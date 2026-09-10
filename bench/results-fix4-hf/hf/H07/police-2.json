@@ -1,0 +1,87 @@
+{
+ "task": "H07",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "calc": true,
+  "max": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  },
+  {
+   "id": "max",
+   "ok": true,
+   "info": "calc=true fn=true alt=false method=false",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Generator parsed sechirut.txt without errors and produced valid Dart code",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No files outside the generated outputs were modified (only spec file edited)",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All gates pass including wiring, contract, datapurity, and assembly",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "New computed field תקרה מחייבת uses max() function correctly (calc=true)",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "max(תקרה לפי 3 חודשים, תקרה לפי שליש) compiled correctly to Dart Math.max",
+   "check": "max",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Formula syntax in spec correctly parsed by entity.mjs; field added to field list",
+   "check": "formula_parsing",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Generated Dart code includes תקרה מחייבת as gen_app_sechirut_ent2_c24 with correct formula",
+   "check": "dart_generation",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Existing fields and computed fields (סך בטוחות, חורג מול 3 חודשים, חורג מול שליש) unmodified",
+   "check": "no_breaking_changes",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "ac7f3d561767a509",
+ "at": "2026-09-10T09:08:36.276Z"
+}

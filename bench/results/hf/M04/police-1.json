@@ -1,0 +1,72 @@
+{
+ "task": "M04",
+ "ns": "peruk17",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "num_particle": true,
+  "title": true
+ },
+ "task_checks": [
+  {
+   "id": "num_particle",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "title",
+   "ok": true,
+   "info": "5×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Added [מספר] particle that generates '30 ימים מקבלת המכתב' in the case screen output",
+   "check": "num_particle",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Added particle with name 'ימים לתגובה' to תיק entity, title appears in generated code",
+   "check": "title",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generator pipeline completed successfully without errors",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All generator gates pass including particles gate (field references resolved correctly)",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No unintended changes to files outside peruk17 namespace",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "519a74ae1ed157ec",
+ "at": "2026-09-10T04:41:47.166Z"
+}

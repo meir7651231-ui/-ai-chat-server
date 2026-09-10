@@ -1,0 +1,63 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..f94cd33 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-sort-tasks-h03 · מיון-טבלה בחלקיק מוגדר בספק-שפה — סינטקס `[טבלה] | מיון: <שדה> <כיוון>` (10.9, H03 task)
++GATE: sort
++ref: (spec-lang only) machtzev/generator/specs-ds/tasks.txt
++ANTIPATTERN: (none — positive learnings)
++RULE: כדי לסדר טבלת-משימה לפי מועד (תאריך) עולה בספק, הוסף שורה: `חלקיק משימה: [טבלה] | מיון: מועד עולה`. הספק-שפה תומכת בחוזה `מיון:` ב-שני מקומות: (1) רמת-ישות (spec line 5) ו-(2) רמת-חלקיק בתוך `[טבלה]` (spec line 17). שדה-תאריך (`מועד`) ממויין אוטומטית: עולה=מהנמוך, יורד=מהגבוה. המנוע יוצר את DsTable+ForgeSortHeaderStates+nameSortKey בעצמו — אין צורך באטומים יד.
++מה שעבד: אפליקציה תוך-דקה (משימות-H03). רצפה-אמת: משימה-ראשונה כמה-ימים-מהיום (מועד קרוב), משימה-אחרונה כחודשים-קדימה (מועד רחוק). המשטרה: רענון ⇒ regen ⇒ compiles (0 errors). טבלה משורשרת נכון (byte_identical_others ✅, sort ✅ px1).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-tasks.json b/machtzev/generator/particle-plan-tasks.json
+index 0637a08..18e06d7 100644
+--- a/machtzev/generator/particle-plan-tasks.json
++++ b/machtzev/generator/particle-plan-tasks.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "משימה",
++  "name": "טבלה מיון מועד עולה",
++  "expr": "[טבלה] | מיון: מועד עולה",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..8337cc7 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -4,3 +4,4 @@
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+ ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++חלקיק משימה: [טבלה] | מיון: מועד עולה

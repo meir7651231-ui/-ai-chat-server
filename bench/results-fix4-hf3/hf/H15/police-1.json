@@ -1,0 +1,80 @@
+{
+ "task": "H15",
+ "ns": "peruk21",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort_px": true,
+  "sort_ent": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_px",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  },
+  {
+   "id": "sort_ent",
+   "ok": true,
+   "info": "ent1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Cases sorted by deadline (עד מתי) soonest first on entity list screen - verified by generator check sort_ent ✅",
+   "check": "sort_ent",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Cases sorted by deadline (עד מתי) soonest first on particle table screen - verified by generator check sort_px ✅",
+   "check": "sort_px",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No hand-edits to generated files - all changes through spec only - verified by machine check no_hand_edit ✅",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No impact on other apps - only peruk21 affected - verified by machine check byte_identical_others ✅",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles without errors - verified by machine check compiles ✅",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "625661211e30597c",
+ "at": "2026-09-10T12:37:15.463Z"
+}

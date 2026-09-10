@@ -1,0 +1,5 @@
+# bench — מדד 50 המשימות (10.9.2026)
+מה כאן: `tasks.json` (50 משימות + אורקלים) · `police-bench.mjs` (המכונה: regen ⇒ בייט-זהות ⇒ יתומים ⇒ שערים ⇒ עברית-בלוגיקה ⇒ Dart-sanity ⇒ [--compile: mirror + flutter analyze] ⇒ בדיקות-המשימה ⇒ DONE/NOT DONE) · `run-task.sh` (זרועות: h0 = מודל לבד · hf = מודל + רתמה: הסגר/allowlist/דו"ח-מכונה/3 מבקרים/מאמת/עד 2 מתקנים · f0 = Fable לבד) · `bench.sh` (מאגר-עובדים) · `rejudge.sh` · `compile-check.sh` · `judge-reports.sh` (שופט-שקרים לדו"חות-יד) · `aggregate.mjs` · `prompts/` · `mirror.mjs` (מראה כמו ship).
+תוצאות: `results/` (מנוע מקורי · h0/hf/f0) · `results-e4/` (מנוע 4 · h0/hf) · `results-fix*/` (לולאת-המנוע, 15 קשות). כל תוצאה: final.json/md (פסק המכונה), engine.patch, spec.txt, claims, audits, judge.json, compile.json.
+דו"חות: `research/45-bench-50.md` · `46-engine-loop.md` · `47-bench-50-engine4.md` (הסיכום).
+הרצה: `BASE_DIR=<עותק-בסיס> BASE_HASHES=<sha256 של new/> RESULTS=<תיקייה> ./bench.sh h0,hf 3 [ids]` · דורש `claude` CLI, node 22, Flutter על PATH ועותקי app_flutter ל---compile (bs-compile-1..3).

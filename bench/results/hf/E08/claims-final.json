@@ -1,0 +1,13 @@
+{
+  "claims": [
+    {
+      "check": "hub_label",
+      "text": "Particle 'עם מתווך' defined in sechirut.txt line 22 as 'חלקיק תיק: עם מתווך = מונה(מתווך=כן)'; generated in new/dart-data-bs/auto/gen_app_sechirut_px1_content.dart with c6='עם מתווך' (line 8), c8='מתווך' (line 10), c9='כן' (line 11); rendered in new/dart-gen-bs/gen_app_sechirut_px1.dart line 35 with KvLine(label: c6, value: ... where c8 == c9)"
+    },
+    {
+      "check": "hub_where",
+      "text": "Dashboard counter with 7 metrics defined in sechirut.txt line 11 including 'מונה(תיק: מתווך=כן)'; generated in new/dart-data-bs/auto/gen_app_sechirut_hub_content.dart line 19 as c17='7 מדדים', confirming hub has all 7 metrics including the new broker counter"
+    }
+  ],
+  "notes": "Fixed: P0-001 (particle definition now uses 'מונה(מתווך=כן)' not 'מונה(תיק: מתווך=כן)' to avoid field name concatenation) and P1-002 (label now displays 'עם מתווך' from c6 instead of enum value 'כן'). Verified: spec changes applied correctly; generated constants have correct values; filter uses correct field constant; hub metric count updated to 7. All core checks pass: regen_ok ✅, byte_identical_others ✅, gates_pass ✅, no_hebrew_in_engine ✅, dart_math_sane ✅, no_hand_edit ✅."
+}

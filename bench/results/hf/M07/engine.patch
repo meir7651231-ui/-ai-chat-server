@@ -1,0 +1,130 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..df21810 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-09-spec-m07-particle · מונה-דרך-שדה בספק (חלקיק) משכפל מונה-בדיאשבורד — זהה תחביר (9.9, M07)
++GATE: regen
++ANTIPATTERN: חלקיק X: name = מונה(field=value) שחוזר על דיאשבורד
++RULE: הוספת מונה לדיאשבורד (לוח בקרה) ויצירת חלקיק תצוגה בספק צריכים שני שורות בספק בדיוק: (1) בשורת-דיאשבורד: `מונה(entity: field=value)` · (2) בחלקיקים: `חלקיק entity: name = מונה(field=value)` — אותה משוואה בשתי שכבות.
++מה נכשל: זה לא נכשל, זה pattern מוצלח — עבור ממצא/נשלח הוספנו בשתי נקודות בהתמלא זהה, engine מפרס לפרטי-חזות ולוגיקה בנפרד.
++ערך-לעתיד: כשמוסיפים counter חדש לתצוגה, כל-שדה-בוליאני בישות יכול לשרת; ודוי לא תמיד צריך counter-שלילי (לא שולם/לא נשלח) — לעתים counter-חיובי (שולם/נשלח) מעניין יותר.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 1f1750a..e73423d 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -162,11 +162,24 @@ export function buildApp(specText) {
+       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} ${L.fieldsWord}${(r.stages || []).length ? ` · ${r.stages.length} ${L.stagesWord}` : ''}` });
+     } else {
+       const slug = `${P}scr${li.i}`;
+-      const title = (li.line.split(/\s+עם\s+/)[0] || li.line).trim();     // כותרת = לפני 'עם'
++      // דשבורד משני: 'לוח בקרה: שם = "תאור"' — כותרת הדשבורד היא הבסיס בלבד ('לוח בקרה')
++      const withRE = new RegExp(`\\s+${SL.withWord}\\s+`);
++      const secondaryMatch = li.line.match(new RegExp(`^([^:]+?):\\s*(.+?)\\s*=\\s*"([^"]+)"(?:${SL.withWord}\\s+(.+))?$`));
++      let title, navName, rawMetricsStr = '';
++      if (secondaryMatch) {
++        title = secondaryMatch[1].trim();                   // בסיס
++        const variant = secondaryMatch[2].trim();           // שם משני
++        navName = `${title} ${variant}`;                    // לוח-הניווט יראה את שניהם
++        rawMetricsStr = secondaryMatch[4] || '';
++      } else {
++        title = (li.line.split(withRE)[0] || li.line).trim();     // כותרת = לפני withWord
++        navName = title;
++        rawMetricsStr = li.line.split(withRE)[1] || '';
++      }
+       // פיצול-מדדים מודע-עומק: רווח/פסיק מפרידים רק ברמה-0 — רווח בתוך '(...)' (מונה-מסונן
+       // 'מונה(מערכת: סטטוס=קריטי)') אינו מפריד. באג-קודם: split גלובלי שבר אגרגט-עם-רווח.
+       const splitMetrics = (str) => { const out = []; let d = 0, cur = ''; for (const ch of str) { if (ch === '(') d++; else if (ch === ')') d = Math.max(0, d - 1); if ((ch === ' ' || ch === ',' || ch === '\t') && d === 0) { if (cur.trim()) out.push(cur.trim()); cur = ''; } else cur += ch; } if (cur.trim()) out.push(cur.trim()); return out; };
+-      const rawMetrics = splitMetrics(li.line.split(/\s+עם\s+/)[1] || '');   // מדדים = אחרי 'עם'
++      const rawMetrics = splitMetrics(rawMetricsStr);
+       // אגרגט מהאפיון: סכום(ישות.שדה) · ממוצע(ישות.שדה) · מונה(ישות). בלי-סוגריים ⇒ מונה-לפי-שם.
+       const aggs = [], countWords = [];
+       // מונה-מסונן (KPI 'בסיכון' · דשבורד-מפקד): 'מונה(ישות: שדה=ערך)' ⇒ סופר רשומות במצב.
+@@ -179,7 +192,7 @@ export function buildApp(specText) {
+         else countWords.push(t);
+       }
+       const { cls } = renderDashboard(slug, { title: clean(title), icon: '📊', entities: entMeta, metrics: countWords, aggs });
+-      screens.push({ slug, cls, kind: 'dashboard', name: clean(title), icon: '📊', sub: `${(countWords.length + aggs.length) || entMeta.length} ${L.metricsWord}` });
++      screens.push({ slug, cls, kind: 'dashboard', name: clean(navName), icon: '📊', sub: `${(countWords.length + aggs.length) || entMeta.length} ${L.metricsWord}` });
+     }
+   }
+ 
+diff --git a/machtzev/generator/particle-plan-sechirut.json b/machtzev/generator/particle-plan-sechirut.json
+index aa8a58e..03301df 100644
+--- a/machtzev/generator/particle-plan-sechirut.json
++++ b/machtzev/generator/particle-plan-sechirut.json
+@@ -201,6 +201,33 @@
+    "KvLine"
+   ]
+  },
++ {
++  "entity": "ממצא",
++  "name": "לא נשלחו",
++  "expr": "מונה(נשלח=לא)",
++  "ok": true,
++  "why": null,
++  "shape": "count",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "שכירות לשנה",
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..beff5e2 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -9,6 +9,7 @@
+ | מה לבקש | ממצא | raw | fact⇒DsChip (DsChip/DsEmpty) | DsChip |
+ | הכנסה | תשלום | sum | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | לא שולם | תשלום | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
++| לא נשלחו | ממצא | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | שכירות לשנה | תיק | raw | fact⇒NumberStepper (NumberStepper/DsChip) | DsChip |
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..8d0c495 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -8,7 +8,8 @@
+ ישות בטוחה עם תיק*, פיקדון(0..1000000), ערבות בנקאית(0..1000000), שטר חוב{אין|עם תקרה|פתוח}, ערב{אין|עם תקרה|בלי תקרה}, סך בטוחות = פיקדון + ערבות בנקאית, תקרה לפי 3 חודשים, תקרה לפי שליש, חורג מול 3 חודשים = סך בטוחות > תקרה לפי 3 חודשים ? חורג : תקין, חורג מול שליש = סך בטוחות > תקרה לפי שליש ? חורג : תקין | מחיקה: תיק=מפל
+ ישות ממצא עם תיק*, סעיף*, צבע{אדום|צהוב|ירוק}, מה כתוב, מה לבקש, נשלח{כן|לא} | מחיקה: תיק=מפל
+ ישות תשלום עם תיק*, סכום{129|159|189}, שולם{כן|לא}, מועד | מחיקה: תיק=מפל
+-לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום), מונה(ממצא: צבע=צהוב), מונה(בטוחה: חורג מול 3 חודשים=חורג), מונה(תשלום: שולם=לא), סכום(תשלום.סכום)
++לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום), מונה(ממצא: צבע=צהוב), מונה(בטוחה: חורג מול 3 חודשים=חורג), מונה(תשלום: שולם=לא), סכום(תשלום.סכום), מונה(ממצא: נשלח=לא)
++לוח בקרה: לא נשלחו = "תיקים שלא נשלחו"
+ תפקיד בודק: הכל
+ תפקיד לקוח: תיק, ממצא, בטוחה | היקף: תיק.לקוח | שדות: ממצא.מה כתוב=נעל, ממצא.מה לבקש=נעל
+ חלקיק בטוחה: חורג = סך בטוחות / תקרה לפי 3 חודשים
+@@ -18,6 +19,7 @@
+ חלקיק ממצא: מה לבקש
+ חלקיק תשלום: הכנסה = סכום(סכום)
+ חלקיק תשלום: לא שולם = מונה(שולם=לא)
++חלקיק ממצא: לא נשלחו = מונה(נשלח=לא)
+ חלקיק תיק: שכירות לשנה
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק

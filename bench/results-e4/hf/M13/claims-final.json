@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "App generator ran without errors and produced valid Dart code"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only machtzev/generator/specs-ds/peruk12.txt was edited, all new/ files are generated"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Other app specs (peruk1-11, peruk13+) generate identical output bytes"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated peruk12 Dart code passes flutter analyze with no errors"
+    },
+    {
+      "check": "particle_added",
+      "text": "Particle line 16 added: 'חלקיק תיק: אגרת העברה = [מספר] אגרת העברת בעלות משולמת לפני הרישום'"
+    },
+    {
+      "check": "spec_valid",
+      "text": "Particle syntax matches SPEC-LANG.md format for [מספר] particles"
+    },
+    {
+      "check": "no_breaks",
+      "text": "All 5 screens (root, hub, shell, flags, settings) generate without errors"
+    }
+  ],
+  "notes": "Added [מספר] (your number) particle 'אגרת העברה' with text 'אגרת העברת בעלות משולמת לפני הרישום' to peruk12 case entity. Spec is valid and app generation successful. Verified: spec-lang compliance, no side-effects on other apps, proper syntax for particle definition."
+}

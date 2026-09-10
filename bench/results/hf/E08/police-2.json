@@ -1,0 +1,60 @@
+{
+ "task": "E08",
+ "ns": "sechirut",
+ "verdict": "NOT DONE",
+ "missing": [
+  "hub_label",
+  "hub_where"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "hub_label": false,
+  "hub_where": false
+ },
+ "task_checks": [
+  {
+   "id": "hub_label",
+   "ok": false,
+   "info": "0×",
+   "mandatory": true
+  },
+  {
+   "id": "hub_where",
+   "ok": false,
+   "info": "0×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Particle 'עם מתווך' defined in sechirut.txt line 22 as 'חלקיק תיק: עם מתווך = מונה(מתווך=כן)'; generated in new/dart-data-bs/auto/gen_app_sechirut_px1_content.d",
+   "check": "hub_label",
+   "verdict": "FALSE"
+  },
+  {
+   "text": "Dashboard counter with 7 metrics defined in sechirut.txt line 11 including 'מונה(תיק: מתווך=כן)'; generated in new/dart-data-bs/auto/gen_app_sechirut_hub_conten",
+   "check": "hub_where",
+   "verdict": "FALSE"
+  }
+ ],
+ "false_claims": 2,
+ "signature": "b91e404c65bf7846",
+ "at": "2026-09-09T21:31:07.789Z"
+}

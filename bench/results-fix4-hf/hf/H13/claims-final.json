@@ -1,0 +1,21 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator runs without error"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only spec file modified"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other files unchanged"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All gates pass"
+    }
+  ],
+  "notes": "panuy.txt line 6 updated with column selection syntax"
+}

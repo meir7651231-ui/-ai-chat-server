@@ -1,0 +1,4 @@
+=== h0/H10 (calendar) start 07:43:31
+  builder.json: exit=0 cost=0.2929068 turns=23 ms=325547 err=false
+  police: NOT DONE missing=sort_list false=0
+=== h0/H10 NOT DONE wall=362s cost=$0.29 false_claims=0

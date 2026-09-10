@@ -1,0 +1,165 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 1f1750a..431f52a 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -158,7 +158,7 @@ export function buildApp(specText) {
+         hidden: roles.map((role) => r.schema.map((s, i) => (role.hide || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+         readonly: roles.map((role) => r.schema.map((s, i) => (role.ro || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+       } : null;
+-      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz });
++      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz, sort: r.sort || null });
+       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} ${L.fieldsWord}${(r.stages || []).length ? ` · ${r.stages.length} ${L.stagesWord}` : ''}` });
+     } else {
+       const slug = `${P}scr${li.i}`;
+diff --git a/machtzev/generator/entity.mjs b/machtzev/generator/entity.mjs
+index 4e09d7c..2804bd6 100644
+--- a/machtzev/generator/entity.mjs
++++ b/machtzev/generator/entity.mjs
+@@ -47,7 +47,7 @@ export function interpret(text) {
+   // "ישות X עם <שדות> | שלבים: a,b | חוקים: תאריך יעד >= תאריך חיוב"
+   const markers = [...text.matchAll(new RegExp('\\|\\s*' + alt(G.sectionMarkers), 'g'))];
+   const main = markers.length ? text.slice(0, markers[0].index) : text;
+-  let stagesPart = '', rulesPart = '', delPart = '', guardsPart = '';
++  let stagesPart = '', rulesPart = '', delPart = '', guardsPart = '', sortPart = '';
+   markers.forEach((m, mi) => {
+     const start = m.index + m[0].length;
+     const end = mi + 1 < markers.length ? markers[mi + 1].index : text.length;
+@@ -55,6 +55,7 @@ export function interpret(text) {
+     if (G.markRules.includes(m[1])) rulesPart = content;
+     else if (G.markDelete.includes(m[1])) delPart = content;
+     else if (G.markGuards.includes(m[1])) guardsPart = content;
++    else if ((G.markSort || []).includes(m[1])) sortPart = content;
+     else stagesPart = content;
+   });
+   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
+@@ -155,7 +156,17 @@ export function interpret(text) {
+   const guards = guardsPart
+     ? guardsPart.split(/[,\n]/).map((e) => { const m = e.match(/^(.+?)\s*:\s*(.+)$/); return m ? { stage: heWords(m[1]).join(' ').trim(), cond: m[2].trim() } : null; }).filter((g) => g && g.stage.length > 1 && g.cond.length > 1)
+     : [];
+-  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards };
++  // ↕ סדר-הרשימה: '| מיון: מרחק בקמ' (עולה = ברירת-המחדל, הקרוב/הקטן ראשון) · '| מיון: מחיר יורד'.
++  // השדה חייב להיות שדה-של-הישות (גם מחושב); לא-מזוהה ⇒ אין מיון (כנות > ניחוש). מבני, אפס-מילון.
++  let sort = null;
++  if (sortPart) {
++    const words = heWords(sortPart.split(/[,\n]/)[0]);
++    const descWords = G.sortDesc || [];
++    const desc = words.length > 1 && descWords.includes(words[words.length - 1]);
++    const field = (desc ? words.slice(0, -1) : words).join(' ');
++    if (fields.includes(field)) sort = { field, desc };
++  }
++  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards, sort };
+ }
+ 
+ // ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..8d060a5 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -198,13 +198,17 @@ const ROLLUP_RE = new RegExp('^(' + [L.sum, L.avg, L.count].join('|') + ')\\(([^
+ // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
+ // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
+ // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
+-function compileFormula(formula, labels) {
++// + 'sqrt(…)' ⇒ math.sqrt (שורש-ריבועי · dart:math) — הקורא מוסיף את הייבוא כשהביטוי מכיל אותו.
++// + שרשור: שדה-מחושב שמפנה לשדה-מחושב-קודם (calcExprs: idx⇒ביטוי) מקבל את הביטוי-שלו
++//   במקום קריאת-_v (שאינה מתעדכנת בטופס) ⇒ 'מרחק בקמ = sqrt(מרחק בריבוע)' חי ונשמר נכון.
++function compileFormula(formula, labels, calcExprs = {}) {
+   const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
+   let e = ' ' + formula + ' ';
+   for (const f of sorted) e = e.split(f.label).join(` @${f.idx}@ `);
+-  const residue = e.replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
++  e = e.replace(/\bsqrt\s*\(/g, '@S@(');
++  const residue = e.replace(/@\d+@|@S@/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
+   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
+-  const dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)").trim();
++  const dart = e.replace(/@(\d+)@/g, (m, i) => (i in calcExprs ? `(${calcExprs[i]})` : `(num.tryParse(_v[${i}] ?? '') ?? 0)`)).replace(/@S@/g, 'math.sqrt').trim();
+   return /@|[֐-׿]/.test(dart) ? null : (dart || null);
+ }
+ 
+@@ -255,7 +259,7 @@ function compileCond(formula, labels) {
+ }
+ 
+ // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
+-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null }) {
++export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null, sort = null }) {
+   const { k, dump } = makeConsts(slug);
+   const cTitle = k(name);
+   const cSub = k(`${schema.length} ${L.fieldsWord}${stages.length ? ` · ${stages.length} ${L.stagesWord}` : ''}`);
+@@ -288,6 +292,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   let firstDateConst = null;   // תפר-לוח-שנה: הקבוע של שדה-התאריך הראשון (null ⇒ אין תאריך)
+   const numFields = [];        // תפר-KPI: קבועי השדות-המספריים (לסכום/ממוצע חי)
+   const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
++  const calcExprs = {};        // שרשור-נוסחאות: idx ⇒ ביטוי-Dart של שדה-מחושב קודם (לנוסחה-מעל-נוסחה)
+   schema.forEach((s, i) => {
+     const cl = k(s.label); labelConst.push(cl);
+     const bind = `value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)`;
+@@ -356,9 +361,11 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+         recValsR.push(ce); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
+         return;
+       }
+-      const expr = compileFormula(s.formula, labelIdx);
++      const expr = compileFormula(s.formula, labelIdx, calcExprs);
+       if (expr) {
+         hasCalc = true;
++        calcExprs[i] = expr;
++        if (/\bmath\.sqrt\(/.test(expr)) funcImports.add("import 'dart:math' as math;");
+         addField(i, `_calc(${cl}, ${expr})`);
+         recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: (${expr}).toStringAsFixed(2)`);
+         return;
+@@ -537,6 +544,14 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const kpiStrip = isPaper() ? '' : `AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: ${cTitle}, value: appStore.count(${SK}).toString(), sub: ${k(L.totalRecords)}, glyph: ${k('🗂️')}))${kpiNumTiles ? ', ' + kpiNumTiles : ''}]))),`;
+   const listRead0 = hasScope ? `appStore.scoped(${SK}, _rlsScope[_rlsRole])` : `appStore.records(${SK})`;
+   const listRead = `(widget.scopeId == null ? ${listRead0} : ${listRead0}.where((r) => (r[widget.scopeField ?? ''] ?? '') == widget.scopeId).toList())`;   // G26 · היקף-הורה
++  // ↕ מיון-הרשימה ('| מיון: שדה [יורד]'): עותק ממוין (records() = רשימת-החנות עצמה — אסור למיין במקום).
++  // מספרי כשאפשר (num.tryParse על הערך-השמור, גם מחושב), אחרת לקסיקלי; חסר-ערך ⇒ אחרון. בלי-מיון ⇒ ביט-זהה.
++  const sortIdx = sort && sort.field ? schema.findIndex((s) => s.label === sort.field) : -1;
++  const sortCmp = sortIdx >= 0
++    ? `(a, b) { final x = num.tryParse(a[${labelConst[sortIdx]}] ?? ''); final y = num.tryParse(b[${labelConst[sortIdx]}] ?? ''); if (x == null || y == null) return x == null ? (y == null ? (a[${labelConst[sortIdx]}] ?? '').compareTo(b[${labelConst[sortIdx]}] ?? '') : 1) : -1; return ${sort.desc ? 'y.compareTo(x)' : 'x.compareTo(y)'}; }`
++    : null;
++  const filtered = `q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList()`;
++  const rsLine = sortCmp ? `final rs = List<Map<String, String>>.of(${filtered})..sort(${sortCmp});` : `final rs = ${filtered};`;
+   const cardSig = rlsActive ? 'Widget _card(Map<String, String> r, Set<int> hidden) {' : 'Widget _card(Map<String, String> r) {';
+   const cardHiddenArg = rlsActive ? ', hidden: hidden' : '';
+   const cardCall = rlsActive ? '_card(rs[i], _rlsHiddenSet)' : '_card(rs[i])';
+@@ -727,7 +742,7 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
+               final all = ${listRead};
+               if (all.isEmpty) return const DsEmpty(label: ${cEmpty});
+               final q = _q.trim().toLowerCase();
+-              final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
++              ${rsLine}
+               ${boardBranch}return Column(children: [
+                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
+                 if (rs.isEmpty) const DsEmpty(label: ${cNoMatch}),
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index a85fb73..3126aa4 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -48,7 +48,14 @@
+   "ולידציה",
+   "מחיקה",
+   "מעברים",
+-  "שערים"
++  "שערים",
++  "מיון"
++ ],
++ "markSort": [
++  "מיון"
++ ],
++ "sortDesc": [
++  "יורד"
+  ],
+  "markRules": [
+   "חוקים",
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..489a18f 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -70,7 +70,7 @@ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/gener
+ 3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+-b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs
++58b455faaefd9b8a5b9e7fe35238351d78082b57b7396d429445477661fc6c4b  machtzev/generator/render-ds.mjs
+ f9d748159c45d3d7013194ae5705a1797948376fc973bbbbb00497a22fa850d1  machtzev/generator/render-module-baseline.json
+ 74cd7e7ccd4d4e3ad57d8e5eade8fb9d38250616cfdfbf15d1d2087d9080d7ea  machtzev/generator/render-module.mjs
+ 0589103ea8b694b19bcef674586d0b31516a9a535b7b833ffce397c4f063798a  machtzev/generator/retarget.mjs

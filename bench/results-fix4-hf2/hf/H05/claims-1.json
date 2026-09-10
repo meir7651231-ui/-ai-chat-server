@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator completed successfully and produced peruk02 app without errors."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps (peruk01, peruk03, etc.) remain byte-identical; no side effects from sorting directive."
+    },
+    {
+      "check": "gates_pass",
+      "text": "All gates passed; spec syntax is valid and no violations detected."
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart output passes flutter analyze with zero errors."
+    },
+    {
+      "check": "sort",
+      "text": "Table particle for cases (חלקיק תיק: [טבלה]) now includes sorting by תאריך מסירת מפתח (key-handover date) in ascending order (earliest first)."
+    }
+  ],
+  "notes": "Modification: Added sorting directive to line 10 of peruk02.txt. Changed from 'חלקיק תיק: [טבלה]' to 'חלקיק תיק: [טבלה] | מיון: תאריך מסירת מפתח עולה'. Verified via machine report: DONE. All claims proven by automated checks (regen_ok, byte_identical_others, gates_pass, compiles) + sorting verification gate (sort px1). No hand-edits to generated files. No breakage."
+}

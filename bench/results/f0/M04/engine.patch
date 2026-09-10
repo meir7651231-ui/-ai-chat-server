@@ -1,0 +1,188 @@
+diff --git a/machtzev/generator/apps/peruk17.json b/machtzev/generator/apps/peruk17.json
+index e752fbd..0220b11 100644
+--- a/machtzev/generator/apps/peruk17.json
++++ b/machtzev/generator/apps/peruk17.json
+@@ -66,6 +66,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "ימים לתגובה",
++    "type": "text",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "סיווג",
+     "type": "text",
+diff --git a/machtzev/generator/particle-plan-peruk17.json b/machtzev/generator/particle-plan-peruk17.json
+index 1fbd18b..ed0f38b 100644
+--- a/machtzev/generator/particle-plan-peruk17.json
++++ b/machtzev/generator/particle-plan-peruk17.json
+@@ -199,5 +199,32 @@
+   "wired": [
+    "DsNote"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "ימים לתגובה",
++  "expr": "[מספר] ימים לתגובה: 30 ימים מקבלת המכתב",
++  "ok": true,
++  "why": null,
++  "shape": "number",
++  "ops": [
++   "hero"
++  ],
++  "picks": [
++   {
++    "op": "hero",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk17.md b/machtzev/generator/particle-plan-peruk17.md
+index c44d091..040fe09 100644
+--- a/machtzev/generator/particle-plan-peruk17.md
++++ b/machtzev/generator/particle-plan-peruk17.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| ימים לתגובה | תיק | number | hero⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+@@ -20,4 +21,5 @@
+ | תיק | טיוטת נלווה קצרה | [תוכן טיוטת נלווה קצרה] | content | DsNote |
+ | תיק | מה לא לשלוח ערמה | [תוכן מה לא לשלוח ערמה] | content | DsNote |
+ | תיק | מתי לעו״ד לחבר מגיש | [תוכן מתי לעו״ד לחבר מגיש] | content | DsNote |
++| תיק | ימים לתגובה | ימים לתגובה | particle | KvLine |
+ | תיק | הסתייגות | [תוכן הסתייגות] | content | DsNote |
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..b844cf9 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -757,13 +757,14 @@
+    "לא ייצוג בוועדה",
+    "לא תיק נכות מלא"
+   ],
+-  "fields": 3,
++  "fields": 4,
+   "outputs": [
+    "כרטיס",
+    "רשימת מסמכים ממוספרת",
+    "טיוטת נלווה קצרה",
+    "מה לא לשלוח ערמה",
+-   "מתי לעו״ד לחבר מגיש"
++   "מתי לעו״ד לחבר מגיש",
++   "ימים לתגובה"
+   ],
+   "severity": false,
+   "classes": [
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..8a4541b 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -184,7 +184,9 @@ export function perukToSpec(md, ns) {
+     const kind = kindOfOut(o.name);
+     // G29 · צורות-פלט: דיף (יש זוגות) · מספר (שדה-מספרי תואם) · הודעה (יש החלטה) · לוח (יש תאריכים) — אחרת נופל לתוכן
+     if (kind === 'diff' && pairs.length) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pDiff[0]}] ${pairs.map((pr) => `${pr.a} ${G.pairArrow[0]} ${pr.b}${pr.factor ? ` × ${pr.factor}` : ''}`).join('; ')}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; }
+-    if (kind === 'number') { const nf = fields.find((f) => f.num && matchField(f.label) && heW(o.name).map(stemOf).some((w) => heW(f.label).map(stemOf).includes(w))); if (nf) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pNumber[0]}] ${nf.label}${o.detail.length ? `: ${q(o.detail[0])}` : ''}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; } }
++    // «המספר שלך» גם בלי המילה «מספר» (מבנה, לא מילון): חלק-פלט ששמו ≡ שדה-קליטה והפירוט פותח בספרה («30 ימים מקבלת המכתב») ⇒ [מספר] שדה: פירוט
++    const selfNum = !kind && o.detail.length && /^\d/.test(o.detail[0]) ? fields.find((f) => f.label === o.name) || null : null;
++    if (kind === 'number' || selfNum) { const nf = selfNum || fields.find((f) => f.num && matchField(f.label) && heW(o.name).map(stemOf).some((w) => heW(f.label).map(stemOf).includes(w))); if (nf) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pNumber[0]}] ${nf.label}${o.detail.length ? `: ${q(o.detail[0])}` : ''}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; } }
+     if (kind === 'message' && decisions.length) {
+       // משפט שבו מציין-מקום ללא שדה-תואם נשמט כולו («תשובה עד .» לא ייכתב) — לא נשארת שארית-תבנית
+       const dec = decisions[0]; const tpl = P.messageTemplate.split(/(?<=[.!?])\s+/).map((sent) => { let bad = false; const s2 = sent.replace(/\{([^}]+)\}/g, (m0, ph) => { if (ph === G.pValueWord || ph.includes('.')) return m0; const f = matchField(ph); if (f) return `{${f}}`; bad = true; return ''; }); return bad ? '' : s2; }).filter(Boolean).join(' ');
+diff --git a/machtzev/generator/peruks/peruk-17.md b/machtzev/generator/peruks/peruk-17.md
+index ae725fd..973fdbc 100644
+--- a/machtzev/generator/peruks/peruk-17.md
++++ b/machtzev/generator/peruks/peruk-17.md
+@@ -61,7 +61,7 @@
+ שם: «המכתב מביטוח לאומי. מה חסר ומה לשלוח עד מתי.»
+ 
+ ### מה שולחים
+-המכתב המלא, איזו בקשה, מה כבר הוגש.
++המכתב המלא, איזו בקשה, מה כבר הוגש, ימים לתגובה.
+ 
+ ### מה חוזר
+ 1. כרטיס: גמלה, סוג מכתב, דדליין
+@@ -69,6 +69,7 @@
+ 3. טיוטת נלווה קצרה
+ 4. מה לא לשלוח (ערמה לא רלוונטית)
+ 5. מתי לעו״ד / לחבר מגיש תביעות
++6. ימים לתגובה: 30 ימים מקבלת המכתב
+ 
+ ---
+ 
+diff --git a/machtzev/generator/report-plan-peruk17.json b/machtzev/generator/report-plan-peruk17.json
+index dc5a1c1..7299a4c 100644
+--- a/machtzev/generator/report-plan-peruk17.json
++++ b/machtzev/generator/report-plan-peruk17.json
+@@ -76,6 +76,19 @@
+      }
+     ]
+    },
++   {
++    "name": "ימים לתגובה",
++    "refs": [
++     {
++      "raw": "ימים לתגובה",
++      "mode": "particle",
++      "why": null,
++      "wired": [
++       "KvLine"
++      ]
++     }
++    ]
++   },
+    {
+     "name": "הסתייגות",
+     "refs": [
+diff --git a/machtzev/generator/specs-ds/peruk17.txt b/machtzev/generator/specs-ds/peruk17.txt
+index 9284905..85c8229 100644
+--- a/machtzev/generator/specs-ds/peruk17.txt
++++ b/machtzev/generator/specs-ds/peruk17.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, המכתב המלא, איזו בקשה, מה כבר הוגש, סיווג{השלמת מסמכים|דחייה לגופה|זימון ועדה|נגמר השעון} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, המכתב המלא, איזו בקשה, מה כבר הוגש, ימים לתגובה, סיווג{השלמת מסמכים|דחייה לגופה|זימון ועדה|נגמר השעון} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+@@ -19,6 +19,8 @@
+ דוח תיק: טיוטת נלווה קצרה = [תוכן טיוטת נלווה קצרה]
+ דוח תיק: מה לא לשלוח ערמה = [תוכן מה לא לשלוח ערמה]
+ דוח תיק: מתי לעו״ד לחבר מגיש = [תוכן מתי לעו״ד לחבר מגיש]
++דוח תיק: ימים לתגובה = ימים לתגובה
++חלקיק תיק: ימים לתגובה = [מספר] ימים לתגובה: 30 ימים מקבלת המכתב
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
+ דוח תיק: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה
+ תוכן מסגרת: כל גמלה טופס + מסמכים + שעון שונה
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..53f8711 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -67,7 +67,7 @@ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/gener
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+ 39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++1a937addd7e1e8da00e62647faef208afcca42829d4f0578b8f2f4d0db877d6e  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

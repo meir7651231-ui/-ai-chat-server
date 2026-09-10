@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Added action 'שלח הודעה' to אדם particle in panuy.txt; generator recompiles without errors"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only spec file (panuy.txt) modified; no hand-edits in generated output folders"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All files outside panuy.txt are byte-identical to previous state; no unintended changes"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All gates in machtzev/gates.tsv pass; spec is valid, no syntax errors"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "No Hebrew strings added to engine code; only to spec (which is correct)"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "No changes to formulas or data; existing math in panuy.txt unchanged"
+    }
+  ],
+  "notes": "Task E20: Added single action button 'שלח הודעה' to אדם particle in machtzev/generator/specs-ds/panuy.txt at line 17. No new atoms, no new helpers, no logic changes. Machine compiles spec → Dart automatically."
+}

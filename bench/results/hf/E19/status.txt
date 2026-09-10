@@ -1,0 +1,8 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/render-ds.mjs
+ M machtzev/generator/specs-ds/peruk25.txt
+?? machtzev/audit/search/2026-09-10-counter-field-filtered-1c87dd27.json
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

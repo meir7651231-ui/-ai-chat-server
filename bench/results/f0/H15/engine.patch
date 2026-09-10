@@ -1,0 +1,223 @@
+diff --git a/machtzev/generator/entity.mjs b/machtzev/generator/entity.mjs
+index 4e09d7c..0e963d9 100644
+--- a/machtzev/generator/entity.mjs
++++ b/machtzev/generator/entity.mjs
+@@ -24,7 +24,12 @@ const RE_DATE = new RegExp(G.typeDate.join('|'));
+ const RE_NUM = new RegExp(G.typeNum.join('|'));
+ const RE_BOOL = new RegExp(G.typeBool.join('|'));
+ const RE_ML = new RegExp(G.typeMultiline.join('|'));
++// ⏳ מועד-יעד (typeDeadline): צירוף-לשון של "עד מתי" ⇒ תאריך שהרשומות ממוינות לפיו (הקרוב קודם) בכל רשימה/טבלה.
++// רמז-לשון מהדאטה (כמו typeDate) — לא מילון-דומייני במנוע. אין מילים ⇒ אף שדה אינו מועד-יעד (ביט-זהה).
++const RE_DEADLINE = (G.typeDeadline || []).length ? new RegExp(G.typeDeadline.join('|')) : null;
++const isDeadline = (field) => !!RE_DEADLINE && RE_DEADLINE.test(field);
+ function inferType(field) {
++  if (isDeadline(field)) return 'date';   // מועד-יעד הוא תאריך גם בלי מילת-תאריך ("דדליין")
+   if (RE_DATE.test(field)) return 'date';
+   if (RE_NUM.test(field)) return 'num';
+   if (RE_BOOL.test(field)) return 'bool';
+@@ -109,7 +114,8 @@ export function interpret(text) {
+     ? stagesPart.replace(new RegExp('^\\s*' + alt(G.stagePrefixes) + '[:\\s]*'), '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 30)
+     : [];
+ 
+-  const schema = annots.map((a) => ({ label: a.label, type: inferType(a.label), required: a.required, unique: a.unique, enumVals: a.enumVals, formula: a.formula, def: a.def, members: a.members, pattern: a.pattern, range: a.range }));
++  // deadline: שדה-מועד-יעד (typeDeadline) — רק שדה-קלט חופשי (לא נוסחה/מקונן/enum); הראשון בסכמה = מפתח-המיון של הרשימות
++  const schema = annots.map((a) => ({ label: a.label, type: inferType(a.label), required: a.required, unique: a.unique, enumVals: a.enumVals, formula: a.formula, def: a.def, members: a.members, pattern: a.pattern, range: a.range, deadline: isDeadline(a.label) && !a.formula && !a.members && !a.enumVals }));
+   const used = new Set();
+   const lines = [`הירו 🗂️ ${entity} | ישות מורכבת — טופס + טבלה`];
+   // 🔄 workflow: פס-שלבים מתוייג (BreadcrumbTrail labels) — מציג את מסע-הרשומה
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..92be9cc 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -299,8 +299,28 @@ const diffRows = (s, k, numOf) => s.pairs.map((pr) => { const a = numOf(pr.a), b
+ // ערך-הדיף: «חדש (היה ישן)» — בלי גליף-חץ (Heebo בלי חיצים ⇒ tofu)
+ const diffVal = (r0, k) => `${numFmt(r0.b)} + ' ' + ${k(T('diffWas', { old: '' }).replace('()', '('))} + ${numFmt(r0.a)} + ')'`;
+ 
++// ── 5ב · מועד-יעד (entity.mjs · spec-lang.typeDeadline): שדה שהרשימות/הטבלאות של הישות ממוינות לפיו — הקרוב קודם ──
++//   deadlineField: השדה הראשון בסכמה עם deadline (אין ⇒ null ⇒ הפלט ביט-זהה). deadlineSortDart: פונקציית-Dart פרטית לקובץ-המסך:
++//   ISO (yyyy-mm-dd, כפי ש-DsDateField/balaganDates כותבים) או d.m[.yyyy] מוקלד; בלי-מועד/לא-תאריך ⇒ אחרונים; יציב (סדר-הקלט נשמר בשוויון).
++export const deadlineField = (schema) => (schema || []).find((f) => f.deadline) || null;
++export const DEADLINE_FN = '_byDeadline';
++export const deadlineSortDart = () => `/// מיון-לפי-מועד-יעד: הקרוב קודם · בלי מועד / לא-תאריך אחרונים · יציב. ISO (yyyy-mm-dd) או d.m[.yyyy]
++List<Map<String, String>> ${DEADLINE_FN}(Iterable<Map<String, String>> rs, String field) {
++  DateTime? at(String s) {
++    final t = s.trim(); if (t.isEmpty) return null;
++    final iso = DateTime.tryParse(t.length == 10 ? '\${t}T12:00:00' : t); if (iso != null) return iso;
++    final m = RegExp(r'^(\\d{1,2})[./-](\\d{1,2})(?:[./-](\\d{2,4}))?\$').firstMatch(t); if (m == null) return null;
++    final y = m.group(3) == null ? DateTime.now().year : int.parse(m.group(3)!) + (m.group(3)!.length == 2 ? 2000 : 0);
++    return DateTime(y, int.parse(m.group(2)!), int.parse(m.group(1)!), 12);
++  }
++  final xs = rs.toList(); final ks = [for (final r in xs) at(r[field] ?? '')];
++  final order = List<int>.generate(xs.length, (i) => i)..sort((a, b) { final da = ks[a], db = ks[b]; if (da == null || db == null) return da == null && db == null ? a - b : (da == null ? 1 : -1); final c = da.compareTo(db); return c != 0 ? c : a - b; });
++  return [for (final i in order) xs[i]];
++}`;
++
+ // ── 6 · פליטה: מסך-חלקיקים לישות (AnimatedBuilder על appStore; אגרגטים למעלה, פר-רשומה בשורות) ──
+ export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) {
++  const helpers = new Map();   // פונקציות-Dart פרטיות שהפלט צריך (מיון-לפי-מועד-יעד) — נכתבות פעם אחת בקובץ-המסך
+   const scoped = !!recsOverride;   // G24 · דוח: הרשומות מוגבלות לרשומת-השורש ⇒ אגרגטים inline על הרשימה (לא על appStore כולו)
+   const recs = recsOverride || `appStore.records('${entity.slug}')`;
+   const numOf = (lbl) => `(num.tryParse(r[${k(lbl)}] ?? '') ?? 0)`;
+@@ -384,7 +404,9 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+       const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      const dl = deadlineField(entity.schema); const di = dl ? entity.schema.indexOf(dl) : -1;   // מועד-יעד ⇒ השורות ממוינות (הקרוב קודם); אותו קבוע-תווית של הכותרת
++      if (di >= 0) helpers.set(DEADLINE_FN, deadlineSortDart());
++      const rows = `[for (final r in ${di >= 0 ? `${DEADLINE_FN}(${recs}, ${labels[di]})` : recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {
+@@ -411,8 +433,9 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+     } else { notes.push(`⚪ ${p.name}: צורה ${s.kind} — פליטה טרם נבנתה (חיפוש בוצע: ${kd.map(([o, pk]) => o + '⇒' + (pk.atoms[0] || '—')).join(' · ')})`); continue; }
+     widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [for (final r in ${rowSrc}) Padding(padding: const EdgeInsets.only(bottom: 8), child: ${rowOf.call})]))`);
+   }
+-  return { imports, widgets, notes, firstWired };
++  return { imports, widgets, notes, firstWired, helpers };
+ }
++const helpersBlock = (helpers) => (helpers && helpers.size ? '\n' + [...helpers.values()].join('\n') : '');   // אין עוזרים ⇒ מחרוזת-ריקה ⇒ פלט ביט-זהה
+ // ── 6ב · סריאליזציה (G25): לכל חלקיק ביטוי-Dart שמחזיר טקסט (וואטסאפ: *כותרת* · "- שורה" · "שדה: ערך"); צורות-פעולה/טבלה/ריק אינן טקסט ──
+ const descFieldOf = (entity, p) => {
+   const textish = entity.schema.filter((f) => !f.formula && !(f.enumVals && f.enumVals.length) && !(f.members && f.members.length) && !/^(num|date|bool)$/.test(f.type || '') && !(p.entNames || []).includes(f.label));
+@@ -466,7 +489,7 @@ export function particleText({ entity, plan, k, recs: recsOverride = null }) {
+ }
+ const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
+ export function renderParticles({ slug, entity, plan, k }) {
+-  const { imports, widgets, notes } = particleWidgets({ entity, plan, k });
++  const { imports, widgets, notes, helpers } = particleWidgets({ entity, plan, k });
+   const cls = clsOf(slug);
+   const code = `// 🧩 חולל ע"י מפרק-החלקיקים הפתוח (particles · הכרעה-27): כל חלקיק נמצא בכל הקטלוג ומורכב מחדש. אל תערוך ידנית.
+ ${plan.filter((p) => p.ok).map((p) => `//   ${p.name} = ${p.expr} ⇒ ${p.shape.kind} ⇒ [${p.ops.join(', ')}] ⇒ ${(p.wired || ['—']).join(' + ')}`).join('\n')}
+@@ -476,7 +499,7 @@ import '../dart-ui-bs/ds/ds.dart';
+ import '../dart-ui-bs/ds/ds_store.dart';
+ ${[...imports].sort().join('\n')}
+ import 'package:flutter/material.dart';
+-
++${helpersBlock(helpers)}
+ class ${cls} extends StatelessWidget {
+   const ${cls}({super.key});
+   @override
+@@ -533,7 +556,7 @@ export function planReports({ reports, plan, entities, content = [] }) {
+ 
+ export function renderReport({ slug, report, k, question = null, visible = 3 }) {   // G28 · question = השאלה שהמסך עונה עליה · visible = חלקים גלויים (השאר ב-DsFold «פרטים (n)», PLAN §3.2)
+   const root = report.root; const rootSlug = root.slug;
+-  const imports = new Set(); const notes = [...report.unresolved]; const sections = [];
++  const imports = new Set(); const notes = [...report.unresolved]; const sections = []; const helpers = new Map();
+   const wired = (cls, ctx) => { const w = wireAtom(cls, ctx); if (w) imports.add(`import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`); return w; };
+   const firstWired = (pick, ctx) => pickWired([...pick.atoms, ...pick.alts], (c) => wired(c, ctx));
+   const goal = `${G.reportWord} ${root.name}`;
+@@ -549,6 +572,7 @@ export function renderReport({ slug, report, k, question = null, visible = 3 })
+       const ent = ref.mode === 'content' ? root : ref.ent;
+       const w = particleWidgets({ entity: ent, plan: [ref.mode === 'particle' && ref.p.shape.kind === 'raw' && !ref.p.labelled ? { ...ref.p, labelled: true } : ref.p], k, recs });   // עובדה-של-השורש בדוח = "שדה: ערך" גם כשהחלקיק קיים (עותק; ה-wired כבר על המקור)
+       for (const i of w.imports) imports.add(i);
++      for (const [hn, hc] of w.helpers) helpers.set(hn, hc);
+       for (const n of w.notes) notes.push(`${sec.name} › ${ref.raw}: ${n}`);
+       children.push(...w.widgets); if (ref.p.wired) used.push(`${ref.raw}⇒${ref.p.wired.join('+')}`);
+       texts.push(...particleText({ entity: ent, plan: [ref.mode === 'particle' && ref.p.shape.kind === 'raw' ? { ...ref.p, labelled: true } : ref.p], k, recs }));
+@@ -601,7 +625,7 @@ import '../dart-data-bs/auto/gen_${slug}_content.dart';
+ import '../dart-ui-bs/ds/ds.dart';
+ import '../dart-ui-bs/ds/ds_store.dart';
+ ${[...imports].sort().join('\n')}
+-import 'package:flutter/material.dart';
++import 'package:flutter/material.dart';${helpersBlock(helpers)}
+ ${textFn}
+ class ${cls} extends StatefulWidget {
+   const ${cls}({this.initialId, super.key});
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..dd8c814 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -21,7 +21,7 @@ const pascal = (slug) => 'GenApp' + slug.replace(/^app_/, '').replace(/(^|[_-])(
+ // (ה-he שלהם, בקובץ-האטום). המנוע אוחז את סוג-הנתון לפי חפיפת-משמעות בין תווית-השדה
+ // לתיאור-העצמי — אפס regex, אפס רשימת-מילים במנוע. מבחן-קונכייה: מחליף אטום ⇒ לומד מחדש.
+ import { readAtlas } from './atlas.mjs';
+-import { searchOp, wireAtom, pickWired } from './particles.mjs';
++import { searchOp, wireAtom, pickWired, DEADLINE_FN, deadlineSortDart } from './particles.mjs';
+ import { isPaper, stripGlyph } from './look.mjs';   // הכרעה-27 · חיפוש-פתוח לאריחי-אגרגט
+ const atlas = readAtlas();   // L93: atlas.json + atlas-data.json
+ const heToks = (s) => [...String(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => stem(m[0])).filter((t) => t.length > 1);
+@@ -537,6 +537,11 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const kpiStrip = isPaper() ? '' : `AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: ${cTitle}, value: appStore.count(${SK}).toString(), sub: ${k(L.totalRecords)}, glyph: ${k('🗂️')}))${kpiNumTiles ? ', ' + kpiNumTiles : ''}]))),`;
+   const listRead0 = hasScope ? `appStore.scoped(${SK}, _rlsScope[_rlsRole])` : `appStore.records(${SK})`;
+   const listRead = `(widget.scopeId == null ? ${listRead0} : ${listRead0}.where((r) => (r[widget.scopeField ?? ''] ?? '') == widget.scopeId).toList())`;   // G26 · היקף-הורה
++  // ⏳ מועד-יעד (entity.mjs · spec-lang.typeDeadline): כל רשימה · לוח · טבלה · CSV של הישות ממוינים לפי השדה — הקרוב קודם. אין שדה ⇒ ביט-זהה.
++  const dlIdx = schema.findIndex((s) => s.deadline);
++  const sortConst = dlIdx >= 0 ? labelConst[dlIdx] : null;
++  const listSorted = sortConst ? `${DEADLINE_FN}(${listRead}, ${sortConst})` : listRead;
++  const csvRead = sortConst ? `${DEADLINE_FN}(appStore.records(${SK}), ${sortConst})` : `appStore.records(${SK})`;
+   const cardSig = rlsActive ? 'Widget _card(Map<String, String> r, Set<int> hidden) {' : 'Widget _card(Map<String, String> r) {';
+   const cardHiddenArg = rlsActive ? ', hidden: hidden' : '';
+   const cardCall = rlsActive ? '_card(rs[i], _rlsHiddenSet)' : '_card(rs[i])';
+@@ -546,7 +551,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     final hid = _rlsHiddenSet;
+     final labels = const [${labelsList}];
+     b.writeln([for (var i = 0; i < labels.length; i++) if (!hid.contains(i)) labels[i]].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
+-    for (final r in ${listRead}) {
++    for (final r in ${listSorted}) {
+       final vals = [${recValues}];
+       b.writeln([for (var i = 0; i < vals.length; i++) if (!hid.contains(i)) vals[i]].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+     }
+@@ -555,7 +560,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     : `  String _csv() {
+     final b = StringBuffer();
+     b.writeln(const [${labelsList}].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
+-    for (final r in appStore.records(${SK})) {
++    for (final r in ${csvRead}) {
+       b.writeln([${recValues}].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+     }
+     return b.toString();
+@@ -594,7 +599,7 @@ ${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImpor
+ ${[...funcImports].sort().join('\n')}
+ import 'package:flutter/material.dart';
+ import 'package:flutter/services.dart';
+-
++${sortConst ? '\n' + deadlineSortDart() : ''}
+ class ${cls} extends StatefulWidget {
+   const ${cls}({this.scopeField, this.scopeId, this.initial, this.editId, super.key});
+   final String? editId;   // פתיחה ישר בעריכת-רשומה קיימת (מעמוד-התיק «ערוך»)
+@@ -724,7 +729,7 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
+           AnimatedBuilder(
+             animation: appStore,
+             builder: (context, _) {
+-              final all = ${listRead};
++              final all = ${listSorted};
+               if (all.isEmpty) return const DsEmpty(label: ${cEmpty});
+               final q = _q.trim().toLowerCase();
+               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index a85fb73..f2e57b9 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -10,6 +10,13 @@
+   "סיום",
+   "מתי"
+  ],
++ "typeDeadline": [
++  "עד מתי",
++  "עד תאריך",
++  "דדליין",
++  "מועד אחרון",
++  "תאריך יעד"
++ ],
+  "typeNum": [
+   "מחיר",
+   "סכום",
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..ba3789d 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -66,11 +66,11 @@ d4015aec8b28007379713aa445c5f4b344b1a2c0448ea66b635fa1de4bf8a859  machtzev/gener
+ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/generator/logic-census.json
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+-39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
++2ec6e3f70d3aa8e7d5d1ffd65660871098c1b51a3065f0454bc4697d9f6fbec7  machtzev/generator/particles.mjs
+ 3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+-b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs
++263abf2ee1cedb3d02329e4135e53bdd11d7dc307c0ece822d8043710b002061  machtzev/generator/render-ds.mjs
+ f9d748159c45d3d7013194ae5705a1797948376fc973bbbbb00497a22fa850d1  machtzev/generator/render-module-baseline.json
+ 74cd7e7ccd4d4e3ad57d8e5eade8fb9d38250616cfdfbf15d1d2087d9080d7ea  machtzev/generator/render-module.mjs
+ 0589103ea8b694b19bcef674586d0b31516a9a535b7b833ffce397c4f063798a  machtzev/generator/retarget.mjs

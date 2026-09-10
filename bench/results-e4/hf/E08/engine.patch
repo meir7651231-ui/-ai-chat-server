@@ -1,0 +1,31 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..ceb16ce 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -55,6 +55,13 @@ ANTIPATTERN: clashOf\(t, c\) != null\) continue;\n[\s\S]{0,240}?availableAt\(t,
+ RULE: לפני `gate('<id>', …)` ב-police: `grep -c "^<id>\t" machtzev/gates.tsv` חייב להחזיר 0; שם-שער = תחום+מטרה (`goldquarry`, לא `quarry`). שער-קיים לעולם לא מוחלף בסקריפט אחר בלי Allow מפורש.
+ מה נכשל: `gate('quarry', 'generator/quarry-golden.mjs')` דרס את `quarry`⇒`quarry-check.mjs` ⇒ ratchet-down "סקריפט הוחלף · ארגומנטים השתנו". הבלוב-לפני (ref) = מצב-העץ ברגע-החסימה (מורים wave-5). התיקון: `goldquarry` — אפס החלשה (35 שערים · 21 baselines).
+ 
++## L2026-09-10-byte-identical-sechirut · הוספת מונה בלוח-בקרה באמצעות spec syntax משאירה כל היתר byte-identical — לא צריך engine, סדר-היוצרות (machine: byte_identical_others) מוגן (10.9, sechirut E08)
++GATE: gates_pass, byte_identical_others, compiles
++ref: 6cb8f0750d37110a:machtzev/generator/specs-ds/sechirut.txt:11
++ANTIPATTERN: שיפור לוח-בקרה + שינוי engine בו בזמן
++RULE: מונה לוח-בקרה מקבל סינון ישיר בספק: `מונה(<entity>: <field>=<value>)` (spec-lang.data.json §6 · מתודולוגיה מחוללת). לא דורש engine logic ⇒ משאיר כל אפליקציה אחרת byte-identical עם האנדקס SHA שלה. בדיקה: machine סורק sha256(other-apps) vs baseline — אם יש engine-change שמשפיעה על data-loop, byte_identical_others נופל; צריך רק spec-change בתא היכל.
++מה נכשל וכיצד נתוקן: סדר-הקדימויות בתחילה — "זה צריך הרצת-מנוע?" ⇒ תשובה ברוב-המקרים "לא, ספק רואה את הערך" ⇒ רק spec. סקר `search-record.mjs "<field-name>"` לפני קידום מונה חדש; אם השדה קיים בישות, המונה מלא-כחוק בספק. ניסיון זה: עובר — רק spec, סגן שם לא שונה, שום entity-logic לא השתנה ⇒ 5 אפליקציות אחרות נשארו בטרקטן (byte_identical_others ✅, regen_ok ✅, compiles ✅, 0 analyzer errors).
++
+ ## L2026-09-04-goal-proof-af3c91 · קובץ-רכזת (hub) שמחווט מסכים הוא מסך — צריך כרטיס-מטרה; ו-KPI ביתי עם מספר-ליטרלי = דאטה-מזויף (4.9, חיווט-SchoolOS)
+ GATE: goal-proof
+ ref: af3c916e95aa0a4ce292e8eeb5cdf6458d12582c:new/dart-gen-bs/schoolos.dart
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..9c61b52 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -8,7 +8,7 @@
+ ישות בטוחה עם תיק*, פיקדון(0..1000000), ערבות בנקאית(0..1000000), שטר חוב{אין|עם תקרה|פתוח}, ערב{אין|עם תקרה|בלי תקרה}, סך בטוחות = פיקדון + ערבות בנקאית, תקרה לפי 3 חודשים, תקרה לפי שליש, חורג מול 3 חודשים = סך בטוחות > תקרה לפי 3 חודשים ? חורג : תקין, חורג מול שליש = סך בטוחות > תקרה לפי שליש ? חורג : תקין | מחיקה: תיק=מפל
+ ישות ממצא עם תיק*, סעיף*, צבע{אדום|צהוב|ירוק}, מה כתוב, מה לבקש, נשלח{כן|לא} | מחיקה: תיק=מפל
+ ישות תשלום עם תיק*, סכום{129|159|189}, שולם{כן|לא}, מועד | מחיקה: תיק=מפל
+-לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום), מונה(ממצא: צבע=צהוב), מונה(בטוחה: חורג מול 3 חודשים=חורג), מונה(תשלום: שולם=לא), סכום(תשלום.סכום)
++לוח בקרה עם מונה(תיק), מונה(תיק: מתווך=כן), מונה(ממצא: צבע=אדום), מונה(ממצא: צבע=צהוב), מונה(בטוחה: חורג מול 3 חודשים=חורג), מונה(תשלום: שולם=לא), סכום(תשלום.סכום)
+ תפקיד בודק: הכל
+ תפקיד לקוח: תיק, ממצא, בטוחה | היקף: תיק.לקוח | שדות: ממצא.מה כתוב=נעל, ממצא.מה לבקש=נעל
+ חלקיק בטוחה: חורג = סך בטוחות / תקרה לפי 3 חודשים

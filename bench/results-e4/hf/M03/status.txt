@@ -1,0 +1,9 @@
+ M machtzev/generator/particle-plan-sechirut.md
+ M machtzev/generator/report-plan-sechirut.json
+ M machtzev/generator/specs-ds/sechirut.txt
+?? "machtzev/audit/search/2026-09-10-\327\241\327\231\327\233\327\225\327\235-summary-6087cc80.json"
+?? "machtzev/audit/search/2026-09-10-\327\241\327\231\327\233\327\225\327\235-summary-cc44cff1.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

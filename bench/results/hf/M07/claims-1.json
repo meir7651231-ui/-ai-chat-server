@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator successfully parsed spec and produced output"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All non-app files are byte-identical to baseline"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All validation gates passed"
+    },
+    {
+      "check": "px_counter",
+      "text": "Dashboard counter constant found for unsent findings"
+    },
+    {
+      "check": "hub_label",
+      "text": "Hub label created for unsent findings counter"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "No Hebrew text in generator engine"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "No new math expressions; counter uses safe syntax"
+    }
+  ],
+  "notes": "Task DONE. Added unsent findings counter to dashboard and findings screen particle. All machine checks passed."
+}

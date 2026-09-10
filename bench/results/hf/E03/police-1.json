@@ -1,0 +1,70 @@
+{
+ "task": "E03",
+ "ns": "peruk12",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "calc_fee": true
+ },
+ "task_checks": [
+  {
+   "id": "calc_fee",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Generator pipeline completed successfully without errors",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All files outside the spec were byte-identical to baseline (no accidental edits)",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All police gates passed (wiring, contracts, uniqueness, verbatim checks)",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart engine code contains no Hebrew (proper data/logic separation)",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed formula 'מחיר * 1.03' compiled to valid Dart numeric expression",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed field verified: 1 formula constant and 1 calculation generated correctly",
+   "check": "calc_fee",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "50c0e143c3f3848b",
+ "at": "2026-09-10T04:17:08.425Z"
+}

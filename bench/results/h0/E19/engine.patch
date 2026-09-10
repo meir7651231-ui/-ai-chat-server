@@ -1,0 +1,26 @@
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..28617d3 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -165,7 +165,7 @@ export function perukToSpec(md, ns) {
+   for (const [tgt, q] of P.questions || []) lines.push(`${G.questionWord} ${tgt}: ${q}`);   // G28 · מסך = שאלה אחת
+   lines.push(`${G.entityNouns[0]} ${root} ${G.withWord} ${rootFields.join(', ')} | ${G.stagePrefixes[0]} ${P.stages.join(', ')}`);
+   if (severity) lines.push(`${G.entityNouns[0]} ${fnd} ${G.withWord} ${P.findingFields.map((f, i) => i === 0 ? f.replace(/\*$/, '') + '*' : f).join(', ')}, ${P.severityField}{${P.severity.join('|')}} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
+-  lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}`);
++  lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}${classes.length && classes.some(c => c.includes('דגל מוגן')) ? `, ${P.dashboardCount}(${root}: ${P.classifyField}=דגל מוגן)` : ''}`);
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]`);
+   lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${P.openAction}`);
+diff --git a/machtzev/generator/specs-ds/peruk25.txt b/machtzev/generator/specs-ds/peruk25.txt
+index dc4d3c8..5d3a6f0 100644
+--- a/machtzev/generator/specs-ds/peruk25.txt
++++ b/machtzev/generator/specs-ds/peruk25.txt
+@@ -4,7 +4,7 @@
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, מכתב פיטורים, ותק, האם חתמו על משהו, סיווג{סיום רגיל מכתב|לחץ לחתום היום|דגל מוגן|עצמאי חוזה קבלן} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+-לוח בקרה עם מונה(תיק)
++לוח בקרה עם מונה(תיק), מונה(תיק: סיווג=דגל מוגן)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק

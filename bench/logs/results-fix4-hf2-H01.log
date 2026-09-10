@@ -1,0 +1,11 @@
+=== hf/H01 (panuy) start 10:24:05
+  builder.json: exit=0 cost=0.8212625 turns=69 ms=467591 err=false
+  police: DONE missing= false=0
+  auditor-compile.json: exit=0 cost=0.2180947 turns=13 ms=102767 err=false
+  auditor-regression.json: exit=0 cost=0.3518546 turns=18 ms=142774 err=false
+  auditor-coverage.json: exit=0 cost=0.39589099999999994 turns=27 ms=201605 err=false
+  validator.json: exit=0 cost=0.25466279999999997 turns=19 ms=114279 err=false
+  fixer.json: exit=0 cost=0.6782479000000001 turns=43 ms=333767 err=false
+  police: DONE missing= false=0
+  police: DONE missing= false=0
+=== hf/H01 DONE wall=1235s cost=$2.72 false_claims=0

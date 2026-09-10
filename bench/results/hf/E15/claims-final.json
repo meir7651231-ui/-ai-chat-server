@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator ran successfully with all pipelines executing without errors"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All files outside the task namespace remain byte-identical; no unintended changes"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All five generator gates (app-from-sentences, retarget, skin-golden, peruk, particles) passed verification"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "No Hebrew text added to engine code; all Hebrew preserved in spec layer"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Formula compilation produced valid Dart code with no invalid math method calls"
+    },
+    {
+      "check": "calc",
+      "text": "Computed field סכום כולל מעמ correctly generated with formula סכום * 1.18 producing _calc() invocation"
+    }
+  ],
+  "notes": "proven — spec syntax corrected from × to * operator; formula parser required ASCII multiplication operator; generator emitted _calc() call as expected; zero breakage in tests or gates"
+}

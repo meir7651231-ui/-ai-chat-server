@@ -1,0 +1,100 @@
+{
+ "task": "M09",
+ "ns": "tasks",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "ent2": true,
+  "empty": true
+ },
+ "task_checks": [
+  {
+   "id": "ent2",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "empty",
+   "ok": true,
+   "info": "data:px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "app-ds.mjs regenerated tasks.txt spec without errors; 2 entities, 7 screens, 0 logic compilation errors.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Empty-particle spec syntax changed in tasks.txt line 9 to use named form (אין תזכורות = [ריק] אין תזכורות), ensuring p.name contains text only, not shape+text c",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No orphan gen_app files created; all generated files belong to app_tasks namespace.",
+   "check": "no_orphans",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All police gates passed; cascade delete pattern recognized, table and empty particles validated.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Engine code contains no Hebrew literals; spec-lang kept in separate data layer.",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No incorrect math function calls; spec has no computed fields with sqrt or min or max.",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "flutter analyze on generated app_tasks Dart code: 0 errors, 0 warnings; Dart type checking passes.",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Second entity created with 3 fields; cascade delete wired.",
+   "check": "ent2",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Empty-state particle rendered as px1 placeholder in spec; engine recognized and included in screen.",
+   "check": "empty",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "f988b3737af81b66",
+ "at": "2026-09-10T16:48:32.255Z"
+}

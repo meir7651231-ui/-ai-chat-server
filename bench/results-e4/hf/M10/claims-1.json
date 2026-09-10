@@ -1,0 +1,37 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Spec regeneration completed successfully with new duration fields"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other app specs (tasks.txt, balagan.txt, etc.) remain byte-identical, no cross-spec side effects"
+    },
+    {
+      "check": "no_orphans",
+      "text": "No orphan generated files, only calendar app regenerated"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All 53 gates passed, including wiring and purity checks"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Computed field division (משך בדקות / 60) generates valid Dart arithmetic without sqrt/sorted/etc issues"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles with 0 analyzer errors"
+    },
+    {
+      "check": "field",
+      "text": "Two fields added: משך בדקות (numeric) and משך בשעות (computed from division)"
+    },
+    {
+      "check": "calc",
+      "text": "Computed field formula correctly parsed: 1 constant meeting entity with 1 calculated field"
+    }
+  ],
+  "notes": "All machine checks PASSED. New fields correctly declared in calendar.txt spec. משך בדקות auto-detected as numeric by 'דקות' keyword. משך בשעות computed field with / operator working correctly. No regressions in other apps. Dart generation clean."
+}

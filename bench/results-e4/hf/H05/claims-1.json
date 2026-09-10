@@ -1,0 +1,17 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "peruk02.txt app regenerated successfully with sorting directive added"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only spec file (peruk02.txt) was modified; no hand-edits of generated Dart files"
+    },
+    {
+      "check": "sorting_applied",
+      "text": "Table particle now sorts cases by תאריך מסירת מפתח (key-handover date) in ascending order (earliest first)"
+    }
+  ],
+  "notes": "proven — Modified peruk02.txt line 10: added sort directive to cases table particle. Syntax: '[טבלה] | מיון: תאריך מסירת מפתח עולה'. Generated Dart shows sort logic applied in gen_app_peruk02_px1.dart line 27. Sorts records by date field using built-in comparator (handles numeric/string dates, empty last). Machine verified: regen_ok✅, byte_identical_others✅, compiles✅, sort✅ px1, no_hand_edit✅."
+}

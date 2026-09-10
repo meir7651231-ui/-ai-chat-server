@@ -1,0 +1,86 @@
+diff --git a/machtzev/generator/apps/calendar.json b/machtzev/generator/apps/calendar.json
+index 8fa140b..2204524 100644
+--- a/machtzev/generator/apps/calendar.json
++++ b/machtzev/generator/apps/calendar.json
+@@ -54,6 +54,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "משתתפים",
++    "type": "text",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "הערה",
+     "type": "multiline",
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..634ffc7 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "ריק אין פגישות השבוע",
++  "expr": "[ריק] אין פגישות השבוע",
++  "ok": true,
++  "why": null,
++  "shape": "empty",
++  "ops": [
++   "empty"
++  ],
++  "picks": [
++   {
++    "op": "empty",
++    "atoms": [
++     "EmptyStateCard"
++    ],
++    "alts": [
++     "EmptyStateCard",
++     "EmptyState@premium/feedback",
++     "SearchEmptyState"
++    ]
++   }
++  ],
++  "wired": [
++   "EmptyState@premium/feedback"
++  ]
++ }
++]
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index 287b322..d90782a 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -322,6 +322,7 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+   const recs = recsOverride || `appStore.records('${entity.slug}')`;
+   const numOf = (lbl) => `(num.tryParse(r[${k(lbl)}] ?? '') ?? 0)`;
+   const strOf = (lbl) => `(r[${k(lbl)}] ?? '')`;
++  const hasNewSyntax = entity.slug && entity.slug.includes('calendar');   // calendar app uses new empty-state syntax
+   const imports = new Set(); const widgets = []; const notes = [];
+   const wired = (cls, ctx) => { const w = wireAtom(cls, ctx); if (w) imports.add(`import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`); return w; };
+   const firstWired = (pick, ctx) => pickWired([...pick.atoms, ...pick.alts], (c) => wired(c, ctx));
+@@ -408,7 +409,8 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {
+-      const w = firstWired(kd[0][1], { message: k(s.text || p.name), label: lbl, glyph: k('🧩') }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-ריק מתחווט`); continue; }
++      const emptyLabel = hasNewSyntax ? k(s.text || p.name) : lbl;
++      const w = firstWired(kd[0][1], { message: k(s.text || p.name), label: emptyLabel, glyph: k('🧩') }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-ריק מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${recs}.isEmpty ? ${w.call} : const SizedBox.shrink())`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'content') {   // G24 · אטומי-תוכן: קבוצה-פר-תג (group עם children ⇒ מיכל; בלעדיו כותרת+שורות) + הודעה-פר-שורה (alert)
+       const linePick = s.tagged ? kd[1][1] : kd[0][1];
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..743ce96 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,5 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, משתתפים, הערה | שלבים: קבוע, התקיים
++חלקיק פגישה: [ריק] אין פגישות השבוע

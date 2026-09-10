@@ -1,0 +1,65 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..80ac8cc 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-sort-a7c2f3 · ישות ללא מיון-הצהרה = רשומות unsorted — מיון לא נוצר באופן אוטומטי (10.9, H10 · task-sort-by-time)
++GATE: none
++ANTIPATTERN: \| מיון: \w+ עולה
++RULE: spec-lang sorting `| מיון: <שדה> עולה` נוצר בקוד רק אם מוצהר בספק. אם לא — rs לא ממוין. אטומי-Sort (TimelineItem, ForgeCountdownTimer וכו') הם ניווט/תצוגה, לא סדר-רשומות. למיון רשומות באפליקציה — חובה הצהרה בספק (entity-level או particle-level).
++מה נכשל: calendar.txt היה unsorted; הצהרת מיון בספק ⇒ generator יצר sort((a,b)...) בקוד ⇒ ent1 line 157, px1 line 18. כדי לא-לשבור: לא להוסיף sort ידנית בקוד (זה hand-edit), רק בספק.
++refs-נוספים: gen_app_calendar_ent1.dart line 157 · gen_app_calendar_px1.dart line 18 · numeric+empty-last fallback (sx/sy comparison).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..59fba01 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "טבלה מה מועד שעה מקום מיון שעה עולה",
++  "expr": "[טבלה] מה, מועד, שעה, מקום | מיון: שעה עולה",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..7f92b82 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,5 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים | מיון: שעה עולה
++חלקיק פגישה: [טבלה] מה, מועד, שעה, מקום | מיון: שעה עולה

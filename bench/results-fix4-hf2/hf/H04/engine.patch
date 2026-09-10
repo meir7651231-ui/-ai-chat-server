@@ -1,0 +1,28 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..859aeeb 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-render-sort-entity · מיון-רשימה נעקד על הישות, לא על החלקיק — entity-definition | מיון: רץ לפני כל ביצוע (10.9, CALENDAR)
++GATE: sort_both
++ref: f8aeae7c65e9eead95f5f1a1d0e37cc2:machtzev/generator/specs-ds/calendar.txt
++ANTIPATTERN: חלקיק.*\|\s*מיון
++RULE: המיון הוא מאפיין-ישות, לא חלקיק — הספק אחראי להצהיר `| מיון: <שדה> עולה/יורד, <שדה2>` על שורת ה-`ישות`; render-ds.mjs קורא `G.markSort` מ-spec-lang.data.json ומזריק `rs.sort(…)` לפני כל render של הרשומות (רשימה/לוח/טבלה); קישור לחלקיק בדומה קורא את ה-`| מיון:` של החלקיק שלו, לא של הישות. שני מיונים בהצהרה אחת = טעות (קורא רק הראשון).
++מה נכשל: הצהרה ראשונה `חלקיק פגישה: [טבלה] … | מיון: מועד עולה, שעה עולה` — נוצר חלקיק במיון, אך מסך-הישות (4 התצוגות) לא הודע למיון כי מיון זה תחת שם `particles.mjs`, לא `entity.mjs`. תיקון: הוצא המיון לרמה-ישות `ישות פגישה עם … | שלבים: … | מיון: מועד עולה, שעה עולה` — render-ds קרא, `rs.sort()` עוטף את החלקיק-זמני, הטבלה ירשמה סדור. הראיה: `git show f8aeae7c…:machtzev/generator/specs-ds/calendar.txt` (לפני) ו-gen_app_calendar_ent1.dart שורה ~155 (אחרי): `rs.sort((a, b) { … a[c16] vs b[c16] … a[c17] vs b[c17] … })`.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..1717a7a 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים | מיון: מועד עולה, שעה עולה

@@ -1,0 +1,10 @@
+ M machtzev/generator/particle-plan-sechirut.json
+ M machtzev/generator/particle-plan-sechirut.md
+ M machtzev/generator/particles.mjs
+ M machtzev/generator/spec-lang.data.json
+ M machtzev/generator/specs-ds/sechirut.txt
+ M machtzev/pins.sha256
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

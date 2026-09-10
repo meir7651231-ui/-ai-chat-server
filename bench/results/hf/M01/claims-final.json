@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "ent3",
+      "text": "Payment entity (תשלום) created as third entity with link to case, amount, and paid status fields"
+    },
+    {
+      "check": "paid",
+      "text": "Paid field (שולם) added as yes/no enum {כן|לא}, required by spec"
+    },
+    {
+      "check": "px3",
+      "text": "Three particles created: table display, add action button, empty state message"
+    },
+    {
+      "check": "regen_ok",
+      "text": "Generator successfully emitted all code, app spec updated with payment entity"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "All changes made in spec layer only (peruk02.txt), no hand edits to generated outputs"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No unexpected modifications to unrelated files"
+    }
+  ],
+  "notes": "All claims proven by machine report verification and git diff inspection. Payment entity properly cascades on case deletion per spec rule. Table screen and navigation from case detail screen confirmed in generated particle plan."
+}

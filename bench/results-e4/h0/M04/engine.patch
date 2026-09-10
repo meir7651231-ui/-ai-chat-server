@@ -1,0 +1,86 @@
+diff --git a/machtzev/generator/particle-plan-peruk17.md b/machtzev/generator/particle-plan-peruk17.md
+index c44d091..8efc19f 100644
+--- a/machtzev/generator/particle-plan-peruk17.md
++++ b/machtzev/generator/particle-plan-peruk17.md
+@@ -20,4 +20,5 @@
+ | תיק | טיוטת נלווה קצרה | [תוכן טיוטת נלווה קצרה] | content | DsNote |
+ | תיק | מה לא לשלוח ערמה | [תוכן מה לא לשלוח ערמה] | content | DsNote |
+ | תיק | מתי לעו״ד לחבר מגיש | [תוכן מתי לעו״ד לחבר מגיש] | content | DsNote |
++| תיק | מספר ימים לתגובה | [תוכן מספר ימים לתגובה] | content | DsNote |
+ | תיק | הסתייגות | [תוכן הסתייגות] | content | DsNote |
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..cb62422 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -763,7 +763,8 @@
+    "רשימת מסמכים ממוספרת",
+    "טיוטת נלווה קצרה",
+    "מה לא לשלוח ערמה",
+-   "מתי לעו״ד לחבר מגיש"
++   "מתי לעו״ד לחבר מגיש",
++   "מספר ימים לתגובה"
+   ],
+   "severity": false,
+   "classes": [
+@@ -788,7 +789,7 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 30
++  "content": 31
+  },
+  {
+   "id": 18,
+diff --git a/machtzev/generator/peruks/peruk-17.md b/machtzev/generator/peruks/peruk-17.md
+index ae725fd..405720a 100644
+--- a/machtzev/generator/peruks/peruk-17.md
++++ b/machtzev/generator/peruks/peruk-17.md
+@@ -69,6 +69,7 @@
+ 3. טיוטת נלווה קצרה
+ 4. מה לא לשלוח (ערמה לא רלוונטית)
+ 5. מתי לעו״ד / לחבר מגיש תביעות
++6. [מספר] ימים לתגובה: 30 ימים מקבלת המכתב
+ 
+ ---
+ 
+diff --git a/machtzev/generator/report-plan-peruk17.json b/machtzev/generator/report-plan-peruk17.json
+index dc5a1c1..dc1b08c 100644
+--- a/machtzev/generator/report-plan-peruk17.json
++++ b/machtzev/generator/report-plan-peruk17.json
+@@ -76,6 +76,19 @@
+      }
+     ]
+    },
++   {
++    "name": "מספר ימים לתגובה",
++    "refs": [
++     {
++      "raw": "[תוכן מספר ימים לתגובה]",
++      "mode": "content",
++      "why": null,
++      "wired": [
++       "DsNote"
++      ]
++     }
++    ]
++   },
+    {
+     "name": "הסתייגות",
+     "refs": [
+diff --git a/machtzev/generator/specs-ds/peruk17.txt b/machtzev/generator/specs-ds/peruk17.txt
+index 9284905..44bb652 100644
+--- a/machtzev/generator/specs-ds/peruk17.txt
++++ b/machtzev/generator/specs-ds/peruk17.txt
+@@ -19,6 +19,7 @@
+ דוח תיק: טיוטת נלווה קצרה = [תוכן טיוטת נלווה קצרה]
+ דוח תיק: מה לא לשלוח ערמה = [תוכן מה לא לשלוח ערמה]
+ דוח תיק: מתי לעו״ד לחבר מגיש = [תוכן מתי לעו״ד לחבר מגיש]
++דוח תיק: מספר ימים לתגובה = [תוכן מספר ימים לתגובה]
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
+ דוח תיק: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה
+ תוכן מסגרת: כל גמלה טופס + מסמכים + שעון שונה
+@@ -51,3 +52,4 @@
+ תוכן טיוטת נלווה קצרה: טיוטת נלווה קצרה
+ תוכן מה לא לשלוח ערמה: מה לא לשלוח ערמה
+ תוכן מתי לעו״ד לחבר מגיש: מתי לעו״ד לחבר מגיש
++תוכן מספר ימים לתגובה: 30 ימים מקבלת המכתב

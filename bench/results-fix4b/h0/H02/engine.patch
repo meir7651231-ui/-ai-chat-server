@@ -1,0 +1,41 @@
+diff --git a/machtzev/generator/particle-plan-sechirut.json b/machtzev/generator/particle-plan-sechirut.json
+index aa8a58e..ece67fa 100644
+--- a/machtzev/generator/particle-plan-sechirut.json
++++ b/machtzev/generator/particle-plan-sechirut.json
+@@ -230,8 +230,8 @@
+  },
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה לקוח טלפון עיר שכירות חודשים מועד חתימה מתווך אופציה החלטה מיון שכירות יורד",
++  "expr": "[טבלה] לקוח, טלפון, עיר, שכירות, חודשים, מועד חתימה, מתווך, אופציה, החלטה | מיון: שכירות יורד",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..d01cb24 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -10,7 +10,7 @@
+ | הכנסה | תשלום | sum | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | לא שולם | תשלום | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | שכירות לשנה | תיק | raw | fact⇒NumberStepper (NumberStepper/DsChip) | DsChip |
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה לקוח טלפון עיר שכירות חודשים מועד חתימה מתווך אופציה החלטה מיון שכירות יורד | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין ממצאים עדיין | ממצא | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | החלטה | תיק | partition | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsSection + DsNote |
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..ebbd877 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -19,7 +19,7 @@
+ חלקיק תשלום: הכנסה = סכום(סכום)
+ חלקיק תשלום: לא שולם = מונה(שולם=לא)
+ חלקיק תיק: שכירות לשנה
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] לקוח, טלפון, עיר, שכירות, חודשים, מועד חתימה, מתווך, אופציה, החלטה | מיון: שכירות יורד
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק ממצא: [ריק] אין ממצאים עדיין
+ חלקיק תיק: החלטה

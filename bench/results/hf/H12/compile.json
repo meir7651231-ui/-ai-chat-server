@@ -1,0 +1,8 @@
+{
+ "errors": 1,
+ "ns_errors": 1,
+ "gen_exit": 0,
+ "sample": [
+  "error • The method 'sorted' isn't defined for the type 'List'. Try correcting the name to the name of an existing method, or defining a method named 'sorted' • lib/genesis/dart-gen-bs/gen_app_peruk17_"
+ ]
+}

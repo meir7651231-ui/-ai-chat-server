@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Successfully regenerated app-ds from updated panuy.txt spec with new ותק בשנים(0..77) field"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps remain byte-identical; no unintended changes to other specs"
+    },
+    {
+      "check": "field",
+      "text": "New ותק בשנים numeric field properly detected in entity and particle declarations"
+    },
+    {
+      "check": "range_max",
+      "text": "Range constraint (0..77) correctly applied to ותק בשנים field"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles with zero analyzer errors"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All gates (syntax, contract, wiring) passed validation"
+    }
+  ],
+  "notes": "proven — Added ותק בשנים(0..77) field to אדם entity in panuy.txt using spec-language range syntax. Regenerated via app-ds.mjs. Machine verification: all 10 checks DONE. No other apps affected. Dart compiles cleanly."
+}

@@ -1,0 +1,85 @@
+{
+ "task": "E10",
+ "ns": "panuy",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "field": true,
+  "range_max": true
+ },
+ "task_checks": [
+  {
+   "id": "field",
+   "ok": true,
+   "info": "2×",
+   "mandatory": true
+  },
+  {
+   "id": "range_max",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Successfully regenerated app-ds from updated panuy.txt spec with new ותק בשנים(0..77) field",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps remain byte-identical; no unintended changes to other specs",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "New ותק בשנים numeric field properly detected in entity and particle declarations",
+   "check": "field",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Range constraint (0..77) correctly applied to ותק בשנים field",
+   "check": "range_max",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles with zero analyzer errors",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All gates (syntax, contract, wiring) passed validation",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "3bb153b34aee8d75",
+ "at": "2026-09-10T16:51:39.833Z"
+}

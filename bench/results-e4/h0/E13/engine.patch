@@ -1,0 +1,43 @@
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..b5aecb7 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -61,6 +61,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "קילומטראז׳",
++    "type": "text",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "מה המוכר אמר",
+     "type": "text",
+@@ -72,6 +78,12 @@
+     "type": "bool",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "מחיר לקמ",
++    "type": "num",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..693ee54 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, קילומטראז׳, מה המוכר אמר, האם נסעת, מחיר לקמ=מחיר / קילומטראז׳ | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

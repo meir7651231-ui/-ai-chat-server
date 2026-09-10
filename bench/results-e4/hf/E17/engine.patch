@@ -1,0 +1,74 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..2a8a27b 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,14 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-text-change-peruk21 · שינוי טקסט בספק מחדש משחזר רק את האפליקציה המוגדרת — לא משפיע על אפליקציות-אחרות (10.9, app-ds.mjs)
++GATE: byte_identical_others
++ref: machtzev/generator/specs-ds/peruk21.txt:12
++ANTIPATTERN: None — זה מקרה טהור
++RULE: שינוי טקסט-לשוני בחלקיק או בתוכן בספק של יישות מסוימת משנה רק את הפלט של אותה יישות; אפליקציות-אחרות נשארות byte-identical. המחולל יוצר חוטים-נפרדים לכל-app ולא משחזר קובצים משותפים על-סמך בחירה ספציפית.
++מה אומת: שינוי טקסט "אין תיקים עדיין" ל"אין מכתבים פתוחים" בתוך peruk21.txt שורה 12 (חלקיק תיק) ⇒ regeneration ⇒ 2 instances של טקסט-חדש ב-peruk21 outputs · 0 instances בפלט-peruk21 · כל 27 peruks-אחרים נשארו byte-identical. בדיקות מכונה: regen_ok, byte_identical_others, compiles = ירוק.
++הלקח: תיקיות-ספקים-נפרדות + generator-להכנסה-אחת = מגירה-נקייה לשינויים מקומיים.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..a5ed0ae 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -55,8 +55,8 @@
+  },
+  {
+   "entity": "תיק",
+-  "name": "ריק אין תיקים עדיין",
+-  "expr": "[ריק] אין תיקים עדיין",
++  "name": "ריק אין מכתבים פתוחים",
++  "expr": "[ריק] אין מכתבים פתוחים",
+   "ok": true,
+   "why": null,
+   "shape": "empty",
+@@ -67,11 +67,11 @@
+    {
+     "op": "empty",
+     "atoms": [
+-     "EmptyStateCard"
++     "EmptyState@premium/feedback"
+     ],
+     "alts": [
+-     "EmptyStateCard",
+      "EmptyState@premium/feedback",
++     "EmptyStateCard",
+      "SearchEmptyState"
+     ]
+    }
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..620107c 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -4,7 +4,7 @@
+ |---|---|---|---|---|
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+-| ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
++| ריק אין מכתבים פתוחים | תיק | empty | empty⇒EmptyState (EmptyState/EmptyStateCard) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..a8ef9b5 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -9,7 +9,7 @@
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
+-חלקיק תיק: [ריק] אין תיקים עדיין
++חלקיק תיק: [ריק] אין מכתבים פתוחים
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: סיווג = [תוכן סיווג]

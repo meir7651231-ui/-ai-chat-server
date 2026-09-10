@@ -1,0 +1,7 @@
+ M machtzev/LEARNINGS.md
+?? "machtzev/audit/search/2026-09-10-\327\234\327\231\327\227\327\224-\327\225\327\225\327\220\327\230\327\241\327\220\327\244-whats-49ec36b2.json"
+?? "machtzev/audit/search/2026-09-10-\327\234\327\231\327\227\327\224-\327\225\327\225\327\220\327\230\327\241\327\220\327\244-whats-e845e531.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

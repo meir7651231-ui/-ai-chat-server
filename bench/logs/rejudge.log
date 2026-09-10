@@ -1,0 +1,23 @@
+f0/E01 DONE => DONE missing=
+f0/E04 DONE => DONE missing=
+f0/H01 NOT DONE => NOT DONE missing=sort_px
+f0/H02 NOT DONE => DONE missing=
+f0/H03 NOT DONE => NOT DONE missing=sort
+f0/M03 DONE => DONE missing=
+h0/E01 DONE => DONE missing=
+h0/E04 NOT DONE => DONE missing=
+h0/E05 NOT DONE => DONE missing=
+h0/H01 NOT DONE => NOT DONE missing=no_hebrew_in_engine,sqrt,sort_px
+h0/H02 NOT DONE => NOT DONE missing=no_hebrew_in_engine,desc
+h0/H03 NOT DONE => NOT DONE missing=no_hebrew_in_engine
+h0/H04 NOT DONE => NOT DONE missing=byte_identical_others,no_hebrew_in_engine,sort_both
+h0/M03 DONE => DONE missing=
+hf/E01 DONE => DONE missing=
+hf/E04 NOT DONE => DONE missing=
+hf/E05 NOT DONE => DONE missing=
+hf/H01 NOT DONE => NOT DONE missing=no_hebrew_in_engine
+hf/H02 DONE => DONE missing=
+hf/H03 NOT DONE => NOT DONE missing=sort
+hf/H04 NOT DONE => NOT DONE missing=sort_both
+hf/M03 DONE => DONE missing=
+REJUDGE-DONE

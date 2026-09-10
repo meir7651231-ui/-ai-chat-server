@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "sechirut.txt regenerates without errors; generator produces valid app structure with 19/19 particles wired and 53 content items (3 new סיכום items added)."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps remain byte-identical; only sechirut spec-ds output changed."
+    },
+    {
+      "check": "gates_pass",
+      "text": "All gates pass; no new thresholds or rules required registration."
+    },
+    {
+      "check": "compiles",
+      "text": "Dart compilation succeeds; analyzer errors total=0, in-app=0."
+    },
+    {
+      "check": "report_text",
+      "text": "Case report (דוח תיק) section סיכום successfully references content group [תוכן סיכום] with 3 items."
+    },
+    {
+      "check": "content_exact_match",
+      "text": "Third content line matches exactly: הבטוחות ייבדקו מול התקרה (verified via grep)."
+    }
+  ],
+  "notes": "proven: all checks passed by machine. Three new content lines added to תוכן סיכום group (lines 94-96 in sechirut.txt). דוח תיק line added at line 43. Required exact text present and verified. No other specs modified. Generator output valid."
+}

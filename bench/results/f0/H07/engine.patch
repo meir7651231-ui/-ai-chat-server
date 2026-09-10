@@ -1,0 +1,114 @@
+diff --git a/machtzev/generator/chrome.data.json b/machtzev/generator/chrome.data.json
+index 25e730b..f4239f2 100644
+--- a/machtzev/generator/chrome.data.json
++++ b/machtzev/generator/chrome.data.json
+@@ -11,6 +11,8 @@
+  "sum": "סכום",
+  "avg": "ממוצע",
+  "count": "מונה",
++ "max": "הגדול מבין",
++ "min": "הקטן מבין",
+  "totalRecords": "סה\"כ רשומות",
+  "linked": "מקושרים",
+  "liveCompare": "השוואה חיה",
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..da5629e 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -198,14 +198,48 @@ const ROLLUP_RE = new RegExp('^(' + [L.sum, L.avg, L.count].join('|') + ')\\(([^
+ // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
+ // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
+ // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
++// 🔤 התאמת-תווית סובלנית-לספרות: תוויות-הסכמה הן מילים-עבריות בלבד (entity.clean מסיר ספרות),
++// אך באפיון הנוסחה כותבים 'תקרה לפי 3 חודשים'. ספרה בין מילות-התווית מותרת ⇒ 'תקרה לפי חודשים'
++// ≡ 'תקרה לפי 3 חודשים'. תווית-חד-מילה ⇒ המילה עצמה (ביט-זהה להתנהגות-הקודמת). בלי זה,
++// שדה-שמצביע-על-תווית-עם-ספרה נפל בשקט לשדה-קלט-רגיל (חורג מול 3 חודשים · שכירות).
++const reEsc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
++const labelRe = (label) => new RegExp(label.trim().split(/\s+/).map(reEsc).join('\\s+(?:\\d+(?:\\.\\d+)?\\s+)?'), 'g');
++const sameLabel = (label, name) => { const n = name.trim(); return n === label || n.replace(/(?<=\S)\s+\d+(?:\.\d+)?\s+(?=\S)/g, ' ') === label; };
++// 🔢 פונקציות-n-אריות מאוצר-המילים (chrome.data.json · אפס-מילון-במנוע): 'הגדול מבין(א, ב)' ⇒ max,
++// 'הקטן מבין(א, ב)' ⇒ min. כל ארגומנט = נוסחה בפני-עצמה (רקורסיבי, סוגריים-מקוננים נתמכים).
++const FORMULA_FNS = () => [[L.max, '>'], [L.min, '<']].filter(([kw]) => kw);
+ function compileFormula(formula, labels) {
+   const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
+   let e = ' ' + formula + ' ';
+-  for (const f of sorted) e = e.split(f.label).join(` @${f.idx}@ `);
+-  const residue = e.replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
++  // (א) פונקציות: כל 'מילת-מפתח(ארג, ארג, …)' ⇒ ביטוי-Dart מהודר ⇒ מציין-מקום §n§. ארגומנט
++  // לא-מהודר / פחות מ-2 ארגומנטים / סוגר-חסר ⇒ null (השדה נשאר רגיל — כנות > קוד-שבור).
++  const fnParts = [];
++  for (const [kw, op] of FORMULA_FNS()) {
++    let at;
++    while ((at = e.indexOf(kw)) >= 0) {
++      let p = at + kw.length; while (e[p] === ' ') p++;
++      if (e[p] !== '(') return null;
++      let d = 0, q = p, cur = ''; const args = [];
++      for (; q < e.length; q++) {
++        const ch = e[q];
++        if (ch === '(') { if (d++ > 0) cur += ch; continue; }
++        if (ch === ')') { if (--d === 0) break; cur += ch; continue; }
++        if (ch === ',' && d === 1) { args.push(cur); cur = ''; continue; }
++        cur += ch;
++      }
++      if (d !== 0) return null;
++      args.push(cur);
++      const dartArgs = args.map((a) => compileFormula(a, labels));
++      if (dartArgs.length < 2 || dartArgs.some((x) => !x)) return null;
++      fnParts.push(`[${dartArgs.join(', ')}].reduce((x, y) => x ${op} y ? x : y)`);
++      e = e.slice(0, at) + ` §${fnParts.length - 1}§ ` + e.slice(q + 1);
++    }
++  }
++  for (const f of sorted) e = e.replace(labelRe(f.label), ` @${f.idx}@ `);
++  const residue = e.replace(/@\d+@|§\d+§/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
+   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
+-  const dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)").trim();
+-  return /@|[֐-׿]/.test(dart) ? null : (dart || null);
++  const dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)").replace(/§(\d+)§/g, (_, n) => fnParts[Number(n)]).trim();
++  return /@|§|[֐-׿]/.test(dart) ? null : (dart || null);
+ }
+ 
+ // ⚖️ מהדר-חוק-בין-שדות: 'תאריך יעד >= תאריך חיוב' ⇒ {li,op,ri}. השוואה מספרית אם שניהם
+@@ -213,7 +247,7 @@ function compileFormula(formula, labels) {
+ function compileRule(rule, labels) {
+   const m = rule.match(/^(.+?)\s*(>=|<=|>|<)\s*(.+)$/);
+   if (!m) return null;
+-  const find = (name) => { const c = labels.find((l) => l.label === name.trim()); return c ? c.idx : -1; };
++  const find = (name) => { const c = labels.find((l) => sameLabel(l.label, name)); return c ? c.idx : -1; };
+   const li = find(m[1]), ri = find(m[3]);
+   if (li < 0 || ri < 0 || li === ri) return null;
+   return { li, ri, op: m[2], text: rule.trim() };
+@@ -222,7 +256,7 @@ function compileRule(rule, labels) {
+ // ⛔ מהדר-שער: תנאי-כניסה-לשלב מעל ההשוואה של compileRule + שתי הרחבות: אגף-ימני
+ // מספר-ליטרלי ('סכום > 0'), ותווית-בודדת = "חייב-מלא" ('תיאור'). מילה-לא-מזוהה ⇒ null.
+ function compileGuard(cond, labels) {
+-  const find = (name) => { const c = labels.find((l) => l.label === name.trim()); return c ? c.idx : -1; };
++  const find = (name) => { const c = labels.find((l) => sameLabel(l.label, name)); return c ? c.idx : -1; };
+   const m = cond.match(/^(.+?)\s*(>=|<=|>|<)\s*(.+)$/);
+   if (m) {
+     const li = find(m[1]); if (li < 0) return null;
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..386b9d5 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -5,7 +5,7 @@
+ שאלה בית: מה עכשיו?
+ שרשרת: פיקדון ביציאה, ליקוי אחרי כניסה, חידוש חוזה
+ ישות תיק עם לקוח*, טלפון, עיר, שכירות*, חודשים*, מועד חתימה, מתווך{כן|לא}, אופציה{כן|לא}, החלטה{לחתום כמו שזה|לחתום אחרי שינויים|לא לחתום}, שכירות לשנה = שכירות * 12, תקרה לפי 3 חודשים = שכירות * 3, תקרה לפי שליש = שכירות * חודשים / 3 | שלבים: התקבל, שולם, בבדיקה, נמסר, תיקון, סגור | מעברים: בבדיקה: שכירות > 0
+-ישות בטוחה עם תיק*, פיקדון(0..1000000), ערבות בנקאית(0..1000000), שטר חוב{אין|עם תקרה|פתוח}, ערב{אין|עם תקרה|בלי תקרה}, סך בטוחות = פיקדון + ערבות בנקאית, תקרה לפי 3 חודשים, תקרה לפי שליש, חורג מול 3 חודשים = סך בטוחות > תקרה לפי 3 חודשים ? חורג : תקין, חורג מול שליש = סך בטוחות > תקרה לפי שליש ? חורג : תקין | מחיקה: תיק=מפל
++ישות בטוחה עם תיק*, פיקדון(0..1000000), ערבות בנקאית(0..1000000), שטר חוב{אין|עם תקרה|פתוח}, ערב{אין|עם תקרה|בלי תקרה}, סך בטוחות = פיקדון + ערבות בנקאית, תקרה לפי 3 חודשים, תקרה לפי שליש, תקרה מחייבת = הגדול מבין(תקרה לפי 3 חודשים, תקרה לפי שליש), חורג מול 3 חודשים = סך בטוחות > תקרה לפי 3 חודשים ? חורג : תקין, חורג מול שליש = סך בטוחות > תקרה לפי שליש ? חורג : תקין | מחיקה: תיק=מפל
+ ישות ממצא עם תיק*, סעיף*, צבע{אדום|צהוב|ירוק}, מה כתוב, מה לבקש, נשלח{כן|לא} | מחיקה: תיק=מפל
+ ישות תשלום עם תיק*, סכום{129|159|189}, שולם{כן|לא}, מועד | מחיקה: תיק=מפל
+ לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום), מונה(ממצא: צבע=צהוב), מונה(בטוחה: חורג מול 3 חודשים=חורג), מונה(תשלום: שולם=לא), סכום(תשלום.סכום)
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..7bb4c92 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -70,7 +70,7 @@ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/gener
+ 3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+-b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs
++341a6384de1ca45bf108658d11649369fb40f68d918a2c82906191a0faa7efc8  machtzev/generator/render-ds.mjs
+ f9d748159c45d3d7013194ae5705a1797948376fc973bbbbb00497a22fa850d1  machtzev/generator/render-module-baseline.json
+ 74cd7e7ccd4d4e3ad57d8e5eade8fb9d38250616cfdfbf15d1d2087d9080d7ea  machtzev/generator/render-module.mjs
+ 0589103ea8b694b19bcef674586d0b31516a9a535b7b833ffce397c4f063798a  machtzev/generator/retarget.mjs

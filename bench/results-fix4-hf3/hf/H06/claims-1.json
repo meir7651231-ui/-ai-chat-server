@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "App peruk12 regenerated successfully with sort specification"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only peruk12.txt spec edited, no generated Dart files manually modified"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other app specs or generated files changed; peruk12 changes isolated"
+    },
+    {
+      "check": "numeric_sort",
+      "text": "Generated code uses num.tryParse + numeric compareTo for price field"
+    },
+    {
+      "check": "sort_ascending",
+      "text": "Spec declares [טבלה] | מיון: מחיר עולה (ascending = cheapest first)"
+    },
+    {
+      "check": "sort_field_price",
+      "text": "Sort field is מחיר (line 7 entity field) as confirmed by c7 constant"
+    }
+  ],
+  "notes": "Spec language supports [טבלה] | מיון: <field> עולה/יורד syntax. Generated Dart in gen_app_peruk12_px1.dart correctly implements numeric ascending sort on price field with proper empty-value handling."
+}

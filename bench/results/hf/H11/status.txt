@@ -1,0 +1,12 @@
+ M machtzev/generator/app-ds.mjs
+ M machtzev/generator/apps/sechirut.json
+ M machtzev/generator/entity.mjs
+ M machtzev/generator/particles.mjs
+ M machtzev/generator/render-ds.mjs
+ M machtzev/generator/specs-ds/sechirut.txt
+?? "machtzev/audit/search/2026-09-10-min-\327\252\327\247\327\250\327\224-\327\240\327\236\327\225\327\233\327\224-82d4c325.json"
+?? "machtzev/audit/search/2026-09-10-min-\327\252\327\247\327\250\327\224-\327\240\327\236\327\225\327\233\327\224-dce84098.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

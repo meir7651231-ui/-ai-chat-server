@@ -1,0 +1,55 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..1376231 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,14 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-calc-peruk25 · שדה מחושב = שדה * קבוע מחולל נכון ב-app-ds; הנוסחה נפלטת כקוד Dart טהור ללא LLM (10.9, E09 · render-ds · הכרעה-27)
++GATE: calc
++ref: new/dart-gen-bs/gen_app_peruk25_ent1.dart:49
++ANTIPATTERN: \(\(num\.tryParse\(_v\[\d+\] \?\? ''\) \?\? 0\) \* \d+\)\.toStringAsFixed\(\d\)
++RULE: שדה מחושב בספק `שם = שדה * N` מתורגם ל-Dart כ-`(num.tryParse(_v[i] ?? '') ?? 0) * N`.toStringAsFixed(2) (הפתקה לנתונים עם עשרונים); הפורמולה נגזרת מצורת-השדה בלבד, ללא מילון-דומייני ולא LLM ב-runtime. הקרור: כל שדה מחושב חייב שקע-דאטה (לא לזייף קבוע).
++מה עבד: הוסף `סכום פיצויים` (numeric) + `פיצויים לשנה = סכום פיצויים * 12` (computed) ל-תיק entity בפרוק-25. ה-generator בחר בשדה הנכון (c19), כתב את הנוסחה בצורה-נכונה ובטוחה (tryParse+default), והנוסחה הופיעה בטפסים ובסדרות-מיוצאות. machine check: 0 errors דאט, byte-identical-others ✅, calc ✅ (1 const + 1 field).
++הפתקה: spec-lang.data.json מגדיר את ההתאמות בין תווית-שדה למילות-מפתח (סכום ⟹ numeric, לשנה ⟹ כלא-ערור); הגנרטור משתמש בהן ולא בנחש.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk25.json b/machtzev/generator/apps/peruk25.json
+index 68ae22f..a1a65e6 100644
+--- a/machtzev/generator/apps/peruk25.json
++++ b/machtzev/generator/apps/peruk25.json
+@@ -74,6 +74,18 @@
+      "דגל מוגן",
+      "עצמאי חוזה קבלן"
+     ]
++   },
++   {
++    "label": "סכום פיצויים",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
++   {
++    "label": "פיצויים לשנה",
++    "type": "text",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/specs-ds/peruk25.txt b/machtzev/generator/specs-ds/peruk25.txt
+index dc4d3c8..0642cd3 100644
+--- a/machtzev/generator/specs-ds/peruk25.txt
++++ b/machtzev/generator/specs-ds/peruk25.txt
+@@ -3,7 +3,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, מכתב פיטורים, ותק, האם חתמו על משהו, סיווג{סיום רגיל מכתב|לחץ לחתום היום|דגל מוגן|עצמאי חוזה קבלן} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, מכתב פיטורים, ותק, האם חתמו על משהו, סיווג{סיום רגיל מכתב|לחץ לחתום היום|דגל מוגן|עצמאי חוזה קבלן}, סכום פיצויים, פיצויים לשנה = סכום פיצויים * 12 | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

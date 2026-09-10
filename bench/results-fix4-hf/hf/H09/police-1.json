@@ -1,0 +1,82 @@
+{
+ "task": "H09",
+ "ns": "tasks",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "calc": true,
+  "round": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  },
+  {
+   "id": "round",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Generator pipeline completed without errors; all 9 modules and 87 tests validated.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only tasks.txt edited in specs-ds/; all generated outputs byte-identical to baseline.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All 53 police gates passed; no violations detected in wiring, purity, or coverage.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Hebrew text confined to spec file; engine/logic layers remain pure (zero Hebrew).",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed field סכום מעוגל = round(סכום) produces valid Dart math with correct type inference.",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Machine detected 1 computed field (סכום מעוגל) with round() function applied to numeric סכום field.",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "round(סכום) function usage verified by generator; matches SPEC-LANG.md syntax for computed fields.",
+   "check": "round",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "b37c49b1f902bd61",
+ "at": "2026-09-10T09:04:40.929Z"
+}

@@ -1,0 +1,199 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 1f1750a..055ce15 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -299,7 +299,7 @@ export function buildApp(specText) {
+     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr });
+     home = { slug: `${P}shell`, cls: shell.cls };
+     // G33 · מניפסט-המודול (הכרעה-29): מה ש«בלגן» (האפליקציה-האחת) צריך כדי למזג את המודול — מסכים · שורש · שדות · שרשרת. נגזר, לא יד.
+-    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [] })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
++    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [], ...(f.formula ? { computed: true } : {}) })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
+     console.log(`🧭 ${L.shellLog}: ${L.shellRootWord} ${rootMeta.name} · ${kids.length} ${L.shellChildrenWord} · ${shell.nav || '—'}${[...rootPage.notes, ...shell.notes].length ? ' · ⚪ ' + [...rootPage.notes, ...shell.notes].join(' · ') : ''}`);
+   }
+   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
+diff --git a/machtzev/generator/apps/sechirut.json b/machtzev/generator/apps/sechirut.json
+index e44be62..4d93877 100644
+--- a/machtzev/generator/apps/sechirut.json
++++ b/machtzev/generator/apps/sechirut.json
+@@ -107,19 +107,22 @@
+     "label": "שכירות לשנה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "computed": true
+    },
+    {
+     "label": "תקרה לפי חודשים",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "computed": true
+    },
+    {
+     "label": "תקרה לפי שליש",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "computed": true
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..ae28df5 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -48,6 +48,13 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "סכום מעוגל",
++    "type": "num",
++    "required": false,
++    "enumVals": [],
++    "computed": true
++   },
+    {
+     "label": "הערה",
+     "type": "multiline",
+diff --git a/machtzev/generator/balagan.mjs b/machtzev/generator/balagan.mjs
+index 4c6c1b2..f064934 100644
+--- a/machtzev/generator/balagan.mjs
++++ b/machtzev/generator/balagan.mjs
+@@ -36,14 +36,16 @@ export const variants = (w) => { const out = [w]; if (w.length >= 4 && /^[והב
+ export function loadModules() {
+   const index = JSON.parse(fs.readFileSync(path.join(HERE, 'peruk-index.json'), 'utf8'));
+   const mods = [];
++  // שדה-מחושב (נוסחה) של המודול אינו קלט: המסך-השורש גוזר אותו בשמירה ⇒ «בלגן» לא שואל עליו, לא מזהה לפיו.
++  const readMod = (p) => { const m = JSON.parse(fs.readFileSync(p, 'utf8')); if (m.root && Array.isArray(m.root.fields)) m.root.fields = m.root.fields.filter((x) => !x.computed); return m; };
+   // מודולי-הבסיס (שכבה: בסיס — משימות · יומן) קודם: הם היום-יום; אחריהם הפירוקים לפי סדרם
+   for (const f of fs.existsSync(APPS) ? fs.readdirSync(APPS).sort() : []) {
+-    const m = JSON.parse(fs.readFileSync(path.join(APPS, f), 'utf8'));
++    const m = readMod(path.join(APPS, f));
+     if (m.layer === 'base' && m.home && m.look === 'paper') mods.push({ ...m, id: 0, moment: '', category: '', doc: `${m.title} ${m.root.name} ${m.root.fields.map((x) => x.label).join(' ')}` });
+   }
+   for (const node of index) {
+     const mp = path.join(APPS, `${node.ns}.json`); if (!fs.existsSync(mp)) continue;
+-    const m = JSON.parse(fs.readFileSync(mp, 'utf8')); if (!m.home || m.look !== 'paper') continue;
++    const m = readMod(mp); if (!m.home || m.look !== 'paper') continue;
+     const doc = fs.existsSync(path.join(PERUKS, `peruk-${String(node.id).padStart(2, '0')}.md`)) ? fs.readFileSync(path.join(PERUKS, `peruk-${String(node.id).padStart(2, '0')}.md`), 'utf8') : '';
+     mods.push({ ...m, id: node.id, moment: node.moment || '', category: node.category || '', doc, layer: m.layer || 'peruk' });
+   }
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..8205c3d 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -198,14 +198,39 @@ const ROLLUP_RE = new RegExp('^(' + [L.sum, L.avg, L.count].join('|') + ')\\(([^
+ // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
+ // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
+ // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
++// 🔢 פונקציות-מספר בנוסחה (טהורות, אפס-דומיין): round(x) · floor(x) · ceil(x) · abs(x) ⇒ שיטת-num ב-Dart.
++// 'fn( … )' עם סוגריים-מאוזנים ⇒ '( … )#fn#' (סימון-ביניים, נבדק בשארית ואז הופך ל-'.fn()').
++// סוגריים לא-מאוזנים ⇒ null (כנות > קוד-שבור). נוסחה בלי פונקציה ⇒ חוזרת ביט-זהה.
++const FORMULA_FNS = ['round', 'floor', 'ceil', 'abs'];
++const FORMULA_FN_RE = new RegExp('(^|[^A-Za-z_])(' + FORMULA_FNS.join('|') + ')\\s*\\(');
++function rewriteFormulaFns(e) {
++  for (let guard = 0; guard < 64; guard++) {
++    const m = e.match(FORMULA_FN_RE); if (!m) return e;
++    const open = m.index + m[0].length - 1;
++    let d = 0, close = -1;
++    for (let i = open; i < e.length; i++) { if (e[i] === '(') d++; else if (e[i] === ')') { d--; if (d === 0) { close = i; break; } } }
++    if (close < 0) return null;
++    e = e.slice(0, m.index + m[1].length) + '(' + e.slice(open + 1, close) + ')#' + m[2] + '#' + e.slice(close + 1);
++  }
++  return null;
++}
++// שדה-מחושב-שלם: הנוסחה כולה עטופה ב-round/floor/ceil ⇒ תצוגה ואחסון כמספר-שלם (בלי '.00').
++function formulaIsWhole(formula) {
++  const s = formula.trim();
++  const m = s.match(/^(round|floor|ceil)\s*\(/); if (!m) return false;
++  let d = 0;
++  for (let i = m[0].length - 1; i < s.length; i++) { if (s[i] === '(') d++; else if (s[i] === ')') { d--; if (d === 0) return i === s.length - 1; } }
++  return false;
++}
+ function compileFormula(formula, labels) {
+   const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
+   let e = ' ' + formula + ' ';
+   for (const f of sorted) e = e.split(f.label).join(` @${f.idx}@ `);
+-  const residue = e.replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
++  e = rewriteFormulaFns(e); if (e == null) return null;
++  const residue = e.replace(/@\d+@|#[a-z]+#/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
+   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
+-  const dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)").trim();
+-  return /@|[֐-׿]/.test(dart) ? null : (dart || null);
++  const dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)").replace(/#([a-z]+)#/g, '.$1()').trim();
++  return /[@#]|[֐-׿]/.test(dart) ? null : (dart || null);
+ }
+ 
+ // ⚖️ מהדר-חוק-בין-שדות: 'תאריך יעד >= תאריך חיוב' ⇒ {li,op,ri}. השוואה מספרית אם שניהם
+@@ -284,7 +309,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const subEditLoad = [];  // טעינת תת-תאים לעריכה: `si: r['הורה/בן']`
+   const rangeSpecs = [];   // ולידציית-טווח: {i, min, max}
+   const patternSpecs = []; // ולידציית-תבנית: {i, pattern}
+-  let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false;
++  let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasCalcWhole = false, hasMulti = false, usedField = false;
+   let firstDateConst = null;   // תפר-לוח-שנה: הקבוע של שדה-התאריך הראשון (null ⇒ אין תאריך)
+   const numFields = [];        // תפר-KPI: קבועי השדות-המספריים (לסכום/ממוצע חי)
+   const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
+@@ -358,9 +383,11 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+       }
+       const expr = compileFormula(s.formula, labelIdx);
+       if (expr) {
+-        hasCalc = true;
+-        addField(i, `_calc(${cl}, ${expr})`);
+-        recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: (${expr}).toStringAsFixed(2)`);
++        // נוסחה עטופה ב-round/floor/ceil ⇒ ערך-שלם: כרטיס-חישוב ואחסון בלי '.00' (אחרת — 2 עשרוניות, כמו היום).
++        const whole = formulaIsWhole(s.formula);
++        if (whole) hasCalcWhole = true; else hasCalc = true;
++        addField(i, `${whole ? '_calcWhole' : '_calc'}(${cl}, ${expr})`);
++        recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: (${expr})${whole ? '.toString()' : '.toStringAsFixed(2)'}`);   // whole ⇒ הביטוי כבר int
+         return;
+       }
+     }
+@@ -689,6 +716,20 @@ ${hasCalc ? `  Widget _calc(String label, num v) => Builder(builder: (context) {
+         ),
+       ); });
+ 
++` : ''}${hasCalcWhole ? `  Widget _calcWhole(String label, num v) => Builder(builder: (context) { final lk = DsLook.of(context); return Padding(
++        padding: const EdgeInsets.symmetric(vertical: 8),
++        child: Container(
++          padding: const EdgeInsets.all(13),
++          decoration: BoxDecoration(color: lk.successSoft, borderRadius: BorderRadius.circular(lk.rSm)),
++          child: Row(children: [
++            Icon(Icons.calculate_outlined, size: 16, color: lk.success),
++            const SizedBox(width: 8),
++            Expanded(child: Text(label, style: TextStyle(color: lk.ink, fontSize: 13.5, fontWeight: FontWeight.w700))),
++            Text(v.round().toString(), style: TextStyle(color: lk.success, fontSize: 15.5, fontWeight: FontWeight.w800)),
++          ]),
++        ),
++      ); });
++
+ ` : ''}${hasLive ? `  Widget _live(String label, String out) => Builder(builder: (context) { final lk = DsLook.of(context); return Padding(
+         padding: const EdgeInsets.only(top: 2, bottom: 6),
+         child: Container(
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..adb3b15 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, סכום מעוגל = round(סכום), הערה | שלבים: פתוח, נעשה
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..59d0602 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -70,7 +70,7 @@ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/gener
+ 3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+-b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs
++04681433ca0c5a33674144869dcc3facd048ad77c1543b1ff6e35f01989bd638  machtzev/generator/render-ds.mjs
+ f9d748159c45d3d7013194ae5705a1797948376fc973bbbbb00497a22fa850d1  machtzev/generator/render-module-baseline.json
+ 74cd7e7ccd4d4e3ad57d8e5eade8fb9d38250616cfdfbf15d1d2087d9080d7ea  machtzev/generator/render-module.mjs
+ 0589103ea8b694b19bcef674586d0b31516a9a535b7b833ffce397c4f063798a  machtzev/generator/retarget.mjs

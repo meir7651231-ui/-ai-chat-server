@@ -1,0 +1,55 @@
+{
+ "task": "M02",
+ "ns": "peruk12",
+ "verdict": "NOT DONE",
+ "missing": [
+  "dash_counter"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "ent2": true,
+  "px2": true,
+  "dash_counter": false
+ },
+ "task_checks": [
+  {
+   "id": "ent2",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "px2",
+   "ok": true,
+   "info": "data:px2",
+   "mandatory": true
+  },
+  {
+   "id": "dash_counter",
+   "ok": false,
+   "info": "no dashboard screen references the label",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "4685fc1b0b5eef3c",
+ "at": "2026-09-10T05:10:40.477Z"
+}

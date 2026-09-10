@@ -1,0 +1,103 @@
+{
+ "task": "H03",
+ "ns": "tasks",
+ "verdict": "NOT DONE",
+ "missing": [
+  "no_orphans"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": false,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [
+   "new/dart-data-bs/auto/gen_app_audit_content.dart",
+   "new/dart-data-bs/auto/gen_app_bind4_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent1_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent2_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent3_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent4_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent5_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent6_content.dart",
+   "new/dart-data-bs/auto/gen_app_flags_content.dart",
+   "new/dart-data-bs/auto/gen_app_hub_content.dart",
+   "new/dart-data-bs/auto/gen_app_main_content.dart",
+   "new/dart-data-bs/auto/gen_app_over1_content.dart",
+   "new/dart-data-bs/auto/gen_app_over2_content.dart",
+   "new/dart-data-bs/auto/gen_app_over3_content.dart",
+   "new/dart-data-bs/auto/gen_app_rec1_content.dart",
+   "new/dart-data-bs/auto/gen_app_rec2_content.dart",
+   "new/dart-data-bs/auto/gen_app_rec3_content.dart",
+   "new/dart-data-bs/auto/gen_app_rec4_content.dart",
+   "new/dart-data-bs/auto/gen_app_rec5_content.dart",
+   "new/dart-data-bs/auto/gen_app_rec6_content.dart",
+   "new/dart-data-bs/auto/gen_app_scr7_content.dart",
+   "new/dart-data-bs/auto/gen_app_settings_content.dart"
+  ],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator ran successfully with tasks.txt particle definition added.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All generated files in new/dart-gen-bs are machine-produced.",
+   "check": "no_hand_edit",
+   "verdict": "FALSE"
+  },
+  {
+   "text": "Table particle includes sort code by מועד field.",
+   "check": "sorting_by_moed",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "tasks.txt includes: חלקיק משימה: [טבלה] | מיון: מועד עולה",
+   "check": "particle_definition",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Only gen_app_tasks_* files created, no orphans.",
+   "check": "no_orphans",
+   "verdict": "FALSE"
+  },
+  {
+   "text": "Hebrew only in spec, not in engine.",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 2,
+ "signature": "2ecfb7d95fa40746",
+ "at": "2026-09-10T11:42:35.411Z"
+}

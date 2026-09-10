@@ -1,0 +1,21 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Spec change (adding | מיון: שעה עולה to Meeting entity) regenerated without errors."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All non-calendar apps remain byte-identical; no changes to other apps' generated Dart."
+    },
+    {
+      "check": "gates_pass",
+      "text": "All gates passed; police-bench verified no violations."
+    },
+    {
+      "check": "sort_list",
+      "text": "Meeting entity list (ent1 screen) now sorts by שעה (time) in ascending order via spec directive."
+    }
+  ],
+  "notes": "proven: Added sort directive to calendar.txt spec: 'ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים | מיון: שעה עולה'. Machine regenerated code and verified sorting applied to entity list screen. No particle screen meetings table exists in this app (sort_second_surface is N/A). All checks pass, VERDICT is DONE."
+}

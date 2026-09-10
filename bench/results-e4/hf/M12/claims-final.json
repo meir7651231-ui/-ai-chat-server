@@ -1,0 +1,1 @@
+{"claims":["opsOf() function in particles.mjs line 182 now handles shape.kind === 'avg' returning ['magnitude']","Particle added to peruk02.txt line 17: 'חלקיק תיק: ממוצע פיקדון = ממוצע / avg(סכום הפיקדון)'"],"notes":"FIXED: Added 'avg' case to particles.mjs opsOf() and added ממוצע פיקדון particle to spec. Should now render properly with magnitude display."}

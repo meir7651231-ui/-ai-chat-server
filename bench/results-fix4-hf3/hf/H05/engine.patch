@@ -1,0 +1,59 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..0bf11c5 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-h05c342 · מיון-טבלה בחלקיק דרך שפת-הספק — `| מיון: שדה עולה|יורד`
++GATE: sort
++ref: machtzev/generator/specs-ds/peruk02.txt
++ANTIPATTERN: חלקיק \w+: \[טבלה\]\s*$
++RULE: חלקיק טבלה ללא מיון מתורגם ל-sort כברירת-מחדל (undefined order). מיון מוגדר בספק: `[טבלה] | מיון: <שדה> עולה` (ascending/min-to-max) או `יורד` (descending/max-to-min); התאריכים ממויינים כמחרוזות מספריות אם הם numeric (DATE), אם לא — כטקסט. פלט-Dart: `sort((a, b) { final c = numCompare ? a[field].compareTo(b[field]) : stringCompare; if (c != 0) return c; })`.
++מה נכשל: peruk02.txt שורה 10 הגדירה `חלקיק תיק: [טבלה]` בלי מיון — תאריך מסירת-מפתח הוצג בסדר-אחסון אקראי. תיקון: הוסיפו `| מיון: תאריך מסירת מפתח עולה` ⇒ [טבלה] particle בפיקדון-אחרי-יציאה מודפסת מוקדם-לאחרון. הספק-תרגיל תופס את זה באופן אוטומטי; רנדור-DS מייצר חיפוש-אחד-למחרוזות (empty ⇒ end). החוק: מיון בספק, לא בקוד. שדה-בחירה בהצהרה ⇒ סדר-ראשוני.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..c98bb76 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -1,8 +1,8 @@
+ [
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה מיון תאריך מסירת מפתח עולה",
++  "expr": "[טבלה] | מיון: תאריך מסירת מפתח עולה",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..257b654 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -2,7 +2,7 @@
+ 
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה מיון תאריך מסירת מפתח עולה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..842a714 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -7,7 +7,7 @@
+ ישות ממצא עם תיק*, סעיף, מה כתוב, מה לבקש, צבע{אדום|צהוב|ירוק} | מחיקה: תיק=מפל
+ לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום)
+ תפקיד בודק: הכל
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] | מיון: תאריך מסירת מפתח עולה
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]

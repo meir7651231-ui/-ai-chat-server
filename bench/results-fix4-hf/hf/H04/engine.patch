@@ -1,0 +1,90 @@
+diff --git a/machtzev/INDEX.md b/machtzev/INDEX.md
+index 9b5154d..ca15aa5 100644
+--- a/machtzev/INDEX.md
++++ b/machtzev/INDEX.md
+@@ -46,6 +46,9 @@
+ | `generator/balagan-run.mjs` · `balagan-run.json` · `balagan-run-baseline.json` | שער-«טוב-יותר» במריצה (G33): playwright על האתר הבנוי — הקשות עד רגע-שמור (≤2) · עד שליחה (1) · זמן-מסך-ראשון; ratchet |
+ | `generator/balagan-one.mjs` · `balagan-one-baseline.json` | שער האפליקציה-האחת (G33): N≡N≡N · מזהה-הרגע N/N · אפס רשימה-סגורה · ratchet |
+ | `generator/balagan-look.mjs` · `balagan-score.json` · `balagan-score-baseline.json` | שער-המראה של «בלגן» (G28 · הכרעה-28): 36 כללי-היעד כמרשם + ציון N/36 + ratchet; --gate/--write |
++| `generator/sort-cmp.mjs` | 🔀 מחולל-משווה לרשימות-ממוינות: ספק בעל-שדה sorting ⇒ Dart (a, b) lambda; מספרי כשניתן, אחרת לקסיקלי; ריק ⇒ אחרון |
++| `generator/formula-fns.mjs` | 📐 כלים לנוסחות טיעוניות בספקים: parse · validate · type-check |
++| `generator/spec-lang-doc.mjs` | 📚 תעודת-דקדוק של שפת-הספק (spec-lang): שדות · סמנים · מילים-שמורות · דוגמאות |
+ | `generator/look.mjs` | מצב-המראה של הריצה (G28): setLook/isPaper · stripGlyph (גליף-מוביל) · skinWired/HARD_COLOR (אטום-בצבע-קשיח נפסל בנייר) — מודול-זעיר בלי מעגל-ייבוא |
+ | `generator/app-shell.mjs` | 🧭 ניווט-מקשרים (GENMAX·G26 · הכרעה-27): `pickRoot` (הישות עם הכי-הרבה מצביעים-נכנסים) ⇒ `renderShell` (סרגל בית·שורש·עוד מחיפוש switch, IndexedStack) + `renderRootPage` (עובדות label+value `must` · ישויות-בנות `referencing`+הוספה `scopeField/scopeId` · דוח `initialId`); אפס מילון — גרף-הקשרים בלבד |
+ | `generator/quarry-golden.mjs` · `golden-fragments.json` · `golden-fragments-report.md` | ⛏️ חציבת-הזהב (GENMAX·G4a): 9 מודולי-SchoolOS ⇒ שברים לפי סמני-הבנאים (═══/───/class/builder/member) + חוקי-דבק (@override · כותרת⇒קוד); לכל שבר defs/atomsUsed/ops/imports, ול-build/builder גם `prelude`+`callSites` (G5a) · round-trip ביט-לביט · שער `goldquarry` |
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..5014b5a 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-particle-sort-a3f18e · חלקיק עם מיון מרובה = צורה בספק בדקדוק `[טבלה] עמודות | מיון: שדה עולה, שדה2 יורד` — לא hand-edit בקוד, רק בספק (10.9, calendar.txt · particles.mjs+sort-cmp.mjs · L105)
++GATE: particles
++ref: machtzev/generator/specs-ds/calendar.txt
++PATTERN: `חלקיק .+: .+ = \[טבלה\].* \| מיון: .+`
++RULE: חלקיק עם טבלה וסדר-מיון מוגדר בספק בקו יחיד בדקדוק: `חלקיק <ישות>: <שם> = [טבלה] <עמודות> | מיון: <שדה1> <עולה|יורד>, <שדה2> <יורד|עולה>, …`. פלט generator: sortLambda מ-sort-cmp.mjs משרשר השוואות ב-Dart (מספרי אם שדה-מספר, enumVals אם בחירה, לקסיקלי אחרת). סדר השדות בטבלה הוא סדר המיון הראשוני (parseSortKeys עבר מהספק).
++מה נלמד: רשימת-פגישות בלוח-שנה הצריכה מיון לפי תאריך ואח"כ שעה. הדרך הנכונה: אחד משדות הטבלה יהיה מסומן כראוי בספק בתוך `| מיון:` (לא בקוד). generator/particles.mjs שורה 124–138 מטבח את כל הטבלאות, parseSortKeys מנתח את שמות-הדיספלינה (עברית, לא enum), sortLambda בנה את comparator ה-Dart — כל השכבה המחוללת נעוצה בדאטה, לא בקוד.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..f94f79b 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "רשימה",
++  "expr": "[טבלה] מה, מועד, שעה, מקום | מיון: מועד עולה, שעה עולה",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/sort-cmp.mjs b/machtzev/generator/sort-cmp.mjs
+index 720d572..cb7f5cf 100644
+--- a/machtzev/generator/sort-cmp.mjs
++++ b/machtzev/generator/sort-cmp.mjs
+@@ -7,7 +7,7 @@ export function sortLambda(sort, k, schema) {
+     const evList = ev ? ev.map((v) => k(v)).join(', ') : '';   // קבועים פעם אחת (בייט-חסכוני)
+     const cmp = ev
+       ? `final o = [${evList}]; final c = o.indexOf(x).compareTo(o.indexOf(y));`
+-      : `final nx = num.tryParse(x), ny = num.tryParse(y); final c = (nx != null && ny != null) ? nx.compareTo(ny) : x.compareTo(y);`;
++      : `final nx = num.tryParse(x), ny = num.tryParse(y); final c = (nx != null && ny != null) ? (nx < ny ? -1 : nx > ny ? 1 : 0) : x.compareTo(y);`;
+     return `{ final x = a[${kc}] ?? '', y = b[${kc}] ?? ''; if (x.isEmpty != y.isEmpty) return x.isEmpty ? 1 : -1; ${cmp} if (c != 0) return ${o.desc ? '-c' : 'c'}; }`;
+   }).join(' ');
+   return `(a, b) { ${body} return 0; }`;
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..b42d3de 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -4,3 +4,4 @@
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+ ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++חלקיק פגישה: רשימה = [טבלה] מה, מועד, שעה, מקום | מיון: מועד עולה, שעה עולה

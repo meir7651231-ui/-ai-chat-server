@@ -1,0 +1,147 @@
+diff --git a/machtzev/compose-engine.mjs b/machtzev/compose-engine.mjs
+index 78ba535..b2c50bf 100644
+--- a/machtzev/compose-engine.mjs
++++ b/machtzev/compose-engine.mjs
+@@ -77,7 +77,7 @@ export const ATOM = {
+ export const FAKERS = new Set([]);
+ 
+ // ── גוזר-הפעולות: מנוסחת-החלקיק → רשימת פעולות-הצגה (deterministic) ──
+-// אופרטורים בנוסחה: '−' הפרש · '/' יחס · '×' מכפלה · 'vs' השוואה · 'count' · 'Σ' · 'partition' · 'raw' · 'name' · 'act'
++// אופרטורים בנוסחה: '−' הפרש · '/' יחס · '×' מכפלה · 'vs' השוואה · 'count' · 'Σ' · 'avg' · 'partition' · 'raw' · 'name' · 'act'
+ export function ops(formula) {
+   const f = formula;
+   if (f.kind === 'raw')       return [{ op: 'fact', why: 'ערך-גלם, אין תת-פעולה ⇒ עובדה עוצרת' }];
+@@ -86,6 +86,7 @@ export function ops(formula) {
+   if (f.kind === 'partition') return [{ op: 'group', why: 'חלוקה-לדליים פר-מצב, אטום חוזר פר-קבוצה' }];
+   if (f.kind === 'count')     return [{ op: 'headline', why: 'ספירה-מסוננת = מדד-כותרת' }];
+   if (f.kind === 'sum')       return [{ op: f.headline ? 'hero' : 'headline', why: 'סכום = מדד' }];
++  if (f.kind === 'avg')       return [{ op: f.headline ? 'hero' : 'headline', why: 'ממוצע = מדד (סכום/מונה על כל הרשומות)' }];
+   if (f.kind === '/')         return [{ op: 'ratio', why: 'חלק-מתוך-שלם ⇒ בר-מילוי (ערך+יעד+יחס באטום-אחד)' }];
+   if (f.kind === '−')         return [{ op: 'diff', why: 'הפרש חתום ⇒ BareStat צבוע-לפי-סימן' }];
+   if (f.kind === '×')         // מכפלה = תובנה: אופרנד × אופרנד = תוצאה (3 פעולות)
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..b1afea9 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -266,5 +266,32 @@
+   "wired": [
+    "KvLine"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "ממוצע פיקדון",
++  "expr": "ממוצע(סכום הפיקדון)",
++  "ok": true,
++  "why": null,
++  "shape": "avg",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..86011f2 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -11,6 +11,7 @@
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
++| ממוצע פיקדון | תיק | avg | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/peruk-lang.data.json b/machtzev/generator/peruk-lang.data.json
+index 74d8d89..633c0be 100644
+--- a/machtzev/generator/peruk-lang.data.json
++++ b/machtzev/generator/peruk-lang.data.json
+@@ -55,6 +55,9 @@
+   "notin": [
+    "מה לא נכנס"
+   ],
++  "particles": [
++   "חלקיקים"
++  ],
+   "kill": [
+    "קריטריון"
+   ]
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..293473e 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -204,6 +204,9 @@ export function perukToSpec(md, ns) {
+   }
+   if (dateFields.length && !outputs.some((o) => kindOfOut(o.name) === 'dates')) { extraParticles.push(`${G.particleWord} ${root}: ${P.datesLabel} = [${G.pDates[0]}]`); lines.push(`${G.reportWord} ${root}: ${P.datesLabel} = ${P.datesLabel}`); }   // G29 · לוח תמיד כשיש תאריכים
+   lines.push(...extraParticles);
++  // חלקיקים-של-הבעלים: סעיף «חלקיקים» במסמך — כל פריט-רשימה בדקדוק-החלקיקים עובר לספק כמו-שהוא (מבני, אפס-ניחוש); פריט בלי מילת-הדקדוק ⇒ חלקיק על השורש
++  const partSec = S('particles'); const partRe = new RegExp('^' + G.particleWord + '\\s');
++  if (partSec) for (const it of items(allText(partSec))) lines.push(partRe.test(it) ? it : `${G.particleWord} ${root}: ${it}`);
+   if (disclaimer) lines.push(`${G.reportWord} ${root}: ${P.reportDisclaimer} = [${G.pContent[0]} ${groups.disclaimer}]`);
+   const phone = P.personFields.find((f) => /טלפון/.test(f));
+   if (phone) lines.push(`${G.reportWord} ${root}: [${G.pExport[0]}] ${P.exportLabel} = ${phone.replace(/\*$/, '')}, ${P.exportGoal}`);
+diff --git a/machtzev/generator/peruks/peruk-02.md b/machtzev/generator/peruks/peruk-02.md
+index 5a21a17..64c334e 100644
+--- a/machtzev/generator/peruks/peruk-02.md
++++ b/machtzev/generator/peruks/peruk-02.md
+@@ -226,4 +226,10 @@
+ מונע חצי מהתיקים המכוערים.
+ 
+ קריטריון הריגה: 20 פניות בלי תשלום, או כולם רצים לבד לבינה.
++
++---
++
++## 13. חלקיקים
++
++- חלקיק תיק: ממוצע פיקדון = ממוצע(סכום הפיקדון)
+ ---
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..caea7c3 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -23,6 +23,7 @@
+ דוח תיק: מה חסר = יציאה, [תוכן מה חסר]
+ דוח תיק: לוח = לוח
+ חלקיק תיק: לוח = [לוח]
++חלקיק תיק: ממוצע פיקדון = ממוצע(סכום הפיקדון)
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
+ דוח תיק: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה
+ תוכן מסגרת: ערובה שכרוכה בהוצאה מוגבלת בתקרה (3 חודשים או שליש מהתקופה — הנמוך)
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..6e29da2 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -28,7 +28,7 @@ f13c01cf38d7c3a396a99af33d27a27acb8a87fb8ecb550e70748a5db59242bc  machtzev/box-p
+ f47b7c003138db29b98039c7dad3bcef469bcff378d3b0e6d599ab3d81e82a52  machtzev/census/logic-census.mjs
+ da798a30e2b6d8b9668025cb1423523cbdc8a4ff78a520a3eaeb1f818664c11d  machtzev/census/oracle.mjs
+ ab162aa1c4b6b7624b039f0ce7bdd4d19ad51f32abd7464965c035725aa47bab  machtzev/compose-engine-report.md
+-e9cf879c197edd2003cc488a806ec47ede41521f47c79b24f8b5a1efda9f02c5  machtzev/compose-engine.mjs
++8d8bcf2b04c01a5d200a9742c807f158eef1e5b2354294e7d7aa09b8074f4226  machtzev/compose-engine.mjs
+ 1e59f361a82c69311fc6861074e428c27426a4f27f741b3404102baf026fcd3f  machtzev/contract-check.mjs
+ f99e220b02888f52a02e426d6514a6d7cc51a448ca1ff669a903118b85eea0db  machtzev/contract-quality-baseline.json
+ 601fa873baef5a31dedd5ce386c5b87dafaa6ae947a4829b30e59c01dcc37805  machtzev/coverage-baseline.json
+@@ -67,7 +67,7 @@ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/gener
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+ 39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++cbd041935d75b18c76ed1539a04bb5f95c58cdbe08d5b5f42243a3be1a836992  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

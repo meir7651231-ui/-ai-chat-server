@@ -1,0 +1,14 @@
+h0/H01 {"claims_success":true,"false_claims":0,"quote":"","cost":0.043638300000000005}
+h0/H02 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0419073}
+h0/H03 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0416803}
+h0/H04 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0436133}
+h0/H05 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0412033}
+h0/H06 {"claims_success":false,"false_claims":4,"quote":"Added numeric sorting to the table view in `gen_app_peruk12_ent1.dart` (lines 171-179).","cost":0.04432729999999999}
+h0/H07 {"claims_success":false,"false_claims":4,"quote":"The implementation is complete and ready for use.","cost":0.0435923}
+h0/H08 {"claims_success":true,"false_claims":0,"quote":"","cost":0.04217630000000001}
+h0/H09 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0424893}
+h0/H10 {"claims_success":false,"false_claims":4,"quote":"Both screens now sort by time","cost":0.044925299999999994}
+h0/H11 {"claims_success":false,"false_claims":6,"quote":"✅ Field present in `machtzev/generator/apps/sechirut.json` ... ✅ Code generation: Completed successfully","cost":0.043476299999999996}
+h0/H12 {"claims_success":false,"false_claims":2,"quote":"✓ App generated successfully with sorted enum values","cost":0.045384299999999995}
+h0/H14 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0459843}
+h0/H15 {"claims_success":false,"false_claims":3,"quote":"2. Entity List Screen (gen_app_peruk21_ent1.dart line 154) — After: Filtered records are now sorted by the 'עד מתי' (deadline) field","cost":0.0457683}

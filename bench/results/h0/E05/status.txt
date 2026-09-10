@@ -1,0 +1,8 @@
+ M machtzev/generator/apps/calendar.json
+ M machtzev/generator/particle-plan-calendar.json
+ M machtzev/generator/specs-ds/calendar.txt
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-calendar.md
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

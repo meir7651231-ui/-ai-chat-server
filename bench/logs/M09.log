@@ -1,0 +1,25 @@
+=== h0/M09 (tasks) start 21:54:26
+  builder.json: exit=0 cost=0.31727510000000003 turns=26 ms=391305 err=false
+  police: NOT DONE missing=empty false=0
+=== h0/M09 NOT DONE wall=423s cost=$0.32 false_claims=0
+=== hf/M09 (tasks) start 22:01:30
+  builder.json: exit=0 cost=0.9364123000000003 turns=72 ms=504214 err=false
+  police: NOT DONE missing=empty false=1
+  auditor-regression.json: exit=0 cost=0.32407529999999996 turns=24 ms=95716 err=false
+  auditor-coverage.json: exit=0 cost=0.35381769999999996 turns=28 ms=106214 err=false
+  auditor-compile.json: exit=0 cost=0.31369790000000003 turns=25 ms=136716 err=false
+  validator.json: exit=0 cost=0.24704240000000002 turns=28 ms=81887 err=false
+  fixer.json: exit=0 cost=0.8738401999999998 turns=61 ms=347083 err=true
+  police: NOT DONE missing=byte_identical_others,empty false=1
+  police: NOT DONE missing=byte_identical_others,empty false=1
+=== hf/M09 NOT DONE wall=1171s cost=$3.05 false_claims=1
+=== f0/M09 (tasks) start 22:21:02
+  builder.json: exit=0 cost=3.766161 turns=64 ms=437067 err=false
+  police: NOT DONE missing=empty false=0
+=== f0/M09 NOT DONE wall=470s cost=$3.77 false_claims=0
+skip h0/M09 (done)
+skip hf/M09 (done)
+skip f0/M09 (done)
+skip h0/M09 (done)
+skip hf/M09 (done)
+skip f0/M09 (done)

@@ -1,0 +1,107 @@
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..31007dd 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -60,8 +60,12 @@
+   {
+    "name": "משימה",
+    "slug": "app_tasks_ent1"
++  },
++  {
++   "name": "תזכורת",
++   "slug": "app_tasks_ent2"
+   }
+  ],
+- "relations": false,
++ "relations": true,
+  "report": null
+ }
+\ No newline at end of file
+diff --git a/machtzev/generator/particle-plan-tasks.json b/machtzev/generator/particle-plan-tasks.json
+index 0637a08..5e60b01 100644
+--- a/machtzev/generator/particle-plan-tasks.json
++++ b/machtzev/generator/particle-plan-tasks.json
+@@ -1 +1,56 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "תזכורת",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
++ {
++  "entity": "תזכורת",
++  "name": "ריק אין תזכורות",
++  "expr": "[ריק] אין תזכורות",
++  "ok": true,
++  "why": null,
++  "shape": "empty",
++  "ops": [
++   "empty"
++  ],
++  "picks": [
++   {
++    "op": "empty",
++    "atoms": [
++     "EmptyStateCard"
++    ],
++    "alts": [
++     "EmptyStateCard",
++     "EmptyState@premium/feedback",
++     "SearchEmptyState"
++    ]
++   }
++  ],
++  "wired": [
++   "EmptyState@premium/feedback"
++  ]
++ }
++]
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..d928273 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -388,7 +388,8 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {
+-      const w = firstWired(kd[0][1], { message: k(s.text || p.name), label: lbl, glyph: k('🧩') }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-ריק מתחווט`); continue; }
++      const msgText = k(s.text || p.name);
++      const w = firstWired(kd[0][1], { message: msgText, label: msgText, glyph: k('🧩') }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-ריק מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${recs}.isEmpty ? ${w.call} : const SizedBox.shrink())`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'content') {   // G24 · אטומי-תוכן: קבוצה-פר-תג (group עם children ⇒ מיכל; בלעדיו כותרת+שורות) + הודעה-פר-שורה (alert)
+       const linePick = s.tagged ? kd[1][1] : kd[0][1];
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..3581c3f 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -4,3 +4,6 @@
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+ ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות תזכורת עם משימה*, מועד*, נשלחה{כן|לא} | מחיקה: משימה=מפל
++חלקיק תזכורת: [טבלה]
++חלקיק תזכורת: [ריק] אין תזכורות

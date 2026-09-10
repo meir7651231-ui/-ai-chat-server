@@ -1,0 +1,74 @@
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..8c73e9e 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -200,6 +200,33 @@
+    "DsNote"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "ממוצע פיקדון",
++  "expr": "ממוצע / avg(סכום הפיקדון)",
++  "ok": true,
++  "why": null,
++  "shape": "/",
++  "ops": [
++   "ratio"
++  ],
++  "picks": [
++   {
++    "op": "ratio",
++    "atoms": [
++     "StatRow"
++    ],
++    "alts": [
++     "StatRow",
++     "ProgressStatRow",
++     "ManagerDashboardCreditBar"
++    ]
++   }
++  ],
++  "wired": [
++   "ForgeGlowSlider"
++  ]
++ },
+  {
+   "entity": "ממצא",
+   "name": "צבע",
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..9a2281e 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בדיקה | ממצא | content | group⇒SectionHeader (SectionHeader/DsSection) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| ממוצע פיקדון | תיק | / | ratio⇒StatRow (StatRow/ProgressStatRow) | ForgeGlowSlider |
+ | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index 287b322..6240551 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -179,6 +179,7 @@ export function opsOf(shape) {
+   if (shape.kind === 'message') return ['switch', 'alert'];     // G29 · נוסחים (בורר) + טקסט-ההודעה (הודעה)
+   if (shape.kind === 'dates') return ['magnitude'];             // G29 · לוח: שורת תווית+ערך (כמו עובדות-השורש), ממוינת
+   if (shape.kind === 'partition') return ['group', 'alert'];   // חלוקה-למצבים: קבוצה-פר-ערך + שורה-פר-רשומה (G24: השורה דרך אטום, לא Text חשוף)
++  if (shape.kind === 'avg') return ['magnitude'];               // ממוצע: סכום מצטבר כערך-אגרגט
+   const f = { kind: shape.kind, headline: shape.headline };
+   try { return opsOfKind(f).map((o) => o.op); } catch { return null; }
+ }
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..cac0902 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -14,6 +14,7 @@
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק ממצא: בדיקה = [תוכן בדיקה]
+ חלקיק תיק: אסור = [תוכן אסור]
++חלקיק תיק: ממוצע פיקדון = ממוצע / avg(סכום הפיקדון)
+ חלקיק ממצא: צבע
+ דוח תיק: כרטיס = [תוכן כרטיס]
+ דוח תיק: טבלת שורות = [תוכן טבלת שורות]

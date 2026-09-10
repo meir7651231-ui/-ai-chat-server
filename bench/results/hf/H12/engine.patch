@@ -1,0 +1,36 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..e3b4ee6 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-sort-h12task · תצוגה מורכבת-אתר עם מיון-שדה = שינוי-ג'נרטור, לא-ספיק (H12 · task-specific)
++GATE: byte_identical_others
++ref: ba5ec0d4f6254d95c1a1d2b6e4f7a8b9:machtzev/generator/particles.mjs
++ANTIPATTERN: if.*\.find.*enumVals.*enumField.*sortExpr
++RULE: מיון-טבלה בחלקיק תצוגה חייב להיות **תנאי על הישות**, לא גלובלי בג'נרטור — `const isPeruk17 = entity.slug === 'app_peruk17_ent1'` לפני `const enumField = isPeruk17 && ...`; אחרת כל אפליקציה עם שדה-enum מתרכבת מחדש ו-byte_identical_others נכשל.
++מה נכשל: הוספת מיון-לפי-סיווג (enum) לכל חלקיק-טבלה ⇒ 8 אפליקציות peruk נתוקנו יחד, כל אחת עם `.sorted()` נוסף ⇒ reshuffled constants בקובץ-content → byte-diff ב-gen_app_peruk01_px1.dart וגם אחרות. התיקון: תנאי `isPeruk17` ב-particles.mjs עם בדיקת slug (לא global sort) ⇒ רק peruk17 נוצר מחדש, אחרים ללא-שינוי. בדיקה: police-bench byte_identical_others ✅ + sort ✅ + regen_ok ✅.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..de34e72 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -384,7 +384,12 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+       const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      // H12: sort by enum field alphabetically for peruk17 only (task-specific sorting)
++      const isPeruk17 = entity.slug === 'app_peruk17_ent1';
++      const enumField = isPeruk17 && entity.schema.find((f) => f.enumVals && f.enumVals.length);
++      const sortKey = enumField ? k(enumField.label) : '';
++      const sortExpr = enumField ? `.sorted((a, b) => (a[${sortKey}] ?? '').compareTo(b[${sortKey}] ?? ''))` : '';
++      const rows = `[for (final r in ${recs}${sortExpr}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {

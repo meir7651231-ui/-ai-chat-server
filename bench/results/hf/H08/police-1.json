@@ -1,0 +1,72 @@
+{
+ "task": "H08",
+ "ns": "panuy",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "calc": true,
+  "abs": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  },
+  {
+   "id": "abs",
+   "ok": true,
+   "info": "2×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Generator pipeline succeeds without errors",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All generated code in new/ is machine-produced",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All files outside generated code remain byte-identical",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All police gates pass",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "machtzev/generator/specs-ds/panuy.txt contains: מרחק אבסולוטי = (הפרש רוחב).abs()",
+   "check": "panuy_spec_updated",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "72468886b717862b",
+ "at": "2026-09-09T21:46:45.785Z"
+}

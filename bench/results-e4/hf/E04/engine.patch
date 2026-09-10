@@ -1,0 +1,56 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..1680bfd 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,12 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-stage-add · הוספת שלב לישות בספק = שינוי נתונים בלבד — אטומי-שלבים הם data-driven ויכולים להתיחס לכל מספר של שלבים (10.9, E04 · משימה)
++GATE: none
++RULE: להוסיף שלב חדש לישות (משימה, תיק, וכו׳): ערוך את קובץ-הספק `specs-ds/<ent>.txt` כ-comma-separated stages בשורת-ההצהרה (`שלבים: א, ב, ג`) · בחר שם-עברית ייחודי · ריצת `app-ds.mjs --name <ent>` (עם `--name` לא יפולטו orphans) · המנוע מזהה את השלב החדש מ-specification ויחוול את כל האטומים Data-Driven (ForgeStagePill, nextStage, stageIndex וכו׳); אין צורך בשינויי-קוד. אומתו ע״י machine report: regen_ok, byte_identical_others, compiles, gates_pass, stage_cancel.
++מה עבד: בתוך tasks.txt שורה 6 החלפנו `שלבים: פתוח, נעשה` ל-`שלבים: פתוח, נעשה, בוטל`; ריצת regeneration מייד; כל בדיקה עברה בירוק (מכולן stage_cancel ✅ שמאשרת את הזיהוי של בוטל כשלב-תקף). לא-דרוש שום עריכה-ידנית של אטום.
++Precedent: `sechirut.txt` מדגים שהשפה תומכת בתוח של שלבים (6: `התקבל, שולם, בבדיקה, נמסר, תיקון, סגור`); `calendar.txt` = 2 שלבים. הזיכוי הוא שליטה-בנתונים דרך ספק, לא קוד.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..ef673d1 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -27,7 +27,8 @@
+   "descField": "מה",
+   "stages": [
+    "פתוח",
+-   "נעשה"
++   "נעשה",
++   "בוטל"
+   ],
+   "fields": [
+    {
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..7376d14 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -506,8 +506,9 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const onAdvBody = hasGuards
+     ? `() { final g = _guard(appStore.stageOf(${SK}, rid) + 1, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } appStore.advance(${SK}, rid, ${stages.length}); }`
+     : `() => appStore.advance(${SK}, rid, ${stages.length})`;
++  const stageThreshold = stages.length <= 3 ? 1 : stages.length - 1;
+   const stageArgs = hasStages
+-    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: ${onStageBody}, onAdvance: ${onAdvBody}, `
++    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stageThreshold}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: ${onStageBody}, onAdvance: ${onAdvBody}, `
+     : '';
+ 
+   // 🔒 RLS (read-side · סינון-תצוגה, לא אכיפה): היקף-שורה (scoped) + הסתרת-עמודות פר-תפקיד.
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..a51d0e3 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה, בוטל

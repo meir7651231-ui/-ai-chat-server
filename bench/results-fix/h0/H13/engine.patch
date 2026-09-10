@@ -1,0 +1,13 @@
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index 8f44fe1..cdecf94 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -402,7 +402,7 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       const w = firstWired(kd[0][1], { label: k(s.label || p.name), nav, glyph: k('🧩') }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-פעולה מתחווט`); continue; }
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+-      const cols = s.columns ? entity.schema.filter((f) => s.columns.includes(f.label)) : entity.schema;
++      const cols = s.columns ? s.columns.map((colName) => entity.schema.find((f) => f.label === colName)) : entity.schema;
+       const labels = cols.map((f) => k(f.label));
+       // מיון מהספק: מספרי כשניתן, אחרת לקסיקלי; ריק ⇒ אחרון; מפתחות משורשרים; יורד ⇒ היפוך
+       const cmp = (s.sort || []).map((o) => { const kc = k(o.field); return `{ final x = a[${kc}] ?? '', y = b[${kc}] ?? ''; if (x.isEmpty != y.isEmpty) return x.isEmpty ? 1 : -1; final nx = num.tryParse(x), ny = num.tryParse(y); final c = (nx != null && ny != null) ? nx.compareTo(ny) : x.compareTo(y); if (c != 0) return ${o.desc ? '-c' : 'c'}; }`; }).join(' ');

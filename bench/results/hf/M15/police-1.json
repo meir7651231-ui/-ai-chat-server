@@ -1,0 +1,87 @@
+{
+ "task": "M15",
+ "ns": "calendar",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "new": true,
+  "old_gone": true
+ },
+ "task_checks": [
+  {
+   "id": "new",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "old_gone",
+   "ok": true,
+   "info": "0×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Generator pipeline completed successfully with field rename applied",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All non-calendar generated files unchanged (no unintended side effects)",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All 53 registered gates pass validation",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Engine code contains no Hebrew strings (metadata and comments only)",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Mathematical expressions and numeric operations verified sane",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Field name successfully changed in spec (calendar.txt line 6: מקום → כתובת)",
+   "check": "field_renamed",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Generated constant reflects rename: gen_app_calendar_ent1_c12 = 'כתובת'",
+   "check": "constant_propagated",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "No hardcoded references to old field name 'מקום' in generated app code",
+   "check": "old_field_removed",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "9c419812da7f52b7",
+ "at": "2026-09-10T02:45:34.465Z"
+}

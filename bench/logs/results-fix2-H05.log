@@ -1,0 +1,4 @@
+=== h0/H05 (peruk02) start 06:47:27
+  builder.json: exit=0 cost=0.26544760000000006 turns=20 ms=219299 err=false
+  police: DONE missing= false=0
+=== h0/H05 DONE wall=252s cost=$0.27 false_claims=0

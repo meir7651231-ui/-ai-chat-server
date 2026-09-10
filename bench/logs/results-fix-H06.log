@@ -1,0 +1,8 @@
+=== h0/H06 (peruk12) start 06:08:46
+  builder.json: exit=0 cost=0.3419128 turns=24 ms=245417 err=false
+  police: NOT DONE missing=byte_identical_others,sort false=0
+=== h0/H06 NOT DONE wall=277s cost=$0.34 false_claims=0
+=== h0/H06 (peruk12) start 06:20:59
+  builder.json: exit=0 cost=0.1727559 turns=16 ms=170843 err=false
+  police: NOT DONE missing=sort false=0
+=== h0/H06 NOT DONE wall=202s cost=$0.17 false_claims=0

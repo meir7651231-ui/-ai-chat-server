@@ -1,0 +1,138 @@
+diff --git a/machtzev/generator/particle-plan-peruk12.json b/machtzev/generator/particle-plan-peruk12.json
+index 2591b82..c10d19f 100644
+--- a/machtzev/generator/particle-plan-peruk12.json
++++ b/machtzev/generator/particle-plan-peruk12.json
+@@ -1,8 +1,8 @@
+ [
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה לפי מחיר",
++  "expr": "[טבלה] לפי מחיר",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-peruk12.md b/machtzev/generator/particle-plan-peruk12.md
+index 65c380d..b3c147f 100644
+--- a/machtzev/generator/particle-plan-peruk12.md
++++ b/machtzev/generator/particle-plan-peruk12.md
+@@ -2,7 +2,7 @@
+ 
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה לפי מחיר | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..601ab26 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -2,7 +2,7 @@
+ // 🧩 particles — מפרק-החלקיקים הפתוח (GENMAX·G23 · הכרעה-27: "אין רשימה סגורה — כל חלקיק, בכל ריצה, נמצא ומורכב מחדש מכל הקטלוג").
+ //   קלט (צעדים 1–2, אדם): שורות `חלקיק <ישות>: <שם> = <צורה>` בספק של app-ds. הצורה = ביטוי מבני על שדות-הישות (אפס-מילון):
+ //     A / B (יחס) · A - B (הפרש) · A * B (מכפלה) · A מול B (השוואה) · מונה(שדה=ערך) · מונה() · סכום(שדה) · ממוצע(שדה) ·
+-//     שדה-enum (חלוקה-למצבים) · שדה-טקסט/תאריך (עובדה) · [טבלה] · [איתור] · [חריגה] · [ייצוא] · [פעולה] טקסט · [ריק] טקסט
++//     שדה-enum (חלוקה-למצבים) · שדה-טקסט/תאריך (עובדה) · [טבלה] · [טבלה] לפי שדה (סדר-שורות עולה; שדה-מספר ⇒ השוואה מספרית) · [איתור] · [חריגה] · [ייצוא] · [פעולה] טקסט · [ריק] טקסט
+ //   המנוע: צורה ⇒ פעולות-הצגה (אלגברת compose-engine, אותו מקור-אמת של הזהב) ⇒ לכל פעולה חיפוש בכל ops-map (cover: פעולה+שקעים+ייעוד) ⇒
+ //   חיווט-שקעים מהדאטה האמיתית (רשומות appStore; שקע שאין לו דאטה ⇒ האטום נפסל, הבא בתור — §20-ג) ⇒ מסך-חלקיקים לישות.
+ //   פלט: plan (json/md, דטרמיניסטי) + קוד-Dart (renderParticles). שער `particles`: plan ≡ טרי · אפס חלקיק-לא-פתור בספקי specs-ds.
+@@ -119,6 +119,11 @@ export function shapeOf(expr, schema, content = [], opts = {}) {
+     if (!fields.length) return { kind: null, why: 'לוח: אין שדות-תאריך' };
+     return { kind: 'dates', fields: fields.map((f) => f.label) };
+   }
++  if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\](?:\\s*' + alt(G.pSortBy) + '\\s+(.+?))?\\s*$')))) {   // G34 · `[טבלה] לפי <שדה>` = סדר-השורות: מספר ⇒ השוואה מספרית (num.tryParse; ריק/לא-מספר אחרון), אחרת טקסט; עולה
++    if (!m[3]) return { kind: 'table' };
++    const f = F(m[3]); if (!f) return { kind: null, why: `טבלה: שדה-מיון לא בסכמה: ${m[3]}` };
++    return { kind: 'table', sortBy: f.label, sortNum: f.type === 'num' || !!f.formula };
++  }
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\]')))) return { kind: 'table' };
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pSearch) + '\\]')))) return { kind: 'search' };
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pFilter) + '\\]')))) return { kind: 'filter' };
+@@ -384,7 +389,10 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+       const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      // G34 · `לפי <שדה>`: עותק ממוין של הרשומות — שדה-מספר: num.tryParse (ריק/לא-מספר ⇒ אינסוף = אחרון), אחרת השוואת-טקסט; עולה
++      const sortKey = (v) => s.sortNum ? `(num.tryParse(${v}[${k(s.sortBy)}] ?? '') ?? double.infinity)` : `(${v}[${k(s.sortBy)}] ?? '')`;
++      const src = s.sortBy ? `(${recs}.toList()..sort((a, b) => ${sortKey('a')}.compareTo(${sortKey('b')})))` : recs;
++      const rows = `[for (final r in ${src}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..f27c96a 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -167,16 +167,20 @@ export function perukToSpec(md, ns) {
+   if (severity) lines.push(`${G.entityNouns[0]} ${fnd} ${G.withWord} ${P.findingFields.map((f, i) => i === 0 ? f.replace(/\*$/, '') + '*' : f).join(', ')}, ${P.severityField}{${P.severity.join('|')}} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
+   lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}`);
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+-  lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]`);
++  const fieldLabels = rootFields.map((f) => f.replace(/[{*].*$/, '').trim());
++  const stemOf = (w) => w.replace(/^[בלהומשכ](?=..)/, '').replace(/(יות|ים|ות|ה)$/, '');
++  const matchField = (txt) => { const ws = heW(txt).map(stemOf); return fieldLabels.find((f) => { const fw = heW(f).map(stemOf); return fw.length && fw.every((w) => ws.includes(w)); }) || null; };
++  // G34 · סדר-הטבלה: המספר שהכרטיס (חלק-הפלט הראשון של «מה חוזר») מדבר עליו — שדה-קליטה מספרי (רמזי-הטיפוס של הסכמה, כמו entity.inferType) שמוזכר בפירוטו ⇒ `[טבלה] לפי <שדה>` (עולה). אין ⇒ הטבלה כסדר-ההזנה.
++  const isNumField = (lbl) => fields.some((f) => f.label === lbl && (f.num || (!G.typeDate.some((w) => lbl.includes(w)) && G.typeNum.some((w) => lbl.includes(w)))));
++  const detailParts = (o) => o.detail.flatMap((dline) => dline.split(/(?<!\d)[,،.](?!\d)/).map((x) => x.trim()).filter(Boolean));
++  const tableSort = outputs.length ? detailParts(outputs[0]).map(matchField).find((f) => f && isNumField(f)) || null : null;
++  lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]${tableSort ? ` ${G.pSortBy[0]} ${tableSort}` : ''}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${P.openAction}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pEmpty[0]}] ${P.emptyText}`);
+   const groupNames = [...new Set(content.map((c) => c.group))];
+   for (const g of groupNames) if (g !== groups.disclaimer && g !== groups.example) lines.push(`${G.particleWord} ${severity && g === groups.check ? fnd : root}: ${g} = [${G.pContent[0]} ${g}]`);
+   if (severity) lines.push(`${G.particleWord} ${fnd}: ${P.severityField}`);
+   // דוח: חלק לכל פריט של «מה חוזר»; refs = שדות שתואמים בפירוט, אחרת תוכן-החלק
+-  const fieldLabels = rootFields.map((f) => f.replace(/[{*].*$/, '').trim());
+-  const stemOf = (w) => w.replace(/^[בלהומשכ](?=..)/, '').replace(/(יות|ים|ות|ה)$/, '');
+-  const matchField = (txt) => { const ws = heW(txt).map(stemOf); return fieldLabels.find((f) => { const fw = heW(f).map(stemOf); return fw.length && fw.every((w) => ws.includes(w)); }) || null; };
+   const kindOfOut = (name) => Object.entries(P.outputKinds).find(([, ws]) => ws.some((w) => name.includes(w)))?.[0] || null;
+   const dateFields = fieldLabels.filter((f) => G.typeDate.some((w) => f.includes(w)));
+   const extraParticles = [];
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index a85fb73..c6b9463 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -96,6 +96,11 @@
+   "טבלה",
+   "רשימה"
+  ],
++ "pSortBy": [
++  "לפי",
++  "מיין לפי",
++  "ממוין לפי"
++ ],
+  "pSearch": [
+   "איתור",
+   "חיפוש"
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..b18e66b 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -7,7 +7,7 @@
+ ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] לפי מחיר
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..df652de 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -66,8 +66,8 @@ d4015aec8b28007379713aa445c5f4b344b1a2c0448ea66b635fa1de4bf8a859  machtzev/gener
+ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/generator/logic-census.json
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+-39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++854ea4897a6b5dda45c0137f2d92c7d81f6c3428ae5e50dbe1df8929abcbf20d  machtzev/generator/particles.mjs
++e6419b93e55b579b4a9aca5246874d2478af68d9b062c6ecc7bdb2696125a1d8  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

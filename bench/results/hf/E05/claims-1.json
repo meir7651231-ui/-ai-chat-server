@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Engine regenerated calendar spec successfully with new participants field"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All gates passed including field parsing and empty text detection"
+    },
+    {
+      "check": "field",
+      "text": "Participants field added to פגישה entity as optional field"
+    },
+    {
+      "check": "empty_text",
+      "text": "Empty-state message added via particle definition"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "No Hebrew text in engine files, all spec changes in calendar.txt only"
+    }
+  ],
+  "notes": "Spec change regenerated calendar app files. Engine correctly auto-wired participants field and empty state."
+}

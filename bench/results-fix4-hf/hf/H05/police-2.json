@@ -1,0 +1,65 @@
+{
+ "task": "H05",
+ "ns": "peruk02",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "sort": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "peruk02.txt line 10: '[טבלה] | מיון: תאריך מסירת מפתח עולה' parses correctly via particles.mjs sort logic",
+   "check": "spec_syntax_valid",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Field 'תאריך מסירת מפתח' is date type (detected from 'תאריך' keyword); valid for sorting in ascending order",
+   "check": "field_type_match",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Keyword 'עולה' from spec-lang.data.json sortAsc list; generates ascending order (earliest first)",
+   "check": "sort_keyword_correct",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Only spec file modified; new/ directory byte-identical to baseline",
+   "check": "no_generated_code_touched",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "app-ds.mjs successfully generated peruk02 app with 5 screens; no parsing or generation errors",
+   "check": "no_regressions",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "86311309a43f0bf7",
+ "at": "2026-09-10T09:00:17.460Z"
+}

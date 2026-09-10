@@ -1,0 +1,10 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/apps/peruk08.json
+ M machtzev/generator/specs-ds/peruk08.txt
+?? "machtzev/audit/search/2026-09-10-stage-\327\252\327\231\327\247-\327\240\327\236\327\241\327\250-89e4feef.json"
+?? "machtzev/audit/search/2026-09-10-stage-\327\252\327\231\327\247-\327\240\327\236\327\241\327\250-ba19330c.json"
+?? "machtzev/audit/search/2026-09-10-stage-\327\252\327\231\327\247-\327\240\327\236\327\241\327\250-ca414d72.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

@@ -1,0 +1,70 @@
+{
+ "task": "E07",
+ "ns": "peruk21",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "counter": true
+ },
+ "task_checks": [
+  {
+   "id": "counter",
+   "ok": true,
+   "info": "consts=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Spec change regenerated successfully; no parser errors in generator pipeline",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No other spec files or generated outputs modified; only peruk21 changes",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All 53 gates pass; no architectural violations or inconsistencies",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No Hebrew added to engine code; all Hebrew confined to spec",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No invalid Dart math method calls on numeric fields",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Counter particle דחופים found in px1 content with filtering by סיווג=הזמנה לוועדה",
+   "check": "counter",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "97097b938c2d9ff7",
+ "at": "2026-09-09T20:41:23.965Z"
+}

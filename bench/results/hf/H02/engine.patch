@@ -1,0 +1,93 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..7aae807 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,9 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-09-table-sort · חלקיק טבלה — סדר רשימות מ-spec, לא מקוד: [טבלה] שדה:direction (9.9, specs-ds · particles.mjs)
++**מה קרה:** טבלה ב-תיק נדרשה ממויינת בשכירות יורד (גבוה ראשון). הטבלה נוצרה בלי מיון. **הלקח:** (1) **מיון בשדה בטבלה מגיע מהספק** — תחביר `[טבלה] שדה:direction` (default=asc); direction=desc|asc בקוד Dart יהיה compareTo דו-כיווני (מספרים לפי tryParse, מחרוזות לפי compareTo). (2) **ניתוח צורה עבור [טבלה]** — הוסף regex לייצור שדה sortField וsortDir בתוכנית. (3) **יצירת שורות עם סדר** — אם sortField הוגדר, `.toList()..sort()` לפני ה-list comprehension בדרט. (4) **מספר vs מחרוזת** — tryParse descending (desc) משווה `b.compareTo(a)`, ascending משווה `a.compareTo(b)`; חוק-טריד: מספרים בשדה numeric, חוק-הטוהר (עמודה אחת = סוג אחד).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-sechirut.json b/machtzev/generator/particle-plan-sechirut.json
+index aa8a58e..f5ed324 100644
+--- a/machtzev/generator/particle-plan-sechirut.json
++++ b/machtzev/generator/particle-plan-sechirut.json
+@@ -230,8 +230,8 @@
+  },
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה שכירות",
++  "expr": "[טבלה] שכירות:desc",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..5421eb5 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -10,7 +10,7 @@
+ | הכנסה | תשלום | sum | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | לא שולם | תשלום | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | שכירות לשנה | תיק | raw | fact⇒NumberStepper (NumberStepper/DsChip) | DsChip |
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה שכירות | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין ממצאים עדיין | ממצא | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | החלטה | תיק | partition | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsSection + DsNote |
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..1e2aaee 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -119,7 +119,15 @@ export function shapeOf(expr, schema, content = [], opts = {}) {
+     if (!fields.length) return { kind: null, why: 'לוח: אין שדות-תאריך' };
+     return { kind: 'dates', fields: fields.map((f) => f.label) };
+   }
+-  if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\]')))) return { kind: 'table' };
++  if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\]\\s*(.*)$')))) {
++    const sortSpec = m[2].trim();
++    let sortField = null, sortDir = 'asc';
++    if (sortSpec) {
++      const sm = sortSpec.match(/^([^:]+)(?::(\w+))?$/);
++      if (sm) { sortField = clean(sm[1]); sortDir = sm[2] ? sm[2].toLowerCase() : 'asc'; }
++    }
++    return { kind: 'table', sortField, sortDir };
++  }
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pSearch) + '\\]')))) return { kind: 'search' };
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pFilter) + '\\]')))) return { kind: 'filter' };
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pExport) + '\\]')))) return { kind: 'export' };
+@@ -384,7 +392,15 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+       const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      let sortedRecs = recs;
++      if (s.sortField) {
++        const sortFieldKey = k(s.sortField);
++        const compareFn = s.sortDir === 'desc' ?
++          `(a, b) => (num.tryParse(b[${sortFieldKey}] ?? '0') ?? 0).compareTo(num.tryParse(a[${sortFieldKey}] ?? '0') ?? 0)` :
++          `(a, b) => (num.tryParse(a[${sortFieldKey}] ?? '0') ?? 0).compareTo(num.tryParse(b[${sortFieldKey}] ?? '0') ?? 0)`;
++        sortedRecs = `(${recs}.toList()..sort(${compareFn}))`;
++      }
++      const rows = `[for (final r in ${sortedRecs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..91b35a5 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -19,7 +19,7 @@
+ חלקיק תשלום: הכנסה = סכום(סכום)
+ חלקיק תשלום: לא שולם = מונה(שולם=לא)
+ חלקיק תיק: שכירות לשנה
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] שכירות:desc
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק ממצא: [ריק] אין ממצאים עדיין
+ חלקיק תיק: החלטה

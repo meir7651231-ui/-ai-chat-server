@@ -1,0 +1,45 @@
+diff --git a/machtzev/generator/apps/calendar.json b/machtzev/generator/apps/calendar.json
+index 8fa140b..d28b6f5 100644
+--- a/machtzev/generator/apps/calendar.json
++++ b/machtzev/generator/apps/calendar.json
+@@ -59,6 +59,18 @@
+     "type": "multiline",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "משך בדקות",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
++   {
++    "label": "משך בשעות",
++    "type": "num",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index a85fb73..33ba018 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -19,6 +19,7 @@
+   "מספר",
+   "אחוז",
+   "שעות",
++  "דקות",
+   "שטח",
+   "רווח",
+   "יתרה",
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..173fab8 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, הערה, משך בדקות, משך בשעות = משך בדקות / 60 | שלבים: קבוע, התקיים

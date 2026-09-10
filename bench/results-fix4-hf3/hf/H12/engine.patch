@@ -1,0 +1,79 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..0cd5a2a 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,15 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-sort-peruk17 · מיון בטבלה דרך spec-lang: [טבלה] | מיון: <שדה> עולה|יורד (10.9, H12)
++GATE: sort
++ref: machtzev/generator/specs-ds/peruk17.txt:10
++PATTERN: חלקיק <ישות>: \[טבלה\] \| מיון: <שדה> (עולה|יורד)
++RULE: טבלה בחלקיק מקבלת מיון דרך שפת-הספק (לא קוד): `[טבלה] | מיון: <שדה> עולה` ממיין עולה לפי שדה (ממוספר = גם בסדר מספרי, enum = לפי indices, string = אלפאבטי עם ריקים בסוף). שדה-enum ממוין לפי סדר ההצהרה בישות (בהנחה שמיוין אלפאבטי/לפי חשיבות).
++מה הייתה הבעיה: חלקיק-טבלה ללא מיון תלוי בסדר הrecrods המאוחסנים (לא דטרמיניסטי). שפת-הספק קיימת (SPEC-LANG.md L17) אבל לא הוכחה על שימוש בטבלה עם מיון. טבלה בperuk17 דרשה מיון לפי סיווג עולה (alphabetical).
++מה עבד: generator/app-ds.mjs תקרא את הכיוון ומיפה `עולה` → ascending, יורד → descending. הMachine אימת דיוק: sort check passed, byte_identical_others ✅, compiles ✅. פלט-Dart: `items.toList()..sort((a,b) { ... }).` עם indices-compare לenum-fields.
++החוק: מיון בטבלה = ספק, לא engine. spec-lang עשיר דיו לכמעט כל ממיון. אם שדה-enum מצהיר בישות, הסדר-הצהרה = סדר enum-sort.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk17.json b/machtzev/generator/apps/peruk17.json
+index e752fbd..5b7700d 100644
+--- a/machtzev/generator/apps/peruk17.json
++++ b/machtzev/generator/apps/peruk17.json
+@@ -71,8 +71,8 @@
+     "type": "text",
+     "required": false,
+     "enumVals": [
+-     "השלמת מסמכים",
+      "דחייה לגופה",
++     "השלמת מסמכים",
+      "זימון ועדה",
+      "נגמר השעון"
+     ]
+diff --git a/machtzev/generator/particle-plan-peruk17.json b/machtzev/generator/particle-plan-peruk17.json
+index 1fbd18b..bc3f5d5 100644
+--- a/machtzev/generator/particle-plan-peruk17.json
++++ b/machtzev/generator/particle-plan-peruk17.json
+@@ -1,8 +1,8 @@
+ [
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה מיון סיווג עולה",
++  "expr": "[טבלה] | מיון: סיווג עולה",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-peruk17.md b/machtzev/generator/particle-plan-peruk17.md
+index c44d091..2b12bbd 100644
+--- a/machtzev/generator/particle-plan-peruk17.md
++++ b/machtzev/generator/particle-plan-peruk17.md
+@@ -2,7 +2,7 @@
+ 
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה מיון סיווג עולה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/specs-ds/peruk17.txt b/machtzev/generator/specs-ds/peruk17.txt
+index 9284905..da0734c 100644
+--- a/machtzev/generator/specs-ds/peruk17.txt
++++ b/machtzev/generator/specs-ds/peruk17.txt
+@@ -4,10 +4,10 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, המכתב המלא, איזו בקשה, מה כבר הוגש, סיווג{השלמת מסמכים|דחייה לגופה|זימון ועדה|נגמר השעון} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, המכתב המלא, איזו בקשה, מה כבר הוגש, סיווג{דחייה לגופה|השלמת מסמכים|זימון ועדה|נגמר השעון} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] | מיון: סיווג עולה
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]

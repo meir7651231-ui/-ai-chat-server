@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator pipeline completes successfully with משתתפים field added to פגישה entity"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Other apps remain byte-identical; only calendar app affected by spec changes"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All police gates pass with משתתפים field and empty-state particle"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles without errors (flutter analyze)"
+    },
+    {
+      "check": "field",
+      "text": "משתתפים field successfully added to פגישה entity (1 field detected)"
+    },
+    {
+      "check": "empty_text",
+      "text": "Empty-state text 'אין פגישות השבוע' successfully added to פגישה particle"
+    }
+  ],
+  "notes": "proven — Pure spec changes only: (1) Added משתתפים field to פגישה entity after מקום; (2) Added particle definition for פגישה with [ריק] empty-state text. Generator pipeline successful, all gates pass, Dart compiles without errors, other apps byte-identical. Machine verdict: DONE."
+}

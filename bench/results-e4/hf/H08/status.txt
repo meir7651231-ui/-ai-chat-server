@@ -1,0 +1,7 @@
+ M machtzev/LEARNINGS.md
+?? "machtzev/audit/search/2026-09-10-\327\250\327\227\327\247-\327\220\327\221\327\241\327\225\327\234\327\225\327\230\327\231-absolute-011daf89.json"
+?? "machtzev/audit/search/2026-09-10-\327\250\327\227\327\247-\327\220\327\221\327\241\327\225\327\234\327\225\327\230\327\231-absolute-b7a4dc4b.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

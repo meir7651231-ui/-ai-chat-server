@@ -1,0 +1,19 @@
+=== h0/H14 (sechirut) start 02:31:31
+  builder.json: exit=0 cost=1.1311417500000003 turns=66 ms=407669 err=false
+  police: NOT DONE missing=byte_identical_others,no_hebrew_in_engine,sort_color false=0
+=== h0/H14 NOT DONE wall=440s cost=$1.13 false_claims=0
+=== hf/H14 (sechirut) start 02:38:51
+  builder.json: exit=0 cost=1.6692952000000003 turns=110 ms=960914 err=false
+  police: NOT DONE missing=byte_identical_others false=0
+  auditor-coverage.json: exit=0 cost=0.25849310000000003 turns=17 ms=95036 err=false
+  auditor-regression.json: exit=0 cost=0.2896153 turns=18 ms=101793 err=false
+  auditor-compile.json: exit=0 cost=0.25321130000000003 turns=15 ms=110971 err=false
+  validator.json: exit=0 cost=0.2510491 turns=21 ms=136217 err=false
+  fixer.json: exit=0 cost=0.9251184000000001 turns=62 ms=694178 err=false
+  police: DONE missing= false=0
+  police: DONE missing= false=0
+=== hf/H14 DONE wall=1997s cost=$3.65 false_claims=0
+=== f0/H14 (sechirut) start 03:12:08
+  builder.json: exit=0 cost=4.21009175 turns=37 ms=367687 err=false
+  police: DONE missing= false=0
+=== f0/H14 DONE wall=399s cost=$4.21 false_claims=0

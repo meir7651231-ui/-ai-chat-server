@@ -1,0 +1,105 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..2432c41 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-enum-counter · שדה-טקסט ל-enum + counter particle בספק — שפת-SPEC-LANG מספיקה לשניהם, אפס-engine (10.9, M08 · peruk08)
++GATE: enum · counter
++PATTERN: שדה{ערך|ערך|ערך}, חלקיק: שם = מונה(שדה=ערך)
++RULE: המרת שדה-חופשי לבחירה-סגורה תעשה בטקסט-הספק בלבד: `שדה{א|ב|ג}` ◄ `שדה`; וחלקיק-מונה על שדה המיוגן (הכרעה-27) מוגדר כ-`חלקיק ישות: שם = מונה(שדה=ערך)` בשדה הגוף, לא בקובץ-engine. לא נדרשת רגיסטרציה ב-gates.tsv עבור enum/counter אלא אם חל תנאי-אזעקה (>1 ערך בחירה בלי תעוד, ערכים בעברית בדקדוק משחוק).
++מה הצליח: peruk08.txt שדה "האם כבר פנו למוכר" הומר ל-`{כן|לא|לא יודע}` בשורה-הישות (L6), ו-particle "לא פנו" הוגדר כ-`חלקיק תיק: לא פנו = מונה(האם כבר פנו למוכר=לא)` (L16). מנוע ה-app-ds קרא את הספק, הוגדר `DsEnumField` להצגה (atom קיים), פלט-Dart עבר flutter analyze ללא שגיאות, וכל אפליקציה אחרת נשארה byte-identical. מכונת-ההערכה: DONE (כל השערים).
++הלקח: SPEC-LANG צפיפה ויעילה לטרנספורמציות שדה; שדה מיוגן = שקע `values:` בפלט-הפרט, וחלקיק-מונה מיקשור אוטומטי ל-screens בלי hand-wire. כשל קיים = כתיבה ל-engine (.mjs/.json) או ליטרלים בקוד-generated בעבור משהו שהספק מוביל.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk08.json b/machtzev/generator/apps/peruk08.json
+index 911b157..ea951c0 100644
+--- a/machtzev/generator/apps/peruk08.json
++++ b/machtzev/generator/apps/peruk08.json
+@@ -68,7 +68,11 @@
+     "label": "האם כבר פנו למוכר",
+     "type": "bool",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [
++     "כן",
++     "לא",
++     "לא יודע"
++    ]
+    },
+    {
+     "label": "סיווג",
+diff --git a/machtzev/generator/particle-plan-peruk08.json b/machtzev/generator/particle-plan-peruk08.json
+index 1fbd18b..dfaa685 100644
+--- a/machtzev/generator/particle-plan-peruk08.json
++++ b/machtzev/generator/particle-plan-peruk08.json
+@@ -199,5 +199,32 @@
+   "wired": [
+    "DsNote"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "לא פנו",
++  "expr": "מונה(האם כבר פנו למוכר=לא)",
++  "ok": true,
++  "why": null,
++  "shape": "count",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk08.md b/machtzev/generator/particle-plan-peruk08.md
+index 99949f4..d6cf4a7 100644
+--- a/machtzev/generator/particle-plan-peruk08.md
++++ b/machtzev/generator/particle-plan-peruk08.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| לא פנו | תיק | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/specs-ds/peruk08.txt b/machtzev/generator/specs-ds/peruk08.txt
+index 4b501fe..f55f7e0 100644
+--- a/machtzev/generator/specs-ds/peruk08.txt
++++ b/machtzev/generator/specs-ds/peruk08.txt
+@@ -3,7 +3,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר{כן|לא|לא יודע}, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+@@ -13,6 +13,7 @@
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: סיווג = [תוכן סיווג]
+ חלקיק תיק: אסור = [תוכן אסור]
++חלקיק תיק: לא פנו = מונה(האם כבר פנו למוכר=לא)
+ דוח תיק: כרטיס = [תוכן כרטיס]
+ דוח תיק: סדר פעולות ממוספר קודם = [תוכן סדר פעולות ממוספר קודם]
+ דוח תיק: הודעה למוכר = [תוכן הודעה למוכר]

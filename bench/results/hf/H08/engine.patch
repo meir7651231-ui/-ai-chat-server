@@ -1,0 +1,63 @@
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..a36d331 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -198,10 +198,47 @@ const ROLLUP_RE = new RegExp('^(' + [L.sum, L.avg, L.count].join('|') + ')\\(([^
+ // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
+ // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
+ // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
+-function compileFormula(formula, labels) {
++// תמיכה בהרחבה רקורסיבית של שדות-מחושבים (Heuristic decision-26): אם שדה בנוסחה הוא בעצמו
++// מחושב, הרחב את הנוסחה שלו ישירות בנוסחת-ההורה, כך ש-_v[i] משקף תמיד קלט-חי, לא ערך-מאוחסן.
++function compileFormula(formula, labels, schema = null) {
++  // Pre-expand computed field dependencies before field name replacement
++  let expandedFormula = formula;
++  if (schema) {
++    let changed = true;
++    const visited = new Set();
++    while (changed) {
++      changed = false;
++      // Sort by label length (longest first) to handle overlapping names correctly
++      const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
++      for (const label of sorted) {
++        if (visited.has(label.idx) || !schema[label.idx] || !schema[label.idx].formula) continue;
++        if (expandedFormula.includes(label.label)) {
++          visited.add(label.idx);
++          // Replace field name with its formula in parentheses
++          const regex = new RegExp(`\\b${label.label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g');
++          expandedFormula = expandedFormula.replace(regex, `(${schema[label.idx].formula})`);
++          changed = true;
++        }
++      }
++    }
++  }
++
+   const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
+-  let e = ' ' + formula + ' ';
++  let e = ' ' + expandedFormula + ' ';
+   for (const f of sorted) e = e.split(f.label).join(` @${f.idx}@ `);
++  // Support method calls like (expr).abs() or (expr).round()
++  const methodMatch = e.match(/^[\s(]*(@\d+@|.*?@\d+@.*)[\s)]*\.([a-z]+)\(\)[\s]*$/);
++  if (methodMatch) {
++    const expr = methodMatch[1].trim();
++    const method = methodMatch[2];
++    const residue = expr.replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
++    if (!residue.trim().length) {
++      const dart = expr.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)");
++      if (!/@|[֐-׿]/.test(dart)) {
++        return `(${dart}).${method}()`;
++      }
++    }
++  }
+   const residue = e.replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
+   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
+   const dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)").trim();
+@@ -356,7 +393,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+         recValsR.push(ce); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
+         return;
+       }
+-      const expr = compileFormula(s.formula, labelIdx);
++      const expr = compileFormula(s.formula, labelIdx, schema);
+       if (expr) {
+         hasCalc = true;
+         addField(i, `_calc(${cl}, ${expr})`);

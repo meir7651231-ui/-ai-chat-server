@@ -1,0 +1,11 @@
+=== hf/H10 (calendar) start 10:53:05
+  builder.json: exit=0 cost=0.3842996000000002 turns=25 ms=205742 err=false
+  police: DONE missing= false=0
+  auditor-regression.json: exit=0 cost=0.36157819999999996 turns=28 ms=135478 err=false
+  auditor-coverage.json: exit=0 cost=0.3655939 turns=28 ms=151822 err=false
+  auditor-compile.json: exit=0 cost=0.36602850000000003 turns=24 ms=158946 err=false
+  validator.json: exit=0 cost=0.2066324 turns=17 ms=127911 err=false
+  fixer.json: exit=0 cost=1.1068841500000002 turns=61 ms=612615 err=true
+  police: NOT DONE missing=regen_ok,byte_identical_others false=2
+  police: NOT DONE missing=regen_ok,byte_identical_others false=2
+=== hf/H10 NOT DONE wall=1218s cost=$2.79 false_claims=2

@@ -1,0 +1,78 @@
+{
+ "task": "E03",
+ "ns": "peruk12",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "calc_fee": true
+ },
+ "task_checks": [
+  {
+   "id": "calc_fee",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "peruk12 app regenerated successfully with new computed field.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps remain byte-identical (peruk1-11, peruk13-28).",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed field מחיר עם אגרה = מחיר * 1.03 defined and gates pass (1 const, 1 calc).",
+   "check": "calc_fee",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles with zero analyzer errors.",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only spec file edited (peruk12.txt); no hand-edits in generated code.",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All gates pass including calc_fee, no_orphans, no_hebrew_in_engine.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "b8ab059a9f7dab2c",
+ "at": "2026-09-10T14:56:04.791Z"
+}

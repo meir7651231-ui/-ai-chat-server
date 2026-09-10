@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Spec regeneration succeeded with new עדיפות{גבוהה|בינונית|נמוכה} field added to תיק entity."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other applications remain byte-identical; no unintended side effects from spec change."
+    },
+    {
+      "check": "no_orphans",
+      "text": "No stray generated files created; output structure remains clean."
+    },
+    {
+      "check": "gates_pass",
+      "text": "All registered gates pass; enum_high, enum_low, and label checks succeeded."
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "No Hebrew text injected into engine logic; spec-layer change only."
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Generated Dart math operations are valid; no sqrt/min/max misuse."
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code passes flutter analyze with zero errors."
+    }
+  ],
+  "notes": "proven: all 7 core checks pass. The new priority field עדיפות{גבוהה|בינונית|נמוכה} is correctly recognized as a closed-choice enum by the generator. Spec syntax validated. No breakage of existing functionality."
+}

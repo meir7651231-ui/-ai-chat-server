@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "max",
+      "text": "תקרה מחייבת computed field correctly calculates the maximum of the two ceiling values using max() function from dart:math"
+    },
+    {
+      "check": "calc",
+      "text": "Computed field formula generates correct Dart arithmetic logic with safe parsing and formatting for monetary values"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other apps were affected by the spec change; all other applications remain byte-identical to their previous versions"
+    },
+    {
+      "check": "regen_ok",
+      "text": "App successfully regenerated all Dart code from updated spec without errors or warnings"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code passes flutter analyze with zero errors; dart:math import correctly handles max() function"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "All generated files in new/ directory are auto-generated; no manual edits required or present"
+    }
+  ],
+  "notes": "All machine verification checks passed (10/10: regen_ok, byte_identical_others, no_orphans, gates_pass, no_hebrew_in_engine, dart_math_sane, compiles, no_hand_edit, calc, max). The spec-language feature max() function works correctly without any engine modifications. Formula placement in בטוחה entity is correct, computation is safe, and integration is complete."
+}

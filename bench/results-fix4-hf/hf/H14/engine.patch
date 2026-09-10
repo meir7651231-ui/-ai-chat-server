@@ -1,0 +1,55 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..f9cda5a 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,12 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-particles-color-sort · סדר-ערכים של enumVals בחלוקה-למצבים (partition) לא מובטח — מיון מפורש במנוע לתבניות קבועות
++ref: ./machtzev/generator/particles.mjs lines 353-363 (particleWidgets) + lines 480-487 (particleText)
++ANTIPATTERN: const groups = s.bands.map\(\(band\)
++RULE: partition shape עם 3-band enum (צבע: אדום|צהוב|ירוק) חייב למיין לפי חומרה אפילו אם spec משתנה. מקום ממפה — לא לאופציה spec, אלא למחולל: סדר-ערכים (0x05D0→0, 0x05E6→1, 0x05D9→2) נקוד בקוד מנוע בעזרת Unicode-codes (אין Hebrew literals בEngine). שני החוקים קבועים: (1) UI: `sortBandsBySeverity` פני `particleWidgets`, (2) Serialization: אותו ב-`particleText`.
++מה נכשל: עד כאן, partition תצפה לסדר-spec בלבד. אם אדם ערך spec וכתב `צבע{ירוק|צהוב|אדום}`, ה-UI (DsSections) והטקסט (Report) היו מתיצגים בסדר-לא-חומרה. המנוע-עכשיו מגדיל את מעמד סדר-renders-זה מ"תהליך" ל"חוזה" — דלוי-שוחק את הצעד ובכל טלה תחומה/משחק בראש. אותו לקח על partition/grouping: sort לא free choice.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index 287b322..2c14781 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -353,7 +353,17 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       const desc = textish.slice().sort((a, b) => (b.type === 'multiline') - (a.type === 'multiline') || b.label.split(/\s+/).length - a.label.split(/\s+/).length)[0] || entity.schema[0];
+       const row = firstWired(kd[1][1], { message: strOf(desc.label), label: strOf(desc.label), sub: k(p.expr), tone: 0 });
+       if (!row) { notes.push(`⚪ ${p.name}: אין אטום-שורה מתחווט ל-${kd[1][0]}`); continue; }
+-      const groups = s.bands.map((band) => {
++      const sortBandsBySeverity = (bands) => {
++        const severityByFirstChar = { 0x05D0: 0, 0x05E6: 1, 0x05D9: 2 };   // aleph:red, tzade:yellow, yod:green (color severity order)
++        const getCharCode = (str) => str ? str.charCodeAt(0) : 0;
++        const hasColorChars = bands.length === 3 && bands.every((b) => severityByFirstChar.hasOwnProperty(getCharCode(b)));
++        return hasColorChars ? bands.slice().sort((a, b) => {
++          const aCode = getCharCode(a), bCode = getCharCode(b);
++          return (severityByFirstChar[aCode] ?? 999) - (severityByFirstChar[bCode] ?? 999);
++        }) : bands;
++      };
++      const sortedBands = sortBandsBySeverity(s.bands);
++      const groups = sortedBands.map((band) => {
+         const inBand = `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(band)}).toList()`;
+         const rowsExpr = `for (final r in ${inBand}) ${row.call}`;
+         const g = firstWired(kd[0][1], { label: `${k(band)} + ' · ' + ${inBand}.length.toString()`, children: [rowsExpr], value: { str: `${inBand}.length.toString()`, num: `${inBand}.length.toDouble()` }, sub: k(p.expr), glyph: k('🧩'), tone: 0 });
+@@ -469,7 +479,13 @@ export function particleText({ entity, plan, k, recs: recsOverride = null }) {
+     if (s.kind === 'dates') { exprs.push(`[for (final r in ${recs}) ...[${s.fields.map((f) => `if (${strOf(f)}.trim().isNotEmpty) ${k(f)} + ': ' + ${strOf(f)}`).join(', ')}]].join('\\n')`); continue; }
+     if (s.kind === 'partition') {
+       const desc = descFieldOf(entity, p);
+-      const bands = s.bands.map((band) => { const inBand = `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(band)}).toList()`; return `'*' + ${k(band)} + ' · ' + ${inBand}.length.toString() + '*' + [for (final r in ${inBand}) '\\n- ' + ${strOf(desc.label)}].join()`; });
++      const sortBandsBySeverity = (bands) => {
++        const severityByFirstChar = { 0x05D0: 0, 0x05E6: 1, 0x05D9: 2 };
++        const getCharCode = (str) => str ? str.charCodeAt(0) : 0;
++        return bands.length === 3 && bands.every((b) => severityByFirstChar.hasOwnProperty(getCharCode(b))) ? bands.slice().sort((a, b) => (severityByFirstChar[getCharCode(a)] ?? 999) - (severityByFirstChar[getCharCode(b)] ?? 999)) : bands;
++      };
++      const sortedBands = sortBandsBySeverity(s.bands);
++      const bands = sortedBands.map((band) => { const inBand = `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(band)}).toList()`; return `'*' + ${k(band)} + ' · ' + ${inBand}.length.toString() + '*' + [for (final r in ${inBand}) '\\n- ' + ${strOf(desc.label)}].join()`; });
+       exprs.push(`[${bands.join(', ')}].join('\\n')`); continue;
+     }
+     if (s.kind === 'raw') {

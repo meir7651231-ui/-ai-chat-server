@@ -1,0 +1,8 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/specs-ds/sechirut.txt
+?? machtzev/audit/search/2026-09-10-ceiling-maximum-computed-5498edce.json
+?? machtzev/audit/search/2026-09-10-max-function-computed-31632fdd.json
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

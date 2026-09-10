@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "export_line_exists",
+      "text": "WhatsApp export line exists in peruk25.txt at line 22: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה"
+    },
+    {
+      "check": "spec_syntax_correct",
+      "text": "Export line syntax matches SPEC-LANG.md pattern: [ייצוא] <שם> = <שדה-טלפון>, <טקסט>"
+    },
+    {
+      "check": "dart_generation",
+      "text": "Dart generation successful with correct wiring: שליחה בוואטסאפ⇒DsChipButton+waLink in gen_app_peruk25_rp1.dart"
+    },
+    {
+      "check": "guards_pass",
+      "text": "Police gates guardexport, autoskin, autologic all pass with green status"
+    },
+    {
+      "check": "no_app_breakage",
+      "text": "No other apps modified; police datapurity and deeppurity gates show no regression"
+    }
+  ],
+  "notes": "proven — Export line for WhatsApp sharing is correctly specified and properly wired into Dart UI layer via DsChipButton with waLink logic. Task requirement satisfied."
+}

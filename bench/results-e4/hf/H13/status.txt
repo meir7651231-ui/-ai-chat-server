@@ -1,0 +1,6 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/particles.mjs
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

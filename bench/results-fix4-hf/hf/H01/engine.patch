@@ -1,0 +1,125 @@
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..11f356f 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -200,7 +200,7 @@ const ROLLUP_RE = new RegExp('^(' + [L.sum, L.avg, L.count].join('|') + ')\\(([^
+ // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
+ // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
+ // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
+-function compileFormula(formula, labels, used = null) {
++function compileFormula(formula, labels, used = null, formulas = null) {
+   const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
+   let e = ' ' + formula + ' ';
+   const fns = Object.keys(G_FNS).sort((a, b) => b.length - a.length);
+@@ -209,7 +209,17 @@ function compileFormula(formula, labels, used = null) {
+   for (const f of names) e = e.split(f.t).join(` @${f.idx}@ `);
+   const residue = e.replace(/@F\d+@/g, ' ').replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/(),\s]/g, '');
+   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
+-  let dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)");
++  // Check if formula contains reference to another formula field - if so, use extracted variable (FINDING-1)
++  let dart = '';
++  if (formulas) {
++    dart = e.replace(/@(\d+)@/g, (match, idx) => {
++      const depFormula = formulas.find((f) => f.idx == idx && f.expr);
++      if (depFormula) return `sq${idx}`;  // Use extracted variable name
++      return `(num.tryParse(_v[${idx}] ?? '') ?? 0)`;
++    });
++  } else {
++    dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)");
++  }
+   dart = dart.replace(/@F(\d+)@\(/g, (_, j) => { const fn = fns[+j]; if (used) used.add(fn); return G_FNS[fn] === 'method' ? `_m_${fn}(` : `${fn}(`; }).trim();
+   return /@|[֐-׿]/.test(dart) ? null : (dart || null);
+ }
+@@ -473,6 +483,74 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const stepsDart = hasStages
+     ? `        DsWorkflow(steps: const ${stageList}, current: 0),\n`
+     : '';
++
++  // 🔧 Dependency extraction (FINDING-1 & FINDING-2): detect when formula fields depend on other formula fields
++  // and extract them as variables to avoid computing from empty _v[] (only happens on new records).
++  const formulaMap = new Map();  // idx => {expr, depIdx}
++  const extractedDeps = new Map();  // depIdx => expr
++  for (let i = 0; i < mapVals.length; i++) {
++    const mapVal = mapVals[i];
++    if (mapVal && mapVal.includes('(num.tryParse(_v[')) {
++      // Extract formula expression from mapVal
++      const match = mapVal.match(/:\s*\((.+)\)\.toStringAsFixed\(2\)/);
++      if (match) {
++        const expr = match[1];
++        // Check if this formula references another formula field's value
++        const depMatch = expr.match(/\(num\.tryParse\(_v\[(\d+)\]\s*\?\?.*?\)\s*\?\?\s*0\)/);
++        if (depMatch) {
++          const depIdx = parseInt(depMatch[1]);
++          const depMapVal = mapVals[depIdx];
++          // If dependent field is also a formula (computed), extract it
++          if (depMapVal && depMapVal.includes('(num.tryParse(_v[') && depMapVal.includes('.toStringAsFixed')) {
++            formulaMap.set(i, { expr, depIdx });
++            // Extract the dependency expression
++            const depMatch2 = depMapVal.match(/:\s*\((.+)\)\.toStringAsFixed\(2\)/);
++            if (depMatch2) {
++              extractedDeps.set(depIdx, depMatch2[1]);
++            }
++          }
++        }
++      }
++    }
++  }
++
++  // Generate extracted variable declarations for save method & build method (FINDING-1 & FINDING-2)
++  let extractedVars = '';
++  if (extractedDeps.size > 0) {
++    const varDecls = [];
++    for (const [depIdx, depExpr] of extractedDeps.entries()) {
++      varDecls.push(`final sq${depIdx} = ${depExpr};`);
++    }
++    if (varDecls.length > 0) {
++      extractedVars = '\n    ' + varDecls.join('\n    ');
++      // Also update mapVals for dependent fields to use extracted variables
++      for (const [fIdx, info] of formulaMap.entries()) {
++        const oldMapVal = mapVals[fIdx];
++        const newExpr = info.expr.replace(new RegExp(`\\(num\\.tryParse\\(_v\\[${info.depIdx}\\][^)]*\\)[^)]*\\)`, 'g'), `sq${info.depIdx}`);
++        const fieldLabel = oldMapVal.split(':')[0];
++        mapVals[fIdx] = `${fieldLabel}: (${newExpr}).toStringAsFixed(2)`;
++      }
++    }
++  }
++
++  // Update fieldBlocks to use extracted variables (FINDING-2 - _calc display)
++  if (extractedDeps.size > 0) {
++    for (let i = 0; i < fieldBlocks.length; i++) {
++      const fb = fieldBlocks[i];
++      if (fb.expr && fb.expr.includes('_calc')) {
++        // Replace _v[depIdx] references with extracted variables in _calc expressions
++        let newExpr = fb.expr;
++        for (const [depIdx] of extractedDeps.entries()) {
++          newExpr = newExpr.replace(
++            new RegExp(`\\(num\\.tryParse\\(_v\\[${depIdx}\\][^)]*\\)[^)]*\\)`, 'g'),
++            `sq${depIdx}`
++          );
++        }
++        fieldBlocks[i] = { ...fb, expr: newExpr };
++      }
++    }
++  }
++
+   const mapEntries = mapVals.join(', ');                                                  // שדות ⇒ מפה (מחושב=נוסחה)
+   const editLoad = [...labelConst.map((cl, i) => `${i}: r[${cl}] ?? ''`), ...subEditLoad].join(', ');   // רשומה ⇒ טופס (עריכה) + תת-תאים מקוננים
+   const recValues = recValsR.join(', ');
+@@ -636,7 +714,7 @@ ${hasVal ? `    final miss = <String>[];
+       ${uniqChecks}
+       ${ruleChecks}${rangeChecks ? '\n      ' + rangeChecks : ''}${patternChecks ? '\n      ' + patternChecks : ''}
+     if (miss.isNotEmpty) { setState(() => _err = miss.join(' · ')); return; }
+-` : ''}    final map = <String, String>{${mapEntries}};
++` : ''}${extractedVars}    final map = <String, String>{${mapEntries}};
+     if (_editId != null) {
+       appStore.update(${SK}, _editId!, map);
+     } else {
+@@ -716,7 +794,7 @@ ${hasCalc ? `  Widget _calc(String label, num v) => Builder(builder: (context) {
+ 
+ ` : ''}  @override
+   Widget build(BuildContext context) {
+-    final lk = DsLook.of(context);
++    final lk = DsLook.of(context);${extractedVars}
+     return DsScaffold(
+       title: ${cTitle},
+       subtitle: ${cSub},

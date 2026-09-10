@@ -1,0 +1,31 @@
+diff --git a/machtzev/generator/apps/calendar.json b/machtzev/generator/apps/calendar.json
+index 8fa140b..3a3366e 100644
+--- a/machtzev/generator/apps/calendar.json
++++ b/machtzev/generator/apps/calendar.json
+@@ -59,6 +59,16 @@
+     "type": "multiline",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "סוג",
++    "type": "text",
++    "required": false,
++    "enumVals": [
++     "עבודה",
++     "אישי",
++     "רפואי"
++    ]
+    }
+   ]
+  },
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..ffe282b 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, הערה, סוג/{עבודה|אישי|רפואי} | שלבים: קבוע, התקיים

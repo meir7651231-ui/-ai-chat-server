@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "sort",
+      "text": "Cases table (תיק particle) sorts by שכירות (rent) in descending order"
+    },
+    {
+      "check": "desc",
+      "text": "Sort direction is descending (highest rent first) via יורד modifier"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other app outputs remain byte-identical; no breaking changes"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only spec file modified; zero hand-edits to generated new/ files"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart passes flutter analyze with zero errors"
+    }
+  ],
+  "notes": "proven — sort logic verified in generated px1 file; numeric comparison with -1 multiplier for descending; null-safe handling of empty strings; machine report confirms DONE status"
+}

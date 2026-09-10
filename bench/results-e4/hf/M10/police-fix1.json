@@ -1,0 +1,95 @@
+{
+ "task": "M10",
+ "ns": "calendar",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "field": true,
+  "calc": true
+ },
+ "task_checks": [
+  {
+   "id": "field",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Spec regeneration completed successfully with new duration fields",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other app specs (tasks.txt, balagan.txt, etc.) remain byte-identical, no cross-spec side effects",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No orphan generated files, only calendar app regenerated",
+   "check": "no_orphans",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All 53 gates passed, including wiring and purity checks",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed field division (משך בדקות / 60) generates valid Dart arithmetic without sqrt/sorted/etc issues",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles with 0 analyzer errors",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Two fields added: משך בדקות (numeric) and משך בשעות (computed from division)",
+   "check": "field",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed field formula correctly parsed: 1 constant meeting entity with 1 calculated field",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "fed4c743e8225572",
+ "at": "2026-09-10T17:01:29.611Z"
+}

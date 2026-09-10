@@ -1,0 +1,82 @@
+{
+ "task": "M10",
+ "ns": "calendar",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "field": true,
+  "calc": true
+ },
+ "task_checks": [
+  {
+   "id": "field",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Generator pipeline executed successfully without errors",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All files outside calendar.txt remain byte-identical with no unintended changes",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All registered gates passed including syntax validation",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Numeric field משך בדקות added to meeting entity (1 field detected)",
+   "check": "field",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed field משך בשעות = משך בדקות / 60 correctly parsed (1 const + 1 calc)",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Hebrew text remains in spec layer only, engine unaffected",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Division operator syntax validated in computed field formula",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "59df6d5641b7c226",
+ "at": "2026-09-10T00:42:20.905Z"
+}

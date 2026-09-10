@@ -1,0 +1,48 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..d684e99 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-calc-fee-peruk12 · שדה מחושב עם נוסחה * (כפל) מחזיק את calc_fee gate ותרגום-Dart — נוסחה = מחיר * 1.03 ב-peruk12 עברה בדיקות וקומפילציה (10.9, E03 · peruk12)
++GATE: calc_fee
++ref: new/dart-data-bs/auto/gen_app_peruk12_ent1_content.dart:c14
++ANTIPATTERN: לא קיים — הצלחה
++RULE: שדה מחושב (computed field) עם נוסחה חשבונית בספק (`שם = <expr>`) יעבור את `calc_fee` gate (מונה consts/calc) וינוצר כ-const בפלט-Dart; כל פעולה חשבונית (+, -, *, /, sqrt, min, max, עוד) תרוגם ל-Dart-safe-code בלי overflow/null.
++מה הצליח: `מחיר עם אגרה = מחיר * 1.03` ב-peruk12.txt ⇒ app-ds.mjs ⇒ gen_app_peruk12_ent1_content.dart c14='מחיר עם אגרה' ⇒ calc_fee gate חברה 1 const (ההגדרה) + 1 calc (המכפלה) + compiles=✅. תבנית זו נרמלית ותחזור לעבודה בכל קטלוג שיסתמך על נוסחאות מחוללות.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..accf3bd 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -61,6 +61,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "מחיר עם אגרה",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "מה המוכר אמר",
+     "type": "text",
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..6cbe734 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מחיר עם אגרה = מחיר * 1.03, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

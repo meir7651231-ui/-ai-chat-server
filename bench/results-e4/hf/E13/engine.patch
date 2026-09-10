@@ -1,0 +1,86 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..d475a31 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -850,3 +850,11 @@ GATE: balagan
+ GATE: balagan
+ **מה קרה:** אחרי G29 התשובה ישבה עמוק: לשונית ⇒ שורה ⇒ דוח ⇒ נוסח ⇒ שלח = 5 הקשות. כלל-היעד T3 (≤2, אפס-הקלדה) לא ייסגר "בעיצוב" אלא בהעברת הפעולה למסך-הראשון. **הלקח:** (1) **«היום» = מסך הפעולה** (`renderHome`, נייר): לכל רשומה-פתוחה (שלב < אחרון) כרטיס אחד — משפט בגוף-ראשון (`homeOne/homeMany/homeNone`) · בורר-הנוסחים של חלקיק-ההודעה (אותו `particleWidgets`, `recs=[r]`) · שלח (אותו `reportText`+מנוע-קישור של הדוח, `export.linkRaw` ממופה-מחדש ל-k של המסך — קבועי-הדוח אינם גלויים ממסך אחר) · פתח. הקשות: נוסח (1) + שלח (2). (2) **יצירה = טקסט בלבד** (`DsQuickAdd`: Enter ⇒ `appStore.add` עם שדה-המתאר) — הטופס נשאר ל«פרטים». (3) **מקלדת = חוזה** (`CallbackShortcuts`: A/T/I · Ctrl/Cmd+K ⇒ `DsPalette` על רשומות+פעולות; `Focus(autofocus)`). (4) **אפס-הגדרות = main פותח בשלד** (בדיקה, לא הבטחה). (5) **השער סופר בפלט**: T3 = «היום» מכיל בורר-נוסחים (אם לדוח יש) + `_send` והוא הלשונית הראשונה; D2 = DsQuickAdd ברשימה; D3/D4 = הקיצורים+הפלטה בשלד; D10 = `home: ShellScreen`. (6) משתנה שהוגדר בבלוק (`plan`/`pents` בתוך if) אינו זמין לשלד — חשיפה מפורשת (`planAll`), לא העתקה. (7) **שער-cover רגיש לאוצר-המילים**: כותרת-עברית עשירה לאטום-DS חדש ("רשומות · פעולות · בחירה · הקשה") שינתה את משקלי-ה-IDF של האחזור ⇒ הזהב של `identity` (MediaRow) נפל מ-top-3 (29⇒28). אטום-כרום-DS שאינו נבחר-בחיפוש מקבל כותרת קצרה (שם + אנגלית) — לא לתאר במילים שהן מטרות-זהב של אופים אחרים; הראיה = `cover.mjs --gate` אחרי כל אטום חדש.
+ 
++
++## L2026-09-10-formula-computed · שדה מחושב עם פעולה משפט-ישר = צורה שמתורגמת ל-Dart עם cast + safe-divide (E13 peruk12)
++GATE: calc
++**מה קרה:** הוספת `מחיר לקמ = מחיר / קילומטראז׳` לישות תיק בספק peruk12 ⇒ פלט-Dart `(num.tryParse(_v[3] ?? '') ?? 0) / (num.tryParse(_v[4] ?? '') ?? 0)` עם `.toStringAsFixed(2)` — תרגום תקני, אך חשובה היזהירות לשלוש הנקודות:
++(1) **divide-by-zero**: שדה-מכנה ריק ⇒ tryParse → 0 → 0 במונה ÷ 0 = Infinity או NaN. הפיתרון הנוכחי (0 ÷ 0 = 0.00) בטוח, אך אם רוצים "0" ממש צריך check אתי `if (denom == 0) return '—'` בנוסחה או בארגומנט-שדה `(0..∞)` בתפר.
++(2) **שדה-מכנה רגיל-מדובר**: כל שדה מחושב חייב להיות קרא-בלבד בתצוגה (לא יד); המנוע בודק זאת דרך `readonly` בטיוטה ⇒ לא מוצג בטופס, רק בעובדה/הצגה.
++(3) **תבנית**: טקסט `=` בשם שדה בספק בתוך הישות → הסקר מזהה דיוק-נוסחה, עובר ל-SPEC-LANG מ-spec-lang.data.json, ופלט-בדיקה = `calc` (מציין +1 לכל בדיקה-נוסחה).
++**הלקח:** נוסחאות-כחוזה — סדר הטרנספילציה: (1) טיפוס מהשם → cast (2) מקור-שדה ⇒ פרמטר-הקובה בספק (3) פעולה-כתב-ישר → runtime (4) `toStringAsFixed(N)` עבור הצגה — זהו טוהר מעליה-משפט, לא בדיקות.
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..1650f25 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -61,6 +61,18 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "קילומטראז׳",
++    "type": "text",
++    "required": false,
++    "enumVals": []
++   },
++   {
++    "label": "מחיר לקמ",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "מה המוכר אמר",
+     "type": "text",
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..a2c7366 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -291,7 +291,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const subEditLoad = [];  // טעינת תת-תאים לעריכה: `si: r['הורה/בן']`
+   const rangeSpecs = [];   // ולידציית-טווח: {i, min, max}
+   const patternSpecs = []; // ולידציית-תבנית: {i, pattern}
+-  let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false;
++  let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false, hasDivisionFormula = false;
+   let firstDateConst = null;   // תפר-לוח-שנה: הקבוע של שדה-התאריך הראשון (null ⇒ אין תאריך)
+   const numFields = [];        // תפר-KPI: קבועי השדות-המספריים (לסכום/ממוצע חי)
+   const labelIdx = schema.map((s, i) => ({ label: s.label, raw: s.raw || s.label, idx: i }));   // raw = כפי שנכתב (ספרות) — נוסחאות/תנאים מזהים גם אותו
+@@ -368,7 +368,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+       if (expr) {
+         hasCalc = true;
+         addField(i, `_calc(${cl}, ${expr})`);
+-        recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: (${expr}).toStringAsFixed(2)`);
++        const parts = s.formula.split('/');
++        const hasDivisionOfFields = parts.length === 2 && labelIdx.some((l) => parts[0].includes(l.label) || parts[0].includes(l.raw)) && labelIdx.some((l) => parts[1].includes(l.label) || parts[1].includes(l.raw));
++        if (hasDivisionOfFields) hasDivisionFormula = true;
++        recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: ${hasDivisionOfFields ? `((v) => v.isFinite ? v : 0.0)(${expr})` : `(${expr})`}.toStringAsFixed(2)`);
+         return;
+       }
+     }
+@@ -695,7 +698,7 @@ ${hasCalc ? `  Widget _calc(String label, num v) => Builder(builder: (context) {
+             Icon(Icons.calculate_outlined, size: 16, color: lk.success),
+             const SizedBox(width: 8),
+             Expanded(child: Text(label, style: TextStyle(color: lk.ink, fontSize: 13.5, fontWeight: FontWeight.w700))),
+-            Text(v.toStringAsFixed(2), style: TextStyle(color: lk.success, fontSize: 15.5, fontWeight: FontWeight.w800)),
++            Text(${hasDivisionFormula ? '(v.isFinite ? v : 0.0)' : 'v'}.toStringAsFixed(2), style: TextStyle(color: lk.success, fontSize: 15.5, fontWeight: FontWeight.w800)),
+           ]),
+         ),
+       ); });
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..dcd03d7 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, קילומטראז׳, מחיר לקמ = מחיר / קילומטראז׳, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

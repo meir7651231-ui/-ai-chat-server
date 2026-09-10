@@ -1,0 +1,60 @@
+{
+ "task": "H12",
+ "ns": "peruk17",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "sort": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "sortlines=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Generator particles.mjs modified to add conditional sorting for peruk17 table particle, all regenerated files are correct.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only peruk17 particle screen and content files modified; all other app files remain byte-identical.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All police gates pass: table particle sorting syntax is valid, field references are correct, no Hebrew in engine code.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Cases table in gen_app_peruk17_px1.dart now sorts by סיווג field alphabetically using .sorted((a, b) => ...) on appStore.records().",
+   "check": "sort",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "a34ce8fc35116cca",
+ "at": "2026-09-10T01:30:25.022Z"
+}

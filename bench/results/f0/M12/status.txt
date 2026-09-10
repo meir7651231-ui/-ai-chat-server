@@ -1,0 +1,12 @@
+ M machtzev/compose-engine.mjs
+ M machtzev/generator/particle-plan-peruk02.json
+ M machtzev/generator/particle-plan-peruk02.md
+ M machtzev/generator/peruk-lang.data.json
+ M machtzev/generator/peruk.mjs
+ M machtzev/generator/peruks/peruk-02.md
+ M machtzev/generator/specs-ds/peruk02.txt
+ M machtzev/pins.sha256
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

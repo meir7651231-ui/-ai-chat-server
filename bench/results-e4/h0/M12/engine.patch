@@ -1,0 +1,45 @@
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..9c42892 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -266,5 +266,16 @@
+   "wired": [
+    "KvLine"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "ממוצע פיקדון",
++  "expr": "ממוצע(סכום הפיקדון)",
++  "ok": false,
++  "why": "אין אלגברת-הרכבה לצורה avg",
++  "shape": "avg",
++  "ops": [],
++  "picks": [],
++  "wired": []
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..93e15b3 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -11,6 +11,7 @@
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
++| ממוצע פיקדון | תיק | avg | אין אלגברת-הרכבה לצורה avg | — |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..caea7c3 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -23,6 +23,7 @@
+ דוח תיק: מה חסר = יציאה, [תוכן מה חסר]
+ דוח תיק: לוח = לוח
+ חלקיק תיק: לוח = [לוח]
++חלקיק תיק: ממוצע פיקדון = ממוצע(סכום הפיקדון)
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
+ דוח תיק: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה
+ תוכן מסגרת: ערובה שכרוכה בהוצאה מוגבלת בתקרה (3 חודשים או שליש מהתקופה — הנמוך)

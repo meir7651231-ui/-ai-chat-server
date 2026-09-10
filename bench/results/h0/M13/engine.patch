@@ -1,0 +1,50 @@
+diff --git a/machtzev/generator/particle-plan-peruk12.json b/machtzev/generator/particle-plan-peruk12.json
+index 2591b82..8815361 100644
+--- a/machtzev/generator/particle-plan-peruk12.json
++++ b/machtzev/generator/particle-plan-peruk12.json
+@@ -160,5 +160,16 @@
+   "wired": [
+    "DsNote"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "מספר אגרת העברה",
++  "expr": "[מספר] אגרת העברה",
++  "ok": false,
++  "why": "מספר: שדה לא בסכמה: אגרת העברה",
++  "shape": null,
++  "ops": [],
++  "picks": [],
++  "wired": []
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk12.md b/machtzev/generator/particle-plan-peruk12.md
+index 65c380d..07287d6 100644
+--- a/machtzev/generator/particle-plan-peruk12.md
++++ b/machtzev/generator/particle-plan-peruk12.md
+@@ -8,6 +8,7 @@
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| מספר אגרת העברה | תיק | — | מספר: שדה לא בסכמה: אגרת העברה | — |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..dc5ab00 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -13,6 +13,7 @@
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: אסור = [תוכן אסור]
++חלקיק תיק: [מספר] אגרת העברה
+ דוח תיק: כרטיס = מחיר
+ דוח תיק: רשימת שאלות למוכר מקסימום = [תוכן רשימת שאלות למוכר מקסימום]
+ דוח תיק: מה לבדוק בנסיעה = [תוכן מה לבדוק בנסיעה]
+@@ -53,3 +54,4 @@
+ תוכן נוסח: מול קבלה
+ תוכן החלטה: להמשיך לבדיקה / לעצור / רק במחיר אחר
+ תוכן החלטה: לא: האוטו גנוב בלי נתון
++תוכן אגרת העברה: אגרת העברת בעלות משולמת לפני הרישום

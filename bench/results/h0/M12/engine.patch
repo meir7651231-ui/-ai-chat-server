@@ -1,0 +1,46 @@
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..8e0f525 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -240,6 +240,17 @@
+    "DsNote"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "ממוצע פיקדון",
++  "expr": "ממוצע(סכום הפיקדון)",
++  "ok": false,
++  "why": "אין אלגברת-הרכבה לצורה avg",
++  "shape": "avg",
++  "ops": [],
++  "picks": [],
++  "wired": []
++ },
+  {
+   "entity": "תיק",
+   "name": "לוח",
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..1f5ae13 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -10,6 +10,7 @@
+ | בדיקה | ממצא | content | group⇒SectionHeader (SectionHeader/DsSection) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
++| ממוצע פיקדון | תיק | avg | אין אלגברת-הרכבה לצורה avg | — |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..becb9bf 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -15,6 +15,7 @@
+ חלקיק ממצא: בדיקה = [תוכן בדיקה]
+ חלקיק תיק: אסור = [תוכן אסור]
+ חלקיק ממצא: צבע
++חלקיק תיק: ממוצע פיקדון = ממוצע(סכום הפיקדון)
+ דוח תיק: כרטיס = [תוכן כרטיס]
+ דוח תיק: טבלת שורות = [תוכן טבלת שורות]
+ דוח תיק: סכום יעד לדרישה = [תוכן סכום יעד לדרישה]

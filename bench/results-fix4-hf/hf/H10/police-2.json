@@ -1,0 +1,67 @@
+{
+ "task": "H10",
+ "ns": "calendar",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "sort_list": true,
+  "sort_second_surface": false
+ },
+ "task_checks": [
+  {
+   "id": "sort_list",
+   "ok": true,
+   "info": "ent1",
+   "mandatory": true
+  },
+  {
+   "id": "sort_second_surface",
+   "ok": false,
+   "info": "none",
+   "mandatory": false
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Generator successfully processed updated calendar spec with sort directive",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only calendar.txt modified; all other files byte-identical to baseline",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All police gates pass with no errors or warnings",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Entity list screen (ent1) now sorts meetings by שעה (time) in ascending order",
+   "check": "sort_list",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "46a0a8dc0b340f36",
+ "at": "2026-09-10T09:17:38.770Z"
+}

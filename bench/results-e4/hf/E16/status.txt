@@ -1,0 +1,9 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/apps/peruk08.json
+ M machtzev/generator/specs-ds/peruk08.txt
+?? "machtzev/audit/search/2026-09-10-\327\225\327\227\327\226\327\250-\327\233\327\241\327\243-refunded-26ac530a.json"
+?? "machtzev/audit/search/2026-09-10-\327\225\327\227\327\226\327\250-\327\233\327\241\327\243-refunded-6ab01639.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

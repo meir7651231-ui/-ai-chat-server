@@ -1,0 +1,52 @@
+{
+ "task": "H04",
+ "ns": "calendar",
+ "verdict": "NOT DONE",
+ "missing": [
+  "byte_identical_others",
+  "sort_both"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": false,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "sort_both": false
+ },
+ "task_checks": [
+  {
+   "id": "sort_both",
+   "ok": false,
+   "info": "sortlines=0",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "changed_others": [
+   "dart-gen-bs/gen_app_peruk01_ent1.dart",
+   "dart-gen-bs/gen_app_peruk02_ent1.dart",
+   "dart-gen-bs/gen_app_peruk03_ent1.dart",
+   "dart-gen-bs/gen_app_peruk04_ent1.dart",
+   "dart-gen-bs/gen_app_peruk19_ent1.dart",
+   "dart-gen-bs/gen_app_peruk20_ent1.dart",
+   "dart-gen-bs/gen_app_peruk21_ent1.dart",
+   "dart-gen-bs/gen_app_sechirut_ent1.dart"
+  ],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "785cd27a2a6f1a76",
+ "at": "2026-09-09T19:40:46.296Z"
+}

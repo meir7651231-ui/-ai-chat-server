@@ -1,0 +1,9 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/particle-plan-tasks.json
+ M machtzev/generator/specs-ds/tasks.txt
+?? machtzev/audit/search/2026-09-10-sorting-table-date-91c05bbc.json
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/particle-plan-tasks.md
+?? machtzev/generator/specs-ds/panuy.txt

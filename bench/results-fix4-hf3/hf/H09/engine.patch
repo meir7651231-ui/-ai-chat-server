@@ -1,0 +1,40 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..7184cec 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -850,3 +850,8 @@ GATE: balagan
+ GATE: balagan
+ **מה קרה:** אחרי G29 התשובה ישבה עמוק: לשונית ⇒ שורה ⇒ דוח ⇒ נוסח ⇒ שלח = 5 הקשות. כלל-היעד T3 (≤2, אפס-הקלדה) לא ייסגר "בעיצוב" אלא בהעברת הפעולה למסך-הראשון. **הלקח:** (1) **«היום» = מסך הפעולה** (`renderHome`, נייר): לכל רשומה-פתוחה (שלב < אחרון) כרטיס אחד — משפט בגוף-ראשון (`homeOne/homeMany/homeNone`) · בורר-הנוסחים של חלקיק-ההודעה (אותו `particleWidgets`, `recs=[r]`) · שלח (אותו `reportText`+מנוע-קישור של הדוח, `export.linkRaw` ממופה-מחדש ל-k של המסך — קבועי-הדוח אינם גלויים ממסך אחר) · פתח. הקשות: נוסח (1) + שלח (2). (2) **יצירה = טקסט בלבד** (`DsQuickAdd`: Enter ⇒ `appStore.add` עם שדה-המתאר) — הטופס נשאר ל«פרטים». (3) **מקלדת = חוזה** (`CallbackShortcuts`: A/T/I · Ctrl/Cmd+K ⇒ `DsPalette` על רשומות+פעולות; `Focus(autofocus)`). (4) **אפס-הגדרות = main פותח בשלד** (בדיקה, לא הבטחה). (5) **השער סופר בפלט**: T3 = «היום» מכיל בורר-נוסחים (אם לדוח יש) + `_send` והוא הלשונית הראשונה; D2 = DsQuickAdd ברשימה; D3/D4 = הקיצורים+הפלטה בשלד; D10 = `home: ShellScreen`. (6) משתנה שהוגדר בבלוק (`plan`/`pents` בתוך if) אינו זמין לשלד — חשיפה מפורשת (`planAll`), לא העתקה. (7) **שער-cover רגיש לאוצר-המילים**: כותרת-עברית עשירה לאטום-DS חדש ("רשומות · פעולות · בחירה · הקשה") שינתה את משקלי-ה-IDF של האחזור ⇒ הזהב של `identity` (MediaRow) נפל מ-top-3 (29⇒28). אטום-כרום-DS שאינו נבחר-בחיפוש מקבל כותרת קצרה (שם + אנגלית) — לא לתאר במילים שהן מטרות-זהב של אופים אחרים; הראיה = `cover.mjs --gate` אחרי כל אטום חדש.
+ 
++## L106 · שדה-מחושב (computed) ממופה ישירות מנוסחה בספק לקוד Dart דרך `_m_<func>` עטיפה (10.9, H09 · tasks)
++GATE: calc
++**מה קרה:** הוספת שדה מחושב סכום מעוגל = round(סכום) לטבלת משימה. **הלקח:** (1) **שדה-מחושב מוגדר בתוך שורת-הישות** בספק-הפרוטוקול `ישות <name> עם <field1>, <field2> = <formula>, …`: הנוסחה מחליפה קלט-משתמש בנגזרת; `app-ds.mjs` מזהה את זה וביצוע = דדופ של שדה-קלט בספק. (2) **הפונקציות תומכות:** `round`, `floor`, `ceil`, `sqrt`, `abs`, `min`, `max`, `pow` כולן נתמכות בספק-הלשון (SPEC-LANG.md). (3) **פלט-Dart מוגן:** כל פונקציה של נוסחה `f(x)` גם כן מוגנת עטיפה `_m_f` שמנטרלת null ומפעילה את הפעולה (`_m_round(num x) => x.round()`), ופלט בשיטה-שמורה (`toStringAsFixed(2)` למספרים-עם-עשרוניות). (4) **שער `calc` סופר**: כמה שדות-מחושבים הוגדרו (כאן 1, מודול-אחד), וכמה קריאות-לפונקציה (`round(סכום)` = 1 שימוש). (5) **אפס-תופעות-לוואי**: שדות-מחושבים משמרים byte-identity של אפליקציות אחרות ויוצרים קבצים חדשים רק ליישות שמכילה אותם — לא regen-הרחב של הקטלוג. **הוכחה:** `police-bench` מדווח calc=1 · round=1× · byte_identical_others=✅.
++
++
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..040dacc 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -48,6 +48,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "סכום מעוגל",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "הערה",
+     "type": "multiline",
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..adb3b15 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, סכום מעוגל = round(סכום), הערה | שלבים: פתוח, נעשה

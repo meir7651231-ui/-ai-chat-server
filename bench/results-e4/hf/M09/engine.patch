@@ -1,0 +1,93 @@
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..31007dd 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -60,8 +60,12 @@
+   {
+    "name": "משימה",
+    "slug": "app_tasks_ent1"
++  },
++  {
++   "name": "תזכורת",
++   "slug": "app_tasks_ent2"
+   }
+  ],
+- "relations": false,
++ "relations": true,
+  "report": null
+ }
+\ No newline at end of file
+diff --git a/machtzev/generator/particle-plan-tasks.json b/machtzev/generator/particle-plan-tasks.json
+index 0637a08..fd78615 100644
+--- a/machtzev/generator/particle-plan-tasks.json
++++ b/machtzev/generator/particle-plan-tasks.json
+@@ -1 +1,56 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "תזכורת",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
++ {
++  "entity": "תזכורת",
++  "name": "אין תזכורות",
++  "expr": "[ריק] אין תזכורות",
++  "ok": true,
++  "why": null,
++  "shape": "empty",
++  "ops": [
++   "empty"
++  ],
++  "picks": [
++   {
++    "op": "empty",
++    "atoms": [
++     "EmptyStateCard"
++    ],
++    "alts": [
++     "EmptyStateCard",
++     "EmptyState@premium/feedback",
++     "SearchEmptyState"
++    ]
++   }
++  ],
++  "wired": [
++   "EmptyState@premium/feedback"
++  ]
++ }
++]
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..4b48edf 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -4,3 +4,6 @@
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+ ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות תזכורת עם משימה*, מועד*, נשלחה | מחיקה: משימה=מפל
++חלקיק תזכורת: [טבלה]
++חלקיק תזכורת: אין תזכורות = [ריק] אין תזכורות

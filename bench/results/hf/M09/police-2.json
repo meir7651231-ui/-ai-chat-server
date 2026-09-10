@@ -1,0 +1,70 @@
+{
+ "task": "M09",
+ "ns": "tasks",
+ "verdict": "NOT DONE",
+ "missing": [
+  "byte_identical_others",
+  "empty"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": false,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "ent2": true,
+  "empty": false
+ },
+ "task_checks": [
+  {
+   "id": "ent2",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "empty",
+   "ok": false,
+   "info": "0×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "changed_others": [
+   "dart-gen-bs/gen_app_panuy_px1.dart",
+   "dart-gen-bs/gen_app_peruk01_px1.dart",
+   "dart-gen-bs/gen_app_peruk02_px1.dart",
+   "dart-gen-bs/gen_app_peruk03_px1.dart",
+   "dart-gen-bs/gen_app_peruk04_px1.dart",
+   "dart-gen-bs/gen_app_peruk05_px1.dart",
+   "dart-gen-bs/gen_app_peruk06_px1.dart",
+   "dart-gen-bs/gen_app_peruk07_px1.dart"
+  ],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Added תזכורת (reminder) as second entity in tasks.txt with משימה* (required link), מועד* (required date), נשלחה{כן|לא}",
+   "check": "ent2",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Empty state message אין תזכורות appears in generated px1_content at const String gen_app_tasks_px1_c8 = 'אין תזכורות'",
+   "check": "empty",
+   "verdict": "FALSE"
+  }
+ ],
+ "false_claims": 1,
+ "signature": "284a8cb0d71f61c3",
+ "at": "2026-09-09T22:20:30.538Z"
+}

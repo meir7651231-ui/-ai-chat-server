@@ -1,0 +1,52 @@
+{
+ "task": "H09",
+ "ns": "tasks",
+ "verdict": "NOT DONE",
+ "missing": [
+  "calc"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "calc": false,
+  "round": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": false,
+   "info": "consts=1 calc=0",
+   "mandatory": true
+  },
+  {
+   "id": "round",
+   "ok": true,
+   "info": "3×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "583a4bacbcda2017",
+ "at": "2026-09-09T22:39:47.363Z",
+ "arm": "f0",
+ "wall_s": 738,
+ "cost_usd": 5.2129835,
+ "tokens": 3170291
+}

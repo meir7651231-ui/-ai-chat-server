@@ -1,0 +1,102 @@
+diff --git a/machtzev/generator/apps/peruk08.json b/machtzev/generator/apps/peruk08.json
+index 911b157..5ac25f4 100644
+--- a/machtzev/generator/apps/peruk08.json
++++ b/machtzev/generator/apps/peruk08.json
+@@ -31,6 +31,7 @@
+    "שולם",
+    "בבדיקה",
+    "נמסר",
++   "הוחזר הכסף",
+    "סגור"
+   ],
+   "fields": [
+diff --git a/machtzev/generator/peruk-lang.data.json b/machtzev/generator/peruk-lang.data.json
+index 74d8d89..a28e09a 100644
+--- a/machtzev/generator/peruk-lang.data.json
++++ b/machtzev/generator/peruk-lang.data.json
+@@ -57,6 +57,9 @@
+   ],
+   "kill": [
+    "קריטריון"
++  ],
++  "stages": [
++   "שלבים"
+   ]
+  },
+  "inputsHead": [
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..9c364fb 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -1,7 +1,8 @@
+ #!/usr/bin/env node
+ // 📄 peruk — קורא-הפירוקים (GENMAX·G27 · הכרעה-27): מסמך «פירוק N» של הבעלים ⇒ צומת-ידע שלם ⇒ ספק-app-ds, בלי יד.
+ //   השלד הקבוע של הפירוקים (הרגע · מסגרת · פירוק ל-N בלוקים · סיווג/אדום-צהוב-ירוק · המוצר: מה-שולחים/מה-חוזר · דוגמה ·
+-//   מחיר · אסור · חובה · שרשרת) נקרא **מבנית** — כותרות, רשימות, מפרידים. כל מילה-עברית מהדאטה (peruk-lang.data.json; §19).
++//   מחיר · אסור · חובה · שרשרת · [שלבים]) נקרא **מבנית** — כותרות, רשימות, מפרידים. כל מילה-עברית מהדאטה (peruk-lang.data.json; §19).
++//   סעיף «שלבים» (רשות, רשימה ≥2) = שלבי-התיק של הפירוק הזה; בלעדיו — שלבי-ברירת-המחדל (peruk-lang.stages).
+ //   פלט: specs-ds/<ns>.txt (ישויות · שלבים · חלקיקים · תוכן · דוח · ייצוא) + peruk-index.json (צומת: מזהה · רגע · קטגוריה ·
+ //   מחירים · שרשרת) — ואז app-ds בונה את האפליקציה. מאות מסמכים = ריצה אחת.
+ //   שער `peruk`: לכל מסמך ב-peruks/ — ≥1 שדה-קליטה · ≥1 חלק-פלט · הסתייגות · אסור; והספק בדיסק ≡ הספק המחולל (טריות).
+@@ -145,6 +146,9 @@ export function perukToSpec(md, ns) {
+   const notin = S('notin'); if (notin) content.push(...contentOf(notin, groups.notin));
+   const ex = S('example'); if (ex) content.push(...contentOf(ex, groups.example));
+   const chainSec = S('chain'); const chain = chainSec ? items(chainSec.lines).map((x) => x.replace(/^\d+[.)]\s*/, '')) : [];
++  // שלבי-התיק: סעיף «שלבים» במסמך (רשימה, ≥2 פריטים) = שרשרת-הסטטוס של הפירוק הזה; בלעדיו — שלבי-ברירת-המחדל (P.stages). מבני, אפס-יד.
++  const stagesSec = S('stages'); const docStages = stagesSec ? items(stagesSec.lines).map(clean).filter(Boolean) : [];
++  const stages = docStages.length >= 2 ? docStages : P.stages;
+   const price = S('price'); const prices = price ? items(price.lines).concat(prose(price.lines)).map((l) => { const m = l.match(/(\d[\d,]*)\s*₪/); return m ? { label: l.split(/[:：]/)[0].trim(), ils: +m[1].replace(/,/g, '') } : null; }).filter(Boolean) : [];
+   // G29 · זוגות ישן/חדש מהבלוקים ("שכ״ד ישן מול חדש") ⇒ שני שדות-מספר + חלקיק-דיף; מכפיל-לשנה כשהבסיס חודשי (peruk-lang.monthlyWords)
+   const pairs = [];
+@@ -163,7 +167,7 @@ export function perukToSpec(md, ns) {
+   lines.push(`${G.lookWord}: ${P.look}`);                                   // G28 · עור-הנייר של «בלגן»
+   if (chain.length) lines.push(`${G.chainWord}: ${chain.map((c) => c.replace(/[,،]/g, ' ')).join(', ')}`);   // G32 · הצעד-הבא (P14)
+   for (const [tgt, q] of P.questions || []) lines.push(`${G.questionWord} ${tgt}: ${q}`);   // G28 · מסך = שאלה אחת
+-  lines.push(`${G.entityNouns[0]} ${root} ${G.withWord} ${rootFields.join(', ')} | ${G.stagePrefixes[0]} ${P.stages.join(', ')}`);
++  lines.push(`${G.entityNouns[0]} ${root} ${G.withWord} ${rootFields.join(', ')} | ${G.stagePrefixes[0]} ${stages.join(', ')}`);
+   if (severity) lines.push(`${G.entityNouns[0]} ${fnd} ${G.withWord} ${P.findingFields.map((f, i) => i === 0 ? f.replace(/\*$/, '') + '*' : f).join(', ')}, ${P.severityField}{${P.severity.join('|')}} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
+   lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}`);
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+diff --git a/machtzev/generator/peruks/peruk-08.md b/machtzev/generator/peruks/peruk-08.md
+index 22a3ec8..7280711 100644
+--- a/machtzev/generator/peruks/peruk-08.md
++++ b/machtzev/generator/peruks/peruk-08.md
+@@ -162,3 +162,12 @@
+ 
+ הבא: לקוח לא משלם לעסק, או קנס שהתנפח.
+ ---
++
++## 13. שלבים
++
++- התקבל
++- שולם
++- בבדיקה
++- נמסר
++- הוחזר הכסף
++- סגור
+diff --git a/machtzev/generator/specs-ds/peruk08.txt b/machtzev/generator/specs-ds/peruk08.txt
+index 4b501fe..6bfe56e 100644
+--- a/machtzev/generator/specs-ds/peruk08.txt
++++ b/machtzev/generator/specs-ds/peruk08.txt
+@@ -3,7 +3,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, הוחזר הכסף, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..32e815e 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -67,7 +67,7 @@ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/gener
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+ 39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++c449a8e3e25817a75e2140e143454a1348956c619a74480c89bdc59cc3d8a4fd  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

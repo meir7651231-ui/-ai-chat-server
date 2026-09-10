@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "spec_syntax_valid",
+      "text": "peruk02.txt line 10: '[טבלה] | מיון: תאריך מסירת מפתח עולה' parses correctly via particles.mjs sort logic"
+    },
+    {
+      "check": "field_type_match",
+      "text": "Field 'תאריך מסירת מפתח' is date type (detected from 'תאריך' keyword); valid for sorting in ascending order"
+    },
+    {
+      "check": "sort_keyword_correct",
+      "text": "Keyword 'עולה' from spec-lang.data.json sortAsc list; generates ascending order (earliest first)"
+    },
+    {
+      "check": "no_generated_code_touched",
+      "text": "Only spec file modified; new/ directory byte-identical to baseline"
+    },
+    {
+      "check": "no_regressions",
+      "text": "app-ds.mjs successfully generated peruk02 app with 5 screens; no parsing or generation errors"
+    }
+  ],
+  "notes": "proven: Fix applied to correct layer (spec .txt, not generated code). Syntax validated against particles.mjs and sort-cmp.mjs parsing logic. Field exists in schema and has date type. Sort order is ascending (עולה). App generation successful without errors. Collateral damage check: other peruk specs unmodified. Awaiting police report for full validation gates."
+}

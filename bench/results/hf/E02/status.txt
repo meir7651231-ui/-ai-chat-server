@@ -1,0 +1,8 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/apps/peruk02.json
+ M machtzev/generator/specs-ds/peruk02.txt
+?? "machtzev/audit/search/2026-09-10-\327\246\327\221\327\242-color-choice-10090ca3.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

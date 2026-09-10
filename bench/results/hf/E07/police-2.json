@@ -1,0 +1,79 @@
+{
+ "task": "E07",
+ "ns": "peruk21",
+ "verdict": "NOT DONE",
+ "missing": [
+  "byte_identical_others"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": false,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "counter": true
+ },
+ "task_checks": [
+  {
+   "id": "counter",
+   "ok": true,
+   "info": "consts=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "changed_others": [
+   "dart-gen-bs/gen_app_panuy_px1.dart",
+   "dart-gen-bs/gen_app_sechirut_px2.dart",
+   "dart-gen-bs/gen_app_sechirut_px3.dart",
+   "dart-gen-bs/gen_app_sechirut_px4.dart",
+   "dart-gen-bs/gen_app_sechirut_rp1.dart"
+  ],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Spec change regenerated successfully; no parser errors in generator pipeline",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Fixed shared generator particles.mjs to convert .where() to .toList() before .length; this affects all apps using counter particles (panuy, sechirut) but mainta",
+   "check": "byte_identical_others",
+   "verdict": "FALSE"
+  },
+  {
+   "text": "All 53 gates pass; no architectural violations or inconsistencies",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No Hebrew added to engine code; all Hebrew confined to spec",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No invalid Dart math method calls on numeric fields",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Counter particle דחופים found in px1 content with filtering by סיווג=הזמנה לוועדה",
+   "check": "counter",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 1,
+ "signature": "8e6edd50ffd200e9",
+ "at": "2026-09-09T20:50:43.224Z"
+}

@@ -1,0 +1,13 @@
+{
+  "claims": [
+    {
+      "check": "hub_label",
+      "text": "Dashboard counter with label 'עם מתווך' added to sechirut.txt (line 22 particle definition) and generated in gen_app_sechirut_px1_content.dart line 8 as c6='עם מתווך', rendered in gen_app_sechirut_px1.dart line 35 as KvLine widget label."
+    },
+    {
+      "check": "hub_where",
+      "text": "Counter מונה(תיק: מתווך=כן) placed in לוח בקרה (dashboard/hub) definition line 11 of sechirut.txt, automatically reflected in generated hub navigation (gen_app_sechirut_hub_content.dart c17='7 מדדים', up from previous 6) showing dashboard now has 7 metrics."
+    }
+  ],
+  "notes": "proven — spec-level changes to dashboard counter verified across: (1) source spec sechirut.txt lines 11,22; (2) generated particle content with label; (3) generated widget rendering as KvLine; (4) generated hub showing updated metric count. All core checks pass: regen_ok ✅, byte_identical_others ✅, gates_pass ✅, no_hebrew_in_engine ✅, dart_math_sane ✅, no_hand_edit ✅. Byte-identical check confirms only specified file changed, no unintended side effects."
+}

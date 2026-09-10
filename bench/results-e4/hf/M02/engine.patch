@@ -1,0 +1,134 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..ef4e90a 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -846,6 +846,10 @@ GATE: balagan
+ ---
+ **תוספת (10.9):** תווית עם ספרה («תקרה לפי 3 חודשים») נשמרת בסכמה בלי הספרה, אבל בנוסחאות/תנאים היא נכתבת כפי שהיא ⇒ compileFormula/compileGuard לא זיהו אותה ונכשלו בשקט (השדה נשאר קלט רגיל). תוקן: schema.raw = כפי שנכתב; הנוסחה מזהה גם raw וגם label. תוצאה: `חורג מול 3 חודשים` ב-sechirut נהיה חי (שינוי-פלט לגיטימי, בסיס-בייטים עודכן). וגם: ענפי `? :` שנוקבים שם-שדה ⇒ ערך-השדה, לא הטקסט.
+ 
++## L106 · תוכנית-הרגע הנוצרת בספק היא כלי-עדר-היוקס: ישות-שנייה = שדה-קישור + תפקידים-סטטיים (10.9, peruk12-M02)
++GATE: regen_ok
++**מה קרה:** משימה: הוסף בדיקה (inspection) לאפליקציית-קנייה-רכב. יישות חדשה = 3 שדות: תיק* (link), מה נבדק* (text), תקין{כן|לא} (choice) — טבלה + מונה ב-dashboard. פחד: "מא תשבור במקום אחר?" הלקח: **הספק מביא את התשובה**. (1) **דפוס ישות-שנייה = זהה לדפוס ממצא**: grep peruk06.txt ⇒ `ישות ממצא עם תיק*, סעיף, מה כתוב, מה לבקש, צבע{אדום|צהוב|ירוק} | מחיקה: תיק=מפל` · זהה לגמרי להקטנה: שדה-קישור בשם הישות-ההורה + * · מחיקה-מפל בשם ההורה בשדה-הקישור. (2) **טבלה-חלקיק = קבוע**: `חלקיק בדיקה: [טבלה]` · `[ריק] אין בדיקות עדיין` · המנוע פולט DsTable עם כל השדות ממתי דברו תוך שניות. (3) **מונה בדשבורד = חיפוש-מחנה**: דקדוק-הדשבורד זיהה `מונה(בדיקה: תקין=לא)` — filter-and-count (Dart: `.where((r) => r[fieldKey] == value).length`) — חקוי מדפוס הקיים `count(ישות: שדה=ערך)`. (4) **היוקסים הנשארות**: (א) הצפי שלי שיש לסרוק את כל הקטלוג — הקטלוג-הנוכחי *כבר* נוסח מ-31 ישויות+צורות·דוחות; הדפוסים (link + ריק-חלקיק + מונה-תנאי) לא חדשים, רק חזרו. (ב) האחרון: byte_identical_others ✅ = לא צעדתי לתוך רגל של יישום אחר (מחסום-דורש-serde בחיווט סגור). (5) **שער `dash_counter` בתוך PROTOCOL_ENFORCEMENT**: האם הגישה הנוכחית לקרות-הדשבורד מכתיבה את הנוסחה או אם היא תובנית? התשובה מהמכונה: דוח-הפוליס בודק שני דברים — (א) הודעות-C של ה-Dart (`c9`/`c10` בקבוע הגלום ב-scr3_content.dart) · (ב) הלוגיקה בפועל ב-gen_app_peruk12_scr3.dart (`where(...).length`). אם שניהם קשורים: שער ירוק. (6) **מנוע הוא מודע למילים**: "תקין" ⇒ `תקין{כן|לא}` זיהה את השדה כבחירה-נכונה-לא·כן (תיוג כן/לא מנוע); הדשבורד ביקש `תקין=לא` = "לא" נבחר ממנו בדיוק. **הדרך הקדימה**: ישות-שלישית (רחוקה) + מחיקה על-ידי-סטירה (orphan) + חלקיק-תוכן לא-קושר = שלוש סדרות-בדיקה; הראיה = `byte_identical_others` + `compiles` + משטרה ירוקה.
++
+ ## L104 · הקשות נמדדות על הפלט, לא מובטחות בפרוזה: «היום» = הפעולה-הראשית במסך-הראשון (8.9, GENMAX · G30 · הכרעה-28)
+ GATE: balagan
+ **מה קרה:** אחרי G29 התשובה ישבה עמוק: לשונית ⇒ שורה ⇒ דוח ⇒ נוסח ⇒ שלח = 5 הקשות. כלל-היעד T3 (≤2, אפס-הקלדה) לא ייסגר "בעיצוב" אלא בהעברת הפעולה למסך-הראשון. **הלקח:** (1) **«היום» = מסך הפעולה** (`renderHome`, נייר): לכל רשומה-פתוחה (שלב < אחרון) כרטיס אחד — משפט בגוף-ראשון (`homeOne/homeMany/homeNone`) · בורר-הנוסחים של חלקיק-ההודעה (אותו `particleWidgets`, `recs=[r]`) · שלח (אותו `reportText`+מנוע-קישור של הדוח, `export.linkRaw` ממופה-מחדש ל-k של המסך — קבועי-הדוח אינם גלויים ממסך אחר) · פתח. הקשות: נוסח (1) + שלח (2). (2) **יצירה = טקסט בלבד** (`DsQuickAdd`: Enter ⇒ `appStore.add` עם שדה-המתאר) — הטופס נשאר ל«פרטים». (3) **מקלדת = חוזה** (`CallbackShortcuts`: A/T/I · Ctrl/Cmd+K ⇒ `DsPalette` על רשומות+פעולות; `Focus(autofocus)`). (4) **אפס-הגדרות = main פותח בשלד** (בדיקה, לא הבטחה). (5) **השער סופר בפלט**: T3 = «היום» מכיל בורר-נוסחים (אם לדוח יש) + `_send` והוא הלשונית הראשונה; D2 = DsQuickAdd ברשימה; D3/D4 = הקיצורים+הפלטה בשלד; D10 = `home: ShellScreen`. (6) משתנה שהוגדר בבלוק (`plan`/`pents` בתוך if) אינו זמין לשלד — חשיפה מפורשת (`planAll`), לא העתקה. (7) **שער-cover רגיש לאוצר-המילים**: כותרת-עברית עשירה לאטום-DS חדש ("רשומות · פעולות · בחירה · הקשה") שינתה את משקלי-ה-IDF של האחזור ⇒ הזהב של `identity` (MediaRow) נפל מ-top-3 (29⇒28). אטום-כרום-DS שאינו נבחר-בחיפוש מקבל כותרת קצרה (שם + אנגלית) — לא לתאר במילים שהן מטרות-זהב של אופים אחרים; הראיה = `cover.mjs --gate` אחרי כל אטום חדש.
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..5f7846c 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -79,9 +79,13 @@
+   {
+    "name": "תיק",
+    "slug": "app_peruk12_ent1"
++  },
++  {
++   "name": "בדיקה",
++   "slug": "app_peruk12_ent2"
+   }
+  ],
+- "relations": false,
++ "relations": true,
+  "report": {
+   "slug": "app_peruk12_rp1",
+   "cls": "GenAppPeruk12Rp1Screen"
+diff --git a/machtzev/generator/particle-plan-peruk12.json b/machtzev/generator/particle-plan-peruk12.json
+index 2591b82..5b458ef 100644
+--- a/machtzev/generator/particle-plan-peruk12.json
++++ b/machtzev/generator/particle-plan-peruk12.json
+@@ -160,5 +160,59 @@
+   "wired": [
+    "DsNote"
+   ]
++ },
++ {
++  "entity": "בדיקה",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
++ {
++  "entity": "בדיקה",
++  "name": "ריק אין בדיקות עדיין",
++  "expr": "[ריק] אין בדיקות עדיין",
++  "ok": true,
++  "why": null,
++  "shape": "empty",
++  "ops": [
++   "empty"
++  ],
++  "picks": [
++   {
++    "op": "empty",
++    "atoms": [
++     "EmptyState@premium/feedback"
++    ],
++    "alts": [
++     "EmptyState@premium/feedback",
++     "EmptyStateCard",
++     "SearchEmptyState"
++    ]
++   }
++  ],
++  "wired": [
++   "EmptyState@premium/feedback"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk12.md b/machtzev/generator/particle-plan-peruk12.md
+index 65c380d..d67c37c 100644
+--- a/machtzev/generator/particle-plan-peruk12.md
++++ b/machtzev/generator/particle-plan-peruk12.md
+@@ -8,6 +8,8 @@
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| טבלה | בדיקה | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| ריק אין בדיקות עדיין | בדיקה | empty | empty⇒EmptyState (EmptyState/EmptyStateCard) | EmptyState@premium/feedback |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..14a5ef0 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -5,7 +5,8 @@
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+-לוח בקרה עם מונה(תיק)
++ישות בדיקה עם תיק*, מה נבדק*, תקין{כן|לא} | מחיקה: תיק=מפל
++לוח בקרה עם מונה(תיק), מונה(בדיקה: תקין=לא)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
+@@ -13,6 +14,8 @@
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: אסור = [תוכן אסור]
++חלקיק בדיקה: [טבלה]
++חלקיק בדיקה: [ריק] אין בדיקות עדיין
+ דוח תיק: כרטיס = מחיר
+ דוח תיק: רשימת שאלות למוכר מקסימום = [תוכן רשימת שאלות למוכר מקסימום]
+ דוח תיק: מה לבדוק בנסיעה = [תוכן מה לבדוק בנסיעה]

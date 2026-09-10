@@ -1,0 +1,22 @@
+ M machtzev/generator/apps/tasks.json
+ M machtzev/generator/atlas-data.json
+ M machtzev/generator/atlas.json
+ M machtzev/generator/atom-index-full.json
+ M machtzev/generator/auto-logic.json
+ M machtzev/generator/logic-census.json
+ M machtzev/generator/ops-map.json
+ M machtzev/generator/particle-plan-peruk03.json
+ M machtzev/generator/particle-plan-peruk03.md
+ M machtzev/generator/particle-plan-peruk04.json
+ M machtzev/generator/particle-plan-peruk04.md
+ M machtzev/generator/particle-plan-peruk05.json
+ M machtzev/generator/particle-plan-peruk05.md
+ M machtzev/generator/particle-plan-sechirut.json
+ M machtzev/generator/particle-plan-sechirut.md
+ M machtzev/generator/render-ds.mjs
+ M machtzev/generator/specs-ds/tasks.txt
+?? "machtzev/audit/search/2026-09-09-\327\241\327\233\327\225\327\235-\327\242\327\225\327\222\327\234-rounded-dbb3dcc7.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

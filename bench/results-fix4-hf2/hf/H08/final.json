@@ -1,0 +1,82 @@
+{
+ "task": "H08",
+ "ns": "panuy",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "calc": true,
+  "abs": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  },
+  {
+   "id": "abs",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator pipeline completed successfully after adding computed field",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps remain unchanged; only panuy.txt and its outputs modified",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code passes flutter analyze with zero errors",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "New computed field מרחק אבסולוטי registered as 1 calculation in app",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "abs() function called exactly once for the new field",
+   "check": "abs",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "a1a0a48f8ee1ae22",
+ "at": "2026-09-10T10:59:29.134Z",
+ "arm": "hf",
+ "wall_s": 864,
+ "cost_usd": 1.7981915,
+ "tokens": 7231646
+}

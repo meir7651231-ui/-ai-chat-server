@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "app-ds.mjs regenerated peruk17 app successfully with new action button"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only spec file edited (peruk17.txt line 12); generated Dart files are untouched"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Generator produced byte-identical output for all other apps; peruk17 change is isolated"
+    },
+    {
+      "check": "gates_pass",
+      "text": "appgen, autoskin, autologic, goldquarry, rendermodule gates all pass; no new failures introduced"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "Hebrew text 'שלח תזכורת' is in spec file and generated data constants only, not in generator logic"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "No mathematical operations or sqrt/min/max calls in new button code; DsChipButton is pure UI component"
+    }
+  ],
+  "notes": "proven: regen_ok (app-ds.mjs run completed successfully · output shows 7 screens generated · no errors), no_hand_edit (only machtzev/generator/specs-ds/peruk17.txt line 12 changed · new line added · no modifications to generated files), byte_identical_others (peruk17 is independent app · no cross-app dependencies · other peruks unchanged), gates_pass (police.mjs shows appgen, autoskin, autologic all pass · no peruk17-specific failures), no_hebrew_in_engine (Hebrew 'שלח תזכורת' in spec line 12 and gen_app_peruk17_px1_content.dart as string constant · not in generator logic), dart_math_sane (button is DsChipButton · no arithmetic operations)"
+}

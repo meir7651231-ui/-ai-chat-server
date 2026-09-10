@@ -1,0 +1,75 @@
+{
+ "task": "E11",
+ "ns": "peruk02",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "new_label": true,
+  "old_gone": true
+ },
+ "task_checks": [
+  {
+   "id": "new_label",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "old_gone",
+   "ok": true,
+   "info": "0×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "App peruk02 regenerated successfully with new field name תיקונים שנדרשו",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Field name changed from תיקונים to תיקונים שנדרשו in gen_app_peruk02_ent1_content.dart constant c15",
+   "check": "field_rename_verified",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Spec file machtzev/generator/specs-ds/peruk02.txt updated: תיקונים* renamed to תיקונים שנדרשו*",
+   "check": "spec_updated",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "No hand edits to generated files - all changes via spec regeneration only",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "689066f34cb436d2",
+ "at": "2026-09-10T16:58:34.008Z"
+}

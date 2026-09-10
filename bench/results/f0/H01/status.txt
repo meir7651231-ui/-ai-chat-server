@@ -1,0 +1,9 @@
+ M machtzev/generator/app-ds.mjs
+ M machtzev/generator/entity.mjs
+ M machtzev/generator/render-ds.mjs
+ M machtzev/generator/spec-lang.data.json
+ M machtzev/pins.sha256
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

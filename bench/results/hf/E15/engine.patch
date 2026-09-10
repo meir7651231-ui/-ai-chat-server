@@ -1,0 +1,45 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..1f0da11 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-formula-syntax-e15 · נוסחה-שדה בספק דורשת אופרטור ASCII `*` לכפל — `×` (U+00D7) נדחה ע"י parser (E15 · tasks.txt)
++GATE: police/calc
++ref: E15 task — machtzev/generator/specs-ds/tasks.txt
++ANTIPATTERN: \s*=\s*\w+\s*×\s*[\d.]+
++RULE: נוסחה-שדה בספק עברי (ישות עם שדה=נוסחה) משתמשת רק בתו ASCII: `*` לכפל, `/` לחילוק, `+`/`-` לחיבור/חיסור, `()` לסדר פעולות. גרפי-עברית לכפל (×, ⋅) נדחה ע"י `compileFormula` (render-ds.mjs: regex `[0-9.+\-*/()\s]`). שרבוט: אם הנוסחה אינה מהודרת, `_calc()` לא מופיע בפלט ⇒ checker `calc` נכשל (consts=1 calc=0).
++מה נכשל: סכום כולל מעמ = סכום × 1.18 ⇒ parser דחה את `×` כתו לא-מזוהה ⇒ `compileFormula` החזיר null. החוק: ASCII `*` בלבד.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..5590045 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -53,6 +53,12 @@
+     "type": "multiline",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "סכום כולל מעמ",
++    "type": "num",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..d41e125 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, הערה, סכום כולל מעמ = סכום * 1.18 | שלבים: פתוח, נעשה

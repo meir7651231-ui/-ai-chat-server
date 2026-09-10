@@ -1,0 +1,82 @@
+{
+ "task": "H02",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort": true,
+  "desc": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  },
+  {
+   "id": "desc",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Spec regeneration succeeded; app generated from updated sechirut.txt",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps' outputs remain byte-identical; only sechirut app changed",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All machine gates passed; no thresholds or rules violated",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Sort feature verified present in sechirut app via machine check sort=✅",
+   "check": "sort",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Descending sort order verified via machine check desc=✅ (highest first)",
+   "check": "desc",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "0b7b390f1f94756d",
+ "at": "2026-09-10T10:27:34.059Z",
+ "arm": "hf",
+ "wall_s": 451,
+ "cost_usd": 1.4453541,
+ "tokens": 6203983
+}

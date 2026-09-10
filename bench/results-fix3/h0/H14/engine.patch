@@ -1,0 +1,62 @@
+diff --git a/machtzev/generator/particle-plan-sechirut.json b/machtzev/generator/particle-plan-sechirut.json
+index aa8a58e..c783ba6 100644
+--- a/machtzev/generator/particle-plan-sechirut.json
++++ b/machtzev/generator/particle-plan-sechirut.json
+@@ -147,6 +147,33 @@
+    "DsChip"
+   ]
+  },
++ {
++  "entity": "ממצא",
++  "name": "טבלה סעיף צבע מה כתוב מיון צבע עולה",
++  "expr": "[טבלה] סעיף, צבע, מה כתוב | מיון: צבע עולה",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
+  {
+   "entity": "תשלום",
+   "name": "הכנסה",
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..676ed1b 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -7,6 +7,7 @@
+ | אדומים | ממצא | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
+ | מה לבקש | ממצא | raw | fact⇒DsChip (DsChip/DsEmpty) | DsChip |
++| טבלה סעיף צבע מה כתוב מיון צבע עולה | ממצא | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | הכנסה | תשלום | sum | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | לא שולם | תשלום | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | שכירות לשנה | תיק | raw | fact⇒NumberStepper (NumberStepper/DsChip) | DsChip |
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..b5d4fb2 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -16,6 +16,7 @@
+ חלקיק ממצא: אדומים = מונה(צבע=אדום)
+ חלקיק ממצא: צבע
+ חלקיק ממצא: מה לבקש
++חלקיק ממצא: [טבלה] סעיף, צבע, מה כתוב | מיון: צבע עולה
+ חלקיק תשלום: הכנסה = סכום(סכום)
+ חלקיק תשלום: לא שולם = מונה(שולם=לא)
+ חלקיק תיק: שכירות לשנה

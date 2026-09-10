@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "App regenerated successfully with column-specific table spec syntax"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps remain byte-identical; no unintended side effects"
+    },
+    {
+      "check": "four_columns",
+      "text": "Table now displays exactly 4 columns: שם, זמין, מרחק בקמ, מחיר לשעה"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart passes flutter analyze with zero errors"
+    },
+    {
+      "check": "has_km",
+      "text": "מרחק בקמ field is present and properly rendered in output"
+    }
+  ],
+  "notes": "proven — Machine report confirms DONE. Spec change only: replaced [טבלה] with [טבלה] שם, זמין, מרחק בקמ, מחיר לשעה in panuy.txt line 6. Column selection syntax was already supported by spec language. No engine changes. All validations passed."
+}

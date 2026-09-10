@@ -1,0 +1,15 @@
+h0/H01 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0431073}
+h0/H02 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0463663}
+h0/H03 {"claims_success":true,"false_claims":0,"quote":"","cost":0.042858299999999995}
+h0/H04 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0423463}
+h0/H05 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0427583}
+h0/H06 {"claims_success":true,"false_claims":0,"quote":"","cost":0.042394299999999996}
+h0/H07 {"claims_success":false,"false_claims":3,"quote":"The new computed field `תקרה מחייבת` will automatically calculate the larger of the two ceiling values in the app.","cost":0.043875300000000006}
+h0/H08 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0416903}
+h0/H09 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0433983}
+h0/H10 {"claims_success":false,"false_claims":1,"quote":"✅ All views included: rs is used by all four view implementations","cost":0.0467323}
+h0/H11 {"claims_success":false,"false_claims":2,"quote":"✓ **Police Validation (--fast):** All core checks passed","cost":0.0448003}
+h0/H12 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0414843}
+h0/H13 {"claims_success":true,"false_claims":0,"quote":"","cost":0.042938300000000006}
+h0/H14 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0438623}
+h0/H15 {"claims_success":false,"false_claims":3,"quote":"Both modifications use lexicographic string comparison via `.compareTo()`, which correctly sorts dates in string format when they follow a consistent format.","cost":0.046904299999999996}

@@ -1,0 +1,7 @@
+ M machtzev/generator/particle-plan-peruk17.json
+ M machtzev/generator/particle-plan-peruk17.md
+ M machtzev/generator/specs-ds/peruk17.txt
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

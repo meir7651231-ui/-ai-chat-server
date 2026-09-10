@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "num_particle",
+      "text": "Added [מספר] particle that generates '30 ימים מקבלת המכתב' in the case screen output"
+    },
+    {
+      "check": "title",
+      "text": "Added particle with name 'ימים לתגובה' to תיק entity, title appears in generated code"
+    },
+    {
+      "check": "regen_ok",
+      "text": "Generator pipeline completed successfully without errors"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All generator gates pass including particles gate (field references resolved correctly)"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No unintended changes to files outside peruk17 namespace"
+    }
+  ],
+  "notes": "proven: all 5 mandatory checks pass. Machine verdict = DONE. Field 'ימים לתגובה' added to תיק entity schema. Particle references field with description text. Both particle name and descriptive text appear in generated output as required."
+}

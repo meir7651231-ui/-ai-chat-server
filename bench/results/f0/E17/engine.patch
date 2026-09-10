@@ -1,0 +1,95 @@
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..a5ed0ae 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -55,8 +55,8 @@
+  },
+  {
+   "entity": "תיק",
+-  "name": "ריק אין תיקים עדיין",
+-  "expr": "[ריק] אין תיקים עדיין",
++  "name": "ריק אין מכתבים פתוחים",
++  "expr": "[ריק] אין מכתבים פתוחים",
+   "ok": true,
+   "why": null,
+   "shape": "empty",
+@@ -67,11 +67,11 @@
+    {
+     "op": "empty",
+     "atoms": [
+-     "EmptyStateCard"
++     "EmptyState@premium/feedback"
+     ],
+     "alts": [
+-     "EmptyStateCard",
+      "EmptyState@premium/feedback",
++     "EmptyStateCard",
+      "SearchEmptyState"
+     ]
+    }
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..620107c 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -4,7 +4,7 @@
+ |---|---|---|---|---|
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+-| ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
++| ריק אין מכתבים פתוחים | תיק | empty | empty⇒EmptyState (EmptyState/EmptyStateCard) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/peruk-lang.data.json b/machtzev/generator/peruk-lang.data.json
+index 74d8d89..8991927 100644
+--- a/machtzev/generator/peruk-lang.data.json
++++ b/machtzev/generator/peruk-lang.data.json
+@@ -113,6 +113,9 @@
+  "exportGoal": "קישור לפתיחת שיחה",
+  "openAction": "פתח תיק",
+  "emptyText": "אין תיקים עדיין",
++ "emptyTextBy": {
++  "peruk21": "אין מכתבים פתוחים"
++ },
+  "dashboardCount": "מונה",
+  "roleAll": "בודק: הכל",
+  "decisionMinOptions": 2,
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..3592658 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -169,7 +169,7 @@ export function perukToSpec(md, ns) {
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]`);
+   lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${P.openAction}`);
+-  lines.push(`${G.particleWord} ${root}: [${G.pEmpty[0]}] ${P.emptyText}`);
++  lines.push(`${G.particleWord} ${root}: [${G.pEmpty[0]}] ${(P.emptyTextBy || {})[ns] || P.emptyText}`);   // מצב-ריק לפי-פירוק (peruk-lang.emptyTextBy[ns]) — אחרת ברירת-המחדל
+   const groupNames = [...new Set(content.map((c) => c.group))];
+   for (const g of groupNames) if (g !== groups.disclaimer && g !== groups.example) lines.push(`${G.particleWord} ${severity && g === groups.check ? fnd : root}: ${g} = [${G.pContent[0]} ${g}]`);
+   if (severity) lines.push(`${G.particleWord} ${fnd}: ${P.severityField}`);
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..a8ef9b5 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -9,7 +9,7 @@
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
+-חלקיק תיק: [ריק] אין תיקים עדיין
++חלקיק תיק: [ריק] אין מכתבים פתוחים
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: סיווג = [תוכן סיווג]
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..d0efb27 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -67,7 +67,7 @@ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/gener
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+ 39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++55d7cb6f97d15bbea743d55a9bb8c4aa564a895851a94e595ae01d01b3b23e68  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

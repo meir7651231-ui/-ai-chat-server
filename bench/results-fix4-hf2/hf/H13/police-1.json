@@ -1,0 +1,78 @@
+{
+ "task": "H13",
+ "ns": "panuy",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "four_columns": true,
+  "has_km": true
+ },
+ "task_checks": [
+  {
+   "id": "four_columns",
+   "ok": true,
+   "info": "columns=4",
+   "mandatory": true
+  },
+  {
+   "id": "has_km",
+   "ok": true,
+   "info": "3×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "SPEC-LANG.md line 17 documents [טבלה] עמודה, עמודה syntax for column selection",
+   "check": "spec_supports_column_selection",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "panuy.txt line 6 changed from [טבלה] to [טבלה] שם, זמין, מרחק בקמ, מחיר לשעה",
+   "check": "panuy_spec_changed",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Generated code ForceDataGrid has exactly 4 columns (c1, c2, c3, c4)",
+   "check": "table_shows_4_columns",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "byte_identical_others check passed - only panuy app changed",
+   "check": "no_other_apps_affected",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "All gates passed: regen_ok, byte_identical_others, gates_pass, no_hebrew_in_engine, dart_math_sane, compiles",
+   "check": "all_gates_pass",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "df037bb9ac7ea380",
+ "at": "2026-09-10T11:14:51.106Z"
+}

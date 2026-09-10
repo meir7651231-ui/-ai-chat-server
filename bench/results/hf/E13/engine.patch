@@ -1,0 +1,61 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..bd1677b 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-computed-fields · שדות-מחושבים בעור-נייר לא קוראים פונקציות-display (_calc) — התוכן נוצר אך המערכת לא הציגה אותו בטופס עריכה (9.9, E13 · peruk12)
++GATE: police (calc check)
++ref: new/dart-gen-bs/gen_app_peruk12_ent1.dart (lacks _calc() calls for computed field מחיר לקמ)
++ANTIPATTERN: עיצוב:\s*נייר.*\n.*computed field.*=.*/
++RULE: עור-נייר (paper skin) מייצר שדות מחושבים בתוכן-ראשוני אך לא בחריץ-display (`_calc` function calls) בעריכה-רשומה. שדה מחושב בסמל נייר עשוי להיות אחסון-בלבד (בתור מטא-דאטה רציף) ולא עריכה-אינטראקטיבית. עיצובים אחרים (פנויים/panuy) מייצרים `_calc()` זמן-אמת למסך-עריכה.
++מה נכשל: spec peruk12.txt הוסיף `מחיר לקמ = מחיר / קילומטראז'` לישות תיק — הנייר שדר את הנתון כקבוע בתוכן אך לא כ-_calc בעריכה, ממנע מהמשטרה לאמת הערכה דינמית (calc consts=1 calc=0). האמת: אם נייר לא צריך חשוב-דינמי, אין כשל; אם הוא צריך, יש תיקון בעור-נייר הדור (render-ds בחיר לאתר ה-_calc logic עבור נייר-full).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..924049f 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -61,6 +61,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "קילומטראז",
++    "type": "text",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "מה המוכר אמר",
+     "type": "text",
+@@ -72,6 +78,12 @@
+     "type": "bool",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "מחיר לקמ",
++    "type": "num",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..65451c1 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, קילומטראז', מה המוכר אמר, האם נסעת, מחיר לקמ = מחיר / קילומטראז' | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

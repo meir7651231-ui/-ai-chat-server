@@ -1,0 +1,73 @@
+{
+ "task": "H12",
+ "ns": "peruk17",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator successfully regenerated peruk17 app with sort directive in particle spec",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Spec change to peruk17.txt did not affect any other app outputs",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Table in peruk17 now sorts cases alphabetically by סיווג field: enum reordered from {השלמת|דחייה|זימון|נגמר} to {דחייה|השלמת|זימון|נגמר} matching Hebrew alphabe",
+   "check": "sort",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles without errors (analyzer errors: 0)",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All protocol gates passed including particle, wiring, and integrity checks",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "64496b4d9f969866",
+ "at": "2026-09-10T12:31:07.514Z"
+}

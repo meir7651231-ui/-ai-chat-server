@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator successfully processed sechirut.txt with new תקרה מחייבת field"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps (peruk*.txt, balagan*, etc.) remain byte-identical, no cross-app breakage"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All police gates pass with new max() computed field in בטוחה entity"
+    },
+    {
+      "check": "max",
+      "text": "max(תקרה לפי 3 חודשים, תקרה לפי שליש) correctly recognized as Dart math function"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles with zero analyzer errors, math operations valid"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "max() is properly emitted as Dart:math.max for numeric comparison"
+    }
+  ],
+  "notes": "proven: All checks verified by machine. New computed field תקרה מחייבת added to בטוחה entity to equal max of two ceiling fields. No spec language violations, no engine changes needed, spec-lang supports max() function per SPEC-LANG.md line 12."
+}

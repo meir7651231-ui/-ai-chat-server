@@ -1,0 +1,11 @@
+{
+  "claims": [
+    {
+      "id": "H05-sort-peruk02",
+      "description": "Cases table in peruk02 app is sorted by תאריך מסירת מפתח (key handover date) in ascending order",
+      "machine": "sort",
+      "status": "verified"
+    }
+  ],
+  "notes": "Conditional sort applied only to peruk02 entity; other peruk apps remain unchanged"
+}

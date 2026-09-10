@@ -1,0 +1,9 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/render-ds.mjs
+?? "machtzev/audit/search/2026-09-10-\327\250\327\227\327\247-\327\221\327\247\327\236-distance-26735513.json"
+?? "machtzev/audit/search/2026-09-10-\327\250\327\227\327\247-\327\221\327\247\327\236-distance-a55011f0.json"
+?? "machtzev/audit/search/2026-09-10-\327\250\327\227\327\247-\327\221\327\247\327\236-distance-dceb85dc.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

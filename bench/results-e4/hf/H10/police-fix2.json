@@ -1,0 +1,96 @@
+{
+ "task": "H10",
+ "ns": "calendar",
+ "verdict": "NOT DONE",
+ "missing": [
+  "byte_identical_others",
+  "no_orphans"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": false,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": false,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort_list": true,
+  "sort_second_surface": false
+ },
+ "task_checks": [
+  {
+   "id": "sort_list",
+   "ok": true,
+   "info": "ent1,shell",
+   "mandatory": true
+  },
+  {
+   "id": "sort_second_surface",
+   "ok": false,
+   "info": "none",
+   "mandatory": false
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "changed_others": [
+   "dart-data-bs/auto/gen_app_audit_content.dart",
+   "dart-data-bs/auto/gen_app_ent10_content.dart",
+   "dart-data-bs/auto/gen_app_ent11_content.dart",
+   "dart-data-bs/auto/gen_app_ent12_content.dart",
+   "dart-data-bs/auto/gen_app_ent13_content.dart",
+   "dart-data-bs/auto/gen_app_ent14_content.dart",
+   "dart-data-bs/auto/gen_app_ent15_content.dart",
+   "dart-data-bs/auto/gen_app_ent16_content.dart"
+  ],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [
+   "new/dart-data-bs/auto/gen_app_ent10_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent11_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent12_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent13_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent14_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent15_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent16_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent17_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent18_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent19_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent20_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent21_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent22_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent23_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent24_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent25_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent26_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent27_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent28_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent29_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent7_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent8_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent9_content.dart",
+   "new/dart-data-bs/auto/gen_app_scr30_content.dart",
+   "new/dart-data-bs/auto/gen_app_scr31_content.dart",
+   "new/dart-data-bs/auto/gen_app_scr32_content.dart",
+   "new/dart-data-bs/auto/gen_app_scr33_content.dart",
+   "new/dart-data-bs/auto/gen_app_scr34_content.dart"
+  ],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 366,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "afc759444a9f506b",
+ "at": "2026-09-10T17:20:03.768Z"
+}

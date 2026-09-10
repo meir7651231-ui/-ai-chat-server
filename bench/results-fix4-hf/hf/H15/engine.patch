@@ -1,0 +1,65 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..5b11c6f 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,15 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-sorting-peruk21 · מיון-ישויות וחלקיקים דרך spec-lang (מיון עולה/יורד)
++GATE: regen_ok · byte_identical_others · sort_px · sort_ent
++RULE: ישות או חלקיק שצריכים מיון מוגדר (ערך-מספרי או תאריך או טקסט לקסיקלי) מתוסף בספק ברמת-ההגדרה, לא בדארט:
++- ישות: `ישות X ... | שלבים ... | מיון: <שדה> <עולה|יורד|מהנמוך|מהגבוה>`
++- חלקיק: `חלקיק X: [טבלה] | מיון: <שדה> <עולה|יורד|...>`
++מה נכשל: התחלה בטעות בעדכון spec עם `--name` טרם `-f` ⇒ generator קרא default, לא את הקובץ. סדר-ארגומנטים נכון: `node app-ds.mjs -f spec.txt --name X`.
++עדות: entity.mjs lines 48-161 (parse sort section) · particles.mjs line 406 (apply sort to table if defined) · sort-cmp.mjs (sortLambda generator) · peruk21.txt lines 7+10 (spec clauses) → gen_app_peruk21_ent1.dart line 153 + gen_app_peruk21_px1.dart line 31 (generated sort calls).
++האופן: parseSortKeys (entity.mjs L160) פורס שדה+כיוון מ-sortPart; sortLambda (sort-cmp.mjs) מייצר λ Dart שמשווה מספרים-קודם, אחרת סטרינג; generator injecting both ent1 filtering (line 152-153) ו-px1 table (line 31) sorting inline בגוף ה-build.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..1ec77f8 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -1,8 +1,8 @@
+ [
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה מיון עד מתי עולה",
++  "expr": "[טבלה] | מיון: עד מתי עולה",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..5c0e94f 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -2,7 +2,7 @@
+ 
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה מיון עד מתי עולה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..f8cf178 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -4,10 +4,10 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, המכתב, מה כבר יש, עד מתי, סיווג{בקשת מסמך|הזמנה לוועדה|דחיית סיוע|הילד מפריע בלי} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, המכתב, מה כבר יש, עד מתי, סיווג{בקשת מסמך|הזמנה לוועדה|דחיית סיוע|הילד מפריע בלי} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור | מיון: עד מתי עולה
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] | מיון: עד מתי עולה
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]

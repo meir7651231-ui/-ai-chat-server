@@ -1,0 +1,59 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..f143621 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-table-sort-particle · טבלה בספק מוגדרת כ-`[טבלה] | מיון: <שדה> <כיוון>` עם סיוב-מספרי-אוטומטי אם זהו שדה-מספר (10.9, peruk12 task H06)
++GATE: sort
++ref: machtzev/generator/specs-ds/peruk12.txt line 10
++RULE: חלקיק-טבלה (תצוגה) מקבל מיון מהספק; צורת הספק `[טבלה] | מיון: <שדה> עולה / מהנמוך | יורד / מהגבוה, <שדה2>` (ראה SPEC-LANG.md שורה 17); הקומפיילר משדר לספק-DsTable/ForgeDataGrid עם `sort((a,b) { })` בקוד שבדוק: (1) טיפוס של זה שדה? (2) חלוקה-שפטי-סודות: ערך-ריק→אחרון · מספר-מכוונת?→compareTo · טקסט→compareTo (3) סדר עולה/יורד (4) שדות-משנה זה אחרי זה). הדוגמא: `מיון: מחיר מהנמוך` → `sort((a,b) { if (x.isEmpty != y.isEmpty) return x.isEmpty ? 1 : -1; final nx = num.tryParse(x), ny = num.tryParse(y); return (nx != null && ny != null) ? nx.compareTo(ny) : x.compareTo(y); })`
++מה נכשל: לא היה חסם; הבדיקה הוזנחה (לא סקר וזאי מסיגי-ערכים). הברר על ידי machine sort-check (סורק את הדו"ח px1 עבור שגיאות-מיון בקוד המחולל).
++refs: new/dart-gen-bs/gen_app_peruk12_px1.dart:25 ⇒ sort כלול, numeric compareTo נימוך (num.tryParse ⇒ nx.compareTo(ny))
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-peruk12.json b/machtzev/generator/particle-plan-peruk12.json
+index 2591b82..d4fef21 100644
+--- a/machtzev/generator/particle-plan-peruk12.json
++++ b/machtzev/generator/particle-plan-peruk12.json
+@@ -1,8 +1,8 @@
+ [
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה מיון מחיר מהנמוך",
++  "expr": "[טבלה] | מיון: מחיר מהנמוך",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-peruk12.md b/machtzev/generator/particle-plan-peruk12.md
+index 65c380d..6a827a8 100644
+--- a/machtzev/generator/particle-plan-peruk12.md
++++ b/machtzev/generator/particle-plan-peruk12.md
+@@ -2,7 +2,7 @@
+ 
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה מיון מחיר מהנמוך | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..f62140a 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -7,7 +7,7 @@
+ ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] | מיון: מחיר מהנמוך
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]

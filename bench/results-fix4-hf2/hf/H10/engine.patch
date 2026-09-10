@@ -1,0 +1,76 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 60e65de..f3a4c89 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -282,7 +282,7 @@ export function buildApp(specText) {
+   const rootMeta = pickRoot(entMeta, backRefs);
+   let home = { slug: `${P}hub`, cls: hub.cls };
+   if (rootMeta) {
+-    const entOf = (name) => { const sc = screens.find((x) => x.kind === 'entity' && x.name === name); const li = info.find((x) => x.isEnt && entRes[x.i] && entRes[x.i].entity === name); const r = li ? entRes[li.i] : null; return { name, slug: nameToSlug[name], cls: sc ? sc.cls : null, schema: r ? r.schema : [], stages: r ? (r.stages || []) : [], icon: '🗂️' }; };
++    const entOf = (name) => { const sc = screens.find((x) => x.kind === 'entity' && x.name === name); const li = info.find((x) => x.isEnt && entRes[x.i] && entRes[x.i].entity === name); const r = li ? entRes[li.i] : null; return { name, slug: nameToSlug[name], cls: sc ? sc.cls : null, schema: r ? r.schema : [], stages: r ? (r.stages || []) : [], sort: r ? (r.sort || []) : [], icon: '🗂️' }; };
+     const descRank = (f) => (f.required && !(f.enumVals && f.enumVals.length) && !/^(num|date|bool|multiline)$/.test(f.type || '')) ? -1 : f.type === 'multiline' ? 0 : (f.enumVals && f.enumVals.length) ? 3 : f.type === 'num' ? 4 : f.type === 'date' ? 5 : f.type === 'bool' ? 6 : f.label.split(/\s+/).length > 1 ? 1 : 2;   // מתאר-רשומה לפי צורה: טקסט-חובה (זהות) > רב-שורתי > תווית-רב-מילים > טקסט > enum > מספר > תאריך; שוויון = סדר-הספק
+     const descOf = (e, skip = []) => { const t = e.schema.filter((f) => !f.formula && !(f.members && f.members.length) && !skip.includes(f.label) && !entMeta.some((x) => x.name === f.label)).map((f, i) => [descRank(f), i, f]).sort((a, b) => a[0] - b[0] || a[1] - b[1]); return t.length ? t[0][2].label : null; };
+     const rootE = entOf(rootMeta.name); rootE.descField = descOf(rootE); rootE.subField = (rootE.schema.find((f) => f.label !== rootE.descField && !(f.members && f.members.length) && !entMeta.some((x) => x.name === f.label)) || {}).label || null;
+diff --git a/machtzev/generator/app-shell.mjs b/machtzev/generator/app-shell.mjs
+index 8cd573c..0f236ed 100644
+--- a/machtzev/generator/app-shell.mjs
++++ b/machtzev/generator/app-shell.mjs
+@@ -6,6 +6,7 @@
+ //   אפס מילון-דומייני: שמות מהספק, אטומים מחיפוש-פתוח (switch לסרגל · group לחלקים · fact(label+value) לעובדות · action לפעולות).
+ import { makeConsts, write, isPaper } from './render-ds.mjs';
+ import { searchOp, wireAtom, pickWired, particleWidgets } from './particles.mjs';
++import { sortLambda } from './sort-cmp.mjs';
+ import { L, T } from './chrome.mjs';
+ import fs0 from 'node:fs';
+ const SL0 = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
+@@ -467,7 +468,9 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
+   const tabs = [home ? `const ${home.cls}()` : dashboard ? `const ${dashboard.cls}()` : null, `_RootTab()`, `const ${hub.cls}()`].filter(Boolean);
+   const paper = isPaper();
+   const quick = paper && root.descField ? `DsQuickAdd(hint: ${k(T('quickAddHint', { action: T('rootAdd', { ent: root.name }) }))}, onSubmit: (s) => appStore.add('${root.slug}', {${k(root.descField)}: s}))` : null;   // G30 · D2: יצירה = טקסט בלבד
+-  const paletteItems = `[DsPaletteItem(label: ${k(T('rootAdd', { ent: root.name }))}, sub: ${k(L.keysHint)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${root.cls}()))), for (final r in appStore.records('${root.slug}')) DsPaletteItem(label: ${disp}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? ''))))]`;
++  const sortRec = (root.sort && root.sort.length) ? `(...appStore.records('${root.slug}')..sort(${sortLambda(root.sort, k, root.schema)}))` : `appStore.records('${root.slug}')`;   // L105 · מיון-רשימה אם יש ספק (cascade operator sorts in-place)
++  const sortLine = (root.sort && root.sort.length) ? `\n    rs.sort(${sortLambda(root.sort, k, root.schema)});` : '';   // sidebar requires separate sort statement
++  const paletteItems = `[DsPaletteItem(label: ${k(T('rootAdd', { ent: root.name }))}, sub: ${k(L.keysHint)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${root.cls}()))), for (final r in ${sortRec}) DsPaletteItem(label: ${disp}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? ''))))]`;
+   const cls = clsOf(slug);
+   const code = `// 🧭 חולל ע"י ניווט-מקשרים (app-shell · G26 · הכרעה-27) — השלד: סרגל-תחתון בית · ${root.name} · עוד. השורש נגזר מגרף-הקשרים. אל תערוך ידנית.
+ ${notes.map((n) => '//   ⚪ ' + n).join('\n')}
+@@ -505,7 +508,7 @@ class _${cls}State extends State<${cls}> {
+ class _RootTab extends StatelessWidget {
+   @override
+   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
+-    final rs = appStore.records('${root.slug}');
++    var rs = appStore.records('${root.slug}')${sortCode};
+     return DsScaffold(title: ${k(questions.list || root.name)}, subtitle: rs.length.toString() + ' ' + ${k(root.name)}, icon: ${k(root.icon || '🗂️')}, children: [
+       ${add ? `Padding(padding: const EdgeInsets.only(bottom: 10), child: ${add.call}),` : ''}
+       ${quick ? `Padding(padding: const EdgeInsets.only(bottom: 6), child: ${quick}),` : ''}
+diff --git a/machtzev/generator/sort-cmp.mjs b/machtzev/generator/sort-cmp.mjs
+index 720d572..820330d 100644
+--- a/machtzev/generator/sort-cmp.mjs
++++ b/machtzev/generator/sort-cmp.mjs
+@@ -5,12 +5,15 @@ export function sortLambda(sort, k, schema) {
+     const kc = k(o.field); const f = (schema || []).find((s) => s.label === o.field);
+     const ev = f && f.enumVals && f.enumVals.length ? f.enumVals : null;
+     const evList = ev ? ev.map((v) => k(v)).join(', ') : '';   // קבועים פעם אחת (בייט-חסכוני)
++    const isTime = f && f.type === 'time';   // זיהוי שדה-שעה
+     const cmp = ev
+       ? `final o = [${evList}]; final c = o.indexOf(x).compareTo(o.indexOf(y));`
++      : isTime
++      ? `final c = _cmpTime(x, y);`
+       : `final nx = num.tryParse(x), ny = num.tryParse(y); final c = (nx != null && ny != null) ? nx.compareTo(ny) : x.compareTo(y);`;
+     return `{ final x = a[${kc}] ?? '', y = b[${kc}] ?? ''; if (x.isEmpty != y.isEmpty) return x.isEmpty ? 1 : -1; ${cmp} if (c != 0) return ${o.desc ? '-c' : 'c'}; }`;
+   }).join(' ');
+-  return `(a, b) { ${body} return 0; }`;
++  return `(a, b) { int _cmpTime(String x, String y) { final xp = x.split(':'); final yp = y.split(':'); final xh = int.tryParse(xp.isNotEmpty ? xp[0] : '') ?? 0; final yh = int.tryParse(yp.isNotEmpty ? yp[0] : '') ?? 0; if (xh != yh) return xh.compareTo(yh); final xm = int.tryParse(xp.length > 1 ? xp[1] : '') ?? 0; final ym = int.tryParse(yp.length > 1 ? yp[1] : '') ?? 0; return xm.compareTo(ym); } ${body} return 0; }`;
+ }
+ // פירוק 'שדה עולה, שדה2 יורד' ⇒ [{field, desc}] · F=תווית⇒שדה-בסכמה או null · words מהדאטה
+ export function parseSortKeys(text, F, clean, G) {
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..568a6dc 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים | מיון: שעה עולה

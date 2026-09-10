@@ -1,0 +1,4 @@
+=== h0/H01 (panuy) start 07:06:49
+  builder.json: exit=0 cost=0.3418007 turns=30 ms=289613 err=false
+  police: DONE missing= false=0
+=== h0/H01 DONE wall=322s cost=$0.34 false_claims=0

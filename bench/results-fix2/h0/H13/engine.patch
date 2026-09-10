@@ -1,0 +1,91 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 1f1750a..2659dfd 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -158,7 +158,7 @@ export function buildApp(specText) {
+         hidden: roles.map((role) => r.schema.map((s, i) => (role.hide || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+         readonly: roles.map((role) => r.schema.map((s, i) => (role.ro || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+       } : null;
+-      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz });
++      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz, tableColumns: r.tableColumns || null });
+       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} ${L.fieldsWord}${(r.stages || []).length ? ` · ${r.stages.length} ${L.stagesWord}` : ''}` });
+     } else {
+       const slug = `${P}scr${li.i}`;
+diff --git a/machtzev/generator/entity.mjs b/machtzev/generator/entity.mjs
+index 4e09d7c..9bf50a3 100644
+--- a/machtzev/generator/entity.mjs
++++ b/machtzev/generator/entity.mjs
+@@ -155,7 +155,25 @@ export function interpret(text) {
+   const guards = guardsPart
+     ? guardsPart.split(/[,\n]/).map((e) => { const m = e.match(/^(.+?)\s*:\s*(.+)$/); return m ? { stage: heWords(m[1]).join(' ').trim(), cond: m[2].trim() } : null; }).filter((g) => g && g.stage.length > 1 && g.cond.length > 1)
+     : [];
+-  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards };
++
++  // טבלה: עמודות (אם ניתנו). '| טבלה: שם, זמין, מרחק בקמ' ⇒ הצג רק את העמודות הללו בטבלה
++  const TABLE_MARKERS = ['טבלה', 'table', 'columns'];
++  const TABLE_RE = new RegExp('^\\s*(' + TABLE_MARKERS.join('|') + ')\\s*:\\s*(.+)$');
++  let tableColumns = null;
++  if (text) {
++    const parts = text.split('|');
++    for (const part of parts) {
++      const tm = part.match(TABLE_RE);
++      if (tm) {
++        const cols = tm[2].split(/[,،]/).map((x) => clean(x)).filter((x) => x.length > 1);
++        if (cols.length && cols.every((c) => schema.some((s) => s.label === c))) {
++          tableColumns = cols;
++        }
++        break;
++      }
++    }
++  }
++  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards, tableColumns };
+ }
+ 
+ // ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 3d0168b..1cfa66f 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -259,7 +259,7 @@ function compileCond(formula, labels) {
+ }
+ 
+ // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
+-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null }) {
++export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null, tableColumns = null }) {
+   const { k, dump } = makeConsts(slug);
+   const cTitle = k(name);
+   const cSub = k(`${schema.length} ${L.fieldsWord}${stages.length ? ` · ${stages.length} ${L.stagesWord}` : ''}`);
+@@ -473,7 +473,23 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const mapEntries = mapVals.join(', ');                                                  // שדות ⇒ מפה (מחושב=נוסחה)
+   const editLoad = [...labelConst.map((cl, i) => `${i}: r[${cl}] ?? ''`), ...subEditLoad].join(', ');   // רשומה ⇒ טופס (עריכה) + תת-תאים מקוננים
+   const recValues = recValsR.join(', ');
+-  const labelsList = labelConst.join(', ');
++
++  // סינון עמודות-טבלה לפי tableColumns אם צוינו
++  let labelsList = labelConst.join(', ');
++  let recValuesForTable = recValues;
++  if (tableColumns && tableColumns.length > 0) {
++    const tableIndices = [];
++    for (const col of tableColumns) {
++      const idx = schema.findIndex((s) => s.label === col);
++      if (idx >= 0) tableIndices.push(idx);
++    }
++    if (tableIndices.length > 0) {
++      const tableLabels = tableIndices.map((i) => labelConst[i]);
++      const tableRecVals = tableIndices.map((i) => recValsR[i]);
++      labelsList = tableLabels.join(', ');
++      recValuesForTable = tableRecVals.join(', ');
++    }
++  }
+   // קשר-הפוך: שבב פר-ישות-מצביעה עם מונה-חי (appStore.referencing).
+   const backChips = backRefs.map((b) => `_backChip(${k(b.fname)}, appStore.referencing('${b.fslug}', ${k(b.ffield)}, rid).length)`).join(', ');
+   const backFooter = backRefs.length ? `, footer: Wrap(spacing: 6, runSpacing: 6, children: [${backChips}])` : '';
+@@ -591,7 +607,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const recordsTrailing = hasSwitch ? 'Row(mainAxisSize: MainAxisSize.min, children: [_viewBar(context), const SizedBox(width: 8), _csvBtn(context)])' : '_csvBtn(context)';
+   const boardBranch = (hasBoard ? `if (_view == ${viewIdx.board}) return DsBoard(stages: const ${stageList}, records: rs, stageOf: (r) => appStore.stageOf(${SK}, r['__id'] ?? ''), titleOf: (r) => r[${viewTitle}] ?? '', onMove: (id, to) => appStore.setStage(${SK}, id, to));\n              ` : '')
+     + (hasCal ? `if (_view == ${viewIdx.cal}) return DsCalendar(records: rs, dateOf: (r) => r[${firstDateConst}] ?? '', titleOf: (r) => r[${viewTitle}] ?? '');\n              ` : '')
+-    + (hasTable ? `if (_view == ${viewIdx.table}) return DsTable(labels: const [${labelsList}], rows: rs.map((r) => [${recValues}]).toList());\n              ` : '');
++    + (hasTable ? `if (_view == ${viewIdx.table}) return DsTable(labels: const [${labelsList}], rows: rs.map((r) => [${recValuesForTable}]).toList());\n              ` : '');
+   const cls = pascal(slug);
+   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+ import '../dart-data-bs/auto/gen_${slug}_content.dart';

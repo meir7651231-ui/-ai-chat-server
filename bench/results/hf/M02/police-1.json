@@ -1,0 +1,91 @@
+{
+ "task": "M02",
+ "ns": "peruk12",
+ "verdict": "NOT DONE",
+ "missing": [
+  "hub_where"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "ent2": true,
+  "px2": true,
+  "hub_where": false
+ },
+ "task_checks": [
+  {
+   "id": "ent2",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "px2",
+   "ok": true,
+   "info": "file",
+   "mandatory": true
+  },
+  {
+   "id": "hub_where",
+   "ok": false,
+   "info": "0×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "peruk12.txt spec regenerates without errors",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No unintended modifications to other files — only specs-ds/peruk12.txt changed",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All generator gates pass: wiring, contracts, quarry, pins",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Secondary entity בדיקה (inspection) correctly defined with required תיק link",
+   "check": "ent2",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Particle/screen file generated for בדיקה table display",
+   "check": "px2",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No Hebrew strings in generated engine code",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No invalid mathematics in generated fields",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "fd85a74470d32a6c",
+ "at": "2026-09-10T04:41:54.770Z"
+}

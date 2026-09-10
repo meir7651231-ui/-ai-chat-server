@@ -1,0 +1,25 @@
+=== h0/M06 (panuy) start 20:24:11
+  builder.json: exit=0 cost=0.2111966 turns=16 ms=158539 err=false
+  police: NOT DONE missing=calc false=0
+=== h0/M06 NOT DONE wall=194s cost=$0.21 false_claims=0
+=== hf/M06 (panuy) start 20:27:25
+  builder.json: exit=0 cost=0.9380097 turns=58 ms=411301 err=false
+  police: NOT DONE missing=calc,far false=0
+  auditor-compile.json: exit=0 cost=0.24652230000000003 turns=16 ms=108452 err=false
+  auditor-coverage.json: exit=0 cost=0.33009669999999997 turns=22 ms=118851 err=false
+  auditor-regression.json: exit=0 cost=0.27574740000000003 turns=19 ms=124179 err=false
+  validator.json: exit=0 cost=0.215784 turns=15 ms=84802 err=false
+  fixer.json: exit=0 cost=1.1490181000000002 turns=61 ms=591333 err=true
+  police: NOT DONE missing=calc,far false=0
+  police: NOT DONE missing=calc,far false=0
+=== hf/M06 NOT DONE wall=1313s cost=$3.16 false_claims=0
+=== f0/M06 (panuy) start 20:49:18
+  builder.json: exit=0 cost=3.96832275 turns=47 ms=566679 err=false
+  police: NOT DONE missing=byte_identical_others,calc false=0
+=== f0/M06 NOT DONE wall=603s cost=$3.97 false_claims=0
+skip h0/M06 (done)
+skip hf/M06 (done)
+skip f0/M06 (done)
+skip h0/M06 (done)
+skip hf/M06 (done)
+skip f0/M06 (done)

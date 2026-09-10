@@ -1,0 +1,54 @@
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index 287b322..f614216 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -400,7 +400,8 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       const w = firstWired(kd[0][1], { label: k(s.label || p.name), nav, glyph: k('🧩') }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-פעולה מתחווט`); continue; }
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+-      const cols = s.columns ? entity.schema.filter((f) => s.columns.includes(f.label)) : entity.schema;
++      let cols = s.columns ? entity.schema.filter((f) => s.columns.includes(f.label)) : entity.schema;
++      if (s.columns) cols = s.columns.map((label) => cols.find((f) => f.label === label)).filter(Boolean);
+       const labels = cols.map((f) => k(f.label));
+       // מיון מהספק: מספרי כשניתן, אחרת לקסיקלי; ריק ⇒ אחרון; מפתחות משורשרים; יורד ⇒ היפוך
+       const src = s.sort ? `(${recs}.toList()..sort(${sortLambda(s.sort, k, entity.schema)}))` : recs;
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..773cce4 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -200,7 +200,8 @@ const ROLLUP_RE = new RegExp('^(' + [L.sum, L.avg, L.count].join('|') + ')\\(([^
+ // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
+ // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
+ // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
+-function compileFormula(formula, labels, used = null) {
++// fieldResolver(idx) → expr/null: לשדות-נוסחה, החזר ביטוי מוקפד (לאינליין) במקום _v[idx]
++function compileFormula(formula, labels, used = null, fieldResolver = null) {
+   const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
+   let e = ' ' + formula + ' ';
+   const fns = Object.keys(G_FNS).sort((a, b) => b.length - a.length);
+@@ -209,7 +210,7 @@ function compileFormula(formula, labels, used = null) {
+   for (const f of names) e = e.split(f.t).join(` @${f.idx}@ `);
+   const residue = e.replace(/@F\d+@/g, ' ').replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/(),\s]/g, '');
+   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
+-  let dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)");
++  let dart = e.replace(/@(\d+)@/g, (_, idx) => { const r = fieldResolver ? fieldResolver(+idx) : null; return r || `(num.tryParse(_v[${idx}] ?? '') ?? 0)`; });
+   dart = dart.replace(/@F(\d+)@\(/g, (_, j) => { const fn = fns[+j]; if (used) used.add(fn); return G_FNS[fn] === 'method' ? `_m_${fn}(` : `${fn}(`; }).trim();
+   return /@|[֐-׿]/.test(dart) ? null : (dart || null);
+ }
+@@ -364,7 +365,15 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+         recValsR.push(ce); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
+         return;
+       }
+-      const expr = compileFormula(s.formula, labelIdx, usedFns);
++      const fieldResolver = (idx) => {
++        const dep = schema[idx];
++        if (dep && dep.formula) {
++          const depExpr = compileFormula(dep.formula, labelIdx, usedFns, fieldResolver);
++          return depExpr ? `(${depExpr})` : null;
++        }
++        return null;
++      };
++      const expr = compileFormula(s.formula, labelIdx, usedFns, fieldResolver);
+       if (expr) {
+         hasCalc = true;
+         addField(i, `_calc(${cl}, ${expr})`);

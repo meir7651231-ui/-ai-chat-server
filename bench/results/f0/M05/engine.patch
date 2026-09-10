@@ -1,0 +1,157 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 1f1750a..9c0aec9 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -55,7 +55,8 @@ function parseRole(line) {
+ export function buildApp(specText) {
+   // 🗣️ צפן §22: קלט חסר-מבנה לגמרי (אף ישות/דשבורד/תפקיד) ⇒ עברית-חופשית ⇒ nlToSpec.
+   // מבנה קיים ⇒ ביט-זהה (לא נוגעים). כך אותה דלת מקבלת גם משפט-חופשי וגם אפיון-מדויק.
+-  const raw = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2 && !PARTICLE_RE.test(l));
++  const isComment = (l) => l.startsWith('#');   // שורת-הערה בספק (`# …`) — לא דקדוק; משמשת גם כסמן תוספות-היד של peruk.mjs
++  const raw = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2 && !isComment(l) && !PARTICLE_RE.test(l));
+   // חסר ישות-מפורשת ⇒ עברית-חופשית לשורות-שאינן-תפקיד (שורות-תפקיד נשמרות כמות-שהן ומצורפות
+   // בחזרה). באג-שנתפס: קלט מעורב (משפט-ישויות-חופשי + 'תפקיד ...') דילג על nlToSpec כי שורת-
+   // תפקיד קיימת ⇒ 0 ישויות, אפליקציה מנוונת. עכשיו רק ישות-מפורשת ⇒ ביט-זהה; אחרת החופשי מתפרש.
+@@ -66,7 +67,7 @@ export function buildApp(specText) {
+     if (nl.trim()) specText = [nl, ...roleLines].join('\n');   // חסר-מבנה ⇒ עברית-חופשית + תפקידים
+   }
+   for (const d of [OUT, R.dataOutDir()]) if (fs.existsSync(d)) for (const f of fs.readdirSync(d)) if (new RegExp(`^gen_${P}[a-z]+\\d*(_content)?\\.dart$`).test(f)) fs.unlinkSync(path.join(d, f));   // G28 · המחולל בעל מרחב-השמות: תוצר-ישן שלא חולל-מחדש (מסך-מגירה שנגרע) לא נשאר
+-  const all0 = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2);
++  const all0 = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2 && !isComment(l));
+   const particleLines = all0.filter((l) => PARTICLE_RE.test(l));   // G23 · חלקיקים (צעד 2) — לא ישויות
+   const contentLines = all0.filter((l) => CONTENT_RE.test(l));     // G24 · אטומי-תוכן (מילה-במילה מהמסמך)
+   const reportLines = all0.filter((l) => REPORT_RE.test(l));       // G24 · חלקיקי-דוח
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..877047e 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -226,5 +226,45 @@
+   "wired": [
+    "KvLine"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "תשובה",
++  "expr": "[הודעה] סיווג = [תוכן הודעה]",
++  "ok": true,
++  "why": null,
++  "shape": "message",
++  "ops": [
++   "switch",
++   "alert"
++  ],
++  "picks": [
++   {
++    "op": "switch",
++    "atoms": [
++     "SegmentedSwitch"
++    ],
++    "alts": [
++     "SegmentedSwitch",
++     "ForgeCheckPop",
++     "ForgePickerOptionsPanelSelection"
++    ]
++   },
++   {
++    "op": "alert",
++    "atoms": [
++     "AlertBanner@premium/feedback"
++    ],
++    "alts": [
++     "AlertBanner@premium/feedback",
++     "ToastCard",
++     "DsNote"
++    ]
++   }
++  ],
++  "wired": [
++   "ForgeMustChip",
++   "DsNote"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..d712f84 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -10,6 +10,7 @@
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
++| תשובה | תיק | message | switch⇒SegmentedSwitch (SegmentedSwitch/ForgeCheckPop) · alert⇒AlertBanner (AlertBanner/ToastCard) | ForgeMustChip + DsNote |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..4c7072e 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -5,6 +5,7 @@
+ //   פלט: specs-ds/<ns>.txt (ישויות · שלבים · חלקיקים · תוכן · דוח · ייצוא) + peruk-index.json (צומת: מזהה · רגע · קטגוריה ·
+ //   מחירים · שרשרת) — ואז app-ds בונה את האפליקציה. מאות מסמכים = ריצה אחת.
+ //   שער `peruk`: לכל מסמך ב-peruks/ — ≥1 שדה-קליטה · ≥1 חלק-פלט · הסתייגות · אסור; והספק בדיסק ≡ הספק המחולל (טריות).
++//   תוספות-יד: שורות שאחרי HAND_MARK בספק (`# תוספות-יד …`) הן של האדם — --all שומר אותן, --gate בודק רק את הרישא המחוללת.
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import { fileURLToPath } from 'node:url';
+@@ -213,6 +214,8 @@ export function perukToSpec(md, ns) {
+ }
+ 
+ // ── main: --all ⇒ כל peruks/*.md ⇒ specs-ds/peruk-NN.txt + peruk-index.json · --gate ⇒ אימות ──
++// סמן תוספות-היד בספק (שורת-הערה — app-ds מתעלם מ-`# …`): מתחתיו שורות שהאדם הוסיף לספק ואינן במסמך-הפירוק.
++export const HAND_MARK = '# תוספות-יד (אחרי המחולל · נשמר ב-peruk.mjs --all · לא נבדק-לשוויון בשער peruk)';
+ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+ if (isMain) {
+   const dir = path.join(GEN, 'peruks'); const out = path.join(GEN, 'specs-ds');
+@@ -223,18 +226,23 @@ if (isMain) {
+     const { spec, node } = perukToSpec(fs.readFileSync(path.join(dir, f), 'utf8'), ns);
+     const specPath = path.join(out, `${ns}.txt`);
+     const probs = [];
++    // תוספות-יד: כל מה שאחרי שורת-הסמן בספק-שבדיסק הוא של האדם (חלקיק/תוכן שאינו במסמך) — נשמר ב---all, לא נבדק-לשוויון ב---gate; המחולל = הרישא בלבד
++    const curAll = fs.existsSync(specPath) ? fs.readFileSync(specPath, 'utf8') : null;
++    const markAt = curAll === null ? -1 : curAll.indexOf(HAND_MARK);
++    const handTail = markAt >= 0 ? curAll.slice(markAt) : '';
++    const handLines = handTail.split('\n').slice(1).filter((l) => l.trim().length > 2 && !l.trim().startsWith('#')).length;
+     if (!node.fields) probs.push('אין שדות-קליטה (מה שולחים)');
+     if (!node.outputs.length) probs.push('אין חלקי-פלט (מה חוזר)');
+     if (!node.disclaimer) probs.push('אין הסתייגות (חובה: «לא ייעוץ…»)');
+     if (node.disclaimer === 'default') console.log(`⚠ ${f}: בלי הסתייגות כתובה — הסתייגות-המוצר (הכרעה-29 §11)`);
+     if (!node.forbidden) probs.push('אין רשימת-אסור');
+     if (gate) {
+-      const cur = fs.existsSync(specPath) ? fs.readFileSync(specPath, 'utf8') : null;
++      const cur = curAll === null ? null : (markAt >= 0 ? curAll.slice(0, markAt) : curAll);
+       if (cur !== spec) probs.push(`הספק בדיסק ≠ המחולל (הרץ node machtzev/generator/peruk.mjs --all)`);
+-    } else fs.writeFileSync(specPath, spec);
++    } else fs.writeFileSync(specPath, spec + (handLines ? handTail : ''));
+     index.push(node);
+     if (probs.length) { bad++; console.log(`🔴 ${f}: ${probs.join(' · ')}`); }
+-    else console.log(`✓ ${f} ⇒ ${ns}: ${node.fields} שדות · ${node.outputs.length} חלקים · ${node.content} תוכן${node.severity ? ' · אדום/צהוב/ירוק' : ''}${node.classes.length ? ` · סיווג ${node.classes.length}` : ''}${node.decisions.length ? ` · החלטה ${node.decisions.length}` : ''} · שרשרת ${node.chain.length}`);
++    else console.log(`✓ ${f} ⇒ ${ns}: ${node.fields} שדות · ${node.outputs.length} חלקים · ${node.content} תוכן${node.severity ? ' · אדום/צהוב/ירוק' : ''}${node.classes.length ? ` · סיווג ${node.classes.length}` : ''}${node.decisions.length ? ` · החלטה ${node.decisions.length}` : ''} · שרשרת ${node.chain.length}${handLines ? ` · תוספות-יד ${handLines}` : ''}`);
+   }
+   if (!gate) fs.writeFileSync(path.join(GEN, 'peruk-index.json'), JSON.stringify(index, null, 1));
+   else { const stored = fs.existsSync(path.join(GEN, 'peruk-index.json')) ? fs.readFileSync(path.join(GEN, 'peruk-index.json'), 'utf8') : ''; if (stored !== JSON.stringify(index, null, 1)) { bad++; console.log('🔴 peruk-index.json ≠ המחולל'); } }
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..2176b34 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -53,3 +53,6 @@
+ תוכן טיוטת תשובה קצרה למחנכת: טיוטת תשובה קצרה למחנכת
+ תוכן שאלות לפגישה: שאלות לפגישה
+ תוכן מה לא לכתוב בקבוצת: מה לא לכתוב בקבוצת
++# תוספות-יד (אחרי המחולל · נשמר ב-peruk.mjs --all · לא נבדק-לשוויון בשער peruk)
++חלקיק תיק: תשובה = [הודעה] סיווג = [תוכן הודעה]
++תוכן הודעה: קיבלתי, הסיווג: {ערך}
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..cdc2e7b 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -67,7 +67,7 @@ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/gener
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+ 39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++2430181d8a08072212c3f223f3a8f6724ebe735182ddf2e8692a1b8d5e36f026  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

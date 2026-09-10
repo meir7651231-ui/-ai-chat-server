@@ -1,0 +1,14 @@
+=== h0/E10 (panuy) start 16:33:51
+  builder.json: exit=0 cost=0.23149920000000004 turns=17 ms=198725 err=false
+  police: DONE missing= false=0
+=== h0/E10 DONE wall=247s cost=$0.23 false_claims=0
+=== hf/E10 (panuy) start 16:37:59
+  builder.json: exit=0 cost=0.35994690000000007 turns=23 ms=231630 err=false
+  police: DONE missing= false=0
+  auditor-coverage.json: exit=0 cost=0.2608414 turns=17 ms=85351 err=false
+  auditor-regression.json: exit=0 cost=0.392448 turns=28 ms=104112 err=false
+  auditor-compile.json: exit=0 cost=0.26102770000000003 turns=14 ms=112197 err=false
+  validator.json: exit=0 cost=0.2419011 turns=19 ms=110940 err=false
+  fixer-1.json: exit=0 cost=0.5554452 turns=38 ms=274162 err=false
+  police: DONE missing= false=0
+=== hf/E10 DONE wall=821s cost=$2.07 false_claims=0

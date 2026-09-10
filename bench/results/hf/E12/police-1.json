@@ -1,0 +1,72 @@
+{
+ "task": "E12",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "sum_label": true,
+  "sum_code": true
+ },
+ "task_checks": [
+  {
+   "id": "sum_label",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "sum_code",
+   "ok": true,
+   "info": "3×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Generator successfully regenerated all code from updated sechirut.txt spec",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "New particle label 'סך הכל' (grand total) found 1× in generated code",
+   "check": "sum_label",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Sum aggregation סכום(סכום) verified 3× in generated code — two particles (הכנסה + סך הכל) plus board definition",
+   "check": "sum_code",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All non-generated files unchanged — only spec file edited, new particle generates correctly",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All validation gates passed — no syntax errors, no Hebrew in engine, math operations valid",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "d932d5680b2cb2c7",
+ "at": "2026-09-10T01:08:36.142Z"
+}

@@ -1,0 +1,104 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 60e65de..93d5c8e 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -158,7 +158,7 @@ export function buildApp(specText) {
+         hidden: roles.map((role) => r.schema.map((s, i) => (role.hide || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+         readonly: roles.map((role) => r.schema.map((s, i) => (role.ro || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+       } : null;
+-      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz, sort: r.sort || [] });
++      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz, sort: r.sort || [], columns: r.columns || null });
+       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} ${L.fieldsWord}${(r.stages || []).length ? ` · ${r.stages.length} ${L.stagesWord}` : ''}` });
+     } else {
+       const slug = `${P}scr${li.i}`;
+diff --git a/machtzev/generator/entity.mjs b/machtzev/generator/entity.mjs
+index b1bf2e9..4947b20 100644
+--- a/machtzev/generator/entity.mjs
++++ b/machtzev/generator/entity.mjs
+@@ -47,7 +47,7 @@ export function interpret(text) {
+   // "ישות X עם <שדות> | שלבים: a,b | חוקים: תאריך יעד >= תאריך חיוב"
+   const markers = [...text.matchAll(new RegExp('\\|\\s*' + alt(G.sectionMarkers), 'g'))];
+   const main = markers.length ? text.slice(0, markers[0].index) : text;
+-  let stagesPart = '', rulesPart = '', delPart = '', guardsPart = '', sortPart = '';
++  let stagesPart = '', rulesPart = '', delPart = '', guardsPart = '', sortPart = '', columnsPart = '';
+   markers.forEach((m, mi) => {
+     const start = m.index + m[0].length;
+     const end = mi + 1 < markers.length ? markers[mi + 1].index : text.length;
+@@ -56,6 +56,7 @@ export function interpret(text) {
+     else if (G.markDelete.includes(m[1])) delPart = content;
+     else if (G.markGuards.includes(m[1])) guardsPart = content;
+     else if ((G.markSort || []).includes(m[1])) sortPart = content;   // L105 · מיון-הרשימה מהספק
++    else if ((G.markColumns || []).includes(m[1])) columnsPart = content;
+     else stagesPart = content;
+   });
+   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
+@@ -158,7 +159,8 @@ export function interpret(text) {
+     : [];
+   const sortWords = [...(G.sortDesc || []), ...(G.sortAsc || [])];
+   const sort = sortPart ? sortPart.split(/[,\n]/).map((e) => { const t = e.trim(); const dm = sortWords.length ? t.match(new RegExp('^(.+?)\\s+(' + sortWords.join('|') + ')$')) : null; const lab = heWords(dm ? dm[1] : t).join(' ').trim(); const f = schema.find((x) => x.label === lab); return f ? { field: f.label, desc: !!(dm && (G.sortDesc || []).includes(dm[2])) } : null; }).filter(Boolean) : [];
+-  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards, sort };
++  const columns = columnsPart ? columnsPart.split(/[,\n]/).map((e) => clean(e)).filter((c) => c && schema.some((s) => s.label === c)) : null;
++  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards, sort, columns };
+ }
+ 
+ // ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..36a72f5 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -261,7 +261,7 @@ function compileCond(formula, labels) {
+ }
+ 
+ // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
+-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null, sort = [] }) {
++export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null, sort = [], columns = null }) {
+   const { k, dump } = makeConsts(slug);
+   const cTitle = k(name);
+   const cSub = k(`${schema.length} ${L.fieldsWord}${stages.length ? ` · ${stages.length} ${L.stagesWord}` : ''}`);
+@@ -477,6 +477,13 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const editLoad = [...labelConst.map((cl, i) => `${i}: r[${cl}] ?? ''`), ...subEditLoad].join(', ');   // רשומה ⇒ טופס (עריכה) + תת-תאים מקוננים
+   const recValues = recValsR.join(', ');
+   const labelsList = labelConst.join(', ');
++  // סינון עמודות לטבלה (אם צוינו ב-| עמודות: ...) — שמר על הסדר שצוין
++  const tableLabels = columns
++    ? columns.map((col) => { const idx = schema.findIndex((s) => s.label === col); return idx >= 0 ? labelConst[idx] : null; }).filter(Boolean).join(', ')
++    : labelsList;
++  const tableValues = columns
++    ? columns.map((col) => { const idx = schema.findIndex((s) => s.label === col); return idx >= 0 ? recValsR[idx] : null; }).filter(Boolean).join(', ')
++    : recValues;
+   // קשר-הפוך: שבב פר-ישות-מצביעה עם מונה-חי (appStore.referencing).
+   const backChips = backRefs.map((b) => `_backChip(${k(b.fname)}, appStore.referencing('${b.fslug}', ${k(b.ffield)}, rid).length)`).join(', ');
+   const backFooter = backRefs.length ? `, footer: Wrap(spacing: 6, runSpacing: 6, children: [${backChips}])` : '';
+@@ -595,7 +602,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const recordsTrailing = hasSwitch ? 'Row(mainAxisSize: MainAxisSize.min, children: [_viewBar(context), const SizedBox(width: 8), _csvBtn(context)])' : '_csvBtn(context)';
+   const boardBranch = (hasBoard ? `if (_view == ${viewIdx.board}) return DsBoard(stages: const ${stageList}, records: rs, stageOf: (r) => appStore.stageOf(${SK}, r['__id'] ?? ''), titleOf: (r) => r[${viewTitle}] ?? '', onMove: (id, to) => appStore.setStage(${SK}, id, to));\n              ` : '')
+     + (hasCal ? `if (_view == ${viewIdx.cal}) return DsCalendar(records: rs, dateOf: (r) => r[${firstDateConst}] ?? '', titleOf: (r) => r[${viewTitle}] ?? '');\n              ` : '')
+-    + (hasTable ? `if (_view == ${viewIdx.table}) return DsTable(labels: const [${labelsList}], rows: rs.map((r) => [${recValues}]).toList());\n              ` : '');
++    + (hasTable ? `if (_view == ${viewIdx.table}) return DsTable(labels: const [${tableLabels}], rows: rs.map((r) => [${tableValues}]).toList());\n              ` : '');
+   const cls = pascal(slug);
+   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+ import '../dart-data-bs/auto/gen_${slug}_content.dart';
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index de89656..043934a 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -49,7 +49,8 @@
+   "מחיקה",
+   "מעברים",
+   "שערים",
+-  "מיון"
++  "מיון",
++  "עמודות"
+  ],
+  "markRules": [
+   "חוקים",
+@@ -62,6 +63,9 @@
+   "מעברים",
+   "שערים"
+  ],
++ "markColumns": [
++  "עמודות"
++ ],
+  "createVerbs": [
+   "צור",
+   "תוסיף",

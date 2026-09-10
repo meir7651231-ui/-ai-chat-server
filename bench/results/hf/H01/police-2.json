@@ -1,0 +1,58 @@
+{
+ "task": "H01",
+ "ns": "panuy",
+ "verdict": "NOT DONE",
+ "missing": [
+  "no_hebrew_in_engine"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": false,
+  "dart_math_sane": true,
+  "sqrt": true,
+  "sort_px": true,
+  "sort_ent": false
+ },
+ "task_checks": [
+  {
+   "id": "sqrt",
+   "ok": true,
+   "info": "import=true fn=true method=false",
+   "mandatory": true
+  },
+  {
+   "id": "sort_px",
+   "ok": true,
+   "info": "sortlines=1",
+   "mandatory": true
+  },
+  {
+   "id": "sort_ent",
+   "ok": false,
+   "info": "sortlines=0",
+   "mandatory": false
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [
+   "? (entity.schema.find((f) => f.label.includes('km') || f.label.includes('בקמ')) ||",
+   "entity.schema.find((f) => /^(distance|מרחק).*km/.test(f.label)) ||"
+  ],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "da761d7e16e07b65",
+ "at": "2026-09-09T18:11:37.745Z"
+}

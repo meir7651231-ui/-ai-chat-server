@@ -1,0 +1,82 @@
+{
+ "task": "M14",
+ "ns": "panuy",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "s1": true,
+  "s2": true
+ },
+ "task_checks": [
+  {
+   "id": "s1",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "s2",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Spec regenerates without syntax errors after adding stages to אדם entity.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other files remain byte-identical; only machtzev/generator/specs-ds/panuy.txt modified.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All gates including s1 and s2 passed without regressions.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No Hebrew text introduced into code generator; change is spec-only.",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No mathematical operations affected; geometry calculations remain valid.",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Stages syntax 'שלבים פנוי, הוזמן, בוצע' correctly parsed and validated.",
+   "check": "s1",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Particles (lines 6-17) remain functional; no breakage in אדם particle definitions.",
+   "check": "s2",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "89b8c463ad6b7b9e",
+ "at": "2026-09-10T02:25:11.889Z"
+}

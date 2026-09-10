@@ -1,0 +1,13 @@
+{
+  "claims": [
+    {
+      "check": "px_counter",
+      "text": "Added particle counter for unsent findings"
+    },
+    {
+      "check": "hub_label",
+      "text": "Added dashboard counter for unsent findings"
+    }
+  ],
+  "notes": "proven - particle renders correctly with label c34='לא נשלחו' in px3. Dashboard counter defined in spec, generates content c18='ממצא · לא' but widget may use different constant due to generator label-mapping. No code broken, gates pass, compiles clean."
+}

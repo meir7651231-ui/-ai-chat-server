@@ -1,0 +1,143 @@
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..7b2c035 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -1,8 +1,8 @@
+ [
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה ממוין לפי תאריך מסירת מפתח",
++  "expr": "[טבלה] ממוין לפי תאריך מסירת מפתח",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..c6d7195 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -2,7 +2,7 @@
+ 
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה ממוין לפי תאריך מסירת מפתח | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..2fa6747 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -2,7 +2,7 @@
+ // 🧩 particles — מפרק-החלקיקים הפתוח (GENMAX·G23 · הכרעה-27: "אין רשימה סגורה — כל חלקיק, בכל ריצה, נמצא ומורכב מחדש מכל הקטלוג").
+ //   קלט (צעדים 1–2, אדם): שורות `חלקיק <ישות>: <שם> = <צורה>` בספק של app-ds. הצורה = ביטוי מבני על שדות-הישות (אפס-מילון):
+ //     A / B (יחס) · A - B (הפרש) · A * B (מכפלה) · A מול B (השוואה) · מונה(שדה=ערך) · מונה() · סכום(שדה) · ממוצע(שדה) ·
+-//     שדה-enum (חלוקה-למצבים) · שדה-טקסט/תאריך (עובדה) · [טבלה] · [איתור] · [חריגה] · [ייצוא] · [פעולה] טקסט · [ריק] טקסט
++//     שדה-enum (חלוקה-למצבים) · שדה-טקסט/תאריך (עובדה) · [טבלה] [לפי <שדה> [יורד]] (מיון-קבוע: תאריך/מספר/טקסט לפי טיפוס-השדה, ריקים אחרונים) · [איתור] · [חריגה] · [ייצוא] · [פעולה] טקסט · [ריק] טקסט
+ //   המנוע: צורה ⇒ פעולות-הצגה (אלגברת compose-engine, אותו מקור-אמת של הזהב) ⇒ לכל פעולה חיפוש בכל ops-map (cover: פעולה+שקעים+ייעוד) ⇒
+ //   חיווט-שקעים מהדאטה האמיתית (רשומות appStore; שקע שאין לו דאטה ⇒ האטום נפסל, הבא בתור — §20-ג) ⇒ מסך-חלקיקים לישות.
+ //   פלט: plan (json/md, דטרמיניסטי) + קוד-Dart (renderParticles). שער `particles`: plan ≡ טרי · אפס חלקיק-לא-פתור בספקי specs-ds.
+@@ -119,7 +119,13 @@ export function shapeOf(expr, schema, content = [], opts = {}) {
+     if (!fields.length) return { kind: null, why: 'לוח: אין שדות-תאריך' };
+     return { kind: 'dates', fields: fields.map((f) => f.label) };
+   }
+-  if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\]')))) return { kind: 'table' };
++  if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\]\\s*(.*)$')))) {   // [טבלה] [לפי <שדה> [יורד]] — מיון-קבוע לפי שדה מהסכמה (טיפוס-השדה קובע את ההשוואה); שדה לא בסכמה ⇒ פסילה, לא ניחוש
++    const rest = m[2].trim(); if (!rest) return { kind: 'table' };
++    const sm = rest.match(new RegExp('^' + alt(G.pSortBy) + '\\s+(.+?)(?:\\s+' + alt(G.pSortDesc) + ')?\\s*$'));
++    if (!sm) return { kind: null, why: `טבלה: צפוי «${G.pSortBy[0]} <שדה>»: ${rest}` };
++    const f = F(sm[2]); if (!f) return { kind: null, why: `טבלה: שדה-המיון לא בסכמה: ${clean(sm[2])}` };
++    return { kind: 'table', sort: { field: f.label, type: f.type === 'date' ? 'date' : f.type === 'num' ? 'num' : 'text', desc: !!sm[3] } };
++  }
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pSearch) + '\\]')))) return { kind: 'search' };
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pFilter) + '\\]')))) return { kind: 'filter' };
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pExport) + '\\]')))) return { kind: 'export' };
+@@ -299,6 +305,15 @@ const diffRows = (s, k, numOf) => s.pairs.map((pr) => { const a = numOf(pr.a), b
+ // ערך-הדיף: «חדש (היה ישן)» — בלי גליף-חץ (Heebo בלי חיצים ⇒ tofu)
+ const diffVal = (r0, k) => `${numFmt(r0.b)} + ' ' + ${k(T('diffWas', { old: '' }).replace('()', '('))} + ${numFmt(r0.a)} + ')'`;
+ 
++// מיון-קבוע של רשומות לפי שדה (טבלה «לפי»): תאריך ⇒ DateTime (ISO מ-DsDateField) · מספר ⇒ num · אחרת טקסט; ערך-ריק תמיד אחרון (אין דאטה ⇒ לא מנחשים מקום); העתק, לא במקום
++export const sortedRecs = (recs, sort, k) => {
++  const key = k(sort.field);
++  const cmp = sort.type === 'date' ? `final dx = DateTime.tryParse(x), dy = DateTime.tryParse(y); final c = dx != null && dy != null ? dx.compareTo(dy) : x.compareTo(y);`
++    : sort.type === 'num' ? `final nx = num.tryParse(x), ny = num.tryParse(y); final c = nx != null && ny != null ? nx.compareTo(ny) : x.compareTo(y);`
++    : `final c = x.compareTo(y);`;
++  return `([...${recs}]..sort((a, b) { final x = (a[${key}] ?? '').trim(), y = (b[${key}] ?? '').trim(); if (x.isEmpty || y.isEmpty) return x.isEmpty ? (y.isEmpty ? 0 : 1) : -1; ${cmp} return ${sort.desc ? '-c' : 'c'}; }))`;
++};
++
+ // ── 6 · פליטה: מסך-חלקיקים לישות (AnimatedBuilder על appStore; אגרגטים למעלה, פר-רשומה בשורות) ──
+ export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) {
+   const scoped = !!recsOverride;   // G24 · דוח: הרשומות מוגבלות לרשומת-השורש ⇒ אגרגטים inline על הרשימה (לא על appStore כולו)
+@@ -384,7 +399,7 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+       const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      const rows = `[for (final r in ${s.sort ? sortedRecs(recs, s.sort, k) : recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..c746355 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -167,7 +167,9 @@ export function perukToSpec(md, ns) {
+   if (severity) lines.push(`${G.entityNouns[0]} ${fnd} ${G.withWord} ${P.findingFields.map((f, i) => i === 0 ? f.replace(/\*$/, '') + '*' : f).join(', ')}, ${P.severityField}{${P.severity.join('|')}} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
+   lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}`);
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+-  lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]`);
++  // השעון-של-התיק: «מה שולחים › חובה» עם שדה-תאריך יחיד ⇒ טבלת-השורש ממוינת לפיו, המוקדם קודם (מבני: הטיפוס מ-typeDate); שני שעונים = דו-משמעי ⇒ לא מנחשים
++  const clocks = fields.filter((f) => f.required && !f.enumVals && new RegExp(G.typeDate.join('|')).test(f.label));
++  lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]${clocks.length === 1 ? ` ${G.pSortBy[0]} ${clocks[0].label}` : ''}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${P.openAction}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pEmpty[0]}] ${P.emptyText}`);
+   const groupNames = [...new Set(content.map((c) => c.group))];
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index a85fb73..0bcb67f 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -96,6 +96,14 @@
+   "טבלה",
+   "רשימה"
+  ],
++ "pSortBy": [
++  "ממוין לפי",
++  "לפי"
++ ],
++ "pSortDesc": [
++  "יורד",
++  "מהמאוחר"
++ ],
+  "pSearch": [
+   "איתור",
+   "חיפוש"
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..22664c5 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -7,7 +7,7 @@
+ ישות ממצא עם תיק*, סעיף, מה כתוב, מה לבקש, צבע{אדום|צהוב|ירוק} | מחיקה: תיק=מפל
+ לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום)
+ תפקיד בודק: הכל
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] ממוין לפי תאריך מסירת מפתח
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..83931cb 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -66,8 +66,8 @@ d4015aec8b28007379713aa445c5f4b344b1a2c0448ea66b635fa1de4bf8a859  machtzev/gener
+ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/generator/logic-census.json
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+-39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++daf48c267a470957ae6c0323edc2b293b0320ee753821fcd5d0dcf4db6f6e4d8  machtzev/generator/particles.mjs
++e6fa79c01e1482145c06a9e1a09825ef3e346e5b6e28df50789dbc2ae0097e52  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

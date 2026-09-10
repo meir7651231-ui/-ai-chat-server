@@ -1,0 +1,55 @@
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..9a7eeae 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -165,7 +165,10 @@ export function perukToSpec(md, ns) {
+   for (const [tgt, q] of P.questions || []) lines.push(`${G.questionWord} ${tgt}: ${q}`);   // G28 · מסך = שאלה אחת
+   lines.push(`${G.entityNouns[0]} ${root} ${G.withWord} ${rootFields.join(', ')} | ${G.stagePrefixes[0]} ${P.stages.join(', ')}`);
+   if (severity) lines.push(`${G.entityNouns[0]} ${fnd} ${G.withWord} ${P.findingFields.map((f, i) => i === 0 ? f.replace(/\*$/, '') + '*' : f).join(', ')}, ${P.severityField}{${P.severity.join('|')}} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
+-  lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}`);
++  // מונה-מסונן על הסיווג (לוח-בקרה): סיווג שההסתייגות-הכתובה-של-הבעלים נוקבת בשמו («דגל מוגן / סילוק — עו״ד») = המקרה
++  // שהמוצר רק מסמן ומוסר הלאה ⇒ הלוח סופר אותו, כמו 'אדום' בממצאים. מבני: שם-הסיווג ⊂ נוסח-ההסתייגות; אפס מילון-דומייני.
++  const handoff = disclaimer && !disclaimerDefault ? classes.filter((c) => norm(disclaimer).includes(c)) : [];
++  lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}${handoff.map((c) => `, ${P.dashboardCount}(${root}: ${P.classifyField}=${c})`).join('')}`);
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]`);
+   lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${P.openAction}`);
+diff --git a/machtzev/generator/specs-ds/peruk24.txt b/machtzev/generator/specs-ds/peruk24.txt
+index 91e5891..2562fa4 100644
+--- a/machtzev/generator/specs-ds/peruk24.txt
++++ b/machtzev/generator/specs-ds/peruk24.txt
+@@ -4,7 +4,7 @@
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, מה קרה, גר לבד, כמה אחים, מכתב אם יש, סיווג{אחרי נפילה|מכתב לא מובן|כסף לא שולם|אחים לא מאוזנים} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+-לוח בקרה עם מונה(תיק)
++לוח בקרה עם מונה(תיק), מונה(תיק: סיווג=אחרי נפילה)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
+diff --git a/machtzev/generator/specs-ds/peruk25.txt b/machtzev/generator/specs-ds/peruk25.txt
+index dc4d3c8..5d3a6f0 100644
+--- a/machtzev/generator/specs-ds/peruk25.txt
++++ b/machtzev/generator/specs-ds/peruk25.txt
+@@ -4,7 +4,7 @@
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, מכתב פיטורים, ותק, האם חתמו על משהו, סיווג{סיום רגיל מכתב|לחץ לחתום היום|דגל מוגן|עצמאי חוזה קבלן} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+-לוח בקרה עם מונה(תיק)
++לוח בקרה עם מונה(תיק), מונה(תיק: סיווג=דגל מוגן)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..4388ea9 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -67,7 +67,7 @@ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/gener
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+ 39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++2b6a014ccac213ea79d1dd36aa1eade8bcfa37c3f71cf91a9e76f179ae2f215d  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

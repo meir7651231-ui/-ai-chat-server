@@ -1,0 +1,85 @@
+{
+ "task": "E13",
+ "ns": "peruk12",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "field": true,
+  "calc": true
+ },
+ "task_checks": [
+  {
+   "id": "field",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "app-ds.mjs regenerated peruk12 successfully with new fields קילומטראז׳ and מחיר לקמ",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No other apps' output changed; peruk12-only modification verified",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Numeric field קילומטראז׳ added to תיק entity",
+   "check": "field",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed field מחיר לקמ = מחיר / קילומטראז׳ correctly generated with division formula",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart passes flutter analyze with zero errors; formula uses valid num.tryParse and toStringAsFixed(2)",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All 53 police gates passed; no violations",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "cfcd5ba4910a971e",
+ "at": "2026-09-10T17:51:17.703Z"
+}

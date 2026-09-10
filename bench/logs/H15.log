@@ -1,0 +1,19 @@
+=== h0/H15 (peruk21) start 02:56:56
+  builder.json: exit=0 cost=0.7474215000000001 turns=46 ms=267592 err=false
+  police: NOT DONE missing=byte_identical_others,no_hebrew_in_engine false=0
+=== h0/H15 NOT DONE wall=299s cost=$0.75 false_claims=0
+=== hf/H15 (peruk21) start 03:01:55
+  builder.json: exit=0 cost=1.36725695 turns=84 ms=817933 err=false
+  police: DONE missing= false=0
+  auditor-regression.json: exit=0 cost=0.29393090000000005 turns=17 ms=105171 err=false
+  auditor-compile.json: exit=0 cost=0.35779059999999996 turns=28 ms=131739 err=false
+  auditor-coverage.json: exit=0 cost=0.40005880000000005 turns=34 ms=170696 err=false
+  validator.json: exit=0 cost=0.24909520000000002 turns=17 ms=125251 err=false
+  fixer.json: exit=0 cost=0.2912775 turns=28 ms=137612 err=false
+  police: DONE missing= false=0
+  police: DONE missing= false=0
+=== hf/H15 DONE wall=1349s cost=$2.96 false_claims=0
+=== f0/H15 (peruk21) start 03:24:24
+  builder.json: exit=0 cost=8.32288025 turns=102 ms=864933 err=false
+  police: NOT DONE missing=sort_ent false=0
+=== f0/H15 NOT DONE wall=896s cost=$8.32 false_claims=0

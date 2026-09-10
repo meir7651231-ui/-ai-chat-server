@@ -1,0 +1,84 @@
+{
+ "task": "M01",
+ "ns": "peruk02",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "ent3": true,
+  "paid": true,
+  "px3": true
+ },
+ "task_checks": [
+  {
+   "id": "ent3",
+   "ok": true,
+   "info": "file",
+   "mandatory": true
+  },
+  {
+   "id": "paid",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "px3",
+   "ok": true,
+   "info": "file",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Payment entity (תשלום) created as third entity with link to case, amount, and paid status fields",
+   "check": "ent3",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Paid field (שולם) added as yes/no enum {כן|לא}, required by spec",
+   "check": "paid",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Three particles created: table display, add action button, empty state message",
+   "check": "px3",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generator successfully emitted all code, app spec updated with payment entity",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All changes made in spec layer only (peruk02.txt), no hand edits to generated outputs",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No unexpected modifications to unrelated files",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "a983a76324e83eb5",
+ "at": "2026-09-10T04:18:21.622Z"
+}

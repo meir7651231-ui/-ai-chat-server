@@ -1,0 +1,109 @@
+diff --git a/machtzev/generator/apps/peruk08.json b/machtzev/generator/apps/peruk08.json
+index 911b157..ea951c0 100644
+--- a/machtzev/generator/apps/peruk08.json
++++ b/machtzev/generator/apps/peruk08.json
+@@ -68,7 +68,11 @@
+     "label": "האם כבר פנו למוכר",
+     "type": "bool",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [
++     "כן",
++     "לא",
++     "לא יודע"
++    ]
+    },
+    {
+     "label": "סיווג",
+diff --git a/machtzev/generator/particle-plan-peruk08.json b/machtzev/generator/particle-plan-peruk08.json
+index 1fbd18b..dfaa685 100644
+--- a/machtzev/generator/particle-plan-peruk08.json
++++ b/machtzev/generator/particle-plan-peruk08.json
+@@ -199,5 +199,32 @@
+   "wired": [
+    "DsNote"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "לא פנו",
++  "expr": "מונה(האם כבר פנו למוכר=לא)",
++  "ok": true,
++  "why": null,
++  "shape": "count",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk08.md b/machtzev/generator/particle-plan-peruk08.md
+index 99949f4..d6cf4a7 100644
+--- a/machtzev/generator/particle-plan-peruk08.md
++++ b/machtzev/generator/particle-plan-peruk08.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| לא פנו | תיק | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..ba37c23 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -315,7 +315,7 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+     const kd = p.ops.map((op, i) => [op, p.picks[i]]);
+     if (agg) {
+       const foldSum = `${recs}.fold(0.0, (a, r) => a + (num.tryParse(r[${k(s.field)}] ?? '') ?? 0))`;
+-      const expr = s.kind === 'count' ? (s.field ? `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(s.value || '')}).length.toDouble()` : scoped ? `${recs}.length.toDouble()` : `appStore.count('${entity.slug}').toDouble()`)
++      const expr = s.kind === 'count' ? (s.field ? `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(s.value || '')}).toList().length.toDouble()` : scoped ? `${recs}.length.toDouble()` : `appStore.count('${entity.slug}').toDouble()`)
+         : s.kind === 'sum' ? (scoped ? foldSum : `appStore.sum('${entity.slug}', ${k(s.field)})`) : (scoped ? `(${recs}.isEmpty ? 0.0 : ${foldSum} / ${recs}.length)` : `appStore.avg('${entity.slug}', ${k(s.field)})`);
+       const ctx = { label: lbl, value: { str: `${expr}.toStringAsFixed(${s.kind === 'avg' ? 1 : 0})`, num: expr }, glyph: k('🧩'), sub: k(p.expr) };
+       const w = firstWired(kd[0][1], ctx);
+@@ -429,7 +429,7 @@ export function particleText({ entity, plan, k, recs: recsOverride = null }) {
+     const s = p.shape; const lbl = k(p.name);
+     if (/^(count|sum|avg)$/.test(s.kind)) {
+       const foldSum = `${recs}.fold(0.0, (a, r) => a + (num.tryParse(r[${k(s.field)}] ?? '') ?? 0))`;
+-      const expr = s.kind === 'count' ? (s.field ? `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(s.value || '')}).length.toDouble()` : scoped ? `${recs}.length.toDouble()` : `appStore.count('${entity.slug}').toDouble()`)
++      const expr = s.kind === 'count' ? (s.field ? `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(s.value || '')}).toList().length.toDouble()` : scoped ? `${recs}.length.toDouble()` : `appStore.count('${entity.slug}').toDouble()`)
+         : s.kind === 'sum' ? (scoped ? foldSum : `appStore.sum('${entity.slug}', ${k(s.field)})`) : (scoped ? `(${recs}.isEmpty ? 0.0 : ${foldSum} / ${recs}.length)` : `appStore.avg('${entity.slug}', ${k(s.field)})`);
+       exprs.push(`${lbl} + ': ' + ${expr}.toStringAsFixed(${s.kind === 'avg' ? 1 : 0})`); continue;
+     }
+diff --git a/machtzev/generator/specs-ds/peruk08.txt b/machtzev/generator/specs-ds/peruk08.txt
+index 4b501fe..f55f7e0 100644
+--- a/machtzev/generator/specs-ds/peruk08.txt
++++ b/machtzev/generator/specs-ds/peruk08.txt
+@@ -3,7 +3,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר{כן|לא|לא יודע}, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+@@ -13,6 +13,7 @@
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: סיווג = [תוכן סיווג]
+ חלקיק תיק: אסור = [תוכן אסור]
++חלקיק תיק: לא פנו = מונה(האם כבר פנו למוכר=לא)
+ דוח תיק: כרטיס = [תוכן כרטיס]
+ דוח תיק: סדר פעולות ממוספר קודם = [תוכן סדר פעולות ממוספר קודם]
+ דוח תיק: הודעה למוכר = [תוכן הודעה למוכר]

@@ -1,0 +1,15 @@
+h0/H01 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0432193}
+h0/H02 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0423363}
+h0/H03 {"claims_success":false,"false_claims":6,"quote":"Modified the tasks table (משימה particle screen) generated from `machtzev/generator/specs-ds/tasks.txt` to sort by due date (מועד) in ascending order","cost":0.0431433}
+h0/H04 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0426823}
+h0/H05 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0444953}
+h0/H06 {"claims_success":false,"false_claims":4,"quote":"✓ Syntax valid (police --fast runs without new errors)","cost":0.045955300000000004}
+h0/H07 {"claims_success":true,"false_claims":0,"quote":"","cost":0.043993300000000006}
+h0/H08 {"claims_success":true,"false_claims":0,"quote":"","cost":0.042137299999999996}
+h0/H09 {"claims_success":true,"false_claims":1,"quote":"Note: index-complete gate failed due to unrelated documentation entries for other scripts","cost":0.0458213}
+h0/H10 {"claims_success":false,"false_claims":3,"quote":"Sorts all views (list, board, calendar, table) by time before rendering","cost":0.0492883}
+h0/H11 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0623443}
+h0/H12 {"claims_success":false,"false_claims":8,"quote":"Police Checks: No new errors introduced (pre-existing issues unrelated to this change)","cost":0.0426743}
+h0/H13 {"claims_success":true,"false_claims":0,"quote":"","cost":0.0422183}
+h0/H14 {"claims_success":false,"false_claims":3,"quote":"✅ Sections appear as: אדום → צהוב → ירוק (red → yellow → green)","cost":0.044127299999999994}
+h0/H15 {"claims_success":false,"false_claims":3,"quote":"All three displays affected: Particle table, entity list (3 views), CSV export","cost":0.0436903}

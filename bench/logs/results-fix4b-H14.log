@@ -1,0 +1,4 @@
+=== h0/H14 (sechirut) start 08:23:19
+  builder.json: exit=0 cost=0.33011329999999994 turns=24 ms=244406 err=false
+  police: NOT DONE missing=no_hebrew_in_engine,sort_color false=0
+=== h0/H14 NOT DONE wall=275s cost=$0.33 false_claims=0

@@ -1,0 +1,114 @@
+diff --git a/machtzev/generator/particle-plan-sechirut.json b/machtzev/generator/particle-plan-sechirut.json
+index aa8a58e..e0d0bfd 100644
+--- a/machtzev/generator/particle-plan-sechirut.json
++++ b/machtzev/generator/particle-plan-sechirut.json
+@@ -82,42 +82,29 @@
+  },
+  {
+   "entity": "ממצא",
+-  "name": "צבע",
+-  "expr": "צבע",
++  "name": "טבלה סעיף צבע מה כתוב מיון צבע עולה",
++  "expr": "[טבלה] סעיף, צבע, מה כתוב | מיון: צבע עולה",
+   "ok": true,
+   "why": null,
+-  "shape": "partition",
++  "shape": "table",
+   "ops": [
+-   "group",
+-   "alert"
++   "table"
+   ],
+   "picks": [
+    {
+-    "op": "group",
+-    "atoms": [
+-     "AnimatedEmpty"
+-    ],
+-    "alts": [
+-     "AnimatedEmpty",
+-     "DsSection",
+-     "SectionHeader"
+-    ]
+-   },
+-   {
+-    "op": "alert",
++    "op": "table",
+     "atoms": [
+-     "AlertBanner@premium/feedback"
++     "DsTable"
+     ],
+     "alts": [
+-     "AlertBanner@premium/feedback",
+-     "ToastCard",
+-     "DsNote"
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
+     ]
+    }
+   ],
+   "wired": [
+-   "DsSection",
+-   "DsNote"
++   "DsTable"
+   ]
+  },
+  {
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..32d40f1 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -5,7 +5,7 @@
+ | חורג | בטוחה | / | ratio⇒StatRow (StatRow/ProgressStatRow) | ForgeGlowSlider |
+ | מעל התקרה | בטוחה | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | אדומים | ממצא | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+-| צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
++| טבלה סעיף צבע מה כתוב מיון צבע עולה | ממצא | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | מה לבקש | ממצא | raw | fact⇒DsChip (DsChip/DsEmpty) | DsChip |
+ | הכנסה | תשלום | sum | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | לא שולם | תשלום | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+@@ -28,7 +28,7 @@
+ |---|---|---|---|---|
+ | תיק | [ייצוא] שליחה בוואטסאפ | טלפון, קישור לפתיחת שיחה | action+link | DsChipButton + waLink |
+ | תיק | המספר שלך | המספר שלך | particle | KvLine |
+-| תיק | אדום צהוב ירוק | ממצא.צבע | childParticle | DsSection + DsNote |
++| תיק | אדום צהוב ירוק | ממצא.צבע | childParticle (שדה) | DsSection + DsNote |
+ | תיק | התשובה | התשובה | particle | ForgeMustChip + DsNote |
+ | תיק | לוח | לוח | particle | KvLine |
+ | תיק | כרטיס עסקה | לקוח | particle (שדה) | DsChip |
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index 8f44fe1..fbab763 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -405,7 +405,16 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       const cols = s.columns ? entity.schema.filter((f) => s.columns.includes(f.label)) : entity.schema;
+       const labels = cols.map((f) => k(f.label));
+       // מיון מהספק: מספרי כשניתן, אחרת לקסיקלי; ריק ⇒ אחרון; מפתחות משורשרים; יורד ⇒ היפוך
+-      const cmp = (s.sort || []).map((o) => { const kc = k(o.field); return `{ final x = a[${kc}] ?? '', y = b[${kc}] ?? ''; if (x.isEmpty != y.isEmpty) return x.isEmpty ? 1 : -1; final nx = num.tryParse(x), ny = num.tryParse(y); final c = (nx != null && ny != null) ? nx.compareTo(ny) : x.compareTo(y); if (c != 0) return ${o.desc ? '-c' : 'c'}; }`; }).join(' ');
++      const cmp = (s.sort || []).map((o) => {
++        const kc = k(o.field);
++        const fld = entity.schema.find((f) => f.label === o.field);
++        const enumVals = fld && fld.enumVals ? fld.enumVals : null;
++        if (enumVals) {
++          const enumMap = enumVals.reduce((acc, val, idx) => ({ ...acc, [k(val)]: idx }), {});
++          return `{ final x = a[${kc}] ?? '', y = b[${kc}] ?? ''; if (x.isEmpty != y.isEmpty) return x.isEmpty ? 1 : -1; final xi = ${JSON.stringify(enumMap)}[x] ?? 999, yi = ${JSON.stringify(enumMap)}[y] ?? 999; final c = xi.compareTo(yi); if (c != 0) return ${o.desc ? '-c' : 'c'}; }`;
++        }
++        return `{ final x = a[${kc}] ?? '', y = b[${kc}] ?? ''; if (x.isEmpty != y.isEmpty) return x.isEmpty ? 1 : -1; final nx = num.tryParse(x), ny = num.tryParse(y); final c = (nx != null && ny != null) ? nx.compareTo(ny) : x.compareTo(y); if (c != 0) return ${o.desc ? '-c' : 'c'}; }`;
++      }).join(' ');
+       const src = s.sort ? `(${recs}.toList()..sort((a, b) { ${cmp} return 0; }))` : recs;
+       const rows = `[for (final r in ${src}) [${cols.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..8394643 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -14,7 +14,7 @@
+ חלקיק בטוחה: חורג = סך בטוחות / תקרה לפי 3 חודשים
+ חלקיק בטוחה: מעל התקרה = מונה(חורג מול 3 חודשים=חורג)
+ חלקיק ממצא: אדומים = מונה(צבע=אדום)
+-חלקיק ממצא: צבע
++חלקיק ממצא: [טבלה] סעיף, צבע, מה כתוב | מיון: צבע עולה
+ חלקיק ממצא: מה לבקש
+ חלקיק תשלום: הכנסה = סכום(סכום)
+ חלקיק תשלום: לא שולם = מונה(שולם=לא)

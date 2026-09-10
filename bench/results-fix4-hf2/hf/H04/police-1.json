@@ -1,0 +1,66 @@
+{
+ "task": "H04",
+ "ns": "calendar",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort_both": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_both",
+   "ok": true,
+   "info": "ent1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Meetings table sorted by date (מועד) ascending, then by time (שעה) ascending",
+   "check": "sort_both",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Spec change regenerated successfully without errors",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps remain byte-identical; only calendar app modified",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart passes flutter analyze with zero errors",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "0d829ad8e5a11df6",
+ "at": "2026-09-10T10:37:33.642Z"
+}

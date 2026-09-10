@@ -1,0 +1,63 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..dac545d 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-sort-h15 · מיון תאריכים (עד מתי) בסדר עולה בטבלאות וברשימות — פעם-אחת בספק, לא בנדרינג (10.9, H15 · peruk21)
++GATE: sort_px, sort_ent
++ref: 20260910-peruk21.txt
++ANTIPATTERN: מיון בנדרינג או בלוגיקה אחרי generation
++RULE: מיון-טבלאות לפי תאריכים בעולה מתבטא בספק בשתי רמות — ברמת-הישות (`מיון: עד מתי עולה` בהגדרת-הישות) ובחלקיק-הטבלה (`מיון: עד מתי עולה` בהגדרת-החלקיק). שדה-תאריך ממוין עולה = תאריכים קודמים ראשונים (deadlines סביב עד מתי). המחולל מטפל בממיר-טיפוסים (תאריך → comparable) ב-Dart; לא לכתוב ממיון בנדרינג או בUI.
++מה נכשל: בחירת רמה-ממיון יחידה (רק משפ-הישות או רק בחלקיק) הייתה משאירה אי-עקביות בין מסכים. הלקח: שני המקומות חייבים להיות סינכרוניים, ושניהם מנוסחים בספק (לא בקוד).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..1ec77f8 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -1,8 +1,8 @@
+ [
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה מיון עד מתי עולה",
++  "expr": "[טבלה] | מיון: עד מתי עולה",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..5c0e94f 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -2,7 +2,7 @@
+ 
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה מיון עד מתי עולה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..f8cf178 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -4,10 +4,10 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, המכתב, מה כבר יש, עד מתי, סיווג{בקשת מסמך|הזמנה לוועדה|דחיית סיוע|הילד מפריע בלי} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, המכתב, מה כבר יש, עד מתי, סיווג{בקשת מסמך|הזמנה לוועדה|דחיית סיוע|הילד מפריע בלי} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור | מיון: עד מתי עולה
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] | מיון: עד מתי עולה
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]

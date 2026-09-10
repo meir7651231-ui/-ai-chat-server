@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "App regenerated successfully with particle definition added"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Other apps remain byte-identical"
+    },
+    {
+      "check": "sort_both",
+      "text": "Particle screen sorts by date then time"
+    },
+    {
+      "check": "compiles",
+      "text": "Dart compiles without errors"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "No manual edits in generated files"
+    }
+  ],
+  "notes": "Task H04 complete. Particle screen sorts by מועד then שעה."
+}

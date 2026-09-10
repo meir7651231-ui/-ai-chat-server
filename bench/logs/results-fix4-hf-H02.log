@@ -1,0 +1,11 @@
+=== hf/H02 (sechirut) start 08:32:48
+  builder.json: exit=0 cost=0.28165399999999996 turns=22 ms=151381 err=false
+  police: DONE missing= false=0
+  auditor-coverage.json: exit=0 cost=0.2500275 turns=17 ms=93790 err=false
+  auditor-regression.json: exit=0 cost=0.34567810000000004 turns=21 ms=98408 err=false
+  auditor-compile.json: exit=0 cost=0.31643340000000003 turns=20 ms=145198 err=false
+  validator.json: exit=0 cost=0.2044552 turns=17 ms=74260 err=false
+  fixer.json: exit=0 cost=0.1680793 turns=11 ms=76118 err=false
+  police: DONE missing= false=0
+  police: DONE missing= false=0
+=== hf/H02 DONE wall=547s cost=$1.57 false_claims=0

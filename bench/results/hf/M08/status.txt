@@ -1,0 +1,10 @@
+ M machtzev/generator/apps/peruk08.json
+ M machtzev/generator/particle-plan-peruk08.json
+ M machtzev/generator/particle-plan-peruk08.md
+ M machtzev/generator/particles.mjs
+ M machtzev/generator/specs-ds/peruk08.txt
+?? machtzev/audit/search/2026-09-09-enum-choice-field-b388c3a7.json
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

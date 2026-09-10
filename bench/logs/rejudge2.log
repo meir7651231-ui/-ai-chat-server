@@ -1,0 +1,52 @@
+h0/E19 NOT DONE => NOT DONE missing=no_hebrew_in_engine
+h0/E05 DONE => DONE missing=
+h0/E08 NOT DONE => DONE missing=
+hf/E05 DONE => DONE missing=
+hf/E08 NOT DONE => DONE missing=
+hf/E19 NOT DONE => NOT DONE missing=byte_identical_others
+f0/E05 NOT DONE => DONE missing=
+f0/E08 NOT DONE => DONE missing=
+f0/E19 NOT DONE => NOT DONE missing=byte_identical_others
+h0/M02 NOT DONE => NOT DONE missing=dash_counter
+h0/M09 NOT DONE => DONE missing=
+h0/H01 NOT DONE => NOT DONE missing=no_hebrew_in_engine,sqrt
+hf/M02 NOT DONE => NOT DONE missing=byte_identical_others
+hf/H01 NOT DONE => NOT DONE missing=no_hebrew_in_engine
+hf/M09 NOT DONE => NOT DONE missing=byte_identical_others
+f0/M02 NOT DONE => DONE missing=
+f0/M09 NOT DONE => DONE missing=
+f0/H01 NOT DONE => DONE missing=
+h0/H02 NOT DONE => NOT DONE missing=no_hebrew_in_engine
+h0/H04 NOT DONE => NOT DONE missing=byte_identical_others,no_hebrew_in_engine
+h0/H03 NOT DONE => NOT DONE missing=no_hebrew_in_engine
+hf/H02 DONE => DONE missing=
+hf/H04 NOT DONE => NOT DONE missing=sort_both
+hf/H03 NOT DONE => DONE missing=
+f0/H02 DONE => DONE missing=
+f0/H04 NOT DONE => DONE missing=
+f0/H03 NOT DONE => DONE missing=
+h0/H05 NOT DONE => NOT DONE missing=byte_identical_others
+h0/H06 NOT DONE => NOT DONE missing=byte_identical_others,no_hebrew_in_engine
+h0/H07 NOT DONE => NOT DONE missing=calc,max
+hf/H05 DONE => DONE missing=
+hf/H06 NOT DONE => NOT DONE missing=byte_identical_others
+hf/H07 NOT DONE => NOT DONE missing=gates_pass
+f0/H05 DONE => DONE missing=
+f0/H06 NOT DONE => NOT DONE missing=no_hebrew_in_engine
+f0/H07 NOT DONE => DONE missing=
+h0/H10 NOT DONE => DONE missing=
+h0/H11 NOT DONE => NOT DONE missing=calc,min
+h0/H12 NOT DONE => NOT DONE missing=sort
+hf/H10 NOT DONE => NOT DONE missing=byte_identical_others,no_hebrew_in_engine
+hf/H11 DONE => DONE missing=
+hf/H12 DONE => DONE missing=
+f0/H10 NOT DONE => NOT DONE missing=regen_ok,gates_pass,sort_list
+f0/H11 NOT DONE => DONE missing=
+f0/H12 DONE => DONE missing=
+h0/H14 NOT DONE => NOT DONE missing=byte_identical_others,no_hebrew_in_engine,sort_color
+h0/H15 NOT DONE => NOT DONE missing=byte_identical_others,no_hebrew_in_engine
+hf/H14 DONE => DONE missing=
+hf/H15 DONE => DONE missing=
+f0/H14 DONE => DONE missing=
+f0/H15 NOT DONE => NOT DONE missing=sort_ent
+REJUDGE2-DONE

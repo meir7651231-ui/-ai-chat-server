@@ -1,0 +1,77 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..1c52917 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-particles-sort · טבלה ממויינת בספק מתפרקת ל-sortLambda בדארט — דקדוק חלקיקים כבר תומך בסדר מיון enum (10.9, H12 peruk17)
++GATE: none
++ref: machtzev/generator/specs-ds/peruk17.txt:10
++ANTIPATTERN: \[טבלה\](?!\s*\|)
++RULE: טבלה עם סדר-בחירה קבוע מוצהנת בספק כ-`[טבלה] | מיון: שדה עולה/יורד, שדה2` (line 124–139 particles.mjs); parseSortKeys מהדאטה מוציא `{field, desc}` ו-sortLambda בדארט משרשרת השוואות (מונים בסדר-הכרזה, מחרוזות-זקוקה בלקסיקלי) — טבלה ממויינת לא דורשת אטום חדש, רק פרמטר בספק.
++מה נלמד: הפעם הראשונה שטבלה בפירוק מצהירה סדר בספק; המצב דורש ביקורת — נוצר particle-plan עם שם-חלקיק "טבלה מיון סיווג עולה" ודוח-מכונה מאומת (sort ✅ px1). כל תוכן-דיווח בספק (טבלה/משפט/דוגמה) יוצא מדקדוק; לא-קיים-במוצא = לא-פעיל. (טבלה במקום אחר שלא זיהתה מיון = לא מיוישנה, מחתום בלי שינוי.)
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk17.json b/machtzev/generator/apps/peruk17.json
+index e752fbd..5b7700d 100644
+--- a/machtzev/generator/apps/peruk17.json
++++ b/machtzev/generator/apps/peruk17.json
+@@ -71,8 +71,8 @@
+     "type": "text",
+     "required": false,
+     "enumVals": [
+-     "השלמת מסמכים",
+      "דחייה לגופה",
++     "השלמת מסמכים",
+      "זימון ועדה",
+      "נגמר השעון"
+     ]
+diff --git a/machtzev/generator/particle-plan-peruk17.json b/machtzev/generator/particle-plan-peruk17.json
+index 1fbd18b..bc3f5d5 100644
+--- a/machtzev/generator/particle-plan-peruk17.json
++++ b/machtzev/generator/particle-plan-peruk17.json
+@@ -1,8 +1,8 @@
+ [
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה מיון סיווג עולה",
++  "expr": "[טבלה] | מיון: סיווג עולה",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-peruk17.md b/machtzev/generator/particle-plan-peruk17.md
+index c44d091..2b12bbd 100644
+--- a/machtzev/generator/particle-plan-peruk17.md
++++ b/machtzev/generator/particle-plan-peruk17.md
+@@ -2,7 +2,7 @@
+ 
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה מיון סיווג עולה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/specs-ds/peruk17.txt b/machtzev/generator/specs-ds/peruk17.txt
+index 9284905..da0734c 100644
+--- a/machtzev/generator/specs-ds/peruk17.txt
++++ b/machtzev/generator/specs-ds/peruk17.txt
+@@ -4,10 +4,10 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, המכתב המלא, איזו בקשה, מה כבר הוגש, סיווג{השלמת מסמכים|דחייה לגופה|זימון ועדה|נגמר השעון} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, המכתב המלא, איזו בקשה, מה כבר הוגש, סיווג{דחייה לגופה|השלמת מסמכים|זימון ועדה|נגמר השעון} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] | מיון: סיווג עולה
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]

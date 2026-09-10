@@ -1,0 +1,164 @@
+diff --git a/machtzev/INDEX.md b/machtzev/INDEX.md
+index 9b5154d..35403f0 100644
+--- a/machtzev/INDEX.md
++++ b/machtzev/INDEX.md
+@@ -47,6 +47,7 @@
+ | `generator/balagan-one.mjs` · `balagan-one-baseline.json` | שער האפליקציה-האחת (G33): N≡N≡N · מזהה-הרגע N/N · אפס רשימה-סגורה · ratchet |
+ | `generator/balagan-look.mjs` · `balagan-score.json` · `balagan-score-baseline.json` | שער-המראה של «בלגן» (G28 · הכרעה-28): 36 כללי-היעד כמרשם + ציון N/36 + ratchet; --gate/--write |
+ | `generator/look.mjs` | מצב-המראה של הריצה (G28): setLook/isPaper · stripGlyph (גליף-מוביל) · skinWired/HARD_COLOR (אטום-בצבע-קשיח נפסל בנייר) — מודול-זעיר בלי מעגל-ייבוא |
++| `generator/time-field.mjs` | ⏱ שדה-השעה של ישות לפי דקדוק-האפיון (`spec-lang.typeTime`, אפס-מילון): `isTimeField`/`timeFieldOf` — הכלל-האחד ל-render-ds (מסך-ישות: כל התצוגות + CSV) · particles (`[טבלה]`) · app-shell (לשונית-הרשימה + פלטה); יש שדה-שעה ⇒ הרשומות עוברות `sortedByTime` (ds_store.dart: מפתח-דקות מספרי, יציב, ריק בסוף); אין ⇒ ביט-זהה — מודול-זעיר בלי מעגל-ייבוא |
+ | `generator/app-shell.mjs` | 🧭 ניווט-מקשרים (GENMAX·G26 · הכרעה-27): `pickRoot` (הישות עם הכי-הרבה מצביעים-נכנסים) ⇒ `renderShell` (סרגל בית·שורש·עוד מחיפוש switch, IndexedStack) + `renderRootPage` (עובדות label+value `must` · ישויות-בנות `referencing`+הוספה `scopeField/scopeId` · דוח `initialId`); אפס מילון — גרף-הקשרים בלבד |
+ | `generator/quarry-golden.mjs` · `golden-fragments.json` · `golden-fragments-report.md` | ⛏️ חציבת-הזהב (GENMAX·G4a): 9 מודולי-SchoolOS ⇒ שברים לפי סמני-הבנאים (═══/───/class/builder/member) + חוקי-דבק (@override · כותרת⇒קוד); לכל שבר defs/atomsUsed/ops/imports, ול-build/builder גם `prelude`+`callSites` (G5a) · round-trip ביט-לביט · שער `goldquarry` |
+ | `generator/render-module.mjs` · `gen_*_subset.dart` · `gen_composite_*.dart` | 🧬 הרכבה-מהקטלוג (GENMAX·G4): חלקיקים/אטומים ⇒ שברים ⇒ סגירת-תלויות (defs · ווידג׳ט⇒כל-שבריו · State⇒ווידג׳ט · חיבורי-מסגרת · build-כשמלא) ⇒ מודול-Dart; מצבים minimal (build סינתטי) / compose (המסך-השלם) · **G8c** `assembleByOps`/`--entity-ops E` (זריעה לפי G2-ops של הישות מ-frag-ops, לא חלקיקי-יד) · **G4b** `assembleMulti --modules a,b` (איחוד-imports · dedupe · הרמת-State · סיומת-מודול להתנגשויות) · **G5a** `socketPlan` (פתיח-הזהב + אתרי-קריאה ⇒ שקעי-בונים, פנימי/מקום-שמור) · שער `rendermodule` |
+diff --git a/machtzev/generator/app-shell.mjs b/machtzev/generator/app-shell.mjs
+index 8cd573c..8b30ea5 100644
+--- a/machtzev/generator/app-shell.mjs
++++ b/machtzev/generator/app-shell.mjs
+@@ -9,7 +9,8 @@ import { searchOp, wireAtom, pickWired, particleWidgets } from './particles.mjs'
+ import { L, T } from './chrome.mjs';
+ import fs0 from 'node:fs';
+ const SL0 = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
+-const isTimeLabel = (f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && !(f.enumVals && f.enumVals.length) && String(f.label).split(/\s+/).some((w) => (SL0.typeTime || []).includes(w));   // שדה-שעה לפי דקדוק-האפיון
++import { isTimeField, timeFieldOf } from './time-field.mjs';   // ⏱ הכלל-האחד לשדה-שעה (משותף ל-render-ds · particles)
++const isTimeLabel = isTimeField;   // שדה-שעה לפי דקדוק-האפיון
+ 
+ const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
+ const impOf = (w) => `import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`;
+@@ -467,7 +468,9 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
+   const tabs = [home ? `const ${home.cls}()` : dashboard ? `const ${dashboard.cls}()` : null, `_RootTab()`, `const ${hub.cls}()`].filter(Boolean);
+   const paper = isPaper();
+   const quick = paper && root.descField ? `DsQuickAdd(hint: ${k(T('quickAddHint', { action: T('rootAdd', { ent: root.name }) }))}, onSubmit: (s) => appStore.add('${root.slug}', {${k(root.descField)}: s}))` : null;   // G30 · D2: יצירה = טקסט בלבד
+-  const paletteItems = `[DsPaletteItem(label: ${k(T('rootAdd', { ent: root.name }))}, sub: ${k(L.keysHint)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${root.cls}()))), for (final r in appStore.records('${root.slug}')) DsPaletteItem(label: ${disp}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? ''))))]`;
++  const rootTime = timeFieldOf(root.schema || []);   // ⏱ שדה-שעה בשורש ⇒ לשונית-הרשימה והפלטה ממוינות לפי שעה (יציב); אין ⇒ ביט-זהה
++  const rootRecs = rootTime ? `sortedByTime(appStore.records('${root.slug}'), ${k(rootTime)})` : `appStore.records('${root.slug}')`;
++  const paletteItems = `[DsPaletteItem(label: ${k(T('rootAdd', { ent: root.name }))}, sub: ${k(L.keysHint)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${root.cls}()))), for (final r in ${rootRecs}) DsPaletteItem(label: ${disp}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? ''))))]`;
+   const cls = clsOf(slug);
+   const code = `// 🧭 חולל ע"י ניווט-מקשרים (app-shell · G26 · הכרעה-27) — השלד: סרגל-תחתון בית · ${root.name} · עוד. השורש נגזר מגרף-הקשרים. אל תערוך ידנית.
+ ${notes.map((n) => '//   ⚪ ' + n).join('\n')}
+@@ -505,7 +508,7 @@ class _${cls}State extends State<${cls}> {
+ class _RootTab extends StatelessWidget {
+   @override
+   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
+-    final rs = appStore.records('${root.slug}');
++    final rs = ${rootRecs};
+     return DsScaffold(title: ${k(questions.list || root.name)}, subtitle: rs.length.toString() + ' ' + ${k(root.name)}, icon: ${k(root.icon || '🗂️')}, children: [
+       ${add ? `Padding(padding: const EdgeInsets.only(bottom: 10), child: ${add.call}),` : ''}
+       ${quick ? `Padding(padding: const EdgeInsets.only(bottom: 6), child: ${quick}),` : ''}
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..43efe79 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..8c508b7 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -14,6 +14,7 @@ import { buildAtlas } from './atlas.mjs';
+ import * as R from '../root.mjs';
+ import { L, T } from './chrome.mjs';
+ import { isPaper, skinWired } from './look.mjs';   // G28 · נייר: אטום שלא לובש עור נפסל
++import { timeFieldOf } from './time-field.mjs';   // ⏱ [טבלה]: ישות עם שדה-שעה ⇒ השורות ממוינות לפי שעה (sortedByTime)
+ 
+ const GEN = R.GEN_DIR;
+ const G = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8'));   // §19-ד: דקדוק-החלקיקים מהדאטה
+@@ -384,7 +385,8 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+       const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      const tf = timeFieldOf(entity.schema);   // ⏱ שדה-שעה ⇒ טבלה ממוינת לפי שעה (יציב · מספרי); אין ⇒ ביט-זהה
++      const rows = `[for (final r in ${tf ? `sortedByTime(${recs}, ${k(tf)})` : recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..b353372 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -23,6 +23,7 @@ const pascal = (slug) => 'GenApp' + slug.replace(/^app_/, '').replace(/(^|[_-])(
+ import { readAtlas } from './atlas.mjs';
+ import { searchOp, wireAtom, pickWired } from './particles.mjs';
+ import { isPaper, stripGlyph } from './look.mjs';   // הכרעה-27 · חיפוש-פתוח לאריחי-אגרגט
++import { timeFieldOf } from './time-field.mjs';   // ⏱ שדה-שעה ⇒ כל רשימת-הרשומות ממוינת לפי שעה (sortedByTime)
+ const atlas = readAtlas();   // L93: atlas.json + atlas-data.json
+ const heToks = (s) => [...String(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => stem(m[0])).filter((t) => t.length > 1);
+ // מילים-עבריות שלמות (לא-גזומות) — לאימות-חפיפה מול הגזם (הגזם מקבץ, המילה מאשרת).
+@@ -536,7 +537,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const kpiNumTiles = numFields.slice(0, 2).map((fc) => `const SizedBox(width: 10), Expanded(child: DsStat(label: ${fc}, value: appStore.sum(${SK}, ${fc}).toStringAsFixed(0), sub: ${k(L.sum)}, glyph: ${k('🧮')}))`).join(', ');
+   const kpiStrip = isPaper() ? '' : `AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: ${cTitle}, value: appStore.count(${SK}).toString(), sub: ${k(L.totalRecords)}, glyph: ${k('🗂️')}))${kpiNumTiles ? ', ' + kpiNumTiles : ''}]))),`;
+   const listRead0 = hasScope ? `appStore.scoped(${SK}, _rlsScope[_rlsRole])` : `appStore.records(${SK})`;
+-  const listRead = `(widget.scopeId == null ? ${listRead0} : ${listRead0}.where((r) => (r[widget.scopeField ?? ''] ?? '') == widget.scopeId).toList())`;   // G26 · היקף-הורה
++  // ⏱ שדה-שעה בסכמה ⇒ הרשומות ממוינות לפי שעה (יציב, מספרי) בכל תצוגה (רשימה · לוח · לוח-שנה · טבלה) וב-CSV; אין ⇒ ביט-זהה
++  const timeIdx = schema.findIndex((s) => s.label === timeFieldOf(schema));
++  const byTime = (expr) => timeIdx >= 0 ? `sortedByTime(${expr}, ${labelConst[timeIdx]})` : expr;
++  const listRead = byTime(`(widget.scopeId == null ? ${listRead0} : ${listRead0}.where((r) => (r[widget.scopeField ?? ''] ?? '') == widget.scopeId).toList())`);   // G26 · היקף-הורה
+   const cardSig = rlsActive ? 'Widget _card(Map<String, String> r, Set<int> hidden) {' : 'Widget _card(Map<String, String> r) {';
+   const cardHiddenArg = rlsActive ? ', hidden: hidden' : '';
+   const cardCall = rlsActive ? '_card(rs[i], _rlsHiddenSet)' : '_card(rs[i])';
+@@ -555,7 +559,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     : `  String _csv() {
+     final b = StringBuffer();
+     b.writeln(const [${labelsList}].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
+-    for (final r in appStore.records(${SK})) {
++    for (final r in ${byTime(`appStore.records(${SK})`)}) {
+       b.writeln([${recValues}].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+     }
+     return b.toString();
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..6fb86a9 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -4,3 +4,4 @@
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+ ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++חלקיק פגישה: [טבלה]
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..9e96c86 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -66,11 +66,11 @@ d4015aec8b28007379713aa445c5f4b344b1a2c0448ea66b635fa1de4bf8a859  machtzev/gener
+ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/generator/logic-census.json
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+-39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
++202bf6b76e6577441259baf93ca9a5ae142575cafb4c02961e4afc7d5bf87224  machtzev/generator/particles.mjs
+ 3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+-b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs
++93931583812d6d18cdd93d813ea66de51eb6c80ac404d092b600908983754612  machtzev/generator/render-ds.mjs
+ f9d748159c45d3d7013194ae5705a1797948376fc973bbbbb00497a22fa850d1  machtzev/generator/render-module-baseline.json
+ 74cd7e7ccd4d4e3ad57d8e5eade8fb9d38250616cfdfbf15d1d2087d9080d7ea  machtzev/generator/render-module.mjs
+ 0589103ea8b694b19bcef674586d0b31516a9a535b7b833ffce397c4f063798a  machtzev/generator/retarget.mjs

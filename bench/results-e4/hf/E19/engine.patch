@@ -1,0 +1,51 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..e488327 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,11 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-specs-conditional-counter · לוח בקרה עם מונים מותנים — תחביר: `מונה(ישות: שדה=ערך)` עבור סנון לפי ערך שדה (10.9, task E19 · peruk25)
++GATE: dash_counter
++RULE: דשבורד עם מונים תנאיים משתמש בתחביר `מונה(ישות)` לסך כללי ו-`מונה(ישות: שדה=ערך)` לסנון; הערך חייב להיות אחד מערכי הבחירה של השדה (enum); דוגמה: `לוח בקרה עם מונה(תיק), מונה(תיק: סיווג=דגל מוגן)` יוצר שני מדדים בדשבורד — סך ותיקים וספירה של דגל-מוגן בלבד.
++מה נכשל: לא נכשל; מצאתי את התחביר בדוגמאות-מוצלחות (panuy.txt, peruk01-09.txt, sechirut.txt) וחילקתי לכל מודול.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..f6b3a1f 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -788,7 +788,7 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics
+     const g = k(a.filtered ? '⚠️' : a.kind === L.avg ? '📈' : a.kind === L.sum ? '🧮' : '🔢');
+     const cf = a.field ? k(a.field) : null;
+     // מונה-מסונן ('בסיכון'): סופר רשומות ששדה-מצב שלהן = הערך (התנהגות-על · דשבורד-מפקד).
+-    const num = a.filtered ? `appStore.records('${a.slug}').where((r) => (r[${k(a.field)}] ?? '') == ${k(a.value)}).length.toDouble()`
++    const num = a.filtered ? `appStore.records('${a.slug}').where((r) => (r[${k(a.field)}] ?? '') == ${k(a.value)}).toList().length.toDouble()`
+       : a.kind === L.sum ? `appStore.sum('${a.slug}', ${cf})`
+       : a.kind === L.avg ? `appStore.avg('${a.slug}', ${cf})`
+       : `appStore.count('${a.slug}').toDouble()`;
+@@ -1143,7 +1143,7 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
+     imports.add(`import '../${prog.file}';`);
+     const extra = prog.fills.length ? ', ' + prog.fills.join(', ') : '';
+     const last = Math.max(0, stages.length - 1);
+-    const pctExpr = `appStore.count('${entitySlug}') == 0 ? 0 : (${recsExpr}.where((r) => appStore.stageOf('${entitySlug}', r['__id'] ?? '') >= ${last}).length * 100 ~/ appStore.count('${entitySlug}'))`;
++    const pctExpr = `appStore.count('${entitySlug}') == 0 ? 0 : (${recsExpr}.where((r) => appStore.stageOf('${entitySlug}', r['__id'] ?? '') >= ${last}).toList().length * 100 ~/ appStore.count('${entitySlug}'))`;
+     blocks.push(`Padding(\n            padding: const EdgeInsets.symmetric(horizontal: 12),\n            child: ${prog.cls}(${prog.p.pct}: ${pctExpr}${extra}),\n          )`);
+   }
+   if (trend) {
+diff --git a/machtzev/generator/specs-ds/peruk25.txt b/machtzev/generator/specs-ds/peruk25.txt
+index dc4d3c8..5d3a6f0 100644
+--- a/machtzev/generator/specs-ds/peruk25.txt
++++ b/machtzev/generator/specs-ds/peruk25.txt
+@@ -4,7 +4,7 @@
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, מכתב פיטורים, ותק, האם חתמו על משהו, סיווג{סיום רגיל מכתב|לחץ לחתום היום|דגל מוגן|עצמאי חוזה קבלן} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+-לוח בקרה עם מונה(תיק)
++לוח בקרה עם מונה(תיק), מונה(תיק: סיווג=דגל מוגן)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק

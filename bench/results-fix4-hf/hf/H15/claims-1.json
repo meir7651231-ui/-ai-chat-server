@@ -1,0 +1,1 @@
+{"claims":[{"check":"sort_ent","text":"Entity list screen (ent1) sorts cases by deadline in ascending order (soonest first)"},{"check":"sort_px","text":"Particle screen (px1) table sorts cases by deadline in ascending order (soonest first)"}],"notes":"Modified peruk21.txt spec to add sort clauses. Generator correctly parsed and injected sorting logic into both screens."}

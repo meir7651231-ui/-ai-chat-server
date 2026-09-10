@@ -1,0 +1,10 @@
+=== hf/H12 (peruk17) start 12:21:12
+  builder.json: exit=0 cost=0.2959789 turns=23 ms=187295 err=false
+  police: DONE missing= false=0
+  auditor-regression.json: exit=0 cost=0.2435392 turns=16 ms=90053 err=false
+  auditor-coverage.json: exit=0 cost=0.19272390000000003 turns=10 ms=102061 err=false
+  auditor-compile.json: exit=0 cost=0.39323050000000015 turns=27 ms=175095 err=false
+  validator.json: exit=0 cost=0.1534388 turns=12 ms=52028 err=false
+  fixer-1.json: exit=0 cost=0.1838708 turns=15 ms=98959 err=false
+  police: DONE missing= false=0
+=== hf/H12 DONE wall=595s cost=$1.46 false_claims=0

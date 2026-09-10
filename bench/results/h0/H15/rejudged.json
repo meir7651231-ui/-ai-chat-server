@@ -1,0 +1,62 @@
+{
+ "task": "H15",
+ "ns": "peruk21",
+ "verdict": "NOT DONE",
+ "missing": [
+  "byte_identical_others",
+  "no_hebrew_in_engine"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": false,
+  "gates_pass": true,
+  "no_hebrew_in_engine": false,
+  "dart_math_sane": true,
+  "sort_px": true,
+  "sort_ent": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_px",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  },
+  {
+   "id": "sort_ent",
+   "ok": true,
+   "info": "ent1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "changed_others": [
+   "dart-gen-bs/gen_app_calendar_ent1.dart",
+   "dart-gen-bs/gen_app_panuy_ent1.dart",
+   "dart-gen-bs/gen_app_peruk01_ent1.dart",
+   "dart-gen-bs/gen_app_peruk01_ent2.dart",
+   "dart-gen-bs/gen_app_peruk02_ent1.dart",
+   "dart-gen-bs/gen_app_peruk02_ent2.dart",
+   "dart-gen-bs/gen_app_peruk03_ent1.dart",
+   "dart-gen-bs/gen_app_peruk04_ent1.dart"
+  ],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [
+   "const deadlineField = entity.schema.find((f) => f.label === 'עד מתי');",
+   "const sortFieldIdx = schema.findIndex((s) => s.label === 'עד מתי');"
+  ],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "be49699cf2d8f1cc",
+ "at": "2026-09-10T05:17:52.414Z"
+}

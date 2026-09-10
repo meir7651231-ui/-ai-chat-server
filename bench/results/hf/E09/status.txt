@@ -1,0 +1,8 @@
+ M machtzev/generator/apps/peruk25.json
+ M machtzev/generator/specs-ds/peruk25.txt
+?? "machtzev/audit/search/2026-09-09-\327\241\327\233\327\225\327\235-\327\244\327\231\327\246\327\225\327\231\327\231\327\235-compensation-73af240b.json"
+?? "machtzev/audit/search/2026-09-09-\327\244\327\231\327\246\327\225\327\231\327\231\327\235-\327\251\327\240\327\224-annual-444746c2.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

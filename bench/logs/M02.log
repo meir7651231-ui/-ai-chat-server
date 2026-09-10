@@ -1,0 +1,44 @@
+=== h0/M02 (peruk12) start 18:16:34
+  builder.json: exit=0 cost=0.16652329999999999 turns=9 ms=175904 err=false
+  police: NOT DONE missing=no_hand_edit,ent2,px2,hub_where false=0
+=== h0/M02 NOT DONE wall=214s cost=$0.17 false_claims=0
+=== hf/M02 (peruk12) start 18:20:08
+  builder.json: exit=0 cost=0.8622920999999999 turns=55 ms=341757 err=false
+  police: NOT DONE missing=ent2,px2,hub_where false=0
+  auditor-compile.json: exit=0 cost=0.2158246 turns=23 ms=74108 err=false
+  auditor-coverage.json: exit=0 cost=0.2384051 turns=17 ms=77332 err=false
+  auditor-regression.json: exit=0 cost=0.21969720000000004 turns=19 ms=81470 err=false
+  validator.json: exit=0 cost=0.1933363 turns=20 ms=83052 err=false
+  fixer.json: exit=0 cost=0.6209369000000001 turns=47 ms=327568 err=false
+  police: NOT DONE missing=ent2,px2,hub_where false=0
+  police: NOT DONE missing=ent2,px2,hub_where false=0
+=== hf/M02 NOT DONE wall=943s cost=$2.35 false_claims=0
+=== f0/M02 (peruk12) start 18:35:51
+  builder.json: exit=0 cost=5.934133 turns=83 ms=833621 err=false
+  police: NOT DONE missing=hub_where false=0
+=== f0/M02 NOT DONE wall=871s cost=$5.93 false_claims=0
+skip h0/M02 (done)
+skip hf/M02 (done)
+skip f0/M02 (done)
+skip h0/M02 (done)
+skip hf/M02 (done)
+skip f0/M02 (done)
+=== h0/M02 (peruk12) start 04:26:17
+  builder.json: exit=0 cost=0.27177899999999994 turns=22 ms=163670 err=false
+  police: NOT DONE missing=hub_where false=0
+=== h0/M02 NOT DONE wall=195s cost=$0.27 false_claims=0
+=== hf/M02 (peruk12) start 04:29:32
+  builder.json: exit=0 cost=0.7419142999999999 turns=55 ms=710975 err=false
+  police: NOT DONE missing=hub_where false=0
+  auditor-coverage.json: exit=0 cost=0.36049280000000006 turns=31 ms=146860 err=true
+  auditor-compile.json: exit=0 cost=0.3975411 turns=30 ms=155152 err=false
+  auditor-regression.json: exit=0 cost=0.42606479999999997 turns=31 ms=156020 err=true
+  validator.json: exit=0 cost=0.2626338 turns=23 ms=126073 err=false
+  fixer.json: exit=0 cost=0.8277192000000003 turns=61 ms=483414 err=true
+  police: NOT DONE missing=byte_identical_others,hub_where false=1
+  police: NOT DONE missing=byte_identical_others,hub_where false=1
+=== hf/M02 NOT DONE wall=1567s cost=$3.02 false_claims=1
+=== f0/M02 (peruk12) start 04:55:40
+  builder.json: exit=0 cost=3.3274672500000007 turns=35 ms=437554 err=false
+  police: NOT DONE missing=hub_where false=0
+=== f0/M02 NOT DONE wall=468s cost=$3.33 false_claims=0

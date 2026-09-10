@@ -1,0 +1,9 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/apps/peruk25.json
+ M machtzev/generator/specs-ds/peruk25.txt
+?? "machtzev/audit/search/2026-09-10-\327\241\327\233\327\225\327\235-\327\244\327\231\327\246\327\225\327\231\327\231\327\235-severance-06f1b71d.json"
+?? "machtzev/audit/search/2026-09-10-\327\241\327\233\327\225\327\235-\327\244\327\231\327\246\327\225\327\231\327\231\327\235-\327\251\327\240\327\224-8b0ff158.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

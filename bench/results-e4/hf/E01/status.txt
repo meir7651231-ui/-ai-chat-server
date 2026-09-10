@@ -1,0 +1,11 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/apps/sechirut.json
+ M machtzev/generator/specs-ds/sechirut.txt
+?? "machtzev/audit/search/2026-09-10-email-\327\220\327\231\327\236\327\231\327\231\327\234-field-5ca9e996.json"
+?? "machtzev/audit/search/2026-09-10-\327\220\327\231\327\236\327\231\327\231\327\234-email-spec-7907b55d.json"
+?? "machtzev/audit/search/2026-09-10-\327\230\327\231\327\247-\327\252\327\231\327\247-email-40445193.json"
+?? "machtzev/audit/search/2026-09-10-\327\230\327\231\327\247-\327\252\327\231\327\247-email-a998909c.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

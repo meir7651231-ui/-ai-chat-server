@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "peruk12 app regenerated successfully with new computed field."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps remain byte-identical (peruk1-11, peruk13-28)."
+    },
+    {
+      "check": "calc_fee",
+      "text": "Computed field מחיר עם אגרה = מחיר * 1.03 defined and gates pass (1 const, 1 calc)."
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles with zero analyzer errors."
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only spec file edited (peruk12.txt); no hand-edits in generated code."
+    },
+    {
+      "check": "gates_pass",
+      "text": "All gates pass including calc_fee, no_orphans, no_hebrew_in_engine."
+    }
+  ],
+  "notes": "proven — All checks verified by machine. Computed field successfully added to peruk12 entity. No breaking changes, all other apps unaffected. Ready for production."
+}

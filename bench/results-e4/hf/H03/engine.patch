@@ -1,0 +1,65 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..2e89d38 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-sort-h03 · מיון בישויות: סינטקס 'מיון: שדה עולה|יורד' בסעיף נפרד של הישות (render-ds · entity.mjs) (10.9, H03 · tasks sorting)
++GATE: sort
++ANTIPATTERN: (entity with no sort | table view unsorted)
++RULE: דרישת-מיון על רשימות/טבלאות משומשות בישות = סעיף חדש בספק: `ישות X עם ... | שלבים: ... | מיון: שדה עולה, שדה2 יורד`. render-ds יוצר `rs.sort(comparator)` לפני כל הגדרת-views (קו 156 בדוגמה). entity.mjs מנתח סעיף מיון כמו סעיף שלבים, חלצ comparator דרך sortLambda (sort-cmp.mjs). סדר-משפחות (שדה-ארוך קודם) ומנע-הצפה לעמודה (numeric>empty>text).
++מה עבד: מיון משה"י (עולה/יורד) בשפה טבעית בלבד, מנוען אחריד בדקדוק-האפיון (spec-lang.data.json: sortAsc/sortDesc). השפה מקבלת רק סדר-הצהרה (field1, field2...) אם סורט לא ציין כיוון = בדרפלט עולה.
++מה לא עבד בראשונה: הוספת מיון לחלקיק בלבד (particle-plan) לא השפיעה על entity screen — חלקיק ודמון ent1 שונים (ent1 לא מקבל נתון עם sort, רק fieldSorting מחלק-סעיף-המיון). החוק: סעיף מיון בישות = למעשה מושפע כל מי שמציג רשימה/טבלה (entity view + particle).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-tasks.json b/machtzev/generator/particle-plan-tasks.json
+index 0637a08..2997856 100644
+--- a/machtzev/generator/particle-plan-tasks.json
++++ b/machtzev/generator/particle-plan-tasks.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "משימה",
++  "name": "טבלה מה מועד סכום הערה מיון מועד עולה",
++  "expr": "[טבלה] מה, מועד, סכום, הערה | מיון: מועד עולה",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..ae69dff 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,5 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה | מיון: מועד עולה
++חלקיק משימה: [טבלה] מה, מועד, סכום, הערה | מיון: מועד עולה

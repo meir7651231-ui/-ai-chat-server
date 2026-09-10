@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "spec_supports_column_selection",
+      "text": "SPEC-LANG.md line 17 documents [טבלה] עמודה, עמודה syntax for column selection"
+    },
+    {
+      "check": "panuy_spec_changed",
+      "text": "panuy.txt line 6 changed from [טבלה] to [טבלה] שם, זמין, מרחק בקמ, מחיר לשעה"
+    },
+    {
+      "check": "table_shows_4_columns",
+      "text": "Generated code ForceDataGrid has exactly 4 columns (c1, c2, c3, c4)"
+    },
+    {
+      "check": "no_other_apps_affected",
+      "text": "byte_identical_others check passed - only panuy app changed"
+    },
+    {
+      "check": "all_gates_pass",
+      "text": "All gates passed: regen_ok, byte_identical_others, gates_pass, no_hebrew_in_engine, dart_math_sane, compiles"
+    }
+  ],
+  "notes": "proven: spec file modified to specify 4 table columns; table now shows exactly 4 columns; no other apps affected; all gates pass; machine verdict DONE"
+}

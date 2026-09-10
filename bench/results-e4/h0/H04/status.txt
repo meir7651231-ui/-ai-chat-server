@@ -1,0 +1,17 @@
+ M machtzev/generator/atlas-data.json
+ M machtzev/generator/atlas.json
+ M machtzev/generator/atom-index-full.json
+ M machtzev/generator/auto-logic.json
+ M machtzev/generator/capabilities/auto-dream.txt
+ M machtzev/generator/knowledge/pure-shelf.json
+ M machtzev/generator/logic-census.json
+ M machtzev/generator/particle-plan-calendar.json
+ M machtzev/generator/specs-ds/calendar.txt
+ M machtzev/generator/specs/capautodream.txt
+ M machtzev/generator/tighten-applied.json
+ M machtzev/generator/tighten-rejected.json
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-calendar.md
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

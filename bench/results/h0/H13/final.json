@@ -1,0 +1,62 @@
+{
+ "task": "H13",
+ "ns": "panuy",
+ "verdict": "NOT DONE",
+ "missing": [
+  "byte_identical_others"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": false,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "four_columns": true,
+  "has_km": true
+ },
+ "task_checks": [
+  {
+   "id": "four_columns",
+   "ok": true,
+   "info": "columns=4",
+   "mandatory": true
+  },
+  {
+   "id": "has_km",
+   "ok": true,
+   "info": "2×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "changed_others": [
+   "dart-data-bs/auto/gen_app_peruk01_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk02_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk03_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk04_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk05_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk06_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk07_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk08_px1_content.dart"
+  ],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "86f5f6cc471f5632",
+ "at": "2026-09-10T02:04:53.957Z",
+ "arm": "h0",
+ "wall_s": 361,
+ "cost_usd": 0.5694896999999999,
+ "tokens": 3469261
+}

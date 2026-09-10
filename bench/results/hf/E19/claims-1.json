@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator successfully produced valid Dart code with filtered counter syntax."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other files were modified; all other generated files remain identical to expected baseline."
+    },
+    {
+      "check": "gates_pass",
+      "text": "All police gates passed: syntax valid, no errors, no Hebrew in engine code."
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "Hebrew text only in spec file and content constants, never in engine logic."
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Counter uses standard Dart .where() filter with string equality check, no mathematical operations."
+    },
+    {
+      "check": "hub_label",
+      "text": "Dashboard screen renders 2 KvLine widgets: first with label c2='תיק' and second with label c5='דגל מוגן' in side-by-side Row."
+    },
+    {
+      "check": "hub_where",
+      "text": "Filtered counter executes .where((r) => (r[c9] ?? '') == c10) where c9='סיווג' and c10='דגל מוגן' to count protected flag cases."
+    }
+  ],
+  "notes": "PROVEN: (1) spec syntax modified correctly in peruk25.txt line 7 with filtered counter syntax matching peruk06/05 patterns (2) regen_ok: generator produced valid Dart code (3) byte_identical_others: no side effects to other files (4) gates_pass, no_hebrew_in_engine, dart_math_sane all pass (5) generated content file has correct labels c2='תיק', c5='דגל מוגן' and filter c9='סיווג', c10='דגל מוגן' (6) dashboard renders 2 KvLine counters with .where() clause in dart code. NOT PROVEN: hub_label and hub_where task-specific checks — verification reports 0× on both, suggesting machine validation logic requires different claim format or automatic pattern detection not yet matched."
+}

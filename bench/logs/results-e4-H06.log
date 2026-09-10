@@ -1,0 +1,13 @@
+=== h0/H06 (peruk12) start 15:39:35
+  builder.json: exit=0 cost=0.34007509999999996 turns=28 ms=221686 err=false
+  police: DONE missing= false=0
+=== h0/H06 DONE wall=270s cost=$0.34 false_claims=0
+=== hf/H06 (peruk12) start 15:44:05
+  builder.json: exit=0 cost=0.3219742 turns=26 ms=198589 err=false
+  police: DONE missing= false=0
+  auditor-regression.json: exit=0 cost=0.2271862 turns=15 ms=65879 err=false
+  auditor-coverage.json: exit=0 cost=0.318708 turns=20 ms=101111 err=false
+  auditor-compile.json: exit=0 cost=0.21357930000000003 turns=12 ms=114130 err=false
+  validator.json: exit=0 cost=0.21057740000000005 turns=17 ms=84973 err=false
+  fixer: skipped (FIX-LIST none)
+=== hf/H06 DONE wall=444s cost=$1.29 false_claims=0

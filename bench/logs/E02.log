@@ -1,0 +1,44 @@
+=== h0/E02 (peruk02) start 18:08:08
+  builder.json: exit=0 cost=0.14804140000000002 turns=7 ms=143212 err=false
+  police: NOT DONE missing=no_hand_edit,enum_high,enum_low,label false=0
+=== h0/E02 NOT DONE wall=178s cost=$0.15 false_claims=0
+=== hf/E02 (peruk02) start 18:11:08
+  builder.json: exit=0 cost=0.8168241000000002 turns=50 ms=520364 err=false
+  police: NOT DONE missing=enum_high,enum_low,label false=3
+  auditor-coverage.json: exit=0 cost=0.22790900000000003 turns=16 ms=60891 err=false
+  auditor-compile.json: exit=0 cost=0.21764940000000002 turns=14 ms=66406 err=false
+  auditor-regression.json: exit=0 cost=0.33738160000000017 turns=26 ms=95295 err=false
+  validator.json: exit=0 cost=0.26788850000000003 turns=22 ms=96193 err=false
+  fixer.json: exit=0 cost=0.4506335 turns=35 ms=303368 err=false
+  police: NOT DONE missing=enum_high,enum_low,label false=3
+  police: NOT DONE missing=enum_high,enum_low,label false=3
+=== hf/E02 NOT DONE wall=1124s cost=$2.32 false_claims=3
+=== f0/E02 (peruk02) start 18:29:53
+  builder.json: exit=0 cost=2.8838494999999997 turns=26 ms=188997 err=false
+  police: NOT DONE missing=enum_high,enum_low,label false=0
+=== f0/E02 NOT DONE wall=230s cost=$2.88 false_claims=0
+skip h0/E02 (done)
+skip hf/E02 (done)
+skip f0/E02 (done)
+skip h0/E02 (done)
+skip hf/E02 (done)
+skip f0/E02 (done)
+=== h0/E02 (peruk02) start 04:09:40
+  builder.json: exit=0 cost=0.15149700000000002 turns=10 ms=83477 err=false
+  police: DONE missing= false=0
+=== h0/E02 DONE wall=130s cost=$0.15 false_claims=0
+=== hf/E02 (peruk02) start 04:11:51
+  builder.json: exit=0 cost=0.37487799999999993 turns=23 ms=189143 err=false
+  police: DONE missing= false=0
+  auditor-regression.json: exit=0 cost=0.2886782 turns=24 ms=105407 err=false
+  auditor-coverage.json: exit=0 cost=0.40747179999999994 turns=25 ms=110309 err=false
+  auditor-compile.json: exit=0 cost=0.3688537 turns=24 ms=163361 err=false
+  validator.json: exit=0 cost=0.22001619999999994 turns=19 ms=66875 err=false
+  fixer.json: exit=0 cost=0.10970929999999998 turns=7 ms=59702 err=false
+  police: DONE missing= false=0
+  police: DONE missing= false=0
+=== hf/E02 DONE wall=584s cost=$1.77 false_claims=0
+=== f0/E02 (peruk02) start 04:21:35
+  builder.json: exit=0 cost=3.7216 turns=34 ms=294448 err=false
+  police: DONE missing= false=0
+=== f0/E02 DONE wall=331s cost=$3.72 false_claims=0

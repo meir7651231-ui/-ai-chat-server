@@ -1,0 +1,71 @@
+{
+ "task": "H01",
+ "ns": "panuy",
+ "verdict": "NOT DONE",
+ "missing": [
+  "no_hand_edit",
+  "byte_identical_others",
+  "no_hebrew_in_engine",
+  "sqrt"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": false,
+  "gates_pass": true,
+  "no_hebrew_in_engine": false,
+  "dart_math_sane": true,
+  "sqrt": false,
+  "sort_px": true,
+  "sort_ent": false
+ },
+ "task_checks": [
+  {
+   "id": "sqrt",
+   "ok": false,
+   "info": "import=false fn=false method=false",
+   "mandatory": true
+  },
+  {
+   "id": "sort_px",
+   "ok": true,
+   "info": "sortlines=1",
+   "mandatory": true
+  },
+  {
+   "id": "sort_ent",
+   "ok": false,
+   "info": "sortlines=0",
+   "mandatory": false
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "changed_others": [
+   "dart-data-bs/auto/gen_app_peruk02_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk10_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk12_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk28_px1_content.dart",
+   "dart-gen-bs/gen_app_peruk02_px1.dart",
+   "dart-gen-bs/gen_app_peruk10_px1.dart",
+   "dart-gen-bs/gen_app_peruk12_px1.dart",
+   "dart-gen-bs/gen_app_peruk28_px1.dart"
+  ],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [
+   "const sortField = entity.schema.find((f) => /^(מרחק|distance)/.test(f.label.toLowerCase())) ||",
+   "entity.schema.find((f) => !f.formula && /^(price|amount|count|num|percent|שעה)$/.test(f.type || ''))"
+  ],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "7be41ebdaed6a8ac",
+ "at": "2026-09-09T17:59:48.752Z"
+}

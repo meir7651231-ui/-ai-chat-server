@@ -1,0 +1,43 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..e434419 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -28,6 +28,13 @@ RULE: פלט-retarget שבו שדה-טקסט ממופה לשדה-ערוץ (`role
+ מה נכשל: אותו ניסיון-משטרה (retry.jsonl 1788539132) על `gen_retarget_supporter_from_tch.dart` בגרסת-G5c (ref): `role⇒phone(type)`, `status⇒address(type)` — נכון-בצורה, שקר-במשמעות; G5d החליף ל-name/chan/unique/reserved (19 מקום-שמור כנים). הלקח כפול: מיפוי שאינו עובדה-מבנית לא נכנס לפלט, ו-truth נמדד אחרון.
+ 
+ ## L2026-09-04-truth-e23e40 · בלוק-האמת נמדד על העץ כולו — truth --write רץ אחרי שכל דוחות-המנוע (gen-verify/harness/picks) סופיים, לא לפניהם (4.9, GENMAX·G5c⇒G5d)
++
++## L2026-09-10-spec-e16-stages · הוספת שלב חדש לישות בקובץ-ספק (stages list insertion) לא דורשת שינוי בمنוע ולא מסכנת byte-parity לאפליקציות אחרות (10.9, E16-peruk08)
++GATE: regen
++ref: machtzev/generator/specs-ds/peruk08.txt:6
++ANTIPATTERN: \| שלבים .* (בלי-הוחזר-הכסף)
++RULE: חיבור קומה-ספק (spec-ds) לוקח זיהוי-אתר ברור (peruk08). הוספת שלב לרשימת-שלבים היא רק דקדוק-בסדר, לא משפיע על מנוע (הרינדור יקרא דקדוק-חוזה-שלבים דינמית). byte-identical-others יודה שרק peruk08 השתנה, שאר האפליקציות ירוקות.
++מה נכשל: (כלא) — כל הבדיקות עברו: regen_ok, byte_identical_others, no_orphans, gates_pass, compiles. רנדור-ds יצמח שלבים מספק כי הרינדור קורא את הדקדוק חי.
+ GATE: truth
+ ref: e23e40e44919b2e18b4f3ec08aa75828f46a9587:new/dart-gen-bs/gen_retarget_volunteer_from_rm.dart
+ ANTIPATTERN: ⇒\w+\(type\)
+diff --git a/machtzev/generator/apps/peruk08.json b/machtzev/generator/apps/peruk08.json
+index 911b157..5ac25f4 100644
+--- a/machtzev/generator/apps/peruk08.json
++++ b/machtzev/generator/apps/peruk08.json
+@@ -31,6 +31,7 @@
+    "שולם",
+    "בבדיקה",
+    "נמסר",
++   "הוחזר הכסף",
+    "סגור"
+   ],
+   "fields": [
+diff --git a/machtzev/generator/specs-ds/peruk08.txt b/machtzev/generator/specs-ds/peruk08.txt
+index 4b501fe..6bfe56e 100644
+--- a/machtzev/generator/specs-ds/peruk08.txt
++++ b/machtzev/generator/specs-ds/peruk08.txt
+@@ -3,7 +3,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, הוחזר הכסף, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

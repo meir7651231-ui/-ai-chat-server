@@ -1,0 +1,45 @@
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..4d640d6 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -226,5 +226,16 @@
+   "wired": [
+    "KvLine"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "הודעה תשובה סיווג קיבלתי הסיווג ערך",
++  "expr": "[הודעה] תשובה = סיווג, קיבלתי, הסיווג: {ערך}",
++  "ok": false,
++  "why": "הודעה: «תשובה» אינו שדה-בחירה",
++  "shape": null,
++  "ops": [],
++  "picks": [],
++  "wired": []
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..0a78ba8 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -10,6 +10,7 @@
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
++| הודעה תשובה סיווג קיבלתי הסיווג ערך | תיק | — | הודעה: «תשובה» אינו שדה-בחירה | — |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..d98517f 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -22,6 +22,7 @@
+ דוח תיק: לוח = לוח
+ חלקיק תיק: לוח = [לוח]
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
++חלקיק תיק: [הודעה] תשובה = סיווג, קיבלתי, הסיווג: {ערך}
+ דוח תיק: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה
+ תוכן מסגרת: ועדות / שילוב / התאמות — נהלים משתנים. לא להבטיח זכאות
+ תוכן מסגרת: אבחון פרטי לא תמיד נכנס אוטומטית. לבדוק מה הוועדה מבקשת

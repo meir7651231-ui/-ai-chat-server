@@ -1,0 +1,25 @@
+=== h0/H04 (calendar) start 19:26:47
+  builder.json: exit=0 cost=1.0706289999999998 turns=81 ms=369446 err=true
+  police: NOT DONE missing=byte_identical_others,no_hebrew_in_engine,sort_both false=0
+=== h0/H04 NOT DONE wall=406s cost=$1.07 false_claims=0
+=== hf/H04 (calendar) start 19:33:33
+  builder.json: exit=0 cost=1.1613049499999997 turns=71 ms=397864 err=false
+  police: NOT DONE missing=byte_identical_others,sort_both false=0
+  auditor-compile.json: exit=0 cost=0.3518267000000001 turns=22 ms=104147 err=false
+  auditor-regression.json: exit=0 cost=0.3368496999999999 turns=31 ms=105276 err=true
+  auditor-coverage.json: exit=0 cost=0.36447640000000014 turns=27 ms=119778 err=false
+  validator.json: exit=0 cost=0.23768190000000003 turns=23 ms=89036 err=false
+  fixer.json: exit=0 cost=0.8857621000000001 turns=61 ms=299970 err=true
+  police: NOT DONE missing=sort_both false=0
+  police: NOT DONE missing=sort_both false=0
+=== hf/H04 NOT DONE wall=1008s cost=$3.34 false_claims=0
+=== f0/H04 (calendar) start 19:50:21
+  builder.json: exit=0 cost=4.944061000000001 turns=52 ms=665287 err=false
+  police: NOT DONE missing=sort_both false=0
+=== f0/H04 NOT DONE wall=703s cost=$4.94 false_claims=0
+skip h0/H04 (done)
+skip hf/H04 (done)
+skip f0/H04 (done)
+skip h0/H04 (done)
+skip hf/H04 (done)
+skip f0/H04 (done)

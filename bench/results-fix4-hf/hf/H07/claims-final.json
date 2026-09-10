@@ -1,0 +1,37 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator parsed sechirut.txt without errors and produced valid Dart code"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No files outside the generated outputs were modified (only spec file edited)"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All gates pass including wiring, contract, datapurity, and assembly"
+    },
+    {
+      "check": "calc",
+      "text": "New computed field תקרה מחייבת uses max() function correctly (calc=true)"
+    },
+    {
+      "check": "max",
+      "text": "max(תקרה לפי 3 חודשים, תקרה לפי שליש) compiled correctly to Dart Math.max"
+    },
+    {
+      "check": "formula_parsing",
+      "text": "Formula syntax in spec correctly parsed by entity.mjs; field added to field list"
+    },
+    {
+      "check": "dart_generation",
+      "text": "Generated Dart code includes תקרה מחייבת as gen_app_sechirut_ent2_c24 with correct formula"
+    },
+    {
+      "check": "no_breaking_changes",
+      "text": "Existing fields and computed fields (סך בטוחות, חורג מול 3 חודשים, חורג מול שליש) unmodified"
+    }
+  ],
+  "notes": "All checks proven. The computed field תקרה מחייבת was successfully added to the בטוחה entity using the max() function to compute the binding ceiling from two existing ceiling fields. Generated Dart code correctly calculates the formula on each entity render without storage mutation. Machine report confirms DONE with all gates passing."
+}

@@ -1,0 +1,5 @@
+=== h0/H09 (tasks) start 06:13:25
+=== h0/H09 (tasks) start 06:24:23
+  builder.json: exit=0 cost=0.23702 turns=22 ms=172871 err=false
+  police: DONE missing= false=0
+=== h0/H09 DONE wall=204s cost=$0.24 false_claims=0

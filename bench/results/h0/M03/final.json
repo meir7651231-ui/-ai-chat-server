@@ -1,0 +1,51 @@
+{
+ "task": "M03",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "report_text": true,
+  "report_title": true
+ },
+ "task_checks": [
+  {
+   "id": "report_text",
+   "ok": true,
+   "info": "2×",
+   "mandatory": true
+  },
+  {
+   "id": "report_title",
+   "ok": true,
+   "info": "7×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "fa0ee063c5b84020",
+ "at": "2026-09-10T04:17:21.811Z",
+ "arm": "h0",
+ "wall_s": 181,
+ "cost_usd": 0.15351499999999998,
+ "tokens": 529461,
+ "rejudged_from": "DONE"
+}

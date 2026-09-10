@@ -1,0 +1,6 @@
+ M machtzev/LEARNINGS.md
+?? "machtzev/audit/search/2026-09-10-\327\231\327\231\327\246\327\225\327\220-export-whats-8397fda2.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

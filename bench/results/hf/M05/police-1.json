@@ -1,0 +1,82 @@
+{
+ "task": "M05",
+ "ns": "peruk21",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "msg": true,
+  "title": true
+ },
+ "task_checks": [
+  {
+   "id": "msg",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "title",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Spec-to-Dart pipeline regenerated successfully without errors",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No hand-edits in generated files outside task scope",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Particle gate now recognizes message particle built from סיווג field with valid content reference",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No Hebrew text added to engine code",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Math operations in generated Dart code are valid",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Message particle תשובה added with template: קיבלתי, הסיווג: {סיווג}",
+   "check": "msg",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Particle definition correctly references סיווג field and תוכן הודעה content group",
+   "check": "title",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "bc84b3a283eac761",
+ "at": "2026-09-09T20:12:38.702Z"
+}

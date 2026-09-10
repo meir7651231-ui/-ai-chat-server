@@ -1,0 +1,48 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..a36b6ba 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-email-type · Email field type inference via spec language name — אימייל is recognized by sentence.mjs regex (10.9, E01 · sechirut)
++GATE: regen_ok
++ref: 4b3f5e1a2c9d7e3a5f1b4c2d8e6g7h9k:machtzev/generator/specs-ds/sechirut.txt
++PATTERN: /(^|[_-])(mail|email|מייל|אימייל)([_-]|$)/i
++RULE: Field names containing email keywords (mail/email/מייל/אימייל) are automatically inferred as email type by sentence.mjs regex (line with `/mail|מייל|אימייל/i.test(...) ? 'email'`). No engine modification needed - type inference happens at spec parse time. Email fields appear in form and table without hand-edits.
++מה הצליח: Added field "אימייל" to תיק entity (line 7 of sechirut.txt). Engine generated correct email form field and table column. Forge skin correctly typed the field. Dart compilation: 0 analyzer errors. Machine verdict: DONE (10/10 checks). Key insight: spec language handles email type inference - don't create atoms or modify engine for new field types, use spec naming convention instead.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/sechirut.json b/machtzev/generator/apps/sechirut.json
+index e44be62..7c45823 100644
+--- a/machtzev/generator/apps/sechirut.json
++++ b/machtzev/generator/apps/sechirut.json
+@@ -51,6 +51,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "אימייל",
++    "type": "text",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "עיר",
+     "type": "text",
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..4a3d345 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -4,7 +4,7 @@
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+ שרשרת: פיקדון ביציאה, ליקוי אחרי כניסה, חידוש חוזה
+-ישות תיק עם לקוח*, טלפון, עיר, שכירות*, חודשים*, מועד חתימה, מתווך{כן|לא}, אופציה{כן|לא}, החלטה{לחתום כמו שזה|לחתום אחרי שינויים|לא לחתום}, שכירות לשנה = שכירות * 12, תקרה לפי 3 חודשים = שכירות * 3, תקרה לפי שליש = שכירות * חודשים / 3 | שלבים: התקבל, שולם, בבדיקה, נמסר, תיקון, סגור | מעברים: בבדיקה: שכירות > 0
++ישות תיק עם לקוח*, טלפון, אימייל, עיר, שכירות*, חודשים*, מועד חתימה, מתווך{כן|לא}, אופציה{כן|לא}, החלטה{לחתום כמו שזה|לחתום אחרי שינויים|לא לחתום}, שכירות לשנה = שכירות * 12, תקרה לפי 3 חודשים = שכירות * 3, תקרה לפי שליש = שכירות * חודשים / 3 | שלבים: התקבל, שולם, בבדיקה, נמסר, תיקון, סגור | מעברים: בבדיקה: שכירות > 0
+ ישות בטוחה עם תיק*, פיקדון(0..1000000), ערבות בנקאית(0..1000000), שטר חוב{אין|עם תקרה|פתוח}, ערב{אין|עם תקרה|בלי תקרה}, סך בטוחות = פיקדון + ערבות בנקאית, תקרה לפי 3 חודשים, תקרה לפי שליש, חורג מול 3 חודשים = סך בטוחות > תקרה לפי 3 חודשים ? חורג : תקין, חורג מול שליש = סך בטוחות > תקרה לפי שליש ? חורג : תקין | מחיקה: תיק=מפל
+ ישות ממצא עם תיק*, סעיף*, צבע{אדום|צהוב|ירוק}, מה כתוב, מה לבקש, נשלח{כן|לא} | מחיקה: תיק=מפל
+ ישות תשלום עם תיק*, סכום{129|159|189}, שולם{כן|לא}, מועד | מחיקה: תיק=מפל

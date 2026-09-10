@@ -1,0 +1,80 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..def5d95 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-sum · חלקיק סך-הכל בתשלום = סכום(סכום) — spec-language sum() pattern עובד מעיצוב ללא שינוי-מנוע (10.9, sechirut · E12)
++GATE: gates_pass
++ref: machtzev/generator/specs-ds/sechirut.txt:21
++PATTERN: חלקיק <ישות>: <שם> = סכום(<שדה>)
++RULE: spec-language sum() aggregation (SPEC-LANG line 18) מייצר Dart sum correctly; particle added to תשלום screen displays total amount without engine changes or hand-edit; regen produces valid Dart with 0 compiler errors.
++מה הצליח: single-line spec addition `חלקיק תשלום: סך הכל = סכום(סכום)` generates valid output (tested: byte_identical_others ✅, regen_ok ✅, compiles ✅, sum_code 3× ✅); pattern identical to existing `הכנסה = סכום(סכום)` at line 19; no breaking changes.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-sechirut.json b/machtzev/generator/particle-plan-sechirut.json
+index aa8a58e..5d3b61f 100644
+--- a/machtzev/generator/particle-plan-sechirut.json
++++ b/machtzev/generator/particle-plan-sechirut.json
+@@ -201,6 +201,33 @@
+    "KvLine"
+   ]
+  },
++ {
++  "entity": "תשלום",
++  "name": "סך הכל",
++  "expr": "סכום(סכום)",
++  "ok": true,
++  "why": null,
++  "shape": "sum",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "שכירות לשנה",
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..3ace175 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -9,6 +9,7 @@
+ | מה לבקש | ממצא | raw | fact⇒DsChip (DsChip/DsEmpty) | DsChip |
+ | הכנסה | תשלום | sum | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | לא שולם | תשלום | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
++| סך הכל | תשלום | sum | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | שכירות לשנה | תיק | raw | fact⇒NumberStepper (NumberStepper/DsChip) | DsChip |
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..5505843 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -18,6 +18,7 @@
+ חלקיק ממצא: מה לבקש
+ חלקיק תשלום: הכנסה = סכום(סכום)
+ חלקיק תשלום: לא שולם = מונה(שולם=לא)
++חלקיק תשלום: סך הכל = סכום(סכום)
+ חלקיק תיק: שכירות לשנה
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק

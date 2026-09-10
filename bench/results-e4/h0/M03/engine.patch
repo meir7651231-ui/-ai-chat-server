@@ -1,0 +1,52 @@
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..8dfb4c9 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -44,3 +44,4 @@
+ | תיק | בקשות לשינוי | ממצא.מה לבקש | childParticle | DsChip |
+ | תיק | מה לא בדקנו | [תוכן לא נבדק] | content | DsNote |
+ | תיק | הסתייגות | [תוכן הסתייגות] | content | DsNote |
++| תיק | סיכום | [תוכן סיכום] | content | DsNote |
+diff --git a/machtzev/generator/report-plan-sechirut.json b/machtzev/generator/report-plan-sechirut.json
+index 3b397a7..4d5a10d 100644
+--- a/machtzev/generator/report-plan-sechirut.json
++++ b/machtzev/generator/report-plan-sechirut.json
+@@ -193,6 +193,19 @@
+       ]
+      }
+     ]
++   },
++   {
++    "name": "סיכום",
++    "refs": [
++     {
++      "raw": "[תוכן סיכום]",
++      "mode": "content",
++      "why": null,
++      "wired": [
++       "DsNote"
++      ]
++     }
++    ]
+    }
+   ]
+  }
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..58dc9bc 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -40,6 +40,7 @@
+ דוח תיק: מה לא בדקנו = [תוכן לא נבדק]
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
+ דוח תיק: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה
++דוח תיק: סיכום = [תוכן סיכום]
+ תוכן בדיקה [אדום]: כניסת משכיר בלי הודעה מראש
+ תוכן בדיקה [אדום]: «אין החזר פיקדון בשום מקרה»
+ תוכן בדיקה [אדום]: ויתור על דירה ראויה למגורים
+@@ -90,3 +91,6 @@
+ תוכן הודעה [לחתום אחרי שינויים]: קיבלתי את החוזה. אחתום אחרי השינויים האלה: {ממצא.מה לבקש}. הבטוחות לא יעלו על {תקרה לפי 3 חודשים} ₪ במצטבר. תשובה עד מועד החתימה.
+ תוכן הודעה [לא לחתום]: קיבלתי את החוזה. בתנאים האלה לא אחתום: {ממצא.מה לבקש}. אם זה משתנה — אשמח לדבר.
+ תוכן הודעה [לחתום כמו שזה]: קיבלתי את החוזה. אחתום כמו שזה במועד החתימה.
++תוכן סיכום: הבטוחות ייבדקו מול התקרה
++תוכן סיכום: חוזה יימסר לאחר חתימה
++תוכן סיכום: בעיות משפטיות תידונו עם עורך דין

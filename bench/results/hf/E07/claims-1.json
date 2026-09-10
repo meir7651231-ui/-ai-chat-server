@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Spec change regenerated successfully; no parser errors in generator pipeline"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other spec files or generated outputs modified; only peruk21 changes"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All 53 gates pass; no architectural violations or inconsistencies"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "No Hebrew added to engine code; all Hebrew confined to spec"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "No invalid Dart math method calls on numeric fields"
+    },
+    {
+      "check": "counter",
+      "text": "Counter particle דחופים found in px1 content with filtering by סיווג=הזמנה לוועדה"
+    }
+  ],
+  "notes": "proven — machine report confirms all checks green; counter appears on case screen with correct label and filter; no breaking changes"
+}

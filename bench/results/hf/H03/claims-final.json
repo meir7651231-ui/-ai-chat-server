@@ -1,0 +1,17 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "App was successfully regenerated with sort functionality"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All gates passed after generator changes"
+    },
+    {
+      "check": "sort_applied",
+      "text": "Table sorted by מועד (due date) field c10 with sort comparator"
+    }
+  ],
+  "notes": "proven: render-ds.mjs modified to sort table by firstDateConst field. particles.mjs modified to sort particle tables by date field. Tasks table now sorts by מועד field in gen_app_tasks_ent1.dart line 158."
+}

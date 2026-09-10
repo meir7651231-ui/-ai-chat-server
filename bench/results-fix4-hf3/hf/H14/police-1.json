@@ -1,0 +1,68 @@
+{
+ "task": "H14",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort_color": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_color",
+   "ok": true,
+   "info": "ent3",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Added '| מיון: צבע עולה' to ממצא entity definition (line 9 of sechirut.txt)",
+   "check": "spec_modified",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Generated code contains sort lambda comparing צבע enum values in order אדום, צהוב, ירוק (gen_app_sechirut_ent3.dart:159)",
+   "check": "sort_lambda_generated",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Sort array [gen_app_sechirut_ent3_c21, gen_app_sechirut_ent3_c22, gen_app_sechirut_ent3_c23] = [אדום, צהוב, ירוק] verified in gen_app_sechirut_ent3_content.dart",
+   "check": "enum_order_correct",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Generated files not edited - spec-only change via app-ds.mjs regeneration",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "f1c4385f1722ade3",
+ "at": "2026-09-10T12:37:21.747Z"
+}

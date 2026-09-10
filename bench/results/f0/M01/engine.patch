@@ -1,0 +1,176 @@
+diff --git a/machtzev/generator/apps/peruk02.json b/machtzev/generator/apps/peruk02.json
+index 21319c4..c8b7262 100644
+--- a/machtzev/generator/apps/peruk02.json
++++ b/machtzev/generator/apps/peruk02.json
+@@ -116,6 +116,10 @@
+   {
+    "name": "ממצא",
+    "slug": "app_peruk02_ent2"
++  },
++  {
++   "name": "תשלום",
++   "slug": "app_peruk02_ent3"
+   }
+  ],
+  "relations": true,
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..226618e 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -26,6 +26,33 @@
+    "DsTable"
+   ]
+  },
++ {
++  "entity": "תשלום",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "פעולה פתח תיק",
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..7f17ee8 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -3,6 +3,7 @@
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה | תשלום | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..5a561ef 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -86,7 +86,10 @@
+   "chain": [],
+   "forbidden": 5,
+   "disclaimer": true,
+-  "content": 66
++  "content": 66,
++  "extras": [
++   "תשלום"
++  ]
+  },
+  {
+   "id": 3,
+diff --git a/machtzev/generator/peruk-lang.data.json b/machtzev/generator/peruk-lang.data.json
+index 74d8d89..8ebe7a3 100644
+--- a/machtzev/generator/peruk-lang.data.json
++++ b/machtzev/generator/peruk-lang.data.json
+@@ -57,6 +57,10 @@
+   ],
+   "kill": [
+    "קריטריון"
++  ],
++  "entities": [
++   "ישויות נוספות",
++   "ישויות"
+   ]
+  },
+  "inputsHead": [
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..e2dd77c 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -152,6 +152,10 @@ export function perukToSpec(md, ns) {
+   const pairRe = new RegExp('^(.+?)\\s+(' + longest(P.oldWords) + ')\\s+' + P.vsWord + '\\s+(' + longest(P.newWords) + ')');
+   for (const sec of [blocks].filter(Boolean)) for (const raw of allText(sec)) { const m = norm(raw).replace(/^\d+[.)]\s*/, '').match(pairRe); if (!m) continue; const base = heW(m[1].replace(/\(.*?\)/g, '')).slice(-2).join(' '); if (!base) continue; const monthly = P.monthlyWords.some((w) => base.includes(w)); pairs.push({ a: `${base} ${m[2]}`, b: `${base} ${m[3]}`, factor: monthly ? 12 : 0 }); }
+   for (const pr of pairs) for (const lbl of [pr.a, pr.b]) if (!fields.some((f) => f.label === lbl)) fields.push({ label: lbl, required: false, num: true });
++  // ישויות-נוספות: סעיף «ישויות נוספות» — כל פריט-רשימה = הצהרת-ישות בדקדוק-האפיון («<שם> עם <שדות> | מחיקה: תיק=מפל»),
++  // עוברת כמות-שהיא לספק (ישות-בת של השורש) ומקבלת מסך-טבלה. מבני: הכותרת מהדאטה, השם = לפני «עם»; פריט בלי «עם» נשמט.
++  const extSec = S('entities');
++  const extras = extSec ? items(extSec.lines).map((t) => { const i = t.indexOf(` ${G.withWord} `); return i > 0 ? { name: t.slice(0, i).trim(), decl: t } : null; }).filter(Boolean) : [];
+   // החלטה: חלק-פלט עם אפשרויות קצרות ⇒ שדה-enum על השורש
+   const decisions = outputs.filter((o) => o.options.length >= P.decisionMinOptions && o.options.length <= P.decisionMaxOptions).map((o) => ({ label: o.name, enumVals: o.options.map((x) => clean(x).split(' ').slice(0, 4).join(' ')).filter(Boolean) }));
+   // ── ספק ──
+@@ -165,9 +169,11 @@ export function perukToSpec(md, ns) {
+   for (const [tgt, q] of P.questions || []) lines.push(`${G.questionWord} ${tgt}: ${q}`);   // G28 · מסך = שאלה אחת
+   lines.push(`${G.entityNouns[0]} ${root} ${G.withWord} ${rootFields.join(', ')} | ${G.stagePrefixes[0]} ${P.stages.join(', ')}`);
+   if (severity) lines.push(`${G.entityNouns[0]} ${fnd} ${G.withWord} ${P.findingFields.map((f, i) => i === 0 ? f.replace(/\*$/, '') + '*' : f).join(', ')}, ${P.severityField}{${P.severity.join('|')}} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
++  for (const e of extras) lines.push(`${G.entityNouns[0]} ${e.decl}`);
+   lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}`);
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]`);
++  for (const e of extras) lines.push(`${G.particleWord} ${e.name}: [${G.pTable[0]}]`);
+   lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${P.openAction}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pEmpty[0]}] ${P.emptyText}`);
+   const groupNames = [...new Set(content.map((c) => c.group))];
+@@ -208,7 +214,7 @@ export function perukToSpec(md, ns) {
+   const phone = P.personFields.find((f) => /טלפון/.test(f));
+   if (phone) lines.push(`${G.reportWord} ${root}: [${G.pExport[0]}] ${P.exportLabel} = ${phone.replace(/\*$/, '')}, ${P.exportGoal}`);
+   for (const c of content) lines.push(`${G.contentWord} ${c.group}${c.tag ? ` [${c.tag}]` : ''}: ${q(c.text)}`);
+-  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length };
++  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length, ...(extras.length ? { extras: extras.map((e) => e.name) } : {}) };
+   return { spec: lines.join('\n') + '\n', node, doc: d };
+ }
+ 
+diff --git a/machtzev/generator/peruks/peruk-02.md b/machtzev/generator/peruks/peruk-02.md
+index 5a21a17..b479006 100644
+--- a/machtzev/generator/peruks/peruk-02.md
++++ b/machtzev/generator/peruks/peruk-02.md
+@@ -226,4 +226,10 @@
+ מונע חצי מהתיקים המכוערים.
+ 
+ קריטריון הריגה: 20 פניות בלי תשלום, או כולם רצים לבד לבינה.
++
++---
++
++## 13. ישויות נוספות
++
++- תשלום עם תיק*, סכום*, שולם{כן|לא} | מחיקה: תיק=מפל
+ ---
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..f690341 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -5,9 +5,11 @@
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, סכום הפיקדון*, מה המשכיר אמר הודעה*, תאריך מסירת מפתח*, חוזה לפחות סעיפי בטוחה*, תיקונים*, יציאה*, פרוטוקול כניסה יציאה, תמונות כניסה ויציאה, וואטסאפ מלא עם המשכיר, קבלות על תיקונים שהוא | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ ישות ממצא עם תיק*, סעיף, מה כתוב, מה לבקש, צבע{אדום|צהוב|ירוק} | מחיקה: תיק=מפל
++ישות תשלום עם תיק*, סכום*, שולם{כן|לא} | מחיקה: תיק=מפל
+ לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
++חלקיק תשלום: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..2ab1452 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -67,7 +67,7 @@ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/gener
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+ 39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++9cea026bab4373c696d337c94d83d39eae0f5508667d0a10aa8ff4f3ac290719  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

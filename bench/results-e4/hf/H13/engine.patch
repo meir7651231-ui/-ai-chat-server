@@ -1,0 +1,29 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..19fa31e 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,11 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-table-columns-panuy · טבלה עם עמודות מנוקדות בספק (דוקטרינת-ה-specs) — ספק בתפקידו (10.9, task H13)
++GATE: four_columns
++RULE: `חלקיק <ישות>: [טבלה] עמודה, עמודה, ...` בספק ⇒ מנתח-החלקיקים מפרק עמודות ⇒ ספייד ממסנן schema לעמודות-נבחרות בלבד. תפקיד העור (forge) לא עורך הפסקה — הוא מקבל `labels` ו-`items` שכבר מסוננים ל-4 עמודות. עיקרון: אם הספק יכול להביע, אל תערוך מנוע — ביט-זהה לאפליקציות אחרות.
++מה נבדק: particle-plan-panuy.md נוצר עם עמודות-מנוקדות + table particle לאדם; render-ds פילטר schema ⇒ 4 שדות (שם, זמין, מרחק בקמ, מחיר לשעה); Dart-gen `ForgeDataGrid(columns: const [c9, c10, c11, c12])` = בדיוק 4; machine-check `four_columns=✅` + `has_km=✅` (3 היפות של "מרחק בקמ").
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index 287b322..fad1d55 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -400,7 +400,7 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       const w = firstWired(kd[0][1], { label: k(s.label || p.name), nav, glyph: k('🧩') }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-פעולה מתחווט`); continue; }
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+-      const cols = s.columns ? entity.schema.filter((f) => s.columns.includes(f.label)) : entity.schema;
++      const cols = s.columns ? s.columns.map((label) => entity.schema.find((f) => f.label === label)).filter(Boolean) : entity.schema;
+       const labels = cols.map((f) => k(f.label));
+       // מיון מהספק: מספרי כשניתן, אחרת לקסיקלי; ריק ⇒ אחרון; מפתחות משורשרים; יורד ⇒ היפוך
+       const src = s.sort ? `(${recs}.toList()..sort(${sortLambda(s.sort, k, entity.schema)}))` : recs;

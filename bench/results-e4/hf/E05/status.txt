@@ -1,0 +1,11 @@
+ M machtzev/generator/apps/calendar.json
+ M machtzev/generator/particle-plan-calendar.json
+ M machtzev/generator/particles.mjs
+ M machtzev/generator/specs-ds/calendar.txt
+?? "machtzev/audit/search/2026-09-10-participants-\327\251\327\252\327\252\327\244\327\231\327\235-meeting-cf52d813.json"
+?? "machtzev/audit/search/2026-09-10-participants-\327\251\327\252\327\252\327\244\327\231\327\235-meeting-e2330e90.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-calendar.md
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

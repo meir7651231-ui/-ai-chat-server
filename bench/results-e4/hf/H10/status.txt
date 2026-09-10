@@ -1,0 +1,27 @@
+ M machtzev/generator/app-ds.mjs
+ M machtzev/generator/app-shell.mjs
+ M machtzev/generator/atlas-data.json
+ M machtzev/generator/atlas.json
+ M machtzev/generator/particle-plan-peruk03.json
+ M machtzev/generator/particle-plan-peruk03.md
+ M machtzev/generator/particle-plan-peruk04.json
+ M machtzev/generator/particle-plan-peruk04.md
+ M machtzev/generator/particle-plan-peruk05.json
+ M machtzev/generator/particle-plan-peruk05.md
+ M machtzev/generator/particle-plan-sechirut.json
+ M machtzev/generator/particle-plan-sechirut.md
+ M machtzev/generator/specs-ds/calendar.txt
+ M machtzev/generator/specs/entity.txt
+ M machtzev/generator/specs/entry.txt
+ M machtzev/generator/specs/improv.txt
+ M machtzev/generator/specs/quest1.txt
+ M machtzev/generator/specs/quest2.txt
+ M machtzev/generator/specs/showcase.txt
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt
+?? machtzev/generator/specs/combined-maor-buildsmart1.txt
+?? machtzev/generator/specs/combined-maor-buildsmart2.txt
+?? machtzev/generator/specs/school-management1.txt
+?? machtzev/generator/specs/school-management2.txt

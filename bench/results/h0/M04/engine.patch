@@ -1,0 +1,45 @@
+diff --git a/machtzev/generator/particle-plan-peruk17.json b/machtzev/generator/particle-plan-peruk17.json
+index 1fbd18b..44a7311 100644
+--- a/machtzev/generator/particle-plan-peruk17.json
++++ b/machtzev/generator/particle-plan-peruk17.json
+@@ -199,5 +199,16 @@
+   "wired": [
+    "DsNote"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "ימים לתגובה",
++  "expr": "[מספר] 30 ימים מקבלת המכתב",
++  "ok": false,
++  "why": "מספר: שדה לא בסכמה: 30 ימים מקבלת המכתב",
++  "shape": null,
++  "ops": [],
++  "picks": [],
++  "wired": []
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk17.md b/machtzev/generator/particle-plan-peruk17.md
+index c44d091..9137167 100644
+--- a/machtzev/generator/particle-plan-peruk17.md
++++ b/machtzev/generator/particle-plan-peruk17.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| ימים לתגובה | תיק | — | מספר: שדה לא בסכמה: 30 ימים מקבלת המכתב | — |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/specs-ds/peruk17.txt b/machtzev/generator/specs-ds/peruk17.txt
+index 9284905..dfdf6a9 100644
+--- a/machtzev/generator/specs-ds/peruk17.txt
++++ b/machtzev/generator/specs-ds/peruk17.txt
+@@ -21,6 +21,7 @@
+ דוח תיק: מתי לעו״ד לחבר מגיש = [תוכן מתי לעו״ד לחבר מגיש]
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
+ דוח תיק: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה
++חלקיק תיק: ימים לתגובה = [מספר] 30 ימים מקבלת המכתב
+ תוכן מסגרת: כל גמלה טופס + מסמכים + שעון שונה
+ תוכן מסגרת: דחייה לגופה ≠ חסר מסמך
+ תוכן מסגרת: ועדה רפואית: הכנה (רשימת מסמכים + מה להביא) לא תחליף לרופא מלווה

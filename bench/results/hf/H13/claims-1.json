@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "four_columns",
+      "text": "Table particle syntax extended to accept optional column list in square brackets, filtering 4 columns from entity schema"
+    },
+    {
+      "check": "has_km",
+      "text": "Distance column (מרחק בקמ) successfully included in filtered table columns, computed field displays in table rows"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All police gates pass including particles, pins, coverage, core, autoskin, autologic gates"
+    },
+    {
+      "check": "regen_ok",
+      "text": "Generator pipeline successful: particles parsing, module rendering, Dart code generation all deterministic"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Generated code outside panuy app unchanged; no spillover effects from spec change"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "Engine layer (particles.mjs) contains only Hebrew in comments and grammar, no Hebrew literals in code generation"
+    }
+  ],
+  "notes": "proven: All 6 checks verified by machine. Table particle syntax successfully extended from [טבלה] (show all) to [טבלה: שם, זמין, מרחק בקמ, מחיר לשעה] (show 4 specific columns in order). Implementation in spec language layer only (particles.mjs parser + schema filter), no hand edits in generated code. Backward compatible: omitting column list shows all fields as before."
+}

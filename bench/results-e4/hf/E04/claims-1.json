@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "App regenerated successfully with new בוטל stage added to tasks.txt spec"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps remain byte-identical; only tasks app changed"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code passes flutter analyze with zero errors"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All registered gates pass; new stage_cancel gate confirms בוטל stage recognized"
+    },
+    {
+      "check": "stage_cancel",
+      "text": "New בוטל (cancelled) stage properly parsed and indexed as third task stage"
+    }
+  ],
+  "notes": "proven: spec change in tasks.txt line 6 added בוטל to stages list. Stage-handling atoms (ForgeStagePill, nextStage, etc.) automatically recognize new stage via data-driven spec processing. No code changes required. Machine verification DONE."
+}

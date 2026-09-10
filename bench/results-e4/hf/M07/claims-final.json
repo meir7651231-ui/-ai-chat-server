@@ -1,0 +1,13 @@
+{
+  "claims": [
+    {
+      "check": "px_counter",
+      "text": "Added particle counter for unsent findings"
+    },
+    {
+      "check": "hub_label",
+      "text": "Dashboard counters now use qualified labels when values are ambiguous"
+    }
+  ],
+  "notes": "Fixed engine render-ds.mjs line 785-788: detect duplicate values in filtered counters and set needsQualified accordingly. Now generates qualified labels (ממצא · לא, תשלום · לא) for ambiguous counters. Constants c17 and c29 now contain qualified labels directly."
+}

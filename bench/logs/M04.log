@@ -1,0 +1,39 @@
+=== h0/M04 (peruk17) start 19:12:17
+  builder.json: exit=0 cost=0.4571281000000001 turns=39 ms=395437 err=false
+  police: NOT DONE missing=gates_pass false=0
+=== h0/M04 NOT DONE wall=429s cost=$0.46 false_claims=0
+=== hf/M04 (peruk17) start 19:19:27
+  builder.json: exit=0 cost=0.9814354000000002 turns=57 ms=657150 err=false
+  police: NOT DONE missing=gates_pass,num_particle false=0
+  auditor-compile.json: exit=0 cost=0.24876840000000006 turns=19 ms=74060 err=false
+  auditor-coverage.json: exit=0 cost=0.23818000000000006 turns=18 ms=185538 err=false
+  auditor-regression.json: exit=0 cost=0.4565441 turns=33 ms=195745 err=false
+  validator.json: exit=0 cost=0.2175235 turns=14 ms=142711 err=false
+  fixer.json: exit=0 cost=0.6914254 turns=48 ms=385288 err=false
+  police: NOT DONE missing=byte_identical_others,gates_pass,num_particle false=1
+  police: NOT DONE missing=byte_identical_others,gates_pass,num_particle false=1
+=== hf/M04 NOT DONE wall=1484s cost=$2.83 false_claims=1
+=== f0/M04 (peruk17) start 19:44:12
+  builder.json: exit=0 cost=4.311942749999999 turns=57 ms=543058 err=false
+  police: DONE missing= false=0
+=== f0/M04 DONE wall=577s cost=$4.31 false_claims=0
+skip h0/M04 (done)
+skip hf/M04 (done)
+skip f0/M04 (done)
+skip h0/M04 (done)
+skip hf/M04 (done)
+skip f0/M04 (done)
+=== h0/M04 (peruk17) start 04:27:08
+  builder.json: exit=0 cost=0.4496601000000001 turns=35 ms=485370 err=false
+  police: NOT DONE missing=gates_pass,num_particle,title false=0
+=== h0/M04 NOT DONE wall=516s cost=$0.45 false_claims=0
+=== hf/M04 (peruk17) start 04:35:44
+  builder.json: exit=0 cost=0.6380292999999996 turns=47 ms=331257 err=false
+  police: DONE missing= false=0
+  auditor-regression.json: exit=0 cost=0.2499885 turns=27 ms=103795 err=false
+  auditor-compile.json: exit=0 cost=0.361503 turns=23 ms=140587 err=false
+  auditor-coverage.json: exit=0 cost=0.40244510000000006 turns=31 ms=174353 err=true
+  validator.json: exit=0 cost=0.23771010000000004 turns=21 ms=83464 err=false
+  fixer: skipped (FIX-LIST none)
+=== hf/M04 DONE wall=625s cost=$1.89 false_claims=0
+skip f0/M04 (done)

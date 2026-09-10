@@ -1,0 +1,56 @@
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..0329828 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -9,6 +9,8 @@ import path from 'node:path';
+ import { stem } from './match.mjs';
+ import { L, T } from './chrome.mjs';
+ import * as R from '../root.mjs';
++import fs0 from 'node:fs';
++const SL0 = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
+ 
+ const ROOT = R.ROOT;
+ const HERE = R.GEN_DIR;
+@@ -537,6 +539,11 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const kpiStrip = isPaper() ? '' : `AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: ${cTitle}, value: appStore.count(${SK}).toString(), sub: ${k(L.totalRecords)}, glyph: ${k('🗂️')}))${kpiNumTiles ? ', ' + kpiNumTiles : ''}]))),`;
+   const listRead0 = hasScope ? `appStore.scoped(${SK}, _rlsScope[_rlsRole])` : `appStore.records(${SK})`;
+   const listRead = `(widget.scopeId == null ? ${listRead0} : ${listRead0}.where((r) => (r[widget.scopeField ?? ''] ?? '') == widget.scopeId).toList())`;   // G26 · היקף-הורה
++
++  // find time field for sorting meetings by time (שעה)
++  const timeFieldLabel = schema.find((f) => String(f.label).split(/\s+/).some((w) => (SL0.typeTime || []).includes(w)))?.label;
++  const timeFieldConst = timeFieldLabel ? k(timeFieldLabel) : null;
++  const sortByTime = timeFieldConst ? `.sort((a, b) => (a[${timeFieldConst}] ?? '').compareTo(b[${timeFieldConst}] ?? ''))` : '';
+   const cardSig = rlsActive ? 'Widget _card(Map<String, String> r, Set<int> hidden) {' : 'Widget _card(Map<String, String> r) {';
+   const cardHiddenArg = rlsActive ? ', hidden: hidden' : '';
+   const cardCall = rlsActive ? '_card(rs[i], _rlsHiddenSet)' : '_card(rs[i])';
+@@ -546,7 +553,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     final hid = _rlsHiddenSet;
+     final labels = const [${labelsList}];
+     b.writeln([for (var i = 0; i < labels.length; i++) if (!hid.contains(i)) labels[i]].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
+-    for (final r in ${listRead}) {
++    for (final r in ${listRead}${sortByTime}) {
+       final vals = [${recValues}];
+       b.writeln([for (var i = 0; i < vals.length; i++) if (!hid.contains(i)) vals[i]].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+     }
+@@ -555,7 +562,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     : `  String _csv() {
+     final b = StringBuffer();
+     b.writeln(const [${labelsList}].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
+-    for (final r in appStore.records(${SK})) {
++    for (final r in appStore.records(${SK})${sortByTime}) {
+       b.writeln([${recValues}].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+     }
+     return b.toString();
+@@ -724,10 +731,10 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
+           AnimatedBuilder(
+             animation: appStore,
+             builder: (context, _) {
+-              final all = ${listRead};
++              final all = ${listRead}${sortByTime};
+               if (all.isEmpty) return const DsEmpty(label: ${cEmpty});
+               final q = _q.trim().toLowerCase();
+-              final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
++              final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList()${sortByTime};
+               ${boardBranch}return Column(children: [
+                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
+                 if (rs.isEmpty) const DsEmpty(label: ${cNoMatch}),

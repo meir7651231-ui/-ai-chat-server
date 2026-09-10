@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "App regenerated successfully - generator processed message particle specification"
+    },
+    {
+      "check": "particle_in_generated_code",
+      "text": "Message particle 'תשובה' confirmed in particle-plan-peruk21.md: '| תשובה | תיק | message |...| ForgeMustChip + DsNote |'"
+    },
+    {
+      "check": "dart_widget_generated",
+      "text": "DsNote widget created in gen_app_peruk21_home.dart with dynamic message construction from field value"
+    },
+    {
+      "check": "template_processed",
+      "text": "Message template 'קיבלתי, הסיווג: {ערך}' correctly parsed - field reference {ערך} mapped to appStore lookup"
+    },
+    {
+      "check": "no_regressions",
+      "text": "Other 27 peruk applications unchanged - only peruk21 generated files modified"
+    },
+    {
+      "check": "spec_syntax_valid",
+      "text": "Syntax follows SPEC-LANG.md line 20 message particle pattern: [הודעה] <field> = [תוכן <group>]"
+    },
+    {
+      "check": "gates_pass",
+      "text": "Peruk gate completed successfully: peruk-21.md regenerated with ✓ status"
+    }
+  ],
+  "notes": "proven: Message particle 'תשובה' successfully added to peruk21 case screen. Verified in generated Dart code (DsNote widget) and particle plan. Template correctly references classification field with {ערך} substitution. No breaking changes to other applications. Task complete."
+}

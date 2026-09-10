@@ -1,0 +1,9 @@
+{
+ "errors": 2,
+ "ns_errors": 2,
+ "gen_exit": 0,
+ "sample": [
+  "error • The argument type 'List<Map<String, String>>' can't be assigned to the parameter type 'List<List<String>>?'.  • lib/genesis/dart-gen-bs/gen_app_tasks_ent1.dart:159:183 • argument_type_not_assi",
+  "error • This expression has a type of 'void' so its value can't be used. Try checking to see if you're using the correct API; there might be a function or call that returns void you didn't expect. Als"
+ ]
+}

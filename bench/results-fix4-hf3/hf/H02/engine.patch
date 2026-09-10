@@ -1,0 +1,59 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..16cb43d 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-sorting-sechirut · טבלה עם מיון בספק = טיפול מלא בחלקיק-render (sorting is handled by the engine, not by hand-code) (10.9, BUILDER·H02)
++GATE: sort + desc
++ANTIPATTERN: [טבלה] בלבד בחלקיק — זה טבלה בלי סדר קבוע
++RULE: טבלה שדורשת סדר קבוע מוצהרת ב-spec כ-`[טבלה] | מיון: <שדה> עולה|יורד|מהנמוך|מהגבוה, <שדה2>` (SPEC-LANG.md line 17); המנוע יעטוף את הפלט (appStore.records) עם `sort()` כך שהערך-ראשון ברשימה הם הגבוהים/הנמוכים, וערך-ריק אחרון; מיון-מספרי מתגלה עם `num.tryParse()` ורק אז משווה בנומריה; דיור הפוך (מהגבוה = highest first) מהופך עם `return -c`.
++מה נכשל / הוכח: סחירות-תיק רצו מיון-ברירת-מחדל ב-highest rent = שדה שכירות בירידה. הפתרון לא בקוד-יד (`sort()` ידי עובד) אלא בשפת-הספק (spec-line 22 משתנה) ⇒ regen ⇒ המנוע מחליט מה-to-sort עם מיון-מתבחן (numerical ⇒ numeric, string ⇒ lexical).
++refs: machtzev/generator/specs-ds/sechirut.txt:22 (before+after), new/dart-gen-bs/gen_app_sechirut_px1.dart:34 (generated sort with -c reversal)
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-sechirut.json b/machtzev/generator/particle-plan-sechirut.json
+index aa8a58e..b7c86fb 100644
+--- a/machtzev/generator/particle-plan-sechirut.json
++++ b/machtzev/generator/particle-plan-sechirut.json
+@@ -230,8 +230,8 @@
+  },
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה מיון שכירות יורד",
++  "expr": "[טבלה] | מיון: שכירות יורד",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..87b6842 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -10,7 +10,7 @@
+ | הכנסה | תשלום | sum | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | לא שולם | תשלום | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | שכירות לשנה | תיק | raw | fact⇒NumberStepper (NumberStepper/DsChip) | DsChip |
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה מיון שכירות יורד | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין ממצאים עדיין | ממצא | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | החלטה | תיק | partition | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsSection + DsNote |
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..b1a417c 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -19,7 +19,7 @@
+ חלקיק תשלום: הכנסה = סכום(סכום)
+ חלקיק תשלום: לא שולם = מונה(שולם=לא)
+ חלקיק תיק: שכירות לשנה
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] | מיון: שכירות יורד
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק ממצא: [ריק] אין ממצאים עדיין
+ חלקיק תיק: החלטה

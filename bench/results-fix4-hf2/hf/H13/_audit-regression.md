@@ -1,0 +1,3 @@
+new/dart-data-bs/auto/gen_app_panuy_px1_content.dart:3 · Table columns in wrong order: spec (panuy.txt line 6) says "[טבלה] שם, זמין, מרחק בקמ, מחיר לשעה" but generated constants have c3='מחיר לשעה' and c4='מרחק בקמ' (swapped) — task requires "in that order" · P1 wrong result · Swap c3 and c4: change c3 to 'מרחק בקמ' and c4 to 'מחיר לשעה'
+
+Verified correct: Table cell indexing (px1.dart:34) uses matching c1-c4 columns with c5-c8 data values; no state-leakage to other apps (sechirut file changes are normal constant renumbering); four-column count correct; spec syntax correctly implemented per SPEC-LANG.md line 17. Cannot verify: Flutter rendering (Dart not available).

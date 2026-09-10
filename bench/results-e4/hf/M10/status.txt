@@ -1,0 +1,8 @@
+ M machtzev/generator/apps/calendar.json
+ M machtzev/generator/specs-ds/calendar.txt
+?? "machtzev/audit/search/2026-09-10-\327\236\327\251\327\232-\327\223\327\247\327\225\327\252-\327\242\327\225\327\252-71c27ded.json"
+?? "machtzev/audit/search/2026-09-10-\327\236\327\251\327\232-\327\223\327\247\327\225\327\252-\327\242\327\225\327\252-7741862c.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

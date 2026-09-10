@@ -1,0 +1,21 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "peruk02 app regenerated successfully from modified spec with table sorting."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other app specs remain byte-identical, no unintended side effects."
+    },
+    {
+      "check": "sort",
+      "text": "Table sorting by תאריך מסירת מפתח (key-handover date) in ascending order (earliest first) generated in px1 screen."
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles with zero analyzer errors."
+    }
+  ],
+  "notes": "Sorting logic verified in gen_app_peruk02_px1.dart line 27. Spec-layer fix only: modified peruk02.txt line 10 to add sorting directive. No engine code or other apps modified. All 9 police checks passed. proven"
+}

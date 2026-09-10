@@ -1,0 +1,85 @@
+{
+ "task": "M03",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "report_text": true,
+  "report_title": true
+ },
+ "task_checks": [
+  {
+   "id": "report_text",
+   "ok": true,
+   "info": "2×",
+   "mandatory": true
+  },
+  {
+   "id": "report_title",
+   "ok": true,
+   "info": "5×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "sechirut.txt regenerates without errors; generator produces valid app structure with 19/19 particles wired and 53 content items (3 new סיכום items added).",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps remain byte-identical; only sechirut spec-ds output changed.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All gates pass; no new thresholds or rules required registration.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Dart compilation succeeds; analyzer errors total=0, in-app=0.",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Case report (דוח תיק) section סיכום successfully references content group [תוכן סיכום] with 3 items.",
+   "check": "report_text",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Third content line matches exactly: הבטוחות ייבדקו מול התקרה (verified via grep).",
+   "check": "content_exact_match",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "f9c7c837f50f8db2",
+ "at": "2026-09-10T14:55:30.310Z"
+}

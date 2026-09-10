@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator pipeline completed successfully after adding computed field"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps remain unchanged; only panuy.txt and its outputs modified"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code passes flutter analyze with zero errors"
+    },
+    {
+      "check": "calc",
+      "text": "New computed field מרחק אבסולוטי registered as 1 calculation in app"
+    },
+    {
+      "check": "abs",
+      "text": "abs() function called exactly once for the new field"
+    }
+  ],
+  "notes": "proven: Added computed field מרחק אבסולוטי = abs(הפרש רוחב) to panuy.txt line 4. Field placed after הפרש אורך for logical grouping with difference calculations. All checks pass, no breakage, Dart compiles cleanly."
+}

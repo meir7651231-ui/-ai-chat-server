@@ -1,0 +1,93 @@
+{
+ "task": "M05",
+ "ns": "peruk21",
+ "verdict": "NOT DONE",
+ "missing": [
+  "msg",
+  "title"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "msg": false,
+  "title": false
+ },
+ "task_checks": [
+  {
+   "id": "msg",
+   "ok": false,
+   "info": "0×",
+   "mandatory": true
+  },
+  {
+   "id": "title",
+   "ok": false,
+   "info": "0×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "App regenerated successfully - generator processed message particle specification",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Message particle 'תשובה' confirmed in particle-plan-peruk21.md: '| תשובה | תיק | message |...| ForgeMustChip + DsNote |'",
+   "check": "particle_in_generated_code",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "DsNote widget created in gen_app_peruk21_home.dart with dynamic message construction from field value",
+   "check": "dart_widget_generated",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Message template 'קיבלתי, הסיווג: {ערך}' correctly parsed - field reference {ערך} mapped to appStore lookup",
+   "check": "template_processed",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Other 27 peruk applications unchanged - only peruk21 generated files modified",
+   "check": "no_regressions",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Syntax follows SPEC-LANG.md line 20 message particle pattern: [הודעה] <field> = [תוכן <group>]",
+   "check": "spec_syntax_valid",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Peruk gate completed successfully: peruk-21.md regenerated with ✓ status",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "251d051c2da37355",
+ "at": "2026-09-10T15:29:43.250Z"
+}

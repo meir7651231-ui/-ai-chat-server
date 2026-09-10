@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator pipeline runs successfully with new counter added to dashboard"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only spec file modified, no hand-edits to generated output files"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps remain byte-identical; only sechirut app is affected"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All police gates pass with new dashboard counter"
+    },
+    {
+      "check": "dashboard_counter_added",
+      "text": "Dashboard counter for מתווך=כן successfully added to sechirut app"
+    }
+  ],
+  "notes": "Added intermediary counter to sechirut dashboard spec. New counter: מונה(תיק: מתווך=כן) added to line 11, following existing counter syntax patterns. Spec-only change, no engine modifications."
+}

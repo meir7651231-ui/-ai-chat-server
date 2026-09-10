@@ -1,0 +1,39 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..a5e1d20 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -848,3 +848,10 @@ GATE: balagan
+ GATE: balagan
+ **מה קרה:** אחרי G29 התשובה ישבה עמוק: לשונית ⇒ שורה ⇒ דוח ⇒ נוסח ⇒ שלח = 5 הקשות. כלל-היעד T3 (≤2, אפס-הקלדה) לא ייסגר "בעיצוב" אלא בהעברת הפעולה למסך-הראשון. **הלקח:** (1) **«היום» = מסך הפעולה** (`renderHome`, נייר): לכל רשומה-פתוחה (שלב < אחרון) כרטיס אחד — משפט בגוף-ראשון (`homeOne/homeMany/homeNone`) · בורר-הנוסחים של חלקיק-ההודעה (אותו `particleWidgets`, `recs=[r]`) · שלח (אותו `reportText`+מנוע-קישור של הדוח, `export.linkRaw` ממופה-מחדש ל-k של המסך — קבועי-הדוח אינם גלויים ממסך אחר) · פתח. הקשות: נוסח (1) + שלח (2). (2) **יצירה = טקסט בלבד** (`DsQuickAdd`: Enter ⇒ `appStore.add` עם שדה-המתאר) — הטופס נשאר ל«פרטים». (3) **מקלדת = חוזה** (`CallbackShortcuts`: A/T/I · Ctrl/Cmd+K ⇒ `DsPalette` על רשומות+פעולות; `Focus(autofocus)`). (4) **אפס-הגדרות = main פותח בשלד** (בדיקה, לא הבטחה). (5) **השער סופר בפלט**: T3 = «היום» מכיל בורר-נוסחים (אם לדוח יש) + `_send` והוא הלשונית הראשונה; D2 = DsQuickAdd ברשימה; D3/D4 = הקיצורים+הפלטה בשלד; D10 = `home: ShellScreen`. (6) משתנה שהוגדר בבלוק (`plan`/`pents` בתוך if) אינו זמין לשלד — חשיפה מפורשת (`planAll`), לא העתקה. (7) **שער-cover רגיש לאוצר-המילים**: כותרת-עברית עשירה לאטום-DS חדש ("רשומות · פעולות · בחירה · הקשה") שינתה את משקלי-ה-IDF של האחזור ⇒ הזהב של `identity` (MediaRow) נפל מ-top-3 (29⇒28). אטום-כרום-DS שאינו נבחר-בחיפוש מקבל כותרת קצרה (שם + אנגלית) — לא לתאר במילים שהן מטרות-זהב של אופים אחרים; הראיה = `cover.mjs --gate` אחרי כל אטום חדש.
+ 
++
++## L2026-09-09-entity-stages-generic · אטום-שלבים בישות נפרש מדקדוק-הספק בלא-הנחות על מספר-שלבים; שינוי ספק בישות קיימת מעדכן את אינדקס-הדאטה (E04)
++GATE: stage_cancel
++ref: machtzev/generator/specs-ds/tasks.txt:line 6
++ANTIPATTERN: \| שלבים: [^|]+$
++RULE: דקדוק-ספק `| שלבים: X, Y, Z` נפרש ברקורסיה בלי הנחה על סדר/ספירה; סדר-רלוונטי לBreadcrumbTrail וסדר-הזרימה (פתוח→נעשה→בוטל קצרה; בוטל, נעשה, פתוח = סדר-פנימי הפוך). עדכון-ספק משימה "שלבים: פתוח, נעשה, בוטל" ⇒ apps/tasks.json + gen_app_tasks_*.dart שלוקחים את 3 השלבים ישירות מ-parsed-stage array. אין טבלה hardcoded ל-2 שלבים; אין בדיקה-מדוקלה.
++מה התגלה: משימה היתה בעלת 2 שלבים. הוספת בוטל כשלישי נכללה אוטומטית בפלט-המנוע; stage_cancel gate ניצח (1×). תיקיון-מנוע שלא היה נדרש: דקדוק ישות בentity.mjs (שורה 108-110) כללי לכל יישות, אין hardcoding של שלבים בקוד-צנרת. החלטה-עיצוב: "סדר משמעותי" (פתוח→דון→ביטול) מעדיף על אלפביתי, משום שה-UI מציג את הסדר כתהליך.
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..ef673d1 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -27,7 +27,8 @@
+   "descField": "מה",
+   "stages": [
+    "פתוח",
+-   "נעשה"
++   "נעשה",
++   "בוטל"
+   ],
+   "fields": [
+    {
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..a51d0e3 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה, בוטל

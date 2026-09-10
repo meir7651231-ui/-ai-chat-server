@@ -1,0 +1,25 @@
+=== h0/E08 (sechirut) start 21:07:30
+  builder.json: exit=0 cost=0.1250209 turns=7 ms=34845 err=false
+  police: NOT DONE missing=hub_label,hub_where false=0
+=== h0/E08 NOT DONE wall=70s cost=$0.13 false_claims=0
+=== hf/E08 (sechirut) start 21:08:40
+  builder.json: exit=0 cost=0.7675881000000001 turns=58 ms=707653 err=false
+  police: NOT DONE missing=hub_label,hub_where false=2
+  auditor-compile.json: exit=0 cost=0.2457984 turns=18 ms=93181 err=false
+  auditor-coverage.json: exit=0 cost=0.4167068 turns=22 ms=103548 err=false
+  auditor-regression.json: exit=0 cost=0.40162620000000004 turns=32 ms=145346 err=false
+  validator.json: exit=0 cost=0.1768832 turns=15 ms=77651 err=false
+  fixer.json: exit=0 cost=0.42686290000000005 turns=32 ms=345624 err=false
+  police: NOT DONE missing=hub_label,hub_where false=2
+  police: NOT DONE missing=hub_label,hub_where false=2
+=== hf/E08 NOT DONE wall=1377s cost=$2.44 false_claims=2
+=== f0/E08 (sechirut) start 21:31:38
+  builder.json: exit=0 cost=2.10499625 turns=19 ms=252392 err=false
+  police: NOT DONE missing=hub_label,hub_where false=0
+=== f0/E08 NOT DONE wall=287s cost=$2.10 false_claims=0
+skip h0/E08 (done)
+skip hf/E08 (done)
+skip f0/E08 (done)
+skip h0/E08 (done)
+skip hf/E08 (done)
+skip f0/E08 (done)

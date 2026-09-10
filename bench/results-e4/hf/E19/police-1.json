@@ -1,0 +1,83 @@
+{
+ "task": "E19",
+ "ns": "peruk25",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "dash_counter": true
+ },
+ "task_checks": [
+  {
+   "id": "dash_counter",
+   "ok": true,
+   "info": "gen_app_peruk25_scr2_content.dart",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "peruk25 app regenerated successfully using app-ds.mjs",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps remain byte-identical; no unintended side effects",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No orphan files generated; --name peruk25 used correctly",
+   "check": "no_orphans",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Dashboard counter added for סיווג=דגל מוגן found in gen_app_peruk25_scr2_content.dart",
+   "check": "dash_counter",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated gen_app_peruk25_scr2.dart line 19 contains both counters: total count via appStore.count() and filtered count via .where((r) => r[סיווג]=דגל מוגן)",
+   "check": "dart_counter_logic",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Modified peruk25.txt line 7 from 'לוח בקרה עם מונה(תיק)' to 'לוח בקרה עם מונה(תיק), מונה(תיק: סיווג=דגל מוגן)' following SPEC-LANG.md pattern",
+   "check": "counter_syntax",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "סיווג field exists in תיק entity with value דגל מוגן confirmed in peruk25.txt line 6",
+   "check": "field_validation",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "b96347e3f3bc9f15",
+ "at": "2026-09-10T18:49:03.090Z"
+}

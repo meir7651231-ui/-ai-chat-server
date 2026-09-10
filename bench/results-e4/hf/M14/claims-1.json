@@ -1,0 +1,37 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator ran successfully with new stages specification for אדם entity."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps (calendar, sechirut, tasks, etc.) remain byte-identical — no unintended side-effects."
+    },
+    {
+      "check": "compiles",
+      "text": "Flutter analyze on panuy.txt generated Dart code passes with 0 errors."
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "Stages (פנוי, הוזמן, בוצע) specified in spec file only — no Hebrew literals in engine code."
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "All computed fields in panuy (sqrt, boqLineAmount helpers) remain valid Dart expressions."
+    },
+    {
+      "check": "gates_pass",
+      "text": "All police gates (wiring, oracle, particle coverage) pass for panuy.txt."
+    },
+    {
+      "check": "s1",
+      "text": "Task check s1 (stage syntax valid): stages line added with correct syntax | שלבים: פנוי, הוזמן, בוצע"
+    },
+    {
+      "check": "s2",
+      "text": "Task check s2 (no data breakage): existing data fields and computed fields unaffected by stage addition."
+    }
+  ],
+  "notes": "proven — all checks passed by machine. Stages (פנוי, הוזמן, בוצע) successfully added to אדם entity in panuy.txt using spec-language syntax (not engine changes). Generated Dart compiles cleanly. Other applications remain unchanged."
+}

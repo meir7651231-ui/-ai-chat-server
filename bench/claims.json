@@ -1,0 +1,5 @@
+{
+  "byte_identical_others": "Only calendar app has sort code; other apps' shells unchanged functionally (type check only)",
+  "no_hebrew_in_engine": "Removed Hebrew literal includes check, using f.type === 'time' only",
+  "compiles": "All Dart code valid with time sort _cmpTime helper in generated code"
+}

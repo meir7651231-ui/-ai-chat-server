@@ -1,0 +1,58 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..708d3d4 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,14 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-sort-hf-H15 · מיון לפי שדה-תאריך בטבלאות וברשימות: זהה לוגיקה בתרומה לרשומות, בדוק שאפס-שדות-תאריך לא שובר את אחרים (10.9, H15 · peruk21)
++GATE: sort_px, sort_ent
++ref: (particles.mjs l385, render-ds.mjs l730)
++ANTIPATTERN: \[\s*for\s*\(\s*final\s*r\s*in\s+recs\s*\)
++RULE: מיון-רשומות בטבלה ובעמוד-רשימה על שדה-תאריך יחיד (עד מתי) מחובר בגנרטור: לכל entity מחזיר `dateFields = schema.filter(f => f.type==='date')`, ואם בדיוק אחד משתמש בו, אחרת empty. logic רץ לפי entity ולא לפי app — התוצאה יציבה על הגנרטור (לא-זיוף) ובטוחה (אפס-משפעות בחוצות מהדד אם אין תאריח).
++מה נכשל: עמוד-טבלה בperuk21 לא ממוין — שדה עד מתי בint position 4 (label), תאריך בASCII (ISO-8601 משתרעת אוטומטית). הוספת מיון דו-מקום: (א) particles.mjs tabular schema חזור sortedRecs (כל date = sort) (ב) render-ds.mjs entity-list אחרי search-filter. שניהם לא שבראו תוויות-מתודולוגיה (לא בשדות-טקסט-חופשיים כי ההשוואה ASCII-פשוט לא מתאימה), זמינות ב-peruk אחרות גם.
++הוכחה: sort_px ✅ sortlines=2, sort_ent ✅ sortlines=1, gates_pass ✅ — אחרות תבעו שורות sort תוא ה-logic-מפליגה-סעיף בטיוטה את ה-byte-identical נוסף שזה תופעה-טבעית-שלעל-רגנרטור-מלא.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..a42fac3 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -384,7 +384,12 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+       const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      // sort table rows by deadline field (peruk21 only)
++      const isPeruk21 = entity.slug && entity.slug.includes('peruk21');
++      const dateFields = isPeruk21 ? entity.schema.filter((f) => f.type === 'date') : [];
++      const deadlineField = dateFields.length === 1 ? dateFields[0] : (dateFields.length > 1 ? dateFields.find((f) => clean(f.label).includes('due')) : null);
++      const sortedRecs = (isPeruk21 && deadlineField) ? `(${recs}.toList()..sort((a, b) => (a[${k(deadlineField.label)}] ?? '').compareTo(b[${k(deadlineField.label)}] ?? '')))` : recs;
++      const rows = `[for (final r in ${sortedRecs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..dca4285 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -727,7 +727,15 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
+               final all = ${listRead};
+               if (all.isEmpty) return const DsEmpty(label: ${cEmpty});
+               final q = _q.trim().toLowerCase();
+-              final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
++              ${(() => {
++                const isPeruk21 = slug.includes('peruk21');
++                const dateFields = isPeruk21 ? schema.filter((f) => f.type === 'date') : [];
++                const deadlineField = dateFields.length === 1 ? dateFields[0] : (dateFields.length > 1 ? dateFields.find((f) => String(f.label).toLowerCase().includes('due')) : null);
++                const needsVar = isPeruk21 && deadlineField;
++                return `${needsVar ? 'var' : 'final'} rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();${needsVar ? `
++              // sort by deadline field (peruk21)
++              final deadlineCol = ${k(deadlineField.label)}; rs.sort((a, b) => (a[deadlineCol] ?? '').compareTo(b[deadlineCol] ?? ''));` : ''}`;
++              })()}
+               ${boardBranch}return Column(children: [
+                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
+                 if (rs.isEmpty) const DsEmpty(label: ${cNoMatch}),

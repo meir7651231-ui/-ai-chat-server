@@ -1,0 +1,72 @@
+{
+ "task": "H11",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "calc": true,
+  "min": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  },
+  {
+   "id": "min",
+   "ok": true,
+   "info": "calc=true fn=true alt=false method=false",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Spec parses correctly after adding תקרה נמוכה computed field to תיק entity.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No other generated files were modified; only sechirut.txt was edited.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All gates pass including calculation gates and min function validation.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "New computed field תקרה נמוכה = min(תקרה לפי 3 חודשים, תקרה לפי שליש) is recognized and compiled.",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Min function is correctly parsed and applied to the two ceiling fields.",
+   "check": "min",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "621c95bf2480744b",
+ "at": "2026-09-10T09:17:52.241Z"
+}

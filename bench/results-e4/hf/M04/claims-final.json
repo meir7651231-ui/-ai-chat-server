@@ -1,0 +1,13 @@
+{
+  "claims": [
+    {
+      "check": "num_particle",
+      "text": "30"
+    },
+    {
+      "check": "title",
+      "text": "ימים לתגובה"
+    }
+  ],
+  "notes": "Verified: [מספר] particle added with numeric value 30"
+}

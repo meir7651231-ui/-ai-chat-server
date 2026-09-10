@@ -1,0 +1,89 @@
+{
+ "task": "H07",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "calc": true,
+  "max": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  },
+  {
+   "id": "max",
+   "ok": true,
+   "info": "calc=true fn=true alt=false method=false",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator ran successfully with sechirut.txt containing new computed field תקרה מחייבת = max(תקרה לפי 3 חודשים, תקרה לפי שליש)",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps remain byte-identical; only sechirut app was modified",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "max() function correctly compiled into Dart; calc=true fn=true indicating computed field with function",
+   "check": "max",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No orphaned generated files; all outputs properly wired to render-ds layer",
+   "check": "no_orphans",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All 53 gates passed; no violations of spec-lang rules or protocol constraints",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Flutter analyze: 0 errors; Dart math functions (max) correctly mapped to top-level dart:math",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "1acfb98b49bc5c36",
+ "at": "2026-09-10T12:07:19.937Z",
+ "arm": "hf",
+ "wall_s": 559,
+ "cost_usd": 1.6515495,
+ "tokens": 6304978
+}

@@ -1,0 +1,9 @@
+=== hf/H06 (peruk12) start 10:43:22
+  builder.json: exit=0 cost=0.3867791 turns=28 ms=202465 err=false
+  police: DONE missing= false=0
+  auditor-compile.json: exit=0 cost=0.22567510000000002 turns=16 ms=84796 err=false
+  auditor-regression.json: exit=0 cost=0.270385 turns=18 ms=109551 err=false
+  auditor-coverage.json: exit=0 cost=0.2780758 turns=17 ms=138193 err=false
+  validator.json: exit=0 cost=0.16572789999999998 turns=16 ms=66036 err=false
+  fixer: skipped (FIX-LIST none)
+=== hf/H06 DONE wall=453s cost=$1.33 false_claims=0

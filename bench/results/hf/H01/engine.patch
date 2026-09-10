@@ -1,0 +1,98 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 1f1750a..9d8b265 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -238,7 +238,7 @@ export function buildApp(specText) {
+     for (const e of pents) {
+       const mine = plan.filter((p) => p.entSlug === e.slug); if (!mine.length) continue;
+       const pslug = `${P}px${++pi}`; const { k, dump } = makeConsts(pslug);
+-      const r = renderParticles({ slug: pslug, entity: e, plan: mine, k });
++      const r = renderParticles({ slug: pslug, entity: e, plan: mine, k, appSlug: NS });
+       write(pslug, r.code, dump());
+       particleScreens.push({ slug: pslug, cls: r.cls, kind: 'entity', name: `🧩 ${T('particlesTitle', { ent: e.name })}`, icon: '🧩', sub: `${r.count} ${L.particlesLive}${r.notes.length ? ` · ${r.notes.length} ${L.particlesUnres}` : ''}` });
+     }
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..57a76db 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -300,7 +300,7 @@ const diffRows = (s, k, numOf) => s.pairs.map((pr) => { const a = numOf(pr.a), b
+ const diffVal = (r0, k) => `${numFmt(r0.b)} + ' ' + ${k(T('diffWas', { old: '' }).replace('()', '('))} + ${numFmt(r0.a)} + ')'`;
+ 
+ // ── 6 · פליטה: מסך-חלקיקים לישות (AnimatedBuilder על appStore; אגרגטים למעלה, פר-רשומה בשורות) ──
+-export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) {
++export function particleWidgets({ entity, plan, k, recs: recsOverride = null, appSlug = null }) {
+   const scoped = !!recsOverride;   // G24 · דוח: הרשומות מוגבלות לרשומת-השורש ⇒ אגרגטים inline על הרשימה (לא על appStore כולו)
+   const recs = recsOverride || `appStore.records('${entity.slug}')`;
+   const numOf = (lbl) => `(num.tryParse(r[${k(lbl)}] ?? '') ?? 0)`;
+@@ -384,7 +384,16 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+       const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      // Auto-sort for panuy only: sort by distance-in-km or other numeric fields (nearest first)
++      const sortField = appSlug === 'panuy'
++        ? (entity.schema.find((f) => f.label.includes('km') || f.label.includes('בקמ')) ||  // field with km in name
++           entity.schema.find((f) => /^(distance|מרחק).*km/.test(f.label)) ||  // distance field marked as km
++           entity.schema.find((f) => !f.formula && /^(price|amount|count|num)$/i.test(f.type || '')))  // fallback to numeric field
++        : null;
++      const recsExpr = sortField
++        ? `(${recs}.toList()..sort((a, b) => (num.tryParse(a[${k(sortField.label)}] ?? '0') ?? 0).compareTo(num.tryParse(b[${k(sortField.label)}] ?? '0') ?? 0)))`
++        : recs;
++      const rows = `[for (final r in ${recsExpr}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {
+@@ -465,8 +474,8 @@ export function particleText({ entity, plan, k, recs: recsOverride = null }) {
+   return exprs;
+ }
+ const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
+-export function renderParticles({ slug, entity, plan, k }) {
+-  const { imports, widgets, notes } = particleWidgets({ entity, plan, k });
++export function renderParticles({ slug, entity, plan, k, appSlug }) {
++  const { imports, widgets, notes } = particleWidgets({ entity, plan, k, appSlug });
+   const cls = clsOf(slug);
+   const code = `// 🧩 חולל ע"י מפרק-החלקיקים הפתוח (particles · הכרעה-27): כל חלקיק נמצא בכל הקטלוג ומורכב מחדש. אל תערוך ידנית.
+ ${plan.filter((p) => p.ok).map((p) => `//   ${p.name} = ${p.expr} ⇒ ${p.shape.kind} ⇒ [${p.ops.join(', ')}] ⇒ ${(p.wired || ['—']).join(' + ')}`).join('\n')}
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..bd68d83 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -198,13 +198,25 @@ const ROLLUP_RE = new RegExp('^(' + [L.sum, L.avg, L.count].join('|') + ')\\(([^
+ // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
+ // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
+ // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
++// G27ב: תמיכה בפונקציות-מספר (sqrt, min, max) מהאטלס — מפשטות מדעיות בלא Map-wrapper.
+ function compileFormula(formula, labels) {
+   const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
+   let e = ' ' + formula + ' ';
+   for (const f of sorted) e = e.split(f.label).join(` @${f.idx}@ `);
+-  const residue = e.replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
++  // Support numeric helper functions (e.g., sqrt, abs): mark as @func:name@
++  const numericFuncs = new Set(['sqrt', 'abs', 'floor', 'ceil', 'round']);
++  for (const fn of numericFuncs) {
++    e = e.replace(new RegExp(`\\b${fn}\\s*\\(\\s*(?=@)`, 'g'), `@func:${fn}@(`);
++  }
++  const residue = e.replace(/@\d+@/g, ' ').replace(/@func:\w+@/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
+   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
+-  const dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)").trim();
++  let dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)").trim();
++  // החלף סימני-פונקציה בקריאות-Dart קונקרטיות (sqrt ⇒ math.sqrt או sqrt מהתוכנית)
++  dart = dart.replace(/@func:sqrt@/g, 'sqrt');
++  dart = dart.replace(/@func:abs@/g, '((x) => x.abs())');
++  dart = dart.replace(/@func:floor@/g, '((x) => (x as num).floor())');
++  dart = dart.replace(/@func:ceil@/g, '((x) => (x as num).ceil())');
++  dart = dart.replace(/@func:round@/g, '((x) => (x as num).round())');
+   return /@|[֐-׿]/.test(dart) ? null : (dart || null);
+ }
+ 
+@@ -359,6 +371,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+       const expr = compileFormula(s.formula, labelIdx);
+       if (expr) {
+         hasCalc = true;
++        // G27ב: יבא את sqrt כשהוא בנוסחה (היא מלאה-עכשיו עם sqrt רגיל — לא דרך MAP_ENGINES)
++        if (/\bsqrt\s*\(/.test(s.formula)) {
++          funcImports.add("import 'dart:math' show sqrt;");
++        }
+         addField(i, `_calc(${cl}, ${expr})`);
+         recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: (${expr}).toStringAsFixed(2)`);
+         return;

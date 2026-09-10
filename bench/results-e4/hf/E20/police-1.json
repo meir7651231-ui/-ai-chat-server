@@ -1,0 +1,78 @@
+{
+ "task": "E20",
+ "ns": "panuy",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "action": true
+ },
+ "task_checks": [
+  {
+   "id": "action",
+   "ok": true,
+   "info": "2×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Spec regeneration succeeded: app-ds.mjs produced 6 screens, 13 particles all wired, no errors.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No other app files modified: panuy is the only app in this task.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All gates passed: no_orphans, no_hebrew_in_engine, dart_math_sane, compiles (0 errors).",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "New action button verified: 'שלח הודעה' appears in generated Dart code for people particle screen.",
+   "check": "action",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Dart compilation clean: flutter analyze reports 0 errors.",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No manual edits: entire output generated from spec via app-ds.mjs.",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "15286e108a4cf637",
+ "at": "2026-09-10T18:44:47.184Z"
+}

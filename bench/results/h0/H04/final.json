@@ -1,0 +1,59 @@
+{
+ "task": "H04",
+ "ns": "calendar",
+ "verdict": "NOT DONE",
+ "missing": [
+  "byte_identical_others",
+  "no_hebrew_in_engine"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": false,
+  "gates_pass": true,
+  "no_hebrew_in_engine": false,
+  "dart_math_sane": true,
+  "sort_both": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_both",
+   "ok": true,
+   "info": "ent1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "changed_others": [
+   "dart-data-bs/auto/gen_app_peruk01_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk02_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk03_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk04_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk19_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk20_px1_content.dart",
+   "dart-data-bs/auto/gen_app_peruk21_px1_content.dart",
+   "dart-data-bs/auto/gen_app_sechirut_px1_content.dart"
+  ],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [
+   "const timeCandidate = schema.find((s) => /(שעה|זמן|time)/i.test(s.label));"
+  ],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "63c2ed773669b3d6",
+ "at": "2026-09-10T05:12:32.562Z",
+ "arm": "h0",
+ "wall_s": 406,
+ "cost_usd": 1.0706289999999998,
+ "tokens": 7615861,
+ "rejudged_from": "NOT DONE"
+}

@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator successfully processes sechirut spec with new min() computed field"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Other apps remain unchanged, byte-identical output maintained"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code for sechirut compiles without errors"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All police gates pass checks"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Dart math functions (min) are correctly used"
+    }
+  ],
+  "notes": "Proven: Added computed field תקרה נמוכה = min(תקרה לפי 3 חודשים, תקרה לפי שליש) to תיק entity in sechirut.txt. Spec-only change. Generator outputs updated as expected, no manual edits to generated files made."
+}

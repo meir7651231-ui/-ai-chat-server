@@ -1,0 +1,61 @@
+{
+ "task": "M04",
+ "ns": "peruk17",
+ "verdict": "NOT DONE",
+ "missing": [
+  "num_particle",
+  "title"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "num_particle": false,
+  "title": false
+ },
+ "task_checks": [
+  {
+   "id": "num_particle",
+   "ok": false,
+   "info": "0×",
+   "mandatory": true
+  },
+  {
+   "id": "title",
+   "ok": false,
+   "info": "0×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "5d7c5f4b6af5fb16",
+ "at": "2026-09-10T15:08:35.045Z",
+ "arm": "h0",
+ "wall_s": 624,
+ "cost_usd": 0.3133167,
+ "tokens": 1619698
+}

@@ -1,0 +1,17 @@
+{
+  "claims": [
+    {
+      "check": "sort_by_distance_ascending",
+      "text": "Table particle [טבלה] spec now includes sort by מרחק בקמ עולה, making nearest-first sort"
+    },
+    {
+      "check": "display_real_distance_km",
+      "text": "Generated table shows מרחק בקמ calculated with sqrt(מרחק בריבוע) in gen_app_panuy_ent1.dart"
+    },
+    {
+      "check": "spec_syntax_valid",
+      "text": "Spec uses standard [טבלה] columns | מיון: field עולה syntax from SPEC-LANG.md line 17"
+    }
+  ],
+  "notes": "proven: (1) sort by מרחק בקמ ascending via c5 in px1 table (line 34), (2) sqrt calc in ent1.dart, (3) spec-only edit, no hand edits"
+}

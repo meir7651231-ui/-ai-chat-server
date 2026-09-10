@@ -1,0 +1,80 @@
+{
+ "task": "H15",
+ "ns": "peruk21",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort_px": true,
+  "sort_ent": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_px",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  },
+  {
+   "id": "sort_ent",
+   "ok": true,
+   "info": "ent1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "App peruk21 regenerated successfully with sorting spec directives",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No other apps modified; all 1782 atoms verified unchanged",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Cases table particle sorts by עד מתי (deadline) ascending via spec directive",
+   "check": "sort_px",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Entity list screen sorts cases by עד מתי ascending via spec directive",
+   "check": "sort_ent",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles with zero analyzer errors",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "625661211e30597c",
+ "at": "2026-09-10T18:28:34.059Z"
+}

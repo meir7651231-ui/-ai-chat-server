@@ -1,0 +1,9 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/apps/tasks.json
+ M machtzev/generator/specs-ds/tasks.txt
+?? "machtzev/audit/search/2026-09-10-\327\241\327\233\327\225\327\235-round-rounded-4d976d03.json"
+?? "machtzev/audit/search/2026-09-10-\327\241\327\233\327\225\327\235-round-rounded-cc5a0590.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

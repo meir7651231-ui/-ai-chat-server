@@ -1,0 +1,79 @@
+{
+ "task": "E17",
+ "ns": "peruk21",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "new_text": true,
+  "old_gone": true
+ },
+ "task_checks": [
+  {
+   "id": "new_text",
+   "ok": true,
+   "info": "2×",
+   "mandatory": true
+  },
+  {
+   "id": "old_gone",
+   "ok": true,
+   "info": "0×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Empty-state message in peruk21 changed to \"אין מכתבים פתוחים\" (verified in generated Dart files)",
+   "check": "new_text",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other peruk applications remain byte-identical; only peruk21 was regenerated",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles without errors (0 analyzer errors)",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No manual edits to generated files; only spec file was modified",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "4e1ccee2a0060977",
+ "at": "2026-09-10T18:30:45.095Z",
+ "arm": "hf",
+ "wall_s": 341,
+ "cost_usd": 1.2800397,
+ "tokens": 6232975
+}

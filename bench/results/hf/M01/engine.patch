@@ -1,0 +1,230 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..8c99e62 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,14 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-add-child · הוספת ישות-בת חדשה למערכת קיימת — קופסה-סגורה חייבת תיק, סכום, מצב (תשלום בפיקדון אחרי יציאה) (10.9, M01 · peruk02)
++GATE: (none)
++ref: machtzev/generator/specs-ds/peruk02.txt:8, particle-plan-peruk02.md:13–15
++ANTIPATTERN: ישות \w+ עם \w+\*.*\| מחיקה: \w+=מפל
++RULE: ישות-בת שהיא 1:N לאחר קיימת חייבת שדה foreign-key וכלל cascade (`| מחיקה: parent=מפל`); הגנרטור משדרג את ה-relation registration ובטבלה יוצגו 3 חלקיקים: [טבלה], [פעולה] הוסף, [ריק] אין. הדפדוף מן תיק ⇐ app_peruk02_ent1 footer ⇒ appStore.referencing('app_peruk02_ent3', field_id, rid).length. הצורה `{field1|field2}` עבור bool-like enums, `*` עבור required.
++מה הצליח: peruk02 מ-2 ישויות (תיק, ממצא) ל-3 (תוספת תשלום: תיק*, סכום*, שולם{כן|לא}); generator בנה apps/peruk02.json with ent3, particle-plan add 3 px3 for table+action+empty, relations += cascade rule, screenflow from ent1 footer reference count.
++עיקרון מוקדם: spec-layer בלבד (peruk02.txt), אפס hand-edit לפלטי new/; machine-report validates no_hand_edit + ent3 + paid + px3 + gates_pass.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 1f1750a..19df9aa 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -238,7 +238,7 @@ export function buildApp(specText) {
+     for (const e of pents) {
+       const mine = plan.filter((p) => p.entSlug === e.slug); if (!mine.length) continue;
+       const pslug = `${P}px${++pi}`; const { k, dump } = makeConsts(pslug);
+-      const r = renderParticles({ slug: pslug, entity: e, plan: mine, k });
++      const r = renderParticles({ slug: pslug, entity: e, plan: mine, k, entities: pents });
+       write(pslug, r.code, dump());
+       particleScreens.push({ slug: pslug, cls: r.cls, kind: 'entity', name: `🧩 ${T('particlesTitle', { ent: e.name })}`, icon: '🧩', sub: `${r.count} ${L.particlesLive}${r.notes.length ? ` · ${r.notes.length} ${L.particlesUnres}` : ''}` });
+     }
+diff --git a/machtzev/generator/apps/peruk02.json b/machtzev/generator/apps/peruk02.json
+index 21319c4..c8b7262 100644
+--- a/machtzev/generator/apps/peruk02.json
++++ b/machtzev/generator/apps/peruk02.json
+@@ -116,6 +116,10 @@
+   {
+    "name": "ממצא",
+    "slug": "app_peruk02_ent2"
++  },
++  {
++   "name": "תשלום",
++   "slug": "app_peruk02_ent3"
+   }
+  ],
+  "relations": true,
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..93c6790 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -240,6 +240,87 @@
+    "DsNote"
+   ]
+  },
++ {
++  "entity": "תשלום",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
++ {
++  "entity": "תשלום",
++  "name": "פעולה הוסף תשלום",
++  "expr": "[פעולה] הוסף תשלום",
++  "ok": true,
++  "why": null,
++  "shape": "act",
++  "ops": [
++   "action"
++  ],
++  "picks": [
++   {
++    "op": "action",
++    "atoms": [
++     "PaymentChip"
++    ],
++    "alts": [
++     "PaymentChip",
++     "QuickActionButton",
++     "DsChipButton"
++    ]
++   }
++  ],
++  "wired": [
++   "DsChipButton"
++  ]
++ },
++ {
++  "entity": "תשלום",
++  "name": "ריק אין תשלומים עדיין",
++  "expr": "[ריק] אין תשלומים עדיין",
++  "ok": true,
++  "why": null,
++  "shape": "empty",
++  "ops": [
++   "empty"
++  ],
++  "picks": [
++   {
++    "op": "empty",
++    "atoms": [
++     "EmptyStateCard"
++    ],
++    "alts": [
++     "EmptyStateCard",
++     "EmptyState@premium/feedback",
++     "SearchEmptyState"
++    ]
++   }
++  ],
++  "wired": [
++   "EmptyState@premium/feedback"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "לוח",
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..9f3ad5d 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -10,6 +10,9 @@
+ | בדיקה | ממצא | content | group⇒SectionHeader (SectionHeader/DsSection) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
++| טבלה | תשלום | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| פעולה הוסף תשלום | תשלום | act | action⇒PaymentChip (PaymentChip/QuickActionButton) | DsChipButton |
++| ריק אין תשלומים עדיין | תשלום | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..0fb3d76 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -299,10 +299,24 @@ const diffRows = (s, k, numOf) => s.pairs.map((pr) => { const a = numOf(pr.a), b
+ // ערך-הדיף: «חדש (היה ישן)» — בלי גליף-חץ (Heebo בלי חיצים ⇒ tofu)
+ const diffVal = (r0, k) => `${numFmt(r0.b)} + ' ' + ${k(T('diffWas', { old: '' }).replace('()', '('))} + ${numFmt(r0.a)} + ')'`;
+ 
++// ── זיהוי שדה-קשר: שדה שכל-מילות-שם-ישות-אחרת מופיעות בו כמילים-שלמות ⇒ הפניה חיה.
++const heWords = (s) => [...String(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => m[0]);
++function pickRelation(label, selfName, entityNames) {
++  const fw = new Set(heWords(label));
++  for (const en of entityNames) {
++    if (en === selfName) continue;
++    const ew = heWords(en);
++    if (ew.length && ew.every((w) => fw.has(w))) return en;
++  }
++  return null;
++}
++
+ // ── 6 · פליטה: מסך-חלקיקים לישות (AnimatedBuilder על appStore; אגרגטים למעלה, פר-רשומה בשורות) ──
+-export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) {
++export function particleWidgets({ entity, plan, k, recs: recsOverride = null, entities = [] }) {
+   const scoped = !!recsOverride;   // G24 · דוח: הרשומות מוגבלות לרשומת-השורש ⇒ אגרגטים inline על הרשימה (לא על appStore כולו)
+   const recs = recsOverride || `appStore.records('${entity.slug}')`;
++  const nameToSlug = {};
++  for (const ent of entities) nameToSlug[ent.name] = ent.slug;
+   const numOf = (lbl) => `(num.tryParse(r[${k(lbl)}] ?? '') ?? 0)`;
+   const strOf = (lbl) => `(r[${k(lbl)}] ?? '')`;
+   const imports = new Set(); const widgets = []; const notes = [];
+@@ -384,7 +398,12 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+       const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      const rowVals = entity.schema.map((f) => {
++        const relEnt = pickRelation(f.label, entity.name, entities.map((e) => e.name));
++        const tslug = relEnt ? nameToSlug[relEnt] : null;
++        return tslug ? `appStore.displayOf('${tslug}', r[${k(f.label)}] ?? '')` : strOf(f.label);
++      });
++      const rows = `[for (final r in ${recs}) [${rowVals.join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {
+@@ -465,8 +484,8 @@ export function particleText({ entity, plan, k, recs: recsOverride = null }) {
+   return exprs;
+ }
+ const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
+-export function renderParticles({ slug, entity, plan, k }) {
+-  const { imports, widgets, notes } = particleWidgets({ entity, plan, k });
++export function renderParticles({ slug, entity, plan, k, entities = [] }) {
++  const { imports, widgets, notes } = particleWidgets({ entity, plan, k, entities });
+   const cls = clsOf(slug);
+   const code = `// 🧩 חולל ע"י מפרק-החלקיקים הפתוח (particles · הכרעה-27): כל חלקיק נמצא בכל הקטלוג ומורכב מחדש. אל תערוך ידנית.
+ ${plan.filter((p) => p.ok).map((p) => `//   ${p.name} = ${p.expr} ⇒ ${p.shape.kind} ⇒ [${p.ops.join(', ')}] ⇒ ${(p.wired || ['—']).join(' + ')}`).join('\n')}
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..3e314e9 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -5,6 +5,7 @@
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, סכום הפיקדון*, מה המשכיר אמר הודעה*, תאריך מסירת מפתח*, חוזה לפחות סעיפי בטוחה*, תיקונים*, יציאה*, פרוטוקול כניסה יציאה, תמונות כניסה ויציאה, וואטסאפ מלא עם המשכיר, קבלות על תיקונים שהוא | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ ישות ממצא עם תיק*, סעיף, מה כתוב, מה לבקש, צבע{אדום|צהוב|ירוק} | מחיקה: תיק=מפל
++ישות תשלום עם תיק*, סכום*, שולם{כן|לא} | מחיקה: תיק=מפל
+ לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+@@ -15,6 +16,9 @@
+ חלקיק ממצא: בדיקה = [תוכן בדיקה]
+ חלקיק תיק: אסור = [תוכן אסור]
+ חלקיק ממצא: צבע
++חלקיק תשלום: [טבלה]
++חלקיק תשלום: [פעולה] הוסף תשלום
++חלקיק תשלום: [ריק] אין תשלומים עדיין
+ דוח תיק: כרטיס = [תוכן כרטיס]
+ דוח תיק: טבלת שורות = [תוכן טבלת שורות]
+ דוח תיק: סכום יעד לדרישה = [תוכן סכום יעד לדרישה]

@@ -1,0 +1,12 @@
+{
+ "errors": 12,
+ "ns_errors": 12,
+ "gen_exit": 0,
+ "sample": [
+  "error • A nullable expression can't be used as an iterator in a for-in loop. Try checking that the value isn't 'null' before using it as an iterator • lib/genesis/dart-gen-bs/gen_app_calendar_ent1.dar",
+  "error • This expression has a type of 'void' so its value can't be used. Try checking to see if you're using the correct API; there might be a function or call that returns void you didn't expect. Als",
+  "error • The method 'replaceAll' can't be unconditionally invoked because the receiver can be 'null'. Try making the call conditional (using '?.') or adding a null check to the target ('!') • lib/genes",
+  "error • This expression has a type of 'void' so its value can't be used. Try checking to see if you're using the correct API; there might be a function or call that returns void you didn't expect. Als",
+  "error • This expression has a type of 'void' so its value can't be used. Try checking to see if you're using the correct API; there might be a function or call that returns void you didn't expect. Als"
+ ]
+}

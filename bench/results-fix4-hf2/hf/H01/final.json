@@ -1,0 +1,82 @@
+{
+ "task": "H01",
+ "ns": "panuy",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sqrt": true,
+  "sort_list": true
+ },
+ "task_checks": [
+  {
+   "id": "sqrt",
+   "ok": true,
+   "info": "import=true fn=true method=false",
+   "mandatory": true
+  },
+  {
+   "id": "sort_list",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator successfully re-ran with modified panuy.txt spec including sorting directive",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps remain byte-identical; panuy spec modification only affects panuy app",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Distance in km calculated via sqrt(מרחק בריבוע) - square root of squared-distance field",
+   "check": "sqrt",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Table particle px1 applies numeric sort on מרחק בקמ field in ascending order (nearest first)",
+   "check": "sort_list",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code passes flutter analyze with zero errors; sort logic is valid",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "607bcf0b5a6780c2",
+ "at": "2026-09-10T10:44:39.882Z",
+ "arm": "hf",
+ "wall_s": 1235,
+ "cost_usd": 2.7200135000000003,
+ "tokens": 13816224
+}

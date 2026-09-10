@@ -1,0 +1,50 @@
+{
+ "task": "H02",
+ "ns": "sechirut",
+ "verdict": "NOT DONE",
+ "missing": [
+  "no_hebrew_in_engine"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": false,
+  "dart_math_sane": true,
+  "sort": true,
+  "desc": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "px1,ent1",
+   "mandatory": true
+  },
+  {
+   "id": "desc",
+   "ok": true,
+   "info": "ent1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [
+   "const rentFieldIdx = schema.findIndex((s) => s.label === 'שכירות');"
+  ],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "18c5da70559b9da6",
+ "at": "2026-09-10T05:12:27.928Z"
+}

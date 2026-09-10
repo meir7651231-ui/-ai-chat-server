@@ -1,0 +1,9 @@
+=== hf/H07 (sechirut) start 12:03:08
+  builder.json: exit=0 cost=0.38050500000000004 turns=21 ms=213487 err=false
+  police: DONE missing= false=0
+  auditor-coverage.json: exit=0 cost=0.36519379999999996 turns=19 ms=156907 err=false
+  auditor-compile.json: exit=0 cost=0.3048813 turns=15 ms=161185 err=false
+  auditor-regression.json: exit=0 cost=0.3260571 turns=16 ms=172212 err=false
+  validator.json: exit=0 cost=0.2749123 turns=25 ms=131601 err=false
+  fixer: skipped (FIX-LIST none)
+=== hf/H07 DONE wall=559s cost=$1.65 false_claims=0

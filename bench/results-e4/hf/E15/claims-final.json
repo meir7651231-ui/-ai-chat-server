@@ -1,0 +1,6 @@
+[
+  "Added computed field סכום כולל מעמ = סכום * 1.18 to משימה entity in specs-ds/tasks.txt",
+  "App regenerated with new computed field",
+  "Computed field formula is valid and follows SPEC-LANG syntax (name = formula with operators)",
+  "No other generated files were manually edited"
+]

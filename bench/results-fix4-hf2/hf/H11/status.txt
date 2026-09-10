@@ -1,0 +1,9 @@
+ M machtzev/generator/apps/sechirut.json
+ M machtzev/generator/render-ds.mjs
+ M machtzev/generator/specs-ds/sechirut.txt
+?? "machtzev/audit/search/2026-09-10-computed-formula-\327\252\327\247\327\250\327\224-a028477e.json"
+?? machtzev/audit/search/2026-09-10-min-max-computed-4f250a40.json
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

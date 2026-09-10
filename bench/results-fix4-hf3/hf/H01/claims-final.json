@@ -1,0 +1,17 @@
+{
+  "claims": [
+    {
+      "check": "sort_by_distance_ascending",
+      "text": "Table columns reordered to match spec [טבלה] שם, זמין, מרחק בקמ, מחיר לשעה via particles.mjs fix (line 404) - nearest-first sort by מרחק בקמ עולה"
+    },
+    {
+      "check": "display_real_distance_km",
+      "text": "Distance field (c25) calculates sqrt(מרחק בריבוע) by inlining dependency formula in render-ds.mjs (fieldResolver), not reading uninitialized _v[10] - works for new and existing records"
+    },
+    {
+      "check": "spec_syntax_valid",
+      "text": "Spec uses standard [טבלה] columns | מיון: field עולה syntax from SPEC-LANG.md line 17"
+    }
+  ],
+  "notes": "FIXED: (1) particles.mjs line 404 reorders filtered columns to match spec order, (2) render-ds.mjs compileFormula inlines formula dependencies, (3) engine changes only, no generated files edited"
+}

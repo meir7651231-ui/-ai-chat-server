@@ -1,0 +1,90 @@
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..43efe79 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index 8f44fe1..3a4a36e 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -137,6 +137,11 @@ export function shapeOf(expr, schema, content = [], opts = {}) {
+         columns = cols.map((f) => f.label);
+       }
+     }
++    // אם אין מיון מפורש, הוסף מיון-ברירת-מחדל לפי שדה-שעה אם קיים
++    if (!sort.length) {
++      const timeField = schema.find((f) => /שעה|זמן|hour|time/i.test(f.label));
++      if (timeField) sort.push({ field: timeField.label, desc: false });
++    }
+     return { kind: 'table', columns, sort: sort.length ? sort : null };
+   }
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pSearch) + '\\]')))) return { kind: 'search' };
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 3d0168b..ec0dfc3 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -291,6 +291,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const patternSpecs = []; // ולידציית-תבנית: {i, pattern}
+   let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false;
+   let firstDateConst = null;   // תפר-לוח-שנה: הקבוע של שדה-התאריך הראשון (null ⇒ אין תאריך)
++  let timeFieldConst = null;   // תפר-מיון: הקבוע של שדה-השעה הראשון (null ⇒ אין שעה)
+   const numFields = [];        // תפר-KPI: קבועי השדות-המספריים (לסכום/ממוצע חי)
+   const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
+   schema.forEach((s, i) => {
+@@ -418,6 +419,8 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     if (ft === 'date') { typedImports.add("import '../dart-ui-bs/ds/ds_date_field.dart';"); if (firstDateConst === null) firstDateConst = cl; addField(i, `DsDateField(label: ${cl}, ${bind})`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
+     if (ft === 'num')  { typedImports.add("import '../dart-ui-bs/ds/ds_number_field.dart';"); numFields.push(cl); addField(i, `DsNumberField(label: ${cl}, ${bind})`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
+     if (ft === 'bool') { typedImports.add("import '../dart-ui-bs/ds/ds_toggle_tile.dart';"); addField(i, `DsToggleTile(label: ${cl}, ${bind})`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
++    // זהה שדה-שעה (שעה, זמן, etc.) כשדה זמן לצורך מיון
++    if (/שעה|זמן|hour|time/i.test(s.label) && timeFieldConst === null) { timeFieldConst = cl; }
+     // (4) טקסט: שדה חופשי + לוגיקת-אימפריה חיה מכוונת-מטרה (טיפוס+IDF+קידומת+מובהקות).
+     usedField = true;
+     addField(i, `DsField(label: ${cl}, hint: '', ${bind})`);
+@@ -735,6 +738,7 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
+               if (all.isEmpty) return const DsEmpty(label: ${cEmpty});
+               final q = _q.trim().toLowerCase();
+               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
++              ${timeFieldConst ? `rs.sort((a, b) { final aTime = (a[${timeFieldConst}] ?? '99:99').trim(); final bTime = (b[${timeFieldConst}] ?? '99:99').trim(); return aTime.compareTo(bTime); });` : ''}
+               ${boardBranch}return Column(children: [
+                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
+                 if (rs.isEmpty) const DsEmpty(label: ${cNoMatch}),
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..6fb86a9 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -4,3 +4,4 @@
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+ ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++חלקיק פגישה: [טבלה]

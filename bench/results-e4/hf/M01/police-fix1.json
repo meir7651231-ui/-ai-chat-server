@@ -1,0 +1,97 @@
+{
+ "task": "M01",
+ "ns": "peruk02",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "ent3": true,
+  "paid": true,
+  "px3": true
+ },
+ "task_checks": [
+  {
+   "id": "ent3",
+   "ok": true,
+   "info": "file",
+   "mandatory": true
+  },
+  {
+   "id": "paid",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "px3",
+   "ok": true,
+   "info": "file",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Third entity תשלום added to peruk02.txt with required fields תיק*, סכום*, שולם.",
+   "check": "ent3",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Entity תשלום uses cascade delete via מחיקה: תיק=מפל, matching ממצא pattern.",
+   "check": "cascade_delete",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Table particle חלקיק תשלום: [טבלה] renders three columns: תיק, סכום, שולם.",
+   "check": "px3",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other app specs remain byte-identical after regeneration.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code passes flutter analyze with 0 errors.",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No stray generated files created; generator wired correctly.",
+   "check": "no_orphans",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All 53 police gates pass (wire+contract+quarry+pins checks).",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "a98b7a64c04e508f",
+ "at": "2026-09-10T14:31:59.314Z"
+}

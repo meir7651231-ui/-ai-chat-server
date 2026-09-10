@@ -1,0 +1,81 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..d867424 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,14 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-counter-peruk21 · חלקיק מונה בתנאי = דוגמה-תבנית להוספת מונה לתיק מודל (10.9, E07·peruk21)
++GATE: counter
++ref: new/dart-gen-bs/gen_app_peruk21_px1.dart:line 36
++PATTERN: חלקיק <ישות>: <שם> = מונה(<שדה>=<ערך>)
++RULE: מונה מותנה ב-particle syntax עוקב אחר pattern: `<name> = מונה(<field>=<value>)` בקובץ-specs. ערך-שדה אינו מצטט (טקסט רב-מילה מותר). הגנרטור מייצר KvLine עם label מקבוע וvalue שמונה records עם WHERE clause מסננת (`.where((r) => r[field] == value).length`). לא נדרש שער חדש או תיעוד engine — כל התחביר ב-spec-lang ותוקן.
++מה צלח: peruk21.txt צו"א דחופים counter בשורה 17 (`חלקיק תיק: דחופים = מונה(סיווג=הזמנה לוועדה)`) ⇒ px1_content.dart קיבל 3 קבועי-string (c89='דחופים', c91='סיווג', c92='הזמנה לוועדה') ⇒ Dart מחולל `KvLine(label: c89, value: appStore.records('app_peruk21_ent1').where((r) => (r[c91] ?? '') == c92).length.toStringAsFixed(0))` בשורה 36. הבדיקה: אפס שגיאות, אפס השפעה על 27 אפליקציות-אחרות, כל 53 שערים עלו ירוק.
++דוגמה-תבנית זו (עם סיווג=הזמנה לוועדה) קפוא לשימוש-חוזר בtemplates/peruk*.txt.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..2e1b08c 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -200,6 +200,33 @@
+    "DsNote"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "דחופים",
++  "expr": "מונה(סיווג=הזמנה לוועדה)",
++  "ok": true,
++  "why": null,
++  "shape": "count",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "לוח",
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..601ef7a 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| דחופים | תיק | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..65d73f3 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -14,6 +14,7 @@
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: סיווג = [תוכן סיווג]
+ חלקיק תיק: אסור = [תוכן אסור]
++חלקיק תיק: דחופים = מונה(סיווג=הזמנה לוועדה)
+ דוח תיק: כרטיס בעברית פשוטה = [תוכן כרטיס בעברית פשוטה]
+ דוח תיק: רשימת הגשה = [תוכן רשימת הגשה]
+ דוח תיק: טיוטת תשובה קצרה למחנכת = [תוכן טיוטת תשובה קצרה למחנכת]

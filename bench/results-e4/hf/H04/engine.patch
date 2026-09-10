@@ -1,0 +1,62 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..822c1d5 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,11 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-particle-sort-a7f3e2 · חלקיק עם מיון: טבלה נוצרת כ-px (particle screen) בנפרד מ-ent (entity screen); מיון מיוצא ב-Dart כ-sort lambda עם טיפול ריק-אחרון ומספרי (9.9, H04 · particle-plan)
++GATE: particle-sort (אפס-gate קיים; בדיקה בידנית ב-police-bench)
++RULE: חלקיק עם מיון מיוצא כ-px<N>.dart נפרד שמרכיב ממנוע-החלקיקים; sort lambda (sort-cmp.mjs::sortLambda) כולל (א) טיפול בערכים ריקים (אחרון) (ב) ניסיון parse-ל-num (מספרי נגד לקסיקלי) (ג) שני שדות+ בסדר-הצהרה; הפלט -צוך-ForgeDataGrid עם .toList()..sort(λ)
++מה נלמד: particle הוא לא-עריכה של entity.px, אלא מסך פתוח-צחה נשלח לחלקיק-פרסום עם חלקיק-בחירה (SPEC-LANG line 17). החלקיק ממיר לחלקיקי-זרם (שדה עמודה + מיון שדה) — אין צורך בעדכון entity.ent1 עבור הדרישה.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..1a0d6b4 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "טבלה מה מועד שעה מקום הערה מיון מועד עולה שעה עולה",
++  "expr": "[טבלה] מה, מועד, שעה, מקום, הערה | מיון: מועד עולה, שעה עולה",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..2ded2c8 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -4,3 +4,5 @@
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+ ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++
++חלקיק פגישה: [טבלה] מה, מועד, שעה, מקום, הערה | מיון: מועד עולה, שעה עולה

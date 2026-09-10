@@ -1,0 +1,25 @@
+=== h0/H01 (panuy) start 17:44:22
+  builder.json: exit=0 cost=0.7295873999999998 turns=49 ms=301866 err=false
+  police: NOT DONE missing=no_hebrew_in_engine,sqrt,sort_px false=0
+=== h0/H01 NOT DONE wall=338s cost=$0.73 false_claims=0
+=== hf/H01 (panuy) start 17:50:01
+  builder.json: exit=0 cost=1.8854111000000007 turns=121 ms=549686 err=true
+  police: NOT DONE missing=no_hand_edit,byte_identical_others,no_hebrew_in_engine,sqrt false=0
+  auditor-compile.json: exit=0 cost=0.294053 turns=18 ms=103009 err=false
+  auditor-coverage.json: exit=0 cost=0.2831901 turns=18 ms=109147 err=false
+  auditor-regression.json: exit=0 cost=0.3684611000000001 turns=21 ms=172470 err=false
+  validator.json: exit=0 cost=0.2767323 turns=24 ms=114006 err=false
+  fixer.json: exit=0 cost=0.8799618 turns=61 ms=383190 err=true
+  police: NOT DONE missing=no_hebrew_in_engine false=0
+  police: NOT DONE missing=no_hebrew_in_engine false=0
+=== hf/H01 NOT DONE wall=1331s cost=$3.99 false_claims=0
+=== f0/H01 (panuy) start 18:12:13
+  builder.json: exit=0 cost=5.9729295 turns=50 ms=574248 err=false
+  police: NOT DONE missing=dart_math_sane,sqrt,sort_px false=0
+=== f0/H01 NOT DONE wall=611s cost=$5.97 false_claims=0
+skip h0/H01 (done)
+skip hf/H01 (done)
+skip f0/H01 (done)
+skip h0/H01 (done)
+skip hf/H01 (done)
+skip f0/H01 (done)

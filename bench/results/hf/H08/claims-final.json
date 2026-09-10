@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator pipeline succeeds without errors"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "All generated code in new/ is machine-produced"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All files outside generated code remain byte-identical"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All police gates pass"
+    },
+    {
+      "check": "panuy_spec_updated",
+      "text": "machtzev/generator/specs-ds/panuy.txt contains: מרחק אבסולוטי = (הפרש רוחב).abs()"
+    }
+  ],
+  "notes": "Added computed field מרחק אבסולוטי using method call syntax. Extended compileFormula in render-ds.mjs to support method calls like .abs() and .round()."
+}

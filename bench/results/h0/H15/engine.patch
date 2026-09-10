@@ -1,0 +1,36 @@
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..49ca3ee 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -384,7 +384,10 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+       const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      const deadlineField = entity.schema.find((f) => f.label === 'עד מתי');   // Sort by deadline if it exists
++      const deadlineConst = deadlineField ? k(deadlineField.label) : null;
++      const sortedRecs = deadlineField ? `(${recs} as List<Map<String, String>>)..sort((a, b) => (a[${deadlineConst}] ?? '').compareTo(b[${deadlineConst}] ?? ''))` : recs;
++      const rows = `[for (final r in ${sortedRecs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..65aca0f 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -288,6 +288,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   let firstDateConst = null;   // תפר-לוח-שנה: הקבוע של שדה-התאריך הראשון (null ⇒ אין תאריך)
+   const numFields = [];        // תפר-KPI: קבועי השדות-המספריים (לסכום/ממוצע חי)
+   const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
++  const sortFieldIdx = schema.findIndex((s) => s.label === 'עד מתי');   // Sorting by deadline field if it exists
+   schema.forEach((s, i) => {
+     const cl = k(s.label); labelConst.push(cl);
+     const bind = `value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)`;
+@@ -728,6 +729,7 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
+               if (all.isEmpty) return const DsEmpty(label: ${cEmpty});
+               final q = _q.trim().toLowerCase();
+               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
++              ${sortFieldIdx >= 0 ? `rs.sort((a, b) => (a[${labelConst[sortFieldIdx]}] ?? '').compareTo(b[${labelConst[sortFieldIdx]}] ?? ''));` : ''}
+               ${boardBranch}return Column(children: [
+                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
+                 if (rs.isEmpty) const DsEmpty(label: ${cNoMatch}),

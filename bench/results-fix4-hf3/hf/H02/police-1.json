@@ -1,0 +1,105 @@
+{
+ "task": "H02",
+ "ns": "sechirut",
+ "verdict": "NOT DONE",
+ "missing": [
+  "no_orphans"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": false,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort": true,
+  "desc": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  },
+  {
+   "id": "desc",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [
+   "new/dart-data-bs/auto/gen_app_audit_content.dart",
+   "new/dart-data-bs/auto/gen_app_bind4_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent1_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent2_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent3_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent4_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent5_content.dart",
+   "new/dart-data-bs/auto/gen_app_ent6_content.dart",
+   "new/dart-data-bs/auto/gen_app_flags_content.dart",
+   "new/dart-data-bs/auto/gen_app_hub_content.dart",
+   "new/dart-data-bs/auto/gen_app_main_content.dart",
+   "new/dart-data-bs/auto/gen_app_over1_content.dart",
+   "new/dart-data-bs/auto/gen_app_over2_content.dart",
+   "new/dart-data-bs/auto/gen_app_over3_content.dart",
+   "new/dart-data-bs/auto/gen_app_rec1_content.dart",
+   "new/dart-data-bs/auto/gen_app_rec2_content.dart",
+   "new/dart-data-bs/auto/gen_app_rec3_content.dart",
+   "new/dart-data-bs/auto/gen_app_rec4_content.dart",
+   "new/dart-data-bs/auto/gen_app_rec5_content.dart",
+   "new/dart-data-bs/auto/gen_app_rec6_content.dart",
+   "new/dart-data-bs/auto/gen_app_scr7_content.dart",
+   "new/dart-data-bs/auto/gen_app_settings_content.dart"
+  ],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "sechirut app תיק particle table modified to include sort clause: | מיון: שכירות יורד",
+   "check": "sort",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "sort comparison uses -c to reverse order (descending/highest first) for numeric שכירות field",
+   "check": "desc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "app-ds.mjs regeneration completed successfully for sechirut spec with sorting added",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "verified - all other apps (calendar, panuy, peruk01-28, tasks) remain byte-identical",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "generated Dart code passes flutter analyze with zero errors",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "00020edeb50f60cc",
+ "at": "2026-09-10T11:40:17.082Z"
+}

@@ -1,0 +1,67 @@
+{
+ "task": "E16",
+ "ns": "peruk08",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "stage": true
+ },
+ "task_checks": [
+  {
+   "id": "stage",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "peruk08.txt regenerated successfully with new stage הוחזר הכסף inserted after נמסר in stages list",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other files (peruk01-peruk07, peruk09-peruk28) remain byte-identical; only peruk08.txt spec changed",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "New stage הוחזר הכסף added to תיק entity workflow between נמסר and סגור",
+   "check": "stage",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "49ddce25eb6ad163",
+ "at": "2026-09-10T18:30:34.378Z",
+ "arm": "hf",
+ "wall_s": 551,
+ "cost_usd": 1.4288085000000001,
+ "tokens": 5862355
+}

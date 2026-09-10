@@ -1,0 +1,49 @@
+{
+ "task": "E01",
+ "ns": "sechirut",
+ "verdict": "NOT DONE",
+ "missing": [
+  "email_in_ent",
+  "email_in_table"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "email_in_ent": false,
+  "email_in_table": false
+ },
+ "task_checks": [
+  {
+   "id": "email_in_ent",
+   "ok": false,
+   "info": "0×",
+   "mandatory": true
+  },
+  {
+   "id": "email_in_table",
+   "ok": false,
+   "info": "0×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "f6637a9c6b8a84e9",
+ "at": "2026-09-09T17:28:45.811Z"
+}

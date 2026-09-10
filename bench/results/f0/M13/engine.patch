@@ -1,0 +1,159 @@
+diff --git a/machtzev/generator/particle-plan-peruk12.json b/machtzev/generator/particle-plan-peruk12.json
+index 2591b82..7f115d3 100644
+--- a/machtzev/generator/particle-plan-peruk12.json
++++ b/machtzev/generator/particle-plan-peruk12.json
+@@ -160,5 +160,32 @@
+   "wired": [
+    "DsNote"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "אגרת העברה",
++  "expr": "[מספר] מחיר: אגרת העברת בעלות משולמת לפני הרישום",
++  "ok": true,
++  "why": null,
++  "shape": "number",
++  "ops": [
++   "hero"
++  ],
++  "picks": [
++   {
++    "op": "hero",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk12.md b/machtzev/generator/particle-plan-peruk12.md
+index 65c380d..0ba0b67 100644
+--- a/machtzev/generator/particle-plan-peruk12.md
++++ b/machtzev/generator/particle-plan-peruk12.md
+@@ -8,6 +8,7 @@
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| אגרת העברה | תיק | number | hero⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+@@ -18,6 +19,7 @@
+ | תיק | רשימת שאלות למוכר מקסימום | [תוכן רשימת שאלות למוכר מקסימום] | content | DsNote |
+ | תיק | מה לבדוק בנסיעה | [תוכן מה לבדוק בנסיעה] | content | DsNote |
+ | תיק | מה חייב לפני העברה | [תוכן מה חייב לפני העברה] | content | DsNote |
++| תיק | אגרת העברה | אגרת העברה | particle | KvLine |
+ | תיק | נוסח | [תוכן נוסח] | content | DsNote |
+ | תיק | החלטה | [תוכן החלטה] | content | DsNote |
+ | תיק | הסתייגות | [תוכן הסתייגות] | content | DsNote |
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..8e4916e 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -536,6 +536,7 @@
+    "רשימת שאלות למוכר מקסימום",
+    "מה לבדוק בנסיעה",
+    "מה חייב לפני העברה",
++   "אגרת העברה",
+    "נוסח",
+    "החלטה"
+   ],
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..a4ac69e 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -5,6 +5,7 @@
+ //   פלט: specs-ds/<ns>.txt (ישויות · שלבים · חלקיקים · תוכן · דוח · ייצוא) + peruk-index.json (צומת: מזהה · רגע · קטגוריה ·
+ //   מחירים · שרשרת) — ואז app-ds בונה את האפליקציה. מאות מסמכים = ריצה אחת.
+ //   שער `peruk`: לכל מסמך ב-peruks/ — ≥1 שדה-קליטה · ≥1 חלק-פלט · הסתייגות · אסור; והספק בדיסק ≡ הספק המחולל (טריות).
++//   «המספר שלך» (G29): פריט ב«מה חוזר» ששורת-הפירוט הראשונה שלו היא שם-שדה-מספרי מדויק (typeNum) ⇒ חלקיק [מספר] שדה: השורה הבאה = הערה.
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import { fileURLToPath } from 'node:url';
+@@ -185,6 +186,8 @@ export function perukToSpec(md, ns) {
+     // G29 · צורות-פלט: דיף (יש זוגות) · מספר (שדה-מספרי תואם) · הודעה (יש החלטה) · לוח (יש תאריכים) — אחרת נופל לתוכן
+     if (kind === 'diff' && pairs.length) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pDiff[0]}] ${pairs.map((pr) => `${pr.a} ${G.pairArrow[0]} ${pr.b}${pr.factor ? ` × ${pr.factor}` : ''}`).join('; ')}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; }
+     if (kind === 'number') { const nf = fields.find((f) => f.num && matchField(f.label) && heW(o.name).map(stemOf).some((w) => heW(f.label).map(stemOf).includes(w))); if (nf) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pNumber[0]}] ${nf.label}${o.detail.length ? `: ${q(o.detail[0])}` : ''}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; } }
++    // G29 · «המספר שלך» בלי זוג ישן/חדש: פריט-פלט שפירוטו פותח בשם-שדה-מספרי מדויק (מילת spec-lang.typeNum) ⇒ [מספר] שדה: יתר-הפירוט = הערת-התנאים — מבני, אפס-מילון
++    if (!kind || kind === 'number') { const nl = o.detail.length ? clean(o.detail[0]) : ''; const nf = nl && fieldLabels.includes(nl) && heW(nl).some((w) => G.typeNum.includes(w)) ? nl : null; if (nf) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pNumber[0]}] ${nf}${o.detail.length > 1 ? `: ${q(o.detail.slice(1).join(' '))}` : ''}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; } }
+     if (kind === 'message' && decisions.length) {
+       // משפט שבו מציין-מקום ללא שדה-תואם נשמט כולו («תשובה עד .» לא ייכתב) — לא נשארת שארית-תבנית
+       const dec = decisions[0]; const tpl = P.messageTemplate.split(/(?<=[.!?])\s+/).map((sent) => { let bad = false; const s2 = sent.replace(/\{([^}]+)\}/g, (m0, ph) => { if (ph === G.pValueWord || ph.includes('.')) return m0; const f = matchField(ph); if (f) return `{${f}}`; bad = true; return ''; }); return bad ? '' : s2; }).filter(Boolean).join(' ');
+diff --git a/machtzev/generator/peruks/peruk-12.md b/machtzev/generator/peruks/peruk-12.md
+index 58df974..09edeed 100644
+--- a/machtzev/generator/peruks/peruk-12.md
++++ b/machtzev/generator/peruks/peruk-12.md
+@@ -72,8 +72,10 @@
+ 2. רשימת שאלות למוכר (10 מקסימום)
+ 3. מה לבדוק בנסיעה
+ 4. מה חייב לפני העברה (רישום, שעבוד, בדיקת מכון)
+-5. נוסח: «מקדמה רק אחרי בדיקה, מול קבלה, מקסימום X»
+-6. החלטה: להמשיך לבדיקה / לעצור / רק במחיר אחר
++5. אגרת העברה: מחיר
++   אגרת העברת בעלות משולמת לפני הרישום
++6. נוסח: «מקדמה רק אחרי בדיקה, מול קבלה, מקסימום X»
++7. החלטה: להמשיך לבדיקה / לעצור / רק במחיר אחר
+ 
+ לא: «האוטו גנוב» בלי נתון.
+ 
+diff --git a/machtzev/generator/report-plan-peruk12.json b/machtzev/generator/report-plan-peruk12.json
+index 7e2b575..84399b7 100644
+--- a/machtzev/generator/report-plan-peruk12.json
++++ b/machtzev/generator/report-plan-peruk12.json
+@@ -63,6 +63,19 @@
+      }
+     ]
+    },
++   {
++    "name": "אגרת העברה",
++    "refs": [
++     {
++      "raw": "אגרת העברה",
++      "mode": "particle",
++      "why": null,
++      "wired": [
++       "KvLine"
++      ]
++     }
++    ]
++   },
+    {
+     "name": "נוסח",
+     "refs": [
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..4d5e4ff 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -17,8 +17,10 @@
+ דוח תיק: רשימת שאלות למוכר מקסימום = [תוכן רשימת שאלות למוכר מקסימום]
+ דוח תיק: מה לבדוק בנסיעה = [תוכן מה לבדוק בנסיעה]
+ דוח תיק: מה חייב לפני העברה = [תוכן מה חייב לפני העברה]
++דוח תיק: אגרת העברה = אגרת העברה
+ דוח תיק: נוסח = [תוכן נוסח]
+ דוח תיק: החלטה = [תוכן החלטה]
++חלקיק תיק: אגרת העברה = [מספר] מחיר: אגרת העברת בעלות משולמת לפני הרישום
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
+ דוח תיק: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה
+ תוכן מסגרת: מודעה + תמונות + שיחה ≠ מצב מכני
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..6bdd4e5 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -67,7 +67,7 @@ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/gener
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+ 39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++30bc086a02accfc889c98ddff628637672d5fd5a8e7fdfeaf1b4c82d9b91b7a6  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

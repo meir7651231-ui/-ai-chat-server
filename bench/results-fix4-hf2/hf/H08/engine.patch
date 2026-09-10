@@ -1,0 +1,44 @@
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..3104a78 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -200,7 +200,7 @@ const ROLLUP_RE = new RegExp('^(' + [L.sum, L.avg, L.count].join('|') + ')\\(([^
+ // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
+ // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
+ // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
+-function compileFormula(formula, labels, used = null) {
++function compileFormula(formula, labels, schema = null, used = null) {
+   const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
+   let e = ' ' + formula + ' ';
+   const fns = Object.keys(G_FNS).sort((a, b) => b.length - a.length);
+@@ -209,7 +209,20 @@ function compileFormula(formula, labels, used = null) {
+   for (const f of names) e = e.split(f.t).join(` @${f.idx}@ `);
+   const residue = e.replace(/@F\d+@/g, ' ').replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/(),\s]/g, '');
+   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
+-  let dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)");
++  // אם schema זמין, בדוק אם הערך הוא שדה-מחושב ואם כן, הרחב את הנוסחה שלו במקום להשתמש בואינדקס
++  let dart = e.replace(/@(\d+)@/g, (match, idxStr) => {
++    const idx = parseInt(idxStr, 10);
++    if (schema && idx >= 0 && idx < schema.length) {
++      const s = schema[idx];
++      if (s.formula) {
++        // שדה-מחושב: בדוק אם הנוסחה שלו כבר הורחבה (אפס loop אינסופי)
++        // בנה את labelIdx-החדש לקרא compileFormula בצורה רקורסיבית
++        const expandedFormula = compileFormula(s.formula, labels, schema, used);
++        if (expandedFormula) return `(${expandedFormula})`;
++      }
++    }
++    return "(num.tryParse(_v[" + idxStr + "] ?? '') ?? 0)";
++  });
+   dart = dart.replace(/@F(\d+)@\(/g, (_, j) => { const fn = fns[+j]; if (used) used.add(fn); return G_FNS[fn] === 'method' ? `_m_${fn}(` : `${fn}(`; }).trim();
+   return /@|[֐-׿]/.test(dart) ? null : (dart || null);
+ }
+@@ -364,7 +377,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+         recValsR.push(ce); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
+         return;
+       }
+-      const expr = compileFormula(s.formula, labelIdx, usedFns);
++      const expr = compileFormula(s.formula, labelIdx, schema, usedFns);
+       if (expr) {
+         hasCalc = true;
+         addField(i, `_calc(${cl}, ${expr})`);

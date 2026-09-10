@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "App regenerated without errors: 19/19 particles wired, 10 screens, 4 entities, 1 dashboard"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Other apps remain byte-identical after sechirut regeneration"
+    },
+    {
+      "check": "email_in_ent",
+      "text": "Email field 'אימייל' successfully added to תיק entity"
+    },
+    {
+      "check": "email_in_table",
+      "text": "Email field appears in table view and form"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart passes flutter analyze: 0 analyzer errors"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "No Hebrew literals in engine code - email type inferred by regex"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All policy gates passed"
+    }
+  ],
+  "notes": "Task completed. Email field 'אימייל' added to תיק entity in sechirut.txt. Machine verdict: DONE. All checks passed."
+}

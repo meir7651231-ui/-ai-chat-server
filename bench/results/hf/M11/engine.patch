@@ -1,0 +1,18 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..5cfa7ac 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-export-m11a7a · ייצוא-דוח שלם = פורמט קבוע וקונסיסטנטי בכל הperuk files (10.9, M11 peruk25 · הכרעה-G25)
++GATE: export
++ref: 9cc8bb0d6a4c4b4e2f3a1d5b6c7e8f9g:machtzev/generator/specs-ds/peruk25.txt
++ANTIPATTERN: דוח.*\[ייצוא\].*=.*[^טלפון]
++RULE: כל ייצוא-דוח בקטע "דוח <ישות>" חייב להכיל: (א) תווית-משתמש בעברית (label) · (ב) שדה-יעד מעיזות ה-entity (field) · (ג) מילות-מטרה או קישור (keywords); הפורמט `[ייצוא] <label> = <field>, <keywords>` קבוע בכל 26 הקבצים peruk03-28; peruk25 מנתב דרך phone בתרגיל בעברית.
++מה נאמת: peruk25.txt שורה 22 תואם את ה-pattern בכל 26 הקבצים (שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה); machine-report M11 אישר export ✅ 1×; אין ניגוד, אין קליטה-חוזרת.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart

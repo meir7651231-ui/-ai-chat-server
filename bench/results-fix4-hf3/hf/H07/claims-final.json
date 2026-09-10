@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator ran successfully with sechirut.txt containing new computed field תקרה מחייבת = max(תקרה לפי 3 חודשים, תקרה לפי שליש)"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps remain byte-identical; only sechirut app was modified"
+    },
+    {
+      "check": "max",
+      "text": "max() function correctly compiled into Dart; calc=true fn=true indicating computed field with function"
+    },
+    {
+      "check": "no_orphans",
+      "text": "No orphaned generated files; all outputs properly wired to render-ds layer"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All 53 gates passed; no violations of spec-lang rules or protocol constraints"
+    },
+    {
+      "check": "compiles",
+      "text": "Flutter analyze: 0 errors; Dart math functions (max) correctly mapped to top-level dart:math"
+    }
+  ],
+  "notes": "proven: The new computed field תקרה מחייבת was successfully added to ישות בטוחה in sechirut.txt as max of two ceiling fields. Machine verified: 10/10 checks pass, generator produced valid Dart code, all apps except sechirut remain unchanged."
+}

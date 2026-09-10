@@ -1,0 +1,157 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 1f1750a..4a7eb57 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -158,7 +158,7 @@ export function buildApp(specText) {
+         hidden: roles.map((role) => r.schema.map((s, i) => (role.hide || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+         readonly: roles.map((role) => r.schema.map((s, i) => (role.ro || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+       } : null;
+-      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz });
++      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz, sortBy: r.sortBy || [] });
+       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} ${L.fieldsWord}${(r.stages || []).length ? ` · ${r.stages.length} ${L.stagesWord}` : ''}` });
+     } else {
+       const slug = `${P}scr${li.i}`;
+diff --git a/machtzev/generator/entity.mjs b/machtzev/generator/entity.mjs
+index 4e09d7c..60f86c2 100644
+--- a/machtzev/generator/entity.mjs
++++ b/machtzev/generator/entity.mjs
+@@ -47,7 +47,7 @@ export function interpret(text) {
+   // "ישות X עם <שדות> | שלבים: a,b | חוקים: תאריך יעד >= תאריך חיוב"
+   const markers = [...text.matchAll(new RegExp('\\|\\s*' + alt(G.sectionMarkers), 'g'))];
+   const main = markers.length ? text.slice(0, markers[0].index) : text;
+-  let stagesPart = '', rulesPart = '', delPart = '', guardsPart = '';
++  let stagesPart = '', rulesPart = '', delPart = '', guardsPart = '', sortPart = '';
+   markers.forEach((m, mi) => {
+     const start = m.index + m[0].length;
+     const end = mi + 1 < markers.length ? markers[mi + 1].index : text.length;
+@@ -55,6 +55,7 @@ export function interpret(text) {
+     if (G.markRules.includes(m[1])) rulesPart = content;
+     else if (G.markDelete.includes(m[1])) delPart = content;
+     else if (G.markGuards.includes(m[1])) guardsPart = content;
++    else if ((G.markSort || []).includes(m[1])) sortPart = content;
+     else stagesPart = content;
+   });
+   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
+@@ -155,7 +156,12 @@ export function interpret(text) {
+   const guards = guardsPart
+     ? guardsPart.split(/[,\n]/).map((e) => { const m = e.match(/^(.+?)\s*:\s*(.+)$/); return m ? { stage: heWords(m[1]).join(' ').trim(), cond: m[2].trim() } : null; }).filter((g) => g && g.stage.length > 1 && g.cond.length > 1)
+     : [];
+-  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards };
++  // 🔃 מיון-הטבלה: '| מיון: מועד, שעה' ⇒ מפתחות-מיון לפי סדר-הכתיבה (מפתח-ראשון, ואז שובר-שוויון…).
++  // רק שדות-שקיימים-בסכמה (לא-מוכר ⇒ נשמט בשקט, לא מנחשים); בלי-סעיף ⇒ [] ⇒ פלט ביט-זהה.
++  const sortBy = sortPart
++    ? [...new Set(sortPart.split(/[,\n]/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1 && fields.includes(s)))]
++    : [];
++  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards, sortBy };
+ }
+ 
+ // ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..8a87359 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -255,7 +255,7 @@ function compileCond(formula, labels) {
+ }
+ 
+ // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
+-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null }) {
++export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null, sortBy = [] }) {
+   const { k, dump } = makeConsts(slug);
+   const cTitle = k(name);
+   const cSub = k(`${schema.length} ${L.fieldsWord}${stages.length ? ` · ${stages.length} ${L.stagesWord}` : ''}`);
+@@ -582,9 +582,45 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     ? `\n  Widget _viewBar(BuildContext context) {\n    final lk = DsLook.of(context);\n    const labels = [${viewChips.join(', ')}];\n    return Row(mainAxisSize: MainAxisSize.min, children: [\n      for (var i = 0; i < labels.length; i++)\n        Padding(\n          padding: const EdgeInsets.only(left: 6),\n          child: Material(\n            color: _view == i ? lk.accentSoft : (lk.chipBg),\n            borderRadius: BorderRadius.circular(20),\n            child: InkWell(\n              borderRadius: BorderRadius.circular(20),\n              onTap: () => setState(() => _view = i),\n              child: Padding(\n                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),\n                child: Text(labels[i], style: TextStyle(color: _view == i ? lk.accentDark : lk.muted, fontSize: 12, fontWeight: FontWeight.w700)),\n              ),\n            ),\n          ),\n        ),\n    ]);\n  }\n`
+     : '';
+   const recordsTrailing = hasSwitch ? 'Row(mainAxisSize: MainAxisSize.min, children: [_viewBar(context), const SizedBox(width: 8), _csvBtn(context)])' : '_csvBtn(context)';
++  // 🔃 מיון-הטבלה מהאפיון ('| מיון: מועד, שעה'): מפתח-אחר-מפתח לפי סדר-הכתיבה. ההשוואה נגזרת מצורת-הערך בלבד
++  // (תאריך-ISO ⇒ כרונולוגי · HH:MM ⇒ דקות · מספר ⇒ מספרי · אחרת לקסיקלי · ריק אחרון); שוויון-מלא ⇒ סדר-ההכנסה (יציב).
++  // חל על תצוגת-הטבלה בלבד (רשימה/לוח/לוח-שנה כמקודם). בלי-סעיף ⇒ אפס-פליטה ⇒ ביט-זהה.
++  const sortIdx = sortBy.map((l) => schema.findIndex((s) => s.label === l)).filter((i) => i >= 0);
++  const hasSort = hasTable && sortIdx.length > 0;
++  const sortMethods = hasSort
++    ? `
++  static int _cmpCell(String x, String y) {
++    final a = x.trim(), b = y.trim();
++    if (a.isEmpty || b.isEmpty) return a.isEmpty ? (b.isEmpty ? 0 : 1) : -1;
++    final da = DateTime.tryParse(a), db = DateTime.tryParse(b);
++    if (da != null && db != null) return da.compareTo(db);
++    final ta = _minutesOf(a), tb = _minutesOf(b);
++    if (ta != null && tb != null) return ta.compareTo(tb);
++    final na = num.tryParse(a), nb = num.tryParse(b);
++    if (na != null && nb != null) return na.compareTo(nb);
++    return a.compareTo(b);
++  }
++  static int? _minutesOf(String s) {
++    final p = s.split(':');
++    if (p.length != 2) return null;
++    final h = int.tryParse(p[0]), m = int.tryParse(p[1]);
++    if (h == null || m == null || h < 0 || h > 23 || m < 0 || m > 59) return null;
++    return h * 60 + m;
++  }
++  static List<Map<String, String>> _sorted(List<Map<String, String>> rs) {
++    final idx = [for (var i = 0; i < rs.length; i++) i];
++    idx.sort((i, j) {
++      for (final f in const [${sortIdx.map((i) => labelConst[i]).join(', ')}]) { final c = _cmpCell(rs[i][f] ?? '', rs[j][f] ?? ''); if (c != 0) return c; }
++      return i.compareTo(j);
++    });
++    return [for (final i in idx) rs[i]];
++  }
++`
++    : '';
++  const tableRows = hasSort ? '_sorted(rs)' : 'rs';
+   const boardBranch = (hasBoard ? `if (_view == ${viewIdx.board}) return DsBoard(stages: const ${stageList}, records: rs, stageOf: (r) => appStore.stageOf(${SK}, r['__id'] ?? ''), titleOf: (r) => r[${viewTitle}] ?? '', onMove: (id, to) => appStore.setStage(${SK}, id, to));\n              ` : '')
+     + (hasCal ? `if (_view == ${viewIdx.cal}) return DsCalendar(records: rs, dateOf: (r) => r[${firstDateConst}] ?? '', titleOf: (r) => r[${viewTitle}] ?? '');\n              ` : '')
+-    + (hasTable ? `if (_view == ${viewIdx.table}) return DsTable(labels: const [${labelsList}], rows: rs.map((r) => [${recValues}]).toList());\n              ` : '');
++    + (hasTable ? `if (_view == ${viewIdx.table}) return DsTable(labels: const [${labelsList}], rows: ${tableRows}.map((r) => [${recValues}]).toList());\n              ` : '');
+   const cls = pascal(slug);
+   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+ import '../dart-data-bs/auto/gen_${slug}_content.dart';
+@@ -640,7 +676,7 @@ ${hasVal ? `    final miss = <String>[];
+       _v = {${editLoad}};
+     });
+   }
+-${guardMethod}${rlsFields}${viewToggle}
++${guardMethod}${sortMethods}${rlsFields}${viewToggle}
+   ${cardSig}
+     final rid = r['__id'] ?? '';
+     return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid)${backFooter}${delArgs}${cardHiddenArg});
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index a85fb73..c1fa121 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -48,7 +48,11 @@
+   "ולידציה",
+   "מחיקה",
+   "מעברים",
+-  "שערים"
++  "שערים",
++  "מיון"
++ ],
++ "markSort": [
++  "מיון"
+  ],
+  "markRules": [
+   "חוקים",
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..d77d484 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים | מיון: מועד, שעה
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..f2d99f7 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -70,7 +70,7 @@ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/gener
+ 3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+-b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs
++5c5a97aa2322d8cc719b235505158eee4ed472cb18f33e214af3597758fc374c  machtzev/generator/render-ds.mjs
+ f9d748159c45d3d7013194ae5705a1797948376fc973bbbbb00497a22fa850d1  machtzev/generator/render-module-baseline.json
+ 74cd7e7ccd4d4e3ad57d8e5eade8fb9d38250616cfdfbf15d1d2087d9080d7ea  machtzev/generator/render-module.mjs
+ 0589103ea8b694b19bcef674586d0b31516a9a535b7b833ffce397c4f063798a  machtzev/generator/retarget.mjs

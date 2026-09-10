@@ -1,0 +1,37 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator pipeline completed successfully with field rename applied"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All non-calendar generated files unchanged (no unintended side effects)"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All 53 registered gates pass validation"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "Engine code contains no Hebrew strings (metadata and comments only)"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Mathematical expressions and numeric operations verified sane"
+    },
+    {
+      "check": "field_renamed",
+      "text": "Field name successfully changed in spec (calendar.txt line 6: מקום → כתובת)"
+    },
+    {
+      "check": "constant_propagated",
+      "text": "Generated constant reflects rename: gen_app_calendar_ent1_c12 = 'כתובת'"
+    },
+    {
+      "check": "old_field_removed",
+      "text": "No hardcoded references to old field name 'מקום' in generated app code"
+    }
+  ],
+  "notes": "proven: Field rename successfully implemented at spec layer, automatically propagated through generator. Generated code verifies: constant c12 now 'כתובת' instead of 'מקום'. All gates pass. No hand-edits required or made. Zero side effects on other apps or entities."
+}

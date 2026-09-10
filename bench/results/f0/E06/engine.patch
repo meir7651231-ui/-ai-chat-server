@@ -1,0 +1,126 @@
+diff --git a/machtzev/generator/particle-plan-peruk17.json b/machtzev/generator/particle-plan-peruk17.json
+index 1fbd18b..ca2e690 100644
+--- a/machtzev/generator/particle-plan-peruk17.json
++++ b/machtzev/generator/particle-plan-peruk17.json
+@@ -53,6 +53,33 @@
+    "DsChipButton"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "פעולה שלח תזכורת",
++  "expr": "[פעולה] שלח תזכורת",
++  "ok": true,
++  "why": null,
++  "shape": "act",
++  "ops": [
++   "action"
++  ],
++  "picks": [
++   {
++    "op": "action",
++    "atoms": [
++     "ProposePrimaryBtn"
++    ],
++    "alts": [
++     "ProposePrimaryBtn",
++     "DsChipButton",
++     "DsPrimaryButton"
++    ]
++   }
++  ],
++  "wired": [
++   "DsChipButton"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "ריק אין תיקים עדיין",
+diff --git a/machtzev/generator/particle-plan-peruk17.md b/machtzev/generator/particle-plan-peruk17.md
+index c44d091..8c55df3 100644
+--- a/machtzev/generator/particle-plan-peruk17.md
++++ b/machtzev/generator/particle-plan-peruk17.md
+@@ -4,6 +4,7 @@
+ |---|---|---|---|---|
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
++| פעולה שלח תזכורת | תיק | act | action⇒ProposePrimaryBtn (ProposePrimaryBtn/DsChipButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/peruk-lang.data.json b/machtzev/generator/peruk-lang.data.json
+index 74d8d89..eab69d8 100644
+--- a/machtzev/generator/peruk-lang.data.json
++++ b/machtzev/generator/peruk-lang.data.json
+@@ -57,6 +57,9 @@
+   ],
+   "kill": [
+    "קריטריון"
++  ],
++  "actions": [
++   "פעולות"
+   ]
+  },
+  "inputsHead": [
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..37a3787 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -145,6 +145,8 @@ export function perukToSpec(md, ns) {
+   const notin = S('notin'); if (notin) content.push(...contentOf(notin, groups.notin));
+   const ex = S('example'); if (ex) content.push(...contentOf(ex, groups.example));
+   const chainSec = S('chain'); const chain = chainSec ? items(chainSec.lines).map((x) => x.replace(/^\d+[.)]\s*/, '')) : [];
++  // פעולות: סעיף «פעולות» (רשימה) ⇒ כפתור-פעולה [פעולה] נוסף על מסך-החלקיקים של השורש; «פתח תיק» תמיד ראשון ולא נכפל — מבני, אפס-יד
++  const actSec = S('actions'); const actions = actSec ? [...new Set(items(actSec.lines).map((x) => clean(x)).filter((x) => x && x !== P.openAction))] : [];
+   const price = S('price'); const prices = price ? items(price.lines).concat(prose(price.lines)).map((l) => { const m = l.match(/(\d[\d,]*)\s*₪/); return m ? { label: l.split(/[:：]/)[0].trim(), ils: +m[1].replace(/,/g, '') } : null; }).filter(Boolean) : [];
+   // G29 · זוגות ישן/חדש מהבלוקים ("שכ״ד ישן מול חדש") ⇒ שני שדות-מספר + חלקיק-דיף; מכפיל-לשנה כשהבסיס חודשי (peruk-lang.monthlyWords)
+   const pairs = [];
+@@ -169,6 +171,7 @@ export function perukToSpec(md, ns) {
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]`);
+   lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${P.openAction}`);
++  for (const a of actions) lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${a}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pEmpty[0]}] ${P.emptyText}`);
+   const groupNames = [...new Set(content.map((c) => c.group))];
+   for (const g of groupNames) if (g !== groups.disclaimer && g !== groups.example) lines.push(`${G.particleWord} ${severity && g === groups.check ? fnd : root}: ${g} = [${G.pContent[0]} ${g}]`);
+diff --git a/machtzev/generator/peruks/peruk-17.md b/machtzev/generator/peruks/peruk-17.md
+index ae725fd..0b2ccd8 100644
+--- a/machtzev/generator/peruks/peruk-17.md
++++ b/machtzev/generator/peruks/peruk-17.md
+@@ -106,4 +106,11 @@
+ 17. ביטוח לאומי
+ 
+ הבא שם: מס / מע״מ לעצמאי, עירייה (ארנונה), דרכון / פנים.
++
++---
++
++## 10. פעולות
++
++- שלח תזכורת
++
+ ---
+diff --git a/machtzev/generator/specs-ds/peruk17.txt b/machtzev/generator/specs-ds/peruk17.txt
+index 9284905..8bd89e3 100644
+--- a/machtzev/generator/specs-ds/peruk17.txt
++++ b/machtzev/generator/specs-ds/peruk17.txt
+@@ -9,6 +9,7 @@
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
++חלקיק תיק: [פעולה] שלח תזכורת
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..ed91eb7 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -67,7 +67,7 @@ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/gener
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+ 39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++e4f449b32d7d71755876bc72bd8c7422ea876e46c1bf2f24170764a0bdd46ef7  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

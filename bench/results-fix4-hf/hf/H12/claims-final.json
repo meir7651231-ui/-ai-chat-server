@@ -1,0 +1,9 @@
+{
+ "claims": [
+  {
+   "check": "sort",
+   "text": "Cases table (חלקיק תיק: [טבלה]) is sorted alphabetically by סיווג (classification) field in ascending order"
+  }
+ ],
+ "notes": "proven: machtzev/generator/specs-ds/peruk17.txt line 10 specifies '[טבלה] | מיון: סיווג עולה'; machtzev/generator/particle-plan-peruk17.md line 5 confirms sort is parsed; machine report shows 'sort ✅ px1'"
+}

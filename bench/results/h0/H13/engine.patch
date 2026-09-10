@@ -1,0 +1,32 @@
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..a0eef02 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -119,7 +119,11 @@ export function shapeOf(expr, schema, content = [], opts = {}) {
+     if (!fields.length) return { kind: null, why: 'לוח: אין שדות-תאריך' };
+     return { kind: 'dates', fields: fields.map((f) => f.label) };
+   }
+-  if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\]')))) return { kind: 'table' };
++  if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\]\\s*(.*)$')) || e.match(new RegExp('^\\[' + alt(G.pTable) + '\\s+(.+)\\]$')))) {
++    const colsStr = (m[2] || m[1] || '').trim();
++    const columns = colsStr ? colsStr.split(/[,،]/).map((c) => clean(c)).filter(Boolean) : [];
++    return { kind: 'table', columns: columns.length ? columns : null };
++  }
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pSearch) + '\\]')))) return { kind: 'search' };
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pFilter) + '\\]')))) return { kind: 'filter' };
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pExport) + '\\]')))) return { kind: 'export' };
+@@ -383,8 +387,12 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       const w = firstWired(kd[0][1], { label: k(s.label || p.name), nav, glyph: k('🧩') }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-פעולה מתחווט`); continue; }
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+-      const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      let selectedFields = entity.schema;
++      if (s.columns) {
++        selectedFields = s.columns.map((colName) => entity.schema.find((f) => f.label === colName)).filter(Boolean);
++      }
++      const labels = selectedFields.map((f) => k(f.label));
++      const rows = `[for (final r in ${recs}) [${selectedFields.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {

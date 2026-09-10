@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator pipeline completed successfully with no errors"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All files outside specs-ds/sechirut.txt remain byte-identical to baseline"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All spec file syntax gates passed validation"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "Hebrew content is only in specs-ds (source specs), not in generated engine code"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "No mathematical computations modified in generated Dart"
+    },
+    {
+      "check": "report_text",
+      "text": "Report section סיכום added with content line references"
+    },
+    {
+      "check": "report_title",
+      "text": "Report section סיכום titled correctly"
+    }
+  ],
+  "notes": "Task M03: Added דוח תיק line 42 and 3 תוכן סיכום lines (94-96). Line 94 has exact string הבטוחות ייבדקו מול התקרה. Proven: exact string present, דוח line added, 3 content lines added, no existing lines broken."
+}

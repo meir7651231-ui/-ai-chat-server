@@ -1,0 +1,65 @@
+{
+ "task": "M02",
+ "ns": "peruk12",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "ent2": true,
+  "px2": true,
+  "dash_counter": true
+ },
+ "task_checks": [
+  {
+   "id": "ent2",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "px2",
+   "ok": true,
+   "info": "data:px2",
+   "mandatory": true
+  },
+  {
+   "id": "dash_counter",
+   "ok": true,
+   "info": "gen_app_peruk12_scr3_content.dart",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "6a2a44964445d0b9",
+ "at": "2026-09-10T14:36:36.125Z",
+ "arm": "h0",
+ "wall_s": 276,
+ "cost_usd": 0.2927313999999999,
+ "tokens": 1388223
+}

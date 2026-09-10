@@ -1,0 +1,77 @@
+{
+ "task": "H14",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort_color": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_color",
+   "ok": true,
+   "info": "ent3",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "App sechirut regenerated successfully from spec with sorting directive added.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Findings (ממצא) table sorted by color severity: אדום (red), צהוב (yellow), ירוק (green).",
+   "check": "sort_color",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other generated apps remain byte-identical; no collateral damage from spec change.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code passes flutter analyze with zero errors.",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All police gates pass; no Hebrew in engine, math functions are safe.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "f1c4385f1722ade3",
+ "at": "2026-09-10T18:20:04.910Z",
+ "arm": "hf",
+ "wall_s": 833,
+ "cost_usd": 2.1646803500000003,
+ "tokens": 10072569
+}

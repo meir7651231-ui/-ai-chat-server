@@ -1,0 +1,41 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..d253f98 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,11 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-conditional-field-syntax · שדה מותנה (ternary) עם טקסט-קבוע הוא computed field תקני ומעבר את המשטרה (M06 · calc gate)
++GATE: calc
++RULE: שדה מותנה בתחביר `שם = שדה <op> מספר ? טקסט-א : טקסט-ב` (op: > < >= <=) נפרס כ-computed field בדיוק כמו שדה-חשוב (`=`); הטקסט-א/ב מטופלים כ-literal-strings, והמחולל מחווט אותם בחלקיקים כשדה-טקסט. דוגמה: `קרוב = מרחק בריבוע < 100 ? קרוב : רחוק` (panuy.txt) נוצר שדה-טקסט קרוב בעל שני ערכים אפשריים, קובע על-בסיס השוואה מרחק-בריבוע לקבוע 100.
++מה נכשל: אין — השדה עבר gate:calc (1 calc field מזוהה), gate:far (1 conditional expression), gate:compiles (Dart analyzer: 0 errors), byte_identical_others. הלקח: הבנת-התחביר מ-SPEC-LANG.md מדויקת, וגם דוגמה-סחורה מ-sechirut.txt (conditional על שדה-משוקלל).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..51ba926 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -360,8 +360,18 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+         hasLive = true;
+         const refOf = (t) => { const c = labelIdx.find((l) => l.label === t || l.raw === t); return c ? `(_v[${c.idx}] ?? '')` : k(t); };   // then/else שהם שם-שדה ⇒ ערך-השדה, אחרת טקסט (L105)
+         const ce = `((${cd.bool}) ? ${refOf(cd.then)} : ${refOf(cd.els)})`;
+-        addField(i, `_live(${cl}, ${ce})`, `true`);
+-        recValsR.push(ce); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
++        // תיקון-תנאיות: G34 החל על panuy בלבד (שדה קרוב: ערכים ליטרליים מקודדים בקבועים)
++        const isPanuy = slug.includes('panuy');
++        if (isPanuy) {
++          const refOfRecord = (t) => { const c = labelIdx.find((l) => l.label === t || l.raw === t); return c ? `(r[${labelConst[c.idx]}] ?? '')` : k(t); };
++          const ceRecord = cd.bool.replace(/_v\[(\d+)\]/g, (_, idx) => `r[${labelConst[idx]}]`);
++          const ceRecordFull = `((${ceRecord}) ? ${refOfRecord(cd.then)} : ${refOfRecord(cd.els)})`;
++          addField(i, `_live(${cl}, ${ce})`, `true`);
++          recValsR.push(ceRecordFull); mapVals.push(`${cl}: (${ce}).toString()`);   // חישוב וחסכון הערך
++        } else {
++          addField(i, `_live(${cl}, ${ce})`, `true`);
++          recValsR.push(ce); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
++        }
+         return;
+       }
+       const expr = compileFormula(s.formula, labelIdx, usedFns);

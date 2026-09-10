@@ -1,0 +1,70 @@
+{
+ "task": "H01",
+ "ns": "panuy",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sqrt": true,
+  "sort_list": true
+ },
+ "task_checks": [
+  {
+   "id": "sqrt",
+   "ok": true,
+   "info": "import=true fn=true method=false",
+   "mandatory": true
+  },
+  {
+   "id": "sort_list",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Table particle [טבלה] spec now includes sort by מרחק בקמ עולה, making nearest-first sort",
+   "check": "sort_by_distance_ascending",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Generated table shows מרחק בקמ calculated with sqrt(מרחק בריבוע) in gen_app_panuy_ent1.dart",
+   "check": "display_real_distance_km",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Spec uses standard [טבלה] columns | מיון: field עולה syntax from SPEC-LANG.md line 17",
+   "check": "spec_syntax_valid",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "80bf972b029f59fa",
+ "at": "2026-09-10T11:51:02.851Z"
+}

@@ -1,0 +1,47 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..e96a31e 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,15 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-computed-9c7c4e · שדה-מחושב בנוסחה יוצר שדה-אחור בישות; round/floor/ceil/abs כל הם תקינים בדארט (10.9, task H09 · tasks.txt)
++GATE: calc
++ref: machtzev/generator/specs-ds/tasks.txt:6
++ANTIPATTERN: \s*=\s*round\(
++RULE: שדה מחושב בספק-language עם `שם = round(<שדה>)` מתורגם ל-Dart עם `int` כתוצאה; הפונקציה round() היא `dart:core` (לא צריך הוספת-import); השדה החדש מופיע בכל הישויות (display/logic/export) ולא שובר אטומים-אחרים (byte-identical-others).
++מה הצליח: משימה עם סכום מעוגל = round(סכום) ⇒ gen_tasks ⇒ Task entity עם `int get sokhomMeugal => sokhom.round()` ⇒ compile בלא שגיאות ⇒ `calc=1 round=1×` בדוח-משטרה.
++מה הוא זה: כל computed field ב-spec נהפך ל-getter בדארט; פונקציות-מתמטיקה בצד-שמאל של `=` מתורגמות ל-Dart ישר (בלא wrapper); הנוסחה לא מחייבת `_computed` suffix או annotation.
++ביטוח: `dart_math_sane` וודא ש-round() קיים; `compiles` וודא ש-generated Dart פוסח; `byte_identical_others` וודא ש-לא שברנו אפליקציות-אחרות.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..cc7b2b8 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -53,6 +53,12 @@
+     "type": "multiline",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "סכום מעוגל",
++    "type": "num",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..a0fc66d 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, הערה, סכום מעוגל = round(סכום) | שלבים: פתוח, נעשה

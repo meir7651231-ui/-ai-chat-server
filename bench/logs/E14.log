@@ -1,0 +1,17 @@
+=== h0/E14 (calendar) start 02:12:21
+  builder.json: exit=0 cost=0.2505926 turns=21 ms=464834 err=false
+  police: DONE missing= false=0
+=== h0/E14 DONE wall=496s cost=$0.25 false_claims=0
+=== hf/E14 (calendar) start 02:20:37
+  builder.json: exit=0 cost=0.3170000999999999 turns=19 ms=113266 err=false
+  police: DONE missing= false=0
+  auditor-compile.json: exit=0 cost=0.22064129999999998 turns=16 ms=79006 err=false
+  auditor-regression.json: exit=0 cost=0.296795 turns=20 ms=103086 err=false
+  auditor-coverage.json: exit=0 cost=0.30276139999999996 turns=21 ms=112864 err=false
+  validator.json: exit=0 cost=0.3110359 turns=33 ms=133450 err=false
+  fixer: skipped (FIX-LIST none)
+=== hf/E14 DONE wall=395s cost=$1.45 false_claims=0
+=== f0/E14 (calendar) start 02:27:12
+  builder.json: exit=0 cost=2.23094725 turns=32 ms=226790 err=false
+  police: DONE missing= false=0
+=== f0/E14 DONE wall=259s cost=$2.23 false_claims=0

@@ -1,0 +1,4 @@
+=== h0/H15 (peruk21) start 07:26:40
+  builder.json: exit=0 cost=0.18295220000000004 turns=16 ms=168406 err=false
+  police: NOT DONE missing=sort_ent false=0
+=== h0/H15 NOT DONE wall=200s cost=$0.18 false_claims=0

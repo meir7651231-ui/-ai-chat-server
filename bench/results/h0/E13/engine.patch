@@ -1,0 +1,76 @@
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..e7abd85 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -61,6 +61,18 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "קילומטראז׳",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
++   {
++    "label": "מחיר לקמ",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "מה המוכר אמר",
+     "type": "text",
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..3cc53b6 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -530,7 +530,7 @@
+    "לא שמאות במקום שמאי",
+    "לא אל תקנה יד 2"
+   ],
+-  "fields": 4,
++  "fields": 5,
+   "outputs": [
+    "כרטיס",
+    "רשימת שאלות למוכר מקסימום",
+diff --git a/machtzev/generator/peruks/peruk-12.md b/machtzev/generator/peruks/peruk-12.md
+index 58df974..40f11b2 100644
+--- a/machtzev/generator/peruks/peruk-12.md
++++ b/machtzev/generator/peruks/peruk-12.md
+@@ -65,7 +65,7 @@
+ שם: «לפני שמעבירים כסף על יד 2. מה חשוד ומה לבדוק.»
+ 
+ ### מה שולחים
+-קישור מודעה / תמונות, מחיר, מה המוכר אמר, האם נסעת.
++קישור מודעה / תמונות, מחיר, קילומטראז׳, מה המוכר אמר, האם נסעת.
+ 
+ ### מה חוזר
+ 1. כרטיס: מחיר מול הגיל/ק״מ, דגלים
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index a85fb73..23a022d 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -23,7 +23,8 @@
+   "רווח",
+   "יתרה",
+   "מ״ר",
+-  "מ\"ר"
++  "מ\"ר",
++  "קילומטראז׳"
+  ],
+  "typeBool": [
+   "האם",
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..dcd03d7 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, קילומטראז׳, מחיר לקמ = מחיר / קילומטראז׳, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

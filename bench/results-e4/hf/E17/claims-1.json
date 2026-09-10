@@ -1,0 +1,21 @@
+{
+  "claims": [
+    {
+      "check": "new_text",
+      "text": "Empty-state message in peruk21 changed to \"אין מכתבים פתוחים\" (verified in generated Dart files)"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other peruk applications remain byte-identical; only peruk21 was regenerated"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles without errors (0 analyzer errors)"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "No manual edits to generated files; only spec file was modified"
+    }
+  ],
+  "notes": "proven — all machine checks passed"
+}

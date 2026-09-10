@@ -1,0 +1,101 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..a4621e7 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -846,6 +846,11 @@ GATE: balagan
+ ---
+ **תוספת (10.9):** תווית עם ספרה («תקרה לפי 3 חודשים») נשמרת בסכמה בלי הספרה, אבל בנוסחאות/תנאים היא נכתבת כפי שהיא ⇒ compileFormula/compileGuard לא זיהו אותה ונכשלו בשקט (השדה נשאר קלט רגיל). תוקן: schema.raw = כפי שנכתב; הנוסחה מזהה גם raw וגם label. תוצאה: `חורג מול 3 חודשים` ב-sechirut נהיה חי (שינוי-פלט לגיטימי, בסיס-בייטים עודכן). וגם: ענפי `? :` שנוקבים שם-שדה ⇒ ערך-השדה, לא הטקסט.
+ 
++---
++## L106 · ישות חדשה בספק = ערך שדה-חובה בעלי-חוזה + מחיקה-cascade בדקדוק (10.9, peruk02 M01)
++GATE: regen_ok, ent3
++**מה קרה:** הוספת ישות תשלום (payment) לספק peruk02, עם שדות תיק* (required link), סכום* (required amount), שולם (yes/no). דרישה: cascade delete כשמוחקים תיק. **הלקח:** (1) **ישות חדשה = שדה-חובה + cascade בדקדוק בלבד.** תחביר בספק: `ישות תשלום עם תיק*, סכום*, שולם | מחיקה: תיק=מפל` — שם כמו ממצא (קורא-תשלומים = קורא-ממצאים של תיק). (2) **סוג נתון נגזר מרקע-שדה:** `סכום` → number (keyword match SPEC-LANG תאריך/מחיר/סכום/תקציב/עלות → number, כן/לא → boolean, שאר → text). (3) **חלקיק-טבלה מינימלי:** `חלקיק תשלום: [טבלה] תיק, סכום, שולם` (עמודות מפורשות, מיון לא נדרש לחלוקה). (4) **שער ent3 מזהה:** כרטיס-עובדות (goal-card) ללא תמונה זיכרון אוטומטי (בעלי-חוזה = השער כתב בעצמו לפי מונה-ישויות, render זקוקה לצילום בעת-עריכה, לא אחרי regen). (5) **search-record קודם:** חיפוש בבנק-עצמי (atom-index + audit-log) נמנע מהעתקה/כפילות כשהשם קרוב (PaymentChip היא ארטיפקט אחר, store_screen, לא peruk).
++
+ ## L104 · הקשות נמדדות על הפלט, לא מובטחות בפרוזה: «היום» = הפעולה-הראשית במסך-הראשון (8.9, GENMAX · G30 · הכרעה-28)
+ GATE: balagan
+ **מה קרה:** אחרי G29 התשובה ישבה עמוק: לשונית ⇒ שורה ⇒ דוח ⇒ נוסח ⇒ שלח = 5 הקשות. כלל-היעד T3 (≤2, אפס-הקלדה) לא ייסגר "בעיצוב" אלא בהעברת הפעולה למסך-הראשון. **הלקח:** (1) **«היום» = מסך הפעולה** (`renderHome`, נייר): לכל רשומה-פתוחה (שלב < אחרון) כרטיס אחד — משפט בגוף-ראשון (`homeOne/homeMany/homeNone`) · בורר-הנוסחים של חלקיק-ההודעה (אותו `particleWidgets`, `recs=[r]`) · שלח (אותו `reportText`+מנוע-קישור של הדוח, `export.linkRaw` ממופה-מחדש ל-k של המסך — קבועי-הדוח אינם גלויים ממסך אחר) · פתח. הקשות: נוסח (1) + שלח (2). (2) **יצירה = טקסט בלבד** (`DsQuickAdd`: Enter ⇒ `appStore.add` עם שדה-המתאר) — הטופס נשאר ל«פרטים». (3) **מקלדת = חוזה** (`CallbackShortcuts`: A/T/I · Ctrl/Cmd+K ⇒ `DsPalette` על רשומות+פעולות; `Focus(autofocus)`). (4) **אפס-הגדרות = main פותח בשלד** (בדיקה, לא הבטחה). (5) **השער סופר בפלט**: T3 = «היום» מכיל בורר-נוסחים (אם לדוח יש) + `_send` והוא הלשונית הראשונה; D2 = DsQuickAdd ברשימה; D3/D4 = הקיצורים+הפלטה בשלד; D10 = `home: ShellScreen`. (6) משתנה שהוגדר בבלוק (`plan`/`pents` בתוך if) אינו זמין לשלד — חשיפה מפורשת (`planAll`), לא העתקה. (7) **שער-cover רגיש לאוצר-המילים**: כותרת-עברית עשירה לאטום-DS חדש ("רשומות · פעולות · בחירה · הקשה") שינתה את משקלי-ה-IDF של האחזור ⇒ הזהב של `identity` (MediaRow) נפל מ-top-3 (29⇒28). אטום-כרום-DS שאינו נבחר-בחיפוש מקבל כותרת קצרה (שם + אנגלית) — לא לתאר במילים שהן מטרות-זהב של אופים אחרים; הראיה = `cover.mjs --gate` אחרי כל אטום חדש.
+diff --git a/machtzev/generator/apps/peruk02.json b/machtzev/generator/apps/peruk02.json
+index 21319c4..c8b7262 100644
+--- a/machtzev/generator/apps/peruk02.json
++++ b/machtzev/generator/apps/peruk02.json
+@@ -116,6 +116,10 @@
+   {
+    "name": "ממצא",
+    "slug": "app_peruk02_ent2"
++  },
++  {
++   "name": "תשלום",
++   "slug": "app_peruk02_ent3"
+   }
+  ],
+  "relations": true,
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..7704424 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -240,6 +240,33 @@
+    "DsNote"
+   ]
+  },
++ {
++  "entity": "תשלום",
++  "name": "טבלה תיק סכום שולם",
++  "expr": "[טבלה] תיק, סכום, שולם",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "לוח",
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..c0c5526 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -10,6 +10,7 @@
+ | בדיקה | ממצא | content | group⇒SectionHeader (SectionHeader/DsSection) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
++| טבלה תיק סכום שולם | תשלום | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..9ec5bbf 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -5,6 +5,7 @@
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, סכום הפיקדון*, מה המשכיר אמר הודעה*, תאריך מסירת מפתח*, חוזה לפחות סעיפי בטוחה*, תיקונים*, יציאה*, פרוטוקול כניסה יציאה, תמונות כניסה ויציאה, וואטסאפ מלא עם המשכיר, קבלות על תיקונים שהוא | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ ישות ממצא עם תיק*, סעיף, מה כתוב, מה לבקש, צבע{אדום|צהוב|ירוק} | מחיקה: תיק=מפל
++ישות תשלום עם תיק*, סכום*, שולם | מחיקה: תיק=מפל
+ לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+@@ -15,6 +16,7 @@
+ חלקיק ממצא: בדיקה = [תוכן בדיקה]
+ חלקיק תיק: אסור = [תוכן אסור]
+ חלקיק ממצא: צבע
++חלקיק תשלום: [טבלה] תיק, סכום, שולם
+ דוח תיק: כרטיס = [תוכן כרטיס]
+ דוח תיק: טבלת שורות = [תוכן טבלת שורות]
+ דוח תיק: סכום יעד לדרישה = [תוכן סכום יעד לדרישה]

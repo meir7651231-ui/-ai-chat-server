@@ -1,0 +1,670 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..3fee72e 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -848,3 +848,8 @@ GATE: balagan
+ GATE: balagan
+ **מה קרה:** אחרי G29 התשובה ישבה עמוק: לשונית ⇒ שורה ⇒ דוח ⇒ נוסח ⇒ שלח = 5 הקשות. כלל-היעד T3 (≤2, אפס-הקלדה) לא ייסגר "בעיצוב" אלא בהעברת הפעולה למסך-הראשון. **הלקח:** (1) **«היום» = מסך הפעולה** (`renderHome`, נייר): לכל רשומה-פתוחה (שלב < אחרון) כרטיס אחד — משפט בגוף-ראשון (`homeOne/homeMany/homeNone`) · בורר-הנוסחים של חלקיק-ההודעה (אותו `particleWidgets`, `recs=[r]`) · שלח (אותו `reportText`+מנוע-קישור של הדוח, `export.linkRaw` ממופה-מחדש ל-k של המסך — קבועי-הדוח אינם גלויים ממסך אחר) · פתח. הקשות: נוסח (1) + שלח (2). (2) **יצירה = טקסט בלבד** (`DsQuickAdd`: Enter ⇒ `appStore.add` עם שדה-המתאר) — הטופס נשאר ל«פרטים». (3) **מקלדת = חוזה** (`CallbackShortcuts`: A/T/I · Ctrl/Cmd+K ⇒ `DsPalette` על רשומות+פעולות; `Focus(autofocus)`). (4) **אפס-הגדרות = main פותח בשלד** (בדיקה, לא הבטחה). (5) **השער סופר בפלט**: T3 = «היום» מכיל בורר-נוסחים (אם לדוח יש) + `_send` והוא הלשונית הראשונה; D2 = DsQuickAdd ברשימה; D3/D4 = הקיצורים+הפלטה בשלד; D10 = `home: ShellScreen`. (6) משתנה שהוגדר בבלוק (`plan`/`pents` בתוך if) אינו זמין לשלד — חשיפה מפורשת (`planAll`), לא העתקה. (7) **שער-cover רגיש לאוצר-המילים**: כותרת-עברית עשירה לאטום-DS חדש ("רשומות · פעולות · בחירה · הקשה") שינתה את משקלי-ה-IDF של האחזור ⇒ הזהב של `identity` (MediaRow) נפל מ-top-3 (29⇒28). אטום-כרום-DS שאינו נבחר-בחיפוש מקבל כותרת קצרה (שם + אנגלית) — לא לתאר במילים שהן מטרות-זהב של אופים אחרים; הראיה = `cover.mjs --gate` אחרי כל אטום חדש.
+ 
++---
++## L107 · «השלב-האחרון = סגור» הוא אינווריאנט-מנוע, לא מוסכמה: שלב-סופי שאינו על המסלול (בוטל) = יציאה-צדדית, לא «עוד שלב» (9.9, GENMAX · משימות)
++GATE: none
++**מה קרה:** הבקשה «הוסף שלב שלישי בוטל למשימה» נראית שורה-אחת בספק. אבל המנוע קורא את רשימת-השלבים כמסלול-ליניארי שסופו = סגור: `open() = שלב < אחרון` · «עשיתי»/«סגור תיק»/תיק-שעומד ⇒ `= אחרון` · `advance` עד האחרון · «צעד-הבא» ⇒ `≥ אחרון` — ב-4 מנועים (render-ds · app-shell · balagan · compose). `פתוח, נעשה, בוטל` ⇒ «עשיתי» מסמן בוטל ו«נעשה» נספר פתוח; `פתוח, בוטל, נעשה` ⇒ «קדם» מבטל. שתי הצורות שוברות בשקט (analyze ירוק). **הלקח:** (1) **שלב-סופי מחוץ למסלול = מבנה בדקדוק**, לא סדר-ברשימה: `| שלבים: פתוח, נעשה, (בוטל)` — סוגריים = יציאה-צדדית (entity.mjs `exits`, `doneIdx` = השלב-הליניארי-האחרון; היציאות תמיד אחרי המסלול). (2) **כל מנוע שואל `doneIdx`, לא `length-1`** (`doneOf` ב-app-shell · `D` ב-render-ds · `linearStages` ב-balagan): סגור = `≥ doneIdx` (גם היציאה) · פתוח = `< doneIdx` · «עשיתי»/«סגור» = `doneIdx` · «צעד-הבא»/`done()` = `== doneIdx` רק כשיש יציאה (בוטל ≠ נעשה) · מסלול-הצעדים (`DsWorkflow`) = הליניאריים בלבד · תוויות/בורר/לוח = הרשימה המלאה (אל היציאה מגיעים רק בבחירה מפורשת). (3) **בלי סוגריים `doneIdx = length-1` ⇒ ביט-זהה**: ההוכחה = חילול-מחדש של calendar · sechirut (6 שלבים+מעברים) · peruk01 · בלגן — אפס דיף ב-Dart. (4) **המניפסט (`apps/<ns>.json`) נושא `doneIdx`**; קורא ישן בלי המפתח נופל ל-`length-1`.
++
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 1f1750a..12b2077 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -95,7 +95,7 @@ export function buildApp(specText) {
+   for (const li of info) if (li.isEnt) {
+     const r = entRes[li.i];
+     const eslug = `${P}ent${li.i}`;
+-    entMeta.push({ name: r.entity, slug: eslug, fields: r.schema.length, stages: (r.stages || []).length, stageLabels: r.stages || [], icon: '🗂️', numFields: r.schema.filter((s) => s.type === 'num').map((s) => s.label), labels: r.schema.map((s) => s.label) });
++    entMeta.push({ name: r.entity, slug: eslug, fields: r.schema.length, stages: (r.stages || []).length, stageLabels: r.stages || [], doneIdx: r.doneIdx, icon: '🗂️', numFields: r.schema.filter((s) => s.type === 'num').map((s) => s.label), labels: r.schema.map((s) => s.label) });
+     if (!(r.entity in nameToSlug)) nameToSlug[r.entity] = eslug;   // שם ⇒ slug-היעד לקשרים
+   }
+   const entityNames = entMeta.map((e) => e.name);
+@@ -158,7 +158,7 @@ export function buildApp(specText) {
+         hidden: roles.map((role) => r.schema.map((s, i) => (role.hide || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+         readonly: roles.map((role) => r.schema.map((s, i) => (role.ro || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+       } : null;
+-      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz });
++      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], doneIdx: r.doneIdx, entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz });
+       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} ${L.fieldsWord}${(r.stages || []).length ? ` · ${r.stages.length} ${L.stagesWord}` : ''}` });
+     } else {
+       const slug = `${P}scr${li.i}`;
+@@ -222,7 +222,7 @@ export function buildApp(specText) {
+   let overN = 0;
+   for (const e of drawer ? entMeta : []) {
+     if (!(e.stageLabels || []).length && !(e.numFields || []).length) continue;   // אין מה להרכיב מעבר ללי מסך-הישות
+-    const c = renderCompose(`${P}over${++overN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], numFields: e.numFields || [], stages: e.stageLabels || [], detail: detailByEnt[e.slug] || null, scopeField: scopeByEnt[e.slug] || null });
++    const c = renderCompose(`${P}over${++overN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], numFields: e.numFields || [], stages: e.stageLabels || [], doneIdx: e.doneIdx, detail: detailByEnt[e.slug] || null, scopeField: scopeByEnt[e.slug] || null });
+     if (c) composeScreens.push({ slug: c.slug, cls: c.cls, kind: 'entity', name: `🧩 ${e.name} · ${L.overviewTag}`, icon: '🧩', sub: L.composedSub });
+     else overN--;
+   }
+@@ -282,7 +282,7 @@ export function buildApp(specText) {
+   const rootMeta = pickRoot(entMeta, backRefs);
+   let home = { slug: `${P}hub`, cls: hub.cls };
+   if (rootMeta) {
+-    const entOf = (name) => { const sc = screens.find((x) => x.kind === 'entity' && x.name === name); const li = info.find((x) => x.isEnt && entRes[x.i] && entRes[x.i].entity === name); const r = li ? entRes[li.i] : null; return { name, slug: nameToSlug[name], cls: sc ? sc.cls : null, schema: r ? r.schema : [], stages: r ? (r.stages || []) : [], icon: '🗂️' }; };
++    const entOf = (name) => { const sc = screens.find((x) => x.kind === 'entity' && x.name === name); const li = info.find((x) => x.isEnt && entRes[x.i] && entRes[x.i].entity === name); const r = li ? entRes[li.i] : null; return { name, slug: nameToSlug[name], cls: sc ? sc.cls : null, schema: r ? r.schema : [], stages: r ? (r.stages || []) : [], doneIdx: r ? r.doneIdx : null, icon: '🗂️' }; };
+     const descRank = (f) => (f.required && !(f.enumVals && f.enumVals.length) && !/^(num|date|bool|multiline)$/.test(f.type || '')) ? -1 : f.type === 'multiline' ? 0 : (f.enumVals && f.enumVals.length) ? 3 : f.type === 'num' ? 4 : f.type === 'date' ? 5 : f.type === 'bool' ? 6 : f.label.split(/\s+/).length > 1 ? 1 : 2;   // מתאר-רשומה לפי צורה: טקסט-חובה (זהות) > רב-שורתי > תווית-רב-מילים > טקסט > enum > מספר > תאריך; שוויון = סדר-הספק
+     const descOf = (e, skip = []) => { const t = e.schema.filter((f) => !f.formula && !(f.members && f.members.length) && !skip.includes(f.label) && !entMeta.some((x) => x.name === f.label)).map((f, i) => [descRank(f), i, f]).sort((a, b) => a[0] - b[0] || a[1] - b[1]); return t.length ? t[0][2].label : null; };
+     const rootE = entOf(rootMeta.name); rootE.descField = descOf(rootE); rootE.subField = (rootE.schema.find((f) => f.label !== rootE.descField && !(f.members && f.members.length) && !entMeta.some((x) => x.name === f.label)) || {}).label || null;
+@@ -299,7 +299,7 @@ export function buildApp(specText) {
+     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr });
+     home = { slug: `${P}shell`, cls: shell.cls };
+     // G33 · מניפסט-המודול (הכרעה-29): מה ש«בלגן» (האפליקציה-האחת) צריך כדי למזג את המודול — מסכים · שורש · שדות · שרשרת. נגזר, לא יד.
+-    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [] })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
++    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], doneIdx: (rootE.stages || []).length ? ((rootE.doneIdx == null || rootE.doneIdx < 0) ? rootE.stages.length - 1 : rootE.doneIdx) : null, fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [] })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
+     console.log(`🧭 ${L.shellLog}: ${L.shellRootWord} ${rootMeta.name} · ${kids.length} ${L.shellChildrenWord} · ${shell.nav || '—'}${[...rootPage.notes, ...shell.notes].length ? ' · ⚪ ' + [...rootPage.notes, ...shell.notes].join(' · ') : ''}`);
+   }
+   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
+diff --git a/machtzev/generator/app-shell.mjs b/machtzev/generator/app-shell.mjs
+index 8cd573c..43ecb21 100644
+--- a/machtzev/generator/app-shell.mjs
++++ b/machtzev/generator/app-shell.mjs
+@@ -12,6 +12,10 @@ const SL0 = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.
+ const isTimeLabel = (f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && !(f.enumVals && f.enumVals.length) && String(f.label).split(/\s+/).some((w) => (SL0.typeTime || []).includes(w));   // שדה-שעה לפי דקדוק-האפיון
+ 
+ const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
++// ⤴ השלב-הליניארי-האחרון של השורש (entity.mjs doneIdx): «סגור תיק»/«עשיתי» = הוא · פתוח = מתחתיו · יציאה-צדדית '(בוטל)'
++//    יושבת אחריו ברשימה (סגורה, לא-עשויה). בלי doneIdx = האחרון-ברשימה ⇒ ביט-זהה לקודם. -1 = בלי שלבים.
++const doneOf = (root) => { const n = ((root && root.stages) || []).length; if (!n) return -1; const d = root.doneIdx; return (d == null || d < 0) ? n - 1 : Math.min(d, n - 1); };
++const hasExits = (root) => doneOf(root) >= 0 && doneOf(root) < root.stages.length - 1;
+ const impOf = (w) => `import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`;
+ 
+ // השורש = הישות עם הכי-הרבה מצביעים-נכנסים (backRefs); שוויון ⇒ הראשונה בספק. אין מצביעים ⇒ אין שלד (הרכזת נשארת).
+@@ -61,7 +65,7 @@ export function renderRootPage(slug, { root, children, report, title }) {
+   const locLabels = root.schema.filter((f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && String(f.label).split(/\s+/).some((w) => (SL0.typeLocation || []).includes(w))).map((f) => f.label);   // שדה-מקום ⇒ «ניווט» (maps, אפס-מפתח)
+   if (paper && locLabels.length) blocks.push(`(() { final loc = [${locLabels.map((l) => `(r0[${k(l)}] ?? '')`).join(', ')}].map((x) => x.trim()).firstWhere((x) => x.length >= 3, orElse: () => ''); if (loc.isEmpty) return const SizedBox.shrink(); return Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.navLabel)} + ' · ' + (loc.length > 24 ? loc.substring(0, 24) + '…' : loc), onTap: () => launchUrl(Uri.parse('https://maps.google.com/?q=' + Uri.encodeComponent(loc)), mode: LaunchMode.externalApplication))])); })()`);
+   if (paper) blocks.push(`Padding(padding: const EdgeInsets.only(bottom: 10), child: DsQuickAdd(hint: ${k(L.noteAddHint)}, onSubmit: (t) { final v = t.trim(); if (v.isEmpty) return; final prev = r0['__note'] ?? ''; final stamp = DateTime.now().toIso8601String().substring(0, 10); appStore.update('${root.slug}', id, {'__note': (prev.isEmpty ? '' : prev + '\\n') + stamp + ' · ' + v}); appStore.logAction('auto', ${k(L.noteAddLog)}.replaceAll('{who}', appStore.displayOf('${root.slug}', id)), entity: '${root.slug}', rid: id, field: '__note', prev: prev); }))`);   // «מה קרה מאז?» — הערה מתוארכת נצברת ב«מה כתבת», עם החזר
+-  const lastStage = root.stages && root.stages.length ? root.stages.length - 1 : -1;
++  const lastStage = doneOf(root);   // ⤴ השלב-הליניארי-האחרון (לא בהכרח האחרון-ברשימה — יציאה-צדדית '(בוטל)' אחריו)
+   if (paper && lastStage >= 0) blocks.push(`(appStore.stageOf('${root.slug}', id) >= ${lastStage} ? const SizedBox.shrink() : Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.closeLabel)}, onTap: () { final prev = r0[AppStore.stageKey] ?? '0'; appStore.update('${root.slug}', id, {AppStore.stageKey: '${lastStage}'}); appStore.logAction('auto', ${k(L.closeLog)}.replaceAll('{who}', appStore.displayOf('${root.slug}', id)), entity: '${root.slug}', rid: id, field: AppStore.stageKey, prev: prev); })])))`);   // «סגור תיק» = השלב-האחרון, עם החזר (השלב חוזר)
+   if (paper) blocks.push(`Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.deleteLabel)}, onTap: () { final snap = Map<String, String>.from(r0); appStore.removeById('${root.slug}', id); appStore.logAction('del', ${k(L.delLog)}.replaceAll('{who}', snap.values.take(2).join(' · ')), entity: '${root.slug}', rid: id, prev: jsonEncode(snap)); Navigator.of(context).pop(); })]))`);   // «מחק» עם החזר (הרשומה חוזרת כמו שהייתה) — «עשיתי לבד» מציג
+   if (paper) blocks.push(`Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.editLabel)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${root.cls}(editId: id)))), const SizedBox(width: 8), DsChipButton(label: ${k(L.dupLabel)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${root.cls}(initial: {for (final e in r0.entries) if (!e.key.startsWith('__') && !const <String>[${root.schema.filter((f) => f.type === 'date').map((f) => k(f.label)).join(', ')}].contains(e.key)) e.key: e.value}))))]))`);   /* ב׳-סט · «עוד אחד כזה» = טופס חדש עם אותם פרטים בלי המועדים (ארנונה של החודש הבא) */   // «ערוך» = מסך-הישות פתוח על הרשומה הזו (תיקון שדה בלי לחפש)
+@@ -113,7 +117,7 @@ export function renderHome(slug, { root, rootPage, report, message, title, chain
+   const firstWired = (pick, ctx) => { const w = pickWired([...pick.atoms, ...pick.alts], (c) => wireAtom(c, ctx)); if (w) imports.add(impOf(w)); return w; };
+   const notes = [];
+   const disp = root.descField ? `(r[${k(root.descField)}] ?? '')` : `appStore.displayOf('${root.slug}', r[AppStore.idKey] ?? '')`;
+-  const openRecs = root.stages && root.stages.length ? `appStore.records('${root.slug}').where((r) => appStore.stageOf('${root.slug}', r[AppStore.idKey] ?? '') < ${root.stages.length - 1}).toList()` : `appStore.records('${root.slug}')`;
++  const openRecs = root.stages && root.stages.length ? `appStore.records('${root.slug}').where((r) => appStore.stageOf('${root.slug}', r[AppStore.idKey] ?? '') < ${doneOf(root)}).toList()` : `appStore.records('${root.slug}')`;   // פתוח = לפני השלב-הליניארי-האחרון (יציאה-צדדית = סגורה)
+   // חלקיק-ההודעה של הדוח (אם יש) — אותו חיווט, רשומה-אחת
+   let msgW = null, msgImports = new Set();
+   if (message) { const w = particleWidgets({ entity: message.entity, plan: [message.p], k, recs: '[r]' }); msgImports = w.imports; if (w.widgets.length) msgW = w.widgets[0]; else notes.push(...w.notes); }
+@@ -141,9 +145,10 @@ export function renderHome(slug, { root, rootPage, report, message, title, chain
+   const phoneList = `[${root.schema.filter((f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && String(f.label).split(/\s+/).some((w) => (SL0.typePhone || []).includes(w))).map((f) => k(f.label)).join(', ')}]`;   // ב׳-לח · שדות-טלפון ⇒ «התקשר» על שורת-היום
+   const numList = `[${root.schema.filter((f) => f.type === 'num' && !String(f.label).split(/\s+/).some((w) => (SL0.typePercent || []).includes(w))).map((f) => k(f.label)).join(', ')}]`;   // ב׳-מ · שדה-הסכום הראשי (לא אחוז) ⇒ ₪ על השורה
+   const timeList = `[${root.schema.filter(isTimeLabel).map((f) => k(f.label)).join(', ')}]`;   // שדות-שעה ⇒ השעה על שורת-היום והתוכנית מקבעת אותה
+-  const lastStage = root.stages && root.stages.length ? root.stages.length - 1 : -1;
++  const lastStage = doneOf(root);   // ⤴ השלב-הליניארי-האחרון (לא בהכרח האחרון-ברשימה — יציאה-צדדית '(בוטל)' אחריו)
++  const closedOp = hasExits(root) ? '==' : '>=';   // «נעשה» לצעד-הבא: עם יציאה-צדדית רק השלב-הליניארי-האחרון (בוטל ≠ נעשה); בלעדיה ≥ כמקודם (ביט-זהה)
+   const dispR = disp;
+-  const dateList = `[${dateFields.map((f) => `_D(${k(f.label)}, ${f.hard ? 'true' : 'false'})`).join(', ')}]`;
++  const dateList =`[${dateFields.map((f) => `_D(${k(f.label)}, ${f.hard ? 'true' : 'false'})`).join(', ')}]`;
+   const nextName = chain.length ? k(chain[0]) : null;
+   const sendLog = sendFn ? `appStore.logAction('send', ${k(L.sendDid)}.replaceAll('{who}', appStore.displayOf('${root.slug}', id0)), entity: '${root.slug}', rid: id0, prev: appStore.stageOf('${root.slug}', id0).toString());` : '';
+   const sendFn2 = sendFn.replace('    final text = ', `    ${sendLog}\n    final text = `);
+@@ -327,12 +332,12 @@ class ${cls}Today {
+     }
+     ${nextName && lastStage >= 0 ? `if (chain) for (final r in appStore.records('${root.slug}')) {   // P14 · הצעד-הבא: רשומה שהגיעה לשלב-האחרון (סגורה — לא ב-open) ובלי הכרעה
+       final rid = r[AppStore.idKey] ?? ''; final who = appStore.displayOf('${root.slug}', rid);
+-      if (appStore.stageOf('${root.slug}', rid) >= ${lastStage} && appStore.decision('next:\$rid').isEmpty) out.add(DsApproveCard(question: ${k(L.nextAsk)}.replaceAll('{next}', ${nextName}), source: module + ' · ' + who, okLabel: ${k(L.actOk)}, noLabel: ${k(L.actNo)}, onOk: () { appStore.decide('next:\$rid', 'ok'); appStore.logAction('next', ${k(L.nextDid)}.replaceAll('{next}', ${nextName}), entity: '${root.slug}', rid: rid, field: 'next:\$rid'); }, onNo: () => appStore.decide('next:\$rid', 'no')));
++      if (appStore.stageOf('${root.slug}', rid) ${closedOp} ${lastStage} && appStore.decision('next:\$rid').isEmpty) out.add(DsApproveCard(question: ${k(L.nextAsk)}.replaceAll('{next}', ${nextName}), source: module + ' · ' + who, okLabel: ${k(L.actOk)}, noLabel: ${k(L.actNo)}, onOk: () { appStore.decide('next:\$rid', 'ok'); appStore.logAction('next', ${k(L.nextDid)}.replaceAll('{next}', ${nextName}), entity: '${root.slug}', rid: rid, field: 'next:\$rid'); }, onNo: () => appStore.decide('next:\$rid', 'no')));
+     }` : ''}
+     return out;
+   }
+   /// רשומות שהגיעו לשלב-האחרון ובלי הכרעת-צעד-הבא — ל«בלגן» (שרשרת חוצת-מודולים)
+-  static List<Map<String, String>> done() => ${lastStage >= 0 ? `appStore.records('${root.slug}').where((r) => appStore.stageOf('${root.slug}', r[AppStore.idKey] ?? '') >= ${lastStage} && appStore.decision('next:\${r[AppStore.idKey] ?? ''}').isEmpty).toList()` : 'const []'};
++  static List<Map<String, String>> done() => ${lastStage >= 0 ? `appStore.records('${root.slug}').where((r) => appStore.stageOf('${root.slug}', r[AppStore.idKey] ?? '') ${closedOp} ${lastStage} && appStore.decision('next:\${r[AppStore.idKey] ?? ''}').isEmpty).toList()` : 'const []'};
+ 
+   // כרטיס-הרשומה (G30): נוסחים · שלח · פתח — ≤2 הקשות
+   static Widget card(BuildContext context, Map<String, String> r) => DsSection(title: module + ' · ' + ((${dispR}).trim().isEmpty ? ${k(root.name)} : ${dispR}), trailing: Text(${stageSub}, style: TextStyle(color: DsLook.of(context).muted, fontSize: 13)), children: [
+diff --git a/machtzev/generator/apps/calendar.json b/machtzev/generator/apps/calendar.json
+index 8fa140b..e901a86 100644
+--- a/machtzev/generator/apps/calendar.json
++++ b/machtzev/generator/apps/calendar.json
+@@ -29,6 +29,7 @@
+    "קבוע",
+    "התקיים"
+   ],
++  "doneIdx": 1,
+   "fields": [
+    {
+     "label": "מה",
+diff --git a/machtzev/generator/apps/peruk01.json b/machtzev/generator/apps/peruk01.json
+index 62f26a4..2eafd04 100644
+--- a/machtzev/generator/apps/peruk01.json
++++ b/machtzev/generator/apps/peruk01.json
+@@ -36,6 +36,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk02.json b/machtzev/generator/apps/peruk02.json
+index 21319c4..2fe5772 100644
+--- a/machtzev/generator/apps/peruk02.json
++++ b/machtzev/generator/apps/peruk02.json
+@@ -33,6 +33,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk03.json b/machtzev/generator/apps/peruk03.json
+index 42123c9..235c9d8 100644
+--- a/machtzev/generator/apps/peruk03.json
++++ b/machtzev/generator/apps/peruk03.json
+@@ -37,6 +37,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk04.json b/machtzev/generator/apps/peruk04.json
+index 168d3f3..fc75a24 100644
+--- a/machtzev/generator/apps/peruk04.json
++++ b/machtzev/generator/apps/peruk04.json
+@@ -38,6 +38,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk05.json b/machtzev/generator/apps/peruk05.json
+index 77e4047..bd0eace 100644
+--- a/machtzev/generator/apps/peruk05.json
++++ b/machtzev/generator/apps/peruk05.json
+@@ -39,6 +39,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk06.json b/machtzev/generator/apps/peruk06.json
+index aa059b9..eedf444 100644
+--- a/machtzev/generator/apps/peruk06.json
++++ b/machtzev/generator/apps/peruk06.json
+@@ -33,6 +33,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk07.json b/machtzev/generator/apps/peruk07.json
+index 5eaca30..32438b4 100644
+--- a/machtzev/generator/apps/peruk07.json
++++ b/machtzev/generator/apps/peruk07.json
+@@ -36,6 +36,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk08.json b/machtzev/generator/apps/peruk08.json
+index 911b157..8b78131 100644
+--- a/machtzev/generator/apps/peruk08.json
++++ b/machtzev/generator/apps/peruk08.json
+@@ -33,6 +33,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk09.json b/machtzev/generator/apps/peruk09.json
+index b185f1d..7b358f6 100644
+--- a/machtzev/generator/apps/peruk09.json
++++ b/machtzev/generator/apps/peruk09.json
+@@ -33,6 +33,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk10.json b/machtzev/generator/apps/peruk10.json
+index 3fec270..4caa337 100644
+--- a/machtzev/generator/apps/peruk10.json
++++ b/machtzev/generator/apps/peruk10.json
+@@ -33,6 +33,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk11.json b/machtzev/generator/apps/peruk11.json
+index 2fb51a1..1fd428a 100644
+--- a/machtzev/generator/apps/peruk11.json
++++ b/machtzev/generator/apps/peruk11.json
+@@ -33,6 +33,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..24756d6 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -36,6 +36,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk13.json b/machtzev/generator/apps/peruk13.json
+index dab7cf8..d40be82 100644
+--- a/machtzev/generator/apps/peruk13.json
++++ b/machtzev/generator/apps/peruk13.json
+@@ -33,6 +33,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk14.json b/machtzev/generator/apps/peruk14.json
+index 3fe6720..08b1012 100644
+--- a/machtzev/generator/apps/peruk14.json
++++ b/machtzev/generator/apps/peruk14.json
+@@ -36,6 +36,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk15.json b/machtzev/generator/apps/peruk15.json
+index 724e157..12bfac6 100644
+--- a/machtzev/generator/apps/peruk15.json
++++ b/machtzev/generator/apps/peruk15.json
+@@ -37,6 +37,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk16.json b/machtzev/generator/apps/peruk16.json
+index b2b9023..3559ad3 100644
+--- a/machtzev/generator/apps/peruk16.json
++++ b/machtzev/generator/apps/peruk16.json
+@@ -38,6 +38,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk17.json b/machtzev/generator/apps/peruk17.json
+index e752fbd..91b33ed 100644
+--- a/machtzev/generator/apps/peruk17.json
++++ b/machtzev/generator/apps/peruk17.json
+@@ -35,6 +35,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk18.json b/machtzev/generator/apps/peruk18.json
+index b58dedc..5bd78a9 100644
+--- a/machtzev/generator/apps/peruk18.json
++++ b/machtzev/generator/apps/peruk18.json
+@@ -36,6 +36,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk19.json b/machtzev/generator/apps/peruk19.json
+index 1c429cd..26d9971 100644
+--- a/machtzev/generator/apps/peruk19.json
++++ b/machtzev/generator/apps/peruk19.json
+@@ -37,6 +37,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk20.json b/machtzev/generator/apps/peruk20.json
+index fbbc6af..3d3938c 100644
+--- a/machtzev/generator/apps/peruk20.json
++++ b/machtzev/generator/apps/peruk20.json
+@@ -38,6 +38,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk21.json b/machtzev/generator/apps/peruk21.json
+index d176e19..5b52f01 100644
+--- a/machtzev/generator/apps/peruk21.json
++++ b/machtzev/generator/apps/peruk21.json
+@@ -35,6 +35,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk22.json b/machtzev/generator/apps/peruk22.json
+index 921ba85..8743649 100644
+--- a/machtzev/generator/apps/peruk22.json
++++ b/machtzev/generator/apps/peruk22.json
+@@ -36,6 +36,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk23.json b/machtzev/generator/apps/peruk23.json
+index d267b60..6f0b60d 100644
+--- a/machtzev/generator/apps/peruk23.json
++++ b/machtzev/generator/apps/peruk23.json
+@@ -37,6 +37,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk24.json b/machtzev/generator/apps/peruk24.json
+index 09a66cb..1ddf0cb 100644
+--- a/machtzev/generator/apps/peruk24.json
++++ b/machtzev/generator/apps/peruk24.json
+@@ -33,6 +33,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk25.json b/machtzev/generator/apps/peruk25.json
+index 68ae22f..d30a6aa 100644
+--- a/machtzev/generator/apps/peruk25.json
++++ b/machtzev/generator/apps/peruk25.json
+@@ -33,6 +33,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk26.json b/machtzev/generator/apps/peruk26.json
+index 967f321..b80bc1b 100644
+--- a/machtzev/generator/apps/peruk26.json
++++ b/machtzev/generator/apps/peruk26.json
+@@ -33,6 +33,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk27.json b/machtzev/generator/apps/peruk27.json
+index 65a552f..0bb2d36 100644
+--- a/machtzev/generator/apps/peruk27.json
++++ b/machtzev/generator/apps/peruk27.json
+@@ -33,6 +33,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/peruk28.json b/machtzev/generator/apps/peruk28.json
+index 5820a2b..3849e9c 100644
+--- a/machtzev/generator/apps/peruk28.json
++++ b/machtzev/generator/apps/peruk28.json
+@@ -33,6 +33,7 @@
+    "נמסר",
+    "סגור"
+   ],
++  "doneIdx": 4,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/sechirut.json b/machtzev/generator/apps/sechirut.json
+index e44be62..3f964ab 100644
+--- a/machtzev/generator/apps/sechirut.json
++++ b/machtzev/generator/apps/sechirut.json
+@@ -38,6 +38,7 @@
+    "תיקון",
+    "סגור"
+   ],
++  "doneIdx": 5,
+   "fields": [
+    {
+     "label": "לקוח",
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..5e3ef49 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -27,8 +27,10 @@
+   "descField": "מה",
+   "stages": [
+    "פתוח",
+-   "נעשה"
++   "נעשה",
++   "בוטל"
+   ],
++  "doneIdx": 1,
+   "fields": [
+    {
+     "label": "מה",
+diff --git a/machtzev/generator/balagan.mjs b/machtzev/generator/balagan.mjs
+index 4c6c1b2..3adf11d 100644
+--- a/machtzev/generator/balagan.mjs
++++ b/machtzev/generator/balagan.mjs
+@@ -33,6 +33,9 @@ const definal = (w) => w.replace(/ך$/, 'כ').replace(/ם$/, 'מ').replace(/ן$/
+ const heWords = (s) => [...String(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => definal(m[0].replace(/[״׳]/g, ''))).filter((w) => w.length >= 2);
+ export const variants = (w) => { const out = [w]; if (w.length >= 4 && /^[והבלמשכ]/.test(w)) out.push(w.slice(1)); return out; };
+ 
++// ⤴ מספר השלבים-הליניאריים של השורש (doneIdx+1 מהמניפסט; בלעדיו = כל השלבים). BalaganModule.stages = המספר הזה:
++//    סגור = שלב ≥ stages-1 · «סגור»/«עשיתי» = stages-1 · יציאה-צדדית '(בוטל)' יושבת מעבר לכך ⇒ סגורה, לא פתוחה.
++export const linearStages = (m) => { const s = (m.root && m.root.stages) || []; if (!s.length) return 0; const d = m.root.doneIdx; return ((d == null || d < 0) ? s.length - 1 : Math.min(d, s.length - 1)) + 1; };
+ export function loadModules() {
+   const index = JSON.parse(fs.readFileSync(path.join(HERE, 'peruk-index.json'), 'utf8'));
+   const mods = [];
+@@ -117,7 +120,7 @@ class BalaganModule {
+ class BalaganHit { const BalaganHit(this.module, this.score); final BalaganModule module; final double score; }
+ 
+ const List<BalaganModule> kBalaganModules = [
+-${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}], selfScore: ${selfScores[i]}, layer: '${m.layer || ''}', required: ${m.root.fields.filter((f) => f.required).length}, timeFields: [${m.root.fields.filter(isTimeField).map((f) => dq(f.label)).join(', ')}], phoneFields: [${m.root.fields.filter(isPhoneField).map((f) => dq(f.label)).join(', ')}], personFields: [${m.root.fields.filter(isPersonField).map((f) => dq(f.label)).join(', ')}], percentFields: [${m.root.fields.filter(isPercentField).map((f) => dq(f.label)).join(', ')}]),`).join('\n')}
++${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${linearStages(m)}, [${(m.chain || []).map(dq).join(', ')}], selfScore: ${selfScores[i]}, layer: '${m.layer || ''}', required: ${m.root.fields.filter((f) => f.required).length}, timeFields: [${m.root.fields.filter(isTimeField).map((f) => dq(f.label)).join(', ')}], phoneFields: [${m.root.fields.filter(isPhoneField).map((f) => dq(f.label)).join(', ')}], personFields: [${m.root.fields.filter(isPersonField).map((f) => dq(f.label)).join(', ')}], percentFields: [${m.root.fields.filter(isPercentField).map((f) => dq(f.label)).join(', ')}]),`).join('\n')}
+ ];
+ /// סף-החולשה — נגזר מהנתונים (לא קבוע-קסם): חצי מביטחון-הכותרת-הנמוך-ביותר בין המודולים. מתחתיו הרגע «כללי» ⇒ שכבת-הבסיס ראשונה.
+ const double kBalaganWeak = ${weak};
+@@ -574,7 +577,7 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
+     expect(s.map((x) => x.rid), contains(old)); expect(s.map((x) => x.rid), isNot(contains(fresh))); expect(s.map((x) => x.rid), isNot(contains(fut)));
+     expect(s.firstWhere((x) => x.rid == old).sub.contains('40'), isTrue);
+     s.firstWhere((x) => x.rid == old).act(0);
+-    expect(appStore.stageOf(S, old), ${(baseMod.root.stages || []).length - 1});
++    expect(appStore.stageOf(S, old), ${linearStages(baseMod) - 1});
+     expect(${baseTodayCls}.stale(today).any((x) => x.rid == old), isFalse);
+     expect(appStore.undo(appStore.log.first['id']!), isTrue);
+     expect(${baseTodayCls}.stale(today).any((x) => x.rid == old), isTrue);
+@@ -1339,7 +1342,7 @@ ${mods.map((m) => `      case '${m.root.slug}': return ${m.rootPage.cls}(id: id)
+     if (_q.trim().isEmpty) ...(() { final seen = <String>{}; final rows = <Widget>[]; for (final e in appStore.log) { if (rows.length >= 5) break; final ent = e['entity'] ?? '', rid = e['rid'] ?? ''; if (ent.isEmpty || rid.isEmpty || e['undone'] == '1' || !_titleOf.containsKey(ent) || !seen.add(ent + '|' + rid) || appStore.byId(ent, rid) == null) continue; rows.add(DsNavTile(glyph: '', title: (_titleOf[ent] ?? ent) + ' · ' + appStore.displayOf(ent, rid), sub: [(() { final at = DateTime.tryParse(e['at'] ?? ''); return at == null ? '' : balaganAgo(at, DateTime.now()); })(), e['what'] ?? ''].where((x) => x.isNotEmpty).join(' · '), onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => _open(ent, rid))))); } return rows.isEmpty ? <Widget>[] : [DsSection(title: ${k(L.recentTitle)}, children: rows)]; })(),   // «איפה הייתי»: התיקים שנגעת בהם לאחרונה, מהיומן
+     if (hits.isNotEmpty) DsSection(title: ${k(L.searchTitle)}.replaceAll('{n}', hits.length.toString()), children: [for (final h in hits.take(30)) DsNavTile(glyph: '', title: (_titleOf[h[0]] ?? h[0]) + ' · ' + appStore.displayOf(h[0], h[1]), sub: (() { final ms = kBalaganModules.where((m) => m.rootSlug == h[0]); final r = appStore.byId(h[0], h[1]); final ctx = ms.isEmpty || r == null ? '' : balaganDupSub(ms.first, r, DateTime.now()); final t = h[2].length > 60 ? h[2].substring(0, 60) + '…' : h[2]; return [ctx, t].where((x) => x.isNotEmpty).join(' · '); })(), onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => _open(h[0], h[1]))))]),
+ ${order.map((t) => `    DsSection(title: ${k(t)}, children: [
+-${mods.filter((m) => m.topic === t).map((m) => `      DsNavTile(glyph: '', title: ${k(m.title)}, sub: [${k(m.moment)}, balaganOpenCount('${m.root.slug}', ${(m.root.stages || []).length})].where((x) => x.isNotEmpty).join(' · '), onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${m.root.cls}()))),`).join('\n')}
++${mods.filter((m) => m.topic === t).map((m) => `      DsNavTile(glyph: '', title: ${k(m.title)}, sub: [${k(m.moment)}, balaganOpenCount('${m.root.slug}', ${linearStages(m)})].where((x) => x.isNotEmpty).join(' · '), onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${m.root.cls}()))),`).join('\n')}
+     ]),`).join('\n')}
+     DsSection(title: ${k(L.topicsSystem)}, children: [
+       DsNavTile(glyph: '', title: ${k(L.keysTitle)}, sub: ${k(L.keysSub)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${clsOf('balagan_keys')}()))),
+diff --git a/machtzev/generator/entity.mjs b/machtzev/generator/entity.mjs
+index 4e09d7c..aece1d0 100644
+--- a/machtzev/generator/entity.mjs
++++ b/machtzev/generator/entity.mjs
+@@ -105,15 +105,22 @@ export function interpret(text) {
+   const fields = annots.map((a) => a.label);
+   // 🔄 שלבי-workflow (אם ניתנו): שרשרת-סטטוס. בלי '|' ⇒ אין workflow (לא ברירת-מחדל).
+   // אין חיתוך ל-8 (קודם הפיל 'ועדה/התקבל/נדחה' — שלבי-ההכרעה שה-workflow קיים בשבילם).
+-  const stages = stagesPart
+-    ? stagesPart.replace(new RegExp('^\\s*' + alt(G.stagePrefixes) + '[:\\s]*'), '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 30)
+-    : [];
++  // ⤴ יציאה-צדדית: שלב בסוגריים — '| שלבים: פתוח, נעשה, (בוטל)' — סופי אך **מחוץ למסלול-הליניארי**: «קדם»/«סיים»/«סגור תיק»
++  //    לעולם לא מגיעים אליו (רק בחירה מפורשת: בורר-שלב · לוח). doneIdx = אינדקס השלב-הליניארי-האחרון; סגור = שלב ≥ doneIdx;
++  //    היציאות תמיד אחרי המסלול ⇒ בלי סוגריים הכל ביט-זהה לקודם (doneIdx = האחרון).
++  const linear = [], exits = [];
++  for (const raw of stagesPart ? stagesPart.replace(new RegExp('^\\s*' + alt(G.stagePrefixes) + '[:\\s]*'), '').split(/[,\n]|\s*→\s*/) : []) {
++    const label = heWords(raw).join(' ').trim();
++    if (label.length > 1) (/^\s*\(.*\)\s*$/.test(raw) ? exits : linear).push(label);
++  }
++  const stages = [...linear, ...exits].slice(0, 30);
++  const doneIdx = Math.max(0, Math.min(linear.length, stages.length) - 1);
+ 
+   const schema = annots.map((a) => ({ label: a.label, type: inferType(a.label), required: a.required, unique: a.unique, enumVals: a.enumVals, formula: a.formula, def: a.def, members: a.members, pattern: a.pattern, range: a.range }));
+   const used = new Set();
+   const lines = [`הירו 🗂️ ${entity} | ישות מורכבת — טופס + טבלה`];
+   // 🔄 workflow: פס-שלבים מתוייג (BreadcrumbTrail labels) — מציג את מסע-הרשומה
+-  if (stages.length >= 2) lines.push(`אטום BreadcrumbTrail ${entity}: ${stages.join(' / ')}`);
++  if (stages.length >= 2) lines.push(`אטום BreadcrumbTrail ${entity}: ${stages.slice(0, doneIdx + 1).join(' / ')}`);   // המסלול בלבד (יציאה-צדדית אינה תחנה)
+   // טופס: אטום-קלט פר-שדה
+   lines.push(`כותרת טופס ${entity}`);
+   for (const s of schema) { const a = inputAtom(s.type); used.add(a); s.atom = a; lines.push(`אטום ${a} ${s.label}`); }
+@@ -155,7 +162,7 @@ export function interpret(text) {
+   const guards = guardsPart
+     ? guardsPart.split(/[,\n]/).map((e) => { const m = e.match(/^(.+?)\s*:\s*(.+)$/); return m ? { stage: heWords(m[1]).join(' ').trim(), cond: m[2].trim() } : null; }).filter((g) => g && g.stage.length > 1 && g.cond.length > 1)
+     : [];
+-  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards };
++  return { spec: lines.join('\n'), entity, schema, stages, doneIdx, exits, rules: rules.map((r) => r.name), vrules, delPolicy, guards };
+ }
+ 
+ // ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..c4028b5 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -255,7 +255,7 @@ function compileCond(formula, labels) {
+ }
+ 
+ // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
+-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null }) {
++export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], doneIdx = null, entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null }) {
+   const { k, dump } = makeConsts(slug);
+   const cTitle = k(name);
+   const cSub = k(`${schema.length} ${L.fieldsWord}${stages.length ? ` · ${stages.length} ${L.stagesWord}` : ''}`);
+@@ -462,8 +462,11 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const hasStages = stages.length >= 2;
+   const stageConsts = hasStages ? stages.map((x) => k(x)) : [];
+   const stageList = `[${stageConsts.join(', ')}]`;
++  // ⤴ D = השלב-הליניארי-האחרון (entity.mjs doneIdx). יציאה-צדדית — '(בוטל)' — יושבת אחריו: «קדם» עוצר ב-D, «סגור» = D,
++  //    stageDone = ≥ D (גם היציאה סגורה). בלי יציאות D = האחרון ⇒ ביט-זהה לקודם.
++  const D = (doneIdx == null || doneIdx < 0) ? stages.length - 1 : Math.min(doneIdx, stages.length - 1);
+   const stepsDart = hasStages
+-    ? `        DsWorkflow(steps: const ${stageList}, current: 0),\n`
++    ? `        DsWorkflow(steps: const [${stageConsts.slice(0, D + 1).join(', ')}], current: 0),\n`
+     : '';
+   const mapEntries = mapVals.join(', ');                                                  // שדות ⇒ מפה (מחושב=נוסחה)
+   const editLoad = [...labelConst.map((cl, i) => `${i}: r[${cl}] ?? ''`), ...subEditLoad].join(', ');   // רשומה ⇒ טופס (עריכה) + תת-תאים מקוננים
+@@ -496,10 +499,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     ? `(i) { if (i > appStore.stageOf(${SK}, rid)) { final g = _guard(i, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } } appStore.setStage(${SK}, rid, i); }`
+     : `(i) => appStore.setStage(${SK}, rid, i)`;
+   const onAdvBody = hasGuards
+-    ? `() { final g = _guard(appStore.stageOf(${SK}, rid) + 1, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } appStore.advance(${SK}, rid, ${stages.length}); }`
+-    : `() => appStore.advance(${SK}, rid, ${stages.length})`;
++    ? `() { final g = _guard(appStore.stageOf(${SK}, rid) + 1, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } appStore.advance(${SK}, rid, ${D + 1}); }`
++    : `() => appStore.advance(${SK}, rid, ${D + 1})`;
+   const stageArgs = hasStages
+-    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: ${onStageBody}, onAdvance: ${onAdvBody}, `
++    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${D}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: ${onStageBody}, onAdvance: ${onAdvBody}, `
+     : '';
+ 
+   // 🔒 RLS (read-side · סינון-תצוגה, לא אכיפה): היקף-שורה (scoped) + הסתרת-עמודות פר-תפקיד.
+@@ -1082,7 +1085,7 @@ export function selectVaried(roleSpecs, pred = () => true, seed = 0) {
+ // **האטום שמגשים אותו הכי-טוב** (selectAtom מדורג); ההרכבה **משלבת** את אטומי-ההיבטים
+ // יחד עד שהמטרה מושגת. שקעי-דאטה⇐נתוני-אמת · שקעים-נותרים⇐סגנון-בטוח (לא דאטה מזויף).
+ const _rS = /^String\??$/, _rLS = /^List<String>\??$/, _rLLS = /^List<List<String>>\??$/, _rLD = /^List<double>\??$/, _rI = /^int\??$/;
+-export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [], stages = [], detail = null, scopeField = null }) {
++export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [], stages = [], doneIdx = null, detail = null, scopeField = null }) {
+   const { k, dump } = makeConsts(slug);
+   const cls = pascal(slug);
+   // 🔐 מקור-הרשומות מכבד RLS: יש שדה-היקף ⇒ scoped (מסונן ל-actor), אחרת records (הכל).
+@@ -1131,7 +1134,7 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
+   if (prog) {
+     imports.add(`import '../${prog.file}';`);
+     const extra = prog.fills.length ? ', ' + prog.fills.join(', ') : '';
+-    const last = Math.max(0, stages.length - 1);
++    const last = Math.max(0, (doneIdx == null || doneIdx < 0) ? stages.length - 1 : Math.min(doneIdx, stages.length - 1));   // סגור = ≥ השלב-הליניארי-האחרון (יציאה-צדדית נספרת כסגורה)
+     const pctExpr = `appStore.count('${entitySlug}') == 0 ? 0 : (${recsExpr}.where((r) => appStore.stageOf('${entitySlug}', r['__id'] ?? '') >= ${last}).length * 100 ~/ appStore.count('${entitySlug}'))`;
+     blocks.push(`Padding(\n            padding: const EdgeInsets.symmetric(horizontal: 12),\n            child: ${prog.cls}(${prog.p.pct}: ${pctExpr}${extra}),\n          )`);
+   }
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..09edb3d 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה, (בוטל)
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..0f43b2f 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -11,7 +11,7 @@ a806ebd46fc621ada29fc44f2ea2d49b46702230313f5113f95e42209c2a3c8d  .githooks/pre-
+ f0ce468621ed75c86b05a063018c3707ac6a8a93944fcf8befc0251d4b014ce4  PURPOSE.md
+ 884436c8354c9f51376d40e5891c6569d4c4c525ce6fbdec7985459327f98d79  machtzev/AGENT-CODE.md
+ ca4f98abb46479e91265ea7ad39a4d83fcd95bfeac7d606602584fca1572b54b  machtzev/DECISIONS.md
+-7f0e9ae5737a73a840fb3d9bdb67460c5023b9876bb0e702b1d639c2738fd5ab  machtzev/LEARNINGS.md
++63b01c2c9ac8a62fa214ac003aac5fc06a4d404933d2690defcfc06914bc408f  machtzev/LEARNINGS.md
+ 6e3d4d4a397a70394d2439ab32a29f8d8b24da02246d9e5131759f8ed16e18c4  machtzev/THE-WAY.md
+ 4328cb71e44391c77f218c0aa49e8c90880c60b510e7c97d49ae2a6dab166184  machtzev/VERIFY-LAWS.md
+ 37005d06bc27e84bb29265118e60f364941d759dce612b07d65a4b2bad12b4aa  machtzev/allow-check.mjs
+@@ -70,7 +70,7 @@ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/gener
+ 3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+-b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs
++1e5790ed1cd14d187d4f771bd9a9b86ef5cea1b2cf80a1b92ce7982f3dc028e1  machtzev/generator/render-ds.mjs
+ f9d748159c45d3d7013194ae5705a1797948376fc973bbbbb00497a22fa850d1  machtzev/generator/render-module-baseline.json
+ 74cd7e7ccd4d4e3ad57d8e5eade8fb9d38250616cfdfbf15d1d2087d9080d7ea  machtzev/generator/render-module.mjs
+ 0589103ea8b694b19bcef674586d0b31516a9a535b7b833ffce397c4f063798a  machtzev/generator/retarget.mjs

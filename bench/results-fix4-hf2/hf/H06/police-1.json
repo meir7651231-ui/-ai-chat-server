@@ -1,0 +1,83 @@
+{
+ "task": "H06",
+ "ns": "peruk12",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort": true,
+  "numeric": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  },
+  {
+   "id": "numeric",
+   "ok": true,
+   "info": "2×",
+   "mandatory": false
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator successfully processed sorting syntax in peruk12.txt particle definition.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Table particle sorts cases (תיק) by price (מחיר) field, ascending order (cheapest first).",
+   "check": "sort",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Price values are compared numerically using Dart's num.tryParse() and compareTo() — not text comparison.",
+   "check": "numeric",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No changes to other app specs; only peruk12.txt modified; all other generated apps remain byte-identical.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart passes flutter analyze with 0 errors; numeric comparisons are valid Dart.",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All police gates pass; no Hebrew in engine; sort-cmp gate validates sort specification.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "bdf654aabe7c7062",
+ "at": "2026-09-10T10:47:26.104Z"
+}

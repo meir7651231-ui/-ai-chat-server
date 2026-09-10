@@ -1,0 +1,18 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..4cc339b 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-first-panuy · שלבים/סטטוסים של ישות מבטאים בשפת-הספק (שלבים: א, ב, ג) לא בקוד — spec-language מאוד מתוך לכך, רegressions מנוע אפס (10.9, MASTER_PROTOCOL·ג.2(c) · M14)
++GATE: byte_identical_others
++ref: da1234567890abcdef:machtzev/generator/specs-ds/panuy.txt
++ANTIPATTERN: הוספת state/stage logic לקוד מחולל במקום לspec
++RULE: ישות עם lifecycle stages מבטאת כ`ישות X עם שדות | שלבים: S1, S2, S3` בקובץ-spec (לא בمحrode/data.json או Dart). Engine מחולל enum ו-UI widgets חופשי. Spec-first = תצפית-עצמית של machine(`byte_identical_others` בוודאות, gates זהים), לא hand-edit.
++מה הצליח: Task M14 הוסיף שלבים (פנוי, הוזמן, בוצע) לאדם בpanuy.txt כשורה-אחת בspec. Machine בדק: regen_ok, compiles, byte_identical_others, gates_pass — כל יישום/app אחר (calendar/sechirut/tasks) נשאר בתוך בייטים. טרנזקציה ספק-בלבד (15 bytes נוספות). לעומת זאת, engine-change היה צריך touch spec-lang.data.json + regain + pins + retest.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart

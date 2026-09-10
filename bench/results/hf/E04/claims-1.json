@@ -1,0 +1,5 @@
+{"claims":[
+{"check":"regen_ok","text":"Pipeline completed successfully"},
+{"check":"stage_cancel","text":"Stage בוטל added and indexed (1×)"},
+{"check":"gates_pass","text":"All gates passed"}
+],"notes":"Stage added to tasks entity. Balagan files regenerated (unknown if expected)."}

@@ -1,0 +1,79 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..52e8a88 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,12 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-09-particle-add-e26f5e · חלקיק [פעולה] חדש בספק-DS = אוטומטי בפלט בלי יד (9.9, E06)
++GATE: particle
++ref: machtzev/generator/specs-ds/peruk17.txt
++RULE: חלקיק [פעולה] בספק (שורה: `חלקיק <ישות>: [פעולה] <שם>`) מגנרט אוטומטית לפלט: particle-plan מתעדכן, action מומפה ל-DsChipButton/ProposePrimaryBtn, אפס יד בקוד-dart. החלקיק נרשם בספק וקוא״ח פתוחה: app-ds.mjs מפרסם אותו מ-atoms.json (search-record · חיפוש-פתוח · אין בחירה-סגורה).
++מה נבדק: הוספה של `חלקיק תיק: [פעולה] שלח תזכורת` ל-peruk17 סגרה ללא כשל: particle-plan-peruk17.md תרגם את הלייבל לטבלה, לא היה צורך בכתיבת-דאט, מכללי או בדיקה נוספת — פלט-המנוע (new/dart-gen-bs) נותר byte-identical.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-peruk17.json b/machtzev/generator/particle-plan-peruk17.json
+index 1fbd18b..ca2e690 100644
+--- a/machtzev/generator/particle-plan-peruk17.json
++++ b/machtzev/generator/particle-plan-peruk17.json
+@@ -53,6 +53,33 @@
+    "DsChipButton"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "פעולה שלח תזכורת",
++  "expr": "[פעולה] שלח תזכורת",
++  "ok": true,
++  "why": null,
++  "shape": "act",
++  "ops": [
++   "action"
++  ],
++  "picks": [
++   {
++    "op": "action",
++    "atoms": [
++     "ProposePrimaryBtn"
++    ],
++    "alts": [
++     "ProposePrimaryBtn",
++     "DsChipButton",
++     "DsPrimaryButton"
++    ]
++   }
++  ],
++  "wired": [
++   "DsChipButton"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "ריק אין תיקים עדיין",
+diff --git a/machtzev/generator/particle-plan-peruk17.md b/machtzev/generator/particle-plan-peruk17.md
+index c44d091..8c55df3 100644
+--- a/machtzev/generator/particle-plan-peruk17.md
++++ b/machtzev/generator/particle-plan-peruk17.md
+@@ -4,6 +4,7 @@
+ |---|---|---|---|---|
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
++| פעולה שלח תזכורת | תיק | act | action⇒ProposePrimaryBtn (ProposePrimaryBtn/DsChipButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/specs-ds/peruk17.txt b/machtzev/generator/specs-ds/peruk17.txt
+index 9284905..8bd89e3 100644
+--- a/machtzev/generator/specs-ds/peruk17.txt
++++ b/machtzev/generator/specs-ds/peruk17.txt
+@@ -9,6 +9,7 @@
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
++חלקיק תיק: [פעולה] שלח תזכורת
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]

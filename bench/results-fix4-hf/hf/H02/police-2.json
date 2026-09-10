@@ -1,0 +1,72 @@
+{
+ "task": "H02",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "sort": true,
+  "desc": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  },
+  {
+   "id": "desc",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Generator successfully processed sechirut.txt with sort specification added to table particle.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Table particle [טבלה] now includes sort specification | מיון: שכירות יורד for descending rent order.",
+   "check": "sort",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Descending sort keyword 'יורד' is correctly recognized by engine from spec-lang.data.json.",
+   "check": "desc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No files outside task H02 were modified; only sechirut.txt line 22 changed.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All registered gates in machtzev/gates.tsv passed validation.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "dcacfa54988b218e",
+ "at": "2026-09-10T08:41:26.341Z"
+}

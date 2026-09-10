@@ -1,0 +1,4 @@
+=== h0/H02 (sechirut) start 08:07:11
+  builder.json: exit=0 cost=0.388875 turns=34 ms=251515 err=false
+  police: DONE missing= false=0
+=== h0/H02 DONE wall=286s cost=$0.39 false_claims=0

@@ -1,0 +1,58 @@
+{
+ "task": "H09",
+ "ns": "tasks",
+ "verdict": "NOT DONE",
+ "missing": [
+  "byte_identical_others"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": false,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "calc": true,
+  "round": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  },
+  {
+   "id": "round",
+   "ok": true,
+   "info": "2×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "changed_others": [
+   "dart-gen-bs/gen_app_peruk06_root.dart",
+   "dart-gen-bs/gen_app_peruk06_shell.dart",
+   "dart-gen-bs/gen_app_peruk23_root.dart",
+   "dart-gen-bs/gen_app_peruk23_shell.dart",
+   "dart-gen-bs/gen_app_peruk24_root.dart",
+   "dart-gen-bs/gen_app_peruk24_shell.dart",
+   "dart-gen-bs/gen_app_peruk27_root.dart",
+   "dart-gen-bs/gen_app_peruk27_shell.dart"
+  ],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "bc6869d42f6350cb",
+ "at": "2026-09-09T22:26:54.122Z"
+}

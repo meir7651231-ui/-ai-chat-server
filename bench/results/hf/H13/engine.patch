@@ -1,0 +1,56 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..9b10f9a 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,14 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-particles-h13 · חלקיק-טבלה שמציג תת-קבוצה של שדות — סינון סכמה בשכבת-הדקדוק, לא בקוד הגנוי (10.9, specs-ds/panuy.txt · particles.mjs · task H13)
++LAYER: spec language (parser + schema filter)
++CHANGE: particles.mjs line 122 regex + lines 395-401 wiring
++SYNTAX: `[טבלה]` (all fields) → `[טבלה: שם, זמין, מרחק בקמ, מחיר לשעה]` (4 columns in order)
++RULE: צורה-חלקיק שמקבלת פרמטר רשימתי (כאן: עמודות) מעוגנת בדקדוק בשקוף — parsing בשורה, validation כל שדה מול schema, וסינון יישם בשכבת-הדור (שדה shapeOf → שדה selectedSchema). סגנון-הקלט בספק (שדות בתוך הסוגריים, מופרדים בפסיקים, סדר-מילים קבוע).
++מה הטיפול: הסינון-הדקדוקי מונע יצירת שדה-שאינו-קיים (each col validated via F(col)); selectedSchema = order-preserving filter לפי רשימת-הפרמטר (לא סדר-סכמה); backwards-compatible שגם omit-list = all fields. משטרה: particles gate אימת דיוק-הדקדוק ב-parse; ה-regen דטרמיניסטי; ה-app-panuy מראה 4 עמודות במדוייק.
++מחזור-הלקח: תאימות של syntax-בספק עם דקדוק-הפסק בנכון-בשורה (לא בקומפילציה), גם אם ה-parser מרשה אלחריות זו — בדוקות לפני commit.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..c288946 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -119,7 +119,17 @@ export function shapeOf(expr, schema, content = [], opts = {}) {
+     if (!fields.length) return { kind: null, why: 'לוח: אין שדות-תאריך' };
+     return { kind: 'dates', fields: fields.map((f) => f.label) };
+   }
+-  if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\]')))) return { kind: 'table' };
++  if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\s*(?::\\s*([^\\]]+))?\\]$')))) {
++    const columnStr = m[2];
++    let columns = null;
++    if (columnStr) {
++      columns = columnStr.split(/[,،]/).map((x) => clean(x)).filter(Boolean);
++      for (const col of columns) {
++        if (!F(col)) return { kind: null, why: `טבלה: שדה לא בסכמה: ${col}` };
++      }
++    }
++    return { kind: 'table', columns };
++  }
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pSearch) + '\\]')))) return { kind: 'search' };
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pFilter) + '\\]')))) return { kind: 'filter' };
+   if ((m = e.match(new RegExp('^\\[' + alt(G.pExport) + '\\]')))) return { kind: 'export' };
+@@ -383,8 +393,11 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       const w = firstWired(kd[0][1], { label: k(s.label || p.name), nav, glyph: k('🧩') }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-פעולה מתחווט`); continue; }
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+-      const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      const selectedSchema = s.columns
++        ? s.columns.map((colName) => entity.schema.find((f) => f.label === colName)).filter(Boolean)
++        : entity.schema;
++      const labels = selectedSchema.map((f) => k(f.label));
++      const rows = `[for (final r in ${recs}) [${selectedSchema.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {

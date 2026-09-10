@@ -1,0 +1,11 @@
+{
+  "claims": [
+    {"check": "regen_ok", "text": "Generator ran successfully with tasks.txt particle definition added."},
+    {"check": "no_hand_edit", "text": "All generated files in new/dart-gen-bs are machine-produced."},
+    {"check": "sorting_by_moed", "text": "Table particle includes sort code by מועד field."},
+    {"check": "particle_definition", "text": "tasks.txt includes: חלקיק משימה: [טבלה] | מיון: מועד עולה"},
+    {"check": "no_orphans", "text": "Only gen_app_tasks_* files created, no orphans."},
+    {"check": "no_hebrew_in_engine", "text": "Hebrew only in spec, not in engine."}
+  ],
+  "notes": "Spec-level change: sort משימה table by מועד ascending. All inspections passed."
+}

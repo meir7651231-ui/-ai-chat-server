@@ -1,0 +1,127 @@
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..cecb7a0 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -61,6 +61,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "קילומטראז׳",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "מה המוכר אמר",
+     "type": "text",
+@@ -72,6 +78,12 @@
+     "type": "bool",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "מחיר לקמ",
++    "type": "num",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..cdb483e 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -530,7 +530,7 @@
+    "לא שמאות במקום שמאי",
+    "לא אל תקנה יד 2"
+   ],
+-  "fields": 4,
++  "fields": 6,
+   "outputs": [
+    "כרטיס",
+    "רשימת שאלות למוכר מקסימום",
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..c120b5e 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -53,6 +53,9 @@ const allText = (sec) => [...sec.lines, ...sec.subs.flatMap((s) => s.lines)];
+ function fieldsFrom(lines) {
+   const out = []; let req = false;
+   const push = (txt, required) => {
++    // שדה-מחושב: 'X = נוסחה' (דקדוק-האפיון שדה=נוסחה) — הנוסחה עוברת כמות-שהיא, לפני כל פיצול ('/' בנוסחה = חילוק, לא חלופה)
++    const fm = txt.match(/^([^=]+?)\s*=\s*(.+)$/);
++    if (fm) { const label = heW(fm[1]).slice(0, P.fieldMaxWords).join(' '); const formula = norm(fm[2]); if (label.length > 1 && formula && !out.some((f) => f.label === label)) out.push({ label, required: false, formula }); return; }
+     const base = txt.split('/')[0].replace(/\(.*?\)/g, '').trim();
+     const or = base.split(new RegExp('\\s+' + P.orWord + '\\s+'));
+     if (or.length === 2 && or.every((x) => heW(x).length && heW(x).length <= 2)) { out.push({ label: clean(or[0]) + ' ' + P.orWord + ' ' + clean(or[1]), enumVals: [clean(or[0]), clean(or[1])], required }); return; }
+@@ -156,7 +159,7 @@ export function perukToSpec(md, ns) {
+   const decisions = outputs.filter((o) => o.options.length >= P.decisionMinOptions && o.options.length <= P.decisionMaxOptions).map((o) => ({ label: o.name, enumVals: o.options.map((x) => clean(x).split(' ').slice(0, 4).join(' ')).filter(Boolean) }));
+   // ── ספק ──
+   const root = P.rootNoun, fnd = P.findingNoun;
+-  const fieldStr = (f) => `${f.label}${f.enumVals ? `{${f.enumVals.join('|')}}` : ''}${f.num ? P.numRange : ''}${f.required ? '*' : ''}`;
++  const fieldStr = (f) => `${f.label}${f.enumVals ? `{${f.enumVals.join('|')}}` : ''}${f.num ? P.numRange : ''}${f.required ? '*' : ''}${f.formula ? ` = ${f.formula}` : ''}`;
+   const rootFields = [...P.personFields, ...fields.map(fieldStr), ...decisions.map((dd) => `${dd.label}{${dd.enumVals.join('|')}}`), ...(classes.length ? [`${P.classifyField}{${classes.join('|')}}`] : [])];
+   const lines = [];
+   lines.push(`${G.appWord}: ${d.title || ns}`);
+@@ -174,7 +177,7 @@ export function perukToSpec(md, ns) {
+   for (const g of groupNames) if (g !== groups.disclaimer && g !== groups.example) lines.push(`${G.particleWord} ${severity && g === groups.check ? fnd : root}: ${g} = [${G.pContent[0]} ${g}]`);
+   if (severity) lines.push(`${G.particleWord} ${fnd}: ${P.severityField}`);
+   // דוח: חלק לכל פריט של «מה חוזר»; refs = שדות שתואמים בפירוט, אחרת תוכן-החלק
+-  const fieldLabels = rootFields.map((f) => f.replace(/[{*].*$/, '').trim());
++  const fieldLabels = rootFields.map((f) => f.replace(/[{*=].*$/, '').trim());
+   const stemOf = (w) => w.replace(/^[בלהומשכ](?=..)/, '').replace(/(יות|ים|ות|ה)$/, '');
+   const matchField = (txt) => { const ws = heW(txt).map(stemOf); return fieldLabels.find((f) => { const fw = heW(f).map(stemOf); return fw.length && fw.every((w) => ws.includes(w)); }) || null; };
+   const kindOfOut = (name) => Object.entries(P.outputKinds).find(([, ws]) => ws.some((w) => name.includes(w)))?.[0] || null;
+diff --git a/machtzev/generator/peruks/peruk-12.md b/machtzev/generator/peruks/peruk-12.md
+index 58df974..4a230d4 100644
+--- a/machtzev/generator/peruks/peruk-12.md
++++ b/machtzev/generator/peruks/peruk-12.md
+@@ -65,7 +65,8 @@
+ שם: «לפני שמעבירים כסף על יד 2. מה חשוד ומה לבדוק.»
+ 
+ ### מה שולחים
+-קישור מודעה / תמונות, מחיר, מה המוכר אמר, האם נסעת.
++קישור מודעה / תמונות, מחיר, קילומטראז׳, מה המוכר אמר, האם נסעת.
++מחיר לקמ = מחיר / קילומטראז׳
+ 
+ ### מה חוזר
+ 1. כרטיס: מחיר מול הגיל/ק״מ, דגלים
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index a85fb73..94e385b 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -22,6 +22,7 @@
+   "שטח",
+   "רווח",
+   "יתרה",
++  "קילומטראז",
+   "מ״ר",
+   "מ\"ר"
+  ],
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..89a241e 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, קילומטראז׳, מה המוכר אמר, האם נסעת, מחיר לקמ = מחיר / קילומטראז׳ | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..1c8389a 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -67,7 +67,7 @@ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/gener
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+ 39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++8841ce995e4dd5dd1f6a1a8c8f34304c036006fd61cc524ce68b87846326fb5c  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

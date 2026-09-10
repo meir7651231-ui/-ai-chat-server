@@ -1,0 +1,77 @@
+{
+ "task": "M11",
+ "ns": "peruk25",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "export": true
+ },
+ "task_checks": [
+  {
+   "id": "export",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "WhatsApp export line exists in peruk25.txt at line 22: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה",
+   "check": "export_line_exists",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Export line syntax matches SPEC-LANG.md pattern: [ייצוא] <שם> = <שדה-טלפון>, <טקסט>",
+   "check": "spec_syntax_correct",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Dart generation successful with correct wiring: שליחה בוואטסאפ⇒DsChipButton+waLink in gen_app_peruk25_rp1.dart",
+   "check": "dart_generation",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Police gates guardexport, autoskin, autologic all pass with green status",
+   "check": "guards_pass",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "No other apps modified; police datapurity and deeppurity gates show no regression",
+   "check": "no_app_breakage",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "cc8fdb4870e0e405",
+ "at": "2026-09-10T17:12:01.035Z",
+ "arm": "hf",
+ "wall_s": 646,
+ "cost_usd": 1.799195,
+ "tokens": 9289765
+}

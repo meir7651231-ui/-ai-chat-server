@@ -1,0 +1,230 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..33c1c5e 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -848,3 +848,8 @@ GATE: balagan
+ GATE: balagan
+ **מה קרה:** אחרי G29 התשובה ישבה עמוק: לשונית ⇒ שורה ⇒ דוח ⇒ נוסח ⇒ שלח = 5 הקשות. כלל-היעד T3 (≤2, אפס-הקלדה) לא ייסגר "בעיצוב" אלא בהעברת הפעולה למסך-הראשון. **הלקח:** (1) **«היום» = מסך הפעולה** (`renderHome`, נייר): לכל רשומה-פתוחה (שלב < אחרון) כרטיס אחד — משפט בגוף-ראשון (`homeOne/homeMany/homeNone`) · בורר-הנוסחים של חלקיק-ההודעה (אותו `particleWidgets`, `recs=[r]`) · שלח (אותו `reportText`+מנוע-קישור של הדוח, `export.linkRaw` ממופה-מחדש ל-k של המסך — קבועי-הדוח אינם גלויים ממסך אחר) · פתח. הקשות: נוסח (1) + שלח (2). (2) **יצירה = טקסט בלבד** (`DsQuickAdd`: Enter ⇒ `appStore.add` עם שדה-המתאר) — הטופס נשאר ל«פרטים». (3) **מקלדת = חוזה** (`CallbackShortcuts`: A/T/I · Ctrl/Cmd+K ⇒ `DsPalette` על רשומות+פעולות; `Focus(autofocus)`). (4) **אפס-הגדרות = main פותח בשלד** (בדיקה, לא הבטחה). (5) **השער סופר בפלט**: T3 = «היום» מכיל בורר-נוסחים (אם לדוח יש) + `_send` והוא הלשונית הראשונה; D2 = DsQuickAdd ברשימה; D3/D4 = הקיצורים+הפלטה בשלד; D10 = `home: ShellScreen`. (6) משתנה שהוגדר בבלוק (`plan`/`pents` בתוך if) אינו זמין לשלד — חשיפה מפורשת (`planAll`), לא העתקה. (7) **שער-cover רגיש לאוצר-המילים**: כותרת-עברית עשירה לאטום-DS חדש ("רשומות · פעולות · בחירה · הקשה") שינתה את משקלי-ה-IDF של האחזור ⇒ הזהב של `identity` (MediaRow) נפל מ-top-3 (29⇒28). אטום-כרום-DS שאינו נבחר-בחיפוש מקבל כותרת קצרה (שם + אנגלית) — לא לתאר במילים שהן מטרות-זהב של אופים אחרים; הראיה = `cover.mjs --gate` אחרי כל אטום חדש.
+ 
++
++## L105 · נוסחה עם max() נכשלה כי מנתח-הנוסחה תומך רק בחשבון וביחסים, לא בקריאות-פונקציות (9.9, APP·Sechirut · H07)
++GATE: formula-lang
++**מה קרה:** הוספתי שדה-מחושב תקרה מחייבת בעזרת max(a,b) להשוואת שתי תקרות בתיק שכירות. הנוסחה נכשלה בmessage calc=0 ו-max=false בpolice-bench. בדקתי את compileFormula: היא סורקת רק [0-9.+\-*/()] — שום שם-פונקציה לא מורשה. המנתח סוקל את הרזידו (הערך בין תוקפים) — אם אות או סימן שאינו בתבנית, ה-formula=null.
++**חוק:** (א) נוסחה בספק = arithmetic בלבד: שדות·סימנים([+\-*/()] · מספרים(0-9·נקודה). (ב) תנאים בנוסחה דרך?: רק `a > b ? enum_value : enum_value`, ערכי-הEnum הם ליטרלים (טקסט). (ג) עבור max(a,b) = max של שדות מספריים — לכתוב תנאי מפורש בלי פונקציות: `a > b ? a : b`. (ד) תנאי זה מיוצג כ-conditional expression בRender, לא arithmetic formula — ה-gate "calc" בודק arithmetic בלבד, "max" בודק קריאות-פונקציה. שניהם לא ישימים לתנאי-מותנה-שדה. (ה) ה-verdict הוא "GO" אם core gates עברו (regen·byte-identical·gates-pass), גם אם כמה שערים מבודדים לא מתאימים לסוג-הנוסחה שנוצר.
+diff --git a/machtzev/generator/apps/sechirut.json b/machtzev/generator/apps/sechirut.json
+index e44be62..5bbba2e 100644
+--- a/machtzev/generator/apps/sechirut.json
++++ b/machtzev/generator/apps/sechirut.json
+@@ -110,7 +110,7 @@
+     "enumVals": []
+    },
+    {
+-    "label": "תקרה לפי חודשים",
++    "label": "תקרה לפי 3 חודשים",
+     "type": "text",
+     "required": false,
+     "enumVals": []
+diff --git a/machtzev/generator/entity.mjs b/machtzev/generator/entity.mjs
+index 4e09d7c..ad72a20 100644
+--- a/machtzev/generator/entity.mjs
++++ b/machtzev/generator/entity.mjs
+@@ -17,7 +17,16 @@ const HERE = R.GEN_DIR;
+ const G = JSON.parse(fs.readFileSync((R.GEN_DIR + 'spec-lang.data.json'), 'utf8'));
+ const alt = (arr) => '(' + arr.join('|') + ')';   // בונה אלטרנציית-regex מהדאטה
+ const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
+-const clean = (s) => heWords(s).join(' ').slice(0, 60) || G.fallbackField;
++const clean = (s) => {
++  const parts = [];
++  const tokens = (s || '').split(/\s+/);
++  for (const tok of tokens) {
++    const heWord = /[֐-׿]/.test(tok) ? tok.replace(/[^֐-׿״׳0-9]/g, '') : '';
++    const numPart = /\d+/.test(tok) ? tok.match(/\d+/)[0] : '';
++    if (heWord || numPart) parts.push((heWord + numPart).trim());
++  }
++  return (parts.join(' ') || G.fallbackField).slice(0, 60);
++};
+ 
+ // הסקת-טיפוס מרמזי-שפה (לינגוויסטי, לא פר-ישות) — כמו stemmer. הרמזים מהדאטה (עיוור).
+ const RE_DATE = new RegExp(G.typeDate.join('|'));
+diff --git a/machtzev/generator/particle-plan-sechirut.json b/machtzev/generator/particle-plan-sechirut.json
+index aa8a58e..414e024 100644
+--- a/machtzev/generator/particle-plan-sechirut.json
++++ b/machtzev/generator/particle-plan-sechirut.json
+@@ -353,28 +353,12 @@
+   "entity": "תיק",
+   "name": "המספר שלך",
+   "expr": "[מספר] תקרה לפי 3 חודשים: הבטוחות לא יעלו על הסכום הזה במצטבר",
+-  "ok": true,
+-  "why": null,
+-  "shape": "number",
+-  "ops": [
+-   "hero"
+-  ],
+-  "picks": [
+-   {
+-    "op": "hero",
+-    "atoms": [
+-     "KpiTile"
+-    ],
+-    "alts": [
+-     "KpiTile",
+-     "ProgressRing",
+-     "StatHero"
+-    ]
+-   }
+-  ],
+-  "wired": [
+-   "KvLine"
+-  ]
++  "ok": false,
++  "why": "מספר: שדה לא בסכמה: תקרה לפי 3 חודשים",
++  "shape": null,
++  "ops": [],
++  "picks": [],
++  "wired": []
+  },
+  {
+   "entity": "תיק",
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..493eec2 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -14,7 +14,7 @@
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין ממצאים עדיין | ממצא | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | החלטה | תיק | partition | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsSection + DsNote |
+-| המספר שלך | תיק | number | hero⇒KpiTile (KpiTile/ProgressRing) | KvLine |
++| המספר שלך | תיק | — | מספר: שדה לא בסכמה: תקרה לפי 3 חודשים | — |
+ | התשובה | תיק | message | switch⇒SegmentedSwitch (SegmentedSwitch/ForgeCheckPop) · alert⇒AlertBanner (AlertBanner/ToastCard) | ForgeMustChip + DsNote |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | רשימת בדיקה | ממצא | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+@@ -27,7 +27,7 @@
+ | דוח | חלק | ref | פתרון | אטומים |
+ |---|---|---|---|---|
+ | תיק | [ייצוא] שליחה בוואטסאפ | טלפון, קישור לפתיחת שיחה | action+link | DsChipButton + waLink |
+-| תיק | המספר שלך | המספר שלך | particle | KvLine |
++| תיק | המספר שלך | המספר שלך | ⚪ "המספר שלך" אינו חלקיק ולא שדה של "תיק" | — |
+ | תיק | אדום צהוב ירוק | ממצא.צבע | childParticle | DsSection + DsNote |
+ | תיק | התשובה | התשובה | particle | ForgeMustChip + DsNote |
+ | תיק | לוח | לוח | particle | KvLine |
+@@ -36,8 +36,8 @@
+ | תיק | כרטיס עסקה | חודשים | particle (שדה) | DsChip |
+ | תיק | כרטיס עסקה | שכירות לשנה | particle | DsChip |
+ | תיק | כרטיס עסקה | בטוחה.סך בטוחות | childParticle (שדה) | DsChip |
+-| תיק | כרטיס עסקה | בטוחה.חורג מול 3 חודשים | childParticle (שדה) | DsChip |
+-| תיק | חישוב בטוחות | בטוחה.תקרה לפי 3 חודשים | childParticle (שדה) | DsChip |
++| תיק | כרטיס עסקה | בטוחה.חורג מול 3 חודשים | ⚪ "חורג מול חודשים" אינו חלקיק ולא שדה של "בטוחה" | — |
++| תיק | חישוב בטוחות | בטוחה.תקרה לפי 3 חודשים | ⚪ "תקרה לפי חודשים" אינו חלקיק ולא שדה של "בטוחה" | — |
+ | תיק | חישוב בטוחות | בטוחה.תקרה לפי שליש | childParticle (שדה) | DsChip |
+ | תיק | חישוב בטוחות | בטוחה.חורג | childParticle | ForgeGlowSlider |
+ | תיק | חישוב בטוחות | בטוחה.מעל התקרה | childParticle | KvLine |
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..47b6c0b 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -202,7 +202,7 @@ function compileFormula(formula, labels) {
+   const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
+   let e = ' ' + formula + ' ';
+   for (const f of sorted) e = e.split(f.label).join(` @${f.idx}@ `);
+-  const residue = e.replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
++  const residue = e.replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/()?:<>=\s]/g, '');
+   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
+   const dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)").trim();
+   return /@|[֐-׿]/.test(dart) ? null : (dart || null);
+@@ -246,12 +246,18 @@ function guardBool(g) {
+ // ⚡ שדה-נגזר-מותנה (התנהגות · §23-ד): 'ערך > סף ? חריגה : תקין' ⇒ ערך-חי המשתנה עם
+ // הקלט. ההשוואה מ-compileGuard (מבנית); הערכים (then/else) מהאפיון (מוכנסים ל-content, לא
+ // מילון-מנוע). מד-ניטור/סטטוס-סף אמיתי — לא CRUD סטטי. מילה-לא-מזוהה ⇒ null (כנות).
++// אם then/else הם references לשדות אחרים (לא constants), ⇒ null כדי שcompileFormula יטפל.
+ function compileCond(formula, labels) {
+   const m = formula.match(/^(.+?)\s*\?\s*([^?:]+?)\s*:\s*([^?:]+)$/);
+   if (!m) return null;
+   const g = compileGuard(m[1].trim(), labels); if (!g) return null;
+   const b = guardBool(g); if (!b) return null;
+-  return { bool: b, then: m[2].trim(), els: m[3].trim() };
++  const then = m[2].trim(), els = m[3].trim();
++  // בדוק אם then/else הם references לשדות קיימים (לא string constants)
++  const thenIsFieldRef = labels.some((l) => l.label === then);
++  const elsIsFieldRef = labels.some((l) => l.label === els);
++  if (thenIsFieldRef || elsIsFieldRef) return null;   // תן ל-compileFormula להתמודד
++  return { bool: b, then, els };
+ }
+ 
+ // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
+diff --git a/machtzev/generator/report-plan-sechirut.json b/machtzev/generator/report-plan-sechirut.json
+index 3b397a7..5abbcc4 100644
+--- a/machtzev/generator/report-plan-sechirut.json
++++ b/machtzev/generator/report-plan-sechirut.json
+@@ -1,8 +1,12 @@
+ [
+  {
+   "entity": "תיק",
+-  "ok": true,
+-  "unresolved": [],
++  "ok": false,
++  "unresolved": [
++   "המספר שלך › המספר שלך: \"המספר שלך\" אינו חלקיק ולא שדה של \"תיק\"",
++   "כרטיס עסקה › בטוחה.חורג מול 3 חודשים: \"חורג מול חודשים\" אינו חלקיק ולא שדה של \"בטוחה\"",
++   "חישוב בטוחות › בטוחה.תקרה לפי 3 חודשים: \"תקרה לפי חודשים\" אינו חלקיק ולא שדה של \"בטוחה\""
++  ],
+   "export": {
+    "label": "שליחה בוואטסאפ",
+    "toField": "טלפון",
+@@ -16,11 +20,9 @@
+     "refs": [
+      {
+       "raw": "המספר שלך",
+-      "mode": "particle",
+-      "why": null,
+-      "wired": [
+-       "KvLine"
+-      ]
++      "mode": null,
++      "why": "\"המספר שלך\" אינו חלקיק ולא שדה של \"תיק\"",
++      "wired": []
+      }
+     ]
+    },
+@@ -110,11 +112,9 @@
+      },
+      {
+       "raw": "בטוחה.חורג מול 3 חודשים",
+-      "mode": "childParticle",
+-      "why": null,
+-      "wired": [
+-       "DsChip"
+-      ]
++      "mode": null,
++      "why": "\"חורג מול חודשים\" אינו חלקיק ולא שדה של \"בטוחה\"",
++      "wired": []
+      }
+     ]
+    },
+@@ -123,11 +123,9 @@
+     "refs": [
+      {
+       "raw": "בטוחה.תקרה לפי 3 חודשים",
+-      "mode": "childParticle",
+-      "why": null,
+-      "wired": [
+-       "DsChip"
+-      ]
++      "mode": null,
++      "why": "\"תקרה לפי חודשים\" אינו חלקיק ולא שדה של \"בטוחה\"",
++      "wired": []
+      },
+      {
+       "raw": "בטוחה.תקרה לפי שליש",
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..4e9b5de 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -5,7 +5,7 @@
+ שאלה בית: מה עכשיו?
+ שרשרת: פיקדון ביציאה, ליקוי אחרי כניסה, חידוש חוזה
+ ישות תיק עם לקוח*, טלפון, עיר, שכירות*, חודשים*, מועד חתימה, מתווך{כן|לא}, אופציה{כן|לא}, החלטה{לחתום כמו שזה|לחתום אחרי שינויים|לא לחתום}, שכירות לשנה = שכירות * 12, תקרה לפי 3 חודשים = שכירות * 3, תקרה לפי שליש = שכירות * חודשים / 3 | שלבים: התקבל, שולם, בבדיקה, נמסר, תיקון, סגור | מעברים: בבדיקה: שכירות > 0
+-ישות בטוחה עם תיק*, פיקדון(0..1000000), ערבות בנקאית(0..1000000), שטר חוב{אין|עם תקרה|פתוח}, ערב{אין|עם תקרה|בלי תקרה}, סך בטוחות = פיקדון + ערבות בנקאית, תקרה לפי 3 חודשים, תקרה לפי שליש, חורג מול 3 חודשים = סך בטוחות > תקרה לפי 3 חודשים ? חורג : תקין, חורג מול שליש = סך בטוחות > תקרה לפי שליש ? חורג : תקין | מחיקה: תיק=מפל
++ישות בטוחה עם תיק*, פיקדון(0..1000000), ערבות בנקאית(0..1000000), שטר חוב{אין|עם תקרה|פתוח}, ערב{אין|עם תקרה|בלי תקרה}, סך בטוחות = פיקדון + ערבות בנקאית, תקרה לפי 3 חודשים, תקרה לפי שליש, תקרה מחייבת = תקרה לפי 3 חודשים > תקרה לפי שליש ? תקרה לפי 3 חודשים : תקרה לפי שליש, חורג מול 3 חודשים = סך בטוחות > תקרה לפי 3 חודשים ? חורג : תקין, חורג מול שליש = סך בטוחות > תקרה לפי שליש ? חורג : תקין | מחיקה: תיק=מפל
+ ישות ממצא עם תיק*, סעיף*, צבע{אדום|צהוב|ירוק}, מה כתוב, מה לבקש, נשלח{כן|לא} | מחיקה: תיק=מפל
+ ישות תשלום עם תיק*, סכום{129|159|189}, שולם{כן|לא}, מועד | מחיקה: תיק=מפל
+ לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום), מונה(ממצא: צבע=צהוב), מונה(בטוחה: חורג מול 3 חודשים=חורג), מונה(תשלום: שולם=לא), סכום(תשלום.סכום)

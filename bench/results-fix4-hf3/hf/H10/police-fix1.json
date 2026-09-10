@@ -1,0 +1,85 @@
+{
+ "task": "H10",
+ "ns": "calendar",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort_list": true,
+  "sort_second_surface": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_list",
+   "ok": true,
+   "info": "ent1,px1",
+   "mandatory": true
+  },
+  {
+   "id": "sort_second_surface",
+   "ok": true,
+   "info": "px1",
+   "mandatory": false
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator successfully regenerated calendar app with sorting",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Entity list screen (ent1.dart line 157) sorts meetings by שעה ascending",
+   "check": "sort_entity_screen",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Particle table screen (px1.dart line 18) sorts meetings by שעה ascending",
+   "check": "sort_particle_screen",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Sorting applied to all entity views: list, board, calendar, table",
+   "check": "sort_all_views",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "No manual edits to generated files; spec-lang only",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only calendar.txt modified; all other apps byte-identical",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "206e5eed78989efe",
+ "at": "2026-09-10T12:23:46.124Z"
+}

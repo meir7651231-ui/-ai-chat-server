@@ -1,0 +1,4 @@
+=== h0/H13 (panuy) start 06:57:15
+  builder.json: exit=0 cost=0.97449775 turns=69 ms=494937 err=false
+  police: NOT DONE missing=four_columns false=0
+=== h0/H13 NOT DONE wall=528s cost=$0.97 false_claims=0

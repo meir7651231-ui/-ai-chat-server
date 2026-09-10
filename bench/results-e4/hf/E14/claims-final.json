@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Calendar app regenerated successfully with סוג field added to פגישה entity"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other apps were affected by the calendar.txt spec change"
+    },
+    {
+      "check": "no_orphans",
+      "text": "No orphan generated files created"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All machine gates passed validation"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles with zero analyzer errors"
+    }
+  ],
+  "notes": "proven: Added סוג{עבודה|אישי|רפואי} closed-choice field to פגישה entity in calendar.txt. Spec language syntax validated. All auto-checks passed. No manual edits to generated files. Task complete."
+}

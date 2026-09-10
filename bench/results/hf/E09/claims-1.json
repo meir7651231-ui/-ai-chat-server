@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator pipeline completed successfully with new fields סכום פיצויים and פיצויים לשנה = סכום פיצויים * 12 added to תיק entity"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "No hand-edits in generated/ directories; only spec file machtzev/generator/specs-ds/peruk25.txt was modified"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other lines in peruk25.txt remain unchanged; only line 6 entity definition was modified"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All police gates pass with new numeric and computed fields present in תיק entity definition"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "Hebrew field names are only in spec file; no Hebrew leaked into generator engine code"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Computed field formula סכום פיצויים * 12 is valid numeric multiplication; no unsafe math operations"
+    }
+  ],
+  "notes": "Added two fields to תיק entity in peruk25.txt line 6: (1) סכום פיצויים - numeric field for compensation amount, (2) פיצויים לשנה - computed field = סכום פיצויים * 12 for annual equivalent. Search-record showed no existing atoms conflict. No other lines modified. Generator produces valid Dart models with new fields present."
+}

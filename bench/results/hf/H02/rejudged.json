@@ -1,0 +1,67 @@
+{
+ "task": "H02",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "sort": true,
+  "desc": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  },
+  {
+   "id": "desc",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Table particle for תיק (cases) includes sort-by-rent logic in generated Dart code",
+   "check": "sort",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Table rows sorted by שכירות (rent) in descending order (highest first) using numeric compareTo",
+   "check": "desc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All generated files regenerated from spec without manual modifications",
+   "check": "no_hand_edit",
+   "verdict": "FALSE"
+  },
+  {
+   "text": "Generator pipeline completed successfully with new table sort feature",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 1,
+ "signature": "b7fffc5263ff6927",
+ "at": "2026-09-10T05:13:03.592Z"
+}

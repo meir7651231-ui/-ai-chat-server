@@ -1,0 +1,44 @@
+{
+ "task": "H14",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "sort_color": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_color",
+   "ok": true,
+   "info": "px3",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "ab526dd453ea973c",
+ "at": "2026-09-10T05:17:57.348Z",
+ "arm": "hf",
+ "wall_s": 1997,
+ "cost_usd": 3.6467824,
+ "tokens": 20490866,
+ "rejudged_from": "DONE"
+}

@@ -1,0 +1,100 @@
+{
+ "task": "E09",
+ "ns": "peruk25",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "field": true,
+  "calc": true
+ },
+ "task_checks": [
+  {
+   "id": "field",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "peruk25.txt spec regenerated successfully via app-ds.mjs; 7 screens, 34 content items, 1 report",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other peruk* apps remain byte-identical; no spillover changes to other specs",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No orphaned gen_app_* files created; all generated outputs properly named and referenced",
+   "check": "no_orphans",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All spec-lang gates passed; spec validation clean",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No Hebrew text in .mjs engine files; all Hebrew content in .data.json content constants",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Multiplication formula (value * 12) safe; no div-by-zero, sqrt, or invalid math functions",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Dart code compiles cleanly: flutter analyze = 0 errors in generated peruk25 app",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "1 new numeric field added: סכום פיצויים (identifies as number via keyword 'סכום')",
+   "check": "field",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "1 const field (סכום פיצויים label) + 1 computed field (פיצויים לשנה = סכום פיצויים * 12); formula in gen_app_peruk25_ent1.dart:49 is ((num.tryParse(_v[6] ?? '')",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "bf1280c01275c6ca",
+ "at": "2026-09-10T16:30:49.786Z"
+}

@@ -1,0 +1,81 @@
+{
+ "task": "E13",
+ "ns": "peruk12",
+ "verdict": "NOT DONE",
+ "missing": [
+  "byte_identical_others",
+  "field",
+  "calc"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": false,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "field": false,
+  "calc": false
+ },
+ "task_checks": [
+  {
+   "id": "field",
+   "ok": false,
+   "info": "0×",
+   "mandatory": true
+  },
+  {
+   "id": "calc",
+   "ok": false,
+   "info": "consts=1 calc=0",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "changed_others": [
+   "dart-data-bs/auto/gen_app_ent1_content.dart",
+   "dart-data-bs/auto/gen_app_flags_content.dart",
+   "dart-data-bs/auto/gen_app_hub_content.dart",
+   "dart-data-bs/auto/gen_app_rec1_content.dart",
+   "dart-data-bs/auto/gen_app_root_content.dart",
+   "dart-data-bs/auto/gen_app_shell_content.dart",
+   "dart-gen-bs/gen_app_ent1.dart",
+   "dart-gen-bs/gen_app_flags.dart"
+  ],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Generator pipeline completed successfully with new field definitions",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No unintended changes to files outside peruk12 namespace",
+   "check": "byte_identical_others",
+   "verdict": "FALSE"
+  },
+  {
+   "text": "All standard generator gates passed validation",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No Hebrew text added to engine code files",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 1,
+ "signature": "001984743f0302ad",
+ "at": "2026-09-10T01:55:49.644Z"
+}

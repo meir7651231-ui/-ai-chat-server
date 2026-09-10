@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator pipeline executed successfully without errors"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All files outside calendar.txt remain byte-identical with no unintended changes"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All registered gates passed including syntax validation"
+    },
+    {
+      "check": "field",
+      "text": "Numeric field משך בדקות added to meeting entity (1 field detected)"
+    },
+    {
+      "check": "calc",
+      "text": "Computed field משך בשעות = משך בדקות / 60 correctly parsed (1 const + 1 calc)"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "Hebrew text remains in spec layer only, engine unaffected"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Division operator syntax validated in computed field formula"
+    }
+  ],
+  "notes": "PROVEN: All checks passed. Numeric field משך בדקות and computed field משך בשעות = משך בדקות / 60 added to meeting entity in calendar.txt line 6. No regressions detected."
+}

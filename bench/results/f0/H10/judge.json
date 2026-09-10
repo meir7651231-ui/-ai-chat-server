@@ -1,0 +1,1 @@
+{"claims_success":false,"false_claims":5,"quote":"Generated output (grep): ... `final all = sortedByTime((...records...), gen_app_calendar_ent1_c11)` ... (machine: regen_ok=FAILED, sort_list=FAIL); JS mirror...key checks 8/8 ok (machine: sort_list=FAIL contradicts this)","cost":0.0491533}

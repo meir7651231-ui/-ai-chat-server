@@ -1,0 +1,10 @@
+ M machtzev/generator/apps/tasks.json
+ M machtzev/generator/particle-plan-tasks.json
+ M machtzev/generator/specs-ds/tasks.txt
+?? "machtzev/audit/search/2026-09-10-\327\252\327\226\327\233\327\225\327\250\327\252-reminder-\327\252\327\226\327\233\327\225\327\250\327\225\327\252-5f6b3015.json"
+?? "machtzev/audit/search/2026-09-10-\327\252\327\226\327\233\327\225\327\250\327\252-reminder-\327\252\327\226\327\233\327\225\327\250\327\225\327\252-c61048c3.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/particle-plan-tasks.md
+?? machtzev/generator/specs-ds/panuy.txt

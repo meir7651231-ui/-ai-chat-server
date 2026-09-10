@@ -1,0 +1,204 @@
+diff --git a/machtzev/generator/apps/peruk08.json b/machtzev/generator/apps/peruk08.json
+index 911b157..ea951c0 100644
+--- a/machtzev/generator/apps/peruk08.json
++++ b/machtzev/generator/apps/peruk08.json
+@@ -68,7 +68,11 @@
+     "label": "האם כבר פנו למוכר",
+     "type": "bool",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [
++     "כן",
++     "לא",
++     "לא יודע"
++    ]
+    },
+    {
+     "label": "סיווג",
+diff --git a/machtzev/generator/particle-plan-peruk08.json b/machtzev/generator/particle-plan-peruk08.json
+index 1fbd18b..dfaa685 100644
+--- a/machtzev/generator/particle-plan-peruk08.json
++++ b/machtzev/generator/particle-plan-peruk08.json
+@@ -199,5 +199,32 @@
+   "wired": [
+    "DsNote"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "לא פנו",
++  "expr": "מונה(האם כבר פנו למוכר=לא)",
++  "ok": true,
++  "why": null,
++  "shape": "count",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk08.md b/machtzev/generator/particle-plan-peruk08.md
+index 99949f4..d6cf4a7 100644
+--- a/machtzev/generator/particle-plan-peruk08.md
++++ b/machtzev/generator/particle-plan-peruk08.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| לא פנו | תיק | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/peruk-lang.data.json b/machtzev/generator/peruk-lang.data.json
+index 74d8d89..8e03286 100644
+--- a/machtzev/generator/peruk-lang.data.json
++++ b/machtzev/generator/peruk-lang.data.json
+@@ -66,6 +66,9 @@
+  "outputsHead": [
+   "מה חוזר"
+  ],
++ "countersHead": [
++  "מונים"
++ ],
+  "requiredKey": "חובה",
+  "optionalKey": "רשות",
+  "mustKey": "חובה",
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..a673c7c 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -2,6 +2,7 @@
+ // 📄 peruk — קורא-הפירוקים (GENMAX·G27 · הכרעה-27): מסמך «פירוק N» של הבעלים ⇒ צומת-ידע שלם ⇒ ספק-app-ds, בלי יד.
+ //   השלד הקבוע של הפירוקים (הרגע · מסגרת · פירוק ל-N בלוקים · סיווג/אדום-צהוב-ירוק · המוצר: מה-שולחים/מה-חוזר · דוגמה ·
+ //   מחיר · אסור · חובה · שרשרת) נקרא **מבנית** — כותרות, רשימות, מפרידים. כל מילה-עברית מהדאטה (peruk-lang.data.json; §19).
++//   «מה שולחים»: פריט "שדה: א / ב / ג" = בחירה סגורה · תת-סעיף «מונים» במוצר: "שם: שדה = ערך" = חלקיק-מונה על השורש.
+ //   פלט: specs-ds/<ns>.txt (ישויות · שלבים · חלקיקים · תוכן · דוח · ייצוא) + peruk-index.json (צומת: מזהה · רגע · קטגוריה ·
+ //   מחירים · שרשרת) — ואז app-ds בונה את האפליקציה. מאות מסמכים = ריצה אחת.
+ //   שער `peruk`: לכל מסמך ב-peruks/ — ≥1 שדה-קליטה · ≥1 חלק-פלט · הסתייגות · אסור; והספק בדיסק ≡ הספק המחולל (טריות).
+@@ -53,6 +54,16 @@ const allText = (sec) => [...sec.lines, ...sec.subs.flatMap((s) => s.lines)];
+ function fieldsFrom(lines) {
+   const out = []; let req = false;
+   const push = (txt, required) => {
++    // "שדה: א / ב / ג" ⇒ בחירה סגורה (≥2 ערכים קצרים, שונים; המפריד מבני — נקודתיים ואז לוכסנים). בלי נקודתיים ⇒ הרגיל למטה
++    const ch = txt.match(/^(.+?)\s*[:：]\s*(.+)$/);
++    if (ch) {
++      const vals = ch[2].split('/').map((x) => clean(x)).filter(Boolean);
++      if (vals.length >= 2 && vals.every((v) => heW(v).length <= P.fieldMaxWords) && new Set(vals).size === vals.length) {
++        const label = heW(ch[1]).slice(0, P.fieldMaxWords).join(' ');
++        if (label.length > 1 && !out.some((f) => f.label === label)) out.push({ label, enumVals: vals, required });
++        return;
++      }
++    }
+     const base = txt.split('/')[0].replace(/\(.*?\)/g, '').trim();
+     const or = base.split(new RegExp('\\s+' + P.orWord + '\\s+'));
+     if (or.length === 2 && or.every((x) => heW(x).length && heW(x).length <= 2)) { out.push({ label: clean(or[0]) + ' ' + P.orWord + ' ' + clean(or[1]), enumVals: [clean(or[0]), clean(or[1])], required }); return; }
+@@ -111,6 +122,10 @@ export function perukToSpec(md, ns) {
+   const outputSec = product ? product.subs.find((s) => P.outputsHead.some((h) => s.head.includes(h))) : null;
+   const fields = inputSec ? fieldsFrom(inputSec.lines) : [];
+   const outputs = outputSec ? outputsFrom(outputSec.lines) : [];
++  // מונים (תת-סעיף «מונים» של «המוצר»): "<שם>: <שדה> = <ערך>" ⇒ חלקיק-מונה על השורש; שדה/ערך שאינם בסכמה ⇒ בעיה בשער
++  const countSec = product ? product.subs.find((s) => (P.countersHead || []).some((h) => s.head.includes(h))) : null;
++  const counters = countSec ? items(countSec.lines).map((l) => { const m = l.match(/^(.+?)\s*[:：]\s*(.+?)\s*=\s*(.+)$/); return m ? { name: clean(m[1]), field: clean(m[2]), value: clean(m[3]) } : null; }).filter((c) => c && c.name && c.field && c.value) : [];
++  const problems = [];
+   const content = []; const groups = P.groups;
+   // מסגרת · בלוקים · סיווג/בדיקה · אסור · לא-נכנס · דוגמה · שרשרת
+   const frame = S('frame'); if (frame) content.push(...contentOf(frame, groups.frame));
+@@ -173,6 +188,12 @@ export function perukToSpec(md, ns) {
+   const groupNames = [...new Set(content.map((c) => c.group))];
+   for (const g of groupNames) if (g !== groups.disclaimer && g !== groups.example) lines.push(`${G.particleWord} ${severity && g === groups.check ? fnd : root}: ${g} = [${G.pContent[0]} ${g}]`);
+   if (severity) lines.push(`${G.particleWord} ${fnd}: ${P.severityField}`);
++  for (const c of counters) {
++    const f = [...fields, ...decisions].find((x) => x.label === c.field);
++    if (!f) problems.push(`מונה «${c.name}»: שדה לא בסכמה: ${c.field}`);
++    else if (f.enumVals && !f.enumVals.includes(c.value)) problems.push(`מונה «${c.name}»: ערך לא בבחירה: ${c.value}`);
++    lines.push(`${G.particleWord} ${root}: ${c.name} = ${P.dashboardCount}(${c.field}=${c.value})`);
++  }
+   // דוח: חלק לכל פריט של «מה חוזר»; refs = שדות שתואמים בפירוט, אחרת תוכן-החלק
+   const fieldLabels = rootFields.map((f) => f.replace(/[{*].*$/, '').trim());
+   const stemOf = (w) => w.replace(/^[בלהומשכ](?=..)/, '').replace(/(יות|ים|ות|ה)$/, '');
+@@ -209,7 +230,7 @@ export function perukToSpec(md, ns) {
+   if (phone) lines.push(`${G.reportWord} ${root}: [${G.pExport[0]}] ${P.exportLabel} = ${phone.replace(/\*$/, '')}, ${P.exportGoal}`);
+   for (const c of content) lines.push(`${G.contentWord} ${c.group}${c.tag ? ` [${c.tag}]` : ''}: ${q(c.text)}`);
+   const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length };
+-  return { spec: lines.join('\n') + '\n', node, doc: d };
++  return { spec: lines.join('\n') + '\n', node, doc: d, problems };
+ }
+ 
+ // ── main: --all ⇒ כל peruks/*.md ⇒ specs-ds/peruk-NN.txt + peruk-index.json · --gate ⇒ אימות ──
+@@ -220,9 +241,9 @@ if (isMain) {
+   const gate = process.argv.includes('--gate'); let bad = 0; const index = [];
+   for (const f of docs) {
+     const ns = f.replace(/\.md$/, '').replace(/-/g, '');
+-    const { spec, node } = perukToSpec(fs.readFileSync(path.join(dir, f), 'utf8'), ns);
++    const { spec, node, problems } = perukToSpec(fs.readFileSync(path.join(dir, f), 'utf8'), ns);
+     const specPath = path.join(out, `${ns}.txt`);
+-    const probs = [];
++    const probs = [...problems];
+     if (!node.fields) probs.push('אין שדות-קליטה (מה שולחים)');
+     if (!node.outputs.length) probs.push('אין חלקי-פלט (מה חוזר)');
+     if (!node.disclaimer) probs.push('אין הסתייגות (חובה: «לא ייעוץ…»)');
+diff --git a/machtzev/generator/peruks/peruk-08.md b/machtzev/generator/peruks/peruk-08.md
+index 22a3ec8..9029709 100644
+--- a/machtzev/generator/peruks/peruk-08.md
++++ b/machtzev/generator/peruks/peruk-08.md
+@@ -80,7 +80,10 @@
+ - צילום החיוב
+ - הזמנה / צ׳אט
+ - מה קרה
+-- האם כבר פנו למוכר
++- האם כבר פנו למוכר: כן / לא / לא יודע
++
++### מונים
++- לא פנו: האם כבר פנו למוכר = לא
+ 
+ ### מה חוזר באותו יום
+ 
+diff --git a/machtzev/generator/specs-ds/peruk08.txt b/machtzev/generator/specs-ds/peruk08.txt
+index 4b501fe..f55f7e0 100644
+--- a/machtzev/generator/specs-ds/peruk08.txt
++++ b/machtzev/generator/specs-ds/peruk08.txt
+@@ -3,7 +3,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר{כן|לא|לא יודע}, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+@@ -13,6 +13,7 @@
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: סיווג = [תוכן סיווג]
+ חלקיק תיק: אסור = [תוכן אסור]
++חלקיק תיק: לא פנו = מונה(האם כבר פנו למוכר=לא)
+ דוח תיק: כרטיס = [תוכן כרטיס]
+ דוח תיק: סדר פעולות ממוספר קודם = [תוכן סדר פעולות ממוספר קודם]
+ דוח תיק: הודעה למוכר = [תוכן הודעה למוכר]
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..6b3d749 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -67,7 +67,7 @@ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/gener
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+ 39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++a38e36dd8ca05a98b1532b688cebd4f7cd36a56f594ceb64bb76c3e2bebb46f6  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+ b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs

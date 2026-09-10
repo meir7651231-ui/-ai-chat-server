@@ -1,0 +1,92 @@
+{
+ "task": "M02",
+ "ns": "peruk12",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "ent2": true,
+  "px2": true,
+  "dash_counter": true
+ },
+ "task_checks": [
+  {
+   "id": "ent2",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "px2",
+   "ok": true,
+   "info": "data:px2",
+   "mandatory": true
+  },
+  {
+   "id": "dash_counter",
+   "ok": true,
+   "info": "gen_app_peruk12_scr3_content.dart",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Entity בדיקה successfully added with fields תיק* (link), מה נבדק* (required text), תקין{כן|לא} (choice)",
+   "check": "ent2",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Table particle [טבלה] and empty-state particle added for בדיקה entity",
+   "check": "px2",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Dashboard counter for inspections where תקין=לא correctly implemented in gen_app_peruk12_scr3_content.dart",
+   "check": "dash_counter",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other app outputs (peruk11, peruk13, peruk14, etc.) remain byte-identical — no breaking changes",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No Hebrew literals added to engine logic files (.mjs, .data.json) — all Hebrew in spec-lang",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart passes flutter analyze with 0 errors in-app",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "5dc5d5c48e770e5f",
+ "at": "2026-09-10T14:42:48.768Z"
+}

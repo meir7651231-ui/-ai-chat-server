@@ -1,0 +1,92 @@
+{
+ "task": "H09",
+ "ns": "tasks",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "calc": true,
+  "round": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  },
+  {
+   "id": "round",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Spec parsed and regenerated correctly with new computed field סכום מעוגל",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps remain byte-identical; only tasks app modified",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All gates passed; no new violations introduced",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles without errors; round() function recognized",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "round() is valid Dart:math operation; no type violations",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed field registered: סכום מעוגל = round(סכום) with 1 calc",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "round() function used once in computed field definition",
+   "check": "round",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "7ab194bc15e260ba",
+ "at": "2026-09-10T10:54:28.984Z",
+ "arm": "hf",
+ "wall_s": 507,
+ "cost_usd": 1.3915592,
+ "tokens": 5990957
+}

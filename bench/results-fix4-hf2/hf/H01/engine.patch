@@ -1,0 +1,101 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..96d7d0c 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,14 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-particle-sort-H01 · מיון בחלקיק [טבלה] מיושם דרך sortLambda עם סינון-ערכים-ריקים וסדר-מספרי
++GATE: sort_list
++ref: new/dart-gen-bs/gen_app_panuy_px1.dart:34
++ANTIPATTERN: .toList()\.\.sort\(\(a, b\) => [^}]*\)\);
++RULE: סדר [טבלה] מהספק (`| מיון: <שדה> עולה/יורד`) מיושם ע"י particles.mjs (parseSortKeys + sortLambda) ⇒ Dart sort(compareTo) עם 3 כללים: (1) ערכים ריקים אחרונים (isEmpty check) (2) מספרים מושווים כ-num (nx.compareTo(ny)) (3) מחרוזות לקסיקלי (x.compareTo(y)); השדה הוא מפתח לשדה-דאטה בטבלה, לא קבוע.
++מה הצליח: panuy.txt שונה מ-`[טבלה]` ל-`[טבלה] | מיון: מרחק בקמ עולה` ⇒ gen_app_panuy_px1.dart קיבל `appStore.records('app_panuy_ent1').toList()..sort((a, b) { final x = a[c15] ?? ''; ... num.tryParse(x).compareTo(num.tryParse(y)) ... })` — שדה c15 = 'מרחק בקמ'. סדר-הדאטא בטבלה הוא closest-first (עולה = ascending). מרחק מחושב ב-spec via sqrt(מרחק בריבוע). police-bench: ✅ regen_ok, byte_identical_others, sort_list, compiles.
++פתיח: particles.mjs-ב שורה 406 מחזיקה את הלוגיקה המלאה; צורה-הפלט פחות ברורה מ-JSX (יתר-compact), אך מערכת-החלקיקים-הפתוחה (הכרעה-27) עוקפת את render-entity ומאפשרת מיון עצמאי בלוח.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..1e6733f 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -284,6 +284,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const addField = (i, expr, cond = null) => fieldBlocks.push({ i, expr, cond });
+   const recValsR = [];   // ערך-תצוגה בטבלה פר-שדה
+   const mapVals = [];    // ערך-שמירה פר-שדה (מחושב ⇒ תוצאת-הנוסחה; אחר ⇒ _v[i])
++  const formulaExprs = new Map();   // שדה-index -> {expr, label} לשדות-מחושבים (לטיפול בעלויות)
+   const requiredIdx = [];
+   const uniqueIdx = [];
+   const defEntries = [];   // ברירות-מחדל: {idx: 'ערך'} לזריעת-טופס-חדש
+@@ -367,6 +368,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+       const expr = compileFormula(s.formula, labelIdx, usedFns);
+       if (expr) {
+         hasCalc = true;
++        formulaExprs.set(i, { expr, label: s.label, const: cl });
+         addField(i, `_calc(${cl}, ${expr})`);
+         recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: (${expr}).toStringAsFixed(2)`);
+         return;
+@@ -473,7 +475,51 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const stepsDart = hasStages
+     ? `        DsWorkflow(steps: const ${stageList}, current: 0),\n`
+     : '';
+-  const mapEntries = mapVals.join(', ');                                                  // שדות ⇒ מפה (מחושב=נוסחה)
++  // 🔗 טיפול בעלויות: אם שדה X מחושב מפנה לשדה Y מחושב, הוציא Y לקבוע-משתנה והשתמש בו גם ב-X וב-Y.
++  // זוג מחושבים (c24, c25): c24 = חישוב ריבוע, c25 = sqrt(c24) ⇒ צור var, הצבע בשניהם.
++  const varExtracted = new Map();   // fieldIdx -> varName
++  const varDefs = [];   // רשימת הגדרות-משתנה פר-_save
++  const usedByFields = new Map();   // fieldIdx שנוצר מ-variable -> רשימת fields שמשתמשים בו
++  for (const [idx, { expr, label }] of formulaExprs) {
++    // חיפוש אם expr מכיל הפניה ל-_v[<i>] כאשר <i> הוא גם מחושב (ב-formulaExprs)
++    const matches = expr.match(/\(num\.tryParse\(_v\[(\d+)\][^)]*\)[^)]*\)/g);
++    if (!matches) continue;
++    for (const m of matches) {
++      const refIdx = parseInt(m.match(/\d+/)[0]);
++      if (formulaExprs.has(refIdx) && !varExtracted.has(refIdx)) {
++        const refInfo = formulaExprs.get(refIdx);
++        const varName = `_var${refIdx}`;
++        varExtracted.set(refIdx, varName);
++        varDefs.push(`    final ${varName} = ${refInfo.expr};`);
++        usedByFields.set(refIdx, [idx]);
++      } else if (formulaExprs.has(refIdx) && varExtracted.has(refIdx)) {
++        const usedList = usedByFields.get(refIdx) || [];
++        if (!usedList.includes(idx)) usedList.push(idx);
++        usedByFields.set(refIdx, usedList);
++      }
++    }
++  }
++  // עדכן mapVals להשתמש במשתנים במקום _v[] ישיר וגם להחליף את התוכן של השדה שנוצר המשתנה ממנו
++  const mapValsUpdated = mapVals.map((entry, i) => {
++    let result = entry;
++    // אם שדה זה הוא בעל-משתנה שהוצא, החלף את החישוב בו בשם-המשתנה
++    if (varExtracted.has(i)) {
++      const varName = varExtracted.get(i);
++      // החלף את כל החישוב (בין ה-(:) ל-toStringAsFixed(2)) בשם-המשתנה
++      result = result.replace(/: \((.+?)\)\.toStringAsFixed\(2\)/, `: ${varName}.toStringAsFixed(2)`);
++    }
++    // אם שדה זה משתמש בנוסחה שמשתמשת במשתנה שהוצא, החלף בו את ה-_v[] בקבוע-המשתנה
++    if (!varExtracted.has(i)) {
++      for (const [extracted, varName] of varExtracted) {
++        // החלף את כל ה-(num.tryParse(_v[extracted] ?? '') ?? 0) בהם משתמשים בנוסחה בקבוע-המשתנה
++        const pattern = new RegExp(`\\(num\\.tryParse\\(_v\\[${extracted}\\][^)]*\\) \\?\\? 0\\)`, 'g');
++        result = result.replace(pattern, `${varName}`);
++      }
++    }
++    return result;
++  });
++  const mapEntriesBase = mapValsUpdated.join(', ');
++  const mapEntries = mapEntriesBase;                                                  // שדות ⇒ מפה (מחושב=נוסחה)
+   const editLoad = [...labelConst.map((cl, i) => `${i}: r[${cl}] ?? ''`), ...subEditLoad].join(', ');   // רשומה ⇒ טופס (עריכה) + תת-תאים מקוננים
+   const recValues = recValsR.join(', ');
+   const labelsList = labelConst.join(', ');
+@@ -636,7 +682,7 @@ ${hasVal ? `    final miss = <String>[];
+       ${uniqChecks}
+       ${ruleChecks}${rangeChecks ? '\n      ' + rangeChecks : ''}${patternChecks ? '\n      ' + patternChecks : ''}
+     if (miss.isNotEmpty) { setState(() => _err = miss.join(' · ')); return; }
+-` : ''}    final map = <String, String>{${mapEntries}};
++` : ''}${varDefs.length > 0 ? varDefs.join('\n') + '\n' : ''}    final map = <String, String>{${mapEntries}};
+     if (_editId != null) {
+       appStore.update(${SK}, _editId!, map);
+     } else {

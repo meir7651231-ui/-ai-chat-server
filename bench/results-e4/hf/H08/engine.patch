@@ -1,0 +1,15 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..365d5e0 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,10 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-abs · calculated field עם abs(שדה) מתורגם בעדינות לDart — Generator תמך בפונקציות-מתמטיקה בלי שגיאה (10.9, panuy task H08)
++GATE: regen_ok, compiles
++מה עבד: הוספת `מרחק אבסולוטי = abs(הפרש רוחב)` לישות אדם (panuy.txt) — קו בודד בspec עם תכונות נכונות (computed field בישות + particle לתצוגה). Generator (app-ds.mjs) סרק את הformula, מצא את abs(), ייצא Dart טהור שעובר analyze בלי errors. שום hand-edit בדאטה, שום side-effect בapps אחרים. Lesson: שפת-הspec תומכת בפונקציות-מתמטיקה (sqrt, min, max, pow, abs, round, floor, ceil) והן מתורגמות וברות-אמון; בדיקה-מכונה מאשרת (חלק-calc לדוח — מופיע בcount).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart

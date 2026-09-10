@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Spec regeneration succeeded: app-ds.mjs produced 6 screens, 13 particles all wired, no errors."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other app files modified: panuy is the only app in this task."
+    },
+    {
+      "check": "gates_pass",
+      "text": "All gates passed: no_orphans, no_hebrew_in_engine, dart_math_sane, compiles (0 errors)."
+    },
+    {
+      "check": "action",
+      "text": "New action button verified: 'שלח הודעה' appears in generated Dart code for people particle screen."
+    },
+    {
+      "check": "compiles",
+      "text": "Dart compilation clean: flutter analyze reports 0 errors."
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "No manual edits: entire output generated from spec via app-ds.mjs."
+    }
+  ],
+  "notes": "proven — all machine checks passed (VERDICT: DONE). Spec change: added 'חלקיק אדם: [פעולה] שלח הודעה' to panuy.txt particle definition. New action button now appears in generated people screen UI."
+}

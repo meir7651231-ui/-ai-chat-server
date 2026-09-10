@@ -1,0 +1,67 @@
+{
+ "task": "E11",
+ "ns": "peruk02",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "new_label": true,
+  "old_gone": true
+ },
+ "task_checks": [
+  {
+   "id": "new_label",
+   "ok": true,
+   "info": "2×",
+   "mandatory": true
+  },
+  {
+   "id": "old_gone",
+   "ok": true,
+   "info": "0×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Field 'תיקונים' renamed to 'תיקונים שנדרשו' in peruk02.txt entity definition (line 6)",
+   "check": "field_renamed",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Text reference 'קבלות על תיקונים שהוא' updated to 'קבלות על תיקונים שנדרשו שהוא' (line 6)",
+   "check": "text_updated",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Spec format remains valid: field list with asterisks for required fields, pipe separator for stages",
+   "check": "spec_syntax_valid",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Only specs-ds/peruk02.txt edited; no changes to generated code",
+   "check": "no_hand_edits_outside_specs_ds",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "6aa2c1ddd37fd872",
+ "at": "2026-09-10T00:40:45.985Z"
+}

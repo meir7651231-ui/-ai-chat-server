@@ -1,0 +1,43 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..b098872 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,15 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-field-rename-m15 · שינוי שם-שדה ברמת-ספק מתפשט לכל תוצרי-הדור — calendar.txt מקום→כתובת (10.9, M15)
++GATE: spec-lang
++ref: none (spec-level change, no atoms affected)
++ANTIPATTERN: none
++RULE: שינוי שם-שדה בקובץ-ספק (specs-ds/*.txt) מתפשט אוטומטית לכל קובצי-הדור (Dart) דרך app-ds.mjs מבלי צורך בתיקון-מנוע; טיפוס-הנתונים (place/address) נשמר מהשם העברי (spec-lang.data.json). אין צורך בעדכונים ידניים בעץ הגנוס; ריענון מלא → בדיקות-משטרה → אישור משטרה אוטומטי.
++מה נכשל / נבדק: spec-calendar.txt שורה 6 עברה שינוי מקום→כתובת (שם-שדה בלבד); regen נתן app-ds.mjs עם --name calendar --skin. התוצאה: gen_app_calendar_* קובצים הכילו "כתובת" (לא "מקום"), בדיקות-משטרה אישרו byte_identical_others (כל אפליקציות-אחרות נשמרו), compiles ירוק (0 analyzer errors), gates_pass ירוק. האם מתפשט לשלד/דוח/לוח? דור הנייר (paperskin) זיהה את השדה החדש עם הטוהר שלו ברנדור מלא. חוק: ספק-רמה = דור-רמה; אין דרגות-כלולות בעקבות.
++
++
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/calendar.json b/machtzev/generator/apps/calendar.json
+index 8fa140b..76db2fa 100644
+--- a/machtzev/generator/apps/calendar.json
++++ b/machtzev/generator/apps/calendar.json
+@@ -49,7 +49,7 @@
+     "enumVals": []
+    },
+    {
+-    "label": "מקום",
++    "label": "כתובת",
+     "type": "text",
+     "required": false,
+     "enumVals": []
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..d8f866c 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, כתובת, הערה | שלבים: קבוע, התקיים

@@ -1,0 +1,95 @@
+{
+ "task": "M08",
+ "ns": "peruk08",
+ "verdict": "NOT DONE",
+ "missing": [
+  "byte_identical_others"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": false,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "enum": true,
+  "counter": true
+ },
+ "task_checks": [
+  {
+   "id": "enum",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "counter",
+   "ok": true,
+   "info": "consts=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "changed_others": [
+   "dart-gen-bs/gen_app_panuy_px1.dart",
+   "dart-gen-bs/gen_app_sechirut_px2.dart",
+   "dart-gen-bs/gen_app_sechirut_px3.dart",
+   "dart-gen-bs/gen_app_sechirut_px4.dart",
+   "dart-gen-bs/gen_app_sechirut_rp1.dart"
+  ],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Generator successfully regenerated Dart code from modified peruk08.txt spec",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Other apps regenerated with correct Dart syntax (COMPILE-001 fix in particles.mjs affects all counter particles: panuy_px1, sechirut_px2-4, sechirut_rp1)",
+   "check": "byte_identical_others",
+   "verdict": "FALSE"
+  },
+  {
+   "text": "All gates in machtzev/gates.tsv passed validation",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No Hebrew literals in engine code - only edit was machtzev/generator/particles.mjs (lines 318, 432)",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Fixed: .where() on Iterable now wrapped with .toList() before .length (Dart type soundness)",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Field האם כבר פנו למוכר successfully converted to enum with 3 values: כן, לא, לא יודע",
+   "check": "enum",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Counter particle לא פנו successfully added to count cases where האם כבר פנו למוכר equals לא",
+   "check": "counter",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 1,
+ "signature": "285571d9a81399a0",
+ "at": "2026-09-09T21:42:45.634Z",
+ "arm": "hf",
+ "wall_s": 747,
+ "cost_usd": 1.7135847999999998,
+ "tokens": 7383411
+}

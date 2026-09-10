@@ -1,0 +1,5 @@
+=== h0/H07 (sechirut) start 06:11:43
+=== h0/H07 (sechirut) start 06:22:03
+  builder.json: exit=0 cost=0.20101120000000003 turns=18 ms=162717 err=false
+  police: NOT DONE missing=calc,max false=0
+=== h0/H07 NOT DONE wall=195s cost=$0.20 false_claims=0

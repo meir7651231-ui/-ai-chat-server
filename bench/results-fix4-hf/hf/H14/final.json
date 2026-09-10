@@ -1,0 +1,51 @@
+{
+ "task": "H14",
+ "ns": "sechirut",
+ "verdict": "NOT DONE",
+ "missing": [
+  "sort_color"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "sort_color": false
+ },
+ "task_checks": [
+  {
+   "id": "sort_color",
+   "ok": false,
+   "info": "none",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "ממצא particle partition bands sorted by color severity: אדום (red) < צהוב (yellow) < ירוק (green)",
+   "check": "sort_color",
+   "verdict": "FALSE"
+  }
+ ],
+ "false_claims": 1,
+ "signature": "69a5d4c97277d9bd",
+ "at": "2026-09-10T09:30:40.775Z",
+ "arm": "hf",
+ "wall_s": 1052,
+ "cost_usd": 2.85396905,
+ "tokens": 15195101
+}

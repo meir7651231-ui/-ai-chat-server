@@ -1,0 +1,92 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 1f1750a..3009236 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -299,7 +299,7 @@ export function buildApp(specText) {
+     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr });
+     home = { slug: `${P}shell`, cls: shell.cls };
+     // G33 · מניפסט-המודול (הכרעה-29): מה ש«בלגן» (האפליקציה-האחת) צריך כדי למזג את המודול — מסכים · שורש · שדות · שרשרת. נגזר, לא יד.
+-    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [] })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
++    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [], ...(f.formula ? { formula: f.formula } : {}) })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
+     console.log(`🧭 ${L.shellLog}: ${L.shellRootWord} ${rootMeta.name} · ${kids.length} ${L.shellChildrenWord} · ${shell.nav || '—'}${[...rootPage.notes, ...shell.notes].length ? ' · ⚪ ' + [...rootPage.notes, ...shell.notes].join(' · ') : ''}`);
+   }
+   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
+diff --git a/machtzev/generator/apps/sechirut.json b/machtzev/generator/apps/sechirut.json
+index e44be62..09f360c 100644
+--- a/machtzev/generator/apps/sechirut.json
++++ b/machtzev/generator/apps/sechirut.json
+@@ -107,19 +107,22 @@
+     "label": "שכירות לשנה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": "שכירות * 12"
+    },
+    {
+     "label": "תקרה לפי חודשים",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": "שכירות * 3"
+    },
+    {
+     "label": "תקרה לפי שליש",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": "שכירות * חודשים / 3"
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..ac16b92 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -48,6 +48,13 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "סכום כולל מעמ",
++    "type": "num",
++    "required": false,
++    "enumVals": [],
++    "formula": "סכום * 1.18"
++   },
+    {
+     "label": "הערה",
+     "type": "multiline",
+diff --git a/machtzev/generator/balagan.mjs b/machtzev/generator/balagan.mjs
+index 4c6c1b2..86a9a57 100644
+--- a/machtzev/generator/balagan.mjs
++++ b/machtzev/generator/balagan.mjs
+@@ -24,6 +24,7 @@ const isPhoneField = (f) => labelIn(f, SLB.typePhone || []);
+ const isPersonField = (f) => labelIn(f, SLB.typePerson || []) || (SLB.typePerson || []).some((w) => w.includes(' ') && f.label.includes(w));
+ const isPercentField = (f) => (f.type === 'num' || !f.type) && f.label.split(/\s+/).some((w) => (SLB.typePercent || []).includes(w));
+ const isTimeField = (f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && !(f.enumVals && f.enumVals.length) && f.label.split(/\s+/).some((w) => TIME_WORDS.includes(w));
++const inputFields = (m) => m.root.fields.filter((f) => !f.formula);   // שדה-מחושב ('שדה = נוסחה' במניפסט) = נגזר במסך-הישות, לא קלט: לא בטופס-האישור, לא יעד-לעובדה, לא שדה-סכום
+ const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
+ const impOf = (w) => `import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`;
+ const dq = (s) => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$')}'`;   // Dart string literal
+@@ -117,7 +118,7 @@ class BalaganModule {
+ class BalaganHit { const BalaganHit(this.module, this.score); final BalaganModule module; final double score; }
+ 
+ const List<BalaganModule> kBalaganModules = [
+-${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}], selfScore: ${selfScores[i]}, layer: '${m.layer || ''}', required: ${m.root.fields.filter((f) => f.required).length}, timeFields: [${m.root.fields.filter(isTimeField).map((f) => dq(f.label)).join(', ')}], phoneFields: [${m.root.fields.filter(isPhoneField).map((f) => dq(f.label)).join(', ')}], personFields: [${m.root.fields.filter(isPersonField).map((f) => dq(f.label)).join(', ')}], percentFields: [${m.root.fields.filter(isPercentField).map((f) => dq(f.label)).join(', ')}]),`).join('\n')}
++${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${inputFields(m).filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${inputFields(m).filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((inputFields(m).find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${inputFields(m).map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}], selfScore: ${selfScores[i]}, layer: '${m.layer || ''}', required: ${inputFields(m).filter((f) => f.required).length}, timeFields: [${inputFields(m).filter(isTimeField).map((f) => dq(f.label)).join(', ')}], phoneFields: [${inputFields(m).filter(isPhoneField).map((f) => dq(f.label)).join(', ')}], personFields: [${inputFields(m).filter(isPersonField).map((f) => dq(f.label)).join(', ')}], percentFields: [${inputFields(m).filter(isPercentField).map((f) => dq(f.label)).join(', ')}]),`).join('\n')}
+ ];
+ /// סף-החולשה — נגזר מהנתונים (לא קבוע-קסם): חצי מביטחון-הכותרת-הנמוך-ביותר בין המודולים. מתחתיו הרגע «כללי» ⇒ שכבת-הבסיס ראשונה.
+ const double kBalaganWeak = ${weak};
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..6b2f8df 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, סכום כולל מעמ = סכום * 1.18, הערה | שלבים: פתוח, נעשה

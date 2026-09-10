@@ -1,0 +1,57 @@
+{
+ "task": "H15",
+ "ns": "peruk21",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "sort_px": true,
+  "sort_ent": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_px",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  },
+  {
+   "id": "sort_ent",
+   "ok": true,
+   "info": "ent1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Entity list screen (ent1) sorts cases by deadline in ascending order (soonest first)",
+   "check": "sort_ent",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Particle screen (px1) table sorts cases by deadline in ascending order (soonest first)",
+   "check": "sort_px",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "3c8af3d797690e13",
+ "at": "2026-09-10T09:35:18.359Z"
+}

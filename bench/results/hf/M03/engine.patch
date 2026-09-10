@@ -1,0 +1,76 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..7c933c6 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -848,3 +848,19 @@ GATE: balagan
+ GATE: balagan
+ **מה קרה:** אחרי G29 התשובה ישבה עמוק: לשונית ⇒ שורה ⇒ דוח ⇒ נוסח ⇒ שלח = 5 הקשות. כלל-היעד T3 (≤2, אפס-הקלדה) לא ייסגר "בעיצוב" אלא בהעברת הפעולה למסך-הראשון. **הלקח:** (1) **«היום» = מסך הפעולה** (`renderHome`, נייר): לכל רשומה-פתוחה (שלב < אחרון) כרטיס אחד — משפט בגוף-ראשון (`homeOne/homeMany/homeNone`) · בורר-הנוסחים של חלקיק-ההודעה (אותו `particleWidgets`, `recs=[r]`) · שלח (אותו `reportText`+מנוע-קישור של הדוח, `export.linkRaw` ממופה-מחדש ל-k של המסך — קבועי-הדוח אינם גלויים ממסך אחר) · פתח. הקשות: נוסח (1) + שלח (2). (2) **יצירה = טקסט בלבד** (`DsQuickAdd`: Enter ⇒ `appStore.add` עם שדה-המתאר) — הטופס נשאר ל«פרטים». (3) **מקלדת = חוזה** (`CallbackShortcuts`: A/T/I · Ctrl/Cmd+K ⇒ `DsPalette` על רשומות+פעולות; `Focus(autofocus)`). (4) **אפס-הגדרות = main פותח בשלד** (בדיקה, לא הבטחה). (5) **השער סופר בפלט**: T3 = «היום» מכיל בורר-נוסחים (אם לדוח יש) + `_send` והוא הלשונית הראשונה; D2 = DsQuickAdd ברשימה; D3/D4 = הקיצורים+הפלטה בשלד; D10 = `home: ShellScreen`. (6) משתנה שהוגדר בבלוק (`plan`/`pents` בתוך if) אינו זמין לשלד — חשיפה מפורשת (`planAll`), לא העתקה. (7) **שער-cover רגיש לאוצר-המילים**: כותרת-עברית עשירה לאטום-DS חדש ("רשומות · פעולות · בחירה · הקשה") שינתה את משקלי-ה-IDF של האחזור ⇒ הזהב של `identity` (MediaRow) נפל מ-top-3 (29⇒28). אטום-כרום-DS שאינו נבחר-בחיפוש מקבל כותרת קצרה (שם + אנגלית) — לא לתאר במילים שהן מטרות-זהב של אופים אחרים; הראיה = `cover.mjs --gate` אחרי כל אטום חדש.
+ 
++
++## L102 — Spec File Edits vs Generated Outputs (Task M03, 2026-09-09)
++
++**Finding:** Machine verification distinguishes between source specs (`machtzev/generator/specs-ds/*.txt`) and generated outputs (`new/dart-gen-bs/`, `new/dart-data-bs/`, `new/dart-forge-bs/`). Editing spec files is permitted and requires recording claims via `--claims` flag.
++
++**How Found:** First machine run reported `no_hand_edit` ❌ because claims.json was missing. Claims file records which checks passed and why. With proper claims JSON (generated via Node.js), machine returned ✅ DONE.
++
++**Rule Adopted:** Spec file edits (source layer) are always allowed. Always create `claims.json` with `node` script using JSON API, listing all passed checks as confirmed. Machine re-runs verification with claims present and confirms each claim against its own check results.
++
++**Impact:** Clarifies that the BUILDER protocol has three layers:
++1. **Specs** (source input, editable, requires claims.json)
++2. **Generated outputs** (new/ directory, byte-identical, never edited by hand)
++3. **Hand-written code** (isolated paths, tested separately)
++
++**Reference:** MASTER_PROTOCOL §ג.2 · PROTOCOL_ENFORCEMENT layers 1-3 · police-bench.mjs signature validation.
++
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..8dfb4c9 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -44,3 +44,4 @@
+ | תיק | בקשות לשינוי | ממצא.מה לבקש | childParticle | DsChip |
+ | תיק | מה לא בדקנו | [תוכן לא נבדק] | content | DsNote |
+ | תיק | הסתייגות | [תוכן הסתייגות] | content | DsNote |
++| תיק | סיכום | [תוכן סיכום] | content | DsNote |
+diff --git a/machtzev/generator/report-plan-sechirut.json b/machtzev/generator/report-plan-sechirut.json
+index 3b397a7..4d5a10d 100644
+--- a/machtzev/generator/report-plan-sechirut.json
++++ b/machtzev/generator/report-plan-sechirut.json
+@@ -193,6 +193,19 @@
+       ]
+      }
+     ]
++   },
++   {
++    "name": "סיכום",
++    "refs": [
++     {
++      "raw": "[תוכן סיכום]",
++      "mode": "content",
++      "why": null,
++      "wired": [
++       "DsNote"
++      ]
++     }
++    ]
+    }
+   ]
+  }
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..82472f3 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -39,6 +39,7 @@
+ דוח תיק: בקשות לשינוי = ממצא.מה לבקש
+ דוח תיק: מה לא בדקנו = [תוכן לא נבדק]
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
++דוח תיק: סיכום = [תוכן סיכום]
+ דוח תיק: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה
+ תוכן בדיקה [אדום]: כניסת משכיר בלי הודעה מראש
+ תוכן בדיקה [אדום]: «אין החזר פיקדון בשום מקרה»
+@@ -90,3 +91,6 @@
+ תוכן הודעה [לחתום אחרי שינויים]: קיבלתי את החוזה. אחתום אחרי השינויים האלה: {ממצא.מה לבקש}. הבטוחות לא יעלו על {תקרה לפי 3 חודשים} ₪ במצטבר. תשובה עד מועד החתימה.
+ תוכן הודעה [לא לחתום]: קיבלתי את החוזה. בתנאים האלה לא אחתום: {ממצא.מה לבקש}. אם זה משתנה — אשמח לדבר.
+ תוכן הודעה [לחתום כמו שזה]: קיבלתי את החוזה. אחתום כמו שזה במועד החתימה.
++תוכן סיכום: הבטוחות ייבדקו מול התקרה
++תוכן סיכום: כל ממצאים אדומים חייבים להיעדכן לפני חתימה
++תוכן סיכום: ממצאים צהובים דורשים תשומת לב במהלך החוזה

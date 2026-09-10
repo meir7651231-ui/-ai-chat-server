@@ -1,0 +1,100 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3041216..5d04d1f 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,11 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-09-counter-particle-e07 · דיווח-ספירה בפעם-ראשונה לשחקן (counter particle) נראה בפעם השנייה לתמונה כמעשה-דקדוק (9.9, E07·peruk21)
++PATTERN: counter particles (`חלקיק entity: name = מונה(field=value)`) מוגדרים ב-spec.txt כחלקיק בגוף-הישות; הגנרטור פולט consts עם שם-המונה כערך
++RULE: counters appear on particle screens (px1) as UI elements. Dashboard (לוח בקרה) counters are separate (`מונה(entity)` and `מונה(entity: field=value)` in board line). Confusion: board is not the particle screen — board = hub/dashboard; particle screen = px1. Counter particles on entity screens use the syntax `חלקיק entity: label = מונה(field=value)` where label becomes the display name and field=value is the filter.
++מה כשל בתיזה: initial attempt added counter to dashboard (לוח בקרה) line 8, not to particle screen. Dashboard is for hub screen, not case-list screen. The correct approach: add a new particle line `חלקיק תיק: דחופים = מונה(סיווג=הזמנה לוועדה)` to the particle definitions. Generator parses this, creates consts, and wires the counter into px1 (case table screen). Final change worked on first regeneration.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..a50120a 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -173,6 +173,33 @@
+    "DsNote"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "דחופים",
++  "expr": "מונה(סיווג=הזמנה לוועדה)",
++  "ok": true,
++  "why": null,
++  "shape": "count",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "אסור",
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..1c3d87a 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -8,6 +8,7 @@
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| דחופים | תיק | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..ba37c23 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -315,7 +315,7 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+     const kd = p.ops.map((op, i) => [op, p.picks[i]]);
+     if (agg) {
+       const foldSum = `${recs}.fold(0.0, (a, r) => a + (num.tryParse(r[${k(s.field)}] ?? '') ?? 0))`;
+-      const expr = s.kind === 'count' ? (s.field ? `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(s.value || '')}).length.toDouble()` : scoped ? `${recs}.length.toDouble()` : `appStore.count('${entity.slug}').toDouble()`)
++      const expr = s.kind === 'count' ? (s.field ? `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(s.value || '')}).toList().length.toDouble()` : scoped ? `${recs}.length.toDouble()` : `appStore.count('${entity.slug}').toDouble()`)
+         : s.kind === 'sum' ? (scoped ? foldSum : `appStore.sum('${entity.slug}', ${k(s.field)})`) : (scoped ? `(${recs}.isEmpty ? 0.0 : ${foldSum} / ${recs}.length)` : `appStore.avg('${entity.slug}', ${k(s.field)})`);
+       const ctx = { label: lbl, value: { str: `${expr}.toStringAsFixed(${s.kind === 'avg' ? 1 : 0})`, num: expr }, glyph: k('🧩'), sub: k(p.expr) };
+       const w = firstWired(kd[0][1], ctx);
+@@ -429,7 +429,7 @@ export function particleText({ entity, plan, k, recs: recsOverride = null }) {
+     const s = p.shape; const lbl = k(p.name);
+     if (/^(count|sum|avg)$/.test(s.kind)) {
+       const foldSum = `${recs}.fold(0.0, (a, r) => a + (num.tryParse(r[${k(s.field)}] ?? '') ?? 0))`;
+-      const expr = s.kind === 'count' ? (s.field ? `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(s.value || '')}).length.toDouble()` : scoped ? `${recs}.length.toDouble()` : `appStore.count('${entity.slug}').toDouble()`)
++      const expr = s.kind === 'count' ? (s.field ? `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(s.value || '')}).toList().length.toDouble()` : scoped ? `${recs}.length.toDouble()` : `appStore.count('${entity.slug}').toDouble()`)
+         : s.kind === 'sum' ? (scoped ? foldSum : `appStore.sum('${entity.slug}', ${k(s.field)})`) : (scoped ? `(${recs}.isEmpty ? 0.0 : ${foldSum} / ${recs}.length)` : `appStore.avg('${entity.slug}', ${k(s.field)})`);
+       exprs.push(`${lbl} + ': ' + ${expr}.toStringAsFixed(${s.kind === 'avg' ? 1 : 0})`); continue;
+     }
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..d9eed90 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -13,6 +13,7 @@
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: סיווג = [תוכן סיווג]
++חלקיק תיק: דחופים = מונה(סיווג=הזמנה לוועדה)
+ חלקיק תיק: אסור = [תוכן אסור]
+ דוח תיק: כרטיס בעברית פשוטה = [תוכן כרטיס בעברית פשוטה]
+ דוח תיק: רשימת הגשה = [תוכן רשימת הגשה]

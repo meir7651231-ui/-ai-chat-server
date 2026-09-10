@@ -1,0 +1,8 @@
+=== h0/H02 (sechirut) start 06:02:43
+  builder.json: exit=0 cost=0.6774761000000002 turns=48 ms=330492 err=false
+  police: NOT DONE missing=byte_identical_others,desc false=0
+=== h0/H02 NOT DONE wall=362s cost=$0.68 false_claims=0
+=== h0/H02 (sechirut) start 06:14:43
+  builder.json: exit=0 cost=0.58540535 turns=29 ms=338984 err=false
+  police: NOT DONE missing=byte_identical_others,no_hebrew_in_engine false=0
+=== h0/H02 NOT DONE wall=375s cost=$0.59 false_claims=0

@@ -1,0 +1,44 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..cfbd6ee 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,12 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-specs-computed-field · שדה מחושב בספק — תחביר: `שם = formula` עם round/floor/ceil/min/max/sqrt/pow/abs (10.9, H09 · משימות)
++GATE: regen_ok · calc · round
++PATTERN: `שדה מחושב = <נוסחה>` בתוך שורת-ישות
++RULE: שדה מחושב מוגדר בספק (SPEC-LANG.md line 12) עם תחביר `name = round(field)` או כל פונקציה מתמכת. הסינטקס נלקח מ-SPEC-LANG.md; המנוע מייצר Dart-valid `int.round()` / `double.round()` לפי טיפוס השדה המקור. חיפוש קודם עם search-record.mjs מתחזוק רשומה חתומה של הביצוע.
++מה הצליח: הוספת `סכום מעוגל = round(סכום)` למשימה בתוך tasks.txt (line 6) ⇒ generator סיים בהצלחה; כל gates ירוקים; בדיקה מחוללת תופסת את השדה החדש עם סוג נכון (int כשסכום=int).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..040dacc 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -48,6 +48,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "סכום מעוגל",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "הערה",
+     "type": "multiline",
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..adb3b15 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, סכום מעוגל = round(סכום), הערה | שלבים: פתוח, נעשה

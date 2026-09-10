@@ -1,0 +1,64 @@
+{
+ "task": "H03",
+ "ns": "tasks",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "dart_math_sane": true,
+  "sort": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Tasks table (משימה particle) is sorted by מועד (due date) ascending, soonest first, in spec layer",
+   "check": "sort",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generator pipeline completed successfully without errors",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All protocol gates passed: wiring, contracts, registry, particles",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No hand-edits detected in generated outputs (dart, data, forge modules)",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "c6237b02ea390119",
+ "at": "2026-09-10T08:43:31.317Z",
+ "arm": "hf",
+ "wall_s": 642,
+ "cost_usd": 1.9986351000000004,
+ "tokens": 9540570
+}

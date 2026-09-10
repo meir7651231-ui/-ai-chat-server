@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Spec parses correctly after adding תקרה נמוכה computed field to תיק entity."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other generated files were modified; only sechirut.txt was edited."
+    },
+    {
+      "check": "gates_pass",
+      "text": "All gates pass including calculation gates and min function validation."
+    },
+    {
+      "check": "calc",
+      "text": "New computed field תקרה נמוכה = min(תקרה לפי 3 חודשים, תקרה לפי שליש) is recognized and compiled."
+    },
+    {
+      "check": "min",
+      "text": "Min function is correctly parsed and applied to the two ceiling fields."
+    }
+  ],
+  "notes": "proven — the machine report confirms DONE. The field was successfully added to sechirut.txt line 7 in the correct syntax. The generator recognizes the min() function and the computed field references to the two parent fields."
+}

@@ -1,0 +1,1 @@
+{"claims_success":false,"false_claims":3,"quote":"Both modifications use lexicographic string comparison via `.compareTo()`, which correctly sorts dates in string format when they follow a consistent format.","cost":0.046904299999999996}

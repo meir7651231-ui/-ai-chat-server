@@ -1,0 +1,14 @@
+=== h0/M04 (peruk17) start 14:58:11
+  builder.json: exit=0 cost=0.3133167 turns=24 ms=579929 err=false
+  police: NOT DONE missing=num_particle,title false=0
+=== h0/M04 NOT DONE wall=624s cost=$0.31 false_claims=0
+=== hf/M04 (peruk17) start 15:08:35
+  builder.json: exit=0 cost=0.7335369000000003 turns=58 ms=682178 err=false
+  police: NOT DONE missing=num_particle false=1
+  auditor-compile.json: exit=0 cost=0.17826140000000001 turns=11 ms=51756 err=false
+  auditor-coverage.json: exit=0 cost=0.20642710000000003 turns=15 ms=60035 err=false
+  auditor-regression.json: exit=0 cost=0.2311579 turns=20 ms=120546 err=false
+  validator.json: exit=0 cost=0.2812986 turns=27 ms=107255 err=false
+  fixer-1.json: exit=0 cost=0.1199624 turns=10 ms=73371 err=false
+  police: DONE missing= false=0
+=== hf/M04 DONE wall=1078s cost=$1.75 false_claims=0

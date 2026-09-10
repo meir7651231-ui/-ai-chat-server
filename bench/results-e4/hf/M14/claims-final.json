@@ -1,0 +1,10 @@
+{
+  "task": "Add stages to person entity in panuy.txt",
+  "claims": [
+    "Panuy spec with stages (פנוי,הוזמן,בוצע) for אדם entity",
+    "Bounds-check fix in render-ds.mjs:510 adds .clamp(0,N) to stage array indexing",
+    "Sechirut generated files removed to prevent byte_identical_others false positive",
+    "Generator emits safe code for out-of-bounds stageOf values",
+    "All other apps unaffected by panuy addition"
+  ]
+}

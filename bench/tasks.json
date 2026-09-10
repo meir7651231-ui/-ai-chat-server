@@ -1,0 +1,993 @@
+[
+{
+"id": "E01",
+"ns": "sechirut",
+"tier": "E",
+"task": "In the spec machtzev/generator/specs-ds/sechirut.txt, the entity תיק (the case) has no email. Add an email field named אימייל to תיק so it appears in the form and in the table. Don't break anything.",
+"checks": [
+{
+"id": "email_in_ent",
+"kind": "lit",
+"file": "data:ent1",
+"text": "אימייל"
+},
+{
+"id": "email_in_table",
+"kind": "lit",
+"file": "data:px1",
+"text": "אימייל"
+}
+]
+},
+{
+"id": "E02",
+"ns": "peruk02",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/peruk02.txt add a priority field to the case entity תיק: a closed choice named עדיפות with the values גבוהה, בינונית, נמוכה. Don't break anything.",
+"checks": [
+{
+"id": "enum_high",
+"kind": "lit",
+"file": "data:ent1",
+"text": "גבוהה"
+},
+{
+"id": "enum_low",
+"kind": "lit",
+"file": "data:ent1",
+"text": "נמוכה"
+},
+{
+"id": "label",
+"kind": "lit",
+"file": "data:ent1",
+"text": "עדיפות"
+}
+]
+},
+{
+"id": "E03",
+"ns": "peruk12",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/peruk12.txt the case entity תיק has a price field מחיר. Add a computed field מחיר עם אגרה that equals the price times 1.03, computed by the app (not typed by the user). Don't break anything.",
+"checks": [
+{
+"id": "calc_fee",
+"kind": "calc",
+"ent": "ent1",
+"label": "מחיר עם אגרה"
+}
+]
+},
+{
+"id": "E04",
+"ns": "tasks",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/tasks.txt the task entity משימה has stages פתוח and נעשה. Add a third stage בוטל (cancelled). Don't break anything.",
+"checks": [
+{
+"id": "stage_cancel",
+"kind": "lit",
+"file": "data:ent1",
+"text": "בוטל"
+}
+]
+},
+{
+"id": "E05",
+"ns": "calendar",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/calendar.txt add a participants field משתתפים to the meeting entity פגישה, and make the meetings screen show the empty-state text אין פגישות השבוע when there are no meetings. Don't break anything.",
+"checks": [
+{
+"id": "field",
+"kind": "lit",
+"file": "data:ent1",
+"text": "משתתפים"
+},
+{
+"id": "empty_text",
+"kind": "lit_any",
+"files": [
+"data:shell",
+"data:px1",
+"data:ent1",
+"data:px2"
+],
+"text": "אין פגישות השבוע"
+}
+]
+},
+{
+"id": "E06",
+"ns": "peruk17",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/peruk17.txt add an action button labelled שלח תזכורת to the case screen (the particle screen of תיק). Don't break anything.",
+"checks": [
+{
+"id": "action",
+"kind": "lit",
+"file": "data:px1",
+"text": "שלח תזכורת"
+}
+]
+},
+{
+"id": "E07",
+"ns": "peruk21",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/peruk21.txt add to the case screen a counter named דחופים that counts cases whose סיווג is הזמנה לוועדה. Don't break anything.",
+"checks": [
+{
+"id": "counter",
+"kind": "count",
+"px": "px1",
+"label": "דחופים"
+}
+]
+},
+{
+"id": "E08",
+"ns": "sechirut",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/sechirut.txt the dashboard (לוח בקרה) counts cases and findings. Add a dashboard counter of cases where מתווך is כן. Don't break anything.",
+"checks": [
+{
+"id": "dash_counter",
+"kind": "dash",
+"label": "מתווך"
+}
+]
+},
+{
+"id": "E09",
+"ns": "peruk25",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/peruk25.txt add to the case entity תיק a numeric field סכום פיצויים and a computed field פיצויים לשנה that equals סכום פיצויים times 12. Don't break anything.",
+"checks": [
+{
+"id": "field",
+"kind": "lit",
+"file": "data:ent1",
+"text": "סכום פיצויים"
+},
+{
+"id": "calc",
+"kind": "calc",
+"ent": "ent1",
+"label": "פיצויים לשנה"
+}
+]
+},
+{
+"id": "E10",
+"ns": "panuy",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/panuy.txt add to the person entity אדם a field ותק בשנים (years of experience) limited to the range 0 to 77. Don't break anything.",
+"checks": [
+{
+"id": "field",
+"kind": "lit",
+"file": "data:ent1",
+"text": "ותק בשנים"
+},
+{
+"id": "range_max",
+"kind": "num",
+"ent": "ent1",
+"value": "77"
+}
+]
+},
+{
+"id": "E11",
+"ns": "peruk02",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/peruk02.txt rename the case field תיקונים to תיקונים שנדרשו everywhere it appears in the generated app. Don't break anything.",
+"checks": [
+{
+"id": "new_label",
+"kind": "lit",
+"file": "data:ent1",
+"text": "תיקונים שנדרשו"
+},
+{
+"id": "old_gone",
+"kind": "absent",
+"file": "data:ent1",
+"pattern": "= 'תיקונים';"
+}
+]
+},
+{
+"id": "E12",
+"ns": "sechirut",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/sechirut.txt the payment entity תשלום has an amount סכום. Add to the payments screen a particle named סך הכל that shows the sum of all amounts. Don't break anything.",
+"checks": [
+{
+"id": "sum_label",
+"kind": "lit",
+"file": "data:px4",
+"text": "סך הכל"
+},
+{
+"id": "sum_code",
+"kind": "regex",
+"file": "gen:px4",
+"pattern": "fold\\(|\\.sum\\b|reduce\\("
+}
+]
+},
+{
+"id": "E13",
+"ns": "peruk12",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/peruk12.txt add to the case entity תיק a numeric field קילומטראז׳ and a computed field מחיר לקמ equal to מחיר divided by קילומטראז׳. Don't break anything.",
+"checks": [
+{
+"id": "field",
+"kind": "lit",
+"file": "data:ent1",
+"text": "קילומטראז׳"
+},
+{
+"id": "calc",
+"kind": "calc",
+"ent": "ent1",
+"label": "מחיר לקמ"
+}
+]
+},
+{
+"id": "E14",
+"ns": "calendar",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/calendar.txt add to the meeting entity פגישה a closed-choice field סוג with the values עבודה, אישי, רפואי. Don't break anything.",
+"checks": [
+{
+"id": "v1",
+"kind": "lit",
+"file": "data:ent1",
+"text": "רפואי"
+},
+{
+"id": "v2",
+"kind": "lit",
+"file": "data:ent1",
+"text": "עבודה"
+},
+{
+"id": "label",
+"kind": "lit",
+"file": "data:ent1",
+"text": "סוג"
+}
+]
+},
+{
+"id": "E15",
+"ns": "tasks",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/tasks.txt add to the task entity משימה a computed field סכום כולל מעמ equal to סכום times 1.18. Don't break anything.",
+"checks": [
+{
+"id": "calc",
+"kind": "calc",
+"ent": "ent1",
+"label": "סכום כולל מעמ"
+}
+]
+},
+{
+"id": "E16",
+"ns": "peruk08",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/peruk08.txt add a stage הוחזר הכסף (money refunded) to the case entity תיק after נמסר. Don't break anything.",
+"checks": [
+{
+"id": "stage",
+"kind": "lit",
+"file": "data:ent1",
+"text": "הוחזר הכסף"
+}
+]
+},
+{
+"id": "E17",
+"ns": "peruk21",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/peruk21.txt the case screen shows אין תיקים עדיין when empty. Change that empty-state text to אין מכתבים פתוחים. Don't break anything.",
+"checks": [
+{
+"id": "new_text",
+"kind": "lit",
+"file": "data:px1",
+"text": "אין מכתבים פתוחים"
+},
+{
+"id": "old_gone",
+"kind": "absent",
+"file": "data:px1",
+"text": "אין תיקים עדיין"
+}
+]
+},
+{
+"id": "E18",
+"ns": "sechirut",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/sechirut.txt add to the finding entity ממצא a closed-choice field עדות with the values תמונה, מסמך, בעל פה. Don't break anything.",
+"checks": [
+{
+"id": "v",
+"kind": "lit",
+"file": "data:ent3",
+"text": "בעל פה"
+},
+{
+"id": "label",
+"kind": "lit",
+"file": "data:ent3",
+"text": "עדות"
+}
+]
+},
+{
+"id": "E19",
+"ns": "peruk25",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/peruk25.txt add to the dashboard (לוח בקרה) a counter of cases whose סיווג is דגל מוגן. Don't break anything.",
+"checks": [
+{
+"id": "dash_counter",
+"kind": "dash",
+"label": "דגל מוגן"
+}
+]
+},
+{
+"id": "E20",
+"ns": "panuy",
+"tier": "E",
+"task": "In machtzev/generator/specs-ds/panuy.txt add an action button labelled שלח הודעה to the people screen (the particle screen of אדם). Don't break anything.",
+"checks": [
+{
+"id": "action",
+"kind": "lit",
+"file": "data:px1",
+"text": "שלח הודעה"
+}
+]
+},
+{
+"id": "M01",
+"ns": "peruk02",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/peruk02.txt add a third entity תשלום (payment) belonging to a case: fields תיק (required link), סכום (required amount), שולם (yes/no); deleting a case cascades to its payments; give it a table screen. Don't break anything.",
+"checks": [
+{
+"id": "ent3",
+"kind": "exists",
+"file": "gen:ent3"
+},
+{
+"id": "paid",
+"kind": "lit",
+"file": "data:ent3",
+"text": "שולם"
+},
+{
+"id": "px3",
+"kind": "exists",
+"file": "gen:px3"
+}
+]
+},
+{
+"id": "M02",
+"ns": "peruk12",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/peruk12.txt add a second entity בדיקה (inspection) belonging to a case: fields תיק (required link), מה נבדק (required), תקין (yes/no); a table screen for it; and a dashboard counter of inspections where תקין is לא. Don't break anything.",
+"checks": [
+{
+"id": "ent2",
+"kind": "lit",
+"file": "data:ent2",
+"text": "מה נבדק"
+},
+{
+"id": "px2",
+"kind": "lit_any",
+"files": [
+"data:px2",
+"data:px1"
+],
+"text": "מה נבדק"
+},
+{
+"id": "dash_counter",
+"kind": "dash",
+"label": "תקין"
+}
+]
+},
+{
+"id": "M03",
+"ns": "sechirut",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/sechirut.txt add to the case report (דוח תיק) a section named סיכום built from content lines, and add three content lines for it; one of them must read exactly: הבטוחות ייבדקו מול התקרה. Don't break anything.",
+"checks": [
+{
+"id": "report_text",
+"kind": "lit",
+"file": "data:rp1",
+"text": "הבטוחות ייבדקו מול התקרה"
+},
+{
+"id": "report_title",
+"kind": "lit",
+"file": "data:rp1",
+"text": "סיכום"
+}
+]
+},
+{
+"id": "M04",
+"ns": "peruk17",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/peruk17.txt add to the case screen a 'your number' particle ([מספר]) named ימים לתגובה whose text says: 30 ימים מקבלת המכתב. Don't break anything.",
+"checks": [
+{
+"id": "num_particle",
+"kind": "lit",
+"file": "data:px1",
+"text": "30 ימים מקבלת המכתב"
+},
+{
+"id": "title",
+"kind": "lit",
+"file": "data:px1",
+"text": "ימים לתגובה"
+}
+]
+},
+{
+"id": "M05",
+"ns": "peruk21",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/peruk21.txt add a message particle ([הודעה]) named תשובה to the case screen, built from the field סיווג and a message content line that reads: קיבלתי, הסיווג: {ערך}. Don't break anything.",
+"checks": [
+{
+"id": "msg",
+"kind": "lit",
+"file": "data:px1",
+"text": "קיבלתי, הסיווג"
+},
+{
+"id": "title",
+"kind": "lit",
+"file": "data:px1",
+"text": "תשובה"
+}
+]
+},
+{
+"id": "M06",
+"ns": "panuy",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/panuy.txt add to the person entity a computed text field קרוב that shows קרוב when מרחק בריבוע is below 100 and רחוק otherwise. Don't break anything.",
+"checks": [
+{
+"id": "calc",
+"kind": "calc",
+"ent": "ent1",
+"label": "קרוב"
+},
+{
+"id": "far",
+"kind": "lit",
+"file": "data:ent1",
+"text": "רחוק"
+}
+]
+},
+{
+"id": "M07",
+"ns": "sechirut",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/sechirut.txt the finding entity ממצא has a yes/no field נשלח. Add a dashboard counter of findings not yet sent, and on the findings screen a counter particle named לא נשלחו of the same thing. Don't break anything.",
+"checks": [
+{
+"id": "px_counter",
+"kind": "count",
+"px": "px3",
+"label": "לא נשלחו"
+},
+{
+"id": "hub_label",
+"kind": "lit",
+"file": "data:hub",
+"text": "נשלח"
+}
+]
+},
+{
+"id": "M08",
+"ns": "peruk08",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/peruk08.txt turn the free-text field האם כבר פנו למוכר into a closed choice with values כן, לא, לא יודע, and add to the case screen a counter particle named לא פנו counting cases where it is לא. Don't break anything.",
+"checks": [
+{
+"id": "enum",
+"kind": "lit",
+"file": "data:ent1",
+"text": "לא יודע"
+},
+{
+"id": "counter",
+"kind": "count",
+"px": "px1",
+"label": "לא פנו"
+}
+]
+},
+{
+"id": "M09",
+"ns": "tasks",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/tasks.txt add a second entity תזכורת (reminder) belonging to a task: fields משימה (required link), מועד (required date), נשלחה (yes/no); deleting a task cascades; a table screen; and an empty-state text אין תזכורות. Don't break anything.",
+"checks": [
+{
+"id": "ent2",
+"kind": "lit",
+"file": "data:ent2",
+"text": "נשלחה"
+},
+{
+"id": "empty",
+"kind": "lit_any",
+"files": [
+"data:px1",
+"data:px2",
+"data:shell"
+],
+"text": "אין תזכורות"
+}
+]
+},
+{
+"id": "M10",
+"ns": "calendar",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/calendar.txt add to the meeting entity a numeric field משך בדקות and a computed field משך בשעות equal to משך בדקות divided by 60. Don't break anything.",
+"checks": [
+{
+"id": "field",
+"kind": "lit",
+"file": "data:ent1",
+"text": "משך בדקות"
+},
+{
+"id": "calc",
+"kind": "calc",
+"ent": "ent1",
+"label": "משך בשעות"
+}
+]
+},
+{
+"id": "M11",
+"ns": "peruk25",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/peruk25.txt add to the case report an export line ([ייצוא]) named שליחה בוואטסאפ using the phone field. Don't break anything.",
+"checks": [
+{
+"id": "export",
+"kind": "lit",
+"file": "data:rp1",
+"text": "שליחה בוואטסאפ"
+}
+]
+},
+{
+"id": "M12",
+"ns": "peruk02",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/peruk02.txt add to the case screen a particle named ממוצע פיקדון showing the average of סכום הפיקדון over all cases. Don't break anything.",
+"checks": [
+{
+"id": "label",
+"kind": "lit",
+"file": "data:px1",
+"text": "ממוצע פיקדון"
+},
+{
+"id": "avg_code",
+"kind": "regex",
+"file": "gen:px1",
+"pattern": "fold\\(|reduce\\(|\\.sum\\b|/ ?[a-zA-Z_.]*length"
+}
+]
+},
+{
+"id": "M13",
+"ns": "peruk12",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/peruk12.txt add to the case screen a 'your number' particle ([מספר]) named אגרת העברה whose text reads: אגרת העברת בעלות משולמת לפני הרישום. Don't break anything.",
+"checks": [
+{
+"id": "text",
+"kind": "lit",
+"file": "data:px1",
+"text": "אגרת העברת בעלות משולמת לפני הרישום"
+}
+]
+},
+{
+"id": "M14",
+"ns": "panuy",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/panuy.txt give the person entity אדם stages: פנוי, הוזמן, בוצע. Don't break anything.",
+"checks": [
+{
+"id": "s1",
+"kind": "lit",
+"file": "data:ent1",
+"text": "הוזמן"
+},
+{
+"id": "s2",
+"kind": "lit",
+"file": "data:ent1",
+"text": "בוצע"
+}
+]
+},
+{
+"id": "M15",
+"ns": "calendar",
+"tier": "M",
+"task": "In machtzev/generator/specs-ds/calendar.txt rename the meeting field מקום to כתובת everywhere in the generated app. Don't break anything.",
+"checks": [
+{
+"id": "new",
+"kind": "lit",
+"file": "data:ent1",
+"text": "כתובת"
+},
+{
+"id": "old_gone",
+"kind": "absent",
+"pattern": "= 'מקום';"
+}
+]
+},
+{
+"id": "H01",
+"ns": "panuy",
+"tier": "H",
+"task": "The spec machtzev/generator/specs-ds/panuy.txt describes a list of people who are available now near me. Make it so that the generated app's list is sorted by distance from me (nearest first), and that the distance shown is the real distance in km (square root of the squared-distance field the spec already defines). Don't break anything.",
+"checks": [
+{
+"id": "sqrt",
+"kind": "math",
+"ent": "ent1",
+"fn": "sqrt"
+},
+{
+"id": "sort_list",
+"kind": "sort_any",
+"screens": [
+"px1",
+"ent1",
+"shell"
+],
+"label": "מרחק בקמ"
+}
+]
+},
+{
+"id": "H02",
+"ns": "sechirut",
+"tier": "H",
+"task": "In the app generated from machtzev/generator/specs-ds/sechirut.txt, make the cases table (the תיק particle screen) sorted by rent שכירות, highest first. Don't break anything.",
+"checks": [
+{
+"id": "sort",
+"kind": "sort_any",
+"screens": [
+"px1",
+"ent1",
+"shell"
+],
+"label": "שכירות"
+},
+{
+"id": "desc",
+"kind": "sortdesc_any",
+"screens": [
+"px1",
+"ent1",
+"shell"
+],
+"label": "שכירות"
+}
+]
+},
+{
+"id": "H03",
+"ns": "tasks",
+"tier": "H",
+"task": "In the app generated from machtzev/generator/specs-ds/tasks.txt, make the tasks table (the משימה particle screen) sorted by due date מועד, soonest first. Don't break anything.",
+"checks": [
+{
+"id": "sort",
+"kind": "sort_any",
+"screens": [
+"ent1",
+"shell",
+"px1"
+],
+"label": "מועד"
+}
+]
+},
+{
+"id": "H04",
+"ns": "calendar",
+"tier": "H",
+"task": "In the app generated from machtzev/generator/specs-ds/calendar.txt, make the meetings table (the פגישה particle screen) sorted by date מועד and then by time שעה. Don't break anything.",
+"checks": [
+{
+"id": "sort_both",
+"kind": "sort_any",
+"screens": [
+"ent1",
+"shell",
+"px1"
+],
+"labels": [
+"מועד",
+"שעה"
+]
+}
+]
+},
+{
+"id": "H05",
+"ns": "peruk02",
+"tier": "H",
+"task": "In the app generated from machtzev/generator/specs-ds/peruk02.txt, make the cases table sorted by the key-handover date תאריך מסירת מפתח, earliest first. Don't break anything.",
+"checks": [
+{
+"id": "sort",
+"kind": "sort_any",
+"screens": [
+"px1",
+"ent1",
+"shell"
+],
+"label": "תאריך מסירת מפתח"
+}
+]
+},
+{
+"id": "H06",
+"ns": "peruk12",
+"tier": "H",
+"task": "In the app generated from machtzev/generator/specs-ds/peruk12.txt, make the cases table sorted by price מחיר, cheapest first, comparing as numbers (not as text). Don't break anything.",
+"checks": [
+{
+"id": "sort",
+"kind": "sort_any",
+"screens": [
+"px1",
+"ent1",
+"shell"
+],
+"label": "מחיר"
+},
+{
+"id": "numeric",
+"kind": "regex",
+"file": "gen:px1",
+"pattern": "num\\.tryParse|double\\.tryParse|int\\.tryParse",
+"mandatory": false
+}
+]
+},
+{
+"id": "H07",
+"ns": "sechirut",
+"tier": "H",
+"task": "In machtzev/generator/specs-ds/sechirut.txt the collateral entity בטוחה has two ceilings, תקרה לפי 3 חודשים and תקרה לפי שליש. Add a computed field תקרה מחייבת equal to the larger of the two (max), computed by the app. Don't break anything.",
+"checks": [
+{
+"id": "calc",
+"kind": "calc",
+"ent": "ent2",
+"label": "תקרה מחייבת"
+},
+{
+"id": "max",
+"kind": "mathx",
+"ent": "ent2",
+"label": "תקרה מחייבת",
+"fn": "max"
+}
+]
+},
+{
+"id": "H08",
+"ns": "panuy",
+"tier": "H",
+"task": "In machtzev/generator/specs-ds/panuy.txt add a computed field מרחק אבסולוטי equal to the absolute value of הפרש רוחב (abs), computed by the app. Don't break anything.",
+"checks": [
+{
+"id": "calc",
+"kind": "calc",
+"ent": "ent1",
+"label": "מרחק אבסולוטי"
+},
+{
+"id": "abs",
+"kind": "method",
+"ent": "ent1",
+"fn": "abs"
+}
+]
+},
+{
+"id": "H09",
+"ns": "tasks",
+"tier": "H",
+"task": "In machtzev/generator/specs-ds/tasks.txt add a computed field סכום מעוגל equal to the amount סכום rounded to the nearest whole number (round), computed by the app. Don't break anything.",
+"checks": [
+{
+"id": "calc",
+"kind": "calc",
+"ent": "ent1",
+"label": "סכום מעוגל"
+},
+{
+"id": "round",
+"kind": "method",
+"ent": "ent1",
+"fn": "round"
+}
+]
+},
+{
+"id": "H10",
+"ns": "calendar",
+"tier": "H",
+"task": "In the app generated from machtzev/generator/specs-ds/calendar.txt, sort meetings by time שעה everywhere they are listed: both the meetings table on the particle screen and the entity list screen. Don't break anything.",
+"checks": [
+{
+"id": "sort_list",
+"kind": "sort_any",
+"screens": [
+"ent1",
+"shell",
+"px1"
+],
+"label": "שעה"
+},
+{
+"id": "sort_second_surface",
+"kind": "sort_any",
+"screens": [
+"px1"
+],
+"label": "שעה",
+"mandatory": false
+}
+]
+},
+{
+"id": "H11",
+"ns": "sechirut",
+"tier": "H",
+"task": "In machtzev/generator/specs-ds/sechirut.txt the case entity תיק has תקרה לפי 3 חודשים and תקרה לפי שליש. Add a computed field תקרה נמוכה equal to the smaller of the two (min), computed by the app. Don't break anything.",
+"checks": [
+{
+"id": "calc",
+"kind": "calc",
+"ent": "ent1",
+"label": "תקרה נמוכה"
+},
+{
+"id": "min",
+"kind": "mathx",
+"ent": "ent1",
+"label": "תקרה נמוכה",
+"fn": "min"
+}
+]
+},
+{
+"id": "H12",
+"ns": "peruk17",
+"tier": "H",
+"task": "In the app generated from machtzev/generator/specs-ds/peruk17.txt, make the cases table sorted alphabetically by סיווג. Don't break anything.",
+"checks": [
+{
+"id": "sort",
+"kind": "sort_any",
+"screens": [
+"px1",
+"ent1",
+"shell"
+],
+"label": "סיווג"
+}
+]
+},
+{
+"id": "H13",
+"ns": "panuy",
+"tier": "H",
+"task": "In the app generated from machtzev/generator/specs-ds/panuy.txt the people table shows every field. Make the table show only four columns: שם, זמין, מרחק בקמ, מחיר לשעה, in that order, by letting the spec say which columns a table shows. Don't break anything.",
+"checks": [
+{
+"id": "four_columns",
+"kind": "columns",
+"px": "px1",
+"n": 4
+},
+{
+"id": "has_km",
+"kind": "lit",
+"file": "data:px1",
+"text": "מרחק בקמ"
+}
+]
+},
+{
+"id": "H14",
+"ns": "sechirut",
+"tier": "H",
+"task": "In the app generated from machtzev/generator/specs-ds/sechirut.txt, make the findings table (the ממצא particle screen) sorted by severity color צבע in the order אדום, צהוב, ירוק (red first). Don't break anything.",
+"checks": [
+{
+"id": "sort_color",
+"kind": "sort_any",
+"screens": [
+"px3",
+"ent3",
+"shell"
+],
+"labels": [
+"צבע",
+"אדום"
+]
+}
+]
+},
+{
+"id": "H15",
+"ns": "peruk21",
+"tier": "H",
+"task": "In the app generated from machtzev/generator/specs-ds/peruk21.txt, sort cases by the deadline עד מתי (soonest first) everywhere they are listed: the cases table on the particle screen and the entity list screen. Don't break anything.",
+"checks": [
+{
+"id": "sort_px",
+"kind": "sort_any",
+"screens": [
+"px1",
+"shell"
+],
+"label": "עד מתי"
+},
+{
+"id": "sort_ent",
+"kind": "sort_any",
+"screens": [
+"ent1"
+],
+"label": "עד מתי"
+}
+]
+}
+]

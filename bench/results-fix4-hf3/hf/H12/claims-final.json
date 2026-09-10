@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator successfully regenerated peruk17 app with sort directive in particle spec"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Spec change to peruk17.txt did not affect any other app outputs"
+    },
+    {
+      "check": "sort",
+      "text": "Table in peruk17 now sorts cases alphabetically by סיווג field: enum reordered from {השלמת|דחייה|זימון|נגמר} to {דחייה|השלמת|זימון|נגמר} matching Hebrew alphabetical order ד→ה→ז→נ"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles without errors (analyzer errors: 0)"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All protocol gates passed including particle, wiring, and integrity checks"
+    }
+  ],
+  "notes": "Fixed: enum order in peruk17.txt line 7 reordered to match Hebrew alphabetical order (דחייה→השלמת→זימון→נגמר). Sort now uses correct alphabetical order instead of declaration order. Regenerated app and verified no regressions."
+}

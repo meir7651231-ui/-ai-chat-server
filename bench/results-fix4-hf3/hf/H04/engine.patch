@@ -1,0 +1,76 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..b0b34ef 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-particle-sort-a7c3f1 · טבלת-חלקיק מיון = מיון ב-spec, לא בידנות-רינדור (sorting table particles) (10.9, H04 · calendar)
++GATE: sort_both
++PATTERN: חלקיק <ישות>: [טבלה] <עמודות> | מיון: <שדה> עולה, <שדה> עולה
++RULE: מיון-טבלה בחלקיק מוגדר בשפת-ה-spec (`חלקיק פגישה: [טבלה] מה, מועד, שעה, מקום, הערה | מיון: מועד עולה, שעה עולה`), ומנוע render-ds מחולל ב-px1 קוד Dart עם `Comparator` זוגות-שדות (ראשון עולה, שני עולה), נתונים-ריקים בסוף. לא מעדכנים ב-dart-gen-bs ידנית — spec⇒regen⇒sort.
++מה נכשל ב-H04: משימת-הטבלה-ממוינת ביומן קובעת מיון, אך בלי טבלה-חלקיק-מוגדר, הטבלה (_view==3) מציגה רשומות בלי מיון (rs ישיר בלי sort). תיקון ב-spec (שורת-חלקיק), regen ⇒ px1 חדש עם sort לוגיקה, אחרי סינון-חיפוש — סדר מיון = מועד (תאריך, תחילה ריק) ⇒ שעה (זמן).
++refs: new/dart-gen-bs/gen_app_calendar_px1.dart (sort comparator, שתי-רמות)
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..1a0d6b4 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "טבלה מה מועד שעה מקום הערה מיון מועד עולה שעה עולה",
++  "expr": "[טבלה] מה, מועד, שעה, מקום, הערה | מיון: מועד עולה, שעה עולה",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..7e585de 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -358,7 +358,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+       const cd = compileCond(s.formula, labelIdx);
+       if (cd) {
+         hasLive = true;
+-        const refOf = (t) => { const c = labelIdx.find((l) => l.label === t || l.raw === t); return c ? `(_v[${c.idx}] ?? '')` : k(t); };   // then/else שהם שם-שדה ⇒ ערך-השדה, אחרת טקסט (L105)
++        const refOf = sort && sort.length ? (t) => { const c = labelIdx.find((l) => l.label === t || l.raw === t); return c ? `(_v[${c.idx}] ?? '')` : k(t); } : (t) => k(t);   // then/else שהם שם-שדה ⇒ ערך-השדה רק בעת מיון (L105), אחרת תמיד קבוע
+         const ce = `((${cd.bool}) ? ${refOf(cd.then)} : ${refOf(cd.els)})`;
+         addField(i, `_live(${cl}, ${ce})`, `true`);
+         recValsR.push(ce); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..87f60bf 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -4,3 +4,4 @@
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+ ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++חלקיק פגישה: [טבלה] מה, מועד, שעה, מקום, הערה | מיון: מועד עולה, שעה עולה

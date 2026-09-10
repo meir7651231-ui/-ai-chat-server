@@ -1,0 +1,83 @@
+diff --git a/machtzev/generator/entity.mjs b/machtzev/generator/entity.mjs
+index 4e09d7c..81420a7 100644
+--- a/machtzev/generator/entity.mjs
++++ b/machtzev/generator/entity.mjs
+@@ -69,7 +69,9 @@ export function interpret(text) {
+   // 🔤 פעלי-שפה (תואמי-לאחור): שדה* = חובה · שדה{א|ב|ג} = ערכים-מותרים · שדה=נוסחה = מחושב.
+   // פיצול-שדות מודע-עומק: פסיק/שורה מפרידים רק ברמה-העליונה — פסיק בתוך ()/{}/[]/<>
+   // (למשל קריאת-מנוע 'engine(שדה→מפתח, שדה→מפתח)') אינו מפריד-שדות.
+-  const splitFields = (str) => { const out = []; let d = 0, cur = ''; for (const ch of str) { if ('({[<'.includes(ch)) d++; else if (')}]>'.includes(ch)) d = Math.max(0, d - 1); if ((ch === ',' || ch === '\n') && d === 0) { out.push(cur); cur = ''; } else cur += ch; } if (cur.trim()) out.push(cur); return out; };
++  // '<'/'>' כסוגריים רק כשאינם אופרטור-השוואה ('a < 100 ? x : y' — רווח/'=' אחריהם ⇒ השוואה,
++  // לא פתיחה; אחרת '<' בלע את כל הפסיקים שאחריו וכל שאר-השדות נעלמו לתוך הנוסחה).
++  const splitFields = (str) => { const out = []; let d = 0, cur = ''; const chars = [...str]; for (let ci = 0; ci < chars.length; ci++) { const ch = chars[ci]; const cmp = (ch === '<' || ch === '>') && /^[\s=]?$/.test(chars[ci + 1] ?? ''); if (!cmp && '({[<'.includes(ch)) d++; else if (!cmp && ')}]>'.includes(ch)) d = Math.max(0, d - 1); if ((ch === ',' || ch === '\n') && d === 0) { out.push(cur); cur = ''; } else cur += ch; } if (cur.trim()) out.push(cur); return out; };
+   const rawFields = splitFields(fieldsPart).map((s) => s.trim()).filter(Boolean).slice(0, 200);
+   const annots = [];   // { label, required, unique, enumVals, formula, def }
+   for (const raw of rawFields) {
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..fef0cc4 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -236,22 +236,25 @@ function compileGuard(cond, labels) {
+ }
+ 
+ // 🔁 מהדר-תנאי-מבני: תנאי-guard ⇒ ביטוי-bool ב-Dart מעל _v[] (מספרי או "מלא"). עיוור-דומיין.
+-function guardBool(g) {
+-  const V = (i) => `(num.tryParse(_v[${i}] ?? '') ?? 0)`;
++// src(i) = ביטוי-המחרוזת של שדה i (ברירת-מחדל: הטופס `_v[i]`; כרטיס/טבלה: `r[label]`) ·
++// numOf(i) = ביטוי-מספרי מוכן (שדה-מחושב בטופס: הנוסחה עצמה — `_calc` לא כותב ל-_v).
++function guardBool(g, src = (i) => `_v[${i}]`, numOf = null) {
++  const V = (i) => (numOf && numOf(i)) || `(num.tryParse(${src(i)} ?? '') ?? 0)`;
+   if (g.kind === 'num') return `${V(g.li)} ${g.op} ${g.num}`;
+   if (g.kind === 'ff') return `${V(g.li)} ${g.op} ${V(g.ri)}`;
+-  if (g.kind === 'filled') return `(_v[${g.li}] ?? '').trim().isNotEmpty`;
++  if (g.kind === 'filled') return `(${src(g.li)} ?? '').trim().isNotEmpty`;
+   return null;
+ }
+ // ⚡ שדה-נגזר-מותנה (התנהגות · §23-ד): 'ערך > סף ? חריגה : תקין' ⇒ ערך-חי המשתנה עם
+ // הקלט. ההשוואה מ-compileGuard (מבנית); הערכים (then/else) מהאפיון (מוכנסים ל-content, לא
+ // מילון-מנוע). מד-ניטור/סטטוס-סף אמיתי — לא CRUD סטטי. מילה-לא-מזוהה ⇒ null (כנות).
++// מחזיר גם את השער-המבני (g) כדי שהקורא יהדר אותו מול מקור-ערך אחר (טופס מול רשומה).
+ function compileCond(formula, labels) {
+   const m = formula.match(/^(.+?)\s*\?\s*([^?:]+?)\s*:\s*([^?:]+)$/);
+   if (!m) return null;
+   const g = compileGuard(m[1].trim(), labels); if (!g) return null;
+   const b = guardBool(g); if (!b) return null;
+-  return { bool: b, then: m[2].trim(), els: m[3].trim() };
++  return { bool: b, g, then: m[2].trim(), els: m[3].trim() };
+ }
+ 
+ // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
+@@ -351,9 +354,17 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+       const cd = compileCond(s.formula, labelIdx);
+       if (cd) {
+         hasLive = true;
+-        const ce = `((${cd.bool}) ? ${k(cd.then)} : ${k(cd.els)})`;
+-        addField(i, `_live(${cl}, ${ce})`, `true`);
+-        recValsR.push(ce); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
++        const cThen = k(cd.then), cEls = k(cd.els);
++        // טופס: שדה-מושווה שהוא-עצמו נוסחה (`_calc`) אינו נכתב ל-_v ⇒ הנוסחה מוצבת במקום
++        // (אחרת ההשוואה הייתה תמיד מול 0). שדה-קלט רגיל ⇒ `_v[i]` כמקודם (ביט-זהה).
++        const inlineCalc = (j) => { const t = schema[j]; if (!t || j === i || !t.formula) return null; const x = compileFormula(t.formula, labelIdx); return x ? `(${x})` : null; };
++        const formBool = guardBool(cd.g, undefined, inlineCalc);
++        // כרטיס/טבלה/CSV: מול הרשומה-השמורה r (השדה-המחושב נשמר ב-toStringAsFixed), לא מול
++        // מצב-הטופס — כל שורה מציגה את הסטטוס שלה-עצמה.
++        const lc = (j) => labelConst[j] || k(schema[j].label);
++        const cardBool = guardBool(cd.g, (j) => `r[${lc(j)}]`);
++        addField(i, `_live(${cl}, ((${formBool}) ? ${cThen} : ${cEls}))`, `true`);
++        recValsR.push(`((${cardBool}) ? ${cThen} : ${cEls})`); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
+         return;
+       }
+       const expr = compileFormula(s.formula, labelIdx);
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..45b276c 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -70,7 +70,7 @@ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/gener
+ 3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+-b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs
++a87b1b3b91cb8e7b8284ee1268d51519077aa94c79ddd27a11743491d6226e63  machtzev/generator/render-ds.mjs
+ f9d748159c45d3d7013194ae5705a1797948376fc973bbbbb00497a22fa850d1  machtzev/generator/render-module-baseline.json
+ 74cd7e7ccd4d4e3ad57d8e5eade8fb9d38250616cfdfbf15d1d2087d9080d7ea  machtzev/generator/render-module.mjs
+ 0589103ea8b694b19bcef674586d0b31516a9a535b7b833ffce397c4f063798a  machtzev/generator/retarget.mjs

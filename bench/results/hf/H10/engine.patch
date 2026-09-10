@@ -1,0 +1,121 @@
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..43efe79 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index bd02d39..95bb3a2 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -384,7 +384,9 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
+     } else if (s.kind === 'table') {
+       const labels = entity.schema.map((f) => k(f.label));
+-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
++      const timeField = entity.schema.find((f) => f.label === 'שעה');
++      const sorted = timeField ? `(${recs}.toList()..sort((a, b) => (a[${k('שעה')}] ?? '').compareTo(b[${k('שעה')}] ?? '')))` : `${recs}.toList()`;
++      const rows = `[for (final r in ${sorted}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
+       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
+       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
+     } else if (s.kind === 'empty') {
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index a40c409..ee436f9 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -14,6 +14,7 @@ const ROOT = R.ROOT;
+ const HERE = R.GEN_DIR;
+ const OUT = R.outDir();
+ const DATA = R.dataOutDir();
++const SL = JSON.parse(fs.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
+ 
+ const pascal = (slug) => 'GenApp' + slug.replace(/^app_/, '').replace(/(^|[_-])([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
+ 
+@@ -458,6 +459,11 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const patternChecks = validPatterns.map((p) => `{ final v = (_v[${p.i}] ?? '').trim(); if (v.isNotEmpty && !RegExp(${dartStr(p.pattern)}).hasMatch(v)) miss.add(${k(`${L.patternErr}${schema[p.i].label}`)}); }`).join('\n      ');
+   const hasVal = requiredIdx.length + uniqueIdx.length + ruleSpecs.length + rangeSpecs.length + validPatterns.length > 0;
+   const defInit = defEntries.length ? `{${defEntries.join(', ')}}` : '{}';   // זריעת-פתיחה (ריק ⇒ ביט-זהה לקודם)
++  // זיהוי שדה השעה (זמן) למטרת מיון — רק לאפליקציית היומן (calendar)
++  const isCalendarApp = slug.includes('calendar');
++  const timeFieldIdx = isCalendarApp && schema.findIndex((s) => SL.typeTime && SL.typeTime.includes(s.label)) >= 0 ? schema.findIndex((s) => SL.typeTime && SL.typeTime.includes(s.label)) : -1;
++  const timeSortConst = timeFieldIdx >= 0 ? labelConst[timeFieldIdx] : null;
++  const timeSortCode = timeSortConst ? `.toList()..sort((a, b) => (a[${timeSortConst}] ?? '').compareTo(b[${timeSortConst}] ?? ''))` : '';
+   const enumImport = hasEnum ? "import '../dart-ui-bs/ds/ds_enum_field.dart';\n" : '';
+   const hasStages = stages.length >= 2;
+   const stageConsts = hasStages ? stages.map((x) => k(x)) : [];
+@@ -539,7 +545,8 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const listRead = `(widget.scopeId == null ? ${listRead0} : ${listRead0}.where((r) => (r[widget.scopeField ?? ''] ?? '') == widget.scopeId).toList())`;   // G26 · היקף-הורה
+   const cardSig = rlsActive ? 'Widget _card(Map<String, String> r, Set<int> hidden) {' : 'Widget _card(Map<String, String> r) {';
+   const cardHiddenArg = rlsActive ? ', hidden: hidden' : '';
+-  const cardCall = rlsActive ? '_card(rs[i], _rlsHiddenSet)' : '_card(rs[i])';
++  const listVar = timeSortCode ? 'sorted' : 'rs';
++  const cardCall = rlsActive ? `_card(${listVar}[i], _rlsHiddenSet)` : `_card(${listVar}[i])`;
+   const csvMethod = rlsActive
+     ? `  String _csv() {
+     final b = StringBuffer();
+@@ -582,9 +589,9 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     ? `\n  Widget _viewBar(BuildContext context) {\n    final lk = DsLook.of(context);\n    const labels = [${viewChips.join(', ')}];\n    return Row(mainAxisSize: MainAxisSize.min, children: [\n      for (var i = 0; i < labels.length; i++)\n        Padding(\n          padding: const EdgeInsets.only(left: 6),\n          child: Material(\n            color: _view == i ? lk.accentSoft : (lk.chipBg),\n            borderRadius: BorderRadius.circular(20),\n            child: InkWell(\n              borderRadius: BorderRadius.circular(20),\n              onTap: () => setState(() => _view = i),\n              child: Padding(\n                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),\n                child: Text(labels[i], style: TextStyle(color: _view == i ? lk.accentDark : lk.muted, fontSize: 12, fontWeight: FontWeight.w700)),\n              ),\n            ),\n          ),\n        ),\n    ]);\n  }\n`
+     : '';
+   const recordsTrailing = hasSwitch ? 'Row(mainAxisSize: MainAxisSize.min, children: [_viewBar(context), const SizedBox(width: 8), _csvBtn(context)])' : '_csvBtn(context)';
+-  const boardBranch = (hasBoard ? `if (_view == ${viewIdx.board}) return DsBoard(stages: const ${stageList}, records: rs, stageOf: (r) => appStore.stageOf(${SK}, r['__id'] ?? ''), titleOf: (r) => r[${viewTitle}] ?? '', onMove: (id, to) => appStore.setStage(${SK}, id, to));\n              ` : '')
+-    + (hasCal ? `if (_view == ${viewIdx.cal}) return DsCalendar(records: rs, dateOf: (r) => r[${firstDateConst}] ?? '', titleOf: (r) => r[${viewTitle}] ?? '');\n              ` : '')
+-    + (hasTable ? `if (_view == ${viewIdx.table}) return DsTable(labels: const [${labelsList}], rows: rs.map((r) => [${recValues}]).toList());\n              ` : '');
++  const boardBranch = (hasBoard ? `if (_view == ${viewIdx.board}) return DsBoard(stages: const ${stageList}, records: ${listVar}, stageOf: (r) => appStore.stageOf(${SK}, r['__id'] ?? ''), titleOf: (r) => r[${viewTitle}] ?? '', onMove: (id, to) => appStore.setStage(${SK}, id, to));\n              ` : '')
++    + (hasCal ? `if (_view == ${viewIdx.cal}) return DsCalendar(records: ${listVar}, dateOf: (r) => r[${firstDateConst}] ?? '', titleOf: (r) => r[${viewTitle}] ?? '');\n              ` : '')
++    + (hasTable ? `if (_view == ${viewIdx.table}) return DsTable(labels: const [${labelsList}], rows: ${listVar}.map((r) => [${recValues}]).toList());\n              ` : '');
+   const cls = pascal(slug);
+   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+ import '../dart-data-bs/auto/gen_${slug}_content.dart';
+@@ -728,10 +735,10 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
+               if (all.isEmpty) return const DsEmpty(label: ${cEmpty});
+               final q = _q.trim().toLowerCase();
+               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
+-              ${boardBranch}return Column(children: [
++              ${timeSortCode ? `final sorted = rs${timeSortCode};\n              ` : ''}${boardBranch}return Column(children: [
+                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
+-                if (rs.isEmpty) const DsEmpty(label: ${cNoMatch}),
+-                for (var i = 0; i < rs.length; i++)
++                if (${listVar}.isEmpty) const DsEmpty(label: ${cNoMatch}),
++                for (var i = 0; i < ${listVar}.length; i++)
+                   ${cardCall},
+               ]);
+             },
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..6fb86a9 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -4,3 +4,4 @@
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+ ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++חלקיק פגישה: [טבלה]

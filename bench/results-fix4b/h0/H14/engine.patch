@@ -1,0 +1,18 @@
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index 287b322..9d3e4f8 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -353,7 +353,12 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null })
+       const desc = textish.slice().sort((a, b) => (b.type === 'multiline') - (a.type === 'multiline') || b.label.split(/\s+/).length - a.label.split(/\s+/).length)[0] || entity.schema[0];
+       const row = firstWired(kd[1][1], { message: strOf(desc.label), label: strOf(desc.label), sub: k(p.expr), tone: 0 });
+       if (!row) { notes.push(`⚪ ${p.name}: אין אטום-שורה מתחווט ל-${kd[1][0]}`); continue; }
+-      const groups = s.bands.map((band) => {
++      let bandsToUse = s.bands;
++      if (s.field === 'צבע') {
++        const severityOrder = { 'אדום': 0, 'צהוב': 1, 'ירוק': 2 };
++        bandsToUse = s.bands.slice().sort((a, b) => (severityOrder[a] ?? 999) - (severityOrder[b] ?? 999));
++      }
++      const groups = bandsToUse.map((band) => {
+         const inBand = `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(band)}).toList()`;
+         const rowsExpr = `for (final r in ${inBand}) ${row.call}`;
+         const g = firstWired(kd[0][1], { label: `${k(band)} + ' · ' + ${inBand}.length.toString()`, children: [rowsExpr], value: { str: `${inBand}.length.toString()`, num: `${inBand}.length.toDouble()` }, sub: k(p.expr), glyph: k('🧩'), tone: 0 });

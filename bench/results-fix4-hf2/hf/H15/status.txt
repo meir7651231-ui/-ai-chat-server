@@ -1,0 +1,10 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/particle-plan-peruk21.json
+ M machtzev/generator/particle-plan-peruk21.md
+ M machtzev/generator/specs-ds/peruk21.txt
+?? machtzev/audit/search/2026-09-10-sort-soonest-deadline-6fa2b43c.json
+?? "machtzev/audit/search/2026-09-10-sort-table-\327\230\327\221\327\234\327\224-61250891.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

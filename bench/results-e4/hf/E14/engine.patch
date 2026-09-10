@@ -1,0 +1,48 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..132dcdb 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,12 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-1a2b3c · תוספת שדה closed-choice לישות בספק — צורת-הגדרה בדיוק בספק-language, רקיל בחיווט (10.9, E14 · calendar)
++GATE: spec-validity
++PATTERN: שדה{ערך|ערך|ערך}
++RULE: חיבור שדה בחירה-סגורה לישות בספק נעשה בתוך הגדרת-הישות עם הצורה `<שם>{<ערך1>|<ערך2>|<ערך3>}`; ללא צורך בעדכון מנוע או חיווט — ה-spec-language מספיק; רקיל-הצהרה בשדה ברשימה מופה בדיוק בפלט-Dart כ-enum type.
++מה הצליח: הוסיף `סוג{עבודה|אישי|רפואי}` לישות `פגישה` בקובץ calendar.txt; שינוי בודדי בשורה אחת בספק; regen הפיק כל פלטים (view/logic/data) בשלוש שכבות בלי errors; שום קובץ אחר לא נפגע (byte_identical_others ✅); דרט compiles באפס-errors. הידע: הספק-language = מערכת טיפול-מלא, ללא צורך ב-custom logic.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/calendar.json b/machtzev/generator/apps/calendar.json
+index 8fa140b..8b9b8a0 100644
+--- a/machtzev/generator/apps/calendar.json
++++ b/machtzev/generator/apps/calendar.json
+@@ -54,6 +54,16 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "סוג",
++    "type": "text",
++    "required": false,
++    "enumVals": [
++     "עבודה",
++     "אישי",
++     "רפואי"
++    ]
++   },
+    {
+     "label": "הערה",
+     "type": "multiline",
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..87f62f5 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, סוג{עבודה|אישי|רפואי}, הערה | שלבים: קבוע, התקיים

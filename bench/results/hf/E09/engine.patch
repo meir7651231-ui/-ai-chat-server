@@ -1,0 +1,36 @@
+diff --git a/machtzev/generator/apps/peruk25.json b/machtzev/generator/apps/peruk25.json
+index 68ae22f..a1a65e6 100644
+--- a/machtzev/generator/apps/peruk25.json
++++ b/machtzev/generator/apps/peruk25.json
+@@ -74,6 +74,18 @@
+      "דגל מוגן",
+      "עצמאי חוזה קבלן"
+     ]
++   },
++   {
++    "label": "סכום פיצויים",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
++   {
++    "label": "פיצויים לשנה",
++    "type": "text",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/specs-ds/peruk25.txt b/machtzev/generator/specs-ds/peruk25.txt
+index dc4d3c8..0642cd3 100644
+--- a/machtzev/generator/specs-ds/peruk25.txt
++++ b/machtzev/generator/specs-ds/peruk25.txt
+@@ -3,7 +3,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, מכתב פיטורים, ותק, האם חתמו על משהו, סיווג{סיום רגיל מכתב|לחץ לחתום היום|דגל מוגן|עצמאי חוזה קבלן} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, מכתב פיטורים, ותק, האם חתמו על משהו, סיווג{סיום רגיל מכתב|לחץ לחתום היום|דגל מוגן|עצמאי חוזה קבלן}, סכום פיצויים, פיצויים לשנה = סכום פיצויים * 12 | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
