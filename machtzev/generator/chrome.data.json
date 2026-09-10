@@ -444,5 +444,16 @@
  "pastAsk": "כבר יש תיק פתוח: «{who}». סיימת אותו?",
  "pastDone": "כן, סיים אותו",
  "savePast": "שמור. המועד עבר — יופיע ב«באיחור».",
- "saveDone": "שמור כבוצע"
+ "saveDone": "שמור כבוצע",
+ "moreToday": "עוד מהיום · {n}",
+ "shootDoc": "צלם מסמך",
+ "tellMe": "תגיד לי מה לעשות",
+ "nowTitle": "עכשיו",
+ "nowSub": "דבר אחד בכל פעם. סיימת — הבא.",
+ "nowNext": "הבא",
+ "nowDone": "סיימת הכל. תנוח.",
+ "nowWhyOverdue": "באיחור",
+ "nowWhyHard": "מועד קשיח",
+ "nowWhyMoney": "₪ {n} עומדים על זה",
+ "nowWhyToday": "להיום"
 }
