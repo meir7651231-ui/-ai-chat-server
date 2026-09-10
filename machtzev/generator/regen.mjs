@@ -20,6 +20,7 @@ export const REGEN = [
   { rel: 'machtzev/generator/peruk.mjs', args: ['--all'], note: 'G27 · פירוקי-הבעלים ⇒ ספקי specs-ds (לפני app-ds)' },
   ...dsSpecs(),
   { rel: 'machtzev/generator/balagan.mjs', args: [], note: 'G33 · הכרעה-29: כל מודולי-הנייר ⇒ אפליקציה אחת «בלגן» (שער balaganone)' },
+  { rel: 'machtzev/generator/server.mjs', args: [], note: 'G57 · הכרעה-31: הצהרת `שרת:` בספק ⇒ חבילת-השרת (חוקים+בדיקת-אמולטור+רנבוק); אין הצהרה ⇒ אין פלט' },
 ];
 function dsSpecs() {
   const dir = fileURLToPath(new URL('./specs-ds/', import.meta.url));

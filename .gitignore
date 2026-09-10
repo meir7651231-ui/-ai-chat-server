@@ -9,3 +9,7 @@ machtzev/node_modules/
 .allow_protocol_edit
 .allow_*
 machtzev/generator/gen-verify-last.log
+server-gen/*/node_modules/
+server-gen/*/package-lock.json
+server-gen/*/firebase-debug.log
+server-gen/*/firestore-debug.log

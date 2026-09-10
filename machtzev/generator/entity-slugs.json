@@ -1,0 +1,104 @@
+{
+ "calendar": [
+  "פגישה=app_calendar_ent1"
+ ],
+ "peruk01": [
+  "ממצא=app_peruk01_ent2",
+  "תיק=app_peruk01_ent1"
+ ],
+ "peruk02": [
+  "ממצא=app_peruk02_ent2",
+  "תיק=app_peruk02_ent1"
+ ],
+ "peruk03": [
+  "תיק=app_peruk03_ent1"
+ ],
+ "peruk04": [
+  "ממצא=app_peruk04_ent2",
+  "תיק=app_peruk04_ent1"
+ ],
+ "peruk05": [
+  "ממצא=app_peruk05_ent2",
+  "תיק=app_peruk05_ent1"
+ ],
+ "peruk06": [
+  "ממצא=app_peruk06_ent2",
+  "תיק=app_peruk06_ent1"
+ ],
+ "peruk07": [
+  "תיק=app_peruk07_ent1"
+ ],
+ "peruk08": [
+  "תיק=app_peruk08_ent1"
+ ],
+ "peruk09": [
+  "ממצא=app_peruk09_ent2",
+  "תיק=app_peruk09_ent1"
+ ],
+ "peruk10": [
+  "תיק=app_peruk10_ent1"
+ ],
+ "peruk11": [
+  "תיק=app_peruk11_ent1"
+ ],
+ "peruk12": [
+  "תיק=app_peruk12_ent1"
+ ],
+ "peruk13": [
+  "תיק=app_peruk13_ent1"
+ ],
+ "peruk14": [
+  "תיק=app_peruk14_ent1"
+ ],
+ "peruk15": [
+  "תיק=app_peruk15_ent1"
+ ],
+ "peruk16": [
+  "תיק=app_peruk16_ent1"
+ ],
+ "peruk17": [
+  "תיק=app_peruk17_ent1"
+ ],
+ "peruk18": [
+  "תיק=app_peruk18_ent1"
+ ],
+ "peruk19": [
+  "תיק=app_peruk19_ent1"
+ ],
+ "peruk20": [
+  "תיק=app_peruk20_ent1"
+ ],
+ "peruk21": [
+  "תיק=app_peruk21_ent1"
+ ],
+ "peruk22": [
+  "תיק=app_peruk22_ent1"
+ ],
+ "peruk23": [
+  "תיק=app_peruk23_ent1"
+ ],
+ "peruk24": [
+  "תיק=app_peruk24_ent1"
+ ],
+ "peruk25": [
+  "תיק=app_peruk25_ent1"
+ ],
+ "peruk26": [
+  "תיק=app_peruk26_ent1"
+ ],
+ "peruk27": [
+  "תיק=app_peruk27_ent1"
+ ],
+ "peruk28": [
+  "תיק=app_peruk28_ent1"
+ ],
+ "sechirut": [
+  "בטוחה=app_sechirut_ent2",
+  "ממצא=app_sechirut_ent3",
+  "תיק=app_sechirut_ent1",
+  "תשלום=app_sechirut_ent4"
+ ],
+ "tasks": [
+  "משימה=app_tasks_ent1"
+ ]
+}

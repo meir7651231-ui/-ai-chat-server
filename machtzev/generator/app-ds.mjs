@@ -82,7 +82,11 @@ export function buildApp(specText) {
   const chainLine = all0.map((l) => l.match(CHAIN_RE)).find(Boolean); const chain = chainLine ? chainLine[1].split(/[,،]/).map((x) => x.trim()).filter(Boolean) : [];
   const LAYER_RE = new RegExp('^\\s*' + SL.layerWord + '\\s*:\\s*(.+)$');   // G33 · `שכבה: בסיס` — מודול-בסיס של בלגן (משימות · יומן), לא פירוק
   const layerLine = all0.map((l) => l.match(LAYER_RE)).find(Boolean); const layer = layerLine ? (SL.layers[layerLine[1].trim()] || null) : null;
-  const all = all0.filter((l) => !PARTICLE_RE.test(l) && !CONTENT_RE.test(l) && !REPORT_RE.test(l) && !APP_RE.test(l) && !LOOK_RE.test(l) && !Q_RE.test(l) && !CHAIN_RE.test(l) && !LAYER_RE.test(l));
+  // G57 · שורות-הצהרה יוצאות **לפני** האינדוקס: מזהה-הישות הוא `<ns>_ent<מספר-שורה>`,
+  //   ולכן כל שורה חדשה מעל הישות מזיזה את המזהה ומיתמת את הנתונים של המשתמש.
+  //   `שרת:` נוסף כאן ברגע שנולד; שער `server` נועל את המפה כדי שזה לא יקרה בשקט שוב.
+  const SERVER_RE = new RegExp('^\\s*' + SL.serverWord + '\\s*:\\s*(.+)$');
+  const all = all0.filter((l) => !PARTICLE_RE.test(l) && !CONTENT_RE.test(l) && !REPORT_RE.test(l) && !APP_RE.test(l) && !LOOK_RE.test(l) && !Q_RE.test(l) && !CHAIN_RE.test(l) && !LAYER_RE.test(l) && !SERVER_RE.test(l));
   const roles = all.filter((l) => ROLE_RE.test(l)).map(parseRole);
   const lines = all.filter((l) => !ROLE_RE.test(l));
   const info = lines.map((line, idx) => ({ line, i: idx + 1, isEnt: ENTITY_RE.test(line) }));

@@ -1,0 +1,28 @@
+rules_version = '2';
+// ☁️ חולל ע"י server.mjs (G57 · הכרעה-31) — אל תערוך ידנית.
+//   כלל אחד: אדם רואה וכותב **רק** את תת-העץ שלו. אין קריאה חוצה-משתמשים, בשום נתיב.
+//   רשימת-הישויות נגזרת מהספקים — ישות שלא הוכרזה נדחית, כדי שדליפת-מפתח לא תהפוך
+//   את המגירה למחסן זר.
+service cloud.firestore {
+  match /databases/{db}/documents {
+    function mine(uid) { return request.auth != null && request.auth.uid == uid; }
+    function known() { return ['app_calendar_ent1', 'app_peruk01_ent1', 'app_peruk01_ent2', 'app_peruk02_ent1', 'app_peruk02_ent2', 'app_peruk03_ent1', 'app_peruk04_ent1', 'app_peruk04_ent2', 'app_peruk05_ent1', 'app_peruk05_ent2', 'app_peruk06_ent1', 'app_peruk06_ent2', 'app_peruk07_ent1', 'app_peruk08_ent1', 'app_peruk09_ent1', 'app_peruk09_ent2', 'app_peruk10_ent1', 'app_peruk11_ent1', 'app_peruk12_ent1', 'app_peruk13_ent1', 'app_peruk14_ent1', 'app_peruk15_ent1', 'app_peruk16_ent1', 'app_peruk17_ent1', 'app_peruk18_ent1', 'app_peruk19_ent1', 'app_peruk20_ent1', 'app_peruk21_ent1', 'app_peruk22_ent1', 'app_peruk23_ent1', 'app_peruk24_ent1', 'app_peruk25_ent1', 'app_peruk26_ent1', 'app_peruk27_ent1', 'app_peruk28_ent1', 'app_tasks_ent1']; }
+    function stateOk(d) {
+      return d.keys().hasOnly(['seq', 'role', 'actor', 'rec', 'log', 'decided', 'dead', 'at'])
+        && (!('rec' in d) || d.rec.keys().hasOnly(known()));
+    }
+    match /users/{uid}/state/app {
+      allow read: if mine(uid);
+      allow write: if mine(uid) && stateOk(request.resource.data);
+    }
+    match /users/{uid}/due/{id} {
+      allow read, write: if mine(uid);
+    }
+    match /users/{uid}/inbox/{id} {
+      allow read, write: if mine(uid);   // כתיבה מבחוץ עוברת בפונקציה (admin), לא בכללים
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
