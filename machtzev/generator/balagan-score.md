@@ -1,4 +1,4 @@
-# ציון «בלגן» · 35/36 (הכרעה-28 · ratchet רצפה 14)
+# ציון «בלגן» · 35/36 (הכרעה-28 · ratchet רצפה 35)
 
 | # | קבוצה | כלל | מצב |
 |---|---|---|---|
@@ -39,4 +39,4 @@
 | T5 | יעד | שליחה החוצה תמיד באישור, גם במתג «לפעול לבד» | ✅ |
 | T6 | יעד | מצב-ריק = משפט מרגיע + הפעולה הראשית | ✅ |
 
-אפליקציות-נייר: peruk01 · peruk04 · peruk19 · peruk20 · peruk21 · sechirut
+אפליקציות-נייר: calendar · peruk01 · peruk02 · peruk03 · peruk04 · peruk05 · peruk06 · peruk07 · peruk08 · peruk09 · peruk10 · peruk11 · peruk12 · peruk13 · peruk14 · peruk15 · peruk16 · peruk17 · peruk18 · peruk19 · peruk20 · peruk21 · peruk22 · peruk23 · peruk24 · peruk25 · peruk26 · peruk27 · peruk28 · sechirut · tasks · balagan
