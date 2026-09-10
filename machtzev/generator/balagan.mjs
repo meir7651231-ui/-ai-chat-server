@@ -1020,6 +1020,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/services.dart';
 import '../dart-ui-bs/ds/ds_voice.dart';
+import '../dart-ui-bs/ds/ds_notify.dart';   // G55 · התראת-דפדפן (אפס-שרת)
 import 'package:url_launcher/url_launcher.dart';
 
 typedef _Items = List<DsTodayItem> Function(DateTime today, {required int dayDelta});
@@ -1090,7 +1091,7 @@ class ${cls} extends StatefulWidget {
   State<${cls}> createState() => _${cls}State();
 }
 
-class _${cls}State extends State<${cls}> {
+class _${cls}State extends State<${cls}> with WidgetsBindingObserver {
   static const _mods = <_Mod>[
 ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${todayCls(m)}.items, ${todayCls(m)}.proposals, ${todayCls(m)}.card, ${todayCls(m)}.autopilot, ${todayCls(m)}.done, ${todayCls(m)}.undated, ${todayCls(m)}.stale, ${todayCls(m)}.remPending, ${i}),`).join('\n')}
   ];
@@ -1104,9 +1105,16 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
   void _openItem(BuildContext context, DsTodayItem it) { final ms = kBalaganModules.where((m) => m.title == it.module); if (ms.isEmpty || it.rid.isEmpty) return; Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => balaganOpenRoot(ms.first.rootSlug, it.rid))); }   // ב׳-לט · הקשה על השורה ⇒ התיק
 
   Future<void> _digest(String lead, int hardToday) async {
-    if (kIsWeb) return;
     final now = DateTime.now(); final hour = int.tryParse(appStore.setting('digestHour', '8')) ?? 8; final key = _iso(_day(now));
     if (now.hour < hour || appStore.setting('digestShown') == key) return;
+    // G55 · באתר: התראת-דפדפן דרך ה-service worker. עד כאן «if (kIsWeb) return» הוציא את
+    //   התקציר מיד ⇒ מי שמשתמש באתר לא קיבל תזכורת מעולם. אין רשות ⇒ שקט, לא בקשה-בטעינה.
+    if (kIsWeb) {
+      if (!notifyGranted()) return;
+      final ok = await notifyShow(${k(L.digestTitle)}, lead, 'digest-' + key);
+      if (ok) appStore.setSetting('digestShown', key);
+      return;
+    }
     try {
       final n = FlutterLocalNotificationsPlugin();
       await n.initialize(const InitializationSettings(android: AndroidInitializationSettings('@mipmap/ic_launcher'), iOS: DarwinInitializationSettings()));
@@ -1203,10 +1211,19 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     return out;
   }
   @override
-  void initState() { super.initState(); WidgetsBinding.instance.addPostFrameCallback((_) { _autopilotAll(); _fetchMail(); }); appStore.addListener(_onStore); }
+  void initState() { super.initState(); WidgetsBinding.instance.addObserver(this); WidgetsBinding.instance.addPostFrameCallback((_) { _autopilotAll(); _fetchMail(); }); appStore.addListener(_onStore); }
   void _onStore() { WidgetsBinding.instance.addPostFrameCallback((_) { if (mounted) _autopilotAll(); }); }
+  // G55 · חוזרים למסך אחרי שעות ⇒ המייל נטען מחדש והיום מחושב מחדש. בלי זה «פעם בפתיחה»
+  //   פירושו «פעם בחיים» באפליקציה מותקנת שאף פעם לא נסגרת.
   @override
-  void dispose() { appStore.removeListener(_onStore); super.dispose(); }
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) return;
+    _mailTried = false;
+    _fetchMail();
+    if (mounted) setState(() {});
+  }
+  @override
+  void dispose() { WidgetsBinding.instance.removeObserver(this); appStore.removeListener(_onStore); super.dispose(); }
 
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
@@ -1675,7 +1692,7 @@ class _${cls}State extends State<${cls}> {
   }
 
   // ── 4 · «חיבורים» (מפתחות-הלקוח) · «נושאים» · «התנהגות» ──
-  const bh = renderBehavior('balagan_behavior', { extraFields: [['minAdd', '4', 'minAddLabel'], ['minSend', '12', 'minSendLabel'], ['minAuto', '3', 'minAutoLabel'], ['eveningHour', '18', 'eveningHourLabel']] });   // שמירת-זמן (§המוצר): הדקות-לפעולה עריכות, לא קבועות
+  const bh = renderBehavior('balagan_behavior', { webNotify: true, extraFields: [['minAdd', '4', 'minAddLabel'], ['minSend', '12', 'minSendLabel'], ['minAuto', '3', 'minAutoLabel'], ['eveningHour', '18', 'eveningHourLabel']] });   // שמירת-זמן (§המוצר): הדקות-לפעולה עריכות, לא קבועות
   {
     const slug = 'balagan_keys'; const { k, dump } = makeConsts(slug); const cls = clsOf(slug);
     const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29 · חוק-6) — «חיבורים»: המפתחות של הלקוח, במכשיר בלבד. אל תערוך ידנית.

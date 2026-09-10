@@ -427,7 +427,7 @@ class _${cls}State extends State<${cls}> {
 }
 
 // ── G32 · «התנהגות» (עוד): שעת-התקציר · ימים-לפני · לפעול-לבד · יומן-הפעולות המלא עם החזר ──
-export function renderBehavior(slug, { extraFields = [] } = {}) {   // extraFields = [[key, default, L-key]] — שדות-הגדרה נוספים (בלגן: דקות-שנחסכות), מרונדרים עם ה-k של המסך
+export function renderBehavior(slug, { extraFields = [], webNotify = false } = {}) {   // extraFields = [[key, default, L-key]] — שדות-הגדרה נוספים (בלגן: דקות-שנחסכות), מרונדרים עם ה-k של המסך
   const { k, dump } = makeConsts(slug);
   const cls = clsOf(slug);
   const code = `// 🧭 חולל ע"י ניווט-מקשרים (app-shell · G32 · הכרעה-28) — התנהגות: הגדרות-הטריגרים ויומן-הפעולות. אל תערוך ידנית.
@@ -436,7 +436,7 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_toggle_tile.dart';
-import 'package:flutter/material.dart';
+${webNotify ? "import '../dart-ui-bs/ds/ds_notify.dart';\nimport 'package:flutter/foundation.dart' show kIsWeb;\n" : ''}import 'package:flutter/material.dart';
 
 class ${cls} extends StatelessWidget {
   const ${cls}({super.key});
@@ -447,7 +447,7 @@ class ${cls} extends StatelessWidget {
     DsField(label: ${k(L.offsetsLabel)}, hint: '3,1,0', value: appStore.setting('offsets', '3,1,0'), onChanged: (v) => appStore.setSetting('offsets', v)),
     DsField(label: ${k(L.dayStartLabel)}, hint: '9', value: appStore.setting('dayStart', '9'), onChanged: (v) => appStore.setSetting('dayStart', v)),
     DsField(label: ${k(L.blockMinLabel)}, hint: '30', value: appStore.setting('blockMin', '30'), onChanged: (v) => appStore.setSetting('blockMin', v)),
-${extraFields.map(([key, def, lbl]) => `    DsField(label: ${k(L[lbl])}, hint: '${def}', value: appStore.setting('${key}', '${def}'), onChanged: (v) => appStore.setSetting('${key}', v)),\n`).join('')}    DsToggleTile(label: ${k(L.autoLabel)}, value: appStore.setting('always:rem') == '1' ? 'true' : 'false', onChanged: (v) => appStore.setSetting('always:rem', v == 'true' ? '1' : '')),
+${extraFields.map(([key, def, lbl]) => `    DsField(label: ${k(L[lbl])}, hint: '${def}', value: appStore.setting('${key}', '${def}'), onChanged: (v) => appStore.setSetting('${key}', v)),\n`).join('')}${webNotify ? `    // G55 · רשות-התראה נדרשת ממחווה של המשתמש — הדפדפן דוחה בקשה בטעינה, ובלי רשות התקציר שותק.\n    if (kIsWeb) DsToggleTile(label: ${k(L.notifyLabel)}, value: notifyGranted() ? 'true' : 'false', onChanged: (v) async { if (v == 'true' && !notifyGranted()) { await notifyAsk(); appStore.setSetting('notifyAsked', '1'); } }),\n` : ''}    DsToggleTile(label: ${k(L.autoLabel)}, value: appStore.setting('always:rem') == '1' ? 'true' : 'false', onChanged: (v) => appStore.setSetting('always:rem', v == 'true' ? '1' : '')),
     DsSection(title: ${k(L.logTitle)}, children: [for (final e in appStore.log) DsLogRow(text: e['what'] ?? '', sub: _short(e['at'] ?? ''), undoLabel: e['undone'] == '1' ? '' : ${k(L.undo)}, onUndo: e['undone'] == '1' ? null : () => appStore.undo(e['id'] ?? ''))]),
   ]));
 }

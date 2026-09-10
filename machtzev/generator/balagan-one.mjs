@@ -41,6 +41,17 @@ if (!/DsFold\(/.test(confirm) || !/appStore\.add\(widget\.module\.rootSlug/.test
 if (!/GenBalaganConfirmScreen\(module:/.test(ask)) fails.push('«מה קרה?» אינו פותח את טופס-האישור');
 const baseMods = mods.filter((m) => m.layer === 'base');
 if (baseMods.length < 2 || !baseMods.every((m) => m.root.fields.some((f) => f.type === 'date'))) fails.push(`שכבת-הבסיס: ${baseMods.length} מודולים (נדרש ≥2 עם תאריך: משימות · יומן)`);
+// G55 · נוכחות: התקציר חייב ערוץ גם באתר, והמסך חייב להתעורר בחזרה אליו.
+//   עד G55 «if (kIsWeb) return;» היה השורה הראשונה ב-_digest ⇒ מי שמשתמש באתר לא קיבל תזכורת מעולם.
+{
+  const dg = home.slice(home.indexOf('Future<void> _digest('), home.indexOf('void _autopilotAll()'));
+  if (/^\s*if \(kIsWeb\) return;/m.test(dg)) fails.push('התקציר יוצא מיד באתר (kIsWeb return)');
+  if (!/notifyShow\(/.test(dg)) fails.push('התקציר בלי ערוץ-התראה באתר');
+  if (!/notifyGranted\(\)/.test(dg)) fails.push('התקציר מציג בלי לבדוק רשות');
+  if (!/with WidgetsBindingObserver/.test(home) || !/didChangeAppLifecycleState/.test(home)) fails.push('«היום» אינו מתעורר בחזרה למסך');
+  const beh = rd(path.join(GEN, 'gen_balagan_behavior.dart'));
+  if (!/notifyAsk\(\)/.test(beh)) fails.push('אין מקום לאשר התראות (הרשות נדרשת ממחווה)');
+}
 // G34 · בדיקות-לפי-גל (100 רגקסים של נוכחות-טקסט, ב׳-ב…ב׳-קא) הוסרו: ההתנהגויות הן אטומי-מדף (behavior-plan.mjs --gate בודק בחירה+ייבוא+קריאה+מתאם-דק); ההיסטוריה ב-knowledge/CLOSED-GENMAX-G33.
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };

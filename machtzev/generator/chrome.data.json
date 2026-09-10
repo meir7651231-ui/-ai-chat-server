@@ -455,5 +455,7 @@
  "nowWhyOverdue": "באיחור",
  "nowWhyHard": "מועד קשיח",
  "nowWhyMoney": "₪ {n} עומדים על זה",
- "nowWhyToday": "להיום"
+ "nowWhyToday": "להיום",
+ "notifyLabel": "תזכורות במכשיר",
+ "notifyBlocked": "הדפדפן חוסם התראות — צריך לאשר בהגדרות-האתר"
 }
