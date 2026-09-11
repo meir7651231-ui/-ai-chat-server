@@ -12,7 +12,9 @@ import { okType, inferImports, classBody, stripComments, HEB_STR, IO_PAT, RIVERP
 const ROOT = new URL('../../', import.meta.url).pathname;
 const SCRATCH = process.argv[2] || '/tmp/genesis-all-screens';
 const SHELF = path.join(ROOT, 'new/dart-ui-bs');
-const OUT = path.join(SHELF, 'auto');
+// יעד: new/dart-ui-bs/auto כברירת-מחדל. SHELF_OUT מאפשר מדידה לתיקייה זמנית
+// בלי לגעת במדף — נחיתה למדף היא החלטה, לא תופעת-לוואי של מדידה.
+const OUT = process.env.SHELF_OUT || path.join(SHELF, 'auto');
 const MACHINE = path.join(ROOT, 'screens-seed/machine');
 
 
@@ -93,7 +95,7 @@ const externalFn = (code) => {
 
 const FLUTTER_RESERVED = new Set(['Divider','Card','Chip','Banner','Hero','TableRow','ColorSwatch','Switch','Radio','Checkbox','Slider','Stepper','Badge','Tab','Drawer','AppBar','Scaffold','ListTile','Row','Column','Stack','Text','Icon','Form','Table','Step','Material','Padding','Center','Align','Title','Actions','Element','State','Navigator','Route','Page','View','Ink','Tooltip','Dialog','SnackBar','Spacer','Placeholder','ListView','GridView','Container','SizedBox','Expanded','Flexible','Wrap','Positioned','Opacity','Transform','ClipRRect','InkWell','GestureDetector','SafeArea','Builder','Key','Size','Offset','Rect','Colors','Icons','Theme','MediaQuery','Border','BorderSide','Radius','Duration','Curve','Curves','Alignment','EdgeInsets','TextStyle','TextSpan','BoxDecoration','BoxShadow','Gradient','Image','ImageProvider','Feedback','Focus','FocusNode','Overlay','Notification']);
 // ── מלאי-המדף הקיים ──
-const shelfNames = new Set(); const shelfHashes = new Map();
+const shelfNames = new Set(); const shelfHashes = new Map(); const shelfOrigins = new Map();
 for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
   const p = path.join(SHELF, f);
   if (!f.endsWith('.dart') || !fs.statSync(p).isFile() || f.startsWith('auto/') || f.startsWith('auto\\')) continue;
@@ -101,6 +103,13 @@ for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
   for (const m of src.matchAll(/class\s+([A-Za-z0-9_]+)\s+extends\s+\w+/g)) {
     shelfNames.add(m[1]);
     const b = classBody(src, m.index); if (b) shelfHashes.set(blind(b, m[1]), m[1]);
+  }
+  // ── מפתח-מוצא (`<מסך>:<widget>`) ──────────────────────────────────────────
+  // גיבוב-גוף לעולם לא יתפוס אטום שנחצב ביד: הוא קיבל props, ולכן גופו שונה.
+  // המוצא הוא המפתח היציב היחיד; בלעדיו המנוע מרים שוב מה שכבר קיים במדף.
+  const name = path.basename(f, '.dart');
+  for (const m of src.matchAll(/(?:מוצא|מאחד גם את)[^\n]*?([A-Za-z0-9_]+(?:__[A-Za-z0-9_]+)*)(?:\.dart)?\s*[:·]\s*(_?[A-Z][A-Za-z0-9_]*)/g)) {
+    shelfOrigins.set(m[1] + ':' + m[2], name);
   }
 }
 
@@ -111,6 +120,12 @@ function fileDecls(src) {
   for (const m of src.matchAll(/class\s+([A-Za-z0-9_]+)(?:<[^{]*>)?(?:\s+extends\s+([A-Za-z0-9_<>, ]+?))?\s*\{/g)) {
     const b = classBody(src, m.index);
     if (b) classes.set(m[1], { body: b, ext: (m[2] || '').trim() });
+  }
+  // typedef פרטי הוא הצהרת-קובץ לכל דבר. בלי זה `typedef _Pal = (...)` נפל
+  // לתפיסת-ה-`/^_[A-Z]/` ופסל widgets טהורים לגמרי שרק קראו לפלטת-צבעים.
+  const typedefs = new Map(); // _Name ⇒ source
+  for (const m of src.matchAll(/(?:^|\n)typedef\s+([A-Za-z0-9_]+)[^;]*;/g)) {
+    typedefs.set(m[1], m[0].trim());
   }
   const helpers = new Map(); // _name ⇒ source
   for (const m of src.matchAll(/(?:^|\n)(?:const|final)\s+(?:[A-Za-z_<>\[\], ]+\s+)?(_[a-z]\w*)\s*=/g)) {
@@ -129,7 +144,7 @@ function fileDecls(src) {
     const full = src.slice(m.index, end + 1).trim();
     if (full.split('\n').length <= 80) helpers.set(m[1], full);
   }
-  return { classes, helpers };
+  return { classes, helpers, typedefs };
 }
 
 // ── המעבר על כל מפות-המכונה ──
@@ -143,12 +158,19 @@ for (const mf of maps) {
   const srcPath = path.join(SCRATCH, screen + '.dart');
   if (!fs.existsSync(srcPath)) continue;
   const src = fs.readFileSync(srcPath, 'utf8');
-  const { classes, helpers } = fileDecls(src);
+  const { classes, helpers, typedefs } = fileDecls(src);
 
   for (const w of map.widgets || []) {
     const id = screen + ':' + w.name;
-    const isStateful = w.kind === 'StatefulWidget';
-    if (!isStateful && (!w.dataClean || !w.pure)) continue;   // מלוכלך ⇒ תור-הליטוש
+    // ConsumerStatefulWidget הוא Stateful לכל דבר; בלי זה 110 widgets לא הגיעו
+    // לצרירת-ה-State ו-`createState() => _XState()` נראה כתלות-פרטית בלתי-פתירה.
+    const isStateful = w.kind === 'StatefulWidget' || w.kind === 'ConsumerStatefulWidget';
+    // ⚠️ עד היום השורה הזו הפילה 535 widgets **בלי רישום** — הדוח תיאר 166 דחיות
+    // שהן 19% ממה שבחוץ. שקט אינו דחייה: כל נפילה נרשמת בשמה, גם כאן.
+    if (!isStateful && (!w.dataClean || !w.pure)) {
+      skip(!w.dataClean && !w.pure ? 'pre-dirty-both' : (!w.dataClean ? 'pre-data' : 'pre-impure'), id + '⇒' + w.kind);
+      continue;   // מלוכלך ⇒ תור-הליטוש
+    }
     const main = classes.get(w.name);
     if (!main) { skip('no-decl', id); continue; }
 
@@ -189,8 +211,14 @@ for (const mf of maps) {
           const h = helpers.get(r);
           if (HEB_STR.test(stripComments(h)) || IO_PAT.test(stripComments(h))) { skip('dirty-helper', id); ok = false; break; }
           bundle.push({ name: r, body: h }); grew = true;
-        } else if (/^_[A-Z]/.test(r)) { skip('private-dep', id); ok = false; break; }
-        else if (!FOUNDATION.has(r) && projectClasses.has(r)) { skip('project-dep', id + '⇒' + r); ok = false; break; }
+        } else if (/^_[A-Z]/.test(r)) {
+          // typedef פרטי מצטרף לצרור verbatim (הצהרת-טיפוס, לא תלות-קוד).
+          const td = typedefs.get(r);
+          if (td && !HEB_STR.test(stripComments(td)) && bundle.length + 1 < 6) {
+            bundle.push({ name: r, body: td, privatize: false }); grew = true;
+          } else { skip('private-dep', id); ok = false; break; }
+        }
+        else if (!FOUNDATION.has(r) && !FLUTTER_RESERVED.has(r) && projectClasses.has(r)) { skip('project-dep', id + '⇒' + r); ok = false; break; }
       }
       if (!grew) break;
     }
@@ -207,6 +235,7 @@ for (const mf of maps) {
     // ── דדופ (הכרעה-5) ──
     const h = blind(bundle.map(b => b.body).join('\n'), w.name);
     if (shelfHashes.has(h)) { skip('already-on-shelf', id + '⇒' + shelfHashes.get(h)); continue; }
+    if (shelfOrigins.has(id)) { skip('already-carved', id + '⇒' + shelfOrigins.get(id)); continue; }
     if (liftedHashes.has(h)) { liftedHashes.get(h).also.push(id); continue; }
 
     // ── שם-ציבורי: בסיס, ואם-תפוס ⇒ מסויג-במסך (v2) ──
@@ -252,7 +281,7 @@ ${joined}
 }
 
 const skippedN = Object.values(report.skipped).reduce((a, v) => a + v.length, 0);
-fs.writeFileSync(path.join(ROOT, 'screens-seed/shelf-lift-report.json'), JSON.stringify(report, null, 1));
+fs.writeFileSync(path.join(process.env.SHELF_OUT || path.join(ROOT,'screens-seed'), process.env.SHELF_OUT ? 'report.json' : 'shelf-lift-report.json'), JSON.stringify(report, null, 1));
 const serves = report.lifted.reduce((a, x) => a + x.serves, 0);
 const st = report.lifted.filter(x => x.kind.startsWith('Stateful')).length;
 console.log(`🛗 מנוע-המדף v2 · הורמו: ${report.lifted.length} אטומים (${st} Stateful · משרתים ${serves} מופעים) · נדחו: ${skippedN}`);

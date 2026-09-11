@@ -5,7 +5,12 @@ import crypto from 'node:crypto';
 export const OK_TYPES = new Set(['String', 'int', 'double', 'bool', 'num', 'Color', 'VoidCallback',
   'IconData', 'Widget', 'List<Widget>', 'List<String>', 'EdgeInsets', 'EdgeInsetsGeometry',
   'BorderRadius', 'TextStyle', 'Key', 'Duration', 'ValueChanged<String>', 'ValueChanged<bool>',
-  'ValueChanged<int>', 'ValueChanged<double>', 'TextEditingController', 'FocusNode', 'ScrollController']);
+  'ValueChanged<int>', 'ValueChanged<double>', 'TextEditingController', 'FocusNode', 'ScrollController',
+  // טיפוסי-Flutter/dart טהורים שנעדרו מהרשימה ולכן פסלו widgets נקיים לגמרי
+  // (הדחייה נרשמה כ-model-prop כאילו זה מודל-של-הפרויקט):
+  'List<int>', 'List<double>', 'Set<String>', 'DateTime', 'TextDirection', 'TimeOfDay',
+  'ValueChanged<TimeOfDay>', 'ValueChanged<DateTime>', 'TextInputType', 'TextAlign',
+  'Alignment', 'AlignmentGeometry', 'BoxFit', 'Axis', 'CrossAxisAlignment', 'MainAxisAlignment']);
 export const okType = (t) => OK_TYPES.has(t.replace(/\?$/, '').replace(/\s+/g, ''));
 
 export const IMPORT_RULES = [
