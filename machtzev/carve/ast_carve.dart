@@ -11,7 +11,7 @@ import 'package:analyzer/dart/ast/visitor.dart';
 
 // dart:core / builtins שמותר להשאיר (לא שקע, לא הטבעה)
 const _core = {
-  'String','int','double','num','bool','List','Map','Set','Iterable','Object','dynamic','void','Function','DateTime','Duration','RegExp','StringBuffer','Comparable','Pattern','Symbol','Type','Null','Never','Enum',
+  'String','int','double','num','bool','List','Map','Set','Iterable','Object','dynamic','void','Function','DateTime','Duration','RegExp','StringBuffer','Comparable','Pattern','Symbol','Type','Null','Never','Enum','MapEntry','StringSink','Runes','BigInt','Uri','Stopwatch','Exception','Error','StateError','ArgumentError','FormatException','Future','Stream',
   'true','false','null','this','super','print','identical','assert',
 };
 
@@ -164,6 +164,16 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   final unit = parseString(content: src, throwIfDiagnostics: false).unit;
   final lineInfo = parseString(content: src, throwIfDiagnostics: false).lineInfo;
 
+  // תחיליות-ייבוא של dart:math (`import 'dart:math' as math;`): בלי זה המזהה
+  // `math` נראה כמזהה-חופשי בלתי-פתיר, והפונקציה נדחית למרות שהיא טהורה.
+  final mathPrefixes = <String>{};
+  for (final dir in unit.directives) {
+    if (dir is ImportDirective && (dir.uri.stringValue ?? '') == 'dart:math') {
+      final pfx = dir.prefix?.name;
+      if (pfx != null) mathPrefixes.add(pfx);
+    }
+  }
+
   // אינדקס הצהרות-top-level בקובץ
   final topFns = <String, FunctionDeclaration>{};
   final topVars = <String, VariableDeclaration>{};   // שם ⇒ ההצהרה (לשקע-ערך)
@@ -216,8 +226,10 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   final inlineTypes = <String>[]; // טיפוס מקומי ⇒ הטבעה verbatim
   final unresolved = <String>[];
   var usesMath = false;
+  String? usedMathPrefix;   // אם הגוף משתמש ב-`math.x`, הייבוא חייב לשאת את התחילית
   for (final id in free.ids) {
     if (topFns.containsKey(id) || topVars.containsKey(id)) sockets.add(id);
+    else if (mathPrefixes.contains(id)) { usesMath = true; usedMathPrefix = id; }
     else if (_mathCore.contains(id)) usesMath = true;
     else unresolved.add(id); // ערך-חופשי לא-מזוהה (אולי import) — חשוד
   }
@@ -314,7 +326,9 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     'unresolved': unresolved,
     'copiedTypes': copiedTypes,
     'fnSource': fnSrc,
-    'imports': usesMath ? ["import 'dart:math';"] : <String>[],
+    'imports': usesMath
+        ? [usedMathPrefix == null ? "import 'dart:math';" : "import 'dart:math' as $usedMathPrefix;"]
+        : <String>[],
     'autoSocket': autoSocket,
     'socketMeta': socketMeta,
     'socketDecls': socketDecls,
