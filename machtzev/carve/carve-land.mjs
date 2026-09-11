@@ -44,7 +44,7 @@ const STUB = /=>\s*(?:const\s+)?(?:\{\s*\}|\[\s*\]|''|""|0|0\.0|null|-?\d+)\s*;?
 
 // ליטרל-דוגמה לטיפוס-אלמנט (לסינתזת-אוסף)
 const elemLit = (t) => ({ String: "'a'", int: '1', double: '1.5', num: '1', bool: 'true' }[t.replace(/\?$/, '')] ?? null);
-function compat(pt, inlined = [], generics = []) {
+function compat(pt, inlined = [], generics = [], samples = {}) {
   const nul = pt.endsWith('?'); const base = pt.replace(/\?$/, '');
   // טיפוס-גנרי שנוצר במחיקת-טיפוס: הפונקציה **אינה קוראת ממנו שדה** (אומת
   // ב-_MemberUse), ולכן כל ערך משרת אותה זהה. מחרוזת מספיקה, וההסקה כובלת T=String.
@@ -59,9 +59,13 @@ function compat(pt, inlined = [], generics = []) {
     if (nul) out.push({ d: 'null', t: base });
     return out;
   }
-  // enum שהוטבע באטום verbatim: הערכים זמינים בקובץ, אין צורך לזייף.
+  // טיפוס שהוטבע באטום verbatim. ⚠️ הנחת-`values` הישנה הניחה שכל מוטבע הוא
+  // enum; למחלקת-דאטה זה לא מתקמפל. עכשיו **החצב** אומר מה הערך (typeSamples),
+  // כי רק הוא ראה את ההצהרה. אין ערך ⇒ אין דוגמה, לא ניחוש.
   if (inlined.includes(base)) {
-    const out = [{ d: `${base}.values.first`, t: base }, { d: `${base}.values.last`, t: base }];
+    const ex = samples[base];
+    if (!ex || !ex.length) return nul ? [{ d: 'null', t: base }] : [];
+    const out = ex.map(d => ({ d, t: base }));
     if (nul) out.push({ d: 'null', t: base });
     return out;
   }
@@ -123,7 +127,7 @@ function landOne(r, seen) {
   if (params === null) return { name: r.name, skip: 'חתימה לא-טריוויאלית' };
   const socketArgs = (r.autoSocket && r.socketMeta) ? r.socketMeta.map(s => `${s.name}: ${s.init}`).join(', ') : '';
   const mkArgs = (c) => [c.map(v => v.d).join(', '), socketArgs].filter(Boolean).join(', ');
-  const perParam = params.map(p => compat(p.type, r.inlineTypes || [], Object.values(r.erasedTypes || {})));
+  const perParam = params.map(p => compat(p.type, r.inlineTypes || [], Object.values(r.erasedTypes || {}), r.typeSamples || {}));
   if (perParam.some(x => x.length === 0)) return { name: r.name, skip: 'אין-קלט-סל' };
   const combos = [];
   const rec = (i, acc) => { if (combos.length >= 12) return; if (i === params.length) { combos.push(acc); return; } for (const v of perParam[i]) { rec(i + 1, [...acc, v]); if (combos.length >= 12) break; } };

@@ -51,6 +51,9 @@ class _FreeIds extends RecursiveAstVisitor<void> {
     // תווית של ארגומנט-בשם (`orElse:` · `child:`): ההורה הוא Label, לא NamedExpression —
     // ולכן הבדיקה הישנה מעולם לא נורתה וכל תווית נספרה כמזהה-חופשי.
     if (p is Label) return;
+    // הפניית-dartdoc (`/// [foo]`) היא **קישור-תיעוד**, לא קוד. בלי זה
+    // `productSubtype` — שמופיע רק בהערה — נספר כתלות וחסם 93 פונקציות.
+    if (p is CommentReference) return;
     if (p is NamedExpression && identical(p.name.label, node)) return;
     if (bound.contains(n) || _core.contains(n)) return;
     // טיפוס (מתחיל באות-גדולה) — מועמד-הטבעה; אחרת — מזהה-ערך
@@ -130,7 +133,10 @@ const _pureDartLibs = {'dart:convert','dart:math','dart:typed_data','dart:collec
 class _ImpFile {
   final String src;
   final Map<String, Declaration> types;
-  _ImpFile(this.src, this.types);
+  // קבועי-top-level של אותו קובץ. בלי אלה מחלקה שמפנה לקבוע-של-קובצה
+  // (`kLipskeyConnectionSizeOverride` — 93 פונקציות) נפסלה כאילו היא לא-טהורה.
+  final Map<String, Declaration> vars;
+  _ImpFile(this.src, this.types, [this.vars = const {}]);
 }
 
 // אינדקס טיפוסים מכל ייבוא-יחסי שקובצו טהור (אפס `package:`, אפס dart: לא-טהור)
@@ -190,7 +196,18 @@ Map<String, _ImpFile> _neighborTypes(String file, CompilationUnit unit) {
       else if (nd is MixinDeclaration) types[nd.name.lexeme] = nd;
       else if (nd is TypeAlias) types[nd.name.lexeme] = nd;
     }
-    final f = _ImpFile(nsrc, types);
+    final vars = <String, Declaration>{};
+    for (final nd in nunit.declarations) {
+      if (nd is TopLevelVariableDeclaration) {
+        if (!nd.variables.isConst && !nd.variables.isFinal) continue;   // רק קבוע
+        for (final v in nd.variables.variables) vars[v.name.lexeme] = nd;
+      } else if (nd is FunctionDeclaration && !nd.isGetter && !nd.isSetter) {
+        // פונקציית-עזר top-level. מחלקה שקוראת לעוזרת-של-קובצה
+        // (`lipskeyConnectionSizes` — 93 פונקציות) נפסלה כאילו אינה טהורה.
+        vars[nd.name.lexeme] = nd;
+      }
+    }
+    final f = _ImpFile(nsrc, types, vars);
     for (final k in types.keys) out.putIfAbsent(k, () => f);
   }
   return out;
@@ -198,41 +215,64 @@ Map<String, _ImpFile> _neighborTypes(String file, CompilationUnit unit) {
 
 // סגירה טרנזיטיבית של הצהרת-טיפוס-שכן: ההצהרה + כל טיפוס שהיא מזכירה,
 // ובלבד שכולם `dart:core` או מוצהרים באותו קובץ-שכן. כל ספק ⇒ null (פסילה).
-List<String>? _neighborClosure(String name, Map<String, _ImpFile> idx) {
+List<String>? _neighborClosure(String name, Map<String, _ImpFile> idx, [List<String>? why]) {
   final f = idx[name];
-  if (f == null) return null;
-  return _typeClosure(name, f);
+  if (f == null) { why?.add('אין-קובץ'); return null; }
+  return _typeClosure(name, f, why, idx);
 }
 
 // אותה סגירה בדיוק, על קובץ **כלשהו** — גם הקובץ הנוכחי. ההטבעה מאותו-קובץ
 // הייתה verbatim בלי שום אימות: מחלקה עם `@immutable` או מחלקה שמפנה למחלקה
 // שכנה נפלטה חלקית, והאטום לא התקמפל. עכשיו אותו חוק לשני המקרים.
-List<String>? _typeClosure(String name, _ImpFile f) {
+List<String>? _typeClosure(String name, _ImpFile primary,
+    [List<String>? why, Map<String, _ImpFile> idx = const {}]) {
   final emitted = <String, String>{};
   final work = <String>[name];
   final seen = <String>{};
+
+  // איתור הצהרה בשם נתון: קודם בקובץ-הראשי, אחר-כך בכל קובץ-שכן טהור.
+  // בלי החיפוש-החוצה, `Mat4` שמפנה ל-`Vec3` בקובץ אחר נפסל אף שהשניים טהורים.
+  (Declaration, String)? find(String n) {
+    final d = primary.types[n] ?? primary.vars[n];
+    if (d != null) return (d, primary.src);
+    final f = idx[n];
+    if (f != null) { final e = f.types[n] ?? f.vars[n]; if (e != null) return (e, f.src); }
+    for (final f in idx.values) {
+      final e = f.types[n] ?? f.vars[n];
+      if (e != null) return (e, f.src);
+    }
+    return null;
+  }
+
   while (work.isNotEmpty) {
     final t = work.removeLast();
     if (!seen.add(t)) continue;
-    final d = f.types[t];
-    if (d == null) return null;                 // טיפוס מקובץ-שכן אחר — פסילה
-    emitted[t] = f.src.substring(d.offset, d.end);
+    final hit = find(t);
+    if (hit == null) { why?.add('לא-נמצא:$t'); return null; }
+    final (d, fsrc) = hit;
+    emitted[t] = fsrc.substring(d.offset, d.end);
+
     final bound = <String>{};
     final loc = _Locals(); d.visitChildren(loc); bound.addAll(loc.names);
-    if (d is ClassDeclaration) { for (final m in d.members) { final n = m is MethodDeclaration ? m.name.lexeme : null; if (n != null) bound.add(n); } bound.add(t); }
+    if (d is ClassDeclaration) {
+      for (final m in d.members) { if (m is MethodDeclaration) bound.add(m.name.lexeme); }
+      bound.add(t);
+    }
     if (d is EnumDeclaration) { for (final c in d.constants) bound.add(c.name.lexeme); bound.add(t); }
+    if (d is MixinDeclaration) { for (final m in d.members) { if (m is MethodDeclaration) bound.add(m.name.lexeme); } bound.add(t); }
+
     final fi = _FreeIds(bound); d.visitChildren(fi);
     for (final tn in fi.typeNames) {
       if (_core.contains(tn) || _mathCore.contains(tn)) continue;
-      if (f.types.containsKey(tn)) { work.add(tn); continue; }
-      return null;                              // טיפוס בלתי-פתיר בתוך ההצהרה
+      if (find(tn) != null) { work.add(tn); continue; }
+      why?.add('טיפוס:$tn בתוך $t'); return null;
     }
-    // גם מזהי-**ערך**, לא רק טיפוסים. בלי זה הוטבעו מחלקות שנשענות על
-    // `@immutable` (מ-package:meta) או על קבוע-top-level של קובצן — האטום נפלט
-    // ולא התקמפל. כל מזהה-ערך חופשי ⇒ פסילת הטיפוס, לא ניחוש.
+    // גם מזהי-**ערך**: קבוע-top-level נגרר פנימה, כל דבר אחר ⇒ פסילה.
+    // בלי זה הוטבעו מחלקות שנשענות על `@immutable` (package:meta) והאטום לא התקמפל.
     for (final id in fi.ids) {
       if (_core.contains(id) || _mathCore.contains(id)) continue;
-      return null;
+      if (find(id) != null) { work.add(id); continue; }
+      why?.add('ערך:$id בתוך $t'); return null;
     }
   }
   return emitted.values.toList();
@@ -329,6 +369,65 @@ void main(List<String> args) {
   stdout.write(jsonEncode(carve(args[0], args[1], startLine)));
 }
 
+
+// ── ערך-דוגמה לטיפוס שהוטבע ─────────────────────────────────────────────────
+// מחברת-הנחיתה הניחה ש**כל** טיפוס מוטבע הוא enum ובנתה `X.values.first`.
+// למחלקת-דאטה זה קרס (9 אטומים). החצב יודע מה ההצהרה באמת — הוא זה שיאמר.
+String? _litFor(String t) {
+  final nul = t.endsWith('?');
+  final b = t.replaceAll('?', '').trim();
+  if (nul) return 'null';
+  switch (b) {
+    case 'String': return "'a'";
+    case 'int': return '0';
+    case 'double': return '0.0';
+    case 'num': return '0';
+    case 'bool': return 'true';
+  }
+  final mL = RegExp(r'^(List|Set|Iterable)<(.+)>$').firstMatch(b);
+  if (mL != null) return 'const <${mL.group(2)}>${mL.group(1) == 'List' ? '[]' : '{}'}';
+  final mM = RegExp(r'^Map<\s*(.+?)\s*,\s*(.+)>$').firstMatch(b);
+  if (mM != null) return 'const <${mM.group(1)}, ${mM.group(2)}>{}';
+  return null;
+}
+
+List<String> _samplesFor(String name, String declSrc) {
+  final u = parseString(content: declSrc, throwIfDiagnostics: false).unit;
+  if (u.declarations.isEmpty) return const [];
+  final d = u.declarations.first;
+  if (d is EnumDeclaration) return ['$name.values.first', '$name.values.last'];
+  if (d is! ClassDeclaration) return const [];
+  for (final m in d.members) {
+    if (m is! ConstructorDeclaration || m.name != null) continue;
+    final args = <String>[];
+    for (final prm in m.parameters.parameters) {
+      final isReq = prm.isRequiredPositional || prm.isRequiredNamed;
+      if (!isReq) continue;                       // אופציונלי ⇒ מדלגים
+      String? ty;
+      final inner = prm is DefaultFormalParameter ? prm.parameter : prm;
+      if (inner is SimpleFormalParameter) ty = inner.type?.toSource();
+      if (inner is FieldFormalParameter) {
+        ty = inner.type?.toSource();
+        if (ty == null) {                          // `this.x` — הטיפוס מהשדה
+          for (final f in d.members) {
+            if (f is! FieldDeclaration) continue;
+            for (final v in f.fields.variables) {
+              if (v.name.lexeme == inner.name.lexeme) ty = f.fields.type?.toSource();
+            }
+          }
+        }
+      }
+      if (ty == null) return const [];
+      final lit = _litFor(ty);
+      if (lit == null) return const [];            // אין ערך-אמת ⇒ אין דוגמה
+      args.add(prm.isRequiredNamed ? '${inner.name!.lexeme}: $lit' : lit);
+    }
+    final kw = m.constKeyword != null ? 'const ' : '';
+    return ['$kw$name(${args.join(', ')})'];
+  }
+  return const [];
+}
+
 Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   final src = File(file).readAsStringSync();
   final unit = parseString(content: src, throwIfDiagnostics: false).unit;
@@ -347,10 +446,16 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   // אינדקס הצהרות-top-level בקובץ
   final topFns = <String, FunctionDeclaration>{};
   final topVars = <String, VariableDeclaration>{};   // שם ⇒ ההצהרה (לשקע-ערך)
+  final topVarDecls = <String, Declaration>{};       // שם ⇒ הצהרת-ה-top-level המלאה (להטבעה)
   final topTypes = <String, Declaration>{}; // enum/class/typedef → הצהרתן
   for (final d in unit.declarations) {
-    if (d is FunctionDeclaration && !d.isGetter && !d.isSetter) topFns[d.name.lexeme] = d;
-    else if (d is TopLevelVariableDeclaration) { for (final v in d.variables.variables) topVars[v.name.lexeme] = v; }
+    if (d is FunctionDeclaration && !d.isGetter && !d.isSetter) { topFns[d.name.lexeme] = d; topVarDecls[d.name.lexeme] = d; }
+    else if (d is TopLevelVariableDeclaration) {
+      for (final v in d.variables.variables) topVars[v.name.lexeme] = v;
+      if (d.variables.isConst || d.variables.isFinal) {
+        for (final v in d.variables.variables) topVarDecls[v.name.lexeme] = d;
+      }
+    }
     else if (d is EnumDeclaration) topTypes[d.name.lexeme] = d;
     else if (d is ClassDeclaration) topTypes[d.name.lexeme] = d;
     else if (d is MixinDeclaration) topTypes[d.name.lexeme] = d;
@@ -360,7 +465,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   // טיפוסי-שכן דרך ייבוא-יחסי מקובץ טהור (ראה _neighborTypes)
   final impIdx = _neighborTypes(file, unit);
   final impSrc = <String, List<String>>{};      // שם ⇒ מקור-ההצהרה + תלויותיה
-  final selfFile = _ImpFile(src, topTypes);     // הקובץ הנוכחי — נבדק באותו חוק
+  final selfFile = _ImpFile(src, topTypes, topVarDecls); // הקובץ הנוכחי — נבדק באותו חוק
 
   // אתר את הפונקציה (top-level או מתודה) לפי שם + שורה
   FunctionDeclaration? fn;
@@ -436,11 +541,18 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   for (final t in free.typeNames) {
     if (topTypes.containsKey(t)) {
       // הטבעה-מאותו-קובץ עוברת אימות זהה: סגירה טרנזיטיבית + אפס מזהה-חופשי.
-      final cl = _typeClosure(t, selfFile);
-      if (cl == null) { unresolved.add('type:$t'); continue; }
+      final w = <String>[];
+      final cl = _typeClosure(t, selfFile, w, impIdx);
+      if (cl == null) { unresolved.add('type:$t' + (w.isEmpty ? '' : ' ←${w.first}')); continue; }
       impSrc[t] = cl; inlineTypes.add(t); continue;
     }
-    if (impIdx.containsKey(t) && (impSrc[t] = _neighborClosure(t, impIdx) ?? const []).isNotEmpty) inlineTypes.add(t);
+    if (impIdx.containsKey(t)) {
+      final w = <String>[];
+      final cl = _neighborClosure(t, impIdx, w);
+      if (cl != null && cl.isNotEmpty) { impSrc[t] = cl; inlineTypes.add(t); continue; }
+      unresolved.add('type:$t' + (w.isEmpty ? '' : ' ←${w.first}'));
+      continue;
+    }
     else if (_mathCore.contains(t)) usesMath = true;
     else if (erasable.contains(t)) continue;   // יהפוך לגנרי — אינו תלות
     // טיפוס לא-מקומי שאינו core ⇒ יתכן import (unresolved-type)
@@ -570,6 +682,15 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     'unresolved': unresolved,
     'erasedTypes': erasedTypes,
     'copiedTypes': copiedTypes,
+    'typeSamples': {
+      for (final t in seenType)
+        if (_samplesFor(t, copiedTypes.firstWhere(
+                (c) => RegExp('(?:class|enum|mixin|typedef)\\s+' + t + r'\b').hasMatch(c),
+                orElse: () => '')).isNotEmpty)
+          t: _samplesFor(t, copiedTypes.firstWhere(
+              (c) => RegExp('(?:class|enum|mixin|typedef)\\s+' + t + r'\b').hasMatch(c),
+              orElse: () => '')),
+    },
     'fnSource': fnSrc,
     'imports': usesMath
         ? [usedMathPrefix == null ? "import 'dart:math';" : "import 'dart:math' as $usedMathPrefix;"]
