@@ -1,0 +1,2115 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 60e65de..d59142e 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -299,7 +299,7 @@ export function buildApp(specText) {
+     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr });
+     home = { slug: `${P}shell`, cls: shell.cls };
+     // G33 · מניפסט-המודול (הכרעה-29): מה ש«בלגן» (האפליקציה-האחת) צריך כדי למזג את המודול — מסכים · שורש · שדות · שרשרת. נגזר, לא יד.
+-    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [] })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
++    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [], formula: f.formula || null })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
+     console.log(`🧭 ${L.shellLog}: ${L.shellRootWord} ${rootMeta.name} · ${kids.length} ${L.shellChildrenWord} · ${shell.nav || '—'}${[...rootPage.notes, ...shell.notes].length ? ' · ⚪ ' + [...rootPage.notes, ...shell.notes].join(' · ') : ''}`);
+   }
+   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
+diff --git a/machtzev/generator/apps/calendar.json b/machtzev/generator/apps/calendar.json
+index 8fa140b..5a35b15 100644
+--- a/machtzev/generator/apps/calendar.json
++++ b/machtzev/generator/apps/calendar.json
+@@ -34,31 +34,36 @@
+     "label": "מה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מועד",
+     "type": "date",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "שעה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מקום",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "הערה",
+     "type": "multiline",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk01.json b/machtzev/generator/apps/peruk01.json
+index 62f26a4..2347b4c 100644
+--- a/machtzev/generator/apps/peruk01.json
++++ b/machtzev/generator/apps/peruk01.json
+@@ -41,97 +41,113 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "קובץ החוזה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "שכר דירה חודשי",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "תקופת החוזה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "עיר",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "האם יש אופציה",
+     "type": "bool",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "פיקדון",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "ערבות",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "ערב",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "שטר חוב",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מתווך",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "חוזה קודם",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "הודעות וואטסאפ עם המשכיר",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מועד חתימה",
+     "type": "date",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "בלי החוזה המלא אין",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "החלטה",
+@@ -141,7 +157,8 @@
+      "לחתום כמו שזה",
+      "לחתום רק אחרי שינויים",
+      "לא לחתום לעורך דין"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk02.json b/machtzev/generator/apps/peruk02.json
+index 21319c4..00e47fe 100644
+--- a/machtzev/generator/apps/peruk02.json
++++ b/machtzev/generator/apps/peruk02.json
+@@ -38,73 +38,85 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סכום הפיקדון",
+     "type": "num",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה המשכיר אמר הודעה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "תאריך מסירת מפתח",
+     "type": "date",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "חוזה לפחות סעיפי בטוחה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "תיקונים",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "יציאה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "פרוטוקול כניסה יציאה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "תמונות כניסה ויציאה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "וואטסאפ מלא עם המשכיר",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "קבלות על תיקונים שהוא",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk03.json b/machtzev/generator/apps/peruk03.json
+index 42123c9..4d1a8c4 100644
+--- a/machtzev/generator/apps/peruk03.json
++++ b/machtzev/generator/apps/peruk03.json
+@@ -42,55 +42,64 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "תיאור תמונות",
+     "type": "multiline",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "תאריך כניסה",
+     "type": "date",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מתי הודיעו",
+     "type": "date",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סעיף תיקונים בחוזה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "פרוטוקול כניסה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "תשובת המשכיר",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "הצעת טכנאי",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "אופציות אחרי השעון רק",
+@@ -99,7 +108,8 @@
+     "enumVals": [
+      "תיקון עצמי אחרי הודעה",
+      "בקשת הפחתה זמנית"
+-    ]
++    ],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -110,7 +120,8 @@
+      "מהותי שעון יום",
+      "קטן לא המוצר",
+      "לא על המשכיר"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk04.json b/machtzev/generator/apps/peruk04.json
+index 168d3f3..72326f8 100644
+--- a/machtzev/generator/apps/peruk04.json
++++ b/machtzev/generator/apps/peruk04.json
+@@ -43,85 +43,99 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "חוזה ישן",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טיוטה חדשה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "שכ״ד נוכחי",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "תאריך סיום",
+     "type": "date",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מתי ביקשו תשובה",
+     "type": "date",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "ליקויים פתוחים",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "וואטסאפ",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה משלמים באזור",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "שכ״ד ישן",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "שכ״ד חדש",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "בטוחות ישנות",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "בטוחות חדשות",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "הודעת תשובה אחת",
+@@ -131,7 +145,8 @@
+      "כן עם תנאים",
+      "לא יוצאים בתאריך החוזה",
+      "הארכה חודשיים באותו מחיר"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk05.json b/machtzev/generator/apps/peruk05.json
+index 77e4047..f69d9e1 100644
+--- a/machtzev/generator/apps/peruk05.json
++++ b/machtzev/generator/apps/peruk05.json
+@@ -44,37 +44,43 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "חוזה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "השטר",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה כבר שולם כפיקדון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מי חותם ערב הורה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "בקשות לתיקון לפני חתימה",
+@@ -85,7 +91,8 @@
+      "לסיים ערבות במועד מסירה",
+      "הודעה לערב לפני מימוש",
+      "לא לחדש ערבות אוטומטית"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk06.json b/machtzev/generator/apps/peruk06.json
+index aa059b9..4fde635 100644
+--- a/machtzev/generator/apps/peruk06.json
++++ b/machtzev/generator/apps/peruk06.json
+@@ -38,55 +38,64 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "כמה שולם ואיך",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "הצעה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה המצב עכשיו",
+     "type": "bool",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה הוא אמר לאחרונה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "הצעת השלמה ממישהו אחר",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "קבלות חומרים",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "שם מלא",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk07.json b/machtzev/generator/apps/peruk07.json
+index 5eaca30..43a5884 100644
+--- a/machtzev/generator/apps/peruk07.json
++++ b/machtzev/generator/apps/peruk07.json
+@@ -41,25 +41,29 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מכתב הדחייה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סוג הביטוח מה קרה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "פוליסה או תנאים כלליים",
+@@ -68,19 +72,22 @@
+     "enumVals": [
+      "פוליסה",
+      "תנאים כלליים"
+-    ]
++    ],
++    "formula": null
+    },
+    {
+     "label": "מה כבר הוגש",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "קבלות",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -92,7 +99,8 @@
+      "ג אי־גילוי הצהרה",
+      "ד גובה נזק",
+      "ה איחור"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk08.json b/machtzev/generator/apps/peruk08.json
+index 911b157..983502b 100644
+--- a/machtzev/generator/apps/peruk08.json
++++ b/machtzev/generator/apps/peruk08.json
+@@ -38,37 +38,43 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "צילום החיוב",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "הזמנה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה קרה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "האם כבר פנו למוכר",
+     "type": "bool",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -81,7 +87,8 @@
+      "ד חיוב לא",
+      "ה מנוי שלא",
+      "ו שולם לא"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk09.json b/machtzev/generator/apps/peruk09.json
+index b185f1d..b20bbc0 100644
+--- a/machtzev/generator/apps/peruk09.json
++++ b/machtzev/generator/apps/peruk09.json
+@@ -38,43 +38,50 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "הצעה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "חשבונית",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "הוכחת מסירה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה נשאר",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה הוא אמר",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk10.json b/machtzev/generator/apps/peruk10.json
+index 3fec270..e2f3709 100644
+--- a/machtzev/generator/apps/peruk10.json
++++ b/machtzev/generator/apps/peruk10.json
+@@ -38,43 +38,50 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "צילום כל המכתב",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "כולל תאריכים וסכומים",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "אם יש מכתב ישן",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "תשלום חלקי",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "צילום בעלות",
+     "type": "num",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -86,7 +93,8 @@
+      "עיקול פעיל",
+      "חוב לא שלך",
+      "ספאם מתחזה"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk11.json b/machtzev/generator/apps/peruk11.json
+index 2fb51a1..95b977c 100644
+--- a/machtzev/generator/apps/peruk11.json
++++ b/machtzev/generator/apps/peruk11.json
+@@ -38,19 +38,22 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "הצעה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -61,7 +64,8 @@
+      "יכול לחכות עם",
+      "לבדוק כפל פירוט",
+      "לא לאשר בטלפון"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..2a8fa2b 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -41,37 +41,50 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "קישור מודעה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מחיר",
+     "type": "num",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
++   },
++   {
++    "label": "מחיר עם אגרה",
++    "type": "num",
++    "required": false,
++    "enumVals": [],
++    "formula": "מחיר * 1.03"
+    },
+    {
+     "label": "מה המוכר אמר",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "האם נסעת",
+     "type": "bool",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk13.json b/machtzev/generator/apps/peruk13.json
+index dab7cf8..09c799c 100644
+--- a/machtzev/generator/apps/peruk13.json
++++ b/machtzev/generator/apps/peruk13.json
+@@ -38,19 +38,22 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "המסמך המלא",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -61,7 +64,8 @@
+      "להבין ולשאול בביקור",
+      "מסמך דחייה אישור",
+      "לא המוצר"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk14.json b/machtzev/generator/apps/peruk14.json
+index 3fe6720..2e79f13 100644
+--- a/machtzev/generator/apps/peruk14.json
++++ b/machtzev/generator/apps/peruk14.json
+@@ -41,37 +41,43 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מכתב דחייה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מרשם",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה הרופא אמר",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "האם יש שב״ן",
+     "type": "bool",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -82,7 +88,8 @@
+      "לא בסל לא",
+      "קוד סל שגוי",
+      "דחייה גורפת בלי"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk15.json b/machtzev/generator/apps/peruk15.json
+index 724e157..6167a50 100644
+--- a/machtzev/generator/apps/peruk15.json
++++ b/machtzev/generator/apps/peruk15.json
+@@ -42,37 +42,43 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "החשבון כולו",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "קופה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "האם תאונה",
+     "type": "bool",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "האם הייתה הפניה",
+     "type": "bool",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -84,7 +90,8 @@
+      "לא בכיסוי",
+      "תאונה",
+      "גבייה אגרסיבית על"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk16.json b/machtzev/generator/apps/peruk16.json
+index b2b9023..529aef5 100644
+--- a/machtzev/generator/apps/peruk16.json
++++ b/machtzev/generator/apps/peruk16.json
+@@ -43,37 +43,43 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "צילום הביטול",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "לאיזה רופא",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "למה נקבע",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה כואב עכשיו",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -84,7 +90,8 @@
+      "תוצאה המשך טיפול",
+      "תסמין מחמיר",
+      "ביטול ביום עצמו"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk17.json b/machtzev/generator/apps/peruk17.json
+index e752fbd..732ea53 100644
+--- a/machtzev/generator/apps/peruk17.json
++++ b/machtzev/generator/apps/peruk17.json
+@@ -40,31 +40,36 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "המכתב המלא",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "איזו בקשה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה כבר הוגש",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -75,7 +80,8 @@
+      "דחייה לגופה",
+      "זימון ועדה",
+      "נגמר השעון"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk18.json b/machtzev/generator/apps/peruk18.json
+index b58dedc..961ff02 100644
+--- a/machtzev/generator/apps/peruk18.json
++++ b/machtzev/generator/apps/peruk18.json
+@@ -41,37 +41,43 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "המכתב",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "עוסק פטור",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "יש רו״ח כן",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "האם הוגש דוח",
+     "type": "bool",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -83,7 +89,8 @@
+      "אי־התאמת מע״מ",
+      "שומה לפי מיטב",
+      "גבייה עיקול"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk19.json b/machtzev/generator/apps/peruk19.json
+index 1c429cd..13356dc 100644
+--- a/machtzev/generator/apps/peruk19.json
++++ b/machtzev/generator/apps/peruk19.json
+@@ -42,25 +42,29 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "השובר",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "עיר",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "שוכר או בעלים",
+@@ -69,13 +73,15 @@
+     "enumVals": [
+      "שוכר",
+      "בעלים"
+-    ]
++    ],
++    "formula": null
+    },
+    {
+     "label": "תאריך כניסה",
+     "type": "date",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -87,7 +93,8 @@
+      "חוב דייר קודם",
+      "שובר נכון ופשוט",
+      "עיקול"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk20.json b/machtzev/generator/apps/peruk20.json
+index fbbc6af..6a7989e 100644
+--- a/machtzev/generator/apps/peruk20.json
++++ b/machtzev/generator/apps/peruk20.json
+@@ -43,31 +43,36 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "צילום סטטוס",
+     "type": "bool",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה צריך",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "תאריך טיסה אם יש",
+     "type": "date",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -78,7 +83,8 @@
+      "תור רחוק בלי",
+      "בקשה תקועה מעבר",
+      "דחייה לגופה שם"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk21.json b/machtzev/generator/apps/peruk21.json
+index d176e19..216ee27 100644
+--- a/machtzev/generator/apps/peruk21.json
++++ b/machtzev/generator/apps/peruk21.json
+@@ -40,31 +40,36 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "המכתב",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה כבר יש",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "עד מתי",
+     "type": "date",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -75,7 +80,8 @@
+      "הזמנה לוועדה",
+      "דחיית סיוע",
+      "הילד מפריע בלי"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk22.json b/machtzev/generator/apps/peruk22.json
+index 921ba85..51af744 100644
+--- a/machtzev/generator/apps/peruk22.json
++++ b/machtzev/generator/apps/peruk22.json
+@@ -41,43 +41,50 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "גיל",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה יש לילד",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה כתוב במעון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סוג עבודה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "יש מישהו שני",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk23.json b/machtzev/generator/apps/peruk23.json
+index d267b60..283f047 100644
+--- a/machtzev/generator/apps/peruk23.json
++++ b/machtzev/generator/apps/peruk23.json
+@@ -42,19 +42,22 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "נושא",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk24.json b/machtzev/generator/apps/peruk24.json
+index 09a66cb..27e8722 100644
+--- a/machtzev/generator/apps/peruk24.json
++++ b/machtzev/generator/apps/peruk24.json
+@@ -38,37 +38,43 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה קרה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "גר לבד",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "כמה אחים",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מכתב אם יש",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -79,7 +85,8 @@
+      "מכתב לא מובן",
+      "כסף לא שולם",
+      "אחים לא מאוזנים"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk25.json b/machtzev/generator/apps/peruk25.json
+index 68ae22f..87175df 100644
+--- a/machtzev/generator/apps/peruk25.json
++++ b/machtzev/generator/apps/peruk25.json
+@@ -38,31 +38,36 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מכתב פיטורים",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "ותק",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "האם חתמו על משהו",
+     "type": "bool",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -73,7 +78,8 @@
+      "לחץ לחתום היום",
+      "דגל מוגן",
+      "עצמאי חוזה קבלן"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk26.json b/machtzev/generator/apps/peruk26.json
+index 967f321..594e1d2 100644
+--- a/machtzev/generator/apps/peruk26.json
++++ b/machtzev/generator/apps/peruk26.json
+@@ -38,31 +38,36 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "צילום עו״ש",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "רשימת מנויים אם יש",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "ביטוחים",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -73,7 +78,8 @@
+      "דליפה שקטה",
+      "קפיצה חד־פעמית",
+      "אין תמונה"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk27.json b/machtzev/generator/apps/peruk27.json
+index 65a552f..3f2686a 100644
+--- a/machtzev/generator/apps/peruk27.json
++++ b/machtzev/generator/apps/peruk27.json
+@@ -38,19 +38,22 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "יש ילדים",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -62,7 +65,8 @@
+      "דירה בבעלות",
+      "כסף משותף",
+      "כבר יש מכתב"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/peruk28.json b/machtzev/generator/apps/peruk28.json
+index 5820a2b..d9a36a1 100644
+--- a/machtzev/generator/apps/peruk28.json
++++ b/machtzev/generator/apps/peruk28.json
+@@ -38,43 +38,50 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "ותק",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "תפקיד",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "העלאה אחרונה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מה נוסף בתפקיד",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מספר אם יש",
+     "type": "num",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סיווג",
+@@ -85,7 +92,8 @@
+      "אין סבב שקט",
+      "כבר אמרו לא",
+      "שכר מתחת למינימום"
+-    ]
++    ],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/sechirut.json b/machtzev/generator/apps/sechirut.json
+index e44be62..8bbaa8b 100644
+--- a/machtzev/generator/apps/sechirut.json
++++ b/machtzev/generator/apps/sechirut.json
+@@ -43,37 +43,43 @@
+     "label": "לקוח",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "טלפון",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "עיר",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "שכירות",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "חודשים",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מועד חתימה",
+     "type": "date",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מתווך",
+@@ -82,7 +88,8 @@
+     "enumVals": [
+      "כן",
+      "לא"
+-    ]
++    ],
++    "formula": null
+    },
+    {
+     "label": "אופציה",
+@@ -91,7 +98,8 @@
+     "enumVals": [
+      "כן",
+      "לא"
+-    ]
++    ],
++    "formula": null
+    },
+    {
+     "label": "החלטה",
+@@ -101,25 +109,29 @@
+      "לחתום כמו שזה",
+      "לחתום אחרי שינויים",
+      "לא לחתום"
+-    ]
++    ],
++    "formula": null
+    },
+    {
+     "label": "שכירות לשנה",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": "שכירות * 12"
+    },
+    {
+     "label": "תקרה לפי חודשים",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": "שכירות * 3"
+    },
+    {
+     "label": "תקרה לפי שליש",
+     "type": "text",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": "שכירות * חודשים / 3"
+    }
+   ]
+  },
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..50b08a8 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -34,25 +34,29 @@
+     "label": "מה",
+     "type": "text",
+     "required": true,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "מועד",
+     "type": "date",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "סכום",
+     "type": "num",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    },
+    {
+     "label": "הערה",
+     "type": "multiline",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [],
++    "formula": null
+    }
+   ]
+  },
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..6cbe734 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מחיר עם אגרה = מחיר * 1.03, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

@@ -1,0 +1,91 @@
+{
+ "task": "E02",
+ "ns": "peruk02",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "enum_high": true,
+  "enum_low": true,
+  "label": true
+ },
+ "task_checks": [
+  {
+   "id": "enum_high",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "enum_low",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "label",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Spec regenerated successfully: peruk02 now has 13 fields (was 12)",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Priority field עדיפות{גבוהה|בינונית|נמוכה} added to case entity תיק in peruk02.txt line 6",
+   "check": "field_added",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Dart code generated with priority field: gen_app_peruk02_ent1_c21 = 'עדיפות' with enum values c22='גבוהה', c23='בינונית', c24='נמוכה'",
+   "check": "dart_generated",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Other peruk apps (01, 03-28) remain unchanged in generated output",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only spec file modified (machtzev/generator/specs-ds/peruk02.txt); regenerated via app-ds.mjs",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "84fc6985e931a7d8",
+ "at": "2026-09-10T20:33:06.431Z",
+ "arm": "hf",
+ "wall_s": 864,
+ "cost_usd": 1.985442,
+ "tokens": 10137739
+}

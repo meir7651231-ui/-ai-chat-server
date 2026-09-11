@@ -1,0 +1,80 @@
+{
+ "task": "M04",
+ "ns": "peruk17",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "num_particle": true,
+  "title": true
+ },
+ "task_checks": [
+  {
+   "id": "num_particle",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "title",
+   "ok": true,
+   "info": "5×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "App successfully regenerated from updated spec-ds/peruk17.txt with --name peruk17 --skin",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No other apps modified; only peruk17 app output changed",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All generator gates pass including particles gate (8/8 particles resolved)",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "One [מספר] particle found: ימים לתגובה = [מספר] ימים לתגובה : 30 ימים מקבלת המכתב",
+   "check": "num_particle",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles with flutter analyze; no errors in peruk17 app",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "f28a4ad91a46226f",
+ "at": "2026-09-10T21:11:35.825Z"
+}

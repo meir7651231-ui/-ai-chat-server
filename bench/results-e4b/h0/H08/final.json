@@ -1,0 +1,58 @@
+{
+ "task": "H08",
+ "ns": "panuy",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "calc": true,
+  "abs": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  },
+  {
+   "id": "abs",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "a1eba880352285b0",
+ "at": "2026-09-10T22:19:18.954Z",
+ "arm": "h0",
+ "wall_s": 84,
+ "cost_usd": 0.1230336,
+ "tokens": 384621
+}

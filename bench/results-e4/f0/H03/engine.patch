@@ -1,0 +1,45 @@
+diff --git a/machtzev/generator/particle-plan-tasks.json b/machtzev/generator/particle-plan-tasks.json
+index 0637a08..18e06d7 100644
+--- a/machtzev/generator/particle-plan-tasks.json
++++ b/machtzev/generator/particle-plan-tasks.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "משימה",
++  "name": "טבלה מיון מועד עולה",
++  "expr": "[טבלה] | מיון: מועד עולה",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..8337cc7 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -4,3 +4,4 @@
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+ ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++חלקיק משימה: [טבלה] | מיון: מועד עולה

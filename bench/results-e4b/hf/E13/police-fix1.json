@@ -1,0 +1,90 @@
+{
+ "task": "E13",
+ "ns": "peruk12",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "field": true,
+  "calc": true
+ },
+ "task_checks": [
+  {
+   "id": "field",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "App peruk12 regenerated successfully from spec",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Numeric field קילומטראז׳ added to תיק entity",
+   "check": "field",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed field מחיר לקמ = מחיר / קילומטראז׳ added to תיק entity",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All 31 other app outputs remain byte-identical; only peruk12 changed",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only spec file edited; generated outputs not manually touched",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart passes flutter analyze with 0 errors",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Division operator (/) correctly compiled for numeric fields",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "0a54bc199262c892",
+ "at": "2026-09-10T23:49:58.967Z"
+}

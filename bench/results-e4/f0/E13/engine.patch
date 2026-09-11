@@ -1,0 +1,154 @@
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..cecb7a0 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -61,6 +61,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "קילומטראז׳",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "מה המוכר אמר",
+     "type": "text",
+@@ -72,6 +78,12 @@
+     "type": "bool",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "מחיר לקמ",
++    "type": "num",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..cdb483e 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -530,7 +530,7 @@
+    "לא שמאות במקום שמאי",
+    "לא אל תקנה יד 2"
+   ],
+-  "fields": 4,
++  "fields": 6,
+   "outputs": [
+    "כרטיס",
+    "רשימת שאלות למוכר מקסימום",
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..996c153 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -53,6 +53,9 @@ const allText = (sec) => [...sec.lines, ...sec.subs.flatMap((s) => s.lines)];
+ function fieldsFrom(lines) {
+   const out = []; let req = false;
+   const push = (txt, required) => {
++    // שדה-מחושב «שם = נוסחה» (מבני: הסימן '=' בלבד; entity.mjs מהדר את הנוסחה) ⇒ עובר לספק כמו-שהוא — לא חובה, לא enum, לא טווח
++    const fm = txt.match(/^([^=]+?)\s*=\s*([^=]+)$/);
++    if (fm) { const label = clean(fm[1]); const formula = norm(fm[2]); if (label.length > 1 && heW(formula).length && !out.some((f) => f.label === label)) out.push({ label, formula, required: false }); return; }
+     const base = txt.split('/')[0].replace(/\(.*?\)/g, '').trim();
+     const or = base.split(new RegExp('\\s+' + P.orWord + '\\s+'));
+     if (or.length === 2 && or.every((x) => heW(x).length && heW(x).length <= 2)) { out.push({ label: clean(or[0]) + ' ' + P.orWord + ' ' + clean(or[1]), enumVals: [clean(or[0]), clean(or[1])], required }); return; }
+@@ -156,7 +159,7 @@ export function perukToSpec(md, ns) {
+   const decisions = outputs.filter((o) => o.options.length >= P.decisionMinOptions && o.options.length <= P.decisionMaxOptions).map((o) => ({ label: o.name, enumVals: o.options.map((x) => clean(x).split(' ').slice(0, 4).join(' ')).filter(Boolean) }));
+   // ── ספק ──
+   const root = P.rootNoun, fnd = P.findingNoun;
+-  const fieldStr = (f) => `${f.label}${f.enumVals ? `{${f.enumVals.join('|')}}` : ''}${f.num ? P.numRange : ''}${f.required ? '*' : ''}`;
++  const fieldStr = (f) => f.formula ? `${f.label} = ${f.formula}` : `${f.label}${f.enumVals ? `{${f.enumVals.join('|')}}` : ''}${f.num ? P.numRange : ''}${f.required ? '*' : ''}`;
+   const rootFields = [...P.personFields, ...fields.map(fieldStr), ...decisions.map((dd) => `${dd.label}{${dd.enumVals.join('|')}}`), ...(classes.length ? [`${P.classifyField}{${classes.join('|')}}`] : [])];
+   const lines = [];
+   lines.push(`${G.appWord}: ${d.title || ns}`);
+@@ -174,7 +177,7 @@ export function perukToSpec(md, ns) {
+   for (const g of groupNames) if (g !== groups.disclaimer && g !== groups.example) lines.push(`${G.particleWord} ${severity && g === groups.check ? fnd : root}: ${g} = [${G.pContent[0]} ${g}]`);
+   if (severity) lines.push(`${G.particleWord} ${fnd}: ${P.severityField}`);
+   // דוח: חלק לכל פריט של «מה חוזר»; refs = שדות שתואמים בפירוט, אחרת תוכן-החלק
+-  const fieldLabels = rootFields.map((f) => f.replace(/[{*].*$/, '').trim());
++  const fieldLabels = rootFields.map((f) => f.replace(/[{*=].*$/, '').trim());   // '=' — שדה-מחושב: התווית בלבד, לא הנוסחה
+   const stemOf = (w) => w.replace(/^[בלהומשכ](?=..)/, '').replace(/(יות|ים|ות|ה)$/, '');
+   const matchField = (txt) => { const ws = heW(txt).map(stemOf); return fieldLabels.find((f) => { const fw = heW(f).map(stemOf); return fw.length && fw.every((w) => ws.includes(w)); }) || null; };
+   const kindOfOut = (name) => Object.entries(P.outputKinds).find(([, ws]) => ws.some((w) => name.includes(w)))?.[0] || null;
+diff --git a/machtzev/generator/peruks/peruk-12.md b/machtzev/generator/peruks/peruk-12.md
+index 58df974..4a230d4 100644
+--- a/machtzev/generator/peruks/peruk-12.md
++++ b/machtzev/generator/peruks/peruk-12.md
+@@ -65,7 +65,8 @@
+ שם: «לפני שמעבירים כסף על יד 2. מה חשוד ומה לבדוק.»
+ 
+ ### מה שולחים
+-קישור מודעה / תמונות, מחיר, מה המוכר אמר, האם נסעת.
++קישור מודעה / תמונות, מחיר, קילומטראז׳, מה המוכר אמר, האם נסעת.
++מחיר לקמ = מחיר / קילומטראז׳
+ 
+ ### מה חוזר
+ 1. כרטיס: מחיר מול הגיל/ק״מ, דגלים
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..28b30db 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -209,7 +209,9 @@ function compileFormula(formula, labels, used = null) {
+   for (const f of names) e = e.split(f.t).join(` @${f.idx}@ `);
+   const residue = e.replace(/@F\d+@/g, ' ').replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/(),\s]/g, '');
+   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
+-  let dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)");
++  // חלוקה בשדה-אחות ⇒ מחלק בטוח-לאפס (_nz: ריק/0 ⇒ ∞ ⇒ המנה 0.0 — אותה מוסכמה כמו יחס-חלקיק ב-particles); שדה ריק לא מציג Infinity/NaN
++  e = e.replace(/\/\s*@(\d+)@/g, (m0, n) => { if (used) used.add('/'); return `/ @D${n}@`; });
++  let dart = e.replace(/@D(\d+)@/g, "_nz(num.tryParse(_v[$1] ?? '') ?? 0)").replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)");
+   dart = dart.replace(/@F(\d+)@\(/g, (_, j) => { const fn = fns[+j]; if (used) used.add(fn); return G_FNS[fn] === 'method' ? `_m_${fn}(` : `${fn}(`; }).trim();
+   return /@|[֐-׿]/.test(dart) ? null : (dart || null);
+ }
+@@ -582,7 +584,8 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const tableImport = hasTable ? "import '../dart-ui-bs/ds/ds_table.dart';\n" : '';
+   const sortLine = (sort && sort.length) ? `\n              rs.sort(${sortLambda(sort, k, schema)});` : '';   // L105 · ריק ⇒ אפס בייטים
+   const mathImport = [...usedFns].some((f) => G_FNS[f] === 'math') ? "import 'dart:math';\n" : '';
+-  const mathHelpers = [...usedFns].filter((f) => G_FNS[f] === 'method').sort().map((f) => `\nnum _m_${f}(num x) => x.${f}();`).join('');   // ריק ⇒ אפס בייטים (בייט-זהות לכל אפליקציה שלא משתמשת)
++  const mathHelpers = [...usedFns].filter((f) => G_FNS[f] === 'method').sort().map((f) => `\nnum _m_${f}(num x) => x.${f}();`).join('')
++    + (usedFns.has('/') ? '\nnum _nz(num x) => x == 0 ? double.infinity : x;   // מחלק-שדה בנוסחה: ריק/0 ⇒ המנה 0.0 (לא Infinity/NaN)' : '');   // ריק ⇒ אפס בייטים (בייט-זהות לכל אפליקציה שלא משתמשת)
+   const viewField = hasSwitch ? "  int _view = 0;   // 0=רשימה · לוח · לוח-שנה · טבלה\n" : '';
+   const viewChips = [`'${L.listChip}'`];   // list תמיד
+   const viewIdx = { board: -1, cal: -1, table: -1 };
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index de89656..c4c7ce1 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -23,7 +23,8 @@
+   "רווח",
+   "יתרה",
+   "מ״ר",
+-  "מ\"ר"
++  "מ\"ר",
++  "קילומטראז"
+  ],
+  "typeBool": [
+   "האם",
+diff --git a/machtzev/generator/specs-ds/SPEC-LANG.md b/machtzev/generator/specs-ds/SPEC-LANG.md
+index 96495e3..36137ed 100644
+--- a/machtzev/generator/specs-ds/SPEC-LANG.md
++++ b/machtzev/generator/specs-ds/SPEC-LANG.md
+@@ -8,7 +8,7 @@
+ 
+ ## שדות (בתוך שורת-הישות)
+ - חובה `שם*` · ייחודי `שם!` · בחירה-סגורה `שדה{א|ב|ג}` · ברירת-מחדל `שדה[ערך]` · טווח `שדה(0..100)`
+-- טיפוס לפי מילה בשם: תאריך תאריך / מועד / יום / לידה / תוקף / התחלה / סיום / מתי · מספר מחיר / סכום / תקציב / עלות / כמות / מספר / אחוז / שעות / שטח / רווח / יתרה / מ״ר / מ"ר · כן/לא האם / פעיל / סטטוס / מצב / חסום / מאושר / נכלל · טלפון טלפון / נייד / פלאפון · שעה שעה · אחוז אחוז / אחוזים / ריבית · מקום מקום / כתובת / מיקום · רב-שורתי תיאור / הערה / הערות / פירוט
++- טיפוס לפי מילה בשם: תאריך תאריך / מועד / יום / לידה / תוקף / התחלה / סיום / מתי · מספר מחיר / סכום / תקציב / עלות / כמות / מספר / אחוז / שעות / שטח / רווח / יתרה / מ״ר / מ"ר / קילומטראז · כן/לא האם / פעיל / סטטוס / מצב / חסום / מאושר / נכלל · טלפון טלפון / נייד / פלאפון · שעה שעה · אחוז אחוז / אחוזים / ריבית · מקום מקום / כתובת / מיקום · רב-שורתי תיאור / הערה / הערות / פירוט
+ - **שדה מחושב** `שם = <נוסחה>`: שדות-אחות, מספרים, + - * / ( ) ופונקציות: sqrt(…), min(…), max(…), pow(…), abs(…), round(…), floor(…), ceil(…) (למשל `מרחק בקמ = sqrt(מרחק בריבוע)`, `תקרה = max(תקרה א, תקרה ב)`)
+ - **שדה מותנה** `שם = <שדה> <op> <שדה|מספר> ? <ערך-אם-כן> : <ערך-אם-לא>` (op: > < >= <=) — למשל `קרוב = מרחק בריבוע < 100 ? קרוב : רחוק`
+ - קישור לישות-אם: שם-הישות כשם-שדה (`תיק*`)
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..89a241e 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, קילומטראז׳, מה המוכר אמר, האם נסעת, מחיר לקמ = מחיר / קילומטראז׳ | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

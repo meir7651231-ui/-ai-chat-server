@@ -1,0 +1,87 @@
+{
+ "task": "M13",
+ "ns": "peruk12",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "text": true
+ },
+ "task_checks": [
+  {
+   "id": "text",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "App-ds generator runs successfully, particles gate now shows 7/7 found-and-wired",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only peruk12.txt modified, no other app specs changed",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No orphan files created by generator",
+   "check": "no_orphans",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All gates including particles gate pass - new [מספר] particle properly recognized",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Hebrew text only in spec file, not in engine code",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No math functions in spec",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Flutter analyze produces 0 errors, compiles successfully",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "995cf703d869833d",
+ "at": "2026-09-11T00:05:32.425Z",
+ "arm": "hf",
+ "wall_s": 797,
+ "cost_usd": 1.6845029,
+ "tokens": 8026812
+}

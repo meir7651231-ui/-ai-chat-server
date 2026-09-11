@@ -1,0 +1,72 @@
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..f139b82 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "פגישות",
++  "expr": "[טבלה] | מיון: שעה עולה",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/sort-cmp.mjs b/machtzev/generator/sort-cmp.mjs
+index 720d572..db05eb2 100644
+--- a/machtzev/generator/sort-cmp.mjs
++++ b/machtzev/generator/sort-cmp.mjs
+@@ -1,5 +1,9 @@
+ // 🔀 sort-cmp — מחולל-משווה אחד לכל רשימה ממוינת-מהספק (L105): מספרי כשניתן, אחרת לקסיקלי; שדה-בחירה ⇒ סדר-ההכרזה; ריק ⇒ אחרון; מפתחות משורשרים; יורד ⇒ היפוך.
+ //   קלט: sort=[{field, desc}] · k=מחרוזת⇒קבוע · schema (ל-enumVals). פלט: גוף-למבדה של Dart `(a, b) { … return 0; }`. אפס-מילון: שמות מהספק, מילים מהדאטה.
++//   שדה-שעה (תווית מדקדוק-האפיון typeTime, כמו isTimeLabel בשלד): «9:00» לפני «16:30» — דקות-מהחצות כששני הערכים שעה, אחרת לקסיקלי. שדות אחרים ביט-זהים.
++import fs from 'node:fs';
++const G0 = JSON.parse(fs.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
++const isTimeField = (f) => !!f && !/^(num|date|bool|multiline)$/.test(f.type || '') && !(f.enumVals && f.enumVals.length) && String(f.label).split(/\s+/).some((w) => (G0.typeTime || []).includes(w));
+ export function sortLambda(sort, k, schema) {
+   const body = (sort || []).map((o) => {
+     const kc = k(o.field); const f = (schema || []).find((s) => s.label === o.field);
+@@ -7,7 +11,9 @@ export function sortLambda(sort, k, schema) {
+     const evList = ev ? ev.map((v) => k(v)).join(', ') : '';   // קבועים פעם אחת (בייט-חסכוני)
+     const cmp = ev
+       ? `final o = [${evList}]; final c = o.indexOf(x).compareTo(o.indexOf(y));`
+-      : `final nx = num.tryParse(x), ny = num.tryParse(y); final c = (nx != null && ny != null) ? nx.compareTo(ny) : x.compareTo(y);`;
++      : isTimeField(f)
++        ? `final tx = RegExp(r'^\\s*(\\d{1,2}):(\\d{2})').firstMatch(x), ty = RegExp(r'^\\s*(\\d{1,2}):(\\d{2})').firstMatch(y); final c = (tx != null && ty != null) ? (int.parse(tx.group(1)!) * 60 + int.parse(tx.group(2)!)).compareTo(int.parse(ty.group(1)!) * 60 + int.parse(ty.group(2)!)) : x.compareTo(y);`
++        : `final nx = num.tryParse(x), ny = num.tryParse(y); final c = (nx != null && ny != null) ? nx.compareTo(ny) : x.compareTo(y);`;
+     return `{ final x = a[${kc}] ?? '', y = b[${kc}] ?? ''; if (x.isEmpty != y.isEmpty) return x.isEmpty ? 1 : -1; ${cmp} if (c != 0) return ${o.desc ? '-c' : 'c'}; }`;
+   }).join(' ');
+   return `(a, b) { ${body} return 0; }`;
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..a4015ab 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,5 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים | מיון: שעה עולה
++חלקיק פגישה: פגישות = [טבלה] | מיון: שעה עולה

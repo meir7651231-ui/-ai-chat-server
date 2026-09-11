@@ -1,0 +1,97 @@
+{
+ "task": "M09",
+ "ns": "tasks",
+ "verdict": "NOT DONE",
+ "missing": [
+  "byte_identical_others"
+ ],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": false,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "ent2": true,
+  "empty": true
+ },
+ "task_checks": [
+  {
+   "id": "ent2",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "empty",
+   "ok": true,
+   "info": "data:px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "changed_others": [
+   "dart-gen-bs/gen_app_panuy_px1.dart",
+   "dart-gen-bs/gen_app_peruk01_px1.dart",
+   "dart-gen-bs/gen_app_peruk02_px1.dart",
+   "dart-gen-bs/gen_app_peruk03_px1.dart",
+   "dart-gen-bs/gen_app_peruk04_px1.dart",
+   "dart-gen-bs/gen_app_peruk05_px1.dart",
+   "dart-gen-bs/gen_app_peruk06_px1.dart",
+   "dart-gen-bs/gen_app_peruk07_px1.dart"
+  ],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator re-ran with תזכורת entity added",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only spec-ds/tasks.txt modified - expected edit",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps unchanged",
+   "check": "byte_identical_others",
+   "verdict": "FALSE"
+  },
+  {
+   "text": "Spec syntax valid, cascade rule correct",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Two new particle screens generated for תזכורת",
+   "check": "ent2",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Empty state particle defined: אין תזכורות",
+   "check": "empty",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 1,
+ "signature": "be6442190adbac83",
+ "at": "2026-09-10T23:02:15.264Z"
+}

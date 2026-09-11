@@ -1,0 +1,62 @@
+diff --git a/machtzev/generator/particle-plan-peruk17.json b/machtzev/generator/particle-plan-peruk17.json
+index 1fbd18b..ca2e690 100644
+--- a/machtzev/generator/particle-plan-peruk17.json
++++ b/machtzev/generator/particle-plan-peruk17.json
+@@ -53,6 +53,33 @@
+    "DsChipButton"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "פעולה שלח תזכורת",
++  "expr": "[פעולה] שלח תזכורת",
++  "ok": true,
++  "why": null,
++  "shape": "act",
++  "ops": [
++   "action"
++  ],
++  "picks": [
++   {
++    "op": "action",
++    "atoms": [
++     "ProposePrimaryBtn"
++    ],
++    "alts": [
++     "ProposePrimaryBtn",
++     "DsChipButton",
++     "DsPrimaryButton"
++    ]
++   }
++  ],
++  "wired": [
++   "DsChipButton"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "ריק אין תיקים עדיין",
+diff --git a/machtzev/generator/particle-plan-peruk17.md b/machtzev/generator/particle-plan-peruk17.md
+index c44d091..8c55df3 100644
+--- a/machtzev/generator/particle-plan-peruk17.md
++++ b/machtzev/generator/particle-plan-peruk17.md
+@@ -4,6 +4,7 @@
+ |---|---|---|---|---|
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
++| פעולה שלח תזכורת | תיק | act | action⇒ProposePrimaryBtn (ProposePrimaryBtn/DsChipButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/specs-ds/peruk17.txt b/machtzev/generator/specs-ds/peruk17.txt
+index 9284905..8bd89e3 100644
+--- a/machtzev/generator/specs-ds/peruk17.txt
++++ b/machtzev/generator/specs-ds/peruk17.txt
+@@ -9,6 +9,7 @@
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
++חלקיק תיק: [פעולה] שלח תזכורת
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]

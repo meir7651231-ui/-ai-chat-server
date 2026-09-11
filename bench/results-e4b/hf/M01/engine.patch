@@ -1,0 +1,103 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..d406b10 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-m01task · ישויות-בנות עם cascade delete מוגדרות בשפת-הספק בלי מגע במנוע (10.9, peruk02 תשלום · M01)
++GATE: gates_pass, regen_ok
++ANTIPATTERN: none (spec-only change)
++RULE: להוסיף ישות-בת מנובטת לתיק (תיק=foreign-key, הורה), נעשה בשפת-הספק בלבד: (1) `ישות <שם> עם <שדה>, <שדה>, … | מחיקה: <הורה>=מפל` (2) `חלקיק <שם>: [טבלה]` לתצוגה; כל שדה בשם-מעמיק (`סכום` ל-amount, `שולם{כן|לא}` ל-yes/no); אין נגיעה ב-engine — המחולל קורא את `relations.dart` היוצר מהספק ומשלב ב-AppStore. צילום-אימות: ערך-אמת שדה, טיפוס-נכון, קישוריות, מחיקה-מפל.
++מה נכשל: ללא (task הושלם תחת פרוטוקול, zero issues).
++דוגמה: `ישות תשלום עם תיק*, סכום*, שולם{כן|לא} | מחיקה: תיק=מפל` + `חלקיק תשלום: [טבלה]` → 3 קבצי-ent מחוללים, rel ent3→ent1, אפס שיבוש לאפליקציות אחרות, flutter analyze 0 errors. לקח עבור גלים: spec-lang דיג מלא עם cascade syntax בשפה; בדיקה-עצמאית של cascade = delete-parent-must-cascade-child (bq/firebase).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk02.json b/machtzev/generator/apps/peruk02.json
+index 21319c4..c8b7262 100644
+--- a/machtzev/generator/apps/peruk02.json
++++ b/machtzev/generator/apps/peruk02.json
+@@ -116,6 +116,10 @@
+   {
+    "name": "ממצא",
+    "slug": "app_peruk02_ent2"
++  },
++  {
++   "name": "תשלום",
++   "slug": "app_peruk02_ent3"
+   }
+  ],
+  "relations": true,
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..cb55733 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -240,6 +240,33 @@
+    "DsNote"
+   ]
+  },
++ {
++  "entity": "תשלום",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "לוח",
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..39dced4 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -10,6 +10,7 @@
+ | בדיקה | ממצא | content | group⇒SectionHeader (SectionHeader/DsSection) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
++| טבלה | תשלום | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..1c79cba 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -5,6 +5,7 @@
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, סכום הפיקדון*, מה המשכיר אמר הודעה*, תאריך מסירת מפתח*, חוזה לפחות סעיפי בטוחה*, תיקונים*, יציאה*, פרוטוקול כניסה יציאה, תמונות כניסה ויציאה, וואטסאפ מלא עם המשכיר, קבלות על תיקונים שהוא | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ ישות ממצא עם תיק*, סעיף, מה כתוב, מה לבקש, צבע{אדום|צהוב|ירוק} | מחיקה: תיק=מפל
++ישות תשלום עם תיק*, סכום*, שולם{כן|לא} | מחיקה: תיק=מפל
+ לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+@@ -15,6 +16,7 @@
+ חלקיק ממצא: בדיקה = [תוכן בדיקה]
+ חלקיק תיק: אסור = [תוכן אסור]
+ חלקיק ממצא: צבע
++חלקיק תשלום: [טבלה]
+ דוח תיק: כרטיס = [תוכן כרטיס]
+ דוח תיק: טבלת שורות = [תוכן טבלת שורות]
+ דוח תיק: סכום יעד לדרישה = [תוכן סכום יעד לדרישה]

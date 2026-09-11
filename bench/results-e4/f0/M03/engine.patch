@@ -1,0 +1,55 @@
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..8dfb4c9 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -44,3 +44,4 @@
+ | תיק | בקשות לשינוי | ממצא.מה לבקש | childParticle | DsChip |
+ | תיק | מה לא בדקנו | [תוכן לא נבדק] | content | DsNote |
+ | תיק | הסתייגות | [תוכן הסתייגות] | content | DsNote |
++| תיק | סיכום | [תוכן סיכום] | content | DsNote |
+diff --git a/machtzev/generator/report-plan-sechirut.json b/machtzev/generator/report-plan-sechirut.json
+index 3b397a7..4d5a10d 100644
+--- a/machtzev/generator/report-plan-sechirut.json
++++ b/machtzev/generator/report-plan-sechirut.json
+@@ -193,6 +193,19 @@
+       ]
+      }
+     ]
++   },
++   {
++    "name": "סיכום",
++    "refs": [
++     {
++      "raw": "[תוכן סיכום]",
++      "mode": "content",
++      "why": null,
++      "wired": [
++       "DsNote"
++      ]
++     }
++    ]
+    }
+   ]
+  }
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..25cefb9 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -39,6 +39,7 @@
+ דוח תיק: בקשות לשינוי = ממצא.מה לבקש
+ דוח תיק: מה לא בדקנו = [תוכן לא נבדק]
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
++דוח תיק: סיכום = [תוכן סיכום]
+ דוח תיק: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה
+ תוכן בדיקה [אדום]: כניסת משכיר בלי הודעה מראש
+ תוכן בדיקה [אדום]: «אין החזר פיקדון בשום מקרה»
+@@ -86,6 +87,9 @@
+ תוכן אסור: הבטחה שהמשכיר יסכים
+ תוכן לא נבדק: מצב פיזי של הדירה, טאבו, חובות ועד, בטיחות חשמל — אלא אם צורפו מסמכים.
+ תוכן הסתייגות: זו קריאת סיכונים, לא ייעוץ משפטי. חוזה חריג / סכסוך — עורך דין.
++תוכן סיכום: הבטוחות ייבדקו מול התקרה.
++תוכן סיכום: הסעיפים האדומים קודמים לכל בקשה אחרת.
++תוכן סיכום: ההחלטה נשלחת למשכיר עד מועד החתימה.
+ תוכן הודעה: קיבלתי את החוזה. ההחלטה שלי: {ערך}. תשובה עד מועד החתימה.
+ תוכן הודעה [לחתום אחרי שינויים]: קיבלתי את החוזה. אחתום אחרי השינויים האלה: {ממצא.מה לבקש}. הבטוחות לא יעלו על {תקרה לפי 3 חודשים} ₪ במצטבר. תשובה עד מועד החתימה.
+ תוכן הודעה [לא לחתום]: קיבלתי את החוזה. בתנאים האלה לא אחתום: {ממצא.מה לבקש}. אם זה משתנה — אשמח לדבר.

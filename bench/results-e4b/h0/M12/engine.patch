@@ -1,0 +1,67 @@
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..4985058 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -240,6 +240,33 @@
+    "DsNote"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "ממוצע פיקדון",
++  "expr": "[תוכן ממוצע פיקדון]",
++  "ok": true,
++  "why": null,
++  "shape": "content",
++  "ops": [
++   "alert"
++  ],
++  "picks": [
++   {
++    "op": "alert",
++    "atoms": [
++     "ToastCard"
++    ],
++    "alts": [
++     "ToastCard",
++     "AlertBanner@premium/feedback",
++     "DsNote"
++    ]
++   }
++  ],
++  "wired": [
++   "DsNote"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "לוח",
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..c530bf3 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -10,6 +10,7 @@
+ | בדיקה | ממצא | content | group⇒SectionHeader (SectionHeader/DsSection) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
++| ממוצע פיקדון | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..9139bf0 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -15,6 +15,7 @@
+ חלקיק ממצא: בדיקה = [תוכן בדיקה]
+ חלקיק תיק: אסור = [תוכן אסור]
+ חלקיק ממצא: צבע
++חלקיק תיק: ממוצע פיקדון = [תוכן ממוצע פיקדון]
+ דוח תיק: כרטיס = [תוכן כרטיס]
+ דוח תיק: טבלת שורות = [תוכן טבלת שורות]
+ דוח תיק: סכום יעד לדרישה = [תוכן סכום יעד לדרישה]
+@@ -91,3 +92,4 @@
+ תוכן אם מתעלמים מדרגה הבאה: לא מייצגים בבית משפט
+ תוכן מה חסר: אם אין תמונות כניסה — לכתוב שזה מחליש
+ תוכן מה חסר: זמן: עד סוף היום
++תוכן ממוצע פיקדון: ממוצע סכום הפיקדון בכל התיקים

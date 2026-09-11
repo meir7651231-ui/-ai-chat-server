@@ -1,0 +1,10 @@
+ M machtzev/INDEX.md
+ M machtzev/generator/apps/calendar.json
+ M machtzev/generator/spec-lang.data.json
+ M machtzev/generator/specs-ds/SPEC-LANG.md
+ M machtzev/generator/specs-ds/calendar.txt
+ M machtzev/pins.sha256
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

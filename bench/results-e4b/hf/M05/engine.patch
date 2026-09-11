@@ -1,0 +1,144 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 60e65de..2e5a062 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -8,6 +8,7 @@ import fs from 'node:fs';
+ import path from 'node:path';
+ import { interpret as entInterpret } from './entity.mjs';
+ import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write, setLook, getLook } from './render-ds.mjs';
++import { resetLook } from './look.mjs';
+ import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, renderReportTest, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
+ import { nlToSpec } from './nl-spec.mjs';
+ import { pickRoot, renderRootPage, renderShell, renderHome, renderBehavior } from './app-shell.mjs';
+@@ -305,6 +306,7 @@ export function buildApp(specText) {
+   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
+   renderMain(`${P}main`, { title: appTitle, hubSlug: home.slug, hubCls: home.cls, edges });
+ 
++  resetLook();   // reset for next app-ds in same process
+   return { screens, sys, roles };
+ }
+ 
+diff --git a/machtzev/generator/look.mjs b/machtzev/generator/look.mjs
+index eedbacd..495888c 100644
+--- a/machtzev/generator/look.mjs
++++ b/machtzev/generator/look.mjs
+@@ -8,6 +8,7 @@ import * as R from '../root.mjs';
+ let LOOK = 'dark';
+ export const setLook = (l) => { LOOK = l || 'dark'; };
+ export const getLook = () => LOOK;
++export const resetLook = () => { LOOK = 'dark'; };
+ export const isPaper = () => LOOK === 'paper';
+ const GLYPH_RE = /^(?:[\p{Extended_Pictographic}☀-➿⬀-⯿\u{1F000}-\u{1FAFF}][️‍]?)+\s*/u;
+ export const stripGlyph = (s) => String(s).replace(GLYPH_RE, '');
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..2e942c6 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -200,6 +200,46 @@
+    "DsNote"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "תשובה",
++  "expr": "[הודעה] סיווג = [תוכן תשובה]",
++  "ok": true,
++  "why": null,
++  "shape": "message",
++  "ops": [
++   "switch",
++   "alert"
++  ],
++  "picks": [
++   {
++    "op": "switch",
++    "atoms": [
++     "SegmentedSwitch"
++    ],
++    "alts": [
++     "SegmentedSwitch",
++     "ForgeCheckPop",
++     "ForgePickerOptionsPanelSelection"
++    ]
++   },
++   {
++    "op": "alert",
++    "atoms": [
++     "AlertBanner@premium/feedback"
++    ],
++    "alts": [
++     "AlertBanner@premium/feedback",
++     "ToastCard",
++     "DsNote"
++    ]
++   }
++  ],
++  "wired": [
++   "ForgeMustChip",
++   "DsNote"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "לוח",
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..65be595 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| תשובה | תיק | message | switch⇒SegmentedSwitch (SegmentedSwitch/ForgeCheckPop) · alert⇒AlertBanner (AlertBanner/ToastCard) | ForgeMustChip + DsNote |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index 287b322..f9d0b2c 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -191,7 +191,10 @@ export function searchOp(op, goal, need = null, k = 3) {   // need: דריסת-
+ }
+ 
+ // ── 4 · חיווט: שקעי-האטום ⇐ דאטה אמיתית. אין דאטה לשקע-חובה ⇒ null (האטום נפסל) ──
+-let ATLAS = null; const atlas = () => (ATLAS ||= buildAtlas({ forge: isPaper() }));   // G28 · נייר: גם אטומי-forge (לובשי-עור) ברי-חיווט ישיר; כהה = אטלס ביט-זהה
++let ATLAS = null;
++const atlas = () => (ATLAS ||= buildAtlas({ forge: isPaper() }));
++const resetAtlas = () => { ATLAS = null; };   // reset for next app-ds in same process
++// G28 · נייר: גם אטומי-forge (לובשי-עור) ברי-חיווט ישיר; כהה = אטלס ביט-זהה
+ const widgetOf = (cls) => atlas().widgets.find((w) => w.cls === cls) || null;
+ const SOCK = {
+   value: /^(value|val|amount|total|count|num)$/, label: /^(label|title|caption|name|text)$/, sub: /^(sub|subtitle|desc|body|note)$/,
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..be953ec 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -139,7 +139,7 @@ function pickXform(label, ftype) {
+ 
+ // מחולל-תוכן: אוסף מחרוזות-עברית ⇒ const; מחזיר את שם-הקבוע לשיבוץ בקוד.
+ // G28 · המראה (הכרעה-28): מצב-המראה חי ב-look.mjs (משותף ל-particles/app-shell בלי מעגל-ייבוא); כאן רק re-export + השימוש ב-k().
+-export { setLook, getLook, isPaper, stripGlyph } from './look.mjs';
++export { setLook, getLook, resetLook, isPaper, stripGlyph } from './look.mjs';
+ export function makeConsts(slug) {
+   const consts = [];
+   const k = (s) => {
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..25f5479 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -14,6 +14,7 @@
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: סיווג = [תוכן סיווג]
+ חלקיק תיק: אסור = [תוכן אסור]
++חלקיק תיק: תשובה = [הודעה] סיווג = [תוכן תשובה]
+ דוח תיק: כרטיס בעברית פשוטה = [תוכן כרטיס בעברית פשוטה]
+ דוח תיק: רשימת הגשה = [תוכן רשימת הגשה]
+ דוח תיק: טיוטת תשובה קצרה למחנכת = [תוכן טיוטת תשובה קצרה למחנכת]
+@@ -38,6 +39,7 @@
+ תוכן סיווג [הזמנה לוועדה]: צ׳ק־ליסט + 5 נקודות שההורה רוצה שייאמרו + שאלות.
+ תוכן סיווג [דחיית סיוע]: עילה מול מה אפשר לבקש עיון מחדש. בלי הבטחה.
+ תוכן סיווג [הילד מפריע]: בקשת פגישה + דוגמאות. לא מכתב האשמה.
++תוכן תשובה: קיבלתי, הסיווג: {ערך}
+ תוכן אסור: לאבחן ADHD מהתיאור
+ תוכן אסור: להבטיח שעות שילוב
+ תוכן אסור: לכתוב במקום הילד שיעורי בית להגשה כאילו הוא כתב

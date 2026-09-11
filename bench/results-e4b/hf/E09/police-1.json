@@ -1,0 +1,80 @@
+{
+ "task": "E09",
+ "ns": "peruk25",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "field": true,
+  "calc": true
+ },
+ "task_checks": [
+  {
+   "id": "field",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "סכום פיצויים numeric field added to תיק entity and generated as gen_app_peruk25_ent1_c19",
+   "check": "field",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "פיצויים לשנה computed field correctly calculates סכום פיצויים * 12 with formula ((num.tryParse(_v[6] ?? '') ?? 0) * 12).toStringAsFixed(2)",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "App regenerated successfully with node app-ds.mjs --name peruk25",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other 27 peruk apps remain byte-identical",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Dart compilation passes with 0 analyzer errors in generated Dart code",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "bf1280c01275c6ca",
+ "at": "2026-09-10T22:29:24.456Z"
+}

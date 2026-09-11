@@ -1,0 +1,193 @@
+diff --git a/machtzev/generator/apps/peruk17.json b/machtzev/generator/apps/peruk17.json
+index e752fbd..260fb2e 100644
+--- a/machtzev/generator/apps/peruk17.json
++++ b/machtzev/generator/apps/peruk17.json
+@@ -66,6 +66,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "מספר ימים",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "סיווג",
+     "type": "text",
+diff --git a/machtzev/generator/particle-plan-peruk17.json b/machtzev/generator/particle-plan-peruk17.json
+index 1fbd18b..73a6b0d 100644
+--- a/machtzev/generator/particle-plan-peruk17.json
++++ b/machtzev/generator/particle-plan-peruk17.json
+@@ -199,5 +199,32 @@
+   "wired": [
+    "DsNote"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "ימים לתגובה",
++  "expr": "[מספר] מספר ימים: 30 ימים מקבלת המכתב",
++  "ok": true,
++  "why": null,
++  "shape": "number",
++  "ops": [
++   "hero"
++  ],
++  "picks": [
++   {
++    "op": "hero",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk17.md b/machtzev/generator/particle-plan-peruk17.md
+index c44d091..040fe09 100644
+--- a/machtzev/generator/particle-plan-peruk17.md
++++ b/machtzev/generator/particle-plan-peruk17.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| ימים לתגובה | תיק | number | hero⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+@@ -20,4 +21,5 @@
+ | תיק | טיוטת נלווה קצרה | [תוכן טיוטת נלווה קצרה] | content | DsNote |
+ | תיק | מה לא לשלוח ערמה | [תוכן מה לא לשלוח ערמה] | content | DsNote |
+ | תיק | מתי לעו״ד לחבר מגיש | [תוכן מתי לעו״ד לחבר מגיש] | content | DsNote |
++| תיק | ימים לתגובה | ימים לתגובה | particle | KvLine |
+ | תיק | הסתייגות | [תוכן הסתייגות] | content | DsNote |
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..b844cf9 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -757,13 +757,14 @@
+    "לא ייצוג בוועדה",
+    "לא תיק נכות מלא"
+   ],
+-  "fields": 3,
++  "fields": 4,
+   "outputs": [
+    "כרטיס",
+    "רשימת מסמכים ממוספרת",
+    "טיוטת נלווה קצרה",
+    "מה לא לשלוח ערמה",
+-   "מתי לעו״ד לחבר מגיש"
++   "מתי לעו״ד לחבר מגיש",
++   "ימים לתגובה"
+   ],
+   "severity": false,
+   "classes": [
+diff --git a/machtzev/generator/peruk-lang.data.json b/machtzev/generator/peruk-lang.data.json
+index 74d8d89..4215e63 100644
+--- a/machtzev/generator/peruk-lang.data.json
++++ b/machtzev/generator/peruk-lang.data.json
+@@ -165,7 +165,8 @@
+    "השוואה"
+   ],
+   "number": [
+-   "מספר"
++   "מספר",
++   "ימים"
+   ],
+   "message": [
+    "הודעה",
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..7510b22 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -179,12 +179,13 @@ export function perukToSpec(md, ns) {
+   const matchField = (txt) => { const ws = heW(txt).map(stemOf); return fieldLabels.find((f) => { const fw = heW(f).map(stemOf); return fw.length && fw.every((w) => ws.includes(w)); }) || null; };
+   const kindOfOut = (name) => Object.entries(P.outputKinds).find(([, ws]) => ws.some((w) => name.includes(w)))?.[0] || null;
+   const dateFields = fieldLabels.filter((f) => G.typeDate.some((w) => f.includes(w)));
++  const numish = (f) => G.typeNum.some((w) => f.includes(w));   // שדה-קליטה שמנוע-הישויות יקליד כמספר (אותם רמזי-typeNum) — כשיר ל-[מספר] כמו שדה-זוג, רק כשחלק-הפלט נושא הערת-תנאים (G29: ערך+תווית+הערה)
+   const extraParticles = [];
+   for (const o of outputs) {
+     const kind = kindOfOut(o.name);
+     // G29 · צורות-פלט: דיף (יש זוגות) · מספר (שדה-מספרי תואם) · הודעה (יש החלטה) · לוח (יש תאריכים) — אחרת נופל לתוכן
+     if (kind === 'diff' && pairs.length) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pDiff[0]}] ${pairs.map((pr) => `${pr.a} ${G.pairArrow[0]} ${pr.b}${pr.factor ? ` × ${pr.factor}` : ''}`).join('; ')}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; }
+-    if (kind === 'number') { const nf = fields.find((f) => f.num && matchField(f.label) && heW(o.name).map(stemOf).some((w) => heW(f.label).map(stemOf).includes(w))); if (nf) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pNumber[0]}] ${nf.label}${o.detail.length ? `: ${q(o.detail[0])}` : ''}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; } }
++    if (kind === 'number') { const nf = fields.find((f) => (f.num || (numish(f.label) && o.detail.length)) && matchField(f.label) && heW(o.name).map(stemOf).some((w) => heW(f.label).map(stemOf).includes(w))); if (nf) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pNumber[0]}] ${nf.label}${o.detail.length ? `: ${q(o.detail[0])}` : ''}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; } }
+     if (kind === 'message' && decisions.length) {
+       // משפט שבו מציין-מקום ללא שדה-תואם נשמט כולו («תשובה עד .» לא ייכתב) — לא נשארת שארית-תבנית
+       const dec = decisions[0]; const tpl = P.messageTemplate.split(/(?<=[.!?])\s+/).map((sent) => { let bad = false; const s2 = sent.replace(/\{([^}]+)\}/g, (m0, ph) => { if (ph === G.pValueWord || ph.includes('.')) return m0; const f = matchField(ph); if (f) return `{${f}}`; bad = true; return ''; }); return bad ? '' : s2; }).filter(Boolean).join(' ');
+diff --git a/machtzev/generator/peruks/peruk-17.md b/machtzev/generator/peruks/peruk-17.md
+index ae725fd..4020a2b 100644
+--- a/machtzev/generator/peruks/peruk-17.md
++++ b/machtzev/generator/peruks/peruk-17.md
+@@ -61,7 +61,7 @@
+ שם: «המכתב מביטוח לאומי. מה חסר ומה לשלוח עד מתי.»
+ 
+ ### מה שולחים
+-המכתב המלא, איזו בקשה, מה כבר הוגש.
++המכתב המלא, איזו בקשה, מה כבר הוגש, מספר ימים.
+ 
+ ### מה חוזר
+ 1. כרטיס: גמלה, סוג מכתב, דדליין
+@@ -69,6 +69,7 @@
+ 3. טיוטת נלווה קצרה
+ 4. מה לא לשלוח (ערמה לא רלוונטית)
+ 5. מתי לעו״ד / לחבר מגיש תביעות
++6. ימים לתגובה: 30 ימים מקבלת המכתב
+ 
+ ---
+ 
+diff --git a/machtzev/generator/report-plan-peruk17.json b/machtzev/generator/report-plan-peruk17.json
+index dc5a1c1..7299a4c 100644
+--- a/machtzev/generator/report-plan-peruk17.json
++++ b/machtzev/generator/report-plan-peruk17.json
+@@ -76,6 +76,19 @@
+      }
+     ]
+    },
++   {
++    "name": "ימים לתגובה",
++    "refs": [
++     {
++      "raw": "ימים לתגובה",
++      "mode": "particle",
++      "why": null,
++      "wired": [
++       "KvLine"
++      ]
++     }
++    ]
++   },
+    {
+     "name": "הסתייגות",
+     "refs": [
+diff --git a/machtzev/generator/specs-ds/peruk17.txt b/machtzev/generator/specs-ds/peruk17.txt
+index 9284905..c947317 100644
+--- a/machtzev/generator/specs-ds/peruk17.txt
++++ b/machtzev/generator/specs-ds/peruk17.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, המכתב המלא, איזו בקשה, מה כבר הוגש, סיווג{השלמת מסמכים|דחייה לגופה|זימון ועדה|נגמר השעון} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, המכתב המלא, איזו בקשה, מה כבר הוגש, מספר ימים, סיווג{השלמת מסמכים|דחייה לגופה|זימון ועדה|נגמר השעון} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+@@ -19,6 +19,8 @@
+ דוח תיק: טיוטת נלווה קצרה = [תוכן טיוטת נלווה קצרה]
+ דוח תיק: מה לא לשלוח ערמה = [תוכן מה לא לשלוח ערמה]
+ דוח תיק: מתי לעו״ד לחבר מגיש = [תוכן מתי לעו״ד לחבר מגיש]
++דוח תיק: ימים לתגובה = ימים לתגובה
++חלקיק תיק: ימים לתגובה = [מספר] מספר ימים: 30 ימים מקבלת המכתב
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
+ דוח תיק: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה
+ תוכן מסגרת: כל גמלה טופס + מסמכים + שעון שונה

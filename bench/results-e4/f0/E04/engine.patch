@@ -1,0 +1,473 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 60e65de..b53cd62 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -95,7 +95,7 @@ export function buildApp(specText) {
+   for (const li of info) if (li.isEnt) {
+     const r = entRes[li.i];
+     const eslug = `${P}ent${li.i}`;
+-    entMeta.push({ name: r.entity, slug: eslug, fields: r.schema.length, stages: (r.stages || []).length, stageLabels: r.stages || [], icon: '🗂️', numFields: r.schema.filter((s) => s.type === 'num').map((s) => s.label), labels: r.schema.map((s) => s.label) });
++    entMeta.push({ name: r.entity, slug: eslug, fields: r.schema.length, stages: (r.stages || []).length, stageLabels: r.stages || [], closedFrom: r.closedFrom, icon: '🗂️', numFields: r.schema.filter((s) => s.type === 'num').map((s) => s.label), labels: r.schema.map((s) => s.label) });
+     if (!(r.entity in nameToSlug)) nameToSlug[r.entity] = eslug;   // שם ⇒ slug-היעד לקשרים
+   }
+   const entityNames = entMeta.map((e) => e.name);
+@@ -158,7 +158,7 @@ export function buildApp(specText) {
+         hidden: roles.map((role) => r.schema.map((s, i) => (role.hide || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+         readonly: roles.map((role) => r.schema.map((s, i) => (role.ro || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+       } : null;
+-      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz, sort: r.sort || [] });
++      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], closedFrom: r.closedFrom, entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz, sort: r.sort || [] });
+       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} ${L.fieldsWord}${(r.stages || []).length ? ` · ${r.stages.length} ${L.stagesWord}` : ''}` });
+     } else {
+       const slug = `${P}scr${li.i}`;
+@@ -222,7 +222,7 @@ export function buildApp(specText) {
+   let overN = 0;
+   for (const e of drawer ? entMeta : []) {
+     if (!(e.stageLabels || []).length && !(e.numFields || []).length) continue;   // אין מה להרכיב מעבר ללי מסך-הישות
+-    const c = renderCompose(`${P}over${++overN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], numFields: e.numFields || [], stages: e.stageLabels || [], detail: detailByEnt[e.slug] || null, scopeField: scopeByEnt[e.slug] || null });
++    const c = renderCompose(`${P}over${++overN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], numFields: e.numFields || [], stages: e.stageLabels || [], closedFrom: e.closedFrom, detail: detailByEnt[e.slug] || null, scopeField: scopeByEnt[e.slug] || null });
+     if (c) composeScreens.push({ slug: c.slug, cls: c.cls, kind: 'entity', name: `🧩 ${e.name} · ${L.overviewTag}`, icon: '🧩', sub: L.composedSub });
+     else overN--;
+   }
+@@ -282,7 +282,7 @@ export function buildApp(specText) {
+   const rootMeta = pickRoot(entMeta, backRefs);
+   let home = { slug: `${P}hub`, cls: hub.cls };
+   if (rootMeta) {
+-    const entOf = (name) => { const sc = screens.find((x) => x.kind === 'entity' && x.name === name); const li = info.find((x) => x.isEnt && entRes[x.i] && entRes[x.i].entity === name); const r = li ? entRes[li.i] : null; return { name, slug: nameToSlug[name], cls: sc ? sc.cls : null, schema: r ? r.schema : [], stages: r ? (r.stages || []) : [], icon: '🗂️' }; };
++    const entOf = (name) => { const sc = screens.find((x) => x.kind === 'entity' && x.name === name); const li = info.find((x) => x.isEnt && entRes[x.i] && entRes[x.i].entity === name); const r = li ? entRes[li.i] : null; return { name, slug: nameToSlug[name], cls: sc ? sc.cls : null, schema: r ? r.schema : [], stages: r ? (r.stages || []) : [], closedFrom: r ? r.closedFrom : undefined, icon: '🗂️' }; };
+     const descRank = (f) => (f.required && !(f.enumVals && f.enumVals.length) && !/^(num|date|bool|multiline)$/.test(f.type || '')) ? -1 : f.type === 'multiline' ? 0 : (f.enumVals && f.enumVals.length) ? 3 : f.type === 'num' ? 4 : f.type === 'date' ? 5 : f.type === 'bool' ? 6 : f.label.split(/\s+/).length > 1 ? 1 : 2;   // מתאר-רשומה לפי צורה: טקסט-חובה (זהות) > רב-שורתי > תווית-רב-מילים > טקסט > enum > מספר > תאריך; שוויון = סדר-הספק
+     const descOf = (e, skip = []) => { const t = e.schema.filter((f) => !f.formula && !(f.members && f.members.length) && !skip.includes(f.label) && !entMeta.some((x) => x.name === f.label)).map((f, i) => [descRank(f), i, f]).sort((a, b) => a[0] - b[0] || a[1] - b[1]); return t.length ? t[0][2].label : null; };
+     const rootE = entOf(rootMeta.name); rootE.descField = descOf(rootE); rootE.subField = (rootE.schema.find((f) => f.label !== rootE.descField && !(f.members && f.members.length) && !entMeta.some((x) => x.name === f.label)) || {}).label || null;
+@@ -299,7 +299,8 @@ export function buildApp(specText) {
+     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr });
+     home = { slug: `${P}shell`, cls: shell.cls };
+     // G33 · מניפסט-המודול (הכרעה-29): מה ש«בלגן» (האפליקציה-האחת) צריך כדי למזג את המודול — מסכים · שורש · שדות · שרשרת. נגזר, לא יד.
+-    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [] })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
++    // root.closedFrom (שלבים-סופיים, '| סופיים:') נפלט רק כשאינו השלב-האחרון — כל מניפסט קיים נשאר ביט-זהה; הקוראים (app-shell.closedFromOf · balagan) מניחים «אחרון» כשחסר.
++    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], ...(Number.isInteger(rootE.closedFrom) && rootE.closedFrom < (rootE.stages || []).length - 1 ? { closedFrom: rootE.closedFrom } : {}), fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [] })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
+     console.log(`🧭 ${L.shellLog}: ${L.shellRootWord} ${rootMeta.name} · ${kids.length} ${L.shellChildrenWord} · ${shell.nav || '—'}${[...rootPage.notes, ...shell.notes].length ? ' · ⚪ ' + [...rootPage.notes, ...shell.notes].join(' · ') : ''}`);
+   }
+   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
+diff --git a/machtzev/generator/app-shell.mjs b/machtzev/generator/app-shell.mjs
+index 8cd573c..514d1db 100644
+--- a/machtzev/generator/app-shell.mjs
++++ b/machtzev/generator/app-shell.mjs
+@@ -13,6 +13,8 @@ const isTimeLabel = (f) => !/^(num|date|bool|multiline)$/.test(f.type || '') &&
+ 
+ const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
+ const impOf = (w) => `import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`;
++// 🏁 מאיזה שלב הרשומה «סגורה»: closedFrom מהספק ('| סופיים:' — נעשה, ואחריו בוטל); בלי ⇒ השלב-האחרון (ביט-זהה); בלי שלבים ⇒ -1
++export const closedFromOf = (root) => { const n = (root.stages || []).length; if (!n) return -1; return Number.isInteger(root.closedFrom) ? Math.max(0, Math.min(root.closedFrom, n - 1)) : n - 1; };
+ 
+ // השורש = הישות עם הכי-הרבה מצביעים-נכנסים (backRefs); שוויון ⇒ הראשונה בספק. אין מצביעים ⇒ אין שלד (הרכזת נשארת).
+ export function pickRoot(entMeta, backRefs) {
+@@ -61,8 +63,8 @@ export function renderRootPage(slug, { root, children, report, title }) {
+   const locLabels = root.schema.filter((f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && String(f.label).split(/\s+/).some((w) => (SL0.typeLocation || []).includes(w))).map((f) => f.label);   // שדה-מקום ⇒ «ניווט» (maps, אפס-מפתח)
+   if (paper && locLabels.length) blocks.push(`(() { final loc = [${locLabels.map((l) => `(r0[${k(l)}] ?? '')`).join(', ')}].map((x) => x.trim()).firstWhere((x) => x.length >= 3, orElse: () => ''); if (loc.isEmpty) return const SizedBox.shrink(); return Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.navLabel)} + ' · ' + (loc.length > 24 ? loc.substring(0, 24) + '…' : loc), onTap: () => launchUrl(Uri.parse('https://maps.google.com/?q=' + Uri.encodeComponent(loc)), mode: LaunchMode.externalApplication))])); })()`);
+   if (paper) blocks.push(`Padding(padding: const EdgeInsets.only(bottom: 10), child: DsQuickAdd(hint: ${k(L.noteAddHint)}, onSubmit: (t) { final v = t.trim(); if (v.isEmpty) return; final prev = r0['__note'] ?? ''; final stamp = DateTime.now().toIso8601String().substring(0, 10); appStore.update('${root.slug}', id, {'__note': (prev.isEmpty ? '' : prev + '\\n') + stamp + ' · ' + v}); appStore.logAction('auto', ${k(L.noteAddLog)}.replaceAll('{who}', appStore.displayOf('${root.slug}', id)), entity: '${root.slug}', rid: id, field: '__note', prev: prev); }))`);   // «מה קרה מאז?» — הערה מתוארכת נצברת ב«מה כתבת», עם החזר
+-  const lastStage = root.stages && root.stages.length ? root.stages.length - 1 : -1;
+-  if (paper && lastStage >= 0) blocks.push(`(appStore.stageOf('${root.slug}', id) >= ${lastStage} ? const SizedBox.shrink() : Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.closeLabel)}, onTap: () { final prev = r0[AppStore.stageKey] ?? '0'; appStore.update('${root.slug}', id, {AppStore.stageKey: '${lastStage}'}); appStore.logAction('auto', ${k(L.closeLog)}.replaceAll('{who}', appStore.displayOf('${root.slug}', id)), entity: '${root.slug}', rid: id, field: AppStore.stageKey, prev: prev); })])))`);   // «סגור תיק» = השלב-האחרון, עם החזר (השלב חוזר)
++  const doneStage = closedFromOf(root);   // «סגור» = השלב-הסופי-הראשון (נעשה); בלי '| סופיים:' = האחרון
++  if (paper && doneStage >= 0) blocks.push(`(appStore.stageOf('${root.slug}', id) >= ${doneStage} ? const SizedBox.shrink() : Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.closeLabel)}, onTap: () { final prev = r0[AppStore.stageKey] ?? '0'; appStore.update('${root.slug}', id, {AppStore.stageKey: '${doneStage}'}); appStore.logAction('auto', ${k(L.closeLog)}.replaceAll('{who}', appStore.displayOf('${root.slug}', id)), entity: '${root.slug}', rid: id, field: AppStore.stageKey, prev: prev); })])))`);   // «סגור תיק» = השלב-האחרון, עם החזר (השלב חוזר)
+   if (paper) blocks.push(`Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.deleteLabel)}, onTap: () { final snap = Map<String, String>.from(r0); appStore.removeById('${root.slug}', id); appStore.logAction('del', ${k(L.delLog)}.replaceAll('{who}', snap.values.take(2).join(' · ')), entity: '${root.slug}', rid: id, prev: jsonEncode(snap)); Navigator.of(context).pop(); })]))`);   // «מחק» עם החזר (הרשומה חוזרת כמו שהייתה) — «עשיתי לבד» מציג
+   if (paper) blocks.push(`Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.editLabel)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${root.cls}(editId: id)))), const SizedBox(width: 8), DsChipButton(label: ${k(L.dupLabel)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${root.cls}(initial: {for (final e in r0.entries) if (!e.key.startsWith('__') && !const <String>[${root.schema.filter((f) => f.type === 'date').map((f) => k(f.label)).join(', ')}].contains(e.key)) e.key: e.value}))))]))`);   /* ב׳-סט · «עוד אחד כזה» = טופס חדש עם אותם פרטים בלי המועדים (ארנונה של החודש הבא) */   // «ערוך» = מסך-הישות פתוח על הרשומה הזו (תיקון שדה בלי לחפש)
+   if (paper && !report) blocks.push(`Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.shareLabel)}, onTap: () { final lines = <String>[appStore.displayOf('${root.slug}', id)]; for (final e in r0.entries) { if (e.key.startsWith('__') || e.value.trim().isEmpty) continue; lines.add(e.key + ': ' + (const <String>[${root.schema.filter((f) => f.type === 'date').map((f) => k(f.label)).join(', ')}].contains(e.key) ? _fmtDate(e.value) : e.value.trim())); }   /* ב׳-עו · שיתוף עם תאריכים במילים */ Clipboard.setData(ClipboardData(text: lines.join('\\n'))); /* ב׳-פד · גם ללוח — במחשב אין וואטסאפ */ launchUrl(Uri.parse('https://wa.me/?text=' + Uri.encodeComponent(lines.join('\\n'))), mode: LaunchMode.externalApplication); })]))`);   // מודול בלי דוח: «שתף» = הרשומה כטקסט (wa.me, הנמען נבחר שם)
+@@ -113,7 +115,7 @@ export function renderHome(slug, { root, rootPage, report, message, title, chain
+   const firstWired = (pick, ctx) => { const w = pickWired([...pick.atoms, ...pick.alts], (c) => wireAtom(c, ctx)); if (w) imports.add(impOf(w)); return w; };
+   const notes = [];
+   const disp = root.descField ? `(r[${k(root.descField)}] ?? '')` : `appStore.displayOf('${root.slug}', r[AppStore.idKey] ?? '')`;
+-  const openRecs = root.stages && root.stages.length ? `appStore.records('${root.slug}').where((r) => appStore.stageOf('${root.slug}', r[AppStore.idKey] ?? '') < ${root.stages.length - 1}).toList()` : `appStore.records('${root.slug}')`;
++  const openRecs = root.stages && root.stages.length ? `appStore.records('${root.slug}').where((r) => appStore.stageOf('${root.slug}', r[AppStore.idKey] ?? '') < ${closedFromOf(root)}).toList()` : `appStore.records('${root.slug}')`;   // פתוח = לפני השלב-הסופי-הראשון
+   // חלקיק-ההודעה של הדוח (אם יש) — אותו חיווט, רשומה-אחת
+   let msgW = null, msgImports = new Set();
+   if (message) { const w = particleWidgets({ entity: message.entity, plan: [message.p], k, recs: '[r]' }); msgImports = w.imports; if (w.widgets.length) msgW = w.widgets[0]; else notes.push(...w.notes); }
+@@ -141,7 +143,8 @@ export function renderHome(slug, { root, rootPage, report, message, title, chain
+   const phoneList = `[${root.schema.filter((f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && String(f.label).split(/\s+/).some((w) => (SL0.typePhone || []).includes(w))).map((f) => k(f.label)).join(', ')}]`;   // ב׳-לח · שדות-טלפון ⇒ «התקשר» על שורת-היום
+   const numList = `[${root.schema.filter((f) => f.type === 'num' && !String(f.label).split(/\s+/).some((w) => (SL0.typePercent || []).includes(w))).map((f) => k(f.label)).join(', ')}]`;   // ב׳-מ · שדה-הסכום הראשי (לא אחוז) ⇒ ₪ על השורה
+   const timeList = `[${root.schema.filter(isTimeLabel).map((f) => k(f.label)).join(', ')}]`;   // שדות-שעה ⇒ השעה על שורת-היום והתוכנית מקבעת אותה
+-  const lastStage = root.stages && root.stages.length ? root.stages.length - 1 : -1;
++  const doneStage = closedFromOf(root);   // «סיים» מקדם עד השלב-הסופי-הראשון (נעשה), לא מעבר (בוטל = קפיצה מפורשת)
++  const doneCond = doneStage >= 0 && doneStage < root.stages.length - 1 ? `== ${doneStage}` : `>= ${doneStage}`;   // הצעד-הבא (שרשרת) רק ל«נעשה» — לא ל«בוטל» שאחריו; בלי סופיים-נוספים ⇒ '>=' כמקודם (ביט-זהה)
+   const dispR = disp;
+   const dateList = `[${dateFields.map((f) => `_D(${k(f.label)}, ${f.hard ? 'true' : 'false'})`).join(', ')}]`;
+   const nextName = chain.length ? k(chain[0]) : null;
+@@ -197,12 +200,12 @@ class ${cls}Today {
+     if (a == ${k(L.actDone)}) {
+       final r0 = appStore.byId('${root.slug}', rid); final rep = (r0 == null ? '' : (r0['__repeat'] ?? '')).trim();
+       final prevStage = r0 == null ? '' : (r0[AppStore.stageKey] ?? '0');
+-      ${lastStage >= 0 ? `appStore.advance('${root.slug}', rid, ${lastStage + 1});` : ''}
++      ${doneStage >= 0 ? `appStore.advance('${root.slug}', rid, ${doneStage + 1});` : ''}
+       appStore.decide('ign:\$rid:\$field', 'no');   // השורה של התאריך הזה טופלה — לא חוזרת מחר כ«באיחור»
+       appStore.logAction('done', ${k(L.doneLog)}.replaceAll('{what}', field + ' · ' + appStore.displayOf('${root.slug}', rid)), entity: '${root.slug}', rid: rid, field: field, prev: prevStage);   // «עשיתי» + החזר (השורה חוזרת, השלב חוזר)
+       if (r0 != null && rep.isNotEmpty) {   // ↻ רגע חוזר: «סיים» יוצר את הבא לבד (המועד-הבא בשדה שנסגר), עם החזר
+         final next = <String, String>{for (final e in r0.entries) if (!e.key.startsWith('__') || e.key == '__repeat' || e.key == '__note') e.key: e.value};
+-        next[field] = _iso(nextRepeat(due, rep)); ${lastStage >= 0 ? `next['__stage'] = '0';` : ''}
++        next[field] = _iso(nextRepeat(due, rep)); ${doneStage >= 0 ? `next['__stage'] = '0';` : ''}
+         final nid = appStore.add('${root.slug}', next);
+         appStore.logAction('add', ${k(L.repeatLog)}.replaceAll('{title}', appStore.displayOf('${root.slug}', nid) + ' · ' + next[field]!), entity: '${root.slug}', rid: nid);
+       }
+@@ -281,7 +284,7 @@ class ${cls}Today {
+       if (!any && appStore.decision('undated:\$rid') != 'no') visible = true;
+       if (visible) continue;
+       final t = _touched(r, rid); if (t == null) continue; final n = today.difference(t).inDays; if (n < 14) continue;
+-      final acts = [${lastStage >= 0 ? `${k(L.closeLabel)}, ` : ''}${k(L.actSetTomorrow)}, ${k(L.actIgnore)}];
++      final acts = [${doneStage >= 0 ? `${k(L.closeLabel)}, ` : ''}${k(L.actSetTomorrow)}, ${k(L.actIgnore)}];
+       out.add(DsTodayItem(title: appStore.displayOf('${root.slug}', rid), sub: [${k(L.staleSub)}.replaceAll('{n}', n.toString()), _moneyOf(r)].where((x) => x.isNotEmpty).join(' · '), rid: rid, field: '', due: t, hard: false, overdue: false, module: module, actions: acts, act: (i) => _staleAct(rid, today, acts, i)));
+     }
+     out.sort((a, b) => a.due.compareTo(b.due));   // הישן ביותר ראשון
+@@ -291,7 +294,7 @@ class ${cls}Today {
+     final a = acts[i.clamp(0, acts.length - 1)];
+     final r = appStore.byId('${root.slug}', rid); if (r == null) return;
+     if (a == ${k(L.actSetTomorrow)}) { final f = _dates.firstWhere((x) => x.hard, orElse: () => _dates.first); appStore.decide('ign:\$rid:\${f.label}', ''); appStore.decide('undated:\$rid', ''); _setDate(rid, f.label, today, [a], 0); return; }   /* המועד החדש חוזר ל«היום» — ההתעלמות הישנה נמחקת */
+-    ${lastStage >= 0 ? `if (a == ${k(L.closeLabel)}) { final prev = r[AppStore.stageKey] ?? '0'; appStore.update('${root.slug}', rid, {AppStore.stageKey: '${lastStage}'}); appStore.logAction('auto', ${k(L.closeLog)}.replaceAll('{who}', appStore.displayOf('${root.slug}', rid)), entity: '${root.slug}', rid: rid, field: AppStore.stageKey, prev: prev); return; }` : ''}
++    ${doneStage >= 0 ? `if (a == ${k(L.closeLabel)}) { final prev = r[AppStore.stageKey] ?? '0'; appStore.update('${root.slug}', rid, {AppStore.stageKey: '${doneStage}'}); appStore.logAction('auto', ${k(L.closeLog)}.replaceAll('{who}', appStore.displayOf('${root.slug}', rid)), entity: '${root.slug}', rid: rid, field: AppStore.stageKey, prev: prev); return; }` : ''}
+     appStore.decide('stale:\$rid', 'no'); appStore.logAction('decide', ${k(L.ignoredLog)}.replaceAll('{what}', appStore.displayOf('${root.slug}', rid)), entity: '${root.slug}', rid: rid, field: 'stale:\$rid');
+   }
+ 
+@@ -325,14 +328,14 @@ class ${cls}Today {
+       ${sendFn ? `final last = appStore.lastLog('send', rid);   // P12 · טיוטה, לא שליחה: אחרי 3 ימים בלי שינוי-שלב ⇒ הצעה; השליחה עצמה רק בהקשה (T5)
+       if (last != null && appStore.decision('fu:\$rid:\${last['id']}').isEmpty) { final at = DateTime.tryParse(last['at'] ?? ''); final n = at == null ? 0 : today.difference(_day(at)).inDays; if (n >= 3 && (last['prev'] ?? '') == appStore.stageOf('${root.slug}', rid).toString()) out.add(DsApproveCard(question: ${k(L.followAsk)}.replaceAll('{n}', n.toString()), source: module + ' · ' + who, okLabel: ${k(L.homeSend)}, noLabel: ${k(L.actNo)}, onOk: () { appStore.decide('fu:\$rid:\${last['id']}', 'ok'); send(context, r, rid); }, onNo: () => appStore.decide('fu:\$rid:\${last['id']}', 'no'))); }` : ''}
+     }
+-    ${nextName && lastStage >= 0 ? `if (chain) for (final r in appStore.records('${root.slug}')) {   // P14 · הצעד-הבא: רשומה שהגיעה לשלב-האחרון (סגורה — לא ב-open) ובלי הכרעה
++    ${nextName && doneStage >= 0 ? `if (chain) for (final r in appStore.records('${root.slug}')) {   // P14 · הצעד-הבא: רשומה שהגיעה לשלב-האחרון (סגורה — לא ב-open) ובלי הכרעה
+       final rid = r[AppStore.idKey] ?? ''; final who = appStore.displayOf('${root.slug}', rid);
+-      if (appStore.stageOf('${root.slug}', rid) >= ${lastStage} && appStore.decision('next:\$rid').isEmpty) out.add(DsApproveCard(question: ${k(L.nextAsk)}.replaceAll('{next}', ${nextName}), source: module + ' · ' + who, okLabel: ${k(L.actOk)}, noLabel: ${k(L.actNo)}, onOk: () { appStore.decide('next:\$rid', 'ok'); appStore.logAction('next', ${k(L.nextDid)}.replaceAll('{next}', ${nextName}), entity: '${root.slug}', rid: rid, field: 'next:\$rid'); }, onNo: () => appStore.decide('next:\$rid', 'no')));
++      if (appStore.stageOf('${root.slug}', rid) ${doneCond} && appStore.decision('next:\$rid').isEmpty) out.add(DsApproveCard(question: ${k(L.nextAsk)}.replaceAll('{next}', ${nextName}), source: module + ' · ' + who, okLabel: ${k(L.actOk)}, noLabel: ${k(L.actNo)}, onOk: () { appStore.decide('next:\$rid', 'ok'); appStore.logAction('next', ${k(L.nextDid)}.replaceAll('{next}', ${nextName}), entity: '${root.slug}', rid: rid, field: 'next:\$rid'); }, onNo: () => appStore.decide('next:\$rid', 'no')));
+     }` : ''}
+     return out;
+   }
+   /// רשומות שהגיעו לשלב-האחרון ובלי הכרעת-צעד-הבא — ל«בלגן» (שרשרת חוצת-מודולים)
+-  static List<Map<String, String>> done() => ${lastStage >= 0 ? `appStore.records('${root.slug}').where((r) => appStore.stageOf('${root.slug}', r[AppStore.idKey] ?? '') >= ${lastStage} && appStore.decision('next:\${r[AppStore.idKey] ?? ''}').isEmpty).toList()` : 'const []'};
++  static List<Map<String, String>> done() => ${doneStage >= 0 ? `appStore.records('${root.slug}').where((r) => appStore.stageOf('${root.slug}', r[AppStore.idKey] ?? '') ${doneCond} && appStore.decision('next:\${r[AppStore.idKey] ?? ''}').isEmpty).toList()` : 'const []'};
+ 
+   // כרטיס-הרשומה (G30): נוסחים · שלח · פתח — ≤2 הקשות
+   static Widget card(BuildContext context, Map<String, String> r) => DsSection(title: module + ' · ' + ((${dispR}).trim().isEmpty ? ${k(root.name)} : ${dispR}), trailing: Text(${stageSub}, style: TextStyle(color: DsLook.of(context).muted, fontSize: 13)), children: [
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..51e1ffc 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -27,8 +27,10 @@
+   "descField": "מה",
+   "stages": [
+    "פתוח",
+-   "נעשה"
++   "נעשה",
++   "בוטל"
+   ],
++  "closedFrom": 1,
+   "fields": [
+    {
+     "label": "מה",
+diff --git a/machtzev/generator/balagan.mjs b/machtzev/generator/balagan.mjs
+index 4c6c1b2..0ab5e29 100644
+--- a/machtzev/generator/balagan.mjs
++++ b/machtzev/generator/balagan.mjs
+@@ -10,7 +10,7 @@ import path from 'node:path';
+ import { fileURLToPath } from 'node:url';
+ import { makeConsts, write, setLook } from './render-ds.mjs';
+ import { searchOp, wireAtom, pickWired } from './particles.mjs';
+-import { renderBehavior } from './app-shell.mjs';
++import { renderBehavior, closedFromOf } from './app-shell.mjs';   // closedFromOf · מאיזה שלב התיק סגור (נעשה; בוטל אחריו)
+ import { L, T } from './chrome.mjs';
+ import * as R from '../root.mjs';
+ 
+@@ -106,8 +106,9 @@ import 'dart:convert';
+ import '../dart-ui-bs/ds/ds_store.dart';
+ class BalaganField { const BalaganField(this.label, this.type, this.required, this.options); final String label, type; final bool required; final List<String> options; }
+ class BalaganModule {
+-  const BalaganModule(this.index, this.ns, this.title, this.moment, this.topic, this.weights, this.dateFields, this.numFields, this.descField, this.longField, this.rootSlug, this.fields, this.stages, this.chain, {this.selfScore = 1, this.layer = '', this.required = 0, this.timeFields = const [], this.phoneFields = const [], this.personFields = const [], this.percentFields = const []});
++  const BalaganModule(this.index, this.ns, this.title, this.moment, this.topic, this.weights, this.dateFields, this.numFields, this.descField, this.longField, this.rootSlug, this.fields, this.stages, this.chain, {this.selfScore = 1, this.layer = '', this.required = 0, this.timeFields = const [], this.phoneFields = const [], this.personFields = const [], this.percentFields = const [], this.closedFrom = -1});
+   final int index; final String ns, title, moment, topic, rootSlug; final Map<String, double> weights; final List<String> dateFields, numFields; final String descField, longField; final List<BalaganField> fields; final int stages; final List<String> chain;
++  final int closedFrom;     // אינדקס-השלב שממנו התיק «סגור» (השלב-הסופי-הראשון: נעשה · בוטל אחריו); בלי שלבים = -1. פתוח = שלב < closedFrom
+   final double selfScore;   // ציון הכותרת+הרגע של המודול עצמו — מכנה-הביטחון
+   final String layer;       // 'base' = שכבת-הבסיס (משימות · יומן)
+   final int required;       // מספר שדות-החובה — המודול הכללי-ביותר = הכי-פחות
+@@ -117,7 +118,7 @@ class BalaganModule {
+ class BalaganHit { const BalaganHit(this.module, this.score); final BalaganModule module; final double score; }
+ 
+ const List<BalaganModule> kBalaganModules = [
+-${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}], selfScore: ${selfScores[i]}, layer: '${m.layer || ''}', required: ${m.root.fields.filter((f) => f.required).length}, timeFields: [${m.root.fields.filter(isTimeField).map((f) => dq(f.label)).join(', ')}], phoneFields: [${m.root.fields.filter(isPhoneField).map((f) => dq(f.label)).join(', ')}], personFields: [${m.root.fields.filter(isPersonField).map((f) => dq(f.label)).join(', ')}], percentFields: [${m.root.fields.filter(isPercentField).map((f) => dq(f.label)).join(', ')}]),`).join('\n')}
++${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}], selfScore: ${selfScores[i]}, layer: '${m.layer || ''}', required: ${m.root.fields.filter((f) => f.required).length}, timeFields: [${m.root.fields.filter(isTimeField).map((f) => dq(f.label)).join(', ')}], phoneFields: [${m.root.fields.filter(isPhoneField).map((f) => dq(f.label)).join(', ')}], personFields: [${m.root.fields.filter(isPersonField).map((f) => dq(f.label)).join(', ')}], percentFields: [${m.root.fields.filter(isPercentField).map((f) => dq(f.label)).join(', ')}], closedFrom: ${closedFromOf(m.root)}),`).join('\n')}
+ ];
+ /// סף-החולשה — נגזר מהנתונים (לא קבוע-קסם): חצי מביטחון-הכותרת-הנמוך-ביותר בין המודולים. מתחתיו הרגע «כללי» ⇒ שכבת-הבסיס ראשונה.
+ const double kBalaganWeak = ${weak};
+@@ -254,7 +255,7 @@ List<Map<String, String>> balaganDuplicates(BalaganModule m, Map<String, String>
+   String norm(String x) => x.trim().toLowerCase().replaceAll(RegExp(r'\\s+'), ' ');
+   final keys = [m.descField, ...m.personFields].where((f) => f.isNotEmpty && norm(v[f] ?? '').length >= 3).toList();
+   if (keys.isEmpty) return const [];
+-  return appStore.records(m.rootSlug).where((r) { final st = int.tryParse(r['__stage'] ?? '0') ?? 0; if (m.stages > 0 && st >= m.stages - 1) return false; return keys.any((f) => norm(r[f] ?? '') == norm(v[f]!)); }).toList();
++  return appStore.records(m.rootSlug).where((r) { final st = int.tryParse(r['__stage'] ?? '0') ?? 0; if (m.stages > 0 && st >= m.closedFrom) return false; return keys.any((f) => norm(r[f] ?? '') == norm(v[f]!)); }).toList();
+ }
+ /// מיזוג לתיק קיים: שדה ריק בקיים מקבל את הערך החדש · «מה כתבת» נצבר (שורה חדשה) · שדה מלא לא נדרס. פעולה אחת עם החזר (prev = JSON של מה שנגע).
+ int balaganMerge(BalaganModule m, String id, Map<String, String> v, String logText) {
+@@ -574,7 +575,7 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
+     expect(s.map((x) => x.rid), contains(old)); expect(s.map((x) => x.rid), isNot(contains(fresh))); expect(s.map((x) => x.rid), isNot(contains(fut)));
+     expect(s.firstWhere((x) => x.rid == old).sub.contains('40'), isTrue);
+     s.firstWhere((x) => x.rid == old).act(0);
+-    expect(appStore.stageOf(S, old), ${(baseMod.root.stages || []).length - 1});
++    expect(appStore.stageOf(S, old), ${closedFromOf(baseMod.root)});   // «סגור» = השלב-הסופי-הראשון (נעשה), לא בהכרח האחרון
+     expect(${baseTodayCls}.stale(today).any((x) => x.rid == old), isFalse);
+     expect(appStore.undo(appStore.log.first['id']!), isTrue);
+     expect(${baseTodayCls}.stale(today).any((x) => x.rid == old), isTrue);
+@@ -616,7 +617,7 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
+     final m = kBalaganModules.firstWhere((x) => x.personFields.isNotEmpty && x.numFields.any((f) => !x.percentFields.contains(f)));
+     final nf = m.numFields.firstWhere((f) => !m.percentFields.contains(f));
+     appStore.add(m.rootSlug, {m.personFields.first: 'יעל ברק', nf: '1,000', if (m.phoneFields.isNotEmpty) m.phoneFields.first: '0501234567'});
+-    appStore.add(m.rootSlug, {m.personFields.first: ' יעל ברק ', nf: '250', if (m.stages > 0) '__stage': (m.stages - 1).toString()});
++    appStore.add(m.rootSlug, {m.personFields.first: ' יעל ברק ', nf: '250', if (m.stages > 0) '__stage': m.closedFrom.toString()});
+     final p = balaganPerson('יעל ברק')!;
+     expect(p.files, 2); expect(p.open, m.stages > 0 ? 1 : 2); expect(p.money, m.stages > 0 ? 1000 : 1250);
+     if (m.phoneFields.isNotEmpty) expect(p.phones, ['0501234567']);
+@@ -682,7 +683,7 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
+     expect(balaganDupSub(m, {m.dateFields.first: '2026-09-09', nf: '8000'}, today), m.title + ' · מחר · ₪ 8,000');
+     expect(balaganDupSub(m, {}, today), m.title);
+     final before = balaganOpenCount(m.rootSlug, m.stages);
+-    appStore.add(m.rootSlug, {nf: '1'}); if (m.stages > 0) appStore.add(m.rootSlug, {nf: '2', '__stage': (m.stages - 1).toString()});
++    appStore.add(m.rootSlug, {nf: '1'}); if (m.stages > 0) appStore.add(m.rootSlug, {nf: '2', '__stage': m.closedFrom.toString()});
+     final after = balaganOpenCount(m.rootSlug, m.stages);
+     expect(after, isNot(before)); expect(after.contains('פתוחים'), isTrue);
+   });
+@@ -872,7 +873,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
+         if (appStore.log.any((e) => e['rid'] == rid && e['undone'] != '1' && e['kind'] != 'add')) continue;
+         final who = bm.title + ' · ' + appStore.displayOf(bm.rootSlug, rid); _standing.add(rid);
+         out.add(DsApproveCard(question: ${k(L.staleAsk)}.replaceAll('{who}', who).replaceAll('{n}', days.toString()), source: who, okLabel: ${k(L.actOk)}, noLabel: ${k(L.actNo)},
+-          onOk: () { final prev = appStore.stageOf(bm.rootSlug, rid).toString(); appStore.update(bm.rootSlug, rid, {AppStore.stageKey: (bm.stages - 1).toString()}); appStore.decide('stale:\$rid', 'ok'); appStore.logAction('auto', ${k(L.staleDid)}.replaceAll('{who}', who).replaceAll('{n}', days.toString()), entity: bm.rootSlug, rid: rid, field: AppStore.stageKey, prev: prev); },
++          onOk: () { final prev = appStore.stageOf(bm.rootSlug, rid).toString(); appStore.update(bm.rootSlug, rid, {AppStore.stageKey: bm.closedFrom.toString()}); appStore.decide('stale:\$rid', 'ok'); appStore.logAction('auto', ${k(L.staleDid)}.replaceAll('{who}', who).replaceAll('{n}', days.toString()), entity: bm.rootSlug, rid: rid, field: AppStore.stageKey, prev: prev); },
+           onNo: () => appStore.decide('stale:\$rid', 'no')));
+       }
+     }
+@@ -1289,7 +1290,7 @@ BalaganPerson? balaganPerson(String name) {
+     for (final r in appStore.records(m.rootSlug)) {
+       if (!m.personFields.any((f) => (r[f] ?? '').trim().toLowerCase() == n)) continue;
+       files++; rids.add(r[AppStore.idKey] ?? '');
+-      final isOpen = m.stages == 0 || appStore.stageOf(m.rootSlug, r[AppStore.idKey] ?? '') < m.stages - 1;
++      final isOpen = m.stages == 0 || appStore.stageOf(m.rootSlug, r[AppStore.idKey] ?? '') < m.closedFrom;
+       if (isOpen) { open++; if (numF.isNotEmpty) { final v = double.tryParse((r[numF.first] ?? '').replaceAll(',', '').trim()); if (v != null) money += v; } }
+       for (final f in m.phoneFields) { final p = (r[f] ?? '').trim(); if (p.isNotEmpty) phones.add(p); }
+       final at = (r['__at'] ?? '').length >= 10 ? (r['__at'] ?? '').substring(0, 10) : ''; if (at.compareTo(last) > 0) last = at; for (final e in appStore.log) { if (e['rid'] != (r[AppStore.idKey] ?? '') || e['undone'] == '1') continue; final la = (e['at'] ?? '').length >= 10 ? e['at']!.substring(0, 10) : ''; if (la.compareTo(last) > 0) last = la; }   /* ב׳-עא · נגיעה-אחרונה = גם פעולות ביומן, לא רק יצירה */
+@@ -1302,7 +1303,8 @@ BalaganPerson? balaganPerson(String name) {
+ List<String> balaganPersonNames() { final out = <String>{}; for (final m in kBalaganModules) { for (final r in appStore.records(m.rootSlug)) { for (final f in m.personFields) { final v = (r[f] ?? '').trim(); if (v.length >= 2) out.add(v); } } } return out.toList(); }
+ BalaganPerson? balaganPersonFor(String q) { final t = q.trim().toLowerCase(); if (t.length < 2) return null; final exact = balaganPerson(t); if (exact != null) return exact; final c = balaganPersonNames().where((n) => n.toLowerCase().contains(t)).toList(); return c.length == 1 ? balaganPerson(c.first) : null; }
+ /// ב׳-נב · כמה תיקים פתוחים במודול (שלב < אחרון; בלי שלבים = הכל) — «דירה · 3 פתוחים»; 0 ⇒ ריק
+-String balaganOpenCount(String slug, int stages) { final n = appStore.records(slug).where((r) => stages == 0 || appStore.stageOf(slug, r[AppStore.idKey] ?? '') < stages - 1).length; return n == 0 ? '' : ${k(L.openCount)}.replaceAll('{n}', n.toString()); }
++int _balaganClosedFrom(String slug, int stages) { for (final m in kBalaganModules) { if (m.rootSlug == slug) return m.closedFrom; } return stages - 1; }   // המודול יודע מאיזה שלב התיק סגור (נעשה · בוטל); לא-מוכר ⇒ האחרון
++String balaganOpenCount(String slug, int stages) { final n = appStore.records(slug).where((r) => stages == 0 || appStore.stageOf(slug, r[AppStore.idKey] ?? '') < _balaganClosedFrom(slug, stages)).length; return n == 0 ? '' : ${k(L.openCount)}.replaceAll('{n}', n.toString()); }
+ String balaganIntl(String ph) { final d = ph.replaceAll(RegExp(r'[^0-9+]'), ''); return d.startsWith('+') ? d.substring(1) : (d.startsWith('0') ? '972' + d.substring(1) : d); }
+ 
+ class ${cls} extends StatefulWidget {
+diff --git a/machtzev/generator/entity.mjs b/machtzev/generator/entity.mjs
+index b1bf2e9..316c17c 100644
+--- a/machtzev/generator/entity.mjs
++++ b/machtzev/generator/entity.mjs
+@@ -47,7 +47,7 @@ export function interpret(text) {
+   // "ישות X עם <שדות> | שלבים: a,b | חוקים: תאריך יעד >= תאריך חיוב"
+   const markers = [...text.matchAll(new RegExp('\\|\\s*' + alt(G.sectionMarkers), 'g'))];
+   const main = markers.length ? text.slice(0, markers[0].index) : text;
+-  let stagesPart = '', rulesPart = '', delPart = '', guardsPart = '', sortPart = '';
++  let stagesPart = '', rulesPart = '', delPart = '', guardsPart = '', sortPart = '', terminalPart = '';
+   markers.forEach((m, mi) => {
+     const start = m.index + m[0].length;
+     const end = mi + 1 < markers.length ? markers[mi + 1].index : text.length;
+@@ -56,6 +56,7 @@ export function interpret(text) {
+     else if (G.markDelete.includes(m[1])) delPart = content;
+     else if (G.markGuards.includes(m[1])) guardsPart = content;
+     else if ((G.markSort || []).includes(m[1])) sortPart = content;   // L105 · מיון-הרשימה מהספק
++    else if ((G.markTerminal || []).includes(m[1])) terminalPart = content;   // שלבים-סופיים (נעשה · בוטל) — «סגור» לא רק השלב-האחרון
+     else stagesPart = content;
+   });
+   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
+@@ -109,6 +110,13 @@ export function interpret(text) {
+   const stages = stagesPart
+     ? stagesPart.replace(new RegExp('^\\s*' + alt(G.stagePrefixes) + '[:\\s]*'), '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 30)
+     : [];
++  // 🏁 שלבים-סופיים (אופציונלי): '| סופיים: נעשה, בוטל' ⇒ «סגור» = מהשלב-הסופי-הראשון והלאה (closedFrom), לא רק השלב-האחרון.
++  // בלי הסעיף ⇒ closedFrom = השלב-האחרון (ביט-זהה לכל ספק קיים). «סיים»/קידום עוצר בשלב-הסופי-הראשון (נעשה);
++  // שאר-הסופיים (בוטל) = קפיצה מפורשת בפס-השלבים. סופי שאינו בשלבים ⇒ אזהרה ומתעלמים (לא מנחשים).
++  const terminalNames = terminalPart ? terminalPart.split(/[,\n]/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1) : [];
++  for (const t of terminalNames) if (!stages.includes(t)) console.warn(String(G.warnTerminalMissing || '{entity}: {stage} ∉ [{stages}]').replace('{entity}', entity).replace('{stage}', t).replace('{stages}', stages.join(', ')));   // הנוסח מהדאטה (§19-ד)
++  const terminalIdx = terminalNames.map((t) => stages.indexOf(t)).filter((i) => i >= 0);
++  const closedFrom = terminalIdx.length ? Math.min(...terminalIdx) : Math.max(0, stages.length - 1);
+ 
+   const schema = annots.map((a) => ({ label: a.label, raw: a.raw, type: inferType(a.label), required: a.required, unique: a.unique, enumVals: a.enumVals, formula: a.formula, def: a.def, members: a.members, pattern: a.pattern, range: a.range }));
+   const used = new Set();
+@@ -158,7 +166,7 @@ export function interpret(text) {
+     : [];
+   const sortWords = [...(G.sortDesc || []), ...(G.sortAsc || [])];
+   const sort = sortPart ? sortPart.split(/[,\n]/).map((e) => { const t = e.trim(); const dm = sortWords.length ? t.match(new RegExp('^(.+?)\\s+(' + sortWords.join('|') + ')$')) : null; const lab = heWords(dm ? dm[1] : t).join(' ').trim(); const f = schema.find((x) => x.label === lab); return f ? { field: f.label, desc: !!(dm && (G.sortDesc || []).includes(dm[2])) } : null; }).filter(Boolean) : [];
+-  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards, sort };
++  return { spec: lines.join('\n'), entity, schema, stages, closedFrom, rules: rules.map((r) => r.name), vrules, delPolicy, guards, sort };
+ }
+ 
+ // ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..a1254e4 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -261,7 +261,7 @@ function compileCond(formula, labels) {
+ }
+ 
+ // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
+-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null, sort = [] }) {
++export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], closedFrom, entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null, sort = [] }) {
+   const { k, dump } = makeConsts(slug);
+   const cTitle = k(name);
+   const cSub = k(`${schema.length} ${L.fieldsWord}${stages.length ? ` · ${stages.length} ${L.stagesWord}` : ''}`);
+@@ -468,6 +468,8 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const defInit = defEntries.length ? `{${defEntries.join(', ')}}` : '{}';   // זריעת-פתיחה (ריק ⇒ ביט-זהה לקודם)
+   const enumImport = hasEnum ? "import '../dart-ui-bs/ds/ds_enum_field.dart';\n" : '';
+   const hasStages = stages.length >= 2;
++  // 🏁 «סגור» = מהשלב-הסופי-הראשון (closedFrom, מ-'| סופיים:'); בלי-סעיף = השלב-האחרון (ביט-זהה). «סיים» עוצר שם; סופיים-אחרים (בוטל) = קפיצה בפס.
++  const doneAt = Number.isInteger(closedFrom) ? Math.max(0, Math.min(closedFrom, stages.length - 1)) : stages.length - 1;
+   const stageConsts = hasStages ? stages.map((x) => k(x)) : [];
+   const stageList = `[${stageConsts.join(', ')}]`;
+   const stepsDart = hasStages
+@@ -504,10 +506,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     ? `(i) { if (i > appStore.stageOf(${SK}, rid)) { final g = _guard(i, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } } appStore.setStage(${SK}, rid, i); }`
+     : `(i) => appStore.setStage(${SK}, rid, i)`;
+   const onAdvBody = hasGuards
+-    ? `() { final g = _guard(appStore.stageOf(${SK}, rid) + 1, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } appStore.advance(${SK}, rid, ${stages.length}); }`
+-    : `() => appStore.advance(${SK}, rid, ${stages.length})`;
++    ? `() { final g = _guard(appStore.stageOf(${SK}, rid) + 1, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } appStore.advance(${SK}, rid, ${doneAt + 1}); }`
++    : `() => appStore.advance(${SK}, rid, ${doneAt + 1})`;
+   const stageArgs = hasStages
+-    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: ${onStageBody}, onAdvance: ${onAdvBody}, `
++    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${doneAt}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: ${onStageBody}, onAdvance: ${onAdvBody}, `
+     : '';
+ 
+   // 🔒 RLS (read-side · סינון-תצוגה, לא אכיפה): היקף-שורה (scoped) + הסתרת-עמודות פר-תפקיד.
+@@ -1093,7 +1095,7 @@ export function selectVaried(roleSpecs, pred = () => true, seed = 0) {
+ // **האטום שמגשים אותו הכי-טוב** (selectAtom מדורג); ההרכבה **משלבת** את אטומי-ההיבטים
+ // יחד עד שהמטרה מושגת. שקעי-דאטה⇐נתוני-אמת · שקעים-נותרים⇐סגנון-בטוח (לא דאטה מזויף).
+ const _rS = /^String\??$/, _rLS = /^List<String>\??$/, _rLLS = /^List<List<String>>\??$/, _rLD = /^List<double>\??$/, _rI = /^int\??$/;
+-export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [], stages = [], detail = null, scopeField = null }) {
++export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [], stages = [], closedFrom, detail = null, scopeField = null }) {
+   const { k, dump } = makeConsts(slug);
+   const cls = pascal(slug);
+   // 🔐 מקור-הרשומות מכבד RLS: יש שדה-היקף ⇒ scoped (מסונן ל-actor), אחרת records (הכל).
+@@ -1142,7 +1144,7 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
+   if (prog) {
+     imports.add(`import '../${prog.file}';`);
+     const extra = prog.fills.length ? ', ' + prog.fills.join(', ') : '';
+-    const last = Math.max(0, stages.length - 1);
++    const last = Math.max(0, Number.isInteger(closedFrom) ? Math.min(closedFrom, stages.length - 1) : stages.length - 1);   // אחוז-הסגורים = מהשלב-הסופי-הראשון
+     const pctExpr = `appStore.count('${entitySlug}') == 0 ? 0 : (${recsExpr}.where((r) => appStore.stageOf('${entitySlug}', r['__id'] ?? '') >= ${last}).length * 100 ~/ appStore.count('${entitySlug}'))`;
+     blocks.push(`Padding(\n            padding: const EdgeInsets.symmetric(horizontal: 12),\n            child: ${prog.cls}(${prog.p.pct}: ${pctExpr}${extra}),\n          )`);
+   }
+diff --git a/machtzev/generator/spec-lang-doc.mjs b/machtzev/generator/spec-lang-doc.mjs
+index 8ee6bd0..4414ca4 100644
+--- a/machtzev/generator/spec-lang-doc.mjs
++++ b/machtzev/generator/spec-lang-doc.mjs
+@@ -10,7 +10,7 @@ export function specLangDoc() {
+ 
+ ## מבנה קובץ
+ - \`${G.appWord}: <שם>\` · \`${G.lookWord}: ${Object.keys(G.looks || {}).join(' | ')}\` · \`${G.questionWord} ${Object.keys(G.questionTargets || {}).join('|')}: <שאלה>\` · \`${G.chainWord}: …\`
+-- \`${j(G.entityNouns)} <שם> ${G.withWord} <שדה>, <שדה>, …  | ${j(G.stagePrefixes)}: א, ב, ג | ${j(G.markDelete)}: <ישות>=${Object.keys(G.delPolicies || {}).slice(0, 3).join('|')} | ${j(G.markGuards)}: <שלב>: <תנאי> | ${j(G.markSort)}: <שדה> ${j(G.sortAsc)}|${j(G.sortDesc)}, <שדה2>\` (מיון רשימת-הישות; שדה-בחירה ⇒ סדר-ההכרזה)
++- \`${j(G.entityNouns)} <שם> ${G.withWord} <שדה>, <שדה>, …  | ${j(G.stagePrefixes)}: א, ב, ג | ${j(G.markDelete)}: <ישות>=${Object.keys(G.delPolicies || {}).slice(0, 3).join('|')} | ${j(G.markGuards)}: <שלב>: <תנאי> | ${j(G.markSort)}: <שדה> ${j(G.sortAsc)}|${j(G.sortDesc)}, <שדה2> | ${j(G.markTerminal)}: <שלב>, <שלב>\` (מיון רשימת-הישות; שדה-בחירה ⇒ סדר-ההכרזה · שלבים-סופיים: «סגור» מהראשון-שבהם והלאה — למשל \`שלבים: פתוח, נעשה, בוטל | ${(G.markTerminal || [])[0]}: נעשה, בוטל\`; «סיים» עוצר בראשון, השאר קפיצה מפורשת; בלי הסעיף = השלב-האחרון)
+ - \`לוח בקרה ${G.withWord} ${j(G.pCount)}(<ישות>), ${j(G.pCount)}(<ישות>: <שדה>=<ערך>), ${j(G.pSum)}(<ישות>.<שדה>)\`
+ - \`${G.particleWord} <ישות>: <צורה>\` · \`${G.reportWord} <ישות>: <שם> = …\` · \`${G.contentWord} <קבוצה>: <טקסט>\`
+ 
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index de89656..5f4ff6d 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -49,8 +49,15 @@
+   "מחיקה",
+   "מעברים",
+   "שערים",
+-  "מיון"
++  "מיון",
++  "סופיים",
++  "סגורים"
++ ],
++ "markTerminal": [
++  "סופיים",
++  "סגורים"
+  ],
++ "warnTerminalMissing": "⚠️ {entity}: שלב-סופי «{stage}» אינו בשלבים [{stages}] — מתעלמים",
+  "markRules": [
+   "חוקים",
+   "ולידציה"
+diff --git a/machtzev/generator/specs-ds/SPEC-LANG.md b/machtzev/generator/specs-ds/SPEC-LANG.md
+index 96495e3..d4fdb6a 100644
+--- a/machtzev/generator/specs-ds/SPEC-LANG.md
++++ b/machtzev/generator/specs-ds/SPEC-LANG.md
+@@ -2,7 +2,7 @@
+ 
+ ## מבנה קובץ
+ - `אפליקציה: <שם>` · `עיצוב: נייר | כהה` · `שאלה דוח|רשימה|בית: <שאלה>` · `שרשרת: …`
+-- `ישות / טבלה / טופס <שם> עם <שדה>, <שדה>, …  | שלבים / סטטוסים / מצבים: א, ב, ג | מחיקה: <ישות>=מפל|cascade|ניתוק | מעברים / שערים: <שלב>: <תנאי> | מיון: <שדה> עולה / מהנמוך|יורד / מהגבוה, <שדה2>` (מיון רשימת-הישות; שדה-בחירה ⇒ סדר-ההכרזה)
++- `ישות / טבלה / טופס <שם> עם <שדה>, <שדה>, …  | שלבים / סטטוסים / מצבים: א, ב, ג | מחיקה: <ישות>=מפל|cascade|ניתוק | מעברים / שערים: <שלב>: <תנאי> | מיון: <שדה> עולה / מהנמוך|יורד / מהגבוה, <שדה2> | סופיים / סגורים: <שלב>, <שלב>` (מיון רשימת-הישות; שדה-בחירה ⇒ סדר-ההכרזה · שלבים-סופיים: «סגור» מהראשון-שבהם והלאה — למשל `שלבים: פתוח, נעשה, בוטל | סופיים: נעשה, בוטל`; «סיים» עוצר בראשון, השאר קפיצה מפורשת; בלי הסעיף = השלב-האחרון)
+ - `לוח בקרה עם מונה / count(<ישות>), מונה / count(<ישות>: <שדה>=<ערך>), סכום / sum / Σ(<ישות>.<שדה>)`
+ - `חלקיק <ישות>: <צורה>` · `דוח <ישות>: <שם> = …` · `תוכן <קבוצה>: <טקסט>`
+ 
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..a6b786c 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה, בוטל | סופיים: נעשה, בוטל
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..f6db7ae 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -11,7 +11,7 @@ a806ebd46fc621ada29fc44f2ea2d49b46702230313f5113f95e42209c2a3c8d  .githooks/pre-
+ f0ce468621ed75c86b05a063018c3707ac6a8a93944fcf8befc0251d4b014ce4  PURPOSE.md
+ 884436c8354c9f51376d40e5891c6569d4c4c525ce6fbdec7985459327f98d79  machtzev/AGENT-CODE.md
+ ca4f98abb46479e91265ea7ad39a4d83fcd95bfeac7d606602584fca1572b54b  machtzev/DECISIONS.md
+-7f0e9ae5737a73a840fb3d9bdb67460c5023b9876bb0e702b1d639c2738fd5ab  machtzev/LEARNINGS.md
++bbdfa7f0f25bca00d95f50e15a2dc737d2dbc3aa6d6d3ed512c0e713eeb7c5d8  machtzev/LEARNINGS.md
+ 6e3d4d4a397a70394d2439ab32a29f8d8b24da02246d9e5131759f8ed16e18c4  machtzev/THE-WAY.md
+ 4328cb71e44391c77f218c0aa49e8c90880c60b510e7c97d49ae2a6dab166184  machtzev/VERIFY-LAWS.md
+ 37005d06bc27e84bb29265118e60f364941d759dce612b07d65a4b2bad12b4aa  machtzev/allow-check.mjs
+@@ -42,7 +42,7 @@ c15153f6c72d2d9d86ee8780afdb00a0126780cae89347fc4f551f7da7fb9388  machtzev/data-
+ 9cfe77e0ad38d9aa3bc21b81213521c05597540b4dcea66c7e1ec746aeb55b5d  machtzev/ds-critic-baseline.json
+ 8179e929e0fdac8910f3756934e86004400ea5ef3f8ba955277eea129d7451c8  machtzev/dup-class-baseline.json
+ 097f8e91f0fe913b92e1d97690115e1b308f761244fc39587d61d593fc568bff  machtzev/emit/free-ref-scan.mjs
+-7acf0836e8e815c026fc249203110b4e1ede49be63a7bfa9e38113eed31893c2  machtzev/gates.tsv
++22b5a5e2d07dc80425967963e7fdb8630c5f563a0be692c1e88a57bd01468bd6  machtzev/gates.tsv
+ 4786fc1a758703bb213ea03fe101e82dd7b50563a3059a5da59f8dc3ec44655e  machtzev/generator/acceptance-space.txt
+ 054e05d0b47e6b0217f5ab55f1f68e6e219ad74196ce90b141ae631f5eb1a2b8  machtzev/generator/app-from-sentences.mjs
+ 7da26db9178cb363c5ed045e6c23ac4521a73d919bb48f161a1448cb8c8292a9  machtzev/generator/atom-index-full.json
+@@ -59,6 +59,7 @@ ab4f6e6ed3ebeef4537b64bc4d03c6f5d30a9d870adb82ea3742f365fe597a92  machtzev/gener
+ 73763a64178c0378a2f49ed3ff04b91cf46b0de778f03825cc421fb4f2789b73  machtzev/generator/cover.mjs
+ d7184214570c62942c7dfc89536077da9ab770f00873404f46c699e81add6ef3  machtzev/generator/entity-terms.mjs
+ d4015aec8b28007379713aa445c5f4b344b1a2c0448ea66b635fa1de4bf8a859  machtzev/generator/enum-values.mjs
++9138779fd66cced6c912ad07e6504d75de33b90372cace3fba947722858ab3ff  machtzev/generator/formula-fns.mjs
+ 73bf6d4ff4d98be23382b9d6193fd2897f7135c4126fe24c98a426fd1ac4913b  machtzev/generator/frag-ops.mjs
+ 6e397cdc8c7903839a799c7d30cd13f0952be26af1e97dbb37076416f1a43b22  machtzev/generator/gen-verify-baseline.json
+ 38e905d1d1021aee73279b8e609c177e15128958a0f3dbdf2483f85e53285e25  machtzev/generator/gen-verify.mjs
+@@ -66,11 +67,11 @@ d4015aec8b28007379713aa445c5f4b344b1a2c0448ea66b635fa1de4bf8a859  machtzev/gener
+ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/generator/logic-census.json
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+-39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
++fe8eb010d2cf47d56caaa511940e208c68e2c90ad3536905317c2f6e4bc3d4b5  machtzev/generator/particles.mjs
+ 3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+-b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs
++5d6ce7379a61b1758892ac362c00435ebad76b55bd2c6740075d15a72980455a  machtzev/generator/render-ds.mjs
+ f9d748159c45d3d7013194ae5705a1797948376fc973bbbbb00497a22fa850d1  machtzev/generator/render-module-baseline.json
+ 74cd7e7ccd4d4e3ad57d8e5eade8fb9d38250616cfdfbf15d1d2087d9080d7ea  machtzev/generator/render-module.mjs
+ 0589103ea8b694b19bcef674586d0b31516a9a535b7b833ffce397c4f063798a  machtzev/generator/retarget.mjs
+@@ -78,6 +79,7 @@ fed47b4bb54e965877fee84e00f8753ae7f93d2beb87d84f6c602dd6af2f12f0  machtzev/gener
+ 7b5f2a373dbce848197cf0777cc94260a9cb3e57ff926331a1f908ef9381cd54  machtzev/generator/shape-ops-baseline.json
+ 7bcce546795a02677898b4d7dda3b3103930368134c618afcb5963f4de2da554  machtzev/generator/shape-ops.mjs
+ c153330459d988ca928aba286b2602ddbea95bb68c7b798b351fee2942821381  machtzev/generator/skin-golden.mjs
++45309877e7c7bfe92d0c59b34723defc633ddb5319f8c97ae40b2241f34bb187  machtzev/generator/spec-lang-doc.mjs
+ 55f19208bb4251f454adc731ea9c4ada8e847a66d26ee39c3fd7d22eb3334826  machtzev/generator/synth.mjs
+ 557be322137bcf91194841b7b247973e3bf154902a4623bf3851cde3fd4970c0  machtzev/generator/tighten-types.mjs
+ d162b6f9e2d468453b35a5f2df61e20a50ac1a951ce9088d665674fe7fecfcc7  machtzev/index-baseline.json
+@@ -99,7 +101,7 @@ c9bf7136f197c9ab4df0a72b1a034affc87e948ff1c2a25121e4c4265ff12902  machtzev/mutat
+ 34b855c8fb122fb90faa368f450f0ff3981212cec4abab795df207c5eea88f57  machtzev/one.mjs
+ 2195ed1605f878921515d9833863d2315400de7874f28901456dacb854d99481  machtzev/pins-check.mjs
+ 4a331265e66a773e0c26edd00a2d9454efe8f7ed67b727333407688fe903c586  machtzev/police-selftest.mjs
+-1e699c08ddd6ae2a74dd2e11456ad6122d6c4d7841b400cfcb4791df162bd322  machtzev/police.mjs
++4672f7cfbfa1e77d541bf5ca0df1847a09a19e5152a74d9a9683982603ef3121  machtzev/police.mjs
+ 29402e8e940d852ffec30cab8932c3f0a7baf2ac9324255bcc9b28187b4d8067  machtzev/pretool-fixtures-baseline.json
+ 953238593662a0cbf6f085e91834eaf6733a223e5d41c1fc585cf76660abd1c9  machtzev/pretool-selftest.mjs
+ 71e473734dde0f2c323764af3a5e916f2e2aa602b9f6cad5fd58b1b718666dd6  machtzev/purity-baseline.json

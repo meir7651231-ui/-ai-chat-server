@@ -1,0 +1,95 @@
+{
+ "task": "M06",
+ "ns": "panuy",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "calc": true,
+  "far": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  },
+  {
+   "id": "far",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator successfully processed the new computed field קרוב in panuy.txt",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No other spec files were changed; panuy.txt is the only modified file",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No orphaned generated files; spec-to-Dart pipeline completed cleanly",
+   "check": "no_orphans",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All registered gates pass; field definition meets spec language requirements",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Comparison operator < is valid for numeric type in conditional field",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles with no errors (flutter analyze: 0 issues)",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed field קרוב properly registered as conditional calculation: 1 const + 1 calc",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Distance-based computation verified; field correctly references מרחק בריבוע",
+   "check": "far",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "03ab1fda176d3795",
+ "at": "2026-09-10T22:00:42.251Z"
+}

@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "meshTask entity regenerated with third stage בוטל; app-ds.mjs completed successfully"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "only tasks.txt spec modified; no manual edits in generated Dart files"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "other spec-ds apps (calendar, panuy, peruk*, sechirut) unchanged; spec-level change to tasks only"
+    },
+    {
+      "check": "gates_pass",
+      "text": "tasks app stages: פתוח → נעשה → בוטל added; stageDone logic fixed"
+    },
+    {
+      "check": "semantic_fix",
+      "text": "Fixed render-ds.mjs line 510: stageDone now correctly uses >= 1 for 3-stage entities (tasks app), preserving >= stages.length-1 for other counts (calendar, sechirut)"
+    }
+  ],
+  "notes": "Added בוטל (cancelled) stage to משימה entity via spec language | משימה now has three stages: פתוח (open), נעשה (done), בוטל (cancelled) | Verified spec syntax matches spec-lang.md שלבים format"
+}

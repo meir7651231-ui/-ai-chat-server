@@ -1,0 +1,85 @@
+{
+ "task": "H11",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "calc": true,
+  "min": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  },
+  {
+   "id": "min",
+   "ok": true,
+   "info": "calc=true fn=true alt=false method=false",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Spec regeneration successful — app-ds.mjs generated all artifacts without errors",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other spec-ds apps remain byte-identical — only sechirut.txt modified, only sechirut app regenerated",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed field תקרה נמוכה = min(תקרה לפי 3 חודשים, תקרה לפי שליש) properly declared and calculated",
+   "check": "calc",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "min() function is supported by spec language (documented in SPEC-LANG.md) and correctly emitted in generated Dart code",
+   "check": "min",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code passes flutter analyze with 0 errors — all type inference correct",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No hand-edits to generated files — only spec source modified, generator produced all Dart",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "bb36983b84955579",
+ "at": "2026-09-10T23:24:17.827Z"
+}

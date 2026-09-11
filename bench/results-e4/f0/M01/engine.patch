@@ -1,0 +1,187 @@
+diff --git a/machtzev/generator/apps/peruk02.json b/machtzev/generator/apps/peruk02.json
+index 21319c4..c8b7262 100644
+--- a/machtzev/generator/apps/peruk02.json
++++ b/machtzev/generator/apps/peruk02.json
+@@ -116,6 +116,10 @@
+   {
+    "name": "ממצא",
+    "slug": "app_peruk02_ent2"
++  },
++  {
++   "name": "תשלום",
++   "slug": "app_peruk02_ent3"
+   }
+  ],
+  "relations": true,
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..39c9e89 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -80,6 +80,33 @@
+    "EmptyState@premium/feedback"
+   ]
+  },
++ {
++  "entity": "תשלום",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "מסגרת",
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..c39e407 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -5,6 +5,7 @@
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
++| טבלה | תשלום | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בדיקה | ממצא | content | group⇒SectionHeader (SectionHeader/DsSection) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..300986b 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -86,7 +86,10 @@
+   "chain": [],
+   "forbidden": 5,
+   "disclaimer": true,
+-  "content": 66
++  "content": 66,
++  "children": [
++   "תשלום"
++  ]
+  },
+  {
+   "id": 3,
+diff --git a/machtzev/generator/peruk-lang.data.json b/machtzev/generator/peruk-lang.data.json
+index 74d8d89..760d6b8 100644
+--- a/machtzev/generator/peruk-lang.data.json
++++ b/machtzev/generator/peruk-lang.data.json
+@@ -57,6 +57,9 @@
+   ],
+   "kill": [
+    "קריטריון"
++  ],
++  "children": [
++   "עוד עוקבים"
+   ]
+  },
+  "inputsHead": [
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..09666ec 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -76,6 +76,28 @@ function fieldsFrom(lines) {
+   return out;
+ }
+ 
++// ── 2b · ישויות-בנות מסעיף «עוד עוקבים»: כל ### <שם> = ישות-בת של השורש (קישור-חובה לשורש · מחיקה=מפל · מסך-טבלה).
++//   פריטים כמו בקליטה (חובה:/רשות:); פריט "שם: א או ב" ⇒ בחירה-סגורה {א|ב}. הטיפוס (סכום=מספר) נגזר משם-השדה ב-app-ds.
++function childrenFrom(sec) {
++  const orRe = new RegExp('\\s+' + P.orWord + '\\s+');
++  return sec.subs.map((s) => {
++    const name = clean(s.head).split(' ').slice(0, 2).join(' ');
++    const fields = []; let req = false;
++    for (const l0 of s.lines) {
++      const l = l0.trim(); if (!l) continue;
++      if (l.startsWith(P.requiredKey)) { req = true; continue; }
++      if (l.startsWith(P.optionalKey)) { req = false; continue; }
++      if (!/^([-*•]|\d+[.)])\s/.test(l)) continue;
++      const it = strip(l); const m = it.match(/^([^:：]+)[:：]\s*(.+)$/);
++      const label = clean(m ? m[1] : it).split(' ').slice(0, P.fieldMaxWords).join(' ');
++      if (!label || fields.some((f) => f.label === label)) continue;
++      const vals = m ? m[2].split(orRe).map(clean).filter(Boolean) : [];
++      fields.push({ label, required: req, enumVals: vals.length >= 2 ? vals : null });
++    }
++    return { name, fields };
++  }).filter((c) => c.name && c.fields.length);
++}
++
+ // ── 3 · חלקי-הפלט מ«מה חוזר»: פריט ממוספר = חלק; שורות-המשך = פירוט (⇒ refs לשדות או תוכן-החלק); תת-רשימה קצרה = אפשרויות-החלטה ──
+ function outputsFrom(lines) {
+   const secs = []; let cur = null;
+@@ -165,11 +187,15 @@ export function perukToSpec(md, ns) {
+   for (const [tgt, q] of P.questions || []) lines.push(`${G.questionWord} ${tgt}: ${q}`);   // G28 · מסך = שאלה אחת
+   lines.push(`${G.entityNouns[0]} ${root} ${G.withWord} ${rootFields.join(', ')} | ${G.stagePrefixes[0]} ${P.stages.join(', ')}`);
+   if (severity) lines.push(`${G.entityNouns[0]} ${fnd} ${G.withWord} ${P.findingFields.map((f, i) => i === 0 ? f.replace(/\*$/, '') + '*' : f).join(', ')}, ${P.severityField}{${P.severity.join('|')}} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
++  // ישויות-בנות («עוד עוקבים»): קישור-חובה לשורש ראשון · מחיקת-שורש = מפל (כמו הממצא)
++  const kids = S('children') ? childrenFrom(S('children')) : [];
++  for (const c of kids) lines.push(`${G.entityNouns[0]} ${c.name} ${G.withWord} ${[`${root}*`, ...c.fields.map(fieldStr)].join(', ')} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
+   lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}`);
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]`);
+   lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${P.openAction}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pEmpty[0]}] ${P.emptyText}`);
++  for (const c of kids) lines.push(`${G.particleWord} ${c.name}: [${G.pTable[0]}]`);   // מסך-טבלה לכל ישות-בת
+   const groupNames = [...new Set(content.map((c) => c.group))];
+   for (const g of groupNames) if (g !== groups.disclaimer && g !== groups.example) lines.push(`${G.particleWord} ${severity && g === groups.check ? fnd : root}: ${g} = [${G.pContent[0]} ${g}]`);
+   if (severity) lines.push(`${G.particleWord} ${fnd}: ${P.severityField}`);
+@@ -208,7 +234,7 @@ export function perukToSpec(md, ns) {
+   const phone = P.personFields.find((f) => /טלפון/.test(f));
+   if (phone) lines.push(`${G.reportWord} ${root}: [${G.pExport[0]}] ${P.exportLabel} = ${phone.replace(/\*$/, '')}, ${P.exportGoal}`);
+   for (const c of content) lines.push(`${G.contentWord} ${c.group}${c.tag ? ` [${c.tag}]` : ''}: ${q(c.text)}`);
+-  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length };
++  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length, ...(kids.length ? { children: kids.map((c) => c.name) } : {}) };
+   return { spec: lines.join('\n') + '\n', node, doc: d };
+ }
+ 
+diff --git a/machtzev/generator/peruks/peruk-02.md b/machtzev/generator/peruks/peruk-02.md
+index 5a21a17..7d1bcde 100644
+--- a/machtzev/generator/peruks/peruk-02.md
++++ b/machtzev/generator/peruks/peruk-02.md
+@@ -227,3 +227,11 @@
+ 
+ קריטריון הריגה: 20 פניות בלי תשלום, או כולם רצים לבד לבינה.
+ ---
++
++## 13. עוד עוקבים לתיק
++
++### תשלום
++חובה:
++- סכום
++רשות:
++- שולם: כן או לא
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..544f9cc 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -5,11 +5,13 @@
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, סכום הפיקדון*, מה המשכיר אמר הודעה*, תאריך מסירת מפתח*, חוזה לפחות סעיפי בטוחה*, תיקונים*, יציאה*, פרוטוקול כניסה יציאה, תמונות כניסה ויציאה, וואטסאפ מלא עם המשכיר, קבלות על תיקונים שהוא | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ ישות ממצא עם תיק*, סעיף, מה כתוב, מה לבקש, צבע{אדום|צהוב|ירוק} | מחיקה: תיק=מפל
++ישות תשלום עם תיק*, סכום*, שולם{כן|לא} | מחיקה: תיק=מפל
+ לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
++חלקיק תשלום: [טבלה]
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק ממצא: בדיקה = [תוכן בדיקה]

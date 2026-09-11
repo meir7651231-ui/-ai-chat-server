@@ -1,0 +1,95 @@
+diff --git a/machtzev/generator/apps/peruk25.json b/machtzev/generator/apps/peruk25.json
+index 68ae22f..58ba762 100644
+--- a/machtzev/generator/apps/peruk25.json
++++ b/machtzev/generator/apps/peruk25.json
+@@ -64,6 +64,18 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "סכום פיצויים",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
++   {
++    "label": "פיצויים לשנה",
++    "type": "text",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "סיווג",
+     "type": "text",
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..57d6fc4 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -1097,7 +1097,7 @@
+    "לא קריירה קואוץ׳",
+    "לא הבטחת משרה"
+   ],
+-  "fields": 3,
++  "fields": 5,
+   "outputs": [
+    "כרטיס ימים",
+    "רשימת מסמכים מכתב תלושים",
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..e7810e3 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -68,6 +68,10 @@ function fieldsFrom(lines) {
+     if (/[:：]$/.test(l) && heW(l).length <= 5) { req = false; continue; }   // תת-כותרת אחרת («חזק מאוד אם יש:») = רשות; לא שדה
+     const it = /^([-*•]|\d+[.)])\s/.test(l) ? strip(l) : norm(l);
+     if (!heW(it).length) continue;
++    // שדה-מחושב: «שם = נוסחה» (דקדוק-האפיון של app-ds בתוך המסמך) ⇒ שדה-נוסחה על השורש; render-ds מהדר
++    // (מילה-לא-מזוהה ⇒ שדה רגיל, כנות). מבני — אפס-מילון; לא נחלק בפסיקים (נוסחה עשויה להכיל פסיק).
++    const fm = it.match(/^([^=]+?)\s*=\s*(.+)$/);
++    if (fm) { const label = heW(fm[1]).slice(0, P.fieldMaxWords).join(' '); const formula = strip(fm[2]); if (label.length > 1 && formula && !out.some((f) => f.label === label)) out.push({ label, required: false, formula }); continue; }
+     // פריט-רשימה שהוא רשימת-פריטים קצרים ⇒ כמה שדות; פריט ארוך ⇒ שדה אחד (התיאור נשמט)
+     const parts = it.split(/[,،]/).map((x) => x.trim()).filter(Boolean);
+     if (parts.length >= 2 && parts.every((p) => heW(p).length <= P.fieldMaxWords)) parts.forEach((p) => push(p, req));
+@@ -156,7 +160,7 @@ export function perukToSpec(md, ns) {
+   const decisions = outputs.filter((o) => o.options.length >= P.decisionMinOptions && o.options.length <= P.decisionMaxOptions).map((o) => ({ label: o.name, enumVals: o.options.map((x) => clean(x).split(' ').slice(0, 4).join(' ')).filter(Boolean) }));
+   // ── ספק ──
+   const root = P.rootNoun, fnd = P.findingNoun;
+-  const fieldStr = (f) => `${f.label}${f.enumVals ? `{${f.enumVals.join('|')}}` : ''}${f.num ? P.numRange : ''}${f.required ? '*' : ''}`;
++  const fieldStr = (f) => f.formula ? `${f.label} = ${f.formula}` : `${f.label}${f.enumVals ? `{${f.enumVals.join('|')}}` : ''}${f.num ? P.numRange : ''}${f.required ? '*' : ''}`;
+   const rootFields = [...P.personFields, ...fields.map(fieldStr), ...decisions.map((dd) => `${dd.label}{${dd.enumVals.join('|')}}`), ...(classes.length ? [`${P.classifyField}{${classes.join('|')}}`] : [])];
+   const lines = [];
+   lines.push(`${G.appWord}: ${d.title || ns}`);
+@@ -174,7 +178,7 @@ export function perukToSpec(md, ns) {
+   for (const g of groupNames) if (g !== groups.disclaimer && g !== groups.example) lines.push(`${G.particleWord} ${severity && g === groups.check ? fnd : root}: ${g} = [${G.pContent[0]} ${g}]`);
+   if (severity) lines.push(`${G.particleWord} ${fnd}: ${P.severityField}`);
+   // דוח: חלק לכל פריט של «מה חוזר»; refs = שדות שתואמים בפירוט, אחרת תוכן-החלק
+-  const fieldLabels = rootFields.map((f) => f.replace(/[{*].*$/, '').trim());
++  const fieldLabels = rootFields.map((f) => f.replace(/\s*=.*$/, '').replace(/[{*].*$/, '').trim());   // שדה-מחושב: התווית שלפני '=' (הנוסחה מכילה '*')
+   const stemOf = (w) => w.replace(/^[בלהומשכ](?=..)/, '').replace(/(יות|ים|ות|ה)$/, '');
+   const matchField = (txt) => { const ws = heW(txt).map(stemOf); return fieldLabels.find((f) => { const fw = heW(f).map(stemOf); return fw.length && fw.every((w) => ws.includes(w)); }) || null; };
+   const kindOfOut = (name) => Object.entries(P.outputKinds).find(([, ws]) => ws.some((w) => name.includes(w)))?.[0] || null;
+diff --git a/machtzev/generator/peruks/peruk-25.md b/machtzev/generator/peruks/peruk-25.md
+index 6d16709..36fa39d 100644
+--- a/machtzev/generator/peruks/peruk-25.md
++++ b/machtzev/generator/peruks/peruk-25.md
+@@ -63,6 +63,8 @@
+ 
+ ### מה שולחים
+ מכתב פיטורים / הודעת וואטסאפ, ותק, האם חתמו על משהו.
++סכום פיצויים
++פיצויים לשנה = סכום פיצויים * 12
+ 
+ ### מה חוזר
+ 1. כרטיס 7 ימים
+diff --git a/machtzev/generator/specs-ds/peruk25.txt b/machtzev/generator/specs-ds/peruk25.txt
+index dc4d3c8..7719d88 100644
+--- a/machtzev/generator/specs-ds/peruk25.txt
++++ b/machtzev/generator/specs-ds/peruk25.txt
+@@ -3,7 +3,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, מכתב פיטורים, ותק, האם חתמו על משהו, סיווג{סיום רגיל מכתב|לחץ לחתום היום|דגל מוגן|עצמאי חוזה קבלן} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, מכתב פיטורים, ותק, האם חתמו על משהו, סכום פיצויים, פיצויים לשנה = סכום פיצויים * 12, סיווג{סיום רגיל מכתב|לחץ לחתום היום|דגל מוגן|עצמאי חוזה קבלן} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

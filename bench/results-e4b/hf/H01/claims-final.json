@@ -1,0 +1,1 @@
+{"claims":[{"check":"regen_ok","text":"Generator completed successfully for panuy app"},{"check":"sort_by_distance","text":"Entity line includes sort directive: | מיון: מרחק בקמ עולה"},{"check":"real_distance_displayed","text":"Particle shows מרחק בקמ (real distance in km) instead of מרחק בריבוע"}],"notes":"proven"}

@@ -1,0 +1,104 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..41a6780 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,12 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-11-particles-m13 · חלקיקי [מספר] דורשים שדה בסכמה — טקסט אינליין לא מתורגם (M13 · spec-lang)
++GATE: particles
++ANTIPATTERN: \[מספר\]\s+[^:]+$
++RULE: חלקיק [מספר] צריך להיות בפורמט `[מספר] <field>: <description>` כאשר `<field>` הוא שדה קיים בסכמת הישות. לא ניתן להשתמש בטקסט אינליין בלי שדה מתאים. אם נדרש להציג טקסט קבוע, היא טקסט הוא לא שדה (כמו "תוכן" ב-[תוכן]), יש להגדיר תוכן בנפרד או להשתמש בחלקיק אחר.
++מה נכשל: ניסיון ראשון להוסיף `חלקיק תיק: אגרת העברה = [מספר] אגרת העברת בעלות משולמת לפני הרישום` בלי הגדרת שדה בסכמה. התוצאה: gate particles כשל עם "שדה לא בסכמה: אגרת העברת בעלות משולמת לפני הרישום" (הטקסט טופל כשם שדה). התיקון: הוספת שדה `אגרת העברה` לישות התיק (line 7), ושינוי החלקיק לפורמט `[מספר] אגרת העברה: אגרת העברת בעלות משולמת לפני הרישום`. הגייט עבר מ-6/7 ל-7/7 נמצאו-ומחווטים.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..fd3ad31 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -72,6 +72,12 @@
+     "type": "bool",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "אגרת העברה",
++    "type": "text",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/particle-plan-peruk12.json b/machtzev/generator/particle-plan-peruk12.json
+index 2591b82..607ffc0 100644
+--- a/machtzev/generator/particle-plan-peruk12.json
++++ b/machtzev/generator/particle-plan-peruk12.json
+@@ -160,5 +160,32 @@
+   "wired": [
+    "DsNote"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "אגרת העברה",
++  "expr": "[מספר] אגרת העברה: אגרת העברת בעלות משולמת לפני הרישום",
++  "ok": true,
++  "why": null,
++  "shape": "number",
++  "ops": [
++   "hero"
++  ],
++  "picks": [
++   {
++    "op": "hero",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk12.md b/machtzev/generator/particle-plan-peruk12.md
+index 65c380d..0734faa 100644
+--- a/machtzev/generator/particle-plan-peruk12.md
++++ b/machtzev/generator/particle-plan-peruk12.md
+@@ -8,6 +8,7 @@
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| אגרת העברה | תיק | number | hero⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..17c19b6 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת, אגרת העברה | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+@@ -13,6 +13,7 @@
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: אסור = [תוכן אסור]
++חלקיק תיק: אגרת העברה = [מספר] אגרת העברה: אגרת העברת בעלות משולמת לפני הרישום
+ דוח תיק: כרטיס = מחיר
+ דוח תיק: רשימת שאלות למוכר מקסימום = [תוכן רשימת שאלות למוכר מקסימום]
+ דוח תיק: מה לבדוק בנסיעה = [תוכן מה לבדוק בנסיעה]

@@ -1,0 +1,117 @@
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..5f7846c 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -79,9 +79,13 @@
+   {
+    "name": "תיק",
+    "slug": "app_peruk12_ent1"
++  },
++  {
++   "name": "בדיקה",
++   "slug": "app_peruk12_ent2"
+   }
+  ],
+- "relations": false,
++ "relations": true,
+  "report": {
+   "slug": "app_peruk12_rp1",
+   "cls": "GenAppPeruk12Rp1Screen"
+diff --git a/machtzev/generator/particle-plan-peruk12.json b/machtzev/generator/particle-plan-peruk12.json
+index 2591b82..dcbac0c 100644
+--- a/machtzev/generator/particle-plan-peruk12.json
++++ b/machtzev/generator/particle-plan-peruk12.json
+@@ -80,6 +80,60 @@
+    "EmptyState@premium/feedback"
+   ]
+  },
++ {
++  "entity": "בדיקה",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
++ {
++  "entity": "בדיקה",
++  "name": "ריק אין בדיקות עדיין",
++  "expr": "[ריק] אין בדיקות עדיין",
++  "ok": true,
++  "why": null,
++  "shape": "empty",
++  "ops": [
++   "empty"
++  ],
++  "picks": [
++   {
++    "op": "empty",
++    "atoms": [
++     "EmptyState@premium/feedback"
++    ],
++    "alts": [
++     "EmptyState@premium/feedback",
++     "EmptyStateCard",
++     "SearchEmptyState"
++    ]
++   }
++  ],
++  "wired": [
++   "EmptyState@premium/feedback"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "מסגרת",
+diff --git a/machtzev/generator/particle-plan-peruk12.md b/machtzev/generator/particle-plan-peruk12.md
+index 65c380d..d7f9ef5 100644
+--- a/machtzev/generator/particle-plan-peruk12.md
++++ b/machtzev/generator/particle-plan-peruk12.md
+@@ -5,6 +5,8 @@
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
++| טבלה | בדיקה | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| ריק אין בדיקות עדיין | בדיקה | empty | empty⇒EmptyState (EmptyState/EmptyStateCard) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..95546bf 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -5,11 +5,14 @@
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+-לוח בקרה עם מונה(תיק)
++ישות בדיקה עם תיק*, מה נבדק, תקין{כן|לא} | מחיקה: תיק=מפל
++לוח בקרה עם מונה(תיק), מונה(בדיקה: תקין=לא)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
++חלקיק בדיקה: [טבלה]
++חלקיק בדיקה: [ריק] אין בדיקות עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: אסור = [תוכן אסור]

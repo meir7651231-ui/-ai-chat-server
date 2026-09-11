@@ -1,0 +1,87 @@
+diff --git a/machtzev/generator/apps/peruk17.json b/machtzev/generator/apps/peruk17.json
+index e752fbd..7f5bccb 100644
+--- a/machtzev/generator/apps/peruk17.json
++++ b/machtzev/generator/apps/peruk17.json
+@@ -76,6 +76,12 @@
+      "זימון ועדה",
+      "נגמר השעון"
+     ]
++   },
++   {
++    "label": "ימים לתגובה",
++    "type": "text",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/particle-plan-peruk17.json b/machtzev/generator/particle-plan-peruk17.json
+index 1fbd18b..4cad6b0 100644
+--- a/machtzev/generator/particle-plan-peruk17.json
++++ b/machtzev/generator/particle-plan-peruk17.json
+@@ -199,5 +199,32 @@
+   "wired": [
+    "DsNote"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "מספר ימים לתגובה ימים מקבלת המכתב",
++  "expr": "[מספר] ימים לתגובה: 30 ימים מקבלת המכתב",
++  "ok": true,
++  "why": null,
++  "shape": "number",
++  "ops": [
++   "hero"
++  ],
++  "picks": [
++   {
++    "op": "hero",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk17.md b/machtzev/generator/particle-plan-peruk17.md
+index c44d091..13b2eb3 100644
+--- a/machtzev/generator/particle-plan-peruk17.md
++++ b/machtzev/generator/particle-plan-peruk17.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| מספר ימים לתגובה ימים מקבלת המכתב | תיק | number | hero⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/specs-ds/peruk17.txt b/machtzev/generator/specs-ds/peruk17.txt
+index 9284905..a8e46dc 100644
+--- a/machtzev/generator/specs-ds/peruk17.txt
++++ b/machtzev/generator/specs-ds/peruk17.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, המכתב המלא, איזו בקשה, מה כבר הוגש, סיווג{השלמת מסמכים|דחייה לגופה|זימון ועדה|נגמר השעון} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, המכתב המלא, איזו בקשה, מה כבר הוגש, סיווג{השלמת מסמכים|דחייה לגופה|זימון ועדה|נגמר השעון}, ימים לתגובה | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+@@ -14,6 +14,7 @@
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: סיווג = [תוכן סיווג]
+ חלקיק תיק: אסור = [תוכן אסור]
++חלקיק תיק: [מספר] ימים לתגובה: 30 ימים מקבלת המכתב
+ דוח תיק: כרטיס = [תוכן כרטיס]
+ דוח תיק: רשימת מסמכים ממוספרת = [תוכן רשימת מסמכים ממוספרת]
+ דוח תיק: טיוטת נלווה קצרה = [תוכן טיוטת נלווה קצרה]

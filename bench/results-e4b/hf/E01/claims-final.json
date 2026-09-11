@@ -1,0 +1,21 @@
+{
+  "claims": [
+    {
+      "check": "email_in_ent",
+      "text": "אימייל field added to תיק entity in sechirut spec and appears in generated form"
+    },
+    {
+      "check": "email_in_table",
+      "text": "אימייל field appears in table column list and data output for תיק records"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Other application files remain byte-identical after regeneration"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code passes flutter analyze with zero errors"
+    }
+  ],
+  "notes": "All checks proven by machine verification. Email field successfully added to sechirut.txt spec as אימייל and appears in both form and table views."
+}

@@ -1,0 +1,1 @@
+{"claims":[{"check":"regen_ok","text":"App regenerated successfully from updated spec"},{"check":"dashboard_counter_add","text":"Dashboard counter for unsent findings added to line 11"},{"check":"particle_add","text":"Counter particle 'לא נשלחו' added to line 25 for findings screen"}],"notes":"Spec changes complete: dashboard counter and findings particle for unsent findings"}

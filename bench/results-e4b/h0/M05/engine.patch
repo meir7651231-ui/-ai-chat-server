@@ -1,0 +1,79 @@
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..ef627e6 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -226,5 +226,45 @@
+   "wired": [
+    "KvLine"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "תשובה",
++  "expr": "[הודעה] סיווג = [תוכן תשובה]",
++  "ok": true,
++  "why": null,
++  "shape": "message",
++  "ops": [
++   "switch",
++   "alert"
++  ],
++  "picks": [
++   {
++    "op": "switch",
++    "atoms": [
++     "SegmentedSwitch"
++    ],
++    "alts": [
++     "SegmentedSwitch",
++     "ForgeCheckPop",
++     "ForgePickerOptionsPanelSelection"
++    ]
++   },
++   {
++    "op": "alert",
++    "atoms": [
++     "AlertBanner@premium/feedback"
++    ],
++    "alts": [
++     "AlertBanner@premium/feedback",
++     "ToastCard",
++     "DsNote"
++    ]
++   }
++  ],
++  "wired": [
++   "ForgeMustChip",
++   "DsNote"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..d712f84 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -10,6 +10,7 @@
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
++| תשובה | תיק | message | switch⇒SegmentedSwitch (SegmentedSwitch/ForgeCheckPop) · alert⇒AlertBanner (AlertBanner/ToastCard) | ForgeMustChip + DsNote |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..10d5738 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -21,6 +21,7 @@
+ דוח תיק: מה לא לכתוב בקבוצת = [תוכן מה לא לכתוב בקבוצת]
+ דוח תיק: לוח = לוח
+ חלקיק תיק: לוח = [לוח]
++חלקיק תיק: תשובה = [הודעה] סיווג = [תוכן תשובה]
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
+ דוח תיק: [ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה
+ תוכן מסגרת: ועדות / שילוב / התאמות — נהלים משתנים. לא להבטיח זכאות
+@@ -53,3 +54,4 @@
+ תוכן טיוטת תשובה קצרה למחנכת: טיוטת תשובה קצרה למחנכת
+ תוכן שאלות לפגישה: שאלות לפגישה
+ תוכן מה לא לכתוב בקבוצת: מה לא לכתוב בקבוצת
++תוכן תשובה: קיבלתי, הסיווג: {ערך}

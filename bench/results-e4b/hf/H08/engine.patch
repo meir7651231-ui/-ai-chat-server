@@ -1,0 +1,15 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..ad56f83 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,10 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-computed-field · שדה מחושב עם abs() = בטוח בשכבת-ספק; regenerate עם --name, לא touch engine (10.9, H08 · panuy)
++GATE: regen_ok, compiles, abs
++RULE: שדה-מחושב בשפת-הספק (SPEC-LANG) מתורגם ישירות ל-Dart; abs() היא פונקציה-top-level ב-dart:math, תמיד בטוחה (אין sqrt/min/max בsignature). עם תוספת ספק = רק regen עם --name בדגל; כל שדה מחושב מוקדש נקרא בטוקן ב-forge (ללא יד). machine מאמת `abs`×1, `calc`×1, `compiles`=0 errors. בדיקה: `abs(הפרש רוחב)` זורים לא-null (הפרש מחושב, לא input בעולם).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart

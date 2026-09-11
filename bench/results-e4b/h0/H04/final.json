@@ -1,0 +1,51 @@
+{
+ "task": "H04",
+ "ns": "calendar",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort_both": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_both",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "a18673633bcc21c6",
+ "at": "2026-09-10T20:58:57.698Z",
+ "arm": "h0",
+ "wall_s": 343,
+ "cost_usd": 0.39791630000000006,
+ "tokens": 2302550
+}

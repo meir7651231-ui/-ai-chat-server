@@ -1,0 +1,18 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..e379a17 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-lang-computed-field · שדה מותנה בשפת-הספק אינו דורש עדכון של חלקיק (10.9, M06 · panuy)
++GATE: gates_pass
++ref: machtzev/generator/specs-ds/panuy.txt
++RULE: שדה מחושב (שדה מותנה `שם = <תנאי> ? <ערך1> : <ערך2>`) המצהיר בשורת-הישות כבר נרשם באינדקס-הישות ואינו דורש עדכון ידני של חלקיק (particle) — החלקיקים הם בחירה של UI, לא חלק מהגדרת-הנתונים; מנוע-הגנרציה קורא משדות-הישות בתור מקור-אמת יחיד.
++מה לומדים: שדה מחושב בשפת-הספק הוא דרך מינימלית להוסיף לוגיקה לישות — לא צריך Touch engine.mjs או spec-lang.data.json אם השדה יכול להבוטא בתחביר קיים (arithmetic, comparison, min/max/sqrt וכו'). רק אם הדקדוק לא מוקד — להוסיף פונקציה לגנרטור.
++הראיה: `git show HEAD:machtzev/generator/specs-ds/panuy.txt | tail -1` מציג קרוב ישור לשורת הישות (לא בנוסף בחלקיק).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart

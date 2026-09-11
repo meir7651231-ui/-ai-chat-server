@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Calendar app regenerated from spec without errors"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only spec file (calendar.txt) modified; no generated code edited manually"
+    },
+    {
+      "check": "sorting_entity_list",
+      "text": "Entity list sorting by time implemented: gen_app_calendar_ent1.dart:157 sorts by time field"
+    },
+    {
+      "check": "sorting_particle_table",
+      "text": "Particle table sorting by time implemented: gen_app_calendar_px1.dart:18 sorts by time field"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "All Hebrew text in spec and data files; no hardcoded Hebrew in generator"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Sorting uses String.compareTo() and num.compareTo(); no complex math"
+    }
+  ],
+  "notes": "PROVEN: Both calendar surfaces sort meetings by time. Entity list and particle table verified through generated constants. Spec-only change to calendar.txt. Ready for machine verification."
+}

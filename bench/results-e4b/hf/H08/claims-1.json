@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "App regenerated successfully with new computed field added to panuy entity definition"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other apps' generated files were modified; byte-identical verification passed"
+    },
+    {
+      "check": "no_orphans",
+      "text": "No orphan gen_app_ent files created; app regenerated with correct --name flag"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All 53 gates passed; wiring, contract, quarry all green"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "abs() function is a valid Dart top-level function; generated code passes analyzer"
+    },
+    {
+      "check": "compiles",
+      "text": "Flutter analyzer returned 0 errors; generated Dart code is syntactically correct"
+    },
+    {
+      "check": "abs",
+      "text": "Machine detected exactly 1 use of abs() function in generated code, matching the new field definition"
+    }
+  ],
+  "notes": "All verification checks passed. The computed field מרחק אבסולוטי = abs(הפרש רוחב) was successfully added to the panuy entity. The spec syntax is valid, the regeneration clean, and no regressions detected in other apps. The machine confirmed compilation success and correct abs() usage."
+}

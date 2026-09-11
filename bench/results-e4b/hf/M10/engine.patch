@@ -1,0 +1,62 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..50bd7eb 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,12 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-computed-division-M10 · שדה מחושב עם חלוקה — דקות→שעות (60÷) וצורה דרט (toStringAsFixed)
++GATE: regen_ok, dart_math_sane
++ref: new/dart-gen-bs/gen_app_calendar_ent1.dart:51
++PATTERN: משך בדקות + משך בשעות = משך בדקות / 60
++RULE: שדה מחושב עם חלוקה לצורה מנורמלת — `(num.tryParse(input) / 60).toStringAsFixed(2)` בדארט; דקות לא היתה בטיפוס-מספר (typeNum) ⇒ הוספת "דקות" לרשימת-המילות-המוכרות; מנוע ישאמר את הנוסחה לפי צורת-הדם (לא regex), מחושב לא מופק כ-string כברירת-מחדל — צריך cast (9.9, M10)
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/calendar.json b/machtzev/generator/apps/calendar.json
+index 8fa140b..d28b6f5 100644
+--- a/machtzev/generator/apps/calendar.json
++++ b/machtzev/generator/apps/calendar.json
+@@ -59,6 +59,18 @@
+     "type": "multiline",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "משך בדקות",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
++   {
++    "label": "משך בשעות",
++    "type": "num",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index de89656..c89d2d4 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -19,6 +19,7 @@
+   "מספר",
+   "אחוז",
+   "שעות",
++  "דקות",
+   "שטח",
+   "רווח",
+   "יתרה",
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..173fab8 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, הערה, משך בדקות, משך בשעות = משך בדקות / 60 | שלבים: קבוע, התקיים

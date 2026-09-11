@@ -1,0 +1,138 @@
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..2c96189 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -72,6 +72,12 @@
+     "type": "bool",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "מחיר עם אגרה",
++    "type": "num",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..3c05817 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -531,6 +531,9 @@
+    "לא אל תקנה יד 2"
+   ],
+   "fields": 4,
++  "computed": [
++   "מחיר עם אגרה"
++  ],
+   "outputs": [
+    "כרטיס",
+    "רשימת שאלות למוכר מקסימום",
+diff --git a/machtzev/generator/peruk-lang.data.json b/machtzev/generator/peruk-lang.data.json
+index 74d8d89..b0bef67 100644
+--- a/machtzev/generator/peruk-lang.data.json
++++ b/machtzev/generator/peruk-lang.data.json
+@@ -66,6 +66,10 @@
+  "outputsHead": [
+   "מה חוזר"
+  ],
++ "computedHead": [
++  "מחושב",
++  "מה מחושב"
++ ],
+  "requiredKey": "חובה",
+  "optionalKey": "רשות",
+  "mustKey": "חובה",
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..7a6975b 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -2,6 +2,7 @@
+ // 📄 peruk — קורא-הפירוקים (GENMAX·G27 · הכרעה-27): מסמך «פירוק N» של הבעלים ⇒ צומת-ידע שלם ⇒ ספק-app-ds, בלי יד.
+ //   השלד הקבוע של הפירוקים (הרגע · מסגרת · פירוק ל-N בלוקים · סיווג/אדום-צהוב-ירוק · המוצר: מה-שולחים/מה-חוזר · דוגמה ·
+ //   מחיר · אסור · חובה · שרשרת) נקרא **מבנית** — כותרות, רשימות, מפרידים. כל מילה-עברית מהדאטה (peruk-lang.data.json; §19).
++//   «מחושב» (תת-סעיף של המוצר): 'תווית = שדה × 1.03' ⇒ שדה-נוסחה על השורש — האפליקציה מחשבת, לא המשתמש.
+ //   פלט: specs-ds/<ns>.txt (ישויות · שלבים · חלקיקים · תוכן · דוח · ייצוא) + peruk-index.json (צומת: מזהה · רגע · קטגוריה ·
+ //   מחירים · שרשרת) — ואז app-ds בונה את האפליקציה. מאות מסמכים = ריצה אחת.
+ //   שער `peruk`: לכל מסמך ב-peruks/ — ≥1 שדה-קליטה · ≥1 חלק-פלט · הסתייגות · אסור; והספק בדיסק ≡ הספק המחולל (טריות).
+@@ -76,6 +77,25 @@ function fieldsFrom(lines) {
+   return out;
+ }
+ 
++// ── 2b · שדות-מחושבים מ«מחושב»: שורה 'תווית = ביטוי' ⇒ שדה-נוסחה על השורש (האפליקציה מחשבת, המשתמש לא מקליד).
++//   הביטוי מבני בלבד: שמות-שדות שכבר נקלטו (הארוך-קודם) · ספרות · + - × ÷ * / ( ). מילה-לא-מזוהה ⇒ השורה נדחית בקול (כנות > נוסחה-שבורה).
++function computedFrom(lines, known) {
++  const out = [];
++  const names = known.slice().sort((a, b) => b.length - a.length);
++  for (const l0 of lines) {
++    const l = l0.trim(); if (!l) continue;
++    const it = /^([-*•]|\d+[.)])\s/.test(l) ? strip(l) : norm(l);
++    const m = it.match(/^(.+?)\s*=\s*(.+)$/); if (!m) continue;
++    const label = heW(m[1]).slice(0, P.fieldMaxWords).join(' ');
++    let expr = m[2].replace(/×/g, '*').replace(/÷/g, '/').replace(/\s+/g, ' ').trim();
++    let residue = ' ' + expr + ' ';
++    for (const n of names) residue = residue.split(n).join(' ');
++    if (label.length <= 1 || /[^0-9.+\-*/()\s]/.test(residue)) { console.log(`⚠ ${P.computedHead[0]}: «${it}» — שדה לא-מוכר בביטוי, נדחה`); continue; }
++    if (!out.some((f) => f.label === label) && !known.includes(label)) out.push({ label, expr });
++  }
++  return out;
++}
++
+ // ── 3 · חלקי-הפלט מ«מה חוזר»: פריט ממוספר = חלק; שורות-המשך = פירוט (⇒ refs לשדות או תוכן-החלק); תת-רשימה קצרה = אפשרויות-החלטה ──
+ function outputsFrom(lines) {
+   const secs = []; let cur = null;
+@@ -111,6 +131,8 @@ export function perukToSpec(md, ns) {
+   const outputSec = product ? product.subs.find((s) => P.outputsHead.some((h) => s.head.includes(h))) : null;
+   const fields = inputSec ? fieldsFrom(inputSec.lines) : [];
+   const outputs = outputSec ? outputsFrom(outputSec.lines) : [];
++  const computedSec = product ? product.subs.find((s) => (P.computedHead || []).some((h) => s.head.includes(h))) : null;
++  const computed = computedSec ? computedFrom(computedSec.lines, [...P.personFields.map((f) => f.replace(/\*$/, '')), ...fields.map((f) => f.label)]) : [];
+   const content = []; const groups = P.groups;
+   // מסגרת · בלוקים · סיווג/בדיקה · אסור · לא-נכנס · דוגמה · שרשרת
+   const frame = S('frame'); if (frame) content.push(...contentOf(frame, groups.frame));
+@@ -157,7 +179,7 @@ export function perukToSpec(md, ns) {
+   // ── ספק ──
+   const root = P.rootNoun, fnd = P.findingNoun;
+   const fieldStr = (f) => `${f.label}${f.enumVals ? `{${f.enumVals.join('|')}}` : ''}${f.num ? P.numRange : ''}${f.required ? '*' : ''}`;
+-  const rootFields = [...P.personFields, ...fields.map(fieldStr), ...decisions.map((dd) => `${dd.label}{${dd.enumVals.join('|')}}`), ...(classes.length ? [`${P.classifyField}{${classes.join('|')}}`] : [])];
++  const rootFields = [...P.personFields, ...fields.map(fieldStr), ...computed.map((c) => `${c.label} = ${c.expr}`), ...decisions.map((dd) => `${dd.label}{${dd.enumVals.join('|')}}`), ...(classes.length ? [`${P.classifyField}{${classes.join('|')}}`] : [])];
+   const lines = [];
+   lines.push(`${G.appWord}: ${d.title || ns}`);
+   lines.push(`${G.lookWord}: ${P.look}`);                                   // G28 · עור-הנייר של «בלגן»
+@@ -208,7 +230,7 @@ export function perukToSpec(md, ns) {
+   const phone = P.personFields.find((f) => /טלפון/.test(f));
+   if (phone) lines.push(`${G.reportWord} ${root}: [${G.pExport[0]}] ${P.exportLabel} = ${phone.replace(/\*$/, '')}, ${P.exportGoal}`);
+   for (const c of content) lines.push(`${G.contentWord} ${c.group}${c.tag ? ` [${c.tag}]` : ''}: ${q(c.text)}`);
+-  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length };
++  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, ...(computed.length ? { computed: computed.map((c) => c.label) } : {}), outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length };
+   return { spec: lines.join('\n') + '\n', node, doc: d };
+ }
+ 
+diff --git a/machtzev/generator/peruks/peruk-12.md b/machtzev/generator/peruks/peruk-12.md
+index 58df974..acd6e09 100644
+--- a/machtzev/generator/peruks/peruk-12.md
++++ b/machtzev/generator/peruks/peruk-12.md
+@@ -77,6 +77,9 @@
+ 
+ לא: «האוטו גנוב» בלי נתון.
+ 
++### מחושב
++- מחיר עם אגרה = מחיר × 1.03
++
+ ---
+ 
+ ## 6. דוגמה
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..4cb153a 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת, מחיר עם אגרה = מחיר * 1.03 | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

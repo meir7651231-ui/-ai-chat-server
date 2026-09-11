@@ -1,0 +1,100 @@
+{
+ "task": "H02",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort": true,
+  "desc": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  },
+  {
+   "id": "desc",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Spec file sechirut.txt was successfully regenerated with sort directive added to תיק particle.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No other app specs were modified; all other generated apps remain byte-identical.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No orphan generated files created; all output properly scoped to sechirut app.",
+   "check": "no_orphans",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All 53 gates pass; no policy violations or safety checks failed.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No Hebrew text added to engine files (.mjs); all sorting logic uses English-named functions.",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart uses valid numeric comparison (num.compareTo) for שכירות field.",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Flutter analyze reports 0 errors; generated Dart code is valid and type-safe.",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Particle sort directive correctly parsed and compiled into Dart sort lambda.",
+   "check": "sort",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Descending sort order (יורד) correctly applied; highest rent values appear first.",
+   "check": "desc",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "7c8a9b13b4282e67",
+ "at": "2026-09-10T20:25:37.076Z"
+}

@@ -1,0 +1,137 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 60e65de..41bbcd9 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -8,7 +8,7 @@ import fs from 'node:fs';
+ import path from 'node:path';
+ import { interpret as entInterpret } from './entity.mjs';
+ import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write, setLook, getLook } from './render-ds.mjs';
+-import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, renderReportTest, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
++import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, emptyTextByEntity, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, renderReportTest, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
+ import { nlToSpec } from './nl-spec.mjs';
+ import { pickRoot, renderRootPage, renderShell, renderHome, renderBehavior } from './app-shell.mjs';
+ import fs0 from 'node:fs';
+@@ -149,6 +149,7 @@ export function buildApp(specText) {
+   for (const f of fs.readdirSync(DATA)) if (own.test(f)) fs.unlinkSync(path.join(DATA, f));
+ 
+   const screens = [];
++  const emptyByEnt = emptyTextByEntity(parseParticleLines(particleLines));   // `חלקיק <ישות>: [ריק] <טקסט>` ⇒ מצב-הריק של מסך-הישות (בלי חלקיק-ריק ⇒ ביט-זהה)
+   for (const li of info) {
+     if (li.isEnt) {
+       const r = entRes[li.i];
+@@ -158,7 +159,7 @@ export function buildApp(specText) {
+         hidden: roles.map((role) => r.schema.map((s, i) => (role.hide || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+         readonly: roles.map((role) => r.schema.map((s, i) => (role.ro || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+       } : null;
+-      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz, sort: r.sort || [] });
++      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz, sort: r.sort || [], emptyText: emptyByEnt[r.entity] || null });
+       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} ${L.fieldsWord}${(r.stages || []).length ? ` · ${r.stages.length} ${L.stagesWord}` : ''}` });
+     } else {
+       const slug = `${P}scr${li.i}`;
+diff --git a/machtzev/generator/apps/calendar.json b/machtzev/generator/apps/calendar.json
+index 8fa140b..2204524 100644
+--- a/machtzev/generator/apps/calendar.json
++++ b/machtzev/generator/apps/calendar.json
+@@ -54,6 +54,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "משתתפים",
++    "type": "text",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "הערה",
+     "type": "multiline",
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..634ffc7 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "ריק אין פגישות השבוע",
++  "expr": "[ריק] אין פגישות השבוע",
++  "ok": true,
++  "why": null,
++  "shape": "empty",
++  "ops": [
++   "empty"
++  ],
++  "picks": [
++   {
++    "op": "empty",
++    "atoms": [
++     "EmptyStateCard"
++    ],
++    "alts": [
++     "EmptyStateCard",
++     "EmptyState@premium/feedback",
++     "SearchEmptyState"
++    ]
++   }
++  ],
++  "wired": [
++   "EmptyState@premium/feedback"
++  ]
++ }
++]
+diff --git a/machtzev/generator/particles.mjs b/machtzev/generator/particles.mjs
+index 287b322..2fb0bfa 100644
+--- a/machtzev/generator/particles.mjs
++++ b/machtzev/generator/particles.mjs
+@@ -43,6 +43,16 @@ export function parseParticleLines(lines) {
+   }
+   return out;
+ }
++// ── 1א · `[ריק] <טקסט>` של ישות ⇒ גם מצב-הריק של מסך-הישות עצמו (לא רק מסך-החלקיקים). ישות ⇒ הטקסט הראשון; בלי חלקיק-ריק ⇒ אין מפתח (המסך נשאר ביט-זהה) ──
++export function emptyTextByEntity(particles) {
++  const out = {};
++  for (const p of particles) {
++    if (p.entity in out) continue;
++    const s = shapeOf(p.expr, []);
++    if (s.kind === 'empty' && s.text && s.text.trim()) out[p.entity] = s.text.trim();
++  }
++  return out;
++}
+ 
+ // ── 1ב · אטומי-תוכן (G24): טקסט מילה-במילה מהמסמך של האדם — דאטה, לא קוד. `תוכן <קבוצה> [תג]: <טקסט>` ──
+ export function parseContentLines(lines) {
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..2ca9034 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -261,7 +261,7 @@ function compileCond(formula, labels) {
+ }
+ 
+ // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
+-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null, sort = [] }) {
++export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null, sort = [], emptyText = null }) {
+   const { k, dump } = makeConsts(slug);
+   const cTitle = k(name);
+   const cSub = k(`${schema.length} ${L.fieldsWord}${stages.length ? ` · ${stages.length} ${L.stagesWord}` : ''}`);
+@@ -270,7 +270,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const cUpdate = k(L.update);
+   const cForm = k(L.recordForm);
+   const cRecords = k(L.records);
+-  const cEmpty = k(T('emptyHint', { name }));
++  const cEmpty = k(emptyText || T('emptyHint', { name }));   // `[ריק] <טקסט>` מהספק ⇒ מצב-הריק של הרשימה; בלעדיו ⇒ הרמז-הכללי (ביט-זהה)
+   const cNoMatch = k(L.noMatch);
+   const SK = `'${slug}'`;   // מפתח-חנות = slug יציב (לא שם-תצוגה חתוך ⇒ אפס דליפת-נתונים בין ישויות)
+ 
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..743ce96 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,5 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, משתתפים, הערה | שלבים: קבוע, התקיים
++חלקיק פגישה: [ריק] אין פגישות השבוע

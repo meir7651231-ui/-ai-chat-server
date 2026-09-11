@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Spec regeneration successful — app-ds.mjs generated all artifacts without errors"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other spec-ds apps remain byte-identical — only sechirut.txt modified, only sechirut app regenerated"
+    },
+    {
+      "check": "calc",
+      "text": "Computed field תקרה נמוכה = min(תקרה לפי 3 חודשים, תקרה לפי שליש) properly declared and calculated"
+    },
+    {
+      "check": "min",
+      "text": "min() function is supported by spec language (documented in SPEC-LANG.md) and correctly emitted in generated Dart code"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code passes flutter analyze with 0 errors — all type inference correct"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "No hand-edits to generated files — only spec source modified, generator produced all Dart"
+    }
+  ],
+  "notes": "proven — added single computed field תקרה נמוכה to תיק entity using spec language min() function. All checks pass. No other apps affected."
+}

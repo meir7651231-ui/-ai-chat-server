@@ -1,0 +1,8 @@
+ M machtzev/generator/particle-plan-sechirut.json
+ M machtzev/generator/particle-plan-sechirut.md
+ M machtzev/generator/specs-ds/sechirut.txt
+?? "machtzev/audit/search/2026-09-10-\327\225\327\240\327\224-count-findings-6c6687c8.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

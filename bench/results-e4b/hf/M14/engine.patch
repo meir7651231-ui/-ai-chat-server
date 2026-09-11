@@ -1,0 +1,12 @@
+diff --git a/machtzev/generator/app-ds.mjs b/machtzev/generator/app-ds.mjs
+index 60e65de..6e8ab48 100644
+--- a/machtzev/generator/app-ds.mjs
++++ b/machtzev/generator/app-ds.mjs
+@@ -55,6 +55,7 @@ function parseRole(line) {
+ export function buildApp(specText) {
+   // 🗣️ צפן §22: קלט חסר-מבנה לגמרי (אף ישות/דשבורד/תפקיד) ⇒ עברית-חופשית ⇒ nlToSpec.
+   // מבנה קיים ⇒ ביט-זהה (לא נוגעים). כך אותה דלת מקבלת גם משפט-חופשי וגם אפיון-מדויק.
++  setLook('dark');   // reset look to default at start of each build
+   const raw = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2 && !PARTICLE_RE.test(l));
+   // חסר ישות-מפורשת ⇒ עברית-חופשית לשורות-שאינן-תפקיד (שורות-תפקיד נשמרות כמות-שהן ומצורפות
+   // בחזרה). באג-שנתפס: קלט מעורב (משפט-ישויות-חופשי + 'תפקיד ...') דילג על nlToSpec כי שורת-

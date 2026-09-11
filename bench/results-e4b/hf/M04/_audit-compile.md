@@ -1,0 +1,5 @@
+machtzev/generator/ship.mjs:2 · ship.mjs quarantined with blocker preventing execution — `console.error("🔒 BLOCKED by protocol...")` and `process.exit(2)` · P0 compile-break · restore original ship.mjs from prior commit
+
+machtzev/generator/apps/peruk17.json:81-85 · field "ימים לתגובה" declared as type "text" but particle expects number shape — num.tryParse falls back to 0 on invalid input · P1 wrong result · change field type from "text" to "num"
+
+**Coverage:** Read peruk17.txt spec, generated px1/px1_content/ent1 Dart, particle-plan JSON, and git diff. Verified particle expression syntax `[מספר] ימים לתגובה : 30 ימים מקבלת המכתב` correctly stored and referenced. KvLine widget renders correctly but note text (c97='30 ימים מקבלת המכתב') is unused in current rendering (may be intentional storage for future use). Null safety: `num.tryParse(...) ?? 0` is sound. String comparisons not involved. No unexistent Dart methods detected. Could not run flutter analyze (Dart not installed), so compile verification is AST-only.

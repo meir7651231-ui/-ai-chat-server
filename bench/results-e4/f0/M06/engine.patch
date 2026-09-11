@@ -1,0 +1,87 @@
+diff --git a/machtzev/generator/entity.mjs b/machtzev/generator/entity.mjs
+index b1bf2e9..4989ddf 100644
+--- a/machtzev/generator/entity.mjs
++++ b/machtzev/generator/entity.mjs
+@@ -70,7 +70,19 @@ export function interpret(text) {
+   // 🔤 פעלי-שפה (תואמי-לאחור): שדה* = חובה · שדה{א|ב|ג} = ערכים-מותרים · שדה=נוסחה = מחושב.
+   // פיצול-שדות מודע-עומק: פסיק/שורה מפרידים רק ברמה-העליונה — פסיק בתוך ()/{}/[]/<>
+   // (למשל קריאת-מנוע 'engine(שדה→מפתח, שדה→מפתח)') אינו מפריד-שדות.
+-  const splitFields = (str) => { const out = []; let d = 0, cur = ''; for (const ch of str) { if ('({[<'.includes(ch)) d++; else if (')}]>'.includes(ch)) d = Math.max(0, d - 1); if ((ch === ',' || ch === '\n') && d === 0) { out.push(cur); cur = ''; } else cur += ch; } if (cur.trim()) out.push(cur); return out; };
++  // '<'/'>' צמודים-לרווח או לפני '=' (למשל 'מרחק < 100', 'א >= ב' בשדה-מותנה) = אופרטור-השוואה, לא סוגר.
++  // באג-קודם: '<' של ההשוואה נספר כפותח ⇒ כל שאר-השורה נבלע לתוך ערך-ה-else.
++  const splitFields = (str) => {
++    const out = []; let d = 0, cur = ''; const cs = Array.from(str);
++    const isCmp = (j) => (cs[j] === '<' || cs[j] === '>') && (/\s/.test(cs[j - 1] || '') || /\s/.test(cs[j + 1] || '') || cs[j + 1] === '=' || cs[j - 1] === '<' || cs[j - 1] === '>');
++    for (let j = 0; j < cs.length; j++) {
++      const ch = cs[j];
++      if (isCmp(j)) { cur += ch; continue; }
++      if ('({[<'.includes(ch)) d++; else if (')}]>'.includes(ch)) d = Math.max(0, d - 1);
++      if ((ch === ',' || ch === '\n') && d === 0) { out.push(cur); cur = ''; } else cur += ch;
++    }
++    if (cur.trim()) out.push(cur); return out;
++  };
+   const rawFields = splitFields(fieldsPart).map((s) => s.trim()).filter(Boolean).slice(0, 200);
+   const annots = [];   // { label, required, unique, enumVals, formula, def }
+   for (const raw of rawFields) {
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..5b043d3 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -242,8 +242,8 @@ function compileGuard(cond, labels) {
+ }
+ 
+ // 🔁 מהדר-תנאי-מבני: תנאי-guard ⇒ ביטוי-bool ב-Dart מעל _v[] (מספרי או "מלא"). עיוור-דומיין.
+-function guardBool(g) {
+-  const V = (i) => `(num.tryParse(_v[${i}] ?? '') ?? 0)`;
++// V(i) = מקור-הערך-המספרי של שדה i (ברירת-מחדל: _v בטופס; ניתן להזריק מקור אחר — רשומה-שמורה / נוסחת-אח).
++function guardBool(g, V = (i) => `(num.tryParse(_v[${i}] ?? '') ?? 0)`) {
+   if (g.kind === 'num') return `${V(g.li)} ${g.op} ${g.num}`;
+   if (g.kind === 'ff') return `${V(g.li)} ${g.op} ${V(g.ri)}`;
+   if (g.kind === 'filled') return `(_v[${g.li}] ?? '').trim().isNotEmpty`;
+@@ -252,11 +252,11 @@ function guardBool(g) {
+ // ⚡ שדה-נגזר-מותנה (התנהגות · §23-ד): 'ערך > סף ? חריגה : תקין' ⇒ ערך-חי המשתנה עם
+ // הקלט. ההשוואה מ-compileGuard (מבנית); הערכים (then/else) מהאפיון (מוכנסים ל-content, לא
+ // מילון-מנוע). מד-ניטור/סטטוס-סף אמיתי — לא CRUD סטטי. מילה-לא-מזוהה ⇒ null (כנות).
+-function compileCond(formula, labels) {
++function compileCond(formula, labels, V) {
+   const m = formula.match(/^(.+?)\s*\?\s*([^?:]+?)\s*:\s*([^?:]+)$/);
+   if (!m) return null;
+   const g = compileGuard(m[1].trim(), labels); if (!g) return null;
+-  const b = guardBool(g); if (!b) return null;
++  const b = guardBool(g, V); if (!b) return null;
+   return { bool: b, then: m[2].trim(), els: m[3].trim() };
+ }
+ 
+@@ -355,13 +355,28 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+         return;
+       }
+       // (0-cond) שדה-נגזר-מותנה: 'A op B ? then : else' ⇒ סטטוס-חי מהשוואה (התנהגות §23-ד).
+-      const cd = compileCond(s.formula, labelIdx);
++      // שני מקורות-ערך לאותה השוואה: בטופס — אח-מחושב (נוסחה) מוזרק כביטויו (ל-_v שלו אין קלט ⇒ נקרא 0);
++      // בכרטיס/CSV — הרשומה-השמורה r (לא מצב-הטופס). אח שאינו נוסחה-פשוטה (צבירה/מנוע/מותנה) ⇒ _v / r כרגיל.
++      const sibExpr = (idx) => {
++        const f = schema[idx];
++        if (!f || !f.formula || ROLLUP_RE.test(f.formula) || /\?/.test(f.formula)) return null;
++        const em2 = f.formula.trim().match(/^([a-zA-Z_]\w*)\s*(?:\(([^)]*)\))?$/);
++        if (em2 && MAP_ENGINES[em2[1]]) return null;
++        return compileFormula(f.formula, labelIdx, usedFns);
++      };
++      const formV = (idx) => { const ex = sibExpr(idx); return ex ? `(${ex})` : `(num.tryParse(_v[${idx}] ?? '') ?? 0)`; };
++      const recLabel = (idx) => labelConst[idx] || k(schema[idx].label);   // אח מאוחר-יותר בסכמה ⇒ קבוע-תווית משלו
++      const recV = (idx) => `(num.tryParse(r[${recLabel(idx)}] ?? '') ?? 0)`;
++      const cd = compileCond(s.formula, labelIdx, formV);
+       if (cd) {
++        const cr = compileCond(s.formula, labelIdx, recV);
+         hasLive = true;
+-        const refOf = (t) => { const c = labelIdx.find((l) => l.label === t || l.raw === t); return c ? `(_v[${c.idx}] ?? '')` : k(t); };   // then/else שהם שם-שדה ⇒ ערך-השדה, אחרת טקסט (L105)
+-        const ce = `((${cd.bool}) ? ${refOf(cd.then)} : ${refOf(cd.els)})`;
++        // then/else שהם שם-שדה ⇒ ערך-השדה (מהטופס / מהרשומה), אחרת טקסט — קבוע אחד לשני המקורות (L105)
++        const refOf = (t) => { const c = labelIdx.find((l) => l.label === t || l.raw === t); if (c && c.idx !== i) return { form: `(_v[${c.idx}] ?? '')`, rec: `(r[${recLabel(c.idx)}] ?? '')` }; const ct = k(t); return { form: ct, rec: ct }; };
++        const th = refOf(cd.then), el = refOf(cd.els);
++        const ce = `((${cd.bool}) ? ${th.form} : ${el.form})`;
+         addField(i, `_live(${cl}, ${ce})`, `true`);
+-        recValsR.push(ce); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
++        recValsR.push(`((${cr.bool}) ? ${th.rec} : ${el.rec})`); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן; בכרטיס מוערך על r
+         return;
+       }
+       const expr = compileFormula(s.formula, labelIdx, usedFns);

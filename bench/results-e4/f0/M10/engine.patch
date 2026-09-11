@@ -1,0 +1,118 @@
+diff --git a/machtzev/generator/app-shell.mjs b/machtzev/generator/app-shell.mjs
+index 8cd573c..4c4dcd2 100644
+--- a/machtzev/generator/app-shell.mjs
++++ b/machtzev/generator/app-shell.mjs
+@@ -139,7 +139,7 @@ export function renderHome(slug, { root, rootPage, report, message, title, chain
+   // G32 · שדות-התאריך של השורש (חובה = hard-deadline, P8) · השלב האחרון · השרשרת
+   const dateFields = root.schema.filter((f) => f.type === 'date').map((f) => ({ label: f.label, hard: !!f.required }));
+   const phoneList = `[${root.schema.filter((f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && String(f.label).split(/\s+/).some((w) => (SL0.typePhone || []).includes(w))).map((f) => k(f.label)).join(', ')}]`;   // ב׳-לח · שדות-טלפון ⇒ «התקשר» על שורת-היום
+-  const numList = `[${root.schema.filter((f) => f.type === 'num' && !String(f.label).split(/\s+/).some((w) => (SL0.typePercent || []).includes(w))).map((f) => k(f.label)).join(', ')}]`;   // ב׳-מ · שדה-הסכום הראשי (לא אחוז) ⇒ ₪ על השורה
++  const numList = `[${root.schema.filter((f) => f.type === 'num' && !String(f.label).split(/\s+/).some((w) => (SL0.typePercent || []).includes(w) || (SL0.typeDuration || []).includes(w))).map((f) => k(f.label)).join(', ')}]`;   // ב׳-מ · שדה-הסכום הראשי (לא אחוז · לא משך בדקות/שעות) ⇒ ₪ על השורה
+   const timeList = `[${root.schema.filter(isTimeLabel).map((f) => k(f.label)).join(', ')}]`;   // שדות-שעה ⇒ השעה על שורת-היום והתוכנית מקבעת אותה
+   const lastStage = root.stages && root.stages.length ? root.stages.length - 1 : -1;
+   const dispR = disp;
+diff --git a/machtzev/generator/apps/calendar.json b/machtzev/generator/apps/calendar.json
+index 8fa140b..20851b9 100644
+--- a/machtzev/generator/apps/calendar.json
++++ b/machtzev/generator/apps/calendar.json
+@@ -54,6 +54,18 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "משך בדקות",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
++   {
++    "label": "משך בשעות",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "הערה",
+     "type": "multiline",
+diff --git a/machtzev/generator/balagan.mjs b/machtzev/generator/balagan.mjs
+index 4c6c1b2..9e17a15 100644
+--- a/machtzev/generator/balagan.mjs
++++ b/machtzev/generator/balagan.mjs
+@@ -23,6 +23,7 @@ const labelIn = (f, words) => !/^(num|date|bool|multiline)$/.test(f.type || '')
+ const isPhoneField = (f) => labelIn(f, SLB.typePhone || []);
+ const isPersonField = (f) => labelIn(f, SLB.typePerson || []) || (SLB.typePerson || []).some((w) => w.includes(' ') && f.label.includes(w));
+ const isPercentField = (f) => (f.type === 'num' || !f.type) && f.label.split(/\s+/).some((w) => (SLB.typePercent || []).includes(w));
++const isDurationField = (f) => (f.type === 'num' || !f.type) && f.label.split(/\s+/).some((w) => (SLB.typeDuration || []).includes(w));   // משך (דקות/שעות) — מספר שאינו כסף: לא שדה-הסכום של «₪ על השורה»/כרטיס-אדם (דקדוק-האפיון, לא דומיין)
+ const isTimeField = (f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && !(f.enumVals && f.enumVals.length) && f.label.split(/\s+/).some((w) => TIME_WORDS.includes(w));
+ const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
+ const impOf = (w) => `import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`;
+@@ -117,7 +118,7 @@ class BalaganModule {
+ class BalaganHit { const BalaganHit(this.module, this.score); final BalaganModule module; final double score; }
+ 
+ const List<BalaganModule> kBalaganModules = [
+-${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}], selfScore: ${selfScores[i]}, layer: '${m.layer || ''}', required: ${m.root.fields.filter((f) => f.required).length}, timeFields: [${m.root.fields.filter(isTimeField).map((f) => dq(f.label)).join(', ')}], phoneFields: [${m.root.fields.filter(isPhoneField).map((f) => dq(f.label)).join(', ')}], personFields: [${m.root.fields.filter(isPersonField).map((f) => dq(f.label)).join(', ')}], percentFields: [${m.root.fields.filter(isPercentField).map((f) => dq(f.label)).join(', ')}]),`).join('\n')}
++${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num' && !isDurationField(f)).map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}], selfScore: ${selfScores[i]}, layer: '${m.layer || ''}', required: ${m.root.fields.filter((f) => f.required).length}, timeFields: [${m.root.fields.filter(isTimeField).map((f) => dq(f.label)).join(', ')}], phoneFields: [${m.root.fields.filter(isPhoneField).map((f) => dq(f.label)).join(', ')}], personFields: [${m.root.fields.filter(isPersonField).map((f) => dq(f.label)).join(', ')}], percentFields: [${m.root.fields.filter(isPercentField).map((f) => dq(f.label)).join(', ')}]),`).join('\n')}
+ ];
+ /// סף-החולשה — נגזר מהנתונים (לא קבוע-קסם): חצי מביטחון-הכותרת-הנמוך-ביותר בין המודולים. מתחתיו הרגע «כללי» ⇒ שכבת-הבסיס ראשונה.
+ const double kBalaganWeak = ${weak};
+diff --git a/machtzev/generator/spec-lang-doc.mjs b/machtzev/generator/spec-lang-doc.mjs
+index 8ee6bd0..cfc9804 100644
+--- a/machtzev/generator/spec-lang-doc.mjs
++++ b/machtzev/generator/spec-lang-doc.mjs
+@@ -16,7 +16,7 @@ export function specLangDoc() {
+ 
+ ## שדות (בתוך שורת-הישות)
+ - חובה \`שם*\` · ייחודי \`שם!\` · בחירה-סגורה \`שדה{א|ב|ג}\` · ברירת-מחדל \`שדה[ערך]\` · טווח \`שדה(0..100)\`
+-- טיפוס לפי מילה בשם: תאריך ${j(G.typeDate)} · מספר ${j(G.typeNum)} · כן/לא ${j(G.typeBool)} · טלפון ${j(G.typePhone)} · שעה ${j(G.typeTime)} · אחוז ${j(G.typePercent)} · מקום ${j(G.typeLocation)} · רב-שורתי ${j(G.typeMultiline)}
++- טיפוס לפי מילה בשם: תאריך ${j(G.typeDate)} · מספר ${j(G.typeNum)} · כן/לא ${j(G.typeBool)} · טלפון ${j(G.typePhone)} · שעה ${j(G.typeTime)} · אחוז ${j(G.typePercent)} · משך (מספר שאינו כסף) ${j(G.typeDuration)} · מקום ${j(G.typeLocation)} · רב-שורתי ${j(G.typeMultiline)}
+ - **שדה מחושב** \`שם = <נוסחה>\`: שדות-אחות, מספרים, + - * / ( ) ופונקציות: ${fns} (למשל \`מרחק בקמ = sqrt(מרחק בריבוע)\`, \`תקרה = max(תקרה א, תקרה ב)\`)
+ - **שדה מותנה** \`שם = <שדה> <op> <שדה|מספר> ? <ערך-אם-כן> : <ערך-אם-לא>\` (op: > < >= <=) — למשל \`קרוב = מרחק בריבוע < 100 ? קרוב : רחוק\`
+ - קישור לישות-אם: שם-הישות כשם-שדה (\`תיק*\`)
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index de89656..1203549 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -19,6 +19,7 @@
+   "מספר",
+   "אחוז",
+   "שעות",
++  "דקות",
+   "שטח",
+   "רווח",
+   "יתרה",
+@@ -205,6 +206,12 @@
+   "אחוזים",
+   "ריבית"
+  ],
++ "typeDuration": [
++  "דקות",
++  "בדקות",
++  "שעות",
++  "בשעות"
++ ],
+  "typeLocation": [
+   "מקום",
+   "כתובת",
+diff --git a/machtzev/generator/specs-ds/SPEC-LANG.md b/machtzev/generator/specs-ds/SPEC-LANG.md
+index 96495e3..f745d6e 100644
+--- a/machtzev/generator/specs-ds/SPEC-LANG.md
++++ b/machtzev/generator/specs-ds/SPEC-LANG.md
+@@ -8,7 +8,7 @@
+ 
+ ## שדות (בתוך שורת-הישות)
+ - חובה `שם*` · ייחודי `שם!` · בחירה-סגורה `שדה{א|ב|ג}` · ברירת-מחדל `שדה[ערך]` · טווח `שדה(0..100)`
+-- טיפוס לפי מילה בשם: תאריך תאריך / מועד / יום / לידה / תוקף / התחלה / סיום / מתי · מספר מחיר / סכום / תקציב / עלות / כמות / מספר / אחוז / שעות / שטח / רווח / יתרה / מ״ר / מ"ר · כן/לא האם / פעיל / סטטוס / מצב / חסום / מאושר / נכלל · טלפון טלפון / נייד / פלאפון · שעה שעה · אחוז אחוז / אחוזים / ריבית · מקום מקום / כתובת / מיקום · רב-שורתי תיאור / הערה / הערות / פירוט
++- טיפוס לפי מילה בשם: תאריך תאריך / מועד / יום / לידה / תוקף / התחלה / סיום / מתי · מספר מחיר / סכום / תקציב / עלות / כמות / מספר / אחוז / שעות / דקות / שטח / רווח / יתרה / מ״ר / מ"ר · כן/לא האם / פעיל / סטטוס / מצב / חסום / מאושר / נכלל · טלפון טלפון / נייד / פלאפון · שעה שעה · אחוז אחוז / אחוזים / ריבית · משך (מספר שאינו כסף) דקות / בדקות / שעות / בשעות · מקום מקום / כתובת / מיקום · רב-שורתי תיאור / הערה / הערות / פירוט
+ - **שדה מחושב** `שם = <נוסחה>`: שדות-אחות, מספרים, + - * / ( ) ופונקציות: sqrt(…), min(…), max(…), pow(…), abs(…), round(…), floor(…), ceil(…) (למשל `מרחק בקמ = sqrt(מרחק בריבוע)`, `תקרה = max(תקרה א, תקרה ב)`)
+ - **שדה מותנה** `שם = <שדה> <op> <שדה|מספר> ? <ערך-אם-כן> : <ערך-אם-לא>` (op: > < >= <=) — למשל `קרוב = מרחק בריבוע < 100 ? קרוב : רחוק`
+ - קישור לישות-אם: שם-הישות כשם-שדה (`תיק*`)
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..16eed60 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, משך בדקות, משך בשעות = משך בדקות / 60, הערה | שלבים: קבוע, התקיים

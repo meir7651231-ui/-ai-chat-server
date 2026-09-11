@@ -1,0 +1,75 @@
+{
+ "task": "M05",
+ "ns": "peruk21",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "msg": true,
+  "title": true
+ },
+ "task_checks": [
+  {
+   "id": "msg",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "title",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "App-ds generator successfully regenerated peruk21 app with new message particle",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Message particle תשובה added to case screen linked to סיווג classification field",
+   "check": "msg",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles without errors - Dart math and List functions are correct",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No other files in new/ directory were modified - only peruk21 regenerated",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "db3af64af37fe349",
+ "at": "2026-09-10T21:17:26.705Z"
+}

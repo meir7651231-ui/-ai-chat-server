@@ -1,0 +1,27 @@
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..5590045 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -53,6 +53,12 @@
+     "type": "multiline",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "סכום כולל מעמ",
++    "type": "num",
++    "required": false,
++    "enumVals": []
+    }
+   ]
+  },
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..ed02a6b 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, הערה, סכום כולל מעמ=סכום*1.18 | שלבים: פתוח, נעשה

@@ -1,0 +1,105 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..fb4a7d6 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-counter-particle-syntax · מונה-חלקיק בישות דורש קידומת-ישות במצב — מונה(ישות: שדה=ערך) לא מונה / count (M08)
++GATE: counter
++ref: new/dart-data-bs/auto/gen_app_peruk08_px1_content.dart
++ANTIPATTERN: חלקיק.*=\s*מונה\s*/\s*count\(
++RULE: חלקיק מונה בהצהרת-ישות שסופר ערכים בישות הזו חייב להשתמש בסוגריים — `מונה(ישות: שדה=ערך)` ולא בשפץ־מונה — `מונה / count(שדה=ערך)`; השפץ נפרש כיחס-חלוקה ומוגדר כ-ratio.
++מה נכשל: ניסיון ראשון השתמש בסוגריים עם שפץ (`מונה / count(תיק: האם כבר פנו למוכר=לא)`), שהמנוע זיהה כרציו בין שני ערכים (⇒ [ratio]). השני השתמש בסוגריים בלבד (ללא שפץ) — `מונה(תיק: האם כבר פנו למוכר=לא)` — והקימוט עבר. הבדל: מונה עם סוגריים = ספירה; עם שפץ = יחס. סדר-הקידומת = entity:field, לא ההיפך.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk08.json b/machtzev/generator/apps/peruk08.json
+index 911b157..ea951c0 100644
+--- a/machtzev/generator/apps/peruk08.json
++++ b/machtzev/generator/apps/peruk08.json
+@@ -68,7 +68,11 @@
+     "label": "האם כבר פנו למוכר",
+     "type": "bool",
+     "required": false,
+-    "enumVals": []
++    "enumVals": [
++     "כן",
++     "לא",
++     "לא יודע"
++    ]
+    },
+    {
+     "label": "סיווג",
+diff --git a/machtzev/generator/particle-plan-peruk08.json b/machtzev/generator/particle-plan-peruk08.json
+index 1fbd18b..808ea99 100644
+--- a/machtzev/generator/particle-plan-peruk08.json
++++ b/machtzev/generator/particle-plan-peruk08.json
+@@ -199,5 +199,32 @@
+   "wired": [
+    "DsNote"
+   ]
++ },
++ {
++  "entity": "תיק",
++  "name": "לא פנו",
++  "expr": "מונה(תיק: האם כבר פנו למוכר=לא)",
++  "ok": true,
++  "why": null,
++  "shape": "count",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
+  }
+ ]
+diff --git a/machtzev/generator/particle-plan-peruk08.md b/machtzev/generator/particle-plan-peruk08.md
+index 99949f4..d6cf4a7 100644
+--- a/machtzev/generator/particle-plan-peruk08.md
++++ b/machtzev/generator/particle-plan-peruk08.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| לא פנו | תיק | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+ 
+diff --git a/machtzev/generator/specs-ds/peruk08.txt b/machtzev/generator/specs-ds/peruk08.txt
+index 4b501fe..a4cadaf 100644
+--- a/machtzev/generator/specs-ds/peruk08.txt
++++ b/machtzev/generator/specs-ds/peruk08.txt
+@@ -3,7 +3,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר{כן|לא|לא יודע}, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+@@ -61,6 +61,7 @@
+ תוכן דוגמה: אחרת אפתח מחלוקת אצל המנפיק.
+ תוכן כרטיס: אמצעי תשלום
+ תוכן כרטיס: סוג א–ו
++חלקיק תיק: לא פנו = מונה(תיק: האם כבר פנו למוכר=לא)
+ תוכן סדר פעולות ממוספר קודם: סדר פעולות ממוספר קודם
+ תוכן הודעה למוכר: הודעה למוכר
+ תוכן טיוטה למנפיק ביט רק: טיוטה למנפיק ביט רק

@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator successfully parsed calendar.txt with new numeric field and computed field with division"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "All generated files in new/dart-gen-bs and new/dart-data-bs produced by app-ds.mjs engine only"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Division operator correct in formula; num.tryParse() for type conversion; toStringAsFixed(2) formatting"
+    },
+    {
+      "check": "field_type_numeric",
+      "text": "First field recognized as numeric via type keyword in spec-lang.data.json"
+    },
+    {
+      "check": "field_name_hebrew",
+      "text": "String constants verified with Hebrew field names in generated dart-data-bs"
+    },
+    {
+      "check": "computed_formula_correct",
+      "text": "Generated code at line 51: (num.tryParse / 60).toStringAsFixed(2) implements correct division formula"
+    }
+  ],
+  "notes": "Proven: All claims verified via grep and file inspection of generated Dart. Engine change minimal and spec-first approach followed."
+}

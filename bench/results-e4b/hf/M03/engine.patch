@@ -1,0 +1,73 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..9509d24 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-lang-abc123 · תוכן ודוח קבועים ביחד — תוכן <קבוצה>: בתוך פורמט בדיקה/חוק/בקשה צריך להיות מיד הגדרת הדוח דוח <ישות>: <שם> = [תוכן <קבוצה>] כדי שהחיווט יידוק כנכון (10.9, M03 · sechirut)
++GATE: spec-lang
++ref: machtzev/generator/specs-ds/sechirut.txt:39–96
++ANTIPATTERN: תוכן\s+\w+:\s*\n(.*?)\n\n(?!דוח.*\[תוכן\s+\1\])
++RULE: כשמוסיפים קבוצת-תוכן חדשה, על הדוח לכלול עיקוב ישיר דרך [תוכן <קבוצה>]; אם תוכן מוגדר אך אין דוח שמרשום את [תוכן <קבוצה>], הוא וטפל ולא יופיע בפלט; סדר-הוויזואל (תוכן → דוח) אינו חשוב, אך קיום שניהם בקובץ הוא.
++מה נכשל / מה הבחן: הוספת תוכן סיכום (סך 3 שורות, אחת חובה) כללה יצירת קבוצה וקישור דוח — המנוע שלח את שני החלקים לפלט בנכונות (regen_ok, compiles, report_text 2×). הלקח לא על כשל אלא על ודאות: לעולם לא להוסיף תוכן בלי דוח או דוח בלי תוכן, אלא כזוג סגור.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..5f7abeb 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -41,6 +41,7 @@
+ | תיק | חישוב בטוחות | בטוחה.תקרה לפי שליש | childParticle (שדה) | DsChip |
+ | תיק | חישוב בטוחות | בטוחה.חורג | childParticle | ForgeGlowSlider |
+ | תיק | חישוב בטוחות | בטוחה.מעל התקרה | childParticle | KvLine |
++| תיק | סיכום | [תוכן סיכום] | content | DsNote |
+ | תיק | בקשות לשינוי | ממצא.מה לבקש | childParticle | DsChip |
+ | תיק | מה לא בדקנו | [תוכן לא נבדק] | content | DsNote |
+ | תיק | הסתייגות | [תוכן הסתייגות] | content | DsNote |
+diff --git a/machtzev/generator/report-plan-sechirut.json b/machtzev/generator/report-plan-sechirut.json
+index 3b397a7..bcd0302 100644
+--- a/machtzev/generator/report-plan-sechirut.json
++++ b/machtzev/generator/report-plan-sechirut.json
+@@ -155,6 +155,19 @@
+      }
+     ]
+    },
++   {
++    "name": "סיכום",
++    "refs": [
++     {
++      "raw": "[תוכן סיכום]",
++      "mode": "content",
++      "why": null,
++      "wired": [
++       "DsNote"
++      ]
++     }
++    ]
++   },
+    {
+     "name": "בקשות לשינוי",
+     "refs": [
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..1388454 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -36,6 +36,7 @@
+ דוח תיק: לוח = לוח
+ דוח תיק: כרטיס עסקה = לקוח, שכירות, חודשים, שכירות לשנה, בטוחה.סך בטוחות, בטוחה.חורג מול 3 חודשים
+ דוח תיק: חישוב בטוחות = בטוחה.תקרה לפי 3 חודשים, בטוחה.תקרה לפי שליש, בטוחה.חורג, בטוחה.מעל התקרה
++דוח תיק: סיכום = [תוכן סיכום]
+ דוח תיק: בקשות לשינוי = ממצא.מה לבקש
+ דוח תיק: מה לא בדקנו = [תוכן לא נבדק]
+ דוח תיק: הסתייגות = [תוכן הסתייגות]
+@@ -90,3 +91,6 @@
+ תוכן הודעה [לחתום אחרי שינויים]: קיבלתי את החוזה. אחתום אחרי השינויים האלה: {ממצא.מה לבקש}. הבטוחות לא יעלו על {תקרה לפי 3 חודשים} ₪ במצטבר. תשובה עד מועד החתימה.
+ תוכן הודעה [לא לחתום]: קיבלתי את החוזה. בתנאים האלה לא אחתום: {ממצא.מה לבקש}. אם זה משתנה — אשמח לדבר.
+ תוכן הודעה [לחתום כמו שזה]: קיבלתי את החוזה. אחתום כמו שזה במועד החתימה.
++תוכן סיכום: הבטוחות ייבדקו מול התקרה
++תוכן סיכום: סך הבטוחות לא יחרוג מהנמוך מ-3 חודשי שכירות או שליש מכל תקופת החוזה
++תוכן סיכום: ערובה מוחזרת תוך 60 יום ממסירת הדירה

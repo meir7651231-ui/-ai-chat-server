@@ -1,0 +1,37 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator successfully processed the new computed field קרוב in panuy.txt"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other spec files were changed; panuy.txt is the only modified file"
+    },
+    {
+      "check": "no_orphans",
+      "text": "No orphaned generated files; spec-to-Dart pipeline completed cleanly"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All registered gates pass; field definition meets spec language requirements"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Comparison operator < is valid for numeric type in conditional field"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles with no errors (flutter analyze: 0 issues)"
+    },
+    {
+      "check": "calc",
+      "text": "Computed field קרוב properly registered as conditional calculation: 1 const + 1 calc"
+    },
+    {
+      "check": "far",
+      "text": "Distance-based computation verified; field correctly references מרחק בריבוע"
+    }
+  ],
+  "notes": "proven: All 8 machine checks pass. The computed text field קרוב has been successfully added to the person (אדם) entity. It displays קרוב when מרחק בריבוע < 100 and רחוק otherwise, following SPEC-LANG.md syntax for conditional fields (שדה מותנה). No functionality broken; no other files affected."
+}

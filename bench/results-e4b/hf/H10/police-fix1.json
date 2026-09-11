@@ -1,0 +1,85 @@
+{
+ "task": "H10",
+ "ns": "calendar",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort_list": true,
+  "sort_second_surface": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_list",
+   "ok": true,
+   "info": "ent1,px1",
+   "mandatory": true
+  },
+  {
+   "id": "sort_second_surface",
+   "ok": true,
+   "info": "px1",
+   "mandatory": false
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Calendar app regenerated from spec without errors",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only spec file (calendar.txt) modified; no generated code edited manually",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Entity list sorting by time implemented: gen_app_calendar_ent1.dart:157 sorts by time field",
+   "check": "sorting_entity_list",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Particle table sorting by time implemented: gen_app_calendar_px1.dart:18 sorts by time field",
+   "check": "sorting_particle_table",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "All Hebrew text in spec and data files; no hardcoded Hebrew in generator",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Sorting uses String.compareTo() and num.compareTo(); no complex math",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "643e322af2961935",
+ "at": "2026-09-10T23:16:35.488Z"
+}

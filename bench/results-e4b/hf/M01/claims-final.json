@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Regenerated peruk02 app using app-ds.mjs with --name flag; all 3 entities generated successfully."
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only peruk02.txt spec file modified; no hand-edits to generated files in new/ directory."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Only peruk02 app regenerated; other apps (audit, bind*, calendar, ent*, etc.) remain unchanged."
+    },
+    {
+      "check": "gates_pass",
+      "text": "Spec syntax validated: cascade delete (מחיקה: תיק=מפל), table particle ([טבלה]), enum field (שולם{כן|לא})."
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "All Hebrew text stays in peruk02.txt spec; no Hebrew added to generator engine files."
+    }
+  ],
+  "notes": "proven: Task requirement to add תשלום (payment) entity to peruk02 implemented successfully. Spec changes: (1) Added 'ישות תשלום עם תיק*, סכום*, שולם{כן|לא} | מחיקה: תיק=מפל' to entity definitions. (2) Added 'חלקיק תשלום: [טבלה]' for table particle. Verified: app-ds.mjs regeneration succeeded, gen_app_peruk02_* files created with timestamp 2026-09-10 20:07, relations.dart shows ent3 properly linked to ent1 (תיק) with cascade delete configuration. No changes to other app specs. Awaiting machine verification: byte_identical_others, compiles (flutter analyze), gates_pass (spec validation)."
+}

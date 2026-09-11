@@ -1,0 +1,478 @@
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..5f7846c 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -79,9 +79,13 @@
+   {
+    "name": "תיק",
+    "slug": "app_peruk12_ent1"
++  },
++  {
++   "name": "בדיקה",
++   "slug": "app_peruk12_ent2"
+   }
+  ],
+- "relations": false,
++ "relations": true,
+  "report": {
+   "slug": "app_peruk12_rp1",
+   "cls": "GenAppPeruk12Rp1Screen"
+diff --git a/machtzev/generator/particle-plan-peruk12.json b/machtzev/generator/particle-plan-peruk12.json
+index 2591b82..a0e4d8a 100644
+--- a/machtzev/generator/particle-plan-peruk12.json
++++ b/machtzev/generator/particle-plan-peruk12.json
+@@ -80,6 +80,33 @@
+    "EmptyState@premium/feedback"
+   ]
+  },
++ {
++  "entity": "בדיקה",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "מסגרת",
+diff --git a/machtzev/generator/particle-plan-peruk12.md b/machtzev/generator/particle-plan-peruk12.md
+index 65c380d..b193eae 100644
+--- a/machtzev/generator/particle-plan-peruk12.md
++++ b/machtzev/generator/particle-plan-peruk12.md
+@@ -5,6 +5,7 @@
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
++| טבלה | בדיקה | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..51df605 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -46,7 +46,8 @@
+   ],
+   "forbidden": 5,
+   "disclaimer": true,
+-  "content": 91
++  "content": 91,
++  "children": []
+  },
+  {
+   "id": 2,
+@@ -86,7 +87,8 @@
+   "chain": [],
+   "forbidden": 5,
+   "disclaimer": true,
+-  "content": 66
++  "content": 66,
++  "children": []
+  },
+  {
+   "id": 3,
+@@ -143,7 +145,8 @@
+   ],
+   "forbidden": 7,
+   "disclaimer": true,
+-  "content": 54
++  "content": 54,
++  "children": []
+  },
+  {
+   "id": 4,
+@@ -194,7 +197,8 @@
+   ],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 57
++  "content": 57,
++  "children": []
+  },
+  {
+   "id": 5,
+@@ -239,7 +243,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 51
++  "content": 51,
++  "children": []
+  },
+  {
+   "id": 6,
+@@ -280,7 +285,8 @@
+   "chain": [],
+   "forbidden": 7,
+   "disclaimer": true,
+-  "content": 67
++  "content": 67,
++  "children": []
+  },
+  {
+   "id": 7,
+@@ -334,7 +340,8 @@
+   ],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 59
++  "content": 59,
++  "children": []
+  },
+  {
+   "id": 8,
+@@ -386,7 +393,8 @@
+   "chain": [],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 45
++  "content": 45,
++  "children": []
+  },
+  {
+   "id": 9,
+@@ -426,7 +434,8 @@
+   "chain": [],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 43
++  "content": 43,
++  "children": []
+  },
+  {
+   "id": 10,
+@@ -473,7 +482,8 @@
+   "chain": [],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 40
++  "content": 40,
++  "children": []
+  },
+  {
+   "id": 11,
+@@ -518,7 +528,8 @@
+   "chain": [],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 34
++  "content": 34,
++  "children": []
+  },
+  {
+   "id": 12,
+@@ -562,7 +573,13 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 32
++  "content": 32,
++  "children": [
++   {
++    "name": "בדיקה",
++    "fields": 2
++   }
++  ]
+  },
+  {
+   "id": 13,
+@@ -609,7 +626,8 @@
+   "chain": [],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 34
++  "content": 34,
++  "children": []
+  },
+  {
+   "id": 14,
+@@ -653,7 +671,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 33
++  "content": 33,
++  "children": []
+  },
+  {
+   "id": 15,
+@@ -699,7 +718,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 33
++  "content": 33,
++  "children": []
+  },
+  {
+   "id": 16,
+@@ -745,7 +765,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 31
++  "content": 31,
++  "children": []
+  },
+  {
+   "id": 17,
+@@ -788,7 +809,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 30
++  "content": 30,
++  "children": []
+  },
+  {
+   "id": 18,
+@@ -833,7 +855,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 31
++  "content": 31,
++  "children": []
+  },
+  {
+   "id": 19,
+@@ -883,7 +906,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 33
++  "content": 33,
++  "children": []
+  },
+  {
+   "id": 20,
+@@ -929,7 +953,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 30
++  "content": 30,
++  "children": []
+  },
+  {
+   "id": 21,
+@@ -973,7 +998,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 30
++  "content": 30,
++  "children": []
+  },
+  {
+   "id": 22,
+@@ -1008,7 +1034,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 25
++  "content": 25,
++  "children": []
+  },
+  {
+   "id": 23,
+@@ -1044,7 +1071,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": "default",
+-  "content": 25
++  "content": 25,
++  "children": []
+  },
+  {
+   "id": 24,
+@@ -1085,7 +1113,8 @@
+   "chain": [],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 32
++  "content": 32,
++  "children": []
+  },
+  {
+   "id": 25,
+@@ -1126,7 +1155,8 @@
+   "chain": [],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 34
++  "content": 34,
++  "children": []
+  },
+  {
+   "id": 26,
+@@ -1162,7 +1192,8 @@
+   "chain": [],
+   "forbidden": 3,
+   "disclaimer": "default",
+-  "content": 31
++  "content": 31,
++  "children": []
+  },
+  {
+   "id": 27,
+@@ -1200,7 +1231,8 @@
+   "chain": [],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 37
++  "content": 37,
++  "children": []
+  },
+  {
+   "id": 28,
+@@ -1237,6 +1269,7 @@
+   "chain": [],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 30
++  "content": 30,
++  "children": []
+  }
+ ]
+\ No newline at end of file
+diff --git a/machtzev/generator/peruk-lang.data.json b/machtzev/generator/peruk-lang.data.json
+index 74d8d89..3429f00 100644
+--- a/machtzev/generator/peruk-lang.data.json
++++ b/machtzev/generator/peruk-lang.data.json
+@@ -57,8 +57,19 @@
+   ],
+   "kill": [
+    "קריטריון"
++  ],
++  "children": [
++   "ישויות-בת",
++   "ישויות בת",
++   "ישות-בת",
++   "ישות בת"
+   ]
+  },
++ "yesNoRe": "\\(\\s*כן\\s*/\\s*לא\\s*\\)",
++ "yesNo": [
++  "כן",
++  "לא"
++ ],
+  "inputsHead": [
+   "מה שולחים",
+   "מה הלקוח שולח"
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..09df813 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -1,7 +1,8 @@
+ #!/usr/bin/env node
+ // 📄 peruk — קורא-הפירוקים (GENMAX·G27 · הכרעה-27): מסמך «פירוק N» של הבעלים ⇒ צומת-ידע שלם ⇒ ספק-app-ds, בלי יד.
+ //   השלד הקבוע של הפירוקים (הרגע · מסגרת · פירוק ל-N בלוקים · סיווג/אדום-צהוב-ירוק · המוצר: מה-שולחים/מה-חוזר · דוגמה ·
+-//   מחיר · אסור · חובה · שרשרת) נקרא **מבנית** — כותרות, רשימות, מפרידים. כל מילה-עברית מהדאטה (peruk-lang.data.json; §19).
++//   מחיר · אסור · חובה · שרשרת · ישויות-בת) נקרא **מבנית** — כותרות, רשימות, מפרידים. כל מילה-עברית מהדאטה (peruk-lang.data.json; §19).
++//   «ישויות-בת»: ### לכל ישות-בת של התיק (תיק* · מחיקה=מפל · מסך-טבלה); שדה «(כן/לא)» ⇒ בחירה + מונה-«לא» בלוח-הבקרה.
+ //   פלט: specs-ds/<ns>.txt (ישויות · שלבים · חלקיקים · תוכן · דוח · ייצוא) + peruk-index.json (צומת: מזהה · רגע · קטגוריה ·
+ //   מחירים · שרשרת) — ואז app-ds בונה את האפליקציה. מאות מסמכים = ריצה אחת.
+ //   שער `peruk`: לכל מסמך ב-peruks/ — ≥1 שדה-קליטה · ≥1 חלק-פלט · הסתייגות · אסור; והספק בדיסק ≡ הספק המחולל (טריות).
+@@ -53,6 +54,8 @@ const allText = (sec) => [...sec.lines, ...sec.subs.flatMap((s) => s.lines)];
+ function fieldsFrom(lines) {
+   const out = []; let req = false;
+   const push = (txt, required) => {
++    // סימון «(כן/לא)» בסוגריים ⇒ שדה-בחירה כן|לא (peruk-lang.yesNoRe); «כן/לא» חשוף (peruk-18) נשאר כמו שהיה
++    if (P.yesNoRe && new RegExp(P.yesNoRe).test(txt)) { const label = heW(txt.replace(new RegExp(P.yesNoRe), ' ')).slice(0, P.fieldMaxWords).join(' '); if (label.length > 1 && !out.some((f) => f.label === label)) out.push({ label, enumVals: P.yesNo, required }); return; }
+     const base = txt.split('/')[0].replace(/\(.*?\)/g, '').trim();
+     const or = base.split(new RegExp('\\s+' + P.orWord + '\\s+'));
+     if (or.length === 2 && or.every((x) => heW(x).length && heW(x).length <= 2)) { out.push({ label: clean(or[0]) + ' ' + P.orWord + ' ' + clean(or[1]), enumVals: [clean(or[0]), clean(or[1])], required }); return; }
+@@ -157,6 +160,13 @@ export function perukToSpec(md, ns) {
+   // ── ספק ──
+   const root = P.rootNoun, fnd = P.findingNoun;
+   const fieldStr = (f) => `${f.label}${f.enumVals ? `{${f.enumVals.join('|')}}` : ''}${f.num ? P.numRange : ''}${f.required ? '*' : ''}`;
++  // ישויות-בת: סעיף «ישויות-בת» (peruk-lang.sections.children) — כל ### = ישות-בת של התיק (תיק* ראשון · מחיקה=מפל),
++  // שדותיה באותו דקדוק של «מה שולחים» (חובה:/רשות: · «(כן/לא)» = בחירה). כל ישות-בת ⇒ מסך-טבלה; כל שדה-כן/לא ⇒ מונה-«לא» בלוח-הבקרה
++  // (כמו מונה-האדום של הממצאים: הלוח סופר את מה-שלא-בסדר). מבני, אפס-מילון.
++  const childSec = S('children');
++  const children = childSec ? childSec.subs.map((s) => ({ name: clean(s.head).split(' ').slice(0, 2).join(' '), fields: fieldsFrom(s.lines) })).filter((c) => c.name && c.name !== root && c.name !== fnd && c.fields.length) : [];
++  const yesNo = P.yesNo || [];
++  const childCounts = children.flatMap((c) => c.fields.filter((f) => f.enumVals && f.enumVals.length === yesNo.length && f.enumVals.every((v, i) => v === yesNo[i])).map((f) => `${P.dashboardCount}(${c.name}: ${f.label}=${yesNo[yesNo.length - 1]})`));
+   const rootFields = [...P.personFields, ...fields.map(fieldStr), ...decisions.map((dd) => `${dd.label}{${dd.enumVals.join('|')}}`), ...(classes.length ? [`${P.classifyField}{${classes.join('|')}}`] : [])];
+   const lines = [];
+   lines.push(`${G.appWord}: ${d.title || ns}`);
+@@ -165,11 +175,13 @@ export function perukToSpec(md, ns) {
+   for (const [tgt, q] of P.questions || []) lines.push(`${G.questionWord} ${tgt}: ${q}`);   // G28 · מסך = שאלה אחת
+   lines.push(`${G.entityNouns[0]} ${root} ${G.withWord} ${rootFields.join(', ')} | ${G.stagePrefixes[0]} ${P.stages.join(', ')}`);
+   if (severity) lines.push(`${G.entityNouns[0]} ${fnd} ${G.withWord} ${P.findingFields.map((f, i) => i === 0 ? f.replace(/\*$/, '') + '*' : f).join(', ')}, ${P.severityField}{${P.severity.join('|')}} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
+-  lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}`);
++  for (const c of children) lines.push(`${G.entityNouns[0]} ${c.name} ${G.withWord} ${[`${root}*`, ...c.fields.map(fieldStr)].join(', ')} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
++  lines.push(`${P.dashWord} ${G.withWord} ${[`${P.dashboardCount}(${root})`, ...(severity ? [`${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})`] : []), ...childCounts].join(', ')}`);
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]`);
+   lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${P.openAction}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pEmpty[0]}] ${P.emptyText}`);
++  for (const c of children) lines.push(`${G.particleWord} ${c.name}: [${G.pTable[0]}]`);
+   const groupNames = [...new Set(content.map((c) => c.group))];
+   for (const g of groupNames) if (g !== groups.disclaimer && g !== groups.example) lines.push(`${G.particleWord} ${severity && g === groups.check ? fnd : root}: ${g} = [${G.pContent[0]} ${g}]`);
+   if (severity) lines.push(`${G.particleWord} ${fnd}: ${P.severityField}`);
+@@ -208,7 +220,7 @@ export function perukToSpec(md, ns) {
+   const phone = P.personFields.find((f) => /טלפון/.test(f));
+   if (phone) lines.push(`${G.reportWord} ${root}: [${G.pExport[0]}] ${P.exportLabel} = ${phone.replace(/\*$/, '')}, ${P.exportGoal}`);
+   for (const c of content) lines.push(`${G.contentWord} ${c.group}${c.tag ? ` [${c.tag}]` : ''}: ${q(c.text)}`);
+-  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length };
++  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length, children: children.map((c) => ({ name: c.name, fields: c.fields.length })) };
+   return { spec: lines.join('\n') + '\n', node, doc: d };
+ }
+ 
+diff --git a/machtzev/generator/peruks/peruk-12.md b/machtzev/generator/peruks/peruk-12.md
+index 58df974..59dc734 100644
+--- a/machtzev/generator/peruks/peruk-12.md
++++ b/machtzev/generator/peruks/peruk-12.md
+@@ -121,3 +121,11 @@
+ נשאר ברכב: טסט בהפתעה, תאונה (חופף ביטוח).
+ הבא במפה הגדולה: בריאות.
+ ---
++
++## 10. ישויות-בת
++
++### בדיקה
++חובה:
++- מה נבדק
++רשות:
++- תקין (כן/לא)
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..0b1100a 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -5,11 +5,13 @@
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+-לוח בקרה עם מונה(תיק)
++ישות בדיקה עם תיק*, מה נבדק*, תקין{כן|לא} | מחיקה: תיק=מפל
++לוח בקרה עם מונה(תיק), מונה(בדיקה: תקין=לא)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
++חלקיק בדיקה: [טבלה]
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: אסור = [תוכן אסור]

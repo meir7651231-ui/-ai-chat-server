@@ -1,0 +1,85 @@
+{
+ "task": "H13",
+ "ns": "panuy",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "four_columns": true,
+  "has_km": true
+ },
+ "task_checks": [
+  {
+   "id": "four_columns",
+   "ok": true,
+   "info": "columns=4",
+   "mandatory": true
+  },
+  {
+   "id": "has_km",
+   "ok": true,
+   "info": "3×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "App regenerated successfully from modified spec",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Table shows exactly 4 columns: שם, זמין, מרחק בקמ, מחיר לשעה in that order",
+   "check": "four_columns",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No other apps were affected by the change",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All generated Dart code is pristine, unchanged from generator output",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All gates passed: particles, wiring, oracle, police checks",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Flutter analyze returns 0 errors",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "89c47ef13500a1cf",
+ "at": "2026-09-11T00:09:00.100Z"
+}

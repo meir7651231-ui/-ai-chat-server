@@ -1,0 +1,9 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/apps/peruk12.json
+ M machtzev/generator/specs-ds/peruk12.txt
+?? "machtzev/audit/search/2026-09-10-\327\247\327\231\327\234\327\225\327\236\327\230\327\250\327\220\327\226-mileage-e7b9a5b6.json"
+?? "machtzev/audit/search/2026-09-10-\327\247\327\231\327\234\327\225\327\236\327\230\327\250\327\220\327\226-mileage-price-d909e393.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

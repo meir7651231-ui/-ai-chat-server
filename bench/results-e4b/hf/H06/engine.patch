@@ -1,0 +1,63 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..df01b13 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-table-sort-b1ff4eea · מיון טבלה לפי שדה מחיר: הנוסחה קבועה בשפת-הספק, המנוע מזהה טיפוס-שדה מהשם (10.9, peruk12 · sort)
++GATE: sort
++ref: b1ff4eea6f9eb639:machtzev/generator/specs-ds/peruk12.txt
++ANTIPATTERN: חלקיק.*:\s*\[טבלה\]\s*\|?(?!.*מיון:)
++RULE: טבלה בשפת-הספק תומכת מיון בקו 17 של SPEC-LANG.md: `[טבלה] <col1>, <col2>, … | מיון: <field> מהנמוך|עולה, <field2>`. שדה המחזיק "מחיר" בשמו יסווג כ-numeric ✓ (SPEC-LANG.md line 11); המנוע יעביר לפונקציית-הSort ב-DsTable. אין צורך בשינוי-engine לכל שינוי מיון.
++מה עבד: כשיר 8/8 — byte_identical_others, gates_pass, sort✓, numeric✓. הסימן: מחיר בשם-השדה = הנתון-מסוג מספר.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-peruk12.json b/machtzev/generator/particle-plan-peruk12.json
+index 2591b82..b03cfc3 100644
+--- a/machtzev/generator/particle-plan-peruk12.json
++++ b/machtzev/generator/particle-plan-peruk12.json
+@@ -1,8 +1,8 @@
+ [
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה לקוח טלפון מחיר מיון מחיר מהנמוך",
++  "expr": "[טבלה] לקוח, טלפון, מחיר | מיון: מחיר מהנמוך",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-peruk12.md b/machtzev/generator/particle-plan-peruk12.md
+index 65c380d..c1794aa 100644
+--- a/machtzev/generator/particle-plan-peruk12.md
++++ b/machtzev/generator/particle-plan-peruk12.md
+@@ -2,7 +2,7 @@
+ 
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה לקוח טלפון מחיר מיון מחיר מהנמוך | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..22f909c 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,10 +4,10 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור | מיון: מחיר מהנמוך
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] לקוח, טלפון, מחיר | מיון: מחיר מהנמוך
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]

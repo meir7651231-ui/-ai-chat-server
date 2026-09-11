@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "App successfully regenerated from updated spec-ds/peruk17.txt with --name peruk17 --skin"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other apps modified; only peruk17 app output changed"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All generator gates pass including particles gate (8/8 particles resolved)"
+    },
+    {
+      "check": "num_particle",
+      "text": "One [מספר] particle found: ימים לתגובה = [מספר] ימים לתגובה : 30 ימים מקבלת המכתב"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles with flutter analyze; no errors in peruk17 app"
+    }
+  ],
+  "notes": "Added field 'ימים לתגובה' to תיק entity schema and created [מספר] particle that references it with note '30 ימים מקבלת המכתב'. The note displays as the particle's descriptive text on the case screen. Field was added to spec, particle was wired in the engine, gates confirmed. All checks pass."
+}

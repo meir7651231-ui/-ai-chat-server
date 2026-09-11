@@ -1,0 +1,39 @@
+diff --git a/machtzev/generator/particle-plan-sechirut.json b/machtzev/generator/particle-plan-sechirut.json
+index aa8a58e..bd3af72 100644
+--- a/machtzev/generator/particle-plan-sechirut.json
++++ b/machtzev/generator/particle-plan-sechirut.json
+@@ -149,7 +149,7 @@
+  },
+  {
+   "entity": "תשלום",
+-  "name": "הכנסה",
++  "name": "סך הכל",
+   "expr": "סכום(סכום)",
+   "ok": true,
+   "why": null,
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..e3225a1 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -7,7 +7,7 @@
+ | אדומים | ממצא | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
+ | מה לבקש | ממצא | raw | fact⇒DsChip (DsChip/DsEmpty) | DsChip |
+-| הכנסה | תשלום | sum | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
++| סך הכל | תשלום | sum | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | לא שולם | תשלום | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | שכירות לשנה | תיק | raw | fact⇒NumberStepper (NumberStepper/DsChip) | DsChip |
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..d6a527d 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -16,7 +16,7 @@
+ חלקיק ממצא: אדומים = מונה(צבע=אדום)
+ חלקיק ממצא: צבע
+ חלקיק ממצא: מה לבקש
+-חלקיק תשלום: הכנסה = סכום(סכום)
++חלקיק תשלום: סך הכל = סכום(סכום)
+ חלקיק תשלום: לא שולם = מונה(שולם=לא)
+ חלקיק תיק: שכירות לשנה
+ חלקיק תיק: [טבלה]

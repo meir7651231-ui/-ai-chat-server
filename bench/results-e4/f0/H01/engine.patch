@@ -1,0 +1,120 @@
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..2215532 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -200,7 +200,10 @@ const ROLLUP_RE = new RegExp('^(' + [L.sum, L.avg, L.count].join('|') + ')\\(([^
+ // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
+ // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
+ // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
+-function compileFormula(formula, labels, used = null) {
++// נוסחה-על-נוסחה ('מרחק בקמ = sqrt(מרחק בריבוע)'): שדה-מחושב אינו מאוחסן ב-_v (נגזר), לכן
++// הפניה אליו מוטמעת כביטוי-הנוסחה שלו (רקורסיבית, עם שומר-מעגל) — לא כקריאת-_v ריקה (=0).
++// רק נוסחה-אריתמטית-טהורה מוטמעת; מנוע/תנאי/צבירה ⇒ null ⇒ נפילה להתנהגות-הקודמת.
++function compileFormula(formula, labels, used = null, seen = new Set()) {
+   const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
+   let e = ' ' + formula + ' ';
+   const fns = Object.keys(G_FNS).sort((a, b) => b.length - a.length);
+@@ -209,7 +212,15 @@ function compileFormula(formula, labels, used = null) {
+   for (const f of names) e = e.split(f.t).join(` @${f.idx}@ `);
+   const residue = e.replace(/@F\d+@/g, ' ').replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/(),\s]/g, '');
+   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
+-  let dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)");
++  const refOf = (i) => {
++    const f = labels.find((l) => l.idx === i);
++    if (f && f.formula && !seen.has(i)) {                       // שדה-מחושב ⇒ הטמעת-הנוסחה (לא _v)
++      const inner = compileFormula(f.formula, labels, used, new Set([...seen, i]));
++      if (inner) return `(${inner})`;
++    }
++    return `(num.tryParse(_v[${i}] ?? '') ?? 0)`;
++  };
++  let dart = e.replace(/@(\d+)@/g, (_, i) => refOf(+i));
+   dart = dart.replace(/@F(\d+)@\(/g, (_, j) => { const fn = fns[+j]; if (used) used.add(fn); return G_FNS[fn] === 'method' ? `_m_${fn}(` : `${fn}(`; }).trim();
+   return /@|[֐-׿]/.test(dart) ? null : (dart || null);
+ }
+@@ -294,7 +305,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false;
+   let firstDateConst = null;   // תפר-לוח-שנה: הקבוע של שדה-התאריך הראשון (null ⇒ אין תאריך)
+   const numFields = [];        // תפר-KPI: קבועי השדות-המספריים (לסכום/ממוצע חי)
+-  const labelIdx = schema.map((s, i) => ({ label: s.label, raw: s.raw || s.label, idx: i }));   // raw = כפי שנכתב (ספרות) — נוסחאות/תנאים מזהים גם אותו
++  const labelIdx = schema.map((s, i) => ({ label: s.label, raw: s.raw || s.label, idx: i, formula: s.formula || null }));   // raw = כפי שנכתב (ספרות) — נוסחאות/תנאים מזהים גם אותו · formula = להטמעת נוסחה-על-נוסחה
+   schema.forEach((s, i) => {
+     const cl = k(s.label); labelConst.push(cl);
+     const bind = `value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)`;
+@@ -581,6 +592,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const calImport = hasCal ? "import '../dart-ui-bs/ds/ds_calendar.dart';\n" : '';
+   const tableImport = hasTable ? "import '../dart-ui-bs/ds/ds_table.dart';\n" : '';
+   const sortLine = (sort && sort.length) ? `\n              rs.sort(${sortLambda(sort, k, schema)});` : '';   // L105 · ריק ⇒ אפס בייטים
++  const listCopy = (sort && sort.length) ? '.toList()' : '';   // מיון ⇒ עותק (appStore.records מחזיר את רשימת-החנות עצמה — אין למיין אותה במקום); ריק ⇒ אפס בייטים
+   const mathImport = [...usedFns].some((f) => G_FNS[f] === 'math') ? "import 'dart:math';\n" : '';
+   const mathHelpers = [...usedFns].filter((f) => G_FNS[f] === 'method').sort().map((f) => `\nnum _m_${f}(num x) => x.${f}();`).join('');   // ריק ⇒ אפס בייטים (בייט-זהות לכל אפליקציה שלא משתמשת)
+   const viewField = hasSwitch ? "  int _view = 0;   // 0=רשימה · לוח · לוח-שנה · טבלה\n" : '';
+@@ -735,7 +747,7 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
+           AnimatedBuilder(
+             animation: appStore,
+             builder: (context, _) {
+-              final all = ${listRead};
++              final all = ${listRead}${listCopy};
+               if (all.isEmpty) return const DsEmpty(label: ${cEmpty});
+               final q = _q.trim().toLowerCase();
+               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();${sortLine}
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..9f38de0 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -11,7 +11,7 @@ a806ebd46fc621ada29fc44f2ea2d49b46702230313f5113f95e42209c2a3c8d  .githooks/pre-
+ f0ce468621ed75c86b05a063018c3707ac6a8a93944fcf8befc0251d4b014ce4  PURPOSE.md
+ 884436c8354c9f51376d40e5891c6569d4c4c525ce6fbdec7985459327f98d79  machtzev/AGENT-CODE.md
+ ca4f98abb46479e91265ea7ad39a4d83fcd95bfeac7d606602584fca1572b54b  machtzev/DECISIONS.md
+-7f0e9ae5737a73a840fb3d9bdb67460c5023b9876bb0e702b1d639c2738fd5ab  machtzev/LEARNINGS.md
++bbdfa7f0f25bca00d95f50e15a2dc737d2dbc3aa6d6d3ed512c0e713eeb7c5d8  machtzev/LEARNINGS.md
+ 6e3d4d4a397a70394d2439ab32a29f8d8b24da02246d9e5131759f8ed16e18c4  machtzev/THE-WAY.md
+ 4328cb71e44391c77f218c0aa49e8c90880c60b510e7c97d49ae2a6dab166184  machtzev/VERIFY-LAWS.md
+ 37005d06bc27e84bb29265118e60f364941d759dce612b07d65a4b2bad12b4aa  machtzev/allow-check.mjs
+@@ -42,7 +42,7 @@ c15153f6c72d2d9d86ee8780afdb00a0126780cae89347fc4f551f7da7fb9388  machtzev/data-
+ 9cfe77e0ad38d9aa3bc21b81213521c05597540b4dcea66c7e1ec746aeb55b5d  machtzev/ds-critic-baseline.json
+ 8179e929e0fdac8910f3756934e86004400ea5ef3f8ba955277eea129d7451c8  machtzev/dup-class-baseline.json
+ 097f8e91f0fe913b92e1d97690115e1b308f761244fc39587d61d593fc568bff  machtzev/emit/free-ref-scan.mjs
+-7acf0836e8e815c026fc249203110b4e1ede49be63a7bfa9e38113eed31893c2  machtzev/gates.tsv
++22b5a5e2d07dc80425967963e7fdb8630c5f563a0be692c1e88a57bd01468bd6  machtzev/gates.tsv
+ 4786fc1a758703bb213ea03fe101e82dd7b50563a3059a5da59f8dc3ec44655e  machtzev/generator/acceptance-space.txt
+ 054e05d0b47e6b0217f5ab55f1f68e6e219ad74196ce90b141ae631f5eb1a2b8  machtzev/generator/app-from-sentences.mjs
+ 7da26db9178cb363c5ed045e6c23ac4521a73d919bb48f161a1448cb8c8292a9  machtzev/generator/atom-index-full.json
+@@ -59,6 +59,7 @@ ab4f6e6ed3ebeef4537b64bc4d03c6f5d30a9d870adb82ea3742f365fe597a92  machtzev/gener
+ 73763a64178c0378a2f49ed3ff04b91cf46b0de778f03825cc421fb4f2789b73  machtzev/generator/cover.mjs
+ d7184214570c62942c7dfc89536077da9ab770f00873404f46c699e81add6ef3  machtzev/generator/entity-terms.mjs
+ d4015aec8b28007379713aa445c5f4b344b1a2c0448ea66b635fa1de4bf8a859  machtzev/generator/enum-values.mjs
++9138779fd66cced6c912ad07e6504d75de33b90372cace3fba947722858ab3ff  machtzev/generator/formula-fns.mjs
+ 73bf6d4ff4d98be23382b9d6193fd2897f7135c4126fe24c98a426fd1ac4913b  machtzev/generator/frag-ops.mjs
+ 6e397cdc8c7903839a799c7d30cd13f0952be26af1e97dbb37076416f1a43b22  machtzev/generator/gen-verify-baseline.json
+ 38e905d1d1021aee73279b8e609c177e15128958a0f3dbdf2483f85e53285e25  machtzev/generator/gen-verify.mjs
+@@ -66,11 +67,11 @@ d4015aec8b28007379713aa445c5f4b344b1a2c0448ea66b635fa1de4bf8a859  machtzev/gener
+ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/generator/logic-census.json
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+-39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
++fe8eb010d2cf47d56caaa511940e208c68e2c90ad3536905317c2f6e4bc3d4b5  machtzev/generator/particles.mjs
+ 3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+-b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs
++3cac07d98761709150c983b75e1739b3f791571fe3f499e77c0dfcb7d9a548f7  machtzev/generator/render-ds.mjs
+ f9d748159c45d3d7013194ae5705a1797948376fc973bbbbb00497a22fa850d1  machtzev/generator/render-module-baseline.json
+ 74cd7e7ccd4d4e3ad57d8e5eade8fb9d38250616cfdfbf15d1d2087d9080d7ea  machtzev/generator/render-module.mjs
+ 0589103ea8b694b19bcef674586d0b31516a9a535b7b833ffce397c4f063798a  machtzev/generator/retarget.mjs
+@@ -78,6 +79,7 @@ fed47b4bb54e965877fee84e00f8753ae7f93d2beb87d84f6c602dd6af2f12f0  machtzev/gener
+ 7b5f2a373dbce848197cf0777cc94260a9cb3e57ff926331a1f908ef9381cd54  machtzev/generator/shape-ops-baseline.json
+ 7bcce546795a02677898b4d7dda3b3103930368134c618afcb5963f4de2da554  machtzev/generator/shape-ops.mjs
+ c153330459d988ca928aba286b2602ddbea95bb68c7b798b351fee2942821381  machtzev/generator/skin-golden.mjs
++b295904e3a629ef78a5e32eebd161200bdc909f0fc9457c36b49e9c42e27d271  machtzev/generator/spec-lang-doc.mjs
+ 55f19208bb4251f454adc731ea9c4ada8e847a66d26ee39c3fd7d22eb3334826  machtzev/generator/synth.mjs
+ 557be322137bcf91194841b7b247973e3bf154902a4623bf3851cde3fd4970c0  machtzev/generator/tighten-types.mjs
+ d162b6f9e2d468453b35a5f2df61e20a50ac1a951ce9088d665674fe7fecfcc7  machtzev/index-baseline.json
+@@ -99,7 +101,7 @@ c9bf7136f197c9ab4df0a72b1a034affc87e948ff1c2a25121e4c4265ff12902  machtzev/mutat
+ 34b855c8fb122fb90faa368f450f0ff3981212cec4abab795df207c5eea88f57  machtzev/one.mjs
+ 2195ed1605f878921515d9833863d2315400de7874f28901456dacb854d99481  machtzev/pins-check.mjs
+ 4a331265e66a773e0c26edd00a2d9454efe8f7ed67b727333407688fe903c586  machtzev/police-selftest.mjs
+-1e699c08ddd6ae2a74dd2e11456ad6122d6c4d7841b400cfcb4791df162bd322  machtzev/police.mjs
++4672f7cfbfa1e77d541bf5ca0df1847a09a19e5152a74d9a9683982603ef3121  machtzev/police.mjs
+ 29402e8e940d852ffec30cab8932c3f0a7baf2ac9324255bcc9b28187b4d8067  machtzev/pretool-fixtures-baseline.json
+ 953238593662a0cbf6f085e91834eaf6733a223e5d41c1fc585cf76660abd1c9  machtzev/pretool-selftest.mjs
+ 71e473734dde0f2c323764af3a5e916f2e2aa602b9f6cad5fd58b1b718666dd6  machtzev/purity-baseline.json

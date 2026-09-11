@@ -1,0 +1,90 @@
+{
+ "task": "H07",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "calc": true,
+  "max": true
+ },
+ "task_checks": [
+  {
+   "id": "calc",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  },
+  {
+   "id": "max",
+   "ok": true,
+   "info": "calc=true fn=true alt=false method=false",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Spec parses and generator completes without syntax errors for sechirut app",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart files in new/dart-gen-bs and new/dart-data-bs contain only auto-generated code, no manual edits",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All apps except sechirut remain byte-identical; only sechirut entity 2 (בטוחה) files modified",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart max() function calls are valid syntax: max((num.tryParse(...) ?? 0), (num.tryParse(...) ?? 0)) with .toStringAsFixed(2)",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Hebrew words (תקרה מחייבת) appear only in spec file and spec-lang data, not in engine logic (.mjs files)",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "max() is called as builtin Dart function with two numeric arguments, both safely parsed with ?? 0 fallback",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Computed field formula max(תקרה לפי 3 חודשים, תקרה לפי שליש) correctly maps to max() of field indices [6] and [7] in generated code",
+   "check": "formula_correct",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "1acfb98b49bc5c36",
+ "at": "2026-09-10T22:11:34.036Z"
+}

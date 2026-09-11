@@ -1,0 +1,51 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..d1d1f96 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,12 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-field-closed-choice · שדה בחירה-סגורה בספק מורכב לנתון עברית בדרט ללא ידיים — סדר תמיד: peruk.mjs --all קודם, אחרי כל עריכת-spec (10.9, E02 task)
++GATE: peruk
++ANTIPATTERN: שדה חדש בספק בלי peruk.mjs --all
++RULE: כל עריכת ספק-ds (הוספת/מחיקת שדה) חייבת לרוץ תיכף עם `node machtzev/generator/peruk.mjs --all` כדי לעדכן את הפלטי-markdown ותו בדיקות; peruk02 היה 9 שדות, הוסף עדיפות{גבוהה|בינונית|נמוכה} ⇒ 10 שדות ⇒ peruk-02.md רעננן ⇒ Dart gen_app_peruk02_ent1_c12 נוצר. אין ידיים, סדר קבוע.
++מה עבד: סדר: (1) עריכת טקסט-spec בלבד (peruk02.txt) (2) `node machtzev/generator/app-ds.mjs -f peruk02.txt --name peruk02 --skin` ל-compile בודד (3) `node machtzev/generator/peruk.mjs --all` לעדכן כל הפלטים (4) police --fast לוידוא (5) claims.json ל-verify. מקבץ בחירה-סגורה (enum בשלוש רמות: גבוהה/בינונית/נמוכה) דרך הספק-language {ערך1|ערך2|ערך3}.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk02.json b/machtzev/generator/apps/peruk02.json
+index 21319c4..47d103c 100644
+--- a/machtzev/generator/apps/peruk02.json
++++ b/machtzev/generator/apps/peruk02.json
+@@ -105,6 +105,16 @@
+     "type": "text",
+     "required": false,
+     "enumVals": []
++   },
++   {
++    "label": "עדיפות",
++    "type": "text",
++    "required": false,
++    "enumVals": [
++     "גבוהה",
++     "בינונית",
++     "נמוכה"
++    ]
+    }
+   ]
+  },
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..9ca3c38 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -3,7 +3,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, סכום הפיקדון*, מה המשכיר אמר הודעה*, תאריך מסירת מפתח*, חוזה לפחות סעיפי בטוחה*, תיקונים*, יציאה*, פרוטוקול כניסה יציאה, תמונות כניסה ויציאה, וואטסאפ מלא עם המשכיר, קבלות על תיקונים שהוא | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, סכום הפיקדון*, מה המשכיר אמר הודעה*, תאריך מסירת מפתח*, חוזה לפחות סעיפי בטוחה*, תיקונים*, יציאה*, פרוטוקול כניסה יציאה, תמונות כניסה ויציאה, וואטסאפ מלא עם המשכיר, קבלות על תיקונים שהוא, עדיפות{גבוהה|בינונית|נמוכה} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ ישות ממצא עם תיק*, סעיף, מה כתוב, מה לבקש, צבע{אדום|צהוב|ירוק} | מחיקה: תיק=מפל
+ לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום)
+ תפקיד בודק: הכל

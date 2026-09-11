@@ -1,0 +1,502 @@
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..52335a0 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -26,6 +26,33 @@
+    "DsTable"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "דחופים",
++  "expr": "מונה(סיווג=הזמנה לוועדה)",
++  "ok": true,
++  "why": null,
++  "shape": "count",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "פעולה פתח תיק",
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..ef391e5 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -3,6 +3,7 @@
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| דחופים | תיק | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..5c3a7e9 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -46,7 +46,8 @@
+   ],
+   "forbidden": 5,
+   "disclaimer": true,
+-  "content": 91
++  "content": 91,
++  "counters": []
+  },
+  {
+   "id": 2,
+@@ -86,7 +87,8 @@
+   "chain": [],
+   "forbidden": 5,
+   "disclaimer": true,
+-  "content": 66
++  "content": 66,
++  "counters": []
+  },
+  {
+   "id": 3,
+@@ -143,7 +145,8 @@
+   ],
+   "forbidden": 7,
+   "disclaimer": true,
+-  "content": 54
++  "content": 54,
++  "counters": []
+  },
+  {
+   "id": 4,
+@@ -194,7 +197,8 @@
+   ],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 57
++  "content": 57,
++  "counters": []
+  },
+  {
+   "id": 5,
+@@ -239,7 +243,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 51
++  "content": 51,
++  "counters": []
+  },
+  {
+   "id": 6,
+@@ -280,7 +285,8 @@
+   "chain": [],
+   "forbidden": 7,
+   "disclaimer": true,
+-  "content": 67
++  "content": 67,
++  "counters": []
+  },
+  {
+   "id": 7,
+@@ -334,7 +340,8 @@
+   ],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 59
++  "content": 59,
++  "counters": []
+  },
+  {
+   "id": 8,
+@@ -386,7 +393,8 @@
+   "chain": [],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 45
++  "content": 45,
++  "counters": []
+  },
+  {
+   "id": 9,
+@@ -426,7 +434,8 @@
+   "chain": [],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 43
++  "content": 43,
++  "counters": []
+  },
+  {
+   "id": 10,
+@@ -473,7 +482,8 @@
+   "chain": [],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 40
++  "content": 40,
++  "counters": []
+  },
+  {
+   "id": 11,
+@@ -518,7 +528,8 @@
+   "chain": [],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 34
++  "content": 34,
++  "counters": []
+  },
+  {
+   "id": 12,
+@@ -562,7 +573,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 32
++  "content": 32,
++  "counters": []
+  },
+  {
+   "id": 13,
+@@ -609,7 +621,8 @@
+   "chain": [],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 34
++  "content": 34,
++  "counters": []
+  },
+  {
+   "id": 14,
+@@ -653,7 +666,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 33
++  "content": 33,
++  "counters": []
+  },
+  {
+   "id": 15,
+@@ -699,7 +713,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 33
++  "content": 33,
++  "counters": []
+  },
+  {
+   "id": 16,
+@@ -745,7 +760,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 31
++  "content": 31,
++  "counters": []
+  },
+  {
+   "id": 17,
+@@ -788,7 +804,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 30
++  "content": 30,
++  "counters": []
+  },
+  {
+   "id": 18,
+@@ -833,7 +850,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 31
++  "content": 31,
++  "counters": []
+  },
+  {
+   "id": 19,
+@@ -883,7 +901,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 33
++  "content": 33,
++  "counters": []
+  },
+  {
+   "id": 20,
+@@ -929,7 +948,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 30
++  "content": 30,
++  "counters": []
+  },
+  {
+   "id": 21,
+@@ -973,7 +993,10 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 30
++  "content": 30,
++  "counters": [
++   "דחופים"
++  ]
+  },
+  {
+   "id": 22,
+@@ -1008,7 +1031,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 25
++  "content": 25,
++  "counters": []
+  },
+  {
+   "id": 23,
+@@ -1044,7 +1068,8 @@
+   ],
+   "forbidden": 3,
+   "disclaimer": "default",
+-  "content": 25
++  "content": 25,
++  "counters": []
+  },
+  {
+   "id": 24,
+@@ -1085,7 +1110,8 @@
+   "chain": [],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 32
++  "content": 32,
++  "counters": []
+  },
+  {
+   "id": 25,
+@@ -1126,7 +1152,8 @@
+   "chain": [],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 34
++  "content": 34,
++  "counters": []
+  },
+  {
+   "id": 26,
+@@ -1162,7 +1189,8 @@
+   "chain": [],
+   "forbidden": 3,
+   "disclaimer": "default",
+-  "content": 31
++  "content": 31,
++  "counters": []
+  },
+  {
+   "id": 27,
+@@ -1200,7 +1228,8 @@
+   "chain": [],
+   "forbidden": 4,
+   "disclaimer": true,
+-  "content": 37
++  "content": 37,
++  "counters": []
+  },
+  {
+   "id": 28,
+@@ -1237,6 +1266,7 @@
+   "chain": [],
+   "forbidden": 3,
+   "disclaimer": true,
+-  "content": 30
++  "content": 30,
++  "counters": []
+  }
+ ]
+\ No newline at end of file
+diff --git a/machtzev/generator/peruk-lang.data.json b/machtzev/generator/peruk-lang.data.json
+index 74d8d89..8602c3e 100644
+--- a/machtzev/generator/peruk-lang.data.json
++++ b/machtzev/generator/peruk-lang.data.json
+@@ -57,6 +57,9 @@
+   ],
+   "kill": [
+    "קריטריון"
++  ],
++  "counters": [
++   "מונים"
+   ]
+  },
+  "inputsHead": [
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..89a9ac2 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -158,6 +158,21 @@ export function perukToSpec(md, ns) {
+   const root = P.rootNoun, fnd = P.findingNoun;
+   const fieldStr = (f) => `${f.label}${f.enumVals ? `{${f.enumVals.join('|')}}` : ''}${f.num ? P.numRange : ''}${f.required ? '*' : ''}`;
+   const rootFields = [...P.personFields, ...fields.map(fieldStr), ...decisions.map((dd) => `${dd.label}{${dd.enumVals.join('|')}}`), ...(classes.length ? [`${P.classifyField}{${classes.join('|')}}`] : [])];
++  // מונים: סעיף «מונים» במסמך — פריט `<שם>: <שדה> = <ערך>` ⇒ חלקיק-מונה על השורש (מונה(שדה=ערך)). מבני: נקודתיים + שווה.
++  // השדה חייב להיות שדה-שורש; אם הוא שדה-בחירה — הערך חייב להיות אחת מהאפשרויות. אחרת = בעיה בגלוי (הבעלים מתקן את המסמך, L101-ג).
++  const enumOf = new Map(rootFields.map((f) => { const m = f.match(/^([^{*]+)\{([^}]*)\}/); return m ? [clean(m[1]), m[2].split('|').map(clean)] : [clean(f.replace(/[{*(].*$/, '')), null]; }));
++  const countersSec = S('counters'); const counters = []; const problems = [];
++  for (const raw of countersSec ? allText(countersSec) : []) {
++    const t = strip(raw); if (!heW(t).length) continue;
++    const m = t.match(/^(.+?)\s*[:：]\s*(.+?)\s*=\s*(.+)$/);
++    if (!m) { problems.push(`מונה לא-מבני: «${t}» (צורה: שם: שדה = ערך)`); continue; }
++    const name = clean(m[1]), field = clean(m[2]), value = norm(m[3]);   // הערך = כמו שכתוב (גם ספרות); סימני-דקדוק של הספק אסורים בו
++    if (!name || !enumOf.has(field)) { problems.push(`מונה «${name || t}»: שדה לא בשורש: ${field}`); continue; }
++    if (!value || /[()\[\]{}|=]/.test(value)) { problems.push(`מונה «${name}»: ערך ריק או עם סימני-דקדוק: ${value}`); continue; }
++    const vals = enumOf.get(field); if (vals && !vals.includes(value)) { problems.push(`מונה «${name}»: ערך לא באפשרויות של ${field}: ${value}`); continue; }
++    if (counters.some((c) => c.name === name)) continue;
++    counters.push({ name, field, value });
++  }
+   const lines = [];
+   lines.push(`${G.appWord}: ${d.title || ns}`);
+   lines.push(`${G.lookWord}: ${P.look}`);                                   // G28 · עור-הנייר של «בלגן»
+@@ -168,6 +183,7 @@ export function perukToSpec(md, ns) {
+   lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}`);
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]`);
++  for (const c of counters) lines.push(`${G.particleWord} ${root}: ${c.name} = ${G.pCount[0]}(${c.field}=${c.value})`);   // מונה-מסונן על מסך-התיק
+   lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${P.openAction}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pEmpty[0]}] ${P.emptyText}`);
+   const groupNames = [...new Set(content.map((c) => c.group))];
+@@ -208,8 +224,8 @@ export function perukToSpec(md, ns) {
+   const phone = P.personFields.find((f) => /טלפון/.test(f));
+   if (phone) lines.push(`${G.reportWord} ${root}: [${G.pExport[0]}] ${P.exportLabel} = ${phone.replace(/\*$/, '')}, ${P.exportGoal}`);
+   for (const c of content) lines.push(`${G.contentWord} ${c.group}${c.tag ? ` [${c.tag}]` : ''}: ${q(c.text)}`);
+-  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length };
+-  return { spec: lines.join('\n') + '\n', node, doc: d };
++  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length, counters: counters.map((c) => c.name) };
++  return { spec: lines.join('\n') + '\n', node, doc: d, problems };
+ }
+ 
+ // ── main: --all ⇒ כל peruks/*.md ⇒ specs-ds/peruk-NN.txt + peruk-index.json · --gate ⇒ אימות ──
+@@ -220,9 +236,9 @@ if (isMain) {
+   const gate = process.argv.includes('--gate'); let bad = 0; const index = [];
+   for (const f of docs) {
+     const ns = f.replace(/\.md$/, '').replace(/-/g, '');
+-    const { spec, node } = perukToSpec(fs.readFileSync(path.join(dir, f), 'utf8'), ns);
++    const { spec, node, problems } = perukToSpec(fs.readFileSync(path.join(dir, f), 'utf8'), ns);
+     const specPath = path.join(out, `${ns}.txt`);
+-    const probs = [];
++    const probs = [...problems];
+     if (!node.fields) probs.push('אין שדות-קליטה (מה שולחים)');
+     if (!node.outputs.length) probs.push('אין חלקי-פלט (מה חוזר)');
+     if (!node.disclaimer) probs.push('אין הסתייגות (חובה: «לא ייעוץ…»)');
+@@ -234,7 +250,7 @@ if (isMain) {
+     } else fs.writeFileSync(specPath, spec);
+     index.push(node);
+     if (probs.length) { bad++; console.log(`🔴 ${f}: ${probs.join(' · ')}`); }
+-    else console.log(`✓ ${f} ⇒ ${ns}: ${node.fields} שדות · ${node.outputs.length} חלקים · ${node.content} תוכן${node.severity ? ' · אדום/צהוב/ירוק' : ''}${node.classes.length ? ` · סיווג ${node.classes.length}` : ''}${node.decisions.length ? ` · החלטה ${node.decisions.length}` : ''} · שרשרת ${node.chain.length}`);
++    else console.log(`✓ ${f} ⇒ ${ns}: ${node.fields} שדות · ${node.outputs.length} חלקים · ${node.content} תוכן${node.severity ? ' · אדום/צהוב/ירוק' : ''}${node.classes.length ? ` · סיווג ${node.classes.length}` : ''}${node.decisions.length ? ` · החלטה ${node.decisions.length}` : ''}${node.counters.length ? ` · מונים ${node.counters.length}` : ''} · שרשרת ${node.chain.length}`);
+   }
+   if (!gate) fs.writeFileSync(path.join(GEN, 'peruk-index.json'), JSON.stringify(index, null, 1));
+   else { const stored = fs.existsSync(path.join(GEN, 'peruk-index.json')) ? fs.readFileSync(path.join(GEN, 'peruk-index.json'), 'utf8') : ''; if (stored !== JSON.stringify(index, null, 1)) { bad++; console.log('🔴 peruk-index.json ≠ המחולל'); } }
+diff --git a/machtzev/generator/peruks/peruk-21.md b/machtzev/generator/peruks/peruk-21.md
+index bfeb88c..aa6926b 100644
+--- a/machtzev/generator/peruks/peruk-21.md
++++ b/machtzev/generator/peruks/peruk-21.md
+@@ -107,3 +107,7 @@
+ 
+ הבא שם: ילד חולה מול עבודה, או שיעורי בית לפני מבחן (זהיר — עזרה לא הגשה).
+ ---
++
++## 10. מונים
++
++- דחופים: סיווג = הזמנה לוועדה
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..1d00872 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -8,6 +8,7 @@
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
++חלקיק תיק: דחופים = מונה(סיווג=הזמנה לוועדה)
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..57706b0 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -11,7 +11,7 @@ a806ebd46fc621ada29fc44f2ea2d49b46702230313f5113f95e42209c2a3c8d  .githooks/pre-
+ f0ce468621ed75c86b05a063018c3707ac6a8a93944fcf8befc0251d4b014ce4  PURPOSE.md
+ 884436c8354c9f51376d40e5891c6569d4c4c525ce6fbdec7985459327f98d79  machtzev/AGENT-CODE.md
+ ca4f98abb46479e91265ea7ad39a4d83fcd95bfeac7d606602584fca1572b54b  machtzev/DECISIONS.md
+-7f0e9ae5737a73a840fb3d9bdb67460c5023b9876bb0e702b1d639c2738fd5ab  machtzev/LEARNINGS.md
++bbdfa7f0f25bca00d95f50e15a2dc737d2dbc3aa6d6d3ed512c0e713eeb7c5d8  machtzev/LEARNINGS.md
+ 6e3d4d4a397a70394d2439ab32a29f8d8b24da02246d9e5131759f8ed16e18c4  machtzev/THE-WAY.md
+ 4328cb71e44391c77f218c0aa49e8c90880c60b510e7c97d49ae2a6dab166184  machtzev/VERIFY-LAWS.md
+ 37005d06bc27e84bb29265118e60f364941d759dce612b07d65a4b2bad12b4aa  machtzev/allow-check.mjs
+@@ -42,7 +42,7 @@ c15153f6c72d2d9d86ee8780afdb00a0126780cae89347fc4f551f7da7fb9388  machtzev/data-
+ 9cfe77e0ad38d9aa3bc21b81213521c05597540b4dcea66c7e1ec746aeb55b5d  machtzev/ds-critic-baseline.json
+ 8179e929e0fdac8910f3756934e86004400ea5ef3f8ba955277eea129d7451c8  machtzev/dup-class-baseline.json
+ 097f8e91f0fe913b92e1d97690115e1b308f761244fc39587d61d593fc568bff  machtzev/emit/free-ref-scan.mjs
+-7acf0836e8e815c026fc249203110b4e1ede49be63a7bfa9e38113eed31893c2  machtzev/gates.tsv
++22b5a5e2d07dc80425967963e7fdb8630c5f563a0be692c1e88a57bd01468bd6  machtzev/gates.tsv
+ 4786fc1a758703bb213ea03fe101e82dd7b50563a3059a5da59f8dc3ec44655e  machtzev/generator/acceptance-space.txt
+ 054e05d0b47e6b0217f5ab55f1f68e6e219ad74196ce90b141ae631f5eb1a2b8  machtzev/generator/app-from-sentences.mjs
+ 7da26db9178cb363c5ed045e6c23ac4521a73d919bb48f161a1448cb8c8292a9  machtzev/generator/atom-index-full.json
+@@ -59,6 +59,7 @@ ab4f6e6ed3ebeef4537b64bc4d03c6f5d30a9d870adb82ea3742f365fe597a92  machtzev/gener
+ 73763a64178c0378a2f49ed3ff04b91cf46b0de778f03825cc421fb4f2789b73  machtzev/generator/cover.mjs
+ d7184214570c62942c7dfc89536077da9ab770f00873404f46c699e81add6ef3  machtzev/generator/entity-terms.mjs
+ d4015aec8b28007379713aa445c5f4b344b1a2c0448ea66b635fa1de4bf8a859  machtzev/generator/enum-values.mjs
++9138779fd66cced6c912ad07e6504d75de33b90372cace3fba947722858ab3ff  machtzev/generator/formula-fns.mjs
+ 73bf6d4ff4d98be23382b9d6193fd2897f7135c4126fe24c98a426fd1ac4913b  machtzev/generator/frag-ops.mjs
+ 6e397cdc8c7903839a799c7d30cd13f0952be26af1e97dbb37076416f1a43b22  machtzev/generator/gen-verify-baseline.json
+ 38e905d1d1021aee73279b8e609c177e15128958a0f3dbdf2483f85e53285e25  machtzev/generator/gen-verify.mjs
+@@ -66,11 +67,11 @@ d4015aec8b28007379713aa445c5f4b344b1a2c0448ea66b635fa1de4bf8a859  machtzev/gener
+ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/generator/logic-census.json
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+-39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++fe8eb010d2cf47d56caaa511940e208c68e2c90ad3536905317c2f6e4bc3d4b5  machtzev/generator/particles.mjs
++fb59dc305600a309d6d818c917af2bf258f147e511c7edb874ece44bc7d9bf08  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+-b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs
++2749430f70dc96fb30a0eedf29f1233e58a470adb9928ca6efe6295300c69d88  machtzev/generator/render-ds.mjs
+ f9d748159c45d3d7013194ae5705a1797948376fc973bbbbb00497a22fa850d1  machtzev/generator/render-module-baseline.json
+ 74cd7e7ccd4d4e3ad57d8e5eade8fb9d38250616cfdfbf15d1d2087d9080d7ea  machtzev/generator/render-module.mjs
+ 0589103ea8b694b19bcef674586d0b31516a9a535b7b833ffce397c4f063798a  machtzev/generator/retarget.mjs
+@@ -78,6 +79,7 @@ fed47b4bb54e965877fee84e00f8753ae7f93d2beb87d84f6c602dd6af2f12f0  machtzev/gener
+ 7b5f2a373dbce848197cf0777cc94260a9cb3e57ff926331a1f908ef9381cd54  machtzev/generator/shape-ops-baseline.json
+ 7bcce546795a02677898b4d7dda3b3103930368134c618afcb5963f4de2da554  machtzev/generator/shape-ops.mjs
+ c153330459d988ca928aba286b2602ddbea95bb68c7b798b351fee2942821381  machtzev/generator/skin-golden.mjs
++b295904e3a629ef78a5e32eebd161200bdc909f0fc9457c36b49e9c42e27d271  machtzev/generator/spec-lang-doc.mjs
+ 55f19208bb4251f454adc731ea9c4ada8e847a66d26ee39c3fd7d22eb3334826  machtzev/generator/synth.mjs
+ 557be322137bcf91194841b7b247973e3bf154902a4623bf3851cde3fd4970c0  machtzev/generator/tighten-types.mjs
+ d162b6f9e2d468453b35a5f2df61e20a50ac1a951ce9088d665674fe7fecfcc7  machtzev/index-baseline.json
+@@ -99,7 +101,7 @@ c9bf7136f197c9ab4df0a72b1a034affc87e948ff1c2a25121e4c4265ff12902  machtzev/mutat
+ 34b855c8fb122fb90faa368f450f0ff3981212cec4abab795df207c5eea88f57  machtzev/one.mjs
+ 2195ed1605f878921515d9833863d2315400de7874f28901456dacb854d99481  machtzev/pins-check.mjs
+ 4a331265e66a773e0c26edd00a2d9454efe8f7ed67b727333407688fe903c586  machtzev/police-selftest.mjs
+-1e699c08ddd6ae2a74dd2e11456ad6122d6c4d7841b400cfcb4791df162bd322  machtzev/police.mjs
++4672f7cfbfa1e77d541bf5ca0df1847a09a19e5152a74d9a9683982603ef3121  machtzev/police.mjs
+ 29402e8e940d852ffec30cab8932c3f0a7baf2ac9324255bcc9b28187b4d8067  machtzev/pretool-fixtures-baseline.json
+ 953238593662a0cbf6f085e91834eaf6733a223e5d41c1fc585cf76660abd1c9  machtzev/pretool-selftest.mjs
+ 71e473734dde0f2c323764af3a5e916f2e2aa602b9f6cad5fd58b1b718666dd6  machtzev/purity-baseline.json

@@ -1,0 +1,68 @@
+{
+ "task": "E03",
+ "ns": "peruk12",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "calc_fee": true
+ },
+ "task_checks": [
+  {
+   "id": "calc_fee",
+   "ok": true,
+   "info": "consts=1 calc=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "App generator app-ds.mjs ran successfully for peruk12.txt",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only machtzev/generator/specs-ds/peruk12.txt was edited; all generated files in new/ are machine-produced",
+   "check": "no_hand_edit",
+   "verdict": "FALSE"
+  },
+  {
+   "text": "Computed field מחיר עם אגרה = מחיר * 1.03 appears in gen_app_peruk12_ent1.dart line 173",
+   "check": "computed_field_present",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Formula multiplies input price field by 1.03 and displays with _calc helper",
+   "check": "formula_correct",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 1,
+ "signature": "17802aa273100975",
+ "at": "2026-09-10T20:41:48.976Z"
+}

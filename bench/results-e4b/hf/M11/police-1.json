@@ -1,0 +1,73 @@
+{
+ "task": "M11",
+ "ns": "peruk25",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "export": true
+ },
+ "task_checks": [
+  {
+   "id": "export",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator produces valid Dart output from peruk25.txt spec without errors",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "WhatsApp export line ([ייצוא] שליחה בוואטסאפ = טלפון, קישור לפתיחת שיחה) is present and correctly formatted in case report",
+   "check": "export",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps remain byte-identical; no collateral changes from peruk25.txt modifications",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles with 0 flutter analyze errors",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All custom gates in machtzev/gates.tsv pass for peruk25.txt specification",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "cc8fdb4870e0e405",
+ "at": "2026-09-10T23:16:28.248Z"
+}

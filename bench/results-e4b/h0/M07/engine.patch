@@ -1,0 +1,69 @@
+diff --git a/machtzev/generator/particle-plan-sechirut.json b/machtzev/generator/particle-plan-sechirut.json
+index aa8a58e..e606587 100644
+--- a/machtzev/generator/particle-plan-sechirut.json
++++ b/machtzev/generator/particle-plan-sechirut.json
+@@ -80,6 +80,33 @@
+    "KvLine"
+   ]
+  },
++ {
++  "entity": "ממצא",
++  "name": "לא נשלחו",
++  "expr": "מונה(נשלח=לא)",
++  "ok": true,
++  "why": null,
++  "shape": "count",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
++ },
+  {
+   "entity": "ממצא",
+   "name": "צבע",
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..ad2a426 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -5,6 +5,7 @@
+ | חורג | בטוחה | / | ratio⇒StatRow (StatRow/ProgressStatRow) | ForgeGlowSlider |
+ | מעל התקרה | בטוחה | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | אדומים | ממצא | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
++| לא נשלחו | ממצא | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
+ | מה לבקש | ממצא | raw | fact⇒DsChip (DsChip/DsEmpty) | DsChip |
+ | הכנסה | תשלום | sum | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..0aa6717 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -8,12 +8,13 @@
+ ישות בטוחה עם תיק*, פיקדון(0..1000000), ערבות בנקאית(0..1000000), שטר חוב{אין|עם תקרה|פתוח}, ערב{אין|עם תקרה|בלי תקרה}, סך בטוחות = פיקדון + ערבות בנקאית, תקרה לפי 3 חודשים, תקרה לפי שליש, חורג מול 3 חודשים = סך בטוחות > תקרה לפי 3 חודשים ? חורג : תקין, חורג מול שליש = סך בטוחות > תקרה לפי שליש ? חורג : תקין | מחיקה: תיק=מפל
+ ישות ממצא עם תיק*, סעיף*, צבע{אדום|צהוב|ירוק}, מה כתוב, מה לבקש, נשלח{כן|לא} | מחיקה: תיק=מפל
+ ישות תשלום עם תיק*, סכום{129|159|189}, שולם{כן|לא}, מועד | מחיקה: תיק=מפל
+-לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום), מונה(ממצא: צבע=צהוב), מונה(בטוחה: חורג מול 3 חודשים=חורג), מונה(תשלום: שולם=לא), סכום(תשלום.סכום)
++לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום), מונה(ממצא: צבע=צהוב), מונה(בטוחה: חורג מול 3 חודשים=חורג), מונה(תשלום: שולם=לא), מונה(ממצא: נשלח=לא), סכום(תשלום.סכום)
+ תפקיד בודק: הכל
+ תפקיד לקוח: תיק, ממצא, בטוחה | היקף: תיק.לקוח | שדות: ממצא.מה כתוב=נעל, ממצא.מה לבקש=נעל
+ חלקיק בטוחה: חורג = סך בטוחות / תקרה לפי 3 חודשים
+ חלקיק בטוחה: מעל התקרה = מונה(חורג מול 3 חודשים=חורג)
+ חלקיק ממצא: אדומים = מונה(צבע=אדום)
++חלקיק ממצא: לא נשלחו = מונה(נשלח=לא)
+ חלקיק ממצא: צבע
+ חלקיק ממצא: מה לבקש
+ חלקיק תשלום: הכנסה = סכום(סכום)

@@ -1,0 +1,37 @@
+ M machtzev/generator/app-ds.mjs
+ M machtzev/generator/apps/calendar.json
+ M machtzev/generator/apps/peruk01.json
+ M machtzev/generator/apps/peruk02.json
+ M machtzev/generator/apps/peruk03.json
+ M machtzev/generator/apps/peruk04.json
+ M machtzev/generator/apps/peruk05.json
+ M machtzev/generator/apps/peruk06.json
+ M machtzev/generator/apps/peruk07.json
+ M machtzev/generator/apps/peruk08.json
+ M machtzev/generator/apps/peruk09.json
+ M machtzev/generator/apps/peruk10.json
+ M machtzev/generator/apps/peruk11.json
+ M machtzev/generator/apps/peruk12.json
+ M machtzev/generator/apps/peruk13.json
+ M machtzev/generator/apps/peruk14.json
+ M machtzev/generator/apps/peruk15.json
+ M machtzev/generator/apps/peruk16.json
+ M machtzev/generator/apps/peruk17.json
+ M machtzev/generator/apps/peruk18.json
+ M machtzev/generator/apps/peruk19.json
+ M machtzev/generator/apps/peruk20.json
+ M machtzev/generator/apps/peruk21.json
+ M machtzev/generator/apps/peruk22.json
+ M machtzev/generator/apps/peruk23.json
+ M machtzev/generator/apps/peruk24.json
+ M machtzev/generator/apps/peruk25.json
+ M machtzev/generator/apps/peruk26.json
+ M machtzev/generator/apps/peruk27.json
+ M machtzev/generator/apps/peruk28.json
+ M machtzev/generator/apps/sechirut.json
+ M machtzev/generator/apps/tasks.json
+ M machtzev/generator/specs-ds/peruk12.txt
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

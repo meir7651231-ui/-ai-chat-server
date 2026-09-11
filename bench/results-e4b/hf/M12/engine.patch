@@ -1,0 +1,94 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..c920a96 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-particles · חלקיק בספק = התייחסות לתוכן, לא פונקציה מתמטית (M12 · peruk02)
++GATE: particles
++ref: machtzev/generator/specs-ds/peruk02.txt:17-18 · gen_app_peruk02_ent1.dart
++ANTIPATTERN: חלקיק \S+: \S+ = (סכום|avg|ממוצע)\(\S+\)
++RULE: חלקיק בספק עם ערך מחושב חייב להתייחס לקבוצת-תוכן מוגדרת (`[תוכן <קבוצה>]`), לא לפונקציה מתמטית. סכום/סכום/avg בקרא-פונקציות עובד בלוח (board level), לא בחלקיק של ישות. אם מפקד רוצה חלקיק שמסכם/ממוצע שדה — הגדר תוכן שמתאר את המטרה (כלי, ייעוץ, תוכן קבוע) וקשור דרך `[תוכן <קבוצה>]`.
++מה נכשל: ניסיון 1–3 להשתמש בתחביר חישובי בחלקיק (`ממוצע(סכום הפיקדון)` / `avg(...)` / `[מספר] ...`) נכשלו (0/10 חלקיקים). הריגקס לעיל מזהה שגיאה זו. החוק: צורת-דאטה בספק = בחירה בין סוגי-תוכן הקיימים, חשוב אם הוא מחושב או סטטי.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..34b456a 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -200,6 +200,33 @@
+    "DsNote"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "ממוצע פיקדון",
++  "expr": "[תוכן ממוצע]",
++  "ok": true,
++  "why": null,
++  "shape": "content",
++  "ops": [
++   "alert"
++  ],
++  "picks": [
++   {
++    "op": "alert",
++    "atoms": [
++     "ToastCard"
++    ],
++    "alts": [
++     "ToastCard",
++     "AlertBanner@premium/feedback",
++     "DsNote"
++    ]
++   }
++  ],
++  "wired": [
++   "DsNote"
++  ]
++ },
+  {
+   "entity": "ממצא",
+   "name": "צבע",
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..a67c659 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בדיקה | ממצא | content | group⇒SectionHeader (SectionHeader/DsSection) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| ממוצע פיקדון | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..12e122c 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -5,7 +5,7 @@
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, סכום הפיקדון*, מה המשכיר אמר הודעה*, תאריך מסירת מפתח*, חוזה לפחות סעיפי בטוחה*, תיקונים*, יציאה*, פרוטוקול כניסה יציאה, תמונות כניסה ויציאה, וואטסאפ מלא עם המשכיר, קבלות על תיקונים שהוא | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ ישות ממצא עם תיק*, סעיף, מה כתוב, מה לבקש, צבע{אדום|צהוב|ירוק} | מחיקה: תיק=מפל
+-לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום)
++לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום), סכום הפיקדון בלוח = סכום(תיק.סכום הפיקדון), ממוצע פיקדון בלוח = ממוצע(תיק.סכום הפיקדון)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
+@@ -14,6 +14,7 @@
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק ממצא: בדיקה = [תוכן בדיקה]
+ חלקיק תיק: אסור = [תוכן אסור]
++חלקיק תיק: ממוצע פיקדון = [תוכן ממוצע]
+ חלקיק ממצא: צבע
+ דוח תיק: כרטיס = [תוכן כרטיס]
+ דוח תיק: טבלת שורות = [תוכן טבלת שורות]
+@@ -91,3 +92,4 @@
+ תוכן אם מתעלמים מדרגה הבאה: לא מייצגים בבית משפט
+ תוכן מה חסר: אם אין תמונות כניסה — לכתוב שזה מחליש
+ תוכן מה חסר: זמן: עד סוף היום
++תוכן ממוצע: ממוצע פיקדון בלוח

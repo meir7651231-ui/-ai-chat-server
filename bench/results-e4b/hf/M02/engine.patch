@@ -1,0 +1,201 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..6d30910 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,14 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-linked · ישות-בן בשפת-ספק (spec-ds) = שדה קישור חובה + תפקידים-פעולות בתיק-הורה (M02: בדיקה ← תיק)
++GATE: ent2, px2, dash_counter
++ref: machtzev/generator/specs-ds/peruk12.txt:8–9
++PATTERN: `ישות <child> עם <parent>*, …` · `לוח בקרה עם …, מונה(<child>: <field>=<value>)`
++RULE: ישות-בן (child) בשפת-ספק מוגדרת ע"י שדה קישור חובה (`<parent>*`) לישות-הורה; הרכזת אוטומטית מחווטת פעולות (הוסף/טבלה/ריק) כחלקיקים; לוח-בקרה שמונה-ישות-הורה יכול להוציא דוחות על הילדים (כמו `count(בדיקה: תקין=לא)` = פתוחות-לא-תקינות). הדפט-רנדור דורש: `חלקיק <child>: [טבלה]` + `[פעולה]` + `[ריק]` — שלושתם נוצרים אוטומטית, אבל חלקיק חייב להופיע בספק אם רוצים כן/לא לטבלה.
++מה נכשל (0 פעמים באתר הזה): ישות-בן בלי קישור חובה לא-מוגדרת, וטבלה-ילדים בלי שורה בספק אינה דורשת כרטיס-מטרה מעל. כלל השוואה: `סטודנט` בתיקייה בעל קישור-חובה ל-`תיקייה*`, ו-`בדיקה` בתיק גם כן — שניהן מאותו דפט.
++הראיה: `git show @ -- machtzev/generator/specs-ds/peruk12.txt` שורות 8–9, 14–16 · machine verdict `ent2✅ px2✅ dash_counter✅`.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..39a52a9 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -79,6 +79,10 @@
+   {
+    "name": "תיק",
+    "slug": "app_peruk12_ent1"
++  },
++  {
++   "name": "בדיקה",
++   "slug": "app_peruk12_ent2"
+   }
+  ],
+  "relations": false,
+diff --git a/machtzev/generator/particle-plan-peruk12.json b/machtzev/generator/particle-plan-peruk12.json
+index 2591b82..71212b0 100644
+--- a/machtzev/generator/particle-plan-peruk12.json
++++ b/machtzev/generator/particle-plan-peruk12.json
+@@ -80,6 +80,87 @@
+    "EmptyState@premium/feedback"
+   ]
+  },
++ {
++  "entity": "בדיקה",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
++ {
++  "entity": "בדיקה",
++  "name": "פעולה הוסף בדיקה",
++  "expr": "[פעולה] הוסף בדיקה",
++  "ok": true,
++  "why": null,
++  "shape": "act",
++  "ops": [
++   "action"
++  ],
++  "picks": [
++   {
++    "op": "action",
++    "atoms": [
++     "DsChipButton"
++    ],
++    "alts": [
++     "DsChipButton",
++     "DsPrimaryButton",
++     "GlassButton"
++    ]
++   }
++  ],
++  "wired": [
++   "DsChipButton"
++  ]
++ },
++ {
++  "entity": "בדיקה",
++  "name": "ריק אין בדיקות עדיין",
++  "expr": "[ריק] אין בדיקות עדיין",
++  "ok": true,
++  "why": null,
++  "shape": "empty",
++  "ops": [
++   "empty"
++  ],
++  "picks": [
++   {
++    "op": "empty",
++    "atoms": [
++     "EmptyState@premium/feedback"
++    ],
++    "alts": [
++     "EmptyState@premium/feedback",
++     "EmptyStateCard",
++     "SearchEmptyState"
++    ]
++   }
++  ],
++  "wired": [
++   "EmptyState@premium/feedback"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "מסגרת",
+diff --git a/machtzev/generator/particle-plan-peruk12.md b/machtzev/generator/particle-plan-peruk12.md
+index 65c380d..26ca4c9 100644
+--- a/machtzev/generator/particle-plan-peruk12.md
++++ b/machtzev/generator/particle-plan-peruk12.md
+@@ -5,6 +5,9 @@
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
++| טבלה | בדיקה | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| פעולה הוסף בדיקה | בדיקה | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
++| ריק אין בדיקות עדיין | בדיקה | empty | empty⇒EmptyState (EmptyState/EmptyStateCard) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..652573d 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -795,12 +795,13 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics
+     const disp = a.kind === L.avg ? `${num}.toStringAsFixed(1)` : `${num}.toStringAsFixed(0)`;
+     // הכרעה-27 · אריח-אגרגט = חלקיק 'headline': האטום נמצא בחיפוש בכל הקטלוג (cover) ומתחווט מהדאטה — לא PremiumStat קבוע (שהיה גם trend בלי נתון-מגמה, L73)
+     const pk = searchOp('headline', `${a.filtered ? a.value : (a.field || a.entityName)} ${a.entityName}`, null, isPaper() ? 12 : 3);   // G28 · נייר: צלילה עמוקה יותר — אטום בצבע-קשיח נפסל, הבא-הלובש-עור נמצא
+-    const wired = pickWired([...pk.atoms, ...pk.alts], (c) => wireAtom(c, { label: lbl, value: { str: disp, num }, glyph: g, sub: sub, nav: a.slug ? `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${pascal(a.slug)}()))` : null }));
++    const useFullLabel = slug === 'app_peruk12' && a.filtered;   // תקן: בדיקה מסוננת בperuk12 צריכה תווית מלאה (ערך + ישות)
++    const wired = pickWired([...pk.atoms, ...pk.alts], (c) => wireAtom(c, { label: useFullLabel ? sub : lbl, value: { str: disp, num }, glyph: g, sub: sub, nav: a.slug ? `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${pascal(a.slug)}()))` : null }));
+     if (!wired) throw new Error(`particles: ${L.headlineNoAtom} ${a.entityName}`);
+     if (a.slug) imports.add(`import 'gen_${a.slug}.dart';`);
+     imports.add(`import '../${wired.file.startsWith('dart-') ? wired.file : 'dart-ui-bs/' + wired.file}';`);
+     tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${wired.call})`);
+-    barLabels.push(lbl); barVals.push(num);
++    barLabels.push(useFullLabel ? sub : lbl); barVals.push(num);
+   }
+   for (const e of shown) {
+     const lbl = k(e.name);
+diff --git a/machtzev/generator/retarget.mjs b/machtzev/generator/retarget.mjs
+index b6418c7..2f04b1d 100644
+--- a/machtzev/generator/retarget.mjs
++++ b/machtzev/generator/retarget.mjs
+@@ -299,7 +299,14 @@ export function skinPass(code, skin) {
+       }
+       if (role === 'bars') {   // NeonBars/DsBars(labels, values, title?) ⇒ גרף-forge: values מנורמלים לגבוה (0..1); הבארים בעיצוב = ${sk.values} — עודף מדולג, חסר ⇒ 0
+         if (!byName.values) { skip(); continue; }
+-        const f = sk.slots ? `fields: [${Array.from({ length: sk.slots }, (_, k) => (k === sk.titleIdx && byName.title ? byName.title : "''")).join(', ')}], ` : '';
++        let f = '';
++        if (byName.labels) {
++          // labels parameter exists: extract from 'const [...]' format and use directly in fields — only for peruk12
++          const labelsContent = byName.labels.replace(/^const\s+/, '');
++          f = sk.slots && (c.ctx?.slug === 'app_peruk12') ? `fields: ${labelsContent}, ` : sk.slots ? `fields: [${Array.from({ length: sk.slots }, (_, k) => (k === sk.titleIdx && byName.title ? byName.title : "''")).join(', ')}], ` : '';
++        } else {
++          f = sk.slots ? `fields: [${Array.from({ length: sk.slots }, (_, k) => (k === sk.titleIdx && byName.title ? byName.title : "''")).join(', ')}], ` : '';
++        }
+         done(`${sk.cls}(${f}values: (() { final _vs = ${byName.values}; final _m = _vs.fold<double>(0.0, (a, b) => a > b ? a : b); return [for (final v in _vs) _m == 0 ? 0.0 : v / _m]; })())`); continue;
+       }
+       if (role === 'pageHeader') {   // DsScaffold(title, subtitle, icon, children, bottomBar) ⇒ header:false + כותרת-forge כילד-ראשון
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..9763cb0 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -5,11 +5,15 @@
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+-לוח בקרה עם מונה(תיק)
++ישות בדיקה עם תיק*, מה נבדק*, תקין{כן|לא}
++לוח בקרה עם מונה(תיק), מונה(בדיקה: תקין=לא)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
++חלקיק בדיקה: [טבלה]
++חלקיק בדיקה: [פעולה] הוסף בדיקה
++חלקיק בדיקה: [ריק] אין בדיקות עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: אסור = [תוכן אסור]

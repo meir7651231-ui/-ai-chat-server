@@ -1,0 +1,48 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..b1db6b1 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-computed-peruk12 · שדה-מחושב בספק מוחלק ישר לפלט — דיוק אריתמטיקה בנוסחה (10.9, E03 · spec-lang · app-ds)
++GATE: regen_ok
++ref: spec-lang.data.json
++PATTERN: שדה_מחושב = שדה_בסיס * קבוע_מספרי
++RULE: ספק-app-ds מטפל בנוסחאות חשבוניות בשדה — הוא מעביר את הנוסחה למנוע-הרינדור אשר מגיל טיפוס-בטיחות עם (num.tryParse(...) ?? 0) לחגירת-מגן מפני קלט-ריק; הערך המחושב מאוחסן בבסיס-הנתונים כ-toStringAsFixed(2) בעת שמירה.
++מה ללמוד: דיוק-הנוסחה — multiply שימור-ערך (1.03) בלא עיגול-אמצע, מלא-דיוק בעצם num, ורק לשמירה/הצגה יש עיגול; חגירה נגד-ריק (0) נכנסת במנוע-הרינדור, לא בספק.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..accf3bd 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -61,6 +61,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "מחיר עם אגרה",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "מה המוכר אמר",
+     "type": "text",
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..6cbe734 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מחיר עם אגרה = מחיר * 1.03, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

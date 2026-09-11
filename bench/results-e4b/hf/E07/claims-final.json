@@ -1,0 +1,21 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator pipeline runs without errors after adding דחופים counter to peruk21"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Other app outputs remain byte-identical, only peruk21 app changes"
+    },
+    {
+      "check": "counter",
+      "text": "Counter named דחופים created as a particle that counts תיק records where סיווג equals הזמנה לוועדה"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code passes flutter analyze with no errors"
+    }
+  ],
+  "notes": "proven"
+}

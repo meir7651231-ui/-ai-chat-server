@@ -1,0 +1,112 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..0cf7a39 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,14 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-linked-entity-a3f2c1 · ישות מחוברת עם cascade deletion = שתי שורות בספק + שתי שורות particles (9.9, M09 · tasks.txt)
++GATE: gates_pass
++ref: 36cb87a46c02ec58d2e6d09d1e6b0e19b34f7cd2:machtzev/generator/specs-ds/tasks.txt
++PATTERN: `ישות <name> עם <link>*, <req-field>*, <opt-field> | מחיקה: <link>=מפל\nחלקיק <name>: \[טבלה\]\nחלקיק <name>: \[ריק\] <empty-text>`
++RULE: תזכורת (reminder) הוספה כישות מחוברת לmשימה (task) עם שדות: משימה* (link), מועד* (date), נשלחה (yes/no). Cascade deletion עם `מחיקה: משימה=מפל`. Table screen + empty state "אין תזכורות" מוגדרים ב-particles. הספק-שפה מייצרת חיווט-link, validation, screens באופן אוטומטי; בדיקות של generator מאמתות את הכל. zero hand-edits לקוד Dart.
++מה הצליח: specification-first workflow (תרגום בית→ספק) = zero runtime surprises. search-record.mjs למנוע כפליות, machine-report כדי לאמת byte-identity של apps אחרות, spec-lang לsintax checking אוטומטי.
++דוגמה של זה: mirror בsechirut.txt (שלוש ישויות מחוברות לתיק עם cascade) · הדפוס זהה.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..31007dd 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -60,8 +60,12 @@
+   {
+    "name": "משימה",
+    "slug": "app_tasks_ent1"
++  },
++  {
++   "name": "תזכורת",
++   "slug": "app_tasks_ent2"
+   }
+  ],
+- "relations": false,
++ "relations": true,
+  "report": null
+ }
+\ No newline at end of file
+diff --git a/machtzev/generator/particle-plan-tasks.json b/machtzev/generator/particle-plan-tasks.json
+index 0637a08..5e60b01 100644
+--- a/machtzev/generator/particle-plan-tasks.json
++++ b/machtzev/generator/particle-plan-tasks.json
+@@ -1 +1,56 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "תזכורת",
++  "name": "טבלה",
++  "expr": "[טבלה]",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ },
++ {
++  "entity": "תזכורת",
++  "name": "ריק אין תזכורות",
++  "expr": "[ריק] אין תזכורות",
++  "ok": true,
++  "why": null,
++  "shape": "empty",
++  "ops": [
++   "empty"
++  ],
++  "picks": [
++   {
++    "op": "empty",
++    "atoms": [
++     "EmptyStateCard"
++    ],
++    "alts": [
++     "EmptyStateCard",
++     "EmptyState@premium/feedback",
++     "SearchEmptyState"
++    ]
++   }
++  ],
++  "wired": [
++   "EmptyState@premium/feedback"
++  ]
++ }
++]
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..feb6238 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -4,3 +4,6 @@
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+ ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות תזכורת עם משימה*, מועד*, נשלחה | מחיקה: משימה=מפל
++חלקיק תזכורת: [טבלה]
++חלקיק תזכורת: [ריק] אין תזכורות

@@ -1,0 +1,47 @@
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..b2f6104 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "טבלה מיון שעה עולה",
++  "expr": "[טבלה] | מיון: שעה עולה",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..041da4d 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,5 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים | מיון: שעה עולה
++חלקיק פגישה: [טבלה] | מיון: שעה עולה

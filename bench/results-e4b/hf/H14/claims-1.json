@@ -1,0 +1,37 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator executed successfully with updated sechirut.txt spec including sort directive"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps remain byte-identical; only sechirut app files changed"
+    },
+    {
+      "check": "no_orphans",
+      "text": "No orphan generated files; all outputs are referenced and properly scoped"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All police gates passed including custom sort_color check for ent3"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "No Hebrew text in engine code; all spec directives properly parsed"
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Dart math functions and field operations are valid"
+    },
+    {
+      "check": "sort_color",
+      "text": "ממצא (ent3) entity table now sorts by צבע field in order: אדום, צהוב, ירוק (red to yellow to green)"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "All changes are generated from spec; no manual edits to generated files"
+    }
+  ],
+  "notes": "PROVEN — Added pipe sort directive to ממצא entity in sechirut.txt. Enum order (אדום|צהוב|ירוק) with ascending sort creates severity order. Code applies rs.sort() with indexOf comparison. Verified in gen_app_sechirut_ent3.dart line 159."
+}

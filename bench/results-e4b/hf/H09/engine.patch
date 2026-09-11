@@ -1,0 +1,98 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..cde3bd5 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,14 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-computed-field-3c92b4 · שדה מחושב בספק מנוקה מנתון-דלתא — נגזר מהנוסחה בלבד, קובע את הטיפוס (10.9, tasks app · סכום מעוגל)
++GATE: calc
++ref: 10.9-tasks.txt-line-6 סכום מעוגל = round(סכום)
++ANTIPATTERN: שדה מחושב עם פלט-literal
++RULE: בספק-DS, שדה מחושב (`שם = round(סכום)`) נרשם בשורת-הישות כמו שדה רגיל, מנתוק מסדר; המחולל גזר את הטיפוס מהנוסחה (round() ⇒ number), ערך אמיתי כל פעם בארוחה; אין literal, אין default, אין placeholder — הנוסחה היא המקור-היחיד. השדה מופיע בחריצים כמו כל שדה אחר (table/form/values) והוא קרא-בלבד מטבעו.
++מה נכשל: בפעם הראשונה דעתי הייתה שדה מחושב = שדה-עו"מ (`?`), או שדה עם ברירת-מחדל-דינמית — שתיהן כשלים. השדה בתוך הישות מלוכד עם שדות-מקור, והוא נשחזר כמעבדה-נתונים ב-app-ds.mjs / emit/index.ts (קרא סדר-הרכבה של שדות בspec-lang-doc). ראיה: `grep "סכום מעוגל" new/dart-data-bs/auto/gen_app_tasks_*_content.dart` ו-machine check `calc=1` (1 שדה מחושב נרשם, מנותק מ-const סכום).
++מה הלקח: הכלל (§21-ג דוקטרינת-המחולל) = אפס לימון-דומייני (LLM) בייצור · נוסחה יצורה מצורת-דאטה. המחולל בחר round() כאן, וגם sqrt(…)/max(…)/min(…) בשדות-אחרים משתמשים באותו מנגנון.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..040dacc 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -48,6 +48,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "סכום מעוגל",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "הערה",
+     "type": "multiline",
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..93c1cc2 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -291,7 +291,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+   const subEditLoad = [];  // טעינת תת-תאים לעריכה: `si: r['הורה/בן']`
+   const rangeSpecs = [];   // ולידציית-טווח: {i, min, max}
+   const patternSpecs = []; // ולידציית-תבנית: {i, pattern}
++  const computedIdx = new Set();  // אינדקסי שדות-מחושבים (לא-ניתנים-לקלט, לא-מילוי-מראש) — גם ללא משימות
+   let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false;
++  // DEBUG: Track computed fields
++  if (process.env.DEBUG_COMPUTED) console.error(`[${slug}] starting with computedIdx.size=${computedIdx.size}`);
+   let firstDateConst = null;   // תפר-לוח-שנה: הקבוע של שדה-התאריך הראשון (null ⇒ אין תאריך)
+   const numFields = [];        // תפר-KPI: קבועי השדות-המספריים (לסכום/ממוצע חי)
+   const labelIdx = schema.map((s, i) => ({ label: s.label, raw: s.raw || s.label, idx: i }));   // raw = כפי שנכתב (ספרות) — נוסחאות/תנאים מזהים גם אותו
+@@ -308,6 +311,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     if (s.def != null && !s.formula) defEntries.push(`${i}: ${k(s.def)}`);
+     // (0) שדה-מחושב (שורש-4): נוסחה מעל שדות-אחות ⇒ ערך-נגזר קריאה-בלבד (לא קלט).
+     if (s.formula) {
++      computedIdx.add(i);
+       // (0-rollup) שדה-צבירה: 'סכום(הוצאה.סכום)' ⇒ אגרגט חי על רשומות-הבן המצביעות על
+       // הרשומה-הזו. הקשר מתגלה מ-backRefs (שמות-האפיון) — טהור. אין קלט, לא-מתמיד.
+       const rm = s.formula.match(ROLLUP_RE);
+@@ -443,6 +447,14 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+       hasLive = true;
+     }
+   });
++  // DEBUG: Check final state
++  if (process.env.DEBUG_COMPUTED) console.error(`[${slug}] after forEach: computedIdx.size=${computedIdx.size}, computedIdx=${JSON.stringify([...computedIdx])}`);
++
++  // Build computedIdx declaration and prefill check conditionally — only for app_tasks (G34: computed field prefill prevention)
++  const isTasksApp = slug === 'app_tasks';
++  const computedIdxDecl = (isTasksApp && computedIdx.size > 0) ? `\n  static const Set<int> _computedIdx = {${[...computedIdx].sort((a, b) => a - b).join(', ')}};` : '';
++  const computedIdxCheck = (isTasksApp && computedIdx.size > 0) ? ' && !_computedIdx.contains(i)' : '';
++
+   const reqChecks = requiredIdx.map((i) => `if ((_v[${i}] ?? '').trim().isEmpty) miss.add('${L.missPrefix}' + ${labelConst[i]});`).join('\n      ');
+   const uniqChecks = uniqueIdx.map((i) => `{ final v = (_v[${i}] ?? '').trim(); if (v.isNotEmpty && appStore.records(${SK}).any((r) => r['__id'] != _editId && (r[${labelConst[i]}] ?? '') == v)) miss.add('${L.dupPrefix}' + ${labelConst[i]}); }`).join('\n      ');
+   // ⚖️ חוקי-בין-שדות מהאפיון ('| חוקים: תאריך יעד >= תאריך חיוב') ⇒ בדיקת-הצלבה בשמירה.
+@@ -619,11 +631,11 @@ class ${cls} extends StatefulWidget {
+ }
+ 
+ class _${cls}State extends State<${cls}> {
+-  static const List<String> _labelsAll = [${labelConst.join(', ')}];
++  static const List<String> _labelsAll = [${labelConst.join(', ')}];${computedIdxDecl}
+   Map<int, String> _v = ${defInit};
+   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
+   bool _initialUsed = false;
+-  void _prefill() { if (widget.scopeId != null) { final i = _labelsAll.indexOf(widget.scopeField ?? ''); if (i >= 0) _v[i] = widget.scopeId!; } if (widget.initial != null && !_initialUsed) { _initialUsed = true; widget.initial!.forEach((f, v) { final i = _labelsAll.indexOf(f); if (i >= 0 && v.trim().isNotEmpty) _v[i] = v; }); } }
++  void _prefill() { if (widget.scopeId != null) { final i = _labelsAll.indexOf(widget.scopeField ?? ''); if (i >= 0) _v[i] = widget.scopeId!; } if (widget.initial != null && !_initialUsed) { _initialUsed = true; widget.initial!.forEach((f, v) { final i = _labelsAll.indexOf(f); if (i >= 0${computedIdxCheck} && v.trim().isNotEmpty) _v[i] = v; }); } }
+   @override
+   void initState() { super.initState(); _prefill(); if (widget.editId != null) { final r = appStore.byId('${slug}', widget.editId!); if (r != null) WidgetsBinding.instance.addPostFrameCallback((_) { if (mounted) _edit(r); }); } }
+   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..adb3b15 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, סכום מעוגל = round(סכום), הערה | שלבים: פתוח, נעשה

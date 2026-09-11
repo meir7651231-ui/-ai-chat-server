@@ -1,0 +1,62 @@
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..131da99 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -200,6 +200,33 @@
+    "DsNote"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "דחופים",
++  "expr": "מונה(תיק: סיווג=הזמנה לוועדה)",
++  "ok": true,
++  "why": null,
++  "shape": "count",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "לוח",
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..601ef7a 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -9,6 +9,7 @@
+ | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+ | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
++| דחופים | תיק | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ 
+ # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..63fe8f3 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -14,6 +14,7 @@
+ חלקיק תיק: בלוקים = [תוכן בלוקים]
+ חלקיק תיק: סיווג = [תוכן סיווג]
+ חלקיק תיק: אסור = [תוכן אסור]
++חלקיק תיק: דחופים = מונה(תיק: סיווג=הזמנה לוועדה)
+ דוח תיק: כרטיס בעברית פשוטה = [תוכן כרטיס בעברית פשוטה]
+ דוח תיק: רשימת הגשה = [תוכן רשימת הגשה]
+ דוח תיק: טיוטת תשובה קצרה למחנכת = [תוכן טיוטת תשובה קצרה למחנכת]

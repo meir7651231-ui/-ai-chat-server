@@ -1,0 +1,30 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..e1c8d68 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,15 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-sort-particle-e7c92f · sorting directive `מיון:` ב-ישות applies to implicit default particle — spec-level only (H03 · tasks table)
++GATE: sort
++ref: machtzev/generator/specs-ds/tasks.txt:6
++ANTIPATTERN: ישות .* \| שלבים:
++RULE: ישות-directive ב-specs-ds/*.txt מקבל `| מיון: <שדה> עולה|יורד` ישירות — אין צורך בחלקיק מפורש; generator מוסיף sort(moed ascending) לפלט המסך הרינדור אוטומטי. משדה-תאריך כמו מועד/יום התאריךים-ריקים מגיעים סוף (ריק-אחרון לפי SPEC-LANG.md L17).
++מה עבד: specs-ds/tasks.txt שורה 6 הוספה `| מיון: מועד עולה` → קומפלציה ₪ → sort gate ✅ → render תלוי-מנוע על למיון-עובדה-בלבד (ForgeDataTable רצפי JSON מהמודול).
++נקודה: gate נודע 'sort' לא שם-gate קודם לגל H03 — machine-bench זיהה סגנון-sort הטהור בפלט Dart וערך greenlit.
++
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..a4b31f0 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה | מיון: מועד עולה

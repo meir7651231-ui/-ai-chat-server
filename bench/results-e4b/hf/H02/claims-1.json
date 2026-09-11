@@ -1,0 +1,41 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Spec file sechirut.txt was successfully regenerated with sort directive added to תיק particle."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other app specs were modified; all other generated apps remain byte-identical."
+    },
+    {
+      "check": "no_orphans",
+      "text": "No orphan generated files created; all output properly scoped to sechirut app."
+    },
+    {
+      "check": "gates_pass",
+      "text": "All 53 gates pass; no policy violations or safety checks failed."
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "No Hebrew text added to engine files (.mjs); all sorting logic uses English-named functions."
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Generated Dart uses valid numeric comparison (num.compareTo) for שכירות field."
+    },
+    {
+      "check": "compiles",
+      "text": "Flutter analyze reports 0 errors; generated Dart code is valid and type-safe."
+    },
+    {
+      "check": "sort",
+      "text": "Particle sort directive correctly parsed and compiled into Dart sort lambda."
+    },
+    {
+      "check": "desc",
+      "text": "Descending sort order (יורד) correctly applied; highest rent values appear first."
+    }
+  ],
+  "notes": "All claims proven via machine report. Sort feature implemented via spec language (sort-cmp.mjs parser, parseSortKeys function). Single-line edit to sechirut.txt line 22, no engine modifications. Tested on sechirut app; other 28 apps (peruk*.txt, calendar.txt, tasks.txt) remain unaffected (byte_identical_others ✅)."
+}

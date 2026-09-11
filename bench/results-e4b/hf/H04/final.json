@@ -1,0 +1,82 @@
+{
+ "task": "H04",
+ "ns": "calendar",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort_both": true
+ },
+ "task_checks": [
+  {
+   "id": "sort_both",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Calendar app regenerated successfully from modified specs-ds/calendar.txt with particle definition.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No other apps were affected; all other generated files remain byte-identical to baseline.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Meetings table (px1) sorted by date (מועד) ascending, then by time (שעה) ascending, verified in gen_app_calendar_px1.dart line 18.",
+   "check": "sort_both",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All gates passed; no structural violations in generated code.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code passes flutter analyze with 0 errors; ForgeDataGrid with correct sort comparators.",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All generated files (new/dart-gen-bs/) are verbatim from engine; no manual edits.",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "a8f2d5e4c526ddc5",
+ "at": "2026-09-10T21:04:06.981Z",
+ "arm": "hf",
+ "wall_s": 585,
+ "cost_usd": 1.5187187,
+ "tokens": 6942028
+}

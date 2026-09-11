@@ -1,0 +1,90 @@
+{
+ "task": "M08",
+ "ns": "peruk08",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "enum": true,
+  "counter": true
+ },
+ "task_checks": [
+  {
+   "id": "enum",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "counter",
+   "ok": true,
+   "info": "consts=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator successfully regenerated all app files from modified spec",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No changes to other apps; only peruk08 output changed",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All generated files properly parented",
+   "check": "no_orphans",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All police gates passed",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Created 1 enum field with 3 closed choice values",
+   "check": "enum",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Created 1 counter particle for case screen",
+   "check": "counter",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Dart code compiles with 0 errors",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "3f5878469d1a2417",
+ "at": "2026-09-10T22:28:34.127Z"
+}

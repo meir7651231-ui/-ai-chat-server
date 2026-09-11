@@ -1,0 +1,9 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/particle-plan-calendar.json
+ M machtzev/generator/specs-ds/calendar.txt
+?? "machtzev/audit/search/2026-09-10-table-sort-\327\231\327\225\327\237-b4bb76e4.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-calendar.md
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

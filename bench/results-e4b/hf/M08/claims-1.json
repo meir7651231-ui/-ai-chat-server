@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator successfully regenerated all app files from modified spec"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No changes to other apps; only peruk08 output changed"
+    },
+    {
+      "check": "no_orphans",
+      "text": "All generated files properly parented"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All police gates passed"
+    },
+    {
+      "check": "enum",
+      "text": "Created 1 enum field with 3 closed choice values"
+    },
+    {
+      "check": "counter",
+      "text": "Created 1 counter particle for case screen"
+    },
+    {
+      "check": "compiles",
+      "text": "Dart code compiles with 0 errors"
+    }
+  ],
+  "notes": "proven: Free-text field converted to enum, counter particle added to case screen, no breakage"
+}

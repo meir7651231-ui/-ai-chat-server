@@ -1,0 +1,93 @@
+{
+ "task": "E08",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "dash_counter": true
+ },
+ "task_checks": [
+  {
+   "id": "dash_counter",
+   "ok": true,
+   "info": "gen_app_sechirut_scr5_content.dart",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Spec file sechirut.txt regenerated without errors",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "No changes to other app specs — only sechirut files modified",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All generated files are properly referenced, no orphan files",
+   "check": "no_orphans",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All registered gates pass: spec-lang parsing, wiring, contracts",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Engine code (generator/*.mjs) unchanged — no Hebrew strings added to engine",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All Dart math functions use correct syntax (sqrt/min/max as top-level from dart:math)",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart passes flutter analyze with 0 errors",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Dashboard counter for מתווך=כן added to sechirut: gen_app_sechirut_scr5_content.dart shows c6='תיק · כן' with c9='מתווך' and c10='כן'",
+   "check": "dash_counter",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All generated files in new/ are machine-generated, no manual edits",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "b47d57035d1188f3",
+ "at": "2026-09-10T22:08:14.288Z"
+}

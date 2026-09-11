@@ -1,0 +1,70 @@
+{
+ "task": "H01",
+ "ns": "panuy",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sqrt": true,
+  "sort_list": true
+ },
+ "task_checks": [
+  {
+   "id": "sqrt",
+   "ok": true,
+   "info": "import=true fn=true method=false",
+   "mandatory": true
+  },
+  {
+   "id": "sort_list",
+   "ok": true,
+   "info": "ent1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator completed successfully for panuy app",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Entity line includes sort directive: | מיון: מרחק בקמ עולה",
+   "check": "sort_by_distance",
+   "verdict": "UNVERIFIED"
+  },
+  {
+   "text": "Particle shows מרחק בקמ (real distance in km) instead of מרחק בריבוע",
+   "check": "real_distance_displayed",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "c23e062680362c28",
+ "at": "2026-09-10T20:17:14.809Z"
+}

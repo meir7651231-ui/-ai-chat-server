@@ -1,0 +1,80 @@
+{
+ "task": "H06",
+ "ns": "peruk12",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "sort": true,
+  "numeric": true
+ },
+ "task_checks": [
+  {
+   "id": "sort",
+   "ok": true,
+   "info": "px1",
+   "mandatory": true
+  },
+  {
+   "id": "numeric",
+   "ok": true,
+   "info": "2×",
+   "mandatory": false
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Table sorted by price in ascending order (cheapest first) using numeric comparison, not text",
+   "check": "sort",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Price field (מחיר) correctly identified as numeric type and sorted numerically (verified 2× by machine)",
+   "check": "numeric",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps remain byte-identical; only peruk12.txt and generated peruk12 app modified",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles without errors (0 analyzer errors in-app and total)",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All 5 gates passed: regen_ok, no_orphans, no_hebrew_in_engine, dart_math_sane, gates_pass",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "b1ff4eea6f9eb639",
+ "at": "2026-09-10T21:46:32.678Z"
+}

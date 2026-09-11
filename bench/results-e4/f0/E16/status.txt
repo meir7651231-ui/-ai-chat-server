@@ -1,0 +1,11 @@
+ M machtzev/generator/apps/peruk08.json
+ M machtzev/generator/peruk-index.json
+ M machtzev/generator/peruk-lang.data.json
+ M machtzev/generator/peruk.mjs
+ M machtzev/generator/peruks/peruk-08.md
+ M machtzev/generator/specs-ds/peruk08.txt
+ M machtzev/pins.sha256
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

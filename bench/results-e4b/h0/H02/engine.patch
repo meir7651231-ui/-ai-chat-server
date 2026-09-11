@@ -1,0 +1,50 @@
+diff --git a/machtzev/generator/particle-plan-sechirut.json b/machtzev/generator/particle-plan-sechirut.json
+index aa8a58e..b7c86fb 100644
+--- a/machtzev/generator/particle-plan-sechirut.json
++++ b/machtzev/generator/particle-plan-sechirut.json
+@@ -230,8 +230,8 @@
+  },
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה מיון שכירות יורד",
++  "expr": "[טבלה] | מיון: שכירות יורד",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-sechirut.md b/machtzev/generator/particle-plan-sechirut.md
+index 66eedfb..87b6842 100644
+--- a/machtzev/generator/particle-plan-sechirut.md
++++ b/machtzev/generator/particle-plan-sechirut.md
+@@ -10,7 +10,7 @@
+ | הכנסה | תשלום | sum | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | לא שולם | תשלום | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | שכירות לשנה | תיק | raw | fact⇒NumberStepper (NumberStepper/DsChip) | DsChip |
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה מיון שכירות יורד | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין ממצאים עדיין | ממצא | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | החלטה | תיק | partition | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsSection + DsNote |
+diff --git a/machtzev/generator/specs-ds/sechirut.txt b/machtzev/generator/specs-ds/sechirut.txt
+index 1e79a2d..4485d8f 100644
+--- a/machtzev/generator/specs-ds/sechirut.txt
++++ b/machtzev/generator/specs-ds/sechirut.txt
+@@ -4,7 +4,7 @@
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+ שרשרת: פיקדון ביציאה, ליקוי אחרי כניסה, חידוש חוזה
+-ישות תיק עם לקוח*, טלפון, עיר, שכירות*, חודשים*, מועד חתימה, מתווך{כן|לא}, אופציה{כן|לא}, החלטה{לחתום כמו שזה|לחתום אחרי שינויים|לא לחתום}, שכירות לשנה = שכירות * 12, תקרה לפי 3 חודשים = שכירות * 3, תקרה לפי שליש = שכירות * חודשים / 3 | שלבים: התקבל, שולם, בבדיקה, נמסר, תיקון, סגור | מעברים: בבדיקה: שכירות > 0
++ישות תיק עם לקוח*, טלפון, עיר, שכירות*, חודשים*, מועד חתימה, מתווך{כן|לא}, אופציה{כן|לא}, החלטה{לחתום כמו שזה|לחתום אחרי שינויים|לא לחתום}, שכירות לשנה = שכירות * 12, תקרה לפי 3 חודשים = שכירות * 3, תקרה לפי שליש = שכירות * חודשים / 3 | שלבים: התקבל, שולם, בבדיקה, נמסר, תיקון, סגור | מיון: שכירות יורד | מעברים: בבדיקה: שכירות > 0
+ ישות בטוחה עם תיק*, פיקדון(0..1000000), ערבות בנקאית(0..1000000), שטר חוב{אין|עם תקרה|פתוח}, ערב{אין|עם תקרה|בלי תקרה}, סך בטוחות = פיקדון + ערבות בנקאית, תקרה לפי 3 חודשים, תקרה לפי שליש, חורג מול 3 חודשים = סך בטוחות > תקרה לפי 3 חודשים ? חורג : תקין, חורג מול שליש = סך בטוחות > תקרה לפי שליש ? חורג : תקין | מחיקה: תיק=מפל
+ ישות ממצא עם תיק*, סעיף*, צבע{אדום|צהוב|ירוק}, מה כתוב, מה לבקש, נשלח{כן|לא} | מחיקה: תיק=מפל
+ ישות תשלום עם תיק*, סכום{129|159|189}, שולם{כן|לא}, מועד | מחיקה: תיק=מפל
+@@ -19,7 +19,7 @@
+ חלקיק תשלום: הכנסה = סכום(סכום)
+ חלקיק תשלום: לא שולם = מונה(שולם=לא)
+ חלקיק תיק: שכירות לשנה
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] | מיון: שכירות יורד
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק ממצא: [ריק] אין ממצאים עדיין
+ חלקיק תיק: החלטה

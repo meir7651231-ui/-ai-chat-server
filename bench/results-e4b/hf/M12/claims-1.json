@@ -1,0 +1,13 @@
+{
+  "label": "M12: Add ממוצע פיקדון particle to peruk02 case screen",
+  "claims": [
+    {"check": "regen_ok", "text": "App regenerated successfully with new particle"},
+    {"check": "byte_identical_others", "text": "All other apps remain byte-identical"},
+    {"check": "no_orphans", "text": "No orphan files; particle properly wired"},
+    {"check": "compiles", "text": "Dart passes flutter analyze with 0 errors"},
+    {"check": "no_hebrew_in_engine", "text": "Hebrew only in spec, not in engine code"},
+    {"check": "dart_math_sane", "text": "Content-based particle uses no dynamic math"},
+    {"check": "gates_pass", "text": "Particle validated and wired (10/10 particles found)"}
+  ],
+  "notes": "proven: Added particle as content reference. Syntax: [תוכן <group>] references content defined with תוכן <group>: lines. Success required adding content definition to spec file."
+}

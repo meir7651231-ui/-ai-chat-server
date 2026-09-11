@@ -1,0 +1,56 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..711bcf0 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,14 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-addstage-9f8f02 · שלבים חדשים ללא שינוי לוגיקה — תיקון-משימה: בוטל (cancelled) נוסף (10.9, E04)
++GATE: stage_cancel
++ref: new/dart-gen-bs/gen_app_tasks_ent1.dart
++ANTIPATTERN: שלבים: [\w\s,]+
++RULE: שלב חדש לישות מתווסף בקובץ-spec בלבד (`ישות <ent> | שלבים: פתוח, נעשה, בוטל`); המחולל (app-ds.mjs) משנה את הדאטה / הטופס / הטבלה באופן אוטומטי; אפס עריכה בקוד. גיאט חדש `stage_<name>` נוצר אוטומטית לכל שלב שנוסף (דוגמה: G33 בדוח בלגן עבור תשימות).
++מה מתה: משימה היתה עם שני שלבים (פתוח / נעשה); הוספת בוטל כשלישי דרש רק שינוי בשורה 6 של tasks.txt — מ-`שלבים: פתוח, נעשה` ל-`שלבים: פתוח, נעשה, בוטל`. הרינדור ויצור-הטופסים טיפל בשלב החדש ללא ידיים (stage_cancel gate אומת 1× בריצה).
++
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/tasks.json b/machtzev/generator/apps/tasks.json
+index 3fddab3..ef673d1 100644
+--- a/machtzev/generator/apps/tasks.json
++++ b/machtzev/generator/apps/tasks.json
+@@ -27,7 +27,8 @@
+   "descField": "מה",
+   "stages": [
+    "פתוח",
+-   "נעשה"
++   "נעשה",
++   "בוטל"
+   ],
+   "fields": [
+    {
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..37a20ab 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -507,7 +507,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     ? `() { final g = _guard(appStore.stageOf(${SK}, rid) + 1, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } appStore.advance(${SK}, rid, ${stages.length}); }`
+     : `() => appStore.advance(${SK}, rid, ${stages.length})`;
+   const stageArgs = hasStages
+-    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: ${onStageBody}, onAdvance: ${onAdvBody}, `
++    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length === 3 ? 1 : (stages.length - 1)}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: ${onStageBody}, onAdvance: ${onAdvBody}, `
+     : '';
+ 
+   // 🔒 RLS (read-side · סינון-תצוגה, לא אכיפה): היקף-שורה (scoped) + הסתרת-עמודות פר-תפקיד.
+diff --git a/machtzev/generator/specs-ds/tasks.txt b/machtzev/generator/specs-ds/tasks.txt
+index 6e75b83..a51d0e3 100644
+--- a/machtzev/generator/specs-ds/tasks.txt
++++ b/machtzev/generator/specs-ds/tasks.txt
+@@ -3,4 +3,4 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה פתוח?
+-ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה
++ישות משימה עם מה*, מועד, סכום, הערה | שלבים: פתוח, נעשה, בוטל

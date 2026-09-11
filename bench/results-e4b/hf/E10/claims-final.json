@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "field",
+      "text": "Field ותק בשנים added to אדם entity in panuy.txt spec"
+    },
+    {
+      "check": "range_max",
+      "text": "Range constraint (0..77) applied to ותק בשנים field"
+    },
+    {
+      "check": "regen_ok",
+      "text": "App regenerated successfully from updated spec"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other apps affected by the change"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles without errors"
+    }
+  ],
+  "notes": "All checks passed (DONE). Field ותק בשנים(0..77) successfully added to person entity without breaking any functionality."
+}

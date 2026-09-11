@@ -1,0 +1,128 @@
+diff --git a/machtzev/generator/particle-plan-peruk02.json b/machtzev/generator/particle-plan-peruk02.json
+index d20a163..c98bb76 100644
+--- a/machtzev/generator/particle-plan-peruk02.json
++++ b/machtzev/generator/particle-plan-peruk02.json
+@@ -1,8 +1,8 @@
+ [
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה מיון תאריך מסירת מפתח עולה",
++  "expr": "[טבלה] | מיון: תאריך מסירת מפתח עולה",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-peruk02.md b/machtzev/generator/particle-plan-peruk02.md
+index 2ce85fe..257b654 100644
+--- a/machtzev/generator/particle-plan-peruk02.md
++++ b/machtzev/generator/particle-plan-peruk02.md
+@@ -2,7 +2,7 @@
+ 
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה מיון תאריך מסירת מפתח עולה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/peruk-index.json b/machtzev/generator/peruk-index.json
+index 51589ca..567677a 100644
+--- a/machtzev/generator/peruk-index.json
++++ b/machtzev/generator/peruk-index.json
+@@ -86,7 +86,8 @@
+   "chain": [],
+   "forbidden": 5,
+   "disclaimer": true,
+-  "content": 66
++  "content": 66,
++  "sort": "תאריך מסירת מפתח"
+  },
+  {
+   "id": 3,
+diff --git a/machtzev/generator/peruk-lang.data.json b/machtzev/generator/peruk-lang.data.json
+index 74d8d89..de1b477 100644
+--- a/machtzev/generator/peruk-lang.data.json
++++ b/machtzev/generator/peruk-lang.data.json
+@@ -3,6 +3,7 @@
+  "titleRe": "^#\\s*פירוק\\s*(\\d+)\\s*[:：]\\s*(.+)$",
+  "momentKey": "הרגע",
+  "categoryKey": "קטגוריה",
++ "sortKey": "מיון",
+  "notLine": "^לא\\s",
+  "sections": {
+   "problem": [
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..0bf96f1 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -21,7 +21,7 @@ const strip = (s) => norm(s).replace(/^[-*•]\s*/, '').replace(/^\d+[.)]\s*/, '
+ // ── 1 · פירוק המסמך לשלד: כותרת · פתיח · סעיפים (##) עם תת-סעיפים (###) ──
+ export function parsePeruk(md) {
+   const lines = md.split(/\r?\n/);
+-  const doc = { id: null, title: null, moment: null, category: null, not: [], sections: [] };
++  const doc = { id: null, title: null, moment: null, category: null, sort: null, not: [], sections: [] };
+   const tRe = new RegExp(P.titleRe);
+   let cur = null, sub = null;
+   for (const raw of lines) {
+@@ -33,6 +33,7 @@ export function parsePeruk(md) {
+     if (!cur) {   // פתיח: הרגע · קטגוריה · "לא X."
+       const mm = line.match(new RegExp('^' + P.momentKey + '\\s*[:：]\\s*(.+)$')); if (mm) { doc.moment = norm(mm[1]); continue; }
+       const cm = line.match(new RegExp('^' + P.categoryKey + '\\s*[:：]\\s*(.+)$')); if (cm) { doc.category = norm(cm[1]); continue; }
++      const sm = P.sortKey && line.match(new RegExp('^' + P.sortKey + '\\s*[:：]\\s*(.+)$')); if (sm) { doc.sort = norm(sm[1]); continue; }   // «מיון: <שדה>» ⇒ טבלת-השורש ממוינת לפי השדה, עולה (המוקדם קודם)
+       if (new RegExp(P.notLine).test(line)) { doc.not.push(strip(line)); continue; }
+       continue;
+     }
+@@ -167,7 +168,9 @@ export function perukToSpec(md, ns) {
+   if (severity) lines.push(`${G.entityNouns[0]} ${fnd} ${G.withWord} ${P.findingFields.map((f, i) => i === 0 ? f.replace(/\*$/, '') + '*' : f).join(', ')}, ${P.severityField}{${P.severity.join('|')}} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
+   lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}`);
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+-  lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]`);
++  // מיון-הטבלה מהמסמך («מיון: <שדה>» בפתיח): השדה חייב להיות שדה-שורש בדיוק (אפס-ניחוש); עולה = המוקדם/הנמוך קודם (sort-cmp: ריק אחרון)
++  const sortField = d.sort ? (rootFields.map((f) => f.replace(/[{*(].*$/, '').trim()).find((l) => l === clean(d.sort)) || null) : null;
++  lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]${sortField ? ` | ${G.pSort[0]}: ${sortField} ${G.sortAsc[0]}` : ''}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${P.openAction}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pEmpty[0]}] ${P.emptyText}`);
+   const groupNames = [...new Set(content.map((c) => c.group))];
+@@ -208,7 +211,7 @@ export function perukToSpec(md, ns) {
+   const phone = P.personFields.find((f) => /טלפון/.test(f));
+   if (phone) lines.push(`${G.reportWord} ${root}: [${G.pExport[0]}] ${P.exportLabel} = ${phone.replace(/\*$/, '')}, ${P.exportGoal}`);
+   for (const c of content) lines.push(`${G.contentWord} ${c.group}${c.tag ? ` [${c.tag}]` : ''}: ${q(c.text)}`);
+-  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length };
++  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length, ...(d.sort ? { sort: sortField } : {}) };
+   return { spec: lines.join('\n') + '\n', node, doc: d };
+ }
+ 
+@@ -228,6 +231,7 @@ if (isMain) {
+     if (!node.disclaimer) probs.push('אין הסתייגות (חובה: «לא ייעוץ…»)');
+     if (node.disclaimer === 'default') console.log(`⚠ ${f}: בלי הסתייגות כתובה — הסתייגות-המוצר (הכרעה-29 §11)`);
+     if (!node.forbidden) probs.push('אין רשימת-אסור');
++    if ('sort' in node && !node.sort) probs.push(`שדה-המיון בפתיח («${P.sortKey}:») אינו שדה-שורש — הטבלה לא תמוין`);
+     if (gate) {
+       const cur = fs.existsSync(specPath) ? fs.readFileSync(specPath, 'utf8') : null;
+       if (cur !== spec) probs.push(`הספק בדיסק ≠ המחולל (הרץ node machtzev/generator/peruk.mjs --all)`);
+diff --git a/machtzev/generator/peruks/peruk-02.md b/machtzev/generator/peruks/peruk-02.md
+index 5a21a17..369603f 100644
+--- a/machtzev/generator/peruks/peruk-02.md
++++ b/machtzev/generator/peruks/peruk-02.md
+@@ -2,6 +2,7 @@
+ 
+ לא כל «דיור».
+ הרגע: המפתח כבר נמסר / עומד להימסר, והמשכיר מקזז או לא מחזיר.
++מיון: תאריך מסירת מפתח
+ 
+ זה לא ייעוץ משפטי ולא תביעה.
+ זה ציר עובדות + הפרדת בלאי מנזק + דרישה קצרה + מסלול אם מתעלמים.
+diff --git a/machtzev/generator/specs-ds/peruk02.txt b/machtzev/generator/specs-ds/peruk02.txt
+index a7b12b9..842a714 100644
+--- a/machtzev/generator/specs-ds/peruk02.txt
++++ b/machtzev/generator/specs-ds/peruk02.txt
+@@ -7,7 +7,7 @@
+ ישות ממצא עם תיק*, סעיף, מה כתוב, מה לבקש, צבע{אדום|צהוב|ירוק} | מחיקה: תיק=מפל
+ לוח בקרה עם מונה(תיק), מונה(ממצא: צבע=אדום)
+ תפקיד בודק: הכל
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] | מיון: תאריך מסירת מפתח עולה
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]

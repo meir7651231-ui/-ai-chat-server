@@ -1,0 +1,85 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..621585c 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,14 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-lang-naming-e07 · שם-מטרי בלוח-בקרה: חלקיקים תמך בשם, דשבורד לא (10.9, E07 · peruk21)
++GATE: parser
++ref: machtzev/generator/app-ds.mjs:173–182
++ANTIPATTERN: לוח בקרה עם.*?=\s*מונה\(
++RULE: למטרי דשבורד (לוח בקרה) שם לא נתמך בתחביר `דוח = מונה(…)` — הפרסר צופה בדיוק בתבנית `מונה(entity: field=value)` והטקסט הכולל `=` נדחף ל-countWords במקום ל-aggs. מטרי דשבורד לוקחים תווית מהערך המסונן או משם-השדה; להציג מטרי עם שם חדש, הוסף חלקיק של השם-התרשימי (`חלקיק <entity>: <שם> = מונה(…)`), וחלקיק זה מופיע ב-px screen.
++מה נכשל: הניסיון הראשון `לוח בקרה עם מונה(תיק), דחופים = מונה(תיק: סיווג=הזמנה לוועדה)` לא היווה מטרי דשבורד כי הפרסר דרש טקסט עם `מונה(…)` בדיוק, בלי קידומת. השיקול: המטרי הם נגזרות מנתון, ושמות מהנתון אומנם מגבילים. החוק: דשבורד לא תומך בשמות מטרים; חלקיקים תומכים, והם מופיעים בעמוד ישות בנפרד.
++מקורות-נוספים: SPEC-LANG.md L18 (חלקיקים `<שם> = מונה(…)`), L6 (דשבורד `מונה / count(…)` בלי שם).
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-peruk21.json b/machtzev/generator/particle-plan-peruk21.json
+index e003653..52335a0 100644
+--- a/machtzev/generator/particle-plan-peruk21.json
++++ b/machtzev/generator/particle-plan-peruk21.json
+@@ -26,6 +26,33 @@
+    "DsTable"
+   ]
+  },
++ {
++  "entity": "תיק",
++  "name": "דחופים",
++  "expr": "מונה(סיווג=הזמנה לוועדה)",
++  "ok": true,
++  "why": null,
++  "shape": "count",
++  "ops": [
++   "headline"
++  ],
++  "picks": [
++   {
++    "op": "headline",
++    "atoms": [
++     "KpiTile"
++    ],
++    "alts": [
++     "KpiTile",
++     "ProgressRing",
++     "StatHero"
++    ]
++   }
++  ],
++  "wired": [
++   "KvLine"
++  ]
++ },
+  {
+   "entity": "תיק",
+   "name": "פעולה פתח תיק",
+diff --git a/machtzev/generator/particle-plan-peruk21.md b/machtzev/generator/particle-plan-peruk21.md
+index b78e668..ef391e5 100644
+--- a/machtzev/generator/particle-plan-peruk21.md
++++ b/machtzev/generator/particle-plan-peruk21.md
+@@ -3,6 +3,7 @@
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+ | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| דחופים | תיק | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/specs-ds/peruk21.txt b/machtzev/generator/specs-ds/peruk21.txt
+index 8d6ecec..753ec15 100644
+--- a/machtzev/generator/specs-ds/peruk21.txt
++++ b/machtzev/generator/specs-ds/peruk21.txt
+@@ -5,9 +5,10 @@
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, המכתב, מה כבר יש, עד מתי, סיווג{בקשת מסמך|הזמנה לוועדה|דחיית סיוע|הילד מפריע בלי} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+-לוח בקרה עם מונה(תיק)
++לוח בקרה עם מונה(תיק), מונה(תיק: סיווג=הזמנה לוועדה)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
++חלקיק תיק: דחופים = מונה(סיווג=הזמנה לוועדה)
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]

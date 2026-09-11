@@ -1,0 +1,273 @@
+diff --git a/machtzev/generator/entity.mjs b/machtzev/generator/entity.mjs
+index b1bf2e9..a5c5ca2 100644
+--- a/machtzev/generator/entity.mjs
++++ b/machtzev/generator/entity.mjs
+@@ -10,6 +10,7 @@ import fs from 'node:fs';
+ import path from 'node:path';
+ import { execFileSync } from 'node:child_process';
+ import { retrieve, matchClass, retrieveLogic } from './match.mjs';
++import { parseSortKeys } from './sort-cmp.mjs';   // L105 · מפרק-מיון אחד לרשימת-הישות ולטבלאות (עולה/יורד/אלפביתי מהדאטה)
+ import * as R from '../root.mjs';
+ 
+ const HERE = R.GEN_DIR;
+@@ -156,8 +157,8 @@ export function interpret(text) {
+   const guards = guardsPart
+     ? guardsPart.split(/[,\n]/).map((e) => { const m = e.match(/^(.+?)\s*:\s*(.+)$/); return m ? { stage: heWords(m[1]).join(' ').trim(), cond: m[2].trim() } : null; }).filter((g) => g && g.stage.length > 1 && g.cond.length > 1)
+     : [];
+-  const sortWords = [...(G.sortDesc || []), ...(G.sortAsc || [])];
+-  const sort = sortPart ? sortPart.split(/[,\n]/).map((e) => { const t = e.trim(); const dm = sortWords.length ? t.match(new RegExp('^(.+?)\\s+(' + sortWords.join('|') + ')$')) : null; const lab = heWords(dm ? dm[1] : t).join(' ').trim(); const f = schema.find((x) => x.label === lab); return f ? { field: f.label, desc: !!(dm && (G.sortDesc || []).includes(dm[2])) } : null; }).filter(Boolean) : [];
++  const sortF = (lab) => schema.find((x) => x.label === lab) || null, sortClean = (t) => heWords(t).join(' ').trim();
++  const sort = sortPart ? sortPart.split(/[,\n]/).map((e) => { if (!e.trim()) return null; const r = parseSortKeys(e, sortF, sortClean, G); return r.error ? null : r.sort[0]; }).filter(Boolean) : [];   // שדה לא-בסכמה ⇒ נשמט (כמו קודם)
+   return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards, sort };
+ }
+ 
+diff --git a/machtzev/generator/particle-plan-peruk17.json b/machtzev/generator/particle-plan-peruk17.json
+index 1fbd18b..4c2f870 100644
+--- a/machtzev/generator/particle-plan-peruk17.json
++++ b/machtzev/generator/particle-plan-peruk17.json
+@@ -1,8 +1,8 @@
+ [
+  {
+   "entity": "תיק",
+-  "name": "טבלה",
+-  "expr": "[טבלה]",
++  "name": "טבלה מיון סיווג אלפביתי",
++  "expr": "[טבלה] | מיון: סיווג אלפביתי",
+   "ok": true,
+   "why": null,
+   "shape": "table",
+diff --git a/machtzev/generator/particle-plan-peruk17.md b/machtzev/generator/particle-plan-peruk17.md
+index c44d091..4be4a57 100644
+--- a/machtzev/generator/particle-plan-peruk17.md
++++ b/machtzev/generator/particle-plan-peruk17.md
+@@ -2,7 +2,7 @@
+ 
+ | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
+ |---|---|---|---|---|
+-| טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
++| טבלה מיון סיווג אלפביתי | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
+ | פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
+ | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
+ | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+diff --git a/machtzev/generator/peruk.mjs b/machtzev/generator/peruk.mjs
+index 0c5043c..40341ab 100644
+--- a/machtzev/generator/peruk.mjs
++++ b/machtzev/generator/peruk.mjs
+@@ -21,7 +21,7 @@ const strip = (s) => norm(s).replace(/^[-*•]\s*/, '').replace(/^\d+[.)]\s*/, '
+ // ── 1 · פירוק המסמך לשלד: כותרת · פתיח · סעיפים (##) עם תת-סעיפים (###) ──
+ export function parsePeruk(md) {
+   const lines = md.split(/\r?\n/);
+-  const doc = { id: null, title: null, moment: null, category: null, not: [], sections: [] };
++  const doc = { id: null, title: null, moment: null, category: null, sort: null, not: [], sections: [] };
+   const tRe = new RegExp(P.titleRe);
+   let cur = null, sub = null;
+   for (const raw of lines) {
+@@ -33,6 +33,7 @@ export function parsePeruk(md) {
+     if (!cur) {   // פתיח: הרגע · קטגוריה · "לא X."
+       const mm = line.match(new RegExp('^' + P.momentKey + '\\s*[:：]\\s*(.+)$')); if (mm) { doc.moment = norm(mm[1]); continue; }
+       const cm = line.match(new RegExp('^' + P.categoryKey + '\\s*[:：]\\s*(.+)$')); if (cm) { doc.category = norm(cm[1]); continue; }
++      const sm = line.match(new RegExp('^(?:' + (G.markSort || []).join('|') + ')\\s*[:：]\\s*(.+)$')); if (sm && G.markSort && G.markSort.length) { doc.sort = norm(sm[1]); continue; }   // «מיון: סיווג אלפביתי» ⇒ מיון טבלת-השורש (מילים: spec-lang.markSort/sortAsc/sortDesc/sortAlpha)
+       if (new RegExp(P.notLine).test(line)) { doc.not.push(strip(line)); continue; }
+       continue;
+     }
+@@ -167,7 +168,7 @@ export function perukToSpec(md, ns) {
+   if (severity) lines.push(`${G.entityNouns[0]} ${fnd} ${G.withWord} ${P.findingFields.map((f, i) => i === 0 ? f.replace(/\*$/, '') + '*' : f).join(', ')}, ${P.severityField}{${P.severity.join('|')}} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
+   lines.push(`${P.dashWord} ${G.withWord} ${P.dashboardCount}(${root})${severity ? `, ${P.sevCount || P.dashboardCount}(${fnd}: ${P.severityField}=${P.severity[0]})` : ''}`);
+   lines.push(`${P.roleWord} ${P.roleAll}`);
+-  lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]`);
++  lines.push(`${G.particleWord} ${root}: [${G.pTable[0]}]${d.sort ? ` | ${G.pSort[0]}: ${d.sort}` : ''}`);   // מיון-הטבלה מהפתיח של המסמך (particles מאמת שהשדה בסכמה)
+   lines.push(`${G.particleWord} ${root}: [${G.pAct[0]}] ${P.openAction}`);
+   lines.push(`${G.particleWord} ${root}: [${G.pEmpty[0]}] ${P.emptyText}`);
+   const groupNames = [...new Set(content.map((c) => c.group))];
+diff --git a/machtzev/generator/peruks/peruk-17.md b/machtzev/generator/peruks/peruk-17.md
+index ae725fd..115fe89 100644
+--- a/machtzev/generator/peruks/peruk-17.md
++++ b/machtzev/generator/peruks/peruk-17.md
+@@ -2,6 +2,7 @@
+ 
+ קטגוריה: בירוקרטיה.
+ הרגע: מכתב «נדחה» / «השלם תוך X ימים» / ועדה קרובה.
++מיון: סיווג אלפביתי
+ אבטלה, נכות, סיעוד, דמי לידה, מילואים, הבטחת הכנסה, ילד נכה.
+ 
+ לא ייצוג בוועדה.
+diff --git a/machtzev/generator/sort-cmp.mjs b/machtzev/generator/sort-cmp.mjs
+index 720d572..6641338 100644
+--- a/machtzev/generator/sort-cmp.mjs
++++ b/machtzev/generator/sort-cmp.mjs
+@@ -1,25 +1,31 @@
+ // 🔀 sort-cmp — מחולל-משווה אחד לכל רשימה ממוינת-מהספק (L105): מספרי כשניתן, אחרת לקסיקלי; שדה-בחירה ⇒ סדר-ההכרזה; ריק ⇒ אחרון; מפתחות משורשרים; יורד ⇒ היפוך.
+-//   קלט: sort=[{field, desc}] · k=מחרוזת⇒קבוע · schema (ל-enumVals). פלט: גוף-למבדה של Dart `(a, b) { … return 0; }`. אפס-מילון: שמות מהספק, מילים מהדאטה.
++//   «אלפביתי» (spec-lang.sortAlpha) ⇒ השוואה לקסיקלית טהורה גם לשדה-בחירה/מספר (הסדר של הטקסט, לא של ההכרזה).
++//   קלט: sort=[{field, desc, alpha}] · k=מחרוזת⇒קבוע · schema (ל-enumVals). פלט: גוף-למבדה של Dart `(a, b) { … return 0; }`. אפס-מילון: שמות מהספק, מילים מהדאטה.
+ export function sortLambda(sort, k, schema) {
+   const body = (sort || []).map((o) => {
+     const kc = k(o.field); const f = (schema || []).find((s) => s.label === o.field);
+-    const ev = f && f.enumVals && f.enumVals.length ? f.enumVals : null;
++    const ev = !o.alpha && f && f.enumVals && f.enumVals.length ? f.enumVals : null;
+     const evList = ev ? ev.map((v) => k(v)).join(', ') : '';   // קבועים פעם אחת (בייט-חסכוני)
+-    const cmp = ev
+-      ? `final o = [${evList}]; final c = o.indexOf(x).compareTo(o.indexOf(y));`
+-      : `final nx = num.tryParse(x), ny = num.tryParse(y); final c = (nx != null && ny != null) ? nx.compareTo(ny) : x.compareTo(y);`;
++    const cmp = o.alpha
++      ? `final c = x.compareTo(y);`
++      : ev
++        ? `final o = [${evList}]; final c = o.indexOf(x).compareTo(o.indexOf(y));`
++        : `final nx = num.tryParse(x), ny = num.tryParse(y); final c = (nx != null && ny != null) ? nx.compareTo(ny) : x.compareTo(y);`;
+     return `{ final x = a[${kc}] ?? '', y = b[${kc}] ?? ''; if (x.isEmpty != y.isEmpty) return x.isEmpty ? 1 : -1; ${cmp} if (c != 0) return ${o.desc ? '-c' : 'c'}; }`;
+   }).join(' ');
+   return `(a, b) { ${body} return 0; }`;
+ }
+-// פירוק 'שדה עולה, שדה2 יורד' ⇒ [{field, desc}] · F=תווית⇒שדה-בסכמה או null · words מהדאטה
++// פירוק 'שדה עולה, שדה2 יורד, שדה3 אלפביתי [יורד]' ⇒ [{field, desc, alpha}] · F=תווית⇒שדה-בסכמה או null · words מהדאטה
+ export function parseSortKeys(text, F, clean, G) {
+   const out = [];
++  const desc = G.sortDesc || [], asc = G.sortAsc || [], alpha = G.sortAlpha || [];
++  const words = [...desc, ...asc, ...alpha];
++  const tailRe = words.length ? new RegExp('^(.+?)\\s+(' + words.join('|') + ')$') : null;
+   for (const key of String(text).split(/[,،]/).map((x) => x.trim()).filter(Boolean)) {
+-    const words = [...(G.sortDesc || []), ...(G.sortAsc || [])];
+-    const dm = words.length ? key.match(new RegExp('^(.+?)\\s+(' + words.join('|') + ')$')) : null;
+-    const lab = clean(dm ? dm[1] : key); const f = F(lab); if (!f) return { error: lab };
+-    out.push({ field: f.label, desc: !!(dm && (G.sortDesc || []).includes(dm[2])) });
++    let rest = key; const mods = [];   // כמה מילות-מיון בזנב, בכל סדר («סיווג אלפביתי יורד»)
++    for (let dm = tailRe && rest.match(tailRe); dm; dm = tailRe && rest.match(tailRe)) { mods.push(dm[2]); rest = dm[1]; }
++    const lab = clean(rest); const f = F(lab); if (!f) return { error: lab };
++    out.push({ field: f.label, desc: mods.some((w) => desc.includes(w)), alpha: mods.some((w) => alpha.includes(w)) });
+   }
+   return { sort: out };
+ }
+diff --git a/machtzev/generator/spec-lang-doc.mjs b/machtzev/generator/spec-lang-doc.mjs
+index 8ee6bd0..ba3bcb7 100644
+--- a/machtzev/generator/spec-lang-doc.mjs
++++ b/machtzev/generator/spec-lang-doc.mjs
+@@ -10,7 +10,7 @@ export function specLangDoc() {
+ 
+ ## מבנה קובץ
+ - \`${G.appWord}: <שם>\` · \`${G.lookWord}: ${Object.keys(G.looks || {}).join(' | ')}\` · \`${G.questionWord} ${Object.keys(G.questionTargets || {}).join('|')}: <שאלה>\` · \`${G.chainWord}: …\`
+-- \`${j(G.entityNouns)} <שם> ${G.withWord} <שדה>, <שדה>, …  | ${j(G.stagePrefixes)}: א, ב, ג | ${j(G.markDelete)}: <ישות>=${Object.keys(G.delPolicies || {}).slice(0, 3).join('|')} | ${j(G.markGuards)}: <שלב>: <תנאי> | ${j(G.markSort)}: <שדה> ${j(G.sortAsc)}|${j(G.sortDesc)}, <שדה2>\` (מיון רשימת-הישות; שדה-בחירה ⇒ סדר-ההכרזה)
++- \`${j(G.entityNouns)} <שם> ${G.withWord} <שדה>, <שדה>, …  | ${j(G.stagePrefixes)}: א, ב, ג | ${j(G.markDelete)}: <ישות>=${Object.keys(G.delPolicies || {}).slice(0, 3).join('|')} | ${j(G.markGuards)}: <שלב>: <תנאי> | ${j(G.markSort)}: <שדה> ${j(G.sortAsc)}|${j(G.sortDesc)}|${j(G.sortAlpha)}, <שדה2>\` (מיון רשימת-הישות; שדה-בחירה ⇒ סדר-ההכרזה, אלא אם ${j(G.sortAlpha)} ⇒ סדר-הטקסט)
+ - \`לוח בקרה ${G.withWord} ${j(G.pCount)}(<ישות>), ${j(G.pCount)}(<ישות>: <שדה>=<ערך>), ${j(G.pSum)}(<ישות>.<שדה>)\`
+ - \`${G.particleWord} <ישות>: <צורה>\` · \`${G.reportWord} <ישות>: <שם> = …\` · \`${G.contentWord} <קבוצה>: <טקסט>\`
+ 
+@@ -22,7 +22,7 @@ export function specLangDoc() {
+ - קישור לישות-אם: שם-הישות כשם-שדה (\`תיק*\`)
+ 
+ ## חלקיקים (\`${G.particleWord} <ישות>: …\`)
+-- \`[${j(G.pTable)}]\` טבלה של כל השדות · **\`[${G.pTable[0]}] עמודה, עמודה, … | ${j(G.pSort)}: <שדה> ${j(G.sortAsc)}|${j(G.sortDesc)}, <שדה2>\`** — עמודות נבחרות ומיון (מספרי כשניתן, ריק אחרון, מפתחות משורשרים)
++- \`[${j(G.pTable)}]\` טבלה של כל השדות · **\`[${G.pTable[0]}] עמודה, עמודה, … | ${j(G.pSort)}: <שדה> ${j(G.sortAsc)}|${j(G.sortDesc)}|${j(G.sortAlpha)}, <שדה2>\`** — עמודות נבחרות ומיון (מספרי כשניתן, שדה-בחירה בסדר-ההכרזה, ${j(G.sortAlpha)} = סדר-הטקסט, ריק אחרון, מפתחות משורשרים)
+ - \`<שם> = ${j(G.pCount)}(<שדה>=<ערך>)\` מונה · \`<שם> = ${j(G.pSum)}(<שדה>)\` סכום · \`<שם> = ${j(G.pAvg)}(<שדה>)\` ממוצע · \`A ${j(G.pVs)} B\` השוואה · \`A / B\` יחס
+ - \`[${j(G.pEmpty)}] <טקסט>\` מצב-ריק · \`[${j(G.pAct)}] <טקסט>\` כפתור-פעולה · \`[${j(G.pSearch)}]\` · \`[${j(G.pFilter)}]\` · \`[${j(G.pExport)}]\`
+ - \`<שם> = [${j(G.pNumber)}] <טקסט>\` "המספר שלך" · \`<שם> = [${j(G.pMessage)}] <שדה-בחירה> = [${G.contentWord} <קבוצה>]\` הודעה · \`<שם> = [${j(G.pDates)}]\` לוח-תאריכים · \`<שדה>\` לבד = עובדה/חלוקה-למצבים
+diff --git a/machtzev/generator/spec-lang.data.json b/machtzev/generator/spec-lang.data.json
+index de89656..946769a 100644
+--- a/machtzev/generator/spec-lang.data.json
++++ b/machtzev/generator/spec-lang.data.json
+@@ -231,6 +231,10 @@
+   "עולה",
+   "מהנמוך"
+  ],
++ "sortAlpha": [
++  "אלפביתי",
++  "אלפבתי"
++ ],
+  "markSort": [
+   "מיון"
+  ]
+diff --git a/machtzev/generator/specs-ds/SPEC-LANG.md b/machtzev/generator/specs-ds/SPEC-LANG.md
+index 96495e3..6242a38 100644
+--- a/machtzev/generator/specs-ds/SPEC-LANG.md
++++ b/machtzev/generator/specs-ds/SPEC-LANG.md
+@@ -2,7 +2,7 @@
+ 
+ ## מבנה קובץ
+ - `אפליקציה: <שם>` · `עיצוב: נייר | כהה` · `שאלה דוח|רשימה|בית: <שאלה>` · `שרשרת: …`
+-- `ישות / טבלה / טופס <שם> עם <שדה>, <שדה>, …  | שלבים / סטטוסים / מצבים: א, ב, ג | מחיקה: <ישות>=מפל|cascade|ניתוק | מעברים / שערים: <שלב>: <תנאי> | מיון: <שדה> עולה / מהנמוך|יורד / מהגבוה, <שדה2>` (מיון רשימת-הישות; שדה-בחירה ⇒ סדר-ההכרזה)
++- `ישות / טבלה / טופס <שם> עם <שדה>, <שדה>, …  | שלבים / סטטוסים / מצבים: א, ב, ג | מחיקה: <ישות>=מפל|cascade|ניתוק | מעברים / שערים: <שלב>: <תנאי> | מיון: <שדה> עולה / מהנמוך|יורד / מהגבוה|אלפביתי / אלפבתי, <שדה2>` (מיון רשימת-הישות; שדה-בחירה ⇒ סדר-ההכרזה, אלא אם אלפביתי / אלפבתי ⇒ סדר-הטקסט)
+ - `לוח בקרה עם מונה / count(<ישות>), מונה / count(<ישות>: <שדה>=<ערך>), סכום / sum / Σ(<ישות>.<שדה>)`
+ - `חלקיק <ישות>: <צורה>` · `דוח <ישות>: <שם> = …` · `תוכן <קבוצה>: <טקסט>`
+ 
+@@ -14,7 +14,7 @@
+ - קישור לישות-אם: שם-הישות כשם-שדה (`תיק*`)
+ 
+ ## חלקיקים (`חלקיק <ישות>: …`)
+-- `[טבלה / רשימה]` טבלה של כל השדות · **`[טבלה] עמודה, עמודה, … | מיון: <שדה> עולה / מהנמוך|יורד / מהגבוה, <שדה2>`** — עמודות נבחרות ומיון (מספרי כשניתן, ריק אחרון, מפתחות משורשרים)
++- `[טבלה / רשימה]` טבלה של כל השדות · **`[טבלה] עמודה, עמודה, … | מיון: <שדה> עולה / מהנמוך|יורד / מהגבוה|אלפביתי / אלפבתי, <שדה2>`** — עמודות נבחרות ומיון (מספרי כשניתן, שדה-בחירה בסדר-ההכרזה, אלפביתי / אלפבתי = סדר-הטקסט, ריק אחרון, מפתחות משורשרים)
+ - `<שם> = מונה / count(<שדה>=<ערך>)` מונה · `<שם> = סכום / sum / Σ(<שדה>)` סכום · `<שם> = ממוצע / avg(<שדה>)` ממוצע · `A מול / vs B` השוואה · `A / B` יחס
+ - `[ריק] <טקסט>` מצב-ריק · `[פעולה] <טקסט>` כפתור-פעולה · `[איתור / חיפוש]` · `[חריגה / סינון]` · `[ייצוא]`
+ - `<שם> = [מספר] <טקסט>` "המספר שלך" · `<שם> = [הודעה] <שדה-בחירה> = [תוכן <קבוצה>]` הודעה · `<שם> = [לוח / תאריכים]` לוח-תאריכים · `<שדה>` לבד = עובדה/חלוקה-למצבים
+diff --git a/machtzev/generator/specs-ds/peruk17.txt b/machtzev/generator/specs-ds/peruk17.txt
+index 9284905..4174f61 100644
+--- a/machtzev/generator/specs-ds/peruk17.txt
++++ b/machtzev/generator/specs-ds/peruk17.txt
+@@ -7,7 +7,7 @@
+ ישות תיק עם לקוח*, טלפון, המכתב המלא, איזו בקשה, מה כבר הוגש, סיווג{השלמת מסמכים|דחייה לגופה|זימון ועדה|נגמר השעון} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+-חלקיק תיק: [טבלה]
++חלקיק תיק: [טבלה] | מיון: סיווג אלפביתי
+ חלקיק תיק: [פעולה] פתח תיק
+ חלקיק תיק: [ריק] אין תיקים עדיין
+ חלקיק תיק: מסגרת = [תוכן מסגרת]
+diff --git a/machtzev/pins.sha256 b/machtzev/pins.sha256
+index 54c2f18..ab0bca2 100644
+--- a/machtzev/pins.sha256
++++ b/machtzev/pins.sha256
+@@ -11,7 +11,7 @@ a806ebd46fc621ada29fc44f2ea2d49b46702230313f5113f95e42209c2a3c8d  .githooks/pre-
+ f0ce468621ed75c86b05a063018c3707ac6a8a93944fcf8befc0251d4b014ce4  PURPOSE.md
+ 884436c8354c9f51376d40e5891c6569d4c4c525ce6fbdec7985459327f98d79  machtzev/AGENT-CODE.md
+ ca4f98abb46479e91265ea7ad39a4d83fcd95bfeac7d606602584fca1572b54b  machtzev/DECISIONS.md
+-7f0e9ae5737a73a840fb3d9bdb67460c5023b9876bb0e702b1d639c2738fd5ab  machtzev/LEARNINGS.md
++bbdfa7f0f25bca00d95f50e15a2dc737d2dbc3aa6d6d3ed512c0e713eeb7c5d8  machtzev/LEARNINGS.md
+ 6e3d4d4a397a70394d2439ab32a29f8d8b24da02246d9e5131759f8ed16e18c4  machtzev/THE-WAY.md
+ 4328cb71e44391c77f218c0aa49e8c90880c60b510e7c97d49ae2a6dab166184  machtzev/VERIFY-LAWS.md
+ 37005d06bc27e84bb29265118e60f364941d759dce612b07d65a4b2bad12b4aa  machtzev/allow-check.mjs
+@@ -42,7 +42,7 @@ c15153f6c72d2d9d86ee8780afdb00a0126780cae89347fc4f551f7da7fb9388  machtzev/data-
+ 9cfe77e0ad38d9aa3bc21b81213521c05597540b4dcea66c7e1ec746aeb55b5d  machtzev/ds-critic-baseline.json
+ 8179e929e0fdac8910f3756934e86004400ea5ef3f8ba955277eea129d7451c8  machtzev/dup-class-baseline.json
+ 097f8e91f0fe913b92e1d97690115e1b308f761244fc39587d61d593fc568bff  machtzev/emit/free-ref-scan.mjs
+-7acf0836e8e815c026fc249203110b4e1ede49be63a7bfa9e38113eed31893c2  machtzev/gates.tsv
++22b5a5e2d07dc80425967963e7fdb8630c5f563a0be692c1e88a57bd01468bd6  machtzev/gates.tsv
+ 4786fc1a758703bb213ea03fe101e82dd7b50563a3059a5da59f8dc3ec44655e  machtzev/generator/acceptance-space.txt
+ 054e05d0b47e6b0217f5ab55f1f68e6e219ad74196ce90b141ae631f5eb1a2b8  machtzev/generator/app-from-sentences.mjs
+ 7da26db9178cb363c5ed045e6c23ac4521a73d919bb48f161a1448cb8c8292a9  machtzev/generator/atom-index-full.json
+@@ -59,6 +59,7 @@ ab4f6e6ed3ebeef4537b64bc4d03c6f5d30a9d870adb82ea3742f365fe597a92  machtzev/gener
+ 73763a64178c0378a2f49ed3ff04b91cf46b0de778f03825cc421fb4f2789b73  machtzev/generator/cover.mjs
+ d7184214570c62942c7dfc89536077da9ab770f00873404f46c699e81add6ef3  machtzev/generator/entity-terms.mjs
+ d4015aec8b28007379713aa445c5f4b344b1a2c0448ea66b635fa1de4bf8a859  machtzev/generator/enum-values.mjs
++9138779fd66cced6c912ad07e6504d75de33b90372cace3fba947722858ab3ff  machtzev/generator/formula-fns.mjs
+ 73bf6d4ff4d98be23382b9d6193fd2897f7135c4126fe24c98a426fd1ac4913b  machtzev/generator/frag-ops.mjs
+ 6e397cdc8c7903839a799c7d30cd13f0952be26af1e97dbb37076416f1a43b22  machtzev/generator/gen-verify-baseline.json
+ 38e905d1d1021aee73279b8e609c177e15128958a0f3dbdf2483f85e53285e25  machtzev/generator/gen-verify.mjs
+@@ -66,11 +67,11 @@ d4015aec8b28007379713aa445c5f4b344b1a2c0448ea66b635fa1de4bf8a859  machtzev/gener
+ dc08c8d4d045ea5dd0e7e7e0cf2e8fb6586c310cf6d80249047a17e4630a6558  machtzev/generator/logic-census.json
+ 7d3b87386d600f5f957851503b4cb6b6e0c08f7968faccff8ea3ca6e173d0837  machtzev/generator/op-census.mjs
+ d6ae5d73212c0b274d016a3e8b24a9df4f29591267c2016be307ffa24f7fc47b  machtzev/generator/ops-census-baseline.json
+-39396100a58b116479d17b1210fa170ca95efc9e8ed487947048d48962e146ca  machtzev/generator/particles.mjs
+-3268e03ae1d21c1a0a9c4dd544b7e60549d34cfcdc1f3be579b23ea878cff0f2  machtzev/generator/peruk.mjs
++fe8eb010d2cf47d56caaa511940e208c68e2c90ad3536905317c2f6e4bc3d4b5  machtzev/generator/particles.mjs
++5114ba3f15f05cd338a211df6c0aea0581fee62dea4450c68a238ef612e16eeb  machtzev/generator/peruk.mjs
+ 2f6d04003f43aa1f07dee9986d350d2c1b2c7ef3606a25c1bb8fbcb165bb0ba0  machtzev/generator/quarry-baseline.json
+ ebed2d38a990e8bef79a3b4a4a554bdf21b2a5a4d667128c4898b940a7730e0b  machtzev/generator/quarry-golden.mjs
+-b57ca73edb46f6f4ff7ae5ef434394d91fdc5a5abde932f528b0970ab0b50a33  machtzev/generator/render-ds.mjs
++2749430f70dc96fb30a0eedf29f1233e58a470adb9928ca6efe6295300c69d88  machtzev/generator/render-ds.mjs
+ f9d748159c45d3d7013194ae5705a1797948376fc973bbbbb00497a22fa850d1  machtzev/generator/render-module-baseline.json
+ 74cd7e7ccd4d4e3ad57d8e5eade8fb9d38250616cfdfbf15d1d2087d9080d7ea  machtzev/generator/render-module.mjs
+ 0589103ea8b694b19bcef674586d0b31516a9a535b7b833ffce397c4f063798a  machtzev/generator/retarget.mjs
+@@ -78,6 +79,7 @@ fed47b4bb54e965877fee84e00f8753ae7f93d2beb87d84f6c602dd6af2f12f0  machtzev/gener
+ 7b5f2a373dbce848197cf0777cc94260a9cb3e57ff926331a1f908ef9381cd54  machtzev/generator/shape-ops-baseline.json
+ 7bcce546795a02677898b4d7dda3b3103930368134c618afcb5963f4de2da554  machtzev/generator/shape-ops.mjs
+ c153330459d988ca928aba286b2602ddbea95bb68c7b798b351fee2942821381  machtzev/generator/skin-golden.mjs
++b14b78da9bed2835f7253636cf64414d16713d727c49e2010cae945cd6301bb4  machtzev/generator/spec-lang-doc.mjs
+ 55f19208bb4251f454adc731ea9c4ada8e847a66d26ee39c3fd7d22eb3334826  machtzev/generator/synth.mjs
+ 557be322137bcf91194841b7b247973e3bf154902a4623bf3851cde3fd4970c0  machtzev/generator/tighten-types.mjs
+ d162b6f9e2d468453b35a5f2df61e20a50ac1a951ce9088d665674fe7fecfcc7  machtzev/index-baseline.json
+@@ -99,7 +101,7 @@ c9bf7136f197c9ab4df0a72b1a034affc87e948ff1c2a25121e4c4265ff12902  machtzev/mutat
+ 34b855c8fb122fb90faa368f450f0ff3981212cec4abab795df207c5eea88f57  machtzev/one.mjs
+ 2195ed1605f878921515d9833863d2315400de7874f28901456dacb854d99481  machtzev/pins-check.mjs
+ 4a331265e66a773e0c26edd00a2d9454efe8f7ed67b727333407688fe903c586  machtzev/police-selftest.mjs
+-1e699c08ddd6ae2a74dd2e11456ad6122d6c4d7841b400cfcb4791df162bd322  machtzev/police.mjs
++4672f7cfbfa1e77d541bf5ca0df1847a09a19e5152a74d9a9683982603ef3121  machtzev/police.mjs
+ 29402e8e940d852ffec30cab8932c3f0a7baf2ac9324255bcc9b28187b4d8067  machtzev/pretool-fixtures-baseline.json
+ 953238593662a0cbf6f085e91834eaf6733a223e5d41c1fc585cf76660abd1c9  machtzev/pretool-selftest.mjs
+ 71e473734dde0f2c323764af3a5e916f2e2aa602b9f6cad5fd58b1b718666dd6  machtzev/purity-baseline.json

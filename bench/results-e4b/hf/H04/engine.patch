@@ -1,0 +1,64 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..0d61a77 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-regen-a8f2d5e4 · טבלה עם מיון בשפת-הספק — [טבלה] עמודות | מיון: שדה עולה, שדה2 עולה ⇒ רנדור two-level comparator ב-ForgeDataGrid (10.9, H04 · calendar)
++GATE: regen_ok · sort_both
++ref: a8f2d5e4c526ddc5:new/dart-gen-bs/gen_app_calendar_px1.dart
++PATTERN: חלקיק <ישות>: \[טבלה\].*\| מיון: (\S+) (עולה|יורד), (\S+) (עולה|יורד)
++RULE: חלקיק-טבלה עם `| מיון:` ב-specs-ds/*.txt מתורגם לשני-דרגות-sort בפלט: שדה-ראשי ב-outer block, שדה-שני ב-inner block; כל שדה מתורגם להשוואה תאימה (מספרי·תאריך·מחרוזת) ועיקול-בחלק (empty-last); סדר עולה/יורד מנוהל בהוראות-ה-comparator.
++מה הצליח: calendar.txt הגדיר `חלקיק פגישה: [טבלה] מה, מועד, שעה, מקום | מיון: מועד עולה, שעה עולה` — המנוע חיפש את שדות-המיון בהצהרת-הישות (מועד* בposition 2, שעה בposition 3 ⇒ c5/c6), בנה two-level comparator עם smart-compare (num/date/string auto-detect), והרנדר ForgeDataGrid קיבל sort function. פלט gen_app_calendar_px1.dart שורה 18: block ראשון לשדה מועד עם empty-check, block שני לשדה שעה עם אותה לוגיקה. הצילום והבדיקות אישרו סדר-כרונולוגי. 0 errors, 0 hand-edit.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..77a7491 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "טבלה מה מועד שעה מקום מיון מועד עולה שעה עולה",
++  "expr": "[טבלה] מה, מועד, שעה, מקום | מיון: מועד עולה, שעה עולה",
++  "ok": true,
++  "why": null,
++  "shape": "table",
++  "ops": [
++   "table"
++  ],
++  "picks": [
++   {
++    "op": "table",
++    "atoms": [
++     "DsTable"
++    ],
++    "alts": [
++     "DsTable",
++     "ForgeModalDialog",
++     "ForgeSplitControl"
++    ]
++   }
++  ],
++  "wired": [
++   "DsTable"
++  ]
++ }
++]
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..93c3666 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -4,3 +4,5 @@
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+ ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++
++חלקיק פגישה: [טבלה] מה, מועד, שעה, מקום | מיון: מועד עולה, שעה עולה

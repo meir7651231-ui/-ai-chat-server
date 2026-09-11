@@ -1,0 +1,51 @@
+{
+ "task": "E07",
+ "ns": "peruk21",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "counter": true
+ },
+ "task_checks": [
+  {
+   "id": "counter",
+   "ok": true,
+   "info": "consts=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [],
+ "false_claims": 0,
+ "signature": "edac471a17bffb03",
+ "at": "2026-09-10T21:58:32.838Z",
+ "arm": "f0",
+ "wall_s": 1085,
+ "cost_usd": 5.35367225,
+ "tokens": 3346645
+}

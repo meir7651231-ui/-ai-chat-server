@@ -1,0 +1,10 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/particle-plan-peruk02.json
+ M machtzev/generator/particle-plan-peruk02.md
+ M machtzev/generator/specs-ds/peruk02.txt
+?? "machtzev/audit/search/2026-09-10-\327\236\327\225\327\246\327\242-average-aggregate-34a7ac7e.json"
+?? "machtzev/audit/search/2026-09-10-\327\236\327\225\327\246\327\242-average-aggregate-f74380d7.json"
+?? machtzev/generator/apps/panuy.json
+?? machtzev/generator/particle-plan-panuy.json
+?? machtzev/generator/particle-plan-panuy.md
+?? machtzev/generator/specs-ds/panuy.txt

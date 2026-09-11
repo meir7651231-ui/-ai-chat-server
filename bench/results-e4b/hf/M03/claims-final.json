@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Sechirut.txt regenerates without error, with סיכום section added to report"
+    },
+    {
+      "check": "report_text",
+      "text": "סיכום content group added with 3 lines, one reading exactly: הבטוחות ייבדקו מול התקרה"
+    },
+    {
+      "check": "report_title",
+      "text": "דוח תיק: סיכום = [תוכן סיכום] added at line 39, between חישוב בטוחות and בקשות לשינוי"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Only sechirut.txt changed; all other app files remain byte-identical"
+    },
+    {
+      "check": "compiles",
+      "text": "Flutter analyzer runs with 0 errors on generated Dart from updated sechirut.txt"
+    }
+  ],
+  "notes": "proven: all machine checks pass (regen_ok, byte_identical_others, no_orphans, gates_pass, no_hebrew_in_engine, dart_math_sane, compiles, report_text 2×, report_title 5×)"
+}

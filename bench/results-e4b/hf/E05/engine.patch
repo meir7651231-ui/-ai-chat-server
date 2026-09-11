@@ -1,0 +1,80 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..e52572e 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,11 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-spec-first · שדה חדש בישות = עריכת-spec בלבד; דקדוק שדה אוטומטי וריגנרציה זהה לכל אפליקציה אחרת (10.9, calendar task)
++RULE: הוספת שדה/חלקיק לישות = edit specs-ds/[app].txt בלבד · דקדוק-שדה (מסוג/טווח/בחירה) נתגלה מתבנית-השם (תאריך/מחיר/אחוז/etc.) · משדה חדש שלא בעל-סימן מיוחד = text field · חלקיקים עם [ריק]/[פעולה]/[תוכן] מווסתים בספק · `app-ds.mjs --name <app> --skin` אחרי עריכה ⇒ regen דטרמיניסטי · אפס יד לgenerated/, אפס השפעה על אפליקציות אחרות (byte-identical gate).
++מה עבד: משתתפים field (text) + [ריק] אין פגישות השבוע particle בcalendar.txt ⇒ regen ⇒ 6 מסכים לcalendar בלבד, שאר 28 אפליקציות ללא שינוי ⇒ flutter analyze 0 errors.
++הראיה: police-bench קיבל byte_identical_others ✅ + field ✅ + empty_text ✅.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/calendar.json b/machtzev/generator/apps/calendar.json
+index 8fa140b..2204524 100644
+--- a/machtzev/generator/apps/calendar.json
++++ b/machtzev/generator/apps/calendar.json
+@@ -54,6 +54,12 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "משתתפים",
++    "type": "text",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "הערה",
+     "type": "multiline",
+diff --git a/machtzev/generator/particle-plan-calendar.json b/machtzev/generator/particle-plan-calendar.json
+index 0637a08..634ffc7 100644
+--- a/machtzev/generator/particle-plan-calendar.json
++++ b/machtzev/generator/particle-plan-calendar.json
+@@ -1 +1,29 @@
+-[]
+\ No newline at end of file
++[
++ {
++  "entity": "פגישה",
++  "name": "ריק אין פגישות השבוע",
++  "expr": "[ריק] אין פגישות השבוע",
++  "ok": true,
++  "why": null,
++  "shape": "empty",
++  "ops": [
++   "empty"
++  ],
++  "picks": [
++   {
++    "op": "empty",
++    "atoms": [
++     "EmptyStateCard"
++    ],
++    "alts": [
++     "EmptyStateCard",
++     "EmptyState@premium/feedback",
++     "SearchEmptyState"
++    ]
++   }
++  ],
++  "wired": [
++   "EmptyState@premium/feedback"
++  ]
++ }
++]
+diff --git a/machtzev/generator/specs-ds/calendar.txt b/machtzev/generator/specs-ds/calendar.txt
+index 1ce6e30..743ce96 100644
+--- a/machtzev/generator/specs-ds/calendar.txt
++++ b/machtzev/generator/specs-ds/calendar.txt
+@@ -3,4 +3,5 @@
+ עיצוב: נייר
+ שאלה בית: מה עכשיו?
+ שאלה רשימה: מה קבוע?
+-ישות פגישה עם מה*, מועד*, שעה, מקום, הערה | שלבים: קבוע, התקיים
++ישות פגישה עם מה*, מועד*, שעה, מקום, משתתפים, הערה | שלבים: קבוע, התקיים
++חלקיק פגישה: [ריק] אין פגישות השבוע

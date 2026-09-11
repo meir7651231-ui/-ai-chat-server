@@ -1,0 +1,84 @@
+{
+ "task": "M03",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "report_text": true,
+  "report_title": true
+ },
+ "task_checks": [
+  {
+   "id": "report_text",
+   "ok": true,
+   "info": "2×",
+   "mandatory": true
+  },
+  {
+   "id": "report_title",
+   "ok": true,
+   "info": "5×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Sechirut.txt regenerates without error, with סיכום section added to report",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "סיכום content group added with 3 lines, one reading exactly: הבטוחות ייבדקו מול התקרה",
+   "check": "report_text",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "דוח תיק: סיכום = [תוכן סיכום] added at line 39, between חישוב בטוחות and בקשות לשינוי",
+   "check": "report_title",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only sechirut.txt changed; all other app files remain byte-identical",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Flutter analyzer runs with 0 errors on generated Dart from updated sechirut.txt",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "46b29f000be634f7",
+ "at": "2026-09-10T20:49:10.856Z",
+ "arm": "hf",
+ "wall_s": 406,
+ "cost_usd": 1.2889361000000004,
+ "tokens": 5839808
+}

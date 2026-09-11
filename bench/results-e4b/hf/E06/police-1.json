@@ -1,0 +1,73 @@
+{
+ "task": "E06",
+ "ns": "peruk17",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "action": true
+ },
+ "task_checks": [
+  {
+   "id": "action",
+   "ok": true,
+   "info": "2×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator completed successfully for peruk17 with new action button.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other applications remain byte-identical; no unintended side effects.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Action button 'שלח תזכורת' added to תיק particle screen in peruk17.txt.",
+   "check": "action",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles without errors; analyzer reports 0 errors.",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only spec file modified (peruk17.txt); no hand-edits in generated output.",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "0e209eddbdb001d9",
+ "at": "2026-09-10T21:34:50.434Z"
+}

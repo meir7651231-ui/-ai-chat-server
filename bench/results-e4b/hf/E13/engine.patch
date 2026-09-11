@@ -1,0 +1,53 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..1bae97d 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,12 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-10-computed-peruk12 · שדה מחושב בנוסחה אריתמטית = ליטרל נגזר, לא ערך-משתמש — div בשדות מספריים מתקמפל כ-`num / num ⇒ num` (E13, peruk12 add קילומטראז׳ + מחיר לקמ)
++GATE: dart_math_sane
++ANTIPATTERN: (?:מחיר|סכום) / (?:קילומטראז׳|כמות)\b
++RULE: שדה מחושב המכיל פעולה אריתמטית (/, *, +, -) על שני שדות מספריים קומפיילר כ-`num get` (קריאה בלבד); חלוקה בשדה שניתן ממנו צעד `קילומטראז׳ / 0` מחזירה `Infinity` (Dart, לא crash) — בדיקות dart_math_sane מוודאות שלא נעשה שימוש ב-`sqrt(0)` או `pow(base, negative)` ללא guard.
++מה היה נכון: מחיר לקמ = מחיר / קילומטראז׳ צפוי, עובר ללא שגיאה; ה-`num get` פועל בכל ממזג שנתונים ממנו קילומטראז׳ (תנאי עיצוב-נייר = אטום מחושב עם שדות משתמש). הלקח: ערך מחושב ממשיך להיות נתון קדום (L52-ג: לעולם לא לזייף) — בבדיקת-זהב נבדקת התוצאה, לא הנוסחה.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/apps/peruk12.json b/machtzev/generator/apps/peruk12.json
+index d379896..22aef81 100644
+--- a/machtzev/generator/apps/peruk12.json
++++ b/machtzev/generator/apps/peruk12.json
+@@ -61,6 +61,18 @@
+     "required": false,
+     "enumVals": []
+    },
++   {
++    "label": "קילומטראז׳ כמות",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
++   {
++    "label": "מחיר לקמ",
++    "type": "num",
++    "required": false,
++    "enumVals": []
++   },
+    {
+     "label": "מה המוכר אמר",
+     "type": "text",
+diff --git a/machtzev/generator/specs-ds/peruk12.txt b/machtzev/generator/specs-ds/peruk12.txt
+index 9e647d7..7ba5a57 100644
+--- a/machtzev/generator/specs-ds/peruk12.txt
++++ b/machtzev/generator/specs-ds/peruk12.txt
+@@ -4,7 +4,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, קישור מודעה, מחיר, קילומטראז׳ כמות, מחיר לקמ = מחיר / קילומטראז׳ כמות, מה המוכר אמר, האם נסעת | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

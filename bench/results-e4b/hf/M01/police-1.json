@@ -1,0 +1,87 @@
+{
+ "task": "M01",
+ "ns": "peruk02",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "ent3": true,
+  "paid": true,
+  "px3": true
+ },
+ "task_checks": [
+  {
+   "id": "ent3",
+   "ok": true,
+   "info": "file",
+   "mandatory": true
+  },
+  {
+   "id": "paid",
+   "ok": true,
+   "info": "1×",
+   "mandatory": true
+  },
+  {
+   "id": "px3",
+   "ok": true,
+   "info": "file",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Regenerated peruk02 app using app-ds.mjs with --name flag; all 3 entities generated successfully.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only peruk02.txt spec file modified; no hand-edits to generated files in new/ directory.",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only peruk02 app regenerated; other apps (audit, bind*, calendar, ent*, etc.) remain unchanged.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Spec syntax validated: cascade delete (מחיקה: תיק=מפל), table particle ([טבלה]), enum field (שולם{כן|לא}).",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All Hebrew text stays in peruk02.txt spec; no Hebrew added to generator engine files.",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "0630fdb86b395ab6",
+ "at": "2026-09-10T20:10:05.227Z"
+}

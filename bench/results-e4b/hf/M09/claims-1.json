@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator re-ran with תזכורת entity added"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only spec-ds/tasks.txt modified - expected edit"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps unchanged"
+    },
+    {
+      "check": "gates_pass",
+      "text": "Spec syntax valid, cascade rule correct"
+    },
+    {
+      "check": "ent2",
+      "text": "Two new particle screens generated for תזכורת"
+    },
+    {
+      "check": "empty",
+      "text": "Empty state particle defined: אין תזכורות"
+    }
+  ],
+  "notes": "PROVEN: תזכורת entity with משימה* link to task, מועד* required date, נשלחה optional yes/no. Cascade deletion rule: מחיקה: משימה=מפל. Table screen [טבלה] + empty state [ריק] אין תזכורות. All field types inferred per SPEC-LANG. Zero breaking changes. Machine verified all gates pass and other apps byte-identical."
+}

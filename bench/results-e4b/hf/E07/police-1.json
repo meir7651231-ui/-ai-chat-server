@@ -1,0 +1,68 @@
+{
+ "task": "E07",
+ "ns": "peruk21",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "counter": true
+ },
+ "task_checks": [
+  {
+   "id": "counter",
+   "ok": true,
+   "info": "consts=1",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Generator pipeline runs without errors after adding דחופים counter to peruk21",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Other app outputs remain byte-identical, only peruk21 app changes",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Counter named דחופים created as a particle that counts תיק records where סיווג equals הזמנה לוועדה",
+   "check": "counter",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code passes flutter analyze with no errors",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "f7bd5e03ff62b2ca",
+ "at": "2026-09-10T21:54:55.394Z"
+}

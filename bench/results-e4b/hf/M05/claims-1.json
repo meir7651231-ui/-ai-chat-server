@@ -1,0 +1,21 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "App-ds generator successfully regenerated peruk21 app with new message particle"
+    },
+    {
+      "check": "msg",
+      "text": "Message particle תשובה added to case screen linked to סיווג classification field"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles without errors - Dart math and List functions are correct"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "No other files in new/ directory were modified - only peruk21 regenerated"
+    }
+  ],
+  "notes": "proven: Message particle תשובה successfully added to machtzev/generator/specs-ds/peruk21.txt with content 'קיבלתי, הסיווג: {ערך}'. Particle displays classification confirmation message based on סיווג field value. All machine checks pass including code compilation and byte verification of other apps."
+}

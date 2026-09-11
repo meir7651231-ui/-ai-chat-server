@@ -15,7 +15,7 @@ DENY="Bash(git commit *),Bash(git push *),Bash(git add *),Bash(git reset *),Bash
 cc() { # cc <model> <maxturns> <prompt-file> <out-json>
   timeout 2400 claude -p "$(cat "$3")" --model "$1" --max-turns "$2" --permission-mode acceptEdits --allowedTools "$ALLOW" --disallowedTools "$DENY" --output-format json > "$4" 2> "$4.err"; echo "  $(basename $4): exit=$? cost=$(node -e "try{const d=require('$4');process.stdout.write(String(d.total_cost_usd)+' turns='+d.num_turns+' ms='+d.duration_ms+' err='+d.is_error)}catch(e){process.stdout.write('unparsable')}")"
 }
-CC=""; for i in 1 2 3; do if mkdir "$B/work/.cc-lock-$i" 2>/dev/null; then CC=$S/repos/bs-compile-$i; CCL="$B/work/.cc-lock-$i"; break; fi; done; [ -n "$CC" ] && trap 'rmdir "$CCL" 2>/dev/null' EXIT
+CC=""; for i in 1 2 3 4 5; do if mkdir "$B/work/.cc-lock-$i" 2>/dev/null; then CC=$S/repos/bs-compile-$i; CCL="$B/work/.cc-lock-$i"; break; fi; done; [ -n "$CC" ] && trap 'rmdir "$CCL" 2>/dev/null' EXIT
 COMPILE_ARG=""; [ -n "$CC" ] && [ "${COMPILE:-1}" = "1" ] && COMPILE_ARG="--compile $CC"
 police() { node "$B/police-bench.mjs" --root . --task "$TID" --claims ./claims.json --base "${BASE_HASHES:-/tmp/base-hashes.txt}" $COMPILE_ARG --out "$1" > ./_police.md 2>./_police.err; echo "  police: $(node -e "const d=require('$1');process.stdout.write(d.verdict+' missing='+d.missing.join(',')+' false='+d.false_claims)")"; }
 T0=$(date +%s); echo "=== $ARM/$TID ($NS) start $(date -u +%H:%M:%S)"
