@@ -79,6 +79,25 @@ String? _fnType(FunctionDeclaration d) {
   return '$ret Function($types)';
 }
 
+/// טיפוס של קבוע-שכן (לשקע-ערך): מההצהרה אם קיימת, אחרת נגזר מהליטרל.
+/// null אם האתחול אינו ליטרל-טהור — אז אין מה להזריק ואין מה להטביע בבדיקה.
+String? _varType(String src, VariableDeclaration v) {
+  final init = v.initializer;
+  if (init == null) return null;
+  final fr = _FreeIds(<String>{});
+  init.visitChildren(fr);
+  for (final id in fr.ids) { if (!_core.contains(id)) return null; }
+  for (final t in fr.typeNames) { if (!_core.contains(t)) return null; }
+  final parent = v.parent;
+  if (parent is VariableDeclarationList && parent.type != null) return parent.type!.toSource();
+  if (init is IntegerLiteral) return 'int';
+  if (init is DoubleLiteral) return 'double';
+  if (init is BooleanLiteral) return 'bool';
+  if (init is SimpleStringLiteral || init is StringInterpolation) return 'String';
+  if (init is ListLiteral) return init.typeArguments?.toSource().replaceAll('<', 'List<') ?? null;
+  return null;
+}
+
 /// סגור-טרנזיטיבי של שכן: השכן **וכל מי שהוא קורא לו** נאספים יחד, ורק אם כולם
 /// טהורים (core/dart:math בלבד) — אחרת פסילה. השמות משוכתבים ל-`_src_<שם>` כדי
 /// שהבדיקה תוכל להטביע אותם verbatim בלי לייבא אף אטום (חוק-4).
@@ -147,11 +166,11 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
 
   // אינדקס הצהרות-top-level בקובץ
   final topFns = <String, FunctionDeclaration>{};
-  final topVars = <String>{};
+  final topVars = <String, VariableDeclaration>{};   // שם ⇒ ההצהרה (לשקע-ערך)
   final topTypes = <String, Declaration>{}; // enum/class/typedef → הצהרתן
   for (final d in unit.declarations) {
     if (d is FunctionDeclaration && !d.isGetter && !d.isSetter) topFns[d.name.lexeme] = d;
-    else if (d is TopLevelVariableDeclaration) { for (final v in d.variables.variables) topVars.add(v.name.lexeme); }
+    else if (d is TopLevelVariableDeclaration) { for (final v in d.variables.variables) topVars[v.name.lexeme] = v; }
     else if (d is EnumDeclaration) topTypes[d.name.lexeme] = d;
     else if (d is ClassDeclaration) topTypes[d.name.lexeme] = d;
     else if (d is MixinDeclaration) topTypes[d.name.lexeme] = d;
@@ -198,7 +217,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   final unresolved = <String>[];
   var usesMath = false;
   for (final id in free.ids) {
-    if (topFns.containsKey(id) || topVars.contains(id)) sockets.add(id);
+    if (topFns.containsKey(id) || topVars.containsKey(id)) sockets.add(id);
     else if (_mathCore.contains(id)) usesMath = true;
     else unresolved.add(id); // ערך-חופשי לא-מזוהה (אולי import) — חשוד
   }
@@ -241,7 +260,18 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
       final mathHit = <String>{};
       for (final sName in sockets) {
         final d = topFns[sName];
-        if (d == null) { ok = false; break; }             // שקע-ערך (topVar) — לא ב-v1
+        if (d == null) {
+          // שקע-**ערך**: קבוע-שכן (`kDeliveredStage`) ⇒ פרמטר מוקלד, כמו
+          // `{required int kIndexMinWordLen}` שבמדף. השם נשמר, כולל תחילית-k.
+          final v = topVars[sName];
+          if (v == null) { ok = false; break; }
+          final vt = _varType(src, v);
+          if (vt == null) { ok = false; break; }           // ערך לא-טהור / בלי טיפוס נגזר
+          socketMeta.add({'name': _pub(sName)!, 'init': _helper(sName)});
+          socketTypes.add(vt);
+          emitted[sName] = 'final ${_helper(sName)} = ' + src.substring(v.initializer!.offset, v.initializer!.end) + ';';
+          continue;
+        }
         final t = _fnType(d);
         if (t == null) { ok = false; break; }
         if (!_collectPure(src, topFns, sName, emitted, mathHit)) { ok = false; break; }

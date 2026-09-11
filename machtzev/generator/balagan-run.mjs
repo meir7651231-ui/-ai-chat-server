@@ -6,6 +6,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
+import net from 'node:net';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 const require = createRequire(import.meta.url);
@@ -18,9 +19,25 @@ const pwDir = ['/home/user/maor-system/node_modules/playwright-core', '/opt/node
 if (!pwDir) { console.log('⚪ balagan-run: אין playwright — מדולג'); process.exit(0); }
 const { chromium } = require(pwDir);
 const exe = fs.readdirSync('/opt/pw-browsers').filter((d) => /^chromium-\d+$/.test(d)).map((d) => `/opt/pw-browsers/${d}/chrome-linux/chrome`).find(fs.existsSync);
-const PORT = 8797;
+// ⚠️ פורט קבוע הפך את השער ללא-כשיר-לריצה-מקבילה: ריצה שנייה נכשלת לתפוס אותו,
+// השרת לא עולה, הדפדפן מקבל סירוב-חיבור — והשער מדווח «אדום» על כשל-תשתית.
+// לכן: פורט חופשי מהמערכת, והמתנה עד שהשרת **עונה בפועל** ולא שנייה שרירותית.
+const PORT = await new Promise((res, rej) => {
+  const s = net.createServer();
+  s.on('error', rej);
+  s.listen(0, '127.0.0.1', () => { const p = s.address().port; s.close(() => res(p)); });
+});
 const srv = spawn('python3', ['-m', 'http.server', String(PORT), '--bind', '127.0.0.1'], { cwd: SITE, stdio: 'ignore' });
-await new Promise((r) => setTimeout(r, 900));
+let up = false;
+for (let i = 0; i < 60 && !up; i++) {
+  await new Promise((r) => setTimeout(r, 100));
+  up = await new Promise((res) => {
+    const c = net.connect(PORT, '127.0.0.1');
+    c.on('connect', () => { c.destroy(); res(true); });
+    c.on('error', () => res(false));
+  });
+}
+if (!up) { srv.kill(); console.log(`🔴 balagan-run: שרת-המבחן לא עלה על ${PORT} תוך 6 שניות — כשל-תשתית, לא כשל-מוצר`); process.exit(1); }
 const SENTENCE = 'המשכיר מקזז 6,200 מהפיקדון של 8,000, מסרתי מפתח ב-1.8.2026';
 
 const res = { tapsSave: null, tapsSend: null, ttiMs: null, ext: [], ok: false, notes: [] };

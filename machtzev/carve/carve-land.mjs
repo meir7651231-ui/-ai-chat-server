@@ -27,8 +27,20 @@ const STUB = /=>\s*(?:const\s+)?(?:\{\s*\}|\[\s*\]|''|""|0|0\.0|null|-?\d+)\s*;?
 
 // ליטרל-דוגמה לטיפוס-אלמנט (לסינתזת-אוסף)
 const elemLit = (t) => ({ String: "'a'", int: '1', double: '1.5', num: '1', bool: 'true' }[t.replace(/\?$/, '')] ?? null);
-function compat(pt) {
+function compat(pt, inlined = []) {
   const nul = pt.endsWith('?'); const base = pt.replace(/\?$/, '');
+  // DateTime: ליטרל-קבוע (דטרמיניסטי — לא DateTime.now()).
+  if (base === 'DateTime') {
+    const out = [{ d: 'DateTime(2026, 8, 24)', t: base }, { d: 'DateTime(2026, 1, 1, 13, 45)', t: base }];
+    if (nul) out.push({ d: 'null', t: base });
+    return out;
+  }
+  // enum שהוטבע באטום verbatim: הערכים זמינים בקובץ, אין צורך לזייף.
+  if (inlined.includes(base)) {
+    const out = [{ d: `${base}.values.first`, t: base }, { d: `${base}.values.last`, t: base }];
+    if (nul) out.push({ d: 'null', t: base });
+    return out;
+  }
   // סינתזת-אוסף: List<X>/Set<X> ⇒ ריק + זוג-אלמנטים · Map<K,V> ⇒ ריק + זוג
   const mL = base.match(/^(List|Set|Iterable)<(.+)>$/);
   if (mL) { const el = elemLit(mL[2]); const c = mL[1] === 'List' ? '[]' : '{}'; const out = [{ d: `const <${mL[2]}>${c}`, t: base }]; if (el) out.push({ d: `const <${mL[2]}>${mL[1] === 'List' ? `[${el},${el}]` : `{${el}}`}`, t: base }); if (nul) out.push({ d: 'null', t: base }); return out; }
@@ -43,7 +55,10 @@ function compat(pt) {
   });
 }
 function parseParams(fnSrc) {
-  const m = fnSrc.match(/\b[\w$]+\s*\(([^)]*)\)/); if (!m) return null;
+  // ⚠️ בלי הסרת-הערות הרגקס תופס סוגריים מתוך dartdoc (`/// ... (…)`) ולא את
+  // החתימה — והפונקציה נדחתה «אין-קלט-סל» בזמן שהפרמטרים שלה פרימיטיביים.
+  const clean = fnSrc.replace(/^\s*\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
+  const m = clean.match(/\b[\w$]+\s*\(([^)]*)\)/); if (!m) return null;
   const raw = m[1].trim(); if (!raw) return [];
   if (/[{[]/.test(raw)) return null;
   return raw.split(',').map(p => { const parts = p.trim().split(/\s+/); return { type: parts.slice(0, -1).join(' '), name: parts.at(-1) }; });
@@ -75,7 +90,7 @@ function landOne(r, seen) {
   if (params === null) return { name: r.name, skip: 'חתימה לא-טריוויאלית' };
   const socketArgs = (r.autoSocket && r.socketMeta) ? r.socketMeta.map(s => `${s.name}: ${s.init}`).join(', ') : '';
   const mkArgs = (c) => [c.map(v => v.d).join(', '), socketArgs].filter(Boolean).join(', ');
-  const perParam = params.map(p => compat(p.type));
+  const perParam = params.map(p => compat(p.type, r.inlineTypes || []));
   if (perParam.some(x => x.length === 0)) return { name: r.name, skip: 'אין-קלט-סל' };
   const combos = [];
   const rec = (i, acc) => { if (combos.length >= 12) return; if (i === params.length) { combos.push(acc); return; } for (const v of perParam[i]) { rec(i + 1, [...acc, v]); if (combos.length >= 12) break; } };
@@ -128,10 +143,12 @@ const carved = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
 const trivial = carved.filter(r => r.ok && (r.trivial || r.autoSocket));
 const seen = new Set();
 let landed = 0, failed = 0, skipped = 0;
+const skipWhy = {};   // סיבת-דילוג ⇒ שמות (בלי זה 16 דילוגים נעלמו בשקט)
 for (const r of trivial) {
   const res = landOne(r, seen);
   if (res.landed) { landed++; if (landed <= 40) console.log(`✅ ${res.name} → dart/${res.landed} · ${res.golden} Golden`); }
   else if (res.fail) { failed++; if (failed <= 20) console.log(`↩ ${res.name}: ${res.fail}`); }
-  else skipped++;
+  else { skipped++; (skipWhy[res.skip || 'לא-מנומק'] ??= []).push(res.name); }   // שקט אינו דילוג
 }
 console.log(`\n═══ נחיתה: ✅ ${landed} אטומים · ↩ ${failed} נכשלו · ↷ ${skipped} דולגו (מתוך ${trivial.length} trivial) ═══`);
+for (const [why, names] of Object.entries(skipWhy).sort((a, b) => b[1].length - a[1].length)) console.log(`   ↷ ${why}: ${names.length} · ${names.slice(0, 6).join(' ')}`);
