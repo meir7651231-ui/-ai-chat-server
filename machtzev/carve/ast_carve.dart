@@ -46,7 +46,11 @@ class _FreeIds extends RecursiveAstVisitor<void> {
     final p = node.parent;
     if (p is PropertyAccess && identical(p.propertyName, node)) return;
     if (p is PrefixedIdentifier && identical(p.identifier, node)) return;
-    if (p is MethodInvocation && identical(p.methodName, node) && p.target != null) return;
+    // קריאת-שיטה על מטרה, וגם על מטרה-משתמעת בשרשור (`x..remove('B')` — ה-target הוא null)
+    if (p is MethodInvocation && identical(p.methodName, node) && (p.target != null || p.isCascaded)) return;
+    // תווית של ארגומנט-בשם (`orElse:` · `child:`): ההורה הוא Label, לא NamedExpression —
+    // ולכן הבדיקה הישנה מעולם לא נורתה וכל תווית נספרה כמזהה-חופשי.
+    if (p is Label) return;
     if (p is NamedExpression && identical(p.name.label, node)) return;
     if (bound.contains(n) || _core.contains(n)) return;
     // טיפוס (מתחיל באות-גדולה) — מועמד-הטבעה; אחרת — מזהה-ערך
@@ -114,6 +118,126 @@ String? _varType(String src, VariableDeclaration v) {
 /// שהבדיקה תוכל להטביע אותם verbatim בלי לייבא אף אטום (חוק-4).
 /// שכן לא-טהור אינו כשל של המכונה: הוא **חייב** להיות שקע, אך התחליף בבדיקה
 /// דורש שיפוט-אדם — והמצאתו ע"י מכונה היא זיוף-דאטה (§20-ג). לכן: דיווח, לא ניחוש.
+
+// ── טיפוס-שכן דרך ייבוא-יחסי ─────────────────────────────────────────────────
+// עד היום הוטבעו רק טיפוסים שהוצהרו **באותו קובץ**; טיפוס שהגיע דרך
+// `import '../data/x.dart'` נספר `type:X` בלתי-פתיר — גם כשהקובץ השכן טהור
+// לגמרי. זה חסם 77 פונקציות על `LipskeyCatalogProduct` לבדו, מחלקת-דאטה
+// בקובץ בלי שום ייבוא. כאן אותו מנגנון-הטבעה מורחב אל השכן, בתנאים זהים:
+// הקובץ כולו טהור, וההצהרה סגורה על עצמה.
+const _pureDartLibs = {'dart:convert','dart:math','dart:typed_data','dart:collection','dart:core'};
+
+class _ImpFile {
+  final String src;
+  final Map<String, Declaration> types;
+  _ImpFile(this.src, this.types);
+}
+
+// אינדקס טיפוסים מכל ייבוא-יחסי שקובצו טהור (אפס `package:`, אפס dart: לא-טהור)
+// שם-החבילה + תיקיית lib שלה, מתוך pubspec.yaml של הפרויקט שהקובץ שייך לו.
+// `package:buildsmart/data/x.dart` הוא ייבוא-עצמי — אותו דבר בדיוק כמו נתיב-יחסי.
+// בלי הפתירה הזו כל האימפריה נראתה «זרה» לחצב, כי היא מייבאת את עצמה ב-package:.
+(String, String)? _ownPackage(String file) {
+  var dir = File(file).parent;
+  for (var i = 0; i < 12; i++) {
+    final pub = File('${dir.path}/pubspec.yaml');
+    if (pub.existsSync()) {
+      for (final line in pub.readAsLinesSync()) {
+        final m = RegExp(r'^name:\s*([A-Za-z_][A-Za-z0-9_]*)').firstMatch(line);
+        if (m != null) return (m.group(1)!, '${dir.path}/lib');
+      }
+      return null;
+    }
+    final up = dir.parent;
+    if (up.path == dir.path) break;
+    dir = up;
+  }
+  return null;
+}
+
+Map<String, _ImpFile> _neighborTypes(String file, CompilationUnit unit) {
+  final out = <String, _ImpFile>{};
+  final dir = File(file).parent.path;
+  final own = _ownPackage(file);
+  for (final d in unit.directives) {
+    if (d is! ImportDirective) continue;
+    final uri = d.uri.stringValue ?? '';
+    if (uri.isEmpty) continue;
+    if (d.prefix != null) continue;                       // ייבוא-בתחילית — לא ב-v1
+    String path;
+    if (!uri.contains(':')) {
+      path = File('$dir/$uri').absolute.path;
+    } else if (own != null && uri.startsWith('package:${own.$1}/')) {
+      path = '${own.$2}/${uri.substring('package:${own.$1}/'.length)}';
+    } else {
+      continue;                                           // dart: או חבילה זרה
+    }
+    if (!File(path).existsSync()) continue;
+    final nsrc = File(path).readAsStringSync();
+    final nunit = parseString(content: nsrc, throwIfDiagnostics: false).unit;
+    var pure = true;
+    for (final nd in nunit.directives) {
+      if (nd is ImportDirective) {
+        final u = nd.uri.stringValue ?? '';
+        if (!_pureDartLibs.contains(u)) { pure = false; break; }
+      } else if (nd is ExportDirective || nd is PartDirective) { pure = false; break; }
+    }
+    if (!pure) continue;
+    final types = <String, Declaration>{};
+    for (final nd in nunit.declarations) {
+      if (nd is EnumDeclaration) types[nd.name.lexeme] = nd;
+      else if (nd is ClassDeclaration) types[nd.name.lexeme] = nd;
+      else if (nd is MixinDeclaration) types[nd.name.lexeme] = nd;
+      else if (nd is TypeAlias) types[nd.name.lexeme] = nd;
+    }
+    final f = _ImpFile(nsrc, types);
+    for (final k in types.keys) out.putIfAbsent(k, () => f);
+  }
+  return out;
+}
+
+// סגירה טרנזיטיבית של הצהרת-טיפוס-שכן: ההצהרה + כל טיפוס שהיא מזכירה,
+// ובלבד שכולם `dart:core` או מוצהרים באותו קובץ-שכן. כל ספק ⇒ null (פסילה).
+List<String>? _neighborClosure(String name, Map<String, _ImpFile> idx) {
+  final f = idx[name];
+  if (f == null) return null;
+  return _typeClosure(name, f);
+}
+
+// אותה סגירה בדיוק, על קובץ **כלשהו** — גם הקובץ הנוכחי. ההטבעה מאותו-קובץ
+// הייתה verbatim בלי שום אימות: מחלקה עם `@immutable` או מחלקה שמפנה למחלקה
+// שכנה נפלטה חלקית, והאטום לא התקמפל. עכשיו אותו חוק לשני המקרים.
+List<String>? _typeClosure(String name, _ImpFile f) {
+  final emitted = <String, String>{};
+  final work = <String>[name];
+  final seen = <String>{};
+  while (work.isNotEmpty) {
+    final t = work.removeLast();
+    if (!seen.add(t)) continue;
+    final d = f.types[t];
+    if (d == null) return null;                 // טיפוס מקובץ-שכן אחר — פסילה
+    emitted[t] = f.src.substring(d.offset, d.end);
+    final bound = <String>{};
+    final loc = _Locals(); d.visitChildren(loc); bound.addAll(loc.names);
+    if (d is ClassDeclaration) { for (final m in d.members) { final n = m is MethodDeclaration ? m.name.lexeme : null; if (n != null) bound.add(n); } bound.add(t); }
+    if (d is EnumDeclaration) { for (final c in d.constants) bound.add(c.name.lexeme); bound.add(t); }
+    final fi = _FreeIds(bound); d.visitChildren(fi);
+    for (final tn in fi.typeNames) {
+      if (_core.contains(tn) || _mathCore.contains(tn)) continue;
+      if (f.types.containsKey(tn)) { work.add(tn); continue; }
+      return null;                              // טיפוס בלתי-פתיר בתוך ההצהרה
+    }
+    // גם מזהי-**ערך**, לא רק טיפוסים. בלי זה הוטבעו מחלקות שנשענות על
+    // `@immutable` (מ-package:meta) או על קבוע-top-level של קובצן — האטום נפלט
+    // ולא התקמפל. כל מזהה-ערך חופשי ⇒ פסילת הטיפוס, לא ניחוש.
+    for (final id in fi.ids) {
+      if (_core.contains(id) || _mathCore.contains(id)) continue;
+      return null;
+    }
+  }
+  return emitted.values.toList();
+}
+
 bool _collectPure(String src, Map<String, FunctionDeclaration> topFns, String root,
     Map<String, String> out, Set<String> mathHit) {
   final work = <String>[root];
@@ -233,6 +357,11 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     else if (d is TypeAlias) topTypes[d.name.lexeme] = d;
   }
 
+  // טיפוסי-שכן דרך ייבוא-יחסי מקובץ טהור (ראה _neighborTypes)
+  final impIdx = _neighborTypes(file, unit);
+  final impSrc = <String, List<String>>{};      // שם ⇒ מקור-ההצהרה + תלויותיה
+  final selfFile = _ImpFile(src, topTypes);     // הקובץ הנוכחי — נבדק באותו חוק
+
   // אתר את הפונקציה (top-level או מתודה) לפי שם + שורה
   FunctionDeclaration? fn;
   MethodDeclaration? method;
@@ -296,6 +425,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     for (final e in byType.entries) {
       final t = e.key;
       if (_core.contains(t) || topTypes.containsKey(t) || _mathCore.contains(t)) continue;
+      if (impIdx.containsKey(t) && _neighborClosure(t, impIdx) != null) continue;  // יוטבע — לא שקע
       if (tn_hasArgs(params, t)) continue;          // טיפוס-גנרי בעצמו — לא ב-v1
       final mu = _MemberUse(e.value, t);
       body.visitChildren(mu);
@@ -304,7 +434,13 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   }
 
   for (final t in free.typeNames) {
-    if (topTypes.containsKey(t)) inlineTypes.add(t);
+    if (topTypes.containsKey(t)) {
+      // הטבעה-מאותו-קובץ עוברת אימות זהה: סגירה טרנזיטיבית + אפס מזהה-חופשי.
+      final cl = _typeClosure(t, selfFile);
+      if (cl == null) { unresolved.add('type:$t'); continue; }
+      impSrc[t] = cl; inlineTypes.add(t); continue;
+    }
+    if (impIdx.containsKey(t) && (impSrc[t] = _neighborClosure(t, impIdx) ?? const []).isNotEmpty) inlineTypes.add(t);
     else if (_mathCore.contains(t)) usesMath = true;
     else if (erasable.contains(t)) continue;   // יהפוך לגנרי — אינו תלות
     // טיפוס לא-מקומי שאינו core ⇒ יתכן import (unresolved-type)
@@ -314,9 +450,13 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   // הטבעת טיפוסים verbatim + הפונקציה (פרטי→ציבורי)
   final buf = StringBuffer();
   final copiedTypes = <String>[];
-  for (final t in inlineTypes) {
-    final d = topTypes[t]!;
-    copiedTypes.add(src.substring(d.offset, d.end));
+  final seenType = <String>{};                    // דדופ: שתי הטבעות של אותו טיפוס
+  for (final t in inlineTypes) {                  // ⇒ `The name 'X' is already defined`
+    for (final srcText in impSrc[t] ?? const <String>[]) {
+      final m = RegExp(r'(?:class|enum|mixin|typedef)\s+([A-Za-z_][A-Za-z0-9_]*)').firstMatch(srcText);
+      if (m != null && !seenType.add(m.group(1)!)) continue;
+      copiedTypes.add(srcText);                   // טיפוס-שכן: המקור מגיע מקובצו
+    }
   }
   // ── שקע-אוטומטי (חוק-3): קריאה-לשכן ⇒ פרמטר-שקע מוזרק ──────────────────
   // עד היום `sockets` היה תווית בלבד: אטום-עם-שכן סווג לא-טריוויאלי ונפל בשקט,

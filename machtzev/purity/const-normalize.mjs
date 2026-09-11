@@ -7,7 +7,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 const ROOT = new URL('../../new/', import.meta.url).pathname;
-const DART = process.env.DART_SDK_BIN || '/home/user/flutter/bin';
+// ⚠️ ה-SDK עצמו, לא עטיפת-flutter. `/home/user/flutter/bin/dart` הוא סקריפט-מעטפת
+// שנכנס לשומר-ה-root של flutter ומפיל את `dart analyze`/`dart run` — והנחיתה
+// ספרה את זה ככשל-אטום ומחקה את האטום. 37 אטומים נזרקו כך בלי שנבדקו מעולם.
+const DART = process.env.DART_SDK_BIN || '/home/user/flutter/bin/cache/dart-sdk/bin';
 const env = { ...process.env, PATH: `${DART}:${process.env.PATH}` };
 const HEB = /[֐-׿]/;
 

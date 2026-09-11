@@ -13,7 +13,21 @@ const ROOT = process.env.CARVE_OUT || new URL('../../new/', import.meta.url).pat
 // ⚠️ המדף האמיתי, תמיד — גם בריצת-ניסוי. בלי זה `CARVE_OUT` מזיז את בדיקת
 // «כבר-קיים» לתיקייה הזמנית, וריצת-מדידה מדווחת כ«חדשים» אטומים שכבר במדף.
 const SHELF = new URL('../../new/', import.meta.url).pathname;
-const DART = process.env.DART_SDK_BIN || '/home/user/flutter/bin';
+// ⚠️ ה-SDK עצמו, לא עטיפת-flutter. `/home/user/flutter/bin/dart` הוא סקריפט-מעטפת
+// שנכנס לשומר-ה-root של flutter ומפיל את `dart analyze`/`dart run` — והנחיתה
+// ספרה את זה ככשל-אטום ומחקה את האטום. 37 אטומים נזרקו כך בלי שנבדקו מעולם.
+// הרתמה והבדיקה ייבאו את ייבואי-האטום בעיוור. `dart analyze` נכשל על
+// ייבוא-לא-בשימוש ⇒ אטום תקין נזרק. מייבאים רק מה שהגוף באמת מזכיר.
+const usedImports = (imports, body) => (imports || []).filter(im => {
+  const pfx = /\bas\s+([A-Za-z_][A-Za-z0-9_]*)\s*;/.exec(im);
+  if (pfx) return new RegExp('\\b' + pfx[1] + '\\.').test(body);
+  return true;
+});
+const RESERVED = new Set([
+  'int','bool','double','num','String','List','Map','Set','Object','Function','Iterable','dynamic','void','Null','Never','Enum','Symbol','Type','Duration','DateTime','RegExp','Uri','BigInt',
+  'do','if','for','in','is','as','new','var','final','const','class','enum','extends','super','this','null','true','false','switch','case','default','return','try','catch','finally','throw','rethrow','while','with','assert','break','continue','else','set','get','factory','operator','typedef','part','show','hide','mixin','abstract','static','external','implements','import','export','library','yield','await','async','covariant','deferred','on',
+]);
+const DART = process.env.DART_SDK_BIN || '/home/user/flutter/bin/cache/dart-sdk/bin';
 const env = { ...process.env, PATH: `${DART}:${process.env.PATH}` };
 
 const POOL = [
@@ -94,6 +108,9 @@ function landOne(r, seen) {
   const atomAbs = path.join(ROOT, 'dart', `${kb}.dart`);
   const testAbs = path.join(ROOT, 'dart', `${kb}_test.dart`);
   if (seen.has(kb)) return { name: r.name, skip: 'כפול-שם תוך-ריצה' };
+  // שם שהוא מילה-שמורה או טיפוס-ליבה אינו יכול להיות שם-פונקציה באטום:
+  // `int(...)` · `do(...)` נפלטו, לא התקמפלו, ונספרו ככשל. פסילה מראש.
+  if (RESERVED.has(r.name)) return { name: r.name, skip: 'שם שמור' };
   if (fs.existsSync(atomAbs) || fs.existsSync(path.join(SHELF, 'dart', `${kb}.dart`))) return { name: r.name, skip: 'כבר-קיים' };
   // פסול: מתודת-override (לא אטום-עצמאי) · גוף-סטאב (קבוע ריק — אין מנגנון)
   if (/@override\b/.test(r.fnSource)) return { name: r.name, skip: '@override — לא אטום' };
@@ -120,7 +137,8 @@ function landOne(r, seen) {
   const sockSrc = (r.autoSocket && r.socketDecls && r.socketDecls.length)
     ? '\n// --- מימוש-השקע verbatim מהמקור (לבדיקה בלבד; לא אטום מיובא) ---\n' + r.socketDecls.join('\n\n') + '\n'
     : '';
-  const harness = `import 'dart:convert';\nimport '${kb}.dart';\n${(r.imports || []).join('\n')}${sockSrc}\nvoid main(){\n${callArgs.map((a, i) => `  try { print(jsonEncode([${i}, (${r.name}(${a})).toString()])); } catch(e){ print(jsonEncode([${i}, {"__t":1}])); }`).join('\n')}\n}\n`;
+  const harnessBody = callArgs.join(' ') + sockSrc;
+  const harness = `import 'dart:convert';\nimport '${kb}.dart';\n${usedImports(r.imports, harnessBody).join('\n')}${sockSrc}\nvoid main(){\n${callArgs.map((a, i) => `  try { print(jsonEncode([${i}, (${r.name}(${a})).toString()])); } catch(e){ print(jsonEncode([${i}, {"__t":1}])); }`).join('\n')}\n}\n`;
   const harnessAbs = path.join(ROOT, 'dart', `_carve_h_${kb}.dart`);
   fs.writeFileSync(harnessAbs, harness);
   let outs;
@@ -131,7 +149,10 @@ function landOne(r, seen) {
     outs = []; for (const [i, o] of rows) outs[i] = (o && typeof o === 'object' && o.__t) ? '__THROW__' : o;
   } catch (e) {
     fs.rmSync(atomAbs, { force: true }); fs.rmSync(harnessAbs, { force: true });
-    return { name: r.name, fail: 'analyze/run: ' + String((e.stderr || e).toString()).slice(0, 90).replace(/\n/g, ' ') };
+    // `dart analyze` כותב ל-stdout, לא ל-stderr. הדיווח קרא רק stderr ⇒ 37 כשלים
+    // הוצגו כשורה ריקה, ואי-אפשר היה לדעת למה אטום נזרק.
+    const msg = [e.stderr, e.stdout, e.message].map(x => (x || '').toString().trim()).filter(Boolean).join(' | ');
+    return { name: r.name, fail: 'analyze/run: ' + msg.slice(0, 140).replace(/\n/g, ' ') };
   }
   fs.rmSync(harnessAbs, { force: true });
   if (outs.filter(x => x !== undefined).length !== combos.length) { fs.rmSync(atomAbs, { force: true }); return { name: r.name, fail: 'אפיון חלקי' }; }
@@ -143,7 +164,7 @@ function landOne(r, seen) {
       ? `  { var threw=false; try{ ${call}; }catch(_){threw=true;} if(!threw) throw StateError('FAIL #${i}: expected throw'); n++; }`
       : `  _eq((${call}).toString(), '${esc(outs[i])}', '#${i}'); n++;`;
   }).join('\n');
-  const test = `// בדיקת-Golden · ${r.name} — אפיון-חצב (חוק-4). מייבאת רק את האטום.\nimport '${kb}.dart';\n${(r.imports || []).join('\n')}${sockSrc}\nvoid _eq(String got, String want, String lbl){ if(got!=want) throw StateError('FAIL [\$lbl]: got=\$got want=\$want'); }\nvoid main(){\n  var n=0;\n${asserts}\n  print('✓ ${r.name}: '+n.toString()+' Golden');\n}\n`;
+  const test = `// בדיקת-Golden · ${r.name} — אפיון-חצב (חוק-4). מייבאת רק את האטום.\nimport '${kb}.dart';\n${usedImports(r.imports, asserts + sockSrc).join('\n')}${sockSrc}\nvoid _eq(String got, String want, String lbl){ if(got!=want) throw StateError('FAIL [\$lbl]: got=\$got want=\$want'); }\nvoid main(){\n  var n=0;\n${asserts}\n  print('✓ ${r.name}: '+n.toString()+' Golden');\n}\n`;
   fs.writeFileSync(testAbs, test);
   try { execSync(`dart analyze ${testAbs}`, { cwd: ROOT, env, stdio: 'pipe' }); execSync(`dart run --enable-asserts ${testAbs}`, { cwd: ROOT, env, stdio: 'pipe' }); }
   catch (e) { fs.rmSync(atomAbs, { force: true }); fs.rmSync(testAbs, { force: true }); return { name: r.name, fail: 'golden: ' + String((e.stdout || e).toString()).slice(0, 100).replace(/\n/g, ' ') }; }
