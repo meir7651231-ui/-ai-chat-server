@@ -98,7 +98,11 @@ function landOne(r, seen) {
   // פסול: מתודת-override (לא אטום-עצמאי) · גוף-סטאב (קבוע ריק — אין מנגנון)
   if (/@override\b/.test(r.fnSource)) return { name: r.name, skip: '@override — לא אטום' };
   if (STUB.test(r.fnSource)) return { name: r.name, skip: 'סטאב — גוף-קבוע' };
-  const params = r.autoSocket ? r.origParams : parseParams(r.fnSource);
+  // הפרמטרים מגיעים **מהחצב** (עץ-תחביר), לא מניתוח-טקסט. `parseParams` נשאר
+  // רק כנפילה-אחורה לקלט ישן שאין בו `paramsSimple` — 3 באגים רצופים נולדו שם.
+  const params = ('paramsSimple' in r)
+    ? (r.paramsSimple ? r.origParams : null)
+    : (r.autoSocket ? r.origParams : parseParams(r.fnSource));
   if (params === null) return { name: r.name, skip: 'חתימה לא-טריוויאלית' };
   const socketArgs = (r.autoSocket && r.socketMeta) ? r.socketMeta.map(s => `${s.name}: ${s.init}`).join(', ') : '';
   const mkArgs = (c) => [c.map(v => v.d).join(', '), socketArgs].filter(Boolean).join(', ');

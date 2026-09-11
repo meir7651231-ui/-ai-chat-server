@@ -327,17 +327,28 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   final socketTypes = <String>[];
   final origParams = <Map<String, String>>[];
   var autoSocket = false;
-  if (sockets.isNotEmpty && unresolved.isEmpty && params != null) {
+
+  // ── הפרמטרים נקראים **מה-AST, תמיד** ─────────────────────────────────────
+  // לקח: 3 באגים רצופים נפלו ב-`parseParams` של מחברת-הנחיתה, שמנתחת את
+  // **הטקסט** (סוגריים מתוך dartdoc · חתימה-גנרית לא-מזוהה). לחצב יש עץ-תחביר;
+  // הוא המקור, והנחיתה רק צורכת. `paramsSimple=false` ⇒ הנחיתה פוסלת, לא מנחשת.
+  var paramsSimple = params != null;
+  if (params != null) {
     final raw = src.substring(params.offset, params.end);
-    var ok = !raw.contains('{') && !raw.contains('[');   // חתימה פוזיציונית בלבד
-    if (ok) {
+    if (raw.contains('{') || raw.contains('[')) paramsSimple = false;   // named/optional
+    if (paramsSimple) {
       for (final p in params.parameters) {
         final n = p.name?.lexeme;
-        if (n == null || n.isEmpty) { ok = false; break; }
+        if (n == null || n.isEmpty) { paramsSimple = false; break; }
         final t = (p is SimpleFormalParameter) ? (p.type?.toSource() ?? 'dynamic') : 'dynamic';
         origParams.add({'type': t, 'name': n});
       }
     }
+    if (!paramsSimple) origParams.clear();
+  }
+
+  if (sockets.isNotEmpty && unresolved.isEmpty && params != null) {
+    var ok = paramsSimple;
     if (ok) {
       final emitted = <String, String>{};   // שם-מקורי ⇒ מקור-משוכתב (דדופ בין שקעים)
       final mathHit = <String>{};
@@ -427,6 +438,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     'socketMeta': socketMeta,
     'socketDecls': socketDecls,
     'origParams': origParams,
+    'paramsSimple': paramsSimple,
     'trivial': sockets.isEmpty && unresolved.isEmpty,
   };
 }
