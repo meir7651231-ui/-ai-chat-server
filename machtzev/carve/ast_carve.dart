@@ -471,15 +471,19 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   FunctionDeclaration? fn;
   MethodDeclaration? method;
   final target = fnName.startsWith('_') ? fnName : fnName;
+  // ⚠️ `d.offset` של הצהרה-מתועדת מתחיל ב**הערת-התיעוד**, לא בשורת-ההצהרה.
+  // עם dartdoc בן 4 שורות השורה המחושבת קטנה ב-4, סובלנות ה-±2 נכשלה,
+  // והפונקציה דווחה «לא נמצאה» — 705 מתוך 1,508 העבודות (47%) נפלו כך.
+  bool near(Declaration d) {
+    if (startLine == null) return true;
+    final a = lineInfo.getLocation(d.offset).lineNumber;
+    final b = lineInfo.getLocation(d.firstTokenAfterCommentAndMetadata.offset).lineNumber;
+    return (a - startLine).abs() <= 2 || (b - startLine).abs() <= 2;
+  }
   void scan(AstNode n) {
     n.visitChildren(_FindDecl((d) {
-      if (d is FunctionDeclaration && d.name.lexeme == target) {
-        final ln = lineInfo.getLocation(d.offset).lineNumber;
-        if (startLine == null || (ln - startLine).abs() <= 2) fn = d;
-      } else if (d is MethodDeclaration && d.name.lexeme == target) {
-        final ln = lineInfo.getLocation(d.offset).lineNumber;
-        if (startLine == null || (ln - startLine).abs() <= 2) method = d;
-      }
+      if (d is FunctionDeclaration && d.name.lexeme == target) { if (near(d)) fn = d; }
+      else if (d is MethodDeclaration && d.name.lexeme == target) { if (near(d)) method = d; }
     }));
   }
   scan(unit);
