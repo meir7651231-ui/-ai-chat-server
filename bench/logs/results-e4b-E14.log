@@ -1,0 +1,16 @@
+=== h0/E14 (calendar) start 23:51:41
+  builder.json: exit=0 cost=0.1621968 turns=13 ms=193780 err=false
+  police: DONE missing= false=0
+=== h0/E14 DONE wall=241s cost=$0.16 false_claims=0
+=== hf/E14 (calendar) start 23:55:42
+  builder.json: exit=0 cost=1.9203077000000004 turns=1 ms=6226 err=false
+  police: NOT DONE missing=byte_identical_others,no_orphans false=0
+  auditor-regression.json: exit=0 cost=0.17374050000000002 turns=22 ms=77584 err=false
+  auditor-coverage.json: exit=0 cost=0.20696530000000002 turns=27 ms=78367 err=false
+  auditor-compile.json: exit=0 cost=0.30467520000000003 turns=29 ms=140228 err=false
+  validator.json: exit=0 cost=0.29847120000000005 turns=29 ms=131388 err=false
+  fixer-1.json: exit=0 cost=0.7030041 turns=50 ms=490079 err=false
+  police: NOT DONE missing=byte_identical_others,no_orphans false=0
+  fixer-2.json: exit=0 cost=0.6008454999999999 turns=61 ms=367420 err=true
+  police: NOT DONE missing=byte_identical_others,no_orphans false=0
+=== hf/E14 NOT DONE wall=2149s cost=$4.21 false_claims=0

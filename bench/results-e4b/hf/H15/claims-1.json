@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "check": "sort_px",
+      "text": "Cases table on particle screen sorted by deadline ascending, soonest first"
+    },
+    {
+      "check": "sort_ent",
+      "text": "Cases on entity list screen sorted by deadline ascending, soonest first"
+    },
+    {
+      "check": "regen_ok",
+      "text": "App regenerated successfully from updated spec"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other peruk apps remain byte-identical"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "No manual edits to generated files"
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles without errors"
+    }
+  ],
+  "notes": "proven - sorting by deadline field implemented in both display contexts using spec language"
+}

@@ -11,3 +11,7 @@
   validator.json: exit=0 cost=0.20211580000000004 turns=16 ms=72503 err=false
   fixer: skipped (FIX-LIST none)
 === hf/E02 DONE wall=401s cost=$1.41 false_claims=0
+=== f0/E02 (peruk02) start 20:09:52
+  builder.json: exit=0 cost=5.3053755 turns=54 ms=835580 err=false
+  police: DONE missing= false=0
+=== f0/E02 DONE wall=891s cost=$5.31 false_claims=0

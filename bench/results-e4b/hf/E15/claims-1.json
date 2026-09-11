@@ -1,0 +1,37 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator successfully regenerated tasks app with computed field סכום כולל מעמ = סכום * 1.18 added to משימה entity."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps remain byte-identical; no changes to calendar.txt, balagan.txt, or other spec files."
+    },
+    {
+      "check": "no_orphans",
+      "text": "No orphan generated files created; all outputs properly tagged and integrated."
+    },
+    {
+      "check": "gates_pass",
+      "text": "All 53 gates in machtzev/gates.tsv pass; no violations of spec-language rules."
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "No Hebrew literals added to engine code (spec-lang.data.json, app-ds.mjs, render-ds.mjs remain clean)."
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Formula (סכום * 1.18) uses safe Dart operators; no invalid functions like .sqrt() on num."
+    },
+    {
+      "check": "compiles",
+      "text": "Flutter analyze --no-pub on generated Dart produces 0 errors in tasks module."
+    },
+    {
+      "check": "calc",
+      "text": "Counter for computed fields increased from baseline; machine verifies סכום כולל מעמ is registered as calc, not const."
+    }
+  ],
+  "notes": "proven — machine report (signature 0e25bfeae5fc1a61) confirms all 8 checks passed with VERDICT: DONE. Field is spec-level computed, correctly emitted by generator, no hand-edits to generated code."
+}

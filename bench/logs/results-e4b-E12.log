@@ -1,0 +1,13 @@
+=== h0/E12 (sechirut) start 23:20:39
+  builder.json: exit=0 cost=0.1334516 turns=6 ms=156847 err=false
+  police: DONE missing= false=0
+=== h0/E12 DONE wall=202s cost=$0.13 false_claims=0
+=== hf/E12 (sechirut) start 23:24:02
+  builder.json: exit=0 cost=0.3438984 turns=19 ms=155670 err=false
+  police: DONE missing= false=0
+  auditor-compile.json: exit=0 cost=0.331636 turns=31 ms=115937 err=false
+  auditor-coverage.json: exit=0 cost=0.4291764 turns=30 ms=130048 err=false
+  auditor-regression.json: exit=0 cost=0.4076456 turns=30 ms=154615 err=false
+  validator.json: exit=0 cost=0.31607689999999994 turns=27 ms=126961 err=false
+  fixer: skipped (FIX-LIST none)
+=== hf/E12 DONE wall=482s cost=$1.83 false_claims=0

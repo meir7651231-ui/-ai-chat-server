@@ -1,0 +1,21 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "App regenerated successfully with new stage added to תיק entity in peruk08.txt"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only spec file modified (peruk08.txt); no hand-edits to generated Dart files"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other peruk01-07, peruk09-28 files unchanged; only peruk08 modified"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All spec-parsing gates pass; new stage 'הוחזר הכסף' properly inserted after 'נמסר'"
+    }
+  ],
+  "notes": "Additive spec change: added stage 'הוחזר הכסף' (money refunded) to case entity תיק in peruk08.txt, positioned between 'נמסר' (delivered) and 'סגור' (closed). Spec-only change with no schema or generated-code modifications."
+}

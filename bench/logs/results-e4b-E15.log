@@ -1,0 +1,13 @@
+=== h0/E15 (tasks) start 00:31:31
+  builder.json: exit=0 cost=0.15980529999999998 turns=11 ms=177381 err=false
+  police: DONE missing= false=0
+=== h0/E15 DONE wall=219s cost=$0.16 false_claims=0
+=== hf/E15 (tasks) start 00:35:11
+  builder.json: exit=0 cost=0.41845550000000004 turns=27 ms=249036 err=false
+  police: DONE missing= false=0
+  auditor-compile.json: exit=0 cost=0.2947904 turns=15 ms=117317 err=false
+  auditor-coverage.json: exit=0 cost=0.2936173 turns=22 ms=141298 err=false
+  auditor-regression.json: exit=0 cost=0.3607942 turns=28 ms=154003 err=false
+  validator.json: exit=0 cost=0.28206050000000005 turns=24 ms=109230 err=false
+  fixer: skipped (FIX-LIST none)
+=== hf/E15 DONE wall=561s cost=$1.65 false_claims=0

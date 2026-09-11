@@ -1,0 +1,59 @@
+{
+ "task": "M07",
+ "ns": "sechirut",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": false,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "px_counter": true,
+  "dash_counter": true
+ },
+ "task_checks": [
+  {
+   "id": "px_counter",
+   "ok": true,
+   "info": "consts=1",
+   "mandatory": true
+  },
+  {
+   "id": "dash_counter",
+   "ok": true,
+   "info": "gen_app_sechirut_scr5_content.dart",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": 0,
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": []
+ },
+ "claims": [
+  {
+   "text": "Added particle counter for unsent findings",
+   "check": "px_counter",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Dashboard counters now use qualified labels when values are ambiguous",
+   "check": "hub_label",
+   "verdict": "UNVERIFIED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "e45640787a928a17",
+ "at": "2026-09-11T01:40:52.443Z"
+}

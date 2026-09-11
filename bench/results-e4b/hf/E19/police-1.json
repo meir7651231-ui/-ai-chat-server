@@ -1,0 +1,83 @@
+{
+ "task": "E19",
+ "ns": "peruk25",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "dash_counter": true
+ },
+ "task_checks": [
+  {
+   "id": "dash_counter",
+   "ok": true,
+   "info": "gen_app_peruk25_scr2_content.dart",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "Successfully regenerated peruk25 app with new counter for דגל מוגן cases.",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other apps (peruk01-24, peruk26-28) remain byte-identical; no cross-app breakage.",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated app with --name peruk25 produced no orphan files.",
+   "check": "no_orphans",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Police gates pass; dash_counter gate confirms counter correctly filters by סיווג field.",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Hebrew text (דגל מוגן) kept in spec-lang.data.json, not in engine code.",
+   "check": "no_hebrew_in_engine",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Bar chart scale handles zero correctly; no invalid math operations.",
+   "check": "dart_math_sane",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Generated Dart code compiles with zero analyzer errors; flutter analyze passes.",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "b96347e3f3bc9f15",
+ "at": "2026-09-11T01:13:49.554Z"
+}

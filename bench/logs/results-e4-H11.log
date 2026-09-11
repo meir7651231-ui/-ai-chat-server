@@ -12,3 +12,7 @@
   fixer-1.json: exit=0 cost=1.0634979999999996 turns=75 ms=699265 err=false
   police: DONE missing= false=0
 === hf/H11 DONE wall=1152s cost=$2.49 false_claims=0
+=== f0/H11 (sechirut) start 23:02:51
+  builder.json: exit=0 cost=4.68048075 turns=45 ms=830104 err=false
+  police: NOT DONE missing=byte_identical_others false=0
+=== f0/H11 NOT DONE wall=875s cost=$4.68 false_claims=0

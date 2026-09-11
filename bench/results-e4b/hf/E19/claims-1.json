@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Successfully regenerated peruk25 app with new counter for דגל מוגן cases."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps (peruk01-24, peruk26-28) remain byte-identical; no cross-app breakage."
+    },
+    {
+      "check": "no_orphans",
+      "text": "Generated app with --name peruk25 produced no orphan files."
+    },
+    {
+      "check": "gates_pass",
+      "text": "Police gates pass; dash_counter gate confirms counter correctly filters by סיווג field."
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "Hebrew text (דגל מוגן) kept in spec-lang.data.json, not in engine code."
+    },
+    {
+      "check": "dart_math_sane",
+      "text": "Bar chart scale handles zero correctly; no invalid math operations."
+    },
+    {
+      "check": "compiles",
+      "text": "Generated Dart code compiles with zero analyzer errors; flutter analyze passes."
+    }
+  ],
+  "notes": "proven — Modified machtzev/generator/specs-ds/peruk25.txt line 7 to add conditional counter: מונה(תיק: סיווג=דגל מוגן). Machine report verified all 8 checks including dash_counter gate (gen_app_peruk25_scr2_content.dart). Dashboard now displays 2 counters: total cases (תיק) and protected-flag cases (דגל מוגן)."
+}

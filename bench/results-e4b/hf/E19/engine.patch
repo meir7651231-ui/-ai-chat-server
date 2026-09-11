@@ -1,0 +1,45 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..81c963d 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-11-spec-5f8e2a · דשבורדים עם מונים מותנים (count עם שדה=ערך) מחויבים להתאים לערך-מפורש מהenumeration בישות (11.9, E19 · peruk25)
++GATE: dash_counter
++ref: 5f8e2a78c4d1e9b3f5a7e2c6d9b4a1f8:new/dart-gen-bs/gen_app_peruk25_scr2_content.dart
++ANTIPATTERN: מונה\(<\w+>: <\w+>=<אנשים>\)
++RULE: דשבורד עם counter מותנה (לדוגמה `מונה(תיק: סיווג=דגל מוגן)`) חייב לציין ערך המופיע בחריץ-enumeration של השדה; render-ds קומפايל הערך לקובץ-content כ-const-string; ושם-הקבוע מוזרק לפילטר RuntimeTime (`where((r) => (r[field_key] ?? '') == const_value)`).
++מה נלמד: שדה-בחירה עם options `a|b|c` ב-spec מייצר עמודה-זרקור בדשבורד שמוקצה מ-appStore ישירות; הסנתור-לפי-ערך התאים בחריץ (סיווג) משנו הטקסט (דגל מוגן) לקבוע-ריצה שעובר הוא-הו לקוד הדרט (line 20 של scr2.dart עשה 3 משימות: איחוד דו-עמודות + סינון + ויזואליזציה כ-bar); אין חיתוך יד בgenerator, וקוד הrendered דורש אפס-עריכה.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..9bea4d6 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -788,7 +788,8 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics
+     const g = k(a.filtered ? '⚠️' : a.kind === L.avg ? '📈' : a.kind === L.sum ? '🧮' : '🔢');
+     const cf = a.field ? k(a.field) : null;
+     // מונה-מסונן ('בסיכון'): סופר רשומות ששדה-מצב שלהן = הערך (התנהגות-על · דשבורד-מפקד).
+-    const num = a.filtered ? `appStore.records('${a.slug}').where((r) => (r[${k(a.field)}] ?? '') == ${k(a.value)}).length.toDouble()`
++    const hasSameEntityUnfiltered = a.filtered && aggs.some((x) => x.slug === a.slug && !x.filtered && (x.kind === L.count || x.field));
++    const num = a.filtered ? `appStore.records('${a.slug}').where((r) => (r[${k(a.field)}] ?? '') == ${k(a.value)}).${hasSameEntityUnfiltered ? 'toList().' : ''}length.toDouble()`
+       : a.kind === L.sum ? `appStore.sum('${a.slug}', ${cf})`
+       : a.kind === L.avg ? `appStore.avg('${a.slug}', ${cf})`
+       : `appStore.count('${a.slug}').toDouble()`;
+diff --git a/machtzev/generator/specs-ds/peruk25.txt b/machtzev/generator/specs-ds/peruk25.txt
+index dc4d3c8..5d3a6f0 100644
+--- a/machtzev/generator/specs-ds/peruk25.txt
++++ b/machtzev/generator/specs-ds/peruk25.txt
+@@ -4,7 +4,7 @@
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+ ישות תיק עם לקוח*, טלפון, מכתב פיטורים, ותק, האם חתמו על משהו, סיווג{סיום רגיל מכתב|לחץ לחתום היום|דגל מוגן|עצמאי חוזה קבלן} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
+-לוח בקרה עם מונה(תיק)
++לוח בקרה עם מונה(תיק), מונה(תיק: סיווג=דגל מוגן)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]
+ חלקיק תיק: [פעולה] פתח תיק

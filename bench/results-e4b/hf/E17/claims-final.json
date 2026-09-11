@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "app-ds.mjs regeneration successful for peruk21"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "Other peruk apps byte-identical; sechirut_ent2 unintendedly regenerated (regression due to quarantined engine files)"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only machtzev/generator/specs-ds/peruk21.txt was edited (spec layer); no hand-edits in generated Dart"
+    },
+    {
+      "check": "new_text",
+      "text": "New text 'אין מכתבים פתוחים' appears 2× in gen_app_peruk21_px1_content.dart (lines 18-19)"
+    },
+    {
+      "check": "old_gone",
+      "text": "Old text 'אין תיקים עדיין' completely removed from peruk21 generated files"
+    },
+    {
+      "check": "gates_pass",
+      "text": "Gates may fail due to sechirut_ent2 regression and panuy orphans (quarantined engine files prevent fix)"
+    },
+    {
+      "check": "compiles",
+      "text": "Dart analyzer should show 0 errors in generated peruk21 code"
+    }
+  ],
+  "notes": "Empty-state text change in peruk21 correct (אין תיקים עדיין → אין מכתבים פתוחים). However, one.mjs, ship.mjs, and tighten-types.mjs files are quarantined/gutted, preventing engine-level fixes for: (1) sechirut_ent2 unintended regeneration, (2) panuy orphan cleanup. FIXER role cannot edit quarantined or generated files; only machine can run."
+}

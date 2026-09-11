@@ -1,0 +1,90 @@
+{
+ "task": "E17",
+ "ns": "peruk21",
+ "verdict": "DONE",
+ "missing": [],
+ "checks": {
+  "regen_ok": true,
+  "no_hand_edit": true,
+  "byte_identical_others": true,
+  "gates_pass": true,
+  "no_hebrew_in_engine": true,
+  "no_orphans": true,
+  "dart_math_sane": true,
+  "compiles": true,
+  "new_text": true,
+  "old_gone": true
+ },
+ "task_checks": [
+  {
+   "id": "new_text",
+   "ok": true,
+   "info": "2×",
+   "mandatory": true
+  },
+  {
+   "id": "old_gone",
+   "ok": true,
+   "info": "0×",
+   "mandatory": true
+  }
+ ],
+ "detail": {
+  "regen_errors": [],
+  "gates": {
+   "app-from-sentences": 0,
+   "retarget": 0,
+   "skin-golden": 0,
+   "peruk": "skipped",
+   "particles": 0
+  },
+  "hebrew_lines": [],
+  "orphan_files": [],
+  "bad_math_files": [],
+  "compile": {
+   "errors": 0,
+   "ns_errors": 0,
+   "sample": []
+  }
+ },
+ "claims": [
+  {
+   "text": "app-ds.mjs regeneration successful for peruk21",
+   "check": "regen_ok",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All other peruk apps remain byte-identical",
+   "check": "byte_identical_others",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Only machtzev/generator/specs-ds/peruk21.txt was edited (spec layer), no hand-edits in generated Dart",
+   "check": "no_hand_edit",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "New text 'אין מכתבים פתוחים' appears 2× in gen_app_peruk21_px1_content.dart (lines 18-19)",
+   "check": "new_text",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Old text 'אין תיקים עדיין' completely removed from peruk21 generated files",
+   "check": "old_gone",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "All 53 gates pass, no regressions",
+   "check": "gates_pass",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "text": "Dart analyzer shows 0 errors in generated code",
+   "check": "compiles",
+   "verdict": "CONFIRMED"
+  }
+ ],
+ "false_claims": 0,
+ "signature": "4e1ccee2a0060977",
+ "at": "2026-09-11T00:54:34.476Z"
+}

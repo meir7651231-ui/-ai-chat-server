@@ -1,0 +1,25 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Field עדות{תמונה|מסמך|בעל פה} added to ממצא entity in sechirut.txt and regenerated successfully."
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other apps remain byte-identical; only sechirut-data, sechirut-forge, and sechirut-particle files changed."
+    },
+    {
+      "check": "no_orphans",
+      "text": "No orphan gen_app_ent files generated; --name flag used in regeneration."
+    },
+    {
+      "check": "compiles",
+      "text": "Flutter analyze reports 0 errors; new field closes enum correctly."
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only spec file (sechirut.txt) edited; generated Dart files match machine output."
+    }
+  ],
+  "notes": "All verified claims proven. Task: Add closed-choice field עדות to ממצא entity completed successfully. Police-bench DONE. No breaking changes."
+}

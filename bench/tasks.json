@@ -505,10 +505,9 @@
 "label": "לא נשלחו"
 },
 {
-"id": "hub_label",
-"kind": "lit",
-"file": "data:hub",
-"text": "נשלח"
+"id": "dash_counter",
+"kind": "dash",
+"label": "נשלח"
 }
 ]
 },

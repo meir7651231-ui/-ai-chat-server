@@ -12,3 +12,7 @@
   fixer-1.json: exit=0 cost=0.4449270999999999 turns=24 ms=288552 err=false
   police: DONE missing= false=0
 === hf/M06 DONE wall=857s cost=$1.74 false_claims=0
+=== f0/M06 (panuy) start 21:27:33
+  builder.json: exit=0 cost=4.297351749999998 turns=43 ms=799699 err=false
+  police: NOT DONE missing=byte_identical_others false=0
+=== f0/M06 NOT DONE wall=850s cost=$4.30 false_claims=0

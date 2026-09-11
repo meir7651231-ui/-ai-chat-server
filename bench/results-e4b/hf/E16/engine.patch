@@ -1,0 +1,71 @@
+diff --git a/machtzev/generator/app-shell.mjs b/machtzev/generator/app-shell.mjs
+index 8cd573c..2061ac2 100644
+--- a/machtzev/generator/app-shell.mjs
++++ b/machtzev/generator/app-shell.mjs
+@@ -107,7 +107,7 @@ ${blocks.map((b) => `      Padding(padding: const EdgeInsets.only(bottom: 12), c
+ 
+ // ── G30 · «היום» (נייר): הרשומות הפתוחות של השורש ⇒ כרטיס-אחד לכל אחת: משפט בגוף-ראשון · בורר-הנוסחים (חלקיק-ההודעה) · שלח · פתח.
+ //    ≤2 הקשות מהמסך-הראשי לפעולה-הראשית (בחר-נוסח + שלח), אפס-הקלדה. הכל מחלקיקים קיימים (message · export) — אין קוד-דומייני.
+-export function renderHome(slug, { root, rootPage, report, message, title, chain = [], appTitle = '' }) {   // G33 · appTitle = שם-המודול ב«היום» המאוחד   // G32 · chain = השרשרת מהפירוק (צעד-הבא בשלב-האחרון)
++export function renderHome(slug, { root, rootPage, report, message, title, chain = [], appTitle = '', needsStageFix = false }) {   // G33 · appTitle = שם-המודול ב«היום» המאוחד   // G32 · chain = השרשרת מהפירוק (צעד-הבא בשלב-האחרון)
+   const { k, dump } = makeConsts(slug);
+   const imports = new Set([`import 'gen_${rootPage.slug}.dart';`, `import '../dart-data-bs/auto/gen_${slug}_content.dart';`, `import '../dart-ui-bs/ds/ds.dart';`, `import '../dart-ui-bs/ds/ds_store.dart';`, `import 'package:url_launcher/url_launcher.dart';`]);   // G32 · קבוצה אחת ⇒ אין כפל-ייבוא
+   const firstWired = (pick, ctx) => { const w = pickWired([...pick.atoms, ...pick.alts], (c) => wireAtom(c, ctx)); if (w) imports.add(impOf(w)); return w; };
+@@ -197,7 +197,7 @@ class ${cls}Today {
+     if (a == ${k(L.actDone)}) {
+       final r0 = appStore.byId('${root.slug}', rid); final rep = (r0 == null ? '' : (r0['__repeat'] ?? '')).trim();
+       final prevStage = r0 == null ? '' : (r0[AppStore.stageKey] ?? '0');
+-      ${lastStage >= 0 ? `appStore.advance('${root.slug}', rid, ${lastStage + 1});` : ''}
++      ${lastStage >= 0 ? `appStore.advance('${root.slug}', rid, ${lastStage});` : ''}
+       appStore.decide('ign:\$rid:\$field', 'no');   // השורה של התאריך הזה טופלה — לא חוזרת מחר כ«באיחור»
+       appStore.logAction('done', ${k(L.doneLog)}.replaceAll('{what}', field + ' · ' + appStore.displayOf('${root.slug}', rid)), entity: '${root.slug}', rid: rid, field: field, prev: prevStage);   // «עשיתי» + החזר (השורה חוזרת, השלב חוזר)
+       if (r0 != null && rep.isNotEmpty) {   // ↻ רגע חוזר: «סיים» יוצר את הבא לבד (המועד-הבא בשדה שנסגר), עם החזר
+diff --git a/machtzev/generator/apps/peruk08.json b/machtzev/generator/apps/peruk08.json
+index 911b157..5ac25f4 100644
+--- a/machtzev/generator/apps/peruk08.json
++++ b/machtzev/generator/apps/peruk08.json
+@@ -31,6 +31,7 @@
+    "שולם",
+    "בבדיקה",
+    "נמסר",
++   "הוחזר הכסף",
+    "סגור"
+   ],
+   "fields": [
+diff --git a/machtzev/generator/render-ds.mjs b/machtzev/generator/render-ds.mjs
+index 5cf436c..2032dc1 100644
+--- a/machtzev/generator/render-ds.mjs
++++ b/machtzev/generator/render-ds.mjs
+@@ -261,7 +261,7 @@ function compileCond(formula, labels) {
+ }
+ 
+ // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
+-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null, sort = [] }) {
++export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null, sort = [], needsStageFix = false }) {
+   const { k, dump } = makeConsts(slug);
+   const cTitle = k(name);
+   const cSub = k(`${schema.length} ${L.fieldsWord}${stages.length ? ` · ${stages.length} ${L.stagesWord}` : ''}`);
+@@ -504,8 +504,8 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
+     ? `(i) { if (i > appStore.stageOf(${SK}, rid)) { final g = _guard(i, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } } appStore.setStage(${SK}, rid, i); }`
+     : `(i) => appStore.setStage(${SK}, rid, i)`;
+   const onAdvBody = hasGuards
+-    ? `() { final g = _guard(appStore.stageOf(${SK}, rid) + 1, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } appStore.advance(${SK}, rid, ${stages.length}); }`
+-    : `() => appStore.advance(${SK}, rid, ${stages.length})`;
++    ? `() { final g = _guard(appStore.stageOf(${SK}, rid) + 1, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } appStore.advance(${SK}, rid, ${stages.length - 1}); }`
++    : `() => appStore.advance(${SK}, rid, ${stages.length - 1})`;
+   const stageArgs = hasStages
+     ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: ${onStageBody}, onAdvance: ${onAdvBody}, `
+     : '';
+diff --git a/machtzev/generator/specs-ds/peruk08.txt b/machtzev/generator/specs-ds/peruk08.txt
+index 4b501fe..6bfe56e 100644
+--- a/machtzev/generator/specs-ds/peruk08.txt
++++ b/machtzev/generator/specs-ds/peruk08.txt
+@@ -3,7 +3,7 @@
+ שאלה דוח: מה לעשות עם זה?
+ שאלה רשימה: מה פתוח עכשיו?
+ שאלה בית: מה עכשיו?
+-ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, סגור
++ישות תיק עם לקוח*, טלפון, צילום החיוב, הזמנה, מה קרה, האם כבר פנו למוכר, סיווג{א לא הגיע|ב הגיע לא|ג ביטול מצד|ד חיוב לא|ה מנוי שלא|ו שולם לא} | שלבים התקבל, שולם, בבדיקה, נמסר, הוחזר הכסף, סגור
+ לוח בקרה עם מונה(תיק)
+ תפקיד בודק: הכל
+ חלקיק תיק: [טבלה]

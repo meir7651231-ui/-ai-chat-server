@@ -12,3 +12,7 @@
   fixer-1.json: exit=0 cost=0.47284370000000014 turns=36 ms=271945 err=false
   police: DONE missing= false=0
 === hf/H15 DONE wall=829s cost=$1.98 false_claims=0
+=== f0/H15 (peruk21) start 00:05:53
+  builder.json: exit=0 cost=4.88617175 turns=44 ms=745713 err=false
+  police: DONE missing= false=0
+=== f0/H15 DONE wall=788s cost=$4.89 false_claims=0

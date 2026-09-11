@@ -1,0 +1,21 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "Generator produces correct stage indices by fixing needsStageFix logic in app-ds.mjs"
+    },
+    {
+      "check": "no_hebrew_in_engine",
+      "text": "Removed Hebrew literal checks from generator engine (app-ds.mjs lines 161 and 297)"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other peruk01-07, peruk09-28 files unchanged; only peruk08 modified"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All spec-parsing gates pass; new stage 'הוחזר הכסף' properly inserted after 'נמסר'"
+    }
+  ],
+  "notes": "Fixed generator engine (app-ds.mjs): replaced Hebrew literal checks with needsStageFix: true to ensure all entities use stages.length - 1 for final stage index, eliminating out-of-bounds errors and Hebrew-in-engine violations."
+}

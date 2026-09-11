@@ -1,0 +1,18 @@
+diff --git a/machtzev/LEARNINGS.md b/machtzev/LEARNINGS.md
+index 3166f5c..47380f4 100644
+--- a/machtzev/LEARNINGS.md
++++ b/machtzev/LEARNINGS.md
+@@ -2,6 +2,13 @@
+ > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
+ > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
+ 
++## L2026-09-11-particle-button-36a89e · פעולה-חדשה בחלקיק = שורת-פעולה-חדשה בספק (E20 · panuy)
++GATE: regen_ok
++ref: 36a89e21fa9ac54bb51bba9bc0e87e6c3e48bb0f:machtzev/generator/specs-ds/panuy.txt
++ANTIPATTERN: חלקיק \w+: \[פעולה\]
++RULE: פעולה חדשה בחלקיק (particle screen) נוספת בספק כשורה נפרדת `חלקיק <ישות>: [פעולה] <text>`; אין לערוך דוח ידני, הגנרטור יתאים את העור לעדכון; בדיקה-מכונה תאמת שתי פעולות על המסך.
++מה נכשל: אין — תוספת פעולה זו בחלקיק אדם (שלח הודעה) נחסמה קודם בעתיד קרוב בנוגע לניווט/logic; כאן הוכנה ההיסטוריה.
++
+ ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+ GATE: police
+ ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart

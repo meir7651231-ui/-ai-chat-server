@@ -1,0 +1,33 @@
+{
+  "claims": [
+    {
+      "check": "regen_ok",
+      "text": "app-ds.mjs regeneration successful for peruk21"
+    },
+    {
+      "check": "byte_identical_others",
+      "text": "All other peruk apps remain byte-identical"
+    },
+    {
+      "check": "no_hand_edit",
+      "text": "Only machtzev/generator/specs-ds/peruk21.txt was edited (spec layer), no hand-edits in generated Dart"
+    },
+    {
+      "check": "new_text",
+      "text": "New text 'אין מכתבים פתוחים' appears 2× in gen_app_peruk21_px1_content.dart (lines 18-19)"
+    },
+    {
+      "check": "old_gone",
+      "text": "Old text 'אין תיקים עדיין' completely removed from peruk21 generated files"
+    },
+    {
+      "check": "gates_pass",
+      "text": "All 53 gates pass, no regressions"
+    },
+    {
+      "check": "compiles",
+      "text": "Dart analyzer shows 0 errors in generated code"
+    }
+  ],
+  "notes": "proven — all checks passed. Empty-state text in peruk21 case screen changed from 'אין תיקים עדיין' (no cases yet) to 'אין מכתבים פתוחים' (no open letters). Change was in spec layer only, regeneration successful, no collateral damage to other apps."
+}

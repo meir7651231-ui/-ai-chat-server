@@ -1,0 +1,2 @@
+ M machtzev/LEARNINGS.md
+ M machtzev/generator/specs-ds/sechirut.txt
