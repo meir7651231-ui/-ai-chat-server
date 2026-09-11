@@ -10,6 +10,9 @@ import { execSync } from 'node:child_process';
 // יעד-הנחיתה: new/ כברירת-מחדל. CARVE_OUT מאפשר ריצת-ניסוי לתיקייה זמנית
 // בלי לגעת במדף — נחיתה למדף היא החלטה, לא תופעת-לוואי של הרצה.
 const ROOT = process.env.CARVE_OUT || new URL('../../new/', import.meta.url).pathname;
+// ⚠️ המדף האמיתי, תמיד — גם בריצת-ניסוי. בלי זה `CARVE_OUT` מזיז את בדיקת
+// «כבר-קיים» לתיקייה הזמנית, וריצת-מדידה מדווחת כ«חדשים» אטומים שכבר במדף.
+const SHELF = new URL('../../new/', import.meta.url).pathname;
 const DART = process.env.DART_SDK_BIN || '/home/user/flutter/bin';
 const env = { ...process.env, PATH: `${DART}:${process.env.PATH}` };
 
@@ -82,7 +85,7 @@ function landOne(r, seen) {
   const atomAbs = path.join(ROOT, 'dart', `${kb}.dart`);
   const testAbs = path.join(ROOT, 'dart', `${kb}_test.dart`);
   if (seen.has(kb)) return { name: r.name, skip: 'כפול-שם תוך-ריצה' };
-  if (fs.existsSync(atomAbs)) return { name: r.name, skip: 'כבר-קיים' };
+  if (fs.existsSync(atomAbs) || fs.existsSync(path.join(SHELF, 'dart', `${kb}.dart`))) return { name: r.name, skip: 'כבר-קיים' };
   // פסול: מתודת-override (לא אטום-עצמאי) · גוף-סטאב (קבוע ריק — אין מנגנון)
   if (/@override\b/.test(r.fnSource)) return { name: r.name, skip: '@override — לא אטום' };
   if (STUB.test(r.fnSource)) return { name: r.name, skip: 'סטאב — גוף-קבוע' };
