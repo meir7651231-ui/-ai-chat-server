@@ -30,8 +30,15 @@ const STUB = /=>\s*(?:const\s+)?(?:\{\s*\}|\[\s*\]|''|""|0|0\.0|null|-?\d+)\s*;?
 
 // ליטרל-דוגמה לטיפוס-אלמנט (לסינתזת-אוסף)
 const elemLit = (t) => ({ String: "'a'", int: '1', double: '1.5', num: '1', bool: 'true' }[t.replace(/\?$/, '')] ?? null);
-function compat(pt, inlined = []) {
+function compat(pt, inlined = [], generics = []) {
   const nul = pt.endsWith('?'); const base = pt.replace(/\?$/, '');
+  // טיפוס-גנרי שנוצר במחיקת-טיפוס: הפונקציה **אינה קוראת ממנו שדה** (אומת
+  // ב-_MemberUse), ולכן כל ערך משרת אותה זהה. מחרוזת מספיקה, וההסקה כובלת T=String.
+  if (generics.includes(base)) {
+    const out = [{ d: "'a'", t: base }, { d: "'ב'", t: base }];
+    if (nul) out.push({ d: 'null', t: base });
+    return out;
+  }
   // DateTime: ליטרל-קבוע (דטרמיניסטי — לא DateTime.now()).
   if (base === 'DateTime') {
     const out = [{ d: 'DateTime(2026, 8, 24)', t: base }, { d: 'DateTime(2026, 1, 1, 13, 45)', t: base }];
@@ -61,7 +68,9 @@ function parseParams(fnSrc) {
   // ⚠️ בלי הסרת-הערות הרגקס תופס סוגריים מתוך dartdoc (`/// ... (…)`) ולא את
   // החתימה — והפונקציה נדחתה «אין-קלט-סל» בזמן שהפרמטרים שלה פרימיטיביים.
   const clean = fnSrc.replace(/^\s*\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
-  const m = clean.match(/\b[\w$]+\s*\(([^)]*)\)/); if (!m) return null;
+  // חתימה גנרית (`famEmoji<T>(T f)`): בלי לאפשר `<…>` בין השם לסוגריים הרגקס
+  // אינו מוצא את החתימה **וממשיך לגוף** — ותופס את הפרמטרים של קריאה אקראית.
+  const m = clean.match(/\b[\w$]+\s*(?:<[^>()]*>)?\s*\(([^)]*)\)/); if (!m) return null;
   const raw = m[1].trim(); if (!raw) return [];
   if (/[{[]/.test(raw)) return null;
   return raw.split(',').map(p => { const parts = p.trim().split(/\s+/); return { type: parts.slice(0, -1).join(' '), name: parts.at(-1) }; });
@@ -93,7 +102,7 @@ function landOne(r, seen) {
   if (params === null) return { name: r.name, skip: 'חתימה לא-טריוויאלית' };
   const socketArgs = (r.autoSocket && r.socketMeta) ? r.socketMeta.map(s => `${s.name}: ${s.init}`).join(', ') : '';
   const mkArgs = (c) => [c.map(v => v.d).join(', '), socketArgs].filter(Boolean).join(', ');
-  const perParam = params.map(p => compat(p.type, r.inlineTypes || []));
+  const perParam = params.map(p => compat(p.type, r.inlineTypes || [], Object.values(r.erasedTypes || {})));
   if (perParam.some(x => x.length === 0)) return { name: r.name, skip: 'אין-קלט-סל' };
   const combos = [];
   const rec = (i, acc) => { if (combos.length >= 12) return; if (i === params.length) { combos.push(acc); return; } for (const v of perParam[i]) { rec(i + 1, [...acc, v]); if (combos.length >= 12) break; } };

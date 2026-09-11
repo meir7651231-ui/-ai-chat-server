@@ -65,6 +65,17 @@ class _FreeIds extends RecursiveAstVisitor<void> {
   }
 }
 
+/// האם הטיפוס [t] מופיע ברשימת-הפרמטרים עם ארגומנטים-גנריים (`Foo<Bar> x`)?
+/// כזה אינו נמחק ב-v1 — המחיקה חייבת להיות החלפת-שם פשוטה.
+bool tn_hasArgs(FormalParameterList ps, String t) {
+  for (final p in ps.parameters) {
+    if (p is! SimpleFormalParameter) continue;
+    final tn = p.type;
+    if (tn is NamedType && tn.name2.lexeme == t && tn.typeArguments != null) return true;
+  }
+  return false;
+}
+
 String _helper(String n) => '_src_' + (n.startsWith('_') ? n.substring(1) : n);
 
 /// טיפוס-הפונקציה של שכן (`double Function(double)`), או null אם חתימתו אינה פוזיציונית.
@@ -139,6 +150,41 @@ bool _collectPure(String src, Map<String, FunctionDeclaration> topFns, String ro
     out[name] = body;
   }
   return true;
+}
+
+/// האם הגוף נוגע בחברים של המשתנים ב-[names] (‏`p.title` · `p.foo()`)?
+/// אם לא — הטיפוס שלהם הוא **אטום-אטום** שעובר דרך הפונקציה בלי שהיא מכירה אותו,
+/// והוא ניתן להחלפה בטיפוס-גנרי בלי לשנות שום התנהגות (הדפוס של `drain_now<T>`).
+class _MemberUse extends RecursiveAstVisitor<void> {
+  final Set<String> names;     // שמות-הפרמטרים מהטיפוס הנבדק
+  final String typeName;       // שם-הטיפוס עצמו — גישה סטטית אליו פוסלת מחיקה
+  bool used = false;
+  _MemberUse(this.names, this.typeName);
+  @override
+  void visitPrefixedIdentifier(PrefixedIdentifier n) {
+    // ⚠️ `Family.coupler` — ערך-enum או חבר-סטטי. מחיקת-הטיפוס תהפוך אותו
+    // ל-`T.coupler` ותשנה **התנהגות**, לא רק טיפוס. פסילה מוחלטת.
+    if (names.contains(n.prefix.name) || n.prefix.name == typeName) used = true;
+    super.visitPrefixedIdentifier(n);
+  }
+  @override
+  void visitPropertyAccess(PropertyAccess n) {
+    final t = n.target;
+    if (t is SimpleIdentifier && names.contains(t.name)) used = true;
+    super.visitPropertyAccess(n);
+  }
+  @override
+  void visitMethodInvocation(MethodInvocation n) {
+    final t = n.target;
+    if (t is SimpleIdentifier && names.contains(t.name)) used = true;
+    super.visitMethodInvocation(n);
+  }
+  @override
+  void visitIndexExpression(IndexExpression n) {
+    final t = n.target;
+    if (t is SimpleIdentifier && names.contains(t.name)) used = true;
+    super.visitIndexExpression(n);
+  }
 }
 
 String? _pub(String name) => name.startsWith('_') ? name.substring(1) : name;
@@ -233,9 +279,34 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     else if (_mathCore.contains(id)) usesMath = true;
     else unresolved.add(id); // ערך-חופשי לא-מזוהה (אולי import) — חשוד
   }
+  // ── שקע-טיפוס: טיפוס-זר שעובר דרך הפונקציה בלי שהיא מכירה אותו ─────────
+  // פרמטר מטיפוס-פרויקט שאיש לא קורא ממנו שדה הוא **אטום-אטום**: הפונקציה רק
+  // מעבירה אותו הלאה. החלפתו בטיפוס-גנרי מסירה את התלות בלי לשנות התנהגות —
+  // הדפוס של `drain_now<T>` ו-`decode<T>` שנחצבו ביד.
+  final erasable = <String>{};
+  if (params != null) {
+    final byType = <String, Set<String>>{};   // שם-טיפוס ⇒ שמות-הפרמטרים שלו
+    for (final p in params.parameters) {
+      if (p is! SimpleFormalParameter) continue;
+      final tn = p.type;
+      final nm = p.name?.lexeme;
+      if (tn is! NamedType || nm == null) continue;
+      (byType[tn.name2.lexeme] ??= <String>{}).add(nm);
+    }
+    for (final e in byType.entries) {
+      final t = e.key;
+      if (_core.contains(t) || topTypes.containsKey(t) || _mathCore.contains(t)) continue;
+      if (tn_hasArgs(params, t)) continue;          // טיפוס-גנרי בעצמו — לא ב-v1
+      final mu = _MemberUse(e.value, t);
+      body.visitChildren(mu);
+      if (!mu.used) erasable.add(t);                // אפס-קריאת-חבר ⇒ ניתן-למחיקה
+    }
+  }
+
   for (final t in free.typeNames) {
     if (topTypes.containsKey(t)) inlineTypes.add(t);
     else if (_mathCore.contains(t)) usesMath = true;
+    else if (erasable.contains(t)) continue;   // יהפוך לגנרי — אינו תלות
     // טיפוס לא-מקומי שאינו core ⇒ יתכן import (unresolved-type)
     else if (!_core.contains(t)) unresolved.add('type:$t');
   }
@@ -297,6 +368,28 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
 
   // גוף-הפונקציה verbatim (כולל חתימה); שנה שם פרטי→ציבורי בכותרת בלבד
   var fnSrc = src.substring(declNode.offset, declNode.end);
+  // מחיקת-טיפוס: `LipskeyCatalogProduct p` ⇒ `T p`, והחתימה מקבלת `<T>`.
+  // אפס שינוי-התנהגות: איש לא קרא שדה מהטיפוס הזה (אומת ב-_MemberUse).
+  final erasedTypes = <String, String>{};
+  if (erasable.isNotEmpty && fn != null) {
+    var i = 0;
+    for (final t in erasable.toList()..sort()) {
+      final tv = i == 0 ? 'T' : 'T${i + 1}';
+      i++;
+      erasedTypes[t] = tv;
+      fnSrc = fnSrc.replaceAll(RegExp('\\b' + RegExp.escape(t) + '\\b'), tv);
+    }
+    // הוספת רשימת-טיפוסים לחתימה, מיד אחרי שם-הפונקציה
+    final tp = erasedTypes.values.join(', ');
+    final existing = fn!.functionExpression.typeParameters;
+    if (existing != null) {
+      fnSrc = fnSrc.replaceFirst('<' + src.substring(existing.offset + 1, existing.end - 1) + '>',
+          '<' + src.substring(existing.offset + 1, existing.end - 1) + ', ' + tp + '>');
+    } else {
+      final nameEnd = fn!.name.end - declNode.offset;
+      fnSrc = fnSrc.substring(0, nameEnd) + '<' + tp + '>' + fnSrc.substring(nameEnd);
+    }
+  }
   if (autoSocket) {
     // הזרקה לפני ה-')' של רשימת-הפרמטרים — מיקום מוחלט מה-AST, לא רגקס.
     final rel = params!.end - declNode.offset;
@@ -324,6 +417,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     'sockets': sockets,
     'inlineTypes': inlineTypes,
     'unresolved': unresolved,
+    'erasedTypes': erasedTypes,
     'copiedTypes': copiedTypes,
     'fnSource': fnSrc,
     'imports': usesMath
