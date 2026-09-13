@@ -118,6 +118,78 @@ if (CFG.verify) {
   R.verify = r.status === 0; if (!R.verify) detail.verify_error = tail(r, 6);
 } else R.verify = null;
 
+// 4b · חבילת-השערים האוניברסלית: כשלי-סוכן שאינם תלויים בשום פרויקט או שפה.
+//      פועלת כברירת-מחדל (`universal: false` בקונפיג מכבה). מקור-האמת = ה-diff מול HEAD.
+if (CFG.universal !== false) {
+  const diff = sh(CFG.diff_cmd || 'git diff HEAD').stdout || '';
+  const files = []; let cur = null;
+  for (const l of diff.split('\n')) {
+    const m = l.match(/^\+\+\+ b\/(.+)$/); if (m) { cur = { f: m[1], add: [], del: [] }; files.push(cur); continue; }
+    if (!cur) continue;
+    if (l.startsWith('+') && !l.startsWith('+++')) cur.add.push(l.slice(1));
+    else if (l.startsWith('-') && !l.startsWith('---')) cur.del.push(l.slice(1));
+  }
+  const isTest = (f) => /(^|\/)(test|tests|spec|__tests__)\//.test(f) || /[._-](test|spec)\.[a-z]+$/i.test(f) || /_test\.[a-z]+$/.test(f);
+  const noComment = (l) => !/^\s*(\/\/|#|\*|--)/.test(l);
+  const hits = {};
+  const flag = (k, msg) => { (hits[k] ??= []).push(msg.slice(0, 140)); };
+
+  // (1) הטסטים לא הוחלשו — הכשל הקלאסי: הסוכן משנה את הטסט כדי שיעבור
+  const SKIP = /\b(it|test|describe|context)\.(skip|todo)\b|\bx(it|describe|test)\s*\(|@(Ignore|Disabled)\b|\bt\.Skip\(|@pytest\.mark\.(skip|xfail)|\bskip\s*:\s*true|\.skip\s*\(/;
+  const DECL = /\b(it|test|describe)\s*\(|\bdef test_|\bfunc Test[A-Z]|#\[test\]|@Test\b/g;
+  const ASSERT = /\b(assert|expect|should|require\.)/;
+  for (const F of files.filter((x) => isTest(x.f))) {
+    const dAdd = (F.add.join('\n').match(DECL) || []).length, dDel = (F.del.join('\n').match(DECL) || []).length;
+    if (dDel > dAdd) flag('tests_not_weakened', `${F.f}: נמחקו ${dDel - dAdd} טסטים`);
+    const aAdd = F.add.filter((l) => ASSERT.test(l)).length, aDel = F.del.filter((l) => ASSERT.test(l)).length;
+    if (aDel > aAdd) flag('tests_not_weakened', `${F.f}: נמחקו ${aDel - aAdd} בדיקות(assert)`);
+    for (const l of F.add) if (SKIP.test(l) && noComment(l)) { flag('tests_not_weakened', `${F.f}: הושבת טסט — ${l.trim()}`); break; }
+  }
+
+  // (2) אין סוד בקוד
+  const SEC = [/(api[_-]?key|secret|passwd|password|token|bearer)\s*[:=]\s*['"][^'"\s]{12,}/i, /-----BEGIN [A-Z ]*PRIVATE KEY-----/, /\bsk-[A-Za-z0-9]{20,}/, /AKIA[0-9A-Z]{16}/, /ghp_[A-Za-z0-9]{20,}/];
+  for (const F of files) for (const l of F.add) if (noComment(l) && SEC.some((re) => re.test(l))) { flag('no_secrets', `${F.f}: ${l.trim()}`); break; }
+
+  // (3) אין שאריות-ניפוי
+  const DBG = /\bconsole\.(log|debug)\s*\(|\bdebugger\b|\bprint\s*\(|\bdbg!\s*\(|\bfmt\.Print(ln)?\s*\(|\bvar_dump\s*\(/;
+  for (const F of files.filter((x) => !isTest(x.f))) for (const l of F.add) if (DBG.test(l) && noComment(l)) { flag('no_debug_left', `${F.f}: ${l.trim()}`); break; }
+
+  // (4) אין בליעת-שגיאות שקטה
+  const SWALLOW = /catch\s*(\([^)]*\))?\s*\{\s*\}|except\s*:\s*pass\b|catch\s*\{\s*\}|\brescue\s*;?\s*end\b|_\s*=\s*err\b/;
+  for (const F of files) for (const l of F.add) if (SWALLOW.test(l) && noComment(l)) { flag('no_swallowed_errors', `${F.f}: ${l.trim()}`); break; }
+
+  // (5) תלות חדשה = החלטה, לא תופעת-לוואי
+  const MAN = /(^|\/)(package\.json|go\.mod|Cargo\.toml|pubspec\.yaml|requirements\.txt|pyproject\.toml|Gemfile|composer\.json)$/;
+  const depNames = (txt, f) => {   // שמות-תלויות בלבד, לא כל שורה במניפסט
+    try {
+      if (/\.json$/.test(f)) { const o = JSON.parse(txt); return new Set([...Object.keys(o.dependencies || {}), ...Object.keys(o.devDependencies || {}), ...Object.keys(o.require || {})]); }
+      if (/go\.mod$/.test(f)) return new Set([...txt.matchAll(/^\s*([\w.\-\/]+)\s+v[\d]/gm)].map((m) => m[1]));
+      const out = new Set(); let inDeps = false;
+      for (const l of txt.split('\n')) {
+        if (/^\s*(\[.*dependencies.*\]|dependencies:|dev_dependencies:|require)/i.test(l)) { inDeps = true; continue; }
+        if (/^\S/.test(l) && !/^\s/.test(l) && inDeps && !/^\s*[\w@.\/-]+\s*[:=]/.test(l)) inDeps = false;
+        const m = inDeps && l.match(/^\s+['"]?([\w@.\/-]+)['"]?\s*[:=]/); if (m) out.add(m[1]);
+      }
+      return out;
+    } catch { return null; }
+  };
+  for (const F of files.filter((x) => MAN.test(x.f))) {
+    const now = fs.existsSync(path.join(ROOT, F.f)) ? fs.readFileSync(path.join(ROOT, F.f), 'utf8') : '';
+    const was = sh(`git show HEAD:'${F.f}'`).stdout || '';
+    const A = depNames(now, F.f), B = depNames(was, F.f);
+    if (A && B) { const neu = [...A].filter((d) => !B.has(d)); if (neu.length) flag('deps_declared', `${F.f}: תלויות חדשות — ${neu.join(', ')}`); }
+    else if (F.add.length) flag('deps_declared', `${F.f}: המניפסט השתנה (${F.add.length} שורות)`);
+  }
+
+  // (6) אין מחיקת-קבצים בלי שנתבקשה
+  const deleted = (sh('git diff HEAD --diff-filter=D --name-only').stdout || '').split('\n').filter(Boolean);
+  if (deleted.length) flag('no_deletions', `${deleted.length} קבצים נמחקו: ${deleted.slice(0, 3).join(' ')}`);
+
+  const UNIV = ['tests_not_weakened', 'no_secrets', 'no_debug_left', 'no_swallowed_errors', 'deps_declared', 'no_deletions'];
+  const off = new Set(CFG.universal_off || []);
+  for (const k of UNIV) if (!off.has(k)) { R[k] = !hits[k]; if (hits[k]) (detail.universal ??= {})[k] = hits[k].slice(0, 3); }
+}
+
 // 5 · תבניות אסורות בשורות שנוספו לקוד-המקור
 if (CFG.forbid_in_diff?.length) {
   const diff = sh(CFG.diff_cmd || 'git diff HEAD').stdout || '';
@@ -151,7 +223,8 @@ if (CFG.orphans) {
 } else R.no_orphans = null;
 
 // ── פסק ──
-const MANDATORY = CFG.mandatory || ['build', 'no_hand_edit', 'in_scope', 'gates', 'verify', 'forbid_diff', 'forbid_out', 'no_orphans'];
+const UNIVERSAL = CFG.universal === false ? [] : ['tests_not_weakened', 'no_secrets', 'no_debug_left', 'no_swallowed_errors', 'deps_declared', 'no_deletions'].filter((k) => !(CFG.universal_off || []).includes(k));
+const MANDATORY = [...(CFG.mandatory || ['build', 'no_hand_edit', 'in_scope', 'gates', 'verify', 'forbid_diff', 'forbid_out', 'no_orphans']), ...UNIVERSAL];
 const missing = MANDATORY.filter((k) => R[k] === false);
 const done = missing.length === 0;
 
@@ -172,6 +245,7 @@ if (detail.verify_error) md += `\nverify: ${detail.verify_error}\n`;
 if (detail.forbid_diff?.length) md += `\nתבנית אסורה בקוד: ${detail.forbid_diff.join(' ‖ ')}\n`;
 if (detail.forbid_out?.length) md += `\nתבנית אסורה בפלט: ${detail.forbid_out.join(' ‖ ')}\n`;
 if (detail.orphans?.length) md += `\nקבצים יתומים (מחק אותם): ${detail.orphans.join(' ')}\n`;
+if (detail.universal) md += '\n' + Object.entries(detail.universal).map(([k, v]) => `**${k}:** ${v.join(' ‖ ')}`).join('\n') + '\n';
 if (detail.baseline) md += `\n⚠ ${detail.baseline}\n`;
 if (rows.length) md += `\n## טענות מול המכונה\n| טענה | שער | פסק |\n|---|---|---|\n` + rows.map((c) => `| ${c.text.replace(/\|/g, '/')} | ${c.check} | ${c.verdict} |`).join('\n') + '\n';
 md += `\n## פסק: **${report.verdict}**${done ? '' : ' — חסר: ' + missing.join(', ')}\n`;
