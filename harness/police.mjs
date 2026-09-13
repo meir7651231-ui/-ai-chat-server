@@ -27,7 +27,33 @@ const opt = (k, d = null) => { const i = argv.indexOf(k); return i >= 0 ? argv[i
 const has = (k) => argv.includes(k);
 const ROOT = path.resolve(opt('--root', '.'));
 const CFG_PATH = opt('--config', path.join(ROOT, 'harness.json'));
-if (!fs.existsSync(CFG_PATH)) { console.error(`✗ אין ${path.relative(ROOT, CFG_PATH)} — ראה harness/harness.example.json`); process.exit(2); }
+// ── --init: מזהה את הפרויקט וכותב harness.json פותח (אפס-הגדרות למתחיל) ──
+if (has('--init')) {
+  const R0 = (c) => spawnSync(c, { cwd: ROOT, shell: true, encoding: 'utf8' });
+  const j = (f) => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8')); } catch { return null; } };
+  const pkg = j('package.json'); const cfg = { name: path.basename(ROOT), outputs_cmd: 'git ls-files -z | xargs -0 sha256sum' };
+  const scripts = (pkg && pkg.scripts) || {};
+  if (pkg) { if (scripts.build) cfg.build = 'npm run build';
+             cfg.verify = scripts.test ? 'npm test' : (scripts.typecheck ? 'npm run typecheck' : (fs.existsSync(path.join(ROOT, 'tsconfig.json')) ? 'npx tsc --noEmit' : null));
+             if (scripts.lint) cfg.gates = [{ name: 'lint', cmd: 'npm run lint' }]; }
+  else if (fs.existsSync(path.join(ROOT, 'pubspec.yaml'))) { cfg.verify = 'flutter test'; cfg.gates = [{ name: 'analyze', cmd: 'flutter analyze 2>&1 | grep -c "^ *error •" | grep -qx 0' }]; }
+  else if (fs.existsSync(path.join(ROOT, 'pyproject.toml')) || fs.existsSync(path.join(ROOT, 'requirements.txt'))) { cfg.verify = 'python -m pytest -q'; }
+  else if (fs.existsSync(path.join(ROOT, 'go.mod'))) { cfg.build = 'go build ./...'; cfg.verify = 'go test ./...'; }
+  else if (fs.existsSync(path.join(ROOT, 'Cargo.toml'))) { cfg.build = 'cargo build'; cfg.verify = 'cargo test'; }
+  if (!cfg.verify) delete cfg.verify;
+  cfg.mandatory = ['in_scope', ...(cfg.build ? ['build', 'no_hand_edit'] : []), ...(cfg.gates ? ['gates'] : []), ...(cfg.verify ? ['verify'] : [])];
+  cfg.state_dir = '.harness'; cfg.timeout_s = 900;
+  if (R0('git rev-parse --is-inside-work-tree').status !== 0) { console.error('✗ זה לא ריפו git — המנוע צריך git כדי לדעת מה השתנה'); process.exit(2); }
+  fs.writeFileSync(CFG_PATH, JSON.stringify(cfg, null, 2) + '\n');
+  console.log(`📝 נכתב ${path.relative(ROOT, CFG_PATH)}:`);
+  console.log(`   מה משתנה: כל קובץ ש-git עוקב אחריו`);
+  console.log(`   ${cfg.build ? 'בנייה: ' + cfg.build : 'בנייה: אין (השער מדולג)'}`);
+  console.log(`   ${cfg.verify ? 'אימות: ' + cfg.verify : '⚠ אימות: לא נמצאה פקודת-טסטים — מלא ידנית את "verify", זה השער הכי חשוב'}`);
+  console.log(`   ${cfg.gates ? 'שערים: ' + cfg.gates.map((g) => g.name).join(', ') : 'שערים: אין'}`);
+  console.log(`\nהצעד הבא:  node ${path.relative(ROOT, process.argv[1])} --baseline    (לפני שהסוכן נוגע)`);
+  process.exit(0);
+}
+if (!fs.existsSync(CFG_PATH)) { console.error(`✗ אין ${path.relative(ROOT, CFG_PATH)} — הרץ:  node ${path.relative(ROOT, process.argv[1])} --init`); process.exit(2); }
 const CFG = JSON.parse(fs.readFileSync(CFG_PATH, 'utf8'));
 const HDIR = path.join(ROOT, CFG.state_dir || '.harness');
 const BASE = opt('--baseline-file', path.join(HDIR, 'baseline.txt'));
@@ -39,8 +65,8 @@ const tail = (r, n = 3) => ((r.stderr || '') + (r.stdout || '')).split('\n').fil
 
 // ── רשימת קובצי-הפלט + חתימותיהם (הגדרת ה"פלט" מגיעה מהקונפיג) ──
 const outputsCmd = CFG.outputs_cmd || (CFG.outputs ? `find ${CFG.outputs.map((o) => `'${o}'`).join(' ')} -type f 2>/dev/null | sort | xargs -r sha256sum` : null);
-if (!outputsCmd) { console.error('✗ harness.json: חסר outputs (רשימת תיקיות-פלט) או outputs_cmd'); process.exit(2); }
-const hashes = () => sh(outputsCmd).stdout || '';
+const OUTC = outputsCmd || 'git ls-files -z | xargs -0 sha256sum';   // בלי הגדרה: כל מה ש-git עוקב אחריו (שער-רדיוס עובד ביום הראשון)
+const hashes = () => sh(OUTC).stdout || '';
 
 // ── מצב --baseline: בונים פעם אחת ושומרים חתימות ──
 if (has('--baseline')) {
