@@ -43,7 +43,16 @@ const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1_$2').replace(/^_+/, '')
 const STUB = /=>\s*(?:const\s+)?(?:\{\s*\}|\[\s*\]|''|""|0|0\.0|null|-?\d+)\s*;?\s*$/;
 
 // ליטרל-דוגמה לטיפוס-אלמנט (לסינתזת-אוסף)
-const elemLit = (t) => ({ String: "'a'", int: '1', double: '1.5', num: '1', bool: 'true' }[t.replace(/\?$/, '')] ?? null);
+// ⚠️ בלי ערך-אלמנט, `List<X>` קיבל **רק** את הרשימה-הריקה, והזהב יצא ריק:
+// פונקציה מחוללת שמחזירה [] עברה אותו. עכשיו גם טיפוס-מוטבע תורם אלמנט
+// (מ-typeSamples של החצב), וללא ערך-אמת — אין אלמנט, לא ניחוש.
+const elemLit = (t, samples = {}) => {
+  const b = t.replace(/\?$/, '');
+  const core = { String: "'a'", int: '1', double: '1.5', num: '1', bool: 'true' }[b];
+  if (core) return core;
+  const ex = samples[b];
+  return (ex && ex.length) ? ex[0] : null;
+};
 function compat(pt, inlined = [], generics = [], samples = {}) {
   const nul = pt.endsWith('?'); const base = pt.replace(/\?$/, '');
   // טיפוס-גנרי שנוצר במחיקת-טיפוס: הפונקציה **אינה קוראת ממנו שדה** (אומת
@@ -71,9 +80,9 @@ function compat(pt, inlined = [], generics = [], samples = {}) {
   }
   // סינתזת-אוסף: List<X>/Set<X> ⇒ ריק + זוג-אלמנטים · Map<K,V> ⇒ ריק + זוג
   const mL = base.match(/^(List|Set|Iterable)<(.+)>$/);
-  if (mL) { const el = elemLit(mL[2]); const c = mL[1] === 'List' ? '[]' : '{}'; const out = [{ d: `const <${mL[2]}>${c}`, t: base }]; if (el) out.push({ d: `const <${mL[2]}>${mL[1] === 'List' ? `[${el},${el}]` : `{${el}}`}`, t: base }); if (nul) out.push({ d: 'null', t: base }); return out; }
+  if (mL) { const el = elemLit(mL[2], samples); const c = mL[1] === 'List' ? '[]' : '{}'; const out = [{ d: `const <${mL[2]}>${c}`, t: base }]; if (el) { const kw = /^const /.test(el) || /^['\d]/.test(el) || el === 'true' ? 'const ' : ''; out.push({ d: `${kw}<${mL[2]}>${mL[1] === 'List' ? `[${el},${el}]` : `{${el}}`}`, t: base }); } if (nul) out.push({ d: 'null', t: base }); return out; }
   const mM = base.match(/^Map<\s*(.+?)\s*,\s*(.+)>$/);
-  if (mM) { const k = elemLit(mM[1]), v = elemLit(mM[2]); const out = [{ d: `const <${mM[1]}, ${mM[2]}>{}`, t: base }]; if (k && v) out.push({ d: `const <${mM[1]}, ${mM[2]}>{${k}: ${v}}`, t: base }); if (nul) out.push({ d: 'null', t: base }); return out; }
+  if (mM) { const k = elemLit(mM[1], samples), v = elemLit(mM[2], samples); const out = [{ d: `const <${mM[1]}, ${mM[2]}>{}`, t: base }]; if (k && v) out.push({ d: `const <${mM[1]}, ${mM[2]}>{${k}: ${v}}`, t: base }); if (nul) out.push({ d: 'null', t: base }); return out; }
   return POOL.filter(v => {
     if (v.t === 'Null') return nul || base === 'Object' || base === 'dynamic';
     if (base === 'Object' || base === 'dynamic') return true;
@@ -115,7 +124,17 @@ function landOne(r, seen) {
   // שם שהוא מילה-שמורה או טיפוס-ליבה אינו יכול להיות שם-פונקציה באטום:
   // `int(...)` · `do(...)` נפלטו, לא התקמפלו, ונספרו ככשל. פסילה מראש.
   if (RESERVED.has(r.name)) return { name: r.name, skip: 'שם שמור' };
-  if (fs.existsSync(atomAbs) || fs.existsSync(path.join(SHELF, 'dart', `${kb}.dart`))) return { name: r.name, skip: 'כבר-קיים' };
+  // ⚠️ «כבר-קיים» נבדק רק מול new/dart, בעוד המדף פרוס על כמה מקורות
+  // (dart-maor · dart-ui-bs · atoms) ובשמות-מקף. שער cross-source (23-ד) תפס
+  // 2 כפילויות שהנחיתה כתבה. הבדיקה עוברת על כל המקורות ובשתי צורות-השם.
+  const kebabName = kb.replace(/_/g, '-');
+  const SOURCES = ['dart', 'dart-maor', 'dart-ui-bs', 'dart-ui-bs/auto', 'atoms'];
+  const twinExt = { atoms: '.mjs' };
+  if (fs.existsSync(atomAbs)) return { name: r.name, skip: 'כבר-קיים' };
+  for (const d of SOURCES) for (const nm of [kb, kebabName]) {
+    const ext = twinExt[d] || '.dart';
+    if (fs.existsSync(path.join(SHELF, d, nm + ext))) return { name: r.name, skip: `כבר-קיים במקור אחר (${d})` };
+  }
   // פסול: מתודת-override (לא אטום-עצמאי) · גוף-סטאב (קבוע ריק — אין מנגנון)
   if (/@override\b/.test(r.fnSource)) return { name: r.name, skip: '@override — לא אטום' };
   if (STUB.test(r.fnSource)) return { name: r.name, skip: 'סטאב — גוף-קבוע' };
@@ -177,7 +196,8 @@ function landOne(r, seen) {
   const doc = (r.fnSource.match(/\/\/\/[^\n]*/g) || []).join('\n').replace(/\/\/\/ ?/g, '');
   const md = `# חוזה · ${r.name}\n\n> אטום-Dart · נחצב אוטומטית ע"י חצב-AST (חוק-4 — verbatim מהמקור).\n\n## מקור\n${srcRef}\n\n## התנהגות\n${doc || '(ראה גוף-האטום)'}\n\n## אימות\nבדיקת-Golden (\`${kb}_test.dart\`): אפיון דטרמיניסטי על סל-קלטים — הוקלט מהרצת הקוד-החלוץ. הרצה: \`dart run --enable-asserts new/dart/${kb}_test.dart\`.\n`;
   fs.writeFileSync(path.join(ROOT, 'dart', `${kb}.contract.md`), md);
-  return { name: r.name, landed: `${kb}.dart`, golden: combos.length };
+  return { name: r.name, landed: `${kb}.dart`, base: kb, golden: combos.length,
+           heb: (r.fnSource.match(/\/\/\/[^\n]*/g) || []).join(' ').match(/[\u0590-\u05FF][\u0590-\u05FF'"\u05F3\u05F4-]*/g) || [] };
 }
 
 const carved = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
@@ -185,11 +205,78 @@ const trivial = carved.filter(r => r.ok && (r.trivial || r.autoSocket));
 const seen = new Set();
 let landed = 0, failed = 0, skipped = 0;
 const skipWhy = {};   // סיבת-דילוג ⇒ שמות (בלי זה 16 דילוגים נעלמו בשקט)
+const landedBases = [];
+const hebOf = {};   // בסיס ⇒ מילות-הייעוד העבריות מהתיעוד של האטום עצמו
 for (const r of trivial) {
   const res = landOne(r, seen);
-  if (res.landed) { landed++; if (landed <= 40) console.log(`✅ ${res.name} → dart/${res.landed} · ${res.golden} Golden`); }
+  if (res.landed) { landed++; landedBases.push(res.base); hebOf[res.base] = res.heb; if (landed <= 40) console.log(`✅ ${res.name} → dart/${res.landed} · ${res.golden} Golden`); }
   else if (res.fail) { failed++; if (failed <= 20) console.log(`↩ ${res.name}: ${res.fail}`); }
   else { skipped++; (skipWhy[res.skip || 'לא-מנומק'] ??= []).push(res.name); }   // שקט אינו דילוג
 }
 console.log(`\n═══ נחיתה: ✅ ${landed} אטומים · ↩ ${failed} נכשלו · ↷ ${skipped} דולגו (מתוך ${trivial.length} trivial) ═══`);
 for (const [why, names] of Object.entries(skipWhy).sort((a, b) => b[1].length - a[1].length)) console.log(`   ↷ ${why}: ${names.length} · ${names.slice(0, 6).join(' ')}`);
+
+// ── שן-המוטציה, בנחיתה ולא רק בשער ─────────────────────────────────────────
+// זהב שנשאר ירוק על אטום-**חלול** אינו חוזה — הוא תיאור-ריק. עד כאן זה
+// נתפס רק בשער (61 אטומים בנחיתה הראשונה ⇒ המדף היה מאדים). עכשיו
+// **אותו שער עצמו** (‏mutation-dart-check --files) מורץ על מה שנחת,
+// והריקים מוסרים לפני שהם נוגעים במדף. אפס מנוע חדש — הפעלה של הקיים.
+if (landedBases.length) {
+  const files = landedBases.flatMap(b => [path.join(ROOT, 'dart', b + '.dart'), path.join(ROOT, 'dart', b + '_test.dart')]).join(',');
+  const gate = new URL('../mutation-dart-check.mjs', import.meta.url).pathname;
+  let out = '';
+  // ⚠️ השער כותב חלק מהפסק-דין ל-stderr. לכידת stdout בלבד החזירה ריק
+  // על exit=1, והסחיפה «לא מצאה» מה שהשער כן מצא.
+  try { out = execSync(`node ${gate} --all --list-unparsed --files ${files}`, { cwd: path.join(ROOT, '..'), stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 64 << 20 }).toString(); }
+  catch (e) { out = ((e.stdout || '') + (e.stderr || '')).toString(); }
+  const vac = [...out.matchAll(/✗ .*?\/([a-z0-9_]+)_test\.dart/g)].map(m => m[1]);
+  // ‏unparsed = העותק-החלול לא קומפל ⇒ **השן לא נשכה**. «לא-נפסל» אינו
+  // «הוכח», והחוב-המוצהר של השער רק-יורד — לכן גם אלה אינם עולים למדף.
+  const unp = [...out.matchAll(/^UNPARSED .*?\/([a-z0-9_]+)\.dart/gm)].map(m => m[1]);
+  const drop = [...new Set([...vac, ...unp])];
+  for (const b of drop) for (const f of [b + '.dart', b + '_test.dart', b + '.contract.md'])
+    fs.rmSync(path.join(ROOT, 'dart', f), { force: true });
+  console.log(`\n🦷 שן-המוטציה: ${vac.length} זהב-ריק · ${unp.length} שהשן לא נשכה בהם (unparsed) ⇒ ${drop.length} הוסרו · נשארו ${landedBases.length - drop.length} אטומים מוכחים`);
+  const alive = landedBases.filter(b => !drop.includes(b));
+
+  // ── חוק-טוהר-הדאטה (הכרעה 16) ─────────────────────────────────────────
+  // «אין דאטה במנגנון». האטום נחצב verbatim, ולכן פונקציה שמערבבת ליטרל-עברי
+  // עם זרימת-בקרה מגיעה מעורבת — והשער אוסר להוסיף מעורב חדש. מריצים את
+  // **אותו שער** ומסירים; הפיצול לאטום-דאטה הוא החלטה, לא נחיתה אוטומטית.
+  const dpGate = new URL('../data-purity-check.mjs', import.meta.url).pathname;
+  let dpOut = '';
+  try { dpOut = execSync(`node ${dpGate} --gate`, { cwd: path.join(ROOT, '..'), stdio: ['ignore', 'pipe', 'pipe'] }).toString(); }
+  catch (e) { dpOut = ((e.stdout || '') + (e.stderr || '')).toString(); }
+  // ⚠️ הפורמט של השער עצמו הוא `+ dart/<שם>`; הצורה עם «אטום-מעורב חדש»
+  // היא עטיפת-ה-pre-commit. התאמה לעטיפה החזירה אפס בעוד השער תפס שלושה.
+  const mixed = [...dpOut.matchAll(/^\s*\+ dart\/([a-z0-9_]+)\s*$/gm)].map(m => m[1])
+    .filter(b => alive.includes(b));
+  for (const b of mixed) for (const f of [b + '.dart', b + '_test.dart', b + '.contract.md'])
+    fs.rmSync(path.join(ROOT, 'dart', f), { force: true });
+  const alive2 = alive.filter(b => !mixed.includes(b));
+  console.log(`🧪 טוהר-דאטה: ${mixed.length} אטומים-מעורבים הוסרו · נשארו ${alive2.length}`);
+
+  // ── הוכחת-חיפוש (23-ד «אין = לא-חיפשת») ───────────────────────────────
+  // לכל אטום חדש חייבת להיות רשומת-חיפוש חתומה מול האורקל. מריצים את
+  // **הכלי הקיים**; מועמד-חזק (ציון ≥3) ⇒ הכלי יוצא 1 ⇒ האטום **אינו עולה**
+  // (כפילות אפשרית = הכרעה אנושית, לא נחיתה). אחרת נכתבת רשומה.
+  const srTool = new URL('../search-record.mjs', import.meta.url).pathname;
+  // ⚠️ הכלי דורש שאילתה **דו-לשונית** (אנגלית=שם · עברית=ייעוד), אחרת חצי
+  // מהאורקל לא נסרק. ייעוד עברי אי-אפשר לחולל בלי להמציא — לכן הוא נלקח
+  // מתיעוד-האטום עצמו. אטום בלי ייעוד-עברי **אינו עולה**: שאילתה חצי-סרוקה
+  // אינה הוכחת-חיפוש, וההמצאה אסורה (§20-ג).
+  const dup = [], noPurpose = [];
+  for (const b of alive2) {
+    const heb = (hebOf[b] || []).filter(w => w.length > 1).slice(0, 6);
+    if (!heb.length) { noPurpose.push(b); continue; }
+    const words = `${b.replace(/_/g, ' ')} ${heb.join(' ')}`;
+    const why = `נחצב אוטומטית מ-buildsmart/app_flutter ע"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). האורקל המאוחד לא החזיר מועמד בציון ≥3 לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.`;
+    try { execSync(`node ${srTool} ${JSON.stringify(words)} --creates new/dart/${b}.dart --none ${JSON.stringify(why)}`, { cwd: path.join(ROOT, '..'), stdio: 'pipe' }); }
+    catch { dup.push(b); }
+  }
+  for (const b of [...dup, ...noPurpose]) for (const f of [b + '.dart', b + '_test.dart', b + '.contract.md'])
+    fs.rmSync(path.join(ROOT, 'dart', f), { force: true });
+  console.log(`🔎 הוכחת-חיפוש: ${alive2.length - dup.length - noPurpose.length} רשומות נכתבו · ${dup.length} מועמד-חזק קיים · ${noPurpose.length} בלי ייעוד-עברי (דורש הכרעה)`);
+  console.log(`\n📦 עלו למדף: ${alive2.length - dup.length - noPurpose.length} אטומים`);
+  if (drop.length) console.log('   ✗ ' + drop.slice(0, 12).join(' ') + (drop.length > 12 ? ` …+${drop.length - 12}` : ''));
+}

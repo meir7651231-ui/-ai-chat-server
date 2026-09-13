@@ -94,6 +94,9 @@ for (const p of pairs) {
   else real++;
 }
 const unparsedN = unparsedFiles.length + compileFail.length;
+// שמות-ה-unparsed לקוראים חיצוניים (מחברת-הנחיתה מסירה אטום שהשן לא יכולה
+// לנשוך בו — «לא-נפסל» אינו «הוכח»). דיווח בלבד; אינו משנה פסק-דין.
+if (argv.includes('--list-unparsed')) { [...unparsedFiles, ...compileFail].forEach((f) => console.log('UNPARSED ' + f)); }
 // חוב-קיים (R3 שדה): בדיקות-חלולות ידועות = רשימה רק-יורדת בבייסליין; דגימה יומית מאדימה רק על חלולה **חדשה** (לא ב-baseline) — כמו כל שער-ראצ׳ט
 const vacNames = vacuous.map((v) => v.replace(/ \(.*$/, ''));
 if (argv.includes('--write')) { fs.writeFileSync(BL, JSON.stringify({ unparsed: unparsedN, vacuous: vacNames, pairs: total, untested }, null, 1) + '\n'); console.log(`✍️ mutation-dart baseline ⇒ unparsed ${unparsedN} · חלולות-ידועות ${vacNames.length} · זוגות ${total} · בלי-בדיקה ${untested}`); process.exit(0); }
