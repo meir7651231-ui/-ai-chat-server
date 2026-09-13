@@ -1,0 +1,156 @@
+#!/usr/bin/env node
+// 🚔 harness/police.mjs — המכונה, בגרסה שאינה קשורה לשום פרויקט.
+//   הפסק ניתן ע"י תוכנית, לא ע"י המודל ולא ע"י בן-אדם. הכל מגיע מ-harness.json שיושב בריפו.
+//
+//   שימוש:
+//     node harness/police.mjs --baseline            # לפני שנוגעים: build + חתימות ⇒ .harness/baseline.txt
+//     node harness/police.mjs [--scope <תבנית>] [--claims claims.json] [--out report.json]
+//
+//   שערי-חובה (כולם מוגדרים ב-harness.json; שער בלי הגדרה מדולג ומדווח ⚪):
+//     build        · פקודת-הבנייה של הפרויקט מסתיימת ב-0
+//     no_hand_edit · הפלט אחרי build זהה לפלט שלפניו ⇒ אף אחד לא ערך ידנית קובץ מחולל
+//     in_scope     · אף קובץ-פלט מחוץ ל--scope לא השתנה מול הבסיס (רדיוס-הפגיעה)
+//     gates        · כל פקודות-השערים של הפרויקט מסתיימות ב-0
+//     verify       · פקודת-האימות (קומפילציה/טסטים) מסתיימת ב-0
+//     forbid_diff  · תבניות אסורות בשורות שנוספו לקוד-המקור
+//     forbid_out   · תבניות אסורות בפלט המחולל
+//     no_orphans   · אין קובץ-פלט בלי מקור שמייצר אותו
+//   טענות: claims.json = {"claims":[{"check":"<id>","text":"…"}],"notes":"…"} — כל טענה מסומנת CONFIRMED / FALSE / UNVERIFIED.
+//   יציאה: 0 = DONE · 1 = NOT DONE · 2 = תקלת-הגדרה.
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import { spawnSync } from 'node:child_process';
+
+const argv = process.argv.slice(2);
+const opt = (k, d = null) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : d; };
+const has = (k) => argv.includes(k);
+const ROOT = path.resolve(opt('--root', '.'));
+const CFG_PATH = opt('--config', path.join(ROOT, 'harness.json'));
+if (!fs.existsSync(CFG_PATH)) { console.error(`✗ אין ${path.relative(ROOT, CFG_PATH)} — ראה harness/harness.example.json`); process.exit(2); }
+const CFG = JSON.parse(fs.readFileSync(CFG_PATH, 'utf8'));
+const HDIR = path.join(ROOT, CFG.state_dir || '.harness');
+const BASE = opt('--baseline-file', path.join(HDIR, 'baseline.txt'));
+const SCOPE = opt('--scope', CFG.default_scope || null);
+const TIMEOUT = (CFG.timeout_s || 600) * 1000;
+
+const sh = (cmd, cwd = ROOT) => spawnSync(cmd, { cwd, shell: true, encoding: 'utf8', maxBuffer: 128 * 1024 * 1024, timeout: TIMEOUT, killSignal: 'SIGKILL' });
+const tail = (r, n = 3) => ((r.stderr || '') + (r.stdout || '')).split('\n').filter(Boolean).slice(-n).join(' ‖ ').slice(0, 300);
+
+// ── רשימת קובצי-הפלט + חתימותיהם (הגדרת ה"פלט" מגיעה מהקונפיג) ──
+const outputsCmd = CFG.outputs_cmd || (CFG.outputs ? `find ${CFG.outputs.map((o) => `'${o}'`).join(' ')} -type f 2>/dev/null | sort | xargs -r sha256sum` : null);
+if (!outputsCmd) { console.error('✗ harness.json: חסר outputs (רשימת תיקיות-פלט) או outputs_cmd'); process.exit(2); }
+const hashes = () => sh(outputsCmd).stdout || '';
+
+// ── מצב --baseline: בונים פעם אחת ושומרים חתימות ──
+if (has('--baseline')) {
+  if (CFG.build) { const r = sh(CFG.build); if (r.status !== 0) { console.error(`✗ build נכשל: ${tail(r)}`); process.exit(2); } }
+  fs.mkdirSync(HDIR, { recursive: true });
+  const h = hashes(); fs.writeFileSync(BASE, h);
+  console.log(`📌 בסיס נשמר: ${h.split('\n').filter(Boolean).length} קבצים ⇒ ${path.relative(ROOT, BASE)}`);
+  process.exit(0);
+}
+
+const R = {}, detail = {};
+
+// 1 · build + אין-עריכה-ידנית (הפלט אחרי build זהה לפלט שלפניו)
+if (CFG.build) {
+  const pre = hashes();
+  const r = sh(CFG.build);
+  R.build = r.status === 0; if (!R.build) detail.build_error = tail(r, 5);
+  R.no_hand_edit = pre === hashes();
+} else { R.build = null; R.no_hand_edit = null; }
+
+const post = hashes();
+
+// 2 · רדיוס-הפגיעה: מה מותר היה להשתנות
+if (fs.existsSync(BASE)) {
+  const parse = (t) => new Map(t.split('\n').filter(Boolean).map((l) => { const i = l.indexOf(' '); return [l.slice(i).trim().replace(/^\*/, ''), l.slice(0, i)]; }));
+  const a = parse(fs.readFileSync(BASE, 'utf8')), b = parse(post);
+  const scopeRe = SCOPE ? new RegExp(SCOPE) : null;
+  const allowRe = CFG.always_allowed ? new RegExp(CFG.always_allowed) : null;
+  const changed = [];
+  for (const [f, h] of b) if (a.get(f) !== h) changed.push(f);
+  for (const f of a.keys()) if (!b.has(f)) changed.push(f + ' (נמחק)');
+  const outside = changed.filter((f) => !(scopeRe && scopeRe.test(f)) && !(allowRe && allowRe.test(f)));
+  R.in_scope = outside.length === 0;
+  detail.changed_in_scope = changed.length - outside.length;
+  detail.changed_outside = outside.slice(0, 10);
+} else { R.in_scope = null; detail.baseline = 'חסר — הרץ --baseline לפני העבודה'; }
+
+// 3 · שערי-הפרויקט
+if (CFG.gates?.length) {
+  const res = {};
+  for (const g of CFG.gates) { const name = typeof g === 'string' ? g : g.name; const cmd = typeof g === 'string' ? g : g.cmd; const r = sh(cmd); res[name] = r.status; if (r.status !== 0) (detail.gate_errors ??= {})[name] = tail(r); }
+  R.gates = Object.values(res).every((s) => s === 0); detail.gates = res;
+} else R.gates = null;
+
+// 4 · אימות: קומפילציה / טסטים
+if (CFG.verify) {
+  if (CFG.verify_pre) sh(CFG.verify_pre);
+  const r = sh(CFG.verify);
+  R.verify = r.status === 0; if (!R.verify) detail.verify_error = tail(r, 6);
+} else R.verify = null;
+
+// 5 · תבניות אסורות בשורות שנוספו לקוד-המקור
+if (CFG.forbid_in_diff?.length) {
+  const diff = sh(CFG.diff_cmd || 'git diff HEAD').stdout || '';
+  const added = diff.split('\n').filter((l) => l.startsWith('+') && !l.startsWith('+++')).map((l) => l.slice(1));
+  const hits = [];
+  for (const f of CFG.forbid_in_diff) { const re = new RegExp(f.pattern); const bad = added.filter((l) => re.test(l) && !(f.unless && new RegExp(f.unless).test(l))); if (bad.length) hits.push(`${f.name}: ${bad[0].trim().slice(0, 100)}`); }
+  R.forbid_diff = hits.length === 0; detail.forbid_diff = hits;
+} else R.forbid_diff = null;
+
+// 6 · תבניות אסורות בפלט המחולל
+if (CFG.forbid_in_output?.length) {
+  const files = post.split('\n').filter(Boolean).map((l) => l.slice(l.indexOf(' ')).trim().replace(/^\*/, ''));
+  const hits = [];
+  for (const f of CFG.forbid_in_output) {
+    const re = new RegExp(f.pattern), only = f.files ? new RegExp(f.files) : null;
+    for (const rel of files) { if (only && !only.test(rel)) continue; const p = path.join(ROOT, rel); if (!fs.existsSync(p)) continue; const t = fs.readFileSync(p, 'utf8'); if (re.test(t)) { hits.push(`${f.name}: ${rel}`); break; } }
+  }
+  R.forbid_out = hits.length === 0; detail.forbid_out = hits;
+} else R.forbid_out = null;
+
+// 7 · יתומים: קובץ-פלט שאין לו מקור
+if (CFG.orphans) {
+  const { produced, name_from, sources_cmd } = CFG.orphans;
+  const known = new Set((sh(sources_cmd).stdout || '').split('\n').map((s) => s.trim()).filter(Boolean));
+  (CFG.orphans.also_known || []).forEach((k) => known.add(k));
+  const baseFiles = new Set(fs.existsSync(BASE) ? fs.readFileSync(BASE, 'utf8').split('\n').map((l) => l.slice(l.indexOf(' ')).trim()).filter(Boolean) : []);
+  const prodRe = new RegExp(produced), nameRe = new RegExp(name_from);
+  const files = post.split('\n').filter(Boolean).map((l) => l.slice(l.indexOf(' ')).trim().replace(/^\*/, ''));
+  const orphans = files.filter((f) => prodRe.test(f) && !baseFiles.has(f)).filter((f) => { const m = path.basename(f).match(nameRe); return m && !known.has(m[1]); });
+  R.no_orphans = orphans.length === 0; detail.orphans = orphans.slice(0, 8);
+} else R.no_orphans = null;
+
+// ── פסק ──
+const MANDATORY = CFG.mandatory || ['build', 'no_hand_edit', 'in_scope', 'gates', 'verify', 'forbid_diff', 'forbid_out', 'no_orphans'];
+const missing = MANDATORY.filter((k) => R[k] === false);
+const done = missing.length === 0;
+
+let claims = { claims: [], notes: '' };
+const cf = opt('--claims'); try { if (cf && fs.existsSync(cf)) claims = JSON.parse(fs.readFileSync(cf, 'utf8')); } catch { claims.notes = '(claims.json לא נקרא)'; }
+const rows = (claims.claims || []).map((c) => ({ text: String(c.text || '').slice(0, 160), check: c.check, verdict: !(c.check in R) || R[c.check] === null ? 'UNVERIFIED' : R[c.check] ? 'CONFIRMED' : 'FALSE' }));
+
+const sig = crypto.createHash('sha256').update(post + JSON.stringify(R)).digest('hex').slice(0, 16);
+const report = { project: CFG.name || path.basename(ROOT), scope: SCOPE, verdict: done ? 'DONE' : 'NOT DONE', missing, checks: R, detail, claims: rows, false_claims: rows.filter((c) => c.verdict === 'FALSE').length, signature: sig, at: new Date().toISOString() };
+
+const icon = (v) => v === true ? '✅' : v === null ? '⚪ (לא מוגדר)' : '❌';
+let md = `# 🚔 ${report.project}${SCOPE ? ` · scope=${SCOPE}` : ''} · ${sig}\n\n| שער | תוצאה |\n|---|---|\n`;
+for (const k of MANDATORY) md += `| ${k} | ${icon(R[k])} |\n`;
+if (detail.build_error) md += `\nbuild: ${detail.build_error}\n`;
+if (detail.changed_outside?.length) md += `\n**מחוץ לרדיוס (${detail.changed_outside.length}):** ${detail.changed_outside.join(' · ')}\n`;
+if (detail.gate_errors) md += `\nשערים אדומים: ${Object.entries(detail.gate_errors).map(([k, v]) => `${k} — ${v}`).join(' ‖ ')}\n`;
+if (detail.verify_error) md += `\nverify: ${detail.verify_error}\n`;
+if (detail.forbid_diff?.length) md += `\nתבנית אסורה בקוד: ${detail.forbid_diff.join(' ‖ ')}\n`;
+if (detail.forbid_out?.length) md += `\nתבנית אסורה בפלט: ${detail.forbid_out.join(' ‖ ')}\n`;
+if (detail.orphans?.length) md += `\nקבצים יתומים (מחק אותם): ${detail.orphans.join(' ')}\n`;
+if (detail.baseline) md += `\n⚠ ${detail.baseline}\n`;
+if (rows.length) md += `\n## טענות מול המכונה\n| טענה | שער | פסק |\n|---|---|---|\n` + rows.map((c) => `| ${c.text.replace(/\|/g, '/')} | ${c.check} | ${c.verdict} |`).join('\n') + '\n';
+md += `\n## פסק: **${report.verdict}**${done ? '' : ' — חסר: ' + missing.join(', ')}\n`;
+
+const out = opt('--out');
+if (out) { fs.mkdirSync(path.dirname(path.resolve(out)), { recursive: true }); fs.writeFileSync(out, JSON.stringify(report, null, 1)); fs.writeFileSync(out.replace(/\.json$/, '.md'), md); }
+console.log(md);
+process.exit(done ? 0 : 1);

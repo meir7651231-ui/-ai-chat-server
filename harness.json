@@ -1,0 +1,44 @@
+{
+  "_": "harness.json של גנסיס — מבטא את המכונה שהריצה את מדד-50, אבל דרך המנוע הגנרי (harness/police.mjs). זה הקובץ היחיד שקושר את המנוע לפרויקט הזה.",
+  "name": "genesis",
+
+  "build": "node harness/genesis-regen.mjs",
+  "outputs": ["new/dart-gen-bs", "new/dart-data-bs"],
+
+  "_default_scope": "בזמן ריצה מעבירים --scope '_<ns>_' כדי לתחום את המשימה לאפליקציה אחת. balagan הוא איחוד של כל המודולים ולכן משתנה לגיטימית.",
+  "always_allowed": "balagan",
+
+  "gates": [
+    { "name": "app-from-sentences", "cmd": "node machtzev/generator/app-from-sentences.mjs --gate" },
+    { "name": "retarget", "cmd": "node machtzev/generator/retarget.mjs --gate" },
+    { "name": "skin-golden", "cmd": "node machtzev/generator/skin-golden.mjs --gate" },
+    { "name": "particles", "cmd": "node machtzev/generator/particles.mjs --gate" },
+    { "name": "formulafns", "cmd": "node machtzev/generator/formula-fns.mjs --gate" },
+    { "name": "speclangdoc", "cmd": "node machtzev/generator/spec-lang-doc.mjs --gate" }
+  ],
+
+  "_verify": "מראה לפרויקט-Flutter (כמו ship) ואז flutter analyze. BUILDSMART מצביע על עותק app_flutter; בלי המשתנה השער מדולג.",
+  "verify_pre": "node bench/mirror.mjs . \"$BUILDSMART\"",
+  "verify": "cd \"$BUILDSMART\" && flutter analyze lib/genesis 2>&1 | grep -c '^ *error •' | grep -qx 0",
+
+  "_forbid_in_diff": "אפס-מילון: אסור ליטרל עברי צמוד להשוואה/חיפוש בלוגיקת-המנוע. הודעות-אבחון מותרות.",
+  "forbid_in_diff": [
+    { "name": "עברית בלוגיקת-המנוע", "pattern": "(===|!==|==|!=)\\s*['\"][^'\"]*[\\u0590-\\u05FF]|\\.(includes|startsWith|endsWith|indexOf)\\(\\s*['\"][^'\"]*[\\u0590-\\u05FF]", "unless": "^\\s*//" }
+  ],
+
+  "_forbid_in_output": "עובדות-Dart: sqrt/min/max/pow הן פונקציות עליונות ב-dart:math; ל-num אין מתודות כאלה.",
+  "forbid_in_output": [
+    { "name": "מתודת-Dart שלא קיימת על num", "pattern": "(?<!math)\\.(sqrt|min|max|pow)\\(", "files": "\\.dart$" }
+  ],
+
+  "orphans": {
+    "produced": "gen_app_",
+    "name_from": "^gen_app_([a-z0-9]*)_",
+    "sources_cmd": "ls machtzev/generator/specs-ds/*.txt | xargs -n1 basename | sed 's/\\.txt$//' | tr -d -c 'a-z0-9\\n'",
+    "also_known": ["balagan"]
+  },
+
+  "mandatory": ["build", "no_hand_edit", "in_scope", "gates", "verify", "forbid_diff", "forbid_out", "no_orphans"],
+  "state_dir": ".harness",
+  "timeout_s": 600
+}

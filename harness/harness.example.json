@@ -1,0 +1,50 @@
+{
+  "_": "harness.json — כל שדה כאן הוא פקודה או תבנית של הפרויקט שלך. המנוע לא יודע כלום על הפרויקט; זה הקובץ היחיד שמלמד אותו. שדה שחסר ⇒ השער מדולג ומדווח ⚪.",
+
+  "name": "my-project",
+
+  "_build": "פקודת-הבנייה/החילול. אחריה המנוע בודק שהפלט לא השתנה ⇒ אף אחד לא ערך ידנית קובץ מחולל.",
+  "build": "npm run build",
+
+  "_outputs": "התיקיות שהבנייה מייצרת. המנוע חותם עליהן sha256 ומשווה לבסיס.",
+  "outputs": ["dist", "build/generated"],
+
+  "_default_scope": "regex על נתיב-קובץ: מה מותר להשתנות. הכל מחוצה לו = חריגת-רדיוס. אפשר לדרוס ב---scope בזמן ריצה.",
+  "default_scope": "^dist/feature-x/",
+  "always_allowed": "^dist/manifest\\.json$",
+
+  "_gates": "בדיקות-הפרויקט שכבר קיימות אצלך. כל אחת חייבת לצאת 0.",
+  "gates": [
+    { "name": "lint", "cmd": "npm run lint" },
+    { "name": "schema", "cmd": "node scripts/check-schema.js" }
+  ],
+
+  "_verify": "השער האמיתי: קומפילציה או טסטים. verify_pre רץ לפניו (למשל העתקת-פלט לפרויקט שמקמפל).",
+  "verify_pre": "node scripts/mirror-to-app.js",
+  "verify": "npx tsc --noEmit",
+
+  "_forbid_in_diff": "תבניות שאסור שיופיעו בשורות שנוספו לקוד-המקור (ליטרלים של דומיין, מפתחות, קיצורי-דרך).",
+  "forbid_in_diff": [
+    { "name": "סוד-בקוד", "pattern": "(api[_-]?key|secret)\\s*[:=]\\s*['\"]" },
+    { "name": "ליטרל-דומיין-בלוגיקה", "pattern": "===\\s*['\"](admin|owner)['\"]" }
+  ],
+
+  "_forbid_in_output": "תבניות שאסור שיופיעו בפלט המחולל (קריאות-API שלא קיימות, TODO שנשאר).",
+  "forbid_in_output": [
+    { "name": "TODO בפלט", "pattern": "TODO|FIXME", "files": "\\.ts$" }
+  ],
+
+  "_orphans": "קובץ-פלט שאין לו מקור. produced = אילו קבצים נחשבים פלט; name_from = מאיפה שולפים את השם; sources_cmd = רשימת השמות החוקיים.",
+  "orphans": {
+    "produced": "^dist/pages/",
+    "name_from": "^page_([a-z0-9]+)_",
+    "sources_cmd": "ls src/pages | sed 's/\\.md$//'",
+    "also_known": ["index"]
+  },
+
+  "_mandatory": "אילו שערים מפילים את הפסק. השאר מדווחים בלבד.",
+  "mandatory": ["build", "no_hand_edit", "in_scope", "gates", "verify", "forbid_diff", "forbid_out", "no_orphans"],
+
+  "state_dir": ".harness",
+  "timeout_s": 600
+}
