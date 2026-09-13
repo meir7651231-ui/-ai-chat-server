@@ -42,6 +42,15 @@
     "also_known": ["index"]
   },
 
+  "_guard": "שכבת-המניעה (harness/guard.mjs). quarantine = פקודות הרסניות שיוחלפו בבדל לזמן המשימה ויוחזרו בסוף. deny/allow = תוספות לרשימות המובנות של claude -p. allow_network=true מחזיר curl/wget.",
+  "guard": {
+    "quarantine": ["scripts/reset-db.js", "scripts/deploy.sh"],
+    "deny": ["Bash(psql *)"],
+    "allow": ["Bash(docker compose up *)"],
+    "block_commits": true,
+    "allow_network": false
+  },
+
   "_mandatory": "אילו שערים מפילים את הפסק. השאר מדווחים בלבד.",
   "mandatory": ["build", "no_hand_edit", "in_scope", "gates", "verify", "forbid_diff", "forbid_out", "no_orphans"],
 

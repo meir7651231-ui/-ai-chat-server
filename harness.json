@@ -38,6 +38,9 @@
     "also_known": ["balagan"]
   },
 
+  "_guard": "שכבת-המניעה. שלושת הקבצים האלה שוברים את המשימה אם סוכן מריץ אותם: one.mjs מחולל מחדש הכל, ship.mjs מעתיק לאפליקציה החיה, tighten-types ידוע-שבור.",
+  "guard": { "quarantine": ["machtzev/one.mjs", "machtzev/generator/ship.mjs", "machtzev/generator/tighten-types.mjs"] },
+
   "mandatory": ["build", "no_hand_edit", "in_scope", "gates", "verify", "forbid_diff", "forbid_out", "no_orphans"],
   "state_dir": ".harness",
   "timeout_s": 600

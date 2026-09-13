@@ -69,13 +69,16 @@ const outputsCmd = CFG.outputs_cmd || (CFG.outputs ? `find ${CFG.outputs.map((o)
 const SD = (CFG.state_dir || '.harness').replace(/^\.\//, '');
 // המנוע אינו שופט את עצמו: תיקיית-המצב, קובץ-ההגדרות, והתיקייה שבה police.mjs יושב.
 const SELF_DIR = path.relative(ROOT, path.dirname(fileURLToPath(import.meta.url))) || '.';
-const SELF = [SD, path.relative(ROOT, CFG_PATH), ...(SELF_DIR && SELF_DIR !== '.' && !SELF_DIR.startsWith('..') ? [SELF_DIR] : [])];
+// קובץ בהסגר הוחלף בבדל ע"י guard.mjs — זה שינוי של הרתמה, לא של הסוכן, ולכן אינו נספר כחריגת-רדיוס.
+const QUAR = (() => { try { return JSON.parse(fs.readFileSync(path.join(HDIR, 'ARMED.json'), 'utf8')).quarantined.map((q) => q.f); } catch { return []; } })();
+const SELF = [SD, path.relative(ROOT, CFG_PATH), ...QUAR, ...(SELF_DIR && SELF_DIR !== '.' && !SELF_DIR.startsWith('..') ? [SELF_DIR] : [])];
 const isSelf = (f) => SELF.some((x) => f === x || f.startsWith(x + '/'));
 const OUTC = outputsCmd || `git ls-files -z --cached --others --exclude-standard | xargs -0 sha256sum${SELF.map((x) => ` | grep -vF '  ${x}'`).join('')}`;   // -F: הנתיב הוא מחרוזת, לא regex (נקודה ב-.harness אינה תו-כללי)   // ברירת-מחדל: כל מה ש-git רואה, כולל קבצים חדשים, בלי תיקיית-המצב של המנוע   // בלי הגדרה: כל מה ש-git עוקב אחריו (שער-רדיוס עובד ביום הראשון)
 const hashes = () => sh(OUTC).stdout || '';
 
 // ── מצב --baseline: בונים פעם אחת ושומרים חתימות ──
 if (has('--baseline')) {
+  if (fs.existsSync(path.join(HDIR, 'ARMED.json')) && !has('--force')) { console.error('✗ הבסיס נעול: המשמר דרוך (harness/guard.mjs --status). צילום-בסיס באמצע משימה מוחק את רדיוס-הפגיעה.'); process.exit(2); }
   if (CFG.build) { const r = sh(CFG.build); if (r.status !== 0) { console.error(`✗ build נכשל: ${tail(r)}`); process.exit(2); } }
   fs.mkdirSync(HDIR, { recursive: true });
   const h = hashes(); fs.writeFileSync(BASE, h);
@@ -103,7 +106,7 @@ if (fs.existsSync(BASE)) {
   const allowRe = CFG.always_allowed ? new RegExp(CFG.always_allowed) : null;
   const changed = [];
   for (const [f, h] of b) if (a.get(f) !== h) changed.push(f);
-  for (const f of a.keys()) if (!b.has(f)) changed.push(f + ' (נמחק)');
+  for (const f of a.keys()) if (!b.has(f) && !isSelf(f)) changed.push(f + ' (נמחק)');   // קובץ שנכנס להסגר נעלם מרשימת-הפלט; זו הרתמה, לא מחיקה של הסוכן
   const outside = changed.filter((f) => !(scopeRe && scopeRe.test(f)) && !(allowRe && allowRe.test(f)));
   R.in_scope = outside.length === 0;
   detail.changed_in_scope = changed.length - outside.length;
@@ -264,9 +267,17 @@ if (CFG.orphans) {
   R.no_orphans = orphans.length === 0; detail.orphans = orphans.slice(0, 8);
 } else R.no_orphans = null;
 
+// 8 · שלמות-השופט: אם המשמר דרוך — אף קובץ-שופט (המנוע, ההגדרה, הבסיס) לא השתנה מאז הדריכה
+const ARMF = path.join(HDIR, 'ARMED.json');
+if (fs.existsSync(ARMF)) {
+  const st = JSON.parse(fs.readFileSync(ARMF, 'utf8'));
+  const bad = Object.entries(st.integrity || {}).filter(([f, h]) => { const p = path.join(ROOT, f); return !fs.existsSync(p) || crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex') !== h; }).map(([f]) => f);
+  R.harness_intact = bad.length === 0; if (bad.length) detail.harness_intact = bad;
+} else R.harness_intact = null;
+
 // ── פסק ──
 const UNIVERSAL = CFG.universal === false ? [] : ['tests_not_weakened', 'no_secrets', 'no_debug_left', 'no_swallowed_errors', 'deps_declared', 'no_deletions', 'no_bypass', 'no_abs_paths', 'lock_consistent', 'no_big_files', 'no_test_network', 'api_not_removed'].filter((k) => !(CFG.universal_off || []).includes(k));
-const MANDATORY = [...(CFG.mandatory || ['build', 'no_hand_edit', 'in_scope', 'gates', 'verify', 'forbid_diff', 'forbid_out', 'no_orphans']), ...UNIVERSAL];
+const MANDATORY = [...(CFG.mandatory || ['build', 'no_hand_edit', 'in_scope', 'gates', 'verify', 'forbid_diff', 'forbid_out', 'no_orphans']), ...UNIVERSAL, 'harness_intact'];
 const missing = MANDATORY.filter((k) => R[k] === false);
 const done = missing.length === 0;
 
@@ -288,6 +299,7 @@ if (detail.forbid_diff?.length) md += `\nתבנית אסורה בקוד: ${detai
 if (detail.forbid_out?.length) md += `\nתבנית אסורה בפלט: ${detail.forbid_out.join(' ‖ ')}\n`;
 if (detail.orphans?.length) md += `\nקבצים יתומים (מחק אותם): ${detail.orphans.join(' ')}\n`;
 if (detail.universal) md += '\n' + Object.entries(detail.universal).map(([k, v]) => `**${k}:** ${v.join(' ‖ ')}`).join('\n') + '\n';
+if (detail.harness_intact) md += `\n**חבלה בשופט — שונו מאז הדריכה:** ${detail.harness_intact.join(' · ')}\n`;
 if (detail.baseline) md += `\n⚠ ${detail.baseline}\n`;
 if (rows.length) md += `\n## טענות מול המכונה\n| טענה | שער | פסק |\n|---|---|---|\n` + rows.map((c) => `| ${c.text.replace(/\|/g, '/')} | ${c.check} | ${c.verdict} |`).join('\n') + '\n';
 md += `\n## פסק: **${report.verdict}**${done ? '' : ' — חסר: ' + missing.join(', ')}\n`;
