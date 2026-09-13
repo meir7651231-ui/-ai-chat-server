@@ -6,7 +6,10 @@ import fs from 'node:fs'; import path from 'node:path'; import crypto from 'node
 const argv = process.argv.slice(2); const opt = (k, d = null) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : d; };
 const ROOT = path.resolve(opt('--root', '.')); const TID = opt('--task'); const BENCH = path.dirname(new URL(import.meta.url).pathname);
 const TASKS = JSON.parse(fs.readFileSync(opt('--tasks', path.join(BENCH, 'tasks.json')), 'utf8'));
-const task = TASKS.find((t) => t.id === TID); if (!task) { console.error('unknown task', TID); process.exit(2); }
+// TID may be a benchmark task id, or `free:<ns>` for any real task (generic gates only — no task-specific oracle).
+const freeM = String(TID || '').match(/^free:([a-z0-9]+)$/i);
+const task = freeM ? { id: TID, ns: freeM[1].toLowerCase(), checks: [] } : TASKS.find((t) => t.id === TID);
+if (!task) { console.error(`unknown task ${TID} — use a benchmark id from tasks.json, or free:<ns>`); process.exit(2); }
 const BASE = opt('--base', '/tmp/base-hashes.txt');
 const claimsFile = opt('--claims'); let claims = { claims: [], notes: '' };
 try { if (claimsFile && fs.existsSync(claimsFile)) claims = JSON.parse(fs.readFileSync(claimsFile, 'utf8')); } catch { claims = { claims: [], notes: '(claims.json unreadable)' }; }
@@ -80,7 +83,7 @@ const done = missing.length === 0;
 const claimRows = (claims.claims || []).map((c) => ({ text: String(c.text || '').slice(0, 160), check: c.check, verdict: !(c.check in R) ? 'UNVERIFIED' : R[c.check] ? 'CONFIRMED' : 'FALSE' }));
 const sig = crypto.createHash('sha256').update(post + JSON.stringify(R)).digest('hex').slice(0, 16);
 const report = { task: TID, ns, verdict: done ? 'DONE' : 'NOT DONE', missing, checks: R, task_checks: taskRes, detail, claims: claimRows, false_claims: claimRows.filter((c) => c.verdict === 'FALSE').length, signature: sig, at: new Date().toISOString() };
-let md = `# 🚔 police-bench — ${TID} (${ns}) · signature ${sig}\n\n| check | result |\n|---|---|\n`;
+let md = `# 🚔 police-bench — ${TID} (${ns})${freeM ? ' · מצב-חופשי: שערים גנריים בלבד (אין אורקל-משימה)' : ''} · signature ${sig}\n\n| check | result |\n|---|---|\n`;
 for (const k of [...mandatoryGeneric, 'no_hand_edit']) { const v = R[k]; md += `| ${k}${k === 'no_hand_edit' ? ' (info)' : ''} | ${v ? '✅' : v === null ? '⚪' : '❌'} |\n`; }
 for (const t of taskRes) md += `| ${t.id}${t.mandatory ? '' : ' (info)'} | ${t.ok ? '✅' : '❌'} ${t.info} |\n`;
 if (detail.regen_errors?.length) md += `\nregen errors: ${detail.regen_errors.join(' ‖ ')}\n`;
