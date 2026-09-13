@@ -21,6 +21,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
 const argv = process.argv.slice(2);
 const opt = (k, d = null) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : d; };
@@ -31,7 +32,7 @@ const CFG_PATH = opt('--config', path.join(ROOT, 'harness.json'));
 if (has('--init')) {
   const R0 = (c) => spawnSync(c, { cwd: ROOT, shell: true, encoding: 'utf8' });
   const j = (f) => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8')); } catch { return null; } };
-  const pkg = j('package.json'); const cfg = { name: path.basename(ROOT), outputs_cmd: 'git ls-files -z | xargs -0 sha256sum' };
+  const pkg = j('package.json'); const cfg = { name: path.basename(ROOT) };   // בלי outputs_cmd: ברירת-המחדל (git, כולל קבצים חדשים) חיה במנוע ומשתדרגת איתו
   const scripts = (pkg && pkg.scripts) || {};
   if (pkg) { if (scripts.build) cfg.build = 'npm run build';
              cfg.verify = scripts.test ? 'npm test' : (scripts.typecheck ? 'npm run typecheck' : (fs.existsSync(path.join(ROOT, 'tsconfig.json')) ? 'npx tsc --noEmit' : null));
@@ -65,7 +66,12 @@ const tail = (r, n = 3) => ((r.stderr || '') + (r.stdout || '')).split('\n').fil
 
 // ── רשימת קובצי-הפלט + חתימותיהם (הגדרת ה"פלט" מגיעה מהקונפיג) ──
 const outputsCmd = CFG.outputs_cmd || (CFG.outputs ? `find ${CFG.outputs.map((o) => `'${o}'`).join(' ')} -type f 2>/dev/null | sort | xargs -r sha256sum` : null);
-const OUTC = outputsCmd || 'git ls-files -z | xargs -0 sha256sum';   // בלי הגדרה: כל מה ש-git עוקב אחריו (שער-רדיוס עובד ביום הראשון)
+const SD = (CFG.state_dir || '.harness').replace(/^\.\//, '');
+// המנוע אינו שופט את עצמו: תיקיית-המצב, קובץ-ההגדרות, והתיקייה שבה police.mjs יושב.
+const SELF_DIR = path.relative(ROOT, path.dirname(fileURLToPath(import.meta.url))) || '.';
+const SELF = [SD, path.relative(ROOT, CFG_PATH), ...(SELF_DIR && SELF_DIR !== '.' && !SELF_DIR.startsWith('..') ? [SELF_DIR] : [])];
+const isSelf = (f) => SELF.some((x) => f === x || f.startsWith(x + '/'));
+const OUTC = outputsCmd || `git ls-files -z --cached --others --exclude-standard | xargs -0 sha256sum${SELF.map((x) => ` | grep -vF '  ${x}'`).join('')}`;   // -F: הנתיב הוא מחרוזת, לא regex (נקודה ב-.harness אינה תו-כללי)   // ברירת-מחדל: כל מה ש-git רואה, כולל קבצים חדשים, בלי תיקיית-המצב של המנוע   // בלי הגדרה: כל מה ש-git עוקב אחריו (שער-רדיוס עובד ביום הראשון)
 const hashes = () => sh(OUTC).stdout || '';
 
 // ── מצב --baseline: בונים פעם אחת ושומרים חתימות ──
@@ -129,6 +135,7 @@ if (CFG.universal !== false) {
     if (l.startsWith('+') && !l.startsWith('+++')) cur.add.push(l.slice(1));
     else if (l.startsWith('-') && !l.startsWith('---')) cur.del.push(l.slice(1));
   }
+  for (let i = files.length - 1; i >= 0; i--) if (isSelf(files[i].f)) files.splice(i, 1);   // המנוע אינו סורק את עצמו
   const isTest = (f) => /(^|\/)(test|tests|spec|__tests__)\//.test(f) || /[._-](test|spec)\.[a-z]+$/i.test(f) || /_test\.[a-z]+$/.test(f);
   const noComment = (l) => !/^\s*(\/\/|#|\*|--)/.test(l);
   const hits = {};
@@ -181,11 +188,46 @@ if (CFG.universal !== false) {
     else if (F.add.length) flag('deps_declared', `${F.f}: המניפסט השתנה (${F.add.length} שורות)`);
   }
 
+  // (6) אין עקיפת-הגנות: לדרוס את השומרים במקום לתקן
+  const BYPASS = /--no-verify|--force\b|-f\s+origin|push\s+.*--force|\[skip[ -]ci\]|--no-gpg-sign|chmod\s+777|DANGEROUSLY|verify\s*[:=]\s*false|rejectUnauthorized\s*:\s*false|NODE_TLS_REJECT_UNAUTHORIZED\s*=\s*['"]?0/;
+  for (const F of files) for (const l of F.add) if (BYPASS.test(l) && noComment(l)) { flag('no_bypass', `${F.f}: ${l.trim()}`); break; }
+
+  // (7) אין נתיב-מוחלט של מכונה מסוימת
+  const ABS = /(['"`])(\/Users\/|\/home\/[a-z][\w.-]*\/|[A-Z]:\\\\Users\\\\|\/tmp\/[\w.-]+\/)/;
+  for (const F of files) for (const l of F.add) if (ABS.test(l) && noComment(l)) { flag('no_abs_paths', `${F.f}: ${l.trim()}`); break; }
+
+  // (8) מניפסט ונעילה נעים יחד
+  const LOCKS = { 'package.json': ['package-lock.json', 'yarn.lock', 'pnpm-lock.yaml'], 'Cargo.toml': ['Cargo.lock'], 'pubspec.yaml': ['pubspec.lock'], 'composer.json': ['composer.lock'], 'Gemfile': ['Gemfile.lock'], 'go.mod': ['go.sum'] };
+  const touched = new Set(files.map((x) => path.basename(x.f)));
+  for (const [man, lks] of Object.entries(LOCKS)) {
+    if (!touched.has(man)) continue;
+    const hasLock = lks.some((l) => touched.has(l));
+    const lockExists = lks.some((l) => fs.existsSync(path.join(ROOT, l)));
+    if (lockExists && !hasLock && hits.deps_declared) flag('lock_consistent', `${man} השתנה אך ${lks[0]} לא`);
+  }
+
+  // (9) אין קובץ ענק/בינארי חדש
+  const added = [...new Set([...(sh('git diff HEAD --diff-filter=A --name-only').stdout || '').split('\n'), ...(sh('git ls-files --others --exclude-standard').stdout || '').split('\n')])].filter(Boolean).filter((f) => !isSelf(f));   // כולל קבצים שלא נוספו ל-git
+  const MAXKB = CFG.max_new_file_kb || 512;
+  for (const f of added) { const p2 = path.join(ROOT, f); if (!fs.existsSync(p2)) continue; const kb = Math.round(fs.statSync(p2).size / 1024); if (kb > MAXKB) flag('no_big_files', `${f} — ${kb}KB (תקרה ${MAXKB}KB)`); }
+
+  // (10) אין רשת בתוך טסטים
+  const NET = /https?:\/\/(?!localhost|127\.0\.0\.1|example\.)|\bfetch\s*\(|axios\.|requests\.(get|post)\s*\(|http\.(Get|Post)\s*\(/;
+  for (const F of files.filter((x) => isTest(x.f))) for (const l of F.add) if (NET.test(l) && noComment(l)) { flag('no_test_network', `${F.f}: ${l.trim()}`); break; }
+
+  // (11) אין הסרת-ייצוא ציבורי (שינוי-שובר)
+  const EXP = /^[+-]\s*(export\s+(default\s+)?(function|const|class|let|var|async)\s+(\w+)|export\s*\{([^}]*)\}|pub\s+fn\s+(\w+)|def\s+(\w+)|func\s+([A-Z]\w*))/;
+  for (const F of files.filter((x) => !isTest(x.f))) {
+    const names = (arr) => new Set(arr.flatMap((l) => { const m = ('+' + l).match(EXP); if (!m) return []; return (m[5] ? m[5].split(',').map((x) => x.trim().split(/\s+as\s+/)[0]) : [m[4] || m[6] || m[7] || m[8]]).filter(Boolean); }));
+    const gone = [...names(F.del)].filter((n) => !names(F.add).has(n));
+    if (gone.length) flag('api_not_removed', `${F.f}: הוסרו ${gone.join(', ')}`);
+  }
+
   // (6) אין מחיקת-קבצים בלי שנתבקשה
-  const deleted = (sh('git diff HEAD --diff-filter=D --name-only').stdout || '').split('\n').filter(Boolean);
+  const deleted = (sh('git diff HEAD --diff-filter=D --name-only').stdout || '').split('\n').filter(Boolean).filter((f) => !isSelf(f));
   if (deleted.length) flag('no_deletions', `${deleted.length} קבצים נמחקו: ${deleted.slice(0, 3).join(' ')}`);
 
-  const UNIV = ['tests_not_weakened', 'no_secrets', 'no_debug_left', 'no_swallowed_errors', 'deps_declared', 'no_deletions'];
+  const UNIV = ['tests_not_weakened', 'no_secrets', 'no_debug_left', 'no_swallowed_errors', 'deps_declared', 'no_deletions', 'no_bypass', 'no_abs_paths', 'lock_consistent', 'no_big_files', 'no_test_network', 'api_not_removed'];
   const off = new Set(CFG.universal_off || []);
   for (const k of UNIV) if (!off.has(k)) { R[k] = !hits[k]; if (hits[k]) (detail.universal ??= {})[k] = hits[k].slice(0, 3); }
 }
@@ -223,7 +265,7 @@ if (CFG.orphans) {
 } else R.no_orphans = null;
 
 // ── פסק ──
-const UNIVERSAL = CFG.universal === false ? [] : ['tests_not_weakened', 'no_secrets', 'no_debug_left', 'no_swallowed_errors', 'deps_declared', 'no_deletions'].filter((k) => !(CFG.universal_off || []).includes(k));
+const UNIVERSAL = CFG.universal === false ? [] : ['tests_not_weakened', 'no_secrets', 'no_debug_left', 'no_swallowed_errors', 'deps_declared', 'no_deletions', 'no_bypass', 'no_abs_paths', 'lock_consistent', 'no_big_files', 'no_test_network', 'api_not_removed'].filter((k) => !(CFG.universal_off || []).includes(k));
 const MANDATORY = [...(CFG.mandatory || ['build', 'no_hand_edit', 'in_scope', 'gates', 'verify', 'forbid_diff', 'forbid_out', 'no_orphans']), ...UNIVERSAL];
 const missing = MANDATORY.filter((k) => R[k] === false);
 const done = missing.length === 0;
