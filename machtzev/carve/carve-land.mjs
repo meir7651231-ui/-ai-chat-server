@@ -134,10 +134,10 @@ function purposeOf(r, srcRef) {
 // G69 · ייבואי-המדף של אטום: טבלאות-דאטה (`../dart-data/<x>-table.dart`) שהחצב פתר לפי מוצא — נכנסים לכל קובץ שמייבא את האטום (הרתמה · הזהב)
 // ⚠️ `dart analyze` = fatal-warnings: ייבוא-מדף שהרתמה/הזהב לא מזכירים בשמו (הערך זורם דרך האטום) ⇒ `unused_import` ⇒ 6 זהבים נפלו. מייבאים רק כשהגוף מזכיר ייצוא.
 //   ⚠️ ההתאמה על **קוד**, לא על ליטרלים: הזהב `'Instance of ConnectorEnd'` הזכיר את שם-הטיפוס בתוך מחרוזת ⇒ הייבוא נכנס ⇒ עדיין unused (5 נפלו שוב).
-const shelfImports = (r, body = null) => { const names = [...(r.shelfVals || []), ...(r.shelfTypes || [])]; const code = body === null ? null : body.replace(/\/\/.*$/gm, '').replace(/'(?:\\.|[^'\\])*'/g, "''"); /* גם הערות — מימוש-השקע נושא הערות-מקור */ if (code !== null && !names.some((n) => new RegExp('\\b' + n + '\\b').test(code))) return []; return (r.shelfImports || []).map((p) => `import '${p}';`); };
+const shelfImports = (r, body = null) => { const names = [...(r.shelfVals || []), ...(r.shelfTypes || []), ...(r.shelfFns || [])]; const code = body === null ? null : body.replace(/\/\/.*$/gm, '').replace(/'(?:\\.|[^'\\])*'/g, "''"); /* גם הערות — מימוש-השקע נושא הערות-מקור */ if (code !== null && !names.some((n) => new RegExp('\\b' + n + '\\b').test(code))) return []; return (r.shelfImports || []).map((p) => `import '${p}';`); };
 function atomFile(r, srcRef, purpose) {
   const imports = [...(r.imports || []), ...shelfImports(r)];
-  const shelfLine = (r.shelfImports || []).length ? `// טבלאות-מדף (G69 — אטום-דאטה משותף מיובא, לא עותק מוטבע): ${[...(r.shelfVals || []), ...(r.shelfTypes || [])].join(' · ')} ← ${r.shelfImports.join(' ')}.\n` : '';
+  const shelfLine = (r.shelfImports || []).length ? `// ייבוא-מדף (G69/G70 — אטום משותף מיובא, לא עותק מוטבע ולא שקע): ${[...(r.shelfVals || []), ...(r.shelfTypes || []), ...(r.shelfFns || [])].join(' · ')} ← ${r.shelfImports.join(' ')}.\n` : '';
   const pure = (r.imports || []).length
     ? `// טוהר: פונקציית top-level עצמאית; הייבוא היחיד הוא ספריית-שפה טהורה (${r.imports.join(' ')}).\n${shelfLine}`
     : `// טוהר: פונקציית top-level עצמאית, ${shelfLine ? 'ייבוא-מדף בלבד' : 'אפס-import'} (אומת ע"י פותר-המזהים).\n${shelfLine}`;

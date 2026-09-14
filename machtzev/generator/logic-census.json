@@ -7836,6 +7836,18 @@
   "wireable": false
  },
  {
+  "file": "dart/pipe_cut_length.dart",
+  "name": "pipeCutLength",
+  "ret": "double",
+  "params": [
+   "double",
+   "double",
+   "double"
+  ],
+  "argc": 3,
+  "wireable": true
+ },
+ {
   "file": "dart/plain_classifications.dart",
   "name": "plainClassifications",
   "ret": "List<String>",

@@ -143,7 +143,8 @@ String _norm(String p) => Uri.file(File(p).absolute.path).normalizePath().toFile
 
 // G69 · טבלאות-המדף (new/dart-data/*-table.dart, שנחתו ע"י carveVar): מפתח = «מוצא|שם». הכותרת נושאת `// ייצוא: <שם> ← <מוצא>` לכל הצהרה
 //   שהסגירה משכה (גם טיפוס מקובץ-שכן של הטבלה). פונקציה שמפנה למזהה שהמוצא שלו נחת ⇒ **מייבאת** את הטבלה במקום לשכפל/להיפסל.
-class _ShelfEntry { final String imp; final String src; final List<String> keys; _ShelfEntry(this.imp, this.src, [this.keys = const []]); }
+class _ShelfEntry { final String imp; final String src; final List<String> keys; final bool isFn; _ShelfEntry(this.imp, this.src, [this.keys = const [], this.isFn = false]); }
+final Map<String, Map<String, String>> _shelfDecls = {};   // ייבוא ⇒ {שם-מוצהר ⇒ מקור} (לדדופ-עותקים ולזיהוי התנגשות-שמות בין ייבואים)
 // G69 · מפתחות-אמת של טבלת-מפה (6 הראשונים, ליטרלי-מחרוזת פשוטים) — דוגמאות-String לפונקציות שמפנות לטבלה; אפס-המצאה
 List<String> _mapKeys(Declaration d) {
   if (d is! TopLevelVariableDeclaration) return const [];
@@ -168,7 +169,22 @@ Map<String, _ShelfEntry> _shelf() {
     if (origins.isEmpty) continue;
     final imp = '../dart-data/' + f.uri.pathSegments.last;
     final u = parseString(content: s, throwIfDiagnostics: false).unit;
-    for (final d in u.declarations) for (final n in _declNames(d)) { final o = origins[n]; if (o != null) out['$o|$n'] = _ShelfEntry(imp, s.substring(d.offset, d.end), _mapKeys(d)); }
+    for (final d in u.declarations) { for (final n in _declNames(d)) { (_shelfDecls[imp] ??= {})[n] = s.substring(d.offset, d.end); final o = origins[n]; if (o != null) out['$o|$n'] = _ShelfEntry(imp, s.substring(d.offset, d.end), _mapKeys(d)); } }
+  }
+  // G70 · גם אטומי-הלוגיקה שכבר במדף (new/dart/<x>.dart): כותרת `// מוצא: <קובץ>:<שורה>` + `· <שם>` ⇒ קריאה-חוצת-קבצים לפונקציה שכבר נחצבה = **ייבוא האטום**
+  //   (אטום+אטום, הכרעה-20), לא עותק-שני ולא שקע. אטום עם שקעים-מוזרקים (חתימה שונה) — לא מיובא.
+  final adir = Directory(dir.path.replaceFirst(RegExp(r'dart-data/?$'), 'dart'));
+  if (adir.existsSync()) for (final f in adir.listSync()) {
+    if (f is! File || !f.path.endsWith('.dart') || f.path.endsWith('_test.dart') || f.path.endsWith('-proof.dart')) continue;
+    final s = f.readAsStringSync();
+    final o = RegExp(r'^// מוצא: (\S+?):\d+', multiLine: true).firstMatch(s); final nm = RegExp(r'^// ⚛️ אטום-Dart[^·\n]*· (\w+)', multiLine: true).firstMatch(s);
+    if (o == null || nm == null || RegExp(r'^// שקעים \(חוק-3', multiLine: true).hasMatch(s)) continue;
+    final origin = o.group(1)!.startsWith('/') ? o.group(1)! : '/home/user/' + o.group(1)!;
+    final imp = f.uri.pathSegments.last;
+    final u = parseString(content: s, throwIfDiagnostics: false).unit;
+    for (final d in u.declarations) for (final n in _declNames(d)) (_shelfDecls[imp] ??= {})[n] = s.substring(d.offset, d.end);
+    final fnSrc = _shelfDecls[imp]?[nm.group(1)!]; if (fnSrc == null) continue;
+    out.putIfAbsent('$origin|${nm.group(1)!}', () => _ShelfEntry(imp, fnSrc, const [], true));
   }
   return _shelfCache = out;
 }
@@ -230,6 +246,8 @@ Map<String, _ImpFile> _neighborTypes(String file, CompilationUnit unit) {
     if (!pure) {
       final cvars = <String, Declaration>{};
       for (final nd in nunit.declarations) if (nd is TopLevelVariableDeclaration && nd.variables.isConst) for (final v in nd.variables.variables) cvars[v.name.lexeme] = nd;
+      // G70 · גם פונקציות-top-level מקובץ לא-טהור — הטוהר של כל אחת נבדק ב-_collectPure (סגירה בתוך קובצה בלבד), כמו קבועי-G68
+      for (final nd in nunit.declarations) if (nd is FunctionDeclaration && !nd.isGetter && !nd.isSetter) cvars[nd.name.lexeme] = nd;
       if (cvars.isNotEmpty) { final cf = _ImpFile(nsrc, const {}, cvars, path); for (final k in cvars.keys) out.putIfAbsent('var:$k', () => cf); }
       continue;
     }
@@ -624,10 +642,20 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   final shelf = _shelf();
   final shelfImports = <String>{}; final shelfVals = <String>[]; final shelfTypes = <String>[]; final shelfSrc = <String, String>{}; final shelfKeys = <String>[];
   _ShelfEntry? shelfOf(String name, String? declPath) => declPath == null ? null : shelf['$declPath|$name'];
+  final shelfFns = <String>[];
+  final crossFns = <String, _ImpFile>{};   // G70 · פונקציה-שכנה חוצת-קבצים ⇒ שקע (הטוהר נבדק ב-_collectPure על קובץ-השכן)
+  final used = <String>{...free.ids, ...free.typeNames};
+  // ייבוא-מדף שמצהיר שם שכבר מגיע מייבוא-מדף אחר **ומשמש** את הפונקציה ⇒ ambiguous_import ⇒ לא מייבאים (נופל לשקע/לא-פתור, בכנות)
+  bool importable(String imp) { final names = _shelfDecls[imp]?.keys ?? const <String>[]; for (final other in shelfImports) { if (other == imp) continue; final on = _shelfDecls[other]?.keys ?? const <String>[]; for (final n in names) if (on.contains(n) && used.contains(n)) return false; } return true; }
   for (final id in free.ids) {
     if (!topFns.containsKey(id)) {
       final se = shelfOf(id, topVars.containsKey(id) ? file : impIdx['var:$id']?.path);
-      if (se != null) { shelfImports.add(se.imp); shelfVals.add(id); shelfKeys.addAll(se.keys.where((k) => !shelfKeys.contains(k))); continue; }
+      final nf = impIdx['var:$id']; final nd = nf?.vars[id];
+      // G70 · אטום-מדף מיובא רק אם **חתימתו ≡ חתימת-המקור** (פרמטרים+החזרה, בבייטים): `normName` במדף קיבל `{required normSearch}` ו-`canConnect` נחצב-ביד על
+      //   `ConnPart` — אותו שם, אותו מוצא, חתימה אחרת ⇒ הקריאה במקור לא מתקמפלת. חתימה שונה ⇒ לא ייבוא; נופל לשקע-חוצה-קבצים (המקור verbatim).
+      if (se != null && se.isFn && !(nd is FunctionDeclaration && _sameSignature(se.src, nd))) { /* לא-מיובא */ }
+      else if (se != null && importable(se.imp)) { shelfImports.add(se.imp); (se.isFn ? shelfFns : shelfVals).add(id); shelfKeys.addAll(se.keys.where((k) => !shelfKeys.contains(k))); continue; }
+      if (!topVars.containsKey(id) && nf != null && nd is FunctionDeclaration && !nd.isGetter && !nd.isSetter) { crossFns[id] = nf; sockets.add(id); continue; }
     }
     if (!topFns.containsKey(id) && !topVars.containsKey(id)) {
       final f = impIdx['var:$id'];
@@ -704,7 +732,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   //   שם-זהה עם מקור-שונה-בבייטים ⇒ «לא-פתור» בכנות (לא בוחרים, לא מנחשים).
   if (shelfImports.isNotEmpty) {
     final exported = <String, String>{};
-    for (final e in shelf.entries) if (shelfImports.contains(e.value.imp)) exported[e.key.split('|').last] = e.value.src;
+    for (final imp in shelfImports) for (final e in (_shelfDecls[imp] ?? const <String, String>{}).entries) exported[e.key] = e.value;
     copiedTypes.removeWhere((c) { for (final n in _declNamesOf(c)) { final s = exported[n]; if (s != null) { if (s.trim() != c.trim()) unresolved.add('type:$n ←שם-כפול-מול-טבלת-מדף'); return true; } } return false; });
   }
   // ── שקע-אוטומטי (חוק-3): קריאה-לשכן ⇒ פרמטר-שקע מוזרק ──────────────────
@@ -743,6 +771,21 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
       final mathHit = <String>{};
       for (final sName in sockets) {
         final d = topFns[sName];
+        final cf = crossFns[sName];
+        if (d == null && cf != null) {
+          // G70 · שקע-פונקציה חוצה-קבצים: הטיפוס מהחתימה, הגוף+עוזריו verbatim מקובץ-השכן (סגירה טהורה בתוך קובצו בלבד — _collectPure)
+          final nd = cf.vars[sName] as FunctionDeclaration;
+          final t = _fnType(nd); if (t == null) { ok = false; break; }
+          final nTop = <String, FunctionDeclaration>{ for (final e in cf.vars.entries) if (e.value is FunctionDeclaration) e.key: e.value as FunctionDeclaration };
+          final tmp = <String, String>{};
+          if (!_collectPure(cf.src, nTop, sName, tmp, mathHit)) { ok = false; break; }
+          var clash = false; for (final e in tmp.entries) { final prev = emitted[e.key]; if (prev != null && prev != e.value) { clash = true; break; } }   // שני עוזרים באותו שם מקבצים שונים ⇒ פסילה
+          if (clash) { ok = false; break; }
+          emitted.addAll(tmp);
+          socketMeta.add({'name': _pub(sName)!, 'init': _helper(sName)});
+          socketTypes.add(t);
+          continue;
+        }
         if (d == null) {
           // שקע-**ערך**: קבוע-שכן (`kDeliveredStage`) ⇒ פרמטר מוקלד, כמו
           // `{required int kIndexMinWordLen}` שבמדף. השם נשמר, כולל תחילית-k.
@@ -827,7 +870,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     'typeShow': { for (final e in { for (final t in seenType) t: copiedTypes.firstWhere((c) => RegExp('(?:class|enum|mixin|typedef)\\s+' + t + r'\b').hasMatch(c), orElse: () => ''), ...shelfSrc }.entries) if (_showFor(e.key, e.value) != null) e.key: _showFor(e.key, e.value)! },
     // G69 · דוגמאות לטיפוס מיובא-מטבלה — מהמקור שבטבלה (החצב ראה אותו), לא מהאטום
     'shelfSamples': _twoPass(shelfSrc),
-    'shelfImports': shelfImports.toList(), 'shelfVals': shelfVals, 'shelfTypes': shelfTypes, 'shelfKeys': shelfKeys,
+    'shelfImports': shelfImports.toList(), 'shelfVals': shelfVals, 'shelfTypes': shelfTypes, 'shelfKeys': shelfKeys, 'shelfFns': shelfFns,
     'shelfKeyFields': () { if (shelfVals.isEmpty || params == null) return const <String, List<String>>{}; final pt = <String, String>{}; for (final p in params.parameters) { final nm = p.name?.lexeme; if (p is SimpleFormalParameter && nm != null && p.type != null) pt[nm] = p.type!.toSource().replaceAll('?', ''); } final kf = _KeyFieldUse(shelfVals.toSet(), pt); body.visitChildren(kf); return { for (final e in kf.out.entries) e.key: e.value.toList() }; }(),
     'bodyLits': _bodyLits(body),
     'fnSource': fnSrc,
@@ -863,6 +906,14 @@ String? _showFor(String name, String declSrc) {
     if (fs.isEmpty) return null;
     return "'$name(' + " + fs.map((f) => "'$f=' + x.$f.toString()").join(" + ', ' + ") + " + ')'";
   } catch (_) { return null; }
+}
+bool _sameSignature(String atomFnSrc, FunctionDeclaration origin) {
+  try {
+    final d = parseString(content: atomFnSrc, throwIfDiagnostics: false).unit.declarations.firstOrNull;
+    if (d is! FunctionDeclaration) return false;
+    String norm(String? x) => (x ?? '').replaceAll(RegExp(r'\s+'), ' ').trim();
+    return norm(d.functionExpression.parameters?.toSource()) == norm(origin.functionExpression.parameters?.toSource()) && norm(d.returnType?.toSource()) == norm(origin.returnType?.toSource());
+  } catch (_) { return false; }
 }
 List<String>? _enumNames(String src) { try { final d = parseString(content: src, throwIfDiagnostics: false).unit.declarations.firstOrNull; return d is EnumDeclaration ? d.constants.map((c) => c.name.lexeme).toList() : null; } catch (_) { return null; } }
 

@@ -1,6 +1,6 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2481** אטומים ממופים (תצוגה 932 · לוגיקה 1001 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2482** אטומים ממופים (תצוגה 932 · לוגיקה 1002 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
@@ -14,8 +14,8 @@
 | predicate | 115 | accessPasswordMatches · assignmentRedeemed · ayinActionVisible · ayinActive · canAddPhoto |
 | text | 110 | AccessoryRow · AccessoryTile · AiCardSub · AiServerNote · AppSettingsBody |
 | container | 107 | AccordionPanel · AdvanceButton · AnimatedTabs · AssignButton · AuroraField |
+| measure | 86 | ageOf · balanceOf · band · boqLineAmount · boqTotal |
 | fact | 85 | AlertBanner · AnimatedToggle · BadgePill · CaPill · CatalogCountBadge |
-| measure | 85 | ageOf · balanceOf · band · boqLineAmount · boqTotal |
 | data:terms | 85 | absence-reason-chips-terms · annual-all-lines-terms · annual-report-terms · audit-cat-colors-terms · audit-report-lines-terms |
 | data:sockets | 74 | amount-in-words-sockets · annual-report-lines-sockets · block-reason-sockets · build-course-daily-rows-sockets · build-custom-export-sockets |
 | stat | 42 | BareStat · Callout · FinCallout · FinRow · ForgeAreaChart |

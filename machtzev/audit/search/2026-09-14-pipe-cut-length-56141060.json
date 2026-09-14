@@ -1,0 +1,178 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T19:42:58.385Z",
+ "query": "pipe cut length אורך-הצינור לחיתוך בין שני מרכזי-אביזר במרחק",
+ "tokens": [
+  "pipe",
+  "cut",
+  "length",
+  "אורך",
+  "צינור",
+  "חיתוך",
+  "בין",
+  "שני",
+  "רכזי",
+  "אביזר",
+  "מרחק"
+ ],
+ "oracle": {
+  "atomIndexSha": "9d7af547b67bba43f0427bda60acf4b8282f57773937b3c10040d21f5238fd49",
+  "logicCensusSha": "6676eb175a094d92c5c7a88f45266781e735ccd72c6f6c710a465f09e15d3adf",
+  "display": 1925,
+  "logic": 1001
+ },
+ "candidates": [
+  {
+   "id": "CutTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/cut_tile.dart",
+   "score": 3,
+   "hits": [
+    "cut"
+   ]
+  },
+  {
+   "id": "isPipe",
+   "layer": "logic",
+   "file": "dart/is_pipe.dart",
+   "score": 3,
+   "hits": [
+    "pipe"
+   ]
+  },
+  {
+   "id": "isPipeProductE",
+   "layer": "logic",
+   "file": "dart/is_pipe_product_e.dart",
+   "score": 3,
+   "hits": [
+    "pipe"
+   ]
+  },
+  {
+   "id": "PipelineRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/pipeline_row.dart",
+   "score": 3,
+   "hits": [
+    "pipe"
+   ]
+  },
+  {
+   "id": "PipeLink",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/pipe_link.dart",
+   "score": 3,
+   "hits": [
+    "pipe"
+   ]
+  },
+  {
+   "id": "syntheticPipe",
+   "layer": "logic",
+   "file": "dart/synthetic_pipe.dart",
+   "score": 3,
+   "hits": [
+    "pipe"
+   ]
+  },
+  {
+   "id": "AnimatedToggle",
+   "layer": "display",
+   "file": "dart-ui-bs/animated_toggle.dart",
+   "score": 2,
+   "hits": [
+    "בין",
+    "שני"
+   ]
+  },
+  {
+   "id": "FlipCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/flip_card.dart",
+   "score": 2,
+   "hits": [
+    "בין",
+    "שני"
+   ]
+  },
+  {
+   "id": "AccessoryRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/accessory_row.dart",
+   "score": 1,
+   "hits": [
+    "אביזר"
+   ]
+  },
+  {
+   "id": "AccessoryTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/accessory_tile.dart",
+   "score": 1,
+   "hits": [
+    "אביזר"
+   ]
+  },
+  {
+   "id": "ActionChipRail",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/action_chip_rail.dart",
+   "score": 1,
+   "hits": [
+    "אביזר"
+   ]
+  },
+  {
+   "id": "AttributeChip",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/attribute_chip.dart",
+   "score": 1,
+   "hits": [
+    "אביזר"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "CaPill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_pill.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "CardDone",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/card_done.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  }
+ ],
+ "strong": [
+  "isPipe",
+  "isPipeProductE",
+  "syntheticPipe"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "CutTile",
+  "PipelineRow",
+  "PipeLink"
+ ],
+ "creates": "new/dart/pipe_cut_length.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 12 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: isPipe 0/12 · isPipeProductE 0/12 · syntheticPipe 0/12. לכן נוצר חדש.",
+ "sig": "561410604abd6fa0f7291357060dc1fae198dac528c12aa313f5de47951973d1"
+}

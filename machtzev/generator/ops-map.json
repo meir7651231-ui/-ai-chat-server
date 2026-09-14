@@ -21266,6 +21266,20 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "pipeCutLength",
+  "layer": "logic",
+  "file": "dart/pipe_cut_length.dart",
+  "op": "measure",
+  "sockets": [
+   "double",
+   "double",
+   "double"
+  ],
+  "ret": "double",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "plainClassifications",
   "layer": "logic",
   "file": "dart/plain_classifications.dart",
