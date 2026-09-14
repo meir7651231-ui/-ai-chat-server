@@ -34,7 +34,7 @@ export function sentenceToSpec(text, LANG) {
     const name = tokens(s).filter((w) => (w.length > 1 && !LEAD.has(w) && !MARKS.includes(w)) || /^\d+$/.test(w)).join(' ') || s;
     if (!name) return null;
     let shape = '';
-    if (values && values.length > 1) shape = `{${values.join('|')}}`;
+    if (values && (values.length > 1 || (values.length === 1 && /\d/.test(values[0])))) shape = `{${values.join('|')}}`;
     else if (hint(name, 'typePhone')) shape = '[טלפון]';
     else if (hint(name, 'typeDate')) shape = '[תאריך]';
     else if (hint(name, 'typePercent')) shape = '(0..100)';
@@ -44,7 +44,12 @@ export function sentenceToSpec(text, LANG) {
   const ents = [];
   const addEnt = (name, rawFields, clause) => {
     name = content(name).join(' ') || name.trim();
-    if (!name || ents.some((e) => e.name === name)) return;
+    if (!name) return;
+    const existing = ents.find((e) => e.name === name);
+    if (existing) {   // «לכל X יש גם …» — אותה ישות שוב = הרחבה: שדות חדשים מצטרפים, קיימים לא משתכפלים
+      for (const f of rawFields.map((f) => toField(f, false)).filter(Boolean)) { const key = f.replace(/[\[({*].*$/, ''); if (!existing.fields.some((g) => g.replace(/[\[({*].*$/, '') === key)) existing.fields.push(f); }
+      return;
+    }
     const fields = rawFields.map((f, i) => toField(f, i === 0)).filter(Boolean);
     if (!fields.length) { fields.push('שם*'); notes.push(`«${name}»: לא נאמר אילו שדות — הוספתי «שם» בלבד. אפשר לכתוב: לכל ${name} יש …`); }
     ents.push({ name, fields, clause });
