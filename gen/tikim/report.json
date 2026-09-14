@@ -1,0 +1,768 @@
+{
+ "app": "תיקים",
+ "spec": "אפליקציה: תיקים\nישות לקוח עם שם*, טלפון[טלפון], כתובת\nישות תיק עם לקוח*, נושא, סכום(0..1000000), תאריך פתיחה[תאריך] | שלבים: התקבל, בטיפול, סגור\nלוח בקרה עם סכום(תיק.סכום)",
+ "sentence": {
+  "text": "מעקב תיקים: לכל לקוח יש שם, טלפון וכתובת; לכל תיק יש לקוח, נושא, סכום ותאריך פתיחה; שלבים: התקבל, בטיפול, סגור\n",
+  "notes": []
+ },
+ "entities": [
+  {
+   "name": "לקוח",
+   "fields": [
+    {
+     "name": "שם",
+     "required": true,
+     "shape": "text"
+    },
+    {
+     "name": "טלפון",
+     "required": false,
+     "shape": "phone"
+    },
+    {
+     "name": "כתובת",
+     "required": false,
+     "shape": "text"
+    }
+   ],
+   "stages": []
+  },
+  {
+   "name": "תיק",
+   "fields": [
+    {
+     "name": "לקוח",
+     "required": true,
+     "shape": "text",
+     "ref": "לקוח"
+    },
+    {
+     "name": "נושא",
+     "required": false,
+     "shape": "text"
+    },
+    {
+     "name": "סכום",
+     "required": false,
+     "shape": "number",
+     "min": 0,
+     "max": 1000000
+    },
+    {
+     "name": "תאריך פתיחה",
+     "required": false,
+     "shape": "date"
+    }
+   ],
+   "stages": [
+    "התקבל",
+    "בטיפול",
+    "סגור"
+   ]
+  }
+ ],
+ "dashboard": [
+  {
+   "op": "סכום",
+   "entity": "תיק",
+   "field": "סכום"
+  }
+ ],
+ "plan": [
+  {
+   "needId": "norm-search",
+   "entity": "לקוח",
+   "field": "שם",
+   "kind": "search",
+   "label": "לקוח.שם"
+  },
+  {
+   "needId": "phone-format",
+   "entity": "לקוח",
+   "field": "טלפון",
+   "kind": "column",
+   "label": "לקוח.טלפון"
+  },
+  {
+   "needId": "norm-search",
+   "entity": "לקוח",
+   "field": "כתובת",
+   "kind": "search",
+   "label": "לקוח.כתובת"
+  },
+  {
+   "needId": "norm-search",
+   "entity": "תיק",
+   "field": "לקוח",
+   "kind": "search",
+   "label": "תיק.לקוח"
+  },
+  {
+   "needId": "norm-search",
+   "entity": "תיק",
+   "field": "נושא",
+   "kind": "search",
+   "label": "תיק.נושא"
+  },
+  {
+   "needId": "money",
+   "entity": "תיק",
+   "field": "סכום",
+   "kind": "column",
+   "label": "תיק.סכום"
+  },
+  {
+   "needId": "fmt-date",
+   "entity": "תיק",
+   "field": "תאריך פתיחה",
+   "kind": "column",
+   "label": "תיק.תאריך פתיחה"
+  },
+  {
+   "needId": "days-since",
+   "entity": "תיק",
+   "field": "תאריך פתיחה",
+   "kind": "column",
+   "label": "תיק.תאריך פתיחה"
+  },
+  {
+   "needId": "sum",
+   "op": "סכום",
+   "entity": "תיק",
+   "field": "סכום",
+   "kind": "kpi",
+   "label": "סכום תיק.סכום"
+  }
+ ],
+ "proofs": [
+  {
+   "need": "norm-search",
+   "label": "נרמול טקסט לחיפוש (ניקוד, סופיות, גרשיים)",
+   "from": {
+    "shape": "text"
+   },
+   "examples": [
+    {
+     "args": [
+      "שָׁלוֹם"
+     ],
+     "want": "שלומ"
+    },
+    {
+     "args": [
+      "ABC"
+     ],
+     "want": "abc"
+    },
+    {
+     "args": [
+      null
+     ],
+     "want": ""
+    },
+    {
+     "args": [
+      " יוסף "
+     ],
+     "want": "יוספ"
+    },
+    {
+     "args": [
+      "כהן ז\"ל"
+     ],
+     "want": "כהנ זל"
+    }
+   ],
+   "tried": 569,
+   "failedBy": {
+    "זריקה": 356,
+    "פלט שונה": 199,
+    "אורך-קריאה": 13
+   },
+   "ms": 44,
+   "proven": [
+    {
+     "name": "norm-search",
+     "fn": "normSearch",
+     "n": 1,
+     "role": "מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות",
+     "tSource": "norm-search-strings"
+    }
+   ],
+   "chosen": "norm-search",
+   "usedBy": [
+    "לקוח.שם",
+    "לקוח.כתובת",
+    "תיק.לקוח",
+    "תיק.נושא"
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 252,
+     "לא מתקמפל בבידוד": 5,
+     "פלט שונה": 71,
+     "זריקה/טיפוס": 66
+    },
+    "note": ""
+   }
+  },
+  {
+   "need": "phone-format",
+   "label": "טלפון ⇒ תצוגה ישראלית עם מקף",
+   "from": {
+    "shape": "phone"
+   },
+   "examples": [
+    {
+     "args": [
+      "0501234567"
+     ],
+     "want": "050-1234567"
+    },
+    {
+     "args": [
+      "+972501234567"
+     ],
+     "want": "050-1234567"
+    },
+    {
+     "args": [
+      "031234567"
+     ],
+     "want": "03-1234567"
+    },
+    {
+     "args": [
+      "050-1234567"
+     ],
+     "want": "050-1234567"
+    },
+    {
+     "args": [
+      "אבג"
+     ],
+     "want": "אבג"
+    }
+   ],
+   "tried": 569,
+   "failedBy": {
+    "זריקה": 355,
+    "פלט שונה": 200,
+    "אורך-קריאה": 13
+   },
+   "ms": 16,
+   "proven": [
+    {
+     "name": "format-israeli-phone",
+     "fn": "formatIsraeliPhone",
+     "n": 1,
+     "role": "",
+     "tSource": "format-israeli-phone-strings"
+    }
+   ],
+   "chosen": "format-israeli-phone",
+   "usedBy": [
+    "לקוח.טלפון"
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 252,
+     "לא מתקמפל בבידוד": 5,
+     "פלט שונה": 67,
+     "זריקה/טיפוס": 70
+    },
+    "note": ""
+   }
+  },
+  {
+   "need": "money",
+   "label": "מספר ⇒ תצוגת-שקלים עם מפרידי-אלפים",
+   "from": {
+    "shape": "number"
+   },
+   "examples": [
+    {
+     "args": [
+      1234567
+     ],
+     "want": "₪1,234,567"
+    },
+    {
+     "args": [
+      0
+     ],
+     "want": "₪0"
+    },
+    {
+     "args": [
+      12
+     ],
+     "want": "₪12"
+    },
+    {
+     "args": [
+      999.6
+     ],
+     "want": "₪1,000"
+    }
+   ],
+   "tried": 569,
+   "failedBy": {
+    "זריקה": 396,
+    "פלט שונה": 159,
+    "אורך-קריאה": 13
+   },
+   "ms": 11,
+   "proven": [
+    {
+     "name": "shekel",
+     "fn": "shekel",
+     "n": 1,
+     "role": "",
+     "tSource": "shekel-strings"
+    }
+   ],
+   "chosen": "shekel",
+   "usedBy": [
+    "תיק.סכום"
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [
+     {
+      "name": "f_money",
+      "fn": "fMoney",
+      "file": "new/dart/f_money.dart",
+      "params": [
+       "num"
+      ],
+      "ret": "String"
+     }
+    ],
+    "failedBy": {
+     "אורך-קריאה": 252,
+     "לא מתקמפל בבידוד": 5,
+     "זריקה/טיפוס": 107,
+     "פלט שונה": 29
+    },
+    "note": ""
+   }
+  },
+  {
+   "need": "fmt-date",
+   "label": "תאריך-ISO ⇒ יום/חודש/שנה",
+   "from": {
+    "shape": "date"
+   },
+   "examples": [
+    {
+     "args": [
+      "2026-09-14"
+     ],
+     "want": "14/09/2026"
+    },
+    {
+     "args": [
+      "2026-01-05"
+     ],
+     "want": "05/01/2026"
+    },
+    {
+     "args": [
+      ""
+     ],
+     "want": "—"
+    },
+    {
+     "args": [
+      null
+     ],
+     "want": "—"
+    }
+   ],
+   "tried": 569,
+   "failedBy": {
+    "זריקה": 360,
+    "פלט שונה": 195,
+    "אורך-קריאה": 13
+   },
+   "ms": 11,
+   "proven": [
+    {
+     "name": "fmt-date",
+     "fn": "fmtDate",
+     "n": 1,
+     "role": "תאריך-ISO ⇒ תצוגה ישראלית dd/mm/yyyy. ריק/שבור ⇒ \"—\".",
+     "tSource": "fmt-date-strings"
+    }
+   ],
+   "chosen": "fmt-date",
+   "usedBy": [
+    "תיק.תאריך פתיחה"
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 252,
+     "לא מתקמפל בבידוד": 5,
+     "פלט שונה": 71,
+     "זריקה/טיפוס": 66
+    },
+    "note": ""
+   }
+  },
+  {
+   "need": "days-since",
+   "label": "ימים שעברו מתאריך עד היום (שלילי = עתיד)",
+   "from": {
+    "shape": "date"
+   },
+   "examples": [
+    {
+     "args": [
+      "2026-09-01",
+      "2026-09-14"
+     ],
+     "want": 13
+    },
+    {
+     "args": [
+      "2026-09-14",
+      "2026-09-14"
+     ],
+     "want": 0
+    },
+    {
+     "args": [
+      "2026-09-15",
+      "2026-09-14"
+     ],
+     "want": -1
+    },
+    {
+     "args": [
+      "2025-09-14",
+      "2026-09-14"
+     ],
+     "want": 365
+    },
+    {
+     "args": [
+      "2024-02-28",
+      "2024-03-01"
+     ],
+     "want": 2
+    }
+   ],
+   "tried": 569,
+   "failedBy": {
+    "זריקה": 295,
+    "אורך-קריאה": 158,
+    "פלט שונה": 114
+   },
+   "ms": 12,
+   "proven": [
+    {
+     "name": "cockpit-days-since",
+     "fn": "cockpitDaysSince",
+     "n": 2,
+     "role": "ימים בין תאריך-ISO ליום-הייחוס (חיובי = בעבר, שלילי = עתיד). `Infinity` לתאריך ריק או לא-תקין.",
+     "tSource": "cockpit-days-since-strings"
+    },
+    {
+     "name": "intel-day-diff",
+     "fn": "dayDiff",
+     "n": 2,
+     "role": "הפרש-ימים (Date.parse, slice(0,10)). Infinity לריק/לא-תקין.",
+     "tSource": "intel-day-diff-strings"
+    }
+   ],
+   "chosen": "cockpit-days-since",
+   "usedBy": [
+    "תיק.תאריך פתיחה"
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 275,
+     "זריקה/טיפוס": 111,
+     "פלט שונה": 8
+    },
+    "note": ""
+   }
+  },
+  {
+   "need": "sum",
+   "label": "סכום שדה-מספר על כל השורות",
+   "from": {
+    "dashboard": "סכום"
+   },
+   "examples": [
+    {
+     "args": [
+      [
+       {
+        "a": 1
+       },
+       {
+        "a": 2
+       }
+      ],
+      {
+       "$fn": "x=>x.a"
+      }
+     ],
+     "want": 3
+    },
+    {
+     "args": [
+      [],
+      {
+       "$fn": "x=>x.a"
+      }
+     ],
+     "want": 0
+    },
+    {
+     "args": [
+      [
+       {
+        "a": 5
+       }
+      ],
+      {
+       "$fn": "x=>x.a"
+      }
+     ],
+     "want": 5
+    },
+    {
+     "args": [
+      [
+       {
+        "a": 1.5
+       },
+       {
+        "a": 2.5
+       },
+       {
+        "a": 0
+       }
+      ],
+      {
+       "$fn": "x=>x.a"
+      }
+     ],
+     "want": 4
+    }
+   ],
+   "tried": 569,
+   "failedBy": {
+    "זריקה": 276,
+    "אורך-קריאה": 158,
+    "פלט שונה": 134
+   },
+   "ms": 10,
+   "proven": [
+    {
+     "name": "grand-total",
+     "fn": "grandTotal",
+     "n": 2,
+     "role": "הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע.",
+     "tSource": null
+    }
+   ],
+   "chosen": "grand-total",
+   "usedBy": [
+    "סכום תיק.סכום"
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 275,
+     "זריקה/טיפוס": 118,
+     "פלט שונה": 1
+    },
+    "note": ""
+   }
+  }
+ ],
+ "atoms": [
+  {
+   "name": "norm-search",
+   "fn": "normSearch",
+   "n": 1,
+   "hasT": true,
+   "role": "מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות",
+   "file": "new/atoms/norm-search.mjs"
+  },
+  {
+   "name": "format-israeli-phone",
+   "fn": "formatIsraeliPhone",
+   "n": 1,
+   "hasT": true,
+   "role": "",
+   "file": "new/atoms/format-israeli-phone.mjs"
+  },
+  {
+   "name": "shekel",
+   "fn": "shekel",
+   "n": 1,
+   "hasT": true,
+   "role": "",
+   "file": "new/atoms/shekel.mjs"
+  },
+  {
+   "name": "fmt-date",
+   "fn": "fmtDate",
+   "n": 1,
+   "hasT": true,
+   "role": "תאריך-ISO ⇒ תצוגה ישראלית dd/mm/yyyy. ריק/שבור ⇒ \"—\".",
+   "file": "new/atoms/fmt-date.mjs"
+  },
+  {
+   "name": "cockpit-days-since",
+   "fn": "cockpitDaysSince",
+   "n": 2,
+   "hasT": true,
+   "role": "ימים בין תאריך-ISO ליום-הייחוס (חיובי = בעבר, שלילי = עתיד). `Infinity` לתאריך ריק או לא-תקין.",
+   "file": "new/atoms/cockpit-days-since.mjs"
+  },
+  {
+   "name": "grand-total",
+   "fn": "grandTotal",
+   "n": 2,
+   "hasT": false,
+   "role": "הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע.",
+   "file": "new/atoms/grand-total.mjs"
+  }
+ ],
+ "unproven": [],
+ "inventory": {
+  "rows": [
+   {
+    "layer": "JS · פונקציות טהורות (new/atoms)",
+    "count": 569,
+    "connected": "הוכחה-בריצה בדפדפן ובמסוף; מוטבעות באפליקציה",
+    "state": "on"
+   },
+   {
+    "layer": "JS · אטומי-דאטה/קבועים (-strings · -data)",
+    "count": 527,
+    "connected": "292 מהם הם הקבועים (T) של הפונקציות — נטענים מהם ישירות",
+    "state": "on"
+   },
+   {
+    "layer": "JS · אסינכרוניים / ריבוי-ייצוא",
+    "count": 64,
+    "connected": "כתיבה ל-db/fs עם שקעים — לא רצים בלי חיבור; לא מחוברים",
+    "state": "off"
+   },
+   {
+    "layer": "Dart · לוגיקה שרק ב-Dart (new/dart · dart-boxes)",
+    "count": 394,
+    "connected": "הוכחה-בריצה ב-Dart במסוף (תוצאות ארוזות בסטודיו); לא ניתן להטביע ב-HTML",
+    "state": "on"
+   },
+   {
+    "layer": "Dart · תאומי ה-JS (dart-maor)",
+    "count": 569,
+    "connected": "אותם אטומים כמו ה-JS, מומרים — מחוברים דרך צורת ה-JS",
+    "state": "on"
+   },
+   {
+    "layer": "Dart · תצוגה (Flutter widgets)",
+    "count": 924,
+    "connected": "מסלול-Flutter: `--flutter` ⇒ מודולי-Dart דרך הדלת של המחצב (אטומים לפי צורה); `--site` ⇒ flutter build web ⇒ אתר רץ (site.mjs; דורש Flutter SDK + buildsmart)",
+    "state": "on"
+   }
+  ]
+ },
+ "meta": {
+  "slug": "tikim",
+  "built": "2026-09-14T20:05:00.205Z",
+  "ms": 9272,
+  "shelf": 1096,
+  "fns": 569,
+  "dart": 394
+ },
+ "flutter": {
+  "ok": true,
+  "specDs": "אפליקציה: תיקים\nישות לקוח עם שם*, טלפון, כתובת\nישות תיק עם לקוח*, נושא, סכום, תאריך פתיחה | שלבים: התקבל, בטיפול, סגור\nלוח בקרה עם סכום(תיק.סכום)",
+  "ns": "gentikim",
+  "files": [
+   "gen_app_gentikim_audit.dart",
+   "gen_app_gentikim_bind1.dart",
+   "gen_app_gentikim_bind2.dart",
+   "gen_app_gentikim_ent1.dart",
+   "gen_app_gentikim_ent2.dart",
+   "gen_app_gentikim_flags.dart",
+   "gen_app_gentikim_hub.dart",
+   "gen_app_gentikim_main.dart",
+   "gen_app_gentikim_over1.dart",
+   "gen_app_gentikim_rec1.dart",
+   "gen_app_gentikim_rec2.dart",
+   "gen_app_gentikim_root.dart",
+   "gen_app_gentikim_scr3.dart",
+   "gen_app_gentikim_settings.dart",
+   "gen_app_gentikim_shell.dart"
+  ],
+  "displayAtoms": [
+   "dart-data-bs/auto/gen_app_gentikim_audit_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_ent1_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_ent2_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_flags_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_hub_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_main_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_over1_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_rec1_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_rec2_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_root_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_scr3_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_settings_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_shell_content.dart",
+   "dart-screens-bs/ai_hub_screen.g.dart",
+   "dart-screens-bs/courier_certs_screen.g.dart",
+   "dart-ui-bs/auto/bar.dart",
+   "dart-ui-bs/auto/callout.dart",
+   "dart-ui-bs/ds/ds.dart",
+   "dart-ui-bs/ds/ds_bars.dart",
+   "dart-ui-bs/ds/ds_board.dart",
+   "dart-ui-bs/ds/ds_calendar.dart",
+   "dart-ui-bs/ds/ds_date_field.dart",
+   "dart-ui-bs/ds/ds_field.dart",
+   "dart-ui-bs/ds/ds_number_field.dart",
+   "dart-ui-bs/ds/ds_search.dart",
+   "dart-ui-bs/ds/ds_select.dart",
+   "dart-ui-bs/ds/ds_store.dart",
+   "dart-ui-bs/ds/ds_table.dart",
+   "dart-ui-bs/ds/ds_toggle_tile.dart",
+   "dart-ui-bs/premium/actions/segmented_switch.dart",
+   "dart-ui-bs/premium/dataviz/kpi_tile.dart",
+   "dart-ui-bs/premium/lists/expandable_tile.dart",
+   "dart-ui-bs/premium/showcase/premium_stat.dart",
+   "dart-ui-bs/premium/surfaces/stat_hero.dart"
+  ],
+  "moved": [
+   "machtzev/generator/apps/gentikim.json",
+   "machtzev/generator/particle-plan-gentikim.json"
+  ],
+  "treeClean": true,
+  "leftover": [],
+  "log": "✨ אפליקציה (מערכת-עיצוב) חוללה — 7 מסכים\n   2 ישויות · 1 דשבורדים · 3 מערכת · 1 לוח\n   הכל דרך render-ds הטהור (טיפוס נאחז מהאטומים · אפס regex).",
+  "err": "",
+  "compileNote": "קומפילציה לאתר: --site (site.mjs; Flutter SDK + buildsmart)"
+ },
+ "site": {
+  "ok": false,
+  "why": "flutter build web נכשל",
+  "err": "Error: Error when reading 'lib/genesis/dart-screens-bs/ai_hub_screen.g.dart': Error reading 'lib/genesis/dart-screens-bs/ai_hub_screen.g.dart'  (No such file or directory)\nError: Error when reading 'lib/genesis/dart-screens-bs/courier_certs_screen.g.dart': Error reading 'lib/genesis/dart-screens-bs/courier_certs_screen.g.dart'  (No such file or directory)\nError: Not a constant expression.\nError: The method 'AiFinTileItem' isn't defined for the type 'GenAppGentikimBind1Screen'.\nError: The method 'AiHubScreenComposed' isn't defined for the type 'GenAppGentikimBind1Screen'.\nError: Not a constant expression.\nError: The method 'PresetChipItem' isn't defined for the type 'GenAppGentikimBind2Screen'.\nError: The method 'CourierCertsScreenComposed' isn't defined for the type 'GenAppGentikimBind2Screen'."
+ }
+}

@@ -1,0 +1,359 @@
+<title>תיקים · המחולל</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+:root{--bg:#f4f3ee;--ink:#1b1a17;--mute:#6f6a5f;--line:#d7d2c6;--card:#fbfaf7;--acc:#1f5f5b;--ok:#2d7a3a;--none:#a33d1a;--code:#eeece5}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#141518;--ink:#ebe8e0;--mute:#a09b8f;--line:#2f3238;--card:#1c1e22;--acc:#62c2ba;--ok:#6fcf7c;--none:#f08a5b;--code:#101114}}
+:root[data-theme=dark]{--bg:#141518;--ink:#ebe8e0;--mute:#a09b8f;--line:#2f3238;--card:#1c1e22;--acc:#62c2ba;--ok:#6fcf7c;--none:#f08a5b;--code:#101114}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Heebo,Arial,sans-serif;direction:rtl;padding-block:20px;padding-inline:20px}
+code,pre{font-family:"JetBrains Mono",Consolas,monospace;font-size:12.5px}code{background:var(--code);padding:1px 5px;border-radius:3px}pre{background:var(--code);padding:10px;border-radius:5px;overflow-x:auto;direction:ltr;text-align:left;max-height:340px}
+h1{font-size:26px;margin:0}h2{font-size:18px;margin:0 0 10px;display:flex;gap:10px;align-items:baseline}h2 .n{font-size:13px;color:var(--mute);font-weight:400}h4,h5{margin:6px 0}
+.wrap{max-width:1180px;margin:0 auto}.head{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:baseline;justify-content:space-between;margin-bottom:18px}.head .mute{font-size:13px}
+.mute{color:var(--mute)}.step{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:12px 0}
+table{border-collapse:collapse}td,th{padding:4px 8px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}th{color:var(--mute);font-weight:500;font-size:13px}
+.ents{display:flex;flex-wrap:wrap;gap:16px}.ent{min-width:260px}
+details.proof{border-top:1px solid var(--line);padding:8px 0}details.proof summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--ok);flex:none;position:relative;top:1px}details.none .dot,.dot.off{background:var(--none)}td.num{font-variant-numeric:tabular-nums;text-align:left}
+.tally{margin-inline-start:auto;font-size:13px;color:var(--mute)}.ex{padding:6px 18px 4px}.pill{display:inline-block;background:var(--code);border-radius:99px;padding:0 9px;font-size:12.5px;margin:2px}
+.frame{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}iframe{width:100%;height:720px;border:0;display:block}
+.spec pre{direction:rtl;text-align:right;font-family:Heebo,Arial,sans-serif;font-size:14px}
+.notes{margin:8px 0;padding-inline-start:18px;color:var(--none)}.notes li{margin:2px 0}
+.stat{display:flex;flex-wrap:wrap;gap:12px}.stat div{background:var(--code);border-radius:6px;padding:8px 14px}.stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+@media (max-width:600px){iframe{height:560px}}
+</style>
+<div class="wrap">
+<div class="head"><div><h1>תיקים</h1><div class="mute">המחולל הטהור · ספק ⇒ צרכים מצורה ⇒ הוכחה-בריצה מול המדף ⇒ הרכבה · אפס מודל</div></div>
+<div class="stat"><div><b>1096</b>אטומי-JS במדף</div><div><b>394</b>אטומי-Dart-בלבד</div><div><b>3414</b>ריצות-הוכחה</div><div><b>6</b>אטומים הורכבו</div><div><b>0</b>צרכים בלי הוכחה</div><div><b>9272</b>ms</div></div></div>
+
+<section class="step spec"><h2>1 · המשפט שלך <span class="n">כמו שנכתב</span></h2><pre>מעקב תיקים: לכל לקוח יש שם, טלפון וכתובת; לכל תיק יש לקוח, נושא, סכום ותאריך פתיחה; שלבים: התקבל, בטיפול, סגור</pre></section>
+<section class="step spec"><h2>1½ · הבנתי כך <span class="n">מבנה בלבד — רבים=ישות, יחיד=שדה, סמן «יש/עם», רמזי-צורה מדאטה. אם טעיתי — תקן את הספק המדויק</span></h2><pre>אפליקציה: תיקים
+ישות לקוח עם שם*, טלפון[טלפון], כתובת
+ישות תיק עם לקוח*, נושא, סכום(0..1000000), תאריך פתיחה[תאריך] | שלבים: התקבל, בטיפול, סגור
+לוח בקרה עם סכום(תיק.סכום)</pre>
+<p class="mute">בלי הנחות — כל ישות קיבלה את השדות שנאמרו.</p>
+<div class="bar"><button class="ghost" data-copy-spec="אפליקציה: תיקים
+ישות לקוח עם שם*, טלפון[טלפון], כתובת
+ישות תיק עם לקוח*, נושא, סכום(0..1000000), תאריך פתיחה[תאריך] | שלבים: התקבל, בטיפול, סגור
+לוח בקרה עם סכום(תיק.סכום)">פתח את הספק המדויק לעריכה</button></div>
+<div class="ents"><div class="ent"><h4>לקוח</h4><table><tr><th>שדה</th><th>צורה</th><th>חובה</th></tr><tr><td>שם</td><td><code>טקסט</code></td><td>כן</td></tr><tr><td>טלפון</td><td><code>טלפון</code></td><td></td></tr><tr><td>כתובת</td><td><code>טקסט</code></td><td></td></tr></table></div><div class="ent"><h4>תיק</h4><table><tr><th>שדה</th><th>צורה</th><th>חובה</th></tr><tr><td>לקוח</td><td><code>קשר ⇒ לקוח</code></td><td>כן</td></tr><tr><td>נושא</td><td><code>טקסט</code></td><td></td></tr><tr><td>סכום</td><td><code>מספר 0..1000000</code></td><td></td></tr><tr><td>תאריך פתיחה</td><td><code>תאריך</code></td><td></td></tr><tr><td>שלבים</td><td colspan="2"><code>התקבל → בטיפול → סגור</code></td></tr></table></div></div></section>
+
+<section class="step"><h2>המלאי המלא <span class="n">כל שכבה בריפו, מה מחובר ואיך — ספירה, לא הערכה</span></h2>
+<table><tr><th></th><th>שכבה</th><th>כמות</th><th>חיבור</th></tr><tr><td><span class="dot"></span></td><td>JS · פונקציות טהורות (new/atoms)</td><td class="num">569</td><td>הוכחה-בריצה בדפדפן ובמסוף; מוטבעות באפליקציה</td></tr><tr><td><span class="dot"></span></td><td>JS · אטומי-דאטה/קבועים (-strings · -data)</td><td class="num">527</td><td>292 מהם הם הקבועים (T) של הפונקציות — נטענים מהם ישירות</td></tr><tr><td><span class="dot off"></span></td><td>JS · אסינכרוניים / ריבוי-ייצוא</td><td class="num">64</td><td>כתיבה ל-db/fs עם שקעים — לא רצים בלי חיבור; לא מחוברים</td></tr><tr><td><span class="dot"></span></td><td>Dart · לוגיקה שרק ב-Dart (new/dart · dart-boxes)</td><td class="num">394</td><td>הוכחה-בריצה ב-Dart במסוף (תוצאות ארוזות בסטודיו); לא ניתן להטביע ב-HTML</td></tr><tr><td><span class="dot"></span></td><td>Dart · תאומי ה-JS (dart-maor)</td><td class="num">569</td><td>אותם אטומים כמו ה-JS, מומרים — מחוברים דרך צורת ה-JS</td></tr><tr><td><span class="dot"></span></td><td>Dart · תצוגה (Flutter widgets)</td><td class="num">924</td><td>מסלול-Flutter: `--flutter` ⇒ מודולי-Dart דרך הדלת של המחצב (אטומים לפי צורה); `--site` ⇒ flutter build web ⇒ אתר רץ (site.mjs; דורש Flutter SDK + buildsmart)</td></tr></table></section>
+<section class="step"><h2>2 · צרכים שנגזרו מצורת-השדות <span class="n">אין מילון: מספר ⇒ תצוגת-כסף וסכימה · תאריך ⇒ תצוגה וימים · טלפון ⇒ עיצוב · טקסט ⇒ חיפוש · ערך-מנוי ⇒ ספירה</span></h2>
+<table><tr><th>מקור בספק</th><th>שימוש</th><th>צורך</th><th>אטום שנבחר</th></tr><tr><td>לקוח.שם</td><td>חיפוש</td><td><code>norm-search</code></td><td><code>norm-search</code></td></tr><tr><td>לקוח.טלפון</td><td>עמודה</td><td><code>phone-format</code></td><td><code>format-israeli-phone</code></td></tr><tr><td>לקוח.כתובת</td><td>חיפוש</td><td><code>norm-search</code></td><td><code>norm-search</code></td></tr><tr><td>תיק.לקוח</td><td>חיפוש</td><td><code>norm-search</code></td><td><code>norm-search</code></td></tr><tr><td>תיק.נושא</td><td>חיפוש</td><td><code>norm-search</code></td><td><code>norm-search</code></td></tr><tr><td>תיק.סכום</td><td>עמודה</td><td><code>money</code></td><td><code>shekel</code></td></tr><tr><td>תיק.תאריך פתיחה</td><td>עמודה</td><td><code>fmt-date</code></td><td><code>fmt-date</code></td></tr><tr><td>תיק.תאריך פתיחה</td><td>עמודה</td><td><code>days-since</code></td><td><code>cockpit-days-since</code></td></tr><tr><td>סכום תיק.סכום</td><td>מדד</td><td><code>sum</code></td><td><code>grand-total</code></td></tr></table></section>
+
+<section class="step"><h2>3 · הוכחה-בריצה <span class="n">כל צורך הורץ מול כל 569 אטומי-הפונקציה במדף (527 הנותרים הם קבועים); עובר רק מי שהחזיר בדיוק את הפלט בכל הדוגמאות</span></h2><details class="proof ok" >
+<summary><span class="dot"></span><b>norm-search</b> — נרמול טקסט לחיפוש (ניקוד, סופיות, גרשיים) <span class="mute">⇐ לקוח.שם · לקוח.כתובת · תיק.לקוח · תיק.נושא</span>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>norm-search</code> · Dart-בלבד: נוסו 394 · עברו 0 · 44ms</span></summary>
+<div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;שָׁלוֹם&quot;]</code></td><td>⇒</td><td><code>&quot;שלומ&quot;</code></td></tr><tr><td><code>[&quot;ABC&quot;]</code></td><td>⇒</td><td><code>&quot;abc&quot;</code></td></tr><tr><td><code>[null]</code></td><td>⇒</td><td><code>&quot;&quot;</code></td></tr><tr><td><code>[&quot; יוסף &quot;]</code></td><td>⇒</td><td><code>&quot;יוספ&quot;</code></td></tr><tr><td><code>[&quot;כהן ז\&quot;ל&quot;]</code></td><td>⇒</td><td><code>&quot;כהנ זל&quot;</code></td></tr></table></div>
+<div class="ex"><h5>מי עבר</h5><ol><li><code>norm-search</code> <span class="mute">(1 ארג׳) מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות · קבועים מאטום-הדאטה <code>norm-search-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
+<div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 356</span> <span class="pill">פלט שונה 199</span> <span class="pill">אורך-קריאה 13</span></p></div>
+<div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 252</span> <span class="pill">לא מתקמפל בבידוד 5</span> <span class="pill">פלט שונה 71</span> <span class="pill">זריקה/טיפוס 66</span></p></div>
+</details><details class="proof ok" >
+<summary><span class="dot"></span><b>phone-format</b> — טלפון ⇒ תצוגה ישראלית עם מקף <span class="mute">⇐ לקוח.טלפון</span>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>format-israeli-phone</code> · Dart-בלבד: נוסו 394 · עברו 0 · 16ms</span></summary>
+<div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;0501234567&quot;]</code></td><td>⇒</td><td><code>&quot;050-1234567&quot;</code></td></tr><tr><td><code>[&quot;+972501234567&quot;]</code></td><td>⇒</td><td><code>&quot;050-1234567&quot;</code></td></tr><tr><td><code>[&quot;031234567&quot;]</code></td><td>⇒</td><td><code>&quot;03-1234567&quot;</code></td></tr><tr><td><code>[&quot;050-1234567&quot;]</code></td><td>⇒</td><td><code>&quot;050-1234567&quot;</code></td></tr><tr><td><code>[&quot;אבג&quot;]</code></td><td>⇒</td><td><code>&quot;אבג&quot;</code></td></tr></table></div>
+<div class="ex"><h5>מי עבר</h5><ol><li><code>format-israeli-phone</code> <span class="mute">(1 ארג׳)  · קבועים מאטום-הדאטה <code>format-israeli-phone-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
+<div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 355</span> <span class="pill">פלט שונה 200</span> <span class="pill">אורך-קריאה 13</span></p></div>
+<div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 252</span> <span class="pill">לא מתקמפל בבידוד 5</span> <span class="pill">פלט שונה 67</span> <span class="pill">זריקה/טיפוס 70</span></p></div>
+</details><details class="proof ok" >
+<summary><span class="dot"></span><b>money</b> — מספר ⇒ תצוגת-שקלים עם מפרידי-אלפים <span class="mute">⇐ תיק.סכום</span>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>shekel</code> · Dart-בלבד: נוסו 394 · עברו 1 · 11ms</span></summary>
+<div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[1234567]</code></td><td>⇒</td><td><code>&quot;₪1,234,567&quot;</code></td></tr><tr><td><code>[0]</code></td><td>⇒</td><td><code>&quot;₪0&quot;</code></td></tr><tr><td><code>[12]</code></td><td>⇒</td><td><code>&quot;₪12&quot;</code></td></tr><tr><td><code>[999.6]</code></td><td>⇒</td><td><code>&quot;₪1,000&quot;</code></td></tr></table></div>
+<div class="ex"><h5>מי עבר</h5><ol><li><code>shekel</code> <span class="mute">(1 ארג׳)  · קבועים מאטום-הדאטה <code>shekel-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
+<div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 396</span> <span class="pill">פלט שונה 159</span> <span class="pill">אורך-קריאה 13</span></p></div>
+<div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><ol><li><code>f_money</code> <span class="mute">num ⇒ String · new/dart/f_money.dart</span></li></ol><p class="mute">עבר את ההוכחה. לא ניתן להטביע ב-HTML (זה Dart) — זמין למסלול-Flutter.</p><p><span class="pill">אורך-קריאה 252</span> <span class="pill">לא מתקמפל בבידוד 5</span> <span class="pill">זריקה/טיפוס 107</span> <span class="pill">פלט שונה 29</span></p></div>
+</details><details class="proof ok" >
+<summary><span class="dot"></span><b>fmt-date</b> — תאריך-ISO ⇒ יום/חודש/שנה <span class="mute">⇐ תיק.תאריך פתיחה</span>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>fmt-date</code> · Dart-בלבד: נוסו 394 · עברו 0 · 11ms</span></summary>
+<div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>&quot;14/09/2026&quot;</code></td></tr><tr><td><code>[&quot;2026-01-05&quot;]</code></td><td>⇒</td><td><code>&quot;05/01/2026&quot;</code></td></tr><tr><td><code>[&quot;&quot;]</code></td><td>⇒</td><td><code>&quot;—&quot;</code></td></tr><tr><td><code>[null]</code></td><td>⇒</td><td><code>&quot;—&quot;</code></td></tr></table></div>
+<div class="ex"><h5>מי עבר</h5><ol><li><code>fmt-date</code> <span class="mute">(1 ארג׳) תאריך-ISO ⇒ תצוגה ישראלית dd/mm/yyyy. ריק/שבור ⇒ &quot;—&quot;. · קבועים מאטום-הדאטה <code>fmt-date-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
+<div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 360</span> <span class="pill">פלט שונה 195</span> <span class="pill">אורך-קריאה 13</span></p></div>
+<div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 252</span> <span class="pill">לא מתקמפל בבידוד 5</span> <span class="pill">פלט שונה 71</span> <span class="pill">זריקה/טיפוס 66</span></p></div>
+</details><details class="proof ok" >
+<summary><span class="dot"></span><b>days-since</b> — ימים שעברו מתאריך עד היום (שלילי = עתיד) <span class="mute">⇐ תיק.תאריך פתיחה</span>
+<span class="tally">JS: נוסו 569 · עברו 2 · נבחר <code>cockpit-days-since</code> · Dart-בלבד: נוסו 394 · עברו 0 · 12ms</span></summary>
+<div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;2026-09-01&quot;,&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>13</code></td></tr><tr><td><code>[&quot;2026-09-14&quot;,&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>0</code></td></tr><tr><td><code>[&quot;2026-09-15&quot;,&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>-1</code></td></tr><tr><td><code>[&quot;2025-09-14&quot;,&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>365</code></td></tr><tr><td><code>[&quot;2024-02-28&quot;,&quot;2024-03-01&quot;]</code></td><td>⇒</td><td><code>2</code></td></tr></table></div>
+<div class="ex"><h5>מי עבר</h5><ol><li><code>cockpit-days-since</code> <span class="mute">(2 ארג׳) ימים בין תאריך-ISO ליום-הייחוס (חיובי = בעבר, שלילי = עתיד). `Infinity` לתאריך ריק או לא-תקין. · קבועים מאטום-הדאטה <code>cockpit-days-since-strings</code></span></li><li><code>intel-day-diff</code> <span class="mute">(2 ארג׳) הפרש-ימים (Date.parse, slice(0,10)). Infinity לריק/לא-תקין. · קבועים מאטום-הדאטה <code>intel-day-diff-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
+<div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 295</span> <span class="pill">אורך-קריאה 158</span> <span class="pill">פלט שונה 114</span></p></div>
+<div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 275</span> <span class="pill">זריקה/טיפוס 111</span> <span class="pill">פלט שונה 8</span></p></div>
+</details><details class="proof ok" >
+<summary><span class="dot"></span><b>sum</b> — סכום שדה-מספר על כל השורות <span class="mute">⇐ סכום תיק.סכום</span>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>grand-total</code> · Dart-בלבד: נוסו 394 · עברו 0 · 10ms</span></summary>
+<div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[[{&quot;a&quot;:1},{&quot;a&quot;:2}],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>3</code></td></tr><tr><td><code>[[],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>0</code></td></tr><tr><td><code>[[{&quot;a&quot;:5}],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>5</code></td></tr><tr><td><code>[[{&quot;a&quot;:1.5},{&quot;a&quot;:2.5},{&quot;a&quot;:0}],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>4</code></td></tr></table></div>
+<div class="ex"><h5>מי עבר</h5><ol><li><code>grand-total</code> <span class="mute">(2 ארג׳) הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע.</span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
+<div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 276</span> <span class="pill">אורך-קריאה 158</span> <span class="pill">פלט שונה 134</span></p></div>
+<div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 275</span> <span class="pill">זריקה/טיפוס 118</span> <span class="pill">פלט שונה 1</span></p></div>
+</details></section>
+
+<section class="step"><h2>4 · האטומים שהוטבעו באפליקציה <span class="n">כלשונם מהמדף, אפס שינוי</span></h2><details><summary><code>norm-search</code> <span class="mute">מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות</span> <span class="mute">· new/atoms/norm-search.mjs</span></summary><pre>/** חוט · norm-search — נרמול-חיפוש עברי. חוזה: norm-search.contract.md
+ *  חולץ כלשונו מ-maor/src/lib/validate.ts */
+function normSearch(t, T) {
+  return String(t || '')
+    .toLowerCase()
+    .replace(/[֑-ׇ]/g, '')
+    .replace(/[ךםןףץ]/g, (ch) =&gt; ({ ך: T.k1, ם: T.k2, ן: T.k3, ף: T.k4, ץ: T.k5 })[ch])
+    .replace(/['&quot;׳״\-–._]/g, '')
+    .trim();
+}
+</pre></details><details><summary><code>format-israeli-phone</code> <span class="mute"></span> <span class="mute">· new/atoms/format-israeli-phone.mjs</span></summary><pre>/** חוט · format-israeli-phone — קודם אוטומטית (אפיון-Golden). חוזה: format-israeli-phone.contract.md */
+function formatIsraeliPhone(raw, T) {
+    const s = String(raw || '').trim();
+    let d = s.replace(/\D/g, '');
+    // קידומת בינלאומית 972/00972 → 0 מקומי (מספרים מיובאים מגיעים כך)
+    if (d.startsWith('00972'))
+        d = '0' + d.slice(5);
+    else if (d.startsWith('972'))
+        d = '0' + d.slice(3);
+    if (!d)
+        return s;
+    if (d[0] === '0') {
+        if (d.length === T.k1)
+            return d.slice(0, 3) + '-' + d.slice(3);
+        if (d.length === 9)
+            return d.slice(0, 2) + '-' + d.slice(2);
+        return d;
+    }
+    if (d.length === 9)
+        return '0' + d.slice(0, 2) + '-' + d.slice(2);
+    if (d.length === 8)
+        return '0' + d[0] + '-' + d.slice(1);
+    return s;
+}
+/** נרמול טקסט לחיפוש עברי: מסיר ניקוד, אותיות סופיות → רגילות, גרשיים. */
+</pre></details><details><summary><code>shekel</code> <span class="mute"></span> <span class="mute">· new/atoms/shekel.mjs</span></summary><pre>/** חוט · shekel — קודם אוטומטית (אפיון-Golden). חוזה: shekel.contract.md */
+function shekel(n, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const PRICES_LS_KEY = T.k1;
+
+    return '₪' + Math.round(n).toLocaleString('he-IL');
+}
+/** קריאת טבלת-המחירים השמורה (מכשיר-המטמיע), או ברירת-המחדל. */
+</pre></details><details><summary><code>fmt-date</code> <span class="mute">תאריך-ISO ⇒ תצוגה ישראלית dd/mm/yyyy. ריק/שבור ⇒ &quot;—&quot;.</span> <span class="mute">· new/atoms/fmt-date.mjs</span></summary><pre>/** חוט · fmt-date — תאריך-ISO לתצוגה. חוזה: fmt-date.contract.md
+ *  חולץ כלשונו (היה זהה ב-4 מודולים של maor — אוחד לעותק-יחיד). */
+function fmtDate(iso, T) {
+  if (!iso) return '—';
+  const [y, m, d] = iso.slice(0, T.k1).split('-');
+  if (!y || !m || !d) return '—';
+  return `${d}/${m}/${y}`;
+}
+</pre></details><details><summary><code>cockpit-days-since</code> <span class="mute">ימים בין תאריך-ISO ליום-הייחוס (חיובי = בעבר, שלילי = עתיד). `Infinity` לתאריך ריק או לא-תקין.</span> <span class="mute">· new/atoms/cockpit-days-since.mjs</span></summary><pre>/** חוט · cockpit-days-since — קודם אוטומטית (אפיון-Golden). חוזה: cockpit-days-since.contract.md
+ * מוצא: maor-system/src/components/supporters/cockpit.ts:42 (daysSince) + MS_DAY:39 (הוטבע inline).
+ * ימים בין תאריך-ISO ליום (חיובי = בעבר). Infinity לתאריך ריק/לא-תקין. חוק-4: verbatim מהמקור.
+ */
+function cockpitDaysSince(iso, todayIso, T) {
+  const MS_DAY = T.k1;
+  if (!iso) return Infinity;
+  const t = new Date(iso + 'T12:00:00').getTime();
+  const now = new Date(todayIso + 'T12:00:00').getTime();
+  if (Number.isNaN(t) || Number.isNaN(now)) return Infinity;
+  return Math.floor((now - t) / MS_DAY);
+}
+</pre></details><details><summary><code>grand-total</code> <span class="mute">הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע.</span> <span class="mute">· new/atoms/grand-total.mjs</span></summary><pre>/** חוט · grand-total — הסכום הכולל של כל הקופות. חוזה: grand-total.contract.md
+ *  חולץ כלשונו מ-maor/src/components/tzedaka/lib.ts:64-66; השכן boxTotal
+ *  הוזרק כשקע (חוק-1 — אפס import פנימי). */
+function grandTotal(boxes, boxTotal) {
+    return boxes.reduce((a, b) =&gt; a + boxTotal(b), 0);
+}
+</pre></details></section>
+
+<section class="step"><h2>4½ · מסלול-Flutter — אטומי-התצוגה <span class="n">אותו ספק דרך הדלת של המחצב (app-ds) ⇒ מודולי-Dart</span></h2>
+<p>15 קבצי-Dart · <b>34</b> אטומי-תצוגה מחווטים · עץ-המחצב נשאר נקי</p><p><code>dart-data-bs/auto/gen_app_gentikim_audit_content.dart</code> <code>dart-data-bs/auto/gen_app_gentikim_ent1_content.dart</code> <code>dart-data-bs/auto/gen_app_gentikim_ent2_content.dart</code> <code>dart-data-bs/auto/gen_app_gentikim_flags_content.dart</code> <code>dart-data-bs/auto/gen_app_gentikim_hub_content.dart</code> <code>dart-data-bs/auto/gen_app_gentikim_main_content.dart</code> <code>dart-data-bs/auto/gen_app_gentikim_over1_content.dart</code> <code>dart-data-bs/auto/gen_app_gentikim_rec1_content.dart</code> <code>dart-data-bs/auto/gen_app_gentikim_rec2_content.dart</code> <code>dart-data-bs/auto/gen_app_gentikim_root_content.dart</code> <code>dart-data-bs/auto/gen_app_gentikim_scr3_content.dart</code> <code>dart-data-bs/auto/gen_app_gentikim_settings_content.dart</code> <code>dart-data-bs/auto/gen_app_gentikim_shell_content.dart</code> <code>dart-screens-bs/ai_hub_screen.g.dart</code> <code>dart-screens-bs/courier_certs_screen.g.dart</code> <code>dart-ui-bs/auto/bar.dart</code> <code>dart-ui-bs/auto/callout.dart</code> <code>dart-ui-bs/ds/ds.dart</code> <code>dart-ui-bs/ds/ds_bars.dart</code> <code>dart-ui-bs/ds/ds_board.dart</code> <code>dart-ui-bs/ds/ds_calendar.dart</code> <code>dart-ui-bs/ds/ds_date_field.dart</code> <code>dart-ui-bs/ds/ds_field.dart</code> <code>dart-ui-bs/ds/ds_number_field.dart</code> <code>dart-ui-bs/ds/ds_search.dart</code> <code>dart-ui-bs/ds/ds_select.dart</code> <code>dart-ui-bs/ds/ds_store.dart</code> <code>dart-ui-bs/ds/ds_table.dart</code> <code>dart-ui-bs/ds/ds_toggle_tile.dart</code> <code>dart-ui-bs/premium/actions/segmented_switch.dart</code> <code>dart-ui-bs/premium/dataviz/kpi_tile.dart</code> <code>dart-ui-bs/premium/lists/expandable_tile.dart</code> <code>dart-ui-bs/premium/showcase/premium_stat.dart</code> <code>dart-ui-bs/premium/surfaces/stat_hero.dart</code></p><p class="mute">קומפילציה לאתר: --site (site.mjs; Flutter SDK + buildsmart)</p></section>
+<section class="step"><h2>5 · האפליקציה <span class="n">רצה כאן; הנתונים נשמרים בדפדפן שלך</span></h2>
+<div class="frame"><iframe title="תיקים" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;he&quot; dir=&quot;rtl&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;תיקים&lt;/title&gt;
+&lt;style&gt;
+:root{--bg:#f7f6f2;--ink:#1d1c19;--mute:#6b675e;--line:#d9d5cb;--card:#ffffff;--acc:#1f5f5b;--acc-ink:#ffffff;--warn:#8a3b12}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}}
+:root[data-theme=dark]{--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Heebo,Arial,sans-serif;padding-block:16px;padding-inline:16px}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:0 0 8px}h2 small{color:var(--mute);font-weight:400}
+.top{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
+.kpi{background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:6px}.kpi .v{display:block;font-size:22px;font-variant-numeric:tabular-nums;font-weight:600}.kpi .l{color:var(--mute);font-size:13px}
+.kpi.none .v{color:var(--warn);font-size:14px}
+.entity{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px;margin:12px 0}
+form.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:10px}label{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;min-width:120px}
+button{font:inherit;background:var(--acc);color:var(--acc-ink);border:0;border-radius:4px;padding:7px 14px;cursor:pointer}button.x{background:transparent;color:var(--mute);padding:2px 6px}
+.tbl{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--mute);font-weight:500;font-size:13px}
+td.num{font-variant-numeric:tabular-nums}.search{min-width:220px}
+.foot{color:var(--mute);font-size:12px;margin-top:16px}
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
+&lt;div class=&quot;top&quot;&gt;&lt;div&gt;&lt;h1&gt;תיקים&lt;/h1&gt;&lt;div class=&quot;foot&quot; style=&quot;margin:0&quot;&gt;נבנה על-ידי המחולל · 6 אטומים מוכחים · הנתונים נשמרים בדפדפן זה&lt;/div&gt;&lt;/div&gt;
+&lt;input class=&quot;search&quot; id=&quot;q&quot; type=&quot;search&quot; placeholder=&quot;חיפוש בכל השדות…&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;kpis&quot;&gt;&lt;div class=&quot;kpi&quot; id=&quot;kpi0&quot;&gt;&lt;span class=&quot;v&quot;&gt;—&lt;/span&gt;&lt;span class=&quot;l&quot;&gt;סכום תיק.סכום&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;section class=&quot;entity&quot; data-entity=&quot;e0&quot;&gt;
+  &lt;h2&gt;לקוח &lt;small id=&quot;e0_n&quot;&gt;&lt;/small&gt;&lt;/h2&gt;
+  &lt;form id=&quot;e0_form&quot; class=&quot;row&quot;&gt;&lt;label&gt;שם &lt;b&gt;*&lt;/b&gt;&lt;input id=&quot;e0_f0&quot; type=&quot;text&quot; required&gt;&lt;/label&gt;&lt;label&gt;טלפון&lt;input id=&quot;e0_f1&quot; type=&quot;tel&quot; inputmode=&quot;tel&quot; &gt;&lt;/label&gt;&lt;label&gt;כתובת&lt;input id=&quot;e0_f2&quot; type=&quot;text&quot; &gt;&lt;/label&gt;&lt;button type=&quot;submit&quot;&gt;הוסף לקוח&lt;/button&gt;&lt;/form&gt;
+  &lt;div class=&quot;tbl&quot;&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;שם&lt;/th&gt;&lt;th&gt;טלפון&lt;/th&gt;&lt;th&gt;כתובת&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;e0_body&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;entity&quot; data-entity=&quot;e1&quot;&gt;
+  &lt;h2&gt;תיק &lt;small id=&quot;e1_n&quot;&gt;&lt;/small&gt;&lt;/h2&gt;
+  &lt;form id=&quot;e1_form&quot; class=&quot;row&quot;&gt;&lt;label&gt;לקוח &lt;b&gt;*&lt;/b&gt;&lt;select id=&quot;e1_f0&quot; data-ref=&quot;0&quot; required&gt;&lt;option value=&quot;&quot;&gt;—&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label&gt;נושא&lt;input id=&quot;e1_f1&quot; type=&quot;text&quot; &gt;&lt;/label&gt;&lt;label&gt;סכום&lt;input id=&quot;e1_f2&quot; type=&quot;number&quot; min=&quot;0&quot; max=&quot;1000000&quot; step=&quot;any&quot; &gt;&lt;/label&gt;&lt;label&gt;תאריך פתיחה&lt;input id=&quot;e1_f3&quot; type=&quot;date&quot; &gt;&lt;/label&gt;&lt;button type=&quot;submit&quot;&gt;הוסף תיק&lt;/button&gt;&lt;/form&gt;
+  &lt;div class=&quot;tbl&quot;&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;לקוח&lt;/th&gt;&lt;th&gt;נושא&lt;/th&gt;&lt;th&gt;סכום&lt;/th&gt;&lt;th&gt;תאריך פתיחה&lt;/th&gt;&lt;th&gt;שלב&lt;/th&gt;&lt;th&gt;ימים&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;e1_body&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+&lt;/section&gt;
+&lt;div class=&quot;foot&quot;&gt;אטומים: norm-search · format-israeli-phone · shekel · fmt-date · cockpit-days-since · grand-total&lt;/div&gt;
+&lt;script&gt;
+// ── אטום norm-search (new/atoms/norm-search.mjs)
+/** חוט · norm-search — נרמול-חיפוש עברי. חוזה: norm-search.contract.md
+ *  חולץ כלשונו מ-maor/src/lib/validate.ts */
+function normSearch(t, T) {
+  return String(t || '')
+    .toLowerCase()
+    .replace(/[֑-ׇ]/g, '')
+    .replace(/[ךםןףץ]/g, (ch) =&gt; ({ ך: T.k1, ם: T.k2, ן: T.k3, ף: T.k4, ץ: T.k5 })[ch])
+    .replace(/['&quot;׳״\-–._]/g, '')
+    .trim();
+}
+const normSearch__T = {&quot;k1&quot;:&quot;כ&quot;,&quot;k2&quot;:&quot;מ&quot;,&quot;k3&quot;:&quot;נ&quot;,&quot;k4&quot;:&quot;פ&quot;,&quot;k5&quot;:&quot;צ&quot;};
+const normSearch__call = (...x) =&gt; normSearch(...x, ...Array(Math.max(0, 1 - x.length)).fill(undefined), normSearch__T);
+
+// ── אטום format-israeli-phone (new/atoms/format-israeli-phone.mjs)
+/** חוט · format-israeli-phone — קודם אוטומטית (אפיון-Golden). חוזה: format-israeli-phone.contract.md */
+function formatIsraeliPhone(raw, T) {
+    const s = String(raw || '').trim();
+    let d = s.replace(/\D/g, '');
+    // קידומת בינלאומית 972/00972 → 0 מקומי (מספרים מיובאים מגיעים כך)
+    if (d.startsWith('00972'))
+        d = '0' + d.slice(5);
+    else if (d.startsWith('972'))
+        d = '0' + d.slice(3);
+    if (!d)
+        return s;
+    if (d[0] === '0') {
+        if (d.length === T.k1)
+            return d.slice(0, 3) + '-' + d.slice(3);
+        if (d.length === 9)
+            return d.slice(0, 2) + '-' + d.slice(2);
+        return d;
+    }
+    if (d.length === 9)
+        return '0' + d.slice(0, 2) + '-' + d.slice(2);
+    if (d.length === 8)
+        return '0' + d[0] + '-' + d.slice(1);
+    return s;
+}
+/** נרמול טקסט לחיפוש עברי: מסיר ניקוד, אותיות סופיות → רגילות, גרשיים. */
+const formatIsraeliPhone__T = {&quot;k1&quot;:10};
+const formatIsraeliPhone__call = (...x) =&gt; formatIsraeliPhone(...x, ...Array(Math.max(0, 1 - x.length)).fill(undefined), formatIsraeliPhone__T);
+
+// ── אטום shekel (new/atoms/shekel.mjs)
+/** חוט · shekel — קודם אוטומטית (אפיון-Golden). חוזה: shekel.contract.md */
+function shekel(n, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const PRICES_LS_KEY = T.k1;
+
+    return '₪' + Math.round(n).toLocaleString('he-IL');
+}
+/** קריאת טבלת-המחירים השמורה (מכשיר-המטמיע), או ברירת-המחדל. */
+const shekel__T = {&quot;k1&quot;:&quot;maor_prices&quot;};
+const shekel__call = (...x) =&gt; shekel(...x, ...Array(Math.max(0, 1 - x.length)).fill(undefined), shekel__T);
+
+// ── אטום fmt-date (new/atoms/fmt-date.mjs)
+/** חוט · fmt-date — תאריך-ISO לתצוגה. חוזה: fmt-date.contract.md
+ *  חולץ כלשונו (היה זהה ב-4 מודולים של maor — אוחד לעותק-יחיד). */
+function fmtDate(iso, T) {
+  if (!iso) return '—';
+  const [y, m, d] = iso.slice(0, T.k1).split('-');
+  if (!y || !m || !d) return '—';
+  return `${d}/${m}/${y}`;
+}
+const fmtDate__T = {&quot;k1&quot;:10};
+const fmtDate__call = (...x) =&gt; fmtDate(...x, ...Array(Math.max(0, 1 - x.length)).fill(undefined), fmtDate__T);
+
+// ── אטום cockpit-days-since (new/atoms/cockpit-days-since.mjs)
+/** חוט · cockpit-days-since — קודם אוטומטית (אפיון-Golden). חוזה: cockpit-days-since.contract.md
+ * מוצא: maor-system/src/components/supporters/cockpit.ts:42 (daysSince) + MS_DAY:39 (הוטבע inline).
+ * ימים בין תאריך-ISO ליום (חיובי = בעבר). Infinity לתאריך ריק/לא-תקין. חוק-4: verbatim מהמקור.
+ */
+function cockpitDaysSince(iso, todayIso, T) {
+  const MS_DAY = T.k1;
+  if (!iso) return Infinity;
+  const t = new Date(iso + 'T12:00:00').getTime();
+  const now = new Date(todayIso + 'T12:00:00').getTime();
+  if (Number.isNaN(t) || Number.isNaN(now)) return Infinity;
+  return Math.floor((now - t) / MS_DAY);
+}
+const cockpitDaysSince__T = {&quot;k1&quot;:86400000};
+const cockpitDaysSince__call = (...x) =&gt; cockpitDaysSince(...x, ...Array(Math.max(0, 2 - x.length)).fill(undefined), cockpitDaysSince__T);
+
+// ── אטום grand-total (new/atoms/grand-total.mjs)
+/** חוט · grand-total — הסכום הכולל של כל הקופות. חוזה: grand-total.contract.md
+ *  חולץ כלשונו מ-maor/src/components/tzedaka/lib.ts:64-66; השכן boxTotal
+ *  הוזרק כשקע (חוק-1 — אפס import פנימי). */
+function grandTotal(boxes, boxTotal) {
+    return boxes.reduce((a, b) =&gt; a + boxTotal(b), 0);
+}
+const grandTotal__call = (...x) =&gt; grandTotal(...x);
+
+// ── דבק מבני (מחולל): סכמה, אחסון, טופס, טבלה, מדדים
+const SCHEMA = [{&quot;name&quot;:&quot;לקוח&quot;,&quot;stages&quot;:[],&quot;fields&quot;:[{&quot;name&quot;:&quot;שם&quot;,&quot;shape&quot;:&quot;text&quot;,&quot;required&quot;:true,&quot;ref&quot;:-1},{&quot;name&quot;:&quot;טלפון&quot;,&quot;shape&quot;:&quot;phone&quot;,&quot;required&quot;:false,&quot;ref&quot;:-1},{&quot;name&quot;:&quot;כתובת&quot;,&quot;shape&quot;:&quot;text&quot;,&quot;required&quot;:false,&quot;ref&quot;:-1}]},{&quot;name&quot;:&quot;תיק&quot;,&quot;stages&quot;:[&quot;התקבל&quot;,&quot;בטיפול&quot;,&quot;סגור&quot;],&quot;fields&quot;:[{&quot;name&quot;:&quot;לקוח&quot;,&quot;shape&quot;:&quot;text&quot;,&quot;required&quot;:true,&quot;ref&quot;:0},{&quot;name&quot;:&quot;נושא&quot;,&quot;shape&quot;:&quot;text&quot;,&quot;required&quot;:false,&quot;ref&quot;:-1},{&quot;name&quot;:&quot;סכום&quot;,&quot;shape&quot;:&quot;number&quot;,&quot;required&quot;:false,&quot;ref&quot;:-1},{&quot;name&quot;:&quot;תאריך פתיחה&quot;,&quot;shape&quot;:&quot;date&quot;,&quot;required&quot;:false,&quot;ref&quot;:-1}]}];
+const KPIS = [{&quot;op&quot;:&quot;סכום&quot;,&quot;need&quot;:&quot;sum&quot;,&quot;entity&quot;:1,&quot;field&quot;:2,&quot;call&quot;:&quot;grandTotal__call&quot;}];
+const KEY = &quot;gen:tikim&quot;;
+const FN = {normSearch__call, formatIsraeliPhone__call, shekel__call, fmtDate__call, cockpitDaysSince__call, grandTotal__call};
+const CALL = { money: shekel__call, fmtDate: fmtDate__call, daysSince: cockpitDaysSince__call, phone: formatIsraeliPhone__call, norm: normSearch__call, sum: grandTotal__call, countBy: null };
+const today = () =&gt; new Date().toISOString().slice(0, 10);
+let DATA; try { DATA = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { DATA = null; }
+if (!DATA) DATA = SCHEMA.map(() =&gt; []);
+const save = () =&gt; { try { localStorage.setItem(KEY, JSON.stringify(DATA)); } catch {} };
+const el = (id) =&gt; document.getElementById(id);
+const esc = (s) =&gt; String(s ?? '').replace(/[&amp;&lt;&gt;&quot;]/g, (c) =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '&quot;': '&amp;quot;' }[c]));
+function show(f, v) {
+  if (v === '' || v == null) return '';
+  if (f.shape === 'number' &amp;&amp; CALL.money) return CALL.money(Number(v));
+  if (f.shape === 'date' &amp;&amp; CALL.fmtDate) return CALL.fmtDate(v);
+  if (f.shape === 'phone' &amp;&amp; CALL.phone) return CALL.phone(v);
+  return esc(v);
+}
+function rowsOf(ei) {
+  const q = el('q') ? el('q').value : '';
+  const rows = DATA[ei];
+  if (!q || !CALL.norm) return rows;
+  const nq = CALL.norm(q);
+  return rows.filter((r) =&gt; SCHEMA[ei].fields.some((f, fi) =&gt; CALL.norm(r[fi]).includes(nq)));
+}
+function paint() {
+  SCHEMA.forEach((e, ei) =&gt; {
+    const rows = rowsOf(ei);
+    el('e' + ei + '_n').textContent = rows.length ? rows.length + ' רשומות' : 'אין רשומות עדיין';
+    const hasDays = e.fields.some((f) =&gt; f.shape === 'date') &amp;&amp; CALL.daysSince;
+    el('e' + ei + '_body').innerHTML = rows.map((r) =&gt; {
+      const idx = DATA[ei].indexOf(r);
+      const cells = e.fields.map((f, fi) =&gt; '&lt;td class=&quot;' + (f.shape === 'number' ? 'num' : '') + '&quot;&gt;' + show(f, r[fi]) + '&lt;/td&gt;').join('');
+      const st = e.stages.length ? '&lt;td&gt;' + esc(r[e.fields.length] || e.stages[0]) + (e.stages.indexOf(r[e.fields.length] || e.stages[0]) &lt; e.stages.length - 1 ? ' &lt;button class=&quot;x&quot; data-adv=&quot;' + ei + ':' + idx + '&quot; title=&quot;לשלב הבא&quot;&gt;›&lt;/button&gt;' : '') + '&lt;/td&gt;' : '';
+      const d = hasDays ? '&lt;td class=&quot;num&quot;&gt;' + e.fields.map((f, fi) =&gt; (f.shape === 'date' &amp;&amp; r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) =&gt; x !== '').join(' / ') + '&lt;/td&gt;' : '';
+      return '&lt;tr&gt;' + cells + st + d + '&lt;td&gt;&lt;button class=&quot;x&quot; data-del=&quot;' + ei + ':' + idx + '&quot; title=&quot;מחק&quot;&gt;✕&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;';
+    }).join('');
+  });
+  // קשרים: רשימות-הבחירה מתמלאות מהרשומות של ישות-היעד
+  document.querySelectorAll('select[data-ref]').forEach((sel) =&gt; { const ti = Number(sel.dataset.ref); const cur = sel.value; sel.innerHTML = '&lt;option value=&quot;&quot;&gt;—&lt;/option&gt;' + DATA[ti].map((r) =&gt; '&lt;option&gt;' + esc(r[0]) + '&lt;/option&gt;').join(''); sel.value = cur; });
+  KPIS.forEach((k, i) =&gt; {
+    const box = el('kpi' + i), v = box.querySelector('.v');
+    if (!k.call) { box.classList.add('none'); v.textContent = 'אין אטום מוכח'; return; }
+    const rows = DATA[k.entity];
+    const fn = FN[k.call];
+    if (k.op === 'סכום') v.textContent = CALL.money ? CALL.money(fn(rows, (r) =&gt; Number(r[k.field]) || 0)) : fn(rows, (r) =&gt; Number(r[k.field]) || 0);
+    else if (k.op === 'מונה') { const c = fn(rows, (r) =&gt; r[k.field]); v.textContent = c.length ? c.map(([a, n]) =&gt; esc(a) + ' ' + n).join(' · ') : '0'; }
+  });
+}
+SCHEMA.forEach((e, ei) =&gt; {
+  el('e' + ei + '_form').addEventListener('submit', (ev) =&gt; {
+    ev.preventDefault();
+    const row = e.fields.map((f, fi) =&gt; el('e' + ei + '_f' + fi).value);
+    if (e.stages.length) row.push(e.stages[0]);
+    DATA[ei].push(row); save(); ev.target.reset(); paint();
+  });
+});
+document.body.addEventListener('click', (ev) =&gt; {
+  const a = ev.target.closest('[data-adv]');
+  if (a) { const [ei, i] = a.dataset.adv.split(':').map(Number); const st = SCHEMA[ei].stages; const r = DATA[ei][i]; const n = SCHEMA[ei].fields.length; const k = st.indexOf(r[n] || st[0]); if (k &lt; st.length - 1) { r[n] = st[k + 1]; save(); paint(); } return; }
+  const b = ev.target.closest('[data-del]'); if (!b) return;
+  const [ei, i] = b.dataset.del.split(':').map(Number);
+  DATA[ei].splice(i, 1); save(); paint();
+});
+if (el('q')) el('q').addEventListener('input', paint);
+paint();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></div></section>
+<p class="mute">קובץ-הפלט: <code>gen/out/tikim/app.html</code> · הדוח: <code>report.json</code> · היומן: <code>log.md</code> · הרצה: <code>node gen/build.mjs gen/specs/tikim.txt</code></p>
+</div>
