@@ -19,7 +19,10 @@ export function renderLiveBody(r, appHtml) {
   return `<div class="head"><div><h1>${esc(r.app)}</h1><div class="mute">המחולל הטהור · ספק ⇒ צרכים מצורה ⇒ הוכחה-בריצה מול המדף ⇒ הרכבה · אפס מודל</div></div>
 <div class="stat"><div><b>${r.meta.shelf}</b>אטומים במדף</div><div><b>${r.proofs.reduce((a, p) => a + p.tried, 0)}</b>ריצות-הוכחה</div><div><b>${r.atoms.length}</b>אטומים הורכבו</div><div><b>${r.unproven.length}</b>צרכים בלי הוכחה</div><div><b>${r.meta.ms}</b>ms</div></div></div>
 
-<section class="step spec"><h2>1 · הספק <span class="n">מה שנכתב בעברית — הקלט היחיד</span></h2><pre>${esc(r.spec.trim())}</pre>
+${r.sentence ? `<section class="step spec"><h2>1 · המשפט שלך <span class="n">כמו שנכתב</span></h2><pre>${esc(r.sentence.text.trim())}</pre></section>
+<section class="step spec"><h2>1½ · הבנתי כך <span class="n">מבנה בלבד — רבים=ישות, יחיד=שדה, סמן «יש/עם», רמזי-צורה מדאטה. אם טעיתי — תקן את הספק המדויק</span></h2><pre>${esc(r.spec.trim())}</pre>
+${r.sentence.notes.length ? `<ul class="notes">${r.sentence.notes.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>` : '<p class="mute">בלי הנחות — כל ישות קיבלה את השדות שנאמרו.</p>'}
+<div class="bar"><button class="ghost" data-copy-spec="${esc(r.spec)}">פתח את הספק המדויק לעריכה</button></div>` : `<section class="step spec"><h2>1 · הספק <span class="n">מה שנכתב בעברית — הקלט היחיד</span></h2><pre>${esc(r.spec.trim())}</pre>`}
 <div class="ents">${entities}</div></section>
 
 <section class="step"><h2>2 · צרכים שנגזרו מצורת-השדות <span class="n">אין מילון: מספר ⇒ תצוגת-כסף וסכימה · תאריך ⇒ תצוגה וימים · טלפון ⇒ עיצוב · טקסט ⇒ חיפוש · ערך-מנוי ⇒ ספירה</span></h2>
@@ -50,6 +53,7 @@ details.proof{border-top:1px solid var(--line);padding:8px 0}details.proof summa
 .tally{margin-inline-start:auto;font-size:13px;color:var(--mute)}.ex{padding:6px 18px 4px}.pill{display:inline-block;background:var(--code);border-radius:99px;padding:0 9px;font-size:12.5px;margin:2px}
 .frame{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}iframe{width:100%;height:720px;border:0;display:block}
 .spec pre{direction:rtl;text-align:right;font-family:Heebo,Arial,sans-serif;font-size:14px}
+.notes{margin:8px 0;padding-inline-start:18px;color:var(--none)}.notes li{margin:2px 0}
 .stat{display:flex;flex-wrap:wrap;gap:12px}.stat div{background:var(--code);border-radius:6px;padding:8px 14px}.stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
 @media (max-width:600px){iframe{height:560px}}
 `;

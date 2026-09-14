@@ -1,69 +1,41 @@
 {
- "app": "גמ\"ח הלוואות",
- "spec": "אפליקציה: גמ\"ח הלוואות\nישות לווה עם שם*, נייד[טלפון], סכום(0..100000)*, תאריך הלוואה[תאריך]*, סטטוס{פעיל|נפרע|באיחור}, הערה\nישות החזר עם לווה*, סכום(0..100000)*, תאריך[תאריך]*\nלוח בקרה עם סכום(לווה.סכום), סכום(החזר.סכום), מונה(לווה.סטטוס)\n",
- "sentence": null,
+ "app": "הוצאות",
+ "spec": "אפליקציה: הוצאות\nישות הוצאה עם תיאור*, סכום(0..1000000), תאריך[תאריך], קטגוריה{אוכל|רכב|בית|אחר}\nלוח בקרה עם סכום(הוצאה.סכום), מונה(הוצאה.קטגוריה)",
+ "sentence": {
+  "text": "מעקב הוצאות: לכל הוצאה יש תיאור, סכום, תאריך וקטגוריה (אוכל, רכב, בית, אחר)\n",
+  "notes": []
+ },
  "entities": [
   {
-   "name": "לווה",
+   "name": "הוצאה",
    "fields": [
     {
-     "name": "שם",
-     "required": true,
-     "shape": "text"
-    },
-    {
-     "name": "נייד",
-     "required": false,
-     "shape": "phone"
-    },
-    {
-     "name": "סכום",
-     "required": true,
-     "shape": "number",
-     "min": 0,
-     "max": 100000
-    },
-    {
-     "name": "תאריך הלוואה",
-     "required": true,
-     "shape": "date"
-    },
-    {
-     "name": "סטטוס",
-     "required": false,
-     "shape": "enum",
-     "values": [
-      "פעיל",
-      "נפרע",
-      "באיחור"
-     ]
-    },
-    {
-     "name": "הערה",
-     "required": false,
-     "shape": "text"
-    }
-   ]
-  },
-  {
-   "name": "החזר",
-   "fields": [
-    {
-     "name": "לווה",
+     "name": "תיאור",
      "required": true,
      "shape": "text"
     },
     {
      "name": "סכום",
-     "required": true,
+     "required": false,
      "shape": "number",
      "min": 0,
-     "max": 100000
+     "max": 1000000
     },
     {
      "name": "תאריך",
-     "required": true,
+     "required": false,
      "shape": "date"
+    },
+    {
+     "name": "קטגוריה",
+     "required": false,
+     "shape": "enum",
+     "values": [
+      "אוכל",
+      "רכב",
+      "בית",
+      "אחר"
+     ]
     }
    ]
   }
@@ -71,114 +43,59 @@
  "dashboard": [
   {
    "op": "סכום",
-   "entity": "לווה",
-   "field": "סכום"
-  },
-  {
-   "op": "סכום",
-   "entity": "החזר",
+   "entity": "הוצאה",
    "field": "סכום"
   },
   {
    "op": "מונה",
-   "entity": "לווה",
-   "field": "סטטוס"
+   "entity": "הוצאה",
+   "field": "קטגוריה"
   }
  ],
  "plan": [
   {
    "needId": "norm-search",
-   "entity": "לווה",
-   "field": "שם",
+   "entity": "הוצאה",
+   "field": "תיאור",
    "kind": "search",
-   "label": "לווה.שם"
-  },
-  {
-   "needId": "phone-format",
-   "entity": "לווה",
-   "field": "נייד",
-   "kind": "column",
-   "label": "לווה.נייד"
+   "label": "הוצאה.תיאור"
   },
   {
    "needId": "money",
-   "entity": "לווה",
+   "entity": "הוצאה",
    "field": "סכום",
    "kind": "column",
-   "label": "לווה.סכום"
+   "label": "הוצאה.סכום"
   },
   {
    "needId": "fmt-date",
-   "entity": "לווה",
-   "field": "תאריך הלוואה",
+   "entity": "הוצאה",
+   "field": "תאריך",
    "kind": "column",
-   "label": "לווה.תאריך הלוואה"
+   "label": "הוצאה.תאריך"
   },
   {
    "needId": "days-since",
-   "entity": "לווה",
-   "field": "תאריך הלוואה",
-   "kind": "column",
-   "label": "לווה.תאריך הלוואה"
-  },
-  {
-   "needId": "norm-search",
-   "entity": "לווה",
-   "field": "הערה",
-   "kind": "search",
-   "label": "לווה.הערה"
-  },
-  {
-   "needId": "norm-search",
-   "entity": "החזר",
-   "field": "לווה",
-   "kind": "search",
-   "label": "החזר.לווה"
-  },
-  {
-   "needId": "money",
-   "entity": "החזר",
-   "field": "סכום",
-   "kind": "column",
-   "label": "החזר.סכום"
-  },
-  {
-   "needId": "fmt-date",
-   "entity": "החזר",
+   "entity": "הוצאה",
    "field": "תאריך",
    "kind": "column",
-   "label": "החזר.תאריך"
-  },
-  {
-   "needId": "days-since",
-   "entity": "החזר",
-   "field": "תאריך",
-   "kind": "column",
-   "label": "החזר.תאריך"
+   "label": "הוצאה.תאריך"
   },
   {
    "needId": "sum",
    "op": "סכום",
-   "entity": "לווה",
+   "entity": "הוצאה",
    "field": "סכום",
    "kind": "kpi",
-   "label": "סכום לווה.סכום"
-  },
-  {
-   "needId": "sum",
-   "op": "סכום",
-   "entity": "החזר",
-   "field": "סכום",
-   "kind": "kpi",
-   "label": "סכום החזר.סכום"
+   "label": "סכום הוצאה.סכום"
   },
   {
    "needId": "count-by",
    "op": "מונה",
-   "entity": "לווה",
-   "field": "סטטוס",
+   "entity": "הוצאה",
+   "field": "קטגוריה",
    "kind": "kpi",
-   "label": "מונה לווה.סטטוס"
+   "label": "מונה הוצאה.קטגוריה"
   }
  ],
  "proofs": [
@@ -226,7 +143,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 75,
+   "ms": 76,
    "proven": [
     {
      "name": "norm-search",
@@ -237,67 +154,7 @@
    ],
    "chosen": "norm-search",
    "usedBy": [
-    "לווה.שם",
-    "לווה.הערה",
-    "החזר.לווה"
-   ]
-  },
-  {
-   "need": "phone-format",
-   "label": "טלפון ⇒ תצוגה ישראלית עם מקף",
-   "from": {
-    "shape": "phone"
-   },
-   "examples": [
-    {
-     "args": [
-      "0501234567"
-     ],
-     "want": "050-1234567"
-    },
-    {
-     "args": [
-      "+972501234567"
-     ],
-     "want": "050-1234567"
-    },
-    {
-     "args": [
-      "031234567"
-     ],
-     "want": "03-1234567"
-    },
-    {
-     "args": [
-      "050-1234567"
-     ],
-     "want": "050-1234567"
-    },
-    {
-     "args": [
-      "אבג"
-     ],
-     "want": "אבג"
-    }
-   ],
-   "tried": 569,
-   "failedBy": {
-    "זריקה": 355,
-    "פלט שונה": 200,
-    "אורך-קריאה": 13
-   },
-   "ms": 23,
-   "proven": [
-    {
-     "name": "format-israeli-phone",
-     "fn": "formatIsraeliPhone",
-     "n": 1,
-     "role": ""
-    }
-   ],
-   "chosen": "format-israeli-phone",
-   "usedBy": [
-    "לווה.נייד"
+    "הוצאה.תיאור"
    ]
   },
   {
@@ -349,8 +206,7 @@
    ],
    "chosen": "shekel",
    "usedBy": [
-    "לווה.סכום",
-    "החזר.סכום"
+    "הוצאה.סכום"
    ]
   },
   {
@@ -391,7 +247,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 16,
+   "ms": 17,
    "proven": [
     {
      "name": "fmt-date",
@@ -402,8 +258,7 @@
    ],
    "chosen": "fmt-date",
    "usedBy": [
-    "לווה.תאריך הלוואה",
-    "החזר.תאריך"
+    "הוצאה.תאריך"
    ]
   },
   {
@@ -455,7 +310,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 114
    },
-   "ms": 15,
+   "ms": 13,
    "proven": [
     {
      "name": "cockpit-days-since",
@@ -472,8 +327,7 @@
    ],
    "chosen": "cockpit-days-since",
    "usedBy": [
-    "לווה.תאריך הלוואה",
-    "החזר.תאריך"
+    "הוצאה.תאריך"
    ]
   },
   {
@@ -558,8 +412,7 @@
    ],
    "chosen": "grand-total",
    "usedBy": [
-    "סכום לווה.סכום",
-    "סכום החזר.סכום"
+    "סכום הוצאה.סכום"
    ]
   },
   {
@@ -655,7 +508,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 136
    },
-   "ms": 15,
+   "ms": 12,
    "proven": [
     {
      "name": "count-by",
@@ -666,7 +519,7 @@
    ],
    "chosen": "count-by",
    "usedBy": [
-    "מונה לווה.סטטוס"
+    "מונה הוצאה.קטגוריה"
    ]
   }
  ],
@@ -678,14 +531,6 @@
    "hasT": true,
    "role": "מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות",
    "file": "new/atoms/norm-search.mjs"
-  },
-  {
-   "name": "format-israeli-phone",
-   "fn": "formatIsraeliPhone",
-   "n": 1,
-   "hasT": true,
-   "role": "",
-   "file": "new/atoms/format-israeli-phone.mjs"
   },
   {
    "name": "shekel",
@@ -730,9 +575,9 @@
  ],
  "unproven": [],
  "meta": {
-  "slug": "gemach",
-  "built": "2026-09-14T18:19:27.560Z",
-  "ms": 174,
+  "slug": "hotzaot",
+  "built": "2026-09-14T18:19:27.253Z",
+  "ms": 149,
   "shelf": 1096,
   "fns": 569
  }

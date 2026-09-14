@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>גמ&quot;ח הלוואות</title>
+<style>
+:root{--bg:#f7f6f2;--ink:#1d1c19;--mute:#6b675e;--line:#d9d5cb;--card:#ffffff;--acc:#1f5f5b;--acc-ink:#ffffff;--warn:#8a3b12}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}}
+:root[data-theme=dark]{--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Heebo,Arial,sans-serif;padding-block:16px;padding-inline:16px}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:0 0 8px}h2 small{color:var(--mute);font-weight:400}
+.top{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
+.kpi{background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:6px}.kpi .v{display:block;font-size:22px;font-variant-numeric:tabular-nums;font-weight:600}.kpi .l{color:var(--mute);font-size:13px}
+.kpi.none .v{color:var(--warn);font-size:14px}
+.entity{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px;margin:12px 0}
+form.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:10px}label{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;min-width:120px}
+button{font:inherit;background:var(--acc);color:var(--acc-ink);border:0;border-radius:4px;padding:7px 14px;cursor:pointer}button.x{background:transparent;color:var(--mute);padding:2px 6px}
+.tbl{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--mute);font-weight:500;font-size:13px}
+td.num{font-variant-numeric:tabular-nums}.search{min-width:220px}
+.foot{color:var(--mute);font-size:12px;margin-top:16px}
+</style></head><body>
+<div class="top"><div><h1>גמ&quot;ח הלוואות</h1><div class="foot" style="margin:0">נבנה על-ידי המחולל · 7 אטומים מוכחים · הנתונים נשמרים בדפדפן זה</div></div>
+<input class="search" id="q" type="search" placeholder="חיפוש בכל השדות…"></div>
+<div class="kpis"><div class="kpi" id="kpi0"><span class="v">—</span><span class="l">סכום לווה.סכום</span></div><div class="kpi" id="kpi1"><span class="v">—</span><span class="l">מונה לווה.סטטוס</span></div><div class="kpi" id="kpi2"><span class="v">—</span><span class="l">סכום החזר.סכום</span></div></div>
+<section class="entity" data-entity="e0">
+  <h2>לווה <small id="e0_n"></small></h2>
+  <form id="e0_form" class="row"><label>שם <b>*</b><input id="e0_f0" type="text" required></label><label>נייד<input id="e0_f1" type="tel" inputmode="tel" ></label><label>סכום<input id="e0_f2" type="number" min="0" max="1000000" step="any" ></label><label>תאריך הלוואה<input id="e0_f3" type="date" ></label><label>סטטוס<select id="e0_f4" ><option>פעיל</option><option>נפרע</option><option>באיחור</option></select></label><button type="submit">הוסף לווה</button></form>
+  <div class="tbl"><table><thead><tr><th>שם</th><th>נייד</th><th>סכום</th><th>תאריך הלוואה</th><th>סטטוס</th><th>ימים</th><th></th></tr></thead><tbody id="e0_body"></tbody></table></div>
+</section>
+<section class="entity" data-entity="e1">
+  <h2>החזר <small id="e1_n"></small></h2>
+  <form id="e1_form" class="row"><label>לווה <b>*</b><input id="e1_f0" type="text" required></label><label>סכום<input id="e1_f1" type="number" min="0" max="1000000" step="any" ></label><label>תאריך<input id="e1_f2" type="date" ></label><button type="submit">הוסף החזר</button></form>
+  <div class="tbl"><table><thead><tr><th>לווה</th><th>סכום</th><th>תאריך</th><th>ימים</th><th></th></tr></thead><tbody id="e1_body"></tbody></table></div>
+</section>
+<div class="foot">אטומים: norm-search · format-israeli-phone · shekel · fmt-date · cockpit-days-since · grand-total · count-by</div>
+<script>
+// ── אטום norm-search (new/atoms/norm-search.mjs)
+/** חוט · norm-search — נרמול-חיפוש עברי. חוזה: norm-search.contract.md
+ *  חולץ כלשונו מ-maor/src/lib/validate.ts */
+function normSearch(t, T) {
+  return String(t || '')
+    .toLowerCase()
+    .replace(/[֑-ׇ]/g, '')
+    .replace(/[ךםןףץ]/g, (ch) => ({ ך: T.k1, ם: T.k2, ן: T.k3, ף: T.k4, ץ: T.k5 })[ch])
+    .replace(/['"׳״\-–._]/g, '')
+    .trim();
+}
+const normSearch__T = {"k1":"כ","k2":"מ","k3":"נ","k4":"פ","k5":"צ"};
+const normSearch__call = (...x) => normSearch(...x, ...Array(Math.max(0, 1 - x.length)).fill(undefined), normSearch__T);
+
+// ── אטום format-israeli-phone (new/atoms/format-israeli-phone.mjs)
+/** חוט · format-israeli-phone — קודם אוטומטית (אפיון-Golden). חוזה: format-israeli-phone.contract.md */
+function formatIsraeliPhone(raw, T) {
+    const s = String(raw || '').trim();
+    let d = s.replace(/\D/g, '');
+    // קידומת בינלאומית 972/00972 → 0 מקומי (מספרים מיובאים מגיעים כך)
+    if (d.startsWith('00972'))
+        d = '0' + d.slice(5);
+    else if (d.startsWith('972'))
+        d = '0' + d.slice(3);
+    if (!d)
+        return s;
+    if (d[0] === '0') {
+        if (d.length === T.k1)
+            return d.slice(0, 3) + '-' + d.slice(3);
+        if (d.length === 9)
+            return d.slice(0, 2) + '-' + d.slice(2);
+        return d;
+    }
+    if (d.length === 9)
+        return '0' + d.slice(0, 2) + '-' + d.slice(2);
+    if (d.length === 8)
+        return '0' + d[0] + '-' + d.slice(1);
+    return s;
+}
+/** נרמול טקסט לחיפוש עברי: מסיר ניקוד, אותיות סופיות → רגילות, גרשיים. */
+const formatIsraeliPhone__T = {"k1":10};
+const formatIsraeliPhone__call = (...x) => formatIsraeliPhone(...x, ...Array(Math.max(0, 1 - x.length)).fill(undefined), formatIsraeliPhone__T);
+
+// ── אטום shekel (new/atoms/shekel.mjs)
+/** חוט · shekel — קודם אוטומטית (אפיון-Golden). חוזה: shekel.contract.md */
+function shekel(n, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const PRICES_LS_KEY = T.k1;
+
+    return '₪' + Math.round(n).toLocaleString('he-IL');
+}
+/** קריאת טבלת-המחירים השמורה (מכשיר-המטמיע), או ברירת-המחדל. */
+const shekel__T = {"k1":"maor_prices"};
+const shekel__call = (...x) => shekel(...x, ...Array(Math.max(0, 1 - x.length)).fill(undefined), shekel__T);
+
+// ── אטום fmt-date (new/atoms/fmt-date.mjs)
+/** חוט · fmt-date — תאריך-ISO לתצוגה. חוזה: fmt-date.contract.md
+ *  חולץ כלשונו (היה זהה ב-4 מודולים של maor — אוחד לעותק-יחיד). */
+function fmtDate(iso, T) {
+  if (!iso) return '—';
+  const [y, m, d] = iso.slice(0, T.k1).split('-');
+  if (!y || !m || !d) return '—';
+  return `${d}/${m}/${y}`;
+}
+const fmtDate__T = {"k1":10};
+const fmtDate__call = (...x) => fmtDate(...x, ...Array(Math.max(0, 1 - x.length)).fill(undefined), fmtDate__T);
+
+// ── אטום cockpit-days-since (new/atoms/cockpit-days-since.mjs)
+/** חוט · cockpit-days-since — קודם אוטומטית (אפיון-Golden). חוזה: cockpit-days-since.contract.md
+ * מוצא: maor-system/src/components/supporters/cockpit.ts:42 (daysSince) + MS_DAY:39 (הוטבע inline).
+ * ימים בין תאריך-ISO ליום (חיובי = בעבר). Infinity לתאריך ריק/לא-תקין. חוק-4: verbatim מהמקור.
+ */
+function cockpitDaysSince(iso, todayIso, T) {
+  const MS_DAY = T.k1;
+  if (!iso) return Infinity;
+  const t = new Date(iso + 'T12:00:00').getTime();
+  const now = new Date(todayIso + 'T12:00:00').getTime();
+  if (Number.isNaN(t) || Number.isNaN(now)) return Infinity;
+  return Math.floor((now - t) / MS_DAY);
+}
+const cockpitDaysSince__T = {"k1":86400000};
+const cockpitDaysSince__call = (...x) => cockpitDaysSince(...x, ...Array(Math.max(0, 2 - x.length)).fill(undefined), cockpitDaysSince__T);
+
+// ── אטום grand-total (new/atoms/grand-total.mjs)
+/** חוט · grand-total — הסכום הכולל של כל הקופות. חוזה: grand-total.contract.md
+ *  חולץ כלשונו מ-maor/src/components/tzedaka/lib.ts:64-66; השכן boxTotal
+ *  הוזרק כשקע (חוק-1 — אפס import פנימי). */
+function grandTotal(boxes, boxTotal) {
+    return boxes.reduce((a, b) => a + boxTotal(b), 0);
+}
+const grandTotal__call = (...x) => grandTotal(...x);
+
+// ── אטום count-by (new/atoms/count-by.mjs)
+/** חוט · count-by — ספירה לפי מפתח, ממוין מהגדול לקטן. חוזה: count-by.contract.md
+ *  חולץ כלשונו מ-maor/src/components/reports/lib.ts:83-91. */
+function countBy(items, key) {
+    const m = new Map();
+    for (const it of items) {
+        const k = key(it);
+        m.set(k, (m.get(k) ?? 0) + 1);
+    }
+    return [...m.entries()].sort((a, b) => b[1] - a[1]);
+}
+const countBy__call = (...x) => countBy(...x);
+
+// ── דבק מבני (מחולל): סכמה, אחסון, טופס, טבלה, מדדים
+const SCHEMA = [{"name":"לווה","fields":[{"name":"שם","shape":"text","required":true},{"name":"נייד","shape":"phone","required":false},{"name":"סכום","shape":"number","required":false},{"name":"תאריך הלוואה","shape":"date","required":false},{"name":"סטטוס","shape":"enum","required":false}]},{"name":"החזר","fields":[{"name":"לווה","shape":"text","required":true},{"name":"סכום","shape":"number","required":false},{"name":"תאריך","shape":"date","required":false}]}];
+const KPIS = [{"op":"סכום","need":"sum","entity":0,"field":2,"call":"grandTotal__call"},{"op":"מונה","need":"count-by","entity":0,"field":4,"call":"countBy__call"},{"op":"סכום","need":"sum","entity":1,"field":1,"call":"grandTotal__call"}];
+const KEY = "gen:gemach-sentence";
+const FN = {normSearch__call, formatIsraeliPhone__call, shekel__call, fmtDate__call, cockpitDaysSince__call, grandTotal__call, countBy__call};
+const CALL = { money: shekel__call, fmtDate: fmtDate__call, daysSince: cockpitDaysSince__call, phone: formatIsraeliPhone__call, norm: normSearch__call, sum: grandTotal__call, countBy: countBy__call };
+const today = () => new Date().toISOString().slice(0, 10);
+let DATA; try { DATA = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { DATA = null; }
+if (!DATA) DATA = SCHEMA.map(() => []);
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(DATA)); } catch {} };
+const el = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function show(f, v) {
+  if (v === '' || v == null) return '';
+  if (f.shape === 'number' && CALL.money) return CALL.money(Number(v));
+  if (f.shape === 'date' && CALL.fmtDate) return CALL.fmtDate(v);
+  if (f.shape === 'phone' && CALL.phone) return CALL.phone(v);
+  return esc(v);
+}
+function rowsOf(ei) {
+  const q = el('q') ? el('q').value : '';
+  const rows = DATA[ei];
+  if (!q || !CALL.norm) return rows;
+  const nq = CALL.norm(q);
+  return rows.filter((r) => SCHEMA[ei].fields.some((f, fi) => CALL.norm(r[fi]).includes(nq)));
+}
+function paint() {
+  SCHEMA.forEach((e, ei) => {
+    const rows = rowsOf(ei);
+    el('e' + ei + '_n').textContent = rows.length ? rows.length + ' רשומות' : 'אין רשומות עדיין';
+    const hasDays = e.fields.some((f) => f.shape === 'date') && CALL.daysSince;
+    el('e' + ei + '_body').innerHTML = rows.map((r) => {
+      const idx = DATA[ei].indexOf(r);
+      const cells = e.fields.map((f, fi) => '<td class="' + (f.shape === 'number' ? 'num' : '') + '">' + show(f, r[fi]) + '</td>').join('');
+      const d = hasDays ? '<td class="num">' + e.fields.map((f, fi) => (f.shape === 'date' && r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) => x !== '').join(' / ') + '</td>' : '';
+      return '<tr>' + cells + d + '<td><button class="x" data-del="' + ei + ':' + idx + '" title="מחק">✕</button></td></tr>';
+    }).join('');
+  });
+  KPIS.forEach((k, i) => {
+    const box = el('kpi' + i), v = box.querySelector('.v');
+    if (!k.call) { box.classList.add('none'); v.textContent = 'אין אטום מוכח'; return; }
+    const rows = DATA[k.entity];
+    const fn = FN[k.call];
+    if (k.op === 'סכום') v.textContent = CALL.money ? CALL.money(fn(rows, (r) => Number(r[k.field]) || 0)) : fn(rows, (r) => Number(r[k.field]) || 0);
+    else if (k.op === 'מונה') { const c = fn(rows, (r) => r[k.field]); v.textContent = c.length ? c.map(([a, n]) => esc(a) + ' ' + n).join(' · ') : '0'; }
+  });
+}
+SCHEMA.forEach((e, ei) => {
+  el('e' + ei + '_form').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const row = e.fields.map((f, fi) => el('e' + ei + '_f' + fi).value);
+    DATA[ei].push(row); save(); ev.target.reset(); paint();
+  });
+});
+document.body.addEventListener('click', (ev) => {
+  const b = ev.target.closest('[data-del]'); if (!b) return;
+  const [ei, i] = b.dataset.del.split(':').map(Number);
+  DATA[ei].splice(i, 1); save(); paint();
+});
+if (el('q')) el('q').addEventListener('input', paint);
+paint();
+</script></body></html>

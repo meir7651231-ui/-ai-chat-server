@@ -2,21 +2,23 @@
 // gen/build.mjs — המחולל מהמסוף. ספק ⇒ צרכים (מצורת-השדות) ⇒ הוכחה-בריצה מול כל המדף ⇒ הרכבה ⇒ אפליקציה רצה.
 // אפס מודל, אפס רשת, אפס קוד-ידני-לאפליקציה: כל חישוב באפליקציה הוא אטום מהמדף שעבר את הדוגמאות בריצה.
 //   node gen/build.mjs gen/specs/gemach.txt      ⇒ gen/out/gemach/{app.html,live.html,report.json,log.md}
+//   הקובץ יכול להיות ספק מדויק (מתחיל ב«אפליקציה:») או משפט רגיל בעברית.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readShelf } from './shelf.mjs';
 import { renderLive } from './live.mjs';
 import { runGenerator } from './engine.mjs';
+import { loadLang } from './lang.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const NEEDS = JSON.parse(fs.readFileSync(path.join(HERE, 'needs.data.json'), 'utf8')).needs;
 
 export async function build(specPath) {
-  const specText = fs.readFileSync(specPath, 'utf8');
+  const text = fs.readFileSync(specPath, 'utf8');
   const slug = path.basename(specPath).replace(/\.txt$/, '');
   const shelf = readShelf();
-  const { report, app } = await runGenerator({ specText, slug, shelf, NEEDS });
+  const { report, app } = await runGenerator({ text, slug, shelf, NEEDS, LANG: loadLang() });
   const outDir = path.join(HERE, 'out', slug);
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(path.join(outDir, 'app.html'), app);
@@ -27,7 +29,9 @@ export async function build(specPath) {
 }
 
 function logMd(r) {
-  const L = [`# ${r.app} — יומן-בנייה`, '', `מדף: ${r.meta.shelf} אטומים (${r.meta.fns} פונקציות) · זמן: ${r.meta.ms}ms · נבנה: ${r.meta.built}`, '', '## ספק', '```', r.spec.trim(), '```', '', '## הוכחות'];
+  const L = [`# ${r.app} — יומן-בנייה`, '', `מדף: ${r.meta.shelf} אטומים (${r.meta.fns} פונקציות) · זמן: ${r.meta.ms}ms · נבנה: ${r.meta.built}`, ''];
+  if (r.sentence) L.push('## המשפט', '```', r.sentence.text.trim(), '```', ...r.sentence.notes.map((n) => `- ⚠ ${n}`), '');
+  L.push('## ספק' + (r.sentence ? ' (נגזר מהמשפט)' : ''), '```', r.spec.trim(), '```', '', '## הוכחות');
   for (const p of r.proofs) {
     L.push(`- **${p.need}** (${p.label}) ⇐ ${p.usedBy.join(', ')}: נוסו ${p.tried} · הוכחו ${p.proven.length}${p.chosen ? ` · נבחר **${p.chosen}**` : ' · **אין אטום מוכח**'}` +
       (p.proven.length > 1 ? ` · גם עברו: ${p.proven.slice(1).map((a) => a.name).join(', ')}` : '') +

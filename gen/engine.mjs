@@ -3,10 +3,19 @@ import { parseSpec } from './spec.mjs';
 import { prove } from './prove.mjs';
 import { renderApp } from './render.mjs';
 import { derivePlan } from './plan.mjs';
+import { sentenceToSpec } from './sentence.mjs';
 
-export async function runGenerator({ specText, slug, shelf, NEEDS, now = () => Date.now(), onStep = () => {} }) {
+export const isSpec = (text) => /^\s*אפליקציה:/.test(text || '');
+
+export async function runGenerator({ text, specText, slug, shelf, NEEDS, LANG, now = () => Date.now(), onStep = () => {} }) {
   const t0 = now();
   const needById = Object.fromEntries(NEEDS.map((n) => [n.id, n]));
+  // משפט רגיל ⇒ ספק (שכבת-המשפט, עיוורת, מדאטה); ספק מדויק עובר כמו שהוא
+  let sentence = null;
+  if (specText == null) {
+    if (isSpec(text)) specText = text;
+    else { const r = sentenceToSpec(text, LANG || {}); specText = r.specText; sentence = { text, notes: r.notes }; onStep({ step: 'sentence', sentence, specText }); }
+  }
   const spec = parseSpec(specText);
   onStep({ step: 'spec', spec });
   const plan = derivePlan(spec, NEEDS);
@@ -29,7 +38,7 @@ export async function runGenerator({ specText, slug, shelf, NEEDS, now = () => D
   }
   const meta = { slug, built: new Date().toISOString(), ms: Math.round(now() - t0), shelf: shelf.length, fns: shelf.filter((a) => a.kind === 'fn').length };
   const app = renderApp(spec, chosen, plan, meta);
-  const report = { app: spec.app, spec: specText, entities: spec.entities, dashboard: spec.dashboard, plan, proofs,
+  const report = { app: spec.app, spec: specText, sentence, entities: spec.entities, dashboard: spec.dashboard, plan, proofs,
     atoms: [...new Set([...chosen.values()])].map((a) => ({ name: a.name, fn: a.fn, n: a.n, hasT: a.hasT, role: a.role, file: a.file, src: a.src })),
     unproven: proofs.filter((p) => !p.chosen).map((p) => p.need), meta };
   onStep({ step: 'done', report });

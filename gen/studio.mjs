@@ -7,14 +7,17 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readShelf } from './shelf.mjs';
 import { LIVE_CSS, LIVE_FONTS } from './live.mjs';
+import { loadLang } from './lang.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const read = (f) => fs.readFileSync(path.join(HERE, f), 'utf8');
 const strip = (src) => src.replace(/^import\s[^\n]*\n/gm, '').replace(/^export\s+(default\s+)?/gm, '');
-const CORE = ['spec.mjs', 'prove.mjs', 'plan.mjs', 'render.mjs', 'live.mjs', 'engine.mjs'].map((f) => `// ══ ${f}\n${strip(read(f))}`).join('\n\n');
+const CORE = ['spec.mjs', 'sentence.mjs', 'prove.mjs', 'plan.mjs', 'render.mjs', 'live.mjs', 'engine.mjs'].map((f) => `// ══ ${f}\n${strip(read(f))}`).join('\n\n');
 const NEEDS = JSON.parse(read('needs.data.json')).needs;
 const shelf = readShelf().filter((a) => a.kind === 'fn').map(({ test, params, ...a }) => a);
 const example = read('specs/gemach.txt').trim();
+const exampleSentence = read('specs/gemach-sentence.txt').trim();
+const LANG = loadLang();
 const safe = (s) => s.replace(/<\/script/gi, '<\\/script').replace(/\uFFFD/g, '\\uFFFD'); // תו-ההחלפה שבאטום decode-csv-buffer נשאר כמובן, בכתיב-בריחה
 
 const html = `<title>סטודיו המחולל</title>
@@ -32,14 +35,14 @@ button{font:inherit;background:var(--acc);color:#fff;border:0;border-radius:5px;
 <div class="head"><div><h1>סטודיו המחולל</h1><div class="mute">כותבים ספק בעברית · המחולל רץ כאן בדפדפן: צרכים מצורה ⇒ הוכחה-בריצה מול המדף ⇒ אפליקציה · אפס מודל, אפס שרת</div></div>
 <div class="stat"><div><b id="s-shelf">${shelf.length}</b>אטומי-פונקציה במדף</div><div><b id="s-needs">${NEEDS.length}</b>צרכים ידועים</div></div></div>
 
-<section class="step"><h2>0 · הספק שלך <span class="n">תיבה ריקה. כתוב מה לבנות. Ctrl+Enter = בנה</span></h2>
-<textarea id="spec" placeholder="אפליקציה: <שם>
-ישות <שם> עם שדה*, שדה(0..1000), שדה{א|ב|ג}, שדה[תאריך], שדה[טלפון], שדה
-לוח בקרה עם סכום(ישות.שדה), מונה(ישות.שדה)"></textarea>
-<div class="bar"><button id="build">בנה</button><button class="ghost" id="ex">מלא דוגמה (גמ"ח הלוואות)</button><button class="ghost" id="clear">נקה</button><span class="mute" id="status"></span></div>
+<section class="step"><h2>0 · מה לבנות <span class="n">תיבה ריקה. כתוב במילים שלך. Ctrl+Enter = בנה</span></h2>
+<textarea id="spec" placeholder="למשל: מעקב הוצאות: לכל הוצאה יש תיאור, סכום, תאריך וקטגוריה (אוכל, רכב, בית, אחר)
+או: אפליקציה לחנות ספרים עם ספרים שיש להם כותרת, מחיר ומצב: חדש/משומש
+או ספק מדויק שמתחיל ב«אפליקציה:»"></textarea>
+<div class="bar"><button id="build">בנה</button><button class="ghost" id="ex">דוגמה במשפט</button><button class="ghost" id="ex2">דוגמה כספק מדויק</button><button class="ghost" id="clear">נקה</button><span class="mute" id="status"></span></div>
 <div class="err" id="err" hidden></div>
 <details class="grammar"><summary>דקדוק-הספק (כל מה שהמחולל מבין — אין יותר)</summary>
-<div><code>אפליקציה: שם</code> — שורה ראשונה.<br><code>ישות X עם א, ב, ג</code> — שדות מופרדים בפסיק. צורת שדה נקבעת רק מסמן: <code>*</code> חובה · <code>(0..N)</code> מספר · <code>{א|ב}</code> ערך-מנוי · <code>[תאריך]</code> · <code>[טלפון]</code> · בלי סמן = טקסט.<br>
+<div><b>משפט רגיל:</b> «X עם א, ב, ג» — פריט ברבים = ישות, ביחיד = שדה. «לכל X יש א, ב» = ישות X עם השדות. רשימת-ערכים בסוגריים או בלוכסן ⇒ ערך-מנוי. מילים כמו תאריך/סכום/טלפון ⇒ הצורה המתאימה (מדאטה). מה שלא הובן נכתב ב«הבנתי כך» — לא מנחשים בשקט.<br><b>ספק מדויק:</b> <code>אפליקציה: שם</code> — שורה ראשונה.<br><code>ישות X עם א, ב, ג</code> — שדות מופרדים בפסיק. צורת שדה נקבעת רק מסמן: <code>*</code> חובה · <code>(0..N)</code> מספר · <code>{א|ב}</code> ערך-מנוי · <code>[תאריך]</code> · <code>[טלפון]</code> · בלי סמן = טקסט.<br>
 <code>לוח בקרה עם סכום(ישות.שדה), מונה(ישות.שדה)</code> — מדדים. סכום על שדה-מספר, מונה על ערך-מנוי.<br>
 מה נגזר אוטומטית: מספר ⇒ תצוגת-שקלים · תאריך ⇒ תצוגה + ימים-מאז · טלפון ⇒ עיצוב · טקסט ⇒ חיפוש · ערך-מנוי ⇒ ספירה. כל אחד רק אם אטום במדף מוכיח אותו בריצה.</div></details>
 </section>
@@ -52,10 +55,14 @@ ${safe(CORE)}
 const NEEDS = ${safe(JSON.stringify(NEEDS))};
 const SHELF = ${safe(JSON.stringify(shelf))};
 const EXAMPLE = ${safe(JSON.stringify(example))};
+const EXAMPLE_SENTENCE = ${safe(JSON.stringify(exampleSentence))};
+const LANG = ${safe(JSON.stringify(LANG))};
 const $ = (id) => document.getElementById(id);
 const KEY = 'gen-studio:spec';
 try { const s = localStorage.getItem(KEY); if (s) $('spec').value = s; } catch {}
-$('ex').onclick = () => { $('spec').value = EXAMPLE; run(); };
+$('ex').onclick = () => { $('spec').value = EXAMPLE_SENTENCE; run(); };
+$('ex2').onclick = () => { $('spec').value = EXAMPLE; run(); };
+document.body.addEventListener('click', (e) => { const b = e.target.closest('[data-copy-spec]'); if (!b) return; $('spec').value = b.dataset.copySpec; $('spec').scrollIntoView({ behavior: 'smooth', block: 'start' }); $('spec').focus(); });
 $('clear').onclick = () => { $('spec').value = ''; $('out').innerHTML = '<p class="empty">עדיין לא נבנה כלום. כתוב ספק ולחץ «בנה».</p>'; $('err').hidden = true; try { localStorage.removeItem(KEY); } catch {} };
 $('build').onclick = run;
 $('spec').addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) run(); });
@@ -67,7 +74,7 @@ async function run() {
   $('status').textContent = 'בונה…';
   const slug = 'studio';
   try {
-    const { report, app } = await runGenerator({ specText, slug, shelf: SHELF, NEEDS, now: () => performance.now(),
+    const { report, app } = await runGenerator({ text: specText, slug, shelf: SHELF, NEEDS, LANG, now: () => performance.now(),
       onStep: (s) => { if (s.step === 'proof') $('status').textContent = 'הוכחה: ' + s.proof.need + ' — נוסו ' + s.proof.tried + ', עברו ' + s.proof.proven.length; } });
     report.meta.ms = Math.round(report.meta.ms);
     $('out').innerHTML = renderLiveBody(report, app);
