@@ -11,10 +11,13 @@ import * as R from '../root.mjs';
 import { readPlan } from './behavior-plan.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const P = readPlan();
-const files = [...new Set(Object.values(P).filter((p) => p.pick).map((p) => p.file))].sort();
+const files = [...new Set(Object.values(P).filter((p) => p.pick).flatMap((p) => p.chain ? p.chain.map((x) => x.file) : [p.file]))].sort();   // הכרעה-20ב · שרשרת = שני קבצים
 // G49 · קופסה מייצאת-מחדש שמות-אטומים (gem · hebParts · …) ⇒ ייבוא-בקידומת `as bxN` והקריאה דרכה; אטומים (dart-maor/dart) נשארים בלי קידומת
 const isBox = (f) => /^dart-boxes\//.test(f); const boxPrefix = (f) => 'bx' + files.filter(isBox).indexOf(f);
-const N = (id) => { const p = P[id]; if (!p || !p.pick) throw new Error(`behavior-compose: אין חלקיק מוכח לצורך ${id}`); return isBox(p.file) ? boxPrefix(p.file) + '.' + p.pick : p.pick; };
+const nameOf = (id, file) => isBox(file) ? boxPrefix(file) + '.' + id : id;
+// הכרעה-20ב · שרשרת B∘A ⇒ סגור-מיידי `((x) => B(A(x)))` — ההרכבה נשארת קריאה-בשם, ואף קובץ אחר לא רואה את החלקים
+const N = (id) => { const p = P[id]; if (!p || !p.pick) throw new Error(`behavior-compose: אין חלקיק מוכח לצורך ${id}`); if (p.chain) { const [a, b] = p.chain; const n = (NEED_ARITY[id] ?? 1); const ps = Array.from({ length: n }, (_, i) => 'a' + i).join(', '); return `((${ps}) => ${nameOf(b.id, b.file)}(${nameOf(a.id, a.file)}(${ps})))`; } return nameOf(p.pick, p.file); };
+const NEED_ARITY = { 'phone.fmtSafe': 1 };
 const code = `// 🧩 חולל ע"י behavior-compose (G34ב · הכרעה-30) — שכבת-ההרכבה: התנהגויות מחלקיקים מוכחים (behavior-plan.json), במקום אחד. אל תערוך ידנית.
 ${files.map((f) => isBox(f) ? `import '../${f}' as ${boxPrefix(f)};` : `import '../${f}';`).join('\n')}
 import '../dart-data-maor/norm-search-sockets.dart';
@@ -47,6 +50,7 @@ String _hm(int m) => (m ~/ 60).toString().padLeft(2, '0') + ':' + (m % 60).toStr
 String bhNormSearch(String s) => ${N('text.normSearch')}(s, normSearch_T);
 String bhNormName(String s) => ${N('name.norm')}(s, (t) => ${N('text.normSearch')}(t, normSearch_T));
 String bhPhoneDigits(String? s) => ${N('phone.digits')}(s);
+String bhPhoneFmtSafe(String? s) => ${N('phone.fmtSafe')}(s);   // הכרעה-20ב · הרכבה-מוכחת: מציין-מקום ⇒ ריק, אחרת עיצוב
 /// ב׳-צה · שורה של ספרות («1250» · «052-123») = חיפוש; מחזירה את השורה או ריק
 String bhDigitsQuery(String q) { final t = q.trim(); return RegExp(r'^[0-9][0-9,.\\- ]*\$').hasMatch(t) && bhPhoneDigits(t).length >= 2 ? t : ''; }
 /// ב׳-צז · «איפה X» ⇒ X (${N('prefix.rule')})
@@ -187,6 +191,7 @@ void main() {
     final ics = bhIcs([{'uid': 'u1', 'date': '2026-09-15', 'title': 'ארנונה, 1250'}], 'בלגן', DateTime(2026, 9, 8, 10)); expect(ics.contains('DTSTART;VALUE=DATE:20260915'), isTrue); expect(ics.contains('SUMMARY:ארנונה\\\\, 1250'), isTrue); expect(ics.endsWith('END:VCALENDAR\\r\\n'), isTrue);
     expect(bhMedianHm(['16:30', '16:00', '17:00']), '16:30'); expect(bhMedianHm(['16:30']), ''); expect(bhMedianHm(['', 'x', '09:00', '10:00']), '10:00');
     expect(bhMonthEnd('2026-09-08'), '2026-09-30'); expect(bhMonthEnd('2026-12-05'), '2026-12-31'); expect(bhMonthEnd('2028-02-10'), '2028-02-29'); expect(bhMonthEnd('2027-02-01'), '2027-02-28');
+    expect(bhPhoneFmtSafe('0521234567'), '052-1234567'); expect(bhPhoneFmtSafe('0000000000'), ''); expect(bhPhoneFmtSafe('00972521234567'), '052-1234567');
     expect(bhMoney('1,250'), 1250); expect(bhMoney('₪ 8,000'), 8000); expect(bhMoney(''), 0); expect(bhMoney(null), 0); expect(bhMoney('abc'), 0); expect(bhMoney(bhThousands(1650)), 1650);
     expect(bhWeekRange('2026-09-08', 0), ['2026-09-06', '2026-09-12']); expect(bhWeekRange('2026-09-08', 1), ['2026-09-13', '2026-09-19']); expect(bhInRange('2026-09-12', '2026-09-06', '2026-09-12'), true); expect(bhInRange('2026-09-13', '2026-09-06', '2026-09-12'), false); expect(bhInRange('', '2026-09-06', '2026-09-12'), false);
     expect(bhMinutesUntil('2026-09-08T10:05:00', '2026-09-08', '10:30'), 25); expect(bhMinutesUntil('2026-09-08T11:00:00', '2026-09-08', '10:30') < 0, isTrue); expect(bhMinutesUntil('', '2026-09-08', '10:30'), -1);

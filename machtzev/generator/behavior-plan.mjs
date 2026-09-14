@@ -61,6 +61,8 @@ export const NEEDS = {
   'a11y.step':          { shape: 'תצוגה',      demand: 'צעד זום אחד למעלה למטה עיגול לעשירית', params: ['num', 'num', 'dynamic', 'dynamic'], ret: 'num', examples: [["1.0, 1, (v) => v, 0.1", "r == 1.1"], ["1.5, -1, (v) => v, 0.1", "r == 1.4"]] },
   'iso.monthDay':       { shape: 'מועד',       demand: 'יום בחודש מתאריך ISO לחיוב חודשי עד 28', params: ['String'], ret: 'num', examples: [["'2026-09-15'", "r == 15"], ["'2026-09-30'", "r == 28"], ["''", "r == 1"]] },
   'heb.gemYear':        { shape: 'מועד',       demand: 'שנה עברית בגימטריה אלפים', params: ['Object?', 'String Function(num) gem'], ret: 'String', imports: ['dart-data-maor/gematria-sockets.dart', 'dart-maor/gematria.dart'], examples: [["'5786', (n) => gem(n, gematria_U, gematria_T, gematria_H, gematria_T2)", "r == 'תשפ״ו'"]] },
+  // ── הכרעה-20ב · צורך-בדיקה של השרשור: אף אטום-יחיד לא עובר את שלוש הדוגמאות (עיצוב לבד לא מזהה מציין-מקום; נרמול לבד לא מעצב) ──
+  'phone.fmtSafe':      { shape: 'חיפוש',      demand: 'טלפון עיצוב מקפים תצוגה מציין-מקום אפסים ספרה חוזרת ריק נרמול', params: ['String?'], ret: 'String', examples: [["'0521234567'", "r == '052-1234567'"], ["'0000000000'", "r == ''"], ["'00972521234567'", "r == '052-1234567'"]] },
   'heb.dateFull':       { shape: 'מועד',       demand: 'תאריך עברי מלא מ ISO יום חודש שנה גימטריה', params: ['String?', 'String Function(num n) gem', 'String Function(String y) gemYear', 'Map<String, Object> Function(DateTime d) hebParts', 'List<String>'], ret: 'String', imports: ['dart-data-maor/gematria-sockets.dart', 'dart-maor/gematria.dart', 'dart-maor/gem-year.dart', 'dart-maor/heb-parts.dart', 'dart-data-maor/heb-month-he-sockets.dart'], examples: [["'2026-09-08', (n) => gem(n, gematria_U, gematria_T, gematria_H, gematria_T2), (y) => gemYear(y, (n) => gem(n, gematria_U, gematria_T, gematria_H, gematria_T2)), hebParts, hebMonthHe_monthNames", "r == 'כ״ו אלול תשפ״ו'"], ["'', (n) => gem(n, gematria_U, gematria_T, gematria_H, gematria_T2), (y) => y, hebParts, hebMonthHe_monthNames", "r == ''"]] },
 };
 const heTok = (s) => [...String(s).matchAll(/[֐-׿][֐-׿"'\-״]{1,}/g)].map((m) => m[0].replace(/^["'\-]+|["'\-]+$/g, '')).filter((t) => t.length >= 2);
@@ -81,22 +83,44 @@ export function plan({ prove = true } = {}) {
   const candsOf = (need) => rows.filter((c) => sigOk(c, need)).filter((c) => isPure(c.file));
   // הוכחה-בריצה: קובץ-מוכיח לכל צורך — כל המועמדים מיובאים עם קידומת, כל דוגמה נבדקת; פלט = "i:j:1/0"
   const proofs = {};
-  if (prove) { for (const id of needsIds) { const need = NEEDS[id]; const cands = candsOf(need); if (!cands.length || !need.examples) continue; proofs[id] = proveCandidates(id, cands, need.examples, need.imports || []); }
-  } else if (fs.existsSync(OUT)) { const saved = JSON.parse(fs.readFileSync(OUT, 'utf8')); for (const id of needsIds) if (saved[id] && saved[id].proof) proofs[id] = saved[id].proof; }
+  // הכרעה-20ב · «אין-יחיד ⇒ שלב כמה עד שהמטרה מושגת»: נפילה-לאחור לשרשרת-של-שניים — נדלקת **רק** כשאף מועמד-יחיד לא עובר את כל הדוגמאות.
+  // הגרף רועש (String ⇒ String משתרשר עם הכל: ~17K קשתות) ⇒ רק CHAIN_K המובילים-לפי-ייעוד עוברים להוכחה-בריצה; ההוכחה מכריעה, לא הדירוג.
+  const CHAIN_K = 24; const chainsOf = {};
+  const pureRows = rows.filter((c) => isPure(c.file));
+  const chainCands = (need, demand, score) => {
+    const As = pureRows.filter((a) => a.argc === need.params.length && a.params.every((p, i) => { const x = norm(p), y = norm(need.params[i]); return x === y || x === 'dynamic'; }) && !/^void$/.test(norm(a.ret)));
+    const out = [];
+    for (const a of As) { const o = norm(a.ret); for (const b of pureRows) { if (b.argc !== 1) continue; const bi = norm(b.params[0]); if (!(bi === o || bi === 'dynamic' || o === 'dynamic')) continue; const br = norm(b.ret); if (!(br === norm(need.ret) || br === 'dynamic')) continue; if (a.id === b.id) continue;
+      out.push({ id: `${b.id}∘${a.id}`, chain: [{ id: a.id, file: a.file }, { id: b.id, file: b.file }], score: +(score(a) + score(b)).toFixed(2) }); } }
+    return { admissible: out.length, top: out.sort((x, y) => y.score - x.score || (x.id < y.id ? -1 : 1)).slice(0, CHAIN_K) };
+  };
+  if (prove) { for (const id of needsIds) { const need = NEEDS[id]; const cands = candsOf(need); if (!need.examples) continue;
+      if (cands.length) proofs[id] = proveCandidates(id, cands, need.examples, need.imports || []);
+      const pf = proofs[id] || {}; const singleOk = Object.values(pf).some((r) => r && r.ok === r.total);
+      if (singleOk) continue;
+      const demand = bag(heTok(need.demand)); const score = (c) => { let s = 0; for (const t of c.titleTok) if (demand.has(t)) s += 2 * idf(t); for (const t of c.bodyTok) if (demand.has(t) && !c.titleTok.has(t)) s += idf(t); return s; };
+      const { admissible, top } = chainCands(need, demand, score); if (!top.length) continue;
+      const cp = proveCandidates(id + '__chain', top, need.examples, need.imports || []);
+      chainsOf[id] = { admissible, cands: Object.fromEntries(top.map((c) => [c.id, { chain: c.chain, score: c.score }])) };
+      proofs[id] = { ...pf, ...cp }; }
+  } else if (fs.existsSync(OUT)) { const saved = JSON.parse(fs.readFileSync(OUT, 'utf8')); for (const id of needsIds) { if (saved[id] && saved[id].proof) proofs[id] = saved[id].proof; if (saved[id] && saved[id].chains) chainsOf[id] = saved[id].chains; } }
   for (const id of needsIds) {
     const need = NEEDS[id]; const demand = bag(heTok(need.demand));
     const score = (c) => { let s = 0; for (const t of c.titleTok) if (demand.has(t)) s += 2 * idf(t); for (const t of c.bodyTok) if (demand.has(t) && !c.titleTok.has(t)) s += idf(t); return s + agree(c, need); };
     const pf = proofs[id] || {};
-    const cands = candsOf(need).map((c) => ({ id: c.id, file: c.file, score: +score(c).toFixed(2), exact: c.params.every((p, i) => norm(p) === norm(need.params[i])) && norm(c.ret) === norm(need.ret), proven: pf[c.id] ? pf[c.id].ok === pf[c.id].total : false, ok: pf[c.id] ? pf[c.id].ok : 0 }))
-      .sort((x, y) => (y.proven - x.proven) || (y.ok - x.ok) || (y.score - x.score) || (x.exact === y.exact ? (x.id < y.id ? -1 : 1) : x.exact ? -1 : 1));
+    const singles = candsOf(need).map((c) => ({ id: c.id, file: c.file, chain: null, score: +score(c).toFixed(2), exact: c.params.every((p, i) => norm(p) === norm(need.params[i])) && norm(c.ret) === norm(need.ret), proven: pf[c.id] ? pf[c.id].ok === pf[c.id].total : false, ok: pf[c.id] ? pf[c.id].ok : 0 }));
+    // שרשראות: יחיד-מוכח תמיד גובר (exact ⇒ יחיד ראשון בשוויון); שרשרת נכנסת רק דרך ההוכחה
+    const chains = chainsOf[id] ? Object.entries(chainsOf[id].cands).map(([cid, c]) => ({ id: cid, file: c.chain[0].file, chain: c.chain, score: c.score, exact: false, proven: pf[cid] ? pf[cid].ok === pf[cid].total : false, ok: pf[cid] ? pf[cid].ok : 0 })) : [];
+    const cands = [...singles, ...chains]
+      .sort((x, y) => (y.proven - x.proven) || (y.ok - x.ok) || ((x.chain ? 1 : 0) - (y.chain ? 1 : 0)) || (y.score - x.score) || (x.exact === y.exact ? (x.id < y.id ? -1 : 1) : x.exact ? -1 : 1));
     const top = cands[0] || null; const ok = top && (pf.error ? top.score > 0 : top.proven);
-    out[id] = { shape: need.shape, pick: ok ? top.id : null, file: ok ? top.file : null, score: top ? top.score : 0, proven: !!(top && top.proven), candidates: cands.length, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.ok}/${need.examples ? need.examples.length : 0}${c.proven ? '✓' : ''}:${c.score}`), proof: pf };
+    out[id] = { shape: need.shape, pick: ok ? top.id : null, file: ok ? top.file : null, chain: ok && top.chain ? top.chain : null, score: top ? top.score : 0, proven: !!(top && top.proven), candidates: singles.length, chainsAdmissible: chainsOf[id] ? chainsOf[id].admissible : 0, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.ok}/${need.examples ? need.examples.length : 0}${c.proven ? '✓' : ''}:${c.score}`), proof: pf, chains: chainsOf[id] || null };
   }
   return out;
 }
 export function readPlan() { return JSON.parse(fs.readFileSync(OUT, 'utf8')); }
 /** למחולל: השם+הקובץ של הנבחר לצורך; צורך לא-פתור ⇒ זריקה (שקע-חובה ריק = פסילה, הכרעה-20ג) */
-export function pick(id) { const p = readPlan()[id]; if (!p || !p.pick) throw new Error(`behavior-plan: אין אטום לצורך ${id} — פסילה (לא כותבים ביד)`); return { name: p.pick, file: p.file }; }
+export function pick(id) { const p = readPlan()[id]; if (!p || !p.pick) throw new Error(`behavior-plan: אין אטום לצורך ${id} — פסילה (לא כותבים ביד)`); return { name: p.pick, file: p.file, chain: p.chain || null }; }
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
@@ -113,9 +137,12 @@ if (isMain) {
     const saved = fs.existsSync(OUT) ? readPlan() : {};
     const BH = 'gen_behaviors.dart'; const bh = src[BH] || ''; if (!bh) fails.push('אין שכבת-הרכבה gen_behaviors.dart (behavior-compose)');
     for (const [id, p] of Object.entries(P)) { if (!p.pick) continue; if (!saved[id] || saved[id].pick !== p.pick) fails.push(`התוכנית השמורה ≠ הבחירה החיה: ${id} (${saved[id] && saved[id].pick} ≠ ${p.pick}) — הרץ בלי --gate`);
-      const imp = new RegExp(`^import '\\.\\./${p.file.replace(/[.\/]/g, '\\$&')}'(?: as \\w+)?;`, 'm');   // G49 · קופסאות מיובאות בקידומת (as bxN)
-      if (!imp.test(bh)) fails.push(`${id}: ${p.pick} לא מיובא בשכבת-ההרכבה`); else if (!new RegExp(`\\b${p.pick}\\(`).test(bh.replace(/^import .*$/gm, ''))) fails.push(`${id}: ${p.pick} מיובא בשכבת-ההרכבה אך לא נקרא`);
-      for (const [f, s] of Object.entries(src)) { if (f === BH || /^gen_app_[a-z0-9_]+\.dart$/.test(f)) continue; /* אפליקציות-הזהב ואפליקציות-הספק (app-from-sentences · app-ds) מחווטות ע"י auto-logic/wireLogic — לא דרך שכבת-ההרכבה */ if (imp.test(s)) fails.push(`${f}: מייבא חלקיק ישירות (${p.pick}) — הרכבה רק ב-${BH} (ה)`); else if (new RegExp(`\\b${p.pick}\\(`).test(s.replace(/^import .*$/gm, ''))) fails.push(`${f}: קורא לחלקיק ${p.pick} ישירות — דרך bh* בלבד (ה)`); } }
+      for (const part of (p.chain || [{ id: p.pick, file: p.file }])) {   // הכרעה-20ב · שרשרת = כל חלק מיובא ונקרא
+      const imp = new RegExp(`^import '\\.\\./${part.file.replace(/[.\/]/g, '\\$&')}'(?: as \\w+)?;`, 'm');   // G49 · קופסאות מיובאות בקידומת (as bxN)
+      if (!imp.test(bh)) fails.push(`${id}: ${part.id} לא מיובא בשכבת-ההרכבה`); else if (!new RegExp(`\\b${part.id}\\(`).test(bh.replace(/^import .*$/gm, ''))) fails.push(`${id}: ${part.id} מיובא בשכבת-ההרכבה אך לא נקרא`);
+      for (const [f, s] of Object.entries(src)) { if (f === BH || /^gen_app_[a-z0-9_]+\.dart$/.test(f)) continue; /* אפליקציות-הזהב ואפליקציות-הספק (app-from-sentences · app-ds) מחווטות ע"י auto-logic/wireLogic — לא דרך שכבת-ההרכבה */ if (imp.test(s)) fails.push(`${f}: מייבא חלקיק ישירות (${part.id}) — הרכבה רק ב-${BH} (ה)`); else if (new RegExp(`\\b${part.id}\\(`).test(s.replace(/^import .*$/gm, ''))) fails.push(`${f}: קורא לחלקיק ${part.id} ישירות — דרך bh* בלבד (ה)`); } } }
+    // (ו) הכרעה-20ב · מנגנון-השרשור מוכח-בבייטים: צורך-הבדיקה נפתר ב**שרשרת** (לא ביחיד — אחרת הצורך אינו צורך-שרשרת והבדיקה ריקה) ושני חלקיה אטומים אמיתיים מהמדף
+    { const q = P['phone.fmtSafe']; if (!q || !q.pick) fails.push('הכרעה-20ב: צורך-השרשור phone.fmtSafe לא נפתר'); else if (!q.chain) fails.push(`הכרעה-20ב: phone.fmtSafe נפתר ביחיד (${q.pick}) — הצורך אינו צורך-שרשרת, הבדיקה ריקה`); else if (!q.chain.every((x) => fs.existsSync(path.join(R.NEW, x.file)))) fails.push('הכרעה-20ב: חלק-שרשרת לא קיים במדף'); }
     // (ג) חלקיק-קיים ⇒ הפרימיטיב שלו אסור בדבק המחולל (הכרעה-20ב: מרכיבים חלקיקים, לא ממציאים מחדש)
     for (const [id, need] of Object.entries(NEEDS)) { if (!need.forbid) continue; const re = new RegExp(need.forbid); for (const [f, s] of Object.entries(src)) { const m = s.split('\n').findIndex((l) => re.test(l)); if (m >= 0) fails.push(`${f}:${m + 1}: פרימיטיב במקום החלקיק ${P[id].pick} (${id})`); } }
     // (ד) כפילות-בכניסה: אטום שנוסף ב-G34 עם חתימה זהה + ≥2 מילות-ייעוד משותפות לאטום ותיק = מימוש-מחדש
@@ -126,5 +153,6 @@ if (isMain) {
   }
   const n = Object.keys(P).length, ok = Object.values(P).filter((p) => p.pick).length;
   if (fails.length) { console.log(`🔴 behavior: ${fails.length} כשלים\n  ` + fails.slice(0, 12).join('\n  ')); process.exit(1); }
-  console.log(`✓ behavior: ${ok}/${n} צרכים ⇒ חלקיקים נבחרו-בהוכחה-בריצה (${Object.values(P).filter((p) => p.proven).length} מוכחים) מ-${catalog().rows.length} מנועים` + (gate ? ' · מיובאים+נקראים · מתאמים דקים' : ' · behavior-plan.json'));
+  const ch = Object.values(P).filter((p) => p.chain).length;
+  console.log(`✓ behavior: ${ok}/${n} צרכים ⇒ חלקיקים נבחרו-בהוכחה-בריצה (${Object.values(P).filter((p) => p.proven).length} מוכחים · ${ch} בשרשרת — הכרעה-20ב) מ-${catalog().rows.length} מנועים` + (gate ? ' · מיובאים+נקראים · מתאמים דקים' : ' · behavior-plan.json'));
 }

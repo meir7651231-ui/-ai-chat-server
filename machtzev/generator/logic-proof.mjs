@@ -13,7 +13,8 @@ const DART = process.env.DART || (fs.existsSync('/home/user/flutter/bin/cache/da
 export const isPure = (file) => { try { const src = fs.readFileSync(path.join(R.NEW, file), 'utf8'); return [...src.matchAll(/^import\s+'([^']+)'/gm)].every((m) => /^(\.\.?\/)/.test(m[1]) || /^dart:(convert|math|core|collection|typed_data)$/.test(m[1])); } catch { return false; } };   // G48 · טהור = אפס-import, או ייבוא-יחסי מהמדף / ספריית-dart טהורה (קופסאות); package:/dart:io/ui/html ⇒ לא
 /** @param id מזהה-הצורך · cands [{id,file}] · examples [[argsDart, checkDart]] ⇒ {candId: {ok,total}} | {error} */
 export function proveCandidates(id, cands, examples, extraImports = []) {   // extraImports: שקעים מהקטלוג (אטומי-דאטה/מנועים) שהדוגמאות קוראות להם בלי קידומת
-  const pure = cands.filter((c) => isPure(c.file)); if (!pure.length || !examples || !examples.length) return {};
+  // הכרעה-20ב · «אין-יחיד ⇒ שלב כמה»: מועמד יכול להיות שרשרת {chain:[{id,file},{id,file}]} — B(A(args)); שני חלקיה חייבים להיות טהורים
+  const pure = cands.filter((c) => c.chain ? c.chain.every((q) => isPure(q.file)) : isPure(c.file)); if (!pure.length || !examples || !examples.length) return {};
   const all = proveFile(id, pure, examples, extraImports);
   if (!all.error) return all;
   // G36 · מועמד אחד שאינו מתקמפל מול הדוגמאות (חתימה-בקטלוג ≠ גוף) לא מפיל את כולם: מוכיחים כל מועמד בקובץ-משלו; הנכשל-בקומפילציה = 0/total עם השגיאה
@@ -22,8 +23,10 @@ export function proveCandidates(id, cands, examples, extraImports = []) {   // e
 }
 function proveFile(id, pure, examples, extraImports) {
   const dir = path.join(HERE, '.prove'); fs.mkdirSync(dir, { recursive: true });
-  const imps = [...extraImports.map((f) => `import '${path.relative(dir, path.join(R.NEW, f)).split(path.sep).join('/')}';`), ...pure.map((c, i) => `import '${path.relative(dir, path.join(R.NEW, c.file)).split(path.sep).join('/')}' as c${i};`)].join('\n');
-  const body = pure.map((c, i) => examples.map((ex, j) => `  try { final dynamic r = c${i}.${c.id}(${ex[0]}); out.add('${i}:${j}:' + ((${ex[1]}) ? '1' : '0')); } catch (_) { out.add('${i}:${j}:0'); }`).join('\n')).join('\n');
+  const rel = (f) => path.relative(dir, path.join(R.NEW, f)).split(path.sep).join('/');
+  const imps = [...extraImports.map((f) => `import '${rel(f)}';`), ...pure.flatMap((c, i) => c.chain ? c.chain.map((q, k) => `import '${rel(q.file)}' as c${i}_${k};`) : [`import '${rel(c.file)}' as c${i};`])].join('\n');
+  const call = (c, i, args) => c.chain ? `c${i}_1.${c.chain[1].id}(c${i}_0.${c.chain[0].id}(${args}))` : `c${i}.${c.id}(${args})`;   // שרשרת = B(A(args))
+  const body = pure.map((c, i) => examples.map((ex, j) => `  try { final dynamic r = ${call(c, i, ex[0])}; out.add('${i}:${j}:' + ((${ex[1]}) ? '1' : '0')); } catch (_) { out.add('${i}:${j}:0'); }`).join('\n')).join('\n');
   const file = path.join(dir, id.replace(/\W/g, '_') + '.dart');
   fs.writeFileSync(file, `// מוכיח-בחירה: ${id} — ${pure.length} מועמדים × ${examples.length} דוגמאות\n${imps}\nvoid main() {\n  final out = <String>[];\n${body}\n  print(out.join(','));\n}\n`);
   const r = spawnSync(DART, ['run', file], { cwd: dir, encoding: 'utf8', timeout: 120000 });
