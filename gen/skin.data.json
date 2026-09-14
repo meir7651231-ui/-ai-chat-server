@@ -45,18 +45,23 @@
     }
   },
   "density": {
-    "_src": "עוגן חרוט: שורה 52px (DECISIONS.md:75). שאר הדרגות נגזרות מהרשת (gridUnit=4) ככפולות שלמות — 8·4=32 · 10·4=40 · 13·4=52. דרגות נוספות ימתינו לגל-המחקר.",
+    "_src": "Carbon data-table: שורה sm=32 · md=40 · lg=48, ריפוד-עמודה 16px; Android: יעד-מגע 48dp. 52 נשאר כעוגן החרוט (הכרעה-28) ועובר את רצפת-המגע.",
     "unitMul": {
       "compact": 8,
       "cozy": 10,
       "roomy": 13
     },
-    "default": "cozy",
     "cellPadMul": {
+      "compact": 2,
+      "cozy": 4,
+      "roomy": 4
+    },
+    "cellPadBlockMul": {
       "compact": 1,
       "cozy": 2,
-      "roomy": 3
-    }
+      "roomy": 2
+    },
+    "default": "cozy"
   },
   "measure": {
     "content": 720,
@@ -81,8 +86,8 @@
   ],
   "focus": {
     "widthMul": 0.5,
-    "offsetMul": 0.5,
-    "_src": "טבעת-מיקוד = דרישת-נגישות; עובי/ריווח כפולות-רשת ולא מספר-יד"
+    "offsetPx": -2,
+    "_src": "Carbon focus-outline: 2px + outline-offset:-2px (פנימה). בשורה של 32px טבעת חיצונית נחתכת."
   },
   "fontStack": {
     "he": "Heebo, Arial, sans-serif",
@@ -194,7 +199,8 @@
       "phone",
       "id",
       "count"
-    ]
+    ],
+    "_rules": "R1.1 כיוון בשורש-המסמך ולא ב-CSS (שורד הדפסה, מצב-קריאה ו-CSS מופשט) · R2.5 letter-spacing אפס בעברית · Bug 8: תא-דביק דורש border-collapse:separate אחרת הגבולות נעלמים"
   },
   "font": {
     "family": "Heebo",

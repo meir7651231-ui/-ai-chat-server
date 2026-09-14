@@ -44,7 +44,7 @@ export function renderApp(spec, chosen, plan, meta) {
     const head = e.fields.map((f) => `<th>${esc(f.name)}</th>`).join('') + (e.stages && e.stages.length ? '<th>שלב</th>' + (callOf('days-since') ? '<th>בשלב</th>' : '') : '') + (e.fields.some((f) => f.shape === 'date') && callOf('days-since') ? '<th>ימים</th>' : '') + '<th></th>';
     return `<section class="entity" data-entity="${ekey}">
   <h2>${esc(e.name)} <small id="${ekey}_n"></small></h2>${e.moment ? `<div class="foot" style="margin:0 0 6px">הרגע: ${esc(e.moment)}${e.screens && e.screens.length ? ' · מסך: ' + esc(e.screens.join(', ')) : ''}</div>` : ''}${e.forbidden && e.forbidden.length ? `<div class="foot" style="margin:0 0 6px">אסור: ${e.forbidden.map((x) => `<b>${esc(x)}</b>`).join(' · ')}</div>` : ''}${e.fix ? `<div class="foot" style="margin:0 0 6px">תיקון בדיעבד: ${esc(e.fix.who)}${e.fix.days ? ' עד ' + e.fix.days + ' ימים מהרישום' : ''}; אחר כך נעול</div>` : ''}
-  <form id="${ekey}_form" class="row">${form}<button type="submit">הוסף ${esc(e.name)}</button></form>
+  <form id="${ekey}_form" class="row">${form}<button type="submit">הוסף ${esc(e.name)}</button></form>${callOf('csv') && callOf('csv-escape') ? `<div class="tools noprint"><button class="ghost" data-csv="${ei}" title="מייצא בדיוק את מה שרואים: הסינון, התפקיד והסדר הנוכחיים">⭳ ייצוא לאקסל (CSV)</button></div>` : ''}
   <div class="tbl"><table><thead><tr>${head}</tr></thead><tbody id="${ekey}_body"></tbody></table></div>
 </section>`;
   }).join('\n');
@@ -73,10 +73,14 @@ ${SKIN_CSS()}
 .exp.bad{background:var(--err);color:var(--hi)}.exp.warn{background:var(--warn);color:var(--on-a)}
 th,td{white-space:nowrap}
 .search{min-width:calc(var(--s1) * 55)}
+.tools{display:flex;gap:var(--s2);margin-bottom:var(--s2)}
+.tbl table{min-width:100%}
+th:first-child,td:first-child{position:sticky;inset-inline-start:0;background:var(--card);z-index:2}
+thead th:first-child{z-index:3}
 .foot{color:var(--mute);font-size:var(--t-meta);margin-top:var(--s4)}
 </style></head><body>
 <div class="top"><div><h1>${esc(spec.app)}</h1><div class="foot" style="margin:0">נבנה על-ידי המחולל · ${atoms.length} אטומים מוכחים · הנתונים נשמרים בדפדפן זה</div></div>
-${hasSearch ? '<input class="search" id="q" type="search" placeholder="חיפוש בכל השדות…">' : ''}${(spec.roles || []).length ? `<label>מי אני <select id="role"><option value="">הכל</option>${spec.roles.map((r) => `<option>${esc(r.name)}</option>`).join('')}</select></label>` : ''}</div>
+${hasSearch ? '<input class="search" id="q" type="search" placeholder="חיפוש בכל השדות…">' : ''}<label class="noprint">צפיפות <select id="density"><option value="compact">צפוף</option><option value="cozy" selected>רגיל</option><option value="roomy">מרווח</option></select></label>${(spec.roles || []).length ? `<label>מי אני <select id="role"><option value="">הכל</option>${spec.roles.map((r) => `<option>${esc(r.name)}</option>`).join('')}</select></label>` : ''}</div>
 <div class="kpis">${kpiHtml}${spec.entities.some((e) => e.fields.some((f) => f.shape === 'date' && (meta.expiryWords || ['תוקף']).some((w) => f.name.includes(w)))) && callOf('days-since') ? '<div class="kpi" id="kpi-exp"><bdi class="v">—</bdi><span class="l">פג תוקף · פג בקרוב</span></div>' : ''}</div>
 ${entityHtml}
 <div class="foot">אטומים: ${atoms.map((a) => a.name).join(' · ')}</div>
@@ -90,7 +94,7 @@ const ROLES = ${jstr(roles)};
 const EXP_WORDS = ${jstr(EXP)}, EXP_DAYS = ${EXP_DAYS};
 const KEY = ${jstr('gen:' + meta.slug)};
 const FN = {${atoms.map((a) => a.fn + '__call').join(', ')}};
-const CALL = { money: ${callOf('money')}, fmtDate: ${callOf('fmt-date')}, daysSince: ${callOf('days-since')}, phone: ${callOf('phone-format')}, norm: ${callOf('norm-search')}, sum: ${callOf('sum')}, countBy: ${callOf('count-by')} };
+const CALL = { money: ${callOf('money')}, fmtDate: ${callOf('fmt-date')}, daysSince: ${callOf('days-since')}, phone: ${callOf('phone-format')}, norm: ${callOf('norm-search')}, sum: ${callOf('sum')}, countBy: ${callOf('count-by')}, csv: ${callOf('csv')}, csvEsc: ${callOf('csv-escape')} };
 const today = () => new Date().toISOString().slice(0, 10);
 let DATA; try { DATA = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { DATA = null; }
 if (!DATA) DATA = SCHEMA.map(() => []);
@@ -129,6 +133,21 @@ function rowsOf(ei) {
   return rows.filter((r) => SCHEMA[ei].fields.some((f, fi) => CALL.norm(r[fi]).includes(nq)));
 }
 let role = '';
+// צפיפות: העדפה אישית שנשמרת (המתג משנה טוקן, לא כלל-CSS)
+const DKEY = KEY + ':density';
+function setDensity(v) { document.documentElement.setAttribute('data-density', v); try { localStorage.setItem(DKEY, v); } catch {} }
+// ייצוא: בדיוק התצוגה שעל המסך (כותרות + שורות גלויות), דרך אטומי-המדף המוכחים
+function exportCsv(ei) {
+  if (!CALL.csv || !CALL.csvEsc) return;
+  const sec = document.querySelector('[data-entity="e' + ei + '"]');
+  const head = [...sec.querySelectorAll('thead th')].map((th) => th.textContent.trim()).filter((x, i, a) => i < a.length - 1);
+  const body = [...sec.querySelectorAll('tbody tr')].map((tr) => [...tr.children].slice(0, head.length).map((td) => td.textContent.replace(/\s*›\s*$/, '').trim()));
+  const text = CALL.csv([head, ...body], CALL.csvEsc);
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' }));
+  a.download = SCHEMA[ei].name + '.csv';
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
 function paint() {
   role = el('role') ? el('role').value : '';
   const allowed = role ? (ROLES.find((x) => x.name === role) || { ents: [] }) : null;
@@ -197,6 +216,9 @@ document.body.addEventListener('click', (ev) => {
 });
 if (el('q')) el('q').addEventListener('input', paint);
 if (el('role')) el('role').addEventListener('change', paint);
+if (el('density')) { let d = 'cozy'; try { d = localStorage.getItem(DKEY) || 'cozy'; } catch {} el('density').value = d; setDensity(d); el('density').addEventListener('change', (ev) => setDensity(ev.target.value)); }
+document.addEventListener('click', (ev) => { const b = ev.target.closest('[data-csv]'); if (b) exportCsv(Number(b.dataset.csv)); });
+
 paint();
 </script></body></html>`;
 }

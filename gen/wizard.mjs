@@ -42,7 +42,7 @@ input[type=checkbox]{accent-color:var(--acc);width:15px;height:15px;flex:none;ma
 .err{color:var(--none);white-space:pre-wrap;margin-top:8px}.note{font-size:13px;color:var(--mute)}
 .tag{display:inline-block;font-size:11px;padding:0 6px;border-radius:99px;background:var(--code);color:var(--mute);margin-inline-start:4px}
 </style>
-<div class="wrap">
+<div class="wrap" dir="rtl" lang="he">
 <div class="head"><div><h1>אשף המוסד</h1><div class="mute">כל התוכנית כמתגים. הכל דלוק. מה שדלוק נכתב כספק ונבנה כאן, בדפדפן, בלי בינה.</div></div>
 <div class="stat"><div><b id="c-ents">${counts.ents}</b>ישויות</div><div><b id="c-fields">${counts.fields}</b>שדות</div><div><b>${counts.autos}</b>אוטומציות</div><div><b>${counts.faces}</b>פנים</div><div><b>${shelf.length}</b>אטומי-JS</div><div><b>${dartShelf.length}</b>Dart-בלבד</div></div></div>
 

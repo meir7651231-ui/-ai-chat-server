@@ -36,7 +36,7 @@ textarea{width:100%;min-height:160px;font:15px/1.6 Heebo,Arial,sans-serif;color:
 .err{color:var(--none);white-space:pre-wrap;margin-top:8px}.grammar{font-size:13px;color:var(--mute);line-height:1.8}.grammar code{font-size:12px}
 .empty{color:var(--mute);padding:10px 0}
 </style>
-<div class="wrap">
+<div class="wrap" dir="rtl" lang="he">
 <div class="head"><div><h1>סטודיו המחולל</h1><div class="mute">כותבים ספק בעברית · המחולל רץ כאן בדפדפן: צרכים מצורה ⇒ הוכחה-בריצה מול המדף ⇒ אפליקציה · אפס מודל, אפס שרת</div></div>
 <div class="stat"><div><b id="s-shelf">${shelf.length}</b>אטומי-JS</div><div><b>${dartShelf.length}</b>אטומי-Dart-בלבד</div><div><b>${INVENTORY.rows.reduce((a, r) => a + r.count, 0)}</b>סה"כ במלאי</div><div><b id="s-needs">${NEEDS.length}</b>צרכים ידועים</div></div></div>
 

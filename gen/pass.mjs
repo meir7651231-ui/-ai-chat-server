@@ -155,7 +155,7 @@ td.num{text-align:left}
 pre{white-space:pre-wrap;font-family:var(--font-he);font-size:var(--t-meta)}
 
 </style>
-<div class="wrap">
+<div class="wrap" dir="rtl" lang="he">
 <h1>המחולל אגף-אגף</h1><div class="mute">סבב ${history.length}: 12 אגפי המוסד, כל אחד לחוד, ואז המוסד כולו כספק מאוחד. השיפורים נגזרים מכנית מהספק ומהדוח. ${esc(new Date().toLocaleDateString('he-IL'))}</div>
 <section class="step"><h2>מה נבנה</h2><div class="tbl"><table><tr><th>אגף</th><th>ישויות</th><th>שדות</th><th>עם שלבים</th><th>מדדים</th><th>צרכים מוכחים</th><th>אטומי-תצוגה (Flutter)</th><th>שיפורים</th></tr>${rows}</table></div></section>
 <section class="step"><h2>מה לשפר — סבב אחרי סבב</h2><div class="tbl"><table><tr><th>סוג</th>${history.map((h) => `<th>סבב ${h.round} (12 אגפים)</th>`).join('')}<th>מאוחד (סבב ${history.length})</th><th>התיקון</th></tr>${histRows}<tr><td><b>סה"כ</b></td>${history.map((h) => `<td class="num">${h.perDeptTotal}</td>`).join('')}<td class="num">${uni ? uni.improvements.length : '—'}</td><td></td></tr><tr><td><b>שאלות-עדשה פתוחות (12 אגפים)</b></td>${history.map((h) => `<td class="num">${h.lenses ?? '—'}</td>`).join('')}<td class="num">${uni ? uni.lenses.reduce((a, l) => a + l.open.length, 0) : '—'}</td><td class="mute">יורד עם חבילות-ידע (packs/) ודקדוק חדש; לא עם קוד-פר-ישות</td></tr><tr><td><b>קובצי חבילות-ידע</b></td>${history.map((h) => `<td class="num">${h.packFiles ?? '—'}</td>`).join('')}<td></td><td class="mute">כל חבילה = דאטה עם מוצא (אטום במדף / פירוק של הבעלים)</td></tr><tr><td><b>הצמדות חבילה×ישות</b></td>${history.map((h) => `<td class="num">${h.packs ?? '—'}</td>`).join('')}<td></td><td class="mute">חבילה מוצמדת לישות לפי match.entity</td></tr></table></div></section>

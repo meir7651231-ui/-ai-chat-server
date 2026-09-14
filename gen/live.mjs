@@ -69,6 +69,6 @@ iframe{width:100%;height:calc(var(--s7) * 15);border:0;display:block}
 export const LIVE_FONTS = FONTS;
 
 export function renderLive(r, appHtml) {
-  return `<title>${esc(r.app)} · המחולל</title>\n${LIVE_FONTS}\n<style>\n${LIVE_CSS}</style>\n<div class="wrap">\n${renderLiveBody(r, appHtml)}</div>`;
+  return `<title>${esc(r.app)} · המחולל</title>\n${LIVE_FONTS}\n<style>\n${LIVE_CSS}</style>\n<div class="wrap" dir="rtl" lang="he">\n${renderLiveBody(r, appHtml)}</div>`;
 }
 

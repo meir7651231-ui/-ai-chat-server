@@ -49,30 +49,31 @@ export function tokensCss() {
   const radii = Object.entries(S.radiusMul).map(([k, m]) => `--r-${k}:${px(r0 * m)}`).join(';') + ';--r-pill:999px';
   const type = Object.entries(T).filter(([k]) => !k.startsWith('_')).map(([k, v]) => `--t-${k}:${px(v.px)};--lh-${k}:${v.lh};--w-${k}:${v.w}`).join(';');
   const rows = Object.entries(D.unitMul).map(([k, m]) => `--row-${k}:${px(g * m)}`).join(';');
-  const pads = Object.entries(D.cellPadMul).map(([k, m]) => `--pad-${k}:${px(g * m)}`).join(';');
+  const pads = Object.entries(D.cellPadMul).map(([k, m]) => `--pad-${k}:${px(g * m)}`).join(';') + ';' + Object.entries(D.cellPadBlockMul).map(([k, m]) => `--padb-${k}:${px(g * m)}`).join(';');
   const motion = Object.entries(seed.motion || {}).map(([k, v]) => `--m-${k}:${v}ms`).join(';');
   const alias = vars({
     '--bg': 'var(--canvas)', '--card': 'var(--surface)', '--raise': 'var(--raised)', '--code': 'var(--raised2)',
     '--mute': 'var(--mut)', '--line': 'var(--hair)', '--acc': 'var(--a)', '--acc-hi': 'var(--a-hi)', '--acc-ink': 'var(--on-a)', '--none': 'var(--err)',
   });
-  const density = `--row-h:var(--row-${D.default});--cell-pad:var(--pad-${D.default})`;
+  const density = `--row-h:var(--row-${D.default});--cell-pad:var(--pad-${D.default});--cell-pad-block:var(--padb-${D.default})`;
   const scales = [space, radii, type, rows, pads, motion, density,
     `--measure:${px(S.measure.content)}`, `--measure-report:${px(S.measure.report)}`,
-    `--focus-w:${px(g * S.focus.widthMul)}`, `--focus-off:${px(g * S.focus.offsetMul)}`,
+    `--focus-w:${px(g * S.focus.widthMul)}`, `--focus-off:${px(S.focus.offsetPx)}`,
     `--font-he:${S.fontStack.he}`, `--font-mono:${S.fontStack.mono}`].join(';');
   const dk = vars(dark) + ';' + vars(theme);
   return `:root{${vars(paper)};${vars(theme)};${alias};${scales}}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]){${dk}}}
 :root[data-theme=dark]{${dk}}
-[data-density=compact]{--row-h:var(--row-compact);--cell-pad:var(--pad-compact)}
-[data-density=cozy]{--row-h:var(--row-cozy);--cell-pad:var(--pad-cozy)}
-[data-density=roomy]{--row-h:var(--row-roomy);--cell-pad:var(--pad-roomy)}
+[data-density=compact]{--row-h:var(--row-compact);--cell-pad:var(--pad-compact);--cell-pad-block:var(--padb-compact)}
+[data-density=cozy]{--row-h:var(--row-cozy);--cell-pad:var(--pad-cozy);--cell-pad-block:var(--padb-cozy)}
+[data-density=roomy]{--row-h:var(--row-roomy);--cell-pad:var(--pad-roomy);--cell-pad-block:var(--padb-roomy)}
 `;
 }
 
 // ── בסיס-CSS: הכל דרך var(), אפס ליטרל-צבע ואפס מספר-ריווח. מצבי-אינטראקציה כלולים (מיקוד · ריחוף · כבוי). ──
 export const BASE_CSS = `*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:var(--w-body) var(--t-body)/var(--lh-body) var(--font-he);direction:rtl;padding-block:var(--s4);padding-inline:var(--s4)}
+body{margin:0;background:var(--bg);color:var(--ink);font:var(--w-body) var(--t-body)/var(--lh-body) var(--font-he);letter-spacing:0;padding-block:var(--s4);padding-inline:var(--s4)}
+/* R1.1: הכיוון יושב בסימון (dir על השורש/העוטף), לא ב-CSS — כדי שישרוד הדפסה, מצב-קריאה ו-CSS מופשט */
 h1{font:var(--w-screen) var(--t-screen)/var(--lh-screen) var(--font-he);margin:0 0 var(--s1)}
 h2{font:var(--w-section) var(--t-section)/var(--lh-section) var(--font-he);margin:0 0 var(--s2);display:flex;gap:var(--s3);align-items:baseline;flex-wrap:wrap}
 h2 small,h2 .n{font-size:var(--t-meta);color:var(--mute);font-weight:400}
@@ -83,11 +84,11 @@ a{color:var(--acc)}
 code{background:var(--code);padding:0 var(--s1);border-radius:var(--r-sm);font-family:var(--font-mono);font-size:var(--t-micro)}
 pre{background:var(--code);padding:var(--s3);border-radius:var(--r-sm);overflow-x:auto;font-family:var(--font-mono);font-size:var(--t-micro)}
 .tbl{overflow-x:auto}
-table{border-collapse:collapse;width:100%}
-th,td{text-align:right;padding:var(--cell-pad) var(--s2);border-bottom:1px solid var(--line);vertical-align:top}
-tbody tr{height:var(--row-h)}
+table{border-collapse:separate;border-spacing:0;width:100%}
+th,td{text-align:start;padding:var(--cell-pad-block) var(--cell-pad);border-block-end:1px solid var(--line);vertical-align:top}
+tbody tr{height:var(--row-h)}   /* בטבלה height מתנהג כמינימום: טקסט גדל ⇒ השורה גדלה (WCAG 1.4.12) */
 tbody tr:hover{background:var(--raise)}
-thead th{position:sticky;top:0;background:var(--card);color:var(--mute);font-weight:var(--w-section);font-size:var(--t-meta);z-index:1}
+thead th{position:sticky;inset-block-start:0;background:var(--card);color:var(--mute);font-weight:var(--w-section);font-size:var(--t-meta);z-index:1}
 td.num,th.num{font-variant-numeric:tabular-nums}
 bdi{unicode-bidi:isolate}
 td.num,th.num,.num{unicode-bidi:isolate}
@@ -100,13 +101,17 @@ button:hover{filter:brightness(1.08)}
 button.x,button.ghost{background:transparent;color:var(--mute);padding:0 var(--s2)}
 button.ghost:hover{background:var(--raise);color:var(--ink)}
 button[disabled],input[disabled],select[disabled]{opacity:.55;cursor:not-allowed}
-:focus-visible{outline:var(--focus-w) solid var(--acc-hi);outline-offset:var(--focus-off)}
+:focus-visible{outline:var(--focus-w) solid var(--acc);outline-offset:var(--focus-off)}
+@media (prefers-contrast:more){:focus-visible{outline-style:dotted}}
 details{border-top:1px solid var(--line);padding:var(--s2) 0}summary{cursor:pointer}
 .pill,.chip{display:inline-block;background:var(--code);border-radius:var(--r-pill);padding:0 var(--s2);font-size:var(--t-meta);margin:var(--s1) 0}
 .chip.ok{color:var(--ok)}.chip.warn{color:var(--warn)}.chip.err{color:var(--err)}
 .empty{color:var(--mute);padding:var(--s4) 0}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-@media print{body{background:#fff;color:#000;padding:0}.noprint,button,input,select{display:none!important}table{page-break-inside:auto}tr,td,th{page-break-inside:avoid}thead{display:table-header-group}}
+@media print{body{padding:0}.noprint,button,input,select{display:none!important}
+  table{break-inside:auto}tr,td,th,.card,.step,.entity{break-inside:avoid}thead{display:table-header-group}
+  p,li{orphans:2;widows:2}
+  a[href^=http]::after{content:' (' attr(href) ')';font-size:var(--t-micro)}}
 `;
 
 // אין link חיצוני: הגופן נוסע מוטבע בקובץ (fonts.mjs). מארחים חיצוניים = 0, וזה נבדק בשער.
