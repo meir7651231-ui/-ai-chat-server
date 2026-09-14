@@ -22,7 +22,7 @@ details.proof{border-top:1px solid var(--line);padding:8px 0}details.proof summa
 </style>
 <div class="wrap">
 <div class="head"><div><h1>הוצאות</h1><div class="mute">המחולל הטהור · ספק ⇒ צרכים מצורה ⇒ הוכחה-בריצה מול המדף ⇒ הרכבה · אפס מודל</div></div>
-<div class="stat"><div><b>1096</b>אטומי-JS במדף</div><div><b>394</b>אטומי-Dart-בלבד</div><div><b>3414</b>ריצות-הוכחה</div><div><b>6</b>אטומים הורכבו</div><div><b>0</b>צרכים בלי הוכחה</div><div><b>13169</b>ms</div></div></div>
+<div class="stat"><div><b>1096</b>אטומי-JS במדף</div><div><b>394</b>אטומי-Dart-בלבד</div><div><b>3414</b>ריצות-הוכחה</div><div><b>6</b>אטומים הורכבו</div><div><b>0</b>צרכים בלי הוכחה</div><div><b>8925</b>ms</div></div></div>
 
 <section class="step spec"><h2>1 · המשפט שלך <span class="n">כמו שנכתב</span></h2><pre>מעקב הוצאות: לכל הוצאה יש תיאור, סכום, תאריך וקטגוריה (אוכל, רכב, בית, אחר)</pre></section>
 <section class="step spec"><h2>1½ · הבנתי כך <span class="n">מבנה בלבד — רבים=ישות, יחיד=שדה, סמן «יש/עם», רמזי-צורה מדאטה. אם טעיתי — תקן את הספק המדויק</span></h2><pre>אפליקציה: הוצאות
@@ -41,42 +41,42 @@ details.proof{border-top:1px solid var(--line);padding:8px 0}details.proof summa
 
 <section class="step"><h2>3 · הוכחה-בריצה <span class="n">כל צורך הורץ מול כל 569 אטומי-הפונקציה במדף (527 הנותרים הם קבועים); עובר רק מי שהחזיר בדיוק את הפלט בכל הדוגמאות</span></h2><details class="proof ok" >
 <summary><span class="dot"></span><b>norm-search</b> — נרמול טקסט לחיפוש (ניקוד, סופיות, גרשיים) <span class="mute">⇐ הוצאה.תיאור</span>
-<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>norm-search</code> · Dart-בלבד: נוסו 394 · עברו 0 · 81ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>norm-search</code> · Dart-בלבד: נוסו 394 · עברו 0 · 56ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;שָׁלוֹם&quot;]</code></td><td>⇒</td><td><code>&quot;שלומ&quot;</code></td></tr><tr><td><code>[&quot;ABC&quot;]</code></td><td>⇒</td><td><code>&quot;abc&quot;</code></td></tr><tr><td><code>[null]</code></td><td>⇒</td><td><code>&quot;&quot;</code></td></tr><tr><td><code>[&quot; יוסף &quot;]</code></td><td>⇒</td><td><code>&quot;יוספ&quot;</code></td></tr><tr><td><code>[&quot;כהן ז\&quot;ל&quot;]</code></td><td>⇒</td><td><code>&quot;כהנ זל&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>norm-search</code> <span class="mute">(1 ארג׳) מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות · קבועים מאטום-הדאטה <code>norm-search-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 356</span> <span class="pill">פלט שונה 199</span> <span class="pill">אורך-קריאה 13</span></p></div>
 <div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 252</span> <span class="pill">לא מתקמפל בבידוד 5</span> <span class="pill">פלט שונה 71</span> <span class="pill">זריקה/טיפוס 66</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>money</b> — מספר ⇒ תצוגת-שקלים עם מפרידי-אלפים <span class="mute">⇐ הוצאה.סכום</span>
-<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>shekel</code> · Dart-בלבד: נוסו 394 · עברו 1 · 20ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>shekel</code> · Dart-בלבד: נוסו 394 · עברו 1 · 13ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[1234567]</code></td><td>⇒</td><td><code>&quot;₪1,234,567&quot;</code></td></tr><tr><td><code>[0]</code></td><td>⇒</td><td><code>&quot;₪0&quot;</code></td></tr><tr><td><code>[12]</code></td><td>⇒</td><td><code>&quot;₪12&quot;</code></td></tr><tr><td><code>[999.6]</code></td><td>⇒</td><td><code>&quot;₪1,000&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>shekel</code> <span class="mute">(1 ארג׳)  · קבועים מאטום-הדאטה <code>shekel-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 396</span> <span class="pill">פלט שונה 159</span> <span class="pill">אורך-קריאה 13</span></p></div>
 <div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><ol><li><code>f_money</code> <span class="mute">num ⇒ String · new/dart/f_money.dart</span></li></ol><p class="mute">עבר את ההוכחה. לא ניתן להטביע ב-HTML (זה Dart) — זמין למסלול-Flutter.</p><p><span class="pill">אורך-קריאה 252</span> <span class="pill">לא מתקמפל בבידוד 5</span> <span class="pill">זריקה/טיפוס 107</span> <span class="pill">פלט שונה 29</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>fmt-date</b> — תאריך-ISO ⇒ יום/חודש/שנה <span class="mute">⇐ הוצאה.תאריך</span>
-<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>fmt-date</code> · Dart-בלבד: נוסו 394 · עברו 0 · 20ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>fmt-date</code> · Dart-בלבד: נוסו 394 · עברו 0 · 13ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>&quot;14/09/2026&quot;</code></td></tr><tr><td><code>[&quot;2026-01-05&quot;]</code></td><td>⇒</td><td><code>&quot;05/01/2026&quot;</code></td></tr><tr><td><code>[&quot;&quot;]</code></td><td>⇒</td><td><code>&quot;—&quot;</code></td></tr><tr><td><code>[null]</code></td><td>⇒</td><td><code>&quot;—&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>fmt-date</code> <span class="mute">(1 ארג׳) תאריך-ISO ⇒ תצוגה ישראלית dd/mm/yyyy. ריק/שבור ⇒ &quot;—&quot;. · קבועים מאטום-הדאטה <code>fmt-date-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 360</span> <span class="pill">פלט שונה 195</span> <span class="pill">אורך-קריאה 13</span></p></div>
 <div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 252</span> <span class="pill">לא מתקמפל בבידוד 5</span> <span class="pill">פלט שונה 71</span> <span class="pill">זריקה/טיפוס 66</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>days-since</b> — ימים שעברו מתאריך עד היום (שלילי = עתיד) <span class="mute">⇐ הוצאה.תאריך</span>
-<span class="tally">JS: נוסו 569 · עברו 2 · נבחר <code>cockpit-days-since</code> · Dart-בלבד: נוסו 394 · עברו 0 · 18ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 2 · נבחר <code>cockpit-days-since</code> · Dart-בלבד: נוסו 394 · עברו 0 · 12ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;2026-09-01&quot;,&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>13</code></td></tr><tr><td><code>[&quot;2026-09-14&quot;,&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>0</code></td></tr><tr><td><code>[&quot;2026-09-15&quot;,&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>-1</code></td></tr><tr><td><code>[&quot;2025-09-14&quot;,&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>365</code></td></tr><tr><td><code>[&quot;2024-02-28&quot;,&quot;2024-03-01&quot;]</code></td><td>⇒</td><td><code>2</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>cockpit-days-since</code> <span class="mute">(2 ארג׳) ימים בין תאריך-ISO ליום-הייחוס (חיובי = בעבר, שלילי = עתיד). `Infinity` לתאריך ריק או לא-תקין. · קבועים מאטום-הדאטה <code>cockpit-days-since-strings</code></span></li><li><code>intel-day-diff</code> <span class="mute">(2 ארג׳) הפרש-ימים (Date.parse, slice(0,10)). Infinity לריק/לא-תקין. · קבועים מאטום-הדאטה <code>intel-day-diff-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 295</span> <span class="pill">אורך-קריאה 158</span> <span class="pill">פלט שונה 114</span></p></div>
 <div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 275</span> <span class="pill">זריקה/טיפוס 111</span> <span class="pill">פלט שונה 8</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>sum</b> — סכום שדה-מספר על כל השורות <span class="mute">⇐ סכום הוצאה.סכום</span>
-<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>grand-total</code> · Dart-בלבד: נוסו 394 · עברו 0 · 16ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>grand-total</code> · Dart-בלבד: נוסו 394 · עברו 0 · 11ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[[{&quot;a&quot;:1},{&quot;a&quot;:2}],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>3</code></td></tr><tr><td><code>[[],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>0</code></td></tr><tr><td><code>[[{&quot;a&quot;:5}],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>5</code></td></tr><tr><td><code>[[{&quot;a&quot;:1.5},{&quot;a&quot;:2.5},{&quot;a&quot;:0}],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>4</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>grand-total</code> <span class="mute">(2 ארג׳) הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע.</span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 276</span> <span class="pill">אורך-קריאה 158</span> <span class="pill">פלט שונה 134</span></p></div>
 <div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 275</span> <span class="pill">זריקה/טיפוס 118</span> <span class="pill">פלט שונה 1</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>count-by</b> — ספירה לפי ערך, מהגדול לקטן <span class="mute">⇐ מונה הוצאה.קטגוריה</span>
-<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>count-by</code> · Dart-בלבד: נוסו 394 · עברו 0 · 17ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>count-by</code> · Dart-בלבד: נוסו 394 · עברו 0 · 12ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[[{&quot;s&quot;:&quot;a&quot;},{&quot;s&quot;:&quot;b&quot;},{&quot;s&quot;:&quot;a&quot;}],&quot;ƒ x=&gt;x.s&quot;]</code></td><td>⇒</td><td><code>[[&quot;a&quot;,2],[&quot;b&quot;,1]]</code></td></tr><tr><td><code>[[{&quot;s&quot;:&quot;b&quot;},{&quot;s&quot;:&quot;b&quot;},{&quot;s&quot;:&quot;a&quot;},{&quot;s&quot;:&quot;c&quot;},{&quot;s&quot;:&quot;c&quot;},{&quot;s&quot;:&quot;c&quot;}],&quot;ƒ x=&gt;x.s&quot;]</code></td><td>⇒</td><td><code>[[&quot;c&quot;,3],[&quot;b&quot;,2],[&quot;a&quot;,1]]</code></td></tr><tr><td><code>[[],&quot;ƒ x=&gt;x.s&quot;]</code></td><td>⇒</td><td><code>[]</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>count-by</code> <span class="mute">(2 ארג׳) ספירה לפי מפתח — עובר על פריטים, מחלץ מפתח-מחרוזת מכל פריט דרך</span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 274</span> <span class="pill">אורך-קריאה 158</span> <span class="pill">פלט שונה 136</span></p></div>
@@ -155,6 +155,7 @@ h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:0 0 8px}h2 small{color
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
 .kpi{background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:6px}.kpi .v{display:block;font-size:22px;font-variant-numeric:tabular-nums;font-weight:600}.kpi .l{color:var(--mute);font-size:13px}
 .kpi.none .v{color:var(--warn);font-size:14px}
+.exp{font-size:11px;padding:0 5px;border-radius:99px;background:var(--line)}.exp.bad{background:#b3261e;color:#fff}.exp.warn{background:#e0a100;color:#1d1c19}
 .entity{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px;margin:12px 0}
 form.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:10px}label{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
 input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;min-width:120px}
@@ -250,8 +251,10 @@ function countBy(items, key) {
 const countBy__call = (...x) =&gt; countBy(...x);
 
 // ── דבק מבני (מחולל): סכמה, אחסון, טופס, טבלה, מדדים
-const SCHEMA = [{&quot;name&quot;:&quot;הוצאה&quot;,&quot;stages&quot;:[],&quot;fields&quot;:[{&quot;name&quot;:&quot;תיאור&quot;,&quot;shape&quot;:&quot;text&quot;,&quot;required&quot;:true,&quot;ref&quot;:-1},{&quot;name&quot;:&quot;סכום&quot;,&quot;shape&quot;:&quot;number&quot;,&quot;required&quot;:false,&quot;ref&quot;:-1},{&quot;name&quot;:&quot;תאריך&quot;,&quot;shape&quot;:&quot;date&quot;,&quot;required&quot;:false,&quot;ref&quot;:-1},{&quot;name&quot;:&quot;קטגוריה&quot;,&quot;shape&quot;:&quot;enum&quot;,&quot;required&quot;:false,&quot;ref&quot;:-1}]}];
+const SCHEMA = [{&quot;name&quot;:&quot;הוצאה&quot;,&quot;stages&quot;:[],&quot;guards&quot;:[],&quot;forbidden&quot;:[],&quot;fix&quot;:null,&quot;fields&quot;:[{&quot;name&quot;:&quot;תיאור&quot;,&quot;shape&quot;:&quot;text&quot;,&quot;required&quot;:true,&quot;formula&quot;:null,&quot;ref&quot;:-1},{&quot;name&quot;:&quot;סכום&quot;,&quot;shape&quot;:&quot;number&quot;,&quot;required&quot;:false,&quot;formula&quot;:null,&quot;ref&quot;:-1},{&quot;name&quot;:&quot;תאריך&quot;,&quot;shape&quot;:&quot;date&quot;,&quot;required&quot;:false,&quot;formula&quot;:null,&quot;ref&quot;:-1},{&quot;name&quot;:&quot;קטגוריה&quot;,&quot;shape&quot;:&quot;enum&quot;,&quot;required&quot;:false,&quot;formula&quot;:null,&quot;ref&quot;:-1}]}];
 const KPIS = [{&quot;op&quot;:&quot;סכום&quot;,&quot;need&quot;:&quot;sum&quot;,&quot;entity&quot;:0,&quot;field&quot;:1,&quot;call&quot;:&quot;grandTotal__call&quot;},{&quot;op&quot;:&quot;מונה&quot;,&quot;need&quot;:&quot;count-by&quot;,&quot;entity&quot;:0,&quot;field&quot;:3,&quot;call&quot;:&quot;countBy__call&quot;}];
+const ROLES = [];
+const EXP_WORDS = [&quot;תוקף&quot;], EXP_DAYS = 30;
 const KEY = &quot;gen:hotzaot&quot;;
 const FN = {normSearch__call, shekel__call, fmtDate__call, cockpitDaysSince__call, grandTotal__call, countBy__call};
 const CALL = { money: shekel__call, fmtDate: fmtDate__call, daysSince: cockpitDaysSince__call, phone: null, norm: normSearch__call, sum: grandTotal__call, countBy: countBy__call };
@@ -261,9 +264,24 @@ if (!DATA) DATA = SCHEMA.map(() =&gt; []);
 const save = () =&gt; { try { localStorage.setItem(KEY, JSON.stringify(DATA)); } catch {} };
 const el = (id) =&gt; document.getElementById(id);
 const esc = (s) =&gt; String(s ?? '').replace(/[&amp;&lt;&gt;&quot;]/g, (c) =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '&quot;': '&amp;quot;' }[c]));
-function show(f, v) {
+function calc(e, r, f) { // נוסחה על שדות אותה רשומה: שמות ⇒ ערכים מספריים, חשבון בלבד
+  let expr = ' ' + f.formula + ' ';
+  const sorted = e.fields.map((g, i) =&gt; ({ g, i })).filter((x) =&gt; x.g.name !== f.name).sort((a, b) =&gt; b.g.name.length - a.g.name.length);
+  for (const { g, i } of sorted) expr = expr.split(g.name).join('(' + (Number(r[i]) || 0) + ')');
+  if (/[^0-9.+\-*/()\s]/.test(expr)) return NaN;
+  try { return Function('return (' + expr + ')')(); } catch { return NaN; }
+}
+function expiry(f, v) {
+  if (!CALL.daysSince || f.shape !== 'date' || !v || !EXP_WORDS.some((w) =&gt; f.name.includes(w))) return '';
+  const d = -CALL.daysSince(v, today());
+  return d &lt; 0 ? ' &lt;b class=&quot;exp bad&quot;&gt;פג&lt;/b&gt;' : d &lt;= EXP_DAYS ? ' &lt;b class=&quot;exp warn&quot;&gt;פג בעוד ' + d + ' ימים&lt;/b&gt;' : '';
+}
+function show(f, v, e, r) {
+  if (f.shape === 'formula' &amp;&amp; e &amp;&amp; r) { const n = calc(e, r, f); return Number.isFinite(n) ? (CALL.money ? CALL.money(n) : String(n)) : '—'; }
   if (v === '' || v == null) return '';
+  if (f.shape === 'date') return (CALL.fmtDate ? CALL.fmtDate(v) : esc(v)) + expiry(f, v);
   if (f.shape === 'number' &amp;&amp; CALL.money) return CALL.money(Number(v));
+  if (f.shape === 'count') return esc(v);
   if (f.shape === 'date' &amp;&amp; CALL.fmtDate) return CALL.fmtDate(v);
   if (f.shape === 'phone' &amp;&amp; CALL.phone) return CALL.phone(v);
   return esc(v);
@@ -275,46 +293,75 @@ function rowsOf(ei) {
   const nq = CALL.norm(q);
   return rows.filter((r) =&gt; SCHEMA[ei].fields.some((f, fi) =&gt; CALL.norm(r[fi]).includes(nq)));
 }
+let role = '';
 function paint() {
+  role = el('role') ? el('role').value : '';
+  const allowed = role ? (ROLES.find((x) =&gt; x.name === role) || { ents: [] }) : null;
   SCHEMA.forEach((e, ei) =&gt; {
+    const sec = document.querySelector('[data-entity=&quot;e' + ei + '&quot;]');
+    if (sec) sec.hidden = !!allowed &amp;&amp; !allowed.all &amp;&amp; !allowed.ents.includes(e.name);
     const rows = rowsOf(ei);
     el('e' + ei + '_n').textContent = rows.length ? rows.length + ' רשומות' : 'אין רשומות עדיין';
     const hasDays = e.fields.some((f) =&gt; f.shape === 'date') &amp;&amp; CALL.daysSince;
     el('e' + ei + '_body').innerHTML = rows.map((r) =&gt; {
       const idx = DATA[ei].indexOf(r);
-      const cells = e.fields.map((f, fi) =&gt; '&lt;td class=&quot;' + (f.shape === 'number' ? 'num' : '') + '&quot;&gt;' + show(f, r[fi]) + '&lt;/td&gt;').join('');
-      const st = e.stages.length ? '&lt;td&gt;' + esc(r[e.fields.length] || e.stages[0]) + (e.stages.indexOf(r[e.fields.length] || e.stages[0]) &lt; e.stages.length - 1 ? ' &lt;button class=&quot;x&quot; data-adv=&quot;' + ei + ':' + idx + '&quot; title=&quot;לשלב הבא&quot;&gt;›&lt;/button&gt;' : '') + '&lt;/td&gt;' : '';
+      const cells = e.fields.map((f, fi) =&gt; '&lt;td class=&quot;' + (f.shape === 'number' || f.shape === 'formula' ? 'num' : '') + '&quot;&gt;' + show(f, r[fi], e, r) + '&lt;/td&gt;').join('');
+      const n = e.fields.length;
+      const st = e.stages.length ? '&lt;td&gt;' + esc(r[n] || e.stages[0]) + (e.stages.indexOf(r[n] || e.stages[0]) &lt; e.stages.length - 1 ? ' &lt;button class=&quot;x&quot; data-adv=&quot;' + ei + ':' + idx + '&quot; title=&quot;לשלב הבא&quot;&gt;›&lt;/button&gt;' : '') + '&lt;/td&gt;' + (CALL.daysSince ? '&lt;td class=&quot;num&quot;&gt;' + (r[n + 1] ? CALL.daysSince(r[n + 1], today()) + ' ימים' : '') + '&lt;/td&gt;' : '') : '';
       const d = hasDays ? '&lt;td class=&quot;num&quot;&gt;' + e.fields.map((f, fi) =&gt; (f.shape === 'date' &amp;&amp; r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) =&gt; x !== '').join(' / ') + '&lt;/td&gt;' : '';
-      return '&lt;tr&gt;' + cells + st + d + '&lt;td&gt;&lt;button class=&quot;x&quot; data-del=&quot;' + ei + ':' + idx + '&quot; title=&quot;מחק&quot;&gt;✕&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;';
+      const noDel = e.forbidden.some((x) =&gt; /^מחיקה$/.test(x));
+      const created = r[n + 2] || r[n + 1] || '';
+      const fixOk = e.fix ? ((role === '' || role === e.fix.who) &amp;&amp; (!e.fix.days || !CALL.daysSince || !created || CALL.daysSince(created, today()) &lt;= e.fix.days)) : true;
+      const editBtn = e.fix ? (fixOk ? '&lt;button class=&quot;x&quot; data-edit=&quot;' + ei + ':' + idx + '&quot; title=&quot;תקן&quot;&gt;✎&lt;/button&gt;' : '&lt;span class=&quot;x&quot; title=&quot;נעול לתיקון&quot;&gt;🔒&lt;/span&gt;') : '';
+      return '&lt;tr&gt;' + cells + st + d + '&lt;td&gt;' + editBtn + (noDel ? '' : '&lt;button class=&quot;x&quot; data-del=&quot;' + ei + ':' + idx + '&quot; title=&quot;מחק&quot;&gt;✕&lt;/button&gt;') + '&lt;/td&gt;&lt;/tr&gt;';
     }).join('');
   });
   // קשרים: רשימות-הבחירה מתמלאות מהרשומות של ישות-היעד
   document.querySelectorAll('select[data-ref]').forEach((sel) =&gt; { const ti = Number(sel.dataset.ref); const cur = sel.value; sel.innerHTML = '&lt;option value=&quot;&quot;&gt;—&lt;/option&gt;' + DATA[ti].map((r) =&gt; '&lt;option&gt;' + esc(r[0]) + '&lt;/option&gt;').join(''); sel.value = cur; });
+  if (el('kpi-exp') &amp;&amp; CALL.daysSince) { let bad = 0, soon = 0; SCHEMA.forEach((e, ei) =&gt; e.fields.forEach((f, fi) =&gt; { if (f.shape === 'date' &amp;&amp; EXP_WORDS.some((w) =&gt; f.name.includes(w))) for (const r of DATA[ei]) if (r[fi]) { const d = -CALL.daysSince(r[fi], today()); if (d &lt; 0) bad++; else if (d &lt;= EXP_DAYS) soon++; } })); el('kpi-exp').querySelector('.v').textContent = bad + ' · ' + soon; }
   KPIS.forEach((k, i) =&gt; {
     const box = el('kpi' + i), v = box.querySelector('.v');
     if (!k.call) { box.classList.add('none'); v.textContent = 'אין אטום מוכח'; return; }
     const rows = DATA[k.entity];
     const fn = FN[k.call];
-    if (k.op === 'סכום') v.textContent = CALL.money ? CALL.money(fn(rows, (r) =&gt; Number(r[k.field]) || 0)) : fn(rows, (r) =&gt; Number(r[k.field]) || 0);
+    const fdef = SCHEMA[k.entity].fields[k.field]; const get = fdef.shape === 'formula' ? ((r) =&gt; { const n = calc(SCHEMA[k.entity], r, fdef); return Number.isFinite(n) ? n : 0; }) : ((r) =&gt; Number(r[k.field]) || 0);
+    if (k.op === 'סכום') v.textContent = CALL.money ? CALL.money(fn(rows, get)) : fn(rows, get);
     else if (k.op === 'מונה') { const c = fn(rows, (r) =&gt; r[k.field]); v.textContent = c.length ? c.map(([a, n]) =&gt; esc(a) + ' ' + n).join(' · ') : '0'; }
   });
 }
 SCHEMA.forEach((e, ei) =&gt; {
   el('e' + ei + '_form').addEventListener('submit', (ev) =&gt; {
     ev.preventDefault();
+    const form = ev.target; const editing = form.dataset.editing;
+    if (editing !== undefined &amp;&amp; editing !== '') { const r = DATA[ei][Number(editing)]; e.fields.forEach((f, fi) =&gt; { if (f.shape !== 'formula') r[fi] = el('e' + ei + '_f' + fi).value; }); delete form.dataset.editing; form.querySelector('button[type=submit]').textContent = 'הוסף ' + e.name; save(); form.reset(); paint(); return; }
     const row = e.fields.map((f, fi) =&gt; el('e' + ei + '_f' + fi).value);
-    if (e.stages.length) row.push(e.stages[0]);
+    if (e.stages.length) row.push(e.stages[0], today()); else row.push('', '');
+    row.push(today()); // תאריך רישום — למדיניות-תיקון
     DATA[ei].push(row); save(); ev.target.reset(); paint();
   });
 });
+// מעבר מותנה: «שדה» = מלא · «שדה &gt; 5» · «שדה &gt;= שדה2» — כמו compileGuard של המחצב
+function guardOk(e, r, cond) {
+  const idx = (name) =&gt; e.fields.findIndex((f) =&gt; f.name === name.trim());
+  const val = (i) =&gt; { const f = e.fields[i]; return f.shape === 'formula' ? calc(e, r, f) : Number(r[i]) || 0; };
+  const m = cond.match(/^(.+?)\s*(&gt;=|&lt;=|&gt;|&lt;|=)\s*(.+)$/);
+  if (m) { const li = idx(m[1]); if (li &lt; 0) return true; const rhs = /^-?\d+(\.\d+)?$/.test(m[3].trim()) ? Number(m[3]) : (idx(m[3]) &gt;= 0 ? val(idx(m[3])) : NaN); if (Number.isNaN(rhs)) return true; const l = val(li); return m[2] === '&gt;=' ? l &gt;= rhs : m[2] === '&lt;=' ? l &lt;= rhs : m[2] === '&gt;' ? l &gt; rhs : m[2] === '&lt;' ? l &lt; rhs : l === rhs; }
+  const bi = idx(cond); return bi &lt; 0 ? true : String(r[bi] ?? '').trim() !== '';
+}
 document.body.addEventListener('click', (ev) =&gt; {
   const a = ev.target.closest('[data-adv]');
-  if (a) { const [ei, i] = a.dataset.adv.split(':').map(Number); const st = SCHEMA[ei].stages; const r = DATA[ei][i]; const n = SCHEMA[ei].fields.length; const k = st.indexOf(r[n] || st[0]); if (k &lt; st.length - 1) { r[n] = st[k + 1]; save(); paint(); } return; }
+  if (a) { const [ei, i] = a.dataset.adv.split(':').map(Number); const e = SCHEMA[ei]; const st = e.stages; const r = DATA[ei][i]; const n = e.fields.length; const k = st.indexOf(r[n] || st[0]);
+    if (k &lt; st.length - 1) { const next = st[k + 1]; const g = e.guards.find((x) =&gt; x.stage === next);
+      if (g &amp;&amp; !guardOk(e, r, g.cond)) { alert('אי אפשר לעבור ל«' + next + '»: ' + g.cond); return; }
+      r[n] = next; r[n + 1] = today(); save(); paint(); } return; }
+  const ed = ev.target.closest('[data-edit]');
+  if (ed) { const [ei, i] = ed.dataset.edit.split(':').map(Number); const e = SCHEMA[ei]; const r = DATA[ei][i]; e.fields.forEach((f, fi) =&gt; { if (f.shape !== 'formula') { const inp = el('e' + ei + '_f' + fi); if (inp) inp.value = r[fi] ?? ''; } }); const form = el('e' + ei + '_form'); form.dataset.editing = String(i); form.querySelector('button[type=submit]').textContent = 'שמור תיקון'; form.scrollIntoView({ block: 'center' }); return; }
   const b = ev.target.closest('[data-del]'); if (!b) return;
   const [ei, i] = b.dataset.del.split(':').map(Number);
   DATA[ei].splice(i, 1); save(); paint();
 });
 if (el('q')) el('q').addEventListener('input', paint);
+if (el('role')) el('role').addEventListener('change', paint);
 paint();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></div></section>
 <p class="mute">קובץ-הפלט: <code>gen/out/hotzaot/app.html</code> · הדוח: <code>report.json</code> · היומן: <code>log.md</code> · הרצה: <code>node gen/build.mjs gen/specs/hotzaot.txt</code></p>

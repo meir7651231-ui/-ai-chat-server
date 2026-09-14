@@ -42,7 +42,12 @@
      ]
     }
    ],
-   "stages": []
+   "stages": [],
+   "guards": [],
+   "forbidden": [],
+   "moment": "",
+   "screens": [],
+   "fix": null
   },
   {
    "name": "החזר",
@@ -66,7 +71,12 @@
      "shape": "date"
     }
    ],
-   "stages": []
+   "stages": [],
+   "guards": [],
+   "forbidden": [],
+   "moment": "",
+   "screens": [],
+   "fix": null
   }
  ],
  "dashboard": [
@@ -86,6 +96,7 @@
    "field": "סכום"
   }
  ],
+ "roles": [],
  "plan": [
   {
    "needId": "norm-search",
@@ -220,7 +231,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 949,
+   "ms": 56,
    "proven": [
     {
      "name": "norm-search",
@@ -291,7 +302,7 @@
     "פלט שונה": 200,
     "אורך-קריאה": 13
    },
-   "ms": 59,
+   "ms": 16,
    "proven": [
     {
      "name": "format-israeli-phone",
@@ -355,7 +366,7 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 19,
+   "ms": 13,
    "proven": [
     {
      "name": "shekel",
@@ -430,7 +441,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 19,
+   "ms": 12,
    "proven": [
     {
      "name": "fmt-date",
@@ -506,7 +517,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 114
    },
-   "ms": 167,
+   "ms": 12,
    "proven": [
     {
      "name": "cockpit-days-since",
@@ -610,7 +621,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 20,
+   "ms": 12,
    "proven": [
     {
      "name": "grand-total",
@@ -729,7 +740,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 136
    },
-   "ms": 17,
+   "ms": 10,
    "proven": [
     {
      "name": "count-by",
@@ -856,11 +867,15 @@
  },
  "meta": {
   "slug": "gemach-sentence",
-  "built": "2026-09-14T20:52:13.111Z",
-  "ms": 16584,
+  "built": "2026-09-14T22:48:06.399Z",
+  "ms": 10570,
   "shelf": 1096,
   "fns": 569,
-  "dart": 394
+  "dart": 394,
+  "expiryWords": [
+   "תוקף"
+  ],
+  "expiryWarnDays": 30
  },
  "flutter": {
   "ok": true,
@@ -941,6 +956,6 @@
   "entry": "gen_app_gengemachsentence_main.dart",
   "files": 55,
   "bytes": 36018585,
-  "ms": 35800
+  "ms": 27071
  }
 }

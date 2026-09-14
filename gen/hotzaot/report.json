@@ -38,7 +38,12 @@
      ]
     }
    ],
-   "stages": []
+   "stages": [],
+   "guards": [],
+   "forbidden": [],
+   "moment": "",
+   "screens": [],
+   "fix": null
   }
  ],
  "dashboard": [
@@ -53,6 +58,7 @@
    "field": "קטגוריה"
   }
  ],
+ "roles": [],
  "plan": [
   {
    "needId": "norm-search",
@@ -144,7 +150,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 81,
+   "ms": 56,
    "proven": [
     {
      "name": "norm-search",
@@ -208,7 +214,7 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 20,
+   "ms": 13,
    "proven": [
     {
      "name": "shekel",
@@ -282,7 +288,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 20,
+   "ms": 13,
    "proven": [
     {
      "name": "fmt-date",
@@ -357,7 +363,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 114
    },
-   "ms": 18,
+   "ms": 12,
    "proven": [
     {
      "name": "cockpit-days-since",
@@ -460,7 +466,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 16,
+   "ms": 11,
    "proven": [
     {
      "name": "grand-total",
@@ -578,7 +584,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 136
    },
-   "ms": 17,
+   "ms": 12,
    "proven": [
     {
      "name": "count-by",
@@ -697,11 +703,15 @@
  },
  "meta": {
   "slug": "hotzaot",
-  "built": "2026-09-14T20:53:55.305Z",
-  "ms": 13169,
+  "built": "2026-09-14T22:49:56.272Z",
+  "ms": 8925,
   "shelf": 1096,
   "fns": 569,
-  "dart": 394
+  "dart": 394,
+  "expiryWords": [
+   "תוקף"
+  ],
+  "expiryWarnDays": 30
  },
  "flutter": {
   "ok": true,
@@ -771,6 +781,6 @@
   "entry": "gen_app_genhotzaot_main.dart",
   "files": 55,
   "bytes": 35993298,
-  "ms": 34567
+  "ms": 25881
  }
 }
