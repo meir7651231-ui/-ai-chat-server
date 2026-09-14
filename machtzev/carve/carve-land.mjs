@@ -134,7 +134,12 @@ function purposeOf(r, srcRef) {
 // G69 · ייבואי-המדף של אטום: טבלאות-דאטה (`../dart-data/<x>-table.dart`) שהחצב פתר לפי מוצא — נכנסים לכל קובץ שמייבא את האטום (הרתמה · הזהב)
 // ⚠️ `dart analyze` = fatal-warnings: ייבוא-מדף שהרתמה/הזהב לא מזכירים בשמו (הערך זורם דרך האטום) ⇒ `unused_import` ⇒ 6 זהבים נפלו. מייבאים רק כשהגוף מזכיר ייצוא.
 //   ⚠️ ההתאמה על **קוד**, לא על ליטרלים: הזהב `'Instance of ConnectorEnd'` הזכיר את שם-הטיפוס בתוך מחרוזת ⇒ הייבוא נכנס ⇒ עדיין unused (5 נפלו שוב).
-const shelfImports = (r, body = null) => { const names = [...(r.shelfVals || []), ...(r.shelfTypes || []), ...(r.shelfFns || [])]; const code = body === null ? null : body.replace(/\/\/.*$/gm, '').replace(/'(?:\\.|[^'\\])*'/g, "''"); /* גם הערות — מימוש-השקע נושא הערות-מקור */ if (code !== null && !names.some((n) => new RegExp('\\b' + n + '\\b').test(code))) return []; return (r.shelfImports || []).map((p) => `import '${p}';`); };
+//   G71 · **פר-ייבוא**: שני ייבואי-מדף (טבלת-הקטלוג + טבלת-הספקים) — הזהב הזכיר שם מהאחד, והשני נכנס כ-unused (4 זהבים נפלו). `shelfByImp` מהחצב.
+const shelfImports = (r, body = null) => {
+  const code = body === null ? null : body.replace(/\/\/.*$/gm, '').replace(/'(?:\\.|[^'\\])*'/g, "''"); /* גם הערות — מימוש-השקע נושא הערות-מקור */
+  const all = [...(r.shelfVals || []), ...(r.shelfTypes || []), ...(r.shelfFns || [])];
+  return (r.shelfImports || []).filter((p) => { if (code === null) return true; const names = (r.shelfByImp || {})[p] || all; return names.some((n) => new RegExp('\\b' + n + '\\b').test(code)); }).map((p) => `import '${p}';`);
+};
 function atomFile(r, srcRef, purpose) {
   const imports = [...(r.imports || []), ...shelfImports(r)];
   const shelfLine = (r.shelfImports || []).length ? `// ייבוא-מדף (G69/G70 — אטום משותף מיובא, לא עותק מוטבע ולא שקע): ${[...(r.shelfVals || []), ...(r.shelfTypes || []), ...(r.shelfFns || [])].join(' · ')} ← ${r.shelfImports.join(' ')}.\n` : '';

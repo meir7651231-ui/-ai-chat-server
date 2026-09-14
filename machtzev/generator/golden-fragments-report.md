@@ -12,7 +12,7 @@
 | schoolos_rooms.dart | 1317 | 190 | 41 | 69 |
 | schoolos_fees.dart | 1585 | 203 | 50 | 84 |
 | schoolos_parents.dart | 1534 | 202 | 57 | 72 |
-| schoolos_dashboard.dart | 1125 | 143 | 40 | 67 |
+| schoolos_dashboard.dart | 1125 | 143 | 40 | 68 |
 
 ## דוגמאות-הצהרה (כותרת ⇒ אטומים-מוצהרים ⇒ בשימוש)
 - `schoolos#46` איתור (הכרעה 23-ג · תובנה·3) = DsSearch ⊕ smartFilter ⊕ smartScore ⊕ n ⇒ [DsSearch ⊕ smartFilter ⊕ smartScore ⊕ normSearch] · בשימוש: DsSearch, smartFilter, smartScore, normSearch

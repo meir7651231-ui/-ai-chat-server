@@ -643,6 +643,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   final shelfImports = <String>{}; final shelfVals = <String>[]; final shelfTypes = <String>[]; final shelfSrc = <String, String>{}; final shelfKeys = <String>[];
   _ShelfEntry? shelfOf(String name, String? declPath) => declPath == null ? null : shelf['$declPath|$name'];
   final shelfFns = <String>[];
+  final shelfByImp = <String, Set<String>>{};   // G71 · ייבוא ⇒ השמות שנפתרו דרכו (הרתמה/הזהב מייבאים רק ייבוא ששם-שלו מוזכר בקוד — לא את כולם)
   final crossFns = <String, _ImpFile>{};   // G70 · פונקציה-שכנה חוצת-קבצים ⇒ שקע (הטוהר נבדק ב-_collectPure על קובץ-השכן)
   final used = <String>{...free.ids, ...free.typeNames};
   // ייבוא-מדף שמצהיר שם שכבר מגיע מייבוא-מדף אחר **ומשמש** את הפונקציה ⇒ ambiguous_import ⇒ לא מייבאים (נופל לשקע/לא-פתור, בכנות)
@@ -654,7 +655,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
       // G70 · אטום-מדף מיובא רק אם **חתימתו ≡ חתימת-המקור** (פרמטרים+החזרה, בבייטים): `normName` במדף קיבל `{required normSearch}` ו-`canConnect` נחצב-ביד על
       //   `ConnPart` — אותו שם, אותו מוצא, חתימה אחרת ⇒ הקריאה במקור לא מתקמפלת. חתימה שונה ⇒ לא ייבוא; נופל לשקע-חוצה-קבצים (המקור verbatim).
       if (se != null && se.isFn && !(nd is FunctionDeclaration && _sameSignature(se.src, nd))) { /* לא-מיובא */ }
-      else if (se != null && importable(se.imp)) { shelfImports.add(se.imp); (se.isFn ? shelfFns : shelfVals).add(id); shelfKeys.addAll(se.keys.where((k) => !shelfKeys.contains(k))); continue; }
+      else if (se != null && importable(se.imp)) { shelfImports.add(se.imp); (shelfByImp[se.imp] ??= {}).add(id); (se.isFn ? shelfFns : shelfVals).add(id); shelfKeys.addAll(se.keys.where((k) => !shelfKeys.contains(k))); continue; }
       if (!topVars.containsKey(id) && nf != null && nd is FunctionDeclaration && !nd.isGetter && !nd.isSetter) { crossFns[id] = nf; sockets.add(id); continue; }
     }
     if (!topFns.containsKey(id) && !topVars.containsKey(id)) {
@@ -696,7 +697,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   }
 
   for (final t in free.typeNames) {
-    { final se = shelfOf(t, topTypes.containsKey(t) ? file : impIdx[t]?.path); if (se != null) { shelfImports.add(se.imp); shelfTypes.add(t); shelfSrc[t] = se.src; continue; } }   // G69
+    { final se = shelfOf(t, topTypes.containsKey(t) ? file : impIdx[t]?.path); if (se != null && importable(se.imp)) { shelfImports.add(se.imp); (shelfByImp[se.imp] ??= {}).add(t); shelfTypes.add(t); shelfSrc[t] = se.src; continue; } }   // G69
     if (topTypes.containsKey(t)) {
       // הטבעה-מאותו-קובץ עוברת אימות זהה: סגירה טרנזיטיבית + אפס מזהה-חופשי.
       final w = <String>[];
@@ -871,6 +872,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     // G69 · דוגמאות לטיפוס מיובא-מטבלה — מהמקור שבטבלה (החצב ראה אותו), לא מהאטום
     'shelfSamples': _twoPass(shelfSrc),
     'shelfImports': shelfImports.toList(), 'shelfVals': shelfVals, 'shelfTypes': shelfTypes, 'shelfKeys': shelfKeys, 'shelfFns': shelfFns,
+    'shelfByImp': { for (final e in shelfByImp.entries) e.key: e.value.toList() },
     'shelfKeyFields': () { if (shelfVals.isEmpty || params == null) return const <String, List<String>>{}; final pt = <String, String>{}; for (final p in params.parameters) { final nm = p.name?.lexeme; if (p is SimpleFormalParameter && nm != null && p.type != null) pt[nm] = p.type!.toSource().replaceAll('?', ''); } final kf = _KeyFieldUse(shelfVals.toSet(), pt); body.visitChildren(kf); return { for (final e in kf.out.entries) e.key: e.value.toList() }; }(),
     'bodyLits': _bodyLits(body),
     'fnSource': fnSrc,

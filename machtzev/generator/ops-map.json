@@ -18589,6 +18589,21 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "kindOf",
+  "layer": "logic",
+  "file": "dart/kind_of.dart",
+  "op": "transform",
+  "sockets": [
+   "String",
+   "bool Function(String) isSizeToken"
+  ],
+  "ret": "AttrKind?",
+  "flags": [
+   "ho"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "kindPlural",
   "layer": "logic",
   "file": "dart/kind_plural.dart",
@@ -25614,6 +25629,18 @@
    "String?"
   ],
   "ret": "List<Map<String, String>>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "verifiedEndsCountFor",
+  "layer": "logic",
+  "file": "dart/verified_ends_count_for.dart",
+  "op": "measure",
+  "sockets": [
+   "LipskeyCatalogProduct"
+  ],
+  "ret": "int",
   "flags": [],
   "why": "צורת-חתימה"
  },

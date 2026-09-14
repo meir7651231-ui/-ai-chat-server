@@ -1,0 +1,185 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T20:12:47.352Z",
+ "query": "verified ends count for חזור מק״ט מוטבע על התמונה נגיעה",
+ "tokens": [
+  "verified",
+  "ends",
+  "count",
+  "for",
+  "חזור",
+  "מק",
+  "וטבע",
+  "על",
+  "תמונה",
+  "נגיעה"
+ ],
+ "oracle": {
+  "atomIndexSha": "53904630e0f5b5907adfaa6122a48c3c12a895f6608fd8c5404cf1297a4801a0",
+  "logicCensusSha": "19b6c2d5a6976bb8bddddad942f17710f72fc9e4ff74556978d400f7317301ef",
+  "display": 1926,
+  "logic": 1002
+ },
+ "candidates": [
+  {
+   "id": "portCountFor",
+   "layer": "logic",
+   "file": "dart/port_count_for.dart",
+   "score": 6,
+   "hits": [
+    "count",
+    "for"
+   ]
+  },
+  {
+   "id": "actionIdsFor",
+   "layer": "logic",
+   "file": "dart/action_ids_for.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "allowedDesignationsFor",
+   "layer": "logic",
+   "file": "dart-maor/allowed-designations-for.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "BadgeCount",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/feedback/badge_count.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "candidateSupportersForCharge",
+   "layer": "logic",
+   "file": "dart-maor/candidate-supporters-for-charge.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "catalogActionIdsFor",
+   "layer": "logic",
+   "file": "dart/catalog_action_ids_for.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "CatalogConfigCatalogConfigCountBadge",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/catalog_config_catalog_config_count_badge.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "CatalogCountBadge",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/catalog_count_badge.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "catalogProductForBrand",
+   "layer": "logic",
+   "file": "dart/catalog_product_for_brand.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "catNodeProductCount",
+   "layer": "logic",
+   "file": "dart/cat_node_product_count.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "companyComplementsFor",
+   "layer": "logic",
+   "file": "dart/company_complements_for.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "componentCounts",
+   "layer": "logic",
+   "file": "dart-maor/component-counts.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "cooldownForFails",
+   "layer": "logic",
+   "file": "dart-maor/cooldown-for-fails.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "CountBadge",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/count_badge.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "countBy",
+   "layer": "logic",
+   "file": "dart-maor/count-by.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  }
+ ],
+ "strong": [
+  "portCountFor",
+  "actionIdsFor",
+  "allowedDesignationsFor",
+  "candidateSupportersForCharge",
+  "catalogActionIdsFor",
+  "catalogProductForBrand",
+  "catNodeProductCount",
+  "companyComplementsFor",
+  "componentCounts",
+  "cooldownForFails",
+  "countBy"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "BadgeCount",
+  "CatalogConfigCatalogConfigCountBadge",
+  "CatalogCountBadge",
+  "CountBadge"
+ ],
+ "creates": "new/dart/verified_ends_count_for.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 5 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: portCountFor 0/5 · actionIdsFor 0/5 · allowedDesignationsFor 0/5 · candidateSupportersForCharge 0/5 · catalogActionIdsFor 0/5 · catalogProductForBrand 0/5 · catNodeProductCount 0/5 · companyComplementsFor 0/5 · componentCounts 0/5 · cooldownForFails 0/5 · countBy 0/5. לכן נוצר חדש.",
+ "sig": "0c8add5e85da11df864d67679a4593bedb9cc35458514b68e5533ed1f2339b26"
+}

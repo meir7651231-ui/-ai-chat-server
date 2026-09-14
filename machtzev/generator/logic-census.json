@@ -5733,6 +5733,17 @@
   "wireable": false
  },
  {
+  "file": "dart/kind_of.dart",
+  "name": "kindOf",
+  "ret": "AttrKind?",
+  "params": [
+   "String",
+   "bool Function(String) isSizeToken"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart/kind_plural.dart",
   "name": "kindPlural",
   "ret": "String",
@@ -11270,6 +11281,16 @@
   "ret": "List<Map<String, String>>",
   "params": [
    "String?"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/verified_ends_count_for.dart",
+  "name": "verifiedEndsCountFor",
+  "ret": "int",
+  "params": [
+   "LipskeyCatalogProduct"
   ],
   "argc": 1,
   "wireable": false
