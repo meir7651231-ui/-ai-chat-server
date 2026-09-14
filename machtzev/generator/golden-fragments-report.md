@@ -1,25 +1,25 @@
 # חציבת-הזהב (quarry-golden · G4a)
 
-**9** מודולים · **1668** שברים · **399** שברי-תובנה (≥2 אטומים בשימוש) · **57** עם הצהרת-⊕ · הרכבה-חוזרת ביט-לביט: **✓ 9/9**
+**9** מודולים · **1668** שברים · **418** שברי-תובנה (≥2 אטומים בשימוש) · **57** עם הצהרת-⊕ · הרכבה-חוזרת ביט-לביט: **✓ 9/9**
 
 | מודול | שורות | שברים | תובנות | אטומים-בשימוש (ייחודיים) |
 |---|---|---|---|---|
-| schoolos.dart | 885 | 116 | 36 | 52 |
-| schoolos_students.dart | 1367 | 221 | 42 | 77 |
-| schoolos_attendance.dart | 1283 | 193 | 40 | 68 |
-| schoolos_courses.dart | 1732 | 223 | 66 | 82 |
-| schoolos_teachers.dart | 1152 | 177 | 36 | 61 |
-| schoolos_rooms.dart | 1317 | 190 | 36 | 68 |
-| schoolos_fees.dart | 1585 | 203 | 50 | 82 |
-| schoolos_parents.dart | 1534 | 202 | 54 | 71 |
-| schoolos_dashboard.dart | 1125 | 143 | 39 | 65 |
+| schoolos.dart | 885 | 116 | 36 | 53 |
+| schoolos_students.dart | 1367 | 221 | 45 | 78 |
+| schoolos_attendance.dart | 1283 | 193 | 41 | 70 |
+| schoolos_courses.dart | 1732 | 223 | 68 | 84 |
+| schoolos_teachers.dart | 1152 | 177 | 40 | 63 |
+| schoolos_rooms.dart | 1317 | 190 | 41 | 69 |
+| schoolos_fees.dart | 1585 | 203 | 50 | 84 |
+| schoolos_parents.dart | 1534 | 202 | 57 | 72 |
+| schoolos_dashboard.dart | 1125 | 143 | 40 | 67 |
 
 ## דוגמאות-הצהרה (כותרת ⇒ אטומים-מוצהרים ⇒ בשימוש)
 - `schoolos#46` איתור (הכרעה 23-ג · תובנה·3) = DsSearch ⊕ smartFilter ⊕ smartScore ⊕ n ⇒ [DsSearch ⊕ smartFilter ⊕ smartScore ⊕ normSearch] · בשימוש: DsSearch, smartFilter, smartScore, normSearch
 - `schoolos#54` חריגה (הכרעה 23-ג · תובנה·2) = FilterChipPill ⊕ finderMatches ⇒ [FilterChipPill ⊕ finderMatches] · בשימוש: FilterChipPill, finderMatches
 - `schoolos#57` ייצוא (הכרעה 23-ג · תובנה) = SoftButton ⊕ toCsv ⊕ csvEscape ⊕ exportAl ⇒ [SoftButton ⊕ toCsv ⊕ csvEscape ⊕ exportAllowed] · בשימוש: SoftButton, toCsv, csvEscape, exportAllowed
 - `schoolos#65` הרשאות-פר-תפקיד (הכרעה 23-ג · חוק-6 זהות=הזרקה) = roleOf ⊕ canGrantedA ⇒ [roleOf ⊕ canGrantedAction] · בשימוש: roleOf, canGrantedAction, label
-- `schoolos#69` אוטומציות פרואקטיביות (הכרעה 23-ג · תובנה) = AlertBanner ⊕ expiringInt ⇒ [AlertBanner ⊕ expiringIntakes ⊕ warehouseValue] · בשימוש: AlertBanner, expiringIntakes, warehouseValue
+- `schoolos#69` אוטומציות פרואקטיביות (הכרעה 23-ג · תובנה) = AlertBanner ⊕ expiringInt ⇒ [AlertBanner ⊕ expiringIntakes ⊕ warehouseValue] · בשימוש: AlertBanner, expiringIntakes, warehouseValue, day
 - `schoolos#75` מחזור-חיים · מצב-מיוחד "פריט-לא-פעיל" (23-ב · דגל=עובדה) = StatusChip  ⇒ [StatusChip ⊕ SoftButton] · בשימוש: StatusChip, SoftButton
 - `schoolos#102` ייצוא (23-ג · תובנה) = SoftButton ⊕ toCsv ⊕ csvEscape ⊕ exportAllowed  ⇒ [SoftButton ⊕ toCsv ⊕ csvEscape ⊕ exportAllowed ⊕ GlassCard] · בשימוש: SoftButton, toCsv, csvEscape, exportAllowed, GlassCard, expand, MediaRow, AlertBanner, TimelineItem
 - `schoolos_students#124` איתור (הכרעה 23-ג) = DsSearch ⊕ smartFilter ⊕ smartScore ⊕ normSearch  ⇒ [DsSearch ⊕ smartFilter ⊕ smartScore ⊕ normSearch ⊕ normPhone] · בשימוש: DsSearch, smartFilter, smartScore, normSearch, normPhone, norm
@@ -30,8 +30,8 @@
 - `schoolos_attendance#117` חריגה (הכרעה 23-ג) = FilterChipPill ⊕ finderMatches — 10 צירי-נעילה (ה ⇒ [FilterChipPill ⊕ finderMatches] · בשימוש: FilterChipPill, finderMatches, label
 - `schoolos_attendance#120` ייצוא (23-ג) = toCsv ⊕ csvEscape ⊕ exportAllowed ⊕ guardExport — שורות ⇒ [toCsv ⊕ csvEscape ⊕ exportAllowed ⊕ guardExport] · בשימוש: toCsv, csvEscape, exportAllowed, guardExport, csvRows, label
 - `schoolos_attendance#187` ייצוא (23-ג) = SoftButton ⊕ toCsv ⊕ csvEscape ⊕ exportAllowed ⊕ guardE ⇒ [SoftButton ⊕ toCsv ⊕ csvEscape ⊕ exportAllowed ⊕ guardExport ⊕ GlassCard] · בשימוש: SoftButton, toCsv, csvEscape, exportAllowed, guardExport, GlassCard, fmtDate, csvRows
-- `schoolos_courses#40` זיהוי-חריגה · התנגשויות (מורה/חדר = הרכבת sessionsOf⊕timeToMin · תלמיד ⇒ [scheduleClashText] · בשימוש: sessionsOf, timeToMin, scheduleClashText
+- `schoolos_courses#40` זיהוי-חריגה · התנגשויות (מורה/חדר = הרכבת sessionsOf⊕timeToMin · תלמיד ⇒ [scheduleClashText] · בשימוש: sessionsOf, timeToMin, scheduleClashText, day
 - `schoolos_courses#58` גריד-שבועי: שעות = טווח מפגשי-החוגים-החיים (timeToMin), צעד 60; תוויות ⇒ [minToHM] · בשימוש: timeToMin, minToHM
 - `schoolos_courses#114` איתור (הכרעה 23-ג) = DsSearch ⊕ smartFilter ⊕ smartScore ⊕ normSearch  ⇒ [DsSearch ⊕ smartFilter ⊕ smartScore ⊕ normSearch] · בשימוש: DsSearch, smartFilter, smartScore, normSearch
-- `schoolos_courses#122` חריגה/סינון (הכרעה 23-ג) = FilterChipPill ⊕ finderMatches — 13 צירים · ⇒ [FilterChipPill ⊕ finderMatches] · בשימוש: FilterChipPill, finderMatches, SegmentedSwitch, DsSearch, sessionsOf, timeToMin
+- `schoolos_courses#122` חריגה/סינון (הכרעה 23-ג) = FilterChipPill ⊕ finderMatches — 13 צירים · ⇒ [FilterChipPill ⊕ finderMatches] · בשימוש: FilterChipPill, finderMatches, day, SegmentedSwitch, DsSearch, sessionsOf, timeToMin
 - `schoolos_courses#127` הרשאות-פר-תפקיד (הכרעה 23-ג · חוק-6 זהות=הזרקה) = roleOf ⊕ canGrantedA ⇒ [roleOf ⊕ canGrantedAction ⊕ teacherIdOf] · בשימוש: roleOf, canGrantedAction, teacherIdOf, label

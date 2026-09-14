@@ -1,0 +1,176 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:19:30.513Z",
+ "query": "normalize סרט טפלון סרט טפלון",
+ "tokens": [
+  "normalize",
+  "סרט",
+  "טפלון"
+ ],
+ "oracle": {
+  "atomIndexSha": "0125c530b7f92b714b3e94efef461c56b43d179ab8a17fb356f285539e8a3ae1",
+  "logicCensusSha": "48324a33a97b8a7d59953d389638c35abdb13121943a14a6f79f3ab5d06c2a47",
+  "display": 1910,
+  "logic": 986
+ },
+ "candidates": [
+  {
+   "id": "adarNorm",
+   "layer": "logic",
+   "file": "dart-maor/adar-norm.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "norm",
+   "layer": "logic",
+   "file": "dart/norm.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalize",
+   "layer": "logic",
+   "file": "dart-boxes/pricing.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalizeConfig",
+   "layer": "logic",
+   "file": "dart-boxes/config.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalizeDocName",
+   "layer": "logic",
+   "file": "dart/normalize_doc_name.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalizePhone",
+   "layer": "logic",
+   "file": "dart-maor/normalize-phone.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalizePrices",
+   "layer": "logic",
+   "file": "dart-maor/normalize-prices.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalizeSite",
+   "layer": "logic",
+   "file": "dart-boxes/config.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalizeTelephony",
+   "layer": "logic",
+   "file": "dart-maor/normalize-telephony.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normEmail",
+   "layer": "logic",
+   "file": "dart-maor/norm-email.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normHeader",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normId",
+   "layer": "logic",
+   "file": "dart-maor/norm-id.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normName",
+   "layer": "logic",
+   "file": "dart-maor/norm-name.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normNameLocal",
+   "layer": "logic",
+   "file": "dart-maor/enroll-new-family.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normPhone",
+   "layer": "logic",
+   "file": "dart-maor/norm-phone.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  }
+ ],
+ "strong": [
+  "adarNorm",
+  "norm",
+  "normalize",
+  "normalizeConfig",
+  "normalizeDocName",
+  "normalizePhone",
+  "normalizePrices",
+  "normalizeSite",
+  "normalizeTelephony",
+  "normEmail",
+  "normHeader",
+  "normId",
+  "normName",
+  "normNameLocal",
+  "normPhone"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/normalize.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 6 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: adarNorm 4/6 · norm 0/6 · normalize 0/6 · normalizeConfig 0/6 · normalizeDocName 5/6 · normalizePhone 4/6 · normalizePrices 0/6 · normalizeSite 0/6 · normalizeTelephony 0/6 · normEmail 5/6 · normHeader 5/6 · normId 2/6 · normName 0/6 · normNameLocal 0/6 · normPhone 2/6 · normalizeIlPhone 0/6 · normalizeMaterial 0/6 · normalizeQuery 0/6 · normalizeScreen 0/6 · normalizeSize 5/6 · normAtom 5/6. לכן נוצר חדש.",
+ "sig": "8fbb7b1d8ae51d7af33f78d32e4389b33a245ca408d032cdbf06d3bba23efef6"
+}

@@ -1,0 +1,225 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:19:42.464Z",
+ "query": "fmt date key שעות ימים ימי עבודה אוגוסט אוקטובר",
+ "tokens": [
+  "fmt",
+  "date",
+  "key",
+  "עות",
+  "ימים",
+  "ימי",
+  "עבודה",
+  "אוגוסט",
+  "אוקטובר"
+ ],
+ "oracle": {
+  "atomIndexSha": "0125c530b7f92b714b3e94efef461c56b43d179ab8a17fb356f285539e8a3ae1",
+  "logicCensusSha": "48324a33a97b8a7d59953d389638c35abdb13121943a14a6f79f3ab5d06c2a47",
+  "display": 1910,
+  "logic": 986
+ },
+ "candidates": [
+  {
+   "id": "attendanceDateKey",
+   "layer": "logic",
+   "file": "dart/attendance_date_key.dart",
+   "score": 6,
+   "hits": [
+    "date",
+    "key"
+   ]
+  },
+  {
+   "id": "CourierAttendanceSendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_send_report_button.dart",
+   "score": 6,
+   "hits": [
+    "עות",
+    "ימים",
+    "ימי",
+    "עבודה",
+    "אוגוסט",
+    "אוקטובר"
+   ]
+  },
+  {
+   "id": "CourierAttendanceTableRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_table_row.dart",
+   "score": 6,
+   "hits": [
+    "עות",
+    "ימים",
+    "ימי",
+    "עבודה",
+    "אוגוסט",
+    "אוקטובר"
+   ]
+  },
+  {
+   "id": "fmtDate",
+   "layer": "logic",
+   "file": "dart-maor/fmt-date.dart",
+   "score": 6,
+   "hits": [
+    "fmt",
+    "date"
+   ]
+  },
+  {
+   "id": "LocationButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/location_button.dart",
+   "score": 6,
+   "hits": [
+    "עות",
+    "ימים",
+    "ימי",
+    "עבודה",
+    "אוגוסט",
+    "אוקטובר"
+   ]
+  },
+  {
+   "id": "SendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/send_report_button.dart",
+   "score": 6,
+   "hits": [
+    "עות",
+    "ימים",
+    "ימי",
+    "עבודה",
+    "אוגוסט",
+    "אוקטובר"
+   ]
+  },
+  {
+   "id": "TodayStat",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/today_stat.dart",
+   "score": 6,
+   "hits": [
+    "עות",
+    "ימים",
+    "ימי",
+    "עבודה",
+    "אוגוסט",
+    "אוקטובר"
+   ]
+  },
+  {
+   "id": "DatePills",
+   "layer": "display",
+   "file": "dart-ui-bs/date_pills.dart",
+   "score": 4,
+   "hits": [
+    "date",
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiBar",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_bar.dart",
+   "score": 3,
+   "hits": [
+    "עות",
+    "ימים",
+    "עבודה"
+   ]
+  },
+  {
+   "id": "AiCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card.dart",
+   "score": 3,
+   "hits": [
+    "עות",
+    "ימים",
+    "עבודה"
+   ]
+  },
+  {
+   "id": "AiCardBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_btn.dart",
+   "score": 3,
+   "hits": [
+    "עות",
+    "ימים",
+    "עבודה"
+   ]
+  },
+  {
+   "id": "AiCardSub",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_sub.dart",
+   "score": 3,
+   "hits": [
+    "עות",
+    "ימים",
+    "עבודה"
+   ]
+  },
+  {
+   "id": "AiCardTop",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_top.dart",
+   "score": 3,
+   "hits": [
+    "עות",
+    "ימים",
+    "עבודה"
+   ]
+  },
+  {
+   "id": "AiFinTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_fin_tile.dart",
+   "score": 3,
+   "hits": [
+    "עות",
+    "ימים",
+    "עבודה"
+   ]
+  },
+  {
+   "id": "AiMdHead",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_md_head.dart",
+   "score": 3,
+   "hits": [
+    "עות",
+    "ימים",
+    "עבודה"
+   ]
+  }
+ ],
+ "strong": [
+  "attendanceDateKey",
+  "fmtDate"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "CourierAttendanceSendReportButton",
+  "CourierAttendanceTableRow",
+  "LocationButton",
+  "SendReportButton",
+  "TodayStat",
+  "DatePills",
+  "AiBar",
+  "AiCard",
+  "AiCardBtn",
+  "AiCardSub",
+  "AiCardTop",
+  "AiFinTile",
+  "AiMdHead"
+ ],
+ "creates": "new/dart/fmt_date_key.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 6 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: attendanceDateKey 0/6 · fmtDate 0/6 · fmtTime 0/6 · fmtJournalDate 0/6 · fmtAuthorDate 0/6 · fmt 0/6 · fmtDayMonth 0/6 · isNewDateGroup 0/6 · roleKeyOf 4/6 · screenKeyForRoute 4/6 · screenKeyForTab 0/6. לכן נוצר חדש.",
+ "sig": "6e27b06b4dceb7d010dcbe29b22c8335a807ab7030b681d07e8cf076f622eb0d"
+}

@@ -1,0 +1,55 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:19:32.714Z",
+ "query": "fmt מ׳ מס",
+ "tokens": [
+  "fmt",
+  "מס"
+ ],
+ "oracle": {
+  "atomIndexSha": "0125c530b7f92b714b3e94efef461c56b43d179ab8a17fb356f285539e8a3ae1",
+  "logicCensusSha": "48324a33a97b8a7d59953d389638c35abdb13121943a14a6f79f3ab5d06c2a47",
+  "display": 1910,
+  "logic": 986
+ },
+ "candidates": [
+  {
+   "id": "fmtDate",
+   "layer": "logic",
+   "file": "dart-maor/fmt-date.dart",
+   "score": 3,
+   "hits": [
+    "fmt"
+   ]
+  },
+  {
+   "id": "fmtDuration",
+   "layer": "logic",
+   "file": "dart/fmt_duration.dart",
+   "score": 3,
+   "hits": [
+    "fmt"
+   ]
+  },
+  {
+   "id": "receiptFmtOf",
+   "layer": "logic",
+   "file": "dart-maor/receipt-fmt-of.dart",
+   "score": 3,
+   "hits": [
+    "fmt"
+   ]
+  }
+ ],
+ "strong": [
+  "fmtDate",
+  "fmtDuration",
+  "receiptFmtOf"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/fmt.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 7 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: fmtDate 0/7 · fmtDuration 0/7 · receiptFmtOf 0/7 · fmtAuthorDate 0/7 · fmtDateKey 0/7 · fmtDayMonth 0/7 · fmtJournalDate 0/7 · fmtTime 0/7. לכן נוצר חדש.",
+ "sig": "516385ffd36bea51f3d4adc420c209a76fb2b38224e9bc523cfab016eaf5e224"
+}

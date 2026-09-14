@@ -1,0 +1,189 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:19:41.284Z",
+ "query": "fmt day month ימ׳ אין משימות לוח הזמנים של",
+ "tokens": [
+  "fmt",
+  "day",
+  "month",
+  "ימ",
+  "אין",
+  "שימות",
+  "לוח",
+  "זמנים",
+  "של"
+ ],
+ "oracle": {
+  "atomIndexSha": "0125c530b7f92b714b3e94efef461c56b43d179ab8a17fb356f285539e8a3ae1",
+  "logicCensusSha": "48324a33a97b8a7d59953d389638c35abdb13121943a14a6f79f3ab5d06c2a47",
+  "display": 1910,
+  "logic": 986
+ },
+ "candidates": [
+  {
+   "id": "DsMonthOffset",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_calendar.dart",
+   "score": 5,
+   "hits": [
+    "month",
+    "לוח",
+    "של"
+   ]
+  },
+  {
+   "id": "activeByMonth",
+   "layer": "logic",
+   "file": "dart-maor/portfolio-active-by-month.dart",
+   "score": 3,
+   "hits": [
+    "month"
+   ]
+  },
+  {
+   "id": "buildMonthGrid",
+   "layer": "logic",
+   "file": "dart-maor/build-month-grid.dart",
+   "score": 3,
+   "hits": [
+    "month"
+   ]
+  },
+  {
+   "id": "cockpitCollectedThisMonth",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-collected-this-month.dart",
+   "score": 3,
+   "hits": [
+    "month"
+   ]
+  },
+  {
+   "id": "courierDayStats",
+   "layer": "logic",
+   "file": "dart/courier_day_stats.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "CourierFormsPillButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_forms_pill_button.dart",
+   "score": 3,
+   "hits": [
+    "אין",
+    "לוח",
+    "של"
+   ]
+  },
+  {
+   "id": "dayBucket",
+   "layer": "logic",
+   "file": "dart/day_bucket.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "dayDiff",
+   "layer": "logic",
+   "file": "dart-maor/intel-day-diff.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "dayLabel",
+   "layer": "logic",
+   "file": "dart/day_label.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "dayLetters",
+   "layer": "logic",
+   "file": "dart-maor/day-letters.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "dayNames",
+   "layer": "logic",
+   "file": "dart-maor/day-names.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "dayProgress",
+   "layer": "logic",
+   "file": "dart-maor/day-progress.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "deliveriesOfDay",
+   "layer": "logic",
+   "file": "dart-maor/deliveries-of-day.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "donCalMonthLine",
+   "layer": "logic",
+   "file": "dart-maor/don-cal-month-line.dart",
+   "score": 3,
+   "hits": [
+    "month"
+   ]
+  },
+  {
+   "id": "DsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "אין",
+    "לוח",
+    "של"
+   ]
+  }
+ ],
+ "strong": [
+  "activeByMonth",
+  "buildMonthGrid",
+  "cockpitCollectedThisMonth",
+  "courierDayStats",
+  "dayBucket",
+  "dayDiff",
+  "dayLabel",
+  "dayLetters",
+  "dayNames",
+  "dayProgress",
+  "deliveriesOfDay",
+  "donCalMonthLine"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "DsMonthOffset",
+  "CourierFormsPillButton",
+  "DsActionRow"
+ ],
+ "creates": "new/dart/fmt_day_month.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 2 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: activeByMonth 0/2 · buildMonthGrid 0/2 · cockpitCollectedThisMonth 0/2 · courierDayStats 0/2 · dayBucket 0/2 · dayDiff 0/2 · dayLabel 0/2 · dayLetters 0/2 · dayNames 0/2 · dayProgress 0/2 · deliveriesOfDay 0/2 · donCalMonthLine 0/2 · day 0/2 · fmtAuthorDate 0/2 · fmtDateKey 0/2 · fmtJournalDate 0/2 · fmtTime 0/2 · fmt 0/2. לכן נוצר חדש.",
+ "sig": "639f6f1977a3dc7cf2aff48733d1d0202441bc424a03627da5f2ee256cc6fab0"
+}

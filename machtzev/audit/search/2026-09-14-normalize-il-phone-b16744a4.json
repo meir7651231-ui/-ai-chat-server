@@ -1,0 +1,182 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:19:37.681Z",
+ "query": "normalize il phone מספר הטלפון אינו תקין'",
+ "tokens": [
+  "normalize",
+  "il",
+  "phone",
+  "ספר",
+  "טלפון",
+  "אינו",
+  "תקין"
+ ],
+ "oracle": {
+  "atomIndexSha": "0125c530b7f92b714b3e94efef461c56b43d179ab8a17fb356f285539e8a3ae1",
+  "logicCensusSha": "48324a33a97b8a7d59953d389638c35abdb13121943a14a6f79f3ab5d06c2a47",
+  "display": 1910,
+  "logic": 986
+ },
+ "candidates": [
+  {
+   "id": "normalizePhone",
+   "layer": "logic",
+   "file": "dart-maor/normalize-phone.dart",
+   "score": 6,
+   "hits": [
+    "normalize",
+    "phone"
+   ]
+  },
+  {
+   "id": "normPhone",
+   "layer": "logic",
+   "file": "dart-maor/norm-phone.dart",
+   "score": 6,
+   "hits": [
+    "normalize",
+    "phone"
+   ]
+  },
+  {
+   "id": "adarNorm",
+   "layer": "logic",
+   "file": "dart-maor/adar-norm.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "allSupPhones",
+   "layer": "logic",
+   "file": "dart-maor/all-sup-phones.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "cleanSupPhones",
+   "layer": "logic",
+   "file": "dart-maor/clean-sup-phones.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "fixPhone",
+   "layer": "logic",
+   "file": "dart-maor/fix-phone.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "formatIsraeliPhone",
+   "layer": "logic",
+   "file": "dart-maor/format-israeli-phone.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "norm",
+   "layer": "logic",
+   "file": "dart/norm.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalize",
+   "layer": "logic",
+   "file": "dart-boxes/pricing.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalizeConfig",
+   "layer": "logic",
+   "file": "dart-boxes/config.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalizeDocName",
+   "layer": "logic",
+   "file": "dart/normalize_doc_name.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalizePrices",
+   "layer": "logic",
+   "file": "dart-maor/normalize-prices.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalizeSite",
+   "layer": "logic",
+   "file": "dart-boxes/config.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normalizeTelephony",
+   "layer": "logic",
+   "file": "dart-maor/normalize-telephony.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "normEmail",
+   "layer": "logic",
+   "file": "dart-maor/norm-email.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  }
+ ],
+ "strong": [
+  "normalizePhone",
+  "normPhone",
+  "adarNorm",
+  "allSupPhones",
+  "cleanSupPhones",
+  "fixPhone",
+  "formatIsraeliPhone",
+  "norm",
+  "normalize",
+  "normalizeConfig",
+  "normalizeDocName",
+  "normalizePrices",
+  "normalizeSite",
+  "normalizeTelephony",
+  "normEmail"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/normalize_il_phone.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 6 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: normalizePhone 0/6 · normPhone 0/6 · adarNorm 0/6 · allSupPhones 0/6 · cleanSupPhones 0/6 · fixPhone 0/6 · formatIsraeliPhone 0/6 · norm 0/6 · normalize 0/6 · normalizeConfig 5/6 · normalizeDocName 0/6 · normalizePrices 0/6 · normalizeSite 5/6 · normalizeTelephony 0/6 · normEmail 0/6 · normalizeScreen 0/6 · normalizeMaterial 0/6 · normalizeQuery 0/6 · normalizeSize 0/6 · normAtom 0/6. לכן נוצר חדש.",
+ "sig": "b16744a4015422bb1315dd0c369f914e8374b46618dbccf8a46a61372506cc55"
+}

@@ -1,0 +1,220 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:19:35.041Z",
+ "query": "fmt journal date מה להביא ודיווח ביצוע כפתור שלח",
+ "tokens": [
+  "fmt",
+  "journal",
+  "date",
+  "מה",
+  "הביא",
+  "דיווח",
+  "יצוע",
+  "פתור",
+  "שלח"
+ ],
+ "oracle": {
+  "atomIndexSha": "0125c530b7f92b714b3e94efef461c56b43d179ab8a17fb356f285539e8a3ae1",
+  "logicCensusSha": "48324a33a97b8a7d59953d389638c35abdb13121943a14a6f79f3ab5d06c2a47",
+  "display": 1910,
+  "logic": 986
+ },
+ "candidates": [
+  {
+   "id": "EquipmentButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/equipment_button.dart",
+   "score": 6,
+   "hits": [
+    "מה",
+    "הביא",
+    "דיווח",
+    "יצוע",
+    "פתור",
+    "שלח"
+   ]
+  },
+  {
+   "id": "fmtDate",
+   "layer": "logic",
+   "file": "dart-maor/fmt-date.dart",
+   "score": 6,
+   "hits": [
+    "fmt",
+    "date"
+   ]
+  },
+  {
+   "id": "ProposePrimaryBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/propose_primary_btn.dart",
+   "score": 6,
+   "hits": [
+    "מה",
+    "הביא",
+    "דיווח",
+    "יצוע",
+    "פתור",
+    "שלח"
+   ]
+  },
+  {
+   "id": "ProposeSecH",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/propose_sec_h.dart",
+   "score": 6,
+   "hits": [
+    "מה",
+    "הביא",
+    "דיווח",
+    "יצוע",
+    "פתור",
+    "שלח"
+   ]
+  },
+  {
+   "id": "ProposeTaskButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/propose_task_button.dart",
+   "score": 6,
+   "hits": [
+    "מה",
+    "הביא",
+    "דיווח",
+    "יצוע",
+    "פתור",
+    "שלח"
+   ]
+  },
+  {
+   "id": "SubmitButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/submit_button.dart",
+   "score": 6,
+   "hits": [
+    "מה",
+    "הביא",
+    "דיווח",
+    "יצוע",
+    "פתור",
+    "שלח"
+   ]
+  },
+  {
+   "id": "WorkerAppStat",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/worker_app_stat.dart",
+   "score": 6,
+   "hits": [
+    "מה",
+    "הביא",
+    "דיווח",
+    "יצוע",
+    "פתור",
+    "שלח"
+   ]
+  },
+  {
+   "id": "WorkerNav",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/worker_nav.dart",
+   "score": 6,
+   "hits": [
+    "מה",
+    "הביא",
+    "דיווח",
+    "יצוע",
+    "פתור",
+    "שלח"
+   ]
+  },
+  {
+   "id": "ForgeDsDateField",
+   "layer": "display",
+   "file": "dart-forge-bs/header/ds_date_field.dart",
+   "score": 4,
+   "hits": [
+    "date",
+    "פתור"
+   ]
+  },
+  {
+   "id": "attendanceDateKey",
+   "layer": "logic",
+   "file": "dart/attendance_date_key.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "courseDateError",
+   "layer": "logic",
+   "file": "dart-maor/course-date-error.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "DateChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/date_chip.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "DateHeader",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/date_header.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "dateInRange",
+   "layer": "logic",
+   "file": "dart-maor/date-in-range.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "DatePills",
+   "layer": "display",
+   "file": "dart-ui-bs/date_pills.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  }
+ ],
+ "strong": [
+  "fmtDate",
+  "attendanceDateKey",
+  "courseDateError",
+  "dateInRange"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "EquipmentButton",
+  "ProposePrimaryBtn",
+  "ProposeSecH",
+  "ProposeTaskButton",
+  "SubmitButton",
+  "WorkerAppStat",
+  "WorkerNav",
+  "ForgeDsDateField",
+  "DateChip",
+  "DateHeader",
+  "DatePills"
+ ],
+ "creates": "new/dart/fmt_journal_date.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 2 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: fmtDate 0/2 · attendanceDateKey 0/2 · courseDateError 0/2 · dateInRange 0/2 · fmtAuthorDate 0/2 · fmtDateKey 0/2 · fmt 0/2 · fmtDayMonth 0/2 · fmtTime 0/2 · isNewDateGroup 0/2. לכן נוצר חדש.",
+ "sig": "3da4f521bedfe0db6113697e9fcc3177db3cea16293ba83734f6563e72491a94"
+}

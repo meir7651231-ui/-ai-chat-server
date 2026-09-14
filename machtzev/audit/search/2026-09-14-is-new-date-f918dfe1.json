@@ -1,0 +1,191 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:19:38.992Z",
+ "query": "is new date group חדשות נקודות נוספו למועדון אושרה ונמצאת",
+ "tokens": [
+  "is",
+  "new",
+  "date",
+  "group",
+  "חדשות",
+  "נקודות",
+  "נוספו",
+  "מועדון",
+  "אושרה",
+  "נמצאת"
+ ],
+ "oracle": {
+  "atomIndexSha": "0125c530b7f92b714b3e94efef461c56b43d179ab8a17fb356f285539e8a3ae1",
+  "logicCensusSha": "48324a33a97b8a7d59953d389638c35abdb13121943a14a6f79f3ab5d06c2a47",
+  "display": 1910,
+  "logic": 986
+ },
+ "candidates": [
+  {
+   "id": "DateHeader",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/date_header.dart",
+   "score": 9,
+   "hits": [
+    "date",
+    "חדשות",
+    "נקודות",
+    "נוספו",
+    "מועדון",
+    "אושרה",
+    "נמצאת"
+   ]
+  },
+  {
+   "id": "NewTaskButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/new_task_button.dart",
+   "score": 4,
+   "hits": [
+    "new",
+    "חדשות"
+   ]
+  },
+  {
+   "id": "attendanceDateKey",
+   "layer": "logic",
+   "file": "dart/attendance_date_key.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "courseDateError",
+   "layer": "logic",
+   "file": "dart-maor/course-date-error.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "csvIsBlank",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "csvIsComment",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "DateChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/date_chip.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "dateInRange",
+   "layer": "logic",
+   "file": "dart-maor/date-in-range.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "DatePills",
+   "layer": "display",
+   "file": "dart-ui-bs/date_pills.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "defaultCourseDates",
+   "layer": "logic",
+   "file": "dart-maor/default-course-dates.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "DsDateField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_date_field.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "findDuplicateGroups",
+   "layer": "logic",
+   "file": "dart-maor/find-duplicate-groups.dart",
+   "score": 3,
+   "hits": [
+    "group"
+   ]
+  },
+  {
+   "id": "findSupporterDupGroups",
+   "layer": "logic",
+   "file": "dart-maor/find-supporter-dup-groups.dart",
+   "score": 3,
+   "hits": [
+    "group"
+   ]
+  },
+  {
+   "id": "fmtDate",
+   "layer": "logic",
+   "file": "dart-maor/fmt-date.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "ForgeAvatarGroup",
+   "layer": "display",
+   "file": "dart-forge-bs/media/avatar_group.dart",
+   "score": 3,
+   "hits": [
+    "group"
+   ]
+  }
+ ],
+ "strong": [
+  "attendanceDateKey",
+  "courseDateError",
+  "csvIsBlank",
+  "csvIsComment",
+  "dateInRange",
+  "defaultCourseDates",
+  "findDuplicateGroups",
+  "findSupporterDupGroups",
+  "fmtDate"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "DateHeader",
+  "NewTaskButton",
+  "DateChip",
+  "DatePills",
+  "DsDateField",
+  "ForgeAvatarGroup"
+ ],
+ "creates": "new/dart/is_new_date_group.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 12 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: attendanceDateKey 0/12 · courseDateError 0/12 · csvIsBlank 0/12 · csvIsComment 0/12 · dateInRange 0/12 · defaultCourseDates 0/12 · findDuplicateGroups 0/12 · findSupporterDupGroups 0/12 · fmtDate 0/12 · shouldCollapseNotifRun 0/12 · fmtAuthorDate 0/12 · fmtDateKey 0/12 · fmtJournalDate 0/12 · fxGroupAmount 0/12 · isLinkableWord 0/12. לכן נוצר חדש.",
+ "sig": "f918dfe1c44df3c56bc7118d8227cf552258f502359440194617022c330a6a7e"
+}

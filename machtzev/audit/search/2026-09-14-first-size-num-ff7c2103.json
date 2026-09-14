@@ -1,0 +1,189 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:19:33.938Z",
+ "query": "first size num יוסר מהסל מוצרים ׳״ קוטר חיצוני",
+ "tokens": [
+  "first",
+  "size",
+  "num",
+  "יוסר",
+  "הסל",
+  "וצרים",
+  "קוטר",
+  "חיצוני"
+ ],
+ "oracle": {
+  "atomIndexSha": "0125c530b7f92b714b3e94efef461c56b43d179ab8a17fb356f285539e8a3ae1",
+  "logicCensusSha": "48324a33a97b8a7d59953d389638c35abdb13121943a14a6f79f3ab5d06c2a47",
+  "display": 1910,
+  "logic": 986
+ },
+ "candidates": [
+  {
+   "id": "HierarchyChipPill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/hierarchy_chip_pill.dart",
+   "score": 5,
+   "hits": [
+    "יוסר",
+    "הסל",
+    "וצרים",
+    "קוטר",
+    "חיצוני"
+   ]
+  },
+  {
+   "id": "LensGroupHeader",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/lens_group_header.dart",
+   "score": 5,
+   "hits": [
+    "יוסר",
+    "הסל",
+    "וצרים",
+    "קוטר",
+    "חיצוני"
+   ]
+  },
+  {
+   "id": "firstOpen",
+   "layer": "logic",
+   "file": "dart/first_open.dart",
+   "score": 3,
+   "hits": [
+    "first"
+   ]
+  },
+  {
+   "id": "isSizeToken",
+   "layer": "logic",
+   "file": "dart/find_attr_siblings.dart",
+   "score": 3,
+   "hits": [
+    "size"
+   ]
+  },
+  {
+   "id": "NumBox",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/num_box.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "numMap",
+   "layer": "logic",
+   "file": "dart/num_map.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "numMatch",
+   "layer": "logic",
+   "file": "dart-maor/num-match.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "sizeDiameterAtoms",
+   "layer": "logic",
+   "file": "dart/size_diameter_atoms.dart",
+   "score": 3,
+   "hits": [
+    "size"
+   ]
+  },
+  {
+   "id": "sizeLabel",
+   "layer": "logic",
+   "file": "dart-maor/size-label.dart",
+   "score": 3,
+   "hits": [
+    "size"
+   ]
+  },
+  {
+   "id": "sizeMatchFrom",
+   "layer": "logic",
+   "file": "dart/size_match_from.dart",
+   "score": 3,
+   "hits": [
+    "size"
+   ]
+  },
+  {
+   "id": "sizeSystem",
+   "layer": "logic",
+   "file": "dart/size_system.dart",
+   "score": 3,
+   "hits": [
+    "size"
+   ]
+  },
+  {
+   "id": "sizeTable",
+   "layer": "logic",
+   "file": "dart/size_table.dart",
+   "score": 3,
+   "hits": [
+    "size"
+   ]
+  },
+  {
+   "id": "sizeTableEq",
+   "layer": "logic",
+   "file": "dart/size_table_eq.dart",
+   "score": 3,
+   "hits": [
+    "size"
+   ]
+  },
+  {
+   "id": "sizeTableHash",
+   "layer": "logic",
+   "file": "dart/size_table_hash.dart",
+   "score": 3,
+   "hits": [
+    "size"
+   ]
+  },
+  {
+   "id": "AccessoryRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/accessory_row.dart",
+   "score": 1,
+   "hits": [
+    "וצרים"
+   ]
+  }
+ ],
+ "strong": [
+  "firstOpen",
+  "isSizeToken",
+  "numMap",
+  "numMatch",
+  "sizeDiameterAtoms",
+  "sizeLabel",
+  "sizeMatchFrom",
+  "sizeSystem",
+  "sizeTable",
+  "sizeTableEq",
+  "sizeTableHash"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "HierarchyChipPill",
+  "LensGroupHeader",
+  "NumBox"
+ ],
+ "creates": "new/dart/first_size_num.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 6 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: firstOpen 0/6 · isSizeToken 0/6 · numMap 0/6 · numMatch 0/6 · sizeDiameterAtoms 0/6 · sizeLabel 0/6 · sizeMatchFrom 0/6 · sizeSystem 0/6 · sizeTable 0/6 · sizeTableEq 0/6 · sizeTableHash 0/6 · stripSizeTokens 0/6 · sizeStructurePattern 0/6 · firstMeaningfulToken 0/6 · mmSize 0/6 · normalizeSize 0/6. לכן נוצר חדש.",
+ "sig": "ff7c2103f156e78ff8402a63ec2431c123816e911ba23c1260fb743a0e692e5c"
+}

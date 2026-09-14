@@ -2390,6 +2390,16 @@
   "wireable": true
  },
  {
+  "file": "dart/day.dart",
+  "name": "day",
+  "ret": "String",
+  "params": [
+   "DateTime"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart/day_bucket.dart",
   "name": "dayBucket",
   "ret": "DateTime",
@@ -4017,6 +4027,16 @@
   "wireable": true
  },
  {
+  "file": "dart/first_size_num.dart",
+  "name": "firstSizeNum",
+  "ret": "double",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/fit-dimensions.dart",
   "name": "fitDimensions",
   "ret": "Map<String, int>",
@@ -4064,6 +4084,26 @@
   "wireable": true
  },
  {
+  "file": "dart/fmt.dart",
+  "name": "fmt",
+  "ret": "String",
+  "params": [
+   "double"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
+  "file": "dart/fmt_author_date.dart",
+  "name": "fmtAuthorDate",
+  "ret": "String",
+  "params": [
+   "DateTime"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/fmt-date.dart",
   "name": "fmtDate",
   "ret": "String",
@@ -4074,11 +4114,51 @@
   "wireable": true
  },
  {
+  "file": "dart/fmt_date_key.dart",
+  "name": "fmtDateKey",
+  "ret": "String",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
+  "file": "dart/fmt_day_month.dart",
+  "name": "fmtDayMonth",
+  "ret": "String",
+  "params": [
+   "DateTime"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart/fmt_duration.dart",
   "name": "fmtDuration",
   "ret": "String",
   "params": [
    "Duration"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/fmt_journal_date.dart",
+  "name": "fmtJournalDate",
+  "ret": "String",
+  "params": [
+   "DateTime"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/fmt_time.dart",
+  "name": "fmtTime",
+  "ret": "String",
+  "params": [
+   "DateTime"
   ],
   "argc": 1,
   "wireable": false
@@ -5302,6 +5382,17 @@
   "params": [
    "String",
    "bool"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
+  "file": "dart/is_new_date_group.dart",
+  "name": "isNewDateGroup",
+  "ret": "bool",
+  "params": [
+   "String?",
+   "String"
   ],
   "argc": 2,
   "wireable": true
@@ -6883,14 +6974,14 @@
   "wireable": true
  },
  {
-  "file": "dart-boxes/pricing.dart",
+  "file": "dart/normalize.dart",
   "name": "normalize",
-  "ret": "Map<String, dynamic>",
+  "ret": "String",
   "params": [
-   "dynamic"
+   "String"
   ],
   "argc": 1,
-  "wireable": false
+  "wireable": true
  },
  {
   "file": "dart-boxes/config.dart",
@@ -6906,6 +6997,16 @@
   "file": "dart/normalize_doc_name.dart",
   "name": "normalizeDocName",
   "ret": "String",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
+  "file": "dart/normalize_il_phone.dart",
+  "name": "normalizeIlPhone",
+  "ret": "String?",
   "params": [
    "String"
   ],
@@ -9241,6 +9342,16 @@
   "wireable": false
  },
  {
+  "file": "dart/screen_key_for_tab.dart",
+  "name": "screenKeyForTab",
+  "ret": "String",
+  "params": [
+   "int"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart/screen_label_he.dart",
   "name": "screenLabelHe",
   "ret": "String",
@@ -9564,6 +9675,16 @@
   ],
   "argc": 1,
   "wireable": false
+ },
+ {
+  "file": "dart/size_structure_pattern.dart",
+  "name": "sizeStructurePattern",
+  "ret": "String",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
  },
  {
   "file": "dart/size_system.dart",

@@ -1,0 +1,211 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:19:36.119Z",
+ "query": "day סשנים לקוחות אחוז המרה במסך אין",
+ "tokens": [
+  "day",
+  "סשנים",
+  "קוחות",
+  "אחוז",
+  "מרה",
+  "מסך",
+  "אין"
+ ],
+ "oracle": {
+  "atomIndexSha": "0125c530b7f92b714b3e94efef461c56b43d179ab8a17fb356f285539e8a3ae1",
+  "logicCensusSha": "48324a33a97b8a7d59953d389638c35abdb13121943a14a6f79f3ab5d06c2a47",
+  "display": 1910,
+  "logic": 986
+ },
+ "candidates": [
+  {
+   "id": "IntelBar",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_bar.dart",
+   "score": 6,
+   "hits": [
+    "סשנים",
+    "קוחות",
+    "אחוז",
+    "מרה",
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "IntelCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_card.dart",
+   "score": 6,
+   "hits": [
+    "סשנים",
+    "קוחות",
+    "אחוז",
+    "מרה",
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "IntelIntro",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_intro.dart",
+   "score": 6,
+   "hits": [
+    "סשנים",
+    "קוחות",
+    "אחוז",
+    "מרה",
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "IntelPill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_pill.dart",
+   "score": 6,
+   "hits": [
+    "סשנים",
+    "קוחות",
+    "אחוז",
+    "מרה",
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "IntelStat",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_stat.dart",
+   "score": 6,
+   "hits": [
+    "סשנים",
+    "קוחות",
+    "אחוז",
+    "מרה",
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "LiveDot",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/live_dot.dart",
+   "score": 6,
+   "hits": [
+    "סשנים",
+    "קוחות",
+    "אחוז",
+    "מרה",
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "courierDayStats",
+   "layer": "logic",
+   "file": "dart/courier_day_stats.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "dayBucket",
+   "layer": "logic",
+   "file": "dart/day_bucket.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "dayDiff",
+   "layer": "logic",
+   "file": "dart-maor/intel-day-diff.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "dayLabel",
+   "layer": "logic",
+   "file": "dart/day_label.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "dayLetters",
+   "layer": "logic",
+   "file": "dart-maor/day-letters.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "dayNames",
+   "layer": "logic",
+   "file": "dart-maor/day-names.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "dayProgress",
+   "layer": "logic",
+   "file": "dart-maor/day-progress.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "deliveriesOfDay",
+   "layer": "logic",
+   "file": "dart-maor/deliveries-of-day.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  },
+  {
+   "id": "eligibleAssignmentsForDay",
+   "layer": "logic",
+   "file": "dart-maor/eligible-assignments-for-day.dart",
+   "score": 3,
+   "hits": [
+    "day"
+   ]
+  }
+ ],
+ "strong": [
+  "courierDayStats",
+  "dayBucket",
+  "dayDiff",
+  "dayLabel",
+  "dayLetters",
+  "dayNames",
+  "dayProgress",
+  "deliveriesOfDay",
+  "eligibleAssignmentsForDay"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "IntelBar",
+  "IntelCard",
+  "IntelIntro",
+  "IntelPill",
+  "IntelStat",
+  "LiveDot"
+ ],
+ "creates": "new/dart/day.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 2 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: courierDayStats 0/2 · dayBucket 0/2 · dayDiff 0/2 · dayLabel 0/2 · dayLetters 0/2 · dayNames 0/2 · dayProgress 0/2 · deliveriesOfDay 0/2 · eligibleAssignmentsForDay 0/2 · fmtDayMonth 0/2. לכן נוצר חדש.",
+ "sig": "5b8be133130f377dac6372a5719f021b31c213ef794cd25a165a9b9b1dcf4326"
+}

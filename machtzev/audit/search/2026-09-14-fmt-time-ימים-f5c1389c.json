@@ -1,0 +1,202 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:19:31.617Z",
+ "query": "fmt time ימים שעות מיקום כניסה שלבים ימי",
+ "tokens": [
+  "fmt",
+  "time",
+  "ימים",
+  "עות",
+  "יקום",
+  "ניסה",
+  "לבים",
+  "ימי"
+ ],
+ "oracle": {
+  "atomIndexSha": "0125c530b7f92b714b3e94efef461c56b43d179ab8a17fb356f285539e8a3ae1",
+  "logicCensusSha": "48324a33a97b8a7d59953d389638c35abdb13121943a14a6f79f3ab5d06c2a47",
+  "display": 1910,
+  "logic": 986
+ },
+ "candidates": [
+  {
+   "id": "LocationButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/location_button.dart",
+   "score": 6,
+   "hits": [
+    "ימים",
+    "עות",
+    "יקום",
+    "ניסה",
+    "לבים",
+    "ימי"
+   ]
+  },
+  {
+   "id": "SendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/send_report_button.dart",
+   "score": 6,
+   "hits": [
+    "ימים",
+    "עות",
+    "יקום",
+    "ניסה",
+    "לבים",
+    "ימי"
+   ]
+  },
+  {
+   "id": "CourierAttendanceSendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_send_report_button.dart",
+   "score": 4,
+   "hits": [
+    "ימים",
+    "עות",
+    "ניסה",
+    "ימי"
+   ]
+  },
+  {
+   "id": "CourierAttendanceTableRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_table_row.dart",
+   "score": 4,
+   "hits": [
+    "ימים",
+    "עות",
+    "ניסה",
+    "ימי"
+   ]
+  },
+  {
+   "id": "OrderTimeline",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/order_timeline.dart",
+   "score": 4,
+   "hits": [
+    "time",
+    "עות"
+   ]
+  },
+  {
+   "id": "TodayStat",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/today_stat.dart",
+   "score": 4,
+   "hits": [
+    "ימים",
+    "עות",
+    "ניסה",
+    "ימי"
+   ]
+  },
+  {
+   "id": "fmtDate",
+   "layer": "logic",
+   "file": "dart-maor/fmt-date.dart",
+   "score": 3,
+   "hits": [
+    "fmt"
+   ]
+  },
+  {
+   "id": "fmtDuration",
+   "layer": "logic",
+   "file": "dart/fmt_duration.dart",
+   "score": 3,
+   "hits": [
+    "fmt"
+   ]
+  },
+  {
+   "id": "ForgeCountdownTimer",
+   "layer": "display",
+   "file": "dart-forge-bs/temporal/countdown_timer.dart",
+   "score": 3,
+   "hits": [
+    "time"
+   ]
+  },
+  {
+   "id": "ForgeLiveClockRelativeTime",
+   "layer": "display",
+   "file": "dart-forge-bs/temporal/live_clock_relative_time.dart",
+   "score": 3,
+   "hits": [
+    "time"
+   ]
+  },
+  {
+   "id": "ForgeTimeSlot",
+   "layer": "display",
+   "file": "dart-forge-bs/temporal/time_slot.dart",
+   "score": 3,
+   "hits": [
+    "time"
+   ]
+  },
+  {
+   "id": "receiptFmtOf",
+   "layer": "logic",
+   "file": "dart-maor/receipt-fmt-of.dart",
+   "score": 3,
+   "hits": [
+    "fmt"
+   ]
+  },
+  {
+   "id": "SettingsTimeRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_time_row.dart",
+   "score": 3,
+   "hits": [
+    "time"
+   ]
+  },
+  {
+   "id": "supportMsgTime",
+   "layer": "logic",
+   "file": "dart-maor/support-msg-time.dart",
+   "score": 3,
+   "hits": [
+    "time"
+   ]
+  },
+  {
+   "id": "timeCostTotal",
+   "layer": "logic",
+   "file": "dart-maor/time-cost-total.dart",
+   "score": 3,
+   "hits": [
+    "time"
+   ]
+  }
+ ],
+ "strong": [
+  "fmtDate",
+  "fmtDuration",
+  "receiptFmtOf",
+  "supportMsgTime",
+  "timeCostTotal"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "LocationButton",
+  "SendReportButton",
+  "CourierAttendanceSendReportButton",
+  "CourierAttendanceTableRow",
+  "OrderTimeline",
+  "TodayStat",
+  "ForgeCountdownTimer",
+  "ForgeLiveClockRelativeTime",
+  "ForgeTimeSlot",
+  "SettingsTimeRow"
+ ],
+ "creates": "new/dart/fmt_time.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 2 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: fmtDate 0/2 · fmtDuration 0/2 · receiptFmtOf 0/2 · supportMsgTime 0/2 · timeCostTotal 0/2 · fmtDateKey 0/2 · fmtJournalDate 0/2 · fmt 0/2 · fmtAuthorDate 0/2 · fmtDayMonth 0/2 · timeoutToInt 0/2. לכן נוצר חדש.",
+ "sig": "f5c1389c448fdde5ea01173ade9c6a8413ee4a2b0822bc30e9151b4527fc36f1"
+}

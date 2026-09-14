@@ -1,0 +1,181 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:19:28.958Z",
+ "query": "screen key for tab בית מחלקות עדכונים חנות",
+ "tokens": [
+  "screen",
+  "key",
+  "for",
+  "tab",
+  "בית",
+  "חלקות",
+  "עדכונים",
+  "חנות"
+ ],
+ "oracle": {
+  "atomIndexSha": "0125c530b7f92b714b3e94efef461c56b43d179ab8a17fb356f285539e8a3ae1",
+  "logicCensusSha": "48324a33a97b8a7d59953d389638c35abdb13121943a14a6f79f3ab5d06c2a47",
+  "display": 1910,
+  "logic": 986
+ },
+ "candidates": [
+  {
+   "id": "actionIdsFor",
+   "layer": "logic",
+   "file": "dart/action_ids_for.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "allowedDesignationsFor",
+   "layer": "logic",
+   "file": "dart-maor/allowed-designations-for.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "annualKey",
+   "layer": "logic",
+   "file": "dart-boxes/hebrew-calendar.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "attendanceDateKey",
+   "layer": "logic",
+   "file": "dart/attendance_date_key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "candidateSupportersForCharge",
+   "layer": "logic",
+   "file": "dart-maor/candidate-supporters-for-charge.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "catalogActionIdsFor",
+   "layer": "logic",
+   "file": "dart/catalog_action_ids_for.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "catalogProductForBrand",
+   "layer": "logic",
+   "file": "dart/catalog_product_for_brand.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "chargeDedupKey",
+   "layer": "logic",
+   "file": "dart-maor/charge-dedup-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "cloudCfgCacheKey",
+   "layer": "logic",
+   "file": "dart-maor/cloud-cfg-cache-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "companyComplementsFor",
+   "layer": "logic",
+   "file": "dart/company_complements_for.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "cooldownForFails",
+   "layer": "logic",
+   "file": "dart-maor/cooldown-for-fails.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "createCloudKey",
+   "layer": "logic",
+   "file": "dart-maor/create-cloud-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "cssFor",
+   "layer": "logic",
+   "file": "dart-boxes/theme.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "deliveryFeeFor",
+   "layer": "logic",
+   "file": "dart/delivery_fee_for.dart",
+   "score": 3,
+   "hits": [
+    "for"
+   ]
+  },
+  {
+   "id": "diameterSortKey",
+   "layer": "logic",
+   "file": "dart/diameter_sort_key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  }
+ ],
+ "strong": [
+  "actionIdsFor",
+  "allowedDesignationsFor",
+  "annualKey",
+  "attendanceDateKey",
+  "candidateSupportersForCharge",
+  "catalogActionIdsFor",
+  "catalogProductForBrand",
+  "chargeDedupKey",
+  "cloudCfgCacheKey",
+  "companyComplementsFor",
+  "cooldownForFails",
+  "createCloudKey",
+  "cssFor",
+  "deliveryFeeFor",
+  "diameterSortKey"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/screen_key_for_tab.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 5 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: actionIdsFor 0/5 · allowedDesignationsFor 0/5 · annualKey 0/5 · attendanceDateKey 0/5 · candidateSupportersForCharge 0/5 · catalogActionIdsFor 0/5 · catalogProductForBrand 0/5 · chargeDedupKey 0/5 · cloudCfgCacheKey 0/5 · companyComplementsFor 0/5 · cooldownForFails 0/5 · createCloudKey 0/5 · cssFor 0/5 · deliveryFeeFor 0/5 · diameterSortKey 0/5 · screenKeyForRoute 0/5 · moduleForScreen 0/5 · fmtDateKey 0/5 · normalizeScreen 0/5 · presenceAllowedForRole 0/5 · profileDefaultsFor 0/5 · roleKeyOf 0/5. לכן נוצר חדש.",
+ "sig": "3d62e77ae774d5de10d5c1287297c9f6296e6589f2390f67fe38a77fb7c11969"
+}

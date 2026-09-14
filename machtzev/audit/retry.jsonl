@@ -1999,3 +1999,6 @@
 {"ts":1789404285,"attempt":1789404285,"gate":"goldquarry","path":"new/dart/attendance_date_key.dart","sha":"0771b19beb25011b6ab6eef0beefecb03cf6b932","blob_before":null,"resolved":true}
 {"ts":1789404285,"attempt":1789404285,"gate":"goldquarry","path":"new/dart/attendance_date_key_test.dart","sha":"0771b19beb25011b6ab6eef0beefecb03cf6b932","blob_before":null,"resolved":true}
 {"ts":1789404285,"attempt":1789404285,"gate":"goldquarry","path":"new/dart/attr_emoji.dart","sha":"0771b19beb25011b6ab6eef0beefecb03cf6b932","blob_before":null,"resolved":true}
+{"ts":1789406896,"attempt":1789406896,"gate":"search-proof","path":"new/dart/day.dart","sha":"d206326d2b2816119393f4eabdf7799922955302","blob_before":null,"resolved":true}
+{"ts":1789406896,"attempt":1789406896,"gate":"search-proof","path":"new/dart/day_test.dart","sha":"d206326d2b2816119393f4eabdf7799922955302","blob_before":null,"resolved":true}
+{"ts":1789406896,"attempt":1789406896,"gate":"search-proof","path":"new/dart/first_size_num.dart","sha":"d206326d2b2816119393f4eabdf7799922955302","blob_before":null,"resolved":true}

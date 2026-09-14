@@ -44,7 +44,9 @@ for (const t of targets) {
     const ranked = oracle.all.filter((e) => !self(e)).map((e) => ({ id: e.id, layer: e.layer, s: scoreFor(q, e).s })).filter((e) => e.s > 0).sort((a, b) => b.s - a.s || a.id.localeCompare(b.id)).slice(0, TOP);
     // «חדש-מאז-החיפוש» = לא ברשומה **וגם לא באורקל המחויב האחרון** (HEAD): מועמד שהיה קיים לפני החיפוש אך מחוץ לחלון-ה-15 שלה, ונכנס לחלון
     //   רק כי אטומים אחרים הוסרו, אינו «חדש» (phoneKey נכנס לחלון של keyboardLayoutKey אחרי הסרת 4 אחים). אם HEAD לא זמין ⇒ הרשומה בלבד.
-    const strongNow = ranked.filter((e) => e.s >= 3 && (!lay || e.layer === lay) && !inRec.has(e.id) && !headIds.has(e.layer + ':' + e.id));
+    // אח-אצווה שנשפט בריצה נקוב **ב-why** (עם ok/total) אך אינו ב-candidates של הרשומה (הכלי מדרג מהאורקל בלבד) — נקוב-בשם = טופל.
+    const addressed = (id) => inRec.has(id) || (rec.why || '').includes(id);
+    const strongNow = ranked.filter((e) => e.s >= 3 && (!lay || e.layer === lay) && !addressed(e.id) && !headIds.has(e.layer + ':' + e.id));
     const selfInRec = (rec.candidates || []).some((c) => ('new/' + (c.file || '')) === t);
     // G64 · «האטום-עצמו ברשומה» כבר לא כשל: search-record מוציא את --creates מהמועמדים, ו«חיפוש בלי-עצמי» ≡ חיפוש-לפני-יצירה. נשאר: האורקל רק גדל + אין חזק-חדש.
     // G64 · אורקל שקטן מאז (אטומים הוסרו בסוויפ/ידנית) אינו כשל: פחות מועמדים לא יכולים להסתיר כפילות שפוספסה; הראיה = ניקוד-חי (strongNow).
