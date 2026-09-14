@@ -47,6 +47,10 @@ Flutter מותקן, buildsmart משוכפל, `node gen/build.mjs <ספק> --site
 `wizard.mjs` ⇒ `out/wizard.html`: `mosad.data.json` (התוכנית המלאה למוסד חסידי כדאטה: אגפים ⇒ ישויות ⇒ שדות/שלבים, אוטומציות, פנים, חיבורים, הקשר)
 כעץ-מתגים, הכל דלוק; מה שדלוק ⇒ ספק ⇒ אותה ליבה של הסטודיו בונה בדפדפן. ההקשר (מדינה · מוסד/מוצר · גודל · טלפון · חצר · שפה · שרת) = מתגים שמכבים ברירות-מחדל, לא שאלות.
 
+## מקרה-הבוחן: מוסד חסידי מלא (התיעוד המלא: `gen/MOSAD.md`)
+12 אגפים · 181 ישויות · 1,232 שדות · 146 אוטומציות · 41 חבילות-ידע עם מוצא · 7/7 צרכים מוכחים בריצה.
+מדידה סבב-אחרי-סבב (שאלות-עדשה פתוחות 1,238 ⇒ 875) ושלושת באגי-המנוע שהסבב חשף — ב-`MOSAD.md` §3–§4.
+
 ## הפיכות של הידע (חבילות)
 `mosad.data.json` **נגזר** תמיד מ-`mosad-build.mjs` על שלושה מקורות: `mosad.sentences.txt` (המשפטים) + `mosad.enrich.json` (העשרות-יד כדאטה)
 + `packs/*.json` (חבילות-ידע חצובות, כל שורה עם מוצא). לא עורכים אותו ביד.
@@ -60,3 +64,15 @@ git rm -r gen .github/workflows/gen.yml && git commit -m "gen: ניתוק"
 ```
 או בלי commit: `rm -rf gen`. אין רישום ב-regen, אין שער, אין baseline, אין pin.
 `node gen/detach.mjs --check` מוכיח את זה בכל רגע.
+
+## מפת-הקבצים (מה נמצא בתיקייה)
+| קובץ | תפקיד |
+|---|---|
+| `engine.mjs` · `spec.mjs` · `plan.mjs` · `prove.mjs` · `render.mjs` · `live.mjs` | הליבה: ספק ⇒ צרכים ⇒ הוכחה ⇒ אפליקציה + דף-לייב |
+| `shelf.mjs` · `prove-dart.mjs` · `inventory.mjs` | המדף (JS · Dart) והמלאי הנספר |
+| `sentence.mjs` · `lang.mjs` · `lang.data.json` | משפט-חופשי ⇒ ספק; ידע-השפה כדאטה |
+| `flutter.mjs` · `site.mjs` | ספק ⇒ מודולי-Dart של המחצב ⇒ אתר-Flutter |
+| `studio.mjs` · `wizard.mjs` · `index-page.mjs` | הסטודיו (תיבה ריקה) · האשף (עץ-מתגים) · דף-שער |
+| `mosad.sentences.txt` · `mosad.enrich.json` · `packs/*.json` · `mosad-build.mjs` | שלושת מקורות-הידע ⇒ `mosad.data.json` (נגזר) |
+| `lenses.mjs` · `lenses.data.json` · `pass.mjs` | 12 העדשות הישיבתיות + המעבר אגף-אגף עם היסטוריית-סבבים |
+| `detach.mjs` · `DETACH.md` · `MOSAD.md` · `packs/README.md` | הוכחת-הניתוק והתיעוד |
