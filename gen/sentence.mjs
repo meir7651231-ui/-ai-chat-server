@@ -31,14 +31,26 @@ export function sentenceToSpec(text, LANG) {
     const em = ENUM_RE.exec(s);
     if (em) { values = (em[1] || em[2]).split(/[,،/|]/).map((v) => v.trim()).filter(Boolean); s = s.replace(ENUM_RE, '').trim(); }
     else if (/\//.test(s)) { const [head, ...rest] = s.split(/\s*[:\-]\s*/); if (rest.length) { values = rest.join(' ').split('/').map((v) => v.trim()).filter(Boolean); s = head.trim(); } }
+    // «יתרה = סכום פחות הנחה» — נוסחה: מילות-החשבון מהדאטה ⇒ סימנים
+    const FW = (LANG.extra && LANG.extra.formulaWords) || {};
+    const eqi = s.indexOf('=');
+    if (eqi > 0) {
+      const lhs = content(s.slice(0, eqi)).join(' ');
+      let rhs = s.slice(eqi + 1).trim();
+      for (const [w, op] of Object.entries(FW)) rhs = rhs.replace(new RegExp(`\\s${w}\\s`, 'g'), op);
+      return lhs + '=' + rhs.replace(/\s+/g, '') + (first ? '*' : '');
+    }
     const name = tokens(s).filter((w) => (w.length > 1 && !LEAD.has(w) && !MARKS.includes(w)) || /^\d+$/.test(w)).join(' ') || s;
     if (!name) return null;
+    const IDW = (LANG.extra && LANG.extra.idWords) || [];
     let shape = '';
+    if (!values && IDW.some((w) => name === w || name.startsWith(w + ' '))) return name + '[מזהה]' + (first ? '*' : '');
     if (values && (values.length > 1 || (values.length === 1 && /\d/.test(values[0])))) shape = `{${values.join('|')}}`;
     else if (hint(name, 'typePhone')) shape = '[טלפון]';
     else if (hint(name, 'typeDate')) shape = '[תאריך]';
+    else if (((LANG.extra && LANG.extra.countWords) || []).some((w) => name === w || name.split(' ').includes(w))) shape = '[כמות]';
     else if (hint(name, 'typePercent')) shape = '(0..100)';
-    else if (hint(name, 'typeNum')) shape = '(0..1000000)';
+    else if (hint(name, 'typeNum') || ((LANG.extra && LANG.extra.numWords) || []).some((w) => name === w || name.split(' ').includes(w))) shape = '(0..1000000)';
     return name + shape + (first ? '*' : '');
   };
   const ents = [];
@@ -61,7 +73,35 @@ export function sentenceToSpec(text, LANG) {
 
   const clauses = String(text || '').split(/[.;\n]+/).map((c) => c.trim()).filter((c) => words(c).length);
   let app = '';
+  const GP = (LANG.extra && LANG.extra.guardPhrases) || [], GO = (LANG.extra && LANG.extra.guardOnly) || [], RS = (LANG.extra && LANG.extra.roleSee) || [];
+  const roles = [];
   clauses.forEach((clause, ci) => {
+    // «אפשר לעבור ל-X רק אם Y» — מעבר מותנה של הישות האחרונה
+    const gm = GP.length && GO.length ? new RegExp(`^(?:${GP.join('|')})-?\\s*([^,]+?)\\s+(?:${GO.join('|')})\\s+(.+)$`).exec(clause) : null;
+    if (gm) { const e = ents[ents.length - 1]; if (e) { (e.guards ||= []).push({ stage: gm[1].trim(), cond: gm[2].trim() }); } else notes.push(`«${clause}»: מעבר לפני כל ישות — התעלמתי`); return; }
+    // «אסור למחוק X» · «אסור לשנות סכום ב-X» · «ב-X אסור: א, ב» — איסורים על ישות
+    const FV = (LANG.extra && LANG.extra.forbidVerbs) || {};
+    const fb = /^(?:ב-?)?(.+?)\s+אסור\s*:\s*(.+)$/.exec(clause) || (Object.keys(FV).length ? new RegExp(`^אסור\\s+(${Object.keys(FV).join('|')})\\s+(.+?)(?:\\s+ב-?(.+))?$`).exec(clause) : null);
+    if (fb) {
+      let entName, items;
+      if (fb[0].startsWith('אסור')) { const verb = fb[1], obj = fb[2], ent = fb[3]; const noun = FV[verb]; entName = ent ? ent.trim() : (verb === 'למחוק' ? obj.trim() : null); items = [verb === 'למחוק' ? noun : noun + ' ' + obj.trim()]; }
+      else { entName = fb[1].trim(); items = fb[2].split(/[,،]/).map((x) => x.trim()).filter(Boolean); }
+      const e = entName ? ents.find((x) => x.name === entName) : ents[ents.length - 1];
+      if (e) { (e.forbidden ||= []).push(...items); } else notes.push(`«${clause}»: איסור על ישות שלא הוזכרה («${entName}») — התעלמתי`);
+      return;
+    }
+    // «תיקון ב-X: גזבר עד 30 ימים» / «ב-X מתקן גזבר עד 30 ימים» — מדיניות-תיקון (בדיעבד)
+    const fxm = /^תיקון\s+ב-?(.+?)\s*:\s*(.+?)(?:\s+עד\s+(\d+)\s*ימים?)?$/.exec(clause) || /^ב-?(.+?)\s+מתקנ(?:ת|ים)?\s+(.+?)(?:\s+עד\s+(\d+)\s*ימים?)?$/.exec(clause);
+    if (fxm) { const e = ents.find((x) => x.name === fxm[1].trim()); if (e) e.fix = { who: fxm[2].trim(), days: fxm[3] ? Number(fxm[3]) : null }; else notes.push(`«${clause}»: תיקון לישות שלא הוזכרה — התעלמתי`); return; }
+    // «הרגע של X: …» — מה מדליק את הישות · «X במסך של Y» — באיזה מסך-תפקיד
+    const mo = /^הרגע\s+של\s+(.+?)\s*:\s*(.+)$/.exec(clause);
+    if (mo) { const e = ents.find((x) => x.name === mo[1].trim()); if (e) e.moment = mo[2].trim(); else notes.push(`«${clause}»: הרגע לישות שלא הוזכרה — התעלמתי`); return; }
+    const sc = /^(.+?)\s+במסך\s+של\s+(.+)$/.exec(clause);
+    if (sc) { const e = ents.find((x) => x.name === sc[1].trim()); if (e) (e.screens ||= []).push(...sc[2].split(/[,،]/).map((x) => x.trim()).filter(Boolean)); else notes.push(`«${clause}»: מסך לישות שלא הוזכרה — התעלמתי`); return; }
+    // «רק X רואה Y, Z» / «תפקיד X: Y, Z» — הרשאה
+    const rm = RS.length ? new RegExp(`^רק\\s+(.+?)\\s+(?:${RS.join('|')})\\s+(.+)$`).exec(clause) : null;
+    const rm2 = /^תפקיד\s+(.+?)\s*:\s*(.+)$/.exec(clause);
+    if (rm || rm2) { const m = rm || rm2; roles.push({ name: m[1].trim(), ents: m[2].split(/[,،]|\s+ו(?=[\u0590-\u05FF])/).map((x) => x.trim()).filter(Boolean) }); return; }
     // «שלבים: א, ב, ג» — שלבי הישות האחרונה שהוזכרה (או של הישות במשפט הזה)
     const sm = STAGE_RE ? STAGE_RE.exec(clause) : null;
     if (sm) {
@@ -139,11 +179,11 @@ export function sentenceToSpec(text, LANG) {
   if (!ents.length && app) { addEnt(app, [], text); notes.push('לא זוהתה שום ישות — הפכתי את שם-האפליקציה לישות אחת. כתוב: «לכל X יש a, b, c»'); }
   const dash = [];
   for (const e of ents) for (const f of e.fields) {
-    const name = f.replace(/[\[({].*$/, '').replace(/\*$/, '');
-    if (/\(\d+\.\.\d+\)/.test(f)) dash.push(`סכום(${e.name}.${name})`);
+    const name = f.replace(/[\[({=].*$/, '').replace(/\*$/, '');
+    if (/\(\d+\.\.\d+\)/.test(f) || /=/.test(f)) dash.push(`סכום(${e.name}.${name})`);
     if (/\{.*\}/.test(f)) dash.push(`מונה(${e.name}.${name})`);
   }
-  const lines = [`אפליקציה: ${app}`, ...ents.map((e) => `ישות ${e.name} עם ${e.fields.join(', ')}${e.stages && e.stages.length ? ` | שלבים: ${e.stages.join(', ')}` : ''}`)];
+  const lines = [`אפליקציה: ${app}`, ...ents.map((e) => `ישות ${e.name} עם ${e.fields.join(', ')}${e.stages && e.stages.length ? ` | שלבים: ${e.stages.join(', ')}` : ''}${e.guards && e.guards.length ? ` | מעברים: ${e.guards.map((g) => g.stage + ': ' + g.cond).join(', ')}` : ''}${e.forbidden && e.forbidden.length ? ` | אסור: ${e.forbidden.join(', ')}` : ''}${e.moment ? ` | הרגע: ${e.moment}` : ''}${e.screens && e.screens.length ? ` | מסך: ${e.screens.join(', ')}` : ''}${e.fix ? ` | תיקון: ${e.fix.who}${e.fix.days ? ' עד ' + e.fix.days + ' ימים' : ''}` : ''}`), ...roles.map((r) => `תפקיד ${r.name}: ${r.ents.join(', ')}`)];
   if (dash.length) lines.push(`לוח בקרה עם ${dash.join(', ')}`);
   return { specText: lines.join('\n'), notes, app, entities: ents };
 }

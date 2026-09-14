@@ -1,0 +1,9 @@
+{ "id": "donor", "name": "תורם", "match": { "entity": ["תורם"] },
+  "sources": ["new/atoms/cockpit-at-risk.contract.md — בסיכון-נטישה: נתן בעבר · בלי מועד-קשר · שקט ≥ N ימים, ממוין מהשקט ביותר", "new/atoms/intel-rfm-from-scan.contract.md — דירוג RFM (טריות · תדירות · סכום) עם ספים מהמקור", "new/atoms/overdue-contact-task-drafts.contract.md — עבר יעד-הקשר ⇒ משימת «להתקשר» אחת", "new/atoms/wa-birthday-text.contract.md — ברכת יום-הולדת לתורם, נפתחת לעריכה לפני שליחה", "new/atoms/bulk-wa-recipients.contract.md — שליחה מרובה: דדופ לפי ספרות-טלפון"],
+  "fields": [ { "name": "תאריך קשר אחרון", "shape": "date" }, { "name": "תאריך קשר הבא", "shape": "date" }, { "name": "תאריך לידה", "shape": "date" }, { "name": "תרומה אחרונה", "shape": "date" }, { "name": "דירוג RFM", "shape": "enum", "values": ["חם", "פעיל", "מתקרר", "נרדם"] } ],
+  "guards": [ { "stage": "קבוע", "cond": "תרומה אחרונה" } ],
+  "forbidden": ["מחיקה", "פנייה למי שסומן «לא לפנות»", "שליחה בשבת וחג", "תורם גלוי למלמד", "שתי הודעות לאותו טלפון בשליחה מרובה"],
+  "moment": "תורם נולד מפנייה ראשונה (ליד) או מתרומה ראשונה; המגייס פותח כרטיס באותו יום",
+  "screens": ["מגייס", "גזבר"],
+  "automations": ["תורם שנתן בעבר, בלי מועד-קשר, ושקט 90 יום ⇒ «בסיכון» (cockpit-at-risk)", "עבר תאריך קשר הבא ⇒ משימת «להתקשר» אחת למגייס (overdue-contact-task-drafts)", "יום-הולדת של תורם ⇒ ברכה מוכנה לוואטסאפ, נפתחת לעריכה (wa-birthday-text)"],
+  "kpi": ["מונה(תורם.דירוג RFM)"] }

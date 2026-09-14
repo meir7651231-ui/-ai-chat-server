@@ -1,0 +1,8 @@
+{ "id": "delivery", "name": "חלוקה", "match": { "entity": ["חלוקה"] },
+  "sources": ["new/atoms/deliveries-of-day.contract.md — מסירות של יום-חלוקה", "new/atoms/deliveries-of-volunteer.contract.md — מסירות של מתנדב", "new/atoms/deliver-receipt.contract.md — אישור מסירה", "new/atoms/advance-status.contract.md — סטטוס מסירה קדימה בלבד: pickup ⇒ enroute ⇒ delivered"],
+  "fields": [ { "name": "מתנדב", "shape": "text" }, { "name": "מסלול", "shape": "text" }, { "name": "אישור מסירה", "shape": "enum", "values": ["נמסר", "לא בבית", "סירב", "כתובת שגויה"] } ],
+  "guards": [ { "stage": "חולק", "cond": "מתנדב" } ],
+  "forbidden": ["מחיקה", "שם מקבל-החבילה גלוי למתנדב שאינו במסלול שלו", "סטטוס מסירה אחורה (רק קדימה)"],
+  "moment": "ועדת חסד מאשרת רשימה לחג; ביום החלוקה כל מתנדב רואה רק את המסלול שלו",
+  "screens": ["ועדת חסד"],
+  "automations": ["מסלול נסגר ⇒ כל מסירה בלי אישור ⇒ רשימת «לא נמסר» לוועדה", "אישור מסירה ⇒ קבלת-מסירה (deliver-receipt)"] }

@@ -58,6 +58,7 @@ jobs:
             mkdir -p "public/$slug"; cp "gen/out/$slug/live.html" "public/$slug/live.html"; cp "gen/out/$slug/log.md" "public/$slug/log.md"; cp "gen/out/$slug/report.json" "public/$slug/report.json"
           done
           node gen/studio.mjs && cp gen/out/studio.html public/studio.html
+          node gen/wizard.mjs && cp gen/out/wizard.html public/wizard.html
           node gen/index-page.mjs public > public/index.html
       - name: פרסום ל-gh-pages/gen
         uses: peaceiris/actions-gh-pages@v4

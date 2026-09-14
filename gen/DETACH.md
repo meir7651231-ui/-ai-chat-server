@@ -43,6 +43,17 @@ node gen/build.mjs gen/specs/tikim.txt --site   # משפט ⇒ ספק ⇒ HTML +
 Flutter מותקן, buildsmart משוכפל, `node gen/build.mjs <ספק> --site` לכל ספק ⇒ `gh-pages/gen/<שם>/` (אתר) + `live.html` + `studio.html`.
 כתובת (אחרי הפעלת Pages על ענף gh-pages): `https://meir7651231-ui.github.io/-ai-chat-server/gen/`.
 
+## האשף
+`wizard.mjs` ⇒ `out/wizard.html`: `mosad.data.json` (התוכנית המלאה למוסד חסידי כדאטה: אגפים ⇒ ישויות ⇒ שדות/שלבים, אוטומציות, פנים, חיבורים, הקשר)
+כעץ-מתגים, הכל דלוק; מה שדלוק ⇒ ספק ⇒ אותה ליבה של הסטודיו בונה בדפדפן. ההקשר (מדינה · מוסד/מוצר · גודל · טלפון · חצר · שפה · שרת) = מתגים שמכבים ברירות-מחדל, לא שאלות.
+
+## הפיכות של הידע (חבילות)
+`mosad.data.json` **נגזר** תמיד מ-`mosad-build.mjs` על שלושה מקורות: `mosad.sentences.txt` (המשפטים) + `mosad.enrich.json` (העשרות-יד כדאטה)
++ `packs/*.json` (חבילות-ידע חצובות, כל שורה עם מוצא). לא עורכים אותו ביד.
+- לבטל חבילה: `rm gen/packs/<id>.json && node gen/mosad-build.mjs` — הדאטה חוזר בדיוק למה שנשאר.
+- לבטל את כל החבילות: `node gen/mosad-build.mjs --no-packs`. לבטל גם העשרות: `--no-enrich` ⇒ המשפטים בלבד.
+- למדוד מה חבילה נתנה: `node gen/pass.mjs --no-flutter` לפני ואחרי (שאלות-עדשה פתוחות).
+
 ## ניתוק מלא (החזרת המצב לקדמותו)
 ```bash
 git rm -r gen .github/workflows/gen.yml && git commit -m "gen: ניתוק"

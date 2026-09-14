@@ -1,0 +1,588 @@
+{
+ "app": "גבייה",
+ "spec": "אפליקציה: גבייה\nישות צק עם משפחה*, מספר[מזהה], סכום(0..1000000), תאריך פירעון[תאריך] | שלבים: התקבל, הופקד, נפרע | אסור: מחיקה | תיקון: גזבר עד 30 ימים\nתפקיד גזבר: צק\nלוח בקרה עם סכום(צק.סכום)",
+ "sentence": {
+  "text": "גבייה: לכל צק יש משפחה, מספר, סכום, תאריך פירעון; שלבים: התקבל, הופקד, נפרע; אסור למחוק צק; תיקון ב-צק: גזבר עד 30 ימים; רק גזבר רואה צק\n",
+  "notes": []
+ },
+ "entities": [
+  {
+   "name": "צק",
+   "fields": [
+    {
+     "name": "משפחה",
+     "required": true,
+     "shape": "text"
+    },
+    {
+     "name": "מספר",
+     "required": false,
+     "shape": "id"
+    },
+    {
+     "name": "סכום",
+     "required": false,
+     "shape": "number",
+     "min": 0,
+     "max": 1000000
+    },
+    {
+     "name": "תאריך פירעון",
+     "required": false,
+     "shape": "date"
+    }
+   ],
+   "stages": [
+    "התקבל",
+    "הופקד",
+    "נפרע"
+   ],
+   "guards": [],
+   "forbidden": [
+    "מחיקה"
+   ],
+   "moment": "",
+   "screens": [],
+   "fix": {
+    "who": "גזבר",
+    "days": 30
+   }
+  }
+ ],
+ "dashboard": [
+  {
+   "op": "סכום",
+   "entity": "צק",
+   "field": "סכום"
+  }
+ ],
+ "roles": [
+  {
+   "name": "גזבר",
+   "all": false,
+   "ents": [
+    "צק"
+   ]
+  }
+ ],
+ "plan": [
+  {
+   "needId": "norm-search",
+   "entity": "צק",
+   "field": "משפחה",
+   "kind": "search",
+   "label": "צק.משפחה"
+  },
+  {
+   "needId": "money",
+   "entity": "צק",
+   "field": "סכום",
+   "kind": "column",
+   "label": "צק.סכום"
+  },
+  {
+   "needId": "fmt-date",
+   "entity": "צק",
+   "field": "תאריך פירעון",
+   "kind": "column",
+   "label": "צק.תאריך פירעון"
+  },
+  {
+   "needId": "days-since",
+   "entity": "צק",
+   "field": "תאריך פירעון",
+   "kind": "column",
+   "label": "צק.תאריך פירעון"
+  },
+  {
+   "needId": "sum",
+   "op": "סכום",
+   "entity": "צק",
+   "field": "סכום",
+   "kind": "kpi",
+   "label": "סכום צק.סכום"
+  }
+ ],
+ "proofs": [
+  {
+   "need": "norm-search",
+   "label": "נרמול טקסט לחיפוש (ניקוד, סופיות, גרשיים)",
+   "from": {
+    "shape": "text"
+   },
+   "examples": [
+    {
+     "args": [
+      "שָׁלוֹם"
+     ],
+     "want": "שלומ"
+    },
+    {
+     "args": [
+      "ABC"
+     ],
+     "want": "abc"
+    },
+    {
+     "args": [
+      null
+     ],
+     "want": ""
+    },
+    {
+     "args": [
+      " יוסף "
+     ],
+     "want": "יוספ"
+    },
+    {
+     "args": [
+      "כהן ז\"ל"
+     ],
+     "want": "כהנ זל"
+    }
+   ],
+   "tried": 569,
+   "failedBy": {
+    "זריקה": 356,
+    "פלט שונה": 199,
+    "אורך-קריאה": 13
+   },
+   "ms": 73,
+   "proven": [
+    {
+     "name": "norm-search",
+     "fn": "normSearch",
+     "n": 1,
+     "role": "מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות",
+     "tSource": "norm-search-strings"
+    }
+   ],
+   "chosen": "norm-search",
+   "usedBy": [
+    "צק.משפחה"
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 252,
+     "לא מתקמפל בבידוד": 5,
+     "פלט שונה": 71,
+     "זריקה/טיפוס": 66
+    },
+    "note": ""
+   }
+  },
+  {
+   "need": "money",
+   "label": "מספר ⇒ תצוגת-שקלים עם מפרידי-אלפים",
+   "from": {
+    "shape": "number"
+   },
+   "examples": [
+    {
+     "args": [
+      1234567
+     ],
+     "want": "₪1,234,567"
+    },
+    {
+     "args": [
+      0
+     ],
+     "want": "₪0"
+    },
+    {
+     "args": [
+      12
+     ],
+     "want": "₪12"
+    },
+    {
+     "args": [
+      999.6
+     ],
+     "want": "₪1,000"
+    }
+   ],
+   "tried": 569,
+   "failedBy": {
+    "זריקה": 396,
+    "פלט שונה": 159,
+    "אורך-קריאה": 13
+   },
+   "ms": 13,
+   "proven": [
+    {
+     "name": "shekel",
+     "fn": "shekel",
+     "n": 1,
+     "role": "",
+     "tSource": "shekel-strings"
+    }
+   ],
+   "chosen": "shekel",
+   "usedBy": [
+    "צק.סכום"
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [
+     {
+      "name": "f_money",
+      "fn": "fMoney",
+      "file": "new/dart/f_money.dart",
+      "params": [
+       "num"
+      ],
+      "ret": "String"
+     }
+    ],
+    "failedBy": {
+     "אורך-קריאה": 252,
+     "לא מתקמפל בבידוד": 5,
+     "זריקה/טיפוס": 107,
+     "פלט שונה": 29
+    },
+    "note": ""
+   }
+  },
+  {
+   "need": "fmt-date",
+   "label": "תאריך-ISO ⇒ יום/חודש/שנה",
+   "from": {
+    "shape": "date"
+   },
+   "examples": [
+    {
+     "args": [
+      "2026-09-14"
+     ],
+     "want": "14/09/2026"
+    },
+    {
+     "args": [
+      "2026-01-05"
+     ],
+     "want": "05/01/2026"
+    },
+    {
+     "args": [
+      ""
+     ],
+     "want": "—"
+    },
+    {
+     "args": [
+      null
+     ],
+     "want": "—"
+    }
+   ],
+   "tried": 569,
+   "failedBy": {
+    "זריקה": 360,
+    "פלט שונה": 195,
+    "אורך-קריאה": 13
+   },
+   "ms": 16,
+   "proven": [
+    {
+     "name": "fmt-date",
+     "fn": "fmtDate",
+     "n": 1,
+     "role": "תאריך-ISO ⇒ תצוגה ישראלית dd/mm/yyyy. ריק/שבור ⇒ \"—\".",
+     "tSource": "fmt-date-strings"
+    }
+   ],
+   "chosen": "fmt-date",
+   "usedBy": [
+    "צק.תאריך פירעון"
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 252,
+     "לא מתקמפל בבידוד": 5,
+     "פלט שונה": 71,
+     "זריקה/טיפוס": 66
+    },
+    "note": ""
+   }
+  },
+  {
+   "need": "days-since",
+   "label": "ימים שעברו מתאריך עד היום (שלילי = עתיד)",
+   "from": {
+    "shape": "date"
+   },
+   "examples": [
+    {
+     "args": [
+      "2026-09-01",
+      "2026-09-14"
+     ],
+     "want": 13
+    },
+    {
+     "args": [
+      "2026-09-14",
+      "2026-09-14"
+     ],
+     "want": 0
+    },
+    {
+     "args": [
+      "2026-09-15",
+      "2026-09-14"
+     ],
+     "want": -1
+    },
+    {
+     "args": [
+      "2025-09-14",
+      "2026-09-14"
+     ],
+     "want": 365
+    },
+    {
+     "args": [
+      "2024-02-28",
+      "2024-03-01"
+     ],
+     "want": 2
+    }
+   ],
+   "tried": 569,
+   "failedBy": {
+    "זריקה": 295,
+    "אורך-קריאה": 158,
+    "פלט שונה": 114
+   },
+   "ms": 18,
+   "proven": [
+    {
+     "name": "cockpit-days-since",
+     "fn": "cockpitDaysSince",
+     "n": 2,
+     "role": "ימים בין תאריך-ISO ליום-הייחוס (חיובי = בעבר, שלילי = עתיד). `Infinity` לתאריך ריק או לא-תקין.",
+     "tSource": "cockpit-days-since-strings"
+    },
+    {
+     "name": "intel-day-diff",
+     "fn": "dayDiff",
+     "n": 2,
+     "role": "הפרש-ימים (Date.parse, slice(0,10)). Infinity לריק/לא-תקין.",
+     "tSource": "intel-day-diff-strings"
+    }
+   ],
+   "chosen": "cockpit-days-since",
+   "usedBy": [
+    "צק.תאריך פירעון"
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 275,
+     "זריקה/טיפוס": 111,
+     "פלט שונה": 8
+    },
+    "note": ""
+   }
+  },
+  {
+   "need": "sum",
+   "label": "סכום שדה-מספר על כל השורות",
+   "from": {
+    "dashboard": "סכום"
+   },
+   "examples": [
+    {
+     "args": [
+      [
+       {
+        "a": 1
+       },
+       {
+        "a": 2
+       }
+      ],
+      {
+       "$fn": "x=>x.a"
+      }
+     ],
+     "want": 3
+    },
+    {
+     "args": [
+      [],
+      {
+       "$fn": "x=>x.a"
+      }
+     ],
+     "want": 0
+    },
+    {
+     "args": [
+      [
+       {
+        "a": 5
+       }
+      ],
+      {
+       "$fn": "x=>x.a"
+      }
+     ],
+     "want": 5
+    },
+    {
+     "args": [
+      [
+       {
+        "a": 1.5
+       },
+       {
+        "a": 2.5
+       },
+       {
+        "a": 0
+       }
+      ],
+      {
+       "$fn": "x=>x.a"
+      }
+     ],
+     "want": 4
+    }
+   ],
+   "tried": 569,
+   "failedBy": {
+    "זריקה": 276,
+    "אורך-קריאה": 158,
+    "פלט שונה": 134
+   },
+   "ms": 14,
+   "proven": [
+    {
+     "name": "grand-total",
+     "fn": "grandTotal",
+     "n": 2,
+     "role": "הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע.",
+     "tSource": null
+    }
+   ],
+   "chosen": "grand-total",
+   "usedBy": [
+    "סכום צק.סכום"
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 275,
+     "זריקה/טיפוס": 118,
+     "פלט שונה": 1
+    },
+    "note": ""
+   }
+  }
+ ],
+ "atoms": [
+  {
+   "name": "norm-search",
+   "fn": "normSearch",
+   "n": 1,
+   "hasT": true,
+   "role": "מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות",
+   "file": "new/atoms/norm-search.mjs"
+  },
+  {
+   "name": "shekel",
+   "fn": "shekel",
+   "n": 1,
+   "hasT": true,
+   "role": "",
+   "file": "new/atoms/shekel.mjs"
+  },
+  {
+   "name": "fmt-date",
+   "fn": "fmtDate",
+   "n": 1,
+   "hasT": true,
+   "role": "תאריך-ISO ⇒ תצוגה ישראלית dd/mm/yyyy. ריק/שבור ⇒ \"—\".",
+   "file": "new/atoms/fmt-date.mjs"
+  },
+  {
+   "name": "cockpit-days-since",
+   "fn": "cockpitDaysSince",
+   "n": 2,
+   "hasT": true,
+   "role": "ימים בין תאריך-ISO ליום-הייחוס (חיובי = בעבר, שלילי = עתיד). `Infinity` לתאריך ריק או לא-תקין.",
+   "file": "new/atoms/cockpit-days-since.mjs"
+  },
+  {
+   "name": "grand-total",
+   "fn": "grandTotal",
+   "n": 2,
+   "hasT": false,
+   "role": "הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע.",
+   "file": "new/atoms/grand-total.mjs"
+  }
+ ],
+ "unproven": [],
+ "inventory": {
+  "rows": [
+   {
+    "layer": "JS · פונקציות טהורות (new/atoms)",
+    "count": 569,
+    "connected": "הוכחה-בריצה בדפדפן ובמסוף; מוטבעות באפליקציה",
+    "state": "on"
+   },
+   {
+    "layer": "JS · אטומי-דאטה/קבועים (-strings · -data)",
+    "count": 527,
+    "connected": "292 מהם הם הקבועים (T) של הפונקציות — נטענים מהם ישירות",
+    "state": "on"
+   },
+   {
+    "layer": "JS · אסינכרוניים / ריבוי-ייצוא",
+    "count": 64,
+    "connected": "כתיבה ל-db/fs עם שקעים — לא רצים בלי חיבור; לא מחוברים",
+    "state": "off"
+   },
+   {
+    "layer": "Dart · לוגיקה שרק ב-Dart (new/dart · dart-boxes)",
+    "count": 394,
+    "connected": "הוכחה-בריצה ב-Dart במסוף (תוצאות ארוזות בסטודיו); לא ניתן להטביע ב-HTML",
+    "state": "on"
+   },
+   {
+    "layer": "Dart · תאומי ה-JS (dart-maor)",
+    "count": 569,
+    "connected": "אותם אטומים כמו ה-JS, מומרים — מחוברים דרך צורת ה-JS",
+    "state": "on"
+   },
+   {
+    "layer": "Dart · תצוגה (Flutter widgets)",
+    "count": 924,
+    "connected": "מסלול-Flutter: `--flutter` ⇒ מודולי-Dart דרך הדלת של המחצב (אטומים לפי צורה); `--site` ⇒ flutter build web ⇒ אתר רץ (site.mjs; דורש Flutter SDK + buildsmart)",
+    "state": "on"
+   }
+  ]
+ },
+ "meta": {
+  "slug": "check2",
+  "built": "2026-09-14T22:19:35.158Z",
+  "ms": 11802,
+  "shelf": 1096,
+  "fns": 569,
+  "dart": 394,
+  "expiryWords": [
+   "תוקף"
+  ],
+  "expiryWarnDays": 30
+ }
+}

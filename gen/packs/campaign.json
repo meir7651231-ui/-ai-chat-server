@@ -1,0 +1,8 @@
+{ "id": "campaign", "name": "מגבית", "match": { "entity": ["מגבית"] },
+  "sources": ["new/atoms/campaign-progress.contract.md — נאסף, יעד, אחוז מעוגל וקטום ל-100; יעד 0 ⇒ 0", "new/atoms/campaign-total.contract.md — סכימת ריקונים ששויכו למבצע", "new/atoms/campaign-csv-rows.contract.md — ייצוא שורות מבצע"],
+  "fields": [ { "name": "נאסף", "shape": "number", "min": 0, "max": 100000000 }, { "name": "אחוז התקדמות", "shape": "formula", "formula": "נאסף/יעד*100" } ],
+  "guards": [ { "stage": "הסתיים", "cond": "תאריך סיום" } ],
+  "forbidden": ["מחיקת מגבית עם תרומות", "שינוי יעד אחרי פתיחה בלי החלטה מתועדת", "אחוז מעל 100 בתצוגה"],
+  "moment": "ועד מחליט על מגבית עם יעד ותאריכים; מהרגע הזה כל תרומה יכולה להשתייך אליה",
+  "screens": ["מגייס", "מנהל כללי"],
+  "automations": ["תרומה משויכת ⇒ «נאסף» מתעדכן ⇒ אחוז קטום ל-100 (campaign-progress)", "יום לפני סיום ⇒ סיכום למגייס ולוועד"] }

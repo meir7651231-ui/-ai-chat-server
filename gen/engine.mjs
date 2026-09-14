@@ -38,9 +38,9 @@ export async function runGenerator({ text, specText, slug, shelf, NEEDS, LANG, d
     proofs.push(proof);
     onStep({ step: 'proof', proof });
   }
-  const meta = { slug, built: new Date().toISOString(), ms: Math.round(now() - t0), shelf: shelf.length, fns: shelf.filter((a) => a.kind === 'fn').length, dart: dartCount };
+  const meta = { slug, built: new Date().toISOString(), ms: Math.round(now() - t0), shelf: shelf.length, fns: shelf.filter((a) => a.kind === 'fn').length, dart: dartCount, expiryWords: (LANG && LANG.extra && LANG.extra.expiryWords) || ['תוקף'], expiryWarnDays: (LANG && LANG.extra && LANG.extra.expiryWarnDays) || 30 };
   const app = renderApp(spec, chosen, plan, meta);
-  const report = { app: spec.app, spec: specText, sentence, entities: spec.entities, dashboard: spec.dashboard, plan, proofs,
+  const report = { app: spec.app, spec: specText, sentence, entities: spec.entities, dashboard: spec.dashboard, roles: spec.roles || [], plan, proofs,
     atoms: [...new Set([...chosen.values()])].map((a) => ({ name: a.name, fn: a.fn, n: a.n, hasT: a.hasT, role: a.role, file: a.file, src: a.src })),
     unproven: proofs.filter((p) => !p.chosen).map((p) => p.need), inventory, meta };
   onStep({ step: 'done', report });

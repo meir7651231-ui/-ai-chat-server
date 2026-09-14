@@ -1,0 +1,41 @@
+{
+ "id": "debt",
+ "name": "חוב",
+ "match": {
+  "entity": [
+   "חוב",
+   "הסדר חוב"
+  ]
+ },
+ "sources": [
+  "new/atoms/task-overdue.contract.md — באיחור = יעד לפני היום ועדיין פתוח",
+  "new/atoms/overdue-contact-task-drafts.contract.md — מי שעבר יעד-הקשר ⇒ משימת «להתקשר» אחת, בלי כפילות",
+  "new/atoms/balance-of.contract.md — יתרה לעולם לא שלילית"
+ ],
+ "fields": [
+  {
+   "name": "תאריך יעד",
+   "shape": "date"
+  },
+  {
+   "name": "שיחה אחרונה",
+   "shape": "date"
+  }
+ ],
+ "forbidden": [
+  "חוב גלוי למלמד או לכיתה",
+  "מכתב משפטי בלי שיחה קודמת",
+  "מחיקה"
+ ],
+ "moment": "צ'ק שחזר, הו\"ק שנכשלה, או חיוב שלא שולם 30 יום — החוב נפתח לבד, לא ביד",
+ "screens": [
+  "גזבר"
+ ],
+ "automations": [
+  "חוב עם יעד שעבר ופתוח ⇒ באיחור ⇒ משימת «להתקשר» אחת לגזבר, לא כפולה (overdue-contact-task-drafts)"
+ ],
+ "fix": {
+  "who": "גזבר",
+  "days": 14
+ }
+}

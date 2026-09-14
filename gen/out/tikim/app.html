@@ -11,6 +11,7 @@ h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:0 0 8px}h2 small{color
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
 .kpi{background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:6px}.kpi .v{display:block;font-size:22px;font-variant-numeric:tabular-nums;font-weight:600}.kpi .l{color:var(--mute);font-size:13px}
 .kpi.none .v{color:var(--warn);font-size:14px}
+.exp{font-size:11px;padding:0 5px;border-radius:99px;background:var(--line)}.exp.bad{background:#b3261e;color:#fff}.exp.warn{background:#e0a100;color:#1d1c19}
 .entity{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px;margin:12px 0}
 form.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:10px}label{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
 input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;min-width:120px}
@@ -30,7 +31,7 @@ td.num{font-variant-numeric:tabular-nums}.search{min-width:220px}
 <section class="entity" data-entity="e1">
   <h2>תיק <small id="e1_n"></small></h2>
   <form id="e1_form" class="row"><label>לקוח <b>*</b><select id="e1_f0" data-ref="0" required><option value="">—</option></select></label><label>נושא<input id="e1_f1" type="text" ></label><label>סכום<input id="e1_f2" type="number" min="0" max="1000000" step="any" ></label><label>תאריך פתיחה<input id="e1_f3" type="date" ></label><button type="submit">הוסף תיק</button></form>
-  <div class="tbl"><table><thead><tr><th>לקוח</th><th>נושא</th><th>סכום</th><th>תאריך פתיחה</th><th>שלב</th><th>ימים</th><th></th></tr></thead><tbody id="e1_body"></tbody></table></div>
+  <div class="tbl"><table><thead><tr><th>לקוח</th><th>נושא</th><th>סכום</th><th>תאריך פתיחה</th><th>שלב</th><th>בשלב</th><th>ימים</th><th></th></tr></thead><tbody id="e1_body"></tbody></table></div>
 </section>
 <div class="foot">אטומים: norm-search · format-israeli-phone · shekel · fmt-date · cockpit-days-since · grand-total</div>
 <script>
@@ -127,8 +128,10 @@ function grandTotal(boxes, boxTotal) {
 const grandTotal__call = (...x) => grandTotal(...x);
 
 // ── דבק מבני (מחולל): סכמה, אחסון, טופס, טבלה, מדדים
-const SCHEMA = [{"name":"לקוח","stages":[],"fields":[{"name":"שם","shape":"text","required":true,"ref":-1},{"name":"טלפון","shape":"phone","required":false,"ref":-1},{"name":"כתובת","shape":"text","required":false,"ref":-1}]},{"name":"תיק","stages":["התקבל","בטיפול","סגור"],"fields":[{"name":"לקוח","shape":"text","required":true,"ref":0},{"name":"נושא","shape":"text","required":false,"ref":-1},{"name":"סכום","shape":"number","required":false,"ref":-1},{"name":"תאריך פתיחה","shape":"date","required":false,"ref":-1}]}];
+const SCHEMA = [{"name":"לקוח","stages":[],"guards":[],"fields":[{"name":"שם","shape":"text","required":true,"formula":null,"ref":-1},{"name":"טלפון","shape":"phone","required":false,"formula":null,"ref":-1},{"name":"כתובת","shape":"text","required":false,"formula":null,"ref":-1}]},{"name":"תיק","stages":["התקבל","בטיפול","סגור"],"guards":[],"fields":[{"name":"לקוח","shape":"text","required":true,"formula":null,"ref":0},{"name":"נושא","shape":"text","required":false,"formula":null,"ref":-1},{"name":"סכום","shape":"number","required":false,"formula":null,"ref":-1},{"name":"תאריך פתיחה","shape":"date","required":false,"formula":null,"ref":-1}]}];
 const KPIS = [{"op":"סכום","need":"sum","entity":1,"field":2,"call":"grandTotal__call"}];
+const ROLES = [];
+const EXP_WORDS = ["תוקף"], EXP_DAYS = 30;
 const KEY = "gen:tikim";
 const FN = {normSearch__call, formatIsraeliPhone__call, shekel__call, fmtDate__call, cockpitDaysSince__call, grandTotal__call};
 const CALL = { money: shekel__call, fmtDate: fmtDate__call, daysSince: cockpitDaysSince__call, phone: formatIsraeliPhone__call, norm: normSearch__call, sum: grandTotal__call, countBy: null };
@@ -138,8 +141,22 @@ if (!DATA) DATA = SCHEMA.map(() => []);
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(DATA)); } catch {} };
 const el = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-function show(f, v) {
+function calc(e, r, f) { // נוסחה על שדות אותה רשומה: שמות ⇒ ערכים מספריים, חשבון בלבד
+  let expr = ' ' + f.formula + ' ';
+  const sorted = e.fields.map((g, i) => ({ g, i })).filter((x) => x.g.name !== f.name).sort((a, b) => b.g.name.length - a.g.name.length);
+  for (const { g, i } of sorted) expr = expr.split(g.name).join('(' + (Number(r[i]) || 0) + ')');
+  if (/[^0-9.+\-*/()\s]/.test(expr)) return NaN;
+  try { return Function('return (' + expr + ')')(); } catch { return NaN; }
+}
+function expiry(f, v) {
+  if (!CALL.daysSince || f.shape !== 'date' || !v || !EXP_WORDS.some((w) => f.name.includes(w))) return '';
+  const d = -CALL.daysSince(v, today());
+  return d < 0 ? ' <b class="exp bad">פג</b>' : d <= EXP_DAYS ? ' <b class="exp warn">פג בעוד ' + d + ' ימים</b>' : '';
+}
+function show(f, v, e, r) {
+  if (f.shape === 'formula' && e && r) { const n = calc(e, r, f); return Number.isFinite(n) ? (CALL.money ? CALL.money(n) : String(n)) : '—'; }
   if (v === '' || v == null) return '';
+  if (f.shape === 'date') return (CALL.fmtDate ? CALL.fmtDate(v) : esc(v)) + expiry(f, v);
   if (f.shape === 'number' && CALL.money) return CALL.money(Number(v));
   if (f.shape === 'date' && CALL.fmtDate) return CALL.fmtDate(v);
   if (f.shape === 'phone' && CALL.phone) return CALL.phone(v);
@@ -153,26 +170,33 @@ function rowsOf(ei) {
   return rows.filter((r) => SCHEMA[ei].fields.some((f, fi) => CALL.norm(r[fi]).includes(nq)));
 }
 function paint() {
+  const role = el('role') ? el('role').value : '';
+  const allowed = role ? (ROLES.find((x) => x.name === role) || { ents: [] }) : null;
   SCHEMA.forEach((e, ei) => {
+    const sec = document.querySelector('[data-entity="e' + ei + '"]');
+    if (sec) sec.hidden = !!allowed && !allowed.all && !allowed.ents.includes(e.name);
     const rows = rowsOf(ei);
     el('e' + ei + '_n').textContent = rows.length ? rows.length + ' רשומות' : 'אין רשומות עדיין';
     const hasDays = e.fields.some((f) => f.shape === 'date') && CALL.daysSince;
     el('e' + ei + '_body').innerHTML = rows.map((r) => {
       const idx = DATA[ei].indexOf(r);
-      const cells = e.fields.map((f, fi) => '<td class="' + (f.shape === 'number' ? 'num' : '') + '">' + show(f, r[fi]) + '</td>').join('');
-      const st = e.stages.length ? '<td>' + esc(r[e.fields.length] || e.stages[0]) + (e.stages.indexOf(r[e.fields.length] || e.stages[0]) < e.stages.length - 1 ? ' <button class="x" data-adv="' + ei + ':' + idx + '" title="לשלב הבא">›</button>' : '') + '</td>' : '';
+      const cells = e.fields.map((f, fi) => '<td class="' + (f.shape === 'number' || f.shape === 'formula' ? 'num' : '') + '">' + show(f, r[fi], e, r) + '</td>').join('');
+      const n = e.fields.length;
+      const st = e.stages.length ? '<td>' + esc(r[n] || e.stages[0]) + (e.stages.indexOf(r[n] || e.stages[0]) < e.stages.length - 1 ? ' <button class="x" data-adv="' + ei + ':' + idx + '" title="לשלב הבא">›</button>' : '') + '</td>' + (CALL.daysSince ? '<td class="num">' + (r[n + 1] ? CALL.daysSince(r[n + 1], today()) + ' ימים' : '') + '</td>' : '') : '';
       const d = hasDays ? '<td class="num">' + e.fields.map((f, fi) => (f.shape === 'date' && r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) => x !== '').join(' / ') + '</td>' : '';
       return '<tr>' + cells + st + d + '<td><button class="x" data-del="' + ei + ':' + idx + '" title="מחק">✕</button></td></tr>';
     }).join('');
   });
   // קשרים: רשימות-הבחירה מתמלאות מהרשומות של ישות-היעד
   document.querySelectorAll('select[data-ref]').forEach((sel) => { const ti = Number(sel.dataset.ref); const cur = sel.value; sel.innerHTML = '<option value="">—</option>' + DATA[ti].map((r) => '<option>' + esc(r[0]) + '</option>').join(''); sel.value = cur; });
+  if (el('kpi-exp') && CALL.daysSince) { let bad = 0, soon = 0; SCHEMA.forEach((e, ei) => e.fields.forEach((f, fi) => { if (f.shape === 'date' && EXP_WORDS.some((w) => f.name.includes(w))) for (const r of DATA[ei]) if (r[fi]) { const d = -CALL.daysSince(r[fi], today()); if (d < 0) bad++; else if (d <= EXP_DAYS) soon++; } })); el('kpi-exp').querySelector('.v').textContent = bad + ' · ' + soon; }
   KPIS.forEach((k, i) => {
     const box = el('kpi' + i), v = box.querySelector('.v');
     if (!k.call) { box.classList.add('none'); v.textContent = 'אין אטום מוכח'; return; }
     const rows = DATA[k.entity];
     const fn = FN[k.call];
-    if (k.op === 'סכום') v.textContent = CALL.money ? CALL.money(fn(rows, (r) => Number(r[k.field]) || 0)) : fn(rows, (r) => Number(r[k.field]) || 0);
+    const fdef = SCHEMA[k.entity].fields[k.field]; const get = fdef.shape === 'formula' ? ((r) => { const n = calc(SCHEMA[k.entity], r, fdef); return Number.isFinite(n) ? n : 0; }) : ((r) => Number(r[k.field]) || 0);
+    if (k.op === 'סכום') v.textContent = CALL.money ? CALL.money(fn(rows, get)) : fn(rows, get);
     else if (k.op === 'מונה') { const c = fn(rows, (r) => r[k.field]); v.textContent = c.length ? c.map(([a, n]) => esc(a) + ' ' + n).join(' · ') : '0'; }
   });
 }
@@ -180,17 +204,29 @@ SCHEMA.forEach((e, ei) => {
   el('e' + ei + '_form').addEventListener('submit', (ev) => {
     ev.preventDefault();
     const row = e.fields.map((f, fi) => el('e' + ei + '_f' + fi).value);
-    if (e.stages.length) row.push(e.stages[0]);
+    if (e.stages.length) row.push(e.stages[0], today());
     DATA[ei].push(row); save(); ev.target.reset(); paint();
   });
 });
+// מעבר מותנה: «שדה» = מלא · «שדה > 5» · «שדה >= שדה2» — כמו compileGuard של המחצב
+function guardOk(e, r, cond) {
+  const idx = (name) => e.fields.findIndex((f) => f.name === name.trim());
+  const val = (i) => { const f = e.fields[i]; return f.shape === 'formula' ? calc(e, r, f) : Number(r[i]) || 0; };
+  const m = cond.match(/^(.+?)\s*(>=|<=|>|<|=)\s*(.+)$/);
+  if (m) { const li = idx(m[1]); if (li < 0) return true; const rhs = /^-?\d+(\.\d+)?$/.test(m[3].trim()) ? Number(m[3]) : (idx(m[3]) >= 0 ? val(idx(m[3])) : NaN); if (Number.isNaN(rhs)) return true; const l = val(li); return m[2] === '>=' ? l >= rhs : m[2] === '<=' ? l <= rhs : m[2] === '>' ? l > rhs : m[2] === '<' ? l < rhs : l === rhs; }
+  const bi = idx(cond); return bi < 0 ? true : String(r[bi] ?? '').trim() !== '';
+}
 document.body.addEventListener('click', (ev) => {
   const a = ev.target.closest('[data-adv]');
-  if (a) { const [ei, i] = a.dataset.adv.split(':').map(Number); const st = SCHEMA[ei].stages; const r = DATA[ei][i]; const n = SCHEMA[ei].fields.length; const k = st.indexOf(r[n] || st[0]); if (k < st.length - 1) { r[n] = st[k + 1]; save(); paint(); } return; }
+  if (a) { const [ei, i] = a.dataset.adv.split(':').map(Number); const e = SCHEMA[ei]; const st = e.stages; const r = DATA[ei][i]; const n = e.fields.length; const k = st.indexOf(r[n] || st[0]);
+    if (k < st.length - 1) { const next = st[k + 1]; const g = e.guards.find((x) => x.stage === next);
+      if (g && !guardOk(e, r, g.cond)) { alert('אי אפשר לעבור ל«' + next + '»: ' + g.cond); return; }
+      r[n] = next; r[n + 1] = today(); save(); paint(); } return; }
   const b = ev.target.closest('[data-del]'); if (!b) return;
   const [ei, i] = b.dataset.del.split(':').map(Number);
   DATA[ei].splice(i, 1); save(); paint();
 });
 if (el('q')) el('q').addEventListener('input', paint);
+if (el('role')) el('role').addEventListener('change', paint);
 paint();
 </script></body></html>

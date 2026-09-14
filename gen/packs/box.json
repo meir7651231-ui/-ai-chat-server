@@ -1,0 +1,56 @@
+{
+ "id": "box",
+ "name": "קופת צדקה",
+ "match": {
+  "entity": [
+   "קופת צדקה"
+  ]
+ },
+ "sources": [
+  "new/atoms/box-total.contract.md — סך הריקונים של קופה",
+  "new/atoms/boxes-overview.contract.md — מבט כל הקופות: רכז, משפחה, ריקון אחרון, סך",
+  "new/atoms/coordinator-boxes.contract.md — הקופות של רכז",
+  "new/atoms/coordinator-print-lines.contract.md — דף-מסלול מודפס לרכז"
+ ],
+ "fields": [
+  {
+   "name": "רכז",
+   "shape": "text"
+  },
+  {
+   "name": "משפחה",
+   "shape": "text"
+  },
+  {
+   "name": "סך ריקונים",
+   "shape": "number",
+   "min": 0,
+   "max": 10000000
+  }
+ ],
+ "stages": [
+  "הוצבה",
+  "פעילה",
+  "לא נמצאה",
+  "הוסרה"
+ ],
+ "forbidden": [
+  "מחיקת קופה עם ריקונים",
+  "ריקון בלי שני חותמים",
+  "רכז רואה קופות של רכז אחר"
+ ],
+ "moment": "רכז מציב קופה בבית או בחנות; מאותו רגע יש לה מסלול ריקון",
+ "screens": [
+  "גבאי",
+  "גזבר"
+ ],
+ "automations": [
+  "קופה בלי ריקון 90 יום ⇒ ברשימת הרכז",
+  "ריקון ⇒ סך הקופה, סך הרכז וסך המגבית מתעדכנים (box-total · coordinator-total · campaign-total)",
+  "דף-מסלול לרכז נוצר מקופותיו (coordinator-print-lines)"
+ ],
+ "fix": {
+  "who": "רכז קופות",
+  "days": 14
+ }
+}

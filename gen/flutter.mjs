@@ -11,7 +11,7 @@ const ROOT = path.resolve(HERE, '..');
 const APP_DS = path.join(ROOT, 'machtzev/generator/app-ds.mjs');
 
 /** ספק-gen ⇒ ספק-ds: סמני-הצורה של gen ([תאריך] · [טלפון] · (a..b)) לא קיימים בדקדוק-ds — נופלים; {א|ב} ו-* נשארים */
-export const toSpecDs = (specText) => specText.replace(/\[(תאריך|טלפון)\]/g, '').replace(/\(-?\d+\.\.-?\d+\)/g, '');
+export const toSpecDs = (specText) => specText.replace(/\[(תאריך|טלפון|מזהה|כמות)\]/g, '').replace(/\(-?\d+\.\.-?\d+\)/g, '').replace(/ \| (אסור|הרגע|מסך|תיקון):[^|\n]*/g, '');
 
 const dirty = () => new Set(spawnSync('git', ['status', '--porcelain', '--untracked-files=all'], { cwd: ROOT, encoding: 'utf8' }).stdout.split('\n').filter(Boolean).map((l) => l.slice(3)));
 

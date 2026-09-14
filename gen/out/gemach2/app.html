@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>גמח</title>
+<style>
+:root{--bg:#f7f6f2;--ink:#1d1c19;--mute:#6b675e;--line:#d9d5cb;--card:#ffffff;--acc:#1f5f5b;--acc-ink:#ffffff;--warn:#8a3b12}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}}
+:root[data-theme=dark]{--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Heebo,Arial,sans-serif;padding-block:16px;padding-inline:16px}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:0 0 8px}h2 small{color:var(--mute);font-weight:400}
+.top{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
+.kpi{background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:6px}.kpi .v{display:block;font-size:22px;font-variant-numeric:tabular-nums;font-weight:600}.kpi .l{color:var(--mute);font-size:13px}
+.kpi.none .v{color:var(--warn);font-size:14px}
+.exp{font-size:11px;padding:0 5px;border-radius:99px;background:var(--line)}.exp.bad{background:#b3261e;color:#fff}.exp.warn{background:#e0a100;color:#1d1c19}
+.entity{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px;margin:12px 0}
+form.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:10px}label{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;min-width:120px}
+button{font:inherit;background:var(--acc);color:var(--acc-ink);border:0;border-radius:4px;padding:7px 14px;cursor:pointer}button.x{background:transparent;color:var(--mute);padding:2px 6px}
+.tbl{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--mute);font-weight:500;font-size:13px}
+td.num{font-variant-numeric:tabular-nums}.search{min-width:220px}
+.foot{color:var(--mute);font-size:12px;margin-top:16px}
+</style></head><body>
+<div class="top"><div><h1>גמח</h1><div class="foot" style="margin:0">נבנה על-ידי המחולל · 5 אטומים מוכחים · הנתונים נשמרים בדפדפן זה</div></div>
+<input class="search" id="q" type="search" placeholder="חיפוש בכל השדות…"><label>מי אני <select id="role"><option value="">הכל</option><option>גזבר</option></select></label></div>
+<div class="kpis"><div class="kpi" id="kpi0"><span class="v">—</span><span class="l">סכום הלוואה.סכום</span></div><div class="kpi" id="kpi1"><span class="v">—</span><span class="l">סכום הלוואה.הנחה</span></div><div class="kpi" id="kpi2"><span class="v">—</span><span class="l">סכום הלוואה.יתרה</span></div><div class="kpi" id="kpi3"><span class="v">—</span><span class="l">סכום החזר.סכום</span></div><div class="kpi" id="kpi-exp"><span class="v">—</span><span class="l">פג תוקף · פג בקרוב</span></div></div>
+<section class="entity" data-entity="e0">
+  <h2>הלוואה <small id="e0_n"></small></h2>
+  <form id="e0_form" class="row"><label>לווה <b>*</b><input id="e0_f0" type="text" required></label><label>מספר<input id="e0_f1" type="text" ></label><label>סכום<input id="e0_f2" type="number" min="0" max="1000000" step="any" ></label><label>הנחה<input id="e0_f3" type="number" min="0" max="1000000" step="any" ></label><label>יתרה<input id="e0_f4" type="text" value="=סכום-הנחה" readonly title="מחושב"></label><label>תאריך<input id="e0_f5" type="date" ></label><label>תוקף אישור<input id="e0_f6" type="date" ></label><label>ערב ראשון<input id="e0_f7" type="text" ></label><label>ערב שני<input id="e0_f8" type="text" ></label><button type="submit">הוסף הלוואה</button></form>
+  <div class="tbl"><table><thead><tr><th>לווה</th><th>מספר</th><th>סכום</th><th>הנחה</th><th>יתרה</th><th>תאריך</th><th>תוקף אישור</th><th>ערב ראשון</th><th>ערב שני</th><th>שלב</th><th>בשלב</th><th>ימים</th><th></th></tr></thead><tbody id="e0_body"></tbody></table></div>
+</section>
+<section class="entity" data-entity="e1">
+  <h2>החזר <small id="e1_n"></small></h2>
+  <form id="e1_form" class="row"><label>הלוואה <b>*</b><select id="e1_f0" data-ref="0" required><option value="">—</option></select></label><label>סכום<input id="e1_f1" type="number" min="0" max="1000000" step="any" ></label><label>תאריך<input id="e1_f2" type="date" ></label><button type="submit">הוסף החזר</button></form>
+  <div class="tbl"><table><thead><tr><th>הלוואה</th><th>סכום</th><th>תאריך</th><th>ימים</th><th></th></tr></thead><tbody id="e1_body"></tbody></table></div>
+</section>
+<div class="foot">אטומים: norm-search · shekel · fmt-date · cockpit-days-since · grand-total</div>
+<script>
+// ── אטום norm-search (new/atoms/norm-search.mjs)
+/** חוט · norm-search — נרמול-חיפוש עברי. חוזה: norm-search.contract.md
+ *  חולץ כלשונו מ-maor/src/lib/validate.ts */
+function normSearch(t, T) {
+  return String(t || '')
+    .toLowerCase()
+    .replace(/[֑-ׇ]/g, '')
+    .replace(/[ךםןףץ]/g, (ch) => ({ ך: T.k1, ם: T.k2, ן: T.k3, ף: T.k4, ץ: T.k5 })[ch])
+    .replace(/['"׳״\-–._]/g, '')
+    .trim();
+}
+const normSearch__T = {"k1":"כ","k2":"מ","k3":"נ","k4":"פ","k5":"צ"};
+const normSearch__call = (...x) => normSearch(...x, ...Array(Math.max(0, 1 - x.length)).fill(undefined), normSearch__T);
+
+// ── אטום shekel (new/atoms/shekel.mjs)
+/** חוט · shekel — קודם אוטומטית (אפיון-Golden). חוזה: shekel.contract.md */
+function shekel(n, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const PRICES_LS_KEY = T.k1;
+
+    return '₪' + Math.round(n).toLocaleString('he-IL');
+}
+/** קריאת טבלת-המחירים השמורה (מכשיר-המטמיע), או ברירת-המחדל. */
+const shekel__T = {"k1":"maor_prices"};
+const shekel__call = (...x) => shekel(...x, ...Array(Math.max(0, 1 - x.length)).fill(undefined), shekel__T);
+
+// ── אטום fmt-date (new/atoms/fmt-date.mjs)
+/** חוט · fmt-date — תאריך-ISO לתצוגה. חוזה: fmt-date.contract.md
+ *  חולץ כלשונו (היה זהה ב-4 מודולים של maor — אוחד לעותק-יחיד). */
+function fmtDate(iso, T) {
+  if (!iso) return '—';
+  const [y, m, d] = iso.slice(0, T.k1).split('-');
+  if (!y || !m || !d) return '—';
+  return `${d}/${m}/${y}`;
+}
+const fmtDate__T = {"k1":10};
+const fmtDate__call = (...x) => fmtDate(...x, ...Array(Math.max(0, 1 - x.length)).fill(undefined), fmtDate__T);
+
+// ── אטום cockpit-days-since (new/atoms/cockpit-days-since.mjs)
+/** חוט · cockpit-days-since — קודם אוטומטית (אפיון-Golden). חוזה: cockpit-days-since.contract.md
+ * מוצא: maor-system/src/components/supporters/cockpit.ts:42 (daysSince) + MS_DAY:39 (הוטבע inline).
+ * ימים בין תאריך-ISO ליום (חיובי = בעבר). Infinity לתאריך ריק/לא-תקין. חוק-4: verbatim מהמקור.
+ */
+function cockpitDaysSince(iso, todayIso, T) {
+  const MS_DAY = T.k1;
+  if (!iso) return Infinity;
+  const t = new Date(iso + 'T12:00:00').getTime();
+  const now = new Date(todayIso + 'T12:00:00').getTime();
+  if (Number.isNaN(t) || Number.isNaN(now)) return Infinity;
+  return Math.floor((now - t) / MS_DAY);
+}
+const cockpitDaysSince__T = {"k1":86400000};
+const cockpitDaysSince__call = (...x) => cockpitDaysSince(...x, ...Array(Math.max(0, 2 - x.length)).fill(undefined), cockpitDaysSince__T);
+
+// ── אטום grand-total (new/atoms/grand-total.mjs)
+/** חוט · grand-total — הסכום הכולל של כל הקופות. חוזה: grand-total.contract.md
+ *  חולץ כלשונו מ-maor/src/components/tzedaka/lib.ts:64-66; השכן boxTotal
+ *  הוזרק כשקע (חוק-1 — אפס import פנימי). */
+function grandTotal(boxes, boxTotal) {
+    return boxes.reduce((a, b) => a + boxTotal(b), 0);
+}
+const grandTotal__call = (...x) => grandTotal(...x);
+
+// ── דבק מבני (מחולל): סכמה, אחסון, טופס, טבלה, מדדים
+const SCHEMA = [{"name":"הלוואה","stages":["בקשה","אושר","ניתן","נפרע"],"guards":[{"stage":"ניתן","cond":"ערב שני"},{"stage":"נפרע","cond":"יתרה <= 0"}],"fields":[{"name":"לווה","shape":"text","required":true,"formula":null,"ref":-1},{"name":"מספר","shape":"id","required":false,"formula":null,"ref":-1},{"name":"סכום","shape":"number","required":false,"formula":null,"ref":-1},{"name":"הנחה","shape":"number","required":false,"formula":null,"ref":-1},{"name":"יתרה","shape":"formula","required":false,"formula":"סכום-הנחה","ref":-1},{"name":"תאריך","shape":"date","required":false,"formula":null,"ref":-1},{"name":"תוקף אישור","shape":"date","required":false,"formula":null,"ref":-1},{"name":"ערב ראשון","shape":"text","required":false,"formula":null,"ref":-1},{"name":"ערב שני","shape":"text","required":false,"formula":null,"ref":-1}]},{"name":"החזר","stages":[],"guards":[],"fields":[{"name":"הלוואה","shape":"text","required":true,"formula":null,"ref":0},{"name":"סכום","shape":"number","required":false,"formula":null,"ref":-1},{"name":"תאריך","shape":"date","required":false,"formula":null,"ref":-1}]}];
+const KPIS = [{"op":"סכום","need":"sum","entity":0,"field":2,"call":"grandTotal__call"},{"op":"סכום","need":"sum","entity":0,"field":3,"call":"grandTotal__call"},{"op":"סכום","need":"sum","entity":0,"field":4,"call":"grandTotal__call"},{"op":"סכום","need":"sum","entity":1,"field":1,"call":"grandTotal__call"}];
+const ROLES = [{"name":"גזבר","all":false,"ents":["הלוואה"]}];
+const EXP_WORDS = ["תוקף"], EXP_DAYS = 30;
+const KEY = "gen:gemach2";
+const FN = {normSearch__call, shekel__call, fmtDate__call, cockpitDaysSince__call, grandTotal__call};
+const CALL = { money: shekel__call, fmtDate: fmtDate__call, daysSince: cockpitDaysSince__call, phone: null, norm: normSearch__call, sum: grandTotal__call, countBy: null };
+const today = () => new Date().toISOString().slice(0, 10);
+let DATA; try { DATA = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { DATA = null; }
+if (!DATA) DATA = SCHEMA.map(() => []);
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(DATA)); } catch {} };
+const el = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function calc(e, r, f) { // נוסחה על שדות אותה רשומה: שמות ⇒ ערכים מספריים, חשבון בלבד
+  let expr = ' ' + f.formula + ' ';
+  const sorted = e.fields.map((g, i) => ({ g, i })).filter((x) => x.g.name !== f.name).sort((a, b) => b.g.name.length - a.g.name.length);
+  for (const { g, i } of sorted) expr = expr.split(g.name).join('(' + (Number(r[i]) || 0) + ')');
+  if (/[^0-9.+\-*/()\s]/.test(expr)) return NaN;
+  try { return Function('return (' + expr + ')')(); } catch { return NaN; }
+}
+function expiry(f, v) {
+  if (!CALL.daysSince || f.shape !== 'date' || !v || !EXP_WORDS.some((w) => f.name.includes(w))) return '';
+  const d = -CALL.daysSince(v, today());
+  return d < 0 ? ' <b class="exp bad">פג</b>' : d <= EXP_DAYS ? ' <b class="exp warn">פג בעוד ' + d + ' ימים</b>' : '';
+}
+function show(f, v, e, r) {
+  if (f.shape === 'formula' && e && r) { const n = calc(e, r, f); return Number.isFinite(n) ? (CALL.money ? CALL.money(n) : String(n)) : '—'; }
+  if (v === '' || v == null) return '';
+  if (f.shape === 'date') return (CALL.fmtDate ? CALL.fmtDate(v) : esc(v)) + expiry(f, v);
+  if (f.shape === 'number' && CALL.money) return CALL.money(Number(v));
+  if (f.shape === 'date' && CALL.fmtDate) return CALL.fmtDate(v);
+  if (f.shape === 'phone' && CALL.phone) return CALL.phone(v);
+  return esc(v);
+}
+function rowsOf(ei) {
+  const q = el('q') ? el('q').value : '';
+  const rows = DATA[ei];
+  if (!q || !CALL.norm) return rows;
+  const nq = CALL.norm(q);
+  return rows.filter((r) => SCHEMA[ei].fields.some((f, fi) => CALL.norm(r[fi]).includes(nq)));
+}
+function paint() {
+  const role = el('role') ? el('role').value : '';
+  const allowed = role ? (ROLES.find((x) => x.name === role) || { ents: [] }) : null;
+  SCHEMA.forEach((e, ei) => {
+    const sec = document.querySelector('[data-entity="e' + ei + '"]');
+    if (sec) sec.hidden = !!allowed && !allowed.all && !allowed.ents.includes(e.name);
+    const rows = rowsOf(ei);
+    el('e' + ei + '_n').textContent = rows.length ? rows.length + ' רשומות' : 'אין רשומות עדיין';
+    const hasDays = e.fields.some((f) => f.shape === 'date') && CALL.daysSince;
+    el('e' + ei + '_body').innerHTML = rows.map((r) => {
+      const idx = DATA[ei].indexOf(r);
+      const cells = e.fields.map((f, fi) => '<td class="' + (f.shape === 'number' || f.shape === 'formula' ? 'num' : '') + '">' + show(f, r[fi], e, r) + '</td>').join('');
+      const n = e.fields.length;
+      const st = e.stages.length ? '<td>' + esc(r[n] || e.stages[0]) + (e.stages.indexOf(r[n] || e.stages[0]) < e.stages.length - 1 ? ' <button class="x" data-adv="' + ei + ':' + idx + '" title="לשלב הבא">›</button>' : '') + '</td>' + (CALL.daysSince ? '<td class="num">' + (r[n + 1] ? CALL.daysSince(r[n + 1], today()) + ' ימים' : '') + '</td>' : '') : '';
+      const d = hasDays ? '<td class="num">' + e.fields.map((f, fi) => (f.shape === 'date' && r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) => x !== '').join(' / ') + '</td>' : '';
+      return '<tr>' + cells + st + d + '<td><button class="x" data-del="' + ei + ':' + idx + '" title="מחק">✕</button></td></tr>';
+    }).join('');
+  });
+  // קשרים: רשימות-הבחירה מתמלאות מהרשומות של ישות-היעד
+  document.querySelectorAll('select[data-ref]').forEach((sel) => { const ti = Number(sel.dataset.ref); const cur = sel.value; sel.innerHTML = '<option value="">—</option>' + DATA[ti].map((r) => '<option>' + esc(r[0]) + '</option>').join(''); sel.value = cur; });
+  if (el('kpi-exp') && CALL.daysSince) { let bad = 0, soon = 0; SCHEMA.forEach((e, ei) => e.fields.forEach((f, fi) => { if (f.shape === 'date' && EXP_WORDS.some((w) => f.name.includes(w))) for (const r of DATA[ei]) if (r[fi]) { const d = -CALL.daysSince(r[fi], today()); if (d < 0) bad++; else if (d <= EXP_DAYS) soon++; } })); el('kpi-exp').querySelector('.v').textContent = bad + ' · ' + soon; }
+  KPIS.forEach((k, i) => {
+    const box = el('kpi' + i), v = box.querySelector('.v');
+    if (!k.call) { box.classList.add('none'); v.textContent = 'אין אטום מוכח'; return; }
+    const rows = DATA[k.entity];
+    const fn = FN[k.call];
+    const fdef = SCHEMA[k.entity].fields[k.field]; const get = fdef.shape === 'formula' ? ((r) => { const n = calc(SCHEMA[k.entity], r, fdef); return Number.isFinite(n) ? n : 0; }) : ((r) => Number(r[k.field]) || 0);
+    if (k.op === 'סכום') v.textContent = CALL.money ? CALL.money(fn(rows, get)) : fn(rows, get);
+    else if (k.op === 'מונה') { const c = fn(rows, (r) => r[k.field]); v.textContent = c.length ? c.map(([a, n]) => esc(a) + ' ' + n).join(' · ') : '0'; }
+  });
+}
+SCHEMA.forEach((e, ei) => {
+  el('e' + ei + '_form').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const row = e.fields.map((f, fi) => el('e' + ei + '_f' + fi).value);
+    if (e.stages.length) row.push(e.stages[0], today());
+    DATA[ei].push(row); save(); ev.target.reset(); paint();
+  });
+});
+// מעבר מותנה: «שדה» = מלא · «שדה > 5» · «שדה >= שדה2» — כמו compileGuard של המחצב
+function guardOk(e, r, cond) {
+  const idx = (name) => e.fields.findIndex((f) => f.name === name.trim());
+  const val = (i) => { const f = e.fields[i]; return f.shape === 'formula' ? calc(e, r, f) : Number(r[i]) || 0; };
+  const m = cond.match(/^(.+?)\s*(>=|<=|>|<|=)\s*(.+)$/);
+  if (m) { const li = idx(m[1]); if (li < 0) return true; const rhs = /^-?\d+(\.\d+)?$/.test(m[3].trim()) ? Number(m[3]) : (idx(m[3]) >= 0 ? val(idx(m[3])) : NaN); if (Number.isNaN(rhs)) return true; const l = val(li); return m[2] === '>=' ? l >= rhs : m[2] === '<=' ? l <= rhs : m[2] === '>' ? l > rhs : m[2] === '<' ? l < rhs : l === rhs; }
+  const bi = idx(cond); return bi < 0 ? true : String(r[bi] ?? '').trim() !== '';
+}
+document.body.addEventListener('click', (ev) => {
+  const a = ev.target.closest('[data-adv]');
+  if (a) { const [ei, i] = a.dataset.adv.split(':').map(Number); const e = SCHEMA[ei]; const st = e.stages; const r = DATA[ei][i]; const n = e.fields.length; const k = st.indexOf(r[n] || st[0]);
+    if (k < st.length - 1) { const next = st[k + 1]; const g = e.guards.find((x) => x.stage === next);
+      if (g && !guardOk(e, r, g.cond)) { alert('אי אפשר לעבור ל«' + next + '»: ' + g.cond); return; }
+      r[n] = next; r[n + 1] = today(); save(); paint(); } return; }
+  const b = ev.target.closest('[data-del]'); if (!b) return;
+  const [ei, i] = b.dataset.del.split(':').map(Number);
+  DATA[ei].splice(i, 1); save(); paint();
+});
+if (el('q')) el('q').addEventListener('input', paint);
+if (el('role')) el('role').addEventListener('change', paint);
+paint();
+</script></body></html>

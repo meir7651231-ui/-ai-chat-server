@@ -1,0 +1,7 @@
+{ "id": "yahrzeit", "name": "יארצייט", "match": { "entity": ["יארצייט"] },
+  "sources": ["new/atoms/heb-annual-eq.contract.md — שוויון יום+חודש עברי לחזרה שנתית, א-סימטרי: המקורי הוא עוגן", "new/atoms/adar-norm.contract.md — דין אדר בשנה מעוברת", "new/atoms/heb-date-full.contract.md — תאריך עברי מלא", "new/atoms/segula-reminders.contract.md — תזכורות מדורגות מתאריך-עוגן"],
+  "fields": [ { "name": "תאריך עברי", "shape": "text" }, { "name": "מקום קבורה", "shape": "text" }, { "name": "נר ולימוד", "shape": "enum", "values": ["נר", "משניות", "קידוש", "הכל"] } ],
+  "forbidden": ["מחיקה", "תזכורת שנשלחת בשבת", "שינוי התאריך העברי בלי אישור המשפחה"],
+  "moment": "פטירה בקהילה או משפחה חדשה שמוסרת את תאריכי ההורים; פעם אחת, וחוזר כל שנה לבד",
+  "screens": ["גבאי"],
+  "automations": ["שבוע לפני היארצייט (לפי הלוח העברי, כלל אדר) ⇒ תזכורת למשפחה, לחזן ולגבאי (heb-annual-eq · adar-norm)", "יארצייט השבוע ⇒ מופיע ב«השבוע» של הגבאי ובעלון"] }
