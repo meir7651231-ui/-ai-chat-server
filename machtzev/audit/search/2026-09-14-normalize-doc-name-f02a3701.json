@@ -1,0 +1,182 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:28:16.579Z",
+ "query": "normalize doc name בטיחות' בטיחות בגובה'",
+ "tokens": [
+  "normalize",
+  "doc",
+  "name",
+  "טיחות",
+  "גובה"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "normName",
+   "layer": "logic",
+   "file": "dart-maor/norm-name.dart",
+   "score": 6,
+   "hits": [
+    "normalize",
+    "name"
+   ]
+  },
+  {
+   "id": "normNameLocal",
+   "layer": "logic",
+   "file": "dart-maor/enroll-new-family.dart",
+   "score": 6,
+   "hits": [
+    "normalize",
+    "name"
+   ]
+  },
+  {
+   "id": "vNormName",
+   "layer": "logic",
+   "file": "dart-boxes/validate.dart",
+   "score": 6,
+   "hits": [
+    "normalize",
+    "name"
+   ]
+  },
+  {
+   "id": "adarNorm",
+   "layer": "logic",
+   "file": "dart-maor/adar-norm.dart",
+   "score": 3,
+   "hits": [
+    "normalize"
+   ]
+  },
+  {
+   "id": "applyAyinNames",
+   "layer": "logic",
+   "file": "dart-maor/apply-ayin-names.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "componentTypeNames",
+   "layer": "logic",
+   "file": "dart/component_type_names.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "dayNames",
+   "layer": "logic",
+   "file": "dart-maor/day-names.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "docSkey",
+   "layer": "logic",
+   "file": "dart-maor/doc-skey.dart",
+   "score": 3,
+   "hits": [
+    "doc"
+   ]
+  },
+  {
+   "id": "exportNames",
+   "layer": "logic",
+   "file": "dart-boxes/names-export.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "fuzzyNameMatch",
+   "layer": "logic",
+   "file": "dart/fuzzy_name_match.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "holidayNames",
+   "layer": "logic",
+   "file": "dart-maor/holiday-names.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "isEncDoc",
+   "layer": "logic",
+   "file": "dart-maor/is-enc-doc.dart",
+   "score": 3,
+   "hits": [
+    "doc"
+   ]
+  },
+  {
+   "id": "matchComponentTypeName",
+   "layer": "logic",
+   "file": "dart/match_component_type_name.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "NameChip",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/name_chip.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "nameIndex",
+   "layer": "logic",
+   "file": "dart-maor/name-index.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  }
+ ],
+ "strong": [
+  "normName",
+  "normNameLocal",
+  "vNormName",
+  "adarNorm",
+  "applyAyinNames",
+  "componentTypeNames",
+  "dayNames",
+  "docSkey",
+  "exportNames",
+  "fuzzyNameMatch",
+  "holidayNames",
+  "isEncDoc",
+  "matchComponentTypeName",
+  "nameIndex"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "NameChip"
+ ],
+ "creates": "new/dart/normalize_doc_name.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 6 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: normName 0/6 · normNameLocal 0/6 · vNormName 0/6 · adarNorm 5/6 · applyAyinNames 0/6 · componentTypeNames 0/6 · dayNames 0/6 · docSkey 0/6 · exportNames 0/6 · fuzzyNameMatch 0/6 · holidayNames 0/6 · isEncDoc 0/6 · matchComponentTypeName 0/6 · nameIndex 0/6. לכן נוצר חדש.",
+ "sig": "f02a37014651ce7e997c8d04222d3aa7d158e41803494b982f54b6ab9e3d0557"
+}

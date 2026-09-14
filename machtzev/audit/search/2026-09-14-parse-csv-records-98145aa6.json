@@ -1,0 +1,181 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:27:50.537Z",
+ "query": "parse csv records מק\"ט",
+ "tokens": [
+  "parse",
+  "csv",
+  "records",
+  "מק"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "parseCsv",
+   "layer": "logic",
+   "file": "dart-maor/parse-csv.dart",
+   "score": 6,
+   "hits": [
+    "parse",
+    "csv"
+   ]
+  },
+  {
+   "id": "parseFamiliesCsv",
+   "layer": "logic",
+   "file": "dart-maor/parse-families-csv.dart",
+   "score": 6,
+   "hits": [
+    "parse",
+    "csv"
+   ]
+  },
+  {
+   "id": "parseSupporterCsv",
+   "layer": "logic",
+   "file": "dart-boxes/supporters.dart",
+   "score": 6,
+   "hits": [
+    "parse",
+    "csv"
+   ]
+  },
+  {
+   "id": "campaignCsvRows",
+   "layer": "logic",
+   "file": "dart-maor/campaign-csv-rows.dart",
+   "score": 3,
+   "hits": [
+    "csv"
+   ]
+  },
+  {
+   "id": "cockpitCsvRows",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-csv-rows.dart",
+   "score": 3,
+   "hits": [
+    "csv"
+   ]
+  },
+  {
+   "id": "collectionsCsvRows",
+   "layer": "logic",
+   "file": "dart-maor/collections-csv-rows.dart",
+   "score": 3,
+   "hits": [
+    "csv"
+   ]
+  },
+  {
+   "id": "csvEscape",
+   "layer": "logic",
+   "file": "dart-maor/csv-escape.dart",
+   "score": 3,
+   "hits": [
+    "csv"
+   ]
+  },
+  {
+   "id": "csvHeaderIndex",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "csv"
+   ]
+  },
+  {
+   "id": "csvHeaderScore",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "csv"
+   ]
+  },
+  {
+   "id": "csvIsBlank",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "csv"
+   ]
+  },
+  {
+   "id": "csvIsComment",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "csv"
+   ]
+  },
+  {
+   "id": "csvRows",
+   "layer": "logic",
+   "file": "dart-boxes/distribution.dart",
+   "score": 3,
+   "hits": [
+    "csv"
+   ]
+  },
+  {
+   "id": "decodeCsvBuffer",
+   "layer": "logic",
+   "file": "dart-maor/decode-csv-buffer.dart",
+   "score": 3,
+   "hits": [
+    "csv"
+   ]
+  },
+  {
+   "id": "deliveriesCsvRows",
+   "layer": "logic",
+   "file": "dart-maor/deliveries-csv-rows.dart",
+   "score": 3,
+   "hits": [
+    "csv"
+   ]
+  },
+  {
+   "id": "DsRecordCard",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "records"
+   ]
+  }
+ ],
+ "strong": [
+  "parseCsv",
+  "parseFamiliesCsv",
+  "parseSupporterCsv",
+  "campaignCsvRows",
+  "cockpitCsvRows",
+  "collectionsCsvRows",
+  "csvEscape",
+  "csvHeaderIndex",
+  "csvHeaderScore",
+  "csvIsBlank",
+  "csvIsComment",
+  "csvRows",
+  "decodeCsvBuffer",
+  "deliveriesCsvRows"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "DsRecordCard"
+ ],
+ "creates": "new/dart/parse_csv_records.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 12 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: parseCsv 0/12 · parseFamiliesCsv 0/12 · parseSupporterCsv 0/12 · campaignCsvRows 0/12 · cockpitCsvRows 0/12 · collectionsCsvRows 0/12 · csvEscape 0/12 · csvHeaderIndex 0/12 · csvHeaderScore 0/12 · csvIsBlank 0/12 · csvIsComment 0/12 · csvRows 0/12 · decodeCsvBuffer 0/12 · deliveriesCsvRows 0/12. לכן נוצר חדש.",
+ "sig": "98145aa68b2b0f516eb2eed5d691c7a1b6df8ec469051f29d5f9f22a933b6eed"
+}

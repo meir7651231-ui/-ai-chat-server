@@ -1,0 +1,256 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:28:03.616Z",
+ "query": "currency symbol ליחידה מוצרים וריאנטים דרישות שלבים חלקים",
+ "tokens": [
+  "currency",
+  "symbol",
+  "יחידה",
+  "וצרים",
+  "ריאנטים",
+  "דרישות",
+  "לבים",
+  "חלקים"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "AccessoryRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/accessory_row.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "ActionChipRail",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/action_chip_rail.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "AttributeChip",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/attribute_chip.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "CircleCloseButton",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/circle_close_button.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "EmojiSectionTitle",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/emoji_section_title.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "EmptyHint",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/empty_hint.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "EmptyHintText",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/empty_hint_text.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "HopBreadcrumb",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/hop_breadcrumb.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "ImageFacePager",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/image_face_pager.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "InfoBulletLine",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/info_bullet_line.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "InfoHeadLine",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/info_head_line.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "InfoStripRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/info_strip_row.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "InsetDivider",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/inset_divider.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "InstallStageRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/install_stage_row.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  },
+  {
+   "id": "LipskeyProductSheetDivider",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/lipskey_product_sheet_divider.dart",
+   "score": 6,
+   "hits": [
+    "יחידה",
+    "וצרים",
+    "ריאנטים",
+    "דרישות",
+    "לבים",
+    "חלקים"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "AccessoryRow",
+  "ActionChipRail",
+  "AttributeChip",
+  "CircleCloseButton",
+  "EmojiSectionTitle",
+  "EmptyHint",
+  "EmptyHintText",
+  "HopBreadcrumb",
+  "ImageFacePager",
+  "InfoBulletLine",
+  "InfoHeadLine",
+  "InfoStripRow",
+  "InsetDivider",
+  "InstallStageRow",
+  "LipskeyProductSheetDivider"
+ ],
+ "creates": "new/dart/currency_symbol.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). האורקל המאוחד לא החזיר מועמד בציון ≥3 באותה שכבה לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.",
+ "sig": "5c772145dc8d57fd7d61394b80540a2c0ebd4b454cae71d757a235f1333ae9ac"
+}

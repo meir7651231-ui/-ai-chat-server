@@ -1,0 +1,210 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:16:55.899Z",
+ "query": "r1 עיגול לספרה-עשרונית אחת זהה ל- על",
+ "tokens": [
+  "r1",
+  "עיגול",
+  "ספרה",
+  "עשרונית",
+  "אחת",
+  "זהה",
+  "על"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "ForgeActionButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/action_button.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeActionRow",
+   "layer": "display",
+   "file": "dart-forge-bs/list/action_row.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeAddTradeButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/add_trade_button.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeAnimatedToggle",
+   "layer": "display",
+   "file": "dart-forge-bs/action/animated_toggle.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeBrandHeader",
+   "layer": "display",
+   "file": "dart-forge-bs/header/brand_header.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeBreadcrumbTrail",
+   "layer": "display",
+   "file": "dart-forge-bs/nav/breadcrumb_trail.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeCartFabButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/cart_fab_button.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeChatSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-forge-bs/action/chat_settings_switch_row.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeCheckRow",
+   "layer": "display",
+   "file": "dart-forge-bs/list/check_row.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeCircleCloseButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/circle_close_button.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeComposer",
+   "layer": "display",
+   "file": "dart-forge-bs/chat/composer.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeConsentDialog",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/consent_dialog.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeCourierSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-forge-bs/action/courier_settings_switch_row.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeDataTable",
+   "layer": "display",
+   "file": "dart-forge-bs/spatial/data_table.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeDetailHeader",
+   "layer": "display",
+   "file": "dart-forge-bs/header/detail_header.dart",
+   "score": 3,
+   "hits": [
+    "ספרה",
+    "זהה",
+    "על"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "ForgeActionButton",
+  "ForgeActionRow",
+  "ForgeAddTradeButton",
+  "ForgeAnimatedToggle",
+  "ForgeBrandHeader",
+  "ForgeBreadcrumbTrail",
+  "ForgeCartFabButton",
+  "ForgeChatSettingsSwitchRow",
+  "ForgeCheckRow",
+  "ForgeCircleCloseButton",
+  "ForgeComposer",
+  "ForgeConsentDialog",
+  "ForgeCourierSettingsSwitchRow",
+  "ForgeDataTable",
+  "ForgeDetailHeader"
+ ],
+ "creates": "new/dart/r1.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). האורקל המאוחד לא החזיר מועמד בציון ≥3 באותה שכבה לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.",
+ "sig": "6a8fa538b3d6c962af1a8701a49bb66649cc2789ed955578e6b6e68baabd1588"
+}

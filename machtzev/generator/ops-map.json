@@ -11878,6 +11878,20 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "attendanceDateKey",
+  "layer": "logic",
+  "file": "dart/attendance_date_key.dart",
+  "op": "format",
+  "sockets": [
+   "DateTime"
+  ],
+  "ret": "String",
+  "flags": [
+   "temporal"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "attentionItems",
   "layer": "logic",
   "file": "dart/attention_items.dart",
@@ -11893,6 +11907,18 @@
   "flags": [
    "ho"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "attrEmoji",
+  "layer": "logic",
+  "file": "dart/attr_emoji.dart",
+  "op": "format",
+  "sockets": [
+   "AttrKind"
+  ],
+  "ret": "String",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -12376,6 +12402,21 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "budgetResidualSpend",
+  "layer": "logic",
+  "file": "dart/budget_residual_spend.dart",
+  "op": "aggregate",
+  "sockets": [
+   "Map<String, int>",
+   "Iterable<String>"
+  ],
+  "ret": "int",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "buildCohort",
   "layer": "logic",
   "file": "dart/build_cohort.dart",
@@ -12836,6 +12877,31 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "canonBsp",
+  "layer": "logic",
+  "file": "dart/canon_bsp.dart",
+  "op": "format",
+  "sockets": [
+   "String"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "canonicalizeWord",
+  "layer": "logic",
+  "file": "dart/canonicalize_word.dart",
+  "op": "format",
+  "sockets": [
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "catNodeProductCount",
   "layer": "logic",
   "file": "dart/cat_node_product_count.dart",
@@ -12965,6 +13031,18 @@
   "flags": [
    "ho"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "chipDisplayLabel",
+  "layer": "logic",
+  "file": "dart/chip_display_label.dart",
+  "op": "format",
+  "sockets": [
+   "String"
+  ],
+  "ret": "String",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -14107,6 +14185,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "currencySymbol",
+  "layer": "logic",
+  "file": "dart/currency_symbol.dart",
+  "op": "format",
+  "sockets": [
+   "CatalogCurrency"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "currentId",
   "layer": "logic",
   "file": "dart-maor/current-id.dart",
@@ -14128,6 +14218,18 @@
    "int",
    "int",
    "int",
+   "int"
+  ],
+  "ret": "int",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "cycleDisplayTemp",
+  "layer": "logic",
+  "file": "dart/cycle_display_temp.dart",
+  "op": "measure",
+  "sockets": [
    "int"
   ],
   "ret": "int",
@@ -14478,6 +14580,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "deliveryFeeFor",
+  "layer": "logic",
+  "file": "dart/delivery_fee_for.dart",
+  "op": "measure",
+  "sockets": [
+   "CartDelivery"
+  ],
+  "ret": "int",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "deliveryListLines",
   "layer": "logic",
   "file": "dart-maor/delivery-list-lines.dart",
@@ -14540,6 +14654,18 @@
    "dynamic"
   ],
   "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "diameterSortKey",
+  "layer": "logic",
+  "file": "dart/diameter_sort_key.dart",
+  "op": "measure",
+  "sockets": [
+   "String"
+  ],
+  "ret": "double",
   "flags": [],
   "why": "צורת-חתימה"
  },
@@ -15048,6 +15174,19 @@
    "ho",
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "elementShown",
+  "layer": "logic",
+  "file": "dart/element_shown.dart",
+  "op": "predicate",
+  "sockets": [
+   "OrgConfig",
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -16592,6 +16731,30 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "fuzzyTolerance",
+  "layer": "logic",
+  "file": "dart/fuzzy_tolerance.dart",
+  "op": "measure",
+  "sockets": [
+   "int"
+  ],
+  "ret": "int",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "fxGroupInt",
+  "layer": "logic",
+  "file": "dart/fx_group_int.dart",
+  "op": "format",
+  "sockets": [
+   "int"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "galvanicGroup",
   "layer": "logic",
   "file": "dart/galvanic_group.dart",
@@ -17441,6 +17604,20 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "illustrativeSiteSpend",
+  "layer": "logic",
+  "file": "dart/illustrative_site_spend.dart",
+  "op": "measure",
+  "sockets": [
+   "num",
+   "int",
+   "int"
+  ],
+  "ret": "num",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "importableContacts",
   "layer": "logic",
   "file": "dart-maor/importable-contacts.dart",
@@ -18240,6 +18417,18 @@
    "Map<String, double>"
   ],
   "ret": "double",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "keyboardLayoutKey",
+  "layer": "logic",
+  "file": "dart/keyboard_layout_key.dart",
+  "op": "format",
+  "sockets": [
+   "String"
+  ],
+  "ret": "String",
   "flags": [],
   "why": "צורת-חתימה"
  },
@@ -19984,6 +20173,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "normalizeDocName",
+  "layer": "logic",
+  "file": "dart/normalize_doc_name.dart",
+  "op": "format",
+  "sockets": [
+   "String"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "normalizePhone",
   "layer": "logic",
   "file": "dart-maor/normalize-phone.dart",
@@ -20607,6 +20808,19 @@
    "String"
   ],
   "ret": "List<List<String>>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "parseCsvRecords",
+  "layer": "logic",
+  "file": "dart/parse_csv_records.dart",
+  "op": "collection",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "List<CsvRecord>",
   "flags": [],
   "why": "צורת-חתימה"
  },
@@ -21718,6 +21932,30 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "r1",
+  "layer": "logic",
+  "file": "dart/r1.dart",
+  "op": "measure",
+  "sockets": [
+   "double"
+  ],
+  "ret": "double",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "rad",
+  "layer": "logic",
+  "file": "dart/rad.dart",
+  "op": "measure",
+  "sockets": [
+   "num"
+  ],
+  "ret": "double",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "rangeLabel",
   "layer": "logic",
   "file": "dart-maor/range-label.dart",
@@ -22055,6 +22293,19 @@
    "ho",
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "registrationValid",
+  "layer": "logic",
+  "file": "dart/registration_valid.dart",
+  "op": "predicate",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -23232,6 +23483,18 @@
   "flags": [
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "slug",
+  "layer": "logic",
+  "file": "dart/slug.dart",
+  "op": "format",
+  "sockets": [
+   "String"
+  ],
+  "ret": "String",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -24556,6 +24819,18 @@
   "sockets": [
    "Map<String, dynamic>",
    "Map<String, String> T"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "thousands",
+  "layer": "logic",
+  "file": "dart/thousands.dart",
+  "op": "format",
+  "sockets": [
+   "int"
   ],
   "ret": "String",
   "flags": [],

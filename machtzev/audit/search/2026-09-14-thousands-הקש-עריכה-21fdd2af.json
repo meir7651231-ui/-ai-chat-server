@@ -1,0 +1,191 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:28:38.604Z",
+ "query": "thousands הקש לעריכה הנתונים להמחשה בגרסה המלאה",
+ "tokens": [
+  "thousands",
+  "הקש",
+  "עריכה",
+  "נתונים",
+  "המחשה",
+  "גרסה",
+  "מלאה"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "Field",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/field.dart",
+   "score": 6,
+   "hits": [
+    "הקש",
+    "עריכה",
+    "נתונים",
+    "המחשה",
+    "גרסה",
+    "מלאה"
+   ]
+  },
+  {
+   "id": "NumBox",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/num_box.dart",
+   "score": 6,
+   "hits": [
+    "הקש",
+    "עריכה",
+    "נתונים",
+    "המחשה",
+    "גרסה",
+    "מלאה"
+   ]
+  },
+  {
+   "id": "SiteRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_row.dart",
+   "score": 6,
+   "hits": [
+    "הקש",
+    "עריכה",
+    "נתונים",
+    "המחשה",
+    "גרסה",
+    "מלאה"
+   ]
+  },
+  {
+   "id": "Tappable",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/tappable.dart",
+   "score": 6,
+   "hits": [
+    "הקש",
+    "עריכה",
+    "נתונים",
+    "המחשה",
+    "גרסה",
+    "מלאה"
+   ]
+  },
+  {
+   "id": "groupThousands",
+   "layer": "logic",
+   "file": "dart/group_thousands.dart",
+   "score": 3,
+   "hits": [
+    "thousands"
+   ]
+  },
+  {
+   "id": "ActionCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/action_card.dart",
+   "score": 1,
+   "hits": [
+    "הקש"
+   ]
+  },
+  {
+   "id": "AdvanceButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/advance_button.dart",
+   "score": 1,
+   "hits": [
+    "נתונים"
+   ]
+  },
+  {
+   "id": "ApprovalButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/approval_button.dart",
+   "score": 1,
+   "hits": [
+    "נתונים"
+   ]
+  },
+  {
+   "id": "AppSettingsBody",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/app_settings_body.dart",
+   "score": 1,
+   "hits": [
+    "נתונים"
+   ]
+  },
+  {
+   "id": "BigButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/big_button.dart",
+   "score": 1,
+   "hits": [
+    "הקש"
+   ]
+  },
+  {
+   "id": "CaPill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_pill.dart",
+   "score": 1,
+   "hits": [
+    "הקש"
+   ]
+  },
+  {
+   "id": "CardDone",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/card_done.dart",
+   "score": 1,
+   "hits": [
+    "הקש"
+   ]
+  },
+  {
+   "id": "CardTop",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/card_top.dart",
+   "score": 1,
+   "hits": [
+    "הקש"
+   ]
+  },
+  {
+   "id": "CaSubTitle",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_sub_title.dart",
+   "score": 1,
+   "hits": [
+    "הקש"
+   ]
+  },
+  {
+   "id": "ConsentDialog",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/consent_dialog.dart",
+   "score": 1,
+   "hits": [
+    "נתונים"
+   ]
+  }
+ ],
+ "strong": [
+  "groupThousands"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "Field",
+  "NumBox",
+  "SiteRow",
+  "Tappable"
+ ],
+ "creates": "new/dart/thousands.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 5 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: groupThousands 4/5. לכן נוצר חדש.",
+ "sig": "21fdd2af33705777f8b5e8ba1c5b4016f8b52ee6d5aabd664c8678d7cf5dcfaf"
+}

@@ -1,0 +1,172 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:27:43.945Z",
+ "query": "canonicalize word אוסלו איביזה אל חזור אלפא אקווה",
+ "tokens": [
+  "canonicalize",
+  "word",
+  "אוסלו",
+  "איביזה",
+  "אל",
+  "חזור",
+  "אלפא",
+  "אקווה"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "amountInWords",
+   "layer": "logic",
+   "file": "dart-maor/amount-in-words.dart",
+   "score": 3,
+   "hits": [
+    "word"
+   ]
+  },
+  {
+   "id": "canonBsp",
+   "layer": "logic",
+   "file": "dart/canon_bsp.dart",
+   "score": 3,
+   "hits": [
+    "canonicalize"
+   ]
+  },
+  {
+   "id": "indexableWord",
+   "layer": "logic",
+   "file": "dart/indexable_word.dart",
+   "score": 3,
+   "hits": [
+    "word"
+   ]
+  },
+  {
+   "id": "integerInWords",
+   "layer": "logic",
+   "file": "dart-maor/integer-in-words.dart",
+   "score": 3,
+   "hits": [
+    "word"
+   ]
+  },
+  {
+   "id": "planWord",
+   "layer": "logic",
+   "file": "dart-maor/plan-word.dart",
+   "score": 3,
+   "hits": [
+    "word"
+   ]
+  },
+  {
+   "id": "ChipScroll",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chip_scroll.dart",
+   "score": 2,
+   "hits": [
+    "אל",
+    "חזור"
+   ]
+  },
+  {
+   "id": "ConnectorTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/connector_tile.dart",
+   "score": 1,
+   "hits": [
+    "אל"
+   ]
+  },
+  {
+   "id": "EmptyConnectors",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/empty_connectors.dart",
+   "score": 1,
+   "hits": [
+    "אל"
+   ]
+  },
+  {
+   "id": "HierarchyChipPill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/hierarchy_chip_pill.dart",
+   "score": 1,
+   "hits": [
+    "אל"
+   ]
+  },
+  {
+   "id": "LensGroupHeader",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/lens_group_header.dart",
+   "score": 1,
+   "hits": [
+    "אל"
+   ]
+  },
+  {
+   "id": "NotifSettingsSectionTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/notif_settings_section_tile.dart",
+   "score": 1,
+   "hits": [
+    "אל"
+   ]
+  },
+  {
+   "id": "NotifSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/notif_settings_switch_row.dart",
+   "score": 1,
+   "hits": [
+    "אל"
+   ]
+  },
+  {
+   "id": "QuickActionsSection",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/quick_actions_section.dart",
+   "score": 1,
+   "hits": [
+    "אל"
+   ]
+  },
+  {
+   "id": "RuleInspectDialog",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/rule_inspect_dialog.dart",
+   "score": 1,
+   "hits": [
+    "אל"
+   ]
+  },
+  {
+   "id": "SectionHeader",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/section_header.dart",
+   "score": 1,
+   "hits": [
+    "אל"
+   ]
+  }
+ ],
+ "strong": [
+  "amountInWords",
+  "canonBsp",
+  "indexableWord",
+  "integerInWords",
+  "planWord"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/canonicalize_word.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 12 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: amountInWords 0/12 · canonBsp 0/12 · canonicalMaterial 0/12 · indexableWord 0/12 · integerInWords 0/12 · isLinkableWord 0/12 · planWord 0/12 · realWordTokens 0/12 · wordTokens 0/12. לכן נוצר חדש.",
+ "sig": "eb0c837995c029323285697c99a29ad10c6515bd5ee11234764c10663084f6d9"
+}

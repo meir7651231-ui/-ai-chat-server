@@ -1,0 +1,182 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:27:45.290Z",
+ "query": "canon bsp מבטיח את סימן-האינץ' על מידת- משווה",
+ "tokens": [
+  "canon",
+  "bsp",
+  "בטיח",
+  "את",
+  "סימן",
+  "אינץ",
+  "על",
+  "ידת",
+  "שווה"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "canonicalizeWord",
+   "layer": "logic",
+   "file": "dart/canonicalize_word.dart",
+   "score": 3,
+   "hits": [
+    "canon"
+   ]
+  },
+  {
+   "id": "DsField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_field.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeActionButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/action_button.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeActionRow",
+   "layer": "display",
+   "file": "dart-forge-bs/list/action_row.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeAddTradeButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/add_trade_button.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeAnimatedToggle",
+   "layer": "display",
+   "file": "dart-forge-bs/action/animated_toggle.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeBrandHeader",
+   "layer": "display",
+   "file": "dart-forge-bs/header/brand_header.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeBreadcrumbTrail",
+   "layer": "display",
+   "file": "dart-forge-bs/nav/breadcrumb_trail.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeCartFabButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/cart_fab_button.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeChatSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-forge-bs/action/chat_settings_switch_row.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeCheckRow",
+   "layer": "display",
+   "file": "dart-forge-bs/list/check_row.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeCircleCloseButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/circle_close_button.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeComposer",
+   "layer": "display",
+   "file": "dart-forge-bs/chat/composer.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeConsentDialog",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/consent_dialog.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  },
+  {
+   "id": "ForgeCourierSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-forge-bs/action/courier_settings_switch_row.dart",
+   "score": 2,
+   "hits": [
+    "את",
+    "על"
+   ]
+  }
+ ],
+ "strong": [
+  "canonicalizeWord"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/canon_bsp.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 6 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: canonicalizeWord 0/6 · canonicalMaterial 0/6. לכן נוצר חדש.",
+ "sig": "018c325743581ebba7d029636b7f79f3fb8e9be467f9d1b14fdf55a253236b2a"
+}

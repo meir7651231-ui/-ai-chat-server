@@ -14,6 +14,8 @@ const opt = (k) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : nu
 const query = argv.filter((a, i) => !a.startsWith('--') && (i === 0 || !argv[i - 1].startsWith('--'))).join(' ').trim();
 if (!query) { console.error('usage: search-record "<מילות-חיפוש>" [--creates <path>] [--choose <id> | --none "<למה>"]'); process.exit(2); }
 import { IDX, LOG, tok, scoreFor, loadOracle, layerOf } from './search-score.mjs';   // G63 · ניקוד אחד משותף לשער
+const OUT = R.MACH + 'audit/search/';   // G64 · נשמט ברפקטור ⇒ כל כתיבת-רשומה קרסה (ReferenceError) ונחיתה שלמה נפסלה כ«נדחתה»; --dry = חישוב בלי כתיבה (לפרה-פלייט)
+const DRY = argv.includes('--dry');
 const sha = (s) => crypto.createHash('sha256').update(s).digest('hex');
 const { display, logic, all } = loadOracle();
 const oracle = { atomIndexSha: sha(fs.readFileSync(IDX)), logicCensusSha: sha(fs.readFileSync(LOG)), display: display.length, logic: logic.length };
@@ -22,7 +24,9 @@ const q = [...new Set(tok(query))];
 if (!q.some((t) => /^[a-z]/.test(t)) || !q.some((t) => /^[א-ת]/.test(t))) { console.error('❌ השאילתה חייבת לכלול גם מילים באנגלית (שמות-אטומים/פונקציות) וגם בעברית (ייעוד) — האורקל דו-לשוני, שאילתה חד-לשונית סורקת חצי'); process.exit(2); }
 export const score = (entry) => scoreFor(q, entry);
 const TOP = Number(opt('--top') || 15);
-const ranked = all.map((e) => ({ ...e, ...score(e) })).filter((e) => e.s > 0).sort((a, b) => b.s - a.s || a.id.localeCompare(b.id)).slice(0, TOP);
+// G64 · האטום-עצמו (‏--creates‎) אינו מועמד: אחרי נחיתה+regen הוא באורקל, ו«חיפוש בלי-עצמי» ≡ חיפוש-לפני-יצירה (השער בודק שהאורקל רק גדל ושאין חזק-חדש)
+const selfOf = opt('--creates') || null;
+const ranked = all.filter((e) => !selfOf || 'new/' + e.file !== selfOf).map((e) => ({ ...e, ...score(e) })).filter((e) => e.s > 0).sort((a, b) => b.s - a.s || a.id.localeCompare(b.id)).slice(0, TOP);
 const candidates = ranked.map((e) => ({ id: e.id, layer: e.layer, file: e.file, score: e.s, hits: e.hits }));
 // G63 · מועמד-חזק = **באותה שכבה** של מה שנוצר: לוגיקה (new/dart · dart-maor · atoms · dart-boxes) מול לוגיקה, תצוגה מול תצוגה.
 //   הראיה: `bestStore` (לוגיקה) נפסל כי `StorePill`/`StoreHubRow` (ווידג׳טים) קיבלו 3 על המילה «store» — אדם שמחפש פונקציה לא
@@ -40,6 +44,7 @@ else if (none !== null) {
 }
 const body = JSON.stringify({ ...record, sig: undefined });
 record.sig = sha('machtzev-search-v1\n' + body);
+if (DRY) { console.log(`🔎 [dry] "${query}" ⇒ ${candidates.length} מועמדים · ${strong.length} חזקים${strong.length ? ': ' + strong.map((c) => c.id).join(' · ') : ''}`); process.exit(0); }
 fs.mkdirSync(OUT, { recursive: true });
 const slug = q.slice(0, 3).join('-').replace(/[^a-z0-9א-ת-]/g, '') || 'q';
 const file = path.join(OUT, `${record.ts.slice(0, 10)}-${slug}-${record.sig.slice(0, 8)}.json`);

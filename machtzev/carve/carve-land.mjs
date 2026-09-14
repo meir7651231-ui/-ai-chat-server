@@ -223,8 +223,10 @@ function landOne(r, seen) {
   const doc = (r.fnSource.match(/\/\/\/[^\n]*/g) || []).join('\n').replace(/\/\/\/ ?/g, '');
   const md = `# חוזה · ${r.name}\n\n> אטום-Dart · נחצב אוטומטית ע"י חצב-AST (חוק-4 — verbatim מהמקור).\n\n## מקור\n${srcRef}\n\n## התנהגות\n${doc || '(ראה גוף-האטום)'}\n\n## ייעוד-עברי\n${purpose.from === 'none' ? '(אין — לא נמצא הקשר עברי במקור/בקוראים/בגוף)' : `מקור: ${purpose.from}${purpose.key ? ' · ' + purpose.key : ''} — ${purpose.words.slice(0, 12).join(' · ')}`}\n\n## אימות\nבדיקת-Golden (\`${kb}_test.dart\`): אפיון דטרמיניסטי על סל-קלטים — הוקלט מהרצת הקוד-החלוץ. הרצה: \`dart run --enable-asserts new/dart/${kb}_test.dart\`.\n`;
   fs.writeFileSync(path.join(ROOT, 'dart', `${kb}.contract.md`), md);
+  // G64 · דוגמאות-הזהב של האטום כזוגות [args, check] — למועמד-חזק שייבדק **בריצה** (אין שקעים ⇒ הדוגמאות ניידות; עם שקעים ⇒ null)
+  const examples = socketArgs ? null : combos.map((c, i) => outs[i] === '__THROW__' ? null : [mkArgs(c), `r.toString() == '${esc(outs[i])}'`]).filter(Boolean);
   return { name: r.name, landed: `${kb}.dart`, base: kb, golden: combos.length,
-           heb: purpose.words, purposeFrom: purpose.from };
+           heb: purpose.words, purposeFrom: purpose.from, examples };
 }
 
 const carved = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
@@ -235,9 +237,10 @@ const skipWhy = {};   // סיבת-דילוג ⇒ שמות (בלי זה 16 דיל
 const landedBases = [];
 const hebOf = {};   // בסיס ⇒ מילות-הייעוד העבריות (G63: תיעוד-עצמי ⇒ מסך-המקור ⇒ מסך-הקורא ⇒ גוף)
 const purposeFromCount = {};
+const exOf = {};   // בסיס ⇒ דוגמאות-הזהב (G64 · הוכחת-אי-כפילות בריצה)
 for (const r of trivial) {
   const res = landOne(r, seen);
-  if (res.landed) { landed++; landedBases.push(res.base); hebOf[res.base] = res.heb; purposeFromCount[res.purposeFrom] = (purposeFromCount[res.purposeFrom] || 0) + 1; if (landed <= 40) console.log(`✅ ${res.name} → dart/${res.landed} · ${res.golden} Golden`); }
+  if (res.landed) { landed++; landedBases.push(res.base); hebOf[res.base] = res.heb; exOf[res.base] = res.examples; purposeFromCount[res.purposeFrom] = (purposeFromCount[res.purposeFrom] || 0) + 1; if (landed <= 40) console.log(`✅ ${res.name} → dart/${res.landed} · ${res.golden} Golden`); }
   else if (res.fail) { failed++; if (failed <= 20) console.log(`↩ ${res.name}: ${res.fail}`); }
   else { skipped++; (skipWhy[res.skip || 'לא-מנומק'] ??= []).push(res.name); }   // שקט אינו דילוג
 }
@@ -271,16 +274,22 @@ if (landedBases.length) {
   // «אין דאטה במנגנון». האטום נחצב verbatim, ולכן פונקציה שמערבבת ליטרל-עברי
   // עם זרימת-בקרה מגיעה מעורבת — והשער אוסר להוסיף מעורב חדש. מריצים את
   // **אותו שער** ומסירים; הפיצול לאטום-דאטה הוא החלטה, לא נחיתה אוטומטית.
+  // G64 · **שני** שערי-הטוהר (data-purity-check ⇒ `+ dart/<שם>` · purity/purity-data ⇒ `new/dart/<שם>.dart`), ובלולאה עד-נקי:
+  //   השערים מדפיסים רק 20/12 ראשונים ⇒ סבב יחיד הסיר בדיוק 20 והשאיר 9 מעורבים שנפלו במשטרה אחרי הנחיתה.
   const dpGate = new URL('../data-purity-check.mjs', import.meta.url).pathname;
-  let dpOut = '';
-  try { dpOut = execSync(`node ${dpGate} --gate`, { cwd: path.join(ROOT, '..'), stdio: ['ignore', 'pipe', 'pipe'] }).toString(); }
-  catch (e) { dpOut = ((e.stdout || '') + (e.stderr || '')).toString(); }
-  // ⚠️ הפורמט של השער עצמו הוא `+ dart/<שם>`; הצורה עם «אטום-מעורב חדש»
-  // היא עטיפת-ה-pre-commit. התאמה לעטיפה החזירה אפס בעוד השער תפס שלושה.
-  const mixed = [...dpOut.matchAll(/^\s*\+ dart\/([a-z0-9_]+)\s*$/gm)].map(m => m[1])
-    .filter(b => alive.includes(b));
-  for (const b of mixed) for (const f of [b + '.dart', b + '_test.dart', b + '.contract.md'])
-    fs.rmSync(path.join(ROOT, 'dart', f), { force: true });
+  const pdGate = new URL('../purity/purity-data.mjs', import.meta.url).pathname;
+  const runGate = (g) => { try { return execSync(`node ${g} --gate`, { cwd: path.join(ROOT, '..'), stdio: ['ignore', 'pipe', 'pipe'] }).toString(); } catch (e) { return ((e.stdout || '') + (e.stderr || '')).toString(); } };
+  const mixed = [];
+  for (let round = 0; round < 12; round++) {
+    // ⚠️ הפורמט של data-purity-check עצמו הוא `+ dart/<שם>`; הצורה עם «אטום-מעורב חדש» היא עטיפת-ה-pre-commit / purity-data (`new/dart/<שם>.dart`).
+    const found = [...new Set([
+      ...[...runGate(dpGate).matchAll(/^\s*\+ dart\/([a-z0-9_]+)\s*$/gm)].map(m => m[1]),
+      ...[...runGate(pdGate).matchAll(/new\/dart\/([a-z0-9_]+)\.dart/g)].map(m => m[1]),
+    ])].filter(b => alive.includes(b) && !mixed.includes(b));
+    if (!found.length) break;
+    for (const b of found) for (const f of [b + '.dart', b + '_test.dart', b + '.contract.md']) fs.rmSync(path.join(ROOT, 'dart', f), { force: true });
+    mixed.push(...found);
+  }
   const alive2 = alive.filter(b => !mixed.includes(b));
   console.log(`🧪 טוהר-דאטה: ${mixed.length} אטומים-מעורבים הוסרו · נשארו ${alive2.length}`);
 
@@ -293,19 +302,54 @@ if (landedBases.length) {
   // מהאורקל לא נסרק. ייעוד עברי אי-אפשר לחולל בלי להמציא — לכן הוא נלקח
   // מתיעוד-האטום עצמו. אטום בלי ייעוד-עברי **אינו עולה**: שאילתה חצי-סרוקה
   // אינה הוכחת-חיפוש, וההמצאה אסורה (§20-ג).
-  const dup = [], noPurpose = [];
+  // G64 · «מועמד-חזק» (ציון-שם ≥3 באותה שכבה) אינו נפסק בהסתכלות אלא **בריצה** (הרף-הגבוה-מאדם): כל מועמד-לוגיקה טהור מורץ על דוגמאות-הזהב
+  //   של האטום-החדש דרך המוכיח-האחד (logic-proof). עובר 100% ⇒ **תאום-מוכח** (לא עולה; הכרעת-בעלים על איחוד) · נכשל ⇒ אי-כפילות מוכחת,
+  //   ונרשם ב---none בשמו עם התוצאה · לא-ניתן-להוכחה (לא-טהור / אין דוגמאות-ניידות / אין דוגמאות) ⇒ נשאר «כפילות-אפשרית» (לא עולה).
+  //   הדירוג = אותו דירוג של search-record (search-score · top-15 · שכבה), כדי שהשמות ב-why יהיו בדיוק אלה שהשער דורש.
+  const { loadOracle, scoreFor, tok, layerOf } = await import('../search-score.mjs');
+  const { proveCandidates } = await import('../generator/logic-proof.mjs');
+  const oracle = process.env.CARVE_OUT ? null : loadOracle();
+  // G64 · פרה-פלייט: כלי-הרשומה חייב לרוץ לפני שפוסלים אטום על סמך «נדחתה» — רפקטור שבר אותו (OUT חסר) ונחיתה שלמה נפסלה בשקט כ«כפילות»
+  if (!process.env.CARVE_OUT) { try { execSync(`node ${srTool} "preflight בדיקה" --creates new/dart/_preflight.dart --dry`, { cwd: path.join(ROOT, '..'), stdio: 'pipe' }); } catch (e) { console.log(`🚨 search-record שבור — הנחיתה נעצרת לפני הוכחת-החיפוש (האטומים נשארים על הדיסק לבדיקה): ${String(e.stderr || e.message).slice(0, 200).replace(/\n/g, ' ')}`); process.exit(1); } }
+  const dup = [], noPurpose = [], twins = [], provenNot = [];
   for (const b of alive2) {
     const heb = (hebOf[b] || []).filter(w => w.length > 1).slice(0, 6);
     if (!heb.length) { noPurpose.push(b); continue; }
     if (process.env.CARVE_OUT) continue;   // ריצת-ניסוי: לא כותבים רשומות-חיפוש לאודיט (הן שייכות לנחיתה אמיתית בלבד)
     const words = `${b.replace(/_/g, ' ')} ${heb.join(' ')}`;
-    const why = `נחצב אוטומטית מ-buildsmart/app_flutter ע"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). האורקל המאוחד לא החזיר מועמד בציון ≥3 לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.`;
-    try { execSync(`node ${srTool} ${JSON.stringify(words)} --creates new/dart/${b}.dart --none ${JSON.stringify(why)}`, { cwd: path.join(ROOT, '..'), stdio: 'pipe' }); }
-    catch { dup.push(b); }
+    const creates = `new/dart/${b}.dart`, lay = layerOf(creates), q = [...new Set(tok(words))];
+    // G64 · אחי-האצווה: אטומים שנחתו באותה ריצה עדיין אינם באורקל, אבל השער (search-proof, ניקוד-חי אחרי regen) יראה אותם כ«מועמד-חזק חדש».
+    //   לכן הם נכנסים למאגר-המועמדים כבר עכשיו (id=camel · שכבה=לוגיקה · ייעוד=מילותיהם) — ונשפטים בריצה כמו כל מועמד (תאום-בתוך-האצווה = נתפס כאן).
+    const inOracle = new Set(oracle.all.map((e) => e.layer + ':' + e.id));
+    const camel = (kb) => kb.replace(/_(\w)/g, (_, c) => c.toUpperCase());
+    const siblings = alive2.filter((x) => x !== b).map((x) => ({ id: camel(x), layer: 'logic', file: `dart/${x}.dart`, purpose: hebOf[x] || [] })).filter((e) => !inOracle.has('logic:' + e.id));
+    // שני חלונות, כי הכלי (search-record) מדרג **בלי** האחים: (א) חלון-הכלי — אורקל בלבד, top-15, אלה השמות שהוא דורש ב---none;
+    //   (ב) אחי-האצווה החזקים — בלי חלון (אחרי regen הם באורקל והשער יראה אותם). האיחוד נשפט בריצה. (6 נדחו כשחלון-מאוחד דחק שמות מחלון-הכלי.)
+    const rank = (pool) => pool.filter((e) => 'new/' + e.file !== creates).map((e) => ({ ...e, s: scoreFor(q, e).s })).filter((e) => e.s > 0).sort((x, y) => y.s - x.s || x.id.localeCompare(y.id));
+    const toolStrong = rank(oracle.all).slice(0, 15).filter((e) => e.s >= 3 && (!lay || e.layer === lay));
+    const sibStrong = rank(siblings).filter((e) => e.s >= 3);
+    const strong = [...toolStrong, ...sibStrong.filter((e) => !toolStrong.some((t) => t.id === e.id))];
+    let why = `נחצב אוטומטית מ-buildsmart/app_flutter ע"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). `;
+    if (!strong.length) why += `האורקל המאוחד לא החזיר מועמד בציון ≥3 באותה שכבה לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.`;
+    else {
+      const ex = exOf[b];
+      if (!ex || !ex.length) { dup.push(b); continue; }   // אין דוגמאות-ניידות ⇒ אי-אפשר להוכיח ⇒ כפילות-אפשרית (הכרעת-בעלים)
+      const res = proveCandidates('carve__' + b, strong.map((e) => ({ id: e.id, file: e.file })), ex);
+      const verdicts = strong.map((e) => ({ id: e.id, r: res[e.id] }));
+      const unproven = verdicts.filter((v) => !v.r);   // לא-טהור / לא הורץ
+      const twin = verdicts.filter((v) => v.r && v.r.total && v.r.ok === v.r.total);
+      if (twin.length) { twins.push(`${b} ≡ ${twin.map((v) => v.id).join(',')}`); dup.push(b); continue; }
+      if (unproven.length) { dup.push(b); continue; }
+      why += `מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על ${ex.length} דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: ` + verdicts.map((v) => `${v.id} ${v.r.ok}/${v.r.total}`).join(' · ') + `. לכן נוצר חדש.`;
+      provenNot.push(b);
+    }
+    try { execSync(`node ${srTool} ${JSON.stringify(words)} --creates ${creates} --none ${JSON.stringify(why)}`, { cwd: path.join(ROOT, '..'), stdio: 'pipe' }); }
+    catch (e) { dup.push(b); console.log(`   ↷ ${b}: רשומת-חיפוש נדחתה — ${String(e.stderr || e.stdout || e.message).slice(0, 160).replace(/\n/g, ' ')}`); }
   }
+  if (twins.length) console.log(`   ≡ תאומים-מוכחים-בריצה (לא עלו · הכרעת-בעלים על איחוד): ${twins.join(' · ')}`);
   for (const b of [...dup, ...noPurpose]) for (const f of [b + '.dart', b + '_test.dart', b + '.contract.md'])
     fs.rmSync(path.join(ROOT, 'dart', f), { force: true });
-  console.log(`🔎 הוכחת-חיפוש: ${alive2.length - dup.length - noPurpose.length} רשומות נכתבו · ${dup.length} מועמד-חזק קיים · ${noPurpose.length} בלי ייעוד-עברי (דורש הכרעה) · מקור-הייעוד: ${Object.entries(purposeFromCount).map(([k, v]) => k + ' ' + v).join(' · ')}`);
+  console.log(`🔎 הוכחת-חיפוש: ${alive2.length - dup.length - noPurpose.length} רשומות נכתבו (${provenNot.length} עם אי-כפילות-מוכחת-בריצה) · ${dup.length} כפילות-אפשרית (${twins.length} תאומים-מוכחים) · ${noPurpose.length} בלי ייעוד-עברי (דורש הכרעה) · מקור-הייעוד: ${Object.entries(purposeFromCount).map(([k, v]) => k + ' ' + v).join(' · ')}`);
   console.log(`\n📦 עלו למדף: ${alive2.length - dup.length - noPurpose.length} אטומים`);
   if (drop.length) console.log('   ✗ ' + drop.slice(0, 12).join(' ') + (drop.length > 12 ? ` …+${drop.length - 12}` : ''));
 }

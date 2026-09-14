@@ -1,22 +1,22 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2443** אטומים ממופים (תצוגה 932 · לוגיקה 963 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2465** אטומים ממופים (תצוגה 932 · לוגיקה 985 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
 | data:strings | 349 | academic-year-label-strings · adar-norm-strings · add-org-member-strings · age-of-strings · amount-in-words-strings |
-| format | 252 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
+| format | 263 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
 | action | 180 | AccordionSectionCard · ActionButton · ActionCard · ActionRow · AddTradeButton |
 | group | 171 | ActionChipRail · AiCardTop · AiMdHead · AnimatedEmpty · ApprovalTaskCard |
 | summary | 159 | allOffConfig · applyAyinNames · applyAyinSheet · applyEntityPartial · applyMetaPartial |
-| collection | 151 | activeByMonth · allSupPhones · allowedDesignationsFor · appendCall · attentionItems |
+| collection | 152 | activeByMonth · allSupPhones · allowedDesignationsFor · appendCall · attentionItems |
 | transform | 120 | actionDescriptor · actionFromString · activeDriver · auditRows · brandById |
-| predicate | 112 | accessPasswordMatches · assignmentRedeemed · ayinActionVisible · ayinActive · canAddPhoto |
+| predicate | 114 | accessPasswordMatches · assignmentRedeemed · ayinActionVisible · ayinActive · canAddPhoto |
 | text | 110 | AccessoryRow · AccessoryTile · AiCardSub · AiServerNote · AppSettingsBody |
 | container | 107 | AccordionPanel · AdvanceButton · AnimatedTabs · AssignButton · AuroraField |
 | fact | 85 | AlertBanner · AnimatedToggle · BadgePill · CaPill · CatalogCountBadge |
 | data:terms | 85 | absence-reason-chips-terms · annual-all-lines-terms · annual-report-terms · audit-cat-colors-terms · audit-report-lines-terms |
-| measure | 77 | ageOf · balanceOf · band · boqLineAmount · boqTotal |
+| measure | 84 | ageOf · balanceOf · band · boqLineAmount · boqTotal |
 | data:sockets | 74 | amount-in-words-sockets · annual-report-lines-sockets · block-reason-sockets · build-course-daily-rows-sockets · build-custom-export-sockets |
 | stat | 42 | BareStat · Callout · FinCallout · FinRow · ForgeAreaChart |
 | panel | 41 | AiCard · CaCard · ChipScroll · DismissibleFavRow · DsCardElevated |
@@ -25,7 +25,7 @@
 | bars | 39 | BarChart · DsBars · DsRecordCard · Forge12Atoms · Forge14Atoms |
 | field | 38 | ChatSettingsSwitchRow · CourierSettingsSwitchRow · DsDateField · DsEnumField · DsMultiSelect |
 | zero | 33 | AuroraBg · BarcodeReticle · Dot · DotGridBg · DotsLoader |
-| aggregate | 29 | catNodeProductCount · cockpitCollectedThisMonth · collectedPaid · componentRemaining · coordinatorTotal |
+| aggregate | 30 | budgetResidualSpend · catNodeProductCount · cockpitCollectedThisMonth · collectedPaid · componentRemaining |
 | switch | 23 | Forge4AtomsSelection · Forge5AtomsSelection · ForgeAnimatedToggleSelection · ForgeCheckPop · ForgeCheckRowSelection |
 | ratio | 12 | AiBar · Bar · CreditBar · ForgeGlowSlider · IntelBar |
 | identity | 12 | AvatarTile · DsScaffold · EmojiSectionTitle · ForgeBrandListRow · ForgeProfileRow |

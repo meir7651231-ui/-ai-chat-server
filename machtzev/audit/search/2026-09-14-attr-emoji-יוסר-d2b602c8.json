@@ -1,0 +1,184 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:28:25.147Z",
+ "query": "attr emoji יוסר מהסל מוצרים ׳״ קוטר חיצוני",
+ "tokens": [
+  "attr",
+  "emoji",
+  "יוסר",
+  "הסל",
+  "וצרים",
+  "קוטר",
+  "חיצוני"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "HierarchyChipPill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/hierarchy_chip_pill.dart",
+   "score": 5,
+   "hits": [
+    "יוסר",
+    "הסל",
+    "וצרים",
+    "קוטר",
+    "חיצוני"
+   ]
+  },
+  {
+   "id": "LensGroupHeader",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/lens_group_header.dart",
+   "score": 5,
+   "hits": [
+    "יוסר",
+    "הסל",
+    "וצרים",
+    "קוטר",
+    "חיצוני"
+   ]
+  },
+  {
+   "id": "AttributeChip",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/attribute_chip.dart",
+   "score": 4,
+   "hits": [
+    "attr",
+    "וצרים"
+   ]
+  },
+  {
+   "id": "EmojiSectionTitle",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/emoji_section_title.dart",
+   "score": 4,
+   "hits": [
+    "emoji",
+    "וצרים"
+   ]
+  },
+  {
+   "id": "findAttrSiblings",
+   "layer": "logic",
+   "file": "dart/find_attr_siblings.dart",
+   "score": 3,
+   "hits": [
+    "attr"
+   ]
+  },
+  {
+   "id": "ForgeEmojiSectionTitle",
+   "layer": "display",
+   "file": "dart-forge-bs/header/emoji_section_title.dart",
+   "score": 3,
+   "hits": [
+    "emoji"
+   ]
+  },
+  {
+   "id": "kindEmoji",
+   "layer": "logic",
+   "file": "dart/kind_emoji.dart",
+   "score": 3,
+   "hits": [
+    "emoji"
+   ]
+  },
+  {
+   "id": "tileEmoji",
+   "layer": "logic",
+   "file": "dart/tile_emoji.dart",
+   "score": 3,
+   "hits": [
+    "emoji"
+   ]
+  },
+  {
+   "id": "isSizeToken",
+   "layer": "logic",
+   "file": "dart/find_attr_siblings.dart",
+   "score": 2,
+   "hits": [
+    "attr"
+   ]
+  },
+  {
+   "id": "AccessoryRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/accessory_row.dart",
+   "score": 1,
+   "hits": [
+    "וצרים"
+   ]
+  },
+  {
+   "id": "AccRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/acc_row.dart",
+   "score": 1,
+   "hits": [
+    "וצרים"
+   ]
+  },
+  {
+   "id": "ActionCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/action_card.dart",
+   "score": 1,
+   "hits": [
+    "יוסר"
+   ]
+  },
+  {
+   "id": "ActionChipRail",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/action_chip_rail.dart",
+   "score": 1,
+   "hits": [
+    "וצרים"
+   ]
+  },
+  {
+   "id": "AdvanceButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/advance_button.dart",
+   "score": 1,
+   "hits": [
+    "וצרים"
+   ]
+  },
+  {
+   "id": "ApprovalButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/approval_button.dart",
+   "score": 1,
+   "hits": [
+    "וצרים"
+   ]
+  }
+ ],
+ "strong": [
+  "findAttrSiblings",
+  "kindEmoji",
+  "tileEmoji"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "HierarchyChipPill",
+  "LensGroupHeader",
+  "AttributeChip",
+  "EmojiSectionTitle",
+  "ForgeEmojiSectionTitle"
+ ],
+ "creates": "new/dart/attr_emoji.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 2 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: stripSizeTokens 0/2 · findAttrSiblings 0/2 · kindEmoji 0/2 · tileEmoji 0/2. לכן נוצר חדש.",
+ "sig": "d2b602c8728d6bf103e296b5a24e27d3ac25c95127a081921d336d8ffebe87a4"
+}

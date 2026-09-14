@@ -1,0 +1,210 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:28:36.851Z",
+ "query": "illustrative site spend הקש לעריכה הנתונים להמחשה בגרסה המלאה",
+ "tokens": [
+  "illustrative",
+  "site",
+  "spend",
+  "הקש",
+  "עריכה",
+  "נתונים",
+  "המחשה",
+  "גרסה",
+  "מלאה"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "SiteRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_row.dart",
+   "score": 9,
+   "hits": [
+    "site",
+    "הקש",
+    "עריכה",
+    "נתונים",
+    "המחשה",
+    "גרסה",
+    "מלאה"
+   ]
+  },
+  {
+   "id": "Field",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/field.dart",
+   "score": 6,
+   "hits": [
+    "הקש",
+    "עריכה",
+    "נתונים",
+    "המחשה",
+    "גרסה",
+    "מלאה"
+   ]
+  },
+  {
+   "id": "NumBox",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/num_box.dart",
+   "score": 6,
+   "hits": [
+    "הקש",
+    "עריכה",
+    "נתונים",
+    "המחשה",
+    "גרסה",
+    "מלאה"
+   ]
+  },
+  {
+   "id": "Tappable",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/tappable.dart",
+   "score": 6,
+   "hits": [
+    "הקש",
+    "עריכה",
+    "נתונים",
+    "המחשה",
+    "גרסה",
+    "מלאה"
+   ]
+  },
+  {
+   "id": "SiteHubCaCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_hub_ca_card.dart",
+   "score": 4,
+   "hits": [
+    "site",
+    "הקש"
+   ]
+  },
+  {
+   "id": "SiteHubCaEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_hub_ca_empty.dart",
+   "score": 4,
+   "hits": [
+    "site",
+    "הקש"
+   ]
+  },
+  {
+   "id": "SiteHubCaPrimary",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_hub_ca_primary.dart",
+   "score": 4,
+   "hits": [
+    "site",
+    "הקש"
+   ]
+  },
+  {
+   "id": "SiteHubCardBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_hub_card_btn.dart",
+   "score": 4,
+   "hits": [
+    "site",
+    "הקש"
+   ]
+  },
+  {
+   "id": "SiteHubMdHead",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_hub_md_head.dart",
+   "score": 4,
+   "hits": [
+    "site",
+    "הקש"
+   ]
+  },
+  {
+   "id": "SiteServerNote",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_server_note.dart",
+   "score": 4,
+   "hits": [
+    "site",
+    "הקש"
+   ]
+  },
+  {
+   "id": "budgetResidualSpend",
+   "layer": "logic",
+   "file": "dart/budget_residual_spend.dart",
+   "score": 3,
+   "hits": [
+    "spend"
+   ]
+  },
+  {
+   "id": "ForgeSiteHubCardBtn",
+   "layer": "display",
+   "file": "dart-forge-bs/action/site_hub_card_btn.dart",
+   "score": 3,
+   "hits": [
+    "site"
+   ]
+  },
+  {
+   "id": "hasPublicSite",
+   "layer": "logic",
+   "file": "dart-maor/has-public-site.dart",
+   "score": 3,
+   "hits": [
+    "site"
+   ]
+  },
+  {
+   "id": "hasSite",
+   "layer": "logic",
+   "file": "dart-boxes/public-site.dart",
+   "score": 3,
+   "hits": [
+    "site"
+   ]
+  },
+  {
+   "id": "normalizeSite",
+   "layer": "logic",
+   "file": "dart-boxes/config.dart",
+   "score": 3,
+   "hits": [
+    "site"
+   ]
+  }
+ ],
+ "strong": [
+  "budgetResidualSpend",
+  "hasPublicSite",
+  "hasSite",
+  "normalizeSite"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "SiteRow",
+  "Field",
+  "NumBox",
+  "Tappable",
+  "SiteHubCaCard",
+  "SiteHubCaEmpty",
+  "SiteHubCaPrimary",
+  "SiteHubCardBtn",
+  "SiteHubMdHead",
+  "SiteServerNote",
+  "ForgeSiteHubCardBtn"
+ ],
+ "creates": "new/dart/illustrative_site_spend.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 12 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: budgetResidualSpend 0/12 · hasPublicSite 0/12 · hasSite 0/12 · normalizeSite 0/12. לכן נוצר חדש.",
+ "sig": "dd3512e6920cf8ec638dd922a6b4a092926513a9351f267f9aa7e7b0f9143822"
+}

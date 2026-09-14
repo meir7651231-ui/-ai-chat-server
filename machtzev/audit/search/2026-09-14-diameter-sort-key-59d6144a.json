@@ -1,0 +1,246 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:28:41.132Z",
+ "query": "diameter sort key מוצרים בעץ גרסאות מים חמים בלבד",
+ "tokens": [
+  "diameter",
+  "sort",
+  "key",
+  "וצרים",
+  "בעץ",
+  "גרסאות",
+  "מים",
+  "חמים",
+  "לבד"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "AccRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/acc_row.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "AxisChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/axis_chip.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "CatalogCountBadge",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/catalog_count_badge.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "ChipWrap",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chip_wrap.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "CompanyCatalogImportCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/company_catalog_import_card.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "EmptySection",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/empty_section.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "FacetChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/facet_chip.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "FacetRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/facet_row.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "MiniQtyBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/mini_qty_btn.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "nameSortKey",
+   "layer": "logic",
+   "file": "dart-maor/name-sort-key.dart",
+   "score": 6,
+   "hits": [
+    "sort",
+    "key"
+   ]
+  },
+  {
+   "id": "SavedVersionChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/saved_version_chip.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "SheetSection",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/sheet_section.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "TreeComingSoon",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/tree_coming_soon.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "vNameSortKey",
+   "layer": "logic",
+   "file": "dart-boxes/validate.dart",
+   "score": 6,
+   "hits": [
+    "sort",
+    "key"
+   ]
+  },
+  {
+   "id": "ForgeSortHeaderStates",
+   "layer": "display",
+   "file": "dart-forge-bs/spatial/sort_header_states.dart",
+   "score": 4,
+   "hits": [
+    "sort",
+    "לבד"
+   ]
+  }
+ ],
+ "strong": [
+  "nameSortKey",
+  "vNameSortKey"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "AccRow",
+  "AxisChip",
+  "CatalogCountBadge",
+  "ChipWrap",
+  "CompanyCatalogImportCard",
+  "EmptySection",
+  "FacetChip",
+  "FacetRow",
+  "MiniQtyBtn",
+  "SavedVersionChip",
+  "SheetSection",
+  "TreeComingSoon",
+  "ForgeSortHeaderStates"
+ ],
+ "creates": "new/dart/diameter_sort_key.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 6 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: nameSortKey 0/6 · vNameSortKey 0/6. לכן נוצר חדש.",
+ "sig": "59d6144aa51d869415630fe0f0d1de7db4f2bbec03e630fee4b60012e86ba4f5"
+}

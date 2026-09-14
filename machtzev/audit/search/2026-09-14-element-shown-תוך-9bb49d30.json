@@ -1,0 +1,181 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:27:42.461Z",
+ "query": "element shown מתוך רכיבים פעילים סקציות אבחון סנכרון",
+ "tokens": [
+  "element",
+  "shown",
+  "תוך",
+  "רכיבים",
+  "פעילים",
+  "סקציות",
+  "אבחון",
+  "סנכרון"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "elementLine",
+   "layer": "logic",
+   "file": "dart/element_line.dart",
+   "score": 3,
+   "hits": [
+    "element"
+   ]
+  },
+  {
+   "id": "matchAllElementIds",
+   "layer": "logic",
+   "file": "dart/match_all_element_ids.dart",
+   "score": 3,
+   "hits": [
+    "element"
+   ]
+  },
+  {
+   "id": "matchElementId",
+   "layer": "logic",
+   "file": "dart/match_element_id.dart",
+   "score": 3,
+   "hits": [
+    "element"
+   ]
+  },
+  {
+   "id": "scopeElementIds",
+   "layer": "logic",
+   "file": "dart/scope_element_ids.dart",
+   "score": 3,
+   "hits": [
+    "element"
+   ]
+  },
+  {
+   "id": "ForgeActionChipRail",
+   "layer": "display",
+   "file": "dart-forge-bs/nav/action_chip_rail.dart",
+   "score": 2,
+   "hits": [
+    "תוך",
+    "פעילים"
+   ]
+  },
+  {
+   "id": "ForgeAnimatedTabs",
+   "layer": "display",
+   "file": "dart-forge-bs/nav/animated_tabs.dart",
+   "score": 2,
+   "hits": [
+    "תוך",
+    "פעילים"
+   ]
+  },
+  {
+   "id": "ForgeCheckPop",
+   "layer": "display",
+   "file": "dart-forge-bs/selection/check_pop.dart",
+   "score": 2,
+   "hits": [
+    "תוך",
+    "פעילים"
+   ]
+  },
+  {
+   "id": "ForgeDatePills",
+   "layer": "display",
+   "file": "dart-forge-bs/header/date_pills.dart",
+   "score": 2,
+   "hits": [
+    "תוך",
+    "פעילים"
+   ]
+  },
+  {
+   "id": "ForgeDsNavTile",
+   "layer": "display",
+   "file": "dart-forge-bs/nav/ds_nav_tile.dart",
+   "score": 2,
+   "hits": [
+    "תוך",
+    "פעילים"
+   ]
+  },
+  {
+   "id": "ForgeFacetChip",
+   "layer": "display",
+   "file": "dart-forge-bs/selection/facet_chip.dart",
+   "score": 2,
+   "hits": [
+    "תוך",
+    "פעילים"
+   ]
+  },
+  {
+   "id": "ForgeFilterBar",
+   "layer": "display",
+   "file": "dart-forge-bs/composite/filter_bar.dart",
+   "score": 2,
+   "hits": [
+    "תוך",
+    "פעילים"
+   ]
+  },
+  {
+   "id": "ForgeImageFacePager",
+   "layer": "display",
+   "file": "dart-forge-bs/media/image_face_pager.dart",
+   "score": 2,
+   "hits": [
+    "תוך",
+    "פעילים"
+   ]
+  },
+  {
+   "id": "ForgeImageFacePagerNav",
+   "layer": "display",
+   "file": "dart-forge-bs/nav/image_face_pager_nav.dart",
+   "score": 2,
+   "hits": [
+    "תוך",
+    "פעילים"
+   ]
+  },
+  {
+   "id": "ForgeLinkRow",
+   "layer": "display",
+   "file": "dart-forge-bs/list/link_row.dart",
+   "score": 2,
+   "hits": [
+    "תוך",
+    "פעילים"
+   ]
+  },
+  {
+   "id": "ForgeMenuRow",
+   "layer": "display",
+   "file": "dart-forge-bs/nav/menu_row.dart",
+   "score": 2,
+   "hits": [
+    "תוך",
+    "פעילים"
+   ]
+  }
+ ],
+ "strong": [
+  "elementLine",
+  "matchAllElementIds",
+  "matchElementId",
+  "scopeElementIds"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/element_shown.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 6 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: elementLine 0/6 · matchAllElementIds 0/6 · matchElementId 0/6 · scopeElementIds 0/6. לכן נוצר חדש.",
+ "sig": "9bb49d30adff433ca24b93e8f31f0c9df9e5b5d5000d923c74f27aa19ec60200"
+}

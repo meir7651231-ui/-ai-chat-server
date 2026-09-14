@@ -4,12 +4,12 @@
   "pick": "startOfWeekSunday",
   "file": "dart/start_of_week_sunday.dart",
   "chain": null,
-  "score": 5.83,
+  "score": 5.82,
   "proven": true,
   "candidates": 20,
   "chainsAdmissible": 0,
   "top3": [
-   "startOfWeekSunday:3/3✓:5.83",
+   "startOfWeekSunday:3/3✓:5.82",
    "popCall:1/3:0",
    "stripAuditMeta:1/3:0"
   ],
@@ -102,12 +102,12 @@
   "pick": "addDaysIso",
   "file": "dart-maor/add-days-iso.dart",
   "chain": null,
-  "score": 64.94,
+  "score": 64.99,
   "proven": true,
   "candidates": 22,
   "chainsAdmissible": 0,
   "top3": [
-   "addDaysIso:3/3✓:64.94",
+   "addDaysIso:3/3✓:64.99",
    "segulaReminders:0/3:7.65",
    "envPath:0/3:1"
   ],
@@ -208,14 +208,14 @@
   "pick": "cockpitDaysSince",
   "file": "dart-maor/cockpit-days-since.dart",
   "chain": null,
-  "score": 38.77,
+  "score": 38.62,
   "proven": true,
   "candidates": 22,
   "chainsAdmissible": 0,
   "top3": [
-   "cockpitDaysSince:3/3✓:38.77",
-   "dayDiff:3/3✓:37.96",
-   "sheetSummary:0/3:18.17"
+   "cockpitDaysSince:3/3✓:38.62",
+   "dayDiff:3/3✓:37.23",
+   "sheetSummary:0/3:17.66"
   ],
   "proof": {
    "campaignTotal": {
@@ -314,14 +314,14 @@
   "pick": "inRange",
   "file": "dart-maor/in-range.dart",
   "chain": null,
-  "score": 72.01,
+  "score": 72.53,
   "proven": true,
   "candidates": 22,
   "chainsAdmissible": 0,
   "top3": [
-   "inRange:3/3✓:72.01",
+   "inRange:3/3✓:72.53",
    "supporterVisibleForDesignations:2/3:1",
-   "taskOverdue:1/3:9.07"
+   "taskOverdue:1/3:9.16"
   ],
   "proof": {
    "coursesOfTeacher": {
@@ -420,12 +420,12 @@
   "pick": "taskOverdue",
   "file": "dart-maor/task-overdue.dart",
   "chain": null,
-  "score": 78.67,
+  "score": 76.93,
   "proven": true,
   "candidates": 21,
   "chainsAdmissible": 0,
   "top3": [
-   "taskOverdue:3/3✓:78.67",
+   "taskOverdue:3/3✓:76.93",
    "isOverdue:3/3✓:1",
    "sameJson:2/3:1"
   ],
@@ -522,12 +522,12 @@
   "pick": "timeToMin",
   "file": "dart-maor/time-to-min.dart",
   "chain": null,
-  "score": 21.94,
+  "score": 22.11,
   "proven": true,
   "candidates": 19,
   "chainsAdmissible": 0,
   "top3": [
-   "timeToMin:2/2✓:21.94",
+   "timeToMin:2/2✓:22.11",
    "donateUrl:0/2:0",
    "expand:0/2:0"
   ],
@@ -616,14 +616,14 @@
   "pick": "minutesBetweenIso",
   "file": "dart-maor/minutes-between-iso.dart",
   "chain": null,
-  "score": 40.73,
+  "score": 40.63,
   "proven": true,
   "candidates": 24,
   "chainsAdmissible": 0,
   "top3": [
-   "minutesBetweenIso:2/2✓:40.73",
-   "levenshtein:0/2:11.32",
-   "wheelIndexUnderPointer:0/2:8.83"
+   "minutesBetweenIso:2/2✓:40.63",
+   "levenshtein:0/2:11.41",
+   "wheelIndexUnderPointer:0/2:8.91"
   ],
   "proof": {
    "coursesOfTeacher": {
@@ -848,13 +848,13 @@
   "pick": "normName",
   "file": "dart-maor/norm-name.dart",
   "chain": null,
-  "score": 8.81,
+  "score": 8.83,
   "proven": true,
   "candidates": 22,
   "chainsAdmissible": 0,
   "top3": [
-   "normName:2/2✓:8.81",
-   "wheelIndexUnderPointer:0/2:5.48",
+   "normName:2/2✓:8.83",
+   "wheelIndexUnderPointer:0/2:5.53",
    "envPath:0/2:1"
   ],
   "proof": {
@@ -954,14 +954,14 @@
   "pick": "normPhone",
   "file": "dart-maor/norm-phone.dart",
   "chain": null,
-  "score": 20.27,
+  "score": 20.44,
   "proven": true,
-  "candidates": 65,
+  "candidates": 78,
   "chainsAdmissible": 0,
   "top3": [
-   "normPhone:3/3✓:20.27",
-   "normalizePhone:2/3:11.13",
-   "normId:1/3:11.13"
+   "normPhone:3/3✓:20.44",
+   "normalizePhone:2/3:11.22",
+   "normId:1/3:11.22"
   ],
   "proof": {
    "adarNorm": {
@@ -981,6 +981,14 @@
     "total": 3
    },
    "basename": {
+    "ok": 0,
+    "total": 3
+   },
+   "canonBsp": {
+    "ok": 0,
+    "total": 3
+   },
+   "chipDisplayLabel": {
     "ok": 0,
     "total": 3
    },
@@ -1024,6 +1032,10 @@
     "ok": 0,
     "total": 3
    },
+   "fmtDateKey": {
+    "ok": 0,
+    "total": 3
+   },
    "formatIsraeliPhone": {
     "ok": 0,
     "total": 3
@@ -1045,6 +1057,10 @@
     "total": 3
    },
    "identityOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "keyboardLayoutKey": {
     "ok": 0,
     "total": 3
    },
@@ -1078,6 +1094,18 @@
    },
    "normPhone": {
     "ok": 3,
+    "total": 3
+   },
+   "normalize": {
+    "ok": 0,
+    "total": 3
+   },
+   "normalizeDocName": {
+    "ok": 0,
+    "total": 3
+   },
+   "normalizeIlPhone": {
+    "ok": 0,
     "total": 3
    },
    "normalizePhone": {
@@ -1152,7 +1180,23 @@
     "ok": 0,
     "total": 3
    },
+   "simpleLabel": {
+    "ok": 0,
+    "total": 3
+   },
+   "simpleWhy": {
+    "ok": 0,
+    "total": 3
+   },
    "siteDonateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "sizeStructurePattern": {
+    "ok": 0,
+    "total": 3
+   },
+   "slug": {
     "ok": 0,
     "total": 3
    },
@@ -1165,6 +1209,10 @@
     "total": 3
    },
    "sortSupportThreads": {
+    "ok": 0,
+    "total": 3
+   },
+   "stageLabelFor": {
     "ok": 0,
     "total": 3
    },
@@ -1193,6 +1241,10 @@
     "total": 3
    },
    "supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "taskWorkArea": {
     "ok": 0,
     "total": 3
    },
@@ -1236,14 +1288,14 @@
   "pick": "countBy",
   "file": "dart-maor/count-by.dart",
   "chain": null,
-  "score": 35.95,
+  "score": 36.27,
   "proven": true,
   "candidates": 18,
   "chainsAdmissible": 0,
   "top3": [
-   "countBy:1/1✓:35.95",
-   "supportUnread:0/1:14.64",
-   "coursesOfTeacher:0/1:5.33"
+   "countBy:1/1✓:36.27",
+   "supportUnread:0/1:14.61",
+   "coursesOfTeacher:0/1:5.39"
   ],
   "proof": {
    "countBy": {
@@ -1326,13 +1378,13 @@
   "pick": "rulePrefix",
   "file": "dart-maor/rule-prefix.dart",
   "chain": null,
-  "score": 27.64,
+  "score": 27.9,
   "proven": true,
   "candidates": 24,
   "chainsAdmissible": 0,
   "top3": [
-   "rulePrefix:3/3✓:27.64",
-   "ruleContains:2/3:18.69",
+   "rulePrefix:3/3✓:27.9",
+   "ruleContains:2/3:18.87",
    "teacherIdOf:2/3:0"
   ],
   "proof": {
@@ -1586,13 +1638,13 @@
   "pick": "ruleExact",
   "file": "dart-maor/rule-exact.dart",
   "chain": null,
-  "score": 66.27,
+  "score": 66.8,
   "proven": true,
   "candidates": 22,
   "chainsAdmissible": 0,
   "top3": [
-   "ruleExact:2/2✓:66.27",
-   "ruleSkeleton:1/2:9.75",
+   "ruleExact:2/2✓:66.8",
+   "ruleSkeleton:1/2:9.83",
    "teacherIdOf:1/2:0"
   ],
   "proof": {
@@ -1692,13 +1744,13 @@
   "pick": "ruleContains",
   "file": "dart-maor/rule-contains.dart",
   "chain": null,
-  "score": 43.4,
+  "score": 43.75,
   "proven": true,
   "candidates": 24,
   "chainsAdmissible": 0,
   "top3": [
-   "ruleContains:3/3✓:43.4",
-   "rulePrefix:2/3:18.69",
+   "ruleContains:3/3✓:43.75",
+   "rulePrefix:2/3:18.87",
    "teacherIdOf:2/3:0"
   ],
   "proof": {
@@ -1806,14 +1858,14 @@
   "pick": "damerauLevenshtein",
   "file": "dart/damerau_levenshtein.dart",
   "chain": null,
-  "score": 32.38,
+  "score": 32.17,
   "proven": true,
   "candidates": 24,
   "chainsAdmissible": 0,
   "top3": [
-   "damerauLevenshtein:4/4✓:32.38",
-   "levenshtein:3/4:49.41",
-   "minutesBetweenIso:1/4:11.32"
+   "damerauLevenshtein:4/4✓:32.17",
+   "levenshtein:3/4:48.9",
+   "minutesBetweenIso:1/4:11.41"
   ],
   "proof": {
    "coursesOfTeacher": {
@@ -1920,14 +1972,14 @@
   "pick": "nameMatches",
   "file": "dart-maor/name-matches.dart",
   "chain": null,
-  "score": 57.26,
+  "score": 57.81,
   "proven": true,
   "candidates": 7,
   "chainsAdmissible": 0,
   "top3": [
-   "nameMatches:4/4✓:57.26",
+   "nameMatches:4/4✓:57.81",
    "accessPasswordMatches:0/4:4",
-   "strongMatchForCharge:0/4:3.4"
+   "strongMatchForCharge:0/4:3.42"
   ],
   "proof": {
    "accessPasswordMatches": {
@@ -1966,14 +2018,14 @@
   "pick": "hebParts",
   "file": "dart-maor/heb-parts.dart",
   "chain": null,
-  "score": 27.47,
+  "score": 26.22,
   "proven": true,
   "candidates": 20,
   "chainsAdmissible": 0,
   "top3": [
-   "hebParts:2/2✓:27.47",
-   "monthLabel:0/2:15.08",
-   "supportMsgTime:0/2:3.83"
+   "hebParts:2/2✓:26.22",
+   "monthLabel:0/2:15.25",
+   "supportMsgTime:0/2:3.82"
   ],
   "proof": {
    "donateUrl": {
@@ -2064,12 +2116,12 @@
   "pick": "gem",
   "file": "dart-maor/gematria.dart",
   "chain": null,
-  "score": 55.81,
+  "score": 56.25,
   "proven": true,
   "candidates": 3,
   "chainsAdmissible": 0,
   "top3": [
-   "gem:2/2✓:55.81",
+   "gem:2/2✓:56.25",
    "smartScore:0/2:0",
    "staleBoxes:0/2:0"
   ],
@@ -2094,14 +2146,14 @@
   "pick": "phoneKey",
   "file": "dart-maor/phone-key.dart",
   "chain": null,
-  "score": 19.09,
+  "score": 19.27,
   "proven": true,
-  "candidates": 65,
+  "candidates": 78,
   "chainsAdmissible": 0,
   "top3": [
-   "phoneKey:4/4✓:19.09",
-   "normPhone:1/4:19.59",
-   "normalizePhone:1/4:11.63"
+   "phoneKey:4/4✓:19.27",
+   "normPhone:1/4:19.74",
+   "normalizePhone:1/4:11.69"
   ],
   "proof": {
    "adarNorm": {
@@ -2121,6 +2173,14 @@
     "total": 4
    },
    "basename": {
+    "ok": 1,
+    "total": 4
+   },
+   "canonBsp": {
+    "ok": 0,
+    "total": 4
+   },
+   "chipDisplayLabel": {
     "ok": 1,
     "total": 4
    },
@@ -2164,6 +2224,10 @@
     "ok": 0,
     "total": 4
    },
+   "fmtDateKey": {
+    "ok": 1,
+    "total": 4
+   },
    "formatIsraeliPhone": {
     "ok": 1,
     "total": 4
@@ -2185,6 +2249,10 @@
     "total": 4
    },
    "identityOf": {
+    "ok": 0,
+    "total": 4
+   },
+   "keyboardLayoutKey": {
     "ok": 0,
     "total": 4
    },
@@ -2218,6 +2286,18 @@
    },
    "normPhone": {
     "ok": 1,
+    "total": 4
+   },
+   "normalize": {
+    "ok": 1,
+    "total": 4
+   },
+   "normalizeDocName": {
+    "ok": 1,
+    "total": 4
+   },
+   "normalizeIlPhone": {
+    "ok": 0,
     "total": 4
    },
    "normalizePhone": {
@@ -2292,8 +2372,24 @@
     "ok": 0,
     "total": 4
    },
+   "simpleLabel": {
+    "ok": 1,
+    "total": 4
+   },
+   "simpleWhy": {
+    "ok": 1,
+    "total": 4
+   },
    "siteDonateUrl": {
     "ok": 0,
+    "total": 4
+   },
+   "sizeStructurePattern": {
+    "ok": 0,
+    "total": 4
+   },
+   "slug": {
+    "ok": 1,
     "total": 4
    },
    "smtpHostFor": {
@@ -2306,6 +2402,10 @@
    },
    "sortSupportThreads": {
     "ok": 0,
+    "total": 4
+   },
+   "stageLabelFor": {
+    "ok": 1,
     "total": 4
    },
    "statusLabel": {
@@ -2334,6 +2434,10 @@
    },
    "supportMsgTime": {
     "ok": 1,
+    "total": 4
+   },
+   "taskWorkArea": {
+    "ok": 0,
     "total": 4
    },
    "timeToMin": {
@@ -2376,13 +2480,13 @@
   "pick": "findDuplicateGroups",
   "file": "dart-maor/find-duplicate-groups.dart",
   "chain": null,
-  "score": 42.82,
+  "score": 43.11,
   "proven": true,
   "candidates": 4,
   "chainsAdmissible": 0,
   "top3": [
-   "findDuplicateGroups:3/3✓:42.82",
-   "strongMatchForCharge:0/3:9.72",
+   "findDuplicateGroups:3/3✓:43.11",
+   "strongMatchForCharge:0/3:9.81",
    "termOf:0/3:0"
   ],
   "proof": {
@@ -2410,13 +2514,13 @@
   "pick": "monthKey",
   "file": "dart-maor/month-key.dart",
   "chain": null,
-  "score": 17.15,
+  "score": 17.33,
   "proven": true,
-  "candidates": 65,
+  "candidates": 78,
   "chainsAdmissible": 0,
   "top3": [
-   "monthKey:3/3✓:17.15",
-   "purposeKeyOf:1/3:9.3",
+   "monthKey:3/3✓:17.33",
+   "purposeKeyOf:1/3:9.39",
    "adarNorm:1/3:2"
   ],
   "proof": {
@@ -2437,6 +2541,14 @@
     "total": 3
    },
    "basename": {
+    "ok": 1,
+    "total": 3
+   },
+   "canonBsp": {
+    "ok": 0,
+    "total": 3
+   },
+   "chipDisplayLabel": {
     "ok": 1,
     "total": 3
    },
@@ -2480,6 +2592,10 @@
     "ok": 0,
     "total": 3
    },
+   "fmtDateKey": {
+    "ok": 1,
+    "total": 3
+   },
    "formatIsraeliPhone": {
     "ok": 1,
     "total": 3
@@ -2502,6 +2618,10 @@
    },
    "identityOf": {
     "ok": 1,
+    "total": 3
+   },
+   "keyboardLayoutKey": {
+    "ok": 0,
     "total": 3
    },
    "langs": {
@@ -2533,6 +2653,18 @@
     "total": 3
    },
    "normPhone": {
+    "ok": 0,
+    "total": 3
+   },
+   "normalize": {
+    "ok": 0,
+    "total": 3
+   },
+   "normalizeDocName": {
+    "ok": 1,
+    "total": 3
+   },
+   "normalizeIlPhone": {
     "ok": 0,
     "total": 3
    },
@@ -2608,8 +2740,24 @@
     "ok": 1,
     "total": 3
    },
+   "simpleLabel": {
+    "ok": 1,
+    "total": 3
+   },
+   "simpleWhy": {
+    "ok": 1,
+    "total": 3
+   },
    "siteDonateUrl": {
     "ok": 0,
+    "total": 3
+   },
+   "sizeStructurePattern": {
+    "ok": 0,
+    "total": 3
+   },
+   "slug": {
+    "ok": 1,
     "total": 3
    },
    "smtpHostFor": {
@@ -2622,6 +2770,10 @@
    },
    "sortSupportThreads": {
     "ok": 0,
+    "total": 3
+   },
+   "stageLabelFor": {
+    "ok": 1,
     "total": 3
    },
    "statusLabel": {
@@ -2649,6 +2801,10 @@
     "total": 3
    },
    "supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "taskWorkArea": {
     "ok": 0,
     "total": 3
    },
@@ -2692,12 +2848,12 @@
   "pick": "icsEscape",
   "file": "dart-maor/ics-escape.dart",
   "chain": null,
-  "score": 24.88,
+  "score": 25.05,
   "proven": true,
-  "candidates": 65,
+  "candidates": 78,
   "chainsAdmissible": 0,
   "top3": [
-   "icsEscape:3/3✓:24.88",
+   "icsEscape:3/3✓:25.05",
    "fullDate:1/3:2",
    "normId:1/3:2"
   ],
@@ -2719,6 +2875,14 @@
     "total": 3
    },
    "basename": {
+    "ok": 0,
+    "total": 3
+   },
+   "canonBsp": {
+    "ok": 0,
+    "total": 3
+   },
+   "chipDisplayLabel": {
     "ok": 0,
     "total": 3
    },
@@ -2762,6 +2926,10 @@
     "ok": 0,
     "total": 3
    },
+   "fmtDateKey": {
+    "ok": 0,
+    "total": 3
+   },
    "formatIsraeliPhone": {
     "ok": 1,
     "total": 3
@@ -2783,6 +2951,10 @@
     "total": 3
    },
    "identityOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "keyboardLayoutKey": {
     "ok": 0,
     "total": 3
    },
@@ -2816,6 +2988,18 @@
    },
    "normPhone": {
     "ok": 1,
+    "total": 3
+   },
+   "normalize": {
+    "ok": 0,
+    "total": 3
+   },
+   "normalizeDocName": {
+    "ok": 0,
+    "total": 3
+   },
+   "normalizeIlPhone": {
+    "ok": 0,
     "total": 3
    },
    "normalizePhone": {
@@ -2890,7 +3074,23 @@
     "ok": 0,
     "total": 3
    },
+   "simpleLabel": {
+    "ok": 0,
+    "total": 3
+   },
+   "simpleWhy": {
+    "ok": 0,
+    "total": 3
+   },
    "siteDonateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "sizeStructurePattern": {
+    "ok": 0,
+    "total": 3
+   },
+   "slug": {
     "ok": 0,
     "total": 3
    },
@@ -2903,6 +3103,10 @@
     "total": 3
    },
    "sortSupportThreads": {
+    "ok": 0,
+    "total": 3
+   },
+   "stageLabelFor": {
     "ok": 0,
     "total": 3
    },
@@ -2931,6 +3135,10 @@
     "total": 3
    },
    "supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "taskWorkArea": {
     "ok": 0,
     "total": 3
    },
@@ -2974,13 +3182,13 @@
   "pick": "foldIcsLine",
   "file": "dart-maor/fold-ics-line.dart",
   "chain": null,
-  "score": 34.27,
+  "score": 34.53,
   "proven": true,
   "candidates": 24,
   "chainsAdmissible": 0,
   "top3": [
-   "foldIcsLine:2/2✓:34.27",
-   "splitCsvLine:1/2:11.55",
+   "foldIcsLine:2/2✓:34.53",
+   "splitCsvLine:1/2:11.64",
    "facetTokens:1/2:2"
   ],
   "proof": {
@@ -3088,12 +3296,12 @@
   "pick": "buildIcs",
   "file": "dart-maor/build-ics.dart",
   "chain": null,
-  "score": 53.16,
+  "score": 53.6,
   "proven": true,
   "candidates": 3,
   "chainsAdmissible": 0,
   "top3": [
-   "buildIcs:2/2✓:53.16",
+   "buildIcs:2/2✓:53.6",
    "smartScore:0/2:0",
    "staleBoxes:0/2:0"
   ],
@@ -3118,12 +3326,12 @@
   "pick": "csvEscape",
   "file": "dart-maor/csv-escape.dart",
   "chain": null,
-  "score": 61.57,
+  "score": 62.01,
   "proven": true,
   "candidates": 36,
   "chainsAdmissible": 0,
   "top3": [
-   "csvEscape:4/4✓:61.57",
+   "csvEscape:4/4✓:62.01",
    "stringField:2/4:2",
    "formatIsraeliPhone:2/4:1"
   ],
@@ -3284,14 +3492,14 @@
   "pick": "toCsv",
   "file": "dart-maor/to-csv.dart",
   "chain": null,
-  "score": 18.07,
+  "score": 18.33,
   "proven": true,
   "candidates": 17,
   "chainsAdmissible": 0,
   "top3": [
-   "toCsv:2/2✓:18.07",
-   "sanitizeSupportText:0/2:7.96",
-   "score:0/2:3.47"
+   "toCsv:2/2✓:18.33",
+   "sanitizeSupportText:0/2:8.05",
+   "score:0/2:3.51"
   ],
   "proof": {
    "coursesOfTeacher": {
@@ -3376,7 +3584,7 @@
   "chainsAdmissible": 0,
   "top3": [
    "parseCsv:2/2✓:2",
-   "supportMsgTime:1/2:4.79",
+   "supportMsgTime:1/2:4.83",
    "popCall:1/2:0"
   ],
   "proof": {
@@ -3566,14 +3774,14 @@
   "pick": "hebHolidayOn",
   "file": "dart-boxes/hebrew.dart",
   "chain": null,
-  "score": 17.05,
+  "score": 15.7,
   "proven": true,
-  "candidates": 65,
+  "candidates": 78,
   "chainsAdmissible": 0,
   "top3": [
-   "hebHolidayOn:2/2✓:17.05",
+   "hebHolidayOn:2/2✓:15.7",
    "dataUrlMime:1/2:2",
-   "orgSlugFromUrl:1/2:2"
+   "normalizeIlPhone:1/2:2"
   ],
   "proof": {
    "adarNorm": {
@@ -3593,6 +3801,14 @@
     "total": 2
    },
    "basename": {
+    "ok": 0,
+    "total": 2
+   },
+   "canonBsp": {
+    "ok": 0,
+    "total": 2
+   },
+   "chipDisplayLabel": {
     "ok": 0,
     "total": 2
    },
@@ -3636,6 +3852,10 @@
     "ok": 0,
     "total": 2
    },
+   "fmtDateKey": {
+    "ok": 0,
+    "total": 2
+   },
    "formatIsraeliPhone": {
     "ok": 0,
     "total": 2
@@ -3657,6 +3877,10 @@
     "total": 2
    },
    "identityOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "keyboardLayoutKey": {
     "ok": 0,
     "total": 2
    },
@@ -3690,6 +3914,18 @@
    },
    "normPhone": {
     "ok": 0,
+    "total": 2
+   },
+   "normalize": {
+    "ok": 0,
+    "total": 2
+   },
+   "normalizeDocName": {
+    "ok": 0,
+    "total": 2
+   },
+   "normalizeIlPhone": {
+    "ok": 1,
     "total": 2
    },
    "normalizePhone": {
@@ -3764,8 +4000,24 @@
     "ok": 0,
     "total": 2
    },
+   "simpleLabel": {
+    "ok": 0,
+    "total": 2
+   },
+   "simpleWhy": {
+    "ok": 0,
+    "total": 2
+   },
    "siteDonateUrl": {
     "ok": 1,
+    "total": 2
+   },
+   "sizeStructurePattern": {
+    "ok": 0,
+    "total": 2
+   },
+   "slug": {
+    "ok": 0,
     "total": 2
    },
    "smtpHostFor": {
@@ -3777,6 +4029,10 @@
     "total": 2
    },
    "sortSupportThreads": {
+    "ok": 0,
+    "total": 2
+   },
+   "stageLabelFor": {
     "ok": 0,
     "total": 2
    },
@@ -3805,6 +4061,10 @@
     "total": 2
    },
    "supportMsgTime": {
+    "ok": 0,
+    "total": 2
+   },
+   "taskWorkArea": {
     "ok": 0,
     "total": 2
    },
@@ -3938,13 +4198,13 @@
   "pick": "hebInputToIso",
   "file": "dart-boxes/hebdate.dart",
   "chain": null,
-  "score": 26.51,
+  "score": 25.25,
   "proven": true,
   "candidates": 5,
   "chainsAdmissible": 0,
   "top3": [
-   "hebInputToIso:2/2✓:26.51",
-   "hebToIsoEn:1/2:26.51",
+   "hebInputToIso:2/2✓:25.25",
+   "hebToIsoEn:1/2:25.25",
    "strongMatchForCharge:0/2:0"
   ],
   "proof": {
@@ -3982,8 +4242,8 @@
   "chainsAdmissible": 0,
   "top3": [
    "parts:1/1✓:2",
-   "monthLabel:0/1:15.08",
-   "supportMsgTime:0/1:3.83"
+   "monthLabel:0/1:15.25",
+   "supportMsgTime:0/1:3.82"
   ],
   "proof": {
    "donateUrl": {
@@ -4074,13 +4334,13 @@
   "pick": "hebToIsoEn",
   "file": "dart-boxes/hebdate.dart",
   "chain": null,
-  "score": 18.95,
+  "score": 17.61,
   "proven": true,
   "candidates": 5,
   "chainsAdmissible": 0,
   "top3": [
-   "hebToIsoEn:2/2✓:18.95",
-   "hebInputToIso:1/2:18.95",
+   "hebToIsoEn:2/2✓:17.61",
+   "hebInputToIso:1/2:17.61",
    "strongMatchForCharge:0/2:0"
   ],
   "proof": {
@@ -4112,12 +4372,12 @@
   "pick": "formatIsraeliPhone",
   "file": "dart-maor/format-israeli-phone.dart",
   "chain": null,
-  "score": 32.65,
+  "score": 32.91,
   "proven": true,
   "candidates": 30,
   "chainsAdmissible": 0,
   "top3": [
-   "formatIsraeliPhone:2/2✓:32.65",
+   "formatIsraeliPhone:2/2✓:32.91",
    "detectSmtpHost:1/2:1",
    "identityOf:1/2:1"
   ],
@@ -4260,7 +4520,7 @@
   "chainsAdmissible": 0,
   "top3": [
    "modeOf:3/3✓:2",
-   "setAllowedPurposes:0/3:15.58",
+   "setAllowedPurposes:0/3:15.73",
    "donateUrl:0/3:0"
   ],
   "proof": {
@@ -4358,8 +4618,8 @@
   "chainsAdmissible": 0,
   "top3": [
    "monthsAgo:3/3✓:3",
-   "levenshtein:0/3:11.32",
-   "minutesBetweenIso:0/3:11.32"
+   "levenshtein:0/3:11.41",
+   "minutesBetweenIso:0/3:11.41"
   ],
   "proof": {
    "coursesOfTeacher": {
@@ -4466,12 +4726,12 @@
   "pick": "clampScale",
   "file": "dart-maor/clamp-scale.dart",
   "chain": null,
-  "score": 68.51,
+  "score": 68.99,
   "proven": true,
   "candidates": 5,
   "chainsAdmissible": 0,
   "top3": [
-   "clampScale:3/3✓:68.51",
+   "clampScale:3/3✓:68.99",
    "termOf:1/3:0",
    "tourAdvance:0/3:1"
   ],
@@ -4504,12 +4764,12 @@
   "pick": "stepScale",
   "file": "dart-maor/step-scale.dart",
   "chain": null,
-  "score": 105.45,
+  "score": 105.97,
   "proven": true,
   "candidates": 5,
   "chainsAdmissible": 0,
   "top3": [
-   "stepScale:2/2✓:105.45",
+   "stepScale:2/2✓:105.97",
    "search:0/2:0",
    "spotlightBox:0/2:0"
   ],
@@ -4548,8 +4808,8 @@
   "chainsAdmissible": 0,
   "top3": [
    "hokDayFromDate:3/3✓:2",
-   "monthLabel:0/3:7.85",
-   "supportMsgTime:0/3:3.83"
+   "monthLabel:0/3:7.94",
+   "supportMsgTime:0/3:3.82"
   ],
   "proof": {
    "donateUrl": {
@@ -4640,12 +4900,12 @@
   "pick": "gemYear",
   "file": "dart-maor/gem-year.dart",
   "chain": null,
-  "score": 28.99,
+  "score": 29.25,
   "proven": true,
   "candidates": 22,
   "chainsAdmissible": 0,
   "top3": [
-   "gemYear:1/1✓:28.99",
+   "gemYear:1/1✓:29.25",
    "envPath:0/1:1",
    "localize:0/1:1"
   ],
@@ -4755,14 +5015,14 @@
     "file": "dart-maor/format-israeli-phone.dart"
    }
   ],
-  "score": 38.37,
+  "score": 38.72,
   "proven": true,
-  "candidates": 65,
-  "chainsAdmissible": 6563,
+  "candidates": 78,
+  "chainsAdmissible": 8776,
   "top3": [
-   "formatIsraeliPhone∘normPhone:3/3✓:38.37",
-   "formatIsraeliPhone∘normId:3/3✓:29.24",
-   "formatIsraeliPhone∘phoneKey:3/3✓:29.24"
+   "formatIsraeliPhone∘normPhone:3/3✓:38.72",
+   "formatIsraeliPhone∘normId:3/3✓:29.5",
+   "formatIsraeliPhone∘phoneKey:3/3✓:29.5"
   ],
   "proof": {
    "adarNorm": {
@@ -4782,6 +5042,14 @@
     "total": 3
    },
    "basename": {
+    "ok": 0,
+    "total": 3
+   },
+   "canonBsp": {
+    "ok": 0,
+    "total": 3
+   },
+   "chipDisplayLabel": {
     "ok": 0,
     "total": 3
    },
@@ -4825,6 +5093,10 @@
     "ok": 0,
     "total": 3
    },
+   "fmtDateKey": {
+    "ok": 0,
+    "total": 3
+   },
    "formatIsraeliPhone": {
     "ok": 2,
     "total": 3
@@ -4846,6 +5118,10 @@
     "total": 3
    },
    "identityOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "keyboardLayoutKey": {
     "ok": 0,
     "total": 3
    },
@@ -4879,6 +5155,18 @@
    },
    "normPhone": {
     "ok": 1,
+    "total": 3
+   },
+   "normalize": {
+    "ok": 0,
+    "total": 3
+   },
+   "normalizeDocName": {
+    "ok": 0,
+    "total": 3
+   },
+   "normalizeIlPhone": {
+    "ok": 0,
     "total": 3
    },
    "normalizePhone": {
@@ -4953,7 +5241,23 @@
     "ok": 0,
     "total": 3
    },
+   "simpleLabel": {
+    "ok": 0,
+    "total": 3
+   },
+   "simpleWhy": {
+    "ok": 0,
+    "total": 3
+   },
    "siteDonateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "sizeStructurePattern": {
+    "ok": 0,
+    "total": 3
+   },
+   "slug": {
     "ok": 0,
     "total": 3
    },
@@ -4966,6 +5270,10 @@
     "total": 3
    },
    "sortSupportThreads": {
+    "ok": 0,
+    "total": 3
+   },
+   "stageLabelFor": {
     "ok": 0,
     "total": 3
    },
@@ -4995,6 +5303,10 @@
    },
    "supportMsgTime": {
     "ok": 1,
+    "total": 3
+   },
+   "taskWorkArea": {
+    "ok": 0,
     "total": 3
    },
    "timeToMin": {
@@ -5101,14 +5413,6 @@
     "ok": 2,
     "total": 3
    },
-   "fmtDate∘formatIsraeliPhone": {
-    "ok": 0,
-    "total": 3
-   },
-   "formatIsraeliPhone∘fmtDate": {
-    "ok": 0,
-    "total": 3
-   },
    "normEmail∘normPhone": {
     "ok": 1,
     "total": 3
@@ -5124,10 +5428,18 @@
    "normPhone∘normId": {
     "ok": 1,
     "total": 3
+   },
+   "normPhone∘normalizePhone": {
+    "ok": 1,
+    "total": 3
+   },
+   "normPhone∘phoneKey": {
+    "ok": 1,
+    "total": 3
    }
   },
   "chains": {
-   "admissible": 6563,
+   "admissible": 8776,
    "cands": {
     "formatIsraeliPhone∘normPhone": {
      "chain": [
@@ -5140,7 +5452,7 @@
        "file": "dart-maor/format-israeli-phone.dart"
       }
      ],
-     "score": 38.37
+     "score": 38.72
     },
     "normPhone∘formatIsraeliPhone": {
      "chain": [
@@ -5153,7 +5465,7 @@
        "file": "dart-maor/norm-phone.dart"
       }
      ],
-     "score": 38.37
+     "score": 38.72
     },
     "formatIsraeliPhone∘pad2": {
      "chain": [
@@ -5166,7 +5478,7 @@
        "file": "dart-maor/format-israeli-phone.dart"
       }
      ],
-     "score": 32.46
+     "score": 32.72
     },
     "pad2∘formatIsraeliPhone": {
      "chain": [
@@ -5179,7 +5491,7 @@
        "file": "dart-maor/pad2.dart"
       }
      ],
-     "score": 32.46
+     "score": 32.72
     },
     "normPhone∘pad2": {
      "chain": [
@@ -5192,7 +5504,7 @@
        "file": "dart-maor/norm-phone.dart"
       }
      ],
-     "score": 30.62
+     "score": 30.89
     },
     "pad2∘normPhone": {
      "chain": [
@@ -5205,7 +5517,7 @@
        "file": "dart-maor/pad2.dart"
       }
      ],
-     "score": 30.62
+     "score": 30.89
     },
     "formatIsraeliPhone∘normEmail": {
      "chain": [
@@ -5218,7 +5530,7 @@
        "file": "dart-maor/format-israeli-phone.dart"
       }
      ],
-     "score": 29.24
+     "score": 29.5
     },
     "formatIsraeliPhone∘normId": {
      "chain": [
@@ -5231,7 +5543,7 @@
        "file": "dart-maor/format-israeli-phone.dart"
       }
      ],
-     "score": 29.24
+     "score": 29.5
     },
     "formatIsraeliPhone∘normalizePhone": {
      "chain": [
@@ -5244,7 +5556,7 @@
        "file": "dart-maor/format-israeli-phone.dart"
       }
      ],
-     "score": 29.24
+     "score": 29.5
     },
     "formatIsraeliPhone∘phoneKey": {
      "chain": [
@@ -5257,7 +5569,7 @@
        "file": "dart-maor/format-israeli-phone.dart"
       }
      ],
-     "score": 29.24
+     "score": 29.5
     },
     "formatIsraeliPhone∘phoneRegion": {
      "chain": [
@@ -5270,7 +5582,7 @@
        "file": "dart-maor/format-israeli-phone.dart"
       }
      ],
-     "score": 29.24
+     "score": 29.5
     },
     "formatIsraeliPhone∘setAllowedPurposes": {
      "chain": [
@@ -5283,7 +5595,7 @@
        "file": "dart-maor/format-israeli-phone.dart"
       }
      ],
-     "score": 29.24
+     "score": 29.5
     },
     "normEmail∘formatIsraeliPhone": {
      "chain": [
@@ -5296,7 +5608,7 @@
        "file": "dart-maor/norm-email.dart"
       }
      ],
-     "score": 29.24
+     "score": 29.5
     },
     "normId∘formatIsraeliPhone": {
      "chain": [
@@ -5309,7 +5621,7 @@
        "file": "dart-maor/norm-id.dart"
       }
      ],
-     "score": 29.24
+     "score": 29.5
     },
     "normalizePhone∘formatIsraeliPhone": {
      "chain": [
@@ -5322,7 +5634,7 @@
        "file": "dart-maor/normalize-phone.dart"
       }
      ],
-     "score": 29.24
+     "score": 29.5
     },
     "phoneKey∘formatIsraeliPhone": {
      "chain": [
@@ -5335,7 +5647,7 @@
        "file": "dart-maor/phone-key.dart"
       }
      ],
-     "score": 29.24
+     "score": 29.5
     },
     "phoneRegion∘formatIsraeliPhone": {
      "chain": [
@@ -5348,7 +5660,7 @@
        "file": "dart-maor/phone-region.dart"
       }
      ],
-     "score": 29.24
+     "score": 29.5
     },
     "setAllowedPurposes∘formatIsraeliPhone": {
      "chain": [
@@ -5361,33 +5673,7 @@
        "file": "dart-maor/set-allowed-purposes.dart"
       }
      ],
-     "score": 29.24
-    },
-    "fmtDate∘formatIsraeliPhone": {
-     "chain": [
-      {
-       "id": "formatIsraeliPhone",
-       "file": "dart-maor/format-israeli-phone.dart"
-      },
-      {
-       "id": "fmtDate",
-       "file": "dart-maor/fmt-date.dart"
-      }
-     ],
-     "score": 27.66
-    },
-    "formatIsraeliPhone∘fmtDate": {
-     "chain": [
-      {
-       "id": "fmtDate",
-       "file": "dart-maor/fmt-date.dart"
-      },
-      {
-       "id": "formatIsraeliPhone",
-       "file": "dart-maor/format-israeli-phone.dart"
-      }
-     ],
-     "score": 27.66
+     "score": 29.5
     },
     "normEmail∘normPhone": {
      "chain": [
@@ -5400,7 +5686,7 @@
        "file": "dart-maor/norm-email.dart"
       }
      ],
-     "score": 27.4
+     "score": 27.67
     },
     "normId∘normPhone": {
      "chain": [
@@ -5413,7 +5699,7 @@
        "file": "dart-maor/norm-id.dart"
       }
      ],
-     "score": 27.4
+     "score": 27.67
     },
     "normPhone∘normEmail": {
      "chain": [
@@ -5426,7 +5712,7 @@
        "file": "dart-maor/norm-phone.dart"
       }
      ],
-     "score": 27.4
+     "score": 27.67
     },
     "normPhone∘normId": {
      "chain": [
@@ -5439,7 +5725,33 @@
        "file": "dart-maor/norm-phone.dart"
       }
      ],
-     "score": 27.4
+     "score": 27.67
+    },
+    "normPhone∘normalizePhone": {
+     "chain": [
+      {
+       "id": "normalizePhone",
+       "file": "dart-maor/normalize-phone.dart"
+      },
+      {
+       "id": "normPhone",
+       "file": "dart-maor/norm-phone.dart"
+      }
+     ],
+     "score": 27.67
+    },
+    "normPhone∘phoneKey": {
+     "chain": [
+      {
+       "id": "phoneKey",
+       "file": "dart-maor/phone-key.dart"
+      },
+      {
+       "id": "normPhone",
+       "file": "dart-maor/norm-phone.dart"
+      }
+     ],
+     "score": 27.67
     }
    }
   }
@@ -5455,7 +5767,7 @@
   "chainsAdmissible": 0,
   "top3": [
    "hebDateFull:2/2✓:6",
-   "staleBoxes:0/2:6.63",
+   "staleBoxes:0/2:6.61",
    "smartScore:0/2:0"
   ],
   "proof": {

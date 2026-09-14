@@ -1,0 +1,180 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:28:37.974Z",
+ "query": "budget residual spend אחר ללא פרויקט\"",
+ "tokens": [
+  "budget",
+  "residual",
+  "spend",
+  "אחר",
+  "ללא",
+  "פרויקט"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "Field",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/field.dart",
+   "score": 3,
+   "hits": [
+    "אחר",
+    "ללא",
+    "פרויקט"
+   ]
+  },
+  {
+   "id": "illustrativeSiteSpend",
+   "layer": "logic",
+   "file": "dart/illustrative_site_spend.dart",
+   "score": 3,
+   "hits": [
+    "spend"
+   ]
+  },
+  {
+   "id": "linkedBudget",
+   "layer": "logic",
+   "file": "dart/linked_budget.dart",
+   "score": 3,
+   "hits": [
+    "budget"
+   ]
+  },
+  {
+   "id": "NumBox",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/num_box.dart",
+   "score": 3,
+   "hits": [
+    "אחר",
+    "ללא",
+    "פרויקט"
+   ]
+  },
+  {
+   "id": "SiteRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_row.dart",
+   "score": 3,
+   "hits": [
+    "אחר",
+    "ללא",
+    "פרויקט"
+   ]
+  },
+  {
+   "id": "Tappable",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/tappable.dart",
+   "score": 3,
+   "hits": [
+    "אחר",
+    "ללא",
+    "פרויקט"
+   ]
+  },
+  {
+   "id": "ConsentDialog",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/consent_dialog.dart",
+   "score": 2,
+   "hits": [
+    "אחר",
+    "ללא"
+   ]
+  },
+  {
+   "id": "AccessoryTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/accessory_tile.dart",
+   "score": 1,
+   "hits": [
+    "ללא"
+   ]
+  },
+  {
+   "id": "ActionButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/action_button.dart",
+   "score": 1,
+   "hits": [
+    "ללא"
+   ]
+  },
+  {
+   "id": "CaEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_empty.dart",
+   "score": 1,
+   "hits": [
+    "פרויקט"
+   ]
+  },
+  {
+   "id": "CaPrimary",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_primary.dart",
+   "score": 1,
+   "hits": [
+    "פרויקט"
+   ]
+  },
+  {
+   "id": "ChipScroll",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chip_scroll.dart",
+   "score": 1,
+   "hits": [
+    "אחר"
+   ]
+  },
+  {
+   "id": "EmptyAccessories",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/empty_accessories.dart",
+   "score": 1,
+   "hits": [
+    "ללא"
+   ]
+  },
+  {
+   "id": "FinCallout",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/fin_callout.dart",
+   "score": 1,
+   "hits": [
+    "פרויקט"
+   ]
+  },
+  {
+   "id": "FinHead",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/fin_head.dart",
+   "score": 1,
+   "hits": [
+    "פרויקט"
+   ]
+  }
+ ],
+ "strong": [
+  "illustrativeSiteSpend",
+  "linkedBudget"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "Field",
+  "NumBox",
+  "SiteRow",
+  "Tappable"
+ ],
+ "creates": "new/dart/budget_residual_spend.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 4 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: illustrativeSiteSpend 0/4 · linkedBudget 0/4. לכן נוצר חדש.",
+ "sig": "ddbc4a53272c00a23b96fb34918a9156ac2b98a86cba1fe59b88982425a83d62"
+}

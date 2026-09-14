@@ -1,0 +1,181 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:28:03.427Z",
+ "query": "registration valid ואת של כולל אימות דו שלבי",
+ "tokens": [
+  "registration",
+  "valid",
+  "ואת",
+  "של",
+  "ולל",
+  "אימות",
+  "דו",
+  "לבי"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "isValidPin",
+   "layer": "logic",
+   "file": "dart-maor/is-valid-pin.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "isValidSlug",
+   "layer": "logic",
+   "file": "dart-maor/is-valid-slug.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "SettingsValidatedTextRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_settings_screen/settings_validated_text_row.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "validateCondition",
+   "layer": "logic",
+   "file": "dart-boxes/bs-security.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "validateHebMonthNames",
+   "layer": "logic",
+   "file": "dart-maor/validate-heb-month-names.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "validateOp",
+   "layer": "logic",
+   "file": "dart/validate_op.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "validBoardCode",
+   "layer": "logic",
+   "file": "dart/valid_board_code.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "validBusinessId",
+   "layer": "logic",
+   "file": "dart/valid_business_id.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "validDateRange",
+   "layer": "logic",
+   "file": "dart/valid_date_range.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "validEmail",
+   "layer": "logic",
+   "file": "dart/valid_email.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "validIsraeliId",
+   "layer": "logic",
+   "file": "dart-maor/valid-israeli-id.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "validIsraeliMobile",
+   "layer": "logic",
+   "file": "dart/valid_israeli_mobile.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "validPositiveAmount",
+   "layer": "logic",
+   "file": "dart/valid_positive_amount.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "vValidId",
+   "layer": "logic",
+   "file": "dart-boxes/validate.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "vFormatPhone",
+   "layer": "logic",
+   "file": "dart-boxes/validate.dart",
+   "score": 2,
+   "hits": [
+    "valid"
+   ]
+  }
+ ],
+ "strong": [
+  "isValidPin",
+  "isValidSlug",
+  "validateCondition",
+  "validateHebMonthNames",
+  "validateOp",
+  "validBoardCode",
+  "validBusinessId",
+  "validDateRange",
+  "validEmail",
+  "validIsraeliId",
+  "validIsraeliMobile",
+  "validPositiveAmount",
+  "vValidId"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "SettingsValidatedTextRow"
+ ],
+ "creates": "new/dart/registration_valid.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 12 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: isValidPin 0/12 · isValidSlug 0/12 · validateCondition 0/12 · validateHebMonthNames 0/12 · validateOp 0/12 · validBoardCode 0/12 · validBusinessId 0/12 · validDateRange 0/12 · validEmail 0/12 · validIsraeliId 0/12 · validIsraeliMobile 0/12 · validPositiveAmount 0/12 · vValidId 0/12. לכן נוצר חדש.",
+ "sig": "0739259511912853ace7e938de93ce509ec635e795594c0c3de150991c91306e"
+}

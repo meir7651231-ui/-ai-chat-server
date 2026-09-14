@@ -1,0 +1,192 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:28:21.252Z",
+ "query": "fuzzy tolerance סף-הסובלנות של מרחק-העריכה המרבי שעדיין נחשב",
+ "tokens": [
+  "fuzzy",
+  "tolerance",
+  "סף",
+  "סובלנות",
+  "של",
+  "רחק",
+  "עריכה",
+  "מרבי",
+  "עדיין",
+  "נחשב"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "Field",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/field.dart",
+   "score": 3,
+   "hits": [
+    "של",
+    "עריכה",
+    "עדיין"
+   ]
+  },
+  {
+   "id": "fuzzyMatch",
+   "layer": "logic",
+   "file": "dart/fuzzy_match.dart",
+   "score": 3,
+   "hits": [
+    "fuzzy"
+   ]
+  },
+  {
+   "id": "fuzzyNameMatch",
+   "layer": "logic",
+   "file": "dart/fuzzy_name_match.dart",
+   "score": 3,
+   "hits": [
+    "fuzzy"
+   ]
+  },
+  {
+   "id": "fuzzyScore",
+   "layer": "logic",
+   "file": "dart/fuzzy_score.dart",
+   "score": 3,
+   "hits": [
+    "fuzzy"
+   ]
+  },
+  {
+   "id": "NumBox",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/num_box.dart",
+   "score": 3,
+   "hits": [
+    "של",
+    "עריכה",
+    "עדיין"
+   ]
+  },
+  {
+   "id": "SiteRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_row.dart",
+   "score": 3,
+   "hits": [
+    "של",
+    "עריכה",
+    "עדיין"
+   ]
+  },
+  {
+   "id": "Tappable",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/tappable.dart",
+   "score": 3,
+   "hits": [
+    "של",
+    "עריכה",
+    "עדיין"
+   ]
+  },
+  {
+   "id": "CourierFormsPillButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_forms_pill_button.dart",
+   "score": 2,
+   "hits": [
+    "של",
+    "עדיין"
+   ]
+  },
+  {
+   "id": "DsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "של",
+    "עריכה"
+   ]
+  },
+  {
+   "id": "DsApproveCard",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "של",
+    "עריכה"
+   ]
+  },
+  {
+   "id": "DsChip",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "של",
+    "עריכה"
+   ]
+  },
+  {
+   "id": "DsChipButton",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "של",
+    "עריכה"
+   ]
+  },
+  {
+   "id": "DsDiffRow",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "של",
+    "עריכה"
+   ]
+  },
+  {
+   "id": "DsEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "של",
+    "עריכה"
+   ]
+  },
+  {
+   "id": "DsFold",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "של",
+    "עריכה"
+   ]
+  }
+ ],
+ "strong": [
+  "fuzzyMatch",
+  "fuzzyNameMatch",
+  "fuzzyScore"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "Field",
+  "NumBox",
+  "SiteRow",
+  "Tappable"
+ ],
+ "creates": "new/dart/fuzzy_tolerance.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 5 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: fuzzyMatch 0/5 · fuzzyNameMatch 0/5 · fuzzyScore 0/5. לכן נוצר חדש.",
+ "sig": "b814a00072ec58d1a262c40c4020337f206124e0cb41f1649c48baa195361dce"
+}

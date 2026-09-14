@@ -1,0 +1,211 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:28:17.714Z",
+ "query": "attendance date key שעות מיקום כניסה אין נוכחות רשומה",
+ "tokens": [
+  "attendance",
+  "date",
+  "key",
+  "עות",
+  "יקום",
+  "ניסה",
+  "אין",
+  "נוכחות",
+  "רשומה"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "CourierAttendanceSendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_send_report_button.dart",
+   "score": 7,
+   "hits": [
+    "attendance",
+    "עות",
+    "ניסה",
+    "אין",
+    "נוכחות"
+   ]
+  },
+  {
+   "id": "CourierAttendanceTableRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_table_row.dart",
+   "score": 7,
+   "hits": [
+    "attendance",
+    "עות",
+    "ניסה",
+    "אין",
+    "נוכחות"
+   ]
+  },
+  {
+   "id": "fmtDateKey",
+   "layer": "logic",
+   "file": "dart/fmt_date_key.dart",
+   "score": 6,
+   "hits": [
+    "date",
+    "key"
+   ]
+  },
+  {
+   "id": "LocationButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/location_button.dart",
+   "score": 5,
+   "hits": [
+    "עות",
+    "יקום",
+    "ניסה",
+    "אין",
+    "נוכחות"
+   ]
+  },
+  {
+   "id": "SendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/send_report_button.dart",
+   "score": 5,
+   "hits": [
+    "עות",
+    "יקום",
+    "ניסה",
+    "אין",
+    "נוכחות"
+   ]
+  },
+  {
+   "id": "DateChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/date_chip.dart",
+   "score": 4,
+   "hits": [
+    "date",
+    "אין"
+   ]
+  },
+  {
+   "id": "DateHeader",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/date_header.dart",
+   "score": 4,
+   "hits": [
+    "date",
+    "אין"
+   ]
+  },
+  {
+   "id": "ForgeDateChip",
+   "layer": "display",
+   "file": "dart-forge-bs/header/date_chip.dart",
+   "score": 4,
+   "hits": [
+    "date",
+    "אין"
+   ]
+  },
+  {
+   "id": "ForgeDateHeader",
+   "layer": "display",
+   "file": "dart-forge-bs/header/date_header.dart",
+   "score": 4,
+   "hits": [
+    "date",
+    "אין"
+   ]
+  },
+  {
+   "id": "ForgeDatePills",
+   "layer": "display",
+   "file": "dart-forge-bs/header/date_pills.dart",
+   "score": 4,
+   "hits": [
+    "date",
+    "אין"
+   ]
+  },
+  {
+   "id": "ForgeDsDateField",
+   "layer": "display",
+   "file": "dart-forge-bs/header/ds_date_field.dart",
+   "score": 4,
+   "hits": [
+    "date",
+    "אין"
+   ]
+  },
+  {
+   "id": "ForgeDsDateFieldInput",
+   "layer": "display",
+   "file": "dart-forge-bs/input/ds_date_field_input.dart",
+   "score": 4,
+   "hits": [
+    "date",
+    "אין"
+   ]
+  },
+  {
+   "id": "ForgeWeekStripDateCellTheater",
+   "layer": "display",
+   "file": "dart-forge-bs/temporal/week_strip_date_cell_theater.dart",
+   "score": 4,
+   "hits": [
+    "date",
+    "אין"
+   ]
+  },
+  {
+   "id": "TodayStat",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/today_stat.dart",
+   "score": 4,
+   "hits": [
+    "עות",
+    "ניסה",
+    "אין",
+    "נוכחות"
+   ]
+  },
+  {
+   "id": "annualKey",
+   "layer": "logic",
+   "file": "dart-boxes/hebrew-calendar.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  }
+ ],
+ "strong": [
+  "fmtDateKey",
+  "annualKey"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "CourierAttendanceSendReportButton",
+  "CourierAttendanceTableRow",
+  "LocationButton",
+  "SendReportButton",
+  "DateChip",
+  "DateHeader",
+  "ForgeDateChip",
+  "ForgeDateHeader",
+  "ForgeDatePills",
+  "ForgeDsDateField",
+  "ForgeDsDateFieldInput",
+  "ForgeWeekStripDateCellTheater",
+  "TodayStat"
+ ],
+ "creates": "new/dart/attendance_date_key.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 2 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: fmtDateKey 0/2 · annualKey 0/2. לכן נוצר חדש.",
+ "sig": "eb55940ee7913f3fcd0218083afe5a007dc3bbd565c61c05ab51018cfaf2e5d3"
+}

@@ -1,0 +1,186 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:28:26.311Z",
+ "query": "chip display label ציפוי כרום ללא ידית",
+ "tokens": [
+  "chip",
+  "display",
+  "label",
+  "ציפוי",
+  "רום",
+  "ללא",
+  "ידית"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "MatchChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/match_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "ללא"
+   ]
+  },
+  {
+   "id": "MustChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/must_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "ללא"
+   ]
+  },
+  {
+   "id": "PriceChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/price_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "ללא"
+   ]
+  },
+  {
+   "id": "ValueChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/value_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "ללא"
+   ]
+  },
+  {
+   "id": "WarnChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/warn_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "ללא"
+   ]
+  },
+  {
+   "id": "absenceReasonChips",
+   "layer": "logic",
+   "file": "dart-maor/absence-reason-chips.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  },
+  {
+   "id": "academicYearLabel",
+   "layer": "logic",
+   "file": "dart-maor/academic-year-label.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "ActionChipRail",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/action_chip_rail.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  },
+  {
+   "id": "actionLabelHe",
+   "layer": "logic",
+   "file": "dart/action_label_he.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "AttributeChip",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/attribute_chip.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  },
+  {
+   "id": "AxisChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/axis_chip.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  },
+  {
+   "id": "ayinAdvanceLabel",
+   "layer": "logic",
+   "file": "dart-maor/ayin-advance-label.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "beneficiaryLabel",
+   "layer": "logic",
+   "file": "dart-maor/beneficiary-label.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "branchLabel",
+   "layer": "logic",
+   "file": "dart/branch_label.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "callerKindLabel",
+   "layer": "logic",
+   "file": "dart-maor/caller-kind-label.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  }
+ ],
+ "strong": [
+  "absenceReasonChips",
+  "academicYearLabel",
+  "actionLabelHe",
+  "ayinAdvanceLabel",
+  "beneficiaryLabel",
+  "branchLabel",
+  "callerKindLabel"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "MatchChip",
+  "MustChip",
+  "PriceChip",
+  "ValueChip",
+  "WarnChip",
+  "ActionChipRail",
+  "AttributeChip",
+  "AxisChip"
+ ],
+ "creates": "new/dart/chip_display_label.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 6 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: absenceReasonChips 0/6 · academicYearLabel 0/6 · actionLabelHe 0/6 · ayinAdvanceLabel 0/6 · beneficiaryLabel 0/6 · branchLabel 0/6 · callerKindLabel 0/6. לכן נוצר חדש.",
+ "sig": "2b588dc1b3fb82cd6cae7378f8cb0ff5366fd2a59cc86912b03b232c8e500e42"
+}

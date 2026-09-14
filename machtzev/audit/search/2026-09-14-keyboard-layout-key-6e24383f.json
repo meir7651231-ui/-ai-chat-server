@@ -1,0 +1,182 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:27:41.280Z",
+ "query": "keyboard layout key אינסטלציה ברזים וסניטריים ההזמנות שלי החלקים",
+ "tokens": [
+  "keyboard",
+  "layout",
+  "key",
+  "אינסטלציה",
+  "רזים",
+  "סניטריים",
+  "הזמנות",
+  "שלי",
+  "חלקים"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "annualKey",
+   "layer": "logic",
+   "file": "dart-boxes/hebrew-calendar.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "attendanceDateKey",
+   "layer": "logic",
+   "file": "dart/attendance_date_key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "chargeDedupKey",
+   "layer": "logic",
+   "file": "dart-maor/charge-dedup-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "cloudCfgCacheKey",
+   "layer": "logic",
+   "file": "dart-maor/cloud-cfg-cache-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "createCloudKey",
+   "layer": "logic",
+   "file": "dart-maor/create-cloud-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "diameterSortKey",
+   "layer": "logic",
+   "file": "dart/diameter_sort_key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "fmtDateKey",
+   "layer": "logic",
+   "file": "dart/fmt_date_key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "genRecoveryKey",
+   "layer": "logic",
+   "file": "dart-maor/gen-recovery-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "histDedupKey",
+   "layer": "logic",
+   "file": "dart-boxes/lib-nedarim-sync.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "lockKey",
+   "layer": "logic",
+   "file": "dart-maor/lock-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "matchAssistantRecipeKey",
+   "layer": "logic",
+   "file": "dart/match_assistant_recipe_key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "matchPropKey",
+   "layer": "logic",
+   "file": "dart/match_prop_key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "monthKey",
+   "layer": "logic",
+   "file": "dart-maor/month-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "nameSortKey",
+   "layer": "logic",
+   "file": "dart-maor/name-sort-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "openCloudKey",
+   "layer": "logic",
+   "file": "dart-maor/open-cloud-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  }
+ ],
+ "strong": [
+  "annualKey",
+  "attendanceDateKey",
+  "chargeDedupKey",
+  "cloudCfgCacheKey",
+  "createCloudKey",
+  "diameterSortKey",
+  "fmtDateKey",
+  "genRecoveryKey",
+  "histDedupKey",
+  "lockKey",
+  "matchAssistantRecipeKey",
+  "matchPropKey",
+  "monthKey",
+  "nameSortKey",
+  "openCloudKey"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/keyboard_layout_key.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 6 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: annualKey 0/6 · attendanceDateKey 0/6 · chargeDedupKey 0/6 · cloudCfgCacheKey 0/6 · createCloudKey 0/6 · diameterSortKey 0/6 · fmtDateKey 0/6 · genRecoveryKey 0/6 · histDedupKey 0/6 · lockKey 0/6 · matchAssistantRecipeKey 0/6 · matchPropKey 0/6 · monthKey 0/6 · nameSortKey 0/6 · openCloudKey 0/6. לכן נוצר חדש.",
+ "sig": "6e24383f4d0860dbebc3247d2e716f9fe506e816bfa77712788490d8ef7ba1df"
+}

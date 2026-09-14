@@ -1,0 +1,238 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:28:28.691Z",
+ "query": "fx group int דוח פיננסי לפרויקט מבקש ימי איחור",
+ "tokens": [
+  "fx",
+  "group",
+  "int",
+  "דוח",
+  "פיננסי",
+  "פרויקט",
+  "בקש",
+  "ימי",
+  "איחור"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "CaEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_empty.dart",
+   "score": 6,
+   "hits": [
+    "דוח",
+    "פיננסי",
+    "פרויקט",
+    "בקש",
+    "ימי",
+    "איחור"
+   ]
+  },
+  {
+   "id": "CaPrimary",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_primary.dart",
+   "score": 6,
+   "hits": [
+    "דוח",
+    "פיננסי",
+    "פרויקט",
+    "בקש",
+    "ימי",
+    "איחור"
+   ]
+  },
+  {
+   "id": "FinCallout",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/fin_callout.dart",
+   "score": 6,
+   "hits": [
+    "דוח",
+    "פיננסי",
+    "פרויקט",
+    "בקש",
+    "ימי",
+    "איחור"
+   ]
+  },
+  {
+   "id": "FinHead",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/fin_head.dart",
+   "score": 6,
+   "hits": [
+    "דוח",
+    "פיננסי",
+    "פרויקט",
+    "בקש",
+    "ימי",
+    "איחור"
+   ]
+  },
+  {
+   "id": "FinRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/fin_row.dart",
+   "score": 6,
+   "hits": [
+    "דוח",
+    "פיננסי",
+    "פרויקט",
+    "בקש",
+    "ימי",
+    "איחור"
+   ]
+  },
+  {
+   "id": "FinRows",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/fin_rows.dart",
+   "score": 6,
+   "hits": [
+    "דוח",
+    "פיננסי",
+    "פרויקט",
+    "בקש",
+    "ימי",
+    "איחור"
+   ]
+  },
+  {
+   "id": "PenaltyCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/penalty_card.dart",
+   "score": 6,
+   "hits": [
+    "דוח",
+    "פיננסי",
+    "פרויקט",
+    "בקש",
+    "ימי",
+    "איחור"
+   ]
+  },
+  {
+   "id": "ReportH2",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/report_h2.dart",
+   "score": 6,
+   "hits": [
+    "דוח",
+    "פיננסי",
+    "פרויקט",
+    "בקש",
+    "ימי",
+    "איחור"
+   ]
+  },
+  {
+   "id": "ReportTable",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/report_table.dart",
+   "score": 6,
+   "hits": [
+    "דוח",
+    "פיננסי",
+    "פרויקט",
+    "בקש",
+    "ימי",
+    "איחור"
+   ]
+  },
+  {
+   "id": "SubRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/sub_row.dart",
+   "score": 6,
+   "hits": [
+    "דוח",
+    "פיננסי",
+    "פרויקט",
+    "בקש",
+    "ימי",
+    "איחור"
+   ]
+  },
+  {
+   "id": "ThrRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/thr_row.dart",
+   "score": 6,
+   "hits": [
+    "דוח",
+    "פיננסי",
+    "פרויקט",
+    "בקש",
+    "ימי",
+    "איחור"
+   ]
+  },
+  {
+   "id": "findDuplicateGroups",
+   "layer": "logic",
+   "file": "dart-maor/find-duplicate-groups.dart",
+   "score": 3,
+   "hits": [
+    "group"
+   ]
+  },
+  {
+   "id": "findSupporterDupGroups",
+   "layer": "logic",
+   "file": "dart-maor/find-supporter-dup-groups.dart",
+   "score": 3,
+   "hits": [
+    "group"
+   ]
+  },
+  {
+   "id": "ForgeAvatarGroup",
+   "layer": "display",
+   "file": "dart-forge-bs/media/avatar_group.dart",
+   "score": 3,
+   "hits": [
+    "group"
+   ]
+  },
+  {
+   "id": "ForgeFacePileGroup",
+   "layer": "display",
+   "file": "dart-forge-bs/media/face_pile_group.dart",
+   "score": 3,
+   "hits": [
+    "group"
+   ]
+  }
+ ],
+ "strong": [
+  "findDuplicateGroups",
+  "findSupporterDupGroups"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "CaEmpty",
+  "CaPrimary",
+  "FinCallout",
+  "FinHead",
+  "FinRow",
+  "FinRows",
+  "PenaltyCard",
+  "ReportH2",
+  "ReportTable",
+  "SubRow",
+  "ThrRow",
+  "ForgeAvatarGroup",
+  "ForgeFacePileGroup"
+ ],
+ "creates": "new/dart/fx_group_int.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 5 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: fxGroupAmount 0/5 · findDuplicateGroups 0/5 · findSupporterDupGroups 0/5. לכן נוצר חדש.",
+ "sig": "ff518ad0d9f49c0517843bd8b358aae0e62e26f8ed8c49340675561ef65882c0"
+}

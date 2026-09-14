@@ -47,7 +47,7 @@ stage('רענון-מאור + census', () => {
   execSync('node machtzev/run.mjs', { cwd: MAOR, stdio: 'pipe', timeout: 600000 });   // census + 15 מחלצים + reconcile + שערים
   // נחיתת-מאור: registry+census שהשתנו (בלבד) — commit+push לענף-העבודה (סימטרי להזרקת-buildsmart)
   const dirty = execSync('git status --short machtzev/registry machtzev/STATUS.md', { cwd: MAOR, encoding: 'utf8' }).trim();
-  if (dirty) execSync(`cd ${MAOR} && git add machtzev/registry machtzev/STATUS.md && git commit -q -m "עדכון-מקור · census אוטומטי מהמנוע-האחד (${merged})" -m "Co-Authored-By: Claude <noreply@anthropic.com>" && git push -q -u origin claude/mah-kora-0by8kw`);
+  if (dirty) execSync(`cd ${MAOR} && git add machtzev/registry machtzev/STATUS.md && git commit -q -m "עדכון-מקור · census אוטומטי מהמנוע-האחד (${merged})" -m "Co-Authored-By: Claude <noreply@anthropic.com>" && git push -q -u origin HEAD`);   // G63 · לענף-הנוכחי של maor-system, לא לענף קשיח
   return `${merged} · census רוענן${dirty ? ' + נחת' : ''}`;
 }, { optional: true });
 
@@ -217,7 +217,7 @@ stage('הזרקת-המדף ל-buildsmart (8 מדפים)', () => {
 stage('נחיתת-buildsmart (commit+push כשיש-שינוי)', () => {
   const st = execSync('cd /home/user/buildsmart && git status --short app_flutter/lib/genesis').toString().trim();
   if (!st) return 'אין-שינוי — אין-נחיתה';
-  execSync(`cd /home/user/buildsmart && git add app_flutter/lib/genesis && git commit -q -m "גנסיס · הזרקת-מדף מהמנוע-האחד" -m "Co-Authored-By: Claude <noreply@anthropic.com>" && git push -q -u origin claude/mah-kora-0by8kw`);
+  execSync(`cd /home/user/buildsmart && git add app_flutter/lib/genesis && git commit -q -m "גנסיס · הזרקת-מדף מהמנוע-האחד" -m "Co-Authored-By: Claude <noreply@anthropic.com>" && git push -q -u origin HEAD`);   // G63 · לענף-הנוכחי של buildsmart, לא לענף קשיח (הסשן עובד על claude/hei-rxv1v1; ענף-זר = push בלי רשות)
   return `נדחף: ${st.split('\n').length} קבצים`;
 }, { optional: true });
 stage(FULL ? 'משטרה-מלאה (10 שערים)' : 'משטרה --fast (10 שערים)', () => last(run('machtzev/police.mjs', FULL ? [] : ['--fast'])));

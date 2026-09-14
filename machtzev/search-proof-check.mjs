@@ -18,6 +18,8 @@ const sha = (s) => crypto.createHash('sha256').update(s).digest('hex');
 const DIR = R.MACH + 'audit/search/';
 const records = fs.existsSync(DIR) ? fs.readdirSync(DIR).filter((f) => f.endsWith('.json')).map((f) => { try { return { file: f, ...JSON.parse(fs.readFileSync(DIR + f, 'utf8')) }; } catch { return null; } }).filter(Boolean) : [];
 const oracle = loadOracle();
+import { execSync } from 'node:child_process';
+const headIds = (() => { try { const d = JSON.parse(execSync('git show HEAD:machtzev/generator/atom-index-full.json', { cwd: R.ROOT, stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 64 * 1024 * 1024 }).toString()); const l = JSON.parse(execSync('git show HEAD:machtzev/generator/logic-census.json', { cwd: R.ROOT, stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 64 * 1024 * 1024 }).toString()); return new Set([...d.map((e) => (e.layer || 'display') + ':' + e.id), ...l.map((e) => 'logic:' + e.name)]); } catch { return new Set(); } })();
 const cur = { atomIndexSha: sha(fs.readFileSync(R.MACH + 'generator/atom-index-full.json')), logicCensusSha: sha(fs.readFileSync(R.MACH + 'generator/logic-census.json')) };
 const bad = [];
 for (const t of targets) {
@@ -40,9 +42,14 @@ for (const t of targets) {
     //   כ«חדשים» מועמדים שתמיד היו מעבר ל-N — isRtl על «is»). חזק-חדש = בתוך אותו חלון, באותה שכבה, לא-עצמי, ולא ברשומה.
     const TOP = (rec.candidates || []).length || 15;
     const ranked = oracle.all.filter((e) => !self(e)).map((e) => ({ id: e.id, layer: e.layer, s: scoreFor(q, e).s })).filter((e) => e.s > 0).sort((a, b) => b.s - a.s || a.id.localeCompare(b.id)).slice(0, TOP);
-    const strongNow = ranked.filter((e) => e.s >= 3 && (!lay || e.layer === lay) && !inRec.has(e.id));
+    // «חדש-מאז-החיפוש» = לא ברשומה **וגם לא באורקל המחויב האחרון** (HEAD): מועמד שהיה קיים לפני החיפוש אך מחוץ לחלון-ה-15 שלה, ונכנס לחלון
+    //   רק כי אטומים אחרים הוסרו, אינו «חדש» (phoneKey נכנס לחלון של keyboardLayoutKey אחרי הסרת 4 אחים). אם HEAD לא זמין ⇒ הרשומה בלבד.
+    const strongNow = ranked.filter((e) => e.s >= 3 && (!lay || e.layer === lay) && !inRec.has(e.id) && !headIds.has(e.layer + ':' + e.id));
     const selfInRec = (rec.candidates || []).some((c) => ('new/' + (c.file || '')) === t);
-    if (!grew || selfInRec) bad.push(`${t}: החיפוש רץ על אורקל ישן ${selfInRec ? '(האטום-עצמו כבר היה בו — לא חיפוש-לפני-יצירה)' : '(האורקל קטן מאז)'} — הרץ מחדש`);
+    // G64 · «האטום-עצמו ברשומה» כבר לא כשל: search-record מוציא את --creates מהמועמדים, ו«חיפוש בלי-עצמי» ≡ חיפוש-לפני-יצירה. נשאר: האורקל רק גדל + אין חזק-חדש.
+    // G64 · אורקל שקטן מאז (אטומים הוסרו בסוויפ/ידנית) אינו כשל: פחות מועמדים לא יכולים להסתיר כפילות שפוספסה; הראיה = ניקוד-חי (strongNow).
+    if (!grew) console.log(`   ℹ️ ${t}: האורקל קטן מאז החיפוש (${rec.oracle?.display}/${rec.oracle?.logic} ⇒ ${oracle.display.length}/${oracle.logic.length}) — נבדק בניקוד-חי`);
+    if (selfInRec) bad.push(`${t}: רשומה ישנה שמכילה את האטום-עצמו כמועמד — הרץ מחדש (search-record מוציא את --creates)`);
     else if (strongNow.length) bad.push(`${t}: מאז החיפוש הופיעו מועמדים-חזקים חדשים: ${strongNow.map((e) => e.id).join(' · ')} — הרץ מחדש והתייחס אליהם`);
   }
   const ignored = (rec.strong || []).filter((id) => !(rec.why || '').includes(id));

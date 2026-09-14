@@ -514,6 +514,16 @@
   "wireable": false
  },
  {
+  "file": "dart/attendance_date_key.dart",
+  "name": "attendanceDateKey",
+  "ret": "String",
+  "params": [
+   "DateTime"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart/attention_items.dart",
   "name": "attentionItems",
   "ret": "List<AttentionItem>",
@@ -525,6 +535,16 @@
    "int"
   ],
   "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/attr_emoji.dart",
+  "name": "attrEmoji",
+  "ret": "String",
+  "params": [
+   "AttrKind"
+  ],
+  "argc": 1,
   "wireable": false
  },
  {
@@ -896,6 +916,17 @@
   "wireable": false
  },
  {
+  "file": "dart/budget_residual_spend.dart",
+  "name": "budgetResidualSpend",
+  "ret": "int",
+  "params": [
+   "Map<String, int>",
+   "Iterable<String>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart/build_cohort.dart",
   "name": "buildCohort",
   "ret": "RetentionCohort",
@@ -1236,6 +1267,27 @@
   "wireable": true
  },
  {
+  "file": "dart/canon_bsp.dart",
+  "name": "canonBsp",
+  "ret": "String",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
+  "file": "dart/canonicalize_word.dart",
+  "name": "canonicalizeWord",
+  "ret": "String",
+  "params": [
+   "String",
+   "Map<String, String>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-boxes/bs-security.dart",
   "name": "canPlace",
   "ret": "bool",
@@ -1351,6 +1403,16 @@
   ],
   "argc": 3,
   "wireable": false
+ },
+ {
+  "file": "dart/chip_display_label.dart",
+  "name": "chipDisplayLabel",
+  "ret": "String",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
  },
  {
   "file": "dart/chip_priority.dart",
@@ -2237,6 +2299,16 @@
   "wireable": false
  },
  {
+  "file": "dart/currency_symbol.dart",
+  "name": "currencySymbol",
+  "ret": "String",
+  "params": [
+   "CatalogCurrency"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/current-id.dart",
   "name": "currentId",
   "ret": "Object?",
@@ -2258,6 +2330,16 @@
    "int"
   ],
   "argc": 5,
+  "wireable": true
+ },
+ {
+  "file": "dart/cycle_display_temp.dart",
+  "name": "cycleDisplayTemp",
+  "ret": "int",
+  "params": [
+   "int"
+  ],
+  "argc": 1,
   "wireable": true
  },
  {
@@ -2535,6 +2617,16 @@
   "wireable": false
  },
  {
+  "file": "dart/delivery_fee_for.dart",
+  "name": "deliveryFeeFor",
+  "ret": "int",
+  "params": [
+   "CartDelivery"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/delivery-list-lines.dart",
   "name": "deliveryListLines",
   "ret": "List<String>",
@@ -2583,6 +2675,16 @@
   ],
   "argc": 1,
   "wireable": false
+ },
+ {
+  "file": "dart/diameter_sort_key.dart",
+  "name": "diameterSortKey",
+  "ret": "double",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
  },
  {
   "file": "dart-maor/dict-he.dart",
@@ -2973,6 +3075,17 @@
    "Iterable<String> Function(String id) actionIdsFor"
   ],
   "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/element_shown.dart",
+  "name": "elementShown",
+  "ret": "bool",
+  "params": [
+   "OrgConfig",
+   "String"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -4178,6 +4291,26 @@
   "wireable": false
  },
  {
+  "file": "dart/fuzzy_tolerance.dart",
+  "name": "fuzzyTolerance",
+  "ret": "int",
+  "params": [
+   "int"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
+  "file": "dart/fx_group_int.dart",
+  "name": "fxGroupInt",
+  "ret": "String",
+  "params": [
+   "int"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart/galvanically_dissimilar.dart",
   "name": "galvanicallyDissimilar",
   "ret": "bool",
@@ -4826,6 +4959,18 @@
   "wireable": false
  },
  {
+  "file": "dart/illustrative_site_spend.dart",
+  "name": "illustrativeSiteSpend",
+  "ret": "num",
+  "params": [
+   "num",
+   "int",
+   "int"
+  ],
+  "argc": 3,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/importable-contacts.dart",
   "name": "importableContacts",
   "ret": "List<dynamic>",
@@ -5443,6 +5588,16 @@
   ],
   "argc": 3,
   "wireable": false
+ },
+ {
+  "file": "dart/keyboard_layout_key.dart",
+  "name": "keyboardLayoutKey",
+  "ret": "String",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
  },
  {
   "file": "dart-boxes/lib-nedarim-sync.dart",
@@ -6748,6 +6903,16 @@
   "wireable": false
  },
  {
+  "file": "dart/normalize_doc_name.dart",
+  "name": "normalizeDocName",
+  "ret": "String",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/normalize-phone.dart",
   "name": "normalizePhone",
   "ret": "String",
@@ -7315,6 +7480,17 @@
    "String"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/parse_csv_records.dart",
+  "name": "parseCsvRecords",
+  "ret": "List<CsvRecord>",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -8190,6 +8366,26 @@
   "wireable": false
  },
  {
+  "file": "dart/r1.dart",
+  "name": "r1",
+  "ret": "double",
+  "params": [
+   "double"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
+  "file": "dart/rad.dart",
+  "name": "rad",
+  "ret": "double",
+  "params": [
+   "num"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/range-label.dart",
   "name": "rangeLabel",
   "ret": "String",
@@ -8453,6 +8649,17 @@
   ],
   "argc": 2,
   "wireable": false
+ },
+ {
+  "file": "dart/registration_valid.dart",
+  "name": "registrationValid",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
  },
  {
   "file": "dart-maor/relabel-hist-by-txn.dart",
@@ -9400,6 +9607,16 @@
   ],
   "argc": 1,
   "wireable": false
+ },
+ {
+  "file": "dart/slug.dart",
+  "name": "slug",
+  "ret": "String",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
  },
  {
   "file": "dart-maor/slugify.dart",
@@ -10469,6 +10686,16 @@
   ],
   "argc": 2,
   "wireable": false
+ },
+ {
+  "file": "dart/thousands.dart",
+  "name": "thousands",
+  "ret": "String",
+  "params": [
+   "int"
+  ],
+  "argc": 1,
+  "wireable": true
  },
  {
   "file": "dart-maor/tier-of.dart",

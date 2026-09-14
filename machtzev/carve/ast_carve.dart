@@ -359,7 +359,8 @@ void main(List<String> args) {
     final jobs = (jsonDecode(File(args[1]).readAsStringSync()) as List);
     final out = [];
     for (final j in jobs) {
-      try { out.add(carve(j['file'], j['name'], j['line'] is int ? j['line'] : int.tryParse('${j['line']}'))); }
+      // G64 · _srcRef נפלט מהחצב עצמו (היה: הוסף ע"י מריץ-חיצוני ⇒ אצווה בלי-מריץ איבדה את המקור ⇒ ייעוד-מהמסך 0)
+      try { final r = Map<String, dynamic>.from(carve(j['file'], j['name'], j['line'] is int ? j['line'] : int.tryParse('${j['line']}'))); r['_srcRef'] = '${j['file'].toString().replaceFirst(RegExp(r'^/home/user/'), '')}:${j['line']}'; out.add(r); }
       catch (e) { out.add({'ok': false, 'reason': 'exception: $e', 'name': j['name']}); }
     }
     stdout.write(jsonEncode(out));

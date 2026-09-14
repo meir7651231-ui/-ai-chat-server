@@ -1,0 +1,217 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:17:45.255Z",
+ "query": "slug אין עדיין מאפיינים בדיקת פירוק שם",
+ "tokens": [
+  "slug",
+  "אין",
+  "עדיין",
+  "אפיינים",
+  "דיקת",
+  "פירוק",
+  "שם"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "MatchChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/match_chip.dart",
+   "score": 6,
+   "hits": [
+    "אין",
+    "עדיין",
+    "אפיינים",
+    "דיקת",
+    "פירוק",
+    "שם"
+   ]
+  },
+  {
+   "id": "ValueChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/value_chip.dart",
+   "score": 6,
+   "hits": [
+    "אין",
+    "עדיין",
+    "אפיינים",
+    "דיקת",
+    "פירוק",
+    "שם"
+   ]
+  },
+  {
+   "id": "WarnChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/warn_chip.dart",
+   "score": 6,
+   "hits": [
+    "אין",
+    "עדיין",
+    "אפיינים",
+    "דיקת",
+    "פירוק",
+    "שם"
+   ]
+  },
+  {
+   "id": "CategoryTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/category_tile.dart",
+   "score": 4,
+   "hits": [
+    "אין",
+    "עדיין",
+    "אפיינים",
+    "שם"
+   ]
+  },
+  {
+   "id": "AccessoryTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/accessory_tile.dart",
+   "score": 3,
+   "hits": [
+    "אין",
+    "עדיין",
+    "שם"
+   ]
+  },
+  {
+   "id": "ConnectorTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/connector_tile.dart",
+   "score": 3,
+   "hits": [
+    "אין",
+    "עדיין",
+    "שם"
+   ]
+  },
+  {
+   "id": "EmptyAccessories",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/empty_accessories.dart",
+   "score": 3,
+   "hits": [
+    "אין",
+    "עדיין",
+    "שם"
+   ]
+  },
+  {
+   "id": "EmptyConnectors",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/empty_connectors.dart",
+   "score": 3,
+   "hits": [
+    "אין",
+    "עדיין",
+    "שם"
+   ]
+  },
+  {
+   "id": "isValidSlug",
+   "layer": "logic",
+   "file": "dart-maor/is-valid-slug.dart",
+   "score": 3,
+   "hits": [
+    "slug"
+   ]
+  },
+  {
+   "id": "LinkBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/link_btn.dart",
+   "score": 3,
+   "hits": [
+    "אין",
+    "עדיין",
+    "שם"
+   ]
+  },
+  {
+   "id": "MustChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/must_chip.dart",
+   "score": 3,
+   "hits": [
+    "אין",
+    "עדיין",
+    "שם"
+   ]
+  },
+  {
+   "id": "orgSlugFromUrl",
+   "layer": "logic",
+   "file": "dart-maor/org-slug-from-url.dart",
+   "score": 3,
+   "hits": [
+    "slug"
+   ]
+  },
+  {
+   "id": "PriceChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/price_chip.dart",
+   "score": 3,
+   "hits": [
+    "אין",
+    "עדיין",
+    "שם"
+   ]
+  },
+  {
+   "id": "RuleInspectDialog",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/rule_inspect_dialog.dart",
+   "score": 3,
+   "hits": [
+    "אין",
+    "עדיין",
+    "שם"
+   ]
+  },
+  {
+   "id": "SectionHeader",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/section_header.dart",
+   "score": 3,
+   "hits": [
+    "אין",
+    "עדיין",
+    "שם"
+   ]
+  }
+ ],
+ "strong": [
+  "isValidSlug",
+  "orgSlugFromUrl"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "MatchChip",
+  "ValueChip",
+  "WarnChip",
+  "CategoryTile",
+  "AccessoryTile",
+  "ConnectorTile",
+  "EmptyAccessories",
+  "EmptyConnectors",
+  "LinkBtn",
+  "MustChip",
+  "PriceChip",
+  "RuleInspectDialog",
+  "SectionHeader"
+ ],
+ "creates": "new/dart/slug.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 6 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: isValidSlug 0/6 · orgSlugFromUrl 0/6. לכן נוצר חדש.",
+ "sig": "d8a869dc0f4d3a173aa24c433379f4a4a93a0bea5c427a348f2930d547ef772f"
+}

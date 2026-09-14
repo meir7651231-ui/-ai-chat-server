@@ -1,0 +1,47 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T16:27:44.176Z",
+ "query": "rad ברז כדורי ברך מחותכת מסעף טי",
+ "tokens": [
+  "rad",
+  "ברז",
+  "דורי",
+  "ברך",
+  "חותכת",
+  "סעף",
+  "טי"
+ ],
+ "oracle": {
+  "atomIndexSha": "6cbd9eac7a8d11b562da1feef676f2144695b421f54842a7b8ca78d62384aef6",
+  "logicCensusSha": "16331f4a6647d9f72d5a8b65c038eea1beb46de175f8e02eaaf27ea67c640b1b",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "StockRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/stock_row.dart",
+   "score": 1,
+   "hits": [
+    "ברז"
+   ]
+  },
+  {
+   "id": "StockTab",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/stock_tab.dart",
+   "score": 1,
+   "hits": [
+    "ברז"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/rad.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). האורקל המאוחד לא החזיר מועמד בציון ≥3 באותה שכבה לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.",
+ "sig": "68c9b45af0fe28eea0791ed21ae072cc1bb905463f3f4c183e71a849025691f1"
+}
