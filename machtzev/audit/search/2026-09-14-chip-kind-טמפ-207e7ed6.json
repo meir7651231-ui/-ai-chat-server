@@ -1,0 +1,187 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T20:36:03.859Z",
+ "query": "chip kind טמפ אורך זווית חומר יעד מותג",
+ "tokens": [
+  "chip",
+  "kind",
+  "טמפ",
+  "אורך",
+  "זווית",
+  "חומר",
+  "יעד",
+  "ותג"
+ ],
+ "oracle": {
+  "atomIndexSha": "600699bb68b307c1fea81a5f0c20643494a5ce46fedee0b8a537dad00bd01ba9",
+  "logicCensusSha": "843466f691b472f4df0f2a385a36456025a1348912092c4787f1f0deec24f82f",
+  "display": 1928,
+  "logic": 1004
+ },
+ "candidates": [
+  {
+   "id": "FilterChipPill",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/filter_chip_pill.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "ותג"
+   ]
+  },
+  {
+   "id": "HierarchyChipPill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/hierarchy_chip_pill.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "אורך"
+   ]
+  },
+  {
+   "id": "MatchChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/match_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "חומר"
+   ]
+  },
+  {
+   "id": "ValueChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/value_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "חומר"
+   ]
+  },
+  {
+   "id": "WarnChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/warn_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "חומר"
+   ]
+  },
+  {
+   "id": "absenceReasonChips",
+   "layer": "logic",
+   "file": "dart-maor/absence-reason-chips.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  },
+  {
+   "id": "ActionChipRail",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/action_chip_rail.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  },
+  {
+   "id": "AttributeChip",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/attribute_chip.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  },
+  {
+   "id": "AxisChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/axis_chip.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  },
+  {
+   "id": "callerKindLabel",
+   "layer": "logic",
+   "file": "dart-maor/caller-kind-label.dart",
+   "score": 3,
+   "hits": [
+    "kind"
+   ]
+  },
+  {
+   "id": "ChipCloud",
+   "layer": "display",
+   "file": "dart-ui-bs/chip_cloud.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  },
+  {
+   "id": "chipDisplayLabel",
+   "layer": "logic",
+   "file": "dart/chip_display_label.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  },
+  {
+   "id": "chipPriority",
+   "layer": "logic",
+   "file": "dart/chip_priority.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  },
+  {
+   "id": "ChipScroll",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chip_scroll.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  },
+  {
+   "id": "chipStyle",
+   "layer": "logic",
+   "file": "dart-maor/chip-style.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  }
+ ],
+ "strong": [
+  "absenceReasonChips",
+  "callerKindLabel",
+  "chipDisplayLabel",
+  "chipPriority",
+  "chipStyle"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "FilterChipPill",
+  "HierarchyChipPill",
+  "MatchChip",
+  "ValueChip",
+  "WarnChip",
+  "ActionChipRail",
+  "AttributeChip",
+  "AxisChip",
+  "ChipCloud",
+  "ChipScroll"
+ ],
+ "creates": "new/dart/chip_kind.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 12 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: absenceReasonChips 0/12 · callerKindLabel 0/12 · chipDisplayLabel 0/12 · chipPriority 0/12 · chipStyle 0/12. לכן נוצר חדש.",
+ "sig": "207e7ed65acb67b9c6c0f745e991052ce2414523d59edaa3f341a039909886a2"
+}

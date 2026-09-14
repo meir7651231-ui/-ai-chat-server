@@ -1,6 +1,6 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2484** אטומים ממופים (תצוגה 932 · לוגיקה 1004 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2492** אטומים ממופים (תצוגה 932 · לוגיקה 1012 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
@@ -9,12 +9,12 @@
 | action | 180 | AccordionSectionCard · ActionButton · ActionCard · ActionRow · AddTradeButton |
 | group | 171 | ActionChipRail · AiCardTop · AiMdHead · AnimatedEmpty · ApprovalTaskCard |
 | summary | 158 | allOffConfig · applyAyinNames · applyAyinSheet · applyEntityPartial · applyMetaPartial |
-| collection | 152 | activeByMonth · allSupPhones · allowedDesignationsFor · appendCall · attentionItems |
-| transform | 122 | actionDescriptor · actionFromString · activeDriver · auditRows · brandById |
-| predicate | 115 | accessPasswordMatches · assignmentRedeemed · ayinActionVisible · ayinActive · canAddPhoto |
+| collection | 153 | activeByMonth · allSupPhones · allowedDesignationsFor · appendCall · attentionItems |
+| transform | 125 | actionDescriptor · actionFromString · activeDriver · auditRows · brandById |
+| predicate | 117 | accessPasswordMatches · assignmentRedeemed · ayinActionVisible · ayinActive · canAddPhoto |
 | text | 110 | AccessoryRow · AccessoryTile · AiCardSub · AiServerNote · AppSettingsBody |
 | container | 107 | AccordionPanel · AdvanceButton · AnimatedTabs · AssignButton · AuroraField |
-| measure | 87 | ageOf · balanceOf · band · boqLineAmount · boqTotal |
+| measure | 88 | ageOf · balanceOf · band · boqLineAmount · boqTotal |
 | fact | 85 | AlertBanner · AnimatedToggle · BadgePill · CaPill · CatalogCountBadge |
 | data:terms | 85 | absence-reason-chips-terms · annual-all-lines-terms · annual-report-terms · audit-cat-colors-terms · audit-report-lines-terms |
 | data:sockets | 74 | amount-in-words-sockets · annual-report-lines-sockets · block-reason-sockets · build-course-daily-rows-sockets · build-custom-export-sockets |
@@ -25,7 +25,7 @@
 | bars | 39 | BarChart · DsBars · DsRecordCard · Forge12Atoms · Forge14Atoms |
 | field | 38 | ChatSettingsSwitchRow · CourierSettingsSwitchRow · DsDateField · DsEnumField · DsMultiSelect |
 | zero | 33 | AuroraBg · BarcodeReticle · Dot · DotGridBg · DotsLoader |
-| aggregate | 30 | budgetResidualSpend · catNodeProductCount · cockpitCollectedThisMonth · collectedPaid · componentRemaining |
+| aggregate | 31 | budgetResidualSpend · cartItemCount · catNodeProductCount · cockpitCollectedThisMonth · collectedPaid |
 | switch | 23 | Forge4AtomsSelection · Forge5AtomsSelection · ForgeAnimatedToggleSelection · ForgeCheckPop · ForgeCheckRowSelection |
 | ratio | 12 | AiBar · Bar · CreditBar · ForgeGlowSlider · IntelBar |
 | identity | 12 | AvatarTile · DsScaffold · EmojiSectionTitle · ForgeBrandListRow · ForgeProfileRow |

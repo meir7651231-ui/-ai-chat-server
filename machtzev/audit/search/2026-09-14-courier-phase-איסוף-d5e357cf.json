@@ -1,0 +1,181 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T20:36:07.536Z",
+ "query": "courier phase איסוף בדרך נמסר",
+ "tokens": [
+  "courier",
+  "phase",
+  "איסוף",
+  "דרך",
+  "נמסר"
+ ],
+ "oracle": {
+  "atomIndexSha": "600699bb68b307c1fea81a5f0c20643494a5ce46fedee0b8a537dad00bd01ba9",
+  "logicCensusSha": "843466f691b472f4df0f2a385a36456025a1348912092c4787f1f0deec24f82f",
+  "display": 1928,
+  "logic": 1004
+ },
+ "candidates": [
+  {
+   "id": "CourierFormsPillButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_forms_pill_button.dart",
+   "score": 4,
+   "hits": [
+    "courier",
+    "דרך"
+   ]
+  },
+  {
+   "id": "CourierPersonalAreaCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_personal_area_card.dart",
+   "score": 4,
+   "hits": [
+    "courier",
+    "דרך"
+   ]
+  },
+  {
+   "id": "CourierAttendanceSendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_send_report_button.dart",
+   "score": 3,
+   "hits": [
+    "courier"
+   ]
+  },
+  {
+   "id": "CourierAttendanceTableRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_table_row.dart",
+   "score": 3,
+   "hits": [
+    "courier"
+   ]
+  },
+  {
+   "id": "courierDayStats",
+   "layer": "logic",
+   "file": "dart/courier_day_stats.dart",
+   "score": 3,
+   "hits": [
+    "courier"
+   ]
+  },
+  {
+   "id": "CourierInfoSection",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_info_section.dart",
+   "score": 3,
+   "hits": [
+    "courier"
+   ]
+  },
+  {
+   "id": "CourierSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_settings_switch_row.dart",
+   "score": 3,
+   "hits": [
+    "courier"
+   ]
+  },
+  {
+   "id": "ForgeCourierFormsPillButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/courier_forms_pill_button.dart",
+   "score": 3,
+   "hits": [
+    "courier"
+   ]
+  },
+  {
+   "id": "ForgeCourierSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-forge-bs/action/courier_settings_switch_row.dart",
+   "score": 3,
+   "hits": [
+    "courier"
+   ]
+  },
+  {
+   "id": "AdvanceButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/advance_button.dart",
+   "score": 2,
+   "hits": [
+    "דרך",
+    "נמסר"
+   ]
+  },
+  {
+   "id": "ApprovalButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/approval_button.dart",
+   "score": 2,
+   "hits": [
+    "דרך",
+    "נמסר"
+   ]
+  },
+  {
+   "id": "AppSettingsBody",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/app_settings_body.dart",
+   "score": 2,
+   "hits": [
+    "דרך",
+    "נמסר"
+   ]
+  },
+  {
+   "id": "Dot",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/dot.dart",
+   "score": 2,
+   "hits": [
+    "דרך",
+    "נמסר"
+   ]
+  },
+  {
+   "id": "JourneyEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/journey_empty.dart",
+   "score": 2,
+   "hits": [
+    "דרך",
+    "נמסר"
+   ]
+  },
+  {
+   "id": "ManageHint",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/manage_hint.dart",
+   "score": 2,
+   "hits": [
+    "דרך",
+    "נמסר"
+   ]
+  }
+ ],
+ "strong": [
+  "courierDayStats"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "CourierFormsPillButton",
+  "CourierPersonalAreaCard",
+  "CourierAttendanceSendReportButton",
+  "CourierAttendanceTableRow",
+  "CourierInfoSection",
+  "CourierSettingsSwitchRow",
+  "ForgeCourierFormsPillButton",
+  "ForgeCourierSettingsSwitchRow"
+ ],
+ "creates": "new/dart/courier_phase.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 2 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: courierDayStats 0/2. לכן נוצר חדש.",
+ "sig": "d5e357cf902101ad92fe18d089a078fab90773a729faa1956729c358cca201d6"
+}

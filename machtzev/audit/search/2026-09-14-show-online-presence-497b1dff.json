@@ -1,0 +1,129 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T20:36:05.245Z",
+ "query": "show online presence זמן מקוון אחרון\"",
+ "tokens": [
+  "show",
+  "online",
+  "presence",
+  "זמן",
+  "קוון",
+  "אחרון"
+ ],
+ "oracle": {
+  "atomIndexSha": "600699bb68b307c1fea81a5f0c20643494a5ce46fedee0b8a537dad00bd01ba9",
+  "logicCensusSha": "843466f691b472f4df0f2a385a36456025a1348912092c4787f1f0deec24f82f",
+  "display": 1928,
+  "logic": 1004
+ },
+ "candidates": [
+  {
+   "id": "elementShown",
+   "layer": "logic",
+   "file": "dart/element_shown.dart",
+   "score": 3,
+   "hits": [
+    "show"
+   ]
+  },
+  {
+   "id": "Countdown",
+   "layer": "display",
+   "file": "dart-ui-bs/countdown_timer.dart",
+   "score": 1,
+   "hits": [
+    "זמן"
+   ]
+  },
+  {
+   "id": "DsCalendar",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_calendar.dart",
+   "score": 1,
+   "hits": [
+    "זמן"
+   ]
+  },
+  {
+   "id": "DsMonthOffset",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_calendar.dart",
+   "score": 1,
+   "hits": [
+    "זמן"
+   ]
+  },
+  {
+   "id": "JourneyRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/journey_row.dart",
+   "score": 1,
+   "hits": [
+    "זמן"
+   ]
+  },
+  {
+   "id": "NotifItem",
+   "layer": "display",
+   "file": "dart-ui-bs/notif_item.dart",
+   "score": 1,
+   "hits": [
+    "זמן"
+   ]
+  },
+  {
+   "id": "OrderListRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/order_list_row.dart",
+   "score": 1,
+   "hits": [
+    "זמן"
+   ]
+  },
+  {
+   "id": "PinPad",
+   "layer": "display",
+   "file": "dart-ui-bs/pin_pad.dart",
+   "score": 1,
+   "hits": [
+    "אחרון"
+   ]
+  },
+  {
+   "id": "PlaceholderNotice",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/placeholder_notice.dart",
+   "score": 1,
+   "hits": [
+    "אחרון"
+   ]
+  },
+  {
+   "id": "Timeline",
+   "layer": "display",
+   "file": "dart-ui-bs/timeline_flow.dart",
+   "score": 1,
+   "hits": [
+    "זמן"
+   ]
+  },
+  {
+   "id": "TimelineItem",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/lists/timeline_item.dart",
+   "score": 1,
+   "hits": [
+    "זמן"
+   ]
+  }
+ ],
+ "strong": [
+  "elementShown"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/show_online_presence.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 2 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: elementShown 0/2. לכן נוצר חדש.",
+ "sig": "497b1dff8483698096ba108fcf3490075cc57cd5a75f8997f8280a066ec46dde"
+}

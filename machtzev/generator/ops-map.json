@@ -12902,6 +12902,33 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "cartItemCount",
+  "layer": "logic",
+  "file": "dart/cart_item_count.dart",
+  "op": "aggregate",
+  "sockets": [
+   "Map<String, int>",
+   "List<SmartCartLine>"
+  ],
+  "ret": "int",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "cartPaymentFor",
+  "layer": "logic",
+  "file": "dart/cart_payment_for.dart",
+  "op": "transform",
+  "sockets": [
+   "StorePayment"
+  ],
+  "ret": "CartPaymentMethod",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "catNodeProductCount",
   "layer": "logic",
   "file": "dart/cat_node_product_count.dart",
@@ -13042,6 +13069,18 @@
    "String"
   ],
   "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "chipKind",
+  "layer": "logic",
+  "file": "dart/chip_kind.dart",
+  "op": "transform",
+  "sockets": [
+   "String"
+  ],
+  "ret": "AttributeKind",
   "flags": [],
   "why": "צורת-חתימה"
  },
@@ -13968,6 +14007,18 @@
    "temporal",
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "courierPhase",
+  "layer": "logic",
+  "file": "dart/courier_phase.dart",
+  "op": "measure",
+  "sockets": [
+   "OrderStage"
+  ],
+  "ret": "int",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -17476,6 +17527,21 @@
    "ho",
    "temporal"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "hexRod",
+  "layer": "logic",
+  "file": "dart/hex_rod.dart",
+  "op": "transform",
+  "sockets": [
+   "int",
+   "double",
+   "double",
+   "double"
+  ],
+  "ret": "Mesh",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -21101,6 +21167,19 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "passesImportance",
+  "layer": "logic",
+  "file": "dart/passes_importance.dart",
+  "op": "predicate",
+  "sockets": [
+   "NotifImportance",
+   "bool"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "patternOutlets",
   "layer": "logic",
   "file": "dart/pattern_outlets.dart",
@@ -23485,6 +23564,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "showOnlinePresence",
+  "layer": "logic",
+  "file": "dart/show_online_presence.dart",
+  "op": "predicate",
+  "sockets": [
+   "ChatLastSeen"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "signUpError",
   "layer": "logic",
   "file": "dart-maor/sign-up-error.dart",
@@ -25180,6 +25271,21 @@
   "ret": "List<String>",
   "flags": [
    "ho"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "toolDeptPath",
+  "layer": "logic",
+  "file": "dart/tool_dept_path.dart",
+  "op": "collection",
+  "sockets": [
+   "String",
+   "List<String>"
+  ],
+  "ret": "List<CatalogNode>",
+  "flags": [
+   "listIn"
   ],
   "why": "צורת-חתימה"
  },

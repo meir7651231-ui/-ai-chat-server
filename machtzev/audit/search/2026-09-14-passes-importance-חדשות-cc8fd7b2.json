@@ -1,0 +1,179 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T20:36:06.435Z",
+ "query": "passes importance חדשות נקודות נוספו למועדון אושרה ונמצאת",
+ "tokens": [
+  "passes",
+  "importance",
+  "חדשות",
+  "נקודות",
+  "נוספו",
+  "מועדון",
+  "אושרה",
+  "נמצאת"
+ ],
+ "oracle": {
+  "atomIndexSha": "600699bb68b307c1fea81a5f0c20643494a5ce46fedee0b8a537dad00bd01ba9",
+  "logicCensusSha": "843466f691b472f4df0f2a385a36456025a1348912092c4787f1f0deec24f82f",
+  "display": 1928,
+  "logic": 1004
+ },
+ "candidates": [
+  {
+   "id": "DateHeader",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/date_header.dart",
+   "score": 6,
+   "hits": [
+    "חדשות",
+    "נקודות",
+    "נוספו",
+    "מועדון",
+    "אושרה",
+    "נמצאת"
+   ]
+  },
+  {
+   "id": "CompanyCatalogImportCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/company_catalog_import_card.dart",
+   "score": 3,
+   "hits": [
+    "importance"
+   ]
+  },
+  {
+   "id": "familiesImportFormatRows",
+   "layer": "logic",
+   "file": "dart-maor/families-import-format-rows.dart",
+   "score": 3,
+   "hits": [
+    "importance"
+   ]
+  },
+  {
+   "id": "mergeFamilyImport",
+   "layer": "logic",
+   "file": "dart-maor/merge-family-import.dart",
+   "score": 3,
+   "hits": [
+    "importance"
+   ]
+  },
+  {
+   "id": "planSupporterImport",
+   "layer": "logic",
+   "file": "dart-maor/plan-supporter-import.dart",
+   "score": 3,
+   "hits": [
+    "importance"
+   ]
+  },
+  {
+   "id": "supportersImportFormatRows",
+   "layer": "logic",
+   "file": "dart-maor/supporters-import-format-rows.dart",
+   "score": 3,
+   "hits": [
+    "importance"
+   ]
+  },
+  {
+   "id": "vcardImportRows",
+   "layer": "logic",
+   "file": "dart-boxes/vcard-import.dart",
+   "score": 3,
+   "hits": [
+    "importance"
+   ]
+  },
+  {
+   "id": "AdvanceButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/advance_button.dart",
+   "score": 1,
+   "hits": [
+    "אושרה"
+   ]
+  },
+  {
+   "id": "ApprovalButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/approval_button.dart",
+   "score": 1,
+   "hits": [
+    "אושרה"
+   ]
+  },
+  {
+   "id": "ApprovalCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/approval_card.dart",
+   "score": 1,
+   "hits": [
+    "חדשות"
+   ]
+  },
+  {
+   "id": "AppSettingsBody",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/app_settings_body.dart",
+   "score": 1,
+   "hits": [
+    "אושרה"
+   ]
+  },
+  {
+   "id": "AuroraBg",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_graphics.dart",
+   "score": 1,
+   "hits": [
+    "נקודות"
+   ]
+  },
+  {
+   "id": "CarouselDeck",
+   "layer": "display",
+   "file": "dart-ui-bs/carousel_deck.dart",
+   "score": 1,
+   "hits": [
+    "נקודות"
+   ]
+  },
+  {
+   "id": "CartItemRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/cart_item_row.dart",
+   "score": 1,
+   "hits": [
+    "חדשות"
+   ]
+  },
+  {
+   "id": "CartSummaryCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/cart_summary_card.dart",
+   "score": 1,
+   "hits": [
+    "חדשות"
+   ]
+  }
+ ],
+ "strong": [
+  "familiesImportFormatRows",
+  "mergeFamilyImport",
+  "planSupporterImport",
+  "supportersImportFormatRows",
+  "vcardImportRows"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "DateHeader",
+  "CompanyCatalogImportCard"
+ ],
+ "creates": "new/dart/passes_importance.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 4 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: familiesImportFormatRows 0/4 · mergeFamilyImport 0/4 · planSupporterImport 0/4 · supportersImportFormatRows 0/4 · vcardImportRows 0/4. לכן נוצר חדש.",
+ "sig": "cc8fd7b2b4fd3268858880c137a60269898ecb1bf36e9e16dbe523d258ca4ae2"
+}

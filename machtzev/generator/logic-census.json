@@ -1299,6 +1299,27 @@
   "wireable": true
  },
  {
+  "file": "dart/cart_item_count.dart",
+  "name": "cartItemCount",
+  "ret": "int",
+  "params": [
+   "Map<String, int>",
+   "List<SmartCartLine>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/cart_payment_for.dart",
+  "name": "cartPaymentFor",
+  "ret": "CartPaymentMethod",
+  "params": [
+   "StorePayment"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart/catalog_action_ids_for.dart",
   "name": "catalogActionIdsFor",
   "ret": "Set<String>",
@@ -1413,6 +1434,16 @@
   ],
   "argc": 1,
   "wireable": true
+ },
+ {
+  "file": "dart/chip_kind.dart",
+  "name": "chipKind",
+  "ret": "AttributeKind",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": false
  },
  {
   "file": "dart/chip_priority.dart",
@@ -2127,6 +2158,16 @@
    "DateTime"
   ],
   "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/courier_phase.dart",
+  "name": "courierPhase",
+  "ret": "int",
+  "params": [
+   "OrderStage"
+  ],
+  "argc": 1,
   "wireable": false
  },
  {
@@ -4853,6 +4894,19 @@
    "String Function(String) term",
    "String? Function(String kind) actionHe",
    "String Function(String id, OpStyle? style) styleHe"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/hex_rod.dart",
+  "name": "hexRod",
+  "ret": "Mesh",
+  "params": [
+   "int",
+   "double",
+   "double",
+   "double"
   ],
   "argc": 4,
   "wireable": false
@@ -7706,6 +7760,17 @@
   "wireable": false
  },
  {
+  "file": "dart/passes_importance.dart",
+  "name": "passesImportance",
+  "ret": "bool",
+  "params": [
+   "NotifImportance",
+   "bool"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart/pattern_outlets.dart",
   "name": "patternOutlets",
   "ret": "int",
@@ -9607,6 +9672,16 @@
   "wireable": false
  },
  {
+  "file": "dart/show_online_presence.dart",
+  "name": "showOnlinePresence",
+  "ret": "bool",
+  "params": [
+   "ChatLastSeen"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/sign-up-error.dart",
   "name": "signUpError",
   "ret": "String",
@@ -10958,6 +11033,17 @@
   "params": [
    "String",
    "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/tool_dept_path.dart",
+  "name": "toolDeptPath",
+  "ret": "List<CatalogNode>",
+  "params": [
+   "String",
+   "List<String>"
   ],
   "argc": 2,
   "wireable": false

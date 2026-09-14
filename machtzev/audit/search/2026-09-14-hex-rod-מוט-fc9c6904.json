@@ -1,0 +1,166 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T20:36:04.087Z",
+ "query": "hex rod מוט-משושה או פריזמה כללית בעל פאות",
+ "tokens": [
+  "hex",
+  "rod",
+  "מוט",
+  "שושה",
+  "או",
+  "פריזמה",
+  "ללית",
+  "בעל",
+  "פאות"
+ ],
+ "oracle": {
+  "atomIndexSha": "600699bb68b307c1fea81a5f0c20643494a5ce46fedee0b8a537dad00bd01ba9",
+  "logicCensusSha": "843466f691b472f4df0f2a385a36456025a1348912092c4787f1f0deec24f82f",
+  "display": 1928,
+  "logic": 1004
+ },
+ "candidates": [
+  {
+   "id": "AssignButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/assign_button.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DecisionLine",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/decision_line.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DirectoryRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/directory_row.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DsApproveCard",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DsChip",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DsChipButton",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DsDiffRow",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DsEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DsFold",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DsLoadMeter",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DsLogRow",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DsNavTile",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DsNote",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  },
+  {
+   "id": "DsPalette",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 1,
+   "hits": [
+    "או"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/hex_rod.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). האורקל המאוחד לא החזיר מועמד בציון ≥3 באותה שכבה לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.",
+ "sig": "fc9c6904dfab956fb889d3a37b3d499a7329bd3334d1db0a3bbb78cf41c96740"
+}

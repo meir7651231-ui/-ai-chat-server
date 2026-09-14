@@ -248,7 +248,11 @@ Map<String, _ImpFile> _neighborTypes(String file, CompilationUnit unit) {
       for (final nd in nunit.declarations) if (nd is TopLevelVariableDeclaration && nd.variables.isConst) for (final v in nd.variables.variables) cvars[v.name.lexeme] = nd;
       // G70 · גם פונקציות-top-level מקובץ לא-טהור — הטוהר של כל אחת נבדק ב-_collectPure (סגירה בתוך קובצה בלבד), כמו קבועי-G68
       for (final nd in nunit.declarations) if (nd is FunctionDeclaration && !nd.isGetter && !nd.isSetter) cvars[nd.name.lexeme] = nd;
-      if (cvars.isNotEmpty) { final cf = _ImpFile(nsrc, const {}, cvars, path); for (final k in cvars.keys) out.putIfAbsent('var:$k', () => cf); }
+      // G72 · גם **טיפוסים** מקובץ לא-טהור (`Order` · `Family` — הקובץ מייבא riverpod, המחלקה עצמה דאטה): הסגירה (_typeClosure) היא השומר —
+      //   שדה מטיפוס-flutter ⇒ «לא-נמצא» ⇒ פסילה. 1,918 אזכורי-`type:` בלי-סיבה היו בדיוק «הקובץ לא נסרק».
+      final ctypes = <String, Declaration>{};
+      for (final nd in nunit.declarations) { if (nd is EnumDeclaration) ctypes[nd.name.lexeme] = nd; else if (nd is ClassDeclaration) ctypes[nd.name.lexeme] = nd; else if (nd is MixinDeclaration) ctypes[nd.name.lexeme] = nd; else if (nd is TypeAlias) ctypes[nd.name.lexeme] = nd; }
+      if (cvars.isNotEmpty || ctypes.isNotEmpty) { final cf = _ImpFile(nsrc, ctypes, cvars, path); for (final k in cvars.keys) out.putIfAbsent('var:$k', () => cf); for (final k in ctypes.keys) out.putIfAbsent(k, () => cf); }
       continue;
     }
     final types = <String, Declaration>{};
@@ -314,7 +318,9 @@ List<String>? _typeClosure(String name, _ImpFile primary,
     final hit = find(t);
     if (hit == null) { why?.add('לא-נמצא:$t'); return null; }
     final (d, fsrc) = hit;
-    emitted[t] = fsrc.substring(d.offset, d.end);
+    // G72 · אנוטציות-meta (`@immutable` · `@visibleForTesting` · …) הן מטא-דאטה לאנלייזר, אפס-התנהגות בריצה — נמחקות מהעותק (האטום אינו מייבא meta)
+    //   ואינן נספרות כמזהה-חופשי. 64 סגירות נפלו על `ערך:immutable`.
+    emitted[t] = _stripMeta(fsrc.substring(d.offset, d.end));
 
     final bound = <String>{};
     final loc = _Locals(); d.visitChildren(loc); bound.addAll(loc.names);
@@ -334,13 +340,15 @@ List<String>? _typeClosure(String name, _ImpFile primary,
     // גם מזהי-**ערך**: קבוע-top-level נגרר פנימה, כל דבר אחר ⇒ פסילה.
     // בלי זה הוטבעו מחלקות שנשענות על `@immutable` (package:meta) והאטום לא התקמפל.
     for (final id in fi.ids) {
-      if (_core.contains(id) || _mathCore.contains(id)) continue;
+      if (_core.contains(id) || _mathCore.contains(id) || _metaNoop.contains(id)) continue;
       if (find(id) != null) { work.add(id); continue; }
       why?.add('ערך:$id בתוך $t'); return null;
     }
   }
   return emitted.values.toList();
 }
+const _metaNoop = {'immutable', 'visibleForTesting', 'protected', 'mustCallSuper', 'nonVirtual', 'internal', 'useResult', 'literal'};
+String _stripMeta(String s) => s.replaceAll(RegExp(r'@(?:' + _metaNoop.join('|') + r')\b(?:\([^)]*\))?\s*'), '');
 
 bool _collectPure(String src, Map<String, FunctionDeclaration> topFns, String root,
     Map<String, String> out, Set<String> mathHit) {

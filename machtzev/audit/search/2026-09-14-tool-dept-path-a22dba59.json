@@ -1,0 +1,180 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T20:36:10.876Z",
+ "query": "tool dept path כלי עבודה חותך צינורות",
+ "tokens": [
+  "tool",
+  "dept",
+  "path",
+  "כלי",
+  "עבודה",
+  "חותך",
+  "צינורות"
+ ],
+ "oracle": {
+  "atomIndexSha": "600699bb68b307c1fea81a5f0c20643494a5ce46fedee0b8a537dad00bd01ba9",
+  "logicCensusSha": "843466f691b472f4df0f2a385a36456025a1348912092c4787f1f0deec24f82f",
+  "display": 1928,
+  "logic": 1004
+ },
+ "candidates": [
+  {
+   "id": "WorkPathCard",
+   "layer": "display",
+   "file": "dart-ui-bs/work_path_card.dart",
+   "score": 4,
+   "hits": [
+    "path",
+    "עבודה"
+   ]
+  },
+  {
+   "id": "colPath",
+   "layer": "logic",
+   "file": "dart-maor/col-path.dart",
+   "score": 3,
+   "hits": [
+    "path"
+   ]
+  },
+  {
+   "id": "ContractorToolsSheetsSheetHandle",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/contractor_tools_sheets_sheet_handle.dart",
+   "score": 3,
+   "hits": [
+    "tool"
+   ]
+  },
+  {
+   "id": "donationsPath",
+   "layer": "logic",
+   "file": "dart-maor/donations-path.dart",
+   "score": 3,
+   "hits": [
+    "path"
+   ]
+  },
+  {
+   "id": "envPath",
+   "layer": "logic",
+   "file": "dart-maor/env-path.dart",
+   "score": 3,
+   "hits": [
+    "path"
+   ]
+  },
+  {
+   "id": "findAlternativePaths",
+   "layer": "logic",
+   "file": "dart/find_alternative_paths.dart",
+   "score": 3,
+   "hits": [
+    "path"
+   ]
+  },
+  {
+   "id": "findShortestPath",
+   "layer": "logic",
+   "file": "dart/find_shortest_path.dart",
+   "score": 3,
+   "hits": [
+    "path"
+   ]
+  },
+  {
+   "id": "findShortestPathExcluding",
+   "layer": "logic",
+   "file": "dart/find_shortest_path_excluding.dart",
+   "score": 3,
+   "hits": [
+    "path"
+   ]
+  },
+  {
+   "id": "ForgeFilterToolbar",
+   "layer": "display",
+   "file": "dart-forge-bs/composite/filter_toolbar.dart",
+   "score": 3,
+   "hits": [
+    "tool"
+   ]
+  },
+  {
+   "id": "ForgeTooltipBubble",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/tooltip_bubble.dart",
+   "score": 3,
+   "hits": [
+    "tool"
+   ]
+  },
+  {
+   "id": "metaPath",
+   "layer": "logic",
+   "file": "dart-maor/meta-path.dart",
+   "score": 3,
+   "hits": [
+    "path"
+   ]
+  },
+  {
+   "id": "QuickToolsList",
+   "layer": "display",
+   "file": "dart-ui-bs/quick_tools_list.dart",
+   "score": 3,
+   "hits": [
+    "tool"
+   ]
+  },
+  {
+   "id": "TooltipBubble",
+   "layer": "display",
+   "file": "dart-ui-bs/tooltip_bubble.dart",
+   "score": 3,
+   "hits": [
+    "tool"
+   ]
+  },
+  {
+   "id": "AiBar",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_bar.dart",
+   "score": 1,
+   "hits": [
+    "עבודה"
+   ]
+  },
+  {
+   "id": "AiCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card.dart",
+   "score": 1,
+   "hits": [
+    "עבודה"
+   ]
+  }
+ ],
+ "strong": [
+  "colPath",
+  "donationsPath",
+  "envPath",
+  "findAlternativePaths",
+  "findShortestPath",
+  "findShortestPathExcluding",
+  "metaPath"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "WorkPathCard",
+  "ContractorToolsSheetsSheetHandle",
+  "ForgeFilterToolbar",
+  "ForgeTooltipBubble",
+  "QuickToolsList",
+  "TooltipBubble"
+ ],
+ "creates": "new/dart/tool_dept_path.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 12 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: colPath 0/12 · donationsPath 0/12 · envPath 0/12 · findAlternativePaths 0/12 · findShortestPath 0/12 · findShortestPathExcluding 0/12 · metaPath 0/12 · resolvePath 0/12. לכן נוצר חדש.",
+ "sig": "a22dba5944be1e1579e821d273971de1d9d3622a1868797f613ae826cbd7de61"
+}
