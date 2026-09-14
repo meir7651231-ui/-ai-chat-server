@@ -1,0 +1,259 @@
+<title>המחולל הישיבתי</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Heebo:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#EFEBE3; --paper:#F8F6F1; --ink:#22282B; --muted:#6B6F66; --line:#D9D3C7;
+  --accent:#9A5B12; --accent-soft:#F1E3CC; --machine:#24616A; --machine-soft:#D6E7E8;
+  --red:#B23A3A; --yellow:#B98A10; --green:#3E7D4F; --sel:#E4DCCB;
+  --serif:"Frank Ruhl Libre","Times New Roman",serif; --sans:"Heebo","Arial Hebrew",Arial,sans-serif; --mono:"JetBrains Mono","Courier New",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#1B1E20; --paper:#242829; --ink:#E9E4DA; --muted:#A19C92; --line:#3A3F41;
+  --accent:#E0A24C; --accent-soft:#3B2E17; --machine:#6FB5BE; --machine-soft:#1E3538;
+  --red:#E07070; --yellow:#E2B84A; --green:#7FC08F; --sel:#33383A; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --ground:#1B1E20; --paper:#242829; --ink:#E9E4DA; --muted:#A19C92; --line:#3A3F41;
+  --accent:#E0A24C; --accent-soft:#3B2E17; --machine:#6FB5BE; --machine-soft:#1E3538;
+  --red:#E07070; --yellow:#E2B84A; --green:#7FC08F; --sel:#33383A; color-scheme:dark; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;direction:rtl;padding-block:0 32px;padding-inline:16px}
+h1,h2,h3{font-family:var(--serif);font-weight:500;margin:0;text-wrap:balance;line-height:1.2}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 24px;padding-block:18px 10px;border-bottom:1px solid var(--line)}
+header h1{font-size:30px}
+header .sub{color:var(--muted);font-size:14px}
+.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-family:var(--sans)}
+/* pipeline */
+.pipe{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch;padding-block:14px;font-variant-numeric:tabular-nums}
+.stage{display:flex;flex-direction:column;gap:2px;padding:8px 12px;border:1px solid var(--line);background:var(--paper);min-width:112px;flex:1 1 112px}
+.stage .n{font-family:var(--serif);font-size:22px;line-height:1}
+.stage .l{font-size:12px;color:var(--muted)}
+.stage.machine{border-color:var(--machine)}
+.stage.yeshiva{border-color:var(--accent);background:var(--accent-soft)}
+.stage .who{font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.stage.machine .who{color:var(--machine)} .stage.yeshiva .who{color:var(--accent)}
+.arrow{align-self:center;color:var(--muted);font-size:18px;padding:0 2px}
+/* workspace */
+.work{display:grid;grid-template-columns:230px minmax(280px,1fr) minmax(320px,1.2fr);gap:14px;align-items:start;margin-top:8px}
+@media (max-width:980px){.work{grid-template-columns:1fr}}
+.pane{background:var(--paper);border:1px solid var(--line);min-width:0}
+.pane h2{font-size:15px;padding:10px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.pane h2 small{font-family:var(--sans);color:var(--muted);font-size:12px;font-weight:400}
+/* list */
+.list{list-style:none;margin:0;padding:0;max-height:70vh;overflow:auto}
+.list li{padding:8px 12px;border-bottom:1px solid var(--line);cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:6px;align-items:baseline}
+.list li:hover{background:var(--sel)} .list li[aria-current="true"]{background:var(--sel);box-shadow:inset 3px 0 0 var(--accent)}
+.list .t{font-size:13px;line-height:1.3} .list .c{font-family:var(--mono);font-size:11px;color:var(--accent);white-space:nowrap}
+.list .c.done{color:var(--green)}
+/* doc */
+.doc{max-height:70vh;overflow:auto;padding:10px 14px;font-size:14px;white-space:pre-wrap;font-family:var(--sans)}
+.doc .h{font-family:var(--serif);font-size:17px;margin-top:10px;display:block}
+.doc .hit{background:var(--accent-soft);box-shadow:-3px 0 0 var(--accent);padding-inline-end:4px;cursor:pointer}
+.doc .hit:hover{outline:1px solid var(--accent)}
+/* tabs */
+.tabs{display:flex;border-bottom:1px solid var(--line)}
+.tabs button{all:unset;cursor:pointer;padding:9px 14px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.tab{padding:10px 12px;max-height:66vh;overflow:auto}
+/* questions */
+.q{border:1px solid var(--line);padding:10px 12px;margin-bottom:10px;display:grid;gap:8px;background:var(--ground)}
+.q.hl{border-color:var(--accent)}
+.q .k{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.q .kind{font-family:var(--serif);font-size:15px;color:var(--accent)}
+.q .kind.fix{color:var(--machine)}
+.q .why{font-size:12px;color:var(--muted)}
+.q .txt{font-size:14px}
+.q .ans{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.q .ans label{display:inline-flex;gap:4px;align-items:center;padding:4px 10px;border:1px solid var(--line);background:var(--paper);cursor:pointer;font-size:13px}
+.q .ans input[type=radio]{accent-color:var(--accent);margin:0}
+.q .ans label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.q .ans label:has(input[value=noise]:checked){border-color:var(--muted);background:var(--sel)}
+.q .ans input[type=text]{flex:1 1 160px;min-width:0;padding:5px 8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-size:13px}
+.q .ans input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.empty{color:var(--muted);padding:20px 8px;text-align:center}
+/* spec */
+.spec{font-family:var(--mono);font-size:12px;line-height:1.55;white-space:pre-wrap;word-break:break-word;margin:0}
+.spec .add{background:var(--machine-soft);color:var(--ink);display:block}
+.spec .add::before{content:"+ ";color:var(--machine)}
+.spec .del{opacity:.55;text-decoration:line-through;display:block}
+.spec .del::before{content:"− ";color:var(--red)}
+.spec .mod{background:var(--accent-soft);display:block}
+.spec .mod::before{content:"~ ";color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);padding:6px 0 10px}
+/* preview */
+.app{border:1px solid var(--line);background:var(--ground);padding:14px;display:grid;gap:14px;max-width:420px;margin-inline:auto}
+.app .title{font-family:var(--serif);font-size:20px}
+.app .ask{font-size:13px;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.kpi{background:var(--paper);border:1px solid var(--line);padding:8px 10px}
+.kpi .v{font-family:var(--serif);font-size:24px;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:11px;color:var(--muted)}
+.form{background:var(--paper);border:1px solid var(--line);padding:10px 12px;display:grid;gap:8px}
+.form .fh{font-family:var(--serif);font-size:16px;border-bottom:1px solid var(--line);padding-bottom:4px}
+.field{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;font-size:13px}
+.field .box{border:1px dashed var(--line);height:26px;min-width:90px;display:flex;align-items:center;padding:0 6px;font-size:11px;color:var(--muted);gap:4px;flex-wrap:wrap}
+.field.new{box-shadow:-3px 0 0 var(--accent);padding-inline-end:6px}
+.field.new .name::after{content:" · חדש";color:var(--accent);font-size:11px}
+.chip{border:1px solid var(--line);padding:0 6px;font-size:10px;line-height:16px;background:var(--ground)}
+.req{color:var(--red)}
+.plist{display:grid;gap:4px;font-size:13px}
+.plist div{display:flex;gap:8px;align-items:baseline}
+.plist .tag{font-family:var(--mono);font-size:10px;color:var(--machine);border:1px solid var(--machine);padding:0 5px;white-space:nowrap}
+.warn{font-size:12px;color:var(--red)}
+.note{font-size:12px;color:var(--muted);padding:6px 0}
+footer{color:var(--muted);font-size:12px;padding-top:18px;line-height:1.7}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (prefers-reduced-motion:no-preference){.list li,.q{transition:background .15s,border-color .15s}}
+</style>
+
+<header>
+  <h1>המחולל הישיבתי</h1>
+  <span class="sub">מסמך-הפירוק שלך ⇐ הספק שהמחצב גזר ⇐ מה הישיבה מצאה ⇐ תשובתך ⇐ הספק המתוקן ⇐ המסך. הכל מכונה, אפס מודל.</span>
+</header>
+
+<section class="pipe" id="pipe" aria-label="הצנרת"></section>
+
+<div class="work">
+  <aside class="pane">
+    <h2>פירוקים <small id="lcount"></small></h2>
+    <ul class="list" id="list"></ul>
+  </aside>
+  <section class="pane">
+    <h2 id="doctitle">הפירוק <small>מה שכתבת · שורה מודגשת = הישיבה עצרה עליה</small></h2>
+    <div class="doc" id="doc"></div>
+  </section>
+  <section class="pane">
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tab-q" aria-selected="true" aria-controls="p-q">שאלות <span id="qn"></span></button>
+      <button role="tab" id="tab-s" aria-selected="false" aria-controls="p-s">הספק</button>
+      <button role="tab" id="tab-a" aria-selected="false" aria-controls="p-a">המסך</button>
+    </div>
+    <div class="tab" id="p-q" role="tabpanel"></div>
+    <div class="tab" id="p-s" role="tabpanel" hidden></div>
+    <div class="tab" id="p-a" role="tabpanel" hidden></div>
+  </section>
+</div>
+
+<footer>
+  <div id="store">התשובות נשמרות בדפדפן הזה בלבד.</div>
+  <div>הישיבה בודקת צורה, לא תוכן: חלופות-בסלאש מול enum · מספרים בפירוק מול הספק · שדות-תאומים · מצייני-מקום · כותרות שהפכו לתוכן · ציטוטים «…» · רשות/חובה. הספק המתוקן כאן הוא הדמיה של שכבה 2: כך תיראה השורה שתיכנס לספק כשתאשר.</div>
+</footer>
+
+<script>
+// ───────── הקורא הישיבתי (אותו קוד כמו yeshiva/read.mjs, בדפדפן) ─────────
+const STOP=new Set(['את','של','על','עם','או','אם','כי','לא','כן','זה','זו','יש','אין','מה','מי','גם','רק','כל','עוד','כבר','בלי','עד','מול','ועד','ולא','הוא','היא','הם','לפי','בין','אחרי','לפני','מתי','איך','למה','אז','אבל']);
+const PLACEHOLDER_RE=/(?:^|[\s־\-–])(?:X|Y|Z|N|XX|YY|NN|TBD|TODO|\?\?\?)(?=$|[\s.,;:־\-–)])/;
+const HEADING_ONLY_RE=/^[א-ת״׳"' ]{1,20}:$/;
+const NUM_RE=/(?<![\d.,])(\d{1,3}(?:[.,]\d{3})*|\d+)(?:\s*[–\-]\s*(\d+))?\s*(%|₪|ימים?|יום|שבועות?|שבוע|חודשים?|חודש|שעות|שנים?|שנה)?/g;
+const SLASH_LIST_RE=/([א-ת״׳"' ]{2,30})\s*\/\s*([א-ת״׳"' ]{2,30})(?:\s*\/\s*([א-ת״׳"' ]{2,30}))?/;
+const QUOTE_RE=/«([^»]{3,80})»/g;
+const words=s=>[...String(s).matchAll(/[א-ת״׳"']{2,}/g)].map(m=>m[0]).filter(w=>!STOP.has(w));
+const PREFIX=/^[ובלכמשה]/;
+const sameWord=(a,b)=>a===b||(PREFIX.test(a)&&a.slice(1)===b)||(PREFIX.test(b)&&b.slice(1)===a);
+const norm=s=>String(s).replace(/[״"'׳]/g,'').replace(/\s+/g,' ').trim();
+
+function parseSpec(text){
+  const spec={entities:[],fields:[],enums:[],particles:[],contents:[],raw:text,lines:text.split('\n')};
+  for(const line of spec.lines){let m;
+    if((m=line.match(/^ישות (\S+) עם (.*?)(?: \| |$)/))){const ent=m[1];spec.entities.push(ent);
+      for(const raw of m[2].split(',')){const f=raw.trim();if(!f)continue;const name=norm(f.replace(/[*{(].*$/,''));const req=/\*/.test(f.replace(/\{[^}]*\}|\([^)]*\)/g,''));const en=(f.match(/\{([^}]*)\}/)||[])[1];const range=(f.match(/\(([^)]*)\)/)||[])[1];
+        spec.fields.push({ent,name,req,en:en?en.split('|').map(norm):null,range:range||null});if(en)spec.enums.push({ent,name,values:en.split('|').map(norm)});}}
+    else if(/^(חלקיק|דוח|לוח בקרה)/.test(line))spec.particles.push(line);else if(/^תוכן /.test(line))spec.contents.push(line);}
+  return spec;}
+function parsePeruk(text){const lines=text.split('\n');const doc={lines,title:(lines[0]||'').replace(/^#\s*/,''),sections:{},optional:[],mandatory:[]};let sec='',sub='';
+  for(const l of lines){if(/^## /.test(l)){sec=l.replace(/^##\s*\d*\.?\s*/,'').trim();sub='';doc.sections[sec]=[];continue;}if(/^### /.test(l)){sub=l.replace(/^###\s*/,'').trim();continue;}if(!sec)continue;doc.sections[sec].push(l);
+    if(/^רשות/.test(l))sub='רשות';else if(/^חובה/.test(l))sub='חובה';const item=l.match(/^\s*[-•]\s*(.+)$/);
+    if(item&&/[א-ת]/.test(item[1])&&sub==='רשות')doc.optional.push(norm(item[1]));if(item&&/[א-ת]/.test(item[1])&&sub==='חובה')doc.mandatory.push(norm(item[1]));}
+  return doc;}
+const WHY={'איכא דאמרי':'הגמרא: "איכא דאמרי" — שתי קריאות בשמן. בפירוק כתבת מקרים, בספק אין שדה שמבדיל ביניהם — האפליקציה לא תשאל.',
+ 'שיעור':'הפוסקים: "שיעור" — מספר במקום קצת/הרבה. הסף שכתבת לא הגיע לספק, המסך יעבוד בלי גבול.',
+ 'ורמינהו':'התוספות: "ורמינהו" — שני מקורות שנראים סותרים. שני שדות עם משמעות אחת: הטופס ישאל פעמיים.',
+ 'ייתור':'הנצי"ב: "ייתור = מידע" — מה שנראה מיותר הוא המידע. ציטוט שטרחת לכתוב ולא הגיע לאף מסך.',
+ 'מאי X':'הגמרא: "מאי" — מה זה? אות מהדוגמה תופיע במסך כאות. תיקון מכני.',
+ 'אין מערבין':'כותרת של הדוגמה נכנסה לתוכן כשורה. פיגום שנשאר בבניין. תיקון מכני.',
+ 'ממה נפשך':'שתי הקריאות נותנות אותה בנייה — לא שואלים.'};
+function check(doc,spec){const out=[];const specText=norm(spec.raw);
+  for(const [sec,ls] of Object.entries(doc.sections)){if(!/פירוק|בלוק|המוצר/.test(sec))continue;for(const l of ls){const m=l.match(SLASH_LIST_RE);if(!m)continue;const opts=[m[1],m[2],m[3]].filter(Boolean).map(norm);
+    if(opts.some(o=>o.split(' ').length>3))continue;if(/^\s*[-•\d.]*\s*(מתי|האם|מה|איך|למה|כמה)\b/.test(l))continue;
+    const covered=spec.enums.some(e=>opts.filter(o=>e.values.some(v=>v.includes(o)||o.includes(v))).length>=2);
+    if(!covered)out.push({kind:'איכא דאמרי',q:true,line:l,text:`«${norm(l.replace(/^\s*[-•\d.]+\s*/,''))}» — מקרים בשמם, ואין enum בספק.`,apply:{type:'enum',opts,name:norm(l.replace(/^\s*[-•\d.]+\s*/,'')).split(/[:(]/)[0].split(' ').slice(0,2).join(' ')}});}}
+  const docNums=new Map();for(const [sec,ls] of Object.entries(doc.sections)){if(/דוגמ/.test(sec))continue;for(const l of ls)for(const m of l.matchAll(NUM_RE)){if(!m[3]&&!m[2])continue;const key=m[0].trim();if(!docNums.has(key))docNums.set(key,{ctx:norm(l).slice(0,90),line:l});}}
+  for(const [k,v] of docNums)if(!specText.includes(norm(k))&&!specText.includes(k.replace(/\s+/g,'')))out.push({kind:'שיעור',q:true,line:v.line,text:`«${k}» («${v.ctx}») — לא בספק.`,apply:{type:'content',line:`תוכן סף: ${v.ctx}`}});
+  for(const ent of spec.entities){const fs_=spec.fields.filter(f=>f.ent===ent);for(let i=0;i<fs_.length;i++)for(let j=i+1;j<fs_.length;j++){const a=fs_[i],b=fs_[j];
+    const shared=words(a.name).filter(w=>w.length>=3&&words(b.name).some(v=>sameWord(w,v)));const sameKind=(!!a.en===!!b.en)&&(!!a.range===!!b.range);const paired=spec.particles.some(pl=>pl.includes(a.name)&&pl.includes(b.name));
+    if(shared.length&&sameKind&&a.name!==b.name&&!paired)out.push({kind:'ורמינהו',q:true,text:`«${a.name}»${a.req?'*':''} ו«${b.name}»${b.req?'*':''} ב${ent} — מילה משותפת «${shared[0]}». אחד מהם?`,apply:{type:'dropField',ent,name:b.name}});}}
+  for(const c of spec.contents)if(PLACEHOLDER_RE.test(c))out.push({kind:'מאי X',q:false,text:`${c.slice(0,80)} — מציין-מקום הפך לטקסט.`,apply:{type:'placeholder',line:c}});
+  for(const c of spec.contents){const body=c.replace(/^תוכן [^:]*:\s*/,'').trim();if(HEADING_ONLY_RE.test(body))out.push({kind:'אין מערבין',q:false,text:`${c.slice(0,60)} — כותרת, לא תוכן.`,apply:{type:'dropLine',line:c}});}
+  for(const [sec,ls] of Object.entries(doc.sections)){if(!/פירוק|בלוק|אדום|צהוב|ירוק|סיווג|המוצר|אסור|חובה/.test(sec))continue;for(const l of ls)for(const m of l.matchAll(QUOTE_RE)){const qn=norm(m[1]);if(!specText.includes(qn))out.push({kind:'ייתור',q:true,line:l,text:`«${qn}» — מצוטט (${sec}) ולא בספק. תוכן בדיקה?`,apply:{type:'content',line:`תוכן בדיקה: ${qn}`}});}}
+  for(const o of doc.optional){const f=spec.fields.find(x=>words(x.name).some(w=>words(o).some(v=>sameWord(w,v))));if(f&&f.req)out.push({kind:'ורמינהו',q:true,text:`«${o}» רשות בפירוק, אבל «${f.name}»* חובה בספק.`,apply:{type:'unrequire',name:f.name}});}
+  for(const o of doc.mandatory){const f=spec.fields.find(x=>words(x.name).some(w=>words(o).some(v=>sameWord(w,v))));if(f&&!f.req)out.push({kind:'ורמינהו',q:true,text:`«${o}» חובה בפירוק, אבל «${f.name}» לא חובה בספק.`,apply:{type:'require',name:f.name}});if(!f)out.push({kind:'ייתור',q:true,text:`«${o}» חובה ב"מה שולחים" — אין שדה בספק.`,apply:{type:'field',name:o}});}
+  const mn=doc.optional.filter(o=>spec.fields.some(x=>!x.req&&words(x.name).some(w=>words(o).some(v=>sameWord(w,v)))));if(mn.length)out.push({kind:'ממה נפשך',q:false,text:`רשות בפירוק ורשות בספק: ${mn.map(x=>`«${x}»`).join(', ')} — נבנה כך.`});
+  const ORDER=['איכא דאמרי','שיעור','ורמינהו','ייתור','מאי X','אין מערבין','ממה נפשך'];
+  out.sort((a,b)=>ORDER.indexOf(a.kind)-ORDER.indexOf(b.kind)||a.text.localeCompare(b.text));
+  out.forEach((f,i)=>f.key=f.kind+'#'+i);return out;}
+
+// ───────── שכבה 2 (הדמיה): התשובות ⇒ הספק המתוקן ─────────
+function applyAnswers(spec,findings,answers){const lines=spec.raw.split('\n');const marks=new Map();let extra=[];
+  const mark=(i,cls,txt)=>{marks.set(i,{cls,txt});};
+  for(const f of findings){const a=answers[f.key];const ap=f.apply;if(!ap)continue;
+    const yes=f.q?(a&&a.v==='yes'):true;if(!yes)continue;
+    if(ap.type==='enum'){const i=lines.findIndex(l=>/^ישות /.test(l));if(i<0)continue;const nm=(a&&a.t)||ap.name||'שדה';const add=`, ${nm}{${ap.opts.join('|')}}`;const l=lines[i];const cut=l.indexOf(' | ');const nl=cut>0?l.slice(0,cut)+add+l.slice(cut):l+add;mark(i,'mod',nl);}
+    else if(ap.type==='field'){const i=lines.findIndex(l=>/^ישות /.test(l));if(i<0)continue;const nm=(a&&a.t)||ap.name;const l=marks.get(i)?marks.get(i).txt:lines[i];const cut=l.indexOf(' | ');const nl=cut>0?l.slice(0,cut)+`, ${nm}*`+l.slice(cut):l+`, ${nm}*`;mark(i,'mod',nl);}
+    else if(ap.type==='dropField'){const i=lines.findIndex(l=>l.startsWith(`ישות ${ap.ent} `));if(i<0)continue;const l=marks.get(i)?marks.get(i).txt:lines[i];const nl=l.replace(new RegExp(`,\\s*${ap.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}[^,|]*`),'');mark(i,'mod',nl);}
+    else if(ap.type==='require'||ap.type==='unrequire'){const i=lines.findIndex(l=>/^ישות /.test(l)&&l.includes(ap.name));if(i<0)continue;const l=marks.get(i)?marks.get(i).txt:lines[i];const re=new RegExp(`(${ap.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})(\\*?)`);const nl=l.replace(re,(m,n)=>ap.type==='require'?n+'*':n);mark(i,'mod',nl);}
+    else if(ap.type==='content'){extra.push(ap.line);}
+    else if(ap.type==='placeholder'){const i=lines.indexOf(ap.line);if(i<0)continue;mark(i,'mod',ap.line.replace(/(?<=^|[\s־\-–])(X|Y|Z|N)(?=$|[\s.,;:־\-–)])/g,'{שדה}'));}
+    else if(ap.type==='dropLine'){const i=lines.indexOf(ap.line);if(i>=0)mark(i,'del',lines[i]);}}
+  return {lines,marks,extra};}
+
+// ───────── מצב · אחסון ─────────
+const $=s=>document.querySelector(s);
+let DATA=[],cur=null,answers={},dbRef=null;
+const lsKey=id=>'yeshiva:'+id;
+function loadLocal(id){try{return JSON.parse(localStorage.getItem(lsKey(id))||'{}');}catch{return {};}}
+function saveLocal(id,a){try{localStorage.setItem(lsKey(id),JSON.stringify(a));}catch{}}
+async function initDb(){try{const db=await window.claude?.use?.('db');if(!db)return;dbRef=db;$('#store').textContent='התשובות נשמרות ומשותפות: כל מי שפותח את הדף רואה אותן, וקלוד קורא אותן משם לשכבה 2.';
+  db.collection('answers').onSnapshot(qs=>{qs.forEach(d=>{const v=d.data();if(v&&v.items){answers[d.id]=v.items;saveLocal(d.id,v.items);}});renderList();if(cur)renderTabs();},()=>{});}catch{}}
+async function persist(id){saveLocal(id,answers[id]||{});if(dbRef){try{await dbRef.collection('answers').doc(id).set({items:answers[id]||{},t:Date.now()});}catch{}}}
+
+// ───────── רינדור ─────────
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function findingsOf(p){if(!p._f){p._doc=parsePeruk(p.doc);p._spec=parseSpec(p.spec);p._f=check(p._doc,p._spec);}return p._f;}
+function stats(p){const f=findingsOf(p);const a=answers[p.id]||{};const qs=f.filter(x=>x.q);return {q:qs.length,fix:f.filter(x=>!x.q&&x.kind!=='ממה נפשך').length,answered:qs.filter(x=>a[x.key]).length,yes:qs.filter(x=>a[x.key]&&a[x.key].v==='yes').length};}
+function renderPipe(){const tot=DATA.reduce((s,p)=>{const st=stats(p);s.q+=st.q;s.fix+=st.fix;s.ans+=st.answered;s.yes+=st.yes;return s;},{q:0,fix:0,ans:0,yes:0});
+  const st=[{who:'אתה',cls:'',n:DATA.length,l:'מסמכי פירוק'},{who:'המחצב',cls:'machine',n:DATA.length,l:'ספקים נגזרו'},{who:'הישיבה',cls:'yeshiva',n:tot.q,l:'שאלות'},{who:'הישיבה',cls:'yeshiva',n:tot.fix,l:'תיקונים מכניים'},{who:'אתה',cls:'',n:tot.ans,l:'נענו · '+tot.yes+' אושרו'},{who:'המחצב',cls:'machine',n:DATA.reduce((s,p)=>s+p._spec.entities.length,0),l:'ישויות ⇒ מסכים'}];
+  $('#pipe').innerHTML=st.map((s,i)=>`${i?'<span class="arrow" aria-hidden="true">⇐</span>':''}<div class="stage ${s.cls}"><span class="who">${s.who}</span><span class="n">${s.n}</span><span class="l">${s.l}</span></div>`).join('');}
+function renderList(){$('#list').innerHTML=DATA.map(p=>{const s=stats(p);return `<li data-id="${p.id}" aria-current="${cur&&cur.id===p.id}"><span class="t">${esc(p.title.replace(/^פירוק \d+:\s*/,''))}</span><span class="c ${s.answered&&s.answered===s.q?'done':''}">${s.answered}/${s.q}</span></li>`;}).join('');
+  $('#lcount').textContent=DATA.length+' · '+DATA.filter(p=>{const s=stats(p);return s.q&&s.answered===s.q;}).length+' נענו';renderPipe();}
+function renderDoc(p){const f=findingsOf(p);const hitLines=new Map();f.forEach(x=>{if(x.line)hitLines.set(x.line,x.key);});
+  $('#doctitle').innerHTML=`${esc(p.title)} <small>שורה מודגשת = הישיבה עצרה עליה</small>`;
+  $('#doc').innerHTML=p.doc.split('\n').map(l=>{if(/^#{1,3} /.test(l))return `<span class="h">${esc(l.replace(/^#+\s*/,''))}</span>`;if(hitLines.has(l))return `<span class="hit" data-key="${hitLines.get(l)}">${esc(l)}</span>`;return esc(l);}).join('\n');}
+function renderQuestions(p){const f=findingsOf(p);const a=answers[p.id]||{};const box=$('#p-q');if(!f.length){box.innerHTML='<div class="empty">אין פערים: כל מה שבפירוק הגיע לספק.</div>';return;}
+  box.innerHTML=f.map(x=>{const v=a[x.key]||{};const isQ=x.q&&x.kind!=='ממה נפשך';
+    const ans=isQ?`<div class="ans"><label><input type="radio" name="${x.key}" value="yes" ${v.v==='yes'?'checked':''}>נכון, תכניס</label><label><input type="radio" name="${x.key}" value="noise" ${v.v==='noise'?'checked':''}>רעש</label>${x.apply&&(x.apply.type==='enum'||x.apply.type==='field')?`<input type="text" id="t-${x.key}" placeholder="שם השדה" value="${esc(v.t||x.apply.name||'')}" aria-label="שם השדה">`:''}</div>`:`<div class="why">${x.kind==='ממה נפשך'?'הערה בלבד':'תיקון מכני — נכנס לספק בלי לשאול'}</div>`;
+    return `<div class="q ${x.q?'':'fix'}" id="q-${x.key}"><div class="k"><span class="kind ${x.q?'':'fix'}">${x.kind}</span></div><div class="txt">${esc(x.text)}</div><div class="why">${WHY[x.kind]||''}</div>${ans}</div>`;}).join('');
+  box.querySelectorAll('input[type=radio]').forEach(r=>r.addEventListener('change',e=>{const k=e.target.name;answers[p.id]=answers[p.id]||{};const t=$('#t-'+CSS.escape(k));answers[p.id][k]={v:e.target.value,t:t?t.value:undefined,ts:Date.now()};persist(p.id);renderList();renderSpec(p);renderApp(p);}));
+  box.querySelectorAll('input[type=text]').forEach(t=>t.addEventListener('change',e=>{const k=e.target.id.slice(2);answers[p.id]=answers[p.id]||{};answers[p.id][k]={...(answers[p.id][k]||{v:'yes'}),t:e.target.value,ts:Date.now()};persist(p.id);renderSpec(p);renderApp(p);}));
+  $('#qn').textContent=`(${stats(p).answered}/${stats(p).q})`;}
+function renderSpec(p){const {lines,marks,extra}=applyAnswers(p._spec,findingsOf(p),answers[p.id]||{});
+  const html=lines.map((l,i)=>{const m=marks.get(i);if(!m)return esc(l);if(m.cls==='del')return `<span class="del">${esc(l)}</span>`;return `<span class="del">${esc(l)}</span><span class="add">${esc(m.txt)}</span>`;}).join('\n')+(extra.length?'\n'+extra.map(e=>`<span class="add">${esc(e)}</span>`).join('\n'):'');
+  $('#p-s').innerHTML=`<div class="legend"><span>+ נכנס מהתשובה שלך</span><span>− יוצא</span><span>שורה רגילה = מה שהמחצב גזר</span></div><pre class="spec">${html}</pre>`;}
+function renderApp(p){const spec=p._spec;const fixed=parseSpec(rebuild(p));
+  const origNames=new Set(spec.fields.map(f=>f.ent+'/'+f.name));const app=fixed;const name=(spec.lines.find(l=>/^אפליקציה:/.test(l))||'').replace(/^אפליקציה:\s*/,'')||p.title;
+  const asks=spec.lines.filter(l=>/^שאלה /.test(l)).map(l=>l.replace(/^שאלה [^:]*:\s*/,''));
+  const kpis=(spec.lines.find(l=>/^לוח בקרה/.test(l))||'').replace(/^לוח בקרה עם\s*/,'').split(/,\s*(?![^()]*\))/).filter(Boolean).map(k=>k.trim());
+  const forms=app.entities.map(ent=>{const fs_=app.fields.filter(f=>f.ent===ent);return `<div class="form"><div class="fh">${esc(ent)}</div>${fs_.map(f=>{const nw=!origNames.has(ent+'/'+f.name);const box=f.en?f.en.map(v=>`<span class="chip">${esc(v)}</span>`).join(''):f.range?`<span>${esc(f.range)}</span>`:'<span>טקסט</span>';return `<div class="field ${nw?'new':''}"><span class="name">${esc(f.name)}${f.req?' <span class="req">*</span>':''}</span><span class="box">${box}</span></div>`;}).join('')}</div>`;}).join('');
+  const parts=app.particles.filter(l=>/^חלקיק/.test(l)).slice(0,12).map(l=>{const m=l.match(/^חלקיק ([^:]+):\s*(.*)$/);if(!m)return '';const tag=(m[2].match(/\[([^\]]+)\]/)||[])[1]||'חישוב';return `<div><span class="tag">${esc(tag)}</span><span>${esc(m[2].replace(/\[[^\]]+\]\s*/,'').slice(0,70))}</span></div>`;}).join('');
+  const contents=app.contents.filter(c=>PLACEHOLDER_RE.test(c)).length;
+  $('#p-a').innerHTML=`<div class="note">הדמיה של המסך שהמחצב ירכיב מהספק המתוקן: טופס לכל ישות, מונים, חלקיקים. שדה מסומן = בא מהתשובה שלך.</div><div class="app"><div class="title">${esc(name)}</div>${asks.length?`<div class="ask">${asks.map(esc).join(' · ')}</div>`:''}${kpis.length?`<div class="kpis">${kpis.map(k=>`<div class="kpi"><div class="v">—</div><div class="l">${esc(k)}</div></div>`).join('')}</div>`:''}${forms}${parts?`<div class="form"><div class="fh">חלקיקים</div><div class="plist">${parts}</div></div>`:''}${contents?`<div class="warn">${contents} שורות תוכן עם מציין-מקום (X/Y) עדיין במסך — התיקון המכני נכנס בשכבה 2.</div>`:''}</div>`;}
+function rebuild(p){const {lines,marks,extra}=applyAnswers(p._spec,findingsOf(p),answers[p.id]||{});return lines.map((l,i)=>{const m=marks.get(i);if(!m)return l;if(m.cls==='del')return null;return m.txt;}).filter(l=>l!==null).concat(extra).join('\n');}
+function renderTabs(){renderQuestions(cur);renderSpec(cur);renderApp(cur);}
+function select(id){cur=DATA.find(p=>p.id===id);if(!cur)return;answers[cur.id]=answers[cur.id]||loadLocal(cur.id);findingsOf(cur);renderList();renderDoc(cur);renderTabs();try{localStorage.setItem('yeshiva:cur',id);}catch{}}
+$('#list').addEventListener('click',e=>{const li=e.target.closest('li');if(li)select(li.dataset.id);});
+$('#doc').addEventListener('click',e=>{const h=e.target.closest('.hit');if(!h)return;showTab('q');const q=document.getElementById('q-'+h.dataset.key);if(q){q.scrollIntoView({block:'center'});q.classList.add('hl');setTimeout(()=>q.classList.remove('hl'),1500);}});
+function showTab(k){for(const t of ['q','s','a']){$('#tab-'+t).setAttribute('aria-selected',t===k);$('#p-'+t).hidden=t!==k;}}
+['q','s','a'].forEach(t=>$('#tab-'+t).addEventListener('click',()=>showTab(t)));
+
+fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;DATA.forEach(p=>{answers[p.id]=loadLocal(p.id);findingsOf(p);});let start='peruk-04';try{start=localStorage.getItem('yeshiva:cur')||start;}catch{}renderList();select(DATA.some(p=>p.id===start)?start:DATA[0].id);initDb();}).catch(()=>{$('#doc').innerHTML='<div class="empty">לא נטענו הפירוקים (data.json).</div>';});
+</script>
