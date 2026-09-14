@@ -1,0 +1,210 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:04:31.485Z",
+ "query": "two ביטול בעלים הגרסה תפורסם מחדש לכל",
+ "tokens": [
+  "two",
+  "יטול",
+  "עלים",
+  "גרסה",
+  "תפורסם",
+  "חדש",
+  "לכל"
+ ],
+ "oracle": {
+  "atomIndexSha": "f7f826a864d68a98a070a72672424c0fe10700dfa34704c16f9f3f2c1cd64c07",
+  "logicCensusSha": "c5e2f049ebfa37edbe5e728ff068e9a154c5731ff23b823410a43947a0504cb7",
+  "display": 1909,
+  "logic": 985
+ },
+ "candidates": [
+  {
+   "id": "DsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsApproveCard",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsChip",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsChipButton",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsDiffRow",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsFold",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsLoadMeter",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsLogRow",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsNavTile",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsNote",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsPalette",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsPrimaryButton",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsQuickAdd",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  },
+  {
+   "id": "DsRecordCard",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "עלים",
+    "חדש",
+    "לכל"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "DsActionRow",
+  "DsApproveCard",
+  "DsChip",
+  "DsChipButton",
+  "DsDiffRow",
+  "DsEmpty",
+  "DsFold",
+  "DsLoadMeter",
+  "DsLogRow",
+  "DsNavTile",
+  "DsNote",
+  "DsPalette",
+  "DsPrimaryButton",
+  "DsQuickAdd",
+  "DsRecordCard"
+ ],
+ "creates": "new/dart/two.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). האורקל המאוחד לא החזיר מועמד בציון ≥3 באותה שכבה לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.",
+ "sig": "d33ed291cccb667d40898484be5d47dbb21171977b95ccb0ece73943cd970c4f"
+}

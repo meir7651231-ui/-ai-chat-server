@@ -10904,6 +10904,16 @@
   "wireable": false
  },
  {
+  "file": "dart/two.dart",
+  "name": "two",
+  "ret": "String",
+  "params": [
+   "int"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-boxes/public-site.dart",
   "name": "ui",
   "ret": "dynamic",
