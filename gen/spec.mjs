@@ -29,7 +29,18 @@ export function parseSpec(text) {
     let m;
     if ((m = /^אפליקציה:\s*(.+)$/.exec(line))) spec.app = m[1].trim();
     else if ((m = /^ישות\s+(.+?)\s+עם\s+(.+)$/.exec(line))) {
-      spec.entities.push({ name: m[1].trim(), fields: m[2].split(',').map(parseField) });
+      // «|» מפריד קטעים רק מחוץ לסוגריים-מסולסלים (בתוך {א|ב} הוא מפריד-ערכים)
+      const parts = []; let d = 0, cur = '';
+      for (const ch of m[2]) { if (ch === '{') d++; else if (ch === '}') d = Math.max(0, d - 1); if (ch === '|' && d === 0) { parts.push(cur); cur = ''; } else cur += ch; }
+      parts.push(cur);
+      const [fieldsPart, ...sections] = parts.map((x) => x.trim());
+      const ent = { name: m[1].trim(), fields: fieldsPart.split(',').map(parseField), stages: [] };
+      for (const sec of sections) {
+        const sm = /^שלבים\s*:?\s*(.+)$/.exec(sec);
+        if (!sm) throw new Error(`קטע לא מוכר אחרי «|» בישות «${ent.name}»: «${sec}» — כאן מובן רק «| שלבים: א, ב, ג»`);
+        ent.stages = sm[1].split(',').map((x) => x.trim()).filter(Boolean);
+      }
+      spec.entities.push(ent);
     } else if ((m = /^לוח בקרה עם\s+(.+)$/.exec(line))) {
       for (const part of m[1].split(',')) {
         const w = /^\s*(\S+?)\((.+?)\.(.+?)\)\s*$/.exec(part);
@@ -39,6 +50,11 @@ export function parseSpec(text) {
     } else throw new Error(`שורת-ספק לא מובנת: «${line}»`);
   }
   if (!spec.app) throw new Error('חסר: אפליקציה: <שם>');
+  // קשר: שדה-טקסט ששמו הוא שם של ישות אחרת ⇒ הפניה אליה (מבני, לא מילון)
+  for (const e of spec.entities) for (const f of e.fields) {
+    const t = spec.entities.find((x) => x !== e && x.name === f.name);
+    if (t && f.shape === 'text') f.ref = t.name;
+  }
   for (const d of spec.dashboard) {
     const e = spec.entities.find((x) => x.name === d.entity);
     if (!e) throw new Error(`לוח-בקרה מפנה לישות שאינה בספק: «${d.entity}»`);

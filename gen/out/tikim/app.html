@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>גמ&quot;ח הלוואות</title>
+<title>תיקים</title>
 <style>
 :root{--bg:#f7f6f2;--ink:#1d1c19;--mute:#6b675e;--line:#d9d5cb;--card:#ffffff;--acc:#1f5f5b;--acc-ink:#ffffff;--warn:#8a3b12}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}}
@@ -19,20 +19,20 @@ button{font:inherit;background:var(--acc);color:var(--acc-ink);border:0;border-r
 td.num{font-variant-numeric:tabular-nums}.search{min-width:220px}
 .foot{color:var(--mute);font-size:12px;margin-top:16px}
 </style></head><body>
-<div class="top"><div><h1>גמ&quot;ח הלוואות</h1><div class="foot" style="margin:0">נבנה על-ידי המחולל · 7 אטומים מוכחים · הנתונים נשמרים בדפדפן זה</div></div>
+<div class="top"><div><h1>תיקים</h1><div class="foot" style="margin:0">נבנה על-ידי המחולל · 6 אטומים מוכחים · הנתונים נשמרים בדפדפן זה</div></div>
 <input class="search" id="q" type="search" placeholder="חיפוש בכל השדות…"></div>
-<div class="kpis"><div class="kpi" id="kpi0"><span class="v">—</span><span class="l">סכום לווה.סכום</span></div><div class="kpi" id="kpi1"><span class="v">—</span><span class="l">סכום החזר.סכום</span></div><div class="kpi" id="kpi2"><span class="v">—</span><span class="l">מונה לווה.סטטוס</span></div></div>
+<div class="kpis"><div class="kpi" id="kpi0"><span class="v">—</span><span class="l">סכום תיק.סכום</span></div></div>
 <section class="entity" data-entity="e0">
-  <h2>לווה <small id="e0_n"></small></h2>
-  <form id="e0_form" class="row"><label>שם <b>*</b><input id="e0_f0" type="text" required></label><label>נייד<input id="e0_f1" type="tel" inputmode="tel" ></label><label>סכום <b>*</b><input id="e0_f2" type="number" min="0" max="100000" step="any" required></label><label>תאריך הלוואה <b>*</b><input id="e0_f3" type="date" required></label><label>סטטוס<select id="e0_f4" ><option>פעיל</option><option>נפרע</option><option>באיחור</option></select></label><label>הערה<input id="e0_f5" type="text" ></label><button type="submit">הוסף לווה</button></form>
-  <div class="tbl"><table><thead><tr><th>שם</th><th>נייד</th><th>סכום</th><th>תאריך הלוואה</th><th>סטטוס</th><th>הערה</th><th>ימים</th><th></th></tr></thead><tbody id="e0_body"></tbody></table></div>
+  <h2>לקוח <small id="e0_n"></small></h2>
+  <form id="e0_form" class="row"><label>שם <b>*</b><input id="e0_f0" type="text" required></label><label>טלפון<input id="e0_f1" type="tel" inputmode="tel" ></label><label>כתובת<input id="e0_f2" type="text" ></label><button type="submit">הוסף לקוח</button></form>
+  <div class="tbl"><table><thead><tr><th>שם</th><th>טלפון</th><th>כתובת</th><th></th></tr></thead><tbody id="e0_body"></tbody></table></div>
 </section>
 <section class="entity" data-entity="e1">
-  <h2>החזר <small id="e1_n"></small></h2>
-  <form id="e1_form" class="row"><label>לווה <b>*</b><select id="e1_f0" data-ref="0" required><option value="">—</option></select></label><label>סכום <b>*</b><input id="e1_f1" type="number" min="0" max="100000" step="any" required></label><label>תאריך <b>*</b><input id="e1_f2" type="date" required></label><button type="submit">הוסף החזר</button></form>
-  <div class="tbl"><table><thead><tr><th>לווה</th><th>סכום</th><th>תאריך</th><th>ימים</th><th></th></tr></thead><tbody id="e1_body"></tbody></table></div>
+  <h2>תיק <small id="e1_n"></small></h2>
+  <form id="e1_form" class="row"><label>לקוח <b>*</b><select id="e1_f0" data-ref="0" required><option value="">—</option></select></label><label>נושא<input id="e1_f1" type="text" ></label><label>סכום<input id="e1_f2" type="number" min="0" max="1000000" step="any" ></label><label>תאריך פתיחה<input id="e1_f3" type="date" ></label><button type="submit">הוסף תיק</button></form>
+  <div class="tbl"><table><thead><tr><th>לקוח</th><th>נושא</th><th>סכום</th><th>תאריך פתיחה</th><th>שלב</th><th>ימים</th><th></th></tr></thead><tbody id="e1_body"></tbody></table></div>
 </section>
-<div class="foot">אטומים: norm-search · format-israeli-phone · shekel · fmt-date · cockpit-days-since · grand-total · count-by</div>
+<div class="foot">אטומים: norm-search · format-israeli-phone · shekel · fmt-date · cockpit-days-since · grand-total</div>
 <script>
 // ── אטום norm-search (new/atoms/norm-search.mjs)
 /** חוט · norm-search — נרמול-חיפוש עברי. חוזה: norm-search.contract.md
@@ -126,25 +126,12 @@ function grandTotal(boxes, boxTotal) {
 }
 const grandTotal__call = (...x) => grandTotal(...x);
 
-// ── אטום count-by (new/atoms/count-by.mjs)
-/** חוט · count-by — ספירה לפי מפתח, ממוין מהגדול לקטן. חוזה: count-by.contract.md
- *  חולץ כלשונו מ-maor/src/components/reports/lib.ts:83-91. */
-function countBy(items, key) {
-    const m = new Map();
-    for (const it of items) {
-        const k = key(it);
-        m.set(k, (m.get(k) ?? 0) + 1);
-    }
-    return [...m.entries()].sort((a, b) => b[1] - a[1]);
-}
-const countBy__call = (...x) => countBy(...x);
-
 // ── דבק מבני (מחולל): סכמה, אחסון, טופס, טבלה, מדדים
-const SCHEMA = [{"name":"לווה","stages":[],"fields":[{"name":"שם","shape":"text","required":true,"ref":-1},{"name":"נייד","shape":"phone","required":false,"ref":-1},{"name":"סכום","shape":"number","required":true,"ref":-1},{"name":"תאריך הלוואה","shape":"date","required":true,"ref":-1},{"name":"סטטוס","shape":"enum","required":false,"ref":-1},{"name":"הערה","shape":"text","required":false,"ref":-1}]},{"name":"החזר","stages":[],"fields":[{"name":"לווה","shape":"text","required":true,"ref":0},{"name":"סכום","shape":"number","required":true,"ref":-1},{"name":"תאריך","shape":"date","required":true,"ref":-1}]}];
-const KPIS = [{"op":"סכום","need":"sum","entity":0,"field":2,"call":"grandTotal__call"},{"op":"סכום","need":"sum","entity":1,"field":1,"call":"grandTotal__call"},{"op":"מונה","need":"count-by","entity":0,"field":4,"call":"countBy__call"}];
-const KEY = "gen:gemach";
-const FN = {normSearch__call, formatIsraeliPhone__call, shekel__call, fmtDate__call, cockpitDaysSince__call, grandTotal__call, countBy__call};
-const CALL = { money: shekel__call, fmtDate: fmtDate__call, daysSince: cockpitDaysSince__call, phone: formatIsraeliPhone__call, norm: normSearch__call, sum: grandTotal__call, countBy: countBy__call };
+const SCHEMA = [{"name":"לקוח","stages":[],"fields":[{"name":"שם","shape":"text","required":true,"ref":-1},{"name":"טלפון","shape":"phone","required":false,"ref":-1},{"name":"כתובת","shape":"text","required":false,"ref":-1}]},{"name":"תיק","stages":["התקבל","בטיפול","סגור"],"fields":[{"name":"לקוח","shape":"text","required":true,"ref":0},{"name":"נושא","shape":"text","required":false,"ref":-1},{"name":"סכום","shape":"number","required":false,"ref":-1},{"name":"תאריך פתיחה","shape":"date","required":false,"ref":-1}]}];
+const KPIS = [{"op":"סכום","need":"sum","entity":1,"field":2,"call":"grandTotal__call"}];
+const KEY = "gen:tikim";
+const FN = {normSearch__call, formatIsraeliPhone__call, shekel__call, fmtDate__call, cockpitDaysSince__call, grandTotal__call};
+const CALL = { money: shekel__call, fmtDate: fmtDate__call, daysSince: cockpitDaysSince__call, phone: formatIsraeliPhone__call, norm: normSearch__call, sum: grandTotal__call, countBy: null };
 const today = () => new Date().toISOString().slice(0, 10);
 let DATA; try { DATA = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { DATA = null; }
 if (!DATA) DATA = SCHEMA.map(() => []);

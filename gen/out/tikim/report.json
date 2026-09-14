@@ -1,10 +1,13 @@
 {
- "app": "גמ\"ח הלוואות",
- "spec": "אפליקציה: גמ\"ח הלוואות\nישות לווה עם שם*, נייד[טלפון], סכום(0..100000)*, תאריך הלוואה[תאריך]*, סטטוס{פעיל|נפרע|באיחור}, הערה\nישות החזר עם לווה*, סכום(0..100000)*, תאריך[תאריך]*\nלוח בקרה עם סכום(לווה.סכום), סכום(החזר.סכום), מונה(לווה.סטטוס)\n",
- "sentence": null,
+ "app": "תיקים",
+ "spec": "אפליקציה: תיקים\nישות לקוח עם שם*, טלפון[טלפון], כתובת\nישות תיק עם לקוח*, נושא, סכום(0..1000000), תאריך פתיחה[תאריך] | שלבים: התקבל, בטיפול, סגור\nלוח בקרה עם סכום(תיק.סכום)",
+ "sentence": {
+  "text": "מעקב תיקים: לכל לקוח יש שם, טלפון וכתובת; לכל תיק יש לקוח, נושא, סכום ותאריך פתיחה; שלבים: התקבל, בטיפול, סגור\n",
+  "notes": []
+ },
  "entities": [
   {
-   "name": "לווה",
+   "name": "לקוח",
    "fields": [
     {
      "name": "שם",
@@ -12,34 +15,12 @@
      "shape": "text"
     },
     {
-     "name": "נייד",
+     "name": "טלפון",
      "required": false,
      "shape": "phone"
     },
     {
-     "name": "סכום",
-     "required": true,
-     "shape": "number",
-     "min": 0,
-     "max": 100000
-    },
-    {
-     "name": "תאריך הלוואה",
-     "required": true,
-     "shape": "date"
-    },
-    {
-     "name": "סטטוס",
-     "required": false,
-     "shape": "enum",
-     "values": [
-      "פעיל",
-      "נפרע",
-      "באיחור"
-     ]
-    },
-    {
-     "name": "הערה",
+     "name": "כתובת",
      "required": false,
      "shape": "text"
     }
@@ -47,141 +28,110 @@
    "stages": []
   },
   {
-   "name": "החזר",
+   "name": "תיק",
    "fields": [
     {
-     "name": "לווה",
+     "name": "לקוח",
      "required": true,
      "shape": "text",
-     "ref": "לווה"
+     "ref": "לקוח"
+    },
+    {
+     "name": "נושא",
+     "required": false,
+     "shape": "text"
     },
     {
      "name": "סכום",
-     "required": true,
+     "required": false,
      "shape": "number",
      "min": 0,
-     "max": 100000
+     "max": 1000000
     },
     {
-     "name": "תאריך",
-     "required": true,
+     "name": "תאריך פתיחה",
+     "required": false,
      "shape": "date"
     }
    ],
-   "stages": []
+   "stages": [
+    "התקבל",
+    "בטיפול",
+    "סגור"
+   ]
   }
  ],
  "dashboard": [
   {
    "op": "סכום",
-   "entity": "לווה",
+   "entity": "תיק",
    "field": "סכום"
-  },
-  {
-   "op": "סכום",
-   "entity": "החזר",
-   "field": "סכום"
-  },
-  {
-   "op": "מונה",
-   "entity": "לווה",
-   "field": "סטטוס"
   }
  ],
  "plan": [
   {
    "needId": "norm-search",
-   "entity": "לווה",
+   "entity": "לקוח",
    "field": "שם",
    "kind": "search",
-   "label": "לווה.שם"
+   "label": "לקוח.שם"
   },
   {
    "needId": "phone-format",
-   "entity": "לווה",
-   "field": "נייד",
+   "entity": "לקוח",
+   "field": "טלפון",
    "kind": "column",
-   "label": "לווה.נייד"
-  },
-  {
-   "needId": "money",
-   "entity": "לווה",
-   "field": "סכום",
-   "kind": "column",
-   "label": "לווה.סכום"
-  },
-  {
-   "needId": "fmt-date",
-   "entity": "לווה",
-   "field": "תאריך הלוואה",
-   "kind": "column",
-   "label": "לווה.תאריך הלוואה"
-  },
-  {
-   "needId": "days-since",
-   "entity": "לווה",
-   "field": "תאריך הלוואה",
-   "kind": "column",
-   "label": "לווה.תאריך הלוואה"
+   "label": "לקוח.טלפון"
   },
   {
    "needId": "norm-search",
-   "entity": "לווה",
-   "field": "הערה",
+   "entity": "לקוח",
+   "field": "כתובת",
    "kind": "search",
-   "label": "לווה.הערה"
+   "label": "לקוח.כתובת"
   },
   {
    "needId": "norm-search",
-   "entity": "החזר",
-   "field": "לווה",
+   "entity": "תיק",
+   "field": "לקוח",
    "kind": "search",
-   "label": "החזר.לווה"
+   "label": "תיק.לקוח"
+  },
+  {
+   "needId": "norm-search",
+   "entity": "תיק",
+   "field": "נושא",
+   "kind": "search",
+   "label": "תיק.נושא"
   },
   {
    "needId": "money",
-   "entity": "החזר",
+   "entity": "תיק",
    "field": "סכום",
    "kind": "column",
-   "label": "החזר.סכום"
+   "label": "תיק.סכום"
   },
   {
    "needId": "fmt-date",
-   "entity": "החזר",
-   "field": "תאריך",
+   "entity": "תיק",
+   "field": "תאריך פתיחה",
    "kind": "column",
-   "label": "החזר.תאריך"
+   "label": "תיק.תאריך פתיחה"
   },
   {
    "needId": "days-since",
-   "entity": "החזר",
-   "field": "תאריך",
+   "entity": "תיק",
+   "field": "תאריך פתיחה",
    "kind": "column",
-   "label": "החזר.תאריך"
+   "label": "תיק.תאריך פתיחה"
   },
   {
    "needId": "sum",
    "op": "סכום",
-   "entity": "לווה",
+   "entity": "תיק",
    "field": "סכום",
    "kind": "kpi",
-   "label": "סכום לווה.סכום"
-  },
-  {
-   "needId": "sum",
-   "op": "סכום",
-   "entity": "החזר",
-   "field": "סכום",
-   "kind": "kpi",
-   "label": "סכום החזר.סכום"
-  },
-  {
-   "needId": "count-by",
-   "op": "מונה",
-   "entity": "לווה",
-   "field": "סטטוס",
-   "kind": "kpi",
-   "label": "מונה לווה.סטטוס"
+   "label": "סכום תיק.סכום"
   }
  ],
  "proofs": [
@@ -229,7 +179,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 60,
+   "ms": 61,
    "proven": [
     {
      "name": "norm-search",
@@ -241,9 +191,10 @@
    ],
    "chosen": "norm-search",
    "usedBy": [
-    "לווה.שם",
-    "לווה.הערה",
-    "החזר.לווה"
+    "לקוח.שם",
+    "לקוח.כתובת",
+    "תיק.לקוח",
+    "תיק.נושא"
    ],
    "dart": {
     "tried": 394,
@@ -301,7 +252,7 @@
     "פלט שונה": 200,
     "אורך-קריאה": 13
    },
-   "ms": 21,
+   "ms": 24,
    "proven": [
     {
      "name": "format-israeli-phone",
@@ -313,7 +264,7 @@
    ],
    "chosen": "format-israeli-phone",
    "usedBy": [
-    "לווה.נייד"
+    "לקוח.טלפון"
    ],
    "dart": {
     "tried": 394,
@@ -365,7 +316,7 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 15,
+   "ms": 17,
    "proven": [
     {
      "name": "shekel",
@@ -377,8 +328,7 @@
    ],
    "chosen": "shekel",
    "usedBy": [
-    "לווה.סכום",
-    "החזר.סכום"
+    "תיק.סכום"
    ],
    "dart": {
     "tried": 394,
@@ -440,7 +390,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 16,
+   "ms": 17,
    "proven": [
     {
      "name": "fmt-date",
@@ -452,8 +402,7 @@
    ],
    "chosen": "fmt-date",
    "usedBy": [
-    "לווה.תאריך הלוואה",
-    "החזר.תאריך"
+    "תיק.תאריך פתיחה"
    ],
    "dart": {
     "tried": 394,
@@ -516,7 +465,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 114
    },
-   "ms": 16,
+   "ms": 15,
    "proven": [
     {
      "name": "cockpit-days-since",
@@ -535,8 +484,7 @@
    ],
    "chosen": "cockpit-days-since",
    "usedBy": [
-    "לווה.תאריך הלוואה",
-    "החזר.תאריך"
+    "תיק.תאריך פתיחה"
    ],
    "dart": {
     "tried": 394,
@@ -620,7 +568,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 16,
+   "ms": 17,
    "proven": [
     {
      "name": "grand-total",
@@ -632,126 +580,7 @@
    ],
    "chosen": "grand-total",
    "usedBy": [
-    "סכום לווה.סכום",
-    "סכום החזר.סכום"
-   ],
-   "dart": {
-    "tried": 394,
-    "proven": [],
-    "failedBy": {
-     "אורך-קריאה": 275,
-     "זריקה/טיפוס": 118,
-     "פלט שונה": 1
-    },
-    "note": ""
-   }
-  },
-  {
-   "need": "count-by",
-   "label": "ספירה לפי ערך, מהגדול לקטן",
-   "from": {
-    "dashboard": "מונה",
-    "shape": "enum"
-   },
-   "examples": [
-    {
-     "args": [
-      [
-       {
-        "s": "a"
-       },
-       {
-        "s": "b"
-       },
-       {
-        "s": "a"
-       }
-      ],
-      {
-       "$fn": "x=>x.s"
-      }
-     ],
-     "want": [
-      [
-       "a",
-       2
-      ],
-      [
-       "b",
-       1
-      ]
-     ]
-    },
-    {
-     "args": [
-      [
-       {
-        "s": "b"
-       },
-       {
-        "s": "b"
-       },
-       {
-        "s": "a"
-       },
-       {
-        "s": "c"
-       },
-       {
-        "s": "c"
-       },
-       {
-        "s": "c"
-       }
-      ],
-      {
-       "$fn": "x=>x.s"
-      }
-     ],
-     "want": [
-      [
-       "c",
-       3
-      ],
-      [
-       "b",
-       2
-      ],
-      [
-       "a",
-       1
-      ]
-     ]
-    },
-    {
-     "args": [
-      [],
-      {
-       "$fn": "x=>x.s"
-      }
-     ],
-     "want": []
-    }
-   ],
-   "tried": 569,
-   "failedBy": {
-    "זריקה": 274,
-    "אורך-קריאה": 158,
-    "פלט שונה": 136
-   },
-   "ms": 12,
-   "proven": [
-    {
-     "name": "count-by",
-     "fn": "countBy",
-     "n": 2,
-     "role": "ספירה לפי מפתח — עובר על פריטים, מחלץ מפתח-מחרוזת מכל פריט דרך",
-     "tSource": null
-    }
-   ],
-   "chosen": "count-by",
-   "usedBy": [
-    "מונה לווה.סטטוס"
+    "סכום תיק.סכום"
    ],
    "dart": {
     "tried": 394,
@@ -813,14 +642,6 @@
    "hasT": false,
    "role": "הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע.",
    "file": "new/atoms/grand-total.mjs"
-  },
-  {
-   "name": "count-by",
-   "fn": "countBy",
-   "n": 2,
-   "hasT": false,
-   "role": "ספירה לפי מפתח — עובר על פריטים, מחלץ מפתח-מחרוזת מכל פריט דרך",
-   "file": "new/atoms/count-by.mjs"
   }
  ],
  "unproven": [],
@@ -865,60 +686,57 @@
   ]
  },
  "meta": {
-  "slug": "gemach",
-  "built": "2026-09-14T19:16:18.656Z",
-  "ms": 17853,
+  "slug": "tikim",
+  "built": "2026-09-14T19:16:00.030Z",
+  "ms": 15393,
   "shelf": 1096,
   "fns": 569,
   "dart": 394
  },
  "flutter": {
   "ok": true,
-  "specDs": "אפליקציה: גמ\"ח הלוואות\nישות לווה עם שם*, נייד, סכום*, תאריך הלוואה*, סטטוס{פעיל|נפרע|באיחור}, הערה\nישות החזר עם לווה*, סכום*, תאריך*\nלוח בקרה עם סכום(לווה.סכום), סכום(החזר.סכום), מונה(לווה.סטטוס)\n",
-  "ns": "gengemach",
+  "specDs": "אפליקציה: תיקים\nישות לקוח עם שם*, טלפון, כתובת\nישות תיק עם לקוח*, נושא, סכום, תאריך פתיחה | שלבים: התקבל, בטיפול, סגור\nלוח בקרה עם סכום(תיק.סכום)",
+  "ns": "gentikim",
   "files": [
-   "gen_app_gengemach_audit.dart",
-   "gen_app_gengemach_bind1.dart",
-   "gen_app_gengemach_bind2.dart",
-   "gen_app_gengemach_ent1.dart",
-   "gen_app_gengemach_ent2.dart",
-   "gen_app_gengemach_flags.dart",
-   "gen_app_gengemach_hub.dart",
-   "gen_app_gengemach_main.dart",
-   "gen_app_gengemach_over1.dart",
-   "gen_app_gengemach_over2.dart",
-   "gen_app_gengemach_rec1.dart",
-   "gen_app_gengemach_rec2.dart",
-   "gen_app_gengemach_root.dart",
-   "gen_app_gengemach_scr3.dart",
-   "gen_app_gengemach_settings.dart",
-   "gen_app_gengemach_shell.dart"
+   "gen_app_gentikim_audit.dart",
+   "gen_app_gentikim_bind1.dart",
+   "gen_app_gentikim_bind2.dart",
+   "gen_app_gentikim_ent1.dart",
+   "gen_app_gentikim_ent2.dart",
+   "gen_app_gentikim_flags.dart",
+   "gen_app_gentikim_hub.dart",
+   "gen_app_gentikim_main.dart",
+   "gen_app_gentikim_over1.dart",
+   "gen_app_gentikim_rec1.dart",
+   "gen_app_gentikim_rec2.dart",
+   "gen_app_gentikim_root.dart",
+   "gen_app_gentikim_scr3.dart",
+   "gen_app_gentikim_settings.dart",
+   "gen_app_gentikim_shell.dart"
   ],
   "displayAtoms": [
-   "dart-data-bs/auto/gen_app_gengemach_audit_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_ent1_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_ent2_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_flags_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_hub_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_main_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_over1_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_over2_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_rec1_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_rec2_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_root_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_scr3_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_settings_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_shell_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_audit_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_ent1_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_ent2_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_flags_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_hub_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_main_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_over1_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_rec1_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_rec2_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_root_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_scr3_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_settings_content.dart",
+   "dart-data-bs/auto/gen_app_gentikim_shell_content.dart",
    "dart-screens-bs/ai_hub_screen.g.dart",
    "dart-screens-bs/courier_certs_screen.g.dart",
+   "dart-ui-bs/auto/bar.dart",
    "dart-ui-bs/auto/callout.dart",
-   "dart-ui-bs/auto/link_row.dart",
-   "dart-ui-bs/auto/rstat.dart",
    "dart-ui-bs/ds/ds.dart",
    "dart-ui-bs/ds/ds_bars.dart",
+   "dart-ui-bs/ds/ds_board.dart",
    "dart-ui-bs/ds/ds_calendar.dart",
    "dart-ui-bs/ds/ds_date_field.dart",
-   "dart-ui-bs/ds/ds_enum_field.dart",
    "dart-ui-bs/ds/ds_field.dart",
    "dart-ui-bs/ds/ds_number_field.dart",
    "dart-ui-bs/ds/ds_search.dart",
@@ -928,17 +746,13 @@
    "dart-ui-bs/ds/ds_toggle_tile.dart",
    "dart-ui-bs/premium/actions/segmented_switch.dart",
    "dart-ui-bs/premium/dataviz/kpi_tile.dart",
-   "dart-ui-bs/premium/dataviz/neon_bars.dart",
    "dart-ui-bs/premium/lists/expandable_tile.dart",
-   "dart-ui-bs/premium/lists/glass_list_tile.dart",
-   "dart-ui-bs/premium/showcase/premium_chip.dart",
-   "dart-ui-bs/premium/showcase/premium_field.dart",
    "dart-ui-bs/premium/showcase/premium_stat.dart",
    "dart-ui-bs/premium/surfaces/stat_hero.dart"
   ],
   "moved": [
-   "machtzev/generator/apps/gengemach.json",
-   "machtzev/generator/particle-plan-gengemach.json"
+   "machtzev/generator/apps/gentikim.json",
+   "machtzev/generator/particle-plan-gentikim.json"
   ],
   "treeClean": true,
   "leftover": [],

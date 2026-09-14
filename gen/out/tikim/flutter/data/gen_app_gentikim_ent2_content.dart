@@ -1,0 +1,21 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_gentikim_ent2_c0 = 'תיק';
+const String gen_app_gentikim_ent2_c1 = '4 שדות · 3 שלבים';
+const String gen_app_gentikim_ent2_c2 = '🗂️';
+const String gen_app_gentikim_ent2_c3 = 'שמירה';
+const String gen_app_gentikim_ent2_c4 = 'עדכון';
+const String gen_app_gentikim_ent2_c5 = 'פרטי הרשומה';
+const String gen_app_gentikim_ent2_c6 = 'רשומות';
+const String gen_app_gentikim_ent2_c7 = 'אין תיק עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_gentikim_ent2_c8 = 'לא נמצאו רשומות תואמות';
+const String gen_app_gentikim_ent2_c9 = 'לקוח';
+const String gen_app_gentikim_ent2_c10 = 'נושא';
+const String gen_app_gentikim_ent2_c11 = 'סכום';
+const String gen_app_gentikim_ent2_c12 = 'תאריך פתיחה';
+const String gen_app_gentikim_ent2_c13 = 'התקבל';
+const String gen_app_gentikim_ent2_c14 = 'בטיפול';
+const String gen_app_gentikim_ent2_c15 = 'סגור';
+const String gen_app_gentikim_ent2_c16 = 'סכום';
+const String gen_app_gentikim_ent2_c17 = '🧮';
+const String gen_app_gentikim_ent2_c18 = 'סה"כ רשומות';
+const String gen_app_gentikim_ent2_c19 = '🗂️';

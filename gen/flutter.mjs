@@ -32,5 +32,5 @@ export function buildFlutter(specText, slug) {
   const atoms = new Set();
   for (const f of files) for (const m of fs.readFileSync(path.join(out, f), 'utf8').matchAll(/import '\.\.\/(dart-[\w-]+\/[^']+)'/g)) atoms.add(m[1]);
   const tail = (r.stdout || '').trim().split('\n').slice(-3).join('\n');
-  return { ok: r.status === 0 && files.length > 0, specDs, ns, files, displayAtoms: [...atoms].sort(), moved, treeClean: after.length === 0, leftover: after, log: tail, err: r.status !== 0 ? (r.stderr || '').split('\n').slice(-5).join('\n') : '', compiled: false, compileNote: 'קומפילציה דורשת Flutter SDK + buildsmart/app_flutter — לא בסביבה הזו' };
+  return { ok: r.status === 0 && files.length > 0, specDs, ns, files, displayAtoms: [...atoms].sort(), moved, treeClean: after.length === 0, leftover: after, log: tail, err: r.status !== 0 ? (r.stderr || '').split('\n').slice(-5).join('\n') : '', compileNote: 'קומפילציה לאתר: --site (site.mjs; Flutter SDK + buildsmart)' };
 }

@@ -37,7 +37,8 @@
       "אחר"
      ]
     }
-   ]
+   ],
+   "stages": []
   }
  ],
  "dashboard": [
@@ -143,7 +144,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 78,
+   "ms": 70,
    "proven": [
     {
      "name": "norm-search",
@@ -207,7 +208,7 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 15,
+   "ms": 14,
    "proven": [
     {
      "name": "shekel",
@@ -281,7 +282,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 17,
+   "ms": 16,
    "proven": [
     {
      "name": "fmt-date",
@@ -356,7 +357,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 114
    },
-   "ms": 17,
+   "ms": 15,
    "proven": [
     {
      "name": "cockpit-days-since",
@@ -459,7 +460,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 18,
+   "ms": 13,
    "proven": [
     {
      "name": "grand-total",
@@ -577,7 +578,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 136
    },
-   "ms": 16,
+   "ms": 12,
    "proven": [
     {
      "name": "count-by",
@@ -689,15 +690,15 @@
    {
     "layer": "Dart · תצוגה (Flutter widgets)",
     "count": 924,
-    "connected": "מסלול-Flutter: `node gen/build.mjs <ספק> --flutter` ⇒ מודולי-Dart דרך הדלת של המחצב, האטומים נבחרים לפי צורה (במסוף; הסטודיו בונה HTML). קומפילציה = Flutter SDK + buildsmart, לא כאן",
+    "connected": "מסלול-Flutter: `--flutter` ⇒ מודולי-Dart דרך הדלת של המחצב (אטומים לפי צורה); `--site` ⇒ flutter build web ⇒ אתר רץ (site.mjs; דורש Flutter SDK + buildsmart)",
     "state": "on"
    }
   ]
  },
  "meta": {
   "slug": "hotzaot",
-  "built": "2026-09-14T18:35:30.115Z",
-  "ms": 15496,
+  "built": "2026-09-14T19:16:34.853Z",
+  "ms": 15348,
   "shelf": 1096,
   "fns": 569,
   "dart": 394
@@ -762,7 +763,6 @@
   "leftover": [],
   "log": "✨ אפליקציה (מערכת-עיצוב) חוללה — 6 מסכים\n   1 ישויות · 1 דשבורדים · 3 מערכת · 1 לוח\n   הכל דרך render-ds הטהור (טיפוס נאחז מהאטומים · אפס regex).",
   "err": "",
-  "compiled": false,
-  "compileNote": "קומפילציה דורשת Flutter SDK + buildsmart/app_flutter — לא בסביבה הזו"
+  "compileNote": "קומפילציה לאתר: --site (site.mjs; Flutter SDK + buildsmart)"
  }
 }

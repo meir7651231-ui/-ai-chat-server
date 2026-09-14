@@ -1,0 +1,56 @@
+{
+ "ns": "gentikim",
+ "title": "תיקים",
+ "look": "dark",
+ "layer": null,
+ "chain": [],
+ "questions": {},
+ "home": null,
+ "shell": {
+  "slug": "app_gentikim_shell",
+  "cls": "GenAppGentikimShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_gentikim_root",
+  "cls": "GenAppGentikimRootScreen"
+ },
+ "root": {
+  "slug": "app_gentikim_ent1",
+  "cls": "GenAppGentikimEnt1Screen",
+  "name": "לקוח",
+  "descField": "שם",
+  "stages": [],
+  "fields": [
+   {
+    "label": "שם",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "כתובת",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "לקוח",
+   "slug": "app_gentikim_ent1"
+  },
+  {
+   "name": "תיק",
+   "slug": "app_gentikim_ent2"
+  }
+ ],
+ "relations": false,
+ "report": null
+}

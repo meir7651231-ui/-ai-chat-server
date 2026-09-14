@@ -21,9 +21,16 @@ node gen/studio.mjs                       # ⇒ gen/out/studio.html — הסטו
 | 527 אטומי-דאטה JS | 292 הם הקבועים (T) של הפונקציות — `shelf.mjs` טוען אותם מאטום-הדאטה התאום, לא מקובץ-הבדיקה |
 | 394 לוגיקה רק-ב-Dart | `prove-dart.mjs`: אותן דוגמאות, קובץ-מוכיח אחד לצורך, ריצה ב-Dart (`/home/user/dart/dart-sdk` או `$DART`); בסטודיו התוצאה ארוזה |
 | 569 תאומי-Dart | אותם אטומים כמו ה-JS |
-| 924 אטומי-תצוגה | `flutter.mjs` (`--flutter`): הספק ⇒ `app-ds.mjs` של המחצב בתהליך נפרד, פלט ל-`out/<slug>/flutter`, עץ-המחצב נשאר נקי (נבדק ב-git status) |
+| 924 אטומי-תצוגה | `flutter.mjs` (`--flutter`): הספק ⇒ `app-ds.mjs` של המחצב בתהליך נפרד, פלט ל-`out/<slug>/flutter`, עץ-המחצב נשאר נקי (נבדק ב-git status). `site.mjs` (`--site`): מראה ל-buildsmart (`BUILDSMART`) + `flutter build web` (`FLUTTER`) ⇒ `out/<slug>/site` — אתר-Flutter רץ, בלי בינה |
 | 64 אסינכרוניים | לא מחוברים (db/fs) — כתוב במלאי |
 `inventory.mjs` סופר את כל זה מהדיסק בכל בנייה; המספרים בדוח, לא ביד.
+
+## משפט ⇒ אתר-Flutter מלא (המנוע הטהור של המחצב, כל אטומי-התצוגה)
+```bash
+node gen/build.mjs gen/specs/tikim.txt --site   # משפט ⇒ ספק ⇒ HTML + מודולי-Dart + אתר ב-out/tikim/site
+```
+המשפט יכול לכלול «שלבים: א, ב, ג» (⇒ `| שלבים` בספק, פס-שלבים ב-Flutter, עמודת-שלב עם «›» ב-HTML) וקשרים
+(שדה ששמו הוא שם ישות אחרת ⇒ בחירה מרשימה). הסביבה: Flutter SDK ב-`/home/user/flutter`, buildsmart ב-`/home/user/meir7651231-ui/buildsmart`.
 
 ## מה הוא לא עושה (בכוונה)
 - לא נוגע ב-`new/`, לא ב-`machtzev/`, לא ב-`regen.mjs`, לא ב-`one.mjs`, לא ב-`gates.tsv`, לא ב-pins. (`--flutter` מריץ את `app-ds.mjs` כתהליך ומעביר את קבצי-הצד שלו ל-`out/`; העץ נקי אחרי.)

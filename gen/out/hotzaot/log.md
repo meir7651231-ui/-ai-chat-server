@@ -1,6 +1,6 @@
 # הוצאות — יומן-בנייה
 
-מדף: 1096 אטומים (569 פונקציות) · זמן: 15496ms · נבנה: 2026-09-14T18:35:30.115Z
+מדף: 1096 אטומים (569 פונקציות) · זמן: 15348ms · נבנה: 2026-09-14T19:16:34.853Z
 
 ## המשפט
 ```
@@ -32,4 +32,4 @@
 
 ## מסלול-Flutter (אטומי-תצוגה)
 - 12 קבצי-Dart ב-flutter/ · 32 אטומי-תצוגה: dart-data-bs/auto/gen_app_genhotzaot_audit_content.dart, dart-data-bs/auto/gen_app_genhotzaot_ent1_content.dart, dart-data-bs/auto/gen_app_genhotzaot_flags_content.dart, dart-data-bs/auto/gen_app_genhotzaot_hub_content.dart, dart-data-bs/auto/gen_app_genhotzaot_main_content.dart, dart-data-bs/auto/gen_app_genhotzaot_over1_content.dart, dart-data-bs/auto/gen_app_genhotzaot_rec1_content.dart, dart-data-bs/auto/gen_app_genhotzaot_root_content.dart, dart-data-bs/auto/gen_app_genhotzaot_scr2_content.dart, dart-data-bs/auto/gen_app_genhotzaot_settings_content.dart, dart-data-bs/auto/gen_app_genhotzaot_shell_content.dart, dart-screens-bs/ai_hub_screen.g.dart, dart-ui-bs/auto/callout.dart, dart-ui-bs/auto/stat.dart, dart-ui-bs/ds/ds.dart, dart-ui-bs/ds/ds_bars.dart, dart-ui-bs/ds/ds_calendar.dart, dart-ui-bs/ds/ds_date_field.dart, dart-ui-bs/ds/ds_enum_field.dart, dart-ui-bs/ds/ds_field.dart, dart-ui-bs/ds/ds_number_field.dart, dart-ui-bs/ds/ds_search.dart, dart-ui-bs/ds/ds_store.dart, dart-ui-bs/ds/ds_table.dart, dart-ui-bs/ds/ds_toggle_tile.dart, dart-ui-bs/premium/actions/glass_button.dart, dart-ui-bs/premium/actions/segmented_switch.dart, dart-ui-bs/premium/dataviz/kpi_tile.dart, dart-ui-bs/premium/dataviz/neon_bars.dart, dart-ui-bs/premium/lists/expandable_tile.dart, dart-ui-bs/premium/showcase/premium_stat.dart, dart-ui-bs/premium/surfaces/stat_hero.dart
-- קומפילציה דורשת Flutter SDK + buildsmart/app_flutter — לא בסביבה הזו
+- קומפילציה לאתר: --site (site.mjs; Flutter SDK + buildsmart)

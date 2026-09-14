@@ -49,10 +49,30 @@ export function sentenceToSpec(text, LANG) {
   };
   const splitItems = (s) => maskParens(s).split(ITEM_RE).map((x) => unmask(x).trim()).filter((x) => content(x).length);
   const DATIVE = new Set((LANG.extra && LANG.extra.dativeAfter) || []);
+  const STAGE_WORDS = [...new Set([...(LANG.stagePrefixes || []), ...(LANG.sectionMarkers || []).slice(0, 1)])].filter(Boolean);
+  const STAGE_RE = STAGE_WORDS.length ? new RegExp(`(?:^|[\\s,;(])(?:${STAGE_WORDS.join('|')})\\s*[:\\-]?\\s*([^;.)]+)`) : null;
 
   const clauses = String(text || '').split(/[.;\n]+/).map((c) => c.trim()).filter((c) => words(c).length);
   let app = '';
   clauses.forEach((clause, ci) => {
+    // «שלבים: א, ב, ג» — שלבי הישות האחרונה שהוזכרה (או של הישות במשפט הזה)
+    const sm = STAGE_RE ? STAGE_RE.exec(clause) : null;
+    if (sm) {
+      const stages = sm[1].split(/[,،]|\s+(?:${CONJ.join('|')})(?=[${HE}])/).map((x) => content(x).join(' ')).filter(Boolean);
+      const before = clause.slice(0, sm.index).trim();
+      clause = before;
+      const target = () => ents[ents.length - 1];
+      if (!words(before).length) { if (target()) target().stages = stages; else notes.push(`«שלבים» לפני כל ישות — לא ידעתי למי הם שייכים; כתוב אותם אחרי הישות`); return; }
+      // ממשיכים לפרש את מה שלפני «שלבים», ואז מצמידים לישות שנוצרה
+      const n0 = ents.length;
+      parseClause(clause, ci);
+      const e = ents.length > n0 ? ents[ents.length - 1] : target();
+      if (e) e.stages = stages; else notes.push(`«שלבים» בלי ישות — התעלמתי`);
+      return;
+    }
+    parseClause(clause, ci);
+  });
+  function parseClause(clause, ci) {
     // ראש-האפליקציה: לפני סמן-פתיחה (:) או לפני סמן-שדות, במשפט הראשון
     let work = clause;
     // סמן-פתיחה (:) נחשב רק כשלפניו אין סמן-שדות ואין פסיק — אחרת הוא חלק מרשימת-ערכים («מצב: חדש/משומש»)
@@ -107,7 +127,7 @@ export function sentenceToSpec(text, LANG) {
       const headName = isHead && seg.length === 2 ? (headItems.length > 1 ? headItems[headItems.length - 1] : app) : head;
       addEnt(headName, tailItems, clause);
     }
-  });
+  }
   if (!app) app = ents[0]?.name || '';
   if (!ents.length && app) { addEnt(app, [], text); notes.push('לא זוהתה שום ישות — הפכתי את שם-האפליקציה לישות אחת. כתוב: «לכל X יש a, b, c»'); }
   const dash = [];
@@ -116,7 +136,7 @@ export function sentenceToSpec(text, LANG) {
     if (/\(\d+\.\.\d+\)/.test(f)) dash.push(`סכום(${e.name}.${name})`);
     if (/\{.*\}/.test(f)) dash.push(`מונה(${e.name}.${name})`);
   }
-  const lines = [`אפליקציה: ${app}`, ...ents.map((e) => `ישות ${e.name} עם ${e.fields.join(', ')}`)];
+  const lines = [`אפליקציה: ${app}`, ...ents.map((e) => `ישות ${e.name} עם ${e.fields.join(', ')}${e.stages && e.stages.length ? ` | שלבים: ${e.stages.join(', ')}` : ''}`)];
   if (dash.length) lines.push(`לוח בקרה עם ${dash.join(', ')}`);
   return { specText: lines.join('\n'), notes, app, entities: ents };
 }

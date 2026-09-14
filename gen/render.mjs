@@ -22,6 +22,8 @@ const INPUT = {
   date: (f, id) => `<input id="${id}" type="date" ${f.required ? 'required' : ''}>`,
   enum: (f, id) => `<select id="${id}" ${f.required ? 'required' : ''}>${f.values.map((v) => `<option>${esc(v)}</option>`).join('')}</select>`,
 };
+// קשר ⇒ בחירה מרשימת הרשומות של ישות-היעד (השדה הראשון שלה); ממולא בזמן-ריצה
+const inputOf = (f, id, spec) => (f.ref ? `<select id="${id}" data-ref="${spec.entities.findIndex((e) => e.name === f.ref)}" ${f.required ? 'required' : ''}><option value="">—</option></select>` : INPUT[f.shape](f, id));
 
 /**
  * chosen: Map needId ⇒ atom (רק מוכחים). plan: [{needId, entity, field, kind: 'column'|'kpi'|'search'}]
@@ -33,8 +35,8 @@ export function renderApp(spec, chosen, plan, meta) {
 
   const entityHtml = spec.entities.map((e, ei) => {
     const ekey = 'e' + ei;
-    const form = e.fields.map((f, fi) => `<label>${esc(f.name)}${f.required ? ' <b>*</b>' : ''}${INPUT[f.shape](f, `${ekey}_f${fi}`)}</label>`).join('');
-    const head = e.fields.map((f) => `<th>${esc(f.name)}</th>`).join('') + (e.fields.some((f) => f.shape === 'date') && callOf('days-since') ? '<th>ימים</th>' : '') + '<th></th>';
+    const form = e.fields.map((f, fi) => `<label>${esc(f.name)}${f.required ? ' <b>*</b>' : ''}${inputOf(f, `${ekey}_f${fi}`, spec)}</label>`).join('');
+    const head = e.fields.map((f) => `<th>${esc(f.name)}</th>`).join('') + (e.stages && e.stages.length ? '<th>שלב</th>' : '') + (e.fields.some((f) => f.shape === 'date') && callOf('days-since') ? '<th>ימים</th>' : '') + '<th></th>';
     return `<section class="entity" data-entity="${ekey}">
   <h2>${esc(e.name)} <small id="${ekey}_n"></small></h2>
   <form id="${ekey}_form" class="row">${form}<button type="submit">הוסף ${esc(e.name)}</button></form>
@@ -45,7 +47,7 @@ export function renderApp(spec, chosen, plan, meta) {
   const kpiHtml = plan.filter((p) => p.kind === 'kpi').map((p, i) => `<div class="kpi" id="kpi${i}"><span class="v">—</span><span class="l">${esc(p.label)}</span></div>`).join('');
   const hasSearch = plan.some((p) => p.kind === 'search');
 
-  const schema = spec.entities.map((e) => ({ name: e.name, fields: e.fields.map((f) => ({ name: f.name, shape: f.shape, required: f.required })) }));
+  const schema = spec.entities.map((e) => ({ name: e.name, stages: e.stages || [], fields: e.fields.map((f) => ({ name: f.name, shape: f.shape, required: f.required, ref: f.ref ? spec.entities.findIndex((x) => x.name === f.ref) : -1 })) }));
   const kpis = plan.filter((p) => p.kind === 'kpi').map((p) => ({ op: p.op, need: p.needId, entity: spec.entities.findIndex((e) => e.name === p.entity), field: spec.entities.find((e) => e.name === p.entity).fields.findIndex((f) => f.name === p.field), call: callOf(p.needId) }));
 
   return `<!doctype html>
@@ -111,10 +113,13 @@ function paint() {
     el('e' + ei + '_body').innerHTML = rows.map((r) => {
       const idx = DATA[ei].indexOf(r);
       const cells = e.fields.map((f, fi) => '<td class="' + (f.shape === 'number' ? 'num' : '') + '">' + show(f, r[fi]) + '</td>').join('');
+      const st = e.stages.length ? '<td>' + esc(r[e.fields.length] || e.stages[0]) + (e.stages.indexOf(r[e.fields.length] || e.stages[0]) < e.stages.length - 1 ? ' <button class="x" data-adv="' + ei + ':' + idx + '" title="לשלב הבא">›</button>' : '') + '</td>' : '';
       const d = hasDays ? '<td class="num">' + e.fields.map((f, fi) => (f.shape === 'date' && r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) => x !== '').join(' / ') + '</td>' : '';
-      return '<tr>' + cells + d + '<td><button class="x" data-del="' + ei + ':' + idx + '" title="מחק">✕</button></td></tr>';
+      return '<tr>' + cells + st + d + '<td><button class="x" data-del="' + ei + ':' + idx + '" title="מחק">✕</button></td></tr>';
     }).join('');
   });
+  // קשרים: רשימות-הבחירה מתמלאות מהרשומות של ישות-היעד
+  document.querySelectorAll('select[data-ref]').forEach((sel) => { const ti = Number(sel.dataset.ref); const cur = sel.value; sel.innerHTML = '<option value="">—</option>' + DATA[ti].map((r) => '<option>' + esc(r[0]) + '</option>').join(''); sel.value = cur; });
   KPIS.forEach((k, i) => {
     const box = el('kpi' + i), v = box.querySelector('.v');
     if (!k.call) { box.classList.add('none'); v.textContent = 'אין אטום מוכח'; return; }
@@ -128,10 +133,13 @@ SCHEMA.forEach((e, ei) => {
   el('e' + ei + '_form').addEventListener('submit', (ev) => {
     ev.preventDefault();
     const row = e.fields.map((f, fi) => el('e' + ei + '_f' + fi).value);
+    if (e.stages.length) row.push(e.stages[0]);
     DATA[ei].push(row); save(); ev.target.reset(); paint();
   });
 });
 document.body.addEventListener('click', (ev) => {
+  const a = ev.target.closest('[data-adv]');
+  if (a) { const [ei, i] = a.dataset.adv.split(':').map(Number); const st = SCHEMA[ei].stages; const r = DATA[ei][i]; const n = SCHEMA[ei].fields.length; const k = st.indexOf(r[n] || st[0]); if (k < st.length - 1) { r[n] = st[k + 1]; save(); paint(); } return; }
   const b = ev.target.closest('[data-del]'); if (!b) return;
   const [ei, i] = b.dataset.del.split(':').map(Number);
   DATA[ei].splice(i, 1); save(); paint();

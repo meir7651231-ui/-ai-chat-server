@@ -106,7 +106,7 @@ function countBy(items, key) {
 const countBy__call = (...x) => countBy(...x);
 
 // ── דבק מבני (מחולל): סכמה, אחסון, טופס, טבלה, מדדים
-const SCHEMA = [{"name":"הוצאה","fields":[{"name":"תיאור","shape":"text","required":true},{"name":"סכום","shape":"number","required":false},{"name":"תאריך","shape":"date","required":false},{"name":"קטגוריה","shape":"enum","required":false}]}];
+const SCHEMA = [{"name":"הוצאה","stages":[],"fields":[{"name":"תיאור","shape":"text","required":true,"ref":-1},{"name":"סכום","shape":"number","required":false,"ref":-1},{"name":"תאריך","shape":"date","required":false,"ref":-1},{"name":"קטגוריה","shape":"enum","required":false,"ref":-1}]}];
 const KPIS = [{"op":"סכום","need":"sum","entity":0,"field":1,"call":"grandTotal__call"},{"op":"מונה","need":"count-by","entity":0,"field":3,"call":"countBy__call"}];
 const KEY = "gen:hotzaot";
 const FN = {normSearch__call, shekel__call, fmtDate__call, cockpitDaysSince__call, grandTotal__call, countBy__call};
@@ -139,10 +139,13 @@ function paint() {
     el('e' + ei + '_body').innerHTML = rows.map((r) => {
       const idx = DATA[ei].indexOf(r);
       const cells = e.fields.map((f, fi) => '<td class="' + (f.shape === 'number' ? 'num' : '') + '">' + show(f, r[fi]) + '</td>').join('');
+      const st = e.stages.length ? '<td>' + esc(r[e.fields.length] || e.stages[0]) + (e.stages.indexOf(r[e.fields.length] || e.stages[0]) < e.stages.length - 1 ? ' <button class="x" data-adv="' + ei + ':' + idx + '" title="לשלב הבא">›</button>' : '') + '</td>' : '';
       const d = hasDays ? '<td class="num">' + e.fields.map((f, fi) => (f.shape === 'date' && r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) => x !== '').join(' / ') + '</td>' : '';
-      return '<tr>' + cells + d + '<td><button class="x" data-del="' + ei + ':' + idx + '" title="מחק">✕</button></td></tr>';
+      return '<tr>' + cells + st + d + '<td><button class="x" data-del="' + ei + ':' + idx + '" title="מחק">✕</button></td></tr>';
     }).join('');
   });
+  // קשרים: רשימות-הבחירה מתמלאות מהרשומות של ישות-היעד
+  document.querySelectorAll('select[data-ref]').forEach((sel) => { const ti = Number(sel.dataset.ref); const cur = sel.value; sel.innerHTML = '<option value="">—</option>' + DATA[ti].map((r) => '<option>' + esc(r[0]) + '</option>').join(''); sel.value = cur; });
   KPIS.forEach((k, i) => {
     const box = el('kpi' + i), v = box.querySelector('.v');
     if (!k.call) { box.classList.add('none'); v.textContent = 'אין אטום מוכח'; return; }
@@ -156,10 +159,13 @@ SCHEMA.forEach((e, ei) => {
   el('e' + ei + '_form').addEventListener('submit', (ev) => {
     ev.preventDefault();
     const row = e.fields.map((f, fi) => el('e' + ei + '_f' + fi).value);
+    if (e.stages.length) row.push(e.stages[0]);
     DATA[ei].push(row); save(); ev.target.reset(); paint();
   });
 });
 document.body.addEventListener('click', (ev) => {
+  const a = ev.target.closest('[data-adv]');
+  if (a) { const [ei, i] = a.dataset.adv.split(':').map(Number); const st = SCHEMA[ei].stages; const r = DATA[ei][i]; const n = SCHEMA[ei].fields.length; const k = st.indexOf(r[n] || st[0]); if (k < st.length - 1) { r[n] = st[k + 1]; save(); paint(); } return; }
   const b = ev.target.closest('[data-del]'); if (!b) return;
   const [ei, i] = b.dataset.del.split(':').map(Number);
   DATA[ei].splice(i, 1); save(); paint();

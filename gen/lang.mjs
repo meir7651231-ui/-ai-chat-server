@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
 const KEYS_NL = ['leadins', 'fieldMarks', 'introMarks', 'listConj', 'pluralSuffixes', 'eachWords', 'impliedMark'];
-const KEYS_SPEC = ['typeDate', 'typeNum', 'typePhone', 'typePercent', 'typeMultiline'];
+const KEYS_SPEC = ['typeDate', 'typeNum', 'typePhone', 'typePercent', 'typeMultiline', 'sectionMarkers', 'stagePrefixes'];
 export function loadLang() {
   const nl = path.join(ROOT, 'machtzev/generator/nl-lang.data.json'), sp = path.join(ROOT, 'machtzev/generator/spec-lang.data.json');
   const snap = path.join(HERE, 'lang.data.json');

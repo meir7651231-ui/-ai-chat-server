@@ -5,7 +5,7 @@ const j = (v) => esc(JSON.stringify(v, (k, x) => (x && x.$fn ? `ƒ ${x.$fn}` : x
 
 export function renderLiveBody(r, appHtml) {
   const shapes = { text: 'טקסט', number: 'מספר', date: 'תאריך', phone: 'טלפון', enum: 'ערך-מנוי' };
-  const entities = r.entities.map((e) => `<div class="ent"><h4>${esc(e.name)}</h4><table><tr><th>שדה</th><th>צורה</th><th>חובה</th></tr>${e.fields.map((f) => `<tr><td>${esc(f.name)}</td><td><code>${shapes[f.shape]}${f.shape === 'enum' ? ' {' + esc(f.values.join('|')) + '}' : f.shape === 'number' ? ` ${f.min}..${f.max}` : ''}</code></td><td>${f.required ? 'כן' : ''}</td></tr>`).join('')}</table></div>`).join('');
+  const entities = r.entities.map((e) => `<div class="ent"><h4>${esc(e.name)}</h4><table><tr><th>שדה</th><th>צורה</th><th>חובה</th></tr>${e.fields.map((f) => `<tr><td>${esc(f.name)}</td><td><code>${f.ref ? 'קשר ⇒ ' + esc(f.ref) : shapes[f.shape]}${f.shape === 'enum' ? ' {' + esc(f.values.join('|')) + '}' : f.shape === 'number' ? ` ${f.min}..${f.max}` : ''}</code></td><td>${f.required ? 'כן' : ''}</td></tr>`).join('')}${e.stages && e.stages.length ? `<tr><td>שלבים</td><td colspan="2"><code>${esc(e.stages.join(' → '))}</code></td></tr>` : ''}</table></div>`).join('');
   const proofs = r.proofs.map((p) => `<details class="proof ${p.chosen ? 'ok' : 'none'}" ${p.chosen ? '' : 'open'}>
 <summary><span class="dot"></span><b>${esc(p.need)}</b> — ${esc(p.label)} <span class="mute">⇐ ${esc(p.usedBy.join(' · '))}</span>
 <span class="tally">JS: נוסו ${p.tried} · עברו ${p.proven.length}${p.chosen ? ` · נבחר <code>${esc(p.chosen)}</code>` : ' · <em>אין אטום מוכח</em>'}${p.dart ? ` · Dart-בלבד: נוסו ${p.dart.tried} · עברו ${p.dart.proven.length}` : ''} · ${p.ms}ms</span></summary>
