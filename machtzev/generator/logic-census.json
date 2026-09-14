@@ -9857,6 +9857,16 @@
   "wireable": false
  },
  {
+  "file": "dart/socket.dart",
+  "name": "socket",
+  "ret": "ConnectorEnd",
+  "params": [
+   "int"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart/soft_batch_warn_he.dart",
   "name": "softBatchWarnHe",
   "ret": "String?",

@@ -23801,6 +23801,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "socket",
+  "layer": "logic",
+  "file": "dart/socket.dart",
+  "op": "transform",
+  "sockets": [
+   "int"
+  ],
+  "ret": "ConnectorEnd",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "softBatchWarnHe",
   "layer": "logic",
   "file": "dart/soft_batch_warn_he.dart",

@@ -136,8 +136,44 @@ class _ImpFile {
   // קבועי-top-level של אותו קובץ. בלי אלה מחלקה שמפנה לקבוע-של-קובצה
   // (`kLipskeyConnectionSizeOverride` — 93 פונקציות) נפסלה כאילו היא לא-טהורה.
   final Map<String, Declaration> vars;
-  _ImpFile(this.src, this.types, [this.vars = const {}]);
+  final String path;   // G69 · נתיב-הקובץ (מנורמל) — טבלת-מדף מזוהה לפי «מוצא|שם», לא לפי שם (99 קבצי-דאטה מייצאים kTerms)
+  _ImpFile(this.src, this.types, [this.vars = const {}, this.path = '']);
 }
+String _norm(String p) => Uri.file(File(p).absolute.path).normalizePath().toFilePath();   // G69 · `lib/a/../b.dart` ≡ `lib/b.dart` — זהות-מוצא בבייטים
+
+// G69 · טבלאות-המדף (new/dart-data/*-table.dart, שנחתו ע"י carveVar): מפתח = «מוצא|שם». הכותרת נושאת `// ייצוא: <שם> ← <מוצא>` לכל הצהרה
+//   שהסגירה משכה (גם טיפוס מקובץ-שכן של הטבלה). פונקציה שמפנה למזהה שהמוצא שלו נחת ⇒ **מייבאת** את הטבלה במקום לשכפל/להיפסל.
+class _ShelfEntry { final String imp; final String src; final List<String> keys; _ShelfEntry(this.imp, this.src, [this.keys = const []]); }
+// G69 · מפתחות-אמת של טבלת-מפה (6 הראשונים, ליטרלי-מחרוזת פשוטים) — דוגמאות-String לפונקציות שמפנות לטבלה; אפס-המצאה
+List<String> _mapKeys(Declaration d) {
+  if (d is! TopLevelVariableDeclaration) return const [];
+  final out = <String>[];
+  for (final v in d.variables.variables) { final init = v.initializer; if (init is SetOrMapLiteral) for (final e in init.elements) { if (e is MapLiteralEntry && e.key is SimpleStringLiteral) out.add((e.key as SimpleStringLiteral).value); } }
+  if (out.length <= 6) return out;
+  if (out.length <= 12) return out;
+  return [for (var i = 0; i < 12; i++) out[(i * (out.length - 1)) ~/ 11]];   // פיזור שווה על פני הטבלה (הראשונים = משפחה אחת)
+}
+Map<String, _ShelfEntry>? _shelfCache;
+Map<String, _ShelfEntry> _shelf() {
+  if (_shelfCache != null) return _shelfCache!;
+  final out = <String, _ShelfEntry>{};
+  final envDir = Platform.environment['CARVE_SHELF_DIR'];
+  final cands = [if (envDir != null) envDir, File(Platform.script.toFilePath()).parent.path + '/../../new/dart-data', 'new/dart-data'];
+  final dir = cands.map((d) => Directory(d)).firstWhere((d) => d.existsSync(), orElse: () => Directory(''));
+  if (dir.path.isNotEmpty) for (final f in dir.listSync()) {
+    if (f is! File || !f.path.endsWith('-table.dart')) continue;
+    final s = f.readAsStringSync();
+    final origins = <String, String>{};
+    for (final m in RegExp(r'^// ייצוא: ([A-Za-z_][A-Za-z0-9_]*) ← (\S+)$', multiLine: true).allMatches(s)) { final o = m.group(2)!; origins[m.group(1)!] = o.startsWith('/') ? o : '/home/user/' + o; }
+    if (origins.isEmpty) continue;
+    final imp = '../dart-data/' + f.uri.pathSegments.last;
+    final u = parseString(content: s, throwIfDiagnostics: false).unit;
+    for (final d in u.declarations) for (final n in _declNames(d)) { final o = origins[n]; if (o != null) out['$o|$n'] = _ShelfEntry(imp, s.substring(d.offset, d.end), _mapKeys(d)); }
+  }
+  return _shelfCache = out;
+}
+List<String> _declNames(Declaration d) => d is NamedCompilationUnitMember ? [d.name.lexeme] : d is TopLevelVariableDeclaration ? d.variables.variables.map((v) => v.name.lexeme).toList() : const [];
+List<String> _declNamesOf(String text) { try { return parseString(content: text, throwIfDiagnostics: false).unit.declarations.expand(_declNames).toList(); } catch (_) { return const []; } }
 
 // אינדקס טיפוסים מכל ייבוא-יחסי שקובצו טהור (אפס `package:`, אפס dart: לא-טהור)
 // שם-החבילה + תיקיית lib שלה, מתוך pubspec.yaml של הפרויקט שהקובץ שייך לו.
@@ -179,6 +215,7 @@ Map<String, _ImpFile> _neighborTypes(String file, CompilationUnit unit) {
       continue;                                           // dart: או חבילה זרה
     }
     if (!File(path).existsSync()) continue;
+    path = _norm(path);
     final nsrc = File(path).readAsStringSync();
     final nunit = parseString(content: nsrc, throwIfDiagnostics: false).unit;
     var pure = true;
@@ -193,7 +230,7 @@ Map<String, _ImpFile> _neighborTypes(String file, CompilationUnit unit) {
     if (!pure) {
       final cvars = <String, Declaration>{};
       for (final nd in nunit.declarations) if (nd is TopLevelVariableDeclaration && nd.variables.isConst) for (final v in nd.variables.variables) cvars[v.name.lexeme] = nd;
-      if (cvars.isNotEmpty) { final cf = _ImpFile(nsrc, const {}, cvars); for (final k in cvars.keys) out.putIfAbsent('var:$k', () => cf); }
+      if (cvars.isNotEmpty) { final cf = _ImpFile(nsrc, const {}, cvars, path); for (final k in cvars.keys) out.putIfAbsent('var:$k', () => cf); }
       continue;
     }
     final types = <String, Declaration>{};
@@ -214,7 +251,7 @@ Map<String, _ImpFile> _neighborTypes(String file, CompilationUnit unit) {
         vars[nd.name.lexeme] = nd;
       }
     }
-    final f = _ImpFile(nsrc, types, vars);
+    final f = _ImpFile(nsrc, types, vars, path);
     for (final k in types.keys) out.putIfAbsent(k, () => f);
     // G68 · קבוע-שכן חוצה-קבצים (`kBspInchToMm` מקובץ-דאטה) — נגיש גם בשם-המשתנה, לשקע-ערך (חוק-3). 69 פונקציות נפלו על מזהה-אחד כזה.
     for (final k in vars.keys) out.putIfAbsent('var:$k', () => f);
@@ -369,7 +406,7 @@ void main(List<String> args) {
     final out = [];
     for (final j in jobs) {
       // G64 · _srcRef נפלט מהחצב עצמו (היה: הוסף ע"י מריץ-חיצוני ⇒ אצווה בלי-מריץ איבדה את המקור ⇒ ייעוד-מהמסך 0)
-      try { final r = Map<String, dynamic>.from(carve(j['file'], j['name'], j['line'] is int ? j['line'] : int.tryParse('${j['line']}'))); r['_srcRef'] = '${j['file'].toString().replaceFirst(RegExp(r'^/home/user/'), '')}:${j['line']}'; out.add(r); }
+      try { final r = Map<String, dynamic>.from(j['kind'] == 'var' ? carveVar(j['file'], j['name']) : carve(j['file'], j['name'], j['line'] is int ? j['line'] : int.tryParse('${j['line']}'))); r['_srcRef'] = '${j['file'].toString().replaceFirst(RegExp(r'^/home/user/'), '')}:${j['line']}'; out.add(r); }
       catch (e) { out.add({'ok': false, 'reason': 'exception: $e', 'name': j['name']}); }
     }
     stdout.write(jsonEncode(out));
@@ -418,11 +455,13 @@ String? _litFor(String t) {
   return null;
 }
 
-List<String> _samplesFor(String name, String declSrc) {
+// G69 · `known`: דוגמאות שכבר נבנו לטיפוסים אחרים (enum ⇒ `X.values.first`) — מחלקה שבנאי-שלה מקבל טיפוס-פרויקט (`ConnectorEnd(EndType, String)`) נבנית בסבב-שני
+List<String> _samplesFor(String name, String declSrc, [Map<String, String> known = const {}]) {
   final u = parseString(content: declSrc, throwIfDiagnostics: false).unit;
   if (u.declarations.isEmpty) return const [];
   final d = u.declarations.first;
-  if (d is EnumDeclaration) return ['$name.values.first', '$name.values.last'];
+  // G69 · ערך-enum כ**שם-קבוע** (`EndType.hdpeCompression`), לא `.values.first` — האחרון אינו ביטוי-קבוע ו-`const ConnectorEnd(EndType.values.first, 'a')` לא התקמפל (6 unparsed)
+  if (d is EnumDeclaration) { final cs = d.constants.map((c) => '$name.${c.name.lexeme}').toList(); return cs.isEmpty ? const [] : [cs.first, cs.last]; }
   if (d is! ClassDeclaration) return const [];
   for (final m in d.members) {
     if (m is! ConstructorDeclaration || m.name != null) continue;
@@ -445,7 +484,7 @@ List<String> _samplesFor(String name, String declSrc) {
         }
       }
       if (ty == null) return const [];
-      final lit = _litFor(ty);
+      final lit = _litFor(ty) ?? known[ty.replaceAll('?', '')];
       if (lit == null) return const [];            // אין ערך-אמת ⇒ אין דוגמה
       args.add(prm.isRequiredNamed ? '${inner.name!.lexeme}: $lit' : lit);
     }
@@ -455,7 +494,48 @@ List<String> _samplesFor(String name, String declSrc) {
   return const [];
 }
 
+// G69 · חציבת **טבלה-מוקלדת** (משתנה-top-level `final`/`const` עם ליטרל-אוסף): הסגירה הטרנזיטיבית של ההצהרה — טיפוסים · עוזרים · קבועים —
+//   דרך אותו `_typeClosure` שמטביע טיפוסי-שכן. יוצא אטום-דאטה אחד שהפונקציות **מייבאות** (לא 37 עותקים מוטבעים). כל ספק ⇒ פסילה עם `why`.
+Map<String, dynamic> carveVar(String file, String varName) {
+  file = _norm(file);
+  final src = File(file).readAsStringSync();
+  final unit = parseString(content: src, throwIfDiagnostics: false).unit;
+  final topTypes = <String, Declaration>{}; final topVarDecls = <String, Declaration>{};
+  TopLevelVariableDeclaration? target;
+  for (final d in unit.declarations) {
+    if (d is FunctionDeclaration && !d.isGetter && !d.isSetter) topVarDecls[d.name.lexeme] = d;
+    else if (d is TopLevelVariableDeclaration) { if (d.variables.isConst || d.variables.isFinal) for (final v in d.variables.variables) { topVarDecls[v.name.lexeme] = d; if (v.name.lexeme == varName) target = d; } }
+    else if (d is EnumDeclaration || d is ClassDeclaration || d is MixinDeclaration || d is TypeAlias) topTypes[(d as NamedCompilationUnitMember).name.lexeme] = d;
+  }
+  if (target == null) return {'ok': false, 'reason': 'var not found: $varName', 'name': varName};
+  final v = target!.variables.variables.firstWhere((x) => x.name.lexeme == varName);
+  final init = v.initializer;
+  if (init == null || !(init is ListLiteral || init is SetOrMapLiteral)) return {'ok': false, 'reason': 'not a collection literal', 'name': varName};
+  final impIdx = _neighborTypes(file, unit);
+  final selfFile = _ImpFile(src, topTypes, topVarDecls, file);
+  final why = <String>[];
+  final cl = _typeClosure(varName, selfFile, why, impIdx);
+  if (cl == null) return {'ok': false, 'reason': 'closure: ' + why.join(' · '), 'name': varName};
+  final declSrc = src.substring(target!.offset, target!.end);
+  final deps = cl.where((x) => x != declSrc).toList();
+  final typeNames = <String>[]; for (final t in deps) { final m = RegExp(r'(?:class|enum|mixin|typedef)\s+([A-Za-z_][A-Za-z0-9_]*)').firstMatch(t); if (m != null) typeNames.add(m.group(1)!); }
+  final typeText = target!.variables.type?.toSource() ?? 'dynamic';
+  // G69 · מוצא לכל הצהרה בסגירה — בהכלת-בייטים (הקובץ שהטקסט נלקח ממנו), לא בניחוש: הכותרת של הטבלה נושאת `// ייצוא: שם ← מוצא`
+  final depOrigins = <String, String>{};
+  for (final t in [declSrc, ...deps]) {
+    final origin = src.contains(t) ? file : impIdx.values.where((f) => f.path.isNotEmpty && f.src.contains(t)).map((f) => f.path).firstOrNull;
+    if (origin == null) return {'ok': false, 'reason': 'מוצא לא-נמצא להצהרה: ' + t.substring(0, t.length < 60 ? t.length : 60).replaceAll('\n', ' '), 'name': varName};
+    for (final n in _declNamesOf(t)) depOrigins[n] = origin;
+  }
+  return {
+    'ok': true, 'isData': true, 'name': varName, 'origName': varName, 'type': typeText, 'kind': target!.variables.isConst ? 'const' : 'final',
+    'decl': declSrc, 'deps': deps, 'exports': [varName, ...typeNames], 'depOrigins': depOrigins,
+    'hebrew': RegExp(r'[\u0590-\u05FF]').hasMatch(cl.join('\n')),
+  };
+}
+
 Map<String, dynamic> carve(String file, String fnName, int? startLine) {
+  file = _norm(file);
   final src = File(file).readAsStringSync();
   final unit = parseString(content: src, throwIfDiagnostics: false).unit;
   final lineInfo = parseString(content: src, throwIfDiagnostics: false).lineInfo;
@@ -492,7 +572,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   // טיפוסי-שכן דרך ייבוא-יחסי מקובץ טהור (ראה _neighborTypes)
   final impIdx = _neighborTypes(file, unit);
   final impSrc = <String, List<String>>{};      // שם ⇒ מקור-ההצהרה + תלויותיה
-  final selfFile = _ImpFile(src, topTypes, topVarDecls); // הקובץ הנוכחי — נבדק באותו חוק
+  final selfFile = _ImpFile(src, topTypes, topVarDecls, file); // הקובץ הנוכחי — נבדק באותו חוק
 
   // אתר את הפונקציה (top-level או מתודה) לפי שם + שורה
   FunctionDeclaration? fn;
@@ -540,7 +620,15 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   String? usedMathPrefix;   // אם הגוף משתמש ב-`math.x`, הייבוא חייב לשאת את התחילית
   // G68 · קבוע-`const` מקובץ-שכן ⇒ שקע-ערך (רק const: ליטרל טהור; `final` מחושב/מוטטי = מצב-מודול, נשאר לא-פתור בכנות)
   final crossVars = <String, (String, VariableDeclaration)>{};   // שם ⇒ (מקור-הקובץ, ההצהרה)
+  // G69 · טבלת-מדף: מזהה/טיפוס שמוצאו (קובץ+שם) כבר נחת כאטום-דאטה ⇒ ייבוא — לא שקע, לא הטבעה, לא «לא-פתור». זהות לפי מוצא, אפס-ניחוש.
+  final shelf = _shelf();
+  final shelfImports = <String>{}; final shelfVals = <String>[]; final shelfTypes = <String>[]; final shelfSrc = <String, String>{}; final shelfKeys = <String>[];
+  _ShelfEntry? shelfOf(String name, String? declPath) => declPath == null ? null : shelf['$declPath|$name'];
   for (final id in free.ids) {
+    if (!topFns.containsKey(id)) {
+      final se = shelfOf(id, topVars.containsKey(id) ? file : impIdx['var:$id']?.path);
+      if (se != null) { shelfImports.add(se.imp); shelfVals.add(id); shelfKeys.addAll(se.keys.where((k) => !shelfKeys.contains(k))); continue; }
+    }
     if (!topFns.containsKey(id) && !topVars.containsKey(id)) {
       final f = impIdx['var:$id'];
       final d = f?.vars[id];
@@ -569,6 +657,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     }
     for (final e in byType.entries) {
       final t = e.key;
+      if (shelfOf(t, topTypes.containsKey(t) ? file : impIdx[t]?.path) != null) continue;   // G69 · מיובא מטבלת-מדף — לא נמחק
       if (_core.contains(t) || topTypes.containsKey(t) || _mathCore.contains(t)) continue;
       if (impIdx.containsKey(t) && _neighborClosure(t, impIdx) != null) continue;  // יוטבע — לא שקע
       if (tn_hasArgs(params, t)) continue;          // טיפוס-גנרי בעצמו — לא ב-v1
@@ -579,6 +668,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   }
 
   for (final t in free.typeNames) {
+    { final se = shelfOf(t, topTypes.containsKey(t) ? file : impIdx[t]?.path); if (se != null) { shelfImports.add(se.imp); shelfTypes.add(t); shelfSrc[t] = se.src; continue; } }   // G69
     if (topTypes.containsKey(t)) {
       // הטבעה-מאותו-קובץ עוברת אימות זהה: סגירה טרנזיטיבית + אפס מזהה-חופשי.
       final w = <String>[];
@@ -609,6 +699,13 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
       if (m != null && !seenType.add(m.group(1)!)) continue;
       copiedTypes.add(srcText);                   // טיפוס-שכן: המקור מגיע מקובצו
     }
+  }
+  // G69 · הצהרה שהסגירה משכה ושכבר מיוצאת מטבלת-מדף **מיובאת** ⇒ לא מועתקת (עותק+ייבוא = `already defined`).
+  //   שם-זהה עם מקור-שונה-בבייטים ⇒ «לא-פתור» בכנות (לא בוחרים, לא מנחשים).
+  if (shelfImports.isNotEmpty) {
+    final exported = <String, String>{};
+    for (final e in shelf.entries) if (shelfImports.contains(e.value.imp)) exported[e.key.split('|').last] = e.value.src;
+    copiedTypes.removeWhere((c) { for (final n in _declNamesOf(c)) { final s = exported[n]; if (s != null) { if (s.trim() != c.trim()) unresolved.add('type:$n ←שם-כפול-מול-טבלת-מדף'); return true; } } return false; });
   }
   // ── שקע-אוטומטי (חוק-3): קריאה-לשכן ⇒ פרמטר-שקע מוזרק ──────────────────
   // עד היום `sockets` היה תווית בלבד: אטום-עם-שכן סווג לא-טריוויאלי ונפל בשקט,
@@ -724,15 +821,14 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     'unresolved': unresolved,
     'erasedTypes': erasedTypes,
     'copiedTypes': copiedTypes,
-    'typeSamples': {
-      for (final t in seenType)
-        if (_samplesFor(t, copiedTypes.firstWhere(
-                (c) => RegExp('(?:class|enum|mixin|typedef)\\s+' + t + r'\b').hasMatch(c),
-                orElse: () => '')).isNotEmpty)
-          t: _samplesFor(t, copiedTypes.firstWhere(
-              (c) => RegExp('(?:class|enum|mixin|typedef)\\s+' + t + r'\b').hasMatch(c),
-              orElse: () => '')),
-    },
+    'typeSamples': _twoPass({ for (final t in seenType) t: copiedTypes.firstWhere((c) => RegExp('(?:class|enum|mixin|typedef)\\s+' + t + r'\b').hasMatch(c), orElse: () => '') }),
+    // G69 · שמות-ערכי-enum (מוטבע/מטבלה) כדוגמאות-String: `EndType.values.firstWhere((e) => e.name == n)` — הדוגמאות הגנריות מחטיאות תמיד; השמות = ערך-אמת מההצהרה
+    'enumNames': [for (final src in [...copiedTypes, ...shelfSrc.values]) ...?_enumNames(src)],
+    'typeShow': { for (final e in { for (final t in seenType) t: copiedTypes.firstWhere((c) => RegExp('(?:class|enum|mixin|typedef)\\s+' + t + r'\b').hasMatch(c), orElse: () => ''), ...shelfSrc }.entries) if (_showFor(e.key, e.value) != null) e.key: _showFor(e.key, e.value)! },
+    // G69 · דוגמאות לטיפוס מיובא-מטבלה — מהמקור שבטבלה (החצב ראה אותו), לא מהאטום
+    'shelfSamples': _twoPass(shelfSrc),
+    'shelfImports': shelfImports.toList(), 'shelfVals': shelfVals, 'shelfTypes': shelfTypes, 'shelfKeys': shelfKeys,
+    'shelfKeyFields': () { if (shelfVals.isEmpty || params == null) return const <String, List<String>>{}; final pt = <String, String>{}; for (final p in params.parameters) { final nm = p.name?.lexeme; if (p is SimpleFormalParameter && nm != null && p.type != null) pt[nm] = p.type!.toSource().replaceAll('?', ''); } final kf = _KeyFieldUse(shelfVals.toSet(), pt); body.visitChildren(kf); return { for (final e in kf.out.entries) e.key: e.value.toList() }; }(),
     'bodyLits': _bodyLits(body),
     'fnSource': fnSrc,
     'imports': usesMath
@@ -745,6 +841,38 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     'paramsSimple': paramsSimple,
     'trivial': sockets.isEmpty && unresolved.isEmpty,
   };
+}
+
+// G69 · דוגמאות בשני סבבים: קודם טיפוסים שנבנים מליבה/enum, אחר-כך מחלקות שבנאיהן מקבלים את הראשונים (ConnectorEnd(EndType, String))
+Map<String, List<String>> _twoPass(Map<String, String> srcOf) {
+  final out = <String, List<String>>{};
+  for (var pass = 0; pass < 2; pass++) {
+    final known = { for (final e in out.entries) e.key: e.value.first };
+    for (final e in srcOf.entries) { if (out.containsKey(e.key) || e.value.isEmpty) continue; final s = _samplesFor(e.key, e.value, known); if (s.isNotEmpty) out[e.key] = s; }
+  }
+  return out;
+}
+// G69 · «זהב-מבני»: מחלקה בלי toString ⇒ `Instance of 'X'` לכל תוצאה ⇒ הזהב עיוור (6 חלולים: ConnectorEnd). החצב פולט מציג-שדות מההצהרה
+//   (`x.type` · `x.size` — כל שדה-מופע ציבורי, verbatim), והרתמה/הזהב משווים אותו במקום toString. אפס-ניחוש: אין שדות ⇒ אין מציג.
+String? _showFor(String name, String declSrc) {
+  try {
+    final d = parseString(content: declSrc, throwIfDiagnostics: false).unit.declarations.firstOrNull;
+    if (d is! ClassDeclaration) return null;
+    final fs = <String>[];
+    for (final m in d.members) { if (m is FieldDeclaration && !m.isStatic) for (final v in m.fields.variables) { if (!v.name.lexeme.startsWith('_')) fs.add(v.name.lexeme); } }
+    if (fs.isEmpty) return null;
+    return "'$name(' + " + fs.map((f) => "'$f=' + x.$f.toString()").join(" + ', ' + ") + " + ')'";
+  } catch (_) { return null; }
+}
+List<String>? _enumNames(String src) { try { final d = parseString(content: src, throwIfDiagnostics: false).unit.declarations.firstOrNull; return d is EnumDeclaration ? d.constants.map((c) => c.name.lexeme).toList() : null; } catch (_) { return null; } }
+
+// G69 · שדה-מפתח: `kTable[p.sku]` / `kTable.containsKey(p.sku)` ⇒ השדה `sku` של הטיפוס של p הוא מפתח-הטבלה — הדוגמה-הבנויה לטיפוס מקבלת מפתח-אמת
+class _KeyFieldUse extends RecursiveAstVisitor<void> {
+  final Set<String> tables; final Map<String, String> paramType; final Map<String, Set<String>> out = {};
+  _KeyFieldUse(this.tables, this.paramType);
+  void _hit(Expression? tgt, Expression? idx) { if (tgt is SimpleIdentifier && tables.contains(tgt.name) && idx is PrefixedIdentifier) { final pt = paramType[idx.prefix.name]; if (pt != null) (out[pt] ??= <String>{}).add(idx.identifier.name); } }
+  @override void visitIndexExpression(IndexExpression n) { _hit(n.target, n.index); super.visitIndexExpression(n); }
+  @override void visitMethodInvocation(MethodInvocation n) { if (n.methodName.name == 'containsKey' && n.argumentList.arguments.isNotEmpty) _hit(n.target, n.argumentList.arguments.first); super.visitMethodInvocation(n); }
 }
 
 // עוזר: מבקר שמריץ callback על כל הצהרת-פונקציה/מתודה

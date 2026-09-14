@@ -1,6 +1,6 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2480** אטומים ממופים (תצוגה 932 · לוגיקה 1000 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2481** אטומים ממופים (תצוגה 932 · לוגיקה 1001 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
@@ -10,7 +10,7 @@
 | group | 171 | ActionChipRail · AiCardTop · AiMdHead · AnimatedEmpty · ApprovalTaskCard |
 | summary | 158 | allOffConfig · applyAyinNames · applyAyinSheet · applyEntityPartial · applyMetaPartial |
 | collection | 152 | activeByMonth · allSupPhones · allowedDesignationsFor · appendCall · attentionItems |
-| transform | 120 | actionDescriptor · actionFromString · activeDriver · auditRows · brandById |
+| transform | 121 | actionDescriptor · actionFromString · activeDriver · auditRows · brandById |
 | predicate | 115 | accessPasswordMatches · assignmentRedeemed · ayinActionVisible · ayinActive · canAddPhoto |
 | text | 110 | AccessoryRow · AccessoryTile · AiCardSub · AiServerNote · AppSettingsBody |
 | container | 107 | AccordionPanel · AdvanceButton · AnimatedTabs · AssignButton · AuroraField |

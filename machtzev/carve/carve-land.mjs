@@ -131,19 +131,28 @@ function purposeOf(r, srcRef) {
   if (body.length) return { words: body, from: 'body-he', key: null };
   return { words: [], from: 'none', key: null };
 }
+// G69 · ייבואי-המדף של אטום: טבלאות-דאטה (`../dart-data/<x>-table.dart`) שהחצב פתר לפי מוצא — נכנסים לכל קובץ שמייבא את האטום (הרתמה · הזהב)
+// ⚠️ `dart analyze` = fatal-warnings: ייבוא-מדף שהרתמה/הזהב לא מזכירים בשמו (הערך זורם דרך האטום) ⇒ `unused_import` ⇒ 6 זהבים נפלו. מייבאים רק כשהגוף מזכיר ייצוא.
+//   ⚠️ ההתאמה על **קוד**, לא על ליטרלים: הזהב `'Instance of ConnectorEnd'` הזכיר את שם-הטיפוס בתוך מחרוזת ⇒ הייבוא נכנס ⇒ עדיין unused (5 נפלו שוב).
+const shelfImports = (r, body = null) => { const names = [...(r.shelfVals || []), ...(r.shelfTypes || [])]; const code = body === null ? null : body.replace(/\/\/.*$/gm, '').replace(/'(?:\\.|[^'\\])*'/g, "''"); /* גם הערות — מימוש-השקע נושא הערות-מקור */ if (code !== null && !names.some((n) => new RegExp('\\b' + n + '\\b').test(code))) return []; return (r.shelfImports || []).map((p) => `import '${p}';`); };
 function atomFile(r, srcRef, purpose) {
-  const imports = (r.imports || []);
-  const pure = imports.length
-    ? `// טוהר: פונקציית top-level עצמאית; הייבוא היחיד הוא ספריית-שפה טהורה (${imports.join(' ')}).\n`
-    : `// טוהר: פונקציית top-level עצמאית, אפס-import (אומת ע"י פותר-המזהים).\n`;
+  const imports = [...(r.imports || []), ...shelfImports(r)];
+  const shelfLine = (r.shelfImports || []).length ? `// טבלאות-מדף (G69 — אטום-דאטה משותף מיובא, לא עותק מוטבע): ${[...(r.shelfVals || []), ...(r.shelfTypes || [])].join(' · ')} ← ${r.shelfImports.join(' ')}.\n` : '';
+  const pure = (r.imports || []).length
+    ? `// טוהר: פונקציית top-level עצמאית; הייבוא היחיד הוא ספריית-שפה טהורה (${r.imports.join(' ')}).\n${shelfLine}`
+    : `// טוהר: פונקציית top-level עצמאית, ${shelfLine ? 'ייבוא-מדף בלבד' : 'אפס-import'} (אומת ע"י פותר-המזהים).\n${shelfLine}`;
   // חוק-3: קריאה-לשכן ⇒ פרמטר-שקע. הכותרת מצהירה על כל שקע שהוזרק אוטומטית.
   const sock = (r.autoSocket && r.socketMeta && r.socketMeta.length)
     ? `// שקעים (חוק-3 — הוזרקו אוטומטית מקריאות-שכן במקור): ${r.socketMeta.map(x => x.name).join(' · ')}.\n`
     : '';
   const header = `// ⚛️ אטום-Dart (דרגת-חוזה) · ${r.name}\n// מוצא: ${srcRef} (חצב-AST · חוק-4 — התנהגות זהה, לא-משופרת).\n${pure}${sock}${r.inlineTypes.length ? `// טיפוסים מוטבעים (חוק-1, verbatim מהמקור): ${r.inlineTypes.join(', ')}.\n` : ''}`;
   const types = r.copiedTypes.length ? r.copiedTypes.join('\n\n') + '\n\n' : '';
+  // G69 · רמז-חלול לשן-המוטציה: טיפוס-החזרה שהוא מחלקה-בנויה (לא enum/ליבה) ⇒ `// חלול: T = <הדוגמה-הבנויה של החצב>` — בלי זה השן לא נושכת (unparsed) והאטום נפסל
+  const retM = r.fnSource.replace(/^\s*\/\/.*$/gm, '').match(new RegExp('^([A-Za-z_][\\w<>,?\\s]*?)\\s+' + r.name + '\\s*(?:<[^>]*>)?\\s*\\(', 'm'));
+  const ret = retM ? retM[1].trim() : ''; const samp = ({ ...(r.typeSamples || {}), ...(r.shelfSamples || {}) })[ret];
+  const hint = samp && samp.length && !/^[A-Za-z_]\w*\.[A-Za-z_]\w*$/.test(samp[0]) ? `// חלול: ${ret} = ${samp[0]}\n` : '';   // enum-literal (X.y) ⇒ השן מזהה enum לבד
   const purp = purpose && purpose.from !== 'own-doc' && purpose.words.length ? `// ייעוד-עברי (G63 · מקור: ${purpose.from === 'source-screen' ? 'מונחי-מסך-המקור ' + purpose.key : purpose.from === 'caller-screen' ? 'מונחי-מסך-הקורא ' + purpose.key : 'ליטרלים-בגוף'} — כמו purposeFrom באינדקס-התצוגה, אפס-המצאה): ${purpose.words.slice(0, 12).join(' · ')}\n` : '';
-  return header + purp + '\n' + (imports.length ? imports.join('\n') + '\n\n' : '') + types + r.fnSource + '\n';
+  return header + purp + hint + '\n' + (imports.length ? imports.join('\n') + '\n\n' : '') + types + r.fnSource + '\n';
 }
 
 function landOne(r, seen) {
@@ -176,23 +185,41 @@ function landOne(r, seen) {
   if (params === null) return { name: r.name, skip: 'חתימה לא-טריוויאלית' };
   const socketArgs = (r.autoSocket && r.socketMeta) ? r.socketMeta.map(s => `${s.name}: ${s.init}`).join(', ') : '';
   const mkArgs = (c) => [c.map(v => v.d).join(', '), socketArgs].filter(Boolean).join(', ');
-  const perParam = params.map(p => compat(p.type, r.inlineTypes || [], Object.values(r.erasedTypes || {}), r.typeSamples || {}, r.bodyLits || {}));
+  // G69 · טיפוס מיובא-מטבלת-מדף מתנהג כמוטבע לצורך הדוגמאות (הערך מגיע מהחצב: shelfSamples מהמקור שבטבלה)
+  //   G69 · פונקציה שמפנה לטבלת-מדף (`kVerifiedSpecs[sku]`) מקבלת גם **מפתחות-אמת מהטבלה** כדוגמאות-String (החצב מוציא אותם מהליטרל) — בלי זה כל דוגמה
+  //   גנרית מחטיאה את המפה והעותק-החלול עובר (4 זהב-ריק: crossesSystem · verifiedEndsCountFor · …). ערך-אמת מהמקור, לא המצאה (§20-ג).
+  const lits = { ...(r.bodyLits || {}) }; if ((r.shelfKeys || []).length) lits.String = [...r.shelfKeys.map((k) => `'${k}'`), ...(lits.String || [])];   // מפתחות-הטבלה ראשונים — הם תחום-הפונקציה
+  if ((r.enumNames || []).length) lits.String = [...(lits.String || []), ...r.enumNames.map((k) => `'${k}'`)];   // שמות-ערכי-enum (`e.name == n`) — מההצהרה, לא המצאה
+  //   ומחלקה שנכנסת לטבלה דרך שדה (`kVerifiedSpecs[p.sku]` — החצב מסיק `shelfKeyFields`): הדוגמה-הבנויה מקבלת מפתח-אמת בשדה, במקום 'a' שמחטיא תמיד
+  const samples = { ...(r.typeSamples || {}), ...(r.shelfSamples || {}) };
+  for (const [T, fields] of Object.entries(r.shelfKeyFields || {})) { const base = (samples[T] || [])[0]; if (!base || !(r.shelfKeys || []).length) continue; const keyed = r.shelfKeys.slice(0, 4).map((k) => fields.reduce((acc, f) => acc.replace(new RegExp(`\\b${f}: '[^']*'`), `${f}: '${k}'`), base)).filter((x) => x !== base); samples[T] = [...keyed, ...samples[T]]; }
+  const perParam = params.map(p => compat(p.type, [...(r.inlineTypes || []), ...(r.shelfTypes || [])], Object.values(r.erasedTypes || {}), samples, lits));
   if (perParam.some(x => x.length === 0)) return { name: r.name, skip: 'אין-קלט-סל' };
-  const combos = [];
-  const rec = (i, acc) => { if (combos.length >= 12) return; if (i === params.length) { combos.push(acc); return; } for (const v of perParam[i]) { rec(i + 1, [...acc, v]); if (combos.length >= 12) break; } };
-  if (params.length === 0) combos.push([]); else rec(0, []);
+  // G69 · אלכסון-ראשון: הסדר-הלקסיקוגרפי עם תקרה-12 מיצה את 12 הצירופים על 2 ערכי-הפרמטר-הראשון ⇒ מפתחות-הטבלה שנוספו לא נכנסו לזהב (crossesSystem נשאר חלול).
+  //   עכשיו כל ערך של כל פרמטר מופיע לפחות פעם אחת (אלכסון), ואז מילוי לקסיקוגרפי עד 12.
+  const combos = []; const seenC = new Set();
+  // G69 · בחירה-לפי-שונות: מריצים עד CAND צירופים-מועמדים ברתמה, ושומרים בזהב עד 12 — קודם נציג לכל **פלט שונה** (הזהב שמאדים על חלול = זהב עם פלטים שונים), אחר-כך מילוי לפי הסדר
+  const CAND = 48;
+  const push = (c) => { const k = c.map((v) => v.d).join('\u0001'); if (!seenC.has(k) && combos.length < CAND) { seenC.add(k); combos.push(c); } };
+  const rec = (i, acc) => { if (combos.length >= CAND) return; if (i === params.length) { push(acc); return; } for (const v of perParam[i]) { rec(i + 1, [...acc, v]); if (combos.length >= CAND) break; } };
+  if (params.length === 0) combos.push([]); else { const maxLen = Math.max(...perParam.map((x) => x.length)); for (let i = 0; i < maxLen; i++) push(perParam.map((x) => x[Math.min(i, x.length - 1)])); rec(0, []); }
   seen.add(kb);
 
   const srcRef = r._srcRef || '(מקור)';
   const purpose = purposeOf(r, srcRef);
   fs.writeFileSync(atomAbs, atomFile(r, srcRef, purpose));
 
+  // G69 · זהב-מבני: טיפוס-החזרה מחלקה עם מציג-שדות מהחצב ⇒ הרתמה והזהב משווים `_show(r)` (שדה-שדה) ולא `toString()` (`Instance of 'X'` — עיוור לחלול)
+  const retM0 = r.fnSource.replace(/^\s*\/\/.*$/gm, '').match(new RegExp('^([A-Za-z_][\\w<>,?\\s]*?)\\s+' + r.name + '\\s*(?:<[^>]*>)?\\s*\\(', 'm'));
+  const retT = retM0 ? retM0[1].trim() : '', retBase = retT.replace(/\?$/, ''), showExpr = (r.typeShow || {})[retBase];
+  const showFn = showExpr ? `String _show(${retBase}? x) => x == null ? 'null' : ${showExpr.replace(/\bx\./g, 'x.')};\n` : '';
+  const wrap = (call) => showExpr ? `_show(${call})` : `(${call}).toString()`;
   const callArgs = combos.map(c => mkArgs(c));
   const sockSrc = (r.autoSocket && r.socketDecls && r.socketDecls.length)
     ? '\n// --- מימוש-השקע verbatim מהמקור (לבדיקה בלבד; לא אטום מיובא) ---\n' + r.socketDecls.join('\n\n') + '\n'
     : '';
   const harnessBody = callArgs.join(' ') + sockSrc;
-  const harness = `import 'dart:convert';\nimport '${kb}.dart';\n${usedImports(r.imports, harnessBody).join('\n')}${sockSrc}\nvoid main(){\n${callArgs.map((a, i) => `  try { print(jsonEncode([${i}, (${r.name}(${a})).toString()])); } catch(e){ print(jsonEncode([${i}, {"__t":1}])); }`).join('\n')}\n}\n`;
+  const harness = `import 'dart:convert';\nimport '${kb}.dart';\n${usedImports([...(r.imports || []), ...shelfImports(r, harnessBody + showFn)], harnessBody + showFn).join('\n')}${sockSrc}\n${showFn}void main(){\n${callArgs.map((a, i) => `  try { print(jsonEncode([${i}, ${wrap(`${r.name}(${a})`)}])); } catch(e){ print(jsonEncode([${i}, {"__t":1}])); }`).join('\n')}\n}\n`;
   const harnessAbs = path.join(ROOT, 'dart', `_carve_h_${kb}.dart`);
   fs.writeFileSync(harnessAbs, harness);
   let outs;
@@ -210,30 +237,77 @@ function landOne(r, seen) {
   }
   fs.rmSync(harnessAbs, { force: true });
   if (outs.filter(x => x !== undefined).length !== combos.length) { fs.rmSync(atomAbs, { force: true }); return { name: r.name, fail: 'אפיון חלקי' }; }
+  { // בחירת ≤12 מתוך המועמדים: נציג-ראשון לכל פלט-שונה, ואז מילוי בסדר-המקור
+    const pick = [], seenOut = new Set();
+    combos.forEach((c, i) => { const o = String(outs[i]); if (!seenOut.has(o) && pick.length < 12) { seenOut.add(o); pick.push(i); } });
+    combos.forEach((c, i) => { if (pick.length < 12 && !pick.includes(i)) pick.push(i); });
+    pick.sort((a, b) => a - b);
+    const c2 = pick.map((i) => combos[i]), o2 = pick.map((i) => outs[i]);
+    combos.length = 0; combos.push(...c2); outs = o2;
+  }
 
   const esc = (s) => s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\$/g, '\\$');
   const asserts = combos.map((c, i) => {
     const call = `${r.name}(${mkArgs(c)})`;
     return outs[i] === '__THROW__'
       ? `  { var threw=false; try{ ${call}; }catch(_){threw=true;} if(!threw) throw StateError('FAIL #${i}: expected throw'); n++; }`
-      : `  _eq((${call}).toString(), '${esc(outs[i])}', '#${i}'); n++;`;
+      : `  _eq(${wrap(call)}, '${esc(outs[i])}', '#${i}'); n++;`;
   }).join('\n');
-  const test = `// בדיקת-Golden · ${r.name} — אפיון-חצב (חוק-4). מייבאת רק את האטום.\nimport '${kb}.dart';\n${usedImports(r.imports, asserts + sockSrc).join('\n')}${sockSrc}\nvoid _eq(String got, String want, String lbl){ if(got!=want) throw StateError('FAIL [\$lbl]: got=\$got want=\$want'); }\nvoid main(){\n  var n=0;\n${asserts}\n  print('✓ ${r.name}: '+n.toString()+' Golden');\n}\n`;
+  const test = `// בדיקת-Golden · ${r.name} — אפיון-חצב (חוק-4). מייבאת רק את האטום.\nimport '${kb}.dart';\n${usedImports([...(r.imports || []), ...shelfImports(r, asserts + sockSrc + showFn)], asserts + sockSrc + showFn).join('\n')}${sockSrc}\n${showFn}void _eq(String got, String want, String lbl){ if(got!=want) throw StateError('FAIL [\$lbl]: got=\$got want=\$want'); }\nvoid main(){\n  var n=0;\n${asserts}\n  print('✓ ${r.name}: '+n.toString()+' Golden');\n}\n`;
   fs.writeFileSync(testAbs, test);
   try { execSync(`dart analyze ${testAbs}`, { cwd: ROOT, env, stdio: 'pipe' }); execSync(`dart run --enable-asserts ${testAbs}`, { cwd: ROOT, env, stdio: 'pipe' }); }
-  catch (e) { fs.rmSync(atomAbs, { force: true }); fs.rmSync(testAbs, { force: true }); return { name: r.name, fail: 'golden: ' + String((e.stdout || e).toString()).slice(0, 100).replace(/\n/g, ' ') }; }
+  catch (e) { if (!process.env.CARVE_KEEP) { fs.rmSync(atomAbs, { force: true }); fs.rmSync(testAbs, { force: true }); } return { name: r.name, fail: 'golden: ' + String((e.stdout || e).toString()).slice(0, 100).replace(/\n/g, ' ') }; }   // CARVE_KEEP=1 ⇒ הקבצים נשארים לאבחון
 
   // חוזה
   const doc = (r.fnSource.match(/\/\/\/[^\n]*/g) || []).join('\n').replace(/\/\/\/ ?/g, '');
   const md = `# חוזה · ${r.name}\n\n> אטום-Dart · נחצב אוטומטית ע"י חצב-AST (חוק-4 — verbatim מהמקור).\n\n## מקור\n${srcRef}\n\n## התנהגות\n${doc || '(ראה גוף-האטום)'}\n\n## ייעוד-עברי\n${purpose.from === 'none' ? '(אין — לא נמצא הקשר עברי במקור/בקוראים/בגוף)' : `מקור: ${purpose.from}${purpose.key ? ' · ' + purpose.key : ''} — ${purpose.words.slice(0, 12).join(' · ')}`}\n\n## אימות\nבדיקת-Golden (\`${kb}_test.dart\`): אפיון דטרמיניסטי על סל-קלטים — הוקלט מהרצת הקוד-החלוץ. הרצה: \`dart run --enable-asserts new/dart/${kb}_test.dart\`.\n`;
   fs.writeFileSync(path.join(ROOT, 'dart', `${kb}.contract.md`), md);
   // G64 · דוגמאות-הזהב של האטום כזוגות [args, check] — למועמד-חזק שייבדק **בריצה** (אין שקעים ⇒ הדוגמאות ניידות; עם שקעים ⇒ null)
-  const examples = socketArgs ? null : combos.map((c, i) => outs[i] === '__THROW__' ? null : [mkArgs(c), `r.toString() == '${esc(outs[i])}'`]).filter(Boolean);
+  const examples = (socketArgs || showExpr) ? null : combos.map((c, i) => outs[i] === '__THROW__' ? null : [mkArgs(c), `r.toString() == '${esc(outs[i])}'`]).filter(Boolean);   // זהב-מבני ⇒ הדוגמאות תלויות ב-_show ⇒ לא ניידות
   return { name: r.name, landed: `${kb}.dart`, base: kb, golden: combos.length,
            heb: purpose.words, purposeFrom: purpose.from, examples };
 }
 
+// ── G69 · נחיתת טבלה-מוקלדת (carveVar) כאטום-דאטה משותף ב-new/dart-data ─────────────────────────────────────
+// 37 פונקציות נפלו על `kVerifiedSpecs` (final · 111KB · לא const ⇒ אינו שקע-ערך). ההעתקה-פר-פונקציה (37 עותקים) נדחתה; במקום זה
+// הטבלה + סגירתה (טיפוסים · עוזרים · קבועים) נוחתת **פעם אחת** ב-dart-data, והחצב פותר את הצרכניות ל**ייבוא** לפי מוצא (קובץ+שם).
+// אימות: analyze + הרצת `.length` (הטבלה נטענת ואינה ריקה). בלי זהב/מוטציה/הוכחת-חיפוש — אין מנגנון, ודאטה אינו בהיקף search-proof.
+function landData(r, seenData) {
+  const kb = kebab(r.name);
+  const file = `${kb}-table.dart`, abs = path.join(ROOT, 'dart-data', file);
+  if (seenData.has(kb)) return { name: r.name, skip: 'כפול-שם תוך-ריצה' };
+  if (fs.existsSync(path.join(SHELF, 'dart-data', file))) return { name: r.name, skip: 'כבר-קיים' };
+  if (!r.depOrigins || !Object.keys(r.depOrigins).length) return { name: r.name, skip: 'אין מוצא-פר-הצהרה (חצב ישן)' };
+  seenData.add(kb);
+  const srcRef = r._srcRef || '(מקור)';
+  const short = (p) => String(p).replace(/^\/home\/user\//, '');
+  const exportsPub = Object.keys(r.depOrigins).filter((n) => !n.startsWith('_'));
+  const mk = (size) => `// 🗄️ טבלה-מוקלדת · ${r.name} (${r.kind} ${r.type}) — אטום-דאטה משותף (G69 · חצב-AST, חוק-4 — verbatim מהמקור, כולל סגירת-הטיפוסים).\n// מוצא: ${srcRef}\n// טוהר: אפס-import; ${r.deps.length} הצהרות-סגירה + הטבלה. פונקציות-מדף **מייבאות** את הקובץ הזה (ייבוא-לפי-מוצא בחצב) במקום להטביע עותק.\n${size == null ? '' : `// גודל: ${size} רשומות (נמדד בהרצה).\n`}${exportsPub.map((n) => `// ייצוא: ${n} ← ${short(r.depOrigins[n])}`).join('\n')}\n\n${r.deps.join('\n\n')}\n\n${r.decl}\n`;
+  fs.mkdirSync(path.dirname(abs), { recursive: true });
+  fs.writeFileSync(abs, mk(null));
+  const h = path.join(ROOT, 'dart-data', `_carve_h_${kb}.dart`);
+  fs.writeFileSync(h, `import '${file}';\nvoid main(){ print(${r.name}.length); }\n`);
+  try {
+    execSync(`dart analyze ${abs}`, { cwd: ROOT, env, stdio: 'pipe' });
+    const n = parseInt(execSync(`dart run ${h}`, { cwd: ROOT, env, stdio: ['ignore', 'pipe', 'pipe'], timeout: 30000 }).toString().trim().split('\n').pop(), 10);
+    fs.rmSync(h, { force: true });
+    if (!(n > 0)) { fs.rmSync(abs, { force: true }); return { name: r.name, fail: `טבלה ריקה (${n})` }; }
+    fs.writeFileSync(abs, mk(n));
+    return { name: r.name, landed: `dart-data/${file}`, size: n, exports: exportsPub };
+  } catch (e) {
+    fs.rmSync(abs, { force: true }); fs.rmSync(h, { force: true });
+    const msg = [e.stderr, e.stdout, e.message].map(x => (x || '').toString().trim()).filter(Boolean).join(' | ');
+    return { name: r.name, fail: 'analyze/run: ' + msg.slice(0, 160).replace(/\n/g, ' ') };
+  }
+}
+
 const carved = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+const datas = carved.filter(r => r.ok && r.isData);
+if (datas.length) {
+  const seenData = new Set(); let dl = 0;
+  for (const r of datas) { const res = landData(r, seenData); if (res.landed) { dl++; console.log(`🗄️ ${res.name} → ${res.landed} · ${res.size} רשומות · ייצוא: ${res.exports.join(' · ')}`); } else console.log(`   ${res.fail ? '↩' : '↷'} ${res.name}: ${res.fail || res.skip}`); }
+  console.log(`═══ טבלאות-מדף: ${dl}/${datas.length} נחתו ב-dart-data (הצרכניות נחצבות מחדש עם --batch — החצב יפתור אותן לייבוא) ═══\n`);
+}
 const trivial = carved.filter(r => r.ok && (r.trivial || r.autoSocket));
 const seen = new Set();
 let landed = 0, failed = 0, skipped = 0;
@@ -267,7 +341,8 @@ if (landedBases.length) {
   const vac = [...out.matchAll(/✗ .*?\/([a-z0-9_]+)_test\.dart/g)].map(m => m[1]);
   // ‏unparsed = העותק-החלול לא קומפל ⇒ **השן לא נשכה**. «לא-נפסל» אינו
   // «הוכח», והחוב-המוצהר של השער רק-יורד — לכן גם אלה אינם עולים למדף.
-  const unp = [...out.matchAll(/^UNPARSED .*?\/([a-z0-9_]+)\.dart/gm)].map(m => m[1]);
+  // ⚠️ כשל-קומפילציה של החלול מדווח בנתיב **הבדיקה** (`socket_test.dart`) — בלי קילוף `_test` ההסרה מחקה רק את הבדיקה והאטום עלה למדף בלי זהב (socket, G69)
+  const unp = [...out.matchAll(/^UNPARSED .*?\/([a-z0-9_]+)\.dart/gm)].map(m => m[1].replace(/_test$/, ''));
   const drop = [...new Set([...vac, ...unp])];
   for (const b of drop) for (const f of [b + '.dart', b + '_test.dart', b + '.contract.md'])
     fs.rmSync(path.join(ROOT, 'dart', f), { force: true });
@@ -356,4 +431,6 @@ if (landedBases.length) {
   console.log(`🔎 הוכחת-חיפוש: ${alive2.length - dup.length - noPurpose.length} רשומות נכתבו (${provenNot.length} עם אי-כפילות-מוכחת-בריצה) · ${dup.length} כפילות-אפשרית (${twins.length} תאומים-מוכחים) · ${noPurpose.length} בלי ייעוד-עברי (דורש הכרעה) · מקור-הייעוד: ${Object.entries(purposeFromCount).map(([k, v]) => k + ' ' + v).join(' · ')}`);
   console.log(`\n📦 עלו למדף: ${alive2.length - dup.length - noPurpose.length} אטומים`);
   if (drop.length) console.log('   ✗ ' + drop.slice(0, 12).join(' ') + (drop.length > 12 ? ` …+${drop.length - 12}` : ''));
+  // G69 · רשימות-מלאות לרישום (הלוג הקצר הסתיר 50/62 — אטום שנעלם בלי שם אינו ניתן-למעקב)
+  console.log(`\n📋 מלא · זהב-ריק: ${vac.join(' ') || '-'}\n📋 מלא · unparsed: ${unp.join(' ') || '-'}\n📋 מלא · מעורבים: ${mixed.join(' ') || '-'}\n📋 מלא · כפילות-אפשרית: ${dup.join(' ') || '-'}\n📋 מלא · בלי-ייעוד: ${noPurpose.join(' ') || '-'}`);
 }

@@ -34,7 +34,16 @@ else if (!argv.includes('--all') && !argv.includes('--write')) {
 }
 // ── מחליל ──
 const DEF = { int: '0', double: '0.0', num: '0', String: "''", bool: 'false', dynamic: 'null', Object: 'null' };   // dynamic/Object ⇒ null (חוקי-טיפוסית)
-const hollowVal = (ret) => { const t = ret.trim(); if (t === 'void') return 'return;'; if (t.endsWith('?')) return 'return null;'; if (DEF[t] !== undefined) return `return ${DEF[t]};`; if (/^(List|Iterable)\b/.test(t)) return 'return const [];'; if (/^(Map|Set)\b/.test(t)) return 'return const {};'; return null; };
+// G69 · ערך-חלול לטיפוס-פרויקט: enum (מוצהר באטום או בקובץ-מדף שהוא מייבא) ⇒ `T.values.first`; מחלקה ⇒ רק אם האטום נושא רמז מוצהר
+//   `// חלול: T = <ביטוי>` (מחברת-הנחיתה כותבת אותו מהדוגמה-הבנויה של החצב). בלי אלה 8 אטומים-מייבאי-טבלה (ConnectorEnd/EndType) היו unparsed = לא-מוכחים.
+const hollowVal = (ret, ctx = { enums: new Set(), hints: {} }) => { const t = ret.trim(); if (t === 'void') return 'return;'; if (t.endsWith('?')) return 'return null;'; if (DEF[t] !== undefined) return `return ${DEF[t]};`; if (/^(List|Iterable)\b/.test(t)) return 'return const [];'; if (/^(Map|Set)\b/.test(t)) return 'return const {};'; if (ctx.enums.has(t)) return `return ${t}.values.first;`; if (ctx.hints[t]) return `return ${ctx.hints[t]};`; return null; };
+const hollowCtx = (src, file) => {
+  if (process.env.MUT_NO_CTX) return { enums: new Set(), hints: {} };   // דיף-רגרסיה: ההתנהגות שלפני G69
+  const enums = new Set([...src.matchAll(/\benum\s+([A-Za-z_]\w*)/g)].map((m) => m[1]));
+  if (file) for (const m of src.matchAll(/^import\s+'(\.\.?\/[^']+)'/gm)) { try { for (const e of fs.readFileSync(path.resolve(path.dirname(file), m[1]), 'utf8').matchAll(/\benum\s+([A-Za-z_]\w*)/g)) enums.add(e[1]); } catch { /* ייבוא שלא נקרא = אין enum */ } }
+  const hints = {}; for (const m of src.matchAll(/^\/\/ חלול: ([A-Za-z_]\w*) = (.+)$/gm)) hints[m[1]] = m[2].trim();
+  return { enums, hints };
+};
 /** מדלג על מחרוזות/הערות בעת ספירת-סוגריים (R3-5.5: `'}'` בתוך מחרוזת שבר את המונה) */
 const skipLiteral = (src, i) => {
   const c = src[i];
@@ -46,7 +55,8 @@ const skipLiteral = (src, i) => {
 const matchParen = (src, i) => { let d = 0, j = i; while (j < src.length) { const s = skipLiteral(src, j); if (s >= 0) { j = s; continue; } if (src[j] === '(') d++; else if (src[j] === ')') { d--; if (!d) return j; } j++; } return -1; };
 const matchBrace = (src, i) => { let d = 0, j = i; while (j < src.length) { const s = skipLiteral(src, j); if (s >= 0) { j = s; continue; } if (src[j] === '{') d++; else if (src[j] === '}') { d--; if (!d) return j; } j++; } return -1; };
 const HEAD_RE = /^([A-Za-z_][\w<>,?\s]*?)\s+([a-z_][\w]*)(<[^>]*>)?\s*\(/gm;   // <ret> <name>[<T>](
-export function hollow(src) {
+export function hollow(src, file = '') {
+  const ctx = hollowCtx(src, file);
   let out = '', last = 0, n = 0, unparsed = 0, pub = 0;   // pub = פונקציות ציבוריות שהוחללו; רק-פרטיות ⇒ הוכחה חלשה ⇒ unparsed
   for (const m of src.matchAll(HEAD_RE)) {
     if (m.index < last) continue;
@@ -54,7 +64,7 @@ export function hollow(src) {
     const close = matchParen(src, m.index + m[0].length - 1); if (close < 0) { unparsed++; continue; }
     const rest = src.slice(close + 1, close + 40); const after = rest.match(/^\s*(async\s*\*?|sync\s*\*?)?\s*(\{|=>)/);
     if (!after) continue;                                           // הצהרה בלבד / חתימה-של-מתודה בתוך מחלקה ⇒ לא פונקציה-עליונה
-    const val = hollowVal(ret); if (val === null) { unparsed++; continue; }
+    const val = hollowVal(ret, ctx); if (val === null) { unparsed++; continue; }
     const bodyStart = close + 1 + after[0].length;
     if (after[2] === '{') { const bodyEnd = matchBrace(src, bodyStart - 1); if (bodyEnd < 0) { unparsed++; continue; } out += src.slice(last, bodyStart - 1) + `{ ${val} }`; last = bodyEnd + 1; }
     else {
@@ -71,7 +81,7 @@ const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'mut-dart-'));
 process.on('exit', () => fs.rmSync(tmp, { recursive: true, force: true }));
 let vacuous = [], real = 0, unparsedFiles = [], compileFail = [], broken = [];
 for (const p of pairs) {
-  const h = hollow(fs.readFileSync(p.atom, 'utf8'));
+  const h = hollow(fs.readFileSync(p.atom, 'utf8'), p.atom);
   if (!h.n || !h.pub) { unparsedFiles.push(path.relative(R.ROOT, p.atom) + (h.n && !h.pub ? ' (רק-פרטיות)' : '')); continue; }   // בלי פונקציה-ציבורית-מוחללת אין הוכחה על הבדיקה
   const d = fs.mkdtempSync(path.join(tmp, 'p-'));
   fs.writeFileSync(path.join(d, path.basename(p.atom)), h.src);
