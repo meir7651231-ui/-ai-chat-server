@@ -39,8 +39,6 @@ ${LIVE_CSS}
 .list label{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;padding:2px 0}.list label.off{color:var(--mute);text-decoration:line-through}
 input[type=checkbox]{accent-color:var(--acc);width:15px;height:15px;flex:none;margin-top:2px}
 .sticky{position:sticky;top:0}.spec{background:var(--code);border:1px solid var(--line);border-radius:6px;padding:10px 12px;max-height:38vh;overflow:auto;white-space:pre-wrap;font:13.5px/1.55 Heebo,Arial,sans-serif;direction:rtl}
-.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}button{font:inherit;background:var(--acc);color:#fff;border:0;border-radius:5px;padding:8px 16px;cursor:pointer;font-weight:500}button.ghost{background:transparent;color:var(--acc);border:1px solid var(--line)}button.sm{padding:3px 9px;font-size:12.5px}
-:root[data-theme=dark] button{color:#0f1f1e}
 .err{color:var(--none);white-space:pre-wrap;margin-top:8px}.note{font-size:13px;color:var(--mute)}
 .tag{display:inline-block;font-size:11px;padding:0 6px;border-radius:99px;background:var(--code);color:var(--mute);margin-inline-start:4px}
 </style>

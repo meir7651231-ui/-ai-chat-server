@@ -1,4 +1,5 @@
 // gen/live.mjs — דף-הלייב של המחולל: מה נכנס (ספק), מה נגזר (צרכים), מה הוכח (ריצה), מה הורכב (אטומים), ומה יצא (האפליקציה רצה בפנים).
+import { SKIN_CSS, FONTS } from './skin.mjs';
 import { esc } from './render.mjs';
 
 const j = (v) => esc(JSON.stringify(v, (k, x) => (x && x.$fn ? `ƒ ${x.$fn}` : x)));
@@ -43,26 +44,29 @@ ${r.flutter.ok ? `<p>${r.flutter.files.length} קבצי-Dart · <b>${r.flutter.d
 `;
 }
 
-export const LIVE_CSS = `:root{--bg:#f4f3ee;--ink:#1b1a17;--mute:#6f6a5f;--line:#d7d2c6;--card:#fbfaf7;--acc:#1f5f5b;--ok:#2d7a3a;--none:#a33d1a;--code:#eeece5}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#141518;--ink:#ebe8e0;--mute:#a09b8f;--line:#2f3238;--card:#1c1e22;--acc:#62c2ba;--ok:#6fcf7c;--none:#f08a5b;--code:#101114}}
-:root[data-theme=dark]{--bg:#141518;--ink:#ebe8e0;--mute:#a09b8f;--line:#2f3238;--card:#1c1e22;--acc:#62c2ba;--ok:#6fcf7c;--none:#f08a5b;--code:#101114}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Heebo,Arial,sans-serif;direction:rtl;padding-block:20px;padding-inline:20px}
-code,pre{font-family:"JetBrains Mono",Consolas,monospace;font-size:12.5px}code{background:var(--code);padding:1px 5px;border-radius:3px}pre{background:var(--code);padding:10px;border-radius:5px;overflow-x:auto;direction:ltr;text-align:left;max-height:340px}
-h1{font-size:26px;margin:0}h2{font-size:18px;margin:0 0 10px;display:flex;gap:10px;align-items:baseline}h2 .n{font-size:13px;color:var(--mute);font-weight:400}h4,h5{margin:6px 0}
-.wrap{max-width:1180px;margin:0 auto}.head{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:baseline;justify-content:space-between;margin-bottom:18px}.head .mute{font-size:13px}
-.mute{color:var(--mute)}.step{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:12px 0}
-table{border-collapse:collapse}td,th{padding:4px 8px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}th{color:var(--mute);font-weight:500;font-size:13px}
-.ents{display:flex;flex-wrap:wrap;gap:16px}.ent{min-width:260px}
-details.proof{border-top:1px solid var(--line);padding:8px 0}details.proof summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
-.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--ok);flex:none;position:relative;top:1px}details.none .dot,.dot.off{background:var(--none)}td.num{font-variant-numeric:tabular-nums;text-align:left}
-.tally{margin-inline-start:auto;font-size:13px;color:var(--mute)}.ex{padding:6px 18px 4px}.pill{display:inline-block;background:var(--code);border-radius:99px;padding:0 9px;font-size:12.5px;margin:2px}
-.frame{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}iframe{width:100%;height:720px;border:0;display:block}
-.spec pre{direction:rtl;text-align:right;font-family:Heebo,Arial,sans-serif;font-size:14px}
-.notes{margin:8px 0;padding-inline-start:18px;color:var(--none)}.notes li{margin:2px 0}
-.stat{display:flex;flex-wrap:wrap;gap:12px}.stat div{background:var(--code);border-radius:6px;padding:8px 14px}.stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
-@media (max-width:600px){iframe{height:560px}}
+export const LIVE_CSS = SKIN_CSS() + `body{padding-block:var(--s5);padding-inline:var(--s5)}
+h1{font-size:calc(var(--t-screen) + var(--s1))}
+pre{direction:ltr;text-align:left;max-height:calc(var(--s7) * 7);white-space:pre}
+h4,h5{margin:var(--s2) 0}
+.head{display:flex;flex-wrap:wrap;gap:var(--s3) var(--s5);align-items:baseline;justify-content:space-between;margin-bottom:var(--s4)}
+.head .mute{font-size:var(--t-meta)}
+.ents{display:flex;flex-wrap:wrap;gap:var(--s4)}.ent{min-width:calc(var(--s1) * 65)}
+details.proof summary{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:baseline}
+.dot{display:inline-block;width:var(--s3);height:var(--s3);border-radius:var(--r-pill);background:var(--ok);flex:none;position:relative;top:1px}
+details.none .dot,.dot.off{background:var(--none)}
+td.num{text-align:left}
+.tally{margin-inline-start:auto;font-size:var(--t-meta);color:var(--mute)}
+.ex{padding:var(--s2) var(--s4) var(--s1)}
+.frame{border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;background:var(--card)}
+iframe{width:100%;height:calc(var(--s7) * 15);border:0;display:block}
+.spec pre{direction:rtl;text-align:right;font-family:var(--font-he);font-size:var(--t-dense);white-space:pre-wrap}
+.notes{margin:var(--s2) 0;padding-inline-start:var(--s4);color:var(--none)}.notes li{margin:var(--s1) 0}
+.stat{display:flex;flex-wrap:wrap;gap:var(--s3)}
+.stat div{background:var(--code);border-radius:var(--r-sm);padding:var(--s2) var(--s3)}
+.stat b{display:block;font-size:var(--t-screen);font-variant-numeric:tabular-nums}
+@media (max-width:600px){iframe{height:calc(var(--s7) * 11)}}
 `;
-export const LIVE_FONTS = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap">';
+export const LIVE_FONTS = FONTS;
 
 export function renderLive(r, appHtml) {
   return `<title>${esc(r.app)} · המחולל</title>\n${LIVE_FONTS}\n<style>\n${LIVE_CSS}</style>\n<div class="wrap">\n${renderLiveBody(r, appHtml)}</div>`;

@@ -12,6 +12,7 @@ import { readDartShelf, proveDart, hasDart } from './prove-dart.mjs';
 import { buildFlutter } from './flutter.mjs';
 import { esc } from './render.mjs';
 import { applyLenses, LENSES, isComputedName } from './lenses.mjs';
+import { SKIN_CSS, FONTS } from './skin.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const NEEDS = JSON.parse(fs.readFileSync(path.join(HERE, 'needs.data.json'), 'utf8')).needs;
@@ -143,16 +144,16 @@ const deps = results.map((r) => { const g = {}; for (const x of r.improvements) 
 <table><tr><th>סוג</th><th>איפה</th><th>למה</th><th>התיקון</th></tr>${Object.entries(g).map(([k, xs]) => `<tr><td><b>${esc(k)}</b> × ${xs.length}</td><td>${xs.slice(0, 8).map((x) => '<code>' + esc(x.what) + '</code>').join(' ')}${xs.length > 8 ? ' …' : ''}</td><td>${esc(xs[0].why)}</td><td>${esc(xs[0].fix)}</td></tr>`).join('')}</table>
 <details><summary class="mute">הספק שנבנה</summary><pre>${esc(r.specText)}</pre></details></details>`; }).join('');
 const page = `<title>המחולל אגף-אגף</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&display=swap">
+${FONTS}
 <style>
-:root{--bg:#f4f3ee;--ink:#1b1a17;--mute:#6f6a5f;--line:#d7d2c6;--card:#fbfaf7;--acc:#1f5f5b;--code:#eeece5;--warn:#a33d1a}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#141518;--ink:#ebe8e0;--mute:#a09b8f;--line:#2f3238;--card:#1c1e22;--acc:#62c2ba;--code:#101114;--warn:#f08a5b}}
-:root[data-theme=dark]{--bg:#141518;--ink:#ebe8e0;--mute:#a09b8f;--line:#2f3238;--card:#1c1e22;--acc:#62c2ba;--code:#101114;--warn:#f08a5b}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 Heebo,Arial,sans-serif;direction:rtl;padding-block:24px;padding-inline:18px}.wrap{max-width:1100px;margin:0 auto}
-h1{font-size:26px;margin:0}h2{font-size:18px;margin:26px 0 8px}.mute{color:var(--mute)}.step{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:12px 0}
-table{border-collapse:collapse;width:100%}td,th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top;font-size:14px}th{color:var(--mute);font-weight:500;font-size:13px}td.num{font-variant-numeric:tabular-nums;text-align:left}
-code{background:var(--code);padding:1px 5px;border-radius:3px;font-size:12.5px}pre{background:var(--code);padding:10px;border-radius:6px;white-space:pre-wrap;font:13px/1.5 Heebo,Arial,sans-serif}
-details{border-top:1px solid var(--line);padding:8px 0}summary{cursor:pointer}.tbl{overflow-x:auto}
+${SKIN_CSS()}
+body{padding-block:var(--s5)}
+h1{font-size:calc(var(--t-screen) + var(--s1))}
+h2{margin:var(--s5) 0 var(--s2)}
+.wrap{max-width:var(--measure-report)}
+td.num{text-align:left}
+pre{white-space:pre-wrap;font-family:var(--font-he);font-size:var(--t-meta)}
+
 </style>
 <div class="wrap">
 <h1>המחולל אגף-אגף</h1><div class="mute">סבב ${history.length}: 12 אגפי המוסד, כל אחד לחוד, ואז המוסד כולו כספק מאוחד. השיפורים נגזרים מכנית מהספק ומהדוח. ${esc(new Date().toLocaleDateString('he-IL'))}</div>

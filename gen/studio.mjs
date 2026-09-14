@@ -33,8 +33,6 @@ ${LIVE_FONTS}
 ${LIVE_CSS}
 textarea{width:100%;min-height:160px;font:15px/1.6 Heebo,Arial,sans-serif;color:var(--ink);background:var(--code);border:1px solid var(--line);border-radius:6px;padding:10px 12px;direction:rtl;resize:vertical}
 .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
-button{font:inherit;background:var(--acc);color:#fff;border:0;border-radius:5px;padding:8px 16px;cursor:pointer;font-weight:500}button.ghost{background:transparent;color:var(--acc);border:1px solid var(--line)}
-:root[data-theme=dark] button, .dark button{color:#0f1f1e}
 .err{color:var(--none);white-space:pre-wrap;margin-top:8px}.grammar{font-size:13px;color:var(--mute);line-height:1.8}.grammar code{font-size:12px}
 .empty{color:var(--mute);padding:10px 0}
 </style>

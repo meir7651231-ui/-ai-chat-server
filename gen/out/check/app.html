@@ -1,28 +1,66 @@
 <!doctype html>
 <html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>גבייה</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap">
 <style>
-:root{--bg:#f7f6f2;--ink:#1d1c19;--mute:#6b675e;--line:#d9d5cb;--card:#ffffff;--acc:#1f5f5b;--acc-ink:#ffffff;--warn:#8a3b12}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}}
-:root[data-theme=dark]{--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Heebo,Arial,sans-serif;padding-block:16px;padding-inline:16px}
-h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:0 0 8px}h2 small{color:var(--mute);font-weight:400}
-.top{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
-.kpi{background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:6px}.kpi .v{display:block;font-size:22px;font-variant-numeric:tabular-nums;font-weight:600}.kpi .l{color:var(--mute);font-size:13px}
-.kpi.none .v{color:var(--warn);font-size:14px}
-.exp{font-size:11px;padding:0 5px;border-radius:99px;background:var(--line)}.exp.bad{background:#b3261e;color:#fff}.exp.warn{background:#e0a100;color:#1d1c19}
-.entity{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px;margin:12px 0}
-form.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:10px}label{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
-input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;min-width:120px}
-button{font:inherit;background:var(--acc);color:var(--acc-ink);border:0;border-radius:4px;padding:7px 14px;cursor:pointer}button.x{background:transparent;color:var(--mute);padding:2px 6px}
-.tbl{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--mute);font-weight:500;font-size:13px}
-td.num{font-variant-numeric:tabular-nums}.search{min-width:220px}
-.foot{color:var(--mute);font-size:12px;margin-top:16px}
+:root{--canvas:#FFFFFF;--sunken:#F7F6F3;--surface:#FFFFFF;--raised:#F7F6F3;--raised2:#EFEDE8;--ink:#37352F;--mut:rgba(55, 53, 47, 0.6);--faint:rgba(55, 53, 47, 0.4);--hair:rgba(0, 0, 0, 0.08);--hair2:rgba(0, 0, 0, 0.05);--on-a:#FFFFFF;--hi:#FFFFFF;--shade:rgba(0, 0, 0, 0);--ok:#1B8A4C;--warn:#C98A00;--err:#C8321E;--gold:#C98A00;--a-hi:#2F6FED;--a:#2F6FED;--a-800:#1E4FB8;--gl:rgba(47, 111, 237, 0);--c2:#2F6FED;--c3:#2F6FED;--bg:var(--canvas);--card:var(--surface);--raise:var(--raised);--code:var(--raised2);--mute:var(--mut);--line:var(--hair);--acc:var(--a);--acc-hi:var(--a-hi);--acc-ink:var(--on-a);--none:var(--err);--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;--r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:22px;--r-pill:999px;--t-screen:22px;--lh-screen:1.25;--w-screen:600;--t-section:15px;--lh-section:1.3;--w-section:700;--t-body:16px;--lh-body:1.5;--w-body:400;--t-dense:14px;--lh-dense:1.45;--w-dense:400;--t-meta:13px;--lh-meta:1.4;--w-meta:400;--t-micro:11.5px;--lh-micro:1.35;--w-micro:500;--row-compact:32px;--row-cozy:40px;--row-roomy:52px;--pad-compact:4px;--pad-cozy:8px;--pad-roomy:12px;--m-fast:140ms;--m-base:240ms;--m-slow:420ms;--m-ambient:6000ms;--row-h:var(--row-cozy);--cell-pad:var(--pad-cozy);--measure:720px;--measure-report:1180px;--focus-w:2px;--focus-off:2px;--font-he:Heebo, Arial, sans-serif;--font-mono:"JetBrains Mono", Consolas, monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236, 233, 226, 0.09);--hair2:rgba(236, 233, 226, 0.05);--on-a:#0B0B0D;--hi:#FFFFFF;--shade:#000000;--ok:#43D08C;--warn:#E6B84F;--err:#E0574E;--gold:#E6C766;--a-hi:#2F6FED;--a:#2F6FED;--a-800:#1E4FB8;--gl:rgba(47, 111, 237, 0);--c2:#2F6FED;--c3:#2F6FED}}
+:root[data-theme=dark]{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236, 233, 226, 0.09);--hair2:rgba(236, 233, 226, 0.05);--on-a:#0B0B0D;--hi:#FFFFFF;--shade:#000000;--ok:#43D08C;--warn:#E6B84F;--err:#E0574E;--gold:#E6C766;--a-hi:#2F6FED;--a:#2F6FED;--a-800:#1E4FB8;--gl:rgba(47, 111, 237, 0);--c2:#2F6FED;--c3:#2F6FED}
+[data-density=compact]{--row-h:var(--row-compact);--cell-pad:var(--pad-compact)}
+[data-density=cozy]{--row-h:var(--row-cozy);--cell-pad:var(--pad-cozy)}
+[data-density=roomy]{--row-h:var(--row-roomy);--cell-pad:var(--pad-roomy)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:var(--w-body) var(--t-body)/var(--lh-body) var(--font-he);direction:rtl;padding-block:var(--s4);padding-inline:var(--s4)}
+h1{font:var(--w-screen) var(--t-screen)/var(--lh-screen) var(--font-he);margin:0 0 var(--s1)}
+h2{font:var(--w-section) var(--t-section)/var(--lh-section) var(--font-he);margin:0 0 var(--s2);display:flex;gap:var(--s3);align-items:baseline;flex-wrap:wrap}
+h2 small,h2 .n{font-size:var(--t-meta);color:var(--mute);font-weight:400}
+.mute{color:var(--mute)}.faint{color:var(--faint)}
+.wrap{max-width:var(--measure-report);margin:0 auto}
+.card,.step,.entity{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:var(--s3) var(--s4);margin:var(--s3) 0}
+a{color:var(--acc)}
+code{background:var(--code);padding:0 var(--s1);border-radius:var(--r-sm);font-family:var(--font-mono);font-size:var(--t-micro)}
+pre{background:var(--code);padding:var(--s3);border-radius:var(--r-sm);overflow-x:auto;font-family:var(--font-mono);font-size:var(--t-micro)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:right;padding:var(--cell-pad) var(--s2);border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr{height:var(--row-h)}
+tbody tr:hover{background:var(--raise)}
+thead th{position:sticky;top:0;background:var(--card);color:var(--mute);font-weight:var(--w-section);font-size:var(--t-meta);z-index:1}
+td.num,th.num{font-variant-numeric:tabular-nums}
+bdi{unicode-bidi:isolate}
+td.num,th.num,.num{unicode-bidi:isolate}
+form.row{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:end;margin-bottom:var(--s3)}
+label{display:flex;flex-direction:column;font-size:var(--t-meta);color:var(--mute);gap:var(--s1)}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s2) var(--s2);min-width:calc(var(--s1) * 30)}
+input:hover,select:hover,textarea:hover{border-color:var(--mute)}
+button{font:inherit;font-weight:var(--w-section);background:var(--acc);color:var(--acc-ink);border:0;border-radius:var(--r-sm);padding:var(--s2) var(--s4);cursor:pointer;transition:filter var(--m-fast) ease}
+button:hover{filter:brightness(1.08)}
+button.x,button.ghost{background:transparent;color:var(--mute);padding:0 var(--s2)}
+button.ghost:hover{background:var(--raise);color:var(--ink)}
+button[disabled],input[disabled],select[disabled]{opacity:.55;cursor:not-allowed}
+:focus-visible{outline:var(--focus-w) solid var(--acc-hi);outline-offset:var(--focus-off)}
+details{border-top:1px solid var(--line);padding:var(--s2) 0}summary{cursor:pointer}
+.pill,.chip{display:inline-block;background:var(--code);border-radius:var(--r-pill);padding:0 var(--s2);font-size:var(--t-meta);margin:var(--s1) 0}
+.chip.ok{color:var(--ok)}.chip.warn{color:var(--warn)}.chip.err{color:var(--err)}
+.empty{color:var(--mute);padding:var(--s4) 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{body{background:#fff;color:#000;padding:0}.noprint,button,input,select{display:none!important}table{page-break-inside:auto}tr,td,th{page-break-inside:avoid}thead{display:table-header-group}}
+
+.top{display:flex;flex-wrap:wrap;gap:var(--s3);align-items:baseline;justify-content:space-between}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(var(--s1) * 40),1fr));gap:var(--s3);margin:var(--s4) 0}
+.kpi{background:var(--card);border:1px solid var(--line);padding:var(--s3);border-radius:var(--r-md)}
+.kpi .v{display:block;font:var(--w-screen) var(--t-screen)/var(--lh-screen) var(--font-he);font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--mute);font-size:var(--t-meta)}
+.kpi.none .v{color:var(--warn);font-size:var(--t-dense)}
+.exp{font-size:var(--t-micro);padding:0 var(--s2);border-radius:var(--r-pill);background:var(--code)}
+.exp.bad{background:var(--err);color:var(--hi)}.exp.warn{background:var(--warn);color:var(--on-a)}
+th,td{white-space:nowrap}
+.search{min-width:calc(var(--s1) * 55)}
+.foot{color:var(--mute);font-size:var(--t-meta);margin-top:var(--s4)}
 </style></head><body>
 <div class="top"><div><h1>גבייה</h1><div class="foot" style="margin:0">נבנה על-ידי המחולל · 6 אטומים מוכחים · הנתונים נשמרים בדפדפן זה</div></div>
 <input class="search" id="q" type="search" placeholder="חיפוש בכל השדות…"><label>מי אני <select id="role"><option value="">הכל</option><option>גזבר</option></select></label></div>
-<div class="kpis"><div class="kpi" id="kpi0"><span class="v">—</span><span class="l">סכום צק.סכום</span></div><div class="kpi" id="kpi1"><span class="v">—</span><span class="l">מונה צק.מיקום</span></div><div class="kpi" id="kpi2"><span class="v">—</span><span class="l">מונה צק.סיבת חזרה</span></div><div class="kpi" id="kpi3"><span class="v">—</span><span class="l">סכום חוב.סכום</span></div></div>
+<div class="kpis"><div class="kpi" id="kpi0"><bdi class="v">—</bdi><span class="l">סכום צק.סכום</span></div><div class="kpi" id="kpi1"><bdi class="v">—</bdi><span class="l">מונה צק.מיקום</span></div><div class="kpi" id="kpi2"><bdi class="v">—</bdi><span class="l">מונה צק.סיבת חזרה</span></div><div class="kpi" id="kpi3"><bdi class="v">—</bdi><span class="l">סכום חוב.סכום</span></div></div>
 <section class="entity" data-entity="e0">
   <h2>צק <small id="e0_n"></small></h2><div class="foot" style="margin:0 0 6px">הרגע: הורה מביא צקים דחויים ביום הרישום · מסך: גזבר</div><div class="foot" style="margin:0 0 6px">אסור: <b>מחיקה</b> · <b>שינוי סכום</b></div>
   <form id="e0_form" class="row"><label>משפחה <b>*</b><input id="e0_f0" type="text" required></label><label>מספר<input id="e0_f1" type="text" ></label><label>בנק<input id="e0_f2" type="text" ></label><label>סכום<input id="e0_f3" type="number" min="0" max="1000000" step="any" ></label><label>תאריך פירעון<input id="e0_f4" type="date" ></label><label>מיקום<select id="e0_f5" ><option>כספת</option><option>בבנק</option><option>אצל הגזבר</option></select></label><label>סיבת חזרה<select id="e0_f6" ><option>אין כיסוי</option><option>חתימה</option><option>מוטב</option><option>חשבון מוגבל</option></select></label><button type="submit">הוסף צק</button></form>
@@ -112,7 +150,7 @@ function countBy(items, key) {
 const countBy__call = (...x) => countBy(...x);
 
 // ── דבק מבני (מחולל): סכמה, אחסון, טופס, טבלה, מדדים
-const SCHEMA = [{"name":"צק","stages":["התקבל","מוחזק","הופקד","נפרע","חזר","הוצג שוב"],"guards":[{"stage":"הופקד","cond":"תאריך פירעון"},{"stage":"הוצג שוב","cond":"סיבת חזרה"}],"forbidden":["מחיקה","שינוי סכום"],"fields":[{"name":"משפחה","shape":"text","required":true,"formula":null,"ref":-1},{"name":"מספר","shape":"id","required":false,"formula":null,"ref":-1},{"name":"בנק","shape":"text","required":false,"formula":null,"ref":-1},{"name":"סכום","shape":"number","required":false,"formula":null,"ref":-1},{"name":"תאריך פירעון","shape":"date","required":false,"formula":null,"ref":-1},{"name":"מיקום","shape":"enum","required":false,"formula":null,"ref":-1},{"name":"סיבת חזרה","shape":"enum","required":false,"formula":null,"ref":-1}]},{"name":"חוב","stages":["ממתין","תזכורת","שיחה","הסדר","נסגר"],"guards":[],"forbidden":[],"fields":[{"name":"משפחה","shape":"text","required":true,"formula":null,"ref":-1},{"name":"סכום","shape":"number","required":false,"formula":null,"ref":-1},{"name":"תאריך יעד","shape":"date","required":false,"formula":null,"ref":-1},{"name":"הערה","shape":"text","required":false,"formula":null,"ref":-1}]}];
+const SCHEMA = [{"name":"צק","stages":["התקבל","מוחזק","הופקד","נפרע","חזר","הוצג שוב"],"guards":[{"stage":"הופקד","cond":"תאריך פירעון"},{"stage":"הוצג שוב","cond":"סיבת חזרה"}],"forbidden":["מחיקה","שינוי סכום"],"fix":null,"fields":[{"name":"משפחה","shape":"text","required":true,"formula":null,"ref":-1},{"name":"מספר","shape":"id","required":false,"formula":null,"ref":-1},{"name":"בנק","shape":"text","required":false,"formula":null,"ref":-1},{"name":"סכום","shape":"number","required":false,"formula":null,"ref":-1},{"name":"תאריך פירעון","shape":"date","required":false,"formula":null,"ref":-1},{"name":"מיקום","shape":"enum","required":false,"formula":null,"ref":-1},{"name":"סיבת חזרה","shape":"enum","required":false,"formula":null,"ref":-1}]},{"name":"חוב","stages":["ממתין","תזכורת","שיחה","הסדר","נסגר"],"guards":[],"forbidden":[],"fix":null,"fields":[{"name":"משפחה","shape":"text","required":true,"formula":null,"ref":-1},{"name":"סכום","shape":"number","required":false,"formula":null,"ref":-1},{"name":"תאריך יעד","shape":"date","required":false,"formula":null,"ref":-1},{"name":"הערה","shape":"text","required":false,"formula":null,"ref":-1}]}];
 const KPIS = [{"op":"סכום","need":"sum","entity":0,"field":3,"call":"grandTotal__call"},{"op":"מונה","need":"count-by","entity":0,"field":5,"call":"countBy__call"},{"op":"מונה","need":"count-by","entity":0,"field":6,"call":"countBy__call"},{"op":"סכום","need":"sum","entity":1,"field":1,"call":"grandTotal__call"}];
 const ROLES = [{"name":"גזבר","all":false,"ents":["צק"]}];
 const EXP_WORDS = ["תוקף"], EXP_DAYS = 30;
@@ -137,14 +175,17 @@ function expiry(f, v) {
   const d = -CALL.daysSince(v, today());
   return d < 0 ? ' <b class="exp bad">פג</b>' : d <= EXP_DAYS ? ' <b class="exp warn">פג בעוד ' + d + ' ימים</b>' : '';
 }
+const BIDI = ["number","formula","date","phone","id","count"];   // מהדאטה (skin.data.json) — מוזרק בזמן-פליטה, לא רשימה ביד
+const bidi = (s) => '<bdi dir="ltr">' + s + '</bdi>';   // UAX#9: ערך בסדר-לטיני (₪8,000 · 052- · 15/10 · -31) מבודד ומוכרז ltr — סימן/מטבע נשארים בצד הנכון
 function show(f, v, e, r) {
-  if (f.shape === 'formula' && e && r) { const n = calc(e, r, f); return Number.isFinite(n) ? (CALL.money ? CALL.money(n) : String(n)) : '—'; }
+  if (f.shape === 'formula' && e && r) { const n = calc(e, r, f); return Number.isFinite(n) ? bidi(CALL.money ? CALL.money(n) : String(n)) : '—'; }
   if (v === '' || v == null) return '';
-  if (f.shape === 'date') return (CALL.fmtDate ? CALL.fmtDate(v) : esc(v)) + expiry(f, v);
-  if (f.shape === 'number' && CALL.money) return CALL.money(Number(v));
+  if (f.shape === 'date') return bidi(CALL.fmtDate ? CALL.fmtDate(v) : esc(v)) + expiry(f, v);
+  if (f.shape === 'number' && CALL.money) return bidi(CALL.money(Number(v)));
+  if (f.shape === 'count') return bidi(esc(v));
   if (f.shape === 'date' && CALL.fmtDate) return CALL.fmtDate(v);
-  if (f.shape === 'phone' && CALL.phone) return CALL.phone(v);
-  return esc(v);
+  if (f.shape === 'phone' && CALL.phone) return bidi(CALL.phone(v));
+  return BIDI.includes(f.shape) ? bidi(esc(v)) : esc(v);
 }
 function rowsOf(ei) {
   const q = el('q') ? el('q').value : '';
@@ -153,8 +194,9 @@ function rowsOf(ei) {
   const nq = CALL.norm(q);
   return rows.filter((r) => SCHEMA[ei].fields.some((f, fi) => CALL.norm(r[fi]).includes(nq)));
 }
+let role = '';
 function paint() {
-  const role = el('role') ? el('role').value : '';
+  role = el('role') ? el('role').value : '';
   const allowed = role ? (ROLES.find((x) => x.name === role) || { ents: [] }) : null;
   SCHEMA.forEach((e, ei) => {
     const sec = document.querySelector('[data-entity="e' + ei + '"]');
@@ -167,9 +209,12 @@ function paint() {
       const cells = e.fields.map((f, fi) => '<td class="' + (f.shape === 'number' || f.shape === 'formula' ? 'num' : '') + '">' + show(f, r[fi], e, r) + '</td>').join('');
       const n = e.fields.length;
       const st = e.stages.length ? '<td>' + esc(r[n] || e.stages[0]) + (e.stages.indexOf(r[n] || e.stages[0]) < e.stages.length - 1 ? ' <button class="x" data-adv="' + ei + ':' + idx + '" title="לשלב הבא">›</button>' : '') + '</td>' + (CALL.daysSince ? '<td class="num">' + (r[n + 1] ? CALL.daysSince(r[n + 1], today()) + ' ימים' : '') + '</td>' : '') : '';
-      const d = hasDays ? '<td class="num">' + e.fields.map((f, fi) => (f.shape === 'date' && r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) => x !== '').join(' / ') + '</td>' : '';
+      const d = hasDays ? '<td class="num">' + bidi(e.fields.map((f, fi) => (f.shape === 'date' && r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) => x !== '').join(' / ')) + '</td>' : '';
       const noDel = e.forbidden.some((x) => /^מחיקה$/.test(x));
-      return '<tr>' + cells + st + d + '<td>' + (noDel ? '' : '<button class="x" data-del="' + ei + ':' + idx + '" title="מחק">✕</button>') + '</td></tr>';
+      const created = r[n + 2] || r[n + 1] || '';
+      const fixOk = e.fix ? ((role === '' || role === e.fix.who) && (!e.fix.days || !CALL.daysSince || !created || CALL.daysSince(created, today()) <= e.fix.days)) : true;
+      const editBtn = e.fix ? (fixOk ? '<button class="x" data-edit="' + ei + ':' + idx + '" title="תקן">✎</button>' : '<span class="x" title="נעול לתיקון">🔒</span>') : '';
+      return '<tr>' + cells + st + d + '<td>' + editBtn + (noDel ? '' : '<button class="x" data-del="' + ei + ':' + idx + '" title="מחק">✕</button>') + '</td></tr>';
     }).join('');
   });
   // קשרים: רשימות-הבחירה מתמלאות מהרשומות של ישות-היעד
@@ -188,8 +233,11 @@ function paint() {
 SCHEMA.forEach((e, ei) => {
   el('e' + ei + '_form').addEventListener('submit', (ev) => {
     ev.preventDefault();
+    const form = ev.target; const editing = form.dataset.editing;
+    if (editing !== undefined && editing !== '') { const r = DATA[ei][Number(editing)]; e.fields.forEach((f, fi) => { if (f.shape !== 'formula') r[fi] = el('e' + ei + '_f' + fi).value; }); delete form.dataset.editing; form.querySelector('button[type=submit]').textContent = 'הוסף ' + e.name; save(); form.reset(); paint(); return; }
     const row = e.fields.map((f, fi) => el('e' + ei + '_f' + fi).value);
-    if (e.stages.length) row.push(e.stages[0], today());
+    if (e.stages.length) row.push(e.stages[0], today()); else row.push('', '');
+    row.push(today()); // תאריך רישום — למדיניות-תיקון
     DATA[ei].push(row); save(); ev.target.reset(); paint();
   });
 });
@@ -207,6 +255,8 @@ document.body.addEventListener('click', (ev) => {
     if (k < st.length - 1) { const next = st[k + 1]; const g = e.guards.find((x) => x.stage === next);
       if (g && !guardOk(e, r, g.cond)) { alert('אי אפשר לעבור ל«' + next + '»: ' + g.cond); return; }
       r[n] = next; r[n + 1] = today(); save(); paint(); } return; }
+  const ed = ev.target.closest('[data-edit]');
+  if (ed) { const [ei, i] = ed.dataset.edit.split(':').map(Number); const e = SCHEMA[ei]; const r = DATA[ei][i]; e.fields.forEach((f, fi) => { if (f.shape !== 'formula') { const inp = el('e' + ei + '_f' + fi); if (inp) inp.value = r[fi] ?? ''; } }); const form = el('e' + ei + '_form'); form.dataset.editing = String(i); form.querySelector('button[type=submit]').textContent = 'שמור תיקון'; form.scrollIntoView({ block: 'center' }); return; }
   const b = ev.target.closest('[data-del]'); if (!b) return;
   const [ei, i] = b.dataset.del.split(':').map(Number);
   DATA[ei].splice(i, 1); save(); paint();

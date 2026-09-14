@@ -1,0 +1,200 @@
+{
+  "_": "בחירות-העיצוב של gen כדאטה (הכרעה-19: מראה=דאטה · הכרעה-28: הרצפה חרוטה). המנוע קורא את זרע-האימפריה ולא ממציא צבע. שינוי כאן ⇒ node gen/skin.mjs ⇒ כל ארבעת העמודים מתעדכנים.",
+  "seeds": {
+    "pureLook": "new/atoms/pure-look.mjs",
+    "designSeed": "new/dart-ui-bs/ds/design-seed.json",
+    "_": "נקראים כדאטה (לא import — gen לא מייבאת מהמחצב). חסרים ⇒ נפילה לצילום skinSnapshot כאן למטה."
+  },
+  "pick": {
+    "skin": "paper",
+    "theme": "t-balagan",
+    "fontSet": "heebo",
+    "_src": "DECISIONS.md:75 · הכרעה-28 (🔴 חרוט): לבן · כחול-יחיד #2F6FED · Heebo. אותה רצפה שהבעלים אישר («יפה»)."
+  },
+  "type": {
+    "_src": "knowledge/PLAN-BALAGAN-DESIGN-2026-09-07.md:202-206 §5.2 + DECISIONS.md:75 — כותרת-מסך 22/600 · כותרת-חלק 15/700 · גוף 16/1.5 · מטא 13",
+    "screen": {
+      "px": 22,
+      "lh": 1.25,
+      "w": 600
+    },
+    "section": {
+      "px": 15,
+      "lh": 1.3,
+      "w": 700
+    },
+    "body": {
+      "px": 16,
+      "lh": 1.5,
+      "w": 400
+    },
+    "dense": {
+      "px": 14,
+      "lh": 1.45,
+      "w": 400
+    },
+    "meta": {
+      "px": 13,
+      "lh": 1.4,
+      "w": 400
+    },
+    "micro": {
+      "px": 11.5,
+      "lh": 1.35,
+      "w": 500
+    }
+  },
+  "density": {
+    "_src": "עוגן חרוט: שורה 52px (DECISIONS.md:75). שאר הדרגות נגזרות מהרשת (gridUnit=4) ככפולות שלמות — 8·4=32 · 10·4=40 · 13·4=52. דרגות נוספות ימתינו לגל-המחקר.",
+    "unitMul": {
+      "compact": 8,
+      "cozy": 10,
+      "roomy": 13
+    },
+    "default": "cozy",
+    "cellPadMul": {
+      "compact": 1,
+      "cozy": 2,
+      "roomy": 3
+    }
+  },
+  "measure": {
+    "content": 720,
+    "_src": "הכרעה-28: רוחב-תוכן ≤720px (מסך-קריאה). מסכי-ניהול רחבים = הכרעת-בעלים פתוחה, ולכן admin עדיין null.",
+    "admin": null,
+    "report": 1180
+  },
+  "radiusMul": {
+    "sm": 1,
+    "md": 1.5,
+    "lg": 2,
+    "xl": 2.75
+  },
+  "spaceMul": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    8,
+    12
+  ],
+  "focus": {
+    "widthMul": 0.5,
+    "offsetMul": 0.5,
+    "_src": "טבעת-מיקוד = דרישת-נגישות; עובי/ריווח כפולות-רשת ולא מספר-יד"
+  },
+  "fontHref": "https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap",
+  "fontStack": {
+    "he": "Heebo, Arial, sans-serif",
+    "mono": "\"JetBrains Mono\", Consolas, monospace"
+  },
+  "_fontNote": "ds.dart:33 (L69) מלמד שגופן-CDN באתר-מנותק ⇒ טקסט נעלם; לכן יש תמיד נפילה ל-Arial, ו-render.mjs פולט את ה-link (קודם לא פלט ⇒ האפליקציה רצה ב-Arial בלי שאיש ידע). אירוח-עצמי בקובץ-יחיד = הטמעת base64 ⇒ הכרעת-בעלים.",
+  "skinSnapshot": {
+    "_": "צילום-נפילה של זרע-האימפריה (paper · t-balagan · heebo) לשימוש אם המחצב לא בעץ. נגזר — לא לערוך ביד.",
+    "paper": {
+      "--canvas": "#FFFFFF",
+      "--sunken": "#F7F6F3",
+      "--surface": "#FFFFFF",
+      "--raised": "#F7F6F3",
+      "--raised2": "#EFEDE8",
+      "--ink": "#37352F",
+      "--mut": "rgba(55, 53, 47, 0.6)",
+      "--faint": "rgba(55, 53, 47, 0.4)",
+      "--hair": "rgba(0, 0, 0, 0.08)",
+      "--hair2": "rgba(0, 0, 0, 0.05)",
+      "--on-a": "#FFFFFF",
+      "--hi": "#FFFFFF",
+      "--shade": "rgba(0, 0, 0, 0)",
+      "--ok": "#1B8A4C",
+      "--warn": "#C98A00",
+      "--err": "#C8321E",
+      "--gold": "#C98A00"
+    },
+    "dark": {
+      "--canvas": "#0C0C0E",
+      "--sunken": "#0A0A0C",
+      "--surface": "#151517",
+      "--raised": "#1B1B1E",
+      "--raised2": "#212126",
+      "--ink": "#ECE9E2",
+      "--mut": "#9B968C",
+      "--faint": "#6E6A62",
+      "--hair": "rgba(236, 233, 226, 0.09)",
+      "--hair2": "rgba(236, 233, 226, 0.05)",
+      "--on-a": "#0B0B0D",
+      "--hi": "#FFFFFF",
+      "--shade": "#000000",
+      "--ok": "#43D08C",
+      "--warn": "#E6B84F",
+      "--err": "#E0574E",
+      "--gold": "#E6C766"
+    },
+    "theme": {
+      "--a-hi": "#2F6FED",
+      "--a": "#2F6FED",
+      "--a-800": "#1E4FB8",
+      "--gl": "rgba(47, 111, 237, 0)",
+      "--c2": "#2F6FED",
+      "--c3": "#2F6FED"
+    },
+    "designSeed": {
+      "_": "זרע-העיצוב (design-seed) — הקלט הקומפקטי שהסקיל מייצר, המנוע מרחיב למערכת-מלאה. שנה כאן ⇒ הרץ ds-tokens.mjs ⇒ כל הטוקנים נולדים-מחדש. אפס-Dart ידני.",
+      "palette": {
+        "bg": "F4F6FA",
+        "card": "FFFFFF",
+        "ink": "0F172A",
+        "muted": "64748B",
+        "faint": "94A3B8",
+        "line": "E6E9F0",
+        "accent": "F97316",
+        "success": "16A34A"
+      },
+      "typeBase": 15,
+      "typeRatio": 1.28,
+      "gridUnit": 4,
+      "radiusBase": 8,
+      "elevTint": "101828",
+      "motion": {
+        "fast": 140,
+        "base": 240,
+        "slow": 420,
+        "ambient": 6000
+      },
+      "gradientHues": {
+        "sunset": [
+          "FB923C",
+          "F43F5E"
+        ],
+        "ocean": [
+          "38BDF8",
+          "4F46E5"
+        ],
+        "aurora": [
+          "34E0C8",
+          "6366F1",
+          "A855F7"
+        ],
+        "forest": [
+          "34D399",
+          "059669"
+        ],
+        "dusk": [
+          "6366F1",
+          "EC4899"
+        ]
+      }
+    }
+  },
+  "bidi": {
+    "_src": "UAX#9 — ספרות הן חלשות-כיוון: סכום/טלפון/מזהה/תאריך צמודים לטקסט-עברי מתהפכים. הבידוד נעשה פר-ערך ולא פר-תא.",
+    "isolateShapes": [
+      "number",
+      "formula",
+      "date",
+      "phone",
+      "id",
+      "count"
+    ]
+  }
+}

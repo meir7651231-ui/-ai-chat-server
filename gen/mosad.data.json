@@ -1,6 +1,6 @@
 {
  "_": "נגזר על ידי mosad-build.mjs מ-mosad.sentences.txt + mosad.enrich.json + packs/*.json — לא לערוך ביד. מחיקת מקור + הרצה = חזרה לקדמות.",
- "built": "2026-09-14T22:36:23.186Z",
+ "built": "2026-09-14T23:13:45.543Z",
  "context": [
   {
    "id": "country",

@@ -2,6 +2,8 @@
 // האטומים מוטבעים כלשונם (אפס import פנימי — לכן אפשר). הדבק כאן הוא מבני בלבד:
 // טופס לפי צורת-השדה, טבלה, אחסון-מקומי, וקריאה לאטום-המוכח לפי המתכון (recipe) של הצורך.
 
+import { SKIN_CSS, FONTS, BIDI_SHAPES } from './skin.mjs';
+
 export const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const jstr = (v) => JSON.stringify(v).replace(/<\//g, '<\\/');
 
@@ -47,7 +49,7 @@ export function renderApp(spec, chosen, plan, meta) {
 </section>`;
   }).join('\n');
 
-  const kpiHtml = plan.filter((p) => p.kind === 'kpi').map((p, i) => `<div class="kpi" id="kpi${i}"><span class="v">—</span><span class="l">${esc(p.label)}</span></div>`).join('');
+  const kpiHtml = plan.filter((p) => p.kind === 'kpi').map((p, i) => `<div class="kpi" id="kpi${i}"><bdi class="v">—</bdi><span class="l">${esc(p.label)}</span></div>`).join('');
   const hasSearch = plan.some((p) => p.kind === 'search');
 
   const schema = spec.entities.map((e) => ({ name: e.name, stages: e.stages || [], guards: e.guards || [], forbidden: e.forbidden || [], fix: e.fix || null, fields: e.fields.map((f) => ({ name: f.name, shape: f.shape, required: f.required, formula: f.formula || null, ref: f.ref ? spec.entities.findIndex((x) => x.name === f.ref) : -1 })) }));
@@ -58,28 +60,24 @@ export function renderApp(spec, chosen, plan, meta) {
   return `<!doctype html>
 <html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(spec.app)}</title>
+${FONTS}
 <style>
-:root{--bg:#f7f6f2;--ink:#1d1c19;--mute:#6b675e;--line:#d9d5cb;--card:#ffffff;--acc:#1f5f5b;--acc-ink:#ffffff;--warn:#8a3b12}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}}
-:root[data-theme=dark]{--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Heebo,Arial,sans-serif;padding-block:16px;padding-inline:16px}
-h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:0 0 8px}h2 small{color:var(--mute);font-weight:400}
-.top{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
-.kpi{background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:6px}.kpi .v{display:block;font-size:22px;font-variant-numeric:tabular-nums;font-weight:600}.kpi .l{color:var(--mute);font-size:13px}
-.kpi.none .v{color:var(--warn);font-size:14px}
-.exp{font-size:11px;padding:0 5px;border-radius:99px;background:var(--line)}.exp.bad{background:#b3261e;color:#fff}.exp.warn{background:#e0a100;color:#1d1c19}
-.entity{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px;margin:12px 0}
-form.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:10px}label{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
-input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;min-width:120px}
-button{font:inherit;background:var(--acc);color:var(--acc-ink);border:0;border-radius:4px;padding:7px 14px;cursor:pointer}button.x{background:transparent;color:var(--mute);padding:2px 6px}
-.tbl{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--mute);font-weight:500;font-size:13px}
-td.num{font-variant-numeric:tabular-nums}.search{min-width:220px}
-.foot{color:var(--mute);font-size:12px;margin-top:16px}
+${SKIN_CSS()}
+.top{display:flex;flex-wrap:wrap;gap:var(--s3);align-items:baseline;justify-content:space-between}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(var(--s1) * 40),1fr));gap:var(--s3);margin:var(--s4) 0}
+.kpi{background:var(--card);border:1px solid var(--line);padding:var(--s3);border-radius:var(--r-md)}
+.kpi .v{display:block;font:var(--w-screen) var(--t-screen)/var(--lh-screen) var(--font-he);font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--mute);font-size:var(--t-meta)}
+.kpi.none .v{color:var(--warn);font-size:var(--t-dense)}
+.exp{font-size:var(--t-micro);padding:0 var(--s2);border-radius:var(--r-pill);background:var(--code)}
+.exp.bad{background:var(--err);color:var(--hi)}.exp.warn{background:var(--warn);color:var(--on-a)}
+th,td{white-space:nowrap}
+.search{min-width:calc(var(--s1) * 55)}
+.foot{color:var(--mute);font-size:var(--t-meta);margin-top:var(--s4)}
 </style></head><body>
 <div class="top"><div><h1>${esc(spec.app)}</h1><div class="foot" style="margin:0">נבנה על-ידי המחולל · ${atoms.length} אטומים מוכחים · הנתונים נשמרים בדפדפן זה</div></div>
 ${hasSearch ? '<input class="search" id="q" type="search" placeholder="חיפוש בכל השדות…">' : ''}${(spec.roles || []).length ? `<label>מי אני <select id="role"><option value="">הכל</option>${spec.roles.map((r) => `<option>${esc(r.name)}</option>`).join('')}</select></label>` : ''}</div>
-<div class="kpis">${kpiHtml}${spec.entities.some((e) => e.fields.some((f) => f.shape === 'date' && (meta.expiryWords || ['תוקף']).some((w) => f.name.includes(w)))) && callOf('days-since') ? '<div class="kpi" id="kpi-exp"><span class="v">—</span><span class="l">פג תוקף · פג בקרוב</span></div>' : ''}</div>
+<div class="kpis">${kpiHtml}${spec.entities.some((e) => e.fields.some((f) => f.shape === 'date' && (meta.expiryWords || ['תוקף']).some((w) => f.name.includes(w)))) && callOf('days-since') ? '<div class="kpi" id="kpi-exp"><bdi class="v">—</bdi><span class="l">פג תוקף · פג בקרוב</span></div>' : ''}</div>
 ${entityHtml}
 <div class="foot">אטומים: ${atoms.map((a) => a.name).join(' · ')}</div>
 <script>
@@ -111,15 +109,17 @@ function expiry(f, v) {
   const d = -CALL.daysSince(v, today());
   return d < 0 ? ' <b class="exp bad">פג</b>' : d <= EXP_DAYS ? ' <b class="exp warn">פג בעוד ' + d + ' ימים</b>' : '';
 }
+const BIDI = ${jstr(BIDI_SHAPES)};   // מהדאטה (skin.data.json) — מוזרק בזמן-פליטה, לא רשימה ביד
+const bidi = (s) => '<bdi dir="ltr">' + s + '</bdi>';   // UAX#9: ערך בסדר-לטיני (₪8,000 · 052- · 15/10 · -31) מבודד ומוכרז ltr — סימן/מטבע נשארים בצד הנכון
 function show(f, v, e, r) {
-  if (f.shape === 'formula' && e && r) { const n = calc(e, r, f); return Number.isFinite(n) ? (CALL.money ? CALL.money(n) : String(n)) : '—'; }
+  if (f.shape === 'formula' && e && r) { const n = calc(e, r, f); return Number.isFinite(n) ? bidi(CALL.money ? CALL.money(n) : String(n)) : '—'; }
   if (v === '' || v == null) return '';
-  if (f.shape === 'date') return (CALL.fmtDate ? CALL.fmtDate(v) : esc(v)) + expiry(f, v);
-  if (f.shape === 'number' && CALL.money) return CALL.money(Number(v));
-  if (f.shape === 'count') return esc(v);
+  if (f.shape === 'date') return bidi(CALL.fmtDate ? CALL.fmtDate(v) : esc(v)) + expiry(f, v);
+  if (f.shape === 'number' && CALL.money) return bidi(CALL.money(Number(v)));
+  if (f.shape === 'count') return bidi(esc(v));
   if (f.shape === 'date' && CALL.fmtDate) return CALL.fmtDate(v);
-  if (f.shape === 'phone' && CALL.phone) return CALL.phone(v);
-  return esc(v);
+  if (f.shape === 'phone' && CALL.phone) return bidi(CALL.phone(v));
+  return BIDI.includes(f.shape) ? bidi(esc(v)) : esc(v);
 }
 function rowsOf(ei) {
   const q = el('q') ? el('q').value : '';
@@ -143,7 +143,7 @@ function paint() {
       const cells = e.fields.map((f, fi) => '<td class="' + (f.shape === 'number' || f.shape === 'formula' ? 'num' : '') + '">' + show(f, r[fi], e, r) + '</td>').join('');
       const n = e.fields.length;
       const st = e.stages.length ? '<td>' + esc(r[n] || e.stages[0]) + (e.stages.indexOf(r[n] || e.stages[0]) < e.stages.length - 1 ? ' <button class="x" data-adv="' + ei + ':' + idx + '" title="לשלב הבא">›</button>' : '') + '</td>' + (CALL.daysSince ? '<td class="num">' + (r[n + 1] ? CALL.daysSince(r[n + 1], today()) + ' ימים' : '') + '</td>' : '') : '';
-      const d = hasDays ? '<td class="num">' + e.fields.map((f, fi) => (f.shape === 'date' && r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) => x !== '').join(' / ') + '</td>' : '';
+      const d = hasDays ? '<td class="num">' + bidi(e.fields.map((f, fi) => (f.shape === 'date' && r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) => x !== '').join(' / ')) + '</td>' : '';
       const noDel = e.forbidden.some((x) => /^מחיקה$/.test(x));
       const created = r[n + 2] || r[n + 1] || '';
       const fixOk = e.fix ? ((role === '' || role === e.fix.who) && (!e.fix.days || !CALL.daysSince || !created || CALL.daysSince(created, today()) <= e.fix.days)) : true;
