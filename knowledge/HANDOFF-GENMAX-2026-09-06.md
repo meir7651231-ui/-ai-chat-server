@@ -180,3 +180,24 @@ https://meir7651231-ui.github.io/buildsmart/schoolos/ · `/studio/` · `/kehila/
 - `renderHome` · `DsQuickAdd` · `DsPalette` · קיצורים · 5 בדיקות-שער. דוח: `knowledge/CLOSED-GENMAX-G30-2026-09-08.md` · L104.
 - **G32 (הבא, הגדול):** דטרמיניסטי מתאריכי-ההכרעה + שלבים + peruk-index (שרשרת): תזכורות −3/−1/08:00 (D5/D6/P1/P6) · מונה-עומס (D7) · יום-יחיד (D8) · «ממתין לאישורך» כרטיסי אשר/דחה/תמיד-אשר לכל כתיבה-החוצה (P11/T5) · «עשיתי לבד»+החזר (T2) · משפט-פתיחה (T1) · תקציר-בוקר (P9) · טיוטה-לא-שליחה (P12) · הצע-ואשר (P13) · צעד-לפי-שלב (P14) · מתג «לפעול לבד» · יומן-פעולות-אוטומטיות ב-AppStore (audit). P15 = שרת (הכרעת-בעלים).
 
+
+## 7 · המחצבה חוצבת מבנייה-חכמה — G61–G73 (11–14.9.2026) · מסירה
+**מצב (אמת מהשערים):** מדף `new/dart` = **407** אטומי-לוגיקה (345 ב-11.9) · `new/dart-data/*-table.dart` = **9** טבלאות-מדף (חדש מ-G69) · אורקל 1,948 · מוטציה-מלאה 911/1069 נושכות, unparsed 151 ≡ בייסליין · משטרה 55/55 · המראה ב-`buildsmart/app_flutter/lib/genesis/{dart,dart-data}` מסונכרנת ו-`flutter analyze` נקי.
+
+**הלולאה של גל-נחיתה (כל גל = אותם 1,508 jobs, `scratchpad/alljobs.json`):**
+```bash
+dart run machtzev/carve/ast_carve.dart --batch jobs.json > carved.json     # החצב (AST) · kind:'var' לטבלאות
+node machtzev/carve/carve-land.mjs carved.json                              # נחיתה: analyze ⇒ זהב ⇒ שן-מוטציה ⇒ טוהר ⇒ הוכחת-חיפוש-בריצה (CARVE_OUT=דיר = ניסוי · CARVE_KEEP=1 = השאר כשלים)
+node machtzev/census/logic-census.mjs && node machtzev/census/atom-index.mjs && node machtzev/census/oracle.mjs --write && node machtzev/generator/op-census.mjs && node machtzev/generator/auto-logic.mjs && node machtzev/generator/quarry-golden.mjs && node machtzev/truth.mjs --write
+node machtzev/mutation-dart-check.mjs --all      # בסוף כל גל (L109) — לא רץ במשטרה
+node machtzev/pins-check.mjs --write && git commit … && git push   # pre-commit ~3 דק׳ · pre-push משטרה-מלאה ~12 דק׳ (ברקע עם לוג)
+```
+**⚠️ מלכודות שנקנו ביוקר בסדרה:** אין `git add -A`/commit בזמן שנחיתה כותבת ל-`new/` (L109: אטום בלי בדיקה עלה) · `git status --short new/` חייב להראות רביעיות (אטום·בדיקה·חוזה·רשומה) · שם מ-`UNPARSED` מקולף מ-`_test` · `dart analyze` = fatal-warnings ⇒ ייבוא-לא-בשימוש מפיל זהב (התאמה על קוד בלי מחרוזות/הערות, פר-ייבוא) · `X.values.first` אינו ביטוי-קבוע · הערה `//` באמצע שורת-פונקציה-אחת מוחקת את שארית השורה · ראצ׳ט-baseline דורש `Allow: baseline:<קובץ> L-id` · לקח חדש = `## L<n> · …` + שורת `GATE:` · `--all` של שן-המוטציה מסתמך על בייסליין שאינו נאכף בדחיפה — הרץ ידנית בסוף גל.
+
+**מה החצב יודע היום (G61–G73):** מזהה-חופשי ⇒ שקע-ערך (const שכן, גם מקובץ לא-טהור) · שקע-פונקציה (אותו קובץ / קובץ-שכן, סגירה-טהורה) · **ייבוא-מדף לפי «מוצא|שם»** (טבלה ב-`dart-data` · אטום ב-`dart` עם חתימה ≡ מקור · שומר-ambiguous_import) · טיפוסים מוטבעים verbatim (גם מקובץ לא-טהור; `@immutable` וחבריו נמחקים) · דוגמאות-מהדאטה (מפתחות-טבלה · שדה-מפתח · שמות-enum · ליטרלי-הגוף) · 3 וריאנטים לכל מחלקה · מציג-שדות (`typeShow`) · רמז-חלול לשן. הנחיתה: זהב-לפי-שונות (48⇒12) · זהב-מבני · שני שערי-טוהר בלולאה · הוכחת-אי-כפילות בריצה (logic-proof).
+
+**הדלי שנשאר = הכרעת-בעלים, לא מכונה (נמדד בנחיתה-המלאה של G73):**
+- **63 בלי ייעוד-עברי** — פונקציות-מנוע בלי תיעוד-עברי/מונחי-מסך/קורא-עם-מסך (`balancedParens` · `wordTokens` · `scoreMatch` · `crossesSystem` · `normAtom` …). לתת ייעוד = להמציא (§20-ג). אפשרויות: ייעוד-אנגלי-בלבד לאטומי-מנוע, או חיפוש בשם-האנגלי כשאין עברית במקור.
+- **23 כפילות-אפשרית** לא-ניתנות-להוכחה-בריצה + תאום-מוכח `p37_elbow_model ≡ p39/p53/p54/p55/p58` (איחוד = הכרעה).
+- 49 מעורבים (ליטרלים-עבריים בגוף) — `purify-dart`; 58 זהב-ריק (מבנה-`Map<String,dynamic>` · צימוד-ערכים בין פרמטרים · רגקס-צורה) — הגל-הבא של המכונה אם ממשיכים.
+דוחות: `knowledge/CLOSED-GENMAX-G61…G73-2026-09-1{1,4}.md`.
