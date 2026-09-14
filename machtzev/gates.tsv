@@ -41,7 +41,7 @@ mutation	בדוק-את-הבדיקה: אדום-על-חלול, ירוק-על-אמ�
 freeref	סורק-הפניות-חופשיות: אפס מזהה לא-מוגדר (חוק-1 — שכן לא-מוזרק)	commit	
 assembly	מבקר-ההרכבה: כל חוט-מתוכנן מחווט בקופסה — נסיגה מ-baseline אסורה (אפס אובדן-יכולת)	push	assemble/box-coverage-baseline.json;grow
 datapurity	סורק-טוהר-דאטה: אפס דאטה-צרובה במנגנון (הכרעה 16, baseline-ratchet — החוב רק יורד)	commit	data-purity-baseline.json;shrink
-deeppurity	סורק-טוהר-עומק: אפס דאטה-חדשה במנגנון — גם קבועים ושמות-דומיין (הכרעה 19, baseline-ratchet רק יורד)	commit	deep-purity-baseline.json;shrink
+deeppurity	סורק-טוהר-עומק + **נכונות** (הכרעת-בעלים 14.9): אפס דאטה-חדשה במנגנון (הכרעה 19) **וגם** אפס סיכון-נכונות קריטי חדש — בליעה-שקטה של זהות/כסף · רצף-מונה · תאריך-UTC (verbatim מהמקור אינו הוכחת-נכונות); שני baseline-ratchet רק-יורדים	commit	deep-purity-baseline.json;shrink
 synth	שער-הסינתזה: יכולת-מוזמנת שהוכחה נשארת מוכחת-חי (JS + שקילות-Dart כשזמין) — capabilities ⇄ specs	push	
 genratchet	רַצֶ'ט-המחולל: buildApp על אפיונים ⇒ דפוסי-חיווט (בחירת-אטום·הרכבה·§21·RLS) נעולים	push	
 independence	מגן-עצמאות: מאור ובנייה-חכמה לא חוצים-ייבוא · רק הלוח מגשר	push	

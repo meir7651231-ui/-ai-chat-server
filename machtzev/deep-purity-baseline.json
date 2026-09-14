@@ -1,1 +1,9 @@
-[]
+{
+ "purity": [],
+ "correctness": [
+  "new/atoms/merge-supporter-into.mjs::בליעה-שקטה::keep.extId || drop.extId",
+  "new/atoms/merge-supporter-into.mjs::בליעה-שקטה::keep.hok || drop.hok",
+  "new/atoms/merge-supporter-into.mjs::בליעה-שקטה::keep.idNum || drop.idNum",
+  "new/dart-maor/merge-supporter-into.dart::בליעה-שקטה::keep.hok ?? drop.hok"
+ ]
+}
