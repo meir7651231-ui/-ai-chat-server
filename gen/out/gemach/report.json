@@ -229,7 +229,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 60,
+   "ms": 74,
    "proven": [
     {
      "name": "norm-search",
@@ -301,7 +301,7 @@
     "פלט שונה": 200,
     "אורך-קריאה": 13
    },
-   "ms": 21,
+   "ms": 23,
    "proven": [
     {
      "name": "format-israeli-phone",
@@ -440,7 +440,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 16,
+   "ms": 17,
    "proven": [
     {
      "name": "fmt-date",
@@ -516,7 +516,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 114
    },
-   "ms": 16,
+   "ms": 15,
    "proven": [
     {
      "name": "cockpit-days-since",
@@ -739,7 +739,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 136
    },
-   "ms": 12,
+   "ms": 13,
    "proven": [
     {
      "name": "count-by",
@@ -866,84 +866,10 @@
  },
  "meta": {
   "slug": "gemach",
-  "built": "2026-09-14T19:16:18.656Z",
-  "ms": 17853,
+  "built": "2026-09-14T20:44:24.836Z",
+  "ms": 17619,
   "shelf": 1096,
   "fns": 569,
   "dart": 394
- },
- "flutter": {
-  "ok": true,
-  "specDs": "אפליקציה: גמ\"ח הלוואות\nישות לווה עם שם*, נייד, סכום*, תאריך הלוואה*, סטטוס{פעיל|נפרע|באיחור}, הערה\nישות החזר עם לווה*, סכום*, תאריך*\nלוח בקרה עם סכום(לווה.סכום), סכום(החזר.סכום), מונה(לווה.סטטוס)\n",
-  "ns": "gengemach",
-  "files": [
-   "gen_app_gengemach_audit.dart",
-   "gen_app_gengemach_bind1.dart",
-   "gen_app_gengemach_bind2.dart",
-   "gen_app_gengemach_ent1.dart",
-   "gen_app_gengemach_ent2.dart",
-   "gen_app_gengemach_flags.dart",
-   "gen_app_gengemach_hub.dart",
-   "gen_app_gengemach_main.dart",
-   "gen_app_gengemach_over1.dart",
-   "gen_app_gengemach_over2.dart",
-   "gen_app_gengemach_rec1.dart",
-   "gen_app_gengemach_rec2.dart",
-   "gen_app_gengemach_root.dart",
-   "gen_app_gengemach_scr3.dart",
-   "gen_app_gengemach_settings.dart",
-   "gen_app_gengemach_shell.dart"
-  ],
-  "displayAtoms": [
-   "dart-data-bs/auto/gen_app_gengemach_audit_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_ent1_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_ent2_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_flags_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_hub_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_main_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_over1_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_over2_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_rec1_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_rec2_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_root_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_scr3_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_settings_content.dart",
-   "dart-data-bs/auto/gen_app_gengemach_shell_content.dart",
-   "dart-screens-bs/ai_hub_screen.g.dart",
-   "dart-screens-bs/courier_certs_screen.g.dart",
-   "dart-ui-bs/auto/callout.dart",
-   "dart-ui-bs/auto/link_row.dart",
-   "dart-ui-bs/auto/rstat.dart",
-   "dart-ui-bs/ds/ds.dart",
-   "dart-ui-bs/ds/ds_bars.dart",
-   "dart-ui-bs/ds/ds_calendar.dart",
-   "dart-ui-bs/ds/ds_date_field.dart",
-   "dart-ui-bs/ds/ds_enum_field.dart",
-   "dart-ui-bs/ds/ds_field.dart",
-   "dart-ui-bs/ds/ds_number_field.dart",
-   "dart-ui-bs/ds/ds_search.dart",
-   "dart-ui-bs/ds/ds_select.dart",
-   "dart-ui-bs/ds/ds_store.dart",
-   "dart-ui-bs/ds/ds_table.dart",
-   "dart-ui-bs/ds/ds_toggle_tile.dart",
-   "dart-ui-bs/premium/actions/segmented_switch.dart",
-   "dart-ui-bs/premium/dataviz/kpi_tile.dart",
-   "dart-ui-bs/premium/dataviz/neon_bars.dart",
-   "dart-ui-bs/premium/lists/expandable_tile.dart",
-   "dart-ui-bs/premium/lists/glass_list_tile.dart",
-   "dart-ui-bs/premium/showcase/premium_chip.dart",
-   "dart-ui-bs/premium/showcase/premium_field.dart",
-   "dart-ui-bs/premium/showcase/premium_stat.dart",
-   "dart-ui-bs/premium/surfaces/stat_hero.dart"
-  ],
-  "moved": [
-   "machtzev/generator/apps/gengemach.json",
-   "machtzev/generator/particle-plan-gengemach.json"
-  ],
-  "treeClean": true,
-  "leftover": [],
-  "log": "✨ אפליקציה (מערכת-עיצוב) חוללה — 7 מסכים\n   2 ישויות · 1 דשבורדים · 3 מערכת · 1 לוח\n   הכל דרך render-ds הטהור (טיפוס נאחז מהאטומים · אפס regex).",
-  "err": "",
-  "compileNote": "קומפילציה לאתר: --site (site.mjs; Flutter SDK + buildsmart)"
  }
 }

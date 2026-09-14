@@ -58,6 +58,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
   console.log(`✓ ${r.app}: ${r.atoms.length} אטומים מוכחים · ${r.unproven.length} צרכים ללא הוכחה · ${r.meta.ms}ms ⇒ gen/out/${r.meta.slug}/`);
   for (const p of r.proofs) console.log(`  ${p.chosen ? '●' : '○'} ${p.need.padEnd(13)} JS: נוסו ${String(p.tried).padStart(4)} · הוכחו ${p.proven.length} ${p.chosen ? '⇒ ' + p.chosen : '⇒ אין'}${p.dart ? ` · Dart: נוסו ${p.dart.tried} · הוכחו ${p.dart.proven.length}${p.dart.proven.length ? ' ⇒ ' + p.dart.proven.map((a) => a.name).join(' ') : ''}` : ''}`);
   if (r.flutter) console.log(r.flutter.ok ? `  🎨 מסלול-Flutter: ${r.flutter.files.length} קבצי-Dart · ${r.flutter.displayAtoms.length} אטומי-תצוגה מחווטים · עץ-המחצב ${r.flutter.treeClean ? 'נקי' : 'לא נקי: ' + r.flutter.leftover.join(' ')} · ${r.flutter.compileNote}` : `  🎨 מסלול-Flutter נכשל: ${r.flutter.why || r.flutter.err}`);
-  if (r.site) console.log(r.site.ok ? `  🌐 אתר: ${r.site.site} · ${r.site.files} קבצים · ${(r.site.bytes / 1024 / 1024).toFixed(1)}MB · ${(r.site.ms / 1000).toFixed(0)}s` : `  🌐 אתר לא נבנה: ${r.site.why}`);
+  if (r.site) console.log(r.site.ok ? `  🌐 אתר: ${r.site.site} · ${r.site.files} קבצים · ${(r.site.bytes / 1024 / 1024).toFixed(1)}MB · ${(r.site.ms / 1000).toFixed(0)}s` : `  🌐 אתר לא נבנה: ${r.site.why}\n${r.site.err || ''}`);
+  if (r.site && !r.site.ok) process.exitCode = 1;   // --site שנכשל = כישלון גלוי, לא שקט
   if (r.inventory) for (const row of r.inventory.rows) console.log(`  ${row.state === 'on' ? '✓' : '✗'} ${String(row.count).padStart(5)} ${row.layer} — ${row.connected}`);
 }

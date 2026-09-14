@@ -12,7 +12,7 @@ export function loadLang() {
   const snap = path.join(HERE, 'lang.data.json');
   if (fs.existsSync(nl) && fs.existsSync(sp)) {
     const a = JSON.parse(fs.readFileSync(nl, 'utf8')), b = JSON.parse(fs.readFileSync(sp, 'utf8'));
-    const L = { _: 'צילום מ-machtzev/generator/{nl-lang,spec-lang}.data.json — מתעדכן אוטומטית ב-build/studio; לא לערוך ביד', extra: { leadins: ['להם', 'לה', 'לו', 'שלהם', 'שלה', 'שלו', 'שכולל', 'שכוללת'], eachWords: ['כל'], dativeAfter: ['אפליקציה', 'אפליקציית', 'מערכת', 'אתר', 'תוכנה', 'תוכנת', 'כלי', 'פלטפורמה', 'מוצר'] } };
+    const L = { _: 'צילום מ-machtzev/generator/{nl-lang,spec-lang}.data.json — מתעדכן אוטומטית ב-build/studio; לא לערוך ביד', extra: { leadins: ['להם', 'לה', 'לו', 'שלהם', 'שלה', 'שלו', 'שכולל', 'שכוללת'], eachWords: ['כל'], dativeAfter: ['אפליקציה', 'אפליקציית', 'מערכת', 'אתר', 'תוכנה', 'תוכנת', 'כלי', 'פלטפורמה', 'מוצר'], singular: ['בעלים', 'מיטות', 'כמות', 'דחיפות', 'זכויות', 'איכות', 'כשרות', 'בריאות', 'נוכחות', 'עלות', 'זהות', 'אחריות', 'סודיות', 'ותק', 'חובות', 'ערבות', 'בטיחות', 'שירות', 'הרשאות', 'זמינות', 'רשות', 'מהות', 'משפחתיות', 'התנהגות', 'יהדות', 'חסידות'] } };
     for (const k of KEYS_NL) L[k] = a[k];
     for (const k of KEYS_SPEC) L[k] = b[k];
     fs.writeFileSync(snap, JSON.stringify(L, null, 1) + '\n');

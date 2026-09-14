@@ -4,7 +4,7 @@
 // מחזיר {specText, notes} — ההערות אומרות לבעלים בדיוק מה הונח, כדי שיתקן.
 const HE = '֐-׿';
 const words = (s) => [...String(s || '').matchAll(new RegExp(`[${HE}][${HE}'"׳״\\-]*`, 'g'))].map((m) => m[0]);
-const tokens = (s) => [...String(s || '').matchAll(new RegExp(`[${HE}A-Za-z][${HE}A-Za-z0-9'"׳״\\-]*`, 'g'))].map((m) => m[0]);
+const tokens = (s) => [...String(s || '').matchAll(new RegExp(`[${HE}A-Za-z0-9][${HE}A-Za-z0-9'"׳״\\-]*`, 'g'))].map((m) => m[0]);
 // פסיקים בתוך סוגריים הם רשימת-ערכים, לא מפריד-שדות ⇒ ממוסכים לפני הפיצול ומוחזרים אחריו
 const maskParens = (s) => s.replace(/\(([^)]*)\)/g, (m) => m.replace(/[,،]/g, '\u2063'));
 const unmask = (s) => s.replace(/\u2063/g, ',');
@@ -15,11 +15,13 @@ export function sentenceToSpec(text, LANG) {
   const PLURAL = new RegExp('(' + (LANG.pluralSuffixes || []).join('|') + ')$');
   const hint = (f, key) => (LANG[key] || []).some((w) => words(f).includes(w));
   const content = (s) => words(s).filter((w) => w.length > 1 && !LEAD.has(w) && !MARKS.includes(w));
-  const plural = (w) => PLURAL.test(w || '');
+  const SINGULAR = new Set((LANG.extra && LANG.extra.singular) || []);
+  const plural = (w) => PLURAL.test(w || '') && !SINGULAR.has(w);
   const notes = [];
   const MARK_RE = new RegExp(`\\s+(?:${MARKS.join('|')})\\s+`);
   const ITEM_RE = new RegExp(`\\s*[,،]\\s*|\\s+(?:${CONJ.join('|')})(?=[${HE}])|\\s+(?:${CONJ.join('|')})-`);
-  const EACH_RE = EACH.length ? new RegExp(`^(?:${EACH.join('|')})\\s+([${HE}][${HE}"׳״\\-]*)\\s+`) : null;
+  const IMPLIED = [...new Set([LANG.impliedMark, ...MARKS].filter(Boolean))];
+  const EACH_RE = EACH.length ? new RegExp(`^(?:${EACH.join('|')})\\s+([${HE}][${HE}"׳״\\-]*(?:\\s+[${HE}][${HE}"׳״\\-]*){0,3}?)\\s+(?:${IMPLIED.join('|')})\\s+`) : null;
   const ENUM_RE = /\(([^)]+)\)|\[([^\]]+)\]/;
 
   // שדה גולמי ⇒ שדה-ספק (עם סמן-צורה)
@@ -29,7 +31,7 @@ export function sentenceToSpec(text, LANG) {
     const em = ENUM_RE.exec(s);
     if (em) { values = (em[1] || em[2]).split(/[,،/|]/).map((v) => v.trim()).filter(Boolean); s = s.replace(ENUM_RE, '').trim(); }
     else if (/\//.test(s)) { const [head, ...rest] = s.split(/\s*[:\-]\s*/); if (rest.length) { values = rest.join(' ').split('/').map((v) => v.trim()).filter(Boolean); s = head.trim(); } }
-    const name = content(s).join(' ') || s;
+    const name = tokens(s).filter((w) => (w.length > 1 && !LEAD.has(w) && !MARKS.includes(w)) || /^\d+$/.test(w)).join(' ') || s;
     if (!name) return null;
     let shape = '';
     if (values && values.length > 1) shape = `{${values.join('|')}}`;
@@ -95,7 +97,7 @@ export function sentenceToSpec(text, LANG) {
     if (ip.length > 1) work = ip.slice(1).join(' ');
     // «לכל X יש a, b» — X ישות עם שדות
     const em = EACH_RE ? EACH_RE.exec(work) : null;
-    if (em) { const rest = work.slice(em[0].length).replace(MARK_RE, ' ').replace(new RegExp(`^(?:${MARKS.join('|')})\\s+`), ''); addEnt(em[1], splitItems(rest), clause); return; }
+    if (em) { const rest = work.slice(em[0].length); addEnt(em[1], splitItems(rest), clause); return; }
     const seg = work.split(MARK_RE);
     let head = seg[0], tail = seg.slice(1).join(' ');
     // «X עם Y שיש להם a, b» — סמן שני בתוך הזנב: הישות היא ראש-הזנב, השדות אחריו

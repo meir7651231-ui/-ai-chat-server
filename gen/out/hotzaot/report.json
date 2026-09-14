@@ -144,7 +144,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 70,
+   "ms": 61,
    "proven": [
     {
      "name": "norm-search",
@@ -208,7 +208,7 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 14,
+   "ms": 17,
    "proven": [
     {
      "name": "shekel",
@@ -282,7 +282,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 16,
+   "ms": 21,
    "proven": [
     {
      "name": "fmt-date",
@@ -460,7 +460,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 13,
+   "ms": 14,
    "proven": [
     {
      "name": "grand-total",
@@ -697,72 +697,10 @@
  },
  "meta": {
   "slug": "hotzaot",
-  "built": "2026-09-14T19:16:34.853Z",
-  "ms": 15348,
+  "built": "2026-09-14T20:44:40.279Z",
+  "ms": 15222,
   "shelf": 1096,
   "fns": 569,
   "dart": 394
- },
- "flutter": {
-  "ok": true,
-  "specDs": "אפליקציה: הוצאות\nישות הוצאה עם תיאור*, סכום, תאריך, קטגוריה{אוכל|רכב|בית|אחר}\nלוח בקרה עם סכום(הוצאה.סכום), מונה(הוצאה.קטגוריה)",
-  "ns": "genhotzaot",
-  "files": [
-   "gen_app_genhotzaot_audit.dart",
-   "gen_app_genhotzaot_bind1.dart",
-   "gen_app_genhotzaot_ent1.dart",
-   "gen_app_genhotzaot_flags.dart",
-   "gen_app_genhotzaot_hub.dart",
-   "gen_app_genhotzaot_main.dart",
-   "gen_app_genhotzaot_over1.dart",
-   "gen_app_genhotzaot_rec1.dart",
-   "gen_app_genhotzaot_root.dart",
-   "gen_app_genhotzaot_scr2.dart",
-   "gen_app_genhotzaot_settings.dart",
-   "gen_app_genhotzaot_shell.dart"
-  ],
-  "displayAtoms": [
-   "dart-data-bs/auto/gen_app_genhotzaot_audit_content.dart",
-   "dart-data-bs/auto/gen_app_genhotzaot_ent1_content.dart",
-   "dart-data-bs/auto/gen_app_genhotzaot_flags_content.dart",
-   "dart-data-bs/auto/gen_app_genhotzaot_hub_content.dart",
-   "dart-data-bs/auto/gen_app_genhotzaot_main_content.dart",
-   "dart-data-bs/auto/gen_app_genhotzaot_over1_content.dart",
-   "dart-data-bs/auto/gen_app_genhotzaot_rec1_content.dart",
-   "dart-data-bs/auto/gen_app_genhotzaot_root_content.dart",
-   "dart-data-bs/auto/gen_app_genhotzaot_scr2_content.dart",
-   "dart-data-bs/auto/gen_app_genhotzaot_settings_content.dart",
-   "dart-data-bs/auto/gen_app_genhotzaot_shell_content.dart",
-   "dart-screens-bs/ai_hub_screen.g.dart",
-   "dart-ui-bs/auto/callout.dart",
-   "dart-ui-bs/auto/stat.dart",
-   "dart-ui-bs/ds/ds.dart",
-   "dart-ui-bs/ds/ds_bars.dart",
-   "dart-ui-bs/ds/ds_calendar.dart",
-   "dart-ui-bs/ds/ds_date_field.dart",
-   "dart-ui-bs/ds/ds_enum_field.dart",
-   "dart-ui-bs/ds/ds_field.dart",
-   "dart-ui-bs/ds/ds_number_field.dart",
-   "dart-ui-bs/ds/ds_search.dart",
-   "dart-ui-bs/ds/ds_store.dart",
-   "dart-ui-bs/ds/ds_table.dart",
-   "dart-ui-bs/ds/ds_toggle_tile.dart",
-   "dart-ui-bs/premium/actions/glass_button.dart",
-   "dart-ui-bs/premium/actions/segmented_switch.dart",
-   "dart-ui-bs/premium/dataviz/kpi_tile.dart",
-   "dart-ui-bs/premium/dataviz/neon_bars.dart",
-   "dart-ui-bs/premium/lists/expandable_tile.dart",
-   "dart-ui-bs/premium/showcase/premium_stat.dart",
-   "dart-ui-bs/premium/surfaces/stat_hero.dart"
-  ],
-  "moved": [
-   "machtzev/generator/apps/genhotzaot.json",
-   "machtzev/generator/particle-plan-genhotzaot.json"
-  ],
-  "treeClean": true,
-  "leftover": [],
-  "log": "✨ אפליקציה (מערכת-עיצוב) חוללה — 6 מסכים\n   1 ישויות · 1 דשבורדים · 3 מערכת · 1 לוח\n   הכל דרך render-ds הטהור (טיפוס נאחז מהאטומים · אפס regex).",
-  "err": "",
-  "compileNote": "קומפילציה לאתר: --site (site.mjs; Flutter SDK + buildsmart)"
  }
 }

@@ -23,7 +23,7 @@ export function buildSite(slug, ns, { log = () => {} } = {}) {
   const LIB = path.join(BUILDSMART, 'lib/genesis');
   const t0 = Date.now();
   log('מראה ⇒ ' + LIB);
-  for (const d of ['dart-forge-bs', 'dart-gen-bs', 'dart-ui-bs', 'dart-maor', 'dart-boxes', 'dart-data-bs', 'dart-data-maor', 'dart']) {
+  for (const d of ['dart-forge-bs', 'dart-gen-bs', 'dart-ui-bs', 'dart-maor', 'dart-boxes', 'dart-data-bs', 'dart-data-maor', 'dart', 'dart-screens-bs', 'dart-boards-bs', 'dart-data']) {   // כל שכבות-ה-Dart של המדף (main של buildsmart בלי lib/genesis)
     const s = path.join(ROOT, 'new', d); if (!fs.existsSync(s)) continue;
     fs.mkdirSync(path.join(LIB, d), { recursive: true }); fs.cpSync(s, path.join(LIB, d), { recursive: true });
   }
