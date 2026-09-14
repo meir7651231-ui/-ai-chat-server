@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import net from 'node:net';
+import os from 'node:os';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 const require = createRequire(import.meta.url);
@@ -40,6 +41,11 @@ for (let i = 0; i < 60 && !up; i++) {
 if (!up) { srv.kill(); console.log(`🔴 balagan-run: שרת-המבחן לא עלה על ${PORT} תוך 6 שניות — כשל-תשתית, לא כשל-מוצר`); process.exit(1); }
 const SENTENCE = 'המשכיר מקזז 6,200 מהפיקדון של 8,000, מסרתי מפתח ב-1.8.2026';
 
+// G62 · הקשחה: השער נפל ב-push ×3 ועבר לבד ×7 (ובמשטרה-מלאה משוחזרת 55/55) — כשל שאינו-משוחזר בלי ראיה = לא ניתן לתקן.
+//   (א) כל ריצה משאירה ראיה **מחוץ ל-worktree** (ה-pre-push מוחק את העץ הזמני): os.tmpdir()/balagan-run-last.json — נימוקי-הכשל, מדדים, מארחים.
+//   (ב) כשל בצורת-תשתית בלבד (מסך-ראשון/שרת/הרשומה-לא-נשמרה/חלון-לא-נפתח — בלי סתירת-עובדות) ⇒ מדידה **שנייה** אחת; הראשונה נרשמת (attempts·firstFails).
+//   רגרסיית-מוצר אמיתית נופלת פעמיים; ratchet-ההקשות/עובדות/מארחים לא נחלש.
+async function measure() {
 const res = { tapsSave: null, tapsSend: null, ttiMs: null, ext: [], ok: false, notes: [] };
 const browser = await chromium.launch({ executablePath: exe, args: ['--no-sandbox', '--disable-gpu'] });
 try {
@@ -83,21 +89,30 @@ try {
   if (process.env.BALAGAN_RUN_DEBUG) { await page2.screenshot({ path: process.env.BALAGAN_RUN_DEBUG }); console.log('B pages:', page2.context().pages().length); }
   if (sent) res.tapsSend = tapsB; else res.notes.push('B: לא נפתח חלון-שליחה');
   res.ok = saved && sent && !res.notes.some((n) => /^A: (סכום|תאריך|הטקסט)/.test(n));
-} finally { await browser.close(); srv.kill(); }
-fs.writeFileSync(OUT, JSON.stringify(res, null, 1));
+} finally { await browser.close(); }
+return res;
+}
 const base = fs.existsSync(BASE) ? JSON.parse(fs.readFileSync(BASE, 'utf8')) : null;
 const FLOOR = 3;   // מסמך-המוצר §5: «פחות מ-3 הקשות לכל פעולה» — הרצפה; המדד = טוב יותר ממנה
-const fails = [];
-if (!res.ok) fails.push(res.notes.join(' · ') || 'המסלול לא הושלם');
-if (res.tapsSave != null && res.tapsSave > FLOOR) fails.push(`רגע-חדש ${res.tapsSave} הקשות > רצפה ${FLOOR}`);
-if (res.tapsSend != null && res.tapsSend > 2) fails.push(`שלח ${res.tapsSend} הקשות > 2`);
-if (base && res.tapsSave != null && base.tapsSave != null && res.tapsSave > base.tapsSave) fails.push(`ratchet: רגע-חדש ${base.tapsSave}⇒${res.tapsSave}`);
-// G52 · תקרת-מסך-ראשון: לפני התיקון 13.8 שנ׳ — 12.6 מהן בקשת-Roboto ל-fonts.gstatic.com שנחסמה.
-//   התקרה נדיבה (רעש-מכונה), אבל חוזרת-לשם = אזעקה מיידית ולא «האתר קצת איטי».
 const TTI_MAX = 6000;
-if (res.ttiMs != null && res.ttiMs > TTI_MAX) fails.push(`מסך-ראשון ${res.ttiMs}ms > תקרה ${TTI_MAX}`);
-if (base && Array.isArray(base.ext) && res.ext.length > base.ext.length) fails.push(`ratchet: מארחים-חיצוניים ${base.ext.length}⇒${res.ext.length} (${res.ext.join(' · ')})`);
+const judge = (res) => {
+  const fails = [];
+  if (!res.ok) fails.push(res.notes.join(' · ') || 'המסלול לא הושלם');
+  if (res.tapsSave != null && res.tapsSave > FLOOR) fails.push(`רגע-חדש ${res.tapsSave} הקשות > רצפה ${FLOOR}`);
+  if (res.tapsSend != null && res.tapsSend > 2) fails.push(`שלח ${res.tapsSend} הקשות > 2`);
+  if (base && res.tapsSave != null && base.tapsSave != null && res.tapsSave > base.tapsSave) fails.push(`ratchet: רגע-חדש ${base.tapsSave}⇒${res.tapsSave}`);
+  if (res.ttiMs != null && res.ttiMs > TTI_MAX) fails.push(`מסך-ראשון ${res.ttiMs}ms > תקרה ${TTI_MAX}`);
+  if (base && Array.isArray(base.ext) && res.ext.length > base.ext.length) fails.push(`ratchet: מארחים-חיצוניים ${base.ext.length}⇒${res.ext.length} (${res.ext.join(' · ')})`);
+  return fails;
+};
+const infraShaped = (fails) => fails.length > 0 && fails.every((f) => /מסך-ראשון|לא נשמרה|לא נפתח חלון|לא הושלם|שרת/.test(f)) && !fails.some((f) => /A: (סכום|תאריך|הטקסט)|ratchet|הקשות >/.test(f));
+let res = await measure(); let fails = judge(res); let attempts = 1, firstFails = null;
+if (infraShaped(fails)) { firstFails = fails; attempts = 2; const r2 = await measure(); const f2 = judge(r2); res = { ...r2, attempts, firstFails, firstTtiMs: res.ttiMs }; fails = f2; }
+srv.kill();
+fs.writeFileSync(OUT, JSON.stringify(res, null, 1));
+try { fs.writeFileSync(path.join(os.tmpdir(), 'balagan-run-last.json'), JSON.stringify({ at: new Date().toISOString(), cwd: process.cwd(), site: SITE, fails, ...res }, null, 1)); } catch { /* ראיה בלבד */ }
+// G52 · תקרת-מסך-ראשון (TTI_MAX): לפני התיקון 13.8 שנ׳ — 12.6 מהן בקשת-Roboto ל-fonts.gstatic.com שנחסמה. התקרה נדיבה (רעש-מכונה), אבל חוזרת-לשם = אזעקה.
 if (gate && fails.length) { console.log(`🔴 balagan-run: ${fails.join(' · ')}`); process.exit(1); }
 if (process.argv.includes('--write') || !base) fs.writeFileSync(BASE, JSON.stringify({ tapsSave: res.tapsSave, tapsSend: res.tapsSend, ext: res.ext }));
-console.log(`${fails.length ? '🔴' : '✓'} balagan-run: רגע-חדש ${res.tapsSave ?? '—'} הקשות (רצפה <${FLOOR}) · שלח ${res.tapsSend ?? '—'} · מסך-ראשון ${res.ttiMs}ms (תקרה ${TTI_MAX}) · חיצוניים ${res.ext.length}${res.ext.length ? ' (' + res.ext.join(' · ') + ')' : ''}${res.notes.length ? ' · ' + res.notes.join(' · ') : ''}`);
+console.log(`${fails.length ? '🔴' : '✓'} balagan-run:${attempts > 1 ? ` (ניסיון ${attempts} · הראשון: ${firstFails.join(' · ')})` : ''} רגע-חדש ${res.tapsSave ?? '—'} הקשות (רצפה <${FLOOR}) · שלח ${res.tapsSend ?? '—'} · מסך-ראשון ${res.ttiMs}ms (תקרה ${TTI_MAX}) · חיצוניים ${res.ext.length}${res.ext.length ? ' (' + res.ext.join(' · ') + ')' : ''}${res.notes.length ? ' · ' + res.notes.join(' · ') : ''}`);
 process.exit(fails.length ? 1 : 0);

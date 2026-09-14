@@ -83,6 +83,8 @@ stage('מיפוי-כל-המסכים (screen-decomp)', () => {
 stage('דדופ-widgets (הכרעה-5)', () => last(run('machtzev/carve/widget-dedup.mjs', [SCRATCH])) && /ייחודיים: (\d+)/.exec(run('machtzev/carve/widget-dedup.mjs', [SCRATCH]))?.[0]);
 stage('דדופ-אטומי-מדף', () => last(run('machtzev/dedup/dedup-atoms.mjs')), { optional: true });
 stage('דדופ-אימפריאלי (Dart↔Dart)', () => last(run('machtzev/dedup/dedup-cross-dart.mjs')), { optional: true });
+// G62 · משפחת-gen-max #3 «זרימה⇒טבלה»: switch-ביטוי עם מפתחות/ערכים קבועים ⇒ אטום-דאטה (dart-data/<base>-table.dart); אפס-אובדן = בדיקת-הזהב, כשל ⇒ החזרה
+stage('זרימה⇒טבלה (G62)', () => last(run('machtzev/purify-dart.mjs', ['--tables'])), { optional: true });
 
 // ── 4 · קטלוג-המונחים המאוחד (מנוע-פנימי — נגזרת-דטרמיניסטית של המפות) ──
 stage('קטלוג-מונחים מאוחד', () => {

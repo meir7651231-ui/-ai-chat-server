@@ -1,0 +1,136 @@
+{
+ "groups": 59,
+ "tested": 73,
+ "proved": 54,
+ "twins": [],
+ "contains": [
+  {
+   "sig": "String(String)",
+   "wide": "adarNorm",
+   "narrow": "expandInchFractions",
+   "n": 6
+  },
+  {
+   "sig": "bool(String)",
+   "wide": "validIsraeliMobile",
+   "narrow": "is45",
+   "n": 6
+  }
+ ],
+ "selfFailed": [
+  {
+   "name": "faviconDataUri",
+   "file": "dart-maor/favicon-data-uri.dart",
+   "self": 0,
+   "n": 12
+  },
+  {
+   "name": "axisOf",
+   "file": "dart/axis_of.dart",
+   "self": 0,
+   "n": 6
+  },
+  {
+   "name": "opTag",
+   "file": "dart/op_tag.dart",
+   "self": 0,
+   "n": 4
+  },
+  {
+   "name": "timeCostTotal",
+   "file": "dart-maor/time-cost-total.dart",
+   "self": 0.125,
+   "n": 8
+  },
+  {
+   "name": "timeHoursTotal",
+   "file": "dart-maor/time-hours-total.dart",
+   "self": 0.7272727272727273,
+   "n": 11
+  },
+  {
+   "name": "brandValue",
+   "file": "dart/brand_value.dart",
+   "self": 0,
+   "n": 3
+  },
+  {
+   "name": "colorValue",
+   "file": "dart/color_value.dart",
+   "self": 0,
+   "n": 4
+  },
+  {
+   "name": "sheetSummary",
+   "file": "dart-maor/sheet-summary.dart",
+   "self": 0,
+   "n": 5
+  },
+  {
+   "name": "donAllowedKeys",
+   "file": "dart-maor/don-allowed-keys.dart",
+   "self": 0,
+   "n": 4
+  },
+  {
+   "name": "foldIcsLine",
+   "file": "dart-maor/fold-ics-line.dart",
+   "self": 0.4,
+   "n": 5
+  },
+  {
+   "name": "matchAssistantCategory",
+   "file": "dart/match_assistant_category.dart",
+   "self": 0.16666666666666666,
+   "n": 6
+  },
+  {
+   "name": "matchAssistantRecipeKey",
+   "file": "dart/match_assistant_recipe_key.dart",
+   "self": 0.16666666666666666,
+   "n": 6
+  },
+  {
+   "name": "matchCatalogActionId",
+   "file": "dart/match_catalog_action_id.dart",
+   "self": 0.2,
+   "n": 5
+  },
+  {
+   "name": "matchComponentTypeName",
+   "file": "dart/match_component_type_name.dart",
+   "self": 0.2,
+   "n": 5
+  },
+  {
+   "name": "matchConditionField",
+   "file": "dart/match_condition_field.dart",
+   "self": 0.2,
+   "n": 5
+  },
+  {
+   "name": "supIls",
+   "file": "dart-maor/sup-ils.dart",
+   "self": 0,
+   "n": 3
+  },
+  {
+   "name": "roomInfoLabel",
+   "file": "dart-maor/room-info-label.dart",
+   "self": 0,
+   "n": 7
+  },
+  {
+   "name": "taskIdentity",
+   "file": "dart-maor/task-identity.dart",
+   "self": 0,
+   "n": 21
+  },
+  {
+   "name": "smartScore",
+   "file": "dart-maor/smart-score.dart",
+   "self": 0,
+   "n": 5
+  }
+ ]
+}

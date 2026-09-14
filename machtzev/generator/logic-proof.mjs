@@ -26,11 +26,23 @@ function proveFile(id, pure, examples, extraImports) {
   const rel = (f) => path.relative(dir, path.join(R.NEW, f)).split(path.sep).join('/');
   const imps = [...extraImports.map((f) => `import '${rel(f)}';`), ...pure.flatMap((c, i) => c.chain ? c.chain.map((q, k) => `import '${rel(q.file)}' as c${i}_${k};`) : [`import '${rel(c.file)}' as c${i};`])].join('\n');
   const call = (c, i, args) => c.chain ? `c${i}_1.${c.chain[1].id}(c${i}_0.${c.chain[0].id}(${args}))` : `c${i}.${c.id}(${args})`;   // שרשרת = B(A(args))
-  const body = pure.map((c, i) => examples.map((ex, j) => `  try { final dynamic r = ${call(c, i, ex[0])}; out.add('${i}:${j}:' + ((${ex[1]}) ? '1' : '0')); } catch (_) { out.add('${i}:${j}:0'); }`).join('\n')).join('\n');
+  // G62 · דוגמה שאינה מתקמפלת מול מועמד (טיפוס-ארגומנט לא-תואם · טיפוס מקובץ-הבעלים) = **כישלון של אותה דוגמה אצל אותו מועמד**, לא כשל-קובץ:
+  //   שורת-גוף = (מועמד, דוגמה) אחת; שגיאת-קומפילציה ממופה לשורה ⇒ מוחלפת ב-'i:j:0' ומריצים שוב (עד 4 סבבים). היה: קובץ-שלם נופל ⇒ גם הבעלים 0/N.
   const file = path.join(dir, id.replace(/\W/g, '_') + '.dart');
-  fs.writeFileSync(file, `// מוכיח-בחירה: ${id} — ${pure.length} מועמדים × ${examples.length} דוגמאות\n${imps}\nvoid main() {\n  final out = <String>[];\n${body}\n  print(out.join(','));\n}\n`);
-  const r = spawnSync(DART, ['run', file], { cwd: dir, encoding: 'utf8', timeout: 120000 });
-  const line = (r.stdout || '').trim().split('\n').pop() || '';
+  const dead = new Set();
+  const mk = () => pure.map((c, i) => examples.map((ex, j) => dead.has(i + ':' + j) ? `  out.add('${i}:${j}:0'); // לא-מתקמפל מול המועמד` : `  try { final dynamic r = ${call(c, i, ex[0])}; out.add('${i}:${j}:' + ((${ex[1]}) ? '1' : '0')); } catch (_) { out.add('${i}:${j}:0'); }`).join('\n')).join('\n');
+  const HEAD = 4;   // שורות לפני הגוף: הערה · imports (imps.split) · void main · final out
+  let r, line = '';
+  for (let round = 0; round < 4; round++) {
+    fs.writeFileSync(file, `// מוכיח-בחירה: ${id} — ${pure.length} מועמדים × ${examples.length} דוגמאות\n${imps}\nvoid main() {\n  final out = <String>[];\n${mk()}\n  print(out.join(','));\n}\n`);
+    r = spawnSync(DART, ['run', file], { cwd: dir, encoding: 'utf8', timeout: 120000 });
+    line = (r.stdout || '').trim().split('\n').pop() || '';
+    if (line.includes(':')) break;
+    const first = HEAD + imps.split('\n').length - 1 + 1;   // מספר-השורה (1-based) של שורת-הגוף הראשונה
+    const bad = [...String(r.stderr || r.stdout || '').matchAll(new RegExp(path.basename(file).replace(/\./g, '\\.') + ':(\\d+):\\d+: Error', 'g'))].map((m) => +m[1] - first).filter((k) => k >= 0 && k < pure.length * examples.length);
+    if (!bad.length) break;
+    for (const k of bad) dead.add(Math.floor(k / examples.length) + ':' + (k % examples.length));
+  }
   if (!line.includes(':')) return { error: (r.stderr || r.stdout || '').split('\n').filter((l) => /rror/.test(l)).slice(0, 2).join(' | ') };
   const pass = {}; for (const tok of line.split(',')) { const [i, j, ok] = tok.split(':'); if (i === undefined || ok === undefined) continue; (pass[pure[+i].id] ||= { ok: 0, total: examples.length }).ok += ok === '1' ? 1 : 0; }
   return pass;

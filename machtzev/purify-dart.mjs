@@ -15,7 +15,7 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const DM = path.join(ROOT, 'new/dart-maor');
 const DD = path.join(ROOT, 'new/dart-data-maor');
 const ATOMS = path.join(ROOT, 'new/atoms');
-const DART = process.env.DART_BIN || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin/dart';
+const DART = process.env.DART_BIN || process.env.DART || ['/home/user/flutter/bin/cache/dart-sdk/bin/dart', '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin/dart'].find((d) => fs.existsSync(d)) || 'dart';
 const DRY = process.argv.includes('--dry');
 const LIMIT = (() => { const i = process.argv.indexOf('--limit'); return i > 0 ? parseInt(process.argv[i + 1]) : Infinity; })();
 const ONLY = (() => { const i = process.argv.indexOf('--only'); return i > 0 ? process.argv[i + 1] : null; })();
@@ -533,6 +533,60 @@ function purifyFile(base, report) {
     else if (fs.existsSync(dataFile)) fs.rmSync(dataFile);
     return report.skip(base, 'ולידציה-נכשלה ⇒ הוחזר: ' + String(e.stderr || e.message).slice(0, 140).replace(/\n/g, ' '));
   }
+}
+
+// ── --tables · זרימה⇒טבלה (G62 · משפחת-gen-max #3 «control-flow⇒table», מוסב למדף-Dart) ──
+//   פונקציית-top-level שגופה `=> switch (x) { מפתח-קבוע => ערך-קבוע, … }` ⇒ המיפוי יורד לאטום-דאטה
+//   `dart-data/<base>-table.dart` (‏const Map, אפס-import — מפתח-אנום = ‎.name‎), והאטום נשאר לוגיקה בלבד (חיפוש+ברירת-מחדל).
+//   אפס-אובדן = בדיקת-הזהב של האטום עצמו (dart run --enable-asserts); כשל ⇒ החזרה מלאה. דיווח-כן על כל דילוג (מדידה לפני-הבנייה: 6/1130).
+//   ערך = ליטרל | term('key') | Enum.member (⇒ Enum.values.byName). ברירת-מחדל לא-קבועה (משתנה/אינטרפולציה) ⇒ לא-טבלאי, דילוג.
+if (process.argv.includes('--tables')) {
+  const DT = path.join(ROOT, 'new/dart'), DDATA = path.join(ROOT, 'new/dart-data');
+  const LIT = /^('(?:[^'\\]|\\.)*'|-?\d+(?:\.\d+)?|true|false|null)$/, ENUM = /^([A-Z]\w*)\.(\w+)$/, TERM = /^term\('([^']*)'\)$/;
+  const litType = (vs) => { const nn = vs.filter((v) => v !== 'null'); const t = nn.every((v) => /^'/.test(v)) ? 'String' : nn.every((v) => /^-?\d+$/.test(v)) ? 'int' : nn.every((v) => /^-?\d/.test(v)) ? 'double' : nn.every((v) => /^(true|false)$/.test(v)) ? 'bool' : 'Object'; return t + (nn.length < vs.length ? '?' : ''); };
+  const bases = fs.readdirSync(DT).filter((f) => f.endsWith('.dart') && !f.endsWith('_test.dart')).map((f) => f.replace(/\.dart$/, '')).filter((b) => !ONLY || b === ONLY);
+  let ok = 0, skip = 0, none = 0;
+  for (const b of bases.slice(0, LIMIT)) {
+    const fp = path.join(DT, b + '.dart'), tp = path.join(DT, b + '_test.dart'); const orig = fs.readFileSync(fp, 'utf8');
+    const m = orig.match(/^([A-Za-z_][\w<>,.? ]*?)\s+([a-z]\w*)\(([^)]*)\)\s*=>\s*switch \(([a-zA-Z_]\w*)\) \{\n([\s\S]*?)\n\s*\};/m);
+    if (!m) { none++; continue; }
+    const [whole, , fn, params, sw, body] = m;
+    const arms = [...body.matchAll(/^\s*(.+?)\s*=>\s*(.+?),?\s*$/gm)].map((a) => [a[1].trim(), a[2].trim()]).filter((a) => a[0]);
+    const rows = arms.filter((a) => a[0] !== '_'), def = arms.find((a) => a[0] === '_');
+    const keyKind = rows.every((a) => LIT.test(a[0])) ? 'lit' : rows.every((a) => ENUM.test(a[0])) ? 'enum' : null;
+    const rhsKind = rows.every((a) => LIT.test(a[1])) && (!def || LIT.test(def[1])) ? 'lit' : rows.every((a) => TERM.test(a[1])) && (!def || TERM.test(def[1])) ? 'term' : rows.every((a) => ENUM.test(a[1])) && (!def || LIT.test(def[1]) && def[1] === 'null' || def && ENUM.test(def[1])) ? 'enum' : null;
+    if (!keyKind || !rhsKind || rows.length < 2) { skip++; console.log(`🫱 ${b} — switch לא-טבלאי (מפתחות ${keyKind || 'מעורב/משתנה'} · ערכים ${rhsKind || 'מעורב/משתנה'})`); continue; }
+    const Fn = fn[0].toUpperCase() + fn.slice(1), tbl = 'k' + Fn + 'Table';
+    const keyOf = (k) => keyKind === 'enum' ? `'${k.match(ENUM)[2]}'` : k;
+    const valOf = (v) => rhsKind === 'term' ? `'${v.match(TERM)[1]}'` : rhsKind === 'enum' ? `'${v.match(ENUM)[2]}'` : v;
+    const KT = keyKind === 'enum' ? 'String' : litType(rows.map((a) => a[0])), VT = rhsKind === 'lit' ? litType(rows.map((a) => a[1])) : 'String';
+    const enumT = rhsKind === 'enum' ? rows[0][1].match(ENUM)[1] : null;
+    if (enumT && !rows.every((a) => a[1].match(ENUM)[1] === enumT)) { skip++; console.log(`🫱 ${b} — ערכי-אנום מכמה טיפוסים`); continue; }
+    const dataFile = path.join(DDATA, b + '-table.dart');
+    const dataSrc = `// 🗄️ דאטה · טבלת-${fn} — הופרדה מזרימת-switch של dart/${b}.dart (G62 · זרימה⇒טבלה; אפס-אובדן הוכח בבדיקת-הזהב).\n// שורה = מפתח ⇒ ערך${keyKind === 'enum' ? ' (מפתח = שם-חבר-האנום, ‎.name‎)' : ''}${rhsKind === 'term' ? ' (ערך = מפתח-מונח ל-term)' : rhsKind === 'enum' ? ` (ערך = שם-חבר ${enumT})` : ''}; להוסיף מקרה = שורת-דאטה, לא קוד.\nconst Map<${KT}, ${VT}> ${tbl} = {\n${rows.map((a) => `  ${keyOf(a[0])}: ${valOf(a[1])},`).join('\n')}\n};\n`;
+    const keyExpr = keyKind === 'enum' ? `${sw}.name` : sw;
+    let bodyNew;
+    if (rhsKind === 'lit') bodyNew = def ? `=> ${tbl}[${keyExpr}] ?? ${def[1]};` : `=> ${tbl}[${keyExpr}]!;`;
+    else if (rhsKind === 'term') bodyNew = def ? `=> term(${tbl}[${keyExpr}] ?? '${def[1].match(TERM)[1]}');` : `=> term(${tbl}[${keyExpr}]!);`;
+    else bodyNew = def ? `{\n  final v = ${tbl}[${keyExpr}];\n  return v == null ? ${def[1]} : ${enumT}.values.byName(v);\n}` : `=> ${enumT}.values.byName(${tbl}[${keyExpr}]!);`;
+    const head = whole.slice(0, whole.indexOf('=>'));
+    let src = orig.replace(whole, head + bodyNew);
+    const imp = `import '../dart-data/${b}-table.dart';`;
+    if (!src.includes(imp)) { const lines = src.split('\n'); let i = 0; while (i < lines.length && (lines[i].startsWith('//') || lines[i].trim() === '' || lines[i].startsWith('import '))) i++; lines.splice(i, 0, `// G62 · זרימה⇒טבלה: המיפוי חי ב-dart-data/${b}-table.dart (דאטה, לא קוד); אפס-אובדן הוכח בבדיקת-הזהב.`, imp, ''); src = lines.join('\n'); }
+    if (DRY) { ok++; console.log(`✅ ${b} — [dry] ${rows.length} שורות ⇒ ${tbl} (${KT}⇒${VT}${def ? ' · ברירת-מחדל' : ''})`); continue; }
+    const origData = fs.existsSync(dataFile) ? fs.readFileSync(dataFile, 'utf8') : null;
+    fs.writeFileSync(fp, src); fs.writeFileSync(dataFile, dataSrc);
+    try {
+      if (!fs.existsSync(tp)) throw new Error('אין בדיקת-זהב ⇒ אין הוכחת-אפס-אובדן');
+      execFileSync(DART, ['run', '--enable-asserts', tp], { cwd: DT, stdio: 'pipe', timeout: 90000 });
+      ok++; console.log(`✅ ${b} — ${rows.length} שורות ⇒ ${tbl} (${KT}⇒${VT}${def ? ' · ברירת-מחדל' : ''}) · בדיקת-הזהב ירוקה`);
+    } catch (e) {
+      fs.writeFileSync(fp, orig); if (origData !== null) fs.writeFileSync(dataFile, origData); else if (fs.existsSync(dataFile)) fs.rmSync(dataFile);
+      skip++; console.log(`🫱 ${b} — ולידציה-נכשלה ⇒ הוחזר: ${String(e.stderr || e.message).slice(0, 160).replace(/\n/g, ' ')}`);
+    }
+  }
+  console.log(`\n🧼 purify-dart --tables: ${ok} הוסבו-לטבלה · ${skip} דולגו · ${none} בלי-switch-ביטוי (מתוך ${Math.min(bases.length, LIMIT)})`);
+  process.exit(0);
 }
 
 // ── ריצה ──

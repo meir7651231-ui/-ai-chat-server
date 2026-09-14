@@ -1,17 +1,16 @@
 # 🗺️ מד-שלמות מול האימפריה — יכולות-לוגיקה שנחצבו למדף
 
 ## maor
-- פונקציות-מקור: **1022** · נחצבו: **626** (61%)
-- פערים: 396 — אימפיורי-מתוכנן 242 · **פער-לוגיקה-אמיתי 154**
-- כיסוי-לוגיקה-טהורה: **80%** (626/780)
+- פונקציות-מקור: **1026** · נחצבו: **668** (65%)
+- פערים: 358 — אימפיורי-מתוכנן 242 · **פער-לוגיקה-אמיתי 116**
+- כיסוי-לוגיקה-טהורה: **85%** (668/784)
+- רוחב (G62): עוזרים-נסתרים (לא-מיוצאים/פרטיים) **339** · מהם נחצבו 59 · מתודות-מחלקה (מחוץ-לתחום: מצב/UI) 4
 
 ### פערי-לוגיקה אמיתיים (קבצי-lib/pure, ממוין)
 
 - `src/components/home/homeData.ts` (20): courseActiveOn, todaySessions, eventsOnDate, birthdaysOn, homeStats, recentFamilies, digestLines, monthlySeries, monthDonationSum, credSummary, courseOccupancies, weightedMonthlyIncome, courseMetrics, credHistogram, credTodayTrend, credNeedsBoost, dueContacts, punchLow, carouselItems, careCounts
 - `src/components/calendar/calLib.ts` (16): fmtD, hpOf, orgBlockError, roomClashError, eventOccursOn, allowItem, dayItems, initialHebMode, buildGregorianGrid, buildHebrewGrid, softClashSuffix, nextOccurIso, icsWindowEvents, quickDate, upcomingItems, upcomingRows
-- `src/components/supporters/planned.ts` (9): isOpenPlan, openPlans, pendingIls, pendingUsd, plannedNextDate, overduePlans, nextUpcomingPlan, addMonthsClamped, planCharges
 - `src/components/timer/cashLib.ts` (9): changeBreakdown, denomTint, denomLabel, countsTotal, expectedDrawer, drawerDiff, cashSuggestions, filterCashSuggest, payerSuggestions
-- `src/components/platform/teamIntel.ts` (8): trendOf, workerIntel, teamIntel, teamSummary, quietWorkers, goalProgress, teamCsvRows, agoLabel
 - `src/components/courses/ops.ts` (6): coursesToday, debtors, punchLowList, dropoutRisk, opsKpis, opsTotal
 - `src/components/public/portal.ts` (6): portalValid, portalMessage, portalChannels, portalHasChannels, portalChatLine, parsePortalChat
 - `src/types/domain.ts` (6): pushDelLog, mergeDelLogs, pushAudit, emptyDb, emptyMember, emptyFamily
@@ -20,52 +19,40 @@
 - `src/components/wall/wallData.ts` (5): fmtIls, buildPodium, buildWeek, birthdaysToday, buildWallData
 - `src/components/builder/handoff.ts` (4): liveAddons, removedFeatures, buildHandoffHtml, downloadTextFile
 - `src/components/courses/collection.ts` (4): collectionList, collectionTotal, collectionCsvRows, collectionMessage
-- `src/components/courses/broadcast.ts` (3): classContacts, defaultClassMessage, classPhonesText
 - `src/components/supporters/segments.ts` (3): requestSupportersSegment, takeSupportersSegment, atRiskIdSet
 - `src/lib/lock.ts` (3): readPinFails, notePinFail, clearPinFails
-- `src/components/builder/sections.ts` (2): featureModuleKey, featureEffectiveOn
 - `src/components/courses/dashboard.ts` (2): courseDashboard, dashboardCsvRows
 - `src/components/courses/parent.ts` (2): parentCard, parentCardText
 - `src/components/courses/retention.ts` (2): dropoutInsights, interventionPrompt
 - `src/components/home/morningBrief.ts` (2): morningBrief, briefSpeechText
 - `src/components/platform/rolePresets.ts` (2): presetModules, presetMatches
 - `src/components/supporters/hebTiming.ts` (2): hebSeasonOf, hebTimingTasks
-- `src/components/supporters/quietHours.ts` (2): contactWindow, localQuiet
-- `src/components/supporters/seasonality.ts` (2): seasonality, donorRhythm
-- `src/components/supporters/signals.ts` (2): donorSignals, portfolioSignals
-- `src/components/supporters/tierMigration.ts` (2): tierAsOf, tierMigration
 - `src/components/supporters/timemachine.ts` (2): churnAtOffset, timeMachine
 - `src/components/supporters/universe3d.ts` (2): donorUniverse, project
-- `src/lib/ids.ts` (2): makeId, deviceTag
-- `src/components/reports/csv.ts` (1): downloadText
-- `src/components/settings/helpers.ts` (1): fmtDateTime
 - `src/components/supporters/askMaor.ts` (1): askMaor
-- `src/components/supporters/intel.ts` (1): shiftIso
 - `src/components/supporters/intelExport.ts` (1): intelCsvRows
-- `src/components/supporters/pareto.ts` (1): paretoReport
 - `src/components/supporters/ranks.ts` (1): donorRanks
-- `src/components/supporters/retention.ts` (1): acquisitionCohorts
 - `src/components/useArmed.ts` (1): useArmed
 - `src/lib/appCheck.ts` (1): initAppCheck
 - `src/lib/netcheck.ts` (1): netCheckTargets
-- `src/lib/originGuard.ts` (1): runOriginGuard
 - `src/lib/search.ts` (1): scoreTerm
 - `src/lib/three-scene.ts` (1): mountBrainScene
 
 ## buildsmart
-- פונקציות-מקור: **791** · נחצבו: **189** (24%)
-- פערים: 602 — אימפיורי-מתוכנן 438 · **פער-לוגיקה-אמיתי 164**
-- כיסוי-לוגיקה-טהורה: **54%** (189/353)
+- פונקציות-מקור: **791** · נחצבו: **190** (24%)
+- פערים: 601 — אימפיורי-מתוכנן 438 · **פער-לוגיקה-אמיתי 163**
+- כיסוי-לוגיקה-טהורה: **54%** (190/353)
+- רוחב (G62): עוזרים-נסתרים (לא-מיוצאים/פרטיים) **460** · מהם נחצבו 145 · מתודות-מחלקה (מחוץ-לתחום: מצב/UI) 3570
 
 ### פערי-לוגיקה אמיתיים (קבצי-lib/pure, ממוין)
 
 - `lib/data/related_info.dart` (30): catalogProductForSku, catalogProductForSmart, brandIsMetallic, needsConnectionSpec, compatibleProductsCount, compatibleProductsFor, verifiedEndsCountFor, compatibleProductsForEnd, connectionExplainHe, chainEdgeLabelHe, lineStructureText, gapAdviceHe, variantSiblingsCountFor, variantSiblingsOf, complianceWhyHe, priceFor, installToolsFor, installTipsFor, systemSafetyNoteHe, frequentlyPairedTypesFor, connectionWarningHe, pairConnectionWarningHe, deepLinkFor, acceptanceChecklistFor, safetyKitItems, chainArrowText, adapterSuggestionFor, connectionNeedsHe, discoveryTagsFor, smartCardSummaryHe
 - `lib/atoms/finder_model.dart` (6): productsForGroup, categoryCounts, groupCount, letterOptions, wallOptions, subsFor
-- `lib/data/variant_families.dart` (6): kindOf, allVariantFamilies, sizeStructurePattern, productFrame, productCanonicalKey, genderPattern
 - `lib/domain/seeds/plumbing_trade_seed.dart` (6): plumbingTrade, plumbingSystems, plumbingProductSpecs, plumbingCompatRules, plumbingCompletionRules, buildPlumbingSeed
 - `lib/theme/config_theme.dart` (6): cfgBrand, cfgSurface, cfgInk, cfgRadius, cfgFontScale, combinedTextScale
 - `lib/data/phaseb_seeds.dart` (5): ganttSpan, budgetPct, buildIndexDeltaPct, roiValue, invoiceSplit
 - `lib/data/repositories/supplier_onboarding.dart` (5): suggestFacets, validateDraft, draftToProductDoc, resolveBarcodeToSku, draftToInventory
+- `lib/data/variant_families.dart` (5): allVariantFamilies, sizeStructurePattern, productFrame, productCanonicalKey, genderPattern
 - `lib/logic/workflow_engine.dart` (5): wfFeatureLabel, wfItemLabel, wfUnitLabel, wfRevertPatch, wfNormName
 - `lib/config/org_config.dart` (4): decodeOrgConfig, encodeOrgConfig, featureEnabled, elementShown
 - `lib/data/company_catalog_import.dart` (4): companyCatalogTemplateCsv, parseCompanyCatalogCsv, encodeCompanyCatalog, decodeCompanyCatalog
@@ -133,12 +120,33 @@
 - `lib/theme/app_theme.dart` (1): bsSuccess
 
 ## yoman
-- פונקציות-מקור: **33** · נחצבו: **3** (9%)
-- פערים: 30 — אימפיורי-מתוכנן 0 · **פער-לוגיקה-אמיתי 30**
-- כיסוי-לוגיקה-טהורה: **9%** (3/33)
+- פונקציות-מקור: **33** · נחצבו: **4** (12%)
+- פערים: 29 — אימפיורי-מתוכנן 0 · **פער-לוגיקה-אמיתי 29**
+- כיסוי-לוגיקה-טהורה: **12%** (4/33)
+- רוחב (G62): עוזרים-נסתרים (לא-מיוצאים/פרטיים) **0** · מהם נחצבו 0 · מתודות-מחלקה (מחוץ-לתחום: מצב/UI) 0
 
 ### פערי-לוגיקה אמיתיים (קבצי-lib/pure, ממוין)
 
-- `/engine.js` (18): el, paras, srcLine, tag, whyBox, runhead, renderMasthead, renderFront, renderCards, renderBriefs, renderTwoup, renderSupplement, renderOpinion, renderForecast, renderColophon, fail, boot, render
+- `/engine.js` (17): el, paras, srcLine, tag, whyBox, runhead, renderMasthead, renderFront, renderCards, renderBriefs, renderTwoup, renderSupplement, renderOpinion, renderForecast, renderColophon, fail, boot
 - `/verify.mjs` (12): allContent, bad, makeValidator, check, resolveMaybe, partSchema, walkStrings, collectUrls, partInjection, islandHtml, startServer, partSmoke
+
+## מקסימליות · חיווט-בפועל (G62 · #7)
+
+- מנועים במדף (logic-census): **957** · מחווטים-בפועל **537** (56%) · **נמשכו-אך-לא-חוּוטו 420** (pulled-not-wired)
+- מקורות-החיווט: auto-logic 28 · behavior 43 · box 467 · הרצפה-המצרפית: truth.mjs wiring-floor (רק-עולה)
+- פסק-כנות: «מחווט» = נבחר-בפועל/נקרא-בפועל, לא «נגיש-לבורר». «פער-מאמת» לפי מילות-שם נדחה (342/957 שווא; חוק-4).
+
+| op | מנועים | מחווטים | לא-מחווטים |
+|---|---|---|---|
+| format | 249 | 125 | 124 |
+| summary | 159 | 94 | 65 |
+| collection | 151 | 104 | 47 |
+| transform | 120 | 61 | 59 |
+| predicate | 111 | 61 | 50 |
+| measure | 76 | 46 | 30 |
+| lines | 40 | 21 | 19 |
+| aggregate | 29 | 17 | 12 |
+| selection | 10 | 6 | 4 |
+| effect | 9 | 1 | 8 |
+| temporal | 3 | 1 | 2 |
 
