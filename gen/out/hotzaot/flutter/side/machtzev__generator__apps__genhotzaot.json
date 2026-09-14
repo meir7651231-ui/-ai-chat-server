@@ -1,0 +1,63 @@
+{
+ "ns": "genhotzaot",
+ "title": "הוצאות",
+ "look": "dark",
+ "layer": null,
+ "chain": [],
+ "questions": {},
+ "home": null,
+ "shell": {
+  "slug": "app_genhotzaot_shell",
+  "cls": "GenAppGenhotzaotShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_genhotzaot_root",
+  "cls": "GenAppGenhotzaotRootScreen"
+ },
+ "root": {
+  "slug": "app_genhotzaot_ent1",
+  "cls": "GenAppGenhotzaotEnt1Screen",
+  "name": "הוצאה",
+  "descField": "תיאור",
+  "stages": [],
+  "fields": [
+   {
+    "label": "תיאור",
+    "type": "multiline",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "סכום",
+    "type": "num",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "תאריך",
+    "type": "date",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "קטגוריה",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "אוכל",
+     "רכב",
+     "בית",
+     "אחר"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "הוצאה",
+   "slug": "app_genhotzaot_ent1"
+  }
+ ],
+ "relations": false,
+ "report": null
+}

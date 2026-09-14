@@ -232,7 +232,8 @@
      "name": "norm-search",
      "fn": "normSearch",
      "n": 1,
-     "role": "מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות"
+     "role": "מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות",
+     "tSource": "norm-search-strings"
     }
    ],
    "chosen": "norm-search",
@@ -240,7 +241,18 @@
     "לווה.שם",
     "לווה.הערה",
     "החזר.לווה"
-   ]
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 252,
+     "לא מתקמפל בבידוד": 5,
+     "פלט שונה": 71,
+     "זריקה/טיפוס": 66
+    },
+    "note": ""
+   }
   },
   {
    "need": "phone-format",
@@ -292,13 +304,25 @@
      "name": "format-israeli-phone",
      "fn": "formatIsraeliPhone",
      "n": 1,
-     "role": ""
+     "role": "",
+     "tSource": "format-israeli-phone-strings"
     }
    ],
    "chosen": "format-israeli-phone",
    "usedBy": [
     "לווה.נייד"
-   ]
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 252,
+     "לא מתקמפל בבידוד": 5,
+     "פלט שונה": 67,
+     "זריקה/טיפוס": 70
+    },
+    "note": ""
+   }
   },
   {
    "need": "money",
@@ -338,20 +362,42 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 15,
+   "ms": 14,
    "proven": [
     {
      "name": "shekel",
      "fn": "shekel",
      "n": 1,
-     "role": ""
+     "role": "",
+     "tSource": "shekel-strings"
     }
    ],
    "chosen": "shekel",
    "usedBy": [
     "לווה.סכום",
     "החזר.סכום"
-   ]
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [
+     {
+      "name": "f_money",
+      "fn": "fMoney",
+      "file": "new/dart/f_money.dart",
+      "params": [
+       "num"
+      ],
+      "ret": "String"
+     }
+    ],
+    "failedBy": {
+     "אורך-קריאה": 252,
+     "לא מתקמפל בבידוד": 5,
+     "זריקה/טיפוס": 107,
+     "פלט שונה": 29
+    },
+    "note": ""
+   }
   },
   {
    "need": "fmt-date",
@@ -391,20 +437,32 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 16,
+   "ms": 15,
    "proven": [
     {
      "name": "fmt-date",
      "fn": "fmtDate",
      "n": 1,
-     "role": "תאריך-ISO ⇒ תצוגה ישראלית dd/mm/yyyy. ריק/שבור ⇒ \"—\"."
+     "role": "תאריך-ISO ⇒ תצוגה ישראלית dd/mm/yyyy. ריק/שבור ⇒ \"—\".",
+     "tSource": "fmt-date-strings"
     }
    ],
    "chosen": "fmt-date",
    "usedBy": [
     "לווה.תאריך הלוואה",
     "החזר.תאריך"
-   ]
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 252,
+     "לא מתקמפל בבידוד": 5,
+     "פלט שונה": 71,
+     "זריקה/טיפוס": 66
+    },
+    "note": ""
+   }
   },
   {
    "need": "days-since",
@@ -461,20 +519,32 @@
      "name": "cockpit-days-since",
      "fn": "cockpitDaysSince",
      "n": 2,
-     "role": "ימים בין תאריך-ISO ליום-הייחוס (חיובי = בעבר, שלילי = עתיד). `Infinity` לתאריך ריק או לא-תקין."
+     "role": "ימים בין תאריך-ISO ליום-הייחוס (חיובי = בעבר, שלילי = עתיד). `Infinity` לתאריך ריק או לא-תקין.",
+     "tSource": "cockpit-days-since-strings"
     },
     {
      "name": "intel-day-diff",
      "fn": "dayDiff",
      "n": 2,
-     "role": "הפרש-ימים (Date.parse, slice(0,10)). Infinity לריק/לא-תקין."
+     "role": "הפרש-ימים (Date.parse, slice(0,10)). Infinity לריק/לא-תקין.",
+     "tSource": "intel-day-diff-strings"
     }
    ],
    "chosen": "cockpit-days-since",
    "usedBy": [
     "לווה.תאריך הלוואה",
     "החזר.תאריך"
-   ]
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 275,
+     "זריקה/טיפוס": 111,
+     "פלט שונה": 8
+    },
+    "note": ""
+   }
   },
   {
    "need": "sum",
@@ -547,20 +617,31 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 13,
+   "ms": 15,
    "proven": [
     {
      "name": "grand-total",
      "fn": "grandTotal",
      "n": 2,
-     "role": "הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע."
+     "role": "הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע.",
+     "tSource": null
     }
    ],
    "chosen": "grand-total",
    "usedBy": [
     "סכום לווה.סכום",
     "סכום החזר.סכום"
-   ]
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 275,
+     "זריקה/טיפוס": 118,
+     "פלט שונה": 1
+    },
+    "note": ""
+   }
   },
   {
    "need": "count-by",
@@ -661,13 +742,24 @@
      "name": "count-by",
      "fn": "countBy",
      "n": 2,
-     "role": "ספירה לפי מפתח — עובר על פריטים, מחלץ מפתח-מחרוזת מכל פריט דרך"
+     "role": "ספירה לפי מפתח — עובר על פריטים, מחלץ מפתח-מחרוזת מכל פריט דרך",
+     "tSource": null
     }
    ],
    "chosen": "count-by",
    "usedBy": [
     "מונה לווה.סטטוס"
-   ]
+   ],
+   "dart": {
+    "tried": 394,
+    "proven": [],
+    "failedBy": {
+     "אורך-קריאה": 275,
+     "זריקה/טיפוס": 118,
+     "פלט שונה": 1
+    },
+    "note": ""
+   }
   }
  ],
  "atoms": [
@@ -729,11 +821,127 @@
   }
  ],
  "unproven": [],
+ "inventory": {
+  "rows": [
+   {
+    "layer": "JS · פונקציות טהורות (new/atoms)",
+    "count": 569,
+    "connected": "הוכחה-בריצה בדפדפן ובמסוף; מוטבעות באפליקציה",
+    "state": "on"
+   },
+   {
+    "layer": "JS · אטומי-דאטה/קבועים (-strings · -data)",
+    "count": 527,
+    "connected": "292 מהם הם הקבועים (T) של הפונקציות — נטענים מהם ישירות",
+    "state": "on"
+   },
+   {
+    "layer": "JS · אסינכרוניים / ריבוי-ייצוא",
+    "count": 64,
+    "connected": "כתיבה ל-db/fs עם שקעים — לא רצים בלי חיבור; לא מחוברים",
+    "state": "off"
+   },
+   {
+    "layer": "Dart · לוגיקה שרק ב-Dart (new/dart · dart-boxes)",
+    "count": 394,
+    "connected": "הוכחה-בריצה ב-Dart במסוף (תוצאות ארוזות בסטודיו); לא ניתן להטביע ב-HTML",
+    "state": "on"
+   },
+   {
+    "layer": "Dart · תאומי ה-JS (dart-maor)",
+    "count": 569,
+    "connected": "אותם אטומים כמו ה-JS, מומרים — מחוברים דרך צורת ה-JS",
+    "state": "on"
+   },
+   {
+    "layer": "Dart · תצוגה (Flutter widgets)",
+    "count": 924,
+    "connected": "מסלול-Flutter: `node gen/build.mjs <ספק> --flutter` ⇒ מודולי-Dart דרך הדלת של המחצב, האטומים נבחרים לפי צורה (במסוף; הסטודיו בונה HTML). קומפילציה = Flutter SDK + buildsmart, לא כאן",
+    "state": "on"
+   }
+  ]
+ },
  "meta": {
   "slug": "gemach",
-  "built": "2026-09-14T18:19:27.560Z",
-  "ms": 174,
+  "built": "2026-09-14T18:35:13.755Z",
+  "ms": 17679,
   "shelf": 1096,
-  "fns": 569
+  "fns": 569,
+  "dart": 394
+ },
+ "flutter": {
+  "ok": true,
+  "specDs": "אפליקציה: גמ\"ח הלוואות\nישות לווה עם שם*, נייד, סכום*, תאריך הלוואה*, סטטוס{פעיל|נפרע|באיחור}, הערה\nישות החזר עם לווה*, סכום*, תאריך*\nלוח בקרה עם סכום(לווה.סכום), סכום(החזר.סכום), מונה(לווה.סטטוס)\n",
+  "ns": "gengemach",
+  "files": [
+   "gen_app_gengemach_audit.dart",
+   "gen_app_gengemach_bind1.dart",
+   "gen_app_gengemach_bind2.dart",
+   "gen_app_gengemach_ent1.dart",
+   "gen_app_gengemach_ent2.dart",
+   "gen_app_gengemach_flags.dart",
+   "gen_app_gengemach_hub.dart",
+   "gen_app_gengemach_main.dart",
+   "gen_app_gengemach_over1.dart",
+   "gen_app_gengemach_over2.dart",
+   "gen_app_gengemach_rec1.dart",
+   "gen_app_gengemach_rec2.dart",
+   "gen_app_gengemach_root.dart",
+   "gen_app_gengemach_scr3.dart",
+   "gen_app_gengemach_settings.dart",
+   "gen_app_gengemach_shell.dart"
+  ],
+  "displayAtoms": [
+   "dart-data-bs/auto/gen_app_gengemach_audit_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_ent1_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_ent2_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_flags_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_hub_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_main_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_over1_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_over2_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_rec1_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_rec2_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_root_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_scr3_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_settings_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_shell_content.dart",
+   "dart-screens-bs/ai_hub_screen.g.dart",
+   "dart-screens-bs/courier_certs_screen.g.dart",
+   "dart-ui-bs/auto/callout.dart",
+   "dart-ui-bs/auto/link_row.dart",
+   "dart-ui-bs/auto/rstat.dart",
+   "dart-ui-bs/ds/ds.dart",
+   "dart-ui-bs/ds/ds_bars.dart",
+   "dart-ui-bs/ds/ds_calendar.dart",
+   "dart-ui-bs/ds/ds_date_field.dart",
+   "dart-ui-bs/ds/ds_enum_field.dart",
+   "dart-ui-bs/ds/ds_field.dart",
+   "dart-ui-bs/ds/ds_number_field.dart",
+   "dart-ui-bs/ds/ds_search.dart",
+   "dart-ui-bs/ds/ds_select.dart",
+   "dart-ui-bs/ds/ds_store.dart",
+   "dart-ui-bs/ds/ds_table.dart",
+   "dart-ui-bs/ds/ds_toggle_tile.dart",
+   "dart-ui-bs/premium/actions/segmented_switch.dart",
+   "dart-ui-bs/premium/dataviz/kpi_tile.dart",
+   "dart-ui-bs/premium/dataviz/neon_bars.dart",
+   "dart-ui-bs/premium/lists/expandable_tile.dart",
+   "dart-ui-bs/premium/lists/glass_list_tile.dart",
+   "dart-ui-bs/premium/showcase/premium_chip.dart",
+   "dart-ui-bs/premium/showcase/premium_field.dart",
+   "dart-ui-bs/premium/showcase/premium_stat.dart",
+   "dart-ui-bs/premium/surfaces/stat_hero.dart"
+  ],
+  "moved": [
+   "machtzev/generator/apps/gengemach.json",
+   "machtzev/generator/particle-plan-gengemach.json"
+  ],
+  "treeClean": true,
+  "leftover": [],
+  "log": "✨ אפליקציה (מערכת-עיצוב) חוללה — 7 מסכים\n   2 ישויות · 1 דשבורדים · 3 מערכת · 1 לוח\n   הכל דרך render-ds הטהור (טיפוס נאחז מהאטומים · אפס regex).",
+  "err": "",
+  "compiled": false,
+  "compileNote": "קומפילציה דורשת Flutter SDK + buildsmart/app_flutter — לא בסביבה הזו"
  }
 }

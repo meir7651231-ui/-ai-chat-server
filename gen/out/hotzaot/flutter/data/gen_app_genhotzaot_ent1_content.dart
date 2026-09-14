@@ -1,0 +1,22 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_genhotzaot_ent1_c0 = 'הוצאה';
+const String gen_app_genhotzaot_ent1_c1 = '4 שדות';
+const String gen_app_genhotzaot_ent1_c2 = '🗂️';
+const String gen_app_genhotzaot_ent1_c3 = 'שמירה';
+const String gen_app_genhotzaot_ent1_c4 = 'עדכון';
+const String gen_app_genhotzaot_ent1_c5 = 'פרטי הרשומה';
+const String gen_app_genhotzaot_ent1_c6 = 'רשומות';
+const String gen_app_genhotzaot_ent1_c7 = 'אין הוצאה עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_genhotzaot_ent1_c8 = 'לא נמצאו רשומות תואמות';
+const String gen_app_genhotzaot_ent1_c9 = 'תיאור';
+const String gen_app_genhotzaot_ent1_c10 = 'סכום';
+const String gen_app_genhotzaot_ent1_c11 = 'תאריך';
+const String gen_app_genhotzaot_ent1_c12 = 'קטגוריה';
+const String gen_app_genhotzaot_ent1_c13 = 'אוכל';
+const String gen_app_genhotzaot_ent1_c14 = 'רכב';
+const String gen_app_genhotzaot_ent1_c15 = 'בית';
+const String gen_app_genhotzaot_ent1_c16 = 'אחר';
+const String gen_app_genhotzaot_ent1_c17 = 'סכום';
+const String gen_app_genhotzaot_ent1_c18 = '🧮';
+const String gen_app_genhotzaot_ent1_c19 = 'סה"כ רשומות';
+const String gen_app_genhotzaot_ent1_c20 = '🗂️';

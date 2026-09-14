@@ -38,6 +38,16 @@ export function readShelf() {
       const tm = T_RE.exec(test);
       if (tm) { try { T = new Function('return (' + tm[1] + ');')(); } catch { T = null; } }
     }
+    // הקבועים (T) מגיעים מאטום-הדאטה התאום (<name>-strings / <name>-data) — האטום האמיתי; קובץ-הבדיקה רק מעתיק אותו
+    let tSource = T ? 'test' : null;
+    for (const twin of [name + '-strings', name + '-data']) {
+      const tp2 = path.join(ATOMS, twin + '.mjs');
+      if (!fs.existsSync(tp2)) continue;
+      const tm2 = /export\s+const\s+\w+_T\s*=\s*(\{[\s\S]*?\n\});/.exec(fs.readFileSync(tp2, 'utf8'));
+      if (!tm2) continue;
+      try { const T2 = new Function('return (' + tm2[1] + ');')(); if (!T || JSON.stringify(T2) === JSON.stringify(T)) { T = T2; tSource = twin; } else tSource = twin + '≠test'; } catch {}
+      break;
+    }
     let role = '';
     const cp = path.join(ATOMS, name + '.contract.md');
     if (fs.existsSync(cp)) {
@@ -45,7 +55,7 @@ export function readShelf() {
       const r = /\*\*תפקיד:\*\*\s*([^\n]*)/.exec(c);
       role = r ? r[1].trim() : '';
     }
-    shelf.push({ name, kind, fn: m[1], params, n, hasT, T, role, file: path.relative(ROOT, path.join(ATOMS, name + '.mjs')), test: fs.existsSync(tp), src: src.replace(/^export\s+/gm, '') });
+    shelf.push({ name, kind, fn: m[1], params, n, hasT, T, tSource, role, file: path.relative(ROOT, path.join(ATOMS, name + '.mjs')), test: fs.existsSync(tp), src: src.replace(/^export\s+/gm, '') });
   }
   return shelf;
 }
@@ -54,5 +64,6 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
   const s = readShelf();
   const byN = {};
   for (const a of s) byN[a.n] = (byN[a.n] ?? 0) + 1;
-  console.log(`מדף: ${s.length} אטומים · עם T: ${s.filter((a) => a.hasT).length} · לפי אורך-קריאה:`, byN);
+  const ts = {}; for (const a of s) if (a.hasT) ts[(a.tSource || 'none').replace(/^.*-(strings|data)(≠test)?$/, '$1$2')] = (ts[(a.tSource || 'none').replace(/^.*-(strings|data)(≠test)?$/, '$1$2')] ?? 0) + 1;
+  console.log(`מדף: ${s.length} אטומים · עם T: ${s.filter((a) => a.hasT).length} · מקור-T:`, ts, '· לפי אורך-קריאה:', byN);
 }

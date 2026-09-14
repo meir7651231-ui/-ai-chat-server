@@ -1,0 +1,25 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_gengemach_ent1_c0 = 'לווה';
+const String gen_app_gengemach_ent1_c1 = '6 שדות';
+const String gen_app_gengemach_ent1_c2 = '🗂️';
+const String gen_app_gengemach_ent1_c3 = 'שמירה';
+const String gen_app_gengemach_ent1_c4 = 'עדכון';
+const String gen_app_gengemach_ent1_c5 = 'פרטי הרשומה';
+const String gen_app_gengemach_ent1_c6 = 'רשומות';
+const String gen_app_gengemach_ent1_c7 = 'אין לווה עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_gengemach_ent1_c8 = 'לא נמצאו רשומות תואמות';
+const String gen_app_gengemach_ent1_c9 = 'שם';
+const String gen_app_gengemach_ent1_c10 = 'נייד';
+const String gen_app_gengemach_ent1_c11 = 'סכום';
+const String gen_app_gengemach_ent1_c12 = 'תאריך הלוואה';
+const String gen_app_gengemach_ent1_c13 = 'סטטוס';
+const String gen_app_gengemach_ent1_c14 = 'פעיל';
+const String gen_app_gengemach_ent1_c15 = 'נפרע';
+const String gen_app_gengemach_ent1_c16 = 'באיחור';
+const String gen_app_gengemach_ent1_c17 = 'הערה';
+const String gen_app_gengemach_ent1_c18 = 'החזר';
+const String gen_app_gengemach_ent1_c19 = 'לווה';
+const String gen_app_gengemach_ent1_c20 = 'סכום';
+const String gen_app_gengemach_ent1_c21 = '🧮';
+const String gen_app_gengemach_ent1_c22 = 'סה"כ רשומות';
+const String gen_app_gengemach_ent1_c23 = '🗂️';

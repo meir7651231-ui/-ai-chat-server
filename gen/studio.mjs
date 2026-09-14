@@ -8,6 +8,8 @@ import { fileURLToPath } from 'node:url';
 import { readShelf } from './shelf.mjs';
 import { LIVE_CSS, LIVE_FONTS } from './live.mjs';
 import { loadLang } from './lang.mjs';
+import { readDartShelf, proveDart, hasDart } from './prove-dart.mjs';
+import { inventory } from './inventory.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const read = (f) => fs.readFileSync(path.join(HERE, f), 'utf8');
@@ -18,6 +20,11 @@ const shelf = readShelf().filter((a) => a.kind === 'fn').map(({ test, params, ..
 const example = read('specs/gemach.txt').trim();
 const exampleSentence = read('specs/gemach-sentence.txt').trim();
 const LANG = loadLang();
+// הוכחות-Dart נארזות מראש: הצרכים קבועים, לכן התוצאה זהה לכל ספק. בדפדפן אין Dart — מוצגת התוצאה מהמסוף.
+const dartShelf = hasDart() ? readDartShelf() : [];
+const DART_PROOFS = {};
+for (const need of NEEDS) if (dartShelf.length) { const d = proveDart(need, dartShelf); DART_PROOFS[need.id] = { tried: d.tried, proven: d.proven.map((a) => ({ name: a.name, fn: a.fn, file: a.file, params: a.params, ret: a.ret })), failed: d.failed, note: d.note || '' }; }
+const INVENTORY = inventory();
 const safe = (s) => s.replace(/<\/script/gi, '<\\/script').replace(/\uFFFD/g, '\\uFFFD'); // תו-ההחלפה שבאטום decode-csv-buffer נשאר כמובן, בכתיב-בריחה
 
 const html = `<title>סטודיו המחולל</title>
@@ -33,7 +40,7 @@ button{font:inherit;background:var(--acc);color:#fff;border:0;border-radius:5px;
 </style>
 <div class="wrap">
 <div class="head"><div><h1>סטודיו המחולל</h1><div class="mute">כותבים ספק בעברית · המחולל רץ כאן בדפדפן: צרכים מצורה ⇒ הוכחה-בריצה מול המדף ⇒ אפליקציה · אפס מודל, אפס שרת</div></div>
-<div class="stat"><div><b id="s-shelf">${shelf.length}</b>אטומי-פונקציה במדף</div><div><b id="s-needs">${NEEDS.length}</b>צרכים ידועים</div></div></div>
+<div class="stat"><div><b id="s-shelf">${shelf.length}</b>אטומי-JS</div><div><b>${dartShelf.length}</b>אטומי-Dart-בלבד</div><div><b>${INVENTORY.rows.reduce((a, r) => a + r.count, 0)}</b>סה"כ במלאי</div><div><b id="s-needs">${NEEDS.length}</b>צרכים ידועים</div></div></div>
 
 <section class="step"><h2>0 · מה לבנות <span class="n">תיבה ריקה. כתוב במילים שלך. Ctrl+Enter = בנה</span></h2>
 <textarea id="spec" placeholder="למשל: מעקב הוצאות: לכל הוצאה יש תיאור, סכום, תאריך וקטגוריה (אוכל, רכב, בית, אחר)
@@ -57,6 +64,9 @@ const SHELF = ${safe(JSON.stringify(shelf))};
 const EXAMPLE = ${safe(JSON.stringify(example))};
 const EXAMPLE_SENTENCE = ${safe(JSON.stringify(exampleSentence))};
 const LANG = ${safe(JSON.stringify(LANG))};
+const DART_PROOFS = ${safe(JSON.stringify(DART_PROOFS))};
+const DART_COUNT = ${dartShelf.length};
+const INVENTORY = ${safe(JSON.stringify(INVENTORY))};
 const $ = (id) => document.getElementById(id);
 const KEY = 'gen-studio:spec';
 try { const s = localStorage.getItem(KEY); if (s) $('spec').value = s; } catch {}
@@ -74,7 +84,7 @@ async function run() {
   $('status').textContent = 'בונה…';
   const slug = 'studio';
   try {
-    const { report, app } = await runGenerator({ text: specText, slug, shelf: SHELF, NEEDS, LANG, now: () => performance.now(),
+    const { report, app } = await runGenerator({ text: specText, slug, shelf: SHELF, NEEDS, LANG, dartProver: (need) => DART_PROOFS[need.id] || null, dartCount: DART_COUNT, inventory: INVENTORY, now: () => performance.now(),
       onStep: (s) => { if (s.step === 'proof') $('status').textContent = 'הוכחה: ' + s.proof.need + ' — נוסו ' + s.proof.tried + ', עברו ' + s.proof.proven.length; } });
     report.meta.ms = Math.round(report.meta.ms);
     $('out').innerHTML = renderLiveBody(report, app);

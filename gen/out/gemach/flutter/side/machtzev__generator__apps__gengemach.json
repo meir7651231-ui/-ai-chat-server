@@ -1,0 +1,78 @@
+{
+ "ns": "gengemach",
+ "title": "גמ\"ח הלוואות",
+ "look": "dark",
+ "layer": null,
+ "chain": [],
+ "questions": {},
+ "home": null,
+ "shell": {
+  "slug": "app_gengemach_shell",
+  "cls": "GenAppGengemachShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_gengemach_root",
+  "cls": "GenAppGengemachRootScreen"
+ },
+ "root": {
+  "slug": "app_gengemach_ent1",
+  "cls": "GenAppGengemachEnt1Screen",
+  "name": "לווה",
+  "descField": "שם",
+  "stages": [],
+  "fields": [
+   {
+    "label": "שם",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "נייד",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סכום",
+    "type": "num",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "תאריך הלוואה",
+    "type": "date",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "סטטוס",
+    "type": "bool",
+    "required": false,
+    "enumVals": [
+     "פעיל",
+     "נפרע",
+     "באיחור"
+    ]
+   },
+   {
+    "label": "הערה",
+    "type": "multiline",
+    "required": false,
+    "enumVals": []
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "לווה",
+   "slug": "app_gengemach_ent1"
+  },
+  {
+   "name": "החזר",
+   "slug": "app_gengemach_ent2"
+  }
+ ],
+ "relations": false,
+ "report": null
+}
