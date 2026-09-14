@@ -1,11 +1,11 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2478** אטומים ממופים (תצוגה 932 · לוגיקה 998 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2479** אטומים ממופים (תצוגה 932 · לוגיקה 999 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
 | data:strings | 349 | academic-year-label-strings · adar-norm-strings · add-org-member-strings · age-of-strings · amount-in-words-strings |
-| format | 275 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
+| format | 276 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
 | action | 180 | AccordionSectionCard · ActionButton · ActionCard · ActionRow · AddTradeButton |
 | group | 171 | ActionChipRail · AiCardTop · AiMdHead · AnimatedEmpty · ApprovalTaskCard |
 | summary | 158 | allOffConfig · applyAyinNames · applyAyinSheet · applyEntityPartial · applyMetaPartial |

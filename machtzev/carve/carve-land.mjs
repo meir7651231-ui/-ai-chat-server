@@ -53,8 +53,12 @@ const elemLit = (t, samples = {}) => {
   const ex = samples[b];
   return (ex && ex.length) ? ex[0] : null;
 };
-function compat(pt, inlined = [], generics = [], samples = {}) {
+function compat(pt, inlined = [], generics = [], samples = {}, bodyLits = {}) {
   const nul = pt.endsWith('?'); const base = pt.replace(/\?$/, '');
+  // G67 · «זהב-ריק» (57/196): הפונקציה החזירה את ברירת-המחדל ('' / 0 / false) על כל דוגמה-גנרית ⇒ העותק-החלול עבר. הדוגמאות
+  //   הכי-טובות הן **ליטרלי-ההכרעה של הגוף עצמו** (`key == 'cart'` · `code <= 48`) — החצב פולט אותם (bodyLits) והם באים ראשונים.
+  const own = (bodyLits[base] || []).slice(0, 6).map((d) => ({ d, t: base }));
+  if (own.length && /^(String|int|double|num|bool)$/.test(base)) { const rest = compat(pt, inlined, generics, samples, {}); const seen = new Set(own.map((x) => x.d)); return [...own, ...rest.filter((x) => !seen.has(x.d))]; }
   // טיפוס-גנרי שנוצר במחיקת-טיפוס: הפונקציה **אינה קוראת ממנו שדה** (אומת
   // ב-_MemberUse), ולכן כל ערך משרת אותה זהה. מחרוזת מספיקה, וההסקה כובלת T=String.
   if (generics.includes(base)) {
@@ -172,7 +176,7 @@ function landOne(r, seen) {
   if (params === null) return { name: r.name, skip: 'חתימה לא-טריוויאלית' };
   const socketArgs = (r.autoSocket && r.socketMeta) ? r.socketMeta.map(s => `${s.name}: ${s.init}`).join(', ') : '';
   const mkArgs = (c) => [c.map(v => v.d).join(', '), socketArgs].filter(Boolean).join(', ');
-  const perParam = params.map(p => compat(p.type, r.inlineTypes || [], Object.values(r.erasedTypes || {}), r.typeSamples || {}));
+  const perParam = params.map(p => compat(p.type, r.inlineTypes || [], Object.values(r.erasedTypes || {}), r.typeSamples || {}, r.bodyLits || {}));
   if (perParam.some(x => x.length === 0)) return { name: r.name, skip: 'אין-קלט-סל' };
   const combos = [];
   const rec = (i, acc) => { if (combos.length >= 12) return; if (i === params.length) { combos.push(acc); return; } for (const v of perParam[i]) { rec(i + 1, [...acc, v]); if (combos.length >= 12) break; } };

@@ -374,6 +374,23 @@ void main(List<String> args) {
 // ── ערך-דוגמה לטיפוס שהוטבע ─────────────────────────────────────────────────
 // מחברת-הנחיתה הניחה ש**כל** טיפוס מוטבע הוא enum ובנתה `X.values.first`.
 // למחלקת-דאטה זה קרס (9 אטומים). החצב יודע מה ההצהרה באמת — הוא זה שיאמר.
+// G67 · ליטרלי-ההכרעה של הגוף (מחרוזות/מספרים) — הדוגמאות הכי-טובות לזהב: פונקציה שמחזירה '' על כל דוגמה-גנרית
+//   נראית חלולה; עם `'cart'` מתוך `key == 'cart'` הזהב מבחין. נאספים מהגוף עצמו, אפס-ניחוש.
+class _BodyLits extends RecursiveAstVisitor<void> {
+  final strs = <String>{}; final ints = <String>{}; final dbls = <String>{};
+  @override void visitSimpleStringLiteral(SimpleStringLiteral n) { final v = n.value; if (v.isNotEmpty && v.length <= 40 && !v.contains('\n')) strs.add(v); super.visitSimpleStringLiteral(n); }
+  @override void visitIntegerLiteral(IntegerLiteral n) { ints.add(n.literal.lexeme); super.visitIntegerLiteral(n); }
+  @override void visitDoubleLiteral(DoubleLiteral n) { dbls.add(n.literal.lexeme); super.visitDoubleLiteral(n); }
+}
+Map<String, List<String>> _bodyLits(AstNode body) {
+  final v = _BodyLits(); body.visitChildren(v);
+  String q(String s) => "'" + s.replaceAll(r'\', r'\\').replaceAll("'", r"\'").replaceAll(r'$', r'\$') + "'";
+  final out = <String, List<String>>{};
+  if (v.strs.isNotEmpty) out['String'] = v.strs.take(8).map(q).toList();
+  if (v.ints.isNotEmpty) { out['int'] = v.ints.take(8).toList(); out['num'] = out['int']!; }
+  if (v.dbls.isNotEmpty) { out['double'] = v.dbls.take(8).toList(); out['num'] = [...(out['num'] ?? []), ...out['double']!]; }
+  return out;
+}
 String? _litFor(String t) {
   final nul = t.endsWith('?');
   final b = t.replaceAll('?', '').trim();
@@ -696,6 +713,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
               (c) => RegExp('(?:class|enum|mixin|typedef)\\s+' + t + r'\b').hasMatch(c),
               orElse: () => '')),
     },
+    'bodyLits': _bodyLits(body),
     'fnSource': fnSrc,
     'imports': usesMath
         ? [usedMathPrefix == null ? "import 'dart:math';" : "import 'dart:math' as $usedMathPrefix;"]

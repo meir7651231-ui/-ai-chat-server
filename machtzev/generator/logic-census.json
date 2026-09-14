@@ -7441,6 +7441,16 @@
   "wireable": true
  },
  {
+  "file": "dart/p58_saddle_model.dart",
+  "name": "p58SaddleModel",
+  "ret": "String",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-boxes/vertical-packs.dart",
   "name": "packOf",
   "ret": "Map<String, dynamic>?",

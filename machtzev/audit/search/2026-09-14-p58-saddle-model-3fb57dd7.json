@@ -1,0 +1,147 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T17:43:06.921Z",
+ "query": "p58 saddle model רוכב מודל\"",
+ "tokens": [
+  "p58",
+  "saddle",
+  "model",
+  "רוכב",
+  "ודל"
+ ],
+ "oracle": {
+  "atomIndexSha": "adb0ed5db5c4ba5f47a81bd8d52df8a797bdd683006f03318c548dc93aa8318a",
+  "logicCensusSha": "7d3140d2d7086b58feb1106faadadb9b8456f623706f3fc634a6f785c06e5cfb",
+  "display": 1922,
+  "logic": 998
+ },
+ "candidates": [
+  {
+   "id": "ModeFrame",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/mode_frame.dart",
+   "score": 3,
+   "hits": [
+    "model"
+   ]
+  },
+  {
+   "id": "modelMeta",
+   "layer": "logic",
+   "file": "dart-maor/model-meta.dart",
+   "score": 3,
+   "hits": [
+    "model"
+   ]
+  },
+  {
+   "id": "modeOf",
+   "layer": "logic",
+   "file": "dart-boxes/lib-nedarim-sync.dart",
+   "score": 3,
+   "hits": [
+    "model"
+   ]
+  },
+  {
+   "id": "modeStr",
+   "layer": "logic",
+   "file": "dart-boxes/lib-nedarim-sync.dart",
+   "score": 3,
+   "hits": [
+    "model"
+   ]
+  },
+  {
+   "id": "p39ElbowModel",
+   "layer": "logic",
+   "file": "dart/p39_elbow_model.dart",
+   "score": 3,
+   "hits": [
+    "model"
+   ]
+  },
+  {
+   "id": "p53AdapterModel",
+   "layer": "logic",
+   "file": "dart/p53_adapter_model.dart",
+   "score": 3,
+   "hits": [
+    "model"
+   ]
+  },
+  {
+   "id": "p54AdapterModel",
+   "layer": "logic",
+   "file": "dart/p54_adapter_model.dart",
+   "score": 3,
+   "hits": [
+    "model"
+   ]
+  },
+  {
+   "id": "p55AdapterModel",
+   "layer": "logic",
+   "file": "dart/p55_adapter_model.dart",
+   "score": 3,
+   "hits": [
+    "model"
+   ]
+  },
+  {
+   "id": "readFilteredMode",
+   "layer": "logic",
+   "file": "dart/read_filtered_mode.dart",
+   "score": 3,
+   "hits": [
+    "model"
+   ]
+  },
+  {
+   "id": "writeFilteredMode",
+   "layer": "logic",
+   "file": "dart/write_filtered_mode.dart",
+   "score": 3,
+   "hits": [
+    "model"
+   ]
+  },
+  {
+   "id": "CutTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/cut_tile.dart",
+   "score": 1,
+   "hits": [
+    "ודל"
+   ]
+  },
+  {
+   "id": "EmptyState",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/empty_state.dart",
+   "score": 1,
+   "hits": [
+    "ודל"
+   ]
+  }
+ ],
+ "strong": [
+  "modelMeta",
+  "modeOf",
+  "modeStr",
+  "p39ElbowModel",
+  "p53AdapterModel",
+  "p54AdapterModel",
+  "p55AdapterModel",
+  "readFilteredMode",
+  "writeFilteredMode"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "ModeFrame"
+ ],
+ "creates": "new/dart/p58_saddle_model.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 10 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: modelMeta 0/10 · modeOf 0/10 · modeStr 0/10 · p39ElbowModel 8/10 · p53AdapterModel 8/10 · p54AdapterModel 8/10 · p55AdapterModel 8/10 · readFilteredMode 0/10 · writeFilteredMode 0/10 · p37ElbowModel 8/10. לכן נוצר חדש.",
+ "sig": "3fb57dd7bab891f313af8ee0849a74a66b05f0ae3cf901cca6213b46c79c0145"
+}
