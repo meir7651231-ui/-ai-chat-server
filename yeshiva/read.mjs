@@ -33,9 +33,12 @@ function parseSpec(text) {
   const spec = { entities: [], fields: [], enums: [], required: new Set(), particles: [], contents: [], raw: text, lines: text.split('\n') };
   for (const line of spec.lines) {
     let m;
-    if ((m = line.match(/^ישות (\S+) עם (.*?)(?: \| |$)/))) {
+    if ((m = line.match(/^ישות (.+?) עם (.*?)(?: \| |$)/))) {
       const ent = m[1];
       spec.entities.push(ent);
+      // «| שלבים: א, ב, ג» — השלבים הם מקרים-בשמם של הישות (כמו enum): «נפרע / חזר» בפירוק מכוסה בשלבים
+      const st = line.match(/\|\s*שלבים\s*:?\s*([^|]+)/);
+      if (st) spec.enums.push({ ent, name: 'שלבים', values: st[1].split(/[,،]/).map(norm).filter(Boolean) });
       for (const raw of m[2].split(',')) {
         const f = raw.trim(); if (!f) continue;
         const name = norm(f.replace(/[*{(].*$/, ''));
