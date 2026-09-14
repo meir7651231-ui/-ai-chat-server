@@ -26075,6 +26075,21 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "wk",
+  "layer": "logic",
+  "file": "dart/wk.dart",
+  "op": "format",
+  "sockets": [
+   "int",
+   "List<String>"
+  ],
+  "ret": "String",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "workerShortName",
   "layer": "logic",
   "file": "dart/worker_short_name.dart",

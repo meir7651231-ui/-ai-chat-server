@@ -1,0 +1,234 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T18:10:16.545Z",
+ "query": "wk משימות הושלמו אין לצוות עדיין חדשות",
+ "tokens": [
+  "wk",
+  "שימות",
+  "ושלמו",
+  "אין",
+  "צוות",
+  "עדיין",
+  "חדשות"
+ ],
+ "oracle": {
+  "atomIndexSha": "0d524501f8a2bc8f32fd67f65c478793efb22a6c3ed64f5d7aa7fd4750235c04",
+  "logicCensusSha": "30171121f8c00b6d25d89a98fe688a87cf9d99b44430fbe7e15ae309a84f11b1",
+  "display": 1923,
+  "logic": 999
+ },
+ "candidates": [
+  {
+   "id": "ApprovalCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/approval_card.dart",
+   "score": 6,
+   "hits": [
+    "שימות",
+    "ושלמו",
+    "אין",
+    "צוות",
+    "עדיין",
+    "חדשות"
+   ]
+  },
+  {
+   "id": "DoneAll",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/done_all.dart",
+   "score": 6,
+   "hits": [
+    "שימות",
+    "ושלמו",
+    "אין",
+    "צוות",
+    "עדיין",
+    "חדשות"
+   ]
+  },
+  {
+   "id": "Intro",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intro.dart",
+   "score": 6,
+   "hits": [
+    "שימות",
+    "ושלמו",
+    "אין",
+    "צוות",
+    "עדיין",
+    "חדשות"
+   ]
+  },
+  {
+   "id": "LogButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/log_button.dart",
+   "score": 6,
+   "hits": [
+    "שימות",
+    "ושלמו",
+    "אין",
+    "צוות",
+    "עדיין",
+    "חדשות"
+   ]
+  },
+  {
+   "id": "NewTaskButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/new_task_button.dart",
+   "score": 6,
+   "hits": [
+    "שימות",
+    "ושלמו",
+    "אין",
+    "צוות",
+    "עדיין",
+    "חדשות"
+   ]
+  },
+  {
+   "id": "PrimaryBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/primary_btn.dart",
+   "score": 6,
+   "hits": [
+    "שימות",
+    "ושלמו",
+    "אין",
+    "צוות",
+    "עדיין",
+    "חדשות"
+   ]
+  },
+  {
+   "id": "ProposalCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/proposal_card.dart",
+   "score": 6,
+   "hits": [
+    "שימות",
+    "ושלמו",
+    "אין",
+    "צוות",
+    "עדיין",
+    "חדשות"
+   ]
+  },
+  {
+   "id": "SecH",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/sec_h.dart",
+   "score": 6,
+   "hits": [
+    "שימות",
+    "ושלמו",
+    "אין",
+    "צוות",
+    "עדיין",
+    "חדשות"
+   ]
+  },
+  {
+   "id": "CaPill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_pill.dart",
+   "score": 3,
+   "hits": [
+    "שימות",
+    "אין",
+    "צוות"
+   ]
+  },
+  {
+   "id": "CardDone",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/card_done.dart",
+   "score": 3,
+   "hits": [
+    "שימות",
+    "אין",
+    "צוות"
+   ]
+  },
+  {
+   "id": "CardTop",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/card_top.dart",
+   "score": 3,
+   "hits": [
+    "שימות",
+    "אין",
+    "צוות"
+   ]
+  },
+  {
+   "id": "CaSubTitle",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_sub_title.dart",
+   "score": 3,
+   "hits": [
+    "שימות",
+    "אין",
+    "צוות"
+   ]
+  },
+  {
+   "id": "HubTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/hub_tile.dart",
+   "score": 3,
+   "hits": [
+    "שימות",
+    "אין",
+    "צוות"
+   ]
+  },
+  {
+   "id": "SiteHubCaCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_hub_ca_card.dart",
+   "score": 3,
+   "hits": [
+    "שימות",
+    "אין",
+    "צוות"
+   ]
+  },
+  {
+   "id": "SiteHubCaEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_hub_ca_empty.dart",
+   "score": 3,
+   "hits": [
+    "שימות",
+    "אין",
+    "צוות"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "ApprovalCard",
+  "DoneAll",
+  "Intro",
+  "LogButton",
+  "NewTaskButton",
+  "PrimaryBtn",
+  "ProposalCard",
+  "SecH",
+  "CaPill",
+  "CardDone",
+  "CardTop",
+  "CaSubTitle",
+  "HubTile",
+  "SiteHubCaCard",
+  "SiteHubCaEmpty"
+ ],
+ "creates": "new/dart/wk.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). האורקל המאוחד לא החזיר מועמד בציון ≥3 באותה שכבה לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.",
+ "sig": "b5045d54442a55546e036ea47b6c008361ddbd6135e4d37fb611de6f2990e7ce"
+}

@@ -188,7 +188,14 @@ Map<String, _ImpFile> _neighborTypes(String file, CompilationUnit unit) {
         if (!_pureDartLibs.contains(u)) { pure = false; break; }
       } else if (nd is ExportDirective || nd is PartDirective) { pure = false; break; }
     }
-    if (!pure) continue;
+    // G68 · קובץ לא-טהור (מייבא flutter) עדיין יכול להצהיר `const double kVatRate = 0.17` — הקבוע טהור גם אם קובצו לא.
+    //   לכן: טיפוסים נרשמים רק מקובץ טהור (כמו קודם), אבל קבועי-`const` נרשמים מכל קובץ-שכן (ליטרל שמפנה לטיפוס ⇒ הבדיקה לא תתקמפל ⇒ נפילה בטוחה).
+    if (!pure) {
+      final cvars = <String, Declaration>{};
+      for (final nd in nunit.declarations) if (nd is TopLevelVariableDeclaration && nd.variables.isConst) for (final v in nd.variables.variables) cvars[v.name.lexeme] = nd;
+      if (cvars.isNotEmpty) { final cf = _ImpFile(nsrc, const {}, cvars); for (final k in cvars.keys) out.putIfAbsent('var:$k', () => cf); }
+      continue;
+    }
     final types = <String, Declaration>{};
     for (final nd in nunit.declarations) {
       if (nd is EnumDeclaration) types[nd.name.lexeme] = nd;
@@ -209,6 +216,8 @@ Map<String, _ImpFile> _neighborTypes(String file, CompilationUnit unit) {
     }
     final f = _ImpFile(nsrc, types, vars);
     for (final k in types.keys) out.putIfAbsent(k, () => f);
+    // G68 · קבוע-שכן חוצה-קבצים (`kBspInchToMm` מקובץ-דאטה) — נגיש גם בשם-המשתנה, לשקע-ערך (חוק-3). 69 פונקציות נפלו על מזהה-אחד כזה.
+    for (final k in vars.keys) out.putIfAbsent('var:$k', () => f);
   }
   return out;
 }
@@ -529,8 +538,17 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   final unresolved = <String>[];
   var usesMath = false;
   String? usedMathPrefix;   // אם הגוף משתמש ב-`math.x`, הייבוא חייב לשאת את התחילית
+  // G68 · קבוע-`const` מקובץ-שכן ⇒ שקע-ערך (רק const: ליטרל טהור; `final` מחושב/מוטטי = מצב-מודול, נשאר לא-פתור בכנות)
+  final crossVars = <String, (String, VariableDeclaration)>{};   // שם ⇒ (מקור-הקובץ, ההצהרה)
   for (final id in free.ids) {
-    if (topFns.containsKey(id) || topVars.containsKey(id)) sockets.add(id);
+    if (!topFns.containsKey(id) && !topVars.containsKey(id)) {
+      final f = impIdx['var:$id'];
+      final d = f?.vars[id];
+      if (f != null && d is TopLevelVariableDeclaration && d.variables.isConst) {
+        for (final v in d.variables.variables) { if (v.name.lexeme == id) crossVars[id] = (f.src, v); }
+      }
+    }
+    if (topFns.containsKey(id) || topVars.containsKey(id) || crossVars.containsKey(id)) sockets.add(id);
     else if (mathPrefixes.contains(id)) { usesMath = true; usedMathPrefix = id; }
     else if (_mathCore.contains(id)) usesMath = true;
     else unresolved.add(id); // ערך-חופשי לא-מזוהה (אולי import) — חשוד
@@ -631,13 +649,15 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
         if (d == null) {
           // שקע-**ערך**: קבוע-שכן (`kDeliveredStage`) ⇒ פרמטר מוקלד, כמו
           // `{required int kIndexMinWordLen}` שבמדף. השם נשמר, כולל תחילית-k.
-          final v = topVars[sName];
+          final cv = crossVars[sName];
+          final v = topVars[sName] ?? cv?.$2;
+          final vsrc = topVars[sName] != null ? src : (cv?.$1 ?? src);   // G68 · המקור של הקובץ שבו הקבוע מוצהר
           if (v == null) { ok = false; break; }
-          final vt = _varType(src, v);
+          final vt = _varType(vsrc, v);
           if (vt == null) { ok = false; break; }           // ערך לא-טהור / בלי טיפוס נגזר
           socketMeta.add({'name': _pub(sName)!, 'init': _helper(sName)});
           socketTypes.add(vt);
-          emitted[sName] = 'final ${_helper(sName)} = ' + src.substring(v.initializer!.offset, v.initializer!.end) + ';';
+          emitted[sName] = 'final ${_helper(sName)} = ' + vsrc.substring(v.initializer!.offset, v.initializer!.end) + ';';
           continue;
         }
         final t = _fnType(d);

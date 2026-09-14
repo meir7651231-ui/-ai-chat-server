@@ -11691,6 +11691,17 @@
   "wireable": false
  },
  {
+  "file": "dart/wk.dart",
+  "name": "wk",
+  "ret": "String",
+  "params": [
+   "int",
+   "List<String>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart/worker_short_name.dart",
   "name": "workerShortName",
   "ret": "String",
