@@ -229,7 +229,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 44,
+   "ms": 82,
    "proven": [
     {
      "name": "norm-search",
@@ -301,7 +301,7 @@
     "פלט שונה": 200,
     "אורך-קריאה": 13
    },
-   "ms": 15,
+   "ms": 23,
    "proven": [
     {
      "name": "format-israeli-phone",
@@ -365,7 +365,7 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 11,
+   "ms": 18,
    "proven": [
     {
      "name": "shekel",
@@ -440,7 +440,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 11,
+   "ms": 18,
    "proven": [
     {
      "name": "fmt-date",
@@ -516,7 +516,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 114
    },
-   "ms": 11,
+   "ms": 17,
    "proven": [
     {
      "name": "cockpit-days-since",
@@ -620,7 +620,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 10,
+   "ms": 19,
    "proven": [
     {
      "name": "grand-total",
@@ -739,7 +739,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 136
    },
-   "ms": 9,
+   "ms": 15,
    "proven": [
     {
      "name": "count-by",
@@ -866,8 +866,8 @@
  },
  "meta": {
   "slug": "gemach",
-  "built": "2026-09-14T20:04:20.156Z",
-  "ms": 9954,
+  "built": "2026-09-14T20:48:22.811Z",
+  "ms": 14803,
   "shelf": 1096,
   "fns": 569,
   "dart": 394
@@ -947,8 +947,11 @@
   "compileNote": "קומפילציה לאתר: --site (site.mjs; Flutter SDK + buildsmart)"
  },
  "site": {
-  "ok": false,
-  "why": "flutter build web נכשל",
-  "err": "Error: Error when reading 'lib/genesis/dart-screens-bs/ai_hub_screen.g.dart': Error reading 'lib/genesis/dart-screens-bs/ai_hub_screen.g.dart'  (No such file or directory)\nError: Error when reading 'lib/genesis/dart-screens-bs/courier_certs_screen.g.dart': Error reading 'lib/genesis/dart-screens-bs/courier_certs_screen.g.dart'  (No such file or directory)\nError: Not a constant expression.\nError: The method 'AiFinTileItem' isn't defined for the type 'GenAppGengemachBind1Screen'.\nError: The method 'AiHubScreenComposed' isn't defined for the type 'GenAppGengemachBind1Screen'.\nError: Not a constant expression.\nError: The method 'PresetChipItem' isn't defined for the type 'GenAppGengemachBind2Screen'.\nError: The method 'CourierCertsScreenComposed' isn't defined for the type 'GenAppGengemachBind2Screen'."
+  "ok": true,
+  "site": "gen/out/gemach/site",
+  "entry": "gen_app_gengemach_main.dart",
+  "files": 55,
+  "bytes": 36021439,
+  "ms": 33211
  }
 }

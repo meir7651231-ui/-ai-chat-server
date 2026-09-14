@@ -144,7 +144,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 44,
+   "ms": 82,
    "proven": [
     {
      "name": "norm-search",
@@ -208,7 +208,7 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 14,
+   "ms": 18,
    "proven": [
     {
      "name": "shekel",
@@ -282,7 +282,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 14,
+   "ms": 20,
    "proven": [
     {
      "name": "fmt-date",
@@ -357,7 +357,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 114
    },
-   "ms": 11,
+   "ms": 18,
    "proven": [
     {
      "name": "cockpit-days-since",
@@ -460,7 +460,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 11,
+   "ms": 17,
    "proven": [
     {
      "name": "grand-total",
@@ -578,7 +578,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 136
    },
-   "ms": 12,
+   "ms": 19,
    "proven": [
     {
      "name": "count-by",
@@ -697,8 +697,8 @@
  },
  "meta": {
   "slug": "hotzaot",
-  "built": "2026-09-14T20:04:40.697Z",
-  "ms": 9858,
+  "built": "2026-09-14T20:49:10.018Z",
+  "ms": 12863,
   "shelf": 1096,
   "fns": 569,
   "dart": 394
@@ -766,8 +766,11 @@
   "compileNote": "קומפילציה לאתר: --site (site.mjs; Flutter SDK + buildsmart)"
  },
  "site": {
-  "ok": false,
-  "why": "flutter build web נכשל",
-  "err": "Error: Error when reading 'lib/genesis/dart-screens-bs/ai_hub_screen.g.dart': Error reading 'lib/genesis/dart-screens-bs/ai_hub_screen.g.dart'  (No such file or directory)\nError: Not a constant expression.\nError: The method 'AiFinTileItem' isn't defined for the type 'GenAppGenhotzaotBind1Screen'.\nError: The method 'AiHubScreenComposed' isn't defined for the type 'GenAppGenhotzaotBind1Screen'.\nError: Compilation failed.\nError: Failed to compile application for the Web."
+  "ok": true,
+  "site": "gen/out/hotzaot/site",
+  "entry": "gen_app_genhotzaot_main.dart",
+  "files": 55,
+  "bytes": 35993298,
+  "ms": 33212
  }
 }
