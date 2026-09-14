@@ -45,7 +45,7 @@ export function readShelf() {
       const r = /\*\*תפקיד:\*\*\s*([^\n]*)/.exec(c);
       role = r ? r[1].trim() : '';
     }
-    shelf.push({ name, kind, fn: m[1], params, n, hasT, T, role, file: path.join(ATOMS, name + '.mjs'), test: fs.existsSync(tp) });
+    shelf.push({ name, kind, fn: m[1], params, n, hasT, T, role, file: path.relative(ROOT, path.join(ATOMS, name + '.mjs')), test: fs.existsSync(tp), src: src.replace(/^export\s+/gm, '') });
   }
   return shelf;
 }

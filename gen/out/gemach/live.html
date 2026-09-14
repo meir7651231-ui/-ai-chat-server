@@ -21,7 +21,7 @@ details.proof{border-top:1px solid var(--line);padding:8px 0}details.proof summa
 </style>
 <div class="wrap">
 <div class="head"><div><h1>גמ&quot;ח הלוואות</h1><div class="mute">המחולל הטהור · ספק ⇒ צרכים מצורה ⇒ הוכחה-בריצה מול המדף ⇒ הרכבה · אפס מודל</div></div>
-<div class="stat"><div><b>1096</b>אטומים במדף</div><div><b>3983</b>ריצות-הוכחה</div><div><b>7</b>אטומים הורכבו</div><div><b>0</b>צרכים בלי הוכחה</div><div><b>339</b>ms</div></div></div>
+<div class="stat"><div><b>1096</b>אטומים במדף</div><div><b>3983</b>ריצות-הוכחה</div><div><b>7</b>אטומים הורכבו</div><div><b>0</b>צרכים בלי הוכחה</div><div><b>164</b>ms</div></div></div>
 
 <section class="step spec"><h2>1 · הספק <span class="n">מה שנכתב בעברית — הקלט היחיד</span></h2><pre>אפליקציה: גמ&quot;ח הלוואות
 ישות לווה עם שם*, נייד[טלפון], סכום(0..100000)*, תאריך הלוואה[תאריך]*, סטטוס{פעיל|נפרע|באיחור}, הערה
@@ -34,25 +34,25 @@ details.proof{border-top:1px solid var(--line);padding:8px 0}details.proof summa
 
 <section class="step"><h2>3 · הוכחה-בריצה <span class="n">כל צורך הורץ מול כל 569 אטומי-הפונקציה במדף (527 הנותרים הם קבועים); עובר רק מי שהחזיר בדיוק את הפלט בכל הדוגמאות</span></h2><details class="proof ok" >
 <summary><span class="dot"></span><b>norm-search</b> — נרמול טקסט לחיפוש (ניקוד, סופיות, גרשיים) <span class="mute">⇐ לווה.שם · לווה.הערה · החזר.לווה</span>
-<span class="tally">נוסו 569 · עברו 1 · נבחר <code>norm-search</code> · 179ms</span></summary>
+<span class="tally">נוסו 569 · עברו 1 · נבחר <code>norm-search</code> · 72ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;שָׁלוֹם&quot;]</code></td><td>⇒</td><td><code>&quot;שלומ&quot;</code></td></tr><tr><td><code>[&quot;ABC&quot;]</code></td><td>⇒</td><td><code>&quot;abc&quot;</code></td></tr><tr><td><code>[null]</code></td><td>⇒</td><td><code>&quot;&quot;</code></td></tr><tr><td><code>[&quot; יוסף &quot;]</code></td><td>⇒</td><td><code>&quot;יוספ&quot;</code></td></tr><tr><td><code>[&quot;כהן ז\&quot;ל&quot;]</code></td><td>⇒</td><td><code>&quot;כהנ זל&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>norm-search</code> <span class="mute">(1 ארג׳) מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות</span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו</h5><p><span class="pill">זריקה 356</span> <span class="pill">פלט שונה 199</span> <span class="pill">אורך-קריאה 13</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>phone-format</b> — טלפון ⇒ תצוגה ישראלית עם מקף <span class="mute">⇐ לווה.נייד</span>
-<span class="tally">נוסו 569 · עברו 1 · נבחר <code>format-israeli-phone</code> · 22ms</span></summary>
+<span class="tally">נוסו 569 · עברו 1 · נבחר <code>format-israeli-phone</code> · 21ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;0501234567&quot;]</code></td><td>⇒</td><td><code>&quot;050-1234567&quot;</code></td></tr><tr><td><code>[&quot;+972501234567&quot;]</code></td><td>⇒</td><td><code>&quot;050-1234567&quot;</code></td></tr><tr><td><code>[&quot;031234567&quot;]</code></td><td>⇒</td><td><code>&quot;03-1234567&quot;</code></td></tr><tr><td><code>[&quot;050-1234567&quot;]</code></td><td>⇒</td><td><code>&quot;050-1234567&quot;</code></td></tr><tr><td><code>[&quot;אבג&quot;]</code></td><td>⇒</td><td><code>&quot;אבג&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>format-israeli-phone</code> <span class="mute">(1 ארג׳) </span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו</h5><p><span class="pill">זריקה 355</span> <span class="pill">פלט שונה 200</span> <span class="pill">אורך-קריאה 13</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>money</b> — מספר ⇒ תצוגת-שקלים עם מפרידי-אלפים <span class="mute">⇐ לווה.סכום · החזר.סכום</span>
-<span class="tally">נוסו 569 · עברו 1 · נבחר <code>shekel</code> · 16ms</span></summary>
+<span class="tally">נוסו 569 · עברו 1 · נבחר <code>shekel</code> · 14ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[1234567]</code></td><td>⇒</td><td><code>&quot;₪1,234,567&quot;</code></td></tr><tr><td><code>[0]</code></td><td>⇒</td><td><code>&quot;₪0&quot;</code></td></tr><tr><td><code>[12]</code></td><td>⇒</td><td><code>&quot;₪12&quot;</code></td></tr><tr><td><code>[999.6]</code></td><td>⇒</td><td><code>&quot;₪1,000&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>shekel</code> <span class="mute">(1 ארג׳) </span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו</h5><p><span class="pill">זריקה 396</span> <span class="pill">פלט שונה 159</span> <span class="pill">אורך-קריאה 13</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>fmt-date</b> — תאריך-ISO ⇒ יום/חודש/שנה <span class="mute">⇐ לווה.תאריך הלוואה · החזר.תאריך</span>
-<span class="tally">נוסו 569 · עברו 1 · נבחר <code>fmt-date</code> · 14ms</span></summary>
+<span class="tally">נוסו 569 · עברו 1 · נבחר <code>fmt-date</code> · 15ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>&quot;14/09/2026&quot;</code></td></tr><tr><td><code>[&quot;2026-01-05&quot;]</code></td><td>⇒</td><td><code>&quot;05/01/2026&quot;</code></td></tr><tr><td><code>[&quot;&quot;]</code></td><td>⇒</td><td><code>&quot;—&quot;</code></td></tr><tr><td><code>[null]</code></td><td>⇒</td><td><code>&quot;—&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>fmt-date</code> <span class="mute">(1 ארג׳) תאריך-ISO ⇒ תצוגה ישראלית dd/mm/yyyy. ריק/שבור ⇒ &quot;—&quot;.</span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו</h5><p><span class="pill">זריקה 360</span> <span class="pill">פלט שונה 195</span> <span class="pill">אורך-קריאה 13</span></p></div>
@@ -64,13 +64,13 @@ details.proof{border-top:1px solid var(--line);padding:8px 0}details.proof summa
 <div class="ex"><h5>למה נפלו</h5><p><span class="pill">זריקה 295</span> <span class="pill">אורך-קריאה 158</span> <span class="pill">פלט שונה 114</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>sum</b> — סכום שדה-מספר על כל השורות <span class="mute">⇐ סכום לווה.סכום · סכום החזר.סכום</span>
-<span class="tally">נוסו 569 · עברו 1 · נבחר <code>grand-total</code> · 15ms</span></summary>
+<span class="tally">נוסו 569 · עברו 1 · נבחר <code>grand-total</code> · 13ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[[{&quot;a&quot;:1},{&quot;a&quot;:2}],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>3</code></td></tr><tr><td><code>[[],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>0</code></td></tr><tr><td><code>[[{&quot;a&quot;:5}],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>5</code></td></tr><tr><td><code>[[{&quot;a&quot;:1.5},{&quot;a&quot;:2.5},{&quot;a&quot;:0}],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>4</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>grand-total</code> <span class="mute">(2 ארג׳) הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע.</span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו</h5><p><span class="pill">זריקה 276</span> <span class="pill">אורך-קריאה 158</span> <span class="pill">פלט שונה 134</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>count-by</b> — ספירה לפי ערך, מהגדול לקטן <span class="mute">⇐ מונה לווה.סטטוס</span>
-<span class="tally">נוסו 569 · עברו 1 · נבחר <code>count-by</code> · 13ms</span></summary>
+<span class="tally">נוסו 569 · עברו 1 · נבחר <code>count-by</code> · 15ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[[{&quot;s&quot;:&quot;a&quot;},{&quot;s&quot;:&quot;b&quot;},{&quot;s&quot;:&quot;a&quot;}],&quot;ƒ x=&gt;x.s&quot;]</code></td><td>⇒</td><td><code>[[&quot;a&quot;,2],[&quot;b&quot;,1]]</code></td></tr><tr><td><code>[[{&quot;s&quot;:&quot;b&quot;},{&quot;s&quot;:&quot;b&quot;},{&quot;s&quot;:&quot;a&quot;},{&quot;s&quot;:&quot;c&quot;},{&quot;s&quot;:&quot;c&quot;},{&quot;s&quot;:&quot;c&quot;}],&quot;ƒ x=&gt;x.s&quot;]</code></td><td>⇒</td><td><code>[[&quot;c&quot;,3],[&quot;b&quot;,2],[&quot;a&quot;,1]]</code></td></tr><tr><td><code>[[],&quot;ƒ x=&gt;x.s&quot;]</code></td><td>⇒</td><td><code>[]</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>count-by</code> <span class="mute">(2 ארג׳) ספירה לפי מפתח — עובר על פריטים, מחלץ מפתח-מחרוזת מכל פריט דרך</span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו</h5><p><span class="pill">זריקה 274</span> <span class="pill">אורך-קריאה 158</span> <span class="pill">פלט שונה 136</span></p></div>
@@ -78,7 +78,7 @@ details.proof{border-top:1px solid var(--line);padding:8px 0}details.proof summa
 
 <section class="step"><h2>4 · האטומים שהוטבעו באפליקציה <span class="n">כלשונם מהמדף, אפס שינוי</span></h2><details><summary><code>norm-search</code> <span class="mute">מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות</span> <span class="mute">· new/atoms/norm-search.mjs</span></summary><pre>/** חוט · norm-search — נרמול-חיפוש עברי. חוזה: norm-search.contract.md
  *  חולץ כלשונו מ-maor/src/lib/validate.ts */
-export function normSearch(t, T) {
+function normSearch(t, T) {
   return String(t || '')
     .toLowerCase()
     .replace(/[֑-ׇ]/g, '')
@@ -87,7 +87,7 @@ export function normSearch(t, T) {
     .trim();
 }
 </pre></details><details><summary><code>format-israeli-phone</code> <span class="mute"></span> <span class="mute">· new/atoms/format-israeli-phone.mjs</span></summary><pre>/** חוט · format-israeli-phone — קודם אוטומטית (אפיון-Golden). חוזה: format-israeli-phone.contract.md */
-export function formatIsraeliPhone(raw, T) {
+function formatIsraeliPhone(raw, T) {
     const s = String(raw || '').trim();
     let d = s.replace(/\D/g, '');
     // קידומת בינלאומית 972/00972 → 0 מקומי (מספרים מיובאים מגיעים כך)
@@ -112,7 +112,7 @@ export function formatIsraeliPhone(raw, T) {
 }
 /** נרמול טקסט לחיפוש עברי: מסיר ניקוד, אותיות סופיות → רגילות, גרשיים. */
 </pre></details><details><summary><code>shekel</code> <span class="mute"></span> <span class="mute">· new/atoms/shekel.mjs</span></summary><pre>/** חוט · shekel — קודם אוטומטית (אפיון-Golden). חוזה: shekel.contract.md */
-export function shekel(n, T) {
+function shekel(n, T) {
   // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
   const PRICES_LS_KEY = T.k1;
 
@@ -121,7 +121,7 @@ export function shekel(n, T) {
 /** קריאת טבלת-המחירים השמורה (מכשיר-המטמיע), או ברירת-המחדל. */
 </pre></details><details><summary><code>fmt-date</code> <span class="mute">תאריך-ISO ⇒ תצוגה ישראלית dd/mm/yyyy. ריק/שבור ⇒ &quot;—&quot;.</span> <span class="mute">· new/atoms/fmt-date.mjs</span></summary><pre>/** חוט · fmt-date — תאריך-ISO לתצוגה. חוזה: fmt-date.contract.md
  *  חולץ כלשונו (היה זהה ב-4 מודולים של maor — אוחד לעותק-יחיד). */
-export function fmtDate(iso, T) {
+function fmtDate(iso, T) {
   if (!iso) return '—';
   const [y, m, d] = iso.slice(0, T.k1).split('-');
   if (!y || !m || !d) return '—';
@@ -131,7 +131,7 @@ export function fmtDate(iso, T) {
  * מוצא: maor-system/src/components/supporters/cockpit.ts:42 (daysSince) + MS_DAY:39 (הוטבע inline).
  * ימים בין תאריך-ISO ליום (חיובי = בעבר). Infinity לתאריך ריק/לא-תקין. חוק-4: verbatim מהמקור.
  */
-export function cockpitDaysSince(iso, todayIso, T) {
+function cockpitDaysSince(iso, todayIso, T) {
   const MS_DAY = T.k1;
   if (!iso) return Infinity;
   const t = new Date(iso + 'T12:00:00').getTime();
@@ -142,12 +142,12 @@ export function cockpitDaysSince(iso, todayIso, T) {
 </pre></details><details><summary><code>grand-total</code> <span class="mute">הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע.</span> <span class="mute">· new/atoms/grand-total.mjs</span></summary><pre>/** חוט · grand-total — הסכום הכולל של כל הקופות. חוזה: grand-total.contract.md
  *  חולץ כלשונו מ-maor/src/components/tzedaka/lib.ts:64-66; השכן boxTotal
  *  הוזרק כשקע (חוק-1 — אפס import פנימי). */
-export function grandTotal(boxes, boxTotal) {
+function grandTotal(boxes, boxTotal) {
     return boxes.reduce((a, b) =&gt; a + boxTotal(b), 0);
 }
 </pre></details><details><summary><code>count-by</code> <span class="mute">ספירה לפי מפתח — עובר על פריטים, מחלץ מפתח-מחרוזת מכל פריט דרך</span> <span class="mute">· new/atoms/count-by.mjs</span></summary><pre>/** חוט · count-by — ספירה לפי מפתח, ממוין מהגדול לקטן. חוזה: count-by.contract.md
  *  חולץ כלשונו מ-maor/src/components/reports/lib.ts:83-91. */
-export function countBy(items, key) {
+function countBy(items, key) {
     const m = new Map();
     for (const it of items) {
         const k = key(it);

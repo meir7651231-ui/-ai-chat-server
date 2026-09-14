@@ -1,19 +1,18 @@
 // gen/render.mjs — הרכבה. מקבל ספק + אטומים-מוכחים ופולט אפליקציה רצה בקובץ-HTML יחיד.
 // האטומים מוטבעים כלשונם (אפס import פנימי — לכן אפשר). הדבק כאן הוא מבני בלבד:
 // טופס לפי צורת-השדה, טבלה, אחסון-מקומי, וקריאה לאטום-המוכח לפי המתכון (recipe) של הצורך.
-import fs from 'node:fs';
 
 export const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const jstr = (v) => JSON.stringify(v).replace(/<\//g, '<\\/');
 
 /** מקור-האטום כפי שהוא, בלי export, עם עטיפת-T זהה לזו של בדיקת-החוזה שלו. */
 export function inlineAtom(a) {
-  const src = fs.readFileSync(a.file, 'utf8').replace(/^export\s+/m, '');
+  const src = a.src;
   const pure = a.fn;
   const wrap = a.hasT
     ? `const ${pure}__T = ${jstr(a.T ?? {})};\nconst ${pure}__call = (...x) => ${pure}(...x, ...Array(Math.max(0, ${a.n} - x.length)).fill(undefined), ${pure}__T);`
     : `const ${pure}__call = (...x) => ${pure}(...x);`;
-  return `// ── אטום ${a.name} (${a.file.replace(/.*\/new\//, 'new/')})\n${src.trim()}\n${wrap}`;
+  return `// ── אטום ${a.name} (${a.file})\n${src.trim()}\n${wrap}`;
 }
 
 const INPUT = {

@@ -1,13 +1,15 @@
 // gen/prove.mjs — הוכחה-בריצה. צורך = חתימה + דוגמאות מחייבות (קלט ⇒ פלט).
 // כל אטום-פונקציה במדף נקרא על כל דוגמה; עובר רק מי שהחזיר בדיוק את הפלט המבוקש בכולן.
 // אין שמות, אין מילון, אין ניחוש: הריצה היא ההוכחה. השם משמש רק כמפתח דטרמיניסטי לשבירת-שוויון.
-import { pathToFileURL } from 'node:url';
-
+// רץ גם ב-Node וגם בדפדפן: האטום נטען ממקורו (אפס import פנימי ⇒ אפשר) ולא מהדיסק.
 const CACHE = new Map();
 export async function loadAtom(a) {
-  if (!CACHE.has(a.file)) CACHE.set(a.file, import(pathToFileURL(a.file).href));
-  const mod = await CACHE.get(a.file);
-  return mod[a.fn];
+  if (!CACHE.has(a.name)) {
+    let fn = null;
+    try { fn = new Function(a.src + '\nreturn ' + a.fn + ';')(); } catch { fn = null; }
+    CACHE.set(a.name, fn);
+  }
+  return CACHE.get(a.name);
 }
 
 export function same(a, b) {

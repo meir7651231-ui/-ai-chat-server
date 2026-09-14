@@ -1,0 +1,85 @@
+#!/usr/bin/env node
+// gen/studio.mjs — אורז את המחולל לדף אחד שרץ בדפדפן: המדף (מקור כל אטום-פונקציה + T + n), הצרכים,
+// ולב-המחולל (אותם קבצים שרצים ב-Node, מודבקים בלי import/export). אתה כותב ספק — ההוכחות רצות אצלך.
+//   node gen/studio.mjs  ⇒ gen/out/studio.html
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { readShelf } from './shelf.mjs';
+import { LIVE_CSS, LIVE_FONTS } from './live.mjs';
+
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const read = (f) => fs.readFileSync(path.join(HERE, f), 'utf8');
+const strip = (src) => src.replace(/^import\s[^\n]*\n/gm, '').replace(/^export\s+(default\s+)?/gm, '');
+const CORE = ['spec.mjs', 'prove.mjs', 'plan.mjs', 'render.mjs', 'live.mjs', 'engine.mjs'].map((f) => `// ══ ${f}\n${strip(read(f))}`).join('\n\n');
+const NEEDS = JSON.parse(read('needs.data.json')).needs;
+const shelf = readShelf().filter((a) => a.kind === 'fn').map(({ test, params, ...a }) => a);
+const example = read('specs/gemach.txt').trim();
+const safe = (s) => s.replace(/<\/script/gi, '<\\/script').replace(/\uFFFD/g, '\\uFFFD'); // תו-ההחלפה שבאטום decode-csv-buffer נשאר כמובן, בכתיב-בריחה
+
+const html = `<title>סטודיו המחולל</title>
+${LIVE_FONTS}
+<style>
+${LIVE_CSS}
+textarea{width:100%;min-height:160px;font:15px/1.6 Heebo,Arial,sans-serif;color:var(--ink);background:var(--code);border:1px solid var(--line);border-radius:6px;padding:10px 12px;direction:rtl;resize:vertical}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+button{font:inherit;background:var(--acc);color:#fff;border:0;border-radius:5px;padding:8px 16px;cursor:pointer;font-weight:500}button.ghost{background:transparent;color:var(--acc);border:1px solid var(--line)}
+:root[data-theme=dark] button, .dark button{color:#0f1f1e}
+.err{color:var(--none);white-space:pre-wrap;margin-top:8px}.grammar{font-size:13px;color:var(--mute);line-height:1.8}.grammar code{font-size:12px}
+.empty{color:var(--mute);padding:10px 0}
+</style>
+<div class="wrap">
+<div class="head"><div><h1>סטודיו המחולל</h1><div class="mute">כותבים ספק בעברית · המחולל רץ כאן בדפדפן: צרכים מצורה ⇒ הוכחה-בריצה מול המדף ⇒ אפליקציה · אפס מודל, אפס שרת</div></div>
+<div class="stat"><div><b id="s-shelf">${shelf.length}</b>אטומי-פונקציה במדף</div><div><b id="s-needs">${NEEDS.length}</b>צרכים ידועים</div></div></div>
+
+<section class="step"><h2>0 · הספק שלך <span class="n">תיבה ריקה. כתוב מה לבנות. Ctrl+Enter = בנה</span></h2>
+<textarea id="spec" placeholder="אפליקציה: <שם>
+ישות <שם> עם שדה*, שדה(0..1000), שדה{א|ב|ג}, שדה[תאריך], שדה[טלפון], שדה
+לוח בקרה עם סכום(ישות.שדה), מונה(ישות.שדה)"></textarea>
+<div class="bar"><button id="build">בנה</button><button class="ghost" id="ex">מלא דוגמה (גמ"ח הלוואות)</button><button class="ghost" id="clear">נקה</button><span class="mute" id="status"></span></div>
+<div class="err" id="err" hidden></div>
+<details class="grammar"><summary>דקדוק-הספק (כל מה שהמחולל מבין — אין יותר)</summary>
+<div><code>אפליקציה: שם</code> — שורה ראשונה.<br><code>ישות X עם א, ב, ג</code> — שדות מופרדים בפסיק. צורת שדה נקבעת רק מסמן: <code>*</code> חובה · <code>(0..N)</code> מספר · <code>{א|ב}</code> ערך-מנוי · <code>[תאריך]</code> · <code>[טלפון]</code> · בלי סמן = טקסט.<br>
+<code>לוח בקרה עם סכום(ישות.שדה), מונה(ישות.שדה)</code> — מדדים. סכום על שדה-מספר, מונה על ערך-מנוי.<br>
+מה נגזר אוטומטית: מספר ⇒ תצוגת-שקלים · תאריך ⇒ תצוגה + ימים-מאז · טלפון ⇒ עיצוב · טקסט ⇒ חיפוש · ערך-מנוי ⇒ ספירה. כל אחד רק אם אטום במדף מוכיח אותו בריצה.</div></details>
+</section>
+<div id="out"><p class="empty">עדיין לא נבנה כלום. כתוב ספק ולחץ «בנה».</p></div>
+</div>
+<script>
+${safe(CORE)}
+
+// ══ הסטודיו
+const NEEDS = ${safe(JSON.stringify(NEEDS))};
+const SHELF = ${safe(JSON.stringify(shelf))};
+const EXAMPLE = ${safe(JSON.stringify(example))};
+const $ = (id) => document.getElementById(id);
+const KEY = 'gen-studio:spec';
+try { const s = localStorage.getItem(KEY); if (s) $('spec').value = s; } catch {}
+$('ex').onclick = () => { $('spec').value = EXAMPLE; run(); };
+$('clear').onclick = () => { $('spec').value = ''; $('out').innerHTML = '<p class="empty">עדיין לא נבנה כלום. כתוב ספק ולחץ «בנה».</p>'; $('err').hidden = true; try { localStorage.removeItem(KEY); } catch {} };
+$('build').onclick = run;
+$('spec').addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) run(); });
+async function run() {
+  const specText = $('spec').value;
+  try { localStorage.setItem(KEY, specText); } catch {}
+  $('err').hidden = true;
+  if (!specText.trim()) { $('err').textContent = 'הספק ריק.'; $('err').hidden = false; return; }
+  $('status').textContent = 'בונה…';
+  const slug = 'studio';
+  try {
+    const { report, app } = await runGenerator({ specText, slug, shelf: SHELF, NEEDS, now: () => performance.now(),
+      onStep: (s) => { if (s.step === 'proof') $('status').textContent = 'הוכחה: ' + s.proof.need + ' — נוסו ' + s.proof.tried + ', עברו ' + s.proof.proven.length; } });
+    report.meta.ms = Math.round(report.meta.ms);
+    $('out').innerHTML = renderLiveBody(report, app);
+    $('status').textContent = 'נבנה ב-' + report.meta.ms + 'ms · ' + report.atoms.length + ' אטומים מוכחים' + (report.unproven.length ? ' · ' + report.unproven.length + ' צרכים בלי הוכחה' : '');
+    $('out').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (e) {
+    $('status').textContent = '';
+    $('err').textContent = 'הספק לא התקבל: ' + e.message;
+    $('err').hidden = false;
+  }
+}
+</script>`;
+fs.mkdirSync(path.join(HERE, 'out'), { recursive: true });
+fs.writeFileSync(path.join(HERE, 'out', 'studio.html'), html);
+console.log(`✓ gen/out/studio.html · ${(html.length / 1024 / 1024).toFixed(2)}MB · ${shelf.length} אטומי-פונקציה · ${NEEDS.length} צרכים`);

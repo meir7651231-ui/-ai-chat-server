@@ -5,7 +5,9 @@
 (`new/atoms`) על דוגמאות מחייבות ⇒ הרכבה לאפליקציה רצה בקובץ-HTML יחיד + דף-לייב שמראה את כל הריצה.
 ```bash
 node gen/build.mjs gen/specs/gemach.txt   # ⇒ gen/out/gemach/{app.html, live.html, report.json, log.md}
+node gen/studio.mjs                       # ⇒ gen/out/studio.html — הסטודיו: תיבה ריקה, המחולל רץ בדפדפן (המדף ארוז בפנים)
 ```
+אותה ליבה (`engine.mjs` · `spec.mjs` · `plan.mjs` · `prove.mjs` · `render.mjs` · `live.mjs`) רצה ב-Node ובדפדפן; הסטודיו מדביק אותה בלי import/export.
 
 ## מה הוא לא עושה (בכוונה)
 - לא נוגע ב-`new/`, לא ב-`machtzev/`, לא ב-`regen.mjs`, לא ב-`one.mjs`, לא ב-`gates.tsv`, לא ב-pins.
