@@ -6,6 +6,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { fontFaceCss, hasFont } from './fonts.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
@@ -108,11 +109,13 @@ details{border-top:1px solid var(--line);padding:var(--s2) 0}summary{cursor:poin
 @media print{body{background:#fff;color:#000;padding:0}.noprint,button,input,select{display:none!important}table{page-break-inside:auto}tr,td,th{page-break-inside:avoid}thead{display:table-header-group}}
 `;
 
-export const FONTS = `<link rel="stylesheet" href="${SKIN_DATA.fontHref}">`;
-export const SKIN_CSS = () => tokensCss() + BASE_CSS;
+// אין link חיצוני: הגופן נוסע מוטבע בקובץ (fonts.mjs). מארחים חיצוניים = 0, וזה נבדק בשער.
+export const FONTS = '';
+export const SKIN_CSS = () => fontFaceCss() + tokensCss() + BASE_CSS;
 
 // ── שער: ליטרל-צבע בפולטי-gen (חוץ מהקובץ הזה ומהדאטה) = כשל. אותו רעיון של look.mjs/HARD_COLOR באימפריה. ──
 const HARD_COLOR = /#[0-9a-fA-F]{3,8}\b|\brgba?\(/;
+const EXTERNAL_HOST = /https?:\/\/(?!localhost)[a-z0-9.-]+/i;
 export function checkNoLiterals() {
   const skip = new Set(['skin.mjs', 'skin-snapshot.mjs']);
   const bad = [];
@@ -128,6 +131,20 @@ export function checkNoLiterals() {
   return bad;
 }
 
+// שער שני: מארח חיצוני בפולטי-gen (גופן/CSS/סקריפט) = כשל. הקובץ חייב לרוץ ברשת מסוננת ובלי רשת.
+export function checkNoExternalHosts() {
+  const bad = [];
+  for (const f of fs.readdirSync(HERE).filter((f) => f.endsWith('.mjs'))) {
+    const src = fs.readFileSync(path.join(HERE, f), 'utf8');
+    src.split('\n').forEach((ln, i) => {
+      if (!/<link|<script[^>]*src=|url\(https?:/i.test(ln)) return;
+      if (!EXTERNAL_HOST.test(ln)) return;
+      bad.push(`${f}:${i + 1}: ${ln.trim().slice(0, 110)}`);
+    });
+  }
+  return bad;
+}
+
 if (process.argv[1] && process.argv[1].endsWith('skin.mjs')) {
   const { from, paper, theme, seed } = loadSkin();
   // רענון צילום-הנפילה: נגזר מהזרע, לא מהיד
@@ -136,13 +153,13 @@ if (process.argv[1] && process.argv[1].endsWith('skin.mjs')) {
     S.skinSnapshot = { _: S.skinSnapshot._, paper, dark: { ...pl.neutral, ...pl.semantic }, theme, designSeed: seed };
     fs.writeFileSync(path.join(HERE, 'skin.data.json'), JSON.stringify(S, null, 2) + '\n');
   }
-  const bad = process.argv.includes('--check') ? checkNoLiterals() : [];
+  const bad = process.argv.includes('--check') ? [...checkNoLiterals(), ...checkNoExternalHosts()] : [];
   const css = SKIN_CSS();
   const nTok = (css.match(/--[a-z0-9-]+:/g) || []).length;
   console.log(`✓ skin: מקור=${from} · עור=${SKIN_DATA.pick.skin} · ערכה=${SKIN_DATA.pick.theme} · ${nTok} הצהרות-טוקן · ${css.length} תווי-CSS · צפיפות ${Object.keys(SKIN_DATA.density.unitMul).length} דרגות (ברירת-מחדל ${SKIN_DATA.density.default})`);
   if (process.argv.includes('--check')) {
-    if (bad.length) { console.error(`✗ ליטרל-צבע ב-${bad.length} מקומות (עיצוב חייב לבוא מהטוקנים):\n  ` + bad.join('\n  ')); process.exit(1); }
-    console.log('✓ שער-עיצוב: אפס ליטרל-צבע בפולטי-gen');
+    if (bad.length) { console.error(`✗ שער-עיצוב נפל ב-${bad.length} מקומות (ליטרל-צבע או מארח חיצוני):\n  ` + bad.join('\n  ')); process.exit(1); }
+    console.log(`✓ שער-עיצוב: אפס ליטרל-צבע · אפס מארח חיצוני · גופן ${hasFont() ? 'מוטבע' : 'חסר (נפילה לערימה)'}`);
   }
   if (process.argv.includes('--css')) console.log(css);
 }

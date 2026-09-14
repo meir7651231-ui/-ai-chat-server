@@ -75,4 +75,6 @@ git rm -r gen .github/workflows/gen.yml && git commit -m "gen: ניתוק"
 | `studio.mjs` · `wizard.mjs` · `index-page.mjs` | הסטודיו (תיבה ריקה) · האשף (עץ-מתגים) · דף-שער |
 | `mosad.sentences.txt` · `mosad.enrich.json` · `packs/*.json` · `mosad-build.mjs` | שלושת מקורות-הידע ⇒ `mosad.data.json` (נגזר) |
 | `lenses.mjs` · `lenses.data.json` · `pass.mjs` | 12 העדשות הישיבתיות + המעבר אגף-אגף עם היסטוריית-סבבים |
+| `skin.mjs` · `skin.data.json` | שכבת-העיצוב: זרע-האימפריה (`pure-look` · `design-seed`) ⇒ טוקני-CSS + בסיס-CSS משותף; `--check` = שער (אפס ליטרל-צבע · אפס מארח חיצוני) |
+| `fonts.mjs` · `fonts/heebo-subset.woff2` · `fonts/OFL.txt` | הגופן נוסע מוטבע בקובץ (41KB תת-קבוצה, משקל-משתנה 100..900, OFL-1.1). `--build` בונה מחדש מקובץ-מקור |
 | `detach.mjs` · `DETACH.md` · `MOSAD.md` · `packs/README.md` | הוכחת-הניתוק והתיעוד |

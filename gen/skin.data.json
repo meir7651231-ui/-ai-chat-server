@@ -84,7 +84,6 @@
     "offsetMul": 0.5,
     "_src": "טבעת-מיקוד = דרישת-נגישות; עובי/ריווח כפולות-רשת ולא מספר-יד"
   },
-  "fontHref": "https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap",
   "fontStack": {
     "he": "Heebo, Arial, sans-serif",
     "mono": "\"JetBrains Mono\", Consolas, monospace"
@@ -196,5 +195,12 @@
       "id",
       "count"
     ]
+  },
+  "font": {
+    "family": "Heebo",
+    "license": "OFL-1.1 (gen/fonts/OFL.txt)",
+    "embed": "base64 woff2 (gen/fonts.mjs)",
+    "externalHosts": 0,
+    "_src": "נמדד: ספרות Heebo רוחב-שווה כברירת-מחדל (1151/2048 לכל עשר) ⇒ עמודות-כסף מיושרות בלי font-feature-settings. משקל-משתנה 100..900 בקובץ אחד. L69+G52: מארח-גופן חיצוני = טקסט נעלם ברשת מסוננת + 12.5 שניות."
   }
 }
