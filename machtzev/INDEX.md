@@ -18,6 +18,7 @@
 | `census/import-graph.mjs` | 🕸️ גרף-imports סטטי ל-`police --inc` (שלב 1): דיף ⇒ דיף+צרכנים-טרנזיטיביים (+זוג בדיקה/חוזה). `import()` דינמי / קובץ-חוץ / >50 ⇒ unknown ⇒ המשטרה מריצה מלא (fail-closed). |
 | `../.github/workflows/police.yml` | 🛡️ CI-עד (שלב 3 · §7.3): non-required. G1 pins · G9 ראצ׳ט מול event.before/סמן · G8 Protocol-Ran על הטווח + dart analyze · G3+G7 truth/wiring ⇒ diff ריק · G2+G10 משטרה מלאה (צהוב=אדום) + מס · G0 מאמת מכלי הסמן (ללא קידום). ערוץ = job summary. |
 | `search-record.mjs` · `audit/search/` | 🔎 הדרך צעד 2–3 (שלב 9): חיפוש-כלי באורקל-המאוחד ⇒ רשומה חתומה (מועמדים · ציונים · הכרעה). `--choose` רק מועמד · `--none` מנומק ומזכיר מועמדים-חזקים. |
+| `search-score.mjs` | ניקוד-החיפוש האחד (G63): tok · near · scoreFor · loadOracle · layerOf — משותף ל-search-record ול-search-proof-check |
 | `goal-card.mjs` · `audit/goals/` | 🎯 כרטיס-מטרה (שלב 9): הסוכן מזין מטרה·מודלים·אטומים·קבלה + תמונת-רנדר; נחתם עם sha-מסך ו-sha-תמונה. `--refresh` אחרי שינוי-מסך. |
 | `goal-proof-check.mjs` | 📷 שער `goal-proof` ב-pre-commit: מסך/לוח שנוסף/השתנה (מזוהה לפי Scaffold, לא לפי תיקייה · L50) ⇒ כרטיס תקף + תמונה אמיתית + כל model/atom בקוד. |
 | `search-proof-check.mjs` | 🧭 שער `search-proof` ב-pre-commit: אטום/קופסה חדשים ⇒ רשומת-חיפוש תקפה (sig · אורקל נוכחי · none). |

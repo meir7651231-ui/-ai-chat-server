@@ -1,0 +1,210 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T14:45:03.118Z",
+ "query": "pseudonym סשנים לקוחות אחוז המרה במסך אין",
+ "tokens": [
+  "pseudonym",
+  "סשנים",
+  "קוחות",
+  "אחוז",
+  "מרה",
+  "מסך",
+  "אין"
+ ],
+ "oracle": {
+  "atomIndexSha": "1fa61e720162f76820b61afafe34d8834000054ca1ff14f3f68e37a8d8e51612",
+  "logicCensusSha": "9cfe3bce28ed7cd00d51a723277b7ffcd744afa6d4093516efe3c9a41abbd0da",
+  "display": 1881,
+  "logic": 957
+ },
+ "candidates": [
+  {
+   "id": "IntelBar",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_bar.dart",
+   "score": 6,
+   "hits": [
+    "סשנים",
+    "קוחות",
+    "אחוז",
+    "מרה",
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "IntelCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_card.dart",
+   "score": 6,
+   "hits": [
+    "סשנים",
+    "קוחות",
+    "אחוז",
+    "מרה",
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "IntelIntro",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_intro.dart",
+   "score": 6,
+   "hits": [
+    "סשנים",
+    "קוחות",
+    "אחוז",
+    "מרה",
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "IntelPill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_pill.dart",
+   "score": 6,
+   "hits": [
+    "סשנים",
+    "קוחות",
+    "אחוז",
+    "מרה",
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "IntelStat",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_stat.dart",
+   "score": 6,
+   "hits": [
+    "סשנים",
+    "קוחות",
+    "אחוז",
+    "מרה",
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "LiveDot",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/live_dot.dart",
+   "score": 6,
+   "hits": [
+    "סשנים",
+    "קוחות",
+    "אחוז",
+    "מרה",
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "CartFabButton",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/cart_fab_button.dart",
+   "score": 2,
+   "hits": [
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "DirectoryRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/directory_row.dart",
+   "score": 2,
+   "hits": [
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "DsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "DsApproveCard",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "DsChip",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "DsChipButton",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "DsDiffRow",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "DsEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "מסך",
+    "אין"
+   ]
+  },
+  {
+   "id": "DsFold",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 2,
+   "hits": [
+    "מסך",
+    "אין"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "IntelBar",
+  "IntelCard",
+  "IntelIntro",
+  "IntelPill",
+  "IntelStat",
+  "LiveDot"
+ ],
+ "creates": "new/dart/pseudonym.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). האורקל המאוחד לא החזיר מועמד בציון ≥3 לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.",
+ "sig": "5bdcbe36176a0052d5d2dce4f32154ec39b73573b8141c993768cc77b01327c6"
+}

@@ -102,7 +102,32 @@ function parseParams(fnSrc) {
   if (/[{[]/.test(raw)) return null;
   return raw.split(',').map(p => { const parts = p.trim().split(/\s+/); return { type: parts.slice(0, -1).join(' '), name: parts.at(-1) }; });
 }
-function atomFile(r, srcRef) {
+// ── G63 · ייעוד-עברי לפונקציה שקטה — **אותו מנגנון של אינדקס-התצוגה** (atom-index: purposeFrom=source-screen):
+//   הבעלים: «ברור גבוה יותר [מאדם] ותבדוק איך הוא לקח עד היום את המשפט-ייעוד». האינדקס לוקח את מונחי-המסך של קובץ-המקור
+//   (screens-seed/machine/<file-key>.json). כאן שרשרת-נפילה מבנית, אפס-המצאה (§20-ג): תיעוד-עצמי ⇒ מונחי-מסך של קובץ-המקור ⇒
+//   מונחי-מסך של הקוראים ⇒ ליטרלים-עבריים בגוף ⇒ אין (לא עולה). המדידה על 177 שקטות: 73 מהמקור · 25 מקוראים · 7 מהגוף · 72 אין.
+const SEED_DIR = path.join(SHELF, '..', 'screens-seed', 'machine');
+const LIB_DIR = path.join(process.env.BUILDSMART || '/home/user/buildsmart/app_flutter', 'lib');
+const heToks = (s) => [...String(s || '').matchAll(/[\u0590-\u05FF]{2,}/g)].map((m) => m[0]);
+let _seed = null, _lib = null;
+const seedTerms = () => { if (_seed) return _seed; _seed = {}; try { for (const f of fs.readdirSync(SEED_DIR).filter((f) => f.endsWith('.json'))) { try { const d = JSON.parse(fs.readFileSync(path.join(SEED_DIR, f), 'utf8')); _seed[f.replace('.json', '')] = [...new Set((d.terms || []).flatMap(heToks))].slice(0, 24); } catch { /* seed פגום = אין מונחים */ } } } catch { /* אין seed */ } return _seed; };
+const libFiles = () => { if (_lib) return _lib; _lib = []; const walk = (d) => { let o = []; try { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const q = path.join(d, e.name); if (e.isDirectory()) { if (!/genesis/.test(e.name)) o = o.concat(walk(q)); } else if (q.endsWith('.dart')) o.push(q); } } catch { /* אין lib */ } return o; }; for (const q of walk(LIB_DIR)) _lib.push([path.relative(LIB_DIR, q), fs.readFileSync(q, 'utf8')]); return _lib; };
+const seedKey = (rel) => rel.replace(/\.dart$/, '').replace(/\//g, '__');
+function purposeOf(r, srcRef) {
+  const own = (r.fnSource.match(/\/\/\/[^\n]*/g) || []).join(' ').match(/[\u0590-\u05FF][\u0590-\u05FF'"\u05F3\u05F4-]*/g) || [];
+  if (own.length) return { words: own, from: 'own-doc', key: null };
+  const seed = seedTerms();
+  const rel = String(srcRef || '').replace(/^buildsmart\/app_flutter\/lib\//, '').replace(/:\d+(-\d+)?$/, '');
+  const k = seedKey(rel);
+  if (seed[k]?.length) return { words: seed[k], from: 'source-screen', key: k };
+  const re = new RegExp('\\b' + String(r.origName || r.name).replace(/^_/, '_?') + '\\s*\\(');
+  const callers = libFiles().filter(([f, src]) => f !== rel && re.test(src)).map(([f]) => seedKey(f)).filter((kk) => seed[kk]?.length);
+  if (callers.length) return { words: seed[callers[0]], from: 'caller-screen', key: callers[0] };
+  const body = [...new Set(heToks(r.fnSource.split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n')))];
+  if (body.length) return { words: body, from: 'body-he', key: null };
+  return { words: [], from: 'none', key: null };
+}
+function atomFile(r, srcRef, purpose) {
   const imports = (r.imports || []);
   const pure = imports.length
     ? `// טוהר: פונקציית top-level עצמאית; הייבוא היחיד הוא ספריית-שפה טהורה (${imports.join(' ')}).\n`
@@ -113,7 +138,8 @@ function atomFile(r, srcRef) {
     : '';
   const header = `// ⚛️ אטום-Dart (דרגת-חוזה) · ${r.name}\n// מוצא: ${srcRef} (חצב-AST · חוק-4 — התנהגות זהה, לא-משופרת).\n${pure}${sock}${r.inlineTypes.length ? `// טיפוסים מוטבעים (חוק-1, verbatim מהמקור): ${r.inlineTypes.join(', ')}.\n` : ''}`;
   const types = r.copiedTypes.length ? r.copiedTypes.join('\n\n') + '\n\n' : '';
-  return header + '\n' + (imports.length ? imports.join('\n') + '\n\n' : '') + types + r.fnSource + '\n';
+  const purp = purpose && purpose.from !== 'own-doc' && purpose.words.length ? `// ייעוד-עברי (G63 · מקור: ${purpose.from === 'source-screen' ? 'מונחי-מסך-המקור ' + purpose.key : purpose.from === 'caller-screen' ? 'מונחי-מסך-הקורא ' + purpose.key : 'ליטרלים-בגוף'} — כמו purposeFrom באינדקס-התצוגה, אפס-המצאה): ${purpose.words.slice(0, 12).join(' · ')}\n` : '';
+  return header + purp + '\n' + (imports.length ? imports.join('\n') + '\n\n' : '') + types + r.fnSource + '\n';
 }
 
 function landOne(r, seen) {
@@ -154,7 +180,8 @@ function landOne(r, seen) {
   seen.add(kb);
 
   const srcRef = r._srcRef || '(מקור)';
-  fs.writeFileSync(atomAbs, atomFile(r, srcRef));
+  const purpose = purposeOf(r, srcRef);
+  fs.writeFileSync(atomAbs, atomFile(r, srcRef, purpose));
 
   const callArgs = combos.map(c => mkArgs(c));
   const sockSrc = (r.autoSocket && r.socketDecls && r.socketDecls.length)
@@ -194,10 +221,10 @@ function landOne(r, seen) {
 
   // חוזה
   const doc = (r.fnSource.match(/\/\/\/[^\n]*/g) || []).join('\n').replace(/\/\/\/ ?/g, '');
-  const md = `# חוזה · ${r.name}\n\n> אטום-Dart · נחצב אוטומטית ע"י חצב-AST (חוק-4 — verbatim מהמקור).\n\n## מקור\n${srcRef}\n\n## התנהגות\n${doc || '(ראה גוף-האטום)'}\n\n## אימות\nבדיקת-Golden (\`${kb}_test.dart\`): אפיון דטרמיניסטי על סל-קלטים — הוקלט מהרצת הקוד-החלוץ. הרצה: \`dart run --enable-asserts new/dart/${kb}_test.dart\`.\n`;
+  const md = `# חוזה · ${r.name}\n\n> אטום-Dart · נחצב אוטומטית ע"י חצב-AST (חוק-4 — verbatim מהמקור).\n\n## מקור\n${srcRef}\n\n## התנהגות\n${doc || '(ראה גוף-האטום)'}\n\n## ייעוד-עברי\n${purpose.from === 'none' ? '(אין — לא נמצא הקשר עברי במקור/בקוראים/בגוף)' : `מקור: ${purpose.from}${purpose.key ? ' · ' + purpose.key : ''} — ${purpose.words.slice(0, 12).join(' · ')}`}\n\n## אימות\nבדיקת-Golden (\`${kb}_test.dart\`): אפיון דטרמיניסטי על סל-קלטים — הוקלט מהרצת הקוד-החלוץ. הרצה: \`dart run --enable-asserts new/dart/${kb}_test.dart\`.\n`;
   fs.writeFileSync(path.join(ROOT, 'dart', `${kb}.contract.md`), md);
   return { name: r.name, landed: `${kb}.dart`, base: kb, golden: combos.length,
-           heb: (r.fnSource.match(/\/\/\/[^\n]*/g) || []).join(' ').match(/[\u0590-\u05FF][\u0590-\u05FF'"\u05F3\u05F4-]*/g) || [] };
+           heb: purpose.words, purposeFrom: purpose.from };
 }
 
 const carved = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
@@ -206,10 +233,11 @@ const seen = new Set();
 let landed = 0, failed = 0, skipped = 0;
 const skipWhy = {};   // סיבת-דילוג ⇒ שמות (בלי זה 16 דילוגים נעלמו בשקט)
 const landedBases = [];
-const hebOf = {};   // בסיס ⇒ מילות-הייעוד העבריות מהתיעוד של האטום עצמו
+const hebOf = {};   // בסיס ⇒ מילות-הייעוד העבריות (G63: תיעוד-עצמי ⇒ מסך-המקור ⇒ מסך-הקורא ⇒ גוף)
+const purposeFromCount = {};
 for (const r of trivial) {
   const res = landOne(r, seen);
-  if (res.landed) { landed++; landedBases.push(res.base); hebOf[res.base] = res.heb; if (landed <= 40) console.log(`✅ ${res.name} → dart/${res.landed} · ${res.golden} Golden`); }
+  if (res.landed) { landed++; landedBases.push(res.base); hebOf[res.base] = res.heb; purposeFromCount[res.purposeFrom] = (purposeFromCount[res.purposeFrom] || 0) + 1; if (landed <= 40) console.log(`✅ ${res.name} → dart/${res.landed} · ${res.golden} Golden`); }
   else if (res.fail) { failed++; if (failed <= 20) console.log(`↩ ${res.name}: ${res.fail}`); }
   else { skipped++; (skipWhy[res.skip || 'לא-מנומק'] ??= []).push(res.name); }   // שקט אינו דילוג
 }
@@ -269,6 +297,7 @@ if (landedBases.length) {
   for (const b of alive2) {
     const heb = (hebOf[b] || []).filter(w => w.length > 1).slice(0, 6);
     if (!heb.length) { noPurpose.push(b); continue; }
+    if (process.env.CARVE_OUT) continue;   // ריצת-ניסוי: לא כותבים רשומות-חיפוש לאודיט (הן שייכות לנחיתה אמיתית בלבד)
     const words = `${b.replace(/_/g, ' ')} ${heb.join(' ')}`;
     const why = `נחצב אוטומטית מ-buildsmart/app_flutter ע"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). האורקל המאוחד לא החזיר מועמד בציון ≥3 לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.`;
     try { execSync(`node ${srTool} ${JSON.stringify(words)} --creates new/dart/${b}.dart --none ${JSON.stringify(why)}`, { cwd: path.join(ROOT, '..'), stdio: 'pipe' }); }
@@ -276,7 +305,7 @@ if (landedBases.length) {
   }
   for (const b of [...dup, ...noPurpose]) for (const f of [b + '.dart', b + '_test.dart', b + '.contract.md'])
     fs.rmSync(path.join(ROOT, 'dart', f), { force: true });
-  console.log(`🔎 הוכחת-חיפוש: ${alive2.length - dup.length - noPurpose.length} רשומות נכתבו · ${dup.length} מועמד-חזק קיים · ${noPurpose.length} בלי ייעוד-עברי (דורש הכרעה)`);
+  console.log(`🔎 הוכחת-חיפוש: ${alive2.length - dup.length - noPurpose.length} רשומות נכתבו · ${dup.length} מועמד-חזק קיים · ${noPurpose.length} בלי ייעוד-עברי (דורש הכרעה) · מקור-הייעוד: ${Object.entries(purposeFromCount).map(([k, v]) => k + ' ' + v).join(' · ')}`);
   console.log(`\n📦 עלו למדף: ${alive2.length - dup.length - noPurpose.length} אטומים`);
   if (drop.length) console.log('   ✗ ' + drop.slice(0, 12).join(' ') + (drop.length > 12 ? ` …+${drop.length - 12}` : ''));
 }

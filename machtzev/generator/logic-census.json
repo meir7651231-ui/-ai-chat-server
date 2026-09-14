@@ -3378,6 +3378,16 @@
   "wireable": false
  },
  {
+  "file": "dart/facet_tokens.dart",
+  "name": "facetTokens",
+  "ret": "List<String>",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/fam-enrollments.dart",
   "name": "famEnrollments",
   "ret": "List<Object?>",
@@ -4313,6 +4323,16 @@
   "wireable": false
  },
  {
+  "file": "dart/grouped.dart",
+  "name": "grouped",
+  "ret": "String",
+  "params": [
+   "int"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/group-label-of.dart",
   "name": "groupLabelOf",
   "ret": "String",
@@ -4622,6 +4642,16 @@
    "String Function(String id, OpStyle? style) styleHe"
   ],
   "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/hhmm.dart",
+  "name": "hhmm",
+  "ret": "String",
+  "params": [
+   "DateTime"
+  ],
+  "argc": 1,
   "wireable": false
  },
  {
@@ -5161,6 +5191,17 @@
   ],
   "argc": 1,
   "wireable": false
+ },
+ {
+  "file": "dart/is_order_open.dart",
+  "name": "isOrderOpen",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
  },
  {
   "file": "dart-maor/is-org-manager.dart",
@@ -7367,6 +7408,16 @@
   "wireable": false
  },
  {
+  "file": "dart/pattern_outlets.dart",
+  "name": "patternOutlets",
+  "ret": "int",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/pay-bal.dart",
   "name": "payBal",
   "ret": "num",
@@ -7961,6 +8012,16 @@
   ],
   "argc": 2,
   "wireable": false
+ },
+ {
+  "file": "dart/pseudonym.dart",
+  "name": "pseudonym",
+  "ret": "String",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
  },
  {
   "file": "dart-maor/public-site-on.dart",

@@ -13,35 +13,24 @@ const argv = process.argv.slice(2);
 const opt = (k) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : null; };
 const query = argv.filter((a, i) => !a.startsWith('--') && (i === 0 || !argv[i - 1].startsWith('--'))).join(' ').trim();
 if (!query) { console.error('usage: search-record "<מילות-חיפוש>" [--creates <path>] [--choose <id> | --none "<למה>"]'); process.exit(2); }
-const IDX = R.MACH + 'generator/atom-index-full.json', LOG = R.MACH + 'generator/logic-census.json', OUT = R.MACH + 'audit/search/';
+import { IDX, LOG, tok, scoreFor, loadOracle, layerOf } from './search-score.mjs';   // G63 · ניקוד אחד משותף לשער
 const sha = (s) => crypto.createHash('sha256').update(s).digest('hex');
-const display = JSON.parse(fs.readFileSync(IDX, 'utf8')), logic = JSON.parse(fs.readFileSync(LOG, 'utf8'));
+const { display, logic, all } = loadOracle();
 const oracle = { atomIndexSha: sha(fs.readFileSync(IDX)), logicCensusSha: sha(fs.readFileSync(LOG)), display: display.length, logic: logic.length };
-// ── טוקניזציה: עברית/לטינית, camelCase, מקפים; מסירים ו/ה/ל/ב/מ תחיליות עבריות בסיסיות ──
-const tok = (s) => String(s || '').replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase().split(/[^a-z0-9א-ת]+/).filter((t) => t.length > 1).map((t) => t.replace(/^[והלבמכש](?=[א-ת]{3,})/, ''));
 const q = [...new Set(tok(query))];
 // האורקל דו-לשוני: שמות-פונקציות/מחלקות באנגלית, purpose בעברית ⇒ שאילתה חייבת מילה אחת לפחות בכל שפה (אחרת חצי-מדף נעלם)
-if (!q.some((t) => /^[a-z]/.test(t)) || !q.some((t) => /^[א-ת]/.test(t))) { console.error('❌ השאילתה חייבת לכלול גם מילים באנגלית (שמות-אטומים/פונקציות) וגם בעברית (ייעוד) — אחרת חצי מהאורקל לא נסרק'); process.exit(1); }
-// התאמה: זהות, או קידומת של ≥4 תווים (age ⊄ image · pager) — לא substring חופשי
-const near = (x, t) => x === t || (t.length >= 4 && x.startsWith(t)) || (x.length >= 4 && t.startsWith(x));
-export function score(entry) {
-  const idT = new Set(tok(entry.id || entry.name)), fileT = new Set(tok(path.basename(entry.file || ''))), purT = new Set(tok((entry.purpose || []).join(' ')));
-  let s = 0; const hits = [];
-  for (const t of q) {
-    if ([...idT].some((x) => near(x, t))) { s += 3; hits.push(t); continue; }
-    if ([...fileT].some((x) => near(x, t))) { s += 2; hits.push(t); continue; }
-    if (purT.has(t)) { s += 1; hits.push(t); }
-  }
-  return { s, hits };
-}
-const seen = new Set();
-const all = [...display.map((e) => ({ id: e.id, layer: e.layer || 'display', file: e.file, purpose: e.purpose })), ...logic.map((e) => ({ id: e.name, layer: 'logic', file: e.file, purpose: [e.ret, ...(e.params || [])] }))].filter((e) => { const k = e.id + '|' + e.file; if (seen.has(k)) return false; seen.add(k); return true; });
+if (!q.some((t) => /^[a-z]/.test(t)) || !q.some((t) => /^[א-ת]/.test(t))) { console.error('❌ השאילתה חייבת לכלול גם מילים באנגלית (שמות-אטומים/פונקציות) וגם בעברית (ייעוד) — האורקל דו-לשוני, שאילתה חד-לשונית סורקת חצי'); process.exit(2); }
+export const score = (entry) => scoreFor(q, entry);
 const TOP = Number(opt('--top') || 15);
 const ranked = all.map((e) => ({ ...e, ...score(e) })).filter((e) => e.s > 0).sort((a, b) => b.s - a.s || a.id.localeCompare(b.id)).slice(0, TOP);
 const candidates = ranked.map((e) => ({ id: e.id, layer: e.layer, file: e.file, score: e.s, hits: e.hits }));
-const strong = candidates.filter((c) => c.score >= 3);   // התאמת-שם אחת לפחות = מועמד שחייבים להתייחס אליו
+// G63 · מועמד-חזק = **באותה שכבה** של מה שנוצר: לוגיקה (new/dart · dart-maor · atoms · dart-boxes) מול לוגיקה, תצוגה מול תצוגה.
+//   הראיה: `bestStore` (לוגיקה) נפסל כי `StorePill`/`StoreHubRow` (ווידג׳טים) קיבלו 3 על המילה «store» — אדם שמחפש פונקציה לא
+//   רואה בכפתור כפילות. האורקל נשאר מאוחד (כל השכבות מדורגות ומתועדות); רק סף-«חייב-להתייחס» הוא שכבתי. בלי --creates ⇒ כל השכבות (כמו קודם).
+const createsLayer = layerOf(opt('--creates'));
+const strong = candidates.filter((c) => c.score >= 3 && (!createsLayer || c.layer === createsLayer));   // התאמת-שם אחת לפחות = מועמד שחייבים להתייחס אליו
 const choose = opt('--choose'), none = opt('--none');
-const record = { v: 1, ts: new Date().toISOString(), query, tokens: q, oracle, candidates, strong: strong.map((c) => c.id), creates: opt('--creates') || null, chosen: null, why: null };
+const record = { v: 1, ts: new Date().toISOString(), query, tokens: q, oracle, candidates, strong: strong.map((c) => c.id), strongLayer: createsLayer, strongOtherLayers: candidates.filter((c) => c.score >= 3 && createsLayer && c.layer !== createsLayer).map((c) => c.id), creates: opt('--creates') || null, chosen: null, why: null };
 if (choose) { if (!candidates.some((c) => c.id === choose)) { console.error(`❌ --choose ${choose} אינו ברשימת-המועמדים — הבחירה חייבת לצאת מהחיפוש`); process.exit(1); } record.chosen = choose; }
 else if (none !== null) {
   if ((none || '').replace(/\s+/g, '').length < 40) { console.error('❌ --none דורש הסבר ≥40 תווים: למה המועמדים לא משרתים את המטרה'); process.exit(1); }

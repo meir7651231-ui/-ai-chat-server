@@ -1,0 +1,67 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T14:41:05.358Z",
+ "query": "hhmm נוכחות",
+ "tokens": [
+  "hhmm",
+  "נוכחות"
+ ],
+ "oracle": {
+  "atomIndexSha": "1fa61e720162f76820b61afafe34d8834000054ca1ff14f3f68e37a8d8e51612",
+  "logicCensusSha": "9cfe3bce28ed7cd00d51a723277b7ffcd744afa6d4093516efe3c9a41abbd0da",
+  "display": 1881,
+  "logic": 957
+ },
+ "candidates": [
+  {
+   "id": "CourierAttendanceSendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_send_report_button.dart",
+   "score": 1,
+   "hits": [
+    "נוכחות"
+   ]
+  },
+  {
+   "id": "CourierAttendanceTableRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_table_row.dart",
+   "score": 1,
+   "hits": [
+    "נוכחות"
+   ]
+  },
+  {
+   "id": "LocationButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/location_button.dart",
+   "score": 1,
+   "hits": [
+    "נוכחות"
+   ]
+  },
+  {
+   "id": "SendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/send_report_button.dart",
+   "score": 1,
+   "hits": [
+    "נוכחות"
+   ]
+  },
+  {
+   "id": "TodayStat",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/today_stat.dart",
+   "score": 1,
+   "hits": [
+    "נוכחות"
+   ]
+  }
+ ],
+ "strong": [],
+ "creates": "new/dart/hhmm.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). האורקל המאוחד לא החזיר מועמד בציון ≥3 לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.",
+ "sig": "63dfcbf40ae821bf9d8f89994704032db3d90aec8d2b0b55415e447e501191b5"
+}

@@ -1,0 +1,255 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T14:45:05.233Z",
+ "query": "grouped מוצרים הזמנות אתרים פריטים התקבלה בהכנה",
+ "tokens": [
+  "grouped",
+  "וצרים",
+  "זמנות",
+  "אתרים",
+  "פריטים",
+  "תקבלה",
+  "הכנה"
+ ],
+ "oracle": {
+  "atomIndexSha": "1fa61e720162f76820b61afafe34d8834000054ca1ff14f3f68e37a8d8e51612",
+  "logicCensusSha": "9cfe3bce28ed7cd00d51a723277b7ffcd744afa6d4093516efe3c9a41abbd0da",
+  "display": 1881,
+  "logic": 957
+ },
+ "candidates": [
+  {
+   "id": "AdvanceButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/advance_button.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "ApprovalButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/approval_button.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "AppSettingsBody",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/app_settings_body.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "Dot",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/dot.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "JourneyEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/journey_empty.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "ManageHint",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/manage_hint.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "ManageIntro",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/manage_intro.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "ManagerDashboardCountBadge",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/manager_dashboard_count_badge.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "ManagerDashboardCreditBar",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/manager_dashboard_credit_bar.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "ManageRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/manage_row.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "ManageSection",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/manage_section.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "MiniTracker",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/mini_tracker.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "PipelineRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/pipeline_row.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "ProductTreeBody",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/product_tree_body.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  },
+  {
+   "id": "RegressionBody",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/regression_body.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "זמנות",
+    "אתרים",
+    "פריטים",
+    "תקבלה",
+    "הכנה"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "AdvanceButton",
+  "ApprovalButton",
+  "AppSettingsBody",
+  "Dot",
+  "JourneyEmpty",
+  "ManageHint",
+  "ManageIntro",
+  "ManagerDashboardCountBadge",
+  "ManagerDashboardCreditBar",
+  "ManageRow",
+  "ManageSection",
+  "MiniTracker",
+  "PipelineRow",
+  "ProductTreeBody",
+  "RegressionBody"
+ ],
+ "creates": "new/dart/grouped.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). האורקל המאוחד לא החזיר מועמד בציון ≥3 לשאילתה הזו, כלומר אין במדף אטום שמשרת את הייעוד — ולכן נוצר חדש.",
+ "sig": "8feaccb45e318cb886ceaffcb3a86cad4d7ec40e6be75840043cfa63c4f69ef0"
+}

@@ -1,26 +1,26 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2437** אטומים ממופים (תצוגה 932 · לוגיקה 957 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2443** אטומים ממופים (תצוגה 932 · לוגיקה 963 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
 | data:strings | 349 | academic-year-label-strings · adar-norm-strings · add-org-member-strings · age-of-strings · amount-in-words-strings |
-| format | 249 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
+| format | 252 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
 | action | 180 | AccordionSectionCard · ActionButton · ActionCard · ActionRow · AddTradeButton |
 | group | 171 | ActionChipRail · AiCardTop · AiMdHead · AnimatedEmpty · ApprovalTaskCard |
 | summary | 159 | allOffConfig · applyAyinNames · applyAyinSheet · applyEntityPartial · applyMetaPartial |
 | collection | 151 | activeByMonth · allSupPhones · allowedDesignationsFor · appendCall · attentionItems |
 | transform | 120 | actionDescriptor · actionFromString · activeDriver · auditRows · brandById |
-| predicate | 111 | accessPasswordMatches · assignmentRedeemed · ayinActionVisible · ayinActive · canAddPhoto |
+| predicate | 112 | accessPasswordMatches · assignmentRedeemed · ayinActionVisible · ayinActive · canAddPhoto |
 | text | 110 | AccessoryRow · AccessoryTile · AiCardSub · AiServerNote · AppSettingsBody |
 | container | 107 | AccordionPanel · AdvanceButton · AnimatedTabs · AssignButton · AuroraField |
 | fact | 85 | AlertBanner · AnimatedToggle · BadgePill · CaPill · CatalogCountBadge |
 | data:terms | 85 | absence-reason-chips-terms · annual-all-lines-terms · annual-report-terms · audit-cat-colors-terms · audit-report-lines-terms |
-| measure | 76 | ageOf · balanceOf · band · boqLineAmount · boqTotal |
+| measure | 77 | ageOf · balanceOf · band · boqLineAmount · boqTotal |
 | data:sockets | 74 | amount-in-words-sockets · annual-report-lines-sockets · block-reason-sockets · build-course-daily-rows-sockets · build-custom-export-sockets |
 | stat | 42 | BareStat · Callout · FinCallout · FinRow · ForgeAreaChart |
 | panel | 41 | AiCard · CaCard · ChipScroll · DismissibleFavRow · DsCardElevated |
-| lines | 40 | absenceReasonChips · allDonationPurposes · allLines · annualAllLines · annualReportLines |
+| lines | 41 | absenceReasonChips · allDonationPurposes · allLines · annualAllLines · annualReportLines |
 | data:table | 40 | advance-status-data · amount-in-words-data · ayin-sheet-rows · block-reason-data · build-course-daily-rows-data |
 | bars | 39 | BarChart · DsBars · DsRecordCard · Forge12Atoms · Forge14Atoms |
 | field | 38 | ChatSettingsSwitchRow · CourierSettingsSwitchRow · DsDateField · DsEnumField · DsMultiSelect |

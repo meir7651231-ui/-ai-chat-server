@@ -1982,3 +1982,7 @@
 {"ts":1789139606,"attempt":1789139606,"gate":"search-proof","path":"new/dart/hhmm.dart","sha":"6dfead629127e53179c1de550e73bb1e9d747264","blob_before":null,"resolved":true}
 {"ts":1789139826,"attempt":1789139826,"gate":"pins","path":null,"sha":"6dfead629127e53179c1de550e73bb1e9d747264","blob_before":null,"resolved":true}
 {"ts":1789389632,"attempt":1789389632,"gate":"pins","path":null,"sha":"75627501db06d17ccfd86e4f01827ec2a2d4df2c","blob_before":null,"resolved":true}
+{"ts":1789397967,"attempt":1789397967,"gate":"search-proof","path":"new/dart/facet_tokens.dart","sha":"a33ee71428b76c463578dada37286ebf44b40c53","blob_before":null,"resolved":true}
+{"ts":1789397967,"attempt":1789397967,"gate":"search-proof","path":"new/dart/facet_tokens_test.dart","sha":"a33ee71428b76c463578dada37286ebf44b40c53","blob_before":null,"resolved":true}
+{"ts":1789397967,"attempt":1789397967,"gate":"search-proof","path":"new/dart/grouped.dart","sha":"a33ee71428b76c463578dada37286ebf44b40c53","blob_before":null,"resolved":true}
+{"ts":1789398292,"attempt":1789398292,"gate":"index-complete","path":null,"sha":"a33ee71428b76c463578dada37286ebf44b40c53","blob_before":null,"resolved":true}
