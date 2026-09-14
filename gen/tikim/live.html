@@ -1,28 +1,73 @@
 <title>תיקים · המחולל</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap">
 <style>
-:root{--bg:#f4f3ee;--ink:#1b1a17;--mute:#6f6a5f;--line:#d7d2c6;--card:#fbfaf7;--acc:#1f5f5b;--ok:#2d7a3a;--none:#a33d1a;--code:#eeece5}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#141518;--ink:#ebe8e0;--mute:#a09b8f;--line:#2f3238;--card:#1c1e22;--acc:#62c2ba;--ok:#6fcf7c;--none:#f08a5b;--code:#101114}}
-:root[data-theme=dark]{--bg:#141518;--ink:#ebe8e0;--mute:#a09b8f;--line:#2f3238;--card:#1c1e22;--acc:#62c2ba;--ok:#6fcf7c;--none:#f08a5b;--code:#101114}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Heebo,Arial,sans-serif;direction:rtl;padding-block:20px;padding-inline:20px}
-code,pre{font-family:"JetBrains Mono",Consolas,monospace;font-size:12.5px}code{background:var(--code);padding:1px 5px;border-radius:3px}pre{background:var(--code);padding:10px;border-radius:5px;overflow-x:auto;direction:ltr;text-align:left;max-height:340px}
-h1{font-size:26px;margin:0}h2{font-size:18px;margin:0 0 10px;display:flex;gap:10px;align-items:baseline}h2 .n{font-size:13px;color:var(--mute);font-weight:400}h4,h5{margin:6px 0}
-.wrap{max-width:1180px;margin:0 auto}.head{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:baseline;justify-content:space-between;margin-bottom:18px}.head .mute{font-size:13px}
-.mute{color:var(--mute)}.step{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:12px 0}
-table{border-collapse:collapse}td,th{padding:4px 8px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}th{color:var(--mute);font-weight:500;font-size:13px}
-.ents{display:flex;flex-wrap:wrap;gap:16px}.ent{min-width:260px}
-details.proof{border-top:1px solid var(--line);padding:8px 0}details.proof summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
-.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--ok);flex:none;position:relative;top:1px}details.none .dot,.dot.off{background:var(--none)}td.num{font-variant-numeric:tabular-nums;text-align:left}
-.tally{margin-inline-start:auto;font-size:13px;color:var(--mute)}.ex{padding:6px 18px 4px}.pill{display:inline-block;background:var(--code);border-radius:99px;padding:0 9px;font-size:12.5px;margin:2px}
-.frame{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}iframe{width:100%;height:720px;border:0;display:block}
-.spec pre{direction:rtl;text-align:right;font-family:Heebo,Arial,sans-serif;font-size:14px}
-.notes{margin:8px 0;padding-inline-start:18px;color:var(--none)}.notes li{margin:2px 0}
-.stat{display:flex;flex-wrap:wrap;gap:12px}.stat div{background:var(--code);border-radius:6px;padding:8px 14px}.stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
-@media (max-width:600px){iframe{height:560px}}
+:root{--canvas:#FFFFFF;--sunken:#F7F6F3;--surface:#FFFFFF;--raised:#F7F6F3;--raised2:#EFEDE8;--ink:#37352F;--mut:rgba(55, 53, 47, 0.6);--faint:rgba(55, 53, 47, 0.4);--hair:rgba(0, 0, 0, 0.08);--hair2:rgba(0, 0, 0, 0.05);--on-a:#FFFFFF;--hi:#FFFFFF;--shade:rgba(0, 0, 0, 0);--ok:#1B8A4C;--warn:#C98A00;--err:#C8321E;--gold:#C98A00;--a-hi:#2F6FED;--a:#2F6FED;--a-800:#1E4FB8;--gl:rgba(47, 111, 237, 0);--c2:#2F6FED;--c3:#2F6FED;--bg:var(--canvas);--card:var(--surface);--raise:var(--raised);--code:var(--raised2);--mute:var(--mut);--line:var(--hair);--acc:var(--a);--acc-hi:var(--a-hi);--acc-ink:var(--on-a);--none:var(--err);--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;--r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:22px;--r-pill:999px;--t-screen:22px;--lh-screen:1.25;--w-screen:600;--t-section:15px;--lh-section:1.3;--w-section:700;--t-body:16px;--lh-body:1.5;--w-body:400;--t-dense:14px;--lh-dense:1.45;--w-dense:400;--t-meta:13px;--lh-meta:1.4;--w-meta:400;--t-micro:11.5px;--lh-micro:1.35;--w-micro:500;--row-compact:32px;--row-cozy:40px;--row-roomy:52px;--pad-compact:4px;--pad-cozy:8px;--pad-roomy:12px;--m-fast:140ms;--m-base:240ms;--m-slow:420ms;--m-ambient:6000ms;--row-h:var(--row-cozy);--cell-pad:var(--pad-cozy);--measure:720px;--measure-report:1180px;--focus-w:2px;--focus-off:2px;--font-he:Heebo, Arial, sans-serif;--font-mono:"JetBrains Mono", Consolas, monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236, 233, 226, 0.09);--hair2:rgba(236, 233, 226, 0.05);--on-a:#0B0B0D;--hi:#FFFFFF;--shade:#000000;--ok:#43D08C;--warn:#E6B84F;--err:#E0574E;--gold:#E6C766;--a-hi:#2F6FED;--a:#2F6FED;--a-800:#1E4FB8;--gl:rgba(47, 111, 237, 0);--c2:#2F6FED;--c3:#2F6FED}}
+:root[data-theme=dark]{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236, 233, 226, 0.09);--hair2:rgba(236, 233, 226, 0.05);--on-a:#0B0B0D;--hi:#FFFFFF;--shade:#000000;--ok:#43D08C;--warn:#E6B84F;--err:#E0574E;--gold:#E6C766;--a-hi:#2F6FED;--a:#2F6FED;--a-800:#1E4FB8;--gl:rgba(47, 111, 237, 0);--c2:#2F6FED;--c3:#2F6FED}
+[data-density=compact]{--row-h:var(--row-compact);--cell-pad:var(--pad-compact)}
+[data-density=cozy]{--row-h:var(--row-cozy);--cell-pad:var(--pad-cozy)}
+[data-density=roomy]{--row-h:var(--row-roomy);--cell-pad:var(--pad-roomy)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:var(--w-body) var(--t-body)/var(--lh-body) var(--font-he);direction:rtl;padding-block:var(--s4);padding-inline:var(--s4)}
+h1{font:var(--w-screen) var(--t-screen)/var(--lh-screen) var(--font-he);margin:0 0 var(--s1)}
+h2{font:var(--w-section) var(--t-section)/var(--lh-section) var(--font-he);margin:0 0 var(--s2);display:flex;gap:var(--s3);align-items:baseline;flex-wrap:wrap}
+h2 small,h2 .n{font-size:var(--t-meta);color:var(--mute);font-weight:400}
+.mute{color:var(--mute)}.faint{color:var(--faint)}
+.wrap{max-width:var(--measure-report);margin:0 auto}
+.card,.step,.entity{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:var(--s3) var(--s4);margin:var(--s3) 0}
+a{color:var(--acc)}
+code{background:var(--code);padding:0 var(--s1);border-radius:var(--r-sm);font-family:var(--font-mono);font-size:var(--t-micro)}
+pre{background:var(--code);padding:var(--s3);border-radius:var(--r-sm);overflow-x:auto;font-family:var(--font-mono);font-size:var(--t-micro)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:right;padding:var(--cell-pad) var(--s2);border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr{height:var(--row-h)}
+tbody tr:hover{background:var(--raise)}
+thead th{position:sticky;top:0;background:var(--card);color:var(--mute);font-weight:var(--w-section);font-size:var(--t-meta);z-index:1}
+td.num,th.num{font-variant-numeric:tabular-nums}
+bdi{unicode-bidi:isolate}
+td.num,th.num,.num{unicode-bidi:isolate}
+form.row{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:end;margin-bottom:var(--s3)}
+label{display:flex;flex-direction:column;font-size:var(--t-meta);color:var(--mute);gap:var(--s1)}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s2) var(--s2);min-width:calc(var(--s1) * 30)}
+input:hover,select:hover,textarea:hover{border-color:var(--mute)}
+button{font:inherit;font-weight:var(--w-section);background:var(--acc);color:var(--acc-ink);border:0;border-radius:var(--r-sm);padding:var(--s2) var(--s4);cursor:pointer;transition:filter var(--m-fast) ease}
+button:hover{filter:brightness(1.08)}
+button.x,button.ghost{background:transparent;color:var(--mute);padding:0 var(--s2)}
+button.ghost:hover{background:var(--raise);color:var(--ink)}
+button[disabled],input[disabled],select[disabled]{opacity:.55;cursor:not-allowed}
+:focus-visible{outline:var(--focus-w) solid var(--acc-hi);outline-offset:var(--focus-off)}
+details{border-top:1px solid var(--line);padding:var(--s2) 0}summary{cursor:pointer}
+.pill,.chip{display:inline-block;background:var(--code);border-radius:var(--r-pill);padding:0 var(--s2);font-size:var(--t-meta);margin:var(--s1) 0}
+.chip.ok{color:var(--ok)}.chip.warn{color:var(--warn)}.chip.err{color:var(--err)}
+.empty{color:var(--mute);padding:var(--s4) 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{body{background:#fff;color:#000;padding:0}.noprint,button,input,select{display:none!important}table{page-break-inside:auto}tr,td,th{page-break-inside:avoid}thead{display:table-header-group}}
+body{padding-block:var(--s5);padding-inline:var(--s5)}
+h1{font-size:calc(var(--t-screen) + var(--s1))}
+pre{direction:ltr;text-align:left;max-height:calc(var(--s7) * 7);white-space:pre}
+h4,h5{margin:var(--s2) 0}
+.head{display:flex;flex-wrap:wrap;gap:var(--s3) var(--s5);align-items:baseline;justify-content:space-between;margin-bottom:var(--s4)}
+.head .mute{font-size:var(--t-meta)}
+.ents{display:flex;flex-wrap:wrap;gap:var(--s4)}.ent{min-width:calc(var(--s1) * 65)}
+details.proof summary{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:baseline}
+.dot{display:inline-block;width:var(--s3);height:var(--s3);border-radius:var(--r-pill);background:var(--ok);flex:none;position:relative;top:1px}
+details.none .dot,.dot.off{background:var(--none)}
+td.num{text-align:left}
+.tally{margin-inline-start:auto;font-size:var(--t-meta);color:var(--mute)}
+.ex{padding:var(--s2) var(--s4) var(--s1)}
+.frame{border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;background:var(--card)}
+iframe{width:100%;height:calc(var(--s7) * 15);border:0;display:block}
+.spec pre{direction:rtl;text-align:right;font-family:var(--font-he);font-size:var(--t-dense);white-space:pre-wrap}
+.notes{margin:var(--s2) 0;padding-inline-start:var(--s4);color:var(--none)}.notes li{margin:var(--s1) 0}
+.stat{display:flex;flex-wrap:wrap;gap:var(--s3)}
+.stat div{background:var(--code);border-radius:var(--r-sm);padding:var(--s2) var(--s3)}
+.stat b{display:block;font-size:var(--t-screen);font-variant-numeric:tabular-nums}
+@media (max-width:600px){iframe{height:calc(var(--s7) * 11)}}
 </style>
 <div class="wrap">
 <div class="head"><div><h1>תיקים</h1><div class="mute">המחולל הטהור · ספק ⇒ צרכים מצורה ⇒ הוכחה-בריצה מול המדף ⇒ הרכבה · אפס מודל</div></div>
-<div class="stat"><div><b>1096</b>אטומי-JS במדף</div><div><b>394</b>אטומי-Dart-בלבד</div><div><b>3414</b>ריצות-הוכחה</div><div><b>6</b>אטומים הורכבו</div><div><b>0</b>צרכים בלי הוכחה</div><div><b>12708</b>ms</div></div></div>
+<div class="stat"><div><b>1096</b>אטומי-JS במדף</div><div><b>394</b>אטומי-Dart-בלבד</div><div><b>3414</b>ריצות-הוכחה</div><div><b>6</b>אטומים הורכבו</div><div><b>0</b>צרכים בלי הוכחה</div><div><b>13247</b>ms</div></div></div>
 
 <section class="step spec"><h2>1 · המשפט שלך <span class="n">כמו שנכתב</span></h2><pre>מעקב תיקים: לכל לקוח יש שם, טלפון וכתובת; לכל תיק יש לקוח, נושא, סכום ותאריך פתיחה; שלבים: התקבל, בטיפול, סגור</pre></section>
 <section class="step spec"><h2>1½ · הבנתי כך <span class="n">מבנה בלבד — רבים=ישות, יחיד=שדה, סמן «יש/עם», רמזי-צורה מדאטה. אם טעיתי — תקן את הספק המדויק</span></h2><pre>אפליקציה: תיקים
@@ -50,35 +95,35 @@ details.proof{border-top:1px solid var(--line);padding:8px 0}details.proof summa
 <div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 252</span> <span class="pill">לא מתקמפל בבידוד 5</span> <span class="pill">פלט שונה 71</span> <span class="pill">זריקה/טיפוס 66</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>phone-format</b> — טלפון ⇒ תצוגה ישראלית עם מקף <span class="mute">⇐ לקוח.טלפון</span>
-<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>format-israeli-phone</code> · Dart-בלבד: נוסו 394 · עברו 0 · 22ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>format-israeli-phone</code> · Dart-בלבד: נוסו 394 · עברו 0 · 23ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;0501234567&quot;]</code></td><td>⇒</td><td><code>&quot;050-1234567&quot;</code></td></tr><tr><td><code>[&quot;+972501234567&quot;]</code></td><td>⇒</td><td><code>&quot;050-1234567&quot;</code></td></tr><tr><td><code>[&quot;031234567&quot;]</code></td><td>⇒</td><td><code>&quot;03-1234567&quot;</code></td></tr><tr><td><code>[&quot;050-1234567&quot;]</code></td><td>⇒</td><td><code>&quot;050-1234567&quot;</code></td></tr><tr><td><code>[&quot;אבג&quot;]</code></td><td>⇒</td><td><code>&quot;אבג&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>format-israeli-phone</code> <span class="mute">(1 ארג׳)  · קבועים מאטום-הדאטה <code>format-israeli-phone-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 355</span> <span class="pill">פלט שונה 200</span> <span class="pill">אורך-קריאה 13</span></p></div>
 <div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 252</span> <span class="pill">לא מתקמפל בבידוד 5</span> <span class="pill">פלט שונה 67</span> <span class="pill">זריקה/טיפוס 70</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>money</b> — מספר ⇒ תצוגת-שקלים עם מפרידי-אלפים <span class="mute">⇐ תיק.סכום</span>
-<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>shekel</code> · Dart-בלבד: נוסו 394 · עברו 1 · 18ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>shekel</code> · Dart-בלבד: נוסו 394 · עברו 1 · 17ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[1234567]</code></td><td>⇒</td><td><code>&quot;₪1,234,567&quot;</code></td></tr><tr><td><code>[0]</code></td><td>⇒</td><td><code>&quot;₪0&quot;</code></td></tr><tr><td><code>[12]</code></td><td>⇒</td><td><code>&quot;₪12&quot;</code></td></tr><tr><td><code>[999.6]</code></td><td>⇒</td><td><code>&quot;₪1,000&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>shekel</code> <span class="mute">(1 ארג׳)  · קבועים מאטום-הדאטה <code>shekel-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 396</span> <span class="pill">פלט שונה 159</span> <span class="pill">אורך-קריאה 13</span></p></div>
 <div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><ol><li><code>f_money</code> <span class="mute">num ⇒ String · new/dart/f_money.dart</span></li></ol><p class="mute">עבר את ההוכחה. לא ניתן להטביע ב-HTML (זה Dart) — זמין למסלול-Flutter.</p><p><span class="pill">אורך-קריאה 252</span> <span class="pill">לא מתקמפל בבידוד 5</span> <span class="pill">זריקה/טיפוס 107</span> <span class="pill">פלט שונה 29</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>fmt-date</b> — תאריך-ISO ⇒ יום/חודש/שנה <span class="mute">⇐ תיק.תאריך פתיחה</span>
-<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>fmt-date</code> · Dart-בלבד: נוסו 394 · עברו 0 · 18ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>fmt-date</code> · Dart-בלבד: נוסו 394 · עברו 0 · 17ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>&quot;14/09/2026&quot;</code></td></tr><tr><td><code>[&quot;2026-01-05&quot;]</code></td><td>⇒</td><td><code>&quot;05/01/2026&quot;</code></td></tr><tr><td><code>[&quot;&quot;]</code></td><td>⇒</td><td><code>&quot;—&quot;</code></td></tr><tr><td><code>[null]</code></td><td>⇒</td><td><code>&quot;—&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>fmt-date</code> <span class="mute">(1 ארג׳) תאריך-ISO ⇒ תצוגה ישראלית dd/mm/yyyy. ריק/שבור ⇒ &quot;—&quot;. · קבועים מאטום-הדאטה <code>fmt-date-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 360</span> <span class="pill">פלט שונה 195</span> <span class="pill">אורך-קריאה 13</span></p></div>
 <div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 252</span> <span class="pill">לא מתקמפל בבידוד 5</span> <span class="pill">פלט שונה 71</span> <span class="pill">זריקה/טיפוס 66</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>days-since</b> — ימים שעברו מתאריך עד היום (שלילי = עתיד) <span class="mute">⇐ תיק.תאריך פתיחה</span>
-<span class="tally">JS: נוסו 569 · עברו 2 · נבחר <code>cockpit-days-since</code> · Dart-בלבד: נוסו 394 · עברו 0 · 18ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 2 · נבחר <code>cockpit-days-since</code> · Dart-בלבד: נוסו 394 · עברו 0 · 16ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;2026-09-01&quot;,&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>13</code></td></tr><tr><td><code>[&quot;2026-09-14&quot;,&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>0</code></td></tr><tr><td><code>[&quot;2026-09-15&quot;,&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>-1</code></td></tr><tr><td><code>[&quot;2025-09-14&quot;,&quot;2026-09-14&quot;]</code></td><td>⇒</td><td><code>365</code></td></tr><tr><td><code>[&quot;2024-02-28&quot;,&quot;2024-03-01&quot;]</code></td><td>⇒</td><td><code>2</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>cockpit-days-since</code> <span class="mute">(2 ארג׳) ימים בין תאריך-ISO ליום-הייחוס (חיובי = בעבר, שלילי = עתיד). `Infinity` לתאריך ריק או לא-תקין. · קבועים מאטום-הדאטה <code>cockpit-days-since-strings</code></span></li><li><code>intel-day-diff</code> <span class="mute">(2 ארג׳) הפרש-ימים (Date.parse, slice(0,10)). Infinity לריק/לא-תקין. · קבועים מאטום-הדאטה <code>intel-day-diff-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 295</span> <span class="pill">אורך-קריאה 158</span> <span class="pill">פלט שונה 114</span></p></div>
 <div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 275</span> <span class="pill">זריקה/טיפוס 111</span> <span class="pill">פלט שונה 8</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>sum</b> — סכום שדה-מספר על כל השורות <span class="mute">⇐ סכום תיק.סכום</span>
-<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>grand-total</code> · Dart-בלבד: נוסו 394 · עברו 0 · 18ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>grand-total</code> · Dart-בלבד: נוסו 394 · עברו 0 · 15ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[[{&quot;a&quot;:1},{&quot;a&quot;:2}],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>3</code></td></tr><tr><td><code>[[],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>0</code></td></tr><tr><td><code>[[{&quot;a&quot;:5}],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>5</code></td></tr><tr><td><code>[[{&quot;a&quot;:1.5},{&quot;a&quot;:2.5},{&quot;a&quot;:0}],&quot;ƒ x=&gt;x.a&quot;]</code></td><td>⇒</td><td><code>4</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>grand-total</code> <span class="mute">(2 ארג׳) הסכום הכולל של כל הקופות — reduce מ-0 של סכום-כל-קופה דרך השקע.</span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 276</span> <span class="pill">אורך-קריאה 158</span> <span class="pill">פלט שונה 134</span></p></div>
@@ -162,28 +207,66 @@ function grandTotal(boxes, boxTotal) {
 <div class="frame"><iframe title="תיקים" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;he&quot; dir=&quot;rtl&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
 &lt;title&gt;תיקים&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap&quot;&gt;
 &lt;style&gt;
-:root{--bg:#f7f6f2;--ink:#1d1c19;--mute:#6b675e;--line:#d9d5cb;--card:#ffffff;--acc:#1f5f5b;--acc-ink:#ffffff;--warn:#8a3b12}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}}
-:root[data-theme=dark]{--bg:#16171a;--ink:#ece9e1;--mute:#a19c90;--line:#33363c;--card:#1f2125;--acc:#5cbcb4;--acc-ink:#0f1f1e}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Heebo,Arial,sans-serif;padding-block:16px;padding-inline:16px}
-h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:0 0 8px}h2 small{color:var(--mute);font-weight:400}
-.top{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
-.kpi{background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:6px}.kpi .v{display:block;font-size:22px;font-variant-numeric:tabular-nums;font-weight:600}.kpi .l{color:var(--mute);font-size:13px}
-.kpi.none .v{color:var(--warn);font-size:14px}
-.exp{font-size:11px;padding:0 5px;border-radius:99px;background:var(--line)}.exp.bad{background:#b3261e;color:#fff}.exp.warn{background:#e0a100;color:#1d1c19}
-.entity{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px;margin:12px 0}
-form.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:10px}label{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
-input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;min-width:120px}
-button{font:inherit;background:var(--acc);color:var(--acc-ink);border:0;border-radius:4px;padding:7px 14px;cursor:pointer}button.x{background:transparent;color:var(--mute);padding:2px 6px}
-.tbl{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--mute);font-weight:500;font-size:13px}
-td.num{font-variant-numeric:tabular-nums}.search{min-width:220px}
-.foot{color:var(--mute);font-size:12px;margin-top:16px}
+:root{--canvas:#FFFFFF;--sunken:#F7F6F3;--surface:#FFFFFF;--raised:#F7F6F3;--raised2:#EFEDE8;--ink:#37352F;--mut:rgba(55, 53, 47, 0.6);--faint:rgba(55, 53, 47, 0.4);--hair:rgba(0, 0, 0, 0.08);--hair2:rgba(0, 0, 0, 0.05);--on-a:#FFFFFF;--hi:#FFFFFF;--shade:rgba(0, 0, 0, 0);--ok:#1B8A4C;--warn:#C98A00;--err:#C8321E;--gold:#C98A00;--a-hi:#2F6FED;--a:#2F6FED;--a-800:#1E4FB8;--gl:rgba(47, 111, 237, 0);--c2:#2F6FED;--c3:#2F6FED;--bg:var(--canvas);--card:var(--surface);--raise:var(--raised);--code:var(--raised2);--mute:var(--mut);--line:var(--hair);--acc:var(--a);--acc-hi:var(--a-hi);--acc-ink:var(--on-a);--none:var(--err);--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;--r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:22px;--r-pill:999px;--t-screen:22px;--lh-screen:1.25;--w-screen:600;--t-section:15px;--lh-section:1.3;--w-section:700;--t-body:16px;--lh-body:1.5;--w-body:400;--t-dense:14px;--lh-dense:1.45;--w-dense:400;--t-meta:13px;--lh-meta:1.4;--w-meta:400;--t-micro:11.5px;--lh-micro:1.35;--w-micro:500;--row-compact:32px;--row-cozy:40px;--row-roomy:52px;--pad-compact:4px;--pad-cozy:8px;--pad-roomy:12px;--m-fast:140ms;--m-base:240ms;--m-slow:420ms;--m-ambient:6000ms;--row-h:var(--row-cozy);--cell-pad:var(--pad-cozy);--measure:720px;--measure-report:1180px;--focus-w:2px;--focus-off:2px;--font-he:Heebo, Arial, sans-serif;--font-mono:&quot;JetBrains Mono&quot;, Consolas, monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236, 233, 226, 0.09);--hair2:rgba(236, 233, 226, 0.05);--on-a:#0B0B0D;--hi:#FFFFFF;--shade:#000000;--ok:#43D08C;--warn:#E6B84F;--err:#E0574E;--gold:#E6C766;--a-hi:#2F6FED;--a:#2F6FED;--a-800:#1E4FB8;--gl:rgba(47, 111, 237, 0);--c2:#2F6FED;--c3:#2F6FED}}
+:root[data-theme=dark]{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236, 233, 226, 0.09);--hair2:rgba(236, 233, 226, 0.05);--on-a:#0B0B0D;--hi:#FFFFFF;--shade:#000000;--ok:#43D08C;--warn:#E6B84F;--err:#E0574E;--gold:#E6C766;--a-hi:#2F6FED;--a:#2F6FED;--a-800:#1E4FB8;--gl:rgba(47, 111, 237, 0);--c2:#2F6FED;--c3:#2F6FED}
+[data-density=compact]{--row-h:var(--row-compact);--cell-pad:var(--pad-compact)}
+[data-density=cozy]{--row-h:var(--row-cozy);--cell-pad:var(--pad-cozy)}
+[data-density=roomy]{--row-h:var(--row-roomy);--cell-pad:var(--pad-roomy)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:var(--w-body) var(--t-body)/var(--lh-body) var(--font-he);direction:rtl;padding-block:var(--s4);padding-inline:var(--s4)}
+h1{font:var(--w-screen) var(--t-screen)/var(--lh-screen) var(--font-he);margin:0 0 var(--s1)}
+h2{font:var(--w-section) var(--t-section)/var(--lh-section) var(--font-he);margin:0 0 var(--s2);display:flex;gap:var(--s3);align-items:baseline;flex-wrap:wrap}
+h2 small,h2 .n{font-size:var(--t-meta);color:var(--mute);font-weight:400}
+.mute{color:var(--mute)}.faint{color:var(--faint)}
+.wrap{max-width:var(--measure-report);margin:0 auto}
+.card,.step,.entity{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:var(--s3) var(--s4);margin:var(--s3) 0}
+a{color:var(--acc)}
+code{background:var(--code);padding:0 var(--s1);border-radius:var(--r-sm);font-family:var(--font-mono);font-size:var(--t-micro)}
+pre{background:var(--code);padding:var(--s3);border-radius:var(--r-sm);overflow-x:auto;font-family:var(--font-mono);font-size:var(--t-micro)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:right;padding:var(--cell-pad) var(--s2);border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr{height:var(--row-h)}
+tbody tr:hover{background:var(--raise)}
+thead th{position:sticky;top:0;background:var(--card);color:var(--mute);font-weight:var(--w-section);font-size:var(--t-meta);z-index:1}
+td.num,th.num{font-variant-numeric:tabular-nums}
+bdi{unicode-bidi:isolate}
+td.num,th.num,.num{unicode-bidi:isolate}
+form.row{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:end;margin-bottom:var(--s3)}
+label{display:flex;flex-direction:column;font-size:var(--t-meta);color:var(--mute);gap:var(--s1)}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s2) var(--s2);min-width:calc(var(--s1) * 30)}
+input:hover,select:hover,textarea:hover{border-color:var(--mute)}
+button{font:inherit;font-weight:var(--w-section);background:var(--acc);color:var(--acc-ink);border:0;border-radius:var(--r-sm);padding:var(--s2) var(--s4);cursor:pointer;transition:filter var(--m-fast) ease}
+button:hover{filter:brightness(1.08)}
+button.x,button.ghost{background:transparent;color:var(--mute);padding:0 var(--s2)}
+button.ghost:hover{background:var(--raise);color:var(--ink)}
+button[disabled],input[disabled],select[disabled]{opacity:.55;cursor:not-allowed}
+:focus-visible{outline:var(--focus-w) solid var(--acc-hi);outline-offset:var(--focus-off)}
+details{border-top:1px solid var(--line);padding:var(--s2) 0}summary{cursor:pointer}
+.pill,.chip{display:inline-block;background:var(--code);border-radius:var(--r-pill);padding:0 var(--s2);font-size:var(--t-meta);margin:var(--s1) 0}
+.chip.ok{color:var(--ok)}.chip.warn{color:var(--warn)}.chip.err{color:var(--err)}
+.empty{color:var(--mute);padding:var(--s4) 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{body{background:#fff;color:#000;padding:0}.noprint,button,input,select{display:none!important}table{page-break-inside:auto}tr,td,th{page-break-inside:avoid}thead{display:table-header-group}}
+
+.top{display:flex;flex-wrap:wrap;gap:var(--s3);align-items:baseline;justify-content:space-between}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(var(--s1) * 40),1fr));gap:var(--s3);margin:var(--s4) 0}
+.kpi{background:var(--card);border:1px solid var(--line);padding:var(--s3);border-radius:var(--r-md)}
+.kpi .v{display:block;font:var(--w-screen) var(--t-screen)/var(--lh-screen) var(--font-he);font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--mute);font-size:var(--t-meta)}
+.kpi.none .v{color:var(--warn);font-size:var(--t-dense)}
+.exp{font-size:var(--t-micro);padding:0 var(--s2);border-radius:var(--r-pill);background:var(--code)}
+.exp.bad{background:var(--err);color:var(--hi)}.exp.warn{background:var(--warn);color:var(--on-a)}
+th,td{white-space:nowrap}
+.search{min-width:calc(var(--s1) * 55)}
+.foot{color:var(--mute);font-size:var(--t-meta);margin-top:var(--s4)}
 &lt;/style&gt;&lt;/head&gt;&lt;body&gt;
 &lt;div class=&quot;top&quot;&gt;&lt;div&gt;&lt;h1&gt;תיקים&lt;/h1&gt;&lt;div class=&quot;foot&quot; style=&quot;margin:0&quot;&gt;נבנה על-ידי המחולל · 6 אטומים מוכחים · הנתונים נשמרים בדפדפן זה&lt;/div&gt;&lt;/div&gt;
 &lt;input class=&quot;search&quot; id=&quot;q&quot; type=&quot;search&quot; placeholder=&quot;חיפוש בכל השדות…&quot;&gt;&lt;/div&gt;
-&lt;div class=&quot;kpis&quot;&gt;&lt;div class=&quot;kpi&quot; id=&quot;kpi0&quot;&gt;&lt;span class=&quot;v&quot;&gt;—&lt;/span&gt;&lt;span class=&quot;l&quot;&gt;סכום תיק.סכום&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;kpis&quot;&gt;&lt;div class=&quot;kpi&quot; id=&quot;kpi0&quot;&gt;&lt;bdi class=&quot;v&quot;&gt;—&lt;/bdi&gt;&lt;span class=&quot;l&quot;&gt;סכום תיק.סכום&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;section class=&quot;entity&quot; data-entity=&quot;e0&quot;&gt;
   &lt;h2&gt;לקוח &lt;small id=&quot;e0_n&quot;&gt;&lt;/small&gt;&lt;/h2&gt;
   &lt;form id=&quot;e0_form&quot; class=&quot;row&quot;&gt;&lt;label&gt;שם &lt;b&gt;*&lt;/b&gt;&lt;input id=&quot;e0_f0&quot; type=&quot;text&quot; required&gt;&lt;/label&gt;&lt;label&gt;טלפון&lt;input id=&quot;e0_f1&quot; type=&quot;tel&quot; inputmode=&quot;tel&quot; &gt;&lt;/label&gt;&lt;label&gt;כתובת&lt;input id=&quot;e0_f2&quot; type=&quot;text&quot; &gt;&lt;/label&gt;&lt;button type=&quot;submit&quot;&gt;הוסף לקוח&lt;/button&gt;&lt;/form&gt;
@@ -314,15 +397,17 @@ function expiry(f, v) {
   const d = -CALL.daysSince(v, today());
   return d &lt; 0 ? ' &lt;b class=&quot;exp bad&quot;&gt;פג&lt;/b&gt;' : d &lt;= EXP_DAYS ? ' &lt;b class=&quot;exp warn&quot;&gt;פג בעוד ' + d + ' ימים&lt;/b&gt;' : '';
 }
+const BIDI = [&quot;number&quot;,&quot;formula&quot;,&quot;date&quot;,&quot;phone&quot;,&quot;id&quot;,&quot;count&quot;];   // מהדאטה (skin.data.json) — מוזרק בזמן-פליטה, לא רשימה ביד
+const bidi = (s) =&gt; '&lt;bdi dir=&quot;ltr&quot;&gt;' + s + '&lt;/bdi&gt;';   // UAX#9: ערך בסדר-לטיני (₪8,000 · 052- · 15/10 · -31) מבודד ומוכרז ltr — סימן/מטבע נשארים בצד הנכון
 function show(f, v, e, r) {
-  if (f.shape === 'formula' &amp;&amp; e &amp;&amp; r) { const n = calc(e, r, f); return Number.isFinite(n) ? (CALL.money ? CALL.money(n) : String(n)) : '—'; }
+  if (f.shape === 'formula' &amp;&amp; e &amp;&amp; r) { const n = calc(e, r, f); return Number.isFinite(n) ? bidi(CALL.money ? CALL.money(n) : String(n)) : '—'; }
   if (v === '' || v == null) return '';
-  if (f.shape === 'date') return (CALL.fmtDate ? CALL.fmtDate(v) : esc(v)) + expiry(f, v);
-  if (f.shape === 'number' &amp;&amp; CALL.money) return CALL.money(Number(v));
-  if (f.shape === 'count') return esc(v);
+  if (f.shape === 'date') return bidi(CALL.fmtDate ? CALL.fmtDate(v) : esc(v)) + expiry(f, v);
+  if (f.shape === 'number' &amp;&amp; CALL.money) return bidi(CALL.money(Number(v)));
+  if (f.shape === 'count') return bidi(esc(v));
   if (f.shape === 'date' &amp;&amp; CALL.fmtDate) return CALL.fmtDate(v);
-  if (f.shape === 'phone' &amp;&amp; CALL.phone) return CALL.phone(v);
-  return esc(v);
+  if (f.shape === 'phone' &amp;&amp; CALL.phone) return bidi(CALL.phone(v));
+  return BIDI.includes(f.shape) ? bidi(esc(v)) : esc(v);
 }
 function rowsOf(ei) {
   const q = el('q') ? el('q').value : '';
@@ -346,7 +431,7 @@ function paint() {
       const cells = e.fields.map((f, fi) =&gt; '&lt;td class=&quot;' + (f.shape === 'number' || f.shape === 'formula' ? 'num' : '') + '&quot;&gt;' + show(f, r[fi], e, r) + '&lt;/td&gt;').join('');
       const n = e.fields.length;
       const st = e.stages.length ? '&lt;td&gt;' + esc(r[n] || e.stages[0]) + (e.stages.indexOf(r[n] || e.stages[0]) &lt; e.stages.length - 1 ? ' &lt;button class=&quot;x&quot; data-adv=&quot;' + ei + ':' + idx + '&quot; title=&quot;לשלב הבא&quot;&gt;›&lt;/button&gt;' : '') + '&lt;/td&gt;' + (CALL.daysSince ? '&lt;td class=&quot;num&quot;&gt;' + (r[n + 1] ? CALL.daysSince(r[n + 1], today()) + ' ימים' : '') + '&lt;/td&gt;' : '') : '';
-      const d = hasDays ? '&lt;td class=&quot;num&quot;&gt;' + e.fields.map((f, fi) =&gt; (f.shape === 'date' &amp;&amp; r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) =&gt; x !== '').join(' / ') + '&lt;/td&gt;' : '';
+      const d = hasDays ? '&lt;td class=&quot;num&quot;&gt;' + bidi(e.fields.map((f, fi) =&gt; (f.shape === 'date' &amp;&amp; r[fi] ? CALL.daysSince(r[fi], today()) : '')).filter((x) =&gt; x !== '').join(' / ')) + '&lt;/td&gt;' : '';
       const noDel = e.forbidden.some((x) =&gt; /^מחיקה$/.test(x));
       const created = r[n + 2] || r[n + 1] || '';
       const fixOk = e.fix ? ((role === '' || role === e.fix.who) &amp;&amp; (!e.fix.days || !CALL.daysSince || !created || CALL.daysSince(created, today()) &lt;= e.fix.days)) : true;
