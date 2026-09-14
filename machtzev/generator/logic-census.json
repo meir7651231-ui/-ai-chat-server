@@ -1299,6 +1299,16 @@
   "wireable": true
  },
  {
+  "file": "dart/cart_delivery_for.dart",
+  "name": "cartDeliveryFor",
+  "ret": "CartDelivery",
+  "params": [
+   "bool"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart/cart_item_count.dart",
   "name": "cartItemCount",
   "ret": "int",
@@ -1388,6 +1398,16 @@
   "wireable": false
  },
  {
+  "file": "dart/chain_arrow_text.dart",
+  "name": "chainArrowText",
+  "ret": "String",
+  "params": [
+   "List<LipskeyCatalogProduct>"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/change-password.dart",
   "name": "changePassword",
   "ret": "Future<void>",
@@ -1421,6 +1441,29 @@
    "Map<String, dynamic>",
    "String Function(Map<String, dynamic>) curOf",
    "String Function(dynamic) providerClearer"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/chat_counterpart_role.dart",
+  "name": "chatCounterpartRole",
+  "ret": "BsRole?",
+  "params": [
+   "List<BsRole>",
+   "BsRole"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/chat_message_is_mine.dart",
+  "name": "chatMessageIsMine",
+  "ret": "bool",
+  "params": [
+   "ChatMessage",
+   "BsRole",
+   "String?"
   ],
   "argc": 3,
   "wireable": false
@@ -1840,6 +1883,16 @@
   ],
   "argc": 1,
   "wireable": true
+ },
+ {
+  "file": "dart/company_category_sections.dart",
+  "name": "companyCategorySections",
+  "ret": "List<Section>",
+  "params": [
+   "List<LipskeyCatalogProduct>"
+  ],
+  "argc": 1,
+  "wireable": false
  },
  {
   "file": "dart/company_complements_for.dart",
@@ -3749,6 +3802,17 @@
    "String Function(dynamic) normSearch"
   ],
   "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/filter_by_image.dart",
+  "name": "filterByImage",
+  "ret": "List<LipskeyCatalogProduct>",
+  "params": [
+   "List<LipskeyCatalogProduct>",
+   "bool"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -5735,6 +5799,17 @@
   "wireable": false
  },
  {
+  "file": "dart/job_boost.dart",
+  "name": "jobBoost",
+  "ret": "int",
+  "params": [
+   "LipskeyCatalogProduct",
+   "Set<String>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart/keyboard_layout_key.dart",
   "name": "keyboardLayoutKey",
   "ret": "String",
@@ -6441,6 +6516,17 @@
   "wireable": false
  },
  {
+  "file": "dart/mates_boost.dart",
+  "name": "matesBoost",
+  "ret": "int",
+  "params": [
+   "LipskeyCatalogProduct",
+   "Set<String>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/max-discount-pct.dart",
   "name": "maxDiscountPct",
   "ret": "num",
@@ -6952,6 +7038,26 @@
    "Map<String, dynamic> CITIES"
   ],
   "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/next_profession_mode.dart",
+  "name": "nextProfessionMode",
+  "ret": "ProfessionMode",
+  "params": [
+   "ProfessionMode"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/next_project_mode.dart",
+  "name": "nextProjectMode",
+  "ret": "ProjectMode",
+  "params": [
+   "ProjectMode"
+  ],
+  "argc": 1,
   "wireable": false
  },
  {
@@ -8975,6 +9081,17 @@
   "wireable": false
  },
  {
+  "file": "dart/resolve_active_lens.dart",
+  "name": "resolveActiveLens",
+  "ret": "CatalogLens",
+  "params": [
+   "CatalogLens",
+   "List<CatalogLens>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart/resolve_cat_title.dart",
   "name": "resolveCatTitle",
   "ret": "CatalogNode?",
@@ -9259,6 +9376,17 @@
    "String Function(String value,\n           int maxLen, bool collapseWhitespace )\n      promptSafeText"
   ],
   "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/safety_kit_items.dart",
+  "name": "safetyKitItems",
+  "ret": "List<LipskeyCatalogProduct>",
+  "params": [
+   "List<LipskeyCatalogProduct>",
+   "List<LipskeyCatalogProduct>"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {

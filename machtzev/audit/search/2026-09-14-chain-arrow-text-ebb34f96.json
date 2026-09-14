@@ -1,0 +1,184 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T21:07:58.263Z",
+ "query": "chain arrow text מחסום צינור מצמד\"",
+ "tokens": [
+  "chain",
+  "arrow",
+  "text",
+  "חסום",
+  "צינור",
+  "צמד"
+ ],
+ "oracle": {
+  "atomIndexSha": "7102c068cc0e3b3b49c2561790c524f33f39aab9fc2eb7991bd8fe04c8428db8",
+  "logicCensusSha": "e8282743103b0f6d43046b3fa590a798e84d8ec9f6afd0cb980134d7c616e8da",
+  "display": 1936,
+  "logic": 1012
+ },
+ "candidates": [
+  {
+   "id": "Forge7AtomsText",
+   "layer": "display",
+   "file": "dart-forge-bs/text/7_atoms_text.dart",
+   "score": 4,
+   "hits": [
+    "text",
+    "חסום"
+   ]
+  },
+  {
+   "id": "ForgeEmphasisText",
+   "layer": "display",
+   "file": "dart-forge-bs/text/emphasis_text.dart",
+   "score": 4,
+   "hits": [
+    "text",
+    "חסום"
+   ]
+  },
+  {
+   "id": "ForgeGradientText",
+   "layer": "display",
+   "file": "dart-forge-bs/text/gradient_text.dart",
+   "score": 4,
+   "hits": [
+    "text",
+    "חסום"
+   ]
+  },
+  {
+   "id": "ForgeLinkRowText",
+   "layer": "display",
+   "file": "dart-forge-bs/text/link_row_text.dart",
+   "score": 4,
+   "hits": [
+    "text",
+    "חסום"
+   ]
+  },
+  {
+   "id": "cockpitWorkListText",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-work-list-text.dart",
+   "score": 3,
+   "hits": [
+    "text"
+   ]
+  },
+  {
+   "id": "EmptyHintText",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/empty_hint_text.dart",
+   "score": 3,
+   "hits": [
+    "text"
+   ]
+  },
+  {
+   "id": "ForgedText",
+   "layer": "display",
+   "file": "dart-ui-bs/forged/forged_text.dart",
+   "score": 3,
+   "hits": [
+    "text"
+   ]
+  },
+  {
+   "id": "GradientText",
+   "layer": "display",
+   "file": "dart-ui-bs/gradient_text.dart",
+   "score": 3,
+   "hits": [
+    "text"
+   ]
+  },
+  {
+   "id": "InlineTextRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/inline_text_row.dart",
+   "score": 3,
+   "hits": [
+    "text"
+   ]
+  },
+  {
+   "id": "isSendableSupportText",
+   "layer": "logic",
+   "file": "dart-maor/is-sendable-support-text.dart",
+   "score": 3,
+   "hits": [
+    "text"
+   ]
+  },
+  {
+   "id": "projectQuoteText",
+   "layer": "logic",
+   "file": "dart/project_quote_text.dart",
+   "score": 3,
+   "hits": [
+    "text"
+   ]
+  },
+  {
+   "id": "quoteTextFor",
+   "layer": "logic",
+   "file": "dart/quote_text_for.dart",
+   "score": 3,
+   "hits": [
+    "text"
+   ]
+  },
+  {
+   "id": "reenrollListText",
+   "layer": "logic",
+   "file": "dart-maor/reenroll-list-text.dart",
+   "score": 3,
+   "hits": [
+    "text"
+   ]
+  },
+  {
+   "id": "reportText",
+   "layer": "logic",
+   "file": "dart-boxes/annual-report.dart",
+   "score": 3,
+   "hits": [
+    "text"
+   ]
+  },
+  {
+   "id": "sanitizeSupportText",
+   "layer": "logic",
+   "file": "dart-maor/sanitize-support-text.dart",
+   "score": 3,
+   "hits": [
+    "text"
+   ]
+  }
+ ],
+ "strong": [
+  "cockpitWorkListText",
+  "isSendableSupportText",
+  "projectQuoteText",
+  "quoteTextFor",
+  "reenrollListText",
+  "reportText",
+  "sanitizeSupportText"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "Forge7AtomsText",
+  "ForgeEmphasisText",
+  "ForgeGradientText",
+  "ForgeLinkRowText",
+  "EmptyHintText",
+  "ForgedText",
+  "GradientText",
+  "InlineTextRow"
+ ],
+ "creates": "new/dart/chain_arrow_text.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 3 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: cockpitWorkListText 0/3 · isSendableSupportText 0/3 · projectQuoteText 0/3 · quoteTextFor 0/3 · reenrollListText 0/3 · reportText 0/3 · sanitizeSupportText 0/3 · combinedTextScale 0/3. לכן נוצר חדש.",
+ "sig": "ebb34f969e0b7db6c15352ce4a37dec2ab123fabcd6a090a0034fe438078cab7"
+}

@@ -463,32 +463,53 @@ Map<String, List<String>> _bodyLits(AstNode body) {
   if (v.dbls.isNotEmpty) { out['double'] = v.dbls.take(8).toList(); out['num'] = [...(out['num'] ?? []), ...out['double']!]; }
   return out;
 }
-String? _litFor(String t) {
+// G73 · ליטרל לפי **וריאנט** (v=0/1/2): דוגמה-בנויה אחת לכל מחלקה נתנה 'a'/0/null לכל שדה ⇒ 14 זהבים-ריקים על קלט-מבני (`e.status` · `t.participants`).
+//   עכשיו כל שדה משתנה בין הווריאנטים (nullable ⇒ ערך ב-v≥1 · רשימה ⇒ איבר ב-v≥1 · enum ⇒ ערך אחר · מחלקה-מקוננת ⇒ הווריאנט שלה), והבחירה-לפי-שונות שומרת מה שמבדיל.
+String? _litFor(String t, [int v = 0, Map<String, List<String>> known = const {}]) {
   final nul = t.endsWith('?');
   final b = t.replaceAll('?', '').trim();
-  if (nul) return 'null';
+  if (nul && v == 0) return 'null';
   switch (b) {
-    case 'String': return "'a'";
-    case 'int': return '0';
-    case 'double': return '0.0';
-    case 'num': return '0';
-    case 'bool': return 'true';
+    case 'String': return ["'a'", "'b'", "'c'"][v % 3];
+    case 'int': return ['0', '1', '2'][v % 3];
+    case 'double': return ['0.0', '1.5', '2.5'][v % 3];
+    case 'num': return ['0', '1', '2'][v % 3];
+    case 'bool': return ['true', 'false', 'true'][v % 3];
+    case 'DateTime': return ['DateTime(2026, 8, 24)', 'DateTime(2026, 1, 1, 13, 45)', 'DateTime(2025, 12, 31, 23, 59)'][v % 3];   // דטרמיניסטי, לא now()
+    case 'Duration': return ['Duration.zero', 'const Duration(minutes: 90)', 'const Duration(days: 2, hours: 3)'][v % 3];
   }
   final mL = RegExp(r'^(List|Set|Iterable)<(.+)>$').firstMatch(b);
-  if (mL != null) return 'const <${mL.group(2)}>${mL.group(1) == 'List' ? '[]' : '{}'}';
+  if (mL != null) {
+    final el = v == 0 ? null : _litFor(mL.group(2)!, v, known);
+    final open = mL.group(1) == 'List' ? '[' : '{', close = mL.group(1) == 'List' ? ']' : '}';
+    if (el == null) return 'const <${mL.group(2)}>$open$close';
+    return '${_isConstExpr(el) ? 'const ' : ''}<${mL.group(2)}>$open$el$close';
+  }
   final mM = RegExp(r'^Map<\s*(.+?)\s*,\s*(.+)>$').firstMatch(b);
-  if (mM != null) return 'const <${mM.group(1)}, ${mM.group(2)}>{}';
+  if (mM != null) {
+    final k = v == 0 ? null : _litFor(mM.group(1)!, v, known), val = v == 0 ? null : _litFor(mM.group(2)!, v, known);
+    if (k == null || val == null) return 'const <${mM.group(1)}, ${mM.group(2)}>{}';
+    return '${_isConstExpr(k) && _isConstExpr(val) ? 'const ' : ''}<${mM.group(1)}, ${mM.group(2)}>{$k: $val}';
+  }
+  final kn = known[b]; if (kn != null && kn.isNotEmpty) return kn[v % kn.length];
   return null;
 }
 
 // G69 · `known`: דוגמאות שכבר נבנו לטיפוסים אחרים (enum ⇒ `X.values.first`) — מחלקה שבנאי-שלה מקבל טיפוס-פרויקט (`ConnectorEnd(EndType, String)`) נבנית בסבב-שני
-List<String> _samplesFor(String name, String declSrc, [Map<String, String> known = const {}]) {
+bool _isConstExpr(String e) => e.startsWith('const ') || e == 'Duration.zero' || e == 'null' || e == 'true' || e == 'false' || RegExp(r"^-?\d").hasMatch(e) || e.startsWith("'") || RegExp(r'^[A-Z]\w*\.[a-z]\w*$').hasMatch(e);   // ליטרל · enum-ref · const-ביטוי
+List<String> _samplesFor(String name, String declSrc, [Map<String, List<String>> known = const {}]) {
   final u = parseString(content: declSrc, throwIfDiagnostics: false).unit;
   if (u.declarations.isEmpty) return const [];
   final d = u.declarations.first;
+  // G73 · עד 3 וריאנטים לכל מחלקה — כל שדה משתנה בין הווריאנטים (ראה _litFor); וריאנט שלא ניתן-לבנייה נשמט
+  final out = <String>[];
+  for (var v = 0; v < 3; v++) { final s = _sampleVariant(name, d, v, known); if (s != null && !out.contains(s)) out.add(s); }
+  return out;
+}
+String? _sampleVariant(String name, Declaration d, int v, Map<String, List<String>> known) {
   // G69 · ערך-enum כ**שם-קבוע** (`EndType.hdpeCompression`), לא `.values.first` — האחרון אינו ביטוי-קבוע ו-`const ConnectorEnd(EndType.values.first, 'a')` לא התקמפל (6 unparsed)
-  if (d is EnumDeclaration) { final cs = d.constants.map((c) => '$name.${c.name.lexeme}').toList(); return cs.isEmpty ? const [] : [cs.first, cs.last]; }
-  if (d is! ClassDeclaration) return const [];
+  if (d is EnumDeclaration) { final cs = d.constants.map((c) => '$name.${c.name.lexeme}').toList(); return cs.isEmpty ? null : [cs.first, cs.last, cs[cs.length ~/ 2]][v % 3]; }   // וריאנטים: ראשון · אחרון · אמצעי
+  if (d is! ClassDeclaration) return null;
   for (final m in d.members) {
     if (m is! ConstructorDeclaration || m.name != null) continue;
     final args = <String>[];
@@ -509,15 +530,15 @@ List<String> _samplesFor(String name, String declSrc, [Map<String, String> known
           }
         }
       }
-      if (ty == null) return const [];
-      final lit = _litFor(ty) ?? known[ty.replaceAll('?', '')];
-      if (lit == null) return const [];            // אין ערך-אמת ⇒ אין דוגמה
+      if (ty == null) return null;
+      final lit = _litFor(ty, v, known);
+      if (lit == null) return null;                // אין ערך-אמת ⇒ אין דוגמה
       args.add(prm.isRequiredNamed ? '${inner.name!.lexeme}: $lit' : lit);
     }
-    final kw = m.constKeyword != null ? 'const ' : '';
-    return ['$kw$name(${args.join(', ')})'];
+    final kw = m.constKeyword != null && args.every((a) => _isConstExpr(a.replaceFirst(RegExp(r'^\w+: '), ''))) ? 'const ' : '';   // const רק כשכל הארגומנטים קבועים
+    return '$kw$name(${args.join(', ')})';
   }
-  return const [];
+  return null;
 }
 
 // G69 · חציבת **טבלה-מוקלדת** (משתנה-top-level `final`/`const` עם ליטרל-אוסף): הסגירה הטרנזיטיבית של ההצהרה — טיפוסים · עוזרים · קבועים —
@@ -900,7 +921,7 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
 Map<String, List<String>> _twoPass(Map<String, String> srcOf) {
   final out = <String, List<String>>{};
   for (var pass = 0; pass < 2; pass++) {
-    final known = { for (final e in out.entries) e.key: e.value.first };
+    final known = { for (final e in out.entries) e.key: e.value };
     for (final e in srcOf.entries) { if (out.containsKey(e.key) || e.value.isEmpty) continue; final s = _samplesFor(e.key, e.value, known); if (s.isNotEmpty) out[e.key] = s; }
   }
   return out;

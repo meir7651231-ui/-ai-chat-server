@@ -1,0 +1,243 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T21:08:02.893Z",
+ "query": "next profession mode מוצרים בעץ גרסאות מים חמים בלבד",
+ "tokens": [
+  "next",
+  "profession",
+  "mode",
+  "וצרים",
+  "בעץ",
+  "גרסאות",
+  "מים",
+  "חמים",
+  "לבד"
+ ],
+ "oracle": {
+  "atomIndexSha": "7102c068cc0e3b3b49c2561790c524f33f39aab9fc2eb7991bd8fe04c8428db8",
+  "logicCensusSha": "e8282743103b0f6d43046b3fa590a798e84d8ec9f6afd0cb980134d7c616e8da",
+  "display": 1936,
+  "logic": 1012
+ },
+ "candidates": [
+  {
+   "id": "AccRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/acc_row.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "AxisChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/axis_chip.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "CatalogCountBadge",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/catalog_count_badge.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "ChipWrap",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chip_wrap.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "CompanyCatalogImportCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/company_catalog_import_card.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "EmptySection",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/empty_section.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "FacetChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/facet_chip.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "FacetRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/facet_row.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "MiniQtyBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/mini_qty_btn.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "SavedVersionChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/saved_version_chip.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "SheetSection",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/sheet_section.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "TreeComingSoon",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/tree_coming_soon.dart",
+   "score": 6,
+   "hits": [
+    "וצרים",
+    "בעץ",
+    "גרסאות",
+    "מים",
+    "חמים",
+    "לבד"
+   ]
+  },
+  {
+   "id": "freshNextYearEnrollment",
+   "layer": "logic",
+   "file": "dart-maor/fresh-next-year-enrollment.dart",
+   "score": 3,
+   "hits": [
+    "next"
+   ]
+  },
+  {
+   "id": "ModeFrame",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/mode_frame.dart",
+   "score": 3,
+   "hits": [
+    "mode"
+   ]
+  },
+  {
+   "id": "modelMeta",
+   "layer": "logic",
+   "file": "dart-maor/model-meta.dart",
+   "score": 3,
+   "hits": [
+    "mode"
+   ]
+  }
+ ],
+ "strong": [
+  "freshNextYearEnrollment",
+  "modelMeta"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "AccRow",
+  "AxisChip",
+  "CatalogCountBadge",
+  "ChipWrap",
+  "CompanyCatalogImportCard",
+  "EmptySection",
+  "FacetChip",
+  "FacetRow",
+  "MiniQtyBtn",
+  "SavedVersionChip",
+  "SheetSection",
+  "TreeComingSoon",
+  "ModeFrame"
+ ],
+ "creates": "new/dart/next_profession_mode.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 3 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: freshNextYearEnrollment 0/3 · modelMeta 0/3 · nextProjectMode 0/3 · companyCategorySections 0/3 · filterByImage 0/3 · safetyKitItems 0/3 · p37ElbowModel 0/3 · stageProgressNext 0/3. לכן נוצר חדש.",
+ "sig": "1274c4be8a803e9bb2ef08572a9e1176ef11b5985b2243fe7ecacc0bcd4b039b"
+}

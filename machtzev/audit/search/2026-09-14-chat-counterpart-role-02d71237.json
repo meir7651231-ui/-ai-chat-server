@@ -1,0 +1,211 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T21:08:08.542Z",
+ "query": "chat counterpart role אימוג׳י אין שיחות בארכיון אעדכן אותך",
+ "tokens": [
+  "chat",
+  "counterpart",
+  "role",
+  "אימוג",
+  "אין",
+  "יחות",
+  "ארכיון",
+  "אעדכן",
+  "אותך"
+ ],
+ "oracle": {
+  "atomIndexSha": "7102c068cc0e3b3b49c2561790c524f33f39aab9fc2eb7991bd8fe04c8428db8",
+  "logicCensusSha": "e8282743103b0f6d43046b3fa590a798e84d8ec9f6afd0cb980134d7c616e8da",
+  "display": 1936,
+  "logic": 1012
+ },
+ "candidates": [
+  {
+   "id": "CircleFab",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/circle_fab.dart",
+   "score": 6,
+   "hits": [
+    "אימוג",
+    "אין",
+    "יחות",
+    "ארכיון",
+    "אעדכן",
+    "אותך"
+   ]
+  },
+  {
+   "id": "DateChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/date_chip.dart",
+   "score": 6,
+   "hits": [
+    "אימוג",
+    "אין",
+    "יחות",
+    "ארכיון",
+    "אעדכן",
+    "אותך"
+   ]
+  },
+  {
+   "id": "Pill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/pill.dart",
+   "score": 6,
+   "hits": [
+    "אימוג",
+    "אין",
+    "יחות",
+    "ארכיון",
+    "אעדכן",
+    "אותך"
+   ]
+  },
+  {
+   "id": "PrivacyNotice",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/privacy_notice.dart",
+   "score": 6,
+   "hits": [
+    "אימוג",
+    "אין",
+    "יחות",
+    "ארכיון",
+    "אעדכן",
+    "אותך"
+   ]
+  },
+  {
+   "id": "TypingBubble",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/typing_bubble.dart",
+   "score": 6,
+   "hits": [
+    "אימוג",
+    "אין",
+    "יחות",
+    "ארכיון",
+    "אעדכן",
+    "אותך"
+   ]
+  },
+  {
+   "id": "CatalogCountBadge",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/catalog_count_badge.dart",
+   "score": 4,
+   "hits": [
+    "counterpart",
+    "אין"
+   ]
+  },
+  {
+   "id": "ForgeChatSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-forge-bs/action/chat_settings_switch_row.dart",
+   "score": 4,
+   "hits": [
+    "chat",
+    "אין"
+   ]
+  },
+  {
+   "id": "RoleRequestsInboxEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/role_requests_inbox_empty.dart",
+   "score": 4,
+   "hits": [
+    "role",
+    "אין"
+   ]
+  },
+  {
+   "id": "BadgeCount",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/feedback/badge_count.dart",
+   "score": 3,
+   "hits": [
+    "counterpart"
+   ]
+  },
+  {
+   "id": "CartChatBubble",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/cart_chat_bubble.dart",
+   "score": 3,
+   "hits": [
+    "chat"
+   ]
+  },
+  {
+   "id": "cartItemCount",
+   "layer": "logic",
+   "file": "dart/cart_item_count.dart",
+   "score": 3,
+   "hits": [
+    "counterpart"
+   ]
+  },
+  {
+   "id": "CatalogConfigCatalogConfigCountBadge",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/catalog_config_catalog_config_count_badge.dart",
+   "score": 3,
+   "hits": [
+    "counterpart"
+   ]
+  },
+  {
+   "id": "catNodeProductCount",
+   "layer": "logic",
+   "file": "dart/cat_node_product_count.dart",
+   "score": 3,
+   "hits": [
+    "counterpart"
+   ]
+  },
+  {
+   "id": "ChatSettingsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_action_row.dart",
+   "score": 3,
+   "hits": [
+    "chat"
+   ]
+  },
+  {
+   "id": "ChatSettingsSectionTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_section_tile.dart",
+   "score": 3,
+   "hits": [
+    "chat"
+   ]
+  }
+ ],
+ "strong": [
+  "cartItemCount",
+  "catNodeProductCount"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "CircleFab",
+  "DateChip",
+  "Pill",
+  "PrivacyNotice",
+  "TypingBubble",
+  "CatalogCountBadge",
+  "ForgeChatSettingsSwitchRow",
+  "RoleRequestsInboxEmpty",
+  "BadgeCount",
+  "CartChatBubble",
+  "CatalogConfigCatalogConfigCountBadge",
+  "ChatSettingsActionRow",
+  "ChatSettingsSectionTile"
+ ],
+ "creates": "new/dart/chat_counterpart_role.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 9 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: cartItemCount 0/9 · catNodeProductCount 0/9 · chatMessageIsMine 0/9 · boardRoleByName 0/9 · chatThreadVisibleToUid 0/9 · presenceAllowedForRole 0/9 · roleFromClaim 0/9 · roleKeyOf 0/9. לכן נוצר חדש.",
+ "sig": "02d71237981e6666d06f53d0cca3668c7ece52b6e611d902e5d583f154ecdf21"
+}

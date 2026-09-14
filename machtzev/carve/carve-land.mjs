@@ -46,12 +46,14 @@ const STUB = /=>\s*(?:const\s+)?(?:\{\s*\}|\[\s*\]|''|""|0|0\.0|null|-?\d+)\s*;?
 // ⚠️ בלי ערך-אלמנט, `List<X>` קיבל **רק** את הרשימה-הריקה, והזהב יצא ריק:
 // פונקציה מחוללת שמחזירה [] עברה אותו. עכשיו גם טיפוס-מוטבע תורם אלמנט
 // (מ-typeSamples של החצב), וללא ערך-אמת — אין אלמנט, לא ניחוש.
-const elemLit = (t, samples = {}) => {
+const elemLit = (t, samples = {}) => elemLits(t, samples)[0] || null;
+// G73 · שני איברים **שונים** לרשימה (`[s0, s1]`): `[el, el]` נתן שני עותקים זהים ⇒ `.length`/`.any` מבדילים, אבל שדה-שונה לא; עם וריאנטים מהחצב יש איבר-שני אמיתי
+const elemLits = (t, samples = {}) => {
   const b = t.replace(/\?$/, '');
-  const core = { String: "'a'", int: '1', double: '1.5', num: '1', bool: 'true' }[b];
+  const core = { String: ["'a'", "'b'"], int: ['1', '2'], double: ['1.5', '2.5'], num: ['1', '2'], bool: ['true', 'false'] }[b];
   if (core) return core;
   const ex = samples[b];
-  return (ex && ex.length) ? ex[0] : null;
+  return (ex && ex.length) ? ex : [];
 };
 function compat(pt, inlined = [], generics = [], samples = {}, bodyLits = {}) {
   const nul = pt.endsWith('?'); const base = pt.replace(/\?$/, '');
@@ -84,7 +86,7 @@ function compat(pt, inlined = [], generics = [], samples = {}, bodyLits = {}) {
   }
   // סינתזת-אוסף: List<X>/Set<X> ⇒ ריק + זוג-אלמנטים · Map<K,V> ⇒ ריק + זוג
   const mL = base.match(/^(List|Set|Iterable)<(.+)>$/);
-  if (mL) { const el = elemLit(mL[2], samples); const c = mL[1] === 'List' ? '[]' : '{}'; const out = [{ d: `const <${mL[2]}>${c}`, t: base }]; if (el) { const kw = /^const /.test(el) || /^['\d]/.test(el) || el === 'true' ? 'const ' : ''; out.push({ d: `${kw}<${mL[2]}>${mL[1] === 'List' ? `[${el},${el}]` : `{${el}}`}`, t: base }); } if (nul) out.push({ d: 'null', t: base }); return out; }
+  if (mL) { const els = elemLits(mL[2], samples); const c = mL[1] === 'List' ? '[]' : '{}'; const out = [{ d: `const <${mL[2]}>${c}`, t: base }]; if (els.length) { const isC = (e) => /^const /.test(e) || /^['\d]/.test(e) || e === 'true' || e === 'false' || /^[A-Z]\w*\.[a-z]\w*$/.test(e); const pair = els.length > 1 ? [els[0], els[1]] : [els[0], els[0]]; const kw = pair.every(isC) ? 'const ' : ''; out.push({ d: `${kw}<${mL[2]}>${mL[1] === 'List' ? `[${pair.join(',')}]` : `{${[...new Set(pair)].join(',')}}`}`, t: base }); if (els.length > 1) out.push({ d: `${isC(els[1]) ? 'const ' : ''}<${mL[2]}>${mL[1] === 'List' ? `[${els[1]}]` : `{${els[1]}}`}`, t: base }); } if (nul) out.push({ d: 'null', t: base }); return out; }
   const mM = base.match(/^Map<\s*(.+?)\s*,\s*(.+)>$/);
   if (mM) { const k = elemLit(mM[1], samples), v = elemLit(mM[2], samples); const out = [{ d: `const <${mM[1]}, ${mM[2]}>{}`, t: base }]; if (k && v) out.push({ d: `const <${mM[1]}, ${mM[2]}>{${k}: ${v}}`, t: base }); if (nul) out.push({ d: 'null', t: base }); return out; }
   return POOL.filter(v => {

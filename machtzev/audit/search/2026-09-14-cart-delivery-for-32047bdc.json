@@ -1,0 +1,254 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T21:08:09.676Z",
+ "query": "cart delivery for פריטים ממתינים לסיכום בבנייה להמשיך הוסף",
+ "tokens": [
+  "cart",
+  "delivery",
+  "for",
+  "פריטים",
+  "מתינים",
+  "סיכום",
+  "בנייה",
+  "המשיך",
+  "וסף"
+ ],
+ "oracle": {
+  "atomIndexSha": "7102c068cc0e3b3b49c2561790c524f33f39aab9fc2eb7991bd8fe04c8428db8",
+  "logicCensusSha": "e8282743103b0f6d43046b3fa590a798e84d8ec9f6afd0cb980134d7c616e8da",
+  "display": 1936,
+  "logic": 1012
+ },
+ "candidates": [
+  {
+   "id": "CartItemRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/cart_item_row.dart",
+   "score": 9,
+   "hits": [
+    "cart",
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  },
+  {
+   "id": "CartSummaryCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/cart_summary_card.dart",
+   "score": 9,
+   "hits": [
+    "cart",
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  },
+  {
+   "id": "DeliveryOptionCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/delivery_option_card.dart",
+   "score": 9,
+   "hits": [
+    "delivery",
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  },
+  {
+   "id": "SmartCartLineCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/smart_cart_line_card.dart",
+   "score": 9,
+   "hits": [
+    "cart",
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  },
+  {
+   "id": "cartPaymentFor",
+   "layer": "logic",
+   "file": "dart/cart_payment_for.dart",
+   "score": 6,
+   "hits": [
+    "cart",
+    "for"
+   ]
+  },
+  {
+   "id": "ContactTile",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/contact_tile.dart",
+   "score": 6,
+   "hits": [
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  },
+  {
+   "id": "deliveryFeeFor",
+   "layer": "logic",
+   "file": "dart/delivery_fee_for.dart",
+   "score": 6,
+   "hits": [
+    "delivery",
+    "for"
+   ]
+  },
+  {
+   "id": "GridHubCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/grid_hub_card.dart",
+   "score": 6,
+   "hits": [
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  },
+  {
+   "id": "LabeledField",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/labeled_field.dart",
+   "score": 6,
+   "hits": [
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  },
+  {
+   "id": "OrdersHiddenNotice",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/orders_hidden_notice.dart",
+   "score": 6,
+   "hits": [
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  },
+  {
+   "id": "OrderTimeline",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/order_timeline.dart",
+   "score": 6,
+   "hits": [
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  },
+  {
+   "id": "PaymentChip",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/payment_chip.dart",
+   "score": 6,
+   "hits": [
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  },
+  {
+   "id": "ProjectChip",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/project_chip.dart",
+   "score": 6,
+   "hits": [
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  },
+  {
+   "id": "QuickAction",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/quick_action.dart",
+   "score": 6,
+   "hits": [
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  },
+  {
+   "id": "QuickActionButton",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/quick_action_button.dart",
+   "score": 6,
+   "hits": [
+    "פריטים",
+    "מתינים",
+    "סיכום",
+    "בנייה",
+    "המשיך",
+    "וסף"
+   ]
+  }
+ ],
+ "strong": [
+  "cartPaymentFor",
+  "deliveryFeeFor"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "CartItemRow",
+  "CartSummaryCard",
+  "DeliveryOptionCard",
+  "SmartCartLineCard",
+  "ContactTile",
+  "GridHubCard",
+  "LabeledField",
+  "OrdersHiddenNotice",
+  "OrderTimeline",
+  "PaymentChip",
+  "ProjectChip",
+  "QuickAction",
+  "QuickActionButton"
+ ],
+ "creates": "new/dart/cart_delivery_for.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 2 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: cartPaymentFor 0/2 · deliveryFeeFor 0/2 · catalogEmptyForProfile 0/2 · defaultDetailFor 0/2 · moduleForScreen 0/2 · presenceAllowedForRole 0/2 · profileDefaultsFor 0/2 · pushChannelIdFor 0/2 · rawShellForProfile 0/2 · screenKeyForRoute 0/2 · seedsEmptyForProfile 0/2. לכן נוצר חדש.",
+ "sig": "32047bdc3af3563011fc6bf8dc1e11c3842787ee76911a6ea584e24da7b7690c"
+}

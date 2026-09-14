@@ -1,20 +1,20 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2492** אטומים ממופים (תצוגה 932 · לוגיקה 1012 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2504** אטומים ממופים (תצוגה 932 · לוגיקה 1024 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
 | data:strings | 349 | academic-year-label-strings · adar-norm-strings · add-org-member-strings · age-of-strings · amount-in-words-strings |
-| format | 277 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
+| format | 278 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
 | action | 180 | AccordionSectionCard · ActionButton · ActionCard · ActionRow · AddTradeButton |
 | group | 171 | ActionChipRail · AiCardTop · AiMdHead · AnimatedEmpty · ApprovalTaskCard |
 | summary | 158 | allOffConfig · applyAyinNames · applyAyinSheet · applyEntityPartial · applyMetaPartial |
-| collection | 153 | activeByMonth · allSupPhones · allowedDesignationsFor · appendCall · attentionItems |
-| transform | 125 | actionDescriptor · actionFromString · activeDriver · auditRows · brandById |
-| predicate | 117 | accessPasswordMatches · assignmentRedeemed · ayinActionVisible · ayinActive · canAddPhoto |
+| collection | 156 | activeByMonth · allSupPhones · allowedDesignationsFor · appendCall · attentionItems |
+| transform | 130 | actionDescriptor · actionFromString · activeDriver · auditRows · brandById |
+| predicate | 118 | accessPasswordMatches · assignmentRedeemed · ayinActionVisible · ayinActive · canAddPhoto |
 | text | 110 | AccessoryRow · AccessoryTile · AiCardSub · AiServerNote · AppSettingsBody |
 | container | 107 | AccordionPanel · AdvanceButton · AnimatedTabs · AssignButton · AuroraField |
-| measure | 88 | ageOf · balanceOf · band · boqLineAmount · boqTotal |
+| measure | 90 | ageOf · balanceOf · band · boqLineAmount · boqTotal |
 | fact | 85 | AlertBanner · AnimatedToggle · BadgePill · CaPill · CatalogCountBadge |
 | data:terms | 85 | absence-reason-chips-terms · annual-all-lines-terms · annual-report-terms · audit-cat-colors-terms · audit-report-lines-terms |
 | data:sockets | 74 | amount-in-words-sockets · annual-report-lines-sockets · block-reason-sockets · build-course-daily-rows-sockets · build-custom-export-sockets |

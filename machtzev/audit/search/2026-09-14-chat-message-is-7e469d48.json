@@ -1,0 +1,213 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T21:08:07.186Z",
+ "query": "chat message is mine אימוג׳י אין שיחות בארכיון אעדכן אותך",
+ "tokens": [
+  "chat",
+  "message",
+  "is",
+  "mine",
+  "אימוג",
+  "אין",
+  "יחות",
+  "ארכיון",
+  "אעדכן",
+  "אותך"
+ ],
+ "oracle": {
+  "atomIndexSha": "7102c068cc0e3b3b49c2561790c524f33f39aab9fc2eb7991bd8fe04c8428db8",
+  "logicCensusSha": "e8282743103b0f6d43046b3fa590a798e84d8ec9f6afd0cb980134d7c616e8da",
+  "display": 1936,
+  "logic": 1012
+ },
+ "candidates": [
+  {
+   "id": "CircleFab",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/circle_fab.dart",
+   "score": 6,
+   "hits": [
+    "אימוג",
+    "אין",
+    "יחות",
+    "ארכיון",
+    "אעדכן",
+    "אותך"
+   ]
+  },
+  {
+   "id": "DateChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/date_chip.dart",
+   "score": 6,
+   "hits": [
+    "אימוג",
+    "אין",
+    "יחות",
+    "ארכיון",
+    "אעדכן",
+    "אותך"
+   ]
+  },
+  {
+   "id": "Pill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/pill.dart",
+   "score": 6,
+   "hits": [
+    "אימוג",
+    "אין",
+    "יחות",
+    "ארכיון",
+    "אעדכן",
+    "אותך"
+   ]
+  },
+  {
+   "id": "PrivacyNotice",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/privacy_notice.dart",
+   "score": 6,
+   "hits": [
+    "אימוג",
+    "אין",
+    "יחות",
+    "ארכיון",
+    "אעדכן",
+    "אותך"
+   ]
+  },
+  {
+   "id": "TypingBubble",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/typing_bubble.dart",
+   "score": 6,
+   "hits": [
+    "אימוג",
+    "אין",
+    "יחות",
+    "ארכיון",
+    "אעדכן",
+    "אותך"
+   ]
+  },
+  {
+   "id": "ForgeChatSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-forge-bs/action/chat_settings_switch_row.dart",
+   "score": 4,
+   "hits": [
+    "chat",
+    "אין"
+   ]
+  },
+  {
+   "id": "ForgeMessageThread",
+   "layer": "display",
+   "file": "dart-forge-bs/chat/message_thread.dart",
+   "score": 4,
+   "hits": [
+    "message",
+    "אין"
+   ]
+  },
+  {
+   "id": "CartChatBubble",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/cart_chat_bubble.dart",
+   "score": 3,
+   "hits": [
+    "chat"
+   ]
+  },
+  {
+   "id": "ChatSettingsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_action_row.dart",
+   "score": 3,
+   "hits": [
+    "chat"
+   ]
+  },
+  {
+   "id": "ChatSettingsSectionTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_section_tile.dart",
+   "score": 3,
+   "hits": [
+    "chat"
+   ]
+  },
+  {
+   "id": "ChatSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_switch_row.dart",
+   "score": 3,
+   "hits": [
+    "chat"
+   ]
+  },
+  {
+   "id": "csvIsBlank",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "csvIsComment",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "ForgedChat",
+   "layer": "display",
+   "file": "dart-ui-bs/forged/forged_chat.dart",
+   "score": 3,
+   "hits": [
+    "chat"
+   ]
+  },
+  {
+   "id": "HomeShellBadgedIcon",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/home_shell_badged_icon.dart",
+   "score": 3,
+   "hits": [
+    "אין",
+    "יחות",
+    "ארכיון"
+   ]
+  }
+ ],
+ "strong": [
+  "csvIsBlank",
+  "csvIsComment"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "CircleFab",
+  "DateChip",
+  "Pill",
+  "PrivacyNotice",
+  "TypingBubble",
+  "ForgeChatSettingsSwitchRow",
+  "ForgeMessageThread",
+  "CartChatBubble",
+  "ChatSettingsActionRow",
+  "ChatSettingsSectionTile",
+  "ChatSettingsSwitchRow",
+  "ForgedChat",
+  "HomeShellBadgedIcon"
+ ],
+ "creates": "new/dart/chat_message_is_mine.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 12 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: csvIsBlank 0/12 · csvIsComment 0/12 · chatCounterpartRole 0/12 · chatThreadVisibleToUid 0/12 · isHttpPhotoRef 0/12 · isLinkableWord 0/12. לכן נוצר חדש.",
+ "sig": "7e469d486a4f86182fff4d0081d10bb999f5199b18f3cbeb6b850543f0da45bb"
+}

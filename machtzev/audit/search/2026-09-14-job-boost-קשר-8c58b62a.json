@@ -1,0 +1,160 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T21:07:55.251Z",
+ "query": "job boost מקשר\"",
+ "tokens": [
+  "job",
+  "boost",
+  "קשר"
+ ],
+ "oracle": {
+  "atomIndexSha": "7102c068cc0e3b3b49c2561790c524f33f39aab9fc2eb7991bd8fe04c8428db8",
+  "logicCensusSha": "e8282743103b0f6d43046b3fa590a798e84d8ec9f6afd0cb980134d7c616e8da",
+  "display": 1936,
+  "logic": 1012
+ },
+ "candidates": [
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "ChatSettingsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_action_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "ChatSettingsSectionTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_section_tile.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "ChatSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_switch_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "ConfirmDialog",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/confirm_dialog.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "DirectoryRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/directory_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "DsMultiSelect",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_multi_select.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "DsSelect",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_select.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "HomeShellBadgedIcon",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/home_shell_badged_icon.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "HomeShellMenuRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/home_shell_menu_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "InlineTextRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/inline_text_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "OrderRowCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/order_row_card.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "QuickReplyBanner",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/quick_reply_banner.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_action_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsInlineTextRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_inline_text_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/job_boost.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 9 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: matesBoost 0/9. לכן נוצר חדש.",
+ "sig": "8c58b62ad93f2e0f63c1c5c8c179153a3b6b12ceb9ebfd9a77313e63ae4dbc58"
+}

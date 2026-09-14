@@ -1,0 +1,180 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T21:08:04.170Z",
+ "query": "resolve active lens סדר לפי",
+ "tokens": [
+  "resolve",
+  "active",
+  "lens",
+  "סדר",
+  "לפי"
+ ],
+ "oracle": {
+  "atomIndexSha": "7102c068cc0e3b3b49c2561790c524f33f39aab9fc2eb7991bd8fe04c8428db8",
+  "logicCensusSha": "e8282743103b0f6d43046b3fa590a798e84d8ec9f6afd0cb980134d7c616e8da",
+  "display": 1936,
+  "logic": 1012
+ },
+ "candidates": [
+  {
+   "id": "ForgeLensGroupHeader",
+   "layer": "display",
+   "file": "dart-forge-bs/header/lens_group_header.dart",
+   "score": 4,
+   "hits": [
+    "lens",
+    "סדר"
+   ]
+  },
+  {
+   "id": "activeByMonth",
+   "layer": "logic",
+   "file": "dart-maor/portfolio-active-by-month.dart",
+   "score": 3,
+   "hits": [
+    "active"
+   ]
+  },
+  {
+   "id": "activeDriver",
+   "layer": "logic",
+   "file": "dart-maor/active-driver.dart",
+   "score": 3,
+   "hits": [
+    "active"
+   ]
+  },
+  {
+   "id": "ayinActive",
+   "layer": "logic",
+   "file": "dart-maor/ayin-active.dart",
+   "score": 3,
+   "hits": [
+    "active"
+   ]
+  },
+  {
+   "id": "hokEffectivelyActive",
+   "layer": "logic",
+   "file": "dart-maor/hok-effectively-active.dart",
+   "score": 3,
+   "hits": [
+    "active"
+   ]
+  },
+  {
+   "id": "LensGroupHeader",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/lens_group_header.dart",
+   "score": 3,
+   "hits": [
+    "lens"
+   ]
+  },
+  {
+   "id": "resolveCatTitle",
+   "layer": "logic",
+   "file": "dart/resolve_cat_title.dart",
+   "score": 3,
+   "hits": [
+    "resolve"
+   ]
+  },
+  {
+   "id": "resolveEnrollFamily",
+   "layer": "logic",
+   "file": "dart-maor/resolve-enroll-family.dart",
+   "score": 3,
+   "hits": [
+    "resolve"
+   ]
+  },
+  {
+   "id": "resolveLocalized",
+   "layer": "logic",
+   "file": "dart-maor/resolve-localized.dart",
+   "score": 3,
+   "hits": [
+    "resolve"
+   ]
+  },
+  {
+   "id": "resolveOrgConfig",
+   "layer": "logic",
+   "file": "dart-maor/resolve-org-config.dart",
+   "score": 3,
+   "hits": [
+    "resolve"
+   ]
+  },
+  {
+   "id": "supEnforceActive",
+   "layer": "logic",
+   "file": "dart-maor/sup-enforce-active.dart",
+   "score": 3,
+   "hits": [
+    "active"
+   ]
+  },
+  {
+   "id": "wfActive",
+   "layer": "logic",
+   "file": "dart/wf_active.dart",
+   "score": 3,
+   "hits": [
+    "active"
+   ]
+  },
+  {
+   "id": "Forge4AtomsStatus",
+   "layer": "display",
+   "file": "dart-forge-bs/status/4_atoms_status.dart",
+   "score": 2,
+   "hits": [
+    "סדר",
+    "לפי"
+   ]
+  },
+  {
+   "id": "ForgeBarChart",
+   "layer": "display",
+   "file": "dart-forge-bs/dataviz/bar_chart.dart",
+   "score": 2,
+   "hits": [
+    "סדר",
+    "לפי"
+   ]
+  },
+  {
+   "id": "ForgeEventCalendar",
+   "layer": "display",
+   "file": "dart-forge-bs/temporal/event_calendar.dart",
+   "score": 2,
+   "hits": [
+    "סדר",
+    "לפי"
+   ]
+  }
+ ],
+ "strong": [
+  "activeByMonth",
+  "activeDriver",
+  "ayinActive",
+  "hokEffectivelyActive",
+  "resolveCatTitle",
+  "resolveEnrollFamily",
+  "resolveLocalized",
+  "resolveOrgConfig",
+  "supEnforceActive",
+  "wfActive"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "ForgeLensGroupHeader",
+  "LensGroupHeader"
+ ],
+ "creates": "new/dart/resolve_active_lens.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 9 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: activeByMonth 0/9 · activeDriver 0/9 · ayinActive 0/9 · hokEffectivelyActive 0/9 · resolveCatTitle 0/9 · resolveEnrollFamily 0/9 · resolveLocalized 0/9 · resolveOrgConfig 0/9 · supEnforceActive 0/9 · wfActive 0/9 · resolvePath 0/9. לכן נוצר חדש.",
+ "sig": "fff23c513f54e43a40d66dd4e4aab0ed1a33294d2a944d5c308172a94a4ba6a2"
+}

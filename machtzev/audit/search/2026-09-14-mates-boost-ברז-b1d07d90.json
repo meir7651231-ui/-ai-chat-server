@@ -1,0 +1,43 @@
+{
+ "v": 1,
+ "ts": "2026-09-14T21:07:53.620Z",
+ "query": "mates boost ברז\"",
+ "tokens": [
+  "mates",
+  "boost",
+  "ברז"
+ ],
+ "oracle": {
+  "atomIndexSha": "7102c068cc0e3b3b49c2561790c524f33f39aab9fc2eb7991bd8fe04c8428db8",
+  "logicCensusSha": "e8282743103b0f6d43046b3fa590a798e84d8ec9f6afd0cb980134d7c616e8da",
+  "display": 1936,
+  "logic": 1012
+ },
+ "candidates": [
+  {
+   "id": "StockRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/stock_row.dart",
+   "score": 1,
+   "hits": [
+    "ברז"
+   ]
+  },
+  {
+   "id": "StockTab",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/stock_tab.dart",
+   "score": 1,
+   "hits": [
+    "ברז"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart/mates_boost.dart",
+ "chosen": "none",
+ "why": "נחצב אוטומטית מ-buildsmart/app_flutter ע\"י חצב-AST (חוק-4 — verbatim מהמקור, כולל תיעודו). מועמדים-חזקים (ציון-שם ≥3, אותה שכבה) הורצו על 9 דוגמאות-הזהב של האטום דרך logic-proof ונכשלו — אי-כפילות מוכחת בריצה, לא בהסתכלות: jobBoost 0/9. לכן נוצר חדש.",
+ "sig": "b1d07d90a9c9031ac888694ac7d3d77c569d795fb26347f3d404e71356adc82c"
+}
