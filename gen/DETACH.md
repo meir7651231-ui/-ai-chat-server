@@ -38,9 +38,14 @@ node gen/build.mjs gen/specs/tikim.txt --site   # משפט ⇒ ספק ⇒ HTML +
 - לא כותב קוד-חישוב באפליקציה: כל חישוב הוא אטום שעבר את הדוגמאות בריצה. צורך בלי אטום מוכח מוצג «אין אטום מוכח».
 - לא רץ אלא ביד.
 
+## המחולל המלא בלי אדם באמצע (CI)
+`.github/workflows/gen.yml`: כל push עם קובץ ב-`gen/specs/*.txt`, או Actions ⇒ gen ⇒ Run workflow עם שם+משפט ⇒
+Flutter מותקן, buildsmart משוכפל, `node gen/build.mjs <ספק> --site` לכל ספק ⇒ `gh-pages/gen/<שם>/` (אתר) + `live.html` + `studio.html`.
+כתובת (אחרי הפעלת Pages על ענף gh-pages): `https://meir7651231-ui.github.io/-ai-chat-server/gen/`.
+
 ## ניתוק מלא (החזרת המצב לקדמותו)
 ```bash
-git rm -r gen && git commit -m "gen: ניתוק"
+git rm -r gen .github/workflows/gen.yml && git commit -m "gen: ניתוק"
 ```
 או בלי commit: `rm -rf gen`. אין רישום ב-regen, אין שער, אין baseline, אין pin.
 `node gen/detach.mjs --check` מוכיח את זה בכל רגע.

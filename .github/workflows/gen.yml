@@ -1,0 +1,75 @@
+# 🏭 gen · המחולל המלא בלי אדם באמצע: משפט בעברית ⇒ ספק ⇒ הוכחה-בריצה ⇒ HTML + מודולי-Dart (כל אטומי-התצוגה של המחצב) ⇒ flutter build web ⇒ אתר.
+# שתי דרכים להפעיל: (א) קובץ חדש/משתנה ב-gen/specs/<שם>.txt ו-push. (ב) Actions ⇒ gen ⇒ Run workflow עם שם ומשפט.
+# הפלט: ענף gh-pages, תיקייה gen/<שם>/ (האתר) + gen/<שם>/live.html (הריצה) + gen/studio.html. אפס בינה בכל שלב.
+name: gen
+on:
+  push:
+    branches: ['**']
+    paths: ['gen/specs/**', 'gen/*.mjs', 'gen/needs.data.json', '.github/workflows/gen.yml']
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'שם התיקייה (אותיות אנגליות/ספרות), למשל tikim'
+        required: true
+      sentence:
+        description: 'המשפט בעברית, למשל: מעקב תיקים: לכל תיק יש לקוח, נושא, סכום ותאריך; שלבים: התקבל, בטיפול, סגור'
+        required: true
+concurrency:
+  group: gen-${{ github.ref }}
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  build:
+    name: 🏭 משפט ⇒ אתר
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: buildsmart (בית-ה-Flutter)
+        run: git clone --depth 1 https://github.com/meir7651231-ui/buildsmart "$RUNNER_TEMP/buildsmart"
+      - name: משפט מהטופס ⇒ קובץ-ספק
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          NAME: ${{ github.event.inputs.name }}
+          SENTENCE: ${{ github.event.inputs.sentence }}
+        run: |
+          case "$NAME" in *[!a-zA-Z0-9_-]*|"") echo "שם לא חוקי: $NAME"; exit 1;; esac
+          printf '%s\n' "$SENTENCE" > "gen/specs/$NAME.txt"
+      - name: המחולל — כל ספק ⇒ HTML + Dart + אתר
+        env:
+          BUILDSMART: ${{ runner.temp }}/buildsmart/app_flutter
+        run: |
+          export FLUTTER="$(which flutter)"
+          mkdir -p public
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then specs="gen/specs/${{ github.event.inputs.name }}.txt"; else specs="$(ls gen/specs/*.txt)"; fi
+          for f in $specs; do
+            slug="$(basename "$f" .txt)"
+            echo "=== $slug"
+            node gen/build.mjs "$f" --site
+            if [ -d "gen/out/$slug/site" ]; then mkdir -p "public/$slug"; cp -r "gen/out/$slug/site/." "public/$slug/"; fi
+            mkdir -p "public/$slug"; cp "gen/out/$slug/live.html" "public/$slug/live.html"; cp "gen/out/$slug/log.md" "public/$slug/log.md"; cp "gen/out/$slug/report.json" "public/$slug/report.json"
+          done
+          node gen/studio.mjs && cp gen/out/studio.html public/studio.html
+          node gen/index-page.mjs public > public/index.html
+      - name: פרסום ל-gh-pages/gen
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          destination_dir: gen
+          keep_files: true
+          commit_message: 'gen: ${{ github.event.inputs.name || github.sha }}'
+      - name: הפלט (גם כקובץ להורדה)
+        uses: actions/upload-artifact@v4
+        with:
+          name: gen-sites
+          path: public
+          retention-days: 14
