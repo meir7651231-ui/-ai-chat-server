@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>תקציב מול ביצוע</title>
+<meta name="description" content="תקציב מול ביצוע כגרף, מועתק במדידה מ-Our World in Data.">
+<style>
+/* אין קישור לגופן: Playfair ו-Lato של המקור נטולי אותיות עבריות.
+   המבנה הועתק — כותרת בגופן-מסורתי וגוף בגופן-מסך — בגופני המערכת. */
+*{box-sizing:border-box}html,body{overflow-x:hidden}
+:root{
+ /* ===== נמדד מ-ourworldindata.org ===== */
+ --bg:#ffffff;--ink:#2d2e2d;--mut:#5b5b5b;--hair:#e4e4e4;
+ --grid:#dddddd;--zero:#999999;      /* פנים מקווקו 4,4 · קו-אפס מלא */
+ --halo:#ffffff;                      /* ההילה מתחת לכל קו */
+ --over:#c4523e;--under:#18470f;
+ --tk:12px}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#1b1c1e;--ink:#eceded;--mut:#a7a9ab;--hair:#33353a;
+ --grid:#3a3d42;--zero:#6d7075;--halo:#1b1c1e;
+ --over:#f0836c;--under:#77c26a}}
+:root[data-theme=dark]{
+ --bg:#1b1c1e;--ink:#eceded;--mut:#a7a9ab;--hair:#33353a;
+ --grid:#3a3d42;--zero:#6d7075;--halo:#1b1c1e;
+ --over:#f0836c;--under:#77c26a}
+/* צבע-הקו נשאר הנמדד; צבע-התווית מוכהה/מובהר עד שהוא עובר 4.5 */
+.lab0{color:#9a5129}
+.lab1{color:#00847e}
+.lab2{color:#a2559c}
+.lab3{color:#4c6a9c}
+.lab4{color:#c4523e}
+.lab5{color:#18470f}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ .lab0{color:#b27b5c}
+ .lab1{color:#1f938d}
+ .lab2{color:#b170ac}
+ .lab3{color:#7088b0}
+ .lab4{color:#cb6755}
+ .lab5{color:#74916f}}}
+:root[data-theme=dark]{
+ .lab0{color:#b27b5c}
+ .lab1{color:#1f938d}
+ .lab2{color:#b170ac}
+ .lab3{color:#7088b0}
+ .lab4{color:#cb6755}
+ .lab5{color:#74916f}}
+
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:400 15px/21px system-ui,sans-serif}
+h1,h2{margin:0}p{margin:0}bdi{unicode-bidi:isolate}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--zero);outline-offset:2px}
+
+.wrap{max-width:1040px;margin:0 auto;padding:26px 20px 70px}
+.card{border:1px solid var(--hair);padding:20px 22px 16px}
+h1{font:600 25px/30px Georgia,"Frank Ruehl CLM","David Libre",serif;color:var(--ink)}
+.sub{font-size:15px;line-height:19.3px;color:var(--mut);margin-top:6px;max-width:70ch}
+.tabs{display:flex;gap:0;margin:16px 0 10px;border:1px solid var(--hair);
+ width:max-content;border-radius:3px;overflow:hidden}
+.tabs button{border:0;background:0;padding:7px 16px;font-size:14px;color:var(--mut);
+ border-inline-start:1px solid var(--hair)}
+.tabs button:first-child{border-inline-start:0}
+.tabs button[aria-selected=true]{background:var(--hair);color:var(--ink);font-weight:600}
+
+.chart{width:100%;height:auto;display:block}
+.grid{stroke:var(--grid);stroke-width:1;stroke-dasharray:4 4}
+.zero{stroke:var(--zero);stroke-width:1}
+.tk{fill:var(--mut);font:400 var(--tk)/1 system-ui,sans-serif}
+.halo{fill:none;stroke:var(--halo);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:butt}
+.ser{fill:none;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:butt}
+/* ב-SVG בתוך עמוד RTL, עוגן-ברירת-המחדל של טקסט עברי הוא קצהו
+   הימני — והוא זורם שמאלה, אל תוך הציור. direction:ltr מיישר את
+   התיבה לשמאל; המילים העבריות עצמן עדיין נקראות מימין לשמאל.  */
+.lab,.labv{direction:ltr;text-anchor:start}
+.lab{font:600 var(--tk)/1 system-ui,sans-serif;fill:currentColor}
+.labv{font:400 11px/1 system-ui,sans-serif;fill:var(--mut)}
+svg .lab0,svg .lab1,svg .lab2,svg .lab3,svg .lab4,svg .lab5{fill:currentColor}
+
+.pane{display:none}.pane.on{display:block}
+
+.brow{display:grid;grid-template-columns:190px minmax(0,1fr) 210px;gap:12px;
+ align-items:center;padding:9px 0;border-bottom:1px solid var(--hair)}
+.bn{font-size:14px}
+.btrack{position:relative;height:20px;background:transparent}
+.bplan{position:absolute;inset-block:0;inset-inline-start:0;background:var(--hair)}
+.bact{position:absolute;inset-block:2px;inset-inline-start:0;background:currentColor;opacity:.85}
+.bv{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums;text-align:end}
+.bv b{font-weight:600}
+.over{color:var(--over)}.under{color:var(--under)}
+
+table{width:100%;border-collapse:collapse;font-size:13px;
+ font-variant-numeric:tabular-nums;margin-top:4px}
+th,td{padding:6px 7px;border-bottom:1px solid var(--hair);text-align:start;white-space:nowrap}
+th{font:600 12px/16px system-ui,sans-serif;color:var(--mut);border-bottom:2px solid var(--zero)}
+td.n{text-align:start}
+
+.src{margin-top:14px;padding-top:12px;border-top:1px solid var(--hair);
+ font-size:13px;line-height:19px;color:var(--mut)}
+.src b{color:var(--ink);font-weight:600}
+.say{margin-top:22px;color:var(--mut);font-size:13px;line-height:20px;max-width:78ch}
+.say b{color:var(--ink)}
+@media(max-width:720px){
+ .brow{grid-template-columns:1fr;gap:4px}
+ .bv{text-align:start}
+ .tblwrap{overflow-x:auto}}
+</style></head><body>
+<div class="wrap"><div class="card">
+
+<h1>תקציב מול ביצוע — תשפ״ז</h1>
+<p class="sub"><b>ביצוע מצטבר</b> הוא סכום ההוצאה בפועל מתחילת השנה ועד סוף החודש המוצג, לכל סעיף בנפרד. הקו נעצר באב — אלול טרם דווח.</p>
+
+<div class="tabs" role="tablist">
+ <button role="tab" aria-selected="true" data-t="line" id="t1" aria-controls="p1">קו</button>
+ <button role="tab" aria-selected="false" data-t="bar" id="t2" aria-controls="p2">עמודות</button>
+ <button role="tab" aria-selected="false" data-t="tbl" id="t3" aria-controls="p3">טבלה</button>
+</div>
+
+<div class="pane on" id="p1" role="tabpanel" aria-labelledby="t1">
+ <svg viewBox="0 0 880 440" class="chart" role="img"
+ aria-label="ביצוע מצטבר לפי סעיף, 11 חודשים">
+ <title>ביצוע מצטבר לפי סעיף תקציבי</title>
+ <line x1="72" y1="402" x2="684" y2="402" class="zero"/>
+ <line x1="72" y1="305" x2="684" y2="305" class="grid"/>
+ <line x1="72" y1="208" x2="684" y2="208" class="grid"/>
+ <line x1="72" y1="111" x2="684" y2="111" class="grid"/>
+ <line x1="72" y1="14" x2="684" y2="14" class="grid"/>
+ <text x="64" y="406" class="tk" text-anchor="end">0 ₪</text>
+ <text x="64" y="309" class="tk" text-anchor="end">300 אלף ₪</text>
+ <text x="64" y="212" class="tk" text-anchor="end">600 אלף ₪</text>
+ <text x="64" y="115" class="tk" text-anchor="end">900 אלף ₪</text>
+ <text x="64" y="18" class="tk" text-anchor="end">1.2 מ׳ ₪</text>
+ <text x="72" y="422" class="tk" text-anchor="middle">תשרי</text>
+ 
+ <text x="194.4" y="422" class="tk" text-anchor="middle">כסלו</text>
+ 
+ <text x="316.8" y="422" class="tk" text-anchor="middle">שבט</text>
+ 
+ <text x="439.2" y="422" class="tk" text-anchor="middle">ניסן</text>
+ 
+ <text x="561.6" y="422" class="tk" text-anchor="middle">סיון</text>
+ 
+ <text x="684" y="422" class="tk" text-anchor="middle">אב</text>
+ <path d="M72.0 366.4 L133.2 321.8 L194.4 292.1 L255.6 258.1 L316.8 216.7 L378.0 180.8 L439.2 152.7 L500.4 116.5 L561.6 72.8 L622.8 42.5 L684.0 16.3" class="halo"/>
+ <path d="M72.0 394.2 L133.2 383.6 L194.4 374.8 L255.6 365.5 L316.8 357.7 L378.0 350.6 L439.2 339.9 L500.4 331.8 L561.6 323.4 L622.8 313.7 L684.0 305.3" class="halo"/>
+ <path d="M72.0 395.2 L133.2 389.4 L194.4 382.6 L255.6 377.1 L316.8 371.0 L378.0 364.2 L439.2 359.3 L500.4 354.5 L561.6 349.6 L622.8 344.4 L684.0 340.2" class="halo"/>
+ <path d="M72.0 398.1 L133.2 394.2 L194.4 390.4 L255.6 386.8 L316.8 382.3 L378.0 377.8 L439.2 371.9 L500.4 365.8 L561.6 361.3 L622.8 357.4 L684.0 351.9" class="halo"/>
+ <path d="M72.0 397.5 L133.2 394.6 L194.4 390.4 L255.6 386.5 L316.8 381.6 L378.0 378.7 L439.2 373.9 L500.4 371.0 L561.6 367.1 L622.8 363.2 L684.0 359.3" class="halo"/>
+ <path d="M72.0 398.1 L133.2 392.3 L194.4 386.8 L255.6 380.7 L316.8 375.8 L378.0 370.0 L439.2 364.8 L500.4 359.0 L561.6 355.1 L622.8 350.9 L684.0 346.1" class="halo"/>
+ <path d="M72.0 366.4 L133.2 321.8 L194.4 292.1 L255.6 258.1 L316.8 216.7 L378.0 180.8 L439.2 152.7 L500.4 116.5 L561.6 72.8 L622.8 42.5 L684.0 16.3" class="ser" style="stroke:#9a5129"/>
+ <path d="M72.0 394.2 L133.2 383.6 L194.4 374.8 L255.6 365.5 L316.8 357.7 L378.0 350.6 L439.2 339.9 L500.4 331.8 L561.6 323.4 L622.8 313.7 L684.0 305.3" class="ser" style="stroke:#00847e"/>
+ <path d="M72.0 395.2 L133.2 389.4 L194.4 382.6 L255.6 377.1 L316.8 371.0 L378.0 364.2 L439.2 359.3 L500.4 354.5 L561.6 349.6 L622.8 344.4 L684.0 340.2" class="ser" style="stroke:#a2559c"/>
+ <path d="M72.0 398.1 L133.2 394.2 L194.4 390.4 L255.6 386.8 L316.8 382.3 L378.0 377.8 L439.2 371.9 L500.4 365.8 L561.6 361.3 L622.8 357.4 L684.0 351.9" class="ser" style="stroke:#4c6a9c"/>
+ <path d="M72.0 397.5 L133.2 394.6 L194.4 390.4 L255.6 386.5 L316.8 381.6 L378.0 378.7 L439.2 373.9 L500.4 371.0 L561.6 367.1 L622.8 363.2 L684.0 359.3" class="ser" style="stroke:#c4523e"/>
+ <path d="M72.0 398.1 L133.2 392.3 L194.4 386.8 L255.6 380.7 L316.8 375.8 L378.0 370.0 L439.2 364.8 L500.4 359.0 L561.6 355.1 L622.8 350.9 L684.0 346.1" class="ser" style="stroke:#18470f"/>
+ <circle cx="684" cy="16.26333333333332" r="3"
+   style="fill:#9a5129"/>
+ <circle cx="684" cy="305.3233333333333" r="3"
+   style="fill:#00847e"/>
+ <circle cx="684" cy="340.24333333333334" r="3"
+   style="fill:#a2559c"/>
+ <circle cx="684" cy="351.8833333333333" r="3"
+   style="fill:#4c6a9c"/>
+ <circle cx="684" cy="359.32" r="3"
+   style="fill:#c4523e"/>
+ <circle cx="684" cy="346.06333333333333" r="3"
+   style="fill:#18470f"/>
+ <text x="694" y="28" class="lab lab0">שכר מלמדים וצוות חינוכי</text>
+ <text x="694" y="42" class="labv lab0">1.2 מ׳ ₪</text>
+ <text x="694" y="286" class="lab lab1">מטבח וסעודות</text>
+ <text x="694" y="300" class="labv lab1">299 אלף ₪</text>
+ <text x="694" y="316" class="lab lab2">הסעות</text>
+ <text x="694" y="330" class="labv lab2">191 אלף ₪</text>
+ <text x="694" y="376" class="lab lab3">אחזקת מבנה וחשמל</text>
+ <text x="694" y="390" class="labv lab3">155 אלף ₪</text>
+ <text x="694" y="406" class="lab lab4">פנימייה</text>
+ <text x="694" y="420" class="labv lab4">132 אלף ₪</text>
+ <text x="694" y="346" class="lab lab5">אחר</text>
+ <text x="694" y="360" class="labv lab5">173 אלף ₪</text>
+</svg>
+</div>
+
+<div class="pane" id="p2" role="tabpanel" aria-labelledby="t2">
+ <div class="brow">
+   <span class="bn">שכר מלמדים וצוות חינוכי</span>
+   <span class="btrack">
+    <span class="bplan" style="width:98.9%"></span>
+    <span class="bact lab0" style="width:100.0%"></span>
+   </span>
+   <span class="bv"><bdi>1.2 מ׳</bdi> / <bdi>1.2 מ׳</bdi> ₪
+    <b class="over">+13 אלף</b></span>
+  </div>
+<div class="brow">
+   <span class="bn">מטבח וסעודות</span>
+   <span class="btrack">
+    <span class="bplan" style="width:100.0%"></span>
+    <span class="bact lab1" style="width:95.8%"></span>
+   </span>
+   <span class="bv"><bdi>299 אלף</bdi> / <bdi>312 אלף</bdi> ₪
+    <b class="under">−13 אלף</b></span>
+  </div>
+<div class="brow">
+   <span class="bn">הסעות</span>
+   <span class="btrack">
+    <span class="bplan" style="width:100.0%"></span>
+    <span class="bact lab2" style="width:97.4%"></span>
+   </span>
+   <span class="bv"><bdi>191 אלף</bdi> / <bdi>196 אלף</bdi> ₪
+    <b class="under">−5 אלף</b></span>
+  </div>
+<div class="brow">
+   <span class="bn">אחזקת מבנה וחשמל</span>
+   <span class="btrack">
+    <span class="bplan" style="width:100.0%"></span>
+    <span class="bact lab3" style="width:92.3%"></span>
+   </span>
+   <span class="bv"><bdi>155 אלף</bdi> / <bdi>168 אלף</bdi> ₪
+    <b class="under">−13 אלף</b></span>
+  </div>
+<div class="brow">
+   <span class="bn">פנימייה</span>
+   <span class="btrack">
+    <span class="bplan" style="width:95.5%"></span>
+    <span class="bact lab4" style="width:100.0%"></span>
+   </span>
+   <span class="bv"><bdi>132 אלף</bdi> / <bdi>126 אלף</bdi> ₪
+    <b class="over">+6 אלף</b></span>
+  </div>
+<div class="brow">
+   <span class="bn">אחר</span>
+   <span class="btrack">
+    <span class="bplan" style="width:97.1%"></span>
+    <span class="bact lab5" style="width:100.0%"></span>
+   </span>
+   <span class="bv"><bdi>173 אלף</bdi> / <bdi>168 אלף</bdi> ₪
+    <b class="over">+5 אלף</b></span>
+  </div>
+</div>
+
+<div class="pane" id="p3" role="tabpanel" aria-labelledby="t3">
+ <div class="tblwrap"><table>
+  <thead><tr><th>סעיף</th><th>תשרי</th><th>חשון</th><th>כסלו</th><th>טבת</th><th>שבט</th><th>אדר</th><th>ניסן</th><th>אייר</th><th>סיון</th><th>תמוז</th><th>אב</th><th>ביצוע</th><th>תקציב</th></tr></thead>
+  <tbody><tr><td>שכר מלמדים וצוות חינוכי</td>
+ <td class="n"><bdi>110</bdi></td><td class="n"><bdi>138</bdi></td><td class="n"><bdi>92</bdi></td><td class="n"><bdi>105</bdi></td><td class="n"><bdi>128</bdi></td><td class="n"><bdi>111</bdi></td><td class="n"><bdi>87</bdi></td><td class="n"><bdi>112</bdi></td><td class="n"><bdi>135</bdi></td><td class="n"><bdi>94</bdi></td><td class="n"><bdi>81</bdi></td>
+ <td class="n"><b><bdi>1193</bdi></b></td><td class="n"><bdi>1180</bdi></td></tr>
+<tr><td>מטבח וסעודות</td>
+ <td class="n"><bdi>24</bdi></td><td class="n"><bdi>33</bdi></td><td class="n"><bdi>27</bdi></td><td class="n"><bdi>29</bdi></td><td class="n"><bdi>24</bdi></td><td class="n"><bdi>22</bdi></td><td class="n"><bdi>33</bdi></td><td class="n"><bdi>25</bdi></td><td class="n"><bdi>26</bdi></td><td class="n"><bdi>30</bdi></td><td class="n"><bdi>26</bdi></td>
+ <td class="n"><b><bdi>299</bdi></b></td><td class="n"><bdi>312</bdi></td></tr>
+<tr><td>הסעות</td>
+ <td class="n"><bdi>21</bdi></td><td class="n"><bdi>18</bdi></td><td class="n"><bdi>21</bdi></td><td class="n"><bdi>17</bdi></td><td class="n"><bdi>19</bdi></td><td class="n"><bdi>21</bdi></td><td class="n"><bdi>15</bdi></td><td class="n"><bdi>15</bdi></td><td class="n"><bdi>15</bdi></td><td class="n"><bdi>16</bdi></td><td class="n"><bdi>13</bdi></td>
+ <td class="n"><b><bdi>191</bdi></b></td><td class="n"><bdi>196</bdi></td></tr>
+<tr><td>אחזקת מבנה וחשמל</td>
+ <td class="n"><bdi>12</bdi></td><td class="n"><bdi>12</bdi></td><td class="n"><bdi>12</bdi></td><td class="n"><bdi>11</bdi></td><td class="n"><bdi>14</bdi></td><td class="n"><bdi>14</bdi></td><td class="n"><bdi>18</bdi></td><td class="n"><bdi>19</bdi></td><td class="n"><bdi>14</bdi></td><td class="n"><bdi>12</bdi></td><td class="n"><bdi>17</bdi></td>
+ <td class="n"><b><bdi>155</bdi></b></td><td class="n"><bdi>168</bdi></td></tr>
+<tr><td>פנימייה</td>
+ <td class="n"><bdi>14</bdi></td><td class="n"><bdi>9</bdi></td><td class="n"><bdi>13</bdi></td><td class="n"><bdi>12</bdi></td><td class="n"><bdi>15</bdi></td><td class="n"><bdi>9</bdi></td><td class="n"><bdi>15</bdi></td><td class="n"><bdi>9</bdi></td><td class="n"><bdi>12</bdi></td><td class="n"><bdi>12</bdi></td><td class="n"><bdi>12</bdi></td>
+ <td class="n"><b><bdi>132</bdi></b></td><td class="n"><bdi>126</bdi></td></tr>
+<tr><td>אחר</td>
+ <td class="n"><bdi>12</bdi></td><td class="n"><bdi>18</bdi></td><td class="n"><bdi>17</bdi></td><td class="n"><bdi>19</bdi></td><td class="n"><bdi>15</bdi></td><td class="n"><bdi>18</bdi></td><td class="n"><bdi>16</bdi></td><td class="n"><bdi>18</bdi></td><td class="n"><bdi>12</bdi></td><td class="n"><bdi>13</bdi></td><td class="n"><bdi>15</bdi></td>
+ <td class="n"><b><bdi>173</bdi></b></td><td class="n"><bdi>168</bdi></td></tr></tbody>
+ </table></div>
+ <p class="src" style="border:0;padding:0;margin-top:8px">הסכומים באלפי ש״ח.</p>
+</div>
+
+<p class="src"><b>מקור הנתונים:</b> ספר התקציב תשפ״ז · דיווחי הביצוע החודשיים. סך התקציב <bdi>2.1 מ׳</bdi> ₪, סך הביצוע <bdi>2.1 מ׳</bdi> ₪.</p>
+
+</div>
+
+<p class="say">הגרף מועתק במדידה מ-Our World in Data: קווי-רשת פנימיים ב־<bdi dir="ltr">#dddddd</bdi> מקווקווים <bdi dir="ltr">4,4</bdi>, <b>וקו-האפס מלא וכהה יותר</b> ב־<bdi dir="ltr">#999999</bdi> — שני טיפולים שונים בכוונה. תוויות הצירים ב־<bdi>12px</bdi>, והיחידה חוזרת על <b>כל</b> סימן ולא פעם אחת בכותרת הציר. <b>אין תיבת-מקרא</b> — שם הסעיף יושב בקצה הקו שלו. <b>וכל קו מצויר פעמיים:</b> הילה ברוחב <bdi>2.5</bdi> בצבע הרקע, ומעליה הקו ברוחב <bdi>1.5</bdi> — כך שקווים שנחתכים נשארים קריאים. אומת במקור: שישה נתיבי-הילה מול שישה נתיבים צבעוניים. <b>שלוש סטיות מודעות:</b> שישה צבעי-הסדרה נמדדו, אבל צבע התווית לא — במקור הוא חזר <bdi dir="ltr">#000000</bdi> בעוד הצילום מראה תוויות צבעוניות, כנראה כי תפסתי את עותקי-ההילה; כאן התווית מוכהית מצבע-הקו עד שהיא עוברת <bdi>4.5</bdi>. שמונה הסעיפים צומצמו לשישה ו«אחר», כי שמונה תוויות בקצה אחד מתנגשות ושש הוא בדיוק מה שהמקור מציג. והזמן זורם שמאל→ימין גם כאן: כך נוהגת העיתונות הכלכלית בישראל, ומספרים וזמן הם LTR ממילא.</p>
+
+</div>
+<script>
+(function(){
+ var tabs=[].slice.call(document.querySelectorAll('[role=tab]'));
+ var panes={line:'p1',bar:'p2',tbl:'p3'};
+ tabs.forEach(function(b){b.addEventListener('click',function(){
+  tabs.forEach(function(x){x.setAttribute('aria-selected','false');});
+  b.setAttribute('aria-selected','true');
+  Object.keys(panes).forEach(function(k){
+   document.getElementById(panes[k]).classList.toggle('on',k===b.dataset.t);});
+ });});
+ document.querySelector('.tabs').addEventListener('keydown',function(e){
+  var i=tabs.indexOf(document.activeElement); if(i<0)return;
+  var n=e.key==='ArrowLeft'?i+1:e.key==='ArrowRight'?i-1:-1;   /* RTL */
+  if(n<0||n>=tabs.length)return; e.preventDefault(); tabs[n].focus(); tabs[n].click();});
+})();
+</script>
+</body></html>
