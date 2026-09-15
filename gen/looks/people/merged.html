@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>רישום תשלום — המשולב</title>
+<meta name="description" content="כל הפלוסים שנמדדו מהאתרים המובילים, מורכבים לפעולה אחת: רישום תשלום.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}
+:root{
+ --bg:#f7f5f0;--card:#ffffff;--sunk:#efece4;--hair:#dcd8cc;--ink:#14180f;--mut:#4e5346;
+ --forest:#163300;--forestH:#0d1f00;--forestA:#0e0f0c;--lime:#9fe870;--edge:#0a1a00;
+ --focus:#ffdd00;--focusInk:#0b0c0c;--warn:#8a4b00;--warnBg:#fff2dd;--neg:#a8281a}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#0d0f0b;--card:#161a12;--sunk:#1e2318;--hair:#2c3325;--ink:#eef2e6;--mut:#a8b09c;
+ --warnBg:#2b1f0c;--warn:#f0c070;--neg:#ff8b7d}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Heebo,Arial,sans-serif;padding:26px 20px 60px}
+h1,h2,h3{margin:0}p{margin:0}ul,ol{margin:0;padding:0;list-style:none}
+button{font:inherit;cursor:pointer}bdi{unicode-bidi:isolate}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.w{max-width:1180px;margin:0 auto}
+h1{font-size:clamp(27px,4vw,38px);font-weight:800;letter-spacing:-.015em}
+p.lead{color:var(--mut);max-width:76ch;margin-top:8px}p.lead b{color:var(--ink)}
+.cols{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;margin-top:22px;align-items:start}
+@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--hair);border-radius:18px;padding:20px}
+.panel+.panel{margin-top:16px}
+h2{font-size:20px;font-weight:800;margin-bottom:4px}
+.sub{font-size:14px;color:var(--mut);margin-bottom:16px}
+
+/* ---- שורת המשפחה ---- */
+.fam{display:flex;align-items:center;gap:14px;background:var(--sunk);border-radius:14px;padding:14px 16px;margin-bottom:16px;flex-wrap:wrap}
+.fam .av{width:44px;height:44px;border-radius:500px;background:var(--forest);color:var(--lime);display:grid;place-items:center;font-weight:800;font-size:16px;flex:none}
+.fam .nm{display:block;font-weight:700;font-size:17px;line-height:1.25}
+.fam .ct{display:block;font-size:13.5px;color:var(--mut)}
+.fam .bal{margin-inline-start:auto;text-align:end}
+.fam .bal b{display:block;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
+.fam .bal span{font-size:12.5px;color:var(--mut)}
+
+/* ---- הכפתור המשולב ---- */
+.act{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.pay{
+ /* Wise: שלוש דרגות של ירוק · Monzo: גלולה · GOV.UK: קצה מוצק · Wise: 0s */
+ background:var(--forest);color:var(--lime);border:0;border-radius:500px;
+ min-height:48px;padding:0 26px;font-weight:700;font-size:16px;
+ box-shadow:0 2px 0 var(--edge);transition:none;
+ display:inline-flex;align-items:center;gap:10px}
+.pay:hover{background:var(--forestH)}
+.pay:active{background:var(--forestA);transform:translateY(2px);box-shadow:inset 0 0 0 1px var(--edge)}
+/* GOV.UK: המיקוד משנה את הכפתור עצמו, לא רק מוסיף קו */
+.pay:focus-visible{background:var(--focus);color:var(--focusInk);outline:3px solid transparent;
+ box-shadow:0 2px 0 var(--focusInk),0 0 0 2px var(--focusInk)}
+.pay:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;transform:none}
+.pay .sp{width:15px;height:15px;border-radius:500px;border:2px solid currentColor;border-top-color:transparent;animation:sp .7s linear infinite;display:none}
+.pay[data-busy] .sp{display:block}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.pay .sp{animation:none}}
+/* Linear: הקיצור חי בתוך הרכיב */
+kbd{font:600 11px ui-monospace,Menlo,monospace;background:var(--sunk);border:1px solid var(--hair);
+ border-radius:5px;padding:2px 6px;color:var(--mut)}
+.pay kbd{background:rgb(255 255 255/.14);border-color:transparent;color:inherit}
+.win{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--mut);margin-inline-start:auto}
+.win select{background:var(--card);color:var(--ink);border:1px solid var(--hair);border-radius:9px;padding:7px 9px;min-height:38px}
+.block{display:none;align-items:center;gap:9px;background:var(--warnBg);color:var(--warn);
+ border-radius:12px;padding:11px 14px;font-size:14px;font-weight:600;margin-top:14px}
+.block.on{display:flex}
+
+/* ---- הספר ---- */
+.led{margin-top:18px;display:grid;gap:8px}
+.led .r{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;
+ border:1px solid var(--hair);border-radius:13px;padding:12px 14px;background:var(--card)}
+.led .r .ic{width:32px;height:32px;border-radius:500px;display:grid;place-items:center;font-size:14px;font-weight:800;flex:none}
+.led .r.in .ic{background:var(--lime);color:var(--forest)}
+.led .r.rev .ic{background:var(--warnBg);color:var(--warn)}
+.led .r .t{font-size:15px;font-weight:600;line-height:1.3}
+.led .r .s{font-size:12.5px;color:var(--mut)}
+.led .r .m{font-variant-numeric:tabular-nums;font-weight:800;font-size:16px;white-space:nowrap}
+.led .r.rev .m{color:var(--warn)}
+.led .r .m small{display:block;font-size:11.5px;font-weight:400;color:var(--mut)}
+/* הביטול חי על השורה, לא בטוסט שנעלם */
+.rowact{grid-column:1/-1;display:flex;align-items:center;gap:10px;border-block-start:1px dashed var(--hair);
+ margin-top:10px;padding-top:10px;font-size:13.5px;color:var(--mut);flex-wrap:wrap}
+.rowact button{background:none;border:1px solid var(--hair);border-radius:500px;padding:6px 14px;min-height:36px;font-weight:700;font-size:13.5px;color:var(--ink)}
+.rowact button.u{border-color:var(--forest);color:var(--forest)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .rowact button.u{border-color:var(--lime);color:var(--lime)}}
+.rowact button.c{border-color:var(--warn);color:var(--warn)}
+.rowact .bar{flex:1;min-width:80px;height:4px;border-radius:500px;background:var(--hair);overflow:hidden}
+.rowact .bar i{display:block;height:100%;background:var(--forest);width:100%}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .rowact .bar i{background:var(--lime)}}
+.empty{color:var(--mut);font-size:14px;padding:14px;border:1px dashed var(--hair);border-radius:13px;text-align:center}
+
+/* ---- יומן ---- */
+.log{display:grid;gap:7px;max-height:330px;overflow:auto}
+.log li{font-size:13px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:9px;align-items:baseline;
+ border-inline-start:3px solid var(--hair);padding:5px 10px}
+.log li.a{border-color:var(--lime)}.log li.r{border-color:var(--warn)}
+.log li .who{font-weight:700;white-space:nowrap}
+.log li .tm{color:var(--mut);font-variant-numeric:tabular-nums;font-size:11.5px;white-space:nowrap}
+.log .ns{color:var(--mut);font-style:normal}
+
+/* ---- מקרא הפלוסים ---- */
+.legend{margin-top:22px}
+.legend table{width:100%;border-collapse:collapse;font-size:13.5px}
+.legend th,.legend td{text-align:start;padding:9px 10px;border-block-end:1px solid var(--hair);vertical-align:top}
+.legend th{color:var(--mut);font-weight:600;font-size:12.5px}
+.legend .src{font-weight:700;white-space:nowrap}
+.legend code{background:var(--sunk);border-radius:6px;padding:2px 7px;font:400 12px ui-monospace,Menlo,monospace;direction:ltr;display:inline-block}
+.legend .no{color:var(--mut)}
+</style></head>
+<body><div class="w">
+<h1>רישום תשלום — כל הפלוסים במקום אחד</h1>
+<p class="lead">שתים-עשרה החלטות־עיצוב שנמדדו מהאתרים המובילים, מורכבות לפעולה אחת.
+<b>לחץ</b> · <b>עבור עם Tab</b> (הכפתור הופך צהוב) · <b>Ctrl+Z</b> מבטל.
+לחץ שבע פעמים כדי לראות את שומר־הסף עוצר אותך.</p>
+
+<div class="cols">
+ <div>
+  <section class="panel">
+   <h2>תיק משפחה</h2>
+   <p class="sub">גבייה · שנת <bdi dir="ltr">תשפ״ז</bdi></p>
+   <div class="fam">
+    <span class="av">או</span>
+    <span><span class="nm">משפחת אונגר</span><span class="ct">לונדון · 3 ילדים · הנחה 10%</span></span>
+    <span class="bal"><b id="bal"><bdi dir="ltr">₪14,428</bdi></b><span>יתרה פתוחה</span></span>
+   </div>
+
+   <div class="act">
+    <button class="pay" id="go" type="button">
+     <i class="sp" aria-hidden="true"></i>
+     <span id="goTx">רישום תשלום <bdi dir="ltr">₪1,000</bdi></span>
+     <kbd>Enter</kbd>
+    </button>
+    <label class="win">חלון־חרטה
+     <select id="win" aria-label="חלון־חרטה בשניות">
+      <option value="5">5 שניות</option><option value="10" selected>10 שניות</option>
+      <option value="20">20 שניות</option><option value="30">30 שניות</option>
+     </select></label>
+   </div>
+   <p class="block" id="blk"><span aria-hidden="true">⛔</span><span>יתרה שלילית — הפעולה נחסמה. מקור: האפיון, אגף גבייה.</span></p>
+
+   <div class="led" id="led"><p class="empty">הספר ריק. לחץ «רישום תשלום».</p></div>
+  </section>
+ </div>
+
+ <div>
+  <section class="panel">
+   <h2>יומן פעולות</h2>
+   <p class="sub">מוסיף בלבד · שום דבר לא נמחק</p>
+   <ul class="log" id="log"><li class="ns">עדיין ריק</li></ul>
+  </section>
+
+  <section class="panel legend">
+   <h2>מאיפה כל פלוס</h2>
+   <p class="sub">כל החלטה והמקור שממנו נמדדה</p>
+   <table><thead><tr><th>מקור</th><th>הפלוס</th><th>הערך</th></tr></thead><tbody>
+   <tr><td class="src">GOV.UK</td><td>קצה מוצק מתחת לכפתור<br><span class="no">האצבע מרגישה לפני שהמוח קורא</span></td><td><code>box-shadow: 0 2px 0</code></td></tr><tr><td class="src">GOV.UK</td><td>בלחיצה הכפתור <b>יורד</b><br><span class="no">נמדד: top 67→65</span></td><td><code>הצל → inset · translateY(2px)</code></td></tr><tr><td class="src">GOV.UK</td><td>במיקוד הכפתור <b>הופך צהוב</b><br><span class="no">נראה על כל רקע, גם בשמש</span></td><td><code>#ffdd00 + מסגרת #0b0c0c</code></td></tr><tr><td class="src">Wise</td><td><b>אפס אנימציה</b><br><span class="no">לוחצים — קורה עכשיו</span></td><td><code>transition: 0s</code></td></tr><tr><td class="src">Wise</td><td>שלוש דרגות של אותו ירוק<br><span class="no">מנוחה · ריחוף · לחיצה</span></td><td><code>#163300 → #0d1f00 → #0e0f0c</code></td></tr><tr><td class="src">Monzo</td><td>גלולה מלאה<br><span class="no">ידידותי, לא «טופס»</span></td><td><code>border-radius: 500px</code></td></tr><tr><td class="src">Linear</td><td>קיצור-מקלדת <b>בתוך</b> הרכיב<br><span class="no">מלמד את עצמו</span></td><td><code><kbd>Ctrl</kbd><kbd>Z</kbd></code></td></tr><tr><td class="src">Stripe</td><td><b>זיכוי, לא מחיקה</b><br><span class="no">החיוב חי לנצח</span></td><td><code>שורה שנייה שמפנה לראשונה</code></td></tr><tr><td class="src">QuickBooks · Xero</td><td>יומן <b>שמוסיף בלבד</b><br><span class="no">ביטול נרשם, לא מוחק</span></td><td><code>מי · מה · מתי</code></td></tr><tr><td class="src">Gmail</td><td>המשתמש בוחר את חלון-החרטה<br><span class="no">מי שנלחץ מאריך</span></td><td><code>5 · 10 · 20 · 30 שניות</code></td></tr><tr><td class="src">מעבדת-הטוסט #7</td><td>הביטול <b>חי על השורה</b><br><span class="no">יצאת מהמסך? עדיין שם</span></td><td><code>לא טוסט שנעלם</code></td></tr><tr><td class="src">האפיון שלך</td><td>שומר-סף לפני הפעולה<br><span class="no"><bdi dir="ltr">30-dossier.js:106</bdi></span></td><td><code>יתרה ≤ 0 ⇒ חסום</code></td></tr>
+   </tbody></table>
+  </section>
+ </div>
+</div>
+</div>
+<script>
+const nis = n => '₪' + n.toLocaleString('en-US');
+const S = { bal: 14428, rows: [], log: [], seq: 0, who: 'מזכיר' };
+const now = () => new Date().toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+const $ = id => document.getElementById(id);
+
+const paintBal = () => $('bal').innerHTML = '<bdi dir="ltr">' + nis(S.bal) + '</bdi>';
+const paintLog = () => $('log').innerHTML = S.log.length
+  ? S.log.map(e => '<li class="' + e.k + '"><span class="who">' + e.who + '</span><span>' + e.what + '</span><span class="tm">' + e.t + '</span></li>').join('')
+  : '<li class="ns">עדיין ריק</li>';
+
+const paintLed = () => {
+  const el = $('led');
+  if (!S.rows.length) { el.innerHTML = '<p class="empty">הספר ריק. לחץ «רישום תשלום».</p>'; return; }
+  el.innerHTML = S.rows.map(r => {
+    const act = r.kind === 'in' && !r.settled
+      ? '<div class="rowact"><span>אפשר להחזיר</span><span class="bar"><i data-bar="' + r.id + '"></i></span>' +
+        '<button class="u" type="button" data-undo="' + r.id + '">בטל <kbd>Ctrl Z</kbd></button></div>'
+      : (r.kind === 'in' && !r.reversedBy
+        ? '<div class="rowact"><span>חלון־החרטה נסגר — אפשר רק זיכוי</span>' +
+          '<button class="c" type="button" data-credit="' + r.id + '">הפקת זיכוי</button></div>'
+        : (r.kind === 'in' && r.reversedBy ? '<div class="rowact"><span>שויך לזיכוי <bdi dir="ltr">#' + r.reversedBy + '</bdi></span></div>' : ''));
+    return '<div class="r ' + r.kind + '">' +
+      '<span class="ic" aria-hidden="true">' + (r.kind === 'in' ? '₪' : '↺') + '</span>' +
+      '<span><span class="t">' + r.title + '</span><span class="s">' + r.sub + '</span></span>' +
+      '<span class="m">' + (r.kind === 'in' ? '+' : '−') + nis(1000) + '<small>' + r.t + '</small></span>' +
+      act + '</div>';
+  }).join('');
+};
+
+const add = (what, k) => { S.log.unshift({ who: S.who, what, t: now(), k }); paintLog(); };
+
+let timers = {};
+const record = () => {
+  /* שומר־הסף — מהאפיון */
+  if (S.bal - 1000 < 0) { $('blk').classList.add('on'); add('נחסם: יתרה שלילית', 'r'); return; }
+  $('blk').classList.remove('on');
+  const b = $('go'), tx = $('goTx'), was = tx.innerHTML;
+  b.dataset.busy = '1'; b.disabled = true; tx.textContent = 'רושם…';
+  setTimeout(() => {
+    delete b.dataset.busy; b.disabled = false; tx.innerHTML = was;
+    const id = ++S.seq;
+    S.bal -= 1000; paintBal();
+    const r = { id, kind: 'in', title: 'תשלום · משפחת אונגר', sub: 'אשראי · שכר לימוד', t: now(), settled: false, reversedBy: null };
+    S.rows.unshift(r); paintLed();
+    add('נרשם תשלום ' + nis(1000), 'a');
+    const secs = +$('win').value;
+    const bar = document.querySelector('[data-bar="' + id + '"]');
+    if (bar) { requestAnimationFrame(() => { bar.style.transition = 'width ' + secs + 's linear'; bar.style.width = '0%'; }); }
+    timers[id] = setTimeout(() => { r.settled = true; delete timers[id]; paintLed(); }, secs * 1000);
+  }, 700);
+};
+
+const undo = (id) => {
+  const r = S.rows.find(x => x.id === id); if (!r || r.settled) return;
+  clearTimeout(timers[id]); delete timers[id];
+  S.rows = S.rows.filter(x => x !== r); S.bal += 1000; paintBal(); paintLed();
+  /* היומן מוסיף — לא מוחק */
+  const e = S.log.find(x => x.what.startsWith('נרשם תשלום') && !x.done);
+  if (e) { e.what += ' · בוטל'; e.done = 1; e.k = 'r'; }
+  paintLog();
+};
+
+const credit = (id) => {
+  const r = S.rows.find(x => x.id === id); if (!r || r.reversedBy) return;
+  const cid = ++S.seq; r.reversedBy = cid;
+  S.bal += 1000; paintBal();
+  S.rows.unshift({ id: cid, kind: 'rev', title: 'זיכוי · מבטל תשלום <bdi dir="ltr">#' + id + '</bdi>', sub: 'החיוב המקורי נשאר בספר', t: now() });
+  paintLed(); add('הופק זיכוי כנגד תשלום #' + id, 'r');
+};
+
+document.addEventListener('click', e => {
+  if (e.target.closest('#go')) return record();
+  const u = e.target.closest('[data-undo]'), c = e.target.closest('[data-credit]');
+  if (u) undo(+u.dataset.undo);
+  if (c) credit(+c.dataset.credit);
+});
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+    const live = S.rows.find(r => r.kind === 'in' && !r.settled);
+    if (live) { e.preventDefault(); undo(live.id); }
+  }
+});
+paintBal(); paintLed(); paintLog();
+</script>
+</body></html>
