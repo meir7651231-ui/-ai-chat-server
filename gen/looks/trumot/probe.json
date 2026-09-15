@@ -1,0 +1,711 @@
+[
+ {
+  "id": "gofundme",
+  "name": "GoFundMe",
+  "users": "הגדול בעולם",
+  "url": "https://www.gofundme.com/discover",
+  "rejected": "רק 0 סכומים — לא עמוד-מגבית",
+  "v": {
+   "wall": [],
+   "els": 584,
+   "money": 0,
+   "goal": false,
+   "donors": true,
+   "cta": 3,
+   "bars": 0,
+   "title": "GoFundMe - Discover"
+  }
+ },
+ {
+  "id": "kickstarter",
+  "name": "Kickstarter",
+  "users": "$8 מיליארד",
+  "url": "https://www.kickstarter.com/discover/advanced?sort=popularity",
+  "rejected": "דף ריק (33)",
+  "v": {
+   "wall": [],
+   "els": 33,
+   "money": 0,
+   "goal": false,
+   "donors": false,
+   "cta": 0,
+   "bars": 0,
+   "title": "Just a moment..."
+  }
+ },
+ {
+  "id": "indiegogo",
+  "name": "Indiegogo",
+  "users": "$2 מיליארד",
+  "url": "https://www.indiegogo.com/explore/all?project_type=campaign&sort=trending",
+  "rejected": "דף ריק (33)",
+  "v": {
+   "wall": [],
+   "els": 33,
+   "money": 0,
+   "goal": false,
+   "donors": false,
+   "cta": 0,
+   "bars": 0,
+   "title": "Just a moment..."
+  }
+ },
+ {
+  "id": "justgiving",
+  "name": "JustGiving",
+  "users": "בריטניה",
+  "url": "https://www.justgiving.com/",
+  "rejected": "חומת-הרשמה",
+  "v": {
+   "wall": [
+    "join now"
+   ],
+   "els": 3593,
+   "money": 4,
+   "goal": true,
+   "donors": true,
+   "cta": 10,
+   "bars": 0,
+   "title": "Online fundraising donations and ideas - JustGiving"
+  }
+ },
+ {
+  "id": "charitywater",
+  "name": "charity: water",
+  "users": "עיצוב-מופת",
+  "url": "https://www.charitywater.org/",
+  "v": {
+   "wall": [],
+   "els": 987,
+   "money": 8,
+   "goal": false,
+   "donors": true,
+   "cta": 16,
+   "bars": 0,
+   "title": "charity: water | Help Bring Clean and Safe Water to Commun"
+  },
+  "m": {
+   "title": "charity: water | Help Bring Clean and Safe Water to Communities",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "Proxima Nova",
+    "size": 20,
+    "lh": "30px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 2244
+     },
+     {
+      "v": "#faf7f0",
+      "w": 2187
+     },
+     {
+      "v": "#f8eed3",
+      "w": 1298
+     },
+     {
+      "v": "#ffca0a",
+      "w": 261
+     },
+     {
+      "v": "#222520",
+      "w": 140
+     },
+     {
+      "v": "#003366",
+      "w": 132
+     },
+     {
+      "v": "#e9eae4",
+      "w": 45
+     },
+     {
+      "v": "#f4f5f0",
+      "w": 24
+     },
+     {
+      "v": "#cedce2",
+      "w": 3
+     }
+    ],
+    "ink": [
+     {
+      "v": "#222520",
+      "w": 44
+     },
+     {
+      "v": "#ffffff",
+      "w": 33
+     },
+     {
+      "v": "#71716c",
+      "w": 23
+     },
+     {
+      "v": "#333232",
+      "w": 15
+     },
+     {
+      "v": "#9b9b94",
+      "w": 12
+     },
+     {
+      "v": "#003366",
+      "w": 3
+     },
+     {
+      "v": "#000000",
+      "w": 1
+     },
+     {
+      "v": "#c1c1ba",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Proxima Nova",
+     "w": 2676
+    },
+    {
+     "v": "Helvetica Neue",
+     "w": 40
+    },
+    {
+     "v": "Kazimir Text",
+     "w": 26
+    },
+    {
+     "v": "cw-icons",
+     "w": 9
+    }
+   ],
+   "radii": [
+    {
+     "v": "4px",
+     "w": 29
+    },
+    {
+     "v": "8px",
+     "w": 15
+    },
+    {
+     "v": "12px",
+     "w": 4
+    },
+    {
+     "v": "9999px",
+     "w": 3
+    },
+    {
+     "v": "3px",
+     "w": 1
+    },
+    {
+     "v": "1px",
+     "w": 1
+    },
+    {
+     "v": "5px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "16px",
+     "w": 3
+    },
+    {
+     "v": "20px",
+     "w": 1
+    },
+    {
+     "v": "40px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "16px",
+     "w": 12
+    },
+    {
+     "v": "379px",
+     "w": 8
+    },
+    {
+     "v": "13px",
+     "w": 7
+    },
+    {
+     "v": "8px",
+     "w": 6
+    },
+    {
+     "v": "104px",
+     "w": 5
+    },
+    {
+     "v": "20px",
+     "w": 3
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0.16) 1px 1px 12px 5px",
+     "w": 1
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+     "w": 1
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.1) 0px 0px 0px 2px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 35,
+     "weight": "400",
+     "lh": "40px",
+     "ls": "normal",
+     "family": "Kazimir Text",
+     "color": "#ffffff",
+     "text": "charity: water"
+    },
+    "h2": {
+     "size": 46,
+     "weight": "400",
+     "lh": "52px",
+     "ls": "normal",
+     "family": "Kazimir Text",
+     "color": "#222520",
+     "text": "Because clean water changes ever"
+    },
+    "body": {
+     "size": 18,
+     "weight": "400",
+     "lh": "24px",
+     "ls": "normal",
+     "family": "Proxima Nova",
+     "color": "#ffffff",
+     "text": "696 million people need their Da"
+    }
+   },
+   "buttons": [
+    {
+     "bg": "#ffca0a",
+     "color": "#222520",
+     "radius": 4,
+     "padX": 24,
+     "padY": 16,
+     "h": 52,
+     "size": 15,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": "uppercase",
+     "count": 8
+    },
+    {
+     "bg": null,
+     "color": "#007aff",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 29,
+     "size": 20,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": "#ffca0a",
+     "color": "#222520",
+     "radius": 4,
+     "padX": 40,
+     "padY": 0,
+     "h": 48,
+     "size": 15,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": "uppercase",
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#333232",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 40,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffca0a",
+     "color": "#222520",
+     "radius": 4,
+     "padX": 0,
+     "padY": 0,
+     "h": 48,
+     "size": 15,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": "uppercase",
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#ffffff",
+     "radius": 8,
+     "padding": "24/24",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#f8eed3",
+     "radius": 8,
+     "padding": "16/16",
+     "border": "1px #c1c1ba",
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#222520",
+     "radius": 8,
+     "padding": "0/0",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "radius": 8,
+     "padding": "40/32",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 586
+  }
+ },
+ {
+  "id": "patreon",
+  "name": "Patreon",
+  "users": "8 מיליון",
+  "url": "https://www.patreon.com/explore",
+  "rejected": "דף ריק (33)",
+  "v": {
+   "wall": [],
+   "els": 33,
+   "money": 0,
+   "goal": false,
+   "donors": false,
+   "cta": 0,
+   "bars": 0,
+   "title": "Just a moment..."
+  }
+ },
+ {
+  "id": "chuffed",
+  "name": "Chuffed",
+  "users": "לא-למטרות-רווח",
+  "url": "https://chuffed.org/discover",
+  "v": {
+   "wall": [],
+   "els": 446,
+   "money": 6,
+   "goal": true,
+   "donors": true,
+   "cta": 5,
+   "bars": 14,
+   "title": "Support non-profit and social enterprise crowdfunding proj"
+  },
+  "m": {
+   "title": "Support non-profit and social enterprise crowdfunding projects on Chuf",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#333333",
+    "family": "open sans",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#f8f8f8",
+      "w": 1283
+     },
+     {
+      "v": "#414141",
+      "w": 1036
+     },
+     {
+      "v": "#ffffff",
+      "w": 922
+     },
+     {
+      "v": "#eeeeee",
+      "w": 589
+     },
+     {
+      "v": "#e444a0",
+      "w": 37
+     },
+     {
+      "v": "#e5e7eb",
+      "w": 21
+     },
+     {
+      "v": "#1fa8df",
+      "w": 11
+     },
+     {
+      "v": "#cfcfcf",
+      "w": 0
+     }
+    ],
+    "ink": [
+     {
+      "v": "#ffffff",
+      "w": 49
+     },
+     {
+      "v": "#333333",
+      "w": 16
+     },
+     {
+      "v": "#4b5563",
+      "w": 8
+     },
+     {
+      "v": "#171717",
+      "w": 8
+     },
+     {
+      "v": "#374151",
+      "w": 8
+     },
+     {
+      "v": "#848484",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "open sans",
+     "w": 429
+    },
+    {
+     "v": "Source Sans Pro",
+     "w": 110
+    },
+    {
+     "v": "Open Sans",
+     "w": 24
+    },
+    {
+     "v": "Inter",
+     "w": 16
+    }
+   ],
+   "radii": [
+    {
+     "v": "12px",
+     "w": 24
+    },
+    {
+     "v": "4px",
+     "w": 4
+    },
+    {
+     "v": "100px",
+     "w": 2
+    },
+    {
+     "v": "32px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "6px",
+     "w": 3
+    },
+    {
+     "v": "24px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "8px",
+     "w": 10
+    },
+    {
+     "v": "12px",
+     "w": 8
+    },
+    {
+     "v": "16px",
+     "w": 3
+    },
+    {
+     "v": "64px",
+     "w": 1
+    },
+    {
+     "v": "15px",
+     "w": 1
+    },
+    {
+     "v": "48px",
+     "w": 1
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+     "w": 8
+    },
+    {
+     "v": "rgba(143, 141, 141, 0.5) 0px 2px 4px 0px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 70,
+     "weight": "700",
+     "lh": "81.6669px",
+     "ls": "-1.75px",
+     "family": "Source Sans Pro",
+     "color": "#ffffff",
+     "text": "Discover"
+    },
+    "h2": {
+     "size": 30,
+     "weight": "400",
+     "lh": "35.0001px",
+     "ls": "0.2px",
+     "family": "Source Sans Pro",
+     "color": "#ffffff",
+     "text": "Find causes you truly care about"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#333333",
+     "radius": 0,
+     "padX": 0,
+     "padY": 8,
+     "h": 30,
+     "size": 14,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": "#e444a0",
+     "color": "#ffffff",
+     "radius": 4,
+     "padX": 20,
+     "padY": 15,
+     "h": 58,
+     "size": 16,
+     "weight": "700",
+     "border": "1px #e444a0",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#ffffff",
+     "radius": 12,
+     "padding": "0/0",
+     "border": "1px null",
+     "shadow": "rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0",
+     "count": 8
+    }
+   ],
+   "elements": 318
+  }
+ },
+ {
+  "id": "causematch",
+  "name": "CauseMatch",
+  "users": "מגביות יהודיות",
+  "url": "https://www.causematch.com/",
+  "rejected": "רק 0 סכומים — לא עמוד-מגבית",
+  "v": {
+   "wall": [],
+   "els": 2729,
+   "money": 0,
+   "goal": true,
+   "donors": true,
+   "cta": 11,
+   "bars": 1,
+   "title": "Fundraise Smarter with Peer-to-Peer Fundraising - CauseMat"
+  }
+ },
+ {
+  "id": "charidy",
+  "name": "Charidy",
+  "users": "מגביות יהודיות",
+  "url": "https://www.charidy.com/",
+  "rejected": "אין כפתור-תרומה",
+  "v": {
+   "wall": [],
+   "els": 597,
+   "money": 6,
+   "goal": true,
+   "donors": true,
+   "cta": 0,
+   "bars": 0,
+   "title": "Charidy | For Crowdfunding and Fundraising Success"
+  }
+ },
+ {
+  "id": "jgive",
+  "name": "JGive",
+  "users": "ישראל",
+  "url": "https://www.jgive.com/new/he/ils",
+  "rejected": "רק 0 סכומים — לא עמוד-מגבית",
+  "v": {
+   "wall": [],
+   "els": 1219,
+   "money": 0,
+   "goal": true,
+   "donors": true,
+   "cta": 9,
+   "bars": 42,
+   "title": "הפלטפורמה המובילה בישראל לתרומות אונליין | Jgive"
+  }
+ }
+]

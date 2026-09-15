@@ -1,0 +1,196 @@
+[
+ {
+  "id": "nre-board",
+  "kind": "לוח-זמנים",
+  "name": "National Rail · לוח-יציאה",
+  "url": "https://ojp.nationalrail.co.uk/service/ldbboard/dep/KGX",
+  "need": [
+   "time"
+  ],
+  "rejected": "רק 0 שעות — לא לוח-זמנים",
+  "v": {
+   "wall": [],
+   "els": 443,
+   "proof": {
+    "times": 0
+   },
+   "title": "Real Time Live Trains Board | National Rail"
+  }
+ },
+ {
+  "id": "heathrow",
+  "kind": "לוח-זמנים",
+  "name": "Heathrow · יציאות",
+  "url": "https://www.heathrow.com/departures",
+  "need": [
+   "time"
+  ],
+  "rejected": "page.goto: net::ERR_TOO_MANY_REDIRECTS a"
+ },
+ {
+  "id": "sbb",
+  "kind": "לוח-זמנים",
+  "name": "SBB · רכבת שווייץ",
+  "url": "https://www.sbb.ch/en",
+  "need": [
+   "time"
+  ],
+  "rejected": "דף ריק (4 אלמנטים)",
+  "v": {
+   "wall": [],
+   "els": 4,
+   "proof": {
+    "times": 0
+   },
+   "title": ""
+  }
+ },
+ {
+  "id": "hebcal-sh",
+  "kind": "לוח-זמנים",
+  "name": "Hebcal · שבת ירושלים",
+  "url": "https://www.hebcal.com/shabbat?geonameid=281184",
+  "need": [
+   "time"
+  ],
+  "rejected": "רק 4 שעות — לא לוח-זמנים",
+  "v": {
+   "wall": [],
+   "els": 299,
+   "proof": {
+    "times": 4
+   },
+   "title": "Shabbat Times for Jerusalem, Israel - Hebcal"
+  }
+ },
+ {
+  "id": "chabad-cl",
+  "kind": "לוח-זמנים",
+  "name": "chabad · הדלקת נרות",
+  "url": "https://www.chabad.org/calendar/candlelighting.htm",
+  "need": [
+   "time"
+  ],
+  "rejected": "דף ריק (33 אלמנטים)",
+  "v": {
+   "wall": [],
+   "els": 33,
+   "proof": {
+    "times": 0
+   },
+   "title": "Just a moment..."
+  }
+ },
+ {
+  "id": "islamicfinder",
+  "kind": "לוח-זמנים",
+  "name": "IslamicFinder · זמני תפילה",
+  "url": "https://www.islamicfinder.org/world/",
+  "need": [
+   "time"
+  ],
+  "rejected": "דף ריק (2 אלמנטים)",
+  "v": {
+   "wall": [],
+   "els": 2,
+   "proof": {
+    "times": 0
+   },
+   "title": "403 Forbidden"
+  }
+ },
+ {
+  "id": "myzmanim",
+  "kind": "לוח-זמנים",
+  "name": "MyZmanim",
+  "url": "https://www.myzmanim.com/search.aspx",
+  "need": [
+   "time"
+  ],
+  "rejected": "דף ריק (100 אלמנטים)",
+  "v": {
+   "wall": [],
+   "els": 100,
+   "proof": {
+    "times": 0
+   },
+   "title": "MyZmanim.com - Instant zmanim for anywhere in the world"
+  }
+ },
+ {
+  "id": "aerolopa",
+  "kind": "מפת-מקומות",
+  "name": "AeroLOPA",
+  "url": "https://www.aerolopa.com/",
+  "need": [
+   "seat"
+  ],
+  "rejected": "דף ריק (1 אלמנטים)",
+  "v": {
+   "wall": [],
+   "els": 1,
+   "proof": {
+    "cells": 0,
+    "rows": 0
+   },
+   "title": ""
+  }
+ },
+ {
+  "id": "aerolopa-ba",
+  "kind": "מפת-מקומות",
+  "name": "AeroLOPA · BA A320",
+  "url": "https://www.aerolopa.com/ba-a320",
+  "need": [
+   "seat"
+  ],
+  "rejected": "דף ריק (110 אלמנטים)",
+  "v": {
+   "wall": [],
+   "els": 110,
+   "proof": {
+    "cells": 8,
+    "rows": 1
+   },
+   "title": "404: This page could not be found."
+  }
+ },
+ {
+  "id": "seatmaps",
+  "kind": "מפת-מקומות",
+  "name": "SeatMaps",
+  "url": "https://seatmaps.com/airlines/dl-delta-air-lines/",
+  "need": [
+   "seat"
+  ],
+  "rejected": "רק 1 שורות-תאים — לא מפת-מקומות",
+  "v": {
+   "wall": [],
+   "els": 2973,
+   "proof": {
+    "cells": 630,
+    "rows": 1
+   },
+   "title": "404 - Not Found"
+  }
+ },
+ {
+  "id": "telecharge",
+  "kind": "מפת-מקומות",
+  "name": "Telecharge · תיאטרון",
+  "url": "https://www.telecharge.com/",
+  "need": [
+   "seat"
+  ],
+  "rejected": "דף ריק (3 אלמנטים)",
+  "v": {
+   "wall": [],
+   "els": 3,
+   "proof": {
+    "cells": 0,
+    "rows": 0
+   },
+   "title": "Access Denied"
+  }
+ }
+]
