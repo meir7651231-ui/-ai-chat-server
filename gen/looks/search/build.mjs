@@ -109,21 +109,19 @@ h1{font:600 15px/20px Heebo;position:absolute;inset:auto;clip-path:inset(50%);wi
 .veil{position:fixed;inset:0;z-index:25;display:none}
 .veil.open{display:block}
 
-/* תוצאות */
-.res{max-width:1240px;margin:26px auto 60px;padding:0 24px}
-.res h2{font:600 22px/28px Heebo;margin-bottom:4px}
-.res p.s{font-size:13.5px;color:var(--mut);margin-bottom:16px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:24px 16px}
-.card .ph{aspect-ratio:20/19;border-radius:20px;background:var(--sunk);border:1px solid var(--hair);
- display:grid;place-items:center;font:700 34px Heebo;color:var(--mut);margin-bottom:10px;position:relative}
-.card .ph .tag{position:absolute;top:10px;inset-inline-start:10px;background:var(--bg);border-radius:50px;
- padding:4px 10px;font:600 12px Heebo;box-shadow:var(--shSeg);color:var(--ink)}
-.card .r1{display:flex;align-items:baseline;gap:8px}
-.card .r1 b{font:500 15px/19px Heebo;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card .r1 span{font-size:14px;white-space:nowrap}
-.card .r2,.card .r3{font-size:14px;color:var(--mut)}
-.card .r4{font-size:14px;margin-top:2px}
-.card .r4 b{font-weight:600}
+/* תוצאות — שורות פשוטות, בלי שום דבר מ-Airbnb.
+   מהאתר נלקחה **שורת-החיפוש בלבד**. */
+.res{max-width:820px;margin:34px auto 60px;padding:0 24px}
+.res h2{font:600 20px/26px Heebo;margin-bottom:2px}
+.res p.s{font-size:13.5px;color:var(--mut);margin-bottom:14px}
+.rows{display:grid;gap:0}
+.row{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:14px;align-items:center;
+ padding:12px 4px;border-block-end:1px solid var(--hair)}
+.row .av{width:40px;height:40px;border-radius:50px;background:var(--sunk);border:1px solid var(--hair);
+ display:grid;place-items:center;font:600 14px Heebo;color:var(--mut)}
+.row b{display:block;font:500 15px/19px Heebo}
+.row span{display:block;font-size:13px;color:var(--mut)}
+.row .m{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
 .src{max-width:1240px;margin:0 auto 50px;padding:0 24px;font-size:12px;color:var(--mut)}
 .src b{color:var(--ink)}
 </style></head>
@@ -141,17 +139,17 @@ h1{font:600 15px/20px Heebo;position:absolute;inset:auto;clip-path:inset(50%);wi
       <b>איזה אגף?</b><span id="v-dept">כל האגפים</span></button>
     <button class="go" type="button" id="go"><span aria-hidden="true">⌕</span><span class="t">חיפוש</span></button>
 
-    <div class="panel" id="p-who" style="inset-inline-end:0">
+    <div class="panel" id="p-who" style="inset-inline-start:0">
       <h2>מי</h2>
       <input id="q" type="search" placeholder="הקלד שם…" autocomplete="off" aria-label="חיפוש שם">
       <div id="who-list"></div>
     </div>
-    <div class="panel" id="p-when" style="inset-inline-end:33%">
+    <div class="panel" id="p-when" style="inset-inline-start:50%;transform:translateX(50%)">
       <h2>מתי</h2>
       ${PERIODS.map(([t, s]) => `<button class="opt" type="button" data-pick="when" data-val="${esc(t)}">
         <span class="ic" aria-hidden="true">📅</span><span><b>${esc(t)}</b><span>${esc(s)}</span></span></button>`).join('')}
     </div>
-    <div class="panel" id="p-dept" style="inset-inline-start:0">
+    <div class="panel" id="p-dept" style="inset-inline-end:0">
       <h2>אגף</h2>
       <button class="opt" type="button" data-pick="dept" data-val="כל האגפים">
         <span class="ic" aria-hidden="true">★</span><span><b>כל האגפים</b><span>חיפוש רוחבי בכל המוסד</span></span></button>
@@ -166,16 +164,16 @@ h1{font:600 15px/20px Heebo;position:absolute;inset:auto;clip-path:inset(50%);wi
 <section class="res">
   <h2 id="rh">‏${D.families} משפחות במוסד</h2>
   <p class="s" id="rs">ממוינות לפי יתרה פתוחה · ${D.year}</p>
-  <div class="grid" id="grid"></div>
+  <div class="rows" id="rows"></div>
 </section>
 
-<p class="src"><b>מה הועתק ומאיפה:</b> הגלולה <bdi dir="ltr">850×66 · רדיוס 100</bdi> · המקטע הפעיל
-<bdi dir="ltr">278×66 · רדיוס 32</bdi> עם מסגרת <bdi dir="ltr">1px #dddddd</bdi> ·
+<p class="src"><b>מהאתר נלקחה שורת-החיפוש בלבד.</b> אלה הערכים שנמדדו ממנה ב-airbnb.com:
+הגלולה <bdi dir="ltr">850×66 · רדיוס 100</bdi> · המקטע הפעיל <bdi dir="ltr">278×66 · רדיוס 32</bdi>
+עם מסגרת <bdi dir="ltr">1px #dddddd</bdi> · הסרגל מכהה ל-<bdi dir="ltr">#ebebeb</bdi> כשמקטע פעיל ·
 הצללים <bdi dir="ltr">0 3px 12px rgb(0 0 0/.1)</bdi> ו-<bdi dir="ltr">0 1px 2px rgb(0 0 0/.08)</bdi> ·
-הכהיית הסרגל ל-<bdi dir="ltr">#ebebeb</bdi> כשמקטע פעיל · התווית <bdi dir="ltr">500 14/18</bdi> ·
-כפתור <bdi dir="ltr">48×48</bdi> שמתרחב · הפלטה <bdi dir="ltr">#222222 · #6c6c6c · #dddddd</bdi> ·
-כרטיס־תמונה רדיוס <bdi dir="ltr">20</bdi> ושורת כותרת+דירוג באותה שורה — <b>הכל נמדד מ-airbnb.com היום</b>.
-הוורוד שלהם הוחלף כי הוא המותג שלהם. נתונים: ${D.families} משפחות מהמחסן.</p>
+התווית <bdi dir="ltr">500 14/18</bdi> · כפתור <bdi dir="ltr">48×48</bdi> שמתרחב.
+<br><b>מה שלא נלקח:</b> הכרטיסים, הדירוגים, תיבות-התמונה, צ׳יפי-הסינון והוורוד שלהם — כל אלה נשארו אצלם.
+התוצאות כאן הן שורות פשוטות של המוסד. נתונים: ${D.families} משפחות מהמחסן.</p>
 
 <script>
 const FAM = ${JSON.stringify(D.fam)}, STAFF = ${JSON.stringify(D.staff)};
@@ -213,14 +211,12 @@ const paintRes = () => {
   const t = (pick.who || '').trim();
   const list = FAM.filter(x => !t || x.name.includes(t) || x.city.includes(t));
   $('rh').textContent = list.length + (t ? ' תוצאות עבור «' + t + '»' : ' משפחות במוסד');
-  $('rs').textContent = [pick.dept || 'כל האגפים', pick.when || 'כל תקופה', 'ממוינות לפי יתרה פתוחה'].join(' · ');
-  $('grid').innerHTML = list.slice(0, 12).map(x =>
-    '<article class="card"><div class="ph">' + x.init +
-      (x.hok ? '<span class="tag">הוראת קבע</span>' : '') + '</div>' +
-    '<div class="r1"><b>' + x.name + '</b><span>★ ' + (x.kids ? (4 + x.kids / 10).toFixed(2) : '—') + '</span></div>' +
-    '<div class="r2">' + x.city + ' · ' + x.kids + ' ילדים</div>' +
-    '<div class="r3">' + (pick.when || 'תשפ״ז') + '</div>' +
-    '<div class="r4"><b>' + nis(x.bal) + '</b> יתרה פתוחה</div></article>').join('');
+  $('rs').textContent = [pick.dept || 'כל האגפים', pick.when || 'כל תקופה'].join(' · ');
+  $('rows').innerHTML = list.slice(0, 10).map(x =>
+    '<div class="row"><span class="av" aria-hidden="true">' + x.init + '</span>' +
+    '<span><b>' + x.name + '</b><span>' + x.city + ' · ' + x.kids + ' ילדים' +
+      (x.hok ? ' · הוראת קבע' : '') + '</span></span>' +
+    '<span class="m">' + nis(x.bal) + '</span></div>').join('');
 };
 
 document.addEventListener('click', e => {
