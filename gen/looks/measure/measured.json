@@ -1,0 +1,5197 @@
+{
+ "measuredAt": "2026-09-15T16:01",
+ "sites": {
+  "raycast·www.raycast.com": {
+   "site": "Raycast",
+   "url": "https://www.raycast.com/",
+   "title": "Raycast - Your shortcut to everything",
+   "body": {
+    "bg": "#07080a",
+    "color": "#ffffff",
+    "family": "Inter",
+    "size": 16,
+    "lh": "18.4px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#07080a",
+      "w": 2017
+     },
+     {
+      "v": "#434345",
+      "w": 536
+     },
+     {
+      "v": "#000000",
+      "w": 356
+     },
+     {
+      "v": "#111214",
+      "w": 193
+     },
+     {
+      "v": "#0.1f671ac14c660a0.2058ab92c061840.25109070fbeb9e",
+      "w": 165
+     },
+     {
+      "v": "#e6e6e6",
+      "w": 24
+     },
+     {
+      "v": "#08090c",
+      "w": 13
+     },
+     {
+      "v": "#1b1c1e",
+      "w": 10
+     },
+     {
+      "v": "#452324",
+      "w": 7
+     },
+     {
+      "v": "#130d0e",
+      "w": 6
+     }
+    ],
+    "ink": [
+     {
+      "v": "#ffffff",
+      "w": 530
+     },
+     {
+      "v": "#9c9c9d",
+      "w": 97
+     },
+     {
+      "v": "#6a6b6c",
+      "w": 50
+     },
+     {
+      "v": "#434345",
+      "w": 37
+     },
+     {
+      "v": "#2f3031",
+      "w": 5
+     },
+     {
+      "v": "#ff6363",
+      "w": 1
+     },
+     {
+      "v": "#8cd6ff",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Inter",
+     "w": 3610
+    },
+    {
+     "v": "SF Pro Text",
+     "w": 523
+    },
+    {
+     "v": "SF Pro",
+     "w": 38
+    },
+    {
+     "v": "GeistMono",
+     "w": 31
+    },
+    {
+     "v": "JetBrains Mono",
+     "w": 1
+    }
+   ],
+   "radii": [
+    {
+     "v": "11px",
+     "w": 159
+    },
+    {
+     "v": "8px",
+     "w": 107
+    },
+    {
+     "v": "6px",
+     "w": 63
+    },
+    {
+     "v": "12px",
+     "w": 53
+    },
+    {
+     "v": "20px",
+     "w": 38
+    },
+    {
+     "v": "16px",
+     "w": 28
+    },
+    {
+     "v": "99999px",
+     "w": 24
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 147
+    },
+    {
+     "v": "10px",
+     "w": 78
+    },
+    {
+     "v": "12px",
+     "w": 39
+    },
+    {
+     "v": "4px",
+     "w": 28
+    },
+    {
+     "v": "24px",
+     "w": 25
+    },
+    {
+     "v": "16px",
+     "w": 19
+    }
+   ],
+   "pads": [
+    {
+     "v": "15px",
+     "w": 159
+    },
+    {
+     "v": "24px",
+     "w": 57
+    },
+    {
+     "v": "8px",
+     "w": 49
+    },
+    {
+     "v": "16px",
+     "w": 20
+    },
+    {
+     "v": "12px",
+     "w": 17
+    },
+    {
+     "v": "4px",
+     "w": 9
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0.4) 0px 1.5px 0.5px 2.5px, rgb(0, 0, 0) 0px 0px 0.5px 1px, rgba(0",
+     "w": 159
+    },
+    {
+     "v": "rgb(27, 28, 30) 0px 0px 0px 1px, rgb(7, 8, 10) 0px 0px 0px 1px inset",
+     "w": 54
+    },
+    {
+     "v": "rgba(215, 201, 175, 0.05) 0px 0px 20px 5px, rgba(215, 201, 175, 0.05) 0px 0px 16",
+     "w": 18
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.28) 0px 1.189px 2.377px 0px",
+     "w": 17
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 64,
+     "weight": "600",
+     "lh": "70.4px",
+     "ls": "normal",
+     "family": "Inter",
+     "color": "#ffffff",
+     "text": "Your shortcut to everything."
+    },
+    "h2": {
+     "size": 32,
+     "weight": "500",
+     "lh": "38.4px",
+     "ls": "-0.8px",
+     "family": "Inter",
+     "color": "#ffffff",
+     "text": "Meet your new virtual assistant"
+    },
+    "h3": {
+     "size": 56,
+     "weight": "400",
+     "lh": "65.52px",
+     "ls": "0.2px",
+     "family": "Inter",
+     "color": "#ffffff",
+     "text": "Build the perfect tools."
+    },
+    "body": {
+     "size": 20,
+     "weight": "500",
+     "lh": "normal",
+     "ls": "0.2px",
+     "family": "Inter",
+     "color": "#6a6b6c",
+     "text": "One interface, everything you ne"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 10,
+     "padX": 12,
+     "padY": 8,
+     "h": 32,
+     "size": 13,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 7
+    },
+    {
+     "bg": null,
+     "color": "#434345",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 67,
+     "size": 24,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 6
+    },
+    {
+     "bg": null,
+     "color": "#434345",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 29,
+     "size": 24,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 5
+    },
+    {
+     "bg": "#e6e6e6",
+     "color": "#2f3031",
+     "radius": 8,
+     "padX": 12,
+     "padY": 8,
+     "h": 36,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.5) 0px 0px 0px 2px, rgba(255, 255, 255, 0.19",
+     "transform": null,
+     "count": 4
+    },
+    {
+     "bg": null,
+     "color": "#6a6b6c",
+     "radius": 86,
+     "padX": 20,
+     "padY": 20,
+     "h": 57,
+     "size": 16,
+     "weight": "400",
+     "border": "1px null",
+     "shadow": "rgba(255, 255, 255, 0.1) 0px 1px 0px 0px inset",
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 86,
+     "padX": 20,
+     "padY": 20,
+     "h": 57,
+     "size": 16,
+     "weight": "400",
+     "border": "1px null",
+     "shadow": "rgba(255, 255, 255, 0.1) 0px 1px 0px 0px inset",
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#434345",
+     "radius": 12,
+     "padding": "0/0",
+     "border": null,
+     "shadow": "rgba(215, 201, 175, 0.05) 0px 0px 20px 5px, rgba(215, 201, 1",
+     "count": 18
+    },
+    {
+     "bg": "#07080a",
+     "radius": 12,
+     "padding": "0/0",
+     "border": "1px null",
+     "shadow": "rgba(255, 255, 255, 0.19) 0px 0px 2px 0px, rgba(255, 255, 25",
+     "count": 1
+    },
+    {
+     "bg": "#000000",
+     "radius": 12,
+     "padding": "0/0",
+     "border": "1px null",
+     "shadow": "rgba(0, 0, 0, 0.4) 0px 4px 40px 8px, rgba(0, 0, 0, 0.8) 0px ",
+     "count": 1
+    },
+    {
+     "bg": "#111214",
+     "radius": 22,
+     "padding": "0/0",
+     "border": "1px null",
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 2443
+  },
+  "raycast·www.raycast.com-store": {
+   "site": "Raycast",
+   "url": "https://www.raycast.com/store",
+   "title": "Raycast - Store",
+   "body": {
+    "bg": "#07080a",
+    "color": "#ffffff",
+    "family": "Inter",
+    "size": 16,
+    "lh": "18.4px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#0c0d0f",
+      "w": 51
+     },
+     {
+      "v": "#07080a",
+      "w": 28
+     },
+     {
+      "v": "#ffffff",
+      "w": 6
+     },
+     {
+      "v": "#e6e6e6",
+      "w": 4
+     },
+     {
+      "v": "#1b1c1e",
+      "w": 2
+     }
+    ],
+    "ink": [
+     {
+      "v": "#9c9c9d",
+      "w": 122
+     },
+     {
+      "v": "#ffffff",
+      "w": 41
+     },
+     {
+      "v": "#6a6b6c",
+      "w": 14
+     },
+     {
+      "v": "#2f3031",
+      "w": 1
+     },
+     {
+      "v": "#cdcece",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Inter",
+     "w": 731
+    }
+   ],
+   "radii": [
+    {
+     "v": "8px",
+     "w": 23
+    },
+    {
+     "v": "12px",
+     "w": 23
+    },
+    {
+     "v": "6px",
+     "w": 13
+    },
+    {
+     "v": "99999px",
+     "w": 13
+    },
+    {
+     "v": "10px",
+     "w": 6
+    },
+    {
+     "v": "4px",
+     "w": 4
+    },
+    {
+     "v": "20px",
+     "w": 3
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 79
+    },
+    {
+     "v": "4px",
+     "w": 21
+    },
+    {
+     "v": "16px",
+     "w": 12
+    },
+    {
+     "v": "40px",
+     "w": 6
+    },
+    {
+     "v": "20px",
+     "w": 6
+    },
+    {
+     "v": "6px",
+     "w": 4
+    }
+   ],
+   "pads": [
+    {
+     "v": "8px",
+     "w": 16
+    },
+    {
+     "v": "12px",
+     "w": 14
+    },
+    {
+     "v": "32px",
+     "w": 13
+    },
+    {
+     "v": "6px",
+     "w": 5
+    },
+    {
+     "v": "16px",
+     "w": 4
+    },
+    {
+     "v": "108px",
+     "w": 1
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(255, 255, 255, 0.05) 0px 1px 0px 0px inset",
+     "w": 24
+    },
+    {
+     "v": "rgba(255, 255, 255, 0.05) 0px 1px 0px 0px inset, rgba(255, 255, 255, 0.25) 0px 0",
+     "w": 13
+    },
+    {
+     "v": "rgba(255, 255, 255, 0.15) 0px 1px 1px 0px inset",
+     "w": 1
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.5) 0px 0px 0px 2px, rgba(255, 255, 255, 0.19) 0px 0px 14px 0px, ",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 80,
+     "weight": "600",
+     "lh": "86px",
+     "ls": "1.2px",
+     "family": "Inter",
+     "color": "#ffffff",
+     "text": "Store"
+    },
+    "h2": {
+     "size": 40,
+     "weight": "500",
+     "lh": "46px",
+     "ls": "normal",
+     "family": "Inter",
+     "color": "#ffffff",
+     "text": "Explore"
+    },
+    "h3": {
+     "size": 20,
+     "weight": "500",
+     "lh": "23px",
+     "ls": "normal",
+     "family": "Inter",
+     "color": "#ffffff",
+     "text": "Featured"
+    },
+    "body": {
+     "size": 20,
+     "weight": "400",
+     "lh": "28px",
+     "ls": "0.3px",
+     "family": "Inter",
+     "color": "#6a6b6c",
+     "text": "Sprinkle a little magic on your "
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 8,
+     "padX": 8,
+     "padY": 8,
+     "h": 32,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": "rgba(255, 255, 255, 0.05) 0px 1px 0px 0px inset, rgba(255, 2",
+     "transform": null,
+     "count": 13
+    },
+    {
+     "bg": "#e6e6e6",
+     "color": "#2f3031",
+     "radius": 8,
+     "padX": 12,
+     "padY": 8,
+     "h": 36,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.5) 0px 0px 0px 2px, rgba(255, 255, 255, 0.19",
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#0c0d0f",
+     "color": "#6a6b6c",
+     "radius": 12,
+     "padX": 16,
+     "padY": 16,
+     "h": 51,
+     "size": 15,
+     "weight": "400",
+     "border": "1px #2f3031",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#0c0d0f",
+     "color": "#6a6b6c",
+     "radius": 12,
+     "padX": 12,
+     "padY": 12,
+     "h": 43,
+     "size": 15,
+     "weight": "400",
+     "border": "1px #2f3031",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [],
+   "elements": 437
+  },
+  "raycast·www.raycast.com-pro": {
+   "site": "Raycast",
+   "url": "https://www.raycast.com/pro",
+   "title": "Raycast Pro: AI, Cloud Sync & Custom Themes, Your Way",
+   "body": {
+    "bg": "#07080a",
+    "color": "#ffffff",
+    "family": "Inter",
+    "size": 16,
+    "lh": "18.4px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#0.1f671ac14c660a0.2058ab92c061840.25109070fbeb9e",
+      "w": 165
+     },
+     {
+      "v": "#1b1c1e",
+      "w": 32
+     },
+     {
+      "v": "#e6e6e6",
+      "w": 26
+     },
+     {
+      "v": "#ff6363",
+      "w": 8
+     },
+     {
+      "v": "#ffffff",
+      "w": 7
+     },
+     {
+      "v": "#56c2ff",
+      "w": 2
+     },
+     {
+      "v": "#27c840",
+      "w": 0
+     },
+     {
+      "v": "#ff625b",
+      "w": 0
+     },
+     {
+      "v": "#febc2e",
+      "w": 0
+     },
+     {
+      "v": "#a3a3a3",
+      "w": 0
+     }
+    ],
+    "ink": [
+     {
+      "v": "#9c9c9d",
+      "w": 198
+     },
+     {
+      "v": "#ffffff",
+      "w": 104
+     },
+     {
+      "v": "#e6e6e6",
+      "w": 23
+     },
+     {
+      "v": "#6a6b6c",
+      "w": 9
+     },
+     {
+      "v": "#2f3031",
+      "w": 4
+     },
+     {
+      "v": "#56c2ff",
+      "w": 3
+     },
+     {
+      "v": "#aae1ff",
+      "w": 1
+     },
+     {
+      "v": "#ff6363",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Inter",
+     "w": 2579
+    },
+    {
+     "v": "GeistMono",
+     "w": 21
+    },
+    {
+     "v": "JetBrains Mono",
+     "w": 1
+    }
+   ],
+   "radii": [
+    {
+     "v": "1px",
+     "w": 291
+    },
+    {
+     "v": "50px",
+     "w": 43
+    },
+    {
+     "v": "8px",
+     "w": 30
+    },
+    {
+     "v": "6px",
+     "w": 19
+    },
+    {
+     "v": "10px",
+     "w": 15
+    },
+    {
+     "v": "999px",
+     "w": 9
+    },
+    {
+     "v": "12px",
+     "w": 6
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 104
+    },
+    {
+     "v": "4px",
+     "w": 69
+    },
+    {
+     "v": "6px",
+     "w": 38
+    },
+    {
+     "v": "16px",
+     "w": 12
+    },
+    {
+     "v": "32px",
+     "w": 9
+    },
+    {
+     "v": "40px",
+     "w": 8
+    }
+   ],
+   "pads": [
+    {
+     "v": "1px",
+     "w": 124
+    },
+    {
+     "v": "8px",
+     "w": 26
+    },
+    {
+     "v": "12px",
+     "w": 11
+    },
+    {
+     "v": "39px",
+     "w": 6
+    },
+    {
+     "v": "24px",
+     "w": 5
+    },
+    {
+     "v": "16px",
+     "w": 4
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(255, 255, 255, 0.1) 0px 1px 0px 0px inset",
+     "w": 6
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.5) 0px 0px 0px 2px, rgba(255, 255, 255, 0.19) 0px 0px 14px 0px, ",
+     "w": 4
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.25) 0px 0px 0px 0.5px",
+     "w": 4
+    },
+    {
+     "v": "rgba(255, 255, 255, 0.05) 0px 1px 0px 0px inset, rgba(255, 255, 255, 0.25) 0px 0",
+     "w": 3
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 48,
+     "weight": "600",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "Inter",
+     "color": "#ffffff",
+     "text": "New Level Unlocked"
+    },
+    "h2": {
+     "size": 48,
+     "weight": "600",
+     "lh": "normal",
+     "ls": "0.2px",
+     "family": "Inter",
+     "color": "#ffffff",
+     "text": "FAQs"
+    },
+    "h3": {
+     "size": 16,
+     "weight": "500",
+     "lh": "24px",
+     "ls": "normal",
+     "family": "Inter",
+     "color": "#ffffff",
+     "text": "AI Chat"
+    },
+    "body": {
+     "size": 20,
+     "weight": "500",
+     "lh": "normal",
+     "ls": "0.2px",
+     "family": "Inter",
+     "color": "#9c9c9d",
+     "text": "You’ve got questions. We’ve got "
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 10,
+     "padX": 12,
+     "padY": 8,
+     "h": 32,
+     "size": 13,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 7
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 0,
+     "padX": 0,
+     "padY": 39,
+     "h": 102,
+     "size": 16,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 6
+    },
+    {
+     "bg": null,
+     "color": "#9c9c9d",
+     "radius": 999,
+     "padX": 8,
+     "padY": 0,
+     "h": 30,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 5
+    },
+    {
+     "bg": "#e6e6e6",
+     "color": "#2f3031",
+     "radius": 8,
+     "padX": 12,
+     "padY": 8,
+     "h": 36,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.5) 0px 0px 0px 2px, rgba(255, 255, 255, 0.19",
+     "transform": null,
+     "count": 4
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 8,
+     "padX": 12,
+     "padY": 8,
+     "h": 36,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": "rgba(255, 255, 255, 0.05) 0px 1px 0px 0px inset, rgba(255, 2",
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 999,
+     "padX": 8,
+     "padY": 0,
+     "h": 30,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": "rgba(255, 255, 255, 0.06) 0px 1px 0px 0px inset",
+     "transform": null,
+     "count": 2
+    }
+   ],
+   "cards": [],
+   "elements": 1823
+  },
+  "raycast·manual.raycast.com": {
+   "site": "Raycast",
+   "url": "https://manual.raycast.com/",
+   "title": "Raycast Manual",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "inter",
+    "size": 15,
+    "lh": "24px"
+   },
+   "mainWidth": 1180,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 741
+     },
+     {
+      "v": "#f9f9f9",
+      "w": 530
+     },
+     {
+      "v": "#5f564c",
+      "w": 104
+     },
+     {
+      "v": "#090404",
+      "w": 104
+     },
+     {
+      "v": "#151312",
+      "w": 104
+     },
+     {
+      "v": "#000000",
+      "w": 3
+     }
+    ],
+    "ink": [
+     {
+      "v": "#000000",
+      "w": 127
+     },
+     {
+      "v": "#d02423",
+      "w": 7
+     },
+     {
+      "v": "#ffffff",
+      "w": 4
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "inter",
+     "w": 573
+    },
+    {
+     "v": "Arial",
+     "w": 33
+    },
+    {
+     "v": "geistMono",
+     "w": 2
+    }
+   ],
+   "radii": [
+    {
+     "v": "12px",
+     "w": 14
+    },
+    {
+     "v": "8px",
+     "w": 7
+    },
+    {
+     "v": "9999px",
+     "w": 5
+    },
+    {
+     "v": "5px",
+     "w": 3
+    },
+    {
+     "v": "4px",
+     "w": 2
+    }
+   ],
+   "gaps": [
+    {
+     "v": "4px",
+     "w": 18
+    },
+    {
+     "v": "8px",
+     "w": 9
+    },
+    {
+     "v": "16px",
+     "w": 5
+    },
+    {
+     "v": "6px",
+     "w": 3
+    },
+    {
+     "v": "2px",
+     "w": 2
+    },
+    {
+     "v": "12px",
+     "w": 2
+    }
+   ],
+   "pads": [
+    {
+     "v": "5px",
+     "w": 61
+    },
+    {
+     "v": "4px",
+     "w": 30
+    },
+    {
+     "v": "20px",
+     "w": 10
+    },
+    {
+     "v": "16px",
+     "w": 10
+    },
+    {
+     "v": "6px",
+     "w": 6
+    },
+    {
+     "v": "12px",
+     "w": 5
+    }
+   ],
+   "shadows": [
+    {
+     "v": "color(srgb 0 0 0 / 0.2) 0px 0px 0px 1px inset, rgba(255, 255, 255, 0.6) 0px 1px ",
+     "w": 2
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.08) 0px 4px 12px 0px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 60,
+     "weight": "700",
+     "lh": "75px",
+     "ls": "-1.8px",
+     "family": "inter",
+     "color": "#000000",
+     "text": "Raycast Manual"
+    },
+    "h2": {
+     "size": 28,
+     "weight": "600",
+     "lh": "35px",
+     "ls": "-0.42px",
+     "family": "inter",
+     "color": "#000000",
+     "text": "Start Here"
+    },
+    "h3": {
+     "size": 15,
+     "weight": "600",
+     "lh": "18.75px",
+     "ls": "-0.15px",
+     "family": "inter",
+     "color": "#000000",
+     "text": "Basics"
+    },
+    "body": {
+     "size": 15,
+     "weight": "400",
+     "lh": "24px",
+     "ls": "normal",
+     "family": "inter",
+     "color": "#000000",
+     "text": "Raycast puts apps, files, extens"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 8,
+     "padX": 10,
+     "padY": 6,
+     "h": 35,
+     "size": 14,
+     "weight": "400",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 601,
+     "size": 15,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#f9f9f9",
+     "color": "#000000",
+     "radius": 8,
+     "padX": 10,
+     "padY": 6,
+     "h": 26,
+     "size": 12,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#ffffff",
+     "radius": 12,
+     "padding": "0/0",
+     "border": "1px null",
+     "shadow": null,
+     "count": 10
+    },
+    {
+     "bg": "#f9f9f9",
+     "radius": 12,
+     "padding": "0/0",
+     "border": "1px null",
+     "shadow": null,
+     "count": 4
+    }
+   ],
+   "elements": 413
+  },
+  "spotify·open.spotify.com": {
+   "site": "Spotify",
+   "url": "https://open.spotify.com/",
+   "title": "Spotify - Web Player: Music for everyone",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#b3b3b3",
+    "family": "SpotifyMixUI",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1045,
+   "palette": {
+    "bg": [
+     {
+      "v": "#000000",
+      "w": 1660
+     },
+     {
+      "v": "#121212",
+      "w": 1653
+     },
+     {
+      "v": "#181818",
+      "w": 1503
+     },
+     {
+      "v": "#333333",
+      "w": 732
+     },
+     {
+      "v": "#535353",
+      "w": 268
+     },
+     {
+      "v": "#1f1f1f",
+      "w": 111
+     },
+     {
+      "v": "#ffffff",
+      "w": 25
+     },
+     {
+      "v": "#3b3b3b",
+      "w": 4
+     },
+     {
+      "v": "#1ed760",
+      "w": 2
+     }
+    ],
+    "ink": [
+     {
+      "v": "#b3b3b3",
+      "w": 10
+     },
+     {
+      "v": "#ffffff",
+      "w": 9
+     },
+     {
+      "v": "#000000",
+      "w": 5
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "SpotifyMixUI",
+     "w": 944
+    },
+    {
+     "v": "SpotifyMixUITitle",
+     "w": 2
+    }
+   ],
+   "radii": [
+    {
+     "v": "1000px",
+     "w": 75
+    },
+    {
+     "v": "8px",
+     "w": 39
+    },
+    {
+     "v": "6px",
+     "w": 30
+    },
+    {
+     "v": "9999px",
+     "w": 27
+    },
+    {
+     "v": "4px",
+     "w": 11
+    },
+    {
+     "v": "2px",
+     "w": 8
+    },
+    {
+     "v": "50px",
+     "w": 2
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 22
+    },
+    {
+     "v": "12px",
+     "w": 6
+    },
+    {
+     "v": "24px",
+     "w": 3
+    },
+    {
+     "v": "16px",
+     "w": 2
+    },
+    {
+     "v": "20px",
+     "w": 2
+    },
+    {
+     "v": "4px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "16px",
+     "w": 33
+    },
+    {
+     "v": "8px",
+     "w": 18
+    },
+    {
+     "v": "4px",
+     "w": 7
+    },
+    {
+     "v": "12px",
+     "w": 3
+    },
+    {
+     "v": "2px",
+     "w": 3
+    },
+    {
+     "v": "11px",
+     "w": 1
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0.5) 0px 8px 24px 0px",
+     "w": 38
+    },
+    {
+     "v": "rgb(18, 18, 18) 0px 1px 0px 0px, rgb(124, 124, 124) 0px 0px 0px 1px inset",
+     "w": 3
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 16,
+     "weight": "700",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUI",
+     "color": "#ffffff",
+     "text": "Your Library"
+    },
+    "h2": {
+     "size": 32,
+     "weight": "700",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUITitle",
+     "color": "#b3b3b3",
+     "text": ""
+    },
+    "body": {
+     "size": 16,
+     "weight": "400",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUI",
+     "color": "#ffffff",
+     "text": "Sign up to get unlimited songs a"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 8,
+     "h": 48,
+     "size": 16,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 0,
+     "h": 48,
+     "size": 16,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": "#1f1f1f",
+     "color": "#ffffff",
+     "radius": 50,
+     "padX": 12,
+     "padY": 12,
+     "h": 48,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 12,
+     "padY": 12,
+     "h": 48,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 8,
+     "padY": 4,
+     "h": 32,
+     "size": 14,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 0,
+     "h": 32,
+     "size": 14,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#181818",
+     "radius": 8,
+     "padding": "16/16",
+     "border": null,
+     "shadow": null,
+     "count": 30
+    },
+    {
+     "bg": "#333333",
+     "radius": 6,
+     "padding": "0/0",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.5) 0px 8px 24px 0px",
+     "count": 30
+    },
+    {
+     "bg": "#121212",
+     "radius": 8,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    },
+    {
+     "bg": "#1f1f1f",
+     "radius": 8,
+     "padding": "16/20",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    }
+   ],
+   "elements": 464
+  },
+  "spotify·www.spotify.com": {
+   "site": "Spotify",
+   "url": "https://www.spotify.com/",
+   "title": "Spotify - Web Player: Music for everyone",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#b3b3b3",
+    "family": "SpotifyMixUI",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1045,
+   "palette": {
+    "bg": [
+     {
+      "v": "#121212",
+      "w": 2529
+     },
+     {
+      "v": "#000000",
+      "w": 1660
+     },
+     {
+      "v": "#333333",
+      "w": 294
+     },
+     {
+      "v": "#535353",
+      "w": 268
+     },
+     {
+      "v": "#1f1f1f",
+      "w": 114
+     },
+     {
+      "v": "#1ed760",
+      "w": 95
+     },
+     {
+      "v": "#b82040",
+      "w": 29
+     },
+     {
+      "v": "#c01008",
+      "w": 29
+     },
+     {
+      "v": "#248291",
+      "w": 29
+     },
+     {
+      "v": "#902010",
+      "w": 29
+     }
+    ],
+    "ink": [
+     {
+      "v": "#b3b3b3",
+      "w": 97
+     },
+     {
+      "v": "#ffffff",
+      "w": 57
+     },
+     {
+      "v": "#121212",
+      "w": 10
+     },
+     {
+      "v": "#000000",
+      "w": 5
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "SpotifyMixUI",
+     "w": 1847
+    },
+    {
+     "v": "SpotifyMixUITitle",
+     "w": 10
+    }
+   ],
+   "radii": [
+    {
+     "v": "9999px",
+     "w": 107
+    },
+    {
+     "v": "6px",
+     "w": 73
+    },
+    {
+     "v": "50px",
+     "w": 18
+    },
+    {
+     "v": "2px",
+     "w": 18
+    },
+    {
+     "v": "8px",
+     "w": 9
+    },
+    {
+     "v": "4px",
+     "w": 3
+    },
+    {
+     "v": "500px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 64
+    },
+    {
+     "v": "4px",
+     "w": 51
+    },
+    {
+     "v": "24px",
+     "w": 3
+    },
+    {
+     "v": "12px",
+     "w": 3
+    },
+    {
+     "v": "2px",
+     "w": 3
+    },
+    {
+     "v": "16px",
+     "w": 2
+    }
+   ],
+   "pads": [
+    {
+     "v": "12px",
+     "w": 43
+    },
+    {
+     "v": "8px",
+     "w": 21
+    },
+    {
+     "v": "1px",
+     "w": 10
+    },
+    {
+     "v": "4px",
+     "w": 7
+    },
+    {
+     "v": "16px",
+     "w": 4
+    },
+    {
+     "v": "2px",
+     "w": 3
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0.5) 0px 8px 24px 0px",
+     "w": 40
+    },
+    {
+     "v": "rgb(18, 18, 18) 0px 1px 0px 0px, rgb(124, 124, 124) 0px 0px 0px 1px inset",
+     "w": 3
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 16,
+     "weight": "700",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUI",
+     "color": "#ffffff",
+     "text": "Your Library"
+    },
+    "h2": {
+     "size": 24,
+     "weight": "700",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUITitle",
+     "color": "#ffffff",
+     "text": "Trending songs"
+    },
+    "body": {
+     "size": 16,
+     "weight": "400",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUI",
+     "color": "#ffffff",
+     "text": "Sign up to get unlimited songs a"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 0,
+     "h": 48,
+     "size": 13,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 40
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 250,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 17
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 251,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 10
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 273,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 8
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 8,
+     "h": 48,
+     "size": 16,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 0,
+     "h": 48,
+     "size": 16,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#333333",
+     "radius": 6,
+     "padding": "0/0",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.5) 0px 8px 24px 0px",
+     "count": 5
+    },
+    {
+     "bg": "#333333",
+     "radius": 50,
+     "padding": "0/0",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.5) 0px 8px 24px 0px",
+     "count": 5
+    },
+    {
+     "bg": "#121212",
+     "radius": 8,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    },
+    {
+     "bg": "#1f1f1f",
+     "radius": 8,
+     "padding": "16/20",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    },
+    {
+     "bg": "#b82040",
+     "radius": 6,
+     "padding": "0/0",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.5) 0px 8px 24px 0px",
+     "count": 1
+    },
+    {
+     "bg": "#c01008",
+     "radius": 6,
+     "padding": "0/0",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.5) 0px 8px 24px 0px",
+     "count": 1
+    }
+   ],
+   "elements": 1270
+  },
+  "spotify·open.spotify.com-search": {
+   "site": "Spotify",
+   "url": "https://open.spotify.com/search",
+   "title": "Spotify – Search",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#b3b3b3",
+    "family": "SpotifyMixUI",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1045,
+   "palette": {
+    "bg": [
+     {
+      "v": "#000000",
+      "w": 1660
+     },
+     {
+      "v": "#121212",
+      "w": 1624
+     },
+     {
+      "v": "#0d73ec",
+      "w": 241
+     },
+     {
+      "v": "#8d67ab",
+      "w": 180
+     },
+     {
+      "v": "#477d95",
+      "w": 150
+     },
+     {
+      "v": "#e61e32",
+      "w": 150
+     },
+     {
+      "v": "#ba5d07",
+      "w": 120
+     },
+     {
+      "v": "#148a08",
+      "w": 120
+     },
+     {
+      "v": "#1f1f1f",
+      "w": 111
+     },
+     {
+      "v": "#dc148c",
+      "w": 90
+     }
+    ],
+    "ink": [
+     {
+      "v": "#ffffff",
+      "w": 87
+     },
+     {
+      "v": "#b3b3b3",
+      "w": 10
+     },
+     {
+      "v": "#000000",
+      "w": 5
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "SpotifyMixUI",
+     "w": 1006
+    },
+    {
+     "v": "SpotifyMixUITitle",
+     "w": 154
+    }
+   ],
+   "radii": [
+    {
+     "v": "8px",
+     "w": 84
+    },
+    {
+     "v": "4px",
+     "w": 78
+    },
+    {
+     "v": "9999px",
+     "w": 27
+    },
+    {
+     "v": "2px",
+     "w": 8
+    },
+    {
+     "v": "50px",
+     "w": 2
+    },
+    {
+     "v": "500px",
+     "w": 1
+    },
+    {
+     "v": "6px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 22
+    },
+    {
+     "v": "16px",
+     "w": 2
+    },
+    {
+     "v": "20px",
+     "w": 2
+    },
+    {
+     "v": "24px",
+     "w": 2
+    },
+    {
+     "v": "4px",
+     "w": 1
+    },
+    {
+     "v": "12px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "12px",
+     "w": 78
+    },
+    {
+     "v": "16px",
+     "w": 78
+    },
+    {
+     "v": "8px",
+     "w": 17
+    },
+    {
+     "v": "4px",
+     "w": 6
+    },
+    {
+     "v": "2px",
+     "w": 3
+    },
+    {
+     "v": "11px",
+     "w": 1
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0.2) 0px 2px 4px 0px",
+     "w": 75
+    },
+    {
+     "v": "rgb(18, 18, 18) 0px 1px 0px 0px, rgb(124, 124, 124) 0px 0px 0px 1px inset",
+     "w": 3
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 16,
+     "weight": "700",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUI",
+     "color": "#ffffff",
+     "text": "Your Library"
+    },
+    "h2": {
+     "size": 24,
+     "weight": "700",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUITitle",
+     "color": "#ffffff",
+     "text": "Browse all"
+    },
+    "body": {
+     "size": 16,
+     "weight": "400",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUI",
+     "color": "#ffffff",
+     "text": "Sign up to get unlimited songs a"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 8,
+     "h": 48,
+     "size": 16,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 0,
+     "h": 48,
+     "size": 16,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": "#1f1f1f",
+     "color": "#b3b3b3",
+     "radius": 50,
+     "padX": 12,
+     "padY": 12,
+     "h": 48,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 12,
+     "padY": 12,
+     "h": 48,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 8,
+     "padY": 4,
+     "h": 32,
+     "size": 14,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 0,
+     "h": 32,
+     "size": 14,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#0d73ec",
+     "radius": 8,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 8
+    },
+    {
+     "bg": "#8d67ab",
+     "radius": 8,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 6
+    },
+    {
+     "bg": "#477d95",
+     "radius": 8,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 5
+    },
+    {
+     "bg": "#e61e32",
+     "radius": 8,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 5
+    },
+    {
+     "bg": "#ba5d07",
+     "radius": 8,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 4
+    },
+    {
+     "bg": "#148a08",
+     "radius": 8,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 4
+    }
+   ],
+   "elements": 657
+  },
+  "spotify·www.spotify.com-us-premium": {
+   "site": "Spotify",
+   "url": "https://www.spotify.com/us/premium/",
+   "title": "Spotify Premium (USA) - Try 3 months for $0",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "SpotifyMixUI",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#121212",
+      "w": 4800
+     },
+     {
+      "v": "#000000",
+      "w": 1653
+     },
+     {
+      "v": "#242424",
+      "w": 709
+     },
+     {
+      "v": "#576dd6",
+      "w": 570
+     },
+     {
+      "v": "#0d72ea",
+      "w": 570
+     },
+     {
+      "v": "#d64000",
+      "w": 570
+     },
+     {
+      "v": "#7358ff",
+      "w": 570
+     },
+     {
+      "v": "#cc2faf",
+      "w": 570
+     },
+     {
+      "v": "#088569",
+      "w": 570
+     },
+     {
+      "v": "#035341",
+      "w": 359
+     }
+    ],
+    "ink": [
+     {
+      "v": "#ffffff",
+      "w": 166
+     },
+     {
+      "v": "#919496",
+      "w": 14
+     },
+     {
+      "v": "#a7a7a7",
+      "w": 11
+     },
+     {
+      "v": "#000000",
+      "w": 10
+     },
+     {
+      "v": "#b3b3b3",
+      "w": 6
+     },
+     {
+      "v": "#d9dadc",
+      "w": 2
+     },
+     {
+      "v": "#121212",
+      "w": 1
+     },
+     {
+      "v": "#1ed760",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "SpotifyMixUI",
+     "w": 1996
+    },
+    {
+     "v": "SpotifyMixUITitleVariable",
+     "w": 76
+    },
+    {
+     "v": "SpotifyMixUITitle",
+     "w": 21
+    },
+    {
+     "v": "a",
+     "w": 12
+    }
+   ],
+   "radii": [
+    {
+     "v": "9999px",
+     "w": 17
+    },
+    {
+     "v": "24px",
+     "w": 12
+    },
+    {
+     "v": "10px",
+     "w": 4
+    },
+    {
+     "v": "50px",
+     "w": 3
+    },
+    {
+     "v": "6px",
+     "w": 2
+    },
+    {
+     "v": "500px",
+     "w": 1
+    },
+    {
+     "v": "4px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "4px",
+     "w": 12
+    },
+    {
+     "v": "8px",
+     "w": 8
+    },
+    {
+     "v": "32px",
+     "w": 3
+    },
+    {
+     "v": "16px",
+     "w": 2
+    },
+    {
+     "v": "24px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "8px",
+     "w": 11
+    },
+    {
+     "v": "1px",
+     "w": 10
+    },
+    {
+     "v": "20px",
+     "w": 7
+    },
+    {
+     "v": "256px",
+     "w": 4
+    },
+    {
+     "v": "12px",
+     "w": 4
+    },
+    {
+     "v": "24px",
+     "w": 3
+    }
+   ],
+   "shadows": [],
+   "type": {
+    "h1": {
+     "size": 128,
+     "weight": "900",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUITitleVariable",
+     "color": "#ffffff",
+     "text": "The ultimate home formusicartist"
+    },
+    "h2": {
+     "size": 64,
+     "weight": "800",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUITitleVariable",
+     "color": "#ffffff",
+     "text": "Introducing Reserved"
+    },
+    "h3": {
+     "size": 32,
+     "weight": "700",
+     "lh": "46.4px",
+     "ls": "normal",
+     "family": "SpotifyMixUI",
+     "color": "#1ed760",
+     "text": "Individual"
+    },
+    "body": {
+     "size": 24,
+     "weight": "400",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUITitleVariable",
+     "color": "#ffffff",
+     "text": "Spotify is compatible with over "
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 0,
+     "padX": 0,
+     "padY": 20,
+     "h": 72,
+     "size": 16,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 38,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 48,
+     "padX": 6,
+     "padY": 1,
+     "h": 48,
+     "size": 13,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#919496",
+     "radius": 0,
+     "padX": 0,
+     "padY": 1,
+     "h": 32,
+     "size": 13,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#242424",
+     "radius": 10,
+     "padding": "0/16",
+     "border": null,
+     "shadow": null,
+     "count": 4
+    },
+    {
+     "bg": "#035341",
+     "radius": 24,
+     "padding": "24/24",
+     "border": null,
+     "shadow": null,
+     "count": 3
+    },
+    {
+     "bg": "#576dd6",
+     "radius": 24,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#0d72ea",
+     "radius": 24,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#d64000",
+     "radius": 24,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#7358ff",
+     "radius": 24,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 560
+  },
+  "duolingo·www.duolingo.com": {
+   "site": "Duolingo",
+   "url": "https://www.duolingo.com/",
+   "title": "Duolingo - The world’s most popular way to learn",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#3c3c3c",
+    "family": "sans-serif",
+    "size": 17,
+    "lh": "20px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#58cc02",
+      "w": 1306
+     },
+     {
+      "v": "#100f3e",
+      "w": 1200
+     },
+     {
+      "v": "#ffffff",
+      "w": 104
+     }
+    ],
+    "ink": [
+     {
+      "v": "#a5ed6e",
+      "w": 67
+     },
+     {
+      "v": "#777777",
+      "w": 50
+     },
+     {
+      "v": "#58cc02",
+      "w": 13
+     },
+     {
+      "v": "#d7ffb8",
+      "w": 7
+     },
+     {
+      "v": "#4b4b4b",
+      "w": 6
+     },
+     {
+      "v": "#042c60",
+      "w": 5
+     },
+     {
+      "v": "#1cb0f6",
+      "w": 3
+     },
+     {
+      "v": "#ffffff",
+      "w": 2
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "duolingo-sans",
+     "w": 2001
+    },
+    {
+     "v": "feather",
+     "w": 11
+    }
+   ],
+   "radii": [
+    {
+     "v": "12px",
+     "w": 7
+    }
+   ],
+   "gaps": [
+    {
+     "v": "10px",
+     "w": 8
+    },
+    {
+     "v": "24px",
+     "w": 7
+    },
+    {
+     "v": "101px",
+     "w": 5
+    },
+    {
+     "v": "32px",
+     "w": 5
+    },
+    {
+     "v": "48px",
+     "w": 3
+    },
+    {
+     "v": "80px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "96px",
+     "w": 3
+    },
+    {
+     "v": "10px",
+     "w": 2
+    },
+    {
+     "v": "40px",
+     "w": 2
+    },
+    {
+     "v": "70px",
+     "w": 1
+    },
+    {
+     "v": "48px",
+     "w": 1
+    },
+    {
+     "v": "140px",
+     "w": 1
+    }
+   ],
+   "shadows": [],
+   "type": {
+    "h1": {
+     "size": 64,
+     "weight": "700",
+     "lh": "normal",
+     "ls": "-1.28px",
+     "family": "feather",
+     "color": "#042c60",
+     "text": "learn anytime, anywhere"
+    },
+    "h2": {
+     "size": 48,
+     "weight": "700",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "feather",
+     "color": "#58cc02",
+     "text": "free. fun. effective."
+    },
+    "body": {
+     "size": 17,
+     "weight": "500",
+     "lh": "24px",
+     "ls": "normal",
+     "family": "duolingo-sans",
+     "color": "#777777",
+     "text": "Learning with Duolingo is fun, a"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#1cb0f6",
+     "radius": 12,
+     "padX": 16,
+     "padY": 0,
+     "h": 50,
+     "size": 15,
+     "weight": "700",
+     "border": "2px null",
+     "shadow": null,
+     "transform": "uppercase",
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#000437",
+     "radius": 12,
+     "padX": 16,
+     "padY": 0,
+     "h": 50,
+     "size": 15,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": "uppercase",
+     "count": 1
+    }
+   ],
+   "cards": [],
+   "elements": 1234
+  },
+  "duolingo·design.duolingo.com": {
+   "site": "Duolingo",
+   "url": "https://design.duolingo.com/",
+   "title": "Articles about Design",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#4b4b4b",
+    "family": "din-next-rounded",
+    "size": 15,
+    "lh": "normal"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#afafaf",
+      "w": 615
+     },
+     {
+      "v": "#ffffff",
+      "w": 26
+     },
+     {
+      "v": "#e5e5e5",
+      "w": 4
+     }
+    ],
+    "ink": [
+     {
+      "v": "#afafaf",
+      "w": 44
+     },
+     {
+      "v": "#a5a5a5",
+      "w": 21
+     },
+     {
+      "v": "#777777",
+      "w": 8
+     },
+     {
+      "v": "#4b4b4b",
+      "w": 6
+     },
+     {
+      "v": "#5a5a5a",
+      "w": 3
+     },
+     {
+      "v": "#58cc02",
+      "w": 3
+     },
+     {
+      "v": "#1cb0f6",
+      "w": 2
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "din-next-rounded",
+     "w": 629
+    },
+    {
+     "v": "Feather",
+     "w": 1
+    },
+    {
+     "v": "GenSenRounded",
+     "w": 1
+    }
+   ],
+   "radii": [
+    {
+     "v": "20px",
+     "w": 6
+    },
+    {
+     "v": "24px",
+     "w": 3
+    },
+    {
+     "v": "11px",
+     "w": 2
+    },
+    {
+     "v": "29px",
+     "w": 1
+    },
+    {
+     "v": "30px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "12px",
+     "w": 10
+    },
+    {
+     "v": "44px",
+     "w": 6
+    },
+    {
+     "v": "10px",
+     "w": 6
+    },
+    {
+     "v": "7px",
+     "w": 3
+    },
+    {
+     "v": "42px",
+     "w": 3
+    },
+    {
+     "v": "8px",
+     "w": 2
+    }
+   ],
+   "pads": [
+    {
+     "v": "15px",
+     "w": 2
+    },
+    {
+     "v": "23px",
+     "w": 1
+    },
+    {
+     "v": "105px",
+     "w": 1
+    },
+    {
+     "v": "47px",
+     "w": 1
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgb(232, 232, 232) 0px 2px 0px 0px",
+     "w": 2
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 38,
+     "weight": "700",
+     "lh": "43.125px",
+     "ls": "normal",
+     "family": "Feather",
+     "color": "#58cc02",
+     "text": "Duologues: the conversations sha"
+    },
+    "h3": {
+     "size": 19,
+     "weight": "700",
+     "lh": "26.25px",
+     "ls": "normal",
+     "family": "din-next-rounded",
+     "color": "#5a5a5a",
+     "text": "Interviewing with Duolingo’s Pro"
+    },
+    "body": {
+     "size": 18,
+     "weight": "400",
+     "lh": "24.948px",
+     "ls": "normal",
+     "family": "din-next-rounded",
+     "color": "#777777",
+     "text": "This learning and development se"
+    }
+   },
+   "buttons": [
+    {
+     "bg": "#ffffff",
+     "color": "#1cb0f6",
+     "radius": 11,
+     "padX": 55,
+     "padY": 15,
+     "h": 49,
+     "size": 15,
+     "weight": "700",
+     "border": "2px #e5e5e5",
+     "shadow": "rgb(232, 232, 232) 0px 2px 0px 0px",
+     "transform": "uppercase",
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#afafaf",
+     "radius": 20,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 6
+    },
+    {
+     "bg": "#afafaf",
+     "radius": 24,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 3
+    },
+    {
+     "bg": "#afafaf",
+     "radius": 30,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 322
+  },
+  "duolingo·blog.duolingo.com": {
+   "site": "Duolingo",
+   "url": "https://blog.duolingo.com/",
+   "title": "Duolingo Blog | Writing about the best way to learn a language",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#4b4b4b",
+    "family": "din-next-rounded",
+    "size": 15,
+    "lh": "normal"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#afafaf",
+      "w": 2872
+     },
+     {
+      "v": "#ffffff",
+      "w": 57
+     },
+     {
+      "v": "#e5e5e5",
+      "w": 11
+     }
+    ],
+    "ink": [
+     {
+      "v": "#afafaf",
+      "w": 44
+     },
+     {
+      "v": "#a5a5a5",
+      "w": 27
+     },
+     {
+      "v": "#777777",
+      "w": 12
+     },
+     {
+      "v": "#58cc02",
+      "w": 7
+     },
+     {
+      "v": "#5a5a5a",
+      "w": 6
+     },
+     {
+      "v": "#4b4b4b",
+      "w": 5
+     },
+     {
+      "v": "#1cb0f6",
+      "w": 4
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "din-next-rounded",
+     "w": 937
+    },
+    {
+     "v": "Feather",
+     "w": 3
+    },
+    {
+     "v": "GenSenRounded",
+     "w": 1
+    }
+   ],
+   "radii": [
+    {
+     "v": "24px",
+     "w": 15
+    },
+    {
+     "v": "11px",
+     "w": 4
+    },
+    {
+     "v": "20px",
+     "w": 3
+    },
+    {
+     "v": "9999px",
+     "w": 2
+    },
+    {
+     "v": "29px",
+     "w": 1
+    },
+    {
+     "v": "30px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "12px",
+     "w": 10
+    },
+    {
+     "v": "10px",
+     "w": 6
+    },
+    {
+     "v": "8px",
+     "w": 4
+    },
+    {
+     "v": "7px",
+     "w": 3
+    },
+    {
+     "v": "50px",
+     "w": 3
+    },
+    {
+     "v": "56px",
+     "w": 3
+    }
+   ],
+   "pads": [
+    {
+     "v": "15px",
+     "w": 4
+    },
+    {
+     "v": "23px",
+     "w": 1
+    },
+    {
+     "v": "105px",
+     "w": 1
+    },
+    {
+     "v": "47px",
+     "w": 1
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgb(232, 232, 232) 0px 2px 0px 0px",
+     "w": 4
+    },
+    {
+     "v": "rgb(229, 229, 229) 0px 2px 0px 0px",
+     "w": 2
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 38,
+     "weight": "700",
+     "lh": "43.125px",
+     "ls": "normal",
+     "family": "Feather",
+     "color": "#58cc02",
+     "text": "Introducing Chess Game Review: L"
+    },
+    "h2": {
+     "size": 38,
+     "weight": "700",
+     "lh": "52.5px",
+     "ls": "normal",
+     "family": "Feather",
+     "color": "#58cc02",
+     "text": "dear duolingo..."
+    },
+    "h3": {
+     "size": 19,
+     "weight": "700",
+     "lh": "26.25px",
+     "ls": "normal",
+     "family": "din-next-rounded",
+     "color": "#5a5a5a",
+     "text": "Dear Duolingo: Can you learn a l"
+    },
+    "body": {
+     "size": 18,
+     "weight": "400",
+     "lh": "24.948px",
+     "ls": "normal",
+     "family": "din-next-rounded",
+     "color": "#777777",
+     "text": "Transform your chess blunders in"
+    }
+   },
+   "buttons": [],
+   "cards": [
+    {
+     "bg": "#afafaf",
+     "radius": 24,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 15
+    },
+    {
+     "bg": "#afafaf",
+     "radius": 20,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 3
+    },
+    {
+     "bg": "#afafaf",
+     "radius": 30,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 414
+  },
+  "duolingo·www.duolingo.com-courses": {
+   "site": "Duolingo",
+   "url": "https://www.duolingo.com/courses",
+   "title": "Free Language Courses for English Speakers - Duolingo",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#3c3c3c",
+    "family": "sans-serif",
+    "size": 17,
+    "lh": "20px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 3280
+     },
+     {
+      "v": "#1cb0f6",
+      "w": 101
+     },
+     {
+      "v": "#f7f7f7",
+      "w": 43
+     }
+    ],
+    "ink": [
+     {
+      "v": "#4b4b4b",
+      "w": 44
+     },
+     {
+      "v": "#777777",
+      "w": 41
+     },
+     {
+      "v": "#ffffff",
+      "w": 2
+     },
+     {
+      "v": "#0b3e71",
+      "w": 1
+     },
+     {
+      "v": "#afafaf",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "duolingo-sans",
+     "w": 416
+    }
+   ],
+   "radii": [
+    {
+     "v": "16px",
+     "w": 88
+    }
+   ],
+   "gaps": [],
+   "pads": [
+    {
+     "v": "12px",
+     "w": 43
+    },
+    {
+     "v": "94px",
+     "w": 1
+    },
+    {
+     "v": "24px",
+     "w": 1
+    }
+   ],
+   "shadows": [],
+   "type": {
+    "h1": {
+     "size": 24,
+     "weight": "700",
+     "lh": "40px",
+     "ls": "normal",
+     "family": "duolingo-sans",
+     "color": "#4b4b4b",
+     "text": "Courses for English Speakers"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#0b3e71",
+     "radius": 16,
+     "padX": 20,
+     "padY": 0,
+     "h": 44,
+     "size": 15,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": "uppercase",
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#ffffff",
+     "radius": 16,
+     "padding": "12/12",
+     "border": "2px #e5e5e5",
+     "shadow": null,
+     "count": 42
+    },
+    {
+     "bg": "#f7f7f7",
+     "radius": 16,
+     "padding": "12/12",
+     "border": "2px #e5e5e5",
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 322
+  },
+  "wise·wise.com": {
+   "site": "Wise",
+   "url": "https://wise.com/",
+   "title": "Wise: The international account | Money without borders | Wise United ",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#454745",
+    "family": "Inter",
+    "size": 18,
+    "lh": "26px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 9102
+     },
+     {
+      "v": "#9fe870",
+      "w": 2705
+     },
+     {
+      "v": "#163300",
+      "w": 1426
+     },
+     {
+      "v": "#e0f7f7",
+      "w": 13
+     }
+    ],
+    "ink": [
+     {
+      "v": "#163300",
+      "w": 161
+     },
+     {
+      "v": "#454745",
+      "w": 148
+     },
+     {
+      "v": "#0e0f0c",
+      "w": 73
+     },
+     {
+      "v": "#9fe870",
+      "w": 14
+     },
+     {
+      "v": "#cf2929",
+      "w": 6
+     },
+     {
+      "v": "#e8ebe6",
+      "w": 6
+     },
+     {
+      "v": "#054d28",
+      "w": 3
+     },
+     {
+      "v": "#ffffff",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Inter",
+     "w": 3131
+    },
+    {
+     "v": "Wise Sans",
+     "w": 27
+    },
+    {
+     "v": "monospace",
+     "w": 1
+    },
+    {
+     "v": "sans-serif",
+     "w": 1
+    }
+   ],
+   "radii": [
+    {
+     "v": "9999px",
+     "w": 122
+    },
+    {
+     "v": "2px",
+     "w": 77
+    },
+    {
+     "v": "19px",
+     "w": 30
+    },
+    {
+     "v": "50px",
+     "w": 23
+    },
+    {
+     "v": "28px",
+     "w": 13
+    },
+    {
+     "v": "10px",
+     "w": 7
+    },
+    {
+     "v": "16px",
+     "w": 6
+    }
+   ],
+   "gaps": [
+    {
+     "v": "4px",
+     "w": 47
+    },
+    {
+     "v": "9px",
+     "w": 43
+    },
+    {
+     "v": "38px",
+     "w": 13
+    },
+    {
+     "v": "28px",
+     "w": 10
+    },
+    {
+     "v": "8px",
+     "w": 10
+    },
+    {
+     "v": "19px",
+     "w": 8
+    }
+   ],
+   "pads": [
+    {
+     "v": "8px",
+     "w": 41
+    },
+    {
+     "v": "9px",
+     "w": 37
+    },
+    {
+     "v": "3px",
+     "w": 16
+    },
+    {
+     "v": "11px",
+     "w": 16
+    },
+    {
+     "v": "56px",
+     "w": 10
+    },
+    {
+     "v": "28px",
+     "w": 8
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(255, 255, 255, 0.2) 0px 0px 0px 1px",
+     "w": 12
+    },
+    {
+     "v": "rgba(22, 51, 0, 0.12) 0px 0px 0px 1px",
+     "w": 1
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.08) 0px 6px 20px 0px",
+     "w": 1
+    },
+    {
+     "v": "rgb(134, 134, 133) 0px 0px 0px 1px inset",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 89,
+     "weight": "900",
+     "lh": "75.7714px",
+     "ls": "normal",
+     "family": "Wise Sans",
+     "color": "#163300",
+     "text": "The fast way to send money abroa"
+    },
+    "h2": {
+     "size": 89,
+     "weight": "900",
+     "lh": "75.7714px",
+     "ls": "normal",
+     "family": "Wise Sans",
+     "color": "#0e0f0c",
+     "text": "Excellent everywhere"
+    },
+    "h3": {
+     "size": 40,
+     "weight": "400",
+     "lh": "34px",
+     "ls": "normal",
+     "family": "Wise Sans",
+     "color": "#9fe870",
+     "text": "Send securely to 140+ countries"
+    },
+    "body": {
+     "size": 40,
+     "weight": "900",
+     "lh": "34px",
+     "ls": "normal",
+     "family": "Wise Sans",
+     "color": "#163300",
+     "text": "Wise Account"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 19,
+     "padX": 12,
+     "padY": 8,
+     "h": 40,
+     "size": 18,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 25
+    },
+    {
+     "bg": "#9fe870",
+     "color": "#163300",
+     "radius": 9999,
+     "padX": 24,
+     "padY": 11,
+     "h": 48,
+     "size": 16,
+     "weight": "600",
+     "border": "1px #9fe870",
+     "shadow": null,
+     "transform": null,
+     "count": 10
+    },
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 9999,
+     "padX": 12,
+     "padY": 8,
+     "h": 32,
+     "size": 18,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 19,
+     "padX": 12,
+     "padY": 8,
+     "h": 64,
+     "size": 18,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 0,
+     "h": 35,
+     "size": 16,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 9999,
+     "padX": 24,
+     "padY": 11,
+     "h": 48,
+     "size": 16,
+     "weight": "600",
+     "border": "1px #163300",
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#163300",
+     "radius": 28,
+     "padding": "28/28",
+     "border": null,
+     "shadow": null,
+     "count": 6
+    },
+    {
+     "bg": "#ffffff",
+     "radius": 28,
+     "padding": "38/28",
+     "border": null,
+     "shadow": null,
+     "count": 3
+    },
+    {
+     "bg": "#ffffff",
+     "radius": 38,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "radius": 16,
+     "padding": "12/16",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "radius": 32,
+     "padding": "28/28",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "radius": 30,
+     "padding": "32/32",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.08) 0px 6px 20px 0px",
+     "count": 1
+    }
+   ],
+   "elements": 1365
+  },
+  "wise·wise.com-gb-pricing": {
+   "site": "Wise",
+   "url": "https://wise.com/gb/pricing/",
+   "title": "Wise Fees & Pricing: Only Pay for What You Use",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#454745",
+    "family": "Inter",
+    "size": 18,
+    "lh": "26px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 1730
+     },
+     {
+      "v": "#9fe870",
+      "w": 1317
+     },
+     {
+      "v": "#163300",
+      "w": 3
+     },
+     {
+      "v": "#efefef",
+      "w": 0
+     }
+    ],
+    "ink": [
+     {
+      "v": "#163300",
+      "w": 91
+     },
+     {
+      "v": "#0e0f0c",
+      "w": 72
+     },
+     {
+      "v": "#454745",
+      "w": 45
+     },
+     {
+      "v": "#008026",
+      "w": 6
+     },
+     {
+      "v": "#9fe870",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Inter",
+     "w": 1362
+    },
+    {
+     "v": "Wise Sans",
+     "w": 10
+    }
+   ],
+   "radii": [
+    {
+     "v": "2px",
+     "w": 60
+    },
+    {
+     "v": "19px",
+     "w": 35
+    },
+    {
+     "v": "9999px",
+     "w": 27
+    },
+    {
+     "v": "50px",
+     "w": 21
+    },
+    {
+     "v": "10px",
+     "w": 6
+    },
+    {
+     "v": "24px",
+     "w": 1
+    },
+    {
+     "v": "28px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "4px",
+     "w": 39
+    },
+    {
+     "v": "9px",
+     "w": 35
+    },
+    {
+     "v": "8px",
+     "w": 9
+    },
+    {
+     "v": "38px",
+     "w": 3
+    },
+    {
+     "v": "28px",
+     "w": 1
+    },
+    {
+     "v": "113px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "8px",
+     "w": 43
+    },
+    {
+     "v": "32px",
+     "w": 18
+    },
+    {
+     "v": "3px",
+     "w": 15
+    },
+    {
+     "v": "22px",
+     "w": 7
+    },
+    {
+     "v": "24px",
+     "w": 7
+    },
+    {
+     "v": "20px",
+     "w": 5
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0.15) 0px 10px 32px 0px, rgba(0, 0, 0, 0.04) 0px 40px 40px 0px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h2": {
+     "size": 89,
+     "weight": "900",
+     "lh": "75.7714px",
+     "ls": "normal",
+     "family": "Wise Sans",
+     "color": "#163300",
+     "text": "Wise is built to save you money"
+    },
+    "h3": {
+     "size": 59,
+     "weight": "900",
+     "lh": "49.7372px",
+     "ls": "normal",
+     "family": "Wise Sans",
+     "color": "#163300",
+     "text": "Precise and predictable"
+    },
+    "body": {
+     "size": 40,
+     "weight": "900",
+     "lh": "34px",
+     "ls": "normal",
+     "family": "Wise Sans",
+     "color": "#163300",
+     "text": "Wise Current Account"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 19,
+     "padX": 12,
+     "padY": 8,
+     "h": 40,
+     "size": 18,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 34
+    },
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 9999,
+     "padX": 12,
+     "padY": 8,
+     "h": 32,
+     "size": 18,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 9999,
+     "padX": 9,
+     "padY": 8,
+     "h": 32,
+     "size": 16,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 19,
+     "padX": 12,
+     "padY": 8,
+     "h": 64,
+     "size": 18,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 9999,
+     "padX": 9,
+     "padY": 8,
+     "h": 32,
+     "size": 18,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#163300",
+     "color": "#9fe870",
+     "radius": 9999,
+     "padX": 12,
+     "padY": 8,
+     "h": 32,
+     "size": 16,
+     "weight": "600",
+     "border": "1px #163300",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#ffffff",
+     "radius": 24,
+     "padding": "8/32",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.15) 0px 10px 32px 0px, rgba(0, 0, 0, 0.04) 0",
+     "count": 1
+    }
+   ],
+   "elements": 781
+  },
+  "wise·wise.com-help": {
+   "site": "Wise",
+   "url": "https://wise.com/help/",
+   "title": "Hi, how can we help? | Wise Help Centre",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#454745",
+    "family": "Inter",
+    "size": 14,
+    "lh": "21.7px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 1485
+     },
+     {
+      "v": "#9fe870",
+      "w": 19
+     }
+    ],
+    "ink": [
+     {
+      "v": "#163300",
+      "w": 44
+     },
+     {
+      "v": "#0e0f0c",
+      "w": 20
+     },
+     {
+      "v": "#454745",
+      "w": 6
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Inter",
+     "w": 447
+    }
+   ],
+   "radii": [
+    {
+     "v": "2px",
+     "w": 44
+    },
+    {
+     "v": "9999px",
+     "w": 16
+    },
+    {
+     "v": "16px",
+     "w": 6
+    },
+    {
+     "v": "24px",
+     "w": 2
+    },
+    {
+     "v": "3px",
+     "w": 1
+    },
+    {
+     "v": "10px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "9px",
+     "w": 7
+    },
+    {
+     "v": "56px",
+     "w": 3
+    },
+    {
+     "v": "4px",
+     "w": 1
+    },
+    {
+     "v": "12px",
+     "w": 1
+    },
+    {
+     "v": "24px",
+     "w": 1
+    },
+    {
+     "v": "16px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "9px",
+     "w": 36
+    },
+    {
+     "v": "24px",
+     "w": 6
+    },
+    {
+     "v": "56px",
+     "w": 3
+    },
+    {
+     "v": "3px",
+     "w": 2
+    },
+    {
+     "v": "12px",
+     "w": 2
+    },
+    {
+     "v": "11px",
+     "w": 2
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgb(134, 134, 133) 0px 0px 0px 1px inset",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 30,
+     "weight": "600",
+     "lh": "34.5px",
+     "ls": "-0.63px",
+     "family": "Inter",
+     "color": "#0e0f0c",
+     "text": "Hi, how can we help?"
+    },
+    "h2": {
+     "size": 18,
+     "weight": "600",
+     "lh": "26px",
+     "ls": "0.18px",
+     "family": "Inter",
+     "color": "#0e0f0c",
+     "text": "Products"
+    },
+    "h3": {
+     "size": 22,
+     "weight": "600",
+     "lh": "27.5px",
+     "ls": "-0.396px",
+     "family": "Inter",
+     "color": "#0e0f0c",
+     "text": "Log in for personalised support"
+    },
+    "body": {
+     "size": 16,
+     "weight": "400",
+     "lh": "24px",
+     "ls": "0.08px",
+     "family": "Inter",
+     "color": "#0e0f0c",
+     "text": "© Wise Payments Limited 2026"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 24,
+     "padX": 12,
+     "padY": 8,
+     "h": 32,
+     "size": 14,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 9999,
+     "padX": 16,
+     "padY": 3,
+     "h": 32,
+     "size": 14,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#9fe870",
+     "color": "#163300",
+     "radius": 9999,
+     "padX": 16,
+     "padY": 3,
+     "h": 32,
+     "size": 14,
+     "weight": "600",
+     "border": "1px #9fe870",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#9fe870",
+     "color": "#163300",
+     "radius": 9999,
+     "padX": 24,
+     "padY": 11,
+     "h": 48,
+     "size": 16,
+     "weight": "600",
+     "border": "1px #9fe870",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#163300",
+     "radius": 9999,
+     "padX": 24,
+     "padY": 11,
+     "h": 48,
+     "size": 16,
+     "weight": "600",
+     "border": "1px #163300",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [],
+   "elements": 216
+  },
+  "monzo·monzo.com": {
+   "site": "Monzo",
+   "url": "https://monzo.com/",
+   "title": "Monzo | Open a Free Account",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "MonzoSansText",
+    "size": 16,
+    "lh": "22.4px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 17061
+     },
+     {
+      "v": "#f2f8f3",
+      "w": 7453
+     },
+     {
+      "v": "#112231",
+      "w": 3447
+     },
+     {
+      "v": "#ff4f40",
+      "w": 218
+     },
+     {
+      "v": "#091723",
+      "w": 149
+     },
+     {
+      "v": "#efefef",
+      "w": 14
+     },
+     {
+      "v": "#3b4c54",
+      "w": 1
+     },
+     {
+      "v": "#75817e",
+      "w": 0
+     }
+    ],
+    "ink": [
+     {
+      "v": "#091723",
+      "w": 167
+     },
+     {
+      "v": "#ffffff",
+      "w": 85
+     },
+     {
+      "v": "#ff4f40",
+      "w": 3
+     },
+     {
+      "v": "#000000",
+      "w": 3
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "MonzoSansText",
+     "w": 2749
+    },
+    {
+     "v": "MonzoSansDisplay",
+     "w": 61
+    }
+   ],
+   "radii": [
+    {
+     "v": "4px",
+     "w": 49
+    },
+    {
+     "v": "128px",
+     "w": 45
+    },
+    {
+     "v": "32px",
+     "w": 28
+    },
+    {
+     "v": "64px",
+     "w": 17
+    },
+    {
+     "v": "16px",
+     "w": 11
+    },
+    {
+     "v": "500px",
+     "w": 9
+    },
+    {
+     "v": "8px",
+     "w": 7
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 40
+    },
+    {
+     "v": "16px",
+     "w": 34
+    },
+    {
+     "v": "24px",
+     "w": 29
+    },
+    {
+     "v": "32px",
+     "w": 8
+    },
+    {
+     "v": "64px",
+     "w": 8
+    },
+    {
+     "v": "48px",
+     "w": 7
+    }
+   ],
+   "pads": [
+    {
+     "v": "64px",
+     "w": 18
+    },
+    {
+     "v": "4px",
+     "w": 12
+    },
+    {
+     "v": "12px",
+     "w": 12
+    },
+    {
+     "v": "8px",
+     "w": 9
+    },
+    {
+     "v": "16px",
+     "w": 8
+    },
+    {
+     "v": "32px",
+     "w": 8
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0) 0px 1px 1px 0px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 49,
+     "weight": "800",
+     "lh": "58.5946px",
+     "ls": "normal",
+     "family": "MonzoSansDisplay",
+     "color": "#ffffff",
+     "text": "Spend your money on life, not yo"
+    },
+    "h2": {
+     "size": 44,
+     "weight": "800",
+     "lh": "52.8px",
+     "ls": "normal",
+     "family": "MonzoSansDisplay",
+     "color": "#091723",
+     "text": "Independent service quality surv"
+    },
+    "h3": {
+     "size": 31,
+     "weight": "700",
+     "lh": "37.4995px",
+     "ls": "normal",
+     "family": "MonzoSansDisplay",
+     "color": "#091723",
+     "text": "Sort your salary"
+    },
+    "body": {
+     "size": 24,
+     "weight": "600",
+     "lh": "33.6px",
+     "ls": "normal",
+     "family": "MonzoSansText",
+     "color": "#ff4f40",
+     "text": "Personal current accounts"
+    },
+    "small": {
+     "size": 13,
+     "weight": "400",
+     "lh": "17.92px",
+     "ls": "normal",
+     "family": "MonzoSansText",
+     "color": "#ffffff",
+     "text": "Monzo Bank Limited is a company "
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 4,
+     "padX": 0,
+     "padY": 0,
+     "h": 44,
+     "size": 16,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 35
+    },
+    {
+     "bg": "#091723",
+     "color": "#ffffff",
+     "radius": 128,
+     "padX": 24,
+     "padY": 0,
+     "h": 48,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 9
+    },
+    {
+     "bg": null,
+     "color": "#091723",
+     "radius": 128,
+     "padX": 16,
+     "padY": 0,
+     "h": 36,
+     "size": 13,
+     "weight": "400",
+     "border": "2px #091723",
+     "shadow": null,
+     "transform": null,
+     "count": 6
+    },
+    {
+     "bg": null,
+     "color": "#091723",
+     "radius": 128,
+     "padX": 24,
+     "padY": 0,
+     "h": 48,
+     "size": 16,
+     "weight": "400",
+     "border": "2px #091723",
+     "shadow": null,
+     "transform": null,
+     "count": 5
+    },
+    {
+     "bg": null,
+     "color": "#091723",
+     "radius": 128,
+     "padX": 0,
+     "padY": 0,
+     "h": 48,
+     "size": 16,
+     "weight": "400",
+     "border": "2px #091723",
+     "shadow": null,
+     "transform": null,
+     "count": 4
+    },
+    {
+     "bg": null,
+     "color": "#091723",
+     "radius": 500,
+     "padX": 0,
+     "padY": 0,
+     "h": 44,
+     "size": 16,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 4
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#f2f8f3",
+     "radius": 32,
+     "padding": "32/24",
+     "border": "2px null",
+     "shadow": null,
+     "count": 8
+    },
+    {
+     "bg": "#f2f8f3",
+     "radius": 64,
+     "padding": "64/64",
+     "border": null,
+     "shadow": null,
+     "count": 4
+    },
+    {
+     "bg": "#f2f8f3",
+     "radius": 64,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 3
+    },
+    {
+     "bg": "#112231",
+     "radius": 64,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    },
+    {
+     "bg": "#ff4f40",
+     "radius": 32,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    },
+    {
+     "bg": "#112231",
+     "radius": 32,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    }
+   ],
+   "elements": 1072
+  },
+  "monzo·monzo.com-current-account": {
+   "site": "Monzo",
+   "url": "https://monzo.com/current-account/",
+   "title": "Current Accounts | Find the Right Current Account for You",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "MonzoSansText",
+    "size": 16,
+    "lh": "22.4px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 16666
+     },
+     {
+      "v": "#f2f8f3",
+      "w": 6676
+     },
+     {
+      "v": "#112231",
+      "w": 2720
+     },
+     {
+      "v": "#ff4f40",
+      "w": 218
+     },
+     {
+      "v": "#091723",
+      "w": 141
+     },
+     {
+      "v": "#efefef",
+      "w": 14
+     },
+     {
+      "v": "#3b4c54",
+      "w": 1
+     },
+     {
+      "v": "#75817e",
+      "w": 0
+     }
+    ],
+    "ink": [
+     {
+      "v": "#091723",
+      "w": 189
+     },
+     {
+      "v": "#ffffff",
+      "w": 84
+     },
+     {
+      "v": "#000000",
+      "w": 3
+     },
+     {
+      "v": "#ff4f40",
+      "w": 2
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "MonzoSansText",
+     "w": 2710
+    },
+    {
+     "v": "MonzoSansDisplay",
+     "w": 60
+    }
+   ],
+   "radii": [
+    {
+     "v": "4px",
+     "w": 37
+    },
+    {
+     "v": "128px",
+     "w": 34
+    },
+    {
+     "v": "16px",
+     "w": 23
+    },
+    {
+     "v": "32px",
+     "w": 18
+    },
+    {
+     "v": "64px",
+     "w": 15
+    },
+    {
+     "v": "500px",
+     "w": 6
+    },
+    {
+     "v": "8px",
+     "w": 5
+    }
+   ],
+   "gaps": [
+    {
+     "v": "16px",
+     "w": 33
+    },
+    {
+     "v": "8px",
+     "w": 24
+    },
+    {
+     "v": "24px",
+     "w": 12
+    },
+    {
+     "v": "32px",
+     "w": 12
+    },
+    {
+     "v": "48px",
+     "w": 9
+    },
+    {
+     "v": "64px",
+     "w": 7
+    }
+   ],
+   "pads": [
+    {
+     "v": "16px",
+     "w": 46
+    },
+    {
+     "v": "8px",
+     "w": 19
+    },
+    {
+     "v": "64px",
+     "w": 18
+    },
+    {
+     "v": "12px",
+     "w": 8
+    },
+    {
+     "v": "24px",
+     "w": 8
+    },
+    {
+     "v": "4px",
+     "w": 7
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0) 0px 1px 1px 0px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 49,
+     "weight": "800",
+     "lh": "58.5946px",
+     "ls": "normal",
+     "family": "MonzoSansDisplay",
+     "color": "#091723",
+     "text": "Current accounts that keep up"
+    },
+    "h2": {
+     "size": 49,
+     "weight": "800",
+     "lh": "58.5946px",
+     "ls": "normal",
+     "family": "MonzoSansDisplay",
+     "color": "#091723",
+     "text": "16 million  personal and  busine"
+    },
+    "h3": {
+     "size": 31,
+     "weight": "700",
+     "lh": "37.4995px",
+     "ls": "normal",
+     "family": "MonzoSansDisplay",
+     "color": "#091723",
+     "text": "Personal account"
+    },
+    "body": {
+     "size": 31,
+     "weight": "700",
+     "lh": "37.4995px",
+     "ls": "normal",
+     "family": "MonzoSansDisplay",
+     "color": "#091723",
+     "text": "4.9"
+    },
+    "small": {
+     "size": 13,
+     "weight": "400",
+     "lh": "17.92px",
+     "ls": "normal",
+     "family": "MonzoSansText",
+     "color": "#091723",
+     "text": "Aged 16+ • Ts&Cs apply"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 4,
+     "padX": 0,
+     "padY": 0,
+     "h": 44,
+     "size": 16,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 35
+    },
+    {
+     "bg": "#091723",
+     "color": "#ffffff",
+     "radius": 128,
+     "padX": 24,
+     "padY": 0,
+     "h": 48,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 12
+    },
+    {
+     "bg": null,
+     "color": "#091723",
+     "radius": 128,
+     "padX": 24,
+     "padY": 0,
+     "h": 48,
+     "size": 16,
+     "weight": "400",
+     "border": "2px #091723",
+     "shadow": null,
+     "transform": null,
+     "count": 7
+    },
+    {
+     "bg": null,
+     "color": "#091723",
+     "radius": 500,
+     "padX": 0,
+     "padY": 0,
+     "h": 44,
+     "size": 16,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 4
+    },
+    {
+     "bg": null,
+     "color": "#091723",
+     "radius": 128,
+     "padX": 16,
+     "padY": 0,
+     "h": 36,
+     "size": 13,
+     "weight": "400",
+     "border": "2px #091723",
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 16,
+     "padX": 16,
+     "padY": 16,
+     "h": 113,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#f2f8f3",
+     "radius": 16,
+     "padding": "8/12",
+     "border": null,
+     "shadow": null,
+     "count": 5
+    },
+    {
+     "bg": "#f2f8f3",
+     "radius": 64,
+     "padding": "64/64",
+     "border": null,
+     "shadow": null,
+     "count": 3
+    },
+    {
+     "bg": "#f2f8f3",
+     "radius": 64,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    },
+    {
+     "bg": "#112231",
+     "radius": 64,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    },
+    {
+     "bg": "#ff4f40",
+     "radius": 32,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    },
+    {
+     "bg": "#112231",
+     "radius": 32,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    }
+   ],
+   "elements": 1197
+  },
+  "monzo·monzo.com-blog": {
+   "site": "Monzo",
+   "url": "https://monzo.com/blog/",
+   "title": "Monzo Blog",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "MonzoSansText",
+    "size": 16,
+    "lh": "22.4px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 8084
+     },
+     {
+      "v": "#112231",
+      "w": 1200
+     },
+     {
+      "v": "#f2f8f3",
+      "w": 614
+     },
+     {
+      "v": "#efefef",
+      "w": 14
+     },
+     {
+      "v": "#016b83",
+      "w": 5
+     },
+     {
+      "v": "#c9d0c6",
+      "w": 3
+     }
+    ],
+    "ink": [
+     {
+      "v": "#091723",
+      "w": 101
+     },
+     {
+      "v": "#ffffff",
+      "w": 46
+     },
+     {
+      "v": "#000000",
+      "w": 3
+     },
+     {
+      "v": "#016b83",
+      "w": 3
+     },
+     {
+      "v": "#aeb5a7",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "MonzoSansText",
+     "w": 997
+    },
+    {
+     "v": "MonzoSansDisplay",
+     "w": 21
+    }
+   ],
+   "radii": [
+    {
+     "v": "4px",
+     "w": 55
+    },
+    {
+     "v": "16px",
+     "w": 17
+    },
+    {
+     "v": "500px",
+     "w": 10
+    },
+    {
+     "v": "25px",
+     "w": 5
+    },
+    {
+     "v": "100px",
+     "w": 4
+    },
+    {
+     "v": "10px",
+     "w": 1
+    },
+    {
+     "v": "64px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "16px",
+     "w": 6
+    },
+    {
+     "v": "8px",
+     "w": 4
+    },
+    {
+     "v": "48px",
+     "w": 2
+    },
+    {
+     "v": "24px",
+     "w": 1
+    },
+    {
+     "v": "12px",
+     "w": 1
+    },
+    {
+     "v": "32px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "4px",
+     "w": 20
+    },
+    {
+     "v": "12px",
+     "w": 5
+    },
+    {
+     "v": "11px",
+     "w": 4
+    },
+    {
+     "v": "16px",
+     "w": 3
+    },
+    {
+     "v": "8px",
+     "w": 2
+    },
+    {
+     "v": "24px",
+     "w": 2
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0.02) 0.4px 0.4px 0.7px 0px, rgba(0, 0, 0, 0.027) 1px 1px 1.7px 0p",
+     "w": 15
+    },
+    {
+     "v": "rgba(0, 0, 0, 0) 0px 1px 1px 0px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 49,
+     "weight": "800",
+     "lh": "58.5946px",
+     "ls": "normal",
+     "family": "MonzoSansDisplay",
+     "color": "#091723",
+     "text": "Monzo Blog"
+    },
+    "h3": {
+     "size": 25,
+     "weight": "800",
+     "lh": "30px",
+     "ls": "normal",
+     "family": "MonzoSansDisplay",
+     "color": "#091723",
+     "text": "Interviewing for Credit at Monzo"
+    },
+    "body": {
+     "size": 20,
+     "weight": "500",
+     "lh": "28px",
+     "ls": "normal",
+     "family": "MonzoSansText",
+     "color": "#091723",
+     "text": "The latest updates, stories, ide"
+    },
+    "small": {
+     "size": 13,
+     "weight": "400",
+     "lh": "17.92px",
+     "ls": "normal",
+     "family": "MonzoSansText",
+     "color": "#ffffff",
+     "text": "Monzo Bank Limited is a company "
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 4,
+     "padX": 0,
+     "padY": 0,
+     "h": 44,
+     "size": 16,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 35
+    },
+    {
+     "bg": null,
+     "color": "#091723",
+     "radius": 500,
+     "padX": 0,
+     "padY": 0,
+     "h": 44,
+     "size": 16,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 4
+    },
+    {
+     "bg": null,
+     "color": "#016b83",
+     "radius": 500,
+     "padX": 24,
+     "padY": 12,
+     "h": 48,
+     "size": 16,
+     "weight": "600",
+     "border": "1px #016b83",
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 4,
+     "padX": 0,
+     "padY": 0,
+     "h": 47,
+     "size": 16,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 42,
+     "size": 0,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 500,
+     "padX": 0,
+     "padY": 0,
+     "h": 26,
+     "size": 16,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#ffffff",
+     "radius": 16,
+     "padding": "0/0",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.02) 0.4px 0.4px 0.7px 0px, rgba(0, 0, 0, 0.0",
+     "count": 15
+    },
+    {
+     "bg": "#112231",
+     "radius": 64,
+     "padding": "64/64",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 527
+  }
+ }
+}

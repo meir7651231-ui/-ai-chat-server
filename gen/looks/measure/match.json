@@ -1,0 +1,1382 @@
+{
+ "checkedAt": "2026-09-15T16:14",
+ "measuredAt": "2026-09-15T16:01",
+ "sites": {
+  "raycast": {
+   "name": "Raycast",
+   "source": [
+    "raycast·www.raycast.com",
+    "raycast·www.raycast.com-store",
+    "raycast·www.raycast.com-pro",
+    "raycast·manual.raycast.com"
+   ],
+   "pct": 100,
+   "checks": [
+    {
+     "group": "צבע",
+     "label": "#0c0d0f",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#07080a",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#111214",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#1b1c1e",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#2f3031",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#000000",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#434345",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#e6e6e6",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#9c9c9d",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#ffffff",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#07080a",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#434345",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#000000",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#111214",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "רדיוס",
+     "label": "8px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "999px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "6px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "12px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "4px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "9999px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "מרווח",
+     "label": "10px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "12px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "8px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "6px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "4px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "2px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 8",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 12",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 8",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 14",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 500",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg #e6e6e6",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "color #2f3031",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 8",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 8",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 8",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 14",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 500",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg שקוף",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "color #ffffff",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "body 16px",
+     "ok": true,
+     "note": "במדידה: 16/16/16/15"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "line-height 18px",
+     "ok": true,
+     "note": "במדידה: 18/18/18/24"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "h1 משקל 600",
+     "ok": true,
+     "note": "במדידה: 600/600/600/700"
+    }
+   ],
+   "waived": []
+  },
+  "spotify": {
+   "name": "Spotify",
+   "source": [
+    "spotify·open.spotify.com",
+    "spotify·www.spotify.com",
+    "spotify·open.spotify.com-search",
+    "spotify·www.spotify.com-us-premium"
+   ],
+   "pct": 100,
+   "checks": [
+    {
+     "group": "צבע",
+     "label": "#181818",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#333333",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#121212",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#1ed760",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#000000",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#ffffff",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#535353",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#b3b3b3",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#000000",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#121212",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#181818",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#333333",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "רדיוס",
+     "label": "6px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "4px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "8px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "9999px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "999px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "מרווח",
+     "label": "12px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "8px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "16px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "2px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "4px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 9999",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 24",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 12",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 16",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 700",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg #ffffff",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "color #000000",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "body 16px",
+     "ok": true,
+     "note": "במדידה: 16/16/16/16"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "h1 משקל 700",
+     "ok": true,
+     "note": "במדידה: 700/700/700/900"
+    }
+   ],
+   "waived": []
+  },
+  "duolingo": {
+   "name": "Duolingo",
+   "source": [
+    "duolingo·www.duolingo.com",
+    "duolingo·design.duolingo.com",
+    "duolingo·blog.duolingo.com",
+    "duolingo·www.duolingo.com-courses"
+   ],
+   "pct": 100,
+   "checks": [
+    {
+     "group": "צבע",
+     "label": "#ffffff",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#58cc02",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#100f3e",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#0b3e71",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#042c60",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#e5e5e5",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#f7f7f7",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#d7ffb8",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#a5ed6e",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#3c3c3c",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#4b4b4b",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#afafaf",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#58cc02",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#100f3e",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#ffffff",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "רדיוס",
+     "label": "12px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "9999px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "מרווח",
+     "label": "12px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "10px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "7px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "24px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 12",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 16",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 15",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 700",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg #ffffff",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "color #0b3e71",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 9999",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 24",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 400",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg #e5e5e5",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "color #afafaf",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 9999",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 24",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 400",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg #a5ed6e",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "color #0d2600",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 9999",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 24",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 400",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg #58cc02",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "color #0d2600",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "body 17px",
+     "ok": true,
+     "note": "במדידה: 17/15/15/17"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "line-height 20px",
+     "ok": true,
+     "note": "במדידה: 20/20"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "h1 משקל 700",
+     "ok": true,
+     "note": "במדידה: 700/700/700/700"
+    }
+   ],
+   "waived": [
+    {
+     "group": "צבע",
+     "label": "#0d2600",
+     "why": "חריגת-קריאוּת מוצהרת"
+    }
+   ]
+  },
+  "wise": {
+   "name": "Wise",
+   "source": [
+    "wise·wise.com",
+    "wise·wise.com-gb-pricing",
+    "wise·wise.com-help"
+   ],
+   "pct": 100,
+   "checks": [
+    {
+     "group": "צבע",
+     "label": "#9fe870",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#163300",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#ffffff",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#e0f7f7",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#e8ebe6",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#cf2929",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#454745",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#ffffff",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#9fe870",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#163300",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#e0f7f7",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "רדיוס",
+     "label": "9999px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "19px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "28px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "מרווח",
+     "label": "9px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "8px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "28px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "19px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "4px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 19",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 12",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 8",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 18",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 600",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg שקוף",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "color #163300",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 9999",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 24",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 11",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 16",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 600",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg #9fe870",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "color #163300",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 9999",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 24",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 11",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 16",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 600",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg #163300",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "color #ffffff",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 9999",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 24",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 11",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 16",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 600",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg #ffffff",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "color #163300",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "body 18px",
+     "ok": true,
+     "note": "במדידה: 18/18/14"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "line-height 26px",
+     "ok": true,
+     "note": "במדידה: 26/26/22"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "h1 משקל 900",
+     "ok": true,
+     "note": "במדידה: 900/600"
+    }
+   ],
+   "waived": []
+  },
+  "monzo": {
+   "name": "Monzo",
+   "source": [
+    "monzo·monzo.com",
+    "monzo·monzo.com-current-account",
+    "monzo·monzo.com-blog"
+   ],
+   "pct": 100,
+   "checks": [
+    {
+     "group": "צבע",
+     "label": "#f2f8f3",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#ffffff",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#ff4f40",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#112231",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#efefef",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#091723",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#3b4c54",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#ffffff",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#f2f8f3",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#112231",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "צבע-מוביל",
+     "label": "#ff4f40",
+     "ok": true,
+     "note": "גוון מוביל של האתר"
+    },
+    {
+     "group": "רדיוס",
+     "label": "128px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "16px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
+     "label": "32px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "מרווח",
+     "label": "16px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "8px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "24px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 128",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 24",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 16",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 400",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg #091723",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "color #ffffff",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 128",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 24",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 16",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 400",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg שקוף",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "color #091723",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 128",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 16",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 13",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 400",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg שקוף",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "color #091723",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "body 16px",
+     "ok": true,
+     "note": "במדידה: 16/16/16"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "line-height 22px",
+     "ok": true,
+     "note": "במדידה: 22/22/22"
+    },
+    {
+     "group": "טיפוגרפיה",
+     "label": "h1 משקל 800",
+     "ok": true,
+     "note": "במדידה: 800/800/800"
+    }
+   ],
+   "waived": []
+  }
+ },
+ "total": {
+  "pct": 100,
+  "hit": 217,
+  "of": 217
+ }
+}

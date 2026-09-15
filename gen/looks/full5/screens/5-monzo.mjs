@@ -3,85 +3,108 @@
    רשימת-תנועות ארוכה עם עיגולי-אייקון, כרטיסי-צבע עם כרטיסונים לבנים, ותשלומים קרובים. */
 export default {
   id: '5-monzo', name: 'Monzo', ref: 'עמוד-בית: כרטיס-חשבון · קופות · הוצאה לפי קטגוריה · תנועות · כרטיסי-צבע',
-  fonts: ['Rubik:wght@400;500;600;700'],
+  fonts: ['Rubik:wght@400;500;700;800'],
   css: `
-:root{--bg:#fff;--ink:#14233c;--mut:#57606f;--dim:#5f6875;--hair:#e6e4e1;--sunk:#f6f5f4;
- --coral:#ff4f40;--coralD:#2b0c08;--pos:#116b3c;--neg:#a8281a;--navy:#14233c}
-body{background:var(--bg);color:var(--ink);font:400 16px/1.55 Rubik,Arial,sans-serif}
-.note{background:var(--sunk);padding:11px 20px;display:flex;align-items:center;gap:12px;font-size:13.5px;flex-wrap:wrap}
+:root{/* נמדד ב-monzo.com — כל גוון כאן מופיע במדידה */
+ --bg:#ffffff;--ink:#091723;--mut:#3b4c54;--dim:#3b4c54;
+ --mint:#f2f8f3;--navy:#112231;--coral:#ff4f40;--grey:#efefef;
+ /* מסגרת-הכרטיס המדודה היא 2px בשקיפות (הצבע חזר null כי אלפא<0.5) */
+ --edge:2px solid rgba(9,23,35,.1);
+ --rTiny:4px;--r:16px;--rCard:32px;--rBig:64px;--rPill:128px;
+ --gap:8px;--gap2:24px}
+body{background:var(--bg);color:var(--ink);font:400 16px/22.4px Rubik,Arial,sans-serif}
+
+.note{background:var(--mint);padding:12px 24px;display:flex;align-items:center;gap:16px;font-size:16px;flex-wrap:wrap}
 .note .sp{flex:1}
-.note button{background:#fff;border:1px solid var(--hair);border-radius:999px;padding:7px 15px;font-size:13px;min-height:36px}
-.nav{border-block-end:1px solid var(--hair);position:sticky;top:0;background:#fff;z-index:10}
-.nav .in{max-width:1180px;margin-inline:auto;padding:13px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.nav .logo{font-weight:700;font-size:20px}
-.nav a{font-size:14.5px;color:var(--mut)}
-.nav a:hover{color:var(--ink)}
+/* כפתור-הקו המדוד: מסגרת 2 · גלולה 128 · גובה 36 · ריפוד 0/16 · 13px/400 */
+.note button{background:none;border:2px solid var(--ink);color:var(--ink);border-radius:var(--rPill);
+ padding:0 16px;font:400 13px Rubik;min-height:36px}
+.note button:hover{background:var(--ink);color:#fff}
+
+.nav{border-block-end:var(--edge);position:sticky;top:0;background:#fff;z-index:10}
+.nav .in{max-width:1180px;margin-inline:auto;padding:16px 24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.nav .logo{font-weight:800;font-size:22px}
+.nav a{font-size:16px;color:var(--ink)}
+.nav a:hover{text-decoration:underline}
 .nav .sp{flex:1}
-.nav .btn{background:var(--navy);color:#fff;border:0;border-radius:999px;padding:9px 17px;font-size:14px;min-height:40px;
- display:inline-flex;align-items:center;gap:7px}
-.nav .btn::after{content:'←';font-size:12px;opacity:.85}
+/* הכפתור הראשי המדוד: רקע #091723 · טקסט לבן · גלולה 128 · גובה 48 · ריפוד 0/24 · 16px/400 */
+.nav .btn{background:var(--ink);color:#fff;border:0;border-radius:var(--rPill);padding:0 24px;font:400 16px Rubik;
+ min-height:48px;display:inline-flex;align-items:center;gap:8px}
+.nav .btn::after{content:'←';font-size:13px}
 
-.wrap{max-width:1180px;margin-inline:auto;padding:24px 20px 80px}
-.greet{font-size:clamp(24px,4vw,32px);font-weight:700;letter-spacing:-.01em;margin-bottom:18px}
-.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;align-items:start;margin-bottom:26px}
+.wrap{max-width:1180px;margin-inline:auto;padding:32px 24px 80px}
+/* h1 מדוד: 49/800 · גובה-שורה 1.2 */
+.greet{font:800 clamp(30px,5vw,49px)/1.2 Rubik;margin-bottom:24px}
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start;margin-bottom:32px}
 @media(max-width:860px){.hero{grid-template-columns:1fr}}
-.acct{background:var(--coral);color:var(--coralD);border-radius:22px;padding:24px;min-height:210px;display:flex;flex-direction:column;gap:6px}
-.acct .lab{font-size:13.5px;font-weight:600;opacity:.85}
-.acct .big{font-size:clamp(32px,6vw,48px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1.05}
-.acct .sub{font-size:13.5px;opacity:.9}
-.acct .row{margin-top:auto;display:flex;gap:9px;flex-wrap:wrap}
-.acct .row button{background:#fff;color:var(--coralD);border:0;border-radius:999px;padding:10px 18px;font-size:14px;font-weight:600;min-height:42px}
-.acct .row button.o{background:rgba(255,255,255,.25);color:#2b0c08;box-shadow:inset 0 0 0 1.5px rgba(43,12,8,.35)}
-.side{display:grid;gap:12px}
-.mini{background:#fff;border:1px solid var(--hair);border-radius:18px;padding:16px}
-.mini h3{font-size:14.5px;margin-bottom:9px}
-.mini .r{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:11px;align-items:center;padding:7px 0;font-size:13.5px}
-.mini .c{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700}
-.mini .m{font-weight:600;font-variant-numeric:tabular-nums}
+/* כרטיס מדוד: רדיוס 32 · ריפוד 32/24 · מסגרת 2 */
+.acct{background:var(--coral);color:var(--ink);border-radius:var(--rCard);border:var(--edge);
+ padding:32px 24px;min-height:230px;display:flex;flex-direction:column;gap:8px}
+.acct .lab{font-size:16px;font-weight:500}
+.acct .big{font:800 clamp(34px,6vw,49px)/1.1 Rubik;font-variant-numeric:tabular-nums}
+.acct .sub{font-size:16px}
+.acct .row{margin-top:auto;padding-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+.acct .row button{background:var(--ink);color:#fff;border:0;border-radius:var(--rPill);padding:0 24px;font:400 16px Rubik;min-height:48px}
+.acct .row button.o{background:none;color:var(--ink);border:2px solid var(--ink)}
+.acct .row button.o:hover{background:var(--ink);color:#fff}
+.side{display:grid;gap:16px}
+.mini{background:var(--mint);border:var(--edge);border-radius:var(--rCard);padding:32px 24px}
+.mini h3{font:700 20px/1.2 Rubik;margin-bottom:12px}
+.mini .r{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:16px;align-items:center;padding:8px 0;font-size:16px}
+.mini .c{width:40px;height:40px;border-radius:var(--rPill);display:grid;place-items:center;font-size:14px;font-weight:500}
+.mini .m{font-weight:500;font-variant-numeric:tabular-nums}
 
-h2{font-size:21px;font-weight:700;margin:26px 0 4px}
-p.sub{font-size:13.5px;color:var(--mut);margin-bottom:14px}
-.pots{display:flex;gap:12px;overflow-x:auto;padding-bottom:10px}
-.pot{flex:none;width:168px;border-radius:18px;padding:16px;min-height:132px;display:flex;flex-direction:column;gap:4px}
-.pot b{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
-.pot span{font-size:13px;font-weight:600}
-.pot small{font-size:11.5px;margin-top:auto;opacity:.85}
-.p1{background:#ffd7d2;color:#5c1810}.p2{background:#d6ecff;color:#0d3663}.p3{background:#dff3d8;color:#14401f}
-.p4{background:#ffeccc;color:#5a3a00}.p5{background:#e8e2ff;color:#2d1f5c}.p6{background:#d9f3ef;color:#10403a}
+/* h2 מדוד: 44/800 — הוקטן לעברית, המשקל נשמר */
+h2{font:800 clamp(26px,3.6vw,34px)/1.2 Rubik;margin:40px 0 4px}
+p.sub{font-size:16px;color:var(--mut);margin-bottom:16px}
+.pots{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px}
+.pot{flex:none;width:200px;border-radius:var(--rCard);border:var(--edge);padding:24px;min-height:150px;display:flex;flex-direction:column;gap:8px}
+.pot b{font:800 26px/1.1 Rubik;font-variant-numeric:tabular-nums}
+.pot span{font-size:16px;font-weight:500}
+.pot small{font-size:14px;margin-top:auto;padding-top:8px}
+/* ארבעת המשטחים היחידים שנמדדו: קורל · נייבי · מנטה · לבן */
+.p1,.p3{background:var(--coral);color:var(--ink)}
+.p2,.p5{background:var(--navy);color:#fff}
+.p4,.p6{background:var(--mint);color:var(--ink)}
 
-.cat{display:grid;gap:10px;background:#fff;border:1px solid var(--hair);border-radius:18px;padding:18px}
-.cat .r{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:12px;align-items:center;font-size:14px}
-.cat .c{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:14px}
-.cat .t{height:8px;border-radius:999px;background:var(--sunk);overflow:hidden;position:relative;grid-column:2/4;margin-top:-4px}
-.cat .t i{position:absolute;inset-block:0;inset-inline-start:0;border-radius:999px}
-.cat .m{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cat{display:grid;gap:16px;background:var(--mint);border:var(--edge);border-radius:var(--rCard);padding:32px 24px}
+.cat .r{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:16px;align-items:center;font-size:16px}
+.cat .c{width:40px;height:40px;border-radius:var(--rPill);display:grid;place-items:center;font-size:16px}
+.cat .t{height:8px;border-radius:var(--rPill);background:#fff;overflow:hidden;position:relative;grid-column:2/4;margin-top:-8px}
+.cat .t i{position:absolute;inset-block:0;inset-inline-start:0;border-radius:var(--rPill)}
+.cat .m{font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
 
-.box{background:var(--coral);border-radius:22px;padding:16px;display:grid;gap:10px;color:var(--coralD)}
-.box.blue{background:#d6ecff}.box.green{background:#dff3d8}
-.box h3{font-size:15px;padding:2px 4px 0}
-.inner{background:#fff;color:var(--ink);border-radius:15px;padding:13px 15px;display:grid;
- grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center}
-.inner .c{width:36px;height:36px;border-radius:11px;background:#f1efec;display:grid;place-items:center;font-size:15px}
-.inner b{font-size:14.5px;font-weight:600;display:block}
-.inner .tag{display:inline-block;font-size:11px;font-weight:700;background:#d9f2e3;color:var(--pos);border-radius:999px;padding:1px 8px;margin-bottom:3px}
-.inner .tag.w{background:#ffeccc;color:#8a5a00}.inner .tag.r{background:#ffe0dc;color:#a8281a}
-.inner span.s{font-size:12.5px;color:var(--dim)}
-.inner .ch{font-size:18px;color:var(--dim)}
-.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px}
+.box{background:var(--coral);color:var(--ink);border:var(--edge);border-radius:var(--rCard);padding:24px;display:grid;gap:8px}
+.box.blue{background:var(--navy);color:#fff}
+.box.green{background:var(--mint);color:var(--ink)}
+.box h3{font:700 20px/1.2 Rubik;padding:0 8px 4px}
+/* הכרטיסון הלבן בתוך הכרטיס הצבעוני — רדיוס-המשנה המדוד 16 */
+.inner{background:#fff;color:var(--ink);border-radius:var(--r);padding:16px;display:grid;
+ grid-template-columns:40px minmax(0,1fr) auto;gap:16px;align-items:center}
+.inner .c{width:40px;height:40px;border-radius:var(--rPill);background:var(--mint);display:grid;place-items:center;font-size:16px}
+.inner b{font-size:16px;font-weight:500;display:block}
+.inner .tag{display:inline-block;font-size:13px;font-weight:500;background:var(--mint);color:var(--ink);
+ border-radius:var(--rPill);padding:2px 12px;margin-bottom:4px}
+.inner .tag.w{background:var(--navy);color:#fff}
+.inner .tag.r{background:var(--coral);color:var(--ink)}
+.inner span.s{font-size:14px;color:var(--mut)}
+.inner .ch{font-size:20px;color:var(--ink)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
 
-.tx{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:13px;align-items:center;padding:12px 4px;border-block-end:1px solid var(--hair)}
-.tx .c{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700}
-.tx b{font-size:15px;font-weight:600;display:block}
-.tx span{font-size:12.5px;color:var(--dim)}
-.tx .m{text-align:end;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
-.tx .m.pos{color:var(--pos)}
-.tx .m small{display:block;font-size:11.5px;font-weight:400;color:var(--dim)}
-.day{font-size:12.5px;font-weight:600;color:var(--dim);margin:16px 0 4px}
-.foot{margin-top:30px;font-size:12.5px;color:var(--dim)}
+.tx{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:16px;align-items:center;padding:12px 4px;
+ border-block-end:var(--edge)}
+.tx .c{width:48px;height:48px;border-radius:var(--rPill);display:grid;place-items:center;font-size:14px;font-weight:500}
+.tx b{font-size:16px;font-weight:500;display:block}
+.tx span{font-size:14px;color:var(--mut)}
+.tx .m{text-align:end;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tx .m small{display:block;font-size:14px;font-weight:400;color:var(--mut)}
+.day{font-size:14px;font-weight:500;color:var(--mut);margin:24px 0 8px}
+.foot{margin-top:32px;font-size:14px;color:var(--mut)}
 `,
   body: (D) => {
-    const cols = ['#ffd7d2:#5c1810', '#d6ecff:#0d3663', '#dff3d8:#14401f', '#ffeccc:#5a3a00', '#e8e2ff:#2d1f5c', '#d9f3ef:#10403a'];
-    const c = (i) => { const [bg, fg] = cols[i % 6].split(':'); return `background:${bg};color:${fg}`; };
+    /* ארבעת המשטחים שנמדדו ב-monzo.com — מנטה · נייבי · קורל · אפור */
+    const cols = ['#f2f8f3:#091723', '#112231:#ffffff', '#ff4f40:#091723', '#efefef:#091723'];
+    const c = (i) => { const [bg, fg] = cols[i % 4].split(':'); return `background:${bg};color:${fg}`; };
     const budTot = D.budget.reduce((a, b) => a + b.actual, 0);
     return `<div class="note noprint"><span>נתוני דוגמה · ${D.today.hd} ${D.today.hy} · ${D.today.dow}</span>
   <span class="sp"></span><button>החלפת שנה</button></div>
@@ -101,12 +124,12 @@ p.sub{font-size:13.5px;color:var(--mut);margin-bottom:14px}
     <div class="side">
       <div class="mini"><h3>היום במוסד</h3>
         ${D.minyanim.slice(2, 6).map((m, i) => `<div class="r"><span class="c" style="${c(i)}">🕯</span>
-          <span>${m.name}<br><span style="font-size:12px;color:var(--dim)">${m.where || '—'}</span></span>
+          <span>${m.name}<br><span style="font-size:14px;color:var(--mut)">${m.where || '—'}</span></span>
           <span class="m">${D.ltr(m.time)}</span></div>`).join('')}</div>
       <div class="mini"><h3>צוות</h3>
         ${D.staffList.filter(s => s.absent).slice(0, 3).map((s, i) => `<div class="r"><span class="c" style="${c(i + 3)}">${s.init}</span>
-          <span>${s.name}<br><span style="font-size:12px;color:var(--dim)">${s.role}</span></span>
-          <span class="m" style="font-size:12.5px">${s.sub ? 'מחליף' : 'אין מחליף'}</span></div>`).join('')}
+          <span>${s.name}<br><span style="font-size:14px;color:var(--mut)">${s.role}</span></span>
+          <span class="m" style="font-size:14px;font-weight:400">${s.sub ? 'מחליף' : 'אין מחליף'}</span></div>`).join('')}
         <div class="r"><span class="c" style="${c(2)}">✓</span><span>נוכחים היום</span><span class="m">${D.present}/${D.staff}</span></div></div>
     </div>
   </section>
@@ -127,7 +150,7 @@ p.sub{font-size:13.5px;color:var(--mut);margin-bottom:14px}
   <div class="cat">
     ${D.budget.map((b, i) => `<div class="r"><span class="c" style="${c(i)}">${['🎓', '🍲', '🚌', '🔧', '📚', '🛏', '🧾', '🕯'][i % 8]}</span>
       <span>${b.name}</span><span class="m">${b.actual} / ${b.plan}</span>
-      <span class="t"><i style="width:${Math.min(100, b.actual / b.plan * 100)}%;background:${b.actual > b.plan ? 'var(--neg)' : 'var(--pos)'}"></i></span></div>`).join('')}
+      <span class="t"><i style="width:${Math.min(100, b.actual / b.plan * 100)}%;background:${b.actual > b.plan ? 'var(--coral)' : 'var(--navy)'}"></i></span></div>`).join('')}
   </div>
 
   <h2>דורש הכרעה</h2>
@@ -159,11 +182,11 @@ p.sub{font-size:13.5px;color:var(--mut);margin-bottom:14px}
   <p class="day">היום</p>
   ${D.payList.slice(0, 6).map((p, i) => `<div class="tx"><span class="c" style="${c(i)}">${p.init}</span>
     <span><b>${p.fam}</b><span>${p.method} · שכר לימוד</span></span>
-    <span class="m pos">+${D.nis(p.amount)}<small>לפני ${p.ago} ימים</small></span></div>`).join('')}
+    <span class="m">+${D.nis(p.amount)}<small>לפני ${p.ago} ימים</small></span></div>`).join('')}
   <p class="day">תרומות שהתקבלו</p>
   ${D.donList.slice(0, 7).map((d, i) => `<div class="tx"><span class="c" style="${c(i + 2)}">${d.init}</span>
     <span><b>${d.name}</b><span>${d.city || '—'} · ${d.method}</span></span>
-    <span class="m pos">+${D.nis(d.amount)}<small>${d.camp}</small></span></div>`).join('')}
+    <span class="m">+${D.nis(d.amount)}<small>${d.camp}</small></span></div>`).join('')}
   <p class="day">הלוואות שניתנו</p>
   ${D.loanList.slice(0, 6).map((l, i) => `<div class="tx"><span class="c" style="${c(i + 4)}">${l.init}</span>
     <span><b>${l.fam}</b><span>${l.purpose} · ${l.stage}</span></span>
@@ -176,7 +199,7 @@ p.sub{font-size:13.5px;color:var(--mut);margin-bottom:14px}
     <span class="m">${D.nis(f.bal)}<small>שולם ${D.nis(f.paid)}</small></span></div>`).join('')}
 
   <p class="foot">כל התנועות, הקופות והסכומים נשאבים מהמחסן של המערכת · החלקים (כרטיס-חשבון צבעוני · קופות ·
-    הוצאה לפי קטגוריה · כרטיסון לבן עם תג וחץ · רשימת-תנועות) לקוחים מ-Monzo · נתוני דוגמה</p>
+    הוצאה לפי קטגוריה · כרטיסון לבן עם תג וחץ · רשימת-תנועות) נמדדו ב-monzo.com · נתוני דוגמה</p>
 </div>`;
   },
 };

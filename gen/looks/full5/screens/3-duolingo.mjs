@@ -5,89 +5,106 @@ export default {
   id: '3-duolingo', name: 'Duolingo', ref: 'עמוד-לימוד: פס-מונים · מסלול-צמתים · באנר-יחידה · ליגה ומשימות · ניווט תחתון',
   fonts: ['Varela+Round', 'Alef:wght@400;700'],
   css: `
-:root{--bg:#fff;--ink:#3c3c3c;--mut:#6a6a6a;--hair:#e5e5e5;--sunk:#f7f7f7;
- --green:#3f7a00;--greenL:#58cc02;--blue:#0f6f9e;--gold:#b35f00;--red:#c0392b;--purple:#5b34c4}
-body{background:var(--bg);color:var(--ink);font:400 16px/1.55 'Varela Round',Arial,sans-serif;padding-bottom:76px}
+:root{/* נמדד ב-duolingo.com */
+ --bg:#ffffff;--ink:#3c3c3c;--mut:#4b4b4b;--dim:#777777;--hair:#e5e5e5;--sunk:#f7f7f7;
+ --green:#58cc02;--greenInk:#0d2600;--greenL:#a5ed6e;--greenPale:#d7ffb8;
+ /* שלושת הכחולים המדודים: #100f3e · #0b3e71 · #042c60 · והתכלת #1cb0f6 (מילוי בלבד) */
+ --navy:#100f3e;--blue:#1cb0f6;--blueInk:#0b3e71;--deep:#042c60;
+ --r:12px;--gap:10px;--gap2:24px}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.18 'Varela Round',Arial,sans-serif;padding-bottom:76px}
 .hdr{border-block-end:2px solid var(--hair);position:sticky;top:0;background:#fff;z-index:10}
-.hdr .in{max-width:1180px;margin-inline:auto;padding:12px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.hdr .logo{font-size:21px;color:var(--green);font-weight:700;margin:0}
+.hdr .in{max-width:1180px;margin-inline:auto;padding:12px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+/* הירוק המדוד אינו עובר סף-קריאוּת כטקסט — לכן הוא מילוי, והשם עליו כהה */
+.hdr .logo{font-size:21px;background:var(--green);color:var(--greenInk);font-weight:700;margin:0;border-radius:var(--r);padding:7px 12px}
 .hdr .sp{flex:1}
-.mtr{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:700}
+/* המונים: הערך יושב בגלולה בגוון מדוד, הטקסט תמיד בדיו המדוד */
+.mtr{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:700;color:var(--ink)}
 .mtr i{font-style:normal;font-size:18px}
-.mtr.f{color:var(--gold)}.mtr.g{color:var(--blue)}.mtr.h{color:var(--red)}.mtr.x{color:var(--green)}
+.mtr b{border-radius:9999px;padding:7px 12px;background:var(--sunk);color:var(--ink)}
+.mtr.f b{background:var(--greenPale)}.mtr.g b{background:var(--hair)}
+.mtr.h b{background:var(--greenL)}.mtr.x b{background:var(--greenPale)}
 
-.wrap{max-width:1180px;margin-inline:auto;padding:20px 18px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:26px}
+.wrap{max-width:1180px;margin-inline:auto;padding:20px 18px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px}
 @media(max-width:940px){.wrap{grid-template-columns:1fr}}
 
-.unit{background:var(--green);color:#fff;border-radius:16px;padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.unit{--onUnit:#100f3e;background:var(--navy);color:#fff;border-radius:var(--r);padding:16px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
 .unit small{display:block;font-size:12.5px;opacity:.9}
 .unit b{font-size:19px}
 .unit .sp{flex:1}
-.unit button{background:rgba(0,0,0,.18);border:0;color:#fff;border-radius:12px;padding:9px 15px;font:400 14px 'Varela Round';min-height:42px}
-.unit.blue{background:var(--blue)}.unit.gold{background:var(--gold)}.unit.purple{background:var(--purple)}
+/* כפתור-המשנה של דואולינגו על באנר צבעוני: מילוי לבן מלא, הטקסט בצבע הבאנר עצמו */
+.unit button{background:#fff;border:2px solid #fff;color:var(--onUnit);border-radius:var(--r);
+ padding:0 16px;font:700 15px 'Varela Round';min-height:50px;text-transform:uppercase;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.unit.blue{background:var(--blueInk);--onUnit:#0b3e71}
+.unit.purple{background:var(--deep);--onUnit:#042c60}
+/* באנר ירוק: הירוק המדוד כרקע והדיו הכהה שלו כטקסט (חריגה מוצהרת) */
+.unit.green{background:var(--green);color:var(--greenInk);--onUnit:#0d2600}
 
-.path{display:grid;justify-items:center;gap:6px;padding:14px 0 22px}
-.node{display:grid;justify-items:center;gap:6px;position:relative}
-.node .btn{width:76px;height:68px;border-radius:50%;border:0;display:grid;place-items:center;font-size:26px;
- background:var(--greenL);color:#0d2600;box-shadow:0 7px 0 #46a302;position:relative}
-.node .btn:active{transform:translateY(4px);box-shadow:0 3px 0 #46a302}
-.node.locked .btn{background:#e5e5e5;color:#afafaf;box-shadow:0 7px 0 #cfcfcf}
-.node.done .btn{background:#ffc800;color:#4a3000;box-shadow:0 7px 0 #d9a400}
+.path{display:grid;justify-items:center;gap:24px;padding:14px 0 22px}
+.node{display:grid;justify-items:center;gap:7px;position:relative}
+.node .btn{width:76px;height:76px;border-radius:9999px;border:0;display:grid;place-items:center;font-size:24px;padding:0;
+ background:var(--green);color:var(--greenInk);box-shadow:0 7px 0 rgba(0,0,0,.22);position:relative}
+.node .btn:active{transform:translateY(4px);box-shadow:0 3px 0 rgba(0,0,0,.22)}
+.node.locked .btn{background:var(--hair);color:#afafaf;box-shadow:0 7px 0 rgba(0,0,0,.12)}
+.node.done .btn{background:var(--greenL);color:var(--greenInk);box-shadow:0 7px 0 rgba(0,0,0,.18)}
 .node .lab{font-size:13.5px;color:var(--mut);text-align:center;max-width:22ch}
 .node .lab b{display:block;color:var(--ink);font-size:14.5px}
-.node .start{position:absolute;top:-34px;background:#fff;border:2px solid var(--hair);border-radius:12px;
- padding:4px 11px;font-size:12px;font-weight:700;color:var(--green);white-space:nowrap}
+/* «התחל כאן» זורם מעל הצומת במקום לרחף — כך הוא לא נוחת על תווית הצומת שמעליו */
+.node .start{order:-1;background:#fff;border:2px solid var(--hair);border-radius:var(--r);
+ padding:7px 12px;font-size:12px;font-weight:700;color:var(--blueInk);white-space:nowrap;text-transform:uppercase}
 .node:nth-child(2){margin-inline-start:96px}.node:nth-child(3){margin-inline-start:150px}
 .node:nth-child(4){margin-inline-start:96px}.node:nth-child(6){margin-inline-end:96px}
 .node:nth-child(7){margin-inline-end:150px}.node:nth-child(8){margin-inline-end:96px}
 @media(max-width:560px){.path .node{margin-inline:0!important}}
 
-.side section{border:2px solid var(--hair);border-radius:16px;padding:16px;margin-bottom:16px}
+.side section{border:2px solid var(--hair);border-radius:var(--r);padding:16px;margin-bottom:16px}
 .side h2{font-size:17px;margin-bottom:4px}
 .side p.s{font-size:13px;color:var(--mut);margin-bottom:12px}
-.lg{display:grid;grid-template-columns:26px 34px minmax(0,1fr) auto;gap:11px;align-items:center;padding:8px 0;border-block-end:1px solid var(--hair);font-size:14px}
+.lg{display:grid;grid-template-columns:26px 34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-block-end:1px solid var(--hair);font-size:14px}
 .lg:last-child{border:0}
 .lg .n{font-weight:700;color:var(--mut);text-align:center}
-.lg .av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700}
+.lg .av{width:34px;height:34px;border-radius:9999px;display:grid;place-items:center;font-size:12px;font-weight:700}
 .lg .m{font-variant-numeric:tabular-nums;font-weight:700;font-size:13.5px}
-.lg.me{background:#f0f9e8;border-radius:10px;padding-inline:8px}
+.lg.me{background:var(--greenPale);border-radius:var(--r);padding-inline:8px}
 .q{display:flex;align-items:center;gap:12px;padding:10px 0;border-block-end:1px solid var(--hair)}
 .q:last-child{border:0}
-.q .ic{width:40px;height:40px;border-radius:12px;background:var(--sunk);display:grid;place-items:center;font-size:18px;flex:none}
+.q .ic{width:40px;height:40px;border-radius:var(--r);background:var(--sunk);display:grid;place-items:center;font-size:18px;flex:none}
 .q .t{flex:1;font-size:14px}
-.q .track{height:12px;border-radius:999px;background:var(--sunk);overflow:hidden;position:relative;margin-top:6px}
-.q .track i{position:absolute;inset-block:0;inset-inline-start:0;background:var(--greenL);border-radius:999px}
+.q .track{height:12px;border-radius:9999px;background:var(--sunk);overflow:hidden;position:relative;margin-top:6px}
+.q .track i{position:absolute;inset-block:0;inset-inline-start:0;background:var(--green);border-radius:9999px}
 .q .val{font-size:12.5px;color:var(--mut);font-variant-numeric:tabular-nums}
-.friend{display:flex;align-items:center;gap:11px;padding:8px 0;font-size:14px}
-.friend .av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700}
+.friend{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px}
+.friend .av{width:32px;height:32px;border-radius:9999px;display:grid;place-items:center;font-size:12px;font-weight:700}
 .friend .m{margin-inline-start:auto;font-size:12.5px;color:var(--mut)}
 
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px;margin:6px 0 20px}
-.card{border:2px solid var(--hair);border-radius:18px;padding:16px;text-align:center}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px;margin:6px 0 20px}
+.card{border:2px solid var(--hair);border-radius:var(--r);padding:16px;text-align:center}
 .card .r{position:relative;display:grid;place-items:center;margin-bottom:8px}
-.card .r b{position:absolute;font-size:23px;color:var(--green)}
+.card .r b{position:absolute;font-size:23px;color:var(--ink)}
 .card h3{font-size:15.5px}
 .card p{font-size:12.5px;color:var(--mut)}
 .tasks{margin-top:8px}
-.task{display:flex;align-items:center;gap:13px;border:2px solid var(--hair);border-radius:16px;padding:12px;margin-bottom:9px}
-.task .ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:19px;flex:none;background:var(--sunk)}
+.task{display:flex;align-items:center;gap:12px;border:2px solid var(--hair);border-radius:var(--r);padding:12px;margin-bottom:9px}
+.task .ic{width:44px;height:44px;border-radius:var(--r);display:grid;place-items:center;font-size:19px;flex:none;background:var(--sunk)}
 .task .t{flex:1;font-size:15px}
 .task .t span{display:block;font-size:12.5px;color:var(--mut)}
-.go{border:0;border-radius:14px;padding:10px 18px;font:400 14.5px 'Varela Round';min-height:44px;
- background:var(--greenL);color:#0d2600;box-shadow:0 4px 0 #46a302}
-.go:active{transform:translateY(3px);box-shadow:0 1px 0 #46a302}
-.go.grey{background:#fff;color:var(--ink);border:2px solid var(--hair);box-shadow:0 4px 0 var(--hair)}
+/* הכפתור המדוד: גובה 50 · ריפוד 0/16 · 15px/700 · רדיוס 12 · אותיות גדולות · מסגרת 2 למשני */
+.go{border:0;border-radius:var(--r);padding:0 16px;font:700 15px 'Varela Round';min-height:50px;text-transform:uppercase;
+ background:var(--green);color:var(--greenInk);box-shadow:0 4px 0 rgba(0,0,0,.22)}
+.go:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.22)}
+.go.grey{background:#fff;color:var(--blueInk);border:2px solid var(--hair);box-shadow:0 4px 0 var(--hair)}
 h2.sec{font-size:19px;margin:22px 0 10px}
 .foot{font-size:12.5px;color:var(--mut);text-align:center;margin-top:20px}
 
 .bottom{position:fixed;inset-inline:0;bottom:0;background:#fff;border-block-start:2px solid var(--hair);
- display:flex;justify-content:center;gap:6px;padding:8px;z-index:20}
-.bottom a{display:grid;justify-items:center;gap:2px;padding:6px 14px;border-radius:12px;font-size:11px;color:var(--mut)}
+ display:flex;justify-content:center;gap:7px;padding:8px;z-index:20}
+.bottom a{display:grid;justify-items:center;gap:7px;padding:8px 12px;border-radius:12px;font-size:11px;color:var(--mut)}
 .bottom a i{font-style:normal;font-size:21px}
-.bottom a[aria-current]{background:#e8f4ff;color:var(--blue)}
+.bottom a[aria-current]{background:var(--greenPale);color:var(--ink)}
 `,
   body: (D) => {
-    const cols = ['#e8f4ff:#0b5c85', '#f0f9e8:#356600', '#fff4e0:#8f4c00', '#f7ecff:#4b2ba3', '#ffeceb:#a32d21'];
+    /* הפלטה המדודה של Duolingo: #58cc02 · #a5ed6e · #d7ffb8 · #100f3e · #1cb0f6 · #777777 */
+    /* חמשת המשטחים הבהירים שנמדדו ב-duolingo, כל אחד עם דיו מדוד שעובר סף-קריאוּת */
+    const cols = ['#d7ffb8:#3c3c3c', '#a5ed6e:#3c3c3c', '#e5e5e5:#4b4b4b', '#f7f7f7:#100f3e', '#f7f7f7:#4b4b4b'];
     const av = (i) => { const [bg, fg] = cols[i % 5].split(':'); return `background:${bg};color:${fg}`; };
     const ring = (pct, lab, sub, col) => `<div class="card"><div class="r">
       <svg width="106" height="106" viewBox="0 0 106 106" role="img" aria-label="${lab} ${pct} אחוז">
@@ -107,12 +124,12 @@ h2.sec{font-size:19px;margin:22px 0 10px}
     ];
     return `<header class="hdr"><div class="in">
   <h1 class="logo">מוסד</h1>
-  <span class="mtr f"><i>🔥</i>${D.pct}%</span>
-  <span class="mtr g"><i>💎</i>${D.nis(D.raised)}</span>
-  <span class="mtr h"><i>❤</i>${D.absent}</span>
+  <span class="mtr f"><i>🔥</i><b>${D.pct}%</b></span>
+  <span class="mtr g"><i>💎</i><b>${D.nis(D.raised)}</b></span>
+  <span class="mtr h"><i>❤</i><b>${D.absent}</b></span>
   <span class="sp"></span>
-  <span class="mtr x"><i>👥</i>${D.present}/${D.staff}</span>
-  <span class="mtr"><i>📅</i>${D.today.hd} ${D.today.hy}</span>
+  <span class="mtr x"><i>👥</i><b>${D.present}/${D.staff}</b></span>
+  <span class="mtr"><i>📅</i><b>${D.today.hd} ${D.today.hy}</b></span>
 </div></header>
 
 <div class="wrap">
@@ -133,7 +150,7 @@ h2.sec{font-size:19px;margin:22px 0 10px}
   <div class="cards">
     ${ring(D.pct, 'גבייה', D.money(D.paid) + ' מתוך ' + D.money(D.due), '#3f7a00')}
     ${ring(D.attAll, 'נוכחות', D.num(D.students) + ' תלמידים', '#0f6f9e')}
-    ${ring(Math.round(D.raised / D.goal * 100), 'מגבית', D.money(D.raised), '#b35f00')}
+    ${ring(Math.round(D.raised / D.goal * 100), 'מגבית', D.money(D.raised), '#2f2d6e')}
   </div>
 
   <h2 class="sec">המשימות של היום</h2>
@@ -148,7 +165,7 @@ h2.sec{font-size:19px;margin:22px 0 10px}
       <button class="go grey">פתח</button></div>`).join('')}
   </div>
 
-  <div class="unit gold"><small>יחידה 3 · בית המדרש</small><b>${D.minyanim.length} זמנים היום</b><span class="sp"></span>
+  <div class="unit green"><small>יחידה 3 · בית המדרש</small><b>${D.minyanim.length} זמנים היום</b><span class="sp"></span>
     <button class="noprint">${D.now.name} עכשיו</button></div>
 
   <div class="tasks">

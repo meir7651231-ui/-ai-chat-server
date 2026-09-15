@@ -3,91 +3,117 @@
    כרטיס-המרה עם בוררים ושורת-עמלה, וכרטיסי-צד. המבנה של עמוד החשבון בצילום. */
 export default {
   id: '4-wise', name: 'Wise', ref: 'עמוד-חשבון: ניווט · רצועת-יתרות · תנועות לפי יום · כרטיס-חישוב · כרטיסי-צד',
-  fonts: ['Heebo:wght@400;500;700;800'],
+  fonts: ['Heebo:wght@400;500;600;700;800;900'],
   css: `
-:root{--bg:#fff;--ink:#163300;--mut:#454f3f;--dim:#6b7464;--hair:#dcdad0;--sunk:#f7f5f0;
- --lime:#9fe870;--limeD:#8ad95c;--pos:#2f7a00;--neg:#a8281a;--gold:#8a5a00}
-body{background:var(--bg);color:var(--ink);font:400 16px/1.5 Heebo,Arial,sans-serif}
-.nav{border-block-end:1px solid var(--hair);position:sticky;top:0;background:#fff;z-index:10}
-.nav .in{max-width:1220px;margin-inline:auto;padding:13px 20px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
-.nav .logo{font:800 22px Heebo;letter-spacing:-.02em}
-.nav a{font-size:14.5px;font-weight:500;color:var(--mut)}
-.nav a:hover{color:var(--ink)}
+:root{/* נמדד ב-wise.com — פלטה · רדיוסים · כפתורים · כרטיסים */
+ --bg:#ffffff;--ink:#163300;--mut:#454745;--dim:#454745;--deep:#0e0f0c;
+ --lime:#9fe870;--forest:#163300;--teal:#e0f7f7;--stone:#e8ebe6;--neg:#cf2929;
+ /* הגבול של Wise אינו border אלא טבעת-צל מדודה */
+ --ring:0 0 0 1px rgba(22,51,0,.12);--ringOn:0 0 0 1px rgba(255,255,255,.2);
+ --r:19px;--rCard:28px;--rPill:9999px;--rTiny:2px;
+ --gap:9px;--gap2:28px}
+body{background:var(--bg);color:var(--mut);font:400 18px/26px Heebo,Arial,sans-serif}
+
+.nav{box-shadow:var(--ring);position:sticky;top:0;background:#fff;z-index:10}
+.nav .in{max-width:1220px;margin-inline:auto;padding:11px 24px;display:flex;align-items:center;gap:19px;flex-wrap:wrap}
+.nav .logo{font:900 24px/1 Heebo;color:var(--ink)}
+.nav a{font-size:16px;font-weight:600;color:var(--ink);border-radius:var(--r);padding:8px 12px;min-height:40px;display:inline-flex;align-items:center}
+.nav a:hover{background:var(--stone)}
 .nav .sp{flex:1}
-.nav .av{width:34px;height:34px;border-radius:50%;background:var(--lime);display:grid;place-items:center;font-weight:800;font-size:13px}
+.nav .av{width:40px;height:40px;border-radius:var(--rPill);background:var(--lime);color:var(--ink);display:grid;place-items:center;font-weight:800;font-size:15px}
 
 .band{background:var(--lime);color:var(--ink)}
-.band .in{max-width:1220px;margin-inline:auto;padding:28px 20px;display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap}
-.band h1{font:800 clamp(26px,4.4vw,42px)/1.05 Heebo;letter-spacing:-.02em;max-width:18ch}
+.band .in{max-width:1220px;margin-inline:auto;padding:56px 24px;display:flex;gap:28px;align-items:flex-end;flex-wrap:wrap}
+/* h1 מדוד: 89/900 · גובה-שורה 0.85 · אין ריווח-אותיות */
+.band h1{font:900 clamp(34px,6vw,64px)/.85 Heebo;max-width:16ch}
 .band .r{margin-inline-start:auto;text-align:end}
-.band .r b{display:block;font:800 clamp(22px,3.4vw,32px)/1 Heebo;font-variant-numeric:tabular-nums}
-.band .r span{font-size:13.5px}
+.band .r b{display:block;font:900 clamp(26px,4vw,40px)/.9 Heebo;font-variant-numeric:tabular-nums}
+.band .r span{font-size:16px}
 
-.wrap{max-width:1220px;margin-inline:auto;padding:24px 20px 80px;display:grid;
- grid-template-columns:270px minmax(0,1fr) 300px;gap:24px;align-items:start}
-@media(max-width:1100px){.wrap{grid-template-columns:260px minmax(0,1fr)}.right{grid-column:1/-1}}
+.wrap{max-width:1220px;margin-inline:auto;padding:28px 24px 80px;display:grid;
+ grid-template-columns:280px minmax(0,1fr) 310px;gap:28px;align-items:start}
+@media(max-width:1100px){.wrap{grid-template-columns:270px minmax(0,1fr)}.right{grid-column:1/-1}}
 @media(max-width:820px){.wrap{grid-template-columns:1fr}.left{order:2}}
 
-.left h2,.right h2{font:800 15px Heebo;margin-bottom:10px}
-.bal{display:grid;gap:2px;margin-bottom:22px}
-.bal a{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:11px;align-items:center;padding:10px;border-radius:12px}
-.bal a:hover{background:var(--sunk)}
-.bal .c{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:14px;font-weight:800}
-.bal b{font-size:14.5px;font-weight:700;display:block}
-.bal span{font-size:12px;color:var(--dim)}
-.bal .m{font-weight:700;font-variant-numeric:tabular-nums;font-size:14px;white-space:nowrap}
-.addbtn{width:100%;border:1.5px dashed var(--hair);background:none;border-radius:12px;padding:11px;
- font:700 14px Heebo;color:var(--mut);min-height:44px;margin-top:6px}
-.addbtn:hover{border-color:var(--ink);color:var(--ink)}
+.left h2,.right h2{font:900 18px/1.2 Heebo;color:var(--ink);margin-bottom:9px}
+.bal{display:grid;gap:4px;margin-bottom:28px}
+.bal a{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:9px;align-items:center;padding:9px 11px;border-radius:var(--r)}
+.bal a:hover{background:var(--teal)}
+.bal .c{width:40px;height:40px;border-radius:var(--rPill);display:grid;place-items:center;font-size:15px;font-weight:800}
+.bal b{font-size:16px;font-weight:600;display:block;color:var(--ink);line-height:1.3}
+.bal span{font-size:14px;color:var(--mut)}
+.bal .m{font-weight:600;font-variant-numeric:tabular-nums;font-size:16px;white-space:nowrap;color:var(--ink)}
+/* כפתור-הטקסט המדוד: גובה 40 · ריפוד 8/12 · 18px/600 · רדיוס 19 */
+.addbtn{width:100%;border:0;background:none;border-radius:var(--r);padding:8px 12px;
+ font:600 18px Heebo;color:var(--ink);min-height:40px;margin-top:4px;box-shadow:var(--ring)}
+.addbtn:hover{background:var(--stone)}
 
-.main .big{font:800 clamp(30px,6vw,46px)/1 Heebo;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.main .cap{font-size:14px;color:var(--mut);margin-top:4px}
-.acts{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 26px}
-.btn{background:var(--ink);color:#fff;border:0;border-radius:999px;padding:12px 24px;font:700 15px Heebo;min-height:48px}
-.btn:hover{background:#0f2400}
-.btn.lime{background:var(--lime);color:var(--ink)}
-.btn.lime:hover{background:var(--limeD)}
-.btn.line{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.main .big{font:900 clamp(34px,7vw,56px)/.9 Heebo;font-variant-numeric:tabular-nums;color:var(--ink)}
+.main .cap{font-size:16px;color:var(--mut);margin-top:4px}
+.acts{display:flex;gap:9px;flex-wrap:wrap;margin:19px 0 28px}
+/* הכפתור הראשי המדוד: bg #9fe870 · color #163300 · גובה 48 · ריפוד 11/24 · 16px/600 · גלולה */
+.btn{background:var(--lime);color:var(--ink);border:1px solid var(--lime);border-radius:var(--rPill);
+ padding:11px 24px;font:600 16px Heebo;min-height:48px}
+.btn:hover{background:#8ad95c;border-color:#8ad95c}
+.btn.dark{background:var(--forest);color:#fff;border-color:var(--forest)}
+.btn.dark:hover{background:#0f2400;border-color:#0f2400}
+/* כפתור-הקו המדוד: אותו גודל, מסגרת 1 בצבע הדיו */
+.btn.line{background:#fff;color:var(--ink);border-color:var(--ink)}
+.btn.line:hover{background:var(--stone)}
+/* כפתור-טקסט (החתימה הנפוצה ביותר באתר — 25 מופעים) */
+.btn.text{background:none;border-color:transparent;border-radius:var(--r);padding:8px 12px;font-size:18px;min-height:40px}
+.btn.text:hover{background:var(--stone)}
 
-.calc{border:1px solid var(--hair);border-radius:16px;overflow:hidden;margin-bottom:26px}
-.calc .row{display:flex;align-items:center;gap:14px;padding:18px 20px;border-block-end:1px solid var(--hair);flex-wrap:wrap}
-.calc .row:last-child{border:0}
-.calc .lab{width:100%;font-size:13px;color:var(--dim)}
-.calc .sel{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--hair);border-radius:999px;padding:7px 14px;font-weight:700;font-size:14px}
-.calc .sel i{width:22px;height:22px;border-radius:50%;background:var(--sunk);display:grid;place-items:center;font-style:normal;font-size:11px}
-.calc .amt{margin-inline-start:auto;font:800 clamp(24px,4.4vw,34px)/1 Heebo;font-variant-numeric:tabular-nums}
-.calc .note{background:var(--sunk);padding:12px 20px;font-size:13px;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
-.calc .note a{color:var(--pos);font-weight:700;text-decoration:underline}
-.calc .rate{display:inline-flex;align-items:center;gap:7px;background:var(--sunk);border-radius:999px;
- padding:6px 13px;font-size:13px;font-weight:700;margin-inline-start:auto}
+.calc{border-radius:var(--rCard);overflow:hidden;margin-bottom:28px;box-shadow:var(--ring)}
+.calc .row{display:flex;align-items:center;gap:9px;padding:19px 28px;box-shadow:0 1px 0 rgba(22,51,0,.12);flex-wrap:wrap}
+.calc .row:last-child{box-shadow:none}
+.calc .lab{width:100%;font-size:16px;color:var(--mut)}
+.calc .sel{display:inline-flex;align-items:center;gap:8px;border-radius:var(--rPill);padding:11px 19px;
+ font-weight:600;font-size:16px;color:var(--ink);box-shadow:var(--ring)}
+.calc .sel i{width:24px;height:24px;border-radius:var(--rPill);background:var(--teal);display:grid;place-items:center;font-style:normal;font-size:12px}
+.calc .amt{margin-inline-start:auto;font:900 clamp(26px,4vw,40px)/.9 Heebo;font-variant-numeric:tabular-nums;color:var(--ink)}
+.calc .note{background:var(--teal);padding:19px 28px;font-size:16px;display:flex;gap:9px;align-items:center;flex-wrap:wrap;color:var(--ink)}
+.calc .note a{font-weight:600;text-decoration:underline}
+.calc .rate{display:inline-flex;align-items:center;gap:8px;background:var(--stone);border-radius:var(--rPill);
+ padding:8px 16px;font-size:15px;font-weight:600;color:var(--ink);margin-inline-start:auto}
 
-h2.sec{font:800 19px Heebo;margin:26px 0 6px}
-p.sub{font-size:13.5px;color:var(--mut);margin-bottom:12px}
-.day{font:700 12.5px Heebo;color:var(--dim);margin:18px 0 6px}
-.tx{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:13px;align-items:center;padding:12px 4px;border-block-end:1px solid var(--hair)}
-.tx .c{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800}
-.tx b{font-size:15px;font-weight:700;display:block}
-.tx span{font-size:12.5px;color:var(--dim)}
-.tx .m{text-align:end;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-.tx .m.pos{color:var(--pos)}
-.tx .m small{display:block;font-size:11.5px;font-weight:400;color:var(--dim)}
+h2.sec{font:900 28px/1.1 Heebo;color:var(--ink);margin:38px 0 4px}
+p.sub{font-size:16px;color:var(--mut);margin-bottom:9px}
+.day{font:600 15px Heebo;color:var(--mut);margin:19px 0 4px}
+.tx{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:9px;align-items:center;padding:11px 4px;
+ box-shadow:0 1px 0 rgba(22,51,0,.12)}
+.tx .c{width:48px;height:48px;border-radius:var(--rPill);display:grid;place-items:center;font-size:15px;font-weight:800}
+.tx b{font-size:16px;font-weight:600;display:block;color:var(--ink);line-height:1.35}
+.tx span{font-size:14px;color:var(--mut)}
+.tx .m{text-align:end;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:16px;color:var(--ink)}
+.tx .m.neg{color:var(--neg)}
+.tx .m small{display:block;font-size:14px;font-weight:400;color:var(--mut)}
 
-.right section{border:1px solid var(--hair);border-radius:16px;padding:16px;margin-bottom:14px}
-.right p.s{font-size:13px;color:var(--mut);margin-bottom:10px}
-.mini{display:grid;gap:8px}
-.mini .r2{display:flex;align-items:center;gap:10px;font-size:13.5px}
-.mini .r2 .c{width:30px;height:30px;border-radius:50%;background:var(--sunk);display:grid;place-items:center;font-size:12px;font-weight:700}
-.mini .r2 .m{margin-inline-start:auto;font-weight:700;font-variant-numeric:tabular-nums}
-.bars{display:grid;gap:7px;font-size:13px}
+/* כרטיס מדוד: רדיוס 28 · ריפוד 28 */
+.right section{border-radius:var(--rCard);padding:28px;margin-bottom:9px;box-shadow:var(--ring)}
+/* כרטיס-כהה מדוד: רקע #163300 · טבעת לבנה שקופה · הדיו המשני = הליים */
+.right section.dark{background:var(--forest);color:#fff;box-shadow:var(--ringOn)}
+.right section.dark h2{color:#fff}
+.right section.dark p.s,.right section.dark .r2 span span{color:var(--lime)}
+/* על הכרטיס הכהה נשאר רק גוון בהיר אחד — אחרת עיגול-הפתיח נבלע ברקע */
+.right section.dark .r2 .c{background:var(--lime)!important;color:var(--ink)!important}
+.right p.s{font-size:16px;color:var(--mut);margin-bottom:9px}
+.mini{display:grid;gap:9px}
+.mini .r2{display:flex;align-items:center;gap:9px;font-size:16px;color:var(--ink)}
+.right section.dark .mini .r2{color:#fff}
+.mini .r2 .c{width:36px;height:36px;border-radius:var(--rPill);background:var(--teal);color:var(--ink);display:grid;place-items:center;font-size:14px;font-weight:600;flex:none}
+.mini .r2 .m{margin-inline-start:auto;font-weight:600;font-variant-numeric:tabular-nums}
+.bars{display:grid;gap:9px;font-size:16px;color:var(--ink)}
 .bars .b{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
-.bars .t{height:8px;border-radius:999px;background:var(--sunk);position:relative;overflow:hidden;grid-column:1/-1}
-.bars .t i{position:absolute;inset-block:0;inset-inline-start:0;background:var(--pos);border-radius:999px}
+.bars .t{height:9px;border-radius:var(--rPill);background:var(--stone);position:relative;overflow:hidden;grid-column:1/-1}
+.bars .t i{position:absolute;inset-block:0;inset-inline-start:0;background:var(--forest);border-radius:var(--rPill)}
 .bars .t i.over{background:var(--neg)}
-.foot{max-width:1220px;margin:0 auto;padding:0 20px 40px;font-size:12.5px;color:var(--dim)}
+.foot{max-width:1220px;margin:0 auto;padding:0 24px 40px;font-size:15px;color:var(--mut)}
 `,
   body: (D) => {
-    const cols = ['#e6f4d9:#2f7a00', '#dbe9ff:#14448a', '#ffe9cc:#8a5a00', '#f3e2ff:#5b34c4', '#ffe0dc:#a8281a'];
-    const c = (i) => { const [bg, fg] = cols[i % 5].split(':'); return `background:${bg};color:${fg}`; };
+    /* ארבעת הגוונים היחידים שנמדדו ב-wise.com — ליים · תכלת · יער · אבן */
+    const cols = ['#9fe870:#163300', '#e0f7f7:#163300', '#163300:#9fe870', '#e8ebe6:#163300'];
+    const c = (i) => { const [bg, fg] = cols[i % 4].split(':'); return `background:${bg};color:${fg}`; };
     const groups = [['היום', D.payList.slice(0, 5)], ['אתמול', D.payList.slice(5, 10)], ['השבוע', D.payList.slice(10, 16)]];
     return `<header class="nav noprint"><div class="in"><span class="logo">מוסד</span>
   <a href="#">גבייה</a><a href="#">תרומות</a><a href="#">כספים</a><a href="#">חסד</a><a href="#">דוחות</a>
@@ -115,7 +141,7 @@ p.sub{font-size:13.5px;color:var(--mut);margin-bottom:12px}
   <h2 style="margin-top:24px">אנשים</h2>
   <div class="mini">
     ${D.staffList.slice(0, 6).map((s, i) => `<span class="r2"><span class="c" style="${c(i)}">${s.init}</span>
-      <span>${s.name}</span><span class="m" style="font-size:12px;color:var(--dim)">${s.absent || 'נוכח'}</span></span>`).join('')}
+      <span>${s.name}</span><span class="m" style="font-size:14px">${s.absent || 'נוכח'}</span></span>`).join('')}
   </div>
 </aside>
 
@@ -123,8 +149,8 @@ p.sub{font-size:13.5px;color:var(--mut);margin-bottom:12px}
   <p class="cap">נגבה עד היום · ${D.tariff.year}</p>
   <p class="big">${D.money(D.paid)}</p>
   <p class="cap">מתוך ${D.money(D.due)} שחויבו ל-${D.families} משפחות · ${D.num(D.students)} תלמידים</p>
-  <div class="acts noprint"><button class="btn">רישום תשלום</button><button class="btn lime">שליחת תזכורות</button>
-    <button class="btn line">הפקת קבלות</button><button class="btn line">ייצוא לרואה חשבון</button></div>
+  <div class="acts noprint"><button class="btn">רישום תשלום</button><button class="btn dark">שליחת תזכורות</button>
+    <button class="btn line">הפקת קבלות</button><button class="btn text">ייצוא לרואה חשבון</button></div>
 
   <div class="calc">
     <div class="row"><span class="lab">חיוב למשפחה — כך הוא מחושב</span>
@@ -146,25 +172,25 @@ p.sub{font-size:13.5px;color:var(--mut);margin-bottom:12px}
   ${groups.map(([day, rows]) => `<p class="day">${day}</p>
     ${rows.map((p, i) => `<div class="tx"><span class="c" style="${c(i)}">${p.init}</span>
       <span><b>${p.fam}</b><span>${p.method} · שכר לימוד</span></span>
-      <span class="m pos">+${D.nis(p.amount)}<small>לפני ${p.ago} ימים</small></span></div>`).join('')}`).join('')}
+      <span class="m">+${D.nis(p.amount)}<small>לפני ${p.ago} ימים</small></span></div>`).join('')}`).join('')}
 
   <h2 class="sec">תרומות שהתקבלו</h2>
   <p class="sub">מגבית ${D.camp} · ${Math.round(D.raised / D.goal * 100)}% מהיעד</p>
   ${D.donList.slice(0, 8).map((d, i) => `<div class="tx"><span class="c" style="${c(i + 1)}">${d.init}</span>
     <span><b>${d.name}</b><span>${d.city || '—'} · ${d.method}</span></span>
-    <span class="m pos">+${D.nis(d.amount)}<small>${d.camp}</small></span></div>`).join('')}
+    <span class="m">+${D.nis(d.amount)}<small>${d.camp}</small></span></div>`).join('')}
 
   <h2 class="sec">הלוואות גמ״ח</h2>
   <p class="sub">${D.loans} בתיק · ${D.money(D.fundOut)} בחוץ · ${D.fundLate} באיחור</p>
   ${D.loanList.map((l, i) => `<div class="tx"><span class="c" style="${c(i + 2)}">${l.init}</span>
     <span><b>${l.fam}</b><span>${l.purpose} · ${l.stage} · ${l.g}/2 ערבים</span></span>
-    <span class="m">−${D.nis(l.amount)}<small>${l.paid ? l.paid + '/' + l.inst + ' תשלומים' : 'טרם ניתנה'}</small></span></div>`).join('')}
+    <span class="m neg">−${D.nis(l.amount)}<small>${l.paid ? l.paid + '/' + l.inst + ' תשלומים' : 'טרם ניתנה'}</small></span></div>`).join('')}
 </main>
 
 <aside class="right">
-  <section><h2>דורש הכרעה</h2><p class="s">${D.alerts.length} עניינים פתוחים</p>
+  <section class="dark"><h2>דורש הכרעה</h2><p class="s">${D.alerts.length} עניינים פתוחים</p>
     <div class="mini">${D.alerts.map(([t, dep], i) => `<span class="r2"><span class="c" style="${c(i)}">!</span>
-      <span>${t}<br><span style="font-size:12px;color:var(--dim)">${dep}</span></span></span>`).join('')}</div>
+      <span>${t}<br><span style="font-size:14px">${dep}</span></span></span>`).join('')}</div>
   </section>
 
   <section><h2>תקציב מול ביצוע</h2><p class="s">באלפי ₪ · ${D.budget.length} סעיפים</p>
@@ -175,17 +201,17 @@ p.sub{font-size:13.5px;color:var(--mut);margin-bottom:12px}
 
   <section><h2>קווי הסעה</h2><p class="s">${D.routes.reduce((a, r) => a + r.riders, 0)} נוסעים</p>
     <div class="mini">${D.routes.map((r, i) => `<span class="r2"><span class="c" style="${c(i)}">🚌</span>
-      <span>${r.name.split(' · ')[0]}<br><span style="font-size:12px;color:var(--dim)">${r.driver || 'אין נהג'}</span></span>
+      <span>${r.name.split(' · ')[0]}<br><span style="font-size:14px">${r.driver || 'אין נהג'}</span></span>
       <span class="m">${r.riders}</span></span>`).join('')}</div>
   </section>
 
   <section><h2>בתור לקבלת קהל</h2><p class="s">${D.queueN} ממתינים</p>
     <div class="mini">${D.queue.slice(0, 6).map((q, i) => `<span class="r2"><span class="c" style="${c(i)}">${q.no}</span>
-      <span>${q.fam}<br><span style="font-size:12px;color:var(--dim)">${q.reason}</span></span></span>`).join('')}</div>
+      <span>${q.fam}<br><span style="font-size:14px">${q.reason}</span></span></span>`).join('')}</div>
   </section>
 </aside>
 </div>
 <p class="foot">כל היתרות, התנועות והסכומים נשאבים מהמחסן של המערכת · החלקים (פס-ניווט · רצועת-יתרות ·
-  כרטיס-חישוב עם בוררים ושורת-עמלה · תנועות לפי יום · כפתור-גלולה) לקוחים מ-Wise · נתוני דוגמה</p>`;
+  כרטיס-חישוב עם בוררים ושורת-עמלה · תנועות לפי יום · טבעת-צל במקום מסגרת · כפתור-גלולה) נמדדו ב-wise.com · נתוני דוגמה</p>`;
   },
 };
