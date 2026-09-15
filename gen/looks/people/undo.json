@@ -1,0 +1,112 @@
+[
+ {
+  "id": "gmail",
+  "name": "Gmail",
+  "url": "https://support.google.com/mail/answer/2819488",
+  "y": 500,
+  "part": "Undo Send",
+  "does": "הפעולה יוצאת, והחלון לחזור נשאר פתוח 30 שניות",
+  "shots": 1,
+  "title": "Send or unsend Gmail messages - Computer - Gmail Help"
+ },
+ {
+  "id": "stripe-refund",
+  "name": "Stripe",
+  "url": "https://docs.stripe.com/refunds",
+  "y": 700,
+  "part": "Refund = רישום-נגדי",
+  "does": "חיוב לא נמחק לעולם — נרשם זיכוי שמפנה אליו",
+  "shots": 0,
+  "title": "Refund and cancel payments | Stripe Documentation"
+ },
+ {
+  "id": "stripe-events",
+  "name": "Stripe Events",
+  "url": "https://docs.stripe.com/api/events",
+  "y": 400,
+  "part": "Event log",
+  "does": "כל שינוי במערכת הוא אירוע בלתי-מחיק עם מי·מה·מתי",
+  "shots": 0,
+  "title": "Events | Stripe API Reference"
+ },
+ {
+  "id": "xero",
+  "name": "Xero",
+  "url": "https://central.xero.com/s/article/History-and-notes",
+  "y": 400,
+  "part": "History & notes",
+  "does": "לכל רשומה חשבונאית: מי נגע, מה שינה, מתי",
+  "shots": 0,
+  "title": "Login | Xero Accounting Software"
+ },
+ {
+  "id": "quickbooks",
+  "name": "QuickBooks",
+  "url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/audit-trails/use-audit-log/L0mcpVZKn_US_en_US",
+  "y": 600,
+  "part": "Audit log",
+  "does": "יומן-ביקורת שאי-אפשר לערוך — הסטנדרט החשבונאי",
+  "shots": 0,
+  "title": ""
+ },
+ {
+  "id": "figma",
+  "name": "Figma",
+  "url": "https://help.figma.com/hc/en-us/articles/360038006754-View-a-file-s-version-history",
+  "y": 500,
+  "part": "Version history",
+  "does": "ביטול אינסופי + ציר-גרסאות עם שמות",
+  "shots": 4,
+  "title": "View a file's version history – Figma Learn - Help Cent"
+ },
+ {
+  "id": "notion",
+  "name": "Notion",
+  "url": "https://www.notion.com/help/duplicate-delete-and-restore-content",
+  "y": 600,
+  "part": "Trash & restore",
+  "does": "מחיקה היא העברה לסל — לא השמדה",
+  "shots": 3,
+  "title": "Delete & restore content in Notion | Notion Help – Noti"
+ },
+ {
+  "id": "linear",
+  "name": "Linear",
+  "url": "https://linear.app/docs/keyboard-shortcuts",
+  "y": 400,
+  "part": "Ctrl+Z בכל מקום",
+  "does": "כל פעולה הרסנית מקבלת טוסט-ביטול",
+  "shots": 0,
+  "title": ""
+ },
+ {
+  "id": "slack",
+  "name": "Slack",
+  "url": "https://slack.com/help/articles/202395258-Edit-or-delete-messages",
+  "y": 500,
+  "part": "Edit history",
+  "does": "הודעה שנערכה נושאת סימן «נערך» — השינוי גלוי",
+  "shots": 1,
+  "title": "Edit or delete messages | Slack"
+ },
+ {
+  "id": "dropbox",
+  "name": "Dropbox",
+  "url": "https://help.dropbox.com/organize/version-history-overview",
+  "y": 500,
+  "part": "Version history",
+  "does": "כל גרסה נשמרת; שחזור הוא יצירת גרסה חדשה",
+  "shots": 1,
+  "title": "Not found - Dropbox"
+ },
+ {
+  "id": "github-revert",
+  "name": "GitHub",
+  "url": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/about-merge-conflicts",
+  "y": 300,
+  "part": "Revert",
+  "does": "ביטול = קומיט חדש שמבטל, לא מחיקת היסטוריה",
+  "shots": 0,
+  "title": "Merge conflicts - GitHub Docs"
+ }
+]
