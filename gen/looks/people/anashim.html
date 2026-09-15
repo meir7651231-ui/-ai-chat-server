@@ -1,0 +1,1371 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>אנשים — 912 רשומות</title>
+<meta name="description" content="מסך אנשים: ספר-רשומות עם מסילת-אינדקס ופאנל-פרטים, מעוצב מערכים שנמדדו במסכים הכי נצפים בעולם.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}
+:root{
+ /* ---- נמדד רק באתרים שהליבה שלהם היא אדם. בסוגריים: מאיפה ---- */
+ --bg:#ffffff;              /* LinkedIn · Stack Overflow · Dribbble */
+ --sunk:#f7f7f8;            /* Twitch */
+ --paper:#f1f2f3;           /* Stack Overflow */
+ --ink:#000000;             /* LinkedIn */
+ --mut:#666666;             /* LinkedIn */
+ --dim:#3b4045;             /* Stack Overflow */
+ --hair:#d6d9dc;            /* Stack Overflow — מסגרת-הכרטיס המדודה */
+ --link:#0a66c2;            /* LinkedIn — קישורי-טקסט */
+ --btnBg:#0a66c2;           /* LinkedIn — רקע-הכפתור המדוד. נשאר זהה גם בכהה:
+                               לבן עליו = 5.68; כחול בהיר עם לבן היה נופל ל-2.15 */
+ --linkA:#1b75d0;           /* Stack Overflow */
+ --r:8px;                   /* LinkedIn — רדיוס-הכרטיס */
+ --rBtn:24px;               /* LinkedIn — רדיוס-הכפתור */
+ --rSm:6px;                 /* Stack Overflow · Twitch */
+ --rPill:9000px;            /* Twitch · Stack Overflow 1000 · Dribbble 50 */
+ --g1:8px;--g2:12px;--g3:24px;   /* LinkedIn pads 8/12/20/24 · SO gaps 4/12/8/24 */
+ --shadow:rgba(0,0,0,.15) 0 4px 6px 0;      /* LinkedIn — צל-הכרטיס המדוד */
+ --ring:0 0 0 1px var(--hair);              /* Stack Overflow — border 1px #d6d9dc */
+ --fs:16px;--lh:24px;       /* LinkedIn — גוף עמוד-האדם */
+ --fsList:13px;--lhList:17px;  /* Stack Overflow — הצפיפות לרשימה */
+ --cardPadY:24px;--cardPadX:32px;  /* LinkedIn — ריפוד-הכרטיס המדוד */
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#0e0e10;              /* Twitch — הדיו שלו כרקע */
+ --sunk:#18181b;
+ --paper:#1f1f23;
+ --ink:#ffffff;
+ --mut:#adadb8;
+ --dim:#c8c8d0;
+ --hair:#2f2f35;
+ --link:#65b7ff;--linkA:#8ab4f8;   /* קישורי-טקסט מתבהרים בכהה */
+ --btnBg:#0a66c2;                  /* הכפתור **לא** מתבהר — אחרת הלבן עליו נופל */
+ --shadow:rgba(0,0,0,.5) 0 4px 6px 0;
+}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--fs)/var(--lh) Heebo,Arial,sans-serif}
+h1,h2,h3{margin:0}p{margin:0}ul,ol{margin:0;padding:0;list-style:none}
+a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}
+bdi{unicode-bidi:isolate}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+/* ---- פס עליון: LinkedIn h1 24/600 lh36 ---- */
+.top{border-block-end:1px solid var(--hair);background:var(--bg);position:sticky;top:0;z-index:10}
+.top .in{max-width:1400px;margin-inline:auto;padding:var(--g2) var(--g3);display:flex;align-items:center;gap:var(--g2);flex-wrap:wrap}
+h1{font:600 24px/36px Heebo}
+.cnt{font-size:var(--fs);color:var(--mut)}
+.find{margin-inline-start:auto;display:flex;align-items:center;gap:var(--g1);
+ background:var(--sunk);border:1px solid var(--hair);border-radius:var(--rPill);
+ padding:0 var(--g2);min-height:40px;min-width:min(38vw,320px)}
+.find input{flex:1;background:none;border:0;outline:0;font:inherit;color:inherit;min-width:0}
+.find input::placeholder{color:var(--dim)}
+
+.wrap{max-width:1400px;margin-inline:auto;padding:var(--g3);display:grid;
+ grid-template-columns:34px minmax(0,1fr) 380px;gap:var(--g3);align-items:start}
+@media(max-width:1100px){.wrap{grid-template-columns:34px minmax(0,1fr)}.side{display:none}}
+@media(max-width:620px){.wrap{grid-template-columns:1fr;padding:var(--g2)}.rail{display:none}}
+
+/* ---- מסילת-אינדקס: גלולה, כמו האווטרים אצל כולם ---- */
+.rail{position:sticky;top:96px;display:grid;gap:2px}
+.rail button{width:34px;height:26px;border:0;background:none;border-radius:var(--rPill);
+ font:600 12px Heebo;color:var(--mut)}
+.rail button:hover:not(:disabled){background:var(--sunk);color:var(--ink)}
+.rail button:disabled{color:var(--hair);cursor:default}
+
+/* ---- הספר: Amazon/Booking — צפוף, קו-שיער, אפס כרטיסים ---- */
+.book{font:400 var(--fsList)/var(--lhList) Heebo,Arial,sans-serif}
+.book h2{font:700 12px/20px Heebo;color:var(--mut);letter-spacing:.06em;
+ padding:var(--g3) 0 var(--g1);position:sticky;top:88px;background:var(--bg)}
+.row{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:var(--g2);align-items:center;
+ padding:12px var(--g1);border-block-end:1px solid var(--hair);border-radius:var(--r)}
+.row:hover{background:var(--sunk)}
+.row .av{width:44px;height:44px;border-radius:var(--rPill);background:var(--sunk);color:var(--ink);
+ display:grid;place-items:center;font:700 15px Heebo;box-shadow:var(--ring)}
+.row .nm{font:600 15px/20px Heebo;display:block}
+.row .nm a{color:var(--link)}
+.row .nm a:hover{text-decoration:underline}
+.row .sb{font-size:var(--fsList);color:var(--mut);display:block}
+.row .m{text-align:end;font-variant-numeric:tabular-nums;white-space:nowrap}
+.row .m b{display:block;font:700 15px/20px Heebo}
+.row .m span{font-size:12px;color:var(--dim)}
+.chip{display:inline-block;font:600 11px/16px Heebo;border-radius:var(--rPill);
+ padding:2px 9px;background:var(--sunk);color:var(--mut);margin-inline-end:5px;box-shadow:var(--ring)}
+.chip.ok{color:#116b3c;background:#e7f6ea;box-shadow:none}
+.chip.no{color:#8a4b00;background:#fff4e5;box-shadow:none}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .chip.ok{color:#7ee2a8;background:#10301e}
+ :root:not([data-theme=light]) .chip.no{color:#f0c070;background:#2b1f0c}}
+
+/* ---- פאנל-פרטים: LinkedIn — כרטיס r8 עם טבעת, בלי צל ---- */
+.side{position:sticky;top:96px;display:grid;gap:var(--g2)}
+/* כרטיס LinkedIn המדוד: r8 · ריפוד 24/32 · צל rgba(0,0,0,.15) 0 4px 6px */
+.card{background:var(--bg);border-radius:var(--r);box-shadow:var(--shadow);padding:var(--cardPadY) var(--cardPadX);font:400 var(--fs)/var(--lh) Heebo,Arial,sans-serif}
+.card h3{font:600 18px/22.5px Heebo;margin-bottom:2px}
+.who{display:flex;align-items:center;gap:var(--g2);margin-bottom:var(--g2)}
+.who .av{width:64px;height:64px;border-radius:var(--rPill);background:var(--sunk);
+ display:grid;place-items:center;font:700 22px Heebo;box-shadow:var(--ring);flex:none}
+.who .ct{font-size:13px;color:var(--mut)}
+/* ---- תיבת-המידע של ויקיפדיה: תווית מימין, ערך משמאל, קו-שיער בין שורות ---- */
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 var(--g2);font-size:var(--fs)}
+.kv dt{color:var(--mut);padding:7px 0;border-block-end:1px solid var(--hair);white-space:nowrap}
+.kv dd{margin:0;padding:7px 0;border-block-end:1px solid var(--hair);text-align:end;font-weight:600;font-variant-numeric:tabular-nums}
+.kv dt:last-of-type,.kv dd:last-of-type{border:0}
+.kids{margin-top:var(--g2);display:grid;gap:var(--g1)}
+.kid{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:var(--g1);align-items:center;font-size:13px}
+.kid .av{width:32px;height:32px;border-radius:var(--rPill);background:var(--sunk);display:grid;place-items:center;font:700 12px Heebo;box-shadow:var(--ring)}
+.kid b{font-weight:600}
+.kid span{color:var(--mut);font-size:12px;display:block}
+.kid .at{color:var(--mut);font-variant-numeric:tabular-nums;font-size:12px}
+/* הכפתור הראשי של LinkedIn, כפי שנמדד: #0a66c2 · לבן · r24 · גובה 48 · ריפוד 12/24 · 16/600 */
+.more{display:flex;align-items:center;justify-content:center;margin-top:var(--g3);
+ background:var(--btnBg);color:#fff;border-radius:var(--rBtn);
+ min-height:48px;padding:12px 24px;font:600 16px Heebo}
+.more:hover{background:#004182}
+
+.src{max-width:1400px;margin:var(--g3) auto 40px;padding:0 var(--g3);font-size:12px;color:var(--dim)}
+.src b{color:var(--mut)}
+</style></head>
+<body>
+<header class="top"><div class="in">
+  <h1>אנשים</h1>
+  <p class="cnt"><bdi dir="ltr">912</bdi> רשומות · 168 משפחות · 44 עובדים · 180 תורמים</p>
+  <label class="find"><span aria-hidden="true">⌕</span><span class="sr">חיפוש</span>
+    <input type="search" placeholder="שם, עיר או תפקיד…" autocomplete="off"></label>
+</div></header>
+
+<div class="wrap">
+  <nav class="rail" aria-label="קפיצה לאות">
+    <button type="button" aria-label="קפוץ לאות א">א</button><button type="button" aria-label="קפוץ לאות ב">ב</button><button type="button" aria-label="קפוץ לאות ג">ג</button><button type="button" aria-label="קפוץ לאות ד">ד</button><button type="button" aria-label="קפוץ לאות ה">ה</button><button type="button" aria-label="קפוץ לאות ו">ו</button><button type="button" aria-label="קפוץ לאות ז">ז</button><button type="button" aria-label="קפוץ לאות ח">ח</button><button type="button" aria-label="קפוץ לאות ט">ט</button><button type="button" aria-label="קפוץ לאות י">י</button><button type="button" aria-label="קפוץ לאות כ">כ</button><button type="button" aria-label="קפוץ לאות ל">ל</button><button type="button" aria-label="קפוץ לאות מ">מ</button><button type="button" aria-label="קפוץ לאות נ">נ</button><button type="button" disabled aria-label="קפוץ לאות ס">ס</button><button type="button" disabled aria-label="קפוץ לאות ע">ע</button><button type="button" aria-label="קפוץ לאות פ">פ</button><button type="button" disabled aria-label="קפוץ לאות צ">צ</button><button type="button" disabled aria-label="קפוץ לאות ק">ק</button><button type="button" aria-label="קפוץ לאות ר">ר</button><button type="button" aria-label="קפוץ לאות ש">ש</button><button type="button" disabled aria-label="קפוץ לאות ת">ת</button>
+  </nav>
+
+  <main class="book">
+    <h2 id="Lא">א</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">אב</span>
+        <span><span class="nm"><a href="#">משפחת אברמסון</a></span>
+          <span class="sb">ביתר עילית · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,575</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">אב</span>
+        <span><span class="nm"><a href="#">משפחת אברמסון א׳</a></span>
+          <span class="sb">אנטוורפן · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,104</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">אב</span>
+        <span><span class="nm"><a href="#">משפחת אברמסון א׳</a></span>
+          <span class="sb">מודיעין עילית · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 21%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,758</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">אב</span>
+        <span><span class="nm"><a href="#">משפחת אברמסון י׳</a></span>
+          <span class="sb">אנטוורפן · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪315</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">אד</span>
+        <span><span class="nm"><a href="#">משפחת אדלר</a></span>
+          <span class="sb">ניו יורק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪7,175</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">אד</span>
+        <span><span class="nm"><a href="#">משפחת אדלר א׳</a></span>
+          <span class="sb">ביתר עילית · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,150</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">אד</span>
+        <span><span class="nm"><a href="#">משפחת אדלר י׳</a></span>
+          <span class="sb">מודיעין עילית · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,194</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">אד</span>
+        <span><span class="nm"><a href="#">משפחת אדלר מ׳</a></span>
+          <span class="sb">אלעד · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪8,050</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">אד</span>
+        <span><span class="nm"><a href="#">משפחת אדלר ש׳</a></span>
+          <span class="sb">בית שמש · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪10,950</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">או</span>
+        <span><span class="nm"><a href="#">משפחת אונגר</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪14,428</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">או</span>
+        <span><span class="nm"><a href="#">משפחת אונגר א׳</a></span>
+          <span class="sb">ניו יורק · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪5,213</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">או</span>
+        <span><span class="nm"><a href="#">משפחת אונגר ד׳</a></span>
+          <span class="sb">בני ברק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,108</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">או</span>
+        <span><span class="nm"><a href="#">משפחת אונגר י׳</a></span>
+          <span class="sb">מודיעין עילית · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,550</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">אק</span>
+        <span><span class="nm"><a href="#">משפחת אקשטיין</a></span>
+          <span class="sb">בני ברק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,675</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">אק</span>
+        <span><span class="nm"><a href="#">משפחת אקשטיין א׳</a></span>
+          <span class="sb">ביתר עילית · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,550</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">אק</span>
+        <span><span class="nm"><a href="#">משפחת אקשטיין ד׳</a></span>
+          <span class="sb">אנטוורפן · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,250</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">אק</span>
+        <span><span class="nm"><a href="#">משפחת אקשטיין י׳</a></span>
+          <span class="sb">ירושלים · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪83</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lב">ב</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">בל</span>
+        <span><span class="nm"><a href="#">משפחת בלוי</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪7,475</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">בל</span>
+        <span><span class="nm"><a href="#">משפחת בלוי י׳</a></span>
+          <span class="sb">מודיעין עילית · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,650</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">בל</span>
+        <span><span class="nm"><a href="#">משפחת בלוי מ׳</a></span>
+          <span class="sb">אלעד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪950</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">בל</span>
+        <span><span class="nm"><a href="#">משפחת בלוי ש׳</a></span>
+          <span class="sb">ניו יורק · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪11,428</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">בר</span>
+        <span><span class="nm"><a href="#">משפחת בראון</a></span>
+          <span class="sb">בית שמש · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,969</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">בר</span>
+        <span><span class="nm"><a href="#">משפחת בראון א׳</a></span>
+          <span class="sb">ניו יורק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪10,875</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">בר</span>
+        <span><span class="nm"><a href="#">משפחת בראון א׳</a></span>
+          <span class="sb">אלעד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-1,622</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">בר</span>
+        <span><span class="nm"><a href="#">משפחת בראון י׳</a></span>
+          <span class="sb">ביתר עילית · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪115</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">בר</span>
+        <span><span class="nm"><a href="#">משפחת ברגר</a></span>
+          <span class="sb">ביתר עילית · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-391</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">בר</span>
+        <span><span class="nm"><a href="#">משפחת ברגר ד׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪11,250</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">בר</span>
+        <span><span class="nm"><a href="#">משפחת ברגר י׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,905</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">בר</span>
+        <span><span class="nm"><a href="#">משפחת ברגר מ׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪313</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">בר</span>
+        <span><span class="nm"><a href="#">משפחת ברגר ש׳</a></span>
+          <span class="sb">ביתר עילית · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,769</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lג">ג</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">גו</span>
+        <span><span class="nm"><a href="#">משפחת גולד</a></span>
+          <span class="sb">ביתר עילית · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,075</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">גו</span>
+        <span><span class="nm"><a href="#">משפחת גולד א׳</a></span>
+          <span class="sb">ירושלים · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,413</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">גו</span>
+        <span><span class="nm"><a href="#">משפחת גולד ד׳</a></span>
+          <span class="sb">ירושלים · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪525</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">גו</span>
+        <span><span class="nm"><a href="#">משפחת גולד י׳</a></span>
+          <span class="sb">ניו יורק · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪13,775</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">גו</span>
+        <span><span class="nm"><a href="#">משפחת גולדשטיין</a></span>
+          <span class="sb">בני ברק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-161</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">גו</span>
+        <span><span class="nm"><a href="#">משפחת גולדשטיין א׳</a></span>
+          <span class="sb">לונדון · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪615</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">גו</span>
+        <span><span class="nm"><a href="#">משפחת גולדשטיין ד׳</a></span>
+          <span class="sb">מודיעין עילית · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪8,475</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">גו</span>
+        <span><span class="nm"><a href="#">משפחת גולדשטיין י׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪805</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">גר</span>
+        <span><span class="nm"><a href="#">משפחת גרין</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,008</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">גר</span>
+        <span><span class="nm"><a href="#">משפחת גרין א׳</a></span>
+          <span class="sb">אלעד · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,625</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">גר</span>
+        <span><span class="nm"><a href="#">משפחת גרין ד׳</a></span>
+          <span class="sb">אנטוורפן · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,215</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">גר</span>
+        <span><span class="nm"><a href="#">משפחת גרין י׳</a></span>
+          <span class="sb">מודיעין עילית · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,828</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lד">ד</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">דו</span>
+        <span><span class="nm"><a href="#">משפחת דויטש</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,404</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">דו</span>
+        <span><span class="nm"><a href="#">משפחת דויטש א׳</a></span>
+          <span class="sb">בני ברק · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 21%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪8,558</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">דו</span>
+        <span><span class="nm"><a href="#">משפחת דויטש י׳</a></span>
+          <span class="sb">ירושלים · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,675</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">דו</span>
+        <span><span class="nm"><a href="#">משפחת דויטש ש׳</a></span>
+          <span class="sb">ביתר עילית · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,050</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lה">ה</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">הו</span>
+        <span><span class="nm"><a href="#">משפחת הורוביץ</a></span>
+          <span class="sb">ניו יורק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,639</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">הו</span>
+        <span><span class="nm"><a href="#">משפחת הורוביץ י׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,050</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">הו</span>
+        <span><span class="nm"><a href="#">משפחת הורוביץ מ׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-652</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">הו</span>
+        <span><span class="nm"><a href="#">משפחת הורוביץ ש׳</a></span>
+          <span class="sb">בני ברק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-582</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">הי</span>
+        <span><span class="nm"><a href="#">משפחת הירש</a></span>
+          <span class="sb">בית שמש · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-1,691</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">הי</span>
+        <span><span class="nm"><a href="#">משפחת הירש ד׳</a></span>
+          <span class="sb">לונדון · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪413</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">הי</span>
+        <span><span class="nm"><a href="#">משפחת הירש י׳</a></span>
+          <span class="sb">בית שמש · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,750</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">הי</span>
+        <span><span class="nm"><a href="#">משפחת הירש מ׳</a></span>
+          <span class="sb">אשדוד · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪10,338</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">הל</span>
+        <span><span class="nm"><a href="#">משפחת הלר</a></span>
+          <span class="sb">ניו יורק · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 21%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,875</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">הל</span>
+        <span><span class="nm"><a href="#">משפחת הלר ד׳</a></span>
+          <span class="sb">בית שמש · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 21%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-364</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">הל</span>
+        <span><span class="nm"><a href="#">משפחת הלר י׳</a></span>
+          <span class="sb">ירושלים · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 21%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,758</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">הל</span>
+        <span><span class="nm"><a href="#">משפחת הלר מ׳</a></span>
+          <span class="sb">מודיעין עילית · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪5,039</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lו">ו</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">וי</span>
+        <span><span class="nm"><a href="#">משפחת ויס</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,439</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">וי</span>
+        <span><span class="nm"><a href="#">משפחת ויס א׳</a></span>
+          <span class="sb">בני ברק · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,150</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">וי</span>
+        <span><span class="nm"><a href="#">משפחת ויס ד׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,148</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">וי</span>
+        <span><span class="nm"><a href="#">משפחת ויס י׳</a></span>
+          <span class="sb">אשדוד · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪439</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">וי</span>
+        <span><span class="nm"><a href="#">משפחת ויס י׳</a></span>
+          <span class="sb">אלעד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,615</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">וי</span>
+        <span><span class="nm"><a href="#">משפחת ויסבלט</a></span>
+          <span class="sb">בני ברק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪318</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">וי</span>
+        <span><span class="nm"><a href="#">משפחת ויסבלט א׳</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪7,375</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">וי</span>
+        <span><span class="nm"><a href="#">משפחת ויסבלט מ׳</a></span>
+          <span class="sb">בני ברק · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 21%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,047</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">וי</span>
+        <span><span class="nm"><a href="#">משפחת ויסבלט ש׳</a></span>
+          <span class="sb">ניו יורק · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-1,622</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">וק</span>
+        <span><span class="nm"><a href="#">משפחת וקסלר</a></span>
+          <span class="sb">מודיעין עילית · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-2,691</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">וק</span>
+        <span><span class="nm"><a href="#">משפחת וקסלר א׳</a></span>
+          <span class="sb">בני ברק · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪14,128</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">וק</span>
+        <span><span class="nm"><a href="#">משפחת וקסלר א׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,113</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">וק</span>
+        <span><span class="nm"><a href="#">משפחת וקסלר י׳</a></span>
+          <span class="sb">אלעד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,613</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lז">ז</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">זי</span>
+        <span><span class="nm"><a href="#">משפחת זילבר</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪8,824</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">זי</span>
+        <span><span class="nm"><a href="#">משפחת זילבר י׳</a></span>
+          <span class="sb">ירושלים · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,825</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">זי</span>
+        <span><span class="nm"><a href="#">משפחת זילבר מ׳</a></span>
+          <span class="sb">ביתר עילית · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,650</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">זי</span>
+        <span><span class="nm"><a href="#">משפחת זילבר ש׳</a></span>
+          <span class="sb">אנטוורפן · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-961</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">זי</span>
+        <span><span class="nm"><a href="#">משפחת זיסקינד</a></span>
+          <span class="sb">מודיעין עילית · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪839</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">זי</span>
+        <span><span class="nm"><a href="#">משפחת זיסקינד א׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪5,050</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">זי</span>
+        <span><span class="nm"><a href="#">משפחת זיסקינד י׳</a></span>
+          <span class="sb">אנטוורפן · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,878</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">זי</span>
+        <span><span class="nm"><a href="#">משפחת זיסקינד ש׳</a></span>
+          <span class="sb">ניו יורק · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪7,513</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lח">ח</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">חש</span>
+        <span><span class="nm"><a href="#">משפחת חשין</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪11,828</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">חש</span>
+        <span><span class="nm"><a href="#">משפחת חשין א׳</a></span>
+          <span class="sb">אנטוורפן · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪8,150</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">חש</span>
+        <span><span class="nm"><a href="#">משפחת חשין ד׳</a></span>
+          <span class="sb">אנטוורפן · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,704</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">חש</span>
+        <span><span class="nm"><a href="#">משפחת חשין י׳</a></span>
+          <span class="sb">אלעד · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪5,950</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lט">ט</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">טו</span>
+        <span><span class="nm"><a href="#">משפחת טויב</a></span>
+          <span class="sb">אשדוד · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,669</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">טו</span>
+        <span><span class="nm"><a href="#">משפחת טויב א׳</a></span>
+          <span class="sb">לונדון · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,615</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">טו</span>
+        <span><span class="nm"><a href="#">משפחת טויב ד׳</a></span>
+          <span class="sb">אלעד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,350</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">טו</span>
+        <span><span class="nm"><a href="#">משפחת טויב י׳</a></span>
+          <span class="sb">ירושלים · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪8,750</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">טנ</span>
+        <span><span class="nm"><a href="#">משפחת טננבוים</a></span>
+          <span class="sb">בני ברק · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪11,604</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">טנ</span>
+        <span><span class="nm"><a href="#">משפחת טננבוים א׳</a></span>
+          <span class="sb">אנטוורפן · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,604</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">טנ</span>
+        <span><span class="nm"><a href="#">משפחת טננבוים מ׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪248</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">טנ</span>
+        <span><span class="nm"><a href="#">משפחת טננבוים ש׳</a></span>
+          <span class="sb">לונדון · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,063</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lי">י</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">יע</span>
+        <span><span class="nm"><a href="#">משפחת יעקובוביץ</a></span>
+          <span class="sb">בני ברק · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,475</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">יע</span>
+        <span><span class="nm"><a href="#">משפחת יעקובוביץ א׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 21%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,858</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">יע</span>
+        <span><span class="nm"><a href="#">משפחת יעקובוביץ ד׳</a></span>
+          <span class="sb">בית שמש · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 21%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,847</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">יע</span>
+        <span><span class="nm"><a href="#">משפחת יעקובוביץ י׳</a></span>
+          <span class="sb">אשדוד · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪10,438</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lכ">כ</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">כה</span>
+        <span><span class="nm"><a href="#">משפחת כהן</a></span>
+          <span class="sb">אשדוד · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,904</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">כה</span>
+        <span><span class="nm"><a href="#">משפחת כהן א׳</a></span>
+          <span class="sb">ביתר עילית · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪8,275</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">כה</span>
+        <span><span class="nm"><a href="#">משפחת כהן י׳</a></span>
+          <span class="sb">ירושלים · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-1,817</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">כה</span>
+        <span><span class="nm"><a href="#">משפחת כהן מ׳</a></span>
+          <span class="sb">מודיעין עילית · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,350</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">כה</span>
+        <span><span class="nm"><a href="#">משפחת כהן ש׳</a></span>
+          <span class="sb">אנטוורפן · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,650</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">כה</span>
+        <span><span class="nm"><a href="#">משפחת כהנא</a></span>
+          <span class="sb">ביתר עילית · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,275</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">כה</span>
+        <span><span class="nm"><a href="#">משפחת כהנא א׳</a></span>
+          <span class="sb">ירושלים · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-237</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">כה</span>
+        <span><span class="nm"><a href="#">משפחת כהנא י׳</a></span>
+          <span class="sb">אנטוורפן · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,618</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">כה</span>
+        <span><span class="nm"><a href="#">משפחת כהנא ש׳</a></span>
+          <span class="sb">אנטוורפן · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,583</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">כץ</span>
+        <span><span class="nm"><a href="#">משפחת כץ</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,818</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">כץ</span>
+        <span><span class="nm"><a href="#">משפחת כץ א׳</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,769</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">כץ</span>
+        <span><span class="nm"><a href="#">משפחת כץ מ׳</a></span>
+          <span class="sb">ירושלים · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪5,048</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">כץ</span>
+        <span><span class="nm"><a href="#">משפחת כץ ש׳</a></span>
+          <span class="sb">אנטוורפן · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-1,217</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lל">ל</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">לו</span>
+        <span><span class="nm"><a href="#">משפחת לוי</a></span>
+          <span class="sb">ניו יורק · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,975</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">לו</span>
+        <span><span class="nm"><a href="#">משפחת לוי ד׳</a></span>
+          <span class="sb">מודיעין עילית · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,915</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">לו</span>
+        <span><span class="nm"><a href="#">משפחת לוי י׳</a></span>
+          <span class="sb">מודיעין עילית · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,050</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">לו</span>
+        <span><span class="nm"><a href="#">משפחת לוי מ׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,925</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">לו</span>
+        <span><span class="nm"><a href="#">משפחת לוי ש׳</a></span>
+          <span class="sb">בני ברק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,038</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">לנ</span>
+        <span><span class="nm"><a href="#">משפחת לנדאו</a></span>
+          <span class="sb">ירושלים · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,394</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">לנ</span>
+        <span><span class="nm"><a href="#">משפחת לנדאו ד׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,850</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">לנ</span>
+        <span><span class="nm"><a href="#">משפחת לנדאו י׳</a></span>
+          <span class="sb">אנטוורפן · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,563</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">לנ</span>
+        <span><span class="nm"><a href="#">משפחת לנדאו מ׳</a></span>
+          <span class="sb">ניו יורק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,928</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lמ">מ</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">מל</span>
+        <span><span class="nm"><a href="#">משפחת מלר</a></span>
+          <span class="sb">ירושלים · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,969</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">מל</span>
+        <span><span class="nm"><a href="#">משפחת מלר ד׳</a></span>
+          <span class="sb">לונדון · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 21%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪8,147</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">מל</span>
+        <span><span class="nm"><a href="#">משפחת מלר י׳</a></span>
+          <span class="sb">ניו יורק · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪150</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">מל</span>
+        <span><span class="nm"><a href="#">משפחת מלר מ׳</a></span>
+          <span class="sb">ירושלים · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,075</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lנ">נ</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">נו</span>
+        <span><span class="nm"><a href="#">משפחת נוימן</a></span>
+          <span class="sb">ביתר עילית · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,275</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">נו</span>
+        <span><span class="nm"><a href="#">משפחת נוימן א׳</a></span>
+          <span class="sb">מודיעין עילית · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-1,691</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">נו</span>
+        <span><span class="nm"><a href="#">משפחת נוימן א׳</a></span>
+          <span class="sb">בני ברק · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,648</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">נו</span>
+        <span><span class="nm"><a href="#">משפחת נוימן י׳</a></span>
+          <span class="sb">מודיעין עילית · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,213</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">נו</span>
+        <span><span class="nm"><a href="#">משפחת נוימן ש׳</a></span>
+          <span class="sb">בית שמש · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,250</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lפ">פ</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">פי</span>
+        <span><span class="nm"><a href="#">משפחת פישר</a></span>
+          <span class="sb">אלעד · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪14,138</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">פי</span>
+        <span><span class="nm"><a href="#">משפחת פישר א׳</a></span>
+          <span class="sb">לונדון · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪5,450</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">פי</span>
+        <span><span class="nm"><a href="#">משפחת פישר ד׳</a></span>
+          <span class="sb">בני ברק · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪8,583</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">פי</span>
+        <span><span class="nm"><a href="#">משפחת פישר י׳</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,275</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">פר</span>
+        <span><span class="nm"><a href="#">משפחת פריד</a></span>
+          <span class="sb">אנטוורפן · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-396</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">פר</span>
+        <span><span class="nm"><a href="#">משפחת פריד א׳</a></span>
+          <span class="sb">בני ברק · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,015</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">פר</span>
+        <span><span class="nm"><a href="#">משפחת פריד ד׳</a></span>
+          <span class="sb">ניו יורק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪5,575</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">פר</span>
+        <span><span class="nm"><a href="#">משפחת פריד י׳</a></span>
+          <span class="sb">בני ברק · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,650</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">פר</span>
+        <span><span class="nm"><a href="#">משפחת פרידמן</a></span>
+          <span class="sb">אשדוד · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪11,075</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">פר</span>
+        <span><span class="nm"><a href="#">משפחת פרידמן א׳</a></span>
+          <span class="sb">ניו יורק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪409</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">פר</span>
+        <span><span class="nm"><a href="#">משפחת פרידמן א׳</a></span>
+          <span class="sb">אנטוורפן · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪7,348</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">פר</span>
+        <span><span class="nm"><a href="#">משפחת פרידמן י׳</a></span>
+          <span class="sb">אלעד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,248</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lר">ר</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">רו</span>
+        <span><span class="nm"><a href="#">משפחת רוזן</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,075</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רו</span>
+        <span><span class="nm"><a href="#">משפחת רוזן א׳</a></span>
+          <span class="sb">אנטוורפן · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,925</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רו</span>
+        <span><span class="nm"><a href="#">משפחת רוזן א׳</a></span>
+          <span class="sb">בית שמש · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,848</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רו</span>
+        <span><span class="nm"><a href="#">משפחת רוזן ד׳</a></span>
+          <span class="sb">אנטוורפן · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪13,004</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רו</span>
+        <span><span class="nm"><a href="#">משפחת רוזן י׳</a></span>
+          <span class="sb">אלעד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-352</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רו</span>
+        <span><span class="nm"><a href="#">משפחת רוט</a></span>
+          <span class="sb">אנטוורפן · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪10,475</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רו</span>
+        <span><span class="nm"><a href="#">משפחת רוט א׳</a></span>
+          <span class="sb">בני ברק · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,150</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רו</span>
+        <span><span class="nm"><a href="#">משפחת רוט י׳</a></span>
+          <span class="sb">בית שמש · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,209</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רו</span>
+        <span><span class="nm"><a href="#">משפחת רוט ש׳</a></span>
+          <span class="sb">לונדון · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,363</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רי</span>
+        <span><span class="nm"><a href="#">משפחת רייזמן</a></span>
+          <span class="sb">אלעד · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,674</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רי</span>
+        <span><span class="nm"><a href="#">משפחת רייזמן א׳</a></span>
+          <span class="sb">אנטוורפן · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-722</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רי</span>
+        <span><span class="nm"><a href="#">משפחת רייזמן י׳</a></span>
+          <span class="sb">בית שמש · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,904</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רי</span>
+        <span><span class="nm"><a href="#">משפחת רייזמן ש׳</a></span>
+          <span class="sb">ירושלים · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,750</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רי</span>
+        <span><span class="nm"><a href="#">משפחת ריינר</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,975</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רי</span>
+        <span><span class="nm"><a href="#">משפחת ריינר א׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 21%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,058</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רי</span>
+        <span><span class="nm"><a href="#">משפחת ריינר מ׳</a></span>
+          <span class="sb">אלעד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪-822</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">רי</span>
+        <span><span class="nm"><a href="#">משפחת ריינר ש׳</a></span>
+          <span class="sb">ביתר עילית · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪815</bdi></b><span>יתרה</span></span>
+      </article><h2 id="Lש">ש</h2>
+      <article class="row">
+        <span class="av" aria-hidden="true">שו</span>
+        <span><span class="nm"><a href="#">משפחת שוורץ</a></span>
+          <span class="sb">לונדון · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪8,839</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">שו</span>
+        <span><span class="nm"><a href="#">משפחת שוורץ א׳</a></span>
+          <span class="sb">ניו יורק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪6,975</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">שו</span>
+        <span><span class="nm"><a href="#">משפחת שוורץ מ׳</a></span>
+          <span class="sb">מודיעין עילית · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,650</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">שו</span>
+        <span><span class="nm"><a href="#">משפחת שוורץ ש׳</a></span>
+          <span class="sb">ירושלים · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,415</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">שט</span>
+        <span><span class="nm"><a href="#">משפחת שטרן</a></span>
+          <span class="sb">ביתר עילית · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 10%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,828</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">שט</span>
+        <span><span class="nm"><a href="#">משפחת שטרן א׳</a></span>
+          <span class="sb">אשדוד · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪4,250</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">שט</span>
+        <span><span class="nm"><a href="#">משפחת שטרן ד׳</a></span>
+          <span class="sb">לונדון · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪8,683</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">שט</span>
+        <span><span class="nm"><a href="#">משפחת שטרן י׳</a></span>
+          <span class="sb">ירושלים · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪2,413</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">שט</span>
+        <span><span class="nm"><a href="#">משפחת שטרן מ׳</a></span>
+          <span class="sb">בני ברק · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,124</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">שפ</span>
+        <span><span class="nm"><a href="#">משפחת שפירא</a></span>
+          <span class="sb">אלעד · 3 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪1,404</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">שפ</span>
+        <span><span class="nm"><a href="#">משפחת שפירא י׳</a></span>
+          <span class="sb">אלעד · 2 ילדים
+            <span class="chip no">בלי הו״ק</span>
+            </span></span>
+        <span class="m"><b><bdi dir="ltr">₪10,250</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">שפ</span>
+        <span><span class="nm"><a href="#">משפחת שפירא מ׳</a></span>
+          <span class="sb">לונדון · 2 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 15%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪3,513</bdi></b><span>יתרה</span></span>
+      </article><article class="row">
+        <span class="av" aria-hidden="true">שפ</span>
+        <span><span class="nm"><a href="#">משפחת שפירא ש׳</a></span>
+          <span class="sb">ירושלים · 3 ילדים
+            <span class="chip ok">הוראת קבע</span>
+            <span class="chip">הנחה 35%</span></span></span>
+        <span class="m"><b><bdi dir="ltr">₪109</bdi></b><span>יתרה</span></span>
+      </article>
+  </main>
+
+  <aside class="side">
+    <section class="card">
+      <div class="who"><span class="av" aria-hidden="true">אב</span>
+        <span><h3>משפחת אברמסון</h3><span class="ct">ביתר עילית · 3 ילדים במוסד</span></span></div>
+      <dl class="kv">
+        <dt>אב</dt><dd>פינחס אברמסון</dd>
+        <dt>אם</dt><dd>לאה אברמסון</dd>
+        <dt>טלפון</dt><dd><bdi dir="ltr">052-892-1015</bdi></dd>
+        <dt>שולם</dt><dd><bdi dir="ltr">₪14,800</bdi></dd>
+        <dt>יתרה</dt><dd><bdi dir="ltr">₪6,575</bdi></dd>
+        <dt>הנחה</dt><dd>0%</dd>
+        <dt>הוראת קבע</dt><dd>אין</dd>
+      </dl>
+      <div class="kids"><h3 style="font-size:13px;color:var(--mut);font-weight:600">ילדים במוסד</h3>
+        <div class="kid"><span class="av" aria-hidden="true">טו</span>
+          <span><b>טוביה אברמסון</b><span>ג׳2</span></span>
+          <span class="at">נוכחות <bdi dir="ltr">5/5</bdi></span></div><div class="kid"><span class="av" aria-hidden="true">גד</span>
+          <span><b>גד אברמסון</b><span>ד׳2</span></span>
+          <span class="at">נוכחות <bdi dir="ltr">5/5</bdi></span></div><div class="kid"><span class="av" aria-hidden="true">או</span>
+          <span><b>אורי אברמסון</b><span>ו׳1</span></span>
+          <span class="at">נוכחות <bdi dir="ltr">3/5</bdi></span></div>
+      </div>
+      <a class="more" href="#">פתיחת התיק המלא</a>
+    </section>
+  </aside>
+</div>
+
+<p class="src"><b>מאיפה העיצוב — רק אתרים שהליבה שלהם אדם:</b>
+הכפתור <bdi dir="ltr">#0a66c2 · r24 · h48 · 12/24 · 16/600</bdi> והכרטיס <bdi dir="ltr">r8 · 24/32 · צל .15</bdi> — <b>LinkedIn</b> (מיליארד משתמשים) ·
+צפיפות־הרשימה <bdi dir="ltr">13/17</bdi> ומסגרת <bdi dir="ltr">#d6d9dc</bdi> — <b>Stack Overflow</b> ·
+גלולה לאווטרים — <b>Twitch · Dribbble</b> · המשטח הכהה <bdi dir="ltr">#0e0e10</bdi> — <b>Twitch</b> ·
+תיבת־המידע — <b>WikiTree</b>.
+<b>שבעה נחסמו ולא נמדדו:</b> Instagram · X · Facebook · Goodreads · Geni · MyHeritage · Behance · Last.fm · Letterboxd.
+נתונים: 168 משפחות מהמחסן.</p>
+</body></html>

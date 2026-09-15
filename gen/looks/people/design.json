@@ -1,0 +1,2053 @@
+[
+ {
+  "id": "youtube",
+  "name": "YouTube · ערוץ",
+  "users": "2.5 מיליארד",
+  "url": "https://www.youtube.com/@NASA",
+  "y": 0,
+  "what": "עמוד-ישות: כותרת · טאבים · רשת פריטים",
+  "m": {
+   "title": "NASA - YouTube",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "Roboto",
+    "size": 10,
+    "lh": "normal"
+   },
+   "mainWidth": 1200,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 2158
+     },
+     {
+      "v": "#000000",
+      "w": 124
+     },
+     {
+      "v": "#282828",
+      "w": 103
+     },
+     {
+      "v": "#0f0f0f",
+      "w": 4
+     },
+     {
+      "v": "#f8f8f8",
+      "w": 3
+     },
+     {
+      "v": "#e1002d",
+      "w": 1
+     }
+    ],
+    "ink": [
+     {
+      "v": "#606060",
+      "w": 174
+     },
+     {
+      "v": "#0f0f0f",
+      "w": 82
+     },
+     {
+      "v": "#ffffff",
+      "w": 35
+     },
+     {
+      "v": "#065fd4",
+      "w": 6
+     },
+     {
+      "v": "#eeeeee",
+      "w": 2
+     },
+     {
+      "v": "#909090",
+      "w": 1
+     },
+     {
+      "v": "#131313",
+      "w": 1
+     },
+     {
+      "v": "#f1f1f1",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Roboto",
+     "w": 2784
+    },
+    {
+     "v": "YouTube Noto",
+     "w": 60
+    },
+    {
+     "v": "Arial",
+     "w": 24
+    }
+   ],
+   "radii": [
+    {
+     "v": "20px",
+     "w": 84
+    },
+    {
+     "v": "4px",
+     "w": 32
+    },
+    {
+     "v": "8px",
+     "w": 31
+    },
+    {
+     "v": "10px",
+     "w": 26
+    },
+    {
+     "v": "16px",
+     "w": 25
+    },
+    {
+     "v": "50px",
+     "w": 24
+    },
+    {
+     "v": "2px",
+     "w": 24
+    }
+   ],
+   "gaps": [],
+   "pads": [
+    {
+     "v": "1px",
+     "w": 32
+    },
+    {
+     "v": "118px",
+     "w": 31
+    },
+    {
+     "v": "12px",
+     "w": 13
+    },
+    {
+     "v": "16px",
+     "w": 10
+    },
+    {
+     "v": "8px",
+     "w": 4
+    },
+    {
+     "v": "6px",
+     "w": 2
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0.3) 0px 4px 4px 0px, rgba(0, 0, 0, 0.2) 0px 0px 4px 0px",
+     "w": 6
+    },
+    {
+     "v": "rgb(238, 238, 238) 0px 1px 2px 0px inset",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 36,
+     "weight": "700",
+     "lh": "50px",
+     "ls": "normal",
+     "family": "Roboto",
+     "color": "#0f0f0f",
+     "text": "NASA"
+    },
+    "h2": {
+     "size": 15,
+     "weight": "700",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "Roboto",
+     "color": "#0f0f0f",
+     "text": "Upcoming live streams"
+    },
+    "h3": {
+     "size": 12,
+     "weight": "700",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "Roboto",
+     "color": "#000000",
+     "text": "Explore"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#0f0f0f",
+     "radius": 20,
+     "padX": 16,
+     "padY": 0,
+     "h": 40,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 36
+    },
+    {
+     "bg": null,
+     "color": "#0f0f0f",
+     "radius": 50,
+     "padX": 16,
+     "padY": 0,
+     "h": 40,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 7
+    },
+    {
+     "bg": null,
+     "color": "#0f0f0f",
+     "radius": 16,
+     "padX": 12,
+     "padY": 0,
+     "h": 32,
+     "size": 12,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 6
+    },
+    {
+     "bg": null,
+     "color": "#065fd4",
+     "radius": 20,
+     "padX": 15,
+     "padY": 0,
+     "h": 40,
+     "size": 14,
+     "weight": "500",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": "#f8f8f8",
+     "color": "#0f0f0f",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 40,
+     "size": 13,
+     "weight": "400",
+     "border": "1px #d3d3d3",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 10,
+     "padX": 0,
+     "padY": 0,
+     "h": 40,
+     "size": 10,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [],
+   "elements": 2200
+  }
+ },
+ {
+  "id": "instagram",
+  "name": "Instagram · פרופיל",
+  "users": "2 מיליארד",
+  "url": "https://www.instagram.com/nasa/",
+  "y": 0,
+  "what": "פרופיל: אווטר · מונים · רשת",
+  "m": {
+   "title": "",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "Times New Roman",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1424,
+   "palette": {
+    "bg": [],
+    "ink": []
+   },
+   "fonts": [],
+   "radii": [],
+   "gaps": [],
+   "pads": [],
+   "shadows": [],
+   "type": {},
+   "buttons": [],
+   "cards": [],
+   "elements": 0
+  }
+ },
+ {
+  "id": "spotify-artist",
+  "name": "Spotify · אמן",
+  "users": "600 מיליון",
+  "url": "https://open.spotify.com/artist/4gzpq5DPGxSnKTe4SA8HAU",
+  "y": 0,
+  "what": "עמוד-ישות עם רשימה ממוספרת",
+  "m": {
+   "title": "Coldplay | Spotify",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#b3b3b3",
+    "family": "SpotifyMixUI",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1045,
+   "palette": {
+    "bg": [
+     {
+      "v": "#121212",
+      "w": 2529
+     },
+     {
+      "v": "#000000",
+      "w": 1727
+     },
+     {
+      "v": "#1f1f1f",
+      "w": 111
+     },
+     {
+      "v": "#ffffff",
+      "w": 25
+     },
+     {
+      "v": "#292929",
+      "w": 5
+     },
+     {
+      "v": "#3b3b3b",
+      "w": 4
+     },
+     {
+      "v": "#1ed760",
+      "w": 2
+     }
+    ],
+    "ink": [
+     {
+      "v": "#b3b3b3",
+      "w": 32
+     },
+     {
+      "v": "#ffffff",
+      "w": 14
+     },
+     {
+      "v": "#000000",
+      "w": 5
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "SpotifyMixUI",
+     "w": 689
+    },
+    {
+     "v": "SpotifyMixUITitle",
+     "w": 1
+    }
+   ],
+   "radii": [
+    {
+     "v": "9999px",
+     "w": 27
+    },
+    {
+     "v": "8px",
+     "w": 9
+    },
+    {
+     "v": "2px",
+     "w": 8
+    },
+    {
+     "v": "50px",
+     "w": 5
+    },
+    {
+     "v": "4px",
+     "w": 3
+    },
+    {
+     "v": "500px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 21
+    },
+    {
+     "v": "16px",
+     "w": 3
+    },
+    {
+     "v": "20px",
+     "w": 2
+    },
+    {
+     "v": "24px",
+     "w": 2
+    },
+    {
+     "v": "4px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "8px",
+     "w": 21
+    },
+    {
+     "v": "4px",
+     "w": 6
+    },
+    {
+     "v": "16px",
+     "w": 4
+    },
+    {
+     "v": "12px",
+     "w": 3
+    },
+    {
+     "v": "2px",
+     "w": 3
+    },
+    {
+     "v": "11px",
+     "w": 1
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgb(18, 18, 18) 0px 1px 0px 0px, rgb(124, 124, 124) 0px 0px 0px 1px inset",
+     "w": 3
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 16,
+     "weight": "700",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUI",
+     "color": "#ffffff",
+     "text": "Your Library"
+    },
+    "body": {
+     "size": 16,
+     "weight": "400",
+     "lh": "normal",
+     "ls": "normal",
+     "family": "SpotifyMixUI",
+     "color": "#ffffff",
+     "text": "Sign up to get unlimited songs a"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 8,
+     "h": 48,
+     "size": 16,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 0,
+     "h": 48,
+     "size": 16,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": "#1f1f1f",
+     "color": "#b3b3b3",
+     "radius": 50,
+     "padX": 12,
+     "padY": 12,
+     "h": 48,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 12,
+     "padY": 12,
+     "h": 48,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 8,
+     "padY": 4,
+     "h": 32,
+     "size": 14,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#b3b3b3",
+     "radius": 9999,
+     "padX": 0,
+     "padY": 0,
+     "h": 32,
+     "size": 14,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#121212",
+     "radius": 8,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    },
+    {
+     "bg": "#1f1f1f",
+     "radius": 8,
+     "padding": "16/20",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    }
+   ],
+   "elements": 277
+  }
+ },
+ {
+  "id": "wikipedia-he",
+  "name": "ויקיפדיה · אדם",
+  "users": "1.5 מיליארד",
+  "url": "https://he.wikipedia.org/wiki/%D7%94%D7%A8%D7%91_%D7%A2%D7%95%D7%91%D7%93%D7%99%D7%94_%D7%99%D7%95%D7%A1%D7%A3",
+  "y": 0,
+  "what": "תיבת-מידע + טקסט · RTL אמיתי",
+  "m": {
+   "title": "הרב עובדיה יוסף – ויקיפדיה",
+   "body": {
+    "bg": "#f8f9fa",
+    "color": "#202122",
+    "family": "sans-serif",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1352,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 1350
+     },
+     {
+      "v": "#f8f9fa",
+      "w": 81
+     },
+     {
+      "v": "#404244",
+      "w": 1
+     },
+     {
+      "v": "#eaecf0",
+      "w": 1
+     },
+     {
+      "v": "#202122",
+      "w": 0
+     }
+    ],
+    "ink": [
+     {
+      "v": "#3366cc",
+      "w": 17
+     },
+     {
+      "v": "#202122",
+      "w": 15
+     },
+     {
+      "v": "#54595d",
+      "w": 4
+     },
+     {
+      "v": "#bf3c2c",
+      "w": 2
+     },
+     {
+      "v": "#404244",
+      "w": 1
+     },
+     {
+      "v": "#101418",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "sans-serif",
+     "w": 278
+    },
+    {
+     "v": "Arial",
+     "w": 1
+    }
+   ],
+   "radii": [
+    {
+     "v": "2px",
+     "w": 31
+    },
+    {
+     "v": "50px",
+     "w": 8
+    }
+   ],
+   "gaps": [
+    {
+     "v": "6px",
+     "w": 6
+    },
+    {
+     "v": "16px",
+     "w": 1
+    },
+    {
+     "v": "20px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "6px",
+     "w": 17
+    },
+    {
+     "v": "1px",
+     "w": 3
+    },
+    {
+     "v": "4px",
+     "w": 2
+    },
+    {
+     "v": "8px",
+     "w": 1
+    },
+    {
+     "v": "3px",
+     "w": 1
+    },
+    {
+     "v": "50px",
+     "w": 1
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0) 0px 0px 0px 1px inset",
+     "w": 1
+    },
+    {
+     "v": "rgb(200, 204, 209) 0px 1px 0px 0px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 29,
+     "weight": "400",
+     "lh": "39.6px",
+     "ls": "normal",
+     "family": "sans-serif",
+     "color": "#101418",
+     "text": "הרב עובדיה יוסף"
+    },
+    "body": {
+     "size": 16,
+     "weight": "400",
+     "lh": "26px",
+     "ls": "normal",
+     "family": "sans-serif",
+     "color": "#202122",
+     "text": "אין כרגע טקסט בדף זה.\nבאפשרותך ל"
+    }
+   },
+   "buttons": [
+    {
+     "bg": "#f8f9fa",
+     "color": "#404244",
+     "radius": 2,
+     "padX": 11,
+     "padY": 1,
+     "h": 32,
+     "size": 14,
+     "weight": "700",
+     "border": "1px #72777d",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#eaecf0",
+     "color": "#202122",
+     "radius": 2,
+     "padX": 8,
+     "padY": 4,
+     "h": 22,
+     "size": 12,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [],
+   "elements": 189
+  }
+ },
+ {
+  "id": "amazon-list",
+  "name": "Amazon · תוצאות",
+  "users": "310 מיליון",
+  "url": "https://www.amazon.com/s?k=notebook",
+  "y": 300,
+  "what": "רשימה בצפיפות גבוהה עם מסננים",
+  "m": {
+   "title": "Amazon.com : notebook",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#0f1111",
+    "family": "Arial",
+    "size": 14,
+    "lh": "20px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 1632
+     },
+     {
+      "v": "#232f3e",
+      "w": 1256
+     },
+     {
+      "v": "#131a22",
+      "w": 715
+     },
+     {
+      "v": "#ffd814",
+      "w": 418
+     },
+     {
+      "v": "#131921",
+      "w": 143
+     },
+     {
+      "v": "#f8f8f8",
+      "w": 72
+     },
+     {
+      "v": "#37475a",
+      "w": 71
+     },
+     {
+      "v": "#f0f2f2",
+      "w": 37
+     },
+     {
+      "v": "#d14900",
+      "w": 13
+     },
+     {
+      "v": "#cc0c39",
+      "w": 12
+     }
+    ],
+    "ink": [
+     {
+      "v": "#0f1111",
+      "w": 784
+     },
+     {
+      "v": "#565959",
+      "w": 138
+     },
+     {
+      "v": "#2162a1",
+      "w": 92
+     },
+     {
+      "v": "#dddddd",
+      "w": 75
+     },
+     {
+      "v": "#ffffff",
+      "w": 73
+     },
+     {
+      "v": "#0064f9",
+      "w": 47
+     },
+     {
+      "v": "#999999",
+      "w": 31
+     },
+     {
+      "v": "#000000",
+      "w": 9
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Arial",
+     "w": 7212
+    }
+   ],
+   "radii": [
+    {
+     "v": "2px",
+     "w": 139
+    },
+    {
+     "v": "4px",
+     "w": 93
+    },
+    {
+     "v": "5px",
+     "w": 83
+    },
+    {
+     "v": "100px",
+     "w": 52
+    },
+    {
+     "v": "8px",
+     "w": 12
+    },
+    {
+     "v": "3px",
+     "w": 3
+    },
+    {
+     "v": "7px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 20
+    },
+    {
+     "v": "10px",
+     "w": 16
+    },
+    {
+     "v": "4px",
+     "w": 7
+    }
+   ],
+   "pads": [
+    {
+     "v": "4px",
+     "w": 190
+    },
+    {
+     "v": "5px",
+     "w": 53
+    },
+    {
+     "v": "256px",
+     "w": 53
+    },
+    {
+     "v": "8px",
+     "w": 47
+    },
+    {
+     "v": "2px",
+     "w": 35
+    },
+    {
+     "v": "24px",
+     "w": 17
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(15, 17, 17, 0.5) 0px 0px 14px 0px",
+     "w": 1
+    },
+    {
+     "v": "rgb(221, 221, 221) 0px 0px 10px 0px",
+     "w": 1
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.1) 0px 1px 2px 0px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 14,
+     "weight": "400",
+     "lh": "20px",
+     "ls": "normal",
+     "family": "Arial",
+     "color": "#0f1111",
+     "text": "1-48 of over 100,000 results for"
+    },
+    "h2": {
+     "size": 20,
+     "weight": "700",
+     "lh": "28px",
+     "ls": "normal",
+     "family": "Arial",
+     "color": "#0f1111",
+     "text": "Results"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#2162a1",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 24,
+     "size": 12,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 53
+    },
+    {
+     "bg": null,
+     "color": "#2162a1",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 24,
+     "size": 14,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 10
+    },
+    {
+     "bg": null,
+     "color": "#0f1111",
+     "radius": 0,
+     "padX": 12,
+     "padY": 0,
+     "h": 48,
+     "size": 14,
+     "weight": "400",
+     "border": "1px #d5d9d9",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#2162a1",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 41,
+     "size": 14,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#d6d6d6",
+     "radius": 0,
+     "padX": 9,
+     "padY": 0,
+     "h": 50,
+     "size": 14,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 3,
+     "padX": 9,
+     "padY": 8,
+     "h": 39,
+     "size": 25,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#ffffff",
+     "radius": 8,
+     "padding": "16/20",
+     "border": null,
+     "shadow": "rgba(15, 17, 17, 0.5) 0px 0px 14px 0px",
+     "count": 1
+    },
+    {
+     "bg": "#f0f2f2",
+     "radius": 8,
+     "padding": "12/12",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 5646
+  }
+ },
+ {
+  "id": "booking",
+  "name": "Booking · תוצאות",
+  "users": "400 מיליון",
+  "url": "https://www.booking.com/searchresults.html?ss=Jerusalem",
+  "y": 400,
+  "what": "רשימה-ופרטים בקנה-מידה",
+  "m": {
+   "title": "Booking.com: Search results. Book your hotel now!",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#1a1a1a",
+    "family": "BlinkMacSystemFont",
+    "size": 14,
+    "lh": "20px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 1027
+     },
+     {
+      "v": "#f5f5f5",
+      "w": 838
+     },
+     {
+      "v": "#003b95",
+      "w": 179
+     },
+     {
+      "v": "#ffb700",
+      "w": 70
+     },
+     {
+      "v": "#595959",
+      "w": 1
+     }
+    ],
+    "ink": [
+     {
+      "v": "#1a1a1a",
+      "w": 60
+     },
+     {
+      "v": "#ffffff",
+      "w": 10
+     },
+     {
+      "v": "#595959",
+      "w": 5
+     },
+     {
+      "v": "#006ce4",
+      "w": 2
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "BlinkMacSystemFont",
+     "w": 503
+    }
+   ],
+   "radii": [
+    {
+     "v": "4px",
+     "w": 16
+    },
+    {
+     "v": "9999px",
+     "w": 9
+    },
+    {
+     "v": "8px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 8
+    },
+    {
+     "v": "12px",
+     "w": 7
+    },
+    {
+     "v": "24px",
+     "w": 1
+    },
+    {
+     "v": "16px",
+     "w": 1
+    },
+    {
+     "v": "32px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "2px",
+     "w": 49
+    },
+    {
+     "v": "8px",
+     "w": 11
+    },
+    {
+     "v": "4px",
+     "w": 9
+    },
+    {
+     "v": "11px",
+     "w": 7
+    },
+    {
+     "v": "16px",
+     "w": 2
+    },
+    {
+     "v": "12px",
+     "w": 1
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(26, 26, 26, 0.16) 0px 2px 8px 0px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h3": {
+     "size": 14,
+     "weight": "700",
+     "lh": "20px",
+     "ls": "normal",
+     "family": "BlinkMacSystemFont",
+     "color": "#1a1a1a",
+     "text": "Support"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 4,
+     "padX": 12,
+     "padY": 8,
+     "h": 48,
+     "size": 16,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#1a1a1a",
+     "radius": 4,
+     "padX": 12,
+     "padY": 8,
+     "h": 48,
+     "size": 16,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": "#ffffff",
+     "color": "#1a1a1a",
+     "radius": 4,
+     "padX": 8,
+     "padY": 0,
+     "h": 34,
+     "size": 14,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 4,
+     "padX": 24,
+     "padY": 4,
+     "h": 50,
+     "size": 20,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [],
+   "elements": 400
+  }
+ },
+ {
+  "id": "airbnb-list",
+  "name": "Airbnb · תוצאות",
+  "users": "150 מיליון",
+  "url": "https://www.airbnb.com/s/Jerusalem/homes",
+  "y": 200,
+  "what": "רשת כרטיסים עם תמונה",
+  "m": {
+   "title": "Airbnb | Jerusalem - Vacation Rentals & Places to Stay - Jerusalem Dis",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#222222",
+    "family": "Airbnb Cereal VF",
+    "size": 14,
+    "lh": "20.02px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#dddddd",
+      "w": 1274
+     },
+     {
+      "v": "#f7f7f7",
+      "w": 1012
+     },
+     {
+      "v": "#e5e3df",
+      "w": 900
+     },
+     {
+      "v": "#ffffff",
+      "w": 80
+     },
+     {
+      "v": "#010101",
+      "w": 37
+     },
+     {
+      "v": "#606060",
+      "w": 35
+     },
+     {
+      "v": "#e31c5f",
+      "w": 33
+     },
+     {
+      "v": "#222222",
+      "w": 14
+     },
+     {
+      "v": "#0.f2f2f9873ffac0.f2f2f9873ffac0.f2f2f9873ffac",
+      "w": 10
+     },
+     {
+      "v": "#f5f5f5",
+      "w": 7
+     }
+    ],
+    "ink": [
+     {
+      "v": "#222222",
+      "w": 156
+     },
+     {
+      "v": "#6c6c6c",
+      "w": 126
+     },
+     {
+      "v": "#c1c1c1",
+      "w": 36
+     },
+     {
+      "v": "#ffffff",
+      "w": 16
+     },
+     {
+      "v": "#000000",
+      "w": 5
+     },
+     {
+      "v": "#038026",
+      "w": 2
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Airbnb Cereal VF",
+     "w": 4159
+    },
+    {
+     "v": "Roboto",
+     "w": 158
+    }
+   ],
+   "radii": [
+    {
+     "v": "50px",
+     "w": 531
+    },
+    {
+     "v": "20px",
+     "w": 58
+    },
+    {
+     "v": "2px",
+     "w": 52
+    },
+    {
+     "v": "4px",
+     "w": 48
+    },
+    {
+     "v": "40px",
+     "w": 20
+    },
+    {
+     "v": "28px",
+     "w": 20
+    },
+    {
+     "v": "24px",
+     "w": 10
+    }
+   ],
+   "gaps": [
+    {
+     "v": "2px",
+     "w": 18
+    },
+    {
+     "v": "6px",
+     "w": 15
+    },
+    {
+     "v": "4px",
+     "w": 8
+    },
+    {
+     "v": "16px",
+     "w": 5
+    },
+    {
+     "v": "8px",
+     "w": 3
+    },
+    {
+     "v": "12px",
+     "w": 2
+    }
+   ],
+   "pads": [
+    {
+     "v": "3px",
+     "w": 26
+    },
+    {
+     "v": "10px",
+     "w": 24
+    },
+    {
+     "v": "12px",
+     "w": 18
+    },
+    {
+     "v": "2px",
+     "w": 18
+    },
+    {
+     "v": "4px",
+     "w": 16
+    },
+    {
+     "v": "8px",
+     "w": 10
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 4px, rgba(0, 0, 0",
+     "w": 36
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.18) 0px 2px 4px 0px, rgba(0, 0, 0, 0.18) 0px 2px 4px 0px, rgba(0",
+     "w": 20
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.08) 0px 1px 2px 0px, rgba(0, 0, 0, 0.05) 0px 4px 12px 0px",
+     "w": 1
+    },
+    {
+     "v": "color(srgb 0 0 0 / 0.02) 0px 0px 0px 1px, color(srgb 0 0 0 / 0.1) 0px 8px 24px 0",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 14,
+     "weight": "400",
+     "lh": "20.02px",
+     "ls": "normal",
+     "family": "Airbnb Cereal VF",
+     "color": "#222222",
+     "text": "Search results; Over 1,000 homes"
+    },
+    "h3": {
+     "size": 14,
+     "weight": "500",
+     "lh": "18px",
+     "ls": "normal",
+     "family": "Airbnb Cereal VF",
+     "color": "#222222",
+     "text": "Support"
+    }
+   },
+   "buttons": [
+    {
+     "bg": "#ffffff",
+     "color": "#222222",
+     "radius": 24,
+     "padX": 12,
+     "padY": 8,
+     "h": 34,
+     "size": 12,
+     "weight": "400",
+     "border": "1px #dddddd",
+     "shadow": null,
+     "transform": null,
+     "count": 9
+    },
+    {
+     "bg": null,
+     "color": "#222222",
+     "radius": 4,
+     "padX": 0,
+     "padY": 0,
+     "h": 48,
+     "size": 14,
+     "weight": "400",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": "#f2f2f2",
+     "color": "#222222",
+     "radius": 50,
+     "padX": 0,
+     "padY": 0,
+     "h": 40,
+     "size": 14,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#222222",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 40,
+     "size": 14,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#222222",
+     "radius": 12,
+     "padX": 8,
+     "padY": 6,
+     "h": 30,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#222222",
+     "radius": 40,
+     "padX": 0,
+     "padY": 0,
+     "h": 48,
+     "size": 14,
+     "weight": "400",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#dddddd",
+     "radius": 20,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 18
+    },
+    {
+     "bg": "#f7f7f7",
+     "radius": 20,
+     "padding": "24/24",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 3293
+  }
+ },
+ {
+  "id": "x-profile",
+  "name": "X · פרופיל",
+  "users": "600 מיליון",
+  "url": "https://x.com/nasa",
+  "y": 0,
+  "what": "פרופיל + הזנה",
+  "m": {
+   "title": "",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "Times New Roman",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1424,
+   "palette": {
+    "bg": [],
+    "ink": []
+   },
+   "fonts": [],
+   "radii": [],
+   "gaps": [],
+   "pads": [],
+   "shadows": [],
+   "type": {},
+   "buttons": [],
+   "cards": [],
+   "elements": 0
+  }
+ },
+ {
+  "id": "reddit-user",
+  "name": "Reddit · משתמש",
+  "users": "500 מיליון",
+  "url": "https://www.reddit.com/user/spez/",
+  "y": 0,
+  "what": "עמוד-אדם עם רשימת-פעילות",
+  "m": {
+   "title": "",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#1a1a1b",
+    "family": "-apple-system",
+    "size": 14,
+    "lh": "21px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#eaedef",
+      "w": 4
+     }
+    ],
+    "ink": [
+     {
+      "v": "#576f76",
+      "w": 3
+     },
+     {
+      "v": "#0f1a1c",
+      "w": 1
+     },
+     {
+      "v": "#000000",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "-apple-system",
+     "w": 53
+    }
+   ],
+   "radii": [
+    {
+     "v": "999px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "16px",
+     "w": 2
+    },
+    {
+     "v": "8px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "16px",
+     "w": 2
+    }
+   ],
+   "shadows": [],
+   "type": {},
+   "buttons": [],
+   "cards": [],
+   "elements": 13
+  }
+ },
+ {
+  "id": "linkedin-p",
+  "name": "LinkedIn · פרופיל",
+  "users": "1 מיליארד",
+  "url": "https://www.linkedin.com/in/williamhgates/",
+  "y": 200,
+  "what": "הפרופיל התעסוקתי הקנוני",
+  "m": {
+   "title": "Bill Gates - Chair, Gates Foundation and Founder, Breakthrough Energy ",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "-apple-system",
+    "size": 16,
+    "lh": "24px"
+   },
+   "mainWidth": 1128,
+   "palette": {
+    "bg": [
+     {
+      "v": "#000000",
+      "w": 1202
+     },
+     {
+      "v": "#ffffff",
+      "w": 985
+     },
+     {
+      "v": "#f3f2ef",
+      "w": 46
+     },
+     {
+      "v": "#0a66c2",
+      "w": 28
+     },
+     {
+      "v": "#f9fafb",
+      "w": 26
+     },
+     {
+      "v": "#057642",
+      "w": 2
+     }
+    ],
+    "ink": [
+     {
+      "v": "#000000",
+      "w": 200
+     },
+     {
+      "v": "#0a66c2",
+      "w": 23
+     },
+     {
+      "v": "#666666",
+      "w": 11
+     },
+     {
+      "v": "#ffffff",
+      "w": 4
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "-apple-system",
+     "w": 1266
+    }
+   ],
+   "radii": [
+    {
+     "v": "24px",
+     "w": 22
+    },
+    {
+     "v": "8px",
+     "w": 21
+    },
+    {
+     "v": "50px",
+     "w": 21
+    },
+    {
+     "v": "9999px",
+     "w": 3
+    },
+    {
+     "v": "16px",
+     "w": 3
+    },
+    {
+     "v": "6px",
+     "w": 2
+    },
+    {
+     "v": "25px",
+     "w": 2
+    }
+   ],
+   "gaps": [],
+   "pads": [
+    {
+     "v": "7px",
+     "w": 38
+    },
+    {
+     "v": "12px",
+     "w": 25
+    },
+    {
+     "v": "8px",
+     "w": 18
+    },
+    {
+     "v": "6px",
+     "w": 10
+    },
+    {
+     "v": "32px",
+     "w": 6
+    },
+    {
+     "v": "4px",
+     "w": 4
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0) 0px 0px 0px 1px",
+     "w": 38
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.75) 0px 0px 0px 1px",
+     "w": 13
+    },
+    {
+     "v": "rgb(10, 102, 194) 0px 0px 0px 1px",
+     "w": 5
+    },
+    {
+     "v": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+     "w": 3
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 24,
+     "weight": "600",
+     "lh": "36px",
+     "ls": "normal",
+     "family": "-apple-system",
+     "color": "#000000",
+     "text": "Bill Gates"
+    },
+    "h2": {
+     "size": 24,
+     "weight": "400",
+     "lh": "30px",
+     "ls": "normal",
+     "family": "-apple-system",
+     "color": "#000000",
+     "text": "About"
+    },
+    "h3": {
+     "size": 18,
+     "weight": "600",
+     "lh": "22.5px",
+     "ls": "normal",
+     "family": "-apple-system",
+     "color": "#000000",
+     "text": "Co-chair"
+    },
+    "body": {
+     "size": 16,
+     "weight": "400",
+     "lh": "24px",
+     "ls": "normal",
+     "family": "-apple-system",
+     "color": "#000000",
+     "text": "Chair of the Gates Foundation. F"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 24,
+     "padX": 16,
+     "padY": 7,
+     "h": 35,
+     "size": 14,
+     "weight": "600",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.75) 0px 0px 0px 1px",
+     "transform": null,
+     "count": 10
+    },
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 0,
+     "padX": 16,
+     "padY": 7,
+     "h": 32,
+     "size": 14,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 1px",
+     "transform": null,
+     "count": 8
+    },
+    {
+     "bg": "#0a66c2",
+     "color": "#ffffff",
+     "radius": 24,
+     "padX": 24,
+     "padY": 12,
+     "h": 48,
+     "size": 16,
+     "weight": "600",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 1px",
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#0a66c2",
+     "radius": 24,
+     "padX": 24,
+     "padY": 12,
+     "h": 48,
+     "size": 16,
+     "weight": "600",
+     "border": null,
+     "shadow": "rgb(10, 102, 194) 0px 0px 0px 1px",
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 16,
+     "padX": 16,
+     "padY": 4,
+     "h": 32,
+     "size": 14,
+     "weight": "600",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 44,
+     "size": 13,
+     "weight": "400",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#ffffff",
+     "radius": 8,
+     "padding": "0/0",
+     "border": "1px null",
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "radius": 9999,
+     "padding": "7/7",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "radius": 8,
+     "padding": "24/24",
+     "border": "1px null",
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "radius": 8,
+     "padding": "16/16",
+     "border": "1px null",
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "radius": 8,
+     "padding": "0/0",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+     "count": 1
+    },
+    {
+     "bg": "#f3f2ef",
+     "radius": 10,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 813
+  }
+ }
+]

@@ -1,0 +1,1798 @@
+[
+ {
+  "id": "linkedin",
+  "name": "LinkedIn",
+  "users": "1 מיליארד",
+  "core": "זהות תעסוקתית",
+  "url": "https://www.linkedin.com/in/williamhgates/",
+  "y": 0,
+  "m": {
+   "title": "Sign Up | LinkedIn",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "-apple-system",
+    "size": 16,
+    "lh": "24px"
+   },
+   "mainWidth": 1128,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 373
+     },
+     {
+      "v": "#0a66c2",
+      "w": 31
+     }
+    ],
+    "ink": [
+     {
+      "v": "#666666",
+      "w": 11
+     },
+     {
+      "v": "#000000",
+      "w": 6
+     },
+     {
+      "v": "#0a66c2",
+      "w": 4
+     },
+     {
+      "v": "#ffffff",
+      "w": 2
+     },
+     {
+      "v": "#696c6f",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "-apple-system",
+     "w": 132
+    }
+   ],
+   "radii": [
+    {
+     "v": "2px",
+     "w": 2
+    },
+    {
+     "v": "24px",
+     "w": 1
+    },
+    {
+     "v": "8px",
+     "w": 1
+    },
+    {
+     "v": "28px",
+     "w": 1
+    },
+    {
+     "v": "25px",
+     "w": 1
+    }
+   ],
+   "gaps": [],
+   "pads": [
+    {
+     "v": "8px",
+     "w": 12
+    },
+    {
+     "v": "12px",
+     "w": 4
+    },
+    {
+     "v": "20px",
+     "w": 2
+    },
+    {
+     "v": "24px",
+     "w": 1
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0) 0px 0px 0px 1px",
+     "w": 1
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.15) 0px 4px 6px 0px, rgba(0, 0, 0, 0.15) 0px 0px 2px 0px",
+     "w": 1
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.6) 0px 0px 0px 1px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 32,
+     "weight": "400",
+     "lh": "40px",
+     "ls": "normal",
+     "family": "-apple-system",
+     "color": "#000000",
+     "text": "Join LinkedIn"
+    },
+    "body": {
+     "size": 16,
+     "weight": "400",
+     "lh": "24px",
+     "ls": "normal",
+     "family": "-apple-system",
+     "color": "#000000",
+     "text": "Already on Linkedin?  Sign in"
+    }
+   },
+   "buttons": [
+    {
+     "bg": "#0a66c2",
+     "color": "#ffffff",
+     "radius": 24,
+     "padX": 24,
+     "padY": 12,
+     "h": 48,
+     "size": 16,
+     "weight": "600",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 1px",
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#0a66c2",
+     "color": "#ffffff",
+     "radius": 28,
+     "padX": 32,
+     "padY": 0,
+     "h": 56,
+     "size": 20,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 25,
+     "padX": 0,
+     "padY": 0,
+     "h": 40,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.6) 0px 0px 0px 1px",
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#0a66c2",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 26,
+     "size": 16,
+     "weight": "400",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#ffffff",
+     "radius": 8,
+     "padding": "24/32",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.15) 0px 4px 6px 0px, rgba(0, 0, 0, 0.15) 0px",
+     "count": 1
+    }
+   ],
+   "elements": 81
+  }
+ },
+ {
+  "id": "stackoverflow",
+  "name": "Stack Overflow",
+  "users": "100 מיליון",
+  "core": "מוניטין מקצועי",
+  "url": "https://stackoverflow.com/users/22656/jon-skeet",
+  "y": 0,
+  "m": {
+   "title": "User Jon Skeet - Stack Overflow",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#0c0d0e",
+    "family": "-apple-system",
+    "size": 13,
+    "lh": "17px"
+   },
+   "mainWidth": 1051,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 2595
+     },
+     {
+      "v": "#0c0d0e",
+      "w": 640
+     },
+     {
+      "v": "#edf5fd",
+      "w": 73
+     },
+     {
+      "v": "#f1f2f3",
+      "w": 30
+     },
+     {
+      "v": "#18864b",
+      "w": 9
+     },
+     {
+      "v": "#1b75d0",
+      "w": 6
+     },
+     {
+      "v": "#555bce",
+      "w": 4
+     },
+     {
+      "v": "#e7700d",
+      "w": 2
+     },
+     {
+      "v": "#e3e6e8",
+      "w": 2
+     }
+    ],
+    "ink": [
+     {
+      "v": "#3b4045",
+      "w": 66
+     },
+     {
+      "v": "#636b74",
+      "w": 55
+     },
+     {
+      "v": "#0c0d0e",
+      "w": 46
+     },
+     {
+      "v": "#1b75d0",
+      "w": 36
+     },
+     {
+      "v": "#babfc5",
+      "w": 33
+     },
+     {
+      "v": "#ffffff",
+      "w": 13
+     },
+     {
+      "v": "#c8ccd0",
+      "w": 4
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "-apple-system",
+     "w": 1081
+    }
+   ],
+   "radii": [
+    {
+     "v": "4px",
+     "w": 51
+    },
+    {
+     "v": "6px",
+     "w": 22
+    },
+    {
+     "v": "1000px",
+     "w": 8
+    },
+    {
+     "v": "100px",
+     "w": 3
+    },
+    {
+     "v": "10px",
+     "w": 1
+    },
+    {
+     "v": "2px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "4px",
+     "w": 23
+    },
+    {
+     "v": "12px",
+     "w": 3
+    },
+    {
+     "v": "8px",
+     "w": 3
+    },
+    {
+     "v": "24px",
+     "w": 2
+    }
+   ],
+   "pads": [
+    {
+     "v": "4px",
+     "w": 42
+    },
+    {
+     "v": "12px",
+     "w": 33
+    },
+    {
+     "v": "8px",
+     "w": 15
+    },
+    {
+     "v": "6px",
+     "w": 8
+    },
+    {
+     "v": "3px",
+     "w": 8
+    },
+    {
+     "v": "5px",
+     "w": 6
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0.05) 0px 0px 0px 0px",
+     "w": 1
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px, rgba(0, 0, 0, 0.05) 0px 1px 4px 0px, rgba(0",
+     "w": 1
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.13) 0px 4px 13px 0px, rgba(0, 0, 0, 0.09) 0px 3px 8px 0px, rgba(",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h2": {
+     "size": 21,
+     "weight": "400",
+     "lh": "27.3px",
+     "ls": "normal",
+     "family": "-apple-system",
+     "color": "#0c0d0e",
+     "text": "Stats"
+    },
+    "body": {
+     "size": 15,
+     "weight": "400",
+     "lh": "22.5px",
+     "ls": "normal",
+     "family": "-apple-system",
+     "color": "#3b4045",
+     "text": "Author of C# in Depth"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#3b4045",
+     "radius": 6,
+     "padX": 10,
+     "padY": 10,
+     "h": 35,
+     "size": 12,
+     "weight": "400",
+     "border": "1px #babfc5",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#636b74",
+     "radius": 1000,
+     "padX": 12,
+     "padY": 6,
+     "h": 29,
+     "size": 13,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#1b75d0",
+     "radius": 6,
+     "padX": 10,
+     "padY": 8,
+     "h": 33,
+     "size": 13,
+     "weight": "400",
+     "border": "1px #1b75d0",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#1b75d0",
+     "color": "#ffffff",
+     "radius": 6,
+     "padX": 10,
+     "padY": 8,
+     "h": 33,
+     "size": 13,
+     "weight": "400",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#1b75d0",
+     "color": "#ffffff",
+     "radius": 6,
+     "padX": 7,
+     "padY": 8,
+     "h": 29,
+     "size": 11,
+     "weight": "400",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#3b4045",
+     "radius": 6,
+     "padX": 7,
+     "padY": 7,
+     "h": 28,
+     "size": 11,
+     "weight": "400",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#ffffff",
+     "radius": 6,
+     "padding": "12/12",
+     "border": "1px #d6d9dc",
+     "shadow": null,
+     "count": 5
+    },
+    {
+     "bg": "#ffffff",
+     "radius": 6,
+     "padding": "0/0",
+     "border": "1px #d6d9dc",
+     "shadow": null,
+     "count": 5
+    },
+    {
+     "bg": "#edf5fd",
+     "radius": 10,
+     "padding": "24/24",
+     "border": null,
+     "shadow": "rgba(0, 0, 0, 0.13) 0px 4px 13px 0px, rgba(0, 0, 0, 0.09) 0p",
+     "count": 1
+    }
+   ],
+   "elements": 801
+  }
+ },
+ {
+  "id": "behance",
+  "name": "Behance",
+  "users": "50 מיליון",
+  "core": "תיק-עבודות",
+  "url": "https://www.behance.net/adobe",
+  "y": 0,
+  "m": {
+   "title": "",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "Times New Roman",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1424,
+   "palette": {
+    "bg": [],
+    "ink": []
+   },
+   "fonts": [],
+   "radii": [],
+   "gaps": [],
+   "pads": [],
+   "shadows": [],
+   "type": {},
+   "buttons": [],
+   "cards": [],
+   "elements": 0
+  }
+ },
+ {
+  "id": "dribbble",
+  "name": "Dribbble",
+  "users": "20 מיליון",
+  "core": "תיק-עבודות",
+  "url": "https://dribbble.com/shots",
+  "y": 200,
+  "m": {
+   "title": "Dribbble - Discover the World’s Top Designers & Creative Professionals",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#0d0c22",
+    "family": "Mona Sans",
+    "size": 16,
+    "lh": "28px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 1791
+     },
+     {
+      "v": "#06040a",
+      "w": 66
+     },
+     {
+      "v": "#f8f6ed",
+      "w": 66
+     },
+     {
+      "v": "#f8f8f8",
+      "w": 66
+     },
+     {
+      "v": "#02050a",
+      "w": 66
+     },
+     {
+      "v": "#f3f5f3",
+      "w": 66
+     },
+     {
+      "v": "#f8efe6",
+      "w": 66
+     },
+     {
+      "v": "#363636",
+      "w": 66
+     },
+     {
+      "v": "#121106",
+      "w": 66
+     },
+     {
+      "v": "#dcdacc",
+      "w": 66
+     }
+    ],
+    "ink": [
+     {
+      "v": "#0d0c22",
+      "w": 44
+     },
+     {
+      "v": "#3d3d4e",
+      "w": 44
+     },
+     {
+      "v": "#ffffff",
+      "w": 36
+     },
+     {
+      "v": "#524b63",
+      "w": 17
+     },
+     {
+      "v": "#6e6d7a",
+      "w": 8
+     },
+     {
+      "v": "#9e9ea7",
+      "w": 6
+     },
+     {
+      "v": "#060318",
+      "w": 5
+     },
+     {
+      "v": "#3a3546",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Mona Sans",
+     "w": 1274
+    }
+   ],
+   "radii": [
+    {
+     "v": "50px",
+     "w": 99
+    },
+    {
+     "v": "8px",
+     "w": 28
+    },
+    {
+     "v": "4px",
+     "w": 22
+    },
+    {
+     "v": "10000000px",
+     "w": 15
+    },
+    {
+     "v": "12px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 74
+    },
+    {
+     "v": "16px",
+     "w": 3
+    },
+    {
+     "v": "4px",
+     "w": 3
+    },
+    {
+     "v": "12px",
+     "w": 2
+    },
+    {
+     "v": "36px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "10px",
+     "w": 3
+    },
+    {
+     "v": "32px",
+     "w": 2
+    },
+    {
+     "v": "3px",
+     "w": 1
+    },
+    {
+     "v": "8px",
+     "w": 1
+    },
+    {
+     "v": "18px",
+     "w": 1
+    },
+    {
+     "v": "72px",
+     "w": 1
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0.01) 0px 2px 2px 0px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "body": {
+     "size": 14,
+     "weight": "500",
+     "lh": "19.6px",
+     "ls": "normal",
+     "family": "Mona Sans",
+     "color": "#0d0c22",
+     "text": "Get 20% off your first payment f"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#3a3546",
+     "radius": 8,
+     "padX": 0,
+     "padY": 0,
+     "h": 40,
+     "size": 14,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#ea4c89",
+     "color": "#ffffff",
+     "radius": 50,
+     "padX": 0,
+     "padY": 0,
+     "h": 40,
+     "size": 13,
+     "weight": "600",
+     "border": "1px #ea4c89",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#0d0c22",
+     "color": "#ffffff",
+     "radius": 10000000,
+     "padX": 24,
+     "padY": 0,
+     "h": 48,
+     "size": 14,
+     "weight": "600",
+     "border": "1px #0d0c22",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "color": "#0d0c22",
+     "radius": 10000000,
+     "padX": 16,
+     "padY": 0,
+     "h": 32,
+     "size": 12,
+     "weight": "700",
+     "border": "1px #e7e7e9",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "color": "#0d0c22",
+     "radius": 8,
+     "padX": 18,
+     "padY": 18,
+     "h": 40,
+     "size": 14,
+     "weight": "500",
+     "border": "1px #e7e7e9",
+     "shadow": "rgba(0, 0, 0, 0.01) 0px 2px 2px 0px",
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "color": "#0d0c22",
+     "radius": 10000000,
+     "padX": 20,
+     "padY": 10,
+     "h": 40,
+     "size": 13,
+     "weight": "600",
+     "border": "1px #e7e7e9",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [],
+   "elements": 1093
+  }
+ },
+ {
+  "id": "goodreads",
+  "name": "Goodreads",
+  "users": "150 מיליון",
+  "core": "עמוד-מחבר",
+  "url": "https://www.goodreads.com/author/show/1244.Haruki_Murakami",
+  "y": 0,
+  "m": {
+   "title": "",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "Times New Roman",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1424,
+   "palette": {
+    "bg": [],
+    "ink": []
+   },
+   "fonts": [],
+   "radii": [],
+   "gaps": [],
+   "pads": [],
+   "shadows": [],
+   "type": {},
+   "buttons": [],
+   "cards": [],
+   "elements": 0
+  }
+ },
+ {
+  "id": "findagrave",
+  "name": "Find a Grave",
+  "users": "40 מיליון",
+  "core": "רשומת-אדם שנפטר",
+  "url": "https://www.findagrave.com/memorial/1075/albert-einstein",
+  "y": 0,
+  "m": {
+   "title": "Attention Required! | Cloudflare",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "Times New Roman",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ffffff",
+      "w": 1635
+     },
+     {
+      "v": "#ebebeb",
+      "w": 739
+     }
+    ],
+    "ink": [
+     {
+      "v": "#404040",
+      "w": 16
+     },
+     {
+      "v": "#595959",
+      "w": 3
+     },
+     {
+      "v": "#0051c3",
+      "w": 2
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "-apple-system",
+     "w": 111
+    }
+   ],
+   "radii": [
+    {
+     "v": "5px",
+     "w": 1
+    }
+   ],
+   "gaps": [],
+   "pads": [
+    {
+     "v": "35px",
+     "w": 1
+    },
+    {
+     "v": "60px",
+     "w": 1
+    },
+    {
+     "v": "53px",
+     "w": 1
+    },
+    {
+     "v": "40px",
+     "w": 1
+    }
+   ],
+   "shadows": [],
+   "type": {
+    "h1": {
+     "size": 60,
+     "weight": "300",
+     "lh": "72px",
+     "ls": "normal",
+     "family": "-apple-system",
+     "color": "#404040",
+     "text": "Sorry, you have been blocked"
+    },
+    "h2": {
+     "size": 30,
+     "weight": "300",
+     "lh": "39px",
+     "ls": "normal",
+     "family": "-apple-system",
+     "color": "#595959",
+     "text": "You are unable to access findagr"
+    },
+    "body": {
+     "size": 15,
+     "weight": "400",
+     "lh": "22.5px",
+     "ls": "normal",
+     "family": "-apple-system",
+     "color": "#404040",
+     "text": "This website is using a security"
+    }
+   },
+   "buttons": [],
+   "cards": [],
+   "elements": 29
+  }
+ },
+ {
+  "id": "wikitree",
+  "name": "WikiTree",
+  "users": "1 מיליון",
+  "core": "אדם + קרובים",
+  "url": "https://www.wikitree.com/wiki/Einstein-16",
+  "y": 0,
+  "m": {
+   "title": "Emanuel Einstein | WikiTree FREE Family Tree",
+   "body": {
+    "bg": "#fcfcfc",
+    "color": "#393a3c",
+    "family": "Roboto",
+    "size": 18,
+    "lh": "27px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#fcfcfc",
+      "w": 1206
+     },
+     {
+      "v": "#f2f1ff",
+      "w": 732
+     },
+     {
+      "v": "#ffeeee",
+      "w": 475
+     },
+     {
+      "v": "#f0f0eb",
+      "w": 462
+     },
+     {
+      "v": "#25422d",
+      "w": 372
+     },
+     {
+      "v": "#e1f0b4",
+      "w": 64
+     },
+     {
+      "v": "#ffffff",
+      "w": 39
+     },
+     {
+      "v": "#fcb815",
+      "w": 4
+     }
+    ],
+    "ink": [
+     {
+      "v": "#008000",
+      "w": 75
+     },
+     {
+      "v": "#393a3c",
+      "w": 61
+     },
+     {
+      "v": "#ffffff",
+      "w": 12
+     },
+     {
+      "v": "#25422d",
+      "w": 8
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Roboto",
+     "w": 688
+    },
+    {
+     "v": "Roboto Mono",
+     "w": 9
+    }
+   ],
+   "radii": [
+    {
+     "v": "6px",
+     "w": 41
+    },
+    {
+     "v": "4px",
+     "w": 2
+    },
+    {
+     "v": "50px",
+     "w": 1
+    },
+    {
+     "v": "18px",
+     "w": 1
+    },
+    {
+     "v": "12px",
+     "w": 1
+    }
+   ],
+   "gaps": [],
+   "pads": [
+    {
+     "v": "6px",
+     "w": 19
+    },
+    {
+     "v": "8px",
+     "w": 14
+    },
+    {
+     "v": "15px",
+     "w": 10
+    },
+    {
+     "v": "16px",
+     "w": 2
+    },
+    {
+     "v": "30px",
+     "w": 1
+    },
+    {
+     "v": "10px",
+     "w": 1
+    }
+   ],
+   "shadows": [],
+   "type": {
+    "h1": {
+     "size": 40,
+     "weight": "700",
+     "lh": "48px",
+     "ls": "normal",
+     "family": "Roboto",
+     "color": "#393a3c",
+     "text": "Emanuel Einstein"
+    },
+    "h2": {
+     "size": 28,
+     "weight": "700",
+     "lh": "33.6px",
+     "ls": "normal",
+     "family": "Roboto",
+     "color": "#393a3c",
+     "text": "Family Tree of Emanuel Einstein"
+    },
+    "body": {
+     "size": 18,
+     "weight": "400",
+     "lh": "27px",
+     "ls": "normal",
+     "family": "Roboto",
+     "color": "#393a3c",
+     "text": "He is the son of Joseph Einstein"
+    }
+   },
+   "buttons": [
+    {
+     "bg": "#f0f0eb",
+     "color": "#393a3c",
+     "radius": 6,
+     "padX": 16,
+     "padY": 8,
+     "h": 45,
+     "size": 16,
+     "weight": "400",
+     "border": "1px #cccccc",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#25422d",
+     "radius": 6,
+     "padX": 12,
+     "padY": 6,
+     "h": 39,
+     "size": 18,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": null,
+     "color": "#25422d",
+     "radius": 6,
+     "padX": 12,
+     "padY": 6,
+     "h": 42,
+     "size": 18,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#fcfcfc",
+     "color": "#393a3c",
+     "radius": 6,
+     "padX": 16,
+     "padY": 8,
+     "h": 45,
+     "size": 16,
+     "weight": "700",
+     "border": "1px #cccccc",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#fcb815",
+     "color": "#393a3c",
+     "radius": 4,
+     "padX": 24,
+     "padY": 10,
+     "h": 36,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "color": "#008000",
+     "radius": 18,
+     "padX": 12,
+     "padY": 6,
+     "h": 38,
+     "size": 14,
+     "weight": "500",
+     "border": "2px #008000",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#f2f1ff",
+     "radius": 6,
+     "padding": "15/15",
+     "border": null,
+     "shadow": null,
+     "count": 4
+    },
+    {
+     "bg": "#f2f1ff",
+     "radius": 6,
+     "padding": "8/10",
+     "border": null,
+     "shadow": null,
+     "count": 4
+    },
+    {
+     "bg": "#ffeeee",
+     "radius": 6,
+     "padding": "8/10",
+     "border": null,
+     "shadow": null,
+     "count": 4
+    },
+    {
+     "bg": "#ffeeee",
+     "radius": 6,
+     "padding": "15/15",
+     "border": null,
+     "shadow": null,
+     "count": 3
+    },
+    {
+     "bg": "#f0f0eb",
+     "radius": 12,
+     "padding": "15/15",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 365
+  }
+ },
+ {
+  "id": "geni",
+  "name": "Geni",
+  "users": "15 מיליון",
+  "core": "אדם + עץ",
+  "url": "https://www.geni.com/people/Albert-Einstein/6000000004004195331",
+  "y": 0,
+  "m": {
+   "title": "",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "Times New Roman",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [],
+    "ink": [
+     {
+      "v": "#000000",
+      "w": 60
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Times New Roman",
+     "w": 24
+    }
+   ],
+   "radii": [],
+   "gaps": [],
+   "pads": [],
+   "shadows": [],
+   "type": {},
+   "buttons": [],
+   "cards": [],
+   "elements": 1
+  }
+ },
+ {
+  "id": "myheritage",
+  "name": "MyHeritage",
+  "users": "100 מיליון",
+  "core": "אדם + משפחה · עברית",
+  "url": "https://www.myheritage.co.il/names/albert_einstein",
+  "y": 0,
+  "m": {
+   "title": "",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "Times New Roman",
+    "size": 16,
+    "lh": "normal"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [],
+    "ink": [
+     {
+      "v": "#000000",
+      "w": 60
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Times New Roman",
+     "w": 24
+    }
+   ],
+   "radii": [],
+   "gaps": [],
+   "pads": [],
+   "shadows": [],
+   "type": {},
+   "buttons": [],
+   "cards": [],
+   "elements": 1
+  }
+ },
+ {
+  "id": "lastfm",
+  "name": "Last.fm",
+  "users": "60 מיליון",
+  "core": "פרופיל-משתמש",
+  "url": "https://www.last.fm/user/RJ",
+  "y": 0,
+  "m": {
+   "title": "Last.fm - Rate Limited",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#232323",
+    "family": "Barlow",
+    "size": 16,
+    "lh": "24px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#000000",
+      "w": 86
+     }
+    ],
+    "ink": [
+     {
+      "v": "#7e7e7e",
+      "w": 44
+     },
+     {
+      "v": "#535353",
+      "w": 5
+     },
+     {
+      "v": "#232323",
+      "w": 3
+     },
+     {
+      "v": "#2d2d2d",
+      "w": 2
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Barlow",
+     "w": 74
+    }
+   ],
+   "radii": [],
+   "gaps": [
+    {
+     "v": "25px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "15px",
+     "w": 1
+    }
+   ],
+   "shadows": [],
+   "type": {
+    "h1": {
+     "size": 36,
+     "weight": "700",
+     "lh": "54px",
+     "ls": "normal",
+     "family": "Barlow",
+     "color": "#232323",
+     "text": "Your request was blocked"
+    },
+    "body": {
+     "size": 18,
+     "weight": "400",
+     "lh": "27px",
+     "ls": "normal",
+     "family": "Barlow",
+     "color": "#535353",
+     "text": "To protect our website, our secu"
+    }
+   },
+   "buttons": [],
+   "cards": [],
+   "elements": 32
+  }
+ },
+ {
+  "id": "letterboxd",
+  "name": "Letterboxd",
+  "users": "17 מיליון",
+  "core": "פרופיל-חבר",
+  "url": "https://letterboxd.com/davidehrlich/",
+  "y": 0,
+  "m": {
+   "title": "Just a moment...",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#313131",
+    "family": "system-ui",
+    "size": 16,
+    "lh": "18.4px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [],
+    "ink": [
+     {
+      "v": "#313131",
+      "w": 7
+     },
+     {
+      "v": "#0000ee",
+      "w": 2
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "system-ui",
+     "w": 49
+    },
+    {
+     "v": "monospace",
+     "w": 1
+    }
+   ],
+   "radii": [],
+   "gaps": [
+    {
+     "v": "16px",
+     "w": 1
+    },
+    {
+     "v": "8px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "16px",
+     "w": 1
+    }
+   ],
+   "shadows": [],
+   "type": {
+    "h1": {
+     "size": 40,
+     "weight": "600",
+     "lh": "50px",
+     "ls": "normal",
+     "family": "system-ui",
+     "color": "#313131",
+     "text": "letterboxd.com"
+    },
+    "h2": {
+     "size": 24,
+     "weight": "600",
+     "lh": "30px",
+     "ls": "normal",
+     "family": "system-ui",
+     "color": "#313131",
+     "text": "Performing security verification"
+    },
+    "body": {
+     "size": 16,
+     "weight": "400",
+     "lh": "24px",
+     "ls": "normal",
+     "family": "system-ui",
+     "color": "#313131",
+     "text": "This website uses a security ser"
+    }
+   },
+   "buttons": [],
+   "cards": [],
+   "elements": 22
+  }
+ },
+ {
+  "id": "twitch",
+  "name": "Twitch",
+  "users": "240 מיליון",
+  "core": "עמוד-יוצר",
+  "url": "https://www.twitch.tv/directory",
+  "y": 200,
+  "m": {
+   "title": "All Categories - Twitch",
+   "body": {
+    "bg": "#f7f7f8",
+    "color": "#0e0e10",
+    "family": "Inter",
+    "size": 14,
+    "lh": "19.6px"
+   },
+   "mainWidth": 1200,
+   "palette": {
+    "bg": [
+     {
+      "v": "#efeff1",
+      "w": 190
+     },
+     {
+      "v": "#ffffff",
+      "w": 103
+     },
+     {
+      "v": "#451093",
+      "w": 82
+     },
+     {
+      "v": "#5c16c5",
+      "w": 50
+     },
+     {
+      "v": "#ff75e6",
+      "w": 6
+     },
+     {
+      "v": "#9147ff",
+      "w": 3
+     },
+     {
+      "v": "#eb0400",
+      "w": 1
+     }
+    ],
+    "ink": [
+     {
+      "v": "#0e0e10",
+      "w": 117
+     },
+     {
+      "v": "#3b3b44",
+      "w": 44
+     },
+     {
+      "v": "#ffffff",
+      "w": 9
+     },
+     {
+      "v": "#000000",
+      "w": 8
+     },
+     {
+      "v": "#5c16c5",
+      "w": 2
+     },
+     {
+      "v": "#18181b",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Inter",
+     "w": 1858
+    },
+    {
+     "v": "Roobert",
+     "w": 43
+    }
+   ],
+   "radii": [
+    {
+     "v": "9000px",
+     "w": 88
+    },
+    {
+     "v": "6px",
+     "w": 10
+    },
+    {
+     "v": "4px",
+     "w": 8
+    },
+    {
+     "v": "10px",
+     "w": 5
+    },
+    {
+     "v": "8px",
+     "w": 3
+    },
+    {
+     "v": "2px",
+     "w": 2
+    }
+   ],
+   "gaps": [
+    {
+     "v": "4px",
+     "w": 2
+    },
+    {
+     "v": "2px",
+     "w": 1
+    },
+    {
+     "v": "16px",
+     "w": 1
+    }
+   ],
+   "pads": [
+    {
+     "v": "5px",
+     "w": 10
+    },
+    {
+     "v": "2px",
+     "w": 8
+    },
+    {
+     "v": "3px",
+     "w": 7
+    },
+    {
+     "v": "4px",
+     "w": 5
+    },
+    {
+     "v": "1px",
+     "w": 4
+    },
+    {
+     "v": "16px",
+     "w": 2
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(50, 50, 57, 0.62) 0px 0px 0px 1px inset",
+     "w": 3
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.13) 0px 1px 2px 0px, rgba(0, 0, 0, 0.08) 0px 0px 2px 0px",
+     "w": 2
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 60,
+     "weight": "500",
+     "lh": "60px",
+     "ls": "-1.2px",
+     "family": "Roobert",
+     "color": "#0e0e10",
+     "text": "Browse"
+    },
+    "h2": {
+     "size": 14,
+     "weight": "400",
+     "lh": "19.6px",
+     "ls": "normal",
+     "family": "Roobert",
+     "color": "#0e0e10",
+     "text": "Just Chatting"
+    },
+    "h3": {
+     "size": 14,
+     "weight": "600",
+     "lh": "19.6px",
+     "ls": "normal",
+     "family": "Roobert",
+     "color": "#0e0e10",
+     "text": "Live Channels"
+    },
+    "body": {
+     "size": 24,
+     "weight": "500",
+     "lh": "26.4px",
+     "ls": "-0.24px",
+     "family": "Roobert",
+     "color": "#ffffff",
+     "text": "Games"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 6,
+     "padX": 0,
+     "padY": 0,
+     "h": 45,
+     "size": 14,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 5
+    },
+    {
+     "bg": null,
+     "color": "#0e0e10",
+     "radius": 9000,
+     "padX": 0,
+     "padY": 0,
+     "h": 32,
+     "size": 14,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#9147ff",
+     "color": "#ffffff",
+     "radius": 9000,
+     "padX": 0,
+     "padY": 0,
+     "h": 32,
+     "size": 14,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "color": "#0e0e10",
+     "radius": 8,
+     "padX": 12,
+     "padY": 0,
+     "h": 32,
+     "size": 14,
+     "weight": "400",
+     "border": null,
+     "shadow": "rgba(50, 50, 57, 0.62) 0px 0px 0px 1px inset",
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "color": "#000000",
+     "radius": 9000,
+     "padX": 0,
+     "padY": 0,
+     "h": 32,
+     "size": 14,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [],
+   "elements": 1526
+  }
+ }
+]
