@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>מסך גבייה — מוסד</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+ --bg:#fbfbfa;--card:#fff;--sunk:#f4f3f0;--raise:#ebe9e5;--ink:#37352F;--mut:#6b675e;--faint:#8a857b;
+ --hair:rgba(0,0,0,.1);--acc:#2F6FED;--acc-soft:#eaf1fe;--on-acc:#fff;--ok:#12703d;--ok-soft:#e3f3ea;
+ --warn:#8a5e00;--warn-soft:#fbf0d8;--err:#a8281a;--err-soft:#fbe7e4;
+ --c1:#2F6FED;--c1-soft:#eaf1fe;--c2:#12703d;--c2-soft:#e3f3ea;--c3:#8a5e00;--c3-soft:#fbf0d8;
+ --c4:#6a3fc0;--c4-soft:#f0ebfb;--c5:#a8281a;--c5-soft:#fbe7e4;--c6:#0c6570;--c6-soft:#e2f2f4;
+ --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;
+ --r:16px;--rs:10px;--row:44px;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#0d0d0f;--card:#161619;--sunk:#1c1c20;--raise:#26262b;--ink:#ECE9E2;--mut:#a8a299;--faint:#8b857c;
+ --hair:rgba(236,233,226,.14);--acc:#7FA6F5;--acc-soft:#1a2436;--on-acc:#0B0B0D;--ok:#5cd79b;--ok-soft:#14261d;
+ --warn:#e8bd5c;--warn-soft:#2a2318;--err:#f08d80;--err-soft:#2c1a17;
+ --c1:#7FA6F5;--c1-soft:#1a2436;--c2:#5cd79b;--c2-soft:#14261d;--c3:#e8bd5c;--c3-soft:#2a2318;
+ --c4:#b79bf0;--c4-soft:#221c32;--c5:#f08d80;--c5-soft:#2c1a17;--c6:#63c6d2;--c6-soft:#152628;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#0d0d0f;--card:#161619;--sunk:#1c1c20;--raise:#26262b;--ink:#ECE9E2;--mut:#a8a299;--faint:#8b857c;--hair:rgba(236,233,226,.14);--acc:#7FA6F5;--acc-soft:#1a2436;--on-acc:#0B0B0D;--ok:#5cd79b;--ok-soft:#14261d;--warn:#e8bd5c;--warn-soft:#2a2318;--err:#f08d80;--err-soft:#2c1a17;--c1:#7FA6F5;--c1-soft:#1a2436;--c2:#5cd79b;--c2-soft:#14261d;--c3:#e8bd5c;--c3-soft:#2a2318;--c4:#b79bf0;--c4-soft:#221c32;--c5:#f08d80;--c5-soft:#2c1a17;--c6:#63c6d2;--c6-soft:#152628;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Heebo,Arial,sans-serif;letter-spacing:0}
+bdi{unicode-bidi:isolate}.num{font-variant-numeric:tabular-nums}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+.skip{position:absolute;inset-inline-start:-9999px;top:0;background:var(--acc);color:var(--on-acc);padding:var(--s2) var(--s4);border-radius:var(--rs);z-index:99}
+.skip:focus{inset-inline-start:var(--s4);top:var(--s2)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
+.shell{max-width:1120px;margin-inline:auto;padding-inline:var(--s4);padding-block:var(--s4) var(--s6)}
+.btn{border:1px solid var(--hair);background:var(--card);border-radius:var(--rs);padding:8px 14px;font-size:14px;display:inline-flex;gap:var(--s2);align-items:center;min-height:40px}
+.btn:hover{border-color:var(--mut)}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:var(--on-acc);font-weight:600}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.pin{display:none;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--acc);color:var(--on-acc);font:800 10.5px Heebo;font-variant-numeric:tabular-nums;vertical-align:middle;margin-inline-start:5px}
+body.pins .pin{display:inline-grid}
+
+header.app{display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap;margin-bottom:var(--s3)}
+h1{font-size:21px;font-weight:700;margin:0;white-space:nowrap}
+h1 small{font-size:13px;font-weight:400;color:var(--mut);margin-inline-start:var(--s2)}
+.ctx{display:flex;gap:2px;background:var(--sunk);border-radius:999px;padding:3px;flex-wrap:wrap}
+.ctx button{border:0;background:transparent;border-radius:999px;padding:7px 14px;font-size:13.5px;color:var(--mut);min-height:36px}
+.ctx button[aria-pressed=true]{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.find{display:flex;align-items:center;gap:var(--s2);background:var(--card);border:1px solid var(--hair);border-radius:12px;padding-inline:var(--s3) var(--s1);flex:1;min-width:min(100%,230px)}
+.find input{flex:1;min-width:60px;border:0;background:transparent;padding:11px 0;font-size:15px;outline:0}
+.find select{border:1px solid var(--hair);background:var(--sunk);border-radius:8px;padding:6px 8px;font-size:12.5px;color:var(--mut);min-height:34px}
+kbd{font:600 11px ui-monospace,monospace;background:var(--sunk);border:1px solid var(--hair);border-radius:5px;padding:2px 6px;color:var(--faint)}
+@media(max-width:560px){kbd.opt{display:none}}
+
+.results{background:var(--card);border:1px solid var(--hair);border-radius:var(--r);overflow:hidden;margin-bottom:var(--s4);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px)}
+@media(max-width:780px){.results{grid-template-columns:1fr}.detail{border-inline-start:0;border-block-start:1px solid var(--hair)}}
+.results[hidden]{display:none}
+ul.hits{list-style:none;margin:0;padding:var(--s1);max-height:290px;overflow:auto}
+ul.hits li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:var(--s3);align-items:center;padding:var(--s2) var(--s3);border-radius:var(--rs);cursor:pointer;min-height:var(--row)}
+ul.hits li[aria-selected=true]{background:var(--acc-soft)}
+.t{font-weight:600;font-size:14.5px}.s{font-size:12.5px;color:var(--mut)}
+.trunc{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:700 12px Heebo;flex:none}
+.detail{border-inline-start:1px solid var(--hair);padding:var(--s4);background:var(--sunk)}
+.detail h3{margin:0 0 2px;font-size:15.5px}
+.dl{display:grid;gap:var(--s1);margin-top:var(--s3);font-size:13.5px}
+.dl>div{display:flex;justify-content:space-between;gap:var(--s3)}
+.dl dt{color:var(--mut);margin:0}.dl dd{margin:0}
+.acts{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s3)}
+.acts .btn{padding:6px 11px;font-size:12.5px;min-height:36px}
+.none{padding:var(--s5) var(--s4);text-align:center;color:var(--mut);font-size:14px}
+
+.shelf-h{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s3);margin:var(--s5) 0 var(--s2)}
+h2{font-size:17px;font-weight:700;margin:0}
+.shelf-h a{font-size:12.5px;color:var(--mut)}
+.shelf{display:flex;gap:var(--s3);overflow-x:auto;padding-bottom:var(--s2);scroll-snap-type:x proximity}
+.shelf>*{scroll-snap-align:start}
+.sq{flex:none;width:152px;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:var(--s3);text-align:start}
+.sq .art{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;font:800 30px Heebo;margin-bottom:var(--s2);font-variant-numeric:tabular-nums}
+.sq .m{font-size:12.5px;color:var(--mut);margin-top:2px}
+.rd{flex:none;width:112px;text-align:center;background:none;border:0;padding:0}
+.rd .art{width:92px;height:92px;border-radius:50%;margin-inline:auto;display:grid;place-items:center;font:800 25px Heebo;margin-bottom:var(--s2)}
+.rd .m{font-size:12px;color:var(--mut)}
+
+.calc{background:var(--card);border:1px solid var(--hair);border-radius:var(--r);padding:var(--s4);margin-top:var(--s5)}
+.pick{display:flex;align-items:center;gap:var(--s3);background:var(--sunk);border-radius:12px;padding:var(--s3);flex-wrap:wrap}
+.pick .who{font-weight:700;font-size:15px;flex:1;min-width:120px}
+.rate{display:inline-flex;align-items:center;gap:var(--s2);background:var(--sunk);border:1px solid var(--hair);border-radius:999px;padding:7px 14px;font-size:13.5px;margin:var(--s4) 0 var(--s1);min-height:38px}
+.lbl{font-size:13px;color:var(--mut);margin-top:var(--s2)}
+.bigrow{display:flex;align-items:baseline;gap:var(--s2);flex-wrap:wrap}
+.big{font:800 clamp(30px,8vw,40px)/1.1 Heebo;font-variant-numeric:tabular-nums;border:0;background:transparent;width:7ch;max-width:62vw;padding:0;outline:0;border-block-end:2px dashed transparent;text-align:start}
+.big:focus{border-block-end-color:var(--acc)}
+.unit{font-weight:800;font-size:clamp(20px,5vw,26px);color:var(--mut)}
+.offer{display:flex;gap:var(--s2);align-items:center;flex-wrap:wrap;background:var(--ok-soft);color:var(--ok);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;margin-top:var(--s3);width:max-content;max-width:100%}
+.offer button{background:none;border:0;color:inherit;font:inherit;text-decoration:underline;padding:0;min-height:0}
+.bd{margin-top:var(--s3);border-block-start:1px solid var(--hair);padding-block-start:var(--s2);display:grid;gap:var(--s1);font-size:14px}
+.bd[hidden]{display:none}
+.bd>div{display:flex;justify-content:space-between;gap:var(--s3)}
+.bd .minus{color:var(--ok)}
+.bd .tot{border-block-start:1px solid var(--hair);padding-block-start:var(--s2);font-weight:700;font-size:15px}
+
+.prods-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);margin:var(--s5) 0 var(--s2)}
+.pager{display:flex;gap:var(--s2)}
+.pager button{width:40px;height:40px;border-radius:50%;border:1px solid var(--hair);background:var(--card);display:grid;place-items:center;font-size:17px}
+.prods{display:flex;gap:var(--s3);overflow-x:auto;padding-bottom:var(--s2);scroll-snap-type:x proximity}
+.prod{flex:none;width:min(272px,86vw);scroll-snap-align:start}
+.prod .head{min-height:160px;border-radius:14px;padding:var(--s3);display:flex;flex-direction:column;justify-content:center;gap:var(--s2)}
+.prod h3{margin:var(--s2) 0 2px;font-size:16px;font-weight:700}
+.prod p{margin:0;font-size:13.5px;color:var(--mut)}
+.inner{background:var(--card);border:1px solid var(--hair);border-radius:11px;padding:10px var(--s3);display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:var(--s2);align-items:center}
+.inner .ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:13px;background:var(--sunk)}
+.inner .t{font-size:13.5px;font-weight:700}
+.inner .tagok{font-size:10.5px;font-weight:800;color:var(--ok);background:var(--ok-soft);border-radius:999px;padding:2px 8px;display:inline-block;margin-bottom:3px}
+.inner .sub{font-size:12px;color:var(--mut)}
+.inner .ch{color:var(--faint);font-size:15px}
+
+.bar{display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap;margin-bottom:var(--s3);font-size:13px;color:var(--mut)}
+.bar label{display:flex;gap:6px;align-items:center}
+footer.note{margin-top:var(--s6);border-block-start:1px solid var(--hair);padding-block-start:var(--s4);font-size:12.5px;line-height:1.7;color:var(--mut)}
+footer.note b{color:var(--ink)}
+@media (min-width:880px){
+ .sq{flex:1 1 0;min-width:152px;max-width:224px}
+ .rd{flex:1 1 0;min-width:112px;max-width:168px}
+}
+@media (min-width:760px){
+ .calc{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--s4)}
+ .calc>h2,.pick,.offer,.bd{grid-column:1/-1}
+ .lbl,.bigrow{grid-column:1}
+ .rate{grid-column:2;grid-row:3/5;justify-self:end;align-self:center;margin:var(--s3) 0 0}
+}
+@media (prefers-reduced-motion:no-preference){.prods,.shelf{scroll-behavior:smooth}}
+@media print{
+ .bar,.find,.ctx,.pager,.acts,.skip,.results{display:none!important}
+ body{background:#fff;color:#000}.calc,.prod,.sq{break-inside:avoid}
+ .prod .head{background:none!important;border:1px solid #ccc}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">דלג לתוכן</a>
+<div class="shell">
+
+<div class="bar">
+  <label><input type="checkbox" id="pins"> הצג את מספרי האלמנטים שנבחרו</label>
+  <span>·</span><span>נתוני דוגמה</span>
+</div>
+
+<header class="app">
+  <h1>גבייה <small>שכר לימוד · תשפ״ז · נתוני דוגמה</small></h1>
+  <nav class="ctx" aria-label="אגף">
+    <button aria-pressed="true" data-dept="גבייה">גבייה</button>
+    <button aria-pressed="false" data-dept="תרומות">תרומות</button>
+    <button aria-pressed="false" data-dept="חסד">חסד</button>
+    <span class="pin">34</span>
+  </nav>
+  <div class="find">
+    <span aria-hidden="true">⌕</span>
+    <input id="q" type="search" role="combobox" aria-expanded="false" aria-controls="hits" aria-autocomplete="list"
+           placeholder="שם משפחה, סכום או פעולה…" autocomplete="off" aria-label="חיפוש במוסד">
+    <span class="pin">1</span>
+    <select id="kind" aria-label="סוג תוצאה"><option value="">כל הסוגים</option><option>משפחה</option><option>צ׳ק</option><option>פעולה</option></select>
+    <span class="pin">2</span>
+    <kbd class="opt">Ctrl+K</kbd>
+  </div>
+</header>
+
+<div class="results" id="results" hidden>
+  <ul class="hits" id="hits" role="listbox" aria-label="תוצאות חיפוש"></ul>
+  <div class="detail" id="detail" aria-live="polite"></div>
+</div>
+
+<main id="main">
+  <div class="shelf-h"><h2>לטפל היום <span class="pin">13</span></h2><a href="#" onclick="return false">הצג הכל</a></div>
+  <div class="shelf" id="shelf1"></div>
+
+  <div class="shelf-h"><h2>משפחות לפי יתרה פתוחה <span class="pin">14</span></h2><a href="#" onclick="return false">הצג הכל</a></div>
+  <div class="shelf" id="shelf2"></div>
+
+  <section class="calc" aria-labelledby="calcH">
+    <h2 id="calcH" class="s" style="font-size:13px;color:var(--mut);font-weight:400;margin-bottom:var(--s2)">חישוב חיוב למשפחה</h2>
+    <div class="pick"><span class="av" id="famAv"></span>
+      <span class="who" id="famName"></span>
+      <button class="btn" id="changeFam">שנה משפחה</button><span class="pin">17</span></div>
+
+    <button class="rate" id="rateBtn" aria-expanded="false" aria-controls="bd">
+      <span aria-hidden="true">🔒</span><span>תעריף תשפ״ז: <bdi dir="ltr">₪6,000</bdi> לילד</span>
+      <span aria-hidden="true">›</span><span class="pin">18</span></button>
+
+    <div class="lbl" id="amtLbl">ההורה משלם בדיוק <span class="pin">19</span></div>
+    <div class="bigrow">
+      <input class="big num" id="amount" inputmode="numeric" aria-labelledby="amtLbl">
+      <span class="unit" aria-hidden="true">₪</span><span class="pin">20</span>
+    </div>
+
+    <div class="offer">משלם את כל השנה מראש?
+      <button id="preBtn" aria-pressed="false">ההנחה עולה ל-6%</button><span class="pin">21</span></div>
+
+    <div class="bd" id="bd" hidden></div>
+  </section>
+
+  <div class="prods-h"><h2>אגפים <span class="pin">26</span></h2>
+    <div class="pager"><button id="prev" aria-label="הקודם">›</button><button id="next" aria-label="הבא">‹</button><span class="pin">25</span></div></div>
+  <div class="prods" id="prods"></div>
+</main>
+
+<footer class="note">
+  נבנה מ-15 האלמנטים שנבחרו: <b>1</b> חיפוש אחד · <b>2</b> מסנן סוג · <b>6</b> פרטי הנבחר בצד · <b>13</b> כרטיס במדף ·
+  <b>14</b> מדף עיגולים · <b>17</b> בורר משפחה · <b>18</b> תעריף נעול עם פירוט · <b>19</b> תווית מעל השדה ·
+  <b>20</b> סכום ענק לעריכה · <b>21</b> הטבה מותנית · <b>25</b> חצי דפדוף · <b>26</b> כרטיס אגף · <b>27</b> ו-<b>28</b> כרטיסיות פנימיות · <b>34</b> בורר אגף.
+  <br>המספרים 35–37 לא קיימים במספור, שנגמר ב-34.
+</footer>
+</div>
+
+<script>
+const money=n=>'₪'+Number(n).toLocaleString('he-IL');
+const bdi=s=>'<bdi dir="ltr">'+s+'</bdi>';
+const FAM=[
+ {n:'משפחת כהן',i:'כה',c:1,kids:4,open:8000,late:0,pay:'הוראת קבע',dept:'גבייה'},
+ {n:'משפחת רוזן',i:'רו',c:5,kids:5,open:20400,late:24,pay:'צ׳ק שחזר',dept:'גבייה'},
+ {n:'משפחת ויס',i:'וי',c:3,kids:7,open:21000,late:11,pay:'הוראת קבע',dept:'גבייה'},
+ {n:'משפחת ברגר',i:'בר',c:4,kids:4,open:24000,late:18,pay:'טרם נקבע',dept:'גבייה'},
+ {n:'משפחת נוימן',i:'נו',c:2,kids:3,open:3000,late:0,pay:'ביט',dept:'גבייה'},
+ {n:'משפחת פרידמן',i:'פר',c:6,kids:3,open:12000,late:6,pay:'מזומן',dept:'חסד'},
+ {n:'משפחת אדלר',i:'אד',c:4,kids:2,open:10000,late:0,pay:'העברה',dept:'תרומות'}];
+const ACTS=[{n:'חיוב חדש',s:'פעולה · N'},{n:'שליחת תזכורות לפיגורים',s:'פעולה · R'},{n:'הפקדת צ׳קים',s:'פעולה · D'},{n:'ייצוא לאקסל',s:'פעולה · ⌘E'}];
+const TASKS={'גבייה':[[12,'צ׳קים להפקדה','עד יום חמישי',2],[37,'משפחות בפיגור','שיחה או תזכורת',5],[8,'בקשות הנחה','ממתינות לוועדה',1],[5,'הלוואות','להחזר החודש',3],[3,'קבלות','להפקה',4]],
+ 'תרומות':[[6,'תודות','טרם נשלחו',2],[8,'תורמים רדומים','לפנייה אישית',1],[2,'הנצחות','להתקנה',4],[1,'דינר','אישורי הגעה',3]],
+ 'חסד':[[5,'החזרים','החודש',2],[2,'בקשות','לוועדה',1],[4,'ערבים','חסרה חתימה',5]]};
+const PROD={'גבייה':[{t:'שכר לימוד',p:'חיובים, הנחות והסדרים לכל המשפחות.',c:1,in:[[money(482300),'פתוח לגבייה','פעיל','₪'],['37','משפחות בפיגור','דורש טיפול','!']]},
+ {t:'צ׳קים',p:'קליטה, הפקדה וטיפול בחזרות.',c:2,in:[['12','להפקדה','יום חמישי','✓'],['2','חזרו החודש','לטיפול','!']]},
+ {t:'הנחות',p:'בקשות, ועדה ותוקף.',c:3,in:[['8','ממתינות','לוועדה','☰'],[money(64000),'ניתן השנה','12% מהחיוב','₪']]},
+ {t:'הסעות',p:'קווים, נוסעים וחיוב חודשי.',c:4,in:[['214','נוסעים','משובצים','✓'],[money(38520),'חיוב חודשי','נגבה','₪']]}],
+ 'תרומות':[{t:'תורמים',p:'כרטיס תורם, היסטוריה וקשר.',c:2,in:[[money(126400),'נאסף לבניין','54% מהיעד','₪'],['8','רדומים','לפנייה','☎']]},
+ {t:'קמפיינים',p:'יעד, התקדמות ושגרירים.',c:1,in:[['3','פעילים','החודש','▲'],[money(41000),'גויס השבוע','מעל התחזית','₪']]}],
+ 'חסד':[{t:'גמ״ח',p:'הלוואות, ערבים והחזרים.',c:3,in:[[money(88000),'יתרת הקרן','זמין','₪'],['5','החזרים','החודש','↻']]},
+ {t:'תמיכות',p:'בקשות ואישורי ועדה.',c:6,in:[['2','ממתינות','לוועדה','☰'],[money(18000),'שולם החודש','לפי החלטה','₪']]}]};
+let dept='גבייה', fam=FAM[0], pre=false;
+
+/* ── בורר אגף (34) — משנה באמת את התוכן ── */
+document.querySelector('.ctx').addEventListener('click',e=>{const b=e.target.closest('button[data-dept]');if(!b)return;
+ dept=b.dataset.dept;[...document.querySelectorAll('.ctx button')].forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+ const f=FAM.filter(x=>x.dept===dept);if(f.length){fam=f[0];calc();}
+ render();});
+
+/* ── חיפוש (1)(2) + פרטי הנבחר (6) — תבנית combobox תקנית ── */
+const q=document.getElementById('q'),kind=document.getElementById('kind'),res=document.getElementById('results'),hits=document.getElementById('hits'),detail=document.getElementById('detail');
+let list=[],sel=0;
+function search(){
+ const v=q.value.trim(),k=kind.value;
+ const f=(k&&k!=='משפחה')?[]:FAM.filter(x=>!v||x.n.includes(v)||String(x.open).includes(v));
+ const c=(k&&k!=='צ׳ק')?[]:((v&&(v.includes('צ')||/\d/.test(v)))?[{n:'צ׳ק 4471 · משפחת כהן',s:money(2000)+' · בהפקדה',ic:'צ'}]:[]);
+ const a=(k&&k!=='פעולה')?[]:ACTS.filter(x=>!v||x.n.includes(v));
+ list=v||k?[...f.map(x=>({fam:x,n:x.n,s:x.dept+' · פתוח '+money(x.open)})),...c,...a]:[];
+ sel=0;res.hidden=!(v||k);q.setAttribute('aria-expanded',String(!res.hidden));draw();
+}
+function draw(){
+ if(!list.length){hits.innerHTML='';detail.innerHTML='<div class="none">לא נמצא. נסה «כהן», «צ׳ק» או «תזכורת».</div>';return;}
+ hits.innerHTML=list.map((x,i)=>'<li role="option" id="hit'+i+'" aria-selected="'+(i===sel)+'" data-i="'+i+'">'+
+  '<span class="av" style="background:var(--c'+(x.fam?x.fam.c:1)+'-soft);color:var(--c'+(x.fam?x.fam.c:1)+')">'+(x.fam?x.fam.i:(x.ic||'⌘'))+'</span>'+
+  '<span class="trunc"><span class="t">'+x.n+'</span><div class="s trunc">'+x.s+'</div></span>'+
+  '<span class="s">'+(x.fam?'Enter':'')+'</span></li>').join('');
+ q.setAttribute('aria-activedescendant','hit'+sel);
+ const x=list[sel];
+ detail.innerHTML=x&&x.fam?
+  '<h3>'+x.fam.n+'</h3><div class="s">'+x.fam.dept+' · '+bdi(x.fam.kids+' ילדים')+'</div>'+
+  '<dl class="dl"><div><dt>יתרה פתוחה</dt><dd class="num">'+bdi(money(x.fam.open))+'</dd></div>'+
+  '<div><dt>אמצעי תשלום</dt><dd>'+x.fam.pay+'</dd></div>'+
+  '<div><dt>ימי איחור</dt><dd class="num">'+(x.fam.late?bdi(x.fam.late):'—')+'</dd></div></dl>'+
+  '<div class="acts"><button class="btn pri" data-open="'+FAM.indexOf(x.fam)+'">פתח בחישוב</button>'+
+  '<button class="btn">תזכורת</button><button class="btn">רשום תשלום</button></div>'+
+  '<div class="s" style="margin-top:10px">פרטי הפריט <span class="pin">6</span></div>'
+  :(x?'<h3>'+x.n+'</h3><div class="s">'+x.s+'</div><div class="acts"><button class="btn pri">הפעל</button></div>':'');
+}
+q.addEventListener('input',search);kind.addEventListener('change',search);
+hits.addEventListener('click',e=>{const li=e.target.closest('[data-i]');if(li){sel=+li.dataset.i;draw();}});
+detail.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b){fam=FAM[+b.dataset.open];calc();q.value='';search();document.getElementById('amount').focus();}});
+q.addEventListener('keydown',e=>{
+ if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!list.length)return;sel=(sel+(e.key==='ArrowDown'?1:-1)+list.length)%list.length;draw();
+  const li=hits.children[sel];li&&li.scrollIntoView({block:'nearest'});}
+ else if(e.key==='Enter'){const x=list[sel];if(x&&x.fam){fam=x.fam;calc();q.value='';search();}}
+ else if(e.key==='Escape'){q.value='';search();}});
+addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();q.focus();q.select();}});
+
+/* ── מדפים (13)(14) ── */
+function render(){
+ document.getElementById('shelf1').innerHTML=(TASKS[dept]||[]).map(x=>'<button class="sq"><div class="art num" style="background:var(--c'+x[3]+'-soft);color:var(--c'+x[3]+')">'+bdi(x[0])+'</div>'+
+  '<div class="t trunc">'+x[1]+'</div><div class="m trunc">'+x[2]+'</div></button>').join('');
+ const f=FAM.filter(x=>x.dept===dept).sort((a,b)=>b.open-a.open);
+ document.getElementById('shelf2').innerHTML=f.map(x=>'<button class="rd" data-fam="'+FAM.indexOf(x)+'"><div class="art" style="background:var(--c'+x.c+'-soft);color:var(--c'+x.c+')">'+x.i+'</div>'+
+  '<div class="t trunc">'+x.n+'</div><div class="m num">'+bdi(money(x.open))+'</div></button>').join('');
+ document.getElementById('prods').innerHTML=(PROD[dept]||[]).map(p=>'<article class="prod"><div class="head" style="background:var(--c'+p.c+'-soft)">'+
+  p.in.map((x,i)=>'<div class="inner"><span class="ic" aria-hidden="true">'+x[3]+'</span>'+
+   '<span class="trunc"><span class="tagok">'+x[2]+'</span><div class="t num trunc">'+bdi(x[0])+'</div><div class="sub trunc">'+x[1]+'</div></span>'+
+   '<span class="ch" aria-hidden="true">›</span><span class="pin">'+(i?28:27)+'</span></div>').join('')+
+  '</div><h3>'+p.t+'</h3><p>'+p.p+'</p></article>').join('');
+ pagerState();
+}
+document.getElementById('shelf2').addEventListener('click',e=>{const b=e.target.closest('[data-fam]');if(b){fam=FAM[+b.dataset.fam];calc();document.querySelector('.calc').scrollIntoView({block:'center'});}});
+
+/* ── חישוב (17)–(21) ── */
+const amount=document.getElementById('amount'),bd=document.getElementById('bd');
+function calc(){
+ document.getElementById('famName').textContent=fam.n+' · '+fam.kids+' ילדים';
+ const av=document.getElementById('famAv');av.textContent=fam.i;av.style.background='var(--c'+fam.c+'-soft)';av.style.color='var(--c'+fam.c+')';
+ const RATE=6000,base=RATE*fam.kids,bus=fam.kids*900,books=fam.kids*225,paid=Math.round(base*0.45);
+ const disc=Math.round(base*(pre?0.21:0.15));
+ const rows=[['שכר לימוד · '+fam.kids+' ילדים × '+money(RATE),base],['הסעות',bus],['ספרים וציוד',books],
+  ['הנחת אח נוסף'+(pre?' + תשלום מראש · 21%':' · 15%'),-disc],['שולם עד היום',-paid]];
+ const tot=rows.reduce((a,r)=>a+r[1],0);
+ bd.innerHTML=rows.map(r=>'<div'+(r[1]<0?' class="minus"':'')+'><span>'+r[0]+'</span><span class="num">'+bdi((r[1]<0?'−':'')+money(Math.abs(r[1])))+'</span></div>').join('')+
+  '<div class="tot"><span>נותר לתשלום</span><span class="num">'+bdi(money(tot))+'</span></div>';
+ if(document.activeElement!==amount) amount.value=Number(tot).toLocaleString('he-IL');
+ fit();
+}
+document.getElementById('rateBtn').onclick=e=>{const open=bd.hidden;bd.hidden=!open;e.currentTarget.setAttribute('aria-expanded',String(open));};
+document.getElementById('preBtn').onclick=e=>{pre=!pre;e.target.setAttribute('aria-pressed',String(pre));
+ e.target.textContent=pre?'ההנחה המוקדמת פעילה · בטל':'ההנחה עולה ל-6%';bd.hidden=false;document.getElementById('rateBtn').setAttribute('aria-expanded','true');calc();};
+document.getElementById('changeFam').onclick=()=>{q.focus();q.value='משפחת';search();};
+const fit=()=>{amount.style.width=Math.max(4,amount.value.length+0.5)+'ch';};
+amount.addEventListener('input',()=>{const d=amount.value.replace(/[^\d]/g,'');amount.value=d?Number(d).toLocaleString('he-IL'):'';fit();});
+amount.addEventListener('blur',()=>{if(!amount.value)calc();});
+
+/* ── דפדוף (25) — כיוון נכון ב-RTL + כיבוי בקצוות ── */
+const prods=document.getElementById('prods');
+const step=()=>Math.round(prods.clientWidth*0.8);
+function pagerState(){
+ const max=prods.scrollWidth-prods.clientWidth;
+ const at=Math.abs(prods.scrollLeft);
+ document.getElementById('prev').disabled=at<=1;
+ document.getElementById('next').disabled=at>=max-1||max<=1;
+}
+document.getElementById('next').onclick=()=>{prods.scrollBy({left:-step()});};
+document.getElementById('prev').onclick=()=>{prods.scrollBy({left:step()});};
+prods.addEventListener('scroll',pagerState,{passive:true});
+addEventListener('resize',pagerState);
+
+document.getElementById('pins').addEventListener('change',e=>document.body.classList.toggle('pins',e.target.checked));
+render();calc();
+</script>
+</body>
+</html>
