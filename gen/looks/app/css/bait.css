@@ -1,0 +1,66 @@
+.wrap{max-width:1240px;margin-inline:auto;padding:var(--s4) var(--s4) var(--s7)}
+.top{display:flex;align-items:center;gap:var(--s4);flex-wrap:wrap;margin-bottom:var(--s5)}
+.mark{font:400 26px/1 'Suez One',Heebo,serif;letter-spacing:-.5px}
+.top .when{font-size:13.5px;color:var(--mut);flex:1;min-width:140px}
+.top .when b{color:var(--ink);font-weight:600}
+
+.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s3)}
+.tile{grid-column:span 3;background:var(--card);border:1px solid var(--hair);border-radius:var(--r);
+ padding:var(--s4);text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:var(--s2);min-height:132px}
+.tile:hover{border-color:var(--acc)}
+.tile .cap{font-size:12.5px;color:var(--mut);display:flex;align-items:center;gap:6px}
+.tile .big{font:800 30px/1 Heebo;font-variant-numeric:tabular-nums}
+.tile .sub{font-size:12.5px;color:var(--mut);margin-top:auto}
+.w6{grid-column:span 6}.w4{grid-column:span 4}.w5{grid-column:span 5}.w8{grid-column:span 8}
+.h2x{min-height:288px}
+
+/* אריח-הדופק: ציר-יום אנכי */
+.pulse{gap:var(--s3)}
+.pulse h2{font-size:17px}
+.pulse ol{display:grid;gap:2px;margin-top:var(--s1)}
+.pulse li{display:grid;grid-template-columns:52px 12px minmax(0,1fr);align-items:center;gap:var(--s3);
+ padding:9px 0;border-block-end:1px solid var(--hair);font-size:14px}
+.pulse li:last-child{border-block-end:0}
+.pulse time{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--raise)}
+.pulse .now .dot{background:var(--acc);box-shadow:0 0 0 4px var(--acc-soft)}
+.pulse .now{font-weight:700}
+.pulse .ok .dot{background:var(--ok)}
+.pulse .now time{color:var(--acc);font-weight:700}
+
+.ring{display:grid;place-items:center;position:relative}
+.ring .mid{position:absolute;text-align:center}
+.ring .mid b{font:800 22px Heebo;font-variant-numeric:tabular-nums;display:block}
+.ring .mid span{font-size:11.5px;color:var(--mut)}
+
+.bars{display:flex;align-items:flex-end;gap:3px;height:56px;margin-top:auto}
+.bars i{flex:1;background:var(--acc-soft);border-radius:3px 3px 0 0;position:relative}
+.bars i.low{background:var(--err-soft)}
+.bars i b{position:absolute;inset-inline:0;bottom:calc(100% + 3px);text-align:center;font:700 9.5px Heebo;color:var(--mut)}
+
+.faces{display:flex;margin-top:auto}
+.faces span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:700 11px Heebo;
+ border:2px solid var(--card);margin-inline-start:-8px}
+.faces span:first-child{margin-inline-start:0}
+
+.alerts{gap:0}
+.alerts li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:var(--s3);align-items:center;
+ padding:10px 0;border-block-end:1px solid var(--hair);font-size:13.5px}
+.alerts li:last-child{border-block-end:0}
+.alerts .sev{width:8px;height:8px;border-radius:50%}
+.alerts .s1{background:var(--err)}.alerts .s2{background:var(--warn)}.alerts .s3{background:var(--faint)}
+.alerts a{color:var(--acc);font-size:12.5px;text-decoration:none;white-space:nowrap}
+.alerts a:hover{text-decoration:underline}
+
+.grid12{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:var(--s2)}
+.grid12 a{display:flex;flex-direction:column;gap:2px;padding:11px var(--s3);border-radius:var(--rs);
+ background:var(--sunk);text-decoration:none;color:inherit;font-size:13.5px;font-weight:600}
+.grid12 a:hover{background:var(--acc-soft);color:var(--acc)}
+.grid12 a span{font-size:11.5px;font-weight:400;color:var(--mut)}
+.grid12 a:hover span{color:inherit}
+
+footer.foot{margin-top:var(--s6);font-size:12.5px;color:var(--mut);display:flex;gap:var(--s3);flex-wrap:wrap}
+
+@media(max-width:1000px){.tile{grid-column:span 6}.w8,.w6,.w5,.w4{grid-column:span 6}}
+@media(max-width:620px){.tile,.w8,.w6,.w5,.w4{grid-column:1/-1}.h2x{min-height:0}}
+@media print{.bento{display:block}.tile{break-inside:avoid;margin-bottom:8px}}

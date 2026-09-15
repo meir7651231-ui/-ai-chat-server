@@ -1,0 +1,37 @@
+.hd{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;padding:var(--s4);max-width:1100px;margin-inline:auto}
+.hd h1{font-size:20px}.hd .sp{flex:1}
+.pad{max-width:1100px;margin-inline:auto;padding:0 var(--s4) var(--s7)}
+
+.picker{display:flex;gap:var(--s2);overflow-x:auto;padding-bottom:var(--s3)}
+.picker button,.picker a{flex:none;border:1px solid var(--hair);background:var(--card);border-radius:999px;
+ padding:8px 15px;font-size:13.5px;min-height:40px;display:flex;align-items:center;gap:7px}
+.picker button i,.picker a i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.picker button[aria-pressed=true],.picker a[aria-pressed=true]{border-color:var(--ink);font-weight:700}
+.picker button.noDriver,.picker a.noDriver{border-style:dashed}
+
+.linehead{display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;margin:var(--s4) 0 var(--s2)}
+.linehead h2{font-size:19px}
+.linehead .drv{font-size:13px;color:var(--mut)}
+.linehead .alert{font-size:12.5px;font-weight:700;color:var(--err);background:var(--err-soft);border-radius:999px;padding:3px 11px}
+
+.map{background:var(--card);border:1px solid var(--hair);border-radius:var(--r);padding:var(--s5) var(--s4);overflow-x:auto}
+.map svg{display:block;min-width:560px;width:100%;height:auto}
+.map text{font:600 12px Heebo;fill:var(--ink)}
+.map text.t2{font:400 11px Heebo;fill:var(--mut)}
+.map text.t3{font:700 10.5px Heebo}
+.riders{display:flex;gap:var(--s4);flex-wrap:wrap;margin-top:var(--s4);font-size:13px;color:var(--mut)}
+.riders b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+.calls{margin-top:var(--s6)}
+.calls h2{font-size:17px;margin-bottom:var(--s1)}
+.calls p.s{font-size:13px;color:var(--mut);margin-bottom:var(--s3)}
+.calls li{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:var(--s3);align-items:center;
+ padding:var(--s3) 0;border-block-end:1px solid var(--hair);font-size:13.5px}
+.calls .sev{width:9px;height:9px;border-radius:50%;background:var(--faint)}
+.calls .d1 .sev{background:var(--err)}
+.calls .d2 .sev{background:var(--warn)}
+.calls .age{font-size:12px;color:var(--mut);white-space:nowrap}
+.calls .own{font-size:12px;white-space:nowrap}
+.calls .own.none{color:var(--err)}
+
+@media print{.picker,.nav{display:none!important}.map{break-inside:avoid}}
