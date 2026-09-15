@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>שלושה עשר מסכים</title>
+<meta name="description" content="שלושה עשר רכיבים שהועתקו במדידה מאתרים חיים, והותאמו למוסד.">
+<style>
+/* אין קישור לגופן — הממצא מוויקיפדיה העברית, מיושם. */
+*{box-sizing:border-box}html,body{overflow-x:hidden}
+:root{
+ --bg:#fbfbfa;--pane:#ffffff;--ink:#1b1c1e;--mut:#5f6368;--hair:#e3e3e0;
+ --acc:#1f5f3f;--warn:#8a4b1f;--col:1120px}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#121314;--pane:#1a1c1e;--ink:#e9eaec;--mut:#a2a6ad;--hair:#2c2f33;
+ --acc:#6cc394;--warn:#e0a26a}}
+:root[data-theme=dark]{
+ --bg:#121314;--pane:#1a1c1e;--ink:#e9eaec;--mut:#a2a6ad;--hair:#2c2f33;
+ --acc:#6cc394;--warn:#e0a26a}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:400 16px/25px system-ui,sans-serif}
+h1,h2,h3{margin:0}p{margin:0}bdi{unicode-bidi:isolate}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:6px}
+
+.wrap{max-width:var(--col);margin:0 auto;padding:40px 22px 80px}
+h1{font:600 34px/44px system-ui,sans-serif}
+.lede{color:var(--mut);margin-top:10px;max-width:70ch}
+.tot{display:flex;gap:26px;flex-wrap:wrap;margin:22px 0 0;padding:16px 0;
+ border-block:1px solid var(--hair)}
+.tot div b{display:block;font:600 24px/30px system-ui,sans-serif;
+ font-variant-numeric:tabular-nums}
+.tot div span{color:var(--mut);font-size:14px}
+.ok{color:var(--acc)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
+ gap:16px;margin-top:26px}
+.card{background:var(--pane);border:1px solid var(--hair);border-radius:10px;
+ padding:16px 18px 15px;display:flex;flex-direction:column;gap:9px}
+.card:hover{border-color:var(--acc)}
+.hd{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.hd b{font:600 17px/24px system-ui,sans-serif}
+.hd .src{color:var(--mut);font-size:13.5px;margin-inline-start:auto;white-space:nowrap}
+.comp{color:var(--mut);font-size:14px;line-height:21px}
+ul{margin:0;padding:0;list-style:none;font-size:13.5px;line-height:20px}
+ul li{padding-inline-start:13px;position:relative;color:var(--mut)}
+ul li:before{content:"";position:absolute;inset-inline-start:0;top:8px;
+ width:5px;height:5px;border-radius:50%;background:var(--hair)}
+ul.dev li:before{background:var(--warn)}
+ul.dev li{color:var(--ink)}
+.ft{margin-top:auto;padding-top:9px;border-top:1px solid var(--hair);
+ display:flex;justify-content:space-between;align-items:baseline;
+ font-size:13px;color:var(--mut)}
+.ft .go{color:var(--acc);font-weight:600}
+
+.note{margin-top:34px;padding-top:20px;border-top:1px solid var(--hair);
+ color:var(--mut);font-size:14.5px;line-height:23px;max-width:78ch}
+.note b{color:var(--ink)}
+.note p+p{margin-top:12px}
+@media(max-width:560px){h1{font:600 26px/34px system-ui,sans-serif}}
+</style></head><body>
+<div class="wrap">
+
+<h1>שלושה עשר מסכים</h1>
+<p class="lede">כל אחד מהם לקח רכיב אחד מאתר חי אחד, <b>במדידה ולא בהערכה</b>, והתאים אותו למוסד. כל מספר בעמודים נגזר מן המחסן; כל סטייה מן המקור מסומנת.</p>
+
+<div class="tot">
+ <div><b>13</b><span>מסכים</span></div>
+ <div><b>13</b><span>אתרים שנמדדו</span></div>
+ <div><b class="ok">0</b><span>כשלי ניגודיות · שתי ערכות</span></div>
+ <div><b class="ok">0</b><span>גלישה ב-360/390/768</span></div>
+ <div><b class="ok">0</b><span>שגיאות קונסולה</span></div>
+ <div><b>45</b><span>עמודים נסרקו · 26 נטענו</span></div>
+</div>
+
+<div class="grid">
+<a class="card" href="search/search.html">
+ <div class="hd"><b>חיפוש משפחות</b><span class="src"><bdi>Airbnb</bdi></span></div>
+ <p class="comp">שורת חיפוש מפולחת</p>
+ <ul><li>מוט 66 · רדיוס 100</li><li>מקטע <bdi dir="ltr">r32</bdi> · כפתור 48</li><li>הסרגל כולו מאפיר כשמקטע פעיל</li></ul>
+ <ul class="dev"><li>נלקחה שורת החיפוש בלבד — רשת הכרטיסים הוסרה</li></ul>
+ <p class="ft"><span><bdi dir="ltr">search.html</bdi> · <bdi>21KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+<a class="card" href="buybox/buybox.html">
+ <div class="hd"><b>תיק משפחה</b><span class="src"><bdi>Amazon</bdi></span></div>
+ <p class="comp">קופסת ההחלטה</p>
+ <ul><li>מחיר <bdi dir="ltr">28/30</bdi> + אגורות 13</li><li>כפתורים <bdi dir="ltr">r100</bdi> בגובה 32</li><li><bdi dir="ltr">#ffd814</bdi> · <bdi dir="ltr">#ffa41c</bdi></li></ul>
+ <ul class="dev"><li>תג ההנחה <bdi dir="ltr">#b12704</bdi> אינו מתבהר בכהה — נושא טקסט לבן</li></ul>
+ <p class="ft"><span><bdi dir="ltr">buybox.html</bdi> · <bdi>12KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+<a class="card" href="nochah/nochah.html">
+ <div class="hd"><b>בית המדרש עכשיו</b><span class="src"><bdi>Twitch</bdi></span></div>
+ <p class="comp">פס נוכחות</p>
+ <ul><li>שורה 45 · צמודות, אפס רווח</li><li>אווטאר 30 · נקודה <bdi dir="ltr">#eb0400</bdi> בקוטר 8</li><li>מכווץ ל-60</li></ul>
+ <ul class="dev"><li>שלוש קבוצות במקום שתיים — למוסד יש אחריות משותפת</li></ul>
+ <p class="ft"><span><bdi dir="ltr">nochah.html</bdi> · <bdi>25KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+<a class="card" href="vaada/vaada.html">
+ <div class="hd"><b>ועדת הלוואות</b><span class="src"><bdi>Stack Overflow</bdi></span></div>
+ <p class="comp">תעלת פסיקה</p>
+ <ul><li>תעלה 57 נעולה</li><li>✓ <bdi dir="ltr">36×36</bdi> · <bdi dir="ltr">#18864b</bdi></li><li>גוף משתנה: <bdi dir="ltr">121/121</bdi>/<bdi dir="ltr">121/159</bdi></li></ul>
+ <ul class="dev"><li>חצי ההצבעה הוסרו — אין קהל, ואין מצביעים על בקשה</li></ul>
+ <p class="ft"><span><bdi dir="ltr">vaada.html</bdi> · <bdi>17KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+<a class="card" href="hechzer/hechzer.html">
+ <div class="hd"><b>החזר כספי</b><span class="src"><bdi>GOV.UK</bdi></span></div>
+ <p class="comp">שחזור משגיאה</p>
+ <ul><li>סיכום גבול <bdi dir="ltr">5px</bdi> <bdi dir="ltr">#ca3535</bdi></li><li>מיקוד צהוב <bdi dir="ltr">#ffdd00</bdi> אומת חי</li><li>אפס רדיוס בכל 9 הרכיבים</li></ul>
+ <ul class="dev"><li>שלושת הכללים הם של האפיון, לא שלי</li></ul>
+ <p class="ft"><span><bdi dir="ltr">hechzer.html</bdi> · <bdi>12KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+<a class="card" href="erech/erech.html">
+ <div class="hd"><b>תיק משפחה כערך</b><span class="src"><bdi>ויקיפדיה עברית</bdi></span></div>
+ <p class="comp">ערך ותיבת מידע</p>
+ <ul><li>גוף <bdi dir="ltr">16/26</bdi> · גופן מערכת</li><li>תיבה 304 · <bdi dir="ltr">#f9f9f9</bdi></li><li>14 הפניות · 7 מקורות</li></ul>
+ <ul class="dev"><li>הפסקה נקצצה ל-660: במקור 93 תווים בשורה, מעל טווח הקריאה</li></ul>
+ <p class="ft"><span><bdi dir="ltr">erech.html</bdi> · <bdi>12KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+<a class="card" href="sulam/sulam.html">
+ <div class="hd"><b>עץ האחריות</b><span class="src"><bdi>WikiTree</bdi></span></div>
+ <p class="comp">סולם דורות</p>
+ <ul><li>כרטיס 237 · <bdi dir="ltr">r6</bdi></li><li>רוחב יורד 290→237→210→196→178</li><li>שורות 4→2→1→1→1</li></ul>
+ <ul class="dev"><li>הגוון מסמן תחום ולא מין</li><li>44 משבצות מיושרות שורה-מול-שורה, 0 סטיות</li></ul>
+ <p class="ft"><span><bdi dir="ltr">sulam.html</bdi> · <bdi>23KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+<a class="card" href="tavla/tavla.html">
+ <div class="hd"><b>אנשים · 912 רשומות</b><span class="src"><bdi>Atlassian</bdi></span></div>
+ <p class="comp">טבלה דינמית</p>
+ <ul><li>שורה 48 · כותרת 653 <bdi dir="ltr">12/16</bdi></li><li>אפס קו בין שורות</li><li>טעינה: 20% שקיפות</li></ul>
+ <ul class="dev"><li>מחיקה אסורה באפיון ⇒ סימון «עזב». המיקוד אחריו אומת</li></ul>
+ <p class="ft"><span><bdi dir="ltr">tavla.html</bdi> · <bdi>97KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+<a class="card" href="grafa/grafa.html">
+ <div class="hd"><b>תקציב מול ביצוע</b><span class="src"><bdi>Our World in Data</bdi></span></div>
+ <p class="comp">גרף קו</p>
+ <ul><li>רשת <bdi dir="ltr">#dddddd</bdi> מקווקו 4,4</li><li>קו אפס <bdi dir="ltr">#999999</bdi> מלא</li><li>6 הילות מול 6 סדרות</li></ul>
+ <ul class="dev"><li>צבע התווית מחושב עד 4.5 — במקור לא נמדד</li></ul>
+ <p class="ft"><span><bdi dir="ltr">grafa.html</bdi> · <bdi>18KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+<a class="card" href="agora/agora.html">
+ <div class="hd"><b>אובייקט החיוב</b><span class="src"><bdi>Stripe</bdi></span></div>
+ <p class="comp">תיעוד API</p>
+ <ul><li>שם שדה Source Code Pro 700 <bdi dir="ltr">14/20</bdi></li><li>כל 13 הערכים שלמים</li><li>אגורות · נקודות בסיס</li></ul>
+ <ul class="dev"><li>הסחיפה נמדדה 0 — הרווח הוא בפריסה: 820 ₪ מול 1.80 ₪</li></ul>
+ <p class="ft"><span><bdi dir="ltr">agora.html</bdi> · <bdi>16KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+<a class="card" href="tor/tor.html">
+ <div class="hd"><b>תיאום קוויטל</b><span class="src"><bdi>Cal.com</bdi></span></div>
+ <p class="comp">בורר יום ושעה</p>
+ <ul><li>תא <bdi dir="ltr">59×59</bdi> · <bdi dir="ltr">r8</bdi> · רווח 4</li><li>משבצת 36 · <bdi dir="ltr">r10</bdi> · רווח 8</li><li>פנוי 500 · סגור 300</li></ul>
+ <ul class="dev"><li><bdi dir="ltr">12h</bdi>/<bdi dir="ltr">24h</bdi> הוחלף בעברי/לועזי</li><li>יום השבוע נגזר מהמחסן, לא מהנחה</li></ul>
+ <p class="ft"><span><bdi dir="ltr">tor.html</bdi> · <bdi>14KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+<a class="card" href="diyun/diyun.html">
+ <div class="hd"><b>דיון ועדת הנחות</b><span class="src"><bdi>Hacker News</bdi></span></div>
+ <p class="comp">שרשור תגובות</p>
+ <ul><li>הזחה 40 בכל רמה</li><li>אפס מסגרות ורקעים</li><li>37 קישורי ניווט, כולם תקפים</li></ul>
+ <ul class="dev"><li><bdi dir="ltr">12px</bdi>⇒<bdi dir="ltr">15/23</bdi> · כפתור 12⇒28</li><li>ההצנעה נגזרת מסמכות, לא מהצבעות</li></ul>
+ <p class="ft"><span><bdi dir="ltr">diyun.html</bdi> · <bdi>22KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+<a class="card" href="sefer/sefer.html">
+ <div class="hd"><b>ספר האפיון</b><span class="src"><bdi>ספריא</bdi></span></div>
+ <p class="comp">מקור ופירוש</p>
+ <ul><li><bdi dir="ltr">26.84/42.944</bdi> מול <bdi dir="ltr">22/35.2</bdi></li><li>יחס 1.22 בגודל ובשורה</li><li>אותה עמודה, רוחב 700</li></ul>
+ <ul class="dev"><li>לא הצלחתי לצלם את המקור נקי — שלושה ניסיונות</li></ul>
+ <p class="ft"><span><bdi dir="ltr">sefer.html</bdi> · <bdi>177KB</bdi></span><span class="go">פתיחה ←</span></p>
+</a>
+</div>
+
+<div class="note">
+ <p><b>איך זה נבנה.</b> לכל אתר: טעינה מלאה בדפדפן אמיתי, פסילה אוטומטית של עמוד שהוא חומת-הרשמה או DOM ריק, מדידה של הרכיב מה-DOM החי, בנייה, ואז ביקורת שמשווה את התוצאה למספרים שנמדדו. הנקודות הכתומות בכל כרטיס הן <b>סטיות מכוונות</b> — מקום שבו לא העתקתי, ומדוע.</p>
+ <p><b>מה שלא הצליח.</b> כל זכות ו-gov.il חסומים מאחורי Cloudflare. GitHub, eBay, Zillow, OpenTable, Archive.org ו-OpenStreetMap לא נטענו. את פס-הזמן של יוטיוב לא ניתן לצלם — אין קודקים לווידאו בדפדפן הזה. את ספריא לא הצלחתי לצלם נקי בשלושה ניסיונות, ורק המדידה ניצלה. עמודי ההזמנה של Calendly החזירו 404, ולכן נמדד Cal.com במקומו.</p>
+ <p><b>שלושה ממצאים על עברית.</b> האתר היחיד בסבב שנבנה לעברית — ויקיפדיה — הוא היחיד שאינו טוען גופן כלל. ספריא מציב עברית <b>גדולה ב-22%</b> מלטינית, ובדיוק אותו יחס ברווח-השורה. ובציר-זמן בגרף העברית אינה שונה: הזמן זורם שמאל→ימין, כמו בכל העיתונות הכלכלית בישראל.</p>
+ <p><b>וממצא אחד על המערכת עצמה.</b> האפיון מחזיק <b>317 איסורים</b>. הקוד חוסם <b>4</b>, מציג <b>10</b>, ו-<b>303</b> קיימים בנייר בלבד. הרשימה המלאה, מסומנת שורה-שורה, נמצאת ב«ספר האפיון».</p>
+</div>
+
+</div></body></html>
