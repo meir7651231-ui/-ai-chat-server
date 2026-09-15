@@ -1,0 +1,2662 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ספר האפיון</title>
+<meta name="description" content="האפיון כמקור והמערכת כפירוש, בטיפוגרפיה מדודה מספריא.">
+<style>
+/* אין קישור לגופן — Cardo של המקור נטול אותיות עבריות, והעברית שם
+   נופלת ממילא לגופן-המערכת. */
+*{box-sizing:border-box}html,body{overflow-x:hidden}
+:root{
+ /* ===== נמדד מ-sefaria.org.il/Berakhot.2a?lang=bi ===== */
+ --bg:#ffffff;--src:#000000;--com:#666666;--hair:#e0ddd5;--mut:#726c60;
+ --ok:#1c6b3a;--mid:#8a5a00;--no:#8c2f2f;
+ /* היחס 1.22 — נמדד גם בגודל וגם ברווח-השורה, ולא במקרה */
+ --srcFs:26.84px;--srcLh:42.944px;
+ --comFs:22px;--comLh:35.2px;
+ --col:700px}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#12110f;--src:#f2efe8;--com:#a8a296;--hair:#2e2b26;--mut:#8b857a;
+ --ok:#6fc48c;--mid:#d8a54a;--no:#e88b8b}}
+:root[data-theme=dark]{
+ --bg:#12110f;--src:#f2efe8;--com:#a8a296;--hair:#2e2b26;--mut:#8b857a;
+ --ok:#6fc48c;--mid:#d8a54a;--no:#e88b8b}
+body{margin:0;background:var(--bg);color:var(--src);
+ font:400 16px/24px system-ui,sans-serif}
+h1,h2,h3{margin:0}p{margin:0}bdi{unicode-bidi:isolate}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--com);outline-offset:3px}
+
+.top{border-bottom:1px solid var(--hair);padding:14px 0;position:sticky;
+ top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+.top .in{max-width:1020px;margin:0 auto;padding:0 20px;display:flex;
+ align-items:center;gap:14px;flex-wrap:wrap}
+.top b{font:600 17px/24px system-ui,sans-serif}
+.top .c{color:var(--mut);font-size:14px}
+select{margin-inline-start:auto;font:400 15px/1 system-ui,sans-serif;
+ border:1px solid var(--hair);border-radius:6px;padding:7px 10px;
+ background:var(--bg);color:var(--src)}
+
+.wrap{max-width:1020px;margin:0 auto;padding:26px 20px 80px}
+h1{font:400 30px/40px system-ui,sans-serif;text-align:center}
+.lede{color:var(--com);font-size:16px;line-height:25px;text-align:center;
+ margin:10px auto 0;max-width:62ch}
+.tot{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:16px;
+ padding-bottom:18px;border-bottom:1px solid var(--hair);color:var(--mut);font-size:14px}
+.tot b{color:var(--src);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* ---------- העמודה. מקור ופירוש באותו רוחב, זה מתחת לזה. ---------- */
+.dept{display:none}.dept.on{display:block}
+h2{font:400 24px/34px system-ui,sans-serif;text-align:center;margin:30px 0 4px}
+.ent{max-width:var(--col);margin:26px auto 0}
+h3{font:600 17px/26px system-ui,sans-serif;color:var(--mut);
+ padding-bottom:5px;border-bottom:1px solid var(--hair)}
+.seg{margin-top:20px}
+/* המקור: גדול, שחור, וראשון */
+.src{font:400 var(--srcFs)/var(--srcLh) system-ui,sans-serif;color:var(--src)}
+.src.forb{position:relative;padding-inline-start:0}
+.mk{position:absolute;inset-inline-end:calc(100% + 14px);top:10px;
+ font:400 14px/1 system-ui,sans-serif;color:var(--mut);
+ font-variant-numeric:tabular-nums}
+/* הפירוש: קטן ב-22%, אפור, ומתחתיו — לא לצדו */
+.com{font:400 var(--comFs)/var(--comLh) system-ui,sans-serif;color:var(--com);margin-top:2px}
+.com b{color:var(--src);font-weight:600}
+.st{display:inline-block;font:600 14px/20px system-ui,sans-serif;
+ border-radius:4px;padding:1px 8px;margin-inline-end:8px;vertical-align:1px}
+.st-ok{color:var(--ok);border:1px solid var(--ok)}
+.st-mid{color:var(--mid);border:1px solid var(--mid)}
+.st-no{color:var(--no);border:1px solid var(--no)}
+
+.say{max-width:var(--col);margin:44px auto 0;padding-top:18px;
+ border-top:1px solid var(--hair);color:var(--com);font-size:15px;line-height:24px}
+.say b{color:var(--src)}
+@media(max-width:760px){
+ :root{--srcFs:21px;--srcLh:33.6px;--comFs:17.2px;--comLh:27.5px}
+ .mk{position:static;display:block;margin-bottom:2px}}
+</style></head><body>
+
+<div class="top"><div class="in">
+ <b>ספר האפיון</b>
+ <span class="c">181 ישויות · 1232 שדות · 317 איסורים</span>
+ <label class="hid" for="pick">מחלקה</label>
+ <select id="pick"><option value="0">אנשים — 4 ישויות</option><option value="1">חינוך — 21 ישויות</option><option value="2">צוות — 8 ישויות</option><option value="3">גבייה — 16 ישויות</option><option value="4">תרומות — 20 ישויות</option><option value="5">כספים — 19 ישויות</option><option value="6">בית המדרש — 20 ישויות</option><option value="7">החצר — 11 ישויות</option><option value="8">חסד — 12 ישויות</option><option value="9">תפעול — 19 ישויות</option><option value="10">שידוכים — 15 ישויות</option><option value="11">תקשורת — 16 ישויות</option></select>
+</div></div>
+
+<div class="wrap">
+ <h1>המילים שלך, ומה המערכת עושה איתן</h1>
+ <p class="lede">כל שורה שחורה היא ציטוט מדויק מן האפיון שכתבת. כל שורה אפורה מתחתיה נגזרה מן הקוד — לא מדעה שלי.</p>
+ <p class="tot">
+  <span>ישויות <b>181</b></span>
+  <span>שדות <b>1232</b>, מהם חובה <b>181</b></span>
+  <span>שלבים <b>533</b></span>
+  <span>איסורים <b>317</b></span>
+  <span>מהם חוסמים בקוד <b>4</b></span>
+  <span>מוצגים בלבד <b>10</b></span>
+  <span>רק באפיון <b>303</b></span>
+ </p>
+
+ <div class="dept on" data-i="0">
+  <h2>אנשים</h2>
+  <section class="ent" id="e-אנשים-אדם">
+ <h3>אדם</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 14 שדות.</p></div>
+</section>
+  <section class="ent" id="e-אנשים-משפחה">
+ <h3>משפחה</h3>
+ <div class="seg">
+   <p class="src">רישום ילד ראשון, או הצטרפות לקהילה; משפחה חדשה נבדקת מול כפילויות לפני יצירה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>14</b> שדות, מהם <b>1</b> חובה (שם משפחה), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקה (רק «עזבה» עם תאריך)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>מיזוג שתי משפחות בלי אישור ידני</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מצב סוציו-אקונומי גלוי למי שאינו ועדת הנחות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-אנשים-קשר משפחתי">
+ <h3>קשר משפחתי</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 3 שדות.</p></div>
+</section>
+  <section class="ent" id="e-אנשים-תפקיד אדם">
+ <h3>תפקיד אדם</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+ </div>
+ <div class="dept" data-i="1">
+  <h2>חינוך</h2>
+  <section class="ent" id="e-חינוך-מוסד">
+ <h3>מוסד</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 9 שדות.</p></div>
+</section>
+  <section class="ent" id="e-חינוך-כיתה">
+ <h3>כיתה</h3>
+ <div class="seg">
+   <p class="src">בתחילת אלול המערכת נבנית מחדש: מי מלמד מה, איפה, מתי — ההתנגשויות צריכות לצעוק לפני שהשנה מתחילה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (מוסד), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>שני שיעורים באותו חדר באותה שעה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>מלמד בשני מקומות באותה שעה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>כיתה מעל המקסימום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חינוך-תלמיד">
+ <h3>תלמיד</h3>
+ <div class="seg">
+   <p class="src">משפחה מגישה טופס רישום (רוב הרישומים באדר–ניסן); מועמד נפתח באותו יום</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>12</b> שדות, מהם <b>1</b> חובה (אדם), ומסלול של <b>6</b> שלבים: מועמד ← ראיון ← ועדת קבלה ← התקבל ← פעיל ← סיים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקה (רק «עזב» עם תאריך)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>חוב או הנחה גלויים במסך התלמיד למלמד</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>שיבוץ לכיתה שלא מתאימה לגיל ולמין בלי אישור מנהל</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>פרטי בריאות למי שאינו אחות או מנהל</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חינוך-נוכחות">
+ <h3>נוכחות</h3>
+ <div class="seg">
+   <p class="src">תחילת כל סדר: המלמד מסמן בהקשה מהמכשיר הכיתתי או בדף שנסרק; בלי מכשיר — המזכירות מקלידה עד 10:00</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>8</b> שדות, מהם <b>1</b> חובה (תלמיד), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקה (תיקון = רשומה חדשה עם הערה)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>דיווח רטרואקטיבי מעבר ל-3 ימים בלי מנהל</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>חיסור גלוי לתלמידים אחרים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חינוך-מבחן">
+ <h3>מבחן</h3>
+ <div class="seg">
+   <p class="src">המלמד מסיים לבדוק בליל שישי — הציונים נכנסים מהטלפון, ההורים רואים רק את הילד שלהם</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>15</b> שדות, מהם <b>1</b> חובה (כיתה), ומסלול של <b>6</b> שלבים: מתוכנן ← הודעה ← התקיים ← נבדק ← ציונים ← בתעודה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>פרסום ציון של תלמיד לתלמיד אחר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שינוי ציון אחרי תעודה בלי אישור מנהל</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מבחן בלי הודעה 3 ימים מראש</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>מבחן ביום שאחרי חג</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חינוך-ציון">
+ <h3>ציון</h3>
+ <div class="seg">
+   <p class="src">המלמד מסיים לבדוק בליל שישי — הציונים נכנסים מהטלפון, ההורים רואים רק את הילד שלהם</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (מבחן), ומסלול של <b>6</b> שלבים: מתוכנן ← הודעה ← התקיים ← נבדק ← ציונים ← בתעודה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>פרסום ציון של תלמיד לתלמיד אחר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שינוי ציון אחרי תעודה בלי אישור מנהל</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מבחן בלי הודעה 3 ימים מראש</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>מבחן ביום שאחרי חג</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חינוך-תעודה">
+ <h3>תעודה</h3>
+ <div class="seg">
+   <p class="src">המלמד מסיים לבדוק בליל שישי — הציונים נכנסים מהטלפון, ההורים רואים רק את הילד שלהם</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (תלמיד), ומסלול של <b>9</b> שלבים: מתוכנן ← הודעה ← התקיים ← נבדק ← ציונים ← בתעודה ← טיוטה ← אושרה ← נשלחה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>פרסום ציון של תלמיד לתלמיד אחר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שינוי ציון אחרי תעודה בלי אישור מנהל</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מבחן בלי הודעה 3 ימים מראש</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>מבחן ביום שאחרי חג</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חינוך-אירוע חינוכי">
+ <h3>אירוע חינוכי</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-חינוך-אברך">
+ <h3>אברך</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-חינוך-שנת לימודים">
+ <h3>שנת לימודים</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-חינוך-שיעור במערכת">
+ <h3>שיעור במערכת</h3>
+ <div class="seg">
+   <p class="src">בתחילת אלול המערכת נבנית מחדש: מי מלמד מה, איפה, מתי — ההתנגשויות צריכות לצעוק לפני שהשנה מתחילה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (כיתה), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>שני שיעורים באותו חדר באותה שעה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>מלמד בשני מקומות באותה שעה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>כיתה מעל המקסימום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חינוך-מקצוע">
+ <h3>מקצוע</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-חינוך-ספר לימוד">
+ <h3>ספר לימוד</h3>
+ <div class="seg">
+   <p class="src">בחור מבקש גמרא לפני זמן חורף — הספרן סורק ברקוד, מועד-ההחזרה נקבע לסוף הזמן</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (מקצוע), ומסלול של <b>7</b> שלבים: הושאל ← תזכורת ← הוחזר ← אבד ← הוזמן ← חולק ← חויב.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>השאלה שנייה למי שיש לו ספר באיחור</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>השאלת ספר שמצבו הפיזי «לכריכה»</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מחיקת ספר אבד (חוב למשאיל)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חינוך-לימוד">
+ <h3>לימוד</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות.</p></div>
+</section>
+  <section class="ent" id="e-חינוך-אישור הורים">
+ <h3>אישור הורים</h3>
+ <div class="seg">
+   <p class="src">המשגיח רואה משהו בהפסקה — הדיווח נכנס מהטלפון בשתי הקשות, המחנך רואה, ההורה לא רואה עד השיחה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (אירוע חינוכי), ומסלול של <b>5</b> שלבים: דווח ← שיחה ← הורים ← ועדה ← נסגר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>השעיה בלי שיחת הורים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>חשיפת אירוע משמעת למלמד שאינו של הכיתה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>אירוע משמעת בכרטיס-התלמיד אחרי סגירה ללא ציון «נסגר»</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>ילד בסיכון — לא בטופס, גורמי חירום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חינוך-אירוע משמעת">
+ <h3>אירוע משמעת</h3>
+ <div class="seg">
+   <p class="src">המשגיח רואה משהו בהפסקה — הדיווח נכנס מהטלפון בשתי הקשות, המחנך רואה, ההורה לא רואה עד השיחה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (תלמיד), ומסלול של <b>7</b> שלבים: דווח ← שיחה ← הורים ← ועדה ← נסגר ← פתוח ← בטיפול.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>השעיה בלי שיחת הורים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>חשיפת אירוע משמעת למלמד שאינו של הכיתה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>אירוע משמעת בכרטיס-התלמיד אחרי סגירה ללא ציון «נסגר»</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>ילד בסיכון — לא בטופס, גורמי חירום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חינוך-ליווי">
+ <h3>ליווי</h3>
+ <div class="seg">
+   <p class="src">המשגיח רואה משהו בהפסקה — הדיווח נכנס מהטלפון בשתי הקשות, המחנך רואה, ההורה לא רואה עד השיחה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (תלמיד), ומסלול של <b>5</b> שלבים: דווח ← שיחה ← הורים ← ועדה ← נסגר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>השעיה בלי שיחת הורים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>חשיפת אירוע משמעת למלמד שאינו של הכיתה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>אירוע משמעת בכרטיס-התלמיד אחרי סגירה ללא ציון «נסגר»</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>ילד בסיכון — לא בטופס, גורמי חירום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חינוך-תוכנית אישית">
+ <h3>תוכנית אישית</h3>
+ <div class="seg">
+   <p class="src">המשגיח רואה משהו בהפסקה — הדיווח נכנס מהטלפון בשתי הקשות, המחנך רואה, ההורה לא רואה עד השיחה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (תלמיד), ומסלול של <b>7</b> שלבים: דווח ← שיחה ← הורים ← ועדה ← נסגר ← אבחון ← תוכנית.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>השעיה בלי שיחת הורים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>חשיפת אירוע משמעת למלמד שאינו של הכיתה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>אירוע משמעת בכרטיס-התלמיד אחרי סגירה ללא ציון «נסגר»</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>ילד בסיכון — לא בטופס, גורמי חירום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חינוך-נוכחות אברך">
+ <h3>נוכחות אברך</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות.</p></div>
+</section>
+  <section class="ent" id="e-חינוך-סמיכה">
+ <h3>סמיכה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-חינוך-תחרות">
+ <h3>תחרות</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות, 4 שלבים.</p></div>
+</section>
+ </div>
+ <div class="dept" data-i="2">
+  <h2>צוות</h2>
+  <section class="ent" id="e-צוות-עובד">
+ <h3>עובד</h3>
+ <div class="seg">
+   <p class="src">מלמד מודיע בערב שהוא חולה מחר — המזכירות צריכה מחליף לפני 8:00: מי פנוי, מי לימד את הכיתה, מי לא בחופשה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (אדם), ומסלול של <b>8</b> שלבים: מועמד ← ראיון ← נקלט ← פעיל ← שימוע ← סיים ← אישורים ← חוזה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>סיום העסקה בלי שימוע</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שכר מתחת למינימום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מחיקת עובד (ארכיון בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>חשיפת שכר לתפקיד שאינו מנהל/גזבר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-צוות-אישור">
+ <h3>אישור</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-צוות-נוכחות עובד">
+ <h3>נוכחות עובד</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות.</p></div>
+</section>
+  <section class="ent" id="e-צוות-חופשה">
+ <h3>חופשה</h3>
+ <div class="seg">
+   <p class="src">מלמד מודיע בערב שהוא חולה מחר — המזכירות צריכה מחליף לפני 8:00: מי פנוי, מי לימד את הכיתה, מי לא בחופשה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>8</b> שדות, מהם <b>1</b> חובה (עובד), ומסלול של <b>9</b> שלבים: מועמד ← ראיון ← נקלט ← פעיל ← שימוע ← סיים ← בקשה ← אושר ← נדחה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>סיום העסקה בלי שימוע</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שכר מתחת למינימום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מחיקת עובד (ארכיון בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>חשיפת שכר לתפקיד שאינו מנהל/גזבר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-צוות-מחליף">
+ <h3>מחליף</h3>
+ <div class="seg">
+   <p class="src">מלמד מודיע בערב שהוא חולה מחר — המזכירות צריכה מחליף לפני 8:00: מי פנוי, מי לימד את הכיתה, מי לא בחופשה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (כיתה), ומסלול של <b>9</b> שלבים: מועמד ← ראיון ← נקלט ← פעיל ← שימוע ← סיים ← חסר ← שובץ ← שולם.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>סיום העסקה בלי שימוע</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שכר מתחת למינימום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מחיקת עובד (ארכיון בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>חשיפת שכר לתפקיד שאינו מנהל/גזבר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-צוות-ציוד לעובד">
+ <h3>ציוד לעובד</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 3 שדות, 2 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-צוות-הערכה">
+ <h3>הערכה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות.</p></div>
+</section>
+  <section class="ent" id="e-צוות-מתנדב">
+ <h3>מתנדב</h3>
+ <div class="seg">
+   <p class="src">רכז החסד מקבל הודעה «צריך מישהו לחלוקה ביום שישי» — ממיין לפי תחום+זמינות+עומס, שולח וואטסאפ אחד</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>7</b> שדות, מהם <b>1</b> חובה (אדם), ומסלול של <b>5</b> שלבים: נרשם ← ראיון ← פעיל ← בהפסקה ← סיים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>שיבוץ מתנדב בהפסקה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>מתנדב עם קטינים בלי אישור משטרה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>חשיפת טלפון מתנדב למשפחות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+ </div>
+ <div class="dept" data-i="3">
+  <h2>גבייה</h2>
+  <section class="ent" id="e-גבייה-חיוב">
+ <h3>חיוב</h3>
+ <div class="seg">
+   <p class="src">פתיחת שנת לימודים: החיוב מחושב לכל משפחה מהתעריפון וכללי ההנחה, ונשלח לאישור לפני פריסה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>8</b> שדות, מהם <b>1</b> חובה (משפחה), ומסלול של <b>5</b> שלבים: חושב ← אושר ← נפרס ← פעיל ← נסגר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הנחות מצטברות (הגבוהה בלבד)</p>
+   <p class="com"><span class="st st-ok">חוסם</span>נאכף בקוד — 01-store.js בודק את התנאי ישירות ומונע את המעבר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שינוי חיוב רטרואקטיבי בלי רשומת-תיקון</p>
+   <p class="com"><span class="st st-mid">מוצג</span>מוצג למשתמש במסך תחת «מה אסור — מתוך האפיון», אך אין עדיין קוד שחוסם את הפעולה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>יתרה שלילית</p>
+   <p class="com"><span class="st st-mid">מוצג</span>מוצג למשתמש במסך תחת «מה אסור — מתוך האפיון», אך אין עדיין קוד שחוסם את הפעולה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>חיוב לפני הסכם חתום</p>
+   <p class="com"><span class="st st-mid">מוצג</span>מוצג למשתמש במסך תחת «מה אסור — מתוך האפיון», אך אין עדיין קוד שחוסם את הפעולה.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-גבייה-הוראת קבע">
+ <h3>הוראת קבע</h3>
+ <div class="seg">
+   <p class="src">ההורה חותם על טופס הו&quot;ק ברישום; החיוב הראשון בחודש העוקב</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>7</b> שדות, מהם <b>1</b> חובה (משפחה), ומסלול של <b>4</b> שלבים: נחתם ← פעיל ← נכשל ← בוטל.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>חיוב בשבת וחג</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>ניסיון חיוב רביעי ברצף בלי שיחה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מחיקה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-גבייה-תשלום">
+ <h3>תשלום</h3>
+ <div class="seg">
+   <p class="src">הורה משלם במזכירות או בטלפון — הקבלה נשלחת בוואטסאפ תוך דקה, לא «נשלח בסוף החודש»</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>8</b> שדות, מהם <b>1</b> חובה (משפחה), ומסלול של <b>5</b> שלבים: נרשם ← נפרע ← קבלה ← בוטל ← הוחזר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקת תשלום שהופקה עליו קבלה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שינוי סכום אחרי קבלה (רק ביטול+חדש)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>קבלה בידי מזכירות (מנהל/גזבר בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>תשלום בלי «עבור»</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-גבייה-צק">
+ <h3>צק</h3>
+ <div class="seg">
+   <p class="src">הורה מביא צ'קים דחויים לשנה במעטפה, במזכירות, ביום הרישום — קליטה בסריקה, קבלת-קליטה מיד</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (משפחה), ומסלול של <b>9</b> שלבים: התקבל ← מוחזק ← בהפקדה ← הופקד ← נפרע ← חזר ← הוצג שוב ← הוחלף ← הוחזר להורה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שינוי סכום אחרי קליטה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>הפקדה של צ'ק מוחזק</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>הודעת חזרה בשבת</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>עמלת חזרה בלי היתר עסקא</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">6</span>הצגה שנייה בלי שיחה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-גבייה-חוב">
+ <h3>חוב</h3>
+ <div class="seg">
+   <p class="src">צ'ק שחזר, הו&quot;ק שנכשלה, או חיוב שלא שולם 30 יום — החוב נפתח לבד, לא ביד</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>7</b> שדות, מהם <b>1</b> חובה (משפחה), ומסלול של <b>5</b> שלבים: ממתין ← תזכורת ← שיחה ← הסדר ← נסגר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>חוב גלוי למלמד או לכיתה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>מכתב משפטי בלי שיחה קודמת</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מחיקה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-גבייה-בקשת הנחה">
+ <h3>בקשת הנחה</h3>
+ <div class="seg">
+   <p class="src">הורה ניגש למזכירות אחרי מכתב-החיוב השנתי ואומר «אני לא יכול» — הבקשה נפתחת מהשיחה, המסמכים מגיעים בוואטסאפ</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (משפחה), ומסלול של <b>11</b> שלבים: הוגשה ← מסמכים ← ועדה ← אושרה ← נדחתה ← ערעור ← פגה ← הוגש ← נדון ← אושר ← נדחה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הנחה מצטברת (הגבוהה בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>אחוז מעל 100</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>הנחה בלי תוקף</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>אישור-הנחה בידי מזכירות (ועדה בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>חשיפת סיבת-ההנחה להורים אחרים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-גבייה-קבלה">
+ <h3>קבלה</h3>
+ <div class="seg">
+   <p class="src">כל תשלום שנרשם ⇒ קבלה מיד, במספר הרץ הבא</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>8</b> שדות, מהם <b>1</b> חובה (משפחה), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שינוי סכום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>הפקה על ידי מי שאינו גזבר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>מספר רץ עם חור</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-גבייה-תעריפון">
+ <h3>תעריפון</h3>
+ <div class="seg">
+   <p class="src">פתיחת שנת לימודים: החיוב מחושב לכל משפחה מהתעריפון וכללי ההנחה, ונשלח לאישור לפני פריסה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>12</b> שדות, מהם <b>1</b> חובה (מוסד), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הנחות מצטברות (הגבוהה בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שינוי חיוב רטרואקטיבי בלי רשומת-תיקון</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>יתרה שלילית</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>חיוב לפני הסכם חתום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-גבייה-כלל הנחה">
+ <h3>כלל הנחה</h3>
+ <div class="seg">
+   <p class="src">הורה ניגש למזכירות אחרי מכתב-החיוב השנתי ואומר «אני לא יכול» — הבקשה נפתחת מהשיחה, המסמכים מגיעים בוואטסאפ</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>8</b> שדות, מהם <b>1</b> חובה (סוג), ומסלול של <b>7</b> שלבים: הוגשה ← מסמכים ← ועדה ← אושרה ← נדחתה ← ערעור ← פגה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הנחה מצטברת (הגבוהה בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>אחוז מעל 100</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>הנחה בלי תוקף</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>אישור-הנחה בידי מזכירות (ועדה בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>חשיפת סיבת-ההנחה להורים אחרים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-גבייה-מלגה חיצונית">
+ <h3>מלגה חיצונית</h3>
+ <div class="seg">
+   <p class="src">מכתב מהגוף מגיע למזכירות: «חסרים מסמכים» — לא דחייה, שעון. הרשומה עוברת ל«השלמות» עם רשימה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>8</b> שדות, מהם <b>1</b> חובה (משפחה), ומסלול של <b>8</b> שלבים: זכאות ← הוגשה ← השלמות ← אושרה ← נדחתה ← התקבל הכסף ← הובטחה ← התקבלה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הנחה למשפחה על סמך מלגה שטרם אושרה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>מחיקת מלגה שהתקבל בה כסף</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-גבייה-קובץ מסב">
+ <h3>קובץ מסב</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 3 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-גבייה-הסדר חוב">
+ <h3>הסדר חוב</h3>
+ <div class="seg">
+   <p class="src">צ'ק שחזר, הו&quot;ק שנכשלה, או חיוב שלא שולם 30 יום — החוב נפתח לבד, לא ביד</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>6</b> שדות, מהם <b>1</b> חובה (משפחה), ומסלול של <b>5</b> שלבים: הוצע ← נחתם ← בתשלומים ← הושלם ← הופר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>חוב גלוי למלמד או לכיתה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>מכתב משפטי בלי שיחה קודמת</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מחיקה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-גבייה-כלל גבייה">
+ <h3>כלל גבייה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 3 שדות.</p></div>
+</section>
+  <section class="ent" id="e-גבייה-כלל הוראת קבע">
+ <h3>כלל הוראת קבע</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 2 שדות.</p></div>
+</section>
+  <section class="ent" id="e-גבייה-חיוב חד פעמי">
+ <h3>חיוב חד פעמי</h3>
+ <div class="seg">
+   <p class="src">הורה משלם במזכירות או בטלפון — הקבלה נשלחת בוואטסאפ תוך דקה, לא «נשלח בסוף החודש»</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (חייב), ומסלול של <b>7</b> שלבים: נרשם ← נפרע ← קבלה ← בוטל ← הוחזר ← נוצר ← שולם.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקת תשלום שהופקה עליו קבלה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שינוי סכום אחרי קבלה (רק ביטול+חדש)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>קבלה בידי מזכירות (מנהל/גזבר בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>תשלום בלי «עבור»</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-גבייה-החזר כספי">
+ <h3>החזר כספי</h3>
+ <div class="seg">
+   <p class="src">משפחה עזבה באמצע שנה והגזבר צריך להחזיר יחסית — הבקשה נפתחת מכרטיס-המשפחה, לא מטופס</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>7</b> שדות, מהם <b>1</b> חובה (משפחה), ומסלול של <b>5</b> שלבים: בקשה ← אושר ← בוצע ← נדחה ← שולם.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>החזר בלי תשלום מקורי</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>החזר במזומן מעל 1000</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>החזר בידי מי שרשם את התשלום (הפרדת-תפקידים)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+ </div>
+ <div class="dept" data-i="4">
+  <h2>תרומות</h2>
+  <section class="ent" id="e-תרומות-תורם">
+ <h3>תורם</h3>
+ <div class="seg">
+   <p class="src">תורם נולד מפנייה ראשונה (ליד) או מתרומה ראשונה; המגייס פותח כרטיס באותו יום</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>16</b> שדות, מהם <b>1</b> חובה (אדם), ומסלול של <b>6</b> שלבים: ליד ← פנייה ← תרם ← קבוע ← ידיד ← נרדם.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>פנייה למי שסומן «לא לפנות»</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>שליחה בשבת וחג</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>תורם גלוי למלמד</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>שתי הודעות לאותו טלפון בשליחה מרובה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תרומות-תרומה">
+ <h3>תרומה</h3>
+ <div class="seg">
+   <p class="src">תורם מעביר בהעברה בנקאית בלי לומר — הגזבר רואה בדף-הבנק סכום בלי שם; ההתאמה לתורם היא הרגע</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>12</b> שדות, מהם <b>1</b> חובה (תורם), ומסלול של <b>5</b> שלבים: הובטחה ← התקבלה ← קבלה ← תודה ← בדוח השנתי.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקת תרומה שהופקה עליה קבלה</p>
+   <p class="com"><span class="st st-ok">חוסם</span>נאכף בקוד — 21-views-b.js קורא ל־blocked() עם הכלל הזה, והפעולה נעצרת.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שינוי ייעוד אחרי קבלה בלי אישור התורם</p>
+   <p class="com"><span class="st st-mid">מוצג</span>מוצג למשתמש במסך תחת «מה אסור — מתוך האפיון», אך אין עדיין קוד שחוסם את הפעולה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>קבלת §46 בלי מספר-עמותה מאושר</p>
+   <p class="com"><span class="st st-mid">מוצג</span>מוצג למשתמש במסך תחת «מה אסור — מתוך האפיון», אך אין עדיין קוד שחוסם את הפעולה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>פנייה לתורם בשבת/חג</p>
+   <p class="com"><span class="st st-mid">מוצג</span>מוצג למשתמש במסך תחת «מה אסור — מתוך האפיון», אך אין עדיין קוד שחוסם את הפעולה.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תרומות-התחייבות">
+ <h3>התחייבות</h3>
+ <div class="seg">
+   <p class="src">תורם אומר «אני מתחייב» — בדינר, בטלפון, בפרלור; נרשם באותו רגע עם תאריך יעד</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>7</b> שדות, מהם <b>1</b> חובה (תורם), ומסלול של <b>4</b> שלבים: פתוחה ← בתשלומים ← הושלמה ← נזנחה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>«נזנחה» בלי החלטת מגייס מתועדת</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>תזכורת בשבת וחג</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תרומות-מגבית">
+ <h3>מגבית</h3>
+ <div class="seg">
+   <p class="src">ועד מחליט על מגבית עם יעד ותאריכים; מהרגע הזה כל תרומה יכולה להשתייך אליה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (שם), ומסלול של <b>4</b> שלבים: תכנון ← פעיל ← הסתיים ← סיכום.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקת מגבית עם תרומות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שינוי יעד אחרי פתיחה בלי החלטה מתועדת</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>אחוז מעל 100 בתצוגה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תרומות-שגריר">
+ <h3>שגריר</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תרומות-פרנס">
+ <h3>פרנס</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תרומות-הנצחה">
+ <h3>הנצחה</h3>
+ <div class="seg">
+   <p class="src">בן משפחה מתקשר שבוע לפני היארצייט: «מי אומר קדיש? האם יש לימוד משניות?» — הרשומה עונה בלי לחפש</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (תורם), ומסלול של <b>7</b> שלבים: הובטחה ← שולם ← הותקן ← פעיל ← פג ← נבחר ← צולם.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>שינוי טקסט-לוח אחרי התקנה בלי אישור המשפחה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>הסרת הנצחה שהיא לצמיתות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>שגיאת-כתיב בשם הנפטר (אישור המשפחה בכתב לפני חריטה)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תרומות-דינר">
+ <h3>דינר</h3>
+ <div class="seg">
+   <p class="src">ערב הדינר: 340 מוזמנים, 210 אישרו, 12 שולחנות — מי יושב עם מי זו השאלה שמכריעה את הערב</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (שנה), ומסלול של <b>6</b> שלבים: הזמנות ← אישורי הגעה ← שיבוץ ← התקיים ← גבייה ← תודות.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הגרלה בלי היתר (חוק העונשין — הגרלה של מוסד ציבורי טעונה היתר)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>הושבת שני צדדים במחלוקת באותו שולחן</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>פרסום שם תורם שביקש אנונימיות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>דינר בתשעת הימים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תרומות-מוזמן לדינר">
+ <h3>מוזמן לדינר</h3>
+ <div class="seg">
+   <p class="src">ערב הדינר: 340 מוזמנים, 210 אישרו, 12 שולחנות — מי יושב עם מי זו השאלה שמכריעה את הערב</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (דינר), ומסלול של <b>5</b> שלבים: תכנון ← מכירה ← אישורים ← התקיים ← סיכום.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הגרלה בלי היתר (חוק העונשין — הגרלה של מוסד ציבורי טעונה היתר)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>הושבת שני צדדים במחלוקת באותו שולחן</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>פרסום שם תורם שביקש אנונימיות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>דינר בתשעת הימים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תרומות-מודעה ביומן">
+ <h3>מודעה ביומן</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-תרומות-קופת צדקה">
+ <h3>קופת צדקה</h3>
+ <div class="seg">
+   <p class="src">רכז מציב קופה בבית או בחנות; מאותו רגע יש לה מסלול ריקון</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (מיקום), ומסלול של <b>4</b> שלבים: הוצבה ← פעילה ← לא נמצאה ← הוסרה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקת קופה עם ריקונים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>ריקון בלי שני חותמים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>רכז רואה קופות של רכז אחר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תרומות-משולח">
+ <h3>משולח</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-תרומות-קשר">
+ <h3>קשר</h3>
+ <div class="seg">
+   <p class="src">תורם שנתן כל חודש הפסיק לפני 3 חודשים בלי לומר — אף אחד לא שם לב, כי אין מי שסופר שקט</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (תורם תורם), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>פנייה למי שביקש להפסיק</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>יותר משתי פניות בחודש לאותו תורם</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>פנייה בשבת/חג/תשעה באב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>פנייה מספר לא-מזוהה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תרומות-כלל תודה">
+ <h3>כלל תודה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תרומות-כלל קשר">
+ <h3>כלל קשר</h3>
+ <div class="seg">
+   <p class="src">תורם שנתן כל חודש הפסיק לפני 3 חודשים בלי לומר — אף אחד לא שם לב, כי אין מי שסופר שקט</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>7</b> שדות, מהם <b>1</b> חובה (דירוג), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>פנייה למי שביקש להפסיק</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>יותר משתי פניות בחודש לאותו תורם</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>פנייה בשבת/חג/תשעה באב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>פנייה מספר לא-מזוהה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תרומות-כלל תורם נרדם">
+ <h3>כלל תורם נרדם</h3>
+ <div class="seg">
+   <p class="src">תורם שנתן כל חודש הפסיק לפני 3 חודשים בלי לומר — אף אחד לא שם לב, כי אין מי שסופר שקט</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>6</b> שדות, מהם <b>1</b> חובה (ללא תרומה), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>פנייה למי שביקש להפסיק</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>יותר משתי פניות בחודש לאותו תורם</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>פנייה בשבת/חג/תשעה באב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>פנייה מספר לא-מזוהה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תרומות-הגרלה">
+ <h3>הגרלה</h3>
+ <div class="seg">
+   <p class="src">ערב הדינר: 340 מוזמנים, 210 אישרו, 12 שולחנות — מי יושב עם מי זו השאלה שמכריעה את הערב</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (מגבית), ומסלול של <b>8</b> שלבים: תכנון ← מכירה ← אישורים ← התקיים ← סיכום ← הגרלה ← זוכים ← נמסרו.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הגרלה בלי היתר (חוק העונשין — הגרלה של מוסד ציבורי טעונה היתר)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>הושבת שני צדדים במחלוקת באותו שולחן</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>פרסום שם תורם שביקש אנונימיות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>דינר בתשעת הימים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תרומות-קרן קיימת">
+ <h3>קרן קיימת</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-תרומות-פרלור מיטינג">
+ <h3>פרלור מיטינג</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תרומות-ישות חול">
+ <h3>ישות חול</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+ </div>
+ <div class="dept" data-i="5">
+  <h2>כספים</h2>
+  <section class="ent" id="e-כספים-עמותה">
+ <h3>עמותה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-כספים-סעיף תקציב">
+ <h3>סעיף תקציב</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-כספים-הוצאה">
+ <h3>הוצאה</h3>
+ <div class="seg">
+   <p class="src">ספק המזון שולח חשבונית חודשית בוואטסאפ למנהל-המטבח, שמעביר לגזבר — הרשומה נפתחת מהצילום, לא מהקלדה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>16</b> שדות, מהם <b>1</b> חובה (עמותה), ומסלול של <b>5</b> שלבים: בקשה ← אושר ← הוזמן ← התקבל ← שולם.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>תשלום בלי חשבונית</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>חשבונית כפולה (אותו ספק+מספר)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מקדמה מעל 30% בלי היקף-עבודה כתוב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>אישור הוצאה בידי מי שהזמין (הפרדת-תפקידים)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>הוצאה בלי סעיף תקציב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-כספים-ספק">
+ <h3>ספק</h3>
+ <div class="seg">
+   <p class="src">ספק המזון שולח חשבונית חודשית בוואטסאפ למנהל-המטבח, שמעביר לגזבר — הרשומה נפתחת מהצילום, לא מהקלדה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (שם), ומסלול של <b>5</b> שלבים: התקבלה ← אושרה ← לתשלום ← שולמה ← במחלוקת.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>תשלום בלי חשבונית</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>חשבונית כפולה (אותו ספק+מספר)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מקדמה מעל 30% בלי היקף-עבודה כתוב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>אישור הוצאה בידי מי שהזמין (הפרדת-תפקידים)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>הוצאה בלי סעיף תקציב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-כספים-תמיכה">
+ <h3>תמיכה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות, 5 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-כספים-ביטוח">
+ <h3>ביטוח</h3>
+ <div class="seg">
+   <p class="src">מכתב-דחייה מגיע מחברת-הביטוח אחרי נזק בגג — הצעד הראשון: לסווג (חסר מסמך? חריג? לגופו?), לא לריב</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (סוג), ומסלול של <b>8</b> שלבים: הצעה ← פעיל ← תביעה ← השלמות ← אושר ← נדחה ← ערעור ← ממונה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>ביטוח שפג בלי חידוש (מוסד בלי כיסוי)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>טיול בלי ביטוח תאונות בתוקף</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>ויתור על ערעור לפני שנקרא סעיף-החריג בפוליסה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>להבטיח «חייבים לשלם»</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-כספים-ישיבת ועד">
+ <h3>ישיבת ועד</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 3 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-כספים-ביקורת">
+ <h3>ביקורת</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-כספים-אישור עמותה">
+ <h3>אישור עמותה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-כספים-תקציב">
+ <h3>תקציב</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 3 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-כספים-תזרים">
+ <h3>תזרים</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-כספים-חשבונית ספק">
+ <h3>חשבונית ספק</h3>
+ <div class="seg">
+   <p class="src">ספק המזון שולח חשבונית חודשית בוואטסאפ למנהל-המטבח, שמעביר לגזבר — הרשומה נפתחת מהצילום, לא מהקלדה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>12</b> שדות, מהם <b>1</b> חובה (ספק), ומסלול של <b>5</b> שלבים: התקבלה ← אושרה ← לתשלום ← שולמה ← במחלוקת.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>תשלום בלי חשבונית</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>חשבונית כפולה (אותו ספק+מספר)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מקדמה מעל 30% בלי היקף-עבודה כתוב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>אישור הוצאה בידי מי שהזמין (הפרדת-תפקידים)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>הוצאה בלי סעיף תקציב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-כספים-חשבון">
+ <h3>חשבון</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות.</p></div>
+</section>
+  <section class="ent" id="e-כספים-הלוואה המוסד">
+ <h3>הלוואה המוסד</h3>
+ <div class="seg">
+   <p class="src">לפני ראש השנה בשנת שמיטה: כל ההלוואות הפתוחות צריכות פרוזבול, אחרת החוב נשמט — רשימה אחת, חתימה אחת</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (מלווה), ומסלול של <b>8</b> שלבים: בקשה ← ועדה ← אושר ← ניתן ← בהחזר ← נפרע ← באיחור ← הוקפא.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הלוואה בלי שני ערבים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>הלוואה בלי שטר חוב חתום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>ריבית (גמ&quot;ח — היתר עסקא לעמלות בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>פנייה לערב לפני שתי תזכורות ללווה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>חשיפת פרטי לווה מחוץ לוועדה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">6</span>מחיקת הלוואה עם יתרה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-כספים-נכס">
+ <h3>נכס</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-כספים-תביעת ביטוח">
+ <h3>תביעת ביטוח</h3>
+ <div class="seg">
+   <p class="src">מכתב-דחייה מגיע מחברת-הביטוח אחרי נזק בגג — הצעד הראשון: לסווג (חסר מסמך? חריג? לגופו?), לא לריב</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (ביטוח), ומסלול של <b>11</b> שלבים: הצעה ← פעיל ← תביעה ← השלמות ← אושר ← נדחה ← ערעור ← ממונה ← נפתחה ← מסמכים ← שולמה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>ביטוח שפג בלי חידוש (מוסד בלי כיסוי)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>טיול בלי ביטוח תאונות בתוקף</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>ויתור על ערעור לפני שנקרא סעיף-החריג בפוליסה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>להבטיח «חייבים לשלם»</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-כספים-ועדת ביקורת">
+ <h3>ועדת ביקורת</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-כספים-דוח שנתי">
+ <h3>דוח שנתי</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-כספים-דיווח למשרד החינוך">
+ <h3>דיווח למשרד החינוך</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 3 שלבים.</p></div>
+</section>
+ </div>
+ <div class="dept" data-i="6">
+  <h2>בית המדרש</h2>
+  <section class="ent" id="e-בית המדרש-מקום">
+ <h3>מקום</h3>
+ <div class="seg">
+   <p class="src">לפני ראש השנה: מי יושב איפה — השאלה חוזרת מדי שנה, המפה מהשנה שעברה היא הבסיס</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>14</b> שדות, מהם <b>1</b> חובה (אזור), ומסלול של <b>3</b> שלבים: פנוי ← נמכר ← הועבר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>שני מניינים באותו מקום באותה שעה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>מכירת מקום שכבר תפוס</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>שינוי זמני-תפילה בלי הודעה 3 ימים מראש</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-בית המדרש-מניין">
+ <h3>מניין</h3>
+ <div class="seg">
+   <p class="src">לפני ראש השנה: מי יושב איפה — השאלה חוזרת מדי שנה, המפה מהשנה שעברה היא הבסיס</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (שם), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>שני מניינים באותו מקום באותה שעה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>מכירת מקום שכבר תפוס</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>שינוי זמני-תפילה בלי הודעה 3 ימים מראש</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-בית המדרש-נדר">
+ <h3>נדר</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-קידוש">
+ <h3>קידוש</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-יארצייט">
+ <h3>יארצייט</h3>
+ <div class="seg">
+   <p class="src">פטירה בקהילה או משפחה חדשה שמוסרת את תאריכי ההורים; פעם אחת, וחוזר כל שנה לבד</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>7</b> שדות, מהם <b>1</b> חובה (משפחה), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>תזכורת שנשלחת בשבת</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>שינוי התאריך העברי בלי אישור המשפחה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-בית המדרש-שמחה">
+ <h3>שמחה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-אירוע באולם">
+ <h3>אירוע באולם</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות, 5 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-ספר תורה">
+ <h3>ספר תורה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-שיעור ציבורי">
+ <h3>שיעור ציבורי</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-חבר קהילה">
+ <h3>חבר קהילה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-ועד קהילה">
+ <h3>ועד קהילה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 3 שדות.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-עלייה">
+ <h3>עלייה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-לימוד משניות">
+ <h3>לימוד משניות</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-ניחום">
+ <h3>ניחום</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-מקווה">
+ <h3>מקווה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-ספר">
+ <h3>ספר</h3>
+ <div class="seg">
+   <p class="src">בחור מבקש גמרא לפני זמן חורף — הספרן סורק ברקוד, מועד-ההחזרה נקבע לסוף הזמן</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (שם), ומסלול של <b>4</b> שלבים: הושאל ← תזכורת ← הוחזר ← אבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>השאלה שנייה למי שיש לו ספר באיחור</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>השאלת ספר שמצבו הפיזי «לכריכה»</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מחיקת ספר אבד (חוב למשאיל)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-בית המדרש-השאלת ספר">
+ <h3>השאלת ספר</h3>
+ <div class="seg">
+   <p class="src">בחור מבקש גמרא לפני זמן חורף — הספרן סורק ברקוד, מועד-ההחזרה נקבע לסוף הזמן</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>7</b> שדות, מהם <b>1</b> חובה (ספר), ומסלול של <b>4</b> שלבים: הושאל ← תזכורת ← הוחזר ← אבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>השאלה שנייה למי שיש לו ספר באיחור</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>השאלת ספר שמצבו הפיזי «לכריכה»</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מחיקת ספר אבד (חוב למשאיל)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-בית המדרש-סניף">
+ <h3>סניף</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-דיון">
+ <h3>דיון</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-בית המדרש-ערבות הדדית">
+ <h3>ערבות הדדית</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+ </div>
+ <div class="dept" data-i="7">
+  <h2>החצר</h2>
+  <section class="ent" id="e-החצר-קבלת קהל">
+ <h3>קבלת קהל</h3>
+ <div class="seg">
+   <p class="src">ליל שישי, 40 קוויטלך בערמה, 3 בטלפון מחו&quot;ל, 2 דחופים (חולה) — הגבאי מסדר לפי דחיפות ולפי סדר-הגעה, לא לפי כסף</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (אדם), ומסלול של <b>5</b> שלבים: בקשה ← תור ← התקיים ← תשובה ← נמסרה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>חשיפת תוכן קוויטל למי שאינו הגבאי</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>קבלת קהל בלי גבאי נוכח</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מחיקת קוויטל (ארכיון בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>תור לפי סכום-פדיון</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-החצר-קוויטל">
+ <h3>קוויטל</h3>
+ <div class="seg">
+   <p class="src">ליל שישי, 40 קוויטלך בערמה, 3 בטלפון מחו&quot;ל, 2 דחופים (חולה) — הגבאי מסדר לפי דחיפות ולפי סדר-הגעה, לא לפי כסף</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (שמות), ומסלול של <b>8</b> שלבים: בקשה ← תור ← התקיים ← תשובה ← נמסרה ← נשלח ← הונח ← אושר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>חשיפת תוכן קוויטל למי שאינו הגבאי</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>קבלת קהל בלי גבאי נוכח</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מחיקת קוויטל (ארכיון בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>תור לפי סכום-פדיון</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-החצר-טיש">
+ <h3>טיש</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-החצר-נסיעה">
+ <h3>נסיעה</h3>
+ <div class="seg">
+   <p class="src">שבוע לפני הנסיעה: 14 הורים לא חתמו, 9 לא שילמו — הרשימה אחת, וואטסאפ אחד לכל קבוצה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (יעד), ומסלול של <b>8</b> שלבים: תכנון ← אישורים ← הרשמה ← תשלום ← שיבוץ ← יצא ← חזר ← סיכום.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>יציאה בלי אישור הורים לכל נרשם</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>יציאה בלי ביטוח תאונות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>יציאה בלי מלווה רפואי</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>רישום אחרי תאריך אחרון להרשמה בלי אישור מנהל</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>נסיעה בתשעת הימים / ספירה בלי אישור רב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-החצר-נרשם לנסיעה">
+ <h3>נרשם לנסיעה</h3>
+ <div class="seg">
+   <p class="src">שבוע לפני הנסיעה: 14 הורים לא חתמו, 9 לא שילמו — הרשימה אחת, וואטסאפ אחד לכל קבוצה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (נסיעה), ומסלול של <b>8</b> שלבים: תכנון ← אישורים ← הרשמה ← תשלום ← שיבוץ ← יצא ← חזר ← סיכום.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>יציאה בלי אישור הורים לכל נרשם</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>יציאה בלי ביטוח תאונות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>יציאה בלי מלווה רפואי</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>רישום אחרי תאריך אחרון להרשמה בלי אישור מנהל</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>נסיעה בתשעת הימים / ספירה בלי אישור רב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-החצר-הילולא">
+ <h3>הילולא</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-החצר-שיחה הרבי">
+ <h3>שיחה הרבי</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות, 6 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-החצר-שאלה לרב">
+ <h3>שאלה לרב</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-החצר-תשובה מהרבי">
+ <h3>תשובה מהרבי</h3>
+ <div class="seg">
+   <p class="src">ליל שישי, 40 קוויטלך בערמה, 3 בטלפון מחו&quot;ל, 2 דחופים (חולה) — הגבאי מסדר לפי דחיפות ולפי סדר-הגעה, לא לפי כסף</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (קוויטל), ומסלול של <b>6</b> שלבים: בקשה ← תור ← התקיים ← תשובה ← נמסרה ← התקבלה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>חשיפת תוכן קוויטל למי שאינו הגבאי</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>קבלת קהל בלי גבאי נוכח</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>מחיקת קוויטל (ארכיון בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>תור לפי סכום-פדיון</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-החצר-מכתב בארכיון">
+ <h3>מכתב בארכיון</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-החצר-גבאי">
+ <h3>גבאי</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+ </div>
+ <div class="dept" data-i="8">
+  <h2>חסד</h2>
+  <section class="ent" id="e-חסד-הלוואה">
+ <h3>הלוואה</h3>
+ <div class="seg">
+   <p class="src">לפני ראש השנה בשנת שמיטה: כל ההלוואות הפתוחות צריכות פרוזבול, אחרת החוב נשמט — רשימה אחת, חתימה אחת</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>13</b> שדות, מהם <b>1</b> חובה (משפחה), ומסלול של <b>8</b> שלבים: בקשה ← ועדה ← אושר ← ניתן ← בהחזר ← נפרע ← באיחור ← הוקפא.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הלוואה בלי שני ערבים</p>
+   <p class="com"><span class="st st-ok">חוסם</span>נאכף בקוד — 22-views-c.js בודק את התנאי ישירות ומונע את המעבר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>הלוואה בלי שטר חוב חתום</p>
+   <p class="com"><span class="st st-ok">חוסם</span>נאכף בקוד — 22-views-c.js בודק את התנאי ישירות ומונע את המעבר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>ריבית (גמ&quot;ח — היתר עסקא לעמלות בלבד)</p>
+   <p class="com"><span class="st st-mid">מוצג</span>מוצג למשתמש במסך תחת «מה אסור — מתוך האפיון», אך אין עדיין קוד שחוסם את הפעולה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>פנייה לערב לפני שתי תזכורות ללווה</p>
+   <p class="com"><span class="st st-mid">מוצג</span>מוצג למשתמש במסך תחת «מה אסור — מתוך האפיון», אך אין עדיין קוד שחוסם את הפעולה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>חשיפת פרטי לווה מחוץ לוועדה</p>
+   <p class="com"><span class="st st-mid">מוצג</span>מוצג למשתמש במסך תחת «מה אסור — מתוך האפיון», אך אין עדיין קוד שחוסם את הפעולה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">6</span>מחיקת הלוואה עם יתרה</p>
+   <p class="com"><span class="st st-mid">מוצג</span>מוצג למשתמש במסך תחת «מה אסור — מתוך האפיון», אך אין עדיין קוד שחוסם את הפעולה.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חסד-החזר">
+ <h3>החזר</h3>
+ <div class="seg">
+   <p class="src">לפני ראש השנה בשנת שמיטה: כל ההלוואות הפתוחות צריכות פרוזבול, אחרת החוב נשמט — רשימה אחת, חתימה אחת</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (הלוואה), ומסלול של <b>8</b> שלבים: בקשה ← ועדה ← אושר ← ניתן ← בהחזר ← נפרע ← באיחור ← הוקפא.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הלוואה בלי שני ערבים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>הלוואה בלי שטר חוב חתום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>ריבית (גמ&quot;ח — היתר עסקא לעמלות בלבד)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>פנייה לערב לפני שתי תזכורות ללווה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>חשיפת פרטי לווה מחוץ לוועדה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">6</span>מחיקת הלוואה עם יתרה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חסד-מפקיד">
+ <h3>מפקיד</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-חסד-תמיכה">
+ <h3>תמיכה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-חסד-חלוקה">
+ <h3>חלוקה</h3>
+ <div class="seg">
+   <p class="src">ועדת חסד מאשרת רשימה לחג; ביום החלוקה כל מתנדב רואה רק את המסלול שלו</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>7</b> שדות, מהם <b>1</b> חובה (שנה), ומסלול של <b>4</b> שלבים: אושר ← נרכש ← נארז ← חולק.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שם מקבל-החבילה גלוי למתנדב שאינו במסלול שלו</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>סטטוס מסירה אחורה (רק קדימה)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-חסד-השאלה">
+ <h3>השאלה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 2 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-חסד-ארוחה לחסד">
+ <h3>ארוחה לחסד</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-חסד-פריט גמח">
+ <h3>פריט גמח</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-חסד-הכנסת כלה">
+ <h3>הכנסת כלה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-חסד-הסעה רפואית">
+ <h3>הסעה רפואית</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-חסד-עזרה לזוג">
+ <h3>עזרה לזוג</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-חסד-קרן חירום">
+ <h3>קרן חירום</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 4 שלבים.</p></div>
+</section>
+ </div>
+ <div class="dept" data-i="9">
+  <h2>תפעול</h2>
+  <section class="ent" id="e-תפעול-חדר">
+ <h3>חדר</h3>
+ <div class="seg">
+   <p class="src">23:15, בדיקת-לילה: 2 חסרים — אחד בבית באישור, אחד לא ידוע. ההורה של השני מקבל טלפון עכשיו, לא מחר</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (בניין), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>תלמיד חסר בלי הודעה להורה תוך 30 דקות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שיבוץ מעל מיטות בחדר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>נוכחות לילה בלי בודק</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תפעול-שיבוץ פנימייה">
+ <h3>שיבוץ פנימייה</h3>
+ <div class="seg">
+   <p class="src">23:15, בדיקת-לילה: 2 חסרים — אחד בבית באישור, אחד לא ידוע. ההורה של השני מקבל טלפון עכשיו, לא מחר</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>7</b> שדות, מהם <b>1</b> חובה (תלמיד), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>תלמיד חסר בלי הודעה להורה תוך 30 דקות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שיבוץ מעל מיטות בחדר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>נוכחות לילה בלי בודק</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תפעול-נוכחות לילה">
+ <h3>נוכחות לילה</h3>
+ <div class="seg">
+   <p class="src">23:15, בדיקת-לילה: 2 חסרים — אחד בבית באישור, אחד לא ידוע. ההורה של השני מקבל טלפון עכשיו, לא מחר</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>8</b> שדות, מהם <b>1</b> חובה (תלמיד), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>תלמיד חסר בלי הודעה להורה תוך 30 דקות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שיבוץ מעל מיטות בחדר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>נוכחות לילה בלי בודק</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תפעול-קו הסעה">
+ <h3>קו הסעה</h3>
+ <div class="seg">
+   <p class="src">7:10 בבוקר, ההסעה מאחרת 20 דקות — ההורים בתחנה צריכים לדעת עכשיו, לא לצלצל למזכירות</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (שם), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>רשומים מעל מקומות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>נהג בלי רישיון הסעות בתוקף</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>קו בלי מלווה לגילאי גן</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>ירידה בתחנה לא-רשומה בלי אישור הורה בכתב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תפעול-נוסע">
+ <h3>נוסע</h3>
+ <div class="seg">
+   <p class="src">7:10 בבוקר, ההסעה מאחרת 20 דקות — ההורים בתחנה צריכים לדעת עכשיו, לא לצלצל למזכירות</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>8</b> שדות, מהם <b>1</b> חובה (קו הסעה), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>רשומים מעל מקומות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>נהג בלי רישיון הסעות בתוקף</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>קו בלי מלווה לגילאי גן</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>ירידה בתחנה לא-רשומה בלי אישור הורה בכתב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תפעול-רכב">
+ <h3>רכב</h3>
+ <div class="seg">
+   <p class="src">הנהג מתקשר מהמוסך: «הם אומרים 4,200» — האם זה בטיחות או יכול לחכות? ההצעה בכתב, הרשומה מסווגת</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (מספר), ומסלול של <b>4</b> שלבים: פעיל ← בטיפול ← מושבת ← נמכר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הסעת תלמידים ברכב בלי טסט בתוקף</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>הסעת תלמידים בלי רישיון הסעות בתוקף</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>אישור תיקון בטלפון בלי הצעה כתובה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>רכב עם ביטוח שפג על הכביש</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תפעול-קריאת שירות">
+ <h3>קריאת שירות</h3>
+ <div class="seg">
+   <p class="src">מישהו רואה תקלה או פונה — מהנייד, עם תמונה, בשלושים שניות</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (מקום), ומסלול של <b>4</b> שלבים: נפתחה ← שובצה ← טופלה ← נסגרה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקה (רק «נסגרה» עם סיבה)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>סגירה בלי מי-ומתי</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>העברה למטפל אחר בלי הודעה לפונה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תפעול-תחזוקה מונעת">
+ <h3>תחזוקה מונעת</h3>
+ <div class="seg">
+   <p class="src">הנהג מתקשר מהמוסך: «הם אומרים 4,200» — האם זה בטיחות או יכול לחכות? ההצעה בכתב, הרשומה מסווגת</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (תדירות בחודשים), ומסלול של <b>4</b> שלבים: פעיל ← בטיפול ← מושבת ← נמכר.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>הסעת תלמידים ברכב בלי טסט בתוקף</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>הסעת תלמידים בלי רישיון הסעות בתוקף</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>אישור תיקון בטלפון בלי הצעה כתובה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>רכב עם ביטוח שפג על הכביש</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תפעול-פריט מלאי">
+ <h3>פריט מלאי</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תפעול-תפריט">
+ <h3>תפריט</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תפעול-פרויקט בנייה">
+ <h3>פרויקט בנייה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות, 6 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-תפעול-אירוע הסעה">
+ <h3>אירוע הסעה</h3>
+ <div class="seg">
+   <p class="src">7:10 בבוקר, ההסעה מאחרת 20 דקות — ההורים בתחנה צריכים לדעת עכשיו, לא לצלצל למזכירות</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (קו הסעה), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>רשומים מעל מקומות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>נהג בלי רישיון הסעות בתוקף</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>קו בלי מלווה לגילאי גן</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>ירידה בתחנה לא-רשומה בלי אישור הורה בכתב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תפעול-מונה">
+ <h3>מונה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תפעול-הזמנת חדר">
+ <h3>הזמנת חדר</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תפעול-תרגיל חירום">
+ <h3>תרגיל חירום</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תפעול-אישור בטיחות">
+ <h3>אישור בטיחות</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 3 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תפעול-כלל תחזוקה">
+ <h3>כלל תחזוקה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 3 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תפעול-נכס להשכרה">
+ <h3>נכס להשכרה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות, 5 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-תפעול-נכס שכור">
+ <h3>נכס שכור</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+ </div>
+ <div class="dept" data-i="10">
+  <h2>שידוכים</h2>
+  <section class="ent" id="e-שידוכים-מועמד">
+ <h3>מועמד</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות, 5 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-שידוכים-הצעה">
+ <h3>הצעה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-שידוכים-קייטנה">
+ <h3>קייטנה</h3>
+ <div class="seg">
+   <p class="src">שבועיים אחרי פסח ההורים שואלים על הקייטנה; שבועיים לפני פסח כולם שואלים על המצות — שני חלונות בשנה, אותו טופס בשתי הקשות</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (שנה), ומסלול של <b>5</b> שלבים: תכנון ← הרשמה ← שיבוץ ← פעיל ← סיכום.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>רשומים מעל מקומות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שיבוץ ילד לקבוצת גיל לא מתאימה (סינון רך: חסר מידע ⇒ מתאים)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>קייטנה בלי ביטוח</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>הזמנת מצות אחרי תאריך אחרון בלי אישור</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-שידוכים-נרשם לקייטנה">
+ <h3>נרשם לקייטנה</h3>
+ <div class="seg">
+   <p class="src">שבועיים אחרי פסח ההורים שואלים על הקייטנה; שבועיים לפני פסח כולם שואלים על המצות — שני חלונות בשנה, אותו טופס בשתי הקשות</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (קייטנה), ומסלול של <b>8</b> שלבים: תכנון ← הרשמה ← שיבוץ ← פעיל ← סיכום ← נרשם ← שולם ← שובץ.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>רשומים מעל מקומות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שיבוץ ילד לקבוצת גיל לא מתאימה (סינון רך: חסר מידע ⇒ מתאים)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>קייטנה בלי ביטוח</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>הזמנת מצות אחרי תאריך אחרון בלי אישור</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-שידוכים-הזמנת מצות">
+ <h3>הזמנת מצות</h3>
+ <div class="seg">
+   <p class="src">שבועיים אחרי פסח ההורים שואלים על הקייטנה; שבועיים לפני פסח כולם שואלים על המצות — שני חלונות בשנה, אותו טופס בשתי הקשות</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (משפחה), ומסלול של <b>8</b> שלבים: תכנון ← הרשמה ← שיבוץ ← פעיל ← סיכום ← הוזמן ← נאפה ← חולק.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>רשומים מעל מקומות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שיבוץ ילד לקבוצת גיל לא מתאימה (סינון רך: חסר מידע ⇒ מתאים)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>קייטנה בלי ביטוח</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>הזמנת מצות אחרי תאריך אחרון בלי אישור</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-שידוכים-כרטיס ימים נוראים">
+ <h3>כרטיס ימים נוראים</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-שידוכים-חסות ללוח">
+ <h3>חסות ללוח</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-שידוכים-הכנה לחתונה">
+ <h3>הכנה לחתונה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-שידוכים-זוג צעיר">
+ <h3>זוג צעיר</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-שידוכים-אירוע נשים">
+ <h3>אירוע נשים</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות.</p></div>
+</section>
+  <section class="ent" id="e-שידוכים-פעילות קייטנה">
+ <h3>פעילות קייטנה</h3>
+ <div class="seg">
+   <p class="src">שבוע לפני הנסיעה: 14 הורים לא חתמו, 9 לא שילמו — הרשימה אחת, וואטסאפ אחד לכל קבוצה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (קייטנה), ומסלול של <b>8</b> שלבים: תכנון ← אישורים ← הרשמה ← תשלום ← שיבוץ ← יצא ← חזר ← סיכום.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>יציאה בלי אישור הורים לכל נרשם</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>יציאה בלי ביטוח תאונות</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>יציאה בלי מלווה רפואי</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>רישום אחרי תאריך אחרון להרשמה בלי אישור מנהל</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>נסיעה בתשעת הימים / ספירה בלי אישור רב</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-שידוכים-בדיקת עירוב">
+ <h3>בדיקת עירוב</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 3 שדות.</p></div>
+</section>
+  <section class="ent" id="e-שידוכים-פרסום">
+ <h3>פרסום</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות, 5 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-שידוכים-מכירה">
+ <h3>מכירה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-שידוכים-מכירת חמץ">
+ <h3>מכירת חמץ</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+ </div>
+ <div class="dept" data-i="11">
+  <h2>תקשורת</h2>
+  <section class="ent" id="e-תקשורת-הודעה">
+ <h3>הודעה</h3>
+ <div class="seg">
+   <p class="src">שלג בירושלים ב-6:30 — הודעה אחת לכל ההורים בשלוש שפות, מהטלפון של המנהל, עם אישור בהקשה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>11</b> שדות, מהם <b>1</b> חובה (קבוצה), ומסלול של <b>6</b> שלבים: טיוטה ← אושרה ← מתוזמנת ← נשלחה ← נמסרה ← נכשלה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>שליחה בשבת/חג (תזמון אוטומטי למוצאי)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שליחה לקבוצה מעל 50 בלי מאשר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>הודעה בשפה שאינה שפת-המשפחה כשיש תבנית בשפתה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>שליחה מספרה אישית של עובד</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תקשורת-מסמך">
+ <h3>מסמך</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תקשורת-טופס">
+ <h3>טופס</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 3 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-תקשורת-פנייה">
+ <h3>פנייה</h3>
+ <div class="seg">
+   <p class="src">מישהו רואה תקלה או פונה — מהנייד, עם תמונה, בשלושים שניות</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>8</b> שדות, מהם <b>1</b> חובה (פונה), ומסלול של <b>4</b> שלבים: התקבלה ← הופנתה ← טופלה ← נסגרה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>מחיקה (רק «נסגרה» עם סיבה)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>סגירה בלי מי-ומתי</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>העברה למטפל אחר בלי הודעה לפונה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תקשורת-גיליון עלון">
+ <h3>גיליון עלון</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 6 שדות, 4 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-תקשורת-קבוצת תפוצה">
+ <h3>קבוצת תפוצה</h3>
+ <div class="seg">
+   <p class="src">שלג בירושלים ב-6:30 — הודעה אחת לכל ההורים בשלוש שפות, מהטלפון של המנהל, עם אישור בהקשה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>8</b> שדות, מהם <b>1</b> חובה (שם), ומסלול של <b>6</b> שלבים: טיוטה ← אושרה ← מתוזמנת ← נשלחה ← נמסרה ← נכשלה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>שליחה בשבת/חג (תזמון אוטומטי למוצאי)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שליחה לקבוצה מעל 50 בלי מאשר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>הודעה בשפה שאינה שפת-המשפחה כשיש תבנית בשפתה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>שליחה מספרה אישית של עובד</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תקשורת-תבנית">
+ <h3>תבנית</h3>
+ <div class="seg">
+   <p class="src">שלג בירושלים ב-6:30 — הודעה אחת לכל ההורים בשלוש שפות, מהטלפון של המנהל, עם אישור בהקשה</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>9</b> שדות, מהם <b>1</b> חובה (שם), ומסלול של <b>6</b> שלבים: טיוטה ← אושרה ← מתוזמנת ← נשלחה ← נמסרה ← נכשלה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>שליחה בשבת/חג (תזמון אוטומטי למוצאי)</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>שליחה לקבוצה מעל 50 בלי מאשר</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>הודעה בשפה שאינה שפת-המשפחה כשיש תבנית בשפתה</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>שליחה מספרה אישית של עובד</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תקשורת-שלוחה">
+ <h3>שלוחה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תקשורת-שידור">
+ <h3>שידור</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 3 שדות, 3 שלבים.</p></div>
+</section>
+  <section class="ent" id="e-תקשורת-תמונה">
+ <h3>תמונה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 4 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תקשורת-כלל פנייה">
+ <h3>כלל פנייה</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 2 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תקשורת-כלל מבחן">
+ <h3>כלל מבחן</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 2 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תקשורת-משתמש">
+ <h3>משתמש</h3>
+ <div class="seg">
+   <p class="src">מזכירה עזבה ביום חמישי — ביום ראשון המשתמש שלה עדיין פעיל. הכלל סוגר אותו לפני שמישהו זוכר</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (אדם), ומסלול של <b>3</b> שלבים: נוצר ← פעיל ← הושעה.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>משתמש פעיל שלא נכנס 90 יום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>משתמש בלי אימות כפול לתפקיד גזבר/מנהל</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>גיבוי שלא נבדק בשחזור 30 יום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>שיתוף משתמש בין שני אנשים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>מחיקת יומן-ביקורת</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תקשורת-שירות חיצוני">
+ <h3>שירות חיצוני</h3>
+ 
+ 
+ <div class="seg"><p class="com">אין לישות זו איסורים או משפט-רגע באפיון. 5 שדות.</p></div>
+</section>
+  <section class="ent" id="e-תקשורת-גיבוי">
+ <h3>גיבוי</h3>
+ <div class="seg">
+   <p class="src">מזכירה עזבה ביום חמישי — ביום ראשון המשתמש שלה עדיין פעיל. הכלל סוגר אותו לפני שמישהו זוכר</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>8</b> שדות, מהם <b>1</b> חובה (תאריך), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>משתמש פעיל שלא נכנס 90 יום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>משתמש בלי אימות כפול לתפקיד גזבר/מנהל</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>גיבוי שלא נבדק בשחזור 30 יום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>שיתוף משתמש בין שני אנשים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>מחיקת יומן-ביקורת</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+  <section class="ent" id="e-תקשורת-אירוע אבטחה">
+ <h3>אירוע אבטחה</h3>
+ <div class="seg">
+   <p class="src">מזכירה עזבה ביום חמישי — ביום ראשון המשתמש שלה עדיין פעיל. הכלל סוגר אותו לפני שמישהו זוכר</p>
+   <p class="com">הרגע שהישות הזאת משרתת, כפי שכתבת אותו. המערכת מחזיקה לה <b>10</b> שדות, מהם <b>1</b> חובה (תאריך), בלי מסלול שלבים.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">1</span>משתמש פעיל שלא נכנס 90 יום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">2</span>משתמש בלי אימות כפול לתפקיד גזבר/מנהל</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">3</span>גיבוי שלא נבדק בשחזור 30 יום</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">4</span>שיתוף משתמש בין שני אנשים</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ <div class="seg">
+   <p class="src forb"><span class="mk" aria-hidden="true">5</span>מחיקת יומן-ביקורת</p>
+   <p class="com"><span class="st st-no">טרם</span>אינו מופיע עדיין באף מסך ואין קוד שחוסם אותו. כתוב באפיון בלבד.</p>
+  </div>
+ 
+</section>
+ </div>
+
+ <p class="say">הטיפוגרפיה מועתקת במדידה מספריא: המקור ב־<bdi>26.84/42.944</bdi> והפירוש ב־<bdi>22/35.2</bdi> — <b>יחס של 1.22 בגודל, ובדיוק אותו 1.22 ברווח-השורה</b>. עברית צריכה יותר מקום לגובה, ומי שמגדיל את הגופן ושוכח את הרווח הורס את זה. שניהם יושבים ב<b>אותה עמודה</b> ברוחב <bdi>700</bdi>, זה מתחת לזה ולא זה לצד זה — במקור נמדד <bdi dir="ltr">x=320, w=700</bdi> לשניהם. והמקור <b>שחור</b> בעוד הפירוש <b>אפור</b> (<bdi dir="ltr">#000000</bdi> מול <bdi dir="ltr">#666666</bdi>): ההיררכיה נאמרת בצבע. <b>ועל האכיפה:</b> «חוסם» ניתן רק היכן שיש בקוד קריאה ל-blocked() או תנאי חסימה מפורש; «מוצג» היכן שהכלל מופיע במסך דרך forbiddenOf אך אינו עוצר פעולה; «טרם» לכל השאר. הספירה נעשתה בזמן הבנייה על קבצי המקור של האפליקציה.</p>
+</div>
+
+<script>
+(function(){
+ var sel=document.getElementById('pick'), panes=[].slice.call(document.querySelectorAll('.dept'));
+ sel.addEventListener('change',function(){
+  panes.forEach(function(p){p.classList.toggle('on',p.dataset.i===sel.value);});
+  window.scrollTo({top:0,behavior:'smooth'});});
+})();
+</script>
+</body></html>
