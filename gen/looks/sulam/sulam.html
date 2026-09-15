@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>עץ האחריות</title>
+<meta name="description" content="עץ האחריות של המוסד בסולם-עמודות, מועתק במדידה מ-WikiTree.">
+<style>
+/* אין קישור לגופן — Roboto של המקור נטול אותיות עבריות, וטעינתו
+   לעמוד עברי לא הייתה עושה דבר מלבד נפילה שקטה לגופן המערכת. */
+*{box-sizing:border-box}html{overflow-x:hidden}
+:root{
+ /* ===== נמדד מ-wikitree.com ===== */
+ --bg:#fcfcfc;--pane:#ffffff;--ink:#393a3c;--mut:#6c6e72;--rule:#d7d8da;
+ --link:#008000;                /* הירוק של WikiTree — קישורי-שם */
+ --cardW:237px;--cardR:6px;--slot:56px;--fs:18px;--lh:27px;
+ /* במקור: כחול=זכר, ורוד=נקבה. כאן הישות היא תפקיד, לא אדם —
+    ולכן הגוון מסמן תחום. הקידוד לפי מין הוסר. */
+ --d0:#eef1f6;--d1:#f2f1ff;--d2:#fff5e8;--d3:#eefaf2;--d4:#ffeeee;
+ --e0:#c9d2e0;--e1:#cdc9f0;--e2:#efd4ae;--e3:#b6e0c8;--e4:#f0c3c3}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#17181a;--pane:#1e2023;--ink:#e6e7e9;--mut:#a0a3a8;--rule:#3a3d41;
+ --link:#5ec97f;
+ --d0:#20252d;--d1:#24223a;--d2:#2e2519;--d3:#1a2e23;--d4:#2f1f1f;
+ --e0:#3a4552;--e1:#413c66;--e2:#5b482a;--e3:#2c5a41;--e4:#5c3a3a}}
+:root[data-theme=dark]{
+ --bg:#17181a;--pane:#1e2023;--ink:#e6e7e9;--mut:#a0a3a8;--rule:#3a3d41;
+ --link:#5ec97f;
+ --d0:#20252d;--d1:#24223a;--d2:#2e2519;--d3:#1a2e23;--d4:#2f1f1f;
+ --e0:#3a4552;--e1:#413c66;--e2:#5b482a;--e3:#2c5a41;--e4:#5c3a3a}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:400 var(--fs)/var(--lh) system-ui,sans-serif}
+h1,h2{margin:0}p{margin:0}bdi{unicode-bidi:isolate}
+.hid{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+.top{background:var(--pane);border-bottom:1px solid var(--rule);padding:14px 0}
+.top .in{max-width:1400px;margin:0 auto;padding:0 20px}
+h1{font:700 40px/48px system-ui,sans-serif}
+.cap{color:var(--mut);margin-top:4px;max-width:70ch}
+
+.hold{max-width:1400px;margin:0 auto;padding:22px 20px 60px}
+h2{font:700 28px/33.6px system-ui,sans-serif;margin-bottom:14px}
+
+/* ---------- הסולם: דור = עמודה. נגלל לרוחב, לא נשבר. ---------- */
+.lad{display:flex;gap:22px;align-items:flex-start;overflow-x:auto;
+ padding-bottom:16px;scroll-snap-type:x proximity}
+.colw{flex:none;scroll-snap-align:start}
+/* תווית-עמודה: מודגשת עם קו תחתון. ריווח-אותיות של המקור הוסר —
+   בעברית הוא פוגע בקריאוּת ואין בה אותיות רישיות להעצים.        */
+.colw>h3{font:700 16px/24px system-ui,sans-serif;color:var(--ink);margin:0 0 10px;
+ padding-bottom:5px;border-bottom:1px solid var(--rule)}
+.col{display:flex;flex-direction:column;gap:12px}
+
+.card{width:var(--cardW);border-radius:var(--cardR);padding:8px 10px 10px;
+ font:400 16px/24px system-ui,sans-serif;position:relative;border:1px solid transparent}
+.card.wide{width:290px}
+.nm{display:block;font:700 16px/19.2px system-ui,sans-serif;color:var(--link)}
+.ln{color:var(--ink);font-size:15px;line-height:21px}
+.ln.sm{color:var(--mut);font-size:14px;line-height:20px}
+/* הפירוט יורד עם המרחק — זה הלב של הרכיב, לא קישוט */
+.card.n2{width:210px}
+.card.n3{width:196px;padding:6px 10px 8px;height:var(--slot)}
+.card.n4{width:178px;padding:6px 10px 8px;height:var(--slot)}
+.slot{height:var(--slot)}
+/* מוט-החיבור: קו מכרטיס-היחידה אל האדם שמחזיק אותה, באותה שורה */
+.card.n4.tie:after{content:"";position:absolute;inset-inline-end:100%;
+ top:50%;width:22px;border-top:1px solid var(--rule)}
+.card.n3 .ln,.card.n4 .ln{font-size:13px;line-height:18px}
+.d0{background:var(--d0);border-color:var(--e0)}
+.d1{background:var(--d1);border-color:var(--e1)}
+.d2{background:var(--d2);border-color:var(--e2)}
+.d3{background:var(--d3);border-color:var(--e3)}
+.d4{background:var(--d4);border-color:var(--e4)}
+.chk{position:absolute;inset-inline-end:8px;top:6px;
+ font:700 13px/1 system-ui,sans-serif;color:var(--link)}
+.chk.off{color:var(--mut)}
+
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin:26px 0 0;
+ padding-top:16px;border-top:1px solid var(--rule);color:var(--mut);font-size:15px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:16px;height:16px;border-radius:4px;display:block;border:1px solid}
+.note{margin-top:20px;color:var(--mut);font-size:15px;line-height:23px;max-width:74ch}
+@media(max-width:700px){h1{font:700 30px/36px system-ui,sans-serif}
+ h2{font:700 22px/28px system-ui,sans-serif}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style></head><body>
+
+<header class="top"><div class="in">
+ <h1>עץ האחריות</h1>
+ <p class="cap">יום שלישי · ד׳ תשרי תשפ״ז — מי אחראי על מי, מהמוסד ועד הכיתה. כל דור הוא עמודה.</p>
+</div></header>
+
+<div class="hold">
+ <h2>מוסדות ← 15 יחידות</h2>
+ <div class="lad" tabindex="0" role="region" aria-label="סולם האחריות, נגלל לרוחב">
+  <div class="colw"><h3>המוסד</h3><div class="col">
+  <div class="card d0 wide">
+     <b class="nm">מוסדות</b>
+     <p class="ln">412 תלמידים · 168 משפחות</p>
+     <p class="ln">44 אנשי צוות, מהם 4 נעדרים היום</p>
+     <p class="ln">12 כיתות · 6 מסלולי הסעה</p>
+     <p class="ln sm">נוכחות היום: 380 מתוך 412</p>
+    </div>
+  </div></div>
+  <div class="colw"><h3>תחומים</h3><div class="col">
+  <div class="card d1"><b class="nm">חינוך</b>
+      <p class="ln">25 אנשים ב־3 תפקידים</p>
+      <p class="ln sm">4 נעדרים</p></div>
+<div class="card d2"><b class="nm">מנהלה</b>
+      <p class="ln">7 אנשים ב־2 תפקידים</p>
+      <p class="ln sm">כולם במקומם</p></div>
+<div class="card d3"><b class="nm">משק</b>
+      <p class="ln">8 אנשים ב־2 תפקידים</p>
+      <p class="ln sm">כולם במקומם</p></div>
+<div class="card d4"><b class="nm">תפעול</b>
+      <p class="ln">4 אנשים ב־1 תפקידים</p>
+      <p class="ln sm">כולם במקומם</p></div>
+  </div></div>
+  <div class="colw"><h3>תפקידים</h3><div class="col">
+  <div class="card d1 n2"><b class="nm">מגיד שיעור</b>
+      <p class="ln">12 אנשים · 3 נעדרים</p></div>
+<div class="card d1 n2"><b class="nm">מלמד</b>
+      <p class="ln">10 אנשים · 1 נעדרים</p></div>
+<div class="card d1 n2"><b class="nm">משגיח</b>
+      <p class="ln">3 אנשים</p></div>
+<div class="card d2 n2"><b class="nm">מזכירות</b>
+      <p class="ln">4 אנשים</p></div>
+<div class="card d2 n2"><b class="nm">הנהלה</b>
+      <p class="ln">3 אנשים</p></div>
+<div class="card d3 n2"><b class="nm">מטבח</b>
+      <p class="ln">5 אנשים</p></div>
+<div class="card d3 n2"><b class="nm">אחזקה</b>
+      <p class="ln">3 אנשים</p></div>
+<div class="card d4 n2"><b class="nm">נהג</b>
+      <p class="ln">4 אנשים</p></div>
+  </div></div>
+  <div class="colw"><h3>הצוות</h3><div class="col">
+  <div class="card d1 n3"><b class="nm">נפתלי גרין</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מגיד שיעור · 8 שנים</p></div>
+<div class="card d1 n3"><b class="nm">נפתלי מלר</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מגיד שיעור · 6 שנים</p></div>
+<div class="card d1 n3"><b class="nm">יעקב פישר</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מגיד שיעור · 11 שנים</p></div>
+<div class="card d1 n3"><b class="nm">שרגא כהנא</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מגיד שיעור · 12 שנים</p></div>
+<div class="card d1 n3"><b class="nm">אלימלך פישר</b><span class="chk off" title="בחופשה" aria-hidden="true">–</span><span class="hid">נעדר · בחופשה</span>
+      <p class="ln sm">מגיד שיעור · 6 שנים</p></div>
+<div class="card d1 n3"><b class="nm">שמואל רוזן</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מגיד שיעור · 3 שנים</p></div>
+<div class="card d1 n3"><b class="nm">זלמן שטרן</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מגיד שיעור · 2 שנים</p></div>
+<div class="card d1 n3"><b class="nm">יעקב גולד</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מגיד שיעור · 7 שנים</p></div>
+<div class="card d1 n3"><b class="nm">נחום בלוי</b><span class="chk off" title="בחופשה" aria-hidden="true">–</span><span class="hid">נעדר · בחופשה</span>
+      <p class="ln sm">מגיד שיעור · 16 שנים</p></div>
+<div class="card d1 n3"><b class="nm">אהרן דויטש</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מגיד שיעור · 6 שנים</p></div>
+<div class="card d1 n3"><b class="nm">ברוך דויטש</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מגיד שיעור · 5 שנים</p></div>
+<div class="card d1 n3"><b class="nm">חיים בראון</b><span class="chk off" title="במחלה" aria-hidden="true">–</span><span class="hid">נעדר · במחלה</span>
+      <p class="ln sm">מגיד שיעור · 19 שנים</p></div>
+<div class="card d1 n3"><b class="nm">יהודה מלר</b><span class="chk off" title="במחלה" aria-hidden="true">–</span><span class="hid">נעדר · במחלה</span>
+      <p class="ln sm">מלמד · 5 שנים</p></div>
+<div class="card d1 n3"><b class="nm">גרשון גולד</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מלמד · 6 שנים</p></div>
+<div class="card d1 n3"><b class="nm">כלב בראון</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מלמד · 15 שנים</p></div>
+<div class="card d1 n3"><b class="nm">שמואל הירש</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מלמד · 1 שנים</p></div>
+<div class="card d1 n3"><b class="nm">יהודה טויב</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מלמד · 21 שנים</p></div>
+<div class="card d1 n3"><b class="nm">יעקב ריינר</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מלמד · 19 שנים</p></div>
+<div class="card d1 n3"><b class="nm">יוסף אברמסון</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מלמד · 20 שנים</p></div>
+<div class="card d1 n3"><b class="nm">כלב דויטש</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מלמד · 16 שנים</p></div>
+<div class="card d1 n3"><b class="nm">מנחם גולד</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מלמד · 3 שנים</p></div>
+<div class="card d1 n3"><b class="nm">שלמה וקסלר</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מלמד · 9 שנים</p></div>
+<div class="card d1 n3"><b class="nm">יוסף שוורץ</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">משגיח · 22 שנים</p></div>
+<div class="card d1 n3"><b class="nm">חיים נוימן</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">משגיח · 16 שנים</p></div>
+<div class="card d1 n3"><b class="nm">ברוך רוזן</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">משגיח · 7 שנים</p></div>
+<div class="card d2 n3"><b class="nm">יצחק בלוי</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מזכירות · 3 שנים</p></div>
+<div class="card d2 n3"><b class="nm">זבולון שטרן</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מזכירות · 17 שנים</p></div>
+<div class="card d2 n3"><b class="nm">יצחק אדלר</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מזכירות · 14 שנים</p></div>
+<div class="card d2 n3"><b class="nm">עזרא חשין</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מזכירות · 7 שנים</p></div>
+<div class="card d2 n3"><b class="nm">לוי חשין</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">הנהלה · 15 שנים</p></div>
+<div class="card d2 n3"><b class="nm">יוסף הירש</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">הנהלה · 5 שנים</p></div>
+<div class="card d2 n3"><b class="nm">יוסף לנדאו</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">הנהלה · 10 שנים</p></div>
+<div class="card d3 n3"><b class="nm">שלמה יעקובוביץ</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מטבח · 16 שנים</p></div>
+<div class="card d3 n3"><b class="nm">שרגא זילבר</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מטבח · 3 שנים</p></div>
+<div class="card d3 n3"><b class="nm">זלמן נוימן</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מטבח · 3 שנים</p></div>
+<div class="card d3 n3"><b class="nm">זלמן דויטש</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מטבח · 1 שנים</p></div>
+<div class="card d3 n3"><b class="nm">משה טויב</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">מטבח · 12 שנים</p></div>
+<div class="card d3 n3"><b class="nm">זבולון ויס</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">אחזקה · 16 שנים</p></div>
+<div class="card d3 n3"><b class="nm">בנימין רוזן</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">אחזקה · 15 שנים</p></div>
+<div class="card d3 n3"><b class="nm">יוסף זילבר</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">אחזקה · 17 שנים</p></div>
+<div class="card d4 n3"><b class="nm">אורי אדלר</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">נהג · 9 שנים</p></div>
+<div class="card d4 n3"><b class="nm">אליהו דויטש</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">נהג · 9 שנים</p></div>
+<div class="card d4 n3"><b class="nm">עזרא אקשטיין</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">נהג · 15 שנים</p></div>
+<div class="card d4 n3"><b class="nm">צבי הורוביץ</b><span class="chk" title="במקומו היום" aria-hidden="true">✓</span><span class="hid">במקומו היום</span>
+      <p class="ln sm">נהג · 21 שנים</p></div>
+  </div></div>
+  <div class="colw"><h3>באחריותם</h3><div class="col">
+  <div class="card d1 n4 tie"><b class="nm">ג׳1</b>
+      <p class="ln sm"><bdi>37</bdi> · נוכחים <bdi>34</bdi> · חדר 10</p></div>
+<div class="card d1 n4 tie"><b class="nm">ג׳2</b>
+      <p class="ln sm"><bdi>27</bdi> · נוכחים <bdi>25</bdi> · חדר 11</p></div>
+<div class="card d1 n4 tie"><b class="nm">ד׳1</b>
+      <p class="ln sm"><bdi>31</bdi> · נוכחים <bdi>30</bdi> · חדר 12</p></div>
+<div class="card d1 n4 tie"><b class="nm">ד׳2</b>
+      <p class="ln sm"><bdi>42</bdi> · נוכחים <bdi>37</bdi> · חדר 13</p></div>
+<div class="card d1 n4 tie"><b class="nm">ה׳1</b>
+      <p class="ln sm"><bdi>30</bdi> · נוכחים <bdi>27</bdi> · חדר 14</p></div>
+<div class="card d1 n4 tie"><b class="nm">ה׳2</b>
+      <p class="ln sm"><bdi>30</bdi> · נוכחים <bdi>26</bdi> · חדר 15</p></div>
+<div class="card d1 n4 tie"><b class="nm">ו׳1</b>
+      <p class="ln sm"><bdi>36</bdi> · נוכחים <bdi>35</bdi> · חדר 16</p></div>
+<div class="card d1 n4 tie"><b class="nm">ו׳2</b>
+      <p class="ln sm"><bdi>29</bdi> · נוכחים <bdi>26</bdi> · חדר 17</p></div>
+<div class="card d1 n4 tie"><b class="nm">ז׳1</b>
+      <p class="ln sm"><bdi>38</bdi> · נוכחים <bdi>37</bdi> · חדר 18</p></div>
+<div class="card d1 n4 tie"><b class="nm">ז׳2</b>
+      <p class="ln sm"><bdi>35</bdi> · נוכחים <bdi>29</bdi> · חדר 19</p></div>
+<div class="card d1 n4 tie"><b class="nm">ח׳1</b>
+      <p class="ln sm"><bdi>37</bdi> · נוכחים <bdi>37</bdi> · חדר 20</p></div>
+<div class="card d1 n4 tie"><b class="nm">ח׳2</b>
+      <p class="ln sm"><bdi>40</bdi> · נוכחים <bdi>37</bdi> · חדר 21</p></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="slot" aria-hidden="true"></div>
+<div class="card d4 n4 tie"><b class="nm">קו 1 · ירושלים מרכז</b>
+      <p class="ln sm"><bdi>49</bdi> · 5 עמדות</p></div>
+<div class="card d4 n4 tie"><b class="nm">קו 2 · בית שמש</b>
+      <p class="ln sm"><bdi>58</bdi> · 4 עמדות</p></div>
+<div class="card d4 n4 tie"><b class="nm">קו 3 · ביתר</b>
+      <p class="ln sm"><bdi>47</bdi> · 3 עמדות</p></div>
+<div class="slot" aria-hidden="true"></div>
+  </div></div>
+ </div>
+
+ <p class="legend">
+  <span><i class="d1" style="border-color:var(--e1)"></i>חינוך</span>
+  <span><i class="d2" style="border-color:var(--e2)"></i>מנהלה</span>
+  <span><i class="d3" style="border-color:var(--e3)"></i>משק</span>
+  <span><i class="d4" style="border-color:var(--e4)"></i>תפעול</span>
+  <span><i class="d0" style="border-color:var(--e0)"></i>המוסד</span>
+  <span><span class="chk" style="position:static">✓</span>במקומו היום</span>
+  <span><span class="chk off" style="position:static">–</span>נעדר</span>
+ </p>
+
+ <p class="note">הסולם מועתק במדידה מ-WikiTree: כרטיס ברוחב <bdi>237</bdi> ורדיוס <bdi>6</bdi>, ריפוד <bdi>8/10/10</bdi>, גוף <bdi>16/24</bdi>, שם ב־<bdi>700 16/19.2</bdi> בירוק <bdi>#008000</bdi> — ותווית מודגשת עם קו תחתון מעל כל עמודה. הרעיון: <b>דור אינו ציור, הוא עמודה</b>. גרף מצויר נשבר בדור השלישי; עמודות נגללות לרוחב בלי גבול. ומה שקל לפספס — <b>הפירוט יורד עם המרחק</b>: כרטיס המוסד נושא ארבע שורות, כרטיס היחידה נושא שתיים. <b>שתי סטיות מודעות:</b> במקור הגוון מסמן מין (כחול/ורוד); כאן הישות היא תפקיד ולא אדם, ולכן הגוון מסמן תחום. ובמקור תוויות העמודות ברישיות ובריווח-אותיות; בעברית אין רישיות, וריווח-אותיות פוגע בקריאוּת — נשארו ההדגשה והקו בלבד.</p>
+</div>
+</body></html>
