@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>צוות — מוסד</title>
+<meta name="description" content="מי נמצא היום ומתי: גאנט של יום אחד עם עקומת כיסוי.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+ --bg:#fbfbfa;--card:#fff;--sunk:#f4f3f0;--raise:#ebe9e5;--ink:#37352F;--mut:#6b675e;--faint:#8a857b;
+ --hair:rgba(0,0,0,.1);--acc:#2560D0;--acc-soft:#eaf1fe;--on-acc:#fff;--ok:#12703d;--ok-soft:#e3f3ea;
+ --warn:#8a5e00;--warn-soft:#fbf0d8;--err:#a8281a;--err-soft:#fbe7e4;
+ --c1:#2560D0;--c1-soft:#eaf1fe;--c2:#12703d;--c2-soft:#e3f3ea;--c3:#8a5e00;--c3-soft:#fbf0d8;
+ --c4:#6a3fc0;--c4-soft:#f0ebfb;--c5:#a8281a;--c5-soft:#fbe7e4;--c6:#0c6570;--c6-soft:#e2f2f4;
+ --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;
+ --r:16px;--rs:10px;--row:44px;--dir:-1;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#0d0d0f;--card:#161619;--sunk:#1c1c20;--raise:#26262b;--ink:#ECE9E2;--mut:#a8a299;--faint:#8b857c;
+ --hair:rgba(236,233,226,.14);--acc:#7FA6F5;--acc-soft:#1a2436;--on-acc:#0B0B0D;--ok:#5cd79b;--ok-soft:#14261d;
+ --warn:#e8bd5c;--warn-soft:#2a2318;--err:#f08d80;--err-soft:#2c1a17;
+ --c1:#7FA6F5;--c1-soft:#1a2436;--c2:#5cd79b;--c2-soft:#14261d;--c3:#e8bd5c;--c3-soft:#2a2318;
+ --c4:#b79bf0;--c4-soft:#221c32;--c5:#f08d80;--c5-soft:#2c1a17;--c6:#63c6d2;--c6-soft:#152628;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#0d0d0f;--card:#161619;--sunk:#1c1c20;--raise:#26262b;--ink:#ECE9E2;--mut:#a8a299;--faint:#8b857c;--hair:rgba(236,233,226,.14);--acc:#7FA6F5;--acc-soft:#1a2436;--on-acc:#0B0B0D;--ok:#5cd79b;--ok-soft:#14261d;--warn:#e8bd5c;--warn-soft:#2a2318;--err:#f08d80;--err-soft:#2c1a17;--c1:#7FA6F5;--c1-soft:#1a2436;--c2:#5cd79b;--c2-soft:#14261d;--c3:#e8bd5c;--c3-soft:#2a2318;--c4:#b79bf0;--c4-soft:#221c32;--c5:#f08d80;--c5-soft:#2c1a17;--c6:#63c6d2;--c6-soft:#152628;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Heebo,Arial,sans-serif;letter-spacing:0}
+bdi{unicode-bidi:isolate}.num{font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3,h4{margin:0;text-wrap:balance}p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;inset-inline-start:-9999px;top:0;background:var(--acc);color:var(--on-acc);padding:var(--s2) var(--s4);border-radius:var(--rs);z-index:99}
+.skip:focus{inset-inline-start:var(--s4);top:var(--s2)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* מגירת-האגפים: ב-NAV_CSS */
+@media print{.nav,.skip{display:none!important}body{background:#fff}}
+.nav{position:relative;font-size:0}
+.nav>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:var(--s2);
+ border:1px solid var(--hair);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13.5px;min-height:38px}
+.nav>summary::-webkit-details-marker{display:none}
+.nav>summary::after{content:'▾';color:var(--faint)}
+.nav[open]>summary{border-color:var(--acc)}
+.nav .sheet{position:absolute;inset-inline-end:0;top:calc(100% + 6px);z-index:40;background:var(--card);
+ border:1px solid var(--hair);border-radius:var(--r);padding:var(--s2);box-shadow:0 12px 32px rgba(0,0,0,.14);
+ display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:2px;width:max-content;max-width:min(92vw,340px)}
+.nav .sheet a{display:flex;align-items:center;gap:var(--s2);padding:8px 10px;border-radius:var(--rs);
+ color:var(--ink);text-decoration:none;font-size:13.5px;white-space:nowrap}
+.nav .sheet a:hover{background:var(--sunk)}
+.nav .sheet a[aria-current=page]{background:var(--acc-soft);color:var(--acc);font-weight:700}
+.nav .sheet i{font-style:normal;width:18px;text-align:center;opacity:.75}
+
+
+.hd{display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap;padding:var(--s4);max-width:1240px;margin-inline:auto}
+.hd h1{font-size:21px}
+.hd .sp{flex:1}
+.kpi{display:flex;gap:var(--s4);flex-wrap:wrap;padding:0 var(--s4) var(--s4);max-width:1240px;margin-inline:auto}
+.kpi div{display:flex;flex-direction:column}
+.kpi b{font:800 24px Heebo;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi span{font-size:12.5px;color:var(--mut)}
+.kpi .warn b{color:var(--warn)}
+.kpi .err b{color:var(--err)}
+
+.scroll{overflow-x:auto;padding:0 var(--s4) var(--s5);max-width:1240px;margin-inline:auto}
+.gantt{display:grid;grid-template-columns:148px repeat(32,minmax(15px,1fr));align-items:center;
+ min-width:760px;row-gap:5px}
+.gantt .hh{grid-row:1;font:500 10.5px Heebo;color:var(--mut);text-align:center;font-variant-numeric:tabular-nums;
+ border-inline-start:1px solid var(--hair);padding-bottom:5px}
+.gantt .nm{grid-column:1;position:sticky;inset-inline-start:0;background:var(--bg);z-index:5;
+ padding-inline-end:var(--s3);display:flex;flex-direction:column;min-height:34px;justify-content:center}
+.gantt .nm b{font-size:13.5px;font-weight:600;white-space:nowrap}
+.gantt .nm span{font-size:11.5px;color:var(--mut);white-space:nowrap}
+.lane{grid-column:2/-1;height:32px;border-radius:8px;background:var(--sunk);position:relative;z-index:1}
+.bar{height:32px;border-radius:8px;display:flex;align-items:center;padding-inline:9px;font-size:11.5px;
+ font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:2;position:relative}
+.bar.b1{background:var(--c1-soft);color:var(--c1)}
+.bar.b2{background:var(--c2-soft);color:var(--c2)}
+.bar.b3{background:var(--c3-soft);color:var(--c3)}
+.bar.b4{background:var(--c4-soft);color:var(--c4)}
+.bar.b5{background:var(--c5-soft);color:var(--c5)}
+.bar.b6{background:var(--c6-soft);color:var(--c6)}
+.off{grid-column:2/-1;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+ font-size:12px;font-weight:600;color:var(--mut);background:repeating-linear-gradient(-45deg,var(--sunk),var(--sunk) 6px,var(--raise) 6px,var(--raise) 12px)}
+.nowl{grid-row:2/-1;width:2px;background:var(--acc);justify-self:center;z-index:4;position:relative}
+.nowl::before{content:'';position:absolute;top:-5px;inset-inline-start:-3px;width:8px;height:8px;border-radius:50%;background:var(--acc)}
+
+.cover{grid-column:2/-1;display:flex;align-items:flex-end;gap:1px;height:46px;margin-top:var(--s3)}
+.cover i{flex:1;background:var(--acc-soft);border-radius:2px 2px 0 0}
+.cover i.thin{background:var(--warn-soft)}
+.cover i.none{background:var(--err-soft);min-height:2px}
+.clab{grid-column:1;font-size:12px;color:var(--mut);margin-top:var(--s3);align-self:end;padding-inline-end:var(--s3)}
+
+.legend{display:flex;gap:var(--s4);flex-wrap:wrap;font-size:12.5px;color:var(--mut);
+ max-width:1240px;margin-inline:auto;padding:0 var(--s4) var(--s6)}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:3px;margin-inline-end:6px;vertical-align:-1px}
+.hatch{background:repeating-linear-gradient(-45deg,var(--sunk),var(--sunk) 3px,var(--raise) 3px,var(--raise) 6px)}
+
+@media(max-width:700px){.gantt{grid-template-columns:110px repeat(32,minmax(13px,1fr))}}
+@media print{.scroll{overflow:visible}.nowl{display:none}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#main">דלג לתוכן</a>
+
+<header class="hd">
+  <h1>צוות</h1>
+  <p style="font-size:13.5px;color:var(--mut)">יום שלישי ד׳ תשרי · <bdi dir="ltr">06:00</bdi>–<bdi dir="ltr">22:00</bdi> · נתוני דוגמה</p>
+  <span class="sp"></span>
+  <details class="nav"><summary aria-label="מעבר לאגף">צוות</summary>
+  <nav class="sheet" aria-label="אגפי המוסד"><a href="index.html"><i aria-hidden="true">🏛</i>בית</a><a href="anashim.html"><i aria-hidden="true">👥</i>אנשים</a><a href="hinuch.html"><i aria-hidden="true">📚</i>חינוך</a><a href="tzevet.html" aria-current="page"><i aria-hidden="true">🧰</i>צוות</a><a href="gviya.html"><i aria-hidden="true">₪</i>גבייה</a><a href="trumot.html"><i aria-hidden="true">❤</i>תרומות</a><a href="ksafim.html"><i aria-hidden="true">📊</i>כספים</a><a href="medrash.html"><i aria-hidden="true">🕯</i>בית המדרש</a><a href="hatzer.html"><i aria-hidden="true">👑</i>החצר</a><a href="hesed.html"><i aria-hidden="true">🤝</i>חסד</a><a href="tifol.html"><i aria-hidden="true">🔧</i>תפעול</a><a href="shiduch.html"><i aria-hidden="true">💍</i>שידוכים</a><a href="tikshor.html"><i aria-hidden="true">✉</i>תקשורת</a></nav></details>
+</header>
+
+<section class="kpi" aria-label="מצב היום">
+  <div><b>41</b><span>נוכחים מתוך 44</span></div>
+  <div class="warn"><b>2</b><span>חסרים · שובץ מחליף</span></div>
+  <div class="err"><b>1</b><span>חסר · בלי מחליף</span></div>
+  <div><b class="num"><bdi dir="ltr">06:00</bdi></b><span>הכיסוי הדק ביותר</span></div>
+</section>
+
+<main id="main" class="scroll">
+  <h2 class="sr">גאנט משמרות ליום שלישי</h2>
+  <div class="gantt">
+    <div class="hh" style="grid-column:2/span 2">06</div><div class="hh" style="grid-column:4/span 2">07</div><div class="hh" style="grid-column:6/span 2">08</div><div class="hh" style="grid-column:8/span 2">09</div><div class="hh" style="grid-column:10/span 2">10</div><div class="hh" style="grid-column:12/span 2">11</div><div class="hh" style="grid-column:14/span 2">12</div><div class="hh" style="grid-column:16/span 2">13</div><div class="hh" style="grid-column:18/span 2">14</div><div class="hh" style="grid-column:20/span 2">15</div><div class="hh" style="grid-column:22/span 2">16</div><div class="hh" style="grid-column:24/span 2">17</div><div class="hh" style="grid-column:26/span 2">18</div><div class="hh" style="grid-column:28/span 2">19</div><div class="hh" style="grid-column:30/span 2">20</div><div class="hh" style="grid-column:32/span 2">21</div>
+    <div class="nm" style="grid-row:2"><b>ר׳ אליהו ויס</b><span>מגיד שיעור ז׳</span></div><div class="lane" style="grid-row:2"></div><div class="bar b1" style="grid-row:2;grid-column:6/14">סדר א׳ · <bdi dir="ltr">08:00–12:20</bdi></div><div class="bar b1" style="grid-row:2;grid-column:17/22">סדר ב׳ · <bdi dir="ltr">13:45–16:10</bdi></div><div class="nm" style="grid-row:3"><b>ר׳ דוד לוי</b><span>מלמד ג׳</span></div><div class="lane" style="grid-row:3"></div><div class="bar b3" style="grid-row:3;grid-column:6/14">סדר א׳ · <bdi dir="ltr">08:00–12:20</bdi></div><div class="bar b3" style="grid-row:3;grid-column:17/20">חזרה · <bdi dir="ltr">13:45–15:20</bdi></div><div class="nm" style="grid-row:4"><b>ר׳ יצחק פריד</b><span>משגיח</span></div><div class="lane" style="grid-row:4"></div><div class="bar b2" style="grid-row:4;grid-column:2/8">שחרית · <bdi dir="ltr">06:20–09:00</bdi></div><div class="bar b2" style="grid-row:4;grid-column:14/17">סעודה · <bdi dir="ltr">12:20–13:45</bdi></div><div class="bar b2" style="grid-row:4;grid-column:28/33">סדר ערב · <bdi dir="ltr">19:00–21:30</bdi></div><div class="nm" style="grid-row:5"><b>ר׳ מנחם פרידמן</b><span>גבאי</span></div><div class="lane" style="grid-row:5"></div><div class="bar b4" style="grid-row:5;grid-column:2/10">מניינים · <bdi dir="ltr">06:00–10:00</bdi></div><div class="bar b4" style="grid-row:5;grid-column:22/30">מנחה/מעריב · <bdi dir="ltr">16:00–20:00</bdi></div><div class="nm" style="grid-row:6"><b>זלמן כץ</b><span>מטבח</span></div><div class="lane" style="grid-row:6"></div><div class="bar b6" style="grid-row:6;grid-column:2/18">בוקר וצהריים · <bdi dir="ltr">05:30–14:00</bdi></div><div class="bar b6" style="grid-row:6;grid-column:24/30">ערב · <bdi dir="ltr">17:00–20:00</bdi></div><div class="nm" style="grid-row:7"><b>חנה גולד</b><span>מזכירות</span></div><div class="lane" style="grid-row:7"></div><div class="bar b5" style="grid-row:7;grid-column:6/20">משרד · <bdi dir="ltr">08:00–15:00</bdi></div><div class="nm" style="grid-row:8"><b>גרשון אדלר</b><span>נהג קו 4</span></div><div class="lane" style="grid-row:8"></div><div class="bar b3" style="grid-row:8;grid-column:4/7">איסוף · <bdi dir="ltr">07:00–08:30</bdi></div><div class="bar b3" style="grid-row:8;grid-column:22/25">פיזור · <bdi dir="ltr">16:00–17:30</bdi></div><div class="nm" style="grid-row:9"><b>שרה ויסבלט</b><span>ציוד</span></div><div class="off" style="grid-row:9">חופשה · לא במשמרת</div><div class="nm" style="grid-row:10"><b>ברוך נוימן</b><span>אחזקה</span></div><div class="off" style="grid-row:10">מחלה · לא במשמרת</div><div class="nm" style="grid-row:11"><b>מרדכי שטרן</b><span>מחליף · אחזקה</span></div><div class="lane" style="grid-row:11"></div><div class="bar b6" style="grid-row:11;grid-column:6/22">במקום ב. נוימן · <bdi dir="ltr">08:00–16:00</bdi></div>
+    <div class="nowl" id="nowl" style="grid-column:17" aria-hidden="true"></div>
+    <div class="clab">כיסוי</div>
+    <div class="cover" role="img" aria-label="עקומת כיסוי: בין 1 ל-7 אנשי צוות בו-זמנית לאורך היום">
+      <i class="" style="height:42.857142857142854%"></i><i class="" style="height:42.857142857142854%"></i><i class="" style="height:57.14285714285714%"></i><i class="" style="height:57.14285714285714%"></i><i class="" style="height:114.28571428571428%"></i><i class="" style="height:100%"></i><i class="" style="height:85.71428571428571%"></i><i class="" style="height:85.71428571428571%"></i><i class="" style="height:71.42857142857143%"></i><i class="" style="height:71.42857142857143%"></i><i class="" style="height:71.42857142857143%"></i><i class="" style="height:71.42857142857143%"></i><i class="" style="height:57.14285714285714%"></i><i class="" style="height:57.14285714285714%"></i><i class="" style="height:57.14285714285714%"></i><i class="" style="height:71.42857142857143%"></i><i class="" style="height:57.14285714285714%"></i><i class="" style="height:57.14285714285714%"></i><i class="thin" style="height:28.57142857142857%"></i><i class="thin" style="height:28.57142857142857%"></i><i class="thin" style="height:28.57142857142857%"></i><i class="thin" style="height:28.57142857142857%"></i><i class="" style="height:42.857142857142854%"></i><i class="thin" style="height:28.57142857142857%"></i><i class="thin" style="height:28.57142857142857%"></i><i class="thin" style="height:28.57142857142857%"></i><i class="" style="height:42.857142857142854%"></i><i class="" style="height:42.857142857142854%"></i><i class="thin" style="height:14.285714285714285%"></i><i class="thin" style="height:14.285714285714285%"></i><i class="thin" style="height:14.285714285714285%"></i><i class="none" style="height:4%"></i>
+    </div>
+  </div>
+</main>
+
+<p class="legend">
+  <span><i style="background:var(--acc-soft)"></i>כיסוי תקין</span>
+  <span><i style="background:var(--warn-soft)"></i>כיסוי דק (≤2)</span>
+  <span><i class="hatch"></i>חופשה או מחלה</span>
+  <span>הקו הכחול = השעה הנוכחית (מופיע בין <bdi dir="ltr">06:00</bdi> ל-<bdi dir="ltr">22:00</bdi>).</span>
+</p>
+<script>
+
+/* הקו הנוכחי זז לחריץ של השעה עכשיו; מחוץ ל-06:00–22:00 הוא נעלם */
+(function(){
+ const n=document.getElementById('nowl'), d=new Date(), h=d.getHours()+d.getMinutes()/60;
+ if(h<6||h>=22){n.hidden=true;return;}
+ n.style.gridColumn=String(Math.round((h-6)*2)+2);
+})();
+
+</script>
+</body>
+</html>

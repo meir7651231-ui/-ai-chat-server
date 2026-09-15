@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>חסד — מוסד</title>
+<meta name="description" content="לוח הבקשות של גמ״ח ההלוואות: כל בקשה נעה משלב לשלב.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+ --bg:#fbfbfa;--card:#fff;--sunk:#f4f3f0;--raise:#ebe9e5;--ink:#37352F;--mut:#6b675e;--faint:#8a857b;
+ --hair:rgba(0,0,0,.1);--acc:#2560D0;--acc-soft:#eaf1fe;--on-acc:#fff;--ok:#12703d;--ok-soft:#e3f3ea;
+ --warn:#8a5e00;--warn-soft:#fbf0d8;--err:#a8281a;--err-soft:#fbe7e4;
+ --c1:#2560D0;--c1-soft:#eaf1fe;--c2:#12703d;--c2-soft:#e3f3ea;--c3:#8a5e00;--c3-soft:#fbf0d8;
+ --c4:#6a3fc0;--c4-soft:#f0ebfb;--c5:#a8281a;--c5-soft:#fbe7e4;--c6:#0c6570;--c6-soft:#e2f2f4;
+ --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;
+ --r:16px;--rs:10px;--row:44px;--dir:-1;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#0d0d0f;--card:#161619;--sunk:#1c1c20;--raise:#26262b;--ink:#ECE9E2;--mut:#a8a299;--faint:#8b857c;
+ --hair:rgba(236,233,226,.14);--acc:#7FA6F5;--acc-soft:#1a2436;--on-acc:#0B0B0D;--ok:#5cd79b;--ok-soft:#14261d;
+ --warn:#e8bd5c;--warn-soft:#2a2318;--err:#f08d80;--err-soft:#2c1a17;
+ --c1:#7FA6F5;--c1-soft:#1a2436;--c2:#5cd79b;--c2-soft:#14261d;--c3:#e8bd5c;--c3-soft:#2a2318;
+ --c4:#b79bf0;--c4-soft:#221c32;--c5:#f08d80;--c5-soft:#2c1a17;--c6:#63c6d2;--c6-soft:#152628;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#0d0d0f;--card:#161619;--sunk:#1c1c20;--raise:#26262b;--ink:#ECE9E2;--mut:#a8a299;--faint:#8b857c;--hair:rgba(236,233,226,.14);--acc:#7FA6F5;--acc-soft:#1a2436;--on-acc:#0B0B0D;--ok:#5cd79b;--ok-soft:#14261d;--warn:#e8bd5c;--warn-soft:#2a2318;--err:#f08d80;--err-soft:#2c1a17;--c1:#7FA6F5;--c1-soft:#1a2436;--c2:#5cd79b;--c2-soft:#14261d;--c3:#e8bd5c;--c3-soft:#2a2318;--c4:#b79bf0;--c4-soft:#221c32;--c5:#f08d80;--c5-soft:#2c1a17;--c6:#63c6d2;--c6-soft:#152628;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Heebo,Arial,sans-serif;letter-spacing:0}
+bdi{unicode-bidi:isolate}.num{font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3,h4{margin:0;text-wrap:balance}p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;inset-inline-start:-9999px;top:0;background:var(--acc);color:var(--on-acc);padding:var(--s2) var(--s4);border-radius:var(--rs);z-index:99}
+.skip:focus{inset-inline-start:var(--s4);top:var(--s2)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* מגירת-האגפים: ב-NAV_CSS */
+@media print{.nav,.skip{display:none!important}body{background:#fff}}
+.nav{position:relative;font-size:0}
+.nav>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:var(--s2);
+ border:1px solid var(--hair);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13.5px;min-height:38px}
+.nav>summary::-webkit-details-marker{display:none}
+.nav>summary::after{content:'▾';color:var(--faint)}
+.nav[open]>summary{border-color:var(--acc)}
+.nav .sheet{position:absolute;inset-inline-end:0;top:calc(100% + 6px);z-index:40;background:var(--card);
+ border:1px solid var(--hair);border-radius:var(--r);padding:var(--s2);box-shadow:0 12px 32px rgba(0,0,0,.14);
+ display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:2px;width:max-content;max-width:min(92vw,340px)}
+.nav .sheet a{display:flex;align-items:center;gap:var(--s2);padding:8px 10px;border-radius:var(--rs);
+ color:var(--ink);text-decoration:none;font-size:13.5px;white-space:nowrap}
+.nav .sheet a:hover{background:var(--sunk)}
+.nav .sheet a[aria-current=page]{background:var(--acc-soft);color:var(--acc);font-weight:700}
+.nav .sheet i{font-style:normal;width:18px;text-align:center;opacity:.75}
+
+
+.hd{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;padding:var(--s4) var(--s4) var(--s3)}
+.hd h1{font-size:20px}.hd .sp{flex:1}
+.fund{display:flex;gap:var(--s2);flex-wrap:wrap;padding:0 var(--s4) var(--s4)}
+.fund div{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:10px var(--s4);min-width:140px}
+.fund b{display:block;font:800 19px Heebo;font-variant-numeric:tabular-nums}
+.fund span{font-size:12px;color:var(--mut)}
+.fund .free b{color:var(--ok)}
+
+.board{display:flex;gap:var(--s3);overflow-x:auto;padding:0 var(--s4) var(--s6);align-items:flex-start;
+ scroll-snap-type:x proximity}
+.col{flex:1 0 246px;max-width:300px;background:var(--sunk);border-radius:var(--r);padding:var(--s3);scroll-snap-align:start}
+.col>h2{display:flex;align-items:baseline;gap:var(--s2);font-size:13.5px;padding:0 4px var(--s3)}
+.col .cnt{font:800 11px Heebo;background:var(--raise);color:var(--mut);border-radius:999px;padding:1px 8px}
+.col .sum{margin-inline-start:auto;font-size:11.5px;color:var(--mut);font-variant-numeric:tabular-nums}
+
+.card{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:var(--s3);margin-bottom:var(--s2)}
+.card .r1{display:flex;align-items:baseline;gap:var(--s2)}
+.card .fam{font-weight:700;font-size:14px;flex:1}
+.card .amt{font:800 14px Heebo;font-variant-numeric:tabular-nums}
+.card .why{font-size:12.5px;color:var(--mut);margin-top:2px}
+.card .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:var(--s2)}
+.tag{font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 8px;background:var(--sunk);color:var(--mut)}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.err{background:var(--err-soft);color:var(--err)}
+.card .move{display:flex;gap:6px;margin-top:var(--s3)}
+.card .move button{flex:1;border:1px solid var(--hair);background:var(--card);border-radius:8px;
+ padding:6px;font-size:12px;min-height:34px;color:var(--mut)}
+.card .move button:hover{border-color:var(--acc);color:var(--acc)}
+.card .move button[disabled]{opacity:.4;cursor:not-allowed}
+.card .bar{height:5px;border-radius:999px;background:var(--sunk);margin-top:var(--s2);overflow:hidden;position:relative}
+.card .bar i{position:absolute;inset-block:0;inset-inline-start:0;background:var(--ok);border-radius:999px}
+.empty{font-size:12.5px;color:var(--mut);text-align:center;padding:var(--s4) 0}
+
+@media print{.board{display:block}.col{max-width:none;break-inside:avoid;margin-bottom:12px}.move{display:none!important}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#main">דלג לתוכן</a>
+
+<header class="hd">
+  <h1>חסד · גמ״ח הלוואות</h1>
+  <span class="sp"></span>
+  <details class="nav"><summary aria-label="מעבר לאגף">חסד</summary>
+  <nav class="sheet" aria-label="אגפי המוסד"><a href="index.html"><i aria-hidden="true">🏛</i>בית</a><a href="anashim.html"><i aria-hidden="true">👥</i>אנשים</a><a href="hinuch.html"><i aria-hidden="true">📚</i>חינוך</a><a href="tzevet.html"><i aria-hidden="true">🧰</i>צוות</a><a href="gviya.html"><i aria-hidden="true">₪</i>גבייה</a><a href="trumot.html"><i aria-hidden="true">❤</i>תרומות</a><a href="ksafim.html"><i aria-hidden="true">📊</i>כספים</a><a href="medrash.html"><i aria-hidden="true">🕯</i>בית המדרש</a><a href="hatzer.html"><i aria-hidden="true">👑</i>החצר</a><a href="hesed.html" aria-current="page"><i aria-hidden="true">🤝</i>חסד</a><a href="tifol.html"><i aria-hidden="true">🔧</i>תפעול</a><a href="shiduch.html"><i aria-hidden="true">💍</i>שידוכים</a><a href="tikshor.html"><i aria-hidden="true">✉</i>תקשורת</a></nav></details>
+</header>
+
+<section class="fund" aria-label="מצב הקרן">
+  <div><b><bdi dir="ltr">₪742,000</bdi></b><span>הון הקרן</span></div>
+  <div><b><bdi dir="ltr">₪486,300</bdi></b><span>בהלוואות פעילות</span></div>
+  <div class="free"><b><bdi dir="ltr">₪255,700</bdi></b><span>זמין להלוואה</span></div>
+  <div><b>26</b><span>הלוואות פעילות</span></div>
+  <div><b>0</b><span>בפיגור מעל חודשיים</span></div>
+</section>
+
+<main id="main" class="board">
+  <section class="col" data-stage="0" aria-label="בקשה חדשה">
+      <h2>בקשה חדשה<span class="cnt">3</span><span class="sum"><bdi dir="ltr">₪25,000</bdi></span></h2>
+      <article class="card" data-i="0">
+          <div class="r1"><span class="fam">משפחת דויטש</span><span class="amt"><bdi dir="ltr">₪12,000</bdi></span></div>
+          <p class="why">הוצאות רפואיות</p>
+          <div class="meta">
+            <span class="tag err">0/2 ערבים</span>
+            <span class="tag">2 ימים</span>
+            
+          </div>
+          
+          <div class="move">
+            <button data-dir="-1" disabled aria-label="החזרה לשלב הקודם">→ אחורה</button>
+            <button data-dir="1"  aria-label="קידום לשלב הבא">קדימה ←</button>
+          </div>
+        </article><article class="card" data-i="1">
+          <div class="r1"><span class="fam">משפחת הירש</span><span class="amt"><bdi dir="ltr">₪8,000</bdi></span></div>
+          <p class="why">שכר לימוד</p>
+          <div class="meta">
+            <span class="tag warn">1/2 ערבים</span>
+            <span class="tag">4 ימים</span>
+            
+          </div>
+          
+          <div class="move">
+            <button data-dir="-1" disabled aria-label="החזרה לשלב הקודם">→ אחורה</button>
+            <button data-dir="1"  aria-label="קידום לשלב הבא">קדימה ←</button>
+          </div>
+        </article><article class="card" data-i="2">
+          <div class="r1"><span class="fam">ר׳ ב. נוימן</span><span class="amt"><bdi dir="ltr">₪5,000</bdi></span></div>
+          <p class="why">תיקון רכב</p>
+          <div class="meta">
+            <span class="tag err">0/2 ערבים</span>
+            <span class="tag warn">9 ימים ממתין</span>
+            <span class="tag">ישן</span>
+          </div>
+          
+          <div class="move">
+            <button data-dir="-1" disabled aria-label="החזרה לשלב הקודם">→ אחורה</button>
+            <button data-dir="1"  aria-label="קידום לשלב הבא">קדימה ←</button>
+          </div>
+        </article>
+    </section><section class="col" data-stage="1" aria-label="בדיקת ערבים">
+      <h2>בדיקת ערבים<span class="cnt">2</span><span class="sum"><bdi dir="ltr">₪35,000</bdi></span></h2>
+      <article class="card" data-i="3">
+          <div class="r1"><span class="fam">משפחת וקסלר</span><span class="amt"><bdi dir="ltr">₪20,000</bdi></span></div>
+          <p class="why">חתונה</p>
+          <div class="meta">
+            <span class="tag ok">2/2 ערבים</span>
+            <span class="tag">6 ימים</span>
+            
+          </div>
+          
+          <div class="move">
+            <button data-dir="-1"  aria-label="החזרה לשלב הקודם">→ אחורה</button>
+            <button data-dir="1"  aria-label="קידום לשלב הבא">קדימה ←</button>
+          </div>
+        </article><article class="card" data-i="4">
+          <div class="r1"><span class="fam">משפחת זילבר</span><span class="amt"><bdi dir="ltr">₪15,000</bdi></span></div>
+          <p class="why">שיפוץ דירה</p>
+          <div class="meta">
+            <span class="tag warn">1/2 ערבים</span>
+            <span class="tag">3 ימים</span>
+            
+          </div>
+          
+          <div class="move">
+            <button data-dir="-1"  aria-label="החזרה לשלב הקודם">→ אחורה</button>
+            <button data-dir="1"  aria-label="קידום לשלב הבא">קדימה ←</button>
+          </div>
+        </article>
+    </section><section class="col" data-stage="2" aria-label="לוועדה">
+      <h2>לוועדה<span class="cnt">2</span><span class="sum"><bdi dir="ltr">₪40,000</bdi></span></h2>
+      <article class="card" data-i="5">
+          <div class="r1"><span class="fam">משפחת חשין</span><span class="amt"><bdi dir="ltr">₪30,000</bdi></span></div>
+          <p class="why">חתונה</p>
+          <div class="meta">
+            <span class="tag ok">2/2 ערבים</span>
+            <span class="tag warn">11 ימים ממתין</span>
+            <span class="tag">ועדה ה׳</span>
+          </div>
+          
+          <div class="move">
+            <button data-dir="-1"  aria-label="החזרה לשלב הקודם">→ אחורה</button>
+            <button data-dir="1"  aria-label="קידום לשלב הבא">קדימה ←</button>
+          </div>
+        </article><article class="card" data-i="6">
+          <div class="r1"><span class="fam">ר׳ ע. טננבוים</span><span class="amt"><bdi dir="ltr">₪10,000</bdi></span></div>
+          <p class="why">הוצאות חג</p>
+          <div class="meta">
+            <span class="tag ok">2/2 ערבים</span>
+            <span class="tag warn">8 ימים ממתין</span>
+            <span class="tag">ועדה ה׳</span>
+          </div>
+          
+          <div class="move">
+            <button data-dir="-1"  aria-label="החזרה לשלב הקודם">→ אחורה</button>
+            <button data-dir="1"  aria-label="קידום לשלב הבא">קדימה ←</button>
+          </div>
+        </article>
+    </section><section class="col" data-stage="3" aria-label="אושר · ממתין לשטר">
+      <h2>אושר · ממתין לשטר<span class="cnt">2</span><span class="sum"><bdi dir="ltr">₪25,500</bdi></span></h2>
+      <article class="card" data-i="7">
+          <div class="r1"><span class="fam">משפחת יעקובוביץ</span><span class="amt"><bdi dir="ltr">₪18,000</bdi></span></div>
+          <p class="why">מעבר דירה</p>
+          <div class="meta">
+            <span class="tag ok">2/2 ערבים</span>
+            <span class="tag">1 ימים</span>
+            
+          </div>
+          
+          <div class="move">
+            <button data-dir="-1"  aria-label="החזרה לשלב הקודם">→ אחורה</button>
+            <button data-dir="1"  aria-label="קידום לשלב הבא">קדימה ←</button>
+          </div>
+        </article><article class="card" data-i="8">
+          <div class="r1"><span class="fam">משפחת כהנא</span><span class="amt"><bdi dir="ltr">₪7,500</bdi></span></div>
+          <p class="why">ציוד לימודי</p>
+          <div class="meta">
+            <span class="tag ok">2/2 ערבים</span>
+            <span class="tag">2 ימים</span>
+            
+          </div>
+          
+          <div class="move">
+            <button data-dir="-1"  aria-label="החזרה לשלב הקודם">→ אחורה</button>
+            <button data-dir="1"  aria-label="קידום לשלב הבא">קדימה ←</button>
+          </div>
+        </article>
+    </section><section class="col" data-stage="4" aria-label="בפירעון">
+      <h2>בפירעון<span class="cnt">3</span><span class="sum"><bdi dir="ltr">₪69,000</bdi></span></h2>
+      <article class="card" data-i="9">
+          <div class="r1"><span class="fam">משפחת לנדאו</span><span class="amt"><bdi dir="ltr">₪24,000</bdi></span></div>
+          <p class="why">חתונה</p>
+          <div class="meta">
+            <span class="tag ok">2/2 ערבים</span>
+            
+            
+          </div>
+          <div class="bar" role="img" aria-label="נפרעו 14 מתוך 24 תשלומים">
+              <i style="width:58%"></i></div>
+            <p class="why">14 מתוך 24 תשלומים</p>
+          <div class="move">
+            <button data-dir="-1"  aria-label="החזרה לשלב הקודם">→ אחורה</button>
+            <button data-dir="1" disabled aria-label="קידום לשלב הבא">קדימה ←</button>
+          </div>
+        </article><article class="card" data-i="10">
+          <div class="r1"><span class="fam">משפחת אברמסון</span><span class="amt"><bdi dir="ltr">₪9,000</bdi></span></div>
+          <p class="why">רפואי</p>
+          <div class="meta">
+            <span class="tag ok">2/2 ערבים</span>
+            
+            
+          </div>
+          <div class="bar" role="img" aria-label="נפרעו 3 מתוך 12 תשלומים">
+              <i style="width:25%"></i></div>
+            <p class="why">3 מתוך 12 תשלומים</p>
+          <div class="move">
+            <button data-dir="-1"  aria-label="החזרה לשלב הקודם">→ אחורה</button>
+            <button data-dir="1" disabled aria-label="קידום לשלב הבא">קדימה ←</button>
+          </div>
+        </article><article class="card" data-i="11">
+          <div class="r1"><span class="fam">משפחת בלוי</span><span class="amt"><bdi dir="ltr">₪36,000</bdi></span></div>
+          <p class="why">דירה</p>
+          <div class="meta">
+            <span class="tag ok">2/2 ערבים</span>
+            
+            
+          </div>
+          <div class="bar" role="img" aria-label="נפרעו 31 מתוך 36 תשלומים">
+              <i style="width:86%"></i></div>
+            <p class="why">31 מתוך 36 תשלומים</p>
+          <div class="move">
+            <button data-dir="-1"  aria-label="החזרה לשלב הקודם">→ אחורה</button>
+            <button data-dir="1" disabled aria-label="קידום לשלב הבא">קדימה ←</button>
+          </div>
+        </article>
+    </section>
+</main>
+<script>
+
+/* העברת פתק בין עמודות — כולל עדכון המונה והסכום של שתי העמודות */
+document.querySelector('.board').addEventListener('click',e=>{
+ const b=e.target.closest('[data-dir]'); if(!b||b.disabled)return;
+ const card=b.closest('.card'), col=card.closest('.col');
+ const to=+col.dataset.stage+ +b.dataset.dir;
+ const dest=document.querySelector('.col[data-stage="'+to+'"]'); if(!dest)return;
+ const empty=dest.querySelector('.empty'); if(empty)empty.remove();
+ dest.appendChild(card);
+ card.querySelector('[data-dir="-1"]').disabled = to===0;
+ card.querySelector('[data-dir="1"]').disabled  = to===4;
+ [col,dest].forEach(c=>{
+  const cards=[...c.querySelectorAll('.card')];
+  c.querySelector('.cnt').textContent=cards.length;
+  const sum=cards.reduce((a,x)=>a+Number(x.querySelector('.amt').textContent.replace(/[^\d]/g,'')),0);
+  c.querySelector('.sum').innerHTML='<bdi dir="ltr">₪'+sum.toLocaleString('he-IL')+'</bdi>';
+  if(!cards.length&&!c.querySelector('.empty'))c.insertAdjacentHTML('beforeend','<p class="empty">אין בקשות בשלב הזה</p>');
+ });
+ card.querySelector('.fam').focus?.();
+});
+
+</script>
+</body>
+</html>

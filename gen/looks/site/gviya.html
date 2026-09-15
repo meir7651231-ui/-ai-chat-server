@@ -131,6 +131,22 @@ footer.note b{color:var(--ink)}
  body{background:#fff;color:#000}.calc,.prod,.sq{break-inside:avoid}
  .prod .head{background:none!important;border:1px solid #ccc}
 }
+.nav{position:relative;font-size:0}
+.nav>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:var(--s2);
+ border:1px solid var(--hair);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13.5px;min-height:38px}
+.nav>summary::-webkit-details-marker{display:none}
+.nav>summary::after{content:'▾';color:var(--faint)}
+.nav[open]>summary{border-color:var(--acc)}
+.nav .sheet{position:absolute;inset-inline-end:0;top:calc(100% + 6px);z-index:40;background:var(--card);
+ border:1px solid var(--hair);border-radius:var(--r);padding:var(--s2);box-shadow:0 12px 32px rgba(0,0,0,.14);
+ display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:2px;width:max-content;max-width:min(92vw,340px)}
+.nav .sheet a{display:flex;align-items:center;gap:var(--s2);padding:8px 10px;border-radius:var(--rs);
+ color:var(--ink);text-decoration:none;font-size:13.5px;white-space:nowrap}
+.nav .sheet a:hover{background:var(--sunk)}
+.nav .sheet a[aria-current=page]{background:var(--acc-soft);color:var(--acc);font-weight:700}
+.nav .sheet i{font-style:normal;width:18px;text-align:center;opacity:.75}
+
+.nav .sheet{font-size:13.5px}
 </style>
 </head>
 <body>
@@ -144,6 +160,8 @@ footer.note b{color:var(--ink)}
 
 <header class="app">
   <h1>גבייה <small>שכר לימוד · תשפ״ז · נתוני דוגמה</small></h1>
+  <details class="nav"><summary aria-label="מעבר לאגף">גבייה</summary>
+  <nav class="sheet" aria-label="אגפי המוסד"><a href="index.html"><i aria-hidden="true">🏛</i>בית</a><a href="anashim.html"><i aria-hidden="true">👥</i>אנשים</a><a href="hinuch.html"><i aria-hidden="true">📚</i>חינוך</a><a href="tzevet.html"><i aria-hidden="true">🧰</i>צוות</a><a href="gviya.html" aria-current="page"><i aria-hidden="true">₪</i>גבייה</a><a href="trumot.html"><i aria-hidden="true">❤</i>תרומות</a><a href="ksafim.html"><i aria-hidden="true">📊</i>כספים</a><a href="medrash.html"><i aria-hidden="true">🕯</i>בית המדרש</a><a href="hatzer.html"><i aria-hidden="true">👑</i>החצר</a><a href="hesed.html"><i aria-hidden="true">🤝</i>חסד</a><a href="tifol.html"><i aria-hidden="true">🔧</i>תפעול</a><a href="shiduch.html"><i aria-hidden="true">💍</i>שידוכים</a><a href="tikshor.html"><i aria-hidden="true">✉</i>תקשורת</a></nav></details>
   <nav class="ctx" aria-label="אגף">
     <button aria-pressed="true" data-dept="גבייה">גבייה</button>
     <button aria-pressed="false" data-dept="תרומות">תרומות</button>

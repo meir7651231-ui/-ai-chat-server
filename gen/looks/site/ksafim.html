@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>כספים — מוסד</title>
+<meta name="description" content="דוח תקציב מול ביצוע לשנת תשפ״ו, ערוך להדפסה ולהגשה לוועד.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&family=Frank+Ruhl+Libre:wght@500;700&display=swap">
+<style>
+:root{
+ --bg:#fbfbfa;--card:#fff;--sunk:#f4f3f0;--raise:#ebe9e5;--ink:#37352F;--mut:#6b675e;--faint:#8a857b;
+ --hair:rgba(0,0,0,.1);--acc:#2560D0;--acc-soft:#eaf1fe;--on-acc:#fff;--ok:#12703d;--ok-soft:#e3f3ea;
+ --warn:#8a5e00;--warn-soft:#fbf0d8;--err:#a8281a;--err-soft:#fbe7e4;
+ --c1:#2560D0;--c1-soft:#eaf1fe;--c2:#12703d;--c2-soft:#e3f3ea;--c3:#8a5e00;--c3-soft:#fbf0d8;
+ --c4:#6a3fc0;--c4-soft:#f0ebfb;--c5:#a8281a;--c5-soft:#fbe7e4;--c6:#0c6570;--c6-soft:#e2f2f4;
+ --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;
+ --r:16px;--rs:10px;--row:44px;--dir:-1;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#0d0d0f;--card:#161619;--sunk:#1c1c20;--raise:#26262b;--ink:#ECE9E2;--mut:#a8a299;--faint:#8b857c;
+ --hair:rgba(236,233,226,.14);--acc:#7FA6F5;--acc-soft:#1a2436;--on-acc:#0B0B0D;--ok:#5cd79b;--ok-soft:#14261d;
+ --warn:#e8bd5c;--warn-soft:#2a2318;--err:#f08d80;--err-soft:#2c1a17;
+ --c1:#7FA6F5;--c1-soft:#1a2436;--c2:#5cd79b;--c2-soft:#14261d;--c3:#e8bd5c;--c3-soft:#2a2318;
+ --c4:#b79bf0;--c4-soft:#221c32;--c5:#f08d80;--c5-soft:#2c1a17;--c6:#63c6d2;--c6-soft:#152628;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#0d0d0f;--card:#161619;--sunk:#1c1c20;--raise:#26262b;--ink:#ECE9E2;--mut:#a8a299;--faint:#8b857c;--hair:rgba(236,233,226,.14);--acc:#7FA6F5;--acc-soft:#1a2436;--on-acc:#0B0B0D;--ok:#5cd79b;--ok-soft:#14261d;--warn:#e8bd5c;--warn-soft:#2a2318;--err:#f08d80;--err-soft:#2c1a17;--c1:#7FA6F5;--c1-soft:#1a2436;--c2:#5cd79b;--c2-soft:#14261d;--c3:#e8bd5c;--c3-soft:#2a2318;--c4:#b79bf0;--c4-soft:#221c32;--c5:#f08d80;--c5-soft:#2c1a17;--c6:#63c6d2;--c6-soft:#152628;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Heebo,Arial,sans-serif;letter-spacing:0}
+bdi{unicode-bidi:isolate}.num{font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3,h4{margin:0;text-wrap:balance}p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;inset-inline-start:-9999px;top:0;background:var(--acc);color:var(--on-acc);padding:var(--s2) var(--s4);border-radius:var(--rs);z-index:99}
+.skip:focus{inset-inline-start:var(--s4);top:var(--s2)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* מגירת-האגפים: ב-NAV_CSS */
+@media print{.nav,.skip{display:none!important}body{background:#fff}}
+.nav{position:relative;font-size:0}
+.nav>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:var(--s2);
+ border:1px solid var(--hair);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13.5px;min-height:38px}
+.nav>summary::-webkit-details-marker{display:none}
+.nav>summary::after{content:'▾';color:var(--faint)}
+.nav[open]>summary{border-color:var(--acc)}
+.nav .sheet{position:absolute;inset-inline-end:0;top:calc(100% + 6px);z-index:40;background:var(--card);
+ border:1px solid var(--hair);border-radius:var(--r);padding:var(--s2);box-shadow:0 12px 32px rgba(0,0,0,.14);
+ display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:2px;width:max-content;max-width:min(92vw,340px)}
+.nav .sheet a{display:flex;align-items:center;gap:var(--s2);padding:8px 10px;border-radius:var(--rs);
+ color:var(--ink);text-decoration:none;font-size:13.5px;white-space:nowrap}
+.nav .sheet a:hover{background:var(--sunk)}
+.nav .sheet a[aria-current=page]{background:var(--acc-soft);color:var(--acc);font-weight:700}
+.nav .sheet i{font-style:normal;width:18px;text-align:center;opacity:.75}
+
+
+body{background:var(--raise)}
+.deskbar{max-width:860px;margin-inline:auto;padding:var(--s3) var(--s4);display:flex;align-items:center;gap:var(--s3)}
+.deskbar .sp{flex:1}
+.deskbar button{border:1px solid var(--hair);background:var(--card);border-radius:var(--rs);padding:8px 13px;font-size:13px;min-height:38px}
+
+.sheet{max-width:860px;margin:0 auto var(--s7);background:var(--card);border:1px solid var(--hair);
+ padding:var(--s7) clamp(20px,5vw,56px);box-shadow:0 8px 28px rgba(0,0,0,.09);
+ font-family:'Frank Ruhl Libre',Heebo,serif}
+.mast{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--s4);
+ border-block-end:2px solid var(--ink);padding-block-end:var(--s3);flex-wrap:wrap}
+.mast h1{font:700 26px 'Frank Ruhl Libre',Heebo,serif;line-height:1.2}
+.mast .who{font-size:12.5px;color:var(--mut);line-height:1.7;text-align:end;font-family:Heebo,sans-serif}
+.stamp{display:inline-block;border:1px solid var(--c3);color:var(--c3);border-radius:6px;
+ padding:2px 9px;font:700 11px Heebo;letter-spacing:.04em}
+
+h2.num{font:700 16px 'Frank Ruhl Libre',Heebo,serif;margin:var(--s6) 0 var(--s2);
+ display:flex;align-items:baseline;gap:var(--s2)}
+h2.num i{font-style:normal;font:700 12px Heebo;color:var(--mut);border:1px solid var(--hair);
+ border-radius:5px;padding:1px 7px}
+p.body{font-size:14.5px;line-height:1.75;max-width:60ch}
+
+table{width:100%;border-collapse:separate;border-spacing:0;font-family:Heebo,sans-serif;font-size:13.5px;margin-top:var(--s3)}
+caption{text-align:start;font-size:12.5px;color:var(--mut);padding-bottom:var(--s2)}
+th,td{color:var(--ink);text-align:start;padding:8px 10px;border-block-end:1px solid var(--hair)}
+thead th{font-size:11.5px;color:var(--mut);font-weight:600;border-block-end:1px solid var(--ink)}
+td.n,th.n{text-align:end;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.use{width:132px}
+.usebar{height:8px;border-radius:999px;background:var(--sunk);position:relative;overflow:hidden}
+.usebar i{position:absolute;inset-block:0;inset-inline-start:0;background:var(--c2);border-radius:999px}
+.usebar i.over{background:var(--err)}
+.usetxt{font-size:11px;color:var(--mut);margin-top:3px;font-variant-numeric:tabular-nums}
+tfoot td{font-weight:700;border-block-start:1px solid var(--ink);border-block-end:0;padding-top:10px}
+.over{color:var(--err)}
+
+figure{margin:var(--s4) 0 0}
+figure svg{width:100%;height:auto;display:block}
+figcaption{font-family:Heebo,sans-serif;font-size:12px;color:var(--mut);margin-top:var(--s2)}
+.chart text{font:400 9.5px Heebo;fill:var(--mut)}
+.chart .gl{stroke:var(--hair);stroke-width:1}
+.chart .axis{stroke:var(--ink);stroke-width:1}
+.key{display:flex;gap:var(--s4);font-family:Heebo,sans-serif;font-size:12px;color:var(--mut);margin-top:var(--s2)}
+.key i{display:inline-block;width:12px;height:10px;border-radius:2px;margin-inline-end:5px}
+
+.sign{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--s5);
+ margin-top:var(--s7);padding-block-start:var(--s5);border-block-start:1px solid var(--hair)}
+.sign div{font-family:Heebo,sans-serif;font-size:12.5px;color:var(--mut)}
+.sign b{display:block;border-block-end:1px solid var(--ink);height:36px;margin-bottom:6px}
+.foot{font-family:Heebo,sans-serif;font-size:11.5px;color:var(--mut);margin-top:var(--s5);text-align:center}
+
+@media print{
+ body{background:#fff}.deskbar{display:none!important}
+ .sheet{box-shadow:none;border:0;max-width:none;padding:0;margin:0}
+ h2.num{break-after:avoid}table{break-inside:auto}tr{break-inside:avoid}
+}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#main">דלג לתוכן</a>
+
+<div class="deskbar">
+  <span style="font-size:13px;color:var(--mut)">גיליון להדפסה · נתוני דוגמה</span>
+  <span class="sp"></span>
+  <button onclick="window.print()">הדפסה</button>
+  <details class="nav"><summary aria-label="מעבר לאגף">כספים</summary>
+  <nav class="sheet" aria-label="אגפי המוסד"><a href="index.html"><i aria-hidden="true">🏛</i>בית</a><a href="anashim.html"><i aria-hidden="true">👥</i>אנשים</a><a href="hinuch.html"><i aria-hidden="true">📚</i>חינוך</a><a href="tzevet.html"><i aria-hidden="true">🧰</i>צוות</a><a href="gviya.html"><i aria-hidden="true">₪</i>גבייה</a><a href="trumot.html"><i aria-hidden="true">❤</i>תרומות</a><a href="ksafim.html" aria-current="page"><i aria-hidden="true">📊</i>כספים</a><a href="medrash.html"><i aria-hidden="true">🕯</i>בית המדרש</a><a href="hatzer.html"><i aria-hidden="true">👑</i>החצר</a><a href="hesed.html"><i aria-hidden="true">🤝</i>חסד</a><a href="tifol.html"><i aria-hidden="true">🔧</i>תפעול</a><a href="shiduch.html"><i aria-hidden="true">💍</i>שידוכים</a><a href="tikshor.html"><i aria-hidden="true">✉</i>תקשורת</a></nav></details>
+</div>
+
+<main id="main" class="sheet">
+  <header class="mast">
+    <div>
+      <h1>דוח תקציב מול ביצוע</h1>
+      <p style="font-family:Heebo,sans-serif;font-size:13px;color:var(--mut);margin-top:4px">
+        שנת הלימודים תשפ״ו · נכון ל-ד׳ תשרי תשפ״ז · <span class="stamp">טיוטה לוועד</span></p>
+    </div>
+    <p class="who">עמותת המוסד (ע״ר)<br>מספר עמותה <bdi dir="ltr">58-0000000</bdi><br>מגיש: בנימין שטרן, גזבר</p>
+  </header>
+
+  <h2 class="num"><i>1</i>תמצית</h2>
+  <p class="body">התקציב המאושר לשנת תשפ״ו עמד על <bdi dir="ltr">₪2,150,000</bdi>. הביצוע בפועל, אחד-עשר חודשים,
+     עומד על <bdi dir="ltr">₪2,113,000</bdi> — 98% מהתקציב. שני סעיפים חרגו:
+     אחזקת מבנה וחשמל (<bdi dir="ltr">₪203,000</bdi> מול <bdi dir="ltr">₪168,000</bdi>) ובית המדרש ואירועים, שניהם בעקבות
+     עבודות האולם. סעיף הספרים נוצל בחסר ומוצע להעביר ממנו <bdi dir="ltr">₪13,000</bdi> לאחזקה.</p>
+
+  <h2 class="num"><i>2</i>ביצוע לפי סעיף</h2>
+  <table>
+    <caption>באלפי ₪ · עמודת הניצול מציירת את היחס בין הביצוע לתקציב</caption>
+    <thead><tr><th scope="col">סעיף</th><th scope="col" class="n">תקציב</th><th scope="col" class="n">בפועל</th>
+      <th scope="col" class="n">יתרה</th><th scope="col" class="use">ניצול</th></tr></thead>
+    <tbody>
+      <tr><th scope="row" style="font-weight:400">שכר מלמדים וצוות חינוכי</th>
+        <td class="n">1,180</td>
+        <td class="n">1,094</td>
+        <td class="n">86</td>
+        <td class="use"><div class="usebar"><i class="" style="width:93%"></i></div>
+          <div class="usetxt">93%</div></td></tr><tr><th scope="row" style="font-weight:400">מטבח וסעודות</th>
+        <td class="n">312</td>
+        <td class="n over">341</td>
+        <td class="n over">‎-29</td>
+        <td class="use"><div class="usebar"><i class="over" style="width:100%"></i></div>
+          <div class="usetxt">109%</div></td></tr><tr><th scope="row" style="font-weight:400">הסעות</th>
+        <td class="n">196</td>
+        <td class="n">188</td>
+        <td class="n">8</td>
+        <td class="use"><div class="usebar"><i class="" style="width:96%"></i></div>
+          <div class="usetxt">96%</div></td></tr><tr><th scope="row" style="font-weight:400">אחזקת מבנה וחשמל</th>
+        <td class="n">168</td>
+        <td class="n over">203</td>
+        <td class="n over">‎-35</td>
+        <td class="use"><div class="usebar"><i class="over" style="width:100%"></i></div>
+          <div class="usetxt">121%</div></td></tr><tr><th scope="row" style="font-weight:400">ספרים וציוד לימודי</th>
+        <td class="n">84</td>
+        <td class="n">71</td>
+        <td class="n">13</td>
+        <td class="use"><div class="usebar"><i class="" style="width:85%"></i></div>
+          <div class="usetxt">85%</div></td></tr><tr><th scope="row" style="font-weight:400">פנימייה</th>
+        <td class="n">126</td>
+        <td class="n">118</td>
+        <td class="n">8</td>
+        <td class="use"><div class="usebar"><i class="" style="width:94%"></i></div>
+          <div class="usetxt">94%</div></td></tr><tr><th scope="row" style="font-weight:400">משרד, ביטוח ורואה חשבון</th>
+        <td class="n">64</td>
+        <td class="n">59</td>
+        <td class="n">5</td>
+        <td class="use"><div class="usebar"><i class="" style="width:92%"></i></div>
+          <div class="usetxt">92%</div></td></tr><tr><th scope="row" style="font-weight:400">בית המדרש ואירועים</th>
+        <td class="n">20</td>
+        <td class="n over">39</td>
+        <td class="n over">‎-19</td>
+        <td class="use"><div class="usebar"><i class="over" style="width:100%"></i></div>
+          <div class="usetxt">195%</div></td></tr>
+    </tbody>
+    <tfoot><tr><td>סך הכל</td><td class="n">2,150</td><td class="n">2,113</td><td class="n">37</td><td class="use">98%</td></tr></tfoot>
+  </table>
+
+  <h2 class="num"><i>3</i>הוצאה חודשית מול התכנון</h2>
+  <figure>
+    <svg viewBox="0 0 640 220" class="chart" role="img"
+         aria-label="הוצאה חודשית: התכנון 179 אלף בכל חודש; הביצוע נע בין 149 אלף בתמוז ל-233 אלף באדר; אלול טרם נסגר">
+      <g><line class="gl" x1="42" y1="180" x2="632" y2="180"></line>
+         <text x="36" y="183" text-anchor="end">0</text></g><g><line class="gl" x1="42" y1="142.5" x2="632" y2="142.5"></line>
+         <text x="36" y="145.5" text-anchor="end">60</text></g><g><line class="gl" x1="42" y1="105" x2="632" y2="105"></line>
+         <text x="36" y="108" text-anchor="end">120</text></g><g><line class="gl" x1="42" y1="67.5" x2="632" y2="67.5"></line>
+         <text x="36" y="70.5" text-anchor="end">180</text></g><g><line class="gl" x1="42" y1="30" x2="632" y2="30"></line>
+         <text x="36" y="33" text-anchor="end">240</text></g>
+      <line class="axis" x1="42" y1="180" x2="632" y2="180"></line>
+      <rect x="586" y="68.125" width="16" height="111.875" fill="var(--sunk)" rx="2"></rect>
+        <rect x="603" y="77.5" width="16" height="102.5" fill="var(--c2)" rx="2"></rect>
+        <text x="602" y="196" text-anchor="middle">תשרי</text><rect x="537" y="68.125" width="16" height="111.875" fill="var(--sunk)" rx="2"></rect>
+        <rect x="554" y="62.5" width="16" height="117.5" fill="var(--c5)" rx="2"></rect>
+        <text x="553" y="196" text-anchor="middle">חשון</text><rect x="488" y="68.125" width="16" height="111.875" fill="var(--sunk)" rx="2"></rect>
+        <rect x="505" y="54.375" width="16" height="125.625" fill="var(--c5)" rx="2"></rect>
+        <text x="504" y="196" text-anchor="middle">כסלו</text><rect x="439" y="68.125" width="16" height="111.875" fill="var(--sunk)" rx="2"></rect>
+        <rect x="456" y="70.00000000000001" width="16" height="109.99999999999999" fill="var(--c2)" rx="2"></rect>
+        <text x="455" y="196" text-anchor="middle">טבת</text><rect x="390" y="68.125" width="16" height="111.875" fill="var(--sunk)" rx="2"></rect>
+        <rect x="407" y="74.37499999999999" width="16" height="105.62500000000001" fill="var(--c2)" rx="2"></rect>
+        <text x="406" y="196" text-anchor="middle">שבט</text><rect x="341" y="68.125" width="16" height="111.875" fill="var(--sunk)" rx="2"></rect>
+        <rect x="358" y="34.375" width="16" height="145.625" fill="var(--c5)" rx="2"></rect>
+        <text x="357" y="196" text-anchor="middle">אדר</text><rect x="292" y="68.125" width="16" height="111.875" fill="var(--sunk)" rx="2"></rect>
+        <rect x="309" y="47.5" width="16" height="132.5" fill="var(--c5)" rx="2"></rect>
+        <text x="308" y="196" text-anchor="middle">ניסן</text><rect x="243" y="68.125" width="16" height="111.875" fill="var(--sunk)" rx="2"></rect>
+        <rect x="260" y="81.25" width="16" height="98.75" fill="var(--c2)" rx="2"></rect>
+        <text x="259" y="196" text-anchor="middle">אייר</text><rect x="194" y="68.125" width="16" height="111.875" fill="var(--sunk)" rx="2"></rect>
+        <rect x="211" y="73.125" width="16" height="106.875" fill="var(--c2)" rx="2"></rect>
+        <text x="210" y="196" text-anchor="middle">סיון</text><rect x="145" y="68.125" width="16" height="111.875" fill="var(--sunk)" rx="2"></rect>
+        <rect x="162" y="86.875" width="16" height="93.125" fill="var(--c2)" rx="2"></rect>
+        <text x="161" y="196" text-anchor="middle">תמוז</text><rect x="96" y="68.125" width="16" height="111.875" fill="var(--sunk)" rx="2"></rect>
+        <rect x="113" y="60" width="16" height="120" fill="var(--c5)" rx="2"></rect>
+        <text x="112" y="196" text-anchor="middle">אב</text><rect x="47" y="68.125" width="16" height="111.875" fill="var(--sunk)" rx="2"></rect>
+        
+        <text x="63" y="196" text-anchor="middle">אלול</text>
+      <text x="636" y="24" text-anchor="end" style="font-size:10px">אלפי ₪</text>
+    </svg>
+    <figcaption>אדר וניסן נושאים את עבודות האולם; אלול טרם נסגר ולכן אין לו עמודת ביצוע.</figcaption>
+  </figure>
+  <p class="key"><span><i style="background:var(--sunk)"></i>תכנון</span>
+     <span><i style="background:var(--c2)"></i>ביצוע בתוך התכנון</span>
+     <span><i style="background:var(--c5)"></i>ביצוע מעל התכנון</span></p>
+
+  <h2 class="num"><i>4</i>להכרעת הוועד</h2>
+  <p class="body">א. העברה תקציבית של <bdi dir="ltr">₪13,000</bdi> מסעיף הספרים לאחזקה.
+     ב. חידוש ביטוח האולם — פג בעוד שישה ימים; שלוש הצעות מצורפות.
+     ג. אישור מסגרת <bdi dir="ltr">₪240,000</bdi> לשנת תשפ״ז לסעיף בית המדרש, לאחר החריגה השנה.</p>
+
+  <div class="sign">
+    <div><b></b>בנימין שטרן · גזבר</div>
+    <div><b></b>יוסף מלר · מנהל</div>
+    <div><b></b>יו״ר הוועד</div>
+  </div>
+  <p class="foot">הדוח הופק מהמערכת · כל הסכומים באלפי ₪ אלא אם צוין אחרת · עמוד 1 מתוך 1</p>
+</main>
+
+</body>
+</html>
