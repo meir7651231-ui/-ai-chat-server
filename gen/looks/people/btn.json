@@ -1,0 +1,184 @@
+[
+ {
+  "id": "wise",
+  "name": "Wise",
+  "url": "https://wise.com/",
+  "label": "Sign up",
+  "rest": {
+   "bg": "rgb(22, 51, 0)",
+   "color": "rgb(159, 232, 112)",
+   "border": "1px rgb(22, 51, 0)",
+   "radius": 9999,
+   "shadow": "—",
+   "transform": "—",
+   "outline": "—",
+   "filter": "—",
+   "opacity": "1",
+   "h": 48,
+   "top": 443,
+   "transition": "color, background-color 0s ease"
+  },
+  "hover": {
+   "bg": "rgb(22, 51, 0) → rgb(13, 31, 0)",
+   "border": "1px rgb(22, 51, 0) → 1px rgb(13, 31, 0)"
+  },
+  "focus": {
+   "bg": "rgb(22, 51, 0) → rgb(13, 31, 0)",
+   "border": "1px rgb(22, 51, 0) → 1px rgb(13, 31, 0)",
+   "outline": "— → 2px solid rgb(22, 51, 0)"
+  },
+  "active": {
+   "bg": "rgb(13, 31, 0) → rgb(14, 15, 12)",
+   "border": "1px rgb(13, 31, 0) → 1px rgb(14, 15, 12)",
+   "outline": "— → 2px solid rgb(22, 51, 0)"
+  }
+ },
+ {
+  "id": "monzo",
+  "name": "Monzo",
+  "url": "https://monzo.com/",
+  "label": "Open a free Monzo account",
+  "rest": {
+   "bg": "rgb(255, 255, 255)",
+   "color": "rgb(9, 23, 35)",
+   "border": "1px rgb(255, 255, 255)",
+   "radius": 500,
+   "shadow": "—",
+   "transform": "—",
+   "outline": "—",
+   "filter": "—",
+   "opacity": "1",
+   "h": 48,
+   "top": 711,
+   "transition": "background-color 0.2s ease"
+  },
+  "hover": {
+   "bg": "rgb(255, 255, 255) → rgba(255, 255, 255, 0.8)",
+   "border": "1px rgb(255, 255, 255) → 1px rgba(255, 255, 255, 0.8)"
+  },
+  "focus": {
+   "bg": "rgb(255, 255, 255) → rgba(255, 255, 255, 0.8)",
+   "border": "1px rgb(255, 255, 255) → 1px rgba(255, 255, 255, 0.8)",
+   "outline": "— → 1px solid rgb(33, 143, 183)"
+  },
+  "active": {
+   "bg": "rgba(255, 255, 255, 0.8) → rgba(255, 255, 255, 0.9)",
+   "border": "1px rgba(255, 255, 255, 0.8) → 1px rgba(255, 255, 255, 0.9)",
+   "outline": "— → 1px solid rgb(33, 143, 183)"
+  }
+ },
+ {
+  "id": "stripe",
+  "name": "Stripe",
+  "url": "https://stripe.com/",
+  "label": "Chat now\n with sales",
+  "rest": {
+   "bg": "rgb(10, 37, 64)",
+   "color": "rgb(255, 255, 255)",
+   "border": "1px rgba(255, 255, 255, 0.12)",
+   "radius": 4,
+   "shadow": "—",
+   "transform": "—",
+   "outline": "—",
+   "filter": "—",
+   "opacity": "1",
+   "h": 40,
+   "top": 844,
+   "transition": "background 0.2s ease-in-out"
+  },
+  "hover": {},
+  "focus": {},
+  "active": {}
+ },
+ {
+  "id": "govuk",
+  "name": "GOV.UK",
+  "url": "https://design-system.service.gov.uk/components/button/",
+  "label": "Hide cookie message",
+  "rest": {
+   "bg": "rgb(15, 122, 82)",
+   "color": "rgb(255, 255, 255)",
+   "border": "2px rgba(0, 0, 0, 0)",
+   "radius": 0,
+   "shadow": "rgb(8, 61, 41) 0px 2px 0px 0px",
+   "transform": "—",
+   "outline": "—",
+   "filter": "—",
+   "opacity": "1",
+   "h": 38,
+   "top": 65,
+   "transition": "all 0s"
+  },
+  "hover": {
+   "bg": "rgb(15, 122, 82) → rgb(11, 92, 62)"
+  },
+  "focus": {
+   "bg": "rgb(15, 122, 82) → rgb(11, 92, 62)",
+   "border": "2px rgba(0, 0, 0, 0) → 2px rgb(255, 221, 0)",
+   "shadow": "rgb(8, 61, 41) 0px 2px 0px 0px → rgb(255, 221, 0) 0px 0px 0px 1px inset",
+   "outline": "— → 3px solid rgba(0, 0, 0, 0)"
+  },
+  "active": {
+   "border": "2px rgba(0, 0, 0, 0) → 2px rgb(255, 221, 0)",
+   "shadow": "rgb(8, 61, 41) 0px 2px 0px 0px → rgb(255, 221, 0) 0px 0px 0px 1px inset",
+   "outline": "— → 3px solid rgba(0, 0, 0, 0)",
+   "top": "65 → 67"
+  }
+ },
+ {
+  "id": "linear",
+  "name": "Linear",
+  "url": "https://linear.app/",
+  "pick": null,
+  "label": "Skip to content →",
+  "rest": {
+   "bg": "rgb(94, 106, 210)",
+   "color": "rgb(255, 255, 255)",
+   "border": "0px rgb(255, 255, 255)",
+   "radius": 0,
+   "shadow": "—",
+   "transform": "—",
+   "outline": "—",
+   "opacity": "0",
+   "h": 32,
+   "transition": "all 0s ease"
+  },
+  "hover": {},
+  "focus": {
+   "shadow": "— → rgb(8, 9, 10) 0px 0px 0px 2px, rgb(94, 106, 210) 0px 0px 0px 4px",
+   "outline": "— → 1px solid rgb(255, 255, 255)",
+   "opacity": "0 → 1"
+  },
+  "active": {
+   "shadow": "— → rgb(8, 9, 10) 0px 0px 0px 2px, rgb(94, 106, 210) 0px 0px 0px 4px",
+   "outline": "— → 1px solid rgb(255, 255, 255)",
+   "opacity": "0 → 1"
+  }
+ },
+ {
+  "id": "raycast",
+  "name": "Raycast",
+  "url": "https://www.raycast.com/",
+  "pick": null,
+  "label": "The Raycast Keyboard",
+  "rest": {
+   "bg": "rgb(19, 13, 14)",
+   "color": "rgb(255, 255, 255)",
+   "border": "0px rgb(255, 255, 255)",
+   "radius": 1000,
+   "shadow": "—",
+   "transform": "—",
+   "outline": "—",
+   "opacity": "1",
+   "h": 30,
+   "transition": "all 0s ease"
+  },
+  "hover": {},
+  "focus": {
+   "outline": "— → 1px auto rgb(16, 16, 16)"
+  },
+  "active": {
+   "outline": "— → 1px auto rgb(16, 16, 16)"
+  }
+ }
+]

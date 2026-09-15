@@ -1,0 +1,212 @@
+[
+ {
+  "id": "material",
+  "name": "Material 3 (Google · Gmail)",
+  "url": "https://m3.material.io/components/snackbar/specs",
+  "sel": "[class*=snackbar],[class*=Snackbar]",
+  "found": [],
+  "secs": [],
+  "pos": [
+   "bottom of the screen"
+  ]
+ },
+ {
+  "id": "primer",
+  "name": "Primer (GitHub)",
+  "url": "https://primer.style/components/toast",
+  "sel": "[class*=Toast],[class*=toast]",
+  "found": [],
+  "secs": [],
+  "pos": []
+ },
+ {
+  "id": "polaris",
+  "name": "Polaris (Shopify)",
+  "url": "https://polaris-react.shopify.com/components/feedback-indicators/toast",
+  "sel": "[class*=Toast],[class*=toast]",
+  "found": [],
+  "secs": [],
+  "pos": []
+ },
+ {
+  "id": "carbon",
+  "name": "Carbon (IBM)",
+  "url": "https://carbondesignsystem.com/components/notification/usage/",
+  "sel": "[class*=toast],[class*=notification]",
+  "found": [
+   {
+    "w": 264,
+    "h": 64,
+    "bg": "#ffffff",
+    "color": "#161616",
+    "dark": false,
+    "radius": 0,
+    "padY": 0,
+    "padX": 0,
+    "size": 16,
+    "weight": "400",
+    "gap": 0,
+    "shadow": null,
+    "action": "Actionable",
+    "actionColor": "#000000",
+    "text": "Variant selector Actionable"
+   },
+   {
+    "w": 378,
+    "h": 52,
+    "bg": "#ffffff",
+    "color": "#161616",
+    "dark": false,
+    "radius": 0,
+    "padY": 16,
+    "padX": 16,
+    "size": 14,
+    "weight": "600",
+    "gap": 0,
+    "shadow": null,
+    "action": null,
+    "actionColor": null,
+    "text": "Purpose"
+   }
+  ],
+  "secs": [],
+  "pos": [
+   "top right"
+  ]
+ },
+ {
+  "id": "atlassian",
+  "name": "Atlassian",
+  "url": "https://atlassian.design/components/flag/examples",
+  "sel": "[class*=flag],[class*=Flag]",
+  "found": [],
+  "secs": [],
+  "pos": []
+ },
+ {
+  "id": "baseweb",
+  "name": "Base Web (Uber)",
+  "url": "https://baseweb.design/components/snackbar/",
+  "sel": "[class*=snackbar],[class*=Snackbar]",
+  "found": [
+   {
+    "w": 256,
+    "h": 36,
+    "bg": "#000000",
+    "color": "#000000",
+    "dark": true,
+    "radius": 0,
+    "padY": 6,
+    "padX": 72,
+    "size": 16,
+    "weight": "400",
+    "gap": 0,
+    "shadow": null,
+    "action": null,
+    "actionColor": null,
+    "text": "Snackbar"
+   },
+   {
+    "w": 320,
+    "h": 56,
+    "bg": "#282828",
+    "color": "#ffffff",
+    "dark": true,
+    "radius": 12,
+    "padY": 0,
+    "padX": 0,
+    "size": 16,
+    "weight": "400",
+    "gap": 0,
+    "shadow": "rgba(0, 0, 0, 0.22) 0px 16px 48px 0px",
+    "action": "Cancel",
+    "actionColor": "#ffffff",
+    "text": "Downloading your file Cancel"
+   },
+   {
+    "w": 514,
+    "h": 56,
+    "bg": "#282828",
+    "color": "#ffffff",
+    "dark": true,
+    "radius": 12,
+    "padY": 0,
+    "padX": 0,
+    "size": 16,
+    "weight": "400",
+    "gap": 0,
+    "shadow": "rgba(0, 0, 0, 0.22) 0px 16px 48px 0px",
+    "action": "Undo",
+    "actionColor": "#ffffff",
+    "text": "The address was removed from your saved places Undo"
+   },
+   {
+    "w": 490,
+    "h": 56,
+    "bg": "#282828",
+    "color": "#ffffff",
+    "dark": true,
+    "radius": 12,
+    "padY": 0,
+    "padX": 0,
+    "size": 16,
+    "weight": "400",
+    "gap": 0,
+    "shadow": "rgba(0, 0, 0, 0.22) 0px 16px 48px 0px",
+    "action": "See list",
+    "actionColor": "#ffffff",
+    "text": "The address was added to your saved places See list"
+   },
+   {
+    "w": 371,
+    "h": 56,
+    "bg": "#282828",
+    "color": "#ffffff",
+    "dark": true,
+    "radius": 12,
+    "padY": 0,
+    "padX": 0,
+    "size": 16,
+    "weight": "400",
+    "gap": 0,
+    "shadow": "rgba(0, 0, 0, 0.22) 0px 16px 48px 0px",
+    "action": "Try again",
+    "actionColor": "#ffffff",
+    "text": "Your address wasn't added Try again"
+   },
+   {
+    "w": 592,
+    "h": 36,
+    "bg": "#fdfdfd",
+    "color": "#000000",
+    "dark": false,
+    "radius": 0,
+    "padY": 0,
+    "padX": 10,
+    "size": 16,
+    "weight": "400",
+    "gap": 0,
+    "shadow": null,
+    "action": null,
+    "actionColor": null,
+    "text": "import {DURATION} from 'baseui/snackbar'"
+   }
+  ],
+  "secs": [],
+  "pos": []
+ },
+ {
+  "id": "spectrum",
+  "name": "Spectrum (Adobe)",
+  "url": "https://spectrum.adobe.com/page/toast/",
+  "sel": "[class*=Toast],[class*=toast]",
+  "found": [],
+  "secs": [
+   "5 seconds"
+  ],
+  "pos": [
+   "bottom center",
+   "bottom of the screen"
+  ]
+ }
+]
