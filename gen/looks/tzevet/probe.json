@@ -1,0 +1,1709 @@
+[
+ {
+  "id": "deputy",
+  "name": "Deputy",
+  "url": "https://www.deputy.com/features/scheduling-software",
+  "v": {
+   "wall": [],
+   "els": 1542,
+   "times": 4,
+   "bars": 9,
+   "words": [
+    "shift",
+    "schedule",
+    "roster",
+    "coverage",
+    "timesheet"
+   ],
+   "title": "Employee Shift Scheduling Software & App — Deputy"
+  },
+  "m": {
+   "title": "Employee Shift Scheduling Software & App — Deputy",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#6c6a72",
+    "family": "Poppins",
+    "size": 16,
+    "lh": "20px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#0c017b",
+      "w": 3780
+     },
+     {
+      "v": "#eff1ff",
+      "w": 2919
+     },
+     {
+      "v": "#ffffff",
+      "w": 1049
+     },
+     {
+      "v": "#ffede9",
+      "w": 634
+     },
+     {
+      "v": "#7f52fd",
+      "w": 52
+     },
+     {
+      "v": "#37cfcd",
+      "w": 21
+     },
+     {
+      "v": "#e4e4e8",
+      "w": 1
+     },
+     {
+      "v": "#4429ba",
+      "w": 0
+     }
+    ],
+    "ink": [
+     {
+      "v": "#ffffff",
+      "w": 108
+     },
+     {
+      "v": "#0c017b",
+      "w": 93
+     },
+     {
+      "v": "#6c6a72",
+      "w": 80
+     },
+     {
+      "v": "#4429ba",
+      "w": 17
+     },
+     {
+      "v": "#ff958a",
+      "w": 11
+     },
+     {
+      "v": "#a20368",
+      "w": 9
+     },
+     {
+      "v": "#37cfcd",
+      "w": 3
+     },
+     {
+      "v": "#c41f88",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Poppins",
+     "w": 2946
+    }
+   ],
+   "radii": [
+    {
+     "v": "12px",
+     "w": 7
+    },
+    {
+     "v": "50px",
+     "w": 7
+    },
+    {
+     "v": "30px",
+     "w": 5
+    },
+    {
+     "v": "10px",
+     "w": 4
+    },
+    {
+     "v": "20px",
+     "w": 4
+    },
+    {
+     "v": "99px",
+     "w": 4
+    },
+    {
+     "v": "16px",
+     "w": 3
+    }
+   ],
+   "gaps": [
+    {
+     "v": "16px",
+     "w": 4
+    },
+    {
+     "v": "5px",
+     "w": 4
+    },
+    {
+     "v": "20px",
+     "w": 3
+    },
+    {
+     "v": "30px",
+     "w": 3
+    },
+    {
+     "v": "40px",
+     "w": 2
+    },
+    {
+     "v": "2px",
+     "w": 2
+    }
+   ],
+   "pads": [
+    {
+     "v": "20px",
+     "w": 21
+    },
+    {
+     "v": "40px",
+     "w": 17
+    },
+    {
+     "v": "80px",
+     "w": 13
+    },
+    {
+     "v": "32px",
+     "w": 12
+    },
+    {
+     "v": "48px",
+     "w": 10
+    },
+    {
+     "v": "30px",
+     "w": 7
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0.07) 0px 0px 20px 0px",
+     "w": 3
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 36,
+     "weight": "700",
+     "lh": "46.08px",
+     "ls": "normal",
+     "family": "Poppins",
+     "color": "#ffffff",
+     "text": "The easiest way to run a better "
+    },
+    "h2": {
+     "size": 30,
+     "weight": "600",
+     "lh": "38.4px",
+     "ls": "normal",
+     "family": "Poppins",
+     "color": "#ffffff",
+     "text": "Prompt your schedule"
+    },
+    "h3": {
+     "size": 30,
+     "weight": "700",
+     "lh": "38.4px",
+     "ls": "normal",
+     "family": "Poppins",
+     "color": "#0c017b",
+     "text": "Frequently asked questions"
+    },
+    "body": {
+     "size": 36,
+     "weight": "700",
+     "lh": "46.8px",
+     "ls": "normal",
+     "family": "Poppins",
+     "color": "#0c017b",
+     "text": "Let's turn scheduling into somet"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#0c017b",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 24,
+     "size": 16,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 4
+    },
+    {
+     "bg": "#37cfcd",
+     "color": "#0c017b",
+     "radius": 12,
+     "padX": 26,
+     "padY": 0,
+     "h": 52,
+     "size": 18,
+     "weight": "600",
+     "border": "2px null",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#37cfcd",
+     "radius": 12,
+     "padX": 26,
+     "padY": 0,
+     "h": 52,
+     "size": 18,
+     "weight": "600",
+     "border": "2px #37cfcd",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": "#0c017b",
+     "color": "#ffffff",
+     "radius": 12,
+     "padX": 26,
+     "padY": 0,
+     "h": 52,
+     "size": 18,
+     "weight": "600",
+     "border": "2px null",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": "#eff1ff",
+     "color": null,
+     "radius": 10,
+     "padX": 16,
+     "padY": 0,
+     "h": 41,
+     "size": 14,
+     "weight": "600",
+     "border": "2px null",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#0c017b",
+     "color": "#ffffff",
+     "radius": 10,
+     "padX": 16,
+     "padY": 0,
+     "h": 41,
+     "size": 14,
+     "weight": "600",
+     "border": "2px null",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [],
+   "elements": 1247
+  }
+ },
+ {
+  "id": "wheniwork",
+  "name": "When I Work",
+  "url": "https://wheniwork.com/features/employee-scheduling",
+  "v": {
+   "wall": [],
+   "els": 477,
+   "times": 0,
+   "bars": 9,
+   "words": [
+    "shift",
+    "schedule",
+    "timesheet"
+   ],
+   "title": "404 Error – Oops! Page Not Found | When I Work"
+  },
+  "m": {
+   "title": "404 Error – Oops! Page Not Found | When I Work",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#666666",
+    "family": "Source Sans Pro",
+    "size": 16,
+    "lh": "24px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#e9fae6",
+      "w": 1200
+     },
+     {
+      "v": "#f5f5f5",
+      "w": 541
+     },
+     {
+      "v": "#ffffff",
+      "w": 478
+     },
+     {
+      "v": "#72b362",
+      "w": 18
+     },
+     {
+      "v": "#ffcc33",
+      "w": 13
+     }
+    ],
+    "ink": [
+     {
+      "v": "#333333",
+      "w": 97
+     },
+     {
+      "v": "#666666",
+      "w": 10
+     },
+     {
+      "v": "#757575",
+      "w": 2
+     },
+     {
+      "v": "#000000",
+      "w": 1
+     },
+     {
+      "v": "#363636",
+      "w": 1
+     },
+     {
+      "v": "#72b362",
+      "w": 1
+     },
+     {
+      "v": "#ffffff",
+      "w": 1
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Source Sans Pro",
+     "w": 622
+    }
+   ],
+   "radii": [
+    {
+     "v": "5px",
+     "w": 4
+    },
+    {
+     "v": "9999px",
+     "w": 3
+    },
+    {
+     "v": "4px",
+     "w": 2
+    },
+    {
+     "v": "10px",
+     "w": 1
+    }
+   ],
+   "gaps": [],
+   "pads": [
+    {
+     "v": "6px",
+     "w": 6
+    },
+    {
+     "v": "12px",
+     "w": 6
+    },
+    {
+     "v": "48px",
+     "w": 2
+    },
+    {
+     "v": "15px",
+     "w": 2
+    },
+    {
+     "v": "34px",
+     "w": 1
+    },
+    {
+     "v": "32px",
+     "w": 1
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgb(51, 51, 51) 0px 0px 0px 0px",
+     "w": 2
+    },
+    {
+     "v": "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px inset",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 60,
+     "weight": "600",
+     "lh": "67.5px",
+     "ls": "normal",
+     "family": "Source Sans Pro",
+     "color": "#333333",
+     "text": "We couldn’t find this page."
+    },
+    "h2": {
+     "size": 48,
+     "weight": "300",
+     "lh": "54px",
+     "ls": "normal",
+     "family": "Source Sans Pro",
+     "color": "#333333",
+     "text": "Scheduling Employees Shouldn't B"
+    },
+    "body": {
+     "size": 18,
+     "weight": "400",
+     "lh": "25px",
+     "ls": "normal",
+     "family": "Source Sans Pro",
+     "color": "#666666",
+     "text": "When I Work makes scheduling and"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#666666",
+     "radius": 0,
+     "padX": 14,
+     "padY": 6,
+     "h": 32,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": "#ffcc33",
+     "color": "#363636",
+     "radius": 9999,
+     "padX": 18,
+     "padY": 6,
+     "h": 34,
+     "size": 14,
+     "weight": "600",
+     "border": "1px #ffcc33",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "color": "#666666",
+     "radius": 9999,
+     "padX": 14,
+     "padY": 6,
+     "h": 34,
+     "size": 14,
+     "weight": "600",
+     "border": "1px #666666",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    },
+    {
+     "bg": "#72b362",
+     "color": "#ffffff",
+     "radius": 4,
+     "padX": 20,
+     "padY": 9,
+     "h": 50,
+     "size": 20,
+     "weight": "600",
+     "border": "1px #72b362",
+     "shadow": null,
+     "transform": "uppercase",
+     "count": 1
+    },
+    {
+     "bg": "#ffcc33",
+     "color": "#333333",
+     "radius": 5,
+     "padX": 16,
+     "padY": 7,
+     "h": 50,
+     "size": 16,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": "uppercase",
+     "count": 1
+    },
+    {
+     "bg": "#ffffff",
+     "color": "#757575",
+     "radius": 5,
+     "padX": 10,
+     "padY": 10,
+     "h": 42,
+     "size": 16,
+     "weight": "600",
+     "border": "1px #dddddd",
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#ffffff",
+     "radius": 10,
+     "padding": "54/70",
+     "border": "1px #dddddd",
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 299
+  }
+ },
+ {
+  "id": "homebase",
+  "name": "Homebase",
+  "url": "https://joinhomebase.com/scheduling/",
+  "v": {
+   "wall": [],
+   "els": 976,
+   "times": 0,
+   "bars": 7,
+   "words": [
+    "shift",
+    "schedule",
+    "coverage",
+    "timesheet"
+   ],
+   "title": "Free Employee & Staff Scheduling Software | Homebase"
+  },
+  "m": {
+   "title": "Free Employee & Staff Scheduling Software | Homebase",
+   "body": {
+    "bg": "#fffefe",
+    "color": "#1e0b3a",
+    "family": "sans",
+    "size": 16,
+    "lh": "24px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#fffefe",
+      "w": 2500
+     },
+     {
+      "v": "#f6f6f6",
+      "w": 1222
+     },
+     {
+      "v": "#f1ecff",
+      "w": 938
+     },
+     {
+      "v": "#0.ffff9b56323bc0.0002fc7fc8004216c0.00015100262a310d",
+      "w": 357
+     },
+     {
+      "v": "#0.ffff9b56323bc0.0002fc8035f3c17e20.00015100262a310d",
+      "w": 340
+     },
+     {
+      "v": "#0.f3d4ae429e0a40.031d4230263878e0.05d9fee4770d7d8",
+      "w": 259
+     },
+     {
+      "v": "#f5f5f5",
+      "w": 226
+     },
+     {
+      "v": "#ffffff",
+      "w": 141
+     },
+     {
+      "v": "#7e3dd4",
+      "w": 80
+     },
+     {
+      "v": "#d5c7ff",
+      "w": 46
+     }
+    ],
+    "ink": [
+     {
+      "v": "#1e0b3a",
+      "w": 200
+     },
+     {
+      "v": "#0.3627d028a1dfba0.09e6b7599e010780.137792de94756d",
+      "w": 76
+     },
+     {
+      "v": "#7e3dd4",
+      "w": 36
+     },
+     {
+      "v": "#fffefe",
+      "w": 31
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "sans",
+     "w": 1846
+    },
+    {
+     "v": "display",
+     "w": 4
+    }
+   ],
+   "radii": [
+    {
+     "v": "10px",
+     "w": 33
+    },
+    {
+     "v": "20px",
+     "w": 22
+    },
+    {
+     "v": "33554400px",
+     "w": 11
+    },
+    {
+     "v": "8px",
+     "w": 5
+    },
+    {
+     "v": "16px",
+     "w": 4
+    },
+    {
+     "v": "14px",
+     "w": 3
+    },
+    {
+     "v": "24px",
+     "w": 2
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 35
+    },
+    {
+     "v": "12px",
+     "w": 32
+    },
+    {
+     "v": "16px",
+     "w": 31
+    },
+    {
+     "v": "32px",
+     "w": 16
+    },
+    {
+     "v": "6px",
+     "w": 12
+    },
+    {
+     "v": "24px",
+     "w": 12
+    }
+   ],
+   "pads": [
+    {
+     "v": "6px",
+     "w": 45
+    },
+    {
+     "v": "12px",
+     "w": 27
+    },
+    {
+     "v": "24px",
+     "w": 19
+    },
+    {
+     "v": "32px",
+     "w": 17
+    },
+    {
+     "v": "64px",
+     "w": 13
+    },
+    {
+     "v": "8px",
+     "w": 5
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+     "w": 23
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 88,
+     "weight": "700",
+     "lh": "79.2px",
+     "ls": "normal",
+     "family": "display",
+     "color": "#1e0b3a",
+     "text": "Smarter schedules,\ndone in secon"
+    },
+    "h2": {
+     "size": 48,
+     "weight": "800",
+     "lh": "48px",
+     "ls": "-0.96px",
+     "family": "sans",
+     "color": "#1e0b3a",
+     "text": "Scheduling built for the way hou"
+    },
+    "h3": {
+     "size": 34,
+     "weight": "900",
+     "lh": "42.5px",
+     "ls": "-0.85px",
+     "family": "sans",
+     "color": "#7e3dd4",
+     "text": "20 hours\nsaved monthly"
+    },
+    "body": {
+     "size": 20,
+     "weight": "700",
+     "lh": "27.5px",
+     "ls": "normal",
+     "family": "sans",
+     "color": "#1e0b3a",
+     "text": "Sign up and add your team"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#1e0b3a",
+     "radius": 0,
+     "padX": 0,
+     "padY": 24,
+     "h": 72,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 9
+    },
+    {
+     "bg": null,
+     "color": "#1e0b3a",
+     "radius": 8,
+     "padX": 8,
+     "padY": 8,
+     "h": 40,
+     "size": 16,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 4
+    },
+    {
+     "bg": null,
+     "color": "#1e0b3a",
+     "radius": 10,
+     "padX": 0,
+     "padY": 0,
+     "h": 40,
+     "size": 16,
+     "weight": "400",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#1e0b3a",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 40,
+     "size": 16,
+     "weight": "400",
+     "border": "1px null",
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    },
+    {
+     "bg": null,
+     "color": "#1e0b3a",
+     "radius": 0,
+     "padX": 0,
+     "padY": 24,
+     "h": 96,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 2
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#f5f5f5",
+     "radius": 20,
+     "padding": "24/24",
+     "border": null,
+     "shadow": null,
+     "count": 5
+    },
+    {
+     "bg": "#f6f6f6",
+     "radius": 20,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 4
+    },
+    {
+     "bg": "#0.ffff9b56323bc0.0002fc7fc8004216c0.00015100262a310d",
+     "radius": 10,
+     "padding": "32/32",
+     "border": "1px null",
+     "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0",
+     "count": 4
+    },
+    {
+     "bg": "#0.f3d4ae429e0a40.031d4230263878e0.05d9fee4770d7d8",
+     "radius": 14,
+     "padding": "24/40",
+     "border": "1px null",
+     "shadow": null,
+     "count": 3
+    },
+    {
+     "bg": "#ffffff",
+     "radius": 16,
+     "padding": "32/32",
+     "border": null,
+     "shadow": null,
+     "count": 3
+    },
+    {
+     "bg": "#f1ecff",
+     "radius": 20,
+     "padding": "80/80",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 845
+  }
+ },
+ {
+  "id": "pco-services",
+  "name": "Planning Center Services",
+  "url": "https://www.planningcenter.com/services",
+  "v": {
+   "wall": [],
+   "els": 2864,
+   "times": 0,
+   "bars": 6,
+   "words": [
+    "schedule"
+   ],
+   "title": "Planning Center Services: Worship Planning Software"
+  },
+  "m": {
+   "title": "Planning Center Services: Worship Planning Software",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#000000",
+    "family": "gilroyFont",
+    "size": 16,
+    "lh": "24px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#ecf6ff",
+      "w": 1200
+     },
+     {
+      "v": "#192338",
+      "w": 1200
+     },
+     {
+      "v": "#141f3a",
+      "w": 714
+     },
+     {
+      "v": "#ffffff",
+      "w": 692
+     },
+     {
+      "v": "#2266f7",
+      "w": 28
+     },
+     {
+      "v": "#3f6ae1",
+      "w": 5
+     },
+     {
+      "v": "#e3e3e3",
+      "w": 4
+     }
+    ],
+    "ink": [
+     {
+      "v": "#ffffff",
+      "w": 77
+     },
+     {
+      "v": "#14224a",
+      "w": 71
+     },
+     {
+      "v": "#373737",
+      "w": 54
+     },
+     {
+      "v": "#b7bcd2",
+      "w": 34
+     },
+     {
+      "v": "#212242",
+      "w": 22
+     },
+     {
+      "v": "#000000",
+      "w": 20
+     },
+     {
+      "v": "#20395e",
+      "w": 16
+     },
+     {
+      "v": "#d1d9f2",
+      "w": 15
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "gilroyFont",
+     "w": 2730
+    }
+   ],
+   "radii": [
+    {
+     "v": "8px",
+     "w": 15
+    },
+    {
+     "v": "24px",
+     "w": 7
+    },
+    {
+     "v": "3px",
+     "w": 6
+    },
+    {
+     "v": "64px",
+     "w": 3
+    },
+    {
+     "v": "9999px",
+     "w": 2
+    },
+    {
+     "v": "6px",
+     "w": 1
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 9
+    },
+    {
+     "v": "40px",
+     "w": 7
+    },
+    {
+     "v": "12px",
+     "w": 7
+    },
+    {
+     "v": "16px",
+     "w": 2
+    },
+    {
+     "v": "44px",
+     "w": 2
+    },
+    {
+     "v": "24px",
+     "w": 2
+    }
+   ],
+   "pads": [
+    {
+     "v": "16px",
+     "w": 19
+    },
+    {
+     "v": "8px",
+     "w": 15
+    },
+    {
+     "v": "20px",
+     "w": 13
+    },
+    {
+     "v": "36px",
+     "w": 7
+    },
+    {
+     "v": "48px",
+     "w": 7
+    },
+    {
+     "v": "32px",
+     "w": 6
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(35, 120, 198, 0.1) 0px 18px 18px 0px",
+     "w": 7
+    },
+    {
+     "v": "rgba(85, 90, 99, 0.15) 0px 3.723px 7.447px 0px",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 80,
+     "weight": "700",
+     "lh": "79.2px",
+     "ls": "-1.6px",
+     "family": "gilroyFont",
+     "color": "#14224a",
+     "text": "Service planning and volunteer s"
+    },
+    "h2": {
+     "size": 80,
+     "weight": "700",
+     "lh": "79.2px",
+     "ls": "-1.6px",
+     "family": "gilroyFont",
+     "color": "#ffffff",
+     "text": "Watch a Services demo"
+    },
+    "h3": {
+     "size": 64,
+     "weight": "700",
+     "lh": "64px",
+     "ls": "-0.51px",
+     "family": "gilroyFont",
+     "color": "#14224a",
+     "text": "More you can do with Services"
+    },
+    "body": {
+     "size": 80,
+     "weight": "700",
+     "lh": "79.2px",
+     "ls": "-1.6px",
+     "family": "gilroyFont",
+     "color": "#ffffff",
+     "text": "Schedule people for every minist"
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 0,
+     "padX": 0,
+     "padY": 20,
+     "h": 72,
+     "size": 20,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 8
+    },
+    {
+     "bg": null,
+     "color": "#2266f7",
+     "radius": 24,
+     "padX": 8,
+     "padY": 8,
+     "h": 36,
+     "size": 16,
+     "weight": "600",
+     "border": "1px #93b5ff",
+     "shadow": null,
+     "transform": null,
+     "count": 7
+    },
+    {
+     "bg": null,
+     "color": "#212242",
+     "radius": 0,
+     "padX": 0,
+     "padY": 32,
+     "h": 64,
+     "size": 22,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 5
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 0,
+     "padX": 0,
+     "padY": 20,
+     "h": 72,
+     "size": 20,
+     "weight": "700",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 4
+    },
+    {
+     "bg": null,
+     "color": "#ffffff",
+     "radius": 3,
+     "padX": 12,
+     "padY": 8,
+     "h": 40,
+     "size": 16,
+     "weight": "600",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 3
+    },
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 54,
+     "size": 16,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 1
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#ffffff",
+     "radius": 8,
+     "padding": "0/0",
+     "border": null,
+     "shadow": "rgba(35, 120, 198, 0.1) 0px 18px 18px 0px",
+     "count": 7
+    }
+   ],
+   "elements": 1082
+  }
+ },
+ {
+  "id": "bamboohr",
+  "name": "BambooHR",
+  "url": "https://www.bamboohr.com/time-tracking",
+  "v": {
+   "wall": [],
+   "els": 719,
+   "times": 2,
+   "bars": 11,
+   "words": [
+    "schedule"
+   ],
+   "title": "BambooHR Blog | Not Found"
+  },
+  "m": {
+   "title": "BambooHR Blog | Not Found",
+   "body": {
+    "bg": "#ffffff",
+    "color": "#38312f",
+    "family": "Inter",
+    "size": 16,
+    "lh": "24px"
+   },
+   "mainWidth": 0,
+   "palette": {
+    "bg": [],
+    "ink": []
+   },
+   "fonts": [],
+   "radii": [],
+   "gaps": [],
+   "pads": [],
+   "shadows": [],
+   "type": {},
+   "buttons": [],
+   "cards": [],
+   "elements": 0
+  }
+ },
+ {
+  "id": "calendly",
+  "name": "Calendly",
+  "url": "https://calendly.com/",
+  "v": {
+   "wall": [],
+   "els": 3261,
+   "times": 0,
+   "bars": 35,
+   "words": [
+    "schedule"
+   ],
+   "title": "Meeting Scheduling Software and AI Meeting Tools | Cale"
+  },
+  "m": {
+   "title": "Meeting Scheduling Software and AI Meeting Tools | Calendly",
+   "body": {
+    "bg": "#fcfbf8",
+    "color": "#000000",
+    "family": "Geist",
+    "size": 16,
+    "lh": "16px"
+   },
+   "mainWidth": 1440,
+   "palette": {
+    "bg": [
+     {
+      "v": "#fcfbf8",
+      "w": 13350
+     },
+     {
+      "v": "#f5f3ee",
+      "w": 2629
+     },
+     {
+      "v": "#e4e6e9",
+      "w": 1745
+     },
+     {
+      "v": "#ffffff",
+      "w": 1390
+     },
+     {
+      "v": "#071a31",
+      "w": 1274
+     },
+     {
+      "v": "#c3dffe",
+      "w": 687
+     },
+     {
+      "v": "#f2f8de",
+      "w": 250
+     },
+     {
+      "v": "#6bb1ff",
+      "w": 189
+     },
+     {
+      "v": "#baf0ec",
+      "w": 184
+     },
+     {
+      "v": "#d4c2ff",
+      "w": 181
+     }
+    ],
+    "ink": [
+     {
+      "v": "#071a31",
+      "w": 126
+     },
+     {
+      "v": "#fcfbf8",
+      "w": 73
+     },
+     {
+      "v": "#5f6d77",
+      "w": 40
+     },
+     {
+      "v": "#3d464e",
+      "w": 15
+     },
+     {
+      "v": "#ffffff",
+      "w": 5
+     }
+    ]
+   },
+   "fonts": [
+    {
+     "v": "Geist",
+     "w": 4103
+    },
+    {
+     "v": "Calendly Sans",
+     "w": 63
+    },
+    {
+     "v": "Wulkan Text",
+     "w": 37
+    },
+    {
+     "v": "ui-sans-serif",
+     "w": 4
+    }
+   ],
+   "radii": [
+    {
+     "v": "24px",
+     "w": 67
+    },
+    {
+     "v": "4px",
+     "w": 43
+    },
+    {
+     "v": "8px",
+     "w": 40
+    },
+    {
+     "v": "48px",
+     "w": 34
+    },
+    {
+     "v": "16px",
+     "w": 27
+    },
+    {
+     "v": "64px",
+     "w": 23
+    },
+    {
+     "v": "12px",
+     "w": 12
+    }
+   ],
+   "gaps": [
+    {
+     "v": "8px",
+     "w": 72
+    },
+    {
+     "v": "16px",
+     "w": 60
+    },
+    {
+     "v": "12px",
+     "w": 47
+    },
+    {
+     "v": "4px",
+     "w": 37
+    },
+    {
+     "v": "24px",
+     "w": 24
+    },
+    {
+     "v": "32px",
+     "w": 12
+    }
+   ],
+   "pads": [
+    {
+     "v": "24px",
+     "w": 33
+    },
+    {
+     "v": "4px",
+     "w": 20
+    },
+    {
+     "v": "8px",
+     "w": 16
+    },
+    {
+     "v": "16px",
+     "w": 16
+    },
+    {
+     "v": "12px",
+     "w": 9
+    },
+    {
+     "v": "120px",
+     "w": 9
+    }
+   ],
+   "shadows": [
+    {
+     "v": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+     "w": 2
+    },
+    {
+     "v": "rgba(71, 103, 136, 0.04) 0px 1px 2px 0px, rgba(71, 103, 136, 0.03) 0px 4px 8px 0",
+     "w": 1
+    }
+   ],
+   "type": {
+    "h1": {
+     "size": 72,
+     "weight": "500",
+     "lh": "79.2px",
+     "ls": "-2px",
+     "family": "Calendly Sans",
+     "color": "#071a31",
+     "text": "All the work around meetings, ha"
+    },
+    "h2": {
+     "size": 60,
+     "weight": "500",
+     "lh": "66px",
+     "ls": "-2px",
+     "family": "Calendly Sans",
+     "color": "#071a31",
+     "text": "There’s more to meetings than fi"
+    },
+    "h3": {
+     "size": 36,
+     "weight": "500",
+     "lh": "39.6px",
+     "ls": "-1px",
+     "family": "Calendly Sans",
+     "color": "#071a31",
+     "text": "100% attendance rate"
+    },
+    "body": {
+     "size": 60,
+     "weight": "500",
+     "lh": "66px",
+     "ls": "-2px",
+     "family": "ui-sans-serif",
+     "color": "#fcfbf8",
+     "text": "Make space for what matters."
+    }
+   },
+   "buttons": [
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 28,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 11
+    },
+    {
+     "bg": null,
+     "color": "#071a31",
+     "radius": 16,
+     "padX": 8,
+     "padY": 8,
+     "h": 36,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 6
+    },
+    {
+     "bg": "#071a31",
+     "color": "#fcfbf8",
+     "radius": 20,
+     "padX": 4,
+     "padY": 4,
+     "h": 50,
+     "size": 16,
+     "weight": "500",
+     "border": "2px null",
+     "shadow": null,
+     "transform": null,
+     "count": 4
+    },
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 0,
+     "padX": 0,
+     "padY": 0,
+     "h": 56,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 4
+    },
+    {
+     "bg": null,
+     "color": "#071a31",
+     "radius": 0,
+     "padX": 2,
+     "padY": 10,
+     "h": 38,
+     "size": 14,
+     "weight": "500",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 4
+    },
+    {
+     "bg": null,
+     "color": "#000000",
+     "radius": 0,
+     "padX": 0,
+     "padY": 56,
+     "h": 223,
+     "size": 16,
+     "weight": "400",
+     "border": null,
+     "shadow": null,
+     "transform": null,
+     "count": 4
+    }
+   ],
+   "cards": [
+    {
+     "bg": "#f5f3ee",
+     "radius": 48,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 5
+    },
+    {
+     "bg": "#c3dffe",
+     "radius": 20,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 4
+    },
+    {
+     "bg": "#e4e6e9",
+     "radius": 64,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 3
+    },
+    {
+     "bg": "#f5f3ee",
+     "radius": 48,
+     "padding": "24/24",
+     "border": null,
+     "shadow": null,
+     "count": 2
+    },
+    {
+     "bg": "#f5f3ee",
+     "radius": 64,
+     "padding": "0/0",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    },
+    {
+     "bg": "#e4e6e9",
+     "radius": 64,
+     "padding": "48/30",
+     "border": null,
+     "shadow": null,
+     "count": 1
+    }
+   ],
+   "elements": 1933
+  }
+ },
+ {
+  "id": "connecteam",
+  "name": "Connecteam",
+  "url": "https://connecteam.com/employee-scheduling-software/",
+  "rejected": "דף ריק (1)",
+  "v": {
+   "wall": [],
+   "els": 1,
+   "times": 0,
+   "bars": 0,
+   "words": [],
+   "title": "employee-scheduling-software.jpg (1920×1080)"
+  }
+ },
+ {
+  "id": "sling",
+  "name": "Sling",
+  "url": "https://getsling.com/",
+  "rejected": "רק 4 פסים — אין לוח",
+  "v": {
+   "wall": [],
+   "els": 1333,
+   "times": 0,
+   "bars": 4,
+   "words": [
+    "schedule",
+    "timesheet"
+   ],
+   "title": "Sling: Free Employee Scheduling And Shift Planning Made"
+  }
+ }
+]

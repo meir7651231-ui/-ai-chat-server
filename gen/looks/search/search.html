@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>חיפוש בכל המוסד</title>
+<meta name="description" content="שורת-חיפוש מפוצלת: מי · מתי · איזה אגף. העתקה מדודה של הרכיב של Airbnb.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}
+:root{
+ /* ---- כל גוון וכל מידה כאן נמדדו מ-airbnb.com היום ---- */
+ --bg:#ffffff;--ink:#222222;--mut:#6c6c6c;--dim:#c1c1c1;--hair:#dddddd;--grey:#ebebeb;--sunk:#f7f7f7;
+ --acc:#e11d48;                       /* כפתור-החיפוש — אצלנו, כי הוורוד שלהם הוא המותג שלהם */
+ --barH:66px;--barR:100px;--segR:32px;--btn:48px;
+ --shBar:0 0 0 1px rgb(0 0 0/.02),0 3px 12px rgb(0 0 0/.1);
+ --shSeg:0 3px 12px rgb(0 0 0/.1),0 1px 2px rgb(0 0 0/.08);
+ --shPanel:0 3px 12px rgb(0 0 0/.1),0 1px 2px rgb(0 0 0/.08);
+ --fs:14px;--lh:20px}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#151517;--ink:#f0f0f0;--mut:#a0a0a5;--dim:#5c5c62;--hair:#2e2e33;--grey:#1e1e22;--sunk:#1a1a1e;
+ --shBar:0 0 0 1px rgb(255 255 255/.06),0 3px 12px rgb(0 0 0/.5);
+ --shSeg:0 3px 12px rgb(0 0 0/.55),0 1px 2px rgb(0 0 0/.4);
+ --shPanel:0 3px 12px rgb(0 0 0/.55),0 1px 2px rgb(0 0 0/.4)}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--fs)/var(--lh) Heebo,Arial,sans-serif}
+h1,h2,h3{margin:0}p{margin:0}ul{margin:0;padding:0;list-style:none}button{font:inherit;cursor:pointer}
+bdi{unicode-bidi:isolate}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+.top{border-block-end:1px solid var(--hair);padding:16px 24px 26px;position:relative;z-index:30;background:var(--bg)}
+.brand{max-width:1240px;margin:0 auto 18px;display:flex;align-items:center;gap:12px}
+.brand b{font:800 20px Heebo;color:var(--acc)}
+.brand span{font-size:13px;color:var(--mut);margin-inline-start:auto}
+h1{font:600 15px/20px Heebo;position:absolute;inset:auto;clip-path:inset(50%);width:1px;height:1px;overflow:hidden}
+
+/* ================= הרכיב המועתק ================= */
+.bar{max-width:850px;margin:0 auto;position:relative;height:var(--barH);
+ background:var(--bg);border-radius:var(--barR);box-shadow:var(--shBar);
+ display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;transition:background .2s}
+/* כשמקטע פעיל — כל הסרגל מכהה, וזה בדיוק מה שהם עושים */
+.bar.on{background:var(--grey)}
+.seg{position:relative;height:var(--barH);border:0;background:none;border-radius:var(--segR);
+ text-align:start;padding:0 26px;display:grid;align-content:center;gap:2px;color:inherit;
+ transition:background .15s,box-shadow .15s}
+.bar.on .seg:hover{background:rgb(0 0 0/.06)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .bar.on .seg:hover{background:rgb(255 255 255/.06)}}
+.seg.act{background:var(--bg);box-shadow:var(--shSeg)}
+.seg b{font:500 var(--fs)/18px Heebo}              /* התווית — נמדד 500 14/18 */
+.seg span{font:400 var(--fs)/18px Heebo;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg.act span{color:var(--ink)}
+/* הקווים הדקים בין המקטעים — נעלמים ליד המקטע הפעיל */
+.seg+.seg::before{content:'';position:absolute;inset-inline-end:0;top:14px;bottom:14px;width:1px;background:var(--hair)}
+.seg.act::before,.seg.act+.seg::before{display:none}
+.go{position:absolute;inset-inline-end:8px;top:9px;height:var(--btn);min-width:var(--btn);
+ border:0;border-radius:50px;background:var(--acc);color:#fff;display:flex;align-items:center;gap:8px;
+ padding:0 14px;font:600 var(--fs) Heebo;transition:padding .2s}
+.go .t{display:none}
+.bar.on .go{padding:0 20px}
+.bar.on .go .t{display:inline}
+
+/* הלוח הנפתח */
+.panel{position:absolute;top:calc(var(--barH) + 12px);background:var(--bg);border-radius:var(--segR);
+ box-shadow:var(--shPanel);padding:16px;width:min(420px,92vw);max-height:420px;overflow:auto;display:none;z-index:40}
+.panel.open{display:block}
+.panel h2{font:600 13px/18px Heebo;color:var(--mut);padding:2px 8px 10px}
+.panel input{width:100%;border:1px solid var(--hair);border-radius:12px;background:var(--sunk);
+ color:inherit;font:inherit;padding:11px 14px;margin-bottom:10px;outline:0}
+.panel input:focus{border-color:var(--ink)}
+.opt{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:12px;align-items:center;
+ width:100%;border:0;background:none;color:inherit;border-radius:12px;padding:8px;text-align:start}
+.opt:hover{background:var(--sunk)}
+.opt .ic{width:48px;height:48px;border-radius:12px;background:var(--sunk);border:1px solid var(--hair);
+ display:grid;place-items:center;font:600 15px Heebo}
+.opt b{display:block;font:500 15px/19px Heebo}
+.opt span{display:block;font-size:13px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.opt .m{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.none{padding:14px 8px;color:var(--mut);font-size:13.5px}
+
+.veil{position:fixed;inset:0;z-index:25;display:none}
+.veil.open{display:block}
+
+/* תוצאות */
+.res{max-width:1240px;margin:26px auto 60px;padding:0 24px}
+.res h2{font:600 22px/28px Heebo;margin-bottom:4px}
+.res p.s{font-size:13.5px;color:var(--mut);margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:24px 16px}
+.card .ph{aspect-ratio:20/19;border-radius:20px;background:var(--sunk);border:1px solid var(--hair);
+ display:grid;place-items:center;font:700 34px Heebo;color:var(--mut);margin-bottom:10px;position:relative}
+.card .ph .tag{position:absolute;top:10px;inset-inline-start:10px;background:var(--bg);border-radius:50px;
+ padding:4px 10px;font:600 12px Heebo;box-shadow:var(--shSeg);color:var(--ink)}
+.card .r1{display:flex;align-items:baseline;gap:8px}
+.card .r1 b{font:500 15px/19px Heebo;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .r1 span{font-size:14px;white-space:nowrap}
+.card .r2,.card .r3{font-size:14px;color:var(--mut)}
+.card .r4{font-size:14px;margin-top:2px}
+.card .r4 b{font-weight:600}
+.src{max-width:1240px;margin:0 auto 50px;padding:0 24px;font-size:12px;color:var(--mut)}
+.src b{color:var(--ink)}
+</style></head>
+<body>
+<h1>חיפוש בכל המוסד</h1>
+<header class="top">
+  <div class="brand"><b>מוסד</b><span><bdi dir="ltr">912</bdi> רשומות · 12 אגפים · תשפ״ז</span></div>
+
+  <div class="bar" id="bar">
+    <button class="seg" type="button" data-seg="who" id="s-who">
+      <b>מי?</b><span id="v-who">שם משפחה, ילד או עובד</span></button>
+    <button class="seg" type="button" data-seg="when" id="s-when">
+      <b>מתי?</b><span id="v-when">כל תקופה</span></button>
+    <button class="seg" type="button" data-seg="dept" id="s-dept">
+      <b>איזה אגף?</b><span id="v-dept">כל האגפים</span></button>
+    <button class="go" type="button" id="go"><span aria-hidden="true">⌕</span><span class="t">חיפוש</span></button>
+
+    <div class="panel" id="p-who" style="inset-inline-end:0">
+      <h2>מי</h2>
+      <input id="q" type="search" placeholder="הקלד שם…" autocomplete="off" aria-label="חיפוש שם">
+      <div id="who-list"></div>
+    </div>
+    <div class="panel" id="p-when" style="inset-inline-end:33%">
+      <h2>מתי</h2>
+      <button class="opt" type="button" data-pick="when" data-val="היום">
+        <span class="ic" aria-hidden="true">📅</span><span><b>היום</b><span>מה קרה מאז הבוקר</span></span></button><button class="opt" type="button" data-pick="when" data-val="השבוע">
+        <span class="ic" aria-hidden="true">📅</span><span><b>השבוע</b><span>שבעת הימים האחרונים</span></span></button><button class="opt" type="button" data-pick="when" data-val="החודש">
+        <span class="ic" aria-hidden="true">📅</span><span><b>החודש</b><span>מתחילת החודש</span></span></button><button class="opt" type="button" data-pick="when" data-val="תשפ״ז">
+        <span class="ic" aria-hidden="true">📅</span><span><b>תשפ״ז</b><span>כל שנת הלימודים</span></span></button><button class="opt" type="button" data-pick="when" data-val="תשפ״ו">
+        <span class="ic" aria-hidden="true">📅</span><span><b>תשפ״ו</b><span>השנה שעברה</span></span></button><button class="opt" type="button" data-pick="when" data-val="הכל">
+        <span class="ic" aria-hidden="true">📅</span><span><b>הכל</b><span>מאז הקמת המוסד</span></span></button>
+    </div>
+    <div class="panel" id="p-dept" style="inset-inline-start:0">
+      <h2>אגף</h2>
+      <button class="opt" type="button" data-pick="dept" data-val="כל האגפים">
+        <span class="ic" aria-hidden="true">★</span><span><b>כל האגפים</b><span>חיפוש רוחבי בכל המוסד</span></span></button>
+      <button class="opt" type="button" data-pick="dept" data-val="אנשים">
+        <span class="ic" aria-hidden="true">א</span>
+        <span><b>אנשים</b><span><bdi dir="ltr">4</bdi> סוגי רשומות</span></span></button><button class="opt" type="button" data-pick="dept" data-val="חינוך">
+        <span class="ic" aria-hidden="true">ח</span>
+        <span><b>חינוך</b><span><bdi dir="ltr">21</bdi> סוגי רשומות</span></span></button><button class="opt" type="button" data-pick="dept" data-val="צוות">
+        <span class="ic" aria-hidden="true">צ</span>
+        <span><b>צוות</b><span><bdi dir="ltr">8</bdi> סוגי רשומות</span></span></button><button class="opt" type="button" data-pick="dept" data-val="גבייה">
+        <span class="ic" aria-hidden="true">ג</span>
+        <span><b>גבייה</b><span><bdi dir="ltr">16</bdi> סוגי רשומות</span></span></button><button class="opt" type="button" data-pick="dept" data-val="תרומות">
+        <span class="ic" aria-hidden="true">ת</span>
+        <span><b>תרומות</b><span><bdi dir="ltr">20</bdi> סוגי רשומות</span></span></button><button class="opt" type="button" data-pick="dept" data-val="כספים">
+        <span class="ic" aria-hidden="true">כ</span>
+        <span><b>כספים</b><span><bdi dir="ltr">19</bdi> סוגי רשומות</span></span></button><button class="opt" type="button" data-pick="dept" data-val="בית המדרש">
+        <span class="ic" aria-hidden="true">ב</span>
+        <span><b>בית המדרש</b><span><bdi dir="ltr">20</bdi> סוגי רשומות</span></span></button><button class="opt" type="button" data-pick="dept" data-val="החצר">
+        <span class="ic" aria-hidden="true">ה</span>
+        <span><b>החצר</b><span><bdi dir="ltr">11</bdi> סוגי רשומות</span></span></button><button class="opt" type="button" data-pick="dept" data-val="חסד">
+        <span class="ic" aria-hidden="true">ח</span>
+        <span><b>חסד</b><span><bdi dir="ltr">12</bdi> סוגי רשומות</span></span></button><button class="opt" type="button" data-pick="dept" data-val="תפעול">
+        <span class="ic" aria-hidden="true">ת</span>
+        <span><b>תפעול</b><span><bdi dir="ltr">19</bdi> סוגי רשומות</span></span></button><button class="opt" type="button" data-pick="dept" data-val="שידוכים">
+        <span class="ic" aria-hidden="true">ש</span>
+        <span><b>שידוכים</b><span><bdi dir="ltr">15</bdi> סוגי רשומות</span></span></button><button class="opt" type="button" data-pick="dept" data-val="תקשורת">
+        <span class="ic" aria-hidden="true">ת</span>
+        <span><b>תקשורת</b><span><bdi dir="ltr">16</bdi> סוגי רשומות</span></span></button>
+    </div>
+  </div>
+</header>
+<div class="veil" id="veil"></div>
+
+<section class="res">
+  <h2 id="rh">‏168 משפחות במוסד</h2>
+  <p class="s" id="rs">ממוינות לפי יתרה פתוחה · תשפ״ז</p>
+  <div class="grid" id="grid"></div>
+</section>
+
+<p class="src"><b>מה הועתק ומאיפה:</b> הגלולה <bdi dir="ltr">850×66 · רדיוס 100</bdi> · המקטע הפעיל
+<bdi dir="ltr">278×66 · רדיוס 32</bdi> עם מסגרת <bdi dir="ltr">1px #dddddd</bdi> ·
+הצללים <bdi dir="ltr">0 3px 12px rgb(0 0 0/.1)</bdi> ו-<bdi dir="ltr">0 1px 2px rgb(0 0 0/.08)</bdi> ·
+הכהיית הסרגל ל-<bdi dir="ltr">#ebebeb</bdi> כשמקטע פעיל · התווית <bdi dir="ltr">500 14/18</bdi> ·
+כפתור <bdi dir="ltr">48×48</bdi> שמתרחב · הפלטה <bdi dir="ltr">#222222 · #6c6c6c · #dddddd</bdi> ·
+כרטיס־תמונה רדיוס <bdi dir="ltr">20</bdi> ושורת כותרת+דירוג באותה שורה — <b>הכל נמדד מ-airbnb.com היום</b>.
+הוורוד שלהם הוחלף כי הוא המותג שלהם. נתונים: 168 משפחות מהמחסן.</p>
+
+<script>
+const FAM = [{"name":"משפחת אונגר","city":"לונדון","kids":3,"bal":14428,"hok":false,"init":"או"},{"name":"משפחת פישר","city":"אלעד","kids":3,"bal":14138,"hok":false,"init":"פי"},{"name":"משפחת וקסלר א׳","city":"בני ברק","kids":3,"bal":14128,"hok":false,"init":"וק"},{"name":"משפחת גולד י׳","city":"ניו יורק","kids":3,"bal":13775,"hok":false,"init":"גו"},{"name":"משפחת רוזן ד׳","city":"אנטוורפן","kids":3,"bal":13004,"hok":false,"init":"רו"},{"name":"משפחת חשין","city":"לונדון","kids":3,"bal":11828,"hok":false,"init":"חש"},{"name":"משפחת טננבוים","city":"בני ברק","kids":3,"bal":11604,"hok":false,"init":"טנ"},{"name":"משפחת בלוי ש׳","city":"ניו יורק","kids":3,"bal":11428,"hok":false,"init":"בל"},{"name":"משפחת ברגר ד׳","city":"אשדוד","kids":2,"bal":11250,"hok":false,"init":"בר"},{"name":"משפחת פרידמן","city":"אשדוד","kids":3,"bal":11075,"hok":false,"init":"פר"},{"name":"משפחת אדלר ש׳","city":"בית שמש","kids":2,"bal":10950,"hok":false,"init":"אד"},{"name":"משפחת בראון א׳","city":"ניו יורק","kids":3,"bal":10875,"hok":true,"init":"בר"},{"name":"משפחת רוט","city":"אנטוורפן","kids":3,"bal":10475,"hok":false,"init":"רו"},{"name":"משפחת יעקובוביץ י׳","city":"אשדוד","kids":3,"bal":10438,"hok":false,"init":"יע"},{"name":"משפחת הירש מ׳","city":"אשדוד","kids":3,"bal":10338,"hok":false,"init":"הי"},{"name":"משפחת שפירא י׳","city":"אלעד","kids":2,"bal":10250,"hok":false,"init":"שפ"},{"name":"משפחת שוורץ","city":"לונדון","kids":3,"bal":8839,"hok":false,"init":"שו"},{"name":"משפחת זילבר","city":"לונדון","kids":3,"bal":8824,"hok":false,"init":"זי"},{"name":"משפחת טויב י׳","city":"ירושלים","kids":2,"bal":8750,"hok":false,"init":"טו"},{"name":"משפחת שטרן ד׳","city":"לונדון","kids":2,"bal":8683,"hok":false,"init":"שט"},{"name":"משפחת פישר ד׳","city":"בני ברק","kids":2,"bal":8583,"hok":false,"init":"פי"},{"name":"משפחת דויטש א׳","city":"בני ברק","kids":2,"bal":8558,"hok":false,"init":"דו"},{"name":"משפחת גולדשטיין ד׳","city":"מודיעין עילית","kids":3,"bal":8475,"hok":true,"init":"גו"},{"name":"משפחת כהן א׳","city":"ביתר עילית","kids":3,"bal":8275,"hok":false,"init":"כה"},{"name":"משפחת חשין א׳","city":"אנטוורפן","kids":2,"bal":8150,"hok":false,"init":"חש"},{"name":"משפחת מלר ד׳","city":"לונדון","kids":2,"bal":8147,"hok":false,"init":"מל"},{"name":"משפחת אדלר מ׳","city":"אלעד","kids":2,"bal":8050,"hok":false,"init":"אד"},{"name":"משפחת זיסקינד ש׳","city":"ניו יורק","kids":2,"bal":7513,"hok":false,"init":"זי"},{"name":"משפחת בלוי","city":"לונדון","kids":3,"bal":7475,"hok":true,"init":"בל"},{"name":"משפחת ויסבלט א׳","city":"לונדון","kids":3,"bal":7375,"hok":true,"init":"וי"},{"name":"משפחת פרידמן א׳","city":"אנטוורפן","kids":2,"bal":7348,"hok":false,"init":"פר"},{"name":"משפחת אדלר","city":"ניו יורק","kids":3,"bal":7175,"hok":true,"init":"אד"},{"name":"משפחת לוי","city":"ניו יורק","kids":3,"bal":6975,"hok":false,"init":"לו"},{"name":"משפחת שוורץ א׳","city":"ניו יורק","kids":3,"bal":6975,"hok":true,"init":"שו"},{"name":"משפחת מלר","city":"ירושלים","kids":3,"bal":6969,"hok":false,"init":"מל"},{"name":"משפחת לנדאו ד׳","city":"אשדוד","kids":2,"bal":6850,"hok":false,"init":"לנ"},{"name":"משפחת גרין י׳","city":"מודיעין עילית","kids":3,"bal":6828,"hok":true,"init":"גר"},{"name":"משפחת ברגר ש׳","city":"ביתר עילית","kids":3,"bal":6769,"hok":true,"init":"בר"},{"name":"משפחת נוימן א׳","city":"בני ברק","kids":2,"bal":6648,"hok":false,"init":"נו"},{"name":"משפחת אברמסון","city":"ביתר עילית","kids":3,"bal":6575,"hok":false,"init":"אב"}], STAFF = [{"name":"נפתלי גרין","role":"מגיד שיעור","init":"נפ"},{"name":"נפתלי מלר","role":"מגיד שיעור","init":"נפ"},{"name":"יעקב פישר","role":"מגיד שיעור","init":"יע"},{"name":"שרגא כהנא","role":"מגיד שיעור","init":"שר"},{"name":"אלימלך פישר","role":"מגיד שיעור","init":"אל"},{"name":"שמואל רוזן","role":"מגיד שיעור","init":"שמ"},{"name":"זלמן שטרן","role":"מגיד שיעור","init":"זל"},{"name":"יעקב גולד","role":"מגיד שיעור","init":"יע"},{"name":"נחום בלוי","role":"מגיד שיעור","init":"נח"},{"name":"אהרן דויטש","role":"מגיד שיעור","init":"אה"},{"name":"ברוך דויטש","role":"מגיד שיעור","init":"בר"},{"name":"חיים בראון","role":"מגיד שיעור","init":"חי"},{"name":"יהודה מלר","role":"מלמד","init":"יה"},{"name":"גרשון גולד","role":"מלמד","init":"גר"},{"name":"כלב בראון","role":"מלמד","init":"כל"},{"name":"שמואל הירש","role":"מלמד","init":"שמ"},{"name":"יהודה טויב","role":"מלמד","init":"יה"},{"name":"יעקב ריינר","role":"מלמד","init":"יע"},{"name":"יוסף אברמסון","role":"מלמד","init":"יו"},{"name":"כלב דויטש","role":"מלמד","init":"כל"}];
+const nis = n => '₪' + Math.round(n).toLocaleString('en-US');
+const $ = i => document.getElementById(i);
+const bar = $('bar'), veil = $('veil');
+let open = null;
+const pick = { who: null, when: null, dept: null };
+
+const close = () => { document.querySelectorAll('.panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.seg').forEach(s => s.classList.remove('act'));
+  bar.classList.remove('on'); veil.classList.remove('open'); open = null; };
+
+const show = (k) => {
+  if (open === k) return close();
+  close();
+  $('s-' + k).classList.add('act'); $('p-' + k).classList.add('open');
+  bar.classList.add('on'); veil.classList.add('open'); open = k;
+  if (k === 'who') { paintWho(''); setTimeout(() => $('q').focus(), 40); }
+};
+
+const paintWho = (q) => {
+  const t = q.trim();
+  const f = FAM.filter(x => !t || x.name.includes(t) || x.city.includes(t)).slice(0, 8);
+  const s = STAFF.filter(x => !t || x.name.includes(t) || x.role.includes(t)).slice(0, 4);
+  const row = (ic, b, sub, m, val) =>
+    '<button class="opt" type="button" data-pick="who" data-val="' + val + '"><span class="ic" aria-hidden="true">' + ic + '</span>' +
+    '<span><b>' + b + '</b><span>' + sub + '</span></span>' + (m ? '<span class="m">' + m + '</span>' : '') + '</button>';
+  const html = f.map(x => row(x.init, x.name, x.city + ' · ' + x.kids + ' ילדים', nis(x.bal), x.name)).join('') +
+    s.map(x => row(x.init, x.name, x.role, '', x.name)).join('');
+  $('who-list').innerHTML = html || '<p class="none">אין תוצאה.</p>';
+};
+
+const paintRes = () => {
+  const t = (pick.who || '').trim();
+  const list = FAM.filter(x => !t || x.name.includes(t) || x.city.includes(t));
+  $('rh').textContent = list.length + (t ? ' תוצאות עבור «' + t + '»' : ' משפחות במוסד');
+  $('rs').textContent = [pick.dept || 'כל האגפים', pick.when || 'כל תקופה', 'ממוינות לפי יתרה פתוחה'].join(' · ');
+  $('grid').innerHTML = list.slice(0, 12).map(x =>
+    '<article class="card"><div class="ph">' + x.init +
+      (x.hok ? '<span class="tag">הוראת קבע</span>' : '') + '</div>' +
+    '<div class="r1"><b>' + x.name + '</b><span>★ ' + (x.kids ? (4 + x.kids / 10).toFixed(2) : '—') + '</span></div>' +
+    '<div class="r2">' + x.city + ' · ' + x.kids + ' ילדים</div>' +
+    '<div class="r3">' + (pick.when || 'תשפ״ז') + '</div>' +
+    '<div class="r4"><b>' + nis(x.bal) + '</b> יתרה פתוחה</div></article>').join('');
+};
+
+document.addEventListener('click', e => {
+  const seg = e.target.closest('[data-seg]');
+  if (seg) { e.stopPropagation(); return show(seg.dataset.seg); }
+  const opt = e.target.closest('[data-pick]');
+  if (opt) { const k = opt.dataset.pick; pick[k] = opt.dataset.val;
+    $('v-' + k).textContent = opt.dataset.val; close(); paintRes(); return; }
+  if (e.target === veil) return close();
+  if (!e.target.closest('.panel')) close();
+});
+$('q').addEventListener('input', e => paintWho(e.target.value));
+$('q').addEventListener('click', e => e.stopPropagation());
+$('go').addEventListener('click', e => { e.stopPropagation(); if (open) { close(); } paintRes(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+paintRes();
+</script>
+</body></html>

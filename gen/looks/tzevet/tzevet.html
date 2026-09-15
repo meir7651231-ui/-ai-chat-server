@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>צוות — 40 מתוך 44</title>
+<meta name="description" content="לוח-משמרות של יום אחד עם עקומת-כיסוי ומציאת מחליף.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}
+:root{
+ --bg:#ffffff;--sunk:#f6f7f9;--hair:#e3e6ea;--ink:#101418;--mut:#5a6470;
+ /* צבעי-המצב של Deputy, כפי שנראו בלוח שלו */
+ --okBg:#e7f6ea;--okLine:#98d2a8;--okInk:#0f5c2e;      /* משמרת */
+ --offBg:#fdeceb;--offLine:#f0a9a2;--offInk:#8a2318;   /* חופשה או מחלה */
+ --naBg:#eef0f3;--naLine:#cfd4da;--naInk:#5a6470;      /* לא זמין */
+ --now:#1a73e8;                                        /* קו-עכשיו, כמו ביומן */
+ --btn:#1a73e8;      /* רקע-הכפתור */
+ --r:6px;--rCard:12px;--rPill:9999px}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#0f1216;--sunk:#161b21;--hair:#242b33;--ink:#eef2f6;--mut:#9aa6b2;
+ --okBg:#10301e;--okLine:#2c6b45;--okInk:#8fe0ad;
+ --offBg:#2e1613;--offLine:#7a3229;--offInk:#ff9d90;
+ --naBg:#1a1f25;--naLine:#2f3740;--naInk:#9aa6b2;
+ --now:#63a4ff;      /* קו-עכשיו מתבהר בכהה — הוא קו, לא נושא טקסט */
+ --btn:#1a73e8}}     /* הכפתור **לא** מתבהר: לבן על #63a4ff = 2.53, על #1a73e8 = 4.6 */
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/21px Heebo,Arial,sans-serif}
+h1,h2,h3{margin:0}p{margin:0}ul{margin:0;padding:0;list-style:none}
+a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}
+bdi{unicode-bidi:isolate}
+:focus-visible{outline:2px solid var(--now);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+header.top{border-block-end:1px solid var(--hair);position:sticky;top:0;background:var(--bg);z-index:20}
+header.top .in{max-width:1560px;margin-inline:auto;padding:14px 22px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+h1{font:800 26px/34px Heebo}
+.day{font-size:14px;color:var(--mut)}
+
+/* ---- ארבעת המספרים ---- */
+.kpi{max-width:1560px;margin:18px auto 0;padding:0 22px;display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.k{background:var(--sunk);border:1px solid var(--hair);border-radius:var(--rCard);padding:14px 16px}
+.k b{display:block;font:800 30px/34px Heebo;font-variant-numeric:tabular-nums}
+.k span{font-size:13.5px;color:var(--mut)}
+.k.warn{border-color:var(--offLine)}
+.k.warn b{color:var(--offInk)}
+.k.act{border-color:var(--now)}
+.k.act b{color:var(--now)}
+
+/* ---- הלוח ---- */
+.board{max-width:1560px;margin:18px auto 0;padding:0 22px 40px}
+.scroll{overflow-x:auto;border:1px solid var(--hair);border-radius:var(--rCard);background:var(--bg)}
+.grid{display:grid;grid-template-columns:184px repeat(32,44px);min-width:max-content;position:relative}
+.hh{grid-row:1;position:sticky;top:62px;background:var(--bg);z-index:5;
+ font:600 12px/30px Heebo;color:var(--mut);text-align:center;border-block-end:1px solid var(--hair);
+ font-variant-numeric:tabular-nums}
+.corner{grid-row:1;grid-column:1;position:sticky;inset-inline-start:0;top:62px;z-index:8;background:var(--bg);
+ border-block-end:1px solid var(--hair);border-inline-end:1px solid var(--hair)}
+.nm{grid-column:1;position:sticky;inset-inline-start:0;z-index:6;background:var(--bg);
+ border-inline-end:1px solid var(--hair);border-block-end:1px solid var(--hair);padding:7px 12px;min-height:46px}
+.nm b{display:block;font:600 14px/18px Heebo}
+.nm span{font-size:12px;color:var(--mut)}
+.lane{border-block-end:1px solid var(--hair);min-height:46px}
+/* תא-המשמרת של Deputy: שעה למעלה, תפקיד מתחת, צבע לפי מצב */
+.bar{align-self:center;margin:4px 2px;border-radius:var(--r);padding:4px 8px;min-height:38px;
+ display:flex;flex-direction:column;justify-content:center;overflow:hidden;
+ background:var(--okBg);border:1px solid var(--okLine);color:var(--okInk)}
+.bar b{font:700 12.5px/15px Heebo;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar span{font-size:11.5px;line-height:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}
+.off{background:var(--offBg);border:1px solid var(--offLine);color:var(--offInk);
+ border-radius:var(--r);margin:4px 2px;padding:6px 10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+ font-size:12.5px;font-weight:600}
+.off .na{background:var(--naBg);border-radius:var(--rPill);padding:1px 8px;color:var(--naInk);font-weight:500}
+/* קו-עכשיו */
+.nowl{grid-row:2/-1;width:2px;background:var(--now);justify-self:center;position:relative;z-index:4}
+.nowl::before{content:'';position:absolute;top:-4px;inset-inline-start:-4px;width:10px;height:10px;border-radius:var(--rPill);background:var(--now)}
+/* עקומת-הכיסוי */
+.clab{grid-column:1;position:sticky;inset-inline-start:0;z-index:6;background:var(--sunk);
+ border-inline-end:1px solid var(--hair);padding:10px 12px;font:700 12.5px Heebo;color:var(--mut)}
+.cov{background:var(--sunk);display:flex;align-items:flex-end;height:74px;padding:6px 1px}
+.cov i{flex:1;background:var(--okLine);border-radius:2px 2px 0 0;margin:0 1px;min-height:3px}
+.cov i.thin{background:var(--offLine)}
+.cov i.zero{background:var(--naLine);min-height:2px}
+.cov.pick i.on{outline:2px solid var(--now);outline-offset:1px}
+
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--mut);padding:12px 2px 0}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-inline-end:6px}
+
+/* ---- מי מחליף את מי ---- */
+.subs{max-width:1560px;margin:26px auto 0;padding:0 22px}
+h2{font:800 20px/26px Heebo;margin-bottom:4px}
+.sub2{font-size:13.5px;color:var(--mut);margin-bottom:12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.c{border:1px solid var(--hair);border-radius:var(--rCard);padding:16px;background:var(--bg)}
+.c.need{border-color:var(--offLine)}
+.c .who{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.c .av{width:40px;height:40px;border-radius:var(--rPill);background:var(--sunk);display:grid;place-items:center;font:700 14px Heebo;flex:none}
+.c .who b{display:block;font:600 15px/19px Heebo}
+.c .who span{font-size:12.5px;color:var(--mut)}
+.tag{border-radius:var(--rPill);padding:2px 10px;font:600 12px Heebo;margin-inline-start:auto;flex:none}
+.tag.ok{background:var(--okBg);color:var(--okInk)}
+.tag.no{background:var(--offBg);color:var(--offInk)}
+/* לוח-המועמדים של Deputy: מומלץ · לא מומלץ · לא זמין */
+.cand{display:grid;gap:6px;margin-top:10px}
+.cand div{display:flex;align-items:center;gap:9px;border:1px solid var(--hair);border-radius:var(--r);padding:7px 10px;font-size:13px}
+.cand .dot{width:8px;height:8px;border-radius:var(--rPill);background:var(--okLine);flex:none}
+.cand .s{margin-inline-start:auto;font-size:12px;color:var(--mut)}
+.send{margin-top:10px;width:100%;background:var(--btn);color:#fff;border:0;border-radius:var(--r);
+ min-height:40px;font:600 14px Heebo}
+.src{max-width:1560px;margin:26px auto 44px;padding:0 22px;font-size:12px;color:var(--mut)}
+.src b{color:var(--ink)}
+</style></head>
+<body>
+<header class="top"><div class="in">
+  <h1>צוות</h1>
+  <p class="day">יום שלישי · ד׳ תשרי תשפ״ז · <bdi dir="ltr">06:00–22:00</bdi></p>
+</div></header>
+
+<section class="kpi" aria-label="מצב הצוות">
+  <div class="k"><b><bdi dir="ltr">40/44</bdi></b><span>נוכחים מתוך כלל הצוות</span></div>
+  <div class="k"><b>1</b><span>חסרים · שובץ מחליף</span></div>
+  <div class="k warn"><b>3</b><span>חסרים · <b style="font:inherit">אין מחליף</b></span></div>
+  <div class="k act"><b><bdi dir="ltr">20:00</bdi></b><span>השעה הכי חשופה — 3 אנשי צוות</span></div>
+</section>
+
+<main class="board">
+  <div class="scroll">
+    <div class="grid">
+      <div class="corner"></div>
+      <div class="hh" style="grid-column:2/span 2"><bdi dir="ltr">06</bdi></div><div class="hh" style="grid-column:4/span 2"><bdi dir="ltr">07</bdi></div><div class="hh" style="grid-column:6/span 2"><bdi dir="ltr">08</bdi></div><div class="hh" style="grid-column:8/span 2"><bdi dir="ltr">09</bdi></div><div class="hh" style="grid-column:10/span 2"><bdi dir="ltr">10</bdi></div><div class="hh" style="grid-column:12/span 2"><bdi dir="ltr">11</bdi></div><div class="hh" style="grid-column:14/span 2"><bdi dir="ltr">12</bdi></div><div class="hh" style="grid-column:16/span 2"><bdi dir="ltr">13</bdi></div><div class="hh" style="grid-column:18/span 2"><bdi dir="ltr">14</bdi></div><div class="hh" style="grid-column:20/span 2"><bdi dir="ltr">15</bdi></div><div class="hh" style="grid-column:22/span 2"><bdi dir="ltr">16</bdi></div><div class="hh" style="grid-column:24/span 2"><bdi dir="ltr">17</bdi></div><div class="hh" style="grid-column:26/span 2"><bdi dir="ltr">18</bdi></div><div class="hh" style="grid-column:28/span 2"><bdi dir="ltr">19</bdi></div><div class="hh" style="grid-column:30/span 2"><bdi dir="ltr">20</bdi></div><div class="hh" style="grid-column:32/span 2"><bdi dir="ltr">21</bdi></div>
+      <div class="nm" style="grid-row:2"><b>נפתלי גרין</b><span>מגיד שיעור · ג׳1</span></div><div class="lane" style="grid-row:2;grid-column:2/-1"></div><div class="bar" style="grid-row:2;grid-column:6/22">
+            <b><bdi dir="ltr">08:00–16:00</bdi></b><span>במקום אלימלך פישר</span></div><div class="nm" style="grid-row:3"><b>נפתלי מלר</b><span>מגיד שיעור · ג׳2</span></div><div class="lane" style="grid-row:3;grid-column:2/-1"></div><div class="bar" style="grid-row:3;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:3;grid-column:17/22">
+            <b><bdi dir="ltr">13:45–16:10</bdi></b><span>סדר ב׳</span></div><div class="nm" style="grid-row:4"><b>יעקב פישר</b><span>מגיד שיעור · ד׳1</span></div><div class="lane" style="grid-row:4;grid-column:2/-1"></div><div class="bar" style="grid-row:4;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:4;grid-column:17/22">
+            <b><bdi dir="ltr">13:45–16:10</bdi></b><span>סדר ב׳</span></div><div class="nm" style="grid-row:5"><b>שרגא כהנא</b><span>מגיד שיעור · ד׳2</span></div><div class="lane" style="grid-row:5;grid-column:2/-1"></div><div class="bar" style="grid-row:5;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:5;grid-column:17/22">
+            <b><bdi dir="ltr">13:45–16:10</bdi></b><span>סדר ב׳</span></div><div class="nm" style="grid-row:6"><b>אלימלך פישר</b><span>מגיד שיעור · ה׳1</span></div><div class="off" style="grid-row:6;grid-column:2/-1">חופשה
+            <span class="na" style="background:var(--okBg);color:var(--okInk)">מחליף: נפתלי גרין</span></div><div class="nm" style="grid-row:7"><b>שמואל רוזן</b><span>מגיד שיעור · ה׳2</span></div><div class="lane" style="grid-row:7;grid-column:2/-1"></div><div class="bar" style="grid-row:7;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:7;grid-column:17/22">
+            <b><bdi dir="ltr">13:45–16:10</bdi></b><span>סדר ב׳</span></div><div class="nm" style="grid-row:8"><b>זלמן שטרן</b><span>מגיד שיעור · ו׳1</span></div><div class="lane" style="grid-row:8;grid-column:2/-1"></div><div class="bar" style="grid-row:8;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:8;grid-column:17/22">
+            <b><bdi dir="ltr">13:45–16:10</bdi></b><span>סדר ב׳</span></div><div class="nm" style="grid-row:9"><b>יעקב גולד</b><span>מגיד שיעור · ו׳2</span></div><div class="lane" style="grid-row:9;grid-column:2/-1"></div><div class="bar" style="grid-row:9;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:9;grid-column:17/22">
+            <b><bdi dir="ltr">13:45–16:10</bdi></b><span>סדר ב׳</span></div><div class="nm" style="grid-row:10"><b>נחום בלוי</b><span>מגיד שיעור · ז׳1</span></div><div class="off" style="grid-row:10;grid-column:2/-1">חופשה
+            <span class="na" style="background:var(--offBg);color:var(--offInk)">אין מחליף</span></div><div class="nm" style="grid-row:11"><b>אהרן דויטש</b><span>מגיד שיעור · ז׳2</span></div><div class="lane" style="grid-row:11;grid-column:2/-1"></div><div class="bar" style="grid-row:11;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:11;grid-column:17/22">
+            <b><bdi dir="ltr">13:45–16:10</bdi></b><span>סדר ב׳</span></div><div class="nm" style="grid-row:12"><b>ברוך דויטש</b><span>מגיד שיעור · ח׳1</span></div><div class="lane" style="grid-row:12;grid-column:2/-1"></div><div class="bar" style="grid-row:12;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:12;grid-column:17/22">
+            <b><bdi dir="ltr">13:45–16:10</bdi></b><span>סדר ב׳</span></div><div class="nm" style="grid-row:13"><b>חיים בראון</b><span>מגיד שיעור · ח׳2</span></div><div class="off" style="grid-row:13;grid-column:2/-1">מחלה
+            <span class="na" style="background:var(--offBg);color:var(--offInk)">אין מחליף</span></div><div class="nm" style="grid-row:14"><b>יהודה מלר</b><span>מלמד</span></div><div class="off" style="grid-row:14;grid-column:2/-1">מחלה
+            <span class="na" style="background:var(--offBg);color:var(--offInk)">אין מחליף</span></div><div class="nm" style="grid-row:15"><b>גרשון גולד</b><span>מלמד</span></div><div class="lane" style="grid-row:15;grid-column:2/-1"></div><div class="bar" style="grid-row:15;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:15;grid-column:17/20">
+            <b><bdi dir="ltr">13:45–15:20</bdi></b><span>חזרה</span></div><div class="nm" style="grid-row:16"><b>כלב בראון</b><span>מלמד</span></div><div class="lane" style="grid-row:16;grid-column:2/-1"></div><div class="bar" style="grid-row:16;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:16;grid-column:17/20">
+            <b><bdi dir="ltr">13:45–15:20</bdi></b><span>חזרה</span></div><div class="nm" style="grid-row:17"><b>שמואל הירש</b><span>מלמד</span></div><div class="lane" style="grid-row:17;grid-column:2/-1"></div><div class="bar" style="grid-row:17;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:17;grid-column:17/20">
+            <b><bdi dir="ltr">13:45–15:20</bdi></b><span>חזרה</span></div><div class="nm" style="grid-row:18"><b>יהודה טויב</b><span>מלמד</span></div><div class="lane" style="grid-row:18;grid-column:2/-1"></div><div class="bar" style="grid-row:18;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:18;grid-column:17/20">
+            <b><bdi dir="ltr">13:45–15:20</bdi></b><span>חזרה</span></div><div class="nm" style="grid-row:19"><b>יעקב ריינר</b><span>מלמד</span></div><div class="lane" style="grid-row:19;grid-column:2/-1"></div><div class="bar" style="grid-row:19;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:19;grid-column:17/20">
+            <b><bdi dir="ltr">13:45–15:20</bdi></b><span>חזרה</span></div><div class="nm" style="grid-row:20"><b>יוסף אברמסון</b><span>מלמד</span></div><div class="lane" style="grid-row:20;grid-column:2/-1"></div><div class="bar" style="grid-row:20;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:20;grid-column:17/20">
+            <b><bdi dir="ltr">13:45–15:20</bdi></b><span>חזרה</span></div><div class="nm" style="grid-row:21"><b>כלב דויטש</b><span>מלמד</span></div><div class="lane" style="grid-row:21;grid-column:2/-1"></div><div class="bar" style="grid-row:21;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:21;grid-column:17/20">
+            <b><bdi dir="ltr">13:45–15:20</bdi></b><span>חזרה</span></div><div class="nm" style="grid-row:22"><b>מנחם גולד</b><span>מלמד</span></div><div class="lane" style="grid-row:22;grid-column:2/-1"></div><div class="bar" style="grid-row:22;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:22;grid-column:17/20">
+            <b><bdi dir="ltr">13:45–15:20</bdi></b><span>חזרה</span></div><div class="nm" style="grid-row:23"><b>שלמה וקסלר</b><span>מלמד</span></div><div class="lane" style="grid-row:23;grid-column:2/-1"></div><div class="bar" style="grid-row:23;grid-column:6/14">
+            <b><bdi dir="ltr">08:00–12:20</bdi></b><span>סדר א׳</span></div><div class="bar" style="grid-row:23;grid-column:17/20">
+            <b><bdi dir="ltr">13:45–15:20</bdi></b><span>חזרה</span></div><div class="nm" style="grid-row:24"><b>יוסף שוורץ</b><span>משגיח</span></div><div class="lane" style="grid-row:24;grid-column:2/-1"></div><div class="bar" style="grid-row:24;grid-column:2/8">
+            <b><bdi dir="ltr">06:20–09:00</bdi></b><span>שחרית</span></div><div class="bar" style="grid-row:24;grid-column:14/17">
+            <b><bdi dir="ltr">12:20–13:45</bdi></b><span>סעודה</span></div><div class="bar" style="grid-row:24;grid-column:28/33">
+            <b><bdi dir="ltr">19:00–21:30</bdi></b><span>סדר ערב</span></div><div class="nm" style="grid-row:25"><b>חיים נוימן</b><span>משגיח</span></div><div class="lane" style="grid-row:25;grid-column:2/-1"></div><div class="bar" style="grid-row:25;grid-column:2/8">
+            <b><bdi dir="ltr">06:20–09:00</bdi></b><span>שחרית</span></div><div class="bar" style="grid-row:25;grid-column:14/17">
+            <b><bdi dir="ltr">12:20–13:45</bdi></b><span>סעודה</span></div><div class="bar" style="grid-row:25;grid-column:28/33">
+            <b><bdi dir="ltr">19:00–21:30</bdi></b><span>סדר ערב</span></div><div class="nm" style="grid-row:26"><b>ברוך רוזן</b><span>משגיח</span></div><div class="lane" style="grid-row:26;grid-column:2/-1"></div><div class="bar" style="grid-row:26;grid-column:2/8">
+            <b><bdi dir="ltr">06:20–09:00</bdi></b><span>שחרית</span></div><div class="bar" style="grid-row:26;grid-column:14/17">
+            <b><bdi dir="ltr">12:20–13:45</bdi></b><span>סעודה</span></div><div class="bar" style="grid-row:26;grid-column:28/33">
+            <b><bdi dir="ltr">19:00–21:30</bdi></b><span>סדר ערב</span></div><div class="nm" style="grid-row:27"><b>יצחק בלוי</b><span>מזכירות</span></div><div class="lane" style="grid-row:27;grid-column:2/-1"></div><div class="bar" style="grid-row:27;grid-column:6/20">
+            <b><bdi dir="ltr">08:00–15:00</bdi></b><span>משרד</span></div><div class="nm" style="grid-row:28"><b>זבולון שטרן</b><span>מזכירות</span></div><div class="lane" style="grid-row:28;grid-column:2/-1"></div><div class="bar" style="grid-row:28;grid-column:6/20">
+            <b><bdi dir="ltr">08:00–15:00</bdi></b><span>משרד</span></div><div class="nm" style="grid-row:29"><b>יצחק אדלר</b><span>מזכירות</span></div><div class="lane" style="grid-row:29;grid-column:2/-1"></div><div class="bar" style="grid-row:29;grid-column:6/20">
+            <b><bdi dir="ltr">08:00–15:00</bdi></b><span>משרד</span></div><div class="nm" style="grid-row:30"><b>עזרא חשין</b><span>מזכירות</span></div><div class="lane" style="grid-row:30;grid-column:2/-1"></div><div class="bar" style="grid-row:30;grid-column:6/20">
+            <b><bdi dir="ltr">08:00–15:00</bdi></b><span>משרד</span></div><div class="nm" style="grid-row:31"><b>שלמה יעקובוביץ</b><span>מטבח</span></div><div class="lane" style="grid-row:31;grid-column:2/-1"></div><div class="bar" style="grid-row:31;grid-column:1/18">
+            <b><bdi dir="ltr">05:30–14:00</bdi></b><span>בוקר וצהריים</span></div><div class="bar" style="grid-row:31;grid-column:24/30">
+            <b><bdi dir="ltr">17:00–20:00</bdi></b><span>ערב</span></div><div class="nm" style="grid-row:32"><b>שרגא זילבר</b><span>מטבח</span></div><div class="lane" style="grid-row:32;grid-column:2/-1"></div><div class="bar" style="grid-row:32;grid-column:1/18">
+            <b><bdi dir="ltr">05:30–14:00</bdi></b><span>בוקר וצהריים</span></div><div class="bar" style="grid-row:32;grid-column:24/30">
+            <b><bdi dir="ltr">17:00–20:00</bdi></b><span>ערב</span></div><div class="nm" style="grid-row:33"><b>זלמן נוימן</b><span>מטבח</span></div><div class="lane" style="grid-row:33;grid-column:2/-1"></div><div class="bar" style="grid-row:33;grid-column:1/18">
+            <b><bdi dir="ltr">05:30–14:00</bdi></b><span>בוקר וצהריים</span></div><div class="bar" style="grid-row:33;grid-column:24/30">
+            <b><bdi dir="ltr">17:00–20:00</bdi></b><span>ערב</span></div><div class="nm" style="grid-row:34"><b>זלמן דויטש</b><span>מטבח</span></div><div class="lane" style="grid-row:34;grid-column:2/-1"></div><div class="bar" style="grid-row:34;grid-column:1/18">
+            <b><bdi dir="ltr">05:30–14:00</bdi></b><span>בוקר וצהריים</span></div><div class="bar" style="grid-row:34;grid-column:24/30">
+            <b><bdi dir="ltr">17:00–20:00</bdi></b><span>ערב</span></div><div class="nm" style="grid-row:35"><b>משה טויב</b><span>מטבח</span></div><div class="lane" style="grid-row:35;grid-column:2/-1"></div><div class="bar" style="grid-row:35;grid-column:1/18">
+            <b><bdi dir="ltr">05:30–14:00</bdi></b><span>בוקר וצהריים</span></div><div class="bar" style="grid-row:35;grid-column:24/30">
+            <b><bdi dir="ltr">17:00–20:00</bdi></b><span>ערב</span></div><div class="nm" style="grid-row:36"><b>זבולון ויס</b><span>אחזקה</span></div><div class="lane" style="grid-row:36;grid-column:2/-1"></div><div class="bar" style="grid-row:36;grid-column:4/22">
+            <b><bdi dir="ltr">07:00–16:00</bdi></b><span>אחזקה</span></div><div class="nm" style="grid-row:37"><b>בנימין רוזן</b><span>אחזקה</span></div><div class="lane" style="grid-row:37;grid-column:2/-1"></div><div class="bar" style="grid-row:37;grid-column:4/22">
+            <b><bdi dir="ltr">07:00–16:00</bdi></b><span>אחזקה</span></div><div class="nm" style="grid-row:38"><b>יוסף זילבר</b><span>אחזקה</span></div><div class="lane" style="grid-row:38;grid-column:2/-1"></div><div class="bar" style="grid-row:38;grid-column:4/22">
+            <b><bdi dir="ltr">07:00–16:00</bdi></b><span>אחזקה</span></div><div class="nm" style="grid-row:39"><b>אורי אדלר</b><span>נהג</span></div><div class="lane" style="grid-row:39;grid-column:2/-1"></div><div class="bar" style="grid-row:39;grid-column:4/7">
+            <b><bdi dir="ltr">07:00–08:30</bdi></b><span>איסוף</span></div><div class="bar" style="grid-row:39;grid-column:22/25">
+            <b><bdi dir="ltr">16:00–17:30</bdi></b><span>פיזור</span></div><div class="nm" style="grid-row:40"><b>אליהו דויטש</b><span>נהג</span></div><div class="lane" style="grid-row:40;grid-column:2/-1"></div><div class="bar" style="grid-row:40;grid-column:4/7">
+            <b><bdi dir="ltr">07:00–08:30</bdi></b><span>איסוף</span></div><div class="bar" style="grid-row:40;grid-column:22/25">
+            <b><bdi dir="ltr">16:00–17:30</bdi></b><span>פיזור</span></div><div class="nm" style="grid-row:41"><b>עזרא אקשטיין</b><span>נהג</span></div><div class="lane" style="grid-row:41;grid-column:2/-1"></div><div class="bar" style="grid-row:41;grid-column:4/7">
+            <b><bdi dir="ltr">07:00–08:30</bdi></b><span>איסוף</span></div><div class="bar" style="grid-row:41;grid-column:22/25">
+            <b><bdi dir="ltr">16:00–17:30</bdi></b><span>פיזור</span></div><div class="nm" style="grid-row:42"><b>צבי הורוביץ</b><span>נהג</span></div><div class="lane" style="grid-row:42;grid-column:2/-1"></div><div class="bar" style="grid-row:42;grid-column:4/7">
+            <b><bdi dir="ltr">07:00–08:30</bdi></b><span>איסוף</span></div><div class="bar" style="grid-row:42;grid-column:22/25">
+            <b><bdi dir="ltr">16:00–17:30</bdi></b><span>פיזור</span></div><div class="nm" style="grid-row:43"><b>לוי חשין</b><span>הנהלה</span></div><div class="lane" style="grid-row:43;grid-column:2/-1"></div><div class="bar" style="grid-row:43;grid-column:7/24">
+            <b><bdi dir="ltr">08:30–17:00</bdi></b><span>משרד</span></div><div class="nm" style="grid-row:44"><b>יוסף הירש</b><span>הנהלה</span></div><div class="lane" style="grid-row:44;grid-column:2/-1"></div><div class="bar" style="grid-row:44;grid-column:7/24">
+            <b><bdi dir="ltr">08:30–17:00</bdi></b><span>משרד</span></div><div class="nm" style="grid-row:45"><b>יוסף לנדאו</b><span>הנהלה</span></div><div class="lane" style="grid-row:45;grid-column:2/-1"></div><div class="bar" style="grid-row:45;grid-column:7/24">
+            <b><bdi dir="ltr">08:30–17:00</bdi></b><span>משרד</span></div>
+      <div class="nowl" style="grid-column:17" aria-hidden="true"></div>
+      <div class="clab" style="grid-row:46">כיסוי</div>
+      <div class="cov" style="grid-row:46;grid-column:2/-1"
+           role="img" aria-label="עקומת כיסוי: בין 3 ל-37 אנשי צוות בו-זמנית. הנקודה הדקה ביותר ב-20:00">
+        <i class="" style="height:21.62162162162162%"></i><i class="" style="height:21.62162162162162%"></i><i class="" style="height:40.54054054054054%"></i><i class="" style="height:40.54054054054054%"></i><i class="" style="height:100%"></i><i class="" style="height:97.2972972972973%"></i><i class="" style="height:89.1891891891892%"></i><i class="" style="height:89.1891891891892%"></i><i class="" style="height:89.1891891891892%"></i><i class="" style="height:89.1891891891892%"></i><i class="" style="height:89.1891891891892%"></i><i class="" style="height:89.1891891891892%"></i><i class="" style="height:51.35135135135135%"></i><i class="" style="height:51.35135135135135%"></i><i class="" style="height:51.35135135135135%"></i><i class="" style="height:89.1891891891892%"></i><i class="" style="height:75.67567567567568%"></i><i class="" style="height:75.67567567567568%"></i><i class="" style="height:40.54054054054054%"></i><i class="" style="height:40.54054054054054%"></i><i class="" style="height:18.91891891891892%"></i><i class="" style="height:18.91891891891892%"></i><i class="" style="height:24.324324324324326%"></i><i class="" style="height:13.513513513513514%"></i><i class="" style="height:13.513513513513514%"></i><i class="" style="height:13.513513513513514%"></i><i class="" style="height:21.62162162162162%"></i><i class="" style="height:21.62162162162162%"></i><i class=" on" style="height:8.108108108108109%"></i><i class="" style="height:8.108108108108109%"></i><i class="" style="height:8.108108108108109%"></i><i class="zero" style="height:3%"></i>
+      </div>
+    </div>
+  </div>
+  <p class="legend">
+    <span><i style="background:var(--okBg);border:1px solid var(--okLine)"></i>משמרת</span>
+    <span><i style="background:var(--offBg);border:1px solid var(--offLine)"></i>חופשה או מחלה</span>
+    <span><i style="background:var(--naBg);border:1px solid var(--naLine)"></i>לא זמין</span>
+    <span><i style="background:var(--now);width:3px;border-radius:2px"></i>השעה עכשיו</span>
+  </p>
+</main>
+
+<section class="subs">
+  <h2>חסרים היום</h2>
+  <p class="sub2">4 לא במשמרת · 3 מהם עדיין בלי מחליף</p>
+  <div class="cards">
+    <article class="c">
+        <div class="who"><span class="av" aria-hidden="true">אל</span>
+          <span><b>אלימלך פישר</b><span>מגיד שיעור · ה׳1</span></span>
+          <span class="tag ok">יש מחליף</span></div>
+        <p style="font-size:13px;color:var(--mut)">חופשה · מחליף: נפתלי גרין</p>
+        
+      </article><article class="c need">
+        <div class="who"><span class="av" aria-hidden="true">נח</span>
+          <span><b>נחום בלוי</b><span>מגיד שיעור · ז׳1</span></span>
+          <span class="tag no">אין מחליף</span></div>
+        <p style="font-size:13px;color:var(--mut)">חופשה</p>
+        <div class="cand">
+          <div><span class="dot" style=""></span>
+            <span>יוסף שוורץ</span><span class="s">פנוי · מומלץ</span></div><div><span class="dot" style=""></span>
+            <span>חיים נוימן</span><span class="s">פנוי · מומלץ</span></div><div><span class="dot" style="background:var(--naLine)"></span>
+            <span>ברוך רוזן</span><span class="s">לא מומלץ · כבר 2 משמרות</span></div><div><span class="dot" style="background:var(--naLine)"></span>
+            <span>אורי אדלר</span><span class="s">לא מומלץ · כבר 2 משמרות</span></div>
+          </div><button class="send" type="button">שליחת הצעת־משמרת ל-4</button>
+      </article><article class="c need">
+        <div class="who"><span class="av" aria-hidden="true">חי</span>
+          <span><b>חיים בראון</b><span>מגיד שיעור · ח׳2</span></span>
+          <span class="tag no">אין מחליף</span></div>
+        <p style="font-size:13px;color:var(--mut)">מחלה</p>
+        <div class="cand">
+          <div><span class="dot" style=""></span>
+            <span>יוסף שוורץ</span><span class="s">פנוי · מומלץ</span></div><div><span class="dot" style=""></span>
+            <span>חיים נוימן</span><span class="s">פנוי · מומלץ</span></div><div><span class="dot" style="background:var(--naLine)"></span>
+            <span>ברוך רוזן</span><span class="s">לא מומלץ · כבר 2 משמרות</span></div><div><span class="dot" style="background:var(--naLine)"></span>
+            <span>אורי אדלר</span><span class="s">לא מומלץ · כבר 2 משמרות</span></div>
+          </div><button class="send" type="button">שליחת הצעת־משמרת ל-4</button>
+      </article><article class="c need">
+        <div class="who"><span class="av" aria-hidden="true">יה</span>
+          <span><b>יהודה מלר</b><span>מלמד</span></span>
+          <span class="tag no">אין מחליף</span></div>
+        <p style="font-size:13px;color:var(--mut)">מחלה</p>
+        <div class="cand">
+          <div><span class="dot" style=""></span>
+            <span>יוסף שוורץ</span><span class="s">פנוי · מומלץ</span></div><div><span class="dot" style=""></span>
+            <span>חיים נוימן</span><span class="s">פנוי · מומלץ</span></div><div><span class="dot" style="background:var(--naLine)"></span>
+            <span>ברוך רוזן</span><span class="s">לא מומלץ · כבר 2 משמרות</span></div><div><span class="dot" style="background:var(--naLine)"></span>
+            <span>אורי אדלר</span><span class="s">לא מומלץ · כבר 2 משמרות</span></div>
+          </div><button class="send" type="button">שליחת הצעת־משמרת ל-4</button>
+      </article>
+  </div>
+</section>
+
+<p class="src"><b>מאיפה העיצוב:</b> תא-המשמרת — שעה למעלה, תפקיד מתחת, וצבע לפי מצב (ירוק משמרת · ורוד חופשה · אפור לא־זמין) —
+ולוח-המועמדים «מומלץ / לא מומלץ» עם «שליחת הצעת־משמרת»: <b>Deputy</b>, אומת בעין ובמדידה
+(גוף <bdi dir="ltr">16/20</bdi> · רדיוסים <bdi dir="ltr">12 · 50 · 30</bdi>).
+עקומת-הכיסוי בתחתית — הדפוס של «שעות עמוסות»; קו-העכשיו — הדפוס של יומן. <b>שניהם לא נמדדו</b> ולא אציג אותם כמדודים.
+נתונים: 44 אנשי צוות מהמחסן.</p>
+</body></html>
