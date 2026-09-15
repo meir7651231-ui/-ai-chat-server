@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>בית המדרש עכשיו</title>
+<meta name="description" content="פס-נוכחות חי לצוות המוסד, מועתק במדידה מפס-הערוצים-החיים של Twitch.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}
+:root{
+ /* ===== נמדד מ-twitch.tv/directory/all · ערכה בהירה ===== */
+ --bg:#f7f7f8;--pane:#ffffff;--ink:#0e0e10;--mut:#3b3b44;
+ --live:#eb0400;            /* הנקודה ותג ה-LIVE — אותו אדום בדיוק */
+ --brand:#9147ff;           /* לא זז בין הערכות. נמדד בשתיהן. */
+ --hair:#e5e5e8;--hov:#efeff1;
+ --railW:240px;--rowH:45px;--av:30px;--dot:8px;
+ --fs:14px;--lh:19.6px}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ /* ===== נמדד מאותו עמוד עם colorScheme:dark ===== */
+ --bg:#0e0e10;--pane:#18181b;--ink:#efeff1;--mut:#d3d3d9;
+ --hair:#2f2f35;--hov:#26262c}}
+:root[data-theme=dark]{
+ --bg:#0e0e10;--pane:#18181b;--ink:#efeff1;--mut:#d3d3d9;
+ --hair:#2f2f35;--hov:#26262c}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:400 var(--fs)/var(--lh) Heebo,Inter,Arial,sans-serif}
+h1,h2{margin:0}p{margin:0}a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;color:inherit}
+bdi{unicode-bidi:isolate}
+:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+/* 1×1 — בדיוק המידה שנמדדה במקור */
+.hid{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ---------- הסרגל העליון: גובה 50, כפתור-גלולה 81×32 ---------- */
+.top{height:50px;background:var(--pane);border-bottom:1px solid var(--hair);
+ display:flex;align-items:center;gap:14px;padding:0 12px;position:sticky;top:env(safe-area-inset-top,0px);z-index:9}
+.logo{width:26px;height:26px;border-radius:6px;background:var(--brand);flex:none}
+.top h1{font:700 15px/1 Heebo}
+.clock{margin-inline-start:auto;font:600 var(--fs)/var(--lh) Heebo;color:var(--mut)}
+.cta{background:var(--brand);color:#fff;border:0;border-radius:9000px;
+ height:32px;padding:0 16px;font:600 var(--fs)/1 Heebo}
+
+.shell{display:flex;align-items:flex-start;min-height:calc(100dvh - 50px)}
+
+/* ---------- הפס. רוחב 240, שורות 45 צמודות, בלי מסגרת ובלי רדיוס ---------- */
+.rail{width:var(--railW);flex:none;background:var(--pane);border-inline-start:1px solid var(--hair);
+ position:sticky;top:calc(50px + env(safe-area-inset-top,0px));align-self:flex-start;
+ max-height:calc(100dvh - 50px);overflow:auto;padding-bottom:12px}
+.rail.mini{--railW:60px}
+.rhead{display:flex;align-items:center;height:44px;padding:0 12px;gap:6px}
+.rhead b{font:600 var(--fs)/var(--lh) Heebo;flex:1;white-space:nowrap}
+.fold{background:0;border:0;padding:4px;border-radius:4px;line-height:0}
+.fold:hover{background:var(--hov)}
+.fold svg{width:18px;height:18px;fill:var(--ink)}
+.rail.mini .rhead b,.rail.mini .tx,.rail.mini .num{display:none}
+.rail.mini .fold svg{transform:scaleX(-1)}
+.rail.mini .rw{justify-content:center;padding:5px 0}
+.rail.mini .st{position:absolute;inset-inline-start:8px;top:6px}
+
+.rw{display:flex;align-items:center;height:var(--rowH);padding:5px 8px;position:relative}
+.rw:hover{background:var(--hov)}
+.av{width:var(--av);height:var(--av);border-radius:9000px;flex:none;
+ background:var(--brand);color:#fff;display:grid;place-items:center;
+ font:600 12px/1 Heebo;letter-spacing:.2px}
+.rw.off .av{background:var(--hair);color:var(--mut)}
+.tx{flex:1;min-width:0;padding-inline-start:8px}
+.tx b{display:block;font:600 var(--fs)/15.4px Heebo;
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tx em{display:block;font:400 var(--fs)/var(--lh) Heebo;color:var(--mut);font-style:normal;
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rw.off .tx b{color:var(--mut)}
+/* המצב והגודל — שתי עמודות נפרדות. זה מה שמאפשר לסרוק. */
+.st{display:flex;align-items:center;gap:5px;flex:none}
+.dot{width:var(--dot);height:var(--dot);border-radius:9000px;background:var(--live);display:block}
+.num{font:400 var(--fs)/var(--lh) Heebo;font-variant-numeric:tabular-nums;min-width:38px;text-align:start}
+.num.mut{color:var(--mut)}
+.gap{height:1px;background:var(--hair);margin:8px 12px}
+.gap+.rw{margin-top:0}
+.rlbl{padding:6px 12px 2px;font:600 12px/16.8px Heebo;color:var(--mut)}
+.rail.mini .rlbl,.rail.mini .gap{display:none}
+
+/* ---------- הלוח. שקט בכוונה — הפס הוא הרכיב, לא הוא. ---------- */
+.main{flex:1;min-width:0;padding:22px 24px 60px}
+.main h2{font:700 26px/1.25 Heebo}
+.lede{color:var(--mut);margin-top:6px;max-width:62ch}
+.bar{display:flex;gap:18px;flex-wrap:wrap;margin:18px 0 6px;
+ padding-bottom:14px;border-bottom:1px solid var(--hair)}
+.kpi b{display:block;font:700 22px/1.2 Heebo;font-variant-numeric:tabular-nums}
+.kpi i{font:400 13px/18px Heebo;font-style:normal;color:var(--mut)}
+.tag{display:inline-flex;align-items:center;gap:4px;background:var(--live);color:#fff;
+ border-radius:4px;padding:1px 5px;font:600 12px/16.8px Heebo}
+ul{margin:0;padding:0;list-style:none}
+.li{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;
+ gap:10px;padding:11px 2px;border-bottom:1px solid var(--hair)}
+.li .a{min-width:0}
+.li .a b{font:600 15px/20px Heebo}
+.li .a em{font-style:normal;color:var(--mut);display:block;font-size:13px;line-height:18px}
+.li .b{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums}
+.li .b .of{color:var(--mut)}
+.li .b i{width:var(--dot);height:var(--dot);border-radius:9000px;background:var(--live);display:block}
+.li.dim .b i{background:var(--hair)}
+.li.dim .a b{color:var(--mut)}
+.note{margin-top:22px;color:var(--mut);font-size:13px;line-height:20px;max-width:70ch}
+@media(max-width:860px){
+ .shell{flex-direction:column}
+ .rail{width:100%;position:static;max-height:none;border-inline-start:0;border-bottom:1px solid var(--hair)}
+ .main{padding:18px 16px 50px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+
+<header class="top">
+ <span class="logo" aria-hidden="true"></span>
+ <h1>מוסדות — בית המדרש</h1>
+ <span class="clock">היום · <bdi>09:40</bdi></span>
+ <button class="cta" type="button">דוח נוכחות</button>
+</header>
+
+<div class="shell">
+ <aside class="rail" id="rail" aria-label="מי פעיל עכשיו">
+  <div class="rhead">
+   <b>פעילים עכשיו</b>
+   <button class="fold" id="fold" type="button" aria-expanded="true" aria-controls="rail" title="כיווץ הפס">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13 4v12h2V4h-2zM3 10l6 5V5l-6 5z"/></svg>
+    <span class="hid">כיווץ פס הנוכחות</span>
+   </button>
+  </div>
+  <p class="rlbl">מחזיקים נפשות · 9</p>
+  <a class="rw" href="#">
+  <span class="av" aria-hidden="true">שכ</span>
+  <span class="tx"><b>שרגא כהנא</b><em>ד׳2</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · 37 נפשות · עד 12:20</span><bdi class="num">37</bdi></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">בד</span>
+  <span class="tx"><b>ברוך דויטש</b><em>ח׳1</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · 37 נפשות · עד 12:20</span><bdi class="num">37</bdi></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">זש</span>
+  <span class="tx"><b>זלמן שטרן</b><em>ו׳1</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · 35 נפשות · עד 12:20</span><bdi class="num">35</bdi></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">נג</span>
+  <span class="tx"><b>נפתלי גרין</b><em>ג׳1</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · במקום אלימלך פישר · 34 נפשות · עד 16:00</span><bdi class="num">34</bdi></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">יפ</span>
+  <span class="tx"><b>יעקב פישר</b><em>ד׳1</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · 30 נפשות · עד 12:20</span><bdi class="num">30</bdi></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">אד</span>
+  <span class="tx"><b>אהרן דויטש</b><em>ז׳2</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · 29 נפשות · עד 12:20</span><bdi class="num">29</bdi></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">שר</span>
+  <span class="tx"><b>שמואל רוזן</b><em>ה׳2</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · 26 נפשות · עד 12:20</span><bdi class="num">26</bdi></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">יג</span>
+  <span class="tx"><b>יעקב גולד</b><em>ו׳2</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · 26 נפשות · עד 12:20</span><bdi class="num">26</bdi></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">נמ</span>
+  <span class="tx"><b>נפתלי מלר</b><em>ג׳2</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · 25 נפשות · עד 12:20</span><bdi class="num">25</bdi></span>
+</a>
+  <div class="gap" role="presentation"></div>
+  <p class="rlbl">בסדר, באחריות משותפת · 24</p>
+  <a class="rw" href="#">
+  <span class="av" aria-hidden="true">גג</span>
+  <span class="tx"><b>גרשון גולד</b><em>סדר א׳</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · עד 12:20</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">כב</span>
+  <span class="tx"><b>כלב בראון</b><em>סדר א׳</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · עד 12:20</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">שה</span>
+  <span class="tx"><b>שמואל הירש</b><em>סדר א׳</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · עד 12:20</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">יט</span>
+  <span class="tx"><b>יהודה טויב</b><em>סדר א׳</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · עד 12:20</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">יר</span>
+  <span class="tx"><b>יעקב ריינר</b><em>סדר א׳</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · עד 12:20</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">יא</span>
+  <span class="tx"><b>יוסף אברמסון</b><em>סדר א׳</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · עד 12:20</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">כד</span>
+  <span class="tx"><b>כלב דויטש</b><em>סדר א׳</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · עד 12:20</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">מג</span>
+  <span class="tx"><b>מנחם גולד</b><em>סדר א׳</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · עד 12:20</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">שו</span>
+  <span class="tx"><b>שלמה וקסלר</b><em>סדר א׳</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · סדר א׳ · עד 12:20</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">יב</span>
+  <span class="tx"><b>יצחק בלוי</b><em>משרד</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · משרד · עד 15:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">זש</span>
+  <span class="tx"><b>זבולון שטרן</b><em>משרד</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · משרד · עד 15:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">יא</span>
+  <span class="tx"><b>יצחק אדלר</b><em>משרד</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · משרד · עד 15:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">עח</span>
+  <span class="tx"><b>עזרא חשין</b><em>משרד</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · משרד · עד 15:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">שי</span>
+  <span class="tx"><b>שלמה יעקובוביץ</b><em>בוקר וצהריים</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · בוקר וצהריים · עד 14:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">שז</span>
+  <span class="tx"><b>שרגא זילבר</b><em>בוקר וצהריים</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · בוקר וצהריים · עד 14:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">זנ</span>
+  <span class="tx"><b>זלמן נוימן</b><em>בוקר וצהריים</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · בוקר וצהריים · עד 14:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">זד</span>
+  <span class="tx"><b>זלמן דויטש</b><em>בוקר וצהריים</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · בוקר וצהריים · עד 14:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">מט</span>
+  <span class="tx"><b>משה טויב</b><em>בוקר וצהריים</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · בוקר וצהריים · עד 14:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">זו</span>
+  <span class="tx"><b>זבולון ויס</b><em>אחזקה</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · אחזקה · עד 16:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">בר</span>
+  <span class="tx"><b>בנימין רוזן</b><em>אחזקה</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · אחזקה · עד 16:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">יז</span>
+  <span class="tx"><b>יוסף זילבר</b><em>אחזקה</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · אחזקה · עד 16:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">לח</span>
+  <span class="tx"><b>לוי חשין</b><em>משרד</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · משרד · עד 17:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">יה</span>
+  <span class="tx"><b>יוסף הירש</b><em>משרד</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · משרד · עד 17:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw" href="#">
+  <span class="av" aria-hidden="true">יל</span>
+  <span class="tx"><b>יוסף לנדאו</b><em>משרד</em></span>
+  <span class="st"><i class="dot" aria-hidden="true"></i><span class="hid">פעיל · משרד · עד 17:00</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+  <div class="gap" role="presentation"></div>
+  <p class="rlbl">לא בסדר כעת · 11</p>
+  <a class="rw off" href="#">
+  <span class="av" aria-hidden="true">אפ</span>
+  <span class="tx"><b>אלימלך פישר</b><em>בחופשה</em></span>
+  <span class="st"><span class="hid">לא פעיל · בחופשה · מחליף: נפתלי גרין</span><span class="num mut" aria-hidden="true">—</span></span>
+</a>
+<a class="rw off" href="#">
+  <span class="av" aria-hidden="true">נב</span>
+  <span class="tx"><b>נחום בלוי</b><em>בחופשה</em></span>
+  <span class="st"><span class="hid">לא פעיל · בחופשה</span><span class="num mut" aria-hidden="true">—</span></span>
+</a>
+<a class="rw off" href="#">
+  <span class="av" aria-hidden="true">חב</span>
+  <span class="tx"><b>חיים בראון</b><em>במחלה</em></span>
+  <span class="st"><span class="hid">לא פעיל · במחלה</span><span class="num mut" aria-hidden="true">—</span></span>
+</a>
+<a class="rw off" href="#">
+  <span class="av" aria-hidden="true">ימ</span>
+  <span class="tx"><b>יהודה מלר</b><em>במחלה</em></span>
+  <span class="st"><span class="hid">לא פעיל · במחלה</span><span class="num mut" aria-hidden="true">—</span></span>
+</a>
+<a class="rw off" href="#">
+  <span class="av" aria-hidden="true">יש</span>
+  <span class="tx"><b>יוסף שוורץ</b><em>הבא ב־12:20</em></span>
+  <span class="st"><span class="hid">לא פעיל</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw off" href="#">
+  <span class="av" aria-hidden="true">חנ</span>
+  <span class="tx"><b>חיים נוימן</b><em>הבא ב־12:20</em></span>
+  <span class="st"><span class="hid">לא פעיל</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw off" href="#">
+  <span class="av" aria-hidden="true">בר</span>
+  <span class="tx"><b>ברוך רוזן</b><em>הבא ב־12:20</em></span>
+  <span class="st"><span class="hid">לא פעיל</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw off" href="#">
+  <span class="av" aria-hidden="true">אא</span>
+  <span class="tx"><b>אורי אדלר</b><em>הבא ב־16:00</em></span>
+  <span class="st"><span class="hid">לא פעיל</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw off" href="#">
+  <span class="av" aria-hidden="true">אד</span>
+  <span class="tx"><b>אליהו דויטש</b><em>הבא ב־16:00</em></span>
+  <span class="st"><span class="hid">לא פעיל</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw off" href="#">
+  <span class="av" aria-hidden="true">עא</span>
+  <span class="tx"><b>עזרא אקשטיין</b><em>הבא ב־16:00</em></span>
+  <span class="st"><span class="hid">לא פעיל</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+<a class="rw off" href="#">
+  <span class="av" aria-hidden="true">צה</span>
+  <span class="tx"><b>צבי הורוביץ</b><em>הבא ב־16:00</em></span>
+  <span class="st"><span class="hid">לא פעיל</span><span class="num mut" aria-hidden="true">·</span></span>
+</a>
+ </aside>
+
+ <main class="main">
+  <h2>בית המדרש עכשיו</h2>
+  <p class="lede">שעה <bdi>09:40</bdi> — סדר א׳ בעיצומו. הפס שמימין מראה מי מחזיק כרגע אחריות על נפשות, וכמה. הוא נגזר מלוח המשמרות ומהנוכחות בפועל, לא נכתב ביד.</p>
+
+  <div class="bar">
+   <div class="kpi"><b><span class="tag">חי</span> 33</b><i>אנשי צוות בסדר כרגע מתוך 44</i></div>
+   <div class="kpi"><b>380</b><i>תלמידים נוכחים מתוך 412</i></div>
+   <div class="kpi"><b>9/12</b><i>שיעורים עם מגיד במקום</i></div>
+  </div>
+
+  <ul>
+  <li class="li">
+   <span class="a"><b>ג׳1</b><em>חדר 10 · מגיד שיעור נפתלי גרין</em></span>
+   <span class="b"><i aria-hidden="true"></i><bdi>34</bdi><span class="of">/ 37</span></span>
+  </li>
+<li class="li">
+   <span class="a"><b>ג׳2</b><em>חדר 11 · מגיד שיעור נפתלי מלר</em></span>
+   <span class="b"><i aria-hidden="true"></i><bdi>25</bdi><span class="of">/ 27</span></span>
+  </li>
+<li class="li">
+   <span class="a"><b>ד׳1</b><em>חדר 12 · מגיד שיעור יעקב פישר</em></span>
+   <span class="b"><i aria-hidden="true"></i><bdi>30</bdi><span class="of">/ 31</span></span>
+  </li>
+<li class="li">
+   <span class="a"><b>ד׳2</b><em>חדר 13 · מגיד שיעור שרגא כהנא</em></span>
+   <span class="b"><i aria-hidden="true"></i><bdi>37</bdi><span class="of">/ 42</span></span>
+  </li>
+<li class="li dim">
+   <span class="a"><b>ה׳1</b><em>חדר 14 · מגיד שיעור אלימלך פישר — בחופשה, במקומו נפתלי גרין</em></span>
+   <span class="b"><i aria-hidden="true"></i><bdi>27</bdi><span class="of">/ 30</span></span>
+  </li>
+<li class="li">
+   <span class="a"><b>ה׳2</b><em>חדר 15 · מגיד שיעור שמואל רוזן</em></span>
+   <span class="b"><i aria-hidden="true"></i><bdi>26</bdi><span class="of">/ 30</span></span>
+  </li>
+<li class="li">
+   <span class="a"><b>ו׳1</b><em>חדר 16 · מגיד שיעור זלמן שטרן</em></span>
+   <span class="b"><i aria-hidden="true"></i><bdi>35</bdi><span class="of">/ 36</span></span>
+  </li>
+<li class="li">
+   <span class="a"><b>ו׳2</b><em>חדר 17 · מגיד שיעור יעקב גולד</em></span>
+   <span class="b"><i aria-hidden="true"></i><bdi>26</bdi><span class="of">/ 29</span></span>
+  </li>
+<li class="li dim">
+   <span class="a"><b>ז׳1</b><em>חדר 18 · מגיד שיעור נחום בלוי — בחופשה, ללא מחליף</em></span>
+   <span class="b"><i aria-hidden="true"></i><bdi>37</bdi><span class="of">/ 38</span></span>
+  </li>
+<li class="li">
+   <span class="a"><b>ז׳2</b><em>חדר 19 · מגיד שיעור אהרן דויטש</em></span>
+   <span class="b"><i aria-hidden="true"></i><bdi>29</bdi><span class="of">/ 35</span></span>
+  </li>
+<li class="li">
+   <span class="a"><b>ח׳1</b><em>חדר 20 · מגיד שיעור ברוך דויטש</em></span>
+   <span class="b"><i aria-hidden="true"></i><bdi>37</bdi><span class="of">/ 37</span></span>
+  </li>
+<li class="li dim">
+   <span class="a"><b>ח׳2</b><em>חדר 21 · מגיד שיעור חיים בראון — במחלה, ללא מחליף</em></span>
+   <span class="b"><i aria-hidden="true"></i><bdi>37</bdi><span class="of">/ 40</span></span>
+  </li>
+  </ul>
+
+  <p class="note">הפס מועתק במדידה מפס־הערוצים־החיים של Twitch: שורה בגובה 45 בלי רווח ביניהן, אווטאר 30 עגול, שם ב־600/14/15.4, עיסוק ב־14/19.6 באפור, ונקודה אדומה <bdi>#eb0400</bdi> בקוטר 8 נעולה לעמודה משלה לצד המספר. גם הטקסט הנסתר בגודל 1×1 לקורא־מסך הועתק — במקור העין מקבלת נקודה ומספר, וקורא־המסך מקבל משפט מלא.</p>
+ </main>
+</div>
+
+<script>
+(function(){
+ var r=document.getElementById('rail'),f=document.getElementById('fold');
+ f.addEventListener('click',function(){
+  var mini=r.classList.toggle('mini');
+  f.setAttribute('aria-expanded',String(!mini));
+  f.title=mini?'פתיחת הפס':'כיווץ הפס';
+ });
+})();
+</script>
+</body></html>
