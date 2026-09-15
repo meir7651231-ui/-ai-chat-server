@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ועדת ההלוואות</title>
+<meta name="description" content="תיק ועדת ההלוואות, עם תעלת-פסיקה מועתקת במדידה מ-Stack Overflow.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}
+:root{
+ /* ===== נמדד מעמוד-שאלה חי ב-stackoverflow.com ===== */
+ --bg:#ffffff;--ink:#0c0d0e;--mut:#636b74;--line:#d6d9dc;--hair:#e3e6e8;
+ --chip:#f1f2f3;--chipInk:#3b4045;--cta:#1b75d0;--ok:#18864b;--bad:#b4232c;
+ --ctaBg:#1b75d0;   /* כפתור נושא-לבן — לא מתבהר בכהה, בשונה מ--cta של הקישורים */
+ --gut:57px;--btn:41px;--ico:18px;
+ --fs:13px;--lh:17px;--numF:700 19px/24.85px}
+/* ===== הערכה הכהה נגזרה על ידי, לא נמדדה: סטאק-אוברפלו מתעלם
+        מ-prefers-color-scheme למשתמש לא-מחובר ונשאר לבן.       ===== */
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#16181a;--ink:#e7e9ea;--mut:#9aa4ad;--line:#3c4246;--hair:#2a2f33;
+ --chip:#24292d;--chipInk:#c3cbd2;--cta:#4a9de8;--ok:#3fb96f;--bad:#ef7b83}}
+:root[data-theme=dark]{
+ --bg:#16181a;--ink:#e7e9ea;--mut:#9aa4ad;--line:#3c4246;--hair:#2a2f33;
+ --chip:#24292d;--chipInk:#c3cbd2;--cta:#4a9de8;--ok:#3fb96f;--bad:#ef7b83}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:400 var(--fs)/var(--lh) Heebo,system-ui,Arial,sans-serif}
+h1,h2,h3{margin:0}p{margin:0}bdi{unicode-bidi:isolate}
+a{color:var(--cta);text-decoration:none}a:hover{text-decoration:underline}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--cta);outline-offset:2px}
+.hid{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+.top{border-top:3px solid var(--ctaBg);border-bottom:1px solid var(--hair);background:var(--bg);
+ display:flex;align-items:center;gap:14px;padding:10px 20px;
+ position:sticky;top:env(safe-area-inset-top,0px);z-index:9}
+.top b{font:700 15px/1.2 Heebo}
+.top .mut{color:var(--mut)}
+.btn{background:var(--ctaBg);color:#fff;border:0;border-radius:6px;height:38px;padding:0 14px;
+ font:500 var(--fs)/1 Heebo;margin-inline-start:auto}
+
+.wrap{max-width:1100px;margin:0 auto;padding:18px 20px 70px}
+h1{font:400 27px/31.15px Heebo}
+.meta{display:flex;gap:16px;flex-wrap:wrap;color:var(--mut);margin-top:10px;
+ padding-bottom:14px;border-bottom:1px solid var(--hair)}
+.meta b{color:var(--ink);font-weight:500}
+.sorts{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:22px 0 4px}
+.sorts h2{font:400 19px/24px Heebo}
+.sorts span{color:var(--mut)}
+
+/* ---------- הרכיב: תעלה קבועת-רוחב לצד גוף חופשי-אורך ---------- */
+.post{display:flex;gap:16px;align-items:flex-start;
+ padding:16px 0;border-top:1px solid var(--hair)}
+.gut{width:var(--gut);flex:none;display:flex;flex-direction:column;align-items:center;
+ text-align:center;padding-top:2px}
+.num{font:var(--numF) Heebo;color:var(--ink);font-variant-numeric:tabular-nums;
+ letter-spacing:-.2px;white-space:nowrap}
+.cur{font:400 11px/14px Heebo;color:var(--mut);margin-top:-2px}
+/* ✓ — 36×36, בדיוק המידה שנמדדה */
+.acc{margin-top:8px;line-height:0}
+.acc svg{width:36px;height:36px;fill:var(--ok)}
+.pend{margin-top:8px;width:var(--ico);height:var(--ico);border-radius:1000px;
+ border:1px solid var(--line);display:block}
+.gr{margin-top:8px;font:400 11px/15px Heebo;color:var(--mut);white-space:nowrap}
+.gr.bad{color:var(--bad);font-weight:500}
+
+.body{flex:1;min-width:0}
+.body h3{font:400 17px/22px Heebo}
+.line{color:var(--mut);margin-top:5px}
+.warn{color:var(--bad);font-weight:500}
+.rule{margin-top:7px;padding:7px 10px;border-inline-start:3px solid var(--bad);
+ background:var(--chip);color:var(--chipInk);border-radius:0 4px 4px 0}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.tag{background:var(--chip);color:var(--chipInk);border:1px solid var(--chip);
+ border-radius:4px;padding:2px 6px;font:500 12px/18px Heebo}
+.who{display:flex;align-items:center;gap:8px;margin-top:11px;flex-wrap:wrap}
+.av{width:32px;height:32px;border-radius:4px;flex:none;background:var(--chip);
+ color:var(--chipInk);display:grid;place-items:center;font:700 12px/1 Heebo}
+.wt a{font:400 var(--fs)/var(--lh) Heebo}
+.wt em{display:block;font-style:normal;color:var(--mut);font-size:12px;line-height:16px}
+.rep{margin-inline-start:auto;font:500 12px/17px Heebo;color:var(--mut);
+ font-variant-numeric:tabular-nums}
+
+.h2{font:400 19px/24px Heebo;margin-top:34px}
+.tbl{width:100%;border-collapse:collapse;margin-top:12px;font-variant-numeric:tabular-nums}
+.tbl th{text-align:start;font:500 12px/18px Heebo;color:var(--mut);
+ border-bottom:1px solid var(--line);padding:6px 8px}
+.tbl td{padding:8px;border-bottom:1px solid var(--hair)}
+.tbl .n{text-align:start;white-space:nowrap}
+.tbl tr.lt td{background:var(--chip)}
+.split{display:flex;align-items:center;gap:12px;margin:26px 0 0;color:var(--mut)}
+.split:before,.split:after{content:"";height:1px;background:var(--hair);flex:1}
+.note{margin-top:28px;padding-top:16px;border-top:1px solid var(--hair);
+ color:var(--mut);max-width:74ch;line-height:20px}
+@media(max-width:560px){
+ .post{gap:12px}
+ .gut{width:48px}
+ .num{font:700 16px/21px Heebo}
+ .acc svg{width:28px;height:28px}
+ .rep{margin-inline-start:0;width:100%}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+
+<header class="top">
+ <b>מוסדות — קופת החסד</b>
+ <span class="mut">יום שלישי · ד׳ תשרי תשפ״ז</span>
+ <button class="btn" type="button">בקשה חדשה</button>
+</header>
+
+<div class="wrap">
+ <h1>ועדת ההלוואות — 6 בקשות על השולחן</h1>
+ <p class="meta">
+  <span>קופה <b><bdi>742,000</bdi> ₪</b></span>
+  <span>בחוץ <b><bdi>179,371</bdi> ₪</b></span>
+  <span>פנוי <b><bdi>562,629</bdi> ₪</b></span>
+  <span>פעילות <b>19</b></span>
+  <span>בפיגור <b>2</b></span>
+ </p>
+
+ <div class="sorts">
+  <h2>6 בקשות על השולחן</h2>
+  <span>ממוינות: מאושרות תחילה, ואחריהן לפי הסכום שעל הפרק — כלל־הסידור של המקור</span>
+ </div>
+
+ <article class="post ok">
+ <div class="gut">
+ <bdi class="num" title="הסכום שעל הפרק">27,000</bdi>
+ <span class="cur" aria-hidden="true">₪</span>
+ <span class="acc" title="הוועדה אישרה"><svg viewBox="0 0 36 36" aria-hidden="true"><path d="M6 18.5l3-3 6 6 12-12 3 3-15 15z"/></svg><span class="hid">אושרה בוועדה</span></span>
+ <span class="gr">ערבים <bdi>2/2</bdi></span>
+</div>
+ <div class="body">
+  <h3><a href="#">משפחת אברמסון א׳ — חתונה</a></h3>
+  <p class="line">אושרה, טרם ניתנה · נפתחה לפני 4 ימים · 34 תשלומים</p>
+  
+  <div class="tags">
+   <span class="tag">אושר</span>
+   <span class="tag">אנטוורפן</span>
+   <span class="tag">3 ילדים</span>
+   <span class="tag">הוראת קבע</span>
+   <span class="tag">יתרת שכ״ל <bdi>3,104</bdi></span>
+  </div>
+  <div class="who">
+   <span class="av" aria-hidden="true">אב</span>
+   <span class="wt"><a href="#">אברהם אברמסון א׳</a><em><bdi>050-507-7811</bdi></em></span>
+   <span class="rep" title="מתוך הקופה">סכום מקורי <bdi>27,000</bdi> ₪</span>
+  </div>
+ </div>
+</article>
+ <p class="split">5 שטרם הוכרעו</p>
+ <article class="post">
+ <div class="gut">
+ <bdi class="num" title="הסכום שעל הפרק">34,000</bdi>
+ <span class="cur" aria-hidden="true">₪</span>
+ <span class="pend" aria-hidden="true"></span><span class="hid">טרם אושרה</span>
+ <span class="gr">ערבים <bdi>2/2</bdi></span>
+</div>
+ <div class="body">
+  <h3><a href="#">משפחת ברגר י׳ — תיקון רכב</a></h3>
+  <p class="line">על שולחן הוועדה · נפתחה לפני 10 ימים · 20 תשלומים</p>
+  
+  <div class="tags">
+   <span class="tag">ועדה</span>
+   <span class="tag">אשדוד</span>
+   <span class="tag">2 ילדים</span>
+   <span class="tag">הוראת קבע</span>
+   <span class="tag">יתרת שכ״ל <bdi>1,905</bdi></span>
+  </div>
+  <div class="who">
+   <span class="av" aria-hidden="true">בר</span>
+   <span class="wt"><a href="#">בנימין ברגר י׳</a><em><bdi>055-344-6562</bdi></em></span>
+   <span class="rep" title="מתוך הקופה">סכום מקורי <bdi>34,000</bdi> ₪</span>
+  </div>
+ </div>
+</article>
+<article class="post">
+ <div class="gut">
+ <bdi class="num" title="הסכום שעל הפרק">33,000</bdi>
+ <span class="cur" aria-hidden="true">₪</span>
+ <span class="pend" aria-hidden="true"></span><span class="hid">טרם אושרה</span>
+ <span class="gr">ערבים <bdi>2/2</bdi></span>
+</div>
+ <div class="body">
+  <h3><a href="#">משפחת פישר ד׳ — שיפוץ דירה</a></h3>
+  <p class="line">טרם נדונה · נפתחה לפני 13 ימים · 18 תשלומים</p>
+  
+  <div class="tags">
+   <span class="tag">בקשה</span>
+   <span class="tag">בני ברק</span>
+   <span class="tag">2 ילדים</span>
+   
+   <span class="tag">יתרת שכ״ל <bdi>8,583</bdi></span>
+  </div>
+  <div class="who">
+   <span class="av" aria-hidden="true">פי</span>
+   <span class="wt"><a href="#">יעקב פישר ד׳</a><em><bdi>055-901-2870</bdi></em></span>
+   <span class="rep" title="מתוך הקופה">סכום מקורי <bdi>33,000</bdi> ₪</span>
+  </div>
+ </div>
+</article>
+<article class="post">
+ <div class="gut">
+ <bdi class="num" title="הסכום שעל הפרק">27,000</bdi>
+ <span class="cur" aria-hidden="true">₪</span>
+ <span class="pend" aria-hidden="true"></span><span class="hid">טרם אושרה</span>
+ <span class="gr bad">ערבים <bdi>0/2</bdi></span>
+</div>
+ <div class="body">
+  <h3><a href="#">משפחת גרין א׳ — תיקון רכב</a></h3>
+  <p class="line">טרם נדונה · נפתחה לפני 4 ימים · 29 תשלומים</p>
+  <p class="rule">חסר ערב — האפיון אוסר מתן הלוואה בלי שני ערבים. הבקשה לא תעבור לשלב הבא.</p>
+  <div class="tags">
+   <span class="tag">בקשה</span>
+   <span class="tag">אלעד</span>
+   <span class="tag">2 ילדים</span>
+   
+   <span class="tag">יתרת שכ״ל <bdi>2,625</bdi></span>
+  </div>
+  <div class="who">
+   <span class="av" aria-hidden="true">גר</span>
+   <span class="wt"><a href="#">נחום גרין א׳</a><em><bdi>050-227-1610</bdi></em></span>
+   <span class="rep" title="מתוך הקופה">סכום מקורי <bdi>27,000</bdi> ₪</span>
+  </div>
+ </div>
+</article>
+<article class="post">
+ <div class="gut">
+ <bdi class="num" title="הסכום שעל הפרק">19,000</bdi>
+ <span class="cur" aria-hidden="true">₪</span>
+ <span class="pend" aria-hidden="true"></span><span class="hid">טרם אושרה</span>
+ <span class="gr">ערבים <bdi>2/2</bdi></span>
+</div>
+ <div class="body">
+  <h3><a href="#">משפחת פרידמן א׳ — חתונה</a></h3>
+  <p class="line">על שולחן הוועדה · נפתחה לפני 11 ימים · 35 תשלומים</p>
+  
+  <div class="tags">
+   <span class="tag">ועדה</span>
+   <span class="tag">ניו יורק</span>
+   <span class="tag">3 ילדים</span>
+   <span class="tag">הוראת קבע</span>
+   <span class="tag">יתרת שכ״ל <bdi>409</bdi></span>
+  </div>
+  <div class="who">
+   <span class="av" aria-hidden="true">פר</span>
+   <span class="wt"><a href="#">אליהו פרידמן א׳</a><em><bdi>053-268-5731</bdi></em></span>
+   <span class="rep" title="מתוך הקופה">סכום מקורי <bdi>19,000</bdi> ₪</span>
+  </div>
+ </div>
+</article>
+<article class="post">
+ <div class="gut">
+ <bdi class="num" title="הסכום שעל הפרק">13,000</bdi>
+ <span class="cur" aria-hidden="true">₪</span>
+ <span class="pend" aria-hidden="true"></span><span class="hid">טרם אושרה</span>
+ <span class="gr">ערבים <bdi>2/2</bdi></span>
+</div>
+ <div class="body">
+  <h3><a href="#">משפחת רוט ש׳ — מעבר דירה</a></h3>
+  <p class="line">על שולחן הוועדה · נפתחה לפני 10 ימים · 21 תשלומים</p>
+  
+  <div class="tags">
+   <span class="tag">ועדה</span>
+   <span class="tag">לונדון</span>
+   <span class="tag">2 ילדים</span>
+   <span class="tag">הוראת קבע</span>
+   <span class="tag">יתרת שכ״ל <bdi>2,363</bdi></span>
+  </div>
+  <div class="who">
+   <span class="av" aria-hidden="true">רו</span>
+   <span class="wt"><a href="#">שלמה רוט ש׳</a><em><bdi>058-613-7028</bdi></em></span>
+   <span class="rep" title="מתוך הקופה">סכום מקורי <bdi>13,000</bdi> ₪</span>
+  </div>
+ </div>
+</article>
+
+ <h2 class="h2">20 הלוואות רצות — חשיפת הקופה</h2>
+ <p class="line">אינן על שולחן הוועדה. כאן בלי תעלה: אין מה להכריע בהן.</p>
+ <table class="tbl"><thead><tr><th>משפחה</th><th>מטרה</th><th>מצב</th><th class="n">עוד בחוץ</th><th class="n">התקדמות</th></tr></thead><tbody>
+ <tr><td>משפחת יעקובוביץ א׳</td><td>תיקון רכב</td>
+  <td>ניתנה</td>
+  <td class="n"><bdi>28,000</bdi> ₪</td><td class="n"><bdi>0/28</bdi></td></tr>
+<tr><td>משפחת בראון א׳</td><td>הוצאות רפואיות</td>
+  <td>ניתנה</td>
+  <td class="n"><bdi>18,000</bdi> ₪</td><td class="n"><bdi>0/32</bdi></td></tr>
+<tr><td>משפחת פריד א׳</td><td>שכר לימוד</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>18,000</bdi> ₪</td><td class="n"><bdi>5/20</bdi></td></tr>
+<tr><td>משפחת רוט</td><td>הוצאות חג</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>16,190</bdi> ₪</td><td class="n"><bdi>11/21</bdi></td></tr>
+<tr><td>משפחת כהנא א׳</td><td>ציוד לימודי</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>13,913</bdi> ₪</td><td class="n"><bdi>13/23</bdi></td></tr>
+<tr class="lt"><td>משפחת דויטש ש׳</td><td>ציוד לימודי</td>
+  <td>בפיגור החזר · <b class="warn">4 ח׳ פיגור</b></td>
+  <td class="n"><bdi>12,727</bdi> ₪</td><td class="n"><bdi>12/33</bdi></td></tr>
+<tr><td>משפחת פישר</td><td>תיקון רכב</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>12,000</bdi> ₪</td><td class="n"><bdi>22/34</bdi></td></tr>
+<tr><td>משפחת חשין</td><td>שיפוץ דירה</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>11,667</bdi> ₪</td><td class="n"><bdi>2/12</bdi></td></tr>
+<tr><td>משפחת לנדאו ד׳</td><td>שכר לימוד</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>10,043</bdi> ₪</td><td class="n"><bdi>12/23</bdi></td></tr>
+<tr><td>משפחת לוי ש׳</td><td>ציוד לימודי</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>7,200</bdi> ₪</td><td class="n"><bdi>11/15</bdi></td></tr>
+<tr><td>משפחת רייזמן</td><td>מעבר דירה</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>5,882</bdi> ₪</td><td class="n"><bdi>7/17</bdi></td></tr>
+<tr><td>משפחת נוימן א׳</td><td>הוצאות רפואיות</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>4,923</bdi> ₪</td><td class="n"><bdi>11/13</bdi></td></tr>
+<tr><td>משפחת אברמסון א׳</td><td>שכר לימוד</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>4,800</bdi> ₪</td><td class="n"><bdi>15/25</bdi></td></tr>
+<tr><td>משפחת פישר י׳</td><td>מעבר דירה</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>4,364</bdi> ₪</td><td class="n"><bdi>6/22</bdi></td></tr>
+<tr class="lt"><td>משפחת וקסלר י׳</td><td>תיקון רכב</td>
+  <td>בפיגור החזר · <b class="warn">4 ח׳ פיגור</b></td>
+  <td class="n"><bdi>4,148</bdi> ₪</td><td class="n"><bdi>20/27</bdi></td></tr>
+<tr><td>משפחת כהנא א׳</td><td>הוצאות רפואיות</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>3,400</bdi> ₪</td><td class="n"><bdi>24/30</bdi></td></tr>
+<tr><td>משפחת כהן ש׳</td><td>תיקון רכב</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>2,769</bdi> ₪</td><td class="n"><bdi>14/26</bdi></td></tr>
+<tr><td>משפחת ויס</td><td>שיפוץ דירה</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>1,059</bdi> ₪</td><td class="n"><bdi>16/17</bdi></td></tr>
+<tr><td>משפחת רייזמן ש׳</td><td>שכר לימוד</td>
+  <td>בהחזר שוטף</td>
+  <td class="n"><bdi>286</bdi> ₪</td><td class="n"><bdi>26/28</bdi></td></tr>
+<tr><td>משפחת טויב י׳</td><td>חתונה</td>
+  <td>נפרעה במלואה</td>
+  <td class="n"><bdi>0</bdi> ₪</td><td class="n"><bdi>35/35</bdi></td></tr>
+ </tbody></table>
+
+ <p class="note">התעלה משמאל מועתקת במדידה מ-Stack Overflow: רוחב <bdi>57</bdi>, טור ממורכז, המספר ב־<bdi>700 19/24.85</bdi>, וה־✓ בגודל <bdi>36×36</bdi> בצבע <bdi>#18864b</bdi>. הרעיון הוא ששתי רשויות שונות חיות באותה עמודה בלי לדרוס זו את זו — המספר אומר <em>כמה כסף על הפרק</em>, החותמת אומרת <em>מה הוועדה החליטה</em>, והן לא מתמזגות לציון אחד. מה שהוסר במכוון: חצי ההצבעה. במקור יש קהל שמצביע; כאן אין קהל, ואין מצביעים על בקשה של משפחה.</p>
+</div>
+</body></html>
