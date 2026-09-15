@@ -1,0 +1,201 @@
+<title>חמישה סגנונות למוסד</title>
+
+<style>
+:root{ --pg:#f2f1ef; --pg-card:#fff; --pg-ink:#232220; --pg-mut:rgba(35,34,32,.62); --pg-hair:rgba(0,0,0,.12); --pg-acc:#2F6FED; color-scheme:light }
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){ --pg:#121214; --pg-card:#1b1b1e; --pg-ink:#ECE9E2; --pg-mut:#9B968C; --pg-hair:rgba(236,233,226,.15); --pg-acc:#7FA6F5; color-scheme:dark }}
+:root[data-theme=dark]{ --pg:#121214; --pg-card:#1b1b1e; --pg-ink:#ECE9E2; --pg-mut:#9B968C; --pg-hair:rgba(236,233,226,.15); --pg-acc:#7FA6F5; color-scheme:dark }
+*{box-sizing:border-box}
+body{margin:0;background:var(--pg);color:var(--pg-ink);font:400 16px/1.55 Heebo,Arial,sans-serif}
+.page{max-width:1240px;margin-inline:auto;padding-inline:16px;padding-block:28px 64px}
+h1{font-size:30px;font-weight:800;margin:0 0 6px;line-height:1.15}
+.lede{color:var(--pg-mut);max-width:64ch;margin:0 0 8px}
+.head-note{font-size:14px;color:var(--pg-mut);margin:0 0 28px}
+.shot{margin-block:34px 0}
+.cap{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;margin-bottom:10px}
+.cap h2{font-size:21px;font-weight:700;margin:0}
+.cap .n{font:700 13px Heebo;background:var(--pg-ink);color:var(--pg);border-radius:999px;padding:2px 10px}
+.cap .diff{font-size:13.5px;color:var(--pg-mut)}
+.frame{border:1px solid var(--pg-hair);border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+:focus-visible{outline:2px solid var(--pg-acc);outline-offset:2px}
+
+/* ══ בסיס המסך. כל סגנון דורס טוקנים ומבנה ══ */
+.app{
+  --bg:#fff; --panel:#fff; --side:#faf9f7; --ink:#37352F; --mut:rgba(55,53,47,.62); --hair:rgba(0,0,0,.09);
+  --acc:#2F6FED; --on-acc:#fff; --ok:#1B8A4C; --warn:#C98A00; --err:#C8321E;
+  --radius:12px; --rsm:8px; --row-h:40px; --padx:16px; --pady:8px; --shadow:none; --zebra:transparent;
+  --font:Heebo,Arial,sans-serif; --fhead:Heebo,Arial,sans-serif; --hw:600; --kpiw:700; --kpi-size:24px;
+  --chip-fill:transparent; --chip-bd:currentColor; --cellline:0px solid var(--hair);
+  background:var(--bg);color:var(--ink);font-family:var(--font);display:grid;grid-template-columns:200px 1fr;min-height:470px
+}
+.app *{font-family:inherit}
+.topnav{display:none}
+.side{background:var(--side);border-inline-end:1px solid var(--hair);padding:14px 10px;display:flex;flex-direction:column;gap:2px}
+.side .brand{font:var(--hw) 16px/1.3 var(--fhead);padding:4px 10px 12px;display:flex;gap:8px;align-items:baseline}
+.side .brand small{font-size:11px;color:var(--mut);font-weight:400}
+.side a{display:flex;justify-content:space-between;gap:8px;padding:6px 10px;border-radius:var(--rsm);color:var(--ink);text-decoration:none;font-size:14px}
+.side a b{font-weight:400}
+.side a i{font-style:normal;color:var(--mut);font-size:12px;font-variant-numeric:tabular-nums}
+.side a[aria-current=page]{background:var(--acc);color:var(--on-acc)}
+.side a[aria-current=page] i{color:var(--on-acc);opacity:.8}
+.main{display:flex;flex-direction:column;min-width:0}
+.bar{display:flex;gap:10px;align-items:center;padding:12px 16px;border-block-end:1px solid var(--hair);background:var(--panel)}
+.bar h3{font:var(--hw) 19px/1.25 var(--fhead);margin:0;white-space:nowrap}
+.bar .q{flex:1;min-width:80px;border:1px solid var(--hair);border-radius:var(--rsm);padding:6px 10px;color:var(--mut);font-size:13px;background:var(--bg)}
+.bar .b{border:1px solid var(--hair);border-radius:var(--rsm);padding:6px 12px;font-size:13px;background:var(--bg);color:var(--ink);white-space:nowrap}
+.bar .b.p{background:var(--acc);border-color:var(--acc);color:var(--on-acc);font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 16px 6px}
+.kpi{border:1px solid var(--hair);background:var(--panel);border-radius:var(--radius);padding:10px 12px;box-shadow:var(--shadow)}
+.kpi b{display:block;font:var(--kpiw) var(--kpi-size)/1.15 var(--fhead);font-variant-numeric:tabular-nums}
+.kpi span{font-size:12.5px;color:var(--mut)}
+.wrap{padding:10px 16px 16px;min-width:0}
+.tbl{border:1px solid var(--hair);border-radius:var(--radius);overflow:auto;background:var(--panel);box-shadow:var(--shadow);max-height:260px}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:14px}
+th,td{text-align:start;padding:var(--pady) var(--padx);border-block-end:1px solid var(--hair);white-space:nowrap;background:var(--panel);color:var(--ink);border-inline-start:var(--cellline)}
+tbody tr{height:var(--row-h)}
+tbody tr:nth-child(2n) td{background:var(--zebra)}
+thead th{position:sticky;inset-block-start:0;z-index:2;color:var(--mut);font:var(--hw) 12.5px/1.3 var(--fhead)}
+th:first-child,td:first-child{position:sticky;inset-inline-start:0;z-index:1;border-inline-start:0}
+thead th:first-child{z-index:3}
+td.num{font-variant-numeric:tabular-nums}
+bdi{unicode-bidi:isolate}
+.tag{display:inline-block;border-radius:999px;padding:1px 9px;font-size:11.5px;font-weight:600;border:1px solid var(--chip-bd);background:var(--chip-fill)}
+.tag.ok{color:var(--ok)}.tag.warn{color:var(--warn)}.tag.err{color:var(--err)}
+.foot{padding:0 16px 14px;color:var(--mut);font-size:12.5px}
+
+/* ── 1 · נייר: שורות, בלי כרטיסים, מדדים כמספרים חשופים ── */
+.app[data-style=paper]{--shadow:none}
+.app[data-style=paper] .kpi{border:0;background:transparent;padding:4px 0;border-inline-end:1px solid var(--hair);border-radius:0}
+.app[data-style=paper] .kpi:last-child{border-inline-end:0}
+.app[data-style=paper] .tbl{border-inline:0;border-block-start:0;border-radius:0}
+
+/* ── 2 · לוח כהה: סולם משטחים, צפוף, אקצנט נדיר ── */
+.app[data-style=dark]{
+  --bg:#0f1011; --panel:#141516; --side:#0b0c0d; --ink:#f7f8f8; --mut:#8a8f98; --hair:#23252a;
+  --acc:#5e6ad2; --ok:#4cb782; --warn:#f2c94c; --err:#eb5757;
+  --radius:8px; --rsm:6px; --row-h:32px; --pady:4px; --kpi-size:21px; --kpiw:600;
+}
+.app[data-style=dark] .kpi{background:#18191a;border-color:#23252a}
+.app[data-style=dark] .side a[aria-current=page]{background:#23252a;color:#f7f8f8}
+.app[data-style=dark] .side a[aria-current=page] i{color:#8a8f98}
+
+/* ── 3 · בנקאי: פס-כותרת צבעוני, כרטיסים עם צל, צ׳יפים ממולאים ── */
+.app[data-style=bank]{
+  --bg:#f6f9fc; --panel:#fff; --side:#0a2540; --ink:#0a2540; --mut:#5b6b7f; --hair:#e6ebf1;
+  --acc:#635bff; --ok:#0e6245; --warn:#983705; --err:#b3093c;
+  --radius:10px; --rsm:6px; --row-h:46px; --padx:18px; --kpi-size:26px;
+  --shadow:0 2px 5px rgba(50,50,93,.09),0 1px 2px rgba(0,0,0,.07);
+  --chip-fill:rgba(99,91,255,.09); --chip-bd:transparent;
+}
+.app[data-style=bank] .side{color:#f6f9fc}
+.app[data-style=bank] .side a{color:#c9d6e4}
+.app[data-style=bank] .side .brand{color:#fff}
+.app[data-style=bank] .side a[aria-current=page]{background:rgba(255,255,255,.14);color:#fff}
+.app[data-style=bank] .bar{background:linear-gradient(90deg,#0a2540,#1a3a5c);border-block-end:0}
+.app[data-style=bank] .bar h3{color:#fff}
+.app[data-style=bank] .bar .q{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.18);color:#c9d6e4}
+.app[data-style=bank] .bar .b{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff}
+.app[data-style=bank] .bar .b.p{background:#635bff;border-color:#635bff}
+.app[data-style=bank] .tag.ok{background:rgba(14,98,69,.1)}
+.app[data-style=bank] .tag.warn{background:rgba(152,55,5,.1)}
+.app[data-style=bank] .tag.err{background:rgba(179,9,60,.1)}
+
+/* ── 4 · מוסדי: בלי סרגל-צד, ניווט עליון, פינות חדות, פסים וקווי-רשת ── */
+.app[data-style=carbon]{
+  --bg:#fff; --panel:#fff; --ink:#161616; --mut:#525252; --hair:#e0e0e0;
+  --acc:#0f62fe; --ok:#198038; --warn:#8e6a00; --err:#da1e28;
+  --radius:0px; --rsm:0px; --row-h:32px; --pady:4px; --zebra:#f4f4f4; --kpi-size:26px; --kpiw:400;
+  --font:"Noto Sans Hebrew",Heebo,Arial,sans-serif; --fhead:"Noto Sans Hebrew",Heebo,Arial,sans-serif;
+  --cellline:1px solid var(--hair);
+  grid-template-columns:1fr;
+}
+.app[data-style=carbon] .side{display:none}
+.app[data-style=carbon] .topnav{display:flex;gap:0;background:#161616;overflow-x:auto}
+.app[data-style=carbon] .topnav a{color:#c6c6c6;text-decoration:none;font-size:13.5px;padding:12px 16px;white-space:nowrap;border-block-end:3px solid transparent}
+.app[data-style=carbon] .topnav a[aria-current=page]{color:#fff;background:#262626;border-block-end-color:#0f62fe}
+.app[data-style=carbon] .kpi{background:#f4f4f4;border:0;border-inline-start:3px solid var(--acc)}
+.app[data-style=carbon] .tbl{border-radius:0}
+.app[data-style=carbon] .tag{border-radius:0;font-weight:600}
+
+/* ── 5 · ספר: מסמך במרכז, כותרות בסריף, קווי-פנקס, בלי כרטיסים ובלי צ׳יפים ── */
+.app[data-style=sefer]{
+  --bg:#f6f1e6; --panel:#fffdf8; --ink:#2b2622; --mut:#7b7064; --hair:#ddd2bd;
+  --acc:#7a4a1f; --ok:#3f6b3a; --warn:#8a6210; --err:#95291c;
+  --radius:3px; --rsm:3px; --row-h:44px; --padx:18px; --kpi-size:26px;
+  --fhead:"Frank Ruhl Libre",Heebo,serif; --hw:700; --kpiw:700; --zebra:#faf6ec;
+  grid-template-columns:1fr;
+}
+.app[data-style=sefer] .side{display:none}
+.app[data-style=sefer] .main{max-width:860px;margin-inline:auto;width:100%;background:var(--panel);border-inline:1px solid var(--hair)}
+.app[data-style=sefer] .bar{justify-content:center;text-align:center;flex-direction:column;gap:4px;border-block-end:3px double var(--hair);padding-block:18px}
+.app[data-style=sefer] .bar .q,.app[data-style=sefer] .bar .b{display:none}
+.app[data-style=sefer] .bar h3{font-size:25px}
+.app[data-style=sefer] .bar::after{content:'ישיבת אור החיים · דוח גבייה · חשוון תשפ״ז';font-size:12.5px;color:var(--mut);font-family:Heebo,sans-serif}
+.app[data-style=sefer] .kpi{border:0;background:transparent;border-block-end:1px solid var(--hair);border-radius:0;text-align:center}
+.app[data-style=sefer] .tbl{border-inline:0;border-radius:0;box-shadow:none}
+.app[data-style=sefer] .tag{border:0;background:transparent;padding:0;font-weight:700;font-size:13px}
+
+@media(max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{flex-direction:row;overflow-x:auto;border-inline-end:0;border-block-end:1px solid var(--hair)}
+  .side .brand{display:none} .side a i{display:none}
+  .kpis{grid-template-columns:1fr 1fr}
+}
+</style>
+
+<div class="page" dir="rtl" lang="he">
+<h1>חמישה סגנונות למוסד</h1>
+<p class="lede">אותו מסך של אגף הגבייה, חמש פעמים. הנתונים והמבנה הלוגי זהים. מה שמתחלף הוא הצבע, הצורה, הצפיפות וגם המבנה עצמו: שניים עם סרגל צד, אחד עם ניווט עליון, ואחד בנוי כמסמך במרכז העמוד.</p>
+<p class="head-note">גלול למטה. חמשת הסגנונות אחד מתחת לשני, בלי צורך ללחוץ.</p>
+<div id="all"></div>
+<p class="head-note" style="margin-block-start:36px">כל החמישה מכבדים את אותם כללים: כיוון מוצהר בסימון, סכומים וטלפונים מבודדים, ספרות ברוחב אחיד, כותרת טבלה דביקה ועמודת זהות נעולה בימין. ההבדל הוא שכבת העיצוב בלבד, ולכן מעבר בין סגנונות הוא החלפת קובץ דאטה.</p>
+</div>
+
+<script>
+document.documentElement.setAttribute('dir','rtl');
+document.documentElement.setAttribute('lang','he');
+
+const ROWS = [
+  ['משפחת כהן',4,24000,16000,8000,'15/10','הוראת קבע','ok','בתשלום'],
+  ['משפחת לוי',6,36000,36000,0,'—','צ׳קים','ok','שולם'],
+  ['משפחת פרידמן',3,18000,6000,12000,'01/11','מזומן','warn','פיגור קל'],
+  ['משפחת רוזן',5,30000,9600,20400,'21/09','צ׳ק שחזר','err','באיחור'],
+  ['משפחת שטרן',2,12000,12000,0,'—','אשראי','ok','שולם'],
+  ['משפחת ויס',7,42000,21000,21000,'10/10','הוראת קבע','warn','מחצית'],
+  ['משפחת ברגר',4,24000,0,24000,'05/11','טרם נקבע','err','לא החל'],
+  ['משפחת נוימן',3,18000,15000,3000,'12/10','ביט','ok','בתשלום']
+];
+const NAV = [['גבייה','1,240',1],['תרומות','860',0],['חסד','310',0],['חינוך','1,180',0],['אנשים','2,940',0],['כספים','74',0],['תפעול','128',0],['בית המדרש','96',0]];
+const KPI = [['₪482,300','פתוח לגבייה'],['37','משפחות בפיגור'],['₪128,400','נגבה החודש'],['12','צ׳קים להפקדה']];
+const STYLES = [
+  ['paper','נייר','לבן, כחול יחיד, שורות במקום כרטיסים. המדדים הם מספרים חשופים עם קו מפריד, בלי מסגרת. שורה 40 פיקסל.'],
+  ['dark','לוח כהה','סולם משטחים כהים במקום צללים, שורה 32 פיקסל, והאקצנט נשמר לכפתור הראשי ולמיקוד בלבד.'],
+  ['bank','בנקאי','פס כותרת כהה ברוחב המסך, סרגל צד בנייבי, כרטיסים עם צל רך וצ׳יפי מצב ממולאים. שורה 46 פיקסל.'],
+  ['carbon','מוסדי','בלי סרגל צד: ניווט עליון בשחור. פינות חדות לגמרי, קווי רשת בין התאים, פסים מתחלפים, שורה 32 פיקסל.'],
+  ['sefer','ספר','מסמך במרכז העמוד בלי ניווט, כותרות בפרנק רול, קו כפול מתחת לכותרת, והמצב נכתב כטקסט ולא כצ׳יפ.']
+];
+const money = n => typeof n === 'number' ? '₪' + n.toLocaleString('he-IL') : n;
+const bdi = s => '<bdi dir="ltr">' + s + '</bdi>';
+
+function screen(style){
+  return '<div class="app" data-style="' + style + '">' +
+    '<nav class="side">' +
+      '<div class="brand">ישיבת אור החיים <small>תשפ״ז</small></div>' +
+      NAV.map(n => '<a href="#"' + (n[2] ? ' aria-current="page"' : '') + '><b>' + n[0] + '</b><i>' + n[1] + '</i></a>').join('') +
+    '</nav>' +
+    '<div class="main">' +
+      '<nav class="topnav">' + NAV.map(n => '<a href="#"' + (n[2] ? ' aria-current="page"' : '') + '>' + n[0] + '</a>').join('') + '</nav>' +
+      '<div class="bar"><h3>גבייה · שכר לימוד</h3><div class="q">חיפוש משפחה, סכום או טלפון…</div><div class="b">ייצוא</div><div class="b p">חיוב חדש</div></div>' +
+      '<div class="kpis">' + KPI.map(k => '<div class="kpi"><b>' + bdi(k[0]) + '</b><span>' + k[1] + '</span></div>').join('') + '</div>' +
+      '<div class="wrap"><div class="tbl"><table>' +
+        '<thead><tr><th>משפחה</th><th>ילדים</th><th class="num">חיוב שנתי</th><th class="num">שולם</th><th class="num">יתרה</th><th class="num">מועד הבא</th><th>אמצעי</th><th>מצב</th></tr></thead><tbody>' +
+        ROWS.map(r => '<tr><td>' + r[0] + '</td><td class="num">' + bdi(r[1]) + '</td><td class="num">' + bdi(money(r[2])) +
+          '</td><td class="num">' + bdi(money(r[3])) + '</td><td class="num">' + bdi(money(r[4])) + '</td><td class="num">' + bdi(r[5]) +
+          '</td><td>' + r[6] + '</td><td><span class="tag ' + r[7] + '">' + r[8] + '</span></td></tr>').join('') +
+        '</tbody></table></div></div>' +
+      '<p class="foot">נתוני דוגמה · מוצגות <bdi dir="ltr">8</bdi> מתוך <bdi dir="ltr">1,240</bdi> משפחות</p>' +
+    '</div></div>';
+}
+document.getElementById('all').innerHTML = STYLES.map((s,i) =>
+  '<section class="shot"><div class="cap"><span class="n">' + (i+1) + '</span><h2>' + s[1] + '</h2><span class="diff">' + s[2] + '</span></div>' +
+  '<div class="frame">' + screen(s[0]) + '</div></section>').join('');
+</script>

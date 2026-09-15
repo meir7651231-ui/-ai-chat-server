@@ -15,3 +15,12 @@
 
 פתיחה: `xdg-open gen/looks/styles.html` או גרירה לדפדפן. שניהם נפתחים גם בלי אינטרנט
 (הגופנים נופלים לערימה המקומית; באתר עצמו הגופן מוטבע — ראה `gen/fonts.mjs`).
+
+## קבצים עצמאיים לצפייה (15.9)
+`1-structures.html` (חמישה מבנים) · `2-modern.html` (חמישה מודרניים) · `5-evidence.html` (תיק-הראיות) —
+נפתחים בלחיצה כפולה, בלי רשת. **שני קבצי-הצילומים אינם בריפו** (4.9MB ו-4MB — מעל תקרת `nobinary`):
+גלריית **המוצרים הישראליים** (מורנינג · חשבונית-ירוקה · iCount · סאמיט · רייזאפ · פייבוקס · JGive ·
+נדרים-פלוס · monday) וגלריית **20 אתרי-העולם** (אפל · Airbnb · Stripe · Linear · Figma · Framer · Vercel ·
+Notion · Duolingo · Spotify · Shopify · Wise · Monzo · Nike · GOV.UK · BBC · Raycast · Arc · Klarna · Pinterest)
+עם מדידת משקל/בקשות/צבע-ראשון ובדיקות-נגישות. לשחזור: `scratchpad/world/grab.mjs` + `measure.mjs` + `build.mjs`.
+**הקל ביותר שנמדד: GOV.UK — 197KB · 16 בקשות · צבע ראשון 556ms.** הכבד: Arc — 11MB · 7.2 שניות.
