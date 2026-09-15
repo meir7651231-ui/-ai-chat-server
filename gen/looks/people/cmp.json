@@ -1,0 +1,32 @@
+[
+ {
+  "id": "govuk",
+  "name": "GOV.UK",
+  "url": "https://design-system.service.gov.uk/components/button/",
+  "sel": ".govuk-button",
+  "pad": "#ffffff"
+ },
+ {
+  "id": "wise",
+  "name": "Wise",
+  "url": "https://wise.com/",
+  "sel": null,
+  "pad": "#ffffff",
+  "label": "Send money"
+ },
+ {
+  "id": "monzo",
+  "name": "Monzo",
+  "url": "https://monzo.com/",
+  "sel": null,
+  "pad": "#112231"
+ },
+ {
+  "id": "stripe",
+  "name": "Stripe",
+  "url": "https://stripe.com/",
+  "sel": null,
+  "pad": "#ffffff",
+  "label": "Contact sales"
+ }
+]
