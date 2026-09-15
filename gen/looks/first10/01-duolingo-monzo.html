@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>1 · Duolingo × Monzo — מסך הבית</title>
+<meta name="description" content="גרסת עיצוב «1 · Duolingo × Monzo» למסך הבית של המוסד. בית: Monzo · ויג׳טים: Spotify · כפתורים: Raycast · כרטיסים: Wise · ממשק: Duolingo">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Alef:wght@400;700&family=Rubik:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}body{margin:0}
+bdi{unicode-bidi:isolate}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3{margin:0}p{margin:0}ul,ol{margin:0;padding:0;list-style:none}a{color:inherit}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media print{.noprint{display:none!important}}
+:root{--bg:#fff;--card:#fff;--sunk:#f7f7f7;--ink:#3c3c3c;
+ --mut:#6a6a6a;--hair:#e5e5e5;--acc:#46a302;--accInk:#0d2600;--pos:#3f7a00;
+ --warn:#b35f00;--solid:#46a302;--onSolid:#0d2600;--accText:#3f7a00;--r:16px;--face:'Varela Round'}
+body{background:var(--bg);color:var(--ink)}
+a{color:inherit}
+body{font:400 16px/1.55 var(--face),Arial,sans-serif}
+h1{font-size:23px}h2{font-size:18px}
+.m-note{background:var(--sunk);padding:11px 20px;display:flex;align-items:center;gap:12px;
+ font-size:13.5px;flex-wrap:wrap}
+.m-note .sp{flex:1}
+.m-w{max-width:1100px;margin-inline:auto;padding:26px 20px 80px}
+.m-head{margin-bottom:22px}
+.m-head p{color:var(--mut);font-size:14.5px;margin-top:6px}
+.m-sec{margin:28px 0 14px}
+.m-dep{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:12px}
+.m-dep a{border:1px solid var(--hair);border-radius:14px;padding:13px;text-decoration:none;font-size:14.5px;font-weight:500}
+.m-dep a:hover{border-color:var(--ink)}
+.m-dep a span{display:block;font-size:12px;color:var(--mut);font-weight:400;margin-top:2px}
+.m-foot{margin-top:32px;font-size:12.5px;color:var(--mut)}
+.s-shelf{display:flex;gap:15px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x proximity}
+.s-card{flex:none;width:178px;background:var(--card);border-radius:var(--r);padding:15px;
+ scroll-snap-align:start;text-decoration:none;color:inherit}
+.s-card:hover{background:var(--sunk)}
+.s-card .art{aspect-ratio:1;border-radius:7px;display:grid;place-items:center;margin-bottom:12px;
+ font:400 32px 'Secular One',var(--face),sans-serif;font-variant-numeric:tabular-nums}
+.s-card b{display:block;font-size:14.5px;font-weight:700}
+.s-card span{font-size:12.5px;color:var(--mut)}
+.w-card{display:flex;align-items:center;gap:13px;border:1px solid var(--hair);border-radius:var(--r);
+ padding:13px 16px;margin-bottom:9px;flex-wrap:wrap}
+.w-card .circ{width:38px;height:38px;border-radius:50%;background:var(--sunk);display:grid;place-items:center;
+ font-size:15px;flex:none}
+.w-card .t{flex:1;min-width:150px;font-size:15px;font-weight:700}
+.w-card .t span{display:block;font-size:12.5px;font-weight:400;color:var(--mut)}
+.w-pill{background:var(--acc);color:var(--accInk);border:0;border-radius:999px;padding:6px 14px;
+ font:700 13px var(--face);min-height:34px}
+.w-pill:hover{background:#8ed85e}
+kbd{font:500 11px ui-monospace,Menlo,monospace;color:var(--mut);background:var(--sunk);
+ border:1px solid var(--hair);border-radius:5px;padding:2px 6px}
+.btn{background:none;border:1px solid var(--hair);color:var(--ink);border-radius:6px;padding:8px 13px;
+ font:500 13.5px var(--face);display:inline-flex;align-items:center;gap:8px;min-height:38px}
+.btn:hover{border-color:var(--mut)}
+.btn.pri{background:var(--solid);border-color:var(--solid);color:var(--onSolid);font-weight:600}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.mixbar{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--hair);border-radius:10px;
+ overflow:hidden;margin-top:26px;font-size:12px}
+.mixbar div{flex:1 1 130px;padding:9px 12px;border-inline-start:1px solid var(--hair)}
+.mixbar div:first-child{border-inline-start:0}
+.mixbar b{display:block;font-size:13px;font-weight:700}
+.mixbar span{color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="m-note noprint"><span>נתוני דוגמה · ד׳ תשרי תשפ״ז</span>
+  <span class="sp"></span><div class="btns"><button class="btn pri">רישום תשלום <kbd>P</kbd></button>
+  <button class="btn">הודעה להורים <kbd>M</kbd></button><button class="btn">דוח לוועד <kbd>R</kbd></button></div></div>
+<div class="m-w">
+  <header class="m-head"><h1>72% נגבו · <bdi dir="ltr">₪675,960</bdi> פתוחים</h1>
+    <p><bdi dir="ltr">412</bdi> תלמידים · 168 משפחות · 40 מתוך 44 אנשי צוות נוכחים היום</p></header>
+  <div class="s-shelf">
+  <a class="s-card" href="#"><span class="art" style="background:#3b1f2b;color:#f2789b">29</span>
+      <b>משפחות בפיגור</b><span>שיחה או תזכורת</span></a><a class="s-card" href="#"><span class="art" style="background:#1f2b3b;color:#8fb4ff">2</span>
+      <b>בקשות גמ״ח</b><span>ממתינות לוועדה</span></a><a class="s-card" href="#"><span class="art" style="background:#2b2b1f;color:#e8c07a">13</span>
+      <b>בתור לקבלת קהל</b><span>החצר</span></a><a class="s-card" href="#"><span class="art" style="background:#1f3b2b;color:#7ee0a0">4</span>
+      <b>חסרים בצוות</b><span>1 מחליפים</span></a><a class="s-card" href="#"><span class="art" style="background:#3b2b1f;color:#f0a97b">1</span>
+      <b>קווים בלי נהג</b><span>למחר</span></a></div>
+  <h2 class="m-sec">דורש הכרעה</h2><div class="w-card">
+    <span class="circ" aria-hidden="true">⚠</span>
+    <span class="t">ביטוח האולם פג בעוד 6 ימים<span>כספים</span></span>
+    <button class="w-pill">טפל</button></div><div class="w-card">
+    <span class="circ" aria-hidden="true">⏳</span>
+    <span class="t">29 משפחות בפיגור בלי הוראת קבע<span>גבייה</span></span>
+    <button class="w-pill">פתח</button></div><div class="w-card">
+    <span class="circ" aria-hidden="true">⏳</span>
+    <span class="t">קו 4 · מודיעין עילית בלי נהג למחר<span>תפעול</span></span>
+    <button class="w-pill">פתח</button></div><div class="w-card">
+    <span class="circ" aria-hidden="true">👤</span>
+    <span class="t">13 ממתינים בקבלת קהל<span>החצר</span></span>
+    <button class="w-pill">פתח</button></div>
+  <h2 class="m-sec">אגפים</h2>
+  <nav class="m-dep"><a href="#">אנשים<span>912 רשומות</span></a><a href="#">חינוך<span>412 תלמידים</span></a><a href="#">צוות<span>44 עובדים</span></a><a href="#">גבייה<span>72% מהחיוב</span></a><a href="#">תרומות<span>3 מגביות</span></a><a href="#">כספים<span>תקציב תשפ״ז</span></a><a href="#">בית המדרש<span>9 זמנים</span></a><a href="#">החצר<span>13 בתור</span></a><a href="#">חסד<span>26 הלוואות</span></a><a href="#">תפעול<span>6 קווים</span></a><a href="#">שידוכים<span>31 הצעות</span></a><a href="#">תקשורת<span>5 קבוצות</span></a></nav>
+  <p class="m-foot"><div class="mixbar"><div><span>בית</span><b>Monzo</b></div><div><span>ויג׳טים</span><b>Spotify</b></div><div><span>כפתורים</span><b>Raycast</b></div><div><span>כרטיסים</span><b>Wise</b></div><div><span>ממשק</span><b>Duolingo</b></div></div>
+        <p style="margin-top:10px">כל החלקים נלקחו מחמשת האתרים שנבחרו · הגופן: Varela Round · המקבילה העברית ל-Feather/DIN Round ·
+        המספרים נגזרים מהמחסן · נתוני דוגמה</p></p></div>
+</body>
+</html>

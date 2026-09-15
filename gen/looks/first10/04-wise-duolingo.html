@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>4 · Wise × Duolingo — מסך הבית</title>
+<meta name="description" content="גרסת עיצוב «4 · Wise × Duolingo» למסך הבית של המוסד. בית: Duolingo · ויג׳טים: Raycast · כפתורים: Monzo · כרטיסים: Spotify · ממשק: Wise">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Varela+Round&family=Alef:wght@400;700&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}body{margin:0}
+bdi{unicode-bidi:isolate}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3{margin:0}p{margin:0}ul,ol{margin:0;padding:0;list-style:none}a{color:inherit}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media print{.noprint{display:none!important}}
+:root{--bg:#fff;--card:#fff;--sunk:#f4f2ea;--ink:#163300;
+ --mut:#4b5744;--hair:#dcdad0;--acc:#9fe870;--accInk:#163300;--pos:#2f7a00;
+ --warn:#8a5a00;--solid:#163300;--onSolid:#ffffff;--accText:#2f7a00;--r:14px;--face:Heebo}
+body{background:var(--bg);color:var(--ink)}
+a{color:inherit}
+body{font:400 16px/1.5 var(--face),Arial,sans-serif}
+h1{font:800 clamp(28px,5vw,44px)/1.05 var(--face);letter-spacing:-.02em}
+h2{font:800 20px var(--face)}
+.d-w{max-width:980px;margin-inline:auto;padding:22px 20px 80px}
+.d-top{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.d-top .pill{background:var(--sunk);border:2px solid var(--hair);border-radius:999px;padding:6px 13px;font-size:14px}
+.d-top .sp{flex:1}
+.d-sec{margin:26px 0 12px;text-align:center}
+.d-dep{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:12px}
+.d-dep a{border:2px solid var(--hair);border-radius:14px;padding:12px;text-align:center;text-decoration:none;font-size:14px}
+.d-dep a:hover{border-color:var(--acc);color:var(--acc)}
+.d-dep a span{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.d-foot{margin-top:30px;text-align:center;font-size:12.5px;color:var(--mut)}
+.r-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:1px;
+ background:var(--hair);border:1px solid var(--hair);border-radius:var(--r);overflow:hidden}
+.r-kpi{background:var(--card);padding:13px 15px}
+.r-kpi b{display:block;font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+.r-kpi span{font-size:12px;color:var(--mut)}
+.r-kpi.up b{color:var(--pos)}.r-kpi.warn b{color:var(--warn)}
+.r-mini{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12.5px;color:var(--mut)}
+.r-mini b{color:var(--ink);font-variant-numeric:tabular-nums}
+.s-list li{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:13px;align-items:center;
+ padding:10px 8px;border-radius:6px;font-size:14.5px}
+.s-list li:hover{background:var(--card)}
+.s-list .n{color:var(--mut);font-size:13px;text-align:center;font-variant-numeric:tabular-nums}
+.s-list .t{font-size:12.5px;color:var(--mut)}
+.s-list .on b{color:var(--accText)}
+.btn{background:var(--solid);color:var(--onSolid);border:0;border-radius:999px;padding:10px 18px;
+ font:500 14px var(--face);min-height:42px;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{filter:brightness(.92)}
+.btn::after{content:'←';font-size:13px;opacity:.8}
+.btn.sec{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--hair)}
+.btn.sec:hover{box-shadow:inset 0 0 0 1.5px var(--ink);background:transparent}
+.btns{display:flex;gap:9px;flex-wrap:wrap}
+.mixbar{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--hair);border-radius:10px;
+ overflow:hidden;margin-top:26px;font-size:12px}
+.mixbar div{flex:1 1 130px;padding:9px 12px;border-inline-start:1px solid var(--hair)}
+.mixbar div:first-child{border-inline-start:0}
+.mixbar b{display:block;font-size:13px;font-weight:700}
+.mixbar span{color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="d-w">
+  <header class="d-top"><h1>שלום, מוסד!</h1><span class="sp"></span>
+    <span class="pill">🔥 72% גבייה</span><span class="pill">👥 40/44</span></header>
+  <div class="r-kpis">
+  <div class="r-kpi up"><b>72%</b><span>נגבה מהחיוב</span></div>
+  <div class="r-kpi"><b>40/44</b><span>צוות נוכח</span></div>
+  <div class="r-kpi"><b>92%</b><span>נוכחות</span></div>
+  <div class="r-kpi warn"><b>29</b><span>בפיגור</span></div>
+  <div class="r-kpi"><b><bdi dir="ltr">₪563K</bdi></b><span>גמ״ח זמין</span></div></div>
+<p class="r-mini"><span>נגבה <b><bdi dir="ltr">₪1,774,900</bdi></b></span><span>פתוח <b><bdi dir="ltr">₪675,960</bdi></b></span>
+  <span>מגבית <b><bdi dir="ltr">₪1,406,140</bdi></b></span><span>תלמידים <b><bdi dir="ltr">412</bdi></b></span></p>
+  <h2 class="d-sec">המשימות של היום</h2><ul class="s-list">
+  <li><span class="n">1</span>
+    <span><b>ביטוח האולם פג בעוד 6 ימים</b><br><span class="t">כספים</span></span><span class="n">›</span></li><li><span class="n">2</span>
+    <span><b>29 משפחות בפיגור בלי הוראת קבע</b><br><span class="t">גבייה</span></span><span class="n">›</span></li><li><span class="n">3</span>
+    <span><b>קו 4 · מודיעין עילית בלי נהג למחר</b><br><span class="t">תפעול</span></span><span class="n">›</span></li><li><span class="n">4</span>
+    <span><b>13 ממתינים בקבלת קהל</b><br><span class="t">החצר</span></span><span class="n">›</span></li>
+  <li class="on"><span class="n">5</span>
+    <span><b>מנחה גדולה</b><br><span class="t">האולם הגדול · 97 משתתפים</span></span>
+    <span class="n"><bdi dir="ltr">13:45</bdi></span></li><li class=""><span class="n">6</span>
+    <span><b>שיעור הלכה</b><br><span class="t">חדר עיון · 110 משתתפים</span></span>
+    <span class="n"><bdi dir="ltr">16:30</bdi></span></li></ul>
+  <div class="noprint" style="margin-top:20px;display:flex;justify-content:center"><div class="btns"><button class="btn">רישום תשלום</button>
+  <button class="btn sec">הודעה להורים</button></div></div>
+  <h2 class="d-sec">אגפים</h2>
+  <nav class="d-dep"><a href="#">אנשים<span>912 רשומות</span></a><a href="#">חינוך<span>412 תלמידים</span></a><a href="#">צוות<span>44 עובדים</span></a><a href="#">גבייה<span>72% מהחיוב</span></a><a href="#">תרומות<span>3 מגביות</span></a><a href="#">כספים<span>תקציב תשפ״ז</span></a><a href="#">בית המדרש<span>9 זמנים</span></a><a href="#">החצר<span>13 בתור</span></a><a href="#">חסד<span>26 הלוואות</span></a><a href="#">תפעול<span>6 קווים</span></a><a href="#">שידוכים<span>31 הצעות</span></a><a href="#">תקשורת<span>5 קבוצות</span></a></nav>
+  <p class="d-foot"><div class="mixbar"><div><span>בית</span><b>Duolingo</b></div><div><span>ויג׳טים</span><b>Raycast</b></div><div><span>כפתורים</span><b>Monzo</b></div><div><span>כרטיסים</span><b>Spotify</b></div><div><span>ממשק</span><b>Wise</b></div></div>
+        <p style="margin-top:10px">כל החלקים נלקחו מחמשת האתרים שנבחרו · הגופן: Heebo 800 · המקבילה העברית ל-Wise Sans ·
+        המספרים נגזרים מהמחסן · נתוני דוגמה</p></p></div>
+</body>
+</html>

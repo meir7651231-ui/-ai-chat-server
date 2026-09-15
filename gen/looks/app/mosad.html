@@ -1158,14 +1158,15 @@ function build() {
   const LFLOW = ['בקשה', 'ועדה', 'אושר', 'ניתן', 'בהחזר', 'נפרע'];
   for (let i = 0; i < 26; i++) {
     const f = DB.families[rn(0, FAMS - 1)];
-    const stage = i < 5 ? LFLOW[rn(0, 1)] : i < 8 ? LFLOW[rn(2, 3)] : i < 23 ? 'בהחזר' : chance(0.5) ? 'באיחור' : 'נפרע';
+    /* בקשה אחת תמיד נכנסת בלי ערבים — כדי שהכלל «הלוואה בלי שני ערבים» יהיה נראה ובדיק */
+    const stage = i === 0 ? 'בקשה' : i < 5 ? LFLOW[rn(0, 1)] : i < 8 ? LFLOW[rn(2, 3)] : i < 23 ? 'בהחזר' : chance(0.5) ? 'באיחור' : 'נפרע';
     const total = rn(4, 36) * 1000;
     const inst = rn(12, 36);
     const started = ['בהחזר', 'באיחור', 'נפרע'].includes(stage);
     const l = {
       id: 'l' + i, familyId: f.id, amount: total,
       purpose: pk(['חתונה', 'הוצאות רפואיות', 'שכר לימוד', 'תיקון רכב', 'שיפוץ דירה', 'מעבר דירה', 'הוצאות חג', 'ציוד לימודי']),
-      stage, guarantors: stage === 'בקשה' ? rn(0, 2) : 2, installments: inst,
+      stage, guarantors: i === 0 ? 0 : stage === 'בקשה' ? rn(1, 2) : 2, installments: inst,
       paid: stage === 'נפרע' ? inst : started ? rn(1, inst - 1) : 0,
       late: stage === 'באיחור' ? rn(2, 4) : 0, days: rn(0, 14),
     };

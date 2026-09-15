@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>3 · Spotify × Raycast — מסך הבית</title>
+<meta name="description" content="גרסת עיצוב «3 · Spotify × Raycast» למסך הבית של המוסד. בית: Raycast · ויג׳טים: Monzo · כפתורים: Wise · כרטיסים: Duolingo · ממשק: Spotify">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Secular+One&family=Assistant:wght@400;600;700&family=Assistant:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}body{margin:0}
+bdi{unicode-bidi:isolate}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3{margin:0}p{margin:0}ul,ol{margin:0;padding:0;list-style:none}a{color:inherit}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media print{.noprint{display:none!important}}
+:root{--bg:#000;--card:#121212;--sunk:#181818;--ink:#fff;
+ --mut:#a7a7a7;--hair:#2a2a2a;--acc:#1db954;--accInk:#00220d;--pos:#1db954;
+ --warn:#f0c05a;--solid:#1db954;--onSolid:#00220d;--accText:#1db954;--r:10px;--face:Assistant}
+body{background:var(--bg);color:var(--ink)}
+a{color:inherit}
+body{font:400 15px/1.5 var(--face),Arial,sans-serif}
+h1{font:400 22px 'Secular One',var(--face),sans-serif}
+h2{font:400 20px 'Secular One',var(--face),sans-serif;display:flex;align-items:baseline;gap:9px}
+h2 small{font:400 12.5px var(--face);color:var(--mut)}
+.r-w{max-width:780px;margin-inline:auto;padding:44px 20px 70px}
+.r-top{display:flex;align-items:baseline;gap:10px;margin-bottom:22px}
+.r-top .d{margin-inline-start:auto;font-size:12.5px;color:var(--mut)}
+.r-cmd{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--hair);
+ border-radius:11px;padding:14px 16px}
+.r-cmd input{flex:1;background:none;border:0;outline:0;font-size:16px;color:var(--ink)}
+.r-cmd input::placeholder{color:var(--mut)}
+.r-hint{font-size:12px;color:var(--mut);margin:8px 2px 26px;display:flex;gap:15px;flex-wrap:wrap}
+.r-sec{margin:24px 2px 8px}
+.r-dep{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.r-dep a{font-size:12.5px;color:var(--mut);border:1px solid var(--hair);border-radius:7px;padding:5px 10px;text-decoration:none}
+.r-dep a:hover{color:var(--ink)}
+.r-dep a i{font-style:normal;opacity:.7;margin-inline-start:6px}
+.r-foot{margin-top:34px;font-size:12px;color:var(--mut)}
+.m-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.m-tile{border-radius:var(--r);padding:20px;color:#2b0c08;min-height:150px;display:flex;flex-direction:column;gap:6px}
+.m-tile b{font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.05}
+.m-tile .lab{font-size:14.5px;font-weight:600}
+.m-tile .sub{font-size:12.5px;margin-top:auto;opacity:.85}
+.m-t1{background:#ffd7d2}.m-t2{background:#d6ecff}.m-t3{background:#dff3d8}.m-t4{background:#ffeccc}.m-t5{background:#e8e2ff}
+.d-task{display:flex;align-items:center;gap:13px;padding:13px;border:2px solid var(--hair);
+ border-radius:16px;margin-bottom:9px}
+.d-task .ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:19px;flex:none;background:var(--sunk)}
+.d-task .t{flex:1;font-size:15px}
+.d-task .t span{display:block;font-size:12.5px;color:var(--mut)}
+.btn{background:var(--solid);color:var(--onSolid);border:0;border-radius:999px;padding:13px 26px;
+ font:700 15px var(--face);min-height:48px}
+.btn:hover{filter:brightness(.92)}
+.btn.sec{background:var(--acc);color:var(--accInk)}
+.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.mixbar{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--hair);border-radius:10px;
+ overflow:hidden;margin-top:26px;font-size:12px}
+.mixbar div{flex:1 1 130px;padding:9px 12px;border-inline-start:1px solid var(--hair)}
+.mixbar div:first-child{border-inline-start:0}
+.mixbar b{display:block;font-size:13px;font-weight:700}
+.mixbar span{color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="r-w">
+  <header class="r-top"><h1>מוסד · לוח הבית</h1><span class="d">ד׳ תשרי תשפ״ז</span></header>
+  <div class="r-cmd noprint"><span aria-hidden="true" style="color:var(--mut)">⌕</span>
+    <input placeholder="חפש משפחה, תלמיד, הלוואה או פעולה…" aria-label="חיפוש"><kbd>Ctrl K</kbd></div>
+  <p class="r-hint"><span>↑↓ לבחירה</span><span>Enter לפתיחה</span><span><bdi dir="ltr">912</bdi> רשומות</span></p>
+  <h2 class="r-sec">מצב</h2><div class="m-grid">
+  <div class="m-tile m-t1"><b>72%</b><span class="lab">גבייה</span><span class="sub"><bdi dir="ltr">₪1,774,900</bdi> מתוך <bdi dir="ltr">₪2,450,860</bdi></span></div>
+  <div class="m-tile m-t2"><b>40/44</b><span class="lab">צוות נוכח</span><span class="sub">4 חסרים · 1 מחליפים</span></div>
+  <div class="m-tile m-t3"><b>92%</b><span class="lab">נוכחות תלמידים</span><span class="sub"><bdi dir="ltr">412</bdi> תלמידים ב-12 כיתות</span></div>
+  <div class="m-tile m-t4"><b>59%</b><span class="lab">מגבית הבניין</span><span class="sub"><bdi dir="ltr">₪1,406,140</bdi> · 183 תרומות</span></div>
+  <div class="m-tile m-t5"><b><bdi dir="ltr">₪563K</bdi></b><span class="lab">זמין בגמ״ח</span><span class="sub">26 הלוואות · 2 ממתינות</span></div></div>
+  <h2 class="r-sec">דורש הכרעה</h2><div class="d-task">
+    <span class="ic" aria-hidden="true">❗</span>
+    <span class="t">ביטוח האולם פג בעוד 6 ימים<span>כספים</span></span>
+    <button class="btn pri">טפל</button></div><div class="d-task">
+    <span class="ic" aria-hidden="true">⏰</span>
+    <span class="t">29 משפחות בפיגור בלי הוראת קבע<span>גבייה</span></span>
+    <button class="btn sec">פתח</button></div><div class="d-task">
+    <span class="ic" aria-hidden="true">⏰</span>
+    <span class="t">קו 4 · מודיעין עילית בלי נהג למחר<span>תפעול</span></span>
+    <button class="btn sec">פתח</button></div><div class="d-task">
+    <span class="ic" aria-hidden="true">💬</span>
+    <span class="t">13 ממתינים בקבלת קהל<span>החצר</span></span>
+    <button class="btn sec">פתח</button></div>
+  <div class="noprint" style="margin-top:22px"><div class="btns"><button class="btn">רישום תשלום</button>
+  <button class="btn sec">הודעה להורים</button><button class="btn line">דוח לוועד</button></div></div>
+  <h2 class="r-sec">אגפים</h2>
+  <nav class="r-dep"><a href="#">אנשים<i>912 רשומות</i></a><a href="#">חינוך<i>412 תלמידים</i></a><a href="#">צוות<i>44 עובדים</i></a><a href="#">גבייה<i>72% מהחיוב</i></a><a href="#">תרומות<i>3 מגביות</i></a><a href="#">כספים<i>תקציב תשפ״ז</i></a><a href="#">בית המדרש<i>9 זמנים</i></a><a href="#">החצר<i>13 בתור</i></a><a href="#">חסד<i>26 הלוואות</i></a><a href="#">תפעול<i>6 קווים</i></a><a href="#">שידוכים<i>31 הצעות</i></a><a href="#">תקשורת<i>5 קבוצות</i></a></nav>
+  <p class="r-foot"><div class="mixbar"><div><span>בית</span><b>Raycast</b></div><div><span>ויג׳טים</span><b>Monzo</b></div><div><span>כפתורים</span><b>Wise</b></div><div><span>כרטיסים</span><b>Duolingo</b></div><div><span>ממשק</span><b>Spotify</b></div></div>
+        <p style="margin-top:10px">כל החלקים נלקחו מחמשת האתרים שנבחרו · הגופן: Secular One לכותרות · Assistant לגוף (מקבילות ל-Circular) ·
+        המספרים נגזרים מהמחסן · נתוני דוגמה</p></p></div>
+</body>
+</html>

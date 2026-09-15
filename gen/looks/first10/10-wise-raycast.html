@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>10 · Wise × Raycast — מסך הבית</title>
+<meta name="description" content="גרסת עיצוב «10 · Wise × Raycast» למסך הבית של המוסד. בית: Raycast · ויג׳טים: Duolingo · כפתורים: Monzo · כרטיסים: Spotify · ממשק: Wise">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Assistant:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}body{margin:0}
+bdi{unicode-bidi:isolate}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3{margin:0}p{margin:0}ul,ol{margin:0;padding:0;list-style:none}a{color:inherit}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media print{.noprint{display:none!important}}
+:root{--bg:#fff;--card:#fff;--sunk:#f4f2ea;--ink:#163300;
+ --mut:#4b5744;--hair:#dcdad0;--acc:#9fe870;--accInk:#163300;--pos:#2f7a00;
+ --warn:#8a5a00;--solid:#163300;--onSolid:#ffffff;--accText:#2f7a00;--r:14px;--face:Heebo}
+body{background:var(--bg);color:var(--ink)}
+a{color:inherit}
+body{font:400 16px/1.5 var(--face),Arial,sans-serif}
+h1{font:800 clamp(28px,5vw,44px)/1.05 var(--face);letter-spacing:-.02em}
+h2{font:800 20px var(--face)}
+.r-w{max-width:780px;margin-inline:auto;padding:44px 20px 70px}
+.r-top{display:flex;align-items:baseline;gap:10px;margin-bottom:22px}
+.r-top .d{margin-inline-start:auto;font-size:12.5px;color:var(--mut)}
+.r-cmd{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--hair);
+ border-radius:11px;padding:14px 16px}
+.r-cmd input{flex:1;background:none;border:0;outline:0;font-size:16px;color:var(--ink)}
+.r-cmd input::placeholder{color:var(--mut)}
+.r-hint{font-size:12px;color:var(--mut);margin:8px 2px 26px;display:flex;gap:15px;flex-wrap:wrap}
+.r-sec{margin:24px 2px 8px}
+.r-dep{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.r-dep a{font-size:12.5px;color:var(--mut);border:1px solid var(--hair);border-radius:7px;padding:5px 10px;text-decoration:none}
+.r-dep a:hover{color:var(--ink)}
+.r-dep a i{font-style:normal;opacity:.7;margin-inline-start:6px}
+.r-foot{margin-top:34px;font-size:12px;color:var(--mut)}
+.d-rings{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px}
+.d-ring{border:2px solid var(--hair);border-radius:20px;padding:20px;text-align:center}
+.d-ring .r{position:relative;display:grid;place-items:center;margin-bottom:8px}
+.d-ring .r b{position:absolute;font-size:25px;color:var(--pos)}
+.d-ring h3{font-size:16px;margin-bottom:3px}
+.d-ring p{font-size:13px;color:var(--mut)}
+.d-bars{border:2px solid var(--hair);border-radius:20px;padding:18px;margin-top:14px}
+.d-bar{display:grid;grid-template-columns:42px minmax(0,1fr) 44px;gap:11px;align-items:center;margin-bottom:8px;font-size:14px}
+.d-track{height:15px;border-radius:999px;background:var(--sunk);overflow:hidden;position:relative}
+.d-track i{position:absolute;inset-block:0;inset-inline-start:0;background:var(--pos);border-radius:999px}
+.d-track i.low{background:var(--warn)}
+.s-list li{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:13px;align-items:center;
+ padding:10px 8px;border-radius:6px;font-size:14.5px}
+.s-list li:hover{background:var(--card)}
+.s-list .n{color:var(--mut);font-size:13px;text-align:center;font-variant-numeric:tabular-nums}
+.s-list .t{font-size:12.5px;color:var(--mut)}
+.s-list .on b{color:var(--accText)}
+.btn{background:var(--solid);color:var(--onSolid);border:0;border-radius:999px;padding:10px 18px;
+ font:500 14px var(--face);min-height:42px;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{filter:brightness(.92)}
+.btn::after{content:'←';font-size:13px;opacity:.8}
+.btn.sec{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--hair)}
+.btn.sec:hover{box-shadow:inset 0 0 0 1.5px var(--ink);background:transparent}
+.btns{display:flex;gap:9px;flex-wrap:wrap}
+.mixbar{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--hair);border-radius:10px;
+ overflow:hidden;margin-top:26px;font-size:12px}
+.mixbar div{flex:1 1 130px;padding:9px 12px;border-inline-start:1px solid var(--hair)}
+.mixbar div:first-child{border-inline-start:0}
+.mixbar b{display:block;font-size:13px;font-weight:700}
+.mixbar span{color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="r-w">
+  <header class="r-top"><h1>מוסד · לוח הבית</h1><span class="d">ד׳ תשרי תשפ״ז</span></header>
+  <div class="r-cmd noprint"><span aria-hidden="true" style="color:var(--mut)">⌕</span>
+    <input placeholder="חפש משפחה, תלמיד, הלוואה או פעולה…" aria-label="חיפוש"><kbd>Ctrl K</kbd></div>
+  <p class="r-hint"><span>↑↓ לבחירה</span><span>Enter לפתיחה</span><span><bdi dir="ltr">912</bdi> רשומות</span></p>
+  <h2 class="r-sec">מצב</h2><div class="d-rings">
+      <div class="d-ring"><div class="r">
+      <svg width="112" height="112" viewBox="0 0 112 112" role="img" aria-label="גבייה 72 אחוז">
+        <circle cx="56" cy="56" r="47" fill="none" stroke="var(--sunk)" stroke-width="13"></circle>
+        <circle cx="56" cy="56" r="47" fill="none" stroke="var(--pos)" stroke-width="13" stroke-linecap="round"
+          stroke-dasharray="212 295" transform="rotate(-90 56 56)"></circle></svg>
+      <b>72%</b></div><h3>גבייה</h3><p><bdi dir="ltr">₪1,774,900</bdi> מתוך <bdi dir="ltr">₪2,450,860</bdi></p></div>
+      <div class="d-ring"><div class="r">
+      <svg width="112" height="112" viewBox="0 0 112 112" role="img" aria-label="נוכחות תלמידים 92 אחוז">
+        <circle cx="56" cy="56" r="47" fill="none" stroke="var(--sunk)" stroke-width="13"></circle>
+        <circle cx="56" cy="56" r="47" fill="none" stroke="var(--pos)" stroke-width="13" stroke-linecap="round"
+          stroke-dasharray="271 295" transform="rotate(-90 56 56)"></circle></svg>
+      <b>92%</b></div><h3>נוכחות תלמידים</h3><p><bdi dir="ltr">412</bdi> תלמידים</p></div>
+      <div class="d-ring"><div class="r">
+      <svg width="112" height="112" viewBox="0 0 112 112" role="img" aria-label="מגבית הבניין 59 אחוז">
+        <circle cx="56" cy="56" r="47" fill="none" stroke="var(--sunk)" stroke-width="13"></circle>
+        <circle cx="56" cy="56" r="47" fill="none" stroke="var(--pos)" stroke-width="13" stroke-linecap="round"
+          stroke-dasharray="174 295" transform="rotate(-90 56 56)"></circle></svg>
+      <b>59%</b></div><h3>מגבית הבניין</h3><p><bdi dir="ltr">₪1,406,140</bdi></p></div></div>
+    <div class="d-bars"><div class="d-bar"><span>ג׳1</span>
+      <span class="d-track"><i class="" style="width:94%"></i></span>
+      <span>94%</span></div><div class="d-bar"><span>ג׳2</span>
+      <span class="d-track"><i class="low" style="width:88%"></i></span>
+      <span>88%</span></div><div class="d-bar"><span>ד׳1</span>
+      <span class="d-track"><i class="" style="width:90%"></i></span>
+      <span>90%</span></div><div class="d-bar"><span>ד׳2</span>
+      <span class="d-track"><i class="" style="width:93%"></i></span>
+      <span>93%</span></div><div class="d-bar"><span>ה׳1</span>
+      <span class="d-track"><i class="" style="width:95%"></i></span>
+      <span>95%</span></div><div class="d-bar"><span>ה׳2</span>
+      <span class="d-track"><i class="" style="width:93%"></i></span>
+      <span>93%</span></div><div class="d-bar"><span>ו׳1</span>
+      <span class="d-track"><i class="" style="width:93%"></i></span>
+      <span>93%</span></div><div class="d-bar"><span>ו׳2</span>
+      <span class="d-track"><i class="" style="width:93%"></i></span>
+      <span>93%</span></div><div class="d-bar"><span>ז׳1</span>
+      <span class="d-track"><i class="" style="width:95%"></i></span>
+      <span>95%</span></div><div class="d-bar"><span>ז׳2</span>
+      <span class="d-track"><i class="low" style="width:89%"></i></span>
+      <span>89%</span></div><div class="d-bar"><span>ח׳1</span>
+      <span class="d-track"><i class="" style="width:92%"></i></span>
+      <span>92%</span></div><div class="d-bar"><span>ח׳2</span>
+      <span class="d-track"><i class="" style="width:92%"></i></span>
+      <span>92%</span></div></div>
+  <h2 class="r-sec">דורש הכרעה</h2><ul class="s-list">
+  <li><span class="n">1</span>
+    <span><b>ביטוח האולם פג בעוד 6 ימים</b><br><span class="t">כספים</span></span><span class="n">›</span></li><li><span class="n">2</span>
+    <span><b>29 משפחות בפיגור בלי הוראת קבע</b><br><span class="t">גבייה</span></span><span class="n">›</span></li><li><span class="n">3</span>
+    <span><b>קו 4 · מודיעין עילית בלי נהג למחר</b><br><span class="t">תפעול</span></span><span class="n">›</span></li><li><span class="n">4</span>
+    <span><b>13 ממתינים בקבלת קהל</b><br><span class="t">החצר</span></span><span class="n">›</span></li>
+  <li class="on"><span class="n">5</span>
+    <span><b>מנחה גדולה</b><br><span class="t">האולם הגדול · 97 משתתפים</span></span>
+    <span class="n"><bdi dir="ltr">13:45</bdi></span></li><li class=""><span class="n">6</span>
+    <span><b>שיעור הלכה</b><br><span class="t">חדר עיון · 110 משתתפים</span></span>
+    <span class="n"><bdi dir="ltr">16:30</bdi></span></li></ul>
+  <div class="noprint" style="margin-top:22px"><div class="btns"><button class="btn">רישום תשלום</button>
+  <button class="btn sec">הודעה להורים</button></div></div>
+  <h2 class="r-sec">אגפים</h2>
+  <nav class="r-dep"><a href="#">אנשים<i>912 רשומות</i></a><a href="#">חינוך<i>412 תלמידים</i></a><a href="#">צוות<i>44 עובדים</i></a><a href="#">גבייה<i>72% מהחיוב</i></a><a href="#">תרומות<i>3 מגביות</i></a><a href="#">כספים<i>תקציב תשפ״ז</i></a><a href="#">בית המדרש<i>9 זמנים</i></a><a href="#">החצר<i>13 בתור</i></a><a href="#">חסד<i>26 הלוואות</i></a><a href="#">תפעול<i>6 קווים</i></a><a href="#">שידוכים<i>31 הצעות</i></a><a href="#">תקשורת<i>5 קבוצות</i></a></nav>
+  <p class="r-foot"><div class="mixbar"><div><span>בית</span><b>Raycast</b></div><div><span>ויג׳טים</span><b>Duolingo</b></div><div><span>כפתורים</span><b>Monzo</b></div><div><span>כרטיסים</span><b>Spotify</b></div><div><span>ממשק</span><b>Wise</b></div></div>
+        <p style="margin-top:10px">כל החלקים נלקחו מחמשת האתרים שנבחרו · הגופן: Heebo 800 · המקבילה העברית ל-Wise Sans ·
+        המספרים נגזרים מהמחסן · נתוני דוגמה</p></p></div>
+</body>
+</html>

@@ -69,6 +69,7 @@ const files = readdirSync(join(here, 'designs')).filter(f => f.endsWith('.mjs'))
 const made = [];
 for (const f of files) {
   const mod = (await import(join(here, 'designs', f))).default;
+  if (!mod) continue;                    // kits.mjs מייצא חלקים בלבד, לא מסכים
   for (const d of [].concat(mod)) {
   const fam = d.fonts.map(x => 'family=' + x).join('&');
   const html = `<!doctype html>

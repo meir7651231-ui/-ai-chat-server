@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>6 · Raycast × Monzo — מסך הבית</title>
+<meta name="description" content="גרסת עיצוב «6 · Raycast × Monzo» למסך הבית של המוסד. בית: Monzo · ויג׳טים: Wise · כפתורים: Spotify · כרטיסים: Duolingo · ממשק: Raycast">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}body{margin:0}
+bdi{unicode-bidi:isolate}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3{margin:0}p{margin:0}ul,ol{margin:0;padding:0;list-style:none}a{color:inherit}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media print{.noprint{display:none!important}}
+:root{--bg:#09090b;--card:#131316;--sunk:#17171a;--ink:#ededf0;
+ --mut:#9a9aa3;--hair:#26262e;--acc:#ff6363;--accInk:#2a0505;--pos:#7ee0a0;
+ --warn:#e8c07a;--solid:#ededf0;--onSolid:#0b0b0d;--accText:#ff6363;--r:8px;--face:Assistant}
+body{background:var(--bg);color:var(--ink)}
+a{color:inherit}
+body{font:400 15px/1.55 var(--face),Arial,sans-serif;letter-spacing:0}
+h1{font-size:19px;font-weight:600}h2{font-size:12px;font-weight:600;letter-spacing:.12em;color:var(--mut)}
+.m-note{background:var(--sunk);padding:11px 20px;display:flex;align-items:center;gap:12px;
+ font-size:13.5px;flex-wrap:wrap}
+.m-note .sp{flex:1}
+.m-w{max-width:1100px;margin-inline:auto;padding:26px 20px 80px}
+.m-head{margin-bottom:22px}
+.m-head p{color:var(--mut);font-size:14.5px;margin-top:6px}
+.m-sec{margin:28px 0 14px}
+.m-dep{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:12px}
+.m-dep a{border:1px solid var(--hair);border-radius:14px;padding:13px;text-decoration:none;font-size:14.5px;font-weight:500}
+.m-dep a:hover{border-color:var(--ink)}
+.m-dep a span{display:block;font-size:12px;color:var(--mut);font-weight:400;margin-top:2px}
+.m-foot{margin-top:32px;font-size:12.5px;color:var(--mut)}
+.w-calc{border:1px solid var(--hair);border-radius:var(--r);overflow:hidden}
+.w-row{display:flex;align-items:center;gap:14px;padding:18px 20px;border-block-end:1px solid var(--hair);flex-wrap:wrap}
+.w-row:last-child{border:0}
+.w-row .lab{font-size:13.5px;color:var(--mut);width:100%}
+.w-row .sel{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--hair);border-radius:999px;
+ padding:7px 13px;font-size:14px;font-weight:700}
+.w-row .sel i{width:20px;height:20px;border-radius:50%;background:var(--sunk);display:grid;place-items:center;font-style:normal;font-size:11px}
+.w-row .amt{margin-inline-start:auto;font:800 clamp(26px,5vw,38px)/1 var(--face);font-variant-numeric:tabular-nums}
+.w-note{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--sunk);font-size:13px}
+.w-note a{color:var(--accText);font-weight:700}
+.w-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:16px}
+.w-kpi{border:1px solid var(--hair);border-radius:var(--r);padding:16px}
+.w-kpi b{display:block;font:800 22px var(--face);font-variant-numeric:tabular-nums;color:var(--ink)}
+.w-kpi span{font-size:12.5px;color:var(--mut)}
+.d-task{display:flex;align-items:center;gap:13px;padding:13px;border:2px solid var(--hair);
+ border-radius:16px;margin-bottom:9px}
+.d-task .ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:19px;flex:none;background:var(--sunk)}
+.d-task .t{flex:1;font-size:15px}
+.d-task .t span{display:block;font-size:12.5px;color:var(--mut)}
+.btn{background:transparent;border:1.5px solid var(--ink);color:var(--ink);border-radius:999px;
+ padding:10px 19px;font:700 14px var(--face);min-height:44px}
+.btn:hover{background:var(--sunk)}
+.btn.pri{background:var(--solid);border-color:var(--solid);color:var(--onSolid)}
+.btn.round{width:54px;height:54px;border-radius:50%;background:var(--solid);color:var(--onSolid);border:0;
+ font-size:19px;display:grid;place-items:center;padding:0}
+.btns{display:flex;gap:11px;align-items:center;flex-wrap:wrap}
+.mixbar{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--hair);border-radius:10px;
+ overflow:hidden;margin-top:26px;font-size:12px}
+.mixbar div{flex:1 1 130px;padding:9px 12px;border-inline-start:1px solid var(--hair)}
+.mixbar div:first-child{border-inline-start:0}
+.mixbar b{display:block;font-size:13px;font-weight:700}
+.mixbar span{color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="m-note noprint"><span>נתוני דוגמה · ד׳ תשרי תשפ״ז</span>
+  <span class="sp"></span><div class="btns"><button class="btn">רישום תשלום</button>
+  <button class="btn round" aria-label="פתיחת יום העבודה">▸</button></div></div>
+<div class="m-w">
+  <header class="m-head"><h1>72% נגבו · <bdi dir="ltr">₪675,960</bdi> פתוחים</h1>
+    <p><bdi dir="ltr">412</bdi> תלמידים · 168 משפחות · 40 מתוך 44 אנשי צוות נוכחים היום</p></header>
+  <div class="w-calc">
+  <div class="w-row"><span class="lab">נגבה עד היום</span>
+    <span class="sel"><i aria-hidden="true">₪</i>שכר לימוד</span><span class="amt"><bdi dir="ltr">₪1,774,900</bdi></span></div>
+  <div class="w-row"><span class="lab">נותר פתוח</span>
+    <span class="sel"><i aria-hidden="true">₪</i>168 משפחות</span><span class="amt"><bdi dir="ltr">₪675,960</bdi></span></div>
+  <div class="w-note"><span aria-hidden="true">🛈</span><span>29 משפחות בפיגור בלי הוראת קבע — <a href="#">רשימה לשיחה</a></span></div>
+</div>
+<div class="w-kpis">
+  <div class="w-kpi"><b>92%</b><span>נוכחות תלמידים</span></div>
+  <div class="w-kpi"><b>40/44</b><span>צוות נוכח היום</span></div>
+  <div class="w-kpi"><b><bdi dir="ltr">₪1,406,140</bdi></b><span>מגבית · 59% מהיעד</span></div>
+  <div class="w-kpi"><b><bdi dir="ltr">₪562,629</bdi></b><span>זמין בגמ״ח</span></div></div>
+  <h2 class="m-sec">דורש הכרעה</h2><div class="d-task">
+    <span class="ic" aria-hidden="true">❗</span>
+    <span class="t">ביטוח האולם פג בעוד 6 ימים<span>כספים</span></span>
+    <button class="btn pri">טפל</button></div><div class="d-task">
+    <span class="ic" aria-hidden="true">⏰</span>
+    <span class="t">29 משפחות בפיגור בלי הוראת קבע<span>גבייה</span></span>
+    <button class="btn sec">פתח</button></div><div class="d-task">
+    <span class="ic" aria-hidden="true">⏰</span>
+    <span class="t">קו 4 · מודיעין עילית בלי נהג למחר<span>תפעול</span></span>
+    <button class="btn sec">פתח</button></div><div class="d-task">
+    <span class="ic" aria-hidden="true">💬</span>
+    <span class="t">13 ממתינים בקבלת קהל<span>החצר</span></span>
+    <button class="btn sec">פתח</button></div>
+  <h2 class="m-sec">אגפים</h2>
+  <nav class="m-dep"><a href="#">אנשים<span>912 רשומות</span></a><a href="#">חינוך<span>412 תלמידים</span></a><a href="#">צוות<span>44 עובדים</span></a><a href="#">גבייה<span>72% מהחיוב</span></a><a href="#">תרומות<span>3 מגביות</span></a><a href="#">כספים<span>תקציב תשפ״ז</span></a><a href="#">בית המדרש<span>9 זמנים</span></a><a href="#">החצר<span>13 בתור</span></a><a href="#">חסד<span>26 הלוואות</span></a><a href="#">תפעול<span>6 קווים</span></a><a href="#">שידוכים<span>31 הצעות</span></a><a href="#">תקשורת<span>5 קבוצות</span></a></nav>
+  <p class="m-foot"><div class="mixbar"><div><span>בית</span><b>Monzo</b></div><div><span>ויג׳טים</span><b>Wise</b></div><div><span>כפתורים</span><b>Spotify</b></div><div><span>כרטיסים</span><b>Duolingo</b></div><div><span>ממשק</span><b>Raycast</b></div></div>
+        <p style="margin-top:10px">כל החלקים נלקחו מחמשת האתרים שנבחרו · הגופן: Assistant · המקבילה העברית ל-Inter ·
+        המספרים נגזרים מהמחסן · נתוני דוגמה</p></p></div>
+</body>
+</html>
