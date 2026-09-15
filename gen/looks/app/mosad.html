@@ -1111,11 +1111,13 @@ function build() {
     p.donorId = d.id;
     DB.donors.push(d);
   }
-  const AMOUNTS = [360, 500, 1000, 1800, 3600, 5400, 10000, 18000, 25000, 36000, 50000, 180000];
+  /* התפלגות התרומות: הרבה קטנות, מעט גדולות — אחרת המגבית «עוברת» את היעד שלה */
+  const AMOUNTS = [360, 360, 500, 500, 1000, 1000, 1800, 1800, 3600, 3600, 5400, 5400, 10000, 18000, 25000, 36000];
   for (let i = 0; i < 260; i++) {
     const dn = pk(DB.donors);
     DB.donations.push({
-      id: 'n' + i, donorId: dn.id, amount: pk(AMOUNTS), campaignId: chance(0.72) ? 'k0' : pk(['k1', 'k2']),
+      id: 'n' + i, donorId: dn.id, amount: i === 0 ? 180000 : pk(AMOUNTS),   // מתנת-הפתיחה של הפרנס
+      campaignId: chance(0.72) ? 'k0' : pk(['k1', 'k2']),
       amb: dn.amb, ago: i, method: pk(['העברה', 'אשראי', 'המחאה', 'מזומן']),
     });
   }

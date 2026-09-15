@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>מדף — מסך הבית</title>
+<meta name="description" content="גרסת עיצוב «מדף» למסך הבית של המוסד. נגן-מוזיקה · כהה · Secular One + Assistant · כפתור עגול">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Secular+One&family=Assistant:wght@400;600;700&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}body{margin:0}
+bdi{unicode-bidi:isolate}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3{margin:0}p{margin:0}ul,ol{margin:0;padding:0;list-style:none}a{color:inherit}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media print{.noprint{display:none!important}}
+
+body{background:#0a0a0a;color:#fff;font:400 15px/1.5 Assistant,Arial,sans-serif}
+.w{max-width:1180px;margin-inline:auto;padding:24px 24px 90px}
+.top{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.top .av{width:38px;height:38px;border-radius:50%;background:#1db954;color:#0a0a0a;display:grid;place-items:center;font:400 16px 'Secular One'}
+.top h1{font:400 20px 'Secular One',Assistant,sans-serif}
+.top .d{margin-inline-start:auto;color:#a7a7a7;font-size:13px}
+.hero{background:linear-gradient(160deg,#1db954 0%,#0f6e34 55%,#0a0a0a 100%);border-radius:14px;
+ padding:34px 30px;display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:34px}
+.hero .big{font:400 clamp(38px,8vw,72px)/1 'Secular One',Assistant,sans-serif}
+.hero .lab{font-size:14px;color:#dff5e6}
+.hero .side{margin-inline-start:auto;display:flex;align-items:center;gap:14px}
+.play{width:56px;height:56px;border-radius:50%;background:#fff;color:#0a0a0a;border:0;font-size:20px;
+ display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.play:hover{transform:scale(1.05)}
+.ghost{background:transparent;border:1px solid rgba(255,255,255,.55);color:#fff;border-radius:999px;
+ padding:10px 20px;font-size:14px;font-weight:700;min-height:44px}
+.ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+h2{font:400 21px 'Secular One',Assistant,sans-serif;margin:30px 0 14px;display:flex;align-items:baseline;gap:10px}
+h2 span{font:400 12.5px Assistant;color:#a7a7a7}
+.shelf{display:flex;gap:16px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x proximity}
+.card{flex:none;width:186px;background:#181818;border-radius:10px;padding:16px;scroll-snap-align:start;text-decoration:none;color:inherit}
+.card:hover{background:#232323}
+.card .art{aspect-ratio:1;border-radius:8px;display:grid;place-items:center;margin-bottom:14px;
+ font:400 34px 'Secular One',Assistant,sans-serif;font-variant-numeric:tabular-nums}
+.card b{display:block;font-size:15px;font-weight:700}
+.card span{font-size:12.5px;color:#a7a7a7}
+.list li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:14px;align-items:center;
+ padding:10px 8px;border-radius:6px;font-size:14.5px}
+.list li:hover{background:#181818}
+.list .n{color:#a7a7a7;font-size:13px;text-align:center;font-variant-numeric:tabular-nums}
+.list .t{font-size:12.5px;color:#a7a7a7}
+.list .on{color:#1db954}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips a{background:#181818;border-radius:999px;padding:8px 15px;font-size:13.5px;text-decoration:none}
+.chips a:hover{background:#282828}
+.chips a i{font-style:normal;color:#a7a7a7;margin-inline-start:7px;font-size:12px}
+footer{margin-top:46px;color:#9a9a9a;font-size:12.5px}
+
+</style>
+</head>
+<body>
+<div class="w">
+  <header class="top"><span class="av" aria-hidden="true">מ</span><h1>הבית של המוסד</h1>
+    <span class="d">ד׳ תשרי תשפ״ז</span></header>
+
+  <section class="hero">
+    <div><p class="lab">גבייה · שכר לימוד תשפ״ז</p>
+      <p class="big">72%</p>
+      <p class="lab"><bdi dir="ltr">₪1,774,900</bdi> נגבו · <bdi dir="ltr">₪675,960</bdi> פתוחים</p></div>
+    <div class="side noprint"><button class="ghost">רישום תשלום</button>
+      <button class="play" aria-label="פתיחת יום העבודה">▸</button></div>
+  </section>
+
+  <h2>לטפל היום <span>נבנה מהמחסן</span></h2>
+  <div class="shelf">
+    <a class="card" href="#">
+        <span class="art" style="background:#3b1f2b;color:#f2789b">29</span>
+        <b>משפחות בפיגור</b><span>שיחה או תזכורת</span></a><a class="card" href="#">
+        <span class="art" style="background:#1f2b3b;color:#7fa6f5">0</span>
+        <b>בקשות גמ״ח</b><span>ממתינות לוועדה</span></a><a class="card" href="#">
+        <span class="art" style="background:#2b2b1f;color:#e3c07b">13</span>
+        <b>בתור לקבלת קהל</b><span>החצר</span></a><a class="card" href="#">
+        <span class="art" style="background:#1f3b2b;color:#8ddba4">4</span>
+        <b>חסרים בצוות</b><span>1 מחליפים שובצו</span></a><a class="card" href="#">
+        <span class="art" style="background:#3b2b1f;color:#f0a97b">1</span>
+        <b>קווים בלי נהג</b><span>למחר</span></a>
+  </div>
+
+  <h2>עכשיו במוסד</h2>
+  <ul class="list">
+    <li class="">
+      <span class="n">1</span>
+      <span><b>ותיקין</b><br><span class="t">עזרה מזרחית · 113 משתתפים</span></span>
+      <span class="n"><bdi dir="ltr">05:40</bdi></span></li><li class="">
+      <span class="n">2</span>
+      <span><b>שחרית · מניין ב׳</b><br><span class="t">האולם הגדול · 99 משתתפים</span></span>
+      <span class="n"><bdi dir="ltr">06:20</bdi></span></li><li class="">
+      <span class="n">3</span>
+      <span><b>שחרית · מניין ג׳</b><br><span class="t">האולם הגדול · 42 משתתפים</span></span>
+      <span class="n"><bdi dir="ltr">07:15</bdi></span></li><li class="">
+      <span class="n">4</span>
+      <span><b>שיעור דף היומי</b><br><span class="t">בית המדרש · 91 משתתפים</span></span>
+      <span class="n"><bdi dir="ltr">08:00</bdi></span></li><li class="on">
+      <span class="n">5</span>
+      <span><b>מנחה גדולה</b><br><span class="t">האולם הגדול · 97 משתתפים</span></span>
+      <span class="n"><bdi dir="ltr">13:45</bdi></span></li><li class="">
+      <span class="n">6</span>
+      <span><b>שיעור הלכה</b><br><span class="t">חדר עיון · 110 משתתפים</span></span>
+      <span class="n"><bdi dir="ltr">16:30</bdi></span></li>
+  </ul>
+
+  <h2>אגפים</h2>
+  <nav class="chips"><a href="#">אנשים<i>912 רשומות</i></a><a href="#">חינוך<i>412 תלמידים</i></a><a href="#">צוות<i>44 עובדים</i></a><a href="#">גבייה<i>72% מהחיוב</i></a><a href="#">תרומות<i>3 מגביות</i></a><a href="#">כספים<i>תקציב תשפ״ז</i></a><a href="#">בית המדרש<i>9 זמנים</i></a><a href="#">החצר<i>13 בתור</i></a><a href="#">חסד<i>26 הלוואות</i></a><a href="#">תפעול<i>6 קווים</i></a><a href="#">שידוכים<i>31 הצעות</i></a><a href="#">תקשורת<i>5 קבוצות</i></a></nav>
+  <footer>אותם מספרים בכל עשר הגרסאות · נתוני דוגמה</footer>
+</div>
+</body>
+</html>

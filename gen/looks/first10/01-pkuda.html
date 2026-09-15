@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>פקודה — מסך הבית</title>
+<meta name="description" content="גרסת עיצוב «פקודה» למסך הבית של המוסד. מסוף-פקודות · כהה · Rubik + מונו · כפתורי-רפאים">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}body{margin:0}
+bdi{unicode-bidi:isolate}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3{margin:0}p{margin:0}ul,ol{margin:0;padding:0;list-style:none}a{color:inherit}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media print{.noprint{display:none!important}}
+
+body{background:#0b0c0e;color:#e7e7e4;font:400 15px/1.55 Rubik,Arial,sans-serif}
+.w{max-width:760px;margin-inline:auto;padding:56px 20px 80px}
+.top{display:flex;align-items:baseline;gap:10px;margin-bottom:28px}
+.top h1{font-size:15px;font-weight:500;color:#9d9d97;letter-spacing:.02em}
+.top .d{font-size:13px;color:#8b8f96;margin-inline-start:auto;font-variant-numeric:tabular-nums}
+.cmd{display:flex;align-items:center;gap:12px;background:#141518;border:1px solid #25272b;
+ border-radius:12px;padding:16px 18px;margin-bottom:8px}
+.cmd .c{color:#7f838a}
+.cmd input{flex:1;background:none;border:0;outline:0;font-size:17px;color:#e7e7e4}
+.cmd input::placeholder{color:#7f838a}
+kbd{font:500 11px ui-monospace,SFMono-Regular,Menlo,monospace;color:#9d9d97;background:#1d1f23;
+ border:1px solid #2c2f34;border-radius:5px;padding:2px 6px}
+.hint{font-size:12px;color:#8b8f96;margin:0 4px 30px;display:flex;gap:16px;flex-wrap:wrap}
+.sec{font:500 11px/1 Rubik;color:#8b8f96;letter-spacing:.14em;margin:26px 4px 10px}
+.rows{border-block-start:1px solid #1c1e21}
+.row{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:14px;align-items:center;
+ padding:11px 4px;border-block-end:1px solid #1c1e21}
+.row:hover{background:#111316}
+.row time,.row .v{font:400 13px ui-monospace,Menlo,monospace;color:#8b8f96;font-variant-numeric:tabular-nums}
+.row .t{font-size:14.5px}
+.row .m{font-size:12.5px;color:#8b8f96}
+.row.on{background:#101418}
+.row.on .t{color:#cfe3ff}
+.row.on time{color:#7fa6f5}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:#1c1e21;
+ border:1px solid #1c1e21;border-radius:10px;overflow:hidden;margin:6px 0 4px}
+.kpi{background:#0e1013;padding:14px 16px}
+.kpi b{display:block;font:500 21px Rubik;font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:#8b8f96}
+.kpi.up b{color:#8ddba4}.kpi.warn b{color:#e3c07b}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
+.gh{background:none;border:1px solid #2c2f34;color:#c9c9c4;border-radius:8px;padding:9px 14px;
+ font-size:13.5px;display:inline-flex;align-items:center;gap:9px;min-height:40px}
+.gh:hover{border-color:#4a4f57;color:#fff}
+.gh kbd{background:#1d1f23}
+.dep{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.dep a{font-size:12.5px;color:#8b8f96;border:1px solid #1c1e21;border-radius:7px;padding:5px 10px;text-decoration:none}
+.dep a:hover{border-color:#2c2f34;color:#e7e7e4}
+.dep a i{font-style:normal;color:#7f838a;margin-inline-start:6px}
+footer{margin-top:40px;font-size:12px;color:#7c8087}
+@media(max-width:560px){.row{grid-template-columns:54px minmax(0,1fr)}.row .v{grid-column:2;justify-self:end}}
+
+</style>
+</head>
+<body>
+<div class="w">
+  <header class="top"><h1>מוסד · לוח הבית</h1><span class="d">ד׳ תשרי תשפ״ז · יום שלישי</span></header>
+
+  <div class="cmd noprint"><span class="c" aria-hidden="true">⌘</span>
+    <input placeholder="חפש משפחה, תלמיד, הלוואה או פעולה…" aria-label="חיפוש בכל המוסד">
+    <kbd>Ctrl K</kbd></div>
+  <p class="hint"><span>↑↓ לבחירה</span><span>Enter לפתיחה</span><span><bdi dir="ltr">912</bdi> רשומות באינדקס</span></p>
+
+  <div class="kpis">
+    <div class="kpi up"><b>72%</b><span>נגבה מהחיוב</span></div>
+    <div class="kpi"><b>40/44</b><span>צוות נוכח</span></div>
+    <div class="kpi"><b>92%</b><span>נוכחות תלמידים</span></div>
+    <div class="kpi warn"><b>29</b><span>משפחות בפיגור</span></div>
+    <div class="kpi"><b><bdi dir="ltr">₪563K</bdi></b><span>זמין בגמ״ח</span></div>
+  </div>
+
+  <h2 class="sec">עכשיו במוסד</h2>
+  <div class="rows">
+    <div class="row">
+      <time><bdi dir="ltr">05:40</bdi></time>
+      <span><span class="t">ותיקין</span><br><span class="m">עזרה מזרחית</span></span>
+      <span class="v">113↑</span></div><div class="row">
+      <time><bdi dir="ltr">06:20</bdi></time>
+      <span><span class="t">שחרית · מניין ב׳</span><br><span class="m">האולם הגדול</span></span>
+      <span class="v">99↑</span></div><div class="row">
+      <time><bdi dir="ltr">07:15</bdi></time>
+      <span><span class="t">שחרית · מניין ג׳</span><br><span class="m">האולם הגדול</span></span>
+      <span class="v">42↑</span></div><div class="row">
+      <time><bdi dir="ltr">08:00</bdi></time>
+      <span><span class="t">שיעור דף היומי</span><br><span class="m">בית המדרש</span></span>
+      <span class="v">91↑</span></div><div class="row on">
+      <time><bdi dir="ltr">13:45</bdi></time>
+      <span><span class="t">מנחה גדולה</span><br><span class="m">האולם הגדול</span></span>
+      <span class="v">97↑</span></div><div class="row">
+      <time><bdi dir="ltr">16:30</bdi></time>
+      <span><span class="t">שיעור הלכה</span><br><span class="m">חדר עיון</span></span>
+      <span class="v">110↑</span></div>
+  </div>
+
+  <h2 class="sec">דורש הכרעה</h2>
+  <div class="rows">
+    <div class="row">
+      <time>כספים</time><span class="t">ביטוח האולם פג בעוד 6 ימים</span><span class="v">›</span></div><div class="row">
+      <time>גבייה</time><span class="t">29 משפחות בפיגור בלי הוראת קבע</span><span class="v">›</span></div><div class="row">
+      <time>תפעול</time><span class="t">קו 4 · מודיעין עילית בלי נהג למחר</span><span class="v">›</span></div><div class="row">
+      <time>החצר</time><span class="t">13 ממתינים בקבלת קהל</span><span class="v">›</span></div>
+  </div>
+
+  <div class="acts noprint">
+    <button class="gh">רישום תשלום <kbd>P</kbd></button>
+    <button class="gh">הודעה להורים <kbd>M</kbd></button>
+    <button class="gh">יומן הפעולות <kbd>L</kbd></button>
+  </div>
+
+  <h2 class="sec">אגפים</h2>
+  <nav class="dep"><a href="#">אנשים<i>912 רשומות</i></a><a href="#">חינוך<i>412 תלמידים</i></a><a href="#">צוות<i>44 עובדים</i></a><a href="#">גבייה<i>72% מהחיוב</i></a><a href="#">תרומות<i>3 מגביות</i></a><a href="#">כספים<i>תקציב תשפ״ז</i></a><a href="#">בית המדרש<i>9 זמנים</i></a><a href="#">החצר<i>13 בתור</i></a><a href="#">חסד<i>26 הלוואות</i></a><a href="#">תפעול<i>6 קווים</i></a><a href="#">שידוכים<i>31 הצעות</i></a><a href="#">תקשורת<i>5 קבוצות</i></a></nav>
+
+  <footer>כל מספר כאן נגזר מהמחסן · נתוני דוגמה</footer>
+</div>
+</body>
+</html>

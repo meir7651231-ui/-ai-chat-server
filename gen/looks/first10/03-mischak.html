@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>משחק — מסך הבית</title>
+<meta name="description" content="גרסת עיצוב «משחק» למסך הבית של המוסד. אפליקציית-לימוד · בהיר · Varela Round · כפתור תלת-ממדי">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Alef:wght@400;700&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}body{margin:0}
+bdi{unicode-bidi:isolate}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3{margin:0}p{margin:0}ul,ol{margin:0;padding:0;list-style:none}a{color:inherit}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media print{.noprint{display:none!important}}
+
+body{background:#fff8ef;color:#3c3836;font:400 16px/1.55 'Varela Round',Arial,sans-serif}
+.w{max-width:960px;margin-inline:auto;padding:22px 20px 80px}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.top h1{font-size:20px}
+.streak{margin-inline-start:auto;display:flex;gap:10px}
+.pill{background:#fff;border:2px solid #ecdcc8;border-radius:999px;padding:7px 14px;font-size:14px;display:flex;gap:7px;align-items:center}
+.pill b{color:#a85f00}
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:26px}
+.big{background:#fff;border:2px solid #ecdcc8;border-radius:22px;padding:22px;text-align:center}
+.ring{position:relative;display:grid;place-items:center;margin-bottom:10px}
+.ring b{position:absolute;font-size:26px;color:#3f7a00}
+.big h2{font-size:16px;margin-bottom:4px}
+.big p{font-size:13.5px;color:#6b635b}
+.tasks{background:#fff;border:2px solid #ecdcc8;border-radius:22px;padding:18px;margin-bottom:24px}
+.tasks h2{font-size:17px;margin-bottom:12px}
+.task{display:flex;align-items:center;gap:14px;padding:12px 0;border-block-end:2px solid #f6ecdf}
+.task:last-child{border:0}
+.task .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:19px;flex:none}
+.task .t{flex:1;font-size:15px}
+.task .t span{display:block;font-size:12.5px;color:#6b635b}
+.go{background:#3f7a00;color:#fff;border:0;border-radius:14px;padding:10px 18px;font-size:14px;
+ box-shadow:0 4px 0 #2d5700;min-height:44px}
+.go:active{transform:translateY(3px);box-shadow:0 1px 0 #2d5700}
+.go.blue{background:#0f6f9e;box-shadow:0 4px 0 #0a5273}
+.go.blue:active{box-shadow:0 1px 0 #0a5273}
+.go.grey{background:#fff;color:#3c3836;border:2px solid #ecdcc8;box-shadow:0 4px 0 #ecdcc8}
+.bars{background:#fff;border:2px solid #ecdcc8;border-radius:22px;padding:18px}
+.bars h2{font-size:17px;margin-bottom:14px}
+.bar{display:grid;grid-template-columns:44px minmax(0,1fr) 46px;gap:12px;align-items:center;margin-bottom:9px;font-size:14px}
+.track{height:16px;border-radius:999px;background:#f0e5d6;overflow:hidden;position:relative}
+.track i{position:absolute;inset-block:0;inset-inline-start:0;background:#58a700;border-radius:999px}
+.track i.low{background:#ff9600}
+.dep{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:24px}
+.dep a{background:#fff;border:2px solid #ecdcc8;border-radius:16px;padding:13px;text-align:center;
+ text-decoration:none;font-size:14px}
+.dep a:hover{border-color:#58a700;color:#3f7a00}
+.dep a span{display:block;font-size:11.5px;color:#6b635b;margin-top:2px}
+footer{margin-top:34px;text-align:center;font-size:13px;color:#6b635b}
+
+</style>
+</head>
+<body>
+<div class="w">
+  <header class="top"><h1>שלום, מוסד!</h1>
+    <div class="streak"><span class="pill">🔥<b>72%</b> גבייה</span>
+      <span class="pill">👥 <b>40</b>/44</span></div></header>
+
+  <div class="board">
+    <div class="big">
+      <div class="ring"><svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="נגבו 72 אחוז">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#f0e5d6" stroke-width="14"></circle>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#58a700" stroke-width="14" stroke-linecap="round"
+          stroke-dasharray="226 314" transform="rotate(-90 60 60)"></circle></svg>
+        <b>72%</b></div>
+      <h2>גבייה</h2><p><bdi dir="ltr">₪1,774,900</bdi> מתוך <bdi dir="ltr">₪2,450,860</bdi></p></div>
+    <div class="big">
+      <div class="ring"><svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="נוכחות 92 אחוז">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#f0e5d6" stroke-width="14"></circle>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#1cb0f6" stroke-width="14" stroke-linecap="round"
+          stroke-dasharray="289 314" transform="rotate(-90 60 60)"></circle></svg>
+        <b style="color:#0f6f9e">92%</b></div>
+      <h2>נוכחות תלמידים</h2><p><bdi dir="ltr">412</bdi> תלמידים ב-12 כיתות</p></div>
+    <div class="big">
+      <div class="ring"><svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="מגבית 59 אחוז">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#f0e5d6" stroke-width="14"></circle>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#ff9600" stroke-width="14" stroke-linecap="round"
+          stroke-dasharray="184 314" transform="rotate(-90 60 60)"></circle></svg>
+        <b style="color:#b35f00">59%</b></div>
+      <h2>מגבית הבניין</h2><p><bdi dir="ltr">₪1,406,140</bdi> מ-183 תרומות</p></div>
+  </div>
+
+  <section class="tasks">
+    <h2>המשימות של היום</h2>
+    <div class="task">
+      <span class="ic" style="background:#ffe2e2" aria-hidden="true">❗</span>
+      <span class="t">ביטוח האולם פג בעוד 6 ימים<span>כספים</span></span>
+      <button class="go">טפל</button></div><div class="task">
+      <span class="ic" style="background:#fff0d6" aria-hidden="true">⏰</span>
+      <span class="t">29 משפחות בפיגור בלי הוראת קבע<span>גבייה</span></span>
+      <button class="go blue">פתח</button></div><div class="task">
+      <span class="ic" style="background:#fff0d6" aria-hidden="true">⏰</span>
+      <span class="t">קו 4 · מודיעין עילית בלי נהג למחר<span>תפעול</span></span>
+      <button class="go grey">פתח</button></div><div class="task">
+      <span class="ic" style="background:#e6f4ff" aria-hidden="true">💬</span>
+      <span class="t">13 ממתינים בקבלת קהל<span>החצר</span></span>
+      <button class="go grey">פתח</button></div>
+  </section>
+
+  <section class="bars">
+    <h2>נוכחות לפי כיתה</h2>
+    <div class="bar"><span>ג׳1</span>
+      <span class="track"><i class="" style="width:94%"></i></span>
+      <span>94%</span></div><div class="bar"><span>ג׳2</span>
+      <span class="track"><i class="low" style="width:88%"></i></span>
+      <span>88%</span></div><div class="bar"><span>ד׳1</span>
+      <span class="track"><i class="" style="width:90%"></i></span>
+      <span>90%</span></div><div class="bar"><span>ד׳2</span>
+      <span class="track"><i class="" style="width:93%"></i></span>
+      <span>93%</span></div><div class="bar"><span>ה׳1</span>
+      <span class="track"><i class="" style="width:95%"></i></span>
+      <span>95%</span></div><div class="bar"><span>ה׳2</span>
+      <span class="track"><i class="" style="width:93%"></i></span>
+      <span>93%</span></div><div class="bar"><span>ו׳1</span>
+      <span class="track"><i class="" style="width:93%"></i></span>
+      <span>93%</span></div><div class="bar"><span>ו׳2</span>
+      <span class="track"><i class="" style="width:93%"></i></span>
+      <span>93%</span></div><div class="bar"><span>ז׳1</span>
+      <span class="track"><i class="" style="width:95%"></i></span>
+      <span>95%</span></div><div class="bar"><span>ז׳2</span>
+      <span class="track"><i class="low" style="width:89%"></i></span>
+      <span>89%</span></div><div class="bar"><span>ח׳1</span>
+      <span class="track"><i class="" style="width:92%"></i></span>
+      <span>92%</span></div><div class="bar"><span>ח׳2</span>
+      <span class="track"><i class="" style="width:92%"></i></span>
+      <span>92%</span></div>
+  </section>
+
+  <nav class="dep"><a href="#">אנשים<span>912 רשומות</span></a><a href="#">חינוך<span>412 תלמידים</span></a><a href="#">צוות<span>44 עובדים</span></a><a href="#">גבייה<span>72% מהחיוב</span></a><a href="#">תרומות<span>3 מגביות</span></a><a href="#">כספים<span>תקציב תשפ״ז</span></a><a href="#">בית המדרש<span>9 זמנים</span></a><a href="#">החצר<span>13 בתור</span></a><a href="#">חסד<span>26 הלוואות</span></a><a href="#">תפעול<span>6 קווים</span></a><a href="#">שידוכים<span>31 הצעות</span></a><a href="#">תקשורת<span>5 קבוצות</span></a></nav>
+  <footer>אותם נתונים, עיצוב אחר · נתוני דוגמה</footer>
+</div>
+</body>
+</html>

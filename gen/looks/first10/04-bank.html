@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>בנק — מסך הבית</title>
+<meta name="description" content="גרסת עיצוב «בנק» למסך הבית של המוסד. אפליקציית-תשלומים · בהיר · Assistant כבד · כפתור מרובע">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;800&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}body{margin:0}
+bdi{unicode-bidi:isolate}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3{margin:0}p{margin:0}ul,ol{margin:0;padding:0;list-style:none}a{color:inherit}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media print{.noprint{display:none!important}}
+
+body{background:#fff;color:#0e0f0c;font:400 16px/1.5 Assistant,Arial,sans-serif}
+.strip{background:#163300;color:#9fe870;padding:10px 20px;font-size:13px;display:flex;gap:14px;flex-wrap:wrap}
+.strip b{color:#fff}
+.w{max-width:1080px;margin-inline:auto;padding:34px 20px 80px}
+.head{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:34px}
+.head h1{font:800 clamp(30px,5vw,46px)/1.05 Assistant;letter-spacing:-.02em;max-width:14ch}
+.head .r{margin-inline-start:auto;text-align:end}
+.head .r b{display:block;font:800 clamp(26px,4vw,38px)/1 Assistant;font-variant-numeric:tabular-nums}
+.head .r span{font-size:13.5px;color:#454b3f}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:38px}
+.sq{background:#9fe870;color:#163300;border:0;border-radius:4px;padding:14px 22px;font-size:15px;font-weight:800;min-height:50px}
+.sq:hover{background:#8ad95c}
+.sq.dark{background:#163300;color:#9fe870}
+.sq.line{background:#fff;border:2px solid #0e0f0c;color:#0e0f0c}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0;border:1px solid #d7d9d3;margin-bottom:38px}
+.cell{padding:22px;border-inline-start:1px solid #d7d9d3}
+.cell:first-child{border-inline-start:0}
+.cell b{display:block;font:800 30px Assistant;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.cell span{font-size:13.5px;color:#454b3f}
+.cell .sub{font-size:12.5px;color:#6b7264;margin-top:6px}
+h2{font:800 20px Assistant;margin:0 0 4px}
+p.lead{font-size:14px;color:#454b3f;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:start;padding:14px 8px;border-block-end:1px solid #e6e8e3}
+thead th{font-size:12px;font-weight:600;color:#6b7264;text-transform:none;border-block-end:2px solid #0e0f0c}
+td.n{text-align:end;font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+td .tag{display:inline-block;font-size:11.5px;font-weight:800;padding:2px 8px;border-radius:3px}
+.t1{background:#ffe0e0;color:#8a1c1c}.t2{background:#fff3d6;color:#7a5200}.t3{background:#e9f7dd;color:#2f5c00}
+.dep{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1px;background:#d7d9d3;
+ border:1px solid #d7d9d3;margin-top:38px}
+.dep a{background:#fff;padding:16px;text-decoration:none;font-weight:600;font-size:14.5px}
+.dep a:hover{background:#f2f4ef}
+.dep a span{display:block;font-weight:400;font-size:12.5px;color:#6b7264;margin-top:3px}
+footer{margin-top:40px;font-size:12.5px;color:#6b7264}
+
+</style>
+</head>
+<body>
+<div class="strip"><span>שנת תשפ״ז</span><span>ד׳ תשרי</span>
+  <span>תעריף לילד <b><bdi dir="ltr">₪6,000</bdi></b></span><span>נתוני דוגמה</span></div>
+<div class="w">
+  <header class="head">
+    <h1>72% מהחיוב השנתי כבר נגבו.</h1>
+    <div class="r"><b><bdi dir="ltr">₪675,960</bdi></b><span>פתוח אצל 168 משפחות</span></div>
+  </header>
+
+  <div class="btns noprint"><button class="sq">רישום תשלום</button>
+    <button class="sq dark">הפקת קבלות</button><button class="sq line">ייצוא לרואה חשבון</button></div>
+
+  <div class="grid">
+    <div class="cell"><b><bdi dir="ltr">₪1,774,900</bdi></b><span>נגבה עד היום</span><p class="sub">מתוך <bdi dir="ltr">₪2,450,860</bdi> שחויבו</p></div>
+    <div class="cell"><b><bdi dir="ltr">₪1,406,140</bdi></b><span>מגבית הבניין</span><p class="sub">183 תרומות · 59% מהיעד</p></div>
+    <div class="cell"><b><bdi dir="ltr">₪562,629</bdi></b><span>זמין בגמ״ח</span><p class="sub">26 הלוואות · 0 ממתינות</p></div>
+  </div>
+
+  <h2>דורש הכרעה היום</h2>
+  <p class="lead">ארבעה דברים שממתינים לך, לפי דחיפות.</p>
+  <table>
+    <thead><tr><th scope="col">מה</th><th scope="col">אגף</th><th scope="col" class="n">דחיפות</th></tr></thead>
+    <tbody><tr><td>ביטוח האולם פג בעוד 6 ימים</td><td>כספים</td>
+      <td class="n"><span class="tag t1">דחוף</span></td></tr><tr><td>29 משפחות בפיגור בלי הוראת קבע</td><td>גבייה</td>
+      <td class="n"><span class="tag t2">השבוע</span></td></tr><tr><td>קו 4 · מודיעין עילית בלי נהג למחר</td><td>תפעול</td>
+      <td class="n"><span class="tag t2">השבוע</span></td></tr><tr><td>13 ממתינים בקבלת קהל</td><td>החצר</td>
+      <td class="n"><span class="tag t3">רגיל</span></td></tr></tbody>
+  </table>
+
+  <nav class="dep"><a href="#">אנשים<span>912 רשומות</span></a><a href="#">חינוך<span>412 תלמידים</span></a><a href="#">צוות<span>44 עובדים</span></a><a href="#">גבייה<span>72% מהחיוב</span></a><a href="#">תרומות<span>3 מגביות</span></a><a href="#">כספים<span>תקציב תשפ״ז</span></a><a href="#">בית המדרש<span>9 זמנים</span></a><a href="#">החצר<span>13 בתור</span></a><a href="#">חסד<span>26 הלוואות</span></a><a href="#">תפעול<span>6 קווים</span></a><a href="#">שידוכים<span>31 הצעות</span></a><a href="#">תקשורת<span>5 קבוצות</span></a></nav>
+  <footer>כל הסכומים נגזרים מהמחסן בזמן ההצגה.</footer>
+</div>
+</body>
+</html>
