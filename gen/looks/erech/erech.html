@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>משפחת לוי ש׳ — תיק</title>
+<meta name="description" content="תיק משפחה בצורת ערך אנציקלופדי, מועתק במדידה מוויקיפדיה העברית.">
+<style>
+/* ===== אין קישור לגופן. זו המדידה, לא השמטה: ויקיפדיה העברית
+        מצהירה font-family: sans-serif ומשאירה לקורא לבחור.
+        חמשת המסכים הקודמים טענו גופן-רשת לטיני. כאן לא.        ===== */
+*{box-sizing:border-box}html,body{overflow-x:hidden}
+:root{
+ /* ===== נמדד מ-he.wikipedia.org ===== */
+ --bg:#f8f9fa;--pane:#ffffff;--ink:#202122;--head:#101418;
+ --box:#f9f9f9;--boxEdge:#aaaaaa;--cap:#55b1e1;--capInk:#000000;
+ --rule:#a2a9b1;--link:#3366cc;--red:#bf3c2c;--mut:#54595d;
+ --fs:16px;--lh:26px;--box-fs:15.2px;--box-lh:21.28px;--boxW:304px;--col:872px;--measure:660px}
+/* ===== הערכה הכהה נגזרה על ידי ולא נמדדה: ויקיפדיה מתעלמת
+        מ-prefers-color-scheme למי שאינו מחובר ונשארת בהירה.   ===== */
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#101418;--pane:#1b1f23;--ink:#eaecf0;--head:#f8f9fa;
+ --box:#1b1f23;--boxEdge:#54595d;--rule:#54595d;
+ --link:#88a9e8;--red:#ff8272;--mut:#a2a9b1}}
+:root[data-theme=dark]{
+ --bg:#101418;--pane:#1b1f23;--ink:#eaecf0;--head:#f8f9fa;
+ --box:#1b1f23;--boxEdge:#54595d;--rule:#54595d;
+ --link:#88a9e8;--red:#ff8272;--mut:#a2a9b1}
+/* --cap נושא טקסט שחור ולכן אינו מוגדר מחדש בכהה — אסור לו להיכהות. */
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:400 var(--fs)/var(--lh) sans-serif}
+h1,h2,h3{margin:0;color:var(--head);font-weight:400}
+p{margin:8px 0 16px}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+a.new{color:var(--red)}
+bdi{unicode-bidi:isolate}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+
+.top{background:var(--pane);border-bottom:1px solid var(--rule);padding:10px 0}
+.top .in{max-width:1180px;margin:0 auto;padding:0 20px;display:flex;
+ align-items:baseline;gap:10px;font-size:15px}
+.top b{font-size:22px;font-weight:700}
+.top span{color:var(--mut)}
+
+.page{max-width:1180px;margin:0 auto;padding:22px 20px 70px;background:var(--pane);
+ min-height:100vh}
+h1{font:400 28.8px/39.6px sans-serif;padding-bottom:4px;border-bottom:1px solid var(--rule)}
+.sub{color:var(--mut);font-size:.85em}
+.lead{margin-top:14px}
+h2{font:400 24px/33px sans-serif;padding-bottom:4.08px;border-bottom:1px solid var(--rule);
+ margin:22px 0 6px}
+h3{font:700 18px/26px sans-serif;margin:16px 0 4px}
+
+/* ---------- תיבת-המידע: 304 · #f9f9f9 · גבול 1px #aaa ---------- */
+.info{float:left;width:var(--boxW);margin:0 15.2px 7.6px 0;background:var(--box);
+ border:1px solid var(--boxEdge);font:400 var(--box-fs)/var(--box-lh) sans-serif;
+ border-collapse:collapse}
+.info caption{background:var(--cap);color:var(--capInk);
+ font:700 18.24px/21.28px sans-serif;padding:3px 6px;text-align:center}
+.info th{font:700 var(--box-fs)/var(--box-lh) sans-serif;text-align:right;
+ vertical-align:top;padding:4px 6px;width:96px;color:var(--ink)}
+.info td{padding:4px 6px;text-align:center;vertical-align:top}
+.info tr+tr th,.info tr+tr td{border-top:1px solid var(--boxEdge)}
+.portrait{padding:10px 6px;text-align:center}
+.mono{display:inline-grid;place-items:center;width:110px;height:110px;border-radius:50%;
+ background:var(--cap);color:var(--capInk);font:700 34px/1 sans-serif}
+.pcap{display:block;margin-top:6px;color:var(--mut);font-size:13px;line-height:18px}
+.owe{color:var(--red)}.clear{color:inherit}
+
+.body{max-width:var(--col)}      /* 872 — רוחב המכל, נמדד */
+/* סטייה מודעת: ויקיפדיה נותנת לפסקאות שמתחת לתיבה לרוץ על כל 872 —
+   93 תווים בשורה, מעבר לטווח הקריאה 45–75. הפסקה נקצצת ל-660.
+   הטבלאות והתיבה נשארות על הרוחב שנמדד.                             */
+.body>p{max-width:var(--measure)}
+.ref{font-size:13.33px;vertical-align:super;line-height:0}
+.ref a{text-decoration:none}
+table.grid{border-collapse:collapse;margin:10px 0 18px;font-size:15px;width:100%;max-width:var(--col)}
+.grid th,.grid td{border:1px solid var(--rule);padding:6px 9px;text-align:start;
+ vertical-align:top}
+.grid th{background:var(--box);font-weight:700}
+.grid td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+ul.notes{margin:8px 0 0;padding:0;list-style:none;font-size:14px;line-height:22px}
+ul.notes li{margin-bottom:4px}
+ul.notes .bk{color:var(--link)}
+.clr{clear:both}
+@media(max-width:900px){
+ .info{float:none;width:100%;margin:0 0 16px}
+ .page{padding:16px 16px 60px}
+ table.grid{display:block;overflow-x:auto}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+
+<div class="top"><div class="in">
+ <b>מוסדות</b><span>תיק משפחה · יום שלישי, ד׳ תשרי תשפ״ז</span>
+</div></div>
+
+<div class="page">
+ <h1>משפחת לוי ש׳</h1>
+
+ <table class="info">
+  <caption>משפחת לוי ש׳</caption>
+  <tr><td class="portrait" colspan="2">
+   <span class="mono" aria-hidden="true">לו</span>
+   <span class="pcap">כלב לוי ש׳ והינדא לוי ש׳, בני ברק</span>
+  </td></tr>
+  <tr><th scope="row">ראש המשפחה</th><td>כלב לוי ש׳</td></tr>
+  <tr><th scope="row">רעייתו</th><td>הינדא לוי ש׳</td></tr>
+  <tr><th scope="row">מקום מגורים</th><td>בני ברק</td></tr>
+  <tr><th scope="row">טלפון</th><td><bdi dir="ltr">057-552-2440</bdi></td></tr>
+  <tr><th scope="row">ילדים במוסד</th><td>3<sup class="ref"><a href="#n1" id="r1">[1]</a></sup></td></tr>
+  <tr><th scope="row">שנת לימודים</th><td>תשפ״ז <span class="sub">(ד׳ תשרי תשפ״ז)</span></td></tr>
+  <tr><th scope="row">חיוב ברוטו</th><td><bdi>21,375</bdi> ₪<sup class="ref"><a href="#n2" id="r2">[2]</a></sup></td></tr>
+  <tr><th scope="row">הנחה</th><td>10%<sup class="ref"><a href="#n3" id="r3">[3]</a></sup></td></tr>
+  <tr><th scope="row">חיוב נטו</th><td><bdi>19,238</bdi> ₪</td></tr>
+  <tr><th scope="row">שולם</th><td><bdi>16,200</bdi> ₪<sup class="ref"><a href="#n4" id="r4">[4]</a></sup></td></tr>
+  <tr><th scope="row">יתרה</th><td><b class="owe"><bdi>3,038</bdi> ₪</b></td></tr>
+  <tr><th scope="row">הוראת קבע</th><td>קיימת</td></tr>
+  <tr><th scope="row">הלוואה</th><td><bdi>27,000</bdi> ₪ · ציוד לימודי<sup class="ref"><a href="#n5" id="r5">[5]</a></sup></td></tr>
+ </table>
+
+ <div class="body">
+ <p class="lead"><b>משפחת לוי ש׳</b> היא אחת מ־168 המשפחות הרשומות במוסד בשנת תשפ״ז. בראשה כלב לוי ש׳, המתגורר בבני ברק עם רעייתו הינדא לוי ש׳. למשפחה 3 ילדים הלומדים במוסד<sup class="ref"><a href="#n1" id="r1">[1]</a></sup>, ונוכחותם הממוצעת בחמשת ימי הלימוד האחרונים עומדת על 87%<sup class="ref"><a href="#n1" id="r1">[1]</a></sup>.</p>
+
+ <h2>חיוב וגבייה</h2>
+ <p>החיוב השנתי ברוטו עומד על <bdi>21,375</bdi> ₪, הנגזר מן התעריפון: 6,000 ₪ שכר לימוד לילד, 225 ₪ ספרים, ו־900 ₪ הסעה עבור 3 מן הילדים<sup class="ref"><a href="#n2" id="r2">[2]</a></sup>. למשפחה הנחה של 10%, ולפיכך החיוב נטו הוא <bdi>19,238</bdi> ₪<sup class="ref"><a href="#n3" id="r3">[3]</a></sup>. עד כה שולמו <bdi>16,200</bdi> ₪<sup class="ref"><a href="#n6" id="r6">[6]</a></sup>, והיתרה הפתוחה עומדת על <b class="owe"><bdi>3,038</bdi> ₪</b>. למשפחה הוראת קבע פעילה.</p>
+ <h3>רשומת הקליטה האחרונה<sup class="ref"><a href="#n4" id="r4">[4]</a></sup></h3>
+ <table class="grid"><thead><tr><th>סכום</th><th>אמצעי</th><th>לפני</th></tr></thead><tbody>
+ <tr><td class="n"><bdi>3,500</bdi> ₪</td><td>אשראי</td><td class="n">21 חודשים</td></tr>
+ </tbody></table>
+
+ <h2>הילדים</h2>
+ <p>יעקב לוי ש׳, יהודה לוי ש׳, אהרן לוי ש׳ — 3 ילדים, הלומדים ב־3 כיתות<sup class="ref"><a href="#n1" id="r1">[1]</a></sup>.</p>
+ <table class="grid"><thead><tr><th>שם</th><th>כיתה</th><th>חדר</th><th>מגיד שיעור</th><th>נוכחות</th></tr></thead><tbody>
+ <tr><td>יעקב לוי ש׳</td><td>ג׳2</td><td>חדר 11</td>
+  <td>נפתלי מלר</td>
+  <td class="n">4/5</td></tr>
+ <tr><td>יהודה לוי ש׳</td><td>ד׳1</td><td>חדר 12</td>
+  <td>יעקב פישר</td>
+  <td class="n">4/5</td></tr>
+ <tr><td>אהרן לוי ש׳</td><td>ד׳2</td><td>חדר 13</td>
+  <td>שרגא כהנא</td>
+  <td class="n">5/5</td></tr>
+ </tbody></table>
+
+ <h2>הסעות</h2>
+ <p>3 מילדי המשפחה נוסעים בהסעות המוסד<sup class="ref"><a href="#n7" id="r7">[7]</a></sup>. יעקב לוי ש׳ עולה בגבעה ב׳ בשעה <bdi dir="ltr">06:58</bdi> בקו 3 · ביתר; יהודה לוי ש׳ עולה בקרית ספר בשעה <bdi dir="ltr">06:45</bdi> בקו 4 · מודיעין עילית; אהרן לוי ש׳ עולה במאה שערים בשעה <bdi dir="ltr">07:08</bdi> בקו 1 · ירושלים מרכז.</p>
+
+ <h2>קופת החסד</h2>
+ <p>למשפחה הלוואה בסך <bdi>27,000</bdi> ₪ שניתנה עבור ציוד לימודי, בפריסה ל־15 תשלומים<sup class="ref"><a href="#n5" id="r5">[5]</a></sup>. מצבה בהחזר: שולמו 11 תשלומים, ונותרו בחוץ <bdi>7,200</bdi> ₪. הבקשה נושאת 2 ערבים. בקופה פנויים כיום <bdi>562,629</bdi> ₪<sup class="ref"><a href="#n5" id="r5">[5]</a></sup>.</p>
+
+ 
+
+ <h2>הערות שוליים</h2>
+ <ul class="notes">
+ <li id="n1"><a class="bk" href="#r1" aria-label="חזרה להפניה 1">↑</a> <b>1.</b> לוח הנוכחות — חמישה ימי לימוד אחרונים.</li>
+ <li id="n2"><a class="bk" href="#r2" aria-label="חזרה להפניה 2">↑</a> <b>2.</b> תעריפון תשפ״ז: שכר לימוד 6,000 ₪, הסעה 900 ₪, ספרים 225 ₪ לילד.</li>
+ <li id="n3"><a class="bk" href="#r3" aria-label="חזרה להפניה 3">↑</a> <b>3.</b> כלל ההנחה שהוחל. האפיון מתיר את הגבוהה בלבד, לא מצטבר.</li>
+ <li id="n4"><a class="bk" href="#r4" aria-label="חזרה להפניה 4">↑</a> <b>4.</b> רשומות קליטה אחרונות. אינן הפנקס המלא ואינן מסתכמות לסך שבכרטיס.</li>
+ <li id="n5"><a class="bk" href="#r5" aria-label="חזרה להפניה 5">↑</a> <b>5.</b> קופת החסד — תיק ההלוואה.</li>
+ <li id="n6"><a class="bk" href="#r6" aria-label="חזרה להפניה 6">↑</a> <b>6.</b> סך התשלומים בכרטיס המשפחה לשנת הלימודים.</li>
+ <li id="n7"><a class="bk" href="#r7" aria-label="חזרה להפניה 7">↑</a> <b>7.</b> לוח ההסעות — עמדות ושעות.</li>
+ </ul>
+
+ <h2>על העמוד הזה</h2>
+ <p>הערך מועתק במדידה מוויקיפדיה העברית: גוף ב־<bdi>16/26</bdi> בגופן־מערכת; כותרת ב־<bdi>28.8/39.6</bdi>; כותרות משנה ב־<bdi>24/33</bdi> עם קו תחתון <bdi>1px</bdi>; תיבת-מידע ברוחב <bdi>304</bdi> על רקע <bdi>#f9f9f9</bdi> בגבול <bdi>1px</bdi>, כותרות-שורה מודגשות וצמודות לתחילת השורה, ערכים ממורכזים. הטקסט מיושר לתחילת השורה בלבד, לא לשני הצדדים. <b>סטייה אחת מודעת:</b> בוויקיפדיה הפסקאות שמתחת לתיבה רצות על מלוא <bdi>872</bdi> הפיקסלים ומגיעות ל־<bdi>93</bdi> תווים בשורה — מעבר לטווח הקריאה הנוח, שהוא <bdi>45–75</bdi>. כאן הפסקה נקצצה ל־<bdi>660</bdi>, והטבלאות ותיבת־המידע נשארו על הרוחב שנמדד. <b>ואין כאן קישור לגופן</b> — ויקיפדיה העברית מצהירה <bdi dir="ltr">sans-serif</bdi> ומשאירה למערכת של הקורא לבחור את הגופן העברי, וזה הועתק כמו שהוא.</p>
+ </div>
+ <div class="clr"></div>
+</div>
+</body></html>
