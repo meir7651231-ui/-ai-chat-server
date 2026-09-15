@@ -1,6 +1,8 @@
 /* מסך הבית בשפת Spotify — עמוד-בית מלא:
    סרגל-צד עם ספרייה, פס עליון, שש אריחי-כניסה, ארבעה מדפים אופקיים מלאים,
    ופס-נגינה תחתון קבוע. בדיוק המבנה של עמוד-הבית בצילום. */
+import { cover } from '../art.mjs';
+
 export default {
   id: '2-spotify', name: 'Spotify', ref: 'עמוד-בית: סרגל-צד · אריחי-כניסה · ארבעה מדפים · פס-נגינה תחתון',
   fonts: ['Secular+One', 'Assistant:wght@400;600;700'],
@@ -18,9 +20,14 @@ body{background:var(--bg);color:var(--ink);font:400 16px/1.5 Assistant,Arial,san
 .nav a{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:6px;color:var(--mut);font-weight:600;font-size:14.5px}
 .nav a:hover,.nav a[aria-current]{color:var(--ink);background:var(--card)}
 .libhead{display:flex;align-items:center;gap:8px;color:var(--mut);font-weight:700;font-size:13.5px;padding:16px 10px 8px;border-block-start:1px solid var(--hair);margin-top:12px}
+/* שני כרטיסי-ההזמנה שיושבים בסרגל-הצד של ספוטיפיי */
+.promo{background:var(--card);border-radius:var(--rCard);padding:16px;margin:8px 4px}
+.promo b{display:block;font-size:16px;font-weight:700}
+.promo p{font-size:14px;color:var(--mut);margin:4px 0 12px}
+.promo button{background:var(--ink);color:#000000;border:0;border-radius:var(--rPill);padding:8px 16px;font:700 14px Assistant;min-height:32px}
 .lib a{display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;align-items:center;padding:7px 8px;border-radius:6px}
 .lib a:hover{background:var(--card)}
-.lib .art{width:38px;height:38px;border-radius:var(--rArt);background:var(--hi);color:var(--ink);display:grid;place-items:center;font-size:15px}
+.lib .art{width:38px;height:38px;border-radius:var(--rArt);color:#ffffff;display:grid;place-items:center;font-size:15px}
 .lib b{font-size:13.5px;font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lib span{font-size:11.5px;color:var(--mut)}
 
@@ -29,6 +36,9 @@ body{background:var(--bg);color:var(--ink);font:400 16px/1.5 Assistant,Arial,san
  background:rgba(0,0,0,.6);backdrop-filter:blur(8px)}
 .top .circ{width:32px;height:32px;border-radius:9999px;background:#000;display:grid;place-items:center;color:var(--mut)}
 .top .sp{flex:1}
+/* שדה-החיפוש המדוד של ספוטיפיי: רקע #1f1f1f · רדיוס 50 · גובה 48 */
+.top .find{display:flex;align-items:center;gap:12px;background:#1f1f1f;border-radius:50px;padding:12px 20px;
+ min-height:48px;min-width:min(42%,360px);color:var(--mut);font-size:16px}
 .top .pill{background:var(--ink);color:#000;border:0;border-radius:var(--rPill);padding:12px 24px;font-weight:700;font-size:16px;min-height:48px}
 .top .av{width:32px;height:32px;border-radius:9999px;background:#535353;color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700}
 .in{padding:8px 22px}
@@ -38,20 +48,29 @@ h1{font:700 clamp(26px,4vw,36px)/1.15 'Secular One',Assistant,sans-serif;margin:
 .q{display:grid;grid-template-columns:62px minmax(0,1fr);align-items:center;gap:12px;background:#333333;
  border-radius:var(--rArt);overflow:hidden;min-height:62px}
 .q:hover{background:#535353}
-.q .art{width:62px;height:62px;display:grid;place-items:center;background:var(--hi);color:var(--ink);font:400 22px 'Secular One',Assistant,sans-serif}
+.q .art{width:62px;height:62px;display:grid;place-items:center;color:#ffffff;font:400 22px 'Secular One',Assistant,sans-serif;box-shadow:rgba(0,0,0,.5) 0 8px 24px 0}
 .q b{font-size:14.5px;font-weight:700}
 .q span{display:block;font-size:11.5px;color:var(--mut)}
-h2{font:400 22px 'Secular One',Assistant,sans-serif;margin:26px 0 4px;display:flex;align-items:baseline;gap:8px}
-h2 a{margin-inline-start:auto;font:600 12px Assistant;color:var(--mut);letter-spacing:.08em}
+h2{font:700 24px 'Secular One',Assistant,sans-serif;margin:32px 0 4px;display:flex;align-items:baseline;gap:8px}
+h2 a{margin-inline-start:auto;font:700 14px Assistant;color:var(--mut)}
+h2 a:hover{color:var(--ink);text-decoration:underline}
 p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
-.shelf{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x proximity}
-.c{flex:none;width:174px;background:var(--card);border-radius:var(--rCard);padding:16px;scroll-snap-align:start}
-.c:hover{background:#242424}
-.c .art{aspect-ratio:1;border-radius:var(--rArt);background:var(--hi);color:var(--ink);box-shadow:rgba(0,0,0,.5) 0 8px 24px 0;display:grid;place-items:center;margin-bottom:12px;
- font:400 30px 'Secular One',Assistant,sans-serif;font-variant-numeric:tabular-nums;position:relative}
+/* המדף של ספוטיפיי היום: אין כרטיס מסביב — יש עטיפה גדולה, ומתחתיה שתי שורות */
+.shelf{display:flex;gap:24px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x proximity}
+.c{flex:none;width:172px;border-radius:var(--rCard);padding:12px;scroll-snap-align:start}
+.c:hover{background:#181818}
+.c .art{aspect-ratio:1;border-radius:var(--rArt);color:#ffffff;box-shadow:rgba(0,0,0,.5) 0 8px 24px 0;
+ display:grid;place-items:center;margin-bottom:12px;position:relative;
+ font:400 44px 'Secular One',Assistant,sans-serif;font-variant-numeric:tabular-nums;text-shadow:0 2px 12px rgb(0 0 0 / .45)}
 .c .art.round{border-radius:9999px}
-.c b{display:block;font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.c span{font-size:12.5px;color:var(--mut);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* כפתור-הנגינה הירוק שצף על העטיפה בריחוף — הסימן המזוהה של המדף */
+.c .art::after{content:'▸';position:absolute;inset-block-end:8px;inset-inline-end:8px;width:40px;height:40px;
+ border-radius:9999px;background:var(--acc);color:#000000;display:grid;place-items:center;font:400 18px Assistant;
+ box-shadow:rgba(0,0,0,.5) 0 8px 24px 0;opacity:0;transform:translateY(8px);transition:.18s}
+.c:hover .art::after{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.c .art::after{transition:none}}
+.c b{display:block;font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c span{font-size:14px;color:var(--mut);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rows{display:grid;gap:2px;margin-top:6px}
 .row{display:grid;grid-template-columns:26px 40px minmax(0,1fr) auto auto;gap:12px;align-items:center;
  padding:7px 10px;border-radius:4px;font-size:14px}
@@ -87,21 +106,25 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
 @media(max-width:700px){.player .mid,.player .right{display:none}}
 `,
   body: (D) => {
-    /* הפלטה המדודה של Spotify: #000 · #121212 · #181818 · #333333 · #535353 · #1ed760 — אין בה צבעי-אריח */
-    const art = () => 'background:#333333;color:#ffffff';
+    /* העטיפות הן אמנות ולא טוקן — באתר האמיתי אלה תמונות. כאן הן מצוירות
+       דטרמיניסטית מהמפתח של הרשומה, ומסומנות data-art. */
+    const art = (k) => cover(k);
     return `<div class="app">
 <aside class="side">
   <p class="brand"><i aria-hidden="true">מ</i>מוסד</p>
   <nav class="nav"><a href="#" aria-current="page">🏠 בית</a><a href="#">⌕ חיפוש</a><a href="#">📚 הספרייה</a></nav>
+  <div class="promo noprint"><b>פתח מגבית חדשה</b><p>שלוש שאלות וזה רץ</p><button>מגבית חדשה</button></div>
+  <div class="promo noprint"><b>המחאות ממתינות להפקדה</b><p>נסרוק ונשייך לבד</p><button>סריקה</button></div>
   <p class="libhead">האגפים שלך</p>
   <nav class="lib">
-    ${D.depts.map(([n, s, e], i) => `<a href="#"><span class="art" style="${art()}">${e}</span>
+    ${D.depts.map(([n, s, e], i) => `<a href="#"><span class="art" data-art style="${art(n)}">${e}</span>
       <span><b>${n}</b><span>${s}</span></span></a>`).join('')}
   </nav>
 </aside>
 
 <main class="main">
-  <div class="top noprint"><span class="circ">›</span><span class="circ">‹</span><span class="sp"></span>
+  <div class="top noprint"><span class="circ">›</span><span class="circ">‹</span>
+    <span class="find"><span aria-hidden="true">⌕</span>מה מחפשים היום?</span><span class="sp"></span>
     <button class="pill">רישום תשלום</button><span class="av">מ</span></div>
 
   <div class="in">
@@ -109,7 +132,7 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
     <div class="quick">
       ${[['גבייה', D.pct + '%', 0], ['פתוח', D.nis(D.open), 1], ['צוות היום', D.present + '/' + D.staff, 3],
       ['נוכחות', D.attAll + '%', 2], ['גמ״ח זמין', D.nis(D.fund), 4], ['מגבית', D.nis(D.raised), 5]]
-        .map(([t, v, i]) => `<a class="q" href="#"><span class="art" style="${art()}">${i % 2 ? '▤' : '◆'}</span>
+        .map(([t, v, i]) => `<a class="q" href="#"><span class="art" data-art style="${art(t)}">${i % 2 ? '▤' : '◆'}</span>
           <span><b>${t}</b><span>${v}</span></span></a>`).join('')}
     </div>
 
@@ -120,7 +143,7 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
       [D.queueN, 'בתור לקבלת קהל', 'החצר'], [D.absent, 'חסרים בצוות', D.subs + ' מחליפים שובצו'],
       [D.routes.filter(r => !r.driver).length, 'קווים בלי נהג', 'למחר'], [D.calls.length, 'קריאות שירות', 'פתוחות'],
       [D.payList.filter(p => p.method === 'המחאה').length, 'צ׳קים להפקדה', 'עד חמישי']]
-        .map(([n, t, s], i) => `<a class="c" href="#"><span class="art" style="${art()}">${n}</span>
+        .map(([n, t, s], i) => `<a class="c" href="#"><span class="art" data-art style="${art(t)}">${n}</span>
           <b>${t}</b><span>${s}</span></a>`).join('')}
     </div>
 
@@ -128,7 +151,7 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
     <p class="sub">${D.families} משפחות · ${D.money(D.open)} פתוחים</p>
     <div class="shelf">
       ${D.topOpen.slice(0, 10).map((f, i) => `<a class="c" href="#">
-        <span class="art round" style="${art()}">${f.init}</span>
+        <span class="art round" data-art style="${art(f.name)}">${f.init}</span>
         <b>${f.name}</b><span>${D.nis(f.bal)} · ${f.kids} ילדים</span></a>`).join('')}
     </div>
 
@@ -136,7 +159,7 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
     <p class="sub">${D.donations} תרומות למגבית ${D.camp} · ${Math.round(D.raised / D.goal * 100)}% מהיעד</p>
     <div class="shelf">
       ${D.donList.slice(0, 10).map((d, i) => `<a class="c" href="#">
-        <span class="art round" style="${art()}">${d.init}</span>
+        <span class="art round" data-art style="${art(d.name)}">${d.init}</span>
         <b>${d.name}</b><span>${D.nis(d.amount)} · ${d.method}</span></a>`).join('')}
     </div>
 
@@ -144,7 +167,7 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
     <p class="sub">${D.minyanim.length} זמנים · הזמן הנוכחי מסומן</p>
     <div class="rows">
       ${D.minyanim.map((m, i) => `<div class="row${m.time === D.now.time ? ' on' : ''}">
-        <span class="n">${i + 1}</span><span class="art" style="${art()}">🕯</span>
+        <span class="n">${i + 1}</span><span class="art" data-art style="${art(m.name)}">🕯</span>
         <span><b>${m.name}</b><span>${m.where || '—'}</span></span>
         <span class="m">${m.count ? m.count + ' משתתפים' : ''}</span><span class="m">${D.ltr(m.time)}</span></div>`).join('')}
     </div>
@@ -153,7 +176,7 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
     <p class="sub">${D.students} תלמידים ב-${D.classes.length} כיתות · נוכחות ממוצעת ${D.attAll}%</p>
     <div class="rows">
       ${D.classes.map((c, i) => `<div class="row"><span class="n">${i + 1}</span>
-        <span class="art" style="${art()}">${c.name}</span>
+        <span class="art" data-art style="${art(c.name)}">${c.name}</span>
         <span><b>${c.rebbe}</b><span>${c.room} · ${c.n} תלמידים</span></span>
         <span class="m">${c.pct}%</span><span class="m">${c.n}</span></div>`).join('')}
     </div>
@@ -162,7 +185,7 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
     <p class="sub">${D.loans} בתיק · ${D.money(D.fund)} זמינים · ${D.fundLate} באיחור</p>
     <div class="rows">
       ${D.loanList.map((l, i) => `<div class="row"><span class="n">${i + 1}</span>
-        <span class="art round" style="${art()}">${l.init}</span>
+        <span class="art round" data-art style="${art(l.fam + l.purpose)}">${l.init}</span>
         <span><b>${l.fam}</b><span>${l.purpose} · ${l.stage}</span></span>
         <span class="m">${l.g}/2 ערבים</span><span class="m">${D.nis(l.amount)}</span></div>`).join('')}
     </div>
@@ -177,7 +200,7 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
 </div>
 
 <div class="player noprint">
-  <div class="now"><span class="art">🕯</span><span><b>${D.now.name}</b><span>${D.now.where} · ${D.now.count} משתתפים</span></span></div>
+  <div class="now"><span class="art" data-art style="${art(D.now.name)}">🕯</span><span><b>${D.now.name}</b><span>${D.now.where} · ${D.now.count} משתתפים</span></span></div>
   <div class="mid"><div class="ctr"><button>⇄</button><button>‹‹</button>
       <button class="play" aria-label="נגן">▸</button><button>››</button><button>↻</button></div>
     <div class="track"><span>${D.ltr('13:45')}</span><span class="bar"><i style="width:42%"></i></span><span>${D.ltr('14:30')}</span></div></div>

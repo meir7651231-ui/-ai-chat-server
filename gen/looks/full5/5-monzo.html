@@ -43,8 +43,17 @@ body{background:var(--bg);color:var(--ink);font:400 16px/22.4px Rubik,Arial,sans
 .nav .btn::after{content:'←';font-size:13px}
 
 .wrap{max-width:1180px;margin-inline:auto;padding:32px 24px 80px}
-/* h1 מדוד: 49/800 · גובה-שורה 1.2 */
-.greet{font:800 clamp(30px,5vw,49px)/1.2 Rubik;margin-bottom:24px}
+/* הגיבור של מונזו: משטח הנייבי המדוד #112231, פינה 32, ריפוד 64, כותרת 49/800 לבנה */
+.lead{background:var(--navy);color:#fff;border-radius:var(--rCard);padding:64px;margin-bottom:32px;
+ display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:48px;align-items:center}
+@media(max-width:900px){.lead{grid-template-columns:1fr;padding:32px 24px;gap:32px}}
+.lead h1{font:800 clamp(32px,5vw,49px)/1.2 Rubik;max-width:16ch;text-wrap:balance}
+.lead p{font-size:20px;line-height:28px;margin:16px 0 32px;max-width:46ch;opacity:.92}
+.lead .cta{display:flex;gap:16px;flex-wrap:wrap}
+.lead .cta button{background:#fff;color:var(--ink);border:0;border-radius:var(--rPill);padding:0 24px;font:400 16px Rubik;min-height:48px}
+.lead .cta button.o{background:none;color:#fff;border:2px solid #fff}
+.lead .cardart{width:100%;height:auto;filter:drop-shadow(0 24px 48px rgb(0 0 0 / .45));transform:rotate(-6deg)}
+.greet{font:800 clamp(26px,3.6vw,34px)/1.2 Rubik;margin-bottom:24px}
 .hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start;margin-bottom:32px}
 @media(max-width:860px){.hero{grid-template-columns:1fr}}
 /* כרטיס מדוד: רדיוס 32 · ריפוד 32/24 · מסגרת 2 */
@@ -121,7 +130,28 @@ p.sub{font-size:16px;color:var(--mut);margin-bottom:16px}
   <span class="sp"></span><button class="btn">רישום תשלום</button></div></header>
 
 <div class="wrap">
-  <h1 class="greet">בוקר טוב · הבית של המוסד</h1>
+  <section class="lead">
+    <div>
+      <h1>הכסף של המוסד — במקום אחד, ברור, וכל הזמן מעודכן.</h1>
+      <p>72% מהחיוב השנתי כבר נגבו. <bdi dir="ltr">₪675,960</bdi> עדיין פתוחים אצל 168 משפחות,
+        ו-29 מהן בפיגור בלי הוראת קבע. הכל נשאב מהמחסן, אף מספר לא הוקלד.</p>
+      <div class="cta noprint"><button>רישום תשלום</button><button class="o">שליחת תזכורות</button></div>
+    </div>
+    <svg data-art class="cardart" viewBox="0 0 340 214" role="img" aria-label="כרטיס המוסד" style="direction:ltr">
+ <defs><linearGradient id="mc" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#ff6a52"/><stop offset=".55" stop-color="#ff4f40"/><stop offset="1" stop-color="#e03a2e"/></linearGradient>
+ <linearGradient id="mg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe9a8"/><stop offset="1" stop-color="#d6a640"/></linearGradient></defs>
+ <rect width="340" height="214" rx="16" fill="url(#mc)"/>
+ <rect x="24" y="64" width="44" height="34" rx="6" fill="url(#mg)"/>
+ <path d="M32 72h28M32 81h28M32 90h28" stroke="#c99a3c" stroke-width="1.5"/>
+ <circle cx="300" cy="44" r="52" fill="#ffffff" opacity=".07"/>
+ <circle cx="272" cy="150" r="34" fill="#ffffff" opacity=".05"/>
+ <text x="24" y="150" fill="#ffffff" font-family="Rubik,Arial" font-size="19" letter-spacing="2.5">•••• •••• •••• 4417</text>
+ <text x="24" y="182" fill="#ffffff" font-family="Rubik,Arial" font-size="13" opacity=".85">MOSAD · TZEDAKA</text>
+ <text x="286" y="182" fill="#ffffff" font-family="Rubik,Arial" font-size="13" opacity=".85">12/29</text>
+</svg>
+  </section>
+  <h2 class="greet">בוקר טוב · הבית של המוסד</h2>
   <section class="hero">
     <div class="acct">
       <span class="lab">נגבה עד היום · תשפ״ז</span>

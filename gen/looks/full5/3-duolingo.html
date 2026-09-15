@@ -25,7 +25,7 @@ body{background:var(--bg);color:var(--ink);font:400 17px/1.18 'Varela Round',Ari
 .hdr{border-block-end:2px solid var(--hair);position:sticky;top:0;background:#fff;z-index:10}
 .hdr .in{max-width:1180px;margin-inline:auto;padding:12px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 /* הירוק המדוד אינו עובר סף-קריאוּת כטקסט — לכן הוא מילוי, והשם עליו כהה */
-.hdr .logo{font-size:21px;background:var(--green);color:var(--greenInk);font-weight:700;margin:0;border-radius:var(--r);padding:7px 12px}
+.hdr .logo{font-size:21px;margin:0;background:var(--green);color:var(--greenInk);font-weight:700;margin:0;border-radius:var(--r);padding:7px 12px}
 .hdr .sp{flex:1}
 /* המונים: הערך יושב בגלולה בגוון מדוד, הטקסט תמיד בדיו המדוד */
 .mtr{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:700;color:var(--ink)}
@@ -49,7 +49,19 @@ body{background:var(--bg);color:var(--ink);font:400 17px/1.18 'Varela Round',Ari
 /* באנר ירוק: הירוק המדוד כרקע והדיו הכהה שלו כטקסט (חריגה מוצהרת) */
 .unit.green{background:var(--green);color:var(--greenInk);--onUnit:#0d2600}
 
-.path{display:grid;justify-items:center;gap:24px;padding:14px 0 22px}
+/* הכרטיס המאויר שפותח את עמוד-הלימוד של דואולינגו */
+.welcome{display:grid;grid-template-columns:300px minmax(0,1fr);gap:24px;align-items:center;
+ border:2px solid var(--hair);border-radius:var(--r);padding:24px;margin-bottom:24px}
+@media(max-width:700px){.welcome{grid-template-columns:1fr;text-align:center;justify-items:center}}
+.welcome .scene{width:300px;max-width:100%;height:auto}
+.welcome h1{font:700 clamp(28px,4.4vw,40px)/1.05 'Varela Round';letter-spacing:-.02em;text-wrap:balance}
+.welcome p{font-size:17px;color:var(--mut);margin:10px 0 16px;max-width:38ch}
+/* רצועת-הקורסים הצבעונית בתחתית העמוד של דואולינגו */
+.courses{display:flex;gap:24px;overflow-x:auto;padding:12px 0 24px;align-items:center}
+.courses a{display:flex;align-items:center;gap:10px;flex:none;font-size:13px;font-weight:700;
+ color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+.courses i{width:36px;height:26px;border-radius:var(--r);display:block;flex:none}
+.path{display:grid;justify-items:center;gap:24px;padding:14px 0 22px;max-width:440px;margin-inline:auto}
 .node{display:grid;justify-items:center;gap:7px;position:relative}
 .node .btn{width:76px;height:76px;border-radius:9999px;border:0;display:grid;place-items:center;font-size:24px;padding:0;
  background:var(--green);color:var(--greenInk);box-shadow:0 7px 0 rgba(0,0,0,.22);position:relative}
@@ -115,7 +127,7 @@ h2.sec{font-size:19px;margin:22px 0 10px}
 </head>
 <body>
 <header class="hdr"><div class="in">
-  <h1 class="logo">מוסד</h1>
+  <p class="logo">מוסד</p>
   <span class="mtr f"><i>🔥</i><b>72%</b></span>
   <span class="mtr g"><i>💎</i><b>₪1,406,140</b></span>
   <span class="mtr h"><i>❤</i><b>4</b></span>
@@ -126,6 +138,31 @@ h2.sec{font-size:19px;margin:22px 0 10px}
 
 <div class="wrap">
 <main>
+  <section class="welcome">
+    <svg data-art class="scene" viewBox="0 0 300 220" role="img" aria-label="איור">
+ <ellipse cx="150" cy="189.2" rx="102.00000000000001" ry="12" fill="#000" opacity=".07"/>
+ <path d="M54 162.8 q36 -110 120 -96.8 q-18 92.39999999999999 -120 96.8 z" fill="#a5ed6e"/>
+ <path d="M66 154 q48 -74.80000000000001 96 -74.80000000000001" stroke="#58cc02" stroke-width="4" fill="none" stroke-linecap="round"/>
+ <g transform="translate(162 44) rotate(1.7)">
+  <rect x="0" y="52" width="82" height="86" rx="30" fill="#ef5da8"/>
+  <rect x="-22" y="70" width="34" height="18" rx="9" fill="#f3d3b3"/>
+  <rect x="70" y="70" width="34" height="18" rx="9" fill="#f3d3b3"/>
+  <circle cx="41" cy="34" r="31" fill="#f3d3b3"/>
+  <path d="M10 26a31 31 0 0 1 62 0q-31 -16 -62 0z" fill="#8a4b2a"/>
+  <circle cx="31" cy="36" r="4" fill="#1f1f1f"/><circle cx="53" cy="36" r="4" fill="#1f1f1f"/>
+  <path d="M33 48q8 7 16 0" stroke="#1f1f1f" stroke-width="3" fill="none" stroke-linecap="round"/>
+ </g>
+ <circle cx="258" cy="48.4" r="13" fill="#1cb0f6" opacity=".9"/>
+ <circle cx="36" cy="52.8" r="9" fill="#ff9f43" opacity=".9"/>
+</svg>
+    <div>
+      <h1>הדרך הכי פשוטה לנהל את המוסד</h1>
+      <p>72% מהחיוב השנתי כבר נגבו · 412 תלמידים ב-12 כיתות ·
+        44 אנשי צוות. ממשיכים מהמקום שבו עצרנו.</p>
+      <button class="go">המשך ליחידה 1</button>
+    </div>
+  </section>
+
   <div class="unit"><small>יחידה 1 · תשפ״ז</small><b>גבייה ושכר לימוד</b><span class="sp"></span>
     <button class="noprint">מדריך היחידה</button></div>
 
@@ -276,7 +313,11 @@ h2.sec{font-size:19px;margin:22px 0 10px}
       <span style="font-weight:700;font-variant-numeric:tabular-nums">₪27,000</span></div>
   </div>
 
-  <p class="foot">כל הנתונים מהמחסן של המערכת · החלקים (פס-מונים · צמתי-מסלול · באנר-יחידה · ליגה ·
+  <nav class="courses noprint" aria-label="אגפים">
+    <a href="#"><i data-art style="background:linear-gradient(160deg,hsl(175 72% 58%),hsl(209 70% 42%));box-shadow:inset 0 1px 0 hsl(175 90% 78% / .65),0 1px 2px rgb(0 0 0 / .5)"></i>אנשים</a><a href="#"><i data-art style="background:linear-gradient(160deg,hsl(283 72% 58%),hsl(317 70% 42%));box-shadow:inset 0 1px 0 hsl(283 90% 78% / .65),0 1px 2px rgb(0 0 0 / .5)"></i>חינוך</a><a href="#"><i data-art style="background:linear-gradient(160deg,hsl(338 72% 58%),hsl(12 70% 42%));box-shadow:inset 0 1px 0 hsl(338 90% 78% / .65),0 1px 2px rgb(0 0 0 / .5)"></i>צוות</a><a href="#"><i data-art style="background:linear-gradient(160deg,hsl(261 72% 58%),hsl(295 70% 42%));box-shadow:inset 0 1px 0 hsl(261 90% 78% / .65),0 1px 2px rgb(0 0 0 / .5)"></i>גבייה</a><a href="#"><i data-art style="background:linear-gradient(160deg,hsl(273 72% 58%),hsl(307 70% 42%));box-shadow:inset 0 1px 0 hsl(273 90% 78% / .65),0 1px 2px rgb(0 0 0 / .5)"></i>תרומות</a><a href="#"><i data-art style="background:linear-gradient(160deg,hsl(52 72% 58%),hsl(86 70% 42%));box-shadow:inset 0 1px 0 hsl(52 90% 78% / .65),0 1px 2px rgb(0 0 0 / .5)"></i>כספים</a><a href="#"><i data-art style="background:linear-gradient(160deg,hsl(125 72% 58%),hsl(159 70% 42%));box-shadow:inset 0 1px 0 hsl(125 90% 78% / .65),0 1px 2px rgb(0 0 0 / .5)"></i>בית המדרש</a><a href="#"><i data-art style="background:linear-gradient(160deg,hsl(66 72% 58%),hsl(100 70% 42%));box-shadow:inset 0 1px 0 hsl(66 90% 78% / .65),0 1px 2px rgb(0 0 0 / .5)"></i>החצר</a><a href="#"><i data-art style="background:linear-gradient(160deg,hsl(66 72% 58%),hsl(100 70% 42%));box-shadow:inset 0 1px 0 hsl(66 90% 78% / .65),0 1px 2px rgb(0 0 0 / .5)"></i>חסד</a><a href="#"><i data-art style="background:linear-gradient(160deg,hsl(223 72% 58%),hsl(257 70% 42%));box-shadow:inset 0 1px 0 hsl(223 90% 78% / .65),0 1px 2px rgb(0 0 0 / .5)"></i>תפעול</a><a href="#"><i data-art style="background:linear-gradient(160deg,hsl(193 72% 58%),hsl(227 70% 42%));box-shadow:inset 0 1px 0 hsl(193 90% 78% / .65),0 1px 2px rgb(0 0 0 / .5)"></i>שידוכים</a><a href="#"><i data-art style="background:linear-gradient(160deg,hsl(160 72% 58%),hsl(194 70% 42%));box-shadow:inset 0 1px 0 hsl(160 90% 78% / .65),0 1px 2px rgb(0 0 0 / .5)"></i>תקשורת</a>
+  </nav>
+
+  <p class="foot">כל הנתונים מהמחסן של המערכת · החלקים (פס-מונים · איור-פתיחה · רצועת-אגפים · צמתי-מסלול · באנר-יחידה · ליגה ·
     משימות יומיות · ניווט תחתון · כפתור תלת-ממדי) לקוחים מ-Duolingo · נתוני דוגמה</p>
 </main>
 

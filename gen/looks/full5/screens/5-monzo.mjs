@@ -1,6 +1,8 @@
 /* מסך הבית בשפת Monzo — עמוד-בית מלא:
    פס-הודעה עליון, כרטיס-חשבון צבעוני עם יתרה, רצועת «קופות», סיכום-הוצאה לפי קטגוריה,
    רשימת-תנועות ארוכה עם עיגולי-אייקון, כרטיסי-צבע עם כרטיסונים לבנים, ותשלומים קרובים. */
+import { monzoCard } from '../art.mjs';
+
 export default {
   id: '5-monzo', name: 'Monzo', ref: 'עמוד-בית: כרטיס-חשבון · קופות · הוצאה לפי קטגוריה · תנועות · כרטיסי-צבע',
   fonts: ['Rubik:wght@400;500;700;800'],
@@ -33,8 +35,17 @@ body{background:var(--bg);color:var(--ink);font:400 16px/22.4px Rubik,Arial,sans
 .nav .btn::after{content:'←';font-size:13px}
 
 .wrap{max-width:1180px;margin-inline:auto;padding:32px 24px 80px}
-/* h1 מדוד: 49/800 · גובה-שורה 1.2 */
-.greet{font:800 clamp(30px,5vw,49px)/1.2 Rubik;margin-bottom:24px}
+/* הגיבור של מונזו: משטח הנייבי המדוד #112231, פינה 32, ריפוד 64, כותרת 49/800 לבנה */
+.lead{background:var(--navy);color:#fff;border-radius:var(--rCard);padding:64px;margin-bottom:32px;
+ display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:48px;align-items:center}
+@media(max-width:900px){.lead{grid-template-columns:1fr;padding:32px 24px;gap:32px}}
+.lead h1{font:800 clamp(32px,5vw,49px)/1.2 Rubik;max-width:16ch;text-wrap:balance}
+.lead p{font-size:20px;line-height:28px;margin:16px 0 32px;max-width:46ch;opacity:.92}
+.lead .cta{display:flex;gap:16px;flex-wrap:wrap}
+.lead .cta button{background:#fff;color:var(--ink);border:0;border-radius:var(--rPill);padding:0 24px;font:400 16px Rubik;min-height:48px}
+.lead .cta button.o{background:none;color:#fff;border:2px solid #fff}
+.lead .cardart{width:100%;height:auto;filter:drop-shadow(0 24px 48px rgb(0 0 0 / .45));transform:rotate(-6deg)}
+.greet{font:800 clamp(26px,3.6vw,34px)/1.2 Rubik;margin-bottom:24px}
 .hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start;margin-bottom:32px}
 @media(max-width:860px){.hero{grid-template-columns:1fr}}
 /* כרטיס מדוד: רדיוס 32 · ריפוד 32/24 · מסגרת 2 */
@@ -113,7 +124,16 @@ p.sub{font-size:16px;color:var(--mut);margin-bottom:16px}
   <span class="sp"></span><button class="btn">רישום תשלום</button></div></header>
 
 <div class="wrap">
-  <h1 class="greet">בוקר טוב · הבית של המוסד</h1>
+  <section class="lead">
+    <div>
+      <h1>הכסף של המוסד — במקום אחד, ברור, וכל הזמן מעודכן.</h1>
+      <p>${D.pct}% מהחיוב השנתי כבר נגבו. ${D.money(D.open)} עדיין פתוחים אצל ${D.families} משפחות,
+        ו-${D.late} מהן בפיגור בלי הוראת קבע. הכל נשאב מהמחסן, אף מספר לא הוקלד.</p>
+      <div class="cta noprint"><button>רישום תשלום</button><button class="o">שליחת תזכורות</button></div>
+    </div>
+    ${monzoCard('4417')}
+  </section>
+  <h2 class="greet">בוקר טוב · הבית של המוסד</h2>
   <section class="hero">
     <div class="acct">
       <span class="lab">נגבה עד היום · ${D.tariff.year}</span>

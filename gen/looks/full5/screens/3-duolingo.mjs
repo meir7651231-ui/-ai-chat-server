@@ -1,6 +1,8 @@
 /* מסך הבית בשפת Duolingo — עמוד-לימוד מלא:
    פס עליון עם מוני-רצף, מסלול-יחידות עם צמתים עגולים, באנר-יחידה, סרגל-צד ימני
    (ליגה · משימות יומיות · חברים), ופס-ניווט תחתון. המבנה של מסך הלימוד בצילום. */
+import { scene, appIcon } from '../art.mjs';
+
 export default {
   id: '3-duolingo', name: 'Duolingo', ref: 'עמוד-לימוד: פס-מונים · מסלול-צמתים · באנר-יחידה · ליגה ומשימות · ניווט תחתון',
   fonts: ['Varela+Round', 'Alef:wght@400;700'],
@@ -15,7 +17,7 @@ body{background:var(--bg);color:var(--ink);font:400 17px/1.18 'Varela Round',Ari
 .hdr{border-block-end:2px solid var(--hair);position:sticky;top:0;background:#fff;z-index:10}
 .hdr .in{max-width:1180px;margin-inline:auto;padding:12px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 /* הירוק המדוד אינו עובר סף-קריאוּת כטקסט — לכן הוא מילוי, והשם עליו כהה */
-.hdr .logo{font-size:21px;background:var(--green);color:var(--greenInk);font-weight:700;margin:0;border-radius:var(--r);padding:7px 12px}
+.hdr .logo{font-size:21px;margin:0;background:var(--green);color:var(--greenInk);font-weight:700;margin:0;border-radius:var(--r);padding:7px 12px}
 .hdr .sp{flex:1}
 /* המונים: הערך יושב בגלולה בגוון מדוד, הטקסט תמיד בדיו המדוד */
 .mtr{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:700;color:var(--ink)}
@@ -39,7 +41,19 @@ body{background:var(--bg);color:var(--ink);font:400 17px/1.18 'Varela Round',Ari
 /* באנר ירוק: הירוק המדוד כרקע והדיו הכהה שלו כטקסט (חריגה מוצהרת) */
 .unit.green{background:var(--green);color:var(--greenInk);--onUnit:#0d2600}
 
-.path{display:grid;justify-items:center;gap:24px;padding:14px 0 22px}
+/* הכרטיס המאויר שפותח את עמוד-הלימוד של דואולינגו */
+.welcome{display:grid;grid-template-columns:300px minmax(0,1fr);gap:24px;align-items:center;
+ border:2px solid var(--hair);border-radius:var(--r);padding:24px;margin-bottom:24px}
+@media(max-width:700px){.welcome{grid-template-columns:1fr;text-align:center;justify-items:center}}
+.welcome .scene{width:300px;max-width:100%;height:auto}
+.welcome h1{font:700 clamp(28px,4.4vw,40px)/1.05 'Varela Round';letter-spacing:-.02em;text-wrap:balance}
+.welcome p{font-size:17px;color:var(--mut);margin:10px 0 16px;max-width:38ch}
+/* רצועת-הקורסים הצבעונית בתחתית העמוד של דואולינגו */
+.courses{display:flex;gap:24px;overflow-x:auto;padding:12px 0 24px;align-items:center}
+.courses a{display:flex;align-items:center;gap:10px;flex:none;font-size:13px;font-weight:700;
+ color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+.courses i{width:36px;height:26px;border-radius:var(--r);display:block;flex:none}
+.path{display:grid;justify-items:center;gap:24px;padding:14px 0 22px;max-width:440px;margin-inline:auto}
 .node{display:grid;justify-items:center;gap:7px;position:relative}
 .node .btn{width:76px;height:76px;border-radius:9999px;border:0;display:grid;place-items:center;font-size:24px;padding:0;
  background:var(--green);color:var(--greenInk);box-shadow:0 7px 0 rgba(0,0,0,.22);position:relative}
@@ -123,7 +137,7 @@ h2.sec{font-size:19px;margin:22px 0 10px}
       ['locked', '📊', 'דוח לוועד', 'סוף החודש'],
     ];
     return `<header class="hdr"><div class="in">
-  <h1 class="logo">מוסד</h1>
+  <p class="logo">מוסד</p>
   <span class="mtr f"><i>🔥</i><b>${D.pct}%</b></span>
   <span class="mtr g"><i>💎</i><b>${D.nis(D.raised)}</b></span>
   <span class="mtr h"><i>❤</i><b>${D.absent}</b></span>
@@ -134,6 +148,16 @@ h2.sec{font-size:19px;margin:22px 0 10px}
 
 <div class="wrap">
 <main>
+  <section class="welcome">
+    ${scene('mosad-' + D.tariff.year)}
+    <div>
+      <h1>הדרך הכי פשוטה לנהל את המוסד</h1>
+      <p>${D.pct}% מהחיוב השנתי כבר נגבו · ${D.students} תלמידים ב-${D.classes.length} כיתות ·
+        ${D.staff} אנשי צוות. ממשיכים מהמקום שבו עצרנו.</p>
+      <button class="go">המשך ליחידה 1</button>
+    </div>
+  </section>
+
   <div class="unit"><small>יחידה 1 · ${D.tariff.year}</small><b>גבייה ושכר לימוד</b><span class="sp"></span>
     <button class="noprint">מדריך היחידה</button></div>
 
@@ -185,7 +209,11 @@ h2.sec{font-size:19px;margin:22px 0 10px}
       <span style="font-weight:700;font-variant-numeric:tabular-nums">${D.nis(l.amount)}</span></div>`).join('')}
   </div>
 
-  <p class="foot">כל הנתונים מהמחסן של המערכת · החלקים (פס-מונים · צמתי-מסלול · באנר-יחידה · ליגה ·
+  <nav class="courses noprint" aria-label="אגפים">
+    ${D.depts.map(([n]) => `<a href="#"><i data-art style="${appIcon(n)}"></i>${n}</a>`).join('')}
+  </nav>
+
+  <p class="foot">כל הנתונים מהמחסן של המערכת · החלקים (פס-מונים · איור-פתיחה · רצועת-אגפים · צמתי-מסלול · באנר-יחידה · ליגה ·
     משימות יומיות · ניווט תחתון · כפתור תלת-ממדי) לקוחים מ-Duolingo · נתוני דוגמה</p>
 </main>
 

@@ -1,5 +1,5 @@
 {
- "checkedAt": "2026-09-15T16:14",
+ "checkedAt": "2026-09-15T16:32",
  "measuredAt": "2026-09-15T16:01",
  "sites": {
   "raycast": {
@@ -32,13 +32,13 @@
     },
     {
      "group": "צבע",
-     "label": "#1b1c1e",
+     "label": "#2f3031",
      "ok": true,
      "note": ""
     },
     {
      "group": "צבע",
-     "label": "#2f3031",
+     "label": "#1b1c1e",
      "ok": true,
      "note": ""
     },
@@ -285,6 +285,12 @@
    "checks": [
     {
      "group": "צבע",
+     "label": "#121212",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
      "label": "#181818",
      "ok": true,
      "note": ""
@@ -292,12 +298,6 @@
     {
      "group": "צבע",
      "label": "#333333",
-     "ok": true,
-     "note": ""
-    },
-    {
-     "group": "צבע",
-     "label": "#121212",
      "ok": true,
      "note": ""
     },
@@ -316,6 +316,12 @@
     {
      "group": "צבע",
      "label": "#ffffff",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
+     "label": "#1f1f1f",
      "ok": true,
      "note": ""
     },
@@ -381,6 +387,12 @@
     },
     {
      "group": "רדיוס",
+     "label": "50px",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "רדיוס",
      "label": "999px",
      "ok": true,
      "note": ""
@@ -399,7 +411,7 @@
     },
     {
      "group": "מרווח",
-     "label": "16px",
+     "label": "24px",
      "ok": true,
      "note": "gap"
     },
@@ -411,9 +423,57 @@
     },
     {
      "group": "מרווח",
+     "label": "16px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
      "label": "4px",
      "ok": true,
      "note": "gap"
+    },
+    {
+     "group": "כפתור",
+     "label": "radius 9999",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 16",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 8",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 14",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 700",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg #ffffff",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "color #000000",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
     },
     {
      "group": "כפתור",
@@ -538,13 +598,13 @@
     },
     {
      "group": "צבע",
-     "label": "#3c3c3c",
+     "label": "#4b4b4b",
      "ok": true,
      "note": ""
     },
     {
      "group": "צבע",
-     "label": "#4b4b4b",
+     "label": "#3c3c3c",
      "ok": true,
      "note": ""
     },
@@ -586,13 +646,13 @@
     },
     {
      "group": "מרווח",
-     "label": "12px",
+     "label": "10px",
      "ok": true,
      "note": "gap"
     },
     {
      "group": "מרווח",
-     "label": "10px",
+     "label": "12px",
      "ok": true,
      "note": "gap"
     },
@@ -694,13 +754,13 @@
     },
     {
      "group": "כפתור",
-     "label": "radius 9999",
+     "label": "radius 12",
      "ok": true,
      "note": ""
     },
     {
      "group": "כפתור",
-     "label": "padX 0",
+     "label": "padX 16",
      "ok": true,
      "note": ""
     },
@@ -712,19 +772,19 @@
     },
     {
      "group": "כפתור",
-     "label": "size 24",
+     "label": "size 15",
      "ok": true,
      "note": ""
     },
     {
      "group": "כפתור",
-     "label": "weight 400",
+     "label": "weight 700",
      "ok": true,
      "note": ""
     },
     {
      "group": "כפתור",
-     "label": "bg #a5ed6e",
+     "label": "bg #58cc02",
      "ok": true,
      "note": "אינו בפלטה המדודה"
     },
@@ -766,7 +826,7 @@
     },
     {
      "group": "כפתור",
-     "label": "bg #58cc02",
+     "label": "bg #a5ed6e",
      "ok": true,
      "note": "אינו בפלטה המדודה"
     },
@@ -1132,6 +1192,12 @@
     },
     {
      "group": "צבע",
+     "label": "#112231",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "צבע",
      "label": "#ffffff",
      "ok": true,
      "note": ""
@@ -1139,12 +1205,6 @@
     {
      "group": "צבע",
      "label": "#ff4f40",
-     "ok": true,
-     "note": ""
-    },
-    {
-     "group": "צבע",
-     "label": "#112231",
      "ok": true,
      "note": ""
     },
@@ -1223,6 +1283,12 @@
     {
      "group": "מרווח",
      "label": "24px",
+     "ok": true,
+     "note": "gap"
+    },
+    {
+     "group": "מרווח",
+     "label": "48px",
      "ok": true,
      "note": "gap"
     },
@@ -1353,6 +1419,48 @@
      "note": "אינו בפלטה המדודה"
     },
     {
+     "group": "כפתור",
+     "label": "radius 128",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padX 24",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "padY 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "size 16",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "weight 400",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "group": "כפתור",
+     "label": "bg #ffffff",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
+     "group": "כפתור",
+     "label": "color #091723",
+     "ok": true,
+     "note": "אינו בפלטה המדודה"
+    },
+    {
      "group": "טיפוגרפיה",
      "label": "body 16px",
      "ok": true,
@@ -1376,7 +1484,7 @@
  },
  "total": {
   "pct": 100,
-  "hit": 217,
-  "of": 217
+  "hit": 235,
+  "of": 235
  }
 }

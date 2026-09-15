@@ -28,9 +28,14 @@ body{background:var(--bg);color:var(--ink);font:400 16px/1.5 Assistant,Arial,san
 .nav a{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:6px;color:var(--mut);font-weight:600;font-size:14.5px}
 .nav a:hover,.nav a[aria-current]{color:var(--ink);background:var(--card)}
 .libhead{display:flex;align-items:center;gap:8px;color:var(--mut);font-weight:700;font-size:13.5px;padding:16px 10px 8px;border-block-start:1px solid var(--hair);margin-top:12px}
+/* שני כרטיסי-ההזמנה שיושבים בסרגל-הצד של ספוטיפיי */
+.promo{background:var(--card);border-radius:var(--rCard);padding:16px;margin:8px 4px}
+.promo b{display:block;font-size:16px;font-weight:700}
+.promo p{font-size:14px;color:var(--mut);margin:4px 0 12px}
+.promo button{background:var(--ink);color:#000000;border:0;border-radius:var(--rPill);padding:8px 16px;font:700 14px Assistant;min-height:32px}
 .lib a{display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;align-items:center;padding:7px 8px;border-radius:6px}
 .lib a:hover{background:var(--card)}
-.lib .art{width:38px;height:38px;border-radius:var(--rArt);background:var(--hi);color:var(--ink);display:grid;place-items:center;font-size:15px}
+.lib .art{width:38px;height:38px;border-radius:var(--rArt);color:#ffffff;display:grid;place-items:center;font-size:15px}
 .lib b{font-size:13.5px;font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lib span{font-size:11.5px;color:var(--mut)}
 
@@ -39,6 +44,9 @@ body{background:var(--bg);color:var(--ink);font:400 16px/1.5 Assistant,Arial,san
  background:rgba(0,0,0,.6);backdrop-filter:blur(8px)}
 .top .circ{width:32px;height:32px;border-radius:9999px;background:#000;display:grid;place-items:center;color:var(--mut)}
 .top .sp{flex:1}
+/* שדה-החיפוש המדוד של ספוטיפיי: רקע #1f1f1f · רדיוס 50 · גובה 48 */
+.top .find{display:flex;align-items:center;gap:12px;background:#1f1f1f;border-radius:50px;padding:12px 20px;
+ min-height:48px;min-width:min(42%,360px);color:var(--mut);font-size:16px}
 .top .pill{background:var(--ink);color:#000;border:0;border-radius:var(--rPill);padding:12px 24px;font-weight:700;font-size:16px;min-height:48px}
 .top .av{width:32px;height:32px;border-radius:9999px;background:#535353;color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700}
 .in{padding:8px 22px}
@@ -48,20 +56,29 @@ h1{font:700 clamp(26px,4vw,36px)/1.15 'Secular One',Assistant,sans-serif;margin:
 .q{display:grid;grid-template-columns:62px minmax(0,1fr);align-items:center;gap:12px;background:#333333;
  border-radius:var(--rArt);overflow:hidden;min-height:62px}
 .q:hover{background:#535353}
-.q .art{width:62px;height:62px;display:grid;place-items:center;background:var(--hi);color:var(--ink);font:400 22px 'Secular One',Assistant,sans-serif}
+.q .art{width:62px;height:62px;display:grid;place-items:center;color:#ffffff;font:400 22px 'Secular One',Assistant,sans-serif;box-shadow:rgba(0,0,0,.5) 0 8px 24px 0}
 .q b{font-size:14.5px;font-weight:700}
 .q span{display:block;font-size:11.5px;color:var(--mut)}
-h2{font:400 22px 'Secular One',Assistant,sans-serif;margin:26px 0 4px;display:flex;align-items:baseline;gap:8px}
-h2 a{margin-inline-start:auto;font:600 12px Assistant;color:var(--mut);letter-spacing:.08em}
+h2{font:700 24px 'Secular One',Assistant,sans-serif;margin:32px 0 4px;display:flex;align-items:baseline;gap:8px}
+h2 a{margin-inline-start:auto;font:700 14px Assistant;color:var(--mut)}
+h2 a:hover{color:var(--ink);text-decoration:underline}
 p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
-.shelf{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x proximity}
-.c{flex:none;width:174px;background:var(--card);border-radius:var(--rCard);padding:16px;scroll-snap-align:start}
-.c:hover{background:#242424}
-.c .art{aspect-ratio:1;border-radius:var(--rArt);background:var(--hi);color:var(--ink);box-shadow:rgba(0,0,0,.5) 0 8px 24px 0;display:grid;place-items:center;margin-bottom:12px;
- font:400 30px 'Secular One',Assistant,sans-serif;font-variant-numeric:tabular-nums;position:relative}
+/* המדף של ספוטיפיי היום: אין כרטיס מסביב — יש עטיפה גדולה, ומתחתיה שתי שורות */
+.shelf{display:flex;gap:24px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x proximity}
+.c{flex:none;width:172px;border-radius:var(--rCard);padding:12px;scroll-snap-align:start}
+.c:hover{background:#181818}
+.c .art{aspect-ratio:1;border-radius:var(--rArt);color:#ffffff;box-shadow:rgba(0,0,0,.5) 0 8px 24px 0;
+ display:grid;place-items:center;margin-bottom:12px;position:relative;
+ font:400 44px 'Secular One',Assistant,sans-serif;font-variant-numeric:tabular-nums;text-shadow:0 2px 12px rgb(0 0 0 / .45)}
 .c .art.round{border-radius:9999px}
-.c b{display:block;font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.c span{font-size:12.5px;color:var(--mut);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* כפתור-הנגינה הירוק שצף על העטיפה בריחוף — הסימן המזוהה של המדף */
+.c .art::after{content:'▸';position:absolute;inset-block-end:8px;inset-inline-end:8px;width:40px;height:40px;
+ border-radius:9999px;background:var(--acc);color:#000000;display:grid;place-items:center;font:400 18px Assistant;
+ box-shadow:rgba(0,0,0,.5) 0 8px 24px 0;opacity:0;transform:translateY(8px);transition:.18s}
+.c:hover .art::after{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.c .art::after{transition:none}}
+.c b{display:block;font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c span{font-size:14px;color:var(--mut);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rows{display:grid;gap:2px;margin-top:6px}
 .row{display:grid;grid-template-columns:26px 40px minmax(0,1fr) auto auto;gap:12px;align-items:center;
  padding:7px 10px;border-radius:4px;font-size:14px}
@@ -103,50 +120,53 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
 <aside class="side">
   <p class="brand"><i aria-hidden="true">מ</i>מוסד</p>
   <nav class="nav"><a href="#" aria-current="page">🏠 בית</a><a href="#">⌕ חיפוש</a><a href="#">📚 הספרייה</a></nav>
+  <div class="promo noprint"><b>פתח מגבית חדשה</b><p>שלוש שאלות וזה רץ</p><button>מגבית חדשה</button></div>
+  <div class="promo noprint"><b>המחאות ממתינות להפקדה</b><p>נסרוק ונשייך לבד</p><button>סריקה</button></div>
   <p class="libhead">האגפים שלך</p>
   <nav class="lib">
-    <a href="#"><span class="art" style="background:#333333;color:#ffffff">👥</span>
-      <span><b>אנשים</b><span>912 רשומות</span></span></a><a href="#"><span class="art" style="background:#333333;color:#ffffff">📚</span>
-      <span><b>חינוך</b><span>412 תלמידים</span></span></a><a href="#"><span class="art" style="background:#333333;color:#ffffff">🧰</span>
-      <span><b>צוות</b><span>44 עובדים</span></span></a><a href="#"><span class="art" style="background:#333333;color:#ffffff">₪</span>
-      <span><b>גבייה</b><span>72% מהחיוב</span></span></a><a href="#"><span class="art" style="background:#333333;color:#ffffff">❤</span>
-      <span><b>תרומות</b><span>3 מגביות</span></span></a><a href="#"><span class="art" style="background:#333333;color:#ffffff">📊</span>
-      <span><b>כספים</b><span>תקציב תשפ״ז</span></span></a><a href="#"><span class="art" style="background:#333333;color:#ffffff">🕯</span>
-      <span><b>בית המדרש</b><span>9 זמנים</span></span></a><a href="#"><span class="art" style="background:#333333;color:#ffffff">👑</span>
-      <span><b>החצר</b><span>13 בתור</span></span></a><a href="#"><span class="art" style="background:#333333;color:#ffffff">🤝</span>
-      <span><b>חסד</b><span>26 הלוואות</span></span></a><a href="#"><span class="art" style="background:#333333;color:#ffffff">🔧</span>
-      <span><b>תפעול</b><span>6 קווים</span></span></a><a href="#"><span class="art" style="background:#333333;color:#ffffff">💍</span>
-      <span><b>שידוכים</b><span>31 הצעות</span></span></a><a href="#"><span class="art" style="background:#333333;color:#ffffff">✉</span>
+    <a href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 70% 16%,hsl(230 71% 57%) 0%,transparent 62%),linear-gradient(152deg,hsl(175 71% 39%) 0%,hsl(230 59% 19%) 100%)">👥</span>
+      <span><b>אנשים</b><span>912 רשומות</span></span></a><a href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 56% 12%,hsl(14 73% 55%) 0%,transparent 62%),linear-gradient(139deg,hsl(283 73% 37%) 0%,hsl(14 61% 17%) 100%)">📚</span>
+      <span><b>חינוך</b><span>412 תלמידים</span></span></a><a href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 41% 17%,hsl(7 66% 67%) 0%,transparent 62%),linear-gradient(185deg,hsl(338 66% 49%) 0%,hsl(7 54% 29%) 100%)">🧰</span>
+      <span><b>צוות</b><span>44 עובדים</span></span></a><a href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 38% 16%,hsl(346 84% 64%) 0%,transparent 62%),linear-gradient(195deg,hsl(261 84% 46%) 0%,hsl(346 72% 26%) 100%)">₪</span>
+      <span><b>גבייה</b><span>72% מהחיוב</span></span></a><a href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 78% 12%,hsl(7 82% 52%) 0%,transparent 62%),linear-gradient(129deg,hsl(273 82% 34%) 0%,hsl(7 70% 14%) 100%)">❤</span>
+      <span><b>תרומות</b><span>3 מגביות</span></span></a><a href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 57% 12%,hsl(103 86% 60%) 0%,transparent 62%),linear-gradient(198deg,hsl(52 86% 42%) 0%,hsl(103 74% 22%) 100%)">📊</span>
+      <span><b>כספים</b><span>תקציב תשפ״ז</span></span></a><a href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 79% 37%,hsl(203 84% 56%) 0%,transparent 62%),linear-gradient(158deg,hsl(125 84% 38%) 0%,hsl(203 72% 18%) 100%)">🕯</span>
+      <span><b>בית המדרש</b><span>9 זמנים</span></span></a><a href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 32% 30%,hsl(99 66% 54%) 0%,transparent 62%),linear-gradient(131deg,hsl(66 66% 36%) 0%,hsl(99 54% 16%) 100%)">👑</span>
+      <span><b>החצר</b><span>13 בתור</span></span></a><a href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 23% 27%,hsl(150 62% 53%) 0%,transparent 62%),linear-gradient(208deg,hsl(66 62% 35%) 0%,hsl(150 50% 15%) 100%)">🤝</span>
+      <span><b>חסד</b><span>26 הלוואות</span></span></a><a href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 61% 26%,hsl(309 76% 61%) 0%,transparent 62%),linear-gradient(121deg,hsl(223 76% 43%) 0%,hsl(309 64% 23%) 100%)">🔧</span>
+      <span><b>תפעול</b><span>6 קווים</span></span></a><a href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 30% 37%,hsl(234 78% 58%) 0%,transparent 62%),linear-gradient(127deg,hsl(193 78% 40%) 0%,hsl(234 66% 20%) 100%)">💍</span>
+      <span><b>שידוכים</b><span>31 הצעות</span></span></a><a href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 25% 19%,hsl(186 87% 56%) 0%,transparent 62%),linear-gradient(211deg,hsl(160 87% 38%) 0%,hsl(186 75% 18%) 100%)">✉</span>
       <span><b>תקשורת</b><span>5 קבוצות</span></span></a>
   </nav>
 </aside>
 
 <main class="main">
-  <div class="top noprint"><span class="circ">›</span><span class="circ">‹</span><span class="sp"></span>
+  <div class="top noprint"><span class="circ">›</span><span class="circ">‹</span>
+    <span class="find"><span aria-hidden="true">⌕</span>מה מחפשים היום?</span><span class="sp"></span>
     <button class="pill">רישום תשלום</button><span class="av">מ</span></div>
 
   <div class="in">
     <h1>יום שלישי טוב</h1>
     <div class="quick">
-      <a class="q" href="#"><span class="art" style="background:#333333;color:#ffffff">◆</span>
-          <span><b>גבייה</b><span>72%</span></span></a><a class="q" href="#"><span class="art" style="background:#333333;color:#ffffff">▤</span>
-          <span><b>פתוח</b><span>₪675,960</span></span></a><a class="q" href="#"><span class="art" style="background:#333333;color:#ffffff">▤</span>
-          <span><b>צוות היום</b><span>40/44</span></span></a><a class="q" href="#"><span class="art" style="background:#333333;color:#ffffff">◆</span>
-          <span><b>נוכחות</b><span>92%</span></span></a><a class="q" href="#"><span class="art" style="background:#333333;color:#ffffff">◆</span>
-          <span><b>גמ״ח זמין</b><span>₪562,629</span></span></a><a class="q" href="#"><span class="art" style="background:#333333;color:#ffffff">▤</span>
+      <a class="q" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 38% 16%,hsl(346 84% 64%) 0%,transparent 62%),linear-gradient(195deg,hsl(261 84% 46%) 0%,hsl(346 72% 26%) 100%)">◆</span>
+          <span><b>גבייה</b><span>72%</span></span></a><a class="q" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 46% 28%,hsl(322 80% 54%) 0%,transparent 62%),linear-gradient(196deg,hsl(286 80% 36%) 0%,hsl(322 68% 16%) 100%)">▤</span>
+          <span><b>פתוח</b><span>₪675,960</span></span></a><a class="q" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 20% 37%,hsl(295 80% 64%) 0%,transparent 62%),linear-gradient(163deg,hsl(244 80% 46%) 0%,hsl(295 68% 26%) 100%)">▤</span>
+          <span><b>צוות היום</b><span>40/44</span></span></a><a class="q" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 67% 14%,hsl(43 69% 56%) 0%,transparent 62%),linear-gradient(201deg,hsl(5 69% 38%) 0%,hsl(43 57% 18%) 100%)">◆</span>
+          <span><b>נוכחות</b><span>92%</span></span></a><a class="q" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 36% 13%,hsl(121 74% 56%) 0%,transparent 62%),linear-gradient(187deg,hsl(36 74% 38%) 0%,hsl(121 62% 18%) 100%)">◆</span>
+          <span><b>גמ״ח זמין</b><span>₪562,629</span></span></a><a class="q" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 29% 25%,hsl(353 84% 60%) 0%,transparent 62%),linear-gradient(223deg,hsl(318 84% 42%) 0%,hsl(353 72% 22%) 100%)">▤</span>
           <span><b>מגבית</b><span>₪1,406,140</span></span></a>
     </div>
 
     <h2>לטפל היום <a href="#">הצג הכל</a></h2>
     <p class="sub">נבנה מהמחסן · 5 עניינים פתוחים</p>
     <div class="shelf">
-      <a class="c" href="#"><span class="art" style="background:#333333;color:#ffffff">29</span>
-          <b>משפחות בפיגור</b><span>שיחה או תזכורת</span></a><a class="c" href="#"><span class="art" style="background:#333333;color:#ffffff">2</span>
-          <b>בקשות גמ״ח</b><span>ממתינות לוועדה</span></a><a class="c" href="#"><span class="art" style="background:#333333;color:#ffffff">13</span>
-          <b>בתור לקבלת קהל</b><span>החצר</span></a><a class="c" href="#"><span class="art" style="background:#333333;color:#ffffff">4</span>
-          <b>חסרים בצוות</b><span>1 מחליפים שובצו</span></a><a class="c" href="#"><span class="art" style="background:#333333;color:#ffffff">1</span>
-          <b>קווים בלי נהג</b><span>למחר</span></a><a class="c" href="#"><span class="art" style="background:#333333;color:#ffffff">5</span>
-          <b>קריאות שירות</b><span>פתוחות</span></a><a class="c" href="#"><span class="art" style="background:#333333;color:#ffffff">2</span>
+      <a class="c" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 46% 22%,hsl(296 70% 67%) 0%,transparent 62%),linear-gradient(230deg,hsl(260 70% 49%) 0%,hsl(296 58% 29%) 100%)">29</span>
+          <b>משפחות בפיגור</b><span>שיחה או תזכורת</span></a><a class="c" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 49% 29%,hsl(342 65% 57%) 0%,transparent 62%),linear-gradient(146deg,hsl(250 65% 39%) 0%,hsl(342 53% 19%) 100%)">2</span>
+          <b>בקשות גמ״ח</b><span>ממתינות לוועדה</span></a><a class="c" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 77% 18%,hsl(234 75% 64%) 0%,transparent 62%),linear-gradient(214deg,hsl(153 75% 46%) 0%,hsl(234 63% 26%) 100%)">13</span>
+          <b>בתור לקבלת קהל</b><span>החצר</span></a><a class="c" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 64% 33%,hsl(242 65% 52%) 0%,transparent 62%),linear-gradient(229deg,hsl(189 65% 34%) 0%,hsl(242 53% 14%) 100%)">4</span>
+          <b>חסרים בצוות</b><span>1 מחליפים שובצו</span></a><a class="c" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 26% 15%,hsl(106 68% 64%) 0%,transparent 62%),linear-gradient(160deg,hsl(21 68% 46%) 0%,hsl(106 56% 26%) 100%)">1</span>
+          <b>קווים בלי נהג</b><span>למחר</span></a><a class="c" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 42% 15%,hsl(131 83% 61%) 0%,transparent 62%),linear-gradient(219deg,hsl(50 83% 43%) 0%,hsl(131 71% 23%) 100%)">5</span>
+          <b>קריאות שירות</b><span>פתוחות</span></a><a class="c" href="#"><span class="art" data-art style="background:radial-gradient(120% 90% at 55% 38%,hsl(16 78% 55%) 0%,transparent 62%),linear-gradient(160deg,hsl(307 78% 37%) 0%,hsl(16 66% 17%) 100%)">2</span>
           <b>צ׳קים להפקדה</b><span>עד חמישי</span></a>
     </div>
 
@@ -154,25 +174,25 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
     <p class="sub">168 משפחות · <bdi dir="ltr">₪675,960</bdi> פתוחים</p>
     <div class="shelf">
       <a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">או</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 37% 25%,hsl(261 71% 63%) 0%,transparent 62%),linear-gradient(203deg,hsl(230 71% 45%) 0%,hsl(261 59% 25%) 100%)">או</span>
         <b>משפחת אונגר</b><span>₪14,428 · 3 ילדים</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">פי</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 31% 38%,hsl(303 67% 58%) 0%,transparent 62%),linear-gradient(130deg,hsl(239 67% 40%) 0%,hsl(303 55% 20%) 100%)">פי</span>
         <b>משפחת פישר</b><span>₪14,138 · 3 ילדים</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">וק</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 50% 11%,hsl(152 79% 58%) 0%,transparent 62%),linear-gradient(176deg,hsl(117 79% 40%) 0%,hsl(152 67% 20%) 100%)">וק</span>
         <b>משפחת וקסלר א׳</b><span>₪14,128 · 3 ילדים</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">גו</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 22% 13%,hsl(90 87% 61%) 0%,transparent 62%),linear-gradient(173deg,hsl(18 87% 43%) 0%,hsl(90 75% 23%) 100%)">גו</span>
         <b>משפחת גולד י׳</b><span>₪13,775 · 3 ילדים</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">רו</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 27% 13%,hsl(206 68% 60%) 0%,transparent 62%),linear-gradient(124deg,hsl(181 68% 42%) 0%,hsl(206 56% 22%) 100%)">רו</span>
         <b>משפחת רוזן ד׳</b><span>₪13,004 · 3 ילדים</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">חש</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 77% 19%,hsl(288 80% 56%) 0%,transparent 62%),linear-gradient(192deg,hsl(196 80% 38%) 0%,hsl(288 68% 18%) 100%)">חש</span>
         <b>משפחת חשין</b><span>₪11,828 · 3 ילדים</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">טנ</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 47% 12%,hsl(75 77% 52%) 0%,transparent 62%),linear-gradient(165deg,hsl(35 77% 34%) 0%,hsl(75 65% 14%) 100%)">טנ</span>
         <b>משפחת טננבוים</b><span>₪11,604 · 3 ילדים</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">בל</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 23% 11%,hsl(329 85% 58%) 0%,transparent 62%),linear-gradient(125deg,hsl(268 85% 40%) 0%,hsl(329 73% 20%) 100%)">בל</span>
         <b>משפחת בלוי ש׳</b><span>₪11,428 · 3 ילדים</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">בר</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 45% 17%,hsl(222 87% 64%) 0%,transparent 62%),linear-gradient(160deg,hsl(175 87% 46%) 0%,hsl(222 75% 26%) 100%)">בר</span>
         <b>משפחת ברגר ד׳</b><span>₪11,250 · 2 ילדים</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">פר</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 36% 20%,hsl(105 77% 67%) 0%,transparent 62%),linear-gradient(215deg,hsl(38 77% 49%) 0%,hsl(105 65% 29%) 100%)">פר</span>
         <b>משפחת פרידמן</b><span>₪11,075 · 3 ילדים</span></a>
     </div>
 
@@ -180,25 +200,25 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
     <p class="sub">183 תרומות למגבית בניין בית המדרש · 59% מהיעד</p>
     <div class="shelf">
       <a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">נפ</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 73% 34%,hsl(149 77% 65%) 0%,transparent 62%),linear-gradient(153deg,hsl(84 77% 47%) 0%,hsl(149 65% 27%) 100%)">נפ</span>
         <b>נפתלי בראון</b><span>₪180,000 · מזומן</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">יצ</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 71% 15%,hsl(148 63% 66%) 0%,transparent 62%),linear-gradient(124deg,hsl(93 63% 48%) 0%,hsl(148 51% 28%) 100%)">יצ</span>
         <b>יצחק לוי</b><span>₪360 · המחאה</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">אל</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 49% 11%,hsl(262 77% 54%) 0%,transparent 62%),linear-gradient(218deg,hsl(175 77% 36%) 0%,hsl(262 65% 16%) 100%)">אל</span>
         <b>בעילום שם</b><span>₪3,600 · אשראי</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">דו</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 46% 26%,hsl(353 65% 53%) 0%,transparent 62%),linear-gradient(228deg,hsl(292 65% 35%) 0%,hsl(353 53% 15%) 100%)">דו</span>
         <b>דוד אדלר מ׳</b><span>₪10,000 · אשראי</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">יע</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 77% 32%,hsl(32 69% 53%) 0%,transparent 62%),linear-gradient(134deg,hsl(326 69% 35%) 0%,hsl(32 57% 15%) 100%)">יע</span>
         <b>יעקב רוזן</b><span>₪1,000 · מזומן</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">יה</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 33% 23%,hsl(318 82% 67%) 0%,transparent 62%),linear-gradient(151deg,hsl(224 82% 49%) 0%,hsl(318 70% 29%) 100%)">יה</span>
         <b>יהודה גרין ד׳</b><span>₪5,400 · המחאה</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">מש</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 34% 26%,hsl(328 67% 54%) 0%,transparent 62%),linear-gradient(168deg,hsl(240 67% 36%) 0%,hsl(328 55% 16%) 100%)">מש</span>
         <b>משה לוי</b><span>₪3,600 · אשראי</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">יו</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 28% 28%,hsl(16 86% 52%) 0%,transparent 62%),linear-gradient(218deg,hsl(299 86% 34%) 0%,hsl(16 74% 14%) 100%)">יו</span>
         <b>יוסף חשין</b><span>₪18,000 · אשראי</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">פי</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 69% 26%,hsl(38 62% 60%) 0%,transparent 62%),linear-gradient(212deg,hsl(337 62% 42%) 0%,hsl(38 50% 22%) 100%)">פי</span>
         <b>פינחס הלר</b><span>₪25,000 · אשראי</span></a><a class="c" href="#">
-        <span class="art round" style="background:#333333;color:#ffffff">קל</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 72% 38%,hsl(184 62% 57%) 0%,transparent 62%),linear-gradient(169deg,hsl(109 62% 39%) 0%,hsl(184 50% 19%) 100%)">קל</span>
         <b>קלמן רוזן י׳</b><span>₪500 · אשראי</span></a>
     </div>
 
@@ -206,31 +226,31 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
     <p class="sub">9 זמנים · הזמן הנוכחי מסומן</p>
     <div class="rows">
       <div class="row">
-        <span class="n">1</span><span class="art" style="background:#333333;color:#ffffff">🕯</span>
+        <span class="n">1</span><span class="art" data-art style="background:radial-gradient(120% 90% at 63% 27%,hsl(33 71% 61%) 0%,transparent 62%),linear-gradient(176deg,hsl(337 71% 43%) 0%,hsl(33 59% 23%) 100%)">🕯</span>
         <span><b>ותיקין</b><span>עזרה מזרחית</span></span>
         <span class="m">113 משתתפים</span><span class="m"><bdi dir="ltr">05:40</bdi></span></div><div class="row">
-        <span class="n">2</span><span class="art" style="background:#333333;color:#ffffff">🕯</span>
+        <span class="n">2</span><span class="art" data-art style="background:radial-gradient(120% 90% at 63% 18%,hsl(292 86% 61%) 0%,transparent 62%),linear-gradient(143deg,hsl(239 86% 43%) 0%,hsl(292 74% 23%) 100%)">🕯</span>
         <span><b>שחרית · מניין ב׳</b><span>האולם הגדול</span></span>
         <span class="m">99 משתתפים</span><span class="m"><bdi dir="ltr">06:20</bdi></span></div><div class="row">
-        <span class="n">3</span><span class="art" style="background:#333333;color:#ffffff">🕯</span>
+        <span class="n">3</span><span class="art" data-art style="background:radial-gradient(120% 90% at 56% 33%,hsl(355 75% 55%) 0%,transparent 62%),linear-gradient(174deg,hsl(263 75% 37%) 0%,hsl(355 63% 17%) 100%)">🕯</span>
         <span><b>שחרית · מניין ג׳</b><span>האולם הגדול</span></span>
         <span class="m">42 משתתפים</span><span class="m"><bdi dir="ltr">07:15</bdi></span></div><div class="row">
-        <span class="n">4</span><span class="art" style="background:#333333;color:#ffffff">🕯</span>
+        <span class="n">4</span><span class="art" data-art style="background:radial-gradient(120% 90% at 58% 28%,hsl(258 64% 66%) 0%,transparent 62%),linear-gradient(195deg,hsl(194 64% 48%) 0%,hsl(258 52% 28%) 100%)">🕯</span>
         <span><b>שיעור דף היומי</b><span>בית המדרש</span></span>
         <span class="m">91 משתתפים</span><span class="m"><bdi dir="ltr">08:00</bdi></span></div><div class="row on">
-        <span class="n">5</span><span class="art" style="background:#333333;color:#ffffff">🕯</span>
+        <span class="n">5</span><span class="art" data-art style="background:radial-gradient(120% 90% at 54% 36%,hsl(113 65% 64%) 0%,transparent 62%),linear-gradient(143deg,hsl(26 65% 46%) 0%,hsl(113 53% 26%) 100%)">🕯</span>
         <span><b>מנחה גדולה</b><span>האולם הגדול</span></span>
         <span class="m">97 משתתפים</span><span class="m"><bdi dir="ltr">13:45</bdi></span></div><div class="row">
-        <span class="n">6</span><span class="art" style="background:#333333;color:#ffffff">🕯</span>
+        <span class="n">6</span><span class="art" data-art style="background:radial-gradient(120% 90% at 43% 34%,hsl(55 67% 54%) 0%,transparent 62%),linear-gradient(162deg,hsl(21 67% 36%) 0%,hsl(55 55% 16%) 100%)">🕯</span>
         <span><b>שיעור הלכה</b><span>חדר עיון</span></span>
         <span class="m">110 משתתפים</span><span class="m"><bdi dir="ltr">16:30</bdi></span></div><div class="row">
-        <span class="n">7</span><span class="art" style="background:#333333;color:#ffffff">🕯</span>
+        <span class="n">7</span><span class="art" data-art style="background:radial-gradient(120% 90% at 44% 23%,hsl(139 87% 60%) 0%,transparent 62%),linear-gradient(158deg,hsl(59 87% 42%) 0%,hsl(139 75% 22%) 100%)">🕯</span>
         <span><b>שקיעה</b><span>—</span></span>
         <span class="m"></span><span class="m"><bdi dir="ltr">18:52</bdi></span></div><div class="row">
-        <span class="n">8</span><span class="art" style="background:#333333;color:#ffffff">🕯</span>
+        <span class="n">8</span><span class="art" data-art style="background:radial-gradient(120% 90% at 53% 24%,hsl(316 70% 54%) 0%,transparent 62%),linear-gradient(216deg,hsl(291 70% 36%) 0%,hsl(316 58% 16%) 100%)">🕯</span>
         <span><b>מנחה ומעריב</b><span>האולם הגדול</span></span>
         <span class="m">28 משתתפים</span><span class="m"><bdi dir="ltr">19:10</bdi></span></div><div class="row">
-        <span class="n">9</span><span class="art" style="background:#333333;color:#ffffff">🕯</span>
+        <span class="n">9</span><span class="art" data-art style="background:radial-gradient(120% 90% at 23% 21%,hsl(204 73% 57%) 0%,transparent 62%),linear-gradient(212deg,hsl(129 73% 39%) 0%,hsl(204 61% 19%) 100%)">🕯</span>
         <span><b>סדר ערב</b><span>בית המדרש</span></span>
         <span class="m">104 משתתפים</span><span class="m"><bdi dir="ltr">20:30</bdi></span></div>
     </div>
@@ -239,40 +259,40 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
     <p class="sub">412 תלמידים ב-12 כיתות · נוכחות ממוצעת 92%</p>
     <div class="rows">
       <div class="row"><span class="n">1</span>
-        <span class="art" style="background:#333333;color:#ffffff">ג׳1</span>
+        <span class="art" data-art style="background:radial-gradient(120% 90% at 78% 30%,hsl(341 72% 59%) 0%,transparent 62%),linear-gradient(187deg,hsl(311 72% 41%) 0%,hsl(341 60% 21%) 100%)">ג׳1</span>
         <span><b>נפתלי גרין</b><span>חדר 10 · 37 תלמידים</span></span>
         <span class="m">94%</span><span class="m">37</span></div><div class="row"><span class="n">2</span>
-        <span class="art" style="background:#333333;color:#ffffff">ג׳2</span>
+        <span class="art" data-art style="background:radial-gradient(120% 90% at 36% 18%,hsl(303 71% 67%) 0%,transparent 62%),linear-gradient(221deg,hsl(219 71% 49%) 0%,hsl(303 59% 29%) 100%)">ג׳2</span>
         <span><b>נפתלי מלר</b><span>חדר 11 · 27 תלמידים</span></span>
         <span class="m">88%</span><span class="m">27</span></div><div class="row"><span class="n">3</span>
-        <span class="art" style="background:#333333;color:#ffffff">ד׳1</span>
+        <span class="art" data-art style="background:radial-gradient(120% 90% at 64% 39%,hsl(302 73% 54%) 0%,transparent 62%),linear-gradient(223deg,hsl(220 73% 36%) 0%,hsl(302 61% 16%) 100%)">ד׳1</span>
         <span><b>יעקב פישר</b><span>חדר 12 · 31 תלמידים</span></span>
         <span class="m">90%</span><span class="m">31</span></div><div class="row"><span class="n">4</span>
-        <span class="art" style="background:#333333;color:#ffffff">ד׳2</span>
+        <span class="art" data-art style="background:radial-gradient(120% 90% at 61% 12%,hsl(184 84% 52%) 0%,transparent 62%),linear-gradient(204deg,hsl(147 84% 34%) 0%,hsl(184 72% 14%) 100%)">ד׳2</span>
         <span><b>שרגא כהנא</b><span>חדר 13 · 42 תלמידים</span></span>
         <span class="m">93%</span><span class="m">42</span></div><div class="row"><span class="n">5</span>
-        <span class="art" style="background:#333333;color:#ffffff">ה׳1</span>
+        <span class="art" data-art style="background:radial-gradient(120% 90% at 37% 20%,hsl(298 74% 53%) 0%,transparent 62%),linear-gradient(171deg,hsl(253 74% 35%) 0%,hsl(298 62% 15%) 100%)">ה׳1</span>
         <span><b>אלימלך פישר</b><span>חדר 14 · 30 תלמידים</span></span>
         <span class="m">95%</span><span class="m">30</span></div><div class="row"><span class="n">6</span>
-        <span class="art" style="background:#333333;color:#ffffff">ה׳2</span>
+        <span class="art" data-art style="background:radial-gradient(120% 90% at 37% 26%,hsl(199 67% 67%) 0%,transparent 62%),linear-gradient(167deg,hsl(135 67% 49%) 0%,hsl(199 55% 29%) 100%)">ה׳2</span>
         <span><b>שמואל רוזן</b><span>חדר 15 · 30 תלמידים</span></span>
         <span class="m">93%</span><span class="m">30</span></div><div class="row"><span class="n">7</span>
-        <span class="art" style="background:#333333;color:#ffffff">ו׳1</span>
+        <span class="art" data-art style="background:radial-gradient(120% 90% at 29% 34%,hsl(247 67% 66%) 0%,transparent 62%),linear-gradient(130deg,hsl(169 67% 48%) 0%,hsl(247 55% 28%) 100%)">ו׳1</span>
         <span><b>זלמן שטרן</b><span>חדר 16 · 36 תלמידים</span></span>
         <span class="m">93%</span><span class="m">36</span></div><div class="row"><span class="n">8</span>
-        <span class="art" style="background:#333333;color:#ffffff">ו׳2</span>
+        <span class="art" data-art style="background:radial-gradient(120% 90% at 57% 30%,hsl(286 69% 57%) 0%,transparent 62%),linear-gradient(244deg,hsl(215 69% 39%) 0%,hsl(286 57% 19%) 100%)">ו׳2</span>
         <span><b>יעקב גולד</b><span>חדר 17 · 29 תלמידים</span></span>
         <span class="m">93%</span><span class="m">29</span></div><div class="row"><span class="n">9</span>
-        <span class="art" style="background:#333333;color:#ffffff">ז׳1</span>
+        <span class="art" data-art style="background:radial-gradient(120% 90% at 62% 37%,hsl(72 84% 56%) 0%,transparent 62%),linear-gradient(161deg,hsl(23 84% 38%) 0%,hsl(72 72% 18%) 100%)">ז׳1</span>
         <span><b>נחום בלוי</b><span>חדר 18 · 38 תלמידים</span></span>
         <span class="m">95%</span><span class="m">38</span></div><div class="row"><span class="n">10</span>
-        <span class="art" style="background:#333333;color:#ffffff">ז׳2</span>
+        <span class="art" data-art style="background:radial-gradient(120% 90% at 62% 35%,hsl(28 79% 64%) 0%,transparent 62%),linear-gradient(121deg,hsl(351 79% 46%) 0%,hsl(28 67% 26%) 100%)">ז׳2</span>
         <span><b>אהרן דויטש</b><span>חדר 19 · 35 תלמידים</span></span>
         <span class="m">89%</span><span class="m">35</span></div><div class="row"><span class="n">11</span>
-        <span class="art" style="background:#333333;color:#ffffff">ח׳1</span>
+        <span class="art" data-art style="background:radial-gradient(120% 90% at 68% 25%,hsl(224 65% 54%) 0%,transparent 62%),linear-gradient(144deg,hsl(135 65% 36%) 0%,hsl(224 53% 16%) 100%)">ח׳1</span>
         <span><b>ברוך דויטש</b><span>חדר 20 · 37 תלמידים</span></span>
         <span class="m">92%</span><span class="m">37</span></div><div class="row"><span class="n">12</span>
-        <span class="art" style="background:#333333;color:#ffffff">ח׳2</span>
+        <span class="art" data-art style="background:radial-gradient(120% 90% at 23% 15%,hsl(55 78% 66%) 0%,transparent 62%),linear-gradient(131deg,hsl(12 78% 48%) 0%,hsl(55 66% 28%) 100%)">ח׳2</span>
         <span><b>חיים בראון</b><span>חדר 21 · 40 תלמידים</span></span>
         <span class="m">92%</span><span class="m">40</span></div>
     </div>
@@ -281,40 +301,40 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
     <p class="sub">26 בתיק · <bdi dir="ltr">₪562,629</bdi> זמינים · 2 באיחור</p>
     <div class="rows">
       <div class="row"><span class="n">1</span>
-        <span class="art round" style="background:#333333;color:#ffffff">גר</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 64% 17%,hsl(33 76% 66%) 0%,transparent 62%),linear-gradient(229deg,hsl(326 76% 48%) 0%,hsl(33 64% 28%) 100%)">גר</span>
         <span><b>משפחת גרין א׳</b><span>תיקון רכב · בקשה</span></span>
         <span class="m">0/2 ערבים</span><span class="m">₪27,000</span></div><div class="row"><span class="n">2</span>
-        <span class="art round" style="background:#333333;color:#ffffff">פי</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 31% 23%,hsl(160 65% 66%) 0%,transparent 62%),linear-gradient(140deg,hsl(66 65% 48%) 0%,hsl(160 53% 28%) 100%)">פי</span>
         <span><b>משפחת פישר ד׳</b><span>שיפוץ דירה · בקשה</span></span>
         <span class="m">2/2 ערבים</span><span class="m">₪33,000</span></div><div class="row"><span class="n">3</span>
-        <span class="art round" style="background:#333333;color:#ffffff">פר</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 33% 25%,hsl(291 85% 57%) 0%,transparent 62%),linear-gradient(241deg,hsl(265 85% 39%) 0%,hsl(291 73% 19%) 100%)">פר</span>
         <span><b>משפחת פרידמן א׳</b><span>חתונה · ועדה</span></span>
         <span class="m">2/2 ערבים</span><span class="m">₪19,000</span></div><div class="row"><span class="n">4</span>
-        <span class="art round" style="background:#333333;color:#ffffff">רו</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 66% 11%,hsl(82 66% 57%) 0%,transparent 62%),linear-gradient(130deg,hsl(350 66% 39%) 0%,hsl(82 54% 19%) 100%)">רו</span>
         <span><b>משפחת רוט ש׳</b><span>מעבר דירה · ועדה</span></span>
         <span class="m">2/2 ערבים</span><span class="m">₪13,000</span></div><div class="row"><span class="n">5</span>
-        <span class="art round" style="background:#333333;color:#ffffff">בר</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 39% 14%,hsl(323 64% 55%) 0%,transparent 62%),linear-gradient(133deg,hsl(262 64% 37%) 0%,hsl(323 52% 17%) 100%)">בר</span>
         <span><b>משפחת ברגר י׳</b><span>תיקון רכב · ועדה</span></span>
         <span class="m">2/2 ערבים</span><span class="m">₪34,000</span></div><div class="row"><span class="n">6</span>
-        <span class="art round" style="background:#333333;color:#ffffff">יע</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 71% 23%,hsl(225 81% 60%) 0%,transparent 62%),linear-gradient(182deg,hsl(193 81% 42%) 0%,hsl(225 69% 22%) 100%)">יע</span>
         <span><b>משפחת יעקובוביץ א׳</b><span>תיקון רכב · ניתן</span></span>
         <span class="m">2/2 ערבים</span><span class="m">₪28,000</span></div><div class="row"><span class="n">7</span>
-        <span class="art round" style="background:#333333;color:#ffffff">בר</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 53% 36%,hsl(212 82% 61%) 0%,transparent 62%),linear-gradient(241deg,hsl(161 82% 43%) 0%,hsl(212 70% 23%) 100%)">בר</span>
         <span><b>משפחת בראון א׳</b><span>הוצאות רפואיות · ניתן</span></span>
         <span class="m">2/2 ערבים</span><span class="m">₪18,000</span></div><div class="row"><span class="n">8</span>
-        <span class="art round" style="background:#333333;color:#ffffff">אב</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 72% 12%,hsl(316 74% 62%) 0%,transparent 62%),linear-gradient(190deg,hsl(239 74% 44%) 0%,hsl(316 62% 24%) 100%)">אב</span>
         <span><b>משפחת אברמסון א׳</b><span>חתונה · אושר</span></span>
         <span class="m">2/2 ערבים</span><span class="m">₪27,000</span></div><div class="row"><span class="n">9</span>
-        <span class="art round" style="background:#333333;color:#ffffff">כה</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 75% 37%,hsl(79 67% 62%) 0%,transparent 62%),linear-gradient(244deg,hsl(30 67% 44%) 0%,hsl(79 55% 24%) 100%)">כה</span>
         <span><b>משפחת כהנא א׳</b><span>הוצאות רפואיות · בהחזר</span></span>
         <span class="m">2/2 ערבים</span><span class="m">₪17,000</span></div><div class="row"><span class="n">10</span>
-        <span class="art round" style="background:#333333;color:#ffffff">כה</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 67% 24%,hsl(156 74% 65%) 0%,transparent 62%),linear-gradient(209deg,hsl(106 74% 47%) 0%,hsl(156 62% 27%) 100%)">כה</span>
         <span><b>משפחת כהנא א׳</b><span>ציוד לימודי · בהחזר</span></span>
         <span class="m">2/2 ערבים</span><span class="m">₪32,000</span></div><div class="row"><span class="n">11</span>
-        <span class="art round" style="background:#333333;color:#ffffff">רו</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 42% 30%,hsl(345 86% 62%) 0%,transparent 62%),linear-gradient(214deg,hsl(295 86% 44%) 0%,hsl(345 74% 24%) 100%)">רו</span>
         <span><b>משפחת רוט</b><span>הוצאות חג · בהחזר</span></span>
         <span class="m">2/2 ערבים</span><span class="m">₪34,000</span></div><div class="row"><span class="n">12</span>
-        <span class="art round" style="background:#333333;color:#ffffff">חש</span>
+        <span class="art round" data-art style="background:radial-gradient(120% 90% at 30% 15%,hsl(358 67% 64%) 0%,transparent 62%),linear-gradient(128deg,hsl(299 67% 46%) 0%,hsl(358 55% 26%) 100%)">חש</span>
         <span><b>משפחת חשין</b><span>שיפוץ דירה · בהחזר</span></span>
         <span class="m">2/2 ערבים</span><span class="m">₪14,000</span></div>
     </div>
@@ -329,7 +349,7 @@ p.sub{font-size:13px;color:var(--mut);margin-bottom:14px}
 </div>
 
 <div class="player noprint">
-  <div class="now"><span class="art">🕯</span><span><b>מנחה גדולה</b><span>האולם הגדול · 97 משתתפים</span></span></div>
+  <div class="now"><span class="art" data-art style="background:radial-gradient(120% 90% at 54% 36%,hsl(113 65% 64%) 0%,transparent 62%),linear-gradient(143deg,hsl(26 65% 46%) 0%,hsl(113 53% 26%) 100%)">🕯</span><span><b>מנחה גדולה</b><span>האולם הגדול · 97 משתתפים</span></span></div>
   <div class="mid"><div class="ctr"><button>⇄</button><button>‹‹</button>
       <button class="play" aria-label="נגן">▸</button><button>››</button><button>↻</button></div>
     <div class="track"><span><bdi dir="ltr">13:45</bdi></span><span class="bar"><i style="width:42%"></i></span><span><bdi dir="ltr">14:30</bdi></span></div></div>

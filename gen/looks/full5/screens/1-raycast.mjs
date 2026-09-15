@@ -1,6 +1,8 @@
 /* מסך הבית בשפת Raycast — חלון-פקודות מלא:
    שורת-חיפוש, מסנן, רשימת-תוצאות מקובצת ארוכה, פאנל-פרטים ימני, סרגל-פעולות תחתון,
    ומתחתיו רשת-הפקודות המהירות — בדיוק המבנה של חלון האפליקציה בצילום. */
+import { appIcon, glow } from '../art.mjs';
+
 export default {
   id: '1-raycast', name: 'Raycast', ref: 'חלון-פקודות: חיפוש · רשימה מקובצת · פאנל-פרטים · סרגל-פעולות · רשת פקודות',
   fonts: ['Assistant:wght@400;500;600;700'],
@@ -14,9 +16,17 @@ body{background:var(--bg);color:var(--ink);font:400 16px/1.15 Assistant,Arial,sa
 .head{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
 .head h1{font-size:18px;font-weight:600;letter-spacing:0}
 .head .d{margin-inline-start:auto;font-size:12.5px;color:var(--mut)}
-kbd{font:500 11px ui-monospace,Menlo,monospace;color:var(--mut);background:var(--row);
+/* כיפות-המקשים של רייקאסט יושבות על המשטח המורם המדוד #434345 */
+kbd{font:500 11px ui-monospace,Menlo,monospace;color:#ffffff;background:var(--raise);
  border:1px solid var(--hair);border-radius:4px;padding:2px 6px;white-space:nowrap}
 
+/* הזוהר שמאחורי חלון-הפקודות באתר של רייקאסט — אמנות, לא משטח */
+.stage{position:relative;isolation:isolate}
+.glow{position:absolute;inset-inline:-8%;top:-140px;height:420px;z-index:-1;pointer-events:none;
+ background:radial-gradient(52% 60% at 50% 50%,hsl(258 90% 62% / .40),transparent 70%),
+  radial-gradient(38% 52% at 22% 40%,hsl(190 95% 55% / .30),transparent 72%),
+  radial-gradient(40% 54% at 80% 46%,hsl(330 90% 60% / .28),transparent 72%);
+ filter:blur(28px)}
 .win{background:var(--win);border:1px solid var(--hair);border-radius:var(--rCard);overflow:hidden;
  box-shadow:0 24px 60px rgba(0,0,0,.55)}
 .bar{display:flex;align-items:center;gap:12px;padding:16px;border-block-end:1px solid var(--hair)}
@@ -38,8 +48,8 @@ kbd{font:500 11px ui-monospace,Menlo,monospace;color:var(--mut);background:var(-
 .r .m{font-size:12.5px;color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap}
 .r.sel .m{color:var(--ink)}
 /* הפלטה המדודה של Raycast מונוכרומטית: #434345 · #2f3031 · #1b1c1e · #9c9c9d · #e6e6e6 */
-.i1{background:#434345;color:#ffffff}.i2{background:#2f3031;color:#e6e6e6}.i3{background:#1b1c1e;color:#9c9c9d}
-.i4{background:#434345;color:#e6e6e6}.i5{background:#2f3031;color:#ffffff}.i6{background:#1b1c1e;color:#e6e6e6}
+/* אייקוני-האפליקציה של רייקאסט צבעוניים — הם אמנות (תמונות באתר האמיתי), לא טוקן */
+.ic[data-art],.av[data-art]{color:#ffffff;text-shadow:0 1px 2px rgb(0 0 0 / .45)}
 
 /* פאנל-הפרטים על המשטח המדוד #111214 · סרגל-הפעולות על השחור המלא */
 .det{background:var(--panel);padding:18px;overflow:auto;max-height:560px}
@@ -97,13 +107,14 @@ h2.sec{font:600 11px Assistant;letter-spacing:.12em;color:var(--dim);margin:30px
 @media(max-width:900px){.body{grid-template-columns:1fr}.det{border-block-start:1px solid var(--hair);max-height:none}}
 `,
   body: (D) => {
-    const ic = (i) => 'i' + (1 + i % 6);
+    /* אייקון-אפליקציה מצויר מהמפתח של הרשומה */
+    const ic = (k) => appIcon(String(k));
     const sel = D.topOpen[0];
     return `<div class="page">
 <header class="head"><h1>מוסד · לוח הבית</h1>
   <span class="d">${D.today.hd} ${D.today.hy} · ${D.today.dow} · ${D.num(D.people)} רשומות באינדקס · נתוני דוגמה</span></header>
 
-<section class="win">
+<div class="stage">${glow()}<section class="win">
   <div class="bar noprint"><span aria-hidden="true" style="color:var(--dim)">⌕</span>
     <input value="משפחת" aria-label="חיפוש בכל המוסד">
     <span class="filter">כל הסוגים ▾</span><kbd>Ctrl K</kbd></div>
@@ -112,37 +123,37 @@ h2.sec{font:600 11px Assistant;letter-spacing:.12em;color:var(--dim);margin:30px
     <div class="list">
       <p class="grp">משפחות · יתרה פתוחה</p>
       ${D.topOpen.map((f, i) => `<div class="r${i === 0 ? ' sel' : ''}">
-        <span class="ic ${ic(i)}">${f.init}</span>
+        <span class="ic" data-art style="${ic(f.name)}">${f.init}</span>
         <span><span class="t">${f.name}</span><br><span class="s">${f.city} · ${f.kids} ילדים${f.hok ? ' · הו״ק' : ''}${f.disc ? ' · הנחה ' + f.disc + '%' : ''}</span></span>
         <span class="m">${D.money(f.bal)}</span></div>`).join('')}
 
       <p class="grp">תלמידים</p>
       ${D.students20.slice(0, 8).map((s, i) => `<div class="r">
-        <span class="ic ${ic(i + 2)}">${s.init}</span>
+        <span class="ic" data-art style="${ic(s.name)}">${s.init}</span>
         <span><span class="t">${s.name}</span><br><span class="s">${s.fam} · כיתה ${s.cls}</span></span>
         <span class="m">נוכחות ${s.att}/5</span></div>`).join('')}
 
       <p class="grp">צוות</p>
       ${D.staffList.slice(0, 7).map((s, i) => `<div class="r">
-        <span class="ic ${ic(i + 4)}">${s.init}</span>
+        <span class="ic" data-art style="${ic(s.name + s.role)}">${s.init}</span>
         <span><span class="t">${s.name}</span><br><span class="s">${s.role}${s.absent ? ' · ' + s.absent : ''}</span></span>
         <span class="m">${s.absent ? (s.sub ? 'מחליף: ' + s.sub : 'אין מחליף') : D.ltr(s.first || '')}</span></div>`).join('')}
 
       <p class="grp">הלוואות גמ״ח</p>
       ${D.loanList.slice(0, 6).map((l, i) => `<div class="r">
-        <span class="ic ${ic(i + 1)}">${l.init}</span>
+        <span class="ic" data-art style="${ic(l.fam + l.purpose)}">${l.init}</span>
         <span><span class="t">${l.fam} · ${l.purpose}</span><br><span class="s">${l.stage} · ${l.g}/2 ערבים${l.paid ? ' · ' + l.paid + '/' + l.inst + ' תשלומים' : ''}</span></span>
         <span class="m">${D.money(l.amount)}</span></div>`).join('')}
 
       <p class="grp">פעולות</p>
       ${[['רישום תשלום', 'גבייה', 'P'], ['הודעה להורים', 'תקשורת', 'M'], ['הפקת קבלה', 'גבייה', 'K'],
       ['פתיחת בקשת הנחה', 'גבייה', 'H'], ['שיבוץ מחליף', 'צוות', 'S'], ['דוח לוועד', 'כספים', 'R']]
-        .map(([t, d, k], i) => `<div class="r"><span class="ic ${ic(i + 3)}">⌘</span>
+        .map(([t, d, k], i) => `<div class="r"><span class="ic" data-art style="${ic(t)}">⌘</span>
           <span><span class="t">${t}</span><br><span class="s">${d}</span></span><span class="m"><kbd>${k}</kbd></span></div>`).join('')}
     </div>
 
     <aside class="det">
-      <div class="big"><span class="av i1">${sel.init}</span>
+      <div class="big"><span class="av" data-art style="${ic(sel.name)}">${sel.init}</span>
         <span><h2>${sel.name}</h2><span class="sub">${sel.city} · ${sel.kids} ילדים במוסד</span></span></div>
       <dl class="kv">
         <div><dt>חיוב אחרי הנחה</dt><dd>${D.money(sel.due)}</dd></div>
@@ -166,7 +177,7 @@ h2.sec{font:600 11px Assistant;letter-spacing:.12em;color:var(--dim);margin:30px
     <span class="sp"></span>
     <button class="act pri">פתיחה <kbd>↵</kbd></button>
     <button class="act">פעולות <kbd>Ctrl K</kbd></button></div>
-</section>
+</section></div>
 
 <h2 class="sec">מצב המוסד</h2>
 <div class="strip">
@@ -212,7 +223,7 @@ h2.sec{font:600 11px Assistant;letter-spacing:.12em;color:var(--dim);margin:30px
 
 <h2 class="sec">פקודות מהירות</h2>
 <div class="cmds">
-  ${D.depts.map(([n, s, e], i) => `<a class="cmd" href="#"><span class="ic ${ic(i)}">${e}</span>
+  ${D.depts.map(([n, s, e], i) => `<a class="cmd" href="#"><span class="ic" data-art style="${ic(n)}">${e}</span>
     <span><b>${n}</b><span>${s}</span></span><kbd>⌘${i + 1}</kbd></a>`).join('')}
 </div>
 

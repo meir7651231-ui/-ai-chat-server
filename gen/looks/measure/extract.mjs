@@ -18,15 +18,20 @@ export const EXTRACT = () => {
   const top = (map, n = 8) => Object.entries(map).sort((a, b) => b[1] - a[1]).slice(0, n)
     .map(([k, v]) => ({ v: k, w: Math.round(v) }));
 
+  /* אמנות אינה טוקן: באתרים האמיתיים העטיפות, האיורים והצילומים הם תמונות,
+     ולכן ממילא אינם נספרים בסריקת-הצבעים. אצלנו הם מצוירים ב-CSS/SVG ומסומנים
+     data-art — הסריקה מדלגת עליהם, כדי ששני הצדדים יימדדו באותה מידה. */
+  const isArt = (el) => !!el.closest('[data-art]');
   const all = [...document.querySelectorAll('body *')].filter(vis);
   const bgArea = {}, inkArea = {}, radii = {}, shadows = {}, fams = {}, gaps = {}, pads = {};
 
   all.forEach(el => {
     const cs = getComputedStyle(el), r = el.getBoundingClientRect();
     const area = Math.min(r.width * r.height, 1.2e6) / 1000;
-    const bg = hex(cs.backgroundColor); if (bg) bump(bgArea, bg, area);
+    const art = isArt(el);
+    const bg = hex(cs.backgroundColor); if (bg && !art) bump(bgArea, bg, area);
     const txt = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
-    if (txt) { const c = hex(cs.color); if (c) bump(inkArea, c, Math.max(1, area / 20)); }
+    if (txt && !art) { const c = hex(cs.color); if (c) bump(inkArea, c, Math.max(1, area / 20)); }
     const rad = px(cs.borderTopLeftRadius); if (rad) bump(radii, rad + 'px', 1);
     if (cs.boxShadow && cs.boxShadow !== 'none') bump(shadows, cs.boxShadow.slice(0, 80), 1);
     const f = cs.fontFamily.split(',')[0].replace(/["']/g, '').trim(); if (f) bump(fams, f, Math.max(1, area / 50));

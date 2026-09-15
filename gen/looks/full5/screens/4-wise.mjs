@@ -1,6 +1,8 @@
 /* מסך הבית בשפת Wise — עמוד-חשבון מלא:
    פס-ניווט עליון, רצועת-יתרות בצד, יתרה ראשית עם שורת-פעולות, רשימת-תנועות מקובצת לפי יום,
    כרטיס-המרה עם בוררים ושורת-עמלה, וכרטיסי-צד. המבנה של עמוד החשבון בצילום. */
+import { coin } from '../art.mjs';
+
 export default {
   id: '4-wise', name: 'Wise', ref: 'עמוד-חשבון: ניווט · רצועת-יתרות · תנועות לפי יום · כרטיס-חישוב · כרטיסי-צד',
   fonts: ['Heebo:wght@400;500;600;700;800;900'],
@@ -24,8 +26,12 @@ body{background:var(--bg);color:var(--mut);font:400 18px/26px Heebo,Arial,sans-s
 
 .band{background:var(--lime);color:var(--ink)}
 .band .in{max-width:1220px;margin-inline:auto;padding:56px 24px;display:flex;gap:28px;align-items:flex-end;flex-wrap:wrap}
+/* מטבעות-הדגל של וייז — אמנות, כמו הדגלים באתר */
+.coins{display:flex;gap:9px;align-items:center;margin-top:19px;flex-wrap:wrap}
+.coins .coin{width:40px;height:40px;display:block}
+.coins span{font-size:16px;font-weight:600}
 /* h1 מדוד: 89/900 · גובה-שורה 0.85 · אין ריווח-אותיות */
-.band h1{font:900 clamp(34px,6vw,64px)/.85 Heebo;max-width:16ch}
+.band h1{font:900 clamp(40px,8vw,89px)/.85 Heebo;max-width:13ch;text-wrap:balance}
 .band .r{margin-inline-start:auto;text-align:end}
 .band .r b{display:block;font:900 clamp(26px,4vw,40px)/.9 Heebo;font-variant-numeric:tabular-nums}
 .band .r span{font-size:16px}
@@ -40,6 +46,7 @@ body{background:var(--bg);color:var(--mut);font:400 18px/26px Heebo,Arial,sans-s
 .bal a{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:9px;align-items:center;padding:9px 11px;border-radius:var(--r)}
 .bal a:hover{background:var(--teal)}
 .bal .c{width:40px;height:40px;border-radius:var(--rPill);display:grid;place-items:center;font-size:15px;font-weight:800}
+.bal .coin{width:40px;height:40px;display:block}
 .bal b{font-size:16px;font-weight:600;display:block;color:var(--ink);line-height:1.3}
 .bal span{font-size:14px;color:var(--mut)}
 .bal .m{font-weight:600;font-variant-numeric:tabular-nums;font-size:16px;white-space:nowrap;color:var(--ink)}
@@ -121,7 +128,8 @@ p.sub{font-size:16px;color:var(--mut);margin-bottom:9px}
 
 <section class="band"><div class="in">
   <h1>${D.pct}% מהחיוב השנתי כבר נגבו.</h1>
-  <div class="r"><b>${D.money(D.open)}</b><span>פתוח אצל ${D.families} משפחות · ${D.late} בפיגור</span></div>
+  <div class="r"><b>${D.money(D.open)}</b><span>פתוח אצל ${D.families} משפחות · ${D.late} בפיגור</span>
+    <div class="coins">${D.depts.slice(0, 5).map(([n]) => coin(n, n)).join('')}<span>${D.depts.length} אגפים</span></div></div>
 </div></section>
 
 <div class="wrap">
@@ -133,7 +141,7 @@ p.sub{font-size:16px;color:var(--mut);margin-bottom:9px}
       ['גמ״ח — בחוץ', D.fundLate + ' באיחור', D.fundOut, 3],
       ['תקציב שנתי', 'ביצוע ' + Math.round(D.budget.reduce((a, b) => a + b.actual, 0) / D.budget.reduce((a, b) => a + b.plan, 0) * 100) + '%',
         D.budget.reduce((a, b) => a + b.plan, 0) * 1000, 2]]
-      .map(([t, s, v, i]) => `<a href="#"><span class="c" style="${c(i)}">₪</span>
+      .map(([t, s, v, i]) => `<a href="#">${coin(t, t)}
         <span><b>${t}</b><span>${s}</span></span><span class="m">${D.money(v)}</span></a>`).join('')}
   </div>
   <button class="addbtn noprint">+ פתיחת יתרה חדשה</button>
