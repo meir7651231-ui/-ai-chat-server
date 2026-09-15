@@ -1,0 +1,72 @@
+[
+ {
+  "id": "attio-people",
+  "url": "https://attio.com/platform/data-model",
+  "y": 900,
+  "title": "Attio: The CRM for agentic revenue",
+  "ok": true
+ },
+ {
+  "id": "linear-list",
+  "url": "https://linear.app/features",
+  "y": 1400,
+  "title": "Features – Linear",
+  "ok": true
+ },
+ {
+  "id": "hubspot-contacts",
+  "url": "https://www.hubspot.com/products/crm/contact-management",
+  "y": 800,
+  "title": "Free Contact Management Software | HubSpot CRM",
+  "ok": true
+ },
+ {
+  "id": "intercom-profile",
+  "url": "https://www.intercom.com/inbox",
+  "y": 900,
+  "title": "AI-powered inbox for faster, better customer support | Inter",
+  "ok": true
+ },
+ {
+  "id": "airtable-record",
+  "url": "https://www.airtable.com/platform/app-building",
+  "y": 1000,
+  "title": "Airtable Omni: Your expert AI app builder | Airtable",
+  "ok": true
+ },
+ {
+  "id": "folk-contacts",
+  "url": "https://www.folk.app/features/contact-management",
+  "y": 700,
+  "title": "folk — Not Found",
+  "ok": true
+ },
+ {
+  "id": "stripe-customers",
+  "url": "https://docs.stripe.com/dashboard/basics",
+  "y": 700,
+  "title": "Web Dashboard | Stripe Documentation",
+  "ok": true
+ },
+ {
+  "id": "notion-db",
+  "url": "https://www.notion.com/product/database",
+  "y": 900,
+  "title": "Page not found",
+  "ok": true
+ },
+ {
+  "id": "clay-people",
+  "url": "https://www.clay.com/product",
+  "y": 900,
+  "title": "Not Found",
+  "ok": true
+ },
+ {
+  "id": "myheritage-tree",
+  "url": "https://www.myheritage.co.il/family-tree",
+  "y": 600,
+  "title": "",
+  "ok": true
+ }
+]

@@ -1,0 +1,98 @@
+[
+ {
+  "id": "linear",
+  "name": "Linear",
+  "url": "https://linear.app/",
+  "does": "רשימה ענקית עם סינון וניווט-מקלדת",
+  "title": "Linear – The system for product development",
+  "ok": true
+ },
+ {
+  "id": "attio",
+  "name": "Attio",
+  "url": "https://attio.com/",
+  "does": "CRM שבנוי סביב «אנשים» וקשרים בין רשומות",
+  "title": "Attio: The CRM for agentic revenue",
+  "ok": true
+ },
+ {
+  "id": "intercom",
+  "name": "Intercom",
+  "url": "https://www.intercom.com/",
+  "does": "פרופיל-אדם עם תכונות וציר-זמן",
+  "title": "Intercom | A complete system for human and AI customer service",
+  "ok": true
+ },
+ {
+  "id": "stripe",
+  "name": "Stripe",
+  "url": "https://stripe.com/",
+  "does": "רשומת-לקוח עם כסף והיסטוריה",
+  "title": "Stripe | Financial Infrastructure to Grow Your Revenue",
+  "ok": true
+ },
+ {
+  "id": "airtable",
+  "name": "Airtable",
+  "url": "https://www.airtable.com/",
+  "does": "טבלה + רשומה מורחבת + רשומות מקושרות",
+  "title": "Airtable: Build Enterprise-ready AI Workflows, Apps & Agents | Airtabl",
+  "ok": true
+ },
+ {
+  "id": "notion",
+  "name": "Notion",
+  "url": "https://www.notion.com/",
+  "does": "מסד עם תצוגות שמורות וקשרים",
+  "title": "The AI workspace that works for you. | Notion",
+  "ok": true
+ },
+ {
+  "id": "hubspot",
+  "name": "HubSpot",
+  "url": "https://www.hubspot.com/products/crm",
+  "does": "איחוד כפולים ושיוך אנשי-קשר",
+  "title": "Streamline Your Entire Business With a Free CRM | HubSpot",
+  "ok": true
+ },
+ {
+  "id": "slack",
+  "name": "Slack",
+  "url": "https://slack.com/",
+  "does": "ספר-חברים וכרטיס-פרופיל",
+  "title": "Slack | AI Work Platform & Productivity Tools",
+  "ok": true
+ },
+ {
+  "id": "myheritage",
+  "name": "MyHeritage",
+  "url": "https://www.myheritage.co.il/",
+  "does": "קשרי-משפחה ועץ — ועברית מלאה",
+  "title": "",
+  "ok": true
+ },
+ {
+  "id": "geni",
+  "name": "Geni",
+  "url": "https://www.geni.com/",
+  "does": "עץ-משפחה שיתופי",
+  "title": "",
+  "ok": true
+ },
+ {
+  "id": "clay",
+  "name": "Clay",
+  "url": "https://www.clay.com/",
+  "does": "העשרת-רשומות וזיהוי אותו אדם",
+  "title": "Clay | Build systems to grow revenue",
+  "ok": true
+ },
+ {
+  "id": "folk",
+  "name": "Folk",
+  "url": "https://www.folk.app/",
+  "does": "ספר-קשרים קליל עם קבוצות",
+  "title": "folk, the CRM that works for you",
+  "ok": true
+ }
+]
