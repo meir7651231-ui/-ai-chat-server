@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>תיק חיוב — שדות וערכים</title>
+<meta name="description" content="תיק חיוב בפריסת תיעוד-ה-API של Stripe, עם כסף כמספר שלם באגורות.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}
+:root{
+ /* ===== נמדד מ-docs.stripe.com/api/charges/object ===== */
+ --bg:#f4f7fa;--pane:#ffffff;--ink:#3c4257;--head:#1a2c44;--mut:#50617a;
+ --link:#045ad0;--sep:#d4dee9;
+ --cstr:#217005;--cnum:#b13600;--ckey:#667691;--cpun:#1a2c44;
+ --mono:"Source Code Pro",Menlo,Monaco,monospace;
+ --fs:14px;--tfs:12px}
+/* ===== הערכה הכהה נגזרה על ידי ולא נמדדה: מתג-הערכה של סטרייפ
+        הוא העדפת-משתמש ואינו נשמע ל-prefers-color-scheme.    ===== */
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+ --bg:#141a22;--pane:#1b232e;--ink:#d3dae5;--head:#f0f4f9;--mut:#9aa8bd;
+ --link:#6aa9f5;--sep:#2c3746;
+ --cstr:#7cc95f;--cnum:#ff9a6b;--ckey:#9aa8bd;--cpun:#d3dae5}}
+:root[data-theme=dark]{
+ --bg:#141a22;--pane:#1b232e;--ink:#d3dae5;--head:#f0f4f9;--mut:#9aa8bd;
+ --link:#6aa9f5;--sep:#2c3746;
+ --cstr:#7cc95f;--cnum:#ff9a6b;--ckey:#9aa8bd;--cpun:#d3dae5}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:400 var(--fs)/22px system-ui,sans-serif}
+h1,h2{margin:0;color:var(--head)}p{margin:0}bdi{unicode-bidi:isolate}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+
+.top{background:var(--pane);border-bottom:1px solid var(--sep);padding:12px 0}
+.top .in{max-width:1300px;margin:0 auto;padding:0 22px;display:flex;
+ align-items:baseline;gap:12px}
+.top b{font:700 15px/1.2 system-ui,sans-serif;color:var(--head)}
+.top span{color:var(--mut);font-size:13px}
+
+.wrap{max-width:1300px;margin:0 auto;padding:22px 22px 70px;
+ display:grid;grid-template-columns:minmax(0,1fr) 470px;gap:34px;align-items:start}
+h1{font:700 24px/32px system-ui,sans-serif}
+.lede{color:var(--mut);margin-top:8px;max-width:64ch}
+h2{font:600 16px/24px system-ui,sans-serif;margin:26px 0 4px}
+
+/* ---------- שדה: מזהה מונוספייס · טיפוס ויחידה · הסבר ---------- */
+.fld{padding:14px 0;border-bottom:1px solid var(--sep)}
+.fld:first-of-type{border-top:1px solid var(--sep)}
+.fh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.fn{font:700 var(--fs)/20px var(--mono);color:var(--head);direction:ltr}
+.ft{font:400 var(--tfs)/16px system-ui,sans-serif;color:var(--mut)}
+.fl{font:400 var(--tfs)/16px system-ui,sans-serif;color:var(--link)}
+.fd{margin-top:5px;color:var(--ink)}
+.fd code{font:400 13px/18px var(--mono);direction:ltr;unicode-bidi:isolate;
+ background:var(--bg);padding:1px 5px;border-radius:3px;color:var(--head)}
+.fd b{color:var(--head)}
+
+/* ---------- העמודה החיה ---------- */
+.side{position:sticky;top:16px}
+.panel{background:var(--pane);border:1px solid var(--sep);border-radius:6px;overflow:hidden}
+.pcap{font:700 var(--fs)/20px system-ui,sans-serif;color:var(--head);
+ padding:9px 16px;border-bottom:1px solid var(--sep);background:var(--bg)}
+pre{margin:0;padding:8px 16px 14px;font:400 var(--fs)/18.2px var(--mono);
+ direction:ltr;text-align:left;overflow-x:auto}
+.cp{color:var(--cpun)}.ck{color:var(--ckey)}.cs{color:var(--cstr)}.cn{color:var(--cnum)}
+.read{border-top:1px solid var(--sep);padding:12px 16px;font-size:13px;line-height:20px}
+.read div{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+.read span{color:var(--mut)}
+.read b{font-variant-numeric:tabular-nums;color:var(--head);font-weight:600}
+
+.ev{background:var(--pane);border:1px solid var(--sep);border-radius:6px;
+ padding:16px 18px;margin-top:22px}
+.ev h2{margin-top:0}
+.ev ul{margin:10px 0 0;padding:0;list-style:none}
+.ev li{padding:7px 0;border-top:1px solid var(--sep);display:flex;
+ justify-content:space-between;gap:14px;align-items:baseline}
+.ev li b{font-variant-numeric:tabular-nums;color:var(--head);white-space:nowrap}
+.warn{color:var(--cnum);font-weight:600}
+@media(max-width:1000px){
+ .wrap{grid-template-columns:minmax(0,1fr)}
+ .side{position:static;order:-1}}
+</style></head><body>
+
+<div class="top"><div class="in">
+ <b>מוסדות — גבייה</b>
+ <span>תיק חיוב · יום שלישי, ד׳ תשרי תשפ״ז</span>
+</div></div>
+
+<div class="wrap">
+ <main>
+  <h1>אובייקט החיוב</h1>
+  <p class="lede">חיוב שנתי אחד של משפחת כהן. <b>כל סכום כאן הוא מספר שלם באגורות</b>, וכל אחוז הוא מספר שלם בנקודות-בסיס. הטיפוס והיחידה כתובים ליד כל שדה — לא בתיעוד נפרד.</p>
+
+  <h2>שדות</h2>
+  <div class="fld">
+   <div class="fh"><span class="fn">institution</span><span class="ft">string</span><span class="fl">מוסד</span></div>
+   <p class="fd">המוסד שאליו שייך החיוב. אינו משתנה במהלך השנה.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">year</span><span class="ft">string</span><span class="fl">שנת לימודים</span></div>
+   <p class="fd">שנה עברית. חיוב שייך לשנה אחת בלבד; תיקון לשנה קודמת נכתב כרשומת-תיקון נפרדת, לפי האפיון.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">children</span><span class="ft">integer</span><span class="fl">מספר ילדים</span></div>
+   <p class="fd">מספר הילדים הרשומים במוסד. כל סעיף לפי-ילד מוכפל בו.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">riders</span><span class="ft">integer</span><span class="fl">מהם בהסעה</span></div>
+   <p class="fd">כמה מן הילדים נוסעים בהסעות. נספר מלוח ההסעות, לא נקבע ידנית.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">tuition_per_child</span><span class="ft">integer · אגורות</span><span class="fl">שכר לימוד לילד</span></div>
+   <p class="fd">מספר שלם באגורות. 600,000 אגורות הן 6,000.00 ₪. הסכום אינו נשמר כשבר עשרוני — ראו «למה אגורות» למטה.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">bus_per_rider</span><span class="ft">integer · אגורות</span><span class="fl">הסעה לנוסע</span></div>
+   <p class="fd">90,000 אגורות, 900.00 ₪. מוכפל ב־riders ולא ב־children.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">books_per_child</span><span class="ft">integer · אגורות</span><span class="fl">ספרים לילד</span></div>
+   <p class="fd">22,500 אגורות, 225.00 ₪.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">gross</span><span class="ft">integer · אגורות</span><span class="fl">חיוב ברוטו</span></div>
+   <p class="fd"><code>children × tuition_per_child + riders × bus_per_rider + children × books_per_child</code>. נגזר; אינו נכתב.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">discount_bp</span><span class="ft">integer · נקודות-בסיס</span><span class="fl">הנחה</span></div>
+   <p class="fd"><b>נקודת-בסיס היא מאית האחוז.</b> 15% נשמרים כ־1,500, לא כ־0.15. אחוז עשרוני היה מחזיר את בעיית השבר דרך הדלת האחורית. האפיון מתיר הנחה אחת בלבד — הגבוהה, לא מצטבר.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">net</span><span class="ft">integer · אגורות</span><span class="fl">חיוב נטו</span></div>
+   <p class="fd"><code>round(gross × (10000 − discount_bp) ÷ 10000)</code>. העיגול נעשה <b>פעם אחת</b>, על התוצאה הסופית, ולעולם לא על שלבי-ביניים.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">paid</span><span class="ft">integer · אגורות</span><span class="fl">שולם</span></div>
+   <p class="fd">סכום התשלומים שנקלטו. מתעדכן רק דרך רשומת-תשלום, לפי האפיון.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">balance</span><span class="ft">integer · אגורות</span><span class="fl">יתרה</span></div>
+   <p class="fd"><code>net − paid</code>. האפיון אוסר יתרה שלילית.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">per_installment</span><span class="ft">integer · אגורות</span><span class="fl">תשלום בפריסה</span></div>
+   <p class="fd"><code>floor(net ÷ 10)</code>. <b>floor ולא round</b> — כדי שסכום התשלומים לעולם לא יעלה על החיוב.</p>
+  </div>
+  <div class="fld">
+   <div class="fh"><span class="fn">remainder</span><span class="ft">integer · אגורות</span><span class="fl">שארית</span></div>
+   <p class="fd"><code>net − per_installment × 10</code>. כאן <b>5</b> אגורות שאינן שייכות לאף תשלום. <b>שדה חובה</b>: בלעדיו השארית פשוט נעלמת. ברירת-המחדל הנכונה היא להוסיף אותה לתשלום הראשון.</p>
+  </div>
+
+  <div class="ev">
+   <h2>למה אגורות — הראיות מהנתונים שלך</h2>
+   <p style="color:var(--mut);margin-top:6px">בדקתי את כל 168 המשפחות. הנה מה שיצא, ומה שלא יצא.</p>
+   <ul>
+    <li><span>חיובים שנוחתים על שבר של שקל</span><b>96 מתוך 168</b></li>
+    <li><span>מה שעיגול לשקלים שלמים מוסיף לכלל המוסד</span><b>39.00 ₪</b></li>
+    <li><span>סחיפה בין שבר עשרוני למספר שלם באגורות</span><b>0</b></li>
+    <li><span>משפחות שיתרתן <b>שלילית</b> — והאפיון אוסר</span><b class="warn">18 מתוך 168</b></li>
+   </ul>
+   <p class="fd" style="margin-top:10px"><b>השורה האחרונה אינה על אגורות — והיא הממצא החמור כאן.</b> 18 משפחות שילמו יותר מן החיוב שלהן, והאפיון אוסר «יתרה שלילית» במפורש. המשפחה שבדוגמה למעלה נבחרה <b>תקינה</b> בכוונה, כדי שהתיעוד לא יציג ערך שהוא עצמו מפר את הכלל שהוא מתאר. אבל ה-18 קיימות בנתונים וצריכות הכרעה: זיכוי לשנה הבאה, או החזר לפי טופס ההחזר.</p>
+   <h2 style="margin-top:18px">אותה פריסה, שתי יחידות</h2>
+   <ul>
+    <li><span>פריסה ל־10 <b>בשקלים שלמים</b> — שארית כוללת</span><b class="warn">820 ₪</b></li>
+    <li><span>משפחות שנשארת בהן שארית</span><b>136 מתוך 168</b></li>
+    <li><span>פריסה ל־10 <b>באגורות שלמות</b> — שארית כוללת</span><b>1.80 ₪</b></li>
+    <li><span>משפחות שנשארת בהן שארית</span><b>36 מתוך 168</b></li>
+   </ul>
+   <p class="fd" style="margin-top:12px"><b>זו כל ההוכחה.</b> אותה משפחה, אותה פריסה: בשקלים שלמים נשארים <b class="warn">4 ₪</b> שאינם שייכים לאף תשלום; באגורות שלמות נשארות <b>5 אגורות</b>. על כל המוסד: <b class="warn">820 ₪</b> מול <b>1.80 ₪</b> — פי 456 פחות.</p>
+   <p class="fd" style="margin-top:10px"><b>ומה שלא מצאתי:</b> עם התעריפון שלך (6,000 · 900 · 225) ואחוזי ההנחה שלך, חישוב בשבר עשרוני וחישוב במספר שלם נותנים <b>אותה תוצאה בדיוק</b> — הסחיפה היא אפס. לא אמכור בעיה שאין. הרווח מן האגורות כאן הוא בפריסה, לא בחישוב.</p>
+  </div>
+
+  <p class="fd" style="margin-top:22px;color:var(--mut);font-size:13px">הפריסה מועתקת במדידה מתיעוד-ה-API של Stripe: שם-שדה ב־<bdi dir="ltr">Source Code Pro 700 14/20</bdi>, טיפוס ב־<bdi>12/16</bdi> אפור צמוד לו, מפריד <bdi>1px</bdi>, וההסבר מתחת — לצד עמודה שנייה ובה אותו אובייקט עצמו, חי, נגלל יחד. צבעי הקוד נמדדו: מחרוזות <bdi dir="ltr">#217005</bdi>, מספרים <bdi dir="ltr">#b13600</bdi>, מפתחות <bdi dir="ltr">#667691</bdi>. <b>סטיות מסומנות:</b> רקע בלוק-הקוד חזר במדידה שקוף, ולכן השתמשתי ברקע-העמוד עם מסגרת-שיער; והערכה הכהה נגזרה ולא נמדדה, כי מתג-הערכה של סטרייפ הוא העדפת-משתמש ואינו נשמע ל-<bdi dir="ltr">prefers-color-scheme</bdi>. ובניגוד לחמשת המסכים האחרונים — כאן <b>כן</b> נטען גופן: <bdi dir="ltr">Source Code Pro</bdi>, ורק למזהים הלטיניים. העברית נשארת בגופן-המערכת.</p>
+ </main>
+
+ <aside class="side">
+  <div class="panel">
+   <div class="pcap">אובייקט החיוב</div>
+   <pre><span class="cp">{</span>
+<span class="ck">  &quot;institution&quot;</span><span class="cp">: </span><span class="cs">&quot;מוסדות&quot;</span><span class="cp">,</span>
+<span class="ck">  &quot;year&quot;</span><span class="cp">: </span><span class="cs">&quot;תשפ״ז&quot;</span><span class="cp">,</span>
+<span class="ck">  &quot;family&quot;</span><span class="cp">: </span><span class="cs">&quot;משפחת כהן&quot;</span><span class="cp">,</span>
+<span class="ck">  &quot;children&quot;</span><span class="cp">: </span><span class="cn">3</span><span class="cp">,</span>
+<span class="ck">  &quot;riders&quot;</span><span class="cp">: </span><span class="cn">2</span><span class="cp">,</span>
+<span class="ck">  &quot;tuition_per_child&quot;</span><span class="cp">: </span><span class="cn">600000</span><span class="cp">,</span>
+<span class="ck">  &quot;bus_per_rider&quot;</span><span class="cp">: </span><span class="cn">90000</span><span class="cp">,</span>
+<span class="ck">  &quot;books_per_child&quot;</span><span class="cp">: </span><span class="cn">22500</span><span class="cp">,</span>
+<span class="ck">  &quot;gross&quot;</span><span class="cp">: </span><span class="cn">2047500</span><span class="cp">,</span>
+<span class="ck">  &quot;discount_bp&quot;</span><span class="cp">: </span><span class="cn">1500</span><span class="cp">,</span>
+<span class="ck">  &quot;net&quot;</span><span class="cp">: </span><span class="cn">1740375</span><span class="cp">,</span>
+<span class="ck">  &quot;paid&quot;</span><span class="cp">: </span><span class="cn">1350000</span><span class="cp">,</span>
+<span class="ck">  &quot;balance&quot;</span><span class="cp">: </span><span class="cn">390375</span><span class="cp">,</span>
+<span class="ck">  &quot;installments&quot;</span><span class="cp">: </span><span class="cn">10</span><span class="cp">,</span>
+<span class="ck">  &quot;per_installment&quot;</span><span class="cp">: </span><span class="cn">174037</span><span class="cp">,</span>
+<span class="ck">  &quot;remainder&quot;</span><span class="cp">: </span><span class="cn">5</span>
+<span class="cp">}</span></pre>
+   <div class="read">
+    <div><span>ברוטו</span><b><bdi>20,475.00</bdi> ₪</b></div>
+    <div><span>הנחה 15%</span><b><bdi>−3,071.25</bdi> ₪</b></div>
+    <div><span>נטו</span><b><bdi>17,403.75</bdi> ₪</b></div>
+    <div><span>שולם</span><b><bdi>13,500.00</bdi> ₪</b></div>
+    <div><span>יתרה</span><b><bdi>3,903.75</bdi> ₪</b></div>
+    <div><span>10 תשלומים של</span><b><bdi>1,740.37</bdi> ₪</b></div>
+    <div><span>שארית לתשלום הראשון</span><b class="warn"><bdi>0.05</bdi> ₪</b></div>
+   </div>
+  </div>
+ </aside>
+</div>
+</body></html>
