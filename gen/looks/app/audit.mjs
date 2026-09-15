@@ -56,6 +56,10 @@ await p.goto('file://' + join(here, 'mosad.html'));
 await p.waitForTimeout(600);
 
 let bad = 0;
+const THEMES = process.argv.includes('--theme') ? [process.argv[process.argv.indexOf('--theme') + 1]] : ['light', 'dark'];
+for (const theme of THEMES) {
+console.log('\n── ערכה: ' + (theme === 'dark' ? 'כהה' : 'בהירה') + ' ──');
+await p.evaluate(t => document.documentElement.setAttribute('data-theme', t), theme);
 for (const r of ROUTES) {
   await p.evaluate(x => { location.hash = '#/' + x; }, r);
   await p.waitForTimeout(260);
@@ -68,7 +72,7 @@ for (const r of ROUTES) {
   }
   await p.setViewportSize({ width: 1280, height: 900 });
   await p.waitForTimeout(120);
-  if (shots) { await p.screenshot({ path: join(here, 'shots', r.replace('/', '-') + '.png'), fullPage: true }); }
+  if (shots) { await p.screenshot({ path: join(here, 'shots', r.replace('/', '-') + '-' + theme + '.png'), fullPage: true }); }
   const f = [];
   if (a.h1 !== 1) f.push('h1=' + a.h1);
   if (a.main !== 1) f.push('main=' + a.main);
@@ -78,6 +82,8 @@ for (const r of ROUTES) {
   bad += f.length ? 1 : 0;
   console.log((f.length ? '✗ ' : '✓ ') + r.padEnd(13) + (f.length ? f.join(' · ') : `${a.why} מספרים עם גזירה · נקי`));
 }
+}
+await p.evaluate(() => document.documentElement.removeAttribute('data-theme'));
 
 /* בדיקות-התנהגות */
 const beh = {};
@@ -123,6 +129,6 @@ console.log((behFails.length ? '✗ ' : '✓ ') + 'התנהגות'.padEnd(13) +
 if (errs.length) console.log('✗ שגיאות: ' + errs.slice(0, 6).join(' | '));
 bad += behFails.length ? 1 : 0;
 bad += errs.length ? 1 : 0;
-console.log(bad ? `\n${bad} ממצאים` : `\n${ROUTES.length} מסלולים + התנהגות — נקי`);
+console.log(bad ? `\n${bad} ממצאים` : `\n${ROUTES.length} מסלולים × ${THEMES.length} ערכות + התנהגות — נקי`);
 await b.close();
 process.exit(bad ? 1 : 0);

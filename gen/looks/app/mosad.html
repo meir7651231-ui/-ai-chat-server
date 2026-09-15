@@ -41,14 +41,14 @@ a{color:inherit}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
 /* ---- סרגל עליון ---- */
-.bar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:var(--s3);
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:var(--s3);
  padding:var(--s2) var(--s4);background:var(--card);border-block-end:1px solid var(--hair);min-height:var(--barh);flex-wrap:wrap}
-.bar .brand{text-decoration:none;font:800 17px Heebo;white-space:nowrap}
-.bar .find{flex:1;min-width:min(100%,220px);display:flex;align-items:center;gap:var(--s2);
+.topbar .brand{text-decoration:none;font:800 17px Heebo;white-space:nowrap}
+.topbar .find{flex:1;min-width:min(100%,220px);display:flex;align-items:center;gap:var(--s2);
  border:1px solid var(--hair);background:var(--sunk);border-radius:999px;padding:8px var(--s4);
  font-size:13.5px;color:var(--mut);min-height:40px;text-align:start}
-.bar .find:hover{border-color:var(--acc);color:var(--acc)}
-.bar .find kbd{margin-inline-start:auto;font:600 11px ui-monospace,monospace;background:var(--card);
+.topbar .find:hover{border-color:var(--acc);color:var(--acc)}
+.topbar .find kbd{margin-inline-start:auto;font:600 11px ui-monospace,monospace;background:var(--card);
  border:1px solid var(--hair);border-radius:5px;padding:2px 6px;color:var(--mut)}
 .tabs{display:flex;gap:2px;overflow-x:auto;order:3;width:100%;padding-bottom:2px}
 .tabs a{display:flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none;color:var(--mut);
@@ -60,6 +60,12 @@ a{color:inherit}
 .tools select{border:1px solid var(--hair);background:var(--card);border-radius:999px;padding:7px 11px;font-size:13px;min-height:38px}
 .tbtn{border:1px solid var(--hair);background:var(--card);border-radius:999px;padding:7px 12px;font-size:12.5px;color:var(--mut);min-height:38px}
 .tbtn:hover{border-color:var(--acc);color:var(--acc)}
+.themeSw{display:flex;gap:2px;background:var(--sunk);border-radius:999px;padding:3px}
+.themeSw button{display:inline-flex;align-items:center;gap:5px;border:0;background:none;border-radius:999px;
+ padding:6px 11px;font-size:12.5px;color:var(--mut);min-height:34px}
+.themeSw button i{font-style:normal;font-size:12px}
+.themeSw button[aria-pressed=true]{background:var(--card);color:var(--ink);font-weight:700;box-shadow:0 1px 2px var(--hair)}
+@media(max-width:620px){.themeSw button span,.themeSw button{font-size:0}.themeSw button i{font-size:14px}}
 
 #app{display:block;min-height:70vh}
 #app:focus{outline:none}
@@ -211,8 +217,8 @@ table.mini .tot th,table.mini .tot td{font-weight:800;border-block-end:0;padding
 .rules h3{font-size:13.5px;margin-bottom:var(--s2)}
 .rules li{font-size:13px;color:var(--err);background:var(--err-soft);border-radius:8px;padding:6px 11px;margin-bottom:5px}
 
-@media print{.bar,.pal,.ui-toast,.dtabs,.dacts{display:none!important}body{background:#fff}}
-@media(max-width:700px){.bar .find kbd{display:none}.dstats{gap:var(--s4)}}
+@media print{.topbar,.pal,.ui-toast,.dtabs,.dacts{display:none!important}body{background:#fff}}
+@media(max-width:700px){.topbar .find kbd{display:none}.dstats{gap:var(--s4)}}
 
 /* ===== anashim.css ===== */
 #app[data-v=anashim] .hd{position:sticky;top:0;z-index:30;background:var(--bg);border-block-end:1px solid var(--hair);
@@ -2764,7 +2770,7 @@ const go = (path) => { location.hash = '#/' + path; };
 
 function chrome() {
   return `<a class="skip" href="#main">דלג לתוכן</a>
-  <header class="bar">
+  <header class="topbar">
     <a class="brand" href="#/bait"><span class="mark">מוסד</span></a>
     <button class="find" id="openPal"><span aria-hidden="true">⌕</span> חיפוש בכל המוסד <kbd>Ctrl K</kbd></button>
     <nav class="tabs" id="tabs" aria-label="אגפים"></nav>
@@ -2773,7 +2779,11 @@ function chrome() {
         <select id="role">${SPEC.roles.map(r => `<option${r === ROLE.name ? ' selected' : ''}>${r}</option>`).join('')}</select></label>
       <button id="logBtn" class="tbtn" aria-label="יומן פעולות">יומן</button>
       <button id="dens" class="tbtn" aria-label="צפיפות">צפיפות</button>
-      <button id="theme" class="tbtn" aria-label="ערכת צבע">מצב</button>
+      <div class="themeSw" role="group" aria-label="ערכת צבע">
+        <button data-theme="light" aria-pressed="false"><i aria-hidden="true">☀</i>בהיר</button>
+        <button data-theme="dark" aria-pressed="false"><i aria-hidden="true">🌙</i>כהה</button>
+        <button data-theme="" aria-pressed="true"><i aria-hidden="true">◐</i>אוטומטי</button>
+      </div>
     </div>
   </header>
   <main id="app" tabindex="-1"></main>
@@ -2892,12 +2902,18 @@ function boot() {
     tabs(); render();
     toast('התפקיד הוחלף ל' + ROLE.name + (ROLE.money ? '' : ' · הסכומים הוסתרו'), false);
   };
-  document.getElementById('theme').onclick = () => {
-    const cur = root.getAttribute('data-theme');
-    const next = cur === 'dark' ? 'light' : cur === 'light' ? '' : 'dark';
-    next ? root.setAttribute('data-theme', next) : root.removeAttribute('data-theme');
-    toast('ערכת צבע: ' + (next === 'dark' ? 'כהה' : next === 'light' ? 'בהירה' : 'לפי המכשיר'), false);
+  /* ערכת-צבע: בחירה מפורשת, נזכרת במכשיר. «אוטומטי» = לפי הגדרת המכשיר. */
+  const setTheme = (t, say) => {
+    t ? root.setAttribute('data-theme', t) : root.removeAttribute('data-theme');
+    document.querySelectorAll('.themeSw button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.theme === t)));
+    try { localStorage.setItem('mosad-theme', t); } catch (e) { /* חלון פרטי — נשאר לפי המכשיר */ }
+    if (say) toast('ערכת צבע: ' + (t === 'dark' ? 'כהה' : t === 'light' ? 'בהירה' : 'לפי המכשיר'), false);
   };
+  document.querySelector('.themeSw').addEventListener('click', e => {
+    const b = e.target.closest('[data-theme]'); if (b) setTheme(b.dataset.theme, true);
+  });
+  let saved = ''; try { saved = localStorage.getItem('mosad-theme') || ''; } catch (e) { }
+  setTheme(saved, false);
   document.getElementById('dens').onclick = () => {
     const d = root.getAttribute('data-density') === 'compact' ? '' : 'compact';
     d ? root.setAttribute('data-density', d) : root.removeAttribute('data-density');

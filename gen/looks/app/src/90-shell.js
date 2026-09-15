@@ -34,7 +34,7 @@ const go = (path) => { location.hash = '#/' + path; };
 
 function chrome() {
   return `<a class="skip" href="#main">דלג לתוכן</a>
-  <header class="bar">
+  <header class="topbar">
     <a class="brand" href="#/bait"><span class="mark">מוסד</span></a>
     <button class="find" id="openPal"><span aria-hidden="true">⌕</span> חיפוש בכל המוסד <kbd>Ctrl K</kbd></button>
     <nav class="tabs" id="tabs" aria-label="אגפים"></nav>
@@ -43,7 +43,11 @@ function chrome() {
         <select id="role">${SPEC.roles.map(r => `<option${r === ROLE.name ? ' selected' : ''}>${r}</option>`).join('')}</select></label>
       <button id="logBtn" class="tbtn" aria-label="יומן פעולות">יומן</button>
       <button id="dens" class="tbtn" aria-label="צפיפות">צפיפות</button>
-      <button id="theme" class="tbtn" aria-label="ערכת צבע">מצב</button>
+      <div class="themeSw" role="group" aria-label="ערכת צבע">
+        <button data-theme="light" aria-pressed="false"><i aria-hidden="true">☀</i>בהיר</button>
+        <button data-theme="dark" aria-pressed="false"><i aria-hidden="true">🌙</i>כהה</button>
+        <button data-theme="" aria-pressed="true"><i aria-hidden="true">◐</i>אוטומטי</button>
+      </div>
     </div>
   </header>
   <main id="app" tabindex="-1"></main>
@@ -162,12 +166,18 @@ function boot() {
     tabs(); render();
     toast('התפקיד הוחלף ל' + ROLE.name + (ROLE.money ? '' : ' · הסכומים הוסתרו'), false);
   };
-  document.getElementById('theme').onclick = () => {
-    const cur = root.getAttribute('data-theme');
-    const next = cur === 'dark' ? 'light' : cur === 'light' ? '' : 'dark';
-    next ? root.setAttribute('data-theme', next) : root.removeAttribute('data-theme');
-    toast('ערכת צבע: ' + (next === 'dark' ? 'כהה' : next === 'light' ? 'בהירה' : 'לפי המכשיר'), false);
+  /* ערכת-צבע: בחירה מפורשת, נזכרת במכשיר. «אוטומטי» = לפי הגדרת המכשיר. */
+  const setTheme = (t, say) => {
+    t ? root.setAttribute('data-theme', t) : root.removeAttribute('data-theme');
+    document.querySelectorAll('.themeSw button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.theme === t)));
+    try { localStorage.setItem('mosad-theme', t); } catch (e) { /* חלון פרטי — נשאר לפי המכשיר */ }
+    if (say) toast('ערכת צבע: ' + (t === 'dark' ? 'כהה' : t === 'light' ? 'בהירה' : 'לפי המכשיר'), false);
   };
+  document.querySelector('.themeSw').addEventListener('click', e => {
+    const b = e.target.closest('[data-theme]'); if (b) setTheme(b.dataset.theme, true);
+  });
+  let saved = ''; try { saved = localStorage.getItem('mosad-theme') || ''; } catch (e) { }
+  setTheme(saved, false);
   document.getElementById('dens').onclick = () => {
     const d = root.getAttribute('data-density') === 'compact' ? '' : 'compact';
     d ? root.setAttribute('data-density', d) : root.removeAttribute('data-density');
