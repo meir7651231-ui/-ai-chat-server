@@ -1,0 +1,379 @@
+[
+ {
+  "id": "semarchy",
+  "name": "Semarchy",
+  "url": "https://semarchy.com/",
+  "wall": [],
+  "freeTrial": [
+   "free trial"
+  ],
+  "bigMedia": 1,
+  "words": 1670,
+  "body": {
+   "bg": "#f7f8f9",
+   "color": "#222222",
+   "family": "-apple-system",
+   "size": 17,
+   "lh": "25.5px"
+  },
+  "radii": [
+   {
+    "v": "8px",
+    "w": 13
+   },
+   {
+    "v": "9999px",
+    "w": 9
+   },
+   {
+    "v": "12px",
+    "w": 4
+   },
+   {
+    "v": "2px",
+    "w": 3
+   }
+  ],
+  "type": {
+   "h1": {
+    "size": 64,
+    "weight": "700",
+    "lh": "72px",
+    "ls": "-1.28px",
+    "family": "Source Serif 4",
+    "color": "#003b72",
+    "text": "Context Changes Everything"
+   },
+   "h2": {
+    "size": 48,
+    "weight": "700",
+    "lh": "57.5938px",
+    "ls": "-0.72px",
+    "family": "Source Serif 4",
+    "color": "#ffffff",
+    "text": "See why customers recommend our "
+   },
+   "h3": {
+    "size": 40,
+    "weight": "700",
+    "lh": "48px",
+    "ls": "-0.4px",
+    "family": "Source Serif 4",
+    "color": "#ffffff",
+    "text": "Transforming businesses in every"
+   },
+   "body": {
+    "size": 24,
+    "weight": "400",
+    "lh": "32px",
+    "ls": "normal",
+    "family": "-apple-system",
+    "color": "#001d39",
+    "text": "With Semarchy’s self-service Int"
+   }
+  },
+  "buttons": 5,
+  "elements": 1175
+ },
+ {
+  "id": "profisee",
+  "name": "Profisee",
+  "url": "https://profisee.com/",
+  "wall": [
+   "contact sales"
+  ],
+  "freeTrial": [],
+  "bigMedia": 1,
+  "words": 560,
+  "body": {
+   "bg": "#edf5f9",
+   "color": "#1a3040",
+   "family": "Montserrat",
+   "size": 18,
+   "lh": "32.4px"
+  },
+  "radii": [
+   {
+    "v": "6px",
+    "w": 13
+   },
+   {
+    "v": "20px",
+    "w": 11
+   },
+   {
+    "v": "15px",
+    "w": 5
+   },
+   {
+    "v": "3px",
+    "w": 3
+   }
+  ],
+  "type": {
+   "h1": {
+    "size": 104,
+    "weight": "400",
+    "lh": "104px",
+    "ls": "-3px",
+    "family": "Oswald",
+    "color": "#ffffff",
+    "text": "Right HERE. Right Now."
+   },
+   "h2": {
+    "size": 48,
+    "weight": "400",
+    "lh": "57.6px",
+    "ls": "-1px",
+    "family": "Oswald",
+    "color": "#ffffff",
+    "text": "MDM in 20 seconds"
+   },
+   "h3": {
+    "size": 35,
+    "weight": "700",
+    "lh": "31.5px",
+    "ls": "-1px",
+    "family": "Montserrat",
+    "color": "#ffffff",
+    "text": "Connect"
+   },
+   "body": {
+    "size": 18,
+    "weight": "700",
+    "lh": "24px",
+    "ls": "normal",
+    "family": "Montserrat",
+    "color": "#212121",
+    "text": "We value your privacy"
+   }
+  },
+  "buttons": 1,
+  "elements": 838
+ },
+ {
+  "id": "reltio",
+  "name": "Reltio",
+  "url": "https://www.reltio.com/",
+  "wall": [
+   "request a demo"
+  ],
+  "freeTrial": [],
+  "bigMedia": 7,
+  "words": 819,
+  "body": {
+   "bg": "#ffffff",
+   "color": "#000033",
+   "family": "Libre Franklin",
+   "size": 16,
+   "lh": "24px"
+  },
+  "radii": [
+   {
+    "v": "12px",
+    "w": 19
+   },
+   {
+    "v": "8px",
+    "w": 7
+   },
+   {
+    "v": "100px",
+    "w": 2
+   },
+   {
+    "v": "50px",
+    "w": 2
+   }
+  ],
+  "type": {
+   "h1": {
+    "size": 66,
+    "weight": "200",
+    "lh": "70px",
+    "ls": "normal",
+    "family": "Libre Franklin",
+    "color": "#ffffff",
+    "text": "The future is agentic AI.\nThe fo"
+   },
+   "h2": {
+    "size": 50,
+    "weight": "300",
+    "lh": "58px",
+    "ls": "normal",
+    "family": "Libre Franklin",
+    "color": "#000033",
+    "text": "AI success starts with context i"
+   },
+   "h3": {
+    "size": 38,
+    "weight": "300",
+    "lh": "48px",
+    "ls": "normal",
+    "family": "Libre Franklin",
+    "color": "#000033",
+    "text": "Build the foundation that powers"
+   },
+   "body": {
+    "size": 18,
+    "weight": "300",
+    "lh": "27px",
+    "ls": "0.4px",
+    "family": "Libre Franklin",
+    "color": "#ffffff",
+    "text": "“Reltio’s core capabilities enab"
+   }
+  },
+  "buttons": 4,
+  "elements": 699
+ },
+ {
+  "id": "informatica",
+  "name": "Informatica",
+  "url": "https://www.informatica.com/products/master-data-management.html",
+  "wall": [
+   "contact sales"
+  ],
+  "freeTrial": [],
+  "bigMedia": 5,
+  "words": 680,
+  "body": {
+   "bg": "#ffffff",
+   "color": "#212529",
+   "family": "Salesforce Sans",
+   "size": 16,
+   "lh": "24px"
+  },
+  "radii": [
+   {
+    "v": "30px",
+    "w": 7
+   }
+  ],
+  "type": {
+   "h1": {
+    "size": 58,
+    "weight": "600",
+    "lh": "58px",
+    "ls": "normal",
+    "family": "ITC Avant Garde",
+    "color": "#101820",
+    "text": "Master Data Management & 360 App"
+   },
+   "h2": {
+    "size": 46,
+    "weight": "600",
+    "lh": "46px",
+    "ls": "normal",
+    "family": "ITC Avant Garde",
+    "color": "#101820",
+    "text": "Empowering customers to achieve "
+   },
+   "h3": {
+    "size": 24,
+    "weight": "300",
+    "lh": "36px",
+    "ls": "normal",
+    "family": "ITC Avant Garde",
+    "color": "#101820",
+    "text": "What is master data management ("
+   },
+   "body": {
+    "size": 26,
+    "weight": "600",
+    "lh": "28.6px",
+    "ls": "normal",
+    "family": "Salesforce Sans",
+    "color": "#022ac0",
+    "text": "“Operational MDM requires higher"
+   },
+   "small": {
+    "size": 16,
+    "weight": "400",
+    "lh": "24px",
+    "ls": "normal",
+    "family": "Salesforce Sans",
+    "color": "#101820",
+    "text": "Anand Vijai M R\n                "
+   }
+  },
+  "buttons": 6,
+  "elements": 861
+ },
+ {
+  "id": "ataccama",
+  "name": "Ataccama",
+  "url": "https://www.ataccama.com/",
+  "wall": [
+   "schedule a demo"
+  ],
+  "freeTrial": [],
+  "bigMedia": 11,
+  "words": 924,
+  "body": {
+   "bg": "#ffffff",
+   "color": "#212529",
+   "family": "Poppins",
+   "size": 16,
+   "lh": "24px"
+  },
+  "radii": [
+   {
+    "v": "48px",
+    "w": 37
+   },
+   {
+    "v": "16px",
+    "w": 33
+   },
+   {
+    "v": "24px",
+    "w": 15
+   },
+   {
+    "v": "8px",
+    "w": 10
+   }
+  ],
+  "type": {
+   "h1": {
+    "size": 56,
+    "weight": "400",
+    "lh": "67.2px",
+    "ls": "normal",
+    "family": "Poppins",
+    "color": "#ffffff",
+    "text": "Trust your data, accelerate your"
+   },
+   "h2": {
+    "size": 36,
+    "weight": "400",
+    "lh": "43.2px",
+    "ls": "normal",
+    "family": "Poppins",
+    "color": "#1a0c42",
+    "text": "From messy data silos to data pr"
+   },
+   "h3": {
+    "size": 28,
+    "weight": "400",
+    "lh": "33.6px",
+    "ls": "normal",
+    "family": "Poppins",
+    "color": "#1a0c42",
+    "text": "Working with industry-leading pa"
+   },
+   "body": {
+    "size": 22,
+    "weight": "600",
+    "lh": "26.4px",
+    "ls": "normal",
+    "family": "Poppins",
+    "color": "#1a0c42",
+    "text": "Press play on what’s next in dat"
+   }
+  },
+  "buttons": 6,
+  "elements": 827
+ }
+]
