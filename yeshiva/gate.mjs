@@ -8,6 +8,9 @@
 //   2) **רצפת-ההכרעה:** המנוע פוסק לבד **רק-עולה**, מתגים **רק-יורדים**.
 //   3) **אנטי-משחק:** הכיסוי (פירוקים · ממצאים) רק-עולה — אסור להוריד מתגים
 //      ע"י צמצום-הנמדד.
+//   4) **מסלול-המטרה (purpose.mjs):** משפט-חופשי ⇒ מסמך-מטרה ⇒ אותם שבעה מהלכים.
+//      זה ה-B שחסר למשפט-חופשי: לא מסמך-בעלים אלא **מה שהמטרה דורשת**, נגזר
+//      משרשרת-המקור (חבילות-ורטיקל ⇒ סכמה) עם ראיה. שדות-עם-מקור רק-עולה.
 //  fail-closed (L27): 0 פירוקים / 0 ממצאים = הכלי שבור, לא הנתונים ⇒ exit 2.
 //  שימוש: node yeshiva/gate.mjs [--gate]
 // ══════════════════════════════════════════════════════════════════════════
@@ -47,6 +50,33 @@ if (!perukim || !findings) {
   process.exit(2);
 }
 
+// ── מסלול-המטרה: הגשר חי ונמדד (קוד לא-נבדק = קוד מת · §21) ──────────────
+let P = { sentences: 0, sourced: 0, findings: 0, open: 0 };
+try {
+  const { purposeDoc } = await import(path.join(HERE, 'purpose.mjs'));
+  const { check, parseSpec } = await import(path.join(HERE, 'read.mjs'));
+  const { specFromSentence } = await import(path.join(HERE, '../machtzev/generator/tzinor.mjs'));
+  const { nlToSpec } = await import(path.join(HERE, '../machtzev/generator/nl-spec.mjs'));
+  const corpus = fs.readFileSync(path.join(HERE, '../machtzev/generator/nl-smoke.txt'), 'utf8')
+    .split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+  for (const sent of corpus) {
+    let sp = ''; try { const t = specFromSentence(sent); if (t.spec.trim()) sp = t.spec; } catch { sp = ''; }
+    if (!sp.trim()) sp = nlToSpec(sent);
+    const doc = purposeDoc(sent);
+    P.sentences++; P.sourced += doc.sources.size; P.open += doc.open.length;
+    P.findings += check(doc, parseSpec(sp)).length;
+  }
+} catch (e) {
+  console.error(`🛠️ yeshiva: מסלול-המטרה נשבר — ${e.message} (fail-closed)`);
+  DIRS.forEach((d, i) => restore(d, before[i]));
+  process.exit(2);
+}
+if (!P.sentences || !P.sourced) {
+  console.error(`🛠️ yeshiva: מסלול-המטרה ${P.sentences} משפטים · ${P.sourced} שדות-עם-מקור — הכלי שבור (fail-closed)`);
+  DIRS.forEach((d, i) => restore(d, before[i]));
+  process.exit(2);
+}
+
 const fails = [];
 const stale = DIRS.flatMap((d, i) => drift(d, before[i]));
 if (stale.length) fails.push(`${stale.length} קבצי-פסק אינם טריים: ${stale.slice(0, 6).join(' · ')}${stale.length > 6 ? ' …' : ''} (הרץ read.mjs/apply.mjs ו-commit)`);
@@ -56,8 +86,13 @@ if (decided < BASE.decided) fails.push(`${decided} פסק-לבד < רצפה ${BA
 if (switches > BASE.switches) fails.push(`${switches} מתגים > רצפה ${BASE.switches} (מתגים רק-יורדים)`);
 if (perukim < BASE.perukim) fails.push(`${perukim} פירוקים < רצפה ${BASE.perukim} (כיסוי רק-עולה)`);
 if (findings < BASE.findings) fails.push(`${findings} ממצאים < רצפה ${BASE.findings} (כיסוי רק-עולה)`);
+const BP = BASE.purpose || {};
+if (P.sentences < (BP.sentences || 0)) fails.push(`מסלול-המטרה: ${P.sentences} משפטים < רצפה ${BP.sentences} (כיסוי רק-עולה)`);
+if (P.sourced < (BP.sourced || 0)) fails.push(`מסלול-המטרה: ${P.sourced} שדות-עם-מקור < רצפה ${BP.sourced} (מקורות רק-עולים)`);
+if (P.findings < (BP.findings || 0)) fails.push(`מסלול-המטרה: ${P.findings} ממצאים < רצפה ${BP.findings} (הישיבתי רק-מעמיק)`);
 
 console.log(`  ${perukim} פירוקים · ${findings} ממצאים · ${decided} פסק המנוע לבד · ${switches} מתגים (רצפה ${BASE.decided}/${BASE.switches})`);
+console.log(`  מסלול-המטרה: ${P.sentences} משפטים · ${P.sourced} שדות-עם-מקור · ${P.findings} ממצאים · ${P.open} מתגים`);
 if (fails.length) { for (const m of fails) console.error('🚨 yeshiva: ' + m); process.exit(1); }
 const up = decided - BASE.decided, down = BASE.switches - switches;
 console.log(`✅ yeshiva: הפסק טרי · ${decided}/${findings} הכריע המנוע לבד${up ? ` ⬆ ${up}` : ''}${down ? ` · מתגים ⬇ ${down} — עדכן את המניפסט` : ''}`);

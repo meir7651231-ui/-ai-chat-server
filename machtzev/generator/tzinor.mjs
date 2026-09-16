@@ -383,21 +383,38 @@ export function specFromSentence(text, origin = 'משפט') {
       const noSrc = real[0].fields.filter((f) => !f.src);
       if (noSrc.length) throw new Error(`tzinor: ${noSrc.length} שדות בלי src ב-${e.word} — באג, לא פלט`);
     }
-    if (real.length === 1) lines.push(`${TPL.ent} ${e.word} ${TPL.with} ${real[0].fields.map((f) => f.name + (f.optional ? '' : '*')).join(', ')}`);
+    // 🔤 שפת-האפיון עברית-בלבד: `interpret` מתייג כל מפתח-לא-עברי כשדה-סתמי אחד
+    // (נמדד: name*⇒«שדה» · phone*⇒«שדה» · מחיר*⇒«מחיר»+טיפוס). לכן מפתח-סכמה
+    // באנגלית **אינו נפלט** — אין לו מונח, ומה שאין לו מונח ⇒ ∅ מדווח, לא ניחוש
+    // (L57 · §20-ג «שקע בלי-ערך-אמת ⇒ פסילה»). הוא נרשם כמתג עם מוצאו, לא כעמודה.
+    const named = real.length === 1 ? real[0].fields.filter((f) => HE_RE.test(f.name)) : [];
+    const unnamed = real.length === 1 ? real[0].fields.filter((f) => !HE_RE.test(f.name)) : [];
+    if (real.length === 1 && unnamed.length) open.push({ word: e.word, options: e.options.length, cls: real[0].cls, fields: unnamed.map((f) => f.name), from: 'שקע-סכמה בלי מונח-עברי', srcs: [...new Set(unnamed.map((f) => f.src))] });
+    if (real.length === 1 && named.length) lines.push(`${TPL.ent} ${e.word} ${TPL.with} ${named.map((f) => f.name + (f.optional ? '' : '*')).join(', ')}`);
     else {
       // אין-מונח / רב-מועמדים ⇒ **לא נופלים ולא ממציאים**: המסך נבנה, השדות פתוחים.
       // שדות-המשפט אם נאמרו; אחרת שדה-זיהוי בלבד — שלד שהמתג ימלא. מקור כל שדה
       // כאן הוא «המשפט שלך», ולכן hamtzaa לא רואה בו המצאה (L57 נשמר).
       const said = (e.sentenceFields || []).map((f) => (typeof f === 'string' ? f : f && f.name)).filter(Boolean);
-      const fs_ = said.length ? said : [SKELETON];
+      // שדה-הזיהוי כשלא נאמרו שדות: **המילה של הישות עצמה**, ביחיד אם יש צורה כזאת
+      // («מטופלים» ⇒ «מטופל»). היא נאמרה במשפט ⇒ אפס המצאה. SKELETON נשאר רק אם
+      // אין אפילו מילה (שלא יכול לקרות — ישות בלי מילה אינה ישות).
+      // כלל-צורה בלבד, אפס-מילון (§23): «ים» סופי = ריבוי-זכר חד-משמעי ⇒ נושר
+      // (מטופלים⇒מטופל · תורים⇒תור). «ות/יות» דו-משמעי (לקוחות⇒לקוח אבל הזמנות⇒הזמנ)
+      // ⇒ **לא נוגעים**, המילה נשארת כפי שנאמרה. hamtzaa מכיר ריבוי⇒יחיד כמקור.
+      const ident = (e.forms || []).find((f) => f && f !== e.word && e.word.startsWith(f))
+        || (PLURAL_M.test(e.word) && e.word.length > 3 ? e.word.replace(PLURAL_M, '') : e.word);
+      const fs_ = said.length ? said : [ident || SKELETON];
       lines.push(`${TPL.ent} ${e.word} ${TPL.with} ${fs_.join(', ')}`);
-      open.push({ word: e.word, options: e.options.length, fields: fs_, from: said.length ? 'המשפט שלך' : 'שלד-מטרה' });
+      open.push({ word: e.word, options: e.options.length, fields: fs_, from: said.length ? 'המשפט שלך' : 'מילת-הישות' });
     }
   }
   return { spec: lines.join('\n'), open, domain: sw.domain.pick, switches: sw };
 }
 const TPL = { ent: 'ישות', with: 'עם' };
-const SKELETON = 'שם';   // שלד-מטרה: שדה-זיהוי בלבד. לא רביעייה, לא ניחוש — מקום למתג.
+const HE_RE = /[\u05d0-\u05ea]/;   // שם-שדה בלי אות-עברית = מפתח-סכמה, לא מונח
+const PLURAL_M = /ים$/;   // ריבוי-זכר חד-משמעי (כלל-צורה · אפס-מילון · §23)
+const SKELETON = 'שם';   // רשת-אחרונה בלבד: ישות בלי מילה (לא קורה). שדה-הזיהוי = מילת-הישות.
 
 // ── שכבת-המטרה (BUILD-ORDER-INTENT · איטר׳ 3) ────────────────────────────────
 //  ורמינהו פסק (:22): «צירוף-ה-caps גס/רועש ⇒ הסיגנל הוא **האטומים עצמם**».

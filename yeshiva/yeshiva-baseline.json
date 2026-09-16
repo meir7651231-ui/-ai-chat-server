@@ -4,5 +4,11 @@
   "perukim": 28,
   "findings": 333,
   "decided": 286,
-  "switches": 47
+  "switches": 47,
+  "purpose": {
+    "_": "מסלול-המטרה: משפט-חופשי ⇒ מסמך-מטרה (purpose.mjs) ⇒ אותם שבעה מהלכים. שדות-עם-מקור וממצאים רק-עולים.",
+    "sentences": 14,
+    "sourced": 179,
+    "findings": 151
+  }
 }

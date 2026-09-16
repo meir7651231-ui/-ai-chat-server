@@ -1,9 +1,10 @@
 {
   "_": "רצפת-שער-ההמצאה (hamtzaa --ratchet). חוב-ההמצאה רק-יורד; הכיסוי (זוגות·שדות) רק-עולה — אסור להוריד חוב ע\"י צמצום-הנמדד. עדכון = מדידה חדשה באותו commit שמוריד את החוב.",
   "measured": "2026-09-16",
+  "note": "מסלול-nl עבר למדידת **המסלול המחווט** (specFromSentence, נפילה ל-nlToSpec) — מה ש-app-ds באמת פולט. 160/169 ⇒ 0/49 אחרי שמפתחות-סכמה בלי מונח-עברי הפסיקו להיפלט כעמודות.",
   "routes": {
     "peruk": { "pairs": 28, "fields": 239, "invented": 51 },
-    "nl": { "pairs": 14, "fields": 169, "invented": 160 }
+    "nl": { "pairs": 14, "fields": 49, "invented": 0 }
   },
-  "total": { "fields": 408, "invented": 211 }
+  "total": { "fields": 288, "invented": 51 }
 }

@@ -31,6 +31,7 @@ import { fileURLToPath } from 'node:url';
 import { interpret } from './entity.mjs';
 import { definal } from './match.mjs';
 import { nlToSpec } from './nl-spec.mjs';
+import { specFromSentence } from './tzinor.mjs';   // הצינור המשולב — מה ש-app-ds באמת מריץ
 import * as R from '../root.mjs';
 
 const GEN = R.GEN_DIR;
@@ -125,13 +126,19 @@ export function routePeruks() {
   return collect('peruk', pairs);
 }
 
-/** מסלול-המשפט-החופשי: כל שורה ב-nl-smoke.txt (קלט) ⇒ nlToSpec (ספק). */
+/** מסלול-המשפט-החופשי: כל שורה ב-nl-smoke.txt (קלט) ⇒ **הספק שהמחולל באמת פולט**.
+ *  זה בדיוק מה ש-`app-ds.mjs` עושה בדלת-הקלט-החופשי: הצינור המשולב קודם
+ *  (`specFromSentence` — מקור-אמת), ו-`nlToSpec` רק כנפילה-לאחור. מדידה על
+ *  `nlToSpec` לבדו הייתה מודדת את הנפילה ולא את המחולל (ירוק/אדום-חלול · L27). */
 export function routeNl() {
   const src = readIf(GEN + 'nl-smoke.txt');
   const pairs = [];
   for (const line of String(src || '').split(/\r?\n/)) {
     const t = line.trim(); if (!t || t.startsWith('#')) continue;
-    pairs.push({ id: t.slice(0, 40), input: t, spec: nlToSpec(t) });
+    let spec = '';
+    try { const r = specFromSentence(t); if (r.spec.trim()) spec = r.spec; } catch { spec = ''; }
+    if (!spec.trim()) spec = nlToSpec(t);
+    pairs.push({ id: t.slice(0, 40), input: t, spec });
   }
   return collect('nl', pairs);
 }
