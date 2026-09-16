@@ -383,5 +383,594 @@
    "read: machtzev/census/engine-index.mjs:162-170 (importsOf) · :324-334 (connected)",
    "read: machtzev/generator/regen.mjs:6-22 (REGEN — shape-ops אינו שם)"
   ]
+ },
+ {
+  "file": "machtzev/generator/op-bridge.mjs",
+  "lang": "mjs",
+  "lines": 68,
+  "does": [
+   {
+    "claim": "לומד מטריצת-זיקה בין G2-ops (צורת-הישות) ל-G1-ops (מה האטום עושה) משכיחות-משותפת ב-9 מודולי-הזהב, עם idf שמנחית ops גנריים.",
+    "evidence": "op-bridge.mjs:19-34 learn() — `affinity[g2][g1] = s/df[g2] * idf[g1]`; הנוסחה מתועדת בשורה 4"
+   },
+   {
+    "claim": "מספק **בורר-מודול חלופי**: pickByOps מדרג מודולים בקוסינוס בין ה-ops הצפויים של הישות ל-tf של המודול.",
+    "evidence": "op-bridge.mjs:41-44 `pickByOps` + cos() בשורה 40"
+   },
+   {
+    "claim": "מודד את עצמו מול הבורר-לפי-שמות הקיים ומדווח הסכמת top-1/top-2.",
+    "evidence": "op-bridge.mjs:51-53 `const agree = strong.filter(p => pickByOps(...)[0].module === p.module)` · :57 שורת-הדיווח"
+   },
+   {
+    "claim": "המטריצה נלמדת ולא נכתבת ביד — זו בדיוק הנקודה מול OPFAM של G3.",
+    "evidence": "op-bridge.mjs:3 «לא טבלת-יד (כמו OPFAM ב-G3) אלא שכיחות-משותפת ב-9 מודולי-הזהב»"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו נטול-טבלת-יד לגמרי** — TAG2MOD ממפה 9 תגים לשמות-קבצים ליטרליים, בתוך מנוע שכל תכליתו להחליף טבלאות-יד.",
+    "evidence": "op-bridge.mjs:16 `const TAG2MOD = { inv:'schoolos.dart', stu:'schoolos_students.dart', ... };` — 9 זוגות חרוטים"
+   },
+   {
+    "claim": "**אינו שער-משטרה** למרות שיש לו `--gate` מלא — אף שורה ב-police.mjs אינה מריצה אותו.",
+    "evidence": "ran: `grep -c \"op-bridge\" machtzev/police.mjs` ⇒ 0. הכרטיס אף מדווח `🚫 לא: לא-שער-משטרה`."
+   },
+   {
+    "claim": "ולכן פלטו המחויב **התיישן בשקט**: --gate אדום עכשיו.",
+    "evidence": "ran: `node machtzev/generator/op-bridge.mjs --gate` ⇒ `🔴 opbridge: op-bridge.json ≠ למידה-טרייה מהזהב (הרץ op-bridge.mjs)` · exit≠0"
+   },
+   {
+    "claim": "הסחיפה כומתה: הקבוצות (g2=48, g1=33) זהות, אבל מודול `crs` עלה מ-25 ל-26 G1-ops ו-1,564 מתוך 1,584 תאי-הזיקה שונים.",
+    "evidence": "ran: /tmp/claude-0/ob2.mjs (מריץ learn() בזיכרון ומשווה, ללא --write) ⇒ `modules DIFF · affinity DIFF · top DIFF · summary DIFF` · `affinity cells differing: 1564 of 1584` · `crs: file g1=25 ⇒ fresh g1=26`"
+   },
+   {
+    "claim": "אינו מוזרק לבורר בפועל — retarget.pickModule נשאר הבורר-לפי-שמות; pickByOps רק **מדווח** הסכמה.",
+    "evidence": "op-bridge.mjs:12 `import { pickModule, ENTITIES } from './retarget.mjs';` — הכיוון הוא op-bridge⇒retarget (מדידה), לא retarget⇒op-bridge (הכרעה)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אפס מייבאים · אפס הרצה-בשם · אפס שער. ran: `grep -rn \"op-bridge.mjs\" --include=*.mjs --include=*.json --include=*.tsv .` ⇒ רק engine-index.json (אינדקס) והקובץ עצמו."
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/retarget.mjs — pickModule (הבורר-לפי-שמות שאותו op-bridge כבר מודד); ובמקביל שורה ב-machtzev/police.mjs ליד gate('shapeops',…) ב-police.mjs:137",
+   "gives": "§20-א מילולית: «הכי-טוב-לייעוד, לא הראשון-שמתאים». הבורר היום מכריע לפי **שם-ישות**; op-bridge מכריע לפי **צורת-הישות** (ops) — הדרך היחידה בקבוצה לבחור מודול לישות ששמה לא נראה מעולם, שזה בדיוק המקרה של משפט-חופשי ב-§22. הוא כבר מודד את הסכמתו מול הבורר הקיים (‏:51-53), כך שהחיבור ניתן לעשות כ-fallback מדוד ולא כהחלפה עיוורת. תנאי: לרשום אותו כשער, אחרת הוא יתיישן שוב."
+  },
+  "s22": {
+   "score": 3,
+   "why": "3 = ישירות על הנתיב. בחירת-המודול היא הצומת שבו משפט הופך לאפליקציה, ו-op-bridge הוא הבורר-לפי-ייעוד היחיד בקבוצה. הסיבה לאי-החיבור אינה «נטוש» ואינה «הוחלף» — הוא פשוט **לא חובר**, ומכיוון שגם לא נרשם כשער, איש לא ראה שהוא נהיה אדום."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/op-bridge.mjs --gate ⇒ 🔴 opbridge: op-bridge.json ≠ למידה-טרייה מהזהב",
+   "ran: node /tmp/claude-0/ob.mjs ⇒ g2 48≡48 · g1 33≡33 · אפס הבדל-קבוצות",
+   "ran: node /tmp/claude-0/ob2.mjs ⇒ affinity cells differing: 1564 of 1584 · modules crs g1 25⇒26",
+   "ran: grep -c \"op-bridge\" machtzev/police.mjs ⇒ 0",
+   "read: machtzev/generator/op-bridge.mjs:1-45 · :51-65 (הגשר, הבורר, בלוק-ה-CLI)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/synth.mjs",
+  "lang": "mjs",
+  "lines": 272,
+  "does": [
+   {
+    "claim": "הזמנת-יכולת = תיאור + דוגמאות «קלט ⇒ פלט»; המנוע מחפש לבדו שרשרת-אטומים עד עומק-4 שמוכיחה את **כל** הדוגמאות.",
+    "evidence": "synth.mjs:2-6 (הכותרת, ציטוט הכרעת-הבעלים «תביא יכולות שאין — והוא יהיה חייב לחבר כמה-וכמה אטומים») · קבצי-ההזמנה ב-machtzev/generator/capabilities/<שם>.txt"
+   },
+   {
+    "claim": "החיפוש מונחה קודם קוהרנטיות-תיאור ואז רוחב — לא כוח-גס עיוור.",
+    "evidence": "synth.mjs:4 «מונחה חוש-המשמעות (קוהרנטיות-תיאור) ואז רוחב»"
+   },
+   {
+    "claim": "בונה את מאגר-המועמדים מהאטלס החי ומסנן לבני-חיווט-Dart בלבד (twins + wirable).",
+    "evidence": "synth.mjs:13-14 `import { buildAtlas } from './atlas.mjs'; import { buildTwinRegistry, twinMeta, dartLit } from './twins.mjs';` · :30-36 בניית pool · :42-45 `const wirable = (f) => { if (!twins.has(f.name)) return false; ... }`"
+   },
+   {
+    "claim": "שער-שימור פעיל וירוק: כל יכולת שהוכחה נשארת מוכחת, והשקילות ל-Dart מאומתת.",
+    "evidence": "ran: `node machtzev/generator/synth.mjs --gate` ⇒ `✓ שער-הסינתזה: 4 יכולות-מוזמנות מוכחות-חי · ✓ שקילות-Dart אומתה (השחלת-המסך ביט-זהה לדוגמאות)` — ובתוכן `✓ weighted-quote: 5 דוגמאות-חוזה (ארגומנטים+עיגול-חצי/שקל+אפס) — ירוק`"
+   },
+   {
+    "claim": "כישלון מדווח כדוח-כן ולא מוסתר.",
+    "evidence": "synth.mjs:5 «הצלחה ⇒ spec למחולל; כישלון ⇒ דוח כן»"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מקבל עברית-חופשית — הקלט הוא קובץ-הזמנה מובנה (שורה-1 תיאור, אחריה זוגות 'קלט => פלט').",
+    "evidence": "synth.mjs:6 «machtzev/generator/capabilities/<שם>.txt — שורה 1 תיאור; אחריה 'קלט => פלט'»"
+   },
+   {
+    "claim": "אינו מחולל מסך או אפליקציה — פולט spec, והמחולל הוא שמרכיב.",
+    "evidence": "synth.mjs:5 «הצלחה ⇒ spec למחולל» · :19 `const SPECS = path.join(HERE,'specs')`"
+   },
+   {
+    "claim": "אינו רץ ב-REGEN. הוא כן מורץ מ-one.mjs — אבל one.mjs אינו נקודת-כניסה של המחולל, ולכן זה אינו «מחובר» לפי ההגדרה.",
+    "evidence": "machtzev/one.mjs:129 `stage('מנוע-הסינתזה (חלום + יכולות-מוזמנות)', () => last(run('machtzev/generator/synth.mjs',['--dream'])), { optional:true });` מול machtzev/generator/regen.mjs:6-22 שבו הוא אינו מופיע. ושים לב ל-`optional:true` — כשלונו אינו מפיל את one."
+   },
+   {
+    "claim": "אינו מכסה את כל האטומים — רק פונקציות עם תאום-Dart ופרמטר-ראשון בר-הזנה.",
+    "evidence": "synth.mjs:41-45 `const FEEDABLE0 = /^(String|dynamic|Object|num|int|double)\\??$/;` + wirable"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:122",
+    "how": "שער `synth` — `gate('synth','generator/synth.mjs',['--gate']);`"
+   },
+   {
+    "who": "machtzev/one.mjs:129",
+    "how": "הרצה-בשם עם `--dream`, אופציונלי. one.mjs אינו ב-GEN_ENTRY ⇒ אינו מזכה בחיבור."
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/regen.mjs:6 (REGEN) — שלב לפני behavior-plan.mjs; או machtzev/generator/behavior-plan.mjs עצמו, כשלב-נפילה-לאחור כשאין חלקיק קיים לצורך",
+   "gives": "זה **§20-ב במנוע**: «אין-יחיד ⇒ שלב כמה עד שהמטרה מושגת», עם הוכחה-בריצה על דוגמאות. behavior-plan (הכרעה-30) כבר בוחר חלקיק-יסוד ע\"י הרצת-דוגמאות על מועמדים — אבל הוא בוחר **אטום אחד**. synth הוא אותה דוקטרינה בעומק-4. חיבורו נותן למחולל את התשובה לשאלה «מה עושים כשאין חלקיק מתאים» בלי לכתוב אטום חדש ביד — בדיוק הפער ש-G34 סגר ידנית (2 חלקיקים חדשים) וש-G35–G50 חזרו אליו שוב ושוב."
+  },
+  "s22": {
+   "score": 3,
+   "why": "3 = ישירות על הנתיב. §22 דורש «אם אין — משלב עד שמושג»; synth הוא המימוש היחיד של המשפט הזה בקבוצה, והוא ירוק בריצה עם 4 יכולות מוכחות ושקילות-Dart. אינו מחובר לא כי הוחלף אלא כי נשאר בשולי-one כשלב אופציונלי."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/synth.mjs --gate ⇒ ✓ שער-הסינתזה: 4 יכולות-מוזמנות מוכחות-חי · ✓ שקילות-Dart אומתה",
+   "read: machtzev/generator/synth.mjs:1-45 (הכותרת, המאגר, wirable)",
+   "read: machtzev/one.mjs:129 (stage אופציונלי) · machtzev/police.mjs:122 (שער synth)",
+   "read: machtzev/generator/regen.mjs:6-22 — synth אינו ב-REGEN"
+  ]
+ },
+ {
+  "file": "machtzev/generator/balagan-look.mjs",
+  "lang": "mjs",
+  "lines": 130,
+  "does": [
+   {
+    "claim": "מריץ 36 כללי-יעד (15 עיצוב · 15 פרואקטיביות · 6 יעד) כבדיקות מכניות על **הפלט-המחולל** של אפליקציות-הנייר, לפי מרשם balagan-score.json.",
+    "evidence": "balagan-look.mjs:2-4 (הכותרת) · balagan-score.json:2 «מרשם 36 כללי-היעד … check = בדיקות מכניות על הפלט-המחולל (balagan-look.mjs)»"
+   },
+   {
+    "claim": "קבוצת-האפליקציות נגזרת מהספקים (`עיצוב: נייר`), לא מרשימה כתובה.",
+    "evidence": "balagan-look.mjs:19-22 — `const LOOK_RE = new RegExp('^\\\\s*' + SL.lookWord + '\\\\s*:\\\\s*(.+)$','m')` ואז `.filter(a => SL.looks[m[1].trim()] === 'paper')`"
+   },
+   {
+    "claim": "מוסיף ns וירטואלי `balagan` כדי למדוד את המוצר עצמו ולא רק את חומרי-הגלם — התיקון של G53.",
+    "evidence": "balagan-look.mjs:22-27 `apps.push({ ns:'balagan', spec:'' });` + ההערה «36 הכללים מעולם לא נמדדו על האפליקציה שהבעלים באמת פותח … והציון «35/36» תיאר את החומר, לא את המוצר»"
+   },
+   {
+    "claim": "כלל שמנגנונו יושב אצל המודול נבדק ככיסוי-מלא של הממוזגים — מודול חדש בלי המנגנון צובע אדום.",
+    "evidence": "balagan-look.mjs:34-37 mergedMods() + ההערה «זו דרישה חזקה יותר מפטור»"
+   },
+   {
+    "claim": "מודד צפיפות (homeSlots) ב-ratchet יורד-בלבד.",
+    "evidence": "balagan-look.mjs:38-43; ran ⇒ `חריצי-«היום» של בלגן: 19 (תקרה 35, יורד-בלבד)`"
+   },
+   {
+    "claim": "ירוק בריצה: 35/36 על 32 אפליקציות-נייר.",
+    "evidence": "ran: `node machtzev/generator/balagan-look.mjs --gate` ⇒ `✓ balagan-look: 35/36 ≥ רצפה 35 · אפס-אדומים על 32 אפליקציות-נייר` · `0 אדומים · 1 ממתינים-לגל`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מחולל דבר — קורא קבצים מחוללים ומדרג אותם.",
+    "evidence": "balagan-look.mjs:16 `const rd = (p) => (fs.existsSync(p) ? fs.readFileSync(p,'utf8') : '');` ו-`files(ns)`/`contents(ns)` — קריאה בלבד מ-new/dart-gen-bs ו-new/dart-data-bs/auto"
+   },
+   {
+    "claim": "אינו מודד את המראה בפועל — כל 36 הכללים הם התאמת-דפוסים על **מקור-Dart**, לא רינדור. המדידה-בדפדפן היא של balagan-run.mjs.",
+    "evidence": "balagan-look.mjs:30-31 קריאת ds.dart כמחרוזת; אין playwright/chromium בקובץ. השוו: balagan-run.mjs מדווח `CLI --gate --bind --no-sandbox --disable-gpu`"
+   },
+   {
+    "claim": "36 אינו מלא — כלל אחד מוצהר `wave:Gxx` (טרם-נבנה), ומוצהר ולא מוסתר.",
+    "evidence": "balagan-look.mjs:3-4 + ran ⇒ `1 ממתינים-לגל`"
+   },
+   {
+    "claim": "אינו מייצא כלום — אינו ספרייה.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/balagan-look.mjs ⇒ `🔧 עושה: 0 ייצואים` · `🚫 לא: אין-ייצוא (לא ספרייה)`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:143",
+    "how": "שער `balagan` — `gate('balagan','generator/balagan-look.mjs',['--gate']);`"
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — אין נקודה כנה. הוא שומר על הפלט של balagan.mjs (שהיא GEN_ENTRY); לחבר אותו **לתוך** המחולל יהפוך את המודד לחלק מהנמדד. ההגדרה ב-engine-index.mjs:317 אומרת זאת במפורש: «שערי-משטרה אינם נחשבים מחוברים: הם שומרים על המחולל, לא חלק ממנו»."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, ואני אומר זאת במפורש. הסיבה לאי-החיבור היא **כלי-מדידה/שער** — לא נטישה ולא החלפה. הוא רץ, ירוק, ורשום במשטרה. ערכו ל-§22 הוא עקיף אך אמיתי (הוא מגדיר את רצפת-הקבלה), וזה בדיוק למה אין מה «לחבר» בו."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/balagan-look.mjs --gate ⇒ ✓ 35/36 ≥ רצפה 35 · 0 אדומים · 1 ממתינים-לגל · 32 אפליקציות · חריצי-היום 19 (תקרה 35)",
+   "read: machtzev/generator/balagan-look.mjs:1-43",
+   "read: machtzev/police.mjs:143 · machtzev/generator/balagan-score.json:2",
+   "read: machtzev/census/engine-index.mjs:317 (שערים אינם מחוברים — ההגדרה)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/balagan-one.mjs",
+  "lang": "mjs",
+  "lines": 112,
+  "does": [
+   {
+    "claim": "מאמת שוויון-N בחמישה מקומות בבת-אחת: מודולי-נייר ≡ פירוקים-עם-מניפסט ≡ balagan-index ≡ ייבוא-Today ב«היום» ≡ מקרי-הפתיחה ב«מה קרה?».",
+    "evidence": "balagan-one.mjs:24-31 — `if (nPeruk !== paperIdx.length)` · `if (bi.modules.length !== mods.length)` · `if (todays !== mods.length)` · `if (cases !== mods.length)`"
+   },
+   {
+    "claim": "מחשב מחדש את מזהה-הרגע ומריץ selfTest — לא סומך על הקובץ המחויב.",
+    "evidence": "balagan-one.mjs:33 `const bad = selfTest(mods, buildIdentifier(mods));` + הכותרת בשורה 3 «דטרמיניסטי, מחושב מחדש כאן — לא מהקובץ»"
+   },
+   {
+    "claim": "אוכף אפס-רשימה-סגורה: נכשל אם balagan.mjs מכיל שם-מודול ליטרלי.",
+    "evidence": "balagan-one.mjs:35 `if (/peruk\\d{2}/.test(src)) fails.push('balagan.mjs מכיל שם-מודול ליטרלי (רשימה סגורה)');`"
+   },
+   {
+    "claim": "אוכף חוק-6 (אפס-סודות): המפתח חייב להיות הגדרה-במכשיר, ונכשל על ליטרל sk-ant-.",
+    "evidence": "balagan-one.mjs:37 `if (!/appStore\\.setting\\('ai\\.key'\\)/.test(keys) || /sk-ant-[A-Za-z0-9]{8,}/.test(keys+ask)) fails.push(...)`"
+   },
+   {
+    "claim": "ירוק בריצה על 30 מודולים.",
+    "evidence": "ran: `node machtzev/generator/balagan-one.mjs --gate` ⇒ `✓ balagan-one: אפליקציה אחת · 30 מודולים ב«היום»+«מה קרה?»+«נושאים» · מזהה-הרגע 30/30 · אפס רשימה-סגורה (רצפה 30)`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מריץ את המחולל — הוא מייבא מ-balagan.mjs כדי **לבדוק**; הריצה היא של balagan.mjs עצמה.",
+    "evidence": "balagan-one.mjs:6 הערה «--gate בלבד (ריצה = balagan.mjs)» · :11 `import { loadModules, buildIdentifier, selfTest, identify } from './balagan.mjs';`"
+   },
+   {
+    "claim": "כיוון-הייבוא הוא הסיבה הפורמלית לאי-חיבורו: הוא מייבא GEN_ENTRY, לא מיובא ממנה. connected() הולך מהכניסה אל מה שהיא מייבאת.",
+    "evidence": "machtzev/census/engine-index.mjs:324 `for (const p of e.importedBy) (kids[p]=kids[p]||[]).push(e.file)` — המפה היא מייבא⇒מיובא, והמעבר מתחיל ב-GEN_ENTRY"
+   },
+   {
+    "claim": "אינו בודק התנהגות-בריצה — כל הבדיקות הן regex על מקור-Dart מחולל.",
+    "evidence": "balagan-one.mjs:28-29 `home.match(/\\w+HomeScreenToday\\.module/g)` · `ask.match(/case \\d+: return \\w+\\(initial: initial\\)/g)` — ספירת-דפוסים בטקסט"
+   },
+   {
+    "claim": "אינו מייצא כלום.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/balagan-one.mjs ⇒ `🔧 עושה: 0 ייצואים` · `🚫 לא: אין-ייצוא (לא ספרייה)`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:144",
+    "how": "שער `balaganone` — `gate('balaganone','generator/balagan-one.mjs',['--gate']);`"
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — שער על פלט של GEN_ENTRY. חיבורו למחולל יהפוך מודד לנמדד (engine-index.mjs:317)."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב. סיבת אי-החיבור: **שער**. הוא ירוק ורשום. תרומתו ל-§22 היא שמירה על «אפס רשימה-סגורה» ועל חוק-6 — חשוב, אך לא שלב בצינור."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/balagan-one.mjs --gate ⇒ ✓ 30 מודולים · מזהה-הרגע 30/30 · אפס רשימה-סגורה",
+   "read: machtzev/generator/balagan-one.mjs:1-40",
+   "read: machtzev/police.mjs:144 · machtzev/census/engine-index.mjs:324 (כיוון-המעבר)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/balagan-run.mjs",
+  "lang": "mjs",
+  "lines": 119,
+  "does": [
+   {
+    "claim": "מודד בדפדפן על האתר הבנוי, לא בקוד: מריץ chromium דרך playwright על build/web-balagan.",
+    "evidence": "balagan-run.mjs:2 (הכותרת «לא סופרים בקוד, מודדים בדפדפן») · :21 `const { chromium } = require(pwDir);` · :22 איתור ה-exe מ-/opt/pw-browsers"
+   },
+   {
+    "claim": "מודד שני מסלולי-משתמש וסופר הקשות: A «רגע חדש» (עד שהרשומה קיימת ב-localStorage), B «שלח» (עד חלון-שליחה).",
+    "evidence": "balagan-run.mjs:3-4 — «הקשות עד שהרשומה קיימת ב-localStorage (הראיה = הדאטה, לא המסך)»"
+   },
+   {
+    "claim": "רצפת-המוצר <3 הקשות, ב-ratchet שאינו מרשה יותר הקשות מהבסיס.",
+    "evidence": "balagan-run.mjs:5 · :16 `const BASE = path.join(HERE,'balagan-run-baseline.json')`"
+   },
+   {
+    "claim": "תופס פורט חופשי מהמערכת ומחכה שהשרת יענה בפועל — תיקון של כשל-תשתית שדיווח «אדום» בשקר.",
+    "evidence": "balagan-run.mjs:23-30 ההערה המפורשת + `s.listen(0,'127.0.0.1',...)`"
+   },
+   {
+    "claim": "מדלג בכנות כשאין אתר או אין playwright — לא מזייף ירוק.",
+    "evidence": "balagan-run.mjs:18 `⚪ balagan-run: אין אתר בנוי … — מדולג` · :20 `⚪ balagan-run: אין playwright — מדולג`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו רץ בקונטיינר הזה — אין אתר בנוי; ולכן מדדיו כאן אינם זמינים.",
+    "evidence": "ran: `ls -d /home/user/buildsmart` נכשל בצעדי-ההיקף (CLAUDE.md: 179 מנועים בריפואים-אחים שאינם בריפו). `golden-harness --gate` באותו קונטיינר החזיר `⚪ אין buildsmart ב-/home/user/buildsmart/app_flutter` — אותו שורש חסר בדיוק."
+   },
+   {
+    "claim": "אינו מחולל ואינו בונה את האתר — ה-build הוא של ship.mjs.",
+    "evidence": "machtzev/generator/ship.mjs:91 `run('flutter',['build','web',…,'-o',`build/ghp-${name}`],APP,…)`; balagan-run רק צורך את התוצר (:15 SITE)"
+   },
+   {
+    "claim": "אינו מודד עיצוב — זה balagan-look; כאן רק הקשות וזמן.",
+    "evidence": "balagan-run.mjs:5 «מדדים: taps-A · taps-B · זמן-עד-מסך-ראשון»"
+   },
+   {
+    "claim": "אינו מייצא כלום.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/balagan-run.mjs ⇒ `🔧 עושה: 0 ייצואים` · `🚫 לא: אין-ייצוא (לא ספרייה)`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:147",
+    "how": "שער `balaganrun`, מסומן FAST — `gate('balaganrun','generator/balagan-run.mjs',['--gate'], FAST); // במריצה — אתר בנוי + playwright (⚪ מדולג בלי אתר)`"
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — שער-מריצה על פלט של GEN_ENTRY."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב. סיבת אי-החיבור: **שער**. ערך עקיף גבוה — הוא המקום היחיד בקבוצה שמודד את §22 כפי שמשתמש חווה אותו (הקשות בדפדפן, ולא דפוס בקוד) — אבל אין לו נקודת-חיבור כנה בצינור."
+  },
+  "evidence": [
+   "read: machtzev/generator/balagan-run.mjs:1-30",
+   "read: machtzev/police.mjs:147",
+   "ran: node machtzev/generator/golden-harness.mjs --gate ⇒ ⚪ אין buildsmart ב-/home/user/buildsmart/app_flutter (מוכיח שאותו שורש חסר בקונטיינר)",
+   "ran: node machtzev/census/engine-index.mjs machtzev/generator/balagan-run.mjs"
+  ]
+ },
+ {
+  "file": "machtzev/generator/golden-harness.mjs",
+  "lang": "mjs",
+  "lines": 60,
+  "does": [
+   {
+    "claim": "מרכיב כל אחד מ-9 מודולי-הזהב מחדש מהקטלוג (assemble מ-render-module), משקף ל-buildsmart, ומריץ את **בדיקות-הזהב המקוריות בלי לשנות בדיקה**.",
+    "evidence": "golden-harness.mjs:2-4 (הכותרת) · :11 `import { assemble, PARTICLE_IDS } from './render-module.mjs';` · :30 `const r = assemble({ module:m, particles:particlesOf(m), mode:'compose', declared:true });`"
+   },
+   {
+    "claim": "משחזר את המראה שדרס — תמיד, גם בכשל.",
+    "evidence": "golden-harness.mjs:4 «שחזור-המראה (git checkout) — תמיד, גם בכשל» · :5 האזהרה «ב-buildsmart רק `checkout -- <file>` לשחזור קובץ שהרתמה עצמה דרסה»"
+   },
+   {
+    "claim": "ratchet רק-עולה על N/9 מודולים ו-K/84 בדיקות.",
+    "evidence": "golden-harness.mjs:4 · :17 `const BASE = path.join(GEN,'render-module-baseline.json');`"
+   },
+   {
+    "claim": "מדלג בכנות (ledger=skipped) כשאין buildsmart/flutter — ואכן מדלג כאן.",
+    "evidence": "golden-harness.mjs:26 `if (!fs.existsSync(path.join(BS,'pubspec.yaml'))) { console.log(`⚪ goldenharness: אין buildsmart ב-${BS} — מדולג`); process.exit(0); }`; ran ⇒ `⚪ goldenharness: אין buildsmart ב-/home/user/buildsmart/app_flutter — מדולג`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו נטול-רשימות-יד**: רשימת 9 המודולים, מפת-הבדיקות TESTS ומפת-החלקיקים particlesOf — שלושתן חרוטות.",
+    "evidence": "golden-harness.mjs:27 `const modules = only || ['schoolos_attendance.dart', … ,'schoolos.dart'];` · :19 `const TESTS = {'schoolos.dart':[…]}` · :21 מפת 8 קידומות-חלקיקים"
+   },
+   {
+    "claim": "אינו מוכיח דבר בקונטיינר הזה — הדילוג אינו כשל, אבל גם אינו ראיה. «ledger=skipped», לא «ran».",
+    "evidence": "ran ⇒ ⚪ מדולג (exit 0). לפי CLAUDE.md §gates, skipped הוא אחד מ-4 מצבי-ה-ran-ledger — ולא ירוק."
+   },
+   {
+    "claim": "אינו מחולל למסירה — הוא כותב למראה של buildsmart רק כדי להריץ בדיקה, ומחזיר.",
+    "evidence": "golden-harness.mjs:29 `const mirror = path.join(BS,'lib/genesis/dart-gen-bs', m);` + השחזור בשורה 4"
+   },
+   {
+    "claim": "אינו מייצא כלום.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/golden-harness.mjs ⇒ `🔧 עושה: 0 ייצואים`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:157",
+    "how": "שער `goldenharness` (FAST) — `gate('goldenharness','generator/golden-harness.mjs',['--gate'], FAST);`"
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — שער. הוא מייבא את render-module (מחובר) כדי לבדוק אותו; חיבור הפוך יהפוך מודד לנמדד."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב. סיבת אי-החיבור: **שער**. הוא המדד המרכזי של הכרעה-24 («הזהב מורכב-מחדש מהקטלוג ועובר את בדיקותיו»), אך אינו שלב-בצינור. הערה למנהל: בקונטיינר-טרי אין לו ראיית-ריצה, רק ראיית-דילוג."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/golden-harness.mjs --gate ⇒ ⚪ goldenharness: אין buildsmart ב-/home/user/buildsmart/app_flutter — מדולג",
+   "read: machtzev/generator/golden-harness.mjs:1-33",
+   "read: machtzev/police.mjs:157"
+  ]
+ },
+ {
+  "file": "machtzev/generator/frag-ops.mjs",
+  "lang": "mjs",
+  "lines": 63,
+  "does": [
+   {
+    "claim": "מייחס G2-ops **פר-שבר-זהב** מהמפתחות שהשבר קורא: מפתח ⇒ טיפוס (מרשימות-הזרע) ⇒ fieldOps ⇒ איחוד-ops של השבר.",
+    "evidence": "frag-ops.mjs:2-4 (הכותרת) · :18 keyTypes(module) · :11 `import { entityOps, fieldOps } from './shape-ops.mjs';`"
+   },
+   {
+    "claim": "הסקת-הטיפוס מהערך עצמו, לא משם-המפתח — §20-ד בפועל.",
+    "evidence": "frag-ops.mjs:17 `const guess = (v) => /^'\\d{4}-\\d{2}-\\d{2}'$/.test(v) ? 'IsoDate' : /^'\\d{2}:\\d{2}'$/.test(v) ? 'TimeHM' : … ;` — התאמה לצורת-הערך"
+   },
+   {
+    "claim": "fragmentsForEntity מחזיר שברים לפי חפיפת-ops משוקללת — זריעה לפי פעולות-יסוד במקום חלקיקי-יד.",
+    "evidence": "frag-ops.mjs:5 «fragmentsForEntity(E, module) = שברי-member/builder שחופפים ל-entityOps(E) (משוקלל) — זריעה לפי פעולות-היסוד (L49) במקום חלקיקי-יד»"
+   },
+   {
+    "claim": "ירוק בריצה על 557 שברים, עם מדד-הסכמה מול בורר-השמות.",
+    "evidence": "ran: `node machtzev/generator/frag-ops.mjs --gate` ⇒ `✓ fragops: 557 שברים עם G2-ops ממפתחות · הסכמת-מודול (חזקות 25): top-1 6 · top-2 8 · זריעה-לפי-ops/שדות-המשפט ≡ (2 פלטים)`"
+   },
+   {
+    "claim": "מאמת את עצמו ע\"י הרכבה-בפועל: קורא ל-assembleByOps ול-subsetFromSentence ומשווה 2 פלטים.",
+    "evidence": "frag-ops.mjs:49 `const { assembleByOps } = await import('./render-module.mjs'); … assembleByOps({module:'schoolos_rooms.dart', entity:'Volunteer'})` · :52 `const { subsetFromSentence } = await import('./sentence.mjs'); … subsetFromSentence('ניהול מתנדבים עם טלפון, אזור ותאריך הצטרפות')`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "ההסכמה עם בורר-השמות **נמוכה ונמדדת ככזאת**: top-1 6 מתוך 25 ישויות חזקות (24%), top-2 8 (32%).",
+    "evidence": "ran (לעיל) — זו לא טענה שלי אלא הפלט של השער עצמו. כלומר הייחוס-לפי-ops עדיין אינו מספיק כדי להחליף את הבורר; הוא אות, לא הכרעה."
+   },
+   {
+    "claim": "אינו בוחר אטום ואינו מחולל — מפיק ייחוס (frag-ops.json) ודוח.",
+    "evidence": "frag-ops.mjs:6 «פלט: frag-ops.json (id ⇒ {keys,g2}) + report»"
+   },
+   {
+    "claim": "אינו רץ ב-REGEN; ריצתו היחידה היא כשער.",
+    "evidence": "read: machtzev/generator/regen.mjs:6-22 — frag-ops אינו ברשימה · machtzev/police.mjs:156 `gate('fragops', …)`"
+   },
+   {
+    "claim": "אינו עצמאי מהזהב — הוא מוגבל ל-MODULES של retarget ולשברים ב-golden-fragments.json.",
+    "evidence": "frag-ops.mjs:12 `import { seedLists, pickModule, ENTITIES, MODULES } from './retarget.mjs';` · :15 `const FR = JSON.parse(…'golden-fragments.json'…).fragments;`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:156",
+    "how": "שער `fragops` — `gate('fragops','generator/frag-ops.mjs',['--gate']);`"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/render-module.mjs — שלב בחירת-החלקיקים ב-assemble (השורה שבה נקבע אילו שברים נכנסים למודול); frag-ops.mjs:49 כבר מדגים בדיוק את הקריאה הזאת",
+   "gives": "החלפת חלקיקי-היד בזריעה נגזרת-ops (L49). אבל הראיה שלו עצמו אומרת להמתין: הסכמה 6/25 ב-top-1. הנקודה כנה, הבשלות לא — ולכן זו נקודת-חיבור **מותנית-שיפור**, לא נקודה לחבר היום."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 = מקרב מעט. הוא על הנתיב (בחירת-שברים למודול) אך מדדו-שלו מראה 24% הסכמה, כלומר חיבורו היום היה מחליף בורר עובד באחד פחות-מדויק. סיבת אי-החיבור: **שער שנבנה כמדידה ולא הבשיל להכרעה** — לא נטוש, לא הוחלף."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/frag-ops.mjs --gate ⇒ ✓ 557 שברים · הסכמה top-1 6/25 · top-2 8/25",
+   "read: machtzev/generator/frag-ops.mjs:1-25 · :49-52",
+   "read: machtzev/police.mjs:156 · machtzev/generator/regen.mjs:6-22"
+  ]
+ },
+ {
+  "file": "machtzev/generator/hamtzaa.mjs",
+  "lang": "mjs",
+  "lines": 283,
+  "does": [
+   {
+    "claim": "אוכף חוק אחד: כל שדה בספק חייב מקור-מילולי בקלט של הבעלים; אין מקור = המצאה = אדום.",
+    "evidence": "hamtzaa.mjs:5 «כל שדה בספק חייב מקור בקלט. אין מקור = המצאה = אדום» · :82 `export function detectInvented(inputText, specText, lang = LANG)`"
+   },
+   {
+    "claim": "מודד את **הצרכן האמיתי** ולא פרסר-משנֶה: משתמש ב-entity.interpret כדי לדעת אילו שדות באמת מגיעים לאפליקציה (L1).",
+    "evidence": "hamtzaa.mjs:14-15 «פירוק-הספק אינו נכתב פה מחדש: משתמשים ב-`entity.interpret` — הצרכן האמיתי של הספק — כדי שהשער ימדוד את השדות שבאמת מגיעים לאפליקציה, לא פרסר-משנֶה (L1)»"
+   },
+   {
+    "claim": "מנגנון-עיוור: אפס מילה-עברית בקוד; כל ידע-השפה מוזרק מ-nl-lang.data.json ו-spec-lang.data.json.",
+    "evidence": "hamtzaa.mjs:11-13 (ההערה המפורשת) — §19-ד"
+   },
+   {
+    "claim": "fail-closed אמיתי: אפס-שדות-שפורסרו או אפס-מילות-קלט ⇒ exit 2 «הכלי שבור, לא הנתונים», ויש לזה בדיקות-עצמיות.",
+    "evidence": "hamtzaa.mjs:17-18 · :209-210 `ok('fail-closed: 0 שדות מסומן', detectInvented('יש כאן טקסט','שורה בלי ישות').fields === 0)` ו-`ok('fail-closed: 0 מילות-קלט מסומן', …inputWords === 0)`"
+   },
+   {
+    "claim": "מכסה את שני מסלולי-הספק בבדיקה אחת (peruk + nl), כי שניהם פולטים אותו פורמט.",
+    "evidence": "hamtzaa.mjs:7-8 · :116 routePeruks · :133 routeNl · :248 `if (has('--gate')||has('--ratchet')||!A.length) rs=[routePeruks(), routeNl()]`"
+   },
+   {
+    "claim": "ירוק בריצה: 51/288 בלי-מקור, על הרצפה.",
+    "evidence": "ran: `node machtzev/generator/hamtzaa.mjs --ratchet` ⇒ `✅ hamtzaa: 51/288 בלי-מקור, רצפה 51` · `nl: 0/49 בלי-מקור (0%)` · `peruk: 51/239 בלי-מקור (רצפה 51)`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו שער-אדום** — הוא רץ במצב ratchet דווקא מפני שחוב-ההמצאה גבוה מדי לשער; זה מוצהר בקוד.",
+    "evidence": "hamtzaa.mjs:256-259 «למה לא --gate ישירות: החוב היום 211/408 — שער-אדום היה חוסם כל commit ומכבה את עצמו. ratchet נועל את המדידה של היום כרצפה» · machtzev/police.mjs:141 `gate('hamtzaa','generator/hamtzaa.mjs',['--ratchet']);`"
+   },
+   {
+    "claim": "והמספר בהערה כבר אינו המספר בריצה — ההערה אומרת 211/408, הריצה מחזירה 51/288. ההערה התיישנה.",
+    "evidence": "hamtzaa.mjs:257 מול ran ⇒ `51/288`. (זה בדיוק «מספר שנכתב ביד מתיישן בשקט» מ-HANDOFF.)"
+   },
+   {
+    "claim": "אינו יודע מה «נכון» לישות — רק אם המילה נאמרה.",
+    "evidence": "hamtzaa.mjs:8-9 «המנוע לא יודע מה \"נכון\" לישות; הוא רק שואל \"האם המילה הזאת נאמרה?\"»"
+   },
+   {
+    "claim": "אינו כותב פלט.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/hamtzaa.mjs ⇒ `🚫 לא: לא-כותב-פלט`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:141",
+    "how": "שער `hamtzaa` במצב `--ratchet`"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ כשלב-בצינור. נקודה כנה אחת ומוגבלת: machtzev/generator/peruk.mjs (regen.mjs:18) — כקריאת-detectInvented על הספק **בזמן-הפליטה**, כך שפירוק חדש לא יוסיף חוב",
+   "gives": "היום הזיהום נתפס בדיעבד ע\"י המשטרה; בדיקה בזמן-הפליטה תמנע אותו. זו עדיין שמירה, לא בנייה — לכן «מוגבלת». חשוב: hamtzaa מייבא את entity.interpret, כלומר הוא כבר יושב על אותו קוד שהצינור מריץ."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 = מקרב מעט. סיבת אי-החיבור: **שער**. אבל שלא כשאר השערים בקבוצה, יש לו נקודת-הזרקה כנה אחת (בזמן-פליטת-הספק), ו-§20-ג («לעולם לא לזייף דאטה») הוא בדיוק מה שהוא אוכף — ולכן 1 ולא 0."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/hamtzaa.mjs --ratchet ⇒ ✅ 51/288 בלי-מקור, רצפה 51 · nl 0/49 · peruk 51/239",
+   "read: machtzev/generator/hamtzaa.mjs:1-24 · :82 · :116 · :133 · :209-221 · :246-260",
+   "read: machtzev/police.mjs:141"
+  ]
+ },
+ {
+  "file": "machtzev/generator/server-gate.mjs",
+  "lang": "mjs",
+  "lines": 83,
+  "does": [
+   {
+    "claim": "בודק שלוש שאלות: מה שהוכרז נפלט ומכסה את כל הישויות · מה שלא הוכרז לא נפלט (ביט-זהות) · אף סוד לא דלף.",
+    "evidence": "server-gate.mjs:2-4 (הכותרת) · :23-24 `if (!declared.length && dirs.length) fails.push(…)` · `if (declared.length && !dirs.length) fails.push(…)`"
+   },
+   {
+    "claim": "ההצהרה נקראת מהספק דרך serverOf, לא מרשימה — ספק בלי הצהרה ⇒ אין חבילה.",
+    "evidence": "server-gate.mjs:7 `import { serverOf } from './server.mjs';` · :20 `.filter((ns) => serverOf(ns))`"
+   },
+   {
+    "claim": "מפתחות-המסמך המותרים בכללים **נגזרים מחתימת cloudJson בקוד-הלקוח** — לא נכתבים פעמיים.",
+    "evidence": "server-gate.mjs:35-39 `const m = rd(…'ds_store.dart').match(/String cloudJson\\(\\) => jsonEncode\\(\\{([^}]*)\\}\\)/); … for (const k of keys) if (!new RegExp(`hasOnly\\\\(\\\\[[^\\\\]]*'${k}'`).test(rules)) fails.push(…)`"
+   },
+   {
+    "claim": "אוכף במפורש שצרור-המפתחות (`settings`) אינו מותר בכללים — גם לקוח פרוץ לא יעלה אותו.",
+    "evidence": "server-gate.mjs:40 `if (/hasOnly\\(\\[[^\\]]*'settings'/.test(rules)) fails.push(`${d}: 'settings' מותר בכללים — צרור-המפתחות יכול לעלות לענן`);`"
+   },
+   {
+    "claim": "ירוק בריצה.",
+    "evidence": "ran: `node machtzev/generator/server-gate.mjs --gate` ⇒ `✓ server: 1 הצהרות · 1 חבילות · ישויות+מפתחות ≡ הקוד · אפס סודות`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו פולט את חבילת-השרת — זה server.mjs, שכן רץ ב-REGEN.",
+    "evidence": "machtzev/generator/regen.mjs:21 `{ rel:'machtzev/generator/server.mjs', args:[], note:'G57 · הכרעה-31: הצהרת `שרת:` בספק ⇒ חבילת-השרת…' }` — server.mjs מחובר; server-gate.mjs הוא הבודק שלו"
+   },
+   {
+    "claim": "אינו מריץ את כללי-הגישה מול אמולטור — הבדיקה כאן היא התאמת-דפוסים על טקסט ה-rules.",
+    "evidence": "server-gate.mjs:28 `const rules = rd(path.join(OUT,d,'firestore.rules'));` ואז `.includes` / regex; אין spawn של firebase emulator בקובץ. (הריצה מול אמולטור מתועדת ב-CLAUDE.md G57/G59 כפעולה נפרדת.)"
+   },
+   {
+    "claim": "אינו מייצא כלום.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/server-gate.mjs ⇒ `🔧 עושה: 0 ייצואים` · `🚫 לא: אין-ייצוא (לא ספרייה)`"
+   },
+   {
+    "claim": "אינו בודק אפליקציות שלא הצהירו — «1 הצהרות» היא כל ההיקף כרגע.",
+    "evidence": "ran (לעיל) ⇒ 1 הצהרות · 1 חבילות"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:145",
+    "how": "שער `server` — `gate('server','generator/server-gate.mjs',['--gate']); // G57 · הכרעה-31`"
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — שער על server.mjs שכבר מחובר (regen.mjs:21). אין נקודה כנה."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב. סיבת אי-החיבור: **שער**. הוא שומר על חוק-6 (אפס-סודות) בפלט-המחולל — תנאי-סף לאפליקציה שעובדת 100%, אבל לא שלב בבנייתה."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/server-gate.mjs --gate ⇒ ✓ server: 1 הצהרות · 1 חבילות · ישויות+מפתחות ≡ הקוד · אפס סודות",
+   "read: machtzev/generator/server-gate.mjs:1-41",
+   "read: machtzev/police.mjs:145 · machtzev/generator/regen.mjs:21"
+  ]
  }
 ]
