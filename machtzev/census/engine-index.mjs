@@ -39,35 +39,64 @@ const OUT = MACH + 'generator/engine-index.json';
 // 🌍 **כל** המנועים, לא רק .mjs — נמדד: הריפו מריץ גם shell (‏hooks), גם Dart
 // (‏carve/ast_carve.dart, 719 שורות), וגם .js (פונקציית-הענן). סריקת-.mjs-בלבד
 // הייתה מחמיצה 15 מנועים, ביניהם **שכבת-האכיפה כולה**.
-const ROOTS = ['machtzev', 'yeshiva'];
+// 🔁 גם כאן **סורק-הכל-מחריג-בהצהרה**. הפכתי את המדיניות לריפואים-האחים
+// והשארתי את הריפו-הראשי על רשימת-תיקיות-שבחרתי — וזה החמיץ 85 קבצי-מנוע
+// **בריפו שעבדתי בו כל היום**, ובהם תיקייה ששמה `engine/` (אטלס · מחולל · lib).
+const ROOTS = ['.'];
+const SELF_SKIP = /\/(node_modules|\.git|new|gen\/out|\.prove|selftest-fixtures)\/|\/(dist|build|coverage)\//;
 const EXTRA = [   // נתיב · שפה · למה הוא מנוע
   { dir: '.githooks', re: /^[a-z-]+$/, lang: 'sh', note: 'שכבת-האכיפה של git' },
   { dir: '.claude/hooks', re: /\.sh$/, lang: 'sh', note: 'tripwire של הסוכן' },
   { dir: 'machtzev/carve', re: /\.dart$/, lang: 'dart', note: 'חצב-AST' },
   { dir: 'machtzev/behavioral', re: /\.dart$/, lang: 'dart', note: 'רתמת-התנהגות' },
   { dir: 'server-gen/balagan/functions', re: /^index\.js$/, lang: 'js', note: 'פונקציית-ענן מחוללת' },
+  { dir: '.github/workflows', re: /\.ya?ml$/, lang: 'yml', note: 'מנועי-CI — מריצים את המשטרה' },
 ];
+// 🌐 **ריפואים-אחים** — נמדד: «תמונה מלאה» של ריפו אחד הייתה חלקית. ליד יושבים
+// `yeshiva-engine-repo` (המנוע הישיבתי **המלא**: 17 מודולים · 6,572 שורות · 5 שכבות
+// — דיווחתי «3,034 שורות» כי ראיתי העתק-ישן של 11 קבצים) ו-`buildsmart`
+// (‏6,752 dart; 3 שערים מדלגים «בלי buildsmart» בזמן שהוא כאן, בנתיב אחר).
+const SIB = [
+  // 🔁 **מדיניות הפוכה: סורקים הכל, מחריגים בהצהרה.** רשימת-תיקיות-שבחרתי
+  // החמיצה 9 מנועים ב-buildsmart, ביניהם שלושה ששמם literally «engine»
+  // (‏polyroll_dim_engine · pure_engine) ועוד שכבת-tripwire שלמה. היקף שנבחר
+  // ביד = פספוס מובנה; היקף שנשלל בהצהרה = פספוס **גלוי**.
+  { root: '/home/user/yeshiva-engine-repo/', label: 'yeshiva-engine', re: /\.(py|mjs|sh)$/,
+    skip: /\/(__pycache__|\.harness-runs|\.git|node_modules)\/|egg-info/ },
+  { root: '/home/user/meir7651231-ui/buildsmart/', label: 'buildsmart', re: /\.(mjs|js|ts|sh|py)$/,
+    // מוחרג: ספריות-צד-שלישי · תוצרי-בנייה · פיגומי-פלטפורמה של Flutter · קוד-אפליקציה
+    skip: /\/(node_modules|dist|build|out|coverage|\.dart_tool|\.git|ephemeral|Pods)\/|\/(ios|android|macos|windows|linux|web)\/|\.d\.ts$|\/app\/src\// },
+];
+// העתקים-ישנים של המנוע הישיבתי — **לא** מנועים נפרדים, מדווחים כדי שלא ייחשבו:
+export const STALE_COPIES = ['engine-A', 'engine-B', 'yeshiva-engine'].map((d) => `/home/user/${d} — 11 קבצים, 5 בלבד זהים למקור (גרסה ישנה)`);
 // ❌ מוחרגים **בהצהרה** (לא בשתיקה) — כל אחד עם הסיבה, כדי שאיש לא יניח שנסרקו:
 export const EXCLUDED = [
   ['new/**/*.mjs (2,478)', 'מדף-אטומים + קופסאות — יש להם atom-index משלהם'],
+  ['selftest-fixtures/*', 'פיקסצ׳רים מורעלים — מוחרגים בכוונה גם ע"י index-check'],
   ['new/**/*.dart (~6,700)', 'אטומי-Dart; ה-main() שבהם = _test.dart, לא מנוע'],
   ['machtzev/generator/.prove/*.dart (86)', 'הוכחות מחוללות (logic-proof), נוצרות בריצה'],
   ['gen/out/**/site/*.js', 'תוצרי-בנייה של Flutter web'],
   ['runtime/engine_api.js', 'באנדל-Dart מהודר (dartProgram), לא מקור'],
   ['gen/looks/app/src/*.js (7)', 'מקור של אפליקציית-דמו, לא מנוע'],
+  ['buildsmart/app_flutter/lib · app/src', 'קוד-אפליקציה (6,752 dart), לא מנועים'],
+  ['/home/user/maor-system', '**באמת חסר** — חיפוש בכל /home/user לא מצא; 2 שערים מדלגים'],
+  ['engine-A · engine-B · yeshiva-engine', 'העתקים-ישנים של המנוע הישיבתי (ראה STALE_COPIES)'],
 ];
 
-const rel = (p) => path.relative(ROOT, p).replace(/\\/g, '/');
+const rel = (p) => {
+  for (const sb of (typeof SIB !== 'undefined' ? SIB : [])) if (p.startsWith(sb.root)) return sb.label + '/' + path.relative(sb.root, p).replace(/\\/g, '/');
+  return path.relative(ROOT, p).replace(/\\/g, '/');
+};
 const readIf = (p) => { try { return fs.readFileSync(p, 'utf8'); } catch { return null; } };
 
-const LANG_OF = (p) => (/\.mjs$/.test(p) ? 'mjs' : /\.dart$/.test(p) ? 'dart' : /\.js$/.test(p) ? 'js' : 'sh');
+const LANG_OF = (p) => (/\.ya?ml$/.test(p) ? 'yml' : /\.py$/.test(p) ? 'py' : /\.ts$/.test(p) ? 'ts' : /\.mjs$/.test(p) ? 'mjs' : /\.dart$/.test(p) ? 'dart' : /\.js$/.test(p) ? 'js' : 'sh');
 function walk(dir, out = []) {
   let ents; try { ents = fs.readdirSync(dir, { withFileTypes: true }); } catch { return out; }
   for (const e of ents) {
     if (e.name === 'node_modules' || e.name.startsWith('.')) continue;
     const p = path.join(dir, e.name);
     if (e.isDirectory()) walk(p, out);
-    else if (/\.mjs$/.test(e.name)) out.push(p);
+    else if (/\.(mjs|py|sh)$/.test(e.name)) out.push(p);
   }
   return out;
 }
@@ -75,6 +104,9 @@ function walk(dir, out = []) {
 // ── מטרה: כותרת-הקובץ (בלוק-הערה עליון) ⇒ INDEX.md ⇒ ∅. אפס ניחוש ──────────
 const BOILER = /^(#!|(?:\/\/|#)\s*[═─=-]{3,}|\/\*|\*\/|\*\s*$|set -[a-z]+)/;
 function purposeFromHeader(src) {
+  // Python: ‏docstring-המודול הוא **המטרה המוצהרת** (כמו כותרת-הבלוק ב-mjs)
+  const ds = src.match(/^\s*(?:"""|''')([\s\S]{2,600}?)(?:"""|''')/);
+  if (ds && /[א-ת]/.test(ds[1])) return ds[1].replace(/\s+/g, ' ').trim().slice(0, 420);
   const lines = src.split('\n');
   const buf = [];
   for (const raw of lines.slice(0, 40)) {
@@ -105,19 +137,36 @@ function indexRows() {
 
 // ── מה עושה: ייצואים · דגלי-CLI · כתיבות · אטומי-דאטה נקראים ───────────────
 const uniq = (a) => [...new Set(a)].filter(Boolean);
-const exportsOf = (s) => uniq([...s.matchAll(/^export\s+(?:async\s+)?(?:function|const|class|let)\s+([A-Za-z_$][\w$]*)/gm)].map((m) => m[1]));
+const exportsOf = (s) => uniq([
+  ...[...s.matchAll(/^export\s+(?:async\s+)?(?:function|const|class|let)\s+([A-Za-z_$][\w$]*)/gm)].map((m) => m[1]),
+  ...[...s.matchAll(/^(?:def|class)\s+([A-Za-z_][\w]*)/gm)].map((m) => m[1]).filter((n) => !n.startsWith('_')),   // Python: ציבורי = בלי קו-תחתי
+]);
 const flagsOf = (s) => uniq([...s.matchAll(/'(--[a-z][a-z0-9-]*)'/g)].map((m) => m[1]));
 // ריצה-מהשורה: דגלים **או** ארגומנט-פוזיציוני (`process.argv[2]`). בלי זה
 // `carve/carve-land.mjs` (312 שורות, רץ ביד) נספר כמת — נמדד.
 // ריצה-מהשורה = shebang **או** קריאת-argv. בלי ה-shebang נספרו כמתים סקריפטים
 // שרצים בלי ארגומנטים בכלל (dedup · empire-coverage · studio-full) — נמדד.
-const runnable = (s) => /^#!/.test(s) || /process\.argv/.test(s) || /^void main\(|^Future<void> main\(/m.test(s);
+const runnable = (s) => /^#!/.test(s) || /process\.argv/.test(s) || /^void main\(|^Future<void> main\(/m.test(s)
+  || /^def main\(|__name__ == ['"]__main__['"]/m.test(s) || /^python3 -m /m.test(s);
 const writesOf = (s) => uniq([...s.matchAll(/writeFileSync\(\s*([^,]{1,90}?)\s*,/g)].map((m) => m[1].replace(/\s+/g, ' ').slice(0, 60)));
 const dataOf = (s) => uniq([...s.matchAll(/([A-Za-z0-9._-]+\.(?:data\.json|json))['"`]/g)].map((m) => m[1])).slice(0, 12);
-const importsOf = (s) => uniq([...s.matchAll(/from\s+'(\.[^']+\.mjs)'/g)].map((m) => m[1]));
+const importsOf = (s) => uniq([
+  ...[...s.matchAll(/from\s+'(\.[^']+\.mjs)'/g)].map((m) => m[1]),
+  // Python: `from .daf import X` · `from . import y` — ייבוא-יחסי בתוך החבילה.
+  // בלי זה 90 מודולי המנוע-הישיבתי נראים 90 קבצים מנותקים (נמדד).
+  ...[...s.matchAll(/^from\s+\.([A-Za-z_][\w]*)\s+import/gm)].map((m) => `./${m[1]}.py`),
+  ...[...s.matchAll(/^import\s+([A-Za-z_][\w]*)$/gm)].map((m) => `./${m[1]}.py`),
+  // TS/JS יחסי בלי סיומת
+  ...[...s.matchAll(/from\s+['"](\.[^'"]+?)['"]/g)].map((m) => (/\.(mjs|js|ts)$/.test(m[1]) ? m[1] : m[1] + '.ts')),
+]);
 
 export function build() {
-  const files = ROOTS.flatMap((r) => walk(path.join(ROOT, r)));
+  const files = ROOTS.flatMap((r) => walk(path.join(ROOT, r))).filter((f) => !SELF_SKIP.test(f + (fs.existsSync(f) && fs.statSync(f).isDirectory() ? '/' : '')));
+  for (const sb of SIB) {
+    (function w(q) { let e = []; try { e = fs.readdirSync(q, { withFileTypes: true }); } catch { return; }
+      for (const x of e) { const f = path.join(q, x.name) + (x.isDirectory() ? '/' : ''); if (sb.skip.test(f)) continue;
+        if (x.isDirectory()) w(path.join(q, x.name)); else if (sb.re.test(x.name)) files.push(path.join(q, x.name)); } })(sb.root);
+  }
   for (const x of EXTRA) {
     let ents = []; try { ents = fs.readdirSync(path.join(ROOT, x.dir)); } catch { ents = []; }
     for (const n of ents) if (x.re.test(n)) files.push(path.join(ROOT, x.dir, n));
@@ -193,7 +242,7 @@ export function build() {
         ...srcAll.filter((x) => x.p !== p && !/census\/engine-index\.mjs$/.test(x.p) && EXEC_RE(base).test(x.s))
           .map((x) => path.basename(x.p).replace(/\.(mjs|dart|js|sh)$/, '')).slice(0, 3),
         // hooks: git מריץ אותם דרך core.hooksPath — קריאה מבנית, לא הזכרה
-        ...docs.filter((d) => !SELF.test(d.p) && EXEC_RE(base).test(d.s)).map((d) => `📄 ${path.basename(d.p)}`).slice(0, 2),
+        ...docs.filter((d) => !SELF.test(d.p) && d.s.includes(base) && EXEC_RE(base).test(d.s)).map((d) => `📄 ${path.basename(d.p)}`).slice(0, 2),
         /^\.githooks\//.test(p) && 'git (hooksPath)',
         /^\.claude\/hooks\//.test(p) && 'claude (settings.json)',
       ]),
