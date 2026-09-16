@@ -1465,5 +1465,426 @@
    "node machtzev/generator/core-from-shape.mjs --gate ⇒ exit 0, הפלט מצוטט למעלה",
    "grep -n 'core' machtzev/gates.tsv ⇒ שורה 22"
   ]
+ },
+ {
+  "file": "machtzev/census/logic-census.mjs",
+  "lang": "mjs",
+  "lines": 69,
+  "capabilities": [
+   {
+    "cap": "סורק שלוש תיקיות-לוגיקה (new/dart-maor · new/dart · new/dart-boxes) ומחלץ כל פונקציה-עליונה, כולל רב-שורתית ו-named-params",
+    "evidence": "machtzev/census/logic-census.mjs:13 (SCAN) · 44 (הרגקס) · 37-59 (logicCensus)"
+   },
+   {
+    "cap": "מחלץ לכל פונקציה את התפר שלה: טיפוסי-הפרמטרים לפי הסדר + טיפוס-ההחזרה + argc",
+    "evidence": "machtzev/census/logic-census.mjs:50-53"
+   },
+   {
+    "cap": "מפצל רשימת-פרמטרים ברמה-העליונה בלבד, תוך כיבוד גנריות <> וטיפוסי-פונקציה () — ומשטיח סמני named/optional",
+    "evidence": "machtzev/census/logic-census.mjs:16-27 (splitParams) · 19"
+   },
+   {
+    "cap": "גוזר טיפוס-פרמטר כטוקן-הראשון, מתעלם משם-הפרמטר, מ-required ומברירת-מחדל",
+    "evidence": "machtzev/census/logic-census.mjs:28-33 (paramType)"
+   },
+   {
+    "cap": "מסמן wireable = קלט פרימיטיבי-בלבד ⊕ פלט ניתן-לתצוגה (פרימיטיב או List של פרימיטיבים) — התנאי שבו המחולל יכול לחווט את הפונקציה כשדה-מחושב",
+    "evidence": "machtzev/census/logic-census.mjs:14,34-35,51-53"
+   },
+   {
+    "cap": "מדלג על קובצי-בדיקה ועל קובצי-הוכחה (-proof.dart), ועל מילות-מפתח שנראות כטיפוס-החזרה (if/for/while/…)",
+    "evidence": "machtzev/census/logic-census.mjs:40,47"
+   },
+   {
+    "cap": "מדדפ לפי שם: השם הראשון שנתפס זוכה — לקופסאות שמייצאות-מחדש, רק נקודת-הכניסה הייחודית נכנסת",
+    "evidence": "machtzev/census/logic-census.mjs:13 (הערת G48) · 47,49 (seen)"
+   },
+   {
+    "cap": "ממיין אלפביתית לפני הפליטה (דטרמיניזם)",
+    "evidence": "machtzev/census/logic-census.mjs:57"
+   },
+   {
+    "cap": "מדפיס פילוח לפי טיפוס-החזרה של ה-wireable + דוגמאות, בהרצה ישירה",
+    "evidence": "machtzev/census/logic-census.mjs:64-68"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו קורא גופי-פונקציות — 'קורא רק חתימות (חוק-4)'; אין לו מושג מה הפונקציה עושה",
+    "evidence": "machtzev/census/logic-census.mjs:7"
+   },
+   {
+    "claim": "אינו מוכיח התנהגות — 'wireable' הוא אמירה על **צורת-החתימה** בלבד; ההוכחה בהרצה היא של logic-proof",
+    "evidence": "machtzev/census/logic-census.mjs:5-6,51-53 מול generator/logic-proof.mjs:15-23"
+   },
+   {
+    "claim": "אינו תופס מתודות-מחלקה — רק פונקציות עליונות (הרגקס מעוגן ל-^)",
+    "evidence": "machtzev/census/logic-census.mjs:44"
+   },
+   {
+    "claim": "אינו שער-משטרה בעצמו — ה-gate שבודק אותו הוא oracle",
+    "evidence": "engine-index card: gate '-' · census/oracle.mjs:34 קורא logicCensus() בשער"
+   },
+   {
+    "claim": "אינו נופל על תיקייה חסרה — readdirSync שנכשל מדלג בשקט לתיקייה הבאה",
+    "evidence": "machtzev/census/logic-census.mjs:40 (catch { continue })"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs — פעמיים: ב-REGEN (אחרי tighten-types, 'חתימות-הלוגיקה המהודקות') וב-INDEX (לפני האורקל) · machtzev/census/oracle.mjs:12,34 (ייבוא) · pins-check קורא את פלטו",
+   "input": "new/dart-maor/*.dart · new/dart/*.dart · new/dart-boxes/*.dart",
+   "output": "machtzev/generator/logic-census.json",
+   "next": "oracle מאחד אותו עם atom-index.json ⇒ atom-index-full.json ⇒ הבורר (auto-logic · cover · render-ds) רואה גם את שכבת-הלוגיקה"
+  },
+  "quality": {
+   "signal": "נמדד דרך שער oracle: `node machtzev/census/oracle.mjs --gate` ⇒ 'אינדקס ≡ עץ-חי' — כלומר השער מריץ logicCensus() בזיכרון ומשווה לקובץ המחויב, ונכשל על כל פונקציה שנוספה/נעלמה. פלטו נמדד: `node -e` על logic-census.json ⇒ 963 פונקציות (dart-maor 569 · dart 289 · dart-boxes 105), מתוכן **120 wireable**",
+   "measured": "כן — שתי הפקודות למעלה. המספר 120/963 הוא גם מדידת-הפער: 12.5% מהלוגיקה עומדת בתנאי-החיווט הצורני"
+  },
+  "evidence": [
+   "cat -n machtzev/census/logic-census.mjs (69 שורות, נקרא במלואו)",
+   "node machtzev/census/oracle.mjs --gate ⇒ exit 0",
+   "node -e על machtzev/generator/logic-census.json ⇒ total=963 wireable=120 {dart-maor:569, dart:289, dart-boxes:105}"
+  ]
+ },
+ {
+  "file": "machtzev/census/oracle.mjs",
+  "lang": "mjs",
+  "lines": 58,
+  "capabilities": [
+   {
+    "cap": "מאחד את שתי השכבות לאינדקס אחד: atom-index.json (תצוגה) + logic-census.json (לוגיקה) ⇒ atom-index-full.json, כל אטום עם layer ומפתח-זהות אחיד",
+    "evidence": "machtzev/census/oracle.mjs:16-23"
+   },
+   {
+    "cap": "מאמת שהאינדקס המחויב ≡ העץ-החי: מריץ atomIndex() ו-logicCensus() **בזיכרון** ומשווה קבוצות שמות בשני הכיוונים, ומדפיס עד 5 מהחורגים",
+    "evidence": "machtzev/census/oracle.mjs:32-41 · 34"
+   },
+   {
+    "cap": "אוכף אפס-איבוד: אורך atom-index-full חייב להיות בדיוק display+logic, וגם הפילוח פר-שכבה חייב להתאים",
+    "evidence": "machtzev/census/oracle.mjs:25,51-54"
+   },
+   {
+    "cap": "סורק רקורסיבית את new/dart-ui-bs ומזהה שם-מחלקת-ווידג׳ט שמופיע בשני קבצים (כפילות), מול baseline מנוהל; כפילות **חדשה** מפילה, וירידה מדווחת כהזדמנות-לכיווץ",
+    "evidence": "machtzev/census/oracle.mjs:42-50"
+   },
+   {
+    "cap": "מצב --write כותב את האורקל, מצב --gate בודק בלבד, ובלי דגל מדפיס סיכום",
+    "evidence": "machtzev/census/oracle.mjs:26-30,31,58"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מייצא כלום — CLI בלבד; מי שצורך אותו צורך את atom-index-full.json",
+    "evidence": "engine-index card: exports ריק · isNot 'אין-ייצוא (לא ספרייה)'"
+   },
+   {
+    "claim": "אינו סורק בעצמו — הסריקה היא של atom-index.mjs ו-logic-census.mjs שהוא מייבא; התוספת שלו היא הסריקה הרקורסיבית לכפילויות-מחלקה בלבד",
+    "evidence": "machtzev/census/oracle.mjs:11-12,44"
+   },
+   {
+    "claim": "אינו מכריע בין כפילויות — 'הראשון-אלפביתית מנצח בשקט'; מה שהוא אוכף הוא רק שלא ייווצרו חדשות",
+    "evidence": "machtzev/census/oracle.mjs:42"
+   },
+   {
+    "claim": "אינו מאמת מטרות/יכולות — המיזוג הוא של זהות+תפר בלבד (id · layer · file · seam · caps · purpose · ret · params)",
+    "evidence": "machtzev/census/oracle.mjs:20-23"
+   },
+   {
+    "claim": "הרקע ההיסטורי מתועד בקוד: עד הכרעה C הוא השווה שלושה קבצי-JSON מחויבים זה-לזה, ו-atom-census.json הזדקן ל-522 בלי שאיש הרגיש — ההשוואה מול העץ-החי היא התיקון",
+    "evidence": "machtzev/census/oracle.mjs:32-33"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs — פעמיים: ב-REGEN ('אינדקס-האמת לפני הבורר') וב-INDEX ('אינדקס-האמת המאוחד') · machtzev/police.mjs (שער oracle, שלב push)",
+   "input": "machtzev/generator/atom-index.json + logic-census.json + העץ החי (new/dart-ui-bs · new/dart-maor · new/dart · new/dart-boxes) + machtzev/dup-class-baseline.json",
+   "output": "machtzev/generator/atom-index-full.json",
+   "next": "auto-logic · cover · render-ds · truth קוראים את האינדקס המאוחד — זהו האורקל ש-§21 דורש"
+  },
+  "quality": {
+   "signal": "`node machtzev/census/oracle.mjs --gate` ⇒ '1887 = תצוגה 924 + לוגיקה 963 (אפס-איבוד) · אינדקס ≡ עץ-חי · כפילויות-מחלקה 8 (חוב-מנוהל, רק-יורד)' (exit 0). אומת עצמאית: `node -e` על atom-index-full.json ⇒ full=1887 display=924 logic=963. שער oracle ב-gates.tsv:53, שלב push, עם baseline מסוג shrink",
+   "measured": "כן — שתי הפקודות למעלה. זהו השער החי היחיד בשרשרת TRUTH⇒full⇒index (מוצהר בקוד)"
+  },
+  "evidence": [
+   "cat -n machtzev/census/oracle.mjs (58 שורות, נקרא במלואו)",
+   "node machtzev/census/oracle.mjs --gate ⇒ exit 0",
+   "node -e על machtzev/generator/atom-index-full.json ⇒ full=1887 display=924 logic=963",
+   "grep -n 'oracle' machtzev/gates.tsv ⇒ שורה 53 (dup-class-baseline.json;shrink)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/logic-proof.mjs",
+  "lang": "mjs",
+  "lines": 49,
+  "capabilities": [
+   {
+    "cap": "מריץ דוגמאות (קלט ⇒ בדיקה על התוצאה) ב-Dart אמיתי על כל מועמד תואם-חתימה, ומחזיר מפה {מועמד: {ok, total}} — הוכחה בהרצה, לא התאמת-תיאור",
+    "evidence": "machtzev/generator/logic-proof.mjs:2-4,15-23 (proveCandidates) · 38 (spawnSync dart run)"
+   },
+   {
+    "cap": "מחליט מיהו מועמד 'טהור' וניתן להרצה בבידוד: אפס import, או ייבוא-יחסי מהמדף, או ספריית-dart טהורה (convert/math/core/collection/typed_data) — package:/dart:io/ui/html פוסלים",
+    "evidence": "machtzev/generator/logic-proof.mjs:12-13 (isPure)"
+   },
+   {
+    "cap": "תומך במועמד-שרשרת (הכרעה-20ב «אין-יחיד ⇒ שלב כמה»): {chain:[A,B]} מורץ כ-B(A(args)), ושני חלקיו חייבים להיות טהורים",
+    "evidence": "machtzev/generator/logic-proof.mjs:16-17 · 28"
+   },
+   {
+    "cap": "עוטף כל דוגמה ב-try/catch משלה, כך שחריגה בדוגמה אחת נספרת ככישלון שלה ולא מפילה את הריצה",
+    "evidence": "machtzev/generator/logic-proof.mjs:33"
+   },
+   {
+    "cap": "מייבא כל מועמד בקידומת משלו (c0, c1…) כדי שהתנגשות-שמות בין מועמדים לא תמנע הוכחה משותפת",
+    "evidence": "machtzev/generator/logic-proof.mjs:27-28"
+   },
+   {
+    "cap": "מזריק שקעי-קטלוג נוספים (extraImports) שהדוגמאות קוראות להם בלי קידומת",
+    "evidence": "machtzev/generator/logic-proof.mjs:15,27"
+   },
+   {
+    "cap": "מייחס שגיאת-קומפילציה לזוג (מועמד, דוגמה) המדויק: ממפה את מספר-השורה בשגיאה חזרה לאינדקס בגוף, מסמן את הזוג כמת, ומריץ שוב — עד 4 סבבים (G62)",
+    "evidence": "machtzev/generator/logic-proof.mjs:29-45 · 41-44"
+   },
+   {
+    "cap": "נופל-לאחור להוכחה פר-מועמד בקובץ נפרד כשהקובץ המשותף בכלל לא התקמפל, כך שמועמד שחתימתו-בקטלוג ≠ גופו לא מפיל את שאר המועמדים (G36)",
+    "evidence": "machtzev/generator/logic-proof.mjs:19-22"
+   },
+   {
+    "cap": "מאתר את ה-dart SDK של Flutter אוטומטית, עם נפילה ל-`dart` שב-PATH",
+    "evidence": "machtzev/generator/logic-proof.mjs:11"
+   },
+   {
+    "cap": "עוצר ריצה תקועה בטיימאאוט של 120 שניות",
+    "evidence": "machtzev/generator/logic-proof.mjs:38"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו בורר — הוא מחזיר ציונים בלבד; ההכרעה 'מי הכי-טוב' היא של behavior-plan ו-auto-logic",
+    "evidence": "machtzev/generator/logic-proof.mjs:4,22 (מחזיר מפה)"
+   },
+   {
+    "claim": "אינו מייצר דוגמאות — הדוגמאות באות מהצורך (behavior-plan) או מפעולות-הזהב (auto-logic)",
+    "evidence": "machtzev/generator/logic-proof.mjs:14-15 (examples כפרמטר)"
+   },
+   {
+    "claim": "אינו מוכיח מועמד לא-טהור — הוא מסונן החוצה לפני ההרצה, ו-cands ריק מחזיר {} ריק (לא שגיאה)",
+    "evidence": "machtzev/generator/logic-proof.mjs:17"
+   },
+   {
+    "claim": "אינו שער-משטרה ואינו רץ מהשורה — אין בו CLI",
+    "evidence": "engine-index card isNot: 'לא-שער-משטרה'; אין בלוק isMain בקובץ"
+   },
+   {
+    "claim": "מנקה אחריו רק חלקית — קובצי-ההוכחה נכתבים לתיקיית .prove ונשארים שם (אין unlink)",
+    "evidence": "machtzev/generator/logic-proof.mjs:25,31,37"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/behavior-plan.mjs (ייבוא — צרכי «בלגן») · machtzev/generator/auto-logic.mjs (פעולות-הזהב) · machtzev/dedup/dedup-atoms.mjs (--semantic, הוכחה-צולבת)",
+   "input": "id-הצורך + רשימת-מועמדים [{id,file}] (או {chain}) + דוגמאות [[argsDart, checkDart]] + extraImports",
+   "output": "{candId: {ok, total, error?}} · וקובצי-Dart זמניים תחת machtzev/generator/.prove",
+   "next": "behavior-plan בוחר את המועמד שעבר ⇒ behavior-compose פולט gen_behaviors.dart (bh*) שהמודולים קוראים לו; auto-logic מדיח פעולת-זהב רק על הוכחה"
+  },
+  "quality": {
+   "signal": "אין שער בשמו. הוא **המנגנון** שמייצר את המדידה של אחרים: CLAUDE.md מדווח G34 «16/16 מוכחים» ו-G34ב «הכי-טוב-בהוכחה 30/30». לא הרצתי את behavior-plan כאן (הוא כותב תוצרים ודורש Dart SDK + כתיבה לעץ)",
+   "measured": "לא-נמדד בסשן הזה — אין gate בשמו, ולא הרצתי את הצרכנים שלו. הדיווחים 16/16 · 30/30 הם מ-CLAUDE.md ולא מפקודה שהרצתי"
+  },
+  "evidence": [
+   "cat -n machtzev/generator/logic-proof.mjs (49 שורות, נקרא במלואו)",
+   "engine-index card: importedBy = machtzev/generator/behavior-plan.mjs · calledByName: dedup-atoms, behavior-plan"
+  ]
+ },
+ {
+  "file": "machtzev/generator/twins.mjs",
+  "lang": "mjs",
+  "lines": 196,
+  "capabilities": [
+   {
+    "cap": "בונה רתמת-תאומים: לכל אטום-Dart מאתר את תאום-ה-JS שלו ב-new/atoms/<base>.mjs ומחזיר מפה שם⇒פונקציה-רהיצה",
+    "evidence": "machtzev/generator/twins.mjs:115-195 (buildTwinRegistry) · 119-124,186"
+   },
+   {
+    "cap": "הופך מנוע רב-פרמטרי לחד-פרמטרי בכך שהוא 'קוצר' את זנב-הארגומנטים ומקבע אותו — כך שהמחולל יכול להריץ אותו על ערך-שדה בודד",
+    "evidence": "machtzev/generator/twins.mjs:4-6,185-186"
+   },
+   {
+    "cap": "קוצר זנב בשלוש שיטות, בסדר-קדימות מוצהר: (א) עטיפת-שקעים מטוהרת שנצלמה בבדיקת-האטום · (ב) קריאת-העבודה הראשונה בבדיקה · (ג) שידור-חוזר חי של הבדיקה עם עטיפת-הקלטה",
+    "evidence": "machtzev/generator/twins.mjs:128-151 (א) · 152-172 (ב) · 176-183 (ג)"
+   },
+   {
+    "cap": "מריץ את הקשר-הבדיקה: מעריך את כל הצהרות-ה-const ברמת-הקובץ בסדרן (מה שנכשל מדולג) ואז מעריך בו את ארגומנטי-הקריאה",
+    "evidence": "machtzev/generator/twins.mjs:62-81 (buildCtx · evalIn)"
+   },
+   {
+    "cap": "לוכד ארגומנטים **חיים** (כולל callbacks ו-DI) בשידור-חוזר: כותב runner שעוטף את הפונקציה במקליט, מנטרל process.exit, בולע כשלי-אימות, ומזריק את יתר ייצואי-האטום כ-const רק אם הבדיקה מזכירה אותם ואינה מגדירה אותם בעצמה",
+    "evidence": "machtzev/generator/twins.mjs:83-113 (replayCapture) · 96-100,105-108"
+   },
+   {
+    "cap": "פוסל בדיקה שמייבאת ערך-זר (מלבד האטום ו-node: builtins) כלא-בטוחה לשידור",
+    "evidence": "machtzev/generator/twins.mjs:88-90"
+   },
+   {
+    "cap": "מסווג זנב כ-simple (פרימיטיבים · רשימה ≤60 של פרימיטיבים · אובייקט ≤60 מפתחות פרימיטיביים) ⇒ מותר לפלוט אותו כליטרל-Dart במסך",
+    "evidence": "machtzev/generator/twins.mjs:26-32 (jsonable · prim · simpleVal) · 6-7"
+   },
+   {
+    "cap": "ממיר ערך-JS לליטרל-Dart עם בריחה מלאה (\\\\ · ' · $ · \\n · \\r) ו-const באוספי-רמה-עליונה",
+    "evidence": "machtzev/generator/twins.mjs:16-24 (dartLit)"
+   },
+   {
+    "cap": "חותך ומפצל קוד בצורה מאוזנת, עם כיבוד מחרוזות ובריחות בשלושה סוגי-ציטוט",
+    "evidence": "machtzev/generator/twins.mjs:34-59 (balanced · splitTop)"
+   },
+   {
+    "cap": "שומר את ידע-הזנבות ל-knowledge/twin-tails.json כדי שהמחולל יקרא אותו סינכרונית בלי לייבא ~1,100 מודולים",
+    "evidence": "machtzev/generator/twins.mjs:189-194"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו רושם מנוע רב-פרמטרי שלא הצליח לקצור — 'לא נרשם (כנות)'; אין ניחוש-זנב",
+    "evidence": "machtzev/generator/twins.mjs:184"
+   },
+   {
+    "claim": "אינו פולט זנב לא-simple ל-Dart — זנב חי/מורכב משרת הרצת-JS בלבד ומסומן simple:false",
+    "evidence": "machtzev/generator/twins.mjs:7,177,181"
+   },
+   {
+    "claim": "אינו רץ מהשורה ואינו שער-משטרה",
+    "evidence": "engine-index card isNot: 'לא-רץ-מהשורה · לא-שער-משטרה · לא-ב-INDEX.md'"
+   },
+   {
+    "claim": "אינו מוכיח נכונות — הוא מספק **רהיצוּת** (ארגומנטים שמאפשרים להריץ); ההשוואה JS⇄Dart היא של הצרכנים (coverage-gate · genesis-gen · synth)",
+    "evidence": "machtzev/generator/twins.mjs:1-2 · importedBy"
+   },
+   {
+    "claim": "בולע שגיאות בשקט בשלושה מקומות — הערכת const, ייבוא-תאום, וכתיבת twin-tails — כך שכשל מתבטא כ'אין תאום' ולא כאזעקה",
+    "evidence": "machtzev/generator/twins.mjs:77,187,190-194"
+   },
+   {
+    "claim": "משתמש ב-eval ו-Function על קוד-בדיקה מהריפו (שידור-חוזר וקריאת-const) — כלי-פנים, לא קלט חיצוני",
+    "evidence": "machtzev/generator/twins.mjs:77,81,147"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/coverage-gate.mjs · machtzev/generator/genesis-gen.mjs · machtzev/generator/synth.mjs (ייבוא)",
+   "input": "new/atoms/<base>.mjs (תאום-JS) + new/atoms/<base>.test.mjs (בדיקת-האטום = אמת-הקרקע לזנב)",
+   "output": "Map שם⇒פונקציה חד-פרמטרית + twinMeta + machtzev/generator/knowledge/twin-tails.json",
+   "next": "genesis-gen מחווט את התאום למסך; coverage-gate סופר תאומי-דאטה כציר-כיסוי"
+  },
+  "quality": {
+   "signal": "אין שער בשמו. הצרכן שמודד אותו הוא שער coverage (gates.tsv:54, שלב push, baseline;grow) שאחד מציריו הוא 'תאומי-דאטה'. לא הרצתי אותו — coverage-gate ו-genesis-gen כותבים תוצרים",
+   "measured": "לא-נמדד — אין gate בשמו; שער coverage שצורך אותו לא הורץ כאן (הוא בשלב push וכותב baseline)"
+  },
+  "evidence": [
+   "awk הדפסת machtzev/generator/twins.mjs שורות 1-196 (נקרא במלואו)",
+   "grep -n 'coverage' machtzev/gates.tsv ⇒ שורה 54",
+   "engine-index card: importedBy = coverage-gate · genesis-gen · synth"
+  ]
+ },
+ {
+  "file": "machtzev/generator/tighten-types.mjs",
+  "lang": "mjs",
+  "lines": 256,
+  "capabilities": [
+   {
+    "cap": "מקליט את **צורת-הדאטה שזרם בפועל** בבדיקות-החוזה של ה-JS: מריץ כל new/atoms/<k>.test.mjs תחת hook שרושם צורת כל ארגומנט וכל החזרה",
+    "evidence": "machtzev/generator/tighten-types.mjs:3,52-67 (record) · 56"
+   },
+   {
+    "cap": "מאחד את הצורות שנרשמו לטיפוס עקבי, ומכליל בכוונה כדי לא להתאים-יתר לדגימה קטנה: int/double ⇒ num · Map<String,X> ⇒ Map<String,dynamic> · List של מפות ⇒ List<Map<String,dynamic>> · עומק>1 ⇒ dynamic",
+    "evidence": "machtzev/generator/tighten-types.mjs:14 (unify) · 69-81 (generalize · dartType)"
+   },
+   {
+    "cap": "מפרסר את חתימת-ה-Dart הקיימת (טיפוס-החזרה · שם · רשימת-הפרמטרים הגולמית) בסריקה מאוזנת של הסוגריים",
+    "evidence": "machtzev/generator/tighten-types.mjs:37-46 (dartSig)"
+   },
+   {
+    "cap": "מזהה את אטומי-ה-dynamic: קובץ ב-dart-maor שיש לו תאום-JS ובדיקה, וחתימתו מכילה dynamic בהחזרה או בפרמטר",
+    "evidence": "machtzev/generator/tighten-types.mjs:47-49 (dynAtoms)"
+   },
+   {
+    "cap": "מתכנן שכתוב פר-פרמטר לפי מצב-ההצהרה (חובה · [אופציונלי] · {named}) — named לא מהודקים כי אין מיפוי-שם מה-JS, ואופציונלי-פוזיציונלי בלי ברירת-מחדל מקבל '?' ",
+    "evidence": "machtzev/generator/tighten-types.mjs:82-106 (plan) · 88-95,99"
+   },
+   {
+    "cap": "משאיר טיפוסי-פונקציה כ-dynamic במכוון (קונטרה-וריאנטיות של סגירות מוקלדות אצל הקוראים)",
+    "evidence": "machtzev/generator/tighten-types.mjs:5,81,102"
+   },
+   {
+    "cap": "פוסל ראיה-מגישוש (L89): בדיקה שכל קריאותיה מסל-הגישוש של promote-auto מסומנת probe ולא מהדקים ממנה — הזיהוי מהמקור (CASES) ולא מהקריאה",
+    "evidence": "machtzev/generator/tighten-types.mjs:6,15-22 (casesProbe) · 64,85"
+   },
+   {
+    "cap": "מאמת כל הידוק בשלוש שכבות: dart analyze על המדף הטהור · flutter analyze במראה ל-buildsmart · **הרצת הוכחות-הקופסאות** (new/dart-boxes/<b>-proof.dart) — הקוראים-האמיתיים",
+    "evidence": "machtzev/generator/tighten-types.mjs:7-8,107-111 (analyzeErrors) · 112-168 (boxProofStage)"
+   },
+   {
+    "cap": "מייחס שגיאה לאטום הספציפי: מזהה בעמודת-השגיאה ⇒ מזהי-השורה ⇒ ואם אין ייחוס, כל האטומים-המהודקים שהקופסה מייבאת",
+    "evidence": "machtzev/generator/tighten-types.mjs:113-114,121-132"
+   },
+   {
+    "cap": "משחזר אוטומטית קובץ/קופסה אדומים ורושם ב-tighten-rejected.json, כדי לא לנסות שוב את אותו אטום על אותה ראיה",
+    "evidence": "machtzev/generator/tighten-types.mjs:8,28-29,86"
+   },
+   {
+    "cap": "מנהל פנקס-הידוקים (tighten-applied.json) עם before/after לכל אטום — לייחוס-שגיאה ולשחזור גם בריצות מאוחרות",
+    "evidence": "machtzev/generator/tighten-types.mjs:30-32,239"
+   },
+   {
+    "cap": "משווה חתימה נוכחית מול HEAD (git show) כדי לזהות אילו חתימות שונו בריצה",
+    "evidence": "machtzev/generator/tighten-types.mjs:238"
+   },
+   {
+    "cap": "שער דו-תנאי: הראיה חייבת להיות טרייה (record מחדש ומשווה), **וגם** אסור שתישאר חתימה שניתן להדק לפי הראיה והיא עדיין dynamic",
+    "evidence": "machtzev/generator/tighten-types.mjs:9,246-253"
+   },
+   {
+    "cap": "מצב-ברירת-מחדל (בלי --apply/--gate) מדפיס תוכנית-הידוק קריאה בלי לשנות דבר",
+    "evidence": "machtzev/generator/tighten-types.mjs:255"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מסיק מטיפוסים כתובים — הראיה היחידה היא דאטה שזרם בבדיקות (§20-ד: 'מהדאטה, לא ממילון')",
+    "evidence": "machtzev/generator/tighten-types.mjs:5"
+   },
+   {
+    "claim": "אינו מהדק named-params בכלל",
+    "evidence": "machtzev/generator/tighten-types.mjs:88,95"
+   },
+   {
+    "claim": "אינו מהדק כשהראיה סותרת — unify מחזיר צורה שאינה ממופה ⇒ dartType מחזיר null ⇒ dynamic נשאר",
+    "evidence": "machtzev/generator/tighten-types.mjs:5,81,98"
+   },
+   {
+    "claim": "אינו סומך על אנלייזר בלבד — הוא דורש **ריצה** של הוכחות-הקופסאות, מפני שהאנלייזר לבדו מפספס את הקוראים-האמיתיים",
+    "evidence": "machtzev/generator/tighten-types.mjs:8,112-114"
+   },
+   {
+    "claim": "אינו מכסה אטום בלי תאום-JS או בלי בדיקה — dynAtoms מסנן אותם החוצה",
+    "evidence": "machtzev/generator/tighten-types.mjs:48"
+   },
+   {
+    "claim": "אינו רץ בלי Dart/Flutter — הוא תלוי ב-DART ו-FLUTTER מהסביבה, וב-buildsmart למראה",
+    "evidence": "machtzev/generator/tighten-types.mjs:34-35"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:REGEN עם ['--record','--apply'] — הצעד השלישי, מיד לפני logic-census · machtzev/police.mjs (שער tighten, שלב push)",
+   "input": "new/dart-maor/*.dart (חתימות) + new/atoms/<k>.mjs + <k>.test.mjs (הראיה) + new/dart-boxes/*-proof.dart (הקוראים) + machtzev/tools/probe-pool.mjs (סל-הגישוש)",
+   "output": "חתימות מהודקות ב-new/dart-maor + type-evidence.json + tighten-applied.json + tighten-rejected.json",
+   "next": "logic-census קורא את החתימות המהודקות ⇒ oracle ⇒ auto-logic/cover בוררים על חתימות חדות; ship ממראה ל-buildsmart"
+  },
+  "quality": {
+   "signal": "`node machtzev/generator/tighten-types.mjs --gate` ⇒ '228 אטומי-dynamic · ראיה ≡ טרייה · 0 חתימות שניתן להדק ונותרו dynamic' (exit 0, `git status --short` ריק אחריו). זהו שער שמריץ מחדש את כל הראיה (record) בכל הרצה, ולא רק משווה קובץ. שער tighten ב-gates.tsv:29, שלב push",
+   "measured": "כן — הפקודה למעלה. הקריאה הנכונה של '228 אטומי-dynamic': זהו מספר האטומים שנמצאים במעקב, לא מספר הכשלים; התנאי שעובר הוא ש-0 מהם ניתנים-להידוק-ולא-הודקו"
+  },
+  "evidence": [
+   "awk הדפסת machtzev/generator/tighten-types.mjs שורות 1-180, 238-256 + grep מבני על כל הקובץ",
+   "timeout 500 node machtzev/generator/tighten-types.mjs --gate ⇒ exit 0",
+   "git status --short אחרי ההרצה ⇒ ריק",
+   "grep -n 'tighten' machtzev/gates.tsv ⇒ שורה 29"
+  ]
  }
 ]
