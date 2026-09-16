@@ -104,6 +104,44 @@ logic-census  ⇒  atom-index  ⇒  oracle --write  ⇒  quarry-golden  ⇒  op-
 * `knowledge/connect/NOTES-connected-A.md` — הקובץ הזה.
 * `knowledge/connect/STATUS-connected-A.txt` — מצב.
 
-## 4 · מה עוד לא נעשה
+## 4 · פקודות-מדידה שהורצו (ראיה, לא טענה)
+
+```
+node machtzev/census/atom-census.mjs
+  ⇒ 565 אטומים · fields 490 · collection 44 · zero 25 · series 6
+  ⇒ detail 353 · kpi 99 · card 73 · list 44 · chrome 25 · status 25 · progress 10 · trend 6
+node machtzev/generator/core-dart.mjs --gate
+  ⇒ exit 0 · «8 מסכי-גרעין ≡ פליטה-דטרמיניסטית מהרג׳יסטרי»
+node machtzev/generator/ops-particles.mjs
+  ⇒ ישויות עם פעולות-יסוד: 54 · מתוכן עם ≥1 צורה חסרת-שדה: 54 (100%)
+node machtzev/generator/quarry-golden.mjs --gate
+  ⇒ exit 0 · 9 מודולי-זהב ⇒ 1668 שברים (397 תובנות) · round-trip ביט-לביט 9/9
+     (baseline מחויב: fragments 1668 · insight 378)
+node machtzev/generator/op-census.mjs --gate
+  ⇒ exit 0 · 2443 אטומים ⇒ 38 ops · 0 לא-ממופים · zero 33 (תצוגה בלבד)
+     (baseline מחויב: total 1958 · zero 44 · ops 38)
+node machtzev/generator/gen-verify.mjs --gate
+  ⇒ ⚪ מדולג — אין buildsmart. ls -d /home/user/buildsmart ⇒ No such file or directory
+ls machtzev/generator/specs-ds/*.txt | wc -l   ⇒ 31
+ls machtzev/generator/peruks/ | wc -l          ⇒ 28
+grep -vc '^#' machtzev/gates.tsv               ⇒ 57 שערים
+grep -rln "root.mjs'"  --include=*.mjs machtzev | wc -l  ⇒ 86
+grep -rln "atlas.mjs'" --include=*.mjs machtzev | wc -l  ⇒ 8
+```
+
+אחרי **כל** ריצה נבדק `git status --short` ⇒ ריק. לא הורץ אף `--write`, לא שונה אף קובץ-קוד.
+
+## 5 · מה שלא הצלחתי / מגבלת-הקלון
+
+* **אין `buildsmart` בקונטיינר** (`ls -d /home/user/buildsmart` ⇒ לא קיים). לכן כל מנוע
+  שמוכיח-בריצת-Flutter מדלג כאן: `gen-verify` הוא הבולט. מה שיש לי עליו זה **תוצר-ריצה מחויב**
+  (‏`gen-verify-report.json` ⇒ 246/283 · 65 אטומים) — ואני מציין במפורש שזו לא ריצה שלי.
+  אותה מגבלה תחול על `goldenharness` · `appgen` · `balaganrun`.
+* **מנועים שכותבים לעץ לא הורצו.** לכל אחד כזה כתבתי «לא-נמדד» + הסיבה. מצב `--gate` הורץ
+  היכן שקיים, כי הוא השוואה ולא כתיבה (אומת ב-`git status` אחרי כל ריצה).
+* **`atlas.json` · `gen-verify-report.json` · `ops-census-baseline.json` ודומיהם** הם תוצרים
+  **מחויבים** — קראתי אותם כראיה על ריצה קודמת, לא כראיה שהרצתי. כתוב כך בכרטיסים.
+
+## 6 · מה עוד לא נעשה
 
 בהמשך הסשן — יתר המנועים ברשימה. הקובץ מתעדכן בכל נחיתה (כל 5 מנועים).

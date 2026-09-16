@@ -203,6 +203,86 @@
   ]
  },
  {
+  "file": "machtzev/generator/atlas.mjs",
+  "lang": "mjs",
+  "lines": 141,
+  "capabilities": [
+   {
+    "cap": "בונה אטלס-מדף אחד שמחבר את **כל** האטומים לרשות-המחולל בשלוש שכבות: widgets (new/dart-ui-bs) · functions (new/dart-maor + new/dart) · data (new/dart-data-bs + new/dart-data-maor)",
+    "evidence": "machtzev/generator/atlas.mjs:2-7,15-17,30,116"
+   },
+   {
+    "cap": "מחלץ לכל ווידג׳ט את החוזה המלא: מחלקה · טיפוסי-props · פרמטרים-מיקומיים · required · named — מתוך גוף-המחלקה והבנאי שנחתכו ב-classBody",
+    "evidence": "machtzev/generator/atlas.mjs:44-61"
+   },
+   {
+    "cap": "מזהה שני אותות-הרכבה על ווידג׳ט: flexRoot (מחזיר Expanded/Flexible ⇒ חייב הורה-flex) ו-dirty (דאטה-עברי קשיח בגוף ⇒ חוב-טוהר)",
+    "evidence": "machtzev/generator/atlas.mjs:62-63"
+   },
+   {
+    "cap": "גוזר **תיאור-עצמי בעברית** לכל אטום מכותרת-הקובץ — ומסנן מילות-פיגום (חוט · אטום · חוזה · מוצא …), כדי שהמחולל ילמד מהאטום מה הוא",
+    "evidence": "machtzev/generator/atlas.mjs:31-37 (ווידג׳טים) · :72-86 (לוגיקה: יורד בכותרת עד שורת-תיאור עם ≥2 מילים, מדלג שורות-פיגום)"
+   },
+   {
+    "cap": "מפרסר חתימות-פונקציה כולל **גנריקה מקוננת** (List<Map<String, dynamic>>) ו-nullable על כל טיפוס, ומפצל פרמטרים במודעות-עומק כך ש-Map<String, X> נשאר פרמטר אחד",
+    "evidence": "machtzev/generator/atlas.mjs:87,89-94"
+   },
+   {
+    "cap": "דוגם תוכן של אטומי-דאטה מסוג List<String> — עד 12 פריטים בפועל, כחומר-בנייה חי למחולל",
+    "evidence": "machtzev/generator/atlas.mjs:104-111"
+   },
+   {
+    "cap": "דגל forge (ברירת-מחדל false) מוסיף את 359 אטומי-ה-forge לאטלס-הווידג׳טים כך ש-wireAtom מחווט אותם ישירות; בלעדיו האטלס ביט-זהה (חוק-7)",
+    "evidence": "machtzev/generator/atlas.mjs:28-30,40,59"
+   },
+   {
+    "cap": "כותב בשני קבצים קומפקטיים (atlas.json + atlas-data.json) כי קובץ-אחד עבר 1MB ונפל בשער nobinary — ו-readAtlas() מאחד כך שהקוראים לא יודעים מהפיצול",
+    "evidence": "machtzev/generator/atlas.mjs:119-135"
+   },
+   {
+    "cap": "מדלג על _test.dart ועל QUARANTINE בכל סריקה",
+    "evidence": "machtzev/generator/atlas.mjs:23"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מחזיק דאטה משלו — «מנגנון-סריקה טהור, אפס-דאטה (חוק-1)»; כל תוכן מגיע מהקבצים הנסרקים",
+    "evidence": "machtzev/generator/atlas.mjs:2"
+   },
+   {
+    "claim": "אינו בורר אטום ואינו מחווט — הוא הקטלוג; הבחירה אצל genesis-gen/particles/render-ds שקוראים לו",
+    "evidence": "machtzev/generator/atlas.mjs:116 (return בלבד) מול הרשימה: 8 מייבאים"
+   },
+   {
+    "claim": "אינו סורק את שכבת-ה-forge כברירת-מחדל — רק עם {forge:true}",
+    "evidence": "machtzev/generator/atlas.mjs:30,40"
+   },
+   {
+    "claim": "אינו מאמת שהחתימות נכונות — התיאור-העברי הוא דיווח-עצמי מכותרת-הקובץ, בדיוק כמו ב-atom-index",
+    "evidence": "machtzev/generator/atlas.mjs:31,72 (ההערות «תיאור-עצמי»)"
+   },
+   {
+    "claim": "ווידג׳ט בלי בנאי שנמצא ברגקס פשוט מדולג בשקט",
+    "evidence": "machtzev/generator/atlas.mjs:50-51 (if (!ctm) continue)"
+   }
+  ],
+  "pipeline": {
+   "runBy": "מורץ ישירות (`node machtzev/generator/atlas.mjs`) לרענון-הקטלוג, ובעיקר **מיובא** ע\"י 8 מנועים: genesis-gen · render-ds · particles · synth · studio-full · coverage-gate · verify-dart-tests · verify-dart-arg0",
+   "input": "new/dart-ui-bs · new/dart-maor · new/dart · new/dart-data-bs · new/dart-data-maor (+ new/dart-forge-bs עם forge:true)",
+   "output": "machtzev/generator/atlas.json (widgets+functions) · machtzev/generator/atlas-data.json (data) · buildAtlas/readAtlas בזיכרון",
+   "next": "המחוללים קוראים readAtlas() ובוררים ממנו אטום לפי צורה/ייעוד"
+  },
+  "quality": {
+   "signal": "אין שער בשם atlas. האיכות נמדדת בעקיפין: שער «coverage» («לבנים-ברות-מילוי · מנועים-ברי-הרצה») ו-«oracle» נשענים על אותו מדף, ו-8 מנועים צורכים אותו — סטייה בקטלוג תיתפס אצלם.",
+   "measured": "נמדד מהתוצר המחויב: `node -e` על atlas.json ⇒ counts {widgets:562, functions:857, data:2159}; atlas-data.json ⇒ 2159. **לא הרצתי את atlas.mjs עצמו** (הוא כותב שני קבצים) — כלומר אלה מספרי-הקטלוג המחויב, לא ריצה טרייה שלי. מספר-המייבאים נמדד: `grep -rln \"atlas.mjs'\" --include=*.mjs machtzev | wc -l` ⇒ 8."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/atlas.mjs (141 שורות, נקרא במלואו)",
+   "node -e על machtzev/generator/atlas.json ⇒ widgets 562 · functions 857 · data 2159",
+   "grep -rln \"atlas.mjs'\" --include=*.mjs machtzev | wc -l ⇒ 8"
+  ]
+ },
+ {
   "file": "machtzev/generator/chrome.mjs",
   "lang": "mjs",
   "lines": 10,
@@ -391,6 +471,316 @@
   ]
  },
  {
+  "file": "machtzev/generator/gen-verify.mjs",
+  "lang": "mjs",
+  "lines": 94,
+  "capabilities": [
+   {
+    "cap": "**מוכיח שפלט-המחולל באמת עולה על המסך** — כותב בדיקת-widget מחוללת לכל gen_*.dart שיש בו XScreen, מריץ flutter test, ודורש pump בלי חריגה + DsScaffold קיים (L53: analyze ירוק ≠ מסך שעובד)",
+    "evidence": "machtzev/generator/gen-verify.mjs:2-4,39-49,67"
+   },
+   {
+    "cap": "סופר **כמה מחלקות-אטום רונדרו בפועל** — עובר על tester.allWidgets, מצליב מול שכבת-התצוגה של ops-map + אטומי-forge מ-atom-index-full, ופולט שורת GENVERIFY {json} שהרתמה קוראת",
+    "evidence": "machtzev/generator/gen-verify.mjs:15-19,50,59,62,71,77"
+   },
+   {
+    "cap": "**סריקת-אינטראקציה** לפלטי G4–G6: מטפטף עד 12 טאפים על כל IconButton/SoftButton, עוטף כל טאפ, סופר חריגות ומדווח איזה ווידג׳ט/תווית נשבר ובאיזו שורה",
+    "evidence": "machtzev/generator/gen-verify.mjs:51-59"
+   },
+   {
+    "cap": "אוכף **אי-סחף-מראה**: קובץ שהמראה ב-buildsmart שונה מהמקור מסומן drift, מוצא מהבדיקה כדי לא להפיל את הקומפילציה של כולם, ומדווח ✗",
+    "evidence": "machtzev/generator/gen-verify.mjs:31,37-38,77,79"
+   },
+   {
+    "cap": "מבדיל קפדני מול ratchet: פלטי-G4/G5 (subset · composite · retarget · core · opsseed · schoolos_forge) ו-רכזות עם חותמת-app-from-sentences בכותרת **חייבים** לעבוד ⇒ exit 1; השאר נמדדים ב-baseline רק-עולה",
+    "evidence": "machtzev/generator/gen-verify.mjs:32-35,89-92"
+   },
+   {
+    "cap": "מדלג-ומדווח על מסך שהבנאי שלו דורש פרמטר (required בלי ברירת-מחדל) — לא ממציא ארגומנט",
+    "evidence": "machtzev/generator/gen-verify.mjs:26-28"
+   },
+   {
+    "cap": "מדלג-ברוך בהיעדר buildsmart (⚪ ו-exit 0) במקום להיכשל",
+    "evidence": "machtzev/generator/gen-verify.mjs:22; אומת בריצה כאן"
+   },
+   {
+    "cap": "מנקה אחריו — מוחק את קובץ-הבדיקה המחולל ושומר לוג-גולמי לאבחון (gen-verify-last.log)",
+    "evidence": "machtzev/generator/gen-verify.mjs:69-70"
+   },
+   {
+    "cap": "תומך --only <files> לבדיקה נקודתית, ואז דורש 100% רנדר במקום ratchet",
+    "evidence": "machtzev/generator/gen-verify.mjs:21,25,88"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "**אינו רץ בלי buildsmart** — בקלון הזה הוא מדלג לגמרי, כלומר אין לו כאן שום כוח-הוכחה",
+    "evidence": "אומת בריצה: `node machtzev/generator/gen-verify.mjs --gate` ⇒ «⚪ genverify: אין buildsmart ב-/home/user/buildsmart/app_flutter — מדולג» · exit 0; `ls -d /home/user/buildsmart` ⇒ No such file or directory"
+   },
+   {
+    "claim": "אינו בודק פיקסלים ואינו משווה מראה — רק «עלה בלי חריגה» + ספירת-אטומים; ההשוואה הוויזואלית היא audit/pixel-audit",
+    "evidence": "machtzev/generator/gen-verify.mjs:48-50 מול machtzev/one.mjs:191-204"
+   },
+   {
+    "claim": "אינו נוגע ב-git ואינו מחולל קוד-מוצר — רק קובץ-בדיקה זמני",
+    "evidence": "machtzev/generator/gen-verify.mjs:5 (ההצהרה «אין git») · :66,69 (כתיבה+מחיקה של קובץ-הבדיקה)"
+   },
+   {
+    "claim": "חריגת-טאפ אינה מפילה את הרנדר עצמו — היא נספרת כממצא, ורק בפלט-קפדני היא הופכת לכשל-שער",
+    "evidence": "machtzev/generator/gen-verify.mjs:51 (ההערה) · :90 (strictFail כולל tapErrors)"
+   },
+   {
+    "claim": "«גרעין-על-הרשומה» (coreSeen) הוא מדד ולא תנאי — הוא תלוי-ניווט ולכן אינו קפדני",
+    "evidence": "machtzev/generator/gen-verify.mjs:90 (ההערה בשורת strictFail)"
+   }
+  ],
+  "pipeline": {
+   "runBy": "שער «genverify» (gates.tsv) מהמשטרה; נקרא גם בסיום שרשרת-הפליטה כדי לאמת core-dart/app-from-sentences (core-dart.mjs:71 מפנה אליו)",
+   "input": "new/dart-gen-bs/gen_*.dart · המראה ב-buildsmart/app_flutter/lib/genesis/dart-gen-bs · ops-map.json · atom-index-full.json · gen-verify-baseline.json",
+   "output": "gen-verify-report.json · gen-verify-last.log · דוח-מסך · exit-code",
+   "next": "ה-baseline מתעדכן (רק-עולה); ONE-STATUS/הרתמה קוראים את הדוח"
+  },
+  "quality": {
+   "signal": "שער «genverify» ב-gates.tsv: «כל gen_*.dart עם מסך נטען ב-flutter test מחולל — אפס-חריגות · DsScaffold · ספירת אטומי-תצוגה שרונדרו — רק-עולה; פלט שלא רונדר = כשל». זה השער החזק ביותר בצינור הזה כי הוא מריץ ולא קורא.",
+   "measured": "**בקלון הזה: לא-נמדד ולא ניתן למדידה** — אין buildsmart (אומת בריצה, ⚪ מדולג). הראיה הקיימת היא תוצר-ריצה **מחויב** (לא שלי): `machtzev/generator/gen-verify-report.json` ⇒ {rendered:246, screens:283, atoms:65, passed:246, failed:37, taps:207, tapErrors:0}, ו-baseline המחויב ⇒ {rendered:74, screens:111, atoms:52}."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/gen-verify.mjs (94 שורות, נקרא במלואו)",
+   "node machtzev/generator/gen-verify.mjs --gate ⇒ ⚪ מדולג (אין buildsmart) · exit 0",
+   "ls -d /home/user/buildsmart ⇒ No such file or directory",
+   "node -e על machtzev/generator/gen-verify-report.json ⇒ rendered 246/283 · atoms 65 (תוצר מחויב, לא ריצה שלי)",
+   "cat machtzev/generator/gen-verify-baseline.json ⇒ rendered 74 · screens 111 · atoms 52"
+  ]
+ },
+ {
+  "file": "machtzev/generator/op-census.mjs",
+  "lang": "mjs",
+  "lines": 201,
+  "capabilities": [
+   {
+    "cap": "ממפה **כל אטום בריפו** לפעולת-יסוד אחת (op) — שלוש שכבות בקובץ אחד: תצוגה · לוגיקה · דאטה — ופולט את ops-map.json שהוא ה-SSOT של compose-engine/render-module",
+    "evidence": "machtzev/generator/op-census.mjs:2-9,161-167,198"
+   },
+   {
+    "cap": "מסווג אטום-תצוגה מ**צורת-השקעים** ב-22 חוקי-צורה מדורגים (table · board · switch · filter · search · field · bars · trend · ratio · ring · alert · empty · timeline · action · stat · identity · expand · fact · group · panel · text) — אף חוק אינו מילת-דומיין",
+    "evidence": "machtzev/generator/op-census.mjs:37-63,93-104,180"
+   },
+   {
+    "cap": "חולץ שקעים של **המחלקה עצמה** גם בקובץ רב-מחלקות — חותך מ-`class <Id>` עד המחלקה הבאה לפני שהוא אוסף `this.X`",
+    "evidence": "machtzev/generator/op-census.mjs:25-35"
+   },
+   {
+    "cap": "מבחין שקע-סגנון משקע-דאטה לפי רשימה מבנית **ולפי צורת-השם** (…Color/Radius/Alpha/Weight/Padding/Size/Style/Opacity/Elevation) — מבני, לא דומייני",
+    "evidence": "machtzev/generator/op-census.mjs:21-27,96"
+   },
+   {
+    "cap": "מזהה תפר-אפס: אין שקע-דאטה **ואין** שקע-מבני ⇒ op='zero' = מזייף-אוטומטי שלא נכנס לבחירה (§20-ג); מיכל-עם-child מסווג panel ולא zero",
+    "evidence": "machtzev/generator/op-census.mjs:8,98-99"
+   },
+   {
+    "cap": "מסלול-סיווג נפרד לאטומי-forge — הבנאי שלהם תמיד {fields, child}, ולכן הצורה נקראת מ-forge-manifest.json (תפר · items · columns · values · control · actions · אותות-DOM), עם 15 חוקי-forge",
+    "evidence": "machtzev/generator/op-census.mjs:64-92,94"
+   },
+   {
+    "cap": "מסווג לוגיקה מ**צורת-החתימה** בלבד (ret ואז params): bool⇒predicate · num⇒aggregate/measure לפי List-בכניסה · String⇒format · List<Map>⇒collection · List<String>⇒lines · Map⇒summary · Set⇒selection · DateTime⇒temporal · void⇒effect — שם-הפונקציה אינו ראיה",
+    "evidence": "machtzev/generator/op-census.mjs:106-128"
+   },
+   {
+    "cap": "מוסיף דגלי-חתימה ללוגיקה: ho (מקבל Function) · temporal (DateTime) · listIn (רשימה בכניסה)",
+    "evidence": "machtzev/generator/op-census.mjs:111-114,127"
+   },
+   {
+    "cap": "**סוגר את הפער של כפילי-שם באורקל**: כל קובץ-תצוגה שאינו באינדקס נסרק ונרשם כ-`Class@dir`, כדי ש-0 אטומים ייפלו (§21)",
+    "evidence": "machtzev/generator/op-census.mjs:140-159,166"
+   },
+   {
+    "cap": "ממפה אטומי-דאטה לפי סוג-קובץ (terms/sockets/strings/table)",
+    "evidence": "machtzev/generator/op-census.mjs:130-138,167"
+   },
+   {
+    "cap": "מצב --gate: 0 לא-ממופים · zero ⊆ תצוגה בלבד · ספירה ואוצר-ops לא-יורדים מול baseline",
+    "evidence": "machtzev/generator/op-census.mjs:10,187-196"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מכיל אף מילת-דומיין — כל החוקים הם צורת-שקעים/חתימה; הקובץ עצמו מצהיר זאת בדוח הנפלט",
+    "evidence": "machtzev/generator/op-census.mjs:4,106,180"
+   },
+   {
+    "claim": "**אינו נושא עוד את מטרת-האטום** — purpose הוסר מ-ops-map כי הכפילות ניפחה אותו מעל 1MB (שער nobinary); המטרה חיה ב-atom-index-full",
+    "evidence": "machtzev/generator/op-census.mjs:164 (ההערה L92)"
+   },
+   {
+    "claim": "אינו בורר ואינו מחווט — הוא נותן לכל אטום תווית-op; הבחירה אצל compose-engine/particles/auto-skin",
+    "evidence": "machtzev/generator/op-census.mjs:9 (SSOT ל-compose-engine/render-module)"
+   },
+   {
+    "claim": "אינו מתקן את שורש-באג-הכפילות — הוא עוקף אותו; התיקון השורשי (מפתח = מחלקה+קובץ) שייך ל-census/atom-index.mjs",
+    "evidence": "machtzev/generator/op-census.mjs:142 (ההערה)"
+   },
+   {
+    "claim": "תלוי לחלוטין בקלט טרי — הוא קורא atom-index-full.json ו-logic-census.json, ולכן חייב לרוץ **אחרי** oracle (ואכן ממוקם כך ב-INDEX)",
+    "evidence": "machtzev/generator/op-census.mjs:17-18 מול machtzev/generator/regen.mjs:33,35"
+   }
+  ],
+  "pipeline": {
+   "runBy": "צנרת-INDEX: machtzev/generator/regen.mjs:35 (quiet, «ops-map.json מהאינדקס הטרי») · ושערי «opcensus»/«cover» מהמשטרה",
+   "input": "machtzev/generator/atom-index-full.json (אורקל) · logic-census.json · new/dart-ui-bs · new/dart-forge-bs/forge-manifest.json · new/dart-data-maor",
+   "output": "machtzev/generator/ops-map.json · ops-census-report.md · ops-census-baseline.json",
+   "next": "ops-map.json נצרך ע\"י quarry-golden (זיהוי אטומים בשברים) · gen-verify (שכבת-התצוגה) · compose-engine/render-module · particles"
+  },
+  "quality": {
+   "signal": "שער «opcensus» ב-gates.tsv: «כל אטום באורקל+דאטה ממופה ל-op מצורת-שקעים/חתימה · 0 לא-ממופים · zero=תצוגה בלבד · אוצר-ops וספירה רק-עולים». בנוסף שער «cover» מודד את הכיסוי שנובע ממנו.",
+   "measured": "הורץ: `node machtzev/generator/op-census.mjs --gate` ⇒ exit 0 · «2443 אטומים ⇒ 38 ops · 0 לא-ממופים · zero 33 (תצוגה בלבד)». ה-baseline המחויב: total 1958 · zero 44 · ops 38 — כלומר הספירה מעל ה-baseline (2443 ≥ 1958) והאוצר שווה (38). git status נשאר ריק."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/op-census.mjs (201 שורות, נקרא במלואו)",
+   "node machtzev/generator/op-census.mjs --gate ⇒ exit 0 · 2443 אטומים · 38 ops · 0 לא-ממופים · zero 33",
+   "head -5 machtzev/generator/ops-census-baseline.json ⇒ total 1958 · unmapped 0 · zero 44 · ops 38"
+  ]
+ },
+ {
+  "file": "machtzev/generator/ops-particles.mjs",
+  "lang": "mjs",
+  "lines": 73,
+  "capabilities": [
+   {
+    "cap": "מחזיר לכל מחלקה את פעולות-היסוד שלה מתוך shape-ops.json — פעולות שנגזרו מ**טיפוסי-השדות** (G2), לא משמותיהם",
+    "evidence": "machtzev/generator/ops-particles.mjs:36-40 (opsOf)"
+   },
+   {
+    "cap": "ממיר פעולות-יסוד לשורות-חלקיק שהמנתח יודע לפתור: `<מילת-חלקיק> <ישות>: [<מילה-עברית>]`",
+    "evidence": "machtzev/generator/ops-particles.mjs:47-57 (particlesFor) · :53 (בניית-השורה)"
+   },
+   {
+    "cap": "מתאים בין שני קצוות-דאטה ב**זהות-שם ולא בטבלה**: שם-ה-op ב-shape-ops.json ≡ shape.kind שהמנתח מזהה; המילה העברית מגיעה מאטום-השפה spec-lang.data.json",
+    "evidence": "machtzev/generator/ops-particles.mjs:11-14,32,34"
+   },
+   {
+    "cap": "**מדווח ∅ במקום לנחש**: פעולה שצורתה דורשת שם-שדה ([מספר] · [סכום] · [לוח]) יוצאת ל-skipped ולא מומצא לה מונח עברי שאינו קיים (L57)",
+    "evidence": "machtzev/generator/ops-particles.mjs:16-17,32,51,56"
+   },
+   {
+    "cap": "מטפל במילת-שפה שהיא מערך — לוקח את הצורה הראשונה (word)",
+    "evidence": "machtzev/generator/ops-particles.mjs:34"
+   },
+   {
+    "cap": "CLI ללא ארגומנט = דוח-כיסוי: כמה ישויות יש להן פעולות-יסוד וכמה מהן עם ≥1 צורה חסרת-שדה",
+    "evidence": "machtzev/generator/ops-particles.mjs:59-68"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו גוזר את פעולות-היסוד — הוא רק קורא shape-ops.json; הגזירה מטיפוסי-השדות היא G2/shapeops",
+    "evidence": "machtzev/generator/ops-particles.mjs:27,38 (קריאה בלבד)"
+   },
+   {
+    "claim": "אינו פותר חלקיק ואינו מחווט שקעים — הוא רק **כותב את שורת-הספק**; הפתרון (צורה⇒פעולות⇒אטומים⇒שקעים) הוא particles.mjs",
+    "evidence": "machtzev/generator/ops-particles.mjs:7-9 (ההצהרה) · :53 (הפלט הוא מחרוזת-ספק)"
+   },
+   {
+    "claim": "אינו מכיר אלא ארבע צורות חסרות-שדה — table · search · filter · export; הוספת צורה = שורה בקוד **וגם** קיומה בשני קובצי-הדאטה",
+    "evidence": "machtzev/generator/ops-particles.mjs:30-32"
+   },
+   {
+    "claim": "אינו מחזיק מילון עברי — כל מילה מגיעה מ-spec-lang.data.json, אותו אטום שהמנתח קורא",
+    "evidence": "machtzev/generator/ops-particles.mjs:11-14,28,34"
+   }
+  ],
+  "pipeline": {
+   "runBy": "ספרייה — machtzev/generator/tzinor.mjs:421 מייבא particlesFor. ניתן גם להרצה ישירה לדוח/לבדיקה",
+   "input": "machtzev/generator/shape-ops.json (פעולות-יסוד פר-ישות) + machtzev/generator/spec-lang.data.json (מילות-השפה)",
+   "output": "{ lines, ops, used, skipped } — שורות-ספק בעברית",
+   "next": "השורות נכנסות לספק; particles.mjs פותר אותן לאטומים+שקעים (שער particles)"
+  },
+  "quality": {
+   "signal": "שער «shapeops» ב-gates.tsv מכסה את הקצה שלפניו (סכמה⇒ops, כיסוי רק-עולה) ושער «particles» את הקצה שאחריו (0 לא-פתורים · 0 לא-מחווטים). המנוע עצמו הוא הדבק בין שניהם.",
+   "measured": "הורץ: `node machtzev/generator/ops-particles.mjs` ⇒ «ישויות עם פעולות-יסוד: 54 · מתוכן עם ≥1 צורה חסרת-שדה: 54 (100%)». git status נשאר ריק."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/ops-particles.mjs (73 שורות, נקרא במלואו)",
+   "node machtzev/generator/ops-particles.mjs ⇒ 54 · 54 (100%)",
+   "grep -rn ops-particles machtzev ⇒ generator/tzinor.mjs:421"
+  ]
+ },
+ {
+  "file": "machtzev/generator/quarry-golden.mjs",
+  "lang": "mjs",
+  "lines": 138,
+  "capabilities": [
+   {
+    "cap": "**חוצב** 9 מודולי-זהב (SchoolOS) לחלקיקי-הרכבה — חיתוך מכני לפי סמנים שהבנאים השאירו בבייטים: `// ═══` (הצהרת-הרכבה) · `// ───` (תת-בלוק) · `class X` · `Widget _x(` · סוגר-בעמודה-0 · הצהרת-חבר בהזחת-2",
+    "evidence": "machtzev/generator/quarry-golden.mjs:2-7,16,21-28,49-55"
+   },
+   {
+    "cap": "אוכף **חוק-חציבה**: השברים רציפים ומכסים את הקובץ כולו ⇒ הרכבה-חוזרת = המקור **ביט-לביט**; roundTrip מחושב בפועל לכל מודול",
+    "evidence": "machtzev/generator/quarry-golden.mjs:7,107-108,115,126"
+   },
+   {
+    "cap": "מחלץ לכל שבר: כותרת-מוצהרת · **אטומים-מוצהרים** (מה-⊕ שבכותרת, מסוננים מול ops-map) · **אטומים-בשימוש** (מזהים בקוד שנמצאים ב-ops-map) · ops · imports נדרשים · defs שהשבר תורם",
+    "evidence": "machtzev/generator/quarry-golden.mjs:64-78,105"
+   },
+   {
+    "cap": "מסווג תפקיד לשבר: preamble · class-head · class-close · build · builder · member — ועוקב אחרי המחלקה הנוכחית לאורך הקובץ",
+    "evidence": "machtzev/generator/quarry-golden.mjs:57-63,80"
+   },
+   {
+    "cap": "**חולץ את שקעי-הבונים של הזהב**: prelude (כל המשפטים לפני ה-return האחרון ב-build) ואתרי-הקריאה של כל בונה, כולל `for (final s in visible) _row(s)` — הערכים של הזהב, לא מומצאים (§20-ג)",
+    "evidence": "machtzev/generator/quarry-golden.mjs:81-104"
+   },
+   {
+    "cap": "מדביק שברים לפי שני חוקי-דבק: @override לבדו אינו נחתך מההצהרה שאחריו; שבר של הערות-בלבד נדבק להצהרה הבאה כדי שהאטומים-המוצהרים ירכבו על הקוד שמממש אותם",
+    "evidence": "machtzev/generator/quarry-golden.mjs:46-52"
+   },
+   {
+    "cap": "שומר את הקטלוג כ**מטא-דאטה בלבד** (טווחי-שורות, לא טקסט) — המקור הוא ה-fixture, והקטלוג נשאר מתחת ל-1MB (שער nobinary)",
+    "evidence": "machtzev/generator/quarry-golden.mjs:134-135"
+   },
+   {
+    "cap": "מצב --gate: round-trip 9/9 + הקטלוג המחויב ≡ חציבה טרייה + שברים/תובנות לא-יורדים מול baseline",
+    "evidence": "machtzev/generator/quarry-golden.mjs:123-132"
+   },
+   {
+    "cap": "פולט דוח-markdown עם טבלה פר-מודול ודוגמאות-הצהרה (כותרת ⇒ אטומים-מוצהרים ⇒ בשימוש)",
+    "evidence": "machtzev/generator/quarry-golden.mjs:117-120,136"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מרכיב — הוא רק חוצב וקוטלג; ההרכבה-מהקטלוג היא render-module (שער rendermodule)",
+    "evidence": "machtzev/generator/quarry-golden.mjs:8 (הפלט = הקטלוג) · ערך rendermodule ב-machtzev/gates.tsv"
+   },
+   {
+    "claim": "אינו מגלה אטומים — הוא מזהה רק מזהים שכבר קיימים ב-ops-map.json, ולכן תלוי ב-op-census שרץ אחריו בצנרת-INDEX",
+    "evidence": "machtzev/generator/quarry-golden.mjs:17-19,68"
+   },
+   {
+    "claim": "רשימת-המודולים קשיחה — 9 קבצי schoolos בקוד, לא נגזרת מהדיסק",
+    "evidence": "machtzev/generator/quarry-golden.mjs:16"
+   },
+   {
+    "claim": "אינו מוודא שהשברים מתקמפלים — round-trip הוא זהות-טקסט, לא בנייה",
+    "evidence": "machtzev/generator/quarry-golden.mjs:107 (השוואת-מחרוזות)"
+   }
+  ],
+  "pipeline": {
+   "runBy": "צנרת-INDEX: machtzev/generator/regen.mjs:34 (quiet) · ושער «goldquarry» מהמשטרה",
+   "input": "new/dart-gen-bs/schoolos*.dart (9 מודולים) + machtzev/generator/ops-map.json",
+   "output": "machtzev/generator/golden-fragments.json · golden-fragments-report.md · quarry-baseline.json",
+   "next": "render-module מרכיב מהקטלוג (שער rendermodule: --all ≡ מקור 9/9); goldenharness מריץ את בדיקות-הזהב על התוצר"
+  },
+  "quality": {
+   "signal": "שער «goldquarry» ב-gates.tsv, עם שלוש בדיקות בבת-אחת: round-trip ביט-לביט · הקטלוג המחויב ≡ חציבה-טרייה · ratchet שברים+תובנות רק-עולה. זו הוכחה חזקה כי «כיסוי מלא» הוא תנאי מתמטי, לא הצהרה.",
+   "measured": "הורץ: `node machtzev/generator/quarry-golden.mjs --gate` ⇒ exit 0 · «9 מודולי-זהב ⇒ 1668 שברים (397 תובנות) · round-trip ביט-לביט 9/9». ה-baseline המחויב: {fragments:1668, insight:378} — כלומר התובנות מעל ה-baseline (397 ≥ 378). git status נשאר ריק."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/quarry-golden.mjs (138 שורות, נקרא במלואו)",
+   "node machtzev/generator/quarry-golden.mjs --gate ⇒ exit 0 · 9 מודולים · 1668 שברים · 397 תובנות · 9/9",
+   "cat machtzev/generator/quarry-baseline.json ⇒ {\"fragments\":1668,\"insight\":378}"
+  ]
+ },
+ {
   "file": "machtzev/generator/regen.mjs",
   "lang": "mjs",
   "lines": 39,
@@ -448,6 +838,74 @@
    "cat -n machtzev/generator/regen.mjs (39 שורות, נקרא במלואו)",
    "grep -n regen machtzev/generator/ship.mjs ⇒ שורות 11,38,77",
    "ls machtzev/generator/specs-ds/*.txt | wc -l ⇒ 31"
+  ]
+ },
+ {
+  "file": "machtzev/generator/tighten-hook.mjs",
+  "lang": "mjs",
+  "lines": 47,
+  "capabilities": [
+   {
+    "cap": "מקליט **צורות-ריצה אמיתיות**: נטען ב---import לפני בדיקת-JS של אטום, עוטף את הפונקציה-המיוצאת ורושם לכל קריאה את צורות-הארגומנטים, מספרם וצורת-ההחזרה",
+    "evidence": "machtzev/generator/tighten-hook.mjs:1,41-45"
+   },
+   {
+    "cap": "ממפה ערך-JS חי לטיפוס-Dart: String · int/double (לפי Number.isInteger · NaN/Infinity ⇒ double) · bool · Function/<arity> · List<T> · DateTime · Set<T> · Map<String,T> · dynamic מעומק 4",
+    "evidence": "machtzev/generator/tighten-hook.mjs:10-24"
+   },
+   {
+    "cap": "מאחד צורות שנצפו לטיפוס אחד: זהה ⇒ הוא · int+double ⇒ num · T+null ⇒ T? · List<?>+List<T> ⇒ List<T> · ערכי-Map מעורבים ⇒ dynamic · אחרת dynamic",
+    "evidence": "machtzev/generator/tighten-hook.mjs:25-39 (unify)"
+   },
+   {
+    "cap": "**מסמן קריאה-מגישוש**: אם כל הארגומנטים הם איברים מסל-הגישוש המשותף (probe-pool) הקריאה מתויגת probe:true — כדי שצורה שנובעת מגישוש-אוטומטי לא תיחשב חוזה-קורא (L89)",
+    "evidence": "machtzev/generator/tighten-hook.mjs:4-7,42"
+   },
+   {
+    "cap": "רושם גם קריאות שזרקו — rec.ret='__THROW__' והחריגה ממשיכה הלאה, כך שהצורה לא הולכת לאיבוד",
+    "evidence": "machtzev/generator/tighten-hook.mjs:43-44"
+   },
+   {
+    "cap": "מדליף את הקלטת לקובץ JSON בצאת-התהליך (TT_OUT) ורושם loader כדי לתפוס את הייבוא",
+    "evidence": "machtzev/generator/tighten-hook.mjs:8,46-47"
+   },
+   {
+    "cap": "חושף את unify גם ל-globalThis (‏__ttUnify) כדי שה-loader/הקורא יוכל להשתמש באותו איחוד",
+    "evidence": "machtzev/generator/tighten-hook.mjs:40"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מסיק טיפוס מהקוד — הוא מודד ערכים שזרמו בפועל בבדיקה; זו **ראיית-בדיקות**, ולכן טובה רק כמו הבדיקות שרצו",
+    "evidence": "machtzev/generator/tighten-hook.mjs:1,42-43"
+   },
+   {
+    "claim": "אינו כותב קוד-Dart ואינו מהדק אטום — הוא רק פולט JSON; ההידוק אצל tighten-types.mjs",
+    "evidence": "machtzev/generator/tighten-hook.mjs:46 (הפלט היחיד) מול machtzev/generator/tighten-types.mjs:14,56"
+   },
+   {
+    "claim": "אינו רץ כתוכנית — אין בו main; הוא נטען כ---import לתהליך אחר",
+    "evidence": "machtzev/generator/tighten-hook.mjs:1; אין בלוק import.meta.url===argv[1] בקובץ"
+   },
+   {
+    "claim": "אינו מבחין בין Map עם מפתחות לא-מחרוזתיים — כל Map אמיתי הופך ל-Map<dynamic, dynamic> ורק אובייקט-רגיל מקבל Map<String, T>",
+    "evidence": "machtzev/generator/tighten-hook.mjs:21-22"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/tighten-types.mjs:56 מריץ `node --import <tighten-hook> <atom>.test.mjs` עם TT_ATOM/TT_OUT; tighten-types עצמו רץ בצנרת ב-machtzev/generator/regen.mjs:9 (--record --apply)",
+   "input": "בדיקות-החוזה של אטומי-ה-JS (new/atoms/<k>.test.mjs) + סל-הגישוש machtzev/tools/probe-pool.mjs",
+   "output": "קובץ-JSON של קריאות (TT_OUT): [{name, args[], argc, probe, ret}]",
+   "next": "tighten-types.mjs מאחד (unify) ⇒ type-evidence.json ⇒ הידוק-חתימות ב-Dart; שער «tighten»"
+  },
+  "quality": {
+   "signal": "שער «tighten» ב-gates.tsv: «type-evidence.json ≡ טרי ואין dynamic שניתן להדק; אימות = analyze טהור+מראה, קובץ-אדום משוחזר». האיכות המהותית: דגל-ה-probe שמונע מגישוש להתחזות לחוזה (L89).",
+   "measured": "לא-נמדד — לא הרצתי את tighten-types (הוא כותב וגם --apply משנה קוד-מקור; אסור לי). הקובץ נקרא במלואו."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/tighten-hook.mjs (47 שורות, נקרא במלואו)",
+   "grep -rn tighten-hook machtzev ⇒ tighten-types.mjs:3,14,56 · tools/probe-pool.mjs:1",
+   "grep -E '^tighten' machtzev/gates.tsv ⇒ שורת-השער"
   ]
  },
  {
