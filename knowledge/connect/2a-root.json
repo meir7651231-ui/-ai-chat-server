@@ -375,5 +375,349 @@
       "ran: grep -n 'maor-system' machtzev/box-data-lift.mjs ⇒ אפס שורות (בניגוד ל-box-assemble)",
       "ran: grep -rn 'box-data-lift.mjs' ⇒ chisel-all.mjs:103 · index-baseline.json:6 בלבד"
     ]
+  },
+  {
+    "file": "machtzev/box-magic-lift.mjs",
+    "lang": "mjs",
+    "lines": 59,
+    "does": [
+      {
+        "claim": "מוצא ב-AST כל ליטרל-מספרי בקופסה ומרים אותו לאטום-דאטה <base>-nums.mjs תחת מפתח אנונימי M.m0/M.m1",
+        "evidence": "machtzev/box-magic-lift.mjs:25-38 (walk) · 41-47 (האטום) · 54-57 (החיווט)"
+      },
+      {
+        "claim": "מסנן לפי ארבעה תנאים מפורשים: val≥10 · לא-הקס/בינארי/אוקטלי · לא-חזקת-2 · לא-אופרנד-סיבי",
+        "evidence": "machtzev/box-magic-lift.mjs:29 (‏val>=10 · /^0[xbo]/i · (val & (val-1))===0) + 31-32 (bitwise)"
+      },
+      {
+        "claim": "מכבד פטור-חוק-6: מספר ששלוש השורות שמעליו מזכירות «חוק-6» / «פרוטוקול-חיצוני» / «קבוע-מתמטי» — מדולג",
+        "evidence": "machtzev/box-magic-lift.mjs:22 (isLaw6, חלון ln-2..ln) + 32"
+      },
+      {
+        "claim": "כותב בדיקת-צילום על כל מפת-M, כך שמוטציית-ערך מאדימה",
+        "evidence": "machtzev/box-magic-lift.mjs:50-52"
+      },
+      {
+        "claim": "מדלג על ליטרלים בתוך הצהרות-import",
+        "evidence": "machtzev/box-magic-lift.mjs:26"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא שומר את המשמעות — ההרמה אנונימית (m0,m1…); מי שיקרא את האטום לא ידע ש-m3 הוא «סף-ימים». מוצהר בקובץ עצמו כאזהרה",
+        "evidence": "machtzev/box-magic-lift.mjs:7 «⚠️ אנונימי: הערך נשמר, המשמעות נשארת בהקשר-המנגנון»; המפתחות נוצרים ב-42 כ-'m'+i"
+      },
+      {
+        "claim": "לא מבחין בין סף-דומיין לבין מספר-מבנה (למשל slice(0,12)) — כל מספר ≥10 שאינו חזקת-2 מורם, גם אם הוא מכני",
+        "evidence": "machtzev/box-magic-lift.mjs:29 — הקריטריון הוא ערכי/תחבירי בלבד, אין ניתוח-הקשר"
+      },
+      {
+        "claim": "לא מטפל במספרים <10 — 0..9 לעולם לא מורמים, גם אם הם סף-דומיין אמיתי",
+        "evidence": "machtzev/box-magic-lift.mjs:29 — val >= 10"
+      },
+      {
+        "claim": "אינו תלוי ב-maor-system — פועל על קופסה ב-new/boxes",
+        "evidence": "ran: grep -n 'maor-system' machtzev/box-magic-lift.mjs ⇒ אפס שורות"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/chisel-all.mjs:104",
+        "how": "run('node',[…/box-magic-lift.mjs, bp]) — מורץ-בשם אחרי box-data-lift"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה. הוא upstream-של-הקטלוג כמו box-data-lift, והרמה אנונימית היא בדיוק מה שהמחולל **לא** יכול לצרוך: §20(ג) דורש שקע עם ערך-אמת ומשמעות, ו-M.m3 אינו כזה. חיבור לצינור היה מייצר שקעים חסרי-מטרה."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב חלקית, ועם הסתייגות. הוא מפריד קבוע-דומיין מהמנגנון (תנאי-קדם להכרעה-26), אבל האנונימיות מורידה את הערך למחולל: אטום-סיפים בלי שמות אינו נותן לבורר במה לבחור. לו ההרמה הייתה נושאת שם-מטרה, הציון היה גבוה יותר."
+    },
+    "evidence": [
+      "read: machtzev/box-magic-lift.mjs:1-58 (כל הקובץ)",
+      "ran: grep -n 'maor-system' machtzev/box-magic-lift.mjs ⇒ אפס פלט",
+      "ran: grep -rn 'box-magic-lift.mjs' ⇒ chisel-all.mjs:104 · index-baseline.json:7 בלבד"
+    ]
+  },
+  {
+    "file": "machtzev/box-proofs-check.mjs",
+    "lang": "mjs",
+    "lines": 53,
+    "does": [
+      {
+        "claim": "מריץ בפועל `dart run --enable-asserts` על כל קובץ *-proof.dart ב-new/dart-boxes, ומסמן כאדומה כל קופסה שההרצה שלה נכשלה",
+        "evidence": "machtzev/box-proofs-check.mjs:29-33 (‏timeout 120s בשורה 31)"
+      },
+      {
+        "claim": "ratchet מול box-proofs-baseline.json: רק קופסה שהאדימה **ואינה ב-baseline** מפילה את השער",
+        "evidence": "machtzev/box-proofs-check.mjs:42-48"
+      },
+      {
+        "claim": "אין בינארי Dart ⇒ exit 2 + 'tool=dart' ב-stderr — לא ירוק-כוזב ולא אדום-כוזב, ועם הוראה מפורשת לא להריץ rethread-boxes",
+        "evidence": "machtzev/box-proofs-check.mjs:20-26 (הערת L27 בשורה 21)"
+      },
+      {
+        "claim": "שער שלא כותב: חוב שירד רק **מדווח** ('baseline may shrink') והעדכון מוחל בטבעת-push עם --baseline",
+        "evidence": "machtzev/box-proofs-check.mjs:49-50 (‏c3ג · עיקרון 5, אחרי R2-5.6)"
+      },
+      {
+        "claim": "פותר את בינארי-ה-Dart דרך המפרק המשותף dart-bin.mjs, לא דרך נתיב קשיח",
+        "evidence": "machtzev/box-proofs-check.mjs:11,19"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא מחווט-מחדש כלום — הוא מדווח ומפנה ל-rethread-boxes.mjs, שאינו נקרא מכאן",
+        "evidence": "machtzev/box-proofs-check.mjs:45 — טקסט-הודעה בלבד; אין spawn של rethread בקובץ"
+      },
+      {
+        "claim": "לא בודק את **האטומים** — רק את הקופסאות שעוטפות אותם; אטום שנשבר מתגלה כאן רק אם קופסה משתמשת בו",
+        "evidence": "machtzev/box-proofs-check.mjs:29 — הקלט הוא new/dart-boxes/*-proof.dart בלבד"
+      },
+      {
+        "claim": "לא רץ ב---fast — מדולג בטבעת-ה-commit",
+        "evidence": "machtzev/police.mjs:133 מעביר FAST; נמדד: 'skipped boxes (--fast)' בפלט police --fast"
+      },
+      {
+        "claim": "אינו מודד את פלט-המחולל — dart-boxes הוא המדף, לא gen_*.dart",
+        "evidence": "machtzev/box-proofs-check.mjs:14 — BOXES = new/dart-boxes"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:133",
+        "how": "gate('boxes','box-proofs-check.mjs',['--gate'],FAST) — מורץ-בשם כשער"
+      },
+      {
+        "who": "machtzev/dart-bin.mjs",
+        "how": "ייבוא: box-proofs-check מייבא resolveDart (שורה 11)"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/behavior-plan.mjs:98 / machtzev/generator/auto-logic.mjs:151 — בורר-המועמדים",
+      "gives": "זו הנקודה הכנה היחידה בקבוצת-הקופסאות, והיא אמיתית: `machtzev/census/logic-census.mjs:13` מצהיר `SCAN = ['dart-maor','dart','dart-boxes']`, כלומר **נקודות-כניסה של קופסאות הן מועמדות לבורר של המחולל** (G48). הבורר מוכיח מועמד בהרצת-דוגמאות (logic-proof), אבל אינו יודע אם הקופסה שממנה המועמד בא **רצה בכלל**. חיבור = הבורר פוסל מועמד שמקורו בקופסה שב-red list. זה בדיוק הדפוס של §20(ג): שקע בלי ערך-אמת ⇒ פסילה. כיום baseline=[] (אפס אדומות), כלומר החיבור לא היה משנה פלט היום — אבל הוא סוגר נתיב שקט לעתיד."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — מקרב ממשית. הוא אינו על נתיב משפט⇒אפליקציה ישירות, אבל הוא היחיד בקבוצה שמחזיק מידע שהבורר-של-המחולל צורך-ולא-יודע: אילו נקודות-כניסה במדף באמת רצות. §22 דורש «אפס-באגים» — מועמד מקופסה שבורה הוא בדיוק הבאג ששום שער אחר לא תופס בזמן-בנייה."
+    },
+    "evidence": [
+      "read: machtzev/box-proofs-check.mjs:1-52 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ 'skipped boxes (--fast)' (שורה 328 בפלט)",
+      "ran: ls new/dart-boxes/*-proof.dart | wc -l ⇒ 62",
+      "ran: cat machtzev/box-proofs-baseline.json ⇒ [] (אפס קופסאות-חוב)",
+      "ran: grep -n 'dart-boxes' machtzev/census/logic-census.mjs ⇒ שורה 13: SCAN = ['dart-maor','dart','dart-boxes'] — מאשר שקופסאות נכנסות לקטלוג-הבורר",
+      "ran: command -v dart ⇒ /root/dart-sdk/bin/dart (השער בר-הרצה בקונטיינר הזה)"
+    ]
+  },
+  {
+    "file": "machtzev/box-purify.mjs",
+    "lang": "mjs",
+    "lines": 85,
+    "does": [
+      {
+        "claim": "מרים מחרוזות-עברית ו-enum-לטיני מקופסה לאטום-דאטה <base>-strings.mjs תחת מפתחות S.k0/S.k1, וכותב חוזה+בדיקת-צילום",
+        "evidence": "machtzev/box-purify.mjs:65-75 · החיווט 77-83"
+      },
+      {
+        "claim": "מזהה enum לפי **הקשר תחבירי** ולא לפי צורת-המחרוזת: רק מחרוזת שמופיעה בהשוואה (===/!==) · case · ערך-בתכונה · return · תנאי · מערך",
+        "evidence": "machtzev/box-purify.mjs:28-33 (‏isEnumLatin שורה 19 הוא רק המסנן הראשוני)"
+      },
+      {
+        "claim": "מטפל בתבניות-עם-שיבוץ: בונה מחדש את התבנית כך שהחלקים-הליטרליים הופכים ל-${S.kN}, השיבוצים נשארים ביטויים, והחלקים שלא הורמו מוברחים — כפיית-המחרוזת נשמרת ביט-לביט",
+        "evidence": "machtzev/box-purify.mjs:58-63 (rebuildTmpl) · escT שורה 50 · purifyExpr 51-57"
+      },
+      {
+        "claim": "מונע חפיפה: ליטרל שיושב בתוך תבנית שכבר נתפסה אינו מטופל פעמיים",
+        "evidence": "machtzev/box-purify.mjs:42-43 (inTmpl)"
+      },
+      {
+        "claim": "מבצע את כל העריכות מהסוף להתחלה כדי שההיסטים לא יזוזו",
+        "evidence": "machtzev/box-purify.mjs:79 — sort((a,b)=>b.start-a.start)"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא שומר משמעות — גם כאן המפתחות אנונימיים (k0,k1…), בדיוק כמו box-magic-lift",
+        "evidence": "machtzev/box-purify.mjs:47-48 — key[t] = 'k' + ki++"
+      },
+      {
+        "claim": "לא מטהר מחרוזות לטיניות שאינן בהקשר-enum — טקסט-לטיני חופשי נשאר במנגנון",
+        "evidence": "machtzev/box-purify.mjs:20 — wanted = HEB || enumSet.has, ו-enumSet נבנה רק מההקשרים בשורות 30-32"
+      },
+      {
+        "claim": "לא נוגע ב-URL ובסיומות-קבצים — מוחרגים במפורש מזיהוי-enum",
+        "evidence": "machtzev/box-purify.mjs:19 — !/^https?|\\.(ts|mjs|dart)$/"
+      },
+      {
+        "claim": "לא מריץ את בדיקות-הקופסה אחרי הטיהור — האימות ש«הערכים ביט-זהים ⇒ golden עומד» נשען על chisel-all",
+        "evidence": "machtzev/chisel-all.mjs:85 — מסנן-השערים שם, לא כאן"
+      },
+      {
+        "claim": "אינו תלוי ב-maor-system",
+        "evidence": "ran: grep -n 'maor-system' machtzev/box-purify.mjs ⇒ אפס פלט"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/chisel-all.mjs:105",
+        "how": "run('node',[…/box-purify.mjs, bp]) — מורץ-בשם, אחרון בשרשרת-הטיהור"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה, ומאותה סיבה כמו box-magic-lift: מפתח S.k7 הוא שקע בלי מטרה. המחולל צריך מחרוזת-דומיין **עם תווית** (כך עובד `אטומי-תוכן` של G24 — `תוכן <קבוצה> [תג]: טקסט`), לא מפתח אנונימי. הרמה לקטלוג = כן; שלב בצינור = לא."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב חלקית. הוא מוציא עברית מהמנגנון וזה תנאי-קדם לטוהר שהמחולל נשען עליו, אבל התוצר עצמו (מפתחות אנונימיים) אינו משהו שהבורר יכול לבחור לפי ייעוד."
+    },
+    "evidence": [
+      "read: machtzev/box-purify.mjs:1-84 (כל הקובץ)",
+      "ran: grep -n 'maor-system' machtzev/box-purify.mjs ⇒ אפס פלט",
+      "ran: grep -rn 'box-purify.mjs' ⇒ chisel-all.mjs:105 · index-baseline.json:9 בלבד"
+    ]
+  },
+  {
+    "file": "machtzev/chisel-all.mjs",
+    "lang": "mjs",
+    "lines": 123,
+    "does": [
+      {
+        "claim": "בוחר מועמדים: כל .ts תחת maor/src עם ≥1 יצוא-פונקציה שאינו כבר במדף, שאינו בדיקה/d.ts, ושאינו «אימפיורי-מתוכנן»",
+        "evidence": "machtzev/chisel-all.mjs:31-41; מסנן impure מוגדר בשורה 28 (tsx · store/state/screens/widgets/services/features/hooks · persist/cloudSync/firebase/pwa/a11yApply/main/App)"
+      },
+      {
+        "claim": "אידמפוטנטי בשתי דרכים: קובץ שכל יצואיו כבר במדף מדולג (שורה 36), וקופסה שכבר קיימת מדולגת (שורה 39)",
+        "evidence": "machtzev/chisel-all.mjs:36,39 (boxExists שורה 27)"
+      },
+      {
+        "claim": "מריץ את שרשרת-הארבעה פר-מועמד: box-assemble --write ⇒ autoPurify ⇒ box-data-lift ⇒ box-magic-lift ⇒ box-purify",
+        "evidence": "machtzev/chisel-all.mjs:99-105"
+      },
+      {
+        "claim": "autoPurify מזריק אנוטציית «קבוע-מתמטי» רק להקשר-מנגנון ודאי — 12 כללים מפורשים (יחידות-זמן · parseInt radix · Array(n) · ימי-שנה בהקשר-זמן · אינדקס-מחרוזת · רכיבי-Date · חודשים · שער-טווח-לוח · לולאת-לוח · סנטינל-אינסוף · מודולו-בסיס · אחוזים)",
+        "evidence": "machtzev/chisel-all.mjs:45-59 (isMechLine) · ההזרקה 64-76"
+      },
+      {
+        "claim": "שמרני במכוון: סף-דומיין חסר-הקשר לא מתאים לאף כלל ⇒ נשאר מסומן ⇒ הקופסה נופלת בשער ⇒ «דורשת-הכרעה» ולא נוחתת",
+        "evidence": "machtzev/chisel-all.mjs:43-44 (ההצהרה) + 110-114 (מסנן-השערים)"
+      },
+      {
+        "claim": "מחיקת קופסה-מפרה גוררת גם את אטומי-הלוואי שלה (-strings/-data/-nums) — אין יתומים",
+        "evidence": "machtzev/chisel-all.mjs:78-82 (rmBox)"
+      },
+      {
+        "claim": "חילוץ-שם-הקופסה מפלט-השער מתוקן: שני רגקסים נפרדים (נתיב-מדף · '+ NAME') עם הערת-באג מפורשת ש-'+ ' בלע 'new'",
+        "evidence": "machtzev/chisel-all.mjs:87-89"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא יכול לרוץ בקלון-טרי — MAOR קשיח ל-/home/user/maor-system, ו-walk() על נתיב שאינו קיים מחזיר [] ⇒ אפס מועמדים, בשקט",
+        "evidence": "machtzev/chisel-all.mjs:14 (MAOR) · 32 (walk(MAOR/src)) · walk מחזיר o אם !existsSync — שורה 18; ran: ls -d /home/user/maor-system ⇒ No such file or directory"
+      },
+      {
+        "claim": "לא נכשל כשאין maor — one.mjs עוטף אותו ב-existsSync ומסמן «דולג», כלומר זו דורמנטיות מוצהרת ולא באג",
+        "evidence": "machtzev/one.mjs:114 — fs.existsSync('/home/user/maor-system') ? … : 'דולג (אין maor)', {optional:true}"
+      },
+      {
+        "claim": "לא מבחין בין כשל-שער לכשל-הרצה — `run()` בולע חריגה ומחזיר stdout+stderr בלי status (אותו דפוס כמו chisel.mjs)",
+        "evidence": "machtzev/chisel-all.mjs:16"
+      },
+      {
+        "claim": "לא מריץ את המשטרה בעצמו, למרות שכותרת-הקובץ מצהירה «משטרה בסוף» — אין קריאה ל-police.mjs בקובץ",
+        "evidence": "machtzev/chisel-all.mjs:7 (ההצהרה) מול ran: grep -n 'police' machtzev/chisel-all.mjs ⇒ אפס פלט. זו דוגמה לכך שכותרת-קובץ אינה ראיה"
+      },
+      {
+        "claim": "אינו חלק מצינור-המחולל — הוא שלב ב-one.mjs, ו-one.mjs אינו אחת מ-6 נקודות-הכניסה של GEN_ENTRY",
+        "evidence": "machtzev/census/engine-index.mjs:319-322 — GEN_ENTRY אינו כולל one.mjs"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/one.mjs:114",
+        "how": "stage('חציבת-קופסאות (chisel-all)') — מורץ-בשם, optional, מותנה בקיום maor-system"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה בצינור-המחולל. זהו **מייצר-הקטלוג**: הוא ממלא את new/boxes ואת אטומי-הדאטה שהמחולל אחר-כך בורר מהם דרך האורקל (regen.mjs:10-11). לחבר אותו ל-REGEN היה אומר לחצוב מ-maor בכל בנייה של אפליקציה — כתיבה בזמן-בנייה, ההפך מדטרמיניזם. החיבור הנכון קיים כבר והוא עקיף: chisel-all ⇒ new/boxes ⇒ logic-census (SCAN כולל dart-boxes) ⇒ הבורר."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב בעקיפין. §21 דורש קטלוג מקסימלי («אסור לצמצם קטלוג — תת-ספירה=אזעקה») ו-chisel-all הוא המנוע שמגדיל אותו. אבל בקונטיינר הזה הוא פולט אפס, והוא אינו על נתיב משפט⇒אפליקציה."
+    },
+    "evidence": [
+      "read: machtzev/chisel-all.mjs:1-122 (כל הקובץ)",
+      "ran: grep -n 'police' machtzev/chisel-all.mjs ⇒ אפס פלט (למרות «משטרה בסוף» בשורה 7)",
+      "ran: ls -d /home/user/maor-system ⇒ No such file or directory",
+      "ran: grep -rn 'chisel-all.mjs' ⇒ machtzev/one.mjs:114 · machtzev/index-baseline.json:12"
+    ]
+  },
+  {
+    "file": "machtzev/chisel.mjs",
+    "lang": "mjs",
+    "lines": 62,
+    "does": [
+      {
+        "claim": "מריץ ארבעה שלבים: חילוץ (gen-wires של maor) ⇒ ניקוי-טיוטות ⇒ promote-auto ⇒ מסנן-שערים",
+        "evidence": "machtzev/chisel.mjs:18-20 · 22-34 · 36-40 · 42-57"
+      },
+      {
+        "claim": "מנרמל שמות-טיוטה ל-kebab לפי **שם-היצוא הראשון** ולא לפי שם-הקובץ שהגיע מהחילוץ",
+        "evidence": "machtzev/chisel.mjs:29-32 (kebabOf מוגדר 14-16)"
+      },
+      {
+        "claim": "מסנן-השערים מריץ 4 שערים (datapurity --gate · deeppurity --gate · wiring · contract) ומוחק כל אטום-חדש ששמו הופיע בפלט-ההפרה — כולל החוזה והבדיקה שלו",
+        "evidence": "machtzev/chisel.mjs:44-51 (הרשימה בשורה 46 · חילוץ-השם ברגקס שורה 48) · rm שורה 43"
+      },
+      {
+        "claim": "חוזר עד 8 סבבים, כי מחיקת אטום יכולה לחשוף הפרה חדשה",
+        "evidence": "machtzev/chisel.mjs:53-57"
+      },
+      {
+        "claim": "«אף אדום לא ננחת»: רק אטומים ששרדו את כל הסבבים נשארים, והמחצבה נמחקת בסוף",
+        "evidence": "machtzev/chisel.mjs:58-61"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אין לו אף קורא בריפו הזה** — לא משטרה, לא hook, לא one.mjs, לא chisel-all. הוא יתום",
+        "evidence": "ran: grep -rn 'chisel.mjs' ⇒ ההתאמה היחידה מחוץ לקובץ עצמו היא machtzev/index-baseline.json:13 (רשומת-חוב-אינדקס, לא קריאה). engine-index מדווח calledByName=[]"
+      },
+      {
+        "claim": "לא יכול לרוץ בקלון-טרי — שורה 20 קוראת לנתיב קשיח /home/user/maor-system/machtzev/factory/gen-wires.mjs שאינו קיים",
+        "evidence": "machtzev/chisel.mjs:20; ran: ls -d /home/user/maor-system ⇒ No such file or directory"
+      },
+      {
+        "claim": "לא מבחין בין כשל-שער לכשל-הרצה — `run()` בולע חריגה ומחזיר stdout+stderr, כך ששער שקרס נראה כשער שלא מצא הפרות",
+        "evidence": "machtzev/chisel.mjs:13 — catch מחזיר (e.stdout||'')+(e.stderr||'') בלי בדיקת-status"
+      },
+      {
+        "claim": "מוחק את quarry/ בלי גיבוי, פעמיים (בתחילת הריצה ובסופה)",
+        "evidence": "machtzev/chisel.mjs:19 ו-59 — fs.rmSync(Q,{recursive:true,force:true})"
+      },
+      {
+        "claim": "אינו החליף את chisel-all — chisel-all הוא המנוע החי (נקרא מ-one.mjs:114), וזה שריד מקביל",
+        "evidence": "machtzev/one.mjs:114 קורא chisel-all.mjs; ל-chisel.mjs אין קורא"
+      }
+    ],
+    "callers": [],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה, ומשתי סיבות בלתי-תלויות: (א) הוא יתום — אף אחד לא קורא לו, ו-chisel-all תפס את מקומו; (ב) גם אילו נקרא, הנתיב הקשיח ל-maor-system מת בקלון-טרי. זהו מועמד לתשובה «זה שריד», לא «זה שער». הכרעת-בעלים אם למחוק — לא נגעתי."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. קוד מת: אפס קוראים + נתיב-מקור שאינו קיים. חיבור למחולל של מנוע שאינו רץ אינו מקרב שום דבר; ההשפעה היחידה שלו היום היא שהוא נספר ב-279 הלא-מחוברים ומייצר רעש."
+    },
+    "evidence": [
+      "read: machtzev/chisel.mjs:1-61 (כל הקובץ)",
+      "ran: grep -rn 'chisel.mjs' --include=*.mjs --include=*.json --include=*.md --include=*.sh . ⇒ מחוץ לקובץ עצמו: machtzev/index-baseline.json:13 בלבד (ו-chisel-all.mjs מתאים רק כתת-מחרוזת של שמו שלו)",
+      "ran: node machtzev/census/engine-index.mjs machtzev/chisel.mjs ⇒ calledByName ריק",
+      "ran: ls -d /home/user/maor-system ⇒ No such file or directory"
+    ]
   }
 ]
