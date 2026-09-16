@@ -1,0 +1,454 @@
+[
+ {
+  "file": "gen/looks/measure/extract.mjs",
+  "lang": "mjs",
+  "lines": 98,
+  "summary": "מכשיר-המדידה: פונקציית-דפדפן טהורה ששולפת מ-DOM חי פלטה-לפי-שטח · טיפוגרפיה-לפי-תפקיד · חתימות-כפתור/כרטיס · רדיוסים · מרווחים · צללים. המכשיר היחיד בקבוצה — 8 מנועים מייבאים אותו.",
+  "does": [
+   {
+    "claim": "מייצא ייצוא-יחיד `EXTRACT` — פונקציה ללא ארגומנטים שרצה בתוך הדפדפן (`p.evaluate(EXTRACT)`), לא ב-node",
+    "evidence": "gen/looks/measure/extract.mjs:3 `export const EXTRACT = () => {`; נקראת ב-measure/probe.mjs:39 `await p.evaluate(EXTRACT)`"
+   },
+   {
+    "claim": "פלטה משוקללת-שטח: כל אלמנט נראה תורם `width*height/1000` לצבע-הרקע שלו, וצבע-דיו נשקל area/20 — כלומר צבע גדול על המסך מנצח צבע שמופיע הרבה פעמים",
+    "evidence": "extract.mjs:30 `const area = Math.min(r.width*r.height, 1.2e6)/1000`; :32 `bump(bgArea, bg, area)`; :34 `bump(inkArea, c, Math.max(1, area/20))`"
+   },
+   {
+    "claim": "פוסל צבע שקוף-למחצה: hex() מחזיר null כש-alpha<0.5, כך שרקעים חצי-שקופים אינם נכנסים לפלטה",
+    "evidence": "extract.mjs:13-14 `const a = m[3]===undefined?1:+m[3]; if (a<0.5) return null;`"
+   },
+   {
+    "claim": "מדלג על «אמנות» — כל אלמנט תחת `[data-art]` אינו תורם צבע, כדי ששני הצדדים (אתר-אמיתי עם תמונות · מסך-שלנו עם SVG) יימדדו באותה סרגל",
+    "evidence": "extract.mjs:24 `const isArt = (el) => !!el.closest('[data-art]')`; :31-34 `const art = isArt(el); ... if (bg && !art)`"
+   },
+   {
+    "claim": "טיפוגרפיה-לפי-תפקיד: לכל בורר (h1/h2/h3/p/small) נלקח האלמנט עם הגופן **הגדול ביותר**, ונרשמים size·weight·lh·ls·family·color",
+    "evidence": "extract.mjs:44-52 `role(sel,key)` ממיין `.sort((a,b)=>parseFloat(...b.fontSize)-parseFloat(...a.fontSize))` ואז `typ[key]={size,weight,lh,ls,family,color,text}`"
+   },
+   {
+    "claim": "חתימת-כפתור = JSON של 10 שדות (bg·color·radius·padX·padY·h·size·weight·border·shadow·transform), מקובצת ונספרת; כפתור קטן מ-22×40 נזרק",
+    "evidence": "extract.mjs:59 `if (r.height<22 || r.width<40) return;`; :60-66 בניית ה-sig ו-`bump(btnSig,sig,1)`"
+   },
+   {
+    "claim": "כרטיס מזוהה **מבנית** ולא בשם: רוחב≥120 · גובה≥60 · רדיוס≥6 · רקע שונה מרקע-ההורה",
+    "evidence": "extract.mjs:73-77 `if (r.width<120||r.height<60) return; ... if (rad<6) return; ... if (bg===pbg) return;`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** טוען דפים, אינו מפעיל דפדפן ואינו כותב קובץ — אין בו import של playwright ואין fs",
+    "evidence": "extract.mjs — הקובץ כולו 98 שורות ללא שורת `import` אחת; `grep -c import gen/looks/measure/extract.mjs` ⇒ 0"
+   },
+   {
+    "claim": "**אינו** משווה ואינו נותן ציון-התאמה — הוא רק פולט מדידה. ההשוואה היא ב-match.mjs",
+    "evidence": "extract.mjs:85-97 ה-return היחיד מחזיר אובייקט-מדידה; אין בו אף `===` של השוואה בין שני מקורות"
+   },
+   {
+    "claim": "**אינו** מודד גובה-שורה/ניגודיות כיחס — `lh` נשמר כמחרוזת-CSS גולמית (`'normal'` נשאר 'normal'), וסף-ניגודיות אינו מחושב כאן כלל",
+    "evidence": "extract.mjs:88 `lh: bodyCs.lineHeight` (מחרוזת כמות-שהיא); אין בקובץ אף חישוב luminance/contrast"
+   },
+   {
+    "claim": "**אינו** מודד Dart/Flutter — הוא קורא `getComputedStyle`/`getBoundingClientRect` של DOM. אין לו נגיעה במדף-האטומים של האימפריה",
+    "evidence": "extract.mjs:8,29,58,72 — כל המדידה דרך `getComputedStyle(el)`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/looks/measure/probe.mjs:10",
+    "how": "import { EXTRACT } from './extract.mjs'"
+   },
+   {
+    "who": "gen/looks/measure/match.mjs:10",
+    "how": "import { EXTRACT } from './extract.mjs'"
+   },
+   {
+    "who": "gen/looks/medrash/probe.mjs:9",
+    "how": "import { EXTRACT } from '../measure/extract.mjs'"
+   },
+   {
+    "who": "gen/looks/trumot/probe.mjs:10",
+    "how": "import { EXTRACT } from '../measure/extract.mjs'"
+   },
+   {
+    "who": "gen/looks/tzevet/probe.mjs:7",
+    "how": "import { EXTRACT } from '../measure/extract.mjs'"
+   },
+   {
+    "who": "gen/looks/people/design.mjs:10",
+    "how": "import { EXTRACT } from '../measure/extract.mjs'"
+   },
+   {
+    "who": "gen/looks/people/mdm.mjs:7",
+    "how": "import { EXTRACT } from '../measure/extract.mjs'"
+   },
+   {
+    "who": "gen/looks/people/person.mjs:9",
+    "how": "import { EXTRACT } from '../measure/extract.mjs'"
+   },
+   {
+    "who": "מחוץ ל-gen/looks",
+    "how": "∅ — אפס. `grep -rn \"looks/\" --include=*.mjs --include=*.js machtzev` מחזיר רק שורת-החרגה אחת (engine-index.mjs:81) ואפס ייבוא"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/gen-verify.mjs:1 (שלב האימות-בפועל של פלטי-המחולל)",
+   "gives": "gen-verify היום מודד **נוכחות** — «DsScaffold קיים · כמה מחלקות-אטום רונדרו». הוא אינו מודד ולו ערך-CSS אחד של מה שהמשתמש רואה. EXTRACT הוא בדיוק המכשיר החסר: הוא כבר רץ על DOM חי דרך playwright, ו-`balagan-run` כבר מריץ playwright על הפלט המחולל. חיבורו נותן לשער יכולת לומר «המסך המחולל יצא בפלטה/רדיוסים/טיפוגרפיה X» כמספר, לא כנוכחות — כלומר רצפת-§22 «אפליקציה עובדת» מקבלת ממד חזותי מדיד."
+  },
+  "s22": {
+   "score": 2,
+   "why": "אינו על נתיב משפט⇒אפליקציה (הוא לא בונה כלום), אבל הוא מכשיר-מדידה טהור, בלי-תלויות, שמתחבר לשער-הקיים בלי שינוי-ארכיטקטורה. §22 דורש «אפס-באגים» — ובאג-מראה (ניגודיות · גלישה · צבע-דלף) אינו נתפס היום בשום שער של המחולל. 2 ולא 3 כי החיבור מוסיף מדידה, לא יכולת-בנייה."
+  },
+  "evidence": [
+   "read: gen/looks/measure/extract.mjs:1-98 (הקובץ במלואו)",
+   "ran: grep -rn \"looks/\" --include=*.mjs --include=*.js --include=*.json machtzev | grep -v engine-index.json ⇒ שורה אחת בלבד (engine-index.mjs:81), אפס ייבוא",
+   "ran: grep -rn \"from '.*extract.mjs'\" gen/looks ⇒ 8 מייבאים",
+   "read: machtzev/generator/gen-verify.mjs:1-6 (מה השער מודד היום)"
+  ]
+ },
+ {
+  "file": "gen/looks/measure/probe.mjs",
+  "lang": "mjs",
+  "lines": 53,
+  "summary": "מריץ את EXTRACT על 18 כתובות ציבוריות של 5 אתרים בדפדפן אמיתי ⇒ measured.json (80KB, מחויב). זו המדידה שכל שאר קבוצת-measure נשענת עליה.",
+  "does": [
+   {
+    "claim": "מגדיר 5 אתרים עם 18 כתובות סה\"כ (raycast 4 · spotify 4 · duolingo 4 · wise 3 · monzo 3) ומודד כל אחת בנפרד בדפדפן chromium",
+    "evidence": "probe.mjs:15-23 מערך SITES; ספירה מאומתת: `node -e \"const m=require('./gen/looks/measure/measured.json');console.log(Object.keys(m.sites).length)\"` ⇒ 18"
+   },
+   {
+    "claim": "viewport קבוע 1440×900 ו-deviceScaleFactor 1 — כדי שהמדידה תהיה ניתנת-לשחזור",
+    "evidence": "probe.mjs:30 `await b.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 })`"
+   },
+   {
+    "claim": "מנסה ללחוץ על באנר-עוגיות לפי 7 נוסחים — **רק `button`, לעולם לא `a`** (מתועד כלקח: קישור מנווט מהדף)",
+    "evidence": "probe.mjs:34-38 `for (const t of ['Accept','Accept all','I agree','Got it','Allow all','Accept cookies','Alle akzeptieren']) { const btn = p.locator(\\`button:has-text(\"${t}\")\\`)...}`"
+   },
+   {
+    "claim": "כותב measured.json עם חותמת-זמן, וגם צילום PNG לכל כתובת תחת shots/",
+    "evidence": "probe.mjs:27 `measuredAt: new Date()...`; :42 `p.screenshot(...)`; :52 `writeFileSync(join(here,'measured.json'), ...)`; אומת: measuredAt = 2026-09-15T16:01"
+   },
+   {
+    "claim": "כתובת שנופלת אינה מפילה את הריצה — נתפסת ומדווחת כ-✗ בלבד",
+    "evidence": "probe.mjs:45-47 `catch (e) { console.log('✗ ' + url + ' — ' + ...) }`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** מודד את המסכים שלנו — רק אתרים חיצוניים חיים. הצד-שלנו נמדד ב-match.mjs",
+    "evidence": "probe.mjs:15-23 — כל 18 הכתובות הן `https://` חיצוניות; אין בקובץ `file://`"
+   },
+   {
+    "claim": "**אינו** רץ בלי רשת ובלי playwright מותקן בנתיב-מוחלט — הוא מייבא מנתיב-מכונה קשיח",
+    "evidence": "probe.mjs:9 `import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs'` — נתיב מוחלט, לא חבילה"
+   },
+   {
+    "claim": "**אינו** דטרמיניסטי — הוא מודד אתרים חיים שמשתנים; measured.json הוא תצלום-רגע של 15.9.2026, לא מקור-אמת מתחדש",
+    "evidence": "probe.mjs:27 `measuredAt` נכתב בכל ריצה; measured.json המחויב נושא 2026-09-15T16:01"
+   },
+   {
+    "claim": "**אינו** שער — אין בו `--gate`, אין ratchet, ו-exit-code תמיד 0",
+    "evidence": "probe.mjs — אין `process.exit` בקובץ כלל; אין `process.argv`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא probe.mjs ואינו מריץ אותו בשם. `grep -rn \"measure/probe\" . --include=*.mjs --include=*.js --include=*.sh` מחוץ ל-README ⇒ ∅"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה בצינור-המחולל",
+   "gives": "probe הוא **מחולל-דאטה חד-פעמי** לצד-הייחוס: הוא מודד את raycast/spotify/duolingo/wise/monzo. המחולל לא בונה את האתרים האלה ולא צריך אותם בזמן-ריצה; מה שהוא צריך זה את התוצר (measured.json), שכבר מחויב. חיבור השער לרשת החיה היה הופך ריצת-מחולל לתלויה ב-5 אתרים חיצוניים — סתירה ל«אפס-באגים» ול-ratchet-המארחים-החיצוניים של G52 (היום 1, יורד-בלבד)."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. זהו כלי-חציבה חד-פעמי שכבר עשה את עבודתו; התוצר שלו (measured.json) הוא מה ששווה, לא הריצה. חיבורו לצינור יפגע ב-§22 (תלות-רשת חיצונית בזמן-בנייה) במקום לקדם אותו."
+  },
+  "evidence": [
+   "read: gen/looks/measure/probe.mjs:1-53 (הקובץ במלואו)",
+   "ran: node -e \"const m=require('./gen/looks/measure/measured.json');console.log('sites:',Object.keys(m.sites).length,'measuredAt',m.measuredAt)\" ⇒ sites: 18 · measuredAt 2026-09-15T16:01",
+   "ran: ls -la gen/looks/measure/ ⇒ measured.json 80311 בתים, מחויב",
+   "ran: grep -rn \"looks/\" machtzev --include=*.mjs ⇒ אפס ייבוא"
+  ]
+ },
+ {
+  "file": "gen/looks/measure/tokens.mjs",
+  "lang": "mjs",
+  "lines": 149,
+  "summary": "5 ערכות-טוקנים מלאות (רקע·דיו·מבטא·רדיוסים·מרווחים·כפתור·גוף·h1) + התאמת-גופן-עברי + 7 חריגות-קריאוּת מוצהרות. ⚠️ הכותרת אומרת «כל ערך מגיע מהמדידה» — בפועל **ערך אחד** נשלף בקוד; כל השאר ליטרלים עם הערת-מקור.",
+  "does": [
+   {
+    "claim": "מייצא `M` (‏measured.json שלם), `FACE` (התאמת-גופן-עברי ל-5 הפנים), `SWAPS` (7 חריגות) ו-`TOK` (5 ערכות-טוקנים מלאות)",
+    "evidence": "tokens.mjs:10 `export const M = JSON.parse(...)`; :22 `export const FACE`; :32 `export const SWAPS`; :42 `export const TOK`"
+   },
+   {
+    "claim": "‏FACE מצמיד לכל פנים-לועזית מקבילה-עברית **עם נימוק** — Inter⇒Assistant · Circular⇒Secular One · Din Round⇒Varela Round · Wise Sans⇒Heebo · MonzoSans⇒Rubik",
+    "evidence": "tokens.mjs:23-27, לכל ערך שדה `why` (למשל :25 `why: 'עגול וידידותי, אותו משקל אופטי'`)"
+   },
+   {
+    "claim": "‏SWAPS מתעד 7 חריגות שבהן גוון-מדוד לא עבר ניגודיות 4.5 בטקסט-קטן, **והחלופה נלקחה מפלטת אותו אתר** ולא מצבע חדש — כל שורה עם `measured` · `ratio` · `used` · `from`",
+    "evidence": "tokens.mjs:32-40; דוגמה :33 `{site:'raycast', what:'טקסט שלישוני', measured:'#6a6b6c', ratio:3.75, used:'#9c9c9d', from:'palette.ink[1] של אותו אתר'}`"
+   },
+   {
+    "claim": "‏`rootCss(k)` פולט בלוק `:root{...}` של 24 משתני-CSS מערכת-הטוקנים — זהו התפר היחיד בין הטוקנים ל-HTML",
+    "evidence": "tokens.mjs:136-149 `export const rootCss = (k) => {...}`"
+   },
+   {
+    "claim": "‏SWAPS משמש כפטור-אמיתי בשער: match.mjs מוותר על גוון שהוכרז כאן",
+    "evidence": "measure/match.mjs:11 `import { SWAPS } from './tokens.mjs'`; :47 `const swapped = (site,hex) => SWAPS.some(...)`; :68 `else if (swapped(pg.site,hex)) waived.push(...)`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו** נגזר מהמדידה כפי שכותרתו טוענת. הכותרת (:2) אומרת «כל ערך כאן מגיע מהמדידה החיה» — אך `pick()` נקרא **פעם אחת בלבד** בכל 149 השורות. 4 מתוך 5 הערכות הן ליטרלים מוקלדים-ביד, וה«מקור» הוא הערת-שוליים שאיש אינו מאמת",
+    "evidence": "ran: grep -n \"pick(\" gen/looks/measure/tokens.mjs ⇒ שורה 46 בלבד: `bg: pick('raycast·www.raycast.com.body.bg', '#07080a')`. שאר ~120 הערכים: ליטרלים, למשל :66 `bg:'#000000', card:'#121212', row:'#181818', raise:'#333333',   // palette.bg`"
+   },
+   {
+    "claim": "**אינו** נבדק מול measured.json — אין בקובץ שום assert/השוואה שתיפול אם ליטרל יסטה מהמדידה. שינוי measured.json לא ישבור כאן דבר (חוץ מהערך היחיד ב-:46)",
+    "evidence": "tokens.mjs — אין `throw`, אין `assert`, אין `process.exit`; `pick` עצמו נופל בשקט ל-fallback (:18 `return v===undefined||v===null ? fallback : v`)"
+   },
+   {
+    "claim": "**אינו** מגדיר עור ל-Flutter/Dart — `rootCss` פולט CSS. אין בו `DsPureSkin` ואין `Color(0x…)`",
+    "evidence": "tokens.mjs:138-148 — הפלט מחרוזת `:root{--bg:…}`; אין בקובץ אף מופע של Color/Dart"
+   },
+   {
+    "claim": "**אינו** מכסה עברית בפועל — FACE ממפה שמות-גופן בלבד; אין בקובץ טעינת-גופן, אין subset ואין נפילה-לאחור",
+    "evidence": "tokens.mjs:22-28 — שדות `real`/`heb`/`family`/`why` בלבד, מחרוזות"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/looks/measure/match.mjs:11",
+    "how": "import { SWAPS } — רק SWAPS. `TOK`, `FACE`, `rootCss` ו-`M` אינם מיובאים ע\"י אף קובץ"
+   },
+   {
+    "who": "מחוץ ל-gen/looks",
+    "how": "∅"
+   }
+  ],
+  "connectAt": {
+   "point": "new/dart-ui-bs/ds/ds_pure.dart:128 — `static const Map<String, DsPureSkin> skins = {'paper': DsPureSkin(...)}`",
+   "gives": "זו נקודת-החיבור האמיתית בקבוצה כולה. **למחולל יש היום עור אחד** — `paper` — ו-16 הצבעים שלו הם ליטרלים מוקלדים-ביד באותה שורה. TOK מחזיק 5 ערכות מלאות באותה סכמה בדיוק (canvas/sunken/surface/ink/mut/hair/acc…), ומתוכן **גוון-הרקע של raycast** באמת נשלף ממדידה. הכרעה-25 קובעת שהמנוע בוחר עור; היום אין לו מה לבחור מביניהם. הסבת TOK ל-4-5 ערכי `DsPureSkin` נוספים היא הדבר היחיד בקבוצה שנוגע ישירות בפלט-המחולל. **אזהרה שחייבת לנסוע עם החיבור:** הליטרלים כאן אינם מאומתים מול measured.json (ראה doesNot) — הסבה-עיוורת תעביר ניחוש למחולל, בניגוד ל§20-ג. יש לגזור מ-measured.json בקוד, לא להעתיק את הליטרלים."
+  },
+  "s22": {
+   "score": 2,
+   "why": "2 — נוגע בפלט (עור = מה שהמשתמש רואה), ויש נקודת-חיבור חיה ומזוהה בשורה אחת (ds_pure.dart:128). לא 3, כי זו שכבת-מראה ולא שכבת-יכולת: משפט-בעברית יניב אפליקציה עובדת גם בלי זה, רק מכוערת-יותר. ולא 3 גם כי מצבו הנוכחי (ליטרלים לא-מאומתים) הופך חיבור-כפשוטו להזרקת-ניחוש."
+  },
+  "evidence": [
+   "read: gen/looks/measure/tokens.mjs:1-149 (הקובץ במלואו)",
+   "ran: grep -n \"pick(\" gen/looks/measure/tokens.mjs ⇒ שורה 46 בלבד (ראיית-השלילה המרכזית)",
+   "ran: grep -rn \"skins\" new/dart-ui-bs/ds/ds_pure.dart ⇒ :128, ערך אחד 'paper'",
+   "ran: grep -rn \"from './tokens.mjs'\" gen/looks ⇒ match.mjs:11 בלבד, ומייבא רק SWAPS"
+  ]
+ },
+ {
+  "file": "gen/looks/measure/match.mjs",
+  "lang": "mjs",
+  "lines": 131,
+  "summary": "שער-ההתאמה: מודד את 5 מסכי full5 באותו EXTRACT שמדד את האתרים החיים, ומשווה ערך-מול-ערך מול measured.json. ‏exit-code 1 אם לא 100%. הראיה המחויבת: match.json ⇒ 235/235 · 100%.",
+  "does": [
+   {
+    "claim": "טוען 5 קבצי HTML מקומיים (‏full5/1-raycast.html … 5-monzo.html) ב-chromium ומריץ עליהם את אותו `EXTRACT` בדיוק",
+    "evidence": "match.mjs:17-23 מערך PAGES; :56 `await p.goto('file://'+join(full5, pg.file))`; :58 `const ours = await p.evaluate(EXTRACT)`"
+   },
+   {
+    "claim": "מאחד את כל כתובות-אותו-אתר לבריכת-ייחוס אחת (colors·radii·gaps·pads·sizes·weights·buttons·body·h1) לפני ההשוואה",
+    "evidence": "match.mjs:26-44 `const refOf = (site) => { const keys = Object.keys(M.sites).filter(k => k===site || k.startsWith(site+'·')); ... }`"
+   },
+   {
+    "claim": "‏5 משפחות-בדיקה: צבע · צבע-מוביל (כיסוי הפוך — 4 הגוונים המובילים של האתר חייבים להופיע אצלנו) · רדיוס · מרווח · כפתור (5 שדות + bg/color) · טיפוגרפיה (body size · line-height · h1 weight)",
+    "evidence": "match.mjs:64-73 (צבע + צבע-מוביל), :75-79 (רדיוס), :81 (מרווח), :83-107 (כפתור), :109-115 (טיפוגרפיה)"
+   },
+   {
+    "claim": "‏**exit-code אמיתי**: יוצא 0 רק ב-100%, אחרת 1 — כלומר זהו שער ולא דוח",
+    "evidence": "match.mjs:131 `process.exit(pct === 100 ? 0 : 1);`"
+   },
+   {
+    "claim": "מוותר מראש רק על גוון שהוכרז ב-SWAPS, וסופר אותו בעמודה נפרדת (`waived`) — פטור מוצהר, לא בליעה",
+    "evidence": "match.mjs:47 `const swapped = ...`; :68 `else if (swapped(pg.site,hex)) waived.push({...why:'חריגת-קריאוּת מוצהרת'})`; :120 `waived` נשמר בדוח"
+   },
+   {
+    "claim": "התוצאה המחויבת: 235 מתוך 235 · 100%",
+    "evidence": "ran: node -e \"const m=require('./gen/looks/measure/match.json');console.log(JSON.stringify(m.total))\" ⇒ {\"pct\":100,\"hit\":235,\"of\":235}, checkedAt 2026-09-15T16:32"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** בודק את **מה שיש באתר ואין אצלנו** ברוב הממדים. הכיסוי-ההפוך קיים לצבע בלבד (4 גוונים מובילים) — לרדיוסים, מרווחים, כפתורים וטיפוגרפיה הבדיקה היא חד-כיוונית: «הערך שלנו נמצא במדידה?». מסך שמשתמש בערך אחד בלבד מכל ממד יקבל 100%",
+    "evidence": "match.mjs:71-73 — הבלוק `צבע-מוביל` הוא היחיד בכיוון ההפוך; :75-115 כל השאר בצורת `for (const X of ours…) add(..., ref.has(X))`"
+   },
+   {
+    "claim": "**אינו** בודק גובה-כפתור — מוצהר במפורש ומנומק",
+    "evidence": "match.mjs:95 `/* גובה-הכפתור אינו נבדק: הוא תוצאה של הריפוד וגובה-השורה, ושניהם כבר נבדקים */`"
+   },
+   {
+    "claim": "**אינו** בודק ניגודיות, גלישה, h1-יחיד או שגיאות-קונסולה — אלה של audit.mjs, לא שלו",
+    "evidence": "match.mjs — אין בקובץ contrast/overflow/console; הבדיקות ב-full5/audit.mjs"
+   },
+   {
+    "claim": "**אינו** מודד יותר מ-4 חתימות-כפתור למסך — `ours.buttons.slice(0,4)`",
+    "evidence": "match.mjs:96 `for (const our of ours.buttons.slice(0, 4))`"
+   },
+   {
+    "claim": "בריכת-הריפוד לכפתורים מורחבת לכל ה-pads וה-gaps של האתר כולו (לא של כפתוריו) — הקלה מוצהרת שמרככת את הבדיקה",
+    "evidence": "match.mjs:89-91 `/* ריפוד נמדד בכל האתר (pads + gaps), לא רק על כפתורים */ padX: new Set([...ref.pads, ...ref.gaps, 0].map(String))`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף מנוע אינו מייבא ואינו מריץ אותו בשם; אינו במרשם gates.tsv (`grep -n look machtzev/gates.tsv` ⇒ ∅)"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/gen-verify.mjs:1 · ליד `--gate` (‏gen-verify:29 `const gate = process.argv.includes('--gate')`)",
+   "gives": "זהו הדפוס שחסר למחולל: **שער-מראה עם exit-code, בריכת-ייחוס מדודה, ופטורים מוצהרים-בשמם**. gen-verify מודד היום נוכחות-אטומים; balagan-look מודד נוכחות-רגקסים בקוד. אף אחד מהם לא מודד ערך-CSS אחד של המסך שרונדר. הדפוס של match (מכשיר-אחד · שני-צדדים · פטור-מוצהר · ratchet) ניתן להעברה לשער-המחולל בלי האתרים החיצוניים — הייחוס יהיה ערכת-הטוקנים שהמחולל הכריז, לא raycast."
+  },
+  "s22": {
+   "score": 2,
+   "why": "2 — המנוע עצמו קשור ל-5 מסכי-HTML שאינם פלט-מחולל, ולכן לא יחובר כפי-שהוא. אבל הדפוס שלו (אותו מכשיר על שני הצדדים + exit-code + פטור-מוצהר-בשמו) הוא בדיוק מה ש§22 «אפס-באגים» דורש בממד שלא נמדד היום. לא 3 כי החיבור דורש החלפת-ייחוס, לא חיווט."
+  },
+  "evidence": [
+   "read: gen/looks/measure/match.mjs:1-131 (הקובץ במלואו)",
+   "ran: node -e \"const m=require('./gen/looks/measure/match.json');console.log(JSON.stringify(m.total),m.checkedAt)\" ⇒ {\"pct\":100,\"hit\":235,\"of\":235} 2026-09-15T16:32",
+   "ran: ls gen/looks/full5/ ⇒ 5 קבצי ה-HTML שהוא טוען קיימים ומחויבים",
+   "ran: grep -n \"look\" machtzev/gates.tsv ⇒ ∅ (אינו שער-משטרה)"
+  ]
+ },
+ {
+  "file": "gen/looks/measure/sheet.mjs",
+  "lang": "mjs",
+  "lines": 84,
+  "summary": "דף-ראיות לעין-אדם: מצלם את 5 המסכים שלנו, מרכיב HTML «אתר-אמיתי מול שלנו» זה-לצד-זה עם טבלת-הערכים מ-match.json, ומצלם גם אותו. שני פלטיו ב-.gitignore.",
+  "does": [
+   {
+    "claim": "מצלם את 5 מסכי full5 ב-1440×900 ושומר כ-`shots/ours-<site>.png`",
+    "evidence": "sheet.mjs:23-29 הלולאה; :27 `await p.screenshot({ path: join(here,'shots','ours-'+pg.site+'.png') })`"
+   },
+   {
+    "claim": "מטביע את שני הצילומים כ-base64 בתוך ה-HTML — הדף נפתח בלי רשת ובלי קבצים נלווים",
+    "evidence": "sheet.mjs:31 `const b64 = (f) => 'data:image/png;base64,' + readFileSync(join(here,'shots',f)).toString('base64')`"
+   },
+   {
+    "claim": "מקבץ את בדיקות match.json לפי `group` ומציג «זהים/סה\"כ» + כל תווית-ערך שנבדקה — כלומר הראיה עצמה על הדף, לא מסקנה",
+    "evidence": "sheet.mjs:36-37 `r.checks.forEach(c => { groups[c.group] = ... })`; :45-46 `<td class=\"vals\">${r.checks.filter(...).map(c=>`<code>${c.label}</code>`)}`"
+   },
+   {
+    "claim": "מציג את החריגות-המוצהרות בשורה נפרדת עם הסיבה",
+    "evidence": "sheet.mjs:48 `${r.waived.length ? `<p class=\"w\">חריגות מוצהרות: ${r.waived.map(w=>w.label+' — '+w.why).join(' · ')}</p>` : ''}`"
+   },
+   {
+    "claim": "כל המספרים בכותרת נגזרים מהקבצים, לא נכתבים ביד",
+    "evidence": "sheet.mjs:72-73 `${Object.keys(M.sites).length} עמודים ציבוריים · ${M.measuredAt}` · `${MATCH.total.hit} מתוך ${MATCH.total.of}`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** בודק, אינו משווה ואינו נכשל — אין בו exit-code ואין השוואה; הוא קורא match.json כמות-שהוא",
+    "evidence": "sheet.mjs:12 `const MATCH = JSON.parse(readFileSync(join(here,'match.json')))` — צריכה בלבד; אין `process.exit` בקובץ"
+   },
+   {
+    "claim": "**אינו** יכול לרוץ לבד — דורש ש-probe.mjs ו-match.mjs רצו לפניו (shots/ · match.json), ו-shots/ אינו בריפו",
+    "evidence": "sheet.mjs:15-19 מצפה ל-`raycast_www_raycast_com.png` וכו' תחת shots/; gen/looks/measure/.gitignore:2 `shots/`"
+   },
+   {
+    "claim": "**אינו** מייצר ארטיפקט מחויב — הכותרת «100% התאמה» בשורה 71 היא **ליטרל מוקלד**, לא נגזרת מ-MATCH.total.pct",
+    "evidence": "sheet.mjs:71 `<h1>מדידה מול ביצוע — 100% התאמה</h1>` — מחרוזת קבועה; לעומת :73 שכן נגזר. אם ההתאמה תרד ל-80%, הכותרת עדיין תאמר 100%"
+   },
+   {
+    "claim": "הפלט אינו בריפו — sheet.html ו-sheet.png מוחרגים במפורש",
+    "evidence": "gen/looks/measure/.gitignore:1-4 `# צילומים ודף-ההשוואה נוצרים מחדש … shots/ · sheet.png · sheet.html`; אומת ב-`ls gen/looks/measure/` — שניהם אינם שם"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "זהו מחולל-דף-ראיות לעין-הבעלים, בלי exit-code ובלי פלט-מחויב, שמשרת השוואה מול 5 אתרים חיצוניים. הדפוס «ראיה חזותית לצד המספר» כבר קיים במחולל ב-`studio-full.mjs` (לוח-מדידה שכל מספר בו נושא את הפקודה שמייצרת אותו). חיבור sheet יכפיל דפוס ולא יוסיף יכולת. ⚠️ ובנוסף: הכותרת-הליטרלית «100% התאמה» (:71) היא בדיוק הדפוס שחוק-האמת אוסר — כותרת שמדווחת על עצמה. אין לחבר אותו כך."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. מחולל-תצוגה חד-פעמי, פלטיו מוחרגים מהריפו, הדפוס שלו קיים כבר ב-studio-full, ויש בו כותרת-ליטרל שמדווחת מספר בלי מדידה."
+  },
+  "evidence": [
+   "read: gen/looks/measure/sheet.mjs:1-84 (הקובץ במלואו)",
+   "ran: cat gen/looks/measure/.gitignore ⇒ shots/ · sheet.png · sheet.html מוחרגים",
+   "ran: ls -la gen/looks/measure/ ⇒ אין sheet.html · אין sheet.png · אין shots/",
+   "read: sheet.mjs:71 מול :73 — ליטרל מול נגזר, באותו דף"
+  ]
+ },
+ {
+  "file": "gen/looks/build-index.mjs",
+  "lang": "mjs",
+  "lines": 155,
+  "summary": "פולט את gen/looks/index.html — עמוד-ריכוז ל-13 מסכי-הדמו. ⚠️ כל 13 הכרטיסים (40 שורות של מספרים ו«סטיות מכוונות») הם **ליטרלים מוקלדים-ביד**; המנוע לא קורא אף אחד מ-13 ה-build.mjs.",
+  "does": [
+   {
+    "claim": "מחזיק מערך `S` של 13 ערכים — תיקייה · אתר-מקור · רכיב · מסך · 3 מספרים · סטיות — ופולט מהם רשת-כרטיסים",
+    "evidence": "build-index.mjs:8-48 מערך S (13 איברים, מ-`search`/Airbnb עד `sefer`/ספריא); :135-141 הלולאה שפולטת `<a class=\"card\">`"
+   },
+   {
+    "claim": "‏**בעיית-RTL אמיתית נפתרה במנוע**: כל אסימון לטיני/מספרי (קוד-צבע · 12/16 · 59×59 · r8 · 24px) נעטף אוטומטית ב-`<bdi dir=\"ltr\">` — כי הסולמית היא תו-ניטרלי שנודד לקצה הלא-נכון ב-RTL",
+    "evidence": "build-index.mjs:51-57 — 4 רגקסים ברצף ב-`esc()`, עם ההנמקה בהערה :51-52"
+   },
+   {
+    "claim": "תומך בכהה/בהיר דרך 3 בלוקים (‏`:root` · `prefers-color-scheme` עם `:root:not([data-theme=light])` · `:root[data-theme=dark]`)",
+    "evidence": "build-index.mjs:69-77"
+   },
+   {
+    "claim": "גודל כל קובץ-יעד **כן** נמדד מהדיסק בזמן-פליטה",
+    "evidence": "build-index.mjs:58-59 `const kb = (d) => { const f = join(here,d,d+'.html'); return existsSync(f) ? Math.round(statSync(f).size/1024) : 0; }`"
+   },
+   {
+    "claim": "מתעד במפורש מה **לא** הצליח: Cloudflare חסם את כל-זכות ו-gov.il; GitHub/eBay/Zillow/OpenTable/Archive.org/OpenStreetMap לא נטענו; ספריא לא צולם נקי; Calendly החזיר 404 ⇒ נמדד Cal.com",
+    "evidence": "build-index.mjs:146 — פסקת «מה שלא הצליח» בגוף ה-HTML"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו** קורא, מודד או מאמת אף אחד מ-13 המנועים שהוא מתאר. שמות-האתרים, שלושת המספרים לכל מסך והסטיות — כולם ליטרלים בשורות 8-48. אם `tavla/build.mjs` ישנה שורה מ-48 ל-52, העמוד ימשיך לומר «שורה 48»",
+    "evidence": "build-index.mjs:8-48 (S כמערך-ליטרלים). ran: grep -n readFileSync gen/looks/build-index.mjs ⇒ שורה 3 בלבד, ה-import — הפונקציה מיובאת ואינה נקראת. הנגיעה היחידה בדיסק: kb() ב-:58-59, statSync על גודל-קובץ בלבד"
+   },
+   {
+    "claim": "🔴 שש שורות-הסיכום בראש העמוד — «13 מסכים · 13 אתרים · 0 כשלי-ניגודיות · 0 גלישה · 0 שגיאות · 45 עמודים נסרקו» — הן **ליטרלים ב-HTML**, לא נגזרות מאף audit",
+    "evidence": "build-index.mjs:125-132 `<div><b>13</b>…<b class=\"ok\">0</b><span>כשלי ניגודיות · שתי ערכות</span>…<div><b>45</b><span>עמודים נסרקו · 26 נטענו</span>`. אין בקובץ ייבוא/קריאה של אף קובץ-audit"
+   },
+   {
+    "claim": "גם הממצא «האפיון מחזיק 317 איסורים · הקוד חוסם 4 · מציג 10 · 303 בנייר בלבד» הוא ליטרל בגוף ה-HTML, לא נספר מ-mosad.data.json",
+    "evidence": "build-index.mjs:148 — המשפט כולו מוקלד בתוך מחרוזת-התבנית; אין בקובץ קריאה ל-mosad.data.json"
+   },
+   {
+    "claim": "**אינו** מכסה את כל 59 מנועי gen/looks — רק 13 מהם. app/ · first10/ · full5/ · measure/ · people/ אינם בעמוד",
+    "evidence": "build-index.mjs:8-48 — 13 ערכים בלבד; `d` של כולם הוא תיקיית-אתר-בודד"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code, אין ratchet, אין --gate",
+    "evidence": "build-index.mjs:153-155 — הקובץ נגמר ב-writeFileSync + console.log"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו. `grep -rn \"build-index\" . --include=*.mjs --include=*.sh --include=*.json` מחוץ ל-engine-index.json ⇒ ∅"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה בצינור-המחולל",
+   "gives": "עמוד-תצוגה לאדם, שכל תוכנו ליטרלים. אין לו קלט-מחולל ואין לו פלט שמישהו בצינור צורך. הדפוס היחיד ששווה בו — עטיפת-bdi האוטומטית לאסימוני-LTR בתוך RTL (:51-57) — הוא באג-אמת שהמחולל פולט עברית ועלול לסבול ממנו; אבל זה פריט-קוד של 7 שורות, לא חיבור-מנוע, והמקום הנכון לבדוק אם הוא חסר הוא `machtzev/generator/chrome.mjs`, לא כאן. **מיפוי בלבד — לא נבדק אם המחולל סובל מזה.**"
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. עמוד-ריכוז ידני שמדווח על עצמו: 13 כרטיסים מוקלדים ושש שורות-סיכום («0 כשלים · 45 עמודים») שאינן נגזרות משום מדידה. זהו בדיוק הדפוס ש-VERIFY-LAWS אוסר, והוא הפוך מ-studio-full שבו כל מספר נושא את פקודתו."
+  },
+  "evidence": [
+   "read: gen/looks/build-index.mjs:1-155 (הקובץ במלואו)",
+   "ran: grep -n readFileSync gen/looks/build-index.mjs ⇒ שורה 3 בלבד (ה-import) — readFileSync **מיובא ולא נקרא אף פעם**. הנגיעה היחידה בדיסק היא statSync/existsSync ב-:58-59 (גודל-קובץ)",
+   "ran: grep -rn \"build-index\" --include=*.mjs --include=*.sh --include=*.json . | grep -v engine-index.json | grep -v node_modules ⇒ ∅",
+   "read: build-index.mjs:125-132 (שורות-הסיכום הליטרליות) ומול machtzev/generator/studio-full.mjs (הדפוס הנגדי, מוזכר ב-CLAUDE.md)"
+  ]
+ }
+]
