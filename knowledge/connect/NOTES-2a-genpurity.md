@@ -138,3 +138,19 @@ affinity cells differing: 1564 of 1584
 - `police.mjs` ⇒ ההתאמה היחידה היא בשורה 105, במילה **«snapshot»**.
 ⇒ `pure/shot.mjs` = אפס קוראים. גם התיעוד שלו (`PURE-STATE.md:44`) מפנה ל-`scratchpad/shot.mjs`
 ברֵיפו `maor-system` שאינו קיים כאן.
+
+## הרחבת דפוס #1 — האינדקס עיוור גם ל-`register()` של loader-hooks
+`tighten-loader.mjs` הוא המקרה השלישי (אחרי `shape-ops` ו-`intent`) שבו «לא-מחובר» נובע מ**צורת-הקריאה**:
+`tighten-hook.mjs:47` עושה `register('./tighten-loader.mjs', import.meta.url)` — מחרוזת, לא `import`.
+ו-`tighten-hook` משרת את `tighten-types.mjs`, שהוא **שלב-3 ב-REGEN** (`regen.mjs:9`).
+⇒ שלוש צורות-קריאה שה-`importsOf` לא רואה: `import()` דינמי · `register('…')` · הרצה-בשם שאינה מ-regen/ship.
+
+## «לא מחובר» שהוא **תכנון** ולא חוב — entity-terms · enum-values
+שניהם מחצבים חד-פעמיים מ-`maor-system` (ריפו-אח, אינו קיים כאן).
+הארכיטקטורה: המנוע חוצב ⇒ הדאטה **מחויבת** ⇒ הצינור צורך **דאטה, לא מנוע** (§19-ד).
+`entity-terms.data.json` אכן נצרך ע"י `tzinor.mjs` שהוא מחובר.
+⇒ חיבור המנועים עצמם היה הופך את המחולל לבלתי-ניתן-להרצה בקלון-טרי. **s22=0 מסיבה טובה.**
+לשניהם הציון ניתן על סמך קריאת-קוד + ריצת-דילוג — סימנתי זאת בגוף הרשומות.
+
+## מונה-ביניים
+31/42 · ‏11 נותרו (כל `machtzev/purity/`).

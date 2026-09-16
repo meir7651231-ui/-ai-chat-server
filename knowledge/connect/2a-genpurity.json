@@ -1609,5 +1609,317 @@
    "ran: node machtzev/census/engine-index.mjs machtzev/pure/pure-look-proof.gen.mjs ⇒ לא-רץ-מהשורה · אין-קורא-ידוע",
    "read: machtzev/census/engine-index.mjs:157 (הגדרת runnable)"
   ]
+ },
+ {
+  "file": "machtzev/generator/studio-full.mjs",
+  "lang": "mjs",
+  "lines": 495,
+  "does": [
+   {
+    "claim": "בונה לוח-מדידה HTML של המחולל החי, שבו **כל ערך נגזר מקריאת-קובץ או מריצת-מנוע** ונושא את הפקודה ואת ה-file:line שממנו נלקח.",
+    "evidence": "studio-full.mjs:3-5 (הכותרת — «חוזה-המדידה») · :11-12 `import { buildAtlas } from './atlas.mjs'; import { NEEDS } from './behavior-plan.mjs';` — מייבא מנועים חיים כדי למדוד אותם"
+   },
+   {
+    "claim": "רץ ומפיק את הלוח בפועל.",
+    "evidence": "ran: `node machtzev/generator/studio-full.mjs` ⇒ `✓ gen/out/mechollel.html · 145KB · 244 שורות-פנקס · 18 שורות-חוזה · 31 ספקים` · exit=0"
+   },
+   {
+    "claim": "תיקיית-הפלט ניתנת-להטיה ולא מלכלכת את הריפו (הפלט מוחרג).",
+    "evidence": "studio-full.mjs:19 `const OUT = process.env.STUDIO_OUT || path.join(ROOT,'gen/out');` · ran: `git check-ignore -v gen/out/mechollel.html` ⇒ `gen/out/.gitignore:8:mechollel.html` · ran: `git status --porcelain` אחרי הריצה ⇒ ריק"
+   },
+   {
+    "claim": "הוא המענה המוצהר לשאלה «איפה אנחנו עכשיו» — CLAUDE.md מפנה אליו במקום לפרוזה.",
+    "evidence": "CLAUDE.md (בלוק-הפתיחה) «ואיפה המחולל עומד — אל תקרא את זה מפרוזה, הרץ: node machtzev/generator/studio-full.mjs ⇒ gen/out/mechollel.html … «מדידה · לא טענה»»"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מחולל אפליקציה, מסך או אטום — רק מודד ומרנדר דוח.",
+    "evidence": "ran (לעיל) — הפלט היחיד הוא mechollel.html · ran: node machtzev/census/engine-index.mjs machtzev/generator/studio-full.mjs ⇒ `🔧 עושה: 0 ייצואים · כותב 1`"
+   },
+   {
+    "claim": "אינו שער — אין לו `--gate`, אינו ב-police.mjs, ואינו יכול להכשיל commit.",
+    "evidence": "ran: הכרטיס ⇒ `🚫 לא: אין-ייצוא (לא ספרייה) · לא-שער-משטרה` · ran: `grep -rn \"studio-full\" machtzev/police.mjs machtzev/generator/regen.mjs` ⇒ אפס תוצאות"
+   },
+   {
+    "claim": "אין לו אף קורא — כל 495 השורות רצות רק כשאדם מקליד את הפקודה.",
+    "evidence": "ran: הכרטיס ⇒ `🔌 מחובר: 0 מייבאים · נקרא-בשם: 📄 INDEX.md,📄 HANDOFF-2026-09-16.md` — שתי ה«קריאות» הן **אזכורים במסמכי-markdown**, לא הרצה"
+   },
+   {
+    "claim": "אינו נשמר — הפלט מוחרג מ-git, כך שאין היסטוריה של המדידות.",
+    "evidence": "ran: git check-ignore (לעיל)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅ (הרצה-ידנית בלבד)",
+    "how": "אפס ייבוא · אפס הרצה-בשם מקוד. מוזכר ב-machtzev/INDEX.md וב-knowledge/HANDOFF-2026-09-16.md כפקודה שאדם מריץ."
+   }
+  ],
+  "connectAt": {
+   "point": "∅ כשלב-בצינור. נקודה תפעולית אפשרית: machtzev/generator/ship.mjs (אחרי שלב ה-REGEN, ליד web-shell ב-ship.mjs:90) — לפלוט את הלוח כחלק מהנחיתה",
+   "gives": "לא מקרב את §22, אבל הופך את «איפה אנחנו עכשיו» למדידה שנרשמת בכל נחיתה במקום להישאר תלויה בכך שמישהו יזכור להקליד פקודה. זו הערה תפעולית — ואני מציין שהיא מנוגדת לבחירה הנוכחית להחריג את הפלט מ-git."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **כלי-מדידה**. ערכו גבוה למי שקורא את הריפו (הוא הראיה שמאחורי כל מספר ב-CLAUDE.md), אבל הוא מודד את המחולל ואינו חלק ממנו."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/studio-full.mjs ⇒ ✓ gen/out/mechollel.html · 145KB · 244 שורות-פנקס · 18 שורות-חוזה · 31 ספקים",
+   "ran: git status --porcelain (אחרי) ⇒ ריק · git check-ignore -v gen/out/mechollel.html ⇒ gen/out/.gitignore:8",
+   "ran: grep -rn studio-full machtzev/police.mjs machtzev/generator/regen.mjs ⇒ אפס",
+   "read: machtzev/generator/studio-full.mjs:1-19"
+  ]
+ },
+ {
+  "file": "machtzev/generator/dart-twins.mjs",
+  "lang": "mjs",
+  "lines": 166,
+  "does": [
+   {
+    "claim": "קוצר «תאומי-Dart»: לאטומים ילידי-buildsmart שאין להם תאום-JS, קורא את קריאת-העבודה הראשונה מ-`<base>_test.dart` — **ליטרלים בלבד, אמת-קרקע** — ורושם fn ⇒ {file, tail}.",
+    "evidence": "dart-twins.mjs:1-3 (הכותרת) · הייצוא `harvestDartTwins`"
+   },
+   {
+    "claim": "runDartBatch מריץ אצוות-הערכות בסקריפט-Dart יחיד (import לכל הקבצים, JSON-lines) — הרצה אמיתית ולא הבטחה.",
+    "evidence": "dart-twins.mjs:3-4 «‏runDartBatch מריץ אצוות-הערכות בסקריפט-Dart יחיד … — בר-הרצה באמת, לא הבטחה»"
+   },
+   {
+    "claim": "פתרון-Dart עמיד בשרשרת-נפילות (env ⇒ sdk-בית ⇒ flutter ⇒ PATH), לפי L34.",
+    "evidence": "dart-twins.mjs:16-22 `const DART = (() => { const cands = [process.env.DART_BIN, …, '/home/user/flutter/bin/dart', …]; for (const c of cands) … return 'dart'; })();`"
+   },
+   {
+    "claim": "קוצר משני מדפים (new/dart ו-new/dart-maor) עם מדף-דאטה תואם לכל אחד.",
+    "evidence": "dart-twins.mjs:12-13 `const SHELVES = new Set(['new/dart','new/dart-maor']); const dataDirOf = (shelf) => shelf === 'new/dart-maor' ? 'new/dart-data-maor' : 'new/dart-data';`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו נטוש ואינו מוחלף — הוא פשוט משרת שערים ולא את הצינור.** שני קוראיו הם מנגנוני-אימות.",
+    "evidence": "machtzev/coverage-gate.mjs:10 `import { harvestDartTwins } from './generator/dart-twins.mjs';` · machtzev/verify-dart-arg0.mjs:10 `import { harvestDartTwins, runDartBatch } from './generator/dart-twins.mjs';`"
+   },
+   {
+    "claim": "אינו רץ מהשורה — ספרייה בלבד.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/dart-twins.mjs ⇒ `🚫 לא: **לא-רץ-מהשורה** · לא-שער-משטרה · לא-ב-INDEX.md`"
+   },
+   {
+    "claim": "אינו בוחר אטום ואינו מחולל — הוא מספק **ראיית-הרצה** על אטומים קיימים.",
+    "evidence": "ran: הכרטיס ⇒ `🔧 עושה: 2 ייצואים (harvestDartTwins, runDartBatch) · כותב 1 · קורא dart-arg0-verified.json`"
+   },
+   {
+    "claim": "אינו יכול להוכיח דבר בקונטיינר הזה בלי Dart — כל הנתיבים ב-DART נבדקים בזמן-ריצה ונופלים ל-PATH.",
+    "evidence": "dart-twins.mjs:16-22; המנגנון המקביל synth.mjs:7-8 מצהיר «Dart כשיש dart ב-PATH/DART_BIN» — כלומר תלות-סביבה מוכרת"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/coverage-gate.mjs:10",
+    "how": "ייבוא סטטי של harvestDartTwins"
+   },
+   {
+    "who": "machtzev/verify-dart-arg0.mjs:10",
+    "how": "ייבוא סטטי של harvestDartTwins + runDartBatch"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/behavior-plan.mjs (regen.mjs:17) — שלב בחירת-חלקיק-היסוד, שכבר מריץ דוגמאות ב-Dart על מועמדים (הכרעה-30)",
+   "gives": "behavior-plan מוכיח מועמדים ע\"י הרצת-דוגמאות; `runDartBatch` הוא בדיוק המנוע שמריץ **אצווה** של הערכות בסקריפט-Dart יחיד. אם הבורר מריץ היום מועמד-אחר-מועמד, האצווה היא שיפור-מהירות ישיר על הנתיב. **לא אימתתי שזו אכן הצורה הנוכחית של behavior-plan** — זו נקודה משוערת-מקוד ולא נמדדת, ואני מסמן זאת."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 = מקרב מעט. הוא תשתית-הוכחה (לא בורר ולא פולט), ושני קוראיו הם שערים. הסיבה לאי-החיבור: **כלי-אימות** — לא נטוש ולא מוחלף, פשוט חי בשכבת-המשטרה. 1 ולא 0 כי §22 דורש «אפס-באגים», וההוכחה-בריצה היא המנגנון שמספק זאת."
+  },
+  "evidence": [
+   "read: machtzev/generator/dart-twins.mjs:1-22",
+   "read: machtzev/coverage-gate.mjs:10 · machtzev/verify-dart-arg0.mjs:10 (שני הקוראים, לפי נתיב)",
+   "ran: node machtzev/census/engine-index.mjs machtzev/generator/dart-twins.mjs ⇒ 2 מייבאים · לא-רץ-מהשורה"
+  ]
+ },
+ {
+  "file": "machtzev/generator/entity-terms.mjs",
+  "lang": "mjs",
+  "lines": 38,
+  "does": [
+   {
+    "claim": "חוצב גשר-מונחים ישות⇔עברית מ-TERM_DEFS של maor-system (מפתחות `entity.*` עם fallback עברי) ופולט אותו כ**אטום-דאטה** — §19-ד: אוצר-מילים = דאטה, לא מילון-במנוע.",
+    "evidence": "entity-terms.mjs:2-5 (הכותרת) · :20 `[...src.matchAll(/\\{\\s*key:\\s*'entity\\.(\\w+)',\\s*label:\\s*'([^']*)',\\s*fallback:\\s*'([^']*)'\\s*\\}/g)]`"
+   },
+   {
+    "claim": "מעשיר בנרדפות מהמדף עצמו — כל `'entity.x': 'עברית'` באטומי-דאטה בארבע תיקיות.",
+    "evidence": "entity-terms.mjs:23 `for (const d of ['new/dart-data-maor','new/dart-data','new/dart-data-bs','new/atoms']) { … matchAll(/'entity\\.(\\w+)':\\s*'([^']+)'/g) … }`"
+   },
+   {
+    "claim": "פותר מפתח ⇒ שם-סכמה בשלוש צורות (יחיד · רבים · סמיכות), ומי שלא נפתר מדווח `null` ולא מומצא.",
+    "evidence": "entity-terms.mjs:17 `const resolveEntity = (suffix) => { const c = [pascal(suffix), pascal(suffix.replace(/s$/,'')), pascal(suffix.replace(/Of$/,''))]; return c.find(x => ENTITIES.has(x)) || null; };` — §20-ג בפועל"
+   },
+   {
+    "claim": "מקור-הישויות הוא סכמת-האמת של הריפו הזה.",
+    "evidence": "entity-terms.mjs:10 `import { FIELDS } from '../../new/atoms/schema-fields.mjs';` · :14 `const ENTITIES = new Set(FIELDS.map(f => f.e));`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו יכול לרוץ כאן** — מקור-האמת שלו בריפו-אח שאינו קיים בקלון הזה; השער מדלג בכנות.",
+    "evidence": "ran: `node machtzev/generator/entity-terms.mjs --gate` ⇒ `⚪ entityterms: אין maor-system (/home/user/maor-system/src/types/features.ts) — הקובץ המחויב הוא האמת` · ran: `ls -d ../maor-system` ⇒ `No such file or directory`. זה בדיוק מה ש-CLAUDE.md מצהיר מראש: «`entityterms`/`enumvalues` ידלגו תמיד (maor-system אינו קיים בשום מקום)»."
+   },
+   {
+    "claim": "אינו שער-אמת בקונטיינר-טרי — הוא תמיד ⚪ מדולג, כלומר הקובץ המחויב לעולם אינו מאומת כאן.",
+    "evidence": "entity-terms.mjs:30 `if (!fs.existsSync(MAOR)) { console.log(`⚪ entityterms: אין maor-system …`); process.exit(0); }` — יציאה 0 לפני כל בדיקה"
+   },
+   {
+    "claim": "אינו נקרא ע\"י שום מנוע — הצרכנים קוראים את **הקובץ** `entity-terms.data.json`, לא את המנוע.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/entity-terms.mjs ⇒ `🔌 מחובר: 0 מייבאים` · ran: `grep -rn \"entity-terms\" machtzev/ --include=*.mjs` ⇒ machtzev/generator/retarget.mjs:18 מזכיר אותו **בהערה** («אטום-דאטה חצוב מ-TERM_DEFS — entity-terms.mjs»), ו-machtzev/generator/tzinor.mjs קורא `entity-terms.data.json` כדאטה"
+   },
+   {
+    "claim": "אינו ממציא מונח — ישות בלי מונח נשארת null ומדווחת.",
+    "evidence": "entity-terms.mjs:33 `${d.terms.filter(t=>!t.entity).length} בלי ישות-סכמה`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:151",
+    "how": "שער `entityterms` — `gate('entityterms','generator/entity-terms.mjs',['--gate']);` (מדלג כאן)"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — וזו התשובה הנכונה: **הפלט שלו כבר מחובר, המנוע לא צריך להיות.** `entity-terms.data.json` נצרך ע\"י tzinor.mjs (מחובר, מיובא מ-app-ds שהיא GEN_ENTRY)",
+   "gives": "זו ארכיטקטורת-מחצבה תקינה לפי §19-ד: המנוע חוצב פעם-אחת מריפו-אח, הדאטה מחויבת, והצינור צורך דאטה ולא מנוע. «לא מחובר» כאן הוא **תכנון**, לא חוב."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **מחצב חד-פעמי מריפו-אח + שער** — ובכוונה. חיבורו לצינור היה יוצר תלות-ריצה בריפו שאינו קיים, כלומר הופך את המחולל לבלתי-ניתן-להרצה בקלון-טרי. הערה: הציון ניתן על סמך קריאת-קוד + ריצת-דילוג, לא על ריצה-מלאה — כי ריצה-מלאה בלתי-אפשרית כאן."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/entity-terms.mjs --gate ⇒ ⚪ אין maor-system (מדולג, exit 0)",
+   "ran: ls -d ../maor-system ⇒ No such file or directory",
+   "read: machtzev/generator/entity-terms.mjs:1-37 (הקובץ במלואו)",
+   "read: machtzev/generator/retarget.mjs:18 (אזכור בהערה בלבד) · machtzev/police.mjs:151"
+  ]
+ },
+ {
+  "file": "machtzev/generator/enum-values.mjs",
+  "lang": "mjs",
+  "lines": 29,
+  "does": [
+   {
+    "claim": "חוצב `export type X = 'a' | 'b'` מ-domain.ts ופולט ערכי-הטיפוסים-המנויים כאטום-דאטה, כולל **הסדר המוצהר**.",
+    "evidence": "enum-values.mjs:15 `for (const m of src.matchAll(/^export type (\\w+) =\\s*\\|?\\s*((?:'[^']*'\\s*\\|?\\s*)+);/gm)) { const vals = [...m[2].matchAll(/'([^']*)'/g)].map(x=>x[1]); if (vals.length >= 2) enums[m[1]] = vals; }`"
+   },
+   {
+    "claim": "מטרתו המוצהרת היא מניעת-המצאה: הסכמה מצביעה על שם-הטיפוס, והערכים נחצבים ולא מנוחשים.",
+    "evidence": "enum-values.mjs:3 «הסכמה (schema-fields) מצביעה על שמות (EnrollmentStatus…) — הערכים והסדר-המוצהר נחצבים מכאן; אין המצאת-מצבים (§20-ג)»"
+   },
+   {
+    "claim": "דורש ≥2 ערכים — טיפוס בעל ערך יחיד אינו enum.",
+    "evidence": "enum-values.mjs:15 `if (vals.length >= 2)`"
+   },
+   {
+    "claim": "המקור ניתן להטיה ב-env.",
+    "evidence": "enum-values.mjs:11 `const MAOR = process.env.MAOR_DOMAIN || path.resolve(ROOT,'../maor-system/src/types/domain.ts');`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו יכול לרוץ כאן** — מדלג בכנות, בדיוק כמו entity-terms.",
+    "evidence": "ran: `node machtzev/generator/enum-values.mjs --gate` ⇒ `⚪ enumvalues: אין maor-system (/home/user/maor-system/src/types/domain.ts) — הקובץ המחויב הוא האמת` · exit 0"
+   },
+   {
+    "claim": "אינו נקרא ע\"י שום מנוע — הצרכן הוא הקובץ `enum-values.data.json`.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/enum-values.mjs ⇒ `🔌 מחובר: 0 מייבאים` · ran: `grep -rn \"enum-values\\.mjs\" --include=*.mjs --include=*.json --include=*.tsv .` ⇒ רק police.mjs:153 ו-engine-index.json"
+   },
+   {
+    "claim": "אינו מכסה enum של Dart — רק תחביר TS.",
+    "evidence": "enum-values.mjs:15 — הדפוס הוא `export type … = 'a' | 'b';` בלבד; אין ענף ל-`enum X { … }`"
+   },
+   {
+    "claim": "אינו חוצב מהסכמה שבריפו הזה, למרות שהיא זמינה — הוא תלוי בלעדית ב-domain.ts החיצוני.",
+    "evidence": "enum-values.mjs:11-16 — אין שימוש ב-`new/atoms/schema-fields.mjs` (השוו ל-entity-terms.mjs:10 שכן מייבא אותה)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:153",
+    "how": "שער `enumvalues` — `gate('enumvalues','generator/enum-values.mjs',['--gate']);` (מדלג כאן)"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — הפלט כבר מחובר כדאטה; המנוע הוא מחצב חד-פעמי מריפו-אח, כמו entity-terms",
+   "gives": "כמו entity-terms: «לא מחובר» הוא תכנון (§19-ד), לא חוב. חיבורו היה יוצר תלות-ריצה בריפו שאינו קיים בקלון-טרי."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **מחצב חד-פעמי מריפו-אח + שער**, בכוונה. הציון על סמך קריאת-קוד + ריצת-דילוג בלבד — ריצה-מלאה בלתי-אפשרית כאן, ואני מסמן זאת."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/enum-values.mjs --gate ⇒ ⚪ אין maor-system (מדולג)",
+   "read: machtzev/generator/enum-values.mjs:1-28 (הקובץ במלואו)",
+   "ran: grep -rn \"enum-values.mjs\" --include=*.mjs --include=*.json --include=*.tsv . ⇒ police.mjs:153 בלבד (מחוץ לאינדקס)",
+   "read: machtzev/police.mjs:153"
+  ]
+ },
+ {
+  "file": "machtzev/generator/tighten-loader.mjs",
+  "lang": "mjs",
+  "lines": 14,
+  "does": [
+   {
+    "claim": "loader-hook של Node: כשקובץ-האטום הנבדק (‏TT_ATOM) נטען, מקור-הייצוא נעטף במקליט `globalThis.__ttRec` — בלי לשנות התנהגות.",
+    "evidence": "tighten-loader.mjs:1 (הכותרת) · :4 `if (process.env.TT_ATOM && url === process.env.TT_ATOM && r.source) {`"
+   },
+   {
+    "claim": "מטפל בשתי צורות-ייצוא: `export function f(` ו-`export const f = (`/`async (`/`function`, משנה שם ל-`f__o` ומייצא עטוף.",
+    "evidence": "tighten-loader.mjs:7-9 — שני ה-replace ואז `src += names.map(n => `export const ${n} = globalThis.__ttRec('${n}', ${n}__o);`)`"
+   },
+   {
+    "claim": "עוקף את המטמון בכוונה כדי שהמקור המשוכתב יתפוס.",
+    "evidence": "tighten-loader.mjs:10 `return { ...r, source: src, shortCircuit: true };`"
+   },
+   {
+    "claim": "אינו נוגע בשום קובץ אחר — בלי TT_ATOM הוא שקוף לחלוטין.",
+    "evidence": "tighten-loader.mjs:12 `return r;` (נפילה-דרך)"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו מנוע** — הוא hook בן 14 שורות, וזו הסיבה האמיתית לאי-חיבורו: אין לו מה לחבר.",
+    "evidence": "read: הקובץ במלואו (14 שורות) — ייצוא יחיד `load`, חתימת loader-hook של Node"
+   },
+   {
+    "claim": "אינו רץ-מהשורה ואינו כותב פלט ואינו שער.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/tighten-loader.mjs ⇒ `🚫 לא: לא-רץ-מהשורה · לא-כותב-פלט · לא-שער-משטרה`"
+   },
+   {
+    "claim": "**אינו נטוש** — הוא נרשם ע\"י tighten-hook.mjs, ו-`tighten-types.mjs` הוא שלב-3 ב-REGEN. כלומר הוא משרת קוד שכן על הנתיב.",
+    "evidence": "machtzev/generator/tighten-hook.mjs:47 `register('./tighten-loader.mjs', import.meta.url);` · machtzev/generator/regen.mjs:9 `{ rel:'machtzev/generator/tighten-types.mjs', args:['--record','--apply'], note:'G20 · הידוק-טיפוסים מראיית-בדיקות + הוכחות-קופסאות (שער tighten)' }`"
+   },
+   {
+    "claim": "ואי-החיבור הוא ארטיפקט-מדידה: `register(...)` אינו `import`, ולכן importsOf אינו רואה אותו — אותה עיוורון שתועדה על intent/shape-ops.",
+    "evidence": "machtzev/census/engine-index.mjs:162-170 (importsOf — רק `from '…'`) מול tighten-hook.mjs:47 שמעביר נתיב כמחרוזת ל-`register`"
+   },
+   {
+    "claim": "הרגקסים שלו מוגבלים לייצוא בתחילת-שורה ואינם תופסים `export {x}` או `export default`.",
+    "evidence": "tighten-loader.mjs:7-8 — שני הדפוסים מעוגנים ב-`^export\\s+` עם דגל `m`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/generator/tighten-hook.mjs:47",
+    "how": "רישום כ-loader-hook: `register('./tighten-loader.mjs', import.meta.url);` — הפעלה בזמן-ריצה, לא ייבוא. (tighten-hook משרת את tighten-types.mjs, שהוא שלב-3 ב-REGEN.)"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ כשלב. מה שדורש תיקון הוא **המודד**: machtzev/census/engine-index.mjs:162-170 — להכיר גם ב-`register('…')` של loader-hooks, כפי שיש להכיר ב-`import('…')` דינמי",
+   "gives": "אין מה לחבר — יש מה למדוד נכון. זהו המקרה השלישי בקבוצה שבו «לא-מחובר» נובע מצורת-הקריאה ולא מנתק אמיתי (הראשונים: shape-ops · intent)."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **לא מנוע אלא hook**, ובנוסף ארטיפקט-מדידה. הוא כבר משרת את tighten-types שהוא שלב-3 ב-REGEN."
+  },
+  "evidence": [
+   "read: machtzev/generator/tighten-loader.mjs:1-13 (הקובץ במלואו)",
+   "read: machtzev/generator/tighten-hook.mjs:47 (ה-register) · machtzev/generator/regen.mjs:9 (tighten-types כשלב-3)",
+   "read: machtzev/census/engine-index.mjs:162-170 (importsOf)",
+   "ran: node machtzev/census/engine-index.mjs machtzev/generator/tighten-loader.mjs ⇒ 0 מייבאים · נקרא-בשם: tighten-hook"
+  ]
  }
 ]
