@@ -1,0 +1,288 @@
+[
+ {
+  "file": "machtzev/assemble/gen-screen.mjs",
+  "lang": "mjs",
+  "lines": 171,
+  "does": [
+   {"claim": "מניפסט-JSON של מסך ⇒ קובץ Dart `<screen>.g.dart` עם מחלקת `<Cls>Composed extends StatelessWidget` שבונה ListView מהסקציות.", "evidence": "machtzev/assemble/gen-screen.mjs:L130-L168 (תבנית-הפלט) · L169 writeFileSync(path.join(OUT, M.screen + '.g.dart'))"},
+   {"claim": "קורא את חתימות-המדף האמיתיות מ-new/dart-ui-bs: props (`this.x`), טיפוסי-`final`, פרמטרים-מיקומיים ו-required-בשמות — ומאמת את המניפסט מולן.", "evidence": "machtzev/assemble/gen-screen.mjs:L18-L37"},
+   {"claim": "פוסל מניפסט עם עברית-ליטרלית בסקציות (תוכן חייב לעבור דרך '$:' מקובץ-דאטה).", "evidence": "machtzev/assemble/gen-screen.mjs:L15 `if (/[֐-׿]/.test(JSON.stringify(M.sections))) die(...)`"},
+   {"claim": "פוסל שוב על הפלט: עברית שדלפה לקוד (אחרי הסרת-הערות) ⇒ יציאה-באדום.", "evidence": "machtzev/assemble/gen-screen.mjs:L166-L167"},
+   {"claim": "מפריד prop לפי קידומת ל-4 סוגי-שקעים: טוקנים · callbacks · שערים · פרמטרי-לוח (חורי-נתוני-ריצה).", "evidence": "machtzev/assemble/gen-screen.mjs:L41-L44 (tokens/callbacks/gates/params)"},
+   {"claim": "רץ בפועל בקלון-הזה ומרכיב מסך אמיתי.", "evidence": "ran: node machtzev/assemble/gen-screen.mjs screens-seed/manifests/contractor_home.manifest.json <scratch> ⇒ '🏗️ הורכב: contractor_home.g.dart · 3 סקציות · 4 אטומי-מדף · 7 טוקנים · 1 callbacks · 0 פרמטרי-לוח · 2 שערים'"},
+   {"claim": "השער-מול-המדף תופס אי-התאמה אמיתית בין מניפסט מחויב לבנאי-אטום מחויב.", "evidence": "ran: gen-screen.mjs על screens-seed/manifests/features__catalog_config__catalog_config_screen.manifest.json ⇒ '🚨 המרכיב: prop \"label\" לא-קיים בבנאי EmptyState — props-אמיתיים: glyph,message'"}
+  ],
+  "doesNot": [
+   {"claim": "לא כותב עברית/תוכן — הפלט הוא חיווט בלבד; התוכן מגיע מקובצי-דאטה חיצוניים דרך '$:'.", "evidence": "machtzev/assemble/gen-screen.mjs:L166-L167 + L131 (הערת-הפלט 'המסך = דאטה; הקוד הזה = חיווט-בלבד')"},
+   {"claim": "לא מייצר את המניפסט — הוא צרכן שלו; המניפסט נבנה ב-gen-manifest.mjs.", "evidence": "machtzev/assemble/gen-screen.mjs:L8-L11 (קורא argv[2] כקובץ קיים)"},
+   {"claim": "לא מחווט לדאטה-חי ולא ל-state — כל שער/callback/טוקן/פרמטר הוא שקע שהלוח מזרים מבחוץ.", "evidence": "machtzev/assemble/gen-screen.mjs:L133 'שערים/callbacks/טוקנים מוזרקים ע\"י הלוח — אפס-IO, אפס-תוכן, אפס-הכרעות כאן'"},
+   {"claim": "אינו הרסני ואינו מוחק — בניגוד לשאר assemble/ הוא מקבל out-dir כארגומנט-3 ורק mkdir+write.", "evidence": "machtzev/assemble/gen-screen.mjs:L9 `const OUT = process.argv[3] || ...` · L168-L169; grep rmSync/unlinkSync על machtzev/assemble/*.mjs אינו מחזיר שורה מ-gen-screen.mjs"},
+   {"claim": "אינו שער-משטרה — אינו ב-machtzev/gates.tsv.", "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/assemble/gen-screen.mjs ⇒ '🚫 לא: ... לא-שער-משטרה'"}
+  ],
+  "callers": [
+   {"who": "machtzev/generator/generate.mjs:17", "how": "הרצה-בשם: const GEN = path.join(ROOT, 'machtzev/assemble/gen-screen.mjs') — נקודת-הכניסה המוצהרת «משפט ⇒ אפליקציה» של §22"},
+   {"who": "machtzev/generator/combine-screens.mjs:88", "how": "הרצה-בשם: execFileSync('node', [.../gen-screen.mjs, r.outManifest])"},
+   {"who": "machtzev/one.mjs:124", "how": "הרצה-בשם בלולאה על screens-seed/manifests/*.manifest.json (שלב «הרכבה-מחוללת»)"}
+  ],
+  "connectAt": {
+   "point": "machtzev/census/engine-index.mjs:L319-L321 (GEN_ENTRY) — להוסיף את machtzev/generator/generate.mjs כנקודת-כניסה שביעית; היא כבר מריצה gen-screen.mjs:17 ו-combine-screens.mjs:88, כך ש-3 מנועים נכנסים בשורה אחת. לחלופין: קריאה ל-generate.mjs מתוך machtzev/generator/regen.mjs:L6-L24 (מערך REGEN).",
+   "gives": "מסלול «משפט ⇒ אחזור-מסכים-רשומים ⇒ מיזוג-סקציות ⇒ קומפוזר-Dart» שקיים ועובד אך אינו נגיש מאף אחת מ-6 נקודות-הכניסה. זה מסלול שונה מ-app-ds/app-from-sentences: אלה גוזרים מסך מ**אפיון-ישות**, וזה מרכיב מ**83 המסכים האמיתיים שכבר פורקו** — כלומר שימוש-חוזר באימפריה במקום גזירה-מחדש."
+  },
+  "s22": {"score": 3, "why": "יושב ישירות על נתיב משפט⇒אפליקציה: הוא המרכיב שבסוף השרשרת generate.mjs⇒combine-screens.mjs⇒gen-screen.mjs, פולט Dart מתקמפל, ומאמת מול המדף האמיתי. רץ היום ומצליח בקלון-הזה (ראיה), והחסם היחיד הוא שנקודת-הכניסה שמפעילה אותו אינה ב-GEN_ENTRY."},
+  "evidence": [
+   "ran: node machtzev/census/engine-index.mjs machtzev/assemble/gen-screen.mjs ⇒ 171 שורות · 0 מייבאים · נקרא-בשם: one,combine-screens,generate",
+   "ran: node machtzev/assemble/gen-screen.mjs screens-seed/manifests/contractor_home.manifest.json <scratch>/gs ⇒ הורכב בהצלחה (3 סקציות · 4 אטומי-מדף)",
+   "ran: אותו מנוע על 3 מניפסטים נוספים ⇒ 2 הצלחות + 1 כשל-שער אמיתי (EmptyState label)",
+   "ran: node machtzev/census/engine-index.mjs --connected --list | grep ⇒ generate.mjs · combine-screens.mjs · gen-screen.mjs · capability.mjs כולם ברשימת הלא-מחוברים",
+   "read: machtzev/assemble/gen-screen.mjs:L1-L45, L130-L171",
+   "read: machtzev/generator/generate.mjs:L17 · machtzev/generator/combine-screens.mjs:L88 · machtzev/one.mjs:L124",
+   "read: machtzev/census/engine-index.mjs:L310-L333 (GEN_ENTRY + connected())"
+  ]
+ },
+ {
+  "file": "machtzev/assemble/gen-manifest.mjs",
+  "lang": "mjs",
+  "lines": 215,
+  "does": [
+   {"claim": "לכל מסך-מקור: מזהה אילו אטומי-מדף מרכיבים אותו וכותב `<screen>.manifest.json` עם סקציות + חיווט-props.", "evidence": "machtzev/assemble/gen-manifest.mjs:L193-L204 (בניית manifest) · L209 writeFileSync(path.join(OUT_FULL, fname))"},
+   {"claim": "בונה אינדקס-מוצא מתעודות-המדף: `// מוצא: <מסך>:<Widget>` בשני פורמטים + `// משרת-גם` ⇒ מפה id⇒אטום.", "evidence": "machtzev/assemble/gen-manifest.mjs:L17-L39"},
+   {"claim": "מפצל לשני יעדים: מניפסט שלם ⇒ screens-seed/manifests/ (המרכיב בונה), מניפסט עם-חורים או שטוח ⇒ manifests-draft/.", "evidence": "machtzev/assemble/gen-manifest.mjs:L13-L14 (OUT_FULL/OUT_DRAFT) · L210"},
+   {"claim": "מסווג prop לפי טיפוס: callback (VoidCallback/ValueChanged/Function) מול טוקן (Color, או double ששמו radius/size/width/height/space/pill/gap).", "evidence": "machtzev/assemble/gen-manifest.mjs:L84-L85"},
+   {"claim": "מרים תוכן-מאתר-הקריאה לקובץ-דאטה נפרד `<screen>_content2.dart` (verbatim).", "evidence": "machtzev/assemble/gen-manifest.mjs:L206-L208"},
+   {"claim": "רץ בפועל בקלון-הזה (עם קלט-ריק) ומסיים ב-0.", "evidence": "ran: node machtzev/assemble/gen-manifest.mjs <scratch>/empty ⇒ '📋 מנוע-המניפסטים · שלמים: 0 ⇒ manifests/ · טיוטות: 0 ... · לא-מסך (אפס-מחלקות): 0'"}
+  ],
+  "doesNot": [
+   {"claim": "לא בונה קוד Dart של מסך — רק את המניפסט; הבנייה היא של gen-screen.mjs.", "evidence": "machtzev/assemble/gen-manifest.mjs:L3 (כותרת) + L209 (הפלט היחיד למסך הוא .manifest.json)"},
+   {"claim": "**אינו מצטבר — הוא מוחק-ואז-בונה**, ולכן הרצה עם קלט חסר מוחקת תוצרים מחויבים. זו אינה השערה: נמדד.", "evidence": "machtzev/assemble/gen-manifest.mjs:L59 (unlink כל *_content2.dart) · L88 (rmSync OUT_DRAFT) · L92-L94 (unlink כל מניפסט עם generated:true); ran ⇒ git status הראה 122 קבצים מחויבים במצב D (83 מניפסטים + 39 content2); שוחזרו ב-git checkout -- screens-seed/ new/dart-data-bs/ ⇒ git status נקי, HEAD עדיין 52dc8d56"},
+   {"claim": "אין לו שסתום-פלט-חלופי כמו SHELF_OUT של shelf-lift — היעד קשיח.", "evidence": "machtzev/assemble/gen-manifest.mjs:L13-L14 (OUT_FULL/OUT_DRAFT קבועים, אפס process.env); השוו machtzev/assemble/shelf-lift.mjs:L17 `process.env.SHELF_OUT || ...`"},
+   {"claim": "אינו מוחק מניפסטים שנכתבו ביד — רק כאלה עם generated:true.", "evidence": "machtzev/assemble/gen-manifest.mjs:L92-L95 (`handWritten`) · L205"},
+   {"claim": "אינו שער-משטרה.", "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/assemble/gen-manifest.mjs ⇒ '🚫 לא: ... לא-שער-משטרה'"}
+  ],
+  "callers": [
+   {"who": "machtzev/one.mjs:117", "how": "הרצה-בשם: stage('מנוע-המניפסטים (gen-manifest)', ...) — רק בצינור one.mjs, לא ב-regen.mjs"}
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה **בקלון הזה**. הקלט שלו הוא SCRATCH (machtzev/assemble/gen-manifest.mjs:L10, ברירת-מחדל /tmp/genesis-all-screens) שמתמלא ב-machtzev/one.mjs:L55-L67 מהמקור-החי של buildsmart; /home/user/buildsmart אינו קיים כאן (נמדד). בלי המקור הוא מייצר 0 ומוחק 122 קבצים מחויבים.",
+   "gives": "∅. הצעד הכן הוא שסתום-פלט (כמו SHELF_OUT) + נעילת-מחיקה-על-קלט-ריק — אבל זה **תיקון-קוד**, מחוץ למשימת-המיפוי."
+  },
+  "s22": {"score": 1, "why": "הוא שלב-אב אמיתי בשרשרת (המניפסט הוא הקלט של gen-screen שציונו 3), ולכן אינו 0. אבל הוא אינו על נתיב משפט⇒אפליקציה: הוא על נתיב **מקור-חי⇒מניפסט**, וחיבורו למחולל בקלון-טרי הוא הרסני-נטו עד שהמקור קיים ויש שסתום-פלט."},
+  "evidence": [
+   "ran: node machtzev/census/engine-index.mjs machtzev/assemble/gen-manifest.mjs ⇒ 215 שורות · 0 מייבאים · נקרא-בשם: one",
+   "ran: node machtzev/assemble/gen-manifest.mjs <scratch>/empty ⇒ שלמים 0 · טיוטות 0 · ואז git status ⇒ 122 D",
+   "ran: git checkout -- screens-seed/ new/dart-data-bs/ ⇒ git status --short | wc -l = 0",
+   "ran: ls על /home/user/buildsmart · /home/user/meir7651231-ui/buildsmart · /home/user/maor-system ⇒ שלושתם MISSING; /tmp/genesis-all-screens MISSING",
+   "read: machtzev/assemble/gen-manifest.mjs:L1-L40, L59, L80-L95, L180-L215",
+   "read: machtzev/one.mjs:L117"
+  ]
+ },
+ {
+  "file": "machtzev/assemble/box-audit.mjs",
+  "lang": "mjs",
+  "lines": 131,
+  "does": [
+   {"claim": "משווה תוכנית-חיווט (box-drafts/*.box-draft.md, סעיף «תוכנית-החיווט») מול הקופסה הבנויה ב-new/dart-boxes — כל חוט מתוכנן חייב להופיע בקוד-הקופסה.", "evidence": "machtzev/assemble/box-audit.mjs:L29-L42 (קריאת-התוכניות) · L61-L73 (audit)"},
+   {"claim": "מתאים טיוטה⇒קופסה דטרמיניסטית: נרמול camel/CONST⇒kebab, ואז המקטע-הארוך-ביותר שמופיע בשם-הטיוטה; עם מפת-דריסה מוצהרת box-aliases.json.__boxmap.", "evidence": "machtzev/assemble/box-audit.mjs:L13-L15 (kebab) · L47-L58 (boxFor)"},
+   {"claim": "מבדיל בין «חסר» (השם בקטלוג אך לא מחווט) לבין «לא-נפתר» (השם כלל לא בקטלוג) — לא בולע שם שלא זוהה.", "evidence": "machtzev/assemble/box-audit.mjs:L66-L70 + הערת L69 'שם לא נפתר בקטלוג — מדוּוח, לא נבלע'"},
+   {"claim": "4 מצבים: דוח (ברירת-מחדל) · --write baseline · --gate ratchet-נסיגה · --selftest אדום-על-חלול.", "evidence": "machtzev/assemble/box-audit.mjs:L88-L119"},
+   {"claim": "ה-selftest הוא מוטציה אמיתית: מוחק חוט-מכוסה מעותק-בזיכרון ודורש שהמנוע יזעק, וגם שירוק על המקור הנקי.", "evidence": "machtzev/assemble/box-audit.mjs:L88-L101; ran ⇒ '✅ אדום-על-חלול: מחיקת academicYearLabel מ-reenroll ⇒ המנוע מזהה חסר' + '✅ ירוק-על-נקי'"},
+   {"claim": "רץ בפועל כאן ומודד: 60 תוכניות · 46 זוגות · 524 חוטים-מתוכננים · 478 מחווטים (91.2%) · 11 חסרים · 35 לא-נפתרו · 12 טיוטות-בלי-קופסה.", "evidence": "ran: node machtzev/assemble/box-audit.mjs (בלי ארגומנטים)"}
+  ],
+  "doesNot": [
+   {"claim": "אינו מוודא שהחוט **עובד** — רק שהשם או הנתיב `/<kebab>.dart` מופיעים במקור-הקופסה. זו התאמת-מחרוזת, לא הוכחת-התנהגות.", "evidence": "machtzev/assemble/box-audit.mjs:L67 `boxSrc.includes('/'+keb+'.dart') || new RegExp('\\\\b'+(alias||t)+'\\\\b').test(boxSrc)`"},
+   {"claim": "אינו מכסה את כל הטיוטות — 12 מתוך 60 לא מותאמות לשום קופסה ונופלות מהספירה לגמרי (לא נחשבות כשל).", "evidence": "machtzev/assemble/box-audit.mjs:L80 `if (!box) { noBox.push(draft); continue; }`; ran ⇒ '⚠️ טיוטות-בלי-קופסה (12)'"},
+   {"claim": "ב---gate אינו נופל על «חסר» או «לא-נפתר» חדשים — רק על **נסיגה** מול baseline מחויב. 35 לא-נפתרים ו-11 חסרים קיימים והשער ירוק.", "evidence": "machtzev/assemble/box-audit.mjs:L113-L119 (רק `for (const t of was) if (!now.has(t))`); ran --gate ⇒ 'אפס-נסיגה מ-baseline (478 חוטים)' exit=0 בזמן שהדוח מראה 11+35"},
+   {"claim": "אינו נוגע במחולל, באטומים או במסכים — קלטו box-drafts/ + new/dart-boxes בלבד.", "evidence": "machtzev/assemble/box-audit.mjs:L19-L23, L30, L45-L46"},
+   {"claim": "אינו כותב דבר במצבי דוח/--gate/--selftest; כותב רק ב---write.", "evidence": "machtzev/assemble/box-audit.mjs:L104-L108 (ה-writeFileSync היחיד); ran שלושת המצבים ⇒ git status --short ריק"}
+  ],
+  "callers": [
+   {"who": "machtzev/police.mjs:121", "how": "שער: gate('assembly', 'assemble/box-audit.mjs', ['--gate'])"},
+   {"who": "machtzev/one.mjs:169", "how": "הרצה-בשם: stage('ביקורת-הרכבה (box-audit)', ... ['--gate'])"}
+  ],
+  "connectAt": {
+   "point": "∅ כ«שלב-במחולל». לפי ההגדרה ב-machtzev/census/engine-index.mjs:L316 שערי-משטרה אינם מחוברים בכוונה — הם שומרים, לא חלק. box-audit הוא שער «assembly» רשום ב-gates.tsv ופועל.",
+   "gives": "∅ — הוא כבר במקומו הנכון. חיבורו ל-GEN_ENTRY היה סותר את ההגדרה עצמה."
+  },
+  "s22": {"score": 0, "why": "0 במפורש: אינו על נתיב משפט⇒אפליקציה כלל. הוא מבקר את תוכניות-הקופסאות של המחצבה (box-drafts מול dart-boxes) — שכבה שקודמת למחולל ומשרתת אותו כשער. הוא עובד, יש לו selftest-מוטציה אמיתי, והוא כבר רץ בכל commit דרך police.mjs:121. «לא-מחובר» כאן הוא הסיווג הנכון, לא פער."},
+  "evidence": [
+   "ran: node machtzev/assemble/box-audit.mjs ⇒ 60 תוכניות · 46 זוגות · 524/478 (91.2%) · חסרים 11 · לא-נפתרו 35 · 12 בלי-קופסה",
+   "ran: node machtzev/assemble/box-audit.mjs --gate ⇒ '🔌 מבקר-ההרכבה: 46 קופסאות · אפס-נסיגה מ-baseline (478 חוטים)' exit=0",
+   "ran: node machtzev/assemble/box-audit.mjs --selftest ⇒ 2 שורות ✅ exit=0",
+   "ran: git status --short אחרי שלושת המצבים ⇒ ריק (אינו כותב)",
+   "ran: node machtzev/census/engine-index.mjs machtzev/assemble/box-audit.mjs ⇒ 131 שורות · שער «assembly» · נקרא-בשם: police,one",
+   "read: machtzev/assemble/box-audit.mjs:L1-L131 (הקובץ המלא)",
+   "read: machtzev/police.mjs:L121 · machtzev/one.mjs:L169 · machtzev/census/engine-index.mjs:L316"
+  ]
+ },
+ {
+  "file": "machtzev/assemble/shelf-lift.mjs",
+  "lang": "mjs",
+  "lines": 290,
+  "does": [
+   {"claim": "מרים widgets «נקיים העומדים-ברשות-עצמם» ממסכי-המקור אל המדף new/dart-ui-bs/auto כאטומי-Dart, verbatim, עם תעודת-מוצא בהערה.", "evidence": "machtzev/assemble/shelf-lift.mjs:L251-L272 (לולאת-הפליטה) · L268-L270 (הערת 'מוצא: <id> (בנייה-חכמה main)')"},
+   {"claim": "מדדפ לפי גוף: אטומים זהים-מבנית מתמזגים ומקבלים '// משרת-גם' במקום עותק שני.", "evidence": "machtzev/assemble/shelf-lift.mjs:L246 (liftedHashes לפי hash) · L266"},
+   {"claim": "מטפל בזוגות-Stateful: מאחד Widget+State, משנה-שם עקבי ל-_<Pub>State, ומפריט אחים-ציבוריים.", "evidence": "machtzev/assemble/shelf-lift.mjs:L255-L258"},
+   {"claim": "מסיק imports דטרמיניסטית משלושה מקורות: inferImports על הגוף · constImportCache · טבלאות FOUNDATION/FOUNDATION_FN.", "evidence": "machtzev/assemble/shelf-lift.mjs:L259-L264"},
+   {"claim": "מריץ **שער-עצמי על כל אטום שנפלט**: קורא ל-screen-decomp.mjs על הקובץ, ואם יש דאטה-צרובה/עברית — מוחק את הקובץ ורושם דחייה 'failed-self-gate'.", "evidence": "machtzev/assemble/shelf-lift.mjs:L272-L280"},
+   {"claim": "מרים גם את קטלוג-הפיגמנטים BsTokens מהמקור-החי כאטום-דאטה שכבה-0; אין clone ⇒ נבלע בשקט ואטומים תלויי-BsTokens יידחו.", "evidence": "machtzev/assemble/shelf-lift.mjs:L24-L34"},
+   {"claim": "רץ בפועל כאן, מוכל, ומסיים ב-0 עם 0 אטומים (אין מקור).", "evidence": "ran: SHELF_OUT=<scratch>/shelf node machtzev/assemble/shelf-lift.mjs <scratch>/empty ⇒ '🛗 מנוע-המדף v2 · הורמו: 0 אטומים ... · נדחו: 0' exit=0, git status נקי"}
+  ],
+  "doesNot": [
+   {"claim": "אינו כותב מסך ואינו מרכיב — הוא מפרק מסכי-מקור לאטומים בודדים. ההרכבה היא gen-manifest+gen-screen.", "evidence": "machtzev/assemble/shelf-lift.mjs:L2-L6 (כותרת) · L252 (הפלט הוא קובץ-לאטום)"},
+   {"claim": "אינו מרים widget עם IO/Riverpod/עברית-צרובה — כל ספק נדחה עם סיבה מנוקבת, לא נבלע.", "evidence": "machtzev/assemble/shelf-lift.mjs:L11 (ייבוא IO_PAT/RIVERPOD/HEB_STR/bodyIssue) · L280 · L283-L285 (דוח-דחיות לפי סיבה)"},
+   {"claim": "**אינו הרסני בהכרח** — בניגוד לשאר assemble/ יש לו שסתום-פלט מוצהר: SHELF_OUT מפנה את היעד ואת הדוח לתיקייה זמנית. ההערה בקוד אומרת זאת במפורש.", "evidence": "machtzev/assemble/shelf-lift.mjs:L15-L17 'נחיתה למדף היא החלטה, לא תופעת-לוואי של מדידה' · L281 (הדוח גם הוא עובר ל-SHELF_OUT)"},
+   {"claim": "אך בברירת-מחדל (בלי SHELF_OUT) כן מוחק את כל new/dart-ui-bs/auto לפני שהוא בונה.", "evidence": "machtzev/assemble/shelf-lift.mjs:L26 `fs.rmSync(OUT, { recursive: true, force: true })`"},
+   {"claim": "אינו שער-משטרה.", "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/assemble/shelf-lift.mjs ⇒ '🚫 לא: ... לא-שער-משטרה'"}
+  ],
+  "callers": [
+   {"who": "machtzev/one.mjs:111", "how": "הרצה-בשם: stage('מנוע-המדף (shelf-lift)', ...) — רק ב-one.mjs"}
+  ],
+  "connectAt": {
+   "point": "∅ בקלון הזה, מאותה סיבה כמו gen-manifest: הקלט הוא SCRATCH (machtzev/assemble/shelf-lift.mjs:L13) שמתמלא מהמקור-החי של buildsmart ב-machtzev/one.mjs:L55-L67, ו-/home/user/buildsmart אינו קיים כאן (נמדד). בנוסף L24-L34 ו-L37-L41 קוראים `git show`/`git grep` על origin/main של אותו ריפו.",
+   "gives": "∅ בקלון-טרי. הערה כנה: מכל assemble/ הוא **המוכן-ביותר** לחיבור, כי SHELF_OUT כבר פותר את בעיית-ההרסנות; מה שחסר הוא רק המקור."
+  },
+  "s22": {"score": 1, "why": "לא 0, כי הוא ממלא את המדף שממנו gen-screen (ציון 3) מרכיב — בלי המדף אין ממה להרכיב. אבל הוא בכיוון ההפוך מ-§22: מקור-קיים⇒אטומים, לא משפט⇒אפליקציה, והוא חסום על העדר הריפו-האח."},
+  "evidence": [
+   "ran: node machtzev/census/engine-index.mjs machtzev/assemble/shelf-lift.mjs ⇒ 290 שורות · 0 מייבאים · נקרא-בשם: one",
+   "ran: SHELF_OUT=<scratch>/shelf node machtzev/assemble/shelf-lift.mjs <scratch>/empty ⇒ 'הורמו: 0 אטומים · נדחו: 0' exit=0 · git status --short | wc -l = 0",
+   "ran: ls /home/user/buildsmart ⇒ MISSING",
+   "read: machtzev/assemble/shelf-lift.mjs:L1-L40, L245-L290",
+   "read: machtzev/one.mjs:L111 · machtzev/one.mjs:L55-L67"
+  ]
+ },
+ {
+  "file": "machtzev/assemble/data-lift.mjs",
+  "lang": "mjs",
+  "lines": 892,
+  "does": [
+   {"claim": "«מנוע-המטרות v3»: מחליף כל מחרוזת-עברית צרובה ב-widget ב-prop **על-שם הפרמטר שאליו היא זורמת** (אינדקס-בנאים אמיתי, לא שם-משתנה).", "evidence": "machtzev/assemble/data-lift.mjs:L2-L4 (הצהרת-החוזה) · L11 (ייבוא maskLitsKeepInterp/HEB_STR) · L880-L884 (פליטת <screen>_content.dart)"},
+   {"claim": "משטח widget תלוי-מודל: קורא אילו שדות נצרכים בפועל ומחליף את המודל ב-props על-שם השדות ('מטרת-הנתון').", "evidence": "machtzev/assemble/data-lift.mjs:L4-L5 · L890 (`modeled = report.lifted.filter(x => x.model).length`)"},
+   {"claim": "מפרק תבנית-אינטרפולציה ('סה\"כ $x') הפוך — קטעי-העברית ⇒ props, החורים נשארים מנגנון.", "evidence": "machtzev/assemble/data-lift.mjs:L6"},
+   {"claim": "מריץ שער-עצמי על כל תוצר: קורא ל-screen-decomp.mjs, ובכשל מוחק את הקובץ ורושם 'failed-self-gate' — בשני מסלולים (widget ומעבר-קובץ).", "evidence": "machtzev/assemble/data-lift.mjs:L839-L843 · L870-L875"},
+   {"claim": "פולט לשלושה יעדים: אטומים ⇒ new/dart-ui-bs/auto · תוכן ⇒ new/dart-data-bs/auto · דוח ⇒ screens-seed/data-lift-report.json.", "evidence": "machtzev/assemble/data-lift.mjs:L15-L17 · L881-L883 · L891 · L893 (שורת-הסיכום)"},
+   {"claim": "מדווח כל דחייה עם סיבה מנוקבת, בשני מפלסים (widget + קובץ-שלם).", "evidence": "machtzev/assemble/data-lift.mjs:L552 (skip) · L884-L887 · L894"}
+  ],
+  "doesNot": [
+   {"claim": "אינו רץ לבד — מוצהר שהוא רץ **אחרי** shelf-lift ועל אותו מדף; ב-one.mjs זה אכן הסדר.", "evidence": "machtzev/assemble/data-lift.mjs:L7 'רץ אחרי shelf-lift (אותו מדף)'; machtzev/one.mjs:L111 ואז L112"},
+   {"claim": "אינו מתרגם ואינו ממציא תוכן — העברית עוברת verbatim לקובץ-דאטה נפרד.", "evidence": "machtzev/assemble/data-lift.mjs:L882 'verbatim מהמקור, אל תערוך ידנית'"},
+   {"claim": "**אין לו שסתום-פלט** (אין SHELF_OUT ואין ארגומנט out-dir) והוא מוחק את new/dart-data-bs/auto במלואו לפני בנייה. עם קלט חסר זו מחיקה-נטו של תוצרים מחויבים — אותה מחלקת-נזק שנמדדה בפועל ב-gen-manifest.", "evidence": "machtzev/assemble/data-lift.mjs:L553 `fs.rmSync(CONTENT_OUT, ...)` · L731 `fs.rmSync(FOUT, ...)` · L146 unlinkSync על כל .dart שמכיל 'מנוע-המטרות'; היעדר process.env בהגדרות L13-L18. מטעם זה **לא הרצתי אותו** — החלטה מתועדת ב-NOTES."},
+   {"claim": "אינו שער-משטרה ואינו מייצא פונקציות (CLI בלבד).", "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/assemble/data-lift.mjs ⇒ '🔧 עושה: 0 ייצואים' · '🚫 לא: אין-ייצוא (לא ספרייה) · לא-שער-משטרה'"}
+  ],
+  "callers": [
+   {"who": "machtzev/one.mjs:112", "how": "הרצה-בשם: stage('מנוע-הליטוש (data-lift)', ...) — רק ב-one.mjs"}
+  ],
+  "connectAt": {
+   "point": "∅ בקלון הזה. אותו חסם: SCRATCH (machtzev/assemble/data-lift.mjs:L14) + BS='/home/user/buildsmart' (L18) שאינו קיים, ובנוסף אין שסתום-פלט כך שהרצה כאן מוחקת 39 קבצי-תוכן מחויבים.",
+   "gives": "∅ בקלון-טרי."
+  },
+  "s22": {"score": 1, "why": "הוא המנוע שהופך אטום-עם-עברית-צרובה לאטום-עם-שקע — כלומר בדיוק ה-«retrofit-תפר» שתמונת-העל מכנה «המהלך הבא», ולכן לא 0. אבל כמו shelf-lift הוא בכיוון מקור⇒אטום, ובקלון-טרי הוא חסום-וגם-הרסני."},
+  "evidence": [
+   "ran: node machtzev/census/engine-index.mjs machtzev/assemble/data-lift.mjs ⇒ 892 שורות · 0 ייצואים · 0 מייבאים · נקרא-בשם: one",
+   "ran: grep -n 'unlinkSync|rmSync' machtzev/assemble/*.mjs ⇒ data-lift.mjs:146,553,731,843,875",
+   "ran: ls /home/user/buildsmart ⇒ MISSING",
+   "not-run: המנוע לא הורץ במכוון — L553 מוחק את new/dart-data-bs/auto ואין שסתום-פלט (ראו NOTES)",
+   "read: machtzev/assemble/data-lift.mjs:L1-L30, L540-L560, L876-L892",
+   "read: machtzev/one.mjs:L112"
+  ]
+ },
+ {
+  "file": "machtzev/assemble/board-gen.mjs",
+  "lang": "mjs",
+  "lines": 642,
+  "does": [
+   {"claim": "לכל מסך-מורכב פולט «לוח» — ConsumerWidget ב-new/dart-boards-bs/<screen>_board.dart שמחווט את הקומפוזר למקורות-החיים.", "evidence": "machtzev/assemble/board-gen.mjs:L2-L3 (כותרת) · L498 `fs.writeFileSync(path.join(OUT, srcScreen + '_board.dart'), code)`"},
+   {"claim": "בונה אינדקס-מוצא אטום⇒מסך:widget משני פורמטי-תעודה שבמדף.", "evidence": "machtzev/assemble/board-gen.mjs:L17-L28"},
+   {"claim": "בונה ארבעה אינדקסים מהמקור-החי של buildsmart דרך `git grep` על origin/main: מזהים-ציבוריים · קבועים · קובץ-בית-למחלקה · קובץ-בית-לקבוע (כולל זיהוי סמל דו-משמעי).", "evidence": "machtzev/assemble/board-gen.mjs:L31-L70"},
+   {"claim": "מכריע «האם הביטוי פתיר בלוח» לפי סריקת-מזהים מול watchVars/extras/DART_OK, ומדווח את המזהים הנכשלים במקום לבלוע.", "evidence": "machtzev/assemble/board-gen.mjs:L82-L126 (exprScanIds · exprResolvable · failingIds)"},
+   {"claim": "פולט גם גלריית-כניסה (GenesisGallery/GenesisApp/GenesisEntryButton) מאחורי דגל-קומפילציה kGenesisScreens, כולל סריקת new/dart-gen-bs לכניסות-gen_*.", "evidence": "machtzev/assemble/board-gen.mjs:L504-L526"},
+   {"claim": "כותב דוח board-gen-report.json עם מונים wired/todo/hebInExpr.", "evidence": "machtzev/assemble/board-gen.mjs:L214 (`report = { boards: [], totals: { wired, todo, hebInExpr } }`)"}
+  ],
+  "doesNot": [
+   {"claim": "אינו מחווט לדאטה אמיתי בלי המקור-החי: כל ארבעת האינדקסים עטופים ב-try/catch ריק, כך שבלי /home/user/buildsmart הם נשארים ריקים **בשקט** וכל ביטוי-פרויקטלי ייחשב לא-פתיר.", "evidence": "machtzev/assemble/board-gen.mjs:L33-L39 · L40-L43 · L44-L53 · L55-L72 (ארבעה `catch { }` ריקים) · L32 `const BS = '/home/user/buildsmart'`"},
+   {"claim": "אינו מרכיב את המסך — הוא עוטף קומפוזר קיים; ההרכבה היא gen-screen.mjs.", "evidence": "machtzev/assemble/board-gen.mjs:L11 (`MANIFESTS`) · L216 (קורא את המניפסט) · L283 (קורא את מסך-המקור)"},
+   {"claim": "**הרסני ובלי שסתום-פלט**: מוחק את כל new/dart-boards-bs (80 קבצים מחויבים כאן) לפני בנייה, והיעד קשיח.", "evidence": "machtzev/assemble/board-gen.mjs:L212 `fs.rmSync(OUT, { recursive: true, force: true })` · L12 `const OUT = path.join(ROOT, 'new/dart-boards-bs')` (אפס process.env, אפס argv[3]); מטעם זה **לא הרצתי אותו**"},
+   {"claim": "אינו שער-משטרה ואינו ב-INDEX.md.", "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/assemble/board-gen.mjs ⇒ '🚫 לא: לא-שער-משטרה · לא-ב-INDEX.md'"}
+  ],
+  "callers": [
+   {"who": "machtzev/one.mjs:159", "how": "הרצה-בשם: stage('מחולל-הלוחות (board-gen)', ...) — רק ב-one.mjs"}
+  ],
+  "connectAt": {
+   "point": "∅ בקלון הזה. שני חסמים בלתי-תלויים: (א) SCRATCH חסר (machtzev/assemble/board-gen.mjs:L9) · (ב) BS='/home/user/buildsmart' חסר (L32) והכישלון שקט (4 catch ריקים), כך שחיבורו כאן היה מייצר לוחות שנראים תקינים אך מחווטים לכלום.",
+   "gives": "∅. הערה: תמונת-העל ב-CLAUDE.md אומרת ש-board-gen «חי אך מנותק מהמחולל» ושיש 79 לוחות דורמנטיים — הקריאה בקוד מאששת זאת ומוסיפה את הסיבה: קלטו הוא הריפו-האח, לא הקטלוג."
+  },
+  "s22": {"score": 1, "why": "הלוח הוא בדיוק התפר שחסר לפי תמונת-העל (אטומי-אפס-דאטה מול מקורות-חיים), ולכן לא 0. אבל בקלון-טרי הוא כפול-חסום ושקט-בכישלון, ולכן אינו מועמד-חיבור כן היום."},
+  "evidence": [
+   "ran: node machtzev/census/engine-index.mjs machtzev/assemble/board-gen.mjs ⇒ 642 שורות · 0 מייבאים · נקרא-בשם: one",
+   "ran: ls new/dart-boards-bs ⇒ 80 קבצים מחויבים (היעד שהמנוע מוחק)",
+   "ran: ls /home/user/buildsmart ⇒ MISSING",
+   "not-run: המנוע לא הורץ במכוון — L212 rmSync על new/dart-boards-bs ואין שסתום-פלט (ראו NOTES)",
+   "read: machtzev/assemble/board-gen.mjs:L1-L60, L82-L126, L212-L216, L498-L526",
+   "read: machtzev/one.mjs:L159"
+  ]
+ },
+ {
+  "file": "machtzev/assemble/gen-theme.mjs",
+  "lang": "mjs",
+  "lines": 40,
+  "does": [
+   {"claim": "קורא את מרשם-האטומים atoms-L0-maor.json, מסנן אטומי-צבע עם ערך #/rgb/hsl/oklch, וממפה כל ערך-ייחודי לפיגמנט p_<hex>.", "evidence": "machtzev/assemble/gen-theme.mjs:L5-L8"},
+   {"claim": "פולט שני קבצים בהפרדת חוק-5: אטום-פלטה טהור (machtzev/new/atoms/palette.mjs, ערכים בלבד) וקופסת-ערכה (machtzev/new/boxes/theme.mjs) שמחזיקה את חיווט תפקיד⇒פיגמנט.", "evidence": "machtzev/assemble/gen-theme.mjs:L17-L21 · L22-L38"},
+   {"claim": "cssFor(mode, overrides) מרכיב :root CSS ונופל-רועש על מצב לא-מוכר או חיווט לפיגמנט-לא-קיים.", "evidence": "machtzev/assemble/gen-theme.mjs:L30-L37"}
+  ],
+  "doesNot": [
+   {"claim": "**אינו קשור ל-Dart/Flutter כלל** — הפלט הוא CSS ו-.mjs, כלומר שכבת-מאור-הישנה (web), לא העץ שהמחולל פולט.", "evidence": "machtzev/assemble/gen-theme.mjs:L36 (`':root {...}'`) · L17/L22 (יעדים .mjs)"},
+   {"claim": "אינו יכול לרוץ בריפו הזה — קלטו machtzev/registry/atoms-L0-maor.json, ותיקיית machtzev/registry אינה קיימת (המרשם יושב ב-maor-system לפי CLAUDE.md).", "evidence": "ran: ls machtzev/registry/ ⇒ 'No such file or directory'; machtzev/assemble/gen-theme.mjs:L5 `new URL('../registry/atoms-L0-maor.json', import.meta.url)`"},
+   {"claim": "גם יעדי-הכתיבה אינם קיימים — machtzev/new/atoms ו-machtzev/new/boxes חסרים, ואין mkdirSync.", "evidence": "ran: ls machtzev/new/atoms machtzev/new/boxes ⇒ שניהם 'No such file or directory'; machtzev/assemble/gen-theme.mjs:L17-L22 (writeFileSync בלי mkdir)"},
+   {"claim": "אינו מחשב ניגודיות/נגישות ואינו מבין סלקטורים — מודה בכך בעצמו: 'קירוב v1: ערך-ראשון=אור, ערך-אחרון-שונה=חושך (הקשר-סלקטור מלא — בגל הבא)'.", "evidence": "machtzev/assemble/gen-theme.mjs:L3 · L13-L14"},
+   {"claim": "אין לו שום קורא בשום מקום בריפו — לא ייבוא, לא הרצה-בשם, לא שער.", "evidence": "ran: grep -rn 'assemble/gen-theme.mjs' --include=*.mjs --include=*.js --include=*.json --include=*.tsv --include=*.sh --include=*.yml --include=*.dart . ⇒ התוצאה היחידה היא machtzev/index-baseline.json:2 (רשימת-מלאי, לא קורא); grep 'gen-theme' ⇒ אפס תוצאות מחוץ לקובץ עצמו"}
+  ],
+  "callers": [
+   {"who": "∅", "how": "אין קורא. הופעה יחידה: machtzev/index-baseline.json:2 — רשימת-מלאי של קבצים, לא הרצה"}
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה. המחולל פולט Dart/Flutter ובוחר עור דרך machtzev/generator/auto-skin.mjs ו-machtzev/ds-forge.mjs (machtzev/generator/regen.mjs:L7-L8). gen-theme פולט CSS ממרשם שאינו בריפו; אין תפר בינו לבין אף נקודת-כניסה.",
+   "gives": "∅"
+  },
+  "s22": {"score": 0, "why": "0 במפורש: שכבה טכנולוגית שונה (CSS/web-מאור) ממה ש-§22 דורש (אפליקציה+אתר Flutter), קלטו אינו קיים בריפו, יעדיו אינם קיימים, ואין לו קורא. הוא שריד-חלוץ מהעידן שלפני מסלול-ה-Dart, לא שלב שהמחולל מדלג עליו."},
+  "evidence": [
+   "ran: node machtzev/census/engine-index.mjs machtzev/assemble/gen-theme.mjs ⇒ 40 שורות · '🚫 לא: לא-שער-משטרה · אין-קורא-ידוע · לא-ב-INDEX.md' · 0 מייבאים",
+   "ran: ls machtzev/registry/ ⇒ No such file or directory",
+   "ran: ls machtzev/new/atoms machtzev/new/boxes ⇒ No such file or directory",
+   "ran: grep -rn 'gen-theme' על כל הריפו (mjs/js/tsv/sh/yml/dart) ⇒ אפס תוצאות מחוץ לקובץ עצמו",
+   "read: machtzev/assemble/gen-theme.mjs:L1-L39 (הקובץ המלא)",
+   "read: machtzev/generator/regen.mjs:L7-L8 (מסלול-העור בפועל: ds-forge + auto-skin)"
+  ]
+ },
+ {
+  "file": "machtzev/assemble/tokens-roundtrip.mjs",
+  "lang": "mjs",
+  "lines": 20,
+  "does": [
+   {"claim": "הוכחת-הפיכוּת: לכל ערך בכל אטום מ-atoms-L0-<repo>.json חוזר לשורה המקורית בקובץ-המקור לפי v.at (file:line) ומשווה שם-משתנה וערך מול המקור.", "evidence": "machtzev/assemble/tokens-roundtrip.mjs:L9-L16"},
+   {"claim": "אי-התאמה ⇒ מדפיס '🚨 אובדן-מידע' עם המקור והאטום זה-מול-זה, ויוצא בקוד 1.", "evidence": "machtzev/assemble/tokens-roundtrip.mjs:L14-L18"},
+   {"claim": "מקבל שם-ריפו כארגומנט (ברירת-מחדל 'maor').", "evidence": "machtzev/assemble/tokens-roundtrip.mjs:L5 `const repo = process.argv[2] || 'maor'`"}
+  ],
+  "doesNot": [
+   {"claim": "אינו יכול לרוץ בריפו הזה — machtzev/registry/census-maor.json אינו קיים; נכשל מיד בשורה 6.", "evidence": "ran: node machtzev/assemble/tokens-roundtrip.mjs ⇒ \"Error: ENOENT: no such file or directory, open '/home/user/-ai-chat-server/machtzev/registry/census-maor.json'\""},
+   {"claim": "גם אם המרשם היה קיים, הוא קורא את קובצי-המקור מ-census.root — כלומר עץ maor-system שאינו בריפו.", "evidence": "machtzev/assemble/tokens-roundtrip.mjs:L11 `fs.readFileSync(`${census.root}/${file}`)`"},
+   {"claim": "אינו בודק Dart ואינו בודק אטומי-תצוגה — הרגקס שלו מכיר רק הצהרת CSS custom-property (`--name: value;`).", "evidence": "machtzev/assemble/tokens-roundtrip.mjs:L12 `orig.match(/^\\s*(--[a-zA-Z0-9-]+)\\s*:\\s*([^;]+);/)`"},
+   {"claim": "אינו כותב דבר ואינו מייצא דבר — CLI-בדיקה בלבד.", "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/assemble/tokens-roundtrip.mjs ⇒ '🚫 לא: אין-ייצוא (לא ספרייה) · לא-כותב-פלט · לא-שער-משטרה · אין-קורא-ידוע · לא-ב-INDEX.md'"},
+   {"claim": "אינו רשום כשער למרות שהוא במהותו בדיקה — אינו ב-gates.tsv ואין לו קורא.", "evidence": "ran: grep -rn 'tokens-roundtrip' על כל הריפו ⇒ ההופעה היחידה היא machtzev/index-baseline.json:4"}
+  ],
+  "callers": [
+   {"who": "∅", "how": "אין קורא. הופעה יחידה: machtzev/index-baseline.json:4 — רשימת-מלאי, לא הרצה"}
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה. הוא בודק הפיכוּת של חילוץ-CSS ממרשם שאינו בריפו. המקבילה החיה שלו במסלול-ה-Dart היא שער ה-oracle (אינדקס ≡ עץ-חי) ו-machtzev/census/oracle.mjs שכבר ב-regen.mjs:L11.",
+   "gives": "∅"
+  },
+  "s22": {"score": 0, "why": "0 במפורש: 20 שורות, שכבת-CSS, קלט שאינו קיים בריפו (נמדד בשגיאת ENOENT), אפס קוראים, ותפקידו כבר מכוסה במסלול-ה-Dart ע\"י oracle.mjs שרץ בצנרת. אינו שלב שהמחולל מדלג עליו."},
+  "evidence": [
+   "ran: node machtzev/assemble/tokens-roundtrip.mjs ⇒ ENOENT על machtzev/registry/census-maor.json",
+   "ran: ls machtzev/registry/ ⇒ No such file or directory",
+   "ran: node machtzev/census/engine-index.mjs machtzev/assemble/tokens-roundtrip.mjs ⇒ 20 שורות · אין-קורא-ידוע · לא-כותב-פלט",
+   "ran: grep -rn 'tokens-roundtrip' על כל הריפו ⇒ רק index-baseline.json:4",
+   "read: machtzev/assemble/tokens-roundtrip.mjs:L1-L19 (הקובץ המלא)",
+   "read: machtzev/generator/regen.mjs:L11 (oracle --write בצנרת)"
+  ]
+ }
+]
