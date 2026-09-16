@@ -1248,5 +1248,366 @@
    "ran: ls -la machtzev/generator/legacy/ ⇒ אין atlas.json ואין knowledge/",
    "read: machtzev/generator/legacy/teach.mjs:1-35 (הקובץ במלואו) · README.md:2"
   ]
+ },
+ {
+  "file": "machtzev/pure/pure-lint.mjs",
+  "lang": "mjs",
+  "lines": 243,
+  "does": [
+   {
+    "claim": "מקודד כל כלל **בר-בדיקה** של PURE-SPEC (§0/§1/§2/§5) לבדיקה דטרמיניסטית חוזרת על קבצי ה-*-family.html.",
+    "evidence": "pure-lint.mjs:2-6 (הכותרת) · :8 `node pure-lint.mjs [files...] # default: every *-family.html + index.html`"
+   },
+   {
+    "claim": "מודד ניגודיות WCAG בפועל ומדווח יחס מספרי.",
+    "evidence": "ran: `node machtzev/pure/pure-lint.mjs --strict` ⇒ `[MINOR] §5 --faint on --surface = 3.39:1 < 4.5:1 (body-text contrast)`"
+   },
+   {
+    "claim": "מוכיח שהשער נושך: selftest מפיל GOOD/BAD על 14 כללים + BLOCKER.",
+    "evidence": "ran: `node machtzev/pure/pure-lint.mjs --selftest` ⇒ `✓ pure-lint selftest — GOOD lints clean · BAD trips all 14 rules + BLOCKER` (exit 0)"
+   },
+   {
+    "claim": "מצהיר במפורש מה הוא **לא** שופט — השארית התפיסתית (Flat≠Elevated בעין, המורף) נשארת לעין אדם.",
+    "evidence": "pure-lint.mjs:4-6 «Anything genuinely perceptual (Flat≠Elevated by eye, identifiable-without-name, the morph *look*) is deliberately NOT judged here; that thin residue is the only place a render+eye remains»"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אדום כאן ואיש אינו רואה:** `--strict` יוצא 1 (מצב-שער) על 2 MAJOR — והוא **אינו רשום במשטרה ואינו ב-gates.tsv**.",
+    "evidence": "ran: `node machtzev/pure/pure-lint.mjs --strict >/dev/null; echo $?` ⇒ `1` · `── pure-lint: 18 files · 0 blocker · 2 major · 18 minor (strict)──` · ran: `grep -c pure-lint machtzev/police.mjs` ⇒ `0` · `grep -c pure-lint machtzev/gates.tsv` ⇒ `0`. הוא כן מורץ מ-machtzev/one.mjs:164 — כלומר רק מי שמריץ את המנוע-האחד המלא ייתקל בזה."
+   },
+   {
+    "claim": "אינו מחולל ואינו קורא Dart — הוא בודק HTML בלבד.",
+    "evidence": "pure-lint.mjs:8 «default: every *-family.html + index.html»"
+   },
+   {
+    "claim": "אינו מייצא כלום ואינו כותב פלט.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/pure/pure-lint.mjs ⇒ `🔧 עושה: 0 ייצואים` · `🚫 לא: אין-ייצוא (לא ספרייה) · לא-כותב-פלט · לא-שער-משטרה`"
+   },
+   {
+    "claim": "אינו מודד את הפלט-המחולל — רק את **מקור-האמת** (הגלריה). את הפלט מודד balagan-look.",
+    "evidence": "pure-lint.mjs:8 מול balagan-look.mjs:2 «בדיקה מכנית על **הפלט-המחולל**»"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/one.mjs:163",
+    "how": "הרצה-בשם `--selftest` — `stage('אימות-מנוע-Pure (pure-lint --selftest)', …)`"
+   },
+   {
+    "who": "machtzev/one.mjs:164",
+    "how": "הרצה-בשם `--strict` — `stage('שער-שפת-העיצוב (pure-lint --strict)', …)`. one.mjs אינו GEN_ENTRY ⇒ אינו מזכה בחיבור."
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/police.mjs + machtzev/gates.tsv — לרשום אותו כשער-אמת (היום הוא שער בכל דבר חוץ מהרישום)",
+   "gives": "לא מקרב את §22 ישירות, אבל סוגר את הפער «שער שאיש לא מריץ»: הוא כבר מוכיח שהוא נושך (selftest), הוא כבר אדום, ואין לו ledger. זו אותה מחלקה בדיוק כמו op-bridge בקבוצה הזאת."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **כלי-מדידה/שער**. הוא שומר על שפת-העיצוב שממנה pure-forge חושל — חשוב, אך לא שלב בנתיב משפט⇒אפליקציה."
+  },
+  "evidence": [
+   "ran: node machtzev/pure/pure-lint.mjs --selftest ⇒ ✓ GOOD lints clean · BAD trips all 14 rules + BLOCKER",
+   "ran: node machtzev/pure/pure-lint.mjs --strict ⇒ 18 files · 0 blocker · 2 major · 18 minor · exit=1",
+   "ran: grep -c pure-lint machtzev/police.mjs ⇒ 0 · grep -c pure-lint machtzev/gates.tsv ⇒ 0",
+   "read: machtzev/pure/pure-lint.mjs:1-12 · machtzev/one.mjs:163-164"
+  ]
+ },
+ {
+  "file": "machtzev/pure/pure-decompose.mjs",
+  "lang": "mjs",
+  "lines": 111,
+  "does": [
+   {
+    "claim": "קורא כל `*-family.html`, מחלץ כל אטום-תצוגה עם סוג-ה-seam, ופולט שלישייה ל-new/atoms: מדף + חוזה + בדיקה.",
+    "evidence": "pure-decompose.mjs:2-6 (הכותרת) · אימות-פלט: `new/atoms/pure-text-shelf.mjs:4` נושא «חולל ע\"י machtzev/pure/pure-decompose.mjs ממקור-האמת machtzev/pure/text-family.html (אל תערוך ידנית — regen)» — וכך גם ב-card/nav/chat/temporal/header/feedback/spatial/dataviz"
+   },
+   {
+    "claim": "המדף הנפלט הוא אטום-אמת לפי חוק-1: `export const` · דאטה-ליטרלית · אפס-import.",
+    "evidence": "pure-decompose.mjs:4 «pure-<family>-shelf.mjs (export const · דאטה-ליטרלית · אפס-import — חוק-1/חוק-אטום)»"
+   },
+   {
+    "claim": "פולט גם מניפסט למחולל: machtzev/generator/knowledge/pure-shelf.json.",
+    "evidence": "pure-decompose.mjs:6 · machtzev/one.mjs:244 קורא אותו לשורת-המצב `pure-shelf`"
+   },
+   {
+    "claim": "מסנן תוכן-פלייסהולדר ותוויות-מצב כדי שלא ייחשבו שמות-אטום.",
+    "evidence": "pure-decompose.mjs:21-23 `const SKIP = new Set(['Label','Value','Meta','Action','Option','Title','Add','LIVE','ON','OFF','info','warn','ok','err',…]);`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **פלטו המחויב אינו עדכני:** `--check` יוצא 1 על 16 קבצים.",
+    "evidence": "ran: `node machtzev/pure/pure-decompose.mjs --check` ⇒ `✗ pure-decompose: 16 קבצים לא-עדכניים — הרץ ללא --check` · exit=1 · מתוכם `✗ לא-עדכני: new/atoms/pure-temporal-shelf.test.mjs` ו-`✗ לא-עדכני: machtzev/generator/knowledge/pure-shelf.json`"
+   },
+   {
+    "claim": "ואין לו שער שיתפוס זאת — אינו ב-police.mjs ואינו ב-gates.tsv; ב-one.mjs הוא מורץ **ללא** `--check`, כלומר כותב במקום לבדוק.",
+    "evidence": "ran: `grep -c pure-decompose machtzev/police.mjs` ⇒ `0` · `grep -c pure-decompose machtzev/gates.tsv` ⇒ `0` · machtzev/one.mjs:166 `stage('פירוק-התצוגה (pure-decompose)', () => last(run('machtzev/pure/pure-decompose.mjs')));` — בלי דגל"
+   },
+   {
+    "claim": "אינו מחולל Dart — פולט `.mjs` (מדף-דאטה). החישול ל-Dart הוא pure-forge.",
+    "evidence": "pure-decompose.mjs:4 (פלט .mjs) מול pure-forge.mjs:2 «ממיר את שפת-Pure מה-HTML … לאטומי-Dart seam-aware»"
+   },
+   {
+    "claim": "אינו מייצא כלום.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/pure/pure-decompose.mjs ⇒ `🔧 עושה: 0 ייצואים`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/one.mjs:166",
+    "how": "הרצה-בשם, ללא דגל (מצב-כתיבה). one.mjs אינו GEN_ENTRY ⇒ אינו מזכה בחיבור."
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/regen.mjs:7 — לפני `ds-forge.mjs` (שהוא כבר השלב הראשון ב-REGEN וממיר Pure ⇒ אטומי-forge)",
+   "gives": "היום REGEN מתחיל ב-ds-forge שצורך את Pure, אבל **הפירוק** של Pure יושב מחוץ לסדר-הריצה — ולכן הוא מתיישן (16 קבצים). הכנסתו כשלב-0 ב-REGEN תהפוך את שרשרת-התצוגה לשלמה מ-HTML ועד אטום-forge, ותסגור את הסחיפה. זו נקודה כנה: היא מחברת מנוע-פליטה אמיתי לצינור, לא שער."
+  },
+  "s22": {
+   "score": 2,
+   "why": "2 = מקרב. הוא מנוע-פליטה (לא שער) שמזין את קטלוג-התצוגה שהמחולל בוחר ממנו, וכרגע פלטו סחף בלי שאיש יראה. לא 3: הוא מייצר **חומר-גלם** (מדף-אטומים), לא צעד על נתיב משפט⇒אפליקציה. סיבת אי-החיבור: **פשוט לא חובר** — הוא חי, רץ, ומורץ מ-one בלבד."
+  },
+  "evidence": [
+   "ran: node machtzev/pure/pure-decompose.mjs --check ⇒ ✗ 16 קבצים לא-עדכניים · exit=1",
+   "ran: grep -c pure-decompose machtzev/police.mjs ⇒ 0 · gates.tsv ⇒ 0",
+   "read: machtzev/pure/pure-decompose.mjs:1-25 · machtzev/one.mjs:166,244",
+   "read: new/atoms/pure-text-shelf.mjs:4 (כותרת-הפלט המעידה על המחולל) · new/atoms/pure-text-shelf.contract.md:14",
+   "read: machtzev/generator/regen.mjs:7 (ds-forge כשלב ראשון)"
+  ]
+ },
+ {
+  "file": "machtzev/pure/pure-forge.mjs",
+  "lang": "mjs",
+  "lines": 161,
+  "does": [
+   {
+    "claim": "ממיר משפחת-Pure מ-HTML (מקור-האמת) לאטום-Dart seam-aware: קורא CSS+מבנה-קומפוננטה ופולט widget שקורא DsSeam.",
+    "evidence": "pure-forge.mjs:2-4 (הכותרת) · :13-20 מפת VAR (CSS-var ⇒ skin/theme/fonts) · :23 `const usedSeam = new Set();`"
+   },
+   {
+    "claim": "אינו ממציא צבע: כל ערך עובר cssVar ⇒ ביטוי-seam, ורק בנפילה hex ליטרלי.",
+    "evidence": "pure-forge.mjs:21-24 `const asColor = (v) => { const d = cssVar(v); if (d) {…} const h = String(v).match(/#([0-9a-fA-F]{6})/); return h ? `const Color(0xFF${h[1].toUpperCase()})` : null; };`"
+   },
+   {
+    "claim": "קורא רק את ערוצי-ה-seam שנצרכו בפועל.",
+    "evidence": "pure-forge.mjs:23 `usedSeam.add(d.split('.')[0])` — «אילו ערוצים נצרכו (skin/theme/fonts) ⇒ לקרוא רק מה שצריך»"
+   },
+   {
+    "claim": "פלטו קיים בעץ ונושא את חתימתו.",
+    "evidence": "ran: `head -5 new/dart-ui-bs/forged/forged_chat.dart` ⇒ `// 🏭 חושל ע\"י pure-forge ממקור-האמת machtzev/pure/chat-family.html — seam-aware, אל תערוך ידנית.`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **הוחלף — ופלטו יתום.** `ds-forge.mjs` (שלב-1 ב-REGEN) מכיל `forgeFamily` משלו ופולט ל-`new/dart-forge-bs`; pure-forge פולט ל-`new/dart-ui-bs/forged`, ואף קובץ-Dart מחולל אינו מפנה לשם.",
+    "evidence": "machtzev/ds-forge.mjs:1318 `function forgeFamily(fam) {` · ds-forge.mjs:16 `const OUT = path.join(ROOT,'new/dart-forge-bs');` · machtzev/generator/regen.mjs:7 `{ rel:'machtzev/ds-forge.mjs', args:[], note:'Pure ⇒ אטומי-forge + מניפסט' }` · ran: `find new/dart-forge-bs -name '*.dart' | wc -l` ⇒ **376** מול `ls new/dart-ui-bs/forged/*.dart | wc -l` ⇒ **13** · ran: `grep -rln \"forged_\" new/dart-gen-bs --include=*.dart | wc -l` ⇒ **0**"
+   },
+   {
+    "claim": "אין לו אף קורא.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/pure/pure-forge.mjs ⇒ `🚫 לא: … אין-קורא-ידוע · לא-ב-INDEX.md` · `🔌 מחובר: 0 מייבאים` · ran: `grep -c pure-forge machtzev/police.mjs` ⇒ 0"
+   },
+   {
+    "claim": "אינו פולט בלי `--write` — ברירת-המחדל היא הדפסה.",
+    "evidence": "pure-forge.mjs:5 «node machtzev/pure/pure-forge.mjs <family> [--write]» · הכרטיס: `CLI --write · כותב 1`"
+   },
+   {
+    "claim": "אינו מכסה את כל המשפחות בריצה אחת — מקבל משפחה אחת בארגומנט.",
+    "evidence": "pure-forge.mjs:155 `if (!fam) { console.error('שימוש: node pure-forge.mjs <family> [--write]'); process.exit(1); }`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אפס מייבאים · אפס הרצה-בשם · אפס שער. ההופעה היחידה מחוץ לעצמו: machtzev/index-baseline.json:60."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — אין נקודה כנה. התפקיד מאויש ע\"י ds-forge.mjs, שהוא שלב-1 ב-REGEN ופולט 376 אטומים מול 13. חיבור pure-forge יצור מחולל-עור שני ופלט מקביל שאיש לא צורך."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **הוחלף** — ds-forge בלע את forgeFamily והפך לשלב-1 של הצינור. הראיה אינה כותרת אלא יחס-פלטים (376:13) ואפס-צרכנים לפלט הישן."
+  },
+  "evidence": [
+   "ran: find new/dart-forge-bs -name '*.dart' | wc -l ⇒ 376",
+   "ran: ls new/dart-ui-bs/forged/*.dart | wc -l ⇒ 13",
+   "ran: grep -rln \"forged_\" new/dart-gen-bs --include=*.dart | wc -l ⇒ 0 (הפלט אינו נצרך)",
+   "ran: head -5 new/dart-ui-bs/forged/forged_chat.dart ⇒ «חושל ע\"י pure-forge»",
+   "read: machtzev/pure/pure-forge.mjs:1-25 · machtzev/ds-forge.mjs:16,1318 · machtzev/generator/regen.mjs:7"
+  ]
+ },
+ {
+  "file": "machtzev/pure/shot.mjs",
+  "lang": "mjs",
+  "lines": 13,
+  "does": [
+   {
+    "claim": "מצלם קובץ-HTML מקומי ב-chromium דרך playwright-core ושומר JPEG q82, viewport 1240, DSR 2.",
+    "evidence": "shot.mjs:4-10 — `chromium.launch({executablePath:EXE})` · `newPage({viewport:{width:1240,height:1000},deviceScaleFactor:2})` · `p.screenshot({path:out,fullPage:true,type:'jpeg',quality:82})`"
+   },
+   {
+    "claim": "יודע להחליף ערכת-נושא לפני הצילום ולהמתין לגופנים.",
+    "evidence": "shot.mjs:7-8 `if(theme){await p.click(`.seg button[data-t=\"${theme}\"]`);await p.waitForTimeout(700);}` · `await p.evaluate(()=>document.fonts.ready)`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אין לו קורא — והדיווח «נקרא-בשם: ship» באינדקס הוא התאמת-שם שגויה.** ship.mjs קורא ל-`machtzev/tools/site-shot.mjs`, קובץ אחר.",
+    "evidence": "ran: `node machtzev/census/engine-index.mjs machtzev/pure/shot.mjs` ⇒ `🔌 מחובר: 0 מייבאים · נקרא-בשם: ship,📄 PURE-STATE.md` מול machtzev/generator/ship.mjs:98 `const sh = node('machtzev/tools/site-shot.mjs', ['studentsforge','SchoolOS · תלמידים · forge','8790'], …);` — `site-shot.mjs`, לא `pure/shot.mjs`"
+   },
+   {
+    "claim": "וגם ההתאמה ב-police.mjs היא שווא: היחידה מוסברת ע\"י המילה «snapshot».",
+    "evidence": "ran: `grep -n shot machtzev/police.mjs` ⇒ שורה 105 בלבד: `// (c3 מחליף ב-outDir()/GEN_OUT; עד אז — snapshot/restore תחת ה-lock, ב-finally.)` — «snapshot» מכיל «shot»"
+   },
+   {
+    "claim": "הנתיב שהתיעוד נותן לו אינו הנתיב שלו — PURE-STATE.md מפנה ל-`scratchpad/shot.mjs` ברֵיפו אחר.",
+    "evidence": "machtzev/pure/PURE-STATE.md:44-45 «סקריפט: `scratchpad/shot.mjs <file> <out.jpg> [theme]`» · «דוגמה: `cd /home/user/maor-system && node scratchpad/shot.mjs …`» — ו-`/home/user/maor-system` אינו קיים כאן"
+   },
+   {
+    "claim": "הנתיב לדפדפן חרוט וגרסה-ספציפית — שביר מול שדרוג playwright.",
+    "evidence": "shot.mjs:2 `const EXE='/opt/pw-browsers/chromium-1194/chrome-linux/chrome';` · ran: `ls -d /opt/pw-browsers/*` ⇒ `chromium` · `chromium-1194` · `chromium_headless_shell-1194` · `ffmpeg-1011` — קיים היום, אבל השוו ל-balagan-run.mjs:22 שמאתר את הגרסה דינמית: `fs.readdirSync('/opt/pw-browsers').filter(d=>/^chromium-\\d+$/.test(d))`"
+   },
+   {
+    "claim": "אינו מייצא כלום ואינו כותב ל-repo — כותב לקובץ שהארגומנט נותן.",
+    "evidence": "shot.mjs:3 `const file=process.argv[2], out=process.argv[3]…` · ran: הכרטיס ⇒ `🚫 לא: … לא-כותב-פלט`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אפס. שתי ה«התאמות» (ship, police) הן התאמות-שם שגויות — מפורק בראיה למעלה."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — כלי-צילום ידני לגלריית-Pure. התפקיד המקביל בצינור מאויש ע\"י machtzev/tools/site-shot.mjs (ship.mjs:98), שמצלם את **האתר הבנוי** ולא HTML סטטי."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **כלי-יד** (13 שורות, ארגומנטים מהשורה) שגם **נטוש** — אפס קוראים אמיתיים והתיעוד שלו מפנה לנתיב בריפו שאינו קיים כאן."
+  },
+  "evidence": [
+   "read: machtzev/pure/shot.mjs:1-12 (הקובץ במלואו)",
+   "ran: grep -n shot machtzev/police.mjs ⇒ רק שורה 105 («snapshot»)",
+   "read: machtzev/generator/ship.mjs:98 ⇒ tools/site-shot.mjs (לא pure/shot.mjs)",
+   "ran: ls -d /opt/pw-browsers/* ⇒ chromium-1194 קיים",
+   "read: machtzev/pure/PURE-STATE.md:44-45,54"
+  ]
+ },
+ {
+  "file": "machtzev/pure/pure-e2e-proof.gen.mjs",
+  "lang": "mjs",
+  "lines": 48,
+  "does": [
+   {
+    "claim": "מייצר עמוד-HTML הדגמה שמראה אותו כפתור בשתי בחירות-פיגמנט שונות, כששתיהן נמשכות מאותו מקור דרך resolvePigment.",
+    "evidence": "pure-e2e-proof.gen.mjs:1 «קופסת-הדגמה (חיווט, לא-אטום): אותו כפתור, שתי בחירות מאותו מקור — דרך resolvePigment» · :8-14 `function button(title, layers) { const g = (role,fb) => resolvePigment(role, layers) ?? fb; … }`"
+   },
+   {
+    "claim": "מצהיר על עצמו כקופסה ולא כאטום, ולכן מותר לו spread-חיווט.",
+    "evidence": "pure-e2e-proof.gen.mjs:5-6 `// הקופסה מרכיבה base פר-ערכה מהקטלוג (spread = חיווט, מותר בקופסה)` · `const baseOf = t => ({ ...PURE_LOOK.neutral, ...PURE_LOOK.semantic, ...PURE_LOOK.themes[t] });`"
+   },
+   {
+    "claim": "רץ ויוצא 0.",
+    "evidence": "ran: `node machtzev/pure/pure-e2e-proof.gen.mjs >/dev/null; echo $?` ⇒ `0`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו מוכיח כלום אוטומטית** — למרות השם «proof». אין בו assert, אין exit≠0, אין השוואה לציפייה; הוא מדפיס HTML ל-stdout ואדם צריך להסתכל.",
+    "evidence": "read: machtzev/pure/pure-e2e-proof.gen.mjs:1-48 — אפס `assert`/`throw`/`process.exit(1)`; ran ⇒ exit 0 תמיד"
+   },
+   {
+    "claim": "אין לו מטרה מתועדת באינדקס ואין לו קורא.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/pure/pure-e2e-proof.gen.mjs ⇒ `🎯 מטרה: ∅ — לא מתועדת` · `🚫 לא: אין-מטרה-מתועדת · אין-ייצוא (לא ספרייה) · לא-כותב-פלט · לא-שער-משטרה · אין-קורא-ידוע · לא-ב-INDEX.md`"
+   },
+   {
+    "claim": "אינו חלק משום שער — לא ב-police ולא ב-gates.tsv.",
+    "evidence": "ran: `grep -c pure-e2e-proof machtzev/police.mjs` ⇒ `0` · `grep -c pure-e2e-proof machtzev/gates.tsv` ⇒ `0`"
+   },
+   {
+    "claim": "אינו כותב קובץ — הפלט הוא stdout בלבד.",
+    "evidence": "pure-e2e-proof.gen.mjs (סוף הקובץ) `process.stdout.write(html)` — כמו באחיו pure-look-proof.gen.mjs:38"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אפס. ההופעה היחידה מחוץ לעצמו: machtzev/index-baseline.json:59."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — עמוד-הדגמה חד-פעמי לעין אדם. אם יש לו ערך, הוא שייך ל-pure-lint (שם השארית-התפיסתית מוצהרת, pure-lint.mjs:4-6) — לא לצינור-המחולל."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **נטוש** — אפס קוראים, אפס מטרה מתועדת, ו«proof» שאינו מוכיח (אין assert, exit 0 תמיד). מחולל-ראווה, לא מנוע."
+  },
+  "evidence": [
+   "ran: node machtzev/pure/pure-e2e-proof.gen.mjs >/dev/null; echo $? ⇒ 0",
+   "read: machtzev/pure/pure-e2e-proof.gen.mjs:1-14 והקובץ כולו — אפס assert",
+   "ran: node machtzev/census/engine-index.mjs machtzev/pure/pure-e2e-proof.gen.mjs ⇒ אין-מטרה-מתועדת · אין-קורא-ידוע",
+   "ran: grep -c pure-e2e-proof machtzev/police.mjs ⇒ 0 · gates.tsv ⇒ 0"
+  ]
+ },
+ {
+  "file": "machtzev/pure/pure-look-proof.gen.mjs",
+  "lang": "mjs",
+  "lines": 39,
+  "does": [
+   {
+    "claim": "מייצר עמוד-HTML שמציג פאנל לכל ערכת-נושא ב-PURE_LOOK, כשכל צבע נקרא מהאטום ולא נכתב בעמוד.",
+    "evidence": "pure-look-proof.gen.mjs:1 `import { PURE_LOOK } from '../../new/atoms/pure-look.mjs';` · :6-13 `const themes=Object.keys(PURE_LOOK.themes); const panels=themes.map(id => …)` · :36 «every color below is read from new/atoms/pure-look.mjs»"
+   },
+   {
+    "claim": "מדגים את הטענה הסמנטית: החלפת ערכה מסיטה את האקצנט, והשגיאה נשארת אדומה (semantic-fixed).",
+    "evidence": "pure-look-proof.gen.mjs:36 «theme switch morphs accent · error stays red (semantic-fixed)» · :17 `:root{${svars}}` (סמנטי גלובלי) מול :23 `${themes.map(themeCSS).join('\\n')}` (אקצנט פר-ערכה)"
+   },
+   {
+    "claim": "רץ ומדפיס HTML.",
+    "evidence": "ran: `node machtzev/pure/pure-look-proof.gen.mjs | head -c 80` ⇒ `<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-` · exit=0"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו מוכיח** — אין assert ואין exit≠0; «proof» כאן = עמוד לעין.",
+    "evidence": "read: machtzev/pure/pure-look-proof.gen.mjs:1-38 (הקובץ במלואו) — אפס assert/throw; מסתיים ב-:38 `process.stdout.write(html)`"
+   },
+   {
+    "claim": "**אינו רץ-מהשורה** לפי האינדקס — אין בו shebang ואין קריאת argv, ולכן נספר כלא-בר-הרצה.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/pure/pure-look-proof.gen.mjs ⇒ `🚫 לא: אין-מטרה-מתועדת · אין-ייצוא (לא ספרייה) · **לא-רץ-מהשורה** · לא-כותב-פלט · לא-שער-משטרה · אין-קורא-ידוע · לא-ב-INDEX.md` — מול engine-index.mjs:157 `const runnable = (s) => /^#!/.test(s) || /process\\.argv/.test(s) || …`. בפועל הוא כן רץ (`node <file>`), אז זו מגבלת-מדידה ולא מגבלת-קובץ."
+   },
+   {
+    "claim": "אין לו מטרה מתועדת ואין לו קורא.",
+    "evidence": "ran (לעיל) ⇒ אין-מטרה-מתועדת · אין-קורא-ידוע · ran: `grep -c pure-look-proof machtzev/police.mjs` ⇒ `0` · `gates.tsv` ⇒ `0`"
+   },
+   {
+    "claim": "אינו כותב קובץ.",
+    "evidence": "pure-look-proof.gen.mjs:38 `process.stdout.write(html)`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אפס. ההופעה היחידה מחוץ לעצמו: machtzev/index-baseline.json:62."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — עמוד-ראווה ל-pure-look. המנוע שבאמת צורך את pure-look בצינור הוא ds-forge.mjs (regen.mjs:7)."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **נטוש** — אפס קוראים, אפס מטרה מתועדת, ו«proof» ללא assert. אותה מחלקה בדיוק כמו pure-e2e-proof.gen.mjs."
+  },
+  "evidence": [
+   "ran: node machtzev/pure/pure-look-proof.gen.mjs | head -c 80 ⇒ HTML · exit=0",
+   "read: machtzev/pure/pure-look-proof.gen.mjs:1-38 (הקובץ במלואו)",
+   "ran: node machtzev/census/engine-index.mjs machtzev/pure/pure-look-proof.gen.mjs ⇒ לא-רץ-מהשורה · אין-קורא-ידוע",
+   "read: machtzev/census/engine-index.mjs:157 (הגדרת runnable)"
+  ]
  }
 ]

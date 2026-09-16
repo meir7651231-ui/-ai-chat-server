@@ -107,3 +107,34 @@ affinity cells differing: 1564 of 1584
 ## הערך היחיד ששורד ב-legacy הוא קורפוס, לא מנוע
 `screens-seed/machine` — 254 מסכים עם `sectionMap`+`composer` מפורקים. אף מנוע **מחובר** אינו נוגע בו.
 `retrieve-screen.mjs` מאחזר מטקסט-תוכן בלבד ואין לו את המבנה. זו הערה למנהל, לא המלצת-חיבור.
+
+## 🔴 דפוס #3 — «שער» שאינו במרשם-השערים מתיישן בשקט
+`machtzev/gates.tsv` הוא מרשם 57 השערים. שלושה מנועים בקבוצה שלי מתנהגים כשערים אך **אינם שם**:
+| מנוע | מצבו עכשיו | police.mjs | gates.tsv |
+|---|---|---|---|
+| `generator/op-bridge.mjs` | `--gate` **אדום** | 0 | — |
+| `pure/pure-lint.mjs` | `--strict` **exit 1** (2 major) | 0 | 0 |
+| `pure/pure-decompose.mjs` | `--check` **exit 1** (16 קבצים) | 0 | 0 |
+שני האחרונים כן מורצים מ-`one.mjs:164,166` — אבל `one.mjs` אינו נקודת-כניסה, ו-`pure-decompose`
+מורץ שם **ללא** `--check`, כלומר במצב-כתיבה: הוא מתקן את הסחיפה במקום לדווח עליה.
+מסקנה: 57 שערים ב-ledger ≠ כל הבדיקות שקיימות. שלוש בדיקות אדומות חיות מחוץ למרשם.
+
+## 🔴 דפוס #4 — «proof» שאינו מוכיח
+`pure-e2e-proof.gen.mjs` ו-`pure-look-proof.gen.mjs` נקראים «proof» ושניהם **מדפיסים HTML ויוצאים 0**.
+אפס `assert`, אפס `exit(1)`. אלה מחוללי-ראווה לעין אדם, לא הוכחות. שניהם: s22=0, «נטוש».
+
+## `pure-forge` הוחלף — וזו מדידה, לא כותרת
+| | `pure/pure-forge.mjs` | `machtzev/ds-forge.mjs` |
+|---|---|---|
+| פונקציה | `forgeFamily` (מיוצא) | `forgeFamily` (ds-forge.mjs:1318) |
+| פלט | `new/dart-ui-bs/forged` — **13** קבצים | `new/dart-forge-bs` — **376** קבצים |
+| ב-REGEN | ✗ | ✓ `regen.mjs:7` (שלב-1) |
+| נצרך ע"י קוד מחולל | `grep -rln "forged_" new/dart-gen-bs` ⇒ **0** | כן |
+⇒ ds-forge בלע את התפקיד. pure-forge = «הוחלף», והפלט שלו יתום.
+
+## 🔴 דפוס #5 — «נקרא-בשם» מפורק סופית על `pure/shot.mjs`
+הכרטיס מדווח `נקרא-בשם: ship`. בדקתי את שתי ההתאמות:
+- `ship.mjs:98` קורא `machtzev/tools/site-shot.mjs` — **קובץ אחר**.
+- `police.mjs` ⇒ ההתאמה היחידה היא בשורה 105, במילה **«snapshot»**.
+⇒ `pure/shot.mjs` = אפס קוראים. גם התיעוד שלו (`PURE-STATE.md:44`) מפנה ל-`scratchpad/shot.mjs`
+ברֵיפו `maor-system` שאינו קיים כאן.
