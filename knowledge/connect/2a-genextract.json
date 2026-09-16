@@ -1,0 +1,267 @@
+[
+ {
+  "file": "machtzev/extract/actions.mjs",
+  "lang": "mjs",
+  "lines": 27,
+  "does": [
+   {
+    "claim": "סורק tsx/dart בתחומי screens+source ומחלץ כל handler (‏onClick/onChange/onSubmit/onKeyDown/onInput/onPressed/onTap/onLongPress) כאטום-פעולה L2 עם file:line ורמז-שורה",
+    "evidence": "machtzev/extract/actions.mjs:7-13"
+   },
+   {
+    "claim": "מחלץ בנוסף פעולות-store: מפתח ברמה-עליונה בקובץ שתחומו 'actions' ‏(‏`^  name: (async)? (`)",
+    "evidence": "machtzev/extract/actions.mjs:16-23"
+   },
+   {
+    "claim": "כותב registry/atoms-L2-<repo>.json + מונה לפי kind",
+    "evidence": "machtzev/extract/actions.mjs:25-27"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מחלץ את **גוף** הפעולה — רק את השם והשורה; אי-אפשר להוכיח ממנו התנהגות",
+    "evidence": "machtzev/extract/actions.mjs:11-12 (‏hint = 80 תווים משורה אחת)"
+   },
+   {
+    "claim": "אינו רץ כאן",
+    "evidence": "ran: `node machtzev/extract/actions.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "∅",
+    "how": "אין קורא לפלט atoms-L2 בשום מנוע בריפו (בדיקה: grep על atoms-L2)"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/behavior-plan.mjs — פנקס «צרכי-ההתנהגות» של G34 (חתימה+דוגמאות)",
+   "gives": "רשימת-פעולות-אמת מהמוצר הישן היא מקור לגיטימי ל«אילו פעולות-יסוד באמת נדרשות», במקום לגזור אותן מ-28 הפירוקים בלבד. אבל L2 נותן שם בלי חתימה ובלי דוגמה — לא מספיק ל-logic-proof, ולכן החיבור דורש שלב-חציבה שאינו קיים"
+  },
+  "s22": {
+   "score": 1,
+   "why": "מקור-רעיונות לצרכי-התנהגות, לא מקור-הוכחה. בלי חתימה+דוגמאות הוא אינו יכול להיכנס לבורר של G34"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/actions.mjs maor ⇒ ENOENT",
+   "ran: grep -rn 'atoms-L2' --include=*.mjs . ⇒ רק machtzev/extract/actions.mjs:25",
+   "read: machtzev/extract/actions.mjs:1-27"
+  ]
+ },
+ {
+  "file": "machtzev/extract/engines.mjs",
+  "lang": "mjs",
+  "lines": 17,
+  "does": [
+   {
+    "claim": "לכל קובץ שתחומו 'engines' ‏(‏lines>0) בונה אטום L6 עם רשימת ה-exports (‏`export function|const|class`)",
+    "evidence": "machtzev/extract/engines.mjs:6-8,10-13"
+   },
+   {
+    "claim": "ל-Dart אין export ⇒ נופל לרגקס-חתימות `^Type name(` וקוטם ל-30 שמות",
+    "evidence": "machtzev/extract/engines.mjs:9"
+   },
+   {
+    "claim": "מסמן pure לפי היעדר 5 טוקנים (‏document./window./localStorage/useApp/zustand/firebase)",
+    "evidence": "machtzev/extract/engines.mjs:12"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "מדד-הטוהר שלו רדוד ואינו תופס אי-טוהר של Dart (‏DateTime.now · Random · File · print) — לעומת מסנן-הטוהר העשיר ב-extract/functions.mjs:10",
+    "evidence": "השוואה: machtzev/extract/engines.mjs:12 מול machtzev/extract/functions.mjs:10"
+   },
+   {
+    "claim": "קוטם ל-30 פונקציות-Dart ⇒ קובץ גדול מדווח חלקית, בלי סימון",
+    "evidence": "machtzev/extract/engines.mjs:9 `.slice(0,30)`"
+   },
+   {
+    "claim": "אינו רץ כאן",
+    "evidence": "ran: `node machtzev/extract/engines.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "machtzev/dedup/dedup.mjs:40 · machtzev/tools/refine.mjs:8",
+    "how": "צרכני-הפלט: קוראים atoms-L6-maor/buildsmart.json"
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — `machtzev/census/engine-index.mjs` כבר עושה את אותה עבודה על הריפו הזה, טוב יותר (ייבוא-טרנזיטיבי, connected(), 342 מנועים). L6 הוא הגרסה הישנה של אותו רעיון על ריפו שאינו כאן"
+  },
+  "s22": {
+   "score": 0,
+   "why": "כפילות-פונקציה עם engine-index.mjs, על מקור שאינו קיים. לא מקרב"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/engines.mjs maor ⇒ ENOENT",
+   "read: machtzev/extract/engines.mjs:1-17",
+   "read: machtzev/census/engine-index.mjs:315-333 (המנוע שכבר עושה זאת)"
+  ]
+ },
+ {
+  "file": "machtzev/extract/flags.mjs",
+  "lang": "mjs",
+  "lines": 19,
+  "does": [
+   {
+    "claim": "סורק קבצי-תחום 'flags' ומחלץ דגלי-יכולת מהצורה `{ key: '…', label: '…' }`",
+    "evidence": "machtzev/extract/flags.mjs:6-10"
+   },
+   {
+    "claim": "מחלץ בנוסף את איברי `INTEGRATION_KEYS = [...]` כאטומי-יכולת מסוג «הרחבה»",
+    "evidence": "machtzev/extract/flags.mjs:14-16"
+   },
+   {
+    "claim": "כותב registry/atoms-L4-<repo>.json",
+    "evidence": "machtzev/extract/flags.mjs:18"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "שורה 11 מחשבת `m` (‏term/key…he/label) ואז **זורקת אותו** — קוד-מת: התוצאה אינה נבדקת ואינה נדחפת ל-atoms",
+    "evidence": "machtzev/extract/flags.mjs:11 — `m = line.match(…);` ואחריו סוף-הבלוק (שורה 12)"
+   },
+   {
+    "claim": "אינו רץ בריפו הזה — אין registry/census-*",
+    "evidence": "ran: `node machtzev/extract/flags.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "machtzev/one.mjs:47",
+    "how": "עקיף דרך run.mjs ב-cwd=maor"
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — דגלי-יכולת של maor אינם שפת-הספק של המחולל (spec.mjs · app-ds.mjs), ואין שלב בצינור שקורא atoms-L4"
+  },
+  "s22": {
+   "score": 0,
+   "why": "לא מקרב. פלט L4 אינו נקרא ע\"י שום שלב במחולל, ומקורו (flags של maor) אינו קיים בריפו"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/flags.mjs maor ⇒ ENOENT census-maor.json",
+   "read: machtzev/extract/flags.mjs:1-19 (שורה 11 = השמה שאינה נצרכת)",
+   "read: machtzev/run.mjs:12"
+  ]
+ },
+ {
+  "file": "machtzev/extract/terms.mjs",
+  "lang": "mjs",
+  "lines": 17,
+  "does": [
+   {
+    "claim": "מוצא בלוק `TERM_DEFS … = [ … ];` בקבצי-תחום 'flags' ומחלץ ממנו `key`+`def`/`label` ⇒ אטומי-מונח L5, עם מספר-שורה מחושב מהיסט-הבלוק",
+    "evidence": "machtzev/extract/terms.mjs:6-14"
+   },
+   {
+    "claim": "כותב registry/atoms-L5-<repo>.json",
+    "evidence": "machtzev/extract/terms.mjs:16"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו קורא מונחים מכל מקור אחר — רק TERM_DEFS. אין TERM_DEFS ⇒ 0 אטומים בשקט (continue)",
+    "evidence": "machtzev/extract/terms.mjs:8-9"
+   },
+   {
+    "claim": "אינו רץ כאן — ENOENT על census",
+    "evidence": "ran: `node machtzev/extract/terms.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "machtzev/one.mjs:47",
+    "how": "עקיף"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/spec-lang.data.json / nl-lang.data.json — קטלוג-המונחים שהמחולל *כן* קורא (gen/lang.mjs:11 קורא אותם, וגם המחולל הראשי)",
+   "gives": "אם L5 היה נשפך לשם, «0 מונחי-שדה» שב-HANDOFF היה נסגר ממקור-אמת ולא ביד. אבל המקור (TERM_DEFS של maor) אינו קיים ⇒ הנקודה לא-ניתנת-למימוש היום"
+  },
+  "s22": {
+   "score": 1,
+   "why": "היעד נכון (שפת-המחולל היא דאטה, §19) אך הצינור בין L5 לבין spec-lang.data.json לא קיים, והמקור חסר"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/terms.mjs maor ⇒ ENOENT census-maor.json",
+   "read: machtzev/extract/terms.mjs:1-17",
+   "read: gen/lang.mjs:11 (הצרכן שקורא spec-lang/nl-lang)"
+  ]
+ },
+ {
+  "file": "machtzev/extract/tokens.mjs",
+  "lang": "mjs",
+  "lines": 24,
+  "does": [
+   {
+    "claim": "קורא census-<repo>.json, לוקח קבצים שתחומם 'tokens', וסורק כל שורה אחר הצורה `--שם: ערך;` ⇒ אטום-עיצוב אחד פר-שם, עם כל הערכים (ערכות/מצבים) מאוגדים פנימה",
+    "evidence": "machtzev/extract/tokens.mjs:4,6,9,11-17"
+   },
+   {
+    "claim": "מסווג kind מתוך הערך/השם בלבד (color · font · shape · space · motion · other) — רגקס, לא מילון",
+    "evidence": "machtzev/extract/tokens.mjs:12-14"
+   },
+   {
+    "claim": "כותב machtzev/registry/atoms-L0-<repo>.json ומדפיס ספירה",
+    "evidence": "machtzev/extract/tokens.mjs:21-23"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו קורא קבצים מהדיסק בכוחות עצמו — כל רשימת-הקבצים באה מ-census; בלי census-<repo>.json הוא קורס מיד (ENOENT), לא מדלג",
+    "evidence": "ran: `node machtzev/extract/tokens.mjs maor` ⇒ Error: ENOENT … machtzev/registry/census-maor.json (הריפו הזה: `ls machtzev/registry/` ⇒ No such file or directory)"
+   },
+   {
+    "claim": "אינו מייצא כלום (exports=0) — CLI בלבד, אי-אפשר לייבא ממנו",
+    "evidence": "machtzev/extract/tokens.mjs:1-24 — אין export; engine-index.json: exports=0"
+   },
+   {
+    "claim": "אינו נוגע במחולל: לא כותב לשום קובץ שהמחולל קורא (המחולל קורא atom-index*.json ו-auto-*.json, לא registry/atoms-L0-*)",
+    "evidence": "read: machtzev/extract/tokens.mjs:21 (היעד היחיד)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם בלולאה: `for … ['tokens','flags',…] run('./extract/'+x+'.mjs',[name])`"
+   },
+   {
+    "who": "machtzev/one.mjs:47",
+    "how": "עקיף — `execSync('node machtzev/run.mjs', {cwd: MAOR})`, כלומר run.mjs מורץ בתוך ריפו maor-system, לא כאן"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/run.mjs:12 (הקיים) — נשאר; נקודת-החיבור-למחולל היחידה הכנה היא הזנת atoms-L0 כשכבת-דאטה ל-`machtzev/generator/atlas.mjs` (buildAtlas cfg.data)",
+   "gives": "טוקני-עיצוב מהאימפריה הישנה כמקור-צבע לבורר-העור במקום זרע-pure-look בלבד. תלוי בקיום maor-system — שאינו קיים בשום מקום (CLAUDE.md), ולכן זו נקודה תיאורטית"
+  },
+  "s22": {
+   "score": 1,
+   "why": "מייצר דאטה שהמחולל *יכול* לצרוך (טוקנים) אבל לא צורך היום, ותלוי במפקד של ריפו שאינו קיים. לא מקרב אפליקציה-עובדת; מקרב את המפה"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/tokens.mjs maor ⇒ ENOENT census-maor.json",
+   "ran: ls machtzev/registry/ ⇒ No such file or directory",
+   "read: machtzev/extract/tokens.mjs:1-24",
+   "read: machtzev/run.mjs:11-12"
+  ]
+ }
+]
