@@ -1,5 +1,199 @@
 [
  {
+  "file": "engine/atlas.mjs",
+  "lang": "mjs",
+  "lines": 95,
+  "does": [
+   {
+    "claim": "בונה קטלוג-חי משלוש תיקיות ש-`cfg` מכתיב: **widgets** (‏class X extends Stateless/StatefulWidget ⇒ cls · types · positional · required · named · flexRoot · dirty) · **functions** (חתימת-Dart ⇒ name · sig · ret · params · תיאור-עצמי-עברי) · **data** (‏`const … =` ⇒ name · type · items ל-List<String>)",
+    "evidence": "engine/atlas.mjs:22-25,27-52,54-76,78-92"
+   },
+   {
+    "claim": "`dirty` = האם גוף-הווידג'ט מכיל מחרוזת-עברית קשיחה ⇒ סימון-חוב-טוהר שהבורר מעניש עליו",
+    "evidence": "engine/atlas.mjs:49 ⇒ engine/generate.mjs:106 (`if (a.dirty) score -= 3`)"
+   },
+   {
+    "claim": "התיאור-העצמי-העברי (`he`) נחלץ מ-14 שורות-ההערה הראשונות, אחרי סינון 8 מילות-פיגום (`חוט`·`אטום`·`חוזה`·…) ו-8 קידומות-מטא (`מוצא:`·`טוהר:`·`חוק-`·…)",
+    "evidence": "engine/atlas.mjs:20,58-67"
+   },
+   {
+    "claim": "רץ ירוק כאן: 5 widgets מ-`engine/catalog/widgets`",
+    "evidence": "ran: `node engine/generate.mjs` ⇒ «atlas: 5 widgets · 0 functions · 0 data»"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** האטלס של המחולל. ‏`machtzev/generator/atlas.mjs` הוא זה שמיובא ע\"י 8+ מנועים (‏genesis-gen · synth · studio-full · render-ds · particles · coverage-gate · verify-dart-tests · verify-dart-arg0). שניהם נקראים `atlas.mjs` ושניהם מייצאים `buildAtlas`",
+    "evidence": "ran: grep -rn \"from '.*atlas.mjs'\" ⇒ `engine/generate.mjs:11 from './atlas.mjs'` מול 8 קוראים של `machtzev/generator/atlas.mjs`"
+   },
+   {
+    "claim": "‏`engine/catalog/logic` ו-`engine/catalog/data` **אינם קיימים** ⇒ שתיים משלוש השכבות ריקות תמיד",
+    "evidence": "ran: `ls engine/catalog/logic engine/catalog/data` ⇒ No such file or directory; הפלט: «0 functions · 0 data»"
+   },
+   {
+    "claim": "בונה `types` כ-`Map` ו-`required`/`named` כ-`Set` ⇒ התוצאה **אינה** ניתנת ל-JSON.stringify כמו-שהיא; האטלס הזה חי בזיכרון בלבד, אין לו קובץ-אינדקס",
+    "evidence": "engine/atlas.mjs:33,44-47 (‏Map/Set) — ואין writeFileSync בקובץ"
+   },
+   {
+    "claim": "מדלג על מחלקה בלי בנאי תואם (`if (!ctm) continue`) בשקט — ווידג'ט לא-נסרק לא מדווח",
+    "evidence": "engine/atlas.mjs:36-37"
+   }
+  ],
+  "callers": [
+   {
+    "who": "engine/generate.mjs:11",
+    "how": "`import { buildAtlas } from './atlas.mjs'` ⇒ `buildAtlas({root, ...cfg.catalog})`"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — ‏`machtzev/generator/atlas.mjs` הוא אותו מנוע, מחובר, עם `readAtlas`/`writeAtlas` (אינדקס על הדיסק) ועם 842 מנועים באטלס אחרי G20",
+   "gives": "∅ — היכולת הייחודית כאן היא **קונפיגורביליות מלאה** (`cfg.widgets`/`logic`/`data` מבחוץ). אבל אותה יכולת קיימת ב-`engine.config.json` בלבד ואינה נדרשת ע\"י המחולל, שסורק נתיבים ידועים"
+  },
+  "s22": {
+   "score": 1,
+   "why": "מנוע-סריקה תקין וטהור, אבל כפילות מוצהרת של האטלס המחובר — ושתי שכבות מתוך שלוש שלו ריקות בפועל"
+  },
+  "evidence": [
+   "ran: node engine/generate.mjs ⇒ «atlas: 5 widgets · 0 functions · 0 data»",
+   "ran: ls engine/catalog ⇒ widgets בלבד",
+   "ran: grep -rn \"atlas.mjs'\" --include=*.mjs . ⇒ 8 קוראים ל-machtzev/generator/atlas.mjs מול 1 ל-engine/atlas.mjs",
+   "read: engine/atlas.mjs:20,22-25,33,36-37,44-49,58-67"
+  ]
+ },
+ {
+  "file": "engine/generate.mjs",
+  "lang": "mjs",
+  "lines": 435,
+  "does": [
+   {
+    "claim": "מחולל שלם ונפרד: ספק-טקסט ⇒ `parsePart` (‏אימוג'י · `|`-תת-כותרת · `:`-אופציות · תור-ערכים-מספריים) ⇒ `roleOf` (‏מקבצי-דעת חיצוניים) ⇒ בורר-אטום בניקוד ⇒ חיווט-props ⇒ קובץ-Dart של מסך",
+    "evidence": "engine/generate.mjs:3-4,40-70,31,85-111,404-413"
+   },
+   {
+    "claim": "**כל** הידע חיצוני: `lexicon.json` · `roles.json` · `tokens.json` · `logic-lexicon.json` · `twin-tails.json` נטענים מ-`cfg.knowledge`; חסר ⇒ ברירת-מחדל ריקה, לא קריסה",
+    "evidence": "engine/generate.mjs:22,25-33"
+   },
+   {
+    "claim": "בורר-האטום פוסל לפני שהוא מנקד: תפקיד-אינטראקטיבי דורש prop `on[A-Z]` · עוגן-דאטה דורש `options`/`items` מסוג `List<String>` · כל פרמטר-חובה חייב להיות מילוי-אפשרי — אחרת `continue`",
+    "evidence": "engine/generate.mjs:91-102"
+   },
+   {
+    "claim": "מנקד בונוסים ועונשים: אופציות +2 · hero +4 · sub +2 · **טוהר −3 אם `dirty`** · עונש על כל מילוי-Widget ועל מספר-הפרמטרים ⇒ שבירת-שוויון מבנית",
+    "evidence": "engine/generate.mjs:103-108"
+   },
+   {
+    "claim": "גשר-לוגיקה עם `bindArgs`: ממלא פרמטרים ממספרים/מחרוזות שבמשפט, מ-`DateTime.now()`, מהזנת-שדה (`__FIELD__` דרך `tryParse`), ומ«זנב-הקציר» (`twin-tails.json` — אמת-קרקע מבדיקת-האטום). **פרמטר-חובה בלי מקור ⇒ `return null`, לא קוראים לאטום**",
+    "evidence": "engine/generate.mjs:146-169"
+   },
+   {
+    "claim": "שער-עצמי (‏הכרעה-16): אחרי הפליטה בודק שקוד-המסך נקי מעברית ומאימוג'י **מחוץ להערות** ⇒ `throw` על הפרת-טוהר",
+    "evidence": "engine/generate.mjs:406-410"
+   },
+   {
+    "claim": "רץ ירוק כאן: «🧬 example · \"מסך לדוגמה\" · 5/5 חלקים ⇒ ExampleHeader, ExampleButton, ExampleCard, ExampleStat, ExampleBanner» · «engine · 1 screens»",
+    "evidence": "ran: `node engine/generate.mjs` (‏exit 0)"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו מוכיח בריצה**. הבחירה היא ניקוד-מבני (טיפוסים · שמות-props · רגקסים מקבצי-הדעת) — אף אטום לא מורץ. זה בדיוק ההבדל מ-`gen/prove.mjs` ומ-G34 («נבחר מי שעובר את הדוגמאות בריצה»)",
+    "evidence": "engine/generate.mjs:85-111 (אין spawn/eval/ריצה) מול gen/prove.mjs:35-54 · CLAUDE.md הכרעה-30"
+   },
+   {
+    "claim": "**`roles.json`/`tokens.json` הם רגקסים על שם-המחלקה** — כלומר התאמה-לפי-שם, המשפחה שממנה באו 8 באגי-האינדקס לפי CLAUDE.md",
+    "evidence": "engine/generate.mjs:30-31,34-35 (`ROLE_RULES.find(r=>r.re.test(cls))`)"
+   },
+   {
+    "claim": "**מוחק תוצרים קודמים בכל ריצה** — `for (const f of readdirSync(OUT)) if (/^gen_.*\\.dart$/) unlinkSync(f)` וכנ\"ל ב-DATA; אין דגל `--only`",
+    "evidence": "engine/generate.mjs:427-428"
+   },
+   {
+    "claim": "מייצר מסך אחד בפועל — `engine/specs/` מכיל `example.txt` בלבד, והקטלוג 5 ווידג'טים לדוגמה. זו הדגמה של מנגנון, לא אפליקציה",
+    "evidence": "ran: ls engine/specs ⇒ example.txt · ran: ls engine/catalog/widgets ⇒ 6 קבצים (5 + tokens.dart)"
+   },
+   {
+    "claim": "אין לו קורא בקוד. ‏`machtzev/generator/generate.mjs:50` מדפיס מחרוזת-שימוש שמכילה «generate.mjs» — זו שורת-עזרה של **מנוע אחר**, לא קריאה",
+    "evidence": "ran: grep -rn 'engine/generate.mjs' --include=*.mjs --include=*.yml . ⇒ אין; machtzev/generator/generate.mjs:50 (‏console.error של מנוע נפרד)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אין קורא — לא ב-one.mjs, לא ב-regen.mjs, לא ב-police.mjs, לא ב-.github/workflows. CLI בלבד"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/behavior-plan.mjs` + `machtzev/generator/logic-proof.mjs` — להחליף את `roleOf`/`tokenFor` (רגקס-על-שם) בבורר-בהוכחה של G34, ולהשאיר את `bindArgs` ואת שער-הטוהר-העצמי",
+   "gives": "שני דברים כאן **אין** למחולל הראשי באותה צורה: (א) `bindArgs` — כיול-ארגומנטים מהמשפט עצמו + «פרמטר-חובה בלי מקור ⇒ לא קוראים», שהוא בדיוק «לעולם לא לזייף דאטה» של §20ג, ממומש כקוד · (ב) שער-הטוהר-העצמי בפליטה (הכרעה-16). שניהם ניתנים להעתקה פנימה בלי לגרור את הבורר-לפי-שם"
+  },
+  "s22": {
+   "score": 2,
+   "why": "מנוע-מחולל מלא, נקי, רץ — ובורר **לפי שם**, כלומר השיטה שהכרעה-30 פסלה במפורש. שני רכיבים בתוכו (`bindArgs` · שער-הטוהר) שווים חיבור מיידי; הבורר עצמו לא"
+  },
+  "evidence": [
+   "ran: node engine/generate.mjs ⇒ «🧬 example · 5/5 חלקים» · «engine · 1 screens · atlas: 5 widgets · 0 functions · 0 data», exit 0",
+   "ran: grep -rn 'engine/generate.mjs' . ⇒ אין קורא בקוד",
+   "read: engine/generate.mjs:22-35,85-111,146-169,404-413,420-435",
+   "read: gen/prove.mjs:35-54 (ההבדל: הוכחה-בריצה)"
+  ]
+ },
+ {
+  "file": "engine/lib.mjs",
+  "lang": "mjs",
+  "lines": 60,
+  "does": [
+   {
+    "claim": "חמישה עזרי-סריקה טהורים: `dartScan` — סורק-Dart מודע-מחרוזות (‏4 מצבים: קוד · '…' · \"…\" · הערה) עם תמיכה ב-`${…}` **מקונן** וב-raw-strings; `classBody` — חילוץ-גוף מאוזן-סוגריים; `stripComments` · `snake` · `dartLit`",
+    "evidence": "engine/lib.mjs:7-35,38-44,47,50,53-59"
+   },
+   {
+    "claim": "`dartScan` מטפל ב-escape, בהיפוך-מצב על `${`, ובמחסנית-עומק לחזרה מהאינטרפולציה — פרסור אמיתי, לא רגקס",
+    "evidence": "engine/lib.mjs:9-11,15-17,25-31"
+   },
+   {
+    "claim": "מצהיר על מוצאו: «חולצו מ-`machtzev/assemble/lift-lib.mjs` + `generator/twins.mjs` **verbatim**»",
+    "evidence": "engine/lib.mjs:2-3"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** המקור — הוא **עותק**. ‏`machtzev/generator/atlas.mjs:11` ו-`machtzev/generator/genesis-gen.mjs:19` מייבאים את אותן פונקציות מ-`../assemble/lift-lib.mjs`. שני עותקים של אותו סורק, בלי שער-סנכרון ביניהם",
+    "evidence": "engine/lib.mjs:2-3 מול machtzev/generator/atlas.mjs:11 (`import { classBody, stripComments } from '../assemble/lift-lib.mjs'`) · machtzev/generator/genesis-gen.mjs:19"
+   },
+   {
+    "claim": "אין לו בדיקה משלו — אין `engine/*.test.mjs` בעץ",
+    "evidence": "ran: ls engine/ ⇒ README.md · atlas.mjs · catalog · engine.config.json · generate.mjs · knowledge · lib.mjs · specs (אין test)"
+   },
+   {
+    "claim": "אפס-דאטה אמיתי — אין מחרוזת עברית, אין נתיב, אין קבוע-פרויקט",
+    "evidence": "read: engine/lib.mjs:1-60 (רק ספריית-התקן של Node)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "engine/atlas.mjs:9",
+    "how": "`import { classBody, stripComments } from './lib.mjs'`"
+   },
+   {
+    "who": "engine/generate.mjs:10",
+    "how": "`import { stripComments, snake, dartLit } from './lib.mjs'`"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/assemble/lift-lib.mjs` — המקור שממנו הוא הועתק",
+   "gives": "חיבור כאן = **מחיקה**: `engine/lib.mjs` מייבא מ-lift-lib במקום להעתיק, או ש-lift-lib מייבא מכאן. היום כל תיקון-באג בסורק-Dart חייב לקרות פעמיים, ואיש לא יודע שהוא חייב. זו הכפילות הכי קונקרטית שמצאתי ב-60"
+  },
+  "s22": {
+   "score": 1,
+   "why": "קוד נקי וטהור, אבל שכפול של מנוע שכבר מחובר למחולל. ערכו ל-§22 הוא שלילי-קטן: שני סורקים שיסטו"
+  },
+  "evidence": [
+   "read: engine/lib.mjs:1-60",
+   "read: machtzev/generator/atlas.mjs:11 · machtzev/generator/genesis-gen.mjs:19 · machtzev/assemble/gen-manifest.mjs:8 (שלושה צרכנים של המקור)",
+   "ran: ls engine/ ⇒ אין קובץ-בדיקה"
+  ]
+ },
+ {
   "file": "machtzev/audit/diff.mjs",
   "lang": "mjs",
   "lines": 144,

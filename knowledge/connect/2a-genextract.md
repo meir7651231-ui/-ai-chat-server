@@ -1,6 +1,6 @@
 # 2א · gen + engine + audit + tools + dedup + extract — מיפוי-חיבור
 
-**33/60 מנועים** · חסרים: engine/atlas.mjs, engine/generate.mjs, engine/lib.mjs, gen/build.mjs, gen/detach.mjs, gen/engine.mjs, gen/flutter.mjs, gen/fonts.mjs, gen/index-page.mjs, gen/inventory.mjs, gen/lang.mjs, gen/lenses.mjs, gen/live.mjs, gen/mosad-build.mjs, gen/packs-apply.mjs, gen/pass.mjs, gen/plan.mjs, gen/prove-dart.mjs, gen/prove.mjs, gen/render.mjs, gen/sentence.mjs, gen/shelf.mjs, gen/site.mjs, gen/skin.mjs, gen/spec.mjs, gen/studio.mjs, gen/wizard.mjs
+**36/60 מנועים** · חסרים: gen/build.mjs, gen/detach.mjs, gen/engine.mjs, gen/flutter.mjs, gen/fonts.mjs, gen/index-page.mjs, gen/inventory.mjs, gen/lang.mjs, gen/lenses.mjs, gen/live.mjs, gen/mosad-build.mjs, gen/packs-apply.mjs, gen/pass.mjs, gen/plan.mjs, gen/prove-dart.mjs, gen/prove.mjs, gen/render.mjs, gen/sentence.mjs, gen/shelf.mjs, gen/site.mjs, gen/skin.mjs, gen/spec.mjs, gen/studio.mjs, gen/wizard.mjs
 
 הרשימה נגזרה מהפקודה (לא מיד):
 
@@ -10,11 +10,12 @@ node machtzev/census/engine-index.mjs --connected --list | grep '○' | sed 's/.
 wc -l /tmp/my-list.txt   # 60
 ```
 
-**פיזור s22:** 3⇒1 · 2⇒7 · 1⇒15 · 0⇒10
+**פיזור s22:** 3⇒1 · 2⇒8 · 1⇒17 · 0⇒10
 
 | מנוע | s22 | connectAt | תמצית |
 |---|---|---|---|
 | `machtzev/audit/heal.mjs` (116) | **3** | ‏`machtzev/one.mjs:193` — ליד «ביקורת-פיקסל», כשלב-תיקון אחרי שלב-המדידה: `diff` מוצא רגרסיה ⇒ `heal --suspects --full` מנסה ומבטל-עצמית | תיקון-עצמי **מוגן**: מודד מטרות + 12 קנרים (‏12 האטומים הנקיים ביותר ב-baseline) לפני/אחרי שינוי-מנוע בעץ-העבודה, ומכריע קידום או **ביטול-אוטומטי** (`git checkout -- ds-forge.mjs` + בנייה-מחדש + מראה חזרה ל-buildsmart) |
+| `engine/generate.mjs` (435) | **2** | ‏`machtzev/generator/behavior-plan.mjs` + `machtzev/generator/logic-proof.mjs` — להחליף את `roleOf`/`tokenFor` (רגקס-על-שם) בבורר-בהוכחה של G34, ולהשאיר את `bindArgs` ואת שער-הטוהר-העצמי | מחולל שלם ונפרד: ספק-טקסט ⇒ `parsePart` (‏אימוג'י · `\|`-תת-כותרת · `:`-אופציות · תור-ערכים-מספריים) ⇒ `roleOf` (‏מקבצי-דעת חיצוניים) ⇒ בורר-אטום בניקוד ⇒ חיווט-props ⇒ קובץ-Dart של מסך |
 | `machtzev/audit/diff.mjs` (144) | **2** | ‏`machtzev/gates.tsv` — כשער עצמאי (‏`diff --gate`) במקום להיות מוכרע מבחוץ ב-one.mjs:195 | משווה כל זוג ORIG↔FORGE בשני מדדים: **raw** (הפרש-אפור פר-פיקסל, רגיש ל-AA של טקסט) ו-**struct** (הקטנה ×0.25 שמממצעת שולי-AA ומשמרת גושים/מיקום/צבע) — ומצהיר ש-struct הוא מדד-הדירוג העיקרי |
 | `machtzev/audit/features.mjs` (49) | **2** | ‏`machtzev/generator/look.mjs` (‏G28 — «נייר פוסל אטום-בצבע-קשיח») · `machtzev/police.mjs` gate `balagan` | טביעת-אצבע-CSS לאטום: אוסף את כל מחלקות-ה-body, מוצא כל בלוק-CSS במשפחה שהסלקטור שלו נוגע במחלקה, מצרף `style="…"` inline, ומחזיר אילו מ-19 תכונות-קשות מופיעות |
 | `machtzev/audit/lib.mjs` (82) | **2** | ‏`machtzev/generator/ds-forge.mjs` / `machtzev/generator/atom-index-full.json` — מקור-האטומים שהמחולל **כן** סורק (924 אטומי-תצוגה) | מקור-אמת יחיד לחציבת-אטומי-Pure: `atomsOf(fam)` חותך תאים מ-`machtzev/pure/<fam>-family.html` דרך אותה `cells()` של `ds-forge.mjs`, מדדפ לפי שם-מחלקה, ולאטום-תאטרון לוקח את **המצב-הראשון** (מה שה-FORGE מצייר) |
@@ -22,6 +23,8 @@ wc -l /tmp/my-list.txt   # 60
 | `machtzev/extract/functions.mjs` (71) | **2** | machtzev/generator/logic-census.mjs / auto-logic.catalog — קטלוג-הלוגיקה שהבורר של G34/G18-19 מחפש בו לפי חתימה | פירוק-מקסימום: כל פונקציה בקובץ engines/source ⇒ אטום L6b עם **גבולות-שורה מדויקים** (start-end), אורך, ורשימת-מי-היא-קוראת (עד 12 שמות, אחרי סינון 100+ מובנים) |
 | `machtzev/extract/schema.mjs` (22) | **2** | ‏`machtzev/generator/app-ds.mjs` — דקדוק-האפיון (`ישות X עם שדה*, סכום(0..N), מצב{א\|ב}`) · `entity-slugs.json` | סורק **רק** `types/domain.ts` או `domain/*.dart` ומחלץ כל שדה בכל ישות ⇒ אטום L10 עם entity · name · optional · type · file:line |
 | `machtzev/tools/dart-test.mjs` (14) | **2** | ‏`machtzev/one.mjs:186-188` — ליד `verify-dart-tests.mjs`, שכבר עושה גילוי-Dart נכון (`HAS_DART` בודק 4 נתיבים כולל `/root/dart-sdk/bin/dart`) ומדלג בנימוס כשאין בינארי | מריץ כל `new/dart/*_test.dart` דרך `dart run --enable-asserts`, סופר ירוק/אדום, ומדפיס «Dart: ok/total בדיקות-חוזה ירוקות» |
+| `engine/atlas.mjs` (95) | **1** | ∅ — ‏`machtzev/generator/atlas.mjs` הוא אותו מנוע, מחובר, עם `readAtlas`/`writeAtlas` (אינדקס על הדיסק) ועם 842 מנועים באטלס אחרי G20 | בונה קטלוג-חי משלוש תיקיות ש-`cfg` מכתיב: **widgets** (‏class X extends Stateless/StatefulWidget ⇒ cls · types · positional · required · named · flexRoot · dirty) · **functions** (חתימת-Dart ⇒ name · sig · ret · params · תיאור-עצמי-עברי) · **data** (‏`const … =` ⇒ name · type · items ל-List<String>) |
+| `engine/lib.mjs` (60) | **1** | ‏`machtzev/assemble/lift-lib.mjs` — המקור שממנו הוא הועתק | חמישה עזרי-סריקה טהורים: `dartScan` — סורק-Dart מודע-מחרוזות (‏4 מצבים: קוד · '…' · "…" · הערה) עם תמיכה ב-`${…}` **מקונן** וב-raw-strings; `classBody` — חילוץ-גוף מאוזן-סוגריים; `stripComments` · `snake` · `dartLit` |
 | `machtzev/audit/gen-forge-dart.mjs` (63) | **1** | ∅ — מחובר נכון בצינור. החסם אינו חיבור אלא סביבה: `/home/user/buildsmart/app_flutter` + Flutter SDK | קורא `shots/index.json` ומחולל קובץ-בדיקת-Flutter אחד (`zz_pixel_audit_test.dart`) שמצייר כל `Forge<Pascal>` ל-PNG במסגור זהה (‏438/pad16/#08080A/2x) |
 | `machtzev/audit/gen-orig.mjs` (28) | **1** | ∅ — מחובר נכון בתוך צינור-האודיט. מה שדרוש הוא **מיזוג** ל-index.json במקום דריסה (כדי שסינון-משפחה לא יזייף ריצה-מלאה) — תיקון, לא חיבור | מצייר כל אטום-Pure ל-PNG דרך Playwright/Chromium במסגור זהה-ל-FORGE (‏viewport 560×1400 · deviceScaleFactor 2 · `--disable-lcd-text` · `--font-render-hinting=none`) ⇒ `shots/orig/<fam>__<slug>.png` |
 | `machtzev/audit/run.mjs` (22) | **1** | ∅ — מחובר נכון (‏one.mjs:196, מאחורי 4 תנאי-סביבה מפורשים). מה שכן שווה: להעביר את `fams` גם לשלבים 2 ו-4, כדי שסינון לא יזייף היקף | מריץ את צינור-האודיט המלא בארבעה שלבים בסדר קבוע: `gen-orig` (‏ORIG/Playwright) ⇒ `gen-forge-dart` ⇒ `flutter test zz_pixel_audit_test.dart` ⇒ `diff` |
@@ -51,6 +54,7 @@ wc -l /tmp/my-list.txt   # 60
 ## למה הציון — שורה לכל מנוע
 
 - `machtzev/audit/heal.mjs` **3** — המנוע היחיד ב-60 שמממש «תקן-מדוד-ובטל-אם-החמרת» עם ביטוח על כל 353 — בדיוק רצפת-הקבלה של §22 («אפס-באגים, אפס-תקלות») בשכבה שהמחולל באמת פולט. הוא לא מחובר לכלום, וזו הפער הגדול ביותר שמצאתי בקבוצה
+- `engine/generate.mjs` **2** — מנוע-מחולל מלא, נקי, רץ — ובורר **לפי שם**, כלומר השיטה שהכרעה-30 פסלה במפורש. שני רכיבים בתוכו (`bindArgs` · שער-הטוהר) שווים חיבור מיידי; הבורר עצמו לא
 - `machtzev/audit/diff.mjs` **2** — המדידה כאן היא מה ש-§22 מכנה «אפס-תקלות» בשכבת-המראה — שני מדדים, heatmap, baseline של 353, וסיווג-מגמה. מה שחסר: פסק-דין. מנוע-מדידה בלי שער הוא דוח
 - `machtzev/audit/features.mjs` **2** — ידע-אמיתי על גבול-ההמרה (‏174/359), בדיוק בציר שהמחולל שובר בו. אבל הוא היום מידע-אחורה בדוח, לא אילוץ-בחירה קדימה בבורר
 - `machtzev/audit/lib.mjs` **2** — יחידת-החציבה שהאודיט כולו יושב עליה, ומייצרת בדיוק את המטא-דאטה של השקעים (‏seam · hug) שהמחולל צורך. רץ ירוק כאן. לא 3 — כי הצרכן שלה הוא האודיט, לא המחולל
@@ -58,6 +62,8 @@ wc -l /tmp/my-list.txt   # 60
 - `machtzev/extract/functions.mjs` **2** — המנוע היחיד ב-extract/ שמייצר בדיוק את מה שהבורר-בהוכחה צורך (פונקציה טהורה + חתימה + טווח). חסר לו רק מקור — ולכן 2, לא 3
 - `machtzev/extract/schema.mjs` **2** — התאמת-צורה כמעט-מלאה לשפת-הספק של המחולל, וחסר לו מנוע-תרגום אחד קצר. אבל המקור (‏domain.ts של maor) אינו קיים — לכן 2 ולא 3
 - `machtzev/tools/dart-test.mjs` **2** — הוא הכלי היחיד בקבוצה שמריץ **קוד-אמת של המחולל** ומייצר פסק-דין. אינו מחובר לשום מקום, ושורה אחת (נתיב) מפרידה בינו לבין 345 בדיקות שרצות. לא 3 — כי הוא בודק את המדף, לא את האפליקציה המחוללת
+- `engine/atlas.mjs` **1** — מנוע-סריקה תקין וטהור, אבל כפילות מוצהרת של האטלס המחובר — ושתי שכבות מתוך שלוש שלו ריקות בפועל
+- `engine/lib.mjs` **1** — קוד נקי וטהור, אבל שכפול של מנוע שכבר מחובר למחולל. ערכו ל-§22 הוא שלילי-קטן: שני סורקים שיסטו
 - `machtzev/audit/gen-forge-dart.mjs` **1** — הצד השני של מדידת-הנאמנות. חשוב לאיכות, אך תלוי בריפו-אח שאינו כאן, ואינו מוסיף יכולת למחולל
 - `machtzev/audit/gen-orig.mjs` **1** — מודד נאמנות-המרה (Pure⇒Flutter), שהוא תנאי ל«אפס-באגים» של §22 — אבל אינו מייצר יכולת. ודריסת-האינדקס היא בדיוק סוג-הבאג שמייצר ירוק-שקרי
 - `machtzev/audit/run.mjs` **1** — מנצח-תזמורת קצר וישר, אבל הוא מריץ מדידה בלבד ותלוי בשני נכסים חיצוניים חסרים. הערך נמצא בשלבים, לא בו
