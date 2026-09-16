@@ -52,6 +52,106 @@
   ]
  },
  {
+  "file": "machtzev/extract/components.mjs",
+  "lang": "mjs",
+  "lines": 30,
+  "does": [
+   {
+    "claim": "שני מעברים: (1) אוסף שמות-רכיבים מיוצאים מכל tsx/dart (‏`export function X` · `export const X` · `class X extends StatelessWidget|StatefulWidget|ConsumerWidget|…`), (2) לכל קובץ בונה קבוצת-שימוש `uses` ע\"י חיפוש `<X` או `X(` של שמות שמוגדרים בקובץ **אחר**",
+    "evidence": "machtzev/extract/components.mjs:9-18,21-23"
+   },
+   {
+    "claim": "מסמן קובץ כ-L3-screen אם שמו נגמר ב-View/Screen/Panel/Tab/Page **או** אם הוא משתמש ב-≥5 רכיבים; מסך מקבל `composes` = עץ-ההרכבה",
+    "evidence": "machtzev/extract/components.mjs:24-26"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "‏`uses` נבדק על **כל** הקובץ כולל מחרוזות והערות (‏`c.txt` גולמי) ⇒ אזכור-שם בתוך טקסט נספר כהרכבה",
+    "evidence": "machtzev/extract/components.mjs:23 — `new RegExp(…).test(c.txt)` על הטקסט המלא, בלי stripComments"
+   },
+   {
+    "claim": "אינו מוצא מופע-רכיב פר-שורה — רק «הקובץ הזה מזכיר את השם הזה» פעם אחת",
+    "evidence": "machtzev/extract/components.mjs:22-24 (‏Set, בלי מיקום)"
+   },
+   {
+    "claim": "אינו רץ כאן",
+    "evidence": "ran: `node machtzev/extract/components.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "∅",
+    "how": "אין צרכן ל-atoms-L1 בשום מנוע (grep atoms-L1- ⇒ רק components.mjs:28)"
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — עץ-ההרכבה של מסכים כבר קיים במחולל ברזולוציה גבוהה בהרבה: `machtzev/generator/atom-index-full.json` (924 אטומי-תצוגה עם שקעים) ו-`machtzev/assemble/gen-manifest.mjs`. L1 הוא אותו רעיון בלי שקעים, על ריפו שאינו כאן"
+  },
+  "s22": {
+   "score": 0,
+   "why": "כפילות-פונקציה נחותה מול אינדקס-האטומים הקיים, ועל מקור חסר. לא מקרב"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/components.mjs maor ⇒ ENOENT",
+   "ran: grep -rn 'atoms-L1-' --include=*.mjs . ⇒ שורה אחת: machtzev/extract/components.mjs:28",
+   "read: machtzev/extract/components.mjs:1-30"
+  ]
+ },
+ {
+  "file": "machtzev/extract/consts.mjs",
+  "lang": "mjs",
+  "lines": 24,
+  "does": [
+   {
+    "claim": "מחפש 4 תבניות של «מספר-קסם» בקוד: השהיית-setTimeout · קבוע-בשם-תקרה (‏CAP/MAX/MIN/LIMIT/SIZE/COUNT/THRESHOLD) · `slice(0,N)` · השוואה ל-≥3 ספרות ⇒ אטומי L9 «החלטות-עסקיות קבורות»",
+    "evidence": "machtzev/extract/consts.mjs:6-11,16-20"
+   },
+   {
+    "claim": "מדלג שורות-הערה וקובצי-בדיקה",
+    "evidence": "machtzev/extract/consts.mjs:12,15"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "‏`value: m[2] || m[1]` — בתבנית threshold יש רק קבוצה אחת, לכן `m[2]` undefined והערך נלקח מ-`m[1]`. אבל ב-named-cap ‏`m[1]`=השם ו-`m[2]`=הערך; הלוגיקה תלויה בסדר-הקבוצות של כל תבנית ולא נבדקת — תבנית חדשה בסדר אחר תשתיק את השם או את הערך בלי אזהרה",
+    "evidence": "machtzev/extract/consts.mjs:19"
+   },
+   {
+    "claim": "אינו רץ כאן",
+    "evidence": "ran: `node machtzev/extract/consts.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "∅",
+    "how": "אין צרכן ל-atoms-L9 (grep ⇒ רק consts.mjs:23)"
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — «מספר-קסם» אינו יחידה שהמחולל יודע לצרוך: הוא בונה מספרים מספק (`(0..N)`) ומדקדוק, לא מקבועי-קוד. אין שקע"
+  },
+  "s22": {
+   "score": 0,
+   "why": "לא מקרב. אין נקודה בצינור-המחולל שמקבלת «מספר-קסם» כקלט"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/consts.mjs maor ⇒ ENOENT",
+   "ran: grep -rn 'atoms-L9-' --include=*.mjs . ⇒ שורה אחת: machtzev/extract/consts.mjs:23",
+   "read: machtzev/extract/consts.mjs:1-24"
+  ]
+ },
+ {
   "file": "machtzev/extract/engines.mjs",
   "lang": "mjs",
   "lines": 17,
@@ -160,6 +260,362 @@
   ]
  },
  {
+  "file": "machtzev/extract/functions.mjs",
+  "lang": "mjs",
+  "lines": 71,
+  "does": [
+   {
+    "claim": "פירוק-מקסימום: כל פונקציה בקובץ engines/source ⇒ אטום L6b עם **גבולות-שורה מדויקים** (start-end), אורך, ורשימת-מי-היא-קוראת (עד 12 שמות, אחרי סינון 100+ מובנים)",
+    "evidence": "machtzev/extract/functions.mjs:57-66"
+   },
+   {
+    "claim": "מזהה חתימת-Dart **רב-שורתית** ע\"י איזון-סוגריים (עד 40 שורות) ואז דורש `{` או `=>` אחרי ה-`)` הסוגר — לא רגקס-שורה",
+    "evidence": "machtzev/extract/functions.mjs:21-40"
+   },
+   {
+    "claim": "מסנן-טוהר עשיר: 40+ טוקנים (‏DOM · fetch · Firestore · Widget · DateTime.now · Random · Timer · CustomPainter · Process) ⇒ `pure:false`",
+    "evidence": "machtzev/extract/functions.mjs:10"
+   },
+   {
+    "claim": "מחריג 25 שמות שאינם-אטום-עסקי לעולם (‏build · initState · toJson · copyWith · paint …) ומסנן span<2",
+    "evidence": "machtzev/extract/functions.mjs:14,60"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מחלץ את הגוף לקובץ — רק טווח-שורות. הצרכן (`dedup-deep.mjs:17-19`) חייב לפתוח את קובץ-המקור בעצמו דרך `census.root`",
+    "evidence": "machtzev/extract/functions.mjs:65 (‏source=`repo/path:start-end`) ⇒ machtzev/dedup/dedup-deep.mjs:15-19"
+   },
+   {
+    "claim": "סוף-הפונקציה נאמד כ«שורה לפני הפונקציה הבאה» — לא איזון-סוגריים. קוד ברמת-הקובץ אחרי פונקציה נספר בתוכה",
+    "evidence": "machtzev/extract/functions.mjs:58"
+   },
+   {
+    "claim": "אינו רץ כאן",
+    "evidence": "ran: `node machtzev/extract/functions.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "machtzev/dedup/dedup-deep.mjs:14",
+    "how": "צרכן-הפלט — `load('atoms-L6b-'+repo)` לזיהוי גופי-פונקציה זהים"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/logic-census.mjs / auto-logic.catalog — קטלוג-הלוגיקה שהבורר של G34/G18-19 מחפש בו לפי חתימה",
+   "gives": "מסנן-הטוהר ורשימת-הקריאות כאן הם **חזקים יותר** מאלה של `extract/engines.mjs`, והם בדיוק מה שהבורר צריך (טהור ⇒ בר-הוכחה). אם maor-system היה קיים, L6b היה מוסיף מועמדים אמיתיים למדף של 957 המנועים. בלי maor — הנקודה תיאורטית"
+  },
+  "s22": {
+   "score": 2,
+   "why": "המנוע היחיד ב-extract/ שמייצר בדיוק את מה שהבורר-בהוכחה צורך (פונקציה טהורה + חתימה + טווח). חסר לו רק מקור — ולכן 2, לא 3"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/functions.mjs maor ⇒ ENOENT",
+   "read: machtzev/extract/functions.mjs:10 (מסנן-הטוהר) · :21-40 (חתימה רב-שורתית) · :57-66",
+   "read: machtzev/dedup/dedup-deep.mjs:14-19 (הצרכן היחיד)"
+  ]
+ },
+ {
+  "file": "machtzev/extract/icons.mjs",
+  "lang": "mjs",
+  "lines": 16,
+  "does": [
+   {
+    "claim": "סופר כל אימוג'י (‏\\p{Extended_Pictographic}) בקבצי tsx/ts/dart של 4 תחומים ⇒ אטום L11 אחד פר-סמל עם מונה-שימושים",
+    "evidence": "machtzev/extract/icons.mjs:6-12,14-16"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "שומר רק את **קובץ-המופע-הראשון** כ-source; כל שאר המיקומים אובדים",
+    "evidence": "machtzev/extract/icons.mjs:10 — `source` נקבע ביצירה ולא מתעדכן"
+   },
+   {
+    "claim": "סופר גם אימוג'י שבהערות ובלוגים (אין סינון-הערות, שלא כמו strings.mjs:10)",
+    "evidence": "machtzev/extract/icons.mjs:9 — `txt.matchAll(RE)` על הקובץ המלא"
+   },
+   {
+    "claim": "אינו רץ כאן",
+    "evidence": "ran: `node machtzev/extract/icons.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "∅",
+    "how": "אין צרכן ל-atoms-L11"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/web-shell.mjs` — ‏G52 גוזר זהות-אפליקציה (‏favicon/manifest) מ«אימוג'י-ממשק» שבקוד-המחולל",
+   "gives": "מונה-אימוג'י פר-אפליקציה הוא בדיוק הקלט של web-shell. אבל web-shell כבר גוזר אותו מהקוד-המחולל עצמו (לא מ-maor) — ולכן L11 מיותר שם"
+  },
+  "s22": {
+   "score": 0,
+   "why": "התפקיד שלו כבר ממולא בתוך המחולל, על המקור הנכון. לא מקרב"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/icons.mjs maor ⇒ ENOENT",
+   "ran: grep -rn 'atoms-L11-' --include=*.mjs . ⇒ שורה אחת",
+   "read: machtzev/extract/icons.mjs:1-16"
+  ]
+ },
+ {
+  "file": "machtzev/extract/knowledge.mjs",
+  "lang": "mjs",
+  "lines": 16,
+  "does": [
+   {
+    "claim": "אטום פר-מסמך-md בתחום 'knowledge': סוג (מתוך 22 קידומות-שם), תאריך מהשם, מספר-שורות, וכותרת-H1 מ-400 התווים הראשונים",
+    "evidence": "machtzev/extract/knowledge.mjs:6-12"
+   },
+   {
+    "claim": "מדפיס התפלגות-סוגים (‏6 המובילים)",
+    "evidence": "machtzev/extract/knowledge.mjs:15-16"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו קורא את **תוכן** המסמך — רק 400 תווים לכותרת. אין אינדוקס, אין חיפוש, אין מונחים",
+    "evidence": "machtzev/extract/knowledge.mjs:7,12"
+   },
+   {
+    "claim": "רשימת-הסוגים היא 22 קידומות קשיחות; מסמך בשם שאינו ברשימה ⇒ 'OTHER' בלי אזהרה",
+    "evidence": "machtzev/extract/knowledge.mjs:9"
+   },
+   {
+    "claim": "אינו רץ כאן",
+    "evidence": "ran: `node machtzev/extract/knowledge.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "∅",
+    "how": "אין צרכן ל-atoms-L8"
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — מטא-דאטה של קבצי-md אינו קלט לשום שלב במחולל. אפילו `peruk.mjs` (קורא-הפירוקים) קורא את **גוף** המסמך, לא את שמו"
+  },
+  "s22": {
+   "score": 0,
+   "why": "לא מקרב, ואומר זאת במפורש: 22 קידומות-שם אינן ידע"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/knowledge.mjs maor ⇒ ENOENT",
+   "read: machtzev/extract/knowledge.mjs:1-16"
+  ]
+ },
+ {
+  "file": "machtzev/extract/regexes.mjs",
+  "lang": "mjs",
+  "lines": 16,
+  "does": [
+   {
+    "claim": "מחלץ כל ליטרל-regex באורך ≥6 מקובצי ts/mjs בתחום 'engines' ⇒ אטום L12 עם pattern (עד 80 תווים), flags ו-file:line",
+    "evidence": "machtzev/extract/regexes.mjs:6-13"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "רואה **רק** ts/mjs — לא Dart, כלומר עיוור לכל מנועי-ה-Dart של האימפריה החדשה",
+    "evidence": "machtzev/extract/regexes.mjs:6 — `/\\.(ts|mjs)$/`"
+   },
+   {
+    "claim": "קוטם ל-80 תווים ⇒ שתי תבניות ארוכות שנבדלות בזנב נראות זהות לצרכן (`dedup-deep` מקבץ לפי `a.pattern` הקטום)",
+    "evidence": "machtzev/extract/regexes.mjs:12 ⇒ machtzev/dedup/dedup-deep.mjs:35"
+   },
+   {
+    "claim": "אינו רץ כאן",
+    "evidence": "ran: `node machtzev/extract/regexes.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "machtzev/dedup/dedup-deep.mjs:35",
+    "how": "צרכן-הפלט — regex זהה ב-≥3 מקומות"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/spec-lang.data.json` — הדקדוק של המחולל הוא היום אוסף תבניות בדאטה",
+   "gives": "תבנית-אמת שחוזרת (ת\"ז · טלפון · תאריך) היא מועמדת-חלקיק. אבל G34 כבר הכריע שחלקיק נבחר **בהוכחה-בריצה**, לא בהתאמת-תבנית — ולכן L12 לא יוכל להיכנס לשם בלי דוגמאות"
+  },
+  "s22": {
+   "score": 1,
+   "why": "מקור-רעיונות לדקדוק, אבל בדיוק הסוג שהכרעה-30 פסלה (התאמה-לפי-מחרוזת במקום הוכחה-בריצה)"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/regexes.mjs maor ⇒ ENOENT",
+   "read: machtzev/extract/regexes.mjs:6,12",
+   "read: machtzev/dedup/dedup-deep.mjs:33-36 (הצרכן)"
+  ]
+ },
+ {
+  "file": "machtzev/extract/schema.mjs",
+  "lang": "mjs",
+  "lines": 22,
+  "does": [
+   {
+    "claim": "סורק **רק** `types/domain.ts` או `domain/*.dart` ומחלץ כל שדה בכל ישות ⇒ אטום L10 עם entity · name · optional · type · file:line",
+    "evidence": "machtzev/extract/schema.mjs:6,10-17"
+   },
+   {
+    "claim": "מנהל מצב-ישות במכונה פשוטה: `export interface X`/`class X` פותח, שורה שמתחילה ב-`}` סוגרת",
+    "evidence": "machtzev/extract/schema.mjs:10-12"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "דורש הזחה של **בדיוק 2 רווחים** ונקודה-פסיק בסוף (`^\\s{2}name(\\?)?: type;`) ⇒ שדה בהזחה אחרת, שדה רב-שורתי, או שדה בלי `;` — נשמט בשקט",
+    "evidence": "machtzev/extract/schema.mjs:14"
+   },
+   {
+    "claim": "אינו רץ כאן",
+    "evidence": "ran: `node machtzev/extract/schema.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "∅",
+    "how": "אין צרכן ל-atoms-L10"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/app-ds.mjs` — דקדוק-האפיון (`ישות X עם שדה*, סכום(0..N), מצב{א|ב}`) · `entity-slugs.json`",
+   "gives": "**הנקודה הכי כנה בכל extract/**: L10 הוא ישות+שדות+טיפוס+חובה, שהם בדיוק חמשת השדות שספק-ds דורש. מחלץ-L10 שהיה רץ על דומיין אמיתי היה יכול לפלוט ספק-ds ישירות (מודל-נתונים ⇒ אפליקציה). מה שחסר: מיפוי-טיפוס (‏`string`⇒טקסט · `number`⇒(0..N) · union⇒{א|ב}) ⇒ פולט-ספק, שאינו קיים"
+  },
+  "s22": {
+   "score": 2,
+   "why": "התאמת-צורה כמעט-מלאה לשפת-הספק של המחולל, וחסר לו מנוע-תרגום אחד קצר. אבל המקור (‏domain.ts של maor) אינו קיים — לכן 2 ולא 3"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/schema.mjs maor ⇒ ENOENT",
+   "read: machtzev/extract/schema.mjs:6,14-17",
+   "read: gen/spec.mjs:9-26 (צורת-השדה שהספק דורש — ההתאמה)"
+  ]
+ },
+ {
+  "file": "machtzev/extract/strings.mjs",
+  "lang": "mjs",
+  "lines": 20,
+  "does": [
+   {
+    "claim": "סורק tsx/ts/dart בתחומי screens+source+actions+engines ומחלץ כל מחרוזת שיש בה אות עברית (‏[֐-׿] בתוך ' \" `) ⇒ אטום L5b עם 60 תווים ו-file:line",
+    "evidence": "machtzev/extract/strings.mjs:6-15"
+   },
+   {
+    "claim": "מסמן `viaTermOf` אם `termOf(` מופיע בשורה **לפני** המחרוזת ⇒ מפריד «עוקף את מערכת-המונחים» מ«עובר דרכה»",
+    "evidence": "machtzev/extract/strings.mjs:12"
+   },
+   {
+    "claim": "מדלג על שורות-הערה (‏`^\\s*(//|/?\\*)`) — לא סופר טקסט-תיעוד כמחרוזת-מוצר",
+    "evidence": "machtzev/extract/strings.mjs:10"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "‏`viaTermOf` הוא היוריסטיקת-שורה בלבד: `termOf('x') + 'טקסט קשיח'` באותה שורה יסומן כ«דרך termOf» למרות שהמחרוזת השנייה קשיחה",
+    "evidence": "machtzev/extract/strings.mjs:12 — התנאי היחיד הוא `indexOf('termOf(') < m.index`"
+   },
+   {
+    "claim": "אינו רץ כאן",
+    "evidence": "ran: `node machtzev/extract/strings.mjs maor` ⇒ ENOENT census-maor.json"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "machtzev/dedup/dedup.mjs:31 · machtzev/tools/refine.mjs:17",
+    "how": "צרכני-הפלט — קוראים atoms-L5b-maor/buildsmart"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/spec-lang.data.json (שכבת-הדקדוק של המחולל)",
+   "gives": "L5b הוא הפוך-מהמחולל: הוא מוצא עברית **בקוד**, והמחולל דורש עברית **בדאטה** (§19). ככלי-שער («אפס-עברית-קשיחה בפולטי-המחולל») יש לו ערך מיידי — אבל אותו תפקיד כבר ממולא ע\"י `machtzev/police.mjs` gate `behavior`/`look`",
+   "gives_note": ""
+  },
+  "s22": {
+   "score": 1,
+   "why": "רעיון-שער נכון (עברית=דאטה) על מקור שאינו כאן, וכפילות עם שערים שכבר רצים. מקרב אמון, לא אפליקציה"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/strings.mjs maor ⇒ ENOENT",
+   "read: machtzev/extract/strings.mjs:1-20",
+   "read: machtzev/dedup/dedup.mjs:31 · machtzev/tools/refine.mjs:17 (הצרכנים)"
+  ]
+ },
+ {
+  "file": "machtzev/extract/styles.mjs",
+  "lang": "mjs",
+  "lines": 25,
+  "does": [
+   {
+    "claim": "סורק **רק** קבצי `.tsx` ומחלץ כל זוג מאפיין:ערך מתוך `style={{…}}` ⇒ אטום L0b מאוגד (אטום אחד לכל זוג, עם `count` ועד 5 מיקומים)",
+    "evidence": "machtzev/extract/styles.mjs:7-20,22"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "הרגקס `style=\\{\\{([^}]*)\\}?\\}?` אינו מאזן סוגריים — סגנון רב-שורתי או סגנון עם ביטוי מקונן (`{a?b:c}`) נקטע באמצע ⇒ תת-ספירה שקטה",
+    "evidence": "machtzev/extract/styles.mjs:10 — `[^}]*` עוצר בסוגר-המסולסל הראשון"
+   },
+   {
+    "claim": "אינו נוגע ב-Dart בכלל — האימפריה החדשה היא Flutter, ו-L0b עיוור אליה",
+    "evidence": "machtzev/extract/styles.mjs:7 — `/\\.tsx$/` בלבד"
+   },
+   {
+    "claim": "אינו רץ כאן",
+    "evidence": "ran: `node machtzev/extract/styles.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "machtzev/dedup/dedup-deep.mjs:41",
+    "how": "צרכן-הפלט — «עיצוב-מולחם שערכו כבר בפלטה ⇒ חיווט-מיידי»"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`gen/skin.mjs` / `machtzev/generator/ds-forge.mjs` — שכבת-העור שקוראת זרע-צבע כדאטה",
+   "gives": "רשימת «ערכים שהולחמו בקוד ויש להם כבר טוקן» היא בדיוק מה ש-`look.mjs` (‏G28) אוכף על פולטי-המחולל. אבל look.mjs כבר עושה זאת על ה-Dart המחולל, ו-L0b רואה רק tsx ⇒ אין מה לחבר"
+  },
+  "s22": {
+   "score": 0,
+   "why": "עיוור ל-Dart, ולכן עיוור לכל מה שהמחולל פולט. השער המקביל (look) כבר רץ"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/styles.mjs maor ⇒ ENOENT",
+   "read: machtzev/extract/styles.mjs:7,10",
+   "read: machtzev/dedup/dedup-deep.mjs:38-43 (הצרכן)"
+  ]
+ },
+ {
   "file": "machtzev/extract/terms.mjs",
   "lang": "mjs",
   "lines": 17,
@@ -262,6 +718,54 @@
    "ran: ls machtzev/registry/ ⇒ No such file or directory",
    "read: machtzev/extract/tokens.mjs:1-24",
    "read: machtzev/run.mjs:11-12"
+  ]
+ },
+ {
+  "file": "machtzev/extract/verticals.mjs",
+  "lang": "mjs",
+  "lines": 27,
+  "does": [
+   {
+    "claim": "מוצא קובץ בשם `verticalPacks.ts`, חותך את `VERTICAL_PACKS = [ … ]`, ומפצל אותו **לפי מיקומי-`id:`** (לא לפי סוגריים) ⇒ עמיד להערות בין בלוקים",
+    "evidence": "machtzev/extract/verticals.mjs:6,9-14"
+   },
+   {
+    "claim": "לכל ורטיקל מחלץ label · sub · icon · theme · accent · motion · עד 15 מודולים-דלוקים · מונה-מונחים",
+    "evidence": "machtzev/extract/verticals.mjs:15-22"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "קורא בדיוק קובץ אחד בשם קבוע — אין `verticalPacks.ts` ⇒ 0 אטומים, יציאה 0, בלי שום אזהרה",
+    "evidence": "machtzev/extract/verticals.mjs:6-7 — `if (f)` ותו לא"
+   },
+   {
+    "claim": "אינו רץ כאן",
+    "evidence": "ran: `node machtzev/extract/verticals.mjs maor` ⇒ ENOENT"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:12",
+    "how": "הרצה-בשם"
+   },
+   {
+    "who": "∅",
+    "how": "אין צרכן ל-atoms-L7"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/auto-skin.mjs` (‏הכרעה-25 — 26 תפקידי-skin שהמנוע בוחר) + `gen/skin.data.json`",
+   "gives": "ורטיקל = חבילת {theme, accent, motion, מודולים-דלוקים} — זו בדיוק צורת-«העור-לפי-ייעוד» ש-auto-skin בוחר היום מהקוד. חבילת-ורטיקל אמיתית הייתה נותנת ל-auto-skin מקור-אמת חיצוני במקום היוריסטיקה. חסר: המקור"
+  },
+  "s22": {
+   "score": 1,
+   "why": "התאמת-צורה טובה ל-auto-skin, אבל העור כבר נבחר ע\"י מנוע (G12-13) ומקור-הוורטיקלים אינו קיים"
+  },
+  "evidence": [
+   "ran: node machtzev/extract/verticals.mjs maor ⇒ ENOENT",
+   "ran: grep -rn 'atoms-L7-' --include=*.mjs . ⇒ שורה אחת",
+   "read: machtzev/extract/verticals.mjs:6-22"
   ]
  }
 ]
