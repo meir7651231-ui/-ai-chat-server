@@ -26,6 +26,7 @@
 //    node engine-index.mjs --find "<מטרה>"    # חיפוש-לפי-מטרה (לא לפי שם!)
 //    node engine-index.mjs <path|שם>          # כרטיס-מנוע מלא
 //    node engine-index.mjs --orphans          # בלי-מטרה · בלי-קורא
+//    node engine-index.mjs --connected [--list]  # מחוברים-למחולל מול לא-מחוברים
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
 import path from 'node:path';
@@ -306,6 +307,31 @@ export function find(q, engines, k = 5) {
   }).filter((x) => x.score > 0).sort((a, b) => b.score - a.score).slice(0, k);
 }
 
+/**
+ * 🔌 **מחוברים-למחולל** — ההגדרה, מפורשת, כפקודה ולא כפרוזה.
+ * מנוע «מחובר» אם הוא נגיש מנקודת-כניסה של המחולל באחת משתי הדרכים:
+ *   (1) **ייבוא** טרנזיטיבי מאחת מ-6 נקודות-הכניסה (ENTRY למטה)
+ *   (2) **הרצה-בשם** מצינור-המחולל (`regen.mjs` · `ship.mjs`) — ואז גם כל
+ *       מה שאותו מנוע מייבא
+ * שערי-משטרה **אינם** נחשבים מחוברים: הם שומרים על המחולל, לא חלק ממנו.
+ * (‏נמדד: «57 מחוברים» ו-«57 שערים» הם **קבוצות שונות באותו גודל** — חיתוך 21.)
+ */
+export const GEN_ENTRY = [
+  'machtzev/generator/app-ds.mjs', 'machtzev/generator/regen.mjs', 'machtzev/generator/ship.mjs',
+  'machtzev/generator/genesis-gen.mjs', 'machtzev/generator/app-from-sentences.mjs', 'machtzev/generator/balagan.mjs',
+];
+export function connected(engines) {
+  const kids = {}; for (const e of engines) for (const p of e.importedBy) (kids[p] = kids[p] || []).push(e.file);
+  const out = new Set(GEN_ENTRY.filter((x) => engines.some((e) => e.file === x)));
+  const walk = () => { const q = [...out]; while (q.length) { const c = q.shift(); for (const k of (kids[c] || [])) if (!out.has(k)) { out.add(k); q.push(k); } } };
+  walk();
+  const pipe = ['machtzev/generator/regen.mjs', 'machtzev/generator/ship.mjs']
+    .map((f) => readIf(path.join(ROOT, f)) || '').join('\n');
+  for (const e of engines) { const b = e.file.replace(/^machtzev\//, ''); if (b && pipe.includes(b)) out.add(e.file); }
+  walk();
+  return out;
+}
+
 const card = (e) => {
   const L = [];
   L.push(`📍 ${e.file}  (${e.lines} שורות)`);
@@ -336,6 +362,17 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     if (!q) { console.log('usage: --find "<מטרה בעברית>"'); process.exit(0); }
     console.log(`❓ ${q}\n`);
     for (const r of find(q, engines)) console.log(`${String(r.score).padStart(6)}  ${r.file}\n        ${(r.purpose || '').slice(0, 150)}\n`);
+  } else if (A.includes('--connected')) {
+    // ההיקף: רק מנועים **בתוך הריפו** — ריפואים-אחים אינם חלק מהמחולל הזה
+    const own = engines.filter((e) => !/^(yeshiva-engine|buildsmart)\//.test(e.file));
+    const C = connected(own);
+    const mine = own.filter((e) => C.has(e.file));
+    const G = own.filter((e) => e.gate);
+    const both = mine.filter((e) => e.gate).length;
+    console.log(`מחוברים-למחולל: ${mine.length} · לא-מחוברים: ${own.length - mine.length} · (מתוך ${own.length} בריפו)`);
+    console.log(`שערים: ${G.length} · בשתי הקבוצות: ${both} — קבוצות שונות, לא אותו דבר`);
+    if (A.includes('--list')) for (const e of own.filter((x) => !C.has(x.file))) console.log(`  ○ ${e.file}`);
+    else console.log('(‏--connected --list = רשימת הלא-מחוברים)');
   } else if (A.includes('--orphans')) {
     console.log(`בלי-מטרה: ${engines.length - withP} · בלי-קורא: ${orphan.length}\n`);
     for (const e of engines.filter((x) => !x.purpose)) console.log(`  ∅ מטרה   ${e.file}`);
@@ -350,6 +387,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     console.log('לפי שורש: ' + Object.entries(byRoot).map(([k, v]) => `${k} ${v}`).join(' · '));
     console.log(`מקור-המטרה: כותרת ${engines.filter((e) => e.purposeFrom === 'כותרת-הקובץ').length} · INDEX.md ${engines.filter((e) => e.purposeFrom === 'INDEX.md').length} · ∅ ${engines.length - withP}`);
     console.log(`שערים: ${engines.filter((e) => e.gate).length} · מהם לא-במרשם: ${engines.filter((e) => e.gate && !e.gateRegistered).length}`);
-    console.log('\nusage: --write | --find "<מטרה>" | <שם-קובץ> | --orphans');
+    console.log('\nusage: --write | --find "<מטרה>" | <שם-קובץ> | --orphans | --connected [--list]');
   }
 }
