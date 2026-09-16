@@ -720,5 +720,917 @@
       "ran: ls gen/*.mjs ⇒ 24 מנועים · ls gen/specs/ ⇒ 7 ספקים (check, check2, gemach-sentence, gemach, gemach2, hotzaot, tikim)",
       "ran: node machtzev/census/engine-index.mjs --connected ⇒ GEN_ENTRY אינו כולל אף קובץ תחת gen/"
     ]
+  },
+  {
+    "file": "box-drafts/io-wiring/score-term@src_lib_search_ts.mjs",
+    "lang": "mjs",
+    "lines": 39,
+    "does": [
+      {
+        "claim": "מדרג התאמת-מונח לשאילתה בשישה מדרגים: זהות 100 · קידומת 80 · גזע-ריבוי 70 · הכלה 62 · שלד-ללא-אמות-קריאה 58 · שגיאת-כתיב 52-4d",
+        "evidence": "box-drafts/io-wiring/score-term@src_lib_search_ts.mjs:10-33"
+      },
+      {
+        "claim": "מטפל בעברית ספציפית: הסרת סיומת ריבוי «ימ»/«ות» אחרי נרמול ם׳-סופית, והשמטת י׳/ו׳ לשלד («דויד» ≈ «דוד»)",
+        "evidence": ":14-19 (ריבוי) · :23-27 (שלד)"
+      },
+      {
+        "claim": "סובלנות-שגיאה תלוית-אורך: מונח באורך 6+ סובל 2 שגיאות, קצר יותר — אחת",
+        "evidence": ":28-32"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — אפס import בקובץ, ו-normSearch ו-levenshtein אינם מוגדרים בו; הם מוצהרים כשקעים בכותרת",
+        "evidence": "ran: grep -c '^import|require(' על הקובץ ⇒ 0 · :3 (שקעים-מועמדים: scoreTerm, normSearch, levenshtein)"
+      },
+      {
+        "claim": "לא קודם מעולם — אין לצידו .contract.md ולא .test.mjs, שהם תנאי-הקידום שהכותרת עצמה מציבה",
+        "evidence": ":4 (קידום: לכתוב <שם>.contract.md + <שם>.test.mjs) · ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "הקובץ מסתיים בהערת-תיעוד יתומה של הפונקציה **הבאה** במקור (הרחבת-שאילתה דרך XLAT) שנחתכה — עדות שהחציבה חתכה לפי טווח-שורות ולא לפי גבול-פונקציה",
+        "evidence": ":36-39"
+      },
+      {
+        "claim": "מקורו maor/src/lib/search.ts — **ריפו שאינו קיים כאן כלל**",
+        "evidence": ":2 · ran: ls -d maor ⇒ אין"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; אינו מורץ-בשם; אינו שער. ran: node machtzev/census/engine-index.mjs --connected --list ⇒ ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ — **הטיוטה מוחלפת כבר בפועל**. הלוגיקה פורקה ל-6 אטומי-Dart ב-new/dart-maor/: rule-exact · rule-prefix · rule-plural · rule-contains · rule-skeleton · rule-typo — אחד לכל מדרג, verbatim, מאותו מקור",
+      "gives": "אין מה לחבר. זו אינה טיוטה-נטושה-שצריך-להציל אלא טיוטה **שהושלמה** דרך פירוק-לאטומים לפי הדוקטרינה. new/dart-maor/rule-plural.dart:30 מחזיק את אותו 70; rule-typo:25 מחזיק את אותו 52-4d. הערך של הכרטיס הזה הוא הקביעה שאין כאן חוב."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב, כי כבר קורב. הלוגיקה חיה בשישה אטומי-Dart מקודמים; הטיוטה היא שארית. חיבורה יכפיל קוד ויפר את הכרעה-5 (כפליות-מדף)."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/score-term@src_lib_search_ts.mjs:1-39 (במלואו)",
+      "ran: grep -rln 'scoreTerm|searchScore' new/ machtzev/ ⇒ new/dart-maor/{rule-exact,rule-plural,rule-prefix,rule-typo,rule-skeleton,rule-contains}.dart",
+      "ran: grep -nE 'return [0-9]+|score' new/dart-maor/rule-plural.dart ⇒ :30 'if (nt == stem || nt.startsWith(stem)) return 70;' · rule-typo.dart:25 'score is 52 - 4*d' — הערכים זהים לטיוטה",
+      "ran: grep -n 'מוצא' new/dart-maor/rule-exact.dart ⇒ :2 'maor/src/lib/search.ts (scoreTerm; פורק — הכרעת-בעלים המשמעות בקופסה)'"
+    ]
+  },
+  {
+    "file": "box-drafts/buildsmart-seed/start-barcode-scanner@app_src_lib_barcode_ts.mjs",
+    "lang": "mjs",
+    "lines": 53,
+    "does": [
+      {
+        "claim": "מחזיק את לולאת-סריקת-הברקוד המלאה: יצירת גלאי עם 5 פורמטים (ean_13 · ean_8 · code_128 · code_39 · qr_code), פתיחת מצלמה, לולאת detect על requestAnimationFrame, וסגירת ה-stream",
+        "evidence": "box-drafts/buildsmart-seed/start-barcode-scanner@app_src_lib_barcode_ts.mjs:11-13 (formats) · :3 (שקעים: getUserMedia, detect, requestAnimationFrame, cancelAnimationFrame, getTracks, stop)"
+      },
+      {
+        "claim": "נופל-רך בעברית כשהדפדפן אינו תומך: מודיע «הדפדפן הזה לא תומך בסריקת ברקוד» ומחזיר null",
+        "evidence": ":6-10"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — אפס import; getCtor (מאתר את בנאי-הגלאי) הוא שקע לא-מסופק",
+        "evidence": "ran: grep -c import ⇒ 0 · :3,:6"
+      },
+      {
+        "claim": "לא קודם — אין contract/test לצידו",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "מקורו buildsmart/app/src/lib/barcode.ts — ריפו-אח שאינו חלק מהריפו הזה",
+        "evidence": ":2 · CLAUDE.md (179 מנועים בריפואים-אחים; buildsmart 89)"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○ ברשימת הלא-מחוברים"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/ — כאטום-הצבה בדגם ds_voice (חוק-6): ds_barcode.dart + _web + _stub, ואז שקע בספק. **זהו הפער היחיד-האמיתי מבין 19 הטיוטות שלי**",
+      "gives": "נמדד: למדף יש את ה**מראה** של סורק-ברקוד ואין לו את ה**יכולת**. new/dart-ui-bs/auto/barcode_reticle.dart הוא 17 שורות — StatelessWidget שמצייר מסגרת 240x150 ותו לא; ו-screens-seed/machine/screens__barcode_scanner.json הוא זרע-מסך. לעומת זאת 'BarcodeDetector' מופיע **0 פעמים בכל הריפו**. זה בדיוק דפוס «אטום-חזות אפס-דאטה» ש-CLAUDE.md מזהיר מפניו, ובדיוק מה שהכרעה-26 אוסרת: אטום שמציג ⇒ חייב שקע-דאטה. הטיוטה הזו היא המקום היחיד בריפו שמחזיק את רשימת-הפורמטים ואת מחזור-החיים של ה-stream."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — יכולת-קלט אמיתית שחסרה למחולל וקיימת רק כאן. «אפליקציה עובדת 100%» שכוללת מסך-סריקה שמצייר מסגרת ולא סורק היא בדיוק ה«כמעט» ש-§22 פוסל. לא 3, כי זו יכולת-קצה אחת ולא חוליה בצינור המשפט⇒אפליקציה, והדרך הנכונה היא אטום-הצבה חדש בדגם ds_voice — כלומר הטיוטה היא **מקור-ידע**, לא קוד-לקידום-כמות-שהוא."
+    },
+    "evidence": [
+      "read: box-drafts/buildsmart-seed/start-barcode-scanner@app_src_lib_barcode_ts.mjs:1-14 + כותרת-השקעים (53 שורות)",
+      "ran: grep -rn 'BarcodeDetector' --include=*.dart --include=*.mjs --include=*.ts . (ללא node_modules) ⇒ 0 התאמות בכל הריפו",
+      "ran: wc -l new/dart-ui-bs/auto/barcode_reticle.dart ⇒ 17 · read: הקובץ = Container עם Border בלבד; ההתאמה היחידה לדפוס-זיהוי הייתה המילה 'camera' בהערת-המוצא :2, לא קוד",
+      "ran: find . -name '*barcode*' (ללא node_modules, ללא box-drafts) ⇒ barcode_reticle.dart · screens__barcode_scanner.json · .content.dart · .props-plan.json — מראה וזרע-מסך בלבד"
+    ]
+  },
+  {
+    "file": "box-drafts/buildsmart-seed/start-voice-recognition@app_src_lib_voice_ts.mjs",
+    "lang": "mjs",
+    "lines": 40,
+    "does": [
+      {
+        "claim": "עוטף זיהוי-דיבור של הדפדפן: קובע lang='he-IL', continuous=false, ומחווט onTranscript/onError/onEnd",
+        "evidence": "box-drafts/buildsmart-seed/start-voice-recognition@app_src_lib_voice_ts.mjs:12-14 · :3 (שקעים)"
+      },
+      {
+        "claim": "נופל-רך בעברית: «הדפדפן הזה לא תומך בחיפוש קולי» + onEnd + null",
+        "evidence": ":6-11"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — אפס import, getCtor שקע לא-מסופק",
+        "evidence": "ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "**מוחלף בפועל** — היכולת חיה במדף כאטום-הצבה מלא",
+        "evidence": "ran: find . -name 'ds_voice*' ⇒ new/dart-ui-bs/ds/ds_voice.dart · ds_voice_web.dart · ds_voice_stub.dart"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○ ברשימת הלא-מחוברים"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ — היכולת כבר מחוברת. ds_voice נצרך ע\"י machtzev/generator/balagan.mjs ומופיע ב-new/dart-gen-bs/gen_balagan_home.dart ו-gen_balagan_ask.dart",
+      "gives": "אין מה לחבר. הטיוטה היא הגרסה ה-TS-מתורגמת של יכולת שכבר הוסבה נכון לדגם אטום-הצבה (חוק-6: web/stub) וחוברה ל«דבר» ב«היום» וב«מה קרה?». זו הראיה שהנתיב טיוטה⇒אטום-הצבה עובד — ושהטיוטה שנשארה מאחור היא שארית, לא חוב."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. היכולת קיימת, מחווטת ומשמשת בפועל בבלגן. הטיוטה כפילות; חיבורה יפר את הכרעה-5."
+    },
+    "evidence": [
+      "read: box-drafts/buildsmart-seed/start-voice-recognition@app_src_lib_voice_ts.mjs:1-14 (מתוך 40)",
+      "ran: find . -name 'ds_voice*' ⇒ 3 קבצים (ds_voice.dart · _web · _stub) — דגם אטום-ההצבה של חוק-6",
+      "ran: grep -rli 'ds_voice|SpeechRecognition' machtzev/ new/ ⇒ machtzev/generator/balagan.mjs · new/dart-gen-bs/gen_balagan_home.dart · gen_balagan_ask.dart · new/dart-ui-bs/ds/ds_voice{,_web}.dart"
+    ]
+  },
+  {
+    "file": "box-drafts/buildsmart-seed/is-barcode-supported@app_src_lib_barcode_ts.mjs",
+    "lang": "mjs",
+    "lines": 7,
+    "does": [
+      {
+        "claim": "מחזיר אמת רק אם גם בנאי-הגלאי קיים וגם navigator.mediaDevices.getUserMedia זמין — בדיקת-כשירות כפולה",
+        "evidence": "box-drafts/buildsmart-seed/is-barcode-supported@app_src_lib_barcode_ts.mjs:5-7"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — getCtor שקע לא-מסופק, אפס import",
+        "evidence": ":3,:6 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "אינו סורק — בדיקת-זמינות בלבד, 3 שורות קוד",
+        "evidence": ":5-7 (return יחיד)"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "נלווה ל-start-barcode-scanner: אם ייבנה ds_barcode כאטום-הצבה, זו בדיוק פונקציית-ה-stub שמחזירה false בפלטפורמה שאינה תומכת",
+      "gives": "בדגם ds_voice_stub, ה-stub צריך לדעת לומר «לא נתמך» בלי לקרוס. 3 השורות האלה הן התוכן של אותו stub. ערך אמיתי אך זעיר — הוא נגזר מ-start-barcode-scanner ולא עומד בפני עצמו."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — תומך בפער-הברקוד האמיתי (s22=2 של הסורק) אך אינו יכולת בפני עצמו: בדיקת-כשירות בת 3 שורות. בלי הסורק אין לו למה להתלוות."
+    },
+    "evidence": [
+      "read: box-drafts/buildsmart-seed/is-barcode-supported@app_src_lib_barcode_ts.mjs:1-7 (במלואו)",
+      "ran: grep -rn 'BarcodeDetector' . (ללא node_modules) ⇒ 0 — היכולת שהוא בודק אינה קיימת בריפו"
+    ]
+  },
+  {
+    "file": "box-drafts/buildsmart-seed/is-voice-supported@app_src_lib_voice_ts.mjs",
+    "lang": "mjs",
+    "lines": 7,
+    "does": [
+      {
+        "claim": "מחזיר אמת אם בנאי-זיהוי-הדיבור קיים — שורת-קוד אחת",
+        "evidence": "box-drafts/buildsmart-seed/is-voice-supported@app_src_lib_voice_ts.mjs:5-7"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — getCtor שקע לא-מסופק",
+        "evidence": ":3,:6 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "מוחלף — ds_voice_stub.dart ממלא בדיוק את התפקיד הזה במדף",
+        "evidence": "ran: find . -name 'ds_voice*' ⇒ ds_voice_stub.dart קיים"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין. בדיקת-הכשירות הקולית כבר קיימת במדף כ-ds_voice_stub.dart בדגם חוק-6."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. שורה אחת שכבר יש לה מקבילה מקודמת ומחווטת."
+    },
+    "evidence": [
+      "read: box-drafts/buildsmart-seed/is-voice-supported@app_src_lib_voice_ts.mjs:1-7 (במלואו)",
+      "ran: find . -name 'ds_voice*' ⇒ ds_voice.dart · _web · _stub"
+    ]
+  },
+  {
+    "file": "box-drafts/buildsmart-seed/search-exact@app_src_lib_search_ts.mjs",
+    "lang": "mjs",
+    "lines": 54,
+    "does": [
+      {
+        "claim": "חיפוש-קידומת-והכלה על אינדקס-מילות-מפתח: לכל פגיעה נבחר המיקום הטוב ביותר מבין מילות-המפתח, והתוצאות מופרדות ל-prefix ול-contains",
+        "evidence": "box-drafts/buildsmart-seed/search-exact@app_src_lib_search_ts.mjs:5-14 + המשך"
+      },
+      {
+        "claim": "מנרמל שאילתה ומחזיר ריק כשהיא ריקה; תקרה ברירת-מחדל 40",
+        "evidence": ":5-8"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — normalize · searchIndex · editDistance כולם שקעים לא-מסופקים, אפס import",
+        "evidence": ":3 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "אין לו תאום מקודם ב-new/ בשם הזה",
+        "evidence": "ran: grep -rl 'searchExact' new/ ⇒ ∅"
+      },
+      {
+        "claim": "מקורו buildsmart/app/src/lib/search.ts — ריפו-אח שאינו כאן",
+        "evidence": ":2 · ran: ls -d maor ⇒ אין (ובאותה מידה אין app/ של buildsmart בריפו זה)"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ מעשית — החיפוש-הסלחן של המחולל כבר נפתר ממקור אחר. G35 (CLAUDE.md) בנה את bhSearchForgiving מ-ruleExact · ruleContains · damerauLevenshtein, ו-new/dart-maor/rule-*.dart מחזיקים את המדרגים",
+      "gives": "אין נקודה כנה. ההבדל בין הטיוטה הזו לבין מה שקיים הוא ש-searchExact עובד על **אינדקס-מילות-מפתח חיצוני** (searchIndex()) — מבנה-נתונים שאינו קיים בריפו. חיבורו ידרוש להמציא את האינדקס הזה, כלומר לבנות, לא לחבר."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. היכולת (חיפוש סלחן מדורג) קיימת ומוכחת דרך אטומי rule-*; מה שייחודי כאן הוא תלות באינדקס-מילות-מפתח שאין לו מקור — ולפי הכרעה-27 «אין מקור ⇒ ∅, לא ניחוש»."
+    },
+    "evidence": [
+      "read: box-drafts/buildsmart-seed/search-exact@app_src_lib_search_ts.mjs:1-14 (מתוך 54)",
+      "ran: grep -rl 'searchExact' new/ ⇒ ∅ (אין תאום מקודם)",
+      "ran: grep -rln 'scoreTerm|searchScore' new/ ⇒ 6 אטומי rule-* — היכולת המקבילה שכן קודמה"
+    ]
+  },
+  {
+    "file": "box-drafts/buildsmart-seed/search-fuzzy@app_src_lib_search_ts.mjs",
+    "lang": "mjs",
+    "lines": 33,
+    "does": [
+      {
+        "claim": "חיפוש-מרחק-עריכה עם סובלנות נגזרת-אורך: floor(len/3)+1",
+        "evidence": "box-drafts/buildsmart-seed/search-fuzzy@app_src_lib_search_ts.mjs:9"
+      },
+      {
+        "claim": "דורש שאילתה באורך 2 לפחות, ומדרג לפי המרחק הטוב ביותר מבין מילות-המפתח; תקרה 6",
+        "evidence": ":5-14"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — normalize · searchIndex · editDistance שקעים לא-מסופקים",
+        "evidence": ":3 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "אין תאום מקודם בשם הזה ב-new/",
+        "evidence": "ran: grep -rl 'searchFuzzy' new/ ⇒ ∅"
+      },
+      {
+        "claim": "נוסחת-הסובלנות שלו **שונה** מזו שבמדף: כאן floor(len/3)+1, ואילו rule-typo מקבע 2 למונח באורך 6+ ואחרת 1",
+        "evidence": ":9 מול new/dart-maor/rule-typo.dart:25 ('threshold is 2 for terms of length >= 6, else 1')"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ לחיבור. שווה לרשום כ**שאלת-הכרעה** ולא כחיבור: שתי נוסחאות-סובלנות שונות לאותה מטרה חיות בריפו",
+      "gives": "לא לחבר — להכריע. הכרעה-20(א) אומרת «הכי-טוב-לייעוד, לא הראשון-שמתאים». כאן יש שתי נוסחאות ואין מדידה שמעדיפה אחת. בלי דוגמאות-זהב שיכריעו, חיבור הטיוטה הוא ניחוש. זו הצבעה על פער-ידע, לא על חוט."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. היכולת קיימת (rule-typo מוכח בדוגמאות-Dart לפי G34); הטיוטה מציעה נוסחה מתחרה בלי ראיה שהיא טובה יותר."
+    },
+    "evidence": [
+      "read: box-drafts/buildsmart-seed/search-fuzzy@app_src_lib_search_ts.mjs:1-14 (מתוך 33)",
+      "ran: grep -rl 'searchFuzzy' new/ ⇒ ∅",
+      "ran: grep -nE 'threshold|52' new/dart-maor/rule-typo.dart ⇒ :25 'threshold is 2 for terms of length >= 6, else 1; score is 52 - 4*d' — נוסחה שונה מ-:9 של הטיוטה"
+    ]
+  },
+  {
+    "file": "box-drafts/io-wiring/pull-all@src_lib_cloud_ts.mjs",
+    "lang": "mjs",
+    "lines": 65,
+    "does": [
+      {
+        "claim": "משיכת-מצב מלאה מ-Firestore: קריאת מסמך-המטא, ואז מעבר על האוספים עם פענוח-מסמך (decryptDoc) לפי מפתח-הצפנה (dek)",
+        "evidence": "box-drafts/io-wiring/pull-all@src_lib_cloud_ts.mjs:5-8 · :3 (שקעים: requireDb, getDoc, scopedMeta, decryptDoc, getDocs, query, collection, scopedCol, where)"
+      },
+      {
+        "claim": "נחצב מ-66 שורות מקור — הטיוטה השנייה בגודלה בקבוצה",
+        "evidence": ":2 (maor/src/lib/cloud.ts:490-555 (66 שורות))"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — 12 שקעים מוצהרים, אפס import",
+        "evidence": ":3 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "**מוחלף בפועל** — pullAll חי כקופסה גמורה",
+        "evidence": "ran: grep -n 'pullAll' new/boxes/lib-cloud.mjs ⇒ :409 (const pullAll = async (dek) => …) · :577 (בייצוא)"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ — new/boxes/lib-cloud.mjs (29,924 בתים) עם lib-cloud.contract.md ו-lib-cloud.test.mjs לצידו הוא הקידום שהכותרת ביקשה, והוא כבר בוצע",
+      "gives": "אין מה לחבר. הטיוטה היא שלב-ביניים שהושלם: אותו שם, אותה חתימה (dek), בקופסה עם חוזה ובדיקה — בדיוק תנאי-הקידום של :4."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. הקופסה קיימת; הטיוטה שארית."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/pull-all@src_lib_cloud_ts.mjs:1-8 (כותרת + פתיח, מתוך 65)",
+      "ran: grep -n 'pullAll' new/boxes/lib-cloud.mjs ⇒ :409 הגדרה · :577 ייצוא",
+      "ran: ls -la new/boxes/lib-cloud* ⇒ .mjs 29924B · .contract.md 6232B · .test.mjs 10038B"
+    ]
+  },
+  {
+    "file": "box-drafts/io-wiring/subscribe-all@src_lib_cloud_ts.mjs",
+    "lang": "mjs",
+    "lines": 50,
+    "does": [
+      {
+        "claim": "האזנה-חיה לכל האוספים עם קילוף מפתח-תומך (stripSupKey) באוספים-נאכפים בלבד — אכיפת-נתונים דורמנטית",
+        "evidence": "box-drafts/io-wiring/subscribe-all@src_lib_cloud_ts.mjs:5-8"
+      },
+      {
+        "claim": "נחצב מ-107 שורות מקור — הטיוטה הגדולה ביותר בקבוצה",
+        "evidence": ":2 (maor/src/lib/cloud.ts:556-662 (107 שורות))"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — 11 שקעים מוצהרים, אפס import; SUP_KEYED_COLS אינו מוגדר בקובץ",
+        "evidence": ":3,:8 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "**מוחלף בפועל**",
+        "evidence": "ran: grep -n 'subscribeAll' new/boxes/lib-cloud.mjs ⇒ :459 הגדרה · :577 ייצוא"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין. הקופסה new/boxes/lib-cloud.mjs מחזיקה את subscribeAll עם חוזה ובדיקה."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. מוחלף בקופסה גמורה."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/subscribe-all@src_lib_cloud_ts.mjs:1-8 (מתוך 50)",
+      "ran: grep -n 'subscribeAll' new/boxes/lib-cloud.mjs ⇒ :459,:577"
+    ]
+  },
+  {
+    "file": "box-drafts/io-wiring/watch-auth@src_lib_cloud_ts.mjs",
+    "lang": "mjs",
+    "lines": 10,
+    "does": [
+      {
+        "claim": "עוטף onAuthStateChanged ומצמצם את המשתמש ל-{uid, email} או null",
+        "evidence": "box-drafts/io-wiring/watch-auth@src_lib_cloud_ts.mjs:5-9"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — onAuthStateChanged ו-requireAuth שקעים לא-מסופקים",
+        "evidence": ":3 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "**מוחלף בפועל**",
+        "evidence": "ran: grep -n 'watchAuth' new/boxes/lib-cloud.mjs ⇒ :362 הגדרה · :575 ייצוא"
+      },
+      {
+        "claim": "מסתיים בהערה יתומה של הפונקציה הבאה במקור (כניסה באימייל+סיסמה) — עדות לחיתוך לפי טווח-שורות",
+        "evidence": ":10"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין. מוחלף בקופסה; וזהות/סודות ממילא חייבים להיות חיווט-הצבה ולא אטום (חוק-6)."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. מוחלף."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/watch-auth@src_lib_cloud_ts.mjs:1-10 (במלואו)",
+      "ran: grep -n 'watchAuth' new/boxes/lib-cloud.mjs ⇒ :362,:575"
+    ]
+  },
+  {
+    "file": "box-drafts/io-wiring/audit-writer-email@src_lib_cloud_ts.mjs",
+    "lang": "mjs",
+    "lines": 8,
+    "does": [
+      {
+        "claim": "מחזיר את כתובת-הדואר של כותב-הביקורת — return בודד",
+        "evidence": "box-drafts/io-wiring/audit-writer-email@src_lib_cloud_ts.mjs:5-7"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — auditEmail אינו מוגדר בקובץ ואינו מיובא",
+        "evidence": ":6 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "**מוחלף בפועל**, ושם הקופסה אף מדויקת יותר: audit.email במקום משתנה-חופשי",
+        "evidence": "ran: grep -n 'auditWriterEmail' new/boxes/lib-cloud.mjs ⇒ :569 (const auditWriterEmail = () => audit.email;) · :573 ייצוא"
+      },
+      {
+        "claim": "מסתיים בהערה יתומה של הפונקציה הבאה (דחיפת טבעת-הלוג)",
+        "evidence": ":8"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין. הקופסה מחזיקה גרסה תקינה; הטיוטה מחזיקה הפניה למשתנה שאינו קיים."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. מוחלף, ובגרסה שבורה."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/audit-writer-email@src_lib_cloud_ts.mjs:1-8 (במלואו)",
+      "ran: grep -n 'auditWriterEmail' new/boxes/lib-cloud.mjs ⇒ :569,:573"
+    ]
+  },
+  {
+    "file": "box-drafts/io-wiring/mark-incoming-payment@src_lib_cloud_ts.mjs",
+    "lang": "mjs",
+    "lines": 15,
+    "does": [
+      {
+        "claim": "מסמן תשלום-נכנס כמטופל: status='handled' + handledAt בזמן-ISO",
+        "evidence": "box-drafts/io-wiring/mark-incoming-payment@src_lib_cloud_ts.mjs:5-10"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — updateDoc · doc · requireDb · scopedCol שקעים לא-מסופקים",
+        "evidence": ":3 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "**מוחלף בפועל**",
+        "evidence": "ran: grep -n 'markIncomingPayment' new/boxes/lib-cloud.mjs ⇒ :542 הגדרה · :578 ייצוא"
+      },
+      {
+        "claim": "מסתיים בהערת-תיעוד יתומה בת 5 שורות של הפונקציה הבאה (האזנה-חיה לתשלומים)",
+        "evidence": ":11-15"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין. מוחלף בקופסה גמורה."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. מוחלף."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/mark-incoming-payment@src_lib_cloud_ts.mjs:1-15 (במלואו)",
+      "ran: grep -n 'markIncomingPayment' new/boxes/lib-cloud.mjs ⇒ :542,:578"
+    ]
+  },
+  {
+    "file": "box-drafts/io-wiring/donation-split-active@src_lib_cloud_ts.mjs",
+    "lang": "mjs",
+    "lines": 11,
+    "does": [
+      {
+        "claim": "מחזיר את דגל פיצול-התרומה — return בודד",
+        "evidence": "box-drafts/io-wiring/donation-split-active@src_lib_cloud_ts.mjs:5-7"
+      },
+      {
+        "claim": "גורר אחריו הערה שמתעדת כלל-אבטחה אמיתי: עובד-מוגבל חייב שאילתה מסוננת ל-pkey מותרים, אחרת Firestore Rules דוחה את ה-list",
+        "evidence": ":8-11"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — splitOn אינו מוגדר ואינו מיובא",
+        "evidence": ":6 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "**מוחלף** — השם קיים כבר כאטום-Dart מקודם",
+        "evidence": "ran: grep -rl 'donationSplitActive' new/ ⇒ new/dart-maor/set-donation-split.dart"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ לקוד. הערך היחיד הוא ההערה :8-11 — ידע-אבטחה על סינון-שאילתה לפי הרשאה",
+      "gives": "לא חוט אלא ידע: «רשימה לא-מסוננת של עובד-מוגבל נדחית». זה ידע ששייך לכללי-הגישה (server-gen/balagan/rules) ולא לאטום. מציין ולא ממליץ לחבר."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. return בודד שמוחלף, ועוד הערה ששייכת לשכבת-הכללים."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/donation-split-active@src_lib_cloud_ts.mjs:1-11 (במלואו)",
+      "ran: grep -rl 'donationSplitActive' new/ ⇒ new/dart-maor/set-donation-split.dart"
+    ]
+  },
+  {
+    "file": "box-drafts/io-wiring/watch-all-support-threads@src_lib_cloudConfig_ts.mjs",
+    "lang": "mjs",
+    "lines": 8,
+    "does": [
+      {
+        "claim": "האזנה-חיה לאוסף-שיחות-התמיכה, ממפה כל מסמך ל-{uid, ...data} ובולע שגיאות ב-noop",
+        "evidence": "box-drafts/io-wiring/watch-all-support-threads@src_lib_cloudConfig_ts.mjs:5-7"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — onSnapshot · collection · cloudDb שקעים, ו-SUPPORT_CHATS אינו מוגדר",
+        "evidence": ":3,:6 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "**מוחלף** — השם מופיע בקופסת-התצורה המקודמת",
+        "evidence": "ran: grep -rl 'watchAllSupportThreads' new/ ⇒ new/boxes/lib-cloud-config.test.mjs (ולצידה lib-cloud-config.mjs 20586B + .contract.md)"
+      },
+      {
+        "claim": "**בולע שגיאות בשקט** — handler הריק `() => {}` הוא בדיוק דפוס «בליעה-שקטה» שגלאי-הנכונות של G61 מסמן",
+        "evidence": ":6 (סוף השורה: , () => { })"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין. מוחלף בקופסת-התצורה; ובנוסף היה נדרש תיקון-נכונות (בליעה-שקטה) לפני כל קידום."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. מוחלף, ונושא דפוס-נכונות פסול."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/watch-all-support-threads@src_lib_cloudConfig_ts.mjs:1-8 (במלואו)",
+      "ran: grep -rl 'watchAllSupportThreads' new/ ⇒ new/boxes/lib-cloud-config.test.mjs",
+      "ran: ls -la new/boxes/lib-cloud-config* ⇒ .mjs 20586B · .contract.md 10165B · .test.mjs 14845B"
+    ]
+  },
+  {
+    "file": "box-drafts/io-wiring/hebrew-closed-windows@src_lib_telephony_engine_ts.mjs",
+    "lang": "mjs",
+    "lines": 5,
+    "does": [
+      {
+        "claim": "ייצוא-מחדש בשורה אחת: hebrewClosedWindows = rawHebrewClosedWindows (חלונות-סגירה לפי לוח עברי)",
+        "evidence": "box-drafts/io-wiring/hebrew-closed-windows@src_lib_telephony_engine_ts.mjs:5"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו מכיל שום לוגיקה — 5 שורות, מהן 4 הערה; rawHebrewClosedWindows אינו מוגדר ואינו מיובא",
+        "evidence": ":1-5 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "הכותרת עצמה מצהירה «שקעים-מועמדים: —» כלומר החוצב ידע שאין כאן קריאות-חוץ, אך גם לא הביא את הגוף",
+        "evidence": ":3"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "**מוחלף** — היכולת חיה כאטום-Dart",
+        "evidence": "ran: grep -rl 'hebrewClosedWindows' new/ ⇒ new/dart-maor/next-closure.dart"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין. שורת ייצוא-מחדש ריקה שהמקור שלה נשאר מאחור; היכולת קודמה ל-new/dart-maor/next-closure.dart. שלושת הקבצים בני-5-השורות בקבוצה (זה · simulate-call · validate-tenant) הם כשל-חציבה מאותו דפוס: alias בלי גוף."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. קובץ בן שורת-קוד אחת שמצביע על שם לא-קיים."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/hebrew-closed-windows@src_lib_telephony_engine_ts.mjs:1-5 (במלואו)",
+      "ran: grep -rl 'hebrewClosedWindows' new/ ⇒ new/dart-maor/next-closure.dart"
+    ]
+  },
+  {
+    "file": "box-drafts/io-wiring/simulate-call@src_lib_telephony_engine_ts.mjs",
+    "lang": "mjs",
+    "lines": 5,
+    "does": [
+      {
+        "claim": "ייצוא-מחדש בשורה אחת: simulateCall = rawSimulateCall",
+        "evidence": "box-drafts/io-wiring/simulate-call@src_lib_telephony_engine_ts.mjs:5"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו מכיל לוגיקה — rawSimulateCall אינו מוגדר ואינו מיובא",
+        "evidence": ":5 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "**מוחלף** — היכולת קודמה, ואף עם בדיקה",
+        "evidence": "ran: grep -rl 'simulateCall' new/ ⇒ new/dart-maor/explain-call_test.dart"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין. alias בלי גוף; היכולת קודמה ל-new/dart-maor (explain-call, עם קובץ-בדיקה)."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. שורת-alias לשם לא-קיים."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/simulate-call@src_lib_telephony_engine_ts.mjs:1-5 (במלואו)",
+      "ran: grep -rl 'simulateCall' new/ ⇒ new/dart-maor/explain-call_test.dart"
+    ]
+  },
+  {
+    "file": "box-drafts/io-wiring/validate-tenant@src_lib_telephony_engine_ts.mjs",
+    "lang": "mjs",
+    "lines": 5,
+    "does": [
+      {
+        "claim": "ייצוא-מחדש בשורה אחת: validateTenant = rawValidateTenant",
+        "evidence": "box-drafts/io-wiring/validate-tenant@src_lib_telephony_engine_ts.mjs:5"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו מכיל לוגיקה — rawValidateTenant אינו מוגדר ואינו מיובא",
+        "evidence": ":5 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "המקור המוצהר הוא **שורה אחת** (engine.ts:77-77) — כלומר גם במקור זו הייתה הפניה, לא גוף",
+        "evidence": ":2"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "**מוחלף**",
+        "evidence": "ran: grep -rl 'validateTenant' new/ ⇒ new/dart-maor/preview-telephony_test.dart"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין. alias בלי גוף, שמקורו עצמו שורה אחת."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. שורת-alias לשם לא-קיים."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/validate-tenant@src_lib_telephony_engine_ts.mjs:1-5 (במלואו)",
+      "ran: grep -rl 'validateTenant' new/ ⇒ new/dart-maor/preview-telephony_test.dart"
+    ]
+  },
+  {
+    "file": "box-drafts/io-wiring/fetch-outbox-issues@src_lib_cloud_ts.mjs",
+    "lang": "mjs",
+    "lines": 21,
+    "does": [
+      {
+        "claim": "סורק שני תאי-יוצא (sms · mail), אוסף את הרשומות בסטטוס error לכדי רשימת-תקלות, וסופר את הממתינות",
+        "evidence": "box-drafts/io-wiring/fetch-outbox-issues@src_lib_cloud_ts.mjs:8-17"
+      },
+      {
+        "claim": "ממיין את התקלות מהחדשה לישנה לפי חותמת at, עם ברירת-מחדל בטוחה למחרוזת ריקה",
+        "evidence": ":18"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — 8 שקעים מוצהרים (collection · requireDb · scopedCol · getDocs · query · where …), אפס import",
+        "evidence": ":3 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "🔴 **אין לו תאום מקודם** — בניגוד ל-9 טיוטות-io-wiring האחרות, השם אינו מופיע בקופסת-הענן",
+        "evidence": "ran: grep -rl 'fetchOutboxIssues' new/ ⇒ ∅ · ran: grep -n 'fetchOutboxIssues' new/boxes/lib-cloud.mjs ⇒ ללא התאמה"
+      },
+      {
+        "claim": "מסתיים בהערה יתומה של retryOutboxItem — שתי הטיוטות הלא-מקודמות הן שכנות במקור",
+        "evidence": ":21"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "new/boxes/lib-cloud.mjs — כתוספת לקופסה הקיימת (היעד הטבעי: לצד fetchIncomingPayments ב-:578), **לא** כאטום עצמאי",
+      "gives": "זהו אחד משני הפריטים היחידים ב-io-wiring שנשארו מאחור כשכל שכניהם קודמו. הקופסה כבר מחזיקה את הצנרת (requireDb · scopedCol) שהטיוטה צריכה, כך שהפער הוא קטן ומוגדר. מה שהוא נותן ל-§22 עקיף: «אפליקציה עובדת 100%» כוללת דיווח-תקלות-שליחה; בלעדיו כשל-שליחה שקט. אבל זו יכולת-ניהול-ענן ולא חוליה במשפט⇒אפליקציה."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — פער אמיתי (אין תאום מקודם, בניגוד לשכניו) אך היקפו ניהול-תקלות-ענן, לא הרכבת-אפליקציה-ממשפט. מקרב את «אפס-תקלות» בשוליים, לא את המחולל."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/fetch-outbox-issues@src_lib_cloud_ts.mjs:1-21 (במלואו)",
+      "ran: grep -rl 'fetchOutboxIssues' new/ ⇒ ∅ (אין תאום — בניגוד ל-pullAll/subscribeAll/watchAuth/markIncomingPayment/auditWriterEmail שכולם נמצאו)",
+      "ran: grep -nE 'auditWriterEmail|markIncomingPayment|subscribeAll|watchAuth|pullAll|fetchOutboxIssues|retryOutboxItem' new/boxes/lib-cloud.mjs ⇒ 5 נמצאו, fetchOutboxIssues ו-retryOutboxItem לא"
+    ]
+  },
+  {
+    "file": "box-drafts/io-wiring/retry-outbox-item@src_lib_cloud_ts.mjs",
+    "lang": "mjs",
+    "lines": 8,
+    "does": [
+      {
+        "claim": "מחזיר פריט-יוצא ל-pending ומוחק את שדה-השגיאה (deleteField) — כדי שה-Function הדקתית תרים אותו שוב",
+        "evidence": "box-drafts/io-wiring/retry-outbox-item@src_lib_cloud_ts.mjs:5-8 · ההערה היתומה ב-fetch-outbox-issues:21 מתארת בדיוק את הפונקציה הזו"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו רץ — updateDoc · doc · requireDb · scopedCol · deleteField שקעים לא-מסופקים",
+        "evidence": ":3 · ran: grep -c import ⇒ 0"
+      },
+      {
+        "claim": "לא קודם — אין contract/test",
+        "evidence": "ran: ls box-drafts/*/ | grep -c 'contract.md|test.mjs' ⇒ 0"
+      },
+      {
+        "claim": "🔴 **אין לו תאום מקודם** — השני מבין שני החריגים בקבוצה",
+        "evidence": "ran: grep -rl 'retryOutboxItem' new/ ⇒ ∅"
+      },
+      {
+        "claim": "אינו שולח דבר בעצמו — רק מסמן; השליחה בידי Function חיצונית",
+        "evidence": ":5-8 (updateDoc בלבד) + ההערה ב-fetch-outbox-issues:21"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅",
+        "how": "אפס מייבאים; ○"
+      }
+    ],
+    "connectAt": {
+      "point": "new/boxes/lib-cloud.mjs — יחד עם fetch-outbox-issues, כזוג אחד (הן שכנות במקור: cloud.ts:787-804 ו-805-809)",
+      "gives": "הזוג fetchOutboxIssues+retryOutboxItem הוא יחידה אחת: לאתר תקלות-שליחה ולנסות שוב. חיבור אחד בלי השני חסר-משמעות. אותה הערכה כמו שכנו — משלים «אפס-תקלות» בשוליים."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — פער אמיתי ומוגדר (אין תאום), אך יכולת-ניהול-ענן ולא חוליה במשפט⇒אפליקציה. זהה בהערכתו ל-fetch-outbox-issues, ויש לטפל בשניהם כזוג."
+    },
+    "evidence": [
+      "read: box-drafts/io-wiring/retry-outbox-item@src_lib_cloud_ts.mjs:1-8 (במלואו)",
+      "ran: grep -rl 'retryOutboxItem' new/ ⇒ ∅",
+      "read: box-drafts/io-wiring/fetch-outbox-issues@src_lib_cloud_ts.mjs:2 ו-:21 ⇒ cloud.ts:787-804 ו-805-809 — שכנות במקור"
+    ]
   }
 ]
