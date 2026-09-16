@@ -2229,5 +2229,363 @@
    "machtzev/generator/ship.mjs:97-99 (הקורא היחיד, עם allowFail)",
    "engine-index card: importedBy ריק · calledByName: ship"
   ]
+ },
+ {
+  "file": "machtzev/pins-check.mjs",
+  "lang": "mjs",
+  "lines": 57,
+  "capabilities": [
+   {
+    "cap": "מחשב sha256 **מלא** לכל קובץ-מקובע ומשווה ל-pins.sha256 — שינוי בלי עדכון-חתימה באותו commit = אדום",
+    "evidence": "machtzev/pins-check.mjs:3,40,52-56"
+   },
+   {
+    "cap": "**גוזר** את רשימת-הקבצים-המקובעים במקום להחזיק אותה ביד: רגקס על police.mjs מוציא כל סקריפט שהוא מפעיל כשער, ל-STATIC ול-OPTIONAL מצטרפים baselines מוצהרים ב-gates.tsv וכל קובץ תחת selftest-fixtures",
+    "evidence": "machtzev/pins-check.mjs:4-6,13-35 · 31 (DERIVED) · 33 (MANIFEST) · 34 (FIXTURES)"
+   },
+   {
+    "cap": "בודק דו-כיוונית: קובץ ברשימה-הנגזרת בלי חתימה, **וגם** חתימה לקובץ שאינו ברשימה (סימן שהוסר מ-police) — שני ה-diffs מודפסים",
+    "evidence": "machtzev/pins-check.mjs:6,49-51"
+   },
+   {
+    "cap": "מזהה מחיקה של קובץ-מקובע בנפרד משינוי",
+    "evidence": "machtzev/pins-check.mjs:54"
+   },
+   {
+    "cap": "מנרמל את CLAUDE.md לפני החתימה: בלוק-האמת (שמחולל ע\"י truth.mjs בתוך pre-commit) מוחלף במחרוזת-קבועה, כך שהבלוק פטור והשאר נעול כרגיל",
+    "evidence": "machtzev/pins-check.mjs:37-39 (canon)"
+   },
+   {
+    "cap": "מסנן קבצים שאינם קיימים לפני החתימה, כך ש-hooks/workflow אופציונליים לא מפילים בסביבה שאין בה אותם",
+    "evidence": "machtzev/pins-check.mjs:28-29,35"
+   },
+   {
+    "cap": "--write מחדש את כל החתימות ומדווח את הפילוח (static · נגזרים · hooks/workflow) · --list מדפיס את הרשימה הנגזרת",
+    "evidence": "machtzev/pins-check.mjs:41-45"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו בודק תוכן — רק זהות-בייטים; קובץ ששונה ונחתם-מחדש עובר בלי שאלה. ההגנה היא שהחתימה חייבת להתעדכן **באותו commit**, ואת זה אוכף ה-hook ולא הקובץ הזה",
+    "evidence": "machtzev/pins-check.mjs:3,7 · ship.mjs:128-134 (מי שמריץ --write ומייצר Allow trailers)"
+   },
+   {
+    "claim": "אינו מייצא כלום — CLI בלבד",
+    "evidence": "engine-index card: exports ריק · isNot 'אין-ייצוא (לא ספרייה)'"
+   },
+   {
+    "claim": "אינו חלק מהמחולל במובן של חילול — הוא 'מחובר' לפי ההגדרה כי ship מריץ אותו בשם (ship.mjs:128), והוא שער-משטרה (gates.tsv:8)",
+    "evidence": "machtzev/generator/ship.mjs:128 · machtzev/gates.tsv:8 · engine-index card: gate 'pins'"
+   },
+   {
+    "claim": "עדכון-החתימות עדיין אינו מותנה ב-trailer — הקוד עצמו מסמן את זה כעתידי ('בעתיד: רק עם trailer Allow: pins-write')",
+    "evidence": "machtzev/pins-check.mjs:7"
+   },
+   {
+    "claim": "אינו יודע מה נכון להיות מקובע — STATIC היא רשימה כתובה-ביד בת 44 שורות; רק DERIVED/MANIFEST/FIXTURES נגזרים",
+    "evidence": "machtzev/pins-check.mjs:13-27"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/police.mjs (שער pins, שלב commit) · machtzev/generator/ship.mjs:128 (--write לפני הקומיט) · .githooks/pre-commit · .github/workflows/police.yml",
+   "input": "machtzev/police.mjs (כטקסט) + machtzev/gates.tsv + machtzev/selftest-fixtures/** + הקבצים עצמם",
+   "output": "machtzev/pins.sha256 (במצב --write) · פסק-דין exit 0/1 אחרת",
+   "next": "ה-hook חוסם את הקומיט על אדום; ship מייצר Allow trailers לכל קובץ נעול שנכנס לקומיט"
+  },
+  "quality": {
+   "signal": "`node machtzev/pins-check.mjs` ⇒ '✓ נעילת-השוטרים: 139 קבצים חתומים ותואמים (sha256 מלא · רשימה נגזרת ≡ כתובה)' (exit 0). שער pins ב-gates.tsv:8, שלב commit. הקוד מתעד שני תיקוני-חוזק היסטוריים: 16-hex ⇒ sha256 מלא (שורש 64-bit), ורשימה-ביד ⇒ רשימה-נגזרת שלא יכולה לסחוף",
+   "measured": "כן — הפקודה למעלה, 139 קבצים"
+  },
+  "evidence": [
+   "Read של machtzev/pins-check.mjs (57 שורות, נקרא במלואו)",
+   "node machtzev/pins-check.mjs ⇒ exit 0, 139 קבצים",
+   "grep -n 'pins' machtzev/gates.tsv ⇒ שורה 8"
+  ]
+ },
+ {
+  "file": "machtzev/truth.mjs",
+  "lang": "mjs",
+  "lines": 164,
+  "capabilities": [
+   {
+    "cap": "מודד את מצב-החיווט חוצה שלוש שכבות (תצוגה · לוגיקה · דאטה) מהבייטים, ופולט TRUTH.md שבו כל מספר נגזר ולא נכתב",
+    "evidence": "machtzev/truth.mjs:2-7,82-104,117-130"
+   },
+   {
+    "cap": "מריץ את הבורר האמיתי 400 פעם פר-היבט (selectVaried עם seed 0..399) כדי למדוד כמה אטומים **נגישים בהרכבה**, במקום להעריך",
+    "evidence": "machtzev/truth.mjs:10,23-36"
+   },
+   {
+    "cap": "מגדיר 'כשיר-לחיווט' במפורש ובנפרד לכל שכבה: תצוגה = יש op≠zero בסנסוס-הפעולות ואינו מזייף-מוצהר · לוגיקה = יש חתימה נקראת — ומתעד למה כל הגדרה קודמת החליפה את הקודמת (L91 · L92)",
+    "evidence": "machtzev/truth.mjs:42-52 · 45-46,49-51"
+   },
+   {
+    "cap": "מחשב ארבעה מדדים נפרדים שקל לבלבל ביניהם, ומדפיס אותם זה לצד זה: נבחרו-בפועל (wired) · נגישים-לבוררים (reach) · כשירים (eligible) · ממופים-לפעולת-יסוד (opsMapped)",
+    "evidence": "machtzev/truth.mjs:65-76,86-89"
+   },
+   {
+    "cap": "מונה את הפער האמיתי בשמות: 'לא-כשירים-במכוון' (עם רשימת המחלקות) ו'כשירים-שאף-בורר-לא-רואה'",
+    "evidence": "machtzev/truth.mjs:90-91"
+   },
+   {
+    "cap": "מושך את רשימת-המזייפים מטקסט compose-engine.mjs (SSOT יחיד) ולא מעתיק אותה",
+    "evidence": "machtzev/truth.mjs:44"
+   },
+   {
+    "cap": "סופר קוראים-אמיתיים: כל מנוע-לוגיקה שקופסת-Dart מייבאת נחשב נגיש (L89)",
+    "evidence": "machtzev/truth.mjs:68-70"
+   },
+   {
+    "cap": "מושך מדדי-ריצה מדוחות אחרים כשקיימים (golden-harness-report · gen-verify-report) ומסמן '— (לא הורץ)' כשאינם — במקום להשמיט את השורה",
+    "evidence": "machtzev/truth.mjs:77-81"
+   },
+   {
+    "cap": "מחולל את בלוק-האמת בתוך CLAUDE.md בין סמני truth:begin/end, כך שהמספרים בשער-הכניסה נגזרים ולא נכתבים ביד",
+    "evidence": "machtzev/truth.mjs:137-148"
+   },
+   {
+    "cap": "ראצ׳ט-אי-נסיגה על החיווט: wired-floor.json רק-עולה, והשער נכשל אם המדידה ירדה מתחתיו",
+    "evidence": "machtzev/truth.mjs:132-134,150-153,160-161"
+   },
+   {
+    "cap": "מפריד בין כתיבה לבין הזזת-הרצפה: הרצפה זזה רק עם --floor (טבעת-push/CI), לעולם לא מתוך hook",
+    "evidence": "machtzev/truth.mjs:149-154"
+   },
+   {
+    "cap": "סופר את מבנה-הענף עצמו (קבצי-machtzev · generator · legacy · knowledge · שערים ב-gates.tsv מול קריאות gate() ב-police)",
+    "evidence": "machtzev/truth.mjs:55-56,105-114"
+   },
+   {
+    "cap": "כותב לתוך TRUTH.md אזהרת-אמת שמפרידה בין 'נבחר' ל'נגיש' — כדי שהמספר לא ייקרא לא-נכון",
+    "evidence": "machtzev/truth.mjs:127-129"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מחולל ואינו משנה קוד — 'אפס תופעות-לוואי (קריאה בלבד)' חוץ מכתיבת TRUTH.md/CLAUDE.md-block/floor במצבי-כתיבה מפורשים",
+    "evidence": "machtzev/truth.mjs:6,135-155"
+   },
+   {
+    "claim": "אינו מייצא כלום — CLI בלבד",
+    "evidence": "engine-index card: exports ריק"
+   },
+   {
+    "claim": "אינו מודד איכות — הוא מודד **חיווט ונגישות**; 'רונדר-בפועל' ו'זהב-מורכב-מחדש' מגיעים מדוחות של שערים אחרים, ואם לא הורצו הוא אומר זאת ולא ממציא",
+    "evidence": "machtzev/truth.mjs:77-81"
+   },
+   {
+    "claim": "אינו מעדכן את הרצפה בהרצה רגילה — --write בלי --floor משאיר אותה ומדווח זאת",
+    "evidence": "machtzev/truth.mjs:154"
+   },
+   {
+    "claim": "אינו סופר את atom-census.json — הוא נמחק (הכרעה C); האורקל הוא atom-index.json",
+    "evidence": "machtzev/truth.mjs:20"
+   },
+   {
+    "claim": "הקובץ עצמו נעול-חתימה ב-pins.sha256, כלומר שינוי בו דורש עדכון-חתימה באותו commit",
+    "evidence": "machtzev/pins-check.mjs:18 ('machtzev/truth.mjs' ב-STATIC)"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:INDEX (--write, הצעד האחרון) · machtzev/police.mjs (שער truth, שלב commit) · .githooks/post-rewrite · pins-check קורא את פלטו",
+   "input": "atom-index.json · logic-census.json · ops-map.json · auto-skin.json · auto-logic.json · golden-harness-report.json · gen-verify-report.json · wired-floor.json + ייבוא חי של render-ds (selectVaried · listMapEngines) + new/dart-boxes",
+   "output": "TRUTH.md · בלוק-האמת ב-CLAUDE.md · wired-floor.json (רק עם --floor)",
+   "next": "כל מסמך בריפו אמור לצטט מכאן; השער מונע סטייה בין המסמך למדידה"
+  },
+  "quality": {
+   "signal": "`node machtzev/truth.mjs --gate` ⇒ '✓ אמת: TRUTH.md ≡ מדידה · חיווט 108/1887 ≥ רצפה 53 (רק-עולה)' (exit 0). שער truth ב-gates.tsv:52, שלב commit, עם wired-floor.json;grow. שני תנאים נאכפים יחד: זהות-מלאה של TRUTH.md למדידה החיה, ואי-נסיגה של מספר-החיווט",
+   "measured": "כן — הפקודה למעלה. הקריאה הנכונה של 108/1887: אלה **שנבחרו-בפועל** ע\"י בורר כלשהו; המדד המקביל 'נגישים-לבוררים' הוא 1855/1855, ו-truth.mjs:127-129 כותב במפורש שאסור לבלבל ביניהם"
+  },
+  "evidence": [
+   "Read של machtzev/truth.mjs (164 שורות, נקרא במלואו)",
+   "node machtzev/truth.mjs --gate ⇒ exit 0",
+   "grep -n 'truth' machtzev/gates.tsv ⇒ שורה 52 (wired-floor.json;grow)",
+   "pre-commit hook הדפיס '🔌 wired 108/1855' בכל קומיט בסשן הזה"
+  ]
+ },
+ {
+  "file": "yeshiva/read.mjs",
+  "lang": "mjs",
+  "lines": 182,
+  "capabilities": [
+   {
+    "cap": "מפרסר ספק-app-ds מבנית: ישויות · שדות · חובה (*) · enum ({א|ב}) · טווח ((…)) · שלבים · חלקיקים · שורות-תוכן",
+    "evidence": "yeshiva/read.mjs:32-56 (parseSpec) · 36-51"
+   },
+   {
+    "cap": "מפרסר מסמך-פירוק של הבעלים לפי מבנה-מרקדאון: כותרות ## / ###, פריטי-רשימה, ותת-חלוקה 'רשות' מול 'חובה'",
+    "evidence": "yeshiva/read.mjs:59-74 (parsePeruk) · 68-71"
+   },
+   {
+    "cap": "«איכא דאמרי» — מזהה חלופות-בסלאש במסמך («נפרע / חזר») שאין להן enum מקביל בספק, ומציע את השדה; מסנן משפטים-עם-סלאש ושאלות",
+    "evidence": "yeshiva/read.mjs:23,82-93 · 88-90"
+   },
+   {
+    "cap": "«שיעור» — מזהה מספר עם יחידה או טווח במסמך (%/₪/ימים/שבועות/חודשים/שעות/שנים) שלא הגיע לספק, ומחריג סעיפי-דוגמה",
+    "evidence": "yeshiva/read.mjs:22,95-104 · 98,100"
+   },
+   {
+    "cap": "«ורמינהו · תאומים» — מזהה שני שדות באותה ישות עם מילת-תוכן משותפת ואותו סוג, ומחריג זוגות-מכוונים שמופיעים יחד בשורת-חלקיק («דיף: ישן ← חדש»)",
+    "evidence": "yeshiva/read.mjs:106-116 · 113"
+   },
+   {
+    "cap": "«ורמינהו · חובה/רשות» — מצליב את קטע 'חובה'/'רשות' במסמך מול כוכבית-החובה בספק בשני הכיוונים",
+    "evidence": "yeshiva/read.mjs:130-132"
+   },
+   {
+    "cap": "«ייתור» — מזהה ציטוט «…» במסמך שלא הגיע לספק, ומציע שלוש קריאות (תוכן בדיקה · אסור · הודעה) בלי להכריע",
+    "evidence": "yeshiva/read.mjs:24,124-128"
+   },
+   {
+    "cap": "«מאי X» ו«אין מערבין» — מזהה מציין-מקום (X/Y/N/TBD/???) שהפך לטקסט, וכותרת שהפכה לשורת-תוכן; שניהם מסומנים כתיקון מכני (q:false)",
+    "evidence": "yeshiva/read.mjs:20-21,118-122"
+   },
+   {
+    "cap": "«ממה נפשך» — מזהה במפורש מקרים ששתי הקריאות בהם נותנות אותה בנייה, ומדווח אותם כהערה ולא כשאלה",
+    "evidence": "yeshiva/read.mjs:134-136"
+   },
+   {
+    "cap": "משווה מילים בעברית עם תחילית-אות-שימוש אחת בלבד ('בטוחות ≡ הבטוחות, לא ≡ טוחות') ועם רשימת-עצירה בת 42 מילים",
+    "evidence": "yeshiva/read.mjs:19,26-29 (STOP · sameWord)"
+   },
+   {
+    "cap": "מייצר לכל פירוק דוח-מרקדאון מסודר לפי שבעת-המהלכים, עם ספירת שאלות/תיקונים/הערות, ו-summary.json מצרפי",
+    "evidence": "yeshiva/read.mjs:142-155 (ORDER · render) · 174"
+   },
+   {
+    "cap": "מדלג-ומדווח על פירוק שאין לו ספק מקביל",
+    "evidence": "yeshiva/read.mjs:165-166"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו נוגע בספק, בפלט-המחולל או ב-regen — 'צופה בלבד · הפיך · נתיק'; הפלט היחיד הוא yeshiva/out/",
+    "evidence": "yeshiva/read.mjs:2,4,16,170,174"
+   },
+   {
+    "claim": "אינו מכיר את הדומיין — 'כל בדיקה = צורה, לא תוכן (עיוור-דומיין כמו המחצב). אין מודל, אין רשת, דטרמיניסטי'",
+    "evidence": "yeshiva/read.mjs:5-6"
+   },
+   {
+    "claim": "אינו מכריע — הוא מסמן q:true על שאלה ו-q:false על תיקון-מכני; ההכרעה היא של apply.mjs",
+    "evidence": "yeshiva/read.mjs:4,144 · apply.mjs:3-4"
+   },
+   {
+    "claim": "אינו שער-משטרה בעצמו — השער הוא yeshiva/gate.mjs שמריץ אותו",
+    "evidence": "engine-index card: gate '-' · yeshiva/gate.mjs:39"
+   },
+   {
+    "claim": "אינו רשום ב-INDEX.md",
+    "evidence": "engine-index card isNot: 'לא-שער-משטרה · לא-ב-INDEX.md'"
+   },
+   {
+    "claim": "ניתן לניתוק מלא — DETACH.md מתעד `git rm -r yeshiva`, כלומר הוא שכבה נלווית ולא חלק מהמחולל",
+    "evidence": "yeshiva/read.mjs:7,153"
+   }
+  ],
+  "pipeline": {
+   "runBy": "yeshiva/gate.mjs:39 (השער, עם --all) · yeshiva/apply.mjs:12 (ייבוא check/parseSpec/parsePeruk) · yeshiva/purpose.mjs",
+   "input": "machtzev/generator/peruks/peruk-NN.md (מה שהבעלים כתב) + machtzev/generator/specs-ds/perukNN.txt (מה ש-peruk.mjs גזר)",
+   "output": "yeshiva/out/peruk-NN.yeshiva.md + yeshiva/out/summary.json",
+   "next": "apply.mjs פוסק על כל ממצא ומחיל על **עותק** של הספק; gate.mjs אוכף שהפלט טרי ושהרצפה לא נסוגה"
+  },
+  "quality": {
+   "signal": "`node yeshiva/gate.mjs --gate` ⇒ '28 פירוקים · 333 ממצאים · 286 פסק המנוע לבד · 47 מתגים (רצפה 286/47)' + '✅ yeshiva: הפסק טרי' (exit 0, `git status --short` ריק — השער מצלם, מריץ, ומשחזר בדיוק). השער אוכף שלושה ראצ׳טים: הכרעה רק-עולה · מתגים רק-יורדים · כיסוי רק-עולה (אנטי-משחק), והוא fail-closed: 0 פירוקים = הכלי שבור ⇒ exit 2",
+   "measured": "כן — הפקודה למעלה. הערה מהקוד עצמו (gate.mjs:15-19): מונה-ממצאים אינו מדד-עומק — 151 ממצאי «ייתור» על מפתחות-סכמה באנגלית היו ממצאי-שווא, ולכן הרצפה בשער היא **התנהגות** ולא מספר"
+  },
+  "evidence": [
+   "Read של yeshiva/read.mjs (182 שורות, נקרא במלואו)",
+   "node yeshiva/gate.mjs --gate ⇒ exit 0, הפלט מצוטט למעלה",
+   "git status --short אחרי ההרצה ⇒ ריק",
+   "head -40 yeshiva/gate.mjs (מנגנון הצילום/שחזור)"
+  ]
+ },
+ {
+  "file": "yeshiva/apply.mjs",
+  "lang": "mjs",
+  "lines": 210,
+  "capabilities": [
+   {
+    "cap": "פוסק בעצמו על כל ממצא של read.mjs לפי **המהלך שהולידו** (9 מהלכים תחת 7 שמות), ומחזיר {ruling, decided, basis[], apply}",
+    "evidence": "yeshiva/apply.mjs:46-98 (moveOf · pasak) · 60"
+   },
+   {
+    "cap": "מחיל כלל-הכרעה אחד ומוצהר: הספק **נגזר** מהמסמך, ולכן בסתירה בין השניים — המסמך גובר. זו עדות מצוטטת, לא סברא",
+    "evidence": "yeshiva/apply.mjs:54-56,71-80"
+   },
+   {
+    "cap": "מכריע תאומים במבחן-קריסה: אם רק אחד מהשניים נקוב במסמך — השני נשמט; אם שניהם נקובים — אין שינוי; אם אף אחד — **מתג**, ולא ברירה שרירותית",
+    "evidence": "yeshiva/apply.mjs:82-92 · 89-91"
+   },
+   {
+    "cap": "פולט מתג רק כשלא נשארה עדות מכריעה, ובונה בו את **שתי האפשרויות בפועל** על הספק המוכרע, כולל דיף שורות לכל אחת",
+    "evidence": "yeshiva/apply.mjs:7,89-97 · 140-151 (buildOptions)"
+   },
+   {
+    "cap": "מחיל את הפסק על עותק של הספק בשש פעולות: הוספת enum · הוספת שדה-חובה · הסרת שדה (עם טיפול בפסיק משני הצדדים) · הוספת/הסרת כוכבית-חובה · הוספת שורת-תוכן · מחיקת שורה",
+    "evidence": "yeshiva/apply.mjs:103-138 (applyPsak) · 113-134"
+   },
+   {
+    "cap": "מאתר מקטע-שדה בשורת-ישות גולמית ע\"י פירוק כמו parseSpec והשוואה מנורמל-מול-מנורמל — כי norm מסיר גרשיים ('שכ״ד' ⇒ 'שכד') וחיפוש-מחרוזת ישיר היה נכשל בשקט",
+    "evidence": "yeshiva/apply.mjs:29-40 (fieldSeg)"
+   },
+   {
+    "cap": "מחיל הכול בבת-אחת דרך מפת-סימונים במקום דריסה סדרתית — במכוון, כי דריסה הייתה מאבדת פסקים (שינוי מודע מול הדמיית-הדפדפן)",
+    "evidence": "yeshiva/apply.mjs:100-108 · 101-102"
+   },
+   {
+    "cap": "כותב פנקס-פסק קריא: לכל ממצא — המהלך, הפסק, וכל שורות-ה'על סמך', ולמתג גם שתי האפשרויות עם הדיף",
+    "evidence": "yeshiva/apply.mjs:153-175 (renderPsak) · 165-167"
+   },
+   {
+    "cap": "מסכם לפי-מהלך על פני כל הפירוקים (per + totals) ומדפיס טבלת-מהלכים ממוינת",
+    "evidence": "yeshiva/apply.mjs:196-206"
+   },
+   {
+    "cap": "מוסיף מקטע-שלבים כ-enum: '| שלבים: א, ב, ג' בספק נחשב מקרים-בשמם ומכסה חלופות-סלאש במסמך",
+    "evidence": "yeshiva/read.mjs:39-41 (parseSpec, שנקרא מכאן) · apply.mjs:12"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו דורס את הספק המקורי — הפלט הוא yeshiva/psak/perukNN.spec.txt **לצד** המקור, 'אפס דריסה'",
+    "evidence": "yeshiva/apply.mjs:6,18,193-194"
+   },
+   {
+    "claim": "אינו מכיל תשובות-אדם — 'מי שמכריע הוא המהלך, והראיה מצוטטת'; פסק בלי מהלך מוגדר בקוד כבאג",
+    "evidence": "yeshiva/apply.mjs:4,171"
+   },
+   {
+    "claim": "אינו מכריע תאומים כשאין עדות — במפורש 'לא נופלים לברירה'",
+    "evidence": "yeshiva/apply.mjs:89-91"
+   },
+   {
+    "claim": "אינו נכנס ל-regen ואינו משפיע על הפלט-המחולל — הוא נתיק (DETACH.md)",
+    "evidence": "yeshiva/apply.mjs:8 · yeshiva/read.mjs:4"
+   },
+   {
+    "claim": "אינו שער-משטרה — השער הוא yeshiva/gate.mjs",
+    "evidence": "engine-index card: gate '-' · yeshiva/gate.mjs:40"
+   },
+   {
+    "claim": "אינו מפרסר בעצמו — parseSpec · parsePeruk · check כולם מיובאים מ-read.mjs",
+    "evidence": "yeshiva/apply.mjs:12"
+   }
+  ],
+  "pipeline": {
+   "runBy": "yeshiva/gate.mjs:40 (השער, עם --all --json) · yeshiva/purpose.mjs",
+   "input": "machtzev/generator/peruks/peruk-NN.md + machtzev/generator/specs-ds/perukNN.txt (שניהם לקריאה בלבד) + הממצאים מ-read.check",
+   "output": "yeshiva/psak/perukNN.spec.txt (ספק מתוקן, לצד המקור) · yeshiva/psak/peruk-NN.psak.md · yeshiva/psak/summary.json",
+   "next": "הספק המתוקן אינו נכנס ל-regen אוטומטית — הוא הצעה מנומקת לבעלים; gate.mjs אוכף שהוא טרי ושאחוז-ההכרעה לא נסוג"
+  },
+  "quality": {
+   "signal": "`node yeshiva/gate.mjs --gate` ⇒ '28 פירוקים · 333 ממצאים · **286 פסק המנוע לבד · 47 מתגים** (רצפה 286/47)' (exit 0). זהו המדד המשמעותי כאן: 86% מהממצאים הוכרעו עם ראיה מצוטטת, והשאר נפלטו כמתגים בנויים. השער גם יורה הוכחות-התנהגות ספציפיות: 'ורמינהו תאומים: **לא** מכריע לבד ⇒ מתג' · 'אפס שם-לא-עברי בספק שיצא מהפסק'",
+   "measured": "כן — הפקודה למעלה, 286/333 · 47 מתגים"
+  },
+  "evidence": [
+   "Read של yeshiva/apply.mjs (210 שורות, נקרא במלואו)",
+   "node yeshiva/gate.mjs --gate ⇒ exit 0, '286 פסק המנוע לבד · 47 מתגים', כולל 4 הוכחות-ירי",
+   "git status --short אחרי ההרצה ⇒ ריק"
+  ]
  }
 ]

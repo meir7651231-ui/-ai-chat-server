@@ -90,17 +90,33 @@ INDEX (regen.mjs:30-37): logic-census ⇒ atom-index ⇒ oracle ⇒ quarry-golde
 4. `/tmp/nc.txt` ו-`/tmp/my.txt` נשמרו ב-`/tmp` כפי שהפרומפט ביקש מפורשות.
 5. `regen.mjs` ו-`one.mjs` נקראו **לעיון בלבד** (סדר-הצינור) ואינם מדווחים — הם אצל העובד השני.
 
-## הפקודות שהורצו לאיסוף-עדות
+## הפקודות שהורצו לאיסוף-עדות (13 שערים · כולן קריאה-בלבד; `git status --short` נשאר ריק)
 
 ```
-node machtzev/generator/sentence.mjs --gate     ⇒ ✓ 16/16 משפטי-זהב (27 מונחי-ישות · אפס-LLM)
-node machtzev/generator/tzinor.mjs --gate       ⇒ ✓ 43 מילות-ישות · 22 לשדות-אמת (465 שדות עם src) · 21 פתוחות · 6 רב-מועמדים · 0 המצאות
-node machtzev/generator/cover.mjs --gate        ⇒ ✓ שחזור-ATOM top-1 18/58 · top-3 29/58 (רצפה 18/29)
-node machtzev/generator/core-from-shape.mjs --gate ⇒ ✓ 49 ישויות · יחסים 32/33 · workflows 8 · אירועים 35 · חוקים 383 · ערוצים 14
-node machtzev/compose-engine.mjs --gate         ⇒ ✓ 60 חלקיקים ≡ הדוח · 0 מזייפים חסומים
-node machtzev/census/oracle.mjs --gate          ⇒ ✓ 1887 = תצוגה 924 + לוגיקה 963 (אפס-איבוד) · כפילויות-מחלקה 8
-node machtzev/pins-check.mjs                    ⇒ ✓ 139 קבצים חתומים ותואמים (sha256 מלא)
-node machtzev/truth.mjs --gate                  ⇒ ✓ TRUTH.md ≡ מדידה · חיווט 108/1887 ≥ רצפה 53
+node machtzev/generator/sentence.mjs --gate        ⇒ ✓ 16/16 משפטי-זהב (27 מונחי-ישות · אפס-LLM)
+node machtzev/generator/tzinor.mjs --gate          ⇒ ✓ 43 מילות-ישות · 22 לשדות-אמת (465 שדות עם src) · 21 פתוחות · 6 רב-מועמדים · 0 המצאות
+node machtzev/generator/retarget.mjs --gate        ⇒ ✓ 8 מודולים-לישות-אחרת ≡ דטרמיניסטי · בורר-מודול 49 ישויות (חזק 25 · בינוני 19 · חלש 5)
+node machtzev/generator/render-module.mjs --gate   ⇒ ✓ --all ≡ מקור 9/9 (ביט-לביט) · 9 מודולי-משנה + 2 הרכבות-חוצות-מודולים
+node machtzev/generator/auto-skin.mjs --gate       ⇒ ✓ 27 תפקידים נבחרו מבנית מ-359 אטומים · toneMap 3
+node machtzev/generator/skin-golden.mjs --gate     ⇒ ✓ 9/9 מודולי-SchoolOS בעור-forge ≡ מחולל-טרי
+node machtzev/generator/cover.mjs --gate           ⇒ ✓ שחזור-ATOM top-1 18/58 · top-3 29/58 (רצפה 18/29)
+node machtzev/generator/core-from-shape.mjs --gate ⇒ ✓ 49 ישויות · יחסים 32/33 · workflows 8 (2 עם אטום-מעבר · 6 סדר-הצהרה) · אירועים 35 · חוקים 383 · ערוצים 14
+node machtzev/compose-engine.mjs --gate            ⇒ ✓ 60 חלקיקים ≡ הדוח · 0 מזייפים חסומים
+node machtzev/census/oracle.mjs --gate             ⇒ ✓ 1887 = תצוגה 924 + לוגיקה 963 (אפס-איבוד) · אינדקס ≡ עץ-חי · כפילויות-מחלקה 8
+node machtzev/generator/tighten-types.mjs --gate   ⇒ ✓ 228 אטומי-dynamic · ראיה ≡ טרייה · 0 חתימות שניתן להדק ונותרו dynamic
+node machtzev/pins-check.mjs                       ⇒ ✓ 139 קבצים חתומים ותואמים (sha256 מלא · רשימה נגזרת ≡ כתובה)
+node machtzev/truth.mjs --gate                     ⇒ ✓ TRUTH.md ≡ מדידה · חיווט 108/1887 ≥ רצפה 53
+node yeshiva/gate.mjs --gate                       ⇒ ✓ 28 פירוקים · 333 ממצאים · 286 פסק המנוע לבד · 47 מתגים (רצפה 286/47)
+```
+
+מדידות-פלט עצמאיות (‏`node -e`, לא שער):
+
+```
+new/dart-forge-bs/forge-manifest.json   ⇒ total=359 · families=17 · uniqueNames=305 · renamed=54
+                                           תפרים: child 359 · items 163 · actions>0 93 · bare 34 · control 23 · values 20 · columns 6 · states 5
+machtzev/generator/logic-census.json    ⇒ total=963 · wireable=120 · {dart-maor 569 · dart 289 · dart-boxes 105}
+machtzev/generator/atom-index-full.json ⇒ full=1887 · display=924 · logic=963
+ls machtzev/pure/*.html | wc -l         ⇒ 21   (מקור-האמת של ds-forge)
 ```
 
 ## ממצאים שכדאי להחזיק בראש כשמשווים מחובר מול לא-מחובר
@@ -115,8 +131,27 @@ node machtzev/truth.mjs --gate                  ⇒ ✓ TRUTH.md ≡ מדידה 
 - **57 «מחוברים» ו-57 «שערים» הם קבוצות שונות באותו גודל** (חיתוך 21) —
   `engine-index.mjs:317`. אל תערבב.
 
-## מה לא הצלחתי / לא עשיתי
+## מה לא הרצתי, ולמה (מפורש — לא "לא-רלוונטי")
 
-- לא הרצתי את `appgen` · `retarget` · `rendermodule` · `skingolden` · `tighten` ·
-  `autoskin` — הם כותבים תוצרים ו/או דורשים `buildsmart` (שאינו בריפו הזה).
-  האיכות שלהם מדווחת דרך `machtzev/gates.tsv` (שם-השער ושלב-האכיפה), לא דרך מספר שהמצאתי.
+| מנוע | שער | למה לא הורץ |
+| --- | --- | --- |
+| `app-from-sentences` | `appgen` (push) | דורש מראה ל-buildsmart ותוצרי-forge טריים; ‏`--test` מריץ `flutter test` |
+| `ds-forge` | אין | כותב 359 קבצים + מניפסט — כתיבה לעץ אסורה לי |
+| `render-ds` | אין | נמדד בעקיפין דרך `truth --gate` (שמייבא אותו) |
+| `match` · `look` · `lift-lib` · `logic-proof` · `twins` · `fillable` | אין | אין שער בשמם; הצרכנים שלהם (‏`coverage` · `balagan` · `behavior-plan`) כותבים baselines/תוצרים |
+| `site-shot` | אין | דורש `buildsmart/build/web-*` + Chromium + playwright-core — אף אחד מהם אינו בקלון הזה |
+| `ship` | אין | הוא **הצינור**: מריץ regen, בונה, מקמט ודוחף. הרצה = שינוי הריפו |
+
+## מה כן נמדד ומה לא — המספר
+
+מתוך 29: **17 עם עדות שהורצה בסשן הזה** · **9 «לא-נמדד»** · השאר «חלקית»
+(‏`quality.measured` ב-`connected-B.json` נושא את הניסוח המדויק פר-מנוע).
+**אף מספר בדוח אינו מ-CLAUDE.md אלא אם נאמר במפורש שהוא משם** (הדוגמה היחידה:
+‏`logic-proof`, שם 16/16 · 30/30 מסומנים כדיווח-מ-CLAUDE ולא כמדידה שלי).
+
+## הערה טכנית אחת שנצפתה בקריאת-הקוד (לא תוקנה — אסור לשנות קוד)
+
+`machtzev/generator/look.mjs`: המטמון בודק `CACHE.has(f)` (שורה 23) וכותב
+`CACHE.set(file, ok)` (שורה 27). לקובץ שנתיבו נורמל (כל מה שאינו מתחיל ב-`dart-`,
+שורה 21) המפתח שנכתב שונה מזה שנקרא ⇒ הקובץ נסרק מחדש בכל קריאה.
+**השפעה: ביצועים בלבד, לא נכונות.** נרשם כאן ולא תוקן.
