@@ -1160,5 +1160,498 @@
    "ran: grep -rn 'parity-js-dart' על הריפו ⇒ רק index-baseline.json:24",
    "read: machtzev/emit/parity-js-dart.mjs:L1-L26 (הקובץ המלא)"
   ]
+ },
+ {
+  "file": "machtzev/carve/screen-decomp.mjs",
+  "lang": "mjs",
+  "lines": 122,
+  "does": [
+   {
+    "claim": "קובץ-מסך Flutter ⇒ מניפסט-שכבות JSON ב-8 שכבות: 0-פיגמנטים · 1-מונחים · 2-אייקונים · 3-מועמדי-לוגיקה · 4/5-חוטי-תצוגה וסקציות · 6-קומפוזר · 7-שקעי-לוח.",
+    "evidence": "machtzev/carve/screen-decomp.mjs:L2-L6 (החוזה) · L105 (`const manifest = { file, lines, pigments, terms, icons, glyphs, logicCandidates, widgets, sectionMap, composer, gates, board }`)"
+   },
+   {
+    "claim": "מחלץ גופי-מחלקה בפרסור-איזון-סוגריים אמיתי, לא ברגקס-שורה.",
+    "evidence": "machtzev/carve/screen-decomp.mjs:L18-L23 (bodyOf)"
+   },
+   {
+    "claim": "מבחין בין «טהור-IO» לבין «טהור-IO אך עם דאטה-צרובה» ומדפיס את השני כאזהרה — זה בדיוק התנאי ש-shelf-lift ו-data-lift משתמשים בו כשער-עצמי.",
+    "evidence": "machtzev/carve/screen-decomp.mjs:L115-L117; machtzev/assemble/shelf-lift.mjs:L274 (`/⚠️ טהורי-IO אך עם דאטה-צרובה/.test(chk)`)"
+   },
+   {
+    "claim": "‏--json <out> כותב את המניפסט; בלעדיו קורא-בלבד ומדפיס דוח.",
+    "evidence": "machtzev/carve/screen-decomp.mjs:L106-L108"
+   },
+   {
+    "claim": "רץ כאן על מסך אמיתי.",
+    "evidence": "ran: node machtzev/carve/screen-decomp.mjs new/dart-gen-bs/gen_app_bind1.dart ⇒ '🔬 פירוק-מסך · gen_app_bind1.dart — 18 שורות ... ש4 חוטי-תצוגה טהורי-IO: 1 · מהם 🧼 נקיים-מדאטה: 1 — GenAppBind1Screen ... 📊 סה\"כ אטומים-מזוהים: 3'"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מפרס Dart — רגקסים על טקסט + איזון-סוגריים. אין analyzer ואין AST.",
+    "evidence": "machtzev/carve/screen-decomp.mjs:L14-L15 (uniq/grab = RegExp) · L28-L30; אין ייבוא ts/analyzer בקובץ"
+   },
+   {
+    "claim": "אינו מחלץ ואינו מרים — קריאה-בלבד, מוצהר בכותרת.",
+    "evidence": "machtzev/carve/screen-decomp.mjs:L3 'דטרמיניסטי, קריאה-בלבד, אפס-LLM'"
+   },
+   {
+    "claim": "אינו שער ואינו יוצא באדום על ממצא — גם 'טהור-IO עם דאטה-צרובה' הוא רק שורת-print. האכיפה נעשית ע\"י הקורא שמחפש את המחרוזת.",
+    "evidence": "machtzev/carve/screen-decomp.mjs:L116 (console.log בלבד, אפס process.exit); machtzev/assemble/shelf-lift.mjs:L274-L280 (הקורא הוא זה שמחליט למחוק)"
+   },
+   {
+    "claim": "אינו כותב כלום בלי --json.",
+    "evidence": "ran: node machtzev/carve/screen-decomp.mjs ... ⇒ git status --short | wc -l = 0"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/assemble/shelf-lift.mjs:273",
+    "how": "הרצה-בשם כשער-עצמי על כל אטום שנפלט"
+   },
+   {
+    "who": "machtzev/assemble/data-lift.mjs:839,870",
+    "how": "הרצה-בשם כשער-עצמי, בשני מסלולים"
+   },
+   {
+    "who": "machtzev/one.mjs:75",
+    "how": "הרצה-בשם: --json ⇒ screens-seed/machine/<screen>.json"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ כשלב-צנרת נפרד. הוא כבר **מוטמע** כשער-עצמי בשלושה מקומות, וזה תפקידו הנכון. הפלט שלו (screens-seed/machine/*.json, 254 קבצים כאן) הוא הקלט של data-lift.mjs:L17 — כלומר הוא כבר מחובר לצינור-ההרכבה, רק לא לזה של regen.mjs.",
+   "gives": "∅ ישירות."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1: אינו על נתיב משפט⇒אפליקציה, אבל הוא המנוע הכי-בשימוש בקבוצת-carve (3 קוראים, 254 תוצרים מחויבים) והוא ההגדרה-בפועל של «אטום נקי-מדאטה» שכל המחצבה נשענת עליה. עובד ורץ כאן."
+  },
+  "evidence": [
+   "ran: node machtzev/carve/screen-decomp.mjs new/dart-gen-bs/gen_app_bind1.dart ⇒ דוח 8-שכבות מלא",
+   "ran: git status --short ⇒ ריק (קריאה-בלבד ללא --json)",
+   "ran: ls screens-seed/machine ⇒ 254 קבצים (תוצריו המחויבים)",
+   "read: machtzev/carve/screen-decomp.mjs:L1-L30, L100-L122",
+   "read: machtzev/assemble/shelf-lift.mjs:L273-L274 · machtzev/assemble/data-lift.mjs:L839,L870 · machtzev/one.mjs:L75"
+  ]
+ },
+ {
+  "file": "machtzev/carve/carve-land.mjs",
+  "lang": "mjs",
+  "lines": 311,
+  "does": [
+   {
+    "claim": "מנחית תוצאת-חצב: מקבל carved.json, כותב אטום-Dart + רתמת-Golden ל-new/dart, מריץ `dart analyze` ואת הבדיקה, **ומחזיר-לאחור בכשל** — «אפס-אטום שלא עבר קומפילציה+בדיקה».",
+    "evidence": "machtzev/carve/carve-land.mjs:L2-L3 (החוזה) · L184 (כתיבת-האטום) · L193 (כתיבת-הרתמה) · L196 `execSync('dart analyze ...')`"
+   },
+   {
+    "claim": "מייצר דוגמאות-מטיפוס מבריכה מוצהרת בת 16 ערכים (מחרוזת-ריקה · עברית · תאריך · טלפון · רווחים · 0/1/-3/100/786 · 3.14 · true/false/null) — הבדיקה נגזרת מהחתימה, לא נכתבת ביד.",
+    "evidence": "machtzev/carve/carve-land.mjs:L33-L39 (POOL) · L49-L56 (elemLit/compat) · L94 parseParams"
+   },
+   {
+    "claim": "‏`purposeOf` גוזר ייעוד-עברי לפונקציה שקטה בסולם-מקורות יורד: תיעוד-עצמי ⇒ מונחי-מסך-המקור (screens-seed/machine) ⇒ מונחי-מסך-הקורא (lib של buildsmart) ⇒ ליטרלים-בגוף.",
+    "evidence": "machtzev/carve/carve-land.mjs:L109-L116 (SEED_DIR · LIB_DIR · heToks · seedTerms · libFiles · purposeOf)"
+   },
+   {
+    "claim": "**שני שסתומים מוצהרים** בהערות: `CARVE_OUT` להרצת-ניסוי, ו-`SHELF` שנשאר תמיד המדף האמיתי כדי שבדיקת «כבר-קיים» לא תזוז לתיקייה-הזמנית ותדווח שקרית «חדשים».",
+    "evidence": "machtzev/carve/carve-land.mjs:L10-L15"
+   },
+   {
+    "claim": "מצביע על ה-SDK ולא על עטיפת-flutter, עם תיעוד-לקח מפורש: העטיפה הפילה analyze/run ו-37 אטומים תקינים נמחקו בלי שנבדקו מעולם.",
+    "evidence": "machtzev/carve/carve-land.mjs:L16-L18 · L30 `process.env.DART_SDK_BIN || '/home/user/flutter/bin/cache/dart-sdk/bin'`"
+   },
+   {
+    "claim": "מייבא רק imports שהגוף באמת מזכיר — כי `dart analyze` נכשל על ייבוא-לא-בשימוש ואטום תקין נזרק.",
+    "evidence": "machtzev/carve/carve-land.mjs:L19-L25 (usedImports + הערת-הלקח)"
+   },
+   {
+    "claim": "נקודת-הכניסה שלו רצה כאן בפועל.",
+    "evidence": "ran: CARVE_OUT=<scratch>/cl/ DART_SDK_BIN=/root/dart-sdk/bin node machtzev/carve/carve-land.mjs <scratch>/carved.json (קלט '[]') ⇒ '═══ נחיתה: ✅ 0 אטומים · ↩ 0 נכשלו · ↷ 0 דולגו (מתוך 0 trivial) ═══' exit 0, git status נקי"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו חוצב** — הוא רק מנחית. הקלט `carved.json` מיוצר ע\"י ast_carve.dart, ו-ast_carve **אינו בר-הרצה כאן** (ראו הכרטיס שלו), ולכן לא יכולתי להריץ נחיתה אמיתית — רק את נקודת-הכניסה על קלט ריק.",
+    "evidence": "machtzev/carve/carve-land.mjs:L5 'שימוש: node carve-land.mjs <carved.json>'; ran: dart run ast_carve.dart ⇒ version solving failed (ראו הכרטיס של ast_carve.dart)"
+   },
+   {
+    "claim": "אינו נקרא ע\"י שום מנוע — מריצים אותו ביד, והאינדקס עצמו מתעד זאת.",
+    "evidence": "ran: grep -rn 'carve-land' ⇒ machtzev/census/engine-index.mjs:154 ('`carve/carve-land.mjs` (312 שורות, רץ ביד) נספר כמת — נמדד') + machtzev/index-baseline.json:10 + הקובץ עצמו"
+   },
+   {
+    "claim": "‏`purposeOf` מוגבל בקלון הזה: `LIB_DIR` הוא /home/user/buildsmart/app_flutter/lib שאינו קיים, כך שמקור-הייעוד «מסך-הקורא» נופל בשקט (catch ריק) ונשארים רק seed + ליטרלים.",
+    "evidence": "machtzev/carve/carve-land.mjs:L110 · L114 (`catch { /* אין lib */ }`); ran: ls /home/user/buildsmart ⇒ MISSING"
+   },
+   {
+    "claim": "אינו שער-משטרה.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/carve/carve-land.mjs ⇒ אינו מסומן כשער"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אין קורא — רץ ביד. הופעות: machtzev/index-baseline.json:10 · machtzev/census/engine-index.mjs:154 (הערה שמתעדת שהוא «רץ ביד»)"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/regen.mjs:L10-L12 — לפני `logic-census.mjs`/`oracle.mjs --write`/`auto-logic.mjs`. הבורר (auto-logic) בוחר מתוך הקטלוג שהאורקל מכיר; carve-land הוא המנוע שמוסיף לקטלוג אטום חדש **עם הוכחה** (analyze + golden + החזרה-לאחור). חיבורו אומר: הרחבת-קטלוג אוטומטית במקום ידנית.",
+   "gives": "‏§21 דורש «הכל-הכל-הכל, אסור לצמצם קטלוג — תת-ספירה=אזעקה». carve-land הוא הדרך היחידה בקבוצה שלי להגדיל את הקטלוג **בלי לוותר על ההוכחה**. החסם אינו ארכיטקטוני אלא תלות: הוא צריך את ast_carve, שחסום על גרסת-analyzer (תיקון-pubspec, מחוץ למשימה)."
+  },
+  "s22": {
+   "score": 2,
+   "why": "2: אינו על הנתיב עצמו אלא מזין אותו, אבל הוא המנוע האיכותי ביותר בקבוצת-carve — הוכחה-בריצה, החזרה-לאחור, שסתום-פלט, ושני לקחי-כשל מתועדים בקוד (עטיפת-flutter · ייבוא-לא-בשימוש). נקודת-הכניסה שלו רצה כאן. מה שמונע 3: לא הצלחתי להריץ נחיתה אמיתית (ast_carve חסום), ולכן ההוכחה שלי היא על הכניסה בלבד."
+  },
+  "evidence": [
+   "ran: CARVE_OUT=<scratch>/cl/ DART_SDK_BIN=/root/dart-sdk/bin node machtzev/carve/carve-land.mjs <scratch>/carved.json ⇒ 'נחיתה: ✅ 0 · ↩ 0 · ↷ 0 (מתוך 0 trivial)' exit 0",
+   "ran: git status --short ⇒ ריק (CARVE_OUT הכיל את הפלט)",
+   "ran: grep -rn 'carve-land' ⇒ אין קורא; engine-index.mjs:154 מתעד «רץ ביד»",
+   "ran: ls /home/user/buildsmart ⇒ MISSING (מסביר את נפילת מקור-הייעוד השני)",
+   "read: machtzev/carve/carve-land.mjs:L1-L41, L109-L116, L180-L200",
+   "read: machtzev/generator/regen.mjs:L10-L12"
+  ]
+ },
+ {
+  "file": "machtzev/carve/widget-dedup.mjs",
+  "lang": "mjs",
+  "lines": 57,
+  "does": [
+   {
+    "claim": "משווה את כל ה-widgets מכל המסכים **לפי מבנה**: מסנוור מחרוזות⇒S, מספרים⇒N, ושם-המחלקה⇒W, ואז sha1. קבוצת-מבנה-זהה = מנגנון-אחד + N שורות-דאטה.",
+    "evidence": "machtzev/carve/widget-dedup.mjs:L26-L31 · L35"
+   },
+   {
+    "claim": "שתי רמות-דמיון: `exact` (מבנה) ו-`loose` (גם מזהי-שדות מסונוורים ⇒ x) לזיהוי משפחות-קרובות; `looseOnly` סופר רק קבוצות שאינן כבר exact.",
+    "evidence": "machtzev/carve/widget-dedup.mjs:L33 · L36 · L42"
+   },
+   {
+    "claim": "מחלץ גופי-מחלקה באיזון-סוגריים ותופס 4 סוגי-בסיס: Stateless · Stateful · Consumer · ConsumerStateful.",
+    "evidence": "machtzev/carve/widget-dedup.mjs:L12-L17 (bodyOf) · L21"
+   },
+   {
+    "claim": "כותב screens-seed/widget-dedup.json לגל-הליטוש: total · uniqueMech · קבוצות עם חברים.",
+    "evidence": "machtzev/carve/widget-dedup.mjs:L56"
+   },
+   {
+    "claim": "רץ כאן על המדף ומודד.",
+    "evidence": "ran (cwd מבודד): node machtzev/carve/widget-dedup.mjs new/dart-ui-bs/auto ⇒ '🔁 דדופ-widgets · 300 widgets מ-263 מסכים · מנגנונים ייחודיים (לפי-מבנה): 267 ⇒ חיסכון: 33 · קבוצות-זהות-מבנה: 28 (מכסות 61) · משפחות-קרובות (רופף): 5' + הקבוצות הגדולות (×4 _PlaceholderRow · ×3 ManageRow · ×3 ManageHint · ×3 PrimaryBtn)"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מאחד ואינו מוחק — מדווח בלבד; האיחוד נעשה ב-shelf-lift דרך hash-הגוף ו-'משרת-גם'.",
+    "evidence": "machtzev/carve/widget-dedup.mjs:L46-L57 (console.log + JSON יחיד); machtzev/assemble/shelf-lift.mjs:L246,L266"
+   },
+   {
+    "claim": "**יעד-הכתיבה יחסי-ל-cwd ולא לשורש-הריפו** — `'screens-seed/widget-dedup.json'` בלי ROOT. הרצה משורש-הריפו דורסת קובץ מחויב; הרצה מ-cwd אחר תיצור/תיכשל שם. מטעם זה הרצתי מ-cwd מבודד עם screens-seed משלו.",
+    "evidence": "machtzev/carve/widget-dedup.mjs:L56 `fs.writeFileSync('screens-seed/widget-dedup.json', ...)` — השוו למנועים אחרים שמחשבים ROOT מ-import.meta.url (למשל machtzev/carve/screen-decomp.mjs אין ROOT כי אינו כותב, ו-machtzev/assemble/gen-screen.mjs:L7)"
+   },
+   {
+    "claim": "אינו רואה widget שאינו יורש מאחד מ-4 הבסיסים (למשל ווידג׳ט-פונקציה או mixin).",
+    "evidence": "machtzev/carve/widget-dedup.mjs:L21 (הרגקס)"
+   },
+   {
+    "claim": "אינו שער ואינו יוצא באדום.",
+    "evidence": "machtzev/carve/widget-dedup.mjs:L46-L57 (אפס process.exit); ran: node machtzev/census/engine-index.mjs machtzev/carve/widget-dedup.mjs ⇒ אינו שער"
+   },
+   {
+    "claim": "הסינוור מוחק גם הבדלים שמשנים התנהגות (כל מספר ⇒ N), כך ש«זהות-מבנה» אינה זהות-סמנטית.",
+    "evidence": "machtzev/carve/widget-dedup.mjs:L29 `.replace(/\\b[0-9]+(\\.[0-9]+)?\\b/g, 'N')`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/one.mjs:83",
+    "how": "הרצה-בשם — ופעמיים באותה שורה: פעם ל-last() ופעם לרגקס 'ייחודיים: (\\d+)'"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ כשלב-צנרת. הוא כלי-מדידה של הכרעה-5 (דדופ אחרי הפירוק) שמזין גל-ליטוש אנושי, וכבר רץ ב-one.mjs:83.",
+   "gives": "∅. הערה: הוא יורץ פעמיים ברצף ב-one.mjs:83 (אותה שורה קוראת ל-run פעמיים) — בזבוז, לא באג."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0: מדד-כפילות על מדף קיים, לא שלב בנתיב משפט⇒אפליקציה. עובד ומדויק (נמדד 300⇒267), אבל הוא מדווח ולא מאחד, והאיחוד בפועל כבר קורה ב-shelf-lift. חיבורו למחולל לא יוסיף יכולת."
+  },
+  "evidence": [
+   "ran (cwd=<scratch>/wd): node .../widget-dedup.mjs .../new/dart-ui-bs/auto ⇒ 300 widgets · 263 מסכים · 267 ייחודיים · 28 קבוצות · 5 רופפות",
+   "ran: git status --short ⇒ 0 (הריצה הוכלה ב-cwd נפרד בגלל הנתיב היחסי)",
+   "read: machtzev/carve/widget-dedup.mjs:L1-L57 (הקובץ המלא)",
+   "read: machtzev/one.mjs:L83"
+  ]
+ },
+ {
+  "file": "machtzev/carve/screen-lift.mjs",
+  "lang": "mjs",
+  "lines": 69,
+  "does": [
+   {
+    "claim": "קובץ-מסך ⇒ שני תוצרים: `<שם>.content.dart` (כל הדאטה-הצרובה, ממופתחת פר-widget) ו-`<שם>.props-plan.json` (תוכנית-props: מה מוחלף במה).",
+    "evidence": "machtzev/carve/screen-lift.mjs:L3-L7 (החוזה) · L64-L65"
+   },
+   {
+    "claim": "מפתח דטרמיניסטי בשני מסלולים: `CfgText('a.b', …)` ⇒ הסיומת (המפתח כבר במקור); אחרת slug מתועתק מהמילים הראשונות + מונה.",
+    "evidence": "machtzev/carve/screen-lift.mjs:L23-L24 (slug עם תעתיק עברי⇒לטיני) · L33-L34 · L40"
+   },
+   {
+    "claim": "מבחין בשלושה מקורות-תוכן ומסמן אותם: CfgText (🔑) · template (§, מחרוזת עם $) · literal (·).",
+    "evidence": "machtzev/carve/screen-lift.mjs:L34,L40 · L68"
+   },
+   {
+    "claim": "‏props-plan מצרף הערה כשיש תבנית: «הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה».",
+    "evidence": "machtzev/carve/screen-lift.mjs:L44-L47"
+   },
+   {
+    "claim": "רץ כאן על שני קלטים ומתנהג נכון בשניהם.",
+    "evidence": "ran: node machtzev/carve/screen-lift.mjs new/dart-ui-bs/auto/acc_row.dart <scratch>/sl ⇒ '0 widgets עם דאטה · 0 פריטי-תוכן' (אטום-מדף, העברית כבר הורמה ממנו); ran על new/dart-gen-bs/gen_app_bind1.dart ⇒ '1 widgets עם דאטה · 1 פריטי-תוכן חולצו · GenAppBind1Screen: 1 (·)'"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו משכתב את המסך** — הוא רק מחלץ ומתכנן. הקוד המקורי נשאר כמות-שהוא; ה-props-plan הוא מסמך לסוכן/מנוע-הליטוש.",
+    "evidence": "machtzev/carve/screen-lift.mjs:L5-L7 · L64-L65 (שני הפלטים היחידים, שניהם ל-outDir)"
+   },
+   {
+    "claim": "אינו תופס מחרוזת עם escape או רב-שורתית — הרגקס דורש `[^'\\n\\\\]`.",
+    "evidence": "machtzev/carve/screen-lift.mjs:L36"
+   },
+   {
+    "claim": "אינו תופס מחרוזות בגרשיים כפולים — רק `'...'`.",
+    "evidence": "machtzev/carve/screen-lift.mjs:L33,L36 (שני הרגקסים על גרש-יחיד בלבד)"
+   },
+   {
+    "claim": "אינו הרסני — out-dir הוא ארגומנט-חובה, mkdir+write בלבד, אפס rmSync.",
+    "evidence": "machtzev/carve/screen-lift.mjs:L11-L12 · L63-L65; ran: grep -n 'rmSync|unlinkSync' machtzev/carve/*.mjs ⇒ אין שורה מ-screen-lift.mjs"
+   },
+   {
+    "claim": "אינו שער ואינו מייצא — CLI בלבד.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/carve/screen-lift.mjs ⇒ אינו שער, אין ייצואים"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/one.mjs:76",
+    "how": "הרצה-בשם: run('machtzev/carve/screen-lift.mjs', [SCRATCH/<f>, ROOT/screens-seed/content])"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ כשלב-צנרת נפרד. הוא זהה-במטרה ל-data-lift.mjs (הוצאת-דאטה-צרובה לשקעים) אך פחות-יכולת: data-lift מחליף בפועל ומייצר props על-שם-הפרמטר, בעוד screen-lift רק מתכנן. §20(א) «הכי-טוב-לייעוד» מכריע לטובת data-lift.",
+   "gives": "∅. תפקידו החי הוא לייצר את screens-seed/content (508 קבצים כאן) — קלט-תוכן, לא שלב-מחולל."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1: תוצריו (508 קבצי-תוכן מחויבים) הם חומר-הגלם של «אטום + דאטה» שהמחולל צורך, ולכן לא 0. אבל הוא שלב-קדם במסלול-א׳ (מקור⇒תוכן), מוגבל ברגקס, וחופף למנוע חזק ממנו באותה צנרת."
+  },
+  "evidence": [
+   "ran: node machtzev/carve/screen-lift.mjs new/dart-ui-bs/auto/acc_row.dart <scratch>/sl ⇒ 0/0",
+   "ran: node machtzev/carve/screen-lift.mjs new/dart-gen-bs/gen_app_bind1.dart <scratch>/sl ⇒ 1 widget · 1 פריט-תוכן",
+   "ran: git status --short ⇒ 0 (out-dir חיצוני)",
+   "ran: ls screens-seed/content ⇒ 508 קבצים (תוצריו המחויבים)",
+   "read: machtzev/carve/screen-lift.mjs:L1-L69 (הקובץ המלא)",
+   "read: machtzev/one.mjs:L76"
+  ]
+ },
+ {
+  "file": "machtzev/carve/ast_carve.dart",
+  "lang": "dart",
+  "lines": 719,
+  "does": [
+   {
+    "claim": "חצב-AST: מוציא פונקציה-בודדת ממקור לאטום-טהור באמצעות `package:analyzer` אמיתי (לא רגקס).",
+    "evidence": "machtzev/carve/ast_carve.dart:L1-L5 (הכותרת) · L8-L10 (ייבוא analyzer/utilities · ast · visitor)"
+   },
+   {
+    "claim": "ליבה דטרמיניסטית בת 4 שלבים מוצהרים: איתור-הפונקציה ⇒ פתירת-מזהים-חופשיים ⇒ סיווג ⇒ פליטת-אטום.",
+    "evidence": "machtzev/carve/ast_carve.dart:L2-L4"
+   },
+   {
+    "claim": "הסיווג הוא שלוש-דרכי ומפורש: שכן-top-level ⇒ **שקע** · טיפוס-מקומי ⇒ **הטבעה-verbatim** · dart:core ⇒ **נשאר**.",
+    "evidence": "machtzev/carve/ast_carve.dart:L3"
+   },
+   {
+    "claim": "מחזיק רשימת dart:core מוצהרת (~45 שמות) ומפריד ממנה במפורש את dart:math, כדי למנוע פליטת-אטום בלי `import 'dart:math';`.",
+    "evidence": "machtzev/carve/ast_carve.dart:L12-L18 (_core) · L20 (הערת ההפרדה)"
+   },
+   {
+    "claim": "פולט JSON ל-stdout ומשנה פרטי⇒ציבורי עם header-מוצא.",
+    "evidence": "machtzev/carve/ast_carve.dart:L4 · L6 (import dart:convert)"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו בר-הרצה בקלון הזה — והסיבה אינה «אין Dart».** ‏Dart קיים (3.13.2) אך הוא **חדש מדי** ל-`analyzer: ^6.11.0` שה-pubspec מצמיד: analyzer 6.x דורש `_macros` מה-SDK, ו-_macros הוסר מ-SDK מודרני.",
+    "evidence": "ran: cd machtzev/carve && /root/dart-sdk/bin/dart run ast_carve.dart ../../new/dart/norm_phone.dart normPhone ⇒ 'Because analyzer >=6.9.0 <7.3.0 depends on macros >=0.1.3-main.0 <0.1.4 which depends on _macros 0.3.3 from sdk, analyzer >=6.9.0 <7.3.0 requires _macros 0.3.3 from sdk. So, because _macros from sdk doesn't exist (could not find package _macros in the Dart SDK) and carve_tools depends on analyzer ^6.11.0, version solving failed.'; ההצעה של pub עצמו: 'Try upgrading your constraint on analyzer: dart pub add analyzer:^14.4.0' — כלומר **תיקון-pubspec**, מחוץ למשימת-המיפוי"
+   },
+   {
+    "claim": "אינו מנחית ואינו מאמת — הוא רק מדפיס JSON. האימות (analyze+golden+החזרה-לאחור) הוא carve-land.mjs.",
+    "evidence": "machtzev/carve/ast_carve.dart:L4 'מדפיס JSON' · L5 (השימוש); machtzev/carve/carve-land.mjs:L2-L3"
+   },
+   {
+    "claim": "אינו נקרא ע\"י שום מנוע — התיעוד היחיד להרצתו הוא README, והאינדקס מודה שזו «הדרך היחידה שבה כלי-יד מתועד».",
+    "evidence": "ran: grep -rn 'ast_carve' ⇒ machtzev/census/engine-index.mjs:41,192,193 (הערות) · machtzev/carve/pubspec.yaml:1 · הקובץ עצמו; machtzev/census/engine-index.mjs:L192-L193 'תיעוד-הרצה: `dart run ast_carve.dart` ב-README של התיקייה הוא **קריאה**'"
+   },
+   {
+    "claim": "אינו שער ואינו ב-gates.tsv.",
+    "evidence": "ran: grep -n 'ast_carve' machtzev/gates.tsv ⇒ אפס תוצאות"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅ (מנוע)",
+    "how": "אין קורא-קוד. תיעוד-הרצה בלבד: machtzev/carve/README.md; machtzev/census/engine-index.mjs:192-193 סופר את התיעוד הזה כ«קריאה» כדי שהקובץ לא ייספר כמת"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/carve/carve-land.mjs:L5 — הוא כבר בעל-התפר: `carve-land.mjs <carved.json>` צורך בדיוק את הפלט שלו. ומשם, יחד, אל machtzev/generator/regen.mjs:L10-L12 (לפני האורקל והבורר). **החסם היחיד הוא גרסת-analyzer ב-machtzev/carve/pubspec.yaml:8, לא ארכיטקטורה.**",
+   "gives": "חציבת-אטומים אוטומטית מקוד-קיים = הגדלת-הקטלוג ש-§21 דורש, עם ההוכחה של carve-land. זהו הזוג היחיד בקבוצה שבו «חיבור» פירושו יכולת חדשה אמיתית ולא רק מדידה."
+  },
+  "s22": {
+   "score": 2,
+   "why": "2: 719 שורות של analyzer אמיתי עם סיווג-מזהים תלת-דרכי — האיכות הגבוהה ביותר בקבוצה מבחינת טכניקה, והצרכן שלו (carve-land) קיים ומאומת. לא 3 כי אינו על נתיב משפט⇒אפליקציה אלא מזין את הקטלוג, ולא הצלחתי להריץ אותו — החסם נמדד במדויק והוא חד-שורתי, אבל עד שיוסר זו יכולת-על-הנייר."
+  },
+  "evidence": [
+   "ran: cd machtzev/carve && /root/dart-sdk/bin/dart pub get ⇒ version solving failed (_macros)",
+   "ran: cd machtzev/carve && /root/dart-sdk/bin/dart run ast_carve.dart ../../new/dart/norm_phone.dart normPhone ⇒ אותה שגיאה",
+   "ran: /root/dart-sdk/bin/dart --version ⇒ 3.13.2 (stable) — כלומר Dart קיים, הבעיה היא צימוד-גרסה",
+   "ran: cat machtzev/carve/pubspec.yaml ⇒ 'analyzer: ^6.11.0'",
+   "ran: grep -rn 'ast_carve' ⇒ אין קורא-קוד",
+   "read: machtzev/carve/ast_carve.dart:L1-L20",
+   "read: machtzev/carve/carve-land.mjs:L5 · machtzev/census/engine-index.mjs:L192-L193"
+  ]
+ },
+ {
+  "file": "machtzev/carve/ast_dehardcode.dart",
+  "lang": "dart",
+  "lines": 132,
+  "does": [
+   {
+    "claim": "מחליף כל מחרוזת-עברית בגוף-מנוע ב-`term('<מטרה>')`, אוסף מפת {מטרה→שם} ומוסיף שקע `term` — הכל דרך `package:analyzer` (מנתח-תחביר אמיתי).",
+    "evidence": "machtzev/carve/ast_dehardcode.dart:L1-L4 (הכותרת) · L6-L10 (ייבואי analyzer)"
+   },
+   {
+    "claim": "**שתי דילוגים מוצהרים שמונעים נזק**: ליטרל שכבר ארגומנט-3 של `termOf` (כלומר כבר מוכתב-מטרה), וליטרל בתוך `const` עליון (טבלת-דאטה — טיפול נפרד).",
+    "evidence": "machtzev/carve/ast_dehardcode.dart:L3-L4"
+   },
+   {
+    "claim": "גוזר מפתח קריא בתעתיק-על עברי⇒לטיני מוצהר (א⇒a … ש⇒sh, רווח⇒'-'), עם נרמול מקפים.",
+    "evidence": "machtzev/carve/ast_dehardcode.dart:L14-L15 (_t · _slug)"
+   },
+   {
+    "claim": "מדפיס JSON אחיד: {ok, source, terms, fn}.",
+    "evidence": "machtzev/carve/ast_dehardcode.dart:L4"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מטפל באינטרפולציה — מחרוזת עם `$` וקטע-עברי בתוכה אינה בטווחו; לכך קיים האח ast_dehardcode_interp.dart.",
+    "evidence": "machtzev/carve/ast_dehardcode.dart:L2 ('מחליף כל מחרוזת-עברית') מול machtzev/carve/ast_dehardcode_interp.dart:L1-L2 ('מרחיב את הקרוב-הבסיסי לקטעי-מחרוזת-מוטבעים')"
+   },
+   {
+    "claim": "**אינו בר-הרצה כאן** — אותו חסם analyzer של ast_carve (אותו pubspec).",
+    "evidence": "ran: cd machtzev/carve && dart pub get ⇒ '_macros from sdk doesn't exist ... carve_tools depends on analyzer ^6.11.0, version solving failed'; machtzev/carve/pubspec.yaml:1 מצהיר שהוא מכסה 'ast_carve · ast_dehardcode'"
+   },
+   {
+    "claim": "אינו כותב קובץ — מדפיס JSON; הכתיבה היא של העטיפה machtzev/purity/ast-purify.mjs.",
+    "evidence": "machtzev/carve/ast_dehardcode.dart:L4; machtzev/purity/ast-purify.mjs:L3 ('מקבל מקור-משוכתב + terms, כותב קובץ-שמות')"
+   },
+   {
+    "claim": "העטיפה שקוראת לו **גם היא חסרת-קורא** — ast-purify.mjs אינה נקראת ע\"י מנוע כלשהו; ההופעות היחידות הן שורות-שימוש בתוכה ובאחותה.",
+    "evidence": "ran: grep -rn 'ast-purify' ⇒ machtzev/purity/ast-purify.mjs:5,172 (טקסט-שימוש) · machtzev/purity/ast-purify-interp.mjs:5,122 · machtzev/purity/const-normalize.mjs:2 (הערה) — אפס הרצה-בשם ואפס ייבוא"
+   },
+   {
+    "claim": "אינו שער.",
+    "evidence": "ran: grep -n 'ast_dehardcode' machtzev/gates.tsv ⇒ אפס תוצאות"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/purity/ast-purify.mjs:33",
+    "how": "הרצה-בשם: execFileSync(`${DART}/dart`, ['run', `${AST}/ast_dehardcode.dart`, absFile]) — אך ל-ast-purify.mjs עצמה אין קורא"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה. מטרתו (עברית-צרובה ⇒ שקע-מונח) כבר מושגת בצנרת בדרך אחרת: machtzev/generator/regen.mjs:L14 (`core-from-shape.mjs` — «הגרעין מהסכמה+מונחים») ו-machtzev/assemble/data-lift.mjs שמחליף מחרוזות ב-props. בנוסף הוא חסום-הרצה, והעטיפה שלו מנותקת גם היא.",
+   "gives": "∅ במצבו. שרשרת-החיבור תדרוש שלושה צעדים (pubspec ⇒ העטיפה ⇒ שלב-צנרת) בעוד שהיכולת כבר קיימת במקום אחר."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 ולא 0: דה-הרדקוד של מונחים הוא יכולת-אמת שהמחולל צריך (אטום עם מחרוזת-צרובה אינו נבחר), והמימוש כאן הוא analyzer אמיתי ולא רגקס. אבל: חסום-הרצה, עטיפתו מנותקת, והיכולת כבר מכוסה בצנרת — ולכן אינו מועמד-חיבור."
+  },
+  "evidence": [
+   "ran: cd machtzev/carve && /root/dart-sdk/bin/dart pub get ⇒ version solving failed (_macros)",
+   "ran: grep -rn 'ast-purify' ⇒ אין קורא לעטיפה",
+   "ran: grep -n 'ast_dehardcode' machtzev/gates.tsv ⇒ ריק",
+   "read: machtzev/carve/ast_dehardcode.dart:L1-L18",
+   "read: machtzev/purity/ast-purify.mjs:L3,L33 · machtzev/generator/regen.mjs:L14"
+  ]
+ },
+ {
+  "file": "machtzev/carve/ast_dehardcode_interp.dart",
+  "lang": "dart",
+  "lines": 127,
+  "does": [
+   {
+    "claim": "מרחיב את הבסיסי לאינטרפולציה: מחליף כל **קטע-עברי בתוך StringInterpolation** ב-`${term('<מטרה>')}` — וגם ליטרל-פשוט כמו הבסיסי.",
+    "evidence": "machtzev/carve/ast_dehardcode_interp.dart:L1-L3"
+   },
+   {
+    "claim": "שלושה דילוגים (אחד יותר מהבסיסי): const עליון · ארגומנט-3 של termOf · **פונקציה שכבר נושאת פרמטר term**.",
+    "evidence": "machtzev/carve/ast_dehardcode_interp.dart:L3"
+   },
+   {
+    "claim": "מרחיב את זיהוי-ה-const מעבר ל-top-level: הצהרת-const · בנאי-const · ליטרל-const.",
+    "evidence": "machtzev/carve/ast_dehardcode_interp.dart:L18 (ההערה 'הקשר-const כלשהו (לא רק top-level)')"
+   },
+   {
+    "claim": "מחזיר JSON עשיר יותר מהבסיסי — {ok, source, terms, fn, count, **hadTerm**} — ו-hadTerm=true הוא איתות מפורש לצרכן: «אין לחווט-מחדש בדיקה/צרכן».",
+    "evidence": "machtzev/carve/ast_dehardcode_interp.dart:L4"
+   },
+   {
+    "claim": "‏_Hit נושא `mode` (ברירת-מחדל 'simple') כדי להבחין בין החלפה-פשוטה להחלפה-בתוך-אינטרפולציה.",
+    "evidence": "machtzev/carve/ast_dehardcode_interp.dart:L16"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו בר-הרצה כאן** — אותו חסם analyzer (אותו pubspec, אף שהכותרת שלו לא מזכירה אותו).",
+    "evidence": "ran: cd machtzev/carve && /root/dart-sdk/bin/dart pub get ⇒ version solving failed (_macros); machtzev/carve/pubspec.yaml:8 'analyzer: ^6.11.0'"
+   },
+   {
+    "claim": "אינו מחליף את הבסיסי — שניהם קיימים כשני קבצים עם שתי עטיפות נפרדות (ast-purify.mjs מול ast-purify-interp.mjs), כלומר כפילות-מנוע שלא אוחדה.",
+    "evidence": "machtzev/purity/ast-purify.mjs:L33 (`ast_dehardcode.dart`) מול machtzev/purity/ast-purify-interp.mjs:L33 (`ast_dehardcode_interp.dart`)"
+   },
+   {
+    "claim": "אינו כותב — מדפיס JSON; העטיפה כותבת.",
+    "evidence": "machtzev/carve/ast_dehardcode_interp.dart:L4; machtzev/purity/ast-purify-interp.mjs:L3"
+   },
+   {
+    "claim": "עטיפתו מריצה `dart` דרך `execSync` עם מחרוזת-פקודה מורכבת ולא דרך execFileSync כמו אחותה — הבדל-מימוש שלא אוחד.",
+    "evidence": "machtzev/purity/ast-purify-interp.mjs:L33 `execSync(`dart run ${AST}/ast_dehardcode_interp.dart ${absFile}`, ...)` מול machtzev/purity/ast-purify.mjs:L33 `execFileSync(`${DART}/dart`, ['run', ...])`"
+   },
+   {
+    "claim": "אין לו קורא אפקטיבי — העטיפה שלו עצמה חסרת-קורא.",
+    "evidence": "ran: grep -rn 'ast-purify' ⇒ רק שורות-שימוש בתוך הקבצים עצמם + הערה ב-const-normalize.mjs:2"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/purity/ast-purify-interp.mjs:33",
+    "how": "הרצה-בשם: execSync('dart run .../ast_dehardcode_interp.dart <file>') — אך לעטיפה עצמה אין קורא"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — כמו אחיו. הערה כנה: אם מישהו כן יחבר את משפחת-הדה-הרדקוד, **זה** המנוע שצריך לחבר ולא הבסיסי (הוא עושה כל מה שהבסיסי עושה ועוד אינטרפולציה ו-hadTerm) — §20(א). כלומר גם בתרחיש-החיבור, ast_dehardcode.dart הבסיסי נשאר מיותר.",
+   "gives": "∅ במצבו."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 מאותו טעם כמו אחיו, ובאותה דרגה: היכולת אמיתית ורלוונטית (מונח-צרוב חוסם בחירת-אטום), המימוש הוא analyzer אמיתי, אבל הוא חסום-הרצה, עטיפתו מנותקת, והיכולת מכוסה בצנרת ב-core-from-shape/data-lift. הוא עדיף על אחיו — וזה בדיוק מה שהופך את אחיו למועמד-מחיקה, לא למועמד-חיבור."
+  },
+  "evidence": [
+   "ran: cd machtzev/carve && /root/dart-sdk/bin/dart pub get ⇒ version solving failed (_macros)",
+   "ran: grep -rn 'ast-purify' ⇒ אין קורא לעטיפות",
+   "ran: wc -l machtzev/carve/ast_dehardcode*.dart ⇒ 132 (בסיסי) · 127 (interp)",
+   "read: machtzev/carve/ast_dehardcode_interp.dart:L1-L18",
+   "read: machtzev/purity/ast-purify-interp.mjs:L3,L33 (מול machtzev/purity/ast-purify.mjs:L33)"
+  ]
  }
 ]

@@ -176,3 +176,86 @@ grep -n '^import' machtzev/generator/tighten-types.mjs
 ```
 `ast-js-to-dart.mjs` · `js-to-dart.mjs` · `dart-to-js.mjs` הם ספריות (‏`export`) ונמדדו
 **דרך הרתמות שלהן**, לא בהרצה ישירה — וכך רשום בשדה ה-evidence שלהם.
+
+---
+
+# מקבץ 3 — `machtzev/carve/` (7: 4 mjs + 3 dart)
+
+## 🔴 תיקון שני להנחת-המשימה: החסם ב-`.dart` אינו «אין Dart»
+שלושת מנועי-ה-`.dart` בקבוצה (`ast_carve` · `ast_dehardcode` · `ast_dehardcode_interp`)
+מייבאים `package:analyzer`. הרצתי `dart pub get` בתיקייה, והתשובה מדויקת:
+
+```
+Because analyzer >=6.9.0 <7.3.0 depends on macros >=0.1.3-main.0 <0.1.4 which depends on
+_macros 0.3.3 from sdk, analyzer >=6.9.0 <7.3.0 requires _macros 0.3.3 from sdk.
+So, because _macros from sdk doesn't exist (could not find package _macros in the Dart SDK)
+and carve_tools depends on analyzer ^6.11.0, version solving failed.
+* Try upgrading your constraint on analyzer: dart pub add analyzer:^14.4.0
+```
+
+כלומר: ה-SDK כאן (3.13.2) **חדש מדי** ל-`analyzer: ^6.11.0` שנצמד ב-`machtzev/carve/pubspec.yaml:8`.
+זה חסם **חד-שורתי וידוע-פתרון** (pub עצמו מציע את התיקון) — אבל תיקון-pubspec הוא שינוי-קוד,
+מחוץ למשימת-המיפוי, ולכן לא נגעתי. `.gitignore` של התיקייה מכסה `.dart_tool/` ו-`pubspec.lock`,
+כך שהניסיון לא הותיר עקבות (`git status` נקי).
+
+## הזוג שהוא הממצא האמיתי של המקבץ: `ast_carve.dart` + `carve-land.mjs`
+שניהם קיבלו s22=2, והם **התפר היחיד בקבוצה שחיבורו נותן יכולת חדשה ולא רק מדידה**:
+- `ast_carve.dart` (719ש) חוצב פונקציה לאטום-טהור עם analyzer אמיתי, סיווג-מזהים תלת-דרכי
+  (שכן-top-level=שקע · טיפוס-מקומי=הטבעה · dart:core=נשאר).
+- `carve-land.mjs` (311ש) מנחית אותו **עם הוכחה**: `dart analyze` + Golden נגזר-מטיפוס
+  (בריכת 16 ערכים) + **החזרה-לאחור בכשל**.
+- הם כבר מחוברים זה-לזה (`carve-land.mjs <carved.json>` = הפלט של `ast_carve`).
+- נקודת-החיבור המוצעת: `regen.mjs:10-12`, לפני `oracle --write` ו-`auto-logic` — כלומר
+  **הגדלת-הקטלוג שהבורר בוחר ממנו**, שזו דרישת §21 המפורשת «אסור לצמצם קטלוג».
+
+הצלחתי להריץ את **נקודת-הכניסה** של `carve-land` (עם `CARVE_OUT` + `DART_SDK_BIN`, קלט `[]`):
+`═══ נחיתה: ✅ 0 אטומים · ↩ 0 נכשלו · ↷ 0 דולגו (מתוך 0 trivial) ═══`, exit 0.
+**לא** הצלחתי להריץ נחיתה אמיתית, כי הקלט דורש את `ast_carve` החסום. אמרתי זאת ב-JSON
+ולא ניפחתי את הציון בגלל זה.
+
+## שני לקחי-כשל שמתועדים **בתוך** carve-land — שווה לצטט
+`carve-land.mjs:16-18`: להצביע על ה-SDK ולא על `/home/user/flutter/bin/dart`, כי העטיפה
+נכנסת לשומר-ה-root של flutter ומפילה `analyze`/`run` — «37 אטומים נזרקו כך בלי שנבדקו מעולם».
+`carve-land.mjs:19-25`: לייבא רק imports שהגוף מזכיר, כי `dart analyze` נכשל על
+ייבוא-לא-בשימוש ⇒ אטום תקין נזרק.
+שניהם אותה משפחה: **הרתמה הפילה אטום והמנוע ספר את זה ככשל-האטום** — וריאציה של L1
+(«בודק-נכשל ⇒ חשוד בבודק»).
+
+## דפוס חוזר #4 — «שסתום-הפלט» חוזר, והפעם גם עם מלכודת-cwd
+`carve-land` ו-`shelf-lift` הם היחידים בכל 33 עם שסתום-סביבה מוצהר (`CARVE_OUT` · `SHELF_OUT`),
+ושניהם נושאים את אותה הערה כמעט מילה-במילה: «נחיתה למדף היא החלטה, לא תופעת-לוואי של מדידה».
+‏`carve-land:13-15` מוסיף דקות שאין ב-shelf-lift: `SHELF` נשאר **תמיד** המדף האמיתי, אחרת
+בדיקת «כבר-קיים» זזה לתיקייה-הזמנית וריצת-מדידה מדווחת שקרית «אטומים חדשים».
+
+מלכודת חדשה שמצאתי: `widget-dedup.mjs:56` כותב ל-`'screens-seed/widget-dedup.json'` —
+**נתיב יחסי-ל-cwd, בלי ROOT**. הרצה משורש-הריפו דורסת קובץ מחויב. הרצתי אותו מ-cwd מבודד
+עם `screens-seed/` משלו, וקיבלתי מדידה נקייה בלי לגעת בעץ:
+**300 widgets מ-263 קבצי-מדף · 267 מנגנונים ייחודיים · 28 קבוצות-זהות-מבנה · 5 משפחות-רופפות.**
+
+## `screen-lift` מול `data-lift` — §20(א) שוב
+שניהם מוציאים דאטה-צרובה לשקעים. `screen-lift` **מתכנן** (‏props-plan.json), `data-lift`
+**מבצע** (מחליף בפועל, props על-שם-הפרמטר, עם שער-עצמי). לכן `screen-lift` קיבל 1 ולא יותר:
+לא כי הוא רע — הוא רץ כאן יפה — אלא כי יש טוב-ממנו באותה צנרת.
+
+הרצה שממחישה את **סדר-הצינור** יפה: `screen-lift` על אטום-מדף (`new/dart-ui-bs/auto/acc_row.dart`)
+⇒ `0 widgets עם דאטה`, כי `data-lift` כבר הוציא ממנו את העברית. על מסך-מחולל שלא עבר ליטוש
+(`new/dart-gen-bs/gen_app_bind1.dart`) ⇒ `1 widgets עם דאטה · 1 פריטי-תוכן חולצו`.
+
+## כפילות שלא אוחדה
+`ast_dehardcode.dart` (132ש) ו-`ast_dehardcode_interp.dart` (127ש) — ה-interp עושה כל מה
+שהבסיסי עושה **ועוד** (אינטרפולציה · דילוג-const מורחב · `hadTerm`). שתי עטיפות נפרדות
+(`purity/ast-purify.mjs` · `purity/ast-purify-interp.mjs`), ואף אחת מהן חסרת-קורא
+(‏`grep -rn 'ast-purify'` ⇒ רק שורות-שימוש בתוך הקבצים עצמם). לכן שניהם s22=1 עם ∅,
+והערתי במפורש: בתרחיש-חיבור, ה-interp הוא שצריך להיבחר — הבסיסי הוא מועמד-מחיקה.
+
+## מה הורץ במקבץ זה
+```
+cd machtzev/carve && dart pub get                          # החסם המדויק
+cd machtzev/carve && dart run ast_carve.dart <f> <fn>      # אותו חסם
+node machtzev/carve/screen-decomp.mjs new/dart-gen-bs/gen_app_bind1.dart
+node machtzev/carve/screen-lift.mjs <f> <scratch>/sl       # ×2 (אטום-מדף · מסך-מחולל)
+(cwd=<scratch>/wd) node .../widget-dedup.mjs .../new/dart-ui-bs/auto
+CARVE_OUT=<scratch>/cl/ DART_SDK_BIN=/root/dart-sdk/bin node machtzev/carve/carve-land.mjs <carved.json>
+grep -rn "ast-purify|carve-land|ast_carve" ...             # מפת-קוראים
+```
+`git status --short` ⇒ 0 אחרי כל אחת.
