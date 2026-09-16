@@ -2515,5 +2515,246 @@
    "ran: מטריצת-תכונות ⇒ vaada: 2·2·1·4·11·0·1 · ספירת hex ⇒ 33",
    "read: gen/looks/sefer/build.mjs:29 — הכלל של ההלוואה נאכף בקובץ אחר, לא כאן"
   ]
+ },
+ {
+  "file": "gen/looks/medrash/probe.mjs",
+  "lang": "mjs",
+  "lines": 91,
+  "summary": "🔴 **המנוע שהחזיר ∅ ודיווח על כך** — 11 מקורות נבדקו, **11 נפסלו, אפס נמדדו**. פוסל מכנית חומת-הרשמה · דף-ריק · ודף שאינו מוכיח שהוא מה שנטען (לוח-זמנים חייב ≥8 שעות; מפת-מקומות חייבת ≥3 שורות-תאים).",
+  "does": [
+   {
+    "claim": "🔴 **כל מקור מצהיר מראש איזו ראיה הוא חייב להציג** (`need: ['time']` או `['seat']`), והאימות נגזר מההצהרה — לא מהערכה",
+    "evidence": "medrash/probe.mjs:16-27 — לכל אחד מ-11 האתרים שדה `need`; :59-65 `const ok = (v, need) => { … if (need.includes('time') && v.proof.times < 8) return 'רק ' + v.proof.times + ' שעות — לא לוח-זמנים'; if (need.includes('seat') && v.proof.rows < 3) return …; }`"
+   },
+   {
+    "claim": "🔴 **שלוש פסילות מכניות, בסדר**: (1) חומת-הרשמה לפי 6 נוסחים · (2) דף-ריק (<120 אלמנטים) · (3) חוסר-ראיה לסוג-הדף",
+    "evidence": "medrash/probe.mjs:35-36 (‏wallWords — 6 נוסחים), :38 (`const els = document.querySelectorAll('body *').length`), :60-63 (שלוש הפסילות לפי הסדר)"
+   },
+   {
+    "claim": "🔴 **מזהה מפת-מקומות מבנית, בלי מילה אחת של טקסט** — אוסף אלמנטים בגודל 12–46px, מקבץ אותם לשורות ברזולוציית 8px, וסופר שורות עם ≥5 תאים",
+    "evidence": "medrash/probe.mjs:47-54 `const small = [...document.querySelectorAll('body *')].filter(el => { const r = el.getBoundingClientRect(); return r.width >= 12 && r.width <= 46 && r.height >= 12 && r.height <= 46; }); const byRow = {}; small.forEach(el => { const y = Math.round(el.getBoundingClientRect().top / 8) * 8; byRow[y] = (byRow[y]||0)+1; }); const rows = Object.values(byRow).filter(n => n >= 5);`"
+   },
+   {
+    "claim": "🔴 **דף שנפסל אינו נמדד** — `continue` לפני `EXTRACT`, כך שמדידה מזוהמת לא נכנסת לקובץ. הפסילה עצמה כן נרשמת, עם הסיבה",
+    "evidence": "medrash/probe.mjs:81 `if (why) { console.log(\\`✗ …נפסל — ${why}\\`); out.push({ ...s, rejected: why, v }); await p.close(); continue; }`; :82 `const m = await p.evaluate(EXTRACT);` — רק אחרי"
+   },
+   {
+    "claim": "🔴 **התוצאה בפועל: 0 מתוך 11.** כל 11 המקורות נפסלו, והכלי כתב זאת לקובץ המחויב במקום להחזיר מדידה-של-כלום",
+    "evidence": "ran: node -e על gen/looks/medrash/probe.json ⇒ סה\"כ 11 · עברו **0** · נפסלו 11. הסיבות: `רק 0 שעות` (nre-board) · `ERR_TOO_MANY_REDIRECTS` (heathrow) · `דף ריק (4)` (sbb) · `רק 4 שעות` (hebcal-sh) · `דף ריק (33)` (chabad-cl) · `דף ריק (2)` (islamicfinder) · `דף ריק (100)` (myzmanim) · `דף ריק (1)` (aerolopa) · `דף ריק (110)` (aerolopa-ba) · `רק 1 שורות-תאים` (seatmaps) · `דף ריק (3)` (telecharge)"
+   },
+   {
+    "claim": "מקבל 9 נוסחי-עוגיות כולל שלושה בעברית («אישור» · «קבל הכל» · «סגור»), ורק `button` — לעולם לא קישור",
+    "evidence": "medrash/probe.mjs:74 `for (const t of ['Accept','Accept all','Accept all cookies','I agree','Got it','Allow all','אישור','קבל הכל','סגור'])`; :75 `p.locator(\\`button:has-text(\"${t}\")\\`)`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** בונה כלום — אין לו `build.mjs` צמוד. `gen/looks/medrash/` מכילה שני קבצים בלבד: probe.mjs ו-probe.json",
+    "evidence": "ran: ls gen/looks/medrash/ ⇒ probe.json · probe.mjs. (לשם השוואה, מסך «בית המדרש עכשיו» נבנה בסוף מ-Twitch תחת nochah/ — ‏build-index.mjs:15-17)"
+   },
+   {
+    "claim": "**אינו** מספק ולו מדידה אחת — `probe.json` המחויב מכיל 11 רשומות-פסילה ואפס רשומות-מדידה",
+    "evidence": "ran: node -e ⇒ `o.filter(x=>x.m).length` = 0"
+   },
+   {
+    "claim": "**אינו** מבחין בין «האתר לא נטען אצלי» ל«האתר אינו מה שחשבתי» — 7 מתוך 11 הפסילות הן «דף ריק», שסביר שהן חסימת-בוט או רינדור-לקוח, לא ראיה על האתר",
+    "evidence": "ran: מתוך 11 הפסילות — 7 הן `דף ריק (N)` עם N בין 1 ל-110; :61 `if (v.els < 120) return 'דף ריק (' + v.els + ' אלמנטים)'` — סף יחיד, בלי הבחנה בין 1 אלמנט (כשל-טעינה) ל-110 (דף אמיתי דליל)"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code. גם 0/11 אינו מכשיל דבר",
+    "evidence": "ran: grep -c 'process.exit' gen/looks/medrash/probe.mjs ⇒ 0"
+   },
+   {
+    "claim": "**אינו** דטרמיניסטי — מודד אתרים חיים; `probe.json` הוא תצלום-רגע",
+    "evidence": "medrash/probe.mjs:16-27 — 11 כתובות `https://` חיצוניות"
+   },
+   {
+    "claim": "‏**הצילום נשמר גם לדף שנפסל** — לפני הפסילה; כלומר shots/ מתמלא גם בכשלים (והוא אינו בריפו)",
+    "evidence": "medrash/probe.mjs:80 `await p.screenshot(…)` לפני :81 (הפסילה). ran: git ls-files gen/looks/medrash/ ⇒ probe.mjs · probe.json בלבד — אין shots"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו. הוא-עצמו מייבא את `EXTRACT` (:9)"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/hamtzaa.mjs (מד-ההמצאות) · והכרעה-27 כפי שהיא מיושמת ב-app-ds.mjs:75 («אין מקור ⇒ ∅ מדווח, לא ניחוש»)",
+   "gives": "🔴 **זהו המימוש הנקי-ביותר של הכרעה-27 שמצאתי בכל 59 המנועים, והוא על מקורות-חיצוניים.** הכרעה-27 אומרת: מה שאין לו מקור ⇒ ∅ מדווח, לא ניחוש. הכלי הזה עשה בדיוק את זה — הצהיר מראש מה תיחשב ראיה, בדק מכנית, פסל 11 מתוך 11, **ודיווח 0 במקום להמציא מדידה**. הדפוס בר-העברה הוא שלושת החלקים יחד: (א) הצהרת-ראיה **לפני** המדידה (`need`) · (ב) פסילה לפני חילוץ (‏`continue` לפני `EXTRACT`) · (ג) הפסילה נרשמת עם סיבתה, כך ש-∅ הוא תוצאה מדווחת ולא שקט. ⚠️ **סייג כן:** הגלאי עצמו גס — 7 מתוך 11 הפסילות הן «דף ריק», שאינה הבחנה בין כשל-טעינה לדף-דליל. לפני העברה יש להפריד את שתי המחלקות, אחרת ∅ יידווח גם כשהמקור קיים."
+  },
+  "s22": {
+   "score": 2,
+   "why": "2 — המנוע עצמו אינו על נתיב משפט⇒אפליקציה (הוא מודד אתרים חיצוניים, והחזיר 0), אבל **הדפוס** שהוא מדגים הוא בדיוק הכרעה-27 בצורתה המכנית, והוא הראיה הנדירה שבה מנוע החזיר ∅ ודיווח עליו במקום למלא. לא 3 כי אין לו נקודת-חיבור בצינור והגלאי דורש הפרדה."
+  },
+  "evidence": [
+   "read: gen/looks/medrash/probe.mjs:1-91 (הקובץ במלואו)",
+   "ran: node -e על gen/looks/medrash/probe.json ⇒ 11 מקורות · 0 עברו · 11 נפסלו, עם סיבת-פסילה לכל אחד",
+   "ran: ls gen/looks/medrash/ ⇒ probe.mjs · probe.json בלבד — אין build",
+   "ran: git ls-files gen/looks/medrash/ ⇒ שני הקבצים מחויבים, shots אינו",
+   "ran: grep -c 'process.exit' ⇒ 0"
+  ]
+ },
+ {
+  "file": "gen/looks/trumot/probe.mjs",
+  "lang": "mjs",
+  "lines": 73,
+  "summary": "מודד 10 עמודי-מגבית בעולם, עם אימות-עצמי מחמש-ראיות (סכומים · יעד · תורמים · כפתור-תרומה · פס-התקדמות). **2 עברו, 8 נפסלו.** מנמק את בחירת-הסוג: עמוד-מגבית חייב להיות ציבורי, כי הוא נועד להישלח.",
+  "does": [
+   {
+    "claim": "🔴 **מנמק מראש למה דווקא הסוג הזה נבחר** — «עמוד-מגבית **חייב** להיות ציבורי, הוא נועד להישלח». כלומר בחירת-המקור עצמה מנומקת מול בעיית חומות-ההרשמה",
+    "evidence": "trumot/probe.mjs:2 `נבחרו כי עמוד-מגבית **חייב** להיות ציבורי — הוא נועד להישלח.`"
+   },
+   {
+    "claim": "🔴 **חמש ראיות נמדדות, שתיים מהן חוסמות** — סכומים (רגקס על מטבע) · יעד/נאספו · תורמים · כפתור-תרומה (סריקת `button,a` לפי טקסט בשתי שפות) · פס-התקדמות (אלמנט רחב-ונמוך עם רקע לא-שקוף)",
+    "evidence": "trumot/probe.mjs:34-42 (חמש הראיות); :45-47 `const reject = v => v.wall.length ? 'חומת-הרשמה' : v.els < 150 ? … : v.money < 2 ? … : v.cta < 1 ? 'אין כפתור-תרומה' : null;` — רק `money` ו-`cta` חוסמים"
+   },
+   {
+    "claim": "🔴 **מזהה פס-התקדמות מבנית ופוסל רקע שקוף** — רוחב>90 · גובה 3–16 · ורקע שאינו `rgba(0,0,0,0)`",
+    "evidence": "trumot/probe.mjs:39-42 `const bars = [...document.querySelectorAll('body *')].filter(el => { const r = el.getBoundingClientRect(); return r.width > 90 && r.height >= 3 && r.height <= 16 && getComputedStyle(el).backgroundColor !== 'rgba(0, 0, 0, 0)'; }).length;`"
+   },
+   {
+    "claim": "‏**כפתור-התרומה מזוהה דו-לשונית** — donate/give/back this/support בצד תרומה/תרמו/לתרום",
+    "evidence": "trumot/probe.mjs:37 `[...document.querySelectorAll('button,a')].filter(e => /donate|give|back this|support|תרומה|תרמו|לתרום/i.test(e.innerText || '')).length`"
+   },
+   {
+    "claim": "🔴 **התוצאה בפועל: 2 מתוך 10** — עברו charity:water ו-Chuffed; נפסלו GoFundMe · Kickstarter · Indiegogo · JustGiving · Patreon · CauseMatch · Charidy · JGive",
+    "evidence": "ran: node -e על gen/looks/trumot/probe.json ⇒ 10 · עברו 2 · נפסלו 8. הסיבות: `רק 0 סכומים` (gofundme · causematch · jgive) · `דף ריק (33)` (kickstarter · indiegogo · patreon) · `חומת-הרשמה` (justgiving) · `אין כפתור-תרומה` (charidy)"
+   },
+   {
+    "claim": "‏**פוסל גם את המובילים בשוק** — GoFundMe («הגדול בעולם» לפי ההצהרה שלו-עצמו) נפסל. כלומר הכלי אינו מכופף את הסף למוניטין",
+    "evidence": "trumot/probe.mjs:16 `{ id:'gofundme', name:'GoFundMe', users:'הגדול בעולם', … }`; ובתוצאה: `✗ gofundme — רק 0 סכומים — לא עמוד-מגבית`"
+   },
+   {
+    "claim": "דף שנפסל אינו נמדד — אותו דפוס `continue` לפני `EXTRACT`",
+    "evidence": "trumot/probe.mjs:63 `if (why) { … out.push({ ...s, rejected: why, v }); await p.close(); continue; }`; :64 `const m = await p.evaluate(EXTRACT);`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** בונה כלום — אין `build.mjs` בתיקייה",
+    "evidence": "ran: ls gen/looks/trumot/ ⇒ probe.json · probe.mjs בלבד"
+   },
+   {
+    "claim": "🔴 **שלוש מתוך חמש הראיות שהוא מודד אינן משמשות לפסילה** — `goal` · `donors` · `bars` נמדדים, נשמרים, ואינם משפיעים. דף בלי פס-התקדמות ובלי מילת-יעד יעבור, אם יש בו 2 סכומים וכפתור",
+    "evidence": "trumot/probe.mjs:43 (‏goal · donors · bars מוחזרים) מול :45-47 (‏reject בודק רק `wall` · `els` · `money` · `cta`)"
+   },
+   {
+    "claim": "‏**«דף ריק (33)» חוזר בשלושה אתרים שונים** — Kickstarter · Indiegogo · Patreon. אותו מספר בדיוק בשלושתם הוא חתימה של דף-ביניים/חסימה, לא של שלושה אתרים דלילים. הכלי אינו מבחין",
+    "evidence": "ran: node -e על probe.json ⇒ `דף ריק (33)` בדיוק, ×3. ובקוד: :45 `v.els < 150 ? \\`דף ריק (${v.els})\\`` — סף יחיד בלי סיווג"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** דטרמיניסטי — 10 כתובות חיצוניות חיות",
+    "evidence": "trumot/probe.mjs:15-26"
+   },
+   {
+    "claim": "‏`money` נספר ברגקס על טקסט-הדף — סכום בתוך כתובת, בכותרת-שיווק או בתפריט ייספר כמו סכום-מגבית",
+    "evidence": "trumot/probe.mjs:34 `const money = (t.match(/[₪$£€]\\s?[\\d,]{2,}/g) || []).length;` — על `document.body.innerText` כולו"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו. מייבא את `EXTRACT` (:10)"
+   }
+  ],
+  "connectAt": {
+   "point": "אותה נקודה כמו medrash/probe — הכרעה-27 (‏app-ds.mjs:75) · hamtzaa.mjs",
+   "gives": "אותו דפוס-איכות בדיוק: הצהרת-ראיה ⇒ פסילה-לפני-חילוץ ⇒ ∅ מדווח-עם-סיבה. **מה שמוסיף כאן ביחס ל-medrash: הנימוק מדוע הסוג בר-מדידה מלכתחילה** (:2) — כלומר שלב שקודם לבחירת-המקור. זה בדיוק «בחר מקור שאפשר להוכיח ממנו». ⚠️ **וגם החולשה מודגמת כאן חדה יותר:** 3 מתוך 5 הראיות נמדדות ואינן חוסמות, כלומר הסף רופף ממה שהתיעוד מרמז. מי שיעביר את הדפוס חייב שכל ראיה שנמדדת תהיה או חוסמת או מוצהרת כלא-חוסמת."
+  },
+  "s22": {
+   "score": 2,
+   "why": "2 — אותו ציון כמו medrash, מאותו טעם: דפוס הכרעה-27 מכני ובר-העברה, עם ראיה בפועל (2/10, כולל פסילת המוביל בשוק). לא 3 כי אין נקודת-חיבור בצינור, ו-3 מ-5 הראיות אינן חוסמות — פער בין מה שנמדד למה שנאכף."
+  },
+  "evidence": [
+   "read: gen/looks/trumot/probe.mjs:1-73 (הקובץ במלואו)",
+   "ran: node -e על gen/looks/trumot/probe.json ⇒ 10 · עברו 2 (charitywater · chuffed) · נפסלו 8, עם סיבה לכל אחד",
+   "ran: ls gen/looks/trumot/ ⇒ probe.mjs · probe.json בלבד",
+   "ran: grep -c 'process.exit' ⇒ 0",
+   "read: trumot/probe.mjs:43 מול :45-47 — הפער בין הנמדד לחוסם"
+  ]
+ },
+ {
+  "file": "gen/looks/tzevet/probe.mjs",
+  "lang": "mjs",
+  "lines": 64,
+  "summary": "הקצר מבין 3 הפרוברים (64 ש׳) והמצליח מביניהם — **6 מתוך 8 עברו**. מזהה «לוח-משמרות» לפי יחס-מימדים (רוחב/גובה ≥2.2) ורקע-אטום, ודורש גם מילת-דומיין. היחיד שה-probe שלו צמוד ל-build באותה תיקייה.",
+  "does": [
+   {
+    "claim": "🔴 **מזהה פס-משמרת לפי יחס-מימדים, לא לפי מחלקה** — רוחב ≥40 · גובה 14–56 · יחס רוחב/גובה ≥2.2 · ורקע עם אלפא >0.5",
+    "evidence": "tzevet/probe.mjs:28-34 `const bars = [...document.querySelectorAll('body *')].filter(el => { const r = el.getBoundingClientRect(); if (r.width < 40 || r.height < 14 || r.height > 56) return false; if (r.width / r.height < 2.2) return false; const c = getComputedStyle(el).backgroundColor.match(/[\\d.]+/g); return c && (c[3] === undefined || +c[3] > .5); }).length;`"
+   },
+   {
+    "claim": "🔴 **דורש שתי ראיות בלתי-תלויות** — גם מילת-דומיין (shift/schedule/roster/coverage/who's working/timesheet) **וגם** ≥6 פסים. טקסט לבד לא מספיק, וצורה לבד לא מספיקה",
+    "evidence": "tzevet/probe.mjs:35 `const words = ['shift','schedule','roster','coverage','who\\'s working','timesheet'].filter(w => low.includes(w));`; :38-39 `const reject = v => … : !v.words.length ? 'לא מדבר על משמרות' : v.bars < 6 ? \\`רק ${v.bars} פסים — אין לוח\\` : null;`"
+   },
+   {
+    "claim": "סופר שעות בשני פורמטים — 24-שעות ו-am/pm",
+    "evidence": "tzevet/probe.mjs:26 `const times = (t.match(/\\b([01]?\\d|2[0-3]):[0-5]\\d\\b|\\b\\d{1,2}\\s?(am|pm)\\b/gi) || []).length;`"
+   },
+   {
+    "claim": "🔴 **התוצאה בפועל: 6 מתוך 8 — שיעור-ההצלחה הגבוה מבין 3 הפרוברים** (‏medrash 0/11 · trumot 2/10). עברו Deputy · When I Work · Homebase · Planning Center · BambooHR · Calendly; נפסלו Connecteam («דף ריק (1)») ו-Sling («רק 4 פסים — אין לוח»)",
+    "evidence": "ran: node -e על gen/looks/tzevet/probe.json ⇒ 8 · עברו 6 · נפסלו 2. והשוואה: medrash 0/11 · trumot 2/10"
+   },
+   {
+    "claim": "🔴 **ההצלחה כאן מסבירה את ההבדל בקבוצה**: אתרי-B2B משווקים בעמודי-פיצ׳ר ציבוריים עם צילומי-מוצר, ולכן הם נמדדים. ‏Calendly — שנפסל ב-`tor/build.mjs` כי עמודי-ההזמנה שלו החזירו 404 — **עבר כאן**, כי כאן נמדד עמוד-השיווק ולא עמוד-ההזמנה",
+    "evidence": "tzevet/probe.mjs:17 `{ id:'calendly', name:'Calendly', url:'https://calendly.com/' }` ⇒ ✓ בתוצאה; מול tor/build.mjs:3 `Calendly עצמו נפסל: עמודי-ההזמנה שלו החזירו 404 או 182 אלמנטים.`"
+   },
+   {
+    "claim": "דף שנפסל אינו נמדד — אותו דפוס `continue` לפני `EXTRACT`",
+    "evidence": "tzevet/probe.mjs:55 `if (why) { … out.push({ ...s, rejected: why, v }); await p.close(); continue; }`; :56 `const m = await p.evaluate(EXTRACT);`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **ה-build הצמוד אינו קורא אותו** — `probe.json` מחויב באותה תיקייה, ו-`tzevet/build.mjs` אינו מזכיר אותו כלל. המדידה נעשתה, נשמרה, ולא נצרכה בקוד",
+    "evidence": "ran: grep -n 'probe' gen/looks/tzevet/build.mjs ⇒ ∅. ran: git ls-files gen/looks/tzevet/ ⇒ probe.json מחויב"
+   },
+   {
+    "claim": "**אינו** מודד את מה שהמסך צריך — הוא מודד **עמודי-שיווק** של כלי-משמרות (‏`/features/scheduling-software` · `/time-tracking`), לא את המוצר עצמו. צילום-מוצר בעמוד-שיווק אינו DOM של לוח-משמרות",
+    "evidence": "tzevet/probe.mjs:12-19 — 6 מתוך 8 הכתובות הן עמודי-פיצ׳ר/שיווק; למשל :12 `https://www.deputy.com/features/scheduling-software`"
+   },
+   {
+    "claim": "‏**גלאי-הפסים עלול לספור רכיבי-שיווק** — כל כפתור, שבב או כרטיסון ברוחב ≥40 וגובה 14–56 ביחס ≥2.2 עם רקע אטום נספר כ«פס-משמרת». בעמוד-שיווק יש הרבה כאלה",
+    "evidence": "tzevet/probe.mjs:28-34 — הגלאי מבני-בלבד, בלי הקשר-הורה ובלי דרישת-שורה (השווה: medrash/probe.mjs:51-53 **כן** מקבץ לשורות לפני שהוא סופר)"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** דטרמיניסטי — 8 כתובות חיצוניות חיות",
+    "evidence": "tzevet/probe.mjs:11-20"
+   },
+   {
+    "claim": "‏`times` נמדד ונשמר אך **אינו חוסם** — אותו פער כמו ב-trumot",
+    "evidence": "tzevet/probe.mjs:36 (‏times מוחזר) מול :38-39 (‏reject בודק `wall` · `els` · `words` · `bars` בלבד)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו — גם לא ה-build שיושב באותה תיקייה. מייבא את `EXTRACT` (:7)"
+   }
+  ],
+  "connectAt": {
+   "point": "אותה נקודה כמו שני הפרוברים האחרים — הכרעה-27 (‏app-ds.mjs:75)",
+   "gives": "אותו דפוס, והתרומה הייחודית שלו היא **דרישת שתי ראיות בלתי-תלויות** (מילת-דומיין **וגם** צורה, :38-39). זו הגנה ישירה מפני מחלקת-התקלה של `CLAUDE.md` — «אל תחפש בשם, חפש לפי מטרה/צורה»: כאן השם לבדו אינו מספיק והצורה לבדה אינה מספיקה. **אבל** הקובץ הזה גם מדגים למה זה לא תמיד עוזר: 6 מתוך 8 «עברו» בעוד שהם עמודי-שיווק, לא מוצרים — כלומר שתי הראיות התקיימו והמדידה עדיין אינה של מה שביקשו. ⚠️ **זהו הלקח שראוי לנסוע עם הדפוס:** אימות-ראיה מגן מפני מקור-ריק, לא מפני **מקור-לא-נכון**."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 — אותו דפוס-אימות של שני אחיו, אבל המופע הזה חלש יותר משניהם: ה-build שלצדו אינו קורא אותו, הוא מודד עמודי-שיווק במקום מוצרים, וגלאי-הפסים שלו רופף (בלי קיבוץ-לשורות שיש ל-medrash). 1 ולא 2 כי הוא מדגים את הדפוס **ואת כשלו** — «עבר האימות» ו«נמדד הדבר הנכון» אינם אותו דבר."
+  },
+  "evidence": [
+   "read: gen/looks/tzevet/probe.mjs:1-64 (הקובץ במלואו)",
+   "ran: node -e על gen/looks/tzevet/probe.json ⇒ 8 · עברו 6 · נפסלו 2 (connecteam · sling)",
+   "ran: השוואת 3 הפרוברים ⇒ medrash 0/11 · trumot 2/10 · tzevet 6/8",
+   "ran: grep -n 'probe' gen/looks/tzevet/build.mjs ⇒ ∅ — ה-build אינו קורא את ה-probe שלצדו",
+   "read: gen/looks/tor/build.mjs:3 — Calendly נפסל שם ועבר כאן, כי נמדד עמוד אחר"
+  ]
  }
 ]
