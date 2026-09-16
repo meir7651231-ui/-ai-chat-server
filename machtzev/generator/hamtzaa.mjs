@@ -29,6 +29,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { interpret } from './entity.mjs';
+import { definal } from './match.mjs';
 import { nlToSpec } from './nl-spec.mjs';
 import * as R from '../root.mjs';
 
@@ -59,15 +60,18 @@ const heWords = (s) => [...String(s || '').matchAll(/[א-ת][א-ת'"״׳]*/g)]
   .map((m) => m[0]).filter((w) => w.length >= 2);
 
 // ── ליבה: האם למילת-שדה יש מקור בקלט? זהה / אות-שימוש / תחילית (משני הכיוונים) ──
+// נרמול-אות-סופית לפני ההשוואה — `definal` של match.mjs, כלל-המורפולוגיה שכבר קיים
+// בריפו (L57: לא כותבים כלל-שפה שני). בלעדיו 'סעיפים' בקלט אינו ממקר את 'סעיף'
+// בספק (ף ≠ פ) והשער מאשים שדה **שנאמר** — אדום-שקר, הכשל החמור ביותר לשער חוסם.
 const pfxHit = (a, b) => {
-  const [s, l] = a.length <= b.length ? [a, b] : [b, a];
+  const [s, l] = a.length <= b.length ? [definal(a), definal(b)] : [definal(b), definal(a)];
   return s.length >= MIN_PFX && l.startsWith(s);
 };
 function sourceOf(fieldWord, inputWords, deprefix) {
   const fv = [fieldWord, deprefix(fieldWord)];
   for (const u of inputWords) {
     const uv = [u, deprefix(u)];
-    for (const f of fv) for (const x of uv) if (x === f || pfxHit(x, f)) return u;
+    for (const f of fv) for (const x of uv) if (definal(x) === definal(f) || pfxHit(x, f)) return u;
   }
   return null;
 }
@@ -190,6 +194,10 @@ function selftest() {
   ok('ברירות-מחדל מוזרקות נתפסות', inv('ניהול מלון עם חדרים', 'ישות חדרים עם שם, תיאור, תאריך, סטטוס').length === 4);
   // תווית-enum מומצאת גם כשהערכים נאמרו (צבע{אדום|צהוב|ירוק})
   ok('תווית-enum מומצאת נתפסת', inv('סמן אדום או צהוב', 'ישות ממצא עם צבע{אדום|צהוב}').join() === 'צבע');
+  // 🎯 אות-סופית: 'סעיפים' בקלט ⇒ 'סעיף' בספק **נאמר**. בלי definal זה היה אדום-שקר.
+  ok('אות-סופית: ריבוי בקלט ⇒ מקור ליחיד', inv('לבדוק את הסעיפים בחוזה', 'ישות ממצא עם סעיף').length === 0);
+  // 🎯 מילת-פיגום אינה ראיה: 'מה' בקלט אינו ממקר את השדה 'מה לבקש' (ירוק-שקר).
+  ok('מילת-פיגום אינה מקור', inv('מה קורה בתיק', 'ישות ממצא עם מה לבקש').join() === 'מה לבקש');
   // fail-closed: ספק בלי שורת-ישות = 0 שדות (הקורא חייב לצאת 2, לא לדווח 0)
   ok('fail-closed: 0 שדות מסומן', detectInvented('יש כאן טקסט', 'שורה בלי ישות').fields === 0);
   ok('fail-closed: 0 מילות-קלט מסומן', detectInvented('', 'ישות תיק עם לקוח').inputWords === 0);
