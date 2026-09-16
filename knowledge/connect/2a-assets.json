@@ -1,0 +1,554 @@
+[
+  {
+    "file": "knowledge/assets/yeshiva-bench/audit_block.py",
+    "lang": "py",
+    "lines": 171,
+    "summary": "גוש-טלאי (לא מודול) שמגדיר שני שערים על תשובת-סוכן — אבחון-באג ב-8 שלבים וביקורת-קוד ב-10 שלבים — ובנוסף ביקורת מכנית אמיתית על קוד-פייתון דרך ast, עם ממצאי file:line.",
+    "does": [
+      {
+        "claim": "מגדיר BUG_STEPS = 8 שלבי-אבחון, כל אחד שלישייה (שם · מה נדרש · רגקס-הסימן שמזהה שהשלב נעשה)",
+        "evidence": "audit_block.py:3-12 · ran: python3 ast ⇒ 'BUG_STEPS = 8 items  lines 3 - 12'"
+      },
+      {
+        "claim": "מגדיר AUDIT_STEPS = 10 שלבי-ביקורת בשמם (הא גופא קשיא · היכי דמי · אלא מעתה · ורמינהו · אין לי אלא · מנא ידעי · כל זמן ש · דבק עם · מקרא הוא · לא מצינו)",
+        "evidence": "audit_block.py:13-24 · ran: python3 ast ⇒ 'AUDIT_STEPS = 10 items  lines 13 - 24'"
+      },
+      {
+        "claim": "bug_reply דורש לפחות 5 מתוך 8 שלבים, ומזהה כל שלב ע\"י הרגקס שלו על התשובה בלבד — לא על הקוד",
+        "evidence": "audit_block.py:42-46 (hit = [n for n, _, pat in BUG_STEPS if re.search(pat, low)] … if len(hit) >= 5: return None)"
+      },
+      {
+        "claim": "audit_reply דורש שהשלבים יופיעו **בשמם** בתשובה (התאמת-מחרוזת על השם, לא רגקס-סימן), ומתיר עד 2 חסרים מתוך 10",
+        "evidence": "audit_block.py:53-55 (missing = [n for n, _ in AUDIT_STEPS if n not in reply] … if len(missing) <= 2: return None)"
+      },
+      {
+        "claim": "audit_file הוא הבדיקה המכנית האמיתית — 8 גלאים על AST של קובץ פייתון, כל ממצא עם path:line: (1) גוש 5 שורות זהה פעמיים (2) הערה שאומרת 'תמיד/אף פעם' (3) docstring שאומר raises ואין raise (4) docstring שאומר returns ואין return (5) שם get_/is_/has_/find_/read_ והגוף כותב או מוחק (6) פרמטר '=None' שנוגעים בו בלי לבדוק None (7) שרשרת if באורך ≥3 על אותו משתנה בלי else · match בלי case _ (8) and/or מעורבים בלי סוגריים",
+        "evidence": "audit_block.py:78-147 · גלאי 1 :87-92 · גלאי 2 :93-96 · 3-4 :106-109 · 5 :110-111 · 6 :112-118 · 7 :121-134 · 8 :135-138"
+      },
+      {
+        "claim": "'לא מצינו' מחפש פונקציה שאף בדיקה אינה קוראת לה — corpus_tests הוא כל קובצי-הבדיקה מאוחדים למחרוזת אחת, וההתאמה היא גבול-מילה על שם-הפונקציה",
+        "evidence": "audit_block.py:119-120 (if not node.name.startswith(UNTESTED_SKIP) and not re.search(rf\"(?<![\\w]){re.escape(node.name)}(?![\\w])\", corpus_tests)) · המחרוזת נבנית ב-audit_block.py:155"
+      },
+      {
+        "claim": "cmd_audit פולט טבלת-markdown של 10 השלבים ואז עד 20 ממצאים לשלב, ומחזיר 1 אם נמצא משהו — כלומר הוא נועד לשמש קוד-יציאה של שער",
+        "evidence": "audit_block.py:160-169 (print('| שלב | מה | ממצאים |') … return 1 if found else 0)"
+      },
+      {
+        "claim": "הוא מפריד במפורש בין 'אבחון' ל'ביקורת': _is_audit גובר, ו-_is_diag מחריג את מי שכבר סווג ביקורת",
+        "evidence": "audit_block.py:29-34 (return any(w in prompt.lower() for w in DIAG_WORDS) and not _is_audit(prompt))"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו מודול שניתן להריץ או לייבא.** אין בו import כלל; 9 שמות חופשיים אינם מוגדרים בו — ביניהם `re`, `ast`, `subprocess`, `Path`",
+        "evidence": "ran: python3 ast (undefined free names) ⇒ ['DIAG_WORDS', 'Path', 'SKIP_DIRS', 'UNTESTED_SKIP', '_kv_args', '_load', '_test_files', 'ast', 're', 'subprocess'] · ran: grep -c '^import\\|^from' audit_block.py ⇒ 0"
+      },
+      {
+        "claim": "אינו קוד-מקור חדש: **כל 12 ההגדרות ברמה-העליונה כבר נחתו** ב-yeshiva/gate.py של הריפו-האח — 10 זהות בייט-לבייט, 2 (_is_diag · audit_file) שונות, ו-**0 חסרות שם**",
+        "evidence": "ran: python3 difflib על ast.get_source_segment מול /home/user/yeshiva-engine/yeshiva/gate.py @598f0d82 ⇒ 'audit_block.py: identical=10 differs=2 absent_upstream=0'"
+      },
+      {
+        "claim": "הכיוון של ה-2 ששונות הוא **למעלה בזרם**: הגרסה שנחתה עשירה יותר. `_is_diag` עבר מ-DIAG_WORDS ל-DIAG_STRONG וקיבל docstring («לא כל 'error' במפרט») — כלומר הנכס הוא הטיוטה, לא העדכון",
+        "evidence": "ran: difflib audit_block.py::_is_diag ⇒ upstream מוסיף docstring ומחליף DIAG_WORDS⇒DIAG_STRONG (asset=2L upstream=3L)"
+      },
+      {
+        "claim": "audit_file אינו יודע שום שפה מלבד פייתון: שני הגלאים הראשונים טקסטואליים, וכל ששת האחרים תלויים ב-ast.parse — כלומר על `.mjs` ו-`.dart` (שפות-הריפו הזה) הוא מחזיר לכל היותר 2 מתוך 8",
+        "evidence": "audit_block.py:97-101 (if p.suffix == '.py': try: tree = ast.parse(src) except SyntaxError: return out) · audit_block.py:68 (הסיומות הנסרקות: .py .js .ts .tsx .go .rs — אין .mjs ואין .dart)"
+      },
+      {
+        "claim": "אינו מכיר את המחולל: אפס אזכורים של machtzev, gen/ או spec",
+        "evidence": "ran: grep -cE 'machtzev|gen/|spec' audit_block.py ⇒ 0"
+      },
+      {
+        "claim": "audit_reply אינו בודק **איכות** אלא **נוכחות-שם**: תשובה שמונה את 10 השמות ואומרת 'לא נמצא' בכל אחד עוברת אותו במלואה",
+        "evidence": "audit_block.py:53 (n not in reply — התאמת-מחרוזת בלבד)"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅ — אין קורא בריפו הזה",
+        "how": "ran: grep -rn --exclude-dir=.git --exclude-dir=node_modules -F 'audit_block.py' . ⇒ 2 התאמות, שתיהן פרוזה־תיעוד (knowledge/assets/README.md:20 · knowledge/HANDOFF-2026-09-16.md:78). אפס import, spawn או exec."
+      },
+      {
+        "who": "האינדקס עצמו — מונה אותו כמנוע עם «4 ייצואים»",
+        "how": "ran: node machtzev/census/engine-index.mjs knowledge/assets/yeshiva-bench/audit_block.py ⇒ '🔧 עושה: 4 ייצואים (bug_reply, audit_reply, audit_file, cmd_audit) · 🔌 מחובר: 0 מייבאים'. ארבעת ה«ייצואים» אינם ניתנים לייבוא בפועל — ראה doesNot."
+      },
+      {
+        "who": "yeshiva/gate.py בריפו-האח (הצרכן ההיסטורי)",
+        "how": "ran: grep -n 'def <שם>' /home/user/yeshiva-engine/yeshiva/gate.py ⇒ bug_reply:606 · audit_reply:618 · audit_file:647 · cmd_audit:719 · _is_diag:597 · _is_audit:602. כלומר הגוש כבר הוטמע שם, וזה הקובץ שרץ."
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/deep-purity-scan.mjs:110-130 (רשימת-הגלאים של גלאי-הנכונות) — כקטלוג-גלאים, לא כקוד",
+      "gives": "**נכס-מחקר, לא מנוע** — אבל הנכס היחיד מהשישה שנושא תוכן-מנוע שאין לו מקבילה כאן. נמדד: `deep-purity-scan.mjs` מריץ היום 6 גלאי-נכונות — בליעה-שקטה · קבוע-קסם · רצף-מונה · חשבון-כסף-בצפים · תאריך-UTC · JSON.parse-לא-מוגן. שמונת הגלאים של audit_file אינם ביניהם, ו-**8 מתוך 10 שמות-השלבים אינם קיימים בשום מקום ב-machtzev/ או yeshiva/**; שתי ההתאמות היחידות («הא גופא קשיא» · «לא מצינו») יושבות שתיהן בתוך מחרוזת-מטרה ב-census/engine-purposes.data.json שמתארת קובץ בריפו-האח — לא מימוש. מה שזה נותן במדויק: ארבעה מהגלאים ניתנים להסבה ל-TypeScript-AST שכבר טעון ב-deep-purity-scan (`lib-ts.mjs`) בלי שום שפה חדשה — «תיעוד אומר returns ואין return», «שם get_/is_ והגוף כותב», «שרשרת if ≥3 בלי else», «and/or מעורבים בלי סוגריים». ההסבה היא עבודת-גל, לא מיפוי, ואינה נעשית כאן. ⚠️ **אל תחבר את הקובץ עצמו**: הוא אינו ניתן לייבוא (0 imports, 10 שמות חופשיים), הוא פייתון בריפו של mjs/dart, והגרסה החיה שלו כבר רצה ב-yeshiva-engine."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 ולא 3 — אינו מחולל ואינו נוגע בפליטה; 2 ולא 1 — הוא היחיד מהשישה שמצביע על פער **נמדד** בשער שכבר רץ במשטרה. §22 קובע «אפס-באגים, אפס-תקלות» כרצפת-קבלה, ו-HANDOFF פריט-1 מודד 37 מסכים שאינם מתרנדרים; שמונת הגלאים כאן הם בדיוק המחלקה שתופסת כאלה לפני הפליטה. הניקוד מתייחס לתוכן (קטלוג-הגלאים), לא לקובץ — הקובץ עצמו אינו בר-הרצה."
+    },
+    "evidence": [
+      "read: knowledge/assets/yeshiva-bench/audit_block.py:L1-L171 (cat -n, כל הקובץ)",
+      "ran: python3 ast (free-name analysis) ⇒ undefined: DIAG_WORDS, Path, SKIP_DIRS, UNTESTED_SKIP, _kv_args, _load, _test_files, ast, re, subprocess",
+      "ran: python3 ast (top-level spans) ⇒ BUG_STEPS=8 (L3-12) · AUDIT_STEPS=10 (L13-24) · 7 defs",
+      "ran: python3 difflib מול /home/user/yeshiva-engine/yeshiva/gate.py @598f0d82 ⇒ identical=10 differs=2 absent_upstream=0",
+      "ran: grep -n 'def …' /home/user/yeshiva-engine/yeshiva/gate.py ⇒ כל 6 הפונקציות קיימות (597, 602, 606, 618, 647, 719)",
+      "ran: grep -oP \"kind: '\\K[^']+\" machtzev/deep-purity-scan.mjs | sort -u ⇒ 6 גלאים: JSON.parse-לא-מוגן, בליעה-שקטה, חשבון-כסף-בצפים, קבוע-קסם, רצף-מונה, תאריך-UTC",
+      "ran: grep -rl '<שם-שלב>' machtzev/ yeshiva/ עבור כל 10 השמות ⇒ 8 ריקים; 2 רק ב-machtzev/census/engine-purposes.data.json (מחרוזת-מטרה על yeshiva-engine/tests/test_gate.py)",
+      "ran: grep -rn -F 'audit_block.py' . ⇒ 2 התאמות, שתיהן תיעוד"
+    ]
+  },
+  {
+    "file": "knowledge/assets/yeshiva-bench/rules3.py",
+    "lang": "py",
+    "lines": 74,
+    "summary": "גוש-טלאי ראשון מהמדידה על מודל-חלש: שלושה שערים על תשובת-סוכן — «ומכל מקום» (שאלת ולא נתת צעד), «כלשון השואל» (שאלה בעברית שנענתה באנגלית), «אין מערבין» (פיגום-מטא בתוך התוצר).",
+    "does": [
+      {
+        "claim": "מגדיר את הלקח המרכזי בכותרת כהצהרה מפורשת: «הכללים כתובים למודל חזק שמבין רמז; מודל חלש מבצע מילולית. אז הרמז נעשה שער»",
+        "evidence": "rules3.py:1-3 (הערת-הפתיחה)"
+      },
+      {
+        "claim": "umikol_makom נדלק בשני תנאים חלופיים — ≥2 שורות שמסתיימות ב-'?' **או** מרקר-חסימה — ואז דורש שורה אחת שאינה שאלה ובה סימן-צעד או שורה-תחתונה",
+        "evidence": "rules3.py:25-34 (qs = sum(1 for l in lines if l.strip().endswith('?')) … if qs < 2 and not any(m in low for m in BLOCKING_MARKERS): return None)"
+      },
+      {
+        "claim": "BLOCKING_MARKERS מונה 18 ניסוחים דו-לשוניים של «אי אפשר לענות עד ש…», חצי עברית חצי אנגלית",
+        "evidence": "rules3.py:4-6 · ran: python3 ast ⇒ BLOCKING_MARKERS = 18 items"
+      },
+      {
+        "claim": "kelashon_hashoel מכריע לפי **יחס אותיות** ולא לפי גילוי-שפה: דורש ≥10 אותיות עבריות בשאלה ו-ph ≥ 2*pl, ואז נדלק אם בתשובה th < tl ו-th+tl ≥ 40",
+        "evidence": "rules3.py:40-46 (ph, pl = len(HEB_RE.findall(pp)), len(LAT_RE.findall(pp)) … if ph < 10 or ph < 2 * pl: return None)"
+      },
+      {
+        "claim": "_prose מסיר קוד, כתובות ומזהים לפני ספירת-האותיות — כדי ששמות-משתנים לטיניים בתשובה עברית לא ייחשבו 'אנגלית'",
+        "evidence": "rules3.py:17-19 (return IDENT_RE.sub(' ', CODE_RE.sub(' ', text))) · CODE_RE :14"
+      },
+      {
+        "claim": "ein_mearvin מחזיר **רשימה** של כל התפיסות (לא בוליאני), משתי משפחות: META_RE על תחילת-שורה ו-META_PHRASES כתת-מחרוזת",
+        "evidence": "rules3.py:52-55 (found = [m.group(0).strip() for m in META_RE.finditer(text)] … found += [p for p in META_PHRASES if p in low])"
+      },
+      {
+        "claim": "deliverable_checks מחיל את שלושת השערים **רק על קובץ-תוצר טקסטואלי** (md/txt/rst) ולא ריק, בנימוק «שם התוצר *הוא* התשובה»",
+        "evidence": "rules3.py:58-61 (if not re.search(r\"\\.(md|txt|rst)$\", path.lower()) or not content.strip(): return [])"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו מודול.** אין בו שורת import אחת, ו-3 שמות חופשיים אינם מוגדרים — כולל `re` שהקובץ משתמש בו בשורה 9",
+        "evidence": "ran: python3 ast ⇒ undefined free names: ['BOTTOM_LINE', 'IDENT_RE', 're'] · ran: grep -c '^import\\|^from' rules3.py ⇒ 0"
+      },
+      {
+        "claim": "כל 12 ההגדרות ברמה-העליונה כבר נחתו ב-yeshiva/gate.py: 7 זהות בייט-לבייט, 5 שונות, 0 חסרות",
+        "evidence": "ran: python3 difflib מול gate.py @598f0d82 ⇒ 'rules3.py: identical=7 differs=5 absent_upstream=0' (META_RE·META_PHRASES·umikol_makom·ein_mearvin·deliverable_checks)"
+      },
+      {
+        "claim": "ההפרש מראה שהנכס הוא הטיוטה: הגרסה שנחתה מוסיפה ל-umikol_makom דילוג על שורה מותנית («אם/once…» אינה צעד-עכשיו), ומרחיבה את deliverable_checks מ-3 שערים ל-**10** (מוסיפה היכי דמי · כל המוסיף גורע · שיעור · ואם אי אפשר · כיצד · לכתחילה ובדיעבד · ואלו הן)",
+        "evidence": "ran: difflib rules3.py::umikol_makom ⇒ upstream מוסיף 'if not s or s.endswith(\"?\") or s.lstrip(\"*#-> \").startswith(CONDITIONAL): continue' · difflib rules3.py::deliverable_checks ⇒ asset=15L upstream=25L, 7 שערים נוספים"
+      },
+      {
+        "claim": "אינו בודק נכונות — רק **צורה**: תשובה שגויה לחלוטין שיש בה משפט-צעד אחד שאינו שאלה עוברת את umikol_makom",
+        "evidence": "rules3.py:30-33 (התנאי היחיד הוא נוכחות סימן-צעד בשורה שאינה שאלה)"
+      },
+      {
+        "claim": "אינו נוגע בקוד, בקבצים או ב-git: הוא מקבל מחרוזות ומחזיר מחרוזות. אפס I/O",
+        "evidence": "ran: grep -cE 'open\\(|subprocess|Path\\(|os\\.' rules3.py ⇒ 0"
+      },
+      {
+        "claim": "אינו מכיר את המחולל: אפס machtzev/gen/spec",
+        "evidence": "ran: grep -cE 'machtzev|gen/|spec' rules3.py ⇒ 0"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅ — אין קורא בריפו הזה",
+        "how": "ran: grep -rn -F 'rules3.py' . ⇒ התאמה אחת בלבד, פרוזה-תיעוד (knowledge/assets/README.md:17). אפס import/spawn/exec."
+      },
+      {
+        "who": "yeshiva/gate.py בריפו-האח",
+        "how": "ran: grep -n 'def …' /home/user/yeshiva-engine/yeshiva/gate.py ⇒ _prose:759 · umikol_makom:764 · kelashon_hashoel:781 · ein_mearvin:794 · deliverable_checks:805 — הגוש כבר שם."
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "**נכס-מחקר, לא מנוע.** הנושא שלו הוא *תשובת-סוכן בפרוזה*, ולריפו הזה אין צרכן כזה: נמדד — machtzev/gates.tsv מונה 57 שערים ואף אחד מהם אינו שופט פרוזה (grep על 'טקסט|נוסח|prose|vague|מעורפל' ⇒ 0 שורות). השער הישיבתי שכן קיים כאן, yeshiva/read.mjs, שופט **ספק מול פירוק** — מסמכים מובנים — לא תשובה. ⚠️ **מלכודת-שם שנמדדה ונשללה:** ל-read.mjs יש מהלך בשם «אין מערבין», אותו שם כמו rules3.ein_mearvin, ו**אינו אותו כלל**: כאן הוא תופס פיגום-מטא בתוצר-טקסט («הבקשה:», «ביצוע: ✅»), ושם הוא תופס כותרת-דוגמה שהפכה לשורת-תוכן בספק (read.mjs:121-122, HEADING_ONLY_RE). שם זהה, נושא אחר — לחבר לפי השם היה מייצר בדיוק את באג-ההתאמה-לפי-שם ש-CLAUDE.md מזהיר מפניו («שמונה באגים בגלאי-האינדקס… התאמה לפי שם/מחרוזת במקום לפי המקור המוצהר»). הערך האמיתי של הקובץ הוא הלקח בשורות 1-3, והוא כבר מצוטט ב-knowledge/assets/README.md:17."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 ולא 0 — הלקח «הרמז נעשה שער» הוא בדיוק המנגנון ש-§22 דורש (רצפת-קבלה נאכפת, לא שאיפה), והוא מנוסח כאן בחדות שאין לה מקבילה בריפו. 1 ולא 2 — הקוד עצמו מת כאן פעמיים: אינו בר-ייבוא, והגרסה החיה שלו כבר רצה בריפו-האח עם 7 שערים יותר. לא מקרב את §22 בשום שורת-קוד, רק בשורת-תיעוד."
+    },
+    "evidence": [
+      "read: knowledge/assets/yeshiva-bench/rules3.py:L1-L74 (cat -n, כל הקובץ)",
+      "ran: python3 ast (free-name analysis) ⇒ undefined: BOTTOM_LINE, IDENT_RE, re",
+      "ran: python3 difflib מול gate.py @598f0d82 ⇒ identical=7 differs=5 absent_upstream=0",
+      "ran: difflib על umikol_makom ו-deliverable_checks ⇒ הכיוון הוא upstream-עשיר-יותר (15L⇒25L)",
+      "ran: grep -rn -F 'rules3.py' . ⇒ התאמה אחת (README.md:17)",
+      "ran: grep -iE 'טקסט|נוסח|prose|vague|מעורפל' machtzev/gates.tsv ⇒ 0 שורות",
+      "read: yeshiva/read.mjs:L121-L122 · L142 (ORDER — 7 מהלכים, ובהם «אין מערבין» בנושא אחר)"
+    ]
+  },
+  {
+    "file": "knowledge/assets/yeshiva-bench/rules4.py",
+    "lang": "py",
+    "lines": 59,
+    "summary": "גוש-טלאי שני: אורך-תשובה כשער מספרי (250 מילים · 120 ב«בקצרה»), סימטריה באבחון-בלי-נתונים (שאלה + צעד + בלי ודאות), והנחיה שכל חסימה תיאמר לסוכן בגוף-שני.",
+    "does": [
+      {
+        "claim": "קובע שני ספים מספריים מפורשים: MAX_WORDS=250 ו-MAX_WORDS_BRIEF=120",
+        "evidence": "rules4.py:5 (MAX_WORDS, MAX_WORDS_BRIEF = 250, 120)"
+      },
+      {
+        "claim": "kol_hamosif בוחר סף לפי **הבקשה** ולא לפי התשובה: DETAIL_MARKERS מבטלים את הגבול כליל, BRIEF_MARKERS מורידים ל-120, ברירת-מחדל 250",
+        "evidence": "rules4.py:25-27 (if any(m in p for m in DETAIL_MARKERS): return None · limit = MAX_WORDS_BRIEF if any(m in p for m in BRIEF_MARKERS) else MAX_WORDS)"
+      },
+      {
+        "claim": "הספירה היא על פרוזה בלבד — גושי-קוד ```…``` מוסרים לפני split()",
+        "evidence": "rules4.py:28-29 (prose = re.sub(r\"```.*?```\", \" \", text, flags=re.S); n = len(prose.split()))"
+      },
+      {
+        "claim": "_tell מוסיף לכל הודעת-חסימה נספח קבוע שמפנה אותה לסוכן בגוף-שני — «ההודעה הזאת אליך, הסוכן — לא למשתמש. אל תבקש ממנו לעקוף»",
+        "evidence": "rules4.py:9 (AGENT_NOTE) · rules4.py:12-14 (sys.stderr.write(msg.rstrip('\\n') + AGENT_NOTE))"
+      },
+      {
+        "claim": "הסיבה לכך מתועדת כמדידה, לא כהעדפה: «מודל חלש קרא 'יש להריץ' כהודעת מערכת למישהו אחר וביקש מהמשתמש לעקוף»",
+        "evidence": "rules4.py:13 (docstring של _tell)"
+      },
+      {
+        "claim": "_is_open_diag מגדיר 'אבחון בלי נתונים' בשלושה תנאים בו-זמנית: מילת-אבחון · DATA_RE לא נמצא (אין traceback/קוד/מספר-תלת-ספרתי/הזחה) · אורך-הבקשה < 500",
+        "evidence": "rules4.py:35-38 (return (any(...) or any(...)) and not DATA_RE.search(prompt) and len(prompt) < 500) · DATA_RE :7"
+      },
+      {
+        "claim": "heichi_dami אוסף עד שלושה חוסרים ומחזיר None אם הרשימה ריקה — כלומר הוא שער-סימטריה: דורש גם שאלה **וגם** צעד, ואוסר ודאות בלי נתונים",
+        "evidence": "rules4.py:48-57 (missing = [] … return ('אבחון בלי נתונים — היכי דמי: חסר ' + '; '.join(missing)) if missing else None)"
+      },
+      {
+        "claim": "הוא מצהיר במפורש שהוא הצד-הנגדי של rules3: «השער 'ומכל מקום' דחף מודל חלש מארבע שאלות ואפס צעדים לשישה צעדים ואפס שאלות. הכלל הזה הוא הצד השני»",
+        "evidence": "rules4.py:42-43 (docstring של heichi_dami)"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו מודול.** אפס imports, ו-6 שמות חופשיים אינם מוגדרים — כולל `re` ו-`sys` שהקובץ קורא להם בשורות 7 ו-14",
+        "evidence": "ran: python3 ast ⇒ undefined free names: ['BOTTOM_LINE', 'CONDITIONAL', 'DIAG_WORDS', 'STEP_MARKERS', 're', 'sys'] · ran: grep -c '^import\\|^from' rules4.py ⇒ 0"
+      },
+      {
+        "claim": "כל 12 ההגדרות כבר נחתו ב-yeshiva/gate.py: 10 זהות בייט-לבייט, 2 שונות, 0 חסרות",
+        "evidence": "ran: python3 difflib מול gate.py @598f0d82 ⇒ 'rules4.py: identical=10 differs=2 absent_upstream=0' (_is_open_diag · heichi_dami)"
+      },
+      {
+        "claim": "גם כאן הנכס הוא הטיוטה: הגרסה שנחתה מוסיפה ל-heichi_dami חוסר רביעי — «צד שני — 'יש אומרים'» (אחרי סיבה סבירה, אפשרות שנייה בשם)",
+        "evidence": "ran: difflib rules4.py::heichi_dami ⇒ upstream מוסיף 'if (sure or any(c in low for c in CAUSE_MARKERS)) and not any(a in low for a in ALT_MARKERS)' (asset=17L upstream=19L)"
+      },
+      {
+        "claim": "250 ו-120 אינם נמדדים משום מקום — אין בקובץ חישוב, התפלגות או הפניה למדגם שממנו נגזרו. הם קבועים שנקבעו",
+        "evidence": "rules4.py:5 (השמה ישירה, בלי מקור) · ran: grep -cE 'percentile|median|ממוצע|חציון|מדגם' rules4.py ⇒ 0"
+      },
+      {
+        "claim": "_is_text_task קובע 'משימת-טקסט' בשלילה בלבד — אם אף מילת-קוד לא מופיעה בבקשה. בקשה ספרותית שמזכירה את המילה 'קובץ' יוצאת מהשער",
+        "evidence": "rules4.py:17-19 (return not any(w in p for w in CODE_WORDS)) · CODE_WORDS :4"
+      },
+      {
+        "claim": "אינו מכיר את המחולל ואינו נוגע ב-I/O מלבד כתיבה ל-stderr",
+        "evidence": "ran: grep -cE 'machtzev|gen/|spec' rules4.py ⇒ 0 · ran: grep -n 'open(\\|subprocess\\|Path(' rules4.py ⇒ 0"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅ — אין קורא בריפו הזה",
+        "how": "ran: grep -rn -F 'rules4.py' . ⇒ התאמה אחת בלבד, פרוזה-תיעוד (knowledge/assets/README.md:18)."
+      },
+      {
+        "who": "yeshiva/gate.py בריפו-האח",
+        "how": "ran: grep -n 'def …' /home/user/yeshiva-engine/yeshiva/gate.py ⇒ _tell:843 · _is_text_task:848 · kol_hamosif:853 · _is_open_diag:866 · heichi_dami:874."
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "**נכס-מחקר, לא מנוע** — ומהשישה, זה בעל הערך-המועבר הנמוך ביותר לריפו הזה. נושאו הוא אורך ונימה של תשובת-סוכן; אין כאן צרכן (57 שערים, אפס שופטי-פרוזה — נמדד). שני חלקים כן ראויים לציון ככתב, לא ככבל: (א) AGENT_NOTE (:9) מנסח כלל-הפעלה שאין לו מקבילה כתובה כאן — «חסימה נאמרת לסוכן, לא למשתמש»; ‏machtzev/VERIFY-LAWS.md:58 (D4 «בלי ציוץ, בלי תירוץ») נוגע בשוליו אך אינו אומר את זה. (ב) הזוג rules3.umikol_makom ↔ rules4.heichi_dami הוא הדגמה נקייה של שער-ושער-נגדי — כלל שדוחף לכיוון אחד זקוק לבלם; זה דפוס-תכן שימושי לשערי-המשטרה, לא קוד להעביר. שני הספים (250/120) **אינם ניתנים להעברה**: הם לא נגזרו ממדידה (נמדד: אפס חישוב בקובץ)."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 ולא 0 — דפוס «שער וְשער-נגדי» ו-AGENT_NOTE הם תובנות-תכן ישימות לשערי-המשטרה, שהן התשתית שעליה §22 נשען. 1 ולא 2 — אין כאן שום מנגנון שניתן לחווט: אינו בר-ייבוא, נושאו אינו בריפו, וספיו שרירותיים. הוא הנכס הדק ביותר מבין הארבעה."
+    },
+    "evidence": [
+      "read: knowledge/assets/yeshiva-bench/rules4.py:L1-L59 (cat -n, כל הקובץ)",
+      "ran: python3 ast (free-name analysis) ⇒ undefined: BOTTOM_LINE, CONDITIONAL, DIAG_WORDS, STEP_MARKERS, re, sys",
+      "ran: python3 difflib מול gate.py @598f0d82 ⇒ identical=10 differs=2 absent_upstream=0",
+      "ran: difflib על heichi_dami ⇒ upstream מוסיף את חוסר «יש אומרים» (17L⇒19L)",
+      "ran: grep -cE 'percentile|median|ממוצע|חציון|מדגם' rules4.py ⇒ 0 (הספים לא נגזרו ממדידה)",
+      "ran: grep -rn -F 'rules4.py' . ⇒ התאמה אחת (README.md:18)",
+      "read: machtzev/VERIFY-LAWS.md:L58 (D4) — ההשוואה ל-AGENT_NOTE"
+    ]
+  },
+  {
+    "file": "knowledge/assets/yeshiva-bench/rules5.py",
+    "lang": "py",
+    "lines": 83,
+    "summary": "גוש-טלאי שלישי, «מהפוסקים»: חמישה שערים על **סיום** התשובה — שיעור (כמות בלי מספר) · ואם אי אפשר (המלצה בלי חלופה) · כיצד (כלל בלי דוגמה) · בדיעבד (נשאל על מה שקרה, נענה על מה שהיה צריך) · ואלו הן (רשימה שנגמרת ב«וכו׳»).",
+    "does": [
+      {
+        "claim": "מנסח את עקרון-הארגון בשורה אחת: «הפוסק לא חושב טוב יותר מהגמרא, הוא כותב אחרת: כלל, תחום, דוגמה, שיעור, חלופה, ושותק»",
+        "evidence": "rules5.py:2 (הערת-הפתיחה)"
+      },
+      {
+        "claim": "shiur דורש צירוף של שלושה תנאים באותו משפט כדי להידלק: מילה-מעורפלת מ-VAGUE **וגם** מונח-מדיד מ-MEASURED **וגם** היעדר מספר לפי NUM_RE — כלומר «הרבה» לבד אינו הפרה, «הרבה עומס» בלי מספר כן",
+        "evidence": "rules5.py:32-35 (for sent in re.split(r\"[.!?\\n]+\", prose): if any(v in s for v in VAGUE) and any(m in s for m in MEASURED) and not NUM_RE.search(sent))"
+      },
+      {
+        "claim": "NUM_RE סופר כ'מספר' גם ביטויי-כמות עבריים ולא רק ספרות — אחוז · כפול · פי X · מחצית · שליש · רבע · יחידות-זמן",
+        "evidence": "rules5.py:7 (NUM_RE = re.compile(r\"\\d|אחוז|%|כפול|פי \\S|מחצית|שליש|רבע|שעה|שעתיים|יום אחד|יומיים|שבוע|חודש|שנה\"))"
+      },
+      {
+        "claim": "veim_i_efshar נדלק רק אחרי שזוהתה המלצה בפועל, ומכבה את עצמו אם כבר יש מילת-חלופה מתוך 13 ב-FALLBACK",
+        "evidence": "rules5.py:46-49 (if not re.search(DECIDES if ... , low): return None · if any(f in low for f in FALLBACK): return None)"
+      },
+      {
+        "claim": "keitzad מחפש כלל מוחלט (RULE_MARKERS) ומכבה את עצמו אם יש מילת-דוגמה **או כל ספרה** — כלומר מספר נחשב דוגמה קונקרטית",
+        "evidence": "rules5.py:58-61 (if not any(r in low for r in RULE_MARKERS): return None · if any(e in low for e in EXAMPLE_MARKERS) or re.search(r\"\\d\", low): return None)"
+      },
+      {
+        "claim": "bediavad מזהה «כבר קרה» בבקשה דרך PAST_RE (לשון-עבר עברית מוטה + 'already' + 'N days ago'), ומכבה את עצמו אם התשובה מצטטת מספר מהבקשה",
+        "evidence": "rules5.py:12 (PAST_RE) · rules5.py:70-72 (nums = set(re.findall(r\"\\d+\", prompt)) … or (nums and any(n in reply for n in nums)))"
+      },
+      {
+        "claim": "ve_elu_hen הוא היחיד מהחמישה שאינו תלוי בבקשה כלל — הוא בודק את הטקסט בלבד, ומחפש **פריט-רשימה** שנגמר ב«וכו׳/ועוד/etc/…»",
+        "evidence": "rules5.py:76-81 (def ve_elu_hen(text: str)) · OPEN_LIST_RE :15 (עוגן לתחילת-פריט: (?:[-*•]|\\d+[.)]))"
+      },
+      {
+        "claim": "כל חמשת השערים מוגדרים במפורש כנאכפים בסיום ולא נאמרים מראש — «מודל חלש מכניס דרישות-פתיחה לתוצר»",
+        "evidence": "rules5.py:2-3 (הערת-הפתיחה)"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו מודול.** אפס imports, ו-6 שמות חופשיים אינם מוגדרים — כולל `re`, ושתי פונקציות (`_is_open_diag` · `_is_text_task`) שיושבות ב-rules4",
+        "evidence": "ran: python3 ast ⇒ undefined free names: ['DECIDES', 'DECISION_WORDS', 'DESIGN_WORDS', '_is_open_diag', '_is_text_task', 're']"
+      },
+      {
+        "claim": "הקובץ **מודה בעצמו שאינו יודע לאיזה מארח הוא נדבק**: veim_i_efshar בודק `if \"DECIDES\" in globals()` ונופל לרגקס-ליטרלי אם לא. זו חתימה של טיוטה-להדבקה, לא של מודול",
+        "evidence": "rules5.py:46 (re.search(DECIDES if \"DECIDES\" in globals() else r\"ממליץ|מומלץ|עדיף|...\", low))"
+      },
+      {
+        "claim": "כל 17 ההגדרות כבר נחתו ב-yeshiva/gate.py: 14 זהות בייט-לבייט, 3 שונות, 0 חסרות — והגרסה שנחתה ניקתה בדיוק את פשרת-ה-globals ל-RECOMMEND_RE",
+        "evidence": "ran: python3 difflib מול gate.py @598f0d82 ⇒ 'rules5.py: identical=14 differs=3 absent_upstream=0' · difflib rules5.py::veim_i_efshar ⇒ upstream: 'if not RECOMMEND_RE.search(low)'"
+      },
+      {
+        "claim": "shiur אינו בודק נכונות של מספר — רק נוכחות. «תוך 5 שניות» כשהאמת 5 דקות עובר במלואו",
+        "evidence": "rules5.py:34 (not NUM_RE.search(sent) — נוכחות בלבד)"
+      },
+      {
+        "claim": "ארבעה מהחמישה מותנים בסיווג-הבקשה (_decision_or_design או _is_open_diag), כלומר על בקשה שלא סווגה הם שקטים לגמרי — רק ve_elu_hen פועל תמיד",
+        "evidence": "rules5.py:28 · :43 · :55 · :67 (בדיקת-סיווג בראש כל פונקציה) מול :76-78 (ve_elu_hen — בלי סיווג)"
+      },
+      {
+        "claim": "אינו מכיר את המחולל ואינו נוגע בקבצים",
+        "evidence": "ran: grep -cE 'machtzev|gen/|spec' rules5.py ⇒ 0 · ran: grep -cE 'open\\(|subprocess|Path\\(' rules5.py ⇒ 0"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅ — אין קורא בריפו הזה",
+        "how": "ran: grep -rn -F 'rules5.py' . ⇒ 2 התאמות, שתיהן פרוזה-תיעוד (knowledge/assets/README.md:19 · knowledge/HANDOFF-2026-09-16.md:76)."
+      },
+      {
+        "who": "yeshiva/gate.py בריפו-האח",
+        "how": "ran: grep -n 'def …' /home/user/yeshiva-engine/yeshiva/gate.py ⇒ shiur:921 · veim_i_efshar:936 · keitzad:948 · bediavad:960 · ve_elu_hen:971."
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/VERIFY-LAWS.md:21 (V2 «ספור, אל תעריך») — כניסוח-אכיפה, לא ככבל",
+      "gives": "**נכס-מחקר, לא מנוע** — אך הנכס בעל ההתאמה-הרעיונית ההדוקה ביותר לחוקת-הריפו. נמדד: VERIFY-LAWS.md:21 אומר «מספר בטענה = grep -c / אורך-מערך / פלט-כלי. לא אומדן», ו-rules5.shiur:32-35 הוא **אותו כלל בדיוק כשהוא בר-הרצה** — VAGUE מול MEASURED מול NUM_RE. ההבדל: חוק-הריפו הוא פרוזה שהסוכן אמור לקרוא, וכאן יש גלאי. מה שזה נותן במדויק: אם אי-פעם ייבנה שער שקורא דוחות (‏knowledge/CLOSED-*.md · ONE-STATUS.md) ומסמן «כמות בלי שיעור», זו התבנית המוכחת שממנה לגזור אותו. ⚠️ **אותה מלכודת-שם כמו ב-rules3, ונשללה באותה מדידה:** ל-yeshiva/read.mjs יש מהלך בשם «שיעור» ואינו אותו כלל — הוא תופס מספר שמופיע בפירוק ואינו מגיע לספק (read.mjs:95-104), כלומר **מספר שנשמט בין שני מסמכים**, ולא **כמות בלי מספר בפרוזה**. ואין לחבר את הקובץ: אינו בר-ייבוא, נשען על שתי פונקציות מ-rules4, והגרסה החיה כבר רצה בריפו-האח."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 ולא 2 — אינו נוגע בשום שורה בדרך ממשפט-עברי לאפליקציה; אף אחד מחמשת השערים אינו פועל על ספק, מסך או פלט-מחולל. 1 ולא 0 — הוא הופך חוק-ריפו קיים (VERIFY-LAWS V2) מפרוזה לגלאי בר-הרצה, ו-HANDOFF:76 מעיד שהכלל הזה נקנה שוב ביוקר בזמן שהקובץ היה בסקרצ׳פד. תרומתו ל-§22 היא במשמעת-הסוכן שבונה את המחולל, לא במחולל."
+    },
+    "evidence": [
+      "read: knowledge/assets/yeshiva-bench/rules5.py:L1-L83 (cat -n, כל הקובץ)",
+      "ran: python3 ast (free-name analysis) ⇒ undefined: DECIDES, DECISION_WORDS, DESIGN_WORDS, _is_open_diag, _is_text_task, re",
+      "ran: python3 difflib מול gate.py @598f0d82 ⇒ identical=14 differs=3 absent_upstream=0",
+      "ran: difflib על veim_i_efshar ⇒ upstream מחליף את פשרת-globals ב-RECOMMEND_RE",
+      "ran: grep -rn -F 'rules5.py' . ⇒ 2 התאמות (README.md:19 · HANDOFF-2026-09-16.md:76)",
+      "read: machtzev/VERIFY-LAWS.md:L21 (V2) — ההשוואה ל-shiur",
+      "read: yeshiva/read.mjs:L95-L104 (המהלך «שיעור» — נושא אחר, אותו שם)"
+    ]
+  },
+  {
+    "file": "knowledge/assets/yeshiva-bench/score_h3.sh",
+    "lang": "sh",
+    "lines": 12,
+    "summary": "מריץ את bench.score על 24 ענפי-ניסוי (12 משימות × with/without) בסבב-השלישי, מתייג 'round 3' ומודל haiku, ומדלג בהודעה על ענף חסר.",
+    "does": [
+      {
+        "claim": "מושך את כל ענפי exp/h3-* ב-refspec אחד לפני הלולאה, כך שכל הניקוד רץ מול תמונה אחת",
+        "evidence": "score_h3.sh:4 (git fetch -q origin '+refs/heads/exp/h3-*:refs/remotes/origin/exp/h3-*')"
+      },
+      {
+        "claim": "מקודד 12 זוגות «קיצור-ענף : מזהה-משימה» בשורה אחת, כי שם-הענף קצר משם-המשימה (db⇒db_choice · slow⇒slow_site · func⇒func_name · bugage⇒bug_age · audit⇒audit_shop)",
+        "evidence": "score_h3.sh:5 (for pair in db:db_choice slow:slow_site … audit:audit_shop) · פיצול ב-:6 (b=${pair%%:*}; t=${pair#*:})"
+      },
+      {
+        "claim": "כל 12 מזהי-המשימה קיימים בפועל ב-bench/tasks.py של הריפו-האח — הזוגות אינם מומצאים",
+        "evidence": "ran: grep -oP 'Task\\(\\s*\"\\K[a-z_]+' /home/user/yeshiva-engine/bench/tasks.py ⇒ 19 מזהים, ובהם כל 12: audit_shop bug_contacts bug_age bug_slug db_choice slow_site func_name apology ac_message refund meeting estimate"
+      },
+      {
+        "claim": "מאמת קיום-ענף לפני הניקוד ומדפיס «אין ענף» במקום להיכשל — ריצה חלקית מותרת ומסומנת",
+        "evidence": "score_h3.sh:8-10 (if git rev-parse -q --verify \"origin/exp/h3-$b-$a\" >/dev/null; then … else echo \"$t [$a]: אין ענף\"; fi)"
+      },
+      {
+        "claim": "שני הדגלים שהוא מעביר — --model ו---note — קיימים ב-argparse של bench/score.py, כלומר הסקריפט תואם ל-CLI בפועל",
+        "evidence": "ran: grep -n 'add_argument' /home/user/yeshiva-engine/bench/score.py ⇒ score.py:54 (--note, default=\"\") · score.py:55 (--model, default=\"fable\")"
+      },
+      {
+        "claim": "**הוא כבר רץ, והתוצאה נחתה**: ל-bench/results.jsonl בריפו-האח יש בדיוק 23 שורות עם note='round 3', והן מפנות לענפי origin/exp/h3-*",
+        "evidence": "ran: python3 על /home/user/yeshiva-engine/bench/results.jsonl ⇒ 'round 3': 23 (מתוך 95 שורות) · כל 23 עם branch=origin/exp/h3-*"
+      },
+      {
+        "claim": "התוצאה שהוא הפיק היא הנתון שבגללו הנכס נשמר: 13 hit=True מול 10 hit=False ב-23 השורות",
+        "evidence": "ran: python3 ספירת hit על 23 שורות round-3 ⇒ True=13, False=10"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו רץ בריפו הזה ואינו יכול**: שורה 3 עוברת ל-/home/user/yeshiva-engine-repo, נתיב שאינו קיים. `cd` כושל בלי `set -e` והלולאה תמשיך בתיקייה הנוכחית",
+        "evidence": "ran: ls -d /home/user/yeshiva-engine-repo ⇒ 'No such file or directory' · score_h3.sh:1-3 (אין set -e ואין set -o pipefail)"
+      },
+      {
+        "claim": "אינו מייצר את הענפים ואינו מריץ סוכן — הוא מנקד ענפים שכבר נדחפו. כל הקלט שלו הוא תוצר של תהליך אחר",
+        "evidence": "score_h3.sh:4-9 (git fetch · git rev-parse · python -m bench.score בלבד — אפס יצירת-ענף)"
+      },
+      {
+        "claim": "הלולאה מכסה 24 צירופים אך רק 22 קיימים בפועל, ושתי הדילוגות **אינן שוות**: ל-ac_message אין ענף without כלל, ואילו ל-meeting יש ענף בשם exp/h3-meeting-without2 שהתבנית של הסקריפט אינה תופסת",
+        "evidence": "ran: git ls-remote --heads origin 'exp/h3-*' ⇒ 23 ענפים; אין exp/h3-ac-without; קיים exp/h3-meeting-without2 (לא -without)"
+      },
+      {
+        "claim": "לכן 23 השורות שנחתו אינן כולן פרי-הסקריפט: 22 תואמות ללולאה, והשורה meeting/without מפנה ל-origin/exp/h3-meeting-without2 — כלומר נוקדה ידנית מחוצה לו",
+        "evidence": "ran: python3 על results.jsonl ⇒ 'meeting without origin/exp/h3-meeting-without2' · התבנית ב-score_h3.sh:8 היא \"origin/exp/h3-$b-$a\" ואינה מייצרת '…-without2'"
+      },
+      {
+        "claim": "אינו מסכם ואינו משווה — הוא רק כותב שורות; ההשוואה with מול without נעשית ב-bench/report.py, שהוא אינו קורא לו",
+        "evidence": "score_h3.sh:1-12 (אפס אזכור של report) · ran: grep -c 'report' score_h3.sh ⇒ 0"
+      },
+      {
+        "claim": "אינו שמור בריפו-האח: אינו מופיע ב-git ls-files שם, כלומר העותק כאן הוא היחיד",
+        "evidence": "ran: git -C /home/user/yeshiva-engine ls-files '*.sh' ⇒ 'harness/run.sh' בלבד · git ls-files | grep -iE 'score_h3|wait_h|h3' ⇒ ריק"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅ — אין קורא בריפו הזה",
+        "how": "ran: grep -rn -F 'score_h3.sh' . ⇒ התאמה אחת בלבד, פרוזה-תיעוד (knowledge/assets/README.md:15)."
+      },
+      {
+        "who": "∅ — גם לא בריפו-האח",
+        "how": "ran: git -C /home/user/yeshiva-engine ls-files | grep -iE 'score_h3|h3' ⇒ ריק. הסקריפט מעולם לא נשמר שם; העותק הזה הוא היחיד שקיים."
+      },
+      {
+        "who": "bench/results.jsonl בריפו-האח (התוצר, לא קורא)",
+        "how": "23 שורות note='round 3' — ran: python3 json.loads על כל 95 השורות. זה הכיוון היחיד שבו הסקריפט מחובר למשהו: הוא ייצר פלט שנשמר."
+      }
+    ],
+    "connectAt": {
+      "point": "∅ ככבל · knowledge/HANDOFF-2026-09-16.md:‏פריט-3 (87 מודולי-הישיבתי מנותקים) כשיטת-הכרעה",
+      "gives": "**נכס-מחקר, לא מנוע** — אבל מהסוג שיש לו תפקיד פתוח. HANDOFF מדרג את «87 מודולי-הישיבתי מנותקים (3/90)» כפריט-הראשון, ו-CLAUDE.md מודד «מהמנוע הישיבתי מחוברים 3 מתוך 90». השאלה שחוסמת את הפריט הזה היא האם חיבור 87 המודולים משתלם, וזו בדיוק השאלה שתוכנית-הניסוי הזו עונה עליה: 12 משימות × with/without × מודל. מה שזה נותן במדויק: **תבנית-ההשוואה**, לא הקוד — 12 זוגות משימה/ענף ותיוג round שמאפשר להשוות סבבים. המספרים שכבר יש: 13/23 פגיעה בסבב-3 (ran). ⚠️ אין לחבר את הסקריפט עצמו: הוא cd לנתיב שאינו קיים, בלי set -e, והוא מפעיל `python -m bench.score` שאינו קיים בריפו הזה. ההרצה-מחדש, אם תוכרע, שייכת לריפו-האח ודורשת ענפי-ניסוי חדשים — עבודת-גל, לא מיפוי."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 ולא 0 — הוא הרתמה היחידה ששרדה לשאלה שחוסמת את פריט-1 ב-HANDOFF, וכבר הפיק 23 מדידות שנחתו; §22 דורש רצפת-קבלה נמדדת, וזה כלי-מדידה. 1 ולא 2 — 12 שורות bash שאינן רצות כאן, שכל ערכן הוא 12 זוגות-מחרוזת; הצינור האמיתי (bench/score.py) יושב בריפו אחר וכבר מופה שם, ו-2b-arena.json נתן לו 1. אינו מקרב שום שורה בדרך ממשפט לאפליקציה."
+    },
+    "evidence": [
+      "read: knowledge/assets/yeshiva-bench/score_h3.sh:L1-L12 (cat -n, כל הקובץ)",
+      "ran: ls -d /home/user/yeshiva-engine-repo ⇒ No such file or directory",
+      "ran: git -C /home/user/yeshiva-engine ls-remote --heads origin 'exp/h3-*' ⇒ 23 ענפים (אין ac-without; יש meeting-without2)",
+      "ran: python3 json.loads על /home/user/yeshiva-engine/bench/results.jsonl ⇒ 95 שורות · note 'round 3' = 23 · hit True=13 False=10",
+      "ran: grep -n 'add_argument' /home/user/yeshiva-engine/bench/score.py ⇒ --note :54 · --model :55 (הדגלים תואמים)",
+      "ran: grep -oP 'Task\\(\\s*\"\\K[a-z_]+' /home/user/yeshiva-engine/bench/tasks.py ⇒ 19 מזהים; כל 12 שבסקריפט קיימים",
+      "ran: git -C /home/user/yeshiva-engine ls-files '*.sh' ⇒ harness/run.sh בלבד",
+      "ran: grep -rn -F 'score_h3.sh' . ⇒ התאמה אחת (README.md:15)"
+    ]
+  },
+  {
+    "file": "knowledge/assets/yeshiva-bench/wait_h.sh",
+    "lang": "sh",
+    "lines": 11,
+    "summary": "לולאת-המתנה: מדגמת ls-remote עד 90 פעמים בהפרשי 20 שניות עד שמופיעים 16 ענפי exp/h-* (8 משימות × with/without), ואז מדפיסה אותם.",
+    "does": [
+      {
+        "claim": "מגדיר 8 משימות ומצפה ל-16 ענפים — 8 × with/without",
+        "evidence": "wait_h.sh:3 (want=\"db slow func apology ac refund meeting estimate\") · :6 (for t in $want; do for a in with without)"
+      },
+      {
+        "claim": "סופר בהתאמה **מדויקת** (grep -qx) ולא כתת-מחרוזת — כך ש-exp/h-db-with אינו נספר עבור exp/h-db-without",
+        "evidence": "wait_h.sh:6 (echo \"$have\" | grep -qx \"exp/h-$t-$a\")"
+      },
+      {
+        "claim": "שואל את השרת ולא את הדיסק: ls-remote בכל סבב, כלומר אינו תלוי ב-fetch מקומי",
+        "evidence": "wait_h.sh:5 (have=$(git ls-remote --heads origin 'exp/h-*' | awk '{print $2}' | sed 's#refs/heads/##'))"
+      },
+      {
+        "claim": "מדפיס חותמת-שעה ומונה בכל סבב ויוצא מוקדם בהגעה ל-16 — התקדמות נראית, לא המתנה אילמת",
+        "evidence": "wait_h.sh:7-8 (echo \"$(date +%T) $n/16\" · [ \"$n\" -ge 16 ] && break)"
+      },
+      {
+        "claim": "תקרת-ההמתנה מפורשת ומחושבת: 90 סבבים × 20 שניות = 30 דקות, ואז ממשיך בלי קשר",
+        "evidence": "wait_h.sh:4 (for i in $(seq 1 90)) · :9 (sleep 20)"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו רץ בריפו הזה**: שורה 2 עוברת ל-/home/user/yeshiva-engine-repo שאינו קיים, ואין set -e",
+        "evidence": "ran: ls -d /home/user/yeshiva-engine-repo ⇒ No such file or directory · wait_h.sh:1-2"
+      },
+      {
+        "claim": "**אינו הזוג של score_h3.sh** — הוא סבב מוקדם יותר: הוא ממתין ל-exp/h-* (8 משימות) בעוד score_h3 מנקד exp/h3-* (12 משימות). ארבע המשימות שנוספו בסבב-3 (bugcontacts · bugage · bugslug · audit) אינן ברשימת-ההמתנה",
+        "evidence": "wait_h.sh:3 (8 שמות) מול score_h3.sh:5 (12 זוגות) · ran: git ls-remote --heads origin 'exp/h-*' ⇒ 23 · 'exp/h3-*' ⇒ 23 — שתי משפחות-ענפים נפרדות"
+      },
+      {
+        "claim": "אינו מנקד, אינו משווה ואינו כותב דבר — הוא רק ממתין ומדפיס. אין לו פלט מתמשך",
+        "evidence": "wait_h.sh:1-11 (אפס כתיבה לקובץ; אפס קריאה ל-bench.score) · ran: grep -cE 'score|jsonl|>' wait_h.sh ⇒ 0"
+      },
+      {
+        "claim": "אינו מבחין בין «הענף טרם נוצר» ל«הענף לא ייווצר» — כישלון-סוכן נראה בדיוק כמו איטיות, עד שהתקרה נגמרת",
+        "evidence": "wait_h.sh:4-9 (התנאי היחיד הוא נוכחות-שם; אין בדיקת-סטטוס, שגיאה או timeout-פר-משימה)"
+      },
+      {
+        "claim": "השורה האחרונה מדפיסה את `$have` מהסבב האחרון שהוסתר בתוך הלולאה — כלומר את התמונה שלפני ה-break, לא רענון",
+        "evidence": "wait_h.sh:11 (echo \"$have\" | grep -E …) — $have נקבע לאחרונה ב-:5 בתוך הלולאה"
+      },
+      {
+        "claim": "בנוי על sleep-polling, שהוא בדיוק מה ש-CLAUDE.md אוסר על סוכני-הריפו הזה («אין sleep/polling; רשתות-ביטחון ב-send_later»)",
+        "evidence": "wait_h.sh:9 (sleep 20) · CLAUDE.md, «⚠️ אזהרות שנקנו ביוקר», שורת «אין sleep/polling»"
+      },
+      {
+        "claim": "אינו שמור בריפו-האח — העותק כאן הוא היחיד",
+        "evidence": "ran: git -C /home/user/yeshiva-engine ls-files '*.sh' ⇒ harness/run.sh בלבד"
+      }
+    ],
+    "callers": [
+      {
+        "who": "∅ — אין קורא בריפו הזה",
+        "how": "ran: grep -rn -F 'wait_h.sh' . ⇒ התאמה אחת בלבד, פרוזה-תיעוד (knowledge/assets/README.md:16)."
+      },
+      {
+        "who": "∅ — גם לא בריפו-האח, ואין לו תוצר שנשמר",
+        "how": "ran: git -C /home/user/yeshiva-engine ls-files | grep -i wait_h ⇒ ריק. בניגוד ל-score_h3.sh, לא נמצא שום ארטיפקט שהוא הפיק: הפלט שלו הוא stdout בלבד (wait_h.sh:7,11)."
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "**נכס-מחקר, והחלש שבשישה** — ולמעשה נכס-היסטורי בלבד. שלוש מדידות סוגרות אותו: (א) הוא מסבב מוקדם יותר מ-score_h3.sh — 8 משימות מול 12, ומשפחת-ענפים אחרת (exp/h-* מול exp/h3-*), כלומר גם בתוך תוכנית-הניסוי עצמה הוא כבר הוחלף; (ב) אין לו תוצר שנשמר בשום מקום, בניגוד ל-23 השורות של score_h3; (ג) המנגנון שלו — sleep-polling — אסור מפורשות על סוכני הריפו הזה לפי CLAUDE.md, כך שגם הרעיון אינו בר-אימוץ כאן. מה שנשאר הוא עדות היסטורית: כך נוהל סבב-2 של הניסוי. אין נקודת-חיבור, ואינני ממליץ לחפש אחת."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — אינו נוגע ב-§22 בשום כיוון. אינו מודד (אינו מנקד), אינו בונה, אינו מכיל כלל שניתן לאמץ, ותבנית-ההמתנה שלו אסורה בריפו הזה במפורש. גם ערכו כעדות מוגבל: הוא מתאר סבב שכבר הוחלף ע\"י score_h3.sh, ולא הותיר אף שורת-תוצאה. הניקוד תואם את הכיול ב-2b-arena.json, שם פיקסצ׳רים וקוד-רקע קיבלו 0."
+    },
+    "evidence": [
+      "read: knowledge/assets/yeshiva-bench/wait_h.sh:L1-L11 (cat -n, כל הקובץ)",
+      "ran: ls -d /home/user/yeshiva-engine-repo ⇒ No such file or directory",
+      "ran: git -C /home/user/yeshiva-engine ls-remote --heads origin 'exp/h-*' ⇒ 23 ענפים · 'exp/h3-*' ⇒ 23 ענפים (שתי משפחות נפרדות)",
+      "ran: git -C /home/user/yeshiva-engine ls-files '*.sh' ⇒ harness/run.sh בלבד (הסקריפט לא שמור שם)",
+      "ran: grep -rn -F 'wait_h.sh' . ⇒ התאמה אחת (README.md:16)",
+      "read: CLAUDE.md, «⚠️ אזהרות שנקנו ביוקר» — «אין sleep/polling»",
+      "השוואה: wait_h.sh:3 (8 משימות) מול score_h3.sh:5 (12 זוגות)"
+    ]
+  }
+]
