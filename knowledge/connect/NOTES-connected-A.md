@@ -122,6 +122,15 @@ node machtzev/generator/op-census.mjs --gate
      (baseline מחויב: total 1958 · zero 44 · ops 38)
 node machtzev/generator/gen-verify.mjs --gate
   ⇒ ⚪ מדולג — אין buildsmart. ls -d /home/user/buildsmart ⇒ No such file or directory
+node machtzev/generator/auto-logic.mjs --gate
+  ⇒ exit 0 · 30 פעולות-לוגיקה × 963 מנועים · הזהב הכי-טוב-בהוכחה 30/30
+     (מאותגר-בטקסט 9 · החלפות מוצעות 9 · **מוכחות 0** — אין buildsmart להוכיח בו)
+node machtzev/generator/behavior-plan.mjs --gate
+  ⇒ exit 0 · 43/43 צרכים ⇒ חלקיקים נבחרו-בהוכחה-בריצה (43 מוכחים · 1 בשרשרת) מ-963 מנועים
+GEN_OUT=<scratch> node machtzev/generator/behavior-compose.mjs
+  ⇒ 38 חלקיקים מוכחים ⇒ 60 התנהגויות (bh*) · diff מול הקובץ המחויב ⇒ **זהה ביט-לביט**
+node -e '…entity.interpret("צור ישות פרויקט עם שם*, תקציב, תאריך התחלה, פעיל, סטטוס{פתוח|סגור} | שלבים: …")'
+  ⇒ פרויקט · 5 שדות · 3 שלבים · 2 חוקים   (וממצא: «סטטוס{פתוח|סגור}» ⟨bool⟩ → AnimatedToggle)
 ls machtzev/generator/specs-ds/*.txt | wc -l   ⇒ 31
 ls machtzev/generator/peruks/ | wc -l          ⇒ 28
 grep -vc '^#' machtzev/gates.tsv               ⇒ 57 שערים
@@ -139,6 +148,9 @@ grep -rln "atlas.mjs'" --include=*.mjs machtzev | wc -l  ⇒ 8
   אותה מגבלה תחול על `goldenharness` · `appgen` · `balaganrun`.
 * **מנועים שכותבים לעץ לא הורצו.** לכל אחד כזה כתבתי «לא-נמדד» + הסיבה. מצב `--gate` הורץ
   היכן שקיים, כי הוא השוואה ולא כתיבה (אומת ב-`git status` אחרי כל ריצה).
+* **תגלית שימושית:** `root.mjs` חושף `GEN_OUT`, ולכן מנוע-פולט אפשר להריץ **בלי לגעת בעץ**
+  (‏`GEN_OUT=<tmp> node …`). כך הרצתי את `behavior-compose` וקיבלתי מדידה אמיתית **וגם**
+  אימות-זהות מול הקובץ המחויב. זה עובד רק למנועים שמשתמשים ב-`R.outDir()`.
 * **`atlas.json` · `gen-verify-report.json` · `ops-census-baseline.json` ודומיהם** הם תוצרים
   **מחויבים** — קראתי אותם כראיה על ריצה קודמת, לא כראיה שהרצתי. כתוב כך בכרטיסים.
 

@@ -283,6 +283,308 @@
   ]
  },
  {
+  "file": "machtzev/generator/auto-logic.mjs",
+  "lang": "mjs",
+  "lines": 177,
+  "capabilities": [
+   {
+    "cap": "**בורר מנוע-לוגיקה לכל פעולה מכל הקטלוג** — לכל פעולת-לוגיקה של מנוע-ההרכבה מדרג את כל מנועי-הלוגיקה באינדקס-האמת ומחזיר pick + top3 + מספר-מועמדים",
+    "evidence": "machtzev/generator/auto-logic.mjs:2-7,89-112"
+   },
+   {
+    "cap": "מדרג בארבעה ערוצים: (א) כשירות-חתימה (argc · טיפוסים · ret; dynamic תואם הכל) · (ב) הסכמת-טיפוסים (+1 לכל פרמטר מפורש-ושווה) · (ג) חפיפת-ייעוד משוקללת-idf בין הביקוש לכותרת-ה-doc · (ד) מוצא משותף (+1.5)",
+    "evidence": "machtzev/generator/auto-logic.mjs:85-87,98"
+   },
+   {
+    "cap": "בונה **ביקוש** מהצד של הזהב עצמו — הערות-ה-import של מודולי-הזהב + שמות-החלקיקים של אותה פעולה — ולא ממילון",
+    "evidence": "machtzev/generator/auto-logic.mjs:92-93,97"
+   },
+   {
+    "cap": "משתמש ב-idf כדי לנטרל בוילרפלייט: טוקן שמופיע בהרבה מנועים (אטום/חוזה/מוצא/טוהר) מקבל משקל אפסי",
+    "evidence": "machtzev/generator/auto-logic.mjs:37-39"
+   },
+   {
+    "cap": "מנרמל מורפולוגית באופן סטטיסטי — פיצול מורכבים ב-'-' והסרת אות-שימוש (ה/ו/ב/ל/מ/ש/כ) כשהשארית ≥3 — בלי מילון",
+    "evidence": "machtzev/generator/auto-logic.mjs:24-26"
+   },
+   {
+    "cap": "חולץ **חתימה אמיתית מהמקור** (לא מהאינדקס המשוטח): ret · פוזיציונליים · אופציונליים [] · named {} · required — בפרסור מודע-עומק",
+    "evidence": "machtzev/generator/auto-logic.mjs:50-69 (sigOf)"
+   },
+   {
+    "cap": "**כותב עטיפת-חתימה (adapter)** למועמד שאינו זהה-בחתימה: פונקציה בשם-הזהב עם cast פוזיציוני, השמטת פרמטרי-יתר, והעברת named לפי שם — ומסרב לעטוף כשצריך להמציא (named-חובה בלי מקור ⇒ null)",
+    "evidence": "machtzev/generator/auto-logic.mjs:73-84"
+   },
+   {
+    "cap": "**מוטציית-רגישות לפני ההוכחה**: מחליף את המנוע ב-stub שזורק; אם בדיקות-הזהב עדיין ירוקות — הן לא מפעילות את המנוע ⇒ הוכחה בלתי-אפשרית",
+    "evidence": "machtzev/generator/auto-logic.mjs:128-129,143-144,149"
+   },
+   {
+    "cap": "**מוכיח בריצה**: מחליף במראה, מריץ את בדיקות-הזהב של המודול, ו**תמיד משחזר** (finally) — פסק-דין מפורט (stub-לא-מתקמפל · הבדיקות-לא-מפעילות · העטיפה-לא-מתקמפלת · מוכח · נכשל)",
+    "evidence": "machtzev/generator/auto-logic.mjs:113-155"
+   },
+   {
+    "cap": "**הוכחה קודמת לתיאור**: מועמד שניצח בניקוד אך לא הוכח אינו מדיח את הזהב — r.pick חוזר ל-declared",
+    "evidence": "machtzev/generator/auto-logic.mjs:9,152,167"
+   },
+   {
+    "cap": "משמר הוכחות יקרות בין ריצות — הוכחה קודמת תקפה כל עוד אותה החלפה מוצעת; --prove מריץ מחדש",
+    "evidence": "machtzev/generator/auto-logic.mjs:164-166"
+   },
+   {
+    "cap": "מיישם החלפות-מוכחות בקוד-מודול מחולל (logicPass) ומדווח כמה הוחלפו",
+    "evidence": "machtzev/generator/auto-logic.mjs:156-158"
+   },
+   {
+    "cap": "מודד reach — כל מנוע שכשיר-בחתימה לפעולה כלשהי, כלומר מה שהבורר באמת שקל (L91) — ומעביר ל-truth.mjs",
+    "evidence": "machtzev/generator/auto-logic.mjs:94,101,110,169"
+   },
+   {
+    "cap": "שוויון ⇒ המנוע-של-הזהב (חוק-4: הקוד-החלוץ קדוש)",
+    "evidence": "machtzev/generator/auto-logic.mjs:7,100"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "**אינו יכול להוכיח בלי buildsmart** — prove() חוזרת מיד אם אין pubspec, ולכן בקלון הזה אף החלפה לא תוכח לעולם",
+    "evidence": "machtzev/generator/auto-logic.mjs:132; `ls -d /home/user/buildsmart` ⇒ לא קיים. אומת במדידה: swapsProven = 0"
+   },
+   {
+    "claim": "אינו בורר אטומי-תצוגה — אטום שאינו בשכבת-הלוגיקה מדולג (זה auto-skin)",
+    "evidence": "machtzev/generator/auto-logic.mjs:96 (if (!d) continue — «אטום-תצוגה — לא כאן»)"
+   },
+   {
+    "claim": "רשימת-הבדיקות של מודול נגזרת בקונבנציית-שם עם חריג-אחד קשיח (schoolos.dart)",
+    "evidence": "machtzev/generator/auto-logic.mjs:114-115"
+   },
+   {
+    "claim": "אינו מגלה פעולות — הפעולות נקראות מטבלת-ה-ATOM של compose-engine.mjs בקריאת-טקסט (regex), לא מ-API",
+    "evidence": "machtzev/generator/auto-logic.mjs:42-49"
+   },
+   {
+    "claim": "מועמד ללא עטיפה כשרה מסומן 'unadaptable' ואינו מיושם — לא ממציאים ארגומנטים (§20-ג)",
+    "evidence": "machtzev/generator/auto-logic.mjs:106,135"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:12 (שלב 6 בצנרת) · שער «autologic» מהמשטרה · ומיובא ע\"י behavior-plan.mjs:13 (catalog)",
+   "input": "machtzev/generator/atom-index-full.json (שכבת-לוגיקה) · machtzev/compose-engine.mjs · new/dart-gen-bs/schoolos*.dart (הערות-import + בדיקות-הזהב) · המקור של כל מנוע (לחתימה)",
+   "output": "machtzev/generator/auto-logic.json ({summary, ops, reach}) + logicPass/provenSwaps כ-API",
+   "next": "skin-golden/retarget קוראים ל-logicPass; reach נכנס ל-truth.mjs (L91)"
+  },
+  "quality": {
+   "signal": "שער «autologic» ב-gates.tsv: «החלפה מיושמת רק אחרי הוכחה בבדיקות-הזהב» + «מחויב ≡ טרי». האיכות המהותית: **מוטציית-הרגישות** — בלי שהבדיקות נופלות על stub-שזורק, אין הוכחה. זה שער על השער.",
+   "measured": "הורץ: `node machtzev/generator/auto-logic.mjs --gate` ⇒ exit 0 · «30 פעולות-לוגיקה × 963 מנועים · הזהב הכי-טוב-בהוכחה 30/30 (מאותגר-בטקסט-בלבד 9) · החלפות מוצעות 9 · מוכחות 0». ה-JSON המחויב: {ops:30, confirmed:30, textChallenged:9, swapsProposed:9, swapsProven:0, reach:907}. **swapsProven=0 עקבי עם היעדר buildsmart** — אין דרך להוכיח כאן. git status נשאר ריק."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/auto-logic.mjs (177 שורות, נקרא במלואו)",
+   "node machtzev/generator/auto-logic.mjs --gate ⇒ exit 0 · 30 × 963 · 30/30 · 9 מוצעות · 0 מוכחות",
+   "node -e על machtzev/generator/auto-logic.json ⇒ summary עם reach 907",
+   "ls -d /home/user/buildsmart ⇒ לא קיים (מסביר את 0 המוכחות)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/behavior-compose.mjs",
+  "lang": "mjs",
+  "lines": 203,
+  "capabilities": [
+   {
+    "cap": "**מרכיב את כל ההתנהגויות במקום אחד** — פולט gen_behaviors.dart עם פונקציות bh* טהורות (ISO · מחרוזות · מספרים) שכל קובץ-מחולל קורא להן",
+    "evidence": "machtzev/generator/behavior-compose.mjs:2-5,21-131"
+   },
+   {
+    "cap": "מזריק את החלקיק-הנבחר לכל שימוש דרך N(id) — שם-הפונקציה נקרא מ-behavior-plan.json ולא נכתב ביד, כך שהחלפת-חלקיק היא רה-גנרציה",
+    "evidence": "machtzev/generator/behavior-compose.mjs:11,13,19"
+   },
+   {
+    "cap": "**מממש שרשרת כסגור-מיידי**: chain [A,B] ⇒ `((a0) => B(A(a0)))` — ההרכבה נשארת קריאה-בשם ואף קובץ אחר לא רואה את החלקים",
+    "evidence": "machtzev/generator/behavior-compose.mjs:18-20"
+   },
+   {
+    "cap": "מייבא קופסאות **בקידומת** (as bxN) ואטומים בלי קידומת, כדי לפתור התנגשות-שמות שקופסה מייצאת-מחדש (G49)",
+    "evidence": "machtzev/generator/behavior-compose.mjs:15-17,22"
+   },
+   {
+    "cap": "זורק במפורש כשחסר חלקיק מוכח לצורך — «אין חלקיק מוכח לצורך X» — במקום לפלוט קוד חלקי",
+    "evidence": "machtzev/generator/behavior-compose.mjs:19"
+   },
+   {
+    "cap": "בונה בסיס-זמן משותף (bhIso · bhIsoT · bhDate · _hm) ומעליו התנהגויות מורכבות: דחייה-רכה-לא-בשבת · בסיס-דחייה-מבאיחור · היסטי-תזכורת · תווית-תאריך-בחלקים · «לפני» · תחילת-תוכנית מעוגלת-5-דק׳",
+    "evidence": "machtzev/generator/behavior-compose.mjs:27-49"
+   },
+   {
+    "cap": "בונה שכבת-חיפוש: נרמול-חיפוש/שם/טלפון · שאילתת-ספרות · קידומת («איפה X») · **חיפוש-סלחן מדורג** (מדויק 100 · קידומת 80 · מכיל 62 · מרחק-עריכה ⇒ 50−d·10)",
+    "evidence": "machtzev/generator/behavior-compose.mjs:50-61"
+   },
+   {
+    "cap": "בונה שכבת-אנשים: אותו-שם · מפתח-טלפון-קנוני · wa.me · **קבוצות-אותו-אדם** (רכיבי-קשירות על טלפון או שם-מנורמל) · «התכוונת ל…?»",
+    "evidence": "machtzev/generator/behavior-compose.mjs:62-78"
+   },
+   {
+    "cap": "בונה שכבת-זמן-מתקדמת: חלונות-פנויים · מפתח-חודש · **זיהוי-חזרה** (כל המרווחים באותו קצב ⇒ d1/w1/w2/m1/m2/y1, אחרת שקט) · ימים-בלי-תשובה · רצף-ימים · דקות-עד · טווח-שבוע · סוף-חודש · חציון-שעות",
+    "evidence": "machtzev/generator/behavior-compose.mjs:79-104"
+   },
+   {
+    "cap": "בונה שכבת-ייצוא/ייבוא: ICS (RFC 5545) · CSV (בנייה עם BOM + פרסור) · vCard",
+    "evidence": "machtzev/generator/behavior-compose.mjs:105-111"
+   },
+   {
+    "cap": "בונה שכבה עברית: תאריך-עברי-מלא · גימטריה⇒מספר (ההיפוך, מאותם שקעי-דאטה) · קלט-«ט״ו אלול»⇒ISO · אותו-תאריך-עברי-בשנה-הבאה (ל׳ בחודש-חסר ⇒ כ״ט) · חגים",
+    "evidence": "machtzev/generator/behavior-compose.mjs:64-66,112-118"
+   },
+   {
+    "cap": "**פולט בדיקה מחוללת משלו** (genesis_gen_behaviors_test.dart) עם ~120 טענות קונקרטיות על תאריך-ייחוס קבוע, ורק אם buildsmart קיים",
+    "evidence": "machtzev/generator/behavior-compose.mjs:133-202"
+   },
+   {
+    "cap": "מכבד GEN_OUT — הפליטה הולכת ל-R.outDir(), כך שאפשר להריץ אותו בלי לגעת בעץ",
+    "evidence": "machtzev/generator/behavior-compose.mjs:10,132; אומת בריצה עם GEN_OUT לתיקייה זמנית"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו בוחר חלקיק — הבחירה כולה ב-behavior-plan.json; כאן רק הרכבה",
+    "evidence": "machtzev/generator/behavior-compose.mjs:3,11,13"
+   },
+   {
+    "claim": "**אינו כותב את הבדיקה בלי buildsmart** — הבדיקה נשמרת רק אם יש pubspec, ולכן בקלון הזה נפלט רק gen_behaviors.dart",
+    "evidence": "machtzev/generator/behavior-compose.mjs:202; אומת בריצה: תיקיית-הפלט הזמנית הכילה קובץ אחד בלבד"
+   },
+   {
+    "claim": "לא כל bh* הוא חלקיק — חלקם הרכבה טהורה מ-bh* אחרים (bhWeekday · bhSoftShift · bhStreakDays · bhMonthEnd · bhSumBy), וחלקם Dart ישיר כשאין חלקיק במדף",
+    "evidence": "machtzev/generator/behavior-compose.mjs:34,37,93,102,89 · :99-100 (bhMoney — «אין חלקיק-פרסור-סכום במדף — נסרק»)"
+   },
+   {
+    "claim": "אינו מגלה התנהגויות — רשימת-ה-bh* כתובה בתבנית; מה שנבחר-אוטומטית הוא איזה חלקיק ממלא כל חור",
+    "evidence": "machtzev/generator/behavior-compose.mjs:21-131 (התבנית כליטרל)"
+   },
+   {
+    "claim": "אינו שער — הוא רק פולט; האכיפה (מיובא · נקרא · לא-ישירות · אין-פרימיטיב) היא ב-behavior-plan --gate",
+    "evidence": "machtzev/generator/behavior-compose.mjs:203 (הסוף = console.log) מול machtzev/generator/behavior-plan.mjs:136-154"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:19 («לפני app-ds/balagan»)",
+   "input": "machtzev/generator/behavior-plan.json (דרך readPlan) + קבצי-החלקיקים שהוא מייבא + שקעי-דאטה (norm-search · gematria · heb-month-he)",
+   "output": "<GEN_OUT|new/dart-gen-bs>/gen_behaviors.dart · וכשיש buildsmart גם test/genesis_gen_behaviors_test.dart",
+   "next": "app-ds · balagan · app-shell · מודולי-הנייר קוראים רק bh*; שער behavior מאמת זאת"
+  },
+  "quality": {
+   "signal": "שער «behavior» (סעיף ה) הוא שער-על-הקובץ הזה: הוא אוכף שכל חלקיק מיובא **ונקרא** דווקא כאן, ושאף קובץ אחר לא נוגע בחלקיקים. בנוסף הבדיקה-המחוללת עם ~120 טענות היא כיסוי-התנהגות ממשי (כשיש buildsmart).",
+   "measured": "הורץ עם פלט-מנותב: `GEN_OUT=<tmp> node machtzev/generator/behavior-compose.mjs` ⇒ «38 חלקיקים מוכחים ⇒ 60 התנהגויות-מורכבות + בדיקה מחוללת». נספר בפועל בקובץ שנפלט: 60 פונקציות bh*. **הפלט זהה ביט-לביט לקובץ המחויב**: `diff -q <tmp>/gen_behaviors.dart new/dart-gen-bs/gen_behaviors.dart` ⇒ זהה. git status נשאר ריק."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/behavior-compose.mjs (203 שורות, נקרא במלואו)",
+   "GEN_OUT=<scratch> node machtzev/generator/behavior-compose.mjs ⇒ 38 חלקיקים ⇒ 60 התנהגויות",
+   "grep -c '^[A-Za-z<>?, ]* bh' <scratch>/gen_behaviors.dart ⇒ 60",
+   "diff -q <scratch>/gen_behaviors.dart new/dart-gen-bs/gen_behaviors.dart ⇒ זהה"
+  ]
+ },
+ {
+  "file": "machtzev/generator/behavior-plan.mjs",
+  "lang": "mjs",
+  "lines": 158,
+  "capabilities": [
+   {
+    "cap": "**מצהיר צרכים במקום לכתוב התנהגות ביד** — 43 פעולות-יסוד, כל אחת {shape, demand, params, ret, examples}; המחולל לא כותב את ההתנהגות, הוא מבקש אותה",
+    "evidence": "machtzev/generator/behavior-plan.mjs:2-5,20-48 (NEEDS); נמדד: 43 מפתחות"
+   },
+   {
+    "cap": "**מוכיח בריצה ב-Dart, לא בתיאור**: לכל צורך יש דוגמאות (קלט ⇒ טענה), הן רצות על **כל** המועמדים בקובץ-מוכיח, ונבחר מי שעובר את כולן; התיאור רק שובר-שוויון",
+    "evidence": "machtzev/generator/behavior-plan.mjs:6-7,86-89,111-114"
+   },
+   {
+    "cap": "מסנן מועמדים בחתימה **ובטוהר** — רק אטומים טהורים (אפס import, חוק-1) שניתן להריץ בבידוד",
+    "evidence": "machtzev/generator/behavior-plan.mjs:83 (candsOf ⇒ sigOk + isPure)"
+   },
+   {
+    "cap": "**משווה טיפוסים, לא שמות-פרמטרים** — stripName קולף שם מ-`List<String> U` / `String Function(num) gem`, הלקח מ-G35 שבו `gem` נראה «לא קיים»",
+    "evidence": "machtzev/generator/behavior-plan.mjs:71-75"
+   },
+   {
+    "cap": "**חיפוש-מסלול (הכרעה-20ב)**: אף מועמד-יחיד לא עובר ⇒ מחפש שרשרת-של-שניים B∘A בגרף-הטיפוסים, מדרג לפי-ייעוד, ומעביר רק את 24 המובילים להוכחה-בריצה — ההוכחה מכריעה, לא הדירוג",
+    "evidence": "machtzev/generator/behavior-plan.mjs:85-97,104-107"
+   },
+   {
+    "cap": "מדרג לפי חפיפת-ייעוד משוקללת-idf + הסכמת-חתימה, כשהמיון הסופי שם **הוכחה קודם לניקוד**: proven ⇒ ok ⇒ יחיד-לפני-שרשרת ⇒ score ⇒ exact",
+    "evidence": "machtzev/generator/behavior-plan.mjs:110,117-120"
+   },
+   {
+    "cap": "**צורך בלי מועמד = פסילה, לא נפילה לקוד-ידני** — pick() זורק במפורש «אין אטום לצורך X — פסילה (לא כותבים ביד)»",
+    "evidence": "machtzev/generator/behavior-plan.mjs:5,126-127"
+   },
+   {
+    "cap": "שער (א): כל צורך נפתר",
+    "evidence": "machtzev/generator/behavior-plan.mjs:133-134"
+   },
+   {
+    "cap": "שער (ב): הנבחר **מיובא ונקרא בפועל** בשכבת-ההרכבה — ולכל חלק בשרשרת בנפרד; תומך בייבוא-בקידומת (as bxN) של קופסאות",
+    "evidence": "machtzev/generator/behavior-plan.mjs:136-143"
+   },
+   {
+    "cap": "שער (ה): **אף קובץ-מחולל אחר לא מייבא או קורא חלקיק ישירות** — הרכבה רק ב-gen_behaviors.dart (עם פטור מפורש לאפליקציות שמחווטות דרך auto-logic)",
+    "evidence": "machtzev/generator/behavior-plan.mjs:144"
+   },
+   {
+    "cap": "שער (ג): **אוסר פרימיטיב-שפה של פעולה שיש לה חלקיק** — כל צורך נושא regex `forbid` (Duration(days · .inDays · .weekday · מפרידי-אלפים ידניים…) שנסרק בדבק המחולל ומדווח קובץ:שורה",
+    "evidence": "machtzev/generator/behavior-plan.mjs:20 (שדה forbid בצרכים) · :149"
+   },
+   {
+    "cap": "שער (ד): **כפילות-בכניסה** — אטום שנוסף ב-G34 עם חתימה זהה ל-אטום ותיק + ≥2 מילות-ייעוד משותפות מסומן כמימוש-מחדש",
+    "evidence": "machtzev/generator/behavior-plan.mjs:151"
+   },
+   {
+    "cap": "שער (ו): **מנגנון-השרשור מוכח-בבייטים** — phone.fmtSafe חייב להיפתר בשרשרת ולא ביחיד, אחרת «הצורך אינו צורך-שרשרת, הבדיקה ריקה»",
+    "evidence": "machtzev/generator/behavior-plan.mjs:147"
+   },
+   {
+    "cap": "שער (ה'): מתאם ארוך מ-900 תווים = חשד למימוש-מחדש",
+    "evidence": "machtzev/generator/behavior-plan.mjs:153-154"
+   },
+   {
+    "cap": "אוכף שהתוכנית השמורה ≡ הבחירה החיה",
+    "evidence": "machtzev/generator/behavior-plan.mjs:138"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "**ב---gate אינו מריץ הוכחה מחדש** — התוכנית השמורה היא ההוכחה; ההרצה-בפועל קורית רק בכתיבה (בלי --gate)",
+    "evidence": "machtzev/generator/behavior-plan.mjs:131 (plan({ prove: !gate }))"
+   },
+   {
+    "claim": "אינו מחפש שרשרת עמוקה מ-2 — עומק-2 בלבד, ורק כנפילה-לאחור",
+    "evidence": "machtzev/generator/behavior-plan.mjs:85-88 (chainCands: a ואז b יחיד)"
+   },
+   {
+    "claim": "אינו כותב את שכבת-ההרכבה — הוא רק בוחר; הפליטה היא behavior-compose.mjs",
+    "evidence": "machtzev/generator/behavior-plan.mjs:8 (הפלט = behavior-plan.json) מול machtzev/generator/regen.mjs:18-19"
+   },
+   {
+    "claim": "אינו שוקל מועמד לא-טהור — קופסה/אטום עם imports שאינם מותרים יוצא מהמועמדים לפני הדירוג",
+    "evidence": "machtzev/generator/behavior-plan.mjs:83"
+   },
+   {
+    "claim": "הצרכים עצמם כתובים ביד בקוד (NEEDS) — הם לא נגזרים מהמסך; מה שנבחר-אוטומטית הוא **המימוש**, לא הצורך",
+    "evidence": "machtzev/generator/behavior-plan.mjs:20-48"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:18 («לפני כל מודול») · שער «behavior» מהמשטרה",
+   "input": "machtzev/generator/atom-index-full.json דרך catalog() של auto-logic · logic-proof.mjs (proveCandidates · isPure) · פלטי-המחולל (לשערים ב-ה-ג-ד)",
+   "output": "machtzev/generator/behavior-plan.json (need ⇒ pick · file · chain · score · proven · top3 · proof) + pick()/readPlan() כ-API",
+   "next": "behavior-compose.mjs קורא readPlan() ופולט gen_behaviors.dart (regen.mjs:19) — לפני app-ds ו-balagan"
+  },
+  "quality": {
+   "signal": "שער «behavior» ב-gates.tsv, והוא יוצא-דופן בחוזק: לא רק «נבחר» אלא **עובר את הדוגמאות בריצת-Dart**, וגם שישה תנאי-מבנה (נפתר · מיובא · נקרא · לא-ישירות · אין-פרימיטיב · אין-כפילות · מנגנון-השרשור-מוכח · מתאמים-דקים). האיסור על פרימיטיב-שפה הוא ratchet אמיתי נגד «לכתוב שוב ביד».",
+   "measured": "הורץ: `node machtzev/generator/behavior-plan.mjs --gate` ⇒ exit 0 · «43/43 צרכים ⇒ חלקיקים נבחרו-בהוכחה-בריצה (43 מוכחים · 1 בשרשרת — הכרעה-20ב) מ-963 מנועים · מיובאים+נקראים · מתאמים דקים». ה-JSON המחויב: 43 צרכים · 43 נבחרו · 43 מוכחים · 1 שרשרת. git status נשאר ריק."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/behavior-plan.mjs (158 שורות, נקרא במלואו)",
+   "node machtzev/generator/behavior-plan.mjs --gate ⇒ exit 0 · 43/43 · 43 מוכחים · 1 בשרשרת · מתוך 963 מנועים",
+   "node -e על machtzev/generator/behavior-plan.json ⇒ needs 43 · picked 43 · proven 43 · chains 1"
+  ]
+ },
+ {
   "file": "machtzev/generator/chrome.mjs",
   "lang": "mjs",
   "lines": 10,
@@ -468,6 +770,106 @@
    "cat -n machtzev/generator/core-dart.mjs (73 שורות, נקרא במלואו)",
    "node machtzev/generator/core-dart.mjs --gate ⇒ exit 0 · 8 מסכים",
    "grep -n core-dart machtzev/police.mjs ⇒ :155 gate('coredart', …)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/entity.mjs",
+  "lang": "mjs",
+  "lines": 174,
+  "capabilities": [
+   {
+    "cap": "מפרש משפט-עברית «צור ישות <שם> עם <שדות>» לישות מלאה: שם · סכמה · שלבים · חוקים · מדיניות-מחיקה · שערי-מעבר",
+    "evidence": "machtzev/generator/entity.mjs:45-159 (interpret) · :158 (הערך המוחזר)"
+   },
+   {
+    "cap": "מפצל את המשפט לסעיפים לפי מילת-מפתח אחרי '|' בלבד, כך ש-'|' בתוך enum {א|ב|ג} לא שובר את הפיצול",
+    "evidence": "machtzev/generator/entity.mjs:46-59"
+   },
+   {
+    "cap": "**דקדוק-אפיון עשיר פר-שדה**: שדה* חובה · שדה! ייחודי · שדה{א|ב|ג} ערכים · שדה=נוסחה · שדה[ברירת-מחדל] · שדה~/regex/ תבנית · שדה(0..100) טווח · שדה(תת/תת) אובייקט-מקונן",
+    "evidence": "machtzev/generator/entity.mjs:69,78-103"
+   },
+   {
+    "cap": "מסדר את חילוץ-המרקרים כך שלא ידרסו זה את זה — regex ראשון (מכיל = [] {} * !), אחר-כך נוסחה, ברירת-מחדל, טווח, מקונן, enum, חובה, ייחודי",
+    "evidence": "machtzev/generator/entity.mjs:78-100"
+   },
+   {
+    "cap": "מפצל שדות ב**מודעות-עומק** — פסיק/שורה מפרידים רק ברמה-העליונה, כך שפסיק בתוך ()/{}/[]/<> אינו מפריד-שדות",
+    "evidence": "machtzev/generator/entity.mjs:70-73"
+   },
+   {
+    "cap": "מסיק טיפוס-שדה מ**רמזי-שפה** (date · num · bool · multiline · text) — לינגוויסטי כמו stemmer, והרמזים עצמם מגיעים מאטום-דאטה חיצוני",
+    "evidence": "machtzev/generator/entity.mjs:22-33 · הרמזים מ-spec-lang.data.json (:17,23-26)"
+   },
+   {
+    "cap": "בוחר אטום-קלט אמיתי **מהמדף** לכל טיפוס דרך matchClass, עם נפילה-לאחור ל-InlineTextRow אם לא נמצא",
+    "evidence": "machtzev/generator/entity.mjs:34-43"
+   },
+   {
+    "cap": "**מחווט חוק-לוגיקה פר-שדה מהמדף בלי מיפוי-ידני** — retrieveLogic מאחזר מועמד לפי תווית-השדה, עם סף-ניקוד ≥3, בלי חזרה על מנוע, ובכפוף ל**התאמת-טיפוס** (date⇒DateTime/String/Object · num⇒num/int/double/… · text⇒String/Object)",
+    "evidence": "machtzev/generator/entity.mjs:124-134"
+   },
+   {
+    "cap": "מרכיב ספק-טקסט מלא: הירו · פס-שלבים (BreadcrumbTrail כשיש ≥2 שלבים) · טופס עם אטום-קלט פר-שדה · כפתור-שמירה מאוחזר · כפתור-קידום-שלב · טבלת-רשומות (DataGrid) · סעיף מנוע-חוקים-חי · באנר-סיכום",
+    "evidence": "machtzev/generator/entity.mjs:113-144"
+   },
+   {
+    "cap": "מפרש מדיניות-מחיקה פר-שדה-קשר (מפל/ניתוק/חסימה, דו-לשוני) עם **נפילה-בטוחה לחסימה** כשלא זוהה",
+    "evidence": "machtzev/generator/entity.mjs:147-152"
+   },
+   {
+    "cap": "מפרש שערי-מעבר פר-שלב-יעד («אושר: סכום > 0») באותו דקדוק-השוואה של '| חוקים:'",
+    "evidence": "machtzev/generator/entity.mjs:153-157"
+   },
+   {
+    "cap": "אינו חותך בשקט — עד 200 שדות ועד 30 שלבים, אחרי שחיתוכים קודמים (20 שדות · 8 שלבים) הבליעו שדות ושלבי-הכרעה",
+    "evidence": "machtzev/generator/entity.mjs:68,73,107,109"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "**ערכי-enum אינם משנים את הטיפוס המוסק** — «סטטוס{פתוח|סגור}» קיבל type=bool ואטום AnimatedToggle, כי ההסקה לינגוויסטית וה-enumVals נשמרים בנפרד",
+    "evidence": "נמדד בריצה: `node -e` על interpret(\"…סטטוס{פתוח|סגור}…\") ⇒ «סטטוס ⟨bool⟩ → AnimatedToggle [\"פתוח\",\"סגור\"]». הקוד: machtzev/generator/entity.mjs:112 (type: inferType(a.label) — בלי התחשבות ב-enumVals)"
+   },
+   {
+    "claim": "**תאריך אינו מקבל אטום-תאריך** — TYPE_ATOM ממפה date⇒FieldRow במכוון, כי DatePills הוא רצועת-14-יום שנשברה בטופס",
+    "evidence": "machtzev/generator/entity.mjs:35-37; אומת בריצה: «תאריך התחלה ⟨date⟩ → FieldRow»"
+   },
+   {
+    "claim": "אינו מגוון אטומי-קלט לשם הגיוון — אטום אחד ועקבי לכל טיפוס («עקביות > מגוון»)",
+    "evidence": "machtzev/generator/entity.mjs:38-39"
+   },
+   {
+    "claim": "שדה מקונן מאפס את כל שאר-המרקרים — חובה/ייחודי/נוסחה/enum/תבנית/טווח נמחקים (v1)",
+    "evidence": "machtzev/generator/entity.mjs:101"
+   },
+   {
+    "claim": "אינו מחזיק מילון עברי — כל מילות-הדקדוק (פעלי-יצירה · שמות-ישות · מילת-עם · מרקרי-סעיף · מדיניות-מחיקה) מגיעות מ-spec-lang.data.json",
+    "evidence": "machtzev/generator/entity.mjs:16-18,61-64,149"
+   },
+   {
+    "claim": "אינו מחולל Dart — הוא פולט **ספק-טקסט**; החילול הוא genesis-gen.mjs, שה-CLI מריץ אחריו",
+    "evidence": "machtzev/generator/entity.mjs:158 (spec כמחרוזת) · :170-172 (ה-CLI כותב specs/entity.txt ומריץ genesis-gen)"
+   },
+   {
+    "claim": "אינו ההפך-של-עצמו — schema.mjs **מפרק**, entity **מרכיב**",
+    "evidence": "machtzev/generator/entity.mjs:3,6"
+   }
+  ],
+  "pipeline": {
+   "runBy": "ספרייה + CLI. כספרייה: interpret הוא הצרכן-האמיתי שעליו נמדד שער «hamtzaa» (gates.tsv: «נמדדים באותה בדיקה על הצרכן-האמיתי — entity.interpret, לא פרסר-משנֶה»). כ-CLI: `node entity.mjs \"צור ישות …\"`",
+   "input": "משפט-עברית חופשי + machtzev/generator/spec-lang.data.json + המדף (דרך match.mjs: retrieve · matchClass · retrieveLogic)",
+   "output": "{spec, entity, schema, stages, rules, vrules, delPolicy, guards}; ב-CLI גם machtzev/generator/specs/entity.txt",
+   "next": "genesis-gen.mjs מקבל את הספק ומחולל את המסך (machtzev/generator/entity.mjs:172)"
+  },
+  "quality": {
+   "signal": "שער «hamtzaa» ב-gates.tsv נמדד **על entity.interpret עצמו**: «כל שדה בספק חייב מונח-מקור בקלט של הבעלים … חוב-ההמצאה ratchet רק-יורד והכיסוי רק-עולה (אנטי-משחק: אסור להוריד חוב ע\"י צמצום-הנמדד); 0 שדות/0 מילות-קלט = הכלי שבור ⇒ exit 2». בנוסף שערי «sentence» · «nlsmoke» · «nlquality» על אותו ציר.",
+   "measured": "הורץ: `node -e` שמייבא את entity.mjs וקורא interpret על משפט-בדיקה ⇒ «entity: פרויקט · fields: 5 · stages: 3 · rules: 2» עם פירוט טיפוס+אטום פר-שדה (כולל ה-bool על «סטטוס»). הייבוא אינו מפעיל את ה-CLI (השומר בשורה 162), ולכן לא נכתב קובץ — git status נשאר ריק. את שער hamtzaa עצמו לא הרצתי."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/entity.mjs (174 שורות, נקרא במלואו)",
+   "node -e 'import(\"./machtzev/generator/entity.mjs\").then(m=>…interpret(\"צור ישות פרויקט עם שם*, תקציב, תאריך התחלה, פעיל, סטטוס{פתוח|סגור} | שלבים: טיוטה, אושר, בוצע\"))' ⇒ 5 שדות · 3 שלבים · 2 חוקים",
+   "grep -E '^hamtzaa' machtzev/gates.tsv ⇒ שורת-השער (מציינת את entity.interpret כצרכן-הנמדד)"
   ]
  },
  {
