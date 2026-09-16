@@ -3832,8 +3832,8 @@
     "gen/build.mjs",
     "gen/pass.mjs"
    ],
-   "gate": "compose-determinism",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "build",
     "pass",
@@ -3844,6 +3844,7 @@
    "isNot": [
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
+    "לא-שער-משטרה",
     "לא-ב-INDEX.md"
    ]
   },
@@ -4150,8 +4151,8 @@
    "reads": [],
    "imports": [],
    "importedBy": [],
-   "gate": "assembly",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "audit",
     "one"
@@ -4161,6 +4162,7 @@
    "isNot": [
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
+    "לא-שער-משטרה",
     "לא-ב-INDEX.md"
    ]
   },
@@ -4329,8 +4331,8 @@
    "reads": [],
    "imports": [],
    "importedBy": [],
-   "gate": "assembly",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "audit",
     "one"
@@ -4340,6 +4342,7 @@
    "isNot": [
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
+    "לא-שער-משטרה",
     "לא-ב-INDEX.md"
    ]
   },
@@ -4465,8 +4468,8 @@
     "gen/looks/full5/screens/4-wise.mjs",
     "gen/looks/full5/screens/5-monzo.mjs"
    ],
-   "gate": "coredart",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "1-raycast",
     "2-spotify",
@@ -4477,6 +4480,7 @@
    "isNot": [
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
+    "לא-שער-משטרה",
     "לא-ב-INDEX.md"
    ]
   },
@@ -4494,8 +4498,8 @@
    "reads": [],
    "imports": [],
    "importedBy": [],
-   "gate": "assembly",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "audit",
     "one"
@@ -4505,6 +4509,7 @@
    "isNot": [
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
+    "לא-שער-משטרה",
     "לא-ב-INDEX.md"
    ]
   },
@@ -6015,8 +6020,8 @@
    "importedBy": [
     "gen/engine.mjs"
    ],
-   "gate": "behavior",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "engine"
    ],
@@ -6025,6 +6030,7 @@
    "isNot": [
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
+    "לא-שער-משטרה",
     "לא-ב-INDEX.md"
    ]
   },
@@ -6165,8 +6171,8 @@
     "gen/engine.mjs",
     "gen/mosad-build.mjs"
    ],
-   "gate": "sentence",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "engine",
     "mosad-build",
@@ -6178,7 +6184,8 @@
    "inIndexMd": true,
    "isNot": [
     "לא-רץ-מהשורה",
-    "לא-כותב-פלט"
+    "לא-כותב-פלט",
+    "לא-שער-משטרה"
    ]
   },
   {
@@ -6307,8 +6314,8 @@
     "gen/render.mjs",
     "gen/studio.mjs"
    ],
-   "gate": "autoskin",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "index-page",
     "live",
@@ -6317,6 +6324,7 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
+    "לא-שער-משטרה",
     "לא-ב-INDEX.md"
    ]
   },
@@ -7082,8 +7090,8 @@
    "reads": [],
    "imports": [],
    "importedBy": [],
-   "gate": "balaganrun",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "one",
     "📄 PROTOCOL.md",
@@ -7093,7 +7101,8 @@
    "inIndexMd": true,
    "isNot": [
     "אין-ייצוא (לא ספרייה)",
-    "לא-כותב-פלט"
+    "לא-כותב-פלט",
+    "לא-שער-משטרה"
    ]
   },
   {
@@ -7160,8 +7169,8 @@
    "reads": [],
    "imports": [],
    "importedBy": [],
-   "gate": "balaganrun",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "run",
     "one",
@@ -7172,7 +7181,8 @@
    "inIndexMd": true,
    "isNot": [
     "אין-ייצוא (לא ספרייה)",
-    "לא-כותב-פלט"
+    "לא-כותב-פלט",
+    "לא-שער-משטרה"
    ]
   },
   {
@@ -7558,8 +7568,8 @@
    "reads": [],
    "imports": [],
    "importedBy": [],
-   "gate": "opcensus",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "police",
     "regen",
@@ -7569,7 +7579,8 @@
    "runnable": true,
    "inIndexMd": true,
    "isNot": [
-    "אין-ייצוא (לא ספרייה)"
+    "אין-ייצוא (לא ספרייה)",
+    "לא-שער-משטרה"
    ]
   },
   {
@@ -7653,7 +7664,7 @@
   {
    "file": "machtzev/census/engine-index.mjs",
    "lang": "mjs",
-   "lines": 341,
+   "lines": 348,
    "purpose": "engine-index.mjs — אינדקס-האמת האחד **לכל מנוע** (מקביל ל-atom-index לאטומים). 🔴 למה הוא קיים: לאטומים יש `atom-index` («מונע פספוס-חוצה-סוכנים») וחיפוש- לפי-מטרה (`search-score`). **למנועים לא היה כלום** — רק `INDEX.md` שהוא טקסט, ו-103 מתוך 213 רשומים בו. לכן השאלה «איזה מנוע פותר לי את X» נענתה ב-grep, ו-grep מוצא רק מה שהשואל כבר ידע לשאול. זה המנגנון שסוגר את זה. לכל מנוע חמש עובדות — כולן **נמדדות**, אף אחת לא",
    "purposeFrom": "כותרת-הקובץ",
    "exports": [
@@ -9163,8 +9174,8 @@
    "reads": [],
    "imports": [],
    "importedBy": [],
-   "gate": "entityterms",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "run"
    ],
@@ -9173,6 +9184,7 @@
    "isNot": [
     "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
+    "לא-שער-משטרה",
     "לא-ב-INDEX.md"
    ]
   },
@@ -10724,8 +10736,8 @@
     "machtzev/generator/particles.mjs",
     "machtzev/generator/render-ds.mjs"
    ],
-   "gate": "balagan",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "balagan-look",
     "particles",
@@ -10736,7 +10748,8 @@
    "inIndexMd": true,
    "isNot": [
     "לא-רץ-מהשורה",
-    "לא-כותב-פלט"
+    "לא-כותב-פלט",
+    "לא-שער-משטרה"
    ]
   },
   {
@@ -12488,8 +12501,8 @@
     "./generator/regen.mjs"
    ],
    "importedBy": [],
-   "gate": "balaganone",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "police",
     "one",
@@ -12503,7 +12516,8 @@
    "runnable": true,
    "inIndexMd": true,
    "isNot": [
-    "אין-ייצוא (לא ספרייה)"
+    "אין-ייצוא (לא ספרייה)",
+    "לא-שער-משטרה"
    ]
   },
   {
@@ -13578,8 +13592,8 @@
    "reads": [],
    "imports": [],
    "importedBy": [],
-   "gate": "balaganrun",
-   "gateRegistered": true,
+   "gate": null,
+   "gateRegistered": false,
    "calledByName": [
     "police",
     "one",
@@ -13590,7 +13604,8 @@
    "runnable": true,
    "inIndexMd": true,
    "isNot": [
-    "אין-ייצוא (לא ספרייה)"
+    "אין-ייצוא (לא ספרייה)",
+    "לא-שער-משטרה"
    ]
   },
   {
@@ -17806,7 +17821,7 @@
    ],
    "imports": [],
    "importedBy": [],
-   "gate": "coverage",
+   "gate": "yeshiva",
    "gateRegistered": true,
    "calledByName": [
     "police",

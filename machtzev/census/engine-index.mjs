@@ -221,7 +221,14 @@ export function build() {
     const purposeFrom = head ? 'כותרת-הקובץ' : row ? 'INDEX.md' : null;
 
     // שער: שורה ב-police.mjs ⇒ המזהה ⇒ שורה ב-gates.tsv
-    const g = police.match(new RegExp(`gate(?:Dirty)?\\('([a-z-]+)',\\s*'[^']*${base.replace(/\./g, '\\.')}'`));
+    // 🔒 גבול-נתיב חובה: בלי `(?:[^']*\/)?` המילה `gate.mjs` תאמה ל-`coverage-gate.mjs`
+    // ו-`run.mjs` ל-`balagan-run.mjs` ⇒ 16 מנועים תבעו שער שאינו שלהם (נמדד:
+    // 72 קבצים אבל 56 מזהים ייחודיים). שם-בסיס = מקטע שלם, לא סיומת-מחרוזת.
+    // 🎯 התאמה לפי **הנתיב שהמשטרה כותבת**, לא שם-בסיס: שני קבצים בשם
+    // `sentence.mjs` (‏gen/ ו-generator/) תבעו את אותו שער. המשטרה כותבת נתיב
+    // יחסי ל-machtzev/ (או `../yeshiva/…`), ולכן זו ההשוואה הנכונה והיחידה.
+    const asPolice = p.startsWith('machtzev/') ? fromMach : p.startsWith('yeshiva/') ? '../' + p : null;
+    const g = asPolice ? police.match(new RegExp(`gate(?:Dirty)?\\('([a-z-]+)',\\s*'${asPolice.replace(/[.\/]/g, (c) => '\\' + c)}'`)) : null;
     const gate = g ? g[1] : null;
     const gateRow = gate && new RegExp(`^${gate}\\t`, 'm').test(gates);
 
