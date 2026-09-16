@@ -238,14 +238,36 @@ if (isMain) {
     rs = [collect('peruk' + n, [{ id: 'peruk-' + n, input: inp, spec }])];
   } else if (has('--peruks')) rs = [routePeruks()];
   else if (has('--nl')) rs = [routeNl()];
-  else if (has('--gate') || !A.length) rs = [routePeruks(), routeNl()];
-  else { console.log('usage: node hamtzaa.mjs [--gate|--peruks|--nl|--peruk N|--file <in> <spec>] [--list] [--json]'); process.exit(0); }
+  else if (has('--gate') || has('--ratchet') || !A.length) rs = [routePeruks(), routeNl()];
+  else { console.log('usage: node hamtzaa.mjs [--gate|--ratchet|--peruks|--nl|--peruk N|--file <in> <spec>] [--list] [--json]'); process.exit(0); }
 
   assertRan(rs);
   if (json) console.log(JSON.stringify(rs, null, 2));
-  else rs.forEach((r) => report(r, list || !has('--gate')));
+  else rs.forEach((r) => report(r, list || !(has('--gate') || has('--ratchet'))));
   const bad = rs.reduce((a, r) => a + r.invented.length, 0);
   const all = rs.reduce((a, r) => a + r.fields, 0);
+  // ── --ratchet: מצב-המשטרה. חוב-ההמצאה **רק-יורד**, והכיסוי **רק-עולה** ──────
+  // למה לא --gate ישירות: החוב היום 211/408 — שער-אדום היה חוסם כל commit ומכבה
+  // את עצמו. ratchet נועל את המדידה של היום כרצפה: אי-אפשר להוסיף המצאה, אי-אפשר
+  // להוריד חוב ע"י צמצום-הנמדד (זוגות/שדות), וכל ירידה אמיתית נכתבת לרצפה.
+  if (has('--ratchet')) {
+    const B = JSON.parse(fs.readFileSync(GEN + 'hamtzaa-baseline.json', 'utf8'));
+    const fails = [];
+    for (const r of rs) {
+      const b = (B.routes || {})[r.route];
+      if (!b) { fails.push(`${r.route}: אין רצפה במניפסט`); continue; }
+      const inv = r.invented.length;
+      if (inv > b.invented) fails.push(`${r.route}: ${inv} המצאות > רצפה ${b.invented} (חוב רק-יורד)`);
+      if (r.pairs < b.pairs) fails.push(`${r.route}: ${r.pairs} זוגות < רצפה ${b.pairs} (כיסוי רק-עולה)`);
+      if (r.fields < b.fields) fails.push(`${r.route}: ${r.fields} שדות < רצפה ${b.fields} (כיסוי רק-עולה)`);
+      const mark = inv < b.invented ? ` ⬇ ${b.invented - inv}` : '';
+      console.log(`  ${r.route}: ${inv}/${r.fields} בלי-מקור (רצפה ${b.invented})${mark}`);
+    }
+    if (fails.length) { for (const m of fails) console.error('🚨 hamtzaa: ' + m); process.exit(1); }
+    const drop = rs.reduce((a, r) => a + (((B.routes || {})[r.route] || {}).invented - r.invented || 0), 0);
+    console.log(`✅ hamtzaa: ${bad}/${all} בלי-מקור, רצפה ${B.total.invented}${drop ? ` ⬇ ${drop} — עדכן את המניפסט` : ''}`);
+    process.exit(0);
+  }
   if (has('--gate')) {
     if (bad) { console.error(`🚨 hamtzaa: ${bad}/${all} שדות בלי מקור בקלט — המצאה (L57 · אין המצאה)`); process.exit(1); }
     console.log(`✅ hamtzaa: ${all}/${all} שדות עם מקור בקלט`);

@@ -138,6 +138,8 @@ gate('shapeops', 'generator/shape-ops.mjs', ['--gate']);
 gate('cover', 'generator/cover.mjs', ['--gate']);
 gate('particles', 'generator/particles.mjs', ['--gate']);
 gate('peruk', 'generator/peruk.mjs', ['--gate']);
+gate('hamtzaa', 'generator/hamtzaa.mjs', ['--ratchet']);
+gate('yeshiva', '../yeshiva/gate.mjs', ['--gate']);
 gate('balagan', 'generator/balagan-look.mjs', ['--gate']);
 gate('balaganone', 'generator/balagan-one.mjs', ['--gate']);
 gate('server', 'generator/server-gate.mjs', ['--gate']);   // G57 · הכרעה-31: חבילת-השרת נגזרת ומאומתת (ישויות · מפתחות · אפס-סודות · מצבות)
