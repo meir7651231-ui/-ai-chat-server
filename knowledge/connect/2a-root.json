@@ -2218,5 +2218,418 @@
       "ran: grep -n 'sens\\|stub' machtzev/generator/auto-logic.mjs ⇒ שורות 11 · 128 · 138 · 143-144 · 149 · 151 — מוטציית-הרגישות בתוך בורר-המחולל",
       "לא הורץ במכוון: המנוע כותב על קובצי-מקור ומשחזר (שורות 37/39/44); הרצה כאן הייתה מסכנת את נקיון עץ-העבודה"
     ]
+  },
+  {
+    "file": "machtzev/mutation-dart-check.mjs",
+    "lang": "mjs",
+    "lines": 113,
+    "does": [
+      {
+        "claim": "מחליל **type-preserving** את גוף הפונקציות-העליונות ב-Dart לפי טיפוס-ההחזרה (int⇒0 · String⇒'' · List⇒const [] · T?⇒null · void⇒return) ומריץ את הבדיקה על העותק-החלול ב-sandbox של 20s",
+        "evidence": "machtzev/mutation-dart-check.mjs:36-37 (DEF · hollowVal) · 3-5"
+      },
+      {
+        "claim": "ירוקה-על-חלול ⇒ בדיקה חלולה (אדום); כשל-קומפילציה של החלול ⇒ **unparsed ולא «נתפס»** — הבחנה שנקנתה ב-R3-5.5",
+        "evidence": "machtzev/mutation-dart-check.mjs:6"
+      },
+      {
+        "claim": "unparsed הוא חוב מוצהר ורק-יורד, ולא ירוק-שקט",
+        "evidence": "machtzev/mutation-dart-check.mjs:7 (‏R3-3.2 · R3-5.6)"
+      },
+      {
+        "claim": "**דגימה דטרמיניסטית לפי HEAD sha ולא לפי תאריך** — Fisher–Yates עם seed מה-sha, כדי שאותו commit ייתן אותה דגימה (R3-5.18)",
+        "evidence": "machtzev/mutation-dart-check.mjs:28-33 (‏seed בשורה 30)"
+      },
+      {
+        "claim": "סופר-סוגריים שמדלג על מחרוזות והערות — הבאג שבו `'}'` בתוך מחרוזת שבר את המונה (R3-5.5)",
+        "evidence": "machtzev/mutation-dart-check.mjs:38-40 (skipLiteral)"
+      },
+      {
+        "claim": "אין Dart ⇒ exit 2 + tool=dart, דרך המפרק המשותף",
+        "evidence": "machtzev/mutation-dart-check.mjs:14,16-17"
+      },
+      {
+        "claim": "ההיקף הוא **כל** תיקיית new/dart* רקורסיבית — נגזר מהדיסק ולא מרשימה קשיחה",
+        "evidence": "machtzev/mutation-dart-check.mjs:22 — readdirSync(R.NEW).filter(/^dart/)"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו מגיע לפלט-המחולל בפועל — לא בגלל היקף אלא בגלל היעדר-בדיקות.** ‏new/dart-gen-bs **כן** נכלל ב-DIRS (הוא תואם /^dart/), אבל אין בו אף `_test.dart`, ולכן כל 577 הקבצים נופלים ל-untested ולעולם אינם מוחללים",
+        "evidence": "machtzev/mutation-dart-check.mjs:22,25-26; ran: find new/dart-gen-bs -name '*_test.dart' | wc -l ⇒ 0 · find new/dart* -name '*_test.dart' | wc -l ⇒ 1007"
+      },
+      {
+        "claim": "לא מחליל מתודות-מחלקה ופונקציות-חץ מסוימות — הן נספרות כ-unparsed ומוצהרות, לא נחשבות ירוק",
+        "evidence": "machtzev/mutation-dart-check.mjs:6-7; machtzev/PROTOCOL.md:278 «unparsed מוצהר (~50%)»"
+      },
+      {
+        "claim": "ברירת-המחדל היא דגימה של 12 בלבד — כיסוי מלא רק ב---all",
+        "evidence": "machtzev/mutation-dart-check.mjs:29"
+      },
+      {
+        "claim": "מדולג ב---fast",
+        "evidence": "machtzev/police.mjs:170 מעביר FAST; נמדד: 'skipped mutation-dart (--fast)'"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:170",
+        "how": "gate('mutation-dart','mutation-dart-check.mjs', CI?['--sample','100']:[], FAST)"
+      },
+      {
+        "who": "machtzev/carve/carve-land.mjs:254",
+        "how": "מורץ-בשם כשער-נחיתה של המחצבה (G61)"
+      },
+      {
+        "who": "machtzev/dart-bin.mjs:14",
+        "how": "ייבוא { resolveDart }"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/app-from-sentences.mjs (regen.mjs:16) — פליטת `<gen_x>_test.dart` לצד כל מודול מחולל",
+      "gives": "נקודה כנה, והיא **הפוכה למה שנראה בהתחלה**: אין כאן פער-היקף לתקן — ההיקף כבר נכון, ‏dart-gen-bs בתוכו. הפער הוא שאין מה למדוד: המחולל אינו פולט בדיקה **לצד** המודול בשם `<x>_test.dart`, ולכן השער רואה 577 קבצים ומדלג על כולם. המחולל כן מייצר «בדיקה מחוללת» (G25 · G32 · 13/13 ⇒ 75/75), אך לא במוסכמת-השמות שהשער מחפש. חיבור = מוסכמת-שם, לא מנוע חדש: ברגע שהבדיקה המחוללת נכתבת כ-`<module>_test.dart` ליד המודול, שער-המוטציה מתחיל לשאול על **הקוד המחולל** את השאלה של L11 — «האם הבדיקה הזו הייתה מאדימה לו הקוד היה שבור». זה בדיוק ההבדל בין «האפליקציה נבנתה» ל«האפליקציה עובדת»."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — מקרב ממשית. הוא המנוע היחיד שיודע להחליל **Dart** ולשאול אם בדיקה ריקה, וזה בדיוק כלי-האימות שרצפת-§22 («אפס-באגים») צריכה על הפלט. לא 3, כי ההפעלה תלויה בהחלטת-מוסכמה של מנוע אחר (המחולל), ולא בשינוי בו עצמו."
+    },
+    "evidence": [
+      "read: machtzev/mutation-dart-check.mjs:1-40",
+      "ran: ls -d new/dart*/ ⇒ 11 תיקיות, ביניהן new/dart-gen-bs (כלומר בהיקף DIRS)",
+      "ran: find new/dart-gen-bs -name '*_test.dart' | wc -l ⇒ 0",
+      "ran: find new/dart* -name '*_test.dart' | wc -l ⇒ 1007 (הזוגות קיימים, רק לא בפלט)",
+      "ran: node machtzev/police.mjs --fast ⇒ 'skipped mutation-dart (--fast)' (שורה 436)"
+    ]
+  },
+  {
+    "file": "machtzev/no-fakers-check.mjs",
+    "lang": "mjs",
+    "lines": 27,
+    "does": [
+      {
+        "claim": "**סורק את פלט-המחולל** — outDir() (new/dart-gen-bs) + לוחות + מסכים — ומחפש שימוש באטום-«מזייף»",
+        "evidence": "machtzev/no-fakers-check.mjs:17-19"
+      },
+      {
+        "claim": "ה-SSOT נקרא **מהמקור** ולא מועתק: regex על `const FAKERS = new Set([…])` בתוך compose-engine.mjs",
+        "evidence": "machtzev/no-fakers-check.mjs:10-13"
+      },
+      {
+        "claim": "ממיר snake_case ⇒ PascalCase (stat_block ⇒ StatBlock) ותופס גם קונסטרוקטור-נקוב (StatBlock.named( ) ולא רק StatBlock(",
+        "evidence": "machtzev/no-fakers-check.mjs:14,16 (‏R3-3.10)"
+      },
+      {
+        "claim": "**מגן מפורש נגד regex-ריק:** רשימה ריקה יוצאת מוקדם עם הודעה, במקום לבנות regex שיתפוס הכל",
+        "evidence": "machtzev/no-fakers-check.mjs:15 — ההערה «רשימה ריקה ≠ regex ריק (שתפס הכל)»"
+      },
+      {
+        "claim": "ratchet shrink-only לפי רשימת-קבצים",
+        "evidence": "machtzev/no-fakers-check.mjs:21-25"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו בודק דבר היום** — ‏FAKERS ריק במקור, ולכן השער יוצא בשורה 15 לפני שהוא פותח ולו קובץ אחד. זה מצב מוצהר («השער עומד לחוב עתידי») ולא באג: G21 רוקן את הרשימה כשכל 10 האטומים-המזייפים קיבלו שקע",
+        "evidence": "ran: grep -n 'const FAKERS' machtzev/compose-engine.mjs ⇒ שורה 77: `export const FAKERS = new Set([]);` · cat machtzev/no-fakers-baseline.json ⇒ []"
+      },
+      {
+        "claim": "לא מזהה זיוף-דאטה חדש בעצמו — הוא אוכף רשימה שמישהו אחר מתחזק; אטום שימציא ערך ולא יירשם ב-FAKERS יעבור",
+        "evidence": "machtzev/no-fakers-check.mjs:10-13 — הרשימה היא הקלט היחיד"
+      },
+      {
+        "claim": "התפיסה היא לפי **שם-מחלקה**, לא לפי התנהגות — אטום שמייצר seed/סינוס בשם אחר אינו נתפס",
+        "evidence": "machtzev/no-fakers-check.mjs:16"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:134",
+        "how": "gate('no-fakers','no-fakers-check.mjs') — מורץ-בשם כשער (לא מדולג ב---fast)"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/regen.mjs:24 — יחד עם ds-critic, כשלב-אימות על הפלט; והשאלה האמיתית היא לבנות את FAKERS **מנועית**",
+      "gives": "נקודה כנה עם שתי שכבות. הפשוטה: הוא כבר מודד את הפלט הנכון, אבל רץ אחרי הבנייה. העמוקה והחשובה יותר: הוא אוכף **רשימה ידנית**, והרשימה ריקה — כלומר המנגנון ש-§20(ג) («לעולם לא לזייף דאטה») ו-הכרעה-26 נשענים עליו הוא היום שומר-ריק. §20(ג) מנוסח כבדיקה מבנית — «שקע בלי-ערך-אמת ⇒ פסילה» — וזו בדיקה שאפשר לגזור מהקוד (אטום שמציג ערך ואין לו שקע-דאטה) במקום לתחזק רשימת-שמות. זה בדיוק מה ש-`particles.mjs` כבר עושה בבחירה («שקע-חובה ריק ⇒ פסילה», G23). חיבור = ה-SSOT נגזר מאותה בדיקה, ואז השער חוזר למדוד משהו."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — מקרב ממשית בפוטנציאל, ומעט מאוד בפועל. הוא היחיד בקבוצה שנושא במפורש את §20(ג), והוא סורק את הפלט הנכון — אבל עם רשימה ריקה הוא מדווח ירוק על 577 קבצים בלי לקרוא אף אחד מהם. הציון על המיקום והייעוד; הפער הוא שה-SSOT ידני."
+    },
+    "evidence": [
+      "read: machtzev/no-fakers-check.mjs:1-26 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ '✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 …) · השער עומד לחוב עתידי' + 'ran no-fakers 61ms'",
+      "ran: grep -n 'const FAKERS' machtzev/compose-engine.mjs ⇒ שורה 77 — new Set([]) ריק",
+      "ran: cat machtzev/no-fakers-baseline.json ⇒ []"
+    ]
+  },
+  {
+    "file": "machtzev/police-selftest.mjs",
+    "lang": "mjs",
+    "lines": 55,
+    "does": [
+      {
+        "claim": "מזריע fixture בתיקייה זמנית ומריץ עליו את השער האמיתי — מוכיח שהחוק **יורה**, לא רק שהוא רשום",
+        "evidence": "machtzev/police-selftest.mjs:17-27 (mk · run) · 31-42"
+      },
+      {
+        "claim": "**גוזר את מיפוי שער⇒סקריפט מ-police.mjs עצמו** ברגקס על `gate('id','script')` — לא מרשימה מועתקת שתסטה",
+        "evidence": "machtzev/police-selftest.mjs:16"
+      },
+      {
+        "claim": "דורש **זוג**: שער «מוכח» רק אם fixture מורעל מחזיר 1 **וגם** fixture נקי מחזיר 0 — ביקורת-שלילית חובה",
+        "evidence": "machtzev/police-selftest.mjs:40,44 (‏paired)"
+      },
+      {
+        "claim": "run() מחזיר קוד-יציאה **גולמי**, כך ש-2/קריסה/timeout אינם נחשבים «יורה» (R2-2.7)",
+        "evidence": "machtzev/police-selftest.mjs:22-27 (‏r.error ⇒ -1)"
+      },
+      {
+        "claim": "שני מצבי-הרצה — dir פוזיציוני או MACHTZEV_ROOT — כדי ששערי --gate שקוראים את העץ דרך root.mjs יהיו ברי-בדיקה (R2-4.8)",
+        "evidence": "machtzev/police-selftest.mjs:5-6,23-24,36"
+      },
+      {
+        "claim": "ה-fixtures יושבים בקבצים **לא-נעולים**, במכוון: לקח חדש = fixture חדש בלי pins-write (R2-3.2)",
+        "evidence": "machtzev/police-selftest.mjs:3"
+      },
+      {
+        "claim": "רצפת-כיסוי: מספר הזוגות-המוכחים רק-עולה",
+        "evidence": "machtzev/police-selftest.mjs:47-52"
+      },
+      {
+        "claim": "מדווח במפורש אילו שערים **אינם** מוכחים (unpaired) — הכנות מובנית בפלט",
+        "evidence": "machtzev/police-selftest.mjs:45-46"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא מוכיח את כל השערים — רק אלה שיש להם fixture; היתר מודפסים כ-«לא-מוכחים»",
+        "evidence": "machtzev/police-selftest.mjs:45-46"
+      },
+      {
+        "claim": "לא בודק את השער על העץ האמיתי — רק על fixture סינתטי בתיקייה זמנית",
+        "evidence": "machtzev/police-selftest.mjs:14,18-20"
+      },
+      {
+        "claim": "לא רץ ב---fast",
+        "evidence": "machtzev/police.mjs:168 מעביר FAST; נמדד: 'skipped selftest (--fast)'"
+      },
+      {
+        "claim": "שער שאינו ב-police.mjs מדווח כ-❓ ומפיל — אבל fixture חסר לשער קיים אינו מפיל בפני עצמו (רק הרצפה תופסת מחיקה)",
+        "evidence": "machtzev/police-selftest.mjs:34 מול 51"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:168",
+        "how": "gate('selftest','police-selftest.mjs',[],FAST)"
+      },
+      {
+        "who": ".githooks/pre-commit:32",
+        "how": "מורץ-בשם בטבעת-ה-commit"
+      },
+      {
+        "who": "machtzev/verify-independent.mjs:59,61",
+        "how": "מורץ פעמיים — פעם מעץ-ה-HEAD עם fixtures של T, ופעם מעץ-ה-tag"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:16",
+        "how": "נעול-חתימה"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "שער, וזה מקומו — והוא שער-על-שערים. הקלט שלו הוא fixture סינתטי ו-police.mjs; אין לו מגע עם ספק, ישות או פלט. ראוי בכל זאת לרשום את הדפוס שהוא מייצג, כי הוא **כבר הועתק לצינור**: «אל תסמוך על הצהרה, הרץ את הדבר ובדוק שהוא נכשל כשצריך» הוא בדיוק מה ש-behavior-plan עושה כשהוא מריץ דוגמאות על כל מועמד (הכרעה-30). המקור כאן, היישום שם."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב ישירות. הוא מה שמונע מכל שאר המדידות להיות ספרות-ריקות: בלעדיו «57 שערים» היא ספירת-ראשים ולא ידיעה, וזה בדיוק הלקח שהמחצב קנה ביוקר. ערך גבוה לפרוטוקול, אפס נתיב-נתונים למחולל."
+    },
+    "evidence": [
+      "read: machtzev/police-selftest.mjs:1-54 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ 'skipped selftest (--fast)' (שורה 434)",
+      "ran: grep -rn 'police-selftest.mjs' ⇒ police.mjs:168 · .githooks/pre-commit:32 · verify-independent.mjs:59,61 · pins-check.mjs:16"
+    ]
+  },
+  {
+    "file": "machtzev/police.mjs",
+    "lang": "mjs",
+    "lines": 185,
+    "does": [
+      {
+        "claim": "מריץ 57 שערים ופולט שורת-ledger לכל אחד באחד מ-4 מצבים: ran · skipped · yellow · failed",
+        "evidence": "machtzev/police.mjs:70 (המבנים) · 81-98 (runGate) · 115-171 (רשימת-השערים)"
+      },
+      {
+        "claim": "**השוואה דו-כיוונית מול gates.tsv**: שער רשום שלא רץ ⇒ אדום, ושער שרץ ואינו במרשם ⇒ אדום",
+        "evidence": "machtzev/police.mjs:176-178"
+      },
+      {
+        "claim": "«skipped אינו ran» — ובמצב מלא (בלי --fast ב-argv) כל דילוג הוא אדום",
+        "evidence": "machtzev/police.mjs:24 (FAST_ARGV) · 175 (‏R3-4.3) · 5"
+      },
+      {
+        "claim": "**צהוב מאומת:** exit 2 + tool=<name> מתקבל רק אם הכלי באמת חסר, והכלי חייב להיות ברשימת 6 הכלים המוכרים — «צהוב עם כלי-קיים = אדום»",
+        "evidence": "machtzev/police.mjs:73-79 (KNOWN_TOOLS · toolMissing) · 92-95"
+      },
+      {
+        "claim": "סיווג לפי error.code/signal **לפני** status — ENOENT/ETIMEDOUT/SIGKILL אינם «אדום»",
+        "evidence": "machtzev/police.mjs:87-91 (‏R3-3.8 בשורה 87)"
+      },
+      {
+        "claim": "timeout דרך coreutils עם TERM-ואז-KILL-אחרי-10s, כדי שהשערים שמשחזרים קבצים (מוטציה) יספיקו לשחזר",
+        "evidence": "machtzev/police.mjs:83 (‏R3-3.15)"
+      },
+      {
+        "claim": "**gateDirty — הכרה מפורשת שהמחולל כותב:** מצלם את gen_app_*.dart בפלט ובדאטה לפני, ומשחזר ב-finally אחרי, כדי שהמשטרה תשאיר עץ-נח (L14)",
+        "evidence": "machtzev/police.mjs:104-113"
+      },
+      {
+        "claim": "pid-lock ב-git-dir עם זיהוי-תהליך-מת ⇒ ריצה אחת בו-זמנית",
+        "evidence": "machtzev/police.mjs:56-67"
+      },
+      {
+        "claim": "הפרדה קריטית TOOLS מול HERE: הסקריפטים של המשטרה הרצה (למשל מ-tag ידוע-טוב) מול העץ **הנמדד** — זה מה שמאפשר את verify-independent",
+        "evidence": "machtzev/police.mjs:18-21 (‏RED-TEAM R2-1.1)"
+      },
+      {
+        "claim": "--inc מצמצם ל-דיף+צרכנים דרך import-graph, אך **fail-closed בארבעה תנאים** (אין דיף · שינוי מחוץ ל-new/ · import דינמי · >50 קבצים) ⇒ נופל לריצה מלאה",
+        "evidence": "machtzev/police.mjs:27-49"
+      },
+      {
+        "claim": "שלושה קודי-יציאה נפרדים: 0 ירוק · 2 צהוב-בלבד · 1 אדום",
+        "evidence": "machtzev/police.mjs:9,181-184"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו «שער» בעצמו** — אין לו gate ב-gates.tsv; הוא המריץ",
+        "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/police.mjs ⇒ gate=- ; machtzev/police.mjs:115-171 — הוא זה שקורא ל-gate()"
+      },
+      {
+        "claim": "לא מגלה שערים — רשימת 57 השערים כתובה ידנית בשורות 115-171, וההגנה היא שההשוואה מול gates.tsv דו-כיוונית",
+        "evidence": "machtzev/police.mjs:115-171 · 176-178"
+      },
+      {
+        "claim": "gateDirty מצלם **רק** /^gen_app_.*\\.dart$/ בשתי תיקיות — פלטי-מחולל אחרים (gen_core_* · gen_behaviors.dart · gen_retarget_*) אינם מצולמים ולא ישוחזרו אם שער יכתוב אותם",
+        "evidence": "machtzev/police.mjs:108 (‏GAP) · 111-112"
+      },
+      {
+        "claim": "gateDirty מוחל על 3 שערים בלבד (acceptance · nlsmoke · nlquality), בעוד שכ-20 שערים אחרים הם מנועי-מחולל ב---gate",
+        "evidence": "ran: grep -n 'gateDirty(' machtzev/police.mjs ⇒ שורות 126,127,128 בלבד"
+      },
+      {
+        "claim": "אינו מריץ את המחולל — השערים שהם מנועי-מחולל מורצים ב---gate, שמשמעותו «אמת שהמחויב ≡ טרי» ולא «חולל מחדש»",
+        "evidence": "machtzev/police.mjs:122,136-154 — כולם עם ['--gate']"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".githooks/pre-commit:106",
+        "how": "node machtzev/police.mjs --inc"
+      },
+      {
+        "who": ".githooks/pre-push:49",
+        "how": "ריצה מלאה ב-worktree"
+      },
+      {
+        "who": ".github/workflows/police.yml:79",
+        "how": "CI=true node machtzev/police.mjs"
+      },
+      {
+        "who": "machtzev/one.mjs · machtzev/audit-gates.mjs:37,39 · machtzev/run.mjs",
+        "how": "מורץ-בשם / נושא-הזרעה"
+      },
+      {
+        "who": "machtzev/police-selftest.mjs:16",
+        "how": "**נקרא כדאטה** — ה-selftest גוזר ממנו את מיפוי שער⇒סקריפט ברגקס"
+      },
+      {
+        "who": "machtzev/dart-bin.mjs:15",
+        "how": "ייבוא { resolveDart }"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ — והתשובה כאן הפוכה מהשאלה",
+      "gives": "שער, וזה מקומו — ובמובן החזק ביותר: הוא **המשטרה**, לא חלק מהמחולל. אבל הקריאה חשפה משהו ששווה לרשום: ‏police.mjs הוא כבר **הצרכן הגדול ביותר של מנועי-המחולל** בריפו. מתוך 57 השערים, כ-20 הם מנועי-generator שמורצים ב---gate (synth · op-census · shape-ops · cover · particles · peruk · hamtzaa · balagan-look · balagan-one · server-gate · behavior-plan · balagan-run · quarry-golden · render-module · retarget · entity-terms · sentence · enum-values · core-from-shape). כלומר הכיוון «לחבר את השער למחולל» כבר קיים בכיוון ההפוך — המחולל מחובר לשער. ו-`gateDirty` הוא הראיה שהתפר הזה מוכר ומטופל. אין מה לחבר; יש להכיר."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב, ואומר זאת בפה מלא. הוא לא בונה ולא בוחר ולא נוגע בספק. ערכו ל-§22 הוא בכך ש**בלעדיו אף מספר בדוח הזה לא היה ראיה**: ה-ledger בן-4-המצבים וההשוואה הדו-כיוונית הם מה שהופך «57 שערים» מספירת-ראשים למדידה. זה בדיוק הלקח שבראש CLAUDE.md — «מספר בסיכום אינו מפה»."
+    },
+    "evidence": [
+      "read: machtzev/police.mjs:1-115,172-184 (הליבה: --inc · ledger · runGate · gate/gateDirty · פסק-הדין)",
+      "ran: node machtzev/police.mjs --fast ⇒ '✅ המשטרה ירוקה — 45 ran · 12 skipped · 0 yellow · 0 failed · מרשם 57' (exit 0)",
+      "ran: grep -n 'gateDirty(' machtzev/police.mjs ⇒ 126 · 127 · 128 בלבד",
+      "ran: node machtzev/census/engine-index.mjs machtzev/police.mjs ⇒ gate=- (אינו שער במרשם)",
+      "read: machtzev/police.mjs:115-171 — ספירת מנועי-generator המורצים כשערים"
+    ]
+  },
+  {
+    "file": "machtzev/pretool-selftest.mjs",
+    "lang": "mjs",
+    "lines": 29,
+    "does": [
+      {
+        "claim": "מזין כל שורה מ-selftest-fixtures/pretool.tsv ל-hook האמיתי כ-JSON של PreToolUse ומשווה את קוד-היציאה לציפייה",
+        "evidence": "machtzev/pretool-selftest.mjs:21-26"
+      },
+      {
+        "claim": "מריץ עם PRETOOL_SELFTEST=1 שמבטל bypass — «env רק מחמיר», כך שאי-אפשר להשתיק את ה-hook דרך סביבה",
+        "evidence": "machtzev/pretool-selftest.mjs:4,23"
+      },
+      {
+        "claim": "fail-closed משולש: hook חסר ⇒ 1 · אין baseline ⇒ 1 · פחות fixtures מהרצפה ⇒ 1 («fixtures נמחקו»)",
+        "evidence": "machtzev/pretool-selftest.mjs:13,17,19"
+      },
+      {
+        "claim": "מנרמל את הנתיב /x/ לשורש-הריפו האמיתי, כך שה-fixtures ניידים",
+        "evidence": "machtzev/pretool-selftest.mjs:22"
+      },
+      {
+        "claim": "timeout נחשב כשל מפורש (status===null ⇒ 'timeout'), לא כ«עבר»",
+        "evidence": "machtzev/pretool-selftest.mjs:24"
+      },
+      {
+        "claim": "סביבה מצומצמת ל-PATH/HOME בלבד",
+        "evidence": "machtzev/pretool-selftest.mjs:23"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא בודק את תוכן-ההודעה של ה-hook — רק את קוד-היציאה (0/2)",
+        "evidence": "machtzev/pretool-selftest.mjs:24-25 — ההשוואה על got בלבד; stderr רק מודפס"
+      },
+      {
+        "claim": "לא מגדיר מה ה-hook אמור לחסום — זו דאטה ב-TSV; המנוע הוא מריץ-ההשוואה בלבד",
+        "evidence": "machtzev/pretool-selftest.mjs:14,21"
+      },
+      {
+        "claim": "תומך רק בשני מבני-קלט (Bash⇒command · אחר⇒file_path)",
+        "evidence": "machtzev/pretool-selftest.mjs:22"
+      },
+      {
+        "claim": "**רץ גם ב---fast** — הוא בטבעת-ה-commit למרות 7.2 שניות, אחד השערים היקרים שלא דולגו",
+        "evidence": "machtzev/police.mjs:167 — gate('pretool','pretool-selftest.mjs') בלי FAST; נמדד: 'ran pretool 7081ms'"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:167",
+        "how": "gate('pretool','pretool-selftest.mjs') — מורץ-בשם כשער, לא מדולג"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "שער, וזה מקומו. הוא מוכיח ש-hook של הסוכן באמת חוסם; הקלט הוא TSV ו-bash. אין נקודה כנה — ואין גם דפוס שהמחולל חסר, כי הרעיון (הרץ-ובדוק-שנכשל) כבר קיים בצינור דרך behavior-plan/logic-proof."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. הוא מגן על שכבת-ההגנה מפני הסוכן עצמו. 105 fixtures שיורים כמצופה הם ערך אמיתי לפרוטוקול ואפס קרבה לנתיב משפט⇒אפליקציה."
+    },
+    "evidence": [
+      "read: machtzev/pretool-selftest.mjs:1-28 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ '✓ pre-tool: 105/105 fixtures יורים כמצופה (79 חסומים · 26 עוברים)' + 'ran pretool 7081ms'",
+      "ran: grep -n 'pretool' machtzev/police.mjs ⇒ שורה 167 (בלי דגל FAST — רץ בטבעת-ה-commit)"
+    ]
   }
 ]

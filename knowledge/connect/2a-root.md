@@ -1,6 +1,6 @@
 # 2a · `machtzev/*.mjs` (שורש) — מיפוי חיבור-למחולל
 
-**31/51 מנועים ממופים** · 2260 שורות נקראו · פיזור s22: 0⇒12 · 1⇒11 · 2⇒7 · 3⇒1
+**36/51 מנועים ממופים** · 2669 שורות נקראו · פיזור s22: 0⇒15 · 1⇒11 · 2⇒9 · 3⇒1
 
 הגדרת «מחובר» = `machtzev/census/engine-index.mjs:319-333` (נגיש בייבוא טרנזיטיבי מ-6 נקודות-הכניסה, או מורץ-בשם מ-regen/ship). שערים אינם מחוברים — הם שומרים.
 מדידה: `node machtzev/census/engine-index.mjs --connected` ⇒ `57 · 279 · 336`.
@@ -15,6 +15,8 @@
 | `empire-coverage.mjs` | 2 | machtzev/generator/regen.mjs:24 — כשלב-דיווח בסוף הצינור, ורק סעיף wiredSection (שורות 124-146) | מודד כיסוי מול שלוש מערכות-האימפריה (maor TS · buildsmart Dart · yoman JS) — כמה מיכולות-הלוגיקה של המקור כבר נחצבו למדף |
 | `goal-card.mjs` | 2 | machtzev/generator/app-from-sentences.mjs (regen.mjs:16) — פליטת-כרטיס פר-מסך-מחולל | כותב כרטיס-מטרה חתום ל-machtzev/audit/goals/<מסך>.json: goal · models · atoms · accept · picture + screenSha + pictureSha + sig |
 | `goal-proof-check.mjs` | 2 | machtzev/generator/regen.mjs:16-22 — הסרת ההחרגה GENOUT, ברגע שהמחולל פולט כרטיסים (ראה goal-card) | שער pre-commit: כל מסך/לוח ב-staged חייב כרטיס-מטרה תקף — והבדיקה היא בבייטים, לא שיפוט |
+| `mutation-dart-check.mjs` | 2 | machtzev/generator/app-from-sentences.mjs (regen.mjs:16) — פליטת `<gen_x>_test.dart` לצד כל מודול מחולל | מחליל **type-preserving** את גוף הפונקציות-העליונות ב-Dart לפי טיפוס-ההחזרה (int⇒0 · String⇒'' · List⇒const [] · T?⇒null · void⇒return) ומריץ את הבדיקה על העותק-החלול ב-sandbox של 20s |
+| `no-fakers-check.mjs` | 2 | machtzev/generator/regen.mjs:24 — יחד עם ds-critic, כשלב-אימות על הפלט; והשאלה האמיתית היא לבנות את FAKERS **מנועית** | **סורק את פלט-המחולל** — outDir() (new/dart-gen-bs) + לוחות + מסכים — ומחפש שימוש באטום-«מזייף» |
 | `box-assemble.mjs` | 1 | ∅ (מותנה) | ממיר קובץ-מקור TS של maor ל-JS דרך ts.transpileModule (מסיר טיפוסים ו-import type, משאיר import-ערך) |
 | `box-data-lift.mjs` | 1 | ∅ | סורק ב-AST אמיתי של TypeScript את הצהרות-המשתנה ברמת-המודול של קופסה ואוסף רק מאתחלים שהם ליטרל-דאטה טהור רקורסיבי |
 | `box-magic-lift.mjs` | 1 | ∅ | מוצא ב-AST כל ליטרל-מספרי בקופסה ומרים אותו לאטום-דאטה <base>-nums.mjs תחת מפתח אנונימי M.m0/M.m1 |
@@ -38,3 +40,6 @@
 | `learn-check.mjs` | 0 | ∅ | parity: כל `## L…` ב-LEARNINGS.md חייב שורת `GATE:` עם מזהה מוכר (מ-gates.tsv ∪ 21 שערי-hook קשיחים) |
 | `learn-draft.mjs` | 0 | ∅ | --record: לכל (שער-כושל × קובץ-staged ב-new/) כותב רשומה ל-audit/retry.jsonl עם ts · attempt · gate · path · sha · blob_before |
 | `merge-regen.mjs` | 0 | ∅ לחיבור; אבל הרשימה בשורות 14-15 היא מועמדת-הרחבה אמיתית | ‏merge-driver של git לקבצים מחוללים: במקום מיזוג-טקסט הוא **מחדש את הקובץ מהעץ** ומחזיר אותו כתוצאת-המיזוג |
+| `police-selftest.mjs` | 0 | ∅ | מזריע fixture בתיקייה זמנית ומריץ עליו את השער האמיתי — מוכיח שהחוק **יורה**, לא רק שהוא רשום |
+| `police.mjs` | 0 | ∅ — והתשובה כאן הפוכה מהשאלה | מריץ 57 שערים ופולט שורת-ledger לכל אחד באחד מ-4 מצבים: ran · skipped · yellow · failed |
+| `pretool-selftest.mjs` | 0 | ∅ | מזין כל שורה מ-selftest-fixtures/pretool.tsv ל-hook האמיתי כ-JSON של PreToolUse ומשווה את קוד-היציאה לציפייה |
