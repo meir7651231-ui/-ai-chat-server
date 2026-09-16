@@ -1846,5 +1846,377 @@
       "read: machtzev/index-check.mjs:1-18 (כל הקובץ)",
       "ran: node machtzev/police.mjs --fast ⇒ '✓ index-complete: 139/208 סקריפטים מאונדקסים · חוב 69/70 (רק-יורד)' + 'ran index-complete 73ms'"
     ]
+  },
+  {
+    "file": "machtzev/learn-check.mjs",
+    "lang": "mjs",
+    "lines": 80,
+    "does": [
+      {
+        "claim": "parity: כל `## L…` ב-LEARNINGS.md חייב שורת `GATE:` עם מזהה מוכר (מ-gates.tsv ∪ 21 שערי-hook קשיחים)",
+        "evidence": "machtzev/learn-check.mjs:14-15 · 30-34"
+      },
+      {
+        "claim": "רצפת-לקחים רק-עולה, fail-closed בהיעדר baseline",
+        "evidence": "machtzev/learn-check.mjs:26-27"
+      },
+      {
+        "claim": "antipattern-scan: כל ANTIPATTERN הוא regex תקין, **ואינו תופס אף קובץ ב-new/** — לקח שחזר = אדום",
+        "evidence": "machtzev/learn-check.mjs:45,47-48 (הסריקה על 7,542 קבצים מ-שורה 36)"
+      },
+      {
+        "claim": "**פוסל ANTIPATTERN שהוא ליטרל** — regex בלי מטא-תווים אמיתיים (אחרי הסרת escapes) הוא בריחה מ-substring ולא לקח",
+        "evidence": "machtzev/learn-check.mjs:29 (META) · 46"
+      },
+      {
+        "claim": "learn-on-retry: טיוטה חייבת לתפוס את ה-blob **לפני** התיקון, לא לתפוס את הקובץ **אחרי**, ולהחזיק fixture מוזרע שנתפס",
+        "evidence": "machtzev/learn-check.mjs:49-65"
+      },
+      {
+        "claim": "ו-ה-fixture חייב להיות **הכללה ולא העתק** — fixture שהוא תת-מחרוזת של ה-blob-לפני נפסל (R3-5.15)",
+        "evidence": "machtzev/learn-check.mjs:64"
+      },
+      {
+        "claim": "stuck-loop: אותו שער שנכשל ב-3 **ניסיונות-commit** שונים (לא 3 שורות) ⇒ עצירה לבעלים; מטא-שערים learn/police מוחרגים",
+        "evidence": "machtzev/learn-check.mjs:68-76 (‏R3-5.1 בשורה 7 · ההחרגה בשורה 74)"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא בודק שה-RULE נכון או שהלקח באמת יושם במלואו — רק שה-regex לא תופס יותר",
+        "evidence": "machtzev/learn-check.mjs:42 — קיום RULE נבדק, תוכנו לא"
+      },
+      {
+        "claim": "לא סורק את machtzev/ עצמו — ההליכה מתחילה ב-R.NEW בלבד, ולכן אנטי-פטרן שחזר בתוך כלי-מחצב לא ייתפס",
+        "evidence": "machtzev/learn-check.mjs:36 — walk(R.NEW)"
+      },
+      {
+        "claim": "לא מייצר לקחים — זה learn-draft; כאן רק אכיפה",
+        "evidence": "machtzev/learn-check.mjs:2-8 — אין כתיבה מלבד --floor בשורה 25"
+      },
+      {
+        "claim": "רשימת שערי-ה-hook קשיחה בקוד ולא נגזרת מה-hooks — שער-hook חדש יצטרך עריכה כאן",
+        "evidence": "machtzev/learn-check.mjs:14 — HOOK_GATES כמערך ליטרלי"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:166",
+        "how": "gate('learn','learn-check.mjs') — מורץ-בשם כשער"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "שער, וזה מקומו — והוא שער על **התהליך** (איך הצוות לומד), לא על החומר. הקלט שלו הוא LEARNINGS.md ו-retry.jsonl; למחולל אין מה לצרוך מהם. ראוי לציין בכנות שזה אחד הבודדים כאן שאין לו אפילו נקודה תיאורטית: אין לו פלט שהוא נתון."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. ערכו למחולל הוא רק דרך בני-אדם/סוכנים שכותבים אותו: אנטי-פטרן שנאכף מכנית מונע רגרסיה בקוד שהמחולל יבנה ממנו. אבל זו השפעה דרך התהליך, לא נתיב-נתונים."
+    },
+    "evidence": [
+      "read: machtzev/learn-check.mjs:1-79 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ '✓ למידה: 116 לקחים עם GATE: (רצפה) · 9 אנטי-פטרנים לא חזרו ב-7542 קבצים · 9 טיוטות-M4 מוכחות · retry.jsonl 2110 · אין stuck-loop' + 'ran learn 617ms'"
+    ]
+  },
+  {
+    "file": "machtzev/learn-draft.mjs",
+    "lang": "mjs",
+    "lines": 65,
+    "does": [
+      {
+        "claim": "--record: לכל (שער-כושל × קובץ-staged ב-new/) כותב רשומה ל-audit/retry.jsonl עם ts · attempt · gate · path · sha · blob_before",
+        "evidence": "machtzev/learn-draft.mjs:22-37 (הדחיפה בשורה 35)"
+      },
+      {
+        "claim": "--record בלי שערים = סימון resolved לרשומות הפתוחות שנתיביהן staged (הכשל נפתר)",
+        "evidence": "machtzev/learn-draft.mjs:38-40"
+      },
+      {
+        "claim": "--stage בלבד: מייצר טיוטת-לקח בראש LEARNINGS.md עם ANTIPATTERN/RULE **ריקים** — כך ששער learn נשאר אדום עד שהסוכן ימלא",
+        "evidence": "machtzev/learn-draft.mjs:55-60 (התבנית בשורה 56); האכיפה ב-learn-check.mjs:42"
+      },
+      {
+        "claim": "ה-id נגזר מ-blob-before ⇒ אידמפוטנטי: אותו כשל לא מייצר שתי טיוטות",
+        "evidence": "machtzev/learn-draft.mjs:51-52"
+      },
+      {
+        "claim": "רושם רק קובץ שבאמת השתנה מול HEAD — אחרת הטיוטה בלתי-ניתנת-לסיפוק (R3-5.2)",
+        "evidence": "machtzev/learn-draft.mjs:27-28"
+      },
+      {
+        "claim": "**תקרת-רעש נלמדה בשדה:** 3 קבצים לשער לניסיון, אחרי ש-commit של 158 קבצים הציף 270 טיוטות על כשל אחד (L87-ו)",
+        "evidence": "machtzev/learn-draft.mjs:29 + 35 (‏.slice(0,3))"
+      },
+      {
+        "claim": "**שערי-פרוטוקול אינם לקח-קוד:** 8 שערים (index-complete · pins · wiring-fresh · truth-fresh · ratchet-down · nobinary · no-registry · gitignore-guard) רושמים שורה עם path:null — נספרת ל-stuck-loop אך בלי טיוטה, אחרי ש-index-complete ייחס 3 טיוטות-שקר לאטומים שבמקרה היו staged (L90)",
+        "evidence": "machtzev/learn-draft.mjs:30-32,34,36"
+      },
+      {
+        "claim": "מייצר גם fixture ריק פר-טיוטה, כדי ש-learn-check ידרוש דוגמה מורעלת",
+        "evidence": "machtzev/learn-draft.mjs:61-62"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא ממלא את הלקח — ANTIPATTERN ו-RULE נשארים ריקים בכוונה; המנוע יוצר את השלד, הסוכן חייב לכתוב את ההכללה",
+        "evidence": "machtzev/learn-draft.mjs:7 («ריקים לסוכן») · 56"
+      },
+      {
+        "claim": "לא רץ ביד — «רץ מתוך pre-commit, לעולם לא ביד»",
+        "evidence": "machtzev/learn-draft.mjs:2"
+      },
+      {
+        "claim": "לא מטייט רשומה בלי blob_before (כשל-כלי) — היא נספרת ל-stuck-loop בלבד",
+        "evidence": "machtzev/learn-draft.mjs:50"
+      },
+      {
+        "claim": "לא נוגע בקבצים מחוץ ל-new/ ובסיומות שאינן mjs/js/dart",
+        "evidence": "machtzev/learn-draft.mjs:17"
+      },
+      {
+        "claim": "מחריג קובץ-זמני של שער twin-replay, אחרת ניסיון-commit מקביל יוצר stuck-loop-רפאים (G48)",
+        "evidence": "machtzev/learn-draft.mjs:35"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".githooks/pre-commit:117",
+        "how": "--record <FAILED_GATES> --stage <STAGED> אחרי משטרה אדומה"
+      },
+      {
+        "who": ".githooks/pre-commit:81-82",
+        "how": "--stage בלבד ⇒ טיוטה; ואז pins-check --write + git add אוטומטי"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:21",
+        "how": "נעול-חתימה"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "שער/מנוע-תהליך, וזה מקומו. הקלט הוא כשלי-שערים ו-git; הפלט הוא טקסט שאדם משלים. אין כאן דבר שהמחולל יכול לצרוך. ראוי לציין לשבח דווקא את מה שהוא **לא** עושה: הוא לא כותב את הלקח בעצמו — וזו החלטה נכונה, כי לקח שנכתב אוטומטית הוא בדיוק «ANTIPATTERN ליטרל» ש-learn-check:46 פוסל."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. זהו מנגנון-הלמידה של הצוות, ושני הלקחים שמקודדים בתוכו (תקרת-3 · שערי-פרוטוקול-אינם-לקח-קוד) הם תיקוני-רעש של עצמו. אפס נתיב-נתונים למחולל."
+    },
+    "evidence": [
+      "read: machtzev/learn-draft.mjs:1-64 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ '… retry.jsonl 2110 · אין stuck-loop' (הפלט של learn-check על הקובץ ש-learn-draft כותב)",
+      "ran: grep -n 'learn-draft' .githooks/pre-commit ⇒ שורות 78 (הערה) · 81 · 117"
+    ]
+  },
+  {
+    "file": "machtzev/lib-ts.mjs",
+    "lang": "mjs",
+    "lines": 13,
+    "does": [
+      {
+        "claim": "פותר-typescript אחד לכל הכלים: machtzev/node_modules (vendored) ⇒ נפילה ל-maor-system",
+        "evidence": "machtzev/lib-ts.mjs:6-7"
+      },
+      {
+        "claim": "requireTs() יוצא exit 2 עם 'tool=typescript' ולא exit 1 — «אין-כלי ≠ כשל» (L34), ו-police ממיין 2 כ-yellow:tool",
+        "evidence": "machtzev/lib-ts.mjs:8-12 (ההנמקה בשורות 3-4)"
+      },
+      {
+        "claim": "הוא הספרייה עם הכי-הרבה מייבאים בקבוצה — 9 מנועים, מהם 2 בתיקיות-מנוע של המחולל (emit/)",
+        "evidence": "ran: grep -rn \"lib-ts.mjs'\" machtzev --include=*.mjs ⇒ box-assemble:10 · box-data-lift:11 · box-magic-lift:12 · box-purify:9 · deep-purity-scan:28 · emit/ast-js-to-dart:4 · emit/free-ref-scan:5 · purity/purify-engine:288 · purity/purify-hard:13"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא מוודא גרסת-typescript ולא שהיא תואמת — createRequire בלבד",
+        "evidence": "machtzev/lib-ts.mjs:6"
+      },
+      {
+        "claim": "הנפילה ל-maor-system מתה בקונטיינר הזה; היא עובדת רק כי npm ci --prefix machtzev הותקן",
+        "evidence": "machtzev/lib-ts.mjs:7; ran: ls -d /home/user/maor-system ⇒ No such file or directory · npm ci --prefix machtzev ⇒ 'added 1 package'"
+      },
+      {
+        "claim": "אינו שער ואין לו CLI — הוא ספרייה",
+        "evidence": "כרטיס engine-index: gate=- · cli=[] · exports=[ts,requireTs]"
+      },
+      {
+        "claim": "`ts` נפתר בזמן-ייבוא (top-level), כך שכל מייבא משלם את העלות גם אם לא ישתמש",
+        "evidence": "machtzev/lib-ts.mjs:7 — export const ts = tryReq(...)"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/box-assemble.mjs:10 · box-data-lift.mjs:11 · box-magic-lift.mjs:12 · box-purify.mjs:9 · deep-purity-scan.mjs:28",
+        "how": "ייבוא { requireTs }"
+      },
+      {
+        "who": "machtzev/emit/ast-js-to-dart.mjs:4 · machtzev/emit/free-ref-scan.mjs:5",
+        "how": "ייבוא { requireTs } — **אלה מנועי-פליטה של המחולל** (G20: ast-js-to-dart הוא מנוע-ההמרה)"
+      },
+      {
+        "who": "machtzev/purity/purify-engine.mjs:288 · machtzev/purity/purify-hard.mjs:13",
+        "how": "ייבוא { requireTs }"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:17",
+        "how": "נעול-חתימה"
+      }
+    ],
+    "connectAt": {
+      "point": "כבר מחובר בפועל דרך machtzev/emit/ast-js-to-dart.mjs:4 — ראוי רק להכיר בכך",
+      "gives": "כמו dart-bin: התשובה אינה «לחבר» אלא «הוא כבר שם». `ast-js-to-dart.mjs` הוא מנוע-ההמרה של G20 (‏JS⇒Dart עם חתימות מוקלדות), והוא מייבא מכאן את ה-AST. אין עבודת-חיווט; יש דיוק-מדידה — ספריית-תשתית שמשרתת גם את המחצבה וגם את הפליטה."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב כתשתית, כמו dart-bin. 13 שורות שמחזיקות את ההבחנה «אין-כלי ≠ כשל» — בלעדיה מנוע-ההמרה היה מדווח אדום-כוזב כשחסר typescript, וזה בדיוק סוג-הרעש ש-§22 («אפס-תקלות») לא סובל. אבל אינו מוסיף יכולת."
+    },
+    "evidence": [
+      "read: machtzev/lib-ts.mjs:1-12 (כל הקובץ)",
+      "ran: grep -rn \"lib-ts.mjs'\" machtzev --include=*.mjs ⇒ 9 מייבאים (הרשימה ב-callers)",
+      "ran: npm ci --prefix machtzev ⇒ 'added 1 package, and audited 2 packages' (typescript vendored — הנתיב הראשון תופס)",
+      "ran: ls -d /home/user/maor-system ⇒ No such file or directory (הנפילה השנייה מתה כאן)"
+    ]
+  },
+  {
+    "file": "machtzev/merge-regen.mjs",
+    "lang": "mjs",
+    "lines": 20,
+    "does": [
+      {
+        "claim": "‏merge-driver של git לקבצים מחוללים: במקום מיזוג-טקסט הוא **מחדש את הקובץ מהעץ** ומחזיר אותו כתוצאת-המיזוג",
+        "evidence": "machtzev/merge-regen.mjs:13-15 (‏copyFileSync ל-A, שהוא קובץ-התוצאה של git)"
+      },
+      {
+        "claim": "מכיר שני קבצים בשמם: TRUTH.md ⇒ truth.mjs --write · WIRING.md ⇒ tools/gen-wiring-doc.mjs",
+        "evidence": "machtzev/merge-regen.mjs:14-15"
+      },
+      {
+        "claim": "קובץ לא-מוכר ⇒ נופל ל-theirs **ומדווח ב-stderr** (לא בולע)",
+        "evidence": "machtzev/merge-regen.mjs:16"
+      },
+      {
+        "claim": "מותקן אוטומטית בשני מקומות — session-start וגם self-heal ב-pre-tool",
+        "evidence": ".claude/hooks/session-start.sh:13 · .claude/hooks/pre-tool.sh:22"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא משתמש ב-O ו-B (base/theirs) בנתיב-המחולל — הוא מתעלם משני הצדדים ומחדש מאפס; זה הרעיון, אבל זה גם אומר ששינוי-כוונה שהיה רק ב-theirs נעלם",
+        "evidence": "machtzev/merge-regen.mjs:9 (הפרמטרים) מול 14-15 (‏O ו-B אינם בשימוש שם)"
+      },
+      {
+        "claim": "לא מטפל בשום קובץ-מחולל אחר — engine-index.json · atom-index.json · auto-logic.json וכל שאר תוצרי-הצינור אינם ברשימה, ויתמזגו כטקסט עם סיכון לסימני-conflict",
+        "evidence": "machtzev/merge-regen.mjs:12-16 — שתי השוואות-שם בלבד"
+      },
+      {
+        "claim": "אינו שער ואינו נקרא מקוד — git קורא לו, ורק אם merge.regen.driver הוגדר **וגם** קיים ייחוס ב-.gitattributes",
+        "evidence": "machtzev/merge-regen.mjs:5"
+      },
+      {
+        "claim": "לא מאמת שהחידוש הצליח מבחינת תוכן — רק ש-execFileSync לא זרק",
+        "evidence": "machtzev/merge-regen.mjs:13-19 — try/catch סביב הכל"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".claude/hooks/session-start.sh:13",
+        "how": "git config merge.regen.driver \"node machtzev/merge-regen.mjs %O %A %B %P\""
+      },
+      {
+        "who": ".claude/hooks/pre-tool.sh:22",
+        "how": "אותה הגדרה כ-self-heal"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:22",
+        "how": "נעול-חתימה"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ לחיבור; אבל הרשימה בשורות 14-15 היא מועמדת-הרחבה אמיתית",
+      "gives": "אין נקודה כנה לחיבור-למחולל — git הוא הקורא, לא הצינור. אבל שווה לרשום מה כן עולה מהקריאה: הרעיון («קובץ-מחולל לא ממזגים, מחדשים») נכון בדיוק באותה מידה לכל תוצרי-REGEN, והרשימה מכירה שניים בלבד. הרחבה היא עבודת-תשתית, לא חיווט-מחולל, והיא הכרעת-בעלים. לא נגעתי."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. הוא מונע נזק בזמן-מיזוג לשני קבצי-תיעוד. שום יכולת של המחולל אינה תלויה בו, ובקונטיינר הזה הוא בכלל לא ירה."
+    },
+    "evidence": [
+      "read: machtzev/merge-regen.mjs:1-19 (כל הקובץ)",
+      "ran: grep -rn 'merge-regen.mjs' ⇒ .claude/hooks/session-start.sh:13 · .claude/hooks/pre-tool.sh:22 · machtzev/pins-check.mjs:22 · machtzev/index-baseline.json:57"
+    ]
+  },
+  {
+    "file": "machtzev/mutation-check.mjs",
+    "lang": "mjs",
+    "lines": 51,
+    "does": [
+      {
+        "claim": "לכל אטום: מחליף את הקובץ בגוף-חלול, מריץ את הבדיקה (חייבת להאדים), משחזר, מריץ שוב (חייבת להוריק) — שני התנאים יחד",
+        "evidence": "machtzev/mutation-check.mjs:34-43 (הפסק בשורה 41)"
+      },
+      {
+        "claim": "**החלול שומר-טיפוס** — כל יצוא הופך לפונקציה שמחזירה undefined, כדי שבדיקת `typeof f === 'function'` **לא** תישאר ירוקה ותסתיר בדיקה-ריקה (R2-2.8)",
+        "evidence": "machtzev/mutation-check.mjs:34 + ההנמקה בשורה 6"
+      },
+      {
+        "claim": "fail-closed על צורת-export שהרגקס לא מפרסר (export default / export {…}) ⇒ unparsed ⇒ אדום, לא דילוג-שקט (L13)",
+        "evidence": "machtzev/mutation-check.mjs:31-33 · 46 · 50"
+      },
+      {
+        "claim": "שחזור מובטח בשלושה מסלולים: finally · מטפלי SIGTERM/SIGINT/SIGHUP · uncaughtException — כי police מריץ אותו תחת timeout -s TERM",
+        "evidence": "machtzev/mutation-check.mjs:23-26 (ההנמקה R3-3.15) · 44"
+      },
+      {
+        "claim": "הליכה **רקורסיבית** — התיקון לבאג שבו אטום בתת-תיקייה לא נבדק מעולם (R2-1.7)",
+        "evidence": "machtzev/mutation-check.mjs:20 + ההנמקה בשורה 4"
+      },
+      {
+        "claim": "sandbox זהה ל-contract-check: env=PATH בלבד · --permission --allow-fs-read · timeout 15s · SIGKILL",
+        "evidence": "machtzev/mutation-check.mjs:17"
+      },
+      {
+        "claim": "מבחין בשלוש מחלקות-כשל נפרדות: vacuous (ירוקה-על-חלול) · broken (אדומה-על-אמיתי) · unparsed",
+        "evidence": "machtzev/mutation-check.mjs:22 · 41-43 · 46-48"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא נוגע ב-Dart — זה mutation-dart-check; כאן .mjs בלבד",
+        "evidence": "machtzev/mutation-check.mjs:16 — isAtom דורש .mjs"
+      },
+      {
+        "claim": "לא בודק קופסאות — האוכלוסייה היא new/atoms/ (‏«תיבות ⇒ boxes-gate»)",
+        "evidence": "machtzev/mutation-check.mjs:15,19"
+      },
+      {
+        "claim": "אטום בלי בדיקה נספר כ-untested ו**אינו** מפיל — הדרישה לבדיקה היא של contract-check, לא של השער הזה",
+        "evidence": "machtzev/mutation-check.mjs:29"
+      },
+      {
+        "claim": "מוטציה אחת בלבד פר-אטום (חלול-מלא) — אינו mutation-testing אמיתי עם אופרטורים; הוא בודק «האם הבדיקה מפעילה את הקוד», לא «האם היא מכסה את ההתנהגות»",
+        "evidence": "machtzev/mutation-check.mjs:34 — יצוא אחד חלול לכל השמות"
+      },
+      {
+        "claim": "**כותב על קובץ-מקור בזמן הריצה** (ומשחזר) — ולכן הוא היחיד בקבוצה שהרצה שלו אינה בטוחה בעץ-עבודה מלוכלך. מסיבה זו לא הרצתי אותו כאן",
+        "evidence": "machtzev/mutation-check.mjs:37,39,44"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:171",
+        "how": "gate('mutation','mutation-check.mjs',[...filesArg()], FAST && !INC_FILES) — מדולג ב---fast אך **לא** תחת --inc (מוטציה על הדיף)"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ — כי היכולת כבר הועתקה לתוך המחולל",
+      "gives": "זו התשובה המעניינת בערך הזה: **העיקרון כבר בצינור, במנוע אחר.** ‏`machtzev/generator/auto-logic.mjs:128-151` מיישם «מוטציית-רגישות» — stub שזורק במקום המנוע, ואם בדיקות-הזהב נשארות ירוקות אז «הבדיקות-לא-מפעילות-את-המנוע» ⇒ המועמד **אינו** מוכח. זה בדיוק הלקח של mutation-check (‏«בדיקה שעוברת גם על קוד שבור שווה כלום»), מיושם על בורר-המחולל. כלומר אין כאן פער לסגור אלא דפוס שהוכיח את עצמו והועבר. לחבר את mutation-check עצמו לצינור יריץ מוטציה על 1,239 אטומי-JS בכל בנייה — עלות בלי תשואה."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב בעקיפין, ובעיקר כמקור-רעיוני. הוא מבטיח שהזהב שהמחולל סומך עליו אינו ריק, וזה תנאי-קדם ל«הכי-טוב-בהוכחה» של הכרעה-30. הציון אינו גבוה יותר כי התרומה הישירה כבר קיימת בצינור דרך auto-logic, ולא דרכו."
+    },
+    "evidence": [
+      "read: machtzev/mutation-check.mjs:1-50 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ 'skipped mutation (--fast)' (שורה 437) — שער סוף-גל",
+      "ran: grep -n 'sens\\|stub' machtzev/generator/auto-logic.mjs ⇒ שורות 11 · 128 · 138 · 143-144 · 149 · 151 — מוטציית-הרגישות בתוך בורר-המחולל",
+      "לא הורץ במכוון: המנוע כותב על קובצי-מקור ומשחזר (שורות 37/39/44); הרצה כאן הייתה מסכנת את נקיון עץ-העבודה"
+    ]
   }
 ]

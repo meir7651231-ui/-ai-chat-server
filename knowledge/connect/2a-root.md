@@ -1,6 +1,6 @@
 # 2a · `machtzev/*.mjs` (שורש) — מיפוי חיבור-למחולל
 
-**26/51 מנועים ממופים** · 2031 שורות נקראו · פיזור s22: 0⇒9 · 1⇒9 · 2⇒7 · 3⇒1
+**31/51 מנועים ממופים** · 2260 שורות נקראו · פיזור s22: 0⇒12 · 1⇒11 · 2⇒7 · 3⇒1
 
 הגדרת «מחובר» = `machtzev/census/engine-index.mjs:319-333` (נגיש בייבוא טרנזיטיבי מ-6 נקודות-הכניסה, או מורץ-בשם מ-regen/ship). שערים אינם מחוברים — הם שומרים.
 מדידה: `node machtzev/census/engine-index.mjs --connected` ⇒ `57 · 279 · 336`.
@@ -24,6 +24,8 @@
 | `dart-bin.mjs` | 1 | כבר מחובר בפועל דרך machtzev/generator/synth.mjs:15 — ראוי רק להכיר בכך | מפרק-נתיב יחיד לבינארי Dart בסדר קבוע: DART_BIN ⇒ $HOME/dart-sdk/bin/dart ⇒ /home/user/flutter/bin/dart ⇒ command -v dart |
 | `data-purity-check.mjs` | 1 | ∅ — ובמתכוון | מסמן אטום כ«מעורב» אם יש בו ליטרל-עברי **וגם** הוא אינו בצורת-דאטה-טהורה — אינווריאנט הכרעה-16: אין דאטה במנגנון |
 | `ds-tokens.mjs` | 1 | ∅ | קורא זרע קומפקטי (new/dart-ui-bs/ds/design-seed.json) ומרחיב אותו ל-7 מחלקות-טוקן ב-ds_scale.dart: DsType · DsSpace · DsRadii · DsElev · DsGradient · DsMotion · DsDark |
+| `lib-ts.mjs` | 1 | כבר מחובר בפועל דרך machtzev/emit/ast-js-to-dart.mjs:4 — ראוי רק להכיר בכך | פותר-typescript אחד לכל הכלים: machtzev/node_modules (vendored) ⇒ נפילה ל-maor-system |
+| `mutation-check.mjs` | 1 | ∅ — כי היכולת כבר הועתקה לתוך המחולל | לכל אטום: מחליף את הקובץ בגוף-חלול, מריץ את הבדיקה (חייבת להאדים), משחזר, מריץ שוב (חייבת להוריק) — שני התנאים יחד |
 | `allow-check.mjs` | 0 | ∅ | מפרסר trailers מסוג `Allow: <kind>[:<scope>] <סיבה>` מהודעת-commit ומחזיר {allows,bad} |
 | `atom-count-check.mjs` | 0 | ∅ | סופר קבצים רקורסיבית לכל תיקייה ישירה תחת new/ ומחזיר {אזור: מספר} |
 | `audit-gates.mjs` | 0 | ∅ | פותח worktree זמני מנותק על HEAD עם core.hooksPath=.githooks, מזריע הפרה, ומנסה `git commit` אמיתי — הראיה היא commit שנכשל |
@@ -33,3 +35,6 @@
 | `ds-motion.mjs` | 0 | ∅ — אבל עם הערה שראוי להביא לבעלים | מחולל ds_anim.dart — 5 עוטפי-מושן-כניסה דרך TweenAnimationBuilder (חד-שוט, בלי controller) |
 | `ds-variants.mjs` | 0 | ∅ לחיבור; אבל יש כאן ממצא-שער שראוי לדווח | מחולל ds_surface.dart — עוטפי-כרטיס פר-תא-מטריצה (מוגבה · מתאר · זכוכית · גרדיאנט), כשהעיצוב מגיע מטוקנים והווידג'ט עיוור |
 | `index-check.mjs` | 0 | ∅ | אוכף שכל .mjs תחת machtzev/ מופיע ב-INDEX.md — סקריפט חדש בלי שורה ⇒ אדום |
+| `learn-check.mjs` | 0 | ∅ | parity: כל `## L…` ב-LEARNINGS.md חייב שורת `GATE:` עם מזהה מוכר (מ-gates.tsv ∪ 21 שערי-hook קשיחים) |
+| `learn-draft.mjs` | 0 | ∅ | --record: לכל (שער-כושל × קובץ-staged ב-new/) כותב רשומה ל-audit/retry.jsonl עם ts · attempt · gate · path · sha · blob_before |
+| `merge-regen.mjs` | 0 | ∅ לחיבור; אבל הרשימה בשורות 14-15 היא מועמדת-הרחבה אמיתית | ‏merge-driver של git לקבצים מחוללים: במקום מיזוג-טקסט הוא **מחדש את הקובץ מהעץ** ומחזיר אותו כתוצאת-המיזוג |
