@@ -221,62 +221,78 @@ table.mini .tot th,table.mini .tot td{font-weight:800;border-block-end:0;padding
 @media(max-width:700px){.topbar .find kbd{display:none}.dstats{gap:var(--s4)}}
 
 /* ===== anashim.css ===== */
+/* אנשים — טבלה דינמית.
+   המידות נמדדו מ-Atlassian Design System: שורה 48 · כותרת 653 12/16
+   מעל קו 2px · ריפוד 4/8/4/0 · אפס קו בין שורות (הגובה מפריד) ·
+   טעינה ב-20% שקיפות במקום שלד. הצבעים הם של האפליקציה.          */
 #app[data-v=anashim] .hd{position:sticky;top:0;z-index:30;background:var(--bg);border-block-end:1px solid var(--hair);
  padding:var(--s3) var(--s4);display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap}
 #app[data-v=anashim] .hd h1{font-size:19px}
-#app[data-v=anashim] .hd .cnt{font-size:12.5px;color:var(--mut);flex:1}
-#app[data-v=anashim] .hd input{border:1px solid var(--hair);background:var(--card);border-radius:999px;padding:9px var(--s4);
- font-size:14px;min-width:min(100%,220px);outline:0;min-height:40px}
-#app[data-v=anashim] .hd input:focus{border-color:var(--acc)}
+#app[data-v=anashim] .hd .cnt{font-size:12.5px;color:var(--mut)}
+#app[data-v=anashim] .hd .cnt2{font-size:12.5px;color:var(--mut);margin-inline-start:auto;
+ font-variant-numeric:tabular-nums;white-space:nowrap}
+#app[data-v=anashim] .hd input,#app[data-v=anashim] .hd select{border:1px solid var(--hair);background:var(--card);color:var(--ink);
+ border-radius:var(--rs);padding:8px var(--s3);font-size:14px;outline:0;min-height:36px}
+#app[data-v=anashim] .hd input{min-width:min(100%,220px)}
+#app[data-v=anashim] .hd input:focus,#app[data-v=anashim] .hd select:focus{border-color:var(--acc)}
+#app[data-v=anashim] .gh{border:1px solid var(--hair);background:var(--card);color:var(--ink);border-radius:var(--rs);
+ padding:0 var(--s3);font:400 13.5px/1 Heebo;min-height:36px}
+#app[data-v=anashim] .gh:hover{background:var(--sunk)}
+#app[data-v=anashim] .gh.sm{min-height:30px;font-size:12.5px;color:var(--mut);padding:0 10px}
+#app[data-v=anashim] .gh.sm:hover{color:var(--err);border-color:var(--err)}
+#app[data-v=anashim] .gh[aria-pressed=true]{background:var(--acc-soft);border-color:var(--acc);color:var(--acc)}
+#app[data-v=anashim] .hid{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
-#app[data-v=anashim] .cols{display:grid;grid-template-columns:34px minmax(0,1fr) minmax(0,340px);gap:0;align-items:start}
-#app[data-v=anashim] .rail{position:sticky;top:64px;display:grid;gap:1px;padding:var(--s3) 0;justify-items:center}
-#app[data-v=anashim] .rail button{border:0;background:none;color:var(--mut);font:700 11.5px Heebo;width:26px;height:19px;border-radius:5px;padding:0}
-#app[data-v=anashim] .rail button[data-has=y]{color:var(--mut)}
-#app[data-v=anashim] .rail button[data-has=y]:hover,#app[data-v=anashim] .rail button[aria-current=true]{background:var(--acc-soft);color:var(--acc)}
-#app[data-v=anashim] .rail button[data-has=n]{opacity:.35;cursor:default}
+#app[data-v=anashim] .holder{position:relative;min-height:240px;padding:0 var(--s4)}
+#app[data-v=anashim] table{width:100%;border-collapse:separate;border-spacing:0;table-layout:auto}
+#app[data-v=anashim] thead th{font:653 12px/16px Heebo;color:var(--mut);text-align:start;height:34px;
+ padding:4px 0 4px var(--s2);border-block-end:2px solid var(--hair);
+ white-space:nowrap;background:var(--bg);position:sticky;top:64px;z-index:5}
+#app[data-v=anashim] thead th.e{text-align:end}
+#app[data-v=anashim] th.srt{padding:0}
+#app[data-v=anashim] th.srt button{display:flex;align-items:center;gap:4px;width:100%;height:34px;background:0;
+ border:0;padding:4px 0 4px var(--s2);font:inherit;color:inherit;text-align:start}
+#app[data-v=anashim] th.srt button:hover{color:var(--ink)}
+#app[data-v=anashim] th.srt .ar{opacity:0;font-size:10px;line-height:1}
+#app[data-v=anashim] th.srt[aria-sort] .ar{opacity:1}
+#app[data-v=anashim] tbody td{font-size:14px;line-height:20px;color:var(--ink);height:48px;
+ padding:4px 0 4px var(--s2);vertical-align:middle;border:0}   /* אין קו בין שורות */
+#app[data-v=anashim] tbody td.e{text-align:end;white-space:nowrap}
+#app[data-v=anashim] tbody tr:hover td{background:var(--sunk)}
+#app[data-v=anashim] .nmc{display:flex;align-items:center;gap:var(--s2);min-width:0}
+#app[data-v=anashim] .nmc .av{border-radius:50%;display:grid;place-items:center;font:700 12px Heebo;flex:none}
+#app[data-v=anashim] .nmc b{font-weight:400}
+#app[data-v=anashim] .sub{display:block;color:var(--mut);font-size:12px;line-height:16px}
 
-#app[data-v=anashim] .book{border-inline:1px solid var(--hair);min-height:100vh}
-#app[data-v=anashim] .lgroup{position:sticky;top:64px;background:var(--sunk);padding:5px var(--s4);font:800 12px Heebo;color:var(--mut);
- border-block:1px solid var(--hair);z-index:10}
-#app[data-v=anashim] .person{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:var(--s3);align-items:center;width:100%;
- padding:var(--s3) var(--s4);border:0;border-block-end:1px solid var(--hair);background:none;text-align:start;min-height:58px}
-#app[data-v=anashim] .person:hover{background:var(--sunk)}
-#app[data-v=anashim] .person[aria-selected=true]{background:var(--acc-soft)}
-#app[data-v=anashim] .person .av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:700 13px Heebo}
-#app[data-v=anashim] .person .nm{font-weight:600;font-size:15px}
-#app[data-v=anashim] .person .ro{font-size:12.5px;color:var(--mut)}
-#app[data-v=anashim] .person .ci{font-size:12px;color:var(--mut);white-space:nowrap}
-@media(max-width:560px){#app[data-v=anashim] .person .ci{display:none}#app[data-v=anashim] }
+/* טעינה: התוכן נשאר ויורד ל-20%, לא מוחלף בשלד */
+#app[data-v=anashim] .holder.load tbody,#app[data-v=anashim] .holder.load thead{opacity:.2;pointer-events:none}
+#app[data-v=anashim] .spin{display:none;position:absolute;inset-block-start:96px;inset-inline-start:50%;
+ width:28px;height:28px;margin-inline-start:-14px;border-radius:50%;
+ border:3px solid var(--hair);border-top-color:var(--acc);animation:anspin .8s linear infinite}
+#app[data-v=anashim] .holder.load .spin{display:block}
+@keyframes anspin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){#app[data-v=anashim] .spin{animation-duration:2.4s}#app[data-v=anashim] }
 
-.panel{position:sticky;top:64px;padding:var(--s4);max-height:calc(100vh - 64px);overflow:auto}
-#app[data-v=anashim] .pcard{background:var(--card);border:1px solid var(--hair);border-radius:var(--r);padding:var(--s4)}
-#app[data-v=anashim] .pcard .who{display:flex;gap:var(--s3);align-items:center}
-#app[data-v=anashim] .pcard .who .av{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font:700 18px Heebo}
-#app[data-v=anashim] .pcard h2{font-size:18px}
-#app[data-v=anashim] .pcard .ro{font-size:13px;color:var(--mut)}
-#app[data-v=anashim] .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:var(--s3)}
-#app[data-v=anashim] .chip{font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 10px;background:var(--sunk);color:var(--mut)}
-#app[data-v=anashim] dl.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px var(--s3);margin:var(--s4) 0 0;font-size:13.5px}
-#app[data-v=anashim] dl.kv dt{color:var(--mut)}#app[data-v=anashim] dl.kv dd{margin:0;text-align:end}
-#app[data-v=anashim] .tree{margin-top:var(--s4);border-block-start:1px solid var(--hair);padding-block-start:var(--s3)}
-#app[data-v=anashim] .tree h3{font-size:13px;color:var(--mut);font-weight:400;margin-bottom:var(--s2)}
-#app[data-v=anashim] .tree svg{width:100%;height:auto;display:block}
-#app[data-v=anashim] .tree text{font:600 11px Heebo;fill:var(--ink)}
-#app[data-v=anashim] .tree text.t2{font:400 9.5px Heebo;fill:var(--mut)}
-#app[data-v=anashim] .tree line{stroke:var(--hair);stroke-width:1.5}
-#app[data-v=anashim] .tree rect.node{fill:var(--sunk);stroke:var(--hair)}
-#app[data-v=anashim] .tree rect.me{fill:var(--acc-soft);stroke:var(--acc)}
-#app[data-v=anashim] .acts{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s4)}
-#app[data-v=anashim] .acts button{border:1px solid var(--hair);background:var(--card);border-radius:var(--rs);padding:7px 12px;font-size:12.5px;min-height:38px}
-#app[data-v=anashim] .acts button.pri{background:var(--acc);border-color:var(--acc);color:var(--on-acc);font-weight:600}
+.none{display:none;padding:56px var(--s4);text-align:center;color:var(--mut);font-size:14px}
+#app[data-v=anashim] .none b{display:block;color:var(--ink);font:600 16px/24px Heebo;margin-block-end:6px}
+#app[data-v=anashim] .holder.empty .none{display:block}
+#app[data-v=anashim] .holder.empty table{display:none}
 
-@media(max-width:900px){
- #app[data-v=anashim] .cols{grid-template-columns:30px minmax(0,1fr)}
- #app[data-v=anashim] .panel{grid-column:1/-1;position:static;max-height:none;border-block-start:1px solid var(--hair)}
- #app[data-v=anashim] .book{border-inline-end:0}
-#app[data-v=anashim] }
-@media print{.rail,.hd input,.acts{display:none!important}.cols{display:block}.panel{position:static}}
+#app[data-v=anashim] .pg{display:flex;justify-content:center;align-items:center;gap:4px;
+ padding:var(--s4) var(--s4) var(--s6);flex-wrap:wrap}
+#app[data-v=anashim] .pg button{min-width:34px;min-height:34px;border:0;border-radius:var(--rs);background:0;
+ color:var(--mut);font-size:14px;font-variant-numeric:tabular-nums}
+#app[data-v=anashim] .pg button:hover:not(:disabled){background:var(--sunk)}
+#app[data-v=anashim] .pg button[aria-current=page]{background:var(--acc-soft);color:var(--acc);font-weight:600}
+#app[data-v=anashim] .pg button:disabled{opacity:.35;cursor:default}
+#app[data-v=anashim] .pg .gap{color:var(--mut);padding:0 2px}
+
+@media(max-width:760px){
+ #app[data-v=anashim] .holder{overflow-x:auto;padding:0 var(--s3)}
+ #app[data-v=anashim] table{min-width:700px}
+ #app[data-v=anashim] thead th{position:static}
+ #app[data-v=anashim] .hd .cnt2{margin-inline-start:0;width:100%}#app[data-v=anashim] }
+@media print{.hd input,.hd select,.gh,.pg,.spin{display:none!important}}
 
 
 /* ===== bait.css ===== */
@@ -1517,73 +1533,148 @@ VIEWS.bait = {
 };
 
 /* ------------------------------------------------------------- אנשים --- */
-const LETTERS = [...'אבגדהוזחטיכלמנסעפצקרשת'];
+/* ---------- אנשים ----------
+   טבלה דינמית. המבנה וההתנהגות הועתקו במדידה מ-Atlassian Design System
+   (atlassian.design/components/dynamic-table — 7,552 אלמנטים, 14 מצבים):
+   שורה 48 · כותרת 653 12/16 מעל קו 2px · אפס קו בין שורות · טעינה
+   ב-20% שקיפות במקום שלד · מצב-ריק · ומיקוד אחרי שהשורה יוצאת מהתצוגה.
+   הצבעים הם של האפליקציה, לא של אטלסיאן — המבנה עובר, הפלטה נשארת.  */
+const AN = { page: 1, per: 25, key: 'name', dir: 1, q: '', kind: '', left: false, focus: null };
+
 VIEWS.anashim = {
   name: 'אנשים',
   render() {
+    const kinds = [...new Set(DB.people.map(p => p.kind))];
     return `<header class="hd"><h1>אנשים</h1>
-      <p class="cnt">${num(DB.people.length)} רשומות · ${DB.families.length} משפחות · ${DB.staff.length} עובדים · ${DB.donors.length} תורמים</p>
-      <input id="q" type="search" placeholder="שם, עיר או תפקיד…" aria-label="סינון אנשים" autocomplete="off"></header>
-    <div class="cols">
-      <nav class="rail" id="rail" aria-label="קפיצה לאות"></nav>
-      <div class="book" id="book" aria-label="רשימת אנשים"></div>
-      <aside class="panel"><div class="pcard" id="panel" aria-live="polite"></div></aside>
-    </div>`;
+      <p class="cnt">${num(DB.people.length)} רשומות · ${kinds.map(k => DB.people.filter(p => p.kind === k).length + ' ' + k).join(' · ')}</p>
+      <input id="q" type="search" placeholder="שם, עיר או שיוך…" aria-label="סינון אנשים" autocomplete="off" value="${esc(AN.q)}">
+      <label class="hid" for="kf">סוג</label>
+      <select id="kf"><option value="">כל הסוגים</option>${kinds.map(k => `<option${AN.kind === k ? ' selected' : ''}>${esc(k)}</option>`).join('')}</select>
+      <button class="gh" id="showLeft" type="button" aria-pressed="${AN.left}">${AN.left ? 'הסתרת מי שעזב' : 'הצגת מי שעזב'}</button>
+      <span class="cnt2" id="cnt"></span></header>
+    <div class="holder" id="holder">
+      <div class="spin" role="status" aria-live="polite"><span class="hid">טוען</span></div>
+      <table>
+        <thead><tr>
+          <th class="srt" data-s="name" style="width:36%"><button type="button">שם<span class="ar">▾</span></button></th>
+          <th class="srt" data-s="kind"><button type="button">סוג<span class="ar">▾</span></button></th>
+          <th class="srt" data-s="city"><button type="button">עיר<span class="ar">▾</span></button></th>
+          <th>שיוך</th>
+          <th class="e">יתרה</th>
+          <th class="e">פעולה</th>
+        </tr></thead>
+        <tbody id="tb"></tbody>
+      </table>
+      <div class="none"><b>אין רשומות מתאימות</b>אף אדם לא עונה על החיפוש והסינון. נסה לנקות את החיפוש או לבחור סוג אחר.</div>
+    </div>
+    <nav class="pg" id="pg" aria-label="עימוד"></nav>`;
   },
   mount() {
-    const rows = () => {
-      const q = (document.getElementById('q').value || '').trim();
-      return DB.families.map(f => ({
-        id: f.id, t: f.name, l: f.name.replace('משפחת ', '')[0], sub: f.city + ' · ' + f.kids.length + ' ילדים', f,
-      })).filter(r => !q || r.t.includes(q) || r.sub.includes(q));
+    const tb = document.getElementById('tb'), pg = document.getElementById('pg'),
+          holder = document.getElementById('holder'), cnt = document.getElementById('cnt');
+
+    /* השיוך והיתרה נגזרים — לא נשמרים על האדם */
+    const tie = (p) => {
+      if (p.kind === 'עובד') { const s = DB.staff.find(x => x.personId === p.id);
+        return s ? { t: s.role, bal: 0, href: '#/staffp/' + s.id } : { t: '—', bal: 0 }; }
+      if (p.kind === 'תלמיד') { const s = DB.students.find(x => x.personId === p.id);
+        const c = s && cls(s.classId);
+        return s ? { t: c ? c.name : '—', bal: 0, href: '#/student/' + s.id } : { t: '—', bal: 0 }; }
+      if (p.kind === 'הורה') { const f = DB.families.find(x => x.head === p.id || x.spouse === p.id);
+        return f ? { t: f.name, bal: balance(f), href: '#/family/' + f.id } : { t: '—', bal: 0 }; }
+      const d = DB.donors.find(x => x.personId === p.id);
+      return d ? { t: d.anon ? 'בעילום שם' : 'תורם', bal: 0, href: '#/donorp/' + d.id } : { t: '—', bal: 0 };
+    };
+    const view = () => {
+      const q = AN.q.trim();
+      return DB.people.filter(p => {
+        if (p.left && !AN.left) return false;
+        if (AN.kind && p.kind !== AN.kind) return false;
+        if (!q) return true;
+        const n = p.first + ' ' + p.last;
+        return n.includes(q) || p.city.includes(q) || tie(p).t.includes(q);
+      }).map(p => ({ p, name: p.first + ' ' + p.last, kind: p.kind, city: p.city, tieO: tie(p) }))
+        .sort((a, b) => (a[AN.key] > b[AN.key] ? 1 : a[AN.key] < b[AN.key] ? -1 : 0) * AN.dir);
     };
     const paint = () => {
-      const list = rows(); let out = '', last = '';
-      list.forEach(r => {
-        if (r.l !== last) { last = r.l; out += `<h2 class="lgroup" id="L${r.l}">${r.l}</h2>`; }
-        out += `<a class="person" href="#/family/${r.id}">${avatar(r.t, r.id, 38)}
-          <span><span class="nm">${esc(r.t)}</span><br><span class="ro">${esc(r.sub)}</span></span>
-          <span class="ci">${money(balance(r.f))}</span></a>`;
+      const v = view(), pages = Math.max(1, Math.ceil(v.length / AN.per));
+      AN.page = Math.min(Math.max(1, AN.page), pages);
+      const slice = v.slice((AN.page - 1) * AN.per, AN.page * AN.per);
+      holder.classList.toggle('empty', !v.length);
+      cnt.innerHTML = v.length ? `${num(v.length)} · עמוד ${AN.page} מתוך ${pages}` : '0 רשומות';
+      tb.innerHTML = slice.map(r => `<tr data-id="${r.p.id}">
+        <td><span class="nmc">${avatar(r.name, r.p.id, 36)}<span>${r.tieO.href
+          ? `<a class="lk" href="${r.tieO.href}">${esc(r.name)}</a>` : `<b>${esc(r.name)}</b>`}
+          ${r.p.left ? `<span class="sub">עזב · ${esc(r.p.left)}</span>` : ''}</span></span></td>
+        <td>${tag(r.kind)}</td><td>${esc(r.city)}</td><td>${esc(r.tieO.t)}</td>
+        <td class="e">${r.tieO.bal > 0 ? money(r.tieO.bal) : '<span class="sub">—</span>'}</td>
+        <td class="e">${r.p.left ? '<span class="sub">ארכיון</span>'
+          : `<button class="gh sm" type="button" data-go="${r.p.id}">סימון «עזב»</button>`}</td></tr>`).join('');
+      /* עימוד מקוצר */
+      const set = { 1: 1, 2: 1 }; set[pages] = 1; set[pages - 1] = 1;
+      for (let i = AN.page - 1; i <= AN.page + 1; i++) if (i >= 1 && i <= pages) set[i] = 1;
+      let last = 0;
+      const out = [`<button type="button" id="prev"${AN.page === 1 ? ' disabled' : ''} aria-label="הקודם">‹</button>`];
+      Object.keys(set).map(Number).filter(n => n >= 1 && n <= pages).sort((a, b) => a - b).forEach(n => {
+        if (last && n > last + 1) out.push('<span class="gap">…</span>');
+        out.push(`<button type="button" data-p="${n}"${n === AN.page ? ' aria-current="page"' : ''}>${n}</button>`);
+        last = n;
       });
-      document.getElementById('book').innerHTML = list.length ? out : empty('אין תוצאה.');
-      document.getElementById('rail').innerHTML = LETTERS.map(L => {
-        const has = list.some(r => r.l === L);
-        return `<button data-l="${L}" data-has="${has ? 'y' : 'n'}"${has ? '' : ' disabled'} aria-label="קפוץ לאות ${L}">${L}</button>`;
-      }).join('');
-      const f = list[0] && list[0].f;
-      document.getElementById('panel').innerHTML = f ? panelOf(f) : empty('בחר משפחה');
+      out.push(`<button type="button" id="next"${AN.page === pages ? ' disabled' : ''} aria-label="הבא">›</button>`);
+      pg.innerHTML = out.join('');
+      /* שחזור מיקוד אחרי ש-act() בנה את המסך מחדש */
+      if (AN.focus != null) {
+        const rows = tb.children;
+        let t = null;
+        if (rows.length) {
+          const i = Math.min(AN.focus, rows.length - 1);
+          for (let k = i; k >= 0 && !t; k--) t = rows[k].querySelector('[data-go]');
+          for (let k = i; k < rows.length && !t; k++) t = rows[k].querySelector('[data-go]');
+        }
+        (t || document.getElementById('q')).focus();
+        AN.focus = null;
+      }
     };
-    const panelOf = (f) => {
-      const kids = f.kids.map(stu);
-      return `<div class="who">${avatar(f.name, f.id, 52)}<span><h2>${esc(f.name)}</h2><span class="ro">${esc(f.city)}</span></span></div>
-      <div class="chips">${tag(f.kids.length + ' ילדים')}${f.hok ? tag('הוראת קבע', 'ok') : tag('בלי הו״ק', 'warn')}${f.discount ? tag('הנחה ' + f.discount + '%') : ''}</div>
-      <dl class="kv">
-        <dt>אב</dt><dd>${esc(nameOf(f.head))}</dd>
-        <dt>אם</dt><dd>${esc(nameOf(f.spouse))}</dd>
-        <dt>טלפון</dt><dd class="num">${ltr(f.phone)}</dd>
-        <dt>יתרה</dt><dd>${money(balance(f))}</dd>
-        <dt>מקום בבית המדרש</dt><dd>${f.seat ? 'שורה ' + (seat(f.seat).row + 1) + ' · ' + (seat(f.seat).col + 1) : '—'}</dd>
-      </dl>
-      <div class="tree"><h3>ילדים במוסד</h3>
-        <ul class="kidlist">${kids.map(k => `<li><a class="lk" href="#/student/${k.id}">${esc(nameOf(k.personId))}</a>
-          <span>${esc(cls(k.classId).name)} · נוכחות ${k.att.filter(Boolean).length}/5</span></li>`).join('') || empty('אין')}</ul></div>
-      <div class="acts"><a class="btn pri" href="#/family/${f.id}">פתיחת התיק המלא</a></div>`;
+    /* המצב ה-14 של אטלסיאן: המיקום נקרא לפני שהשורה יוצאת */
+    const leave = (id, btn) => {
+      const tr = btn.closest('tr');
+      AN.focus = Array.prototype.indexOf.call(tb.children, tr);
+      const p = DB.people.find(x => x.id === id);
+      const nm = p.first + ' ' + p.last;
+      act('סומן «עזב» · ' + nm, 'אנשים', () => {
+        const was = p.left || null;
+        p.left = DB.today.hd + ' ' + DB.today.hy;
+        return () => { p.left = was; };
+      });
+      toast('סומן «עזב» · ' + nm);
     };
-    document.getElementById('q').addEventListener('input', paint);
-    document.getElementById('rail').addEventListener('click', e => {
-      const b = e.target.closest('[data-l]'); if (!b || b.dataset.has !== 'y') return;
-      const t = document.getElementById('L' + b.dataset.l);
-      if (t) t.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth' });
+    document.getElementById('q').addEventListener('input', e => { AN.q = e.target.value; AN.page = 1; paint(); });
+    document.getElementById('kf').addEventListener('change', e => { AN.kind = e.target.value; AN.page = 1; paint(); });
+    document.getElementById('showLeft').addEventListener('click', function () {
+      AN.left = !AN.left; this.setAttribute('aria-pressed', String(AN.left));
+      this.textContent = AN.left ? 'הסתרת מי שעזב' : 'הצגת מי שעזב'; AN.page = 1; paint();
     });
-    document.getElementById('book').addEventListener('mouseover', e => {
-      const a = e.target.closest('.person'); if (!a) return;
-      const f = fam(a.getAttribute('href').split('/')[2]); if (f) document.getElementById('panel').innerHTML = panelOf(f);
+    document.querySelector('thead').addEventListener('click', e => {
+      const th = e.target.closest('th.srt'); if (!th) return;
+      const k = th.dataset.s;
+      if (AN.key === k) AN.dir = -AN.dir; else { AN.key = k; AN.dir = 1; }
+      AN.page = 1; syncSort(); paint();
     });
-    paint();
+    tb.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) leave(b.dataset.go, b); });
+    pg.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b || b.disabled) return;
+      if (b.id === 'prev') AN.page--; else if (b.id === 'next') AN.page++; else AN.page = +b.dataset.p;
+      paint(); document.getElementById('app').scrollIntoView({ block: 'start' });
+    });
+    const syncSort = () => {
+      document.querySelectorAll('th.srt').forEach(x => { x.removeAttribute('aria-sort'); x.querySelector('.ar').textContent = '▾'; });
+      const th = document.querySelector(`th[data-s="${AN.key}"]`);
+      if (th) { th.setAttribute('aria-sort', AN.dir > 0 ? 'ascending' : 'descending'); th.querySelector('.ar').textContent = AN.dir > 0 ? '▾' : '▴'; }
+    };
+    syncSort(); paint();
   },
 };
 
-/* ------------------------------------------------------------- חינוך --- */
 const SLOTS = [['08:00', '08:45'], ['08:50', '09:35'], ['09:40', '10:25'], ['10:25', '10:45'], ['10:45', '11:30'],
 ['11:35', '12:20'], ['12:20', '13:45'], ['13:45', '14:30'], ['14:35', '15:20']];
 const DAYS6 = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳'];

@@ -101,73 +101,148 @@ VIEWS.bait = {
 };
 
 /* ------------------------------------------------------------- אנשים --- */
-const LETTERS = [...'אבגדהוזחטיכלמנסעפצקרשת'];
+/* ---------- אנשים ----------
+   טבלה דינמית. המבנה וההתנהגות הועתקו במדידה מ-Atlassian Design System
+   (atlassian.design/components/dynamic-table — 7,552 אלמנטים, 14 מצבים):
+   שורה 48 · כותרת 653 12/16 מעל קו 2px · אפס קו בין שורות · טעינה
+   ב-20% שקיפות במקום שלד · מצב-ריק · ומיקוד אחרי שהשורה יוצאת מהתצוגה.
+   הצבעים הם של האפליקציה, לא של אטלסיאן — המבנה עובר, הפלטה נשארת.  */
+const AN = { page: 1, per: 25, key: 'name', dir: 1, q: '', kind: '', left: false, focus: null };
+
 VIEWS.anashim = {
   name: 'אנשים',
   render() {
+    const kinds = [...new Set(DB.people.map(p => p.kind))];
     return `<header class="hd"><h1>אנשים</h1>
-      <p class="cnt">${num(DB.people.length)} רשומות · ${DB.families.length} משפחות · ${DB.staff.length} עובדים · ${DB.donors.length} תורמים</p>
-      <input id="q" type="search" placeholder="שם, עיר או תפקיד…" aria-label="סינון אנשים" autocomplete="off"></header>
-    <div class="cols">
-      <nav class="rail" id="rail" aria-label="קפיצה לאות"></nav>
-      <div class="book" id="book" aria-label="רשימת אנשים"></div>
-      <aside class="panel"><div class="pcard" id="panel" aria-live="polite"></div></aside>
-    </div>`;
+      <p class="cnt">${num(DB.people.length)} רשומות · ${kinds.map(k => DB.people.filter(p => p.kind === k).length + ' ' + k).join(' · ')}</p>
+      <input id="q" type="search" placeholder="שם, עיר או שיוך…" aria-label="סינון אנשים" autocomplete="off" value="${esc(AN.q)}">
+      <label class="hid" for="kf">סוג</label>
+      <select id="kf"><option value="">כל הסוגים</option>${kinds.map(k => `<option${AN.kind === k ? ' selected' : ''}>${esc(k)}</option>`).join('')}</select>
+      <button class="gh" id="showLeft" type="button" aria-pressed="${AN.left}">${AN.left ? 'הסתרת מי שעזב' : 'הצגת מי שעזב'}</button>
+      <span class="cnt2" id="cnt"></span></header>
+    <div class="holder" id="holder">
+      <div class="spin" role="status" aria-live="polite"><span class="hid">טוען</span></div>
+      <table>
+        <thead><tr>
+          <th class="srt" data-s="name" style="width:36%"><button type="button">שם<span class="ar">▾</span></button></th>
+          <th class="srt" data-s="kind"><button type="button">סוג<span class="ar">▾</span></button></th>
+          <th class="srt" data-s="city"><button type="button">עיר<span class="ar">▾</span></button></th>
+          <th>שיוך</th>
+          <th class="e">יתרה</th>
+          <th class="e">פעולה</th>
+        </tr></thead>
+        <tbody id="tb"></tbody>
+      </table>
+      <div class="none"><b>אין רשומות מתאימות</b>אף אדם לא עונה על החיפוש והסינון. נסה לנקות את החיפוש או לבחור סוג אחר.</div>
+    </div>
+    <nav class="pg" id="pg" aria-label="עימוד"></nav>`;
   },
   mount() {
-    const rows = () => {
-      const q = (document.getElementById('q').value || '').trim();
-      return DB.families.map(f => ({
-        id: f.id, t: f.name, l: f.name.replace('משפחת ', '')[0], sub: f.city + ' · ' + f.kids.length + ' ילדים', f,
-      })).filter(r => !q || r.t.includes(q) || r.sub.includes(q));
+    const tb = document.getElementById('tb'), pg = document.getElementById('pg'),
+          holder = document.getElementById('holder'), cnt = document.getElementById('cnt');
+
+    /* השיוך והיתרה נגזרים — לא נשמרים על האדם */
+    const tie = (p) => {
+      if (p.kind === 'עובד') { const s = DB.staff.find(x => x.personId === p.id);
+        return s ? { t: s.role, bal: 0, href: '#/staffp/' + s.id } : { t: '—', bal: 0 }; }
+      if (p.kind === 'תלמיד') { const s = DB.students.find(x => x.personId === p.id);
+        const c = s && cls(s.classId);
+        return s ? { t: c ? c.name : '—', bal: 0, href: '#/student/' + s.id } : { t: '—', bal: 0 }; }
+      if (p.kind === 'הורה') { const f = DB.families.find(x => x.head === p.id || x.spouse === p.id);
+        return f ? { t: f.name, bal: balance(f), href: '#/family/' + f.id } : { t: '—', bal: 0 }; }
+      const d = DB.donors.find(x => x.personId === p.id);
+      return d ? { t: d.anon ? 'בעילום שם' : 'תורם', bal: 0, href: '#/donorp/' + d.id } : { t: '—', bal: 0 };
+    };
+    const view = () => {
+      const q = AN.q.trim();
+      return DB.people.filter(p => {
+        if (p.left && !AN.left) return false;
+        if (AN.kind && p.kind !== AN.kind) return false;
+        if (!q) return true;
+        const n = p.first + ' ' + p.last;
+        return n.includes(q) || p.city.includes(q) || tie(p).t.includes(q);
+      }).map(p => ({ p, name: p.first + ' ' + p.last, kind: p.kind, city: p.city, tieO: tie(p) }))
+        .sort((a, b) => (a[AN.key] > b[AN.key] ? 1 : a[AN.key] < b[AN.key] ? -1 : 0) * AN.dir);
     };
     const paint = () => {
-      const list = rows(); let out = '', last = '';
-      list.forEach(r => {
-        if (r.l !== last) { last = r.l; out += `<h2 class="lgroup" id="L${r.l}">${r.l}</h2>`; }
-        out += `<a class="person" href="#/family/${r.id}">${avatar(r.t, r.id, 38)}
-          <span><span class="nm">${esc(r.t)}</span><br><span class="ro">${esc(r.sub)}</span></span>
-          <span class="ci">${money(balance(r.f))}</span></a>`;
+      const v = view(), pages = Math.max(1, Math.ceil(v.length / AN.per));
+      AN.page = Math.min(Math.max(1, AN.page), pages);
+      const slice = v.slice((AN.page - 1) * AN.per, AN.page * AN.per);
+      holder.classList.toggle('empty', !v.length);
+      cnt.innerHTML = v.length ? `${num(v.length)} · עמוד ${AN.page} מתוך ${pages}` : '0 רשומות';
+      tb.innerHTML = slice.map(r => `<tr data-id="${r.p.id}">
+        <td><span class="nmc">${avatar(r.name, r.p.id, 36)}<span>${r.tieO.href
+          ? `<a class="lk" href="${r.tieO.href}">${esc(r.name)}</a>` : `<b>${esc(r.name)}</b>`}
+          ${r.p.left ? `<span class="sub">עזב · ${esc(r.p.left)}</span>` : ''}</span></span></td>
+        <td>${tag(r.kind)}</td><td>${esc(r.city)}</td><td>${esc(r.tieO.t)}</td>
+        <td class="e">${r.tieO.bal > 0 ? money(r.tieO.bal) : '<span class="sub">—</span>'}</td>
+        <td class="e">${r.p.left ? '<span class="sub">ארכיון</span>'
+          : `<button class="gh sm" type="button" data-go="${r.p.id}">סימון «עזב»</button>`}</td></tr>`).join('');
+      /* עימוד מקוצר */
+      const set = { 1: 1, 2: 1 }; set[pages] = 1; set[pages - 1] = 1;
+      for (let i = AN.page - 1; i <= AN.page + 1; i++) if (i >= 1 && i <= pages) set[i] = 1;
+      let last = 0;
+      const out = [`<button type="button" id="prev"${AN.page === 1 ? ' disabled' : ''} aria-label="הקודם">‹</button>`];
+      Object.keys(set).map(Number).filter(n => n >= 1 && n <= pages).sort((a, b) => a - b).forEach(n => {
+        if (last && n > last + 1) out.push('<span class="gap">…</span>');
+        out.push(`<button type="button" data-p="${n}"${n === AN.page ? ' aria-current="page"' : ''}>${n}</button>`);
+        last = n;
       });
-      document.getElementById('book').innerHTML = list.length ? out : empty('אין תוצאה.');
-      document.getElementById('rail').innerHTML = LETTERS.map(L => {
-        const has = list.some(r => r.l === L);
-        return `<button data-l="${L}" data-has="${has ? 'y' : 'n'}"${has ? '' : ' disabled'} aria-label="קפוץ לאות ${L}">${L}</button>`;
-      }).join('');
-      const f = list[0] && list[0].f;
-      document.getElementById('panel').innerHTML = f ? panelOf(f) : empty('בחר משפחה');
+      out.push(`<button type="button" id="next"${AN.page === pages ? ' disabled' : ''} aria-label="הבא">›</button>`);
+      pg.innerHTML = out.join('');
+      /* שחזור מיקוד אחרי ש-act() בנה את המסך מחדש */
+      if (AN.focus != null) {
+        const rows = tb.children;
+        let t = null;
+        if (rows.length) {
+          const i = Math.min(AN.focus, rows.length - 1);
+          for (let k = i; k >= 0 && !t; k--) t = rows[k].querySelector('[data-go]');
+          for (let k = i; k < rows.length && !t; k++) t = rows[k].querySelector('[data-go]');
+        }
+        (t || document.getElementById('q')).focus();
+        AN.focus = null;
+      }
     };
-    const panelOf = (f) => {
-      const kids = f.kids.map(stu);
-      return `<div class="who">${avatar(f.name, f.id, 52)}<span><h2>${esc(f.name)}</h2><span class="ro">${esc(f.city)}</span></span></div>
-      <div class="chips">${tag(f.kids.length + ' ילדים')}${f.hok ? tag('הוראת קבע', 'ok') : tag('בלי הו״ק', 'warn')}${f.discount ? tag('הנחה ' + f.discount + '%') : ''}</div>
-      <dl class="kv">
-        <dt>אב</dt><dd>${esc(nameOf(f.head))}</dd>
-        <dt>אם</dt><dd>${esc(nameOf(f.spouse))}</dd>
-        <dt>טלפון</dt><dd class="num">${ltr(f.phone)}</dd>
-        <dt>יתרה</dt><dd>${money(balance(f))}</dd>
-        <dt>מקום בבית המדרש</dt><dd>${f.seat ? 'שורה ' + (seat(f.seat).row + 1) + ' · ' + (seat(f.seat).col + 1) : '—'}</dd>
-      </dl>
-      <div class="tree"><h3>ילדים במוסד</h3>
-        <ul class="kidlist">${kids.map(k => `<li><a class="lk" href="#/student/${k.id}">${esc(nameOf(k.personId))}</a>
-          <span>${esc(cls(k.classId).name)} · נוכחות ${k.att.filter(Boolean).length}/5</span></li>`).join('') || empty('אין')}</ul></div>
-      <div class="acts"><a class="btn pri" href="#/family/${f.id}">פתיחת התיק המלא</a></div>`;
+    /* המצב ה-14 של אטלסיאן: המיקום נקרא לפני שהשורה יוצאת */
+    const leave = (id, btn) => {
+      const tr = btn.closest('tr');
+      AN.focus = Array.prototype.indexOf.call(tb.children, tr);
+      const p = DB.people.find(x => x.id === id);
+      const nm = p.first + ' ' + p.last;
+      act('סומן «עזב» · ' + nm, 'אנשים', () => {
+        const was = p.left || null;
+        p.left = DB.today.hd + ' ' + DB.today.hy;
+        return () => { p.left = was; };
+      });
+      toast('סומן «עזב» · ' + nm);
     };
-    document.getElementById('q').addEventListener('input', paint);
-    document.getElementById('rail').addEventListener('click', e => {
-      const b = e.target.closest('[data-l]'); if (!b || b.dataset.has !== 'y') return;
-      const t = document.getElementById('L' + b.dataset.l);
-      if (t) t.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth' });
+    document.getElementById('q').addEventListener('input', e => { AN.q = e.target.value; AN.page = 1; paint(); });
+    document.getElementById('kf').addEventListener('change', e => { AN.kind = e.target.value; AN.page = 1; paint(); });
+    document.getElementById('showLeft').addEventListener('click', function () {
+      AN.left = !AN.left; this.setAttribute('aria-pressed', String(AN.left));
+      this.textContent = AN.left ? 'הסתרת מי שעזב' : 'הצגת מי שעזב'; AN.page = 1; paint();
     });
-    document.getElementById('book').addEventListener('mouseover', e => {
-      const a = e.target.closest('.person'); if (!a) return;
-      const f = fam(a.getAttribute('href').split('/')[2]); if (f) document.getElementById('panel').innerHTML = panelOf(f);
+    document.querySelector('thead').addEventListener('click', e => {
+      const th = e.target.closest('th.srt'); if (!th) return;
+      const k = th.dataset.s;
+      if (AN.key === k) AN.dir = -AN.dir; else { AN.key = k; AN.dir = 1; }
+      AN.page = 1; syncSort(); paint();
     });
-    paint();
+    tb.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) leave(b.dataset.go, b); });
+    pg.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b || b.disabled) return;
+      if (b.id === 'prev') AN.page--; else if (b.id === 'next') AN.page++; else AN.page = +b.dataset.p;
+      paint(); document.getElementById('app').scrollIntoView({ block: 'start' });
+    });
+    const syncSort = () => {
+      document.querySelectorAll('th.srt').forEach(x => { x.removeAttribute('aria-sort'); x.querySelector('.ar').textContent = '▾'; });
+      const th = document.querySelector(`th[data-s="${AN.key}"]`);
+      if (th) { th.setAttribute('aria-sort', AN.dir > 0 ? 'ascending' : 'descending'); th.querySelector('.ar').textContent = AN.dir > 0 ? '▾' : '▴'; }
+    };
+    syncSort(); paint();
   },
 };
 
-/* ------------------------------------------------------------- חינוך --- */
 const SLOTS = [['08:00', '08:45'], ['08:50', '09:35'], ['09:40', '10:25'], ['10:25', '10:45'], ['10:45', '11:30'],
 ['11:35', '12:20'], ['12:20', '13:45'], ['13:45', '14:30'], ['14:35', '15:20']];
 const DAYS6 = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳'];
