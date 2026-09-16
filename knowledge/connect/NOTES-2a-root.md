@@ -46,5 +46,34 @@ wc -l $(cat list)                                    ⇒ 4460 total (51 קבצי
 - **הרבה מהמנועים כאן הם upstream-של-הקטלוג ולא שלב-בצינור.** המחולל צורך את תוצרתם
   דרך האורקל (`regen.mjs:10-11`), וזה החיבור הנכון — לא קריאה ישירה.
 
+
+## 🔴 ממצא שלא חיפשתי — כלי-חובה שבור (מדווח, לא תוקן)
+
+`machtzev/search-record.mjs` **קורס בכל ריצה שמגיעה לשלב-הכתיבה**:
+
+```
+$ node machtzev/search-record.mjs "zzqqxwv בליעזזקק" --none "<≥40 תווים>"
+ReferenceError: OUT is not defined
+    at file:///…/machtzev/search-record.mjs:43:14
+$ echo $?            ⇒ 1
+$ git status --porcelain   ⇒ (ריק — שום קובץ לא נוצר)
+```
+
+**סיבה-בשורש** (‏`git show 0771b19b -- machtzev/search-record.mjs`): גל **G63** העביר את
+`IDX`/`LOG` ל-`search-score.mjs` ומחק את השורה
+`const IDX = …, LOG = …, OUT = R.MACH + 'audit/search/';` — אבל `OUT` לא הוצהר מחדש
+ואינו מיוצא מ-`search-score`. שורות 43 ו-45 עדיין משתמשות בו.
+
+**למה זה חשוב:** ‏`search-proof-check.mjs:25` (שער `search-proof` ב-pre-commit) **דורש**
+רשומת-חיפוש חתומה לכל אטום/קופסה חדשים ב-6 תיקיות
+(`atoms · logic · boxes · dart · dart-maor · dart-boxes`). הכלי היחיד שמייצר רשומה כזו הוא
+זה שקורס. כלומר מאז 14.9 **אי-אפשר לנחות אטום חדש בתיקיות האלה**. אימות עקיף:
+`ls machtzev/audit/search/*.json | wc -l` ⇒ 37, והחדשה ביותר היא `2026-09-14-…`.
+הפגיעה אינה רק בסוכן שמקליד ידנית — `machtzev/carve/carve-land.mjs:291` מריץ את הכלי
+אוטומטית בנחיתה (G61).
+
+**לא תיקנתי.** המשימה אוסרת שינוי-קוד במפורש. התיקון הוא שורה אחת
+(הצהרת `OUT`, או ייצואו מ-`search-score`), והוא הכרעת-בעלים/גל-תיקון נפרד.
+
 ## מה לא הצלחתי
 (מתעדכן בסוף)

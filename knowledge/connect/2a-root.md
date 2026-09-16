@@ -1,6 +1,6 @@
 # 2a · `machtzev/*.mjs` (שורש) — מיפוי חיבור-למחולל
 
-**41/51 מנועים ממופים** · 2875 שורות נקראו · פיזור s22: 0⇒19 · 1⇒12 · 2⇒9 · 3⇒1
+**44/51 מנועים ממופים** · 3008 שורות נקראו · פיזור s22: 0⇒19 · 1⇒13 · 2⇒11 · 3⇒1
 
 הגדרת «מחובר» = `machtzev/census/engine-index.mjs:319-333` (נגיש בייבוא טרנזיטיבי מ-6 נקודות-הכניסה, או מורץ-בשם מ-regen/ship). שערים אינם מחוברים — הם שומרים.
 מדידה: `node machtzev/census/engine-index.mjs --connected` ⇒ `57 · 279 · 336`.
@@ -17,6 +17,8 @@
 | `goal-proof-check.mjs` | 2 | machtzev/generator/regen.mjs:16-22 — הסרת ההחרגה GENOUT, ברגע שהמחולל פולט כרטיסים (ראה goal-card) | שער pre-commit: כל מסך/לוח ב-staged חייב כרטיס-מטרה תקף — והבדיקה היא בבייטים, לא שיפוט |
 | `mutation-dart-check.mjs` | 2 | machtzev/generator/app-from-sentences.mjs (regen.mjs:16) — פליטת `<gen_x>_test.dart` לצד כל מודול מחולל | מחליל **type-preserving** את גוף הפונקציות-העליונות ב-Dart לפי טיפוס-ההחזרה (int⇒0 · String⇒'' · List⇒const [] · T?⇒null · void⇒return) ומריץ את הבדיקה על העותק-החלול ב-sandbox של 20s |
 | `no-fakers-check.mjs` | 2 | machtzev/generator/regen.mjs:24 — יחד עם ds-critic, כשלב-אימות על הפלט; והשאלה האמיתית היא לבנות את FAKERS **מנועית** | **סורק את פלט-המחולל** — outDir() (new/dart-gen-bs) + לוחות + מסכים — ומחפש שימוש באטום-«מזייף» |
+| `search-record.mjs` | 2 | ∅ עד שהבאג ייסגר; ואז — machtzev/carve/carve-land.mjs:291 הוא כבר הצרכן האוטומטי | שואל את האורקל-המאוחד (תצוגה + לוגיקה) ומדרג מועמדים לשאילתה, עם חתימות-sha של שני קובצי-האורקל ברשומה |
+| `search-score.mjs` | 2 | machtzev/generator/auto-logic.mjs:151 / behavior-plan.mjs:98 — כשלב-דירוג מקדים לפני ההוכחה-בריצה | ניקוד-החיפוש **האחד** — עותק יחיד המשותף ל-search-record (כותב) ול-search-proof-check (השער), כדי ששניהם לא יסטו |
 | `box-assemble.mjs` | 1 | ∅ (מותנה) | ממיר קובץ-מקור TS של maor ל-JS דרך ts.transpileModule (מסיר טיפוסים ו-import type, משאיר import-ערך) |
 | `box-data-lift.mjs` | 1 | ∅ | סורק ב-AST אמיתי של TypeScript את הצהרות-המשתנה ברמת-המודול של קופסה ואוסף רק מאתחלים שהם ליטרל-דאטה טהור רקורסיבי |
 | `box-magic-lift.mjs` | 1 | ∅ | מוצא ב-AST כל ליטרל-מספרי בקופסה ומרים אותו לאטום-דאטה <base>-nums.mjs תחת מפתח אנונימי M.m0/M.m1 |
@@ -28,6 +30,7 @@
 | `ds-tokens.mjs` | 1 | ∅ | קורא זרע קומפקטי (new/dart-ui-bs/ds/design-seed.json) ומרחיב אותו ל-7 מחלקות-טוקן ב-ds_scale.dart: DsType · DsSpace · DsRadii · DsElev · DsGradient · DsMotion · DsDark |
 | `lib-ts.mjs` | 1 | כבר מחובר בפועל דרך machtzev/emit/ast-js-to-dart.mjs:4 — ראוי רק להכיר בכך | פותר-typescript אחד לכל הכלים: machtzev/node_modules (vendored) ⇒ נפילה ל-maor-system |
 | `mutation-check.mjs` | 1 | ∅ — כי היכולת כבר הועתקה לתוך המחולל | לכל אטום: מחליף את הקובץ בגוף-חלול, מריץ את הבדיקה (חייבת להאדים), משחזר, מריץ שוב (חייבת להוריק) — שני התנאים יחד |
+| `search-proof-check.mjs` | 1 | ∅ | לכל אטום/קופסה **חדשים** ב-6 תיקיות (atoms · logic · boxes · dart · dart-maor · dart-boxes) דורש רשומת-חיפוש שה-creates שלה הוא בדיוק הנתיב |
 | `wiring-check.mjs` | 1 | ∅ | אוכף את שלושת חוקי-החשמלאי על ייבוא יחסי: אטום לא מייבא כלום פנימי · קופסה מייבאת רק אטומים · לוח מייבא רק קופסאות |
 | `allow-check.mjs` | 0 | ∅ | מפרסר trailers מסוג `Allow: <kind>[:<scope>] <סיבה>` מהודעת-commit ומחזיר {allows,bad} |
 | `atom-count-check.mjs` | 0 | ∅ | סופר קבצים רקורסיבית לכל תיקייה ישירה תחת new/ ומחזיר {אזור: מספר} |

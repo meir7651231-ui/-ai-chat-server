@@ -2849,6 +2849,249 @@
     ]
   },
   {
+    "file": "machtzev/search-proof-check.mjs",
+    "lang": "mjs",
+    "lines": 53,
+    "does": [
+      {
+        "claim": "לכל אטום/קופסה **חדשים** ב-6 תיקיות (atoms · logic · boxes · dart · dart-maor · dart-boxes) דורש רשומת-חיפוש שה-creates שלה הוא בדיוק הנתיב",
+        "evidence": "machtzev/search-proof-check.mjs:14-16,24-25"
+      },
+      {
+        "claim": "מאמת את חתימת-הרשומה (sig) — רשומה שנערכה ידנית נדחית",
+        "evidence": "machtzev/search-proof-check.mjs:26-27"
+      },
+      {
+        "claim": "**דורש chosen === 'none'** — אם הרשומה בחרה מועמד קיים, השאלה הופכת ל«אז למה יצרת חדש?»",
+        "evidence": "machtzev/search-proof-check.mjs:28"
+      },
+      {
+        "claim": "דורש שכל מועמד-חזק יוזכר ב-why",
+        "evidence": "machtzev/search-proof-check.mjs:48-49"
+      },
+      {
+        "claim": "**פותר בחוכמה את פרדוקס-האורקל:** אחרי נחיתה האינדקס משתנה בהכרח (האטום החדש בפנים), ולכן «אורקל ישן» אינו נפסל אוטומטית — הוא מתקבל אם (א) האטום-עצמו אינו בין מועמדי-הרשומה (חיפוש-לפני-יצירה) (ב) האורקל רק גדל (ג) לא צץ מועמד-חזק חדש באותה שכבה, בניקוד-חי עם אותם טוקנים",
+        "evidence": "machtzev/search-proof-check.mjs:29-47 (ההנמקה בשורות 30-33)"
+      },
+      {
+        "claim": "ההשוואה נחתכת ל-top-N של הרשומה, כדי שמועמדים שתמיד היו מעבר ל-N לא יופיעו כ«חדשים»",
+        "evidence": "machtzev/search-proof-check.mjs:39-42"
+      },
+      {
+        "claim": "משתמש ב-scoreFor המשותף — אותו ניקוד של הכלי, לא עותק",
+        "evidence": "machtzev/search-proof-check.mjs:10,42"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא בודק ש«אין» **נכון** — רק שהוא ארוך מספיק, מזכיר את המועמדים-החזקים, וחתום",
+        "evidence": "machtzev/search-proof-check.mjs:28,48-49"
+      },
+      {
+        "claim": "לא מכסה מסכים/לוחות/פלט-מחולל — ה-SCOPE הוא 6 תיקיות-מדף בלבד, וגם בהן רק קובץ בעומק-אחד",
+        "evidence": "machtzev/search-proof-check.mjs:14 — /^new\\/(…)\\/[^/]+\\.(mjs|dart)$/"
+      },
+      {
+        "claim": "שער-דלתא: בלי קבצים חדשים ב-staged ⇒ יוצא 0",
+        "evidence": "machtzev/search-proof-check.mjs:16"
+      },
+      {
+        "claim": "אינו שער-משטרה — רק pre-commit",
+        "evidence": "ran: grep -c 'search-proof' machtzev/police.mjs ⇒ 0; הקורא הוא .githooks/pre-commit:46"
+      },
+      {
+        "claim": "🔴 **בפועל הוא היום שער-חוסם-מוחלט על 6 התיקיות** — הוא דורש רשומה, והכלי שמייצר רשומות (`search-record.mjs`) קורס ב-ReferenceError. אטום חדש בתיקיות האלה אינו יכול לעבור את ה-hook",
+        "evidence": "machtzev/search-proof-check.mjs:25 (הדרישה) מול ran: node machtzev/search-record.mjs … ⇒ 'ReferenceError: OUT is not defined' (search-record.mjs:43)"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".githooks/pre-commit:46",
+        "how": "מורץ-בשם עם --files על הקבצים שנוספו"
+      },
+      {
+        "who": "machtzev/search-score.mjs",
+        "how": "ייבוא { scoreFor, loadOracle, layerOf }"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "שער, וזה מקומו — והוא השער שאוכף את §20(א) על **בני-אדם/סוכנים**, בדיוק במקום שבו המחולל אינו מעורב (יצירת אטום חדש ביד). המחולל כבר חי לפי אותו כלל בדרכו שלו: `particles.mjs` פוסל שקע-חובה ריק, ו-behavior-plan מוכיח מועמדים לפני בחירה. אין כאן מה להעביר. מה שכן דורש תשומת-לב הוא שהשער תקין והכלי המשלים שבור — כלומר הזוג אינו עובד, והתקלה אינה בשער."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב בעקיפין. הוא מגן על §21 («אסור לצמצם קטלוג») מהכיוון ההפוך: מונע ניפוח-הקטלוג בכפילויות שהבורר יצטרך לבחור ביניהן. אבל הוא שער-commit על עבודת-אדם, לא שלב בנתיב משפט⇒אפליקציה."
+    },
+    "evidence": [
+      "read: machtzev/search-proof-check.mjs:1-52 (כל הקובץ)",
+      "ran: grep -c 'search-proof' machtzev/police.mjs ⇒ 0 (אינו שער-משטרה)",
+      "ran: grep -n 'search-proof-check' .githooks/pre-commit ⇒ שורה 46",
+      "ran: node machtzev/search-record.mjs … ⇒ ReferenceError (הכלי המשלים שבור — ראה ערך search-record)"
+    ]
+  },
+  {
+    "file": "machtzev/search-record.mjs",
+    "lang": "mjs",
+    "lines": 51,
+    "does": [
+      {
+        "claim": "שואל את האורקל-המאוחד (תצוגה + לוגיקה) ומדרג מועמדים לשאילתה, עם חתימות-sha של שני קובצי-האורקל ברשומה",
+        "evidence": "machtzev/search-record.mjs:18-19,25-26"
+      },
+      {
+        "claim": "**אוכף שאילתה דו-לשונית** — חייבת מילה באנגלית (שמות) וגם בעברית (ייעוד), אחרת «חצי-מדף נעלם»",
+        "evidence": "machtzev/search-record.mjs:21-22"
+      },
+      {
+        "claim": "--choose חייב לצאת מרשימת-המועמדים; בחירה שאינה מועמד נדחית",
+        "evidence": "machtzev/search-record.mjs:34"
+      },
+      {
+        "claim": "--none דורש ≥40 תווים **ושכל מועמד-חזק (ציון ≥3) יוזכר בשמו** — «אין» חייב להתייחס, לא להתעלם",
+        "evidence": "machtzev/search-record.mjs:36-38"
+      },
+      {
+        "claim": "מועמד-חזק נמדד **באותה שכבה** של --creates (G63) — התיקון לבאג שבו bestStore נפסל בגלל ווידג׳טים בשם Store*; והרשומה שומרת גם strongOtherLayers לכנות",
+        "evidence": "machtzev/search-record.mjs:27-31,33"
+      },
+      {
+        "claim": "הרשומה נחתמת sha256 עם קידומת-מרחב 'machtzev-search-v1'",
+        "evidence": "machtzev/search-record.mjs:41-42"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "🔴 **אינו מסוגל לכתוב רשומה — הוא קורס.** ‏`OUT` בשורות 43 ו-45 אינו מוגדר בקובץ ואינו מיוצא מ-search-score ⇒ `ReferenceError: OUT is not defined` בכל ריצה שמגיעה לשלב-הכתיבה",
+        "evidence": "ran: node machtzev/search-record.mjs \"zzqqxwv בליעזזקק\" --none \"<≥40 תווים>\" ⇒ 'ReferenceError: OUT is not defined at …/search-record.mjs:43:14' · exit=1 · git status --porcelain ⇒ ריק (שום קובץ לא נוצר). ran: grep -n 'OUT' machtzev/search-record.mjs ⇒ שורות 43, 45 בלבד (שימוש בלי הגדרה) · grep -n 'OUT' machtzev/root.mjs ⇒ רק outDir/dataOutDir, לא OUT"
+      },
+      {
+        "claim": "**הסיבה-בשורש מזוהה:** commit 0771b19b (גל G63) העביר את IDX/LOG ל-search-score ומחק את השורה שהגדירה גם את OUT, בלי להצהיר עליו מחדש",
+        "evidence": "ran: git show 0771b19b -- machtzev/search-record.mjs | grep -E '^[-+].*OUT' ⇒ `-const IDX = … , LOG = … , OUT = R.MACH + 'audit/search/';` (שורה נמחקה, לא הוחלפה)"
+      },
+      {
+        "claim": "**המשמעות המעשית:** ‏search-proof-check דורש רשומה חתומה לכל אטום/קופסה חדשים ב-6 תיקיות; הכלי היחיד שמייצר רשומה כזו קורס ⇒ בפועל אי-אפשר לנחות אטום חדש בתיקיות האלה מאז 14.9. 37 הרשומות הקיימות כולן מלפני-כן",
+        "evidence": "machtzev/search-proof-check.mjs:14,25; ran: ls machtzev/audit/search/*.json | wc -l ⇒ 37 · ls -t … | head -1 ⇒ 2026-09-14-pattern-outlets-וצרים-a7beeb3b.json"
+      },
+      {
+        "claim": "לא מחפש בקוד — רק באינדקסים המחוללים; אינדקס לא-טרי ⇒ חיפוש לא-טרי",
+        "evidence": "machtzev/search-record.mjs:18 — loadOracle קורא שני קובצי-JSON"
+      },
+      {
+        "claim": "לא מכריע בעצמו — בלי --choose/--none הרשומה נשארת בלי הכרעה",
+        "evidence": "machtzev/search-record.mjs:49"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".githooks/pre-commit:48",
+        "how": "מוזכר בהודעת-השגיאה של השער (הסוכן מריץ ידנית)"
+      },
+      {
+        "who": "machtzev/search-proof-check.mjs:25",
+        "how": "מוזכר כפקודת-התיקון; הרשומה שהוא כותב היא הקלט של השער"
+      },
+      {
+        "who": "machtzev/carve/carve-land.mjs:291",
+        "how": "מורץ-בשם כשלב-נחיתה של המחצבה (G61)"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ עד שהבאג ייסגר; ואז — machtzev/carve/carve-land.mjs:291 הוא כבר הצרכן האוטומטי",
+      "gives": "אין טעם לדון בחיבור-למחולל של כלי שקורס. הממצא כאן אינו «איפה לחבר» אלא **מה שבור**, והוא חמור יותר מכל נקודת-חיבור שמצאתי בקבוצה: שער-חובה (search-proof) שהכלי המשלים שלו אינו עובד. שווה לציין ש-`carve-land.mjs:291` כבר מריץ אותו אוטומטית בנחיתה — כלומר הבאג פוגע גם במחצבה האוטומטית של G61, לא רק בסוכן שמקליד ידנית. **לא תיקנתי** (המשימה אוסרת שינוי-קוד); מדווח עם הפקודה, ה-file:line וה-commit שגרם."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — על הייעוד, לא על המצב. הרעיון («אין» = «לא-חיפשת», וכל מועמד-חזק חייב מענה בשמו) הוא §20(א) בצורתו האכיפה ביותר בריפו, והוא הדבר שמונע מהמחולל להתמלא בכפילויות. אבל היום הוא מייצר אפס רשומות. הציון משקף מיקום-וייעוד; המצב מדווח במלואו ב-doesNot."
+    },
+    "evidence": [
+      "read: machtzev/search-record.mjs:1-50 (כל הקובץ)",
+      "ran: node machtzev/search-record.mjs \"zzqqxwv בליעזזקק\" --none \"<≥40 תווים>\" ⇒ ReferenceError: OUT is not defined (search-record.mjs:43:14) · true exit=1",
+      "ran: git status --porcelain אחרי שתי ההרצות ⇒ ריק (אפס כתיבה, אפס לכלוך)",
+      "ran: git show 0771b19b -- machtzev/search-record.mjs | grep '^[-+].*OUT' ⇒ ההגדרה נמחקה בגל G63",
+      "ran: ls machtzev/audit/search/*.json | wc -l ⇒ 37 · החדשה ביותר 2026-09-14"
+    ]
+  },
+  {
+    "file": "machtzev/search-score.mjs",
+    "lang": "mjs",
+    "lines": 29,
+    "does": [
+      {
+        "claim": "ניקוד-החיפוש **האחד** — עותק יחיד המשותף ל-search-record (כותב) ול-search-proof-check (השער), כדי ששניהם לא יסטו",
+        "evidence": "machtzev/search-score.mjs:1; machtzev/search-record.mjs:16 · machtzev/search-proof-check.mjs:10"
+      },
+      {
+        "claim": "טוקניזציה דו-לשונית: מפצלת camelCase, מורידה רישיות, ומסירה אותיות-שימוש עבריות (והלבמכש) לפני מילה בת ≥3 אותיות",
+        "evidence": "machtzev/search-score.mjs:7"
+      },
+      {
+        "claim": "**התאמה היא זהות או קידומת של ≥4 תווים — לא substring חופשי**, במפורש כדי ש-age לא יתאים ל-image/pager",
+        "evidence": "machtzev/search-score.mjs:8-9 (near)"
+      },
+      {
+        "claim": "ניקוד מדורג לפי מקור-ההתאמה: שם-ישות 3 · שם-קובץ 2 · מטרה 1 — וכל טוקן נספר פעם אחת (continue אחרי פגיעה)",
+        "evidence": "machtzev/search-score.mjs:10-19"
+      },
+      {
+        "claim": "loadOracle מאחד תצוגה (atom-index-full) ולוגיקה (logic-census) לרשומות אחידות, בלי כפילי id בתוך שכבה",
+        "evidence": "machtzev/search-score.mjs:21-26"
+      },
+      {
+        "claim": "layerOf גוזר שכבת-יעד **מהנתיב שנוצר** — זה התיקון של G63 שמונע «כפילות-שווא חוצת-שכבות»",
+        "evidence": "machtzev/search-score.mjs:27-28"
+      },
+      {
+        "claim": "**מיוצא ומיובא גם ע\"י אינדקס-המנועים עצמו** — engine-index.mjs משתמש ב-tok/near, «עותק אחד, לא שניים»",
+        "evidence": "machtzev/census/engine-index.mjs:34 — import { tok, near } from '../search-score.mjs'"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא מייצא OUT ולא כל נתיב-פלט — וזו הסיבה הישירה לבאג ב-search-record (ראה שם)",
+        "evidence": "machtzev/search-score.mjs:5 — מייצא IDX ו-LOG בלבד"
+      },
+      {
+        "claim": "לא קורא לקוד ולא מנתח סמנטיקה — ניקוד על שמות ומחרוזות-מטרה בלבד; המטרה עצמה היא דיווח-עצמי מכותרת-הקובץ",
+        "evidence": "machtzev/search-score.mjs:11 — purT מ-entry.purpose"
+      },
+      {
+        "claim": "אינו שער ואין לו CLI",
+        "evidence": "כרטיס engine-index: gate=- · cli=[]"
+      },
+      {
+        "claim": "עבור רשומות-לוגיקה ה-purpose אינו טקסט-מטרה אלא חתימה (ret + params) — כלומר ההתאמה לשכבת-הלוגיקה היא לפי טיפוסים, לא לפי כוונה",
+        "evidence": "machtzev/search-score.mjs:24 — purpose: [e.ret, ...(e.params||[])]"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/search-record.mjs:16",
+        "how": "ייבוא { IDX, LOG, tok, scoreFor, loadOracle, layerOf }"
+      },
+      {
+        "who": "machtzev/search-proof-check.mjs:10",
+        "how": "ייבוא { scoreFor, loadOracle, layerOf }"
+      },
+      {
+        "who": "machtzev/census/engine-index.mjs:34",
+        "how": "ייבוא { tok, near } — אותו ניקוד משמש את אינדקס-המנועים"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/auto-logic.mjs:151 / behavior-plan.mjs:98 — כשלב-דירוג מקדים לפני ההוכחה-בריצה",
+      "gives": "נקודה כנה, עם הסתייגות חשובה. §20(א) דורש «הכי-טוב-לייעוד, לא הראשון-שמתאים», ו-search-score הוא הניקוד-לפי-ייעוד היחיד בריפו שמדרג **את שתי השכבות יחד**. בוררי-המחולל מדרגים לפי חתימה (‏G35: «חתימת-הצורך = חתימת-הקטלוג») ואז מוכיחים בריצה — כלומר הם חזקים בהוכחה וחלשים בייעוד: מנוע עם חתימה תואמת ומטרה הפוכה יעבור את המסננת. הוספת ניקוד-ייעוד כדירוג-מקדים היא בדיוק «הכי-טוב» מול «מתאים». ההסתייגות: המטרה באורקל היא דיווח-עצמי מכותרת-הקובץ (‏CLAUDE.md מציין 165 מנועים לא-ידועים), ולכן הניקוד יכול לדרג לפי כותרת שקרית — הוא צריך להיות **מדרג**, לעולם לא **מכריע**, וההוכחה-בריצה נשארת הפוסק."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — מקרב ממשית. 29 שורות שמחזיקות את ההבחנה בין «מתאים» ל«הכי-טוב-לייעוד», שהיא §20(א) עצמה, וכבר משרתות שלושה צרכנים כולל אינדקס-המנועים. לא 3, כי היא אינה בונה ואינה מוכיחה — ובלי הוכחה, ניקוד-לפי-שם הוא בדיוק האנטי-דפוס שהאינדקס נבנה לסגור."
+    },
+    "evidence": [
+      "read: machtzev/search-score.mjs:1-28 (כל הקובץ)",
+      "ran: grep -n 'search-score' machtzev/census/engine-index.mjs ⇒ שורות 19, 34 (ייבוא tok/near)",
+      "ran: node machtzev/search-record.mjs \"tokens טוקן\" --none \"…\" ⇒ הניקוד פעל והדפיס 8 מועמדים-חזקים (facetTokens · isSizeToken · mintFeedToken · readIcsFeedToken · scopeTokenHe · studioScopeTokens · token · tokens) — כלומר הדירוג עצמו חי"
+    ]
+  },
+  {
     "file": "machtzev/wave-partition.mjs",
     "lang": "mjs",
     "lines": 45,
