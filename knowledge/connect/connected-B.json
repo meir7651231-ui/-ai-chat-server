@@ -1009,5 +1009,461 @@
    "node machtzev/generator/cover.mjs --gate ⇒ exit 0 (השער שצורך אותו)",
    "engine-index card: importedBy = 11 קבצים"
   ]
+ },
+ {
+  "file": "machtzev/generator/render-ds.mjs",
+  "lang": "mjs",
+  "lines": 1641,
+  "capabilities": [
+   {
+    "cap": "מרנדר מסך-ישות מלא מסכמה מובנית: שדות · שלבים · יחסים · backRefs · חוקי-אימות · שומר-מחיקה · הרשאות",
+    "evidence": "machtzev/generator/render-ds.mjs:258-750 (renderEntity)"
+   },
+   {
+    "cap": "מרנדר עוד שישה סוגי-מסך: דשבורד (מדדים+אגרגטים) · רכזת (מסכים+תפקידים+שדות-היקף) · main · כרטיס-רשומה · מסך-מערכת גנרי · אשף",
+    "evidence": "machtzev/generator/render-ds.mjs:751 · 842 · 945 · 1195 · 1373 · 1444"
+   },
+   {
+    "cap": "בוחר את אטום-הקלט לשדה לפי חפיפת-משמעות בין תווית-השדה לתיאור-העצמי של האטום — האטומים מצהירים 'שדה לנתון…' ואין regex או רשימת-מילים במנוע",
+    "evidence": "machtzev/generator/render-ds.mjs:20-46 (INPUTS · pickInput) · 34-36"
+   },
+   {
+    "cap": "מסנן רעש-גזם בשער-קידומת: גזע משותף נחשב רק אם המילים המקוריות חולקות קידומת ≥3 תווים ו-≥70% (מבטל מספר→ספר · לידה→מידה)",
+    "evidence": "machtzev/generator/render-ds.mjs:30-32 (prefixMatch)"
+   },
+   {
+    "cap": "בונה בריכת-מנועי-טרנספורם לשדה בשלושה מסננים מבניים: טיפוס-החזרה ניתן-לתצוגה · פרמטר ראשון פרימיטיבי · הקובץ עצמאי (אפס import חוצה-אטום) · והגוף סקלרי (אטום שמטיל ל-Map/List נפסל)",
+    "evidence": "machtzev/generator/render-ds.mjs:48-72 · 55 (selfContained) · 59 (scalarBody)"
+   },
+   {
+    "cap": "מחווט מנועי-רשומה (Map⇒ערך-מוצג) רק כשהמשתמש נוקב בשמם בדקדוק, ומזריק פרמטרי-עוזר סטנדרטיים (term-זהותי · מפרסר-תאריך) בעצמו",
+    "evidence": "machtzev/generator/render-ds.mjs:74-99 (injectHelper · MAP_ENGINES) · 78-83"
+   },
+   {
+    "cap": "מפרסר טיפוסי-פרמטרים מהחתימה בעצמו, כי atlas.params שבור על פסיק-פנימי של Map<String, X>",
+    "evidence": "machtzev/generator/render-ds.mjs:84-94 (sigParamTypes)"
+   },
+   {
+    "cap": "חושף את סט-מנועי-הרשומה הנגישים (listMapEngines) למדידת-אמת ב-truth.mjs, בלי תופעות-לוואי",
+    "evidence": "machtzev/generator/render-ds.mjs:100-101"
+   },
+   {
+    "cap": "קורא את שקעי-הבנאי האמיתיים של כל אטום מקוד-המקור (required + אופציונלי, כולל הצהרה-משותפת 'final double a, b;')",
+    "evidence": "machtzev/generator/render-ds.mjs:1025-1035 (atomCtor)"
+   },
+   {
+    "cap": "בורר אטום מונחה-מטרה (selectAtom): כל שקע-תפקיד חייב להיקשר לפי שם+טיפוס, וכל שקע-חובה אחר חייב להיות בטוח-למילוי; הניקוד = פחות-מילויים ⇒ מגשים-שלם-יותר",
+    "evidence": "machtzev/generator/render-ds.mjs:1047-1071 (_candidates · selectAtom)"
+   },
+   {
+    "cap": "מבחין בין שקע-סגנון/התנהגות (Color · IconData · Widget · callback · Tokens) שמותר למלא, לבין שקע-דאטה שאין לו ערך-אמת — שפוסל את המועמד ולא ממולא",
+    "evidence": "machtzev/generator/render-ds.mjs:1036-1046 (_fillStyle) · 1064"
+   },
+   {
+    "cap": "מפזר שימוש בין אטומים שקולים-בטובם (selectVaried) לפי seed פר-ישות — מגוון בלי לוותר על 'הכי-טוב'",
+    "evidence": "machtzev/generator/render-ds.mjs:1072-1079 · 1091"
+   },
+   {
+    "cap": "מרכיב מסך-סקירה מהיבטים (renderCompose): מדדים · לוח-שלבים או רשימה-לחיצה או טבלה · מגמה (רק אם יש שדה-מספרי) · התקדמות (רק אם יש שלבים) · כרטיס (רק אם ≥2 שדות-טקסט) — כל היבט בורר אטום משלו",
+    "evidence": "machtzev/generator/render-ds.mjs:1085-1110+"
+   },
+   {
+    "cap": "מכבד RLS לאורך כל המסכים: יש שדה-היקף ⇒ appStore.scoped, אחרת appStore.records",
+    "evidence": "machtzev/generator/render-ds.mjs:1088-1089,1343-1344"
+   },
+   {
+    "cap": "סורק מסכים מפורקים (*.g.dart) ובונה מהם רישום אוטומטי (SCREEN_REGISTRY): מזהה את מחלקת-ה-Composed, קורא את פרמטרי-הבנאי, ממלא Tokens לפי שם-השדה, ומזהה את רשימת-הפריטים הראשית ואת שדה-התצוגה שלה",
+    "evidence": "machtzev/generator/render-ds.mjs:1290-1336 (analyzeScreen · SCREEN_REGISTRY) · 1298 (tokColor) · 1320 (dispF)"
+   },
+   {
+    "cap": "כורך מסך-מפורק לישות-אמת (renderScreenBind): שדה-התצוגה מקבל את הערך-הראשון-הלא-ריק של הרשומה, ושאר השדות מילוי-בטוח",
+    "evidence": "machtzev/generator/render-ds.mjs:1338-1345"
+   },
+   {
+    "cap": "מקמפל נוסחאות/חוקים/שומרים/תנאים מהדקדוק לקוד-Dart",
+    "evidence": "machtzev/generator/render-ds.mjs:201-257 (compileFormula · compileRule · compileGuard · guardBool · compileCond)"
+   },
+   {
+    "cap": "בוחר יחס (יחיד ורב) לשדה לפי שמות-הישויות באפליקציה, כולל גזירת-ריבוי",
+    "evidence": "machtzev/generator/render-ds.mjs:165-200 (pickRelation · pluralForms · pickMultiRelation)"
+   },
+   {
+    "cap": "מפריד עברית מקוד: כל מחרוזת עברית נכתבת לקובץ-תוכן const נפרד וקוד-המסך נשאר נקי (חוק-הטוהר)",
+    "evidence": "machtzev/generator/render-ds.mjs:4-5,141-151 (makeConsts) · 152-164 (write)"
+   },
+   {
+    "cap": "מחזיר דירוגי-מועמדים גלויים (rankInputs · rankXforms) שמשמשים את האשף להציג חלופות",
+    "evidence": "machtzev/generator/render-ds.mjs:1431-1443,1473,1485"
+   },
+   {
+    "cap": "מודע למצב-המראה: בנייר פוסל אטום שאינו לובש-עור ומקלף גליף מוביל (דרך look.mjs)",
+    "evidence": "machtzev/generator/render-ds.mjs:25"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מפרש משפט-עברי — הוא מקבל סכמה כבר-מובנית; הפירוש הוא של tzinor/nl-spec ו-app-ds",
+    "evidence": "machtzev/generator/render-ds.mjs:3 · חתימות renderEntity/renderCompose מקבלות {schema,fields,stages}"
+   },
+   {
+    "claim": "אינו שער-משטרה (gate '-') ואינו ב-INDEX.md",
+    "evidence": "engine-index card isNot: 'לא-שער-משטרה · לא-ב-INDEX.md'"
+   },
+   {
+    "claim": "אינו ממלא שקע-דאטה בערך מומצא — _fillStyle מחזיר null לטיפוס שאינו סגנון/התנהגות, והמועמד נפסל",
+    "evidence": "machtzev/generator/render-ds.mjs:1036-1046,1064"
+   },
+   {
+    "claim": "אינו בוחר מנוע-רשומה בעצמו — מנוע-Map מחווט רק בשם שהמשתמש נקב בדקדוק ('לא בחירה-עיוורת')",
+    "evidence": "machtzev/generator/render-ds.mjs:74-77"
+   },
+   {
+    "claim": "אינו נופל כשאין atom-index.json — loadCensus מחזיר מערך ריק בשקט, כלומר בורר על מצע ריק אפשרי ולא יתריע",
+    "evidence": "machtzev/generator/render-ds.mjs:1024"
+   },
+   {
+    "claim": "אינו משתמש ב-atom-census.json — הוא בוטל, והאורקל היחיד הוא atom-index.json (הכרעה C)",
+    "evidence": "machtzev/generator/render-ds.mjs:1022-1024"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/app-ds.mjs · app-shell.mjs · balagan.mjs · capability.mjs · mahulal/generator-ratchet.mjs · machtzev/truth.mjs (למדידה)",
+   "input": "סכמה מובנית מ-app-ds (שנגזרה מספק/משפט) + atom-index.json (מפקד-האטומים) + atlas.json/atlas-data.json + קוד-האטומים עצמו (atomCtor קורא קבצים)",
+   "output": "קובצי מסך-Flutter ב-new/dart-gen-bs + קובצי-תוכן עבריים ב-new/dart-data-bs/auto",
+   "next": "app-ds מרכיב מהם אפליקציה (שלד+ניווט) ⇒ balagan ממזג מודולי-נייר ⇒ ship ⇒ analyze + build web"
+  },
+  "quality": {
+   "signal": "אין שער בשמו. הוא נמדד בעקיפין דרך שערים שצורכים את פלטו: `node machtzev/truth.mjs --gate` ⇒ 'חיווט 108/1887 ≥ רצפה 53 (רק-עולה)' (exit 0) — ו-truth מייבא אותו ישירות בשביל listMapEngines. שערי הכיסוי-בפועל (genverify · balagan-look) לא הורצו כאן",
+   "measured": "חלקית — `node machtzev/truth.mjs --gate` ⇒ exit 0 (מודד את החיווט שנגזר גם ממנו). אין מדידה ישירה של איכות-הרינדור שלו בפקודה אחת"
+  },
+  "evidence": [
+   "awk הדפסת machtzev/generator/render-ds.mjs שורות 1-165, 1010-1110, 1290-1345 + grep של כל 21 הייצואים",
+   "node machtzev/truth.mjs --gate ⇒ exit 0",
+   "engine-index card: importedBy = 6 קבצים (app-ds · app-shell · balagan · capability · generator-ratchet · truth)"
+  ]
+ },
+ {
+  "file": "machtzev/compose-engine.mjs",
+  "lang": "mjs",
+  "lines": 248,
+  "capabilities": [
+   {
+    "cap": "גוזר מנוסחת-חלקיק רשימת פעולות-הצגה דטרמיניסטית, לפי 36 סוגי-נוסחה (raw · name · act · partition · count · sum · / · − · × · vs · search · filter · table · empty · export · perm · auto · life · log · panel + 16 סוגי-SchoolOS)",
+    "evidence": "machtzev/compose-engine.mjs:81-140 (ops) · 139 (kind לא-מוכר ⇒ throw)"
+   },
+   {
+    "cap": "מחזיק טבלת-ברירה op⇒אטום-אמיתי, שבה לכל ערך מצורף **שקע-הדאטה שלו כ-file:line** — אטום בלי נושא-ערך לא נכנס לטבלה",
+    "evidence": "machtzev/compose-engine.mjs:7-70 (ATOM · 68 ערכים)"
+   },
+   {
+    "cap": "מרכיב פעולה מרובת-אטומים כשהמטרה דורשת: מכפלה ⇒ 3 אטומים · השוואה ⇒ 3 · פאנל ⇒ 5 · טריאז׳ ⇒ 4 — ומסמן זאת כ-insight",
+    "evidence": "machtzev/compose-engine.mjs:91-94,112-117,119 · 216"
+   },
+   {
+    "cap": "משלב שכבת-תצוגה עם שכבת-לוגיקה באותה פעולה (§21): איתור = DsSearch ⊕ smartFilter · ייצוא = כפתור ⊕ toCsv · הרשאות = בורר ⊕ roleOf ⊕ canGrantedAction",
+    "evidence": "machtzev/compose-engine.mjs:96-107"
+   },
+   {
+    "cap": "חוסם בחירה במזייף: FAKERS היא SSOT, ובחירה באטום שברשימה זורקת שגיאה בזמן-ריצה",
+    "evidence": "machtzev/compose-engine.mjs:71-77 · 213"
+   },
+   {
+    "cap": "מחזיק קטלוג של 60 חלקיקים כצורות-דאטה (id · שם-עברי · נוסחה) — זהו המקור שממנו render-module גוזר PARTICLE_IDS/PARTICLE_NAMES",
+    "evidence": "machtzev/compose-engine.mjs:142-206 · render-module.mjs:24,27-32"
+   },
+   {
+    "cap": "מייצר דוח-מרקדאון עם טבלת-ההרכבות, הוכחת-נושא-ערך פר-אטום, ורשימת-המזייפים",
+    "evidence": "machtzev/compose-engine.mjs:226-237"
+   },
+   {
+    "cap": "שער-דטרמיניזם: הפלט על כל החלקיקים חייב להיות זהה ל-compose-engine-report.md; שינוי בטבלה/בחלקיקים = אירוע-ראצ׳ט מוצהר",
+    "evidence": "machtzev/compose-engine.mjs:239-245"
+   },
+   {
+    "cap": "מריץ את בלוק-הדוח **רק** בהרצה ישירה, כדי שייבוא מ-particles.mjs לא יכתוב קבצים (הכרעה-27)",
+    "evidence": "machtzev/compose-engine.mjs:221-224,248"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "FAKERS ריק היום — הרשימה נשארת כ-SSOT אבל אינה חוסמת אף אטום בפועל, כי חמשת המזייפים קיבלו שקע-דאטה אמיתי ב-G21/הכרעה-26",
+    "evidence": "machtzev/compose-engine.mjs:76-77 · פלט השער: '0 מזייפים חסומים'"
+   },
+   {
+    "claim": "אינו מרנדר קוד — פלטו הוא מיפוי {op, atom, seam, why}; הרינדור הוא של render-module/render-ds",
+    "evidence": "machtzev/compose-engine.mjs:208-218 (compose מחזיר תיאור)"
+   },
+   {
+    "claim": "אינו בורר אטום בזמן-ריצה — הטבלה כתובה-ביד; הבורר-המנועי שמנסה לשחזר אותה הוא cover.mjs, והשער שם מודד עד כמה זה מצליח",
+    "evidence": "machtzev/compose-engine.mjs:7-8 מול cover.mjs:9,86-108"
+   },
+   {
+    "claim": "אינו קורא קוד-Dart כדי לאמת ששקע-הדאטה שהוא מצטט עדיין קיים — ה-seam הוא מחרוזת-הערה, וההוכחה שלו היא ידנית מהסשן שכתב אותה",
+    "evidence": "machtzev/compose-engine.mjs:8,10-70 (seam = טקסט חופשי)"
+   },
+   {
+    "claim": "ארבעה מזייפים שזוהו בבייטים (DataGrid · timeline_flow · shimmer_skeleton · StatBlock) **לא** נוספו לרשימה במכוון — הוספה = הכרעת בעל-המחולל",
+    "evidence": "machtzev/compose-engine.mjs:72-74"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/particles.mjs (ייבוא) · machtzev/generator/render-module.mjs:24 (קורא את הקוד כטקסט) · machtzev/generator/cover.mjs:20,88 (קורא כטקסט) · machtzev/police.mjs (שער compose-determinism)",
+   "input": "אין קלט-קובץ — הקטלוג (ATOM · PARTICLES · ops) הוא הקוד עצמו",
+   "output": "compose(p) ⇒ {…p, atoms:[{op,atom,seam,label,why}], insight} · ובהרצה ישירה machtzev/compose-engine-report.md",
+   "next": "render-module גוזר ממנו את קטלוג-החלקיקים ⇒ הרכבה מהזהב; particles.mjs מחווט חלקיק-חופשי; cover מנסה לשחזר את הטבלה מנועית"
+  },
+  "quality": {
+   "signal": "`node machtzev/compose-engine.mjs --gate` ⇒ '60 חלקיקים ≡ הדוח · 0 מזייפים חסומים' (exit 0). שער compose-determinism ב-gates.tsv:32, שלב commit. המדידה החזקה יותר היא דרך cover: `node machtzev/generator/cover.mjs --gate` ⇒ top-1 18/58 · top-3 29/58 — כלומר מנוע-הבורר משחזר היום שליש מהטבלה הזו לבד",
+   "measured": "כן — שתי הפקודות למעלה"
+  },
+  "evidence": [
+   "awk הדפסת machtzev/compose-engine.mjs שורות 1-140, 205-248 + grep מבני",
+   "node machtzev/compose-engine.mjs --gate ⇒ exit 0, 60 חלקיקים · 0 מזייפים",
+   "node machtzev/generator/cover.mjs --gate ⇒ exit 0, top-1 18/58 · top-3 29/58",
+   "grep -n 'compose-determinism' machtzev/gates.tsv ⇒ שורה 32"
+  ]
+ },
+ {
+  "file": "machtzev/generator/cover.mjs",
+  "lang": "mjs",
+  "lines": 140,
+  "capabilities": [
+   {
+    "cap": "עונה על בקשה {op, need:[שקעים], goal:'משפט'} ברשימת-אטומים שמכסים את השקעים — אחד או כמה",
+    "evidence": "machtzev/generator/cover.mjs:36-53 (cover)"
+   },
+   {
+    "cap": "מנקד מועמד-תצוגה בארבעה רכיבים: כיסוי-שקעים ×10 · קנס על שקע-עודף ×1.5 · דירוג-מטרה מ-match.retrieve · דרגת-מדף (ds > premium > שורש > auto/מסכים-מפורקים)",
+    "evidence": "machtzev/generator/cover.mjs:26-34 (tier · scoreDisplay)"
+   },
+   {
+    "cap": "משלב חמדנית עד כיסוי-מלא כשאין אטום-יחיד שמכסה הכל (§20-ב), עם תקרת-עומק של 4 אטומים",
+    "evidence": "machtzev/generator/cover.mjs:44-50 · 49"
+   },
+   {
+    "cap": "מרחיב למשפחות-op שכנות כשאין מועמד באותו op (stat↔trend/ratio/fact · table↔board/bars · …)",
+    "evidence": "machtzev/generator/cover.mjs:22-23 (NEAR) · 42"
+   },
+   {
+    "cap": "מדווח פער-כיסוי במפורש (missing · ok:false) במקום לזייף",
+    "evidence": "machtzev/generator/cover.mjs:8,51-52"
+   },
+   {
+    "cap": "בורר מנוע-לוגיקה לפי המטרה-בעברית שבכותרת-הקובץ של האטום עצמו (10 שורות ההערה הראשונות), עם IDF על גזמים ורשימת-עצירה נגזרת (מילה ב->8% מהמנועים = רעש)",
+    "evidence": "machtzev/generator/cover.mjs:55-66 · 65 (STOP)"
+   },
+   {
+    "cap": "מנרמל ניקוד-לוגיקה לפי אורך-הכותרת, כדי שכותרת מילולית לא תנצח בזכות אורכה",
+    "evidence": "machtzev/generator/cover.mjs:73"
+   },
+   {
+    "cap": "מוסיף עד-שני: מועמד שגם match.retrieveLogic מדרג מקבל תוספת-ניקוד יורדת לפי מיקומו",
+    "evidence": "machtzev/generator/cover.mjs:78-81"
+   },
+   {
+    "cap": "מושך את רשימת-המזייפים ישירות מטקסט compose-engine.mjs (SSOT יחיד) ומרחיב אותה לגרסת-Pascal",
+    "evidence": "machtzev/generator/cover.mjs:19-20"
+   },
+   {
+    "cap": "משחזר את טבלת-ATOM הידנית כמבחן-עצמי: מפרסר מקוד compose-engine את ה-op, האטום, השקעים מתוך ה-seam, ואת **המטרה-בעברית** (שמות-החלקיקים + נוסחאותיהם + ה-why + ההערה) — ואז מריץ את הבורר ובודק אם הגיע לאותו אטום",
+    "evidence": "machtzev/generator/cover.mjs:86-108 (parseAtomTable) · 116-126"
+   },
+   {
+    "cap": "מדווח top-1 ו-top-3 בנפרד לתצוגה וללוגיקה, וכותב דוח-מרקדאון עם שורה לכל op (ביד מול המנוע)",
+    "evidence": "machtzev/generator/cover.mjs:127-130"
+   },
+   {
+    "cap": "שער-ratchet רק-עולה: ירידה ב-top-1 או ב-top-3 מול cover-baseline.json מפילה",
+    "evidence": "machtzev/generator/cover.mjs:132-135 · machtzev/gates.tsv:12 ('generator/cover-baseline.json;grow')"
+   },
+   {
+    "cap": "מריץ את השער רק בהרצה ישירה, כי particles.mjs מייבא אותו (הכרעה-27)",
+    "evidence": "machtzev/generator/cover.mjs:113-115"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מרנדר ואינו כותב קוד — פלטו רשימת מזהי-אטומים",
+    "evidence": "machtzev/generator/cover.mjs:52,83 (return {atoms:[…]})"
+   },
+   {
+    "claim": "אינו מדרג לפי שם-הפונקציה — מפורשות: 'שם-הפונקציה לעולם אינו ראיה; המטרה-בעברית של האטום כן' (הכרעה 23-ב)",
+    "evidence": "machtzev/generator/cover.mjs:7"
+   },
+   {
+    "claim": "אינו מרכיב מנועי-לוגיקה — coverLogic מחזיר מועמד יחיד ו-composed תמיד false",
+    "evidence": "machtzev/generator/cover.mjs:82-83"
+   },
+   {
+    "claim": "אינו סוגר את הפער מול הטבלה-הידנית — נכון להרצה כאן הוא משחזר 18 מתוך 58 ב-top-1 (29 ב-top-3), כלומר רוב הבחירות הידניות עדיין לא נגזרות מנועית",
+    "evidence": "node machtzev/generator/cover.mjs --gate ⇒ 'top-1 18/58 · top-3 29/58 (רצפה 18/29)'"
+   },
+   {
+    "claim": "אינו נכשל על כותרת-אטום חסרה — קריאה שנכשלת מחזירה מחרוזת ריקה והאטום נשאר בבריכה בלי מונחים",
+    "evidence": "machtzev/generator/cover.mjs:61"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/particles.mjs (ייבוא — חיווט חלקיק-חופשי) · machtzev/police.mjs (שער cover)",
+   "input": "machtzev/generator/ops-map.json (מפת אטום⇒op⇒שקעים, נגזרת מ-op-census) + machtzev/compose-engine.mjs (כטקסט) + match.retrieve/retrieveLogic + כותרות קובצי-האטומים",
+   "output": "{atoms, alts, composed, missing, ok} · ובהרצה ישירה cover-report.md + cover-baseline.json",
+   "next": "particles.mjs מחווט את האטומים שנבחרו לשקעי-דאטה ⇒ מסכי-px; שקע-חובה ריק ⇒ פסילה"
+  },
+  "quality": {
+   "signal": "`node machtzev/generator/cover.mjs --gate` ⇒ '✓ cover: שחזור-ATOM top-1 18/58 · top-3 29/58 (רצפה 18/29)' (exit 0). זהו אחד השערים הבודדים שמודד **יכולת** ולא רק דטרמיניזם: הוא שואל כמה מהבחירות-שנעשו-ביד המנוע מגיע אליהן לבד, ומגן על המספר בראצ׳ט רק-עולה",
+   "measured": "כן — הפקודה למעלה. הערך המוחלט (18/58 = 31%) הוא גם המדידה של הפער"
+  },
+  "evidence": [
+   "awk הדפסת machtzev/generator/cover.mjs שורות 1-140 (נקרא במלואו)",
+   "node machtzev/generator/cover.mjs --gate ⇒ exit 0, 18/58 · 29/58",
+   "grep -n 'cover' machtzev/gates.tsv ⇒ שורה 12 (baseline;grow)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/look.mjs",
+  "lang": "mjs",
+  "lines": 28,
+  "capabilities": [
+   {
+    "cap": "מחזיק את מצב-המראה של הריצה כמשתנה-מודול אחד (setLook/getLook/isPaper) — 'dark' ברירת-מחדל, 'paper' = עור-הנייר של «בלגן»",
+    "evidence": "machtzev/generator/look.mjs:8-11"
+   },
+   {
+    "cap": "מקלף גליף-מוביל ממחרוזת (אימוג׳י · סימנים-פיקטוגרפיים · צירופי-ZWJ) — L98: גליף בקבוע נחתך",
+    "evidence": "machtzev/generator/look.mjs:12-13 (GLYPH_RE · stripGlyph)"
+   },
+   {
+    "cap": "מגדיר מהו 'צבע-קשיח' בביטוי-אחד: Color(0x…) שאינו שקוף · Colors.x שאינו transparent · Color.fromARGB/RGBO · BsTokens הסמנטיים — ומחריג טוקנים (DsTokens/DsLook/skin.*)",
+    "evidence": "machtzev/generator/look.mjs:15-17 (HARD_COLOR)"
+   },
+   {
+    "cap": "מכריע אם אטום 'לובש-עור' בקריאת קוד-המקור שלו בפועל: כרום-DS תמיד כן, אחרת הקובץ נסרק ל-HARD_COLOR",
+    "evidence": "machtzev/generator/look.mjs:19-27 (skinWired) · 22,26"
+   },
+   {
+    "cap": "מנרמל נתיב-אטלס לנתיב-דיסק ('premium/x.dart' ⇒ 'dart-ui-bs/premium/x.dart')",
+    "evidence": "machtzev/generator/look.mjs:21"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מחיל עור — הוא רק מדווח מצב ומכריע כשירות; ההזרקה בפועל היא ב-render-ds · particles · balagan-look",
+    "evidence": "machtzev/generator/look.mjs:1-2 (הכותרת: 'מצב-המראה של הריצה') · importedBy: balagan-look · particles · render-ds"
+   },
+   {
+    "claim": "אינו מייבא כלום מהמחולל — במכוון, 'מודול-זעיר בלי תלויות כדי ש-render-ds ו-particles יקראו אותו בלי מעגל'",
+    "evidence": "machtzev/generator/look.mjs:1-2,4-6 (רק fs · path · root)"
+   },
+   {
+    "claim": "אינו כותב פלט ואינו שער-משטרה",
+    "evidence": "engine-index card isNot: 'לא-רץ-מהשורה · לא-כותב-פלט · לא-שער-משטרה'"
+   },
+   {
+    "claim": "אינו נופל על קובץ חסר — קובץ שאינו קיים נקרא כמחרוזת ריקה, ולכן נחשב אוטומטית 'לובש-עור'",
+    "evidence": "machtzev/generator/look.mjs:25-26"
+   },
+   {
+    "claim": "המטמון שלו לא תמיד פוגע: הבדיקה היא CACHE.has(f) אבל הכתיבה היא CACHE.set(file, ok) — לקובץ שנתיבו נורמל (כל מה שאינו מתחיל ב-'dart-') המפתח שנכתב שונה מזה שנקרא, ולכן הקובץ ייסרק שוב בכל קריאה. השפעה: ביצועים בלבד, לא נכונות",
+    "evidence": "machtzev/generator/look.mjs:21,23,27"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/render-ds.mjs:25 · machtzev/generator/particles.mjs · machtzev/generator/balagan-look.mjs",
+   "input": "קריאת setLook מהמחולל + קובצי-אטום תחת new/ (לקריאת HARD_COLOR)",
+   "output": "ערכי-החזרה בלבד: isPaper · stripGlyph · skinWired · HARD_COLOR",
+   "next": "render-ds/particles פוסלים אטום לא-לובש-עור כשהמצב 'paper'; balagan-look מריץ את שער-המראה של «בלגן»"
+  },
+  "quality": {
+   "signal": "אין לו שער בשמו. הכלל שהוא מגדיר נאכף בשער balagan (gates.tsv:14 · 36 כללים · baseline;grow), שלא הרצתי כאן (הוא דורש את פלטי-בלגן המחוללים)",
+   "measured": "לא-נמדד — אין gate בשמו ולא הרצתי את שער balagan"
+  },
+  "evidence": [
+   "cat machtzev/generator/look.mjs (28 שורות, נקרא במלואו)",
+   "grep -n 'balagan' machtzev/gates.tsv ⇒ שורה 14"
+  ]
+ },
+ {
+  "file": "machtzev/generator/core-from-shape.mjs",
+  "lang": "mjs",
+  "lines": 79,
+  "capabilities": [
+   {
+    "cap": "גוזר לכל ישות-סכמה שכבת-גרעין בשישה חלקים: יחסים · workflow · אירועים · חוקים · ערוצי-התראה · policy (שקע-ריק)",
+    "evidence": "machtzev/generator/core-from-shape.mjs:42-60 (core) · 59"
+   },
+   {
+    "cap": "פותר יעד-יחס משדה `xId` בשבעה כללים מדורגים ומדווחים: שם-מדויק ⇒ סיומת באותו מרחב-שמות ⇒ סיומת יחידה ⇒ סיומת עם עדיפות Org ⇒ תחילית (הקצר-ביותר) ⇒ מילה-אחרונה ⇒ עצמי; אחרת reserved או ambiguous",
+    "evidence": "machtzev/generator/core-from-shape.mjs:24-41 (relationTarget) · כל ערך-החזרה נושא `how`"
+   },
+   {
+    "cap": "מזהה workflow משדה-enum בשם status/stage/outcome, ושולף את המצבים מ-enum-values.data.json או מטיפוס-איחוד-מחרוזות",
+    "evidence": "machtzev/generator/core-from-shape.mjs:46-50 · 47"
+   },
+   {
+    "cap": "מחווט מנוע-מעבר אמיתי כשהוא קיים על המדף (advance-status.dart · next-stage.dart — נבדק בקיום-קובץ), ואחרת מצהיר במפורש 'סדר-ההצהרה כברירת-מחדל — הצבה, לא אמת (חוק-7)'",
+    "evidence": "machtzev/generator/core-from-shape.mjs:22-23 (SHELF_WORKFLOW) · 48-49"
+   },
+   {
+    "cap": "גוזר אירועי-מחזור-חיים משדות-IsoDate לפי סיומת (At/Date/start/end/expiry/due) ומייצר להם שם-אירוע",
+    "evidence": "machtzev/generator/core-from-shape.mjs:51"
+   },
+   {
+    "cap": "גוזר ארבעה סוגי-חוקים: חובה (o:false) · תחום-enum · שלמות-יחס (ref) · ייחודיות-id",
+    "evidence": "machtzev/generator/core-from-shape.mjs:52-57"
+   },
+   {
+    "cap": "מזהה ערוצי-התראה משם-השדה (phone/tel/mobile/wa/whatsapp ⇒ phone · mail/email ⇒ email) לפי מקטע-שם ולא תת-מחרוזת",
+    "evidence": "machtzev/generator/core-from-shape.mjs:19 (chanKind) · 58"
+   },
+   {
+    "cap": "מחריג ישויות שאינן דומיין (Db · UiPrefs · NotifPrefs · ReportPrefs · SecurityCfg)",
+    "evidence": "machtzev/generator/core-from-shape.mjs:17-18"
+   },
+   {
+    "cap": "כותב רישום JSON + דוח-מרקדאון עם שורה לכל ישות (מונח · שדות · יחסים עם ה-how · workflow · אירועים · חוקים · ערוצים)",
+    "evidence": "machtzev/generator/core-from-shape.mjs:64-78"
+   },
+   {
+    "cap": "שער-דטרמיניזם: core-registry.json חייב להיות זהה לנגזרת-טרייה מהסכמה",
+    "evidence": "machtzev/generator/core-from-shape.mjs:70-73"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו ממציא מדיניות — policy-config (שבת/כשרות/הרשאות) נפלט כשקע מוצהר-וריק, כי הוא הכרעת-בעלים",
+    "evidence": "machtzev/generator/core-from-shape.mjs:7,59"
+   },
+   {
+    "claim": "אינו ממציא יעד-יחס — יחס שלא נפתר נושא how='reserved' או 'ambiguous(A/B)' ונספר כלא-פתור בשער",
+    "evidence": "machtzev/generator/core-from-shape.mjs:25,31,40 · 67 (resolved/rel.length)"
+   },
+   {
+    "claim": "אינו ממציא מעברי-מצב — בלי אטום-מדף הוא מצהיר 'הצבה, לא אמת'",
+    "evidence": "machtzev/generator/core-from-shape.mjs:49"
+   },
+   {
+    "claim": "אינו כותב Dart — הפלט הוא JSON+MD; הפליטה ל-gen_core_<entity>.dart נעשית בצעד הבא, core-dart.mjs",
+    "evidence": "machtzev/generator/core-from-shape.mjs:7,74,77 · regen.mjs (הצעד שאחריו: core-dart)"
+   },
+   {
+    "claim": "אינו מיובא ע\"י אף מנוע — importedBy ריק; הצריכה היא דרך core-registry.json",
+    "evidence": "engine-index card: importedBy ריק"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:REGEN (הצעד 'הגרעין מהסכמה+מונחים') · שער core במשטרה",
+   "input": "new/atoms/schema-fields.mjs (FIELDS) · enum-values.data.json · entity-terms.data.json · קיום קבצים ב-new/dart-maor",
+   "output": "machtzev/generator/core-registry.json + core-registry-report.md",
+   "next": "core-dart.mjs ⇒ gen_core_<entity>.dart ⇒ retarget.mjs:376-422 מחווט אותו לתוך מסך-הישות (coreWired)"
+  },
+  "quality": {
+   "signal": "`node machtzev/generator/core-from-shape.mjs --gate` ⇒ '49 ישויות · יחסים 32/33 פתורים · workflows 8 (2 עם אטום-מעבר · 6 סדר-הצהרה) · אירועים 35 · חוקים 383 · ערוצים 14 ≡ סכמה' (exit 0). שער core ב-gates.tsv:22, שלב commit. המספרים עצמם הם גם המדידה של הפער: 1 יחס לא-פתור, ו-6 מתוך 8 ה-workflows הם הצבה ולא אטום-מעבר אמיתי",
+   "measured": "כן — הפקודה למעלה"
+  },
+  "evidence": [
+   "cat -n machtzev/generator/core-from-shape.mjs (79 שורות, נקרא במלואו)",
+   "node machtzev/generator/core-from-shape.mjs --gate ⇒ exit 0, הפלט מצוטט למעלה",
+   "grep -n 'core' machtzev/gates.tsv ⇒ שורה 22"
+  ]
  }
 ]
