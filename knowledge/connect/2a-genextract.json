@@ -194,6 +194,78 @@
   ]
  },
  {
+  "file": "gen/build.mjs",
+  "lang": "mjs",
+  "lines": 64,
+  "does": [
+   {
+    "claim": "נקודת-הכניסה מהמסוף: קורא ספק/משפט מקובץ, בונה מדף-JS + מדף-Dart, מריץ `runGenerator`, וכותב ארבעה תוצרים ל-`gen/out/<slug>/`: `app.html` · `report.json` · `live.html` · `log.md`",
+    "evidence": "gen/build.mjs:21-36"
+   },
+   {
+    "claim": "מזריק את מוכיח-ה-Dart **רק אם** יש Dart בסביבה ויש אטומי-Dart — אחרת `dartProver = null` והמנוע פשוט לא מדווח שכבת-Dart",
+    "evidence": "gen/build.mjs:25-27"
+   },
+   {
+    "claim": "`--flutter` מוסיף את מסלול-התצוגה; `--site` מוסיף גם בניית-אתר. **`--site` שנכשל = כישלון גלוי** (`process.exitCode = 1`), לא שקט",
+    "evidence": "gen/build.mjs:28-29,62"
+   },
+   {
+    "claim": "`log.md` מדווח לכל צורך: כמה נוסו · כמה עברו · מי נבחר · **מי עוד עבר** · פילוח-סיבות-נפילה · ושכבת-Dart בנפרד",
+    "evidence": "gen/build.mjs:43-47"
+   },
+   {
+    "claim": "סעיף «חסר במדף» מפורש: «אף אטום לא עבר את הדוגמאות — באפליקציה מוצג «אין אטום מוכח», **לא קוד-ידני**»",
+    "evidence": "gen/build.mjs:50"
+   },
+   {
+    "claim": "רץ ירוק כאן מקצה-לקצה: «✓ גמ\"ח הלוואות: 9 אטומים מוכחים · 0 צרכים ללא הוכחה · 28726ms»",
+    "evidence": "ran: `node gen/build.mjs gen/specs/gemach.txt` (‏exit 0)"
+   },
+   {
+    "claim": "מוריד את `src` של האטומים מ-`report.json` (כדי שלא יתפח) אך משאיר אותו ב-`live.html`",
+    "evidence": "gen/build.mjs:33-34"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו דטרמיניסטי בפלט: הריצה שינתה `live.html`·`log.md`·`report.json` בעץ המחויב (‏`meta.built`/`ms`), ו-`app.html` **לא** השתנה",
+    "evidence": "ran: בדיקת-מצב-עץ אחרי הריצה ⇒ שלושת התוצרים מסומנים M + `gen/lang.data.json`; שוחזרו בשחזור-עץ"
+   },
+   {
+    "claim": "**כותב ל-`gen/lang.data.json` כתופעת-לוואי** של `loadLang()` בכל בנייה — קובץ-דאטה מחויב משתנה בכל הרצה",
+    "evidence": "gen/build.mjs:27 (‏loadLang) ⇒ gen/lang.mjs:18 (‏writeFileSync)"
+   },
+   {
+    "claim": "אינו מחובר לצנרת: לא ב-`regen.mjs`, לא ב-`one.mjs`, לא ב-`police.mjs`. הקורא היחיד הוא ה-workflow של gen",
+    "evidence": "ran: חיפוש `gen/build.mjs` בכל הריפו ⇒ `.github/workflows/gen.yml:56` · `gen/MOSAD.md` · `gen/DETACH.md` · `gen/live.mjs` (טקסט-תצוגה)"
+   }
+  ],
+  "callers": [
+   {
+    "who": ".github/workflows/gen.yml:56",
+    "how": "‏CI: מריץ `gen/build.mjs` עם `--site` לכל ספק שהשתנה"
+   },
+   {
+    "who": "gen/DETACH.md:7,30 · gen/MOSAD.md:111",
+    "how": "מתועד"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/regen.mjs` — סדר-הריצה של GENMAX, כשלב «מסלול-HTML» לצד מסלול-ה-Dart",
+   "gives": "‏`build.mjs` הוא היחיד ב-60 שמייצר **אפליקציה רצה + דוח-הוכחה + יומן-בנייה באותה ריצה**. חיבורו ל-regen היה נותן לכל ספק-GENMAX גם גרסת-HTML-ניידת (ללא Flutter) וגם `log.md` שאומר למה כל אטום נבחר. תנאי-קדם: להוציא את `meta.built` ואת כתיבת-`lang.data.json` מנתיב-הריצה, אחרת כל regen מלכלך את העץ"
+  },
+  "s22": {
+   "score": 3,
+   "why": "משפט⇒אפליקציה-רצה בפקודה אחת, עם דיווח-כישלון כן ובלי קוד-ידני. זו §22 בקנה-מידה קטן, ורצה ירוק כאן. הפגמים (אי-דטרמיניזם · כתיבה-בצד) ממוקדים ומדידים"
+  },
+  "evidence": [
+   "ran: node gen/build.mjs gen/specs/gemach.txt ⇒ «✓ … 9 אטומים מוכחים · 0 צרכים ללא הוכחה · 28726ms ⇒ gen/out/gemach/»",
+   "ran: בדיקת-מצב-עץ אחרי ⇒ M על 3 תוצרים + gen/lang.data.json; שוחזרו",
+   "read: gen/build.mjs:21-36,39-52,54-63 · gen/lang.mjs:18"
+  ]
+ },
+ {
   "file": "gen/engine.mjs",
   "lang": "mjs",
   "lines": 48,
@@ -266,6 +338,129 @@
   ]
  },
  {
+  "file": "gen/flutter.mjs",
+  "lang": "mjs",
+  "lines": 36,
+  "does": [
+   {
+    "claim": "מסלול-התצוגה: ממיר ספק-gen לספק-ds (`toSpecDs` מפיל את `[תאריך]`·`[טלפון]`·`(a..b)` ואת הקטעים שאין להם דקדוק ב-ds) ומריץ את **הדלת של המחצב** — `machtzev/generator/app-ds.mjs` — כתהליך נפרד (spawn, לא import)",
+    "evidence": "gen/flutter.mjs:1-2,11,13-14,26"
+   },
+   {
+    "claim": "מפנה את כל הפלט ל-`gen/out/<slug>/flutter` דרך `GEN_OUT`/`GEN_DATA_OUT`, ו**מעביר לכאן כל קובץ שנולד מחוץ ל-gen/** בריצה — כדי שעץ-המחצב יישאר ביט-זהה",
+    "evidence": "gen/flutter.mjs:20,26-29"
+   },
+   {
+    "claim": "מודד את זה בפועל: בדיקת-מצב-עץ לפני ואחרי, והתוצאה `treeClean` + `leftover` בדוח",
+    "evidence": "gen/flutter.mjs:16,25,30,35"
+   },
+   {
+    "claim": "מחלץ את רשימת אטומי-התצוגה שחוברו מתוך שורות-ה-`import '../dart-*/…'` בקבצים שנוצרו",
+    "evidence": "gen/flutter.mjs:32-33"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**זו הראיה ש-`gen/` אינה מנותקת**: היא מפעילה נקודת-כניסה של המחולל (`app-ds.mjs`, אחת מ-6 ב-`GEN_ENTRY`). הכיוון חד-סטרי — gen קוראת למחולל, המחולל אינו קורא ל-gen — ולכן `connected()` עדיין מסמן ○",
+    "evidence": "gen/flutter.mjs:11,26 (‏APP_DS = machtzev/generator/app-ds.mjs) מול machtzev/census/engine-index.mjs:315-333 (‏GEN_ENTRY · connected)"
+   },
+   {
+    "claim": "`toSpecDs` **מוחק** מידע בשקט: `[תאריך]`/`[טלפון]`/טווח-מספר נופלים, וארבעה קטעי-ישות (`אסור`·`הרגע`·`מסך`·`תיקון`) נמחקים לגמרי ⇒ מסלול-Flutter מקבל ספק עני יותר מ-HTML, בלי הערה בדוח",
+    "evidence": "gen/flutter.mjs:14"
+   },
+   {
+    "claim": "אינו מקמפל — `compileNote` אומר במפורש «קומפילציה לאתר: --site (site.mjs; Flutter SDK + buildsmart)»",
+    "evidence": "gen/flutter.mjs:4,35"
+   },
+   {
+    "claim": "`ok` נקבע לפי `status===0 && files.length>0` בלבד — אין בדיקה שהקבצים מתקמפלים או שהאטומים קיימים",
+    "evidence": "gen/flutter.mjs:35"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/build.mjs:15",
+    "how": "`import { buildFlutter }` — נקרא ב-`--flutter` או `--site`"
+   },
+   {
+    "who": "gen/pass.mjs:12",
+    "how": "`import { buildFlutter }` — פר-אגף"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`gen/flutter.mjs:14` (‏`toSpecDs`) — להחליף את המחיקה-השקטה בהערה בדוח, ואז להזרים את ארבעת הקטעים (`אסור`·`הרגע`·`מסך`·`תיקון`) לדקדוק של `app-ds.mjs`",
+   "gives": "‏`אסור`/`הרגע`/`תיקון` הם בדיוק שפת-הבעלים שהמחולל המחובר **כן** יודע לבטא (‏G32: «ממתין לאישורך» · «עשיתי לבד» · שרשרת). ההמרה כאן זורקת אותם. סגירת הפער הזה היא הדבר היחיד שמפריד בין ספק-gen לספק-ds מלא"
+  },
+  "s22": {
+   "score": 2,
+   "why": "הגשר היחיד בין `gen/` לבין המחולל האמיתי, ועם משמעת-עץ אמיתית (בדיקת-שינויים לפני/אחרי). אבל הוא מגשר תוך מחיקת-מידע בשקט — וזה הפוך מ«לעולם לא לזייף»"
+  },
+  "evidence": [
+   "read: gen/flutter.mjs:11,14,16,20,25-35",
+   "read: machtzev/census/engine-index.mjs:315-333 (‏GEN_ENTRY כולל app-ds.mjs)",
+   "ran: node gen/build.mjs gen/specs/gemach.txt (בלי --flutter) ⇒ המסלול לא הופעל; app-ds הוא נקודת-כניסה מחוברת"
+  ]
+ },
+ {
+  "file": "gen/inventory.mjs",
+  "lang": "mjs",
+  "lines": 29,
+  "does": [
+   {
+    "claim": "מלאי-מלא בשש שורות, כל אחת עם `count` · `connected` (במילים) · `state` (on/off) — כדי ש«תת-ספירה = אזעקה» של §21 תהיה נראית",
+    "evidence": "gen/inventory.mjs:1,19-27"
+   },
+   {
+    "claim": "סופר משלוש ספירות בלתי-תלויות: `readShelf()` (‏fn/const) · `readdirSync(new/atoms)` (קבצים) · `atom-index-full.json` (תצוגה + תאומי-Dart) · `readDartShelf()`",
+    "evidence": "gen/inventory.mjs:9-18"
+   },
+   {
+    "claim": "**השורה השלישית היא ההפרש** — `jsFiles - fns - consts` = «אסינכרוניים / ריבוי-יצוא», מסומנת `state:'off'` עם ההסבר «לא רצים בלי חיבור; לא מחוברים». כלומר המלאי סוגר מול הדיסק ומודה במה שלא נכנס",
+    "evidence": "gen/inventory.mjs:23"
+   },
+   {
+    "claim": "מדד חי: 569 · 527 · 64 · 394 · 569 · 924",
+    "evidence": "ran: `node gen/build.mjs gen/specs/gemach.txt` ⇒ שש שורות-המלאי בסוף הפלט"
+   },
+   {
+    "claim": "`state` של שכבת-ה-Dart נגזר מ-`hasDart()` בזמן-אמת — אין Dart ⇒ «אין Dart בסביבה — לא הוכחו», לא טענת-שווא",
+    "evidence": "gen/inventory.mjs:24"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מסביר **אילו** 64 הקבצים הם ריבוי-יצוא — רק את המספר. אי-אפשר לפעול על השורה הזו בלי לחזור ל-`shelf.mjs`",
+    "evidence": "gen/inventory.mjs:23 (‏מספר בלבד)"
+   },
+   {
+    "claim": "`connected` הוא **טקסט שנכתב ביד** בתוך המנוע, לא נגזר: «מחוברים דרך צורת ה-JS» · «הוכחה-בריצה בדפדפן ובמסוף» הן טענות שאיש לא מודד",
+    "evidence": "gen/inventory.mjs:21-26 (מחרוזות קבועות)"
+   },
+   {
+    "claim": "אין `atom-index-full.json` ⇒ שתי שורות (‏תצוגה · תאומי-Dart) מקבלות 0 בשקט, בלי לסמן «לא נמדד»",
+    "evidence": "gen/inventory.mjs:16-18 (`existsSync ? … : []`)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/build.mjs:14 · gen/studio.mjs:12 · gen/wizard.mjs:12",
+    "how": "`import { inventory }` — שלושה צרכנים"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/studio-full.mjs` — לוח-המדידה של המחולל («כל מספר נושא את הפקודה שמייצרת אותו ואת ה-file:line»)",
+   "gives": "‏`inventory` כבר עושה את החצי הקשה: **שש שורות שסוגרות מול הדיסק, כולל שורת-ההפרש שמודה במה שלא נכנס**. מה שחסר לו הוא בדיוק מה ש-studio-full הוסיף — הפקודה ליד המספר. שילובם נותן מלאי שסוגר-מול-הדיסק **וגם** ניתן-לאימות"
+  },
+  "s22": {
+   "score": 2,
+   "why": "מממש את «תת-ספירה=אזעקה» של §21 באמת — שלוש ספירות בלתי-תלויות ושורת-הפרש מוצהרת. הפגם: עמודת «מחובר» היא פרוזה-ביד בתוך מנוע, בדיוק מה ש-CLAUDE.md מזהיר מפניו"
+  },
+  "evidence": [
+   "ran: node gen/build.mjs gen/specs/gemach.txt ⇒ «✓ 569 … ✓ 527 … ✗ 64 … ✓ 394 … ✓ 569 … ✓ 924»",
+   "read: gen/inventory.mjs:9-27"
+  ]
+ },
+ {
   "file": "gen/plan.mjs",
   "lang": "mjs",
   "lines": 20,
@@ -319,6 +514,78 @@
    "ran: node gen/build.mjs gen/specs/gemach.txt ⇒ 9 צרכים נכנסו לתכנית (מתוך 10 ב-needs.data.json; phone-norm הוחרג בשורה 8)",
    "ran: node -e \"require('./gen/needs.data.json').needs.length\" ⇒ 10",
    "read: gen/plan.mjs:3-19"
+  ]
+ },
+ {
+  "file": "gen/prove-dart.mjs",
+  "lang": "mjs",
+  "lines": 93,
+  "does": [
+   {
+    "claim": "מוכיח-Dart: מתרגם את **אותן דוגמאות** של הצורך לליטרלים של Dart, בונה קובץ-מוכיח אחד עם כל מועמד×דוגמה ב-try/catch, מריץ `dart run`, ומפענח base64/JSON לתוצאות",
+    "evidence": "gen/prove-dart.mjs:1-3,36-79"
+   },
+   {
+    "claim": "**ריפוי-קומפילציה בסבבים**: שורה שאינה מתקמפלת נמצאת לפי מספר-שורה בשגיאה ומושתקת בסבב הבא; קובץ-אטום שבור כולו מוצא מהייבוא — עד 12 סבבים, והמועמדים הבריאים ממשיכים",
+    "evidence": "gen/prove-dart.mjs:45-69"
+   },
+   {
+    "claim": "מייבא אטומי-Dart-בלבד מהאינדקס המאוחד — מסנן החוצה `dart-maor/` (תאומי-ה-JS) ומאמת קיום-קובץ בדיסק",
+    "evidence": "gen/prove-dart.mjs:16-22"
+   },
+   {
+    "claim": "גילוי-Dart גמיש: שלושה נתיבים ואז **נפילה ל-`'dart'` שב-PATH** — זה מה שגרם לו לעבוד כאן בעוד `tools/dart-test.mjs` נפל",
+    "evidence": "gen/prove-dart.mjs:12; ran: `which dart` ⇒ /root/dart-sdk/bin/dart · `node gen/build.mjs …` ⇒ «Dart: נוסו 394» בכל צורך"
+   },
+   {
+    "claim": "`toDart` מתרגם גם שקע-פונקציה פשוט (`x => x.field`) ל-lambda של Dart, ו**זורק שגיאה מפורשת** על שקע שאינו ניתן לתרגום — לא מזייף",
+    "evidence": "gen/prove-dart.mjs:31"
+   },
+   {
+    "claim": "נמדד: 394 אטומי-Dart-בלבד נוסו לכל צורך; `money` הוכח (`f_money`), שאר שמונת הצרכים — אפס",
+    "evidence": "ran: `node gen/build.mjs gen/specs/gemach.txt` ⇒ «● money … Dart: נוסו 394 · הוכחו 1 ⇒ f_money» · שאר השורות «הוכחו 0»"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** יכול להטביע את מה שהוכיח — התוצאה היא Dart, והאפליקציה של `render.mjs` היא HTML. אטום-Dart שהוכח נשאר «זמין למסלול-Flutter» בלבד",
+    "evidence": "gen/live.mjs (סעיף שכבת-Dart): «עבר את ההוכחה. לא ניתן להטביע ב-HTML (זה Dart)»"
+   },
+   {
+    "claim": "מסנן מועמדים לפי `a.n === argc` **בדיוק** (לא `>=` כמו ב-JS) ⇒ אטום-Dart עם פרמטר-ברירת-מחדל אחד נוסף נפסל כ«אורך-קריאה» בלי לנסות",
+    "evidence": "gen/prove-dart.mjs:38-39 מול gen/prove.mjs:39 (`a.n < …args.length`)"
+   },
+   {
+    "claim": "כותב קובץ-מוכיח ל-`gen/out/.prove-dart/` בכל ריצה — תוצר-לוואי בעץ",
+    "evidence": "gen/prove-dart.mjs:43,52,57"
+   },
+   {
+    "claim": "תוצאות-ה-Dart בסטודיו הן **ארוזות מראש**, לא חיות: «בדפדפן אין Dart — מוצגת התוצאה מהמסוף»",
+    "evidence": "gen/studio.mjs:26 (הערה) · gen/wizard.mjs:22-23"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/build.mjs:13 · gen/pass.mjs:11 · gen/studio.mjs:11 · gen/wizard.mjs:11",
+    "how": "`import { readDartShelf, proveDart, hasDart }`"
+   },
+   {
+    "who": "gen/inventory.mjs:6",
+    "how": "`import { readDartShelf, hasDart }` — לספירת-המלאי"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/logic-proof.mjs` — המוכיח-המשותף של G34ב, שמריץ דוגמאות ב-Dart על מועמדים",
+   "gives": "היכולת שכאן ואין שם באותה צורה: **ריפוי-קומפילציה ב-12 סבבים** — מועמד שבור מושתק לבדו והשאר ממשיכים, במקום שכשל-קומפילציה יפיל את כל הקבוצה. ‏G36 תיעד בדיוק את הבאג הזה («מועמד שלא מתקמפל ⇒ הוכחה פר-מועמד»), וכאן יש מימוש נוסף ועצמאי שראוי להשוואה"
+  },
+  "s22": {
+   "score": 3,
+   "why": "מוכיח בריצה ב-Dart — השפה שהמחולל באמת פולט — עם ריפוי-כשלים שמונע «אטום טוב נפסל בגלל שכן שבור». רץ ירוק כאן על 394 אטומים. זה §20 בשפת-היעד"
+  },
+  "evidence": [
+   "ran: node gen/build.mjs gen/specs/gemach.txt ⇒ «Dart: נוסו 394» × 9 צרכים · money הוכח ⇒ f_money",
+   "ran: which dart ⇒ /root/dart-sdk/bin/dart (הנפילה-ל-PATH היא מה שעבד)",
+   "read: gen/prove-dart.mjs:12,16-22,31,36-79,84-92"
   ]
  },
  {
@@ -554,6 +821,132 @@
    "read: gen/sentence.mjs:1-24,49-53,61-63,69,80-120,160-185",
    "read: gen/sentence.mjs:108 (הליטרל שאינו מורחב)",
    "read: gen/lang.mjs:15 (המילון הקשיח שמזין אותו)"
+  ]
+ },
+ {
+  "file": "gen/shelf.mjs",
+  "lang": "mjs",
+  "lines": 69,
+  "does": [
+   {
+    "claim": "אינדקס-המדף: קורא כל `new/atoms/*.mjs` ומחלץ שם-פונקציה, פרמטרים, `kind` (‏fn/const), `hasT`, `n` (אורך-קריאה), `T` (קבועים), `role` (מ-`*.contract.md`), ו-`src` בלי `export`",
+    "evidence": "gen/shelf.mjs:10-16,17-60"
+   },
+   {
+    "claim": "**`n` נלקח מקובץ-הבדיקה** ולא מהחתימה — `Math.max(0, N - a.length)` בבדיקה הוא מקור-האמת לאורך-הקריאה; החתימה היא רק נפילה-לאחור",
+    "evidence": "gen/shelf.mjs:14,36-37"
+   },
+   {
+    "claim": "**`T` מועדף מאטום-הדאטה התאום** (`<name>-strings` / `<name>-data`) על פני קובץ-הבדיקה — «האטום האמיתי; קובץ-הבדיקה רק מעתיק אותו»; אי-התאמה מסומנת `tSource = twin+'≠test'`",
+    "evidence": "gen/shelf.mjs:41-50"
+   },
+   {
+    "claim": "מדד חי: **1,160 קבצי-אטום · 569 פונקציות · 527 קבועים · 292 מהם עם T מאטום-דאטה**",
+    "evidence": "ran: `node gen/build.mjs gen/specs/gemach.txt` ⇒ «569 JS · פונקציות טהורות» · «527 JS · אטומי-דאטה/קבועים … 292 מהם הם הקבועים (T)» · «64 JS · אסינכרוניים / ריבוי-ייצוא»"
+   },
+   {
+    "claim": "CLI עצמאי: `node gen/shelf.mjs` מדפיס פילוח לפי אורך-קריאה ומקור-T",
+    "evidence": "gen/shelf.mjs:63-68"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "מזהה **רק יצוא ראשון** — `SIG_RE` · `ARROW_RE` · `ARROW1_RE` · `CONST_RE` על `exec` יחיד; קובץ עם כמה יצואים נרשם כאטום אחד. אלה 64 ה«אסינכרוניים/ריבוי-יצוא» שהמלאי מסמן `state:'off'`",
+    "evidence": "gen/shelf.mjs:25-27 (‏exec אחד) ⇒ gen/inventory.mjs:23 (‏`jsFiles - fns - consts` = «לא מחוברים»)"
+   },
+   {
+    "claim": "אינו קורא `new/dart*` — ‏JS בלבד; שכבת-ה-Dart היא `prove-dart.mjs`",
+    "evidence": "gen/shelf.mjs:8,18-19"
+   },
+   {
+    "claim": "מעריך `T` דרך `new Function` בלי סנדבוקס — קובץ-בדיקה זדוני היה מריץ קוד בזמן-אינדוקס (כאן: קוד-בית, אך זו הנחה)",
+    "evidence": "gen/shelf.mjs:39,47"
+   },
+   {
+    "claim": "`role` מגיע מ-`contract.md` בהתאמת-רגקס `**תפקיד:**` — אין חוזה ⇒ מחרוזת ריקה, בלי אזהרה",
+    "evidence": "gen/shelf.mjs:51-57"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/build.mjs:9 · gen/inventory.mjs:5 · gen/pass.mjs:8 · gen/studio.mjs:8 · gen/wizard.mjs:8",
+    "how": "`import { readShelf }` — חמישה צרכנים"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/logic-census.mjs` / `atom-index-full.json` — אינדקס-הלוגיקה של המחולל המחובר",
+   "gives": "שתי הכרעות כאן חדות יותר משם: (א) **אורך-הקריאה נלקח מהבדיקה, לא מהחתימה** — כלומר מהריצה שהוכיחה · (ב) **הקבועים נלקחים מאטום-הדאטה התאום, ואי-התאמה מסומנת במפורש** (`≠test`). שתיהן יישום ישיר של «האינדקס=אורקל» ב-VERIFY-LAWS, וראויות להעתקה"
+  },
+  "s22": {
+   "score": 2,
+   "why": "אינדקס מדויק עם שתי הכרעות-אמת טובות, שמזין את ההוכחה. לא 3 — כי הוא רואה JS בלבד, ויצוא-יחיד בלבד (‏64 קבצים יוצאים מהקטלוג בשקט)"
+  },
+  "evidence": [
+   "ran: node gen/build.mjs gen/specs/gemach.txt ⇒ «569 · 527 · 292 · 64»",
+   "read: gen/shelf.mjs:10-16,25-27,36-37,41-50,51-57,63-68"
+  ]
+ },
+ {
+  "file": "gen/site.mjs",
+  "lang": "mjs",
+  "lines": 56,
+  "does": [
+   {
+    "claim": "מפלט-Flutter לאתר רץ: מעתיק 11 תיקיות-Dart של המדף אל `<buildsmart>/lib/genesis`, מוסיף את קבצי-האפליקציה ל-`dart-gen-bs` ואת התוכן ל-`dart-data-bs/auto`, ומריץ בניית-web בשחרור",
+    "evidence": "gen/site.mjs:2-5,26-32,37"
+   },
+   {
+    "claim": "**מסיר את `<base href>` מה-index** כדי שהאתר ירוץ מכל נתיב/קישור, ומסנן `.symbols` ו-`NOTICES` מהפלט",
+    "evidence": "gen/site.mjs:41-43"
+   },
+   {
+    "claim": "גילוי-סביבה מפורש עם נפילה מדווחת: אין BUILDSMART ⇒ `{ok:false, why:'אין פרויקט-Flutter…'}` · אין Flutter ⇒ why · אין נקודת-כניסה ⇒ why. «לא נכשל בשקט»",
+    "evidence": "gen/site.mjs:6,13-15,18-22"
+   },
+   {
+    "claim": "מריץ `pub get` רק אם `.dart_tool/package_config.json` חסר, ומדווח את 800 התווים האחרונים בכישלון",
+    "evidence": "gen/site.mjs:34"
+   },
+   {
+    "claim": "מחזיר מדידה אמיתית: מספר-קבצים · בייטים · ms",
+    "evidence": "gen/site.mjs:44-46"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו רץ כאן** — `BUILDSMART` מחפש `/home/user/buildsmart/app_flutter` ו-`/home/user/meir7651231-ui/buildsmart/app_flutter`; שניהם חסרים, וגם `/home/user/flutter/bin/flutter`",
+    "evidence": "ran: `ls /home/user/buildsmart/app_flutter /home/user/flutter/bin/flutter` ⇒ שניהם MISSING; gen/site.mjs:13-14"
+   },
+   {
+    "claim": "**כותב לתוך ריפו אחר**: `fs.cpSync` ל-`<BUILDSMART>/lib/genesis` — 11 תיקיות, בלי גיבוי ובלי בדיקה מה היה שם. שלא כמו `flutter.mjs` שמקפיד על ביט-זהות בעץ-המחצב, כאן אין שום שמירה על עץ-היעד",
+    "evidence": "gen/site.mjs:26-32"
+   },
+   {
+    "claim": "אינו מוחק את `build/gen-<slug>` שנוצר בתוך buildsmart — רק מעתיק ממנו",
+    "evidence": "gen/site.mjs:35,41"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/build.mjs:16",
+    "how": "`import { buildSite }` — נקרא ב-`--site` כשמסלול-Flutter הצליח"
+   },
+   {
+    "who": "gen/DETACH.md:43",
+    "how": "מתועד"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/web-shell.mjs` (‏G52) — שכבת-הקליפה שגוזרת זהות-אפליקציה מהקוד-המחולל ומאמתת SW בזמן-פליטה",
+   "gives": "שניהם עושים «מפלט-Flutter לאתר». ‏`web-shell` עושה זאת עם זהות, PWA ו-service-worker מאומת; `site.mjs` עושה זאת בלי. אין מה לחבר — יש לבחור אחד. ההעתקה-לריפו-אחר בלי שמירה (שורות 26-32) היא הסיבה להעדיף את web-shell"
+  },
+  "s22": {
+   "score": 1,
+   "why": "מגיע עד אתר-רץ, וזה יעד §22 — אבל דורש שני נכסים חסרים, יש לו מחליף חזק יותר במחולל, והוא דורס תיקיות בריפו אחר"
+  },
+  "evidence": [
+   "ran: ls /home/user/buildsmart/app_flutter · /home/user/flutter/bin/flutter ⇒ MISSING",
+   "read: gen/site.mjs:13-15,18-22,26-35,41-46"
   ]
  },
  {
