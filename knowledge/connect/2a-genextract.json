@@ -461,6 +461,319 @@
   ]
  },
  {
+  "file": "gen/lang.mjs",
+  "lang": "mjs",
+  "lines": 22,
+  "does": [
+   {
+    "claim": "טוען את ידע-השפה **מקבצי-הדאטה של המחולל המחובר** — `machtzev/generator/nl-lang.data.json` + `spec-lang.data.json` — ומרענן צילום-נפילה מקומי (`gen/lang.data.json`) בכל טעינה מוצלחת",
+    "evidence": "gen/lang.mjs:1-2,10-21"
+   },
+   {
+    "claim": "**קריאת-קבצים בלבד, אפס `import`** — מוצהר בכותרת וזו הסיבה ש-`gen/detach.mjs` יכול לטעון ניתוק",
+    "evidence": "gen/lang.mjs:2,3-5 (רק fs/path/url)"
+   },
+   {
+    "claim": "מייבא 7 מפתחות מ-nl-lang ו-7 מ-spec-lang — רשימות מפורשות, לא spread",
+    "evidence": "gen/lang.mjs:8-9,16-17"
+   },
+   {
+    "claim": "אין קבצי-מקור ⇒ נופל לצילום; אין גם צילום ⇒ שגיאת-קריאה גלויה, לא ברירת-מחדל מומצאת",
+    "evidence": "gen/lang.mjs:13,21"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**‏`extra` הוא 100+ מילים עבריות קשיחות בתוך הקוד** — `countWords` · `numWords` · `singular` (‏30 מילים) · `formulaWords` · `idWords` · `guardPhrases` · `forbidVerbs` · `roleSee` · `dativeAfter`. ‏`sentence.mjs:1` מצהיר «אפס מילה-עברית במנוע»; ההצהרה נכונה שם ו**נשברת כאן**",
+    "evidence": "gen/lang.mjs:15 — שורה אחת באורך ~1,300 תווים, כולה עברית"
+   },
+   {
+    "claim": "**כותב לדיסק בכל טעינה** — `fs.writeFileSync(snap, …)` בתוך `loadLang()` ⇒ כל בנייה/סטודיו/אשף משנה קובץ מחויב. נמדד: ריצת-build אחת סימנה `gen/lang.data.json` כמשתנה",
+    "evidence": "gen/lang.mjs:18; ran: `node gen/build.mjs gen/specs/gemach.txt` ⇒ בבדיקת-מצב-העץ `gen/lang.data.json` הופיע כמשתנה (שוחזר)"
+   },
+   {
+    "claim": "‏`extra` **אינו** מגיע מקבצי-הדאטה — הוא נבנה בקוד ומוזג לתוצאה, כך שגם כשהמקורות קיימים חצי מהשפה הוא ליטרל",
+    "evidence": "gen/lang.mjs:15 (ה-`extra` מוגדר בתוך אובייקט-ה-`L` הראשוני) · :16-17 (רק KEYS_NL/KEYS_SPEC נדרסים מהקבצים)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/build.mjs:12 · gen/mosad-build.mjs:11 · gen/pass.mjs:10 · gen/studio.mjs:10 · gen/wizard.mjs:10",
+    "how": "`import { loadLang }` — חמישה צרכנים"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/spec-lang.data.json` · `nl-lang.data.json` — הקבצים שהוא כבר קורא מהם",
+   "gives": "החיבור הוא **העברת `extra` לשם**: 100+ המילים שיושבות היום ב-`gen/lang.mjs:15` שייכות לדאטה של המחולל, לא לקוד של gen. זה סוגר את ההפרה של §19 בשני הצדדים בבת-אחת, ומייתר את הליטרל. בנוסף: להוציא את `writeFileSync` מ-`loadLang` (או לכתוב רק כשהתוכן השתנה) כדי שקריאה תפסיק לכתוב"
+  },
+  "s22": {
+   "score": 1,
+   "why": "גשר-דאטה נכון בעיקרון (קורא מהמחולל, לא מייבא) — אבל מחזיק בתוכו את מילון-העברית הגדול ביותר שמצאתי בקוד-מנוע, וכותב לעץ בכל קריאה"
+  },
+  "evidence": [
+   "ran: node gen/build.mjs gen/specs/gemach.txt ⇒ gen/lang.data.json סומן כמשתנה בבדיקת-מצב-העץ",
+   "read: gen/lang.mjs:2,8-9,13,15,16-18,21",
+   "read: gen/sentence.mjs:1 (ההצהרה «אפס מילה-עברית במנוע»)"
+  ]
+ },
+ {
+  "file": "gen/lenses.mjs",
+  "lang": "mjs",
+  "lines": 43,
+  "does": [
+   {
+    "claim": "‏12 העדשות של המנוע-הישיבתי על ישות: לכל עדשה **בדיקה מכנית** האם הספק עונה לשאלה; לא — השאלה פתוחה. «המנוע שואל; הוא לא עונה»",
+    "evidence": "gen/lenses.mjs:1-2,22-42; ran: node -e על gen/lenses.data.json ⇒ «lenses= 12»"
+   },
+   {
+    "claim": "‏12 סוגי-בדיקה מובחנים: `automation-mentions` · `stages-min` · `has-field-word` · `face-mentions` · `fix-policy` · `has-field-or-forbidden-word` · `money-needs-ref` · `money-needs-date` · `money-visible-to` · `has-enum-or-stages` · `has-kpi` · `forbidden-list` — וסוג-על `no-grammar`",
+    "evidence": "ran: node -e על lenses.data.json ⇒ רשימת ה-kinds; gen/lenses.mjs:26-38"
+   },
+   {
+    "claim": "**`no-grammar` פתוחה תמיד, ואומרת למה**: «אין דרך לכתוב את התשובה בספק — זה פער **במחולל**, לא בתוכנית». המנוע מודה בגבול-עצמו במקום להעמיד פנים",
+    "evidence": "gen/lenses.mjs:2,30 (‏`open=true; why=L.gap`) · :41 (‏`grammar: L.kind==='no-grammar'`)"
+   },
+   {
+    "claim": "זיהוי-שדה-כסף הוא **התאמת-מילה-שלמה**, עם קילוף אותיות-שימוש: «מוסך ≠ סך» מתועד כדוגמה בקוד; 20 מילות-כסף מגיעות מהדאטה",
+    "evidence": "gen/lenses.mjs:12-14; ran: node -e ⇒ «moneyWords= 20»"
+   },
+   {
+    "claim": "שלוש עדשות-כסף ייעודיות: ישות-כסף בלי אסמכתא (אין מול מה להתאים) · בלי תאריך (לא ניתן לסגור תקופה) · **גלויה לתפקיד שאסור לו** — זו עדשת-הרשאה, לא עדשת-מבנה",
+    "evidence": "gen/lenses.mjs:34-36"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** מציע תיקון ואינו מתקן — מחזיר `{lens, name, q, open, why, grammar}` ותו לא. ההצעות (`fix`) הן של `pass.mjs`, לא שלו",
+    "evidence": "gen/lenses.mjs:41 מול gen/pass.mjs:44-59"
+   },
+   {
+    "claim": "`default: open=false` — סוג-עדשה לא-מוכר בדאטה נסגר בשקט במקום לזעוק. תוספת-עדשה עם טעות-כתיב תיעלם",
+    "evidence": "gen/lenses.mjs:39"
+   },
+   {
+    "claim": "אין לו קורא מלבד `pass.mjs`, ואינו נכנס ל-`build.mjs` — כלומר בנייה רגילה **אינה** עוברת דרך העדשות",
+    "evidence": "ran: חיפוש `lenses.mjs` ⇒ gen/pass.mjs:14 בלבד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/pass.mjs:14",
+    "how": "`import { applyLenses, LENSES, isComputedName }`"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/app-ds.mjs` — בסוף הפליטה, כשכבת-«שאלות שנשארו פתוחות» לכל ישות; ובמקביל `yeshiva/gate.mjs` (השער הישיבתי)",
+   "gives": "‏CLAUDE.md הכרעה-27: «המנוע הישיבתי פוסק **לפני** בנייה; אין מקור ⇒ ∅, לא ניחוש». ‏`lenses` הוא המימוש המכני של זה על ספק — 12 שאלות שאפשר לענות עליהן רק מהספק. חיבורו ל-`app-ds` הופך כל בנייה ל«מה ידוע · מה חסר · ומה **אין דקדוק** לבטא» — כולל רשימת-הפערים-במחולל עצמו (`no-grammar`), שהיא מפת-דרכים"
+  },
+  "s22": {
+   "score": 3,
+   "why": "זה המנוע היחיד ב-60 ששואל «מה עוד חסר כדי שזו תהיה אפליקציה שלמה» — וגם מודה במפורש אילו שאלות **אין למחולל דקדוק** לבטא. §22 אומר «אפס-באגים, אפס-תקלות»; העדשות הן איך יודעים שהגענו"
+  },
+  "evidence": [
+   "ran: node -e \"const L=require('./gen/lenses.data.json');…\" ⇒ «lenses= 12 · kinds=… · moneyWords= 20»",
+   "ran: grep -rn 'lenses.mjs' --include=*.mjs . ⇒ gen/pass.mjs:14 בלבד",
+   "read: gen/lenses.mjs:1-2,12-14,22-42"
+  ]
+ },
+ {
+  "file": "gen/mosad-build.mjs",
+  "lang": "mjs",
+  "lines": 60,
+  "does": [
+   {
+    "claim": "בונה את `mosad.data.json` מחדש **תמיד משלושה מקורות בסדר קבוע**: משפטי-הבעלים (`mosad.sentences.txt`) ⇒ העשרות-יד כדאטה (`mosad.enrich.json`) ⇒ חבילות-ידע (`packs/*.json`)",
+    "evidence": "gen/mosad-build.mjs:2-6,22-25,29-35,37-56"
+   },
+   {
+    "claim": "**הפיכות מוצהרת ונאכפת**: «מחיקת חבילה / העשרה ⇒ הרצה ⇒ הדאטה חוזר בדיוק למה שנשאר. `mosad.data.json` לעולם לא נערך ביד» — ו-`--no-packs`/`--no-enrich` מאפשרים למדוד בדיוק כמה כל מקור תרם",
+    "evidence": "gen/mosad-build.mjs:6-7,18-19"
+   },
+   {
+    "claim": "שלב-החבילות **מאחד ולא דורס** שלבים: `[...P.stages, ...e.stages.filter(s => !P.stages.includes(s))]` — «כדי שמעברים קיימים לא יצביעו לריק»",
+    "evidence": "gen/mosad-build.mjs:43-45"
+   },
+   {
+    "claim": "מנקה מעברים-יתומים אחרי המיזוג ומדווח אותם (`added.droppedGuards`) — לא מוחק בשקט",
+    "evidence": "gen/mosad-build.mjs:53"
+   },
+   {
+    "claim": "כל הצמדת-חבילה נרשמת עם **מוצא**: `packsApplied.push({pack, entity, dept, added, sources: P.sources})`",
+    "evidence": "gen/mosad-build.mjs:55"
+   },
+   {
+    "claim": "מדד חי: ‏41 חבילות בעץ; הפלט הנוכחי ‏12 אגפים · 181 ישויות · 146 אוטומציות · 81 הצמדות",
+    "evidence": "ran: `ls gen/packs/*.json | wc -l` ⇒ 41 · node -e על mosad.data.json ⇒ 12 · 181 · 146 · 81"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "מייצר קובץ-דאטה, **לא אפליקציה** — הצרכנים הם `wizard` ו-`pass`",
+    "evidence": "gen/mosad-build.mjs:58 (‏writeFileSync יחיד)"
+   },
+   {
+    "claim": "`mosad.enrich.json` הוא «העשרות-**יד** כדאטה» — כלומר יש שכבה אנושית בין המשפטים לתוצאה, והיא אינה נגזרת משום מקור",
+    "evidence": "gen/mosad-build.mjs:4 (ההודאה בכותרת) · :30-34"
+   },
+   {
+    "claim": "לא הרצתי — הוא דורס את `mosad.data.json` המחויב עם `built: new Date().toISOString()` ⇒ העץ ישתנה בכל ריצה גם בלי שינוי-מקור",
+    "evidence": "gen/mosad-build.mjs:57-58 (‏`built` = שעת-הריצה)"
+   },
+   {
+    "claim": "אין לו קורא בקוד — CLI בלבד; מתועד ב-`gen/MOSAD.md:17,97-107`",
+    "evidence": "ran: חיפוש `mosad-build.mjs` ⇒ gen/MOSAD.md · gen/DETACH.md · gen/packs/README.md בלבד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אין קורא בקוד"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/peruk.mjs` (‏G27 — קורא-הפירוקים: מסמך-בעלים ⇒ ספק-app-ds ⇒ צומת ב-`peruk-index.json`)",
+   "gives": "שני המנועים עושים את אותו דבר: **מסמך-בעלים ⇒ דאטה-מובנה ⇒ ספק**. ‏`peruk` כבר מחובר (‏28 פירוקים ⇒ 28 אפליקציות-נייר). מה ש-`mosad-build` מוסיף ואין שם: **שלוש שכבות-מקור מופרדות עם דגלי-ביטול** (`--no-packs` · `--no-enrich`) ו-**`sources` פר-הצמדה**. זו מדידת-תרומה-פר-מקור שחסרה ב-peruk"
+  },
+  "s22": {
+   "score": 2,
+   "why": "מייצר את הקורפוס שעליו המחולל נמדד, עם הפיכות ומוצא אמיתיים. אבל שכבת-ה-enrich היא יד, ויש לו מחליף מחובר (‏peruk) שעושה את אותו מסלול"
+  },
+  "evidence": [
+   "ran: ls gen/packs/*.json | wc -l ⇒ 41",
+   "ran: node -e על gen/mosad.data.json ⇒ 12 · 181 · 146 · 81",
+   "ran: grep -rn 'mosad-build.mjs' ⇒ אין קורא בקוד",
+   "read: gen/mosad-build.mjs:2-7,18-19,22-25,29-35,43-45,53-58"
+  ]
+ },
+ {
+  "file": "gen/packs-apply.mjs",
+  "lang": "mjs",
+  "lines": 30,
+  "does": [
+   {
+    "claim": "מצמיד חבילות-ידע לישויות ב-`mosad.data.json` לפי `P.match.entity`, **מוסיף רק מה שחסר** (שדה/שלב/מעבר/איסור/הרגע/מסך/אוטומציה), ורושם `sources` פר-הצמדה",
+    "evidence": "gen/packs-apply.mjs:2,12-25"
+   },
+   {
+    "claim": "`--dry` מריץ בלי לכתוב ומדפיס בדיוק מה היה נוסף",
+    "evidence": "gen/packs-apply.mjs:8,28-29"
+   },
+   {
+    "claim": "מעבר-חבילה בודק תלות אמיתית לפני הוספת-מעבר: `e.stages.includes(g.stage) && e.fields.some(f => f.name === g.cond.split(/[><=]/)[0].trim())` — לא מוסיף מעבר לשלב שאינו קיים או לשדה שאינו קיים",
+    "evidence": "gen/packs-apply.mjs:18"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**כפילות מוצהרת**: `gen/mosad-build.mjs:38-56` מכיל את אותו קוד-הצמדה כמעט מילה-במילה, אבל **שם הוא נכון יותר** — שלבים מאוחדים ולא נדרסים, ומעברים-יתומים מנוקים. כאן שלבים **נדרסים** (`e.stages = P.stages.slice()`) ואין ניקוי",
+    "evidence": "gen/packs-apply.mjs:17 (‏`e.stages = P.stages.slice()` — דריסה) מול gen/mosad-build.mjs:43-45 (איחוד) ו-:53 (ניקוי-יתומים)"
+   },
+   {
+    "claim": "**אינו הפיך**: הוא כותב על `mosad.data.json` הקיים ⇒ הרצה פעמיים מצטברת, בניגוד ל-`mosad-build` שבונה מאפס משלושת המקורות",
+    "evidence": "gen/packs-apply.mjs:9,28 (קורא את הדאטה הקיים וכותב עליו)"
+   },
+   {
+    "claim": "אינו מוסיף `fix` (מדיניות-תיקון) אף שהחבילות מכילות אותו — `mosad-build:50` כן",
+    "evidence": "gen/packs-apply.mjs:12-25 (אין טיפול ב-`P.fix`) מול gen/mosad-build.mjs:50"
+   },
+   {
+    "claim": "לא הרצתי — הוא דורס קובץ-דאטה מחויב באופן לא-הפיך",
+    "evidence": "gen/packs-apply.mjs:28 (‏`if (!DRY) writeFileSync(mosad.data.json)`)"
+   },
+   {
+    "claim": "אין לו קורא, ואף לא אזכור בתיעוד — לא ב-MOSAD.md ולא ב-packs/README.md (שמפנים ל-`mosad-build.mjs`)",
+    "evidence": "ran: חיפוש `packs-apply` בכל הריפו ⇒ אפס תוצאות מלבד הקובץ עצמו"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אין קורא ואין אזכור בתיעוד"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — ‏`gen/mosad-build.mjs:37-56` הוא אותו שלב, הפיך ונכון יותר (איחוד-שלבים · ניקוי-יתומים · `fix`)",
+   "gives": "∅ — חיבור כאן יהיה נסיגה: המנוע הזה דורס שלבים ואינו הפיך, ושתי התכונות האלה הן בדיוק מה ש-`mosad-build` תיקן"
+  },
+  "s22": {
+   "score": 0,
+   "why": "לא מקרב: גרסה ישנה, לא-הפיכה ופחות-נכונה של שלב שכבר קיים בקובץ הסמוך. אין קורא ואין תיעוד"
+  },
+  "evidence": [
+   "ran: grep -rn 'packs-apply' . ⇒ אין אזכור מלבד הקובץ",
+   "read: gen/packs-apply.mjs:9,17,18,28 מול gen/mosad-build.mjs:43-45,50,53,57-58",
+   "ran: ls gen/packs/*.json | wc -l ⇒ 41 חבילות"
+  ]
+ },
+ {
+  "file": "gen/pass.mjs",
+  "lang": "mjs",
+  "lines": 172,
+  "does": [
+   {
+    "claim": "המחולל עובר **אגף-אגף** על `mosad.data.json`: בונה כל אגף (‏HTML + מסלול-Flutter), מפעיל את 12 העדשות, ומדווח לכל אגף מה נבנה · מה לא הוכח · מה אפשר לשפר — «נגזר מכנית מהספק ומהדוח, לא מדעה»",
+    "evidence": "gen/pass.mjs:1-2,8-15"
+   },
+   {
+    "claim": "`specOf` גוזר ספק-מדויק מהדאטה, כולל **אכיפת שדה-חובה אחד לפחות**: אם לאף שדה אין `required`, הראשון נעשה חובה",
+    "evidence": "gen/pass.mjs:31"
+   },
+   {
+    "claim": "`improvements` = **16 כללים מכניים** על הספק, כל אחד עם `kind` · `what` · `why` · `fix` קונקרטי: קשר חוצה-אגף · צורה-חסרה (תאריך/טלפון) · ערך-מנוי-יחיד · מזהה-שנספר-כסכום · שדה-מחושב-שמוזן-ביד · נוסחה-ריקה · כפילות מצב/שלבים · שלבים-בלי-תאריך · מעברים חסרים · ישות-דלה · אין-חובה · קשר-לא-נפתר · שם-כפול-בין-אגפים",
+    "evidence": "gen/pass.mjs:42-62"
+   },
+   {
+    "claim": "מדד-הקלט החי: **12 אגפים · 181 ישויות · 146 אוטומציות · 81 הצמדות-חבילה**",
+    "evidence": "ran: node -e על gen/mosad.data.json ⇒ «departments= 12 ents= 181 automations= 146 packsApplied= 81»"
+   },
+   {
+    "claim": "מטמן הוכחות-Dart פר-צורך (`dartCache[need.id] ||= …`) — הצרכים קבועים, אז ההוכחה רצה פעם אחת ל-12 אגפים",
+    "evidence": "gen/pass.mjs:25"
+   },
+   {
+    "claim": "`--no-flutter` מדלג על מסלול-התצוגה ⇒ מדידת-עדשות מהירה בלי Flutter",
+    "evidence": "gen/pass.mjs:3,20"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "‏`improvements` הוא **דעה מקודדת**, לא הוכחה: «ישות דלה» = פחות מ-3 שדות · «מעבר יחיד» = ‏4 שלבים ומעבר אחד. אלה ספים שנבחרו ביד בתוך המנוע, בלי מקור ובלי דאטה",
+    "evidence": "gen/pass.mjs:57-59 (‏`e.fields.length < 3` · `e.stages.length >= 4 && guards.length === 1`)"
+   },
+   {
+    "claim": "שלושה כללים משתמשים ברגקס-על-שם-שדה (`/^(מספר|קוד|מזהה)$/` · `/^(מצב|סטטוס|שלב)$/` · `/^(אדם|משפחה|תלמיד|עובד|תורם)$/`) — עברית קשיחה במנוע, בניגוד ל-§19",
+    "evidence": "gen/pass.mjs:48,53,61"
+   },
+   {
+    "claim": "לא הרצתי אותו: הריצה המלאה בונה 12 אגפים (‏כל אחד ~28 שניות של הוכחה) ומריצה את מסלול-ה-Flutter דרך `app-ds.mjs`, שכותב מחוץ ל-`gen/`. נמנעתי בכוונה כדי לא לגעת בעץ",
+    "evidence": "gen/pass.mjs:20 (‏withFlutter ברירת-מחדל true) ⇒ gen/flutter.mjs:26-29 (כותב ומעביר קבצים מחוץ ל-gen/)"
+   },
+   {
+    "claim": "אין לו קורא בקוד — CLI בלבד; מתועד ב-`gen/MOSAD.md:108` · `gen/packs/README.md:5` כמדידת-לפני/אחרי לחבילה",
+    "evidence": "ran: חיפוש `pass.mjs` ⇒ gen/MOSAD.md:108 · gen/DETACH.md:59 · gen/packs/README.md:5 בלבד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אין קורא בקוד — לא ב-CI, לא בצנרת. שלוש הפניות בתיעוד בלבד"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/studio-full.mjs` — לוח-המדידה של המחולל",
+   "gives": "‏`pass` הוא היחיד שמריץ את המחולל על **קורפוס שלם** (‏12 אגפים · 181 ישויות) ומחזיר טבלת-פערים פר-ישות. זו בדיוק המדידה ש-studio-full עושה על הקוד, רק על הצד השני — הספק. שילובם עונה על «איפה המחולל עומד» משני הכיוונים. תנאי: להוציא את 16 הספים והרגקסים העבריים לדאטה, כמו שנעשה ב-`lenses.data.json`"
+  },
+  "s22": {
+   "score": 2,
+   "why": "מריץ את המחולל בהיקף ומחזיר פערים מכניים — שימושי מאוד. אבל 16 הכללים הם ספים-ביד ורגקסים-בעברית בתוך מנוע, וזה בדיוק מה ש-`lenses` עשה נכון בקובץ הסמוך"
+  },
+  "evidence": [
+   "ran: node -e על gen/mosad.data.json ⇒ 12 אגפים · 181 ישויות · 146 אוטומציות · 81 הצמדות",
+   "ran: grep -rn 'pass.mjs' ⇒ אין קורא בקוד",
+   "read: gen/pass.mjs:1-25,27-39,42-62"
+  ]
+ },
+ {
   "file": "gen/plan.mjs",
   "lang": "mjs",
   "lines": 20,
@@ -947,6 +1260,74 @@
   "evidence": [
    "ran: ls /home/user/buildsmart/app_flutter · /home/user/flutter/bin/flutter ⇒ MISSING",
    "read: gen/site.mjs:13-15,18-22,26-35,41-46"
+  ]
+ },
+ {
+  "file": "gen/skin.mjs",
+  "lang": "mjs",
+  "lines": 173,
+  "does": [
+   {
+    "claim": "שכבת-העיצוב של gen: **זרע-אחד ⇒ טוקני-CSS ⇒ בסיס-CSS משותף לכל העמודים**. הצבעים נקראים מזרע-האימפריה (`new/atoms/pure-look.mjs`) ואינם נכתבים כאן (‏הכרעה-19 + הכרעה-28)",
+    "evidence": "gen/skin.mjs:1-3,17-26,29-37"
+   },
+   {
+    "claim": "קורא את הזרע **כדאטה ולא כ-import** — `new Function(src + '; return PURE_LOOK;')` — «חוק-הניתוק»",
+    "evidence": "gen/skin.mjs:17-21"
+   },
+   {
+    "claim": "**מסרב להמציא צבע**: אין זרע ואין צילום ⇒ `throw new Error('gen/skin: אין זרע-עיצוב ואין צילום — לא ממציאים צבעים (חוק-5)')`",
+    "evidence": "gen/skin.mjs:34"
+   },
+   {
+    "claim": "כל הסקאלות נגזרות מ-`gridUnit`/`radiusBase` של הזרע (מרווחים · רדיוסים · טיפוגרפיה · גובה-שורה · ריפוד · תנועה · 3 דרגות-צפיפות) — אפס px קשיח",
+    "evidence": "gen/skin.mjs:41,45-55"
+   },
+   {
+    "claim": "**שער-עיצוב שרץ ירוק כאן**: `node gen/skin.mjs --check` ⇒ «✓ skin: מקור=זרע · עור=paper · ערכה=t-balagan · 140 הצהרות-טוקן · 62544 תווי-CSS · צפיפות 3 דרגות» · «✓ שער-עיצוב: אפס ליטרל-צבע · אפס מארח חיצוני · גופן מוטבע», exit 0",
+    "evidence": "ran: `node gen/skin.mjs --check`"
+   },
+   {
+    "claim": "מרענן את צילום-הנפילה **מהזרע, לא מהיד**, רק כשהמקור הוא הזרע",
+    "evidence": "gen/skin.mjs:157-162"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "`--check` **אינו מחובר לשום שער** — לא ב-`police.mjs`, לא ב-`gates.tsv`, לא ב-CI. הוא שער שאיש אינו מפעיל",
+    "evidence": "ran: חיפוש `skin.mjs` ⇒ gen/skin.data.json:2 (הערה) + חמשת המייבאים בתוך gen/; אין אזכור ב-police/gates/workflows"
+   },
+   {
+    "claim": "כותב על `gen/skin.data.json` המחויב בכל הרצת-CLI (‏רענון-הצילום) — כולל הרצת `--check`",
+    "evidence": "gen/skin.mjs:157-162 (הכתיבה קודמת לבדיקת `--check`)"
+   },
+   {
+    "claim": "אינו נוגע ב-Flutter — הוא פולט CSS. עור-האפליקציה המחוללת נקבע ב-`auto-skin.mjs`/`ds-forge.mjs`",
+    "evidence": "gen/skin.mjs:1 (‏«בסיס-CSS משותף לכל העמודים»)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/render.mjs:5 · gen/live.mjs:2 · gen/pass.mjs:15 · gen/index-page.mjs:4 · gen/studio.mjs:13",
+    "how": "`import { SKIN_CSS, FONTS, BIDI_SHAPES }` — חמישה עמודים"
+   },
+   {
+    "who": "gen/skin.data.json:2",
+    "how": "הדאטה מפנה אליו: «שינוי כאן ⇒ node gen/skin.mjs ⇒ כל ארבעת העמודים מתעדכנים»"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/gates.tsv` / `machtzev/police.mjs` — להוסיף `gen/skin.mjs --check` כשער, במקביל לשער `look` של G28",
+   "gives": "‏G28 בנה את `look.mjs` שאוכף «נייר פוסל אטום-בצבע-קשיח» על פולטי-ה-Dart. ‏`skin --check` אוכף את אותו חוק בדיוק על פולטי-ה-HTML של gen — **ואף מוסיף ציר שאין ב-look: ratchet-מארחים-חיצוניים** (‏«אפס מארח חיצוני · גופן מוטבע»), שהוא הלקח של L69+G52. שני השערים משלימים"
+  },
+  "s22": {
+   "score": 2,
+   "why": "מממש נכון את הכרעה-19 ואת חוק-5 (מסרב להמציא), ורץ ירוק עם שער אמיתי — ששום דבר לא מפעיל. הפער הוא חיבור, לא איכות"
+  },
+  "evidence": [
+   "ran: node gen/skin.mjs --check ⇒ «140 הצהרות-טוקן · 62544 תווי-CSS» · «אפס ליטרל-צבע · אפס מארח חיצוני · גופן מוטבע», exit 0",
+   "ran: grep -rn 'skin.mjs' --include=*.mjs --include=*.tsv --include=*.yml . ⇒ רק מייבאים בתוך gen/",
+   "read: gen/skin.mjs:1-3,17-26,29-37,41-55,150-173"
   ]
  },
  {
