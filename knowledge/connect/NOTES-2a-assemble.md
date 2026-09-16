@@ -96,3 +96,83 @@ node machtzev/assemble/gen-screen.mjs <manifest> <scratch>/gs
 SHELF_OUT=<scratch>/shelf node machtzev/assemble/shelf-lift.mjs <scratch>/empty
 node machtzev/assemble/tokens-roundtrip.mjs                  # ENOENT (הראיה)
 ```
+
+---
+
+# מקבץ 2 — `machtzev/emit/` (8 מנועים)
+
+## 🔴 התיקון שפתח את כל הקבוצה: `DART` הוא משתנה-סביבה
+כל מנועי-`emit` שמריצים Dart מגדירים
+`const DART = process.env.DART || '/home/user/flutter/bin/dart'`
+(`parity-ast.mjs:9` · `parity-js-dart.mjs:5` · `fuzz-parity.mjs:7`).
+ברירת-המחדל שבורה כאן (`flutter` חסר) — אבל `dart` **קיים** ב-`/root/dart-sdk/bin/dart`
+(‏`Dart SDK version: 3.13.2 (stable) linux_x64`). עם `DART=/root/dart-sdk/bin/dart`
+**כל ארבעת מנועי-הרתמה רצו בפועל**, ולכן כל הקבוצה נמדדה ולא רק נקראה.
+זהו התיקון המעשי להנחה «אין Dart בקלון-טרי».
+
+## 🔴 המדידה המרכזית — §20(א) «הכי-טוב-לייעוד» מוכרע במספרים
+אותה משימה (JS⇒Dart על `new/atoms`), אותו מדד (`dart analyze` נקי):
+
+| מנוע | רתמה | מתקמפל | פרמטרים מוקלדים |
+|---|---|---|---|
+| `js-to-dart.mjs` (רגקס) | `parity-js-dart.mjs 20` | **10/20 (50%)** | 0 בהגדרה |
+| `ast-js-to-dart.mjs` `--dynamic` | `parity-ast.mjs 25` | **21/25 (84%)** | 0/52 (0%) |
+| `ast-js-to-dart.mjs` static | `parity-ast.mjs 25` | **21/25 (84%)** | 20/61 (33%) |
+| `ast-js-to-dart.mjs` `--evidence` | `parity-ast.mjs 25` | **21/25 (84%)** | 30/63 (48%) |
+| `ast-js-to-dart.mjs` `--verified` | `parity-ast.mjs 12` | **11/12 (92%)** | 2/11 (18%) · הורדות 1 |
+
+מסקנה מדודה: `js-to-dart` + `parity-js-dart` הם **baseline שהוחלף**, ולכן s22=0 —
+לא כי הם רעים, אלא כי §20(א) אוסר לבחור את הראשון-שמתאים כשיש מדוד-טוב-יותר באותה תיקייה.
+הכיוון ההפוך (`dart-to-js` + `parity-check`) נמדד ב-**26/345 (7.5%)** ו-`parity-check`
+**יוצא בקוד 1** — אדום שאיש אינו רואה, כי אין לו קורא ואינו ב-`gates.tsv`.
+(אימות קוד-היציאה נעשה בלי pipe: `node ... > /tmp/pc.txt 2>&1; echo $?` ⇒ `1`. עם `| head`
+הייתי מקבל את קוד-היציאה של `head` — מלכודת שנתקלתי בה וחזרתי למדוד נכון.)
+
+## ממצא — G20 ב-CLAUDE.md מול מה שהצנרת מריצה
+`CLAUDE.md` מציג את `emit/ast-js-to-dart.mjs` כמנוע-ההמרה של G20. בצנרת
+(`regen.mjs:9`) יושב `generator/tighten-types.mjs --record --apply` עם אותה מטרה —
+אבל הוא **אינו מייבא ואינו מזכיר** את `ast-js-to-dart`:
+`grep -n '^import' machtzev/generator/tighten-types.mjs` ⇒ `fs · path · child_process · url ·
+./tighten-hook.mjs · ../tools/probe-pool.mjs`; `grep -n 'ast-js-to-dart|parity|emit/'` ⇒ אפס.
+המייבא היחיד של `ast-js-to-dart` בכל הריפו הוא `parity-ast.mjs:4`, וגם הוא לא-מחובר.
+זו הסיבה שנתתי לו s22=2 עם נקודת-חיבור ל-`regen.mjs:9` ולא הכרזתי אותו «כבר מחובר».
+
+## דפוס חוזר #3 — «מתקמפל» ≠ «נכון»
+‏3 מתוך 4 הרתמות מריצות `dart analyze` בלבד ומוסיפות `void main(){}`, כלומר
+**הפונקציה הנבדקת כלל אינה נקראת** (`parity-ast.mjs:31` · `parity-js-dart.mjs:19`).
+היחיד שמשווה התנהגות הוא `fuzz-parity.mjs` — ‏`dart run` על קורפוס-קצה מול אורקל-JS.
+הרצתי אותו והוא באמת עובד: `✅ norm-phone: 28 קלטי-קצה — Dart≡JS` לצד
+`🚨 gematria: אי-התאמה!` — בדיוק מה שכותרת-המנוע טוענת שהוא תפס.
+לכן `fuzz-parity` קיבל 2 (המטבע של §22 הוא «אפס-באגים», לא «מתקמפל»), בעוד
+הרתמות שמודדות קומפילציה בלבד קיבלו 1 או 0.
+
+## פגם שנמדד ב-fuzz-parity (דווח, לא תוקן)
+`gematria` החזיר `🚨 אי-התאמה!` ואחריו שורת-פירוט **ריקה** — הממצא אינו בר-פעולה.
+מה שנמדד: הפלט הריק. ההסבר מקריאה (`fuzz-parity.mjs:47`): `String(e.stdout || e.stderr)` —
+‏`e.stdout` הוא Buffer, ו-Buffer ריק הוא truthy, כך ש-`stderr` לא נבדק לעולם.
+סימנתי זאת ב-JSON כ«הסבר מקריאה» ולא כמדידה, לפי כלל-האמת.
+
+## פגם שנמדד ב-free-ref-scan (דווח, לא תוקן)
+`free-ref-scan.mjs:61-62` — כשל-פרסינג נדחף ל-`hits` אך **אינו** מגדיל את `bad`,
+ו-`--gate` (`:66`) בודק רק `bad`. אטום שלא נפרס יעבור בשקט.
+**לא מדדתי את הנתיב הזה**: בקלון הזה `grep -c parse` על הפלט = 0, כלומר אף אטום לא נכשל
+בפרסינג. אמרתי זאת במפורש ב-JSON.
+
+## שערים בקבוצה — «לא-מחובר» שהוא סיווג נכון
+`free-ref-scan.mjs` הוא שער `freeref` (‏`police.mjs:118`) ובנוסף נקרא מ-4 נקודות
+ב-`purify-engine.mjs:274,502,712` ו-`purify-hard.mjs:524`. הוא רץ כאן נקי:
+**1160 אטומים · 0 עם הפניה-חופשית חשודה · exit 0**. לפי `engine-index.mjs:316` שערים
+אינם «מחוברים» בהגדרה — ולכן s22=0 אצלו הוא תיאור, לא תלונה.
+
+## מה הורץ (הכל קורא-בלבד; `git status` ריק אחרי)
+```
+export DART=/root/dart-sdk/bin/dart
+node machtzev/emit/parity-ast.mjs 25 [--dynamic|--evidence]   ·  ... 12 --verified
+node machtzev/emit/parity-js-dart.mjs 20
+node machtzev/emit/parity-check.mjs > /tmp/pc.txt 2>&1 ; echo $?     # 1
+node machtzev/emit/free-ref-scan.mjs [--gate]                        # 1160 · 0 · exit 0
+node machtzev/emit/fuzz-parity.mjs '[["gematria","num"],["norm-phone","str"],["fmt-money","num"]]'
+grep -n '^import' machtzev/generator/tighten-types.mjs
+```
+`ast-js-to-dart.mjs` · `js-to-dart.mjs` · `dart-to-js.mjs` הם ספריות (‏`export`) ונמדדו
+**דרך הרתמות שלהן**, לא בהרצה ישירה — וכך רשום בשדה ה-evidence שלהם.
