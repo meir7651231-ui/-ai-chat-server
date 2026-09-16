@@ -1,0 +1,507 @@
+[
+ {
+  "file": "machtzev/generator/ship.mjs",
+  "lang": "mjs",
+  "lines": 144,
+  "capabilities": [
+   {
+    "cap": "מריץ את כל מחוללי-הצינור בסדר-קבוע אחד — runRegen(node, REGEN), כשרשימת-הצעדים חיה ב-regen.mjs (אותה רשימה ל-one.mjs, G22)",
+    "evidence": "machtzev/generator/ship.mjs:11,38-39 + machtzev/generator/regen.mjs:6-29 (REGEN = 17 צעדים)"
+   },
+   {
+    "cap": "ממראה את תוצרי-המחולל אל buildsmart/lib/genesis: forge נמחק-ומועתק במלואו · gen_*.dart עם מחיקת-יתומים · ds/*.dart · dart-maor (קיימים-בלבד) · dart-ui-bs · קובצי-תוכן gen_(app|balagan)_*_content",
+    "evidence": "machtzev/generator/ship.mjs:43-56"
+   },
+   {
+    "cap": "מוחק שאריות-ראיה zz_shot_* מתיקיית-היעד",
+    "evidence": "machtzev/generator/ship.mjs:57"
+   },
+   {
+    "cap": "ממראה נקודתית רק את קופסאות dart-boxes ש-gen_behaviors.dart באמת מייבא (רגקס על שורות ה-import), לא את כולן",
+    "evidence": "machtzev/generator/ship.mjs:58-59"
+   },
+   {
+    "cap": "מריץ flutter analyze על lib/genesis ונכשל על שגיאת-error אחת (מסנן שורות שמתחילות ב-'error •')",
+    "evidence": "machtzev/generator/ship.mjs:62-65"
+   },
+   {
+    "cap": "מריץ flutter test על כל קובצי genesis_*_test.dart ונכשל אם השורה המסכמת אינה 'All tests passed'",
+    "evidence": "machtzev/generator/ship.mjs:66-71"
+   },
+   {
+    "cap": "מריץ שלושה שערי-מחולל בשם (retarget · skingolden · appgen) ואת צינור-האינדקס INDEX (logic-census · atom-index · oracle · quarry-golden · op-census · truth)",
+    "evidence": "machtzev/generator/ship.mjs:72-77 + machtzev/generator/regen.mjs:30-37"
+   },
+   {
+    "cap": "בונה אתר-web לכל אפליקציה ברשימת SITES (7 כניסות) עם --base-href פר-אתר, ומדלג בדיווח על כניסה שקובץ-המקור שלה חסר",
+    "evidence": "machtzev/generator/ship.mjs:27,87-95"
+   },
+   {
+    "cap": "בונה אתר-ראיה חד-פעמי למסך-התלמידים: כותב נקודת-כניסה זמנית zz_shot_students_forge.dart, בונה, ומוחק אותה",
+    "evidence": "machtzev/generator/ship.mjs:82-86"
+   },
+   {
+    "cap": "מריץ web-shell פר-אפליקציה בשלושה מצבים: --entry (זהות-האתר) · --prune (גיזום-גופנים בפלט-הבנייה) · --restore (החזרת-קליפת-הריפו)",
+    "evidence": "machtzev/generator/ship.mjs:90,92,96"
+   },
+   {
+    "cap": "מצלם את האתר הבנוי דרך site-shot (allowFail — צילום שנכשל אינו מפיל את ה-ship)",
+    "evidence": "machtzev/generator/ship.mjs:97-99"
+   },
+   {
+    "cap": "פורס ל-gh-pages: יוצר worktree אם חסר, מושך --ff-only, מחליף תיקיית-דמו לכל אתר שנבנה, ומקמט+דוחף רק אם git status --porcelain אינו ריק",
+    "evidence": "machtzev/generator/ship.mjs:102-113"
+   },
+   {
+    "cap": "מקמט ודוחף שני ריפואים בסדר קבוע — buildsmart (add ממוקד לרשימת-נתיבים, לא add -A) ואז גנסיס (pins-check --write ⇒ add -A)",
+    "evidence": "machtzev/generator/ship.mjs:119-142"
+   },
+   {
+    "cap": "מייצר שורות Allow: pins-write:<file> אוטומטית לכל קובץ נעול-חתימה שנכנס לקומיט (CLAUDE.md ⇒ 'הכרעה-24', אחרים ⇒ ערך --lesson)",
+    "evidence": "machtzev/generator/ship.mjs:133-134"
+   },
+   {
+    "cap": "דוחף עם נסיגה-מעריכית עד 6 ניסיונות, ורק כששגיאת-ה-stderr תואמת דפוס-רשת; כל שגיאה אחרת נזרקת מיד",
+    "evidence": "machtzev/generator/ship.mjs:117"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מחולל — אפס לוגיקת-חילול בקובץ; כל החילול מתבצע בצעדי REGEN של regen.mjs שהוא רק מריץ",
+    "evidence": "machtzev/generator/ship.mjs:11,38-39 (ייבוא יחיד מ-regen.mjs) · grep '^export' ⇒ 0"
+   },
+   {
+    "claim": "אינו ספרייה — אפס ייצואים, אי-אפשר לייבא ממנו",
+    "evidence": "grep -c '^export' machtzev/generator/ship.mjs ⇒ 0 · importedBy ריק ב-engine-index.json"
+   },
+   {
+    "claim": "אינו שער-משטרה — אפס קריאות gate()",
+    "evidence": "grep -c 'gate(' machtzev/generator/ship.mjs ⇒ 0 · אינו ב-machtzev/gates.tsv"
+   },
+   {
+    "claim": "אינו מריץ את המשטרה המלאה בעצמו — הוא נשען על hook של pre-push בגנסיס",
+    "evidence": "machtzev/generator/ship.mjs:141 (הערה 'pre-push: המשטרה המלאה')"
+   },
+   {
+    "claim": "אינו מחייב בנייה/פריסה/דחיפה — --no-build · --no-deploy · --no-push · --no-commit מכבים כל שלב בנפרד",
+    "evidence": "machtzev/generator/ship.mjs:81,103,119,139"
+   },
+   {
+    "claim": "אינו מגלה אפליקציות מהדיסק — רשימת האתרים SITES קשיחה בקוד (7 זוגות שם/כניסה), בניגוד ל-dsSpecs() ב-regen שנגזר מהתיקייה",
+    "evidence": "machtzev/generator/ship.mjs:27"
+   }
+  ],
+  "pipeline": {
+   "runBy": "אדם / שורת-פקודה בלבד. הוא אחת מ-6 נקודות-הכניסה של GEN_ENTRY, כלומר שורש-הגדרת-'מחובר' ולא צרכן שלה",
+   "input": "דגלי-CLI (--msg --lesson --no-build --no-deploy --no-push --no-commit --full-verify) + ENV: BUILDSMART · GHP_DIR · SESSION_URL · FLUTTER",
+   "output": "תוצרי-מחולל ממורָאים ב-buildsmart/lib/genesis · build/ghp-<name> לכל אתר · קומיטים+דחיפות ב-buildsmart, בגנסיס וב-gh-pages",
+   "next": "regen.mjs ⇒ (ds-forge ⇒ auto-skin ⇒ tighten-types ⇒ logic-census ⇒ oracle ⇒ auto-logic ⇒ skin-golden ⇒ core-from-shape ⇒ core-dart ⇒ app-from-sentences ⇒ behavior-plan ⇒ behavior-compose ⇒ peruk ⇒ app-ds×specs ⇒ balagan ⇒ server) ואז analyze/test/שערים/בנייה/צילום/פריסה"
+  },
+  "quality": {
+   "signal": "אין לו שער משלו; האיכות שלו היא שרשרת-האימות שהוא כופה: analyze באפס-errors (ship.mjs:63-65) · flutter test של כל genesis_* (66-71) · 3 שערים (72-75). הוא עצמו אינו נמדד באף baseline",
+   "measured": "לא-נמדד (אין gate ל-ship; `grep -c 'gate(' machtzev/generator/ship.mjs` ⇒ 0)"
+  },
+  "evidence": [
+   "cat -n machtzev/generator/ship.mjs (144 שורות, נקראו במלואן)",
+   "sed -n '/export const REGEN/,/\\];/p' machtzev/generator/regen.mjs",
+   "grep -c '^export' machtzev/generator/ship.mjs ⇒ 0",
+   "grep -c 'gate(' machtzev/generator/ship.mjs ⇒ 0",
+   "node machtzev/census/engine-index.mjs --connected ⇒ 57 · 285 · 342"
+  ]
+ },
+ {
+  "file": "machtzev/generator/tzinor.mjs",
+  "lang": "mjs",
+  "lines": 439,
+  "capabilities": [
+   {
+    "cap": "מפרק משפט-עברי-חופשי למילות-ישות מועמדות + מילות-תחום, לפי מבנה בלבד: פיצול-סעיפים · עוגן-'לכל' (כולל אחרי נקודתיים) · מרקר-שדות · מפרידי-רשימה · סיומת-ריבוי",
+    "evidence": "machtzev/generator/tzinor.mjs:134-192 (entityWords) · 72-77 (הדפוסים נבנים מ-nl-lang.data.json)"
+   },
+   {
+    "cap": "מנקד התאמת-מילה-לצורת-מונח ב-3 מדרגות (זהות 3 · וריאנט-ריבוי/קידומת 2 · startsWith 1) ומחזיר 0 אם לא כל מילות-הצורה תאמו",
+    "evidence": "machtzev/generator/tzinor.mjs:93-109 (scoreForm)"
+   },
+   {
+    "cap": "מתרגם מפתח-מונח למחלקת-סכמה בשלושה מסלולים מתועדים: הצהרת-בעלים ב-entity-terms · CAP(x) · CAP ביחיד; entity=null הוא הצהרה מפורשת 'אין מחלקה', לא כשל",
+    "evidence": "machtzev/generator/tzinor.mjs:113-123 (keyToClass)"
+   },
+   {
+    "cap": "שולף את שדות-האמת של מחלקה מ-FIELDS ומצמיד לכל שדה src בצורת file:key מדויק",
+    "evidence": "machtzev/generator/tzinor.mjs:126-130 (fieldsOf) · 128"
+   },
+   {
+    "cap": "מדרג תחומים (13 חבילות-ורטיקל) לפי מספר-ראיות, ומכריע pick רק כשנשאר מועמד-יחיד בראש",
+    "evidence": "machtzev/generator/tzinor.mjs:195-211 (domainsFor) · 210"
+   },
+   {
+    "cap": "בונה לכל מילת-ישות את **כל** המועמדים כאפשרויות בנויות (מחלקה + שדות + ראיות), ממזג לפי-מחלקה, ומסמן strict:false מועמד שהגיע רק מהמסלול-הסגור של sentence.resolve",
+    "evidence": "machtzev/generator/tzinor.mjs:214-253 (candidatesFor) · 230-248"
+   },
+   {
+    "cap": "מוסיף לכל מילה שתי אפשרויות קבועות שאינן סכמה: 'ישות-חדשה-מהמשפט' (שדות רק ממה שנאמר) ו-'לא-ישות'",
+    "evidence": "machtzev/generator/tzinor.mjs:268-274"
+   },
+   {
+    "cap": "מבקר את עצמו: שדה בלי src · רביעיית-ברירת-מחדל · pick לא-ריק = הפרות שמפילות את השער",
+    "evidence": "machtzev/generator/tzinor.mjs:282-294 (audit)"
+   },
+   {
+    "cap": "מודד את עצמו על קורפוס (nl-smoke.txt): נפתרו / שאלה-פתוחה / רב-מועמדים / שדות / המצאות",
+    "evidence": "machtzev/generator/tzinor.mjs:297-311 (measure)"
+   },
+   {
+    "cap": "ממיר מתגים למחרוזת-ספק שה-app-ds קורא: מועמד-יחיד-strict-עם-שדות ⇒ שורת 'ישות X עם …' משדות-אמת; אחרת ⇒ שורה עם שדות-מהמשפט או עם מילת-הישות-ביחיד, ולעולם לא רביעיית-ברירת-מחדל",
+    "evidence": "machtzev/generator/tzinor.mjs:377-420 (specFromSentence) · 394,399-410"
+   },
+   {
+    "cap": "גוזר יחיד מריבוי בכלל-צורה בלבד: 'ים' סופי נושר, 'ות' דו-משמעי נשאר כפי שנאמר",
+    "evidence": "machtzev/generator/tzinor.mjs:403-407,425"
+   },
+   {
+    "cap": "מסנן שמות-שדה בלי אות-עברית (מפתח-סכמה אנגלי) החוצה מהספק ורושם אותם כמתג-פתוח עם מקורם",
+    "evidence": "machtzev/generator/tzinor.mjs:386-393,424"
+   },
+   {
+    "cap": "מוסיף שורות-חלקיקים מפעולות-היסוד של המחלקה (particlesFor מ-ops-particles), וכישלון שם אינו מפיל אלא מוותר על החלקיקים",
+    "evidence": "machtzev/generator/tzinor.mjs:416-418,421"
+   },
+   {
+    "cap": "מחזיר שכבת-מטרה (אטומים+caps) מ-intent.intentProfile, עם נפילה-רכה לרשימות ריקות",
+    "evidence": "machtzev/generator/tzinor.mjs:433-439 (purposeOf)"
+   },
+   {
+    "cap": "מסוגל לכתוב את קובץ-הזהב של עצמו (--write-golden) ולהדפיס מדידה קריאה (--smoke)",
+    "evidence": "machtzev/generator/tzinor.mjs:336-362"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מכריע בין מועמדים — pick של ישות תמיד null, וה-audit מפיל אם אינו null",
+    "evidence": "machtzev/generator/tzinor.mjs:276 ('pick: null') · 287"
+   },
+   {
+    "claim": "אינו ממציא שדות — אין DEF_FIELDS בשום מסלול; שדה בלי src נזרק כשגיאה ולא נפלט",
+    "evidence": "machtzev/generator/tzinor.mjs:17,383-384"
+   },
+   {
+    "claim": "אינו משכפל מקורות — VERTICAL_PACKS · FIELDS · entity-terms · nl-lang נקראים, לא מועתקים",
+    "evidence": "machtzev/generator/tzinor.mjs:37-40,53-54"
+   },
+   {
+    "claim": "אינו מתקן את sentence.mjs — שני תיקוני-הניקוד (startsWith במקום includes · hit===fws.length) חיים כאן בלבד, המקור נשאר נעול-חתימה",
+    "evidence": "machtzev/generator/tzinor.mjs:24-27,103,108"
+   },
+   {
+    "claim": "אינו שער-משטרה למרות --gate שלו — אין gate() ואינו במרשם gates.tsv",
+    "evidence": "engine-index card: gate: '-' · isNot: 'לא-שער-משטרה'"
+   },
+   {
+    "claim": "אינו בונה קוד — פלטו מחרוזת-ספק ומבנה-מתגים; כל רינדור-Dart קורה במורד-הזרם ב-app-ds",
+    "evidence": "machtzev/generator/tzinor.mjs:419 (return {spec, open, domain, switches})"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/app-ds.mjs:14,70 (specFromSentence — המסלול הראשי) · machtzev/generator/hamtzaa.mjs:34,139 · yeshiva/purpose.mjs",
+   "input": "משפט-עברי-חופשי (מחרוזת) + מקורות-אמת: new/atoms/vertical-packs.mjs · new/atoms/schema-fields.mjs · entity-terms.data.json · nl-lang.data.json",
+   "output": "{spec: שורות 'ישות X עם …', open: מתגים-פתוחים, domain, switches} — ובנתיב ה-CLI גם tzinor-golden.json",
+   "next": "app-ds.buildApp (מחרוזת-הספק ⇒ מסכים) · כש-tzinor מחזיר ספק-ריק, app-ds נופל ל-nlToSpec כשלד-נתונים"
+  },
+  "quality": {
+   "signal": "`node machtzev/generator/tzinor.mjs --gate` ⇒ '43 מילות-ישות · 22 לשדות-אמת (465 שדות, כולם עם src) · 21 שאלה-פתוחה · 6 רב-מועמדים · 0 המצאות' (exit 0). זהב-רגרסיה מלא: גם הספירות וגם כל שורה בנפרד מושוות ל-tzinor-golden.json",
+   "measured": "כן — הפקודה למעלה. השער נכשל על כל סטייה בספירה או בשורה (tzinor.mjs:324-331) ועל המצאה אחת (324)"
+  },
+  "evidence": [
+   "cat -n machtzev/generator/tzinor.mjs (439 שורות, נקראו במלואן)",
+   "node machtzev/generator/tzinor.mjs --gate ⇒ exit 0, פלט מצוטט למעלה",
+   "grep -n 'nlToSpec\\|specFromSentence' machtzev/generator/app-ds.mjs ⇒ tzinor ראשי, nl-spec נפילה-לאחור (app-ds.mjs:70-71)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/app-from-sentences.mjs",
+  "lang": "mjs",
+  "lines": 321,
+  "capabilities": [
+   {
+    "cap": "מקבל N משפטי-עברית ומחזיר אפליקציה שלמה: N מודולי-ישות + רכזת-ניווט + נקודת-כניסה ל-web + קובץ-בדיקה ל-buildsmart",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:140-273 (buildApp) · 273 (מחזיר hub/test/entry + שמות-הקבצים)"
+   },
+   {
+    "cap": "מריץ פר-משפט את שרשרת sentence.fromSentence (⇒ ישות ⇒ pickModule ⇒ retarget) ומדלג-בדיווח על משפט בלי ישות ועל ישות חוזרת",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:147-155"
+   },
+   {
+    "cap": "מאמת עור-forge מבנית מול forge-manifest.json ל-26 תפקידי-עור, כל תפקיד עם דרישת-צורה משלו (value+label · text1 · text2 · child · select · items2 · control · table · values · value+values · board · calendar)",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:26-137 (resolveSkin) · 31-64 (מפת ROLES)"
+   },
+   {
+    "cap": "מזהה איזה חריץ באטום-forge הוא מספרי ואיזה טקסטואלי מתוך תוכן-העיצוב (fieldDemo) — ערך ⇒ החריץ-המספרי, תווית ⇒ הטקסטואלי, השאר מחרוזת-ריקה כמקום-שמור",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:24,71,117-120,138-139"
+   },
+   {
+    "cap": "פוסל אטום-עור שאינו עומד בדרישה עם הודעת-שגיאה שמצטטת את הצורה שנמצאה (משפחה שגויה · אין תפר-child/control · values<3 · אטום רב-מצבי)",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:69-72,75,78,83,88,92,96,100,105,109,113,118,123"
+   },
+   {
+    "cap": "ממפה טונים מוצהרים (toneMap) לאינדקסי-וריאנט של האטום ופוסל טון שאינו וריאנט קיים",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:65,128-133"
+   },
+   {
+    "cap": "קורא ל-autoSkin לפני resolveSkin — כלומר העור נבחר ע\"י המנוע, ומה שבספק הוא דריסה בלבד",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:25,143-144"
+   },
+   {
+    "cap": "מחולל רכזת עם חיפוש-חי נגזר: DsSearch + smartFilter + smartScore + normSearch מהמדף, כששורות-החיפוש נגזרות מתפר-העובדות של המודולים (כותרת · label · המשפט · תוויות-המדדים)",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:176-187,192"
+   },
+   {
+    "cap": "מחולל אריחי-KPI מעובדות-אמת בלבד — כל אריח קורא <E>Facts.hero/heroLabel/count של המודול, ואין ערך-ליטרל",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:164,195-198"
+   },
+   {
+    "cap": "מחווט hero-jump: הקשה על אריח פותחת את המודול על רשומת-ה-hero הראשונה, ומעבירה initialMetric כשקיים תפר-מדד",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:162-163,196-197"
+   },
+   {
+    "cap": "מחולל קובץ-בדיקות widget מלא ל-buildsmart: אריחים בבית · חיפוש-רכזת (צפי מחושב באותו מנוע-מדף) · ג׳יבריש ⇒ EmptyState · הזרקת-שורה שמאירה עמודת-מקום-שמור · hero-jump · ניווט-הלוך-ושוב לכל מודול",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:206-269 · 221-235 (הצפי מחושב ב-JS דרך normSearch, לא נכתב ביד)"
+   },
+   {
+    "cap": "מחולל נקודת-כניסה נפרדת gen_main_<name>.dart כדי ש-flutter build web יבנה את האפליקציה כאתר עצמאי",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:270-272"
+   },
+   {
+    "cap": "שער-דטרמיניזם: --gate משווה כל קובץ שעל הדיסק לפלט-הטרי ונכשל על הבדל, בלי לכתוב",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:285-292"
+   },
+   {
+    "cap": "--test מעתיק ל-buildsmart ומריץ flutter test בפועל, ומפרסר את המונה מהפלט (+N -M)",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:293-300"
+   },
+   {
+    "cap": "--build בונה את האתר בפועל ומודד את גודל main.dart.js",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:301-308"
+   },
+   {
+    "cap": "מגלה את ספקי-האפליקציות מהדיסק (app-golden*.json) ולא מרשימה כתובה, ומנקה מודולי-עור יתומים שאף רכזת לא מייבאת",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:278,313-319"
+   },
+   {
+    "cap": "תומך בהצהרת-אדם של מטרה+פעולות-יסוד פר-מודול (modules[{sentence,goal,ops}]) ומטביע אותן כהערה בראש הקוד המחולל",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:140-141,153"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מפרש את המשפט בעצמו — כל פתרון-הישות נעשה ב-sentence.fromSentence, וכל הסבת-הקוד ב-retarget",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:11-12,149"
+   },
+   {
+    "claim": "אינו בורר את העור בעצמו — הבורר הוא auto-skin; resolveSkin רק מאמת מבנית וממפה חריצים",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:25,144"
+   },
+   {
+    "claim": "אינו ממציא ערכי-דמו — חריץ שאין לו ערך-אמת מקבל מחרוזת-ריקה, לא תוכן-העיצוב",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:22,118,138-139"
+   },
+   {
+    "claim": "אינו בונה כברירת-מחדל — --build הוא ידני/ראיה ומוגדר בקוד כ'כבד, לא בטבעת-push'",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:301"
+   },
+   {
+    "claim": "אינו יוצר ישות חדשה — משפט בלי מונח-ישות נכנס ל-skipped עם סיבה, לא למודול מומצא",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:150 · sentence.mjs:71"
+   },
+   {
+    "claim": "אינו נוגע ב-buildsmart כשאין שם pubspec.yaml — כל הכתיבה/הריצה שם מותנית בקיומו",
+    "evidence": "machtzev/generator/app-from-sentences.mjs:290,293,301"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:REGEN (צעד 'משפט ⇒ אפליקציה') · machtzev/generator/ship.mjs:75 (--gate) · machtzev/police.mjs:159 (שער appgen עם --gate --test)",
+   "input": "machtzev/generator/app-golden*.json ({name, sentences[]|modules[]}) שמתגלים מהתיקייה, או --name/--text; ועוד new/dart-forge-bs/forge-manifest.json",
+   "output": "new/dart-gen-bs/gen_app_<name>.dart · gen_main_<name>.dart · gen_retarget_*.dart (מודול לכל ישות) · <buildsmart>/test/genesis_gen_app_<name>_test.dart",
+   "next": "ship ממראה ל-buildsmart ⇒ flutter analyze + flutter test ⇒ flutter build web ⇒ gh-pages"
+  },
+  "quality": {
+   "signal": "שער appgen במשטרה, ובמצב FAST, עם --gate --test (machtzev/police.mjs:159) — כלומר בדיקת-הניווט המחוללת רצה בפועל ב-flutter test, לא רק דטרמיניזם-בייטים. resolveSkin זורק על כל אי-התאמה מבנית, 26 תפקידים",
+   "measured": "כן, אך לא הורץ כאן: `node machtzev/generator/app-from-sentences.mjs --gate` דורש מראה ל-buildsmart ותוצרי-forge טריים, ולא הרצתי אותו כדי לא לכתוב לעץ. השער עצמו רשום ב-machtzev/gates.tsv בשם appgen"
+  },
+  "evidence": [
+   "awk הדפסת machtzev/generator/app-from-sentences.mjs שורות 1-321 (נקרא במלואו)",
+   "grep -n 'appgen' machtzev/police.mjs ⇒ שורה 159: gate('appgen','generator/app-from-sentences.mjs',['--gate','--test'],FAST)",
+   "sed -n '/export const REGEN/,/\\];/p' machtzev/generator/regen.mjs ⇒ הצעד 'app-from-sentences.mjs' ברשימה"
+  ]
+ },
+ {
+  "file": "machtzev/generator/sentence.mjs",
+  "lang": "mjs",
+  "lines": 114,
+  "capabilities": [
+   {
+    "cap": "פותר משפט-עברי לישות-סכמה אחת מדורגת: מנקד כל צורת-מונח מול מילות-המשפט ב-3 מדרגות (זהות 3 · וריאנט-ריבוי/אחרי-הסרת-אות-שימוש 2 · הכלה 1) ומחזיר entity + score + עד 4 חלופות",
+    "evidence": "machtzev/generator/sentence.mjs:32-53 (resolve) · 45"
+   },
+   {
+    "cap": "מוריד משקל למילים שאחרי מילת-יחס (×0.6) — 'מסירות לפי מתנדב' ⇒ Delivery ולא Volunteer",
+    "evidence": "machtzev/generator/sentence.mjs:30-31,35,45"
+   },
+   {
+    "cap": "שובר צורה עם '/' לחלופות ('בן/בת משפחה' ⇒ שתי צורות) כלל-פורמט של TERM_DEFS",
+    "evidence": "machtzev/generator/sentence.mjs:38-39 (altForms)"
+   },
+   {
+    "cap": "מכריע ספציפיות בשוויון-ציון לטובת הצורה הארוכה-יותר שתאמה ('בני משפחה' ⇒ Member, לא Family)",
+    "evidence": "machtzev/generator/sentence.mjs:48-49"
+   },
+   {
+    "cap": "מנרמל עברית דרך אטום-המדף normSearch + טבלת-הדאטה התאומה (סופיות⇒רגילות), במקום טבלת-אותיות מקומית",
+    "evidence": "machtzev/generator/sentence.mjs:12-13,25,28"
+   },
+   {
+    "cap": "מקבל כינויי-ישות מוצהרים פר-אפליקציה (aliases: 'entity.student' ⇒ 'Member') וממפה מונח בלי ישות-סכמה למחלקה שהבעלים הצהיר",
+    "evidence": "machtzev/generator/sentence.mjs:22-23 (termsWith)"
+   },
+   {
+    "cap": "מתרגם פעולות-יסוד שכתב אדם למזהי-חלקיקים של מודול-הזהב שנבחר, בארבע צורות-התאמה (מזהה מלא · שם מלא · זנב אחרי '.' · זנב אחרי '·'), ונכשל עם רשימת-הזמינות כשאין התאמה",
+    "evidence": "machtzev/generator/sentence.mjs:56-68 (particlesForOps) · 66"
+   },
+   {
+    "cap": "מריץ את השרשרת המלאה משפט ⇒ ישות ⇒ pickModule ⇒ retarget ⇒ קוד-מסך, ובוחר שם-קובץ דטרמיניסטי שכולל תג-מודול, טביעת-חלקיקים (sha1) ותג-עור (sha1 של מחלקות-העור)",
+    "evidence": "machtzev/generator/sentence.mjs:69-77 (fromSentence) · 17,75"
+   },
+   {
+    "cap": "גוזר פעולות-יסוד משדות-המשפט: interpret ⇒ schema ⇒ fieldOps, כולל זיהוי טלפון/מייל מהתווית או מה-rule",
+    "evidence": "machtzev/generator/sentence.mjs:79-85 (fieldOpsOfSentence)"
+   },
+   {
+    "cap": "מרכיב מודול-משנה סביב שדות-המשפט בלבד (assembleByOps עם minOverlap נגזר מספר-הפעולות)",
+    "evidence": "machtzev/generator/sentence.mjs:86-93 (subsetFromSentence) · 90"
+   },
+   {
+    "cap": "שער-דטרמיניזם מול sentence-golden.json: כל משפט-זהב חייב להיפתר לישות הצפויה",
+    "evidence": "machtzev/generator/sentence.mjs:97-102"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו ממציא ישות — משפט בלי מונח מחזיר reason 'אין מונח-ישות במשפט — מקום-שמור (אין המצאה)' ו-module=null",
+    "evidence": "machtzev/generator/sentence.mjs:6,71,87"
+   },
+   {
+    "claim": "אינו מחזיק מילון-עברית בקוד — כל המונחים מ-entity-terms.data.json, וכל אוצר-פעולות-היסוד מ-PARTICLE_NAMES של render-module",
+    "evidence": "machtzev/generator/sentence.mjs:16,20-21,54-55"
+   },
+   {
+    "claim": "אינו מחזיר יותר ממועמד אחד כהכרעה — resolve מחזיר entity יחיד (הראשון ב-ranked); ריבוי-מועמדים כמתג הוא של tzinor, לא שלו",
+    "evidence": "machtzev/generator/sentence.mjs:52 · tzinor.mjs:230-234 עוטף אותו בדיוק בשביל זה"
+   },
+   {
+    "claim": "אינו כותב קובץ בתוך fromSentence — הכתיבה קורית רק בנתיב-ה-CLI",
+    "evidence": "machtzev/generator/sentence.mjs:76 (מחזיר out+code) מול 107,112 (fs.writeFileSync רק תחת isMain)"
+   },
+   {
+    "claim": "אינו מדרג מחלקה שאינה בסכמה — הניקוד רץ רק על TERMS שיש להם entity",
+    "evidence": "machtzev/generator/sentence.mjs:21"
+   },
+   {
+    "claim": "אינו נוגע בפירוק-מבנה-המשפט לישויות מרובות — הוא פותר ישות-אחת-למשפט; ריבוי-ישויות נעשה במעלה (app-from-sentences מריץ אותו פר-משפט)",
+    "evidence": "machtzev/generator/sentence.mjs:32-52 · app-from-sentences.mjs:147-149"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/app-from-sentences.mjs:11,149 (fromSentence) · machtzev/generator/tzinor.mjs:42,232 (resolve — המסלול-הסגור) · machtzev/police.mjs (שער sentence)",
+   "input": "משפט-עברי + entity-terms.data.json (מונחים+צורות) + PARTICLE_IDS/PARTICLE_NAMES/TAG מ-render-module + אופציונלית skin ו-aliases",
+   "output": "{entity, score, ranked, pick, module, out, code, counts, facts, particles} — קוד-Dart של מסך-ישות מוסב",
+   "next": "app-from-sentences כותב את הקוד ל-new/dart-gen-bs ומחבר אליו רכזת+בדיקה; retarget הוא שמייצר את הקוד עצמו"
+  },
+  "quality": {
+   "signal": "`node machtzev/generator/sentence.mjs --gate` ⇒ '✓ sentence: 16/16 משפטי-זהב נפתרים לישות הצפויה (27 מונחי-ישות · אפס-LLM)' (exit 0). שער רשום בשם sentence",
+   "measured": "כן — הפקודה למעלה, 16/16. הערה: הקובץ נעול-חתימה ב-pins.sha256, ולכן שני תיקוני-הניקוד הידועים (startsWith · hit===fws.length) נכתבו ב-tzinor ולא כאן (tzinor.mjs:24-27)"
+  },
+  "evidence": [
+   "cat -n machtzev/generator/sentence.mjs (114 שורות, נקראו במלואן)",
+   "node machtzev/generator/sentence.mjs --gate ⇒ exit 0, 16/16",
+   "node machtzev/pins-check.mjs ⇒ 139 קבצים חתומים ותואמים"
+  ]
+ },
+ {
+  "file": "machtzev/generator/nl-spec.mjs",
+  "lang": "mjs",
+  "lines": 103,
+  "capabilities": [
+   {
+    "cap": "ממיר משפט-עברי-חופשי לאפיון-מובנה בשורות 'ישות X עם שדה, שדה' — הפלט הוא טקסט שה-app-ds קורא",
+    "evidence": "machtzev/generator/nl-spec.mjs:41-97 (nlToSpec) · 96"
+   },
+   {
+    "cap": "מפצל לסעיפים לפי נקודה/נקודה-פסיק/שורה, ובכל סעיף מפריד ראש מזנב לפי מרקר-שדות מהדאטה",
+    "evidence": "machtzev/generator/nl-spec.mjs:43,59-61"
+   },
+   {
+    "cap": "מזריק מרקר-שדות מובלע לתבנית 'לכל X שדה, שדה' כדי שהרשימה תהפוך לשדות ולא לישויות",
+    "evidence": "machtzev/generator/nl-spec.mjs:23-25,52"
+   },
+   {
+    "cap": "מזהה ראש-תחום לפני נקודתיים ומשמיט אותו כשהוא ביחיד ('ניהול מלון:'), אך שומר אותו כישות כשהוא ברבים ('ניהול רכבים:')",
+    "evidence": "machtzev/generator/nl-spec.mjs:53-57"
+   },
+   {
+    "cap": "מכריע ישות-מול-שדה באות-ריבוי מורפולוגית בלבד (סיומות מהדאטה): מילה ברבים = ישות, ביחיד = שדה",
+    "evidence": "machtzev/generator/nl-spec.mjs:26,29,65-69"
+   },
+   {
+    "cap": "מטפל בארבעה מבני-משפט נפרדים: אין-זנב · זנב-רבים · רשימת-ראש+זנב · זנב-כולו-יחיד",
+    "evidence": "machtzev/generator/nl-spec.mjs:70-85"
+   },
+   {
+    "cap": "מסיר קידומת 'ל' משם-הראש בלבד (למכון ⇒ מכון) לפי כלל-אורך, בלי לגעת בפריטי-הזנב",
+    "evidence": "machtzev/generator/nl-spec.mjs:30-32,34"
+   },
+   {
+    "cap": "ממזג ישויות כפולות לפי גזע ('רכבים'/'רכב' = מושג אחד) ושומר את זו שיש לה שדות-אמת",
+    "evidence": "machtzev/generator/nl-spec.mjs:88-95"
+   },
+   {
+    "cap": "רץ מהשורה כ-CLI ומדפיס IN/SPEC",
+    "evidence": "machtzev/generator/nl-spec.mjs:99-103"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מחזיק אף מילה-עברית בקוד — כל ידע-השפה (מילות-פיגום · מרקרי-שדות · חיבורי-רשימה · סיומות-ריבוי · תבניות) מוזרק מ-nl-lang.data.json",
+    "evidence": "machtzev/generator/nl-spec.mjs:4-5,12-22"
+   },
+   {
+    "claim": "אינו מכיר סכמה — אין לו גישה ל-FIELDS/מחלקות; הוא מוציא שמות-שדה מהמשפט בלבד",
+    "evidence": "machtzev/generator/nl-spec.mjs:9-12 (אין ייבוא schema-fields) · 47"
+   },
+   {
+    "claim": "**כן** משלים שדות ברירת-מחדל כשלא נאמרו — DEF_FIELDS מהדאטה. זה בדיוק ההבדל מ-tzinor, שנבנה כדי לסגור את זה",
+    "evidence": "machtzev/generator/nl-spec.mjs:16,48 · מול tzinor.mjs:17,290 שמפיל 'רביעיית-ברירת-מחדל (המצאה)'"
+   },
+   {
+    "claim": "אינו המסלול-הראשי יותר — app-ds מריץ קודם specFromSentence של tzinor ונופל ל-nlToSpec רק אם הספק יצא ריק",
+    "evidence": "machtzev/generator/app-ds.mjs:70-71"
+   },
+   {
+    "claim": "אינו שער-משטרה ואינו כותב קובץ",
+    "evidence": "engine-index card isNot: 'לא-כותב-פלט · לא-שער-משטרה'; אין fs.writeFileSync בקובץ"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/app-ds.mjs:12,71 (נפילה-לאחור) · machtzev/generator/hamtzaa.mjs:33,140 · machtzev/mahulal/generator-ratchet.mjs:11,51,77-83 · machtzev/mahulal/nl-quality.mjs:9",
+   "input": "משפט-עברי-חופשי + machtzev/generator/nl-lang.data.json (אטום-דאטה של ידע-השפה)",
+   "output": "מחרוזת רב-שורתית 'ישות <שם> עם <שדות>'",
+   "next": "app-ds.buildApp ⇒ מסכים; generator-ratchet מודד עליו יציבות (ratchet)"
+  },
+  "quality": {
+   "signal": "אין לו שער משלו. הוא נמדד בעקיפין: machtzev/mahulal/generator-ratchet.mjs:51,77-83 מריץ אותו על 4 משפטים קבועים, ו-generator-ratchet.mjs:56 קורא את קוד-המקור שלו ומסיר הערות — כלומר יש ratchet שסופר על הקוד עצמו (ככל הנראה אכיפת 'אפס מילה-עברית')",
+   "measured": "לא-נמדד ישירות — אין gate בשמו (engine-index: gate '-'); לא הרצתי את generator-ratchet כי הוא כותב baseline"
+  },
+  "evidence": [
+   "cat -n machtzev/generator/nl-spec.mjs (103 שורות, נקראו במלואן)",
+   "grep -n 'nlToSpec\\|specFromSentence' machtzev/generator/app-ds.mjs machtzev/generator/hamtzaa.mjs machtzev/mahulal/generator-ratchet.mjs"
+  ]
+ }
+]
