@@ -719,5 +719,401 @@
       "ran: node machtzev/census/engine-index.mjs machtzev/chisel.mjs ⇒ calledByName ריק",
       "ran: ls -d /home/user/maor-system ⇒ No such file or directory"
     ]
+  },
+  {
+    "file": "machtzev/contract-check.mjs",
+    "lang": "mjs",
+    "lines": 74,
+    "does": [
+      {
+        "claim": "אוכף לכל אטום/קופסה ב-new/: קיים <base>.contract.md באורך ≥100 תווים **וגם** <base>.test.mjs, והבדיקה חייבת לצאת 0",
+        "evidence": "machtzev/contract-check.mjs:40-49"
+      },
+      {
+        "claim": "מריץ כל בדיקה ב-sandbox אמיתי: env מסונן ל-PATH בלבד · cwd=תיקיית-האטום · --permission --allow-fs-read מוגבל ל-new/ · timeout 15s · SIGKILL",
+        "evidence": "machtzev/contract-check.mjs:28-32 (הרקע ב-3-5: 1,239 בדיקות רצו עם GH_TOKEN/AWS_* — R2-3.5)"
+      },
+      {
+        "claim": "סורק PII/סודות בגוף האטום ומפיל על התאמה (חוק-6): מיילים של ספקים נפוצים · מפתחות AIzaSy · BEGIN PRIVATE KEY",
+        "evidence": "machtzev/contract-check.mjs:20 (PII) + 39"
+      },
+      {
+        "claim": "ratchet-איכות-חוזה בשלושה צירים שהם חוב-רק-יורד: noExample (אין דוגמה מספרית בחוזה) · noImport (הבדיקה לא מייבאת את האטום שלה) · noAssert (בדיקה בלי assertion)",
+        "evidence": "machtzev/contract-check.mjs:45-47 (הזיהוי) · 59-70 (ההשוואה ל-baseline)"
+      },
+      {
+        "claim": "עבריין **חדש** בלבד מאדים; ריפוי רק מדווח — השער לא כותב baseline (עיקרון 5)",
+        "evidence": "machtzev/contract-check.mjs:66-71"
+      },
+      {
+        "claim": "תומך בבדיקה אינקרמנטלית דרך --files (משמש את police --inc)",
+        "evidence": "machtzev/contract-check.mjs:22-24"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא בודק ש**הדוגמה בחוזה תואמת את הקוד** — noExample הוא regex על נוכחות ספרה ליד ⇒/=> בלבד, לא הרצה",
+        "evidence": "machtzev/contract-check.mjs:45"
+      },
+      {
+        "claim": "לא בודק את איכות ה-assertion — `!==` בהערה יספק את הכלל",
+        "evidence": "machtzev/contract-check.mjs:47 — /process\\.exit\\(1\\)|throw |assert|!==|expect\\(/ על כל גוף-הקובץ"
+      },
+      {
+        "claim": "לא נוגע בקבצי-Dart — isAtom דורש .mjs",
+        "evidence": "machtzev/contract-check.mjs:21"
+      },
+      {
+        "claim": "אינו השער האיטי «בטעות» — 64.9 שניות נמדדו, וזה הכי-איטי בטבעת ה---fast",
+        "evidence": "ran: node machtzev/police.mjs --fast ⇒ 'ran contract 64873ms' (שורה 4 בפלט)"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:116",
+        "how": "gate('contract','contract-check.mjs',[R.NEW,...filesArg()]) — מורץ-בשם כשער"
+      },
+      {
+        "who": "machtzev/run.mjs:15",
+        "how": "run('./contract-check.mjs',[]) — מורץ-בשם"
+      },
+      {
+        "who": "machtzev/chisel.mjs:46 · machtzev/chisel-all.mjs:85",
+        "how": "מורץ-בשם כחלק ממסנן-השערים של החציבה"
+      },
+      {
+        "who": ".githooks/pre-commit:35",
+        "how": "מורץ-בשם בטבעת-ה-commit"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "שער, וזה מקומו. הוא מודד את **המדף** (new/*.mjs) ולא את פלט-המחולל, ו-gen_*.dart אינו .mjs ולכן מחוץ לתחומו מלכתחילה (שורה 21). היכולת שכן שווה להעתיק — sandbox להרצת-בדיקה — כבר קיימת בצינור דרך logic-proof.mjs שמריץ דוגמאות ב-Dart."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב בעקיפין. «חוזה + בדיקה ירוקה לכל אטום» הוא התנאי שמאפשר לבורר-המחולל להאמין לקטלוג (§20: הכי-טוב-לייעוד דורש שהמועמד בכלל עובד). אבל הוא upstream של הקטלוג ולא שלב בנתיב משפט⇒אפליקציה, ואין לו מה לומר על הפלט."
+    },
+    "evidence": [
+      "read: machtzev/contract-check.mjs:1-73 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ '✓ חוק-החוזה: 1239 אטומים — לכולם חוזה + בדיקה ירוקה (sandbox) · חוב-איכות: noExample 617 · noImport 18 · noAssert 3 (רק-יורד)' + 'ran contract 64873ms'",
+      "ran: grep -rn 'contract-check.mjs' ⇒ police.mjs:116 · run.mjs:15 · chisel.mjs:46 · chisel-all.mjs:85 · .githooks/pre-commit:35"
+    ]
+  },
+  {
+    "file": "machtzev/coverage-gate.mjs",
+    "lang": "mjs",
+    "lines": 61,
+    "does": [
+      {
+        "claim": "מודד ארבעה צירי-יכולת ומפיל על נסיגה בכל אחד: widgetsFillable · enginesRunnable · essence · dataTwinned",
+        "evidence": "machtzev/coverage-gate.mjs:41-49 (cur) · 53-54 (ההשוואה)"
+      },
+      {
+        "claim": "«לבנה ברת-מילוי» מחושבת מול **אותו** FILLABLE שהמחולל עצמו משתמש בו — ייבוא מפורש מ-generator/fillable.mjs שמוצהר כ-SSOT",
+        "evidence": "machtzev/coverage-gate.mjs:17 + machtzev/generator/fillable.mjs:1 «SSOT יחיד … genesis-gen (בורר+מילוי) ו-coverage-gate (מד-לבנים-ברות-מילוי)»"
+      },
+      {
+        "claim": "בונה את האטלס דרך generator/atlas.mjs — אותו אטלס של המחולל, לא סריקה משלו",
+        "evidence": "machtzev/coverage-gate.mjs:8,16"
+      },
+      {
+        "claim": "«מנוע בר-הרצה» = איחוד של שלושה מקורות: רתמת-התאומים · תאומי-Dart שנקצרו · פונקציות שבדיקת-הזהב שלהן עברה בהרצת-Dart (dart-tests-passing.json)",
+        "evidence": "machtzev/coverage-gate.mjs:31-35 · 44"
+      },
+      {
+        "claim": "fail-closed על baseline חסר/שבור",
+        "evidence": "machtzev/coverage-gate.mjs:51"
+      },
+      {
+        "claim": "שער שלא כותב: גידול רק מדווח כ-'baseline may grow' ומוחל בטבעת-push",
+        "evidence": "machtzev/coverage-gate.mjs:55-57"
+      },
+      {
+        "claim": "מחריג Widget/List<Widget> מדרישת-המילוי — ילד הוא תפר, לא ערך",
+        "evidence": "machtzev/coverage-gate.mjs:23"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא **מונה בשמות** את הלבנים שאינן ברות-מילוי — הוא סופר fillable++ בלבד, ולכן אי-אפשר לדעת ממנו אילו 3 לבנים (מתוך 572) המחולל לא יכול להשתמש בהן",
+        "evidence": "machtzev/coverage-gate.mjs:18-27 — מונה בלבד, אין דחיפה למערך-שמות"
+      },
+      {
+        "claim": "לא מודד את פלט-המחולל — המדד הוא על האטלס (המדף), לא על gen_*.dart",
+        "evidence": "machtzev/coverage-gate.mjs:16,19 — atlas.widgets"
+      },
+      {
+        "claim": "לא מריץ Dart בעצמו — הוא **קורא** תוצאות שהורצו קודם (dart-tests-passing.json), ובולע כשל-קריאה לסט ריק",
+        "evidence": "machtzev/coverage-gate.mjs:34-35 — try/catch{} ריק"
+      },
+      {
+        "claim": "לא מגן על ציר חדש שאינו ב-baseline — התנאי דורש base[k] !== undefined",
+        "evidence": "machtzev/coverage-gate.mjs:54"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:131",
+        "how": "gate('coverage','coverage-gate.mjs') — מורץ-בשם כשער"
+      },
+      {
+        "who": "machtzev/generator/atlas.mjs · twins.mjs · dart-twins.mjs · fillable.mjs",
+        "how": "ייבוא: coverage-gate מייבא מהם (שורות 8-10, 17) — כלומר הוא כבר תלוי בקוד-המחולל, אך לא להפך"
+      },
+      {
+        "who": "machtzev/PROTOCOL.md:205",
+        "how": "רשום ב-PINNED (נעול-חתימה) כדי שהמודד לא ייערך בשקט (RED-TEAM 2.1)"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/genesis-gen.mjs:115-122 — לולאת-בורר-הלבנים",
+      "gives": "נקודה כנה וממשית. `genesis-gen.mjs:122` עושה `if (!fillable) continue;` — כלומר **המחולל מדלג בשקט** על לבנה שאינו יודע למלא. `coverage-gate` מריץ את אותו חישוב בדיוק (אותו FILLABLE, אותו אטלס) ויודע שיש 3 כאלה (569/572) — אבל גם הוא רק סופר ואינו נוקב בשמות. חיבור = החישוב נעשה פעם אחת, במחולל, והוא **פולט את רשימת-הלבנים-שדולגו ואת הטיפוס שחסם כל אחת**. זה הופך «תת-ספירה שקטה» ל«אזעקה» כדרישת §21, ונותן לגל-הבא רשימת-עבודה מדודה במקום מספר."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — מקרב ממשית. הוא היחיד בקבוצה שמודד בדיוק את הפער של §22: כמה מהקטלוג המחולל **באמת יכול** להשתמש בו. הוא לא על נתיב משפט⇒אפליקציה (הוא לא בונה כלום), אבל הוא חולק SSOT עם בורר-המחולל, ולכן ההעברה של היכולת שלו לזמן-בנייה היא שינוי קטן עם ערך ישיר."
+    },
+    "evidence": [
+      "read: machtzev/coverage-gate.mjs:1-60 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ '✓ שער-הכיסוי: לבנים 569/572 (99%) · מנועים 841/852 (99%) · מהות 849/852 (100%) · תאומי-דאטה 411/411 (100%)' + 'ran coverage 940ms'",
+      "ran: grep -n 'FILLABLE' machtzev/generator/genesis-gen.mjs ⇒ שורה 100 (ייבוא) · 120 (השימוש) · 122 (ה-continue השקט)",
+      "read: machtzev/generator/fillable.mjs:1 — ההצהרה שהמודד והבורר חולקים SSOT",
+      "ran: grep -rln \"generator/atlas.mjs\" machtzev --include=*.mjs ⇒ coverage-gate · genesis-gen · synth · studio-full · render-ds · particles · verify-dart-tests · verify-dart-arg0"
+    ]
+  },
+  {
+    "file": "machtzev/cross-source-check.mjs",
+    "lang": "mjs",
+    "lines": 33,
+    "does": [
+      {
+        "claim": "לכל אטום **חדש** ב-staged: בונה אינדקס-שמות מכל new/ ומחפש שם-מנורמל זהה בתיקייה אחרת; מצא ⇒ 🔴 «המצאה-מחדש»",
+        "evidence": "machtzev/cross-source-check.mjs:21-22 (האינדקס) · 24-27 (הבדיקה) · 31 (הפסק)"
+      },
+      {
+        "claim": "נרמול-שם אגרסיבי: מסיר סיומת וכל תו שאינו אות/ספרה, ומוריד רישיות — כך ש-dateFull ו-date-full ו-DATE_FULL מתלכדים",
+        "evidence": "machtzev/cross-source-check.mjs:16"
+      },
+      {
+        "claim": "משווה רק בתוך אותו **סוג** (atom/box/screen/ui/data) לפי מפת-תיקיות מפורשת — קופסה בשם-האטום שלה אינה המצאה-מחדש",
+        "evidence": "machtzev/cross-source-check.mjs:18-20 (KIND · הערת R3-5.11)"
+      },
+      {
+        "claim": "תאום חוצה-שפה (JS↔Dart באותו שם ואותו סוג) מדווח כ-ℹ️ בלבד ואינו מפיל — twins לגיטימיים",
+        "evidence": "machtzev/cross-source-check.mjs:26,28,30"
+      },
+      {
+        "claim": "מדלג על quarantine ו-node_modules בהליכה",
+        "evidence": "machtzev/cross-source-check.mjs:22"
+      },
+      {
+        "claim": "בלי --files ⇒ יוצא 0 מיד (שער-דלתא, לא סריקה מלאה)",
+        "evidence": "machtzev/cross-source-check.mjs:10-15"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**לא משווה גוף/סמנטיקה — רק שם.** שני אטומים זהים בקוד ושונים בשם יעברו; זה בדיוק הדפוס שהמחצב מזהיר מפניו («8 באגים … כולם מאותה משפחה: התאמה לפי שם/מחרוזת במקום לפי המקור המוצהר»)",
+        "evidence": "machtzev/cross-source-check.mjs:16,25-26 — ההשוואה כולה על norm(basename)"
+      },
+      {
+        "claim": "לא שואל את האורקל ולא את engine-index — «אורקל-הקבצים» בהודעת-הסיום הוא מפת-שמות-קבצים שהוא בנה בעצמו, לא האורקל הסמנטי",
+        "evidence": "machtzev/cross-source-check.mjs:21-22 ו-32 — index.size הוא גודל מפת-ה-norm"
+      },
+      {
+        "claim": "לא מפיל על שם זהה **באותה תיקייה** — הסינון דורש dirname שונה",
+        "evidence": "machtzev/cross-source-check.mjs:25"
+      },
+      {
+        "claim": "אינו שער-משטרה — הוא רץ רק ב-pre-commit ואינו ב-gates.tsv כשער של police",
+        "evidence": "ran: grep -n 'cross-source' machtzev/police.mjs ⇒ אפס פלט; הקורא היחיד הוא .githooks/pre-commit:42"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".githooks/pre-commit:42",
+        "how": "מורץ-בשם עם --files על הקבצים שנוספו"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:21",
+        "how": "רשום כקובץ נעול-חתימה"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה, והסיבה חשובה: מה שהוא עושה (מניעת-כפילות) **כבר קיים במחולל בגרסה חזקה יותר** — `search-record`/`search-score` שואלים את האורקל לפי מטרה, ו-`dedup-atoms --semantic` משווה לפי הוכחה-צולבת של דוגמאות-זהב. cross-source הוא בדיקת-שם מכנית בטבעת-ה-commit; לחבר אותה למחולל היה מחזיר את המחולל להתאמה-לפי-שם, בדיוק האנטי-דפוס שהאינדקס נבנה כדי לסגור."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב, ואף מייצג את הגישה שהמחולל נגמל ממנה. ערכו היחיד הוא רשת-ביטחון זולה בזמן-commit לפני שהסוכן שכח לחפש. שער, וזה מקומו."
+    },
+    "evidence": [
+      "read: machtzev/cross-source-check.mjs:1-32 (כל הקובץ)",
+      "ran: grep -n 'cross-source' machtzev/police.mjs ⇒ אפס פלט (אינו שער-משטרה)",
+      "ran: grep -rn 'cross-source-check.mjs' ⇒ .githooks/pre-commit:42 · machtzev/pins-check.mjs:21 · machtzev/INDEX.md:25"
+    ]
+  },
+  {
+    "file": "machtzev/dart-bin.mjs",
+    "lang": "mjs",
+    "lines": 19,
+    "does": [
+      {
+        "claim": "מפרק-נתיב יחיד לבינארי Dart בסדר קבוע: DART_BIN ⇒ $HOME/dart-sdk/bin/dart ⇒ /home/user/flutter/bin/dart ⇒ command -v dart",
+        "evidence": "machtzev/dart-bin.mjs:8-12"
+      },
+      {
+        "claim": "resolveDart מחזיר null כשאין — מאפשר לקורא להחליט (צהוב/דילוג-מוצהר) במקום לקרוס",
+        "evidence": "machtzev/dart-bin.mjs:10-11"
+      },
+      {
+        "claim": "requireDart יוצא exit 2 עם 'tool=dart' — הסימון ש-police ממיין כ-yellow:tool, לא כ-failed",
+        "evidence": "machtzev/dart-bin.mjs:13-18 (ההסבר בשורות 3-4)"
+      },
+      {
+        "claim": "הוא אחד משני המנועים בקבוצה שיש להם **מייבאים אמיתיים** (ולא רק הרצה-בשם)",
+        "evidence": "ran: grep -rn \"from './dart-bin.mjs'\" ⇒ police.mjs:15 · box-proofs-check.mjs:11 · mutation-dart-check.mjs:14 · rethread-boxes.mjs:19; ועוד generator/synth.mjs:15 ('../dart-bin.mjs')"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא מאמת שהבינארי **עובד** או מהי גרסתו — רק existsSync על הנתיב",
+        "evidence": "machtzev/dart-bin.mjs:10 — fs.existsSync בלבד, אין הרצת --version"
+      },
+      {
+        "claim": "לא מטפל ב-flutter כמותג נפרד — /home/user/flutter/bin/dart הוא נתיב קשיח, ואינו קיים בקונטיינר הזה",
+        "evidence": "machtzev/dart-bin.mjs:9; ran: ls -d /home/user/flutter ⇒ No such file or directory"
+      },
+      {
+        "claim": "אינו שער — אין לו gate ב-gates.tsv ואין לו CLI; הוא ספרייה",
+        "evidence": "כרטיס engine-index: gate=- · cli=[] · exports=[resolveDart,requireDart]"
+      },
+      {
+        "claim": "לא מחפש ב-PATH ראשון — `command -v dart` הוא **הנפילה האחרונה**, אחרי שלושת הנתיבים הקשיחים",
+        "evidence": "machtzev/dart-bin.mjs:9-11 — הלולאה על cands קודמת ל-execFileSync"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:15",
+        "how": "ייבוא { resolveDart }"
+      },
+      {
+        "who": "machtzev/box-proofs-check.mjs:11",
+        "how": "ייבוא { resolveDart }"
+      },
+      {
+        "who": "machtzev/mutation-dart-check.mjs:14",
+        "how": "ייבוא { resolveDart }"
+      },
+      {
+        "who": "machtzev/rethread-boxes.mjs:19",
+        "how": "ייבוא { requireDart }"
+      },
+      {
+        "who": "machtzev/generator/synth.mjs:15",
+        "how": "ייבוא { resolveDart, requireDart } — **זהו קורא בתוך תיקיית-המחולל**"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:17 · PROTOCOL.md:205",
+        "how": "נעול-חתימה (PINNED)"
+      }
+    ],
+    "connectAt": {
+      "point": "כבר מחובר בפועל דרך machtzev/generator/synth.mjs:15 — ראוי רק להכיר בכך",
+      "gives": "זהו המקרה היחיד בקבוצה שבו התשובה אינה «לחבר» אלא «הוא כבר שם». `generator/synth.mjs` מייבא ממנו, ו-synth הוא מנוע-מחולל. הסיבה שהוא נספר בלא-מחוברים היא שההגדרה ב-engine-index.mjs:323-333 מודדת נגישות מ-6 נקודות-הכניסה, ו-synth אינו אחת מהן ולא מיובא מהן. אין כאן עבודת-חיווט — יש כאן דיוק-מדידה: מנוע-תשתית שמשרת גם את הצינור וגם את השערים."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב כתשתית. בלעדיו כל הוכחת-Dart (logic-proof · behavior-plan · box-proofs) לא יודעת איפה הבינארי, וכל ההוכחות-בריצה של הכרעה-30 נשענות על זה. אבל הוא לא מקרב תוכן — הוא מאפשר. 19 שורות שמונעות «כשל-ריצה ריק» (L107/G20)."
+    },
+    "evidence": [
+      "read: machtzev/dart-bin.mjs:1-18 (כל הקובץ)",
+      "ran: command -v dart ⇒ /root/dart-sdk/bin/dart; ls -d $HOME/dart-sdk ⇒ /root/dart-sdk (כלומר הנתיב השני ברשימה הוא זה שתופס כאן)",
+      "ran: ls -d /home/user/flutter ⇒ No such file or directory (הנתיב השלישי מת בקונטיינר הזה)",
+      "ran: grep -rn 'dart-bin.mjs' ⇒ police.mjs:15 · box-proofs-check.mjs:11 · mutation-dart-check.mjs:14 · rethread-boxes.mjs:19 · generator/synth.mjs:15 · pins-check.mjs:17"
+    ]
+  },
+  {
+    "file": "machtzev/data-purity-check.mjs",
+    "lang": "mjs",
+    "lines": 69,
+    "does": [
+      {
+        "claim": "מסמן אטום כ«מעורב» אם יש בו ליטרל-עברי **וגם** הוא אינו בצורת-דאטה-טהורה — אינווריאנט הכרעה-16: אין דאטה במנגנון",
+        "evidence": "machtzev/data-purity-check.mjs:17-35 (isMixed) · הפסק בשורה 34"
+      },
+      {
+        "claim": "מפשיט הערות בשלוש צורות (בלוק · שורה · זנב) עם שומר מפורש נגד :// ונגד // בתוך מחרוזת",
+        "evidence": "machtzev/data-purity-check.mjs:20 (ההנמקה בשורות 18-19)"
+      },
+      {
+        "claim": "פוטר עברית בתוך ארגומנט-RegExp — תבנית-התאמה היא לוגיקה, לא דאטה-תצוגה; זו סימטריה מודעת JS⇄Dart (ב-JS ליטרל-regex פטור מטבעו)",
+        "evidence": "machtzev/data-purity-check.mjs:21-23"
+      },
+      {
+        "claim": "פוטר מפתח-עברי קצר שקושר שקע ('ך': T['k1']) — חיווט ולא דאטה",
+        "evidence": "machtzev/data-purity-check.mjs:24-26"
+      },
+      {
+        "claim": "«צורת-דאטה טהורה» מזוהה בשני הניבים (Dart: const מוקלד/getter/פונקציה-מחזירת-ליטרל · JS: export const=ליטרל) **ובתנאי שאין control-flow** בקובץ",
+        "evidence": "machtzev/data-purity-check.mjs:32-33"
+      },
+      {
+        "claim": "ratchet: רק מעורב שאינו ב-baseline מפיל",
+        "evidence": "machtzev/data-purity-check.mjs:58-66"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**לא סורק את פלט-המחולל.** DIRS = ['dart-maor','dart','atoms'] — ‏dart-gen-bs (מסכי-המחולל) · boxes · dart-boxes · dart-ui-bs אינם נסרקים כלל",
+        "evidence": "machtzev/data-purity-check.mjs:12"
+      },
+      {
+        "claim": "לא מזהה דאטה **לא-עברית** — טבלת-ספים באנגלית או מערך-קבועים מספרי לא ייתפס כאן (זה תפקידו של deep-purity-scan)",
+        "evidence": "machtzev/data-purity-check.mjs:27-29 — אם אין עברית, return false מיד"
+      },
+      {
+        "claim": "לא מבחין בין עברית בהודעת-שגיאה לעברית בתוכן-מסך — כל ליטרל-עברי שווה",
+        "evidence": "machtzev/data-purity-check.mjs:28"
+      },
+      {
+        "claim": "לא כותב ב---gate; --baseline הוא מצב נפרד ומפורש",
+        "evidence": "machtzev/data-purity-check.mjs:52-54 מול 58-67"
+      },
+      {
+        "claim": "מגביל ליטרל ל-160 תווים — מחרוזת-עברית ארוכה מזה לא תיתפס",
+        "evidence": "machtzev/data-purity-check.mjs:28 — {0,160}"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:119",
+        "how": "gate('datapurity','data-purity-check.mjs',['--gate']) — מורץ-בשם כשער"
+      },
+      {
+        "who": "machtzev/carve/carve-land.mjs:274",
+        "how": "מורץ-בשם כשער-נחיתה של המחצבה (G61)"
+      },
+      {
+        "who": "machtzev/chisel.mjs:46 · machtzev/chisel-all.mjs:85",
+        "how": "מורץ-בשם כחלק ממסנן-השערים"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ — ובמתכוון",
+      "gives": "שער, וזה מקומו, והיקף-הסריקה שלו נכון כפי שהוא. הפיתוי הוא להרחיב DIRS ל-dart-gen-bs «כדי לכסות גם את הפלט» — וזו תהיה טעות: פלט-המחולל **אמור** להכיל עברית (זה תוכן-המסך שנגזר מהספק), ולכן סריקת-עברית עליו תייצר רעש ולא אמת. את הפלט שומרים שערים אחרים (no-fakers · balagan-look · ds-critic). ההיקף המצומצם כאן הוא החלטה נכונה, לא פער."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב בעקיפין. הפרדת דאטה/מנגנון היא התנאי שמאפשר לבורר להחליף מנגנון בלי לגרור איתו טקסט, וזה בדיוק מה שמאפשר את auto-logic/auto-skin. אבל המנוע עצמו אינו על נתיב משפט⇒אפליקציה ואינו רואה את הפלט."
+    },
+    "evidence": [
+      "read: machtzev/data-purity-check.mjs:1-68 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ '✓ שער-טוהר-דאטה: אפס מעורב-חדש · חוב-מנוהל 0/0 (רק יורד — הכרעה 16)' + 'ran datapurity 141ms'",
+      "ran: grep -n \"const DIRS\" machtzev/data-purity-check.mjs ⇒ שורה 12: ['dart-maor','dart','atoms'] — מאשר ש-dart-gen-bs אינו בהיקף",
+      "ran: grep -rn 'data-purity-check.mjs' ⇒ police.mjs:119 · carve/carve-land.mjs:274 · chisel.mjs:46 · chisel-all.mjs:85"
+    ]
   }
 ]
