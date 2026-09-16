@@ -2013,5 +2013,507 @@
    "ran: grep -c 'process.exit' ⇒ 0",
    "read: machtzev/generator/auto-skin.mjs:22-23 (bars · meter) · CLAUDE.md G21/הכרעה-26 (FAKERS ריק)"
   ]
+ },
+ {
+  "file": "gen/looks/agora/build.mjs",
+  "lang": "mjs",
+  "lines": 255,
+  "summary": "תיק-חיוב בפריסת תיעוד-ה-API של Stripe, וכסף כמספר-שלם (אגורות). 🔴 **אפס מופעי `aria-` — הנמוך בכל 14**, אבל 9 מופעי `bdi` ובלוק-הגזירה החשבונאי המורכב בקבוצה: הוא מחפש משפחה שהחישוב שלה נופל על שבר.",
+  "does": [
+   {
+    "claim": "🔴 **מחפש בכוונה מקרה-קצה חשבונאי** — משפחה שבה החיוב המחושב אינו מספר-שלם (‏`Math.abs(ex-Math.round(ex))>1e-9`), יש הנחה, יש הסעה ויש יתרה. כלומר הדוגמה נבחרה כדי **להראות את בעיית-השבר**, לא כדי להיראות יפה",
+    "evidence": "agora/build.mjs (בבלוק-הגזירה) `const frac = DB.families.filter(f => { const k=f.kids.length, bus=f.kids.filter(id=>stu(id)&&stu(id).routeId).length; const ex=(k*T.tuition+bus*T.bus+k*T.books)*(1-f.discount/100); return Math.abs(ex-Math.round(ex))>1e-9 && f.discount>0 && bus>0 && balance(f)>0; });`"
+   },
+   {
+    "claim": "נופל-לאחור בבטחה אם אין מקרה-קצה — `|| DB.families[0]`",
+    "evidence": "agora/build.mjs (בבלוק-הגזירה) `const f = frac.sort((a,b)=>b.kids.length-a.kids.length)[0] || DB.families[0];`"
+   },
+   {
+    "claim": "‏**סורק את כל המשפחות** ומודד תופעה כלל-מערכתית (סופר גם כמה יתרות שליליות יש, ומריץ את החישוב על כולן)",
+    "evidence": "agora/build.mjs (בבלוק-הגזירה) `const neg=DB.families.filter(x=>balance(x)<0).length; DB.families.forEach(x=>{ const kk=x.kids.length, bb=…; const ex=(kk*T.tuition+bb*T.bus+kk*T.books)*(1-x.discount/100); …})`"
+   },
+   {
+    "claim": "‏**9 מופעי `bdi`** — טיפול-RTL כבד, וזה מתאים: תיעוד-API מלא במזהים ובמספרים לטיניים בתוך עברית",
+    "evidence": "ran: מטריצת-התכונות ⇒ agora: prefers-color 3 · data-theme 2 · h1 1 · aria- **0** · bdi 9 · script/onclick 0 · new Function 1"
+   },
+   {
+    "claim": "‏**הממצא המרכזי מוצהר**: הסחיפה נמדדה 0 — כלומר החישוב עצמו מדויק; הפער הוא בפריסה (‏«820 ₪ מול 1.80 ₪» — יישור-עמודות של סכומים בסדרי-גודל שונים)",
+    "evidence": "build-index.mjs:38 `dev:['הסחיפה נמדדה 0 — הרווח הוא בפריסה: 820 ₪ מול 1.80 ₪']`; :37 `num:['שם שדה Source Code Pro 700 14/20','כל 13 הערכים שלמים','אגורות · נקודות בסיס']`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אפס מופעי `aria-` — הנמוך בכל 14 הבנאים, והיחיד עם 0**. באותה קבוצה, ‏tor מגיע ל-18. אין שום שער שאוכף את זה",
+    "evidence": "ran: grep -c 'aria-' על 14 הבנאים ⇒ agora **0** · tor 18 · tavla 13 · grafa 10 · nochah 8 · search 7 · hechzer 7 · diyun 4 · sulam 4 · tzevet 4 · vaada 4 · buybox 3 · erech 2 · sefer 1"
+   },
+   {
+    "claim": "**אינו** אינטראקטיבי — אפס script/onclick",
+    "evidence": "ran: grep -c 'onclick|addEventListener|<script' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מייבא טוקנים — 36 ליטרלי-hex",
+    "evidence": "ran: ספירת hex ⇒ 36"
+   },
+   {
+    "claim": "**אינו** מתקן את בעיית-השבר שהוא מצא — הוא **מציג** אותה. אין בקובץ עיגול, אין מדיניות-אגורות, ואין חסימה",
+    "evidence": "agora/build.mjs — בלוק-הגזירה מזהה `Math.abs(ex-Math.round(ex))>1e-9` ומעביר למסך; אין בקובץ `blocked(` (ran ⇒ 0)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ לצינור — אבל הממצא עצמו נוגע בחלקיק קיים: `fMoney` (אחד מ-16 החלקיקים המוכחים של G34)",
+   "gives": "התובנה האמיתית כאן אינה העיצוב אלא **הבאג החשבונאי**: חיוב שנגזר מהכפלה באחוז-הנחה נופל על שבר, וכסף בשברי-אגורה הוא מחלקת-באג ידועה. ‏G61 אכן בנה גלאי-נכונות שכולל «כסף-בצפים» כאחת החמש. כלומר **המחולל כבר יודע לחפש את זה**, ו-agora מדגים מופע אחד שלו בדאטה. אין כאן מנוע לחבר; יש ראיה שהגלאי של G61 מכוון לנכון. ⚠️ **לא נבדק אם הגלאי היה תופס דווקא את המופע הזה — מיפוי בלבד.**"
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. דמו-HTML סטטי (אפס אינטראקטיביות), אפס `aria-`, 36 ליטרלי-צבע, בלי שער. הממצא החשבונאי שווה — אבל הוא ממצא בדאטה, וגלאי-הכסף-בצפים של G61 כבר קיים במחולל."
+  },
+  "evidence": [
+   "read: gen/looks/agora/build.mjs:1-8 (כותרת) · בלוק-הגזירה המלא דרך awk (‏new Function…)(SPEC)) · :252 (הפלט)",
+   "ran: מטריצת-תכונות על 14 ⇒ agora: 3·2·1·**0**·9·0·1 — היחיד עם אפס aria",
+   "ran: ספירת hex ⇒ 36 · grep -c 'process.exit' ⇒ 0 · grep -c 'blocked(' ⇒ 0",
+   "read: CLAUDE.md G61 — גלאי-הנכונות (כסף-בצפים) · G34 — החלקיק fMoney"
+  ]
+ },
+ {
+  "file": "gen/looks/buybox/build.mjs",
+  "lang": "mjs",
+  "lines": 248,
+  "summary": "קופסת-ההחלטה של תיק-משפחה, מועתקת מקופסת-הקנייה של Amazon. בוחר את המשפחה עם החוב הגבוה-ביותר, מפרק לרשימת-ילדים ולארבעה תשלומים אחרונים. 3 מאזיני-אירוע (בורר-וריאנט + מונה-כמות).",
+  "does": [
+   {
+    "claim": "בוחר את המשפחה עם היתרה הפתוחה הגבוהה-ביותר — נגזר, לא מוקלד",
+    "evidence": "buybox/build.mjs (בבלוק-הגזירה) `const sortBy=(a,f,d=1)=>[...a].sort((x,y)=>(f(x)>f(y)?1:f(x)<f(y)?-1:0)*d); const f = sortBy(DB.families.filter(x=>balance(x)>0), x=>-balance(x))[0];`"
+   },
+   {
+    "claim": "מפרק את המשפחה לרשימת-ילדים עם כיתה — כלומר «הפריט» בקופסת-הקנייה הוא צירוף של ישויות מקושרות",
+    "evidence": "buybox/build.mjs (בבלוק-הגזירה) `kidList: f.kids.map(k => { const s=stu(k); return { name:nameOf(s.personId), cls:cls(s.classId).name, …}})`"
+   },
+   {
+    "claim": "מושך את 4 התשלומים האחרונים של אותה משפחה עם אמצעי-התשלום והזמן",
+    "evidence": "buybox/build.mjs (בבלוק-הגזירה) `pays: DB.payments.filter(p=>p.familyId===f.id).slice(0,4).map(p=>({ m:p.method, a:p.amount, ago:p.ago }))`"
+   },
+   {
+    "claim": "‏**בורר-וריאנט ומונה-כמות אינטראקטיביים** — הדפוס המזוהה של קופסת-הקנייה",
+    "evidence": "buybox/build.mjs:229 `<script>`; :232 `document.getElementById('vars').addEventListener('click', e => {`; :240 `document.querySelector('.qty').addEventListener('click', e => {`"
+   },
+   {
+    "claim": "‏**13 מופעי `bdi` — הגבוה בכל 14**, וזה נכון לדומיין: מחיר מפוצל לשקלים+אגורות בתוך עברית הוא מוקש-RTL",
+    "evidence": "ran: מטריצת-התכונות ⇒ buybox: bdi **13** (הגבוה); diyun 11 · vaada 11 · agora 9 · erech 12. והמספרים המדודים: build-index.mjs:13 `num:['מחיר 28/30 + אגורות 13','כפתורים r100 בגובה 32','#ffd814 · #ffa41c']`"
+   },
+   {
+    "claim": "‏**סטייה-מוצהרת עם נימוק-נגישות**: תג-ההנחה `#b12704` אינו מתבהר בערכה כהה — נושא טקסט לבן",
+    "evidence": "build-index.mjs:14 `dev:['תג ההנחה #b12704 אינו מתבהר בכהה — נושא טקסט לבן']`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** קונה, שומר או משנה דבר — `vars` ו-`qty` מעדכנים DOM בלבד",
+    "evidence": "buybox/build.mjs:232,240 — שני מאזינים מקומיים; אין fetch/localStorage בקובץ"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** נגיש במיוחד — 3 מופעי `aria-` בלבד, לרכיב שהוא כולו בוררים ומונים",
+    "evidence": "ran: מטריצת-התכונות ⇒ buybox: aria- 3 (רביעי-מהסוף מבין 14)"
+   },
+   {
+    "claim": "**אינו** מייבא טוקנים — 33 ליטרלי-hex",
+    "evidence": "ran: ספירת hex ⇒ 33"
+   },
+   {
+    "claim": "**אינו** מוסיף למחולל — «קופסת-החלטה» היא `section`/`frame` במונחי-תפקידי-העור, ו«בורר» הוא `segmented`/`chip`; לשלושתם יש דרישת-צורה",
+    "evidence": "machtzev/generator/auto-skin.mjs:20 `section: { need: 'child+text1', … }, frame: { need: 'child', … }`; :21 `segmented: { need: 'select', … }, chip: { need: 'select', … }`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "הרכיב כולו מתפרק לתפקידי-עור שכבר קיימים במחולל (`section` · `segmented` · `chip`), והמימוש HTML/JS. הפריט היחיד בעל-ערך-כללי: **13 מופעי bdi** — הגבוה בקבוצה — מצביע על כך שמחיר-מפוצל בתוך עברית דורש טיפול-כיוון כבד. המחולל פולט עברית תמיד, וכבר נתקל באותה מחלקה (‏G28 ‏`tokenLit`; ‏build-index.mjs:51-57 עוטף אוטומטית). ⚠️ **לא נבדק אם המחולל מטפל בזה — מיפוי בלבד.**"
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. קופסה צרובה בלי שמירה ובלי מצב, המתפרקת לשלושה תפקידי-עור שכבר יש להם בורר במחולל."
+  },
+  "evidence": [
+   "read: gen/looks/buybox/build.mjs:1-8 (כותרת) · בלוק-הגזירה המלא דרך awk · :229-248 (ה-script)",
+   "ran: מטריצת-תכונות על 14 ⇒ buybox: 1·1·1·3·13·3·1 — ה-bdi הגבוה בקבוצה",
+   "ran: ספירת hex ⇒ 33 · grep -c 'process.exit' ⇒ 0",
+   "read: machtzev/generator/auto-skin.mjs:20-21 — section/frame/segmented/chip"
+  ]
+ },
+ {
+  "file": "gen/looks/erech/build.mjs",
+  "lang": "mjs",
+  "lines": 228,
+  "summary": "תיק-משפחה בצורת ערך-אנציקלופדיה, מועתק מוויקיפדיה העברית. 🔴 **המקור היחיד בכל הסבב שנבנה לעברית — והיחיד שאינו טוען גופן כלל**; הממצא הזה יושם בפועל בכל הקבוצה.",
+  "does": [
+   {
+    "claim": "🔴 **בוחר משפחה לפי 4 תנאים ואז לפי שני מפתחות-מיון** — ≥3 ילדים · הלוואה · הנחה · תשלומים; ואז לפי מספר-התשלומים ואז מספר-הילדים. עם **שתי נפילות-לאחור** מדורגות",
+    "evidence": "erech/build.mjs (בבלוק-הגזירה) `const cand = DB.families.filter(f => f.kids.length >= 3 && f.loan && f.discount > 0 && hasPay[f.id]); const f = cand.sort((a,b) => (hasPay[b.id]-hasPay[a.id]) || (b.kids.length - a.kids.length))[0] || DB.families.filter(f => f.kids.length >= 3 && f.loan)[0] || DB.families[0];`"
+   },
+   {
+    "claim": "🔴 **מרכז 5 אגפים בערך אחד** — ילדים+כיתות · הלוואה · תשלומים · יארצייטים · חודשים-עבריים. זהו «תיק שבו נפגשים אגפים», הרעיון שחוזר גם ב-app/",
+    "evidence": "erech/build.mjs (בבלוק-הגזירה) `const kids = f.kids.map(…)` · `const l = f.loan ? loan(f.loan) : null;` · `const pays = DB.payments.filter(p => p.familyId === f.id);` · `const yz = DB.yahrzeits.filter(z => z.familyId === f.id);` · `return { t:DB.tariff, today:DB.today, hmonths:DB.hmonths, … }`"
+   },
+   {
+    "claim": "🔴 **ממצא-מדידה על עברית, שיושם בקבוצה כולה**: ויקיפדיה העברית היא האתר היחיד בסבב שנבנה לעברית, והיחיד שאינו טוען גופן — ולכן `build-index.mjs` עצמו הפסיק לטעון גופן",
+    "evidence": "build-index.mjs:67 `/* אין קישור לגופן — הממצא מוויקיפדיה העברית, מיושם. */`; והממצא מנוסח ב-:147 «האתר היחיד בסבב שנבנה לעברית — ויקיפדיה — הוא היחיד שאינו טוען גופן כלל»"
+   },
+   {
+    "claim": "‏12 מופעי `bdi` — מהגבוהים בקבוצה, מתאים לערך עם תיבת-מידע מלאה בתאריכים ומספרים",
+    "evidence": "ran: מטריצת-התכונות ⇒ erech: prefers-color 2 · data-theme 2 · h1 1 · aria- 2 · bdi 12 · script/onclick 0 · new Function 1"
+   },
+   {
+    "claim": "‏**סטייה-מוצהרת עם מדידה**: הפסקה נקצצה ל-660px כי במקור נמדדו 93 תווים בשורה — מעל טווח-הקריאה",
+    "evidence": "build-index.mjs:26 `dev:['הפסקה נקצצה ל-660: במקור 93 תווים בשורה, מעל טווח הקריאה']`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** אינטראקטיבי — אפס script/onclick",
+    "evidence": "ran: grep -c 'onclick|addEventListener|<script' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** נגיש במיוחד — 2 מופעי `aria-` בלבד (רק sefer ו-agora נמוכים ממנו)",
+    "evidence": "ran: מטריצת-התכונות ⇒ erech aria- 2; sefer 1 · agora 0"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מייבא טוקנים — 35 ליטרלי-hex",
+    "evidence": "ran: ספירת hex ⇒ 35"
+   },
+   {
+    "claim": "**אינו** מציג את 14 ההפניות ו-7 המקורות כמנגנון — הם תוכן-ערך שנצרב, לא מערכת-ציטוט",
+    "evidence": "build-index.mjs:25 `num:['גוף 16/26 · גופן מערכת','תיבה 304 · #f9f9f9','14 הפניות · 7 מקורות']` — מספרי-פלט קבועים"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ לצינור — אבל הממצא נוגע ב-machtzev/generator/web-shell.mjs (‏G52: גיזום-גופנים פר-אפליקציה)",
+   "gives": "הממצא «האתר העברי היחיד הוא היחיד שאינו טוען גופן» הוא ממצא-אמת, והוא **כבר טופל במחולל מכיוון אחר וחזק יותר**: ‏G52 מדד מסך-ראשון 13,838ms ⇒ 2,428ms, כש-12,583 מילישניות מהם היו בקשת-Roboto ל-fonts.gstatic.com — והפתרון היה לצרף Roboto מקומית ולגזום משפחות-גופן שאינן ב-`main.dart.js`. כלומר המחולל הגיע לאותה מסקנה דרך **מדידת-זמן**, לא דרך חיקוי-ויקיפדיה, וכבר יש לו שער (תקרת-מסך-ראשון 6000ms + ratchet-מארחים-חיצוניים). אין מה לחבר; יש הסכמה בין שתי מדידות עצמאיות."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. ערך-HTML סטטי, 2 מופעי aria, בלי שער. הממצא על גופנים אמיתי — וכבר נמדד, יושם ונשמר בשער במחולל (‏G52), בצורה חזקה יותר."
+  },
+  "evidence": [
+   "read: gen/looks/erech/build.mjs:1-8 (כותרת) · בלוק-הגזירה המלא דרך awk",
+   "ran: מטריצת-תכונות על 14 ⇒ erech: 2·2·1·2·12·0·1",
+   "ran: ספירת hex ⇒ 35 · grep -c 'process.exit' ⇒ 0",
+   "read: gen/looks/build-index.mjs:67,147 — הממצא על הגופן ויישומו",
+   "read: CLAUDE.md G52 — מדידת-הגופנים במחולל (13,838ms ⇒ 2,428ms) והשער שנולד ממנה"
+  ]
+ },
+ {
+  "file": "gen/looks/nochah/build.mjs",
+  "lang": "mjs",
+  "lines": 244,
+  "summary": "פס-נוכחות «בית המדרש עכשיו» בשפת פס-הערוצים-החיים של Twitch. 🔴 **היחיד מבין 14 שמקבל פרמטר-זמן חיצוני** (`new Function('SPEC','NOW',…)`) — כלומר הפלט תלוי בשעה, וזו הבחנה אמיתית.",
+  "does": [
+   {
+    "claim": "🔴 **היחיד בקבוצה שמזריק זמן כפרמטר** — `new Function('SPEC','NOW', src + …)` במקום `new Function('SPEC', …)` של 13 האחרים",
+    "evidence": "nochah/build.mjs (בבלוק-הגזירה) `const D = new Function('SPEC', 'NOW', src + \\`…`; השווה: agora/buybox/diyun/erech/grafa/hechzer/search/tavla/tor/tzevet/vaada — כולם `new Function('SPEC', src + …)`; ‏sulam הוא היוצא-דופן השני עם `new Function('SPEC','DOMAIN',…)`"
+   },
+   {
+    "claim": "🔴 **מחשב «מי בפנים עכשיו» מתוך חלונות-משמרת** — ממיר HH:MM לדקות, מוצא את המשמרת שמכילה את NOW, ואת המשמרת-הבאה שאחריו",
+    "evidence": "nochah/build.mjs (בבלוק-הגזירה) `const t2m = t => +t.slice(0,2)*60 + +t.slice(3); const hhmm = m => …; const on = s.shifts.find(x => NOW >= t2m(x[0]) && NOW < t2m(x[1])); const next = s.shifts.map(x=>t2m(x[0])).filter(m => m > NOW).sort((a,b)=>a-b)[0];`"
+   },
+   {
+    "claim": "🔴 **«גודל-הקהל» נגזר לפי תפקיד, לא לפי שדה** — מלמד בשיעור ⇒ מספר התלמידים הנוכחים בכיתתו; נהג במשמרת ⇒ סכום הנוסעים בכל תחנות הקו שלו",
+    "evidence": "nochah/build.mjs (בבלוק-הגזירה) `if (on && c) size = DB.students.filter(st => st.classId === c.id && st.att[DB.todayIdx||0]).length; else if (on && s.role === 'נהג') { const r = DB.routes.find(r => r.driver === s.id); if (r) size = r.stops.reduce((a,x)=>a+x.riders.length,0); }`"
+   },
+   {
+    "claim": "‏8 מופעי `aria-` ומאזין-סינון אחד",
+    "evidence": "ran: מטריצת-התכונות ⇒ nochah: prefers-color 1 · data-theme 2 · h1 1 · aria- 8 · bdi 6 · script/onclick 2 · new Function 1; nochah/build.mjs:231 `<script>`; :234 `f.addEventListener('click',function(){`"
+   },
+   {
+    "claim": "‏**סטייה-מוצהרת עם נימוק-דומייני**: שלוש קבוצות במקום שתיים — «למוסד יש אחריות משותפת»",
+    "evidence": "build-index.mjs:17 `dev:['שלוש קבוצות במקום שתיים — למוסד יש אחריות משותפת']`; והמספרים המדודים :16 `num:['שורה 45 · צמודות, אפס רווח','אווטאר 30 · נקודה #eb0400 בקוטר 8','מכווץ ל-60']`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו חי — הזמן נצרב בזמן-בנייה**. ‏NOW מוזרק פעם-אחת ליצירת ה-HTML; הדף לא יתעדכן לעולם. «עכשיו» בכותרת הוא «עכשיו של רגע-הבנייה»",
+    "evidence": "nochah/build.mjs — ‏NOW הוא ארגומנט ל-`new Function` בזמן-node; ה-script בדף (:231-244) הוא מאזין-סינון בלבד, בלי `setInterval`/`Date` (ran: grep -c 'setInterval|new Date' ⇒ 0)"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מייבא טוקנים — 24 ליטרלי-hex",
+    "evidence": "ran: ספירת hex ⇒ 24"
+   },
+   {
+    "claim": "**אינו** מטפל בחציית-חצות — `t2m` ממיר לדקות-מתחילת-היום, ומשמרת שחוצה חצות (‏23:00–01:00) תיתן `NOW >= 1380 && NOW < 60` שלעולם אינו אמת",
+    "evidence": "nochah/build.mjs (בבלוק-הגזירה) `const on = s.shifts.find(x => NOW >= t2m(x[0]) && NOW < t2m(x[1]));` — השוואה ליניארית בלי טיפול-גלישה"
+   },
+   {
+    "claim": "**אינו** מוסיף למחולל יכולת — «מי פעיל עכשיו» הוא נגזרת-זמן, והמחולל **כבר** בנה את זה כשכבה שלמה (‏G32: הכל נגזר ברינדור מתאריכי-ההכרעה + `_items(today)`), עם חלקיקים מוכחים (‏`cockpitDaysSince` · `inRange` · `taskOverdue` · `timeToMin` · `minutesBetweenIso`)",
+    "evidence": "CLAUDE.md G32 (הטריגרים — הכל נגזר ברינדור, `_items(today)`) ו-G34 (‏16 חלקיקים מוכחים, בהם `inRange` ו-`timeToMin`)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "היכולת «מה קורה עכשיו, נגזר מזמן» היא בדיוק מה ש-G32 בנה במחולל, ושם היא **נגזרת ברינדור** ולא נצרבת בבנייה — כלומר חזקה מהותית ממה שיש כאן. ‏G34 אף החליף את הפרימיטיבים בחלקיקים מוכחים (`inRange` · `timeToMin`), ושער `behavior` אוסר פרימיטיב-שפה לפעולה שיש לה חלקיק — כלומר `t2m` שנכתב כאן ביד היה נפסל שם. ⚠️ **באג-חציית-חצות שתועד ב-doesNot הוא ממצא, לא הצעת-תיקון — הקובץ מחוץ להיקף השינוי של המשימה.**"
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. «עכשיו» נצרב בזמן-בנייה ואינו מתעדכן, ‏`t2m` הידני נשבר על חציית-חצות, והיכולת כולה קיימת במחולל בצורה נגזרת-ברינדור עם חלקיקים מוכחים ושער שאוסר בדיוק את המימוש שכאן."
+  },
+  "evidence": [
+   "read: gen/looks/nochah/build.mjs:1-8 (כותרת) · בלוק-הגזירה המלא דרך awk · :231-244 (ה-script)",
+   "ran: השוואת חתימות `new Function` על 14 הבנאים ⇒ nochah הוא 'SPEC','NOW' · sulam 'SPEC','DOMAIN' · 12 הנותרים 'SPEC' בלבד",
+   "ran: מטריצת-תכונות ⇒ nochah: 1·2·1·8·6·2·1",
+   "ran: ספירת hex ⇒ 24 · grep -c 'process.exit' ⇒ 0",
+   "read: CLAUDE.md G32 · G34 — נגזרת-הזמן ברינדור והחלקיקים המוכחים"
+  ]
+ },
+ {
+  "file": "gen/looks/sulam/build.mjs",
+  "lang": "mjs",
+  "lines": 201,
+  "summary": "«עץ האחריות» בסולם-דורות, מועתק מ-WikiTree. היוצא-דופן השני בחתימה (`new Function('SPEC','DOMAIN',…)`), ו-🔴 **49 ליטרלי-hex — הגבוה בכל 14**. מצהיר במפורש שהגוון מסמן תחום ולא מין.",
+  "does": [
+   {
+    "claim": "🔴 **מזריק מפת-תחומים חיצונית** — `new Function('SPEC','DOMAIN', …)`, ומסווג כל תפקיד לתחום דרכה",
+    "evidence": "sulam/build.mjs (בבלוק-הגזירה) `const D = new Function('SPEC', 'DOMAIN', src + \\`…`; ובתוכו `const dom = r => Object.keys(DOMAIN).find(d => DOMAIN[d].includes(r)) || 'אחר';` — עם נפילה-לאחור מפורשת ל'אחר'"
+   },
+   {
+    "claim": "‏**כל אדם מקבל «מה תחתיו» נגזר** — מלמד ⇒ הכיתה שלו עם מספר-התלמידים וכמה נוכחים; נהג ⇒ הקו שלו עם מספר-הנוסעים (ו-`here:null`, כי לקו אין «נוכחות»)",
+    "evidence": "sulam/build.mjs (בבלוק-הגזירה) `n: DB.students.filter(x=>x.classId===c.id).length, here: DB.students.filter(x=>x.classId===c.id&&x.att[0]).length` · `n: r.stops.reduce((a,x)=>a+x.riders.length,0), here: null`"
+   },
+   {
+    "claim": "‏**רשימת-התפקידים נגזרת מהדאטה** (‏`[...new Set(...)]`), ולכל תפקיד נספרים סה\"כ וכמה נעדרים",
+    "evidence": "sulam/build.mjs (בבלוק-הגזירה) `const roles = [...new Set(DB.staff.map(s=>s.role))].map(r => ({ name:r, dom:dom(r), n:DB.staff.filter(s=>s.role===r).length, out:DB.staff.filter(s=>s.role===r&&s.absent).length }));`"
+   },
+   {
+    "claim": "🔴 **הצהרה-נגדית מפורשת על משמעות-הצבע**: «הגוון מסמן תחום ולא מין» — במקור (‏WikiTree) הצבע מסמן מין; כאן הוא מוסב לתחום-אחריות",
+    "evidence": "build-index.mjs:29 `dev:['הגוון מסמן תחום ולא מין','44 משבצות מיושרות שורה-מול-שורה, 0 סטיות']`"
+   },
+   {
+    "claim": "‏**רוחב-הכרטיס יורד לפי דור** — 290→237→210→196→178, ושורות-הטקסט יורדות 4→2→1→1→1. מדידה, לא הערכה",
+    "evidence": "build-index.mjs:28 `num:['כרטיס 237 · r6','רוחב יורד 290→237→210→196→178','שורות 4→2→1→1→1']`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **49 ליטרלי-hex — הגבוה בכל 14 הבנאים**, פי-2.7 מ-search (18)",
+    "evidence": "ran: ספירת hex על 14 ⇒ sulam **49** · grafa 46 · agora 36 · erech 35 · tzevet 35 · buybox 33 · hechzer 32 · tor 31 · tavla 27 · diyun 24 · nochah 24 · vaada 33 · search 18"
+   },
+   {
+    "claim": "**אינו** אינטראקטיבי — אפס script/onclick",
+    "evidence": "ran: grep -c 'onclick|addEventListener|<script' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** עץ-משפחה ואינו רקורסיבי — הוא סולם-עמודות בעומק-קבוע (‏5 רוחבי-כרטיס = 5 דורות מוקלדים). עומק משתנה לא ייוצג",
+    "evidence": "build-index.mjs:28 — חמישה רוחבים בדיוק; ובבלוק-הגזירה אין פונקציה רקורסיבית (‏`people` ו-`roles` הן שתי רשימות שטוחות)"
+   },
+   {
+    "claim": "‏**`DOMAIN` עצמו אינו נגזר** — הוא מוזרק מבחוץ כמפה, ולכן סיווג-תפקיד-לתחום הוא הכרעה ידנית, לא נגזרת-מהאפיון",
+    "evidence": "sulam/build.mjs (בבלוק-הגזירה) `const dom = r => Object.keys(DOMAIN).find(d => DOMAIN[d].includes(r)) || 'אחר';` — ‏DOMAIN מגיע כארגומנט, לא מ-SPEC"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "‏«עץ אחריות» הוא היררכיה, ובמחולל היא מטופלת ב-`app-shell.mjs` (‏G26: שורש = הישות-הכי-מוצבעת ⇒ שלד + עמוד-שורש עם בנות מסוננות) — כלומר **נגזרת מהקישוריות** ולא מסולם-דורות מוקלד. כאן העומק קבוע ב-5 והסיווג-לתחום מוזרק ידנית. אין מה לחבר. **הפריט לרישום:** זהו בעל ה-49 ליטרלי-hex — הגבוה בקבוצה — והוא בדיוק מה ש-`look.mjs:16` ‏`HARD_COLOR` פוסל במחולל; אילו היה אטום, היה נפסל בעור-הנייר."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. סולם בעומק-קבוע עם סיווג מוזרק-ידנית, אפס אינטראקטיביות, ו-49 ליטרלי-צבע (הגבוה בקבוצה) — בדיוק מה שהמחולל פוסל. ההיררכיה במחולל נגזרת מקישוריות, חזק מזה."
+  },
+  "evidence": [
+   "read: gen/looks/sulam/build.mjs:1-8 (כותרת) · בלוק-הגזירה המלא דרך awk",
+   "ran: ספירת hex על כל 14 הבנאים ⇒ sulam 49, הגבוה",
+   "ran: מטריצת-תכונות ⇒ sulam: 1·2·1·4·3·0·1",
+   "ran: השוואת חתימות new Function ⇒ sulam הוא 'SPEC','DOMAIN'",
+   "read: machtzev/generator/look.mjs:16 (‏HARD_COLOR) · CLAUDE.md G26 (‏app-shell, היררכיה נגזרת-קישוריות)"
+  ]
+ },
+ {
+  "file": "gen/looks/tzevet/build.mjs",
+  "lang": "mjs",
+  "lines": 230,
+  "summary": "מסך «צוות» — גאנט של יום-אחד + עקומת-כיסוי + «מי מחליף את מי». 🔴 **היחיד מבין 14 שהרפרנס שלו לא נמדד ממכשיר אלא «אומת בעין ובמדידה»** — והוא היחיד שיש לו `probe.mjs` צמוד משלו.",
+  "does": [
+   {
+    "claim": "גוזר לכל עובד את משמרות-היום כטווחים עם תווית אופציונלית",
+    "evidence": "tzevet/build.mjs (בבלוק-הגזירה) `staff: DB.staff.map(s => ({ …, shifts: s.shifts.map(([a,b,lab]) => ({ a, b, lab: lab || '' })), …}))` — נפילה-לאחור מפורשת לתווית ריקה"
+   },
+   {
+    "claim": "🔴 **התיקייה היחידה בכל gen/looks שיש בה גם בנאי וגם probe** — `gen/looks/tzevet/probe.mjs` (64 שורות) מודד את הרפרנס בנפרד, ו-`probe.json` מחויב לריפו. ‏medrash/ ו-trumot/ מחזיקות probe בלבד (בלי build), ו-13 תיקיות-הבנאים האחרות מחזיקות build בלבד",
+    "evidence": "ran: ls gen/looks/*/probe.mjs ⇒ measure · medrash · trumot · tzevet. ran: ls gen/looks/medrash/ gen/looks/trumot/ ⇒ probe.mjs + probe.json בלבד, אין build.mjs. ran: git ls-files gen/looks/tzevet/ ⇒ build.mjs · probe.mjs · probe.json · tzevet.html — כולם מחויבים"
+   },
+   {
+    "claim": "🔴 **מצהיר על סוג-הראיה שלו בכנות** — «הרפרנס שאומת בעין ובמדידה: Deputy», ומפרט מה בדיוק נלקח: תא-משמרת עם שעה למעלה ותפקיד מתחת, צבע לפי מצב, תפריט «מצא מחליף»",
+    "evidence": "tzevet/build.mjs:2-3 `הרפרנס שאומת בעין ובמדידה: Deputy — תא-משמרת עם שעה למעלה ותפקיד מתחת, צבע לפי מצב (משמרת · חופשה · לא זמין), ותפריט «מצא מחליף».`"
+   },
+   {
+    "claim": "‏**המצב מקודד בשלוש מחלקות ולא בשתיים** — משמרת · חופשה · לא-זמין; כלומר «לא נמצא» אינו נבלע ב«חופשה»",
+    "evidence": "tzevet/build.mjs:3 (ההצהרה) ובבלוק-הגזירה `absent` נשמר כשדה נפרד על כל עובד"
+   },
+   {
+    "claim": "‏4 מופעי `aria-` · 7 מופעי `bdi` · h1 יחיד · כהה+בהיר",
+    "evidence": "ran: מטריצת-התכונות ⇒ tzevet: prefers-color 1 · data-theme 1 · h1 1 · aria- 4 · bdi 7 · script/onclick 0 · new Function 1"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** אינטראקטיבי — אפס script/onclick. «תפריט מצא-מחליף» שמוזכר בכותרת הוא מראה, לא פעולה",
+    "evidence": "ran: grep -c 'onclick|addEventListener|<script' gen/looks/tzevet/build.mjs ⇒ 0"
+   },
+   {
+    "claim": "**אינו** קורא את probe.json של עצמו — הבנאי והמודד יושבים באותה תיקייה ואינם מדברים",
+    "evidence": "ran: grep -n 'probe' gen/looks/tzevet/build.mjs ⇒ ∅; ‏tzevet/build.mjs:4-6 מייבא רק node:fs · node:path · node:url"
+   },
+   {
+    "claim": "**אינו** מוצא מחליף — אין בקובץ שום התאמת-כישור, זמינות או התנגשות",
+    "evidence": "tzevet/build.mjs — בלוק-הגזירה מחזיר `staff` עם `shifts` ו-`absent`; אין פונקציית-שיבוץ"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מייבא טוקנים — 35 ליטרלי-hex",
+    "evidence": "ran: ספירת hex ⇒ 35"
+   },
+   {
+    "claim": "‏**`data-theme` מופיע פעם אחת בלבד** — הנמוך בקבוצה יחד עם buybox; כלומר ייתכן שיש `prefers-color-scheme` בלי דריסה-ידנית מלאה",
+    "evidence": "ran: מטריצת-התכונות ⇒ tzevet data-theme 1 · buybox 1; כל שאר ה-12 ≥2, ‏diyun 10"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "גאנט-של-יום הוא `board`/`calendar`/`timeline` במונחי-המחולל, ולשלושתם יש תפקיד-עור עם דרישת-צורה מלאה. ‏tzevet הוא HTML סטטי בלי שיבוץ ובלי התנגשות. **הפריט היחיד בעל-ערך, והוא מתודולוגי:** זהו הבנאי היחיד שמצהיר במפורש שהרפרנס שלו «אומת בעין ובמדידה» ולא רק במכשיר — כלומר הוא לא מתחזה למדידה-טהורה. זו כנות-דיווח, לא מנוע."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. גאנט סטטי בלי שיבוץ, שלא קורא אפילו את ה-probe שלו-עצמו, ליכולת שיש לה שלושה תפקידי-עור מנומקים במחולל."
+  },
+  "evidence": [
+   "read: gen/looks/tzevet/build.mjs:1-8 (כותרת + ההצהרה על הרפרנס) · בלוק-הגזירה המלא דרך awk",
+   "ran: ls gen/looks/*/probe.mjs + ls gen/looks/medrash/ gen/looks/trumot/ + git ls-files gen/looks/tzevet/ ⇒ tzevet היא היחידה עם build+probe; medrash/trumot probe-בלבד",
+   "ran: grep -n 'probe' gen/looks/tzevet/build.mjs ⇒ ∅ — הבנאי אינו קורא את המודד",
+   "ran: מטריצת-תכונות ⇒ tzevet: 1·1·1·4·7·0·1 · ספירת hex ⇒ 35 · process.exit ⇒ 0",
+   "read: machtzev/generator/auto-skin.mjs:21,24 — timeline · calendar · board"
+  ]
+ },
+ {
+  "file": "gen/looks/vaada/build.mjs",
+  "lang": "mjs",
+  "lines": 224,
+  "summary": "ועדת-ההלוואות כתעלת-פסיקה בשפת Stack Overflow. 🔴 **מושך שלבים מהאפיון** (`stagesOf('חסד','הלוואה')`) ומחשב יתרת-קרן חיה מול ההלוואות שניתנו — הגזירה הכספית המחוברת-ביותר מבין 14.",
+  "does": [
+   {
+    "claim": "🔴 **מושך את שלבי-ההלוואה מהאפיון** — `stagesOf('חסד','הלוואה')`, ולא מרשימה מוקלדת",
+    "evidence": "vaada/build.mjs (בבלוק-הגזירה) `return { rows, F, today:DB.today, stages: stagesOf('חסד','הלוואה'), …}`"
+   },
+   {
+    "claim": "🔴 **מגדיר «ניתן» כקבוצת-שלבים מפורשת** — `['ניתן','בהחזר','באיחור','נפרע']` — ומחשב לפיה מה עדיין בחוץ; כלומר הכסף-בחוץ נגזר מהשלב, לא משדה",
+    "evidence": "vaada/build.mjs (בבלוק-הגזירה) `const GIVEN = ['ניתן','בהחזר','באיחור','נפרע']; … const out = GIVEN.includes(l.stage) ? … ;`"
+   },
+   {
+    "claim": "מושך את מצב-הקרן מפונקציית-המחסן `fund()` ומצרף אותו לכל שורת-הלוואה",
+    "evidence": "vaada/build.mjs (בבלוק-הגזירה) `const F = fund();` ו-`return { rows, F, … }`"
+   },
+   {
+    "claim": "‏11 מופעי `bdi` — מהגבוהים בקבוצה, מתאים למסך מלא בסכומים ובמספרי-הלוואה",
+    "evidence": "ran: מטריצת-התכונות ⇒ vaada: prefers-color 2 · data-theme 2 · h1 1 · aria- 4 · bdi 11 · script/onclick 0 · new Function 1"
+   },
+   {
+    "claim": "🔴 **סטייה-מוצהרת שמסירה מנגנון שלם מהמקור**: חצי-ההצבעה של Stack Overflow הוסרו — «אין קהל, ואין מצביעים על בקשה». כלומר ההחלטה מי-פוסק לא הועתקה בעיוורון",
+    "evidence": "build-index.mjs:20 `dev:['חצי ההצבעה הוסרו — אין קהל, ואין מצביעים על בקשה']`; והמדידה :19 `num:['תעלה 57 נעולה','✓ 36×36 · #18864b','גוף משתנה: 121/121/121/159']`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** אינטראקטיבי — אפס script/onclick. «תעלת-הפסיקה» היא פריסה, לא פעולה; אי-אפשר לאשר או לדחות",
+    "evidence": "ran: grep -c 'onclick|addEventListener|<script' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** אוכף את הכלל שהמסך הזה קיים בשבילו — «הלוואה בלי שני ערבים» נאכף ב-`app/src/22-views-c.js` (כפי ש-sefer מזהה), לא כאן. אין `blocked(` בקובץ",
+    "evidence": "ran: grep -c 'blocked(' gen/looks/vaada/build.mjs ⇒ 0; ‏sefer/build.mjs:29 `['חסד','הלוואה','הלוואה בלי שני ערבים', /guarantors\\s*<\\s*2/, '22-views-c.js']`"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מייבא טוקנים — 33 ליטרלי-hex",
+    "evidence": "ran: ספירת hex ⇒ 33"
+   },
+   {
+    "claim": "‏**`GIVEN` מוקלד ביד למרות ש-`stages` נמשך מהאפיון** — הקובץ מושך את רשימת-השלבים מהמקור, ואז מגדיר בנפרד אילו מהם נחשבים «ניתן». שינוי-שלב באפיון לא יעדכן את `GIVEN`",
+    "evidence": "vaada/build.mjs (בבלוק-הגזירה) — `stagesOf('חסד','הלוואה')` נמשך, ובאותו בלוק `const GIVEN = ['ניתן','בהחזר','באיחור','נפרע'];` ליטרלי"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ לצינור — נקודת-ההשוואה: machtzev/generator/particles.mjs (דקדוק-האפיון: `| שלבים` · `| מעברים`)",
+   "gives": "«שלבים ומעברים» הם חלק מדקדוק-האפיון של המחולל (מסלול-ב׳, `app-ds.mjs`), והמחולל גוזר מהם מסכים. ‏vaada מדגים את השלב הבא — שלב ⇒ משמעות-כספית — אבל עושה זאת דרך רשימה מוקלדת (`GIVEN`) לצד השלבים-שנמשכו, וזו בדיוק הסתירה-הפנימית שמייתרת את המשיכה. **הפריט בעל-הערך:** ההסרה-המוצהרת של מנגנון-ההצבעה («אין קהל») היא דוגמה נכונה ל-§20 — לא להעתיק מנגנון שאין לו מקור בדומיין. זו הכרעה טובה, לא מנוע."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. מסך סטטי שאינו מאשר ואינו דוחה, אינו אוכף את הכלל שהוא קיים בשבילו, ומחזיק רשימת-שלבים מוקלדת לצד שלבים-שנמשכו מהאפיון — סתירה שמבטלת את היתרון של המשיכה."
+  },
+  "evidence": [
+   "read: gen/looks/vaada/build.mjs:1-8 (כותרת) · בלוק-הגזירה המלא דרך awk",
+   "ran: grep -c 'blocked(' ⇒ 0 · grep -c 'process.exit' ⇒ 0 · grep -c 'onclick|addEventListener|<script' ⇒ 0",
+   "ran: מטריצת-תכונות ⇒ vaada: 2·2·1·4·11·0·1 · ספירת hex ⇒ 33",
+   "read: gen/looks/sefer/build.mjs:29 — הכלל של ההלוואה נאכף בקובץ אחר, לא כאן"
+  ]
  }
 ]
