@@ -214,6 +214,14 @@
    {
     "claim": "**אינו** מכסה עברית בפועל — FACE ממפה שמות-גופן בלבד; אין בקובץ טעינת-גופן, אין subset ואין נפילה-לאחור",
     "evidence": "tokens.mjs:22-28 — שדות `real`/`heb`/`family`/`why` בלבד, מחרוזות"
+   },
+   {
+    "claim": "🔴 **אינו נצרך**: מתוך 4 הייצואים שלו, `TOK` · `FACE` · `M` ו-`rootCss` אינם מיובאים ע\"י אף קובץ בריפו. הצרכן היחיד הוא match.mjs, והוא מייבא **רק** `SWAPS`. כלומר 5 ערכות-הטוקנים כולן — עיקר הקובץ — הן ייצוא-מת",
+    "evidence": "ran: grep -rn \"rootCss\" gen/ machtzev/ --include=*.mjs --include=*.js ⇒ שורה אחת בלבד — ההגדרה עצמה (tokens.mjs:136). ran: grep -rn \"from '.*tokens.mjs'\" gen/looks ⇒ match.mjs:11 בלבד, ומייבא רק SWAPS"
+   },
+   {
+    "claim": "🔴 קיימות **שלוש** ערכות-טוקנים נפרדות לאותם 5 אתרים באותה תיקייה, והן אינן מסכימות: (1) measure/tokens.mjs TOK · (2) first10/designs/kits.mjs KITS[].tok · (3) ליטרלי-CSS בתוך כל אחד מ-5 full5/screens/*.mjs. רק (1) מתיימר להיות מדוד",
+    "evidence": "ran: node -e השוואת KITS מול TOK ⇒ raycast acc #ff6363 מול #e6e6e6 · spotify acc #1db954 מול #1ed760 · duolingo acc #46a302 מול #58cc02. ran: grep -rn \"tokens\" gen/looks/full5/ ⇒ ∅ — המסכים אינם מייבאים, למשל screens/1-raycast.mjs:11 --bg:#07080a כליטרל"
    }
   ],
   "callers": [
@@ -238,7 +246,8 @@
    "read: gen/looks/measure/tokens.mjs:1-149 (הקובץ במלואו)",
    "ran: grep -n \"pick(\" gen/looks/measure/tokens.mjs ⇒ שורה 46 בלבד (ראיית-השלילה המרכזית)",
    "ran: grep -rn \"skins\" new/dart-ui-bs/ds/ds_pure.dart ⇒ :128, ערך אחד 'paper'",
-   "ran: grep -rn \"from './tokens.mjs'\" gen/looks ⇒ match.mjs:11 בלבד, ומייבא רק SWAPS"
+   "ran: grep -rn \"from './tokens.mjs'\" gen/looks ⇒ match.mjs:11 בלבד, ומייבא רק SWAPS",
+   "ran: grep -rn \"rootCss\" gen/ machtzev/ --include=*.mjs ⇒ ההגדרה בלבד, אפס קוראים"
   ]
  },
  {
@@ -449,6 +458,365 @@
    "ran: grep -n readFileSync gen/looks/build-index.mjs ⇒ שורה 3 בלבד (ה-import) — readFileSync **מיובא ולא נקרא אף פעם**. הנגיעה היחידה בדיסק היא statSync/existsSync ב-:58-59 (גודל-קובץ)",
    "ran: grep -rn \"build-index\" --include=*.mjs --include=*.sh --include=*.json . | grep -v engine-index.json | grep -v node_modules ⇒ ∅",
    "read: build-index.mjs:125-132 (שורות-הסיכום הליטרליות) ומול machtzev/generator/studio-full.mjs (הדפוס הנגדי, מוזכר ב-CLAUDE.md)"
+  ]
+ },
+ {
+  "file": "gen/looks/full5/build.mjs",
+  "lang": "mjs",
+  "lines": 149,
+  "summary": "מרכיב 5 מסכי-HTML עצמאיים: מריץ את מחסן-האפליקציה ב-`new Function` ושואב ממנו **רשימות** (לא רק מונים), ואז מזריק ל-5 מודולי-screens. זהו ה-build העשיר-ביותר בקבוצה.",
+  "does": [
+   {
+    "claim": "קורא את האפיון `gen/mosad.data.json` (388KB, מחויב) ומצמצם אותו לצורה רזה: roles + departments⇒entities⇒fields[name,shape,required]",
+    "evidence": "full5/build.mjs:10-14; אומת: `ls -la gen/mosad.data.json` ⇒ 388526 בתים"
+   },
+   {
+    "claim": "🔴 מריץ את `app/src/01-store.js` כקוד **בתוך `new Function`** — כלומר מחסן-האפליקציה מורץ בתהליך-הבנייה, ומתוכו נשאבים הערכים",
+    "evidence": "full5/build.mjs:15 `const storeSrc = readFileSync(join(here,'..','app','src','01-store.js'),'utf8')`; :18 `const D = new Function('SPEC', storeSrc + \\`...\\`)(SPEC)`"
+   },
+   {
+    "claim": "שואב **רשימות ולא רק מונים** — 14 משפחות · 16 תשלומים · 14 תרומות · 12 הלוואות · כיתות · צוות · מניינים · קווים · קריאות · יארצייטים · תקציב · יומן · 20 תלמידים",
+    "evidence": "full5/build.mjs:38-63 — `topOpen` · `lateList` · `payList` · `classes` · `staffList` · `minyanim` · `donList` · `loanList` · `queue` · `routes` · `calls` · `yahr` · `budget` · `log` · `students20`"
+   },
+   {
+    "claim": "כל סכום **נגזר** מפונקציות-המחסן (`totals()` · `balance()` · `discounted()` · `fund()` · `raised()` · `attendanceOf()`) ולא נכתב כליטרל",
+    "evidence": "full5/build.mjs:21 `const t = totals(), fn = fund(), camp = DB.campaigns[0]`; :22-23 `bal: balance(f), due: discounted(f)`; :35 `attendanceOf(c.id)`"
+   },
+   {
+    "claim": "טוען דינמית כל `screens/*.mjs`, עוטף את `d.body(D)` בשלד-HTML מלא (‏charset · viewport · title · description · גופנים) ופולט `<id>.html` + index.html עם 5 iframes",
+    "evidence": "full5/build.mjs:94-119 הלולאה; :98-116 השלד; :121-146 ה-index"
+   },
+   {
+    "claim": "‏5 עוזרי-תצוגה משותפים עוטפים כל מספר ב-`<bdi dir=\"ltr\">` — פתרון-RTL אמיתי לספרות בתוך עברית",
+    "evidence": "full5/build.mjs:73-77 `D.nis` · `D.money` · `D.k` · `D.num` · `D.ltr`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** קורא את `measure/tokens.mjs`. הטוקנים של כל אתר כתובים שוב, כליטרלי-CSS, בתוך כל אחד מ-5 מודולי-ה-screens — עותק שלישי של אותם ערכים",
+    "evidence": "ran: grep -rn \"tokens\" gen/looks/full5/ ⇒ ∅. דוגמה לעותק: screens/1-raycast.mjs:11 `--bg:#07080a;--win:#0c0d0f;--row:#1b1c1e…`"
+   },
+   {
+    "claim": "**אינו** מאמת דבר — אין exit-code, אין ניגודיות, אין גלישה. הבדיקה היא ב-audit.mjs הנפרד",
+    "evidence": "full5/build.mjs:147-149 — הקובץ נגמר ב-2 console.log; אין `process.exit`"
+   },
+   {
+    "claim": "**אינו** רץ בלי מחסן-האפליקציה — הוא תלוי ב-`../app/src/01-store.js`, כלומר תיקיית app/ היא תלות-קשיחה של full5/ ושל first10/",
+    "evidence": "full5/build.mjs:15 (נתיב יחסי קשיח); אותה תלות ב-first10/build.mjs:18"
+   },
+   {
+    "claim": "**אינו** מייצר אפליקציה עובדת — הפלט הוא HTML סטטי בלי JS; `d.body(D)` פולט מחרוזת שנצרבת בזמן-בנייה. אין ב-5 המסכים ניתוב, מצב או פעולה",
+    "evidence": "full5/build.mjs:112-114 `<body>${d.body(D)}</body>` — אין `<script>` בשלד, בניגוד ל-app/build.mjs:89-92 שכן מזריק JS"
+   },
+   {
+    "claim": "**אינו** עובד בלי רשת — כל מסך טוען גופנים מ-fonts.googleapis.com",
+    "evidence": "full5/build.mjs:105-106 `<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\">` + `<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?...\">`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף מנוע אינו מייבא/מריץ אותו. הוא-עצמו מייבא את 5 ה-screens ב-:97 `await import(join(here,'screens',f))`"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה, אבל דפוס אחד שווה תשומת-לב: machtzev/generator/app-ds.mjs (מסלול-ב׳ לישות שאינה באימפריה)",
+   "gives": "ה-build הזה פולט HTML מ-JS, בעוד המחולל פולט Dart. אין תפר. הדבר היחיד שראוי להיאמר: **הדפוס «שאב רשימות, לא מונים»** (:38-63) הוא בדיוק מה ש-§20-ג דורש — האטום מקבל ערך-אמת ולא seed. אבל למחולל כבר יש את זה (הכרעה-26 · G21: אטום שמציג ערך חייב שקע-דאטה, FAKERS ריק). כלומר זו הדגמה של עיקרון שכבר נאכף במחולל, לא תוספת לו."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 — לא מקרב בעצמו (‏HTML סטטי, לא Dart, אין ניתוב ואין מצב), אבל הוא הצומת שמחזיק את קבוצת-full5 כולה, והדפוס שלו «רשימות מהמחסן ⇒ 5 שפות-עיצוב לאותו תוכן» הוא המחשה תקפה של רב-עוריות. 1 ולא 0 כי יש בו מנגנון-גזירה אמיתי; 1 ולא 2 כי אין לו נקודת-חיבור בצינור."
+  },
+  "evidence": [
+   "read: gen/looks/full5/build.mjs:1-149 (הקובץ במלואו)",
+   "ran: ls -la gen/mosad.data.json ⇒ 388526 בתים, מחויב",
+   "ran: grep -rn \"tokens\" gen/looks/full5/ ⇒ ∅ (הטוקנים אינם מיובאים — עותק שלישי)",
+   "ran: grep -rn \"looks/\" machtzev --include=*.mjs ⇒ אפס ייבוא/הרצה"
+  ]
+ },
+ {
+  "file": "gen/looks/full5/art.mjs",
+  "lang": "mjs",
+  "lines": 86,
+  "summary": "6 מחוללי-ציור דטרמיניסטיים ב-CSS/SVG (עטיפת-אלבום · אייקון · כרטיס-אשראי · איור-דמות · מטבע · הילה), כולם מזרע-שם. הרקע: הטוקנים היו נכונים והמסכים עדיין לא נראו כמו המקור — כי באתרים האמיתיים הצבע העשיר מגיע מתמונות.",
+  "does": [
+   {
+    "claim": "‏PRNG דטרמיניסטי משלו: ‏FNV-1a על המחרוזת ⇒ `mulberry32` — אותו מפתח נותן תמיד אותו ציור",
+    "evidence": "art.mjs:9 `const hash = (s) => { let h = 2166136261; … h = Math.imul(h, 16777619) … }` (‏FNV-1a); :10 `const rnd = (seed) => {… t += 0x6D2B79F5 …}` (‏mulberry32); :11 `export const seedOf`"
+   },
+   {
+    "claim": "‏6 ייצואים: `seedOf` · `cover` (עטיפת-אלבום, גרדיאנט דו-גוני ב-HSL) · `appIcon` · `monzoCard` (‏SVG של כרטיס-אשראי) · `scene` (איור-דמות) · `coin` (מטבע-דגל) · `glow`",
+    "evidence": "art.mjs:11,14,25,34,55,78,86"
+   },
+   {
+    "claim": "🔴 **כל אלמנט-אמנות נושא `data-art`, ומכשיר-המדידה מדלג עליו** — כך שכבת-הציור אינה מזהמת את ההשוואה. זה התפר שמחזיק את «100% התאמה» ישר",
+    "evidence": "art.mjs:34 `<svg data-art class=\"cardart\">`; :58 `<svg data-art class=\"scene\">`; :80 `<svg data-art class=\"coin\">`; :86 `<div data-art class=\"glow\">`. ובצד השני: measure/extract.mjs:24 `const isArt = (el) => !!el.closest('[data-art]')`"
+   },
+   {
+    "claim": "‏**באג-RTL אמיתי תוקן ומתועד**: טקסט בתוך SVG במסמך-RTL מתהפך בספרות ⇒ `style=\"direction:ltr\"` מפורש על כרטיס-האשראי",
+    "evidence": "art.mjs:33 `/* המסמך כולו RTL — טקסט בתוך ה-SVG חייב כיוון מפורש, אחרת הספרות מתהפכות */`; :34 `style=\"direction:ltr\"`"
+   },
+   {
+    "claim": "כל ציור נושא `role=\"img\"` + `aria-label` — כלומר נגיש, ולא רק יפה",
+    "evidence": "art.mjs:34 `role=\"img\" aria-label=\"כרטיס המוסד\"`; :58 `role=\"img\" aria-label=\"איור\"`; :80 `role=\"img\" aria-label=\"${label}\"`; :86 `aria-hidden=\"true\"` להילה (קישוט)"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** טוען, מוריד או מטמיע קובץ-תמונה — הכל CSS/SVG בתוך המחרוזת. אין בו fs ואין רשת",
+    "evidence": "art.mjs — אפס שורות `import` (‏`grep -c \"^import\" ⇒ 0`); כל הייצואים מחזירים מחרוזת"
+   },
+   {
+    "claim": "**אינו** גנרי — 4 מתוך 6 הפונקציות נכתבו לאתר ספציפי אחד וקבועות לו: `monzoCard` צובע `#ff4f40` קשיח, `scene` צובע `#a5ed6e`/`#58cc02` (‏דואולינגו) קשיח, `coin` בוחר מ-6 זוגות-דגל קבועים",
+    "evidence": "art.mjs:36 `stop-color=\"#ff4f40\"`; :60-61 `fill=\"#a5ed6e\"` · `stroke=\"#58cc02\"`; :77 `const FLAG = [['#0b3d91','#ffffff'],…]` — 6 זוגות ליטרליים"
+   },
+   {
+    "claim": "**אינו** נגזר מהדאטה של המוסד — הזרע הוא מחרוזת-מפתח שרירותית, והציור אינו מייצג ערך. `cover('x')` יפיק עטיפה יפה בלי קשר למה ש-x מכיל",
+    "evidence": "art.mjs:14-22 — `cover(key)` משתמש ב-key **רק** כזרע ל-PRNG; אין שום שדה-דאטה שנכנס לציור"
+   },
+   {
+    "claim": "‏FIG (4 דמויות) הוא ליטרל קבוע — האיור אינו מגוון מעבר ל-4 וריאציות × זווית",
+    "evidence": "art.mjs:49-54 `const FIG = [{skin:'#f6c89a',…}, …]` — 4 איברים; :56 `FIG[Math.floor(r()*FIG.length)]`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/looks/full5/screens/1-raycast.mjs:4",
+    "how": "import { appIcon, glow } from '../art.mjs'"
+   },
+   {
+    "who": "gen/looks/full5/screens/2-spotify.mjs:4",
+    "how": "import { cover }"
+   },
+   {
+    "who": "gen/looks/full5/screens/3-duolingo.mjs:4",
+    "how": "import { scene, appIcon }"
+   },
+   {
+    "who": "gen/looks/full5/screens/4-wise.mjs:4",
+    "how": "import { coin }"
+   },
+   {
+    "who": "gen/looks/full5/screens/5-monzo.mjs:4",
+    "how": "import { monzoCard }"
+   },
+   {
+    "who": "מחוץ ל-full5",
+    "how": "∅"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/look.mjs:16 — `HARD_COLOR` (הכלל שפוסל אטום עם צבע-קשיח בעור-הנייר)",
+   "gives": "התובנה של art.mjs תקפה למחולל, אבל **בכיוון ההפוך ממה שנראה**. המחולל היום פוסל כל אטום שמכיל `Color(0x…)` קשיח (‏look.mjs:16), ובצדק — כי צבע-קשיח שובר החלפת-עור. art.mjs מדגים שיש מחלקה שלישית שאיננה «טוקן» ואיננה «הפרה»: **ציור** — ולכן הוא סימן אותה במפורש (`data-art`) וגרם למכשיר-המדידה לדלג עליה (extract.mjs:24). אם ותכף המחולל יפלוט אייקון/איור/גרף מצויר, הוא יצטרך בדיוק את ההבחנה הזו, אחרת `HARD_COLOR` יפסול כל ציור לגיטימי. ⚠️ **מיפוי בלבד — לא נבדק אם המחולל סובל מזה היום.**"
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 — הקוד עצמו אינו בר-חיבור (‏CSS/SVG לדפדפן, 4 מתוך 6 הפונקציות נעולות לאתר-מסוים, והציור אינו נגזר מדאטה — מה ש-§20-ג היה פוסל אילו הציור היה מתיימר לייצג ערך). מה ששווה הוא ההבחנה «ציור ≠ טוקן ≠ הפרה» ומנגנון ה-`data-art` שאוכף אותה בשני הצדדים. זו תובנה, לא מנוע-לחיבור."
+  },
+  "evidence": [
+   "read: gen/looks/full5/art.mjs:1-86 (הקובץ במלואו)",
+   "ran: grep -rn \"from '../art.mjs'\" gen/looks/full5/screens/ ⇒ 5 מייבאים, אחד לכל מסך",
+   "read: gen/looks/measure/extract.mjs:24 — הצד השני של תפר ה-data-art",
+   "read: machtzev/generator/look.mjs:16 — HARD_COLOR, הכלל שהתובנה נוגעת בו"
+  ]
+ },
+ {
+  "file": "gen/looks/full5/audit.mjs",
+  "lang": "mjs",
+  "lines": 72,
+  "summary": "🔴 **עותק-בייטים מדויק של `first10/audit.mjs`** (‏sha256 זהה). שער-נגישות אמיתי עם exit-code: h1-יחיד · ניגודיות בהרכבת-אלפא · גלישה ב-360/390/768 · אפס שגיאות-דף. הכותרת שלו עדיין מפנה ל-first10.",
+  "does": [
+   {
+    "claim": "סורק כל `*.html` בתיקייתו (חוץ מ-index.html) — כלומר הוא נייד לפי-תיקייה, וזו הסיבה שאותו קובץ עובד בשני מקומות",
+    "evidence": "full5/audit.mjs:11 `const pages = readdirSync(here).filter(f => f.endsWith('.html') && f !== 'index.html').sort()`"
+   },
+   {
+    "claim": "🔴 **מחשב ניגודיות נכון**: הרכבת-אלפא אמיתית במעלה עץ-ההורים עד רקע אטום, נוסחת-לומיננס sRGB תקנית, וסף-WCAG מותנה-גודל (3.0 לטקסט ≥24px או ≥18.66px+bold, אחרת 4.5)",
+    "evidence": "full5/audit.mjs:18-27 `bgOf` מטפס `cur = cur.parentElement` וממזג `mix(acc,c)` עד `acc[3]===1`; :17 `lum` עם `v<=.03928 ? v/12.92 : ((v+.055)/1.055)**2.4` ומקדמי .2126/.7152/.0722; :35 `const need = (size>=24 || (size>=18.66 && bold)) ? 3 : 4.5`"
+   },
+   {
+    "claim": "מדלג נכון על מה שאינו טקסט-נראה: ללא צומת-טקסט ישיר · hidden/none · אפס-מלבנים · תחת `aria-hidden` · `:disabled`",
+    "evidence": "full5/audit.mjs:30-33"
+   },
+   {
+    "claim": "בודק גלישה-אופקית ב-3 רוחבי-נייד אמיתיים ומחזיר את מספר הפיקסלים החורגים",
+    "evidence": "full5/audit.mjs:54-58 `for (const w of [360,390,768]) { await p.setViewportSize(...); over[w] = await p.evaluate(() => Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth)) }`"
+   },
+   {
+    "claim": "תופס שגיאות-דף אמיתיות ומכשיל עליהן; **exit-code אמיתי**",
+    "evidence": "full5/audit.mjs:49 `p.on('pageerror', e => errs.push(...))`; :72 `process.exit(bad ? 1 : 0)`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו קובץ נפרד מ-first10/audit.mjs** — שני הקבצים זהים בבייטים. כפילות-מדף לפי הכרעה-5",
+    "evidence": "ran: sha256sum gen/looks/full5/audit.mjs gen/looks/first10/audit.mjs ⇒ שניהם `ba011b9493dc3f64302309fbc79d0ca8b7beb27228d9f2c32c5c5ea73a2e9743`. ran: diff gen/looks/full5/audit.mjs gen/looks/first10/audit.mjs ⇒ אפס הבדל"
+   },
+   {
+    "claim": "🔴 **הכותרת שלו מדווחת על הקובץ האחר** — שורה 1 אומרת «שער לעשר הגרסאות» (‏full5 הוא חמש), ושורה 2 אומרת `הרצה: node gen/looks/first10/audit.mjs`. זו דוגמה חיה לכך שכותרת-קובץ אינה ראיה — והאינדקס אכן קלט את הטעות",
+    "evidence": "full5/audit.mjs:1-2 (הטקסט עצמו); machtzev/generator/engine-index.json:4426 — ה-purpose של full5/audit.mjs רשום כ-`הרצה: node gen/looks/first10/audit.mjs */`, כלומר האינדקס העתיק את הדיווח-העצמי השגוי"
+   },
+   {
+    "claim": "**אינו** בודק ציוני-דרך (‏main/nav/footer), ליטרלי-צבע או התנהגות — אלה קיימים רק ב-app/audit.mjs",
+    "evidence": "full5/audit.mjs:62-65 — 4 בדיקות בלבד (h1 · contrast · overflow · errs). לעומת app/audit.mjs:77-81 שמוסיף `main` ו-`ליטרלי-צבע`"
+   },
+   {
+    "claim": "**אינו** בודק שתי ערכות-צבע — רץ בערכה אחת. `app/audit.mjs` כן רץ ב-light+dark",
+    "evidence": "full5/audit.mjs:46 `for (const f of pages)` — אין לולאת-theme; לעומת app/audit.mjs:59-60 `const THEMES = … ['light','dark']; for (const theme of THEMES)`"
+   },
+   {
+    "claim": "**אינו** במרשם-השערים של המשטרה",
+    "evidence": "ran: grep -n \"look\" machtzev/gates.tsv ⇒ ∅"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/balagan-run.mjs (שער-המריצה שכבר מפעיל playwright על הפלט-המחולל)",
+   "gives": "**זו נקודת-החיבור הכי כנה בכל 59 המנועים.** `balagan-run` כבר מריץ playwright על האפליקציה המחוללת ומודד הקשות. `CHECK` כאן (:13-42) הוא פונקציית-דפדפן טהורה, בלי תלויות, שמחזירה `{h1, contrast[]}` — היא תרוץ על כל דף שהוא. בדיקת-הגלישה (:54-58) זהה באופייה. מה שזה נותן ל-§22: היום «אפס-באגים» של המחולל נמדד כ-analyze-ירוק + נוכחות-אטומים; **כשל-ניגודיות וגלישה-אופקית בנייד אינם נתפסים בשום שער**, והם באגים שהמשתמש רואה מיד. ⚠️ סייג כן: הפלט-המחולל הוא Flutter-web, שמרנדר ל-canvas או ל-DOM לפי הרנדרר; אם canvas — `document.querySelectorAll('body *')` לא ימצא דבר. **לא נבדק איזה רנדרר בשימוש — זה תנאי-הסף לחיבור.**"
+  },
+  "s22": {
+   "score": 2,
+   "why": "2 — שער-אמת עם exit-code, מנגנון-ניגודיות תקני ובלי-תלויות, וממד שהמחולל לא מודד כלל היום. לא 3 כי (א) הוא כפילות-בייטים שצריכה איחוד לפני חיבור, ו-(ב) התלות ברנדרר-DOM לא נבדקה, ובלי זה זו הבטחה ולא חיבור."
+  },
+  "evidence": [
+   "read: gen/looks/full5/audit.mjs:1-72 (הקובץ במלואו)",
+   "ran: sha256sum gen/looks/full5/audit.mjs gen/looks/first10/audit.mjs gen/looks/app/audit.mjs ⇒ שני הראשונים זהים (ba011b94…), השלישי שונה (78893da1…)",
+   "ran: diff gen/looks/full5/audit.mjs gen/looks/first10/audit.mjs ⇒ ריק",
+   "ran: grep -n \"look\" machtzev/gates.tsv ⇒ ∅",
+   "read: machtzev/generator/engine-index.json:4426 — ה-purpose השגוי שהועתק מהכותרת"
+  ]
+ },
+ {
+  "file": "gen/looks/first10/audit.mjs",
+  "lang": "mjs",
+  "lines": 72,
+  "summary": "🔴 **אותם בייטים בדיוק כמו `full5/audit.mjs`** (‏sha256 `ba011b94…`). זהו המקור — הכותרת שלו נכונה כאן («עשר הגרסאות» · `node gen/looks/first10/audit.mjs`) והועתקה כמות-שהיא ל-full5.",
+  "does": [
+   {
+    "claim": "זהה בבייטים ל-full5/audit.mjs — כל טענת-'עושה' שם תקפה כאן מילה-במילה: h1-יחיד · ניגודיות בהרכבת-אלפא עם סף-WCAG מותנה-גודל · גלישה ב-360/390/768 · שגיאות-דף · exit-code",
+    "evidence": "ran: diff gen/looks/first10/audit.mjs gen/looks/full5/audit.mjs ⇒ ריק. ראיות-השורות: :13-42 (‏CHECK) · :54-58 (גלישה) · :49 (‏pageerror) · :72 (`process.exit(bad ? 1 : 0)`)"
+   },
+   {
+    "claim": "כאן הכותרת **תואמת** את מיקום-הקובץ: «שער לעשר הגרסאות» ו-`הרצה: node gen/looks/first10/audit.mjs` — ו-first10 אכן פולט 10 קבצי-HTML",
+    "evidence": "first10/audit.mjs:1-2; ran: `ls gen/looks/first10/*.html | grep -v index | wc -l` ⇒ 10"
+   },
+   {
+    "claim": "הסריקה לפי-תיקייה (`readdirSync(here)`) היא מה שאִפשר את ההעתקה — הקובץ אינו מכיל שום נתיב לתיקייה מסוימת",
+    "evidence": "first10/audit.mjs:8 `const here = dirname(fileURLToPath(import.meta.url))`; :11 `readdirSync(here)`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו** מנוע נפרד — עותק-בייטים. שני הקבצים צריכים להיות מודול-אחד + שתי נקודות-כניסה (הכרעה-5: כפילות-מדף)",
+    "evidence": "ran: sha256sum ⇒ שניהם ba011b9493dc3f64302309fbc79d0ca8b7beb27228d9f2c32c5c5ea73a2e9743"
+   },
+   {
+    "claim": "**אינו** בודק את השילוב עצמו — 10 הקבצים שהוא סורק הם תמורות של 5 ערכות, אבל הבדיקה אינה יודעת דבר על ההרכב. מסך שקיבל כפתור-כהה על משטח-בהיר ייתפס רק אם **הניגודיות** נפלה, לא כי ההרכב שגוי",
+    "evidence": "first10/audit.mjs:62-65 — 4 בדיקות גנריות; אין בקובץ אף אזכור של KITS/MIX/combos"
+   },
+   {
+    "claim": "**אינו** בודק שתי ערכות-צבע, ציוני-דרך, ליטרלי-צבע או התנהגות",
+    "evidence": "first10/audit.mjs:61-65 מול app/audit.mjs:76-81 ו-:88-128"
+   },
+   {
+    "claim": "**אינו** במרשם gates.tsv",
+    "evidence": "ran: grep -n \"look\" machtzev/gates.tsv ⇒ ∅"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "זהה ל-full5/audit.mjs — machtzev/generator/balagan-run.mjs. **חיבור אחד לשניהם, לא שניים**",
+   "gives": "אותה תרומה בדיוק (‏CHECK הוא אותה פונקציה). הפריט האמיתי כאן אינו «לחבר גם אותו» אלא **לאחד תחילה**: שני עותקי-בייטים של אותו שער הם בדיוק המחלקה ש-`dedup-atoms` נועד לתפוס. ⚠️ מיפוי בלבד — לא אוחד ולא נבדק ב-dedup."
+  },
+  "s22": {
+   "score": 2,
+   "why": "2 — אותו ציון כמו התאום שלו, מאותה סיבה, ועם אותו סייג. הציון ניתן ליכולת (מדידת-נגישות על פלט חי), והיכולת אחת; שני הקבצים אינם שתי יכולות."
+  },
+  "evidence": [
+   "read: gen/looks/first10/audit.mjs:1-72 (הקובץ במלואו)",
+   "ran: diff gen/looks/first10/audit.mjs gen/looks/full5/audit.mjs ⇒ ריק (אפס הבדל)",
+   "ran: sha256sum על שלושת ה-audits ⇒ first10 ≡ full5, app שונה",
+   "ran: ls gen/looks/first10/*.html ⇒ 10 קבצים + index.html"
+  ]
+ },
+ {
+  "file": "gen/looks/first10/build.mjs",
+  "lang": "mjs",
+  "lines": 144,
+  "summary": "מרכיב 10 גרסאות-עיצוב של מסך-הבית מאותו מחסן. זהה במבנהו ל-full5/build.mjs אך שואב **פחות** (מונים + 3 רשימות במקום 15), וטוען מ-`designs/` במקום מ-`screens/`.",
+  "does": [
+   {
+    "claim": "אותו דפוס בדיוק כמו full5/build: קורא mosad.data.json ⇒ SPEC רזה, מריץ את 01-store.js ב-`new Function`, שואב, ואז טוען דינמית את `designs/*.mjs`",
+    "evidence": "first10/build.mjs:11-17 (‏SPEC — זהה כמעט-מילה-במילה ל-full5/build.mjs:11-14); :18-44 (‏new Function); :68-71 (טעינה דינמית)"
+   },
+   {
+    "claim": "‏**מדלג נכון על kits.mjs**: הוא טוען כל `designs/*.mjs` אבל מוותר על מודול בלי `default` — כי kits מייצא חלקים בלבד",
+    "evidence": "first10/build.mjs:72 `if (!mod) continue;                    // kits.mjs מייצא חלקים בלבד, לא מסכים`"
+   },
+   {
+    "claim": "תומך במודול שמייצא **מערך** של מסכים (‏combos מייצא 10) דרך `[].concat(mod)` — ולכן קובץ-designs אחד מייצר 10 קבצי-HTML",
+    "evidence": "first10/build.mjs:73 `for (const d of [].concat(mod)) {`; אומת: `ls gen/looks/first10/*.html | grep -v index | wc -l` ⇒ 10"
+   },
+   {
+    "claim": "אותם 5 עוזרי-bdi ואותו `D.alerts` נגזר — כולל התראות שנוצרות **מהנתונים** (קווים בלי נהג נגזרים, לא נכתבים)",
+    "evidence": "first10/build.mjs:47-58; :56 `...D.noDriver.map(n => [n + ' בלי נהג למחר','תפעול',2])`"
+   },
+   {
+    "claim": "פולט גם דף-בחירה עם 10 iframes חיים ממוספרים",
+    "evidence": "first10/build.mjs:100-141; :132-136 הלולאה עם `<span class=\"no\">${i+1}</span>`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** שואב רשימות עשירות כמו full5 — כאן `att` · `minyanim` · `depts` בלבד; אין payList/donList/loanList/staffList/budget/log/yahr",
+    "evidence": "first10/build.mjs:22-43 (הבלוק המוחזר) מול full5/build.mjs:24-70 — full5 מחזיר 15 רשימות נוספות"
+   },
+   {
+    "claim": "🔴 **אינו** משתמש בטוקנים המדודים. הוא מעביר ל-designs את `D` (דאטה) בלבד; הצבעים באים מ-`kits.mjs`, שהוא ערכה **שלישית ונפרדת** שאינה מסכימה עם `measure/tokens.mjs`",
+    "evidence": "ran: node -e (השוואת KITS מול TOK) ⇒ raycast bg `#09090b` מול `#07080a` · raycast acc `#ff6363` מול `#e6e6e6` · spotify acc `#1db954` מול `#1ed760` · duolingo acc `#46a302` מול `#58cc02`. (‏wise ו-monzo acc **כן** זהים; ההבדל ברקע שלהם הוא `#fff` מול `#ffffff`, אותו צבע.)"
+   },
+   {
+    "claim": "**אינו** מאמת — אין exit-code",
+    "evidence": "first10/build.mjs:141-144 — נגמר ב-writeFileSync + 2 console.log"
+   },
+   {
+    "claim": "**אינו** עצמאי מ-app/ — תלוי ב-`../app/src/01-store.js`, אותה תלות-קשיחה כמו full5",
+    "evidence": "first10/build.mjs:18 `readFileSync(join(here,'..','app','src','01-store.js'),'utf8')`"
+   },
+   {
+    "claim": "**אינו** מייצר אפליקציה — HTML סטטי בלי `<script>`",
+    "evidence": "first10/build.mjs:75-93 השלד — אין בו תג script"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף מנוע אינו מייבא/מריץ אותו; הוא מייבא את designs/*.mjs ב-:71"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "זהו המקרה הברור בקבוצה של «מנוע שכבר יש לו מקבילה במחולל, ופחות-טובה ממנה». מה שהוא עושה — אותו תוכן ב-N שפות-עיצוב — הוא בדיוק `auto-skin.mjs` (הכרעה-25: המנוע בורר עור לפי **צורה**, `machtzev/generator/auto-skin.mjs:19` ‏ROLES). ההבדל: auto-skin בורר מנומק-מהצורה ובלי מילון-שמות (§20-ד), ואילו כאן הערבוב הוא **טבלה קבועה** של 10 תמורות מוקלדות-ביד (‏combos.mjs:6-17). חיבורו יחליף מנוע-בורר בטבלה — נסיגה, לא קידום."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 — יש בו גזירת-דאטה אמיתית (ולכן לא 0), אבל הוא הגרסה הענייה של full5/build, מחזיק עותק-טוקנים שלישי שסותר את המדוד, ומה שהוא מדגים כבר קיים במחולל בצורה חזקה יותר (‏auto-skin בורר, כאן טבלה קבועה)."
+  },
+  "evidence": [
+   "read: gen/looks/first10/build.mjs:1-144 (הקובץ במלואו)",
+   "ran: node -e (השוואת KITS[s].tok מול TOK[s] ל-5 האתרים) ⇒ 4 ערכים סותרים מהותית",
+   "ran: ls gen/looks/first10/*.html | grep -v index | wc -l ⇒ 10",
+   "read: machtzev/generator/auto-skin.mjs:1-19 — המקבילה החזקה במחולל"
   ]
  }
 ]
