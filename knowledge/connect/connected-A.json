@@ -203,6 +203,219 @@
   ]
  },
  {
+  "file": "machtzev/generator/app-ds.mjs",
+  "lang": "mjs",
+  "lines": 368,
+  "capabilities": [
+   {
+    "cap": "**הדלת-האחת של מסלול-ב׳**: אפיון-טקסט ⇒ אפליקציה שלמה — ישויות · דשבורדים · מסכי-חלקיקים · דוחות · כרטיסי-רשומה · מסכי-מערכת · שלד-ניווט · main; הכל דרך render-ds",
+    "evidence": "machtzev/generator/app-ds.mjs:3-5,56-350"
+   },
+   {
+    "cap": "**מקבל גם משפט-חופשי וגם אפיון-מדויק באותה דלת** — אין ישות-מפורשת ⇒ עברית-חופשית עוברת specFromSentence ואז nlToSpec כנפילה-לאחור; יש מבנה ⇒ ביט-זהה, לא נוגעים",
+    "evidence": "machtzev/generator/app-ds.mjs:57-75"
+   },
+   {
+    "cap": "**מפעיל את המנוע-הישיבתי לפני שנבנה מסך אחד** — הטיוטה עוברת את שבעת המהלכים מול מסמך-המטרה; מה שהוכרע מיושם, מה שלא נשאר מתג ולא מומצא (L57); פסק שנכשל אינו חוסם בנייה",
+    "evidence": "machtzev/generator/app-ds.mjs:13,76-81"
+   },
+   {
+    "cap": "מפרש תפקידים עם **RLS מלא**: היקף (role.scope ⇒ scopeField בכל מסכי-החיווט) · הסתרת-שדה · נעילת-שדה-לקריאה",
+    "evidence": "machtzev/generator/app-ds.mjs:32-54,175-182,236-238"
+   },
+   {
+    "cap": "**בונה גרף-קשרים דו-כיווני מצורת-השמות בלבד** — קשר-יחיד (תת-קבוצת-מילים) קודם, אחרת קשר-רבים (צורות-ריבוי עם טיפול באותיות-סופיות); אפס מילון",
+    "evidence": "machtzev/generator/app-ds.mjs:129-147,153-169"
+   },
+   {
+    "cap": "בונה קשתות-שלמות-קשר **opt-in בלבד** (רק שדות שהוכרזו ב-'| מחיקה:') ומחשב מדיניות חמורה-ביותר פר-הורה (חסימה גוברת) ⇒ שער-מחיקה בכרטיס",
+    "evidence": "machtzev/generator/app-ds.mjs:148-169"
+   },
+   {
+    "cap": "**שער-ספק מוקדם**: ישות בלי שדות ⇒ throw עם ציטוט-השורה, במקום לפלוט Dart שלא מתקמפל ולגלות את זה 70 שניות אחר-כך ב-flutter build",
+    "evidence": "machtzev/generator/app-ds.mjs:110-119"
+   },
+   {
+    "cap": "מפרש אגרגטים לדשבורד במודעות-עומק: סכום/ממוצע/מונה(ישות.שדה) + **מונה-מסונן** מונה(ישות: שדה=ערך)",
+    "evidence": "machtzev/generator/app-ds.mjs:196-215"
+   },
+   {
+    "cap": "**בוחר שורש-אפליקציה מגרף-הקשרים** (הישות עם הכי-הרבה מצביעים) ובונה שלד בית·שורש·עוד, עם עמוד-שורש שמציג עובדות · בנות-מסוננות · דוח",
+    "evidence": "machtzev/generator/app-ds.mjs:16,318-333"
+   },
+   {
+    "cap": "**בוחר מתאר-רשומה לפי צורה** — דירוג: טקסט-חובה (זהות) > רב-שורתי > תווית-רב-מילים > טקסט > enum > מספר > תאריך; אפס מילון-דומייני",
+    "evidence": "machtzev/generator/app-ds.mjs:322-326"
+   },
+   {
+    "cap": "**מצב-נייר משנה את המבנה, לא רק את הצבע**: מסכי-המגירה (מסך-אמת · כרטיס · סקירה) לא מחוללים כלל, «היום» מחליף את לוח-הבקרה בלשונית-הבית, ונוסף מסך «התנהגות»",
+    "evidence": "machtzev/generator/app-ds.mjs:242-244,249,296,335-340"
+   },
+   {
+    "cap": "מנקה תוצר-ישן **רק בתוך מרחב-השמות** (--name), כדי שלא ימחק את פלטי-האפליקציות האחרות (L95, אותה מחלה של L93)",
+    "evidence": "machtzev/generator/app-ds.mjs:24-26,82,171-175"
+   },
+   {
+    "cap": "**פולט מניפסט-מודול נגזר** (apps/<ns>.json): מסכים · שורש · שדות · שלבים · שרשרת · יחסים · דוח — מה ש«בלגן» צריך כדי למזג את המודול",
+    "evidence": "machtzev/generator/app-ds.mjs:341"
+   },
+   {
+    "cap": "פולט תוכניות-אבחון דטרמיניסטיות: particle-plan-<ns>.json/.md ו-report-plan-<ns>.json — ותוכנית **ריקה מדווחת** לספק בלי חלקיקים, כדי ש«אין» יובחן מ«חסר»",
+    "evidence": "machtzev/generator/app-ds.mjs:272,283-284,286"
+   },
+   {
+    "cap": "--skin: מריץ את אותו בורר-עור של מסלול-א׳ (auto-skin ⇒ skinPass) על כל מסכי מסלול-ב׳, ובנייר גם **גוזם ייבוא-אטום שהוחלף** ולא נותר בשימוש",
+    "evidence": "machtzev/generator/app-ds.mjs:353-364"
+   },
+   {
+    "cap": "אוכף את סדר-שורות-ההצהרה: כל ההצהרות (אפליקציה · עיצוב · שאלה · שרשרת · שכבה · שרת) יוצאות **לפני** האינדוקס, כי מזהה-הישות הוא <ns>_ent<מספר-שורה> ושורה חדשה מעליה מיתמת נתוני-משתמש",
+    "evidence": "machtzev/generator/app-ds.mjs:105-109,123"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "**אינו מכבד GEN_OUT במלואו** — המסכים והדאטה הולכים ל-R.outDir()/R.dataOutDir(), אבל particle-plan · report-plan · apps/<ns>.json נכתבים תמיד ל-R.GEN_DIR",
+    "evidence": "machtzev/generator/app-ds.mjs:22-23,27 (OUT/DATA) מול :272,283-284,341 (GEN_DIR); אומת בריצה: עם GEN_OUT מותאם עדיין נוצרו 4 קבצים ב-machtzev/generator/ (מחקתי אותם, git status חזר לריק)"
+   },
+   {
+    "claim": "אינו מרנדר ואינו מקמפל — הוא פולט Dart; ההוכחה שהמסך עולה היא gen-verify",
+    "evidence": "machtzev/generator/app-ds.mjs:5 · machtzev/generator/gen-verify.mjs:2-4"
+   },
+   {
+    "claim": "אינו בוחר את הישות מהמשפט בעצמו — entity.interpret עושה זאת לכל שורת-ישות",
+    "evidence": "machtzev/generator/app-ds.mjs:9,123"
+   },
+   {
+    "claim": "אינו פותר חלקיקים — planParticles/planReports של particles.mjs עושים את החיפוש-הפתוח",
+    "evidence": "machtzev/generator/app-ds.mjs:11,264-274"
+   },
+   {
+    "claim": "**האשף אינו קריטי** — renderWizard עטוף ב-try והכשל שלו שקט (wizTile=null)",
+    "evidence": "machtzev/generator/app-ds.mjs:308-315"
+   },
+   {
+    "claim": "אין שורש בלי מצביעים (אלא אם יש ישות יחידה) ⇒ אין שלד, והרכזת נשארת הבית",
+    "evidence": "machtzev/generator/app-shell.mjs:17-22 (pickRoot) · machtzev/generator/app-ds.mjs:318-320"
+   },
+   {
+    "claim": "אינו כותב בדיקת-דוח בלי buildsmart — הבדיקה המחוללת נשמרת רק כשיש pubspec",
+    "evidence": "machtzev/generator/app-ds.mjs:277-279"
+   }
+  ],
+  "pipeline": {
+   "runBy": "**נקודת-כניסה של המחולל** (GEN_ENTRY ב-engine-index.mjs:320). בצנרת: machtzev/generator/regen.mjs:21,25-29 מריץ אותו פעם לכל specs-ds/*.txt עם --name <stem> --skin (31 ריצות)",
+   "input": "machtzev/generator/specs-ds/<ns>.txt (או משפט-חופשי ב-CLI) + spec-lang.data.json + chrome.data.json + המדף דרך render-ds/particles/atlas",
+   "output": "new/dart-gen-bs/gen_app_<ns>_*.dart (ent · scr · px · rp · rec · over · bind · hub · shell · root · home · behavior · main · wizard) · new/dart-data-bs/auto/*_content.dart · machtzev/generator/{particle-plan,report-plan}-<ns>.{json,md} · machtzev/generator/apps/<ns>.json",
+   "next": "balagan.mjs קורא את apps/*.json וממזג את המודולים לאפליקציה אחת (regen.mjs:22); השערים particles · balaganone · genverify מודדים את התוצר"
+  },
+  "quality": {
+   "signal": "שערים: «particles» (0 חלקיקים לא-פתורים בכל 31 הספקים) · «hamtzaa» (אפס-המצאת-שדה) · «balagan» (36 כללי-מראה) · «genverify» (הרנדר בפועל). האיכות החזקה: שער-הספק המוקדם (ישות בלי שדות = throw) ומרחב-השמות שמונע מחיקה חוצה-אפליקציות.",
+   "measured": "**הורץ בפועל** עם פלט מנותב: `GEN_OUT=<tmp> GEN_DATA_OUT=<tmp> node machtzev/generator/app-ds.mjs -f machtzev/generator/specs-ds/peruk01.txt --name probe01` ⇒ exit 0 · «9/9 חלקיקים נמצאו-ומחווטים · 2 מסכי-חלקיקים · 91 פריטי-תוכן · 1 מסכי-דוח» · «ניווט-מקשרים: שורש תיק · 1 ישויות-בנות» · «8 מסכים · 2 ישויות · 1 דשבורדים · 4 מערכת · 1 לוח» ⇒ **17 קובצי-Dart** בתיקייה הזמנית. ארבעת קובצי-התוכנית שנכתבו ל-GEN_DIR נמחקו ו-git status חזר לריק."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/app-ds.mjs (368 שורות, נקרא במלואו בשלושה חלקים)",
+   "GEN_OUT=<scratch>/g2 GEN_DATA_OUT=<scratch>/d2 node machtzev/generator/app-ds.mjs -f …/peruk01.txt --name probe01 ⇒ 8 מסכים · 17 קבצים",
+   "ls <scratch>/g2 ⇒ gen_app_probe01_{audit,behavior,ent1,ent2,flags,home,hub,main,px1,px2,relations,root,rp1,scr3,settings,shell,wizard}.dart",
+   "git status --short אחרי ניקוי ⇒ ריק"
+  ]
+ },
+ {
+  "file": "machtzev/generator/app-shell.mjs",
+  "lang": "mjs",
+  "lines": 527,
+  "capabilities": [
+   {
+    "cap": "**גוזר את הניווט מצורת-הדאטה בלבד**: הישות שהכי-הרבה ישויות מצביעות עליה = שורש-האפליקציה (מרכז-כובד); שוויון ⇒ הראשונה בספק; ישות יחידה = שורש",
+    "evidence": "machtzev/generator/app-shell.mjs:2-3,17-22 (pickRoot)"
+   },
+   {
+    "cap": "בונה **עמוד-שורש לרשומה אחת**: עובדות (שדה⇒אטום label+value) · חלק לכל ישות-בת עם רשומות מסוננות + הוספה ממולאת-מראש · פעולת-דוח",
+    "evidence": "machtzev/generator/app-shell.mjs:25-63"
+   },
+   {
+    "cap": "**בוחר כל אטום בחיפוש-פתוח ומחווט אותו** — searchOp+wireAtom+pickWired, עם צלילה ל-12 חלופות; אטום שלא מתחווט מדולג ו**נרשם כהערה בקוד** (⚪), לא מוחלף בקוד-ידני",
+    "evidence": "machtzev/generator/app-shell.mjs:8,29,33-35,54-56,60-62"
+   },
+   {
+    "cap": "מזהה שדה-טלפון ושדה-שעה **מדקדוק-האפיון** (spec-lang typePhone/typeTime), לא ממילון-קוד",
+    "evidence": "machtzev/generator/app-shell.mjs:11-12,63"
+   },
+   {
+    "cap": "פולט פעולות-מכשיר מהתיק: «התקשר» (tel:) ו«וואטסאפ» (wa.me עם המרת 0⇒972) — אפס-מפתח, אפס-שרת",
+    "evidence": "machtzev/generator/app-shell.mjs:63"
+   },
+   {
+    "cap": "**מצב-נייר משנה סדר ולא רק סגנון**: העובדות יורדות לקיפול «פרטים (n)» **אחרי** הבנות והדוח — «המסך מציג מה-לעשות, לא טבלה»",
+    "evidence": "machtzev/generator/app-shell.mjs:44-45,50,62"
+   },
+   {
+    "cap": "בונה מסך «היום» (renderHome): רשומות-פתוחות של השורש (לפי שלב < אחרון) ⇒ כרטיס לכל אחת עם משפט בגוף-ראשון · בורר-נוסחים (חלקיק-ההודעה) · שלח · פתח — ≤2 הקשות לפעולה הראשית",
+    "evidence": "machtzev/generator/app-shell.mjs:108-145"
+   },
+   {
+    "cap": "מרכיב את **השליחה** מהדוח: טקסט-הדוח + המנוע-המקשר (waLink) ⇒ launchUrl, עם נפילה ל-Share.share כשאין קישור",
+    "evidence": "machtzev/generator/app-shell.mjs:125-136"
+   },
+   {
+    "cap": "**מייבא רק את שכבת-ההרכבה** (gen_behaviors.dart) ולא חלקיקים ישירות — כפי ששער behavior דורש",
+    "evidence": "machtzev/generator/app-shell.mjs:28,122"
+   },
+   {
+    "cap": "בונה שלד עם סרגל-תחתון על IndexedStack (בית · שורש · עוד), כשהבורר עצמו נבחר בחיפוש עם **צורך מפורש** items+selected+onSelect — «בורר שלא יודע לבחור אינו סרגל»",
+    "evidence": "machtzev/generator/app-shell.mjs:459-470"
+   },
+   {
+    "cap": "מוסיף בנייר: שורה-מהירה (DsQuickAdd — יצירה בטקסט בלבד) · פלטת-פקודות · קיצורי-מקלדת T/I/A/Ctrl+K · מצב-ריק מרגיע עם הפעולה הראשית",
+    "evidence": "machtzev/generator/app-shell.mjs:471-474,477-500"
+   },
+   {
+    "cap": "בונה מסך «התנהגות»: שעת-תקציר · ימים-לפני · לפעול-לבד · יומן-פעולות עם החזר — עם שדות-הגדרה נוספים מוזרקים ע\"י הקורא (extraFields)",
+    "evidence": "machtzev/generator/app-shell.mjs:429-430"
+   },
+   {
+    "cap": "בורר ל«היום» את שדות-התאריך (חובה = hard-deadline), שדות-הטלפון, שדה-הסכום הראשי (מספר שאינו אחוז) ושדות-השעה — הכל מהסכמה",
+    "evidence": "machtzev/generator/app-shell.mjs:140-144"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "**אפס מילון-דומייני** — כל השמות מהספק, כל האטומים מחיפוש-פתוח (switch לסרגל · group לחלקים · fact לעובדות · action לפעולות)",
+    "evidence": "machtzev/generator/app-shell.mjs:6"
+   },
+   {
+    "claim": "אין שורש ⇒ אין שלד — הרכזת (hub) נשארת הבית ביט-זהה",
+    "evidence": "machtzev/generator/app-shell.mjs:5,17-22"
+   },
+   {
+    "claim": "אינו CLI — אין main; ספרייה שמיובאת ע\"י app-ds",
+    "evidence": "אין בלוק import.meta.url===argv[1] בקובץ · machtzev/generator/app-ds.mjs:16 (הייבוא)"
+   },
+   {
+    "claim": "אינו בוחר את מתאר-הרשומה (descField/subField) — app-ds מחשב אותם ומעביר",
+    "evidence": "machtzev/generator/app-ds.mjs:322-328 מול machtzev/generator/app-shell.mjs:26 (מקבל root.descField מוכן)"
+   },
+   {
+    "claim": "אטום שלא נמצא אינו מפיל את הפליטה — הוא הופך להערה ⚪ בראש הקובץ",
+    "evidence": "machtzev/generator/app-shell.mjs:36,55,62,469 (notes) · :483 (הזרקת ההערות לקוד)"
+   }
+  ],
+  "pipeline": {
+   "runBy": "ספרייה — machtzev/generator/app-ds.mjs:16 מייבא pickRoot · renderRootPage · renderShell · renderHome · renderBehavior; balagan.mjs משתמש באותן פונקציות לאפליקציה-האחת",
+   "input": "entMeta + backRefs (גרף-הקשרים) + סכמות-הישויות + reportByEnt + תוכנית-החלקיקים — הכל מ-app-ds; והמדף דרך particles/atlas",
+   "output": "מחרוזות-Dart שנכתבות דרך write(): gen_<ns>_root · _shell · _home · _behavior (+ קובצי-תוכן נלווים)",
+   "next": "app-ds מפנה אליהם את renderMain; שער balagan/balaganrun מודד את התוצר במריצה"
+  },
+  "quality": {
+   "signal": "שער «balagan» (36 כללי-מראה ופרואקטיביות כמרשם מכני) · שער «balaganrun» (playwright: ≤2 הקשות לרגע-חדש, «שלח» בהקשה אחת, מד-צפיפות homeSlots כ-ratchet יורד-בלבד) · שער «behavior» (ה: רק bh*, אפס ייבוא-חלקיק ישיר).",
+   "measured": "**לא נמדד ישירות** — אין לו CLI ואין שער בשמו. נמדד בעקיפין דרך app-ds: הריצה על peruk01 פלטה בפועל `gen_app_probe01_root.dart` · `_shell.dart` · `_home.dart` · `_behavior.dart`, ודיווחה «ניווט-מקשרים (G26): שורש תיק · 1 ישויות-בנות · ForgeMustChip» — כלומר pickRoot בחר שורש והבורר נבחר בחיפוש-פתוח (ForgeMustChip) ולא נכתב ביד."
+  },
+  "evidence": [
+   "sed/grep על machtzev/generator/app-shell.mjs (527 שורות — נקראו הכותרת, pickRoot, renderRootPage, renderHome, renderShell, renderBehavior והמבנה המלא ב-grep)",
+   "ריצת app-ds (לעיל) ⇒ שורת «ניווט-מקשרים (G26): שורש תיק · 1 ישויות-בנות · ForgeMustChip»",
+   "ls <scratch>/g2 ⇒ gen_app_probe01_root.dart · _shell.dart · _home.dart · _behavior.dart"
+  ]
+ },
+ {
   "file": "machtzev/generator/atlas.mjs",
   "lang": "mjs",
   "lines": 141,
@@ -1107,6 +1320,110 @@
   ]
  },
  {
+  "file": "machtzev/generator/particles.mjs",
+  "lang": "mjs",
+  "lines": 704,
+  "capabilities": [
+   {
+    "cap": "**מפרק-חלקיקים פתוח — אין רשימה סגורה**: כל חלקיק, בכל ריצה, נמצא ומורכב מחדש מכל הקטלוג (הכרעה-27)",
+    "evidence": "machtzev/generator/particles.mjs:2"
+   },
+   {
+    "cap": "מפרש שלוש שפות-קלט: שורת-חלקיק (`חלקיק <ישות>: <שם> = <צורה>`) · אטום-תוכן (`תוכן <קבוצה> [תג]: טקסט`) · חלקיק-דוח (`דוח <ישות>: <חלק> = ref…`) — כל מילות-הדקדוק מ-spec-lang.data.json",
+    "evidence": "machtzev/generator/particles.mjs:19-23,29-86"
+   },
+   {
+    "cap": "**גוזר צורה מבנית מהביטוי** (אפס-מילון): יחס A/B · הפרש · מכפלה · השוואה · מונה(שדה=ערך) · סכום · ממוצע · enum⇒חלוקה-למצבים · שדה-טקסט/תאריך⇒עובדה · [טבלה]/[איתור]/[חריגה]/[ייצוא]/[פעולה]/[ריק] · [דיף]/[מספר]/[הודעה]/[לוח]/[תוכן]",
+    "evidence": "machtzev/generator/particles.mjs:4-6,87-146"
+   },
+   {
+    "cap": "**פוסל צורה ששדותיה אינם בסכמה ומדווח למה** — «דיף: שדה לא בסכמה: X» · «מספר: שדה לא בסכמה» · «אין אטומי-תוכן לקבוצה»; לא מנחש",
+    "evidence": "machtzev/generator/particles.mjs:93,105,108-109"
+   },
+   {
+    "cap": "ממפה צורה ⇒ פעולות-הצגה דרך **אלגברת compose-engine** — אותו מקור-אמת של מודולי-הזהב — עם מיפוי מפורש לצורות-G29",
+    "evidence": "machtzev/generator/particles.mjs:12,147-166"
+   },
+   {
+    "cap": "**מחפש אטום לכל פעולה בכל ops-map** לפי פעולה+שקעים-נדרשים+ייעוד (cover), עם טבלת-צרכים מבנית פר-פעולה (27 פעולות, שמות-שקעים ולא מילות-דומיין)",
+    "evidence": "machtzev/generator/particles.mjs:11,148-157,167-175"
+   },
+   {
+    "cap": "**חיווט-שקעים מדאטה אמיתית — שקע-חובה בלי ערך ⇒ האטום נפסל והבא בתור** (§20-ג: לעולם לא לזייף דאטה)",
+    "evidence": "machtzev/generator/particles.mjs:7,176-229"
+   },
+   {
+    "cap": "מזהה שקעים לפי **תבנית-שם מבנית** (value|val|amount|total|count|num · label|title|caption|name|text · fraction|pct|percent|progress · …) ולא לפי שם-שדה של הדומיין",
+    "evidence": "machtzev/generator/particles.mjs:180-186"
+   },
+   {
+    "cap": "**בנייר: פוסל אטום שאינו לובש-עור ואטום שלא יודע להיות חשוף** (bare), וצולל ל-12 מועמדים במקום 3 — «הכי-טוב-לייעוד», לא הראשון-שמתאים",
+    "evidence": "machtzev/generator/particles.mjs:16,169,188-190,177"
+   },
+   {
+    "cap": "מחווט גם **מנועי-לוגיקה** (wireLogic): פרמטר לפי שם-השקע, ופרמטר בשם-מנוע-אח = שקע-פונקציה ⇒ ייבוא המנוע-האח; שקע בלי ערך ⇒ null",
+    "evidence": "machtzev/generator/particles.mjs:230-246"
+   },
+   {
+    "cap": "פולט מסך-חלקיקים לישות (AnimatedBuilder על appStore; אגרגטים למעלה, פר-רשומה בשורות)",
+    "evidence": "machtzev/generator/particles.mjs:302-415,468-490"
+   },
+   {
+    "cap": "**מסרלל כל חלקיק לטקסט** (particleText) בפורמט-וואטסאפ (*כותרת* · «- שורה» · «שדה: ערך») — וצורות-פעולה/טבלה/ריק מוכרזות כלא-טקסט במקום לפלוט זבל",
+    "evidence": "machtzev/generator/particles.mjs:416-467"
+   },
+   {
+    "cap": "בונה דוח כ**מבנה-קבוע-לרשומה**: כל חלק = רשימת-refs, וכל ref נפתר לחלקיק-קיים / שדה (חלקיק-סינתטי) / אטומי-תוכן — באותו חיפוש-פתוח",
+    "evidence": "machtzev/generator/particles.mjs:491-533,534-633"
+   },
+   {
+    "cap": "**פולט בדיקה מחוללת לסריאליזציה** שזורעת רשומה לפי הסכמה (ערכי-צורה, לא דומיין) ומוכיחה שהטקסט מכיל כל חלק וכל «שדה: » של השורש",
+    "evidence": "machtzev/generator/particles.mjs:641-669"
+   },
+   {
+    "cap": "שער --gate: עובר על **כל** ספק ב-specs-ds ודורש שהתוכנית קיימת, שאפס חלקיקים לא-פתורים/לא-מחווטים, ושכל ref בדוחות פתור",
+    "evidence": "machtzev/generator/particles.mjs:676-704"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "**השער אינו מחשב מחדש — הוא קורא את התוכניות השמורות**; אם app-ds לא רץ, השער נכשל על «אין particle-plan-<ns>.json» ולא על החלקיק עצמו",
+    "evidence": "machtzev/generator/particles.mjs:687-689,697-698"
+   },
+   {
+    "claim": "אינו מגלה חלקיקים — האדם כותב אותם בספק (או peruk.mjs גוזר אותם); המנוע פותר ומחווט",
+    "evidence": "machtzev/generator/particles.mjs:3 («קלט (צעדים 1–2, אדם)»)"
+   },
+   {
+    "claim": "אינו מייצר ערך — שקע בלי ערך-אמת פוסל את האטום, ולא מקבל seed/סינוס/מחזור",
+    "evidence": "machtzev/generator/particles.mjs:7,176"
+   },
+   {
+    "claim": "פעולות-לוגיקה עוברות במסלול נפרד (coverLogic) עם רשימת-LOGIC קשיחה בקוד — שם כן יש רשימה סגורה",
+    "evidence": "machtzev/generator/particles.mjs:158,170-171"
+   },
+   {
+    "claim": "האטלס נטען עצלנית ונשמר במטמון לכל התהליך, ודגל-ה-forge שלו נקבע לפי מצב-הנייר בזמן-הטעינה הראשונה",
+    "evidence": "machtzev/generator/particles.mjs:177"
+   }
+  ],
+  "pipeline": {
+   "runBy": "ספרייה — machtzev/generator/app-ds.mjs:11 מייבא 15 פונקציות; app-shell.mjs:8 מייבא searchOp/wireAtom/pickWired/particleWidgets; balagan.mjs משתמש באותן. כ-CLI: רק `--gate` (שער «particles»)",
+   "input": "שורות-הספק (חלקיק/תוכן/דוח) + סכמות-הישויות + ops-map.json דרך cover.mjs + האטלס (buildAtlas) + spec-lang.data.json",
+   "output": "plan (מבנה-נתונים) + מחרוזות-Dart (renderParticles · renderReport · renderReportTest) + particleText; ובשער: פסק על כל 31 הספקים",
+   "next": "app-ds כותב את התוכניות ל-particle-plan-<ns>.json; השער קורא אותן"
+  },
+  "quality": {
+   "signal": "שער «particles» ב-gates.tsv: «כל חלקיק בכל ספק-specs-ds נמצא בחיפוש-פתוח בכל הקטלוג (צורה⇒פעולות⇒אטומים⇒שקעים) ומחווט — 0 לא-פתורים · 0 לא-מחווטים · תכנית-חלקיקים ≡ ספק». זה שער חזק כי הוא מודד **כיסוי מלא על כל הספקים**, לא דגימה.",
+   "measured": "הורץ: `node machtzev/generator/particles.mjs --gate` ⇒ exit 0 · «436 חלקיקים ב-31 ספקים — כולם נמצאו בחיפוש-פתוח ומחווטים». בנוסף, ריצת app-ds על peruk01 דיווחה בזמן-אמת «9/9 נמצאו-ומחווטים · 91 פריטי-תוכן». git status נשאר ריק."
+  },
+  "evidence": [
+   "sed/grep על machtzev/generator/particles.mjs (704 שורות — נקראו הכותרת, הפרסרים, shapeOf, opsOf/searchOp, wireAtom/wireLogic, בלוק-השער, והמבנה המלא ב-grep)",
+   "node machtzev/generator/particles.mjs --gate ⇒ exit 0 · 436 חלקיקים ב-31 ספקים",
+   "ריצת app-ds ⇒ «🧩 חלקיקים (הכרעה-27): 9/9 נמצאו-ומחווטים»"
+  ]
+ },
+ {
   "file": "machtzev/generator/peruk.mjs",
   "lang": "mjs",
   "lines": 243,
@@ -1758,6 +2075,91 @@
    "cat -n machtzev/root.mjs (15 שורות, נקרא במלואו)",
    "grep -rln \"root.mjs'\" --include=*.mjs machtzev | wc -l ⇒ 86",
    "grep על machtzev/one.mjs — אין import של root.mjs (עובדת-השלילה)"
+  ]
+ },
+ {
+  "file": "yeshiva/purpose.mjs",
+  "lang": "mjs",
+  "lines": 109,
+  "capabilities": [
+   {
+    "cap": "**סוגר את הפער שבו המנוע-הישיבתי לא רץ בכלל**: הוא עובד ב«השווה A ל-B», ובמשפט-חופשי אין מסמך-B — כאן ה-B נבנה מהמטרה (אילו שדות נדרשים), וזה בדיוק המסלול שבו המחולל ממציא הכי הרבה",
+    "evidence": "yeshiva/purpose.mjs:3-8"
+   },
+   {
+    "cap": "בונה מ**משפט חופשי** מסמך בצורת-doc של read.mjs (title · sections · optional · mandatory), כך ש-check(doc, spec) רץ עליו **בלי שינוי** — אותם שבעה מהלכים, אותו פסק",
+    "evidence": "yeshiva/purpose.mjs:35-72 (purposeDoc)"
+   },
+   {
+    "cap": "**מחפש לפי צורה ולא לפי מילים** — המקור הוא tzinor.toSwitches (מילה ⇒ מועמדי-סכמה עם fields[].src); חיפוש-לפי-מילים נמדד ונפסל כי «תורים» החזיר DotsLoader («נקודות קופצות בתור»)",
+    "evidence": "yeshiva/purpose.mjs:10-13,22,41"
+   },
+   {
+    "cap": "**אפס-המצאה**: שדה בלי src לא נכנס למסמך, ומילה בלי מועמד-סכמה ⇒ ∅ מדווח (L57)",
+    "evidence": "yeshiva/purpose.mjs:15,58"
+   },
+   {
+    "cap": "**לא מכריע כשיש כמה מועמדים** — soleOption דורש מועמד-אמת יחיד (מחלקה + שדות + לא-רופף); אחרת זה מתג, לא הכרעה",
+    "evidence": "yeshiva/purpose.mjs:16,29-33,48-53"
+   },
+   {
+    "cap": "**אוכף שפת-אפיון עברית**: שקע בלי מונח-עברי אינו נכנס לחובה/רשות (אחרת הישיבתי היה מיישם אותו כשדה) — הוא יוצא למתג **עם המוצא שלו**",
+    "evidence": "yeshiva/purpose.mjs:26,61-67"
+   },
+   {
+    "cap": "מחזיר ראיה לכל הכרעה — «<מילה> ≡ <מחלקה> (n שקעים) · <evidence>» ומפת שדה⇒מוצא",
+    "evidence": "yeshiva/purpose.mjs:60,68,70,94-95"
+   },
+   {
+    "cap": "**הישיבתי לפני הבנייה** (rule): טיוטת-ספק + משפט ⇒ מסמך-מטרה ⇒ שבעת המהלכים ⇒ פסק ⇒ **ספק מתוקן**, עם ספירת-הוכרעו והמתגים שנותרו",
+    "evidence": "yeshiva/purpose.mjs:74-92"
+   },
+   {
+    "cap": "מייצא purposeSources — «סוג-המקור השני של שער-ההמצאה»",
+    "evidence": "yeshiva/purpose.mjs:94-95"
+   },
+   {
+    "cap": "מדדפ שדות (שם שכבר נראה לא נרשם שוב) ומנרמל גרשיים/רווחים",
+    "evidence": "yeshiva/purpose.mjs:27,59"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "**אינו מכריע כלום כשאין מועמד-סכמה יחיד** — מדווח מתג עם מספר-המועמדים. נמדד: במשפט-בדיקה 2 מתוך 3 הישויות קיבלו «0 מועמדי-סכמה, אין יחיד ⇒ מתג»",
+    "evidence": "yeshiva/purpose.mjs:48-53; אומת בריצה: «תורים במרפאה» ו-«רופאים» ⇒ 0 מועמדים ⇒ מתגים"
+   },
+   {
+    "claim": "**ישות שנפתרה עדיין יכולה לתת 0 שקעי-חובה** — אם כל שמות-השדות אינם עבריים הם יוצאים למתג. נמדד: «מטופלים» ≡ Family עם 25 שקעים ⇒ חובה 0 · רשות 0 · מתג עם 25",
+    "evidence": "yeshiva/purpose.mjs:61-67; אומת בריצה (הפלט המלא ב-NOTES)"
+   },
+   {
+    "claim": "אינו חוסם בנייה — הקורא (app-ds) עוטף אותו ב-try ומתעלם מכשל; «פסק שנכשל אינו חוסם בנייה»",
+    "evidence": "machtzev/generator/app-ds.mjs:76-81"
+   },
+   {
+    "claim": "אינו ממציא שם-שדה — «הישיבתי לא ממציא שם — זה בדיוק תפקידו»",
+    "evidence": "yeshiva/purpose.mjs:63"
+   },
+   {
+    "claim": "אינו מכיל את שבעת המהלכים — הם ב-read.mjs (check/parseSpec) וב-apply.mjs (pasak/applyPsak); זה גשר בלבד",
+    "evidence": "yeshiva/purpose.mjs:23-24,82-85"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/app-ds.mjs:13,78 (`yeshivaRule` — פוסק לפני שנבנה מסך) · yeshiva/gate.mjs:61,101 (השער הישיבתי) · CLI לאבחון",
+   "input": "משפט-עברית חופשי + טיוטת-ספק; דרך tzinor.toSwitches ⇒ חבילות-ורטיקל ⇒ schema-fields",
+   "output": "purposeDoc: {mandatory, optional, sources, open, domain, entities} · rule: {spec מתוקן, rulings, decided, switches, open}",
+   "next": "app-ds ממשיך לבנות עם הספק המתוקן; מה שלא הוכרע נשאר מתג ומדווח"
+  },
+  "quality": {
+   "signal": "שער «yeshiva» ב-gates.tsv: «הפסק שבדיסק ≡ ריצה טרייה (פסק ישן = ירוק-חלול · L27) · המנוע פוסק-לבד ratchet רק-עולה · מתגים רק-יורדים · עץ-נח משוחזר-מדויק · 0 פירוקים/0 ממצאים ⇒ exit 2». בנוסף שער «hamtzaa» מציין את purposeSources כאחד משני מקורות-האמת שלו. האיכות המהותית: הראיה נדרשת לכל שדה (src), והכרעה ללא מועמד-יחיד אסורה.",
+   "measured": "הורץ: `node yeshiva/purpose.mjs \"מערכת לניהול תורים במרפאה עם רופאים ומטופלים\"` ⇒ תחום clinic (מקור: new/atoms/vertical-packs.mjs#clinic) · «מטופלים» ≡ Family (25 שקעים) עם שתי ראיות · «תורים במרפאה» ו-«רופאים» ⇒ מתגים (0 מועמדים) · **שקעי-חובה 0 · רשות 0 · 3 מתגים · 25 מקורות**. git status נשאר ריק. את שער yeshiva עצמו לא הרצתי."
+  },
+  "evidence": [
+   "cat -n yeshiva/purpose.mjs (109 שורות, נקרא במלואו)",
+   "node yeshiva/purpose.mjs \"מערכת לניהול תורים במרפאה עם רופאים ומטופלים\" ⇒ הפלט המלא (ב-NOTES)",
+   "grep -rn purpose.mjs machtzev yeshiva ⇒ app-ds.mjs:13 · yeshiva/gate.mjs:61,101",
+   "grep -E '^(yeshiva|hamtzaa)' machtzev/gates.tsv ⇒ שתי שורות-השער"
   ]
  }
 ]

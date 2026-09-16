@@ -137,6 +137,14 @@ BUILDSMART=<scratch>/bs node machtzev/generator/web-shell.mjs --entry gen_app_pe
   ⇒ «חוזה שכירות למגורים — לפני חתימה» · #2F6FED על #FFFFFF · ח · SW רשום
 BUILDSMART=<scratch>/bs node machtzev/generator/web-shell.mjs --entry gen_balagan_main.dart
   ⇒ «בלגן» · #2F6FED על #FFFFFF · **ב** · SW רשום   (נפילה-לאות — עור-הנייר אפס-אימוג׳י)
+node machtzev/generator/particles.mjs --gate
+  ⇒ exit 0 · 436 חלקיקים ב-31 ספקים — כולם נמצאו בחיפוש-פתוח ומחווטים
+GEN_OUT=<scratch>/g2 GEN_DATA_OUT=<scratch>/d2 \
+  node machtzev/generator/app-ds.mjs -f machtzev/generator/specs-ds/peruk01.txt --name probe01
+  ⇒ 9/9 חלקיקים מחווטים · 91 פריטי-תוכן · 1 מסך-דוח · שורש «תיק» · 8 מסכים ⇒ **17 קובצי-Dart**
+node yeshiva/purpose.mjs "מערכת לניהול תורים במרפאה עם רופאים ומטופלים"
+  ⇒ תחום clinic · «מטופלים» ≡ Family (25 שקעים, 2 ראיות) · «תורים במרפאה»/«רופאים» ⇒ מתגים (0 מועמדים)
+  ⇒ שקעי-חובה 0 · רשות 0 · 3 מתגים · 25 מקורות
 ls machtzev/generator/specs-ds/*.txt | wc -l   ⇒ 31
 ls machtzev/generator/peruks/ | wc -l          ⇒ 28
 grep -vc '^#' machtzev/gates.tsv               ⇒ 57 שערים
@@ -162,6 +170,13 @@ grep -rln "atlas.mjs'" --include=*.mjs machtzev | wc -l  ⇒ 8
   אימות-זהות מול הקובץ המחויב. זה עובד רק למנועים שמשתמשים ב-`R.outDir()`.
 * **`atlas.json` · `gen-verify-report.json` · `ops-census-baseline.json` ודומיהם** הם תוצרים
   **מחויבים** — קראתי אותם כראיה על ריצה קודמת, לא כראיה שהרצתי. כתוב כך בכרטיסים.
+* **`app-ds` לא מכבד GEN_OUT במלואו.** המסכים והדאטה כן נשלחו לתיקייה הזמנית, אבל
+  `particle-plan-<ns>.json` · `particle-plan-<ns>.md` · `report-plan-<ns>.json` · `apps/<ns>.json`
+  נכתבים **תמיד** ל-`machtzev/generator/`. אחרי הריצה מחקתי את ארבעת הקבצים עם ה-ns הזמני
+  (`probe01`) ואימתתי `git status --short` ⇒ ריק. זו עובדת-שלילה שנרשמה בכרטיס של app-ds.
+* **שני מנועים לא הורצו כלל**, וכתוב למה בכרטיסים שלהם: `server.mjs` (כותב ל-`server-gen/`
+  בתוך הריפו, אין לו `--gate` ואינו מכבד `GEN_OUT`) ו-`one.mjs`/`census.mjs` (דוחפים commits
+  ו/או כותבים ל-`registry/`). ל-`genesis-gen` ו-`balagan` — ראה בכרטיסים שלהם.
 
 ## 6 · מה עוד לא נעשה
 
