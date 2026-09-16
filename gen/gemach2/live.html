@@ -23,10 +23,13 @@ code{background:var(--code);padding:0 var(--s1);border-radius:var(--r-sm);font-f
 pre{background:var(--code);padding:var(--s3);border-radius:var(--r-sm);overflow-x:auto;font-family:var(--font-mono);font-size:var(--t-micro)}
 .tbl{overflow-x:auto}
 table{border-collapse:separate;border-spacing:0;width:100%}
-th,td{text-align:start;padding:var(--cell-pad-block) var(--cell-pad);border-block-end:1px solid var(--line);vertical-align:top}
+/* נמדד מ-Atlassian Design System (atlassian.design/components/dynamic-table):
+   אין קו בין שורות — הגובה לבדו מפריד; הקו היחיד הוא מתחת לכותרת, ועבה.
+   והתא מיושר לאמצע, לא לראש.                                            */
+th,td{text-align:start;padding:var(--cell-pad-block) var(--cell-pad);border:0;vertical-align:middle}
 tbody tr{height:var(--row-h)}   /* בטבלה height מתנהג כמינימום: טקסט גדל ⇒ השורה גדלה (WCAG 1.4.12) */
 tbody tr:hover{background:var(--raise)}
-thead th{position:sticky;inset-block-start:0;background:var(--card);color:var(--mute);font-weight:var(--w-section);font-size:var(--t-meta);z-index:1}
+thead th{position:sticky;inset-block-start:0;background:var(--card);color:var(--mute);font-weight:var(--w-section);font-size:var(--t-meta);border-block-end:2px solid var(--line);z-index:1}
 td.num,th.num{font-variant-numeric:tabular-nums}
 bdi{unicode-bidi:isolate}
 td.num,th.num,.num{unicode-bidi:isolate}
@@ -74,7 +77,7 @@ iframe{width:100%;height:calc(var(--s7) * 15);border:0;display:block}
 </style>
 <div class="wrap" dir="rtl" lang="he">
 <div class="head"><div><h1>גמח</h1><div class="mute">המחולל הטהור · ספק ⇒ צרכים מצורה ⇒ הוכחה-בריצה מול המדף ⇒ הרכבה · אפס מודל</div></div>
-<div class="stat"><div><b>1096</b>אטומי-JS במדף</div><div><b>394</b>אטומי-Dart-בלבד</div><div><b>3983</b>ריצות-הוכחה</div><div><b>7</b>אטומים הורכבו</div><div><b>0</b>צרכים בלי הוכחה</div><div><b>13085</b>ms</div></div></div>
+<div class="stat"><div><b>1096</b>אטומי-JS במדף</div><div><b>394</b>אטומי-Dart-בלבד</div><div><b>3983</b>ריצות-הוכחה</div><div><b>7</b>אטומים הורכבו</div><div><b>0</b>צרכים בלי הוכחה</div><div><b>12875</b>ms</div></div></div>
 
 <section class="step spec"><h2>1 · המשפט שלך <span class="n">כמו שנכתב</span></h2><pre>גמח: לכל הלוואה יש לווה, מספר, סכום, הנחה, יתרה = סכום פחות הנחה, תאריך, תוקף אישור, ערב ראשון, ערב שני; שלבים: בקשה, אושר, ניתן, נפרע; אפשר לעבור ל-ניתן רק אם ערב שני; אפשר לעבור ל-נפרע רק אם יתרה &lt;= 0; רק גזבר רואה הלוואה
 לכל החזר יש הלוואה, סכום, תאריך</pre></section>
@@ -98,14 +101,14 @@ iframe{width:100%;height:calc(var(--s7) * 15);border:0;display:block}
 
 <section class="step"><h2>3 · הוכחה-בריצה <span class="n">כל צורך הורץ מול כל 569 אטומי-הפונקציה במדף (527 הנותרים הם קבועים); עובר רק מי שהחזיר בדיוק את הפלט בכל הדוגמאות</span></h2><details class="proof ok" >
 <summary><span class="dot"></span><b>norm-search</b> — נרמול טקסט לחיפוש (ניקוד, סופיות, גרשיים) <span class="mute">⇐ הלוואה.לווה · הלוואה.ערב ראשון · הלוואה.ערב שני · החזר.הלוואה</span>
-<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>norm-search</code> · Dart-בלבד: נוסו 394 · עברו 0 · 82ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>norm-search</code> · Dart-בלבד: נוסו 394 · עברו 0 · 80ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;שָׁלוֹם&quot;]</code></td><td>⇒</td><td><code>&quot;שלומ&quot;</code></td></tr><tr><td><code>[&quot;ABC&quot;]</code></td><td>⇒</td><td><code>&quot;abc&quot;</code></td></tr><tr><td><code>[null]</code></td><td>⇒</td><td><code>&quot;&quot;</code></td></tr><tr><td><code>[&quot; יוסף &quot;]</code></td><td>⇒</td><td><code>&quot;יוספ&quot;</code></td></tr><tr><td><code>[&quot;כהן ז\&quot;ל&quot;]</code></td><td>⇒</td><td><code>&quot;כהנ זל&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>norm-search</code> <span class="mute">(1 ארג׳) מנרמל טקסט להשוואת-חיפוש עברית: אותיות-קטנות, הסרת ניקוד, אותיות · קבועים מאטום-הדאטה <code>norm-search-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 356</span> <span class="pill">פלט שונה 199</span> <span class="pill">אורך-קריאה 13</span></p></div>
 <div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 252</span> <span class="pill">לא מתקמפל בבידוד 5</span> <span class="pill">פלט שונה 71</span> <span class="pill">זריקה/טיפוס 66</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>money</b> — מספר ⇒ תצוגת-שקלים עם מפרידי-אלפים <span class="mute">⇐ הלוואה.סכום · הלוואה.הנחה · הלוואה.יתרה · החזר.סכום</span>
-<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>shekel</code> · Dart-בלבד: נוסו 394 · עברו 1 · 20ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>shekel</code> · Dart-בלבד: נוסו 394 · עברו 1 · 18ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[1234567]</code></td><td>⇒</td><td><code>&quot;₪1,234,567&quot;</code></td></tr><tr><td><code>[0]</code></td><td>⇒</td><td><code>&quot;₪0&quot;</code></td></tr><tr><td><code>[12]</code></td><td>⇒</td><td><code>&quot;₪12&quot;</code></td></tr><tr><td><code>[999.6]</code></td><td>⇒</td><td><code>&quot;₪1,000&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>shekel</code> <span class="mute">(1 ארג׳)  · קבועים מאטום-הדאטה <code>shekel-strings</code></span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 396</span> <span class="pill">פלט שונה 159</span> <span class="pill">אורך-קריאה 13</span></p></div>
@@ -126,7 +129,7 @@ iframe{width:100%;height:calc(var(--s7) * 15);border:0;display:block}
 <div class="ex"><h5>שכבת-Dart — אטומים שקיימים רק ב-Dart, אותן דוגמאות, הורצו ב-Dart</h5><p class="mute">אף אטום-Dart-בלבד לא עבר.</p><p><span class="pill">אורך-קריאה 275</span> <span class="pill">זריקה/טיפוס 111</span> <span class="pill">פלט שונה 8</span></p></div>
 </details><details class="proof ok" >
 <summary><span class="dot"></span><b>csv-escape</b> — הגנת תא ל-CSV (פסיק · מרכאות · שורה · נוסחה) <span class="mute">⇐ ייצוא · הגנת תא ל-CSV (פסיק · מרכאות · שורה · נוסחה)</span>
-<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>csv-escape</code> · Dart-בלבד: נוסו 394 · עברו 0 · 20ms</span></summary>
+<span class="tally">JS: נוסו 569 · עברו 1 · נבחר <code>csv-escape</code> · Dart-בלבד: נוסו 394 · עברו 0 · 18ms</span></summary>
 <div class="ex"><h5>הדוגמאות המחייבות (כל מועמד חייב לעבור את כולן בריצה)</h5><table><tr><td><code>[&quot;אב&quot;]</code></td><td>⇒</td><td><code>&quot;אב&quot;</code></td></tr><tr><td><code>[&quot;a,b&quot;]</code></td><td>⇒</td><td><code>&quot;\&quot;a,b\&quot;&quot;</code></td></tr><tr><td><code>[&quot;he said \&quot;x\&quot;&quot;]</code></td><td>⇒</td><td><code>&quot;\&quot;he said \&quot;\&quot;x\&quot;\&quot;\&quot;&quot;</code></td></tr><tr><td><code>[&quot;=1+1&quot;]</code></td><td>⇒</td><td><code>&quot;'=1+1&quot;</code></td></tr><tr><td><code>[&quot;&quot;]</code></td><td>⇒</td><td><code>&quot;&quot;</code></td></tr></table></div>
 <div class="ex"><h5>מי עבר</h5><ol><li><code>csv-escape</code> <span class="mute">(1 ארג׳) מגן על תא-CSV: חוסם הזרקת-נוסחאות (תא שמתחיל ב-=+-@/טאב מקבל גרש</span></li></ol><p class="mute">הראשון נבחר: הכי פחות ארגומנטים, ואז סדר-אלפבית — שבירת-שוויון דטרמיניסטית, לא שיפוט.</p></div>
 <div class="ex"><h5>למה נפלו (JS)</h5><p><span class="pill">זריקה 354</span> <span class="pill">פלט שונה 201</span> <span class="pill">אורך-קריאה 13</span></p></div>
@@ -236,10 +239,13 @@ code{background:var(--code);padding:0 var(--s1);border-radius:var(--r-sm);font-f
 pre{background:var(--code);padding:var(--s3);border-radius:var(--r-sm);overflow-x:auto;font-family:var(--font-mono);font-size:var(--t-micro)}
 .tbl{overflow-x:auto}
 table{border-collapse:separate;border-spacing:0;width:100%}
-th,td{text-align:start;padding:var(--cell-pad-block) var(--cell-pad);border-block-end:1px solid var(--line);vertical-align:top}
+/* נמדד מ-Atlassian Design System (atlassian.design/components/dynamic-table):
+   אין קו בין שורות — הגובה לבדו מפריד; הקו היחיד הוא מתחת לכותרת, ועבה.
+   והתא מיושר לאמצע, לא לראש.                                            */
+th,td{text-align:start;padding:var(--cell-pad-block) var(--cell-pad);border:0;vertical-align:middle}
 tbody tr{height:var(--row-h)}   /* בטבלה height מתנהג כמינימום: טקסט גדל ⇒ השורה גדלה (WCAG 1.4.12) */
 tbody tr:hover{background:var(--raise)}
-thead th{position:sticky;inset-block-start:0;background:var(--card);color:var(--mute);font-weight:var(--w-section);font-size:var(--t-meta);z-index:1}
+thead th{position:sticky;inset-block-start:0;background:var(--card);color:var(--mute);font-weight:var(--w-section);font-size:var(--t-meta);border-block-end:2px solid var(--line);z-index:1}
 td.num,th.num{font-variant-numeric:tabular-nums}
 bdi{unicode-bidi:isolate}
 td.num,th.num,.num{unicode-bidi:isolate}

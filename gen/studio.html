@@ -23,10 +23,13 @@ code{background:var(--code);padding:0 var(--s1);border-radius:var(--r-sm);font-f
 pre{background:var(--code);padding:var(--s3);border-radius:var(--r-sm);overflow-x:auto;font-family:var(--font-mono);font-size:var(--t-micro)}
 .tbl{overflow-x:auto}
 table{border-collapse:separate;border-spacing:0;width:100%}
-th,td{text-align:start;padding:var(--cell-pad-block) var(--cell-pad);border-block-end:1px solid var(--line);vertical-align:top}
+/* נמדד מ-Atlassian Design System (atlassian.design/components/dynamic-table):
+   אין קו בין שורות — הגובה לבדו מפריד; הקו היחיד הוא מתחת לכותרת, ועבה.
+   והתא מיושר לאמצע, לא לראש.                                            */
+th,td{text-align:start;padding:var(--cell-pad-block) var(--cell-pad);border:0;vertical-align:middle}
 tbody tr{height:var(--row-h)}   /* בטבלה height מתנהג כמינימום: טקסט גדל ⇒ השורה גדלה (WCAG 1.4.12) */
 tbody tr:hover{background:var(--raise)}
-thead th{position:sticky;inset-block-start:0;background:var(--card);color:var(--mute);font-weight:var(--w-section);font-size:var(--t-meta);z-index:1}
+thead th{position:sticky;inset-block-start:0;background:var(--card);color:var(--mute);font-weight:var(--w-section);font-size:var(--t-meta);border-block-end:2px solid var(--line);z-index:1}
 td.num,th.num{font-variant-numeric:tabular-nums}
 bdi{unicode-bidi:isolate}
 td.num,th.num,.num{unicode-bidi:isolate}
