@@ -1488,5 +1488,530 @@
    "ran: grep -o '#[0-9a-fA-F]{3,8}' | wc -l ⇒ 32",
    "read: gen/looks/measure/extract.mjs:13-14 (הסיבה ל-null) ו-measure/tokens.mjs:120,125 (הערכים הסותרים)"
   ]
+ },
+ {
+  "file": "gen/looks/sefer/build.mjs",
+  "lang": "mjs",
+  "lines": 204,
+  "summary": "🔴 **החריג בקבוצת-ה-14, והמנוע האמיתי שבה**: לא מצייר מסך מדאטה אלא **מודד כיסוי** — סורק את קוד-האפליקציה ומכריע לכל אחד מ-317 איסורי-האפיון אם הוא «חוסם» · «מוצג» · «טרם». התוצאה מוצגת כספר-עם-פירוש.",
+  "does": [
+   {
+    "claim": "🔴 **קורא קוד, לא דאטה** — הוא היחיד מבין 14 שאינו מריץ את המחסן ב-`new Function`; במקומו הוא קורא את כל `app/src/*.js` כטקסט",
+    "evidence": "sefer/build.mjs:12-14 `const code = readdirSync(appSrc).filter(f => f.endsWith('.js')).map(f => ({ f, t: readFileSync(join(appSrc, f), 'utf8') })); const allCode = code.map(c => c.t).join('\\n');`. ran: grep -c 'new Function' על 14 הבנאים ⇒ sefer הוא היחיד עם 0"
+   },
+   {
+    "claim": "🔴 **שלוש דרגות-אכיפה, כל אחת עם גלאי משלה**: «חוסם» = קריאה ל-`blocked(forbiddenOf('אגף','ישות')[i])` (הכלל ה-i בדיוק) · «מוצג» = הזוג אגף|ישות מופיע ב-`forbiddenOf` אך בלי `blocked` · «טרם» = לא נמצא כלל",
+    "evidence": "sefer/build.mjs:17-18 (‏shown), :22-25 (‏enforced, עם אינדקס-הכלל `\\[(\\d+)\\]`), :57-60 (‏note מכריע: `if (enforced.has(key)) return {s:'חוסם'…}` ⇒ `if (shown.has(…)) return {s:'מוצג'…}`)"
+   },
+   {
+    "claim": "🔴 **הסיכום נספר מאותה פונקציה שמייצרת את התגים** — כדי שהמספר בכותרת והתגים בגוף לא יוכלו לסתור זה את זה. זו הגנה מפורשת מפני כותרת-שמדווחת-על-עצמה",
+    "evidence": "sefer/build.mjs:46-48 `/* הסיכום נספר מ-note() עצמו — אותו מקור שמייצר את התגים, כדי שהמספר בכותרת והתגים בגוף לא יוכלו לסתור זה את זה. */ const TALLY = { 'חוסם':0, 'מוצג':0, 'טרם':0 };`"
+   },
+   {
+    "claim": "🔴 **הפירוש מנמק את עצמו עם שם-הקובץ** — «נאכף בקוד — 22-views-c.js קורא ל־blocked() עם הכלל הזה». כלומר לא תג בלבד, אלא ראיה",
+    "evidence": "sefer/build.mjs:57 `return { s:'חוסם', t: \\`נאכף בקוד — ${enforced.get(key)} קורא ל־blocked() עם הכלל הזה, והפעולה נעצרת.\\` }`; :23 `enforced.set(m[1]+'|'+m[2]+'|'+m[3], c.f)` — ‏c.f הוא שם-הקובץ"
+   },
+   {
+    "claim": "סופר בנפרד 5 ממדי-אפיון (ישויות · שדות · שדות-חובה · איסורים · שלבים) מהאפיון עצמו",
+    "evidence": "sefer/build.mjs:43-45 `let ENTS=0, FIELDS=0, REQ=0, FORB=0, STAGES=0; depts.forEach(d => d.ents.forEach(e => { ENTS++; FIELDS += e.fields.length; … }))`. אומת עצמאית: ran: node -e על mosad.data.json ⇒ 12 אגפים · 181 ישויות · 1,232 שדות · **317 איסורים** · 533 שלבים"
+   },
+   {
+    "claim": "מתרגם `shape` לעברית דרך מפה מוצהרת (‏10 טיפוסים) במקום להציג את המפתח הגולמי",
+    "evidence": "sefer/build.mjs:51-52 `const SHAPES = { text:'טקסט', number:'מספר', money:'סכום', date:'תאריך', id:'מזהה', bool:'כן/לא', ref:'הפניה', enum:'רשימה', file:'קובץ', phone:'טלפון' }`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **הגלאי הוא רגקס על טקסט-קוד — בדיוק מחלקת-התקלה ש-CLAUDE.md מזהיר מפניה** («התאמה לפי שם/מחרוזת במקום לפי המקור המוצהר», 8 באגי-האינדקס). ‏`blocked(forbiddenOf('x','y')[3])` שנכתב עם מרכאות-כפולות, עם משתנה במקום ליטרל, או מפוצל לשתי שורות — לא ייתפס, והכלל ידווח «טרם» בשקט",
+    "evidence": "sefer/build.mjs:22 `c.t.matchAll(/blocked\\(\\s*forbiddenOf\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)\\[(\\d+)\\]/g)` — מרכאות-בודדות קשיחות, אינדקס חייב להיות ליטרל-מספרי"
+   },
+   {
+    "claim": "🔴 **שתי החסימות ה«ידניות» הן רשימה מוקלדת של 2 פריטים עם רגקס לכל אחד** — כלומר כל חסימה שנכתבה ביד ואינה ברשימה תדווח «טרם», והרשימה אינה נגזרת משום מקור",
+    "evidence": "sefer/build.mjs:28-32 `const HAND = [ ['חסד','הלוואה','הלוואה בלי שני ערבים', /guarantors\\s*<\\s*2/, '22-views-c.js'], ['גבייה','חיוב','הנחות מצטברות (הגבוהה בלבד)', /1\\s*-\\s*f\\.discount\\s*\\/\\s*100/, '01-store.js'] ]; const handHit = HAND.filter(h => h[3].test(allCode));`"
+   },
+   {
+    "claim": "‏**שורה 58 מתאימה כלל לפי 12 התווים הראשונים של הטקסט** — התאמת-מחרוזת חלקית על כלל בעברית. שני איסורים שמתחילים באותן 12 אותיות יתבלבלו",
+    "evidence": "sefer/build.mjs:58 `const h = handHit.find(x => x[0]===dept && x[1]===ent && rule.startsWith(x[2].slice(0,12)))`"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code ואין ratchet. הוא מדווח כיסוי ואינו מונע ממנו לרדת",
+    "evidence": "sefer/build.mjs:200 `writeFileSync(join(here,'sefer.html'), html)` — ובקובץ אין `process.exit`. ran: grep -c 'process.exit' על 14 הבנאים ⇒ 0 בכולם"
+   },
+   {
+    "claim": "**אינו** בודק את מה שהוא סורק — הוא מודד את `gen/looks/app/src/` (אפליקציית-הדמו), לא את המחולל ולא את האימפריה",
+    "evidence": "sefer/build.mjs:8 `const appSrc = join(here,'..','app','src')` — נתיב קשיח לאפליקציית-הדמו"
+   },
+   {
+    "claim": "**הכיסוי בפועל דליל מאוד**: מדידה עצמאית של קוד-האפליקציה מוצאת **קריאת-`blocked(forbiddenOf)` אחת** ו-3 זוגות-`forbiddenOf` ייחודיים, מול 317 איסורים באפיון",
+    "evidence": "ran: grep -ro \"blocked(\\s*forbiddenOf(\\s*'[^']*'\\s*,\\s*'[^']*'\\s*)\\[[0-9]*\\]\" gen/looks/app/src/ | wc -l ⇒ 1. ran: grep -ro \"forbiddenOf(…)\" | sort -u | wc -l ⇒ 3. ⚠️ **הטלי המדויק לא נמדד** — הוא דורש הרצת הבנאי, והרצה כותבת מחדש את sefer.html המחויב; נמנעתי"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/hamtzaa.mjs — ‏`--ratchet --list` (מד-ההמצאות הנעול, פריט 4 ב-HANDOFF) · והכרעה-27 / שער `yeshiva` (‏app-ds.mjs:75 קורא `rule()` לפני בניית מסך)",
+   "gives": "**הדפוס כאן הוא בדיוק החסר שפריט-4 ב-HANDOFF מתאר, בממד אחר.** ‏`hamtzaa` מודד «כמה שדות המצאתי שאין להם מקור»; `sefer` מודד את הצד ההפוך — «כמה מהכללים שיש להם מקור באמת נאכפים». שניהם מדדי-כיסוי-מול-אפיון, ורק אחד מהם קיים במחולל. §22 «אפס-באגים» כולל «המערכת לא מרשה מה שאסור»: מסך מחולל שמציג כלל ואינו חוסם אותו הוא באג-אמת שאף שער אינו סופר.\n⚠️ **שני תנאי-סף שחייבים לנסוע עם החיבור:** (א) הגלאי חייב לעבור מרגקס-על-טקסט לסריקת-AST או לקריאה מהמקור-המוצהר — במצבו הנוכחי הוא בדיוק הבאג שהאינדקס למד ביוקר; (ב) רשימת-ה-HAND בת-2 חייבת להיעלם או להיגזר, אחרת המדד משקר כלפי-מטה."
+  },
+  "s22": {
+   "score": 2,
+   "why": "2 — מנוע-מדידה אמיתי על ציר שהמחולל לא מודד (אכיפת-איסורים מול האפיון), עם הגנה מפורשת מפני כותרת-שמדווחת-על-עצמה (:46-48). לא 3 כי המנגנון עצמו (רגקס-על-קוד + רשימה ידנית בת-2) הוא בדיוק מחלקת-התקלה שהריפו למד ביוקר, והוא ימדוד שקר במחולל בלי כתיבה-מחדש."
+  },
+  "evidence": [
+   "read: gen/looks/sefer/build.mjs:1-60 (כל מנגנון-המדידה) + :190-204 (הפלט)",
+   "ran: node -e ספירה עצמאית מ-gen/mosad.data.json ⇒ 12 אגפים · 181 ישויות · 1,232 שדות · 317 איסורים · 533 שלבים",
+   "ran: grep -ro על app/src ⇒ 1 קריאת blocked(forbiddenOf) · 3 זוגות forbiddenOf ייחודיים",
+   "ran: סריקת 14 הבנאים על 'new Function' ⇒ sefer הוא היחיד בלי (0), כל השאר 1",
+   "ran: סריקת 14 הבנאים על 'process.exit' ⇒ 0 בכולם"
+  ]
+ },
+ {
+  "file": "gen/looks/tavla/build.mjs",
+  "lang": "mjs",
+  "lines": 296,
+  "summary": "הארוך מבין 14. טבלת-אנשים דינמית (912 רשומות) בשפת Atlassian: חיפוש-חי · סינון-סוג · דפדוף · «הצג עזבו». ‏13 מופעי `aria-` — השני-בגובהו בקבוצה. מחזיק כלל-מהאפיון שהופך לאיסור-מחיקה.",
+  "does": [
+   {
+    "claim": "‏**גוזר שורה-לכל-אדם עם «קשר» נגזר-לפי-סוג** — עובד⇒תפקיד+ותק/היעדרות · תלמיד⇒כיתה+חדר · הורה⇒שם-משפחה+מספר-ילדים · תורם⇒עיר. כלומר עמודה אחת שמשמעותה משתנה לפי הרשומה",
+    "evidence": "tavla/build.mjs:17-27 (בתוך ה-`new Function`) — `if (p.kind==='עובד'){…tie = s ? s.role : ''; sub = s && s.absent ? 'ב'+s.absent : (s ? s.since : '');} else if (p.kind==='תלמיד'){…tie = c ? c.name : ''…}` וכו׳ ל-4 סוגים"
+   },
+   {
+    "claim": "‏**סוגי-האנשים נגזרים מהדאטה ולא מוקלדים** — `[...new Set(DB.people.map(p=>p.kind))]`",
+    "evidence": "tavla/build.mjs:31 `kinds: [...new Set(DB.people.map(p=>p.kind))]`"
+   },
+   {
+    "claim": "🔴 **מושך את איסורי-האפיון לישות «משפחה» ומשתמש בהם** — `forbiddenOf('אנשים','משפחה')` נכנס ל-D ומשם למסך",
+    "evidence": "tavla/build.mjs:30 `return { rows, forb: forbiddenOf('אנשים','משפחה'), today: DB.today, …}`"
+   },
+   {
+    "claim": "**אינטראקטיבי באמת** — 6 מופעי script/addEventListener: חיפוש-חי שמאפס דף, מסנן-סוג, «הצג עזבו», «טען עוד»",
+    "evidence": "tavla/build.mjs:185 `<script>`; :278 `q.addEventListener('input',function(){page=1;draw();});`; :279 `kf.addEventListener('change',function(){page=1;draw();});`; :280 `document.getElementById('showLeft').addEventListener('click',…)`; :283 `document.getElementById('load').addEventListener('click',…)`"
+   },
+   {
+    "claim": "‏**13 מופעי `aria-`** — השני-בגובהו מבין 14 (אחרי tor עם 18)",
+    "evidence": "ran: grep -c 'aria-' על 14 הבנאים ⇒ tavla 13 · tor 18 · grafa 10 · nochah 8 · search 7 · hechzer 7 · diyun 4 · sulam 4 · tzevet 4 · vaada 4 · buybox 3 · erech 2 · sefer 1 · agora 0"
+   },
+   {
+    "claim": "כהה+בהיר דרך `prefers-color-scheme` ושני מופעי `data-theme` — הדפוס הקבוע בכל 14",
+    "evidence": "ran: grep -c על 14 ⇒ לכל אחד ≥1 prefers-color-scheme ו-≥1 data-theme"
+   },
+   {
+    "claim": "‏**h1 יחיד** — כמו כל 14",
+    "evidence": "ran: grep -c '<h1' על 14 הבנאים ⇒ 1 בכולם, בלי יוצא-דופן"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** שער — אין exit-code, אין בדיקה. ה-audit היחיד שסורק תיקייה כזו הוא `first10/audit.mjs`, והוא אינו מופעל על התיקיות האלה",
+    "evidence": "tavla/build.mjs:293 `writeFileSync(join(here,'tavla.html'), html)` — הקובץ נגמר שם. ran: grep -c 'process.exit' על 14 ⇒ 0 בכולם"
+   },
+   {
+    "claim": "**אינו** אוכף את איסור-המחיקה — הוא **מציג** את `forb` ומסמן «עזב» במקום למחוק. זה עיצוב-נכון, אבל האכיפה היא בכתיבת-המסך ולא בכלל שנקרא מהאפיון",
+    "evidence": "tavla/build.mjs:30 מושך את `forb`, אך אין בקובץ קריאה ל-`blocked(...)` — ran: grep -c 'blocked(' gen/looks/tavla/build.mjs ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מציג את כל 912 הרשומות בבת-אחת — דפדוף בצד-הלקוח; הנתונים כולם נצרבים ב-HTML",
+    "evidence": "tavla/build.mjs:283 `document.getElementById('load').addEventListener(…)`; :278 `page=1;draw();` — דפדוף על מערך שכבר בדף"
+   },
+   {
+    "claim": "**אינו** מייבא טוקנים מדודים — 27 ליטרלי-hex בבלוק `:root` עם הערה «נמדד מ-atlassian.design»",
+    "evidence": "tavla/build.mjs:37-38 `:root{ /* ===== נמדד מ-atlassian.design ===== */`. ran: ספירת hex ⇒ 27"
+   },
+   {
+    "claim": "**אינו** טוען גופן — מוצהר במפורש שלגופן של Atlassian אין אותיות עבריות",
+    "evidence": "tavla/build.mjs:35 `/* אין קישור לגופן — Atlassian Sans נטול אותיות עבריות. */`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/auto-skin.mjs:19 — התפקיד `table: { need: 'table', fam: ['spatial','list'] }`",
+   "gives": "למחולל **כבר יש** תפקיד-עור `table`, והוא בורר לו אטום לפי צורה (`fits`: `!!(a.items && a.items.cells && a.columns)`, ‏auto-skin.mjs:41). כלומר «טבלה» אינה חסר. מה ש-tavla מדגים ואין למחולל הוא **צירוף-ההתנהגויות סביב הטבלה** — חיפוש-חי שמאפס דף · מסנן-סוג נגזר-מהדאטה · דפדוף · ומצב «עזב» במקום מחיקה. אבל זה 6 מאזיני-אירוע ב-JS, וה-forge-atoms של המחולל הם Dart. **אין תפר.** הפריט היחיד בעל ערך-כללי: «איסור-מחיקה באפיון ⇒ סימון-מצב במקום מחיקה» הוא תרגום-כלל-לעיצוב, והמקום שבו זה שייך למחולל הוא `particles.mjs` (‏שקע-חובה ריק ⇒ פסילה) — לא כאן."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. דמו-HTML של יכולת שלמחולל כבר יש כתפקיד-עור מנומק (`table` ב-auto-skin), במימוש שאינו בר-העברה (‏JS/DOM מול Dart) ובלי שער. מה שמעבר לזה הוא 27 ליטרלי-צבע."
+  },
+  "evidence": [
+   "read: gen/looks/tavla/build.mjs:1-45 (הגזירה המלאה + ראש ה-HTML) · :185-296 דרך grep על script/addEventListener/writeFileSync",
+   "ran: מטריצת-תכונות על 14 הבנאים (prefers-color · data-theme · h1 · aria- · bdi · onclick|script · new Function) ⇒ tavla: 1·2·1·13·2·6·1",
+   "ran: grep -c 'process.exit' על 14 ⇒ 0 בכולם",
+   "ran: grep -o hex | wc -l ⇒ 27",
+   "read: machtzev/generator/auto-skin.mjs:19,41 — התפקיד table הקיים במחולל"
+  ]
+ },
+ {
+  "file": "gen/looks/tor/build.mjs",
+  "lang": "mjs",
+  "lines": 298,
+  "summary": "בורר יום+שעה (תיאום קוויטל) בשפת Cal.com. **18 מופעי `aria-` — הגבוה בכל 59 המנועים**, ו-6 מאזיני-אירוע. מתעד פסילת-מקור: Calendly החזיר 404/182 אלמנטים ⇒ נמדד Cal.com.",
+  "does": [
+   {
+    "claim": "‏**הנגיש-ביותר בקבוצה**: 18 מופעי `aria-`, יותר מכל אחד מ-59 המנועים",
+    "evidence": "ran: grep -c 'aria-' על 14 הבנאים ⇒ tor 18 (הגבוה); tavla 13 · grafa 10 · nochah 8 · search 7 · hechzer 7 · agora 0 (הנמוך)"
+   },
+   {
+    "claim": "‏**מתעד פסילת-מקור בכותרת** — לא «בחרתי Cal.com» אלא «Calendly נפסל: עמודי-ההזמנה שלו החזירו 404 או 182 אלמנטים». זו ראיה, לא העדפה",
+    "evidence": "tor/build.mjs:3 `Calendly עצמו נפסל: עמודי-ההזמנה שלו החזירו 404 או 182 אלמנטים.`; :2 `נמדד מ-cal.com/rick/get-rick-rolled (33 תאי-יום · 52 משבצות-שעה)`"
+   },
+   {
+    "claim": "גזירה רזה ומדויקת — התור והמניינים בלבד, עם מיפוי-שדות מקוצר",
+    "evidence": "tor/build.mjs (בתוך ה-new Function) `return { today: DB.today, queue: DB.queue.map(q => ({ no:q.no, fam:fam(q.familyId).name, reason:q.reason, … })), minyanim: DB.minyanim.map(m => ({ t:m.time, n:m.name, w:m.where, c:m.count })) }`"
+   },
+   {
+    "claim": "‏**6 מאזיני-אירוע** — בחירת-יום ברשת, בחירת-משבצת, שני מתגים ('hbtn'/'gbtn') וכפתור-אישור",
+    "evidence": "tor/build.mjs:230 `<script>`; :269 `grid.addEventListener('click',…)`; :274 `slots.addEventListener('click',…)`; :279 `document.getElementById('hbtn').addEventListener('click',…)`; :282 `…'gbtn'…`; :285 `go.addEventListener('click',…)`"
+   },
+   {
+    "claim": "‏**המתג 12h/24h של המקור הוחלף בעברי/לועזי** — התאמת-דומיין מוצהרת, לא העתקה עיוורת (שני הכפתורים hbtn/gbtn)",
+    "evidence": "tor/build.mjs:279,282 — שני מתגים; והתיאור המקביל ב-build-index.mjs:41 `dev:['12h/24h הוחלף בעברי/לועזי','יום השבוע נגזר מהמחסן, לא מהנחה']`"
+   },
+   {
+    "claim": "‏h1 יחיד · כהה+בהיר · 2 מופעי bdi — הדפוס הקבוע",
+    "evidence": "ran: מטריצת-התכונות ⇒ tor: prefers-color 1 · data-theme 2 · h1 1 · aria- 18 · bdi 2 · script/onclick 6 · new Function 1"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** קובע תור באמת — אין שמירה, אין התנגשות, אין מצב. הלחיצות מעדכנות DOM בלבד",
+    "evidence": "tor/build.mjs:269-285 — 6 מאזינים, כולם מקומיים לדף; אין fetch/localStorage בקובץ"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' gen/looks/tor/build.mjs ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מייבא טוקנים — 31 ליטרלי-hex בקובץ",
+    "evidence": "ran: grep -o hex | wc -l ⇒ 31"
+   },
+   {
+    "claim": "**אינו** מטפל בלוח-העברי — «עברי/לועזי» הוא מתג-תצוגה; החישוב עצמו אינו בקובץ",
+    "evidence": "tor/build.mjs — אין בקובץ אף חישוב-תאריך-עברי; השווה: המחולל **כן** מחזיק את זה (‏CLAUDE.md G49: `hebHolidayOn` · `hebInputToIso` · `hebDateFull` · `bhGemToNum`)"
+   },
+   {
+    "claim": "**אינו** מוסיף למחולל יכולת — למחולל **כבר יש** תפקיד-עור `calendar` עם דרישת-צורה מלאה",
+    "evidence": "machtzev/generator/auto-skin.mjs:24 `calendar: { need: 'calendar', fam: ['temporal','spatial'] }`; :40 `case 'calendar': { const v = (a.items && a.items.variants) || []; return !!(a.items && a.columns && a.actions >= 2 && ['pad','has','today'].every((t) => v.includes(t))); }`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ לצינור. נקודת-ההשוואה: machtzev/generator/auto-skin.mjs:24,40 — התפקיד `calendar`",
+   "gives": "בורר-יום-ושעה הוא יכולת שהמחולל **כבר בורר לה אטום** לפי צורה מלאה (עמודות + ≥2 פעולות + וריאנטי pad/has/today). ‏tor הוא HTML/JS ואינו בר-הזרקה. **הדבר היחיד שראוי להיאמר, והוא על הציר של §22 ולא של העיצוב:** 18 מופעי-`aria` כאן מול **אפס** ב-agora — כלומר גם בתוך אותה קבוצה, שנכתבה באותו שבוע, הנגישות נעה מ-0 ל-18 בלי שום שער שיאכוף. זה בדיוק מה שקורה כשאין מדידה; והמחולל, שפולט מסכים באלפים, חשוף לאותה שונות."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. דמו-HTML של יכולת שכבר קיימת במחולל כתפקיד-עור מנומק, בשפה שאינה בת-הזרקה, בלי שער ובלי מצב. הממצא על שונות-הנגישות (0–18) שייך ל-NOTES כדפוס-קבוצה, לא לחיבור-מנוע."
+  },
+  "evidence": [
+   "read: gen/looks/tor/build.mjs:1-8 (כותרת + פסילת-המקור) · בלוק-הגזירה ובלוק-ה-script דרך awk/grep ממוקד (:230-298)",
+   "ran: grep -c 'aria-' על 14 הבנאים ⇒ tor 18, הגבוה; agora 0, הנמוך",
+   "ran: grep -c 'process.exit' ⇒ 0",
+   "ran: grep -o hex | wc -l ⇒ 31",
+   "read: machtzev/generator/auto-skin.mjs:24,40 — התפקיד calendar הקיים במחולל"
+  ]
+ },
+ {
+  "file": "gen/looks/search/build.mjs",
+  "lang": "mjs",
+  "lines": 239,
+  "summary": "שורת-חיפוש מפולחת בשפת Airbnb, עם חיפוש-חי בכל הישויות. **הליטרלי-צבע הנמוך בקבוצה (18)** ו-6 מאזיני-אירוע כולל Escape. ה-README מצהיר שרשת-הכרטיסים של המקור הוסרה במכוון.",
+  "does": [
+   {
+    "claim": "‏**חיפוש-חי אמיתי** — הקלדה מציירת תוצאות, לחיצה פותחת, Escape סוגר, ו-`stopPropagation` מונע סגירה-בטעות",
+    "evidence": "search/build.mjs:178 `<script>`; :231 `$('q').addEventListener('input', e => paintWho(e.target.value));`; :232 `$('q').addEventListener('click', e => e.stopPropagation());`; :233 `$('go').addEventListener('click', e => { e.stopPropagation(); if (open) { close(); } paintRes(); });`; :234 `document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });`; :222 `document.addEventListener('click', e => {…})` — סגירה בלחיצה-בחוץ"
+   },
+   {
+    "claim": "מחפש בשלושה מאגרים נגזרים — 12 האגפים (עם מספר-הישויות בכל אחד), 40 המשפחות עם היתרה הגבוהה, ו-20 עובדים",
+    "evidence": "search/build.mjs (בתוך ה-new Function) `depts: SPEC.depts.map(d => ({ n: d.n, e: d.e.length })), fam: sortBy(DB.families, f=>-balance(f)).slice(0,40).map(…), staff: DB.staff.slice(0,20).map(s=>({ name:nameOf(s.personId), role:s.role, …}))`"
+   },
+   {
+    "claim": "🔴 **הנקי-ביותר בליטרלי-צבע מבין 14** — 18 בלבד, מול 49 ב-sulam",
+    "evidence": "ran: ספירת hex על 14 הבנאים ⇒ search 18 (הנמוך) · sulam 49 (הגבוה) · grafa 46 · agora 36"
+   },
+   {
+    "claim": "‏7 מופעי `aria-` · h1 יחיד · כהה+בהיר · 7 מופעי bdi",
+    "evidence": "ran: מטריצת-התכונות ⇒ search: prefers-color 2 · data-theme 2 · h1 1 · aria- 7 · bdi 7 · script/onclick 6 · new Function 1"
+   },
+   {
+    "claim": "‏**סטייה-מהמקור מוצהרת**: נלקחה שורת-החיפוש בלבד, רשת-הכרטיסים של Airbnb הוסרה",
+    "evidence": "build-index.mjs:11 `dev:['נלקחה שורת החיפוש בלבד — רשת הכרטיסים הוסרה']`; ובכותרת search/build.mjs:1 `העתקה של שורת-החיפוש המפוצלת של Airbnb, למוסד.`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** מחפש בכל הישויות — 40 משפחות ו-20 עובדים בלבד, שנצרבו בזמן-בנייה. המחסן מחזיק 912 אנשים ו-168 משפחות",
+    "evidence": "search/build.mjs — `.slice(0,40)` ו-`.slice(0,20)` בבלוק-הגזירה; המספרים המלאים מתועדים ב-README (912 אנשים · 168 משפחות) ונגזרים ב-full5/build.mjs:27 `people: DB.people.length`"
+   },
+   {
+    "claim": "**אינו** מחובר לשום מקור-חי — כל התוצאות נצרבות ב-HTML בזמן-בנייה. אין fetch ואין אינדקס",
+    "evidence": "search/build.mjs:178-239 — כל ה-script פועל על מערכים שכבר בדף; אין `fetch` בקובץ"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מוסיף למחולל — למחולל יש תפקיד-עור `search` עם דרישת-צורה, וגם מנוע-חיפוש-סלחן מוכח (G35: `ruleExact` · `ruleContains` · `damerauLevenshtein` ⇒ «ארנונא»⇒«ארנונה»), שהוא **חזק** מהחיפוש כאן",
+    "evidence": "machtzev/generator/auto-skin.mjs:23 `search: { need: 'control', fam: ['input','composite'] }`; CLAUDE.md G35 — 5 `bh*` לחיפוש-סלחן מדורג. לעומת search/build.mjs:231 שהוא `paintWho(e.target.value)` — התאמת-מחרוזת פשוטה"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "למחולל יש תפקיד-עור `search` **ומנוע-חיפוש חזק יותר** (חיפוש-סלחן מדורג עם מרחק-עריכה, מוכח ב-G35). החיפוש כאן הוא התאמת-מחרוזת על 60 רשומות צרובות. אין מה לתרום. הפריט היחיד שראוי לרישום: זהו הקובץ הנקי-ביותר בליטרלי-צבע מבין 14 (18) — ראיה לכך שגם בלי שער אפשר להיות ממושמע, וגם שאין מה שיאכוף זאת."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. חיפוש צרוב על 60 רשומות, במימוש חלש מזה שכבר מוכח במחולל, בלי שער ובלי מקור-חי."
+  },
+  "evidence": [
+   "read: gen/looks/search/build.mjs:1-8 (כותרת) · בלוק-הגזירה ובלוק-ה-script דרך awk/grep ממוקד (:178-239)",
+   "ran: ספירת hex על 14 הבנאים ⇒ search 18, הנמוך בקבוצה",
+   "ran: מטריצת-תכונות על 14 ⇒ search: 2·2·1·7·7·6·1",
+   "ran: grep -c 'process.exit' ⇒ 0",
+   "read: machtzev/generator/auto-skin.mjs:23 · CLAUDE.md G35 — המקבילות החזקות במחולל"
+  ]
+ },
+ {
+  "file": "gen/looks/hechzer/build.mjs",
+  "lang": "mjs",
+  "lines": 254,
+  "summary": "טופס החזר-כספי בשפת GOV.UK. **המנוע היחיד מבין 14 ששלושת הכללים החוסמים בו מגיעים מהאפיון ולא מהדמיון** — ו-`fieldsOf('גבייה','החזר כספי')` מושך את שמות-השדות מהאפיון עצמו.",
+  "does": [
+   {
+    "claim": "🔴 **מושך את שדות-הטופס מהאפיון** — לא מוקלדים, אלא `fieldsOf('גבייה','החזר כספי')`",
+    "evidence": "hechzer/build.mjs (בבלוק-הגזירה) `fields: fieldsOf('גבייה','החזר כספי').map(x => x[0])`"
+   },
+   {
+    "claim": "🔴 **בוחר את המשפחה לפי נתון ולא לפי ליטרל** — המשפחה עם הכי-הרבה תשלומים, מחושבת בזמן-בנייה",
+    "evidence": "hechzer/build.mjs (בבלוק-הגזירה) `const cnt = {}; DB.payments.forEach(p => cnt[p.familyId] = (cnt[p.familyId]||0)+1); const fid = Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0]; const f = fam(fid);`"
+   },
+   {
+    "claim": "גוזר גם את רשימת-הפקידים המורשים לפי תפקיד מהמחסן",
+    "evidence": "hechzer/build.mjs `const clerks = DB.staff.filter(s => ['מזכירות','הנהלה'].includes(s.role)).map(s => nameOf(s.personId));`"
+   },
+   {
+    "claim": "‏**טופס עם ולידציה אמיתית** — `preventDefault` על submit ועל ניווט-לשגיאה, כלומר סיכום-שגיאות שקופץ למקום (הדפוס של GOV.UK)",
+    "evidence": "hechzer/build.mjs:200 `<script>`; :233 `a.addEventListener('click',function(ev){ev.preventDefault();` (קפיצה מסיכום-השגיאות לשדה); :238 `f.addEventListener('submit',function(ev){ev.preventDefault();`"
+   },
+   {
+    "claim": "‏7 מופעי `aria-` · h1 יחיד · כהה+בהיר",
+    "evidence": "ran: מטריצת-התכונות ⇒ hechzer: prefers-color 1 · data-theme 2 · h1 1 · aria- 7 · bdi 4 · script/onclick 3 · new Function 1"
+   },
+   {
+    "claim": "‏**מצהיר על מקור-הכללים בכותרת** — «שלושת הכללים החוסמים באים מהאפיון (גבייה / החזר כספי), לא מהדמיון»",
+    "evidence": "hechzer/build.mjs:2"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** מאמת שהכללים נאכפים — הוא **מציג** אותם ומפעיל ולידציית-טופס שנכתבה ביד; אין בקובץ `blocked(...)`",
+    "evidence": "ran: grep -c 'blocked(' gen/looks/hechzer/build.mjs ⇒ 0. (השווה: sefer/build.mjs:22 מחפש בדיוק את הדפוס הזה כדי לסמן «חוסם»)"
+   },
+   {
+    "claim": "**אינו** שולח דבר — `preventDefault` על ה-submit ותו-לא. אין יעד, אין שמירה",
+    "evidence": "hechzer/build.mjs:238 `f.addEventListener('submit',function(ev){ev.preventDefault();` — אין fetch בקובץ"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מייבא טוקנים — 32 ליטרלי-hex, עם ההערה שמיקוד-הצהוב `#ffdd00` «אומת חי»",
+    "evidence": "ran: ספירת hex ⇒ 32; התיאור המקביל ב-build-index.mjs:22 `num:['סיכום גבול 5px #ca3535','מיקוד צהוב #ffdd00 אומת חי','אפס רדיוס בכל 9 הרכיבים']`"
+   },
+   {
+    "claim": "**אינו** מכסה את האפיון — 3 כללים מתוך 317",
+    "evidence": "hechzer/build.mjs:2 («שלושת הכללים»); ran: ספירה עצמאית מ-mosad.data.json ⇒ 317 איסורים"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/app-ds.mjs:75 — הקריאה ל-`rule()` (המנוע הישיבתי פוסק **לפני** שנבנה מסך, הכרעה-27)",
+   "gives": "‏hechzer מדגים את השלב שאחרי `rule()`: הכלל שנפסק צריך להגיע **אל המסך** — כטקסט-שמוצג, כשדה-חובה, וכחסימה-עם-ציטוט. המחולל כבר פוסק לפני-בנייה; מה שאינו ברור הוא אם הפסיקה מגיעה לפלט כחסימה-נראית. ⚠️ **לא נבדק — מיפוי בלבד.** הדפוס בעל-הערך כאן הוא **`fieldsOf(אגף, ישות)`**: שמות-השדות של הטופס נמשכים מהאפיון ולא מומצאים — וזה בדיוק פריט-4 ב-HANDOFF (‏51 המצאות במסלול-הפירוקים) ופריט-6 (‏0 מונחי-שדה בריפו). הרעיון «שדה בטופס חייב מקור מוצהר» כבר נאכף במחולל דרך `hamtzaa.mjs --ratchet`; ‏hechzer מראה אותו על טופס שלם."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 — יש בו שני דפוסים על-הציר הנכון (שדות-מהאפיון · כללים-מהאפיון אל המסך), והוא היחיד מבין 14 שמצהיר על מקור-הכללים שלו. אבל הוא **מציג** ואינו **אוכף** (אפס `blocked(`), מכסה 3 כללים מתוך 317, והמימוש HTML/JS. 1 ולא 2 כי מה שהוא מדגים כבר נאכף במחולל במנגנון חזק יותר (‏rule() לפני-בנייה + ratchet-המצאות)."
+  },
+  "evidence": [
+   "read: gen/looks/hechzer/build.mjs:1-8 (כותרת) · בלוק-הגזירה ובלוק-ה-script דרך awk/grep ממוקד (:200-254)",
+   "ran: grep -c 'blocked(' gen/looks/hechzer/build.mjs ⇒ 0 — מציג, לא אוכף",
+   "ran: node -e על mosad.data.json ⇒ 317 איסורים (מול 3 שהוא מכסה)",
+   "ran: מטריצת-תכונות על 14 ⇒ hechzer: 1·2·1·7·4·3·1",
+   "read: machtzev/generator/app-ds.mjs:75 (הקריאה ל-rule) לפי CLAUDE.md §4"
+  ]
+ },
+ {
+  "file": "gen/looks/diyun/build.mjs",
+  "lang": "mjs",
+  "lines": 276,
+  "summary": "דיון-ועדה כשרשור-תגובות בשפת Hacker News. מושך **גם שדות וגם איסורים** מהאפיון, ומחזיק את מספר מופעי-ה-`data-theme` הגבוה בקבוצה (10) — כלומר טיפול-ערכות הכי-מפורט מבין 14.",
+  "does": [
+   {
+    "claim": "🔴 **מושך שני דברים מהאפיון** — גם את האיסורים וגם את שמות-השדות של «בקשת הנחה»",
+    "evidence": "diyun/build.mjs (בבלוק-הגזירה) `return { T:DB.tariff, today:DB.today, fb: forbiddenOf('גבייה','בקשת הנחה'), fields: fieldsOf('גבייה','בקשת הנחה').map(x=>x[0]), …}`"
+   },
+   {
+    "claim": "בוחר את המשפחה לפי **שלושה תנאים בו-זמנית** (3 ילדים · יתרה חיובית · הנחה קיימת) ואז לפי היתרה הגבוהה — כלומר דוגמה שנבחרה לייצג מקרה מורכב, לא הראשונה",
+    "evidence": "diyun/build.mjs (בבלוק-הגזירה) `const f = DB.families.filter(x => x.kids.length === 3 && balance(x) > 0 && x.discount > 0).sort((a,b) => balance(b) - balance(a))[0];`"
+   },
+   {
+    "claim": "‏**המשתתפים בדיון נגזרים לפי תפקיד** — פונקציית-עזר `people(role)` שמחזירה שמות מהמחסן",
+    "evidence": "diyun/build.mjs (בבלוק-הגזירה) `const people = r => DB.staff.filter(s => s.role === r).map(s => nameOf(s.personId));`"
+   },
+   {
+    "claim": "‏**קיפול-שרשור אמיתי** — קיפול/פתיחה של תגובה בודדת, ושני כפתורים גלובליים «קפל הכל»/«פתח הכל»",
+    "evidence": "diyun/build.mjs:232 `<script>`; :258 `document.addEventListener('click',function(e){`; :262 `document.getElementById('collapseAll').addEventListener('click',function(){`; :264 `document.getElementById('expandAll').addEventListener('click',function(){`"
+   },
+   {
+    "claim": "🔴 **הטיפול המפורט-ביותר בערכות-צבע מבין 14** — 5 בלוקי `prefers-color-scheme` ו-10 מופעי `data-theme`",
+    "evidence": "ran: מטריצת-התכונות על 14 ⇒ diyun: prefers-color **5** · data-theme **10** (שניהם הגבוהים בקבוצה); הבא אחריו grafa עם 2·4"
+   },
+   {
+    "claim": "‏**סטייה-מהמקור מוצהרת ומנומקת**: «ההצנעה נגזרת מסמכות, לא מהצבעות» — ב-HN תגובה דהה לפי הצבעות; כאן לפי תפקיד, כי לוועדה אין קהל",
+    "evidence": "build-index.mjs:44 `dev:['12px⇒15/23 · כפתור 12⇒28','ההצנעה נגזרת מסמכות, לא מהצבעות']`; ובכותרת diyun/build.mjs:2 `נמדד מדיון חי: item?id=49708431 — 419 תגובות, 13 רמות עומק.`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** אוכף — מושך `fb` (איסורים) ומציג; אין `blocked(`",
+    "evidence": "ran: grep -c 'blocked(' gen/looks/diyun/build.mjs ⇒ 0"
+   },
+   {
+    "claim": "**אינו** דיון אמיתי — אין כתיבה, אין שמירה, אין משתתף. השרשור צרוב ב-HTML",
+    "evidence": "diyun/build.mjs:258-266 — 3 מאזינים, כולם קיפול/פתיחה של DOM; אין fetch/localStorage בקובץ"
+   },
+   {
+    "claim": "**אינו** מגיע ל-13 רמות-העומק שנמדדו — הכותרת מדווחת על **המקור** (‏419 תגובות · 13 רמות), לא על הפלט",
+    "evidence": "diyun/build.mjs:2 — «נמדד מדיון חי … 419 תגובות, 13 רמות עומק» הוא תיאור המקור; המספר המקביל בתיאור-הפלט הוא build-index.mjs:43 `num:['הזחה 40 בכל רמה','אפס מסגרות ורקעים','37 קישורי ניווט, כולם תקפים']`"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מייבא טוקנים — 24 ליטרלי-hex",
+    "evidence": "ran: ספירת hex ⇒ 24"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ לצינור. נקודת-השוואה: machtzev/generator/auto-skin.mjs:21 — התפקיד `timeline: { need: 'items2', fam: ['list','chat','card'] }`",
+   "gives": "שרשור-תגובות הוא `timeline`/`chat` במונחי-המחולל, ויש לו תפקיד-עור עם דרישת-צורה. אין מה לחבר. **הפריט בעל-הערך היחיד, והוא ל-NOTES ולא לחיבור:** ‏diyun מחזיק 5 בלוקי `prefers-color-scheme` ו-10 מופעי `data-theme` מול 1–2 בשאר הקבוצה — כלומר טיפול-הערכות בתוך אותה קבוצה נע פי-5 עד פי-10 בלי שום שער. זה אותו ממצא כמו טווח-הנגישות (0–18 מופעי aria), ובאותו כיוון: **מה שלא נמדד, נע**."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. שרשור צרוב בלי כתיבה ובלי שמירה, בשפה שאינה בת-הזרקה, ליכולת שכבר יש לה תפקיד-עור מנומק במחולל. הממצא על שונות-הערכות שייך ל-NOTES."
+  },
+  "evidence": [
+   "read: gen/looks/diyun/build.mjs:1-8 (כותרת) · בלוק-הגזירה ובלוק-ה-script דרך awk/grep ממוקד (:232-276)",
+   "ran: מטריצת-תכונות על 14 ⇒ diyun: prefers-color 5 · data-theme 10 — שניהם הגבוהים בקבוצה",
+   "ran: grep -c 'blocked(' ⇒ 0 · grep -c 'process.exit' ⇒ 0",
+   "ran: ספירת hex ⇒ 24",
+   "read: machtzev/generator/auto-skin.mjs:21 — התפקיד timeline"
+  ]
+ },
+ {
+  "file": "gen/looks/grafa/build.mjs",
+  "lang": "mjs",
+  "lines": 267,
+  "summary": "גרף-קו «תקציב מול ביצוע» בשפת Our World in Data. הגזירה הרזה-ביותר מבין 14 (3 שדות), אבל **10 מופעי `aria-`** ולשוניות עם ניווט-מקלדת. 46 ליטרלי-hex — השני-בגובהו.",
+  "does": [
+   {
+    "claim": "‏**הגזירה הרזה בקבוצה** — 3 שדות בלבד: חודשים, היום, ו-8 סעיפי-תקציב עם תוכנית מול ביצוע מחושב",
+    "evidence": "grafa/build.mjs (בבלוק-הגזירה) `return { months: DB.hmonths, today: DB.today, budget: DB.budget.map(b => ({ name:b.name, plan:b.plan, months:b.months, actual: budgetActual(b) })) }` — ‏3 מפתחות"
+   },
+   {
+    "claim": "‏**הביצוע מחושב ולא מוקלד** — `budgetActual(b)` היא פונקציית-מחסן",
+    "evidence": "grafa/build.mjs (בבלוק-הגזירה) `actual: budgetActual(b)`; אותה פונקציה נקראת גם ב-full5/build.mjs:60 `budget: DB.budget.map(b => ({ name:b.name, plan:b.plan, actual: budgetActual(b) }))`"
+   },
+   {
+    "claim": "🔴 **לשוניות עם ניווט-מקלדת אמיתי** — לא רק קליק; יש מאזין-`keydown` על מיכל-הלשוניות, כלומר חיצים מזיזים בין לשוניות (דפוס-ARIA לtablist)",
+    "evidence": "grafa/build.mjs:245 `<script>`; :249 `tabs.forEach(function(b){b.addEventListener('click',function(){`; :255 `document.querySelector('.tabs').addEventListener('keydown',function(e){`"
+   },
+   {
+    "claim": "‏**10 מופעי `aria-`** — השלישי-בגובהו מבין 14, ומתאים לצורך (גרף + tablist הם שני הרכיבים שהכי תלויים ב-ARIA)",
+    "evidence": "ran: מטריצת-התכונות ⇒ grafa: prefers-color 2 · data-theme 4 · h1 1 · aria- 10 · bdi 6 · script/onclick 3 · new Function 1"
+   },
+   {
+    "claim": "‏**סטייה-מהמקור מוצהרת ומנומקת**: צבע-התווית מחושב עד ניגודיות 4.5 — «במקור לא נמדד». כלומר המקור נכשל בנגישות והעותק תיקן",
+    "evidence": "build-index.mjs:35 `dev:['צבע התווית מחושב עד 4.5 — במקור לא נמדד']`; ובכותרת grafa/build.mjs:2 `נמדד מ-ourworldindata.org/grapher/life-expectancy (4,350 אלמנטים).`"
+   },
+   {
+    "claim": "פרטי-הרשת נמדדו ברמת-הפיקסל — רשת מקווקוות 4,4 · קו-אפס מלא · 6 הילות מול 6 סדרות",
+    "evidence": "build-index.mjs:34 `num:['רשת #dddddd מקווקו 4,4','קו אפס #999999 מלא','6 הילות מול 6 סדרות']`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** מצייר מדאטה חיה — 8 סעיפי-התקציב צרובים ב-HTML בזמן-בנייה",
+    "evidence": "grafa/build.mjs:245-267 — ה-script מחליף לשוניות על נתונים שכבר בדף; אין fetch בקובץ"
+   },
+   {
+    "claim": "🔴 **46 ליטרלי-hex** — השני-בגובהו מבין 14, וזה צפוי בגרף (‏6 סדרות × 2 ערכות + רשת + צירים), אבל כל אחד מהם ליטרל בקובץ ולא טוקן",
+    "evidence": "ran: ספירת hex על 14 ⇒ grafa 46; רק sulam גבוה יותר (49)"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מוסיף למחולל — יש תפקידי-עור `bars` ו-`meter`, והמחולל **כבר סגר** בדיוק את הפער של גרף-שממציא-ערך",
+    "evidence": "machtzev/generator/auto-skin.mjs:22-23 `meter: { need: 'value+values', … }` · `bars: { need: 'values', fam: ['dataviz'] }`; ו-CLAUDE.md G21 (הכרעה-26): «אטום שמציג ערך חייב שקע-דאטה — 10 אטומי-DS שהמציאו ערך (seed/סינוס/מחזור) קיבלו pct/values/marked/…, FAKERS ריק»"
+   },
+   {
+    "claim": "**אינו** מגיע לרזולוציית-המקור — 4,350 אלמנטים נמדדו במקור; הפלט הוא גרף אחד עם 6 סדרות",
+    "evidence": "grafa/build.mjs:2 — המספר מתאר את המקור הנמדד, לא את הפלט"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "זהו המקרה החד-ביותר של «כבר נסגר, וחזק יותר». תובנת-הליבה של גרף — **אסור שגרף ימציא ערך** — היא בדיוק הכרעה-26/G21, שם המחולל רוקן את `FAKERS` והכריח 10 אטומי-DS שהמציאו ערך (זרע · סינוס · מחזור) לקבל שקע-דאטה. ‏grafa מדגים את העיקרון על גרף אחד; המחולל אוכף אותו על **כל** אטום שמציג ערך, כשער. אין כאן תוספת. הפריט היחיד ששווה לצטט הוא הסטייה-המוצהרת: העותק **תיקן נגישות שהמקור נכשל בה** — כלומר «מדידה» אינה «חיקוי-עיוור», וזו הבחנה נכונה."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. גרף צרוב ב-HTML של יכולת שלמחולל יש לה שני תפקידי-עור מנומקים, ושעיקרון-הליבה שלה כבר נאכף אצלו כשער (‏G21 · FAKERS ריק) — חזק ממה שיש כאן."
+  },
+  "evidence": [
+   "read: gen/looks/grafa/build.mjs:1-8 (כותרת) · בלוק-הגזירה ובלוק-ה-script דרך awk/grep ממוקד (:245-267)",
+   "ran: מטריצת-תכונות על 14 ⇒ grafa: 2·4·1·10·6·3·1",
+   "ran: ספירת hex על 14 ⇒ grafa 46, שני-בגובהו",
+   "ran: grep -c 'process.exit' ⇒ 0",
+   "read: machtzev/generator/auto-skin.mjs:22-23 (bars · meter) · CLAUDE.md G21/הכרעה-26 (FAKERS ריק)"
+  ]
  }
 ]
