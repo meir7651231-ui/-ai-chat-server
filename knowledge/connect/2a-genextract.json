@@ -1,5 +1,353 @@
 [
  {
+  "file": "machtzev/dedup/dedup-atoms.mjs",
+  "lang": "mjs",
+  "lines": 112,
+  "does": [
+   {
+    "claim": "ארבע עדשות על מדף-החוזה (`new/atoms/`): (א) תאומי-גוף — sha256 של הקוד אחרי הסרת הערות/רווחים · (ב) תאומי-שם — נרמול `split(/[-_]/).sort().join('|')` שתופס גם סדר-מילים הפוך · (ג) תאומי-מוצא — שני אטומים עם אותה שורת «מוצא:» · (ד) `--semantic`: תאומי-פעולה בהוכחה-צולבת",
+    "evidence": "machtzev/dedup/dedup-atoms.mjs:19-26,30-37,40-47,57"
+   },
+   {
+    "claim": "מדד היום על הריפו הזה: 1,160 אטומים · 2 תאומי-גוף · 2 תאומי-שם · 49 תאומי-מוצא",
+    "evidence": "ran: `node machtzev/dedup/dedup-atoms.mjs` ⇒ «מדף: 1160 אטומים» · «תאומי-גוף (2 קבוצות)» · «תאומי-שם (2 קבוצות…)» · «תאומי-מוצא (49 קבוצות)»; לדוגמה `build-course-daily-rows-data.mjs ≡ week-day-names.mjs`"
+   },
+   {
+    "claim": "בעדשה הסמנטית הכלל הוא «המועמד עובר כל מה שהבעלים עצמו עובר»; בעלים שעובר <80% מדוגמאות-עצמו מוכרז `selfFailed` ו**אינו שופט** — חילוץ-לא-נאמן לא מפיל אטום",
+    "evidence": "machtzev/dedup/dedup-atoms.mjs:98-99"
+   },
+   {
+    "claim": "דו-כיווני ⇒ `twins` (מועמד-לאיחוד, הכרעת-בעלים) · חד-כיווני ⇒ `contains`; כותב optwins.json + OPTWINS-REPORT.md",
+    "evidence": "machtzev/dedup/dedup-atoms.mjs:100-102,105-112"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו ממזג ואינו מוחק כלום** — כל הפלט הוא דוח + JSON; האיחוד מפורש כהכרעת-בעלים",
+    "evidence": "machtzev/dedup/dedup-atoms.mjs:8 (הערת-הכותרת) ואין `unlinkSync`/`writeFileSync` ל-new/atoms בכל הקובץ"
+   },
+   {
+    "claim": "בלי `--semantic` הוא **התאמת-מחרוזות בלבד** — בדיוק משפחת-הבאגים ש-CLAUDE.md מזהיר מפניה («התאמה לפי שם/מחרוזת במקום לפי המקור המוצהר»)",
+    "evidence": "machtzev/dedup/dedup-atoms.mjs:19-47 (‏hash · nameKey · srcOf — אין ריצה)"
+   },
+   {
+    "claim": "עדשת-הגוף רגישה לשינוי-קוסמטי: שינוי שם-משתנה משנה את ה-sha ⇒ תאומים אמיתיים נעלמים",
+    "evidence": "machtzev/dedup/dedup-atoms.mjs:15-17 (‏norm מסיר רק הערות ורווחים)"
+   },
+   {
+    "claim": "אינו נוגע ב-Dart — `new/atoms/` הוא JS בלבד; ל-Dart יש מנוע נפרד (dedup-cross-dart)",
+    "evidence": "machtzev/dedup/dedup-atoms.mjs:13-14"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/one.mjs:84",
+    "how": "שלב-צנרת: `stage('דדופ-אטומי-מדף', () => last(run('machtzev/dedup/dedup-atoms.mjs')), {optional:true})`"
+   },
+   {
+    "who": "CLAUDE.md:120",
+    "how": "מתועד כפקודת-מפעל «אחרי כל גל»"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/regen.mjs` — סדר-הריצה היחיד של GENMAX (`ship` · `one`), כשלב-קדם לפני `behavior-plan.mjs`",
+   "gives": "‏§21 אומר «תת-ספירה = אזעקה», והכפילות היא הצד השני של אותו מטבע: שני אטומים שקולים ⇒ הבורר בוחר לפי שבירת-שוויון-אלפביתית (`gen/prove.mjs:53`) ולא לפי ייעוד. הרצת `--semantic` בתוך regen הופכת «כפילות» ממידע-אחורה לאילוץ-בחירה קדימה. מחיר: ריצות-Dart, לכן `--semantic` ולא ברירת-מחדל"
+  },
+  "s22": {
+   "score": 2,
+   "why": "עדשת-ד' היא בדיוק שיטת-ההוכחה של §20 (הרצה, לא שם) ומיושמת נכון — כולל הסירוב לשפוט מנוע שאינו מוכיח את עצמו. חסר: היא אינה בצנרת-המחולל, רק בצנרת-המפעל"
+  },
+  "evidence": [
+   "ran: node machtzev/dedup/dedup-atoms.mjs ⇒ 1160 אטומים · 2 · 2 · 49",
+   "read: machtzev/dedup/dedup-atoms.mjs:1-9,15-47,95-112",
+   "read: machtzev/one.mjs:84 (הקורא)"
+  ]
+ },
+ {
+  "file": "machtzev/dedup/dedup-cross-dart.mjs",
+  "lang": "mjs",
+  "lines": 31,
+  "does": [
+   {
+    "claim": "משווה `new/dart` מול `new/dart-maor` בשלוש עדשות: שם-מנורמל · sha1 של **מבנה** (כל מזהה מוחלף ב-`ID`, טיפוסים `dynamic/final/var` נמחקים) ⇒ שתי פונקציות שונות-שמות באותו מבנה מתגלות",
+    "evidence": "machtzev/dedup/dedup-cross-dart.mjs:11-13,20-21,24-29"
+   },
+   {
+    "claim": "מדד היום: «בנייה-חכמה-Dart: 345 · מאור-Dart: …» ⇒ **4 מועמדי-ליבה-אימפריאלית**, כולם לפי שם (`fmt_date` · `norm_name` · `norm_search` · `normalize_phone`); אפס התאמות-מבנה",
+    "evidence": "ran: `node machtzev/dedup/dedup-cross-dart.mjs` ⇒ 4 שורות 🔗, אפס שורות 🧬, «4 מועמדי-ליבה-אימפריאלית»"
+   },
+   {
+    "claim": "עוצר מוקדם ומדווח כשאין מאור-Dart — `if (!maor.length) { console.log('(מאור עדיין לא-מומר…)'); exit(0) }`",
+    "evidence": "machtzev/dedup/dedup-cross-dart.mjs:18"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**באג בבנייה של `mByStruct`**: `(mByStruct.get(k) || mByStruct.set(k,[]).get(k)).push(a)` — `Map.set` מחזיר את ה-Map, ו-`.get(k)` עליו מחזיר את המערך, כך שזה עובד במקרה; אבל אם `k` כבר קיים עם ערך falsy התנהגות משתנה. יותר חשוב: **עדשת-המבנה לא הניבה אף התאמה** — 0 שורות 🧬 מתוך 345×N השוואות",
+    "evidence": "machtzev/dedup/dedup-cross-dart.mjs:21 + ran (אפס 🧬 בפלט)"
+   },
+   {
+    "claim": "אינו כותב קובץ — stdout בלבד, כמו dedup-cross",
+    "evidence": "machtzev/dedup/dedup-cross-dart.mjs:28-31"
+   },
+   {
+    "claim": "אינו סורק `new/dart-boxes` (‏102 המנועים ש-G48 הוסיף) ולא `new/dart-forge-bs`",
+    "evidence": "machtzev/dedup/dedup-cross-dart.mjs:16 — `read('dart')` · `read('dart-maor')` בלבד"
+   },
+   {
+    "claim": "נרמול-המבנה מוחק את **כל** שמות-המזהים ⇒ שתי פונקציות חשבוניות שונות לחלוטין באותו שלד מקבלות אותו sha. שלא כמו dedup-atoms --semantic, אין כאן ריצה שתפריך",
+    "evidence": "machtzev/dedup/dedup-cross-dart.mjs:13 — `.replace(/[a-z_][\\w]*/gi,'ID')`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/one.mjs:85",
+    "how": "שלב-צנרת: `stage('דדופ-אימפריאלי (Dart↔Dart)', …, {optional:true})`"
+   },
+   {
+    "who": "CLAUDE.md:122",
+    "how": "מתועד כפקודת-מפעל"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/dedup/dedup-atoms.mjs --semantic` (‏עדשת-ד') — במקום sha-מבנה, להעביר את זוגות-המועמדים של עדשת-המבנה דרך `logic-proof`",
+   "gives": "עדשת-המבנה מייצרת מועמדים זולים; `logic-proof` מכריע בהוכחה-בריצה. היום היא מייצרת אפס — לכן החיבור גם מודד אם הנרמול רגיש-מדי או רופף-מדי. זה בדיוק «הכי-טוב-בהוכחה» של G34ב"
+  },
+  "s22": {
+   "score": 1,
+   "why": "בצנרת ורץ, אבל שתי העדשות המוכחות שלו (שם · מבנה) הן התאמת-מחרוזת; עדשת-המבנה נתנה 0 ולכן היום הוא למעשה dedup-cross בשם אחר"
+  },
+  "evidence": [
+   "ran: node machtzev/dedup/dedup-cross-dart.mjs ⇒ 4 🔗 · 0 🧬 · «4 מועמדי-ליבה-אימפריאלית»",
+   "read: machtzev/dedup/dedup-cross-dart.mjs:11-13,16,21,24-31",
+   "read: machtzev/one.mjs:85 (הקורא)"
+  ]
+ },
+ {
+  "file": "machtzev/dedup/dedup-cross.mjs",
+  "lang": "mjs",
+  "lines": 19,
+  "does": [
+   {
+    "claim": "משווה שמות-קבצים מנורמלים בין `new/atoms` (‏JS) ל-`new/dart` (‏Dart) ⇒ «ליבה-אימפריאלית»: יכולת שקיימת בשתי המערכות",
+    "evidence": "machtzev/dedup/dedup-cross.mjs:8-15"
+   },
+   {
+    "claim": "מדד היום: «מאור-JS: 1160 אטומים · בנייה-חכמה-Dart: 345 אטומים · 🔗 ליבה-אימפריאלית: 4» — `fmt-date` · `norm-name` · `norm-search` · `normalize-phone`",
+    "evidence": "ran: `node machtzev/dedup/dedup-cross.mjs` (הפלט המלא)"
+   },
+   {
+    "claim": "אומר במפורש בכותרת שזו **אינה כפילות-למחיקה** אלא דגל-לתשומת-לב באיחוד",
+    "evidence": "machtzev/dedup/dedup-cross.mjs:4-5"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו משווה גוף** — שמות בלבד. שני אטומים בשם זהה שמתנהגים אחרת יוכרזו «ליבה-אימפריאלית» בשקר",
+    "evidence": "machtzev/dedup/dedup-cross.mjs:3 (ההודאה בכותרת) · :15 (‏`if (jsN.has(k))` — כל ההשוואה)"
+   },
+   {
+    "claim": "אינו כותב שום קובץ — stdout בלבד; אין דוח לצרוך",
+    "evidence": "machtzev/dedup/dedup-cross.mjs:16-19 — רק console.log"
+   },
+   {
+    "claim": "סורק **רק** `new/dart`, לא `new/dart-boxes` — בעוד ש-G48 הוסיף 102 מנועי-קופסה מ-dart-boxes לאטלס",
+    "evidence": "machtzev/dedup/dedup-cross.mjs:11 — `readdirSync(R+'dart')` בלבד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "CLAUDE.md:121",
+    "how": "מתועד כפקודת-מפעל"
+   },
+   {
+    "who": "∅",
+    "how": "אין קורא בקוד — לא ב-one.mjs, לא ב-run.mjs, לא ב-police.mjs (בדיקה: grep dedup-cross.mjs על כל הריפו)"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — ‏`machtzev/dedup/dedup-cross-dart.mjs` עושה את אותה עבודה **לפי גוף** ולא לפי שם, והוא כן בצנרת (one.mjs:85)",
+   "gives": "∅ — חיבור-לפי-שם הוא בדיוק מה ש-CLAUDE.md מסמן כשורש-8-הבאגים («התאמה לפי שם/מחרוזת במקום לפי המקור המוצהר»)"
+  },
+  "s22": {
+   "score": 0,
+   "why": "לא מקרב, ואף מסכן: שיטת-ההשוואה שלו היא השיטה שנפסלה. יש לו מחליף בצנרת"
+  },
+  "evidence": [
+   "ran: node machtzev/dedup/dedup-cross.mjs ⇒ «1160 · 345 · 🔗 4»",
+   "ran: grep -rn 'dedup-cross.mjs' --include=*.mjs --include=*.md . ⇒ CLAUDE.md:121 בלבד",
+   "read: machtzev/dedup/dedup-cross.mjs:1-19"
+  ]
+ },
+ {
+  "file": "machtzev/dedup/dedup-deep.mjs",
+  "lang": "mjs",
+  "lines": 57,
+  "does": [
+   {
+    "claim": "ארבעה ממצאים ברזולוציית-הפירוק-המלא: גופי-פונקציה זהים (sha1 על הגוף האמיתי שנקרא **מהדיסק** לפי טווח-השורות של L6b) · שם-זהה בקבצים שונים · regex זהה ב-≥3 מקומות · עיצוב-מולחם שערכו כבר בפלטה",
+    "evidence": "machtzev/dedup/dedup-deep.mjs:12-30,33-36,39-43"
+   },
+   {
+    "claim": "הוא **המנוע היחיד** במשפחת-ה-registry שחוזר לקובץ-המקור וקורא בייטים אמיתיים, במקום להסתמך על המטא-דאטה",
+    "evidence": "machtzev/dedup/dedup-deep.mjs:8 (‏roots מ-census) · :17-19 (‏readFileSync + slice לפי הטווח)"
+   },
+   {
+    "claim": "מסנן רעש: גוף <60 תווים אחרי נרמול נזרק",
+    "evidence": "machtzev/dedup/dedup-deep.mjs:20"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "קורס בקלון-טרי (‏`readdirSync(machtzev/registry/)` בשורה 8)",
+    "evidence": "ran: `node machtzev/dedup/dedup-deep.mjs` ⇒ Error: ENOENT … scandir '…/machtzev/registry/'"
+   },
+   {
+    "claim": "עדשת-הגוף מוחקת הערות ורווחים אך **לא** שמות-מזהים ⇒ תופסת רק העתק-הדבק מדויק, לא שקילות",
+    "evidence": "machtzev/dedup/dedup-deep.mjs:19"
+   },
+   {
+    "claim": "עדשת-הסגנון (4) רצה **רק על maor** — `load('atoms-L0-maor')` ו-`atoms-L0b-maor` קשיחים, בלי לולאת-ריפו כמו בשלבים 1-3",
+    "evidence": "machtzev/dedup/dedup-deep.mjs:40-41 מול :13,34"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:18",
+    "how": "`try { run('./dedup/dedup-deep.mjs', []); } catch {}` — כשל נבלע"
+   },
+   {
+    "who": "machtzev/one.mjs:47",
+    "how": "עקיף"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/purity/purify-dart.mjs --tables` / `machtzev/dedup/dedup-atoms.mjs` — שני המנועים שכבר רצים על הריפו הזה ועושים את אותן עדשות על Dart/JS מקומי",
+   "gives": "הערך הייחודי שלו — «קרא את הבייטים לפי טווח-השורות» — הוא בדיוק מה שחסר ל-dedup-atoms (שמשווה קבצים שלמים). אם L6b היה נגזר מהריפו הזה (‏`machtzev/census/engine-index.mjs` כבר מחזיק את נתוני-הקבצים), dedup-deep היה עובד עליו בלי שינוי"
+  },
+  "s22": {
+   "score": 1,
+   "why": "השיטה נכונה (בייטים, לא מטא-דאטה) אבל הקלט שלה מת. מקרב את האמון במפה, לא את האפליקציה"
+  },
+  "evidence": [
+   "ran: node machtzev/dedup/dedup-deep.mjs ⇒ ENOENT scandir machtzev/registry/",
+   "read: machtzev/dedup/dedup-deep.mjs:8,17-20,40-41",
+   "read: machtzev/run.mjs:18"
+  ]
+ },
+ {
+  "file": "machtzev/dedup/dedup.mjs",
+  "lang": "mjs",
+  "lines": 77,
+  "does": [
+   {
+    "claim": "הכרעת-כפילויות בשלוש משפחות מתוך ה-registry: (1) צבעים — שמות שונים שכל **סט-הערכים** שלהם זהה (≥3 שמות) ⇒ קנוני = השם עם הכי פחות מקפים · (2) מחרוזות — אותו טקסט-מתובנת (ספרות⇒`#`) ב-≥2 מקומות ⇒ מועמד-מונח · (3) מנועים — תאומים maor↔buildsmart בניקוד (‏exports + 20 לטהור + 30 לקיום-בדיקה + אורך/100)",
+    "evidence": "machtzev/dedup/dedup.mjs:10-24,28-37,40-64"
+   },
+   {
+    "claim": "מכריע `winner` רק כשצד אחד **מכיל 100%** מהיצוא של השני; אחרת `merge` עם רשימת-הייחודי-לכל-צד — «אינווריאנט: הקנוני חייב להכיל 100% מכל כפיל»",
+    "evidence": "machtzev/dedup/dedup.mjs:2-3,54-61"
+   },
+   {
+    "claim": "כותב registry/dupgroups.json + dedup/DEDUP-REPORT.md",
+    "evidence": "machtzev/dedup/dedup.mjs:66,76"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**קורס בקלון-טרי** — אין `machtzev/registry/`",
+    "evidence": "ran: `node machtzev/dedup/dedup.mjs` ⇒ Error: ENOENT … (‏`load()` תופס, אבל שלב-הצבעים קורא `load()` שמחזיר [] ואז `hasTest` קורא `load('census-…')`; הקריסה בפועל היא ENOENT בשרשרת)"
+   },
+   {
+    "claim": "`counts.undecided` מאותחל ל-0 ואף פעם לא מוגדל — `decision` הוא תמיד 'winner' או 'merge' ⇒ **«🚨 ללא-הכרעה» יהיה 0 תמיד**, גם כשאין הכרעה",
+    "evidence": "machtzev/dedup/dedup.mjs:67-68 מול :22,36,58-61 (שלושת המקומות שמגדירים decision)"
+   },
+   {
+    "claim": "סף-המחרוזות בקוד הוא `>= 2` בעוד שהכותרת והדוח אומרים «≥5 מופעים»",
+    "evidence": "machtzev/dedup/dedup.mjs:27 (הערה «≥5») · :35 (`filter(([,v]) => v.length >= 2)`) · :72 (הכותרת בדוח «≥5 מופעים»)"
+   },
+   {
+    "claim": "השוואת-המנועים היא O(maor × buildsmart) לפי שמות-יצוא בלבד — אין ריצה, אין דוגמאות",
+    "evidence": "machtzev/dedup/dedup.mjs:47-51"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:17",
+    "how": "`try { run('./dedup/dedup.mjs', []); } catch {}` — **הכשל נבלע**"
+   },
+   {
+    "who": "machtzev/one.mjs:47",
+    "how": "עקיף דרך run.mjs ב-cwd=maor"
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — כל שלושת שלביו תלויים ב-registry של maor-system שאינו קיים, ושניים מהם (צבעים · מנועים) כבר יש להם מחליף שרץ על הריפו הזה: `machtzev/assemble/gen-theme.mjs` לצבעים, `dedup-atoms` למנועים"
+  },
+  "s22": {
+   "score": 0,
+   "why": "לא מקרב: מת מלמעלה (אין registry), עטוף ב-catch שבולע, ומדד «ללא-הכרעה» שלו שבור מהותית"
+  },
+  "evidence": [
+   "ran: node machtzev/dedup/dedup.mjs ⇒ Error: ENOENT (‏machtzev/registry/)",
+   "read: machtzev/dedup/dedup.mjs:27,35,67-68,72 (הסתירה ≥5/≥2 והמונה-המת)",
+   "read: machtzev/run.mjs:17 (‏try/catch שבולע)"
+  ]
+ },
+ {
+  "file": "machtzev/dedup/reconcile.mjs",
+  "lang": "mjs",
+  "lines": 33,
+  "does": [
+   {
+    "claim": "שלוש משוואות-שלמות על ה-registry, עם `exit 1` על כל הפרה: (1) אפס קבצים-יתומים בכל מפקד · (2) כל מזהה-אטום ייחודי גלובלית (אותו id עם source אחר = אזעקה) · (3) כל אטום מצביע לקובץ שקיים במפקד — «רשומת-רפאים»",
+    "evidence": "machtzev/dedup/reconcile.mjs:9-14,15-23,24-32"
+   },
+   {
+    "claim": "הוא **המשטרה** של שכבת-המחצב — `process.exit(fail)` בסוף, לא דוח",
+    "evidence": "machtzev/dedup/reconcile.mjs:2,33"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "קורס בקלון-טרי לפני שהוא בודק משהו",
+    "evidence": "ran: `node machtzev/dedup/reconcile.mjs` ⇒ Error: ENOENT … scandir '…/machtzev/registry/'"
+   },
+   {
+    "claim": "אינו מאמת שה-**מפקד** עצמו טרי מול הדיסק — הוא מאמין ל-census.json. קובץ שנמחק מהריפו אך נשאר במפקד יעבור את כל שלוש המשוואות",
+    "evidence": "machtzev/dedup/reconcile.mjs:26-29 (‏censusFiles נבנה מה-JSON, לא מ-fs)"
+   },
+   {
+    "claim": "בניגוד ל-dedup/dedup-deep שנקראים ב-`try/catch`, הוא נקרא **בלי** catch — כלומר הוא הראשון שיפיל את run.mjs",
+    "evidence": "machtzev/run.mjs:13 (`run('./dedup/reconcile.mjs', [])`) מול :16-18 (‏try/catch)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:13",
+    "how": "הרצה-בשם, ללא catch — פסק-דין חוסם"
+   },
+   {
+    "who": "machtzev/one.mjs:47",
+    "how": "עקיף דרך run.mjs ב-cwd=maor"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/police.mjs` — מרשם-השערים (‏gates.tsv, 57 שערים) — כשער «אינדקס ≡ עץ-חי» לשכבת-המחצב, במקביל לשער `oracle` הקיים שעושה בדיוק זאת לאטומים",
+   "gives": "‏`oracle` מאמת «אינדקס-אטומים ≡ עץ-חי». reconcile הוא אותו חוק על ה-registry. אבל ה-registry אינו קיים כאן, ו-`oracle` כבר מכסה את מה שכן קיים ⇒ הנקודה קיימת אך ריקה מתוכן היום"
+  },
+  "s22": {
+   "score": 1,
+   "why": "הרעיון («מספר בלי מקור = רשומת-רפאים») הוא בדיוק VERIFY-LAWS, אבל האובייקט שהוא שומר עליו אינו בריפו"
+  },
+  "evidence": [
+   "ran: node machtzev/dedup/reconcile.mjs ⇒ ENOENT scandir machtzev/registry/",
+   "read: machtzev/dedup/reconcile.mjs:1-33",
+   "read: machtzev/run.mjs:13 (קורא בלי catch) מול :16-18 (עם catch)"
+  ]
+ },
+ {
   "file": "machtzev/extract/actions.mjs",
   "lang": "mjs",
   "lines": 27,
