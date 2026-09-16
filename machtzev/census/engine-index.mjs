@@ -106,7 +106,10 @@ const BOILER = /^(#!|(?:\/\/|#)\s*[═─=-]{3,}|\/\*|\*\/|\*\s*$|set -[a-z]+)/;
 function purposeFromHeader(src) {
   // Python: ‏docstring-המודול הוא **המטרה המוצהרת** (כמו כותרת-הבלוק ב-mjs)
   const ds = src.match(/^\s*(?:"""|''')([\s\S]{2,600}?)(?:"""|''')/);
-  if (ds && /[א-ת]/.test(ds[1])) return ds[1].replace(/\s+/g, ' ').trim().slice(0, 420);
+  // 🔴 היה כאן `/[א-ת]/` — דרישת-עברית שזרקה **67 מנועים מתועדים באנגלית**
+  // (‏minisql · buildsmart/functions · scripts). תיעוד הוא תיעוד בכל שפה;
+  // הסינון צריך להיות על **בוילרפלייט**, לא על אלפבית (נמדד).
+  if (ds && ds[1].trim().replace(/[\s─═=*-]+/g, '').length >= 12) return ds[1].replace(/\s+/g, ' ').trim().slice(0, 420);
   const lines = src.split('\n');
   const buf = [];
   for (const raw of lines.slice(0, 40)) {
@@ -119,9 +122,13 @@ function purposeFromHeader(src) {
     if (buf.join(' ').length > 400) break;
   }
   const text = buf.join(' ').replace(/\s+/g, ' ').trim();
-  if (!text || !/[א-ת]/.test(text)) return null;
+  // אותו תיקון: מספיק תוכן-אמת (בלי קווי-הפרדה), בכל שפה
+  if (!text || text.replace(/[\s─═=*-]+/g, '').length < 12) return null;
   return text.slice(0, 420);
 }
+
+// מקור-מטרה שלישי: מטרות **נחקרות** (מישהו פתח וקרא). כל רשומה עם evidence.
+const RESEARCHED = (() => { try { return JSON.parse(fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), 'engine-purposes.data.json'), 'utf8')).purposes || {}; } catch { return {}; } })();
 
 function indexRows() {
   const md = readIf(MACH + 'INDEX.md') || '';
@@ -217,8 +224,9 @@ export function build() {
     const fromMach = p.replace(/^machtzev\//, '');
     const row = IDX.find((r) => r.files.some((f) => f === fromMach || f === base || f.endsWith('/' + base)));
     const head = purposeFromHeader(src);
-    const purpose = head || (row ? row.purpose : null);
-    const purposeFrom = head ? 'כותרת-הקובץ' : row ? 'INDEX.md' : null;
+    const res = RESEARCHED[p];
+    const purpose = head || (row ? row.purpose : null) || (res ? res.purpose : null);
+    const purposeFrom = head ? 'כותרת-הקובץ' : row ? 'INDEX.md' : res ? 'נחקר (+evidence)' : null;
 
     // שער: שורה ב-police.mjs ⇒ המזהה ⇒ שורה ב-gates.tsv
     // 🔒 גבול-נתיב חובה: בלי `(?:[^']*\/)?` המילה `gate.mjs` תאמה ל-`coverage-gate.mjs`

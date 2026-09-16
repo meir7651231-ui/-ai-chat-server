@@ -1,7 +1,7 @@
 {
  "at": "2026-09-16",
  "count": 515,
- "withPurpose": 395,
+ "withPurpose": 476,
  "engines": [
   {
    "file": ".claude/hooks/pre-tool.sh",
@@ -875,8 +875,8 @@
    "file": "buildsmart/.claude/hooks/session-start.sh",
    "lang": "sh",
    "lines": 71,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "REPO=\"${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null)}\"",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -895,7 +895,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -1006,8 +1005,8 @@
    "file": "buildsmart/app_flutter/scripts/apply_lipskey_enrich.py",
    "lang": "py",
    "lines": 124,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "\"\"\"Apply VALIDATED Lipskey enrichment (dims + color) onto lib/data/lipskey_catalog.dart.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "dart_value",
     "dart_map",
@@ -1028,7 +1027,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
     "אין-קורא-ידוע",
@@ -1065,8 +1063,8 @@
    "file": "buildsmart/app_flutter/scripts/crop_huliot.py",
    "lang": "py",
    "lines": 471,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "\"\"\"Adaptive crop for Huliot SmartLock catalog pages.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "find_green_lines",
     "band_tops_for",
@@ -1090,7 +1088,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
     "אין-קורא-ידוע",
@@ -1101,8 +1098,8 @@
    "file": "buildsmart/app_flutter/scripts/enrich_from_name.py",
    "lang": "py",
    "lines": 86,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "\"\"\"R8-safe name-parse enrichment → knowledge/_enrich_validated.json.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "size_in",
     "finish_in",
@@ -1121,7 +1118,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
     "אין-קורא-ידוע",
@@ -1214,8 +1210,8 @@
    "file": "buildsmart/app_flutter/scripts/fill_residual_rt.py",
    "lang": "py",
    "lines": 81,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "\"\"\"R8 residual fill — size/finish printed verbatim in a product's own name that earlier passes missed (cm/inch/slash sizes; pure-colour words). Idempotent.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "size_in",
     "color_in",
@@ -1232,7 +1228,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
     "אין-קורא-ידוע",
@@ -1320,8 +1315,8 @@
    "file": "buildsmart/app_flutter/scripts/harvest_lipski_site.py",
    "lang": "py",
    "lines": 57,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "\"\"\"Harvest every product on lipski.co.il (official manufacturer site, ~186 products): for each product page, pull its SKU, name, and main image URL. Output a JSON map for matching against our catalog. Uses curl (Cloudflare blocks urllib's UA). Read-only. Usage: python scripts/harvest_lipski_site.py \"\"\"",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "curl",
     "main"
@@ -1339,7 +1334,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
     "אין-קורא-ידוע",
@@ -1350,8 +1344,8 @@
    "file": "buildsmart/app_flutter/scripts/match_lipskey_pdf.py",
    "lang": "py",
    "lines": 116,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "\"\"\"Match the swarm's VALIDATED Lipskey-PDF extraction against the live catalog.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "as_int",
     "main"
@@ -1370,7 +1364,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
     "אין-קורא-ידוע",
@@ -1407,8 +1400,8 @@
    "file": "buildsmart/app_flutter/scripts/polish_shot.js",
    "lang": "js",
    "lines": 27,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Polish screenshot — Playwright headless chromium shot of the Flutter web build. ignoreHTTPSErrors: the sandbox proxies external hosts with an untrusted cert. Args: <url> <out.png> [waitMs]",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [
     "--no-sandbox",
@@ -1427,7 +1420,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -1463,8 +1455,8 @@
    "file": "buildsmart/app_flutter/scripts/post_build.sh",
    "lang": "sh",
    "lines": 64,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Re-applies the canvasKit config to build/web/flutter_bootstrap.js so that local serving (puppeteer / `python3 -m http.server`) loads canvaskit from the bundled `canvaskit/` instead of the gstatic CDN. `flutter build web --release` regenerates flutter_bootstrap.js on every run, wiping our local override — run this immediately after each build. Usage: cd app_flutter flutter build web --release scripts/post_build.sh",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -1477,7 +1469,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -1542,8 +1533,8 @@
    "file": "buildsmart/app/scripts/extract-catalog.mjs",
    "lang": "mjs",
    "lines": 440,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Lifts product catalog, variant tables, supplier pricing, and tool bundles from the legacy single-file prototype (../index.html) into type-safe TS modules under src/data/, and decodes embedded base64 JPEGs to public/catalog/*.jpg. node scripts/extract-catalog.mjs",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "childrenOf",
     "categoryById",
@@ -1573,7 +1564,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-שער-משטרה",
     "אין-קורא-ידוע",
     "לא-ב-INDEX.md"
@@ -1583,8 +1573,8 @@
    "file": "buildsmart/app/smoke-settings.mjs",
    "lang": "mjs",
    "lines": 219,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Smoke-test — verifies wired settings leaves end-to-end. Coverage: display · notifications · region · delivery · about · security · support · account · payment · reset Run from repo root: cd app && npm run build && cd .. npx http-server app/dist -p 8123 -s & node app/smoke-settings.mjs",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -1599,7 +1589,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -1665,8 +1654,8 @@
    "file": "buildsmart/functions/src/analytics.ts",
    "lang": "ts",
    "lines": 312,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Pillar 5 · Step 66 — COST-GUARDRAILS for the Studio scale surface (analytics + presence). The publish path's two ceilings — `maxInstances: 10` and the per-uid `_publishRate/{uid}` limiter — already live on `publishConfig` (studio.ts, built in Step 56; the detail's \"maxInstances on publishConfig+rollups / rate-limit on _publishRate\" is satisfied there). THIS module adds the remaining four guardrails",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "kNumShards",
     "kPresenceStaleMs",
@@ -1698,7 +1687,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -1709,8 +1697,8 @@
    "file": "buildsmart/functions/src/approveUsers.ts",
    "lang": "ts",
    "lines": 182,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "registration approval — the OWNER/manager activates who may buy. New accounts are born `status: pending` (the client born-status write), and the pending-gate (rbac checkoutBlock + the `isActive()` orders rule) blocks them at checkout until an owner approves. Approval is OWNER-DRIVEN from the Manager Customers screen's approval panel (app_flutter/lib/screens/ manager_dashboard_screen.dart), which calls THIS callable t",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "APPROVE_USERS_CAP",
     "mayApproveUsers",
@@ -1736,7 +1724,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -1747,8 +1734,8 @@
    "file": "buildsmart/functions/src/audit.ts",
    "lang": "ts",
    "lines": 65,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "S8.4 — append-only `auditLog` collection writes from the sensitive paths (advanceOrderStage · revertIllegalOrderStageWrite · computeCredit · getUploadUrl). who / what / when / before→after. APPEND-ONLY contract: this module only ever `add()`s. Functions run with the Admin SDK (rules-exempt); S5 Security Rules (sibling fleet — firestore.rules) must deny ALL client read/write on `auditLog` so the collection is server-",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "writeAudit"
    ],
@@ -1778,7 +1765,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -1789,8 +1775,8 @@
    "file": "buildsmart/functions/src/claude.ts",
    "lang": "ts",
    "lines": 167,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "askClaude — a thin, AUTH-gated server proxy to the Anthropic API. Mirrors the `r2.ts` callable pattern exactly (auth-gated, no App-Check enforcement — the same posture as computeCredit/getUploadUrl/reviewRoleRequest; App-Check enforcement is a later, all-callables-together hardening once attestation is confirmed in the shipped build, NOT a one-off that breaks only this endpoint). SSOT / security: the API key lives ON",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "askClaude"
    ],
@@ -1809,7 +1795,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -1820,8 +1805,8 @@
    "file": "buildsmart/functions/src/common.ts",
    "lang": "ts",
    "lines": 76,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Shared plumbing for the S8 server-side modules (orders/credit/push/r2/audit). IMPORTANT — load order: `index.ts` (the entrypoint) calls `initializeApp()` in its module body, but ES imports are hoisted ABOVE that call, so every module here executes first. Therefore modules must NEVER resolve an Admin SDK service at module scope — always lazily, inside a handler (by the time any handler runs, index.ts has long finished",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "REGION",
     "db",
@@ -1864,7 +1849,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -1875,8 +1859,8 @@
    "file": "buildsmart/functions/src/credit.ts",
    "lang": "ts",
    "lines": 143,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "S8.2 — `computeCredit` callable: contractor credit computed SERVER-side. creditLimit = READ from `customers/{name}.creditLimit`, or 0 when a manager has not set one. It is NOT derived. It used to be `contractorCredit(name)` — a hash of the person's name in the 30,000–120,000 ₪ band — and returning that from here was worse than returning it from the client, because the client treats this callable as the one authority ",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "computeCredit"
    ],
@@ -1897,7 +1881,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -1908,8 +1891,8 @@
    "file": "buildsmart/functions/src/creditCore.ts",
    "lang": "ts",
    "lines": 149,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "S8.2 core — EXACT port of the deterministic contractor-credit logic. PURE module (no Firebase imports) so `selftest.ts` can exercise it offline. SOURCE (read 2026-06-10): app_flutter/lib/logic/manager_dashboard.dart `contractorCredit(String name)` — note: the SSOT row pointed at lib/state/orders_engine.dart, but the function actually lives in logic/manager_dashboard.dart (orders_engine.dart only consumes it via",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "dartStringHashCode",
     "contractorCredit",
@@ -1933,7 +1916,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -1944,8 +1926,8 @@
    "file": "buildsmart/functions/src/deleteAccount.ts",
    "lang": "ts",
    "lines": 650,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "S1.8 — account-deletion server cleanup (GDPR right-to-erasure + Apple's in-app account-deletion requirement), as a GEN2 CALLABLE. Why a callable (not an Auth onDelete trigger): Firebase Auth has no GEN2 background trigger for deletion, and this codebase is all gen2 (Cloud Run / Eventarc, region me-west1). A v1/gen1 `auth.user().onDelete` trigger requires a gen1 deploy path (App Engine instance + the v1 generateUpload",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "eraseUserCompletely",
     "deleteAccount",
@@ -1968,7 +1950,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -1979,8 +1960,8 @@
    "file": "buildsmart/functions/src/directory.ts",
    "lang": "ts",
    "lines": 131,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "directory — the small, readable \"who exists here\" list. WHY IT HAS TO EXIST. Chat threads are isolated by `participantUids`, and the app fills that list by resolving the other side's uids from their role. It did that by reading the whole `users` collection — which the rules correctly deny to everyone except an admin, since `users` holds phone numbers, e-mail addresses and approval status. The client caught the denial",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "syncDirectoryEntry",
     "onUserDocWritten"
@@ -2002,7 +1983,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2013,8 +1993,8 @@
    "file": "buildsmart/functions/src/index.ts",
    "lang": "ts",
    "lines": 228,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "BuildSmart Cloud Functions — S1.9 `setRole` (server-connect §S1). THE ONLY WAY A ROLE IS WRITTEN. Roles live as Firebase Auth CUSTOM CLAIMS (`role: contractor|manager|store|courier|worker`, or `roles: [...]` for a multi-role user) — never as a client-writable Firestore field. The client reads them via `getIdTokenResult` (lib/state/auth_state.dart, roleProvider) and S5 Security Rules enforce them server-side. Admin SD",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "setRole"
    ],
@@ -2050,7 +2030,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2061,8 +2040,8 @@
    "file": "buildsmart/functions/src/orderEmail.ts",
    "lang": "ts",
    "lines": 199,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Order-confirmation email — SSOT: knowledge/DIRECTIVE-order-confirmation-email.md. Firestore trigger on `orders/{orderId}` creation → a pretty RTL-Hebrew HTML confirmation email via Resend, to the CUSTOMER (when the order carries an email) and ALWAYS a copy to the business OWNER. GATED + default-OFF (byte-identical until the owner turns it on): • `ORDER_EMAIL` (string param) must equal \"true\", AND • `RESEND_API_KEY` (",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "buildOrderEmailHtml",
     "onOrderCreatedEmail"
@@ -2082,7 +2061,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2093,8 +2071,8 @@
    "file": "buildsmart/functions/src/orderFlow.ts",
    "lang": "ts",
    "lines": 103,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "S8.1 domain — the order stage chain + per-transition role authorization. PURE module (no Firebase imports) so `selftest.ts` can exercise it offline. VERBATIM SOURCES (read 2026-06-10, branch claude/whats-happening-LyY9G): • Chain: app_flutter/lib/logic/manager_dashboard.dart `kManagerOrderFlow` (@legacy index.html:16943 `ORDER_FLOW`): new → preparing → ready → pickup → transit → delivered • Labels: app_flutter/lib/da",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "ORDER_FLOW",
     "ORDER_STAGE_LABEL_HE",
@@ -2121,7 +2099,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2132,8 +2109,8 @@
    "file": "buildsmart/functions/src/orders.ts",
    "lang": "ts",
    "lines": 207,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "S8.1 — server-side stage-transition enforcement, TWO layers (both required): 1. CALLABLE `advanceOrderStage({orderId})` — THE sanctioned write path. Firestore triggers carry no auth context, so role checks can only happen where the caller's ID token is present: here. The callable advances the order ONE step along ORDER_FLOW iff the caller's role claims own that transition (store / courier per sys_orders.dart; manager",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "advanceOrderStage",
     "revertIllegalOrderStageWrite"
@@ -2155,7 +2132,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2166,8 +2142,8 @@
    "file": "buildsmart/functions/src/push.ts",
    "lang": "ts",
    "lines": 219,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "S8.3 (+S6.3) — FCM push triggers: • `onOrderStageChanged` — onDocumentUpdated orders/{orderId}: a LEGAL stage step notifies the order's participants (contractorId / storeId / courierId — uids per the schema; ids that have no users/{uid} doc, e.g. legacy seed display-names, are silently skipped) minus the actor that advanced it (the callable stamps stageBy/stageAt). Hebrew payload with the VERBATIM stage label (suppli",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "sendToUsers",
     "onOrderStageChanged",
@@ -2191,7 +2167,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2233,8 +2208,8 @@
    "file": "buildsmart/functions/src/reviewRoleRequest.ts",
    "lang": "ts",
    "lines": 245,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "6 — role-request review (gen2 callable). A signed-in user asks for an OPERATIONAL role by writing roleRequests/{uid} (status: pending); the designated approver reviews it here. This is the ONLY path besides the bootstrap setRole that writes a role claim, and it enforces a hierarchical approval matrix (NOT admin-only — the real operators approve their own tier): requested role → approver role worker → contractor (a co",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "mayReviewRoleRequest",
     "reviewRoleRequest",
@@ -2259,7 +2234,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2270,8 +2244,8 @@
    "file": "buildsmart/functions/src/selftest.ts",
    "lang": "ts",
    "lines": 233,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Offline self-test of the PURE S8 logic (no Firebase, no emulator, no network): `npm run selftest` → tsc → node lib/selftest.js. Asserts: • creditCore — the Dart-VM string hash + contractorCredit match the ground-truth probe captured from `dart run` (Dart 3.7.2, 2026-06-10); • orderFlow — the chain, single-step legality, and the per-transition role authorization mirror sys_orders.dart / supplier_data.dart.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2294,7 +2268,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -2306,8 +2279,8 @@
    "file": "buildsmart/functions/src/setEmployer.ts",
    "lang": "ts",
    "lines": 127,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "HR-enablement St1 — `setEmployer` (gen2 callable, region me-west1): the worker→employer link, ADMIN-ONLY, and deliberately ORTHOGONAL to the role surface (mirrors `setOrg`). WHY: worker HR (attendance / certs / vacations …) can only move to the server once the server knows WHO a worker's employer is — so a secure rule can say \"the worker writes their own doc, and ONLY their employer (or a manager) reads",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "setEmployer"
    ],
@@ -2330,7 +2303,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2341,8 +2313,8 @@
    "file": "buildsmart/functions/src/setEmployerCore.ts",
    "lang": "ts",
    "lines": 42,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "PURE core of the `setEmployer` callable — NO firebase imports, so the offline self-test (test/setEmployer.test.ts, the creditCore idiom) can import it with plain `ts-node`. The Firebase-bound wrapper (setEmployer.ts) calls this to decide, then does the admin-gated claim + users-doc write.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "UID_PATTERN",
     "parseSetEmployerInput"
@@ -2361,7 +2333,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2372,8 +2343,8 @@
    "file": "buildsmart/functions/src/setOrg.ts",
    "lang": "ts",
    "lines": 138,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Stage-3.3 St1 — `setOrg` (gen2 callable, region me-west1): org membership, ADMIN-ONLY, and deliberately ORTHOGONAL to the role surface. NOT part of `setRole` on purpose: setRole REPLACES its whole claim surface (role/roles/storeId) on every call, and org membership must SURVIVE a re-role — so membership gets its own callable that moves ONLY the `orgId` claim, merged over whatever else the target carries (the same cla",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "setOrg"
    ],
@@ -2393,7 +2364,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2404,8 +2374,8 @@
    "file": "buildsmart/functions/src/studio.ts",
    "lang": "ts",
    "lines": 545,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Pillar 5 · Step 56 — `publishConfig`, THE single sanctioned publish-to-all path for the Studio config tree. Mirrors `advanceOrderStage` (orders.ts:50): an AUTH-gated onCall that does its mutation inside a `runTransaction`, stamps who/when, and writes an `auditLog` entry on BOTH success and denial. The publish itself is a POINTER FLIP over immutable snapshots — O(users), not O(users×nodes) — so a publish to thousands ",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "decidePublish",
     "rateLimitExceeded",
@@ -2433,7 +2403,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2444,8 +2413,8 @@
    "file": "buildsmart/functions/src/taskNotifs.ts",
    "lang": "ts",
    "lines": 100,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "onTaskStatusChanged (Wave T3 · 2d) — SERVER-GENERATED worker bell feed. The in-app §6 worker notification feed (the 🔔 bell) migrates from the client's username-keyed local store to `workerNotifs/{workerUid}`, WRITTEN BY THE SERVER so a contractor's approve/reject can reach the worker WITHOUT a cross-party client write (a client can never write another user's feed — the rule is self-only; only this Admin-SDK trigger ",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "onTaskStatusChanged"
    ],
@@ -2464,7 +2433,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2475,8 +2443,8 @@
    "file": "buildsmart/functions/test/credit.test.ts",
    "lang": "ts",
    "lines": 108,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Offline self-test of the PURE `computeCredit` decision cores — the same style as functions/test/studio.test.ts and functions/src/selftest.ts: a `check()` harness over the pure cores, run with `tsc && node`. This repo carries no `firebase-functions-test`, so the Firebase-bound onCall wrapper, the Firestore reads and the audit sink are exercised only through the cores tested here — exactly as `mayReviewRoleRequest` is ",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2491,7 +2459,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -2504,8 +2471,8 @@
    "file": "buildsmart/functions/test/setEmployer.test.ts",
    "lang": "ts",
    "lines": 97,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Offline self-test of the PURE `parseSetEmployerInput` core — the credit.test.ts idiom (this repo carries no `firebase-functions-test`, so the onCall wrapper + Admin SDK writes are exercised only through the pure core tested here). It lives OUTSIDE src, so the deploy build (tsconfig include: [\"src\"]) never ships it. Run: `npx ts-node functions/test/setEmployer.test.ts` WHAT THIS CORE EXISTS TO GUARANTEE: the worker→em",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2522,7 +2489,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -2534,8 +2500,8 @@
    "file": "buildsmart/functions/test/studio.test.ts",
    "lang": "ts",
    "lines": 411,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Offline self-test of the PURE Step-56 `publishConfig` logic (no Firebase, no emulator, no network) — the SAME style as functions/src/selftest.ts (the repo's only existing functions test: a `check()` harness over the PURE cores, run `tsc && node`). This repo carries NO `firebase-functions-test` dependency, and the Firebase-bound onCall wrapper / transaction / audit sink are exercised through their PURE decision cores ",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2554,7 +2520,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -2566,8 +2531,8 @@
    "file": "buildsmart/orchestrator/scripts/assert-manifest.sh",
    "lang": "sh",
    "lines": 25,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Run a manifest of BYTE assertions (conformance + regression) so source-conformance and \"this bug must never come back\" are ENFORCED by the gate automatically — not left to remembering to run grep-verify with the right patterns. This is the systematic form of the kit's core rule (verify bytes, not prose). Manifest lines (#comments / blank lines ignored): <relpath>:::<present_regex> file MUST contain it (conformance: a",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2583,7 +2548,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2594,8 +2558,8 @@
    "file": "buildsmart/orchestrator/scripts/central-verify.sh",
    "lang": "sh",
    "lines": 69,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "THE GATE. Returns 0 only if static-analysis is clean, tests pass, and the build succeeds. Project-specific adapter (current: Flutter). Swap the three command blocks for another stack. Hardened (red-team): asserts the target fingerprint, prints what it aimed at, no longer swallows failures, and trusts the analyzer's exit code (not only a regex). usage: central-verify.sh <app-dir> APP=\"${1:?app dir (e.g. .../app_flutte",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2610,7 +2574,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2621,8 +2584,8 @@
    "file": "buildsmart/orchestrator/scripts/ckpt.sh",
    "lang": "sh",
    "lines": 25,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Durable run checkpoint — resume + phase ordering. State lives in the worktree's git-admin dir (survives the worktree, never appears in `git diff`). Atomic writes, jq-validated. usage: ckpt.sh <worktree> <cmd> [args] init \"<goal>\" | set <key> <value> | get <key> | phase <name> | guard <required-phase> | show guard exits 1 if the current phase is earlier than <required-phase> in the fixed pipeline order —",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2639,7 +2602,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2650,8 +2612,8 @@
    "file": "buildsmart/orchestrator/scripts/diff-coverage.sh",
    "lang": "sh",
    "lines": 49,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Diff-coverage gate — every CHANGED source file must appear in the coverage report. This is the red-team's T2 false-green killer: when lcov paths and git paths don't line up, the naive intersection is empty and the gate \"passes\" having actually checked nothing. Here a zero-overlap (coverage and changes BOTH non-empty, yet no path in common) is itself a hard BLOCK — a path mismatch is never allowed to read as a pass. O",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2666,7 +2628,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2677,8 +2638,8 @@
    "file": "buildsmart/orchestrator/scripts/ff-push.sh",
    "lang": "sh",
    "lines": 40,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Fast-forward push ONLY. Refuses the default/protected branch (red-team CRITICAL #1), refuses if origin advanced past your base, and aborts on a failed fetch (never push against an unconfirmed remote state). usage: ff-push.sh <worktree> <repo-dir> <branch> <expected-origin-base-sha> No override exists: a protected-branch push is a deliberate human action done by hand, outside this automation. (The ALLOW_PROTECTED env-",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2691,7 +2652,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2703,8 +2663,8 @@
    "file": "buildsmart/orchestrator/scripts/grep-verify.sh",
    "lang": "sh",
    "lines": 27,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Verify the BYTES, not the agent's prose. Use after a fix fleet returns (especially on \"already done\" / \"no change needed\" claims) to confirm each fix is actually in the file. Each arg is a check: \"file:::present_regex\" (must appear >=1) or \"file:::!absent_regex\" (must appear 0 times) Exits non-zero if any check fails. example: grep-verify.sh \"lib/x.dart:::_loaded\" \"lib/x.dart:::!oldBuggyString\" fail=0",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2720,7 +2680,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2731,8 +2690,8 @@
    "file": "buildsmart/orchestrator/scripts/lens-coverage.sh",
    "lang": "sh",
    "lines": 27,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Lens coverage gate — every REQUIRED audit lens must have been returned by the fleet. Kills the \"we ran 9 of 10 lenses and nobody noticed the 10th was missing\" gap: a missing viewpoint is a silent hole, not a visible failure. usage: lens-coverage.sh <required-lenses-file> <returned-dir-OR-listfile> returned dir -> uses basenames of *.md / *.json (lens id = filename without extension) returned file -> one returned lens",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2747,7 +2706,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2758,8 +2716,8 @@
    "file": "buildsmart/orchestrator/scripts/registry.sh",
    "lang": "sh",
    "lines": 42,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Sub-agent registry — track every spawned agent so none is left unreaped before a phase advances. A \"leaked\" agent (spawned, never closed) means an audit/fix lane silently went missing — this turns that into a hard BLOCK instead of a silent gap. State lives in the worktree's git-admin dir (survives the worktree, never appears in `git diff`). Atomic writes, jq-validated. usage: registry.sh <worktree> <cmd> [args]",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2776,7 +2734,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2787,8 +2744,8 @@
    "file": "buildsmart/orchestrator/scripts/report-lint.sh",
    "lang": "sh",
    "lines": 37,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Lint a run-report JSON against the report contract (pure jq — there is no `jsonschema` in this runtime). Catches the failure mode where a report SAYS \"CLEAN\" while it still carries deferred work or unresolved discrepancies — the \"looks done, isn't\" trap. schemas/report.schema.json documents the same shape. usage: report-lint.sh <report.json> F=\"${1:?report.json}\" [ -f \"$F\" ] || { echo \"FAIL: no such report file: $F\";",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2803,7 +2760,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2814,8 +2770,8 @@
    "file": "buildsmart/orchestrator/scripts/required-tests.sh",
    "lang": "sh",
    "lines": 29,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Enforce that CRITICAL test flows EXIST. Paired with a green `flutter test` in central-verify, presence is sufficient: the suite fails the whole run if any test fails, so \"present + suite-green\" ⇒ the flow ran AND passed. This closes the gap where the gate runs \"whatever tests happen to exist\" without guaranteeing the real flows (state machine, cross-role) stay covered even when a change doesn't touch them.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2831,7 +2787,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2842,8 +2797,8 @@
    "file": "buildsmart/orchestrator/scripts/selftest.sh",
    "lang": "sh",
    "lines": 128,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Self-test for the tooling layer — exercises every script on synthetic data with EXPECTED exit codes. Hermetic: uses a throwaway `git init` repo + a tmpdir, cleaned on exit. Touches nothing in the real worktree. Run before committing tooling changes; it must print \"SELFTEST PASS\". usage: selftest.sh HERE=$(cd \"$(dirname \"$0\")\" && pwd) LENSES=\"$HERE/../lenses/registry.txt\" CKPT=\"$HERE/ckpt.sh\"; REG=\"$HERE/registry.sh\";",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2866,7 +2821,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2877,8 +2831,8 @@
    "file": "buildsmart/orchestrator/scripts/wt-setup.sh",
    "lang": "sh",
    "lines": 10,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Create a fresh detached worktree at a commit/branch for one pipeline run. usage: wt-setup.sh <repo-dir> <commit-or-branch> <worktree-path> REPO=\"${1:?repo dir}\"; REF=\"${2:?commit/branch}\"; WT=\"${3:?worktree path}\" git -C \"$REPO\" fetch --no-tags origin \"$REF\" 2>/dev/null || true git -C \"$REPO\" worktree add --detach \"$WT\" \"$REF\" echo \"worktree at $(git -C \"$WT\" rev-parse --short HEAD) -> $WT\" echo \"cleanup later with: ",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2891,7 +2845,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -2903,8 +2856,8 @@
    "file": "buildsmart/rules_test/approval.test.js",
    "lang": "js",
    "lines": 266,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "rules_test/approval.test.js — \"all-by-approval\", enforced where it counts. WHAT WAS WRONG. The approval lifecycle existed only on the client, and every layer of it was decorative: • the amber strip calls itself, in its own source, \"a non-blocking notice\"; • the typed gate `requirePermission` (rbac.dart) has ZERO call sites; • the checkout fence tested `userProfileProvider.registered`, a device-local",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2917,7 +2870,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -2930,8 +2882,8 @@
    "file": "buildsmart/rules_test/chat.test.js",
    "lang": "js",
    "lines": 322,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "rules_test/chat.test.js — launch A9 rules-emulator suite for the CHAT ownership rules in /firestore.rules (chatThreads + chatMessages). Runs ONLY against the Firestore emulator (`npm test` under `firebase emulators:exec`), never the live project. @firebase/rules-unit-testing v4 over node's built-in runner (`node --test`) — same harness as orders.test.js. WHY THIS FILE EXISTS: before A9 the chat rules had ZERO emulato",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2944,7 +2896,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -2957,8 +2908,8 @@
    "file": "buildsmart/rules_test/inventory.test.js",
    "lang": "js",
    "lines": 207,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "rules_test/inventory.test.js — U3 (store-ownership) emulator suite for the LAUNCH-BLOCKING isolation in /firestore.rules. Runs ONLY against the Firestore emulator (`npm run test:emulator`). Same harness as orders/users.test.js: @firebase/rules-unit-testing over node's built-in runner (`node --test`). THE LAUNCH-BLOCKER (SPEC-user-system §U3, directive §6): a store owner manages its OWN inventory alone and can NEVER t",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2971,7 +2922,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -2984,8 +2934,8 @@
    "file": "buildsmart/rules_test/orders.test.js",
    "lang": "js",
    "lines": 458,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "rules_test/orders.test.js — launch Phase G (G3) rules-emulator suite for the OWNERSHIP hardening in /firestore.rules. Runs ONLY against the Firestore emulator (`npm run test:emulator` boots it via firebase.json → firestore.rules), never the live project. Written with @firebase/rules-unit-testing v4/v5 over node's built-in runner (`node --test`) — no mocha/jest, per rules_test/README.md. COVERS (the Phase-G ask + the ",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -2998,7 +2948,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -3011,8 +2960,8 @@
    "file": "buildsmart/rules_test/org_config.test.js",
    "lang": "js",
    "lines": 190,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "rules_test/org_config.test.js — the OWNER-publishes / EVERYONE-reads contract for `orgConfigLive/current`, pinned against /firestore.rules. Runs ONLY on the Firestore emulator (`npm run test:emulator` boots it via firebase.json → firestore.rules), never the live project. Written with @firebase/rules-unit-testing over node's built-in runner (`node --test`) — no mocha/jest, per rules_test/README.md; the harness/boilerp",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -3025,7 +2974,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -3038,8 +2986,8 @@
    "file": "buildsmart/rules_test/studio.test.js",
    "lang": "js",
    "lines": 435,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "rules_test/studio.test.js — Pillar 5 · Step 65 rules-emulator suite for the STUDIO + AUTHORED-CATALOG blocks in /firestore.rules (studioConfig* / catalogProducts* / catalogPending* / catalog metadata / analytics* / presence*). Runs ONLY against the Firestore emulator (`npm test` under `firebase emulators:exec`), never the live project. @firebase/rules-unit-testing v4 over node's built-in runner (`node --test`) — same",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -3052,7 +3000,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -3065,8 +3012,8 @@
    "file": "buildsmart/rules_test/users.test.js",
    "lang": "js",
    "lines": 262,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "rules_test/users.test.js — U0.4 rules-emulator suite for the `users/{uid}` AUTHORITY-FIELD hardening in /firestore.rules. Runs ONLY against the Firestore emulator (`npm run test:emulator`), never the live project. Same harness as orders.test.js: @firebase/rules-unit-testing over node's built-in runner (`node --test`) — no mocha/jest (rules_test/README.md). COVERS (the U0 rule + the all-by-approval decision it enforce",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -3081,7 +3028,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -3093,8 +3039,8 @@
    "file": "buildsmart/scripts/bootstrap-studio-pointer.mjs",
    "lang": "mjs",
    "lines": 65,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "P5.68 (R2-10 deploy-ordering) — ONE-TIME, IDEMPOTENT bootstrap of the Studio publish pointer `studioConfig/published`, run in CI *before* the rules-lock so the very first client `get`/listen (step 58) never hits a MISSING doc. WHY THIS EXISTS (R2-10, the last Pillar-5 hardening): • The step-58 listener + step-59 snapshot-puller treat a MISSING pointer as \"no published config yet\" and fall back to the bundled born-see",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -3107,7 +3053,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -3120,8 +3065,8 @@
    "file": "buildsmart/scripts/build_clean.sh",
    "lang": "sh",
    "lines": 31,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "stage-4 · build the CLEAN profile — the generic white-label base (PLAN-buildsmart-clean-master §4: one code → many apps). What APP_PROFILE=clean means (lib/state/app_profile.dart, pinned by app_profile_flags_test): • every shipped-UX capability ON (word-finder, keyboard, dives, global search, store comparison, smart-input); • NO company server (CATALOG_BASE_URL='') and NO company CDN (IMAGE_BASE_URL='') — bundled ass",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -3134,7 +3079,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -3240,8 +3184,8 @@
    "file": "buildsmart/scripts/compare_local_vs_flip.sh",
    "lang": "sh",
    "lines": 71,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "P5.68 (§8 Phase-3, 📈) — compare the LOCAL (flags-OFF, shipped default) build against the FLIP (Pillar-5 server flags ON) build, so a dev can eyeball that turning the backend ON did not regress the offline experience before cutover. This is a DEV helper — it is NOT a CI gate (the CI gate is the flags-OFF `backend_flag_test.dart` + the deploy-ordering selftest). It runs two builds and reports drift; the shipped defaul",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -3254,7 +3198,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -3266,8 +3209,8 @@
    "file": "buildsmart/scripts/extract_lipskey.py",
    "lang": "py",
    "lines": 412,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "\"\"\" Lipskey Plumbing Catalog 2024 — full extractor v3. Handles NO-style blocks, flat tables (bends/pipes/branches). \"\"\"",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "cat",
     "clean",
@@ -3294,7 +3237,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
     "אין-קורא-ידוע",
@@ -3334,8 +3276,8 @@
    "file": "buildsmart/scripts/mutation_hard_test.py",
    "lang": "py",
    "lines": 206,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "\"\"\" mutation_hard_test.py — 20 HARDER mutations. Subtler bugs, narrower logic gaps. Some are designed to slip through — finding them means we need more tests.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "read",
     "write",
@@ -3356,7 +3298,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
     "אין-קורא-ידוע",
@@ -3367,8 +3308,8 @@
    "file": "buildsmart/scripts/mutation_test.py",
    "lang": "py",
    "lines": 223,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "\"\"\" mutation_test.py — injects 20 bugs into the infra helpers and verifies the test suite catches every one of them.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "read",
     "write",
@@ -3390,7 +3331,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
     "אין-קורא-ידוע",
@@ -3452,8 +3392,8 @@
    "file": "buildsmart/scripts/seed/backfill_user_status.js",
    "lang": "js",
    "lines": 83,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "backfill_user_status.js — the USER-SYSTEM ACTIVATION migration. Stamps status:'active' on every EXISTING users/{uid} that has NO status field, so pre-user-system accounts are NOT read as 'pending' once USER_SYSTEM is turned on. (BsUser.fromWire decodes a MISSING status as `pending` — the all-by-approval safe default — which is correct for NEW registrations, but would wrongly flag every grandfathered user. This backfi",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [
     "--project",
@@ -3469,7 +3409,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -3481,8 +3420,8 @@
    "file": "buildsmart/scripts/seed/upload_seed.js",
    "lang": "js",
    "lines": 80,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "upload_seed.js — write a Firestore seed bundle (from the Flutter exporter) to the real project, via firebase-admin (server-side, bypasses security rules for a one-shot admin seed). Idempotent: doc-id keyed, merge:true → a re-run updates, never duplicates. Batched (≤400/commit). The bundle is the EXACT shape the app reads (produced by the proven Dart toDoc / verifiedSpecToDoc / store+inventory serializers) — top-level",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [
     "--project",
@@ -3498,7 +3437,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -3547,8 +3485,8 @@
    "file": "buildsmart/scripts/vercel-build.sh",
    "lang": "sh",
    "lines": 42,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Vercel build script for the Flutter web app (app_flutter/).",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -3561,7 +3499,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -3573,8 +3510,8 @@
    "file": "buildsmart/service-worker.js",
    "lang": "js",
    "lines": 58,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "BuildSmart — Service Worker Provides offline support: caches the app shell on install and serves it from cache when the network is unavailable (construction sites frequently have no signal). Cache-first for the shell, network-first for everything else with a cache fallback. ===================================================================== */ var CACHE_NAME = 'buildsmart-v107'; var APP_SHELL = [",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -3589,7 +3526,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -3602,8 +3538,8 @@
    "file": "buildsmart/upload_huliot_r2.py",
    "lang": "py",
    "lines": 37,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "\"\"\"Upload 159 Huliot SmartLock product images to Cloudflare R2.\"\"\"",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -3616,7 +3552,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -7664,7 +7599,7 @@
   {
    "file": "machtzev/census/engine-index.mjs",
    "lang": "mjs",
-   "lines": 348,
+   "lines": 356,
    "purpose": "engine-index.mjs — אינדקס-האמת האחד **לכל מנוע** (מקביל ל-atom-index לאטומים). 🔴 למה הוא קיים: לאטומים יש `atom-index` («מונע פספוס-חוצה-סוכנים») וחיפוש- לפי-מטרה (`search-score`). **למנועים לא היה כלום** — רק `INDEX.md` שהוא טקסט, ו-103 מתוך 213 רשומים בו. לכן השאלה «איזה מנוע פותר לי את X» נענתה ב-grep, ו-grep מוצא רק מה שהשואל כבר ידע לשאול. זה המנגנון שסוגר את זה. לכל מנוע חמש עובדות — כולן **נמדדות**, אף אחת לא",
    "purposeFrom": "כותרת-הקובץ",
    "exports": [
@@ -7682,7 +7617,8 @@
     "OUT"
    ],
    "reads": [
-    "engine-index.json"
+    "engine-index.json",
+    "engine-purposes.data.json"
    ],
    "imports": [
     "../search-score.mjs",
@@ -7692,7 +7628,8 @@
    "gate": null,
    "gateRegistered": false,
    "calledByName": [
-    "📄 INDEX.md"
+    "📄 INDEX.md",
+    "📄 HANDOFF-2026-09-16.md"
    ],
    "runnable": true,
    "inIndexMd": true,
@@ -10475,7 +10412,8 @@
    "gateRegistered": true,
    "calledByName": [
     "police",
-    "📄 INDEX.md"
+    "📄 INDEX.md",
+    "📄 HANDOFF-2026-09-16.md"
    ],
    "runnable": true,
    "inIndexMd": true,
@@ -11668,7 +11606,8 @@
    "gate": null,
    "gateRegistered": false,
    "calledByName": [
-    "📄 INDEX.md"
+    "📄 INDEX.md",
+    "📄 HANDOFF-2026-09-16.md"
    ],
    "runnable": true,
    "inIndexMd": true,
@@ -12795,8 +12734,8 @@
    "file": "machtzev/pure/pure-lint.mjs",
    "lang": "mjs",
    "lines": 243,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "pure-lint — deterministic gate for the PURE visual-spec, pushed to its byte maximum. Encodes every CHECKABLE rule of PURE-SPEC.md (§0/§1/§2/§5) so verification is repeatable, zero-token, and permanent — \"bytes-not-prose\". Anything genuinely perceptual (Flat≠Elevated by eye, identifiable-without-name, the morph *look*) is deliberately NOT judged here; that thin residue is the only place a render+eye remains.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [
     "--strict",
@@ -12836,7 +12775,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -14856,8 +14794,8 @@
    "file": "yeshiva-engine/arena/tests/test_orders.py",
    "lang": "py",
    "lines": 156,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "from datetime import date",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "test_checkout_chains_pricing_tax_shipping_inclusive_il",
     "test_checkout_exclusive_tax_eu_adds_tax_and_shipping",
@@ -14885,7 +14823,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -14897,8 +14834,8 @@
    "file": "yeshiva-engine/arena/tests/test_pricing_tax_shipping.py",
    "lang": "py",
    "lines": 105,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "from datetime import date",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "test_tier_pricing_kicks_in_by_quantity",
     "test_percent_coupon_applies_to_every_line",
@@ -14924,7 +14861,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -14936,8 +14872,8 @@
    "file": "yeshiva-engine/arena/tests/test_reports_repo_cli.py",
    "lang": "py",
    "lines": 54,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "from datetime import date from pathlib import Path",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "test_report_totals_and_category_split_agree",
     "test_report_date_filter_and_top_products",
@@ -14959,7 +14895,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -15024,8 +14959,8 @@
    "file": "yeshiva-engine/bench/fixtures/audit/shop/inventory.py",
    "lang": "py",
    "lines": 28,
-   "purpose": "מלאי.",
-   "purposeFrom": "כותרת-הקובץ",
+   "purpose": null,
+   "purposeFrom": null,
    "exports": [
     "reserve",
     "restock",
@@ -15042,6 +14977,7 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
+    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -15053,8 +14989,8 @@
    "file": "yeshiva-engine/bench/fixtures/audit/shop/money.py",
    "lang": "py",
    "lines": 21,
-   "purpose": "כסף.",
-   "purposeFrom": "כותרת-הקובץ",
+   "purpose": null,
+   "purposeFrom": null,
    "exports": [
     "round_price",
     "apply_discount",
@@ -15071,6 +15007,7 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
+    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -15082,7 +15019,7 @@
    "file": "yeshiva-engine/bench/fixtures/audit/shop/orders.py",
    "lang": "py",
    "lines": 32,
-   "purpose": "הזמנות.",
+   "purpose": "\"\"\"הזמנות.\"\"\" from dataclasses import dataclass from datetime import datetime",
    "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "Order",
@@ -15112,7 +15049,7 @@
    "file": "yeshiva-engine/bench/fixtures/audit/shop/report.py",
    "lang": "py",
    "lines": 30,
-   "purpose": "דוחות.",
+   "purpose": "\"\"\"דוחות.\"\"\" from datetime import datetime",
    "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "parse_date",
@@ -15142,7 +15079,7 @@
    "file": "yeshiva-engine/bench/fixtures/bugs/age.py",
    "lang": "py",
    "lines": 11,
-   "purpose": "גיל לטופס.",
+   "purpose": "\"\"\"גיל לטופס.\"\"\" from datetime import date",
    "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "age"
@@ -15742,8 +15679,8 @@
    "file": "yeshiva-engine/random/minisql/minisql/__init__.py",
    "lang": "py",
    "lines": 11,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "minisql — a small relational database engine in pure Python. SQL lexer + parser → AST → planner (index selection, hash joins) → Volcano-style executor. Storage: in-memory tables with B+tree indexes, a write-ahead log for durability and crash recovery, snapshots (checkpoints), and transactions with undo-based rollback.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [],
    "cli": [],
    "writes": [],
@@ -15759,7 +15696,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "אין-ייצוא (לא ספרייה)",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
@@ -15772,8 +15708,8 @@
    "file": "yeshiva-engine/random/minisql/minisql/ast.py",
    "lang": "py",
    "lines": 216,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "AST nodes. Plain dataclasses; the planner and executor pattern-match on their types.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "Expr",
     "Literal",
@@ -15817,7 +15753,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -15829,8 +15764,8 @@
    "file": "yeshiva-engine/random/minisql/minisql/btree.py",
    "lang": "py",
    "lines": 207,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "B+tree keyed by SQL values (via SortKey) → list of row ids. Supports point lookup, range scan, delete. Leaves are linked for range scans. Order is small on purpose so the split/merge paths are exercised by tests.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "BTree"
    ],
@@ -15849,7 +15784,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -15860,8 +15794,8 @@
    "file": "yeshiva-engine/random/minisql/minisql/cli.py",
    "lang": "py",
    "lines": 62,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Interactive shell / script runner: python -m minisql.cli [dbfile] [-f script.sql]",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "run_script",
     "main"
@@ -15882,7 +15816,6 @@
    "runnable": true,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
     "אין-קורא-ידוע",
@@ -15893,8 +15826,8 @@
    "file": "yeshiva-engine/random/minisql/minisql/database.py",
    "lang": "py",
    "lines": 165,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "The facade: parse → plan → execute, with autocommit, explicit transactions, statement-level atomicity.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "Result",
     "Database"
@@ -15921,7 +15854,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -15974,8 +15906,8 @@
    "file": "yeshiva-engine/random/minisql/minisql/executor.py",
    "lang": "py",
    "lines": 661,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Binding, expression evaluation, and Volcano-style plan nodes. Binding turns `Column` references into `BoundCol(depth, idx)` against a `Scope` chain, so correlated subqueries can reach outer rows via depth >= 1. Every node has `columns` (list of (label, name)) and `run(outer)` yielding tuples aligned with `columns`.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "BoundCol",
     "AggRef",
@@ -16025,7 +15957,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -16036,8 +15967,8 @@
    "file": "yeshiva-engine/random/minisql/minisql/lexer.py",
    "lang": "py",
    "lines": 113,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Tokenizer. Produces a flat list of tokens with positions for error messages.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "Token",
     "tokenize"
@@ -16057,7 +15988,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -16068,8 +15998,8 @@
    "file": "yeshiva-engine/random/minisql/minisql/parser.py",
    "lang": "py",
    "lines": 445,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Recursive-descent SQL parser with precedence climbing for expressions.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "Parser",
     "parse",
@@ -16091,7 +16021,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -16102,8 +16031,8 @@
    "file": "yeshiva-engine/random/minisql/minisql/planner.py",
    "lang": "py",
    "lines": 375,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Planner: FROM tree → join nodes (hash join for equi-joins), predicate pushdown, index selection, aggregation, ordering.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "conjuncts",
     "conjoin",
@@ -16128,7 +16057,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -16139,8 +16067,8 @@
    "file": "yeshiva-engine/random/minisql/minisql/storage.py",
    "lang": "py",
    "lines": 342,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "\"\"\"Storage: tables with row ids, B+tree indexes, constraints, write-ahead log, snapshots, undo log.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "ColumnInfo",
     "IndexInfo",
@@ -16168,7 +16096,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -16179,8 +16106,8 @@
    "file": "yeshiva-engine/random/minisql/minisql/values.py",
    "lang": "py",
    "lines": 183,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "SQL values: type coercion, three-valued logic, comparison with NULLs, LIKE.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "coerce",
     "type_name",
@@ -16212,7 +16139,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -16257,8 +16183,8 @@
    "file": "yeshiva-engine/random/minisql/tests/test_consistency.py",
    "lang": "py",
    "lines": 53,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "Property-style checks: the planner's shortcuts (index scans, hash joins, pushdown) must agree with brute force.",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "test_index_scan_agrees_with_full_scan_under_churn",
     "test_hash_join_agrees_with_nested_loop"
@@ -16276,7 +16202,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -16598,8 +16523,8 @@
    "file": "yeshiva-engine/tests/test_gate.py",
    "lang": "py",
    "lines": 1078,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "מפרט-השערים בפועל: 46 בדיקות pytest שמריצות את `yeshiva.gate` כתת-תהליך ומאמתות (א) `detect()` — משפט-עברית ⇒ מהלכי-שאלה לפי **צורת-המשפט** (שאלה·ציווי·סדר·אורך), לא לפי מילון; (ב) מכניקת-השער — `prompt` נועל · `check` חוסם כלים ב-exit 2 · AskUserQuestion מותר גם בנעילה · `clear --qa` דורש ≥3 תשובות · פקודות-סלאש והודעה-קלילה אינן נועלות; (ג) שומרי-אמת: novel_facts (עובדה שלא הייתה בקלט) · done_catches_weakened_test · yitur (פרטי-הבקשה חייבים להופיע בעבודה) · teiku (מספר בלי טווח) · guard חוסם commit עד «סיימתי» · repair-loop עם תקרה · חתימת-עץ שמבדילה commit מעריכה · מצב-מכונה מול מצב-אדם לפי אותות.",
+   "purposeFrom": "נחקר (+evidence)",
    "exports": [
     "test_detect_question_word_yields_heicha_kai",
     "test_detect_imperative_and_order_and_long_phrase",
@@ -16709,7 +16634,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
@@ -16721,8 +16645,8 @@
    "file": "yeshiva-engine/tests/test_maimatai.py",
    "lang": "py",
    "lines": 506,
-   "purpose": null,
-   "purposeFrom": null,
+   "purpose": "from yeshiva.maimatai import Statement, World, interrogate, interrogate_sugya, interrogate_trace",
+   "purposeFrom": "כותרת-הקובץ",
    "exports": [
     "test_question_about_parameter_presupposes_obligation",
     "test_missing_slots_are_asked_and_closed_by_world",
@@ -16782,7 +16706,6 @@
    "runnable": false,
    "inIndexMd": false,
    "isNot": [
-    "אין-מטרה-מתועדת",
     "לא-רץ-מהשורה",
     "לא-כותב-פלט",
     "לא-שער-משטרה",
