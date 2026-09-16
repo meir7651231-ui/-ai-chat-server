@@ -2631,5 +2631,378 @@
       "ran: node machtzev/police.mjs --fast ⇒ '✓ pre-tool: 105/105 fixtures יורים כמצופה (79 חסומים · 26 עוברים)' + 'ran pretool 7081ms'",
       "ran: grep -n 'pretool' machtzev/police.mjs ⇒ שורה 167 (בלי דגל FAST — רץ בטבעת-ה-commit)"
     ]
+  },
+  {
+    "file": "machtzev/quarry-check.mjs",
+    "lang": "mjs",
+    "lines": 20,
+    "does": [
+      {
+        "claim": "לכל טיוטה ב-quarry/: דורש כותרת «מוצא:» ו-parse תקין (new Function על הקוד המופשט)",
+        "evidence": "machtzev/quarry-check.mjs:8-17"
+      },
+      {
+        "claim": "מפשיט import/export לפני ה-parse, כי new Function אינו מודול",
+        "evidence": "machtzev/quarry-check.mjs:11-15"
+      },
+      {
+        "claim": "מחצבה שאינה קיימת = עובר («מחצבה ריקה»), לא כשל",
+        "evidence": "machtzev/quarry-check.mjs:6"
+      },
+      {
+        "claim": "מוצהר כ«קלה מדרגת-חוזה» — סף-כניסה לטיוטה, לא לאטום",
+        "evidence": "machtzev/quarry-check.mjs:2"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא בודק שהמוצא **נכון** — רק שהמחרוזת 'מוצא:' מופיעה איפשהו בקובץ, כולל בהערה או במחרוזת",
+        "evidence": "machtzev/quarry-check.mjs:10 — txt.includes('מוצא:')"
+      },
+      {
+        "claim": "לא מריץ את הטיוטה ולא בודק התנהגות — parse בלבד",
+        "evidence": "machtzev/quarry-check.mjs:16"
+      },
+      {
+        "claim": "לא יורד לתת-תיקיות — readdirSync שטוח",
+        "evidence": "machtzev/quarry-check.mjs:8"
+      },
+      {
+        "claim": "**לא בודק כלום בפועל היום** — המחצבה ריקה, וזה המצב התקין (chisel/chisel-all מוחקים אותה בסוף)",
+        "evidence": "ran: node machtzev/police.mjs --fast ⇒ '✓ מחצבה ריקה' + 'ran quarry 54ms'; machtzev/chisel.mjs:59 · chisel-all מוחקים את quarry"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:117",
+        "how": "gate('quarry','quarry-check.mjs',[R.p('quarry')]) — מורץ-בשם כשער"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "שער, וזה מקומו — והוא שער-הכניסה של המחצבה, שלב שקודם לקטלוג ולכן קודם למחולל. המחצבה ריקה במצב תקין, ולכן הוא שומר על דלת שאמורה להיות סגורה. אין נקודה כנה."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. 20 שורות שמוודאות שטיוטה מוצהרת-מוצא ומתפרסרת. שער-סניטציה בקצה הרחוק ביותר מהמחולל."
+    },
+    "evidence": [
+      "read: machtzev/quarry-check.mjs:1-19 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ '✓ מחצבה ריקה' + 'ran quarry 54ms'"
+    ]
+  },
+  {
+    "file": "machtzev/ratchet-direction.mjs",
+    "lang": "mjs",
+    "lines": 72,
+    "does": [
+      {
+        "claim": "עונה על שאלה אחת — «האם commit B חלש מ-A?» — ותמיד דרך `git show`, **לעולם לא מעץ-העבודה**",
+        "evidence": "machtzev/ratchet-direction.mjs:3,15-16"
+      },
+      {
+        "claim": "גוזר מ-police.mjs את ה-tuples של כל שער (id · script · args · skip) ברגקס, ומזהה ארבע החלשות: שער נמחק · סקריפט הוחלף · ארגומנטים השתנו · skip הורחב",
+        "evidence": "machtzev/ratchet-direction.mjs:19 (tuples) · 43-48"
+      },
+      {
+        "claim": "**skip מותר רק כצמצום-אמיתי** — זהה, ריק, או `<קודם> && …`; ריק→FAST הוא החלשה",
+        "evidence": "machtzev/ratchet-direction.mjs:18 (skipOk) · 5"
+      },
+      {
+        "claim": "קורא את מניפסט gates.tsv ומזהה גם רשומה שנמחקה · baseline-manifest שהוסר/הוחלף · **כיוון שהתהפך** (shrink⇄grow)",
+        "evidence": "machtzev/ratchet-direction.mjs:20 (manifest) · 49-53"
+      },
+      {
+        "claim": "משווה baselines **רקורסיבית** לפי כיוון: shrink = מפתחות/פריטים/מספרים לא עולים · grow = לא יורדים · צורה שהשתנתה = החלשה",
+        "evidence": "machtzev/ratchet-direction.mjs:24-38 (weaken)"
+      },
+      {
+        "claim": "baseline חדש (אין עבר) מדולג; baseline שנמחק = החלשה; baseline לא-JSON = החלשה",
+        "evidence": "machtzev/ratchet-direction.mjs:57-60"
+      },
+      {
+        "claim": "מיוצא כספרייה (tuples · manifest · weaken · compare) כדי ש-verify-independent ישתמש **באותה** סמנטיקה ולא יעתיק אותה",
+        "evidence": "machtzev/ratchet-direction.mjs:19,20,24,39; machtzev/verify-independent.mjs:41-42 (‏«מקור-אמת יחיד לסמנטיקת-הראצ׳ט (R3-4.13)»)"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא מריץ שום שער — הוא קורא שני snapshots של קוד ו-JSON ומשווה",
+        "evidence": "machtzev/ratchet-direction.mjs:15-16 — git show בלבד"
+      },
+      {
+        "claim": "לא יודע אם ההחלשה **מוצדקת** — זה תפקידו של allow-check, שרץ אחריו על אותו קובץ-issues",
+        "evidence": ".githooks/pre-commit:90-96 ⇒ machtzev/allow-check.mjs:44-57"
+      },
+      {
+        "claim": "מזהה שערים ברגקס על מקור-ה-JS ולא בהרצה — שינוי-צורה בקריאת gate() (למשל פיצול לשורות) עלול לחמוק",
+        "evidence": "machtzev/ratchet-direction.mjs:19 — matchAll על תבנית gate('id','script'…)"
+      },
+      {
+        "claim": "אינו שער-משטרה — הוא רץ ב-hooks ובCI",
+        "evidence": "ran: grep -c 'ratchet-direction' machtzev/police.mjs ⇒ 0"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".githooks/pre-commit:89-90",
+        "how": "מועתק מ-HEAD ומורץ עם --index (אכיפה מ-HEAD, לא מעץ-העבודה)"
+      },
+      {
+        "who": ".githooks/pre-push:31,33",
+        "how": "מורץ **פר-commit** מה-sha הנדחף (R3-1.1)"
+      },
+      {
+        "who": ".github/workflows/police.yml:58",
+        "how": "מורץ ב-CI מול ה-base"
+      },
+      {
+        "who": "machtzev/verify-independent.mjs:41-42",
+        "how": "נטען כמקור-האמת לסמנטיקת-הראצ׳ט"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:21",
+        "how": "נעול-חתימה"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "שער, וזה מקומו המובהק — ואולי המובהק בכולם: הקלט שלו הוא שני commits, והפלט הוא פסק על **כיוון**. למחולל אין commits ואין כיוון. ראוי בכל זאת לומר מה הוא מגן עליו: כל מספר בדוח הזה (‏57 · 336 · 963) נשען על baseline או רצפה, ו-ratchet-direction הוא מה שמונע מהם לרדת בשקט. בלעדיו «רק-יורד» היא כוונה, לא מנגנון."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. אין נתיב-נתונים למחולל ואין יכולת שהמחולל חסר. הוא שומר על אמינות המדידות שמהן ייגזר אי-פעם הפסק אם §22 הושג."
+    },
+    "evidence": [
+      "read: machtzev/ratchet-direction.mjs:1-71 (כל הקובץ)",
+      "ran: git commit (batch זה) ⇒ ה-hook הדפיס '✓ [ratchet-down] ✓ ראצ׳ט-כיוון: אין החלשה (57 שערים · 25 baselines)' — כלומר ראיתי אותו יורה בפועל",
+      "ran: grep -c 'ratchet-direction' machtzev/police.mjs ⇒ 0 (אינו שער-משטרה)"
+    ]
+  },
+  {
+    "file": "machtzev/run.mjs",
+    "lang": "mjs",
+    "lines": 34,
+    "does": [
+      {
+        "claim": "מפעיל פר-גל בסדר קבוע: מפקד (census פר-ריפו) ⇒ 15 מחלצים פר-ריפו ⇒ reconcile ⇒ wiring-check ⇒ contract-check ⇒ זיקוק ⇒ דדופ ⇒ כתיבת STATUS.md",
+        "evidence": "machtzev/run.mjs:11-18 · 31-32"
+      },
+      {
+        "claim": "מדלג על ריפו שאינו קיים",
+        "evidence": "machtzev/run.mjs:11"
+      },
+      {
+        "claim": "מאפשר דריסת נתיב-buildsmart דרך BS_TIP",
+        "evidence": "machtzev/run.mjs:7"
+      },
+      {
+        "claim": "בונה לוח-מצב מ-registry/atoms-*.json ו-census-*.json",
+        "evidence": "machtzev/run.mjs:20-32"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו יכול לרוץ בקלון-טרי — הוא יזרוק.** שלושת הריפואים חסרים (כל המפקד והמחלצים מדולגים), אבל שורות 22 ו-27 קוראות `fs.readdirSync(machtzev/registry/)` **בלי try**, והתיקייה אינה קיימת",
+        "evidence": "machtzev/run.mjs:20-22,27; ran: ls -e machtzev/registry ⇒ MISSING (בדיקת-קיום); ls -d /home/user/maor-system /home/user/yoman-habina ⇒ אינם קיימים"
+      },
+      {
+        "claim": "ולא במקרה: `registry/` אינו מחויב בכוונה — למשטרה יש שער `no-registry` שמאדים אם registry נכנס ל-staging",
+        "evidence": "machtzev/audit-gates.mjs:35 — מקרה 'no-registry' מזריע machtzev/registry/seed.json ומצפה לחסימה; ran: node machtzev/police.mjs --fast ⇒ '✓ [no-registry] נקי' בפלט ה-hook"
+      },
+      {
+        "claim": "לא מריץ את המשטרה המלאה — רק wiring+contract; ה---fast שבתיעוד CLAUDE.md אינו מיושם כאן (אין קריאת argv בקובץ)",
+        "evidence": "machtzev/run.mjs:1-33 — אין process.argv; CLAUDE.md:103 מתעד `run.mjs --fast`"
+      },
+      {
+        "claim": "אינו שער ואינו בצינור-המחולל",
+        "evidence": "ran: grep -c 'run.mjs' machtzev/police.mjs ⇒ ההתאמה היא בהערה/רשימה ולא gate(); GEN_ENTRY ב-engine-index.mjs:319-322 אינו כולל אותו"
+      },
+      {
+        "claim": "שמו גרם לבלבול מתועד — גלאי-האינדקס התאים `run.mjs` ל-`balagan-run.mjs` עד שנוסף גבול-נתיב",
+        "evidence": "machtzev/census/engine-index.mjs:234 — ההערה על ההתאמה השגויה"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/one.mjs",
+        "how": "מוזכר; אך one.mjs הוא המפעיל החי היום"
+      },
+      {
+        "who": "CLAUDE.md:102-103 · MPRAT.md:44 · PROTOCOL.md:200",
+        "how": "תיעוד"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה. זהו מפעיל-של-דור-קודם שהוחלף ע\"י `one.mjs` (המנוע-האחד), והוא תלוי בשלושה ריפואים חיצוניים ובתיקיית-registry שמדיניות-המשטרה **אוסרת** לחייב. בקלון-טרי הוא לא רק דורמנטי — הוא זורק. זהו מועמד ל«שריד», והכרעה שלא נגעתי בה."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. מפעיל שאינו רץ, שהוחלף, ושתלוי בנכסים שאינם בריפו. לחבר אותו למחולל לא ייתן דבר."
+    },
+    "evidence": [
+      "read: machtzev/run.mjs:1-33 (כל הקובץ)",
+      "ran: בדיקת-קיום לתלויות ⇒ machtzev/census.mjs EXISTS · machtzev/extract EXISTS · machtzev/dedup/reconcile.mjs EXISTS · **machtzev/registry MISSING** · machtzev/tools/refine.mjs EXISTS",
+      "ran: ls -d /home/user/maor-system /home/user/yoman-habina ⇒ אינם קיימים",
+      "לא הורץ במכוון: הוא מריץ contract-check (64.9s) וכותב STATUS.md, ובכל מקרה היה זורק על registry החסר"
+    ]
+  },
+  {
+    "file": "machtzev/wave-partition.mjs",
+    "lang": "mjs",
+    "lines": 45,
+    "does": [
+      {
+        "claim": "מחשב לכל קובץ-יעד «רדיוס-פגיעה» = הוא + צרכניו הטרנזיטיביים, דרך census/import-graph",
+        "evidence": "machtzev/wave-partition.mjs:11,17-19"
+      },
+      {
+        "claim": "**קבצים שרדיוסיהם נחתכים נכנסים לאותו תא** — רכיבי-קשירות של יחס-החיתוך, כדי שלא יהיו שני בונים על אותו קובץ",
+        "evidence": "machtzev/wave-partition.mjs:22-30 (הלולאה הגדֵלה בשורה 28)"
+      },
+      {
+        "claim": "אורז תאים לגלים של ≤10 ב-first-fit-decreasing (L20)",
+        "evidence": "machtzev/wave-partition.mjs:31-38"
+      },
+      {
+        "claim": "**תא גדול מהמקסימום אינו נחתך** — הוא מוצהר כ-overflow, כי חיתוך = קונפליקט",
+        "evidence": "machtzev/wave-partition.mjs:35 · 44 · ההנמקה בשורה 5"
+      },
+      {
+        "claim": "fail-closed על רדיוס לא-ידוע: כל הקבצים עם צרכנים לא-ידועים מאוחדים לתא אחד (R3-5.12)",
+        "evidence": "machtzev/wave-partition.mjs:20-21"
+      },
+      {
+        "claim": "«אפס-LLM, אפס-כתיבה» — מוצהר ומקוים; אין fs.write בקובץ",
+        "evidence": "machtzev/wave-partition.mjs:7; ran: grep -c 'writeFileSync' machtzev/wave-partition.mjs ⇒ 0"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא מחלק עבודה לסוכנים ולא מריץ נחיל — «במחצב יש רק החלוקה-המכנית»; הנחיל עצמו חי ב-buildsmart/orchestrator",
+        "evidence": "machtzev/PROTOCOL.md:278"
+      },
+      {
+        "claim": "לא נוגע ב-machtzev/ — עם --staged הוא מסנן ל-new/ בלבד",
+        "evidence": "machtzev/wave-partition.mjs:14"
+      },
+      {
+        "claim": "אינו שער-משטרה; מי שאוכף את `Wave: k/N` הוא commit-msg",
+        "evidence": ".githooks/commit-msg:24-25; ran: grep -c 'wave-partition' machtzev/police.mjs ⇒ 0"
+      },
+      {
+        "claim": "הרדיוס סטטי בלבד — import() דינמי מסומן unknown ומטופל ב-fail-closed, לא נפתר",
+        "evidence": "machtzev/wave-partition.mjs:20"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".githooks/commit-msg:24-25",
+        "how": "מורץ-בשם לאימות/הצעת שדה `Wave:`"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:22",
+        "how": "נעול-חתימה"
+      },
+      {
+        "who": "machtzev/census/import-graph.mjs",
+        "how": "ייבוא { buildGraph, consumersOf }"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה. הוא מחלק **עבודת-סוכנים**, והמחולל לפי הכרעה-24 הוא «מנוע, לא נחיל» — כלומר הארכיטקטורה כבר הכריעה נגד המקרה שהכלי הזה משרת. ראוי לציין שהגרף שהוא משתמש בו (import-graph) **כן** בשימוש בצינור בעקיפין, דרך police --inc; אבל זו הספרייה, לא המנוע הזה."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. הוא נועד לתזמן בני-אדם/סוכנים, והמחולל אינו נחיל. הערך שלו הוא בטבעת-ה-commit של הצוות."
+    },
+    "evidence": [
+      "read: machtzev/wave-partition.mjs:1-44 (כל הקובץ)",
+      "ran: grep -c 'writeFileSync' machtzev/wave-partition.mjs ⇒ 0 (מקיים «אפס-כתיבה»)",
+      "ran: grep -c 'wave-partition' machtzev/police.mjs ⇒ 0",
+      "ran: grep -n 'wave-partition' .githooks/commit-msg ⇒ שורות 24, 25"
+    ]
+  },
+  {
+    "file": "machtzev/wiring-check.mjs",
+    "lang": "mjs",
+    "lines": 35,
+    "does": [
+      {
+        "claim": "אוכף את שלושת חוקי-החשמלאי על ייבוא יחסי: אטום לא מייבא כלום פנימי · קופסה מייבאת רק אטומים · לוח מייבא רק קופסאות",
+        "evidence": "machtzev/wiring-check.mjs:27-31"
+      },
+      {
+        "claim": "קובע אזור לפי **נתיב** (atoms/ · boxes/ · board.*) גם למקור וגם ליעד, ומשווה ביניהם",
+        "evidence": "machtzev/wiring-check.mjs:19,25"
+      },
+      {
+        "claim": "פוטר מקרה אחד בלבד: בדיקה שמייבאת את האטום שלה",
+        "evidence": "machtzev/wiring-check.mjs:26 (ownTest)"
+      },
+      {
+        "claim": "ייבוא לא-יחסי (ספריות/סטנדרט) מותר ומדולג",
+        "evidence": "machtzev/wiring-check.mjs:23"
+      },
+      {
+        "claim": "תופס שלוש צורות-ייבוא: import…from · import() דינמי · require()",
+        "evidence": "machtzev/wiring-check.mjs:21"
+      },
+      {
+        "claim": "חוצה-שפות: הסריקה כוללת mjs · ts · tsx · js · dart",
+        "evidence": "machtzev/wiring-check.mjs:14"
+      },
+      {
+        "claim": "תומך ב---files לריצה אינקרמנטלית מ-police --inc",
+        "evidence": "machtzev/wiring-check.mjs:15"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא בודק את **תוכן** הייבוא — רק אזור-מקור מול אזור-יעד",
+        "evidence": "machtzev/wiring-check.mjs:24-31"
+      },
+      {
+        "claim": "אזור 'other' (כל מה שאינו atoms/boxes/board.) אינו מוגבל כלל — ‏dart-gen-bs · dart-maor · dart-ui-bs נופלים ל-other ומייבאים חופשי",
+        "evidence": "machtzev/wiring-check.mjs:19,25 — התנאים בשורות 28-30 חלים רק על atom/box/board"
+      },
+      {
+        "claim": "לא מזהה מחזוריות (cycles) — רק הפרות-שכבה",
+        "evidence": "machtzev/wiring-check.mjs:27-31"
+      },
+      {
+        "claim": "תיקייה שאינה קיימת = עובר",
+        "evidence": "machtzev/wiring-check.mjs:11"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:115",
+        "how": "gate('wiring','wiring-check.mjs',[R.NEW,...filesArg()]) — השער הראשון בריצה"
+      },
+      {
+        "who": "machtzev/run.mjs:14",
+        "how": "מורץ-בשם"
+      },
+      {
+        "who": "machtzev/chisel.mjs:46 · machtzev/chisel-all.mjs:85",
+        "how": "מורץ-בשם במסנן-השערים של החציבה"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "שער, וזה מקומו. הוא אוכף את חוק-2 ו-חוק-3 של LAW.md על **המדף**, וזו בדיוק ההבטחה שהמחולל נשען עליה כשהוא מרכיב: אטום טהור לא גורר תלויות, קופסה מרכיבה אטומים. ההרחבה המתבקשת — לאכוף גם על dart-gen-bs — אינה נכונה: פלט-המחולל הוא **הרכבה**, והוא אמור לייבא אטומים וקופסאות כאחד; לכן 'other' ללא-הגבלה הוא החלטה ולא פער."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב בעקיפין. שלושת החוקים שהוא אוכף הם מה שהופך את הקטלוג לבר-הרכבה: אטום שמייבא אטום היה הופך כל בחירה של הבורר לגרירת-תת-עץ. אבל הוא לא רואה את הפלט, לא בוחר ולא בונה."
+    },
+    "evidence": [
+      "read: machtzev/wiring-check.mjs:1-34 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ '✓ חוקי-החשמלאי: 7542 קבצים בעץ החדש — אפס הפרות-חיווט' + 'ran wiring 363ms'",
+      "ran: grep -rn 'wiring-check.mjs' ⇒ police.mjs:115 · run.mjs:14 · chisel.mjs:46 · chisel-all.mjs:85"
+    ]
   }
 ]

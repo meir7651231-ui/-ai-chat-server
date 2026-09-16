@@ -1,6 +1,6 @@
 # 2a · `machtzev/*.mjs` (שורש) — מיפוי חיבור-למחולל
 
-**36/51 מנועים ממופים** · 2669 שורות נקראו · פיזור s22: 0⇒15 · 1⇒11 · 2⇒9 · 3⇒1
+**41/51 מנועים ממופים** · 2875 שורות נקראו · פיזור s22: 0⇒19 · 1⇒12 · 2⇒9 · 3⇒1
 
 הגדרת «מחובר» = `machtzev/census/engine-index.mjs:319-333` (נגיש בייבוא טרנזיטיבי מ-6 נקודות-הכניסה, או מורץ-בשם מ-regen/ship). שערים אינם מחוברים — הם שומרים.
 מדידה: `node machtzev/census/engine-index.mjs --connected` ⇒ `57 · 279 · 336`.
@@ -28,6 +28,7 @@
 | `ds-tokens.mjs` | 1 | ∅ | קורא זרע קומפקטי (new/dart-ui-bs/ds/design-seed.json) ומרחיב אותו ל-7 מחלקות-טוקן ב-ds_scale.dart: DsType · DsSpace · DsRadii · DsElev · DsGradient · DsMotion · DsDark |
 | `lib-ts.mjs` | 1 | כבר מחובר בפועל דרך machtzev/emit/ast-js-to-dart.mjs:4 — ראוי רק להכיר בכך | פותר-typescript אחד לכל הכלים: machtzev/node_modules (vendored) ⇒ נפילה ל-maor-system |
 | `mutation-check.mjs` | 1 | ∅ — כי היכולת כבר הועתקה לתוך המחולל | לכל אטום: מחליף את הקובץ בגוף-חלול, מריץ את הבדיקה (חייבת להאדים), משחזר, מריץ שוב (חייבת להוריק) — שני התנאים יחד |
+| `wiring-check.mjs` | 1 | ∅ | אוכף את שלושת חוקי-החשמלאי על ייבוא יחסי: אטום לא מייבא כלום פנימי · קופסה מייבאת רק אטומים · לוח מייבא רק קופסאות |
 | `allow-check.mjs` | 0 | ∅ | מפרסר trailers מסוג `Allow: <kind>[:<scope>] <סיבה>` מהודעת-commit ומחזיר {allows,bad} |
 | `atom-count-check.mjs` | 0 | ∅ | סופר קבצים רקורסיבית לכל תיקייה ישירה תחת new/ ומחזיר {אזור: מספר} |
 | `audit-gates.mjs` | 0 | ∅ | פותח worktree זמני מנותק על HEAD עם core.hooksPath=.githooks, מזריע הפרה, ומנסה `git commit` אמיתי — הראיה היא commit שנכשל |
@@ -43,3 +44,7 @@
 | `police-selftest.mjs` | 0 | ∅ | מזריע fixture בתיקייה זמנית ומריץ עליו את השער האמיתי — מוכיח שהחוק **יורה**, לא רק שהוא רשום |
 | `police.mjs` | 0 | ∅ — והתשובה כאן הפוכה מהשאלה | מריץ 57 שערים ופולט שורת-ledger לכל אחד באחד מ-4 מצבים: ran · skipped · yellow · failed |
 | `pretool-selftest.mjs` | 0 | ∅ | מזין כל שורה מ-selftest-fixtures/pretool.tsv ל-hook האמיתי כ-JSON של PreToolUse ומשווה את קוד-היציאה לציפייה |
+| `quarry-check.mjs` | 0 | ∅ | לכל טיוטה ב-quarry/: דורש כותרת «מוצא:» ו-parse תקין (new Function על הקוד המופשט) |
+| `ratchet-direction.mjs` | 0 | ∅ | עונה על שאלה אחת — «האם commit B חלש מ-A?» — ותמיד דרך `git show`, **לעולם לא מעץ-העבודה** |
+| `run.mjs` | 0 | ∅ | מפעיל פר-גל בסדר קבוע: מפקד (census פר-ריפו) ⇒ 15 מחלצים פר-ריפו ⇒ reconcile ⇒ wiring-check ⇒ contract-check ⇒ זיקוק ⇒ דדופ ⇒ כתיבת STATUS.md |
+| `wave-partition.mjs` | 0 | ∅ | מחשב לכל קובץ-יעד «רדיוס-פגיעה» = הוא + צרכניו הטרנזיטיביים, דרך census/import-graph |
