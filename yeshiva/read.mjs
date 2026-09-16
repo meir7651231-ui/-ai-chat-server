@@ -29,7 +29,7 @@ const sameWord = (a, b) => a === b || (PREFIX.test(a) && a.slice(1) === b) || (P
 const norm = (s) => String(s).replace(/[״"'׳]/g, '').replace(/\s+/g, ' ').trim();
 
 // ── קריאת הספק (מבנית, אותם מפרידים של peruk/app-ds) ──
-function parseSpec(text) {
+export function parseSpec(text) {
   const spec = { entities: [], fields: [], enums: [], required: new Set(), particles: [], contents: [], raw: text, lines: text.split('\n') };
   for (const line of spec.lines) {
     let m;
@@ -56,7 +56,7 @@ function parseSpec(text) {
 }
 
 // ── קריאת הפירוק (מבנית: כותרות · רשימות · «ציטוטים» · סלאשים · מספרים) ──
-function parsePeruk(text) {
+export function parsePeruk(text) {
   const lines = text.split('\n');
   const doc = { lines, title: (lines[0] || '').replace(/^#\s*/, ''), sections: {}, optional: [], mandatory: [] };
   let sec = '', sub = '';
@@ -74,7 +74,7 @@ function parsePeruk(text) {
 }
 
 // ── הבדיקות ──
-function check(doc, spec) {
+export function check(doc, spec) {
   const out = [];
   const specText = norm(spec.raw);
   const specWords = new Set(words(specText));
@@ -88,7 +88,7 @@ function check(doc, spec) {
       if (opts.some((o) => o.split(' ').length > 3)) continue;                   // משפט עם סלאש, לא רשימת-מקרים
       if (/^\s*[-•\d.]*\s*(מתי|האם|מה|איך|למה|כמה)\b/.test(l)) continue;         // שאלה בפירוק, לא מקרים בשמם
       const covered = spec.enums.some((e) => opts.filter((o) => e.values.some((v) => v.includes(o) || o.includes(v))).length >= 2);
-      if (!covered) out.push({ kind: 'איכא דאמרי', q: true, text: `«${norm(l.replace(/^\s*[-•\d.]+\s*/, ''))}» — מקרים בשמם בפירוק, ואין enum מתאים בספק. שדה {${opts.join('|')}}?` });
+      if (!covered) out.push({ kind: 'איכא דאמרי', q: true, line: l, text: `«${norm(l.replace(/^\s*[-•\d.]+\s*/, ''))}» — מקרים בשמם בפירוק, ואין enum מתאים בספק. שדה {${opts.join('|')}}?`, apply: { type: 'enum', opts, name: norm(l.replace(/^\s*[-•\d.]+\s*/, '')).split(/[:(]/)[0].split(' ').slice(0, 2).join(' ') } });
     }
   }
 
@@ -98,10 +98,10 @@ function check(doc, spec) {
     if (/דוגמ/.test(sec)) continue;                                                 // דוגמת-פלט = נתוני-דמו, לא כלל
     for (const l of ls) for (const m of l.matchAll(NUM_RE)) {
       if (!m[3] && !m[2]) continue;                                                // מספר חשוף בלי יחידה ובלי טווח — לא שיעור
-      const key = m[0].trim(); if (!docNums.has(key)) docNums.set(key, norm(l).slice(0, 90));
+      const key = m[0].trim(); if (!docNums.has(key)) docNums.set(key, { ctx: norm(l).slice(0, 90), line: l });
     }
   }
-  for (const [k, ctx] of docNums) if (!specText.includes(norm(k)) && !specText.includes(k.replace(/\s+/g, ''))) out.push({ kind: 'שיעור', q: true, text: `«${k}» בפירוק («${ctx}») — לא בספק. סף/שיעור שנשמט, או טקסט בלבד?` });
+  for (const [k, v] of docNums) if (!specText.includes(norm(k)) && !specText.includes(k.replace(/\s+/g, ''))) out.push({ kind: 'שיעור', q: true, line: v.line, text: `«${k}» בפירוק («${v.ctx}») — לא בספק. סף/שיעור שנשמט, או טקסט בלבד?`, apply: { type: 'content', line: `תוכן סף: ${v.ctx}` } });
 
   // ורמינהו · שני שדות באותה ישות עם מילת-תוכן משותפת ואותו סוג
   for (const ent of spec.entities) {
@@ -111,25 +111,25 @@ function check(doc, spec) {
       const shared = words(a.name).filter((w) => w.length >= 3 && words(b.name).some((v) => sameWord(w, v)));
       const sameKind = (!!a.en === !!b.en) && (!!a.range === !!b.range);
       const paired = spec.particles.some((pl) => pl.includes(a.name) && pl.includes(b.name));   // «דיף: ישן ← חדש» — זוג מכוון
-      if (shared.length && sameKind && a.name !== b.name && !paired) out.push({ kind: 'ורמינהו', q: true, text: `«${a.name}»${a.req ? '*' : ''} ו«${b.name}»${b.req ? '*' : ''} ב${ent} — מילה משותפת «${shared[0]}», אותו סוג. אחד מהם, או שניהם בכוונה?` });
+      if (shared.length && sameKind && a.name !== b.name && !paired) out.push({ kind: 'ורמינהו', q: true, text: `«${a.name}»${a.req ? '*' : ''} ו«${b.name}»${b.req ? '*' : ''} ב${ent} — מילה משותפת «${shared[0]}», אותו סוג. אחד מהם, או שניהם בכוונה?`, apply: { type: 'dropField', ent, name: b.name }, pair: { ent, a: a.name, b: b.name } });
     }
   }
 
   // מאי X · מצייני-מקום בתוכן
-  for (const c of spec.contents) if (PLACEHOLDER_RE.test(c)) out.push({ kind: 'מאי X', q: false, text: `${c.slice(0, 80)} — מציין-מקום מהדוגמה הפך לטקסט. להחליף ב{שדה}.` });
+  for (const c of spec.contents) if (PLACEHOLDER_RE.test(c)) out.push({ kind: 'מאי X', q: false, text: `${c.slice(0, 80)} — מציין-מקום מהדוגמה הפך לטקסט. להחליף ב{שדה}.`, apply: { type: 'placeholder', line: c } });
 
   // אין מערבין · כותרת-דוגמה שהפכה לשורת-תוכן
-  for (const c of spec.contents) { const body = c.replace(/^תוכן [^:]*:\s*/, '').trim(); if (HEADING_ONLY_RE.test(body)) out.push({ kind: 'אין מערבין', q: false, text: `${c.slice(0, 60)} — כותרת, לא תוכן. להשמיט.` }); }
+  for (const c of spec.contents) { const body = c.replace(/^תוכן [^:]*:\s*/, '').trim(); if (HEADING_ONLY_RE.test(body)) out.push({ kind: 'אין מערבין', q: false, text: `${c.slice(0, 60)} — כותרת, לא תוכן. להשמיט.`, apply: { type: 'dropLine', line: c } }); }
 
   // ייתור = מידע · ציטוט «…» בפירוק שלא הגיע לספק
   for (const [sec, ls] of Object.entries(doc.sections)) {
     if (!/פירוק|בלוק|אדום|צהוב|ירוק|סיווג|המוצר|אסור|חובה/.test(sec)) continue;
-    for (const l of ls) for (const m of l.matchAll(QUOTE_RE)) { const qn = norm(m[1]); if (!specText.includes(qn)) out.push({ kind: 'ייתור', q: true, text: `«${qn}» — מצוטט בפירוק (${sec}) ולא בספק. תוכן בדיקה? אסור? הודעה?` }); }
+    for (const l of ls) for (const m of l.matchAll(QUOTE_RE)) { const qn = norm(m[1]); if (!specText.includes(qn)) out.push({ kind: 'ייתור', q: true, line: l, text: `«${qn}» — מצוטט בפירוק (${sec}) ולא בספק. תוכן בדיקה? אסור? הודעה?`, apply: { type: 'content', line: `תוכן בדיקה: ${qn}` }, readings: ['תוכן בדיקה', 'אסור', 'הודעה'] }); }
   }
 
   // ממה נפשך · "רשות" ⇒ לא-חובה בספק (הערה, לא שאלה); "חובה" ⇒ חובה
-  for (const o of doc.optional) { const f = spec.fields.find((x) => words(x.name).some((w) => words(o).some((v) => sameWord(w, v)))); if (f && f.req) out.push({ kind: 'ורמינהו', q: true, text: `«${o}» רשות בפירוק, אבל «${f.name}»* חובה בספק.` }); }
-  for (const o of doc.mandatory) { const f = spec.fields.find((x) => words(x.name).some((w) => words(o).some((v) => sameWord(w, v)))); if (f && !f.req) out.push({ kind: 'ורמינהו', q: true, text: `«${o}» חובה בפירוק, אבל «${f.name}» לא חובה בספק.` }); if (!f) out.push({ kind: 'ייתור', q: true, text: `«${o}» חובה ב"מה שולחים" — אין שדה בספק שמכיל מילה ממנו.` }); }
+  for (const o of doc.optional) { const f = spec.fields.find((x) => words(x.name).some((w) => words(o).some((v) => sameWord(w, v)))); if (f && f.req) out.push({ kind: 'ורמינהו', q: true, text: `«${o}» רשות בפירוק, אבל «${f.name}»* חובה בספק.`, apply: { type: 'unrequire', name: f.name }, doc_says: o }); }
+  for (const o of doc.mandatory) { const f = spec.fields.find((x) => words(x.name).some((w) => words(o).some((v) => sameWord(w, v)))); if (f && !f.req) out.push({ kind: 'ורמינהו', q: true, text: `«${o}» חובה בפירוק, אבל «${f.name}» לא חובה בספק.`, apply: { type: 'require', name: f.name }, doc_says: o }); if (!f) out.push({ kind: 'ייתור', q: true, text: `«${o}» חובה ב"מה שולחים" — אין שדה בספק שמכיל מילה ממנו.`, apply: { type: 'field', name: o }, doc_says: o }); }
 
   // ממה נפשך · שדות-רשות שנבנו כרשות — שתי הקריאות שוות, לא שואלים
   const mn = doc.optional.filter((o) => spec.fields.some((x) => !x.req && words(x.name).some((w) => words(o).some((v) => sameWord(w, v)))));
@@ -179,4 +179,4 @@ function main(argv) {
   return 0;
 }
 
-process.exit(main(process.argv.slice(2)));
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) process.exit(main(process.argv.slice(2)));
