@@ -1,6 +1,6 @@
 # 2a · `machtzev/*.mjs` (שורש) — מיפוי חיבור-למחולל
 
-**22/51 מנועים ממופים** · 1755 שורות נקראו · פיזור s22: 0⇒8 · 1⇒9 · 2⇒4 · 3⇒1
+**26/51 מנועים ממופים** · 2031 שורות נקראו · פיזור s22: 0⇒9 · 1⇒9 · 2⇒7 · 3⇒1
 
 הגדרת «מחובר» = `machtzev/census/engine-index.mjs:319-333` (נגיש בייבוא טרנזיטיבי מ-6 נקודות-הכניסה, או מורץ-בשם מ-regen/ship). שערים אינם מחוברים — הם שומרים.
 מדידה: `node machtzev/census/engine-index.mjs --connected` ⇒ `57 · 279 · 336`.
@@ -12,6 +12,9 @@
 | `coverage-gate.mjs` | 2 | machtzev/generator/genesis-gen.mjs:115-122 — לולאת-בורר-הלבנים | מודד ארבעה צירי-יכולת ומפיל על נסיגה בכל אחד: widgetsFillable · enginesRunnable · essence · dataTwinned |
 | `ds-critic.mjs` | 2 | machtzev/generator/regen.mjs:24 — כשלב-אימות אחרון בצינור (אחרי server.mjs), במקום one.mjs:161 | **סורק את פלט-המחולל** — SCAN = R.outDir() = new/dart-gen-bs (או GEN_OUT מהסביבה); זהו אחד המעטים בקבוצה שמסתכל על מה שהמחולל ייצר |
 | `ds-pure.mjs` | 2 | machtzev/generator/regen.mjs:7 — לצד ds-forge.mjs, בראש הצינור | קורא את אטום-הזרע new/atoms/pure-look.mjs (PURE_LOOK) ומחולל דטרמיניסטית את ds_pure.dart — נייטרל · סמנטי · ערכות-אקצנט · fontSets · themeOf() |
+| `empire-coverage.mjs` | 2 | machtzev/generator/regen.mjs:24 — כשלב-דיווח בסוף הצינור, ורק סעיף wiredSection (שורות 124-146) | מודד כיסוי מול שלוש מערכות-האימפריה (maor TS · buildsmart Dart · yoman JS) — כמה מיכולות-הלוגיקה של המקור כבר נחצבו למדף |
+| `goal-card.mjs` | 2 | machtzev/generator/app-from-sentences.mjs (regen.mjs:16) — פליטת-כרטיס פר-מסך-מחולל | כותב כרטיס-מטרה חתום ל-machtzev/audit/goals/<מסך>.json: goal · models · atoms · accept · picture + screenSha + pictureSha + sig |
+| `goal-proof-check.mjs` | 2 | machtzev/generator/regen.mjs:16-22 — הסרת ההחרגה GENOUT, ברגע שהמחולל פולט כרטיסים (ראה goal-card) | שער pre-commit: כל מסך/לוח ב-staged חייב כרטיס-מטרה תקף — והבדיקה היא בבייטים, לא שיפוט |
 | `box-assemble.mjs` | 1 | ∅ (מותנה) | ממיר קובץ-מקור TS של maor ל-JS דרך ts.transpileModule (מסיר טיפוסים ו-import type, משאיר import-ערך) |
 | `box-data-lift.mjs` | 1 | ∅ | סורק ב-AST אמיתי של TypeScript את הצהרות-המשתנה ברמת-המודול של קופסה ואוסף רק מאתחלים שהם ליטרל-דאטה טהור רקורסיבי |
 | `box-magic-lift.mjs` | 1 | ∅ | מוצא ב-AST כל ליטרל-מספרי בקופסה ומרים אותו לאטום-דאטה <base>-nums.mjs תחת מפתח אנונימי M.m0/M.m1 |
@@ -29,3 +32,4 @@
 | `ds-graphics.mjs` | 0 | ∅ | מחולל ds_graphics.dart — 5 CustomPainter דטרמיניסטיים (אורורה/מש/גלים/רשת-נקודות/זוהר) מתוך מפרט-דאטה בקובץ |
 | `ds-motion.mjs` | 0 | ∅ — אבל עם הערה שראוי להביא לבעלים | מחולל ds_anim.dart — 5 עוטפי-מושן-כניסה דרך TweenAnimationBuilder (חד-שוט, בלי controller) |
 | `ds-variants.mjs` | 0 | ∅ לחיבור; אבל יש כאן ממצא-שער שראוי לדווח | מחולל ds_surface.dart — עוטפי-כרטיס פר-תא-מטריצה (מוגבה · מתאר · זכוכית · גרדיאנט), כשהעיצוב מגיע מטוקנים והווידג'ט עיוור |
+| `index-check.mjs` | 0 | ∅ | אוכף שכל .mjs תחת machtzev/ מופיע ב-INDEX.md — סקריפט חדש בלי שורה ⇒ אדום |

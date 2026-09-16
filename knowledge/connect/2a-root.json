@@ -1580,5 +1580,271 @@
       "ran: grep -n 'ds-variants' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט",
       "ran: git status --porcelain אחרי כל ה---check ⇒ ריק (שום כתיבה)"
     ]
+  },
+  {
+    "file": "machtzev/empire-coverage.mjs",
+    "lang": "mjs",
+    "lines": 154,
+    "does": [
+      {
+        "claim": "מודד כיסוי מול שלוש מערכות-האימפריה (maor TS · buildsmart Dart · yoman JS) — כמה מיכולות-הלוגיקה של המקור כבר נחצבו למדף",
+        "evidence": "machtzev/empire-coverage.mjs:11-15 (SRC) · 30-…"
+      },
+      {
+        "claim": "מסווג פער לשתי קטגוריות: «אימפיורי-מתוכנן» (React/store/ענן/DOM/hooks) מול «פער-לוגיקה-אמיתי» — כלומר מה שהמחולל **לא יוכל להרכיב**",
+        "evidence": "machtzev/empire-coverage.mjs:3-5"
+      },
+      {
+        "claim": "G62 · ציר-רוחב: סופר גם עוזרים-נסתרים (_x) בנפרד ומתודות-מחלקה כמחוץ-לתחום, במפורש כדי שהמכנה לא יהיה תת-ספור («תת-ספירה = אזעקה»)",
+        "evidence": "machtzev/empire-coverage.mjs:27-29 (ההנמקה) · 45 (הפרדת _x ל-hidden) · 151 (הדיווח)"
+      },
+      {
+        "claim": "**wiredSection — הסעיף שהופך אותו לרלוונטי למחולל:** קורא logic-census.json · ops-map.json · auto-logic.json · behavior-plan.json ומחשב כמה מנועים **נבחרו/נקראו בפועל** מול «נמשכו-אך-לא-חוּוטו», עם טבלה פר-op",
+        "evidence": "machtzev/empire-coverage.mjs:124-146 (המקורות בשורות 126-128 · החישוב 129-137 · הטבלה 143-144)"
+      },
+      {
+        "claim": "מגדיר «מחווט» בכנות מפורשת: נבחר-בפועל/נקרא-בפועל, **לא** «נגיש-לבורר» — בדיוק ההבחנה של engine-index.connected",
+        "evidence": "machtzev/empire-coverage.mjs:142"
+      },
+      {
+        "claim": "דוחה במפורש מדד שנבדק ונמצא שקרי: «פער-מאמת» לפי מילות-שם נמדד כ-342/957 שווא ונפסל, גם כי שינוי-גוף-אטום סותר חוק-4",
+        "evidence": "machtzev/empire-coverage.mjs:120-123"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**מחצית-המנוע דורמנטית כאן:** שלושת שורשי-המקור אינם קיימים בקונטיינר, ו-walk מחזיר [] בשקט ⇒ סעיף-הכיסוי מדווח אפסים בלי להיכשל",
+        "evidence": "machtzev/empire-coverage.mjs:11-15 · 17-18 (walk מחזיר out אם !existsSync); ran: ls -d /home/user/maor-system /home/user/buildsmart /home/user/yoman-habina ⇒ אף אחד לא קיים"
+      },
+      {
+        "claim": "אינו שער — אין gate, אין exit-code על נסיגה; הוא מדווח בלבד וכותב EMPIRE-COVERAGE.md",
+        "evidence": "machtzev/empire-coverage.mjs:148-153 — אין process.exit; ran: grep -n 'empire-coverage' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט"
+      },
+      {
+        "claim": "אין לו קורא בקוד — הוא מורץ ידנית; האזכור היחיד הוא בדוח-G62",
+        "evidence": "ran: grep -rn 'empire-coverage' ⇒ knowledge/CLOSED-GENMAX-G62-2026-09-14.md:15 · machtzev/index-baseline.json:25 בלבד"
+      },
+      {
+        "claim": "מזהה התאמה **לפי שם-פונקציה**, לא לפי גוף — «יש שם-תואם במדף?»",
+        "evidence": "machtzev/empire-coverage.mjs:3"
+      }
+    ],
+    "callers": [],
+    "connectAt": {
+      "point": "machtzev/generator/regen.mjs:24 — כשלב-דיווח בסוף הצינור, ורק סעיף wiredSection (שורות 124-146)",
+      "gives": "זו נקודה כנה, ולא בגלל מדידת-האימפריה (שדורמנטית) אלא בגלל **wiredSection**, שהוא היחיד בריפו שעונה על שאלת-§21 במספרים: כמה מהקטלוג המחולל באמת משתמש בו. מדדתי בעצמי את אותו חישוב, read-only: **963 מנועים · 537 מחווטים-בפועל · 426 pulled-not-wired**, ומתוך ה-537 רק **71** הגיעו משני הבוררים של המחולל (auto-logic 28 · behavior 43) — כל היתר (467) הם «דרך קופסה». כלומר הבורר בוחר מתוך 963 ופוסק על 71. §21 קובע «אסור לצמצם קטלוג — תת-ספירה=אזעקה»; הסעיף הזה **הוא** האזעקה, והוא רץ רק כשמישהו זוכר להריץ אותו ביד. חיבור = המספר נפלט בכל בנייה, ורצפה עליו (רק-עולה) כמו wiring-floor."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — מקרב ממשית. הוא לא בונה כלום ולא נוגע בפלט, ולכן לא 3. אבל הוא מחזיק את המדד היחיד שאומר כמה רחוק המחולל מ«כל אטום, רקורסיבית» — והפער שהוא חושף (71 מתוך 963 דרך הבוררים) הוא ההבדל בין §21 כהצהרה ל-§21 כמדידה."
+    },
+    "evidence": [
+      "read: machtzev/empire-coverage.mjs:1-45,120-153",
+      "ran (חישוב-מחדש read-only של wiredSection מאותם JSONs, בלי הרצת המנוע שכותב): ⇒ 'logic-census: 963 · מחווטים-בפועל: 537 · pulled-not-wired: 426' · מקורות {auto-logic:28, behavior:43, box:467}; git status --porcelain אחרי ⇒ ריק",
+      "ran: ls -d /home/user/maor-system /home/user/buildsmart /home/user/yoman-habina ⇒ אף אחד לא קיים",
+      "ran: grep -n 'empire-coverage' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט"
+    ]
+  },
+  {
+    "file": "machtzev/goal-card.mjs",
+    "lang": "mjs",
+    "lines": 58,
+    "does": [
+      {
+        "claim": "כותב כרטיס-מטרה חתום ל-machtzev/audit/goals/<מסך>.json: goal · models · atoms · accept · picture + screenSha + pictureSha + sig",
+        "evidence": "machtzev/goal-card.mjs:24 (המבנה) · 53-56 (החתימה והכתיבה)"
+      },
+      {
+        "claim": "**אוכף שהמודלים והאטומים מופיעים בקוד-המסך עצמו** — «חיבור בתצוגה בלבד אינו חיבור (23-ד)»",
+        "evidence": "machtzev/goal-card.mjs:42-43"
+      },
+      {
+        "claim": "מאמת שהתמונה היא PNG/JPEG אמיתי לפי magic-bytes, ‏≥400×300, ‏<1MB — וקורא רוחב/גובה ישירות מכותרת-ה-PNG",
+        "evidence": "machtzev/goal-card.mjs:44-51 (‏readUInt32BE(16)/(20) בשורה 49)"
+      },
+      {
+        "claim": "חותם sha256 עם קידומת-מרחב 'machtzev-goal-v1' על הגוף בלי ה-sig — כך שעריכה-ידנית של הכרטיס נתפסת",
+        "evidence": "machtzev/goal-card.mjs:54-55; האימות ב-goal-proof-check.mjs:29"
+      },
+      {
+        "claim": "--refresh שומר את שדות-המטרה ומחדש רק את ה-sha (למסך שהשתנה)",
+        "evidence": "machtzev/goal-card.mjs:22 · 53"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**לא מודד אם המטרה הושגה** — הוא מוודא נוכחות (goal ≥40 תווים · accept מכיל ספרה · תמונה אמיתית). ההכרעה אם התמונה משיגה את המטרה נשארת לעין-אדם, וזה מוצהר",
+        "evidence": "machtzev/goal-card.mjs:3-5; machtzev/PROTOCOL.md:273 «מה שנשאר לעין: האם המטרה בכרטיס היא המטרה הנכונה»"
+      },
+      {
+        "claim": "לא מרנדר כלום — התמונה מגיעה מבחוץ כארגומנט --picture",
+        "evidence": "machtzev/goal-card.mjs:6-7 — הסוכן מספק את הרנדר"
+      },
+      {
+        "claim": "לא נקרא ע\"י המחולל — שום מנוע-מחולל אינו פולט כרטיס-מטרה",
+        "evidence": "ran: grep -rn 'goal-card' machtzev/generator/ --include=*.mjs ⇒ אפס פלט (ההתאמות תחת generator/ הן רק ב-engine-index.json — דאטה, לא קוד)"
+      },
+      {
+        "claim": "אינו עובד על מסכים מחוללים — השער שצורך אותו מחריג gen_*.dart במפורש",
+        "evidence": "machtzev/goal-proof-check.mjs:17 — GENOUT = /\\/gen_[^/]+\\.dart$/, ומוחרג בשורה 18"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".githooks/pre-commit:57",
+        "how": "מוזכר בהודעת-השגיאה של השער (לא מורץ אוטומטית — הסוכן מריץ ידנית)"
+      },
+      {
+        "who": "machtzev/goal-proof-check.mjs:26,31",
+        "how": "מוזכר כפקודת-התיקון; הכרטיס שהוא כותב הוא הקלט של השער"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/app-from-sentences.mjs (regen.mjs:16) — פליטת-כרטיס פר-מסך-מחולל",
+      "gives": "נקודה כנה וחזקה, והיא ההפך מ«לחבר את הכלי»: הכלי מבקש מהסוכן **להקליד** את מה שהמחולל **כבר יודע**. עבור מסך מחולל, ארבעת השדות קיימים בזמן-הבנייה: `goal` = המשפט-בעברית/הספק שהוליד את המסך · `models`/`atoms` = מה שהבורר חיווט בפועל (auto-logic.json · behavior-plan.json) · `accept` = הבדיקה-המחוללת שכבר נכתבת ממילא. מה שחסר הוא רק התמונה, ו-`genverify`/‏`balaganrun` כבר מרנדרים בדפדפן. כלומר אפשר לפלוט כרטיס חתום פר-מסך **בלי אדם**, והוא יהיה אמיתי יותר מכרטיס מוקלד, כי models/atoms יגיעו מהחיווט ולא מהזיכרון. היום: 9 כרטיסים בדיסק מול 568 מסכים מחוללים שמוחרגים מהדרישה."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — מקרב ממשית. §22 הוא טענת-מטרה («הכי-טוב-למטרה … עד שמושג»), וכרטיס-מטרה הוא הצורה היחידה בריפו שבה מטרה נכתבת, נחתמת ונבדקת מול הקוד. לא 3, כי הכלי עצמו רק מאמת-נוכחות ואינו מודד השגה; הערך מגיע מההיפוך — שהמחולל יפלוט אותו במקום שאדם יקליד."
+    },
+    "evidence": [
+      "read: machtzev/goal-card.mjs:1-25,40-57",
+      "ran: ls machtzev/audit/goals/*.json | wc -l ⇒ 9 כרטיסים",
+      "ran: ls new/dart-gen-bs/gen_*.dart | wc -l ⇒ 568 מסכים מחוללים (מוחרגים ע\"י GENOUT)",
+      "ran: grep -rn 'goal-card' machtzev/generator/ --include=*.mjs ⇒ אפס פלט (אף מנוע-מחולל אינו מזכיר אותו; ההתאמות היחידות תחת generator/ הן ב-engine-index.json, כלומר בדאטה של האינדקס ולא בקוד)"
+    ]
+  },
+  {
+    "file": "machtzev/goal-proof-check.mjs",
+    "lang": "mjs",
+    "lines": 45,
+    "does": [
+      {
+        "claim": "שער pre-commit: כל מסך/לוח ב-staged חייב כרטיס-מטרה תקף — והבדיקה היא בבייטים, לא שיפוט",
+        "evidence": "machtzev/goal-proof-check.mjs:2-4 · 24-42"
+      },
+      {
+        "claim": "**מזהה «מסך» לפי מה-שהוא ולא לפי איפה-שהוא** — תיקיות-המסכים/לוחות תמיד, ובנוסף כל .dart ב-new/ שבונה Scaffold/DsScaffold/MaterialApp/runApp",
+        "evidence": "machtzev/goal-proof-check.mjs:15-18 (הלקח L50 מפורש בשורה 15: גל-11 חי ב-dart-gen-bs ועקף את השער)"
+      },
+      {
+        "claim": "קורא את הגרסה ה-**staged** דרך `git show :<file>` ונופל לעץ-העבודה רק אם אין — כך שהשער שופט את מה שנכנס ל-commit",
+        "evidence": "machtzev/goal-proof-check.mjs:14"
+      },
+      {
+        "claim": "מאמת את חתימת-הכרטיס (sig) ואת screenSha — כרטיס שנערך ידנית או מסך שהשתנה אחרי הכרטיס ⇒ אדום",
+        "evidence": "machtzev/goal-proof-check.mjs:28-31"
+      },
+      {
+        "claim": "מאמת את התמונה מחדש בעצמו: magic-bytes · מידות מכותרת-PNG · pictureSha — לא סומך על הכרטיס",
+        "evidence": "machtzev/goal-proof-check.mjs:36-41"
+      },
+      {
+        "claim": "דורש שכל model וכל atom מהכרטיס יופיעו בקוד-המסך",
+        "evidence": "machtzev/goal-proof-check.mjs:33-34"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**מחריג את כל פלט-המחולל** — GENOUT = /\\/gen_[^/]+\\.dart$/ ⇒ 568 מסכים מחוללים לעולם אינם דורשים כרטיס-מטרה",
+        "evidence": "machtzev/goal-proof-check.mjs:17-18; ran: ls new/dart-gen-bs/gen_*.dart | wc -l ⇒ 568"
+      },
+      {
+        "claim": "מחריג גם את המדף (dart-ui-bs) ואת קבצי-בדיקה/הוכחה",
+        "evidence": "machtzev/goal-proof-check.mjs:17 — SHELF · EXEMPT"
+      },
+      {
+        "claim": "שער-דלתא בלבד: בלי --files או בלי מסכים ב-staged ⇒ יוצא 0 מיד. מסכים קיימים שלא נגעו בהם אינם נבדקים — ולכן 9 כרטיסים מכסים 163 מסכים בתיקיות-המסכים/לוחות",
+        "evidence": "machtzev/goal-proof-check.mjs:19-20; ran: ls machtzev/audit/goals/*.json | wc -l ⇒ 9 · ls new/dart-screens-bs/*.dart | wc -l ⇒ 83 · ls new/dart-boards-bs/*.dart | wc -l ⇒ 80"
+      },
+      {
+        "claim": "אינו שער-משטרה — רץ רק ב-pre-commit",
+        "evidence": "ran: grep -n 'goal-proof' machtzev/police.mjs ⇒ אפס פלט; הקורא הוא .githooks/pre-commit:55"
+      },
+      {
+        "claim": "לא שופט אם המטרה הושגה — «בודק בבייטים (לא שופט)» מוצהר בשורה 3",
+        "evidence": "machtzev/goal-proof-check.mjs:3"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".githooks/pre-commit:55",
+        "how": "מורץ-בשם עם --files על ה-.dart ה-staged"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/regen.mjs:16-22 — הסרת ההחרגה GENOUT, ברגע שהמחולל פולט כרטיסים (ראה goal-card)",
+      "gives": "ההחרגה בשורה 17 היא ההחלטה הנכונה **היום** — אי-אפשר לדרוש מאדם להקליד 568 כרטיסים, וזו בדיוק הסיבה שהיא נכתבה. אבל היא גם המקום שבו §22 נעצר: רצפת-הקבלה «אפליקציה עובדת 100%» חלה על המסכים המחוללים, והם היחידים שאף כרטיס-מטרה לא נוגע בהם. הזוג goal-card+goal-proof כבר מחזיק את כל המכניקה (חתימה · sha · אימות-תמונה · מודל-בקוד); מה שחסר הוא שהמחולל יפלוט את הכרטיס. ברגע שזה קורה, ההחרגה נופלת מעצמה וזה **אותו** שער — בלי מנוע חדש. שער, ומקומו יכול להתרחב."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — מקרב ממשית, בזוג עם goal-card. הוא אינו בונה, ולכן לא 3; אבל הוא המנגנון שמכריח «מטרה + ראיה חזותית + חיבור-בקוד» באותו commit, וזו הצורה הקרובה ביותר בריפו לרצפת-הקבלה של §22. הפער שמדדתי (568 מוחרגים · 9 כרטיסים) הוא פער-היקף, לא פער-מנגנון."
+    },
+    "evidence": [
+      "read: machtzev/goal-proof-check.mjs:1-44 (כל הקובץ)",
+      "ran: ls new/dart-gen-bs/gen_*.dart | wc -l ⇒ 568 (מוחרגים ע\"י GENOUT בשורה 17)",
+      "ran: ls machtzev/audit/goals/*.json | wc -l ⇒ 9 כרטיסים קיימים",
+      "ran: ls new/dart-screens-bs/*.dart | wc -l ⇒ 83 · ls new/dart-boards-bs/*.dart | wc -l ⇒ 80 (163 בהיקף-SCOPE)",
+      "ran: grep -n 'goal-proof' machtzev/police.mjs ⇒ אפס פלט (אינו שער-משטרה)"
+    ]
+  },
+  {
+    "file": "machtzev/index-check.mjs",
+    "lang": "mjs",
+    "lines": 19,
+    "does": [
+      {
+        "claim": "אוכף שכל .mjs תחת machtzev/ מופיע ב-INDEX.md — סקריפט חדש בלי שורה ⇒ אדום",
+        "evidence": "machtzev/index-check.mjs:9-12,16-17"
+      },
+      {
+        "claim": "מקבל ארבע צורות-אזכור (נתיב · basename · עם/בלי סיומת), אך **רק כאסימון בגרשיים אחוריים** — כדי שאזכור-בפרוזה לא ייחשב תיעוד",
+        "evidence": "machtzev/index-check.mjs:11 (‏R3-3.7 בהערה)"
+      },
+      {
+        "claim": "ratchet shrink-only: חוב-קיים ברשימה ב-index-baseline.json, ורק חדש מפיל",
+        "evidence": "machtzev/index-check.mjs:15-17"
+      },
+      {
+        "claim": "מדלג על node_modules ועל selftest-fixtures בהליכה",
+        "evidence": "machtzev/index-check.mjs:10"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "לא בודק שהשורה ב-INDEX.md **נכונה** או עדכנית — רק שהמחרוזת קיימת. תיאור שגוי לחלוטין יעבור",
+        "evidence": "machtzev/index-check.mjs:11 — idx.includes בלבד"
+      },
+      {
+        "claim": "לא נוגע ב-.dart ולא בקבצים מחוץ ל-machtzev/",
+        "evidence": "machtzev/index-check.mjs:10 — endsWith('.mjs') והליכה מ-R.MACH"
+      },
+      {
+        "claim": "אינו אינדקס-המנועים — אין לו קשר ל-engine-index.json; זהו מד-תיעוד של INDEX.md בלבד",
+        "evidence": "machtzev/index-check.mjs:8 — הקלט היחיד הוא machtzev/INDEX.md"
+      },
+      {
+        "claim": "fail-open על baseline חסר — `fs.existsSync(BL) ? … : []` נותן סט ריק, ואז כל החוב הקיים נחשב «חדש» ⇒ בפועל אדום, לא ירוק; כלומר נופל לצד הבטוח",
+        "evidence": "machtzev/index-check.mjs:15-17"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:164",
+        "how": "gate('index-complete','index-check.mjs') — מורץ-בשם כשער"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "שער, וזה מקומו — ומהסוג הפשוט ביותר: הוא שומר על תיעוד-הכלים של המחצב. אין לו שום מגע עם ספק, ישות, אטום או פלט. אין נקודה כנה."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. ערכו עקיף לגמרי (שסוכן ימצא כלי קיים במקום להמציא), וגם זה מתווך דרך INDEX.md ולא דרך המחולל. ראוי לציין: הוא זה שמלמד שגם המחצב עצמו מנוהל בראצ׳ט — 139/208 מאונדקסים, חוב 69 רק-יורד."
+    },
+    "evidence": [
+      "read: machtzev/index-check.mjs:1-18 (כל הקובץ)",
+      "ran: node machtzev/police.mjs --fast ⇒ '✓ index-complete: 139/208 סקריפטים מאונדקסים · חוב 69/70 (רק-יורד)' + 'ran index-complete 73ms'"
+    ]
   }
 ]
