@@ -7,10 +7,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
-import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write, setLook, getLook } from './render-ds.mjs';
+import { renderEntity, renderDashboard, renderHub, renderSystem, renderWizard, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write, setLook, getLook } from './render-ds.mjs';
 import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, renderReportTest, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
 import { nlToSpec } from './nl-spec.mjs';
-import { specFromSentence } from './tzinor.mjs';   // הצינור-המשולב (חוק-הבעלים §20-ג): עוטף את nlToSpec — מה שנפתר ממקור-אמת גובר, מה שלא ⇒ ∅ מדווח
+import { specFromSentence } from './tzinor.mjs';   // combined pipeline (§20-c): wraps nlToSpec — source-of-truth wins, otherwise reports empty
 import { pickRoot, renderRootPage, renderShell, renderHome, renderBehavior } from './app-shell.mjs';
 import fs0 from 'node:fs';
 const SL = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
@@ -63,12 +63,11 @@ export function buildApp(specText) {
   if (raw.length && !raw.some((l) => ENTITY_RE.test(l))) {
     const roleLines = raw.filter((l) => ROLE_RE.test(l));
     const freeLines = raw.filter((l) => !ROLE_RE.test(l));
-    // 🔀 הצינור-המשולב קודם: כל מילת-ישות ⇒ מקור-אמת או ∅. ורמינהו (BUILD-ORDER-INTENT:16)
-    //    פסק שלא מחליפים את nlToSpec אלא **עוטפים** — לכן הוא הנפילה־לאחור, לא הראשון.
+    // combined pipeline first; nlToSpec stays as fallback (BUILD-ORDER-INTENT:16).
     const free = freeLines.join('\n');
     let nl = '';
     try { const t = specFromSentence(free); if (t.spec.trim()) nl = t.spec; } catch (e) { nl = ''; }
-    if (!nl.trim()) nl = nlToSpec(free);   // שלד-הנתונים — כשהצינור לא הכיר אף מילה
+    if (!nl.trim()) nl = nlToSpec(free);   // data skeleton — when the pipeline knew no word
     if (nl.trim()) specText = [nl, ...roleLines].join('\n');   // חסר-מבנה ⇒ עברית-חופשית + תפקידים
   }
   for (const d of [OUT, R.dataOutDir()]) if (fs.existsSync(d)) for (const f of fs.readdirSync(d)) if (new RegExp(`^gen_${P}[a-z]+\\d*(_content)?\\.dart$`).test(f)) fs.unlinkSync(path.join(d, f));   // G28 · המחולל בעל מרחב-השמות: תוצר-ישן שלא חולל-מחדש (מסך-מגירה שנגרע) לא נשאר
@@ -299,7 +298,14 @@ export function buildApp(specText) {
   const scopeFields = [];
   for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeFields.some((x) => x.slug === sl && x.field === sc.field)) scopeFields.push({ slug: sl, field: sc.field }); }
   const appTitle = appName || L.appTitle;
-  const hub = renderHub(`${P}hub`, { title: appTitle, icon: '🏗️', screens: [...screens, ...reportScreens, ...particleScreens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys], roles, scopeFields });
+  // wizard: one per app, assembled over shelf atoms (THE-WAY). Failure is non-fatal.
+  let wizTile = null;
+  try {
+    const wEnts = Object.values(entRes).map((r) => ({ name: r.entity, schema: r.schema, stages: r.stages || [] }));
+    const wiz = renderWizard(`${P}wizard`, { entities: wEnts, screenCount: screens.length + sys.length + 2 });
+    if (wiz && wiz.slug) wizTile = { slug: wiz.slug, cls: wiz.cls, name: L.wizTitle, icon: '🧙', sub: `${wiz.steps} ${L.wizSteps} · ${wiz.options} ${L.wizOpts} · ${wiz.inventions} ${L.wizInv}` };
+  } catch (e) { wizTile = null; }
+  const hub = renderHub(`${P}hub`, { title: appTitle, icon: '🏗️', screens: [...screens, ...reportScreens, ...particleScreens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys, ...(wizTile ? [wizTile] : [])], roles, scopeFields });
   // 🧭 G26 · ניווט-מקשרים: השורש = הישות עם הכי-הרבה מצביעים (backRefs); יש שורש ⇒ שלד (בית · שורש · עוד) הוא הבית, הרכזת = "עוד" (ביט-זהה)
   const rootMeta = pickRoot(entMeta, backRefs);
   let home = { slug: `${P}hub`, cls: hub.cls };
@@ -350,7 +356,7 @@ if (import.meta.url === 'file://' + process.argv[1]) {
     console.log(`🎨 ${L.skinLog}: ${Object.entries(tot).filter(([, v]) => v).map(([k, v]) => `${k}×${v}`).join(' · ') || '—'}`);
   }
   const ents = screens.filter((s) => s.icon === '🗂️');
-  console.log(`\n✨ אפליקציה (מערכת-עיצוב) חוללה — ${screens.length + sys.length + 1} מסכים`);
-  console.log(`   ${ents.length} ישויות · ${screens.length - ents.length} דשבורדים · ${sys.length} מערכת · 1 לוח`);
+  console.log(`\n✨ אפליקציה (מערכת-עיצוב) חוללה — ${screens.length + sys.length + 1} ${L.wizScreens}`);
+  console.log(`   ${ents.length} ${L.wizEntities} · ${screens.length - ents.length} דשבורדים · ${sys.length} מערכת · 1 לוח`);
   console.log('   הכל דרך render-ds הטהור (טיפוס נאחז מהאטומים · אפס regex).');
 }
