@@ -10,6 +10,7 @@ import { interpret as entInterpret } from './entity.mjs';
 import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write, setLook, getLook } from './render-ds.mjs';
 import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, renderReportTest, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
 import { nlToSpec } from './nl-spec.mjs';
+import { specFromSentence } from './tzinor.mjs';   // הצינור-המשולב (חוק-הבעלים §20-ג): עוטף את nlToSpec — מה שנפתר ממקור-אמת גובר, מה שלא ⇒ ∅ מדווח
 import { pickRoot, renderRootPage, renderShell, renderHome, renderBehavior } from './app-shell.mjs';
 import fs0 from 'node:fs';
 const SL = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
@@ -62,7 +63,12 @@ export function buildApp(specText) {
   if (raw.length && !raw.some((l) => ENTITY_RE.test(l))) {
     const roleLines = raw.filter((l) => ROLE_RE.test(l));
     const freeLines = raw.filter((l) => !ROLE_RE.test(l));
-    const nl = nlToSpec(freeLines.join('\n'));
+    // 🔀 הצינור-המשולב קודם: כל מילת-ישות ⇒ מקור-אמת או ∅. ורמינהו (BUILD-ORDER-INTENT:16)
+    //    פסק שלא מחליפים את nlToSpec אלא **עוטפים** — לכן הוא הנפילה־לאחור, לא הראשון.
+    const free = freeLines.join('\n');
+    let nl = '';
+    try { const t = specFromSentence(free); if (t.spec.trim()) nl = t.spec; } catch (e) { nl = ''; }
+    if (!nl.trim()) nl = nlToSpec(free);   // שלד-הנתונים — כשהצינור לא הכיר אף מילה
     if (nl.trim()) specText = [nl, ...roleLines].join('\n');   // חסר-מבנה ⇒ עברית-חופשית + תפקידים
   }
   for (const d of [OUT, R.dataOutDir()]) if (fs.existsSync(d)) for (const f of fs.readdirSync(d)) if (new RegExp(`^gen_${P}[a-z]+\\d*(_content)?\\.dart$`).test(f)) fs.unlinkSync(path.join(d, f));   // G28 · המחולל בעל מרחב-השמות: תוצר-ישן שלא חולל-מחדש (מסך-מגירה שנגרע) לא נשאר

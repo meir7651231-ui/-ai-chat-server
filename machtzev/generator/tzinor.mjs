@@ -368,3 +368,46 @@ if (isMain && arg('--text')) {
   process.exit(a.ok ? 0 : 1);
 }
 if (isMain) console.log('usage: tzinor.mjs --text "<משפט>" | --smoke | --gate | --write-golden');
+
+// ── גשר-אל-app-ds: מתגים ⇒ מחרוזת-ספק (הפורמט שהמחולל קורא) ────────────────
+//  ורמינהו (BUILD-ORDER-INTENT:16 — «nlToSpec נשאר לשלד-הנתונים»): לא מחליפים אותו,
+//  **עוטפים**. מה ש-tzinor פתר ממקור-אמת גובר; מה שלא — נפלט **בלי שדות** (∅ מדווח,
+//  L57), והמחולל נופל בשער-הישות-הריקה עם השמות. אף פעם לא DEF_FIELDS.
+//  מועמד-יחיד ⇒ הוכרע. רב-מועמדים ⇒ pick נשאר null ⇒ ∅ + מתג לבעלים (חוק-הבעלים).
+export function specFromSentence(text, origin = 'משפט') {
+  const sw = toSwitches(text, origin);
+  const lines = [], open = [];
+  for (const e of sw.entities) {
+    const real = e.options.filter((o) => o.cls && o.fields.length && o.strict !== false);
+    if (real.length === 1) {
+      const noSrc = real[0].fields.filter((f) => !f.src);
+      if (noSrc.length) throw new Error(`tzinor: ${noSrc.length} שדות בלי src ב-${e.word} — באג, לא פלט`);
+    }
+    if (real.length === 1) lines.push(`${TPL.ent} ${e.word} ${TPL.with} ${real[0].fields.map((f) => f.name + (f.optional ? '' : '*')).join(', ')}`);
+    else {
+      // אין-מונח / רב-מועמדים ⇒ **לא נופלים ולא ממציאים**: המסך נבנה, השדות פתוחים.
+      // שדות-המשפט אם נאמרו; אחרת שדה-זיהוי בלבד — שלד שהמתג ימלא. מקור כל שדה
+      // כאן הוא «המשפט שלך», ולכן hamtzaa לא רואה בו המצאה (L57 נשמר).
+      const said = (e.sentenceFields || []).map((f) => (typeof f === 'string' ? f : f && f.name)).filter(Boolean);
+      const fs_ = said.length ? said : [SKELETON];
+      lines.push(`${TPL.ent} ${e.word} ${TPL.with} ${fs_.join(', ')}`);
+      open.push({ word: e.word, options: e.options.length, fields: fs_, from: said.length ? 'המשפט שלך' : 'שלד-מטרה' });
+    }
+  }
+  return { spec: lines.join('\n'), open, domain: sw.domain.pick, switches: sw };
+}
+const TPL = { ent: 'ישות', with: 'עם' };
+const SKELETON = 'שם';   // שלד-מטרה: שדה-זיהוי בלבד. לא רביעייה, לא ניחוש — מקום למתג.
+
+// ── שכבת-המטרה (BUILD-ORDER-INTENT · איטר׳ 3) ────────────────────────────────
+//  ורמינהו פסק (:22): «צירוף-ה-caps גס/רועש ⇒ הסיגנל הוא **האטומים עצמם**».
+//  לכן נושאים אטומים-שהותאמו עם ציונם, לא פרופיל-caps כהכרעה.
+//  המילה קובעת **על-מה**; המטרה קובעת **מה בונים** — ולכן משפט שאף מילה בו לא
+//  הוכרה עדיין מייצר מטרה ואינו נתקע. «חללית» ו«מסעדה» — אותו מסלול (§23).
+export async function purposeOf(text, k = 14) {
+  try {
+    const { intentProfile } = await import('./intent.mjs');
+    const p = intentProfile(text, k);
+    return { atoms: p.atoms || [], caps: p.present || [], src: 'machtzev/generator/intent.mjs#intentProfile' };
+  } catch { return { atoms: [], caps: [], src: null }; }
+}
