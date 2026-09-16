@@ -1,6 +1,6 @@
 # 2א · gen + engine + audit + tools + dedup + extract — מיפוי-חיבור
 
-**21/60 מנועים** · חסרים: engine/atlas.mjs, engine/generate.mjs, engine/lib.mjs, gen/build.mjs, gen/detach.mjs, gen/engine.mjs, gen/flutter.mjs, gen/fonts.mjs, gen/index-page.mjs, gen/inventory.mjs, gen/lang.mjs, gen/lenses.mjs, gen/live.mjs, gen/mosad-build.mjs, gen/packs-apply.mjs, gen/pass.mjs, gen/plan.mjs, gen/prove-dart.mjs, gen/prove.mjs, gen/render.mjs, gen/sentence.mjs, gen/shelf.mjs, gen/site.mjs, gen/skin.mjs, gen/spec.mjs, gen/studio.mjs, gen/wizard.mjs, machtzev/audit/diff.mjs, machtzev/audit/features.mjs, machtzev/audit/gen-forge-dart.mjs, machtzev/audit/gen-orig.mjs, machtzev/audit/heal.mjs, machtzev/audit/lib.mjs, machtzev/audit/run.mjs, machtzev/tools/box-coverage.mjs, machtzev/tools/dart-test.mjs, machtzev/tools/gen-wiring-doc.mjs, machtzev/tools/promote-auto.mjs, machtzev/tools/refine.mjs
+**26/60 מנועים** · חסרים: engine/atlas.mjs, engine/generate.mjs, engine/lib.mjs, gen/build.mjs, gen/detach.mjs, gen/engine.mjs, gen/flutter.mjs, gen/fonts.mjs, gen/index-page.mjs, gen/inventory.mjs, gen/lang.mjs, gen/lenses.mjs, gen/live.mjs, gen/mosad-build.mjs, gen/packs-apply.mjs, gen/pass.mjs, gen/plan.mjs, gen/prove-dart.mjs, gen/prove.mjs, gen/render.mjs, gen/sentence.mjs, gen/shelf.mjs, gen/site.mjs, gen/skin.mjs, gen/spec.mjs, gen/studio.mjs, gen/wizard.mjs, machtzev/audit/diff.mjs, machtzev/audit/features.mjs, machtzev/audit/gen-forge-dart.mjs, machtzev/audit/gen-orig.mjs, machtzev/audit/heal.mjs, machtzev/audit/lib.mjs, machtzev/audit/run.mjs
 
 הרשימה נגזרה מהפקודה (לא מיד):
 
@@ -10,13 +10,14 @@ node machtzev/census/engine-index.mjs --connected --list | grep '○' | sed 's/.
 wc -l /tmp/my-list.txt   # 60
 ```
 
-**פיזור s22:** 3⇒0 · 2⇒3 · 1⇒9 · 0⇒9
+**פיזור s22:** 3⇒0 · 2⇒4 · 1⇒12 · 0⇒10
 
 | מנוע | s22 | connectAt | תמצית |
 |---|---|---|---|
 | `machtzev/dedup/dedup-atoms.mjs` (112) | **2** | ‏`machtzev/generator/regen.mjs` — סדר-הריצה היחיד של GENMAX (`ship` · `one`), כשלב-קדם לפני `behavior-plan.mjs` | ארבע עדשות על מדף-החוזה (`new/atoms/`): (א) תאומי-גוף — sha256 של הקוד אחרי הסרת הערות/רווחים · (ב) תאומי-שם — נרמול `split(/[-_]/).sort().join('\|')` שתופס גם סדר-מילים הפוך · (ג) תאומי-מוצא — שני אטומים עם אותה שורת «מוצא:» · (ד) `--semantic`: תאומי-פעולה בהוכחה-צולבת |
 | `machtzev/extract/functions.mjs` (71) | **2** | machtzev/generator/logic-census.mjs / auto-logic.catalog — קטלוג-הלוגיקה שהבורר של G34/G18-19 מחפש בו לפי חתימה | פירוק-מקסימום: כל פונקציה בקובץ engines/source ⇒ אטום L6b עם **גבולות-שורה מדויקים** (start-end), אורך, ורשימת-מי-היא-קוראת (עד 12 שמות, אחרי סינון 100+ מובנים) |
 | `machtzev/extract/schema.mjs` (22) | **2** | ‏`machtzev/generator/app-ds.mjs` — דקדוק-האפיון (`ישות X עם שדה*, סכום(0..N), מצב{א\|ב}`) · `entity-slugs.json` | סורק **רק** `types/domain.ts` או `domain/*.dart` ומחלץ כל שדה בכל ישות ⇒ אטום L10 עם entity · name · optional · type · file:line |
+| `machtzev/tools/dart-test.mjs` (14) | **2** | ‏`machtzev/one.mjs:186-188` — ליד `verify-dart-tests.mjs`, שכבר עושה גילוי-Dart נכון (`HAS_DART` בודק 4 נתיבים כולל `/root/dart-sdk/bin/dart`) ומדלג בנימוס כשאין בינארי | מריץ כל `new/dart/*_test.dart` דרך `dart run --enable-asserts`, סופר ירוק/אדום, ומדפיס «Dart: ok/total בדיקות-חוזה ירוקות» |
 | `machtzev/dedup/dedup-cross-dart.mjs` (31) | **1** | ‏`machtzev/dedup/dedup-atoms.mjs --semantic` (‏עדשת-ד') — במקום sha-מבנה, להעביר את זוגות-המועמדים של עדשת-המבנה דרך `logic-proof` | משווה `new/dart` מול `new/dart-maor` בשלוש עדשות: שם-מנורמל · sha1 של **מבנה** (כל מזהה מוחלף ב-`ID`, טיפוסים `dynamic/final/var` נמחקים) ⇒ שתי פונקציות שונות-שמות באותו מבנה מתגלות |
 | `machtzev/dedup/dedup-deep.mjs` (57) | **1** | ‏`machtzev/purity/purify-dart.mjs --tables` / `machtzev/dedup/dedup-atoms.mjs` — שני המנועים שכבר רצים על הריפו הזה ועושים את אותן עדשות על Dart/JS מקומי | ארבעה ממצאים ברזולוציית-הפירוק-המלא: גופי-פונקציה זהים (sha1 על הגוף האמיתי שנקרא **מהדיסק** לפי טווח-השורות של L6b) · שם-זהה בקבצים שונים · regex זהה ב-≥3 מקומות · עיצוב-מולחם שערכו כבר בפלטה |
 | `machtzev/dedup/reconcile.mjs` (33) | **1** | ‏`machtzev/police.mjs` — מרשם-השערים (‏gates.tsv, 57 שערים) — כשער «אינדקס ≡ עץ-חי» לשכבת-המחצב, במקביל לשער `oracle` הקיים שעושה בדיוק זאת לאטומים | שלוש משוואות-שלמות על ה-registry, עם `exit 1` על כל הפרה: (1) אפס קבצים-יתומים בכל מפקד · (2) כל מזהה-אטום ייחודי גלובלית (אותו id עם source אחר = אזעקה) · (3) כל אטום מצביע לקובץ שקיים במפקד — «רשומת-רפאים» |
@@ -26,6 +27,9 @@ wc -l /tmp/my-list.txt   # 60
 | `machtzev/extract/terms.mjs` (17) | **1** | machtzev/generator/spec-lang.data.json / nl-lang.data.json — קטלוג-המונחים שהמחולל *כן* קורא (gen/lang.mjs:11 קורא אותם, וגם המחולל הראשי) | מוצא בלוק `TERM_DEFS … = [ … ];` בקבצי-תחום 'flags' ומחלץ ממנו `key`+`def`/`label` ⇒ אטומי-מונח L5, עם מספר-שורה מחושב מהיסט-הבלוק |
 | `machtzev/extract/tokens.mjs` (24) | **1** | machtzev/run.mjs:12 (הקיים) — נשאר; נקודת-החיבור-למחולל היחידה הכנה היא הזנת atoms-L0 כשכבת-דאטה ל-`machtzev/generator/atlas.mjs` (buildAtlas cfg.data) | קורא census-<repo>.json, לוקח קבצים שתחומם 'tokens', וסורק כל שורה אחר הצורה `--שם: ערך;` ⇒ אטום-עיצוב אחד פר-שם, עם כל הערכים (ערכות/מצבים) מאוגדים פנימה |
 | `machtzev/extract/verticals.mjs` (27) | **1** | ‏`machtzev/generator/auto-skin.mjs` (‏הכרעה-25 — 26 תפקידי-skin שהמנוע בוחר) + `gen/skin.data.json` | מוצא קובץ בשם `verticalPacks.ts`, חותך את `VERTICAL_PACKS = [ … ]`, ומפצל אותו **לפי מיקומי-`id:`** (לא לפי סוגריים) ⇒ עמיד להערות בין בלוקים |
+| `machtzev/tools/box-coverage.mjs` (69) | **1** | ‏`machtzev/police.mjs` כשער נוסף ב-gates.tsv, עם `--strict` | לכל `box-drafts/*.box-draft.md` קורא את רשימת-החוטים (שורות שמתחילות ב-`· שם`) ומסווג כל חוט לחמש קטגוריות: קיים-בחוזה (`new/atoms`) · במחצבה (`quarry`) · אשכול-מתועד · גבול-IO · חוק-6 · חסר-אמיתי |
+| `machtzev/tools/gen-wiring-doc.mjs` (26) | **1** | ∅ — כבר מחובר במקומות הנכונים (צנרת · CI · מיזוג · pin). מה שחסר אינו חיבור אלא תיקון: להחליף את נתיב-הזהב הקשיח בבדיקה יחסית | גוזר את `WIRING.md` **מה-imports האמיתיים**: לכל קופסה ב-`new/boxes` אוסף `from '../atoms/<x>.mjs'` ⇒ רשימת-חוטים, ומאחד לקבוצת «מחווטים» |
+| `machtzev/tools/promote-auto.mjs` (129) | **1** | ‏`machtzev/carve/carve-land.mjs` (מחברת-הנחיתה של G61) — שם כבר יש «שן-מוטציה בנחיתה» והוכחת-חיפוש דו-לשונית פר-אטום | מקדם טיוטה מ-`quarry/` ל-`new/atoms/` בלי נחיל: **קבוע** ⇒ חוזה-צילום (‏JSON snapshot) · **פונקציה-טהורה** ⇒ חוזה-אפיון (Golden): מריץ את הקוד על סל-קלטים משותף (`probe-pool.mjs`, ‏L89) ומקליט פלטים דטרמיניסטיים |
 | `machtzev/dedup/dedup-cross.mjs` (19) | **0** | ∅ — ‏`machtzev/dedup/dedup-cross-dart.mjs` עושה את אותה עבודה **לפי גוף** ולא לפי שם, והוא כן בצנרת (one.mjs:85) | משווה שמות-קבצים מנורמלים בין `new/atoms` (‏JS) ל-`new/dart` (‏Dart) ⇒ «ליבה-אימפריאלית»: יכולת שקיימת בשתי המערכות |
 | `machtzev/dedup/dedup.mjs` (77) | **0** | ∅ | הכרעת-כפילויות בשלוש משפחות מתוך ה-registry: (1) צבעים — שמות שונים שכל **סט-הערכים** שלהם זהה (≥3 שמות) ⇒ קנוני = השם עם הכי פחות מקפים · (2) מחרוזות — אותו טקסט-מתובנת (ספרות⇒`#`) ב-≥2 מקומות ⇒ מועמד-מונח · (3) מנועים — תאומים maor↔buildsmart בניקוד (‏exports + 20 לטהור + 30 לקיום-בדיקה + אורך/100) |
 | `machtzev/extract/components.mjs` (30) | **0** | ∅ | שני מעברים: (1) אוסף שמות-רכיבים מיוצאים מכל tsx/dart (‏`export function X` · `export const X` · `class X extends StatelessWidget\|StatefulWidget\|ConsumerWidget\|…`), (2) לכל קובץ בונה קבוצת-שימוש `uses` ע"י חיפוש `<X` או `X(` של שמות שמוגדרים בקובץ **אחר** |
@@ -35,12 +39,14 @@ wc -l /tmp/my-list.txt   # 60
 | `machtzev/extract/icons.mjs` (16) | **0** | ‏`machtzev/generator/web-shell.mjs` — ‏G52 גוזר זהות-אפליקציה (‏favicon/manifest) מ«אימוג'י-ממשק» שבקוד-המחולל | סופר כל אימוג'י (‏\p{Extended_Pictographic}) בקבצי tsx/ts/dart של 4 תחומים ⇒ אטום L11 אחד פר-סמל עם מונה-שימושים |
 | `machtzev/extract/knowledge.mjs` (16) | **0** | ∅ | אטום פר-מסמך-md בתחום 'knowledge': סוג (מתוך 22 קידומות-שם), תאריך מהשם, מספר-שורות, וכותרת-H1 מ-400 התווים הראשונים |
 | `machtzev/extract/styles.mjs` (25) | **0** | ‏`gen/skin.mjs` / `machtzev/generator/ds-forge.mjs` — שכבת-העור שקוראת זרע-צבע כדאטה | סורק **רק** קבצי `.tsx` ומחלץ כל זוג מאפיין:ערך מתוך `style={{…}}` ⇒ אטום L0b מאוגד (אטום אחד לכל זוג, עם `count` ועד 5 מיקומים) |
+| `machtzev/tools/refine.mjs` (34) | **0** | ∅ | שלושה ממצאים מה-registry ⇒ `REFINE-REPORT.md`: מנועים-תאומים maor↔buildsmart לפי חפיפת-שמות-יצוא (≥3 משותפים או שם-זהה) · ריכוז מחרוזות-קשיחות לפי קובץ (25 מובילים) · ערכי-צבע שחוזרים ב-≥3 שמות |
 
 ## למה הציון — שורה לכל מנוע
 
 - `machtzev/dedup/dedup-atoms.mjs` **2** — עדשת-ד' היא בדיוק שיטת-ההוכחה של §20 (הרצה, לא שם) ומיושמת נכון — כולל הסירוב לשפוט מנוע שאינו מוכיח את עצמו. חסר: היא אינה בצנרת-המחולל, רק בצנרת-המפעל
 - `machtzev/extract/functions.mjs` **2** — המנוע היחיד ב-extract/ שמייצר בדיוק את מה שהבורר-בהוכחה צורך (פונקציה טהורה + חתימה + טווח). חסר לו רק מקור — ולכן 2, לא 3
 - `machtzev/extract/schema.mjs` **2** — התאמת-צורה כמעט-מלאה לשפת-הספק של המחולל, וחסר לו מנוע-תרגום אחד קצר. אבל המקור (‏domain.ts של maor) אינו קיים — לכן 2 ולא 3
+- `machtzev/tools/dart-test.mjs` **2** — הוא הכלי היחיד בקבוצה שמריץ **קוד-אמת של המחולל** ומייצר פסק-דין. אינו מחובר לשום מקום, ושורה אחת (נתיב) מפרידה בינו לבין 345 בדיקות שרצות. לא 3 — כי הוא בודק את המדף, לא את האפליקציה המחוללת
 - `machtzev/dedup/dedup-cross-dart.mjs` **1** — בצנרת ורץ, אבל שתי העדשות המוכחות שלו (שם · מבנה) הן התאמת-מחרוזת; עדשת-המבנה נתנה 0 ולכן היום הוא למעשה dedup-cross בשם אחר
 - `machtzev/dedup/dedup-deep.mjs` **1** — השיטה נכונה (בייטים, לא מטא-דאטה) אבל הקלט שלה מת. מקרב את האמון במפה, לא את האפליקציה
 - `machtzev/dedup/reconcile.mjs` **1** — הרעיון («מספר בלי מקור = רשומת-רפאים») הוא בדיוק VERIFY-LAWS, אבל האובייקט שהוא שומר עליו אינו בריפו
@@ -50,6 +56,9 @@ wc -l /tmp/my-list.txt   # 60
 - `machtzev/extract/terms.mjs` **1** — היעד נכון (שפת-המחולל היא דאטה, §19) אך הצינור בין L5 לבין spec-lang.data.json לא קיים, והמקור חסר
 - `machtzev/extract/tokens.mjs` **1** — מייצר דאטה שהמחולל *יכול* לצרוך (טוקנים) אבל לא צורך היום, ותלוי במפקד של ריפו שאינו קיים. לא מקרב אפליקציה-עובדת; מקרב את המפה
 - `machtzev/extract/verticals.mjs` **1** — התאמת-צורה טובה ל-auto-skin, אבל העור כבר נבחר ע"י מנוע (G12-13) ומקור-הוורטיקלים אינו קיים
+- `machtzev/tools/box-coverage.mjs` **1** — מודד את המחצבה, לא את המחולל. 60 הקופסאות אינן בקטלוג שהבורר סורק (‏`atom-index-full.json`), ולכן «מוכנות-קופסה» אינה יכולת-אפליקציה
+- `machtzev/tools/gen-wiring-doc.mjs` **1** — מנוע-תיעוד בריא ומחובר היטב לצנרת-המפעל, אבל `new/boxes` אינן בקטלוג של המחולל; מפת-החיווט שלהן אינה מקרבת אפליקציה-עובדת
+- `machtzev/tools/promote-auto.mjs` **1** — מנוע-קידום איכותי (דטרמיניזם-בריצה, מגן-התנגשות-אמת) שמריץ על מחצבה ריקה, והקורא היחיד שלו שבור. הוא **יכול** להזרים אטומים לקטלוג — ולכן 1 ולא 0 — אבל היום אינו
 - `machtzev/dedup/dedup-cross.mjs` **0** — לא מקרב, ואף מסכן: שיטת-ההשוואה שלו היא השיטה שנפסלה. יש לו מחליף בצנרת
 - `machtzev/dedup/dedup.mjs` **0** — לא מקרב: מת מלמעלה (אין registry), עטוף ב-catch שבולע, ומדד «ללא-הכרעה» שלו שבור מהותית
 - `machtzev/extract/components.mjs` **0** — כפילות-פונקציה נחותה מול אינדקס-האטומים הקיים, ועל מקור חסר. לא מקרב
@@ -59,3 +68,4 @@ wc -l /tmp/my-list.txt   # 60
 - `machtzev/extract/icons.mjs` **0** — התפקיד שלו כבר ממולא בתוך המחולל, על המקור הנכון. לא מקרב
 - `machtzev/extract/knowledge.mjs` **0** — לא מקרב, ואומר זאת במפורש: 22 קידומות-שם אינן ידע
 - `machtzev/extract/styles.mjs` **0** — עיוור ל-Dart, ולכן עיוור לכל מה שהמחולל פולט. השער המקביל (look) כבר רץ
+- `machtzev/tools/refine.mjs` **0** — לא מקרב, ומזיק: הוא המקור המובהק ביותר בקבוצה למספר-ירוק-בלי-מקור. VERIFY-LAWS: «טענה=ציטוט-בייטים» — כאן הבייטים אומרים 0 והדוח אומר «זיקוק»

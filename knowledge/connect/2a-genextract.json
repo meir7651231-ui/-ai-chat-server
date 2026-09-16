@@ -1115,5 +1115,308 @@
    "ran: grep -rn 'atoms-L7-' --include=*.mjs . ⇒ שורה אחת",
    "read: machtzev/extract/verticals.mjs:6-22"
   ]
+ },
+ {
+  "file": "machtzev/tools/box-coverage.mjs",
+  "lang": "mjs",
+  "lines": 69,
+  "does": [
+   {
+    "claim": "לכל `box-drafts/*.box-draft.md` קורא את רשימת-החוטים (שורות שמתחילות ב-`· שם`) ומסווג כל חוט לחמש קטגוריות: קיים-בחוזה (`new/atoms`) · במחצבה (`quarry`) · אשכול-מתועד · גבול-IO · חוק-6 · חסר-אמיתי",
+    "evidence": "machtzev/tools/box-coverage.mjs:40-55"
+   },
+   {
+    "claim": "מנסה **כל** נוסחאות-השמות שהמכונות עצמן משתמשות בהן (camel⇒kebab · UPPER_SNAKE⇒lower · שקילות `_`↔`-` · סיומת-קופסה) — לא נוסחה אחת",
+    "evidence": "machtzev/tools/box-coverage.mjs:27-36,47"
+   },
+   {
+    "claim": "מדד היום: **46/60 קופסאות מוכנות · 0 חורים אמיתיים** ⇒ box-drafts/READINESS.md",
+    "evidence": "ran: `node machtzev/tools/box-coverage.mjs` ⇒ «מד-מוכנות: 46/60 קופסאות מוכנות · 0 חורים אמיתיים»"
+   },
+   {
+    "claim": "‏`--strict` הופך אותו לשער: `exit 1` אם יש חור",
+    "evidence": "machtzev/tools/box-coverage.mjs:69"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "‏`--strict` **אינו** מופעל בשום קורא — one.mjs:177 מריץ אותו בלי דגל וב-`optional:true`, כלומר גם כשל אינו עוצר",
+    "evidence": "machtzev/one.mjs:177 — `run('machtzev/tools/box-coverage.mjs')` בלי args, `{optional:true}`"
+   },
+   {
+    "claim": "שלוש רשימות קשיחות ביד בתוך המנוע (IO_NAMES · LAW6 · CLUSTERED — 15 שמות) — דאטה בתוך מנוע, בניגוד לחוק-1",
+    "evidence": "machtzev/tools/box-coverage.mjs:22-25"
+   },
+   {
+    "claim": "אינו בודק שהחוט **עובד**, רק שקובץ בשם מתאים קיים ב-`new/atoms`",
+    "evidence": "machtzev/tools/box-coverage.mjs:11,48"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/one.mjs:177",
+    "how": "שלב-צנרת `stage('מד-מוכנות-קופסאות', …, {optional:true})`"
+   },
+   {
+    "who": "CLAUDE.md:119 · box-drafts/READINESS.md:1 · machtzev/LEARNINGS.md:132",
+    "how": "מתועד ומייצר את שורת-הכותרת של הדוח"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/police.mjs` כשער נוסף ב-gates.tsv, עם `--strict`",
+   "gives": "היום «0 חורים» הוא מספר שאיש לא נופל עליו. כשער-ratchet (החורים רק יורדים) הוא הופך את «46/60» ליעד-נמדד. זה **לא** מקרב את §22 ישירות — קופסה ≠ אטום-מחולל — ולכן הערך הוא אמון, לא יכולת"
+  },
+  "s22": {
+   "score": 1,
+   "why": "מודד את המחצבה, לא את המחולל. 60 הקופסאות אינן בקטלוג שהבורר סורק (‏`atom-index-full.json`), ולכן «מוכנות-קופסה» אינה יכולת-אפליקציה"
+  },
+  "evidence": [
+   "ran: node machtzev/tools/box-coverage.mjs ⇒ «46/60 קופסאות מוכנות · 0 חורים אמיתיים»",
+   "read: machtzev/tools/box-coverage.mjs:22-25,27-36,40-55,69",
+   "read: machtzev/one.mjs:177 (מריץ בלי --strict, optional)"
+  ]
+ },
+ {
+  "file": "machtzev/tools/dart-test.mjs",
+  "lang": "mjs",
+  "lines": 14,
+  "does": [
+   {
+    "claim": "מריץ כל `new/dart/*_test.dart` דרך `dart run --enable-asserts`, סופר ירוק/אדום, ומדפיס «Dart: ok/total בדיקות-חוזה ירוקות»",
+    "evidence": "machtzev/tools/dart-test.mjs:6-13"
+   },
+   {
+    "claim": "פסק-דין חוסם: `process.exit(fail ? 1 : 0)`",
+    "evidence": "machtzev/tools/dart-test.mjs:13"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**נתיב-Dart קשיח שאינו קיים כאן** — `/home/user/flutter/bin/dart`; אין נפילה ל-PATH. תוצאה: `Dart: 0/345 בדיקות-חוזה ירוקות · 345 נכשלו`, exit 1 — **345 כשלים שאינם אמיתיים**",
+    "evidence": "ran: `node machtzev/tools/dart-test.mjs` ⇒ «✗ … /bin/sh: 1: /home/user/flutter/bin/dart: not found» ×345 · «Dart: 0/345» · `echo $?` ⇒ 1; machtzev/tools/dart-test.mjs:5"
+   },
+   {
+    "claim": "‏Dart **כן** קיים בסביבה — `which dart` ⇒ `/root/dart-sdk/bin/dart`. `gen/prove-dart.mjs:12` מוצא אותו (רשימת-נתיבים ואז נפילה ל-`'dart'`) והריץ 394 אטומי-Dart בפועל. ההבדל הוא שורה אחת",
+    "evidence": "ran: `which dart` ⇒ /root/dart-sdk/bin/dart · ran: `node gen/build.mjs gen/specs/gemach.txt` ⇒ «Dart: נוסו 394» בכל 9 הצרכים; gen/prove-dart.mjs:12"
+   },
+   {
+    "claim": "קורא רק `new/dart/` — לא `new/dart-boxes` (‏102 מנועים ש-G48 הכניס לאטלס) ולא `new/dart-maor`",
+    "evidence": "machtzev/tools/dart-test.mjs:6"
+   },
+   {
+    "claim": "בולע את הפלט המוצלח (`stdio:'pipe'`) — אי-אפשר לדעת כמה assert-ים רצו, רק כמה קבצים לא קרסו",
+    "evidence": "machtzev/tools/dart-test.mjs:10"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אין קורא — לא ב-one.mjs, לא ב-run.mjs, לא ב-police.mjs, לא ב-workflows, ולא ב-CLAUDE.md (grep על `dart-test.mjs` בכל הריפו ⇒ רק הקובץ עצמו)"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/one.mjs:186-188` — ליד `verify-dart-tests.mjs`, שכבר עושה גילוי-Dart נכון (`HAS_DART` בודק 4 נתיבים כולל `/root/dart-sdk/bin/dart`) ומדלג בנימוס כשאין בינארי",
+   "gives": "‏345 בדיקות-החוזה של `new/dart` אינן נבדקות היום ע\"י אף שער. חיבורן לצנרת (אחרי תיקון שורה 5 לגילוי כמו `one.mjs:186`) נותן **ראיית-ריצה** לשכבת-הלוגיקה ש-§22 מבטיח «אפס-באגים» עליה. זו נקודת-החיבור הכי כנה בכל `tools/`"
+  },
+  "s22": {
+   "score": 2,
+   "why": "הוא הכלי היחיד בקבוצה שמריץ **קוד-אמת של המחולל** ומייצר פסק-דין. אינו מחובר לשום מקום, ושורה אחת (נתיב) מפרידה בינו לבין 345 בדיקות שרצות. לא 3 — כי הוא בודק את המדף, לא את האפליקציה המחוללת"
+  },
+  "evidence": [
+   "ran: node machtzev/tools/dart-test.mjs ⇒ «Dart: 0/345 … · 345 נכשלו»; exit 1",
+   "ran: which dart ⇒ /root/dart-sdk/bin/dart",
+   "ran: node gen/build.mjs gen/specs/gemach.txt ⇒ «Dart: נוסו 394» (אותו בינארי, גילוי אחר)",
+   "ran: grep -rn 'dart-test.mjs' . ⇒ אין קורא",
+   "read: machtzev/tools/dart-test.mjs:1-14 · gen/prove-dart.mjs:12 · machtzev/one.mjs:186"
+  ]
+ },
+ {
+  "file": "machtzev/tools/gen-wiring-doc.mjs",
+  "lang": "mjs",
+  "lines": 26,
+  "does": [
+   {
+    "claim": "גוזר את `WIRING.md` **מה-imports האמיתיים**: לכל קופסה ב-`new/boxes` אוסף `from '../atoms/<x>.mjs'` ⇒ רשימת-חוטים, ומאחד לקבוצת «מחווטים»",
+    "evidence": "machtzev/tools/gen-wiring-doc.mjs:12-15,23"
+   },
+   {
+    "claim": "מוסיף לכל קופסה: תפקיד מהחוזה (`*.contract.md`) · האם יש מגן-הכרעה בבדיקה · האם יש רתמת-זהב",
+    "evidence": "machtzev/tools/gen-wiring-doc.mjs:16-21"
+   },
+   {
+    "claim": "מדד היום: **78 קופסאות · 1012/1160 מחווט (87%)**",
+    "evidence": "ran: `node machtzev/tools/gen-wiring-doc.mjs` ⇒ «WIRING.md חולל: 78 קופסאות · 1012/1160 מחווט (87%)»"
+   },
+   {
+    "claim": "נעול-חתימה: רשום ב-`machtzev/pins-check.mjs:20` (‏pins.sha256) ⇒ שינוי בו חייב עדכון-שוטר באותו commit",
+    "evidence": "machtzev/pins-check.mjs:20"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "בודק רתמת-זהב מול **נתיב-מוחלט של ריפו אחר** — `/home/user/maor-system/machtzev/parity/…` — שאינו קיים בשום מקום ⇒ עמודת «🏆 רתמת-זהב» היא ⏳ תמיד, בלי אזהרה",
+    "evidence": "machtzev/tools/gen-wiring-doc.mjs:20 (הנתיב הקשיח) · CLAUDE.md: «maor-system ❌ לא קיים בשום מקום»"
+   },
+   {
+    "claim": "סופר רק `from '../atoms/…'` — ייבוא דינמי (`await import`) או ייבוא ממקום אחר אינו נספר כחיווט",
+    "evidence": "machtzev/tools/gen-wiring-doc.mjs:14"
+   },
+   {
+    "claim": "«מחווט» = מיובא ע\"י קופסה כלשהי, לא «מגיע למחולל». 87% כאן אינם ה-`108/1855` שה-hook מדפיס",
+    "evidence": "ran: hook ב-pre-commit ⇒ «🔌 wired 108/1855» מול המנוע הזה ⇒ «1012/1160 (87%)» — שני מדדים שונים על שתי אוכלוסיות"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/one.mjs:178",
+    "how": "שלב-צנרת `stage('מפת-חיווט (gen-wiring-doc)', …, {optional:true})`"
+   },
+   {
+    "who": ".github/workflows/police.yml:72",
+    "how": "‏CI: `node machtzev/tools/gen-wiring-doc.mjs >/dev/null` (שלב-משטרה)"
+   },
+   {
+    "who": "machtzev/merge-regen.mjs:15",
+    "how": "במיזוג — `WIRING.md` מחולל-מחדש במקום להיפתר ידנית"
+   },
+   {
+    "who": "WIRING.md:2 · CLAUDE.md:118",
+    "how": "מתועד כמקור-הקובץ"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — כבר מחובר במקומות הנכונים (צנרת · CI · מיזוג · pin). מה שחסר אינו חיבור אלא תיקון: להחליף את נתיב-הזהב הקשיח בבדיקה יחסית",
+   "gives": "תיקון-הנתיב היה הופך עמודה שלמה מ-⏳-תמיד לנתון. אבל זה תיקון-קוד — מחוץ להיקף המשימה הזו"
+  },
+  "s22": {
+   "score": 1,
+   "why": "מנוע-תיעוד בריא ומחובר היטב לצנרת-המפעל, אבל `new/boxes` אינן בקטלוג של המחולל; מפת-החיווט שלהן אינה מקרבת אפליקציה-עובדת"
+  },
+  "evidence": [
+   "ran: node machtzev/tools/gen-wiring-doc.mjs ⇒ «78 קופסאות · 1012/1160 מחווט (87%)»",
+   "read: machtzev/tools/gen-wiring-doc.mjs:12-23 · :20 (נתיב-maor הקשיח)",
+   "read: machtzev/one.mjs:178 · .github/workflows/police.yml:72 · machtzev/merge-regen.mjs:15 · machtzev/pins-check.mjs:20"
+  ]
+ },
+ {
+  "file": "machtzev/tools/promote-auto.mjs",
+  "lang": "mjs",
+  "lines": 129,
+  "does": [
+   {
+    "claim": "מקדם טיוטה מ-`quarry/` ל-`new/atoms/` בלי נחיל: **קבוע** ⇒ חוזה-צילום (‏JSON snapshot) · **פונקציה-טהורה** ⇒ חוזה-אפיון (Golden): מריץ את הקוד על סל-קלטים משותף (`probe-pool.mjs`, ‏L89) ומקליט פלטים דטרמיניסטיים",
+    "evidence": "machtzev/tools/promote-auto.mjs:2-6,13,101-117"
+   },
+   {
+    "claim": "דטרמיניזם נבדק בריצה-כפולה: `r1 = fn(...args); r2 = fn(...args)` ורק אם `ser(r1) === ser(r2)` המקרה נרשם ⇒ פונקציה תלוית-שעון/אקראי נופלת מעצמה",
+    "evidence": "machtzev/tools/promote-auto.mjs:108-110"
+   },
+   {
+    "claim": "מגן-התנגשות-אמת: אוסף את **כל** שמות-היצוא שכבר במדף (‏function · const · `export {a as b}`) ופוסל טיוטה שמתנגשת — לא רק לפי שם-קובץ-kebab",
+    "evidence": "machtzev/tools/promote-auto.mjs:19-26,38"
+   },
+   {
+    "claim": "פוסל אסינכרוני, פוסל arity>3, ודורש ≥3 מקרים (‏≥1 לפונקציה-בלי-ארגומנטים) לפני קידום",
+    "evidence": "machtzev/tools/promote-auto.mjs:103,116"
+   },
+   {
+    "claim": "כותב שלושה קבצים לכל אטום שקודם (‏`.mjs` · `.contract.md` · `.test.mjs` המריץ את הצילום+האפיון) ומוחק את הטיוטה",
+    "evidence": "machtzev/tools/promote-auto.mjs:119-124"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**`quarry/` אינה קיימת** בריפו הזה ⇒ הלולאה הראשית לא נכנסת אפילו פעם אחת. הרצה: «0 קודמו · 0 שאריות-לנחיל · 0 דולגו»",
+    "evidence": "ran: `node machtzev/tools/promote-auto.mjs` ⇒ «{}» + «מנוע-הקידום-האוטומטי: 0 קודמו · 0 שאריות-לנחיל · 0 דולגו»; `ls quarry` ⇒ No such file or directory"
+   },
+   {
+    "claim": "**הקורא היחיד בקוד שבור**: `machtzev/chisel.mjs:38` מריץ `machtzev/promote-auto.mjs` — נתיב שאינו קיים (הקובץ ב-`machtzev/tools/`)",
+    "evidence": "machtzev/chisel.mjs:38 · `ls machtzev/promote-auto.mjs` ⇒ No such file or directory"
+   },
+   {
+    "claim": "אינו מוכיח **נכונות** — רק דטרמיניזם ויציבות. פונקציה שמחזירה תשובה שגויה באופן עקבי תקודם עם «חוזה» שמקדש את השגיאה",
+    "evidence": "machtzev/tools/promote-auto.mjs:108-113 (‏ההקלטה היא החוזה, אין ציפייה חיצונית)"
+   },
+   {
+    "claim": "סל-הקלטים קטום לפי arity: ‏arity 2 ⇒ 12×12 · arity 3 ⇒ 10×10×10, ועוצר ב-8 מקרים ⇒ כיסוי דליל",
+    "evidence": "machtzev/tools/promote-auto.mjs:104-107,114"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/chisel.mjs:38",
+    "how": "הרצה-בשם — **בנתיב שגוי** (`machtzev/promote-auto.mjs`), כלומר הקריאה מתה"
+   },
+   {
+    "who": "CLAUDE.md:117",
+    "how": "מתועד כפקודת-מפעל בנתיב הנכון"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/carve/carve-land.mjs` (מחברת-הנחיתה של G61) — שם כבר יש «שן-מוטציה בנחיתה» והוכחת-חיפוש דו-לשונית פר-אטום",
+   "gives": "‏promote-auto מייצר חוזה-מהקלטה; carve-land מייצר חוזה-מהוכחה. שילובם = אטום שנוחת עם גם צילום וגם מוטציה. אבל לפני כל זה צריך לתקן את `chisel.mjs:38` — היום הקריאה היחידה בקוד מפנה לקובץ שאינו קיים"
+  },
+  "s22": {
+   "score": 1,
+   "why": "מנוע-קידום איכותי (דטרמיניזם-בריצה, מגן-התנגשות-אמת) שמריץ על מחצבה ריקה, והקורא היחיד שלו שבור. הוא **יכול** להזרים אטומים לקטלוג — ולכן 1 ולא 0 — אבל היום אינו"
+  },
+  "evidence": [
+   "ran: node machtzev/tools/promote-auto.mjs ⇒ «0 קודמו · 0 שאריות · 0 דולגו»",
+   "ran: ls quarry ⇒ No such file or directory",
+   "ran: ls machtzev/promote-auto.mjs ⇒ No such file or directory (הנתיב ב-chisel.mjs:38)",
+   "read: machtzev/tools/promote-auto.mjs:13,19-26,38,101-124"
+  ]
+ },
+ {
+  "file": "machtzev/tools/refine.mjs",
+  "lang": "mjs",
+  "lines": 34,
+  "does": [
+   {
+    "claim": "שלושה ממצאים מה-registry ⇒ `REFINE-REPORT.md`: מנועים-תאומים maor↔buildsmart לפי חפיפת-שמות-יצוא (≥3 משותפים או שם-זהה) · ריכוז מחרוזות-קשיחות לפי קובץ (25 מובילים) · ערכי-צבע שחוזרים ב-≥3 שמות",
+    "evidence": "machtzev/tools/refine.mjs:7-15,16-20,21-25,27-33"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**ירוק-שקרי**: `load()` עוטף כל קריאה ב-`try/catch` ומחזיר `[]` ⇒ בקלון-טרי הוא מדפיס «0 · 0 · 0» **ויוצא 0**. אפס-מקור ואפס-ממצא נראים זהים",
+    "evidence": "ran: `node machtzev/tools/refine.mjs >/dev/null; echo $?` ⇒ `0`; הפלט: «זיקוק: 0 מנועים-תאומים · 0 מחרוזות-קשיחות · 0 ערכי-צבע כפולים ⇒ REFINE-REPORT.md»; machtzev/tools/refine.mjs:5"
+   },
+   {
+    "claim": "תנאי-התאום שגוי מהותית: `(nameSim && a.exports.length && b.exports.length)` מספיק ⇒ **כל** זוג עם שם-קובץ זהה ולפחות יצוא אחד בכל צד מוכרז תאום, גם בלי יצוא משותף אחד",
+    "evidence": "machtzev/tools/refine.mjs:13 (הפסוקית השלישית)"
+   },
+   {
+    "claim": "הוא כפילות-חלקית של `machtzev/dedup/dedup.mjs` — אותם שני שלבים (מנועים-תאומים · צבעים-כפולים) מאותם קבצים, בלי הניקוד וההכרעה שיש שם",
+    "evidence": "machtzev/tools/refine.mjs:8-15,21-25 מול machtzev/dedup/dedup.mjs:40-64,10-24"
+   },
+   {
+    "claim": "כותב `REFINE-REPORT.md` גם כשאין שום ממצא — קובץ-דוח ריק שנראה כמו דוח",
+    "evidence": "machtzev/tools/refine.mjs:33 (‏writeFileSync ללא תנאי)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/run.mjs:16",
+    "how": "`try { run('./tools/refine.mjs', []); } catch {}` — כשל נבלע (ולא יהיה כשל, כי הוא יוצא 0)"
+   },
+   {
+    "who": "machtzev/one.mjs:47",
+    "how": "עקיף דרך run.mjs ב-cwd=maor"
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — כל שלושת שלביו קיימים ב-`dedup/dedup.mjs` בגרסה חזקה יותר (ניקוד + אינווריאנט-כיסוי-100%). מה שהיה שווה לחבר הוא **שער** שיפיל אותו כשה-registry ריק — אבל זה תיקון, לא חיבור"
+  },
+  "s22": {
+   "score": 0,
+   "why": "לא מקרב, ומזיק: הוא המקור המובהק ביותר בקבוצה למספר-ירוק-בלי-מקור. VERIFY-LAWS: «טענה=ציטוט-בייטים» — כאן הבייטים אומרים 0 והדוח אומר «זיקוק»"
+  },
+  "evidence": [
+   "ran: node machtzev/tools/refine.mjs >/dev/null; echo $? ⇒ 0 · הפלט «0 · 0 · 0»",
+   "read: machtzev/tools/refine.mjs:5 (‏load שבולע) · :13 (תנאי-התאום) · :33",
+   "read: machtzev/run.mjs:16 · machtzev/dedup/dedup.mjs:40-64 (המחליף החזק)"
+  ]
  }
 ]
