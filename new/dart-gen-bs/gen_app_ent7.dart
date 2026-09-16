@@ -4,7 +4,7 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
-import '../dart-maor/gematria.dart';
+import '../dart-maor/phone-key.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt7Screen extends StatefulWidget {
@@ -48,7 +48,7 @@ class _GenAppEnt7ScreenState extends State<GenAppEnt7Screen> {
         DsWorkflow(steps: const [gen_app_ent7_c17, gen_app_ent7_c18, gen_app_ent7_c19, gen_app_ent7_c20, gen_app_ent7_c21], current: 2),
         DsSection(title: gen_app_ent7_c4, children: [
           DsField(label: gen_app_ent7_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
-          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent7_c9, gem((num.tryParse(_v[0] ?? '') ?? 0))),
+          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent7_c9, phoneKey((_v[0] ?? ''))),
           DsField(label: gen_app_ent7_c10, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent7_c11, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsField(label: gen_app_ent7_c12, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),

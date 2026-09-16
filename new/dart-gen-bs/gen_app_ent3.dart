@@ -5,9 +5,9 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import '../dart-maor/fmt-date.dart';
-import '../dart-maor/gematria.dart';
-import '../dart-maor/month-he-of.dart';
+import '../dart-maor/phone-key.dart';
 import '../dart/angle_digits.dart';
+import '../dart/namespace_of.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt3Screen extends StatefulWidget {
@@ -51,9 +51,9 @@ class _GenAppEnt3ScreenState extends State<GenAppEnt3Screen> {
         DsWorkflow(steps: const [gen_app_ent3_c25, gen_app_ent3_c26, gen_app_ent3_c27, gen_app_ent3_c28, gen_app_ent3_c29, gen_app_ent3_c30], current: 2),
         DsSection(title: gen_app_ent3_c4, children: [
           DsField(label: gen_app_ent3_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
-          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent3_c9, gem((num.tryParse(_v[0] ?? '') ?? 0))),
+          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent3_c9, phoneKey((_v[0] ?? ''))),
           DsField(label: gen_app_ent3_c10, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
-          if ((_v[1] ?? '').trim().isNotEmpty) _live(gen_app_ent3_c11, monthHeOf((_v[1] ?? ''))),
+          if ((_v[1] ?? '').trim().isNotEmpty) _live(gen_app_ent3_c11, namespaceOf((_v[1] ?? ''))),
           DsField(label: gen_app_ent3_c12, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsField(label: gen_app_ent3_c13, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent3_c14, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),

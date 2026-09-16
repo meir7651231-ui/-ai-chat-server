@@ -5,8 +5,8 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import '../dart-maor/format-israeli-phone.dart';
-import '../dart-maor/month-he-of.dart';
 import '../dart-maor/norm-email.dart';
+import '../dart/namespace_of.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt1Screen extends StatefulWidget {
@@ -50,7 +50,7 @@ class _GenAppEnt1ScreenState extends State<GenAppEnt1Screen> {
         DsWorkflow(steps: const [gen_app_ent1_c21, gen_app_ent1_c22, gen_app_ent1_c23, gen_app_ent1_c24, gen_app_ent1_c25, gen_app_ent1_c26, gen_app_ent1_c27], current: 2),
         DsSection(title: gen_app_ent1_c4, children: [
           DsField(label: gen_app_ent1_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
-          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent1_c9, monthHeOf((_v[0] ?? ''))),
+          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent1_c9, namespaceOf((_v[0] ?? ''))),
           DsField(label: gen_app_ent1_c10, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent1_c11, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           if ((_v[2] ?? '').trim().isNotEmpty) _live(gen_app_ent1_c12, formatIsraeliPhone((_v[2] ?? ''))),

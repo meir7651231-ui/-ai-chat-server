@@ -38,6 +38,7 @@ import 'gen_app_scr32.dart';
 import 'gen_app_scr33.dart';
 import 'gen_app_scr34.dart';
 import 'gen_app_settings.dart';
+import 'gen_app_wizard_orbit.dart';
 import 'package:flutter/material.dart';
 
 class GenAppHubScreen extends StatelessWidget {
@@ -87,6 +88,7 @@ class GenAppHubScreen extends StatelessWidget {
       DsNavTile(glyph: gen_app_hub_c105, title: gen_app_hub_c106, sub: gen_app_hub_c107, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppAuditScreen()))),
       DsNavTile(glyph: gen_app_hub_c108, title: gen_app_hub_c109, sub: gen_app_hub_c110, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppFlagsScreen()))),
       DsNavTile(glyph: gen_app_hub_c111, title: gen_app_hub_c112, sub: gen_app_hub_c113, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppSettingsScreen()))),
+      DsNavTile(glyph: gen_app_hub_c114, title: gen_app_hub_c115, sub: gen_app_hub_c116, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppWizardOrbitScreen()))),
       ],
     );
   }

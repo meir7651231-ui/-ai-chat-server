@@ -4,7 +4,7 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
-import '../dart-maor/enroll-new-family.dart';
+import '../dart/f_money.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt29Screen extends StatefulWidget {
@@ -51,7 +51,7 @@ class _GenAppEnt29ScreenState extends State<GenAppEnt29Screen> {
           DsField(label: gen_app_ent29_c9, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent29_c10, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsField(label: gen_app_ent29_c11, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
-          if ((_v[3] ?? '').trim().isNotEmpty) _live(gen_app_ent29_c12, normSearch((_v[3] ?? ''))),
+          if ((_v[3] ?? '').trim().isNotEmpty) _live(gen_app_ent29_c12, fMoney((num.tryParse(_v[3] ?? '') ?? 0))),
           DsField(label: gen_app_ent29_c13, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
           DsField(label: gen_app_ent29_c14, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
           DsField(label: gen_app_ent29_c15, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),

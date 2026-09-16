@@ -1,5 +1,5 @@
 // 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
-const String gen_app_scr30_c0 = 'דשבורד הנהלה עם פרויקטים פרויקטים בסיכון';
+const String gen_app_scr30_c0 = 'דשבורד הנהלה עם פרויקטים';
 const String gen_app_scr30_c1 = '29 מודולים · סקירת-על';
 const String gen_app_scr30_c2 = '📊';
 const String gen_app_scr30_c3 = 'ליד';

@@ -1,5 +1,5 @@
 // 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
-const String gen_app_scr33_c0 = 'דשבורד כספים עם הכנסות הוצאות תקציב רווח';
+const String gen_app_scr33_c0 = 'דשבורד כספים עם הכנסות';
 const String gen_app_scr33_c1 = '29 מודולים · סקירת-על';
 const String gen_app_scr33_c2 = '📊';
 const String gen_app_scr33_c3 = 'ליד';

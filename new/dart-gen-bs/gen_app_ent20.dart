@@ -4,8 +4,8 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
-import '../dart-maor/gematria.dart';
-import '../dart-maor/room-info-label.dart';
+import '../dart-maor/phone-key.dart';
+import '../dart/group_thousands.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt20Screen extends StatefulWidget {
@@ -49,12 +49,12 @@ class _GenAppEnt20ScreenState extends State<GenAppEnt20Screen> {
         DsWorkflow(steps: const [gen_app_ent20_c18, gen_app_ent20_c19, gen_app_ent20_c20, gen_app_ent20_c21, gen_app_ent20_c22], current: 2),
         DsSection(title: gen_app_ent20_c4, children: [
           DsField(label: gen_app_ent20_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
-          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent20_c9, gem((num.tryParse(_v[0] ?? '') ?? 0))),
+          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent20_c9, phoneKey((_v[0] ?? ''))),
           DsField(label: gen_app_ent20_c10, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent20_c11, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsField(label: gen_app_ent20_c12, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent20_c13, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
-          if ((_v[4] ?? '').trim().isNotEmpty) _live(gen_app_ent20_c14, roomInfoLabel((_v[4] ?? ''))),
+          if ((_v[4] ?? '').trim().isNotEmpty) _live(gen_app_ent20_c14, groupThousands((int.tryParse(_v[4] ?? '') ?? 0))),
           DsField(label: gen_app_ent20_c15, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
           DsField(label: gen_app_ent20_c16, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
           if ((_v[6] ?? '').trim().isNotEmpty) _live(gen_app_ent20_c17, advanceStatus((_v[6] ?? ''))),

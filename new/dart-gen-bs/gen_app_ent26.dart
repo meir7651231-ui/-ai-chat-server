@@ -5,7 +5,7 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import '../dart-maor/fmt-date.dart';
-import '../dart/norm_search.dart';
+import '../dart/weather_icon_for.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt26Screen extends StatefulWidget {
@@ -53,7 +53,7 @@ class _GenAppEnt26ScreenState extends State<GenAppEnt26Screen> {
           DsField(label: gen_app_ent26_c10, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           if ((_v[2] ?? '').trim().isNotEmpty) _live(gen_app_ent26_c11, fmtDate((_v[2] ?? ''))),
           DsField(label: gen_app_ent26_c12, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
-          if ((_v[3] ?? '').trim().isNotEmpty) _live(gen_app_ent26_c13, normSearch((_v[3] ?? ''))),
+          if ((_v[3] ?? '').trim().isNotEmpty) _live(gen_app_ent26_c13, weatherIconFor((int.tryParse(_v[3] ?? '') ?? 0))),
           DsField(label: gen_app_ent26_c14, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
           if ((_v[4] ?? '').trim().isNotEmpty) _live(gen_app_ent26_c15, advanceStatus((_v[4] ?? ''))),
         ]),

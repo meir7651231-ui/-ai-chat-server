@@ -1,5 +1,5 @@
 // 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
-const String gen_app_scr34_c0 = 'דשבורד בטיחות עם בדיקות פתוחות אירועים ל';
+const String gen_app_scr34_c0 = 'דשבורד בטיחות עם בדיקות פתוחות';
 const String gen_app_scr34_c1 = '29 מודולים · סקירת-על';
 const String gen_app_scr34_c2 = '📊';
 const String gen_app_scr34_c3 = 'ליד';

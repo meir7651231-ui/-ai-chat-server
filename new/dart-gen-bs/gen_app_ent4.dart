@@ -6,8 +6,8 @@ import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import '../dart-maor/fmt-date.dart';
 import '../dart-maor/gen-join-code.dart';
-import '../dart-maor/month-he-of.dart';
-import '../dart-maor/room-info-label.dart';
+import '../dart/group_thousands.dart';
+import '../dart/namespace_of.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt4Screen extends StatefulWidget {
@@ -52,7 +52,7 @@ class _GenAppEnt4ScreenState extends State<GenAppEnt4Screen> {
           DsField(label: gen_app_ent4_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent4_c9, genJoinCode((_v[0] ?? ''))),
           DsField(label: gen_app_ent4_c10, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
-          if ((_v[1] ?? '').trim().isNotEmpty) _live(gen_app_ent4_c11, monthHeOf((_v[1] ?? ''))),
+          if ((_v[1] ?? '').trim().isNotEmpty) _live(gen_app_ent4_c11, namespaceOf((_v[1] ?? ''))),
           DsField(label: gen_app_ent4_c12, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsField(label: gen_app_ent4_c13, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent4_c14, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
@@ -61,7 +61,7 @@ class _GenAppEnt4ScreenState extends State<GenAppEnt4Screen> {
           DsField(label: gen_app_ent4_c17, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
           DsField(label: gen_app_ent4_c18, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
           DsField(label: gen_app_ent4_c19, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
-          if ((_v[8] ?? '').trim().isNotEmpty) _live(gen_app_ent4_c20, roomInfoLabel((_v[8] ?? ''))),
+          if ((_v[8] ?? '').trim().isNotEmpty) _live(gen_app_ent4_c20, groupThousands((int.tryParse(_v[8] ?? '') ?? 0))),
           DsField(label: gen_app_ent4_c21, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
           if ((_v[9] ?? '').trim().isNotEmpty) _live(gen_app_ent4_c22, advanceStatus((_v[9] ?? ''))),
         ]),

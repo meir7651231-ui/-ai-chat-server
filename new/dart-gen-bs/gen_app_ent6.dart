@@ -5,7 +5,7 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import '../dart-maor/fmt-date.dart';
-import '../dart-maor/room-info-label.dart';
+import '../dart/group_thousands.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt6Screen extends StatefulWidget {
@@ -53,7 +53,7 @@ class _GenAppEnt6ScreenState extends State<GenAppEnt6Screen> {
           DsField(label: gen_app_ent6_c11, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           if ((_v[3] ?? '').trim().isNotEmpty) _live(gen_app_ent6_c12, fmtDate((_v[3] ?? ''))),
           DsField(label: gen_app_ent6_c13, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
-          if ((_v[4] ?? '').trim().isNotEmpty) _live(gen_app_ent6_c14, roomInfoLabel((_v[4] ?? ''))),
+          if ((_v[4] ?? '').trim().isNotEmpty) _live(gen_app_ent6_c14, groupThousands((int.tryParse(_v[4] ?? '') ?? 0))),
           DsField(label: gen_app_ent6_c15, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
           DsField(label: gen_app_ent6_c16, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
           DsField(label: gen_app_ent6_c17, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),

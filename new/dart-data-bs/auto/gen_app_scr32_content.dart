@@ -1,5 +1,5 @@
 // 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
-const String gen_app_scr32_c0 = 'דשבורד מנהל אתר עם משימות היום עובדים בא';
+const String gen_app_scr32_c0 = 'דשבורד מנהל אתר עם משימות היום';
 const String gen_app_scr32_c1 = '29 מודולים · סקירת-על';
 const String gen_app_scr32_c2 = '📊';
 const String gen_app_scr32_c3 = 'ליד';

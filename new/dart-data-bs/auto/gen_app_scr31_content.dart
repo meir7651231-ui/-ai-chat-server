@@ -1,5 +1,5 @@
 // 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
-const String gen_app_scr31_c0 = 'דשבורד מנהל פרויקט עם התקדמות גאנט נתיב ';
+const String gen_app_scr31_c0 = 'דשבורד מנהל פרויקט עם התקדמות';
 const String gen_app_scr31_c1 = '29 מודולים · סקירת-על';
 const String gen_app_scr31_c2 = '📊';
 const String gen_app_scr31_c3 = 'ליד';

@@ -5,7 +5,7 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import '../dart-maor/fmt-date.dart';
-import '../dart-maor/month-he-of.dart';
+import '../dart/namespace_of.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt10Screen extends StatefulWidget {
@@ -49,7 +49,7 @@ class _GenAppEnt10ScreenState extends State<GenAppEnt10Screen> {
         DsWorkflow(steps: const [gen_app_ent10_c18, gen_app_ent10_c19, gen_app_ent10_c20, gen_app_ent10_c21, gen_app_ent10_c22], current: 2),
         DsSection(title: gen_app_ent10_c4, children: [
           DsField(label: gen_app_ent10_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
-          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent10_c9, monthHeOf((_v[0] ?? ''))),
+          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent10_c9, namespaceOf((_v[0] ?? ''))),
           DsField(label: gen_app_ent10_c10, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent10_c11, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsField(label: gen_app_ent10_c12, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),

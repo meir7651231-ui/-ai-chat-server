@@ -39,8 +39,30 @@ function pickInput(label) {
 // בודד. עצמאיות בלבד (אפס import חוצה-אטום ⇒ סינכרון בטוח). הידע (he) על הפונקציה.
 const PRIM = new Set(['dynamic', 'String', 'num', 'int', 'double', 'String?', 'num?']);
 const selfContained = (shelf, file) => { try { return !/^import\s+'(?!dart:|package:flutter)/m.test(fs.readFileSync(path.join(ROOT, shelf, file), 'utf8')); } catch { return false; } };
+// ניתן-להרצה-על-ערך-בודד: אחרי הפרמטר הראשון אין *פרמטר-חובה* נוסף. נבדק מהחתימה
+// עצמה (הזנב חייב להתחיל ב-[ או ב-{), ולא מעצם קיומו של סוגר-אופציונלי אי-שם —
+// חתימה כמו amountInWords(amount, ONES, …, [currency]) נושאת 9 חובות ונדחית.
+const oneArgCallable = (f) => {
+  const sig = String(f.sig || '');
+  const inner = sig.slice(sig.indexOf('(') + 1, sig.lastIndexOf(')')).trim();
+  if (!inner) return false;
+  if (inner.startsWith('{')) return false;   // הכל פרמטרי-שם — אין ארגומנט-מיקום כלל
+  if (inner.startsWith('[')) return true;    // הפרמטר-המיקומי הראשון אופציונלי
+  let d = 0;
+  for (let i = 0; i < inner.length; i++) {
+    const c = inner[i];
+    if ('(<[{'.includes(c)) d++;
+    else if (')>]}'.includes(c)) d--;
+    else if (c === ',' && d === 0) {
+      const tail = inner.slice(i + 1).trim();
+      if (tail.startsWith('[')) return true;                                  // זנב אופציונלי-מיקום
+      return tail.startsWith('{') && !/(^|[{,\s])required\s/.test(tail);       // זנב-שם בלי חובה
+    }
+  }
+  return true;                               // פרמטר-מיקום יחיד
+};
 const XFORM = atlas.functions
-  .filter((f) => f.ret === 'String' && (f.params || []).length >= 1 && PRIM.has(f.params[0].type) && ((f.params.length === 1) || /\[/.test(f.sig || '')) && (f.he || []).length && selfContained(f.shelf, f.file))
+  .filter((f) => f.ret === 'String' && (f.params || []).length >= 1 && PRIM.has(f.params[0].type) && oneArgCallable(f) && (f.he || []).length && selfContained(f.shelf, f.file))
   .map((f) => ({ name: f.name, file: f.file, shelf: f.shelf, inType: f.params[0].type, st: [...new Set((f.he || []).flatMap(heToks))] }));
 // בוחר מנוע-טרנספורם לשדה לפי-משמעות (אחזור טהור, אפס regex). דורש התאמה ברורה.
 function pickXform(label, used) {
@@ -313,6 +335,223 @@ ${kids.join('\n')}
 `;
   write(slug, code, dump());
   return { slug, cls };
+}
+
+// ── 🧙 אשף-הבעלים: שלב-תחום (13 חבילות-ורטיקל) · שלב לכל ישות (כל מועמד = אפשרות
+//    בנויה + מתג) · שלב-שדות (כל שדה = מתג דלוק) · סרגל-חי. הרכבה מעל אטומי-המדף
+//    בלבד — לכל אפשרות נרשם מקורה (spec / קובץ-אטום); "המצאה" = אפשרות בלי מקור,
+//    והסרגל סופר אותן. חוק-הבעלים: כל ספק ⇒ שתי האפשרויות נבנות ⇒ מתג דלוק.
+// ── מועמדי-הקלט של שדה: כל אטומי-הקלט שמצהירים-עצמית על משמעות-התווית (אחזור
+//    טהור, אותו ניקוד של pickInput) + אטום-ברירת-המחדל שהמנוע היה בוחר בלעדיהם.
+export function rankInputs(label) {
+  const q = [...new Set(heToks(label))];
+  return INPUTS.map((w) => ({ cls: w.cls, file: w.file, s: q.filter((t) => w.st.includes(t)).length }))
+    .filter((x) => x.s > 0).sort((a, b) => b.s - a.s || a.cls.localeCompare(b.cls));
+}
+// ── מועמדי-מנוע-החוקים של שדה: כל מנוע-טרנספורם שחולק משמעות עם התווית. ──
+export function rankXforms(label) {
+  const q = [...new Set(heToks(label))];
+  return XFORM.map((f) => ({ ...f, s: q.filter((t) => f.st.includes(t)).length }))
+    .filter((x) => x.s > 0).sort((a, b) => b.s - a.s || a.name.localeCompare(b.name));
+}
+
+const DS_INPUT_IMPORT = { DsField: 'ds/ds_field.dart', DsNumberField: 'ds/ds_number_field.dart', DsDateField: 'ds/ds_date_field.dart', DsToggleTile: 'ds/ds_toggle_tile.dart' };
+
+export function renderWizard(slug, { entities, screenCount }) {
+  const { k, dump } = makeConsts(slug);
+  const cls = pascal(slug);
+
+  const opts = [];                                  // כל מתג: {src} — src ריק = המצאה
+  const addOpt = (src) => { opts.push({ src }); return opts.length - 1; };
+  const imports = new Set(["import '../dart-ui-bs/auto/switch_row.dart';"]);
+  const seenX = new Map();                          // שם-פונקציה ⇒ האטום שנבחר (מניעת התנגשות-שם)
+
+  // ── שלב 0 — תחום: 13 כפתורים, כל אחד חבילת-ורטיקל בנויה מהאטום (בזמן-ריצה). ──
+  const stepTitles = [k('תחום העסק')];
+  const stepBodies = [`        if (_err() != null) DsEmpty(label: _err()!),
+        if ((_w['industry'] as String).isNotEmpty) DsChip(label: _w['industry'] as String, tone: 1),
+        for (final p in _industries)
+          DsNavTile(
+            glyph: p['emoji'] as String,
+            title: p['label'] as String,
+            sub: p['sub'] as String,
+            onTap: () => setState(() => _w['industry'] = p['id']),
+          ),`];
+
+  // ── שלב לכל ישות — כל מועמד שהמנוע שקל, בנוי, עם מתג דלוק. ──
+  const fieldIdx = [];                              // פר-ישות: מדדי-מתגי-השדות (לסרגל החי)
+  let trial = 0;                                    // מונה שדות-ניסיון (ערך חי למנועי-החוקים)
+  entities.forEach((e) => {
+    const kids = [];
+    e.schema.forEach((s) => {
+      const t = trial++;
+      const rows = [];
+      const cands = rankInputs(s.label);
+      if (!cands.some((c) => c.cls === 'DsField')) cands.push({ cls: 'DsField', file: DS_INPUT_IMPORT.DsField, s: 0 });
+      for (const c of cands) {
+        if (!DS_INPUT_IMPORT[c.cls]) continue;
+        imports.add(`import '../dart-ui-bs/${DS_INPUT_IMPORT[c.cls]}';`);
+        const i = addOpt(`dart-ui-bs/${DS_INPUT_IMPORT[c.cls]}`);
+        rows.push(`          SwitchRow(label: ${k(`${c.cls} · dart-ui-bs/${DS_INPUT_IMPORT[c.cls]}`)}, value: _on[${i}], onChanged: (v) => setState(() => _on[${i}] = v)),`);
+        const lbl = k(s.label);
+        rows.push(c.cls === 'DsField'
+          ? `          if (_on[${i}]) DsField(label: ${lbl}, hint: '', value: _t[${t}] ?? '', onChanged: (v) => setState(() => _t[${t}] = v)),`
+          : `          if (_on[${i}]) ${c.cls}(label: ${lbl}),`);
+      }
+      for (const f of rankXforms(s.label)) {
+        if (seenX.has(f.name) && seenX.get(f.name) !== f.file) continue;   // שם תפוס ע"י אטום אחר
+        seenX.set(f.name, f.file);
+        imports.add(`import '../${f.shelf.replace(/^new\//, '')}/${f.file}';`);
+        const i = addOpt(`${f.shelf.replace(/^new\//, '')}/${f.file}`);
+        rows.push(`          SwitchRow(label: ${k(`${f.name} · ${f.shelf.replace(/^new\//, '')}/${f.file}`)}, value: _on[${i}], onChanged: (v) => setState(() => _on[${i}] = v)),`);
+        const nt = f.inType.replace(/\?$/, '');
+        const arg = nt === 'int' ? `(int.tryParse(_t[${t}] ?? '') ?? 0)`
+          : nt === 'double' ? `(double.tryParse(_t[${t}] ?? '') ?? 0)`
+          : nt === 'num' ? `(num.tryParse(_t[${t}] ?? '') ?? 0)`
+          : `(_t[${t}] ?? '')`;
+        rows.push(`          if (_on[${i}] && (_t[${t}] ?? '').trim().isNotEmpty) _live(${k(f.name)}, ${f.name}(${arg})),`);
+      }
+      kids.push(`        DsSection(title: ${k(s.label)}, children: [\n${rows.join('\n')}\n        ]),`);
+    });
+    if ((e.stages || []).length >= 2) {
+      const i = addOpt(`spec:${e.name}|שלבים`);
+      kids.push(`        SwitchRow(label: ${k(`DsWorkflow · ${e.stages.length} שלבים (מהאפיון)`)}, value: _on[${i}], onChanged: (v) => setState(() => _on[${i}] = v)),`);
+      kids.push(`        if (_on[${i}]) DsWorkflow(steps: const [${e.stages.map((x) => k(x)).join(', ')}], current: 0),`);
+    }
+    stepTitles.push(k(e.name));
+    stepBodies.push(kids.join('\n'));
+  });
+
+  // ── שלב אחרון — שדות: כל שדה שהמחולל מכיר, מתג דלוק (הבעלים מכבה את המיותר). ──
+  const fieldKids = [];
+  entities.forEach((e) => {
+    const mine = [];
+    const rows = e.schema.map((s) => {
+      const i = addOpt(`spec:${e.name}|${s.label}`);
+      mine.push(i);
+      return `          SwitchRow(label: ${k(`${s.label} · ${s.type}`)}, value: _on[${i}], onChanged: (v) => setState(() => _on[${i}] = v)),`;
+    });
+    fieldIdx.push(mine);
+    fieldKids.push(`        DsSection(title: ${k(e.name)}, children: [\n${rows.join('\n')}\n        ]),`);
+  });
+  stepTitles.push(k('שדות'));
+  stepBodies.push(fieldKids.join('\n'));
+
+  const inventions = opts.filter((o) => !o.src).length;
+  const bodies = stepBodies.map((b, i) => `  List<Widget> _s${i}() => [\n${b}\n      ];`).join('\n');
+  const cases = stepBodies.map((_, i) => `      case ${i}: return _s${i}();`).join('\n');
+
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — אשף-הבעלים של האפליקציה. אל תערוך ידנית.
+// הרכבה מעל אטומי-המדף בלבד (אפס קוד-חדש): wizard-industries · vertical-packs ·
+// wizard-steps · empty-wizard · wizard-step-error + שקעיו · switch_row · ds/*.
+// חוק-הבעלים: כל ספק ⇒ שתי האפשרויות נבנות ⇒ מתג דלוק כברירת-מחדל.
+// "המצאה" = אפשרות שהוצעה לבעלים ואין לה מקור (אפיון או קובץ-אטום). כל מתג נושא
+// את מקורו בתווית שלו, והסרגל-החי סופר — ${inventions} המצאות.
+import '../dart-data-bs/auto/gen_${slug}_content.dart';
+import '../dart-ui-bs/ds/ds.dart';
+import '../dart-maor/vertical-packs.dart' as vp;
+import '../dart-maor/wizard-industries.dart' as wi;
+import '../dart-maor/wizard-steps.dart' as ws;
+import '../dart-maor/empty-wizard.dart' as ew;
+import '../dart-maor/wizard-step-error.dart' as wse;
+import '../dart-data-maor/wizard-step-error-sockets.dart' as wset;
+${[...imports].sort().join('\n')}
+import 'package:flutter/material.dart';
+
+/// מספר-האפשרויות שאין להן מקור — חייב 0 (נמדד בזמן-החילול, לא מוצהר).
+const int _kInventions = ${inventions};
+const int _kScreens = ${screenCount};
+/// מדדי-מתגי-השדות פר-ישות (הסרגל החי סופר מהם).
+const List<List<int>> _kFieldOpts = [${fieldIdx.map((a) => `[${a.join(', ')}]`).join(', ')}];
+
+class ${cls} extends StatefulWidget {
+  const ${cls}({super.key});
+
+  @override
+  State<${cls}> createState() => _${cls}State();
+}
+
+class _${cls}State extends State<${cls}> {
+  /// מצב-האפס מהאטום empty-wizard — שדה industry הוא שלב-התחום.
+  final Map<String, dynamic> _w = ew.emptyWizard();
+  /// כל מתג דלוק כברירת-מחדל: הבעלים מכבה את המיותר, לא מדליק את החסר.
+  final List<bool> _on = List<bool>.filled(${opts.length}, true);
+  /// ערכי-ניסיון פר-שדה — מזינים את מנועי-החוקים החיים.
+  final Map<int, String> _t = {};
+  int _step = 0;
+
+  /// 13 תחומי-העסק מהמדף: wizardIndustries(verticalPacks) — מקור-אמת יחיד.
+  static final List<Map<String, dynamic>> _industries = wi.wizardIndustries(vp.verticalPacks);
+
+  /// שקע-ולידציה שאינו נקרא: שלב-החשבון (4) של חוזה-המקור אינו חלק מאשף-זה.
+  static dynamic _noSignUp(dynamic a, dynamic b, dynamic c, dynamic d, dynamic e, dynamic f) => null;
+
+  /// ולידציה מהמדף. שלב-התחום = שלב 0 של החוזה (wizard-step-error). כל שלב אחר
+  /// נמסר מעל גבול-החוזה (wizardSteps) ⇒ ענף-ברירת-המחדל של האטום מחזיר null —
+  /// שלבי-הישויות והשדות הם רשות, כי הכל דלוק מראש.
+  String? _err() => wse.wizardStepError(
+      _step == 0 ? 0 : ws.wizardSteps, _w, _noSignUp, wset.wizardStepError_T) as String?;
+
+  int get _liveFields => _kFieldOpts.fold(0, (n, g) => n + g.where((i) => _on[i]).length);
+  int get _liveEntities => _kFieldOpts.where((g) => g.any((i) => _on[i])).length;
+
+  Widget _live(String label, String out) => Padding(
+        padding: const EdgeInsets.only(top: 2, bottom: 6),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(11),
+          decoration: BoxDecoration(color: DsTokens.accentSoft, borderRadius: BorderRadius.circular(DsTokens.rSm)),
+          child: Row(children: [
+            const Icon(Icons.bolt, size: 15, color: DsTokens.accentDark),
+            const SizedBox(width: 7),
+            Expanded(child: Text('\$label · \$out', style: const TextStyle(color: DsTokens.accentDark, fontSize: 13, fontWeight: FontWeight.w700))),
+          ]),
+        ),
+      );
+
+  Widget _bar() => IntrinsicHeight(
+        child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Expanded(child: DsStat(label: ${k('ישויות')}, value: _liveEntities.toString(), sub: ${k('דלוקות מתוך האפיון')}, glyph: '🗂️')),
+          const SizedBox(width: 12),
+          Expanded(child: DsStat(label: ${k('שדות')}, value: _liveFields.toString(), sub: ${k('מתגים דלוקים')}, glyph: '🔤')),
+          const SizedBox(width: 12),
+          Expanded(child: DsStat(label: ${k('מסכים')}, value: '\$_kScreens', sub: ${k('ייבנו לבעלים')}, glyph: '🖥️')),
+          const SizedBox(width: 12),
+          Expanded(child: DsStat(label: ${k('המצאות')}, value: '\$_kInventions', sub: ${k('אפשרות בלי מקור')}, glyph: '🚫')),
+        ]),
+      );
+
+${bodies}
+
+  List<Widget> _body() {
+    switch (_step) {
+${cases}
+    }
+    return const [];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DsScaffold(
+      title: ${k('אשף האפליקציה')},
+      subtitle: ${k(`${stepTitles.length} שלבים · הכל דלוק, כבו את המיותר`)},
+      icon: '🧙',
+      bottomBar: Row(children: [
+        Expanded(child: DsPrimaryButton(label: ${k('הקודם')}, onTap: _step == 0 ? null : () => setState(() => _step--))),
+        const SizedBox(width: 12),
+        Expanded(child: DsPrimaryButton(label: ${k('הבא')}, onTap: (_step >= ${stepTitles.length - 1} || _err() != null) ? null : () => setState(() => _step++))),
+      ]),
+      children: [
+        DsWorkflow(steps: const [${stepTitles.join(', ')}], current: _step),
+        _bar(),
+        ..._body(),
+      ],
+    );
+  }
+}
+`;
+  write(slug, code, dump());
+  return { slug, cls, steps: stepTitles.length, options: opts.length, inventions };
 }
 
 // ── CLI לבדיקה מהירה: node render-ds.mjs ──

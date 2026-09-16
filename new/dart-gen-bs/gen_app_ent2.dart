@@ -4,9 +4,9 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/format-israeli-phone.dart';
-import '../dart-maor/gematria.dart';
-import '../dart-maor/month-he-of.dart';
 import '../dart-maor/norm-email.dart';
+import '../dart-maor/phone-key.dart';
+import '../dart/namespace_of.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt2Screen extends StatefulWidget {
@@ -49,10 +49,10 @@ class _GenAppEnt2ScreenState extends State<GenAppEnt2Screen> {
       children: [
         DsSection(title: gen_app_ent2_c4, children: [
           DsField(label: gen_app_ent2_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
-          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent2_c9, monthHeOf((_v[0] ?? ''))),
+          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent2_c9, namespaceOf((_v[0] ?? ''))),
           DsField(label: gen_app_ent2_c10, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent2_c11, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
-          if ((_v[2] ?? '').trim().isNotEmpty) _live(gen_app_ent2_c12, gem((num.tryParse(_v[2] ?? '') ?? 0))),
+          if ((_v[2] ?? '').trim().isNotEmpty) _live(gen_app_ent2_c12, phoneKey((_v[2] ?? ''))),
           DsField(label: gen_app_ent2_c13, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent2_c14, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
           if ((_v[4] ?? '').trim().isNotEmpty) _live(gen_app_ent2_c15, formatIsraeliPhone((_v[4] ?? ''))),
