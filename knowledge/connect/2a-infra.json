@@ -1,0 +1,724 @@
+[
+  {
+    "file": ".githooks/pre-commit",
+    "lang": "sh",
+    "lines": 131,
+    "does": [
+      {
+        "claim": "טבעת-commit מלאה: הגנה-עצמית ⇒ staging ⇒ מנועי-hook ⇒ ראצ׳ט ⇒ משטרה ⇒ ledger",
+        "evidence": ".githooks/pre-commit:3-4 (תיאור-הסדר) · :20,:31,:63,:85,:104 (כותרות-המקטעים בפועל)"
+      },
+      {
+        "claim": "כותב ledger ב-4 מצבים (ran/failed/yellow/skipped) לקובץ .git/protocol_ledger — זהו המקור ש-commit-msg חותם עליו",
+        "evidence": ".githooks/pre-commit:10 (LEDGER=$GD/protocol_ledger) · :12-15 (ok/err/yel/skipg) · .githooks/commit-msg:28-32 קורא אותו"
+      },
+      {
+        "claim": "מריץ truth.mjs --write ו-gen-wiring-doc.mjs על עותק של ה-index (checkout-index ל-tmp), לא על עץ-העבודה, ומעתיק בחזרה רק אם שונה",
+        "evidence": ".githooks/pre-commit:65-75"
+      },
+      {
+        "claim": "מפעיל 3 שערי-ראיה על קבצים חדשים: cross-source-check + search-proof-check על new/*.{mjs,dart} שנוספו, ו-goal-proof-check על כל new/**.dart שהשתנה",
+        "evidence": ".githooks/pre-commit:40-49 (ADDED) · :53-58 (SCREENS)"
+      },
+      {
+        "claim": "מדלג על המשטרה כולה כשכל ה-staged הוא תיעוד (knowledge/ · design/ · archive/ · *.md)",
+        "evidence": ".githooks/pre-commit:61 (CODE=…grep -vE) · :118 (skipg police)"
+      },
+      {
+        "claim": "מודד מס-פרוטוקול ומתריע מעל 60 שניות ומעל שער-20-שניות — עלות-הפרוטוקול כמדד, לא כשקט",
+        "evidence": ".githooks/pre-commit:121,:125-127"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו מריץ משטרה מלאה — רק --inc (דיף+צרכנים); המלאה היא ב-pre-push ו-CI",
+        "evidence": ".githooks/pre-commit:106 (police.mjs --inc) מול .githooks/pre-push:49 (police.mjs בלי דגל)"
+      },
+      {
+        "claim": "צהוב אינו חוסם commit (רק push)",
+        "evidence": ".githooks/pre-commit:111 (yel police … צהוב לא חוסם commit; חוסם push)"
+      },
+      {
+        "claim": "אינו מתקן את הראצ׳ט — החלשת-baseline עוברת רק עם trailer Allow שנבדק ב-commit-msg, לא כאן",
+        "evidence": ".githooks/pre-commit:98 (yel ratchet-down … נדרש trailer Allow … commit-msg מאמת)"
+      },
+      {
+        "claim": "אינו יודע דבר על ספקים/משפטים-בעברית — אפס אזכור לספקים או לנקודות-הכניסה של המחולל",
+        "evidence": "ran: grep -c 'specs|generator|app-ds' .githooks/pre-commit ⇒ 0"
+      },
+      {
+        "claim": "אינו נחשב «מחובר-למחולל» לפי ההגדרה: אינו מיובא מ-6 נקודות-הכניסה ואינו מורץ-בשם מ-regen/ship",
+        "evidence": "machtzev/census/engine-index.mjs:310-333 (connected) · ran: engine-index --connected --list ⇒ מופיע כ-○"
+      }
+    ],
+    "callers": [
+      {
+        "who": "git עצמו",
+        "how": "שכבת-ההפעלה של git מצביעה ל-.githooks בקונטיינר — ran: cat .git/config ⇒ שורה 6"
+      },
+      {
+        "who": ".githooks/pre-applypatch · .githooks/pre-merge-commit",
+        "how": "exec ישיר לאותו קובץ (pre-applypatch:3 · pre-merge-commit:3)"
+      },
+      {
+        "who": ".claude/hooks/session-start.sh:11 · .claude/hooks/pre-tool.sh:20 · machtzev/audit-gates.mjs:20",
+        "how": "שלושתם מכוונים את שכבת-ההפעלה ל-.githooks (self-heal) — כלומר מתחזקים את הקריאה"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:28",
+        "how": "רשום ב-OPTIONAL ⇒ נעול-חתימה; ran: grep -n githooks machtzev/pins.sha256 ⇒ שורה 6"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/regen.mjs — שלב-אימות אחרי הפליטה. היום הקשר הפוך ולא-מוצהר: machtzev/generator/genesis-gen.mjs:638 כותב ל-new/atoms, ו-.githooks/pre-commit:53 תופס ^new/.+[.]dart$ ⇒ כל מסך-Dart שהמחולל פולט כבר נדרש לכרטיס-מטרה מ-goal-proof-check",
+      "gives": "היום המחולל מגלה את הדרישה רק כשהשוטר חוסם commit. אם regen.mjs יריץ goal-proof-check על מה שהוא בדיוק פלט, המחולל יפלוט כרטיס-מטרה יחד עם המסך במקום שאדם ימלא אותו בדיעבד — זה מסיר אדם-באמצע מהצינור, שזו בדיוק דרישת §22. אין צורך להריץ את pre-commit עצמו; רק את שער-המסכים שהוא מפעיל."
+    },
+    "s22": {
+      "score": 2,
+      "why": "לא מקרב ישירות (שער, לא מחולל), אבל מחזיק את נקודת-החיכוך היחידה שבה פלט-מחולל נדרש לתוצר-אדם: goal-proof-check על new/**.dart. כל עוד הכרטיס ממולא ביד, «משפט ⇒ אפליקציה בלי אדם באמצע» אינו שלם. 2 ולא 3 כי החיבור מסיר חיכוך ולא מוסיף יכולת-הרכבה."
+    },
+    "evidence": [
+      "read: .githooks/pre-commit:1-131 (הקובץ במלואו)",
+      "ran: cat .git/config ⇒ שורה 6 מפנה ל-.githooks (הטבעת פעילה בקונטיינר הזה)",
+      "ran: grep -rn 'new/' machtzev/generator/genesis-gen.mjs ⇒ :638,:647,:774 'new/atoms' — פלט-המחולל נוחת בתיקייה ש-pre-commit:53 סורק",
+      "ran: node machtzev/census/engine-index.mjs --connected --list | grep pre-commit ⇒ ○ (לא-מחובר)"
+    ]
+  },
+  {
+    "file": ".githooks/pre-push",
+    "lang": "sh",
+    "lines": 61,
+    "does": [
+      {
+        "claim": "סקופ לפי יעד-הדחיפה (remote_ref) ולא לפי הענף המקומי, וקורא את שורות-ה-stdin שגit מזרים",
+        "evidence": ".githooks/pre-push:2 (הצהרה) · :13 (mapfile -t LINES) · :15 (set -- $line; rref=${3:-})"
+      },
+      {
+        "claim": "חוסם דחיפה ל-main/master/production בלי trailer Allow: push-main בראש-הדחיפה",
+        "evidence": ".githooks/pre-push:9 (PROTECTED) · :17-21"
+      },
+      {
+        "claim": "חוסם מחיקת-ref ולא-fast-forward",
+        "evidence": ".githooks/pre-push:22-26"
+      },
+      {
+        "claim": "מריץ משטרה מלאה על worktree detached של ה-sha הנדחף — לא על עץ-העבודה",
+        "evidence": ".githooks/pre-push:44-50"
+      },
+      {
+        "claim": "דורש Protocol-Ran על כל commit בטווח — תופס rebase/cherry-pick/am שעקפו pre-commit",
+        "evidence": ".githooks/pre-push:39-43"
+      },
+      {
+        "claim": "מצביע על buildsmart האמיתי כשקיים, כדי ששערי-flutter לא יהיו «⚪ מדולג» שנספר כ-ran (ירוק-שקר, L63)",
+        "evidence": ".githooks/pre-push:47-48"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו מחיל טבעת-push על הענף שלי — PROTO מכיל רק claude/hei-rxv1v1 ו-claude/mah-kora-0by8kw; claude/connect-2a-infra-260916 וגם claude/mizug אינם ברשימה ⇒ 'אינו ענף-פרוטוקול — ללא טבעת-push'",
+        "evidence": ".githooks/pre-push:8 (PROTO=…) · :27 (continue)"
+      },
+      {
+        "claim": "אינו מריץ archive — במפורש worktree, כדי ש-.gitattributes export-ignore לא יסתיר קבצים (R2-2.5)",
+        "evidence": ".githooks/pre-push:5"
+      },
+      {
+        "claim": "אינו מתיר צהוב כברירת-מחדל — צהוב חוסם אלא אם יש Allow: yellow-push",
+        "evidence": ".githooks/pre-push:5 (צהוב = חוסם) · :53-55"
+      },
+      {
+        "claim": "אינו יודע דבר על המחולל — אפס אזכור לנקודות-הכניסה או לספקים",
+        "evidence": "ran: grep -c 'generator|specs|app-ds' .githooks/pre-push ⇒ 0"
+      }
+    ],
+    "callers": [
+      {
+        "who": "git עצמו",
+        "how": "שכבת-ההפעלה מצביעה ל-.githooks — ran: cat .git/config שורה 6"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:28",
+        "how": "נעול-חתימה; ran: grep -n pre-push machtzev/pins.sha256 ⇒ שורה 7"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ לחיבור-למחולל. הנקודה הכנה היחידה הפוכה: .githooks/pre-push:47-48 (פתרון BUILDSMART) מחזיק את הידע ששער-שרץ-בלי-buildsmart מדווח ירוק-שקר — ידע ששייך ל-machtzev/police.mjs עצמו, לא ל-hook של דחיפה",
+      "gives": "היום הידע הזה חי רק ב-hook של דחיפה. שער-flutter שרץ מ-regen.mjs או מ-CI בלי המשתנה יחזור ל«⚪ מדולג»=ran. הרמת 4 השורות למשטרה תסגור את ירוק-השקר בכל נתיב-הרצה. זה לא מקרב את §22 — זה מגן על המדידה שלו."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 ולא 0 רק בזכות :47-48: הידע על ירוק-שקר של שערי-flutter הוא ידע-מדידה שהמחולל תלוי בו (הזהב שלו נבדק בשערים האלה). שאר הקובץ — הגנת-ענפים ו-Protocol-Ran — אינו נוגע ב«משפט ⇒ אפליקציה» כלל."
+    },
+    "evidence": [
+      "read: .githooks/pre-push:1-61 (הקובץ במלואו)",
+      "ran: git branch --show-current ⇒ claude/connect-2a-infra-260916 — אינו ב-PROTO של שורה 8, לכן טבעת-push לא תחול על הדחיפות שלי (עובדה-שלילה נמדדת, לא משוערת)",
+      "ran: grep -n 'pre-push' machtzev/pins.sha256 ⇒ שורה 7 (נעול-חתימה)"
+    ]
+  },
+  {
+    "file": ".githooks/commit-msg",
+    "lang": "sh",
+    "lines": 34,
+    "does": [
+      {
+        "claim": "פוסל הודעה מתחת ל-15 תווים (תווים ולא בייטים — locale מוזרק כי ב-hook אין LANG)",
+        "evidence": ".githooks/commit-msg:7-8"
+      },
+      {
+        "claim": "פוסל 14 מילות-זבל כשורה-ראשונה שלמה (wip/test/fix/update/…)",
+        "evidence": ".githooks/commit-msg:9-10"
+      },
+      {
+        "claim": "מפעיל allow-check.mjs מ-HEAD (git show), לא מעץ-העבודה — אוכף שלא ניתן לערוך-ולעקוף באותו commit",
+        "evidence": ".githooks/commit-msg:12-13"
+      },
+      {
+        "claim": "DoD: שם-בדיקה חייב להופיע בדיף — בלי להריץ את הבדיקה",
+        "evidence": ".githooks/commit-msg:14-18"
+      },
+      {
+        "claim": "Wave: k/N — עד 10 קבצי-קוד ב-new/ לגל (L20); בלי השדה זו הצעה בלבד",
+        "evidence": ".githooks/commit-msg:19-25"
+      },
+      {
+        "claim": "כותב את ה-trailer Protocol-Ran = sha256(tree-id ‖ ledger) חתוך ל-16 תווים",
+        "evidence": ".githooks/commit-msg:28-33"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "ה-trailer אינו הוכחה שהשערים רצו — הוא עקביות-עצמית בלבד; ההוכחה היא CI/pre-push שמריצים משטרה מחדש (מוצהר בקובץ)",
+        "evidence": ".githooks/commit-msg:3"
+      },
+      {
+        "claim": "אינו מריץ את הבדיקה שב-DoD — רק מוודא ששמה בדיף",
+        "evidence": ".githooks/commit-msg:17 (שם-הבדיקה חייב להיות בשינוי — בלי הרצה)"
+      },
+      {
+        "claim": "אינו כותב trailer כשאין ledger — כלומר commit שנוצר בלי pre-commit יוצא בלי Protocol-Ran (וזה מה ש-pre-push:39-43 ו-police.yml G8 תופסים)",
+        "evidence": ".githooks/commit-msg:28 (if [ -f $GD/protocol_ledger ])"
+      },
+      {
+        "claim": "אינו נוגע במחולל",
+        "evidence": "ran: grep -c 'generator|specs' .githooks/commit-msg ⇒ 0"
+      }
+    ],
+    "callers": [
+      {
+        "who": "git עצמו",
+        "how": "שכבת-ההפעלה מצביעה ל-.githooks"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:28",
+        "how": "נעול-חתימה; ran: grep -n commit-msg machtzev/pins.sha256 ⇒ שורה 5"
+      },
+      {
+        "who": ".githooks/pre-commit:95 · :102",
+        "how": "כותב protocol_ratchet_issues ו-protocol_pins_edits — commit-msg:13 קורא את שניהם כארגומנטים"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה. הקובץ אוכף צורת-הודעה וחותם ledger; אין בו ידע על אטומים, ספקים, ישויות או הרכבה שהמחולל יכול למשוך."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. אכיפת-טקסט על הודעות-commit וחתימת-עקביות. גם אם ייקרא מזמן-הבנייה לא ייווצר שום צעד לעבר «משפט ⇒ אפליקציה». אומר זאת במפורש כנדרש."
+    },
+    "evidence": [
+      "read: .githooks/commit-msg:1-34 (הקובץ במלואו)",
+      "ran: grep -n 'commit-msg' machtzev/pins.sha256 ⇒ שורה 5",
+      "ran: grep -c 'generator|specs' .githooks/commit-msg ⇒ 0"
+    ]
+  },
+  {
+    "file": ".githooks/post-commit",
+    "lang": "sh",
+    "lines": 8,
+    "does": [
+      {
+        "claim": "מוסיף ל-index את TRUTH.md · WIRING.md · CLAUDE.md רק אם הם כבר זהים ל-HEAD",
+        "evidence": ".githooks/post-commit:5-7 (git diff --quiet HEAD -- $f && git add)"
+      },
+      {
+        "claim": "קיים כדי לפתור מקרה מדוד: ב-git commit עם נתיבים/--only ה-hook עובד על index זמני והקבצים-המחוללים נשארים modified",
+        "evidence": ".githooks/post-commit:2-3 (R2-2.7, אומת)"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו מחולל מחדש — לא קורא ל-truth.mjs ולא ל-gen-wiring-doc; רק git add",
+        "evidence": "ran: grep -c 'truth|wiring|node ' .githooks/post-commit ⇒ 0"
+      },
+      {
+        "claim": "אינו מבצע amend ואינו חוסם דבר — exit 0 קבוע",
+        "evidence": ".githooks/post-commit:8"
+      },
+      {
+        "claim": "אינו נוגע בשום קובץ אחר מלבד 3 השמות הקשיחים",
+        "evidence": ".githooks/post-commit:5 (for f in TRUTH.md WIRING.md CLAUDE.md)"
+      }
+    ],
+    "callers": [
+      {
+        "who": "git עצמו",
+        "how": "שכבת-ההפעלה מצביעה ל-.githooks; לא נעול-חתימה — ran: grep -c post-commit machtzev/pins.sha256 ⇒ 0"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "8 שורות של סנכרון-index. אין ידע שהמחולל יכול למשוך."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. תיקון-ארגונומיה של git, אפס תוכן-בנייה."
+    },
+    "evidence": [
+      "read: .githooks/post-commit:1-8 (הקובץ במלואו)",
+      "ran: grep -c 'truth|wiring|node ' .githooks/post-commit ⇒ 0",
+      "ran: grep -c post-commit machtzev/pins.sha256 ⇒ 0 (אינו נעול)"
+    ]
+  },
+  {
+    "file": ".githooks/post-rewrite",
+    "lang": "sh",
+    "lines": 7,
+    "does": [
+      {
+        "claim": "אחרי rebase/amend מוסיף שורה (חותמת+סוג) ל-.git/REGEN_NEEDED ומדפיס הודעה",
+        "evidence": ".githooks/post-rewrite:4-6"
+      },
+      {
+        "claim": "מנמק במפורש למה לא מבצע amend מכאן: רקורסיה, ומתקן רק tip (R2-2.1 אומת)",
+        "evidence": ".githooks/post-rewrite:3"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו מרענן TRUTH/WIRING — רק מסמן; האימות מוטל על pre-push",
+        "evidence": ".githooks/post-rewrite:3 (מסמנים; pre-push יאמת) · :6"
+      },
+      {
+        "claim": "אינו חוסם — exit 0 קבוע",
+        "evidence": ".githooks/post-rewrite:7"
+      },
+      {
+        "claim": "שום קוד אינו קורא את REGEN_NEEDED — 5 ההופעות בריפו הן: הכתיבה עצמה (.githooks/post-rewrite:5), שני אזכורי-תיעוד (machtzev/PROTOCOL.md:99,:325 · machtzev/RED-TEAM-PROTOCOL.md:168) והעתק כותרת-הקובץ באינדקס (machtzev/generator/engine-index.json:129). אין צרכן-קוד",
+        "evidence": "ran: grep -rn 'REGEN_NEEDED' . (ללא node_modules) ⇒ 5 התאמות, כולן כתיבה/תיעוד/אינדקס — אפס קריאה"
+      }
+    ],
+    "callers": [
+      {
+        "who": "git עצמו",
+        "how": "שכבת-ההפעלה מצביעה ל-.githooks; לא נעול-חתימה"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ לחיבור-למחולל",
+      "gives": "אין. שווה לציין כממצא-תחזוקה ולא כחיבור: הסימון ב-REGEN_NEEDED הוא כתיבה-ללא-קורא (נמדד), כלומר ההצהרה «pre-push יאמת» נכונה אך הסימון עצמו מיותר."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. סימון-תחזוקה שאיש אינו קורא."
+    },
+    "evidence": [
+      "read: .githooks/post-rewrite:1-7 (הקובץ במלואו)",
+      "ran: grep -rn 'REGEN_NEEDED' . (ללא node_modules) ⇒ 5 התאמות: .githooks/post-rewrite:5 (הכתיבה) · machtzev/PROTOCOL.md:99,:325 · machtzev/RED-TEAM-PROTOCOL.md:168 · machtzev/generator/engine-index.json:129 — אף אחת אינה קריאה בקוד"
+    ]
+  },
+  {
+    "file": ".githooks/pre-applypatch",
+    "lang": "sh",
+    "lines": 3,
+    "does": [
+      {
+        "claim": "exec ישיר ל-.githooks/pre-commit דרך הנתיב המוחלט של שורש-הריפו",
+        "evidence": ".githooks/pre-applypatch:3"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו מוסיף שום בדיקה משלו — 3 שורות, מהן shebang והערה",
+        "evidence": "read: .githooks/pre-applypatch:1-3"
+      },
+      {
+        "claim": "אינו מכסה את commit-msg — git am כן מריץ commit-msg בנפרד; הקובץ סוגר רק את חור-ה-pre-commit",
+        "evidence": ".githooks/pre-applypatch:2 (git am עוקף pre-commit (אומת))"
+      }
+    ],
+    "callers": [
+      {
+        "who": "git am",
+        "how": "שכבת-ההפעלה מצביעה ל-.githooks"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "מתאם בן-3-שורות. כל תוכנו הוא pre-commit, שכבר קיבל כרטיס משלו."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. סגירת-נתיב-עקיפה של git, אפס תוכן."
+    },
+    "evidence": [
+      "read: .githooks/pre-applypatch:1-3 (הקובץ במלואו)"
+    ]
+  },
+  {
+    "file": ".githooks/pre-merge-commit",
+    "lang": "sh",
+    "lines": 3,
+    "does": [
+      {
+        "claim": "exec ישיר ל-.githooks/pre-commit",
+        "evidence": ".githooks/pre-merge-commit:3"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו מוסיף בדיקה משלו",
+        "evidence": "read: .githooks/pre-merge-commit:1-3"
+      },
+      {
+        "claim": "אינו מכסה merge מסוג fast-forward (אין שם commit כלל) ולא merge עם conflicts (שם git מריץ pre-commit רגיל)",
+        "evidence": ".githooks/pre-merge-commit:2 (merge --no-ff/pull יוצרים commit בלי pre-commit (אומת git 2.43))"
+      }
+    ],
+    "callers": [
+      {
+        "who": "git merge --no-ff / git pull",
+        "how": "שכבת-ההפעלה מצביעה ל-.githooks"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "מתאם בן-3-שורות ל-pre-commit."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. סגירת-נתיב-עקיפה, אפס תוכן."
+    },
+    "evidence": [
+      "read: .githooks/pre-merge-commit:1-3 (הקובץ במלואו)"
+    ]
+  },
+  {
+    "file": ".claude/hooks/pre-tool.sh",
+    "lang": "sh",
+    "lines": 116,
+    "does": [
+      {
+        "claim": "tripwire על Bash/Edit/Write/MultiEdit/NotebookEdit — כל כלי אחר יוצא 0 מיד",
+        "evidence": ".claude/hooks/pre-tool.sh:12"
+      },
+      {
+        "claim": "fail-closed בהיעדר jq (exit 2 = חסום)",
+        "evidence": ".claude/hooks/pre-tool.sh:8"
+      },
+      {
+        "claim": "מחזיק שלוש רשימות-משטח: PROTECT (שכבת-ההגנה) · PROTDIR (תיקיות) · GENERATED (קבצים-מחוללים שאסור לערוך ביד)",
+        "evidence": ".claude/hooks/pre-tool.sh:26-28"
+      },
+      {
+        "claim": "מעריך פקודת-Bash פר-מקטע (מפרידי ; && || | ושורה-חדשה) אחרי הסרת-מרכאות, כדי ש-whitelist לא ידלוף בין מקטעים",
+        "evidence": ".claude/hooks/pre-tool.sh:54 (CMDN, tr -d מרכאות) · :66-69"
+      },
+      {
+        "claim": "מקנן נתיבים ב-realpath -m לפני ההשוואה, כך ש-.. וסימלינק לא עוקפים",
+        "evidence": ".claude/hooks/pre-tool.sh:42"
+      },
+      {
+        "claim": "פתח-חירום מוגבל-בזמן: .allow_protocol_edit בן 24 שעות, 30 תווים לפחות, 3 שורות לפחות — ו-PRETOOL_SELFTEST מבטל אותו (env יכול רק להחמיר)",
+        "evidence": ".claude/hooks/pre-tool.sh:29-36"
+      },
+      {
+        "claim": "חוסם sleep/polling/while-true/read -t/timeout-מוסווה",
+        "evidence": ".claude/hooks/pre-tool.sh:62,:105-107"
+      },
+      {
+        "claim": "אומת בפועל בסשן הזה: חסם שתי פקודות שלי — קריאת-הגדרה, ואחר כך heredoc של JSON שרק הזכיר את שם-ההגדרה בטקסט",
+        "evidence": "ran: פקודה שהכילה את שם הגדרת-ה-hook ⇒ '🔒 pre-tool: … (unset/שינוי חסומים)'; המנגנון :54 (הסרת-מרכאות) + :74-76"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו מסנן-פקודות ואינו מתיימר להיות — bash /tmp/s.sh · node -e · python -c · alias גלובלי עוברים, מוצהר",
+        "evidence": ".claude/hooks/pre-tool.sh:2-3"
+      },
+      {
+        "claim": "אינו חוסם כתיבה לקובץ-מחולל דרך כלי-האמת עצמם — GENERATED חוסם עריכה-ביד ומפנה לפקודה הנכונה",
+        "evidence": ".claude/hooks/pre-tool.sh:43"
+      },
+      {
+        "claim": "אינו רץ כשאין machtzev/police.mjs בשורש — יוצא 0",
+        "evidence": ".claude/hooks/pre-tool.sh:14"
+      },
+      {
+        "claim": "אינו מבחין בין נתיב-בפקודה לבין מחרוזת-בתוכן: :54 מסיר מרכאות מכל הפקודה, ולכן heredoc שמכיל את שם-ההגדרה בטקסט-בלבד נחסם — נמדד עליי פעמיים בסשן הזה. זו עלות-אמת של הגישה, מוצהרת ב-:2-3 כ-tripwire ולא כמסנן",
+        "evidence": ".claude/hooks/pre-tool.sh:54 · :74-76 + שתי החסימות שקיבלתי בפועל"
+      },
+      {
+        "claim": "הבחנת-קריאה/כתיבה חלקית: :75 מתיר --get/--get-all/-l/--list, אך קריאה יחידה בלי --get נחסמת",
+        "evidence": ".claude/hooks/pre-tool.sh:74-76"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".claude/settings.json",
+        "how": "PreToolUse hook; נדרש גם ע\"י .githooks/pre-commit:23 (grep -q PreToolUse)"
+      },
+      {
+        "who": ".githooks/pre-commit:23",
+        "how": "דורש שהקובץ יהיה קיים ו-executable, אחרת err layers"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:28",
+        "how": "נעול-חתימה; ran: grep -n pre-tool machtzev/pins.sha256 ⇒ שורה 1"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/census/engine-index.mjs — מקור ל«מה מחולל». היום רשימת-GENERATED ב-.claude/hooks/pre-tool.sh:28 היא מחרוזת-יד (TRUTH.md|WIRING.md|atom-index(-full)?.json|logic-census.json|pins.sha256) המשוכפלת מול מה שהכלים באמת כותבים",
+      "gives": "המחולל יודע בדיוק אילו קבצים הוא פולט (שדה writes באינדקס). אם ה-hook יגזור את GENERATED מאותו מקור, קובץ-מחולל חדש יהיה מוגן ברגע שנוצר, במקום להישאר פתוח-לעריכה-ביד עד שמישהו יזכור לעדכן רגקס. חיבור אמיתי אך הגנתי — משרת את נכונות-המדידה של המחולל, לא את יכולת-ההרכבה."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 ולא 0: מחזיק את רשימת-הקבצים-המחוללים, שהיא ידע על פלט-המחולל שהיום משוכפל ביד ויכול להתיישן בשקט — בדיוק דפוס «מספר שנכתב ביד מתיישן בשקט». אבל §22 מדבר על משפט⇒אפליקציה, וה-hook אינו תורם שם דבר, לכן לא 2."
+    },
+    "evidence": [
+      "read: .claude/hooks/pre-tool.sh:1-116 (הקובץ במלואו)",
+      "ran: שתי פקודות-Bash שלי נחסמו בפועל ע\"י ה-hook (האחת קריאת-הגדרה, השנייה heredoc שרק הזכיר את שמה) — ראיה חיה שהשכבה פעילה, לא רק קיימת",
+      "ran: grep -n 'pre-tool' machtzev/pins.sha256 ⇒ שורה 1 (נעול-חתימה)"
+    ]
+  },
+  {
+    "file": ".claude/hooks/session-start.sh",
+    "lang": "sh",
+    "lines": 52,
+    "does": [
+      {
+        "claim": "מפעיל את הפרוטוקול: מכוון את שכבת-ההפעלה ל-.githooks · chmod +x · merge-driver regen — אידמפוטנטי ואפס-רשת",
+        "evidence": ".claude/hooks/session-start.sh:10-14"
+      },
+      {
+        "claim": "מתקין Dart 3.13.2 אטומית (mktemp ⇒ .partial ⇒ mv) ולא-פטאלית: כשל-הורדה ⇒ שערי-Dart צהובים, לא אדומים (L34)",
+        "evidence": ".claude/hooks/session-start.sh:18-31"
+      },
+      {
+        "claim": "מזהה Dart של Flutter ב-/home/user/flutter/bin/dart ומדלג על ההורדה",
+        "evidence": ".claude/hooks/session-start.sh:22-23"
+      },
+      {
+        "claim": "מריץ npm ci ב-machtzev כשחסר typescript vendored",
+        "evidence": ".claude/hooks/session-start.sh:38-41"
+      },
+      {
+        "claim": "מדפיס כרטיס-מצב: ענף · HEAD · ahead/behind מול origin · בלוק-האמת מ-CLAUDE.md · סדר-הקריאה",
+        "evidence": ".claude/hooks/session-start.sh:43-51"
+      },
+      {
+        "claim": "מנמק תיקון-כשל מדוד: היה set -e + curl ראשון ⇒ כשל-רשת הפיל את הכל לפני שהופעל דבר (R2-6.4)",
+        "evidence": ".claude/hooks/session-start.sh:3-5"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו חוסם דבר — exit 0 קבוע, וכל שלב מדווח וממשיך (לא set -e)",
+        "evidence": ".claude/hooks/session-start.sh:5-6 · :52"
+      },
+      {
+        "claim": "אינו מריץ את המשטרה — רק מדפיס את הפקודה",
+        "evidence": ".claude/hooks/session-start.sh:50"
+      },
+      {
+        "claim": "אינו מריץ את המחולל ואינו בונה שום אפליקציה",
+        "evidence": "ran: grep -c 'generator|regen|ship|app-ds' .claude/hooks/session-start.sh ⇒ 0"
+      },
+      {
+        "claim": "הודעת-הכרטיס יוצאת ל-stderr בלבד (כל ה-echo עם >&2)",
+        "evidence": ".claude/hooks/session-start.sh:15,:48-51"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".claude/settings.json",
+        "how": "SessionStart hook"
+      },
+      {
+        "who": ".githooks/pre-commit:22-23",
+        "how": "מפנה אליו כתיקון ('הרץ .claude/hooks/session-start.sh') ודורש את קיומו ב-err layers"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:28",
+        "how": "נעול-חתימה; ran: grep -n session-start machtzev/pins.sha256 ⇒ שורה 2"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/regen.mjs — שלב-כשירות בפתיחה. :18-31 (Dart) ו-:38-41 (typescript vendored) הם תנאי-הריצה של המחולל עצמו: בלי Dart אין logic-proof (הרצת דוגמאות ב-Dart), ובלי typescript אין deep-purity",
+      "gives": "היום כשירות-הכלים נקבעת פעם-אחת בפתיחת-סשן. מנוע שירוץ בלי הסשן הזה (CI · קריאה ישירה ל-regen) מגלה את החוסר כ«צהוב» באמצע. בדיקת-כשירות מפורשת בראש regen.mjs תהפוך «כלי חסר» מתוצאה-צהובה-מאוחרת להודעה-בהתחלה. מקרב את §22 בעקיפין: הוכחת-האטומים של המחולל תלויה ב-Dart שה-hook מתקין."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — לא מקרב את יכולת-ההרכבה, אבל מחזיק את תנאי-הריצה שבלעדיהם הוכחת-הדוגמאות-ב-Dart (הלב של הכרעה-30/G34) מדווחת צהוב במקום לפסוק. תשתית-הכרחית, לא צעד לעבר המשפט-בעברית."
+    },
+    "evidence": [
+      "read: .claude/hooks/session-start.sh:1-52 (הקובץ במלואו)",
+      "ran: grep -n 'session-start' machtzev/pins.sha256 ⇒ שורה 2",
+      "ran: grep -c 'generator|regen|ship|app-ds' .claude/hooks/session-start.sh ⇒ 0"
+    ]
+  },
+  {
+    "file": ".github/workflows/police.yml",
+    "lang": "yml",
+    "lines": 110,
+    "does": [
+      {
+        "claim": "«עד, לא חומה»: non-required, מדווח — רץ על כל ענף, על PR ועל workflow_dispatch, בלי cancel-in-progress",
+        "evidence": ".github/workflows/police.yml:1 · :6-13"
+      },
+      {
+        "claim": "G0 — המאמת-העצמאי מורץ מכלי-הסמן (worktree של MSHA) על HEAD, לא מכלי-HEAD",
+        "evidence": ".github/workflows/police.yml:88-99 (git worktree add /tmp/T $MSHA · node /tmp/T/machtzev/verify-independent.mjs)"
+      },
+      {
+        "claim": "הסמן נשמר מחוץ לריפו ב-vars.PROTOCOL_GOOD_SHA, וענף protocol-good-* חייב להצביע עליו בדיוק — אחרת TAMPER",
+        "evidence": ".github/workflows/police.yml:40-48"
+      },
+      {
+        "claim": "G8 — Protocol-Ran נדרש על כל commit מאז הסמן, לא רק מאז הדחיפה",
+        "evidence": ".github/workflows/police.yml:59-68"
+      },
+      {
+        "claim": "G3+G7 — מריץ truth.mjs --write + gen-wiring-doc ואז דורש diff ריק; מסמך-מחולל ישן = אדום",
+        "evidence": ".github/workflows/police.yml:69-74"
+      },
+      {
+        "claim": "צהוב = אדום ב-CI (סביבה נקייה: כלי חסר הוא כשל, L34) — הן במשטרה והן במאמת",
+        "evidence": ".github/workflows/police.yml:83 · :99"
+      },
+      {
+        "claim": "מקבע Dart 3.7.2 ומדפיס TOOLS לסיכום",
+        "evidence": ".github/workflows/police.yml:31-39"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו מקדם את הסמן — G0 מצהיר במפורש 'ללא קידום'; הקידום הוא ack-בעלים + עדכון vars",
+        "evidence": ".github/workflows/police.yml:88 · :99"
+      },
+      {
+        "claim": "אינו מריץ את המחולל ואינו בונה אפליקציה — אפס אזכור לנקודות-הכניסה, לספקים או ל-flutter",
+        "evidence": "ran: grep -c 'generator|gen/specs|flutter' .github/workflows/police.yml ⇒ 0"
+      },
+      {
+        "claim": "שלב dart analyze הוא continue-on-error — עד בלבד, לא חוסם",
+        "evidence": ".github/workflows/police.yml:84-87"
+      },
+      {
+        "claim": "אינו יכול להיכשל-בשקט על היעדר-סמן — היעדר vars ⇒ MSHA ריק ⇒ :91 exit 1, לא דילוג",
+        "evidence": ".github/workflows/police.yml:46 · :91"
+      },
+      {
+        "claim": "permissions: contents: read בלבד — אינו כותב לריפו",
+        "evidence": ".github/workflows/police.yml:14-15"
+      }
+    ],
+    "callers": [
+      {
+        "who": "GitHub Actions",
+        "how": "on: push branches ** · pull_request · workflow_dispatch (:6-10)"
+      },
+      {
+        "who": ".githooks/pre-commit:23",
+        "how": "קיום .github/workflows/police.yml הוא תנאי ל-ok layers; היעדרו = err"
+      },
+      {
+        "who": "machtzev/pins-check.mjs",
+        "how": "ran: grep -n 'police.yml' machtzev/pins.sha256 ⇒ אין (לא נעול-חתימה); אך .githooks/pre-commit:101 מחייב Allow: pins-write לעריכתו"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ לחיבור-למחולל בהגדרת connected(). machtzev/generator/regen.mjs אינו רץ ב-CI הזה כלל; הצינור נבנה סביב truth/police/verify-independent",
+      "gives": "אין נקודה כנה שמקרבת את §22. שווה לרשום כעובדה-שלילה חשובה: אין שום שלב ב-police.yml שמריץ את המחולל — אימות-הפלט של GENMAX נסמך על שערי-המשטרה בלבד, ועל gen.yml שהוא צינור נפרד."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — העד שמחזיק את «צהוב=אדום» ואת המאמת-מכלי-הסמן, כלומר את מה שמונע ירוק-שקר בכל מדידה שהמחולל נשען עליה. אבל אינו מריץ את המחולל ואינו יודע עליו דבר — לכן לא 2."
+    },
+    "evidence": [
+      "read: .github/workflows/police.yml:1-110 (הקובץ במלואו)",
+      "ran: grep -c 'generator|gen/specs|flutter' .github/workflows/police.yml ⇒ 0 (עובדת-השלילה: המחולל אינו רץ בעד)",
+      "ran: grep -n 'police.yml' machtzev/pins.sha256 ⇒ ללא התאמה"
+    ]
+  },
+  {
+    "file": ".github/workflows/gen.yml",
+    "lang": "yml",
+    "lines": 76,
+    "does": [
+      {
+        "claim": "זהו הצינור היחיד בריפו שמממש «משפט בעברית ⇒ אתר» מקצה-לקצה בלי אדם באמצע, כולל טופס workflow_dispatch עם שדה «המשפט בעברית»",
+        "evidence": ".github/workflows/gen.yml:1-3 (כותרת) · :9-16 (inputs name + sentence)"
+      },
+      {
+        "claim": "שתי דרכי-הפעלה: push לקובץ ב-gen/specs/**, או Run workflow שכותב את המשפט לקובץ-ספק",
+        "evidence": ".github/workflows/gen.yml:6-8 (paths) · :38-45 (printf … > gen/specs/$NAME.txt)"
+      },
+      {
+        "claim": "מאמת את שם-התיקייה מול תווים לא-חוקיים לפני יצירת הקובץ",
+        "evidence": ".github/workflows/gen.yml:44"
+      },
+      {
+        "claim": "משיג את buildsmart ב-clone --depth 1 ומעביר BUILDSMART=$RUNNER_TEMP/buildsmart/app_flutter — כלומר פותר בפועל את תלות-הריפו-האח שמדלגת מקומית",
+        "evidence": ".github/workflows/gen.yml:36-37 · :47-48"
+      },
+      {
+        "claim": "מריץ לכל ספק את gen/build.mjs --site, ואז studio/wizard/index-page, ומפרסם ל-gh-pages תחת gen/ + artifact ל-14 יום",
+        "evidence": ".github/workflows/gen.yml:53-62 · :63-76"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו מפעיל את המחולל של GENMAX — אף לא אחת מ-6 נקודות-הכניסה (app-ds · regen · ship · genesis-gen · app-from-sentences · balagan) מופיעה בקובץ; הוא מפעיל מסלול נפרד תחת gen/",
+        "evidence": "ran: grep -cE 'app-ds|regen|ship|genesis-gen|app-from-sentences|balagan|machtzev/generator' .github/workflows/gen.yml ⇒ 0 · לעומת :56 (node gen/build.mjs)"
+      },
+      {
+        "claim": "gen/build.mjs עצמו אינו מחובר לפי ההגדרה — 0 מייבאים, ואינו מורץ-בשם מ-regen/ship",
+        "evidence": "ran: node machtzev/census/engine-index.mjs gen/build.mjs ⇒ '🔌 מחובר: 0 מייבאים · נקרא-בשם: live,build'"
+      },
+      {
+        "claim": "אינו מריץ את המשטרה ואינו מאמת את הפלט מול שער כלשהו — הצלחת-הצעד היא exit-code של build.mjs בלבד",
+        "evidence": "ran: grep -c 'police' .github/workflows/gen.yml ⇒ 0"
+      },
+      {
+        "claim": "אינו מוגבל לענף — push branches ['**'] בכל ענף שנוגע ב-gen/",
+        "evidence": ".github/workflows/gen.yml:6-8"
+      }
+    ],
+    "callers": [
+      {
+        "who": "GitHub Actions",
+        "how": "on: push paths gen/specs/** · gen/*.mjs · gen/needs.data.json · הקובץ עצמו (:6-8) + workflow_dispatch (:9)"
+      },
+      {
+        "who": "gen/build.mjs · gen/studio.mjs · gen/wizard.mjs · gen/index-page.mjs",
+        "how": "מורצים-בשם מהצעדים :56,:60-62 — ran: ls gen/*.mjs ⇒ 24 קבצים קיימים"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/regen.mjs — כשלב-פרסום; או הפוך: .github/workflows/gen.yml:53-62 להחליף node gen/build.mjs ב-node machtzev/generator/regen.mjs. זו הנקודה הכנה החזקה ביותר בכל 34 המנועים שלי",
+      "gives": "היום קיימים שני מסלולי-מחולל מקבילים: gen/ (24 מנועים · יש לו CI · יש לו אתר · יש לו טופס-משפט-בעברית · פותר buildsmart) ו-machtzev/generator/ (GENMAX · 57 מחוברים · יש לו שערים ומשטרה). ל-gen/ יש בדיוק מה שחסר ל-GENMAX — הפעלה אוטומטית ופרסום מקצה-לקצה בלי אדם; ל-GENMAX יש בדיוק מה שחסר ל-gen/ — אימות. חיבור הצינור לנקודות-הכניסה של GENMAX נותן ל-§22 את החוליה החסרה: משפט-בעברית שנכנס בטופס ויוצא כאתר שעבר שערים. הצבעה על נקודה, לא ביצוע — איחוד שני המסלולים הוא הכרעת-בעלים."
+    },
+    "s22": {
+      "score": 3,
+      "why": "3 — היחיד ברשימתי שמממש את צורת-§22 בפועל: שדה «המשפט בעברית» ⇒ אתר חי, אפס אדם באמצע (:1, :15, :63-70). הפער שהוא חושף הוא בדיוק הפער של §22: הצינור הזה לא מחובר למחולל המאומת ולא עובר משטרה, ולכן «100% עובד, אפס-באגים» אינו מובטח בו. חיבורו הוא צעד-אמת ולא צעד-נוחות."
+    },
+    "evidence": [
+      "read: .github/workflows/gen.yml:1-76 (הקובץ במלואו)",
+      "ran: grep -cE 'app-ds|regen|ship|genesis-gen|app-from-sentences|balagan|machtzev/generator' .github/workflows/gen.yml ⇒ 0 (עובדת-השלילה המרכזית)",
+      "ran: node machtzev/census/engine-index.mjs gen/build.mjs ⇒ 65 שורות · 0 מייבאים · נקרא-בשם live,build",
+      "ran: ls gen/*.mjs ⇒ 24 מנועים · ls gen/specs/ ⇒ 7 ספקים (check, check2, gemach-sentence, gemach, gemach2, hotzaot, tikim)",
+      "ran: node machtzev/census/engine-index.mjs --connected ⇒ GEN_ENTRY אינו כולל אף קובץ תחת gen/"
+    ]
+  }
+]
