@@ -503,5 +503,511 @@
    "cat -n machtzev/generator/nl-spec.mjs (103 שורות, נקראו במלואן)",
    "grep -n 'nlToSpec\\|specFromSentence' machtzev/generator/app-ds.mjs machtzev/generator/hamtzaa.mjs machtzev/mahulal/generator-ratchet.mjs"
   ]
+ },
+ {
+  "file": "machtzev/generator/retarget.mjs",
+  "lang": "mjs",
+  "lines": 654,
+  "capabilities": [
+   {
+    "cap": "מזהה את הישות-הראשית של מודול-זהב: מאתר כל רשימות-הזרע (const או בתוך seed()) בסוגריים-מאוזנים, ומדרג לפי כמה ממפתחותיהן **נצרכים בקוד** ואז לפי התאמת-שם לגזע-הקובץ ומספר-שורות",
+    "evidence": "machtzev/generator/retarget.mjs:59-67 (seedLists) · 68-81 (primaryKeys) · 79"
+   },
+   {
+    "cap": "משער טיפוס של כל מפתח-זרע מצורת-הערך בלבד (IsoDate · TimeHM · Id · string · boolean · number · list · map · null)",
+    "evidence": "machtzev/generator/retarget.mjs:52 (guess) · 51 (cat — מיפוי טיפוס-סכמה לקטגוריה)"
+   },
+   {
+    "cap": "ממפה מפתח-זרע לשדה-ישות בארבע מדרגות ללא מילון: שם-זהה ⇒ ערוץ-מוצהר (phone/email מרמז-הצורה) ⇒ צורת-טיפוס שיש לה **בדיוק** מועמד-פנוי אחד ⇒ מקום-שמור",
+    "evidence": "machtzev/generator/retarget.mjs:88-101 (mapKeys) · 93,94,97-98"
+   },
+   {
+    "cap": "נועל מפתחות שהם חוזה של מנוע-מדף: קורא את קובצי dart-maor שהמודול מייבא ומסמן כל מפתח ש-`s['k']` מופיע בהם כ-'engine-contract' שלא משנים לו שם",
+    "evidence": "machtzev/generator/retarget.mjs:82-87 (engineKeys) · 94"
+   },
+   {
+    "cap": "מחליף מונחי-עברית בליטרלי-מחרוזת בלבד (לא במזהים ולא בהערות), כולל אות-שימוש מובילה — 'חדרים'⇒'מתנדבים' · 'לחדר'⇒'למתנדב' — וסופר את מספר-ההחלפות",
+    "evidence": "machtzev/generator/retarget.mjs:38-50 (swapTerms) · 46"
+   },
+   {
+    "cap": "מזהה את מונחי-ישות-המקור של מודול בשני מסלולים מדורגים: מפתח-מונח ≡ גזע-שם-הקובץ, ואחרת ישות-סכמה עם ≥5 שמות-שדה זהים לזרע; מתחת לזה ⇒ null ומדווח",
+    "evidence": "machtzev/generator/retarget.mjs:26-37 (sourceTerms) · 35"
+   },
+   {
+    "cap": "משנה שם לכל מחלקות-המסך לפי שם-הישות החדשה (מזהה את המחלקה הציבורית שמסתיימת ב-Screen וגוזר ממנה את הגזע)",
+    "evidence": "machtzev/generator/retarget.mjs:367-371"
+   },
+   {
+    "cap": "מחווט את מסך-הגרעין כשקיים gen_core_<e>.dart: מזריק import + מקטע-מחזור-חיים ב-DsScaffold + פנקס-מצבים לפי id + מקטע-רשומה בפאנל עם כפתור-קידום — ומדווח כפער מצב שאינו במחזור-החיים החצוב במקום לתקן בשקט",
+    "evidence": "machtzev/generator/retarget.mjs:375-422 · 410"
+   },
+   {
+    "cap": "מוסיף עמודות-מקום-שמור ל-columnDefs לכל שדה-ישות שלא קיבל מקור (עמודה שמאירה רק כשהנתון מוזרם) — למעט שדות-רשימה",
+    "evidence": "machtzev/generator/retarget.mjs:423-436 · 432"
+   },
+   {
+    "cap": "מחולל מחלקת-עובדות ציבורית <E>Facts שבה כל ערך הוא ביטוי-חי על הזרע: count בשלוש צורות-הצהרה (static-const · seed-db · nested-arg), metricDefs חצובים משורת-ה-KPI של הזהב, hero, heroLabel, rows, byId",
+    "evidence": "machtzev/generator/retarget.mjs:437-460 (count) · 461-469 (metrics) · 508-521"
+   },
+   {
+    "cap": "בוחר hero לפי עובדת-מבנה בלבד: StatHero שהזהב הכריז ⇒ המדד הראשון שנצבע-סכנה כשאינו-אפס ⇒ המדד הראשון ⇒ count, ורושם את הסיבה (heroHow) בקוד",
+    "evidence": "machtzev/generator/retarget.mjs:470-472,515"
+   },
+   {
+    "cap": "שותל getter של שורות-המדד (rowsOf_<key>) רק כשה-getter המקורי הוא בדיוק `X.where(P).length` — where יחיד, בלי חיבור/חיסור — כדי שהרכזת תוכל לקפוץ לרשומה",
+    "evidence": "machtzev/generator/retarget.mjs:475-490 · 483-484"
+   },
+   {
+    "cap": "מחווט תפר-סינון-לפי-מדד במסך: פרמטר initialMetric ⇒ שדה-מצב ⇒ initState ⇒ סינון visible ⇒ באנר + כפתור-ביטול; אין עוגן ⇒ מחזיר את הקוד המקורי ולא משאיר סינון-חלקי",
+    "evidence": "machtzev/generator/retarget.mjs:560-583 · 582"
+   },
+   {
+    "cap": "מזהה תפר-הזרקה (db) ואת תווית-המבט שמגלה את הטבלה, מתוך צורת ה-SegmentedSwitch ו-`_mode == N` שלפני `_table(`",
+    "evidence": "machtzev/generator/retarget.mjs:493-503 · 498-501"
+   },
+   {
+    "cap": "מריץ מעבר-עור (skinPass) שמחליף קריאות-DS באטומי-forge עם fields לפי תפקידי-חריצים, עם פרסר-ארגומנטים מאוזן (סוגריים · מחרוזות · אינטרפולציה)",
+    "evidence": "machtzev/generator/retarget.mjs:102-117 (callArgs) · 174-349 (skinPass) · 594"
+   },
+   {
+    "cap": "מריץ את מנוע-הלוגיקה-לפי-ייעוד (logicPass מ-auto-logic) על הקוד המורכב — החלפות מוכחות בלבד",
+    "evidence": "machtzev/generator/retarget.mjs:15,357"
+   },
+   {
+    "cap": "בוחר מודול-זהב לישות לפי עובדות-מבנה בלבד: מספר שמות-שדה זהים בין הזרע לסכמה, ואז דמיון-קוסינוס של פרופיל-קטגוריות-הטיפוסים; ומסווג חוזק strong/medium/weak",
+    "evidence": "machtzev/generator/retarget.mjs:606-620 (pickModule) · 616-619"
+   },
+   {
+    "cap": "כותב כותרת-מקור מלאה לכל קובץ מחולל: הזרע-הנבחר, מועמדיו, ספירת-המיפוי לפי סוג, ההחלפות, תפר-העובדות, ושדות בלי מקור",
+    "evidence": "machtzev/generator/retarget.mjs:596-602"
+   },
+   {
+    "cap": "שער-דטרמיניזם: טבלת-הבחירה לכל ישויות-הדומיין + 8 ההרכבות-המחויבות חייבות להיות זהות לפלט-טרי; השער לא כותב בלי --write",
+    "evidence": "machtzev/generator/retarget.mjs:631-640 · 331 בהערת-render-module (L14)"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מרכיב את הקוד בעצמו — ההרכבה מהקטלוג היא של render-module.assemble; retarget מקבל את הפלט ומסיב אותו",
+    "evidence": "machtzev/generator/retarget.mjs:13,356"
+   },
+   {
+    "claim": "אינו משתמש במילון-שדות עברי — המיפוי הוא שם/ערוץ/צורת-טיפוס בלבד, וכשאין התאמה ⇒ 'reserved' ולא ניחוש",
+    "evidence": "machtzev/generator/retarget.mjs:5,98"
+   },
+   {
+    "claim": "אינו ממציא ערכי-זרע — ערכי-הזרע נשמרים כ'זרע-הצבה של המקור' ומוצהרים ככאלה בכותרת",
+    "evidence": "machtzev/generator/retarget.mjs:6,601"
+   },
+   {
+    "claim": "אינו מחליף תוויות כשאין מונח ליעד או למקור — התוויות נשארות ומדווח בכותרת",
+    "evidence": "machtzev/generator/retarget.mjs:41,601"
+   },
+   {
+    "claim": "אינו מקמפל ואינו מרנדר — הכותרת שלו אומרת מפורשות שהרנדר-בפועל הוא בשער genverify",
+    "evidence": "machtzev/generator/retarget.mjs:7,639"
+   },
+   {
+    "claim": "אינו בוחר לפי ops — ניסוי-מדידה שרשום בקוד הראה ש-G2-ops אינם מבחינים (20–40% אחיד), ולכן הבורר נשען על שמות+צורה",
+    "evidence": "machtzev/generator/retarget.mjs:607"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/sentence.mjs:14,72-74 (pickModule+retarget) · machtzev/generator/app-from-sentences.mjs:12 (termsFor) · frag-ops.mjs · op-bridge.mjs · skin-golden.mjs (skinPass) · machtzev/generator/ship.mjs:73 · שער retarget במשטרה",
+   "input": "מודול-זהב מ-new/dart-gen-bs + שם-ישות מ-new/atoms/schema-fields.mjs + entity-terms.data.json + אופציונלית skin ו-particles",
+   "output": "{code, map, facts, counts, terms, coreWired, columnsAdded} ⇒ new/dart-gen-bs/gen_retarget_<e>_from_<tag>.dart · retarget-picks.json",
+   "next": "app-from-sentences כותב את הקוד ובונה סביבו רכזת+בדיקות; ship ממראה ⇒ analyze+test; שער genverify מרנדר בפועל"
+  },
+  "quality": {
+   "signal": "`node machtzev/generator/retarget.mjs --gate` ⇒ '8 מודולים-לישות-אחרת ≡ מחולל-דטרמיניסטי · בורר-מודול 49 ישויות (חזק 25 · בינוני 19 · חלש 5)' (exit 0, `git status --short` ריק אחריו). השער רשום ב-machtzev/gates.tsv:18 בשלב commit",
+   "measured": "כן — הפקודה למעלה. אזהרת-כיסוי: השער בודק דטרמיניזם-בייטים על 8 זוגות מחויבים בלבד; הרנדר-בפועל מדווח כשייך לשער אחר (genverify), לא נמדד כאן"
+  },
+  "evidence": [
+   "awk הדפסת machtzev/generator/retarget.mjs שורות 1-110, 350-520, 560-645 + grep מבני על כל הקובץ",
+   "node machtzev/generator/retarget.mjs --gate ⇒ exit 0",
+   "git status --short אחרי ההרצה ⇒ ריק (השער אינו כותב בלי --write)",
+   "grep -n 'retarget' machtzev/gates.tsv ⇒ שורה 18"
+  ]
+ },
+ {
+  "file": "machtzev/generator/render-module.mjs",
+  "lang": "mjs",
+  "lines": 374,
+  "capabilities": [
+   {
+    "cap": "קורא קטלוג-שברים (golden-fragments.json) שנושא **טווחי-שורות בלבד**, ושולף את הבייטים מהמקור עצמו — כך שהקטלוג לא יכול לסטות מהקוד",
+    "evidence": "machtzev/generator/render-module.mjs:21-23"
+   },
+   {
+    "cap": "גוזר את קטלוג-החלקיקים מקוד compose-engine.mjs בקריאת-רגקס (ATOM · KIND_OPS · PARTICLES · שמות-עבריים), ומייצא אותו כ-PARTICLE_IDS/PARTICLE_NAMES/atomsOfParticle — מקור-אמת אחד לחלקיקים",
+    "evidence": "machtzev/generator/render-module.mjs:24,27-33"
+   },
+   {
+    "cap": "בוחר שברים לפי אטומי-יעד (מחלקיקים · מ---atoms · מ-declaredAtoms) ואז סוגר תלויות עד נקודת-שבת: מזהה-בשימוש ⇒ השבר שמגדיר אותו, מחלקת-ווידג׳ט ⇒ כל שבריה, State<X> ⇒ X",
+    "evidence": "machtzev/generator/render-module.mjs:117-171 (select) · 137-167"
+   },
+   {
+    "cap": "מוסיף אוטומטית את חיבורי-המסגרת של Flutter (initState/dispose/didUpdateWidget/didChangeDependencies) כשהמחלקה נבחרה — הם מבנה, לא תוכן",
+    "evidence": "machtzev/generator/render-module.mjs:159-160"
+   },
+   {
+    "cap": "בוחר את build() המקורי רק כשכל מה שהוא צורך מתוך מחלקתו כבר נבחר; אחרת בונה build סינתטי",
+    "evidence": "machtzev/generator/render-module.mjs:161-166 · 176-185 (syntheticBuild)"
+   },
+   {
+    "cap": "בונה build סינתטי מ-replay של הזהב: הפתיח המקורי + אתרי-הקריאה המקוריים של הבונים שנבחרו (עם spread לבוני-List<Widget>) — אפס ערך מומצא",
+    "evidence": "machtzev/generator/render-module.mjs:39,176-185 · 180"
+   },
+   {
+    "cap": "בודק פתירוּת של כל אתר-קריאה: מזהה שאינו מקומי/ידוע/מיובא/מוגדר-בשבר ⇒ האתר נפסל ומדווח כמקום-שמור, לא נשתל שבור",
+    "evidence": "machtzev/generator/render-module.mjs:43-50 (siteResolvable) · 182"
+   },
+   {
+    "cap": "גוזם את הפתיח לפי-שימוש: מפרק לפי משפטים בסוגריים-מאוזנים ושומר רק הגדרות שנצרכות (סגירה איטרטיבית), ומדווח מה נשמט",
+    "evidence": "machtzev/generator/render-module.mjs:54-65 (preludeStatements/prunePrelude)"
+   },
+   {
+    "cap": "מחשב-מחדש את ה-imports מהקוד הסופי (סמל שמופיע בקוד) — אפס import מיותר, אפס חסר; כולל קריאת שמות-מיוצאים מקובצי-ייבוא יחסיים",
+    "evidence": "machtzev/generator/render-module.mjs:11,51 (importNamesOf) · 92 (declaredNames)"
+   },
+   {
+    "cap": "זורע לפי ops עם סף-חפיפה (minOverlap) ובמצב seedBuildersOnly זורע רק בוני-תצוגה — שברי-דאטה נכנסים דרך סגירת-התלויות בלבד",
+    "evidence": "machtzev/generator/render-module.mjs:121-122 · 187-194 (assembleByOps)"
+   },
+   {
+    "cap": "מרכיב הרכבה חוצת-מודולים (assembleMulti) עם זיהוי חברים משותפים, שינוי-שם להתנגשויות, ודיווח conflicts/renamed/dropped",
+    "evidence": "machtzev/generator/render-module.mjs:243-317 · 345,364"
+   },
+   {
+    "cap": "מוכיח את המכניקה: --all חייב להחזיר את קובץ-המקור **ביט-לביט** בכל 9 המודולים",
+    "evidence": "machtzev/generator/render-module.mjs:5,324-327"
+   },
+   {
+    "cap": "משמר את כל בלוק-ה-imports גם כשתת-כותרת פיצלה אותו (לקח מתועד: fees איבד 42 imports)",
+    "evidence": "machtzev/generator/render-module.mjs:130-132"
+   },
+   {
+    "cap": "מריץ CLI רק כשהקובץ הוא נקודת-הכניסה — כדי שייבוא מ-golden-harness לא יכתוב קובץ בטעות (לקח רשום בקוד)",
+    "evidence": "machtzev/generator/render-module.mjs:318-320"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו כותב בשער — הוא משווה לפלט המחויב ומורה להריץ --write; L14 ('פסק-דין על עץ נח') מצוטט בקוד",
+    "evidence": "machtzev/generator/render-module.mjs:331-333"
+   },
+   {
+    "claim": "אינו מקמפל — הכותרת והשער אומרים במפורש שהקומפילציה היא בשער-buildsmart",
+    "evidence": "machtzev/generator/render-module.mjs:12,349"
+   },
+   {
+    "claim": "אינו יודע על ישויות/סכמה — הוא עובד על שברים ואטומים; הסבת-הישות היא של retarget",
+    "evidence": "machtzev/generator/render-module.mjs:117 (אין ייבוא schema-fields בקובץ)"
+   },
+   {
+    "claim": "אינו מחזיק רשימת-חלקיקים משלו — כולה נקראת מטקסט compose-engine.mjs בזמן-ריצה",
+    "evidence": "machtzev/generator/render-module.mjs:24,27-32"
+   },
+   {
+    "claim": "אינו בוחר שבר לפי שם — הבחירה היא לפי atomsUsed/defs/opsSeed, כלומר לפי מה שהשבר משתמש בו ומגדיר",
+    "evidence": "machtzev/generator/render-module.mjs:125,129"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/retarget.mjs:13,356 (assemble) · sentence.mjs:16 (PARTICLE_IDS/NAMES/TAG) · golden-harness.mjs · skin-golden.mjs · frag-ops.mjs · שער rendermodule במשטרה",
+   "input": "machtzev/generator/golden-fragments.json (טווחים) + הקבצים ב-new/dart-gen-bs + machtzev/compose-engine.mjs (טקסט) + בקשה {module, particles|atoms|all, mode, declared}",
+   "output": "{code, fragments, of, target, plans} ⇒ gen_*_subset.dart · gen_composite_*.dart · או קוד שמועבר ל-retarget",
+   "next": "retarget מסיב את הקוד לישות אחרת ⇒ app-from-sentences כותב ⇒ ship ⇒ analyze"
+  },
+  "quality": {
+   "signal": "`node machtzev/generator/render-module.mjs --gate` ⇒ '--all ≡ מקור 9/9 · 9 מודולי-משנה + 2 הרכבות-חוצות-מודולים ≡ הרכבה-דטרמיניסטית' (exit 0). הראיה החזקה כאן היא round-trip ביט-לביט על 9 קבצים — לא רק השוואה לפלט מחויב. שער rendermodule ב-gates.tsv:17",
+   "measured": "כן — הפקודה למעלה, 9/9 ביט-לביט + 9 subsets + 2 composites"
+  },
+  "evidence": [
+   "awk הדפסת machtzev/generator/render-module.mjs שורות 1-70, 117-250, 318-350 + grep מבני על כל הקובץ",
+   "node machtzev/generator/render-module.mjs --gate ⇒ exit 0",
+   "grep -n 'rendermodule' machtzev/gates.tsv ⇒ שורה 17"
+  ]
+ },
+ {
+  "file": "machtzev/generator/auto-skin.mjs",
+  "lang": "mjs",
+  "lines": 161,
+  "capabilities": [
+   {
+    "cap": "בורר לכל אחד מ-27 תפקידי-העור את האטום הטוב-ביותר מתוך **כל** אטומי forge-manifest, בשני שלבים: התאמה-קשה (fits) ואז ניקוד-ייעוד (score)",
+    "evidence": "machtzev/generator/auto-skin.mjs:17-28 (ROLES) · 121-126 (rank) · 134-146 (autoSkin)"
+   },
+   {
+    "cap": "מחליט התאמה-קשה לפי צורה בלבד: משפחה מותרת · אטום רב-מצבי נפסל (אלא ל-control) · ספירת חריצים מספריים מול טקסטואליים · קיום תפרי child/control/items/columns/values/selectable",
+    "evidence": "machtzev/generator/auto-skin.mjs:31-51 (fits)"
+   },
+   {
+    "cap": "מנקד ייעוד מאותות-הצורה שה-ds-forge חצב מה-CSS/DOM: הדגשת-מספר (numEmph) · <button>/<a> · מעוטר · אינטראקטיבי · svg · וריאנטי-tone · כיוון-פריסה · סוג-placeholder של הקלט · גודל-גופן · עודף-חריצים",
+    "evidence": "machtzev/generator/auto-skin.mjs:52-120 (score) · 64-118"
+   },
+   {
+    "cap": "פוסל מועמד מוחלט (מחזיר null, לא ציון-נמוך) כשתנאי-הזהות של התפקיד חסר: KPI בלי מספר-מודגש · אריח-ניווט שאינו לחיץ · כפתור שאינו <button>/<a> · מקטע/מסגרת/זכוכית שאינם מיכל מעוטר-ודומם",
+    "evidence": "machtzev/generator/auto-skin.mjs:69,72,77,86,89,98"
+   },
+   {
+    "cap": "מחשב עודף-חריצים אמיתי: חריצים-עצמיים + תבנית-פריט אחת, במקום לספור את כל פריטי-הדמו",
+    "evidence": "machtzev/generator/auto-skin.mjs:54 (effSlots)"
+   },
+   {
+    "cap": "מודד כיסוי-טונים — כמה מארבעת מצבי-ה-DS (info/ok/err/warn) יש להם טוקן-וריאנט משלהם — ומשתמש בזה כניקוד לתפקידי-סטטוס",
+    "evidence": "machtzev/generator/auto-skin.mjs:61 (toneCoverage) · 78,80,82"
+   },
+   {
+    "cap": "בונה גשר-טונים אוטומטי (toneMapOf): ממפה טון-DS 0..3 לטוקן-tone של Pure לפי סמנטיקת-המשפחה, עם נפילה לטון-הראשון כשחסר",
+    "evidence": "machtzev/generator/auto-skin.mjs:127-133"
+   },
+   {
+    "cap": "שובר שוויון-ציון בסדר מבני קבוע: סדר-המשפחות המותרות ואז סדר-אלפביתי של שם-המחלקה (דטרמיניזם)",
+    "evidence": "machtzev/generator/auto-skin.mjs:124-125"
+   },
+   {
+    "cap": "מודד ומדווח reach — כל אטום שכשיר (fits) לתפקיד כלשהו, כלומר מה שהבורר באמת רואה ולא רק מה שנבחר — ומעביר את זה ל-truth.mjs",
+    "evidence": "machtzev/generator/auto-skin.mjs:136,138,145,150"
+   },
+   {
+    "cap": "מקבל דריסות מהספק (overrides) לכל תפקיד ול-toneMap, ומכבד אותן מעל בחירת-המנוע",
+    "evidence": "machtzev/generator/auto-skin.mjs:134,139,143"
+   },
+   {
+    "cap": "שער-דטרמיניזם + כלל-נכונות ייעודי: auto-skin.json ≡ בורר-טרי, ובנוסף kpi/hero/stat אסור שיהיו אטום-מגמה (StatBlock/MetricTile) — נכשל אחרת (L73)",
+    "evidence": "machtzev/generator/auto-skin.mjs:151-157 · 153-154"
+   },
+   {
+    "cap": "מדפיס דוח top-3 לכל תפקיד עם הציונים (מצב-כתיבה), כך שהבחירה ניתנת לבדיקה",
+    "evidence": "machtzev/generator/auto-skin.mjs:150,159"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו משתמש בשם-האטום לניקוד — §20-ד: 'אפס מילון-שמות; שם-האטום לא משתתף בניקוד'. השם מופיע רק בשובר-שוויון האלפביתי ובכלל-הפסילה של L73",
+    "evidence": "machtzev/generator/auto-skin.mjs:5,125,153"
+   },
+   {
+    "claim": "אינו מחשל אטומים — הוא קורא את forge-manifest.json שכבר נכתב ע\"י ds-forge",
+    "evidence": "machtzev/generator/auto-skin.mjs:12,135"
+   },
+   {
+    "claim": "אינו מאמת תקינות-מבנית לעומק — ההודעות המפורטות והזריקות הן ב-resolveSkin של app-from-sentences; כאן fits רק מחזיר בוליאני",
+    "evidence": "machtzev/generator/auto-skin.mjs:31-51 מול app-from-sentences.mjs:69-123"
+   },
+   {
+    "claim": "אינו כותב בשער — --gate משווה ויוצא לפני fs.writeFileSync",
+    "evidence": "machtzev/generator/auto-skin.mjs:151-157 (process.exit) מול 158"
+   },
+   {
+    "claim": "אינו מנקד תפקיד calendar בכלל — score מחזיר 0 קבוע, כלומר הבחירה שם היא fits + שובר-שוויון בלבד",
+    "evidence": "machtzev/generator/auto-skin.mjs:117"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:REGEN (צעד 2, מיד אחרי ds-forge) · machtzev/generator/app-from-sentences.mjs:25,144 · skin-golden.mjs · שער autoskin במשטרה",
+   "input": "new/dart-forge-bs/forge-manifest.json (359 אטומים · 17 משפחות) + overrides מהספק",
+   "output": "machtzev/generator/auto-skin.json — {skin: role⇒cls, top3, reach}",
+   "next": "app-from-sentences.resolveSkin מאמת מבנית וממפה חריצים ⇒ retarget.skinPass מחליף בקוד ⇒ מודולים בעור-forge"
+  },
+  "quality": {
+   "signal": "`node machtzev/generator/auto-skin.mjs --gate` ⇒ '27 תפקידים נבחרו מבנית מ-359 אטומים · toneMap 3' (exit 0). מספר-האטומים אומת עצמאית: `node -e` על forge-manifest.json ⇒ total=359 · families=17. שער autoskin ב-gates.tsv:27, שלב commit",
+   "measured": "כן — שתי הפקודות למעלה. הערה: השער מוכיח דטרמיניזם + כלל-שלילה אחד (L73); הוא אינו מוכיח שהבחירה היא ה'טובה ביותר' — אין לזה מדד בקוד"
+  },
+  "evidence": [
+   "awk הדפסת machtzev/generator/auto-skin.mjs שורות 1-161 (נקרא במלואו)",
+   "node machtzev/generator/auto-skin.mjs --gate ⇒ exit 0, 27 תפקידים / 359 אטומים",
+   "node -e על new/dart-forge-bs/forge-manifest.json ⇒ total=359 families=17 uniqueNames=305 renamed=54"
+  ]
+ },
+ {
+  "file": "machtzev/ds-forge.mjs",
+  "lang": "mjs",
+  "lines": 1454,
+  "capabilities": [
+   {
+    "cap": "מפרסר CSS של דפי-Pure למפת-מחלקות (class ⇒ {prop:val}), כולל פסאודו-אלמנטים, שרשראות-סלקטורים, סגנון-inline והורשת-משתני-CSS",
+    "evidence": "machtzev/ds-forge.mjs:196-312 (parseStyle · pseudoKids · parseInline · chainMatches · styleOf) · 57 (resolveVars)"
+   },
+   {
+    "cap": "מפרסר HTML בפרסר-סובלני משלו (עם רשימת-תגי-void) ⇒ DOM",
+    "evidence": "machtzev/ds-forge.mjs:313-337 (parseDOM · VOID)"
+   },
+   {
+    "cap": "חוצב כל תא-אטום מגלריית-Pure לפי `<div class=\"cell\">` בסוגריים-מאוזנים, ושולף ממנו שם + סוג-תפר (seam) + גוף בלי ה-foot",
+    "evidence": "machtzev/ds-forge.mjs:1194-1215 (cells)"
+   },
+   {
+    "cap": "מתרגם DOM ל-widget Flutter: מיכלים · פריסות row/column/wrap · טקסט · עיטור (BoxDecoration) · צללים · גרדיאנטים (ליניארי · רדיאלי · קוני) · שוליים · טיפוגרפיה",
+    "evidence": "machtzev/ds-forge.mjs:660-1069 (emit) · 420-459 (decoration) · 99-157 (gradientExpr/radialExpr/conicExpr) · 512-527 (shadowExpr) · 530-558 (textStyle)"
+   },
+   {
+    "cap": "מתרגם SVG שלם לצייר-Dart: rect · circle · line · path · text · arc, כל אלמנט עם צבעו, כולל גרדיאנטים ועוגן-טקסט — פרסר path-data רץ ב-runtime",
+    "evidence": "machtzev/ds-forge.mjs:559-643 (svgScene · gradStops) · 1228-1243 (SVGHELPER · _Op)"
+   },
+   {
+    "cap": "ממיר כל צבע לביטוי-חריץ דרך DsSeam (skin/theme/fonts) במקום ליטרל — כולל טבלת-ליטרלים-ידועים ו-rgba עם אלפא (hair/hair2 = ink-alpha)",
+    "evidence": "machtzev/ds-forge.mjs:18-41 (SKIN · LIT_TOKEN · RGB_TOKEN · tokenLit) · 42-43 (THEME/FONT) · 64-88 (colorExpr)"
+   },
+   {
+    "cap": "מחשב יחידות-CSS לערכי-Dart: px · אחוזים · calc() · clamp() · vw/vh (מול viewport קבוע 560×1400)",
+    "evidence": "machtzev/ds-forge.mjs:163-194 (evalCalc · vwPx · evalClamp · px · pct · num) · 173"
+   },
+   {
+    "cap": "מזהה וחוצב שמונה תפרי-נתונים לכל אטום: fields (חריצי-טקסט) · items (קבוצת-פריטים, כולל תאים · וריאנטים · selected · onSelect) · columns · values (מילויי-אחוז) · control (שדה-חי) · onAction · child · bare — ופולט רק את התפרים שהאטום באמת משתמש בהם",
+    "evidence": "machtzev/ds-forge.mjs:342-360 (slot/_f) · 1377-1393 (זיהוי-שימוש ⇒ שדות-הקונסטרקטור)"
+   },
+   {
+    "cap": "מחלץ חתימת-צורה (sig) לכל אטום: תג-השורש · מעוטר · אינטראקטיבי · כיוון · svg · סוג-קלט · סדרות · מילויים · גודל+משקל-גופן פר-חריץ · numEmph (יחס הדגשת-המספר) — זה בדיוק מה ש-auto-skin מנקד עליו",
+    "evidence": "machtzev/ds-forge.mjs:1417-1421"
+   },
+   {
+    "cap": "מטפל באטומי-תיאטרון (רב-מצביים): חוצב מצבים, מריץ כל זרוע בנפרד, ולוקח את הזרוע עם הכי הרבה חריצים כחוזה-האטום",
+    "evidence": "machtzev/ds-forge.mjs:1181-1191 (theaterStates · enumId) · 1344-1352"
+   },
+   {
+    "cap": "מדדפ שמות חוצה-משפחות: המופע הראשון (סדר אלפביתי) שומר את השם הפשוט, מופע מאוחר מקבל סיומת-משפחה ונרשם ב-manifest.renamed",
+    "evidence": "machtzev/ds-forge.mjs:1332 · 1449-1450"
+   },
+   {
+    "cap": "כותב לכל משפחה קובץ-חבית (barrel) שמייצא את כל אטומיה, ומניפסט גלובלי forge-manifest.json עם כרטיס-צורה מלא לכל אטום",
+    "evidence": "machtzev/ds-forge.mjs:1424 · 1443-1453"
+   },
+   {
+    "cap": "חוסם ריצה-חלקית: משפחה בודדת בלי --partial-unsafe נכשלת, כי המניפסט והדדופ גלובליים (לקח L73 מתועד — ריצה-חלקית דרסה את המניפסט ל-32 אטומים)",
+    "evidence": "machtzev/ds-forge.mjs:1439-1440"
+   },
+   {
+    "cap": "כותב כותרת-מקור בכל קובץ-אטום שמצביעה על קובץ-ה-Pure שממנו נחשל ואוסרת עריכה-ידנית",
+    "evidence": "machtzev/ds-forge.mjs:1218-1222 (HEADER)"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מייצא כלום — CLI בלבד (`אין-ייצוא (לא ספרייה)` באינדקס); מי שצורך אותו צורך את **הפלט** (forge-manifest.json), לא את הקוד",
+    "evidence": "engine-index card: exports ריק · auto-skin.mjs:12,135 קורא את הקובץ ולא מייבא את המנוע"
+   },
+   {
+    "claim": "אינו שער-משטרה — אין gate() ואינו ב-gates.tsv",
+    "evidence": "engine-index card isNot: 'אין-ייצוא (לא ספרייה) · לא-שער-משטרה'"
+   },
+   {
+    "claim": "אינו ממציא תוכן — חריץ שקיבל רשימת-fields מקבל fields[i] או מחרוזת-ריקה, לעולם לא את תוכן-הדמו של הגלריה (§20-ג)",
+    "evidence": "machtzev/ds-forge.mjs:342 (הערת-התפר) · 1391 (_it מחזיר '' כשחסר) · 1391 (values חסר ⇒ 0, 'אין המצאה')"
+   },
+   {
+    "claim": "אינו בוחר אטום לתפקיד — הוא רק מחשל ומתאר; הבחירה היא של auto-skin",
+    "evidence": "machtzev/ds-forge.mjs:1421 (פולט sig) מול auto-skin.mjs:64-120 (מנקד עליו)"
+   },
+   {
+    "claim": "אינו מקמפל — האימות מוצהר בכותרת כ'מוזרק ל-buildsmart ⇒ flutter analyze (genesis-compile)', כלומר מחוץ למנוע",
+    "evidence": "machtzev/ds-forge.mjs:7"
+   },
+   {
+    "claim": "אינו קורא מקור-Dart — מקור-האמת שלו הוא 21 קובצי HTML ב-machtzev/pure/",
+    "evidence": "machtzev/ds-forge.mjs:15 · `ls machtzev/pure/*.html | wc -l` ⇒ 21"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:REGEN — **הצעד הראשון בצינור** ('Pure ⇒ אטומי-forge + מניפסט') · נקרא-בשם גם מ-one · features · heal · lib",
+   "input": "machtzev/pure/<family>-family.html (21 קבצים)",
+   "output": "new/dart-forge-bs/<family>/<snake>.dart (StatelessWidget) + <family>.dart (barrel) + forge-manifest.json",
+   "next": "auto-skin מדרג את המניפסט ⇒ resolveSkin מאמת ⇒ retarget.skinPass מחליף בקוד ⇒ ship ממראה ל-buildsmart ⇒ analyze"
+  },
+  "quality": {
+   "signal": "לא הרצתי אותו (הוא כותב 359 קבצים + מניפסט; `--write` וכתיבה לעץ אסורים לי). פלטו נמדד עצמאית: `node -e` על forge-manifest.json ⇒ 359 אטומים · 17 משפחות · 305 שמות-ייחודיים · 54 ממותגי-משפחה · 23 סוגי-seam; ולפי תפרים: child 359 · items 163 · actions>0 93 · bare 34 · control 23 · values 20 · columns 6 · states 5. אין לו gate; האימות שלו הוא analyze ב-buildsmart (ship.mjs:62-65)",
+   "measured": "חלקית — הפלט נמדד בפקודה למעלה; המנוע עצמו לא-נמדד (אין שער בשמו ב-gates.tsv)"
+  },
+  "evidence": [
+   "awk הדפסת machtzev/ds-forge.mjs שורות 1-40, 1194-1290, 1330-1454 + grep מבני על כל 1454 השורות (מפת פונקציות)",
+   "node -e על new/dart-forge-bs/forge-manifest.json (ספירות מצוטטות למעלה)",
+   "ls machtzev/pure/*.html | wc -l ⇒ 21",
+   "sed -n '/export const REGEN/,/\\];/p' machtzev/generator/regen.mjs ⇒ ds-forge הוא הצעד הראשון"
+  ]
+ },
+ {
+  "file": "machtzev/generator/match.mjs",
+  "lang": "mjs",
+  "lines": 95,
+  "capabilities": [
+   {
+    "cap": "מחזיר אטומי-תצוגה מדורגים לביטוי-עברי חופשי, בניקוד stem∩ משוקלל-IDF שנלמד מהקורפוס עצמו",
+    "evidence": "machtzev/generator/match.mjs:40-53 (retrieve) · 34-37 (df/idf)"
+   },
+   {
+    "cap": "מחשב גזע-עברי קליל: הסרת קידומת-שימוש, הסרת סיומת (ים/ות/יות/ת/ה/י), ואז נרמול-אות-סופית — כדי ש'תשלומים' ו'תשלום' יתלכדו",
+    "evidence": "machtzev/generator/match.mjs:17-22 (definal · stem · heTokens)"
+   },
+   {
+    "cap": "מאנדקס כל אטום משלושה מקורות-משמעות: מטרה-אמיתית מ-atom-index (מונחי-מסך-המקור) · התיאור-העצמי מהאטלס · מילים שנלמדו-משימוש (learned.json)",
+    "evidence": "machtzev/generator/match.mjs:24-33 · 28 (PURPOSE עוקף בוילרפלייט)"
+   },
+   {
+    "cap": "מחזיר מדד-כיסוי (cover) לכל תוצאה — איזה חלק מהביטוי באמת נגע באטום, כדי להבחין בין מסגור-מקרי לבקשה-אמיתית",
+    "evidence": "machtzev/generator/match.mjs:47-48"
+   },
+   {
+    "cap": "מחזיר 'הטוב-ביותר' רק מעל סף-ציון (ברירת-מחדל 1.5), אחרת null",
+    "evidence": "machtzev/generator/match.mjs:55 (best)"
+   },
+   {
+    "cap": "מאחזר אטומי-לוגיקה באותו מנגנון מעל atlas.functions, עם IDF נפרד לשכבת-הלוגיקה",
+    "evidence": "machtzev/generator/match.mjs:57-76 (retrieveLogic) · 63-66"
+   },
+   {
+    "cap": "מחליט מי 'ניתן-לחיווט-standalone': מחזיר טיפוס-בסיס וכל פרמטר-חובה הוא DateTime/bool או אופציונלי",
+    "evidence": "machtzev/generator/match.mjs:58-61 (RETS · primArg · wireable)"
+   },
+   {
+    "cap": "ממפה שם-מחלקה אנגלי מפורק (כמו _MetricGrid) לאטום-קטלוג לפי חפיפת מילות-שם-המחלקה — משמש את ההרכבה-ההפוכה",
+    "evidence": "machtzev/generator/match.mjs:78-87 (clsWords · matchClass)"
+   },
+   {
+    "cap": "עמיד לקובץ-אטלס מפוצל: אם atlas.json חסר data, מושך אותו מ-atlas-data.json (L93)",
+    "evidence": "machtzev/generator/match.mjs:15"
+   },
+   {
+    "cap": "רץ מהשורה כבדיקת-אחזור מהירה",
+    "evidence": "machtzev/generator/match.mjs:89-95"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מחזיק מיפוי מילה⇒אטום כתוב-ביד — כל הידע מהאטומים עצמם",
+    "evidence": "machtzev/generator/match.mjs:6"
+   },
+   {
+    "claim": "אינו כותב פלט ואינו שער-משטרה",
+    "evidence": "engine-index card isNot: 'לא-כותב-פלט · לא-שער-משטרה · לא-ב-INDEX.md'; אין fs.writeFileSync בקובץ"
+   },
+   {
+    "claim": "אינו מדרג אטום בלי גזעים — אטום שאין לו אף מונח מסונן החוצה מהאינדקס לגמרי",
+    "evidence": "machtzev/generator/match.mjs:33 (.filter((w) => w.st.length))"
+   },
+   {
+    "claim": "אינו מאחזר לוגיקה שאינה מחזירה טיפוס-בסיס — LOGIC מסונן ל-RETS בלבד",
+    "evidence": "machtzev/generator/match.mjs:62"
+   },
+   {
+    "claim": "אינו נופל כשקובץ-אינדקס חסר — readJson מחזיר ברירת-מחדל בשקט, כלומר אחזור על אינדקס ריק אפשרי ולא יתריע",
+    "evidence": "machtzev/generator/match.mjs:13"
+   }
+  ],
+  "pipeline": {
+   "runBy": "11 מייבאים: capability · cover · entity · hamtzaa · intent · legacy/app · legacy/compose · legacy/nl · nl-spec (רק stem) · render-ds · tzinor (רק stem)",
+   "input": "machtzev/generator/atlas.json + atlas-data.json + knowledge/learned.json + atom-index.json",
+   "output": "ערכי-החזרה בלבד: retrieve/best/retrieveLogic/matchClass/stem/definal (אין כתיבה)",
+   "next": "cover.mjs משתמש בו לבחירת-מועמדים; render-ds לבחירת-אטום; nl-spec ו-tzinor משתמשים בו רק בשביל stem (מיזוג ישויות לפי גזע)"
+  },
+  "quality": {
+   "signal": "אין שער בשמו (engine-index: gate '-'). הוא נצרך ע\"י שערים אחרים — cover (`node machtzev/generator/cover.mjs --gate` ⇒ 'שחזור-ATOM top-1 18/58 · top-3 29/58 (רצפה 18/29)', exit 0) הוא המדידה הקרובה ביותר לאיכות-האחזור שלו, והיא **דרך** cover ולא עליו",
+   "measured": "לא-נמדד ישירות — אין gate בשמו; המספר 18/58 · 29/58 שייך לשער cover, לא ל-match"
+  },
+  "evidence": [
+   "awk הדפסת machtzev/generator/match.mjs שורות 1-95 (נקרא במלואו)",
+   "node machtzev/generator/cover.mjs --gate ⇒ exit 0 (השער שצורך אותו)",
+   "engine-index card: importedBy = 11 קבצים"
+  ]
  }
 ]
