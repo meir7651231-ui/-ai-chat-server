@@ -1,0 +1,15 @@
+# 2a · generator + purity + pure — 42 מנועים לא-מחוברים למחולל
+
+> מיפוי בלבד. אפס שינוי-קוד. ההגדרה של «מחובר» = `machtzev/census/engine-index.mjs:324 connected()` — נגישות מ-6 נקודות-הכניסה (`GEN_ENTRY`, שורה 319) בייבוא **סטטי** טרנזיטיבי, או הרצה-בשם מ-`regen.mjs`/`ship.mjs`.
+> מדידה: `node machtzev/census/engine-index.mjs --connected` ⇒ `מחוברים-למחולל: 57 · לא-מחוברים: 279 · (מתוך 336 בריפו)`
+
+**נכתבו עד כה: 6/42**
+
+| # | מנוע | שורות | s22 | קוראים היום | connectAt | תמצית |
+|---|---|---|---|---|---|---|
+| 1 | `generator/capability.mjs` | 168 | **3** | machtzev/generator/generate.mjs | machtzev/generator/app-ds.mjs — שלב הרכבת-המסך, לצד particles.mjs (CLAUDE.md G23); או בעקיפין ע"י הוספת generate.mjs ל-GEN_ENTRY (engine-index.mjs:319) | משפט-חופשי ⇒ אפליקציה-רצה, מוכח בריצה. זה בדיוק §22, והיכולת (תנאי⇒התראה) אינה קיימת באף מנוע מחובר. הניקוד נשאר 3 למרות הסף-הקבוע, כי הפגם הוא בשורה אחת ולא בארכיטקטורה. |
+| 2 | `generator/generate.mjs` | 57 | **3** | ∅ | machtzev/census/engine-index.mjs:319 — GEN_ENTRY (הוספה כנקודת-כניסה שביעית) | ישירות על נתיב משפט⇒אפליקציה: זו הכניסה היחידה בקבוצה שמקבלת עברית-חופשית ומחזירה Dart מתקמפל בשני מסלולים — שניהם הורצו והצליחו. אינו מחובר, ולא מפני שהוחלף: app-ds/app-from-sentences מתחילים מ**ספק** מובנה, לא ממשפט-חופשי. |
+| 3 | `generator/combine-screens.mjs` | 91 | **2** | machtzev/generator/generate.mjs | נגרר-אוטומטית עם generate.mjs (engine-index.mjs:319 GEN_ENTRY). נקודה עצמאית: machtzev/assemble/gen-screen.mjs — כצרכן-מניפסט נוסף | על הנתיב, אך שלב-ביניים ולא כניסה: הוא מקבל טקסט ומחזיר מניפסט, לא אפליקציה. הורץ בפועל דרך generate.mjs והפיק מניפסט+Dart. זיהום-הקורפוס (:70/:12) מוריד אותו מ-3. |
+| 4 | `generator/intent.mjs` | 37 | **2** | machtzev/generator/tzinor.mjs:435 (דרך purposeOf, tzinor.mjs:433) | machtzev/generator/tzinor.mjs:433 — להפעיל את purposeOf שכבר כתובה וממתינה, מתוך מסלול-הבחירה של tzinor (fieldsOf/keyToClass, tzinor.mjs) | על הנתיב ובעלות-חיבור כמעט-אפסית (פונקציית-הגישור כבר כתובה ב-tzinor), אך הוא מחזיר פרופיל-caps שהמסמך עצמו מתאר כ«גס/רועש» (tzinor.mjs:430) — לכן שיפור-הכרעה ולא צעד חדש על הנתיב. לא 3: אינו מייצר פלט. |
+| 5 | `generator/retrieve-screen.mjs` | 81 | **2** | machtzev/generator/combine-screens.mjs · machtzev/generator/generate.mjs | נגרר עם generate.mjs (GEN_ENTRY). נקודה עצמאית בעלת-ערך: machtzev/generator/tzinor.mjs — לצד purposeOf (tzinor.mjs:433), כאחזור-לפי-מטרה ברמת-מסך ולא ברמת-אטום | תשתית-אחזור על הנתיב, לא כניסה. הוכח עובד (2.77 על ai_hub_screen). לא 3 כי אינו מייצר פלט בעצמו, ו-STOP החרוטה היא חוב מול דוקטרינת «דקדוק=דאטה». |
+| 6 | `generator/shape-ops.mjs` | 107 | **0** | machtzev/generator/render-module.mjs:116,188 · machtzev/generator/sentence.mjs:81 · machtzev/generator/frag-ops.mjs:11 · machtzev/generator/op-bridge.mjs:11 · machtzev/police.mjs:137 | ∅ — הוא כבר מחובר בפועל. מה שדורש תיקון הוא **המודד**: machtzev/census/engine-index.mjs:162-170 (importsOf) — להוסיף דפוס ל-`import('…')` דינמי | 0 = לא מקרב, ואני אומר זאת במפורש: אין כאן מה לחבר. shape-ops כבר על הנתיב ומורץ (הוכח בריצה). הפריט הוא ממצא-על-המודד, לא חוב-חיווט. הוא נכלל ברשימת-ה-42 מפני שהמדידה שגויה. |

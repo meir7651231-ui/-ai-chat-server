@@ -1,0 +1,387 @@
+[
+ {
+  "file": "machtzev/generator/generate.mjs",
+  "lang": "mjs",
+  "lines": 57,
+  "does": [
+   {
+    "claim": "בורר-מסלול בן-3-ענפים: משפט ⇒ (1) capability.emitApp אם יש סעיף-תנאי מבני, (2) combine() אם יש כיסוי-קורפוס, (3) דיווח-פער כן.",
+    "evidence": "machtzev/generator/generate.mjs:25-43 — `if (detectAllClauses(text).length)` / `if (anyCovered(text))` / `return { ok:false, path:'none' }`"
+   },
+   {
+    "claim": "מסלול-1 כותב אפליקציית-Dart עצמאית עם main() לתיקיית-הפלט ומחזיר runnable:true.",
+    "evidence": "generate.mjs:27-30 `const code = emitApp(text, cls); fs.writeFileSync(file, code)`; ran: `GEN_OUT=/tmp/... node machtzev/generator/generate.mjs -n probe_alert \"התרע כשמלאי חורג מ-100\"` ⇒ `✅ מסלול=capability · אפליקציה-רצה (main)` · הקובץ נפלט 2810 בתים עם `void main() => runApp(const _CapApp());`"
+   },
+   {
+    "claim": "מסלול-2 מפעיל את machtzev/assemble/gen-screen.mjs כתת-תהליך על המניפסט הממוזג.",
+    "evidence": "generate.mjs:17,36 `const GEN = path.join(ROOT,'machtzev/assemble/gen-screen.mjs')` · `execFileSync('node',[GEN, r.outManifest])`; ran: `node machtzev/generator/generate.mjs -n probe_comb \"רשימת תלמידים\"` ⇒ `✅ מסלול=combine · מסך-מורכב (Composed) · new/dart-screens-bs/probe_comb.g.dart` · `← ai_hub_screen (פסוקית \"רשימת תלמידים\" · 2.77)`"
+   },
+   {
+    "claim": "הפיצול-לפסוקיות מבני בלבד (מחברים: וגם/גם/;/,/ו-מחוברת), אפס מילון-דומייני.",
+    "evidence": "generate.mjs:20 `t.split(/\\s+וגם\\s+|\\s+גם\\s+|[;,\\n]|\\s+ו(?=[א-ת])/)`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** נקודת-כניסה של המחולל למרות שהכותרת מכריזה «הכניסה-האחת של המחולל (§22)» — 6 נקודות-הכניסה ב-GEN_ENTRY אינן כוללות אותו.",
+    "evidence": "generate.mjs:2 כותרת מול machtzev/census/engine-index.mjs:319-322 `GEN_ENTRY = ['app-ds.mjs','regen.mjs','ship.mjs','genesis-gen.mjs','app-from-sentences.mjs','balagan.mjs']` — generate.mjs אינו ברשימה. זו בדיוק הדוגמה לכך שכותרת-קובץ אינה ראיה."
+   },
+   {
+    "claim": "אינו מחולל אפליקציה-מלאה (שלד+ניווט+רכזת+שרת) — מסלול-1 פולט מסך-בודד עם main, מסלול-2 פולט קובץ-מסך אחד.",
+    "evidence": "generate.mjs:30 מחזיר `file` יחיד; capability.mjs:135 `home: const ${cls}()` — מסך אחד, ללא Navigator/שלד. השוו ל-app-shell.mjs שבונה שלד (CLAUDE.md G26)."
+   },
+   {
+    "claim": "אינו רץ ב-REGEN ואינו שער-משטרה — אין לו שורה ב-regen.mjs ואין gate() ב-police.mjs.",
+    "evidence": "ran: `grep -rn \"generate\\.mjs\" machtzev/police.mjs machtzev/generator/regen.mjs` ⇒ אפס תוצאות (הופעות רק ב-index-baseline.json:46 ו-engine-index.json)"
+   },
+   {
+    "claim": "אינו מזייף כשאין כיסוי — מחזיר path:'none' ורשימת-הפסוקיות שלא כוסו.",
+    "evidence": "generate.mjs:43; ran: `node machtzev/generator/generate.mjs -n probe_zz \"זזזז קקקק\"` ⇒ `🔴 [none] אין כיסוי-קורפוס ואין כוונת-ניטור מבנית · פסוקיות-ללא-כיסוי: זזזז קקקק` — §20-ג מקוים בפועל"
+   }
+  ],
+  "callers": [],
+  "connectAt": {
+   "point": "machtzev/census/engine-index.mjs:319 — GEN_ENTRY (הוספה כנקודת-כניסה שביעית)",
+   "gives": "מסלול-§23 שלם (משפט⇒אטומים לפי-מטרה⇒מסך/אפליקציה) נכנס להיקף-המחולל, וגורר איתו 3 מנועים נוספים (capability · combine-screens · retrieve-screen) שכולם הוכחו רצים. זה משלים את מסלול-GENMAX (שבונה מ**ספק** מובנה) בדרך שמתחילה ממשפט-חופשי-אמיתי — בדיוק §22. אזהרה: מסלול-2 כותב מניפסט לתוך screens-seed/manifests/ (combine-screens.mjs:71) ⇒ חיבור לצינור דורש בידוד-פלט, כי הוא מזהם את קורפוס-המקור שממנו הוא עצמו מאחזר."
+  },
+  "s22": {
+   "score": 3,
+   "why": "ישירות על נתיב משפט⇒אפליקציה: זו הכניסה היחידה בקבוצה שמקבלת עברית-חופשית ומחזירה Dart מתקמפל בשני מסלולים — שניהם הורצו והצליחו. אינו מחובר, ולא מפני שהוחלף: app-ds/app-from-sentences מתחילים מ**ספק** מובנה, לא ממשפט-חופשי."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/generate.mjs -n probe_zz \"זזזז קקקק\" ⇒ 🔴 [none] אין כיסוי-קורפוס",
+   "ran: GEN_OUT=/tmp/claude-0/genout node machtzev/generator/generate.mjs -n probe_alert \"התרע כשמלאי חורג מ-100\" ⇒ ✅ מסלול=capability · אפליקציה-רצה (main)",
+   "ran: node machtzev/generator/generate.mjs -n probe_comb \"רשימת תלמידים\" ⇒ ✅ מסלול=combine · ai_hub_screen · 2.77 (הפלט נוקה: rm new/dart-screens-bs/probe_comb.g.dart screens-seed/manifests/screens__probe_comb.manifest.json ⇒ git status נקי)",
+   "ran: node machtzev/census/engine-index.mjs machtzev/generator/generate.mjs ⇒ 🔌 מחובר: 0 מייבאים",
+   "read: machtzev/generator/generate.mjs:1-56 (הקובץ במלואו)",
+   "read: machtzev/census/engine-index.mjs:310-333 (GEN_ENTRY + connected)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/capability.mjs",
+  "lang": "mjs",
+  "lines": 168,
+  "does": [
+   {
+    "claim": "מזהה סעיף-התראה-מותנית מבני «<כוונה> כש <X> <יחס> <Y>» ומחזיר {trigger,x,op,y}.",
+    "evidence": "capability.mjs:31-52 — `const WHEN = /(כאשר|ברגע ש|כש)/` (שורה 19) + טבלת-יחס REL בת 2 שורות (13-16) ⇒ op '>' או '<'"
+   },
+   {
+    "claim": "בוחר אטומי-ערך/קריאה **לפי צורת-השקע** דרך selectAtom (render-ds), ואטום-התראה לפי-מטרה דרך retrieve (match) — לא מיפוי-שמות.",
+    "evidence": "capability.mjs:90-91 `selectAtom({ value:{re:NUM_RE, ty:/double|num/} })` · capability.mjs:56 `retrieve(phrase,3)`"
+   },
+   {
+    "claim": "המבנה נגזר ממספר-הפסוקיות: N תנאים ⇒ N יחידות, הגוף נבנה בלולאה על units.",
+    "evidence": "capability.mjs:65-72 detectAllClauses מפצל לפי וגם/גם/;/newline · capability.mjs:105-116 `units.map(...)` בונה את הילדים"
+   },
+   {
+    "claim": "פולט אפליקציית-Flutter עצמאית מלאה: main + MaterialApp + RTL + DsScaffold + Slider חי.",
+    "evidence": "capability.mjs:126-159; ran דרך generate.mjs ⇒ /tmp/claude-0/genout/probe_alert.dart:11 `void main() => runApp(const _CapApp());` · :18 Directionality RTL · :150 DsScaffold"
+   },
+   {
+    "claim": "ייבוא-ההתראה נפלט רק כשיש התראה בפועל (מונע ייבוא-מת שיפיל analyze).",
+    "evidence": "capability.mjs:99-101 `const hasAlert = units.some(u=>u.alert); if (hasAlert) impPaths.push(...)`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מרכיב מכל 1,878 האטומים — אטום-ההתראה מקובע ל-AlertBanner גם כש-match בחר אחרת.",
+    "evidence": "capability.mjs:95 `const alertAtom = new Set(['AlertBanner']).has(picked) ? picked : 'AlertBanner';` — pickAtom נקרא בשורה 94 אך תוצאתו נזרקת אלא אם היא בדיוק AlertBanner. זו רשימה-סגורה-של-אחד בתוך מנוע שמצהיר «אפס-מילון»."
+   },
+   {
+    "claim": "אינו מזרים דאטה-אמת — הערך ההתחלתי 55 והסף 60 קבועים בקוד-הפלט.",
+    "evidence": "capability.mjs:103 `double _v${u.i} = 55;` · capability.mjs:106 `_v${u.i} ${u.op} 60` — הסף אינו נלקח מ-`y` שזוהה בשורה 50. §20-ג («לעולם לא לזייף דאטה») חל כאן: המספר במשפט («100») נקרא ואינו משמש."
+   },
+   {
+    "claim": "אינו יודע מה X ו-Y — רק צורתם; אין בו שום שם-תחום.",
+    "evidence": "capability.mjs:30 הערה + capability.mjs:44 `const xWords = hw(xPart)` — חילוץ מילים-עבריות גנרי"
+   },
+   {
+    "claim": "אינו שער-משטרה ואינו כותב קובץ בעצמו — רק מחזיר מחרוזת-קוד (הכתיבה אצל generate.mjs).",
+    "evidence": "capability.mjs:160 `return \\`...\\`` · אפס writeFileSync בקובץ; ran: `node machtzev/census/engine-index.mjs machtzev/generator/capability.mjs` ⇒ 🚫 לא: לא-כותב-פלט · לא-שער-משטרה"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/generator/generate.mjs",
+    "how": "ייבוא סטטי — `import { detectAllClauses, emitApp } from './capability.mjs';` (generate.mjs:11). generate.mjs עצמו לא-מחובר ⇒ הענף כולו מחוץ להיקף."
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/app-ds.mjs — שלב הרכבת-המסך, לצד particles.mjs (CLAUDE.md G23); או בעקיפין ע\"י הוספת generate.mjs ל-GEN_ENTRY (engine-index.mjs:319)",
+   "gives": "יכולת שאין היום בצינור-GENMAX: **מסך-ניטור-והתראה נגזר-ממשפט**. דקדוק-היחס (capability.mjs:13-16) הוא חלקיק-יסוד במובן הכרעה-30 — «חורג/מעל/מתחת» ⇒ אופרטור — וחסר מ-spec-lang.data.json. לפני חיבור חייבים לסגור את הסף-הקבוע (:106), אחרת זה מפר §20-ג בתוך הצינור."
+  },
+  "s22": {
+   "score": 3,
+   "why": "משפט-חופשי ⇒ אפליקציה-רצה, מוכח בריצה. זה בדיוק §22, והיכולת (תנאי⇒התראה) אינה קיימת באף מנוע מחובר. הניקוד נשאר 3 למרות הסף-הקבוע, כי הפגם הוא בשורה אחת ולא בארכיטקטורה."
+  },
+  "evidence": [
+   "ran: GEN_OUT=/tmp/claude-0/genout node machtzev/generator/generate.mjs -n probe_alert \"התרע כשמלאי חורג מ-100\" ⇒ probe_alert.dart (2810B)",
+   "read: /tmp/claude-0/genout/probe_alert.dart:1-25 — הכותרת המחוללת: «1 יחידות (1 תנאים) ⇒ 1× ערך⇒GaugeMeter/PremiumRing + 1× התראה⇒AlertBanner»",
+   "read: machtzev/generator/capability.mjs:1-167 (הקובץ במלואו)",
+   "ran: node machtzev/census/engine-index.mjs machtzev/generator/capability.mjs ⇒ 🔌 מחובר: 1 מייבאים (generate.mjs)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/combine-screens.mjs",
+  "lang": "mjs",
+  "lines": 91,
+  "does": [
+   {
+    "claim": "מפצל צורך לפסוקיות, מאחזר לכל פסוקית את מסך-המקור הקרוב ביותר, וממזג את הסקציות של כמה מסכים למניפסט אחד.",
+    "evidence": "combine-screens.mjs:22-31 screenPerClause · :51-64 לולאת-המיזוג `for (const sec of m.sections||[]) sections.push({...sec, id})`"
+   },
+   {
+    "claim": "מונע התנגשות-מזהים בין מסכים ע\"י ns-ing: `<screen>__<id>` כשה-id כבר תפוס.",
+    "evidence": "combine-screens.mjs:56 `const id = sections.some(x=>x.id===sec.id) ? `${s.name}__${sec.id}` : sec.id;`"
+   },
+   {
+    "claim": "כותב את המניפסט הממוזג ל-screens-seed/manifests/screens__<name>.manifest.json.",
+    "evidence": "combine-screens.mjs:70-71 `const outManifest = path.join(ROOT,'screens-seed/manifests',...); fs.writeFileSync(outManifest, ...)`; ran ⇒ נוצר בפועל `screens-seed/manifests/screens__probe_comb.manifest.json` (נמחק אחרי המדידה)"
+   },
+   {
+    "claim": "פסוקית ללא כיסוי (score<=0) נרשמת ב-misses ואינה מומצאת.",
+    "evidence": "combine-screens.mjs:27 `if (!best || best.score <= 0) { misses.push(cl); continue; }`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מרכיב Dart בעצמו — רק מניפסט; ההרכבה אצל machtzev/assemble/gen-screen.mjs.",
+    "evidence": "combine-screens.mjs:88 (בלוק-ה-CLI) `execFileSync('node',[path.join(ROOT,'machtzev/assemble/gen-screen.mjs'), r.outManifest])`"
+   },
+   {
+    "claim": "אינו מאמת שהסקציות הממוזגות מתיישבות זו עם זו — אין בדיקת-תאימות-שקעים, רק שרשור.",
+    "evidence": "combine-screens.mjs:51-60 — `sections.push({...sec, id})` בלי שום בדיקה על sec.atom או שקעיו"
+   },
+   {
+    "claim": "אינו מבודד פלט: הוא כותב לאותה תיקיית-מניפסטים שממנה retrieve-screen קורא ⇒ כל ריצה מרחיבה את הקורפוס שהוא עצמו מאחזר ממנו.",
+    "evidence": "combine-screens.mjs:12 `const MAN = path.join(ROOT,'screens-seed/manifests')` (קריאה) מול :70 (כתיבה) · retrieve-screen.mjs:20 `const MAN = new URL('../../screens-seed/manifests/',...)` — אותה תיקייה"
+   },
+   {
+    "claim": "אינו שער-משטרה.",
+    "evidence": "ran: grep -rn \"combine-screens\" machtzev/police.mjs ⇒ אפס תוצאות"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/generator/generate.mjs",
+    "how": "ייבוא סטטי — `import { combine } from './combine-screens.mjs';` (generate.mjs:12)"
+   }
+  ],
+  "connectAt": {
+   "point": "נגרר-אוטומטית עם generate.mjs (engine-index.mjs:319 GEN_ENTRY). נקודה עצמאית: machtzev/assemble/gen-screen.mjs — כצרכן-מניפסט נוסף",
+   "gives": "«צירוף-סקציות שאף מסך-רשום-יחיד לא מכיל» — זה §20-ב (הרכבה-עד-שמושג) בשכבת-המסכים, שאין לו מקבילה בצינור-GENMAX (שם המודול נבחר שלם ע\"י pickModule). לפני חיבור: לבודד את תיקיית-הפלט מתיקיית-הקורפוס (:70 מול :12)."
+  },
+  "s22": {
+   "score": 2,
+   "why": "על הנתיב, אך שלב-ביניים ולא כניסה: הוא מקבל טקסט ומחזיר מניפסט, לא אפליקציה. הורץ בפועל דרך generate.mjs והפיק מניפסט+Dart. זיהום-הקורפוס (:70/:12) מוריד אותו מ-3."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/generate.mjs -n probe_comb \"רשימת תלמידים\" ⇒ combine הצליח, ← ai_hub_screen · 2.77",
+   "ran: git status --porcelain (אחרי) ⇒ ?? new/dart-screens-bs/probe_comb.g.dart · ?? screens-seed/manifests/screens__probe_comb.manifest.json — ראיית-הכתיבה-לקורפוס; שניהם נמחקו ⇒ CLEAN",
+   "read: machtzev/generator/combine-screens.mjs:1-91 (הקובץ במלואו)",
+   "read: machtzev/generator/retrieve-screen.mjs:20 (אותה תיקיית-מניפסטים)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/retrieve-screen.mjs",
+  "lang": "mjs",
+  "lines": 81,
+  "does": [
+   {
+    "claim": "בונה קורפוס «מסך ⇒ מונחים» מהמחרוזות העבריות שבקבצי screens__*_content.dart, ומנקד את הצורך ב-IDF על חפיפת-מונחים.",
+    "evidence": "retrieve-screen.mjs:41-52 loadScreens (`f.match(/^screens__(.+?)_content2?\\.dart$/)`) · :54-60 buildIdf · :62-74 retrieveScreen"
+   },
+   {
+    "claim": "מעשיר כל מסך במונחי-המטרה של האטומים שבמניפסט שלו — צמצום-נרדפוּת בלי מילון.",
+    "evidence": "retrieve-screen.mjs:25-39 screenAtomTerms + :50 `for (const [k,terms] of Object.entries(screenAtomTerms())) if (byScreen[k]) byScreen[k].push(...terms)`"
+   },
+   {
+    "claim": "הנרמול מבני-בלבד: נטרול-סופיות + קילוף-יידוע, ואותיות-שורש (מ/ש/ל/ב) נשמרות בכוונה.",
+    "evidence": "retrieve-screen.mjs:12-13 definalize + norm, עם ההערה בשורות 10-11 «אותיות-שורש נשמרות ⇒ מלאי/מסך/שיחות/לוח לא נהרסים»"
+   },
+   {
+    "claim": "הניקוד עובד בפועל ומחזיר מסך-מקור אמיתי עם ציון>0.",
+    "evidence": "ran דרך generate.mjs ⇒ `← ai_hub_screen (פסוקית \"רשימת תלמידים\" · 2.77)`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו רשימת-עצירה ריקה — יש STOP קשיחה בת 19 מילים בקוד (לא דאטה חיצונית), בניגוד לטון «אפס-מילון».",
+    "evidence": "retrieve-screen.mjs:15 `const STOP = new Set(['של','עמ','את','או','גמ','אני','צריכ','רוצה','מסכ',...])` — מילון-מסגרת קטן חרוט במנוע. השוו ל-spec-lang.data.json שבו הדקדוק הוא דאטה (הכרעה G34)."
+   },
+   {
+    "claim": "אינו מאחזר אטומים — רק **מסכים**; בחירת-האטום היא של match.mjs/render-ds.",
+    "evidence": "retrieve-screen.mjs:73 מחזיר `{name, score, hits}` כאשר name = שם-מסך מ-screens__*_content.dart"
+   },
+   {
+    "claim": "אינו מטמין — loadScreens+buildIdf רצים מחדש בכל קריאה, כולל קריאת כל קבצי-התוכן מהדיסק.",
+    "evidence": "retrieve-screen.mjs:63-64 `const byScreen = loadScreens(); const IDF = buildIdf(byScreen);` בתוך retrieveScreen עצמה — ב-combine-screens.mjs:26 היא נקראת בלולאה על כל פסוקית"
+   },
+   {
+    "claim": "אינו כותב פלט ואינו שער.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/retrieve-screen.mjs ⇒ 🚫 לא: לא-כותב-פלט · לא-שער-משטרה · לא-ב-INDEX.md"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/generator/combine-screens.mjs",
+    "how": "ייבוא סטטי — `import { retrieveScreen } from './retrieve-screen.mjs';` (combine-screens.mjs:9)"
+   },
+   {
+    "who": "machtzev/generator/generate.mjs",
+    "how": "ייבוא סטטי — generate.mjs:13; משמש ב-anyCovered (generate.mjs:21) כבורר-המסלול"
+   }
+  ],
+  "connectAt": {
+   "point": "נגרר עם generate.mjs (GEN_ENTRY). נקודה עצמאית בעלת-ערך: machtzev/generator/tzinor.mjs — לצד purposeOf (tzinor.mjs:433), כאחזור-לפי-מטרה ברמת-מסך ולא ברמת-אטום",
+   "gives": "אחזור-לפי-מטרה על **קורפוס-המסכים האמיתי** (הטקסט העברי שבמסכי-המקור). הצינור המחובר מאחזר היום ברמת-האטום (match.mjs) וברמת-המודול (pickModule) — רמת-המסך חסרה. זה בדיוק המנגנון שמאפשר «אין-יחיד ⇒ שלב כמה» (§20-ב)."
+  },
+  "s22": {
+   "score": 2,
+   "why": "תשתית-אחזור על הנתיב, לא כניסה. הוכח עובד (2.77 על ai_hub_screen). לא 3 כי אינו מייצר פלט בעצמו, ו-STOP החרוטה היא חוב מול דוקטרינת «דקדוק=דאטה»."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/generate.mjs -n probe_comb \"רשימת תלמידים\" ⇒ ← ai_hub_screen · 2.77 (retrieveScreen דרך anyCovered)",
+   "read: machtzev/generator/retrieve-screen.mjs:1-80 (הקובץ במלואו)",
+   "ran: node machtzev/census/engine-index.mjs machtzev/generator/retrieve-screen.mjs ⇒ 🔌 מחובר: 2 מייבאים (combine-screens.mjs, generate.mjs)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/intent.mjs",
+  "lang": "mjs",
+  "lines": 37,
+  "does": [
+   {
+    "claim": "משפט-חופשי ⇒ פרופיל-יכולות: מריץ retrieve(sentence,k) מ-match.mjs, סוכם את תגי-ה-caps של האטומים שהותאמו משוקללים בציונם.",
+    "evidence": "intent.mjs:17-25 — `const atoms = retrieve(sentence, k);` · `for (const a of atoms) for (const c of (CAPS[a.cls]||[])) if(!NOISE.has(c)) cap[c] = +((cap[c]||0)+a.s).toFixed(2);`"
+   },
+   {
+    "claim": "«יכולת נוכחת» = מעל 12% מסך-המשקל — רצפה מבנית, לא רשימה.",
+    "evidence": "intent.mjs:24 `const present = sorted.filter(([,v]) => v/total >= 0.12).map(([c])=>c);`"
+   },
+   {
+    "claim": "מסנן 2 תגים רועשים (detail, chrome) כי detail מכסה ~65% מהאטומים.",
+    "evidence": "intent.mjs:14-15 `// detail = ~65% מהאטומים (רועש) · chrome = לא-יכולת.` · `const NOISE = new Set(['detail','chrome']);`"
+   },
+   {
+    "claim": "מקור-ה-caps הוא atom-index.json בלבד — אפס מילון-דומייני בקובץ.",
+    "evidence": "intent.mjs:12-13 `const IDX = JSON.parse(fs.readFileSync((R.GEN_DIR+'atom-index.json'),'utf8')); const CAPS={}; for (const a of IDX) CAPS[a.cls]=a.caps||[];`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו בוחר אטום ואינו פולט קוד — מחזיר {present, caps, atoms} בלבד.",
+    "evidence": "intent.mjs:25 `return { present, caps: Object.fromEntries(sorted), atoms: atoms.slice(0,6).map(a=>`${a.cls}(${a.s})`) };`"
+   },
+   {
+    "claim": "**אינו** באמת «0 מייבאים» כפי שהכרטיס מדווח — tzinor.mjs מייבא אותו דינמית; האינדקס עיוור ל-`await import()`.",
+    "evidence": "tzinor.mjs:435 `const { intentProfile } = await import('./intent.mjs');` מול machtzev/census/engine-index.mjs:162-170 `importsOf` שתופס רק `from '…'` — אין בו דפוס ל-import() דינמי"
+   },
+   {
+    "claim": "ואף-על-פי-כן הוא באמת לא-מגיע: `tzinor.purposeOf` — הפונקציה היחידה שמייבאת אותו — **אין לה אף קורא בכל הריפו**.",
+    "evidence": "ran: `grep -rn \"purposeOf\\|intentProfile\" --include=*.mjs --include=*.js . --exclude-dir=node_modules` ⇒ ההגדרה ב-tzinor.mjs:433, השימוש ב-tzinor.mjs:435-437, ההגדרה ב-intent.mjs:17 וה-CLI ב-intent.mjs:31. אפס קריאות ל-purposeOf מחוץ להגדרתה. (המופעים ב-carve-land.mjs:116 ו-data-lift.mjs:187 הם פונקציות מקומיות שונות באותו שם.)"
+   },
+   {
+    "claim": "כישלון שלו אינו נראה — הקריאה עטופה ב-catch שמחזיר ריק בשקט.",
+    "evidence": "tzinor.mjs:438 `} catch { return { atoms: [], caps: [], src: null }; }` — אילו purposeOf כן נקראה, קובץ חסר או atom-index פגום היו מחזירים «אין מטרה» במקום שגיאה"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/generator/tzinor.mjs:435 (דרך purposeOf, tzinor.mjs:433)",
+    "how": "ייבוא **דינמי** `await import('./intent.mjs')`. tzinor.mjs עצמו **כן** מחובר (מיובא מ-app-ds.mjs שהיא GEN_ENTRY) — אך purposeOf היא ענף-מת: אפס קוראים. ⇒ בפועל intent.mjs לא מורץ אף פעם בצינור."
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/tzinor.mjs:433 — להפעיל את purposeOf שכבר כתובה וממתינה, מתוך מסלול-הבחירה של tzinor (fieldsOf/keyToClass, tzinor.mjs)",
+   "gives": "«המילה קובעת על-מה; המטרה קובעת מה בונים» (tzinor.mjs:431-432 — ההערה כבר כתובה). היום tzinor מכריע לפי **מילת-הישות** בלבד; שכבת-המטרה תיתן לו את §20-א («הכי-טוב-לייעוד») על משפט שאף מילה בו לא הוכרה. זה החיבור הזול ביותר בקבוצה — קוד-הקריאה קיים, חסר רק ה-call-site."
+  },
+  "s22": {
+   "score": 2,
+   "why": "על הנתיב ובעלות-חיבור כמעט-אפסית (פונקציית-הגישור כבר כתובה ב-tzinor), אך הוא מחזיר פרופיל-caps שהמסמך עצמו מתאר כ«גס/רועש» (tzinor.mjs:430) — לכן שיפור-הכרעה ולא צעד חדש על הנתיב. לא 3: אינו מייצר פלט."
+  },
+  "evidence": [
+   "read: machtzev/generator/intent.mjs:1-36 (הקובץ במלואו)",
+   "read: machtzev/generator/tzinor.mjs:425-438 (purposeOf + הייבוא הדינמי + ה-catch)",
+   "read: machtzev/census/engine-index.mjs:162-170 (importsOf — תופס רק `from '…'`, לא import() דינמי)",
+   "ran: grep -rn \"purposeOf|intentProfile\" --include=*.mjs --include=*.js . ⇒ אפס קוראים ל-purposeOf",
+   "ran: node machtzev/census/engine-index.mjs --connected --list | grep -c tzinor ⇒ 0 (כלומר tzinor מחובר)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/shape-ops.mjs",
+  "lang": "mjs",
+  "lines": 107,
+  "does": [
+   {
+    "claim": "סכמה ⇒ פעולות-יסוד: לכל שדה {n,t,o} מחזיר רשימת-ops נגזרת מצורת-השדה בלבד, ולכל ישות את איחוד-ה-ops.",
+    "evidence": "ייצואים fieldOps + entityOps; ran (ריצה-אמיתית דרך הצינור): `node -e` על sentence.fieldOpsOfSentence('ניהול מתנדבים עם טלפון, אזור ותאריך הצטרפות') ⇒ `ops: [\"channel\",\"temporal\",\"calendar\",\"expiry\",\"holidayGuard\"]`"
+   },
+   {
+    "claim": "קלט-האמת הוא new/atoms/schema-fields.mjs (FIELDS) — 54 ישויות · 492 שדות.",
+    "evidence": "כותרת shape-ops.mjs:1-5 + ran: node machtzev/census/engine-index.mjs machtzev/generator/shape-ops.mjs ⇒ `🔧 עושה: 2 ייצואים (fieldOps, entityOps) · CLI --gate --write-baseline · כותב 3`"
+   },
+   {
+    "claim": "הוא שער-משטרה רשום ורץ.",
+    "evidence": "machtzev/police.mjs:137 `gate('shapeops','generator/shape-ops.mjs',['--gate']);`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו מנותק מהמחולל.** הסיווג «לא-מחובר» הוא ארטיפקט-מדידה: שני צרכניו בצינור מייבאים אותו **דינמית**, ו-connected() רואה רק ייבוא סטטי.",
+    "evidence": "machtzev/generator/render-module.mjs:116 `(await import('./shape-ops.mjs')).entityOps` · machtzev/generator/sentence.mjs:81 `const { fieldOps } = await import('./shape-ops.mjs');` — מול engine-index.mjs:162-170 importsOf שתופס רק `from '…'`"
+   },
+   {
+    "claim": "ולא רק ייבוא-נייר: הקריאה יושבת על נתיב-ההרכבה הראשי ומורצת בפועל.",
+    "evidence": "render-module.mjs:188 `const opsSeed = opsOverride || await entityOpsOf(entity);` · ran: probe על sentence.fieldOpsOfSentence החזיר ops אמיתיים (לעיל) — כלומר הקוד נטען והורץ"
+   },
+   {
+    "claim": "אינו מכיר מילון-דומייני — ה-ops נגזרים מטיפוס-השדה, לא משמו.",
+    "evidence": "כותרת shape-ops.mjs:5 «לכל ישות רשימת-ops נגזרת מצורת-השדות בלבד (§20-ד): טיפוס ⇒ op, אפס מילון»; sentence.mjs:83 מזין `{n,t,o}` בלבד ל-fieldOps"
+   },
+   {
+    "claim": "אינו רשום ב-REGEN — לכן גם ההרצה-בשם לא מזכה אותו.",
+    "evidence": "read: machtzev/generator/regen.mjs:6-22 (REGEN) — shape-ops אינו ברשימה"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/generator/render-module.mjs:116,188",
+    "how": "ייבוא דינמי `await import('./shape-ops.mjs')` בנתיב assembleByOps. render-module **מחובר**."
+   },
+   {
+    "who": "machtzev/generator/sentence.mjs:81",
+    "how": "ייבוא דינמי בתוך fieldOpsOfSentence. sentence **מחובר**."
+   },
+   {
+    "who": "machtzev/generator/frag-ops.mjs:11",
+    "how": "ייבוא סטטי `import { entityOps, fieldOps } from './shape-ops.mjs';` (frag-ops עצמו לא-מחובר)"
+   },
+   {
+    "who": "machtzev/generator/op-bridge.mjs:11",
+    "how": "ייבוא סטטי (op-bridge עצמו לא-מחובר)"
+   },
+   {
+    "who": "machtzev/police.mjs:137",
+    "how": "שער `shapeops` — שומר, לא חלק מהמחולל לפי ההגדרה"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — הוא כבר מחובר בפועל. מה שדורש תיקון הוא **המודד**: machtzev/census/engine-index.mjs:162-170 (importsOf) — להוסיף דפוס ל-`import('…')` דינמי",
+   "gives": "תיקון-המודד יעביר את shape-ops (ואת כל מי שמגיעים אליו כך) מ-279 ל-57, ויסגור מחלקת-שווא שלמה בדיווח-הכיסוי. זהו בדיוק הדפוס שהוזהר עליו ב-CLAUDE.md: «שמונה באגים בגלאי-האינדקס היו כולם מאותה משפחה: התאמה לפי שם/מחרוזת במקום לפי המקור המוצהר»."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, ואני אומר זאת במפורש: אין כאן מה לחבר. shape-ops כבר על הנתיב ומורץ (הוכח בריצה). הפריט הוא ממצא-על-המודד, לא חוב-חיווט. הוא נכלל ברשימת-ה-42 מפני שהמדידה שגויה."
+  },
+  "evidence": [
+   "ran: node /tmp/claude-0/probe.mjs (מייבא machtzev/generator/sentence.mjs ומריץ fieldOpsOfSentence) ⇒ ops: [\"channel\",\"temporal\",\"calendar\",\"expiry\",\"holidayGuard\"] — shape-ops נטען והורץ בפועל",
+   "ran: git status --porcelain אחרי ה-probe ⇒ ריק (אפס תופעות-לוואי)",
+   "ran: node machtzev/census/engine-index.mjs --connected --list ⇒ render-module.mjs ו-sentence.mjs אינם ברשימת-הלא-מחוברים (כלומר מחוברים)",
+   "read: machtzev/generator/render-module.mjs:116,188 · machtzev/generator/sentence.mjs:78-89",
+   "read: machtzev/census/engine-index.mjs:162-170 (importsOf) · :324-334 (connected)",
+   "read: machtzev/generator/regen.mjs:6-22 (REGEN — shape-ops אינו שם)"
+  ]
+ }
+]
