@@ -3092,6 +3092,247 @@
     ]
   },
   {
+    "file": "machtzev/verify-dart-arg0.mjs",
+    "lang": "mjs",
+    "lines": 29,
+    "does": [
+      {
+        "claim": "מריץ כל מנוע-Dart-יליד שיש לו מתכון arg0-קבוע, **בהרצה מבודדת job-אחד-לבאץ׳**, כדי שכשל אחד לא ירעיל את השאר",
+        "evidence": "machtzev/verify-dart-arg0.mjs:18-21 (‏runDartBatch עם פריט יחיד) · ההנמקה בשורות 2-3"
+      },
+      {
+        "claim": "שומר רק את השמות ש**רצו באמת** ⇒ proof-record ב-knowledge/dart-arg0-verified.json",
+        "evidence": "machtzev/verify-dart-arg0.mjs:20,27"
+      },
+      {
+        "claim": "**מגן-מטמון (L27):** אם היו מועמדים ואפס אומתו — לא מוחק את ההוכחות הקיימות אלא יוצא 1, כי זה סימן ל-Dart שבור ולא לרגרסיה",
+        "evidence": "machtzev/verify-dart-arg0.mjs:23-26"
+      },
+      {
+        "claim": "בונה את המועמדים מהאטלס של המחולל (buildAtlas) ומ-harvestDartTwins עם allArg0",
+        "evidence": "machtzev/verify-dart-arg0.mjs:9-10,14-15"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו משתמש במפרק-ה-Dart המשותף — אין בו ייבוא מ-dart-bin.mjs; הוא נסמך על dart-twins שיש לו רשימת-נתיבים משלו",
+        "evidence": "ran: grep -c 'dart-bin' machtzev/verify-dart-arg0.mjs ⇒ 0; machtzev/generator/dart-twins.mjs:15-17 — רשימת-מועמדים עצמאית"
+      },
+      {
+        "claim": "אינו שער — אין לו gate ואין ratchet; הוא מייצר ראיה שמישהו אחר סופר",
+        "evidence": "ran: grep -c 'verify-dart-arg0' machtzev/police.mjs machtzev/gates.tsv ⇒ 0 ו-0"
+      },
+      {
+        "claim": "מאמת רק «רץ בלי לקרוס» (‏o[0] !== null) — לא שהערך נכון",
+        "evidence": "machtzev/verify-dart-arg0.mjs:20"
+      },
+      {
+        "claim": "קלט-האימות הוא תמיד '0' — אימות-רהיצות בנקודה אחת, לא כיסוי-התנהגות",
+        "evidence": "machtzev/verify-dart-arg0.mjs:19"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/one.mjs:185",
+        "how": "stage('אימות-arg0-Dart') — מורץ-בשם, מותנה ב-HAS_DART, optional"
+      },
+      {
+        "who": "machtzev/generator/atlas.mjs · dart-twins.mjs",
+        "how": "ייבוא — הוא צרכן של מודולי-המחולל"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ בנפרד — הוא זנב של verify-dart-tests (ראה שם), ואותה נקודת-חיבור מכסה את שניהם",
+      "gives": "אין לו נקודה עצמאית כנה: הוא מייצר רשימת-שמות שהמדד (coverage-gate) מאחד עם רשימות אחרות. שווה לציין שהוא כן על צד-המחולל של הגדר — הוא מייבא את האטלס ואת dart-twins, כלומר הוא כלי-אימות שבנוי על מודולי-הצינור."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב בעקיפין וקלושות. ‏29 שורות שמוכיחות רהיצות בנקודה אחת; התרומה האמיתית ל«הכי-טוב-בהוכחה» מגיעה מ-verify-dart-tests, והוא זנב שלו. המגן-מטמון שלו (L27) הוא הרעיון שראוי לזכור: היעדר-כלי לא מוחק הוכחות."
+    },
+    "evidence": [
+      "read: machtzev/verify-dart-arg0.mjs:1-28 (כל הקובץ)",
+      "ran: grep -c 'dart-bin' machtzev/verify-dart-arg0.mjs ⇒ 0",
+      "ran: grep -c 'verify-dart-arg0' machtzev/police.mjs machtzev/gates.tsv ⇒ 0 · 0",
+      "ran: ls -l machtzev/generator/knowledge/dart-arg0-verified.json ⇒ 1042 בתים (ה-proof-record קיים)"
+    ]
+  },
+  {
+    "file": "machtzev/verify-dart-tests.mjs",
+    "lang": "mjs",
+    "lines": 51,
+    "does": [
+      {
+        "claim": "מריץ בפועל כל בדיקת-חוזה golden של Dart (`new/dart{,-maor}/<base>_test.dart`) עם `dart run --enable-asserts`, במקביל (-j8 כברירת-מחדל)",
+        "evidence": "machtzev/verify-dart-tests.mjs:32-36 · 19 · 41"
+      },
+      {
+        "claim": "בדיקה שעוברת = **הוכחה חזקה** שכל פונקציות-האטום שלה רהיצות, ושמותיהן נכתבים ל-proof-record knowledge/dart-tests-passing.json",
+        "evidence": "machtzev/verify-dart-tests.mjs:3-5 · 40 · 49"
+      },
+      {
+        "claim": "**מגן-מטמון (L27):** אפס-עברו ⇒ לא מוחק את ההוכחות הקיימות, יוצא 1 ומסביר «Dart חסר/שבור?»",
+        "evidence": "machtzev/verify-dart-tests.mjs:44-48"
+      },
+      {
+        "claim": "ממפה base⇒שמות-פונקציות מהאטלס של המחולל, ומריץ רק base שיש לו קובץ-בדיקה",
+        "evidence": "machtzev/verify-dart-tests.mjs:22-29"
+      },
+      {
+        "claim": "timeout 90s לכל בדיקה",
+        "evidence": "machtzev/verify-dart-tests.mjs:34"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו משתמש במפרק-ה-Dart המשותף, למרות ש-PROTOCOL מצהיר «resolver אחד ל-Dart»** — יש לו רשימת-נתיבים משלו, ובסופה נפילה למחרוזת 'dart' חשופה (בלי exit 2 tool=dart, כלומר בלי צהוב)",
+        "evidence": "machtzev/verify-dart-tests.mjs:14-18; ran: grep -c 'dart-bin' machtzev/verify-dart-tests.mjs ⇒ 0; machtzev/PROTOCOL.md:129 «resolver אחד ל-Dart: machtzev/dart-bin.mjs»"
+      },
+      {
+        "claim": "**וזה לא מקרה יחיד — יש שלושה מפרקי-Dart עצמאיים בריפו**, ואחד מהם נושא נתיב-סקרצ'פד מת של סשן אחר: `dart-twins.mjs:17` מצביע ל-/tmp/claude-0/-home-user/2d086046-…/scratchpad/dart-sdk/bin/dart. זה בדיוק הבאג שתועד ב-L107/G20 («נתיב קשיח = כשל-ריצה ריק שמסתיר את השגיאה»)",
+        "evidence": "ran: grep -an 'dart-sdk' machtzev/generator/dart-twins.mjs ⇒ שורות 15-17 כולל הנתיב הזמני; machtzev/dart-bin.mjs:9 (המפרק המוצהר) · machtzev/verify-dart-tests.mjs:15 (השלישי)"
+      },
+      {
+        "claim": "אינו שער — אין gate, אין ratchet, אין exit-code על נסיגה במספר-המוכחים",
+        "evidence": "ran: grep -c 'verify-dart-tests' machtzev/police.mjs machtzev/gates.tsv ⇒ 0 · 0"
+      },
+      {
+        "claim": "אינו נוגע ב-dart-boxes ולא ב-dart-gen-bs — המסנן הוא ^new/dart(-maor)?$ בלבד",
+        "evidence": "machtzev/verify-dart-tests.mjs:25"
+      },
+      {
+        "claim": "«עברה» = exit 0 של קובץ-הבדיקה כולו; אין פירוק לפונקציה — כל השמות ב-base מסומנים מוכחים יחד",
+        "evidence": "machtzev/verify-dart-tests.mjs:40"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/one.mjs:184",
+        "how": "stage('אימות-רהיצות-Dart', … ['-j12']) — מורץ-בשם, מותנה ב-HAS_DART, optional"
+      },
+      {
+        "who": "machtzev/coverage-gate.mjs:33-35",
+        "how": "**צרכן ה-proof-record** — מאחד את dart-tests-passing.json ל«מנועים ברי-הרצה»"
+      },
+      {
+        "who": "machtzev/generator/atlas.mjs",
+        "how": "ייבוא { buildAtlas }"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/auto-logic.mjs:151 / behavior-plan.mjs:110-117 — כמסנן-כשירות על מועמדי-הבורר",
+      "gives": "נקודה כנה. ‏`dart-tests-passing.json` הוא רשימת הפונקציות ש**הוכחו רהיצות בהרצה אמיתית**, וזה בדיוק סוג-הראיה שהכרעה-30 דורשת מהבורר. אבל מדדתי מי קורא אותו, והתשובה היא **רק `coverage-gate.mjs:35`** — כלומר ההוכחה מגיעה למד-הכיסוי ולא לבורר. הבוררים מוכיחים מועמדים בעצמם (‏logic-proof · מוטציית-רגישות), וזה טוב יותר; אבל הם עושים זאת פר-צורך ובזמן-ריצה, בעוד שכאן יש מטמון-הוכחות מוכן. החיבור הכנה אינו «להחליף את ההוכחה» אלא «לדרג לפי מה שכבר מוכח» — מועמד שקובץ-הבדיקה שלו עובר מתחיל בנקודת-פתיחה טובה יותר, וההוכחה-בריצה נשארת הפוסק. **תנאי-קדם שראוי לומר:** כל עוד יש שלושה מפרקי-Dart שונים ואחד מהם מצביע לסקרצ'פד מת, «אפס-מאומתים» עלול לנבוע מנתיב ולא מקוד."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — מקרב ממשית. הוא מייצר את ההוכחה-בריצה החזקה ביותר שיש על מדף-ה-Dart, ו-§20 בנוי על «הכי-טוב-בהוכחה». הציון אינו 3 כי הפלט שלו היום מגיע למד ולא לבורר, והבורר כבר מחזיק מנגנון-הוכחה משלו."
+    },
+    "evidence": [
+      "read: machtzev/verify-dart-tests.mjs:1-50 (כל הקובץ)",
+      "ran: grep -rn 'dart-tests-passing' machtzev --include=*.mjs ⇒ הצרכן היחיד מחוץ למנוע עצמו הוא coverage-gate.mjs:35",
+      "ran: grep -c 'dart-bin' machtzev/verify-dart-tests.mjs ⇒ 0 (אינו משתמש במפרק המשותף)",
+      "ran: grep -an 'dart-sdk' machtzev/generator/dart-twins.mjs ⇒ שורות 15-17, כולל נתיב-סקרצ'פד של סשן אחר",
+      "ran: ls -l machtzev/generator/knowledge/dart-tests-passing.json ⇒ 11576 בתים",
+      "ran: node machtzev/police.mjs --fast ⇒ '✓ שער-הכיסוי: … מנועים 841/852 (99%)' — הצריכה של ה-proof-record דרך coverage"
+    ]
+  },
+  {
+    "file": "machtzev/verify-independent.mjs",
+    "lang": "mjs",
+    "lines": 87,
+    "does": [
+      {
+        "claim": "מריץ את **כלי-המשטרה מ-tag ידוע-טוב (T)** על העץ הנוכחי (H) ובודק כיוון — «לא חומה. עד»",
+        "evidence": "machtzev/verify-independent.mjs:2-3 · 66-74"
+      },
+      {
+        "claim": "**שתי משטרות מלאות**: H-tools על H, ו-T-tools על H דרך MACHTZEV_ROOT — ההפרדה שנבנתה ב-police.mjs:18-21 היא מה שמאפשר את זה",
+        "evidence": "machtzev/verify-independent.mjs:66-74"
+      },
+      {
+        "claim": "ארבעה קודי-יציאה נפרדים: 0 ירוק (מועמד-לקידום) · 1 אדום · 2 צהוב/לא-מוכח · **3 tamper**",
+        "evidence": "machtzev/verify-independent.mjs:5,24,30"
+      },
+      {
+        "claim": "**בדיקת-זהות נגד החלפת-תג:** אם --expect-sha ניתן והתג אינו מתחיל בו (קידומת ≥12) ⇒ tamper, לא סתם אדום",
+        "evidence": "machtzev/verify-independent.mjs:30"
+      },
+      {
+        "claim": "הוכחת-ירי צולבת: fixtures של T **וגם** של H מועתקים לספרייה אחת, כשה-T מועתק אחרון כדי שהרעל שלו יגבר על שם-זהה (R3-6.3), ומורצים על סקריפטי H",
+        "evidence": "machtzev/verify-independent.mjs:56-59"
+      },
+      {
+        "claim": "מדד «unproven רק-יורד»: אם מספר זוגות-ההוכחה ב-H קטן מב-T ⇒ אדום",
+        "evidence": "machtzev/verify-independent.mjs:60-62,84"
+      },
+      {
+        "claim": "**מבחין בין «שער חדש שכלי-T לא מכירים» לבין החלשה** — שער שנוסף ב-H, שכלי-T לא יודעים להריץ אך H-on-H הריץ בהצלחה, אינו מפיל",
+        "evidence": "machtzev/verify-independent.mjs:75-78"
+      },
+      {
+        "claim": "משתמש ב-ratchet-direction כספרייה, כדי שסמנטיקת-הראצ׳ט תהיה מקור-אמת יחיד (R3-4.13)",
+        "evidence": "machtzev/verify-independent.mjs:41-42"
+      },
+      {
+        "claim": "כותב דוח JSON **תמיד**, גם בכשל, ואינו מקדם בעצמו — «הקידום = ack של הבעלים»",
+        "evidence": "machtzev/verify-independent.mjs:5,22-24"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו חומה ואינו חוסם** — הוא מייצר פסק ודוח; שום hook לא תלוי בו לחסימה",
+        "evidence": "machtzev/verify-independent.mjs:2 («לא חומה. עד») · 24 — done() רק כותב ויוצא"
+      },
+      {
+        "claim": "לא מקדם את התג בעצמו — הקידום הוא פעולה של הבעלים",
+        "evidence": "machtzev/verify-independent.mjs:5,24"
+      },
+      {
+        "claim": "אינו שער-משטרה — הוא מריץ את המשטרה, לא רץ בתוכה",
+        "evidence": "ran: grep -c 'verify-independent' machtzev/police.mjs ⇒ 0"
+      },
+      {
+        "claim": "דורש היסטוריה עמוקה ושני worktrees — בקלון רדוד עם --depth קטן הצעדים 3-4 אינם ניתנים להרצה",
+        "evidence": "machtzev/verify-independent.mjs:6 (שני worktrees · כיוון פר-commit ב-T..H)"
+      },
+      {
+        "claim": "לא הורץ כאן — הוא מריץ שתי משטרות מלאות (timeout 1800s כל אחת) ובונה worktrees; מעבר לתקציב ומסכן את נקיון העץ",
+        "evidence": "machtzev/verify-independent.mjs:67 — timeout: 1800000 פר-משטרה"
+      }
+    ],
+    "callers": [
+      {
+        "who": ".github/workflows/police.yml:95",
+        "how": "מורץ מ-/tmp/T על HEAD עם --expect-sha ו---report"
+      },
+      {
+        "who": ".claude/hooks/session-start.sh:50",
+        "how": "מוצג לסוכן כפקודה מומלצת"
+      },
+      {
+        "who": "machtzev/pins-check.mjs:17 · PROTOCOL.md:205",
+        "how": "נעול-חתימה (PINNED)"
+      },
+      {
+        "who": "machtzev/ratchet-direction.mjs · machtzev/police-selftest.mjs",
+        "how": "מורצים/נטענים על-ידו (שורות 42, 59, 61)"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "שער, וזה מקומו — והוא הקצה הרחוק ביותר מהמחולל בכל הקבוצה: הקלט שלו הוא שני commits ושני עצי-כלים, והשאלה שלו היא «האם הפרוטוקול נחלש». אין למחולל מה לצרוך. ראוי בכל זאת לרשום את הרעיון, כי הוא הכי-חזק בקבוצה: **הכלי שמודד לא יכול להיות הכלי שנמדד.** זו אותה משפחת-לקח של «מספר בסיכום אינו מפה» — ואם אי-פעם תיטען טענה ש-§22 הושג, זה המנגנון שצריך לאשר אותה, כי הוא היחיד שמריץ את המדידה מעץ-כלים שלא נגעו בו בגל הנוכחי."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב, ואומר זאת ישירות. אין נתיב-נתונים ואין יכולת חסרה. ערכו הוא מטא: הוא מה שהופך «ירוק» מדיווח-עצמי לעדות. אפס קרבה לנתיב משפט⇒אפליקציה."
+    },
+    "evidence": [
+      "read: machtzev/verify-independent.mjs:1-30,55-86",
+      "ran: grep -c 'verify-independent' machtzev/police.mjs ⇒ 0",
+      "ran: grep -rn 'verify-independent' .github/workflows/police.yml .claude/hooks/session-start.sh ⇒ police.yml:95 · session-start.sh:50",
+      "לא הורץ במכוון: שתי משטרות מלאות (timeout 1800s כל אחת) + worktrees — מעבר לתקציב הגל ומסכן עץ-נח"
+    ]
+  },
+  {
     "file": "machtzev/wave-partition.mjs",
     "lang": "mjs",
     "lines": 45,
