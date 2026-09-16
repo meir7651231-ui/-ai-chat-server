@@ -1,0 +1,140 @@
+[
+ {
+  "entity": "מטופלים",
+  "name": "ייצוא",
+  "expr": "[ייצוא]",
+  "ok": true,
+  "why": null,
+  "shape": "export",
+  "ops": [
+   "action",
+   "serialize"
+  ],
+  "picks": [
+   {
+    "op": "action",
+    "atoms": [
+     "DsChipButton"
+    ],
+    "alts": [
+     "DsChipButton",
+     "DsPrimaryButton",
+     "GlassButton"
+    ]
+   },
+   {
+    "op": "serialize",
+    "atoms": [
+     "exportAllowed"
+    ],
+    "alts": [
+     "exportAllowed",
+     "eventsCsvRows",
+     "ayinSheetRows"
+    ]
+   }
+  ],
+  "wired": []
+ },
+ {
+  "entity": "מטופלים",
+  "name": "חריגה",
+  "expr": "[חריגה]",
+  "ok": true,
+  "why": null,
+  "shape": "filter",
+  "ops": [
+   "filter",
+   "predicate"
+  ],
+  "picks": [
+   {
+    "op": "filter",
+    "atoms": [
+     "FilterChipPill"
+    ],
+    "alts": [
+     "FilterChipPill",
+     "PresetChip",
+     "SeverityChip"
+    ]
+   },
+   {
+    "op": "predicate",
+    "atoms": [
+     "isGrantableFeature"
+    ],
+    "alts": [
+     "isGrantableFeature",
+     "liveSuggestions",
+     "cockpitProgress"
+    ]
+   }
+  ],
+  "wired": []
+ },
+ {
+  "entity": "מטופלים",
+  "name": "איתור",
+  "expr": "[איתור]",
+  "ok": true,
+  "why": null,
+  "shape": "search",
+  "ops": [
+   "search",
+   "match"
+  ],
+  "picks": [
+   {
+    "op": "search",
+    "atoms": [
+     "DsSearch"
+    ],
+    "alts": [
+     "DsSearch",
+     "DsToggleTile",
+     "PremiumToggle"
+    ]
+   },
+   {
+    "op": "match",
+    "atoms": [
+     "liveSuggestions"
+    ],
+    "alts": [
+     "liveSuggestions",
+     "configOpFromJson",
+     "templateFor"
+    ]
+   }
+  ],
+  "wired": []
+ },
+ {
+  "entity": "מטופלים",
+  "name": "טבלה",
+  "expr": "[טבלה]",
+  "ok": true,
+  "why": null,
+  "shape": "table",
+  "ops": [
+   "table"
+  ],
+  "picks": [
+   {
+    "op": "table",
+    "atoms": [
+     "DsTable"
+    ],
+    "alts": [
+     "DsTable",
+     "ForgeModalDialog",
+     "ForgeSplitControl"
+    ]
+   }
+  ],
+  "wired": [
+   "DsTable"
+  ]
+ }
+]

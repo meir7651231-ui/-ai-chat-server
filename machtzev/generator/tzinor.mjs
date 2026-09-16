@@ -376,7 +376,7 @@ if (isMain) console.log('usage: tzinor.mjs --text "<משפט>" | --smoke | --gat
 //  מועמד-יחיד ⇒ הוכרע. רב-מועמדים ⇒ pick נשאר null ⇒ ∅ + מתג לבעלים (חוק-הבעלים).
 export function specFromSentence(text, origin = 'משפט') {
   const sw = toSwitches(text, origin);
-  const lines = [], open = [];
+  const lines = [], open = [], cls_ = [];
   for (const e of sw.entities) {
     const real = e.options.filter((o) => o.cls && o.fields.length && o.strict !== false);
     if (real.length === 1) {
@@ -389,6 +389,7 @@ export function specFromSentence(text, origin = 'משפט') {
     // (L57 · §20-ג «שקע בלי-ערך-אמת ⇒ פסילה»). הוא נרשם כמתג עם מוצאו, לא כעמודה.
     const named = real.length === 1 ? real[0].fields.filter((f) => HE_RE.test(f.name)) : [];
     const unnamed = real.length === 1 ? real[0].fields.filter((f) => !HE_RE.test(f.name)) : [];
+    if (real.length === 1) cls_.push({ word: e.word, cls: real[0].cls });
     if (real.length === 1 && unnamed.length) open.push({ word: e.word, options: e.options.length, cls: real[0].cls, fields: unnamed.map((f) => f.name), from: 'שקע-סכמה בלי מונח-עברי', srcs: [...new Set(unnamed.map((f) => f.src))] });
     if (real.length === 1 && named.length) lines.push(`${TPL.ent} ${e.word} ${TPL.with} ${named.map((f) => f.name + (f.optional ? '' : '*')).join(', ')}`);
     else {
@@ -409,8 +410,16 @@ export function specFromSentence(text, origin = 'משפט') {
       open.push({ word: e.word, options: e.options.length, fields: fs_, from: said.length ? 'המשפט שלך' : 'מילת-הישות' });
     }
   }
+  // 🧩 **פעולות-יסוד ⇒ חלקיקים** (G23·G2): הפעולות נגזרות מ**טיפוסי-השדות** ולכן
+  // אינן תלויות במונח-עברי לשדה (שאינו קיים בריפו) — זה המסלול שעוקף את הקיר.
+  // צורה שדורשת שם-שדה נשארת מתג. כישלון ⇒ בלי חלקיקים, לא קריסה.
+  for (const c of cls_) {
+    try { const pr = particlesFor(c.cls, c.word); lines.push(...pr.lines); if (pr.skipped.length) open.push({ word: c.word, cls: c.cls, options: pr.skipped.length, fields: pr.skipped, from: 'פעולת-יסוד שצורתה דורשת שם-שדה', srcs: ['machtzev/generator/shape-ops.json#' + c.cls] }); } catch { /* */ }
+  }
   return { spec: lines.join('\n'), open, domain: sw.domain.pick, switches: sw };
 }
+import { particlesFor } from './ops-particles.mjs';   // פעולות-יסוד ⇒ חלקיקים (G23·G2)
+
 const TPL = { ent: 'ישות', with: 'עם' };
 const HE_RE = /[\u05d0-\u05ea]/;   // שם-שדה בלי אות-עברית = מפתח-סכמה, לא מונח
 const PLURAL_M = /ים$/;   // ריבוי-זכר חד-משמעי (כלל-צורה · אפס-מילון · §23)
