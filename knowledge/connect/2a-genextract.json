@@ -194,6 +194,436 @@
   ]
  },
  {
+  "file": "gen/engine.mjs",
+  "lang": "mjs",
+  "lines": 48,
+  "does": [
+   {
+    "claim": "לב-המחולל, 48 שורות: טקסט ⇒ (ספק-מדויק או `sentenceToSpec`) ⇒ `parseSpec` ⇒ `derivePlan` ⇒ `prove` לכל צורך ⇒ `renderApp` ⇒ `{report, app}`",
+    "evidence": "gen/engine.mjs:10-47"
+   },
+   {
+    "claim": "`isSpec` מבדיל ספק-מדויק ממשפט לפי `^\\s*אפליקציה:` — ספק עובר כמו-שהוא, בלי לעבור דרך המנתח",
+    "evidence": "gen/engine.mjs:8,15-18"
+   },
+   {
+    "claim": "`onStep` — callback לכל שלב (‏sentence · spec · plan · proof · done) ⇒ אותו מנוע מזין גם CLI וגם UI-חי בדפדפן",
+    "evidence": "gen/engine.mjs:10,17,20,22,39,46"
+   },
+   {
+    "claim": "מדווח על **כל** צורך, כולל שנפל: `proof` נושא tried · failedBy (מפת-סיבות) · ms · כל המוכחים · מי-משתמש-בו; `unproven` היא רשימה מפורשת בדוח",
+    "evidence": "gen/engine.mjs:30-38,45"
+   },
+   {
+    "claim": "`dartProver` הוא **הזרקה**, לא ייבוא — המנוע אינו יודע על Dart; מי שמזריק הוא `build.mjs`/`pass.mjs`. בדפדפן מוזרקת תוצאה ארוזה",
+    "evidence": "gen/engine.mjs:10,37"
+   },
+   {
+    "claim": "`now` מוזרק כברירת-מחדל `() => Date.now()` ⇒ ניתן לדטרמיניזציה מבחוץ",
+    "evidence": "gen/engine.mjs:10"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו כותב שום קובץ** — מחזיר מחרוזת ואובייקט; כל ה-IO ב-`build.mjs`. זו ההפרדה שמאפשרת לו לרוץ בדפדפן",
+    "evidence": "read: gen/engine.mjs:1-48 (אין fs)"
+   },
+   {
+    "claim": "`new Date().toISOString()` ב-`meta.built` **אינו** עובר דרך `now` המוזרק ⇒ הפלט אינו דטרמיניסטי גם כששאר המנוע כן. זו הסיבה ש-`report.json`/`live.html`/`log.md` השתנו אחרי הרצה בלי שינוי-קוד",
+    "evidence": "gen/engine.mjs:41; ran: `node gen/build.mjs gen/specs/gemach.txt` ⇒ `git status` הראה M על `gen/out/gemach/{live.html,log.md,report.json}` — **ו-`app.html` לא השתנה**"
+   },
+   {
+    "claim": "אין הוכחת-שילוב: `prove` מחזיר אטום-יחיד לצורך. «אין-יחיד ⇒ שלב כמה» (§20ב) לא ממומש כאן — צורך בלי אטום נשאר `unproven`",
+    "evidence": "gen/engine.mjs:32 (‏`if (r.proven[0]) chosen.set(id, …)`) · :45"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/build.mjs:11",
+    "how": "`import { runGenerator }`"
+   },
+   {
+    "who": "gen/pass.mjs:9",
+    "how": "`import { runGenerator }` — 12 אגפים"
+   },
+   {
+    "who": "gen/studio.mjs:20 · gen/wizard.mjs:17",
+    "how": "נארז לדפדפן (‏`engine.mjs` הוא האחרון ב-CORE)"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/regen.mjs` — סדר-הריצה היחיד של GENMAX",
+   "gives": "מה שאין למחולל המחובר בצורה הזו: **מנוע-ליבה אחד, אפס-IO, שרץ זהה ב-Node ובדפדפן, עם `onStep` לכל שלב.** זה מה שמאפשר את «המשתמש רואה את המחולל רץ אצלו». תנאי-קדם לחיבור: להוציא את `new Date()` משורה 41 אל `now` המוזרק, אחרת כל ריצה מלכלכת את העץ"
+  },
+  "s22": {
+   "score": 3,
+   "why": "זו הצורה הנקייה ביותר של §22 שמצאתי: משפט⇒אפליקציה ב-48 שורות, דטרמיניסטי, בלי LLM, בלי IO, ומדווח בכנות גם על כישלון. שני פערים (‏Date לא-מוזרק · אין שילוב-אטומים של §20ב) — שניהם ממוקדים"
+  },
+  "evidence": [
+   "ran: node gen/build.mjs gen/specs/gemach.txt ⇒ «✓ גמ\"ח הלוואות: 9 אטומים מוכחים · 0 צרכים ללא הוכחה · 28726ms»",
+   "ran: git status --porcelain אחרי הריצה ⇒ M על live.html · log.md · report.json (ולא app.html) ⇒ אי-דטרמיניזם מ-meta.built",
+   "read: gen/engine.mjs:8,10,15-22,30-47"
+  ]
+ },
+ {
+  "file": "gen/plan.mjs",
+  "lang": "mjs",
+  "lines": 20,
+  "does": [
+   {
+    "claim": "גוזר תכנית דטרמיניסטית **מצורה בלבד**: לכל שדה, כל צורך שה-`from.shape` שלו תואם ⇒ שורת-תכנית (‏needId · entity · field · kind · label); `formula`⇒`number` ו-`count`⇒`none`",
+    "evidence": "gen/plan.mjs:3-11"
+   },
+   {
+    "claim": "צרכי-רמת-אפליקציה (`from.app`) נכנסים **פעם אחת** כשיש בכלל ישות — לא פר-שדה",
+    "evidence": "gen/plan.mjs:12-13"
+   },
+   {
+    "claim": "פריט-לוח-בקרה בלי צורך מוגדר ⇒ `throw` מפורש, לא דילוג",
+    "evidence": "gen/plan.mjs:15-16"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**מחריג `phone-norm` בשורת-קוד קשיחה** — `if (n.id === 'phone-norm') continue;` עם הערה «האפליקציה הזו לא צורכת אותו». זה מזהה-צורך ספציפי מוטמע במנוע-הגזירה = דאטה בתוך מנוע, בניגוד לחוק-1",
+    "evidence": "gen/plan.mjs:8"
+   },
+   {
+    "claim": "`kind` נקבע ע\"י השוואת-מזהה קשיחה נוספת — `n.id === 'norm-search' ? 'search' : 'column'`",
+    "evidence": "gen/plan.mjs:9"
+   },
+   {
+    "claim": "אינו מדרג ואינו בוחר — מייצר רשימה מלאה; הבחירה היא של `prove`",
+    "evidence": "gen/plan.mjs:3-19 (אין score/sort)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/engine.mjs:5",
+    "how": "`import { derivePlan }` ⇒ `derivePlan(spec, NEEDS)` (‏שורה 21)"
+   },
+   {
+    "who": "gen/studio.mjs:20 · gen/wizard.mjs:17",
+    "how": "נארז לדפדפן"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/behavior-plan.mjs` — פנקס-הצרכים של G34",
+   "gives": "העיקרון «צורך נולד מצורת-שדה, לא משם-שדה» הוא בדיוק מה ש-G34 מימש בגדול. ‏`derivePlan` הוא הגרסה המינימלית שלו — 20 שורות. אין מה לחבר; יש מה **לנקות**: שתי השוואות-המזהה הקשיחות (שורות 8-9) הן בדיוק הדפוס שהמנוע הגדול נמנע ממנו"
+  },
+  "s22": {
+   "score": 1,
+   "why": "עיקרון נכון במימוש זעיר, אבל שתי השוואות-מזהה קשיחות, והמקבילה המחוברת (behavior-plan) כבר עשירה בהרבה"
+  },
+  "evidence": [
+   "ran: node gen/build.mjs gen/specs/gemach.txt ⇒ 9 צרכים נכנסו לתכנית (מתוך 10 ב-needs.data.json; phone-norm הוחרג בשורה 8)",
+   "ran: node -e \"require('./gen/needs.data.json').needs.length\" ⇒ 10",
+   "read: gen/plan.mjs:3-19"
+  ]
+ },
+ {
+  "file": "gen/prove.mjs",
+  "lang": "mjs",
+  "lines": 55,
+  "does": [
+   {
+    "claim": "**הוכחה-בריצה**: כל אטום-פונקציה במדף נטען ומורץ על **כל** דוגמאות-הצורך; עובר רק מי שהחזיר בדיוק את הפלט המבוקש בכולן. «אין שמות, אין מילון, אין ניחוש: הריצה היא ההוכחה»",
+    "evidence": "gen/prove.mjs:1-3,35-52"
+   },
+   {
+    "claim": "טוען אטום מהמקור ולא מהדיסק (`new Function(a.src + '\\nreturn '+a.fn)`) ⇒ רץ גם ב-Node וגם בדפדפן — זה מה שמאפשר את הסטודיו",
+    "evidence": "gen/prove.mjs:4,6-13"
+   },
+   {
+    "claim": "`same()` — השוואה עמוקה שמטפלת ב-`NaN===NaN`, במערך-מול-אובייקט, ובמספר-מפתחות; לא `JSON.stringify`",
+    "evidence": "gen/prove.mjs:15-23"
+   },
+   {
+    "claim": "מרפד ארגומנטים חסרים ב-`undefined` עד `a.n` ומצרף `T` בסוף אם `hasT` ⇒ אטום עם קבועי-דאטה נבדק עם הקבועים האמיתיים שלו",
+    "evidence": "gen/prove.mjs:28-32"
+   },
+   {
+    "claim": "מסווג כל כישלון לסיבה שמית (‏אורך-קריאה · טעינה · לא פונקציה · זריקה · אסינכרוני · פלט שונה) — הדוח אומר **למה** נפלו, לא רק כמה",
+    "evidence": "gen/prove.mjs:39-51"
+   },
+   {
+    "claim": "פוסל אסינכרוני במפורש (`got.then` ⇒ `why='אסינכרוני'`) ומשכפל ארגומנטים לפני כל קריאה (`clone`) ⇒ אטום שמשנה קלט לא מזהם את המדידה הבאה",
+    "evidence": "gen/prove.mjs:25-26,48"
+   },
+   {
+    "claim": "נמדד בריצה: 569 אטומים נוסו לכל אחד מ-9 הצרכים, וכולם הוכחו",
+    "evidence": "ran: `node gen/build.mjs gen/specs/gemach.txt` ⇒ «● norm-search JS: נוסו 569 · הוכחו 1 ⇒ norm-search» … 9 שורות ●, «0 צרכים ללא הוכחה»"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**שבירת-השוויון היא `n` ואז סדר-אלפבית** — לא «הכי-טוב-לייעוד» של §20א. כששני אטומים עוברים, הבחירה שרירותית לחלוטין ביחס למטרה",
+    "evidence": "gen/prove.mjs:53 — `proven.sort((x,y)=>x.n-y.n || x.name.localeCompare(y.name))`; נמדד: `days-since` הוכיח **2** אטומים ונבחר הראשון-אלפביתית"
+   },
+   {
+    "claim": "מטמון לפי שם בלבד (`CACHE.set(a.name, fn)`) — שני אטומים בשם זהה ממקורות שונים יחלקו פונקציה",
+    "evidence": "gen/prove.mjs:5,7,11"
+   },
+   {
+    "claim": "כישלון-טעינה נבלע ל-`fn=null` בתוך ה-catch ואז מדווח כ«לא פונקציה», לא כ«טעינה» — הסיבה האמיתית אובדת",
+    "evidence": "gen/prove.mjs:9-10 (‏catch ⇒ fn=null) מול :41-42"
+   },
+   {
+    "claim": "אינו נוגע ב-Dart — שכבת-ה-Dart היא `prove-dart.mjs` נפרד",
+    "evidence": "gen/prove.mjs:1-4"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/engine.mjs:3",
+    "how": "`import { prove }` ⇒ נקרא לכל needId (שורה 29)"
+   },
+   {
+    "who": "gen/prove-dart.mjs:8",
+    "how": "`import { same }` — אותה השוואה-עמוקה משמשת גם את מוכיח-ה-Dart"
+   },
+   {
+    "who": "gen/studio.mjs:20 · gen/wizard.mjs:17",
+    "how": "נארז לדפדפן — ההוכחות רצות אצל המשתמש"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/logic-proof.mjs` — המוכיח-המשותף של G34ב",
+   "gives": "‏`logic-proof` מוכיח ב-Dart. ‏`gen/prove` מוכיח ב-JS **ובדפדפן**. היכולת שאין למחולל המחובר: **המשתמש רואה את ההוכחה רצה אצלו** (הסטודיו). אבל לפני חיבור צריך לתקן את שבירת-השוויון: `sort` לפי אלפבית **סותר את §20א** («הכי-טוב-לייעוד, לא הראשון-שמתאים»), וזה בדיוק מה ש-`auto-logic` פתר ב-G18-19 עם מוטציית-רגישות"
+  },
+  "s22": {
+   "score": 3,
+   "why": "זה **הלב** של §20: בחירה בהוכחה-בריצה, אפס-מילון, אפס-LLM, וגם בדפדפן. רץ ירוק כאן על 569 אטומים. הפגם — שבירת-שוויון אלפביתית — הוא תיקון של שורה אחת, לא של שיטה"
+  },
+  "evidence": [
+   "ran: node gen/build.mjs gen/specs/gemach.txt ⇒ 9 צרכים × 569 אטומים נוסו · «days-since JS: נוסו 569 · הוכחו 2»",
+   "read: gen/prove.mjs:4-13,15-23,25-32,35-54"
+  ]
+ },
+ {
+  "file": "gen/render.mjs",
+  "lang": "mjs",
+  "lines": 224,
+  "does": [
+   {
+    "claim": "הרכבה: ספק + אטומים-מוכחים ⇒ **קובץ-HTML יחיד רץ**. האטומים מוטבעים כלשונם (‏`inlineAtom`), והדבק הוא מבני בלבד: טופס לפי צורת-השדה · טבלה · אחסון-מקומי · קריאה לאטום-המוכח",
+    "evidence": "gen/render.mjs:1-3,10-17,35-37"
+   },
+   {
+    "claim": "`inlineAtom` עוטף כל אטום ב-`__call` שמרפד ארגומנטים ומצרף `T` — **אותה עטיפה בדיוק** של בדיקת-החוזה שלו, כך שמה שהוכח הוא מה שרץ",
+    "evidence": "gen/render.mjs:10-17"
+   },
+   {
+    "claim": "מפת-`INPUT` לפי צורה (‏text · phone/tel · number עם min/max · date · enum⇒select · count · id · formula-readonly); שדה עם `ref` ⇒ `<select data-ref>` שמתמלא בזמן-ריצה מהישות המקושרת",
+    "evidence": "gen/render.mjs:19-30"
+   },
+   {
+    "claim": "`callOf` מחזיר `null` לצורך שלא הוכח, וכל תכונה נבנית **רק אם** האטום שלה קיים — כפתור-CSV נפלט רק אם `csv`+`csv-escape` הוכחו; עמודת-«ימים» רק אם `days-since` הוכח",
+    "evidence": "gen/render.mjs:37,42,45"
+   },
+   {
+    "claim": "`bidi()` עוטף כל ערך בסדר-לטיני ב-`<bdi dir=\"ltr\">` (‏UAX#9) — ₪8,000 · 052- · תאריך · שלילי נשארים בצד הנכון ב-RTL",
+    "evidence": "gen/render.mjs:108-109"
+   },
+   {
+    "claim": "`BIDI_SHAPES` מוזרק מ-`skin.data.json` בזמן-פליטה — «מהדאטה, לא רשימה ביד»",
+    "evidence": "gen/render.mjs:108"
+   },
+   {
+    "claim": "נוסחת-שדה מחושבת בסנדבוקס מוגבל: שמות⇒ערכים מספריים, ואז **`if (/[^0-9.+\\-*/()\\s]/.test(expr)) return NaN`** לפני `Function` ⇒ רק חשבון",
+    "evidence": "gen/render.mjs:96-101"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו כותב קוד-לוגיקה משלו**: כל חישוב באפליקציה הוא אטום מהמדף שעבר את הדוגמאות. צורך שלא הוכח ⇒ מוצג «אין אטום מוכח», לא קוד-ידני",
+    "evidence": "gen/render.mjs:37 (‏callOf⇒null) · gen/build.mjs:50 (‏«באפליקציה מוצג «אין אטום מוכח», לא קוד-ידני»)"
+   },
+   {
+    "claim": "פולט HTML, **לא Flutter** — אין שום קשר לאטומי-התצוגה (924) של המחצב. מסלול-התצוגה הוא `flutter.mjs` נפרד שקורא ל-`app-ds.mjs`",
+    "evidence": "gen/render.mjs:65-90 (‏doctype/style/script) · gen/flutter.mjs:11,26"
+   },
+   {
+    "claim": "נשען על `localStorage` בלבד — אין שרת, אין סנכרון, אין מצבות-מחיקה (מה ש-G51/G57 בנו לבלגן). נתונים חיים בדפדפן אחד",
+    "evidence": "gen/render.mjs:93-95"
+   },
+   {
+    "claim": "`calc` מחליף שמות-שדות במחרוזת ממוינת לפי אורך — שם-שדה שהוא תת-מחרוזת של אחר עלול להיחתך אם הסדר לא מספיק (מוגן חלקית בלבד ע\"י המיון)",
+    "evidence": "gen/render.mjs:98-99"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/engine.mjs:4",
+    "how": "`import { renderApp }` ⇒ שורה 42"
+   },
+   {
+    "who": "gen/live.mjs:3 · gen/pass.mjs:13",
+    "how": "`import { esc }`"
+   },
+   {
+    "who": "gen/studio.mjs:20 · gen/wizard.mjs:17",
+    "how": "נארז לדפדפן"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/render-module.mjs` / `render-ds.mjs` — שכבת-ההרכבה של המחולל המחובר (פולטת Dart)",
+   "gives": "היכולת שאין שם: **«תכונה נפלטת רק אם האטום שלה הוכח»** כעיקרון-פליטה גורף (‏`callOf(x) ? … : ''` ב-6 מקומות). זה §20ג («שקע בלי-ערך-אמת ⇒ פסילה») ממומש ברמת-הממשק, לא רק ברמת-האטום. ‏G21 (הכרעה-26) עשה את החצי השני — אטום שמציג ערך חייב שקע — אבל לא את הצד הזה: ממשק שלא נפלט כשאין ממה"
+  },
+  "s22": {
+   "score": 3,
+   "why": "מרכיב אפליקציה **רצה** מאטומים מוכחים בלבד, ומסרב לפלוט ממשק בלי אטום. זו רצפת-הקבלה של §22 בקטן. הגבול: HTML+localStorage, לא Flutter+ענן"
+  },
+  "evidence": [
+   "ran: node gen/build.mjs gen/specs/gemach.txt ⇒ `gen/out/gemach/app.html` נוצר, וה-diff מול הקומיט **ריק** (‏git status לא סימן אותו) ⇒ הפליטה דטרמיניסטית",
+   "read: gen/render.mjs:10-17,19-30,35-45,93-109"
+  ]
+ },
+ {
+  "file": "gen/sentence.mjs",
+  "lang": "mjs",
+  "lines": 189,
+  "does": [
+   {
+    "claim": "משפט-בעברית-חופשית ⇒ ספק, **כמנוע עיוור**: כל מילה עברית מגיעה מ-`LANG` (דאטה). המנוע מכיר רק מבנה — פיצול-משפטים · ראש/זנב לפי סמן-שדות · **רבים=ישות · יחיד=שדה**",
+    "evidence": "gen/sentence.mjs:1-3,12-24,160-176"
+   },
+   {
+    "claim": "מחזיר `notes` — «ההערות אומרות לבעלים בדיוק מה הונח, כדי שיתקן». כל הנחה מיוצרת מפורשות (שדות חסרים · ישות לא-מזוהה · מעבר/איסור/תיקון לפני-ישות)",
+    "evidence": "gen/sentence.mjs:4,66,81,90,95,98,100,112,117,170,179"
+   },
+   {
+    "claim": "שבעה כללי-פסוקית מעבר לישויות: מעבר-מותנה (`אפשר לעבור ל-X רק אם Y`) · איסור (שתי צורות) · מדיניות-תיקון · `הרגע של X:` · `X במסך של Y` · תפקיד (`רק X רואה…`) · `שלבים:`",
+    "evidence": "gen/sentence.mjs:80-120"
+   },
+   {
+    "claim": "ממסך פסיקים בתוך סוגריים לפני הפיצול ומחזיר אחריו (`\\u2063`) ⇒ `מצב(חדש, משומש)` אינו נשבר לשני שדות",
+    "evidence": "gen/sentence.mjs:9-10,69"
+   },
+   {
+    "claim": "`לכל X יש …` = הרחבה, לא שכפול: ישות קיימת מקבלת רק שדות חדשים לפי מפתח-שם מנורמל",
+    "evidence": "gen/sentence.mjs:61-63"
+   },
+   {
+    "claim": "גוזר לוח-בקרה אוטומטית מצורת-השדות: מספר/נוסחה ⇒ `סכום(…)` · ערך-מנוי ⇒ `מונה(…)`",
+    "evidence": "gen/sentence.mjs:180-185"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**באג-ליטרל בשורה 108**: תבנית-הפיצול של השלבים נכתבה במחרוזת-רגקס רגילה עם `${CONJ.join('|')}` ו-`${HE}` — שאינם מורחבים (זה `new RegExp` על מחרוזת בגרשיים-בודדים בתוך `split(/…/)`), כלומר הפיצול הוא על פסיק בלבד; ה«או» של מילות-החיבור לא עובד שם",
+    "evidence": "gen/sentence.mjs:108 — `.split(/[,،]|\\s+(?:${CONJ.join('|')})(?=[${HE}])/)` בתוך רגקס-ליטרל, שבו `${…}` אינו אינטרפולציה"
+   },
+   {
+    "claim": "מודה בעצמו שהוא מנחש, ולכן מחזיר `notes`: «לא הבנתי אם זו ישות או שדה (אין צורת-רבים) — התעלמתי»",
+    "evidence": "gen/sentence.mjs:170"
+   },
+   {
+    "claim": "אין `notes` על שדה שקיבל צורה שגויה — רק על ישות שנשמטה. שדה ש-`hint` סיווג כ-`[תאריך]` בטעות עובר בשקט",
+    "evidence": "gen/sentence.mjs:49-53 (אין push ל-notes בכל ענפי-הצורה)"
+   },
+   {
+    "claim": "מילון-ה-`extra` שב-`gen/lang.mjs:15` כולל 100+ מילים עבריות קשיחות (`countWords` · `numWords` · `singular` · `forbidVerbs`) — «אפס מילה-עברית במנוע» מתקיים ב-sentence.mjs אך **לא** ב-lang.mjs שמזין אותו",
+    "evidence": "gen/sentence.mjs:1 (ההצהרה) מול gen/lang.mjs:15 (הרשימה)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/engine.mjs:6",
+    "how": "`import { sentenceToSpec }` — נקרא כשהטקסט אינו מתחיל ב-«אפליקציה:»"
+   },
+   {
+    "who": "gen/mosad-build.mjs:12",
+    "how": "בונה 12 אגפים מ-`mosad.sentences.txt`"
+   },
+   {
+    "who": "gen/studio.mjs:20 · gen/wizard.mjs:17",
+    "how": "נארז לדפדפן"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/nl-spec.mjs` (‏`nlToSpec`) — שכבת-המשפט של המחולל המחובר, ששער `machtzev/mahulal/generator-ratchet.mjs:11` מגן עליה",
+   "gives": "היכולת שאין שם: **`notes` — «הבנתי כך, וזה מה שהנחתי»**. ‏G33 בנה «הבנתי כך?» בבלגן כטופס-אישור, אבל הוא נגזר ממזהה-רגע (TF-IDF), לא מרשימת-הנחות מפורשת של המנתח. הזרמת `notes` ל-`nl-spec` תיתן לבעלים את אותה שקיפות על **כל** ספק, לא רק על רגע-בלגן"
+  },
+  "s22": {
+   "score": 2,
+   "why": "בדיוק הצעד הראשון של §22 (משפט-חופשי ⇒ מבנה), עם עקרון-עיצוב נכון (מנוע עיוור + הנחות מוצהרות). אבל זו שכבת-משפט **שנייה** מול nl-spec, ויש בה באג-ליטרל מדיד"
+  },
+  "evidence": [
+   "ran: node gen/build.mjs gen/specs/gemach.txt (המסלול עבר) · gen/specs/gemach-sentence.txt קיים כמסלול-המשפט",
+   "read: gen/sentence.mjs:1-24,49-53,61-63,69,80-120,160-185",
+   "read: gen/sentence.mjs:108 (הליטרל שאינו מורחב)",
+   "read: gen/lang.mjs:15 (המילון הקשיח שמזין אותו)"
+  ]
+ },
+ {
+  "file": "gen/spec.mjs",
+  "lang": "mjs",
+  "lines": 80,
+  "does": [
+   {
+    "claim": "קורא-ספק: צורת-השדה נקבעת **רק מסמן מפורש** — `שם*` חובה · `סכום(0..N)` מספר-בטווח · `סטטוס{א|ב|ג}` ערך-מנוי · `[תאריך]`·`[טלפון]`·`[מזהה]`·`[כמות]` · `שדה=נוסחה`; אחרת טקסט. אפס ניחוש-לפי-שם",
+    "evidence": "gen/spec.mjs:1-26"
+   },
+   {
+    "claim": "מפריד קטעי-`|` **רק מחוץ לסוגריים-מסולסלים** (בתוך `{א|ב}` זה מפריד-ערכים) — מונה-עומק ידני, לא split",
+    "evidence": "gen/spec.mjs:39-41"
+   },
+   {
+    "claim": "שש סעיפי-ישות: `שלבים` · `מעברים` · `אסור` · `הרגע` · `מסך` · `תיקון` (עם `עד N ימים`)",
+    "evidence": "gen/spec.mjs:44-55"
+   },
+   {
+    "claim": "**גוזר קשר בין ישויות מבנית**: שדה-טקסט ששמו זהה לשם של ישות אחרת ⇒ `f.ref` — «מבני, לא מילון»",
+    "evidence": "gen/spec.mjs:69-73"
+   },
+   {
+    "claim": "ארבע בדיקות-שלמות שזורקות שגיאה **בעברית עם הסבר מה מותר**: סמן-צורה לא-מוכר · קטע-`|` לא-מוכר · מעבר לשלב שאינו קיים · תפקיד/לוח-בקרה שמפנים לישות או שדה שאינם בספק",
+    "evidence": "gen/spec.mjs:24,55,67-68,74-78"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מנחש כלום: שורה שאינה תואמת לאף כלל ⇒ `throw` («שורת-ספק לא מובנת») — לא דילוג בשקט",
+    "evidence": "gen/spec.mjs:64"
+   },
+   {
+    "claim": "אינו קורא קבצים ואינו נוגע בדיסק — טקסט נכנס, אובייקט יוצא. אפס-תלות",
+    "evidence": "read: gen/spec.mjs:1-80 (אין import כלל)"
+   },
+   {
+    "claim": "אינו מכיר `שרת: ענן`, `עיצוב: נייר`, `שכבה:`, `חלקיק`, `תוכן`, `דוח`, `[ייצוא]` — כל הדקדוק ש-G21→G29 הוסיפו ל-`app-ds.mjs`. זו שפת-ספק **אחרת**",
+    "evidence": "gen/spec.mjs:34-64 (חמישה כללים בלבד) מול CLAUDE.md §G23-G29"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/engine.mjs:2",
+    "how": "`import { parseSpec }`"
+   },
+   {
+    "who": "gen/mosad-build.mjs:13",
+    "how": "`import { parseSpec }`"
+   },
+   {
+    "who": "gen/studio.mjs:20 · gen/wizard.mjs:17",
+    "how": "נארז לדפדפן: `strip(read('spec.mjs'))` — הקוד מודבק בלי import/export"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/app-ds.mjs` — דקדוק-האפיון של המחולל המחובר",
+   "gives": "שני דברים כאן חסרים שם: (א) **ארבע בדיקות-השלמות עם הודעה-בעברית שאומרת מה כן מותר** — זו חוויית-הבעלים של «תקן את הספק» · (ב) **גזירת-`ref` מבנית** (שדה ששמו = שם ישות ⇒ הפניה). שניהם ניתנים להעתקה בלי לגעת בשאר"
+  },
+  "s22": {
+   "score": 2,
+   "why": "קורא-ספק מדויק, אפס-ניחוש, אפס-תלות, ועם הודעות-שגיאה שמלמדות. אבל זו שפה **שנייה** לצד `app-ds` — ולכן ערכו הוא רכיבים-להעתקה, לא המנוע כולו"
+  },
+  "evidence": [
+   "ran: node gen/build.mjs gen/specs/gemach.txt ⇒ הצינור עבר את parseSpec וסיים «9 אטומים מוכחים · 0 צרכים ללא הוכחה»",
+   "read: gen/spec.mjs:9-26,39-41,44-55,64,67-78"
+  ]
+ },
+ {
   "file": "machtzev/audit/diff.mjs",
   "lang": "mjs",
   "lines": 144,
