@@ -1,6 +1,6 @@
 # 2א · תשתית — hooks · workflows · box-drafts · server-gen · yeshiva
 
-**30/34 מנועים ממופו** · מיפוי בלבד — לא חובר, לא נבנה, לא תוקן, לא שונה קוד.
+**34/34 מנועים ממופו** · מיפוי בלבד — לא חובר, לא נבנה, לא תוקן, לא שונה קוד.
 
 הרשימה נגזרה מהפקודה, לא מפרוזה:
 ```bash
@@ -14,6 +14,7 @@ node machtzev/census/engine-index.mjs --connected --list | grep '○' | sed 's/.
 | `.github/workflows/gen.yml` | 3 | machtzev/generator/regen.mjs — כשלב-פרסום; או הפוך: .github/workflows/gen.yml:53-62 להחליף node gen/build.mjs ב-node machtzev/generator/regen.mjs. זו  | זהו הצינור היחיד בריפו שמממש «משפט בעברית ⇒ אתר» מקצה-לקצה בלי אדם באמצע, כולל טופס workflow_dispatch עם שדה «המשפט בעברית» |
 | `.githooks/pre-commit` | 2 | machtzev/generator/regen.mjs — שלב-אימות אחרי הפליטה. היום הקשר הפוך ולא-מוצהר: machtzev/generator/genesis-gen.mjs:638 כותב ל-new/atoms, ו-.githooks/p | טבעת-commit מלאה: הגנה-עצמית ⇒ staging ⇒ מנועי-hook ⇒ ראצ׳ט ⇒ משטרה ⇒ ledger |
 | `box-drafts/buildsmart-seed/start-barcode-scanner@app_src_lib_barcode_ts.mjs` | 2 | machtzev/generator/ — כאטום-הצבה בדגם ds_voice (חוק-6): ds_barcode.dart + _web + _stub, ואז שקע בספק. **זהו הפער היחיד-האמיתי מבין 19 הטיוטות שלי** | מחזיק את לולאת-סריקת-הברקוד המלאה: יצירת גלאי עם 5 פורמטים (ean_13 · ean_8 · code_128 · code_39 · qr_code), פתיחת מצלמה, לולאת detect על requestAnimationFrame, וסגירת ה-stream |
+| `yeshiva/gate.mjs` | 2 | machtzev/generator/regen.mjs — לא השער עצמו (שער נשאר משטרה), אלא **טענת-הקבלה שבתוכו**: yeshiva/gate.mjs:110-115 («אפס שם-לא-עברי בספק שיצא מהפסק») ש | אוכף **טריות**: מצלם את yeshiva/psak ו-yeshiva/out, מריץ read.mjs --all ו-apply.mjs --all מחדש, ומשווה — פסק ישן בדיסק הוא ירוק-חלול (L27) |
 | `.claude/hooks/pre-tool.sh` | 1 | machtzev/census/engine-index.mjs — מקור ל«מה מחולל». היום רשימת-GENERATED ב-.claude/hooks/pre-tool.sh:28 היא מחרוזת-יד (TRUTH.md\|WIRING.md\|atom-inde | tripwire על Bash/Edit/Write/MultiEdit/NotebookEdit — כל כלי אחר יוצא 0 מיד |
 | `.claude/hooks/session-start.sh` | 1 | machtzev/generator/regen.mjs — שלב-כשירות בפתיחה. :18-31 (Dart) ו-:38-41 (typescript vendored) הם תנאי-הריצה של המחולל עצמו: בלי Dart אין logic-proof  | מפעיל את הפרוטוקול: מכוון את שכבת-ההפעלה ל-.githooks · chmod +x · merge-driver regen — אידמפוטנטי ואפס-רשת |
 | `.githooks/pre-push` | 1 | ∅ לחיבור-למחולל. הנקודה הכנה היחידה הפוכה: .githooks/pre-push:47-48 (פתרון BUILDSMART) מחזיק את הידע ששער-שרץ-בלי-buildsmart מדווח ירוק-שקר — ידע ששיי | סקופ לפי יעד-הדחיפה (remote_ref) ולא לפי הענף המקומי, וקורא את שורות-ה-stdin שגit מזרים |
@@ -41,11 +42,14 @@ node machtzev/census/engine-index.mjs --connected --list | grep '○' | sed 's/.
 | `box-drafts/io-wiring/validate-tenant@src_lib_telephony_engine_ts.mjs` | 0 | ∅ | ייצוא-מחדש בשורה אחת: validateTenant = rawValidateTenant |
 | `box-drafts/io-wiring/watch-all-support-threads@src_lib_cloudConfig_ts.mjs` | 0 | ∅ | האזנה-חיה לאוסף-שיחות-התמיכה, ממפה כל מסמך ל-{uid, ...data} ובולע שגיאות ב-noop |
 | `box-drafts/io-wiring/watch-auth@src_lib_cloud_ts.mjs` | 0 | ∅ | עוטף onAuthStateChanged ומצמצם את המשתמש ל-{uid, email} או null |
+| `server-gen/balagan/functions/index.js` | 0 | ∅ — וזו התשובה המהותית, לא היעדר-תשובה. הקובץ הוא **פלט** של מנוע מחובר (server.mjs ⇒ regen.mjs:23), ולכן «לחבר אותו למחולל» היה מעגלי | שלוש פונקציות-ענן: oauthCallback (code ⇒ refresh_token) · oauthToken (מחזיר access_token קצר בלבד) · pushDue (תזמון כל 15 דקות, שולח FCM למועדים שהגיע זמנם) |
+| `server-gen/balagan/rules.test.mjs` | 0 | ∅ לחיבור (תוצר, כמו שכנו). הנקודה הכנה היחידה היא **המנגנון**, לא הקובץ: machtzev/generator/server.mjs:239 (תבנית RULES_TEST) — הדפוס «כלל-גישה מוכח מ | מוכיח את כללי-הגישה מול **אמולטור-Firestore אמיתי** (127.0.0.1:8181) ולא מצהיר עליהם — 15 טענות assertSucceeds/assertFails |
+| `yeshiva/detach.mjs` | 0 | ∅ — ובמכוון. זהו מנוע **אנטי-חיבור**: תפקידו להוכיח שהתיקייה נתיקה, ולכן חיבורו לצינור יסתור את עצמו (הוא סופר רישום ב-regen.mjs ככשל, :31-33) | מוכיח **נתיקות**: שאף קובץ מחוץ ל-yeshiva/ אינו מזכיר את נתיביה, ושאף קובץ בתוכה אינו מייבא מבחוץ (לא יחסית ולא חבילה) |
 
 ## פיזור-הציונים
 - **s22=3** — 1 מנועים
-- **s22=2** — 2 מנועים
+- **s22=2** — 3 מנועים
 - **s22=1** — 7 מנועים
-- **s22=0** — 20 מנועים
+- **s22=0** — 23 מנועים
 
-אחוז-הראיה: 30/30 מנועים עם סעיף (6) מלא. פריט בלי ראיה אינו פריט.
+אחוז-הראיה: 34/34 מנועים עם סעיף (6) מלא. פריט בלי ראיה אינו פריט.
