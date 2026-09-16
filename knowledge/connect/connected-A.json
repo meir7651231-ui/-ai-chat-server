@@ -1107,6 +1107,118 @@
   ]
  },
  {
+  "file": "machtzev/generator/peruk.mjs",
+  "lang": "mjs",
+  "lines": 243,
+  "capabilities": [
+   {
+    "cap": "**קורא מסמך-פירוק של הבעלים ומייצר ממנו ספק שלם, בלי יד** — «מאות מסמכים = ריצה אחת»",
+    "evidence": "machtzev/generator/peruk.mjs:2,6,106-213,217-243"
+   },
+   {
+    "cap": "מפרק את המסמך **מבנית** לשלד: כותרת ממוספרת · פתיח (רגע · קטגוריה · «לא X») · סעיפי ## · תת-סעיפי ###",
+    "evidence": "machtzev/generator/peruk.mjs:22-42 (parsePeruk)"
+   },
+   {
+    "cap": "מזהה סוג-סעיף לפי מילות-מפתח מקובץ-דאטה (peruk-lang.data.json), לא לפי סדר או לפי קוד",
+    "evidence": "machtzev/generator/peruk.mjs:4,14,43-47 (kindOf) · :45"
+   },
+   {
+    "cap": "**גוזר שדות-קליטה מ«מה שולחים»**: חובה/רשות לפי תת-כותרת · פריט-עם-פסיקים ⇒ כמה שדות · «X או Y» ⇒ enum · «A וB-מוקלד» ⇒ שני שדות · תת-כותרת (≤5 מילים עם ':') אינה שדה",
+    "evidence": "machtzev/generator/peruk.mjs:52-77"
+   },
+   {
+    "cap": "גוזר חלקי-פלט מ«מה חוזר»: פריט ממוספר = חלק · שורות-המשך = פירוט · תת-רשימה קצרה = אפשרויות-החלטה",
+    "evidence": "machtzev/generator/peruk.mjs:79-92"
+   },
+   {
+    "cap": "**מזהה החלטה** — חלק-פלט עם 2–N אפשרויות קצרות ⇒ שדה-enum על ישות-השורש",
+    "evidence": "machtzev/generator/peruk.mjs:155-156,160"
+   },
+   {
+    "cap": "מזהה סולם-חומרה (אדום/צהוב/ירוק) לעומת סיווג רגיל, ולפי זה פולט ישות-ממצא שנייה עם שדה-חומרה ומדיניות-מחיקה במפל",
+    "evidence": "machtzev/generator/peruk.mjs:117-125,167"
+   },
+   {
+    "cap": "**גוזר זוגות ישן/חדש** מהבלוקים ⇒ שני שדות-מספר + חלקיק-דיף, עם מכפיל-לשנה כשהבסיס חודשי; המילה-הארוכה קודם כדי ש-«חדש» לא יתפוס לפני «חדשות»",
+    "evidence": "machtzev/generator/peruk.mjs:149-154,186"
+   },
+   {
+    "cap": "בוחר **צורת-פלט** לכל חלק לפי מילות-הכותרת: דיף · מספר · הודעה · לוח — ואחרת נופל לתוכן",
+    "evidence": "machtzev/generator/peruk.mjs:180,185-203"
+   },
+   {
+    "cap": "**משמיט משפט-עם-חור**: בתבנית-ההודעה, משפט שבו מציין-מקום בלי שדה-תואם נמחק כולו, כדי שלא תישאר שארית-תבנית («תשובה עד .»)",
+    "evidence": "machtzev/generator/peruk.mjs:189-190"
+   },
+   {
+    "cap": "מתאים פירוט לשדה דרך **גזירת-שורש** עברית קלה (הסרת אות-שימוש + סיומות ריבוי)",
+    "evidence": "machtzev/generator/peruk.mjs:178-179"
+   },
+   {
+    "cap": "מחלץ הסתייגות ואיסורים **מבנית** — «אסור…:» פותח רשימה · «חובה…:» פותח שורה-מצוטטת — וב-regex שעוקף את הבעיה ש-\\b לא עובד על עברית",
+    "evidence": "machtzev/generator/peruk.mjs:126-140"
+   },
+   {
+    "cap": "**מדווח ברירת-מחדל במקום להמציא**: אין הסתייגות כתובה ⇒ הסתייגות-המוצר (הכרעה-29 §11) **עם ⚠ בפלט**, ומסומן 'default' בצומת",
+    "evidence": "machtzev/generator/peruk.mjs:142-143,211,229"
+   },
+   {
+    "cap": "מחלץ מחירים (מספר + ₪) ושרשרת-צעדים, ובונה צומת-ידע (peruk-index.json): מזהה · רגע · קטגוריה · מחירים · שרשרת · דגלים",
+    "evidence": "machtzev/generator/peruk.mjs:147-148,211,239"
+   },
+   {
+    "cap": "פולט ספק מלא: אפליקציה · עיצוב-נייר · שרשרת · שאלות-מסך · ישות-שורש עם שלבים · ישות-ממצא · לוח · תפקיד · חלקיקי-טבלה/פעולה/ריק/תוכן · חלקי-דוח · ייצוא · אטומי-תוכן",
+    "evidence": "machtzev/generator/peruk.mjs:157-210"
+   },
+   {
+    "cap": "מנקה סימני-דקדוק מטקסט-תוכן (| [ ] =) אך **שומר** {…} כמציין-מקום של הודעה (G29)",
+    "evidence": "machtzev/generator/peruk.mjs:103"
+   },
+   {
+    "cap": "שער: לכל מסמך — ≥1 שדה-קליטה · ≥1 חלק-פלט · הסתייגות · רשימת-אסור; **והספק בדיסק ≡ הספק המחולל** וגם peruk-index ≡ המחולל (טריות)",
+    "evidence": "machtzev/generator/peruk.mjs:7,225-241"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מבין את המסמך — הוא קורא **שלד** (כותרות · רשימות · מפרידים · מילות-מפתח מדאטה); מסמך שלא בנוי בשלד הזה ייצא ריק ויפול בשער",
+    "evidence": "machtzev/generator/peruk.mjs:3-4,226-230"
+   },
+   {
+    "claim": "אינו מחולל Dart — הוא פולט **ספק טקסט**; האפליקציה נבנית ע\"י app-ds שרץ אחריו",
+    "evidence": "machtzev/generator/peruk.mjs:6 · machtzev/generator/regen.mjs:20-21"
+   },
+   {
+    "claim": "אינו מחזיק מילה עברית משלו — כל מילות-הדקדוק משני קובצי-דאטה (peruk-lang.data.json · spec-lang.data.json)",
+    "evidence": "machtzev/generator/peruk.mjs:4,14-15"
+   },
+   {
+    "claim": "מחיר נקלט רק כשיש '₪' בשורה — פריט-מחיר בלי הסימן מדולג",
+    "evidence": "machtzev/generator/peruk.mjs:148"
+   },
+   {
+    "claim": "אינו מוסיף «לוח» פעמיים — אם כבר יש חלק-פלט מסוג dates, לא נוסף חלקיק-תאריכים כללי",
+    "evidence": "machtzev/generator/peruk.mjs:205"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:20 (`peruk.mjs --all`, «לפני app-ds») · שער «peruk» מהמשטרה",
+   "input": "machtzev/generator/peruks/*.md (28 מסמכים) + peruk-lang.data.json + spec-lang.data.json",
+   "output": "machtzev/generator/specs-ds/<ns>.txt (ספק לכל פירוק) + machtzev/generator/peruk-index.json",
+   "next": "regen.mjs:21 (dsSpecs) קורא את התיקייה ומריץ app-ds על כל ספק — כולל אלה שנוצרו כאן זה עתה"
+  },
+  "quality": {
+   "signal": "שער «peruk» ב-gates.tsv, עם ארבע דרישות-תוכן פר-מסמך **ובדיקת-טריות דו-כיוונית** (הספק בדיסק ≡ המחולל, וגם האינדקס). כלומר אי-אפשר לערוך ספק ביד בלי שהשער יאדים.",
+   "measured": "הורץ: `node machtzev/generator/peruk.mjs --all --gate` ⇒ exit 0 · «28 פירוקים ⇒ 28 ספקים» · כל מסמך עם ✓ ופירוט (למשל peruk-28.md ⇒ 5 שדות · 5 חלקים · 30 תוכן · סיווג 4). git status נשאר ריק — `--gate` משווה ולא כותב."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/peruk.mjs (243 שורות, נקרא במלואו)",
+   "node machtzev/generator/peruk.mjs --all --gate ⇒ exit 0 · 28/28",
+   "ls machtzev/generator/peruks/ | wc -l ⇒ 28"
+  ]
+ },
+ {
   "file": "machtzev/generator/quarry-golden.mjs",
   "lang": "mjs",
   "lines": 138,
@@ -1243,6 +1355,104 @@
   ]
  },
  {
+  "file": "machtzev/generator/server.mjs",
+  "lang": "mjs",
+  "lines": 302,
+  "capabilities": [
+   {
+    "cap": "**הופך «שרת» ליכולת-של-המחולל**: ספק שמצהיר `שרת: ענן` ⇒ נפלטת חבילת-שרת מלאה מאותן ישויות שמהן נגזרו המסכים; ספק בלי ההצהרה ⇒ אין תיקייה, ביט-זהה",
+    "evidence": "machtzev/generator/server.mjs:2-5,26-32 (serverOf) · :206-211"
+   },
+   {
+    "cap": "גוזר את רשימת-הישויות משמות-האוספים של האפליקציות המוכרזות, כך שישות שלא הוכרזה נדחית בכללים",
+    "evidence": "machtzev/generator/server.mjs:34-45 (entitiesOf) · :62"
+   },
+   {
+    "cap": "**גוזר את מפתחות-המסמך מחתימת הקוד** — קורא את `String cloudJson() => jsonEncode({…})` מ-ds_store.dart וזורק אם לא נמצא; כך הכללים לא יכולים לסטות מהקוד",
+    "evidence": "machtzev/generator/server.mjs:47-53 (stateKeys)"
+   },
+   {
+    "cap": "פולט חוקי-Firestore שבהם אדם רואה וכותב **רק** את תת-העץ שלו, עם `match /{document=**} allow read, write: if false` כסוגר",
+    "evidence": "machtzev/generator/server.mjs:55-90"
+   },
+   {
+    "cap": "**חוסם את צרור-המפתחות בכללים עצמם** — stateOk מתיר רק את מפתחות-cloudJson, כך ש-settings נדחה גם מלקוח פרוץ",
+    "evidence": "machtzev/generator/server.mjs:47-49,64-67"
+   },
+   {
+    "cap": "**חוסם את טוקן-הרענון גם לבעליו** — `match /users/{uid}/secret/{id} allow read, write: if false`; רק הפונקציות (admin) נוגעות",
+    "evidence": "machtzev/generator/server.mjs:80-83"
+   },
+   {
+    "cap": "פולט **בדיקת-אמולטור** אמיתית (rules.test.mjs) עם 15 טענות קונקרטיות — בעלים כותב/קורא · אחר לא · אנונימי לא · ישות-לא-מוכרת נדחית · שדה זר נדחה · settings נדחה · נתיב-חוץ נדחה · טוקן-מכשיר · מועד · טוקן-רענון חסום — ו-exit 1 אם לא 15",
+    "evidence": "machtzev/generator/server.mjs:239-275 (RULES_TEST)"
+   },
+   {
+    "cap": "פולט פונקציית-שרת אחת ו**טיפשה בכוונה**: היא לא מחשבת מתי להזכיר — הלקוח כתב מועדים, היא שולחת את מה שהגיע זמנו ומסמנת; מוחקת טוקן שפג",
+    "evidence": "machtzev/generator/server.mjs:134-150 (FUNCTIONS_INDEX + ההערות בשורות 135-137,147-148)"
+   },
+   {
+    "cap": "פולט זרימת-OAuth שבה **טוקן-הרענון לעולם לא מגיע לדפדפן**: code⇒refresh בפונקציה עם סוד-מהסביבה, שמירה בנתיב החסום, והלקוח מקבל רק access_token קצר; ה-state הוא ה-ID-token כדי שאי-אפשר לתלות טוקן באדם אחר",
+    "evidence": "machtzev/generator/server.mjs:149-183 (הערות 149-156 · CID/CSEC 156-157 · callback 165-166 · token 180)"
+   },
+   {
+    "cap": "**אפס סודות בקוד** (חוק-6) — המזהה והסוד מגיעים מ-process.env, וה-runbook (ACTIVATE.md) אומר לבעלים מה להזין ואיפה",
+    "evidence": "machtzev/generator/server.mjs:14,155-157,92,244"
+   },
+   {
+    "cap": "פולט גם package.json · firebase.json · functions/package.json · .gitignore (תלויות-בדיקה אינן תוצר-מנוע)",
+    "evidence": "machtzev/generator/server.mjs:188-205 (emitServer)"
+   },
+   {
+    "cap": "מוציא את החבילה **מחוץ ל-new/** במכוון — «new/ הוא מדף-האטומים, וחבילת-שרת אינה אטום» (וגם: תלויות-בדיקה לא נסרקות כחוטים)",
+    "evidence": "machtzev/generator/server.mjs:22"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "**אינו משכפל את מנוע-התזכורות לשרת** — «הלוגיקה לא משוכפלת; השרת טיפש בכוונה. כפילות-מנוע היא חוב, לא ארכיטקטורה»",
+    "evidence": "machtzev/generator/server.mjs:11-12,134-137"
+   },
+   {
+    "claim": "הענן הוא **העתק ולא מקור** — users/{uid}/state/app הוא מגירת-המכשיר; כיבוי הקונפיג ⇒ מקומי-מלא",
+    "evidence": "machtzev/generator/server.mjs:6-8"
+   },
+   {
+    "claim": "אינו פורס ואינו מריץ — הוא פולט קבצים; הפריסה היא צעד-בעלים ב-ACTIVATE.md",
+    "evidence": "machtzev/generator/server.mjs:188-205 (כתיבה בלבד) · :92 (ה-runbook)"
+   },
+   {
+    "claim": "אינו נגזר מהספק פר-אפליקציה ב-CLI — ה-CLI בודק הצהרה של **שכבת-הבסיס** (tasks או calendar) ופולט חבילה אחת בשם 'balagan'",
+    "evidence": "machtzev/generator/server.mjs:207-211; אומת: `grep -n שרת machtzev/generator/specs-ds/*.txt` ⇒ ההצהרה נמצאת **רק** ב-tasks.txt:3"
+   },
+   {
+    "claim": "אינו כותב לקוח — מסך-החיבור הוא cloud-screen.mjs והחוט הוא ds_cloud.dart",
+    "evidence": "machtzev/generator/server.mjs:2-5 מול machtzev/generator/cloud-screen.mjs:2"
+   },
+   {
+    "claim": "אינו מכבד GEN_OUT — הפלט קבוע ב-<repo>/server-gen",
+    "evidence": "machtzev/generator/server.mjs:22 (OUT = path.join(ROOT, 'server-gen'))"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:23 (השלב האחרון בצנרת-הפליטה) · שער «server» מהמשטרה",
+   "input": "machtzev/generator/specs-ds/*.txt (ההצהרה) · machtzev/generator/apps/<ns>.json (ישויות) · machtzev/generator/balagan-index.json (רשימת-המודולים) · new/dart-ui-bs/ds/ds_store.dart (חתימת cloudJson) · spec-lang.data.json",
+   "output": "server-gen/<app>/{firestore.rules, firebase.json, package.json, rules.test.mjs, ACTIVATE.md, .gitignore, functions/{index.js, package.json}}",
+   "next": "צעדי-בעלים: npm i ⇒ אמולטור ⇒ `firebase deploy --only firestore:rules` ⇒ הדבקת-קונפיג במסך «חיבורים» (שנגזר ב-cloud-screen)"
+  },
+  "quality": {
+   "signal": "שער «server» ב-gates.tsv: «הצהרת `שרת:` ⇒ חבילה נפלטת ומכסה את כל ישויות-האפליקציה; אין הצהרה ⇒ אין פלט (ביט-זהות); מפתחות-המסמך ≡ `cloudJson` של החנות; `settings` אסור בכללים; מצבות-מחיקה חלק מהמסמך; אפס ליטרל-סוד בפלט». האיכות החזקה: הכללים **מוכחים מול אמולטור** (15 טענות) ולא מוצהרים, והמפתחות **נגזרים מהקוד**.",
+   "measured": "**לא הרצתי** — server.mjs כותב ל-server-gen/ שבתוך הריפו ואינו מכבד GEN_OUT (אין לו --gate משלו; השער רץ מהמשטרה). מדדתי את התוצר המחויב במקום: `ls server-gen/balagan/` ⇒ 6 פריטים + functions/; ספירת-הישויות ב-known() של firestore.rules ⇒ **36**; `node -e` על balagan-index.json ⇒ **30 מודולים**; ההצהרה `שרת: ענן` קיימת רק ב-specs-ds/tasks.txt:3. את 15 טענות-האמולטור לא הרצתי (דורש אמולטור-Firestore)."
+  },
+  "evidence": [
+   "sed/grep על machtzev/generator/server.mjs (302 שורות — נקרא במלואו בשלושה חלקים)",
+   "ls server-gen/balagan/ ⇒ ACTIVATE.md · firebase.json · firestore.rules · functions · package.json · rules.test.mjs",
+   "grep -o 'function known() { return [.*]' server-gen/balagan/firestore.rules | tr ',' '\\n' | wc -l ⇒ 36",
+   "grep -n שרת machtzev/generator/specs-ds/tasks.txt ⇒ :3 שרת: ענן (calendar.txt — אין)",
+   "node -e על machtzev/generator/balagan-index.json ⇒ 30 modules"
+  ]
+ },
+ {
   "file": "machtzev/generator/tighten-hook.mjs",
   "lang": "mjs",
   "lines": 47,
@@ -1308,6 +1518,99 @@
    "cat -n machtzev/generator/tighten-hook.mjs (47 שורות, נקרא במלואו)",
    "grep -rn tighten-hook machtzev ⇒ tighten-types.mjs:3,14,56 · tools/probe-pool.mjs:1",
    "grep -E '^tighten' machtzev/gates.tsv ⇒ שורת-השער"
+  ]
+ },
+ {
+  "file": "machtzev/generator/web-shell.mjs",
+  "lang": "mjs",
+  "lines": 211,
+  "capabilities": [
+   {
+    "cap": "**גוזר את זהות-האפליקציה מהקוד-המחולל עצמו** — שם מ-MaterialApp.title · צבע-מותג מ-DsPure.themes[..].a · רקע מ-DsPure.skins[..].canvas · סמל מהאימוג׳י הראשון בטקסט-ממשק; אפס-ליטרל פר-אפליקציה",
+    "evidence": "machtzev/generator/web-shell.mjs:6-7,19-49 (identity)"
+   },
+   {
+    "cap": "עוקב אחרי שרשרת-הייבוא (רמה אחת) כשנקודת-הכניסה היא main() דק, עד שנמצאת ה-MaterialApp עם title",
+    "evidence": "machtzev/generator/web-shell.mjs:20-25"
+   },
+   {
+    "cap": "פותר title שהוא קבוע — מחפש את `const String <id> = '…'` בכל קובצי-הדאטה המחוללים",
+    "evidence": "machtzev/generator/web-shell.mjs:27-31"
+   },
+   {
+    "cap": "נופל לאות-הראשונה של השם כשאין אימוג׳י — במכוון, כי עור-הנייר הוא אפס-אימוג׳י («וזה נכון, לא כשל»)",
+    "evidence": "machtzev/generator/web-shell.mjs:42-47; אומת בריצה: «בלגן» ⇒ הסמל «ב»"
+   },
+   {
+    "cap": "כותב קליפה מלאה: icon.svg מחולל (rect+emoji בצבע-המותג) · manifest.json (rtl · he · standalone · maskable) · index.html עם theme-color, apple-touch-icon ומסך-פתיחה שנעלם ב-flutter-first-frame",
+    "evidence": "machtzev/generator/web-shell.mjs:52-53,71-116"
+   },
+   {
+    "cap": "**רושם את ה-service worker** — flutter_bootstrap.js מחולל עם serviceWorkerSettings; הקובץ נוצר בכל בנייה אך מעולם לא נרשם ⇒ אפס-אופליין (G52)",
+    "evidence": "machtzev/generator/web-shell.mjs:4-5,171-181"
+   },
+   {
+    "cap": "פולט **מקלט-דחיפה** (firebase-messaging-sw.js) שקורא את הקונפיג מ-query של הרישום (כי הקונפיג מודבק בזמן-ריצה), עם תג פר-תיק נגד ערימת-התראות ופתיחת-חלון בלחיצה",
+    "evidence": "machtzev/generator/web-shell.mjs:117-150"
+   },
+   {
+    "cap": "**מאמת את ה-SW בזמן-פליטה בשתי בדיקות ב-vm**: (1) הקוד נפרס (new vm.Script) (2) בלי query הוא **לא מאתחל כלום** (דורמנטיות), ועם קונפיג הוא כן — זה נולד מבאג שבו רגקס איבד לוכסן-נמלט ואיש לא ראה שגיאה",
+    "evidence": "machtzev/generator/web-shell.mjs:151-169"
+   },
+   {
+    "cap": "מקבע גרסאות-CDN של ה-SW בכוונה — «CDN לא-מקובע משנה את המקלט מתחת לפריסה שלא נגעה בו»",
+    "evidence": "machtzev/generator/web-shell.mjs:121-123"
+   },
+   {
+    "cap": "**צילום והחזרה הפיכים** (חוק-7): הקליפה המקורית של «בנייה חכמה» נשמרת פעם-אחת ב-.dart_tool (מחוץ ל-git) ומוחזרת ב---restore, והצילום נמחק כדי שהבא יילקח ממצב נקי",
+    "evidence": "machtzev/generator/web-shell.mjs:55-69,183-185"
+   },
+   {
+    "cap": "**גוזם גופנים אחרי הבנייה לפי הפלט עצמו** — משפחה ששמה אינו מופיע ב-main.dart.js של אותה אפליקציה יוצאת; לא רשימה-ביד, עם שמירה על MaterialIcons ו-packages/",
+    "evidence": "machtzev/generator/web-shell.mjs:8,159-172 (prune, שורות 186-199 בקובץ)"
+   },
+   {
+    "cap": "בורח נכון מ-HTML בכל הזרקה (esc)",
+    "evidence": "machtzev/generator/web-shell.mjs:52"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו בונה — הוא רק מכין את הקליפה **לפני** ה-build ומנקה **אחריו**; הבנייה אצל ship",
+    "evidence": "machtzev/generator/web-shell.mjs:7-8 (השימוש המוצהר)"
+   },
+   {
+    "claim": "אינו מכיל קונפיג-Firebase ואינו סוד — ה-SW מקבל הכל ב-query בזמן-ריצה",
+    "evidence": "machtzev/generator/web-shell.mjs:117-126"
+   },
+   {
+    "claim": "אינו יודע לזהות אימוג׳י בהערות — הוא מסנן שורות-הערה לפני החיפוש",
+    "evidence": "machtzev/generator/web-shell.mjs:45"
+   },
+   {
+    "claim": "**אינו קורא מ-root.mjs** — APP וה-GEN מקודדים/מגיעים מ-BUILDSMART ומנתיב יחסי, ולכן GEN_OUT לא משפיע עליו",
+    "evidence": "machtzev/generator/web-shell.mjs:10-12"
+   },
+   {
+    "claim": "--restore בלי צילום אינו שגיאה — הוא מדווח «אין צילום להחזרה»",
+    "evidence": "machtzev/generator/web-shell.mjs:64,184"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/ship.mjs — `web-shell --entry <gen_x_main.dart>` לפני כל build, `--prune <buildDir>` אחריו, `--restore` בסוף המסלול",
+   "input": "new/dart-gen-bs/<entry>.dart (+ שרשרת-הייבוא) · new/dart-ui-bs/ds/ds_pure.dart · new/dart-data-bs/auto/*.dart · תיקיית buildsmart/app_flutter/web",
+   "output": "buildsmart/app_flutter/web/{index.html, manifest.json, icon.svg, flutter_bootstrap.js, firebase-messaging-sw.js} · ובגיזום: FontManifest.json מצומצם + מחיקת קובצי-גופן",
+   "next": "flutter build web ⇒ אתר; ואז --prune ואז --restore"
+  },
+  "quality": {
+   "signal": "**אימות-בזמן-פליטה** של ה-SW (נפרס + דורמנטי בלי קונפיג) — המנוע בודק את התוצר שלו לפני שהוא כותב אותו, ונופל ב-throw אם לא. בנוסף שער-המריצה ב-one/ship מודד תקרת-מסך-ראשון וratchet של מארחים-חיצוניים. אין שער בשם web-shell ב-gates.tsv.",
+   "measured": "הורץ פעמיים מול BUILDSMART זמני (‏`BUILDSMART=<tmp> node machtzev/generator/web-shell.mjs --entry …`): ⇒ «חוזה שכירות למגורים — לפני חתימה» · #2F6FED על #FFFFFF · ח · SW רשום, ו-«בלגן» · #2F6FED על #FFFFFF · **ב** · SW רשום. חמשת קובצי-הקליפה נכתבו לתיקייה הזמנית, כלומר שתי בדיקות-ה-vm של ה-SW עברו בפועל (אחרת throw). git status של הריפו נשאר ריק."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/web-shell.mjs (211 שורות, נקרא במלואו)",
+   "BUILDSMART=<scratch>/bs node machtzev/generator/web-shell.mjs --entry gen_app_peruk01_main.dart ⇒ זהות נגזרה + 5 קבצים",
+   "BUILDSMART=<scratch>/bs node machtzev/generator/web-shell.mjs --entry gen_balagan_main.dart ⇒ «בלגן» · סמל «ב» (נפילה-לאות, כמתועד)",
+   "ls <scratch>/bs/web ⇒ firebase-messaging-sw.js · flutter_bootstrap.js · icon.svg · index.html · manifest.json"
   ]
  },
  {

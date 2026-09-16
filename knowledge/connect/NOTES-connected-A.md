@@ -131,6 +131,12 @@ GEN_OUT=<scratch> node machtzev/generator/behavior-compose.mjs
   ⇒ 38 חלקיקים מוכחים ⇒ 60 התנהגויות (bh*) · diff מול הקובץ המחויב ⇒ **זהה ביט-לביט**
 node -e '…entity.interpret("צור ישות פרויקט עם שם*, תקציב, תאריך התחלה, פעיל, סטטוס{פתוח|סגור} | שלבים: …")'
   ⇒ פרויקט · 5 שדות · 3 שלבים · 2 חוקים   (וממצא: «סטטוס{פתוח|סגור}» ⟨bool⟩ → AnimatedToggle)
+node machtzev/generator/peruk.mjs --all --gate
+  ⇒ exit 0 · 28 פירוקים ⇒ 28 ספקים (כל מסמך עם ✓ ופירוט שדות/חלקים/תוכן)
+BUILDSMART=<scratch>/bs node machtzev/generator/web-shell.mjs --entry gen_app_peruk01_main.dart
+  ⇒ «חוזה שכירות למגורים — לפני חתימה» · #2F6FED על #FFFFFF · ח · SW רשום
+BUILDSMART=<scratch>/bs node machtzev/generator/web-shell.mjs --entry gen_balagan_main.dart
+  ⇒ «בלגן» · #2F6FED על #FFFFFF · **ב** · SW רשום   (נפילה-לאות — עור-הנייר אפס-אימוג׳י)
 ls machtzev/generator/specs-ds/*.txt | wc -l   ⇒ 31
 ls machtzev/generator/peruks/ | wc -l          ⇒ 28
 grep -vc '^#' machtzev/gates.tsv               ⇒ 57 שערים
@@ -148,6 +154,9 @@ grep -rln "atlas.mjs'" --include=*.mjs machtzev | wc -l  ⇒ 8
   אותה מגבלה תחול על `goldenharness` · `appgen` · `balaganrun`.
 * **מנועים שכותבים לעץ לא הורצו.** לכל אחד כזה כתבתי «לא-נמדד» + הסיבה. מצב `--gate` הורץ
   היכן שקיים, כי הוא השוואה ולא כתיבה (אומת ב-`git status` אחרי כל ריצה).
+* **תגלית שנייה:** `web-shell.mjs` מכבד `BUILDSMART`, ולכן הרצתי אותו מול תיקייה זמנית
+  וקיבלתי מדידה אמיתית של גזירת-הזהות **ושל שתי בדיקות-ה-vm של ה-service worker** (הן
+  זורקות אם ה-SW לא נפרס או לא-דורמנטי — הקבצים נכתבו, כלומר הן עברו).
 * **תגלית שימושית:** `root.mjs` חושף `GEN_OUT`, ולכן מנוע-פולט אפשר להריץ **בלי לגעת בעץ**
   (‏`GEN_OUT=<tmp> node …`). כך הרצתי את `behavior-compose` וקיבלתי מדידה אמיתית **וגם**
   אימות-זהות מול הקובץ המחויב. זה עובד רק למנועים שמשתמשים ב-`R.outDir()`.
