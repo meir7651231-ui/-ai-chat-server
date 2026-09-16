@@ -818,5 +818,675 @@
    "ran: ls gen/looks/first10/*.html | grep -v index | wc -l ⇒ 10",
    "read: machtzev/generator/auto-skin.mjs:1-19 — המקבילה החזקה במחולל"
   ]
+ },
+ {
+  "file": "gen/looks/first10/designs/kits.mjs",
+  "lang": "mjs",
+  "lines": 419,
+  "summary": "מודול-הדאטה הגדול בקבוצה: 5 ערכות-עיצוב, כל אחת עם 5 שכבות נשלפות-בנפרד (משטח·בית·ויג׳טים·כרטיסים·כפתורים) + טוקנים + גופן. זהו מה שמאפשר את הערבוב — כל שכבה מחליקה לבד.",
+  "does": [
+   {
+    "claim": "מייצא 5 ערכות בשם (`raycast` · `spotify` · `duolingo` · `wise` · `monzo`) ומן-הסתם גם `KITS` כמפה",
+    "evidence": "kits.mjs:13,92,182,260,349 — חמשת המשתנים המיוצאים; :419 export const KITS = { raycast, spotify, duolingo, wise, monzo }"
+   },
+   {
+    "claim": "🔴 **ההפרדה לשכבות היא המנגנון**: כל ערכה מפרידה CSS **ופונקציית-פליטה** לכל שכבה — `typeCss` · `homeCss`+`home(D,P)` · `widCss`+`wid(D)` · `cardCss`+`cards(D)` · `btnCss`+`btns()`. זה מה שמאפשר לקחת בית מאתר אחד וכפתורים מאחר",
+    "evidence": "kits.mjs:18 `typeCss` · :21 `homeCss` · :35 `home: (D,P) =>` · :47 `widCss` · :55 `wid: (D) =>` · :64 `cardCss` · :72 `cards: (D) =>` · :78 `btnCss` · :85 `btns: () =>` (מבנה זהה בכל 5)"
+   },
+   {
+    "claim": "‏`home(D,P)` מקבל **פרמטר-שני P** עם הזרקות (`P.wid()` · `P.cards()` · `P.btns()` · `P.mixLine`) — כלומר הבית אינו יודע מי מספק את השכבות. זו הזרקת-תלות אמיתית, לא העתקה",
+    "evidence": "kits.mjs:35 `home: (D, P) =>`; ובצד הקורא combos.mjs:45-52 `body: (D) => home.home(D, { wid: () => wid.wid(D), cards: () => card.cards(D), btns: () => btn.btns(D), mixLine: ... })`"
+   },
+   {
+    "claim": "🔴 **הלקח שהערבוב לימד נצרב בדאטה**: כל ערכה מחזיקה **זוגות-צבע** — `solid`/`onSolid` למילוי-ראשי, `accText` להדגשה-בטקסט, `pos`/`warn` — בדיוק כי כפתור שנבנה למשטח-כהה מתעוור על משטח-בהיר",
+    "evidence": "kits.mjs:17 `… acc:'#ff6363', accInk:'#2a0505', pos:'#7ee0a0', warn:'#e8c07a', solid:'#ededf0', onSolid:'#0b0b0d', accText:'#ff6363' …` — 14 מפתחות ב-tok, כולל 3 הזוגות; זהה בכל 5 הערכות (:96 · :186 · :264 · :352)"
+   },
+   {
+    "claim": "כל ערכה מתעדת את עצמה בשדה `parts` (5 תיאורים בעברית) ובשדה `faceNote` (למה נבחר הגופן העברי)",
+    "evidence": "kits.mjs:15 `parts: { surface:'משטח פחם + שורות קו-שיער', home:'שורת-פקודה במרכז…', … }`; :16 `faceNote: 'Assistant · המקבילה העברית ל-Inter'`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו** מודד ואינו מסכים עם המדידה. הטוקנים כאן הם ערכה **שנייה ונפרדת** מ-`measure/tokens.mjs`, והם סותרים אותה ב-4 ערכים מהותיים. `kits.mjs` לא מייבא את measured.json ולא את tokens.mjs",
+    "evidence": "ran: node -e (השוואת KITS[s].tok מול TOK[s]) ⇒ raycast bg #09090b מול #07080a · raycast acc #ff6363 מול #e6e6e6 · spotify acc #1db954 מול #1ed760 · duolingo acc #46a302 מול #58cc02. ran: grep -n \"measured\\|tokens\" gen/looks/first10/designs/kits.mjs ⇒ ∅"
+   },
+   {
+    "claim": "**אינו** מייצא `default` — ולכן `first10/build.mjs` מדלג עליו במפורש. הוא ספרייה, לא מסך",
+    "evidence": "kits.mjs — אין `export default`; first10/build.mjs:72 `if (!mod) continue;   // kits.mjs מייצא חלקים בלבד, לא מסכים`"
+   },
+   {
+    "claim": "**אינו** מגדיר התנהגות — כל 5 הערכות פולטות HTML סטטי. אין onclick, אין state, אין אירוע",
+    "evidence": "ran: grep -c \"onclick\\|addEventListener\" gen/looks/first10/designs/kits.mjs ⇒ 0"
+   },
+   {
+    "claim": "**אינו** בר-שימוש מחוץ ל-first10 — הוא נכתב לשלד הספציפי של `home(D,P)` עם ה-D של first10/build (שדות כמו `D.attAll` · `D.noDriver`), ואינו סכמה כללית",
+    "evidence": "kits.mjs:35-46 — הפליטה קוראת ישירות ל-`D.pct` · `D.depts` וכו׳, בלי חוזה מוצהר"
+   },
+   {
+    "claim": "**אינו** מכסה את אוצר-הרכיבים — 5 שכבות בלבד (משטח·בית·ויג׳טים·כרטיסים·כפתורים). אין טבלה, אין טופס, אין ניווט, אין מצב-ריק",
+    "evidence": "kits.mjs:15 `parts` — חמישה מפתחות בדיוק, זהה בכל 5 הערכות"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/looks/first10/designs/combos.mjs:3",
+    "how": "import { KITS } from './kits.mjs' — הצרכן היחיד"
+   },
+   {
+    "who": "gen/looks/first10/build.mjs:71",
+    "how": "נטען דינמית ב-`await import(join(here,'designs',f))` ואז **מדולג** (:72) כי אין לו default"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/auto-skin.mjs:19 — ‏`ROLES` (‏26 תפקידי-עור שהמנוע בורר להם אטום לפי צורה)",
+   "gives": "‏kits מחזיק נכס-דאטה אמיתי שהמחולל **חסר**: **זוגות-הצבע** `solid`/`onSolid` ו-`accText` (:17). הכרעה-25 נותנת למחולל בורר-עור מנומק-מצורה, ו-`DsPureSkin` (‏ds_pure.dart:128) מחזיק `onA` — אבל הלקח ש-kits צרב (גוון-מבטא כמילוי ≠ אותו גוון כטקסט; טקסט-על-מבטא דורש דיו נפרד) הוא בדיוק המחלקה שהמציאה 7 חריגות ב-SWAPS. **אבל**: זו תובנת-דאטה בת-3-מפתחות, וכדי להכניס אותה יש לגזור אותה ממדידה ולא להעתיק את הליטרלים של kits, שכבר הוכחו סותרים את המדוד. ⚠️ מיפוי בלבד — לא נבדק אם `DsPureSkin` כבר מכסה את זה."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 — מודול-דאטה גדול ומסודר עם מנגנון-שכבות אמיתי, אבל: הטוקנים שלו סותרים את המדוד ולכן אינם בני-הזרקה, הוא פולט CSS/HTML ולא Dart, והוא חסר-התנהגות. מה שבר-העברה הוא שלושה מפתחות-צבע ותובנה אחת — לא חיבור-מנוע."
+  },
+  "evidence": [
+   "read: gen/looks/first10/designs/kits.mjs — מבנה מלא של 5 הערכות (‏:13-91 raycast במלואה; :92-419 מיפוי-שורות של 4 הנותרות דרך grep ממוקד על parts/tok/typeCss/homeCss/widCss/cardCss/btnCss)",
+   "ran: node -e (השוואת KITS מול TOK ל-5 האתרים) ⇒ 4 ערכים סותרים מהותית",
+   "ran: grep -c \"onclick|addEventListener\" gen/looks/first10/designs/kits.mjs ⇒ 0",
+   "read: gen/looks/first10/build.mjs:72 — ההחרגה המפורשת של kits",
+   "read: machtzev/generator/auto-skin.mjs:19 ו-new/dart-ui-bs/ds/ds_pure.dart:128 — המקבילות במחולל"
+  ]
+ },
+ {
+  "file": "gen/looks/first10/designs/combos.mjs",
+  "lang": "mjs",
+  "lines": 54,
+  "summary": "‏54 שורות שמייצרות 10 מסכים: טבלת-ערבוב של 5 שכבות × 10 תמורות, שבה כל אתר מופיע **בדיוק פעמיים בכל עמודה** — ואומת מכנית. הקובץ הצפוף-ביותר בקבוצה ביחס תוצר/שורה.",
+  "does": [
+   {
+    "claim": "מחזיק טבלת `MIX` — 10 שורות × 5 עמודות [בית · ויג׳טים · כפתורים · כרטיסים · ממשק], ומייצא `default` = 10 אובייקטי-מסך",
+    "evidence": "combos.mjs:6-17 (‏MIX); :5 `/* [בית, ויג׳טים, כפתורים, כרטיסים, ממשק] */`; :34 `export default MIX.map((mix, i) => {`"
+   },
+   {
+    "claim": "🔴 **הטענה בהערה נכונה ואומתה**: בכל אחת מ-5 העמודות, כל אחד מ-5 האתרים מופיע בדיוק פעמיים — כלומר זהו ריבוע-לטיני מאוזן, לא ערבוב אקראי",
+    "evidence": "combos.mjs:2 `/* … וכל אתר מופיע בדיוק פעמיים בכל עמודה, כדי שהעשרה באמת יהיו שונים. */`. ran: node -e (ספירת-תדירות פר-עמודה על MIX) ⇒ כל 5 העמודות: {monzo:2, spotify:2, raycast:2, duolingo:2, wise:2} — true בכולן"
+   },
+   {
+    "claim": "🔴 **פס-ההרכב נגזר מהשילוב ולא נכתב ביד** — התווית «בית: Monzo · ויג׳טים: Spotify …» מיוצרת ב-map על אותו מערך שמייצר את ה-CSS",
+    "evidence": "combos.mjs:26 `/* פס-ההרכב: מה נלקח מאיפה — נגזר מהשילוב, לא נכתב ביד */`; :37 `const parts = mix.map((x,j) => \\`<div><span>${LAYER[j]}</span><b>${KITS[x].name}</b></div>\\`)`; :42 `ref: mix.map((x,j) => ...).join(' · ')`"
+   },
+   {
+    "claim": "מרכיב את ה-CSS מ-7 מקורות לפי סדר-שכבות: טוקני-המשטח ⇒ טיפוגרפיית-המשטח ⇒ בית ⇒ ויג׳טים ⇒ כרטיסים ⇒ כפתורים ⇒ פס-הרכב",
+    "evidence": "combos.mjs:44 `css: [tokens(surf), surf.typeCss, home.homeCss, wid.widCss, card.cardCss, btn.btnCss, mixCss].join('\\n')`"
+   },
+   {
+    "claim": "‏**איחוד-גופנים מחושב**: טוען את גופני-המשטח, ואת גופני-הבית רק אם הבית אינו המשטח — הימנעות מבקשת-רשת כפולה",
+    "evidence": "combos.mjs:38 `const fonts = [...new Set([...surf.font, ...(home === surf ? [] : home.font)])]`"
+   },
+   {
+    "claim": "🔴 **מודה במצב-הדאטה**: פס-ההרכב מסתיים ב«נתוני דוגמה» — הצהרה מפורשת שהמספרים אינם אמיתיים",
+    "evidence": "combos.mjs:51 `המספרים נגזרים מהמחסן · נתוני דוגמה`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** בורר — `MIX` היא טבלה **מוקלדת-ביד** של 10 תמורות. אין בקובץ שום ניקוד, שום התאמת-צורה ושום כלל שמחליט מה מתאים למה. זה ההפך מהכרעה-25",
+    "evidence": "combos.mjs:6-17 — 10 מערכים ליטרליים; אין בקובץ אף `score`/`fits`/`sort`. השווה: machtzev/generator/auto-skin.mjs:34 `export function fits(a, R)` — ניקוד-צורה"
+   },
+   {
+    "claim": "**אינו** מאמת שההרכב תקין — אין בדיקת-ניגודיות ואין פסילה. כפתור-כהה על משטח-כהה ייפלט; רק `first10/audit.mjs` (קובץ אחר) יתפוס זאת, ורק אם הניגודיות נפלה",
+    "evidence": "combos.mjs:34-53 — ה-map מחזיר אובייקט בלי שום תנאי; אין `throw`/`filter`/`if`"
+   },
+   {
+    "claim": "**אינו** יוצר יכולת חדשה — כל 10 המסכים הם אותן 5 שכבות בסדר אחר. אין כאן «אטום+אטום ⇒ יכולת חדשה», יש תמורה",
+    "evidence": "combos.mjs:35 `const [home,wid,btn,card,surf] = mix.map(x => KITS[x])` — כל חלק נלקח שלם מ-KITS, ללא הרכבה"
+   },
+   {
+    "claim": "**אינו** מרחיב מעבר ל-10 — המספר קבוע בטבלה; 5 אתרים × 5 שכבות נותנים 3,125 תמורות אפשריות, ונבחרו 10 ידנית",
+    "evidence": "combos.mjs:6-17 — 10 שורות בדיוק, ממוספרות בהערות 1–10"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/looks/first10/build.mjs:71",
+    "how": "נטען דינמית — `(await import(join(here,'designs',f))).default` ⇒ מערך של 10 ⇒ `[].concat(mod)` ב-:73"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "מנוע-התמורות הזה עומד בניגוד ישיר להכרעה-25 ול-§20-א («הכי-טוב-לייעוד, לא הראשון-שמתאים»). המחולל **כבר** בורר עור לפי צורה, עם ניקוד ובלי מילון-שמות (‏auto-skin.mjs:19 ‏ROLES · :34 `fits`). כאן הבחירה היא טבלה מוקלדת של 10 שורות. חיבורו יחליף בורר-מנומק בטבלה-קבועה — נסיגה מוצהרת, לא קידום. הדבר היחיד שראוי לצטט ממנו הוא **ריבוע-לטיני מאוזן ככלי-כיסוי לבדיקה** (לא כמנגנון-בחירה): אם אי-פעם ירצו לבדוק ש-N עורים × M תפקידים לא שוברים זה את זה, זה הדפוס — ‏10 תמורות מאוזנות במקום 3,125."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. מנגנון-הבחירה שלו (טבלה ידנית) חלש מזה שכבר קיים במחולל (בורר-לפי-צורה), הפלט CSS/HTML, והוא עצמו מצהיר «נתוני דוגמה». הכיסוי-המאוזן שווה כרעיון-בדיקה בלבד, וזה לא חיבור."
+  },
+  "evidence": [
+   "read: gen/looks/first10/designs/combos.mjs:1-54 (הקובץ במלואו)",
+   "ran: node -e (ספירת-תדירות של כל אתר בכל אחת מ-5 עמודות MIX) ⇒ כל עמודה {כל אתר: 2}, הטענה בהערה :2 מאומתת",
+   "ran: ls gen/looks/first10/*.html | grep -v index | wc -l ⇒ 10 — התוצר בפועל",
+   "read: machtzev/generator/auto-skin.mjs:19,34 — הבורר-לפי-צורה שהוא ההפך מטבלת MIX"
+  ]
+ },
+ {
+  "file": "gen/looks/app/build.mjs",
+  "lang": "mjs",
+  "lines": 100,
+  "summary": "מרכיב את `mosad.html` — קובץ-אחד שהוא מערכת: מזריק את האפיון כ-JSON, משרשר 7 קבצי-JS ומתחם 14 גיליונות-CSS פר-מסך. מחזיק את **מנוע-תיחום-ה-CSS** היחיד בקבוצה.",
+  "does": [
+   {
+    "claim": "קורא את האפיון ומזריק אותו **לתוך הדף** כקבוע `SPEC` — כלומר האפיון עצמו נוסע עם האפליקציה ולא מועתק ידנית",
+    "evidence": "app/build.mjs:11-21 (קריאה + צמצום); :90 `const SPEC = ${JSON.stringify(SPEC)};` בתוך תג ה-script"
+   },
+   {
+    "claim": "🔴 **מנוע-תיחום-CSS אמיתי** (`scope`, :24-54): מוסיף `#app[data-v=<id>]` לכל בורר בגיליון, כדי ששמות-מחלקות של 14 מסכים לא יתנגשו. זהו פותר-בעיה, לא עיטור — README מתעד שני באגי-התנגשות שנתפסו כך (`.bar` של הסרגל דרס `.bar` של פס-התקדמות)",
+    "evidence": "app/build.mjs:24-54; :45-46 `if (s==='body'||s==='html'||s===':root') return \\`#app[data-v=${id}]\\`; return \\`#app[data-v=${id}] ${s}\\`;`"
+   },
+   {
+    "claim": "‏**התיחום מטפל נכון ב-at-rules**: `@media`/`@supports`/`@layer` — נכנס פנימה ומתחם את מה שבתוכם; `@keyframes`/`@font-face` — מעתיק את הבלוק שלם בלי לגעת (תיחום שם-אנימציה היה שובר אותה)",
+    "evidence": "app/build.mjs:33-38 `if (/^@(media|supports|layer)/.test(clean)) { out.push(head+'{'); at++; i = brace+1; continue; } /* @keyframes / @font-face — מעתיקים את הבלוק כמו שהוא */ const end = matchEnd(css, brace); out.push(css.slice(i, end+1));`"
+   },
+   {
+    "claim": "‏`matchEnd` סופר סוגריים מקוננים — פרסור-איזון אמיתי, לא regex",
+    "evidence": "app/build.mjs:55-62 `let d=0; for (…) { if (s[i]==='{') d++; else if (s[i]==='}') { d--; if (!d) return i; } }`"
+   },
+   {
+    "claim": "‏`_`-prefix בשם-גיליון = גלובלי (לא מתוחם) — מוסכמה מפורשת שמאפשרת `_app.css` משותף",
+    "evidence": "app/build.mjs:68 `CSS += f.startsWith('_') ? body : ... scope(body, f.replace('.css',''))`; קיים בפועל: `gen/looks/app/css/_app.css`"
+   },
+   {
+    "claim": "כל מספר בשורת-הסיכום נגזר מה-SPEC שנקרא, לא מוקלד",
+    "evidence": "app/build.mjs:98-100 `${SPEC.depts.length} אגפים · ${SPEC.depts.reduce((a,d)=>a+d.e.length,0)} ישויות · ${SPEC.depts.reduce(…)} שדות`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** מחולל — הוא **משרשר** קבצים שנכתבו ביד. `src/*.js` (‏7 קבצים) ו-`css/*.css` (‏14) הם קוד-אדם; ה-build רק מדביק לפי סדר-שם",
+    "evidence": "app/build.mjs:72-73 `const jsFiles = readdirSync(join(here,'src')).filter(f=>f.endsWith('.js')).sort(); const JS = jsFiles.map(f => … + readFileSync(…))` — שרשור טהור, אפס גזירה"
+   },
+   {
+    "claim": "**אינו** בונה מסך מהאפיון. האפיון מוזרק כדאטה שהקוד-הידני **קורא**; שום מסך אינו נגזר ממנו. זה ההפך מהמחולל",
+    "evidence": "app/build.mjs:90 — SPEC הוא קבוע בדף; אין בקובץ שום פליטת-DOM מתוך SPEC"
+   },
+   {
+    "claim": "**אינו** מאמת — אין exit-code, אין בדיקה. `app/audit.mjs` הוא קובץ נפרד",
+    "evidence": "app/build.mjs:96-100 — נגמר ב-writeFileSync + console.log"
+   },
+   {
+    "claim": "**אינו** עובד בלי רשת — טוען 3 משפחות-גופן מ-fonts.googleapis.com. (‏README מצהיר «נפתח בלחיצה כפולה, בלי רשת» — נכון לתוכן, לא לגופנים)",
+    "evidence": "app/build.mjs:82-83 `<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\">` + `family=Heebo…&family=Frank+Ruhl+Libre…&family=Suez+One`"
+   },
+   {
+    "claim": "‏`scope` **אינו** מטפל במחרוזות ובהערות בתוך ערכי-CSS — הוא סורק `{` גולמית. `content:\"{\"` היה שובר אותו. לא נתקל בזה כי הגיליונות נכתבו ע\"י אותו מחבר",
+    "evidence": "app/build.mjs:28 `const brace = css.indexOf('{', i);` — חיפוש-תו גולמי, בלי מצב-מחרוזת. ההערות מטופלות רק בכותרת-הבורר (:32), לא בגוף"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו. הוא **נצרך בעקיפין**: full5/build.mjs:15 ו-first10/build.mjs:18 קוראים את `app/src/01-store.js` ישירות — כלומר תיקיית app/ היא תלות שלהם, אך לא דרך build.mjs"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ לצינור — אבל נקודת-השוואה: machtzev/generator/app-ds.mjs (מסלול-ב׳: אפיון ⇒ מסכים)",
+   "gives": "‏app/ הוא בדיוק הדבר שהמחולל **מחליף**: אפיון + קוד-ידני ⇒ מערכת. המחולל עושה אפיון ⇒ מסכים, בלי הקוד-הידני שבאמצע. חיבור app/build.mjs לצינור אין לו משמעות — הוא משרשר Dart? לא, הוא משרשר JS שנכתב ביד. **מה שכן ראוי להיאמר:** מנוע-התיחום `scope()` (:24-62) פותר בעיה אמיתית — התנגשות-שמות בין מסכים בקובץ-אחד — והמחולל פולט מסכים רבים לאותה אפליקציה. ב-Dart הבעיה לא קיימת באותה צורה (מרחבי-שמות של מחלקות), ולכן זו כנראה אינה חסר. **לא נבדק — נאמר כהערכה מוצהרת, לא כממצא.**"
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. זהו ה-build של אפליקציית-הדמו הידנית: משרשר 7 קבצי-JS ו-14 גיליונות שנכתבו ביד, פולט HTML. הוא מייצג בדיוק את המצב שהמחולל בא להחליף. מנוע-התיחום מרשים אך פותר בעיה של CSS-בקובץ-אחד, שאינה בעיית-המחולל."
+  },
+  "evidence": [
+   "read: gen/looks/app/build.mjs:1-100 (הקובץ במלואו)",
+   "ran: ls gen/looks/app/src/ ⇒ 7 קבצי JS · ls gen/looks/app/css/ ⇒ 14 גיליונות, מהם `_app.css` הגלובלי",
+   "ran: ls -la gen/mosad.data.json ⇒ 388526 בתים",
+   "read: gen/looks/full5/build.mjs:15 · gen/looks/first10/build.mjs:18 — התלות העקיפה ב-app/src/01-store.js"
+  ]
+ },
+ {
+  "file": "gen/looks/app/audit.mjs",
+  "lang": "mjs",
+  "lines": 134,
+  "summary": "🔴 **השער החזק בקבוצה, ושונה מהתאומים**: 20 מסלולים × 2 ערכות-צבע + 8 בדיקות-התנהגות שמפעילות את האפליקציה באמת (פלטה · תשלום · ביטול · כלל-מהאפיון חוסם · תפקיד חסום · סכומים מתאזנים).",
+  "does": [
+   {
+    "claim": "שונה מהותית מ-full5/first10 audit — sha256 אחר, ‏134 שורות מול 72, ובודק 3 דברים שהם לא: `main` יחיד · ליטרלי-צבע ב-style · מספרים-עם-גזירה",
+    "evidence": "ran: sha256sum ⇒ app/audit.mjs `78893da1634eb291155139e5dcbc9007cb7bf720868bc46af6fe6c633046d905` מול `ba011b94…` של השניים. app/audit.mjs:18 `main: document.querySelectorAll('main').length … why: document.querySelectorAll('[data-why]').length`; :19 ספירת-ליטרלים; :78-79 הפסילות"
+   },
+   {
+    "claim": "🔴 **תופס ליטרל-צבע בקוד** — כל `[style]` תחת #app שמכיל hex/rgb/hsl נספר ומכשיל. זהו בדיוק הדפוס של `HARD_COLOR` במחולל",
+    "evidence": "app/audit.mjs:19 `document.querySelectorAll('#app [style]').forEach(e => { if (/#[0-9a-f]{3,8}\\b|rgba?\\(|hsla?\\(/i.test(e.getAttribute('style'))) out.lit++; })`; :79 `if (a.lit) f.push('ליטרלי-צבע ' + a.lit)`"
+   },
+   {
+    "claim": "🔴 **רץ בשתי ערכות-צבע** — 20 מסלולים × light + dark, כלומר 40 מדידות-נגישות. התאומים רצים בערכה אחת",
+    "evidence": "app/audit.mjs:59-62 `const THEMES = process.argv.includes('--theme') ? [...] : ['light','dark']; for (const theme of THEMES) { … await p.evaluate(t => document.documentElement.setAttribute('data-theme', t), theme)`"
+   },
+   {
+    "claim": "🔴 **8 בדיקות-התנהגות אמיתיות** שמפעילות את המערכת ומאמתות תוצאה, לא נוכחות: פלטה מוצאת (Ctrl+K ⇒ הקלדה ⇒ ≥2 תוצאות) · Enter קופץ לתיק והפלטה נסגרת · תשלום נרשם ביומן · ביטול מחזיר · כלל-מהאפיון **באמת חוסם** מעבר-שלב · תפקיד «מלמד» נחסם · כסף מוסתר · הסכומים מתאזנים בין המסכים",
+    "evidence": "app/audit.mjs:90-116 (הביצוע) ו-:118-126 (הפסילות). למשל :102-107 `beh.ruleBlocks = await p.evaluate(() => { const w = DB.loans.find(l => l.guarantors < 2); … c().click(); const mid = w.stage; c().click(); return mid !== w.stage ? 'לא נחסם' : … })`"
+   },
+   {
+    "claim": "🔴 **בדיקת-איזון חוצת-מסכים** — מאמת ש-`totals().due` שווה לסכום `discounted()` על כל המשפחות; כלומר מספר שמוצג במסך אחד חייב להתאים למסך אחר",
+    "evidence": "app/audit.mjs:116 `beh.reconcile = await p.evaluate(() => totals().due === DB.families.reduce((a,f) => a + discounted(f), 0))`; :126 `if (!beh.reconcile) behFails.push('הסכומים לא מתאזנים')`"
+   },
+   {
+    "claim": "תופס גם `console.error` ולא רק `pageerror`, ומכשיל עליהם",
+    "evidence": "app/audit.mjs:53-54 `p.on('pageerror', …); p.on('console', m => { if (m.type()==='error') errs.push(…) })`; :131 `bad += errs.length ? 1 : 0`"
+   },
+   {
+    "claim": "‏exit-code אמיתי",
+    "evidence": "app/audit.mjs:134 `process.exit(bad ? 1 : 0)`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו** נייד — 20 המסלולים הם רשימה **מוקלדת** של נתיבי-hash של אפליקציה אחת, ו-8 בדיקות-ההתנהגות נעולות לסלקטורים ולמשתנים-גלובליים שלה (`#palq` · `#palr li` · `[data-pay]` · `#undoBtn` · `#role` · `DB.log` · `totals()` · `discounted()`)",
+    "evidence": "app/audit.mjs:14-15 (‏ROUTES מוקלדים); :92-116 — `p.fill('#palq', …)` · `p.click('[data-pay]')` · `p.click('#undoBtn')` · `p.selectOption('#role','מלמד')` · `DB.log[0].what` · `totals().due`"
+   },
+   {
+    "claim": "**אינו** בודק את האפיון עצמו — הוא בודק שהאפליקציה מכבדת **כלל אחד** (הלוואה בלי שני ערבים). ‏README מצהיר שהאפיון מחזיק 317 איסורים ושהקוד חוסם 4",
+    "evidence": "app/audit.mjs:102-107 — בדיקה אחת, על הלוואה אחת (`DB.loans.find(l => l.guarantors < 2)`)"
+   },
+   {
+    "claim": "**אינו** מודד את מה שנמדד ב-match.mjs (התאמה לאתר) — אלה שני שערים שונים על שני צירים שונים",
+    "evidence": "app/audit.mjs — אין בו measured.json ואין EXTRACT"
+   },
+   {
+    "claim": "**אינו** במרשם gates.tsv ואינו רץ במשטרה",
+    "evidence": "ran: grep -n \"look\" machtzev/gates.tsv ⇒ ∅"
+   },
+   {
+    "claim": "**אינו** מצלם כברירת-מחדל — רק עם `--shots`",
+    "evidence": "app/audit.mjs:11 `const shots = process.argv.includes('--shots')`; :75 `if (shots) { await p.screenshot(…) }`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/gen-verify.mjs — ליד `--gate` (:29) · ו-machtzev/generator/balagan-run.mjs (שער-המריצה בדפדפן)",
+   "gives": "**זהו הדפוס החזק ביותר ב-59 המנועים, ושלושה חלקים ממנו נוגעים בפער-אמת של המחולל:**\n(1) **בדיקת-איזון חוצת-מסכים** (:116) — «מספר במסך א׳ ≡ מספר במסך ב׳». זה בדיוק סוג-הבאג ש-G54 חשף במחולל (`AppStore._display` החזיר את הערך-הראשון בסדר-ההכנסה ⇒ משימה נקראה «350» במקום «לשלם ארנונה», בכל מסך). באג-עקביות אינו נתפס ב-analyze ואינו נתפס בספירת-אטומים.\n(2) **ליטרלי-צבע כפסילה** (:19) — המחולל **כבר** אוכף את זה על הקוד (`look.mjs:16` ‏HARD_COLOR, סטטי). כאן זה נאכף על ה-DOM החי, כלומר תופס גם מה שנכנס בזמן-ריצה.\n(3) **שתי ערכות-צבע** (:59) — `balagan-look.paperRoot` בודק ש-`Brightness.light` מוצהר, אבל אף שער אינו מרנדר את המוצר בשתי הערכות ומודד ניגודיות בשתיהן.\n⚠️ **סייג כן:** הקובץ עצמו נעול לאפליקציה שלו (ראה doesNot). מה שבר-העברה הוא שלושת הדפוסים, לא הקוד."
+  },
+  "s22": {
+   "score": 3,
+   "why": "3 — הציון הגבוה היחיד בקבוצה, ובכוונה. §22 היא **רצפת-קבלה**: «אפליקציה+אתר עובדים 100%, אפס-באגים». השאלה «האם הפלט באמת עובד» נמדדת היום ב-analyze-ירוק, נוכחות-אטומים ורגקסים-בקוד. הקובץ הזה מדגים את הצורה החסרה: **להפעיל את המוצר ולאמת תוצאה** — פעולה נרשמת, ביטול מחזיר, כלל חוסם באמת, הרשאה חוסמת באמת, ומספרים מתאזנים בין מסכים. זה בדיוק על נתיב משפט⇒אפליקציה-עובדת. הציון ניתן לדפוס; הקוד עצמו דורש כתיבה-מחדש מול הפלט-המחולל, וזה נאמר במפורש."
+  },
+  "evidence": [
+   "read: gen/looks/app/audit.mjs:1-134 (הקובץ במלואו)",
+   "ran: sha256sum על שלושת ה-audits ⇒ app שונה (78893da1…) מהתאומים (ba011b94…)",
+   "ran: grep -n \"look\" machtzev/gates.tsv ⇒ ∅",
+   "read: machtzev/generator/gen-verify.mjs:1-6,29 — מה השער מודד היום (נוכחות, לא התנהגות)",
+   "read: machtzev/generator/look.mjs:16 — HARD_COLOR, האכיפה הסטטית המקבילה ל-:19",
+   "read: CLAUDE.md §G54 — באג _display (עקביות חוצת-מסכים) שבדיקה מסוג :116 הייתה תופסת"
+  ]
+ },
+ {
+  "file": "gen/looks/full5/screens/1-raycast.mjs",
+  "lang": "mjs",
+  "lines": 234,
+  "summary": "מודול-מסך: `{id,name,ref,fonts,css,body(D)}` בשפת Raycast — חלון-פקודות עם חיפוש, רשימה מקובצת, פאנל-פרטים, סרגל-פעולות ו-6 פאנלים. צורך 28 שדות-דאטה. 100 שורות CSS, 126 שורות פליטה, אפס התנהגות.",
+  "does": [
+   {
+    "claim": "מייצא `default` יחיד בחוזה קבוע לכל 5 המסכים: `{id, name, ref, fonts[], css, body(D)}`",
+    "evidence": "1-raycast.mjs:6-8 `export default { id:'1-raycast', name:'Raycast', ref:'חלון-פקודות: …', fonts:['Assistant:wght@400;500;600;700'], …}`; :109 `body: (D) => {`"
+   },
+   {
+    "claim": "צורך **28 שדות-דאטה** מהמחסן — כולל 8 רשימות (‏topOpen · payList · classes · staffList · loanList · donList · routes · calls · log · students20 · minyanim)",
+    "evidence": "ran: grep -o \"D\\.[a-zA-Z0-9]*\" gen/looks/full5/screens/1-raycast.mjs | sort -u ⇒ 28 שדות: D.alerts D.attAll D.calls D.classes D.depts D.donList D.fund D.late D.loanList D.log D.ltr D.minyanim D.money D.num D.open D.paid D.payList D.pct D.people D.present D.raised D.routes D.staff D.staffList D.students20 D.tariff D.today D.topOpen"
+   },
+   {
+    "claim": "בונה 6 פאנלים-משניים בעלי כותרת נגזרת: «עכשיו במוסד · N זמנים» · «דורש הכרעה» · «כיתות · נוכחות» · «קווי הסעה» · «תרומות אחרונות» · «יומן הפעולות»",
+    "evidence": "1-raycast.mjs:195,200,206,210,215,219 — `<section class=\"panel\"><h3>…`; :195 `עכשיו במוסד · ${D.minyanim.length} זמנים` — המספר נגזר"
+   },
+   {
+    "claim": "מייבא מ-art.mjs את `appIcon` ו-`glow` ומשתמש בהילה מאחורי חלון-הפקודות — בדיוק האלמנט שהמדידה לא יכלה לתפוס (הוא תמונה באתר האמיתי)",
+    "evidence": "1-raycast.mjs:4 `import { appIcon, glow } from '../art.mjs'`; :117 `<div class=\"stage\">${glow()}<section class=\"win\">`"
+   },
+   {
+    "claim": "‏h1 יחיד ושדה-חיפוש עם `aria-label` — כלומר נכתב מול דרישות ה-audit",
+    "evidence": "1-raycast.mjs:114 `<header class=\"head\"><h1>מוסד · לוח הבית</h1>`; :119 `<input value=\"משפחת\" aria-label=\"חיפוש בכל המוסד\">`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו אפליקציה** — אפס אינטראקטיביות. שדה-החיפוש הוא `<input value=\"משפחת\">` שאינו מחפש, וסרגל-הפעולות אינו פועל",
+    "evidence": "ran: grep -c \"onclick|addEventListener|<script\" gen/looks/full5/screens/1-raycast.mjs ⇒ 0. ה-`value=\"משפחת\"` ב-:119 הוא טקסט-קבוע"
+   },
+   {
+    "claim": "🔴 **אינו** מייבא את הטוקנים המדודים — 23 ליטרלי-hex כתובים בתוך בלוק `:root` בקובץ, עם הערה «כל הערכים נמדדו ב-raycast.com» שאיש אינו מאמת",
+    "evidence": "1-raycast.mjs:10-13 `:root{/* כל הערכים נמדדו ב-raycast.com ו-raycast.com/store */ --bg:#07080a;--win:#0c0d0f;--row:#1b1c1e;--raise:#434345;…}`. ran: grep -rn \"tokens\" gen/looks/full5/ ⇒ ∅. ran: ספירת hex בקובץ ⇒ 23"
+   },
+   {
+    "claim": "**אינו** מגדיר את החוזה שלו — `body(D)` קורא ל-28 שדות בלי שום הצהרה או ברירת-מחדל. שדה חסר ב-D ⇒ `undefined` בדף, בשקט",
+    "evidence": "1-raycast.mjs:109 `body: (D) => {` — בלי destructuring ובלי בדיקה; למשל :195 `${D.minyanim.length}` ייפול אם minyanim חסר"
+   },
+   {
+    "claim": "**אינו** נייד — נכתב ל-D של `full5/build.mjs` בלבד. שדות כמו `students20` ו-`attAll` אינם קיימים ב-D של first10",
+    "evidence": "‏`D.students20` · `D.log` · `D.calls` מופיעים ב-full5/build.mjs:58-63 אך לא ב-first10/build.mjs:22-43"
+   },
+   {
+    "claim": "**אינו** רספונסיבי-מהותית — הצפיפות (חלון-פקודות + פאנל-פרטים) נבנתה ל-1240px; ה-audit בודק גלישה בלבד, לא שימושיות בנייד",
+    "evidence": "1-raycast.mjs:15 `.page{…max-width:1240px…}`; full5/audit.mjs:64 בודק `scrollWidth - clientWidth` בלבד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/looks/full5/build.mjs:97",
+    "how": "נטען דינמית — `(await import(join(here,'screens',f))).default` בלולאה על כל screens/*.mjs"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "זהו **תוכן**, לא מנוע: 234 שורות של CSS ותבנית-HTML לאתר אחד, בלי התנהגות ובלי חוזה. המחולל פולט Dart מאטומים שנבחרים לפי צורה; אין תפר שאליו HTML-של-Raycast נכנס. אם אי-פעם ירצו את **המראה** הזה במחולל, הדרך היא ערכת-`DsPureSkin` נוספת (‏ds_pure.dart:128) שנגזרת מ-measured.json — לא הקובץ הזה."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב, ויש לומר זאת בפה מלא: זהו מסך-דמו סטטי. אפס אינטראקטיביות (נמדד: 0 מופעי onclick/addEventListener/script), 23 ליטרלי-צבע בתוך הקובץ, ואין לו חוזה. §22 מדבר על «אפליקציה+אתר **עובדים**» — וזה, במפורש, לא עובד; זה נראה."
+  },
+  "evidence": [
+   "read: gen/looks/full5/screens/1-raycast.mjs:1-22 (כותרת + בלוק הטוקנים) · :109-234 דרך grep מבני על h1/section/aria-label; ‏css :9-108 · body :109-234 (מדוד)",
+   "ran: grep -c \"onclick|addEventListener|<script\" ⇒ 0",
+   "ran: grep -o \"D\\.[a-zA-Z0-9]*\" | sort -u | wc -l ⇒ 28 שדות-דאטה",
+   "ran: grep -o '#[0-9a-fA-F]{3,8}' | wc -l ⇒ 23 ליטרלי-hex",
+   "ran: grep -rn \"tokens\" gen/looks/full5/ ⇒ ∅"
+  ]
+ },
+ {
+  "file": "gen/looks/full5/screens/2-spotify.mjs",
+  "lang": "mjs",
+  "lines": 210,
+  "summary": "מודול-מסך בשפת Spotify — סרגל-צד עם 12 האגפים, אריחי-כניסה, מדפים אופקיים ופס-נגינה תחתון קבוע. צורך 34 שדות-דאטה, הרבה-ביותר מבין החמישה. אותו חוזה, אפס התנהגות.",
+  "does": [
+   {
+    "claim": "אותו חוזה בדיוק כמו 1-raycast: `{id,name,ref,fonts,css,body(D)}`",
+    "evidence": "2-spotify.mjs:6-8; :108 `body: (D) => {`"
+   },
+   {
+    "claim": "צורך **34 שדות-דאטה** — המספר הגבוה מבין 5 המסכים",
+    "evidence": "ran: grep -o \"D\\.[a-zA-Z0-9]*\" | sort -u ⇒ 34: D.absent D.alerts D.attAll D.calls D.camp D.classes D.depts D.donList D.donations D.families D.fund D.fundLate D.goal D.late D.loanList D.loans D.loansOpen D.ltr D.minyanim D.money D.nis D.now D.open D.payList D.pct D.present D.queueN D.raised D.routes D.staff D.students D.subs D.today D.topOpen"
+   },
+   {
+    "claim": "‏**ה-h1 נגזר מהיום** — «<יום> טוב» מתוך `D.today.dow`, לא מחרוזת קבועה",
+    "evidence": "2-spotify.mjs:131 `<h1>${D.today.dow} טוב</h1>`"
+   },
+   {
+    "claim": "מייבא `cover` מ-art.mjs — עטיפות-אלבום מצוירות, הפריט שהמדידה זיהתה כחסר (באתר האמיתי זו תמונה)",
+    "evidence": "2-spotify.mjs:4 `import { cover } from '../art.mjs'`"
+   },
+   {
+    "claim": "סרגל-הצד נעלם מתחת ל-900px — טיפול-רספונסיבי מפורש, לא רק מניעת-גלישה",
+    "evidence": "2-spotify.mjs:15 `@media(max-width:900px){.app{grid-template-columns:1fr}.side{display:none}}`"
+   },
+   {
+    "claim": "‏**מיישם חריגת-SWAPS בפועל**: הירוק `#1ed760` משמש כרקע-עיגול עם `color:#000000` עליו, ולא כטקסט — בדיוק כפי ש-SWAPS מצהיר (יחס 1.92 כטקסט)",
+    "evidence": "2-spotify.mjs:19 `.side .brand i{…background:var(--acc);color:#000000;…}` כאשר :12 `--acc:#1ed760`; ההצהרה: measure/tokens.mjs:37 `{site:'spotify', what:'הירוק כטקסט', measured:'#1ed760', ratio:1.92, used:'#1ed760 כמילוי בלבד'}`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו אפליקציה** — פס-הנגינה התחתון הוא 3 כפתורים שאינם עושים דבר",
+    "evidence": "ran: grep -c \"onclick|addEventListener|<script\" ⇒ 0. :205 `<button class=\"play\" aria-label=\"נגן\">▸</button><button>››</button><button>↻</button>`"
+   },
+   {
+    "claim": "🔴 **אינו** מייבא טוקנים — 35 ליטרלי-hex בקובץ, עם הערה «נמדד ב-open.spotify.com»",
+    "evidence": "2-spotify.mjs:10-12 `:root{/* נמדד ב-open.spotify.com ו-www.spotify.com */ --bg:#000000;--panel:#121212;…}`. ran: ספירת hex ⇒ 35"
+   },
+   {
+    "claim": "שני הכפתורים האחרונים בפס-הנגינה **בלי `aria-label`** — רק ל-`play` יש. תווי `››` ו-`↻` לא ייקראו נכון בקורא-מסך",
+    "evidence": "2-spotify.mjs:205 — `aria-label=\"נגן\"` על הראשון בלבד. (‏full5/audit.mjs אינו בודק aria-label על כפתורים — ראה הפער ב-doesNot שלו)"
+   },
+   {
+    "claim": "**אינו** נייד ל-D אחר — `D.fundLate` · `D.queueN` · `D.subs` קיימים ב-full5/build בלבד",
+    "evidence": "full5/build.mjs:29,32,34 מול first10/build.mjs:22-43 שאין בו fundLate/queueN"
+   },
+   {
+    "claim": "**אינו** מגדיר חוזה — אותה בעיה כמו בכל 5",
+    "evidence": "2-spotify.mjs:108 `body: (D) => {` — בלי destructuring ובלי ברירות-מחדל"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/looks/full5/build.mjs:97",
+    "how": "נטען דינמית בלולאה על screens/*.mjs"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "תוכן, לא מנוע — כמו 4 אחיו. הפריט היחיד ששווה לציין: זהו המסך שבו ההצהרה ב-SWAPS מיושמת בפועל ובר-בדיקה (הירוק כמילוי ולא כטקסט), כלומר הוא **הראיה** שהמנגנון «חריגה-מוצהרת ⇒ יישום» סגור. זה נכס-ראיה, לא נקודת-חיבור."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. מסך-דמו סטטי: אפס אינטראקטיביות (נמדד 0), 35 ליטרלי-צבע, בלי חוזה, נעול ל-D של full5."
+  },
+  "evidence": [
+   "read: gen/looks/full5/screens/2-spotify.mjs:1-22 (כותרת + טוקנים + סרגל-צד) · מבנה :108-210 דרך grep על h1/section/button",
+   "ran: grep -c \"onclick|addEventListener|<script\" ⇒ 0",
+   "ran: grep -o \"D\\.[a-zA-Z0-9]*\" | sort -u | wc -l ⇒ 34",
+   "ran: grep -o '#[0-9a-fA-F]{3,8}' | wc -l ⇒ 35",
+   "read: gen/looks/measure/tokens.mjs:37 — הצהרת-ה-SWAPS שהמסך מיישם"
+  ]
+ },
+ {
+  "file": "gen/looks/full5/screens/3-duolingo.mjs",
+  "lang": "mjs",
+  "lines": 255,
+  "summary": "הארוך מבין 5 המסכים. שפת Duolingo — פס-מונים, מסלול-צמתים מתפתל, טבעות-SVG מחושבות, ליגה ומשימות-יומיות, ניווט תחתון. 29 שדות-דאטה, 50 ליטרלי-hex (הרבה-ביותר), אפס התנהגות.",
+  "does": [
+   {
+    "claim": "אותו חוזה; הארוך בקבוצה — 109 שורות CSS + 138 שורות פליטה",
+    "evidence": "3-duolingo.mjs:6-8 (החוזה); css :9-117 · body :118-255 (מדוד)"
+   },
+   {
+    "claim": "🔴 **מחשב טבעת-התקדמות ב-SVG** — לא תמונה ולא ספרייה; הטבעת נגזרת מאחוז אמיתי, עם `aria-label` שמכיל את הערך",
+    "evidence": "3-duolingo.mjs:124 `<svg width=\"106\" height=\"106\" viewBox=\"0 0 106 106\" role=\"img\" aria-label=\"${lab} ${pct} אחוז\">` — ‏lab ו-pct מוזרקים"
+   },
+   {
+    "claim": "🔴 **מיישם שלוש חריגות-SWAPS בבת-אחת ומתעד כל אחת בהערה**: הירוק `#58cc02` כמילוי-בלבד עם דיו `#0d2600`; שלושת הכחולים המדודים `#100f3e`/`#0b3e71`/`#042c60`; והתכלת `#1cb0f6` כמילוי בלבד",
+    "evidence": "3-duolingo.mjs:12-14 `--green:#58cc02;--greenInk:#0d2600;… /* שלושת הכחולים המדודים: #100f3e · #0b3e71 · #042c60 · והתכלת #1cb0f6 (מילוי בלבד) */`; :19-20 `/* הירוק המדוד אינו עובר סף-קריאוּת כטקסט — לכן הוא מילוי, והשם עליו כהה */ .hdr .logo{…background:var(--green);color:var(--greenInk);…}`; ההצהרות: measure/tokens.mjs:35-36"
+   },
+   {
+    "claim": "‏5 סעיפי-תוכן עם כותרת-משנה נגזרת: ליגת-הגבייה · משימות-יומיות · הצוות («N נוכחים מתוך M») · יארצייטים («N רשומים»)",
+    "evidence": "3-duolingo.mjs:221,228,236,242; :236 `<p class=\"s\">${D.present} נוכחים מתוך ${D.staff}</p>`; :242 `${D.yahr.length} רשומים`"
+   },
+   {
+    "claim": "מייבא `scene` (איור-דמות) ו-`appIcon` מ-art.mjs — הפריט שהמדידה זיהתה כחסר בדואולינגו",
+    "evidence": "3-duolingo.mjs:4 `import { scene, appIcon } from '../art.mjs'`"
+   },
+   {
+    "claim": "כפתורי-האגפים נושאים `aria-label` והאייקון מסומן `aria-hidden` — טיפול נכון באמוג׳י-קישוט",
+    "evidence": "3-duolingo.mjs:167 `<button class=\"btn\" aria-label=\"${t}\"><span aria-hidden=\"true\">${ic}</span></button>`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו אפליקציה** — מסלול-הצמתים, המשימות-היומיות והניווט-התחתון אינם ניתנים ללחיצה",
+    "evidence": "ran: grep -c \"onclick|addEventListener|<script\" ⇒ 0"
+   },
+   {
+    "claim": "🔴 **50 ליטרלי-hex** — הגבוה מבין 5 המסכים, וכולם בקובץ ולא בטוקנים מיובאים",
+    "evidence": "ran: grep -o '#[0-9a-fA-F]{3,8}' gen/looks/full5/screens/3-duolingo.mjs | wc -l ⇒ 50. ran: grep -rn \"tokens\" gen/looks/full5/ ⇒ ∅"
+   },
+   {
+    "claim": "‏«משימות יומיות · מתאפסות בחצות» — **הצהרה שאין מאחוריה מנגנון**. אין בקובץ שום איפוס, שום מצב ושום זמן",
+    "evidence": "3-duolingo.mjs:228 `<section><h2>משימות יומיות</h2><p class=\"s\">מתאפסות בחצות</p>` — טקסט בלבד; 0 מופעי script/state בקובץ"
+   },
+   {
+    "claim": "‏h1 «הדרך הכי פשוטה לנהל את המוסד» הוא **סיסמת-שיווק מוקלדת**, לא נגזרת — בניגוד ל-h1 של 2-spotify שנגזר מהיום",
+    "evidence": "3-duolingo.mjs:154 `<h1>הדרך הכי פשוטה לנהל את המוסד</h1>` מול 2-spotify.mjs:131 `<h1>${D.today.dow} טוב</h1>`"
+   },
+   {
+    "claim": "**אינו** מגדיר חוזה; נעול ל-D של full5 (‏`D.yahr` · `D.staffList` · `D.loanList`)",
+    "evidence": "3-duolingo.mjs:118 `body: (D) => {`; `D.yahr` קיים ב-full5/build.mjs:59 בלבד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/looks/full5/build.mjs:97",
+    "how": "נטען דינמית בלולאה על screens/*.mjs"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "תוכן, לא מנוע. מה שבכל-זאת ראוי לרישום: זהו המסך שבו **שלוש** חריגות-הקריאוּת מיושמות ומתועדות בהערה **בשורה שמעל היישום** — כלומר הפטור אינו רק מוצהר ב-SWAPS אלא גם מנומק בנקודת-השימוש. הדפוס «הערה שמסבירה למה הערך-המדוד לא שימש» הוא דפוס-אמת טוב; הוא כבר קיים במחולל בצורה חזקה יותר (ראצ׳ט + `balagan-score.json` כמרשם-כללים)."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. מסך-דמו סטטי, 50 ליטרלי-צבע, ו«משימות מתאפסות בחצות» שהוא טקסט בלי מנגנון. זו בדיוק המחלקה ש-§22 שולל: נראה-עובד ואינו עובד."
+  },
+  "evidence": [
+   "read: gen/looks/full5/screens/3-duolingo.mjs:1-22 (כותרת + טוקנים + הערות-SWAPS) · מבנה :118-255 דרך grep על h1/section/svg/button",
+   "ran: grep -c \"onclick|addEventListener|<script\" ⇒ 0",
+   "ran: grep -o \"D\\.[a-zA-Z0-9]*\" | sort -u | wc -l ⇒ 29",
+   "ran: grep -o '#[0-9a-fA-F]{3,8}' | wc -l ⇒ 50 (הגבוה ב-5 המסכים)",
+   "read: gen/looks/measure/tokens.mjs:35-36 — שתיים מהחריגות שהמסך מיישם"
+  ]
+ },
+ {
+  "file": "gen/looks/full5/screens/4-wise.mjs",
+  "lang": "mjs",
+  "lines": 225,
+  "summary": "שפת Wise — ניווט, רצועת-יתרות, תנועות מקובצות לפי יום, כרטיס-חישוב, כרטיסי-צד. 29 שדות-דאטה. מחזיק ממצא-מדידה מעניין: הגבול של Wise אינו `border` אלא טבעת-צל.",
+  "does": [
+   {
+    "claim": "אותו חוזה; css :9-119 · body :120-225",
+    "evidence": "4-wise.mjs:6-8; :120 `body: (D) => {`"
+   },
+   {
+    "claim": "🔴 **ממצא-מדידה שנצרב כטוקן**: «הגבול של Wise אינו border אלא טבעת-צל מדודה» ⇒ `--ring:0 0 0 1px rgba(22,51,0,.12)`. זו דוגמה לכך שהמדידה שינתה **מנגנון** ולא רק ערך",
+    "evidence": "4-wise.mjs:13-14 `/* הגבול של Wise אינו border אלא טבעת-צל מדודה */ --ring:0 0 0 1px rgba(22,51,0,.12);--ringOn:0 0 0 1px rgba(255,255,255,.2);`; ומיושם ב-:19 `.nav{box-shadow:var(--ring);…}`"
+   },
+   {
+    "claim": "‏**ה-h1 נגזר במלואו מהדאטה** — «N% מהחיוב השנתי כבר נגבו.»",
+    "evidence": "4-wise.mjs:130 `<h1>${D.pct}% מהחיוב השנתי כבר נגבו.</h1>`"
+   },
+   {
+    "claim": "‏4 סעיפים עם כותרת-משנה נגזרת, כולל **חישוב בתוך התבנית**: «N נוסעים» מסוכם מכל הקווים",
+    "evidence": "4-wise.mjs:199,204,210,216; :210 `<p class=\"s\">${D.routes.reduce((a,r) => a + r.riders, 0)} נוסעים</p>` — reduce בזמן-פליטה"
+   },
+   {
+    "claim": "צורך 29 שדות-דאטה, כולל `D.budget` (‏8 סעיפי-תקציב) שרק הוא ו-5-monzo משתמשים בו",
+    "evidence": "ran: grep -o \"D\\.[a-zA-Z0-9]*\" | sort -u ⇒ 29 כולל D.budget; :204 `<section><h2>תקציב מול ביצוע</h2><p class=\"s\">באלפי ₪ · ${D.budget.length} סעיפים</p>`"
+   },
+   {
+    "claim": "מייבא `coin` מ-art.mjs — מטבעות-דגל, האלמנט המצויר של Wise",
+    "evidence": "4-wise.mjs:4 `import { coin } from '../art.mjs'`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו אפליקציה** — כרטיס-החישוב עם הבוררים אינו מחשב; הבוררים אינם מחוברים לדבר",
+    "evidence": "ran: grep -c \"onclick|addEventListener|<script\" ⇒ 0"
+   },
+   {
+    "claim": "🔴 **אינו** מייבא טוקנים — 31 ליטרלי-hex + 2 ערכי-rgba בקובץ",
+    "evidence": "4-wise.mjs:10-16 בלוק `:root` עם הערה «נמדד ב-wise.com». ran: ספירת hex ⇒ 31. ran: grep -rn \"tokens\" gen/looks/full5/ ⇒ ∅"
+   },
+   {
+    "claim": "🔴 **חורג מהמדידה ומודה בכך רק ב-tokens.mjs, לא בקובץ עצמו**: h1 של Wise נמדד 89px במשקל 900, וכאן הוא `clamp(…,44px)` — הוקטן לעברית. ההודאה יושבת בקובץ אחר שהמסך אינו מייבא",
+    "evidence": "measure/tokens.mjs:112 `h1: { size: 64, weight: 900, lh: 0.85, ls: '0' },  // type.h1 89/900 — הוקטן לעברית, המשקל נשמר` — ו-kits.mjs:266 `h1{font:800 clamp(28px,5vw,44px)…}`. שלוש הצהרות שונות על אותו h1 בשלושה קבצים"
+   },
+   {
+    "claim": "**אינו** מגדיר חוזה; נעול ל-D של full5 (‏`D.budget` · `D.fundLate` · `D.queueN`)",
+    "evidence": "4-wise.mjs:120 `body: (D) => {`; `D.budget` קיים ב-full5/build.mjs:60 בלבד"
+   },
+   {
+    "claim": "‏`body` צובע ב-`--mut` ולא ב-`--ink` — בחירה מדודה (‏body.color של wise נמדד `#454745`), אבל היא אומרת שגוף-הטקסט אינו בצבע-הדיו הראשי",
+    "evidence": "4-wise.mjs:17 `body{…color:var(--mut);…}` כאשר :11 `--ink:#163300;--mut:#454745`; ההצדקה ב-measure/tokens.mjs:101 `mut: '#454745',  // body.color`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/looks/full5/build.mjs:97",
+    "how": "נטען דינמית בלולאה על screens/*.mjs"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "תוכן, לא מנוע. הפריט היחיד בעל ערך-כללי: **הממצא שגבול יכול להיות טבעת-צל ולא `border`** (:13-14). זו הבחנה שמדידה תופסת ועין לא, והיא רלוונטית לכל מי שמנסה לשחזר מראה. אבל היא ערך-דאטה בודד, וכבר יושבת ב-measured.json; אין כאן מנוע לחבר."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. מסך-דמו סטטי בלי התנהגות, עם 31 ליטרלי-צבע, ועם h1 שקיימות לו שלוש הצהרות סותרות בשלושה קבצים."
+  },
+  "evidence": [
+   "read: gen/looks/full5/screens/4-wise.mjs:1-22 (כותרת + טוקנים + ניווט) · מבנה :120-225 דרך grep על h1/section",
+   "ran: grep -c \"onclick|addEventListener|<script\" ⇒ 0",
+   "ran: grep -o \"D\\.[a-zA-Z0-9]*\" | sort -u | wc -l ⇒ 29",
+   "ran: grep -o '#[0-9a-fA-F]{3,8}' | wc -l ⇒ 31",
+   "read: gen/looks/measure/tokens.mjs:101,112 ו-first10/designs/kits.mjs:266 — שלוש ההצהרות על אותו h1"
+  ]
+ },
+ {
+  "file": "gen/looks/full5/screens/5-monzo.mjs",
+  "lang": "mjs",
+  "lines": 225,
+  "summary": "שפת Monzo — פס-הודעה, כרטיס-חשבון עם SVG של כרטיס-אשראי, קופות, הוצאה-לפי-קטגוריה, כרטיסי-צבע. 31 שדות-דאטה. מחזיק את ההסבר הכי מפורש למה מדידה החזירה `null`.",
+  "does": [
+   {
+    "claim": "אותו חוזה; css :9-114 · body :115-225",
+    "evidence": "5-monzo.mjs:6-8; :115 `body: (D) => {`"
+   },
+   {
+    "claim": "🔴 **מתעד למה המדידה החזירה null** — מסגרת-הכרטיס נמדדה 2px בשקיפות, ו-`extract.hex()` פוסל alpha<0.5 ⇒ הצבע חזר null. ההערה כאן היא ההסבר הנכון להתנהגות המכשיר",
+    "evidence": "5-monzo.mjs:13-14 `/* מסגרת-הכרטיס המדודה היא 2px בשקיפות (הצבע חזר null כי אלפא<0.5) */ --edge:2px solid rgba(9,23,35,.1);`; ובצד המכשיר: measure/extract.mjs:13-14 `const a = m[3]===undefined?1:+m[3]; if (a<0.5) return null;`"
+   },
+   {
+    "claim": "🔴 **מתעד חתימת-כפתור מדודה במלואה בהערה מעל היישום**: «מסגרת 2 · גלולה 128 · גובה 36 · ריפוד 0/16 · 13px/400»",
+    "evidence": "5-monzo.mjs:21-22 `/* כפתור-הקו המדוד: מסגרת 2 · גלולה 128 · גובה 36 · ריפוד 0/16 · 13px/400 */ .note button{background:none;border:2px solid var(--ink);color:var(--ink);border-radius:var(--rPill);`"
+   },
+   {
+    "claim": "‏5 רדיוסים מדודים כטוקנים נפרדים — 4 · 16 · 32 · 64 · 128, בדיוק הסולם שהמדידה החזירה למונזו",
+    "evidence": "5-monzo.mjs:15 `--rTiny:4px;--r:16px;--rCard:32px;--rBig:64px;--rPill:128px;`; ומול measure/tokens.mjs:125 `r:16, rCard:32, rBig:64, rPill:128,   // radii: 4 · 128 · 32 · 64 · 16`"
+   },
+   {
+    "claim": "מייבא `monzoCard` מ-art.mjs — ה-SVG של כרטיס-האשראי, הפריט המצויר המזוהה-ביותר של מונזו",
+    "evidence": "5-monzo.mjs:4 `import { monzoCard } from '../art.mjs'`"
+   },
+   {
+    "claim": "‏h1 נגזר-חלקית וצורך 31 שדות-דאטה כולל `D.k` (עוזר-אלפים)",
+    "evidence": "5-monzo.mjs:129 `<h1>הכסף של המוסד — במקום אחד, ברור, וכל הזמן מעודכן.</h1>`; ran: grep -o \"D\\.[a-zA-Z0-9]*\" | sort -u ⇒ 31 כולל D.k"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו אפליקציה** — הקופות, הכרטיסים והתנועות אינם לחיצים",
+    "evidence": "ran: grep -c \"onclick|addEventListener|<script\" ⇒ 0"
+   },
+   {
+    "claim": "🔴 **אינו** מייבא טוקנים — 32 ליטרלי-hex + rgba בקובץ, עם הערה «כל גוון כאן מופיע במדידה» שאיש אינו מאמת מכנית",
+    "evidence": "5-monzo.mjs:10 `:root{/* נמדד ב-monzo.com — כל גוון כאן מופיע במדידה */`. ran: ספירת hex ⇒ 32. ran: grep -rn \"tokens\" gen/looks/full5/ ⇒ ∅. ⚠️ ההערה אכן נבדקת — אבל בקובץ אחר (‏match.mjs:64-70), ורק כשמריצים אותו"
+   },
+   {
+    "claim": "‏h1 הוא **סיסמת-שיווק מוקלדת** ולא נגזרת, כמו ב-3-duolingo ובניגוד ל-2-spotify ול-4-wise",
+    "evidence": "5-monzo.mjs:129 — מחרוזת קבועה, בלי `${D…}`"
+   },
+   {
+    "claim": "**אינו** מגדיר חוזה; נעול ל-D של full5 (‏`D.budget` · `D.k` · `D.queue`)",
+    "evidence": "5-monzo.mjs:115 `body: (D) => {`"
+   },
+   {
+    "claim": "‏`--dim` ו-`--mut` מקבלים **אותו ערך** `#3b4c54` — כלומר שתי דרגות-דיו קרסו לאחת. במדידה היו שתיים (`mut:'#3d4a57'` · `dim:'#5f6875'`), והשוני נאבד בגלל חריגת-הקריאוּת",
+    "evidence": "5-monzo.mjs:11 `--mut:#3b4c54;--dim:#3b4c54;` מול measure/tokens.mjs:120 `mut: '#3d4a57', dim: '#5f6875',` — שלושה ערכים שונים בין שני הקבצים"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/looks/full5/build.mjs:97",
+    "how": "נטען דינמית בלולאה על screens/*.mjs"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "תוכן, לא מנוע. הערך הכללי היחיד: ההערה ב-:13-14 היא ההסבר הטוב-ביותר בקבוצה למה **מכשיר-מדידה מחזיר null**, וזה בדיוק סוג-הידע ש-VERIFY-LAWS דורש — לדעת מה המכשיר לא רואה. אבל זו הערה, לא מנוע."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. מסך-דמו סטטי, אפס אינטראקטיביות, 32 ליטרלי-צבע, h1 מוקלד, ושתי דרגות-דיו שקרסו לערך אחד שאינו מופיע בשום מדידה."
+  },
+  "evidence": [
+   "read: gen/looks/full5/screens/5-monzo.mjs:1-22 (כותרת + טוקנים + פס-הודעה) · מבנה :115-225 דרך grep על h1/section",
+   "ran: grep -c \"onclick|addEventListener|<script\" ⇒ 0",
+   "ran: grep -o \"D\\.[a-zA-Z0-9]*\" | sort -u | wc -l ⇒ 31",
+   "ran: grep -o '#[0-9a-fA-F]{3,8}' | wc -l ⇒ 32",
+   "read: gen/looks/measure/extract.mjs:13-14 (הסיבה ל-null) ו-measure/tokens.mjs:120,125 (הערכים הסותרים)"
+  ]
  }
 ]
