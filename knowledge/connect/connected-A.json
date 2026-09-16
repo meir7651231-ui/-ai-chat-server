@@ -1,0 +1,600 @@
+[
+ {
+  "file": "machtzev/census.mjs",
+  "lang": "mjs",
+  "lines": 64,
+  "capabilities": [
+   {
+    "cap": "עובר רקורסיבית על כל קובץ בריפו-יעד (ממוין, דטרמיניסטי) ומשייך כל אחד לדלי + תחום-אטומים לפי 12 כללי-נתיב — הראשון-שתופס מנצח",
+    "evidence": "machtzev/census.mjs:18-31,35-50"
+   },
+   {
+    "cap": "אוכף «אין יתומים»: קובץ שלא נתפס ע\"י אף כלל ⇒ רשימת-יתומים ⇒ exit 1 (אזעקה)",
+    "evidence": "machtzev/census.mjs:47,63"
+   },
+   {
+    "cap": "סופר שורות לכל קובץ תוך דילוג על בינאריים (buf.includes(0) ⇒ 0 שורות) ובלי לקרוס על קובץ בלתי-קריא",
+    "evidence": "machtzev/census.mjs:45"
+   },
+   {
+    "cap": "סופר תיקיות-אטומות (.git · node_modules · dist · build · .dart_tool · .gradle · Pods) כגוש אחד בלי לרדת פנימה",
+    "evidence": "machtzev/census.mjs:15,39"
+   },
+   {
+    "cap": "מסכם לפי-תחום (קבצים+שורות) וכותב registry/census-<name>.json עם totals · byDomain · opaqueDirs · orphans · רשימת-הקבצים המלאה",
+    "evidence": "machtzev/census.mjs:52-58"
+   },
+   {
+    "cap": "מדפיס טבלת-תחומים ממוינת לפי שורות + שורת-סיכום «100% משויכים»",
+    "evidence": "machtzev/census.mjs:60-64"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו קורא קוד ואינו מבין מה הקובץ עושה — השיוך לפי **נתיב/סיומת** בלבד (regex על rel), לא לפי תוכן",
+    "evidence": "machtzev/census.mjs:18-31 (כל 12 הכללים הם regex על המחרוזת p)"
+   },
+   {
+    "claim": "אינו כותב למקור — הפלט היחיד הוא registry/census-<name>.json ליד הקובץ עצמו",
+    "evidence": "machtzev/census.mjs:5 (ההצהרה) · :57-58 (הכתיבה היחידה)"
+   },
+   {
+    "claim": "אינו מפקד-אטומים ואינו קשור ל-atom-census — הוא סופר קבצים ושורות, לא מחלקות/שקעים",
+    "evidence": "machtzev/census.mjs:3-4 מול machtzev/census/atom-census.mjs:3-9"
+   },
+   {
+    "claim": "אינו נגזר מ-root.mjs — מקבל את השורש כארגומנט CLI חובה",
+    "evidence": "machtzev/census.mjs:11-12"
+   }
+  ],
+  "pipeline": {
+   "runBy": "מורץ בשם עם ארגומנטים: `node census.mjs <repo-root> <repo-name>`; במנוע-האחד הוא מגיע דרך run.mjs של maor (machtzev/one.mjs:47 — «census + 15 מחלצים + reconcile + שערים»)",
+   "input": "שורש-ריפו כלשהו (argv[2]) + שם (argv[3])",
+   "output": "machtzev/registry/census-<name>.json + דוח-מסך + exit-code",
+   "next": "המחלצים/ה-reconcile של run.mjs צורכים את הרג׳יסטרי"
+  },
+  "quality": {
+   "signal": "שער-אמת מובנה: exit 1 על יתום אחד. דטרמיניסטי (מיון שמות) וניתן להרצה חוזרת.",
+   "measured": "לא-נמדד בסשן הזה — לא הרצתי אותו (הוא כותב ל-machtzev/registry/, מחוץ ל-knowledge/connect/). מנגנון-האזעקה נקרא בקוד (machtzev/census.mjs:63)."
+  },
+  "evidence": [
+   "cat -n machtzev/census.mjs (64 שורות, נקרא במלואו)",
+   "grep על machtzev/one.mjs:47 — הקריאה ל-run.mjs של maor"
+  ]
+ },
+ {
+  "file": "machtzev/census/atom-census.mjs",
+  "lang": "mjs",
+  "lines": 109,
+  "capabilities": [
+   {
+    "cap": "מסווג טיפוס-שדה של Dart לקטגוריה טהורה (cb · style · widget · series · list · str · num · bool · other) — לפי הטיפוס בלבד, בלי ידע-דומייני",
+    "evidence": "machtzev/census/atom-census.mjs:31-42 (fieldKind)"
+   },
+   {
+    "cap": "חולץ את כל שדות-ה-final של מחלקת-ווידג׳ט, כולל הכרזה-מרובה בשורה אחת (`final Type a, b, c;`) — התיקון שסגר תפרים שנראו zero",
+    "evidence": "machtzev/census/atom-census.mjs:45-50"
+   },
+   {
+    "cap": "גוזר **תפר-נתונים** לכל אטום מהחתימה שלו-עצמו: series (סדרת-מספרים) ⇒ collection (רשימה) ⇒ fields (ערכים בודדים) ⇒ zero (רק callbacks/style)",
+    "evidence": "machtzev/census/atom-census.mjs:56-60"
+   },
+   {
+    "cap": "גוזר **ייעוד** (caps) משילוב תפר + שמות-שדות גנריים: trend · list · kpi · status · card · progress · detail · chrome",
+    "evidence": "machtzev/census/atom-census.mjs:62-70"
+   },
+   {
+    "cap": "פולט פרופיל-שקעים מספרי לכל אטום (str/num/bool/list/series/widget/cb/style + fields/dataFields) — המצע לבחירה-לפי-התאמה במנוע-ההרכבה",
+    "evidence": "machtzev/census/atom-census.mjs:72-78"
+   },
+   {
+    "cap": "סורק רקורסיבית את כל מדף-החזות (new/dart-ui-bs), תופס כמה מחלקות-ווידג׳ט בקובץ אחד, ומדדפ לפי שם-מחלקה חוצה-קבצים",
+    "evidence": "machtzev/census/atom-census.mjs:19-28,81-95"
+   },
+   {
+    "cap": "מדפיס התפלגות תפרים וייעודים בהרצה ישירה",
+    "evidence": "machtzev/census/atom-census.mjs:98-108"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "**אינו כותב עוד atom-census.json** — הכתיבה בוטלה בהכרעה c4ב (תת-קבוצה של atom-index.json בלי צרכן ייחודי); בהרצה ישירה הוא רק מדפיס הודעה שמפנה ל-atom-index",
+    "evidence": "machtzev/census/atom-census.mjs:100-101; אומת בריצה: הפלט פותח ב-«ℹ️ atom-census.json בוטל (c4ב)» והעץ נשאר נקי (git status ריק)"
+   },
+   {
+    "claim": "אינו סורק את dart-forge-bs — SCAN הוא dart-ui-bs בלבד; ספריית-ה-forge נסרקת ע\"י atom-index",
+    "evidence": "machtzev/census/atom-census.mjs:15 מול machtzev/census/atom-index.mjs:27"
+   },
+   {
+    "claim": "אינו קורא מילון-דומייני ואינו פונה לרשת/LLM — הייעוד נגזר מצורה ומשמות-שדות גנריים",
+    "evidence": "machtzev/census/atom-census.mjs:8,30,62-70"
+   },
+   {
+    "claim": "אינו מודד טוהר (עברית-בקוד) ואינו יודע מאיזה מסך האטום הורם — זה atom-index",
+    "evidence": "machtzev/census/atom-census.mjs:72-78 (השדות המוחזרים) מול machtzev/census/atom-index.mjs:30-38"
+   }
+  ],
+  "pipeline": {
+   "runBy": "בעיקר כספרייה — atom-index.mjs:10 מייבא את analyzeAtom. ניתן גם להרצה ישירה (`node machtzev/census/atom-census.mjs`) לדוח-התפלגות",
+   "input": "new/dart-ui-bs/**/*.dart (קוד-המקור של אטומי-החזות)",
+   "output": "מערך-אטומים בזיכרון (census()) + analyzeAtom כפונקציה מיוצאת + דוח-מסך. אין קובץ-פלט",
+   "next": "atom-index.mjs עוטף את analyzeAtom ומוסיף מוצא/מטרה/טוהר, וכותב generator/atom-index.json"
+  },
+  "quality": {
+   "signal": "דטרמיניסטי (מיון + דדופ-שם) · אפס-רשת/LLM · קורא רק את חוזה-האטום (חוק-4). השער הנשען עליו הוא oracle (אינדקס ≡ עץ-חי), לא שער משלו.",
+   "measured": "הורץ: `node machtzev/census/atom-census.mjs` ⇒ 565 אטומים · תפרים fields 490 · collection 44 · zero 25 · series 6 · ייעודים detail 353 · kpi 99 · card 73 · list 44 · chrome 25 · status 25 · progress 10 · trend 6. העץ נשאר נקי (git status ריק) — אישור שהוא לא כותב."
+  },
+  "evidence": [
+   "cat -n machtzev/census/atom-census.mjs (109 שורות, נקרא במלואו)",
+   "node machtzev/census/atom-census.mjs ⇒ 565 אטומים + התפלגויות (הודפס לעיל)",
+   "git status --short ⇒ ריק אחרי הריצה"
+  ]
+ },
+ {
+  "file": "machtzev/census/atom-index.mjs",
+  "lang": "mjs",
+  "lines": 54,
+  "capabilities": [
+   {
+    "cap": "בונה אינדקס-אמת אחד לכל אטום-חזות: מחלקה · קובץ · מוצא-מסך · מטרה · טוהר · תפר · ייעוד · פרופיל-שקעים — במקום שסוכן יצליב 5 קבצים וינחש",
+    "evidence": "machtzev/census/atom-index.mjs:3-7,24-42"
+   },
+   {
+    "cap": "סורק שני מדפים: new/dart-ui-bs וגם new/dart-forge-bs (ספריית-החישול), ומדדפ לפי שם-מחלקה",
+    "evidence": "machtzev/census/atom-index.mjs:26-27,34"
+   },
+   {
+    "cap": "מזהה את מסך-המקור של אטום מהערת «מוצא: screens__…» שבקוד",
+    "evidence": "machtzev/census/atom-index.mjs:30"
+   },
+   {
+    "cap": "גוזר מטרה-אמיתית בסדר-עדיפות: מונחי-מסך-המקור (מ-screens-seed/machine/*.json) אם הורם, אחרת התיאור-העצמי מההערות מנוקה-בוילרפלייט; ומתייג את המקור ב-purposeFrom (source-screen · own-he · none)",
+    "evidence": "machtzev/census/atom-index.mjs:18-20,36-38"
+   },
+   {
+    "cap": "מודד טוהר: סופר מילים-בעברית בקוד אחרי הסרת ההערות — עברית בקוד = חוב",
+    "evidence": "machtzev/census/atom-index.mjs:32"
+   },
+   {
+    "cap": "מאציל את ניתוח-החתימה (תפר · ייעוד · שקעים) ל-analyzeAtom של atom-census במקום לשכפל",
+    "evidence": "machtzev/census/atom-index.mjs:10,35"
+   },
+   {
+    "cap": "כותב generator/atom-index.json ומדפיס סיכום-אמת: כמה אטומים, כמה עם מטרה-אמיתית (מפולח לפי מקור), כמה נקיים מול חוב-עברית",
+    "evidence": "machtzev/census/atom-index.mjs:44-53"
+   },
+   {
+    "cap": "עמיד לחוסר-קלט — קריאת screens-seed עטופה ב-try/catch, כך שהיעדר מפות-מסך לא מפיל את האינדקס (המטרה נופלת ל-own-he/none)",
+    "evidence": "machtzev/census/atom-index.mjs:20"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "המטרה אינה מאומתת מול הקוד — היא או מונחים מהמסך שממנו האטום הורם, או טקסט-ההערות שלו עצמו; שניהם דיווח-עצמי",
+    "evidence": "machtzev/census/atom-index.mjs:36-38 (purpose = screenTerms[origin] || ownHe); CLAUDE.md מציין זאת מפורשות: «המטרות הן דיווח-עצמי מכותרת הקובץ, לא אומתו מול הקוד»"
+   },
+   {
+    "claim": "אינו מאנדקס לוגיקה — רק StatelessWidget/StatefulWidget; שכבת-הלוגיקה היא logic-census והאיחוד הוא oracle",
+    "evidence": "machtzev/census/atom-index.mjs:33 (הרגקס תופס רק extends StatelessWidget|StatefulWidget) · machtzev/generator/regen.mjs:31-33"
+   },
+   {
+    "claim": "אינו בוחר אטום ואינו מחווט — הוא רק מתאר; הבחירה אצל auto-skin/auto-logic/particles",
+    "evidence": "machtzev/census/atom-index.mjs:24-42 (מחזיר תיאור בלבד) מול machtzev/generator/regen.mjs:8,12"
+   },
+   {
+    "claim": "אינו אינדקס-המנועים — engine-index.json הוא קובץ אחר לגמרי (מנועי-mjs), וזה אינדקס אטומי-Dart",
+    "evidence": "machtzev/census/atom-index.mjs:14 (OUT = generator/atom-index.json)"
+   }
+  ],
+  "pipeline": {
+   "runBy": "צנרת-INDEX של regen: machtzev/generator/regen.mjs:32 (quiet) — מיד אחרי logic-census ולפני oracle --write",
+   "input": "new/dart-ui-bs/**/*.dart · new/dart-forge-bs/**/*.dart · screens-seed/machine/*.json",
+   "output": "machtzev/generator/atom-index.json + סיכום-מסך",
+   "next": "machtzev/census/oracle.mjs --write מאחד תצוגה+לוגיקה (regen.mjs:33), ושער oracle מאמת אינדקס ≡ עץ-חי"
+  },
+  "quality": {
+   "signal": "שער «oracle» במרשם-השערים: «אורקל-מאוחד: atom-index-full ≡ תצוגה+לוגיקה (1332) — אפס-אטום-נופל (§21 יסוד)» — האינדקס נבדק מול העץ-החי, לא נסמך על עצמו.",
+   "measured": "לא הרצתי אותו — הוא כותב את generator/atom-index.json (שינוי-עץ מחוץ ל-knowledge/connect/). קיום השער אומת: `grep -E '^oracle' machtzev/gates.tsv`. ספירה מקבילה דרך atom-census ⇒ 565 (dart-ui-bs בלבד; atom-index סורק גם forge ולכן גדול יותר — לא-נמדד כמה)."
+  },
+  "evidence": [
+   "cat -n machtzev/census/atom-index.mjs (54 שורות, נקרא במלואו)",
+   "grep -vc '^#' machtzev/gates.tsv ⇒ 57 · grep -E '^oracle' machtzev/gates.tsv ⇒ שורת-השער",
+   "node machtzev/census/atom-census.mjs ⇒ 565 (מדף אחד בלבד)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/chrome.mjs",
+  "lang": "mjs",
+  "lines": 10,
+  "capabilities": [
+   {
+    "cap": "טוען את אוצר-מילות-הכרום מקובץ-דאטה חיצוני (chrome.data.json) ומייצא אותו כ-L — כך המנוע-העיוור כותב L.<role> במקום מחרוזת-עברית קשיחה (§19)",
+    "evidence": "machtzev/generator/chrome.mjs:9"
+   },
+   {
+    "cap": "ממלא תבנית: T(key, vars) מחליף {placeholder} בערכים — מילוי-מחרוזת בלבד, בלי לוגיקה",
+    "evidence": "machtzev/generator/chrome.mjs:10"
+   },
+   {
+    "cap": "מאתר את קובץ-הדאטה דרך root.mjs (GEN_DIR) ולא בנתיב מקודד",
+    "evidence": "machtzev/generator/chrome.mjs:8-9"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מחזיק אף מילה בעברית בעצמו — כל התוכן בקובץ-הדאטה; המנוע הוא 10 שורות של קריאה+החלפה",
+    "evidence": "machtzev/generator/chrome.mjs:1-10 (אין ליטרל-עברי בקוד)"
+   },
+   {
+    "claim": "אינו מתרגם, אינו בורר נוסח ואינו נופל-לברירת-מחדל — L[key] חסר מחזיר undefined ו-T יקרוס על split של undefined",
+    "evidence": "machtzev/generator/chrome.mjs:10 (String(v) מוגן, אך L[key] לא)"
+   },
+   {
+    "claim": "אינו שער ואינו נבדק בעצמו",
+    "evidence": "machtzev/generator/chrome.mjs:1-10 (אין exit/בדיקה); grep על gates.tsv — אין שער בשם chrome"
+   }
+  ],
+  "pipeline": {
+   "runBy": "ספרייה — מיובא, לא מורץ. 5 מייבאים: app-ds · balagan · render-ds · app-shell · particles",
+   "input": "machtzev/generator/chrome.data.json",
+   "output": "L (אובייקט-מילון) · T (פונקציית-תבנית)",
+   "next": "המחוללים פולטים Dart שמכיל את המחרוזת שנבחרה מ-L"
+  },
+  "quality": {
+   "signal": "ההפרדה עצמה היא האיכות (מנוע-עיוור · אפס-מילון-במנוע, §19). אין שער, אין בדיקה, אין ratchet.",
+   "measured": "5 מייבאים — `grep -rn \"chrome.mjs'\" --include=*.mjs machtzev` ⇒ app-ds.mjs:18 · balagan.mjs:15 · render-ds.mjs:10 · app-shell.mjs:9 · particles.mjs:15. איכות עצמה: לא-נמדד."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/chrome.mjs (10 שורות, נקרא במלואו)",
+   "grep -rn \"chrome.mjs'\" --include=*.mjs machtzev ⇒ 5 מייבאים",
+   "grep -vc '^#' machtzev/gates.tsv ⇒ 57 שערים; אין ערך chrome"
+  ]
+ },
+ {
+  "file": "machtzev/generator/cloud-screen.mjs",
+  "lang": "mjs",
+  "lines": 46,
+  "capabilities": [
+   {
+    "cap": "מרנדר את כל סעיף-החיבור-לענן בלולאה אחת מעל קובץ-דאטה (cloud-sockets.data.json) במקום שורת-ווידג׳ט אחרי שורת-ווידג׳ט ביד — שקע חדש = שורה בדאטה, אפס Dart ביד",
+    "evidence": "machtzev/generator/cloud-screen.mjs:2-5,16-43"
+   },
+   {
+    "cap": "מקבץ את השקעים לשלוש רמות-צורך (always · config · account) ועוטף כל קבוצה בשער-תצוגה שמגיע מהדאטה — «מתי לשאול» הוא נתון, לא קוד",
+    "evidence": "machtzev/generator/cloud-screen.mjs:17,25-37"
+   },
+   {
+    "cap": "פולט שלושה סוגי-רכיב פר-שקע: שדה (DsField) · הערה (DsNote) · פעולה (DsPrimaryButton/DsChipButton לפי primary)",
+    "evidence": "machtzev/generator/cloud-screen.mjs:18-22,29-34"
+   },
+   {
+    "cap": "מבדיל בין שקע שנשמר בחנות לבין משתנה-מסך: kind==='store' ⇒ appStore.setting/setSetting, אחרת קריאה/השמה ישירה",
+    "evidence": "machtzev/generator/cloud-screen.mjs:19-20"
+   },
+   {
+    "cap": "מנטרל פעולות בזמן-עבודה (_cloudBusy ⇒ onTap: null) ומוסיף שורת-הודעה מותנית בסוף הסעיף",
+    "evidence": "machtzev/generator/cloud-screen.mjs:33-34,39"
+   },
+   {
+    "cap": "מייצא את המספר שהשער סופר מולו — cloudWidgetCount() = שקעים+הערות+פעולות+1, כדי שאי-אפשר להבריח ווידג׳ט-ענן שלא בא מהדאטה",
+    "evidence": "machtzev/generator/cloud-screen.mjs:45-46"
+   },
+   {
+    "cap": "מושך את כל הטקסט ממילון-הכרום (L) דרך פונקציית-קבוע מוזרקת k — אין ליטרל-עברי בפלט",
+    "evidence": "machtzev/generator/cloud-screen.mjs:15-16,21,31-34,40"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מדבר עם ענן ואינו מחזיק סוד — הוא פולט מחרוזות-Dart בלבד; החוט האמיתי הוא אטום-ההצבה ds_cloud.dart",
+    "evidence": "machtzev/generator/cloud-screen.mjs:6-8 (היבוא היחיד: fs/path/url — אין רשת)"
+   },
+   {
+    "claim": "אינו כותב קובץ — ספרייה שמחזירה מחרוזת; הכתיבה אצל balagan.mjs",
+    "evidence": "machtzev/generator/cloud-screen.mjs:16 (return) · אין writeFileSync בקובץ"
+   },
+   {
+    "claim": "אינו יוצר את חבילת-השרת (חוקים/פונקציות) — זה server.mjs; כאן רק מסך-ההגדרות של הלקוח",
+    "evidence": "machtzev/generator/regen.mjs:23 מול machtzev/generator/cloud-screen.mjs:2"
+   },
+   {
+    "claim": "אינו בורר אטומים — שמות אטומי-ה-DS (DsField · DsNote · DsPrimaryButton · DsChipButton · DsSection) קשיחים בקוד הפולט",
+    "evidence": "machtzev/generator/cloud-screen.mjs:21,31-34,40"
+   }
+  ],
+  "pipeline": {
+   "runBy": "ספרייה — machtzev/generator/balagan.mjs:14 מייבא renderCloudSection; machtzev/generator/balagan-one.mjs:8 מייבא SOCKETS + cloudWidgetCount (צד-השער)",
+   "input": "machtzev/generator/cloud-sockets.data.json (6 שקעים · 3 הערות · 5 פעולות) + מילון-הכרום L + פונקציית-הקבוע k",
+   "output": "מחרוזת-Dart של DsSection אחד, שמוטמעת במסך «חיבורים» של בלגן",
+   "next": "balagan.mjs מטמיע בפלט; balagan-one.mjs (שער balaganone) סופר ווידג׳טים מול cloudWidgetCount()"
+  },
+  "quality": {
+   "signal": "שער דו-כיווני מוצהר (G60): שקע-שהוצהר-ואינו-במסך ⇒ אדום, וגם ווידג׳ט-שנכתב-ביד ⇒ אדום — הספירה מיוצאת מהמנוע עצמו ונאכפת ב-balagan-one.",
+   "measured": "נמדד מהדאטה: `node -e` על cloud-sockets.data.json ⇒ sockets 6 · notes 3 · actions 5 ⇒ cloudWidgetCount() = 15. את שער balaganone עצמו לא הרצתי — לא-נמדד כאן."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/cloud-screen.mjs (46 שורות, נקרא במלואו)",
+   "node -e על machtzev/generator/cloud-sockets.data.json ⇒ 6/3/5",
+   "grep -rn cloud-screen.mjs machtzev ⇒ balagan.mjs:14 · balagan-one.mjs:8"
+  ]
+ },
+ {
+  "file": "machtzev/generator/core-dart.mjs",
+  "lang": "mjs",
+  "lines": 73,
+  "capabilities": [
+   {
+    "cap": "פולט מסך-Dart שלם לכל ישות שיש לה workflow עם מצבים — gen_core_<entity>.dart מתוך core-registry.json בלבד",
+    "evidence": "machtzev/generator/core-dart.mjs:14-16,64-72"
+   },
+   {
+    "cap": "מפריד שתי שכבות בפלט: מחלקת-דאטה <E>Core (term · states · relations · rules · channels · events) ומסך-תצוגה <E>CoreScreen",
+    "evidence": "machtzev/generator/core-dart.mjs:28-38"
+   },
+   {
+    "cap": "בוחר מנוע-מעבר-מצב מהמדף לפי הצהרת-הרג׳יסטרי: advance-status ⇒ אטום advanceStatus · next-stage ⇒ nextStage+stageIndex+ayinStages · אחרת סדר-ההצהרה כהצבה מוצהרת (חוק-7) — ומייבא בדיוק את מה שנבחר",
+    "evidence": "machtzev/generator/core-dart.mjs:18-20"
+   },
+   {
+    "cap": "בונה תצוגה מאטומי-DS בלבד (DsScaffold · DsSection · StatusChip · AlertBanner · SoftButton · DsTable) — הציור-ביד היחיד הוא פריסת Wrap",
+    "evidence": "machtzev/generator/core-dart.mjs:4,17,44-59"
+   },
+   {
+    "cap": "מדלג-ברוך על מקטע-ריק: אין יחסים/אירועים/ערוצים ⇒ AlertBanner מסביר במקום טבלה ריקה",
+    "evidence": "machtzev/generator/core-dart.mjs:54,56-57"
+   },
+   {
+    "cap": "מציב את policy (שבת/כשרות/הרשאות) כשקע ריק עם באנר «הכרעת-בעלים» במקום להמציא ערך",
+    "evidence": "machtzev/generator/core-dart.mjs:4,26,58"
+   },
+   {
+    "cap": "בורח נכון מ-Dart בעת פליטת-מחרוזות (backslash · גרש · $)",
+    "evidence": "machtzev/generator/core-dart.mjs:13 (q)"
+   },
+   {
+    "cap": "מצב --gate: משווה כל פלט מחויב מול פליטה-טרייה ונופל ב-exit 1 על כל הפרש",
+    "evidence": "machtzev/generator/core-dart.mjs:70-71"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מרנדר ואינו מוכיח שהמסך עולה — השער שלו משווה טקסט בלבד; הרנדר-בפועל הוא שער genverify",
+    "evidence": "machtzev/generator/core-dart.mjs:71 (הטקסט «הרנדר בשער genverify») · ערך coredart ב-machtzev/gates.tsv"
+   },
+   {
+    "claim": "אינו גוזר את הרג׳יסטרי — הוא רק קורא core-registry.json; הגזירה היא core-from-shape.mjs שרץ שלב לפניו",
+    "evidence": "machtzev/generator/core-dart.mjs:12 מול machtzev/generator/regen.mjs:14-15"
+   },
+   {
+    "claim": "אינו מטפל בישות בלי workflow — emit מחזיר null והישות מדולגת בשקט",
+    "evidence": "machtzev/generator/core-dart.mjs:15,69"
+   },
+   {
+    "claim": "אין בו Date.now ואין דאטה מומצא — הכל מהרג׳יסטרי",
+    "evidence": "machtzev/generator/core-dart.mjs:5 (ההצהרה); אין Date/Math.random בקובץ"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:15 (שלב 9 בצנרת) · machtzev/police.mjs:155 במצב --gate",
+   "input": "machtzev/generator/core-registry.json (פלט core-from-shape.mjs, שרץ שלב לפניו ב-regen.mjs:14)",
+   "output": "new/dart-gen-bs/gen_core_<entity>.dart",
+   "next": "מסכי-הישות (retarget) מייבאים את <E>Core (הכותרת מציינת G6c); הרנדר נבדק בשער genverify"
+  },
+  "quality": {
+   "signal": "שער «coredart» רשום ב-gates.tsv ומורץ מהמשטרה (police.mjs:155) — ratchet של זהות-ביטים: פלט מחויב ≡ פליטה טרייה מהרג׳יסטרי.",
+   "measured": "הורץ: `node machtzev/generator/core-dart.mjs --gate` ⇒ exit 0 · «8 מסכי-גרעין (gen_core_*.dart) ≡ פליטה-דטרמיניסטית מהרג׳יסטרי». git status נשאר ריק."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/core-dart.mjs (73 שורות, נקרא במלואו)",
+   "node machtzev/generator/core-dart.mjs --gate ⇒ exit 0 · 8 מסכים",
+   "grep -n core-dart machtzev/police.mjs ⇒ :155 gate('coredart', …)"
+  ]
+ },
+ {
+  "file": "machtzev/generator/regen.mjs",
+  "lang": "mjs",
+  "lines": 39,
+  "capabilities": [
+   {
+    "cap": "מגדיר את סדר-הריצה היחיד של צנרת-המחולל (GENMAX) כמערך REGEN — 17 שלבים מוצהרים + שלבי-ספק נגזרים, כל פריט {rel,args,note}",
+    "evidence": "machtzev/generator/regen.mjs:6-24"
+   },
+   {
+    "cap": "גוזר את שלבי מסלול-ב׳ **מהדיסק** — כל machtzev/generator/specs-ds/*.txt ⇒ הרצת app-ds.mjs -f <spec> --name <stem> --skin; אין רשימה קשיחה",
+    "evidence": "machtzev/generator/regen.mjs:25-29 (dsSpecs · readdirSync) · נמדד: `ls machtzev/generator/specs-ds/*.txt | wc -l` ⇒ 31"
+   },
+   {
+    "cap": "מגדיר צנרת-אינדוקס נפרדת INDEX — 6 שלבים (logic-census · atom-index · oracle --write · quarry-golden · op-census · truth --write) שרצים אחרי הפליטה",
+    "evidence": "machtzev/generator/regen.mjs:30-37"
+   },
+   {
+    "cap": "מריץ רשימת-שלבים דרך **מריץ מוזרק** — runRegen(node, steps) מקבל את הפונקציה המריצה מבחוץ, כך שכל צנרת שומרת על הלוג/הכשל שלה",
+    "evidence": "machtzev/generator/regen.mjs:39"
+   },
+   {
+    "cap": "פולט תווית-טקסט קריאה של סדר-הריצה (שמות-בסיס מחוברים ב-⇒) לשימוש בלוג",
+    "evidence": "machtzev/generator/regen.mjs:38 (label) · נצרך ב-machtzev/generator/ship.mjs:38"
+   },
+   {
+    "cap": "מסמן שלבים כשקטים (quiet) כדי שהמריץ יבליע את הפלט שלהם",
+    "evidence": "machtzev/generator/regen.mjs:10-11,28,31-36,39"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מריץ תהליכים בעצמו",
+    "evidence": "אין execFileSync/spawn/exec בקובץ — היבוא היחיד הוא node:fs ו-node:url (machtzev/generator/regen.mjs:4-5); ההרצה בפועל אצל הקורא (machtzev/one.mjs:155-156 · machtzev/generator/ship.mjs:77)"
+   },
+   {
+    "claim": "אינו שער ואינו בודק תוצאה — אין exit code, אין throw, אין השוואה מול baseline",
+    "evidence": "machtzev/generator/regen.mjs:1-39 (אין process.exit/throw בקובץ)"
+   },
+   {
+    "claim": "אינו משרשר את INDEX לתוך REGEN — אלו שתי רשימות נפרדות, והקורא מחליט אם לשרשר",
+    "evidence": "machtzev/generator/regen.mjs:6,30 מול machtzev/one.mjs:156 ([...REGEN, ...INDEX]) ומול machtzev/generator/ship.mjs:38,77 (שתי קריאות נפרדות)"
+   }
+  ],
+  "pipeline": {
+   "runBy": "מיובא (לא מורץ) ע\"י machtzev/one.mjs:10 ו-machtzev/generator/ship.mjs:11; גם engine-index קורא אותו כטקסט כדי להכריע «מחובר» (machtzev/census/engine-index.mjs:328)",
+   "input": "תיקיית machtzev/generator/specs-ds/ (readdirSync) — זה כל הקלט; שאר הרשימה ליטרלית בקוד",
+   "output": "שני מערכי-תיאור-שלבים (REGEN, INDEX) + שתי פונקציות (label, runRegen)",
+   "next": "הקורא מריץ כל s.rel עם s.args: ds-forge ⇒ auto-skin ⇒ tighten-types ⇒ logic-census ⇒ oracle ⇒ auto-logic ⇒ skin-golden ⇒ core-from-shape ⇒ core-dart ⇒ app-from-sentences ⇒ behavior-plan ⇒ behavior-compose ⇒ peruk --all ⇒ 31×app-ds ⇒ balagan ⇒ server, ואז INDEX"
+  },
+  "quality": {
+   "signal": "מקור-אמת יחיד לסדר-הריצה — ship.mjs ו-one.mjs מייבאים את אותו מערך במקום להחזיק שני עותקים (G22/L94). אין שער ייעודי ל-regen עצמו; האכיפה עקיפה (שני הצרכנים מייבאים, לא משכפלים).",
+   "measured": "31 ספקי specs-ds נספרו בפועל (`ls machtzev/generator/specs-ds/*.txt | wc -l` ⇒ 31); 17 שלבים ליטרליים ב-REGEN + 6 ב-INDEX נספרו בקריאת הקוד. אין מדידת-איכות משלו — לא-נמדד."
+  },
+  "evidence": [
+   "cat -n machtzev/generator/regen.mjs (39 שורות, נקרא במלואו)",
+   "grep -n regen machtzev/generator/ship.mjs ⇒ שורות 11,38,77",
+   "ls machtzev/generator/specs-ds/*.txt | wc -l ⇒ 31"
+  ]
+ },
+ {
+  "file": "machtzev/one.mjs",
+  "lang": "mjs",
+  "lines": 249,
+  "capabilities": [
+   {
+    "cap": "מריץ את כל הצנרת בפקודה אחת כרצף «שלבים» — כל שלב נמדד בזמן, נתפס ב-try/catch, ונרשם לשורה בלוח-מצב; שלב-חובה שנכשל מדליק failed=1 ו-exit≠0",
+    "evidence": "machtzev/one.mjs:20-30,248-249"
+   },
+   {
+    "cap": "מבחין בין שלב-חובה לשלב-אופציונלי — optional:true ⇒ ⏭️ ולא מפיל את הריצה (כך «אין buildsmart»/«אין maor» אינם כשל)",
+    "evidence": "machtzev/one.mjs:20,26-28, ושימוש ב-:52,65,84-87,114,129,134,142,161,176-178,181,184-185,204,216,222"
+   },
+   {
+    "cap": "מסנן שלבים לפי --genmax — רק שלב שמסומן genmax:true רץ, כלומר רק צנרת-המחולל + לוח-המצב",
+    "evidence": "machtzev/one.mjs:13,21,154-158"
+   },
+   {
+    "cap": "מרענן את מקור-maor לבד: git fetch origin main ⇒ merge (abort על קונפליקט, לעולם לא force) ⇒ run.mjs ⇒ commit+push של registry/STATUS בלבד",
+    "evidence": "machtzev/one.mjs:37-52"
+   },
+   {
+    "cap": "מושך את מסכי-המקור החיים מ-buildsmart דרך git ls-tree/git show של origin/main לתיקיית-שריטה — בלי checkout",
+    "evidence": "machtzev/one.mjs:55-65"
+   },
+   {
+    "cap": "מפרק כל מסך לשני תוצרים: מפת-מכונה (screen-decomp --json) ותוכן מורם (screen-lift)",
+    "evidence": "machtzev/one.mjs:68-80"
+   },
+   {
+    "cap": "גוזר קטלוג-מונחים מאוחד מכל מפות-המסכים: ספירת-מופעים + מפתח sha1 לכל מונח ⇒ terms-catalog.json + אטום-דאטה Dart (ui_terms.dart + termOf)",
+    "evidence": "machtzev/one.mjs:90-107"
+   },
+   {
+    "cap": "מריץ את צנרת-המחולל דרך regen.mjs — [...REGEN, ...INDEX] בסדר, במקום רשימה משלו",
+    "evidence": "machtzev/one.mjs:10,154-158"
+   },
+   {
+    "cap": "מחולל רק ספקים-חדשים ב-genesis-gen (--only על מי שאין לו gen_<slug>.dart), כדי שהריצה-המלאה לא תשכתב ~100 מסכים ותמחק תוצרי-GENMAX",
+    "evidence": "machtzev/one.mjs:144-151"
+   },
+   {
+    "cap": "מזריק 9 מדפי-Dart ל-buildsmart (מחיקה+העתקה, בלי _test ובלי QUARANTINE) ומנחית commit+push רק כשיש שינוי",
+    "evidence": "machtzev/one.mjs:206-222"
+   },
+   {
+    "cap": "מגדר שלבי-Dart/Flutter/Playwright לפי קיום-בינארי — בלי dart מדלג ושומר את מטמון-ההוכחות במקום למחוק אותו",
+    "evidence": "machtzev/one.mjs:183-185,188-204"
+   },
+   {
+    "cap": "אוכף שער-רגרסיית-פיקסל: אטום שסטה >1.5% מ-baseline (ו->2% מוחלט) ⇒ throw ⇒ שלב אדום",
+    "evidence": "machtzev/one.mjs:197-199"
+   },
+   {
+    "cap": "כותב לוח-מצב מאוחד (ONE-STATUS.md): טבלת-שלבים + ספירות-מדף פר-קטלוג",
+    "evidence": "machtzev/one.mjs:226-247"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מחזיק את סדר-צנרת-המחולל — הסדר מיובא מ-regen.mjs; שלב-מחולל חדש נוסף שם, לא כאן",
+    "evidence": "machtzev/one.mjs:10,156 (import { REGEN, INDEX } · for (const st of [...REGEN, ...INDEX]))"
+   },
+   {
+    "claim": "אינו מריץ genesis-gen מלא כברירת-מחדל — רק ספקים שאין להם פלט; מסך קיים מתחדש רק ידנית ב---only",
+    "evidence": "machtzev/one.mjs:144-151 (התיעוד מציין drift של 84 קבצים ומחיקת תוצרי-GENMAX, L93)"
+   },
+   {
+    "claim": "אינו בונה flutter ואינו מפרסם אתר — זה ship.mjs; one מזריק מדף ומריץ שערים",
+    "evidence": "machtzev/one.mjs:206-223 מול machtzev/generator/ship.mjs:2 (regen ⇒ מראה ⇒ אימות ⇒ שערים ⇒ בנייה ⇒ צילום ⇒ gh-pages ⇒ קומיט ⇒ דחיפה)"
+   },
+   {
+    "claim": "אינו מחזיק לוגיקה עסקית — לפי הכותרת «כאן רק חיווט, אפס-לוגיקה-חדשה»; היוצא-מן-הכלל היחיד שנמצא בקריאה הוא קטלוג-המונחים שמחושב בגוף הקובץ",
+    "evidence": "machtzev/one.mjs:5 (ההצהרה) מול machtzev/one.mjs:90-107 (חישוב בגוף — חריג יחיד)"
+   },
+   {
+    "claim": "אינו נועל נתיבים דרך root.mjs — הוא מחשב ROOT מ-import.meta.url ומקודד נתיבים מוחלטים (/home/user/buildsmart · /home/user/maor-system)",
+    "evidence": "machtzev/one.mjs:11,15,37,138,192,207"
+   }
+  ],
+  "pipeline": {
+   "runBy": "האדם/הגל, ישירות: `node machtzev/one.mjs [--full] [--genmax]`",
+   "input": "origin/main של buildsmart (מסכים) · origin/main של maor-system · screens-seed/ · new/ · machtzev/generator/specs*/",
+   "output": "screens-seed/{machine,content,manifests,terms-catalog.json} · new/dart-data-bs/ui_terms.dart · new/dart-gen-bs/* · הזרקה ל-buildsmart/app_flutter/lib/genesis · machtzev/ONE-STATUS.md · exit-code",
+   "next": "המשטרה (machtzev/police.mjs --fast או מלאה) היא השלב הלפני-אחרון (machtzev/one.mjs:223), ואז לוח-המצב"
+  },
+  "quality": {
+   "signal": "שער-רגרסיית-פיקסל מול baseline.json (>1.5% ⇒ כשל) · המשטרה כשלב-חובה בסוף · ledger של שלבים עם ✅/🚨/⏭️ וזמן לכל שלב · exit-code אמיתי",
+   "measured": "לא-נמדד בסשן הזה — לא הרצתי את one.mjs (הוא כותב לעץ, מזריק ל-buildsmart ודוחף commits; אסור לי לשנות קוד/לדחוף מחוץ ל-knowledge/connect). מנגנוני-המדידה שלו נקראו בקוד בלבד."
+  },
+  "evidence": [
+   "cat -n machtzev/one.mjs (249 שורות, נקרא במלואו)",
+   "grep -n regen machtzev/generator/ship.mjs (להשוואת התפקידים)"
+  ]
+ },
+ {
+  "file": "machtzev/root.mjs",
+  "lang": "mjs",
+  "lines": 15,
+  "capabilities": [
+   {
+    "cap": "קובע את שורש-העץ-הנמדד למנועים — ROOT נגזר מ-MACHTZEV_ROOT אם הוגדר, אחרת מהתיקייה שבה הקוד יושב",
+    "evidence": "machtzev/root.mjs:8-9"
+   },
+   {
+    "cap": "מאפשר להריץ כלים מ-tag ידוע-טוב על עץ אחר (המאמת-העצמאי, PROTOCOL §5.2) ולהזריק רעל לעותק ב-selftest — הכל דרך משתנה-סביבה אחד",
+    "evidence": "machtzev/root.mjs:3-4"
+   },
+   {
+    "cap": "מפנה את פלט-המחולל לתיקייה זמנית דרך GEN_OUT / GEN_DATA_OUT — כך נשמר «עץ-נח» (L14) בלי snapshot/restore",
+    "evidence": "machtzev/root.mjs:5,14-15"
+   },
+   {
+    "cap": "מספק נתיבים קנוניים לכל מנוע: ROOT · MACH · NEW · GEN_DIR · p(...) · outDir() · dataOutDir()",
+    "evidence": "machtzev/root.mjs:9-15"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מנתב imports של קוד — רק קריאה/כתיבה ל-fs עוברת דרכו; imports נשארים יחסיים",
+    "evidence": "machtzev/root.mjs:2 (הכלל המוצהר)"
+   },
+   {
+    "claim": "אינו יוצר תיקיות ואינו נוגע בדיסק — אין fs בקובץ, רק node:path ו-node:url",
+    "evidence": "machtzev/root.mjs:6-7"
+   },
+   {
+    "claim": "אינו נאכף על כל המנועים — one.mjs למשל מחשב ROOT בעצמו ואינו מייבא אותו",
+    "evidence": "machtzev/one.mjs:11 (const ROOT = new URL('../', import.meta.url).pathname) — אין import של root.mjs ב-one.mjs"
+   }
+  ],
+  "pipeline": {
+   "runBy": "אינו מורץ — ספרייה. מיובא ע\"י 86 קבצי-mjs תחת machtzev/",
+   "input": "משתני-סביבה MACHTZEV_ROOT · GEN_OUT · GEN_DATA_OUT + מיקום הקובץ עצמו",
+   "output": "קבועי-נתיב ופונקציות-נתיב (ROOT, MACH, NEW, GEN_DIR, p, outDir, dataOutDir)",
+   "next": "כל מנוע שקורא/כותב fs משתמש בהם במקום לקודד נתיב"
+  },
+  "quality": {
+   "signal": "אין שער ייעודי. האכיפה מעשית: 86 מייבאים, והמאמת-העצמאי + selftest תלויים בו כדי להריץ על עץ אחר.",
+   "measured": "86 קבצים מייבאים אותו — `grep -rln \"root.mjs'\" --include=*.mjs machtzev | wc -l` ⇒ 86"
+  },
+  "evidence": [
+   "cat -n machtzev/root.mjs (15 שורות, נקרא במלואו)",
+   "grep -rln \"root.mjs'\" --include=*.mjs machtzev | wc -l ⇒ 86",
+   "grep על machtzev/one.mjs — אין import של root.mjs (עובדת-השלילה)"
+  ]
+ }
+]
