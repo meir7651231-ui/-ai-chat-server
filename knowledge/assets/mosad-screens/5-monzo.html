@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Monzo — מסך הבית המלא</title>
+<meta name="description" content="מסך הבית של המוסד בשפת Monzo, מלא. עמוד-בית: כרטיס-חשבון · קופות · הוצאה לפי קטגוריה · תנועות · כרטיסי-צבע">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap">
+<style>
+*{box-sizing:border-box}html,body{overflow-x:hidden}body{margin:0}
+bdi{unicode-bidi:isolate}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+h1,h2,h3,h4{margin:0}p{margin:0}ul,ol{margin:0;padding:0;list-style:none}a{color:inherit;text-decoration:none}
+img{max-width:100%}:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media print{.noprint{display:none!important}}
+
+:root{/* נמדד ב-monzo.com — כל גוון כאן מופיע במדידה */
+ --bg:#ffffff;--ink:#091723;--mut:#3b4c54;--dim:#3b4c54;
+ --mint:#f2f8f3;--navy:#112231;--coral:#ff4f40;--grey:#efefef;
+ /* מסגרת-הכרטיס המדודה היא 2px בשקיפות (הצבע חזר null כי אלפא<0.5) */
+ --edge:2px solid rgba(9,23,35,.1);
+ --rTiny:4px;--r:16px;--rCard:32px;--rBig:64px;--rPill:128px;
+ --gap:8px;--gap2:24px}
+body{background:var(--bg);color:var(--ink);font:400 16px/22.4px Rubik,Arial,sans-serif}
+
+.note{background:var(--mint);padding:12px 24px;display:flex;align-items:center;gap:16px;font-size:16px;flex-wrap:wrap}
+.note .sp{flex:1}
+/* כפתור-הקו המדוד: מסגרת 2 · גלולה 128 · גובה 36 · ריפוד 0/16 · 13px/400 */
+.note button{background:none;border:2px solid var(--ink);color:var(--ink);border-radius:var(--rPill);
+ padding:0 16px;font:400 13px Rubik;min-height:36px}
+.note button:hover{background:var(--ink);color:#fff}
+
+.nav{border-block-end:var(--edge);position:sticky;top:0;background:#fff;z-index:10}
+.nav .in{max-width:1180px;margin-inline:auto;padding:16px 24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.nav .logo{font-weight:800;font-size:22px}
+.nav a{font-size:16px;color:var(--ink)}
+.nav a:hover{text-decoration:underline}
+.nav .sp{flex:1}
+/* הכפתור הראשי המדוד: רקע #091723 · טקסט לבן · גלולה 128 · גובה 48 · ריפוד 0/24 · 16px/400 */
+.nav .btn{background:var(--ink);color:#fff;border:0;border-radius:var(--rPill);padding:0 24px;font:400 16px Rubik;
+ min-height:48px;display:inline-flex;align-items:center;gap:8px}
+.nav .btn::after{content:'←';font-size:13px}
+
+.wrap{max-width:1180px;margin-inline:auto;padding:32px 24px 80px}
+/* הגיבור של מונזו: משטח הנייבי המדוד #112231, פינה 32, ריפוד 64, כותרת 49/800 לבנה */
+.lead{background:var(--navy);color:#fff;border-radius:var(--rCard);padding:64px;margin-bottom:32px;
+ display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:48px;align-items:center}
+@media(max-width:900px){.lead{grid-template-columns:1fr;padding:32px 24px;gap:32px}}
+.lead h1{font:800 clamp(32px,5vw,49px)/1.2 Rubik;max-width:16ch;text-wrap:balance}
+.lead p{font-size:20px;line-height:28px;margin:16px 0 32px;max-width:46ch;opacity:.92}
+.lead .cta{display:flex;gap:16px;flex-wrap:wrap}
+.lead .cta button{background:#fff;color:var(--ink);border:0;border-radius:var(--rPill);padding:0 24px;font:400 16px Rubik;min-height:48px}
+.lead .cta button.o{background:none;color:#fff;border:2px solid #fff}
+.lead .cardart{width:100%;height:auto;filter:drop-shadow(0 24px 48px rgb(0 0 0 / .45));transform:rotate(-6deg)}
+.greet{font:800 clamp(26px,3.6vw,34px)/1.2 Rubik;margin-bottom:24px}
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start;margin-bottom:32px}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+/* כרטיס מדוד: רדיוס 32 · ריפוד 32/24 · מסגרת 2 */
+.acct{background:var(--coral);color:var(--ink);border-radius:var(--rCard);border:var(--edge);
+ padding:32px 24px;min-height:230px;display:flex;flex-direction:column;gap:8px}
+.acct .lab{font-size:16px;font-weight:500}
+.acct .big{font:800 clamp(34px,6vw,49px)/1.1 Rubik;font-variant-numeric:tabular-nums}
+.acct .sub{font-size:16px}
+.acct .row{margin-top:auto;padding-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+.acct .row button{background:var(--ink);color:#fff;border:0;border-radius:var(--rPill);padding:0 24px;font:400 16px Rubik;min-height:48px}
+.acct .row button.o{background:none;color:var(--ink);border:2px solid var(--ink)}
+.acct .row button.o:hover{background:var(--ink);color:#fff}
+.side{display:grid;gap:16px}
+.mini{background:var(--mint);border:var(--edge);border-radius:var(--rCard);padding:32px 24px}
+.mini h3{font:700 20px/1.2 Rubik;margin-bottom:12px}
+.mini .r{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:16px;align-items:center;padding:8px 0;font-size:16px}
+.mini .c{width:40px;height:40px;border-radius:var(--rPill);display:grid;place-items:center;font-size:14px;font-weight:500}
+.mini .m{font-weight:500;font-variant-numeric:tabular-nums}
+
+/* h2 מדוד: 44/800 — הוקטן לעברית, המשקל נשמר */
+h2{font:800 clamp(26px,3.6vw,34px)/1.2 Rubik;margin:40px 0 4px}
+p.sub{font-size:16px;color:var(--mut);margin-bottom:16px}
+.pots{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px}
+.pot{flex:none;width:200px;border-radius:var(--rCard);border:var(--edge);padding:24px;min-height:150px;display:flex;flex-direction:column;gap:8px}
+.pot b{font:800 26px/1.1 Rubik;font-variant-numeric:tabular-nums}
+.pot span{font-size:16px;font-weight:500}
+.pot small{font-size:14px;margin-top:auto;padding-top:8px}
+/* ארבעת המשטחים היחידים שנמדדו: קורל · נייבי · מנטה · לבן */
+.p1,.p3{background:var(--coral);color:var(--ink)}
+.p2,.p5{background:var(--navy);color:#fff}
+.p4,.p6{background:var(--mint);color:var(--ink)}
+
+.cat{display:grid;gap:16px;background:var(--mint);border:var(--edge);border-radius:var(--rCard);padding:32px 24px}
+.cat .r{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:16px;align-items:center;font-size:16px}
+.cat .c{width:40px;height:40px;border-radius:var(--rPill);display:grid;place-items:center;font-size:16px}
+.cat .t{height:8px;border-radius:var(--rPill);background:#fff;overflow:hidden;position:relative;grid-column:2/4;margin-top:-8px}
+.cat .t i{position:absolute;inset-block:0;inset-inline-start:0;border-radius:var(--rPill)}
+.cat .m{font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.box{background:var(--coral);color:var(--ink);border:var(--edge);border-radius:var(--rCard);padding:24px;display:grid;gap:8px}
+.box.blue{background:var(--navy);color:#fff}
+.box.green{background:var(--mint);color:var(--ink)}
+.box h3{font:700 20px/1.2 Rubik;padding:0 8px 4px}
+/* הכרטיסון הלבן בתוך הכרטיס הצבעוני — רדיוס-המשנה המדוד 16 */
+.inner{background:#fff;color:var(--ink);border-radius:var(--r);padding:16px;display:grid;
+ grid-template-columns:40px minmax(0,1fr) auto;gap:16px;align-items:center}
+.inner .c{width:40px;height:40px;border-radius:var(--rPill);background:var(--mint);display:grid;place-items:center;font-size:16px}
+.inner b{font-size:16px;font-weight:500;display:block}
+.inner .tag{display:inline-block;font-size:13px;font-weight:500;background:var(--mint);color:var(--ink);
+ border-radius:var(--rPill);padding:2px 12px;margin-bottom:4px}
+.inner .tag.w{background:var(--navy);color:#fff}
+.inner .tag.r{background:var(--coral);color:var(--ink)}
+.inner span.s{font-size:14px;color:var(--mut)}
+.inner .ch{font-size:20px;color:var(--ink)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
+
+.tx{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:16px;align-items:center;padding:12px 4px;
+ border-block-end:var(--edge)}
+.tx .c{width:48px;height:48px;border-radius:var(--rPill);display:grid;place-items:center;font-size:14px;font-weight:500}
+.tx b{font-size:16px;font-weight:500;display:block}
+.tx span{font-size:14px;color:var(--mut)}
+.tx .m{text-align:end;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tx .m small{display:block;font-size:14px;font-weight:400;color:var(--mut)}
+.day{font-size:14px;font-weight:500;color:var(--mut);margin:24px 0 8px}
+.foot{margin-top:32px;font-size:14px;color:var(--mut)}
+
+</style>
+</head>
+<body>
+<div class="note noprint"><span>נתוני דוגמה · ד׳ תשרי תשפ״ז · יום שלישי</span>
+  <span class="sp"></span><button>החלפת שנה</button></div>
+<header class="nav noprint"><div class="in"><span class="logo">מוסד</span>
+  <a href="#">בית</a><a href="#">גבייה</a><a href="#">חינוך</a><a href="#">תרומות</a><a href="#">חסד</a><a href="#">דוחות</a>
+  <span class="sp"></span><button class="btn">רישום תשלום</button></div></header>
+
+<div class="wrap">
+  <section class="lead">
+    <div>
+      <h1>הכסף של המוסד — במקום אחד, ברור, וכל הזמן מעודכן.</h1>
+      <p>72% מהחיוב השנתי כבר נגבו. <bdi dir="ltr">₪675,960</bdi> עדיין פתוחים אצל 168 משפחות,
+        ו-29 מהן בפיגור בלי הוראת קבע. הכל נשאב מהמחסן, אף מספר לא הוקלד.</p>
+      <div class="cta noprint"><button>רישום תשלום</button><button class="o">שליחת תזכורות</button></div>
+    </div>
+    <svg data-art class="cardart" viewBox="0 0 340 214" role="img" aria-label="כרטיס המוסד" style="direction:ltr">
+ <defs><linearGradient id="mc" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#ff6a52"/><stop offset=".55" stop-color="#ff4f40"/><stop offset="1" stop-color="#e03a2e"/></linearGradient>
+ <linearGradient id="mg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe9a8"/><stop offset="1" stop-color="#d6a640"/></linearGradient></defs>
+ <rect width="340" height="214" rx="16" fill="url(#mc)"/>
+ <rect x="24" y="64" width="44" height="34" rx="6" fill="url(#mg)"/>
+ <path d="M32 72h28M32 81h28M32 90h28" stroke="#c99a3c" stroke-width="1.5"/>
+ <circle cx="300" cy="44" r="52" fill="#ffffff" opacity=".07"/>
+ <circle cx="272" cy="150" r="34" fill="#ffffff" opacity=".05"/>
+ <text x="24" y="150" fill="#ffffff" font-family="Rubik,Arial" font-size="19" letter-spacing="2.5">•••• •••• •••• 4417</text>
+ <text x="24" y="182" fill="#ffffff" font-family="Rubik,Arial" font-size="13" opacity=".85">MOSAD · TZEDAKA</text>
+ <text x="286" y="182" fill="#ffffff" font-family="Rubik,Arial" font-size="13" opacity=".85">12/29</text>
+</svg>
+  </section>
+  <h2 class="greet">בוקר טוב · הבית של המוסד</h2>
+  <section class="hero">
+    <div class="acct">
+      <span class="lab">נגבה עד היום · תשפ״ז</span>
+      <span class="big"><bdi dir="ltr">₪1,774,900</bdi></span>
+      <span class="sub">72% מהחיוב · נותרו <bdi dir="ltr">₪675,960</bdi> אצל 168 משפחות</span>
+      <span class="row noprint"><button>רישום תשלום</button><button class="o">שליחת תזכורות</button><button class="o">הפקת קבלות</button></span>
+    </div>
+    <div class="side">
+      <div class="mini"><h3>היום במוסד</h3>
+        <div class="r"><span class="c" style="background:#f2f8f3;color:#091723">🕯</span>
+          <span>שחרית · מניין ג׳<br><span style="font-size:14px;color:var(--mut)">האולם הגדול</span></span>
+          <span class="m"><bdi dir="ltr">07:15</bdi></span></div><div class="r"><span class="c" style="background:#112231;color:#ffffff">🕯</span>
+          <span>שיעור דף היומי<br><span style="font-size:14px;color:var(--mut)">בית המדרש</span></span>
+          <span class="m"><bdi dir="ltr">08:00</bdi></span></div><div class="r"><span class="c" style="background:#ff4f40;color:#091723">🕯</span>
+          <span>מנחה גדולה<br><span style="font-size:14px;color:var(--mut)">האולם הגדול</span></span>
+          <span class="m"><bdi dir="ltr">13:45</bdi></span></div><div class="r"><span class="c" style="background:#efefef;color:#091723">🕯</span>
+          <span>שיעור הלכה<br><span style="font-size:14px;color:var(--mut)">חדר עיון</span></span>
+          <span class="m"><bdi dir="ltr">16:30</bdi></span></div></div>
+      <div class="mini"><h3>צוות</h3>
+        <div class="r"><span class="c" style="background:#efefef;color:#091723">אל</span>
+          <span>אלימלך פישר<br><span style="font-size:14px;color:var(--mut)">מגיד שיעור</span></span>
+          <span class="m" style="font-size:14px;font-weight:400">מחליף</span></div><div class="r"><span class="c" style="background:#f2f8f3;color:#091723">נח</span>
+          <span>נחום בלוי<br><span style="font-size:14px;color:var(--mut)">מגיד שיעור</span></span>
+          <span class="m" style="font-size:14px;font-weight:400">אין מחליף</span></div><div class="r"><span class="c" style="background:#112231;color:#ffffff">חי</span>
+          <span>חיים בראון<br><span style="font-size:14px;color:var(--mut)">מגיד שיעור</span></span>
+          <span class="m" style="font-size:14px;font-weight:400">אין מחליף</span></div>
+        <div class="r"><span class="c" style="background:#ff4f40;color:#091723">✓</span><span>נוכחים היום</span><span class="m">40/44</span></div></div>
+    </div>
+  </section>
+
+  <h2>קופות</h2>
+  <p class="sub">כסף שמוקצה מראש · 8 סעיפי תקציב ועוד</p>
+  <div class="pots">
+    <div class="pot p1"><span>מגבית הבניין</span><b><bdi dir="ltr">₪1,406K</bdi></b><small>מתוך <bdi dir="ltr">₪2,400K</bdi> · 59%</small></div>
+    <div class="pot p3"><span>גמ״ח — זמין</span><b><bdi dir="ltr">₪563K</bdi></b><small>26 הלוואות פעילות</small></div>
+    <div class="pot p2"><span>יתרה פתוחה</span><b><bdi dir="ltr">₪676K</bdi></b><small>29 משפחות בפיגור</small></div>
+    <div class="pot p4"><span>תקציב שנתי</span><b><bdi dir="ltr">₪2,143K</bdi></b><small>ביצוע 8 סעיפים</small></div>
+    <div class="pot p5"><span>הסעות</span><b>248</b><small>נוסעים ב-6 קווים</small></div>
+    <div class="pot p6"><span>תלמידים</span><b><bdi dir="ltr">412</bdi></b><small>12 כיתות · 92% נוכחות</small></div>
+  </div>
+
+  <h2>הוצאה לפי סעיף</h2>
+  <p class="sub">באלפי ₪ · אדום = חריגה מהתכנון</p>
+  <div class="cat">
+    <div class="r"><span class="c" style="background:#f2f8f3;color:#091723">🎓</span>
+      <span>שכר מלמדים וצוות חינוכי</span><span class="m">1193 / 1180</span>
+      <span class="t"><i style="width:100%;background:var(--coral)"></i></span></div><div class="r"><span class="c" style="background:#112231;color:#ffffff">🍲</span>
+      <span>מטבח וסעודות</span><span class="m">299 / 312</span>
+      <span class="t"><i style="width:95.83333333333334%;background:var(--navy)"></i></span></div><div class="r"><span class="c" style="background:#ff4f40;color:#091723">🚌</span>
+      <span>הסעות</span><span class="m">191 / 196</span>
+      <span class="t"><i style="width:97.44897959183673%;background:var(--navy)"></i></span></div><div class="r"><span class="c" style="background:#efefef;color:#091723">🔧</span>
+      <span>אחזקת מבנה וחשמל</span><span class="m">155 / 168</span>
+      <span class="t"><i style="width:92.26190476190477%;background:var(--navy)"></i></span></div><div class="r"><span class="c" style="background:#f2f8f3;color:#091723">📚</span>
+      <span>ספרים וציוד לימודי</span><span class="m">84 / 84</span>
+      <span class="t"><i style="width:100%;background:var(--navy)"></i></span></div><div class="r"><span class="c" style="background:#112231;color:#ffffff">🛏</span>
+      <span>פנימייה</span><span class="m">132 / 126</span>
+      <span class="t"><i style="width:100%;background:var(--coral)"></i></span></div><div class="r"><span class="c" style="background:#ff4f40;color:#091723">🧾</span>
+      <span>משרד, ביטוח ורואה חשבון</span><span class="m">67 / 64</span>
+      <span class="t"><i style="width:100%;background:var(--coral)"></i></span></div><div class="r"><span class="c" style="background:#efefef;color:#091723">🕯</span>
+      <span>בית המדרש ואירועים</span><span class="m">22 / 20</span>
+      <span class="t"><i style="width:100%;background:var(--coral)"></i></span></div>
+  </div>
+
+  <h2>דורש הכרעה</h2>
+  <p class="sub">5 עניינים · לחיצה פותחת את האגף</p>
+  <div class="two">
+    <div class="box">
+      <h3>היום</h3>
+      <a class="inner" href="#"><span class="c" aria-hidden="true">⚠</span>
+        <span><span class="tag r">כספים</span><b>ביטוח האולם פג בעוד 6 ימים</b></span>
+        <span class="ch" aria-hidden="true">›</span></a><a class="inner" href="#"><span class="c" aria-hidden="true">⏳</span>
+        <span><span class="tag w">גבייה</span><b>29 משפחות בפיגור בלי הוראת קבע</b></span>
+        <span class="ch" aria-hidden="true">›</span></a><a class="inner" href="#"><span class="c" aria-hidden="true">⏳</span>
+        <span><span class="tag w">תפעול</span><b>קו 4 · מודיעין עילית בלי נהג למחר</b></span>
+        <span class="ch" aria-hidden="true">›</span></a><a class="inner" href="#"><span class="c" aria-hidden="true">👤</span>
+        <span><span class="tag ">החצר</span><b>13 ממתינים בקבלת קהל</b></span>
+        <span class="ch" aria-hidden="true">›</span></a><a class="inner" href="#"><span class="c" aria-hidden="true">👤</span>
+        <span><span class="tag ">חסד</span><b>2 בקשות גמ״ח ממתינות לוועדה</b></span>
+        <span class="ch" aria-hidden="true">›</span></a>
+    </div>
+    <div class="box blue">
+      <h3>קריאות שירות</h3>
+      <a class="inner" href="#"><span class="c" aria-hidden="true">🔧</span>
+        <span><span class="tag r">דחוף</span><b>דוד חם לא עובד · פנימייה קומה ב׳</b>
+        <span class="s">זבולון ויס · 2 ימים</span></span>
+        <span class="ch" aria-hidden="true">›</span></a><a class="inner" href="#"><span class="c" aria-hidden="true">🔧</span>
+        <span><span class="tag r">דחוף</span><b>נזילה במטבח · מתחת לכיור</b>
+        <span class="s">זבולון ויס · 1 ימים</span></span>
+        <span class="ch" aria-hidden="true">›</span></a><a class="inner" href="#"><span class="c" aria-hidden="true">🔧</span>
+        <span><span class="tag w">רגיל</span><b>תאורה בחדר 14</b>
+        <span class="s">לא שובץ · 4 ימים</span></span>
+        <span class="ch" aria-hidden="true">›</span></a><a class="inner" href="#"><span class="c" aria-hidden="true">🔧</span>
+        <span><span class="tag w">רגיל</span><b>דלת הכיתה לא ננעלת</b>
+        <span class="s">לא שובץ · 6 ימים</span></span>
+        <span class="ch" aria-hidden="true">›</span></a><a class="inner" href="#"><span class="c" aria-hidden="true">🔧</span>
+        <span><span class="tag w">כשיתאפשר</span><b>צביעת מסדרון מזרחי</b>
+        <span class="s">לא שובץ · 21 ימים</span></span>
+        <span class="ch" aria-hidden="true">›</span></a>
+    </div>
+    <div class="box green">
+      <h3>בתור לקבלת קהל</h3>
+      <a class="inner" href="#"><span class="c" aria-hidden="true">47</span>
+        <span><span class="tag">בפנים</span><b>משפחת לנדאו</b>
+        <span class="s">הודעה אישית</span></span><span class="ch" aria-hidden="true">›</span></a><a class="inner" href="#"><span class="c" aria-hidden="true">48</span>
+        <span><span class="tag">ממתין</span><b>משפחת לוי</b>
+        <span class="s">קוויטל · ברכה לרפואה</span></span><span class="ch" aria-hidden="true">›</span></a><a class="inner" href="#"><span class="c" aria-hidden="true">49</span>
+        <span><span class="tag">ממתין</span><b>משפחת רוט ש׳</b>
+        <span class="s">שידוך</span></span><span class="ch" aria-hidden="true">›</span></a><a class="inner" href="#"><span class="c" aria-hidden="true">50</span>
+        <span><span class="tag">ממתין</span><b>משפחת ויס י׳</b>
+        <span class="s">הודעה אישית</span></span><span class="ch" aria-hidden="true">›</span></a><a class="inner" href="#"><span class="c" aria-hidden="true">51</span>
+        <span><span class="tag">ממתין</span><b>משפחת טננבוים א׳</b>
+        <span class="s">בקשת הנחה</span></span><span class="ch" aria-hidden="true">›</span></a>
+    </div>
+  </div>
+
+  <h2>תנועות</h2>
+  <p class="sub">16 תשלומים אחרונים · 14 תרומות</p>
+  <p class="day">היום</p>
+  <div class="tx"><span class="c" style="background:#f2f8f3;color:#091723">או</span>
+    <span><b>משפחת אונגר א׳</b><span>הוראת קבע · שכר לימוד</span></span>
+    <span class="m">+₪4,000<small>לפני 0 ימים</small></span></div><div class="tx"><span class="c" style="background:#112231;color:#ffffff">טו</span>
+    <span><b>משפחת טויב א׳</b><span>אשראי · שכר לימוד</span></span>
+    <span class="m">+₪2,600<small>לפני 1 ימים</small></span></div><div class="tx"><span class="c" style="background:#ff4f40;color:#091723">כה</span>
+    <span><b>משפחת כהן י׳</b><span>הוראת קבע · שכר לימוד</span></span>
+    <span class="m">+₪3,900<small>לפני 2 ימים</small></span></div><div class="tx"><span class="c" style="background:#efefef;color:#091723">כץ</span>
+    <span><b>משפחת כץ מ׳</b><span>העברה · שכר לימוד</span></span>
+    <span class="m">+₪2,500<small>לפני 3 ימים</small></span></div><div class="tx"><span class="c" style="background:#f2f8f3;color:#091723">בל</span>
+    <span><b>משפחת בלוי</b><span>העברה · שכר לימוד</span></span>
+    <span class="m">+₪1,300<small>לפני 4 ימים</small></span></div><div class="tx"><span class="c" style="background:#112231;color:#ffffff">בר</span>
+    <span><b>משפחת ברגר</b><span>הוראת קבע · שכר לימוד</span></span>
+    <span class="m">+₪2,800<small>לפני 5 ימים</small></span></div>
+  <p class="day">תרומות שהתקבלו</p>
+  <div class="tx"><span class="c" style="background:#ff4f40;color:#091723">נפ</span>
+    <span><b>נפתלי בראון</b><span>אנטוורפן · מזומן</span></span>
+    <span class="m">+₪180,000<small>בניין בית המדרש</small></span></div><div class="tx"><span class="c" style="background:#efefef;color:#091723">יצ</span>
+    <span><b>יצחק לוי</b><span>אשדוד · המחאה</span></span>
+    <span class="m">+₪360<small>בניין בית המדרש</small></span></div><div class="tx"><span class="c" style="background:#f2f8f3;color:#091723">אל</span>
+    <span><b>בעילום שם</b><span>מודיעין עילית · אשראי</span></span>
+    <span class="m">+₪3,600<small>קמחא דפסחא</small></span></div><div class="tx"><span class="c" style="background:#112231;color:#ffffff">דו</span>
+    <span><b>דוד אדלר מ׳</b><span>אלעד · אשראי</span></span>
+    <span class="m">+₪10,000<small>בניין בית המדרש</small></span></div><div class="tx"><span class="c" style="background:#ff4f40;color:#091723">יע</span>
+    <span><b>יעקב רוזן</b><span>בית שמש · מזומן</span></span>
+    <span class="m">+₪1,000<small>בניין בית המדרש</small></span></div><div class="tx"><span class="c" style="background:#efefef;color:#091723">יה</span>
+    <span><b>יהודה גרין ד׳</b><span>אנטוורפן · המחאה</span></span>
+    <span class="m">+₪5,400<small>דינר תשפ״ו</small></span></div><div class="tx"><span class="c" style="background:#f2f8f3;color:#091723">מש</span>
+    <span><b>משה לוי</b><span>מודיעין עילית · אשראי</span></span>
+    <span class="m">+₪3,600<small>בניין בית המדרש</small></span></div>
+  <p class="day">הלוואות שניתנו</p>
+  <div class="tx"><span class="c" style="background:#f2f8f3;color:#091723">גר</span>
+    <span><b>משפחת גרין א׳</b><span>תיקון רכב · בקשה</span></span>
+    <span class="m">−₪27,000<small>0/2 ערבים</small></span></div><div class="tx"><span class="c" style="background:#112231;color:#ffffff">פי</span>
+    <span><b>משפחת פישר ד׳</b><span>שיפוץ דירה · בקשה</span></span>
+    <span class="m">−₪33,000<small>2/2 ערבים</small></span></div><div class="tx"><span class="c" style="background:#ff4f40;color:#091723">פר</span>
+    <span><b>משפחת פרידמן א׳</b><span>חתונה · ועדה</span></span>
+    <span class="m">−₪19,000<small>2/2 ערבים</small></span></div><div class="tx"><span class="c" style="background:#efefef;color:#091723">רו</span>
+    <span><b>משפחת רוט ש׳</b><span>מעבר דירה · ועדה</span></span>
+    <span class="m">−₪13,000<small>2/2 ערבים</small></span></div><div class="tx"><span class="c" style="background:#f2f8f3;color:#091723">בר</span>
+    <span><b>משפחת ברגר י׳</b><span>תיקון רכב · ועדה</span></span>
+    <span class="m">−₪34,000<small>2/2 ערבים</small></span></div><div class="tx"><span class="c" style="background:#112231;color:#ffffff">יע</span>
+    <span><b>משפחת יעקובוביץ א׳</b><span>תיקון רכב · ניתן</span></span>
+    <span class="m">−₪28,000<small>2/2 ערבים</small></span></div>
+
+  <h2>משפחות עם יתרה פתוחה</h2>
+  <p class="sub">14 הגדולות · מתוך 168</p>
+  <div class="tx"><span class="c" style="background:#f2f8f3;color:#091723">או</span>
+    <span><b>משפחת אונגר</b><span>לונדון · 3 ילדים · הנחה 10%</span></span>
+    <span class="m">₪14,428<small>שולם ₪4,000</small></span></div><div class="tx"><span class="c" style="background:#112231;color:#ffffff">פי</span>
+    <span><b>משפחת פישר</b><span>אלעד · 3 ילדים · הנחה 10%</span></span>
+    <span class="m">₪14,138<small>שולם ₪5,100</small></span></div><div class="tx"><span class="c" style="background:#ff4f40;color:#091723">וק</span>
+    <span><b>משפחת וקסלר א׳</b><span>בני ברק · 3 ילדים · הנחה 10%</span></span>
+    <span class="m">₪14,128<small>שולם ₪4,300</small></span></div><div class="tx"><span class="c" style="background:#efefef;color:#091723">גו</span>
+    <span><b>משפחת גולד י׳</b><span>ניו יורק · 3 ילדים</span></span>
+    <span class="m">₪13,775<small>שולם ₪5,800</small></span></div><div class="tx"><span class="c" style="background:#f2f8f3;color:#091723">רו</span>
+    <span><b>משפחת רוזן ד׳</b><span>אנטוורפן · 3 ילדים · הנחה 15%</span></span>
+    <span class="m">₪13,004<small>שולם ₪4,400</small></span></div><div class="tx"><span class="c" style="background:#112231;color:#ffffff">חש</span>
+    <span><b>משפחת חשין</b><span>לונדון · 3 ילדים · הנחה 10%</span></span>
+    <span class="m">₪11,828<small>שולם ₪6,600</small></span></div><div class="tx"><span class="c" style="background:#ff4f40;color:#091723">טנ</span>
+    <span><b>משפחת טננבוים</b><span>בני ברק · 3 ילדים · הנחה 15%</span></span>
+    <span class="m">₪11,604<small>שולם ₪5,800</small></span></div><div class="tx"><span class="c" style="background:#efefef;color:#091723">בל</span>
+    <span><b>משפחת בלוי ש׳</b><span>ניו יורק · 3 ילדים · הנחה 10%</span></span>
+    <span class="m">₪11,428<small>שולם ₪7,000</small></span></div><div class="tx"><span class="c" style="background:#f2f8f3;color:#091723">בר</span>
+    <span><b>משפחת ברגר ד׳</b><span>אשדוד · 2 ילדים</span></span>
+    <span class="m">₪11,250<small>שולם ₪3,000</small></span></div><div class="tx"><span class="c" style="background:#112231;color:#ffffff">פר</span>
+    <span><b>משפחת פרידמן</b><span>אשדוד · 3 ילדים</span></span>
+    <span class="m">₪11,075<small>שולם ₪9,400</small></span></div><div class="tx"><span class="c" style="background:#ff4f40;color:#091723">אד</span>
+    <span><b>משפחת אדלר ש׳</b><span>בית שמש · 2 ילדים</span></span>
+    <span class="m">₪10,950<small>שולם ₪3,300</small></span></div><div class="tx"><span class="c" style="background:#efefef;color:#091723">בר</span>
+    <span><b>משפחת בראון א׳</b><span>ניו יורק · 3 ילדים · הוראת קבע</span></span>
+    <span class="m">₪10,875<small>שולם ₪10,500</small></span></div><div class="tx"><span class="c" style="background:#f2f8f3;color:#091723">רו</span>
+    <span><b>משפחת רוט</b><span>אנטוורפן · 3 ילדים</span></span>
+    <span class="m">₪10,475<small>שולם ₪10,000</small></span></div><div class="tx"><span class="c" style="background:#112231;color:#ffffff">יע</span>
+    <span><b>משפחת יעקובוביץ י׳</b><span>אשדוד · 3 ילדים · הנחה 10%</span></span>
+    <span class="m">₪10,438<small>שולם ₪8,800</small></span></div>
+
+  <p class="foot">כל התנועות, הקופות והסכומים נשאבים מהמחסן של המערכת · החלקים (כרטיס-חשבון צבעוני · קופות ·
+    הוצאה לפי קטגוריה · כרטיסון לבן עם תג וחץ · רשימת-תנועות) נמדדו ב-monzo.com · נתוני דוגמה</p>
+</div>
+</body>
+</html>

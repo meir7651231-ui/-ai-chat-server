@@ -1,0 +1,196 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>תוכנית · המחולל</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;600&family=Heebo:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{--paper:#fff;--ink:#37352F;--mut:#6B6963;--faint:rgba(55,53,47,.40);
+--hair:rgba(0,0,0,.08);--hair2:rgba(0,0,0,.05);--raised:#F7F6F3;
+--a:#2F6FED;--ok:#17713F;--err:#C8321E;--warn:#8A5A00;--code:#F4F2ED}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--paper:#0C0C0E;--ink:#ECE9E2;--mut:#9B968C;
+--faint:#6E6A62;--hair:rgba(236,233,226,.09);--hair2:rgba(236,233,226,.05);--raised:#1B1B1E;
+--a:#5B8DF6;--ok:#43D08C;--err:#E0574E;--warn:#E6B84F;--code:#1A1A1D}}
+:root[data-theme=dark]{--paper:#0C0C0E;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;
+--hair:rgba(236,233,226,.09);--hair2:rgba(236,233,226,.05);--raised:#1B1B1E;
+--a:#5B8DF6;--ok:#43D08C;--err:#E0574E;--warn:#E6B84F;--code:#1A1A1D}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.5 Heebo,system-ui,sans-serif;
+padding:0 16px;padding-block:40px 80px}
+.w{max-width:900px;margin:0 auto}
+h1{font:600 30px/1.22 "Frank Ruhl Libre",serif;margin:0 0 4px}
+.sub{color:var(--mut);font-size:14px;margin:0 0 30px}
+h2{font:600 22px/1.25 "Frank Ruhl Libre",serif;margin:44px 0 10px;padding-block-end:8px;border-block-end:1px solid var(--hair)}
+h3{font:700 15px/1.3 Heebo;margin:22px 0 6px}
+p{margin:0 0 12px;color:var(--mut)}
+p strong,td strong,li strong{color:var(--ink);font-weight:700}
+bdi,code{font-family:"IBM Plex Mono",monospace;font-size:13px}
+code{background:var(--code);padding:1px 5px;border-radius:4px;color:var(--ink)}
+ul,ol{margin:0 0 12px;padding-inline-start:20px;color:var(--mut)}li{margin-bottom:5px}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:0 0 14px}
+th{text-align:start;font:700 12px/1.4 Heebo;letter-spacing:.05em;color:var(--mut);
+padding:0 10px 8px;border-block-end:2px solid var(--hair);white-space:nowrap}
+td{padding:10px;border-block-end:1px solid var(--hair2);vertical-align:top;color:var(--mut)}
+td:first-child{color:var(--ink)}
+.tw{overflow-x:auto}
+.n{font-variant-numeric:tabular-nums;unicode-bidi:isolate}
+.y{color:var(--ok);font-weight:700}.r{color:var(--err);font-weight:700}.w8{color:var(--warn);font-weight:700}
+pre{background:var(--code);border:1px solid var(--hair2);border-radius:6px;padding:12px 14px;
+margin:0 0 14px;overflow-x:auto;direction:ltr;text-align:left;
+font:400 12.5px/1.65 "IBM Plex Mono",monospace;color:var(--ink)}
+pre.he{direction:rtl;text-align:right;font-family:Heebo,sans-serif;font-size:14px;line-height:1.7}
+.sum{display:flex;flex-wrap:wrap;gap:24px;border-block:1px solid var(--hair);
+padding-block:16px;margin:0 0 22px}
+.sum div{min-width:104px}
+.sum .v{font:700 26px/1 Heebo;font-variant-numeric:tabular-nums}
+.sum .k{font-size:12.5px;color:var(--mut);margin-top:4px}
+.box{background:var(--raised);border:1px solid var(--hair2);border-radius:8px;padding:14px 16px;margin:0 0 14px}
+.box.hot{border-inline-start:3px solid var(--err)}
+.box.q{border-inline-start:3px solid var(--a)}
+.box .t{font:700 14px/1.3 Heebo;color:var(--ink);margin-bottom:6px}
+.box p{margin:0 0 6px;font-size:14.5px}.box p:last-child{margin:0}
+.f{color:var(--faint);font-size:13px}
+</style></head><body><div class="w">
+
+<h1>האפליקציה שהיא המחולל</h1>
+<p class="sub">תוכנית · שישה חוקרים · כל מספר נמדד מהבייטים · 16.9.2026</p>
+
+<div class="sum">
+<div><div class="v n">6</div><div class="k">חוקרים חזרו</div></div>
+<div><div class="v n">11</div><div class="k">ממצאים חדשים</div></div>
+<div><div class="v n">8</div><div class="k">הכרעות שלך</div></div>
+<div><div class="v n">6</div><div class="k">גלים</div></div>
+<div><div class="v n r">4</div><div class="k">טעויות שלי שתוקנו</div></div>
+</div>
+
+<h2>מה מצאנו — ואי אפשר להתווכח עם זה</h2>
+
+<div class="box hot"><div class="t">1 · הקטלוג שהמחולל בוחר ממנו — רקוב, ובלי שער</div>
+<pre class="he">atlas.json  מחויב: 562 widgets · 857 functions ·  2,159 data
+            טרי  : 572 widgets · 865 functions · 18,205 data</pre>
+<p>ועשרת החסרים הם <strong>בדיוק אלה שמנצחים את החיווט</strong>:</p>
+<pre>DsFold · DsNote · DsDiffRow · DsQuickAdd · DsPalette
+DsLoadMeter · DsActionRow · DsApproveCard · DsChipButton · DsLogRow</pre>
+<p><strong>ו-<bdi dir="ltr">TRUTH.md</bdi> — השער החזק ביותר בריפו — נמדד מעליו:</strong> <bdi dir="ltr">truth.mjs:10</bdi> מייבא <code>selectVaried</code> מ‑<bdi dir="ltr">render-ds.mjs:26</bdi>, שקורא את הקובץ הרקוב. השער יוצא ירוק, ובצדק — הוא באמת זהה למדידה. <strong>אבל המדידה שותה מ‑562 במקום 572.</strong></p></div>
+
+<div class="box hot"><div class="t">2 · הראצ׳ט מעניש תיקון-באגים</div>
+<pre>weaken({failed:37}, {failed:0}, "grow")   ⇒  ["failed: 37 → 0"]   ← החלשה!
+weaken({failed:37}, {failed:0}, "shrink") ⇒  []                    ← תקין</pre>
+<p><bdi dir="ltr">gates.tsv:31</bdi> מצהיר <code>gen-verify-baseline.json;grow</code>, ובקובץ יושב <code>"failed": 37</code>. <strong>מי שיתקן את 37 המסכים — הקומיט שלו ייחסם.</strong> זו המלכודת היחידה מסוגה מבין 23 ה‑baselines.</p></div>
+
+<div class="box hot"><div class="t">3 · הכותרת אומרת אטום אחד, הייבוא מביא אחר</div>
+<pre class="he">מצהירים «EmptyState@premium/feedback» : 29
+מייבאים  auto/empty_state.dart          : 29     ← 100%</pre>
+<p>שני אטומים חולקים את השם <code>EmptyState</code>, ו‑<bdi dir="ltr">particles.mjs:178</bdi> מחזיר את <strong>הראשון</strong>. עקבת-הגזירה — הדבר שהאפליקציה אמורה להציג כראיה — <strong>שקרית ב‑29 מתוך 29.</strong> ‏8 שמות כפולים בסך הכל.</p></div>
+
+<div class="box"><div class="t">4 · ועוד שבעה, מאומתים</div>
+<ul>
+<li><strong>‏0 מרווח בחוב-העברית:</strong> <bdi dir="ltr">render-ds</bdi> 34/34 · <bdi dir="ltr">app-ds</bdi> 39/39 · <bdi dir="ltr">entity</bdi> 45/45. מילה אחת ⇒ שער אדום</li>
+<li><strong>שדה מחושב-מותנה</strong> מציג את הטופס בכל שורה וב-CSV — 4 קבצים</li>
+<li><strong>5 סוגי-שדה</strong> מוצהרים בדקדוק ולא מחוברים — 71 שדות</li>
+<li><strong>2 טוקנים נופלים בניגודיות:</strong> <code>rgba(דיו,.6)</code> = 3.65 · הכחול בכהה = 4.30. הרצפה דורשת 4.5</li>
+<li><strong>5 אימוג׳י</strong> ב-<bdi dir="ltr">chrome.data.json</bdi> — הפרת «אפס אימוג׳י» החרוטה</li>
+<li><strong><bdi dir="ltr">gen-verify</bdi> יוצא ירוק בלי <bdi dir="ltr">buildsmart</bdi></strong> — <code>exit 0</code>, לא צהוב. השער שאמור להוכיח רינדור, עובר בלי למדוד</li>
+<li><strong>‏5 מ-55 שערים</strong> בלבד הוכיחו ירי. 50 הם כוונה, לא מכניזם</li>
+</ul></div>
+
+<h2>איך האפליקציה הורגת כל ויכוח</h2>
+
+<p>ארבעת הזוגות שגרמו לכל ויכוח בשיחה שלנו — כולם «מספרים נכונים שעונים על שאלות שונות»:</p>
+
+<div class="tw"><table>
+<thead><tr><th>הזוג</th><th>ההבדל</th></tr></thead><tbody>
+<tr><td class="n">108 ≠ 372</td><td>«נבחר ע"י בורר» מול «מופיע בפלט». <strong>שניהם נכונים</strong></td></tr>
+<tr><td class="n">924 ≠ 562</td><td>שמות בשני מדפים · מול הצהרות במדף אחד מקובץ רקוב</td></tr>
+<tr><td class="n">1887 ≠ 1895</td><td>שמות · מול שורות. ההפרש 8 = כפילי-השם</td></tr>
+<tr><td class="n">27 ≠ 28</td><td><code>toneMap</code> אינו תפקיד</td></tr>
+</tbody></table></div>
+
+<p><strong>הפתרון: חוזה-מדידה.</strong> קובץ <bdi dir="ltr">numbers.tsv</bdi> — מספר בלי שורה בו, האפליקציה <strong>לא מציגה</strong>. וכל מספר על המסך נראה כך:</p>
+
+<pre class="he">924  אטומי-תצוגה מאונדקסים              [שמות-ייחודיים]
+הגדרה  מחלקות extends Stateless/StatefulWidget בשני מדפים; כפול = פעם אחת
+מימוש  census/atom-index.mjs:27-41
+פקודה  node machtzev/numbers.mjs --show display.atoms.indexed   [העתק]
+קלט    atom-index.json · sha256 a1b2… · טרי
+לא זה  572 = הצהרות · 562 = atlas המחויב · 372 = מופיע-בפלט</pre>
+
+<p><strong>שורת «לא זה» היא הלב.</strong> אי אפשר להציג 108 בלי ש-372 ו-1855 יופיעו לידו — זה נגזר אוטומטית מכל שני מספרים שחולקים מונח ונבדלים ביחידה.</p>
+
+<div class="box q"><div class="t">והמבחן שאי אפשר לזייף</div>
+<p>הצופה מעתיק פקודה, מריץ <strong>במסוף שלו</strong>, ומדביק את הפלט. הדף משווה מחרוזות בצד-הלקוח.</p>
+<p><strong>הדף לא יכול לזייף השוואה שהקלט שלה בא מהיד של הצופה.</strong></p></div>
+
+<h2>איך היא נראית</h2>
+
+<p><strong>לוח-מכשירים, לא עמוד-מוכר.</strong> נייר לבן, קווי-שערה, כחול אחד. שלושה גופנים = שלושה קולות: <strong>סריפה</strong> מה שהאדם כתב · <strong>סאנס</strong> מה שהמנוע דיווח · <strong>מונו</strong> מה שהמכונה הריצה.</p>
+
+<p>והדבר שהכי חשוב שייראה נכון — <strong>הפסילה</strong>. ‏164 מתוך 230 חלקיקים נפסל בהם המדורג-1:</p>
+
+<pre class="he">┌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┐   מקווקו = חוב
+╎  ForgeLinearProgressStatus    ╎
+╎  שקע-חובה ריק:  values        ╎   ← השקע בשמו, לא «חסר נתון»
+╎  לא מוצג — אין נתון. לא ממציאים.╎
+└╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┘   בגובה המדויק של האטום שהיה נכנס</pre>
+
+<p>האטום <strong>לא מקבל ✗</strong> — ✗ אומר «נשבר», וכאן שום דבר לא נשבר. והנוסח: <strong>«568 מ-569 נדחו. זו לא תקלה — זו הבדיקה.»</strong></p>
+
+<h2>איפה זה נבנה</h2>
+
+<p><strong>בתוך <bdi dir="ltr">gen/</bdi></strong> — והחוקר הוכיח למה בהרצה: <code>node gen/detach.mjs --check</code> מאשר «אפס אזכור מבחוץ · לא בצנרת, לא בשער, לא ב-pin». הפיכות במשפט אחד: <code>git rm -r gen</code>.</p>
+
+<p><strong>והבסיס כבר קיים.</strong> ‏<bdi dir="ltr">gen/studio.mjs</bdi> — «סטודיו המחולל» — כבר מריץ את המחולל בדפדפן, בלי שרת ובלי רשת. הוא <strong>היה שבור</strong> (3 סמלים לא מוגדרים); תיקנתי ב-<bdi dir="ltr">/tmp</bdi> והוכחתי:</p>
+<pre class="he">נבנה ב-150ms · 9 אטומים מוכחים · 0 צרכים בלי הוכחה
+5,121 ריצות-הוכחה · iframe עם אפליקציה רצה
+רשת חיצונית: אפס · שגיאות: אפס · 939KB (תקרה 1,048,576)</pre>
+
+<h2>ששת הגלים</h2>
+
+<div class="tw"><table>
+<thead><tr><th>#</th><th>מה נוחת</th><th>מה אתה רואה</th><th>המספר</th></tr></thead><tbody>
+<tr><td class="n">0</td><td><code>npm ci --prefix machtzev</code></td><td>המשטרה ירוקה במקום צהובה</td><td><code>0 yellow</code></td></tr>
+<tr><td class="n">1</td><td>תיקון-הסטודיו (2 שורות, מוכח)</td><td><strong>דף שרץ, היום</strong></td><td>‏150ms</td></tr>
+<tr><td class="n">2</td><td>שדה-מותנה + שער <code>cardform</code></td><td>הכרטיס מציג את השורה שלו</td><td><code>grep _v[ ⇒ 0</code></td></tr>
+<tr><td class="n">3</td><td><bdi dir="ltr">atlas</bdi> ⇐ <bdi dir="ltr">regen</bdi> + שער-טריות</td><td>הקטלוג מתרענן בפקודה</td><td>‏0.47s</td></tr>
+<tr><td class="n">4</td><td>פיצול <code>failed</code> ל-baseline <code>shrink</code></td><td>אפשר לתקן בלי להיחסם</td><td><code>failed &lt; 37</code></td></tr>
+<tr><td class="n">5</td><td>5 סוגי-השדה</td><td>טלפון מחייג · תיאור בתיבה</td><td>‏71 ⇒ 0</td></tr>
+<tr><td class="n">6</td><td><bdi dir="ltr">numbers.tsv</bdi> + חוזה-המדידה</td><td><strong>הוויכוח נסגר מבנית</strong></td><td><code>untracked = 0</code></td></tr>
+</tbody></table></div>
+
+<p><strong>גל 1 נוחת בישיבה אחת ושווה לבד.</strong> וכל גל נגמר ב-<code>node machtzev/police.mjs --fast</code> ⇒ <code>exit 0</code>, ו-<code>node machtzev/one.mjs && git status --porcelain | wc -l</code> ⇒ <code>0</code>.</p>
+
+<h3>ורצפת-הקבלה של §22 — שש פקודות</h3>
+<pre>node machtzev/police.mjs              → "55 ran · 0 skipped · 0 yellow · 0 failed"
+node .../gen-verify.mjs --gate        → failed = 0 · rendered = screens
+node .../balagan-look.mjs --gate      → "36/36 · 0 אדומים"
+node .../balagan-run.mjs --gate       → exit 0 על אתר בנוי
+node machtzev/one.mjs && git status   → 0
+node machtzev/truth.mjs --gate        → exit 0</pre>
+<p class="f">היום: שורה 1 צהובה · שורה 2 <bdi dir="ltr">failed=37</bdi> · שורה 3 ‏35/36 · שורה 4 ⚪. <strong>«ירוק ב---fast» אינו §22</strong> — הוא מדלג על <bdi dir="ltr">genverify</bdi>.</p>
+
+<h2>שמונה הכרעות — שלך</h2>
+
+<div class="tw"><table>
+<thead><tr><th>#</th><th>השאלה</th><th>ההמלצה</th></tr></thead><tbody>
+<tr><td class="n">1</td><td><strong>מי המחולל?</strong> ‏<bdi dir="ltr">app-ds</bdi> או <bdi dir="ltr">genesis-gen</bdi>? ‏38 ספקים חולקים שמות-קבצים</td><td><bdi dir="ltr">app-ds</bdi>. השני ל-<bdi dir="ltr">legacy/</bdi></td></tr>
+<tr><td class="n">2</td><td>הקטלוג רשאי לכלול את הפלט של עצמו? ‏<span class="n">17,429</span> מ-<span class="n">18,205</span> הם פלט-המחולל</td><td>לא. לגדר <code>auto/</code></td></tr>
+<tr><td class="n">3</td><td>האטלס — תוצר נגזר או מקור חתום? היום <strong>שניהם, ולכן אף אחד</strong></td><td>תוצר נגזר</td></tr>
+<tr><td class="n">4</td><td>רצפת-§22 — <code>--fast</code> או מלא?</td><td>מלא לרצפה, <code>--fast</code> לקצב</td></tr>
+<tr><td class="n">5</td><td>מונה-התקלות <code>failed:37</code> — לאן הראצ׳ט?</td><td>לפצל ל-<code>shrink</code></td></tr>
+<tr><td class="n">6</td><td>חוב-העברית באפס מרווח — מה הכלל?</td><td>אף מילה חדשה בקוד. הכל לדאטה</td></tr>
+<tr><td class="n">7</td><td>כותב-אחד לעץ? נמדדו שניים בו-זמנית היום</td><td>כן, עם <bdi dir="ltr">lock</bdi></td></tr>
+<tr><td class="n">8</td><td><bdi dir="ltr">dart-boxes</bdi> לאטלס? <span class="n">+723</span> פונקציות · <span class="n">420</span> שמות מתנגשים</td><td><strong>לא בבנייה הזו</strong></td></tr>
+</tbody></table></div>
+
+<div class="box hot"><div class="t">והסיבה ש-8 היא «לא» חד</div>
+<p>שני הבוררים פותרים התנגשות-שם <strong>הפוך</strong>: <bdi dir="ltr">render-ds.mjs:99</bdi> — האחרון מנצח · <bdi dir="ltr">coverage-gate.mjs:29</bdi> — הראשון מנצח.</p>
+<p><strong>התוצאה אינה «יותר בחירה» אלא קשירה-מחדש שקטה של 420 שמות, שונה בין שני צרכנים.</strong> ואין שער בריפו שיתפוס את זה.</p></div>
+
+<h2>ארבע טעויות שלי שהנחיל תיקן</h2>
+<div class="tw"><table><tbody>
+<tr><td><code>dart-boxes</code> = <span class="n">105</span></td><td>באמת <strong><span class="n">723</span></strong> פונקציות</td></tr>
+<tr><td>האטלס <strong>משמיט</strong> forge</td><td>זה <strong>דגל opt-in שכבר דולק</strong></td></tr>
+<tr><td><span class="n">4</span> קבצים נשארים בעץ</td><td><strong><span class="n">5</span></strong> בריפו ואחד מחוצה לו</td></tr>
+<tr><td><span class="n">3</span> צורות פולטות מסך ריק</td><td><strong>אחת</strong> — <code>avg</code>, ולא בשימוש</td></tr>
+</tbody></table></div>
+
+<p class="f">וכולן מאותו סוג: קריאת-קוד. הכלל שהנחיל ניסח לבנייה הזאת — <strong>«קריאת-קוד היא ז'אנר שמייצר השערות משכנעות; היא לא יכולה להפריך את עצמה»</strong>. כל ממצא נושא: טענה · פקודה · פלט · תאריך · על-איזה-עץ. ומודדים את <strong>הפלט</strong>, לא את המקור, על <strong>עץ קפוא</strong>.</p>
+
+</div></body></html>

@@ -1,0 +1,241 @@
+<!doctype html><html lang="he" dir="rtl"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>שבע חקירות</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap">
+<style>
+:root{--bg:#F7F6F3;--card:#fff;--ink:#141719;--ink2:#41474B;--mute:#757D82;--line:#E0E2E0;--line2:#EDEEEC;
+ --acc:#1F4E6B;--accbg:#E5EEF4;--ok:#1C6B52;--okbg:#E3F1EB;--warn:#8E5A0A;--warnbg:#F9F0DE;
+ --bad:#8F2F2F;--badbg:#F9E7E5;--code:#F1F3F2;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0D1113;--card:#151A1D;--ink:#E7EBEC;--ink2:#B0B9BC;
+ --mute:#7C868A;--line:#232B2F;--line2:#1B2225;--acc:#6BAED6;--accbg:#12293A;--ok:#5CC0A0;--okbg:#0F2A23;
+ --warn:#D8A44A;--warnbg:#2E2410;--bad:#E08A82;--badbg:#31191A;--code:#101618}}
+:root[data-theme=dark]{--bg:#0D1113;--card:#151A1D;--ink:#E7EBEC;--ink2:#B0B9BC;--mute:#7C868A;--line:#232B2F;
+ --line2:#1B2225;--acc:#6BAED6;--accbg:#12293A;--ok:#5CC0A0;--okbg:#0F2A23;--warn:#D8A44A;--warnbg:#2E2410;
+ --bad:#E08A82;--badbg:#31191A;--code:#101618}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.7 Heebo,system-ui,sans-serif;
+ padding-block:0 72px;padding-inline:16px}
+.wrap{max-width:1020px;margin:0 auto}
+h1{font:900 clamp(30px,6vw,52px)/1.08 Heebo;letter-spacing:-.03em;margin:0;text-wrap:balance}
+h2{font:800 clamp(23px,3.6vw,34px)/1.2 Heebo;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h3{font:700 19px/1.4 Heebo;margin:26px 0 8px}
+h4{font:700 17px/1.4 Heebo;margin:24px 0 8px;color:var(--ink2)}
+p{margin:0 0 14px;max-width:66ch}
+blockquote{margin:14px 0;padding:12px 16px;border-inline-start:3px solid var(--acc);
+ background:var(--accbg);font-size:17px;font-style:normal}
+.m,code{font-family:var(--mono);font-size:.85em;background:var(--code);padding:1px 5px;border-radius:3px;
+ display:inline-block;direction:rtl;unicode-bidi:embed}
+code.ltr,.ltr{direction:ltr;text-align:left}
+.sm{font-size:.84em}.mute{color:var(--mute)}.strong{font-weight:700}
+.num{font-variant-numeric:tabular-nums;text-align:center}
+header{padding-block:62px 32px}
+.kick{font:700 12px/1 Heebo;letter-spacing:.2em;color:var(--acc);margin-bottom:14px}
+.lead{font-size:19px;color:var(--ink2);max-width:60ch;margin-top:14px}
+.verdict{margin:34px 0 0;padding:22px 24px;background:var(--card);border:1px solid var(--line);border-radius:6px}
+.verdict p{font-size:18px;margin:0}
+.verdict b{color:var(--acc)}
+section.ax{padding-block:46px;border-top:1px solid var(--line)}
+.axh{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
+.axn{font:800 13px/1 var(--mono);color:var(--acc);background:var(--accbg);padding:6px 9px;border-radius:3px;flex:none}
+.ax.good .axn{color:var(--ok);background:var(--okbg)}
+.ax.red .axn{color:var(--bad);background:var(--badbg)}
+.axq{color:var(--mute);font-size:16px;margin:0 0 18px}
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:1px;background:var(--line);
+ border:1px solid var(--line);border-radius:5px;overflow:hidden;margin:0 0 22px}
+.st div{background:var(--card);padding:14px 12px}
+.st b{display:block;font:800 27px/1.05 Heebo;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--acc)}
+.ax.good .st b{color:var(--ok)} .ax.red .st b{color:var(--bad)}
+.st span{display:block;font-size:12px;color:var(--mute);margin-top:4px}
+table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--card);
+ border:1px solid var(--line);border-radius:5px;overflow:hidden;margin:16px 0}
+th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line2);vertical-align:top}
+thead th{background:var(--card);border-bottom:2px solid var(--line);font-weight:600;font-size:12.5px;color:var(--mute)}
+tbody tr:last-child td{border-bottom:0}
+td.ok{color:var(--ok);font-weight:600}td.bad{color:var(--bad);font-weight:600}td.warn{color:var(--warn);font-weight:600}
+pre{background:#0D1214;color:#CBDDDA;border:0;border-radius:5px;padding:14px 16px;overflow-x:auto;
+ font:13px/1.65 var(--mono);margin:14px 0;direction:rtl;text-align:right;white-space:pre-wrap}
+pre.ltr{direction:ltr;text-align:left}
+pre .g{color:#63C9AC}pre .y{color:#DFB45F}pre .r{color:#E8918A}
+.note{border-inline-start:3px solid var(--acc);background:var(--accbg);padding:15px 17px;
+ border-radius:0 5px 5px 0;margin:18px 0}
+.note.ok-n{border-color:var(--ok);background:var(--okbg)}
+.note.bad-n{border-color:var(--bad);background:var(--badbg)}
+.note.warn-n{border-color:var(--warn);background:var(--warnbg)}
+.note p:last-child,.note ul:last-child{margin-bottom:0}
+ul{padding-inline-start:20px;margin:0 0 12px}li{margin-bottom:6px}
+.bars{margin:16px 0 20px;display:grid;gap:5px}
+.bar{display:grid;grid-template-columns:150px 1fr 44px;align-items:center;gap:10px;font-size:13.5px}
+.bl{background:transparent;padding:0;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bt{height:16px;background:var(--acc);border-radius:2px;min-width:3px}
+.bv{font-variant-numeric:tabular-nums;color:var(--mute);font-size:12.5px;text-align:left}
+.amp{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin-top:14px;
+ border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.amp div{background:var(--card);padding:13px}
+.amp b{display:block;font:800 26px/1 Heebo;color:var(--ok);font-variant-numeric:tabular-nums}
+.amp .lo b{color:var(--bad)}
+.amp span{display:block;font-size:12px;color:var(--mute);margin-top:4px}
+footer{padding-block:34px;border-top:1px solid var(--line);color:var(--mute);font-size:13.5px}
+@media(max-width:620px){.bar{grid-template-columns:110px 1fr 38px}.amp{grid-template-columns:1fr}}
+</style>
+<div class="wrap">
+
+<header>
+  <div class="kick">שבע חקירות · הכל בהרצה</div>
+  <h1>המחולל,<br>נמדד עד הסוף</h1>
+  <p class="lead">שבעה חוקרים, כל אחד על ציר אחר. אף טענה לא נכנסה לכאן מקריאת-קוד —
+  הכל הורץ, נחבל, ונמדד. וכל מספר שמופיע כאן אימתתי בעצמי לפני שמסרתי אותו.</p>
+  <div class="verdict"><p>המחולל <b>קיים ועובד</b>. הליבה שלו — הבחירה בהרצה — היא <b>אמיתית ומוכחת</b>.
+  מה ששבור הוא <b>מה שמסביב</b>: השערים שאמורים לשמור עליו, האטלס שהוא בוחר ממנו,
+  והפער בין «בלגן» לאפליקציה שתכתוב היום.</p></div>
+</header>
+
+<section class="ax">
+  <div class="axh"><span class="axn">01</span><h2>הדקדוק</h2></div>
+  <p class="axq">מה אפשר לבקש מהמחולל</p>
+  <div class="st"><div><b>84</b><span>מבנים בשפה</span></div><div><b>47</b><span>בשימוש</span></div><div><b>37</b><span>אפס שימוש</span></div><div><b>8</b><span>שבורים</span></div></div>
+  <p>השפה מקבלת <b>84 מבנים</b>. הקורפוס משתמש ב-47. <b>37 מבנים אף אחד לא נגע בהם מעולם</b>, ו-8 מהם שבורים — כולם דווקא בקבוצת האפס-שימוש, ולכן הקורפוס ירוק לגמרי.</p>
+    <table><thead><tr><th>מה שתכתוב</th><th>מה שיקרה</th><th>שורש</th></tr></thead><tbody>
+    <tr><td class="m">טבלת X עם …</td><td class="bad">ישות בשם «טבלת X»</td><td class="m sm">ENTITY_RE מכיר טבלת · entityNouns מכיר טבלה</td></tr>
+    <tr><td class="m">טבלה X עם …</td><td class="bad">הופך לדשבורד</td><td class="m sm">app-ds.mjs:25</td></tr>
+    <tr><td class="m">בנה / הוסף ישות X</td><td class="bad">הופך לדשבורד</td><td class="m sm">ENTITY_RE מכיר רק «צור»</td></tr>
+    <tr><td class="m">[חיפוש] · [סינון] · [ייצוא]</td><td class="bad">⚪ פליטה טרם נבנתה</td><td class="m sm">particles.mjs:411</td></tr>
+    <tr><td class="m">ממוצע(שדה) כחלקיק</td><td class="bad">אין אלגברת-הרכבה לצורה avg</td><td class="m sm">compose-engine.mjs:81</td></tr>
+    <tr><td class="m">א מול ב</td><td class="bad">אין אטום מתחווט ל-compare</td><td class="m sm">NEED.compare</td></tr>
+    </tbody></table>
+    <div class="note"><p><b>ולמה הקורפוס לא נתקל בזה:</b> ‏<code>peruk.mjs</code> כותב <b>29 מתוך 31</b> הספקים אוטומטית ממסמכי-הפירוק שלך. כלומר הקורפוס משקף את מה ש-<code>peruk</code> יודע לכתוב — לא את מה שהשפה יודעת לקבל. המבנים השבורים פשוט לא בדרך שלו.</p></div>
+</section>
+<section class="ax">
+  <div class="axh"><span class="axn">02</span><h2>הקטלוג והבורר</h2></div>
+  <p class="axq">מה קורה כשכותבים חלקיק</p>
+  <div class="st"><div><b>924</b><span>אטומי-תצוגה</span></div><div><b>10</b><span>נבחרים אי-פעם</span></div><div><b>73%</b><span>מהבדיקות = פסילה</span></div><div><b>0</b><span>הרכבות של cover</span></div></div>
+  <p>ספרתי בעצמי מ-31 תוכניות-החלקיקים המחויבות. <b>עשרה אטומים.</b> שלושה מהם מכסים 82%:</p>
+    <div class="bars">
+    <div class="bar"><span class="bl m">DsNote</span><span class="bt" style="width:100%"></span><span class="bv">126</span></div><div class="bar"><span class="bl m">DsTable</span><span class="bt" style="width:23.015873015873016%"></span><span class="bv">29</span></div><div class="bar"><span class="bl m">DsChipButton</span><span class="bt" style="width:23.015873015873016%"></span><span class="bv">29</span></div><div class="bar"><span class="bl m">EmptyState</span><span class="bt" style="width:23.015873015873016%"></span><span class="bv">29</span></div><div class="bar"><span class="bl m">KvLine</span><span class="bt" style="width:11.11111111111111%"></span><span class="bv">14</span></div><div class="bar"><span class="bl m">DsSection</span><span class="bt" style="width:6.349206349206349%"></span><span class="bv">8</span></div><div class="bar"><span class="bl m">ForgeMustChip</span><span class="bt" style="width:3.968253968253968%"></span><span class="bv">5</span></div><div class="bar"><span class="bl m">DsChip</span><span class="bt" style="width:2%"></span><span class="bv">2</span></div><div class="bar"><span class="bl m">DsDiffRow</span><span class="bt" style="width:2%"></span><span class="bv">1</span></div><div class="bar"><span class="bl m">ForgeGlowSlider</span><span class="bt" style="width:2%"></span><span class="bv">1</span></div>
+    </div>
+    <p>הסיבה נמדדה: <b>16,629 בדיקות-מועמד, 12,196 פסילות.</b> מתוכן:</p>
+    <table><thead><tr><th>השקע שחסם</th><th>פסילות</th></tr></thead><tbody>
+    <tr><td class="m">height:double</td><td class="num strong">4,432</td></tr>
+    <tr><td class="m">icon:IconData</td><td class="num">371</td></tr>
+    <tr><td class="m">pct · inkColor</td><td class="num">590</td></tr>
+    <tr><td class="m">color · surfaceColor · mutedColor</td><td class="num">402</td></tr>
+    </tbody></table>
+    <div class="note bad-n"><p><b>אטום-רפאים:</b> ‏<code>AlertBanner</code> הוא אחד משלושה אטומי-«הודעה» בכל הקטלוג. הוא היה מועמד <b>1,026 פעם</b> — ונפסל בכולן, על <code>height:double</code>. תמיד מועמד, לעולם לא נבחר.</p></div>
+    <div class="note bad-n"><p><b>§20-ב הוא קוד מת.</b> «אין-יחיד ⇒ שלב כמה» — <code>cover()</code> נקראה <b>1,206 פעם והחזירה אפס הרכבות</b>. ‏14 ההרכבות שכן קורות באות ממקום אחר: טבלה קשיחה שמחזירה שתי פעולות לצורה אחת (<code>partition ⇒ group+alert</code>). זו הרכבה שנקבעה ביד, לא כזו שהבורר גילה.</p></div>
+</section>
+<section class="ax good">
+  <div class="axh"><span class="axn">03</span><h2>שכבת ההתנהגות</h2></div>
+  <p class="axq">מה המחולל יודע מעבר לטופס</p>
+  <div class="st"><div><b>43</b><span>צרכים</span></div><div><b>1,085</b><span>הרצות Dart</span></div><div><b>218</b><span>שניות</span></div><div><b>2</b><span>אטומים חדשים אי-פעם</span></div></div>
+  <p><b>זה החלק החזק ביותר במחולל, ובפער.</b> התנהגות לא נכתבת — היא מוכחת.</p>
+    <p>כל פעולה היא <b>צורך</b>: חתימה + דוגמאות. הבורר מוצא מועמדים מ-963 מנועים <b>ומריץ את הדוגמאות עליהם ב-Dart אמיתי</b>. נבחר מי שעובר.</p>
+    <pre class="term">‏43 צרכים · 111 דוגמאות · 1,061 מועמדים תואמי-חתימה
+‏1,085 הרצות dart run · 2,987 הרצות-דוגמה
+<span class="g">עברו: 302  ·  נבחרו: 43  ·  זמן: 218s (מהן 217 ב-Dart)</span></pre>
+    <div class="note ok-n"><p><b>וכשאף אחד לא עובר — הוא משרשר.</b> הצורך <code>phone.fmtSafe</code>: מ-65 מועמדים, <b>אפס</b> עברו את כל הדוגמאות. הבורר בנה גרף של 6,563 שרשראות-כשירות, דירג 24, הריץ — ומצא <code>formatIsraeliPhone∘normPhone</code>, שעבר 3/3.</p></div>
+    <p>הטענה של <code>CLAUDE.md</code> שרק <b>2 אטומים חדשים</b> נוצרו אי-פעם — <b>אומתה</b>. מ-16 צרכים ל-43, מ-856 מנועים ל-963: כל 27 הצרכים שנוספו נפתרו מהמדף הקיים. אפס אטומים חדשים.</p>
+    <p>והשער שמגן על זה — <b>הוכח שהוא יורה בשש דרכים שונות</b>, כל אחת בחבלה אמיתית: פרימיטיב במקום חלקיק · ייבוא ישיר · קריאה ישירה · נבחר-לא-מיובא · מחיקת שכבת-ההרכבה · מתאם עבה מדי.</p>
+    <p class="mute sm">חור אחד נמדד: בדיקת-המתאם-הדק רצה בלי דגל <code>g</code>, ולכן בודקת רק את ההופעה הראשונה בקובץ.</p>
+</section>
+<section class="ax">
+  <div class="axh"><span class="axn">04</span><h2>העור והקליפה</h2></div>
+  <p class="axq">מה אפליקציה מקבלת בפועל</p>
+  <div class="st"><div><b>27</b><span>תפקידי-עור</span></div><div><b>10</b><span>יורים בייצור</span></div><div><b>561</b><span>החלפות ב-31 ספקים</span></div><div><b>0</b><span>רישומי service worker</span></div></div>
+  <p>מתוך 27 תפקידי-החלפה, <b>17 לא יורים אף פעם</b> — ארבעה נמחקים בעור-נייר במכוון, והשאר לא מופעלים כי המחולל פשוט לא פולט את אטומי-ה-DS שלהם.</p>
+    <h4>והממצא שהוא עליי</h4>
+    <div class="note bad-n"><p>האתר ששלחתי — «קופת גמ״ח» — נושא את הקליפה של buildsmart:</p>
+    <pre class="term sm"><span class="y">manifest.json  "name": "בנייה חכמה" · theme: #FF7A18
+index.html     &lt;title&gt;בנייה חכמה&lt;/title&gt;
+og:url         https://buildsmart-b0b78.web.app/</span></pre>
+    <p>יש <code>web-shell.mjs</code> שגוזר זהות פר-אפליקציה מהקוד המחולל — <b>לא הרצתי אותו</b>. הלשונית הראתה את השם הנכון רק כי Flutter דורס אותה בזמן ריצה. התקנה למסך-הבית הייתה נותנת «בנייה חכמה» כתומה.</p></div>
+    <h4>ושני מחוללים בתוך אחד</h4>
+    <p>כל היכולות שנבנו ב-60 גלים הגיעו ל«בלגן». אפליקציה שתכתוב היום מקבלת טופס, טבלה, ולוח CSV:</p>
+    <table><thead><tr><th>יכולת</th><th>אפליקציה מחוללת</th><th>«בלגן»</th></tr></thead><tbody>
+    <tr><td>ייצוא CSV</td><td class="ok">46 קבצים</td><td class="ok">—</td></tr><tr><td>ייצוא ICS</td><td class="bad">0</td><td class="ok">✓</td></tr><tr><td>ייבוא CSV · vCard</td><td class="bad">0</td><td class="ok">✓</td></tr><tr><td>צילום-מסמך</td><td class="bad">0</td><td class="ok">✓</td></tr><tr><td>זיהוי-דיבור</td><td class="bad">0</td><td class="ok">✓</td></tr><tr><td>ענן · דחיפה · התראות</td><td class="bad">0</td><td class="ok">✓</td></tr><tr><td>גיבוי · שחזור</td><td class="bad">0</td><td class="ok">✓</td></tr><tr><td>גודל-טקסט</td><td class="bad">0</td><td class="ok">✓</td></tr><tr><td>לוח עברי</td><td class="warn">חלקית (1 מ-4)</td><td class="ok">✓</td></tr>
+    </tbody></table>
+    <p class="sm mute">מסך-ראשון נמדד: <b>1,776ms</b> — פי שלושה מתחת לתקרה. מארחים חיצוניים: 3 (הבסיס אומר 1) — כי בניתי בלי הדגל שהפרוטוקול דורש.</p>
+</section>
+<section class="ax good">
+  <div class="axh"><span class="axn">05</span><h2>השרת</h2></div>
+  <p class="axq">מה נפלט כשכותבים «שרת: ענן»</p>
+  <div class="st"><div><b>15/15</b><span>כללי-גישה</span></div><div><b>3</b><span>פונקציות נטענו</span></div><div><b>15/15</b><span>מצבות-מחיקה</span></div><div><b>0</b><span>בקשות Firebase בלי קונפיג</span></div></div>
+  <p>החוקר התקין אמולטור-Firestore אמיתי מחוץ לריפו והריץ:</p>
+    <pre class="term"><span class="g">✓ כללי-הגישה: 15/15 · בעל-המגירה כותב · אדם אחר לא קורא ·
+  ישות לא-מוכרת נדחית · מפתחות-הלקוח נדחים ·
+  טוקן-הרענון חסום גם לבעליו</span></pre>
+    <p>ואז <b>חיבל בכוונה</b> כדי לאמת שהדחייה אמיתית: הוסיף <code>settings</code> ל-<code>hasOnly</code> בעותק — והכתיבה הצליחה. כלומר החסימה באמת באה מהכלל, לא במקרה.</p>
+    <p>גם הפונקציות נבדקו חי: שלושתן נטענו, <code>oauthToken</code> בלי הרשאה החזיר <b>401</b>, <code>oauthCallback</code> בלי קוד החזיר <b>400</b> — ומכאן שהסודות באמת נקראים מהסביבה ולא יושבים בקוד.</p>
+    <div class="note bad-n"><p><b>שלוש טענות של הריפו על עצמו — הופרכו:</b></p><ul>
+    <li><code>app-ds.mjs</code> <b>לא פולט שרת בכלל</b>. ‏<code>grep emitServer</code> עליו = אפס.</li>
+    <li><code>server.mjs:298</code> — <code class="ltr">serverOf('tasks') || serverOf('calendar')</code>. ספק חדש שיצהיר «שרת: ענן» <b>לא יקבל חבילה</b>, והשער לא יתפוס.</li>
+    <li>‏<code>npm test</code> ברנבוק <b>לא מריץ אמולטור</b> — אין <code>firebase-tools</code> בתלויות. מי שיריץ לפי ההוראות לא יקבל את מה שהובטח.</li>
+    </ul></div>
+</section>
+<section class="ax good">
+  <div class="axh"><span class="axn">06</span><h2>«בלגן»</h2></div>
+  <p class="axq">המוצר — מה הוא עושה בשביל אדם</p>
+  <div class="st"><div><b>✓</b><span>נבנה ורץ</span></div><div><b>2</b><span>הקשות לרגע חדש</span></div><div><b>35/36</b><span>כללים</span></div><div><b>64%</b><span>תבנית ידנית</span></div></div>
+  <p>החוקר בנה, פתח, והשתמש. הקליד ב«היום»:</p>
+    <blockquote>המשכיר מקזז 6,200 מהפיקדון של 8,000, מסרתי מפתח ב-1.8.2026</blockquote>
+    <p>והאפליקציה זיהתה את המודול הנכון, פתחה טופס-אישור, ושמרה:</p>
+    <pre class="term ltr"><span class="g">"סכום הפיקדון": "8000"          </span><span class="y">← הקרוב למילה «פיקדון»</span>
+<span class="g">"תאריך מסירת מפתח": "2026-08-01"</span><span class="y">  ולא 6,200, הראשון במשפט</span></pre>
+    <p>זה לא מודל-שפה. זו קרבה-למילת-השדה. אפס שגיאות, מסך-ראשון 1.5 שניות.</p>
+    <div class="note bad-n"><p><b>ההפרה שנשארה — זו שעצרת עליה בזמנו.</b> ‏<code>balagan.mjs</code> = 2,160 שורות, ו-<b>1,384 מהן (64%) הן תבניות-Dart ידניות, מסך אחרי מסך.</b></p>
+    <p>‏G34 סגר את ההתנהגויות. G60 סגר את מסך-החיבורים. <b>גופי 8 המסכים — עדיין ביד.</b></p>
+    <div class="amp"><div><b>×24.7</b><span>הגברה — המודולים</span></div><div class="lo"><b>×1.7</b><span>הגברה — שכבת «בלגן»</span></div></div></div>
+    <div class="note warn-n"><p><b>וחור ברַצֶ'ט:</b> גל G54 הוריד את צפיפות «היום» מ-35 חריצים ל-19 — <b>ואף אחד לא כתב את הבסיס מחדש.</b> הוא עדיין <code>{"slots": 35}</code>. יש שם <b>16 חריצי-סחף</b>: המסך יכול להתעבות בחזרה והשער יישאר ירוק.</p></div>
+</section>
+<section class="ax red">
+  <div class="axh"><span class="axn">07</span><h2>המשטרה</h2></div>
+  <p class="axq">מה באמת מוגן</p>
+  <div class="st"><div><b>55</b><span>שערים</span></div><div><b>5</b><span>עם הוכחת-ירי</span></div><div><b>10</b><span>ירוקים על חבלה אמיתית</span></div><div><b>1</b><span>שער שהוא no-op</span></div></div>
+  <p>הפרוטוקול שלך קובע (<code>PROTOCOL.md:148</code>): <b>«הוכחת-ירי — הראיה היחידה»</b>. הרצתי:</p>
+    <pre class="term"><span class="y">זוגות-הוכחה (מורעל⇒1 ∧ נקי⇒0): 5/55</span>
+<span class="r">❌ חוק לא יורה — המשטרה שבורה!</span></pre>
+    <p><b>ל-50 שערים אין הוכחה שהם יורים.</b> לפי ההגדרה של הפרוטוקול עצמו — הם הצהרה, לא הגנה.</p>
+    <h4>והחבלה הוכיחה את זה</h4>
+    <p>החוקר הכניס למסך מחולל קוד שמובטח שיקרוס בזמן בנייה. <b>עשרה שערים רצו. כולם ירוקים.</b></p>
+    <p>השער היחיד שנועד לתפוס את זה — <code>genverify</code> — יוצא 0 בשקט כי אין buildsmart בנתיב שהוא מחפש, <b>ונספר כ«רץ»</b>. ה-hook עצמו קורא לזה בשמו: «ירוק-שקר».</p>
+    <h4>ושער אחד הוא כלום</h4>
+    <pre class="term ltr sm">compose-engine.mjs:77   export const FAKERS = new Set([]);
+no-fakers-check.mjs:15  if (!classes.length) { console.log('✓ …'); process.exit(0); }</pre>
+    <p><code>no-fakers</code> יוצא ירוק <b>לפני שהוא קורא קובץ אחד</b>.</p>
+    <h4>והרַצֶ'ט מעניש תיקון</h4>
+    <table><thead><tr><th>מה עשית</th><th>פסק-הרַצֶ'ט</th></tr></thead><tbody>
+    <tr><td>תיקנת באג — <span class="m">failed 37 ⇒ 0</span></td><td class="bad">🚨 החלשה</td></tr>
+    <tr><td>הוספת 200 בדיקות — <span class="m">997 ⇒ 1197</span></td><td class="bad">🚨 החלשה</td></tr>
+    <tr><td>מחקת אטום מת — <span class="m">1160 ⇒ 1159</span></td><td class="bad">🚨 החלשה</td></tr>
+    </tbody></table>
+    <p>כל תיקון בריא דורש <code>Allow:</code> שמכריז על עצמו כהחלשה. זה שוחק את המנגנון עד שהחלשה אמיתית תעבור בהיסח-דעת.</p>
+    <div class="note ok-n"><p><b>ותיקון אחד, בשורה אחת:</b> ‏<code class="ltr">npm ci --prefix machtzev</code>. חסר <code>typescript</code> ⇒ שני שערים צהובים ואחד אדום. עם ההתקנה: <b>2,250 קבצים חוזרים לכיסוי</b>, והמשטרה מאדומה לירוקה. ב-CI זה כבר מטופל; הפער רק מקומי — ובדיוק שם, בטבעת-commit.</p></div>
+</section>
+
+<section class="ax red">
+  <div class="axh"><span class="axn">✗</span><h2>מה שהריפו טוען על עצמו — והופרך</h2></div>
+  <p class="axq">שש טענות שנבדקו ולא עמדו</p>
+  <table><thead><tr><th>הטענה</th><th>המדידה</th></tr></thead><tbody>
+  <tr><td>‏«app-ds פולט חבילת-שרת»</td><td class="bad">‏grep emitServer על app-ds.mjs = אפס. התפר ב-server.mjs בלבד.</td></tr><tr><td>‏«npm test מריץ אמולטור»</td><td class="bad">‏scripts.test = node rules.test.mjs — בלי emulators:exec, בלי firebase-tools.</td></tr><tr><td>‏«חיצוניים 1»</td><td class="bad">‏3 בבנייה טרייה. שניים מהם ברירות-מחדל של Flutter, לא של שכבת-הענן.</td></tr><tr><td>‏«mergeJson מדלג על ישות לא-מוכרת»</td><td class="bad">‏החזיר 1 ויצר אותה. האכיפה קיימת רק בכללי-הענן.</td></tr><tr><td>‏«look.mjs: 8 אטומים עם ליטרל»</td><td class="bad">‏3. ההערה מיושנת.</td></tr><tr><td>‏«האטלס מעודכן»</td><td class="bad">‏10 ווידג׳טים חסרים — בדיוק אלה שהמחולל בוחר הכי הרבה.</td></tr>
+  </tbody></table>
+</section>
+
+<section class="ax">
+  <div class="axh"><span class="axn">→</span><h2>מה עושים</h2></div>
+  <p class="axq">בסדר תשואה יורדת — כל אחד נמדד, לא משוער</p>
+  <table><thead><tr><th>#</th><th>הצעד</th><th>מה זה קונה</th></tr></thead><tbody>
+  <tr><td class="num">1</td><td><code class="ltr">npm ci --prefix machtzev</code></td><td class="ok">2,250 קבצים חוזרים לכיסוי · המשטרה מאדומה לירוקה</td></tr>
+  <tr><td class="num">2</td><td>‏<code>genverify</code> ו-5 «⚪ מדולג» ⇒ צהוב במקום ירוק</td><td class="ok">החבלה שעברה 10 שערים הייתה נתפסת</td></tr>
+  <tr><td class="num">3</td><td>רענון <code>atlas.json</code></td><td class="ok">‏10 האטומים שהמחולל בוחר הכי הרבה חוזרים לקטלוג</td></tr>
+  <tr><td class="num">4</td><td>כיוון פר-מפתח ברַצֶ'ט</td><td class="ok">תיקון-באג מפסיק להיחשב החלשה</td></tr>
+  <tr><td class="num">5</td><td>‏<code>web-shell.mjs</code> בצינור-הבנייה</td><td class="ok">אפליקציה מחוללת מקבלת זהות משלה, לא של buildsmart</td></tr>
+  <tr><td class="num">6</td><td>שורת <code>SOCK</code> ל-<code>height</code></td><td class="ok">‏4,432 פסילות נפתחות · הקטלוג האפקטיבי גדל מ-10</td></tr>
+  <tr><td class="num">7</td><td>‏<code>fixtures</code> ל-5 שערי-מחולל</td><td class="ok">‏5/55 ⇒ 10/55. כל אחד זול כמו הקיימים</td></tr>
+  </tbody></table>
+  <div class="note"><p><b>ושתי הכרעות שהן שלך:</b> ‏(א) 64% מ-<code>balagan.mjs</code> הן תבניות ידניות — לסגור את ההפרה שעצרת עליה, או להשאיר.
+  ‏(ב) הפער בין «בלגן» לאפליקציה מחוללת — האם היכולות אמורות לרדת לכל מי שכותב ספק.</p></div>
+</section>
+
+<footer>
+  ‏<span class="m">meir7651231-ui/-ai-chat-server</span> · ענף <span class="m">claude/yeshiva-read</span> ·
+  ‏<span class="m">3db1bcc8</span> · שבעה חוקרים · הריפו לא זז: <span class="m">git status</span> נקי.
+</footer>
+</div></html>

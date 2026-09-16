@@ -1,0 +1,184 @@
+<!doctype html><html lang="he" dir="rtl"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>מה המחולל צריך לעשות</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap">
+<style>
+:root{--bg:#FAF8F5;--card:#fff;--ink:#16181A;--ink2:#444A4E;--mute:#787F84;--line:#E3E1DD;--line2:#EFEEEB;
+ --acc:#7A3E18;--accbg:#F4E9E0;--ok:#1C6347;--okbg:#E2EFE9;--bad:#8C2B2B;--badbg:#F8E6E4;
+ --code:#F2F1EE;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#111011;--card:#191819;--ink:#ECEAE7;--ink2:#B7B3AE;
+ --mute:#85807B;--line:#2A2827;--line2:#201F1F;--acc:#D9945C;--accbg:#2E1D11;--ok:#5FBF9B;--okbg:#122A22;
+ --bad:#E0867E;--badbg:#301818;--code:#151414}}
+:root[data-theme=dark]{--bg:#111011;--card:#191819;--ink:#ECEAE7;--ink2:#B7B3AE;--mute:#85807B;--line:#2A2827;
+ --line2:#201F1F;--acc:#D9945C;--accbg:#2E1D11;--ok:#5FBF9B;--okbg:#122A22;--bad:#E0867E;--badbg:#301818;--code:#151414}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.7 Heebo,system-ui,sans-serif;padding-block:0 76px;padding-inline:16px}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font:900 clamp(31px,6.4vw,56px)/1.06 Heebo;letter-spacing:-.035em;margin:0;text-wrap:balance}
+h2{font:800 clamp(22px,3.6vw,33px)/1.18 Heebo;letter-spacing:-.02em;margin:0 0 6px;text-wrap:balance}
+h3{font:700 18px/1.4 Heebo;margin:22px 0 8px}
+p{margin:0 0 14px;max-width:66ch}
+.m,code{font-family:var(--mono);font-size:.84em;background:var(--code);padding:1px 5px;border-radius:3px;display:inline-block;direction:rtl;unicode-bidi:embed}
+.lead{font-size:19px;color:var(--ink2);max-width:58ch;margin-top:16px}
+header{padding-block:64px 26px}
+.kick{font:700 12px/1 Heebo;letter-spacing:.2em;color:var(--acc);margin-bottom:14px}
+blockquote{margin:26px 0;padding:22px 26px;background:var(--card);border:1px solid var(--line);
+ border-inline-start:4px solid var(--acc);border-radius:0 6px 6px 0;font-size:18.5px;line-height:1.75}
+blockquote cite{display:block;margin-top:12px;font:500 13px var(--mono);color:var(--mute);font-style:normal;direction:rtl}
+section{padding-block:44px;border-top:1px solid var(--line)}
+.sn{display:inline-block;font:800 12px/1 var(--mono);color:var(--acc);background:var(--accbg);padding:6px 9px;border-radius:3px;margin-bottom:12px}
+.scroll{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:5px;background:var(--card)}
+.scroll table{margin:0;border:0;border-radius:0;min-width:420px}
+table{border-collapse:collapse;width:100%;font-size:15px;background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin:16px 0}
+th,td{padding:10px 13px;text-align:right;border-bottom:1px solid var(--line2);vertical-align:top}
+thead th{background:var(--card);border-bottom:2px solid var(--line);font-weight:600;font-size:12.5px;color:var(--mute)}
+tbody tr:last-child td{border-bottom:0}
+td.bad,.bad{color:var(--bad);font-weight:700}
+td.ok,.ok{color:var(--ok);font-weight:700}
+td.num{font-variant-numeric:tabular-nums;text-align:center;white-space:nowrap}
+pre{max-width:100%;background:#12100F;color:#DCD3CA;border-radius:5px;padding:14px 16px;overflow-x:auto;
+ font:12.8px/1.65 var(--mono);margin:12px 0;direction:ltr;text-align:left}
+pre .c{color:#8C837A}pre .k{color:#E0A86B}pre .r{color:#E8918A}
+.cause{overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:18px 20px;margin:16px 0}
+.cause .hd{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:4px}
+.cause .hd b{font:700 18px Heebo}
+.cause .hd span{font:500 12px var(--mono);color:var(--mute);direction:rtl}
+.cause p{margin:10px 0 0;font-size:15.5px;color:var(--ink2)}
+.cause p b{color:var(--ink)}
+.note{border-inline-start:3px solid var(--ok);background:var(--okbg);padding:16px 18px;border-radius:0 5px 5px 0;margin:18px 0}
+.note.b{border-color:var(--bad);background:var(--badbg)}
+.note p:last-child{margin-bottom:0}
+.big{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:1px;background:var(--line);
+ border:1px solid var(--line);border-radius:5px;overflow:hidden;margin:20px 0}
+.big div{background:var(--card);padding:15px 13px}
+.big b{display:block;font:900 30px/1 Heebo;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--acc)}
+.big span{display:block;font-size:12px;color:var(--mute);margin-top:5px}
+ul{padding-inline-start:20px;margin:0 0 12px}li{margin-bottom:7px}
+footer{padding-block:34px;border-top:1px solid var(--line);color:var(--mute);font-size:13.5px}
+@media(max-width:620px){td.num{white-space:normal}}
+</style>
+<div class="wrap">
+
+<header>
+  <div class="kick">שבע חקירות · במילים שלך</div>
+  <h1>מה המחולל<br>צריך לעשות</h1>
+  <p class="lead">שבע פעמים אמרת לי שאני לא מבין. בכל פעם עניתי בניסוח חדש <em>שלי</em>.
+  הפעם הלכתי למה שאתה כתבת.</p>
+</header>
+
+<blockquote>
+  "המחולל צריך לקחת משפט בעברית חופשית ולהשתמש בכל כל היכולות של כל אטום, לבדוק מה ישרת
+  הכי טוב את המטרה, ואם אין — לשלב אטום ביחד עד שהוא מגיע למטרה. והתוצאה של כל משפט צריכה
+  להיות אפליקציה ואתר שעובד במיליון אחוז — בלי באגים, בלי תקלות, בלי כלום. עובד מאה אחוז מלא."
+  <cite>DECISIONS.md:37 · 31.8 · 🔴🔴 חרוט · נאמר פעם־אחת</cite>
+</blockquote>
+
+<section>
+  <div class="sn">01</div><h2>מה אתה כותב 28 פעם</h2>
+  <p>‏28 הפירוקים אינם 28 נושאים. הם <b>מוצר אחד, 28 פעם</b> — באותו מבנה, עד לרמת המחיר וההחזר:</p>
+  <p style="font-size:19px;color:var(--ink)"><b>רגע</b> מהחיים · <b>מה המסמך באמת אומר</b> · <b>מספר אחד</b> · <b>טיוטה לשלוח</b> · <b>מה אסור</b> · <b>עד מתי</b></p>
+  <p>שורת «השם ללקוח» חוזרת מילה במילה:</p>
+  <ul>
+    <li>«תשלח את החוזה. <b>תדע על מה אתה חותם</b> לפני מחר.»</li>
+    <li>«תשלח את הבדיקה. <b>מה כתוב, מה דחוף, מה לשאול</b>.»</li>
+    <li>«פוטרת. <b>מה לסגור השבוע</b>.»</li>
+  </ul>
+  <h3>ומה שחוזר</h3>
+  <p><b>CRUD.</b> ‏<code>ישות תיק</code> + <code>ישות ממצא</code> + <code>לוח בקרה עם מונה</code> + <code>תפקיד בודק: הכל</code> — זהה ב-28 האפליקציות. טופס שדות-טקסט, ומסך-דוח.</p>
+  <div class="scroll"><table><thead><tr><th>מה שכתבת</th><th>במסמכים</th><th>בספקים</th></tr></thead><tbody>
+  <tr><td>המחירים — 70 שורות, הלב המסחרי</td><td class="num">28 מסמכים</td><td class="num bad">0 ספקים</td></tr><tr><td>«המספר האחד» — הליבה של המוצר</td><td class="num">חלקיק <span class="m">[מספר]</span> קיים</td><td class="num bad">0 מתוך 28</td></tr><tr><td>הטיוטה שניסחת בעצמך</td><td class="num">25 מסמכים מבקשים</td><td class="num bad">3 מקבלים תבנית גנרית</td></tr><tr><td>הרגע — מה שמגדיר את כל 28</td><td class="num">נקרא ונשמר באינדקס</td><td class="num bad">לא נכתב לספק</td></tr><tr><td>חלקי-דוח שמחזירים את שם עצמם</td><td class="num">—</td><td class="num bad"><b>80</b></td></tr>
+  </tbody></table></div>
+  <div class="note b"><p><b>והדבר החד ביותר:</b> ככל שכתבת בביטחון רב יותר — האפליקציה יצאה ריקה יותר.
+  פירוקים 1–7, הארוכים עם תת-פירוט: <b>0% קונכיות</b>. פירוקים 8–28, שבהם כבר הפנמת את הפורמט
+  וכתבת רק את שם הפריט: <b>60–100% תוויות ריקות</b>.</p>
+  <pre class="ltr" style="direction:rtl;text-align:right">peruk17.txt:  תוכן טיוטת נלווה קצרה: טיוטת נלווה קצרה
+peruk25.txt:  תוכן מה לא לחתום הלילה: מה לא לחתום הלילה
+peruk28.txt:  תוכן מספר אחד לבקש טווח: מספר אחד לבקש טווח</pre></div>
+</section>
+
+<section>
+  <div class="sn">02</div><h2>שש שורות קוד</h2>
+  <p>כל חסימה שמצאנו היא <b>כלל אחד</b>. לא ארכיטקטורה — שורה.</p>
+  <div class="cause">
+    <div class="hd"><b>אטום ריק מנצח</b><span>particles.mjs:225</span></div>
+    <pre>let bestScore = -1;
+const score = w.filled.length / w.sockets;   // ForgeGlowSlider: 0/2 = 0
+if (score > bestScore)                       // 0 > -1  ✓</pre>
+    <p>אטום שקיבל <b>אפס ערכים אמיתיים</b> הוא מועמד כשר. §20-ג אוכף על <b>שקע</b> — לא על <b>בחירה</b>. זו הסיבה המכנית ל-58.</p></div><div class="cause">
+    <div class="hd"><b>394 אטומים חסומים על צבע</b><span>particles.mjs:213</span></div>
+    <pre>if (e == null) { if (req) return null; continue; }</pre>
+    <p>הכלל פוסל על <b>כל</b> שקע-חובה. אבל השמות המובילים הם <code>radius · accentColor · height · gap</code> — <b>סגנון, לא דאטה</b>. §20-ג אוסר לזייף דאטה ומתיר ברירת-מחדל לסגנון. <b>109 אטומים חסומים רק על גיאומטריה וצבע.</b></p></div><div class="cause">
+    <div class="hd"><b>5 אטומי-קלט מתוך 924</b><span>render-ds.mjs:35</span></div>
+    <pre>.filter((w) => (w.he || []).slice(0, 2).join(' ') === L.fieldForData)</pre>
+    <p>בורר אטומי-הקלט דורש ששתי המילים העבריות הראשונות באטום יהיו <b>שוות בדיוק</b> לביטוי אחד. עוברים חמישה. הצוואר אינו חומר-הגלם — הוא <b>השוואת-מחרוזת בת שתי מילים</b>.</p></div><div class="cause">
+    <div class="hd"><b>כל פלט-המחולל פטור מהשער</b><span>goal-proof-check.mjs:20</span></div>
+    <pre>const GENOUT = /\/gen_[^/]+\.dart$/;
+const isScreen = (f) => … && !GENOUT.test(f) && …</pre>
+    <p>‏<code>goal-proof</code> — השער שמוודא «האם זה באמת משיג את המטרה» + תמונה — <b>מחריג בהגדרה את 246 מסכי-המחולל</b>. לכן מסך שמצייר 58 נוחת ירוק.</p></div><div class="cause">
+    <div class="hd"><b>הצינור לא חובר</b><span>peruk.mjs</span></div>
+    <pre>// השפה יודעת:  חוקים · שערים · מעברים · מעל · מתחת ל · סכום · מול
+// peruk.mjs קורא לאף אחד מהם. הוא מייצר רק: מחיקה</pre>
+    <p>‏107 שורות «אסור» הפכו ל-<code>תוכן אסור:</code> — טקסט, לא כלל שעוצר. ו-<code>מחיר</code> · <code>הרגע</code> · <code>קטגוריה</code> <b>כבר נקראים ונשמרים</b> ב-<code>peruk-index.json</code> — ופשוט לא נכתבים לספק.</p></div><div class="cause">
+    <div class="hd"><b>הבורר החכם כבוי</b><span>app-ds.mjs:211</span></div>
+    <pre>const drawer = getLook() !== 'paper';
+for (const e of drawer ? entMeta : [])   // ⇒ renderCompose לא נקרא</pre>
+    <p>‏<code>renderCompose</code> הוא <b>מרכיב-7-היבטים אמיתי</b> והצרכן היחיד של <code>caps</code> — אינדקס-היכולות. כל 31 הספקים מצהירים «נייר». <b>0 קריאות ב-31 ריצות ייצור.</b></p></div>
+</section>
+
+<section>
+  <div class="sn">03</div><h2>ומה שכבר בנוי — וכבוי</h2>
+  <p>שלוש היכולות שהדוקטרינה דורשת <b>כבר כתובות בריפו</b>:</p>
+  <div class="scroll"><table><thead><tr><th>איפה</th><th>מה הוא עושה</th><th>ומה מכבה אותו</th></tr></thead><tbody>
+  <tr><td class="m">compose-engine.mjs:91-94</td><td class="ok">מפרק ל-3 פעולות עבור <span class="m">×</span> ו-<span class="m">vs</span></td><td class="bad">הפלט זורק את השלישית — <span class="m">particles.mjs:327</span> משתמש רק ב-<span class="m">kd[0]</span></td></tr><tr><td class="m">cover.mjs:44-52</td><td class="ok">מרכיב כמה אטומים משלימי-שקעים (<span class="m">composed:true</span>)</td><td class="bad"><span class="m">pickWired:310</span> מפרק בחזרה — מטפל בהם כרשימת-חלופות לבחירת-אחד</td></tr><tr><td class="m">render-ds.mjs:1093</td><td class="ok">בורר-7-היבטים עם <span class="m">caps</span></td><td class="bad">כבוי ב-31/31 ע"י <span class="m">app-ds.mjs:211</span></td></tr>
+  </tbody></table></div>
+  <div class="note"><p>התוכנית אינה לבנות מחולל שני. היא לתת לשלושת אלה
+  <b>ישות-דאטה אחת שמחזיקה את ההחלטה</b> — ואז לשערים יש על מה לירות.</p></div>
+</section>
+
+<section>
+  <div class="sn">03ב</div><h2>ו־§23 — הכלל שהופר בשמו</h2>
+  <p>§23 אוסר: <b>«כל רשימת־מילים (<span class="m">type-hints</span>) שגדלה כדי לעבור משפט =
+  לכלוך־בזחילה שנשבר על הדומיין־הבא»</b>. נקבת בשם המנגנון המדויק.</p>
+  <pre style="direction:rtl;text-align:right">spec-lang.data.json
+typePerson = ["שם","לקוח","ספק","משכיר","שוכר","עובד",
+              "מטפל","רופא","נציג","מוכר","קונה","מורה","הורה"]</pre>
+  <p>‏14 שמות־עצם דומייניים. ומדידה לאורך ההיסטוריה:</p>
+  <div class="scroll"><table><thead><tr><th>מילון</th><th>אז</th><th>היום</th><th></th></tr></thead><tbody>
+  <tr><td class="m">spec-lang.data.json</td><td class="num">1,495B</td><td class="num bad">4,452B</td><td class="bad">+198%</td></tr>
+  <tr><td class="m">nl-lang.data.json</td><td class="num">1,066B</td><td class="num bad">1,671B</td><td class="bad">+57%</td></tr>
+  <tr><td class="m">gen/lang.data.json</td><td class="num">2,448B</td><td class="num bad">4,467B</td><td class="bad">+82% ב-4 קומיטים ביום אחד</td></tr>
+  </tbody></table></div>
+  <div class="note b"><p><b>ועברית בקוד־המנוע:</b> ‏<b>46 מתוך 57</b> קבצי <span class="m">generator/*.mjs</span> ·
+  <b>6,042</b> מילות־עברית. השער שאמור לתפוס את זה בודק <b>קובץ אחד</b> — <span class="m">nl-spec.mjs</span> — והוא היחיד שנקי.</p></div>
+</section>
+
+<section>
+  <div class="sn">04</div><h2>איפה המחולל עומד — מדוד</h2>
+  <div class="big">
+    <div><b>1,887</b><span>אטומים מאונדקסים</span></div>
+    <div><b>1,144</b><span>בהישג-בורר</span></div>
+    <div><b>108</b><span>נבחרים בפועל</span></div>
+    <div><b>64</b><span>מגיעים לפיקסל</span></div>
+  </div>
+  <p>הלוגיקה כמעט משוחררת — <b>98%</b> בהישג-בורר. <b>התצוגה חנוקה ב-22%</b>, והדאטה החצובה מהאימפריה
+  שמגיעה לאפליקציות: <b>4%</b>.</p>
+  <div class="note b"><p><b>ותיקון-אמת ב-CLAUDE.md עצמו:</b> ‏<code>CLAUDE.md:17</code> אומר
+  «המחולל מחווט <b>רק 13</b>». המדידה החיה: <code>✓ אמת: חיווט <b>108</b>/1887</code>.
+  המספר 13 הוא מ-31.8 — לפני שמדף-forge (359 אטומים עם תפר-דאטה) ובורר-<code>auto-skin</code> נולדו.
+  ו-<code>wired-floor.json</code> עדיין תקוע על רצפה <b>53</b>.</p></div>
+</section>
+
+<section>
+  <div class="sn">05</div><h2>הדרך</h2>
+  <div class="scroll"><table><thead><tr><th>גל</th><th>מה</th><th>הכלל</th><th>היקף</th><th>הראיה</th></tr></thead><tbody>
+  <tr><td class="num"><b>1</b></td><td><b>רצפת-דאטה</b></td><td>אטום שמילא 0 שקעי-דאטה אינו מועמד</td><td>3 שורות · <span class="m">particles.mjs</span></td><td class="ok">צילום לפני/אחרי: <b>58</b> ⇒ המספר של הרשומה · <span class="m">ForgeGlowSlider()</span> 2 ⇒ 0</td></tr><tr><td class="num"><b>2</b></td><td><b>החיווט מסוריאליזציה</b></td><td>שקע ⇐ ביטוי-AST, לא מחרוזת-Dart</td><td><span class="m">emit-dart.mjs</span> נולד · <span class="m">particles.mjs:218</span> נמחק</td><td class="ok">שער חדש: <span class="m">emitDart(manifest) ≡ הקוד</span> ביט-בביט. חבלה בצומת ⇒ הפלט משתנה</td></tr><tr><td class="num"><b>3</b></td><td><b>תמיד מפרק</b></td><td><span class="m">factDepth ≥ 1 ⇒ parts ≥ factDepth+1</span></td><td>מוחק 6 <span class="m">if</span> קבועים</td><td class="ok">‏216 באטום-יחיד ⇒ רק העובדות · 0 ב-3 אטומים ⇒ כל יחס/השוואה</td></tr><tr><td class="num"><b>4</b></td><td><b>שחרור הקטלוג</b></td><td><span class="m">role:"style"</span> ⇒ ברירת-מחדל · ‏<span class="m">tokenLit</span> על premium</td><td>טבלת-שקעים לדאטה</td><td class="ok">אטומים בפלט <b>39 ⇒ ≥150</b> · חסומי-צבע 268 ⇒ ≤113</td></tr><tr><td class="num"><b>5</b></td><td><b>אימות מול המטרה</b></td><td><span class="m">GENOUT</span> יורד · <span class="m">accept</span> מחולל</td><td><span class="m">goal-proof</span>+<span class="m">search-proof</span> למרשם</td><td class="ok">‏246 מסכים <b>פטורים ⇒ 0</b> · אף ליטרל-עיצוב על מסך עם רשומה</td></tr>
+  </tbody></table></div>
+  <div class="note"><p><b>גל 1 נוחת בישיבה אחת</b> — שלוש שורות בקובץ אחד, והוא הופך באג שאפשר לראות
+  בעיניים: המסך שאומר «האם הבטוחות חורגות מהתקרה החוקית» מפסיק להציג <b>58</b>.</p></div>
+</section>
+
+<footer>
+  שבעה חוקרים · כל ממצא אומת מולי בבייטים לפני שנמסר ·
+  <span class="m">meir7651231-ui/-ai-chat-server</span> · <span class="m">3db1bcc8</span> · הריפו לא זז.
+</footer>
+</div></html>

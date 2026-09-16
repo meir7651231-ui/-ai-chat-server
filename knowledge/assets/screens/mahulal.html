@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>המחולל · המכניקה</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{--ink:#1a1916;--ink2:#494540;--faint:#7c766e;--page:#f7f5f0;--card:#fffefc;
+--line:#dcd7cc;--hair:#eae5da;--ok:#1a6b44;--no:#98330f;--mark:#b0540a;--acc:#27487f;--code:#f0ede5}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#ebe7de;--ink2:#bcb6aa;--faint:#8a8478;
+--page:#15140e;--card:#1d1c15;--line:#363329;--hair:#292720;--ok:#5fc78d;--no:#f2916a;--mark:#e2b055;--acc:#90b2ea;--code:#22211a}}
+:root[data-theme=dark]{--ink:#ebe7de;--ink2:#bcb6aa;--faint:#8a8478;--page:#15140e;--card:#1d1c15;
+--line:#363329;--hair:#292720;--ok:#5fc78d;--no:#f2916a;--mark:#e2b055;--acc:#90b2ea;--code:#22211a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:400 17px/1.66 Heebo,system-ui,sans-serif;padding:0 16px;padding-block:40px 80px}
+.w{max-width:900px;margin:0 auto}
+h1{font:700 31px/1.22 Heebo;margin:0 0 5px;text-wrap:balance}
+.sub{color:var(--faint);font-size:15px;margin:0 0 32px}
+h2{font:700 21px/1.3 Heebo;margin:46px 0 12px;padding-block-end:8px;border-block-end:2px solid var(--hair);text-wrap:balance}
+h2 .n{display:inline-block;min-width:1.8em;color:var(--faint);font:600 13px/1 "IBM Plex Mono",monospace}
+h3{font:600 17px/1.4 Heebo;margin:24px 0 7px}
+p{margin:0 0 13px;color:var(--ink2)}
+p strong,li strong,td strong{color:var(--ink);font-weight:700}
+bdi,code{font-family:"IBM Plex Mono",monospace;font-size:.88em}
+code{background:var(--code);padding:1px 5px;border-radius:3px;color:var(--ink)}
+ul,ol{margin:0 0 14px;padding-inline-start:22px;color:var(--ink2)}li{margin-bottom:6px}
+blockquote{margin:0 0 16px;padding:14px 18px;background:var(--card);border-inline-start:4px solid var(--acc);border-radius:0 5px 5px 0;color:var(--ink)}
+blockquote p{margin:0 0 8px;color:var(--ink)}blockquote p:last-child{margin:0}
+blockquote cite{display:block;margin-top:8px;font-style:normal;font-size:13.5px;color:var(--faint)}
+.hot{border-inline-start-color:var(--mark)}
+table{width:100%;border-collapse:collapse;font-size:15px;margin:0 0 16px}
+th{text-align:start;font:700 12px/1.4 Heebo;letter-spacing:.06em;color:var(--faint);padding:0 10px 8px;border-block-end:2px solid var(--hair);white-space:nowrap}
+td{padding:10px;border-block-end:1px solid var(--hair);vertical-align:top;color:var(--ink2)}
+td:first-child{color:var(--ink)}
+.tw{overflow-x:auto}
+.num{font-variant-numeric:tabular-nums}
+.y{color:var(--ok);font-weight:700}.n{color:var(--no);font-weight:700}
+pre{background:var(--code);border:1px solid var(--hair);border-radius:6px;padding:13px 16px;margin:0 0 16px;
+overflow-x:auto;direction:ltr;text-align:left;font:400 13px/1.7 "IBM Plex Mono",monospace;color:var(--ink)}
+pre.he{direction:rtl;text-align:right;font-family:Heebo,sans-serif;font-size:14.5px;line-height:1.75}
+.big{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--card);margin:0 0 20px}
+.big div{flex:1 1 115px;padding:13px 15px;border-inline-end:1px solid var(--hair)}
+.big div:last-child{border-inline-end:0}
+.big .v{font:700 25px/1.1 Heebo;font-variant-numeric:tabular-nums}
+.big .k{font-size:12.5px;color:var(--faint);margin-top:2px}
+.f{color:var(--faint);font-size:14px}
+.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:0 0 18px}
+.four>div{background:var(--card);border:1px solid var(--line);border-radius:7px;padding:14px 16px}
+.four .t{font:600 12px/1 "IBM Plex Mono",monospace;color:var(--faint);letter-spacing:.05em;margin-bottom:6px}
+.four .h{font:600 16px/1.3 Heebo;color:var(--ink);margin-bottom:5px}
+.four p{margin:0;font-size:14.5px}
+</style></head><body><div class="w">
+
+<h1>המחולל · המכניקה</h1>
+<p class="sub">שישה חוקרים · הכל הורץ, לא רק נקרא · כל מספר אומת שוב בעצמי</p>
+
+<blockquote>
+<p>«לא מתאימים ביותר אלא מי יתן את הייעוד בצורה הטובה ביותר.»</p>
+<p>«ואם אין — לא, שישלב כמה עד שיגיע לתוצאה.»</p>
+<cite>הכרעה 20 (א)+(ב) · <bdi dir="ltr">DECISIONS.md:25-30</bdi> · 31.8</cite>
+</blockquote>
+
+<h2><span class="n">1</span>ארבעה מנועי-הרכבה, לא אחד</h2>
+<p>זו הטעות שחזרה אצלי שוב ושוב: חיפשתי מנגנון אחד. יש ארבעה, הם שונים לגמרי, ורצים בשלבים שונים.</p>
+
+<div class="four">
+<div><div class="t">א · אלגברה</div><div class="h">אלגברת-הנוסחה</div>
+<p><code>ops(formula)</code> ב-<bdi dir="ltr">compose-engine.mjs:81</bdi>. צורת-דאטה ⇒ <strong>רשימת פעולות</strong>. <code>×</code> תמיד 3 אטומים · <code>panel</code> תמיד 5. אין חיפוש — חוק.</p></div>
+<div><div class="t">ב · כיסוי</div><div class="h">כיסוי-שקעים</div>
+<p><code>cover()</code> ב-<bdi dir="ltr">cover.mjs:36</bdi>. לולאה חמדנית שאוספת אטומים עד שכל השקעים מכוסים, תקרה 4.</p></div>
+<div><div class="t">ג · שרשרת</div><div class="h">שרשרת-לוגיקה</div>
+<p><bdi dir="ltr">synth.mjs:72</bdi> · BFS עומק 1–4. ההכרעה אינה ניקוד — היא <strong><bdi dir="ltr">dart run</bdi></strong>.</p></div>
+<div><div class="t">ד · שברים</div><div class="h">שברי-זהב</div>
+<p><bdi dir="ltr">quarry-golden.mjs</bdi>. 9 מסכים שאדם כתב ⇒ <span class="num">1,668</span> שברים, הרכבה-חוזרת ביט-לביט <span class="num">9/9</span>.</p></div>
+</div>
+
+<h2><span class="n">2</span>איזה מהם באמת רץ — מדדתי בייצור</h2>
+<p>שאלתי את היומנים של המחולל עצמו, כל 31 הספקים:</p>
+
+<pre class="he">חלקיקים בייצור:        230
+בחירות (picks):        270
+בחירות עם 2+ אטומים:     0   ← מנוע ב׳ לא הרכיב אף פעם
+חלקיקים עם 2+ פעולות:   40   ← מנוע א׳ הרכיב 40 פעמים
+top-1 נדחה בחיווט:     170</pre>
+
+<div class="four" style="grid-template-columns:1fr">
+<div class="hot" style="border-inline-start:4px solid var(--mark)">
+<div class="h">שתי מסקנות שאף אחת מהן לא ניחשתי</div>
+<p><strong>ההרכבה האמיתית קורית במנוע א׳ — טבלה, לא חיפוש.</strong> <code>cover()</code> יודע להרכיב (אימתתי: 4,234 מקרים בניסוי), אבל בייצור הוא מחזיר אטום אחד ב-100% מהמקרים, כי מה שמבקשים ממנו צנוע.</p>
+<p style="margin-top:8px"><strong>ו-170 מתוך 230 החלקיקים — 74% — נבחרו כשהמועמד המוביל נדחה.</strong> לא בגלל ניקוד. בגלל <code>§20-ג</code>.</p>
+</div></div>
+
+<h2><span class="n">3</span>הדחייה היא הלב</h2>
+<p>‏<bdi dir="ltr">particles.mjs:203</bdi>, שורה אחת:</p>
+<pre>if (e == null) { if (req) return null; continue; }
+// שקע-חובה בלי דאטה ⇒ האטום נפסל (§20-ג: אין ערך-מומצא)</pre>
+<p>הדירוג <em>מציע</em>. החיווט <em>מכריע</em>. אם לאטום יש שקע-חובה שאין לו ערך-אמת מהישות — הוא נופל, והבא בתור נכנס. מהיומן האמיתי:</p>
+<pre class="he">חלקיק «מסגרת»   דורג: ToastCard        נכנס: DsNote
+חלקיק «לוח»     דורג: KpiTile          נכנס: KvLine
+חלקיק «ריק»     דורג: EmptyStateCard   נכנס: EmptyState@premium
+חלקיק «הודעה»   דורג: SegmentedSwitch  נכנס: ForgeMustChip + DsNote</pre>
+<p><strong>«לעולם לא לזייף דאטה» אינו סיסמה — הוא ה-<code>return null</code> הזה,</strong> והוא מה שקובע 74% מהבחירות.</p>
+
+<h2><span class="n">4</span>מהמשפט למסך — 11 תחנות</h2>
+<p>הרצתי עם אינסטרומנטציה ומדדתי 60 קריאות. אלה התחנות, בסדר:</p>
+<pre>1  setLook            ← השורה «עיצוב: נייר»
+2  interpret          ← ישות ⇒ סכמה + גרף-קשרים
+3  renderEntity       ⇒ מסך-ישות (טופס · ולידציה · 4 תצוגות · שלבים)
+4  renderDashboard    ⇒ דשבורד
+5  planParticles → renderParticles → write      ⇒ מסך-חלקיקים
+6  planReports  → renderReport   → write        ⇒ מסך-דוח
+7  renderSystem ×3    ⇒ audit · flags · settings
+8  renderHub          ⇒ רכזת + שער-הרשאות
+9  renderRootPage · renderHome · renderShell
+10 renderMain
+11 autoSkin → skinPass ×13        ← קורא כל קובץ מהדיסק ומשכתב</pre>
+<p><strong>שלב 11 הוא מכונה שנייה.</strong> ‏<code>--skin</code> אינו חלק מהרינדור — הוא מעבר בדיעבד על קבצים שכבר נכתבו. לכן הכותרת של קובץ אומרת <code>DsTable</code> ובגוף יושב <code>ForgeDataGrid</code>.</p>
+
+<h3>והמחולל מתעד את עצמו</h3>
+<p>כל קובץ מחולל נושא בראשו את דרך-ההסקה שלו:</p>
+<pre class="he">// טבלה  = [טבלה]            ⇒ table   ⇒ [table]         ⇒ DsTable
+// הודעה = [הודעה] … = [תוכן] ⇒ message ⇒ [switch, alert] ⇒ ForgeMustChip + DsNote
+// לוח    = [לוח]             ⇒ dates   ⇒ [magnitude]     ⇒ KvLine</pre>
+
+<h2><span class="n">5</span>איפה ההרכבה הטורית באמת מוכחת</h2>
+<p>במנועים ג׳ ההרכבה לא נבחרת לפי ניקוד — היא <strong>מורצת</strong>. אתה מזמין יכולת ככה:</p>
+<pre class="he">שחזור מספר טלפון לתצוגה ישראלית מתוך שורה בקידוד-מייל ישן
++972=2050-123=204567  =>  050-1234567
+=2B972=2054-987=2065=2043  =>  054-9876543</pre>
+<p>תיאור + דוגמאות. המנוע עושה BFS על שרשראות של עד 4 אטומים, <strong>מריץ כל מועמד על כל הדוגמאות</strong>, ואם מצא — <strong>כותב את הספק בעצמו</strong>. המדידה החיה:</p>
+<pre class="he">mail-phone     עומק 2 ⇒ decodeQuotedPrintable ∘ formatIsraeliPhone
+clock-calendar עומק 3 ⇒ timeToMin ∘ excelSerialToIso ∘ fmtDate
+time-gematria  עומק 2 ⇒ timeToMin ∘ gem
+מאגר: 133 ברי-חיווט מתוך 865 · 4/4 הורכבו · שקילות-Dart אומתה</pre>
+<p>ובצרכי-ההתנהגות: <span class="num">43</span> צרכים, <span class="num">43</span> מוכחים בריצה, ו<strong>אחד</strong> דרש שרשרת. אותו אחד — <code>phone.fmtSafe</code> — נבחר מתוך <span class="num">6,563</span> שרשראות קבילות: 24 המובילות נשלחו להוכחה, 3 עברו 3/3, והקוהרנטית נבחרה. אף אטום יחיד לא הגיע ל-3/3.</p>
+<p class="f">הרצתי את קובץ-ההוכחה בעצמי: <code>dart run phone_fmtSafe__chain.dart</code> ⇒ <code>0:0:1,0:1:1,0:2:1</code> — שלוש מתוך שלוש לזוכה.</p>
+
+<h2><span class="n">6</span>ומה עוצר אותנו — שלושה חסמים, שלושה סוגים</h2>
+
+<div class="tw"><table>
+<thead><tr><th>#</th><th>החסם</th><th>מדידה</th><th>סוג</th></tr></thead><tbody>
+<tr><td>1</td><td><strong>אין מילה בשפה שמבקשת</strong></td><td><bdi dir="ltr">compose-engine</bdi> מגדיר <span class="num">38</span> צורות · <code>shapeOf</code> יכול לייצר <span class="num">20</span></td><td>שפה</td></tr>
+<tr><td>2</td><td><strong>האטלס עיוור ל-forge</strong></td><td><bdi dir="ltr">atlas.json</bdi>: <span class="num">562</span> ווידג׳טים · <span class="num">0</span> מ-<bdi dir="ltr">dart-forge-bs</bdi></td><td>קובץ מיושן</td></tr>
+<tr><td>3</td><td><strong>מאגר דליל בצורות שבחרנו</strong></td><td><code>timeline</code> 2 אטומים · <code>board</code> 1 · <code>table</code> 5</td><td>מלאי</td></tr>
+</tbody></table></div>
+
+<p><strong>25 יכולות קיימות בקטלוג ואין להן תחביר:</strong></p>
+<pre class="he">board (קנבן) · bars (עמודות) · ring · gauge · trend (מגמה)
+attendance (גיליון נוכחות) · clash (התנגשות) · weekly (תפוסה)
+balance (יתרות) · hok (הוראת קבע) · roster · makeups · holidayGuard
+enrollment · broadcast · import · risk · pipeline · log · panel · triage</pre>
+<p>ושלוש צורות אפילו מתפרשות ונופלות בשקט — <code>[חיפוש]</code>, <code>[סינון]</code>, <code>[ייצוא]</code> כחלקיק: המפרש מזהה, החיפוש רץ, ואז <code>else</code> עם ההערה <strong>«פליטה טרם נבנתה»</strong>.</p>
+
+<h2><span class="n">7</span>מה המחולל כבר בנה</h2>
+<div class="big">
+<div><div class="v num">118,593</div><div class="k">שורות Dart</div></div>
+<div><div class="v num">577</div><div class="k">קבצים</div></div>
+<div><div class="v num">31</div><div class="k">אפליקציות-נייר</div></div>
+<div><div class="v num">181</div><div class="k">ישויות ב«המוסד»</div></div>
+<div><div class="v num">1,232</div><div class="k">שדות</div></div>
+</div>
+<p><strong>המוסד שלך כבר עבר דרכו</strong> — 12 אגפים ואז ספק מאוחד, 13 מעברים, ב-14.9. והדוח שלו אומר בכנות מה חלש: <code>אין «אסור» ×200</code> · <code>קשר חוצה-אגף ×90</code> · <code>קשר לא נפתר ×39</code> · <code>נוסחה ריקה ×4</code>. וההסבר שלו עצמו: <em>«באפליקציה-המאוחדת זה קשר; באגף לבד — הקלדה»</em>.</p>
+
+<h3>מדידות-איכות שרצות היום</h3>
+<div class="tw"><table>
+<thead><tr><th>מדד</th><th>ערך</th><th>מה נמדד</th></tr></thead><tbody>
+<tr><td><bdi dir="ltr">balagan-score</bdi></td><td class="y">35/36</td><td>כללי-יעד, מכנית על הפלט</td></tr>
+<tr><td><bdi dir="ltr">gen-verify</bdi></td><td>246/283</td><td>מסכים שרונדרו ב-flutter test · 0 חריגות-הקשה</td></tr>
+<tr><td><bdi dir="ltr">golden-harness</bdi></td><td>87/87</td><td>הזהב מורכב-מחדש עובר את בדיקותיו · ‏<strong>5 מ-9 זהים ביט</strong></td></tr>
+<tr><td><bdi dir="ltr">balagan-run</bdi></td><td>2 / 1 הקשות</td><td>Playwright על האתר · מסך-ראשון 2,585ms</td></tr>
+<tr><td>חיווט</td><td class="n">108 / 1,887</td><td>נגישים 100% · נבחרו 5.8%</td></tr>
+</tbody></table></div>
+
+<h2><span class="n">8</span>באג חי — שורה אחת, נראה למשתמש</h2>
+<p>באפליקציית «בדיקת חוזה שכירות» הספק אומר:</p>
+<pre class="he">ישות תשלום עם תיק*, סכום{129|159|189}, שולם{כן|לא}, מועד</pre>
+<p>וזה מה שנפלט לקוד החי, <bdi dir="ltr">gen_app_sechirut_ent4_content.dart:13-15</bdi>:</p>
+<pre>const String …_c11 = 'שדה';
+const String …_c12 = 'שדה';
+const String …_c13 = 'שדה';</pre>
+<p><strong>בורר-המחיר מציג שלוש שורות זהות בשם «שדה» במקום 129 / 159 / 189.</strong> השורש ב-<bdi dir="ltr">entity.mjs:20</bdi>:</p>
+<pre>const clean = (s) => heWords(s).join(' ').slice(0,60) || G.fallbackField;</pre>
+<p>‏<code>heWords</code> שומר אותיות עבריות בלבד. מספר ⇒ ריק ⇒ <code>'שדה'</code>. אין שום דרך בשפה לבטא enum מספרי או לועזי.</p>
+
+<h2><span class="n">9</span>עשרים מגבלות שנמדדו · הבולטות</h2>
+<div class="tw"><table><tbody>
+<tr><td><strong>סדר-השורות הוא המזהה</strong></td><td><code>slug=ent&lt;N&gt;</code> לפי מיקום — הזזת ישות מייתמת נתוני-משתמש</td></tr>
+<tr><td>נוסחה = רק <code>+ - * / ( )</code></td><td>אין <code>min</code>/<code>max</code>/<code>round</code>, אין חשבון-תאריכים</td></tr>
+<tr><td>ולידציה = רק <code>&gt;= &lt;= &gt; &lt;</code></td><td>בין שני שדות. אין <code>=</code>, אין «וגם»/«או»</td></tr>
+<tr><td>תפקיד = סינון-תצוגה</td><td><strong>לא אכיפה</strong> — כתוב כך בקוד, <bdi dir="ltr">render-ds.mjs:846</bdi></td></tr>
+<tr><td><code>שרשרת:</code></td><td>רק האיבר הראשון מרונדר</td></tr>
+<tr><td><code>שרת: ענן</code></td><td>עובד רק ב-<bdi dir="ltr">tasks</bdi> ו-<bdi dir="ltr">calendar</bdi></td></tr>
+<tr><td>אין תחביר-הערה</td><td>שורה חופשית הופכת לדשבורד בשקט</td></tr>
+</tbody></table></div>
+
+<h2><span class="n">10</span>המשפט המדויק</h2>
+<blockquote>
+<p>המחולל אינו בוחר רכיב ואינו מרכיב בפעולה אחת. <strong>הוא מפרק מטרה לדרישות, ולכל סוג-דרישה יש בורר משלו, וכל בורר יודע להחזיר יותר מאחד.</strong></p>
+<p>צורת-דאטה על מסך ⇒ פירוק <strong>אלגברי מקדים</strong>. קבוצת-שקעים ⇒ פירוק <strong>חמדני מדורג</strong>. התנהגות חישובית ⇒ פירוק <strong>טורי מוכח בהרצה</strong>. מסך שנבנה פעם ⇒ <strong>סלקציה על הבייטים</strong>.</p>
+<p>והמשותף אינו האלגוריתם אלא הדין: הכי-טוב-לייעוד · אין-יחיד ⇒ שלב · <strong>שקע בלי דאטה-אמת ⇒ פסילה, לא מילוי</strong> · אפס-מילון, אפס-LLM.</p>
+</blockquote>
+
+<p>ולכן התשובה לשאלה «הוא יודע לייצר את המסכים שבחרנו»: <strong>הוא בנוי בדיוק לזה, והמחסום אינו הבורר.</strong> הוא שאין מילה בעברית שמבקשת, שהאטלס לא רואה את האטומים, ושהמאגר דליל בשלוש הצורות שבחרנו. שלושה חסמים — ושלושתם ניתנים למדידה לפני שנוגעים בקוד.</p>
+
+</div></body></html>

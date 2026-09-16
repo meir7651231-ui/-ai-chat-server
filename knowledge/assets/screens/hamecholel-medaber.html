@@ -1,0 +1,269 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>המחולל מדבר</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@200;300;400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* ── עולם אחד מכוון: מסך-לילה. אין מצב-בהיר בכוונה — זה ממשק-קול. ── */
+:root{
+ --void:#07090C; --deep:#0C1016; --panel:#11161E; --edge:#1B2330; --edge2:#141B25;
+ --ink:#E8EDF4; --ink2:#9BA8BA; --dim:#5D6A7C;
+ --live:#38E1C4; --live2:#0E7A68; --liveglow:rgba(56,225,196,.16);
+ --heat:#FF7A45; --gold:#F2C14E; --vio:#8B7BF0;
+ --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+ --sans:'Heebo',system-ui,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--void);color:var(--ink);font-family:var(--sans);line-height:1.6;
+ -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;
+ padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:940px;margin:0 auto;padding-inline:16px;padding-block:40px 80px}
+h1{font-size:clamp(32px,7vw,54px);font-weight:200;letter-spacing:-.03em;line-height:1.05;margin:0 0 12px}
+h1 b{font-weight:900}
+.sub{color:var(--ink2);font-size:17px;max-width:54ch;margin:0 0 6px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--live);text-transform:uppercase;margin:0 0 14px}
+h2{font-size:20px;font-weight:700;margin:0 0 4px;letter-spacing:-.01em}
+.lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase}
+section{margin-top:54px}
+.head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.head .n{font-family:var(--mono);font-size:12px;color:var(--live)}
+.head .why{margin-inline-start:auto;font-size:13px;color:var(--dim)}
+/* ── מסגרת-מכשיר ── */
+.dev{background:linear-gradient(180deg,var(--deep),var(--panel));border:1px solid var(--edge);
+ border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04)}
+.bar{display:flex;align-items:center;gap:9px;padding:11px 15px;border-bottom:1px solid var(--edge2);background:rgba(0,0,0,.25)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 10px var(--live)}
+.bar .t{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.1em}
+.bar .r{margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;color:var(--live)}
+/* ── 1 · קול ── */
+.voice{padding:30px 22px 26px;text-align:center}
+.orb{position:relative;width:clamp(160px,44vw,216px);height:clamp(160px,44vw,216px);margin:0 auto 20px}
+.orb canvas{position:absolute;inset:0;width:100%;height:100%}
+.orb .core{position:absolute;inset:32%;border-radius:50%;
+ background:radial-gradient(circle at 38% 34%,#7CFFE8,var(--live) 42%,var(--live2) 100%);
+ box-shadow:0 0 44px var(--liveglow),0 0 90px rgba(56,225,196,.1);animation:bre 3.4s ease-in-out infinite}
+@keyframes bre{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@media (prefers-reduced-motion:reduce){.orb .core{animation:none}}
+.said{font-size:clamp(19px,4.2vw,27px);font-weight:300;line-height:1.45;color:var(--ink);
+ max-width:26ch;margin:0 auto 6px;min-height:2.6em}
+.said .w{opacity:0;animation:fin .45s forwards}
+@keyframes fin{to{opacity:1}}
+.said .live{color:var(--live)}
+.hint{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.12em}
+/* ── תשובת המחולל ── */
+.reply{border-top:1px solid var(--edge2);padding:18px 18px 20px;background:rgba(56,225,196,.025)}
+.reply .who{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.reply .who .av{width:22px;height:22px;border-radius:50%;
+ background:radial-gradient(circle at 36% 32%,#7CFFE8,var(--live2));box-shadow:0 0 14px var(--liveglow)}
+.reply .who span{font-family:var(--mono);font-size:10.5px;color:var(--live);letter-spacing:.14em}
+.reply p{margin:0 0 12px;font-size:15.5px;color:var(--ink2)}
+.reply p b{color:var(--ink);font-weight:500}
+/* ── כרטיסי-ישות ── */
+.ents{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:10px;margin:0 0 4px}
+.ent{background:rgba(255,255,255,.022);border:1px solid var(--edge);border-radius:9px;padding:13px 14px}
+.ent.q{border-color:rgba(242,193,78,.4);background:rgba(242,193,78,.05)}
+.ent .nm{font-size:16px;font-weight:700;display:flex;align-items:baseline;gap:7px}
+.ent .cls{font-family:var(--mono);font-size:10.5px;color:var(--live);direction:ltr}
+.ent.q .cls{color:var(--gold)}
+.ent .src{font-family:var(--mono);font-size:9.5px;color:var(--dim);margin-top:5px;direction:ltr;text-align:start;word-break:break-all;line-height:1.5}
+.ent .cnt{font-size:12.5px;color:var(--ink2);margin-top:7px}
+.ent .cnt b{color:var(--live);font-weight:700;font-size:15px}
+.ent.q .cnt b{color:var(--gold)}
+/* ── מתגים ── */
+.opts{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.opt{font-family:inherit;font-size:12px;padding:6px 11px;border-radius:14px;cursor:pointer;
+ background:rgba(255,255,255,.04);border:1px solid var(--edge);color:var(--ink2);transition:.14s}
+.opt:hover{border-color:var(--live)}
+.opt[aria-pressed="true"]{background:rgba(56,225,196,.14);border-color:var(--live);color:var(--live);font-weight:500}
+.opt:focus-visible{outline:2px solid var(--live);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.chip{font-family:var(--mono);font-size:10.5px;padding:3.5px 8px;border-radius:5px;cursor:pointer;direction:ltr;
+ background:rgba(56,225,196,.1);border:1px solid rgba(56,225,196,.3);color:var(--live);transition:.1s}
+.chip[aria-pressed="false"]{background:transparent;border-color:var(--edge);color:var(--dim)}
+.chip:focus-visible{outline:2px solid var(--live);outline-offset:1px}
+/* ── שורת-מונים ── */
+.meter{display:flex;gap:1px;background:var(--edge2);border-top:1px solid var(--edge2)}
+.m{flex:1;background:rgba(0,0,0,.3);padding:12px 8px;text-align:center}
+.m b{display:block;font-size:21px;font-weight:900;line-height:1.1;color:var(--live)}
+.m.zero b{color:var(--ink)}
+.m small{display:block;font-family:var(--mono);font-size:9.5px;color:var(--dim);margin-top:3px;letter-spacing:.08em}
+/* ── 2 · זרם ── */
+.stream{padding:16px 16px 18px;display:flex;flex-direction:column;gap:11px}
+.msg{max-width:88%;padding:11px 14px;border-radius:13px;font-size:14.5px;line-height:1.55}
+.msg.me{align-self:flex-start;background:rgba(139,123,240,.13);border:1px solid rgba(139,123,240,.3);border-start-start-radius:4px}
+.msg.it{align-self:flex-end;background:rgba(255,255,255,.035);border:1px solid var(--edge);border-start-end-radius:4px;color:var(--ink2)}
+.msg.it b{color:var(--ink);font-weight:500}
+.msg .tiny{display:block;font-family:var(--mono);font-size:9.5px;color:var(--dim);margin-top:6px;direction:ltr;text-align:start}
+.think{align-self:flex-end;display:flex;gap:4px;padding:9px 13px}
+.think i{width:5px;height:5px;border-radius:50%;background:var(--live);display:block;animation:bl 1.3s infinite}
+.think i:nth-child(2){animation-delay:.18s}.think i:nth-child(3){animation-delay:.36s}
+@keyframes bl{0%,60%,100%{opacity:.22}30%{opacity:1}}
+/* ── 3 · לוח ── */
+.split{display:grid;grid-template-columns:1fr 1.25fr;min-height:330px}
+@media (max-width:700px){.split{grid-template-columns:1fr}}
+.left{padding:20px 18px;border-inline-end:1px solid var(--edge2);display:flex;flex-direction:column;gap:14px}
+.wave{height:54px;position:relative}.wave canvas{position:absolute;inset:0;width:100%;height:100%}
+.transcript{font-size:15px;font-weight:300;line-height:1.5;color:var(--ink)}
+.transcript em{font-style:normal;color:var(--live);border-bottom:1px solid rgba(56,225,196,.35)}
+.right{padding:16px;background:rgba(0,0,0,.2);display:flex;flex-direction:column;gap:9px}
+.scr{background:rgba(255,255,255,.03);border:1px solid var(--edge);border-radius:8px;padding:11px 13px;
+ opacity:0;transform:translateY(7px);animation:up .5s forwards}
+@keyframes up{to{opacity:1;transform:none}}
+.scr .h{font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:7px}
+.scr .h .p{width:5px;height:5px;border-radius:50%;background:var(--live)}
+.scr .rows{display:grid;gap:4px;margin-top:8px}
+.row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;font-size:11.5px;color:var(--dim)}
+.row .bx{height:16px;min-width:56px;border-radius:3px;background:rgba(255,255,255,.05);border:1px solid var(--edge)}
+.foot{margin-top:60px;padding-top:20px;border-top:1px solid var(--edge2);
+ font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.9}
+</style></head><body>
+<div class="wrap">
+
+<p class="eyebrow">שלוש דוגמאות · נתונים אמיתיים מהעץ שלך</p>
+<h1>המחולל <b>מדבר</b></h1>
+<p class="sub">אתה מדבר. הוא שומע, בונה מול העיניים, ועונה. כשהוא לא יודע — הוא לא ממציא, הוא בונה את שתי האפשרויות ונותן לך להדליק.</p>
+
+<!-- ══ 1 ══ -->
+<section>
+ <div class="head"><span class="n">01</span><h2>קול</h2><span class="why">הכל מתחיל מספירה חיה. המשפט נולד תוך כדי דיבור.</span></div>
+ <div class="dev">
+  <div class="bar"><span class="dot"></span><span class="t">מקשיב</span><span class="r">אפס המצאות</span></div>
+  <div class="voice">
+   <div class="orb"><canvas id="orb" width="440" height="440" aria-hidden="true"></canvas><div class="core"></div></div>
+   <div class="said" id="said"></div>
+   <div class="hint">דבר · או הקלד</div>
+  </div>
+  <div class="reply">
+   <div class="who"><span class="av"></span><span>המחולל</span></div>
+   <p>זיהיתי <b>קליניקה</b>. שתיים מהמילים שלך יש להן מקור — אחת אין, ולכן בניתי אותה בשתי צורות.</p>
+   <div class="ents" id="ents"></div>
+  </div>
+  <div class="meter">
+   <div class="m"><b id="mE">2</b><small>ישויות</small></div>
+   <div class="m"><b id="mF">37</b><small>שדות</small></div>
+   <div class="m"><b id="mS">6</b><small>מסכים</small></div>
+   <div class="m zero"><b>0</b><small>המצאות</small></div>
+  </div>
+ </div>
+</section>
+
+<!-- ══ 2 ══ -->
+<section>
+ <div class="head"><span class="n">02</span><h2>זרם</h2><span class="why">שיחה. הוא חושב בקול, ומראה מאיפה כל דבר בא.</span></div>
+ <div class="dev">
+  <div class="bar"><span class="dot"></span><span class="t">שיחה חיה</span><span class="r">13 תחומים · 492 שדות</span></div>
+  <div class="stream">
+   <div class="msg me">מערכת לניהול מרפאה עם מטופלים ורופאים</div>
+   <div class="msg it"><b>מרפאה</b> — זה תחום שאני מכיר.<span class="tiny">vertical-packs.mjs → clinic</span></div>
+   <div class="msg it"><b>מטופל</b> אצלך הוא <b>Family</b>, ויש לו 25 שדות אמיתיים.<span class="tiny">clinic.terms["entity.family"] = "מטופל" → schema-fields.mjs → Family.*</span></div>
+   <div class="msg it"><b>רופא</b> יכול להיות שניים. בניתי את שניהם — תדליק.<span class="tiny">Teacher (19 שדות) · ישות חדשה (2 מהמשפט)</span></div>
+   <div class="think" aria-label="בונה"><i></i><i></i><i></i></div>
+  </div>
+ </div>
+</section>
+
+<!-- ══ 3 ══ -->
+<section>
+ <div class="head"><span class="n">03</span><h2>לוח</h2><span class="why">אתה מדבר משמאל, האפליקציה קמה מימין. בזמן אמת.</span></div>
+ <div class="dev">
+  <div class="bar"><span class="dot"></span><span class="t">בונה תוך כדי</span><span class="r">0.4 שניות למסך</span></div>
+  <div class="split">
+   <div class="left">
+    <div class="wave"><canvas id="wv" width="600" height="110" aria-hidden="true"></canvas></div>
+    <div class="transcript">מערכת לניהול <em>מרפאה</em> עם <em>מטופלים</em>, <em>חדרי טיפול</em> ו<em>חבילות טיפול</em></div>
+    <div class="lbl">3 ישויות · 2 עם מקור · 1 בשאלה</div>
+   </div>
+   <div class="right" id="right"></div>
+  </div>
+ </div>
+</section>
+
+<p class="foot">
+ כל שם בעמוד נקרא מהעץ: vertical-packs.mjs (13 תחומים) · schema-fields.mjs (492 שדות · 54 מחלקות) · entity-terms.data.json (32 מונחים).<br>
+ «מטופל» = entity.family = Family = 25 שדות · «חדר טיפול» = entity.room = Room = 12 שדות. שום דבר כאן לא הומצא.
+</p>
+</div>
+
+<script>
+/* ── כדור-הקול ── */
+(function(){const c=document.getElementById('orb'),x=c.getContext('2d');let t=0;
+ const R=Math.min(window.devicePixelRatio||1,2);c.width=440*R;c.height=440*R;x.scale(R,R);
+ const red=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ function f(){t+=red?0:.016;x.clearRect(0,0,440,440);
+  for(let r=0;r<4;r++){const rad=92+r*21+Math.sin(t*1.5+r*.8)*7;
+   x.beginPath();
+   for(let a=0;a<=Math.PI*2+.01;a+=.07){
+    const n=Math.sin(a*4+t*2+r)*4+Math.sin(a*7-t*1.4+r*2)*2.6;
+    const rr=rad+n; const px=220+Math.cos(a)*rr, py=220+Math.sin(a)*rr;
+    a?x.lineTo(px,py):x.moveTo(px,py);}
+   x.closePath();x.strokeStyle='rgba(56,225,196,'+(0.3-r*0.06)+')';x.lineWidth=1.1;x.stroke();}
+  requestAnimationFrame(f);}
+ f();})();
+
+/* ── המשפט נכתב ── */
+(function(){const el=document.getElementById('said');
+ const ws='מערכת לניהול מרפאה עם מטופלים, חדרי טיפול וחבילות טיפול'.split(' ');
+ const key=new Set(['מרפאה','מטופלים,','טיפול','טיפול']);
+ ws.forEach((w,i)=>{const s=document.createElement('span');
+  s.className='w'+(key.has(w)?' live':'');s.textContent=w+' ';
+  s.style.animationDelay=(i*0.16)+'s';el.appendChild(s);});})();
+
+/* ── הישויות ── */
+const ENTS=[
+ {nm:'מטופלים',cls:'Family',n:25,src:'clinic.terms["entity.family"] → schema-fields.mjs'},
+ {nm:'חדרי טיפול',cls:'Room',n:12,src:'clinic.terms["entity.room"] → schema-fields.mjs'},
+ {nm:'חבילות טיפול',q:true,opts:[
+   {l:'Course',n:39,on:true},{l:'ישות חדשה',n:3,on:false},{l:'לא ישות',n:0,on:false}],
+   src:'אין מונח — שתי האפשרויות נבנו'}];
+const FIELDS={Family:['id','name','father','mother','phone','phone2','email','city','address','status'],
+ Room:['id','name','active','slot','cap','location','rate','from','to','eq']};
+const off=new Set();
+function draw(){
+ const box=document.getElementById('ents');let h='';
+ for(const e of ENTS){
+  if(!e.q){const on=FIELDS[e.cls].filter(f=>!off.has(e.cls+f)).length;
+   h+='<div class="ent"><div class="nm">'+e.nm+'<span class="cls">'+e.cls+'</span></div>'
+    +'<div class="cnt"><b>'+e.n+'</b> שדות אמיתיים</div>'
+    +'<div class="chips">'+FIELDS[e.cls].map(f=>'<button class="chip" data-k="'+e.cls+f+'" aria-pressed="'+(!off.has(e.cls+f))+'">'+f+'</button>').join('')+'</div>'
+    +'<div class="src">'+e.src+'</div></div>';}
+  else{h+='<div class="ent q"><div class="nm">'+e.nm+'<span class="cls">?</span></div>'
+    +'<div class="cnt">אין לו מונח — <b>'+e.opts.length+'</b> אפשרויות בנויות</div>'
+    +'<div class="opts">'+e.opts.map((o,i)=>'<button class="opt" data-o="'+i+'" aria-pressed="'+o.on+'">'+o.l+(o.n?' · '+o.n:'')+'</button>').join('')+'</div>'
+    +'<div class="src">'+e.src+'</div></div>';}}
+ box.innerHTML=h;
+ let f=0,en=0;
+ for(const e of ENTS){if(!e.q){en++;f+=e.n-FIELDS[e.cls].filter(x=>off.has(e.cls+x)).length;}
+  else{const s=e.opts.find(o=>o.on);if(s&&s.n){en++;f+=s.n;}}}
+ document.getElementById('mE').textContent=en;
+ document.getElementById('mF').textContent=f;
+ document.getElementById('mS').textContent=en*3;}
+document.addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b)return;
+ if(b.dataset.k){off.has(b.dataset.k)?off.delete(b.dataset.k):off.add(b.dataset.k);draw();}
+ if(b.dataset.o!==undefined){const e=ENTS[2];e.opts.forEach((o,i)=>o.on=(i==+b.dataset.o));draw();}});
+draw();
+
+/* ── גל ── */
+(function(){const c=document.getElementById('wv'),x=c.getContext('2d');let t=0;
+ const R=Math.min(window.devicePixelRatio||1,2);c.width=600*R;c.height=110*R;x.scale(R,R);
+ const red=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ function f(){t+=red?0:.05;x.clearRect(0,0,600,110);
+  const N=64,w=600/N;
+  for(let i=0;i<N;i++){const p=i/N;
+   const h=(Math.sin(t+i*.32)*.5+.5)*(Math.sin(p*Math.PI))*46+4;
+   x.fillStyle='rgba(56,225,196,'+(0.2+0.5*Math.sin(p*Math.PI))+')';
+   x.fillRect(i*w+1,55-h/2,w-2.5,h);}
+  requestAnimationFrame(f);}
+ f();})();
+
+/* ── מסכים קמים ── */
+(function(){const r=document.getElementById('right');
+ const S=[{n:'מטופלים',f:['שם','טלפון','אימייל','עיר']},
+          {n:'חדרי טיפול',f:['שם','קיבולת','מיקום']},
+          {n:'חבילות טיפול',f:['שם','מחיר']}];
+ S.forEach((s,i)=>{const d=document.createElement('div');d.className='scr';
+  d.style.animationDelay=(0.5+i*0.45)+'s';
+  d.innerHTML='<div class="h"><span class="p"></span>'+s.n+'</div><div class="rows">'
+   +s.f.map(f=>'<div class="row"><span>'+f+'</span><span class="bx"></span></div>').join('')+'</div>';
+  r.appendChild(d);});})();
+</script>
+</body></html>

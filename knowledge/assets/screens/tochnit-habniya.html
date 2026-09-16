@@ -1,0 +1,302 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>תוכנית הבנייה</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+ --bg:#F7F7F8; --panel:#FFFFFF; --sunk:#EFEFF1; --ink:#0E0F11; --ink2:#3A3D42; --mute:#6B6F76;
+ --line:#DCDDE0; --line2:#EBECEE;
+ --acc:#0E0F11; --accbg:#EAEAEC;
+ --go:#0F6E4E; --gobg:#E2EFE9; --stop:#8E2E2E; --stopbg:#F8E8E6; --wait:#7E5510; --waitbg:#F7EFDE;
+ --codebg:#F0F0F2;
+ --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+ --sans:'Heebo',system-ui,'Segoe UI',Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#0D0E10; --panel:#16181A; --sunk:#111315; --ink:#F0F1F3; --ink2:#B6BABF; --mute:#7E848B;
+ --line:#262A2E; --line2:#1D2023; --acc:#F0F1F3; --accbg:#1C1F22;
+ --go:#68CBA2; --gobg:#0F241C; --stop:#E5928B; --stopbg:#271715; --wait:#DCB271; --waitbg:#251D10;
+ --codebg:#111315;
+}}
+:root[data-theme="dark"]{
+ --bg:#0D0E10; --panel:#16181A; --sunk:#111315; --ink:#F0F1F3; --ink2:#B6BABF; --mute:#7E848B;
+ --line:#262A2E; --line2:#1D2023; --acc:#F0F1F3; --accbg:#1C1F22;
+ --go:#68CBA2; --gobg:#0F241C; --stop:#E5928B; --stopbg:#271715; --wait:#DCB271; --waitbg:#251D10;
+ --codebg:#111315;
+}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.66;
+ -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+.wrap{max-width:880px;margin:0 auto;padding-inline:20px;padding-block:52px 88px}
+h1{font-size:clamp(36px,7.5vw,60px);font-weight:900;line-height:1.02;letter-spacing:-.03em;margin:0 0 14px;text-wrap:balance}
+h2{font-size:clamp(22px,3.9vw,30px);font-weight:900;letter-spacing:-.018em;margin:0 0 9px;text-wrap:balance}
+h3{font-size:17px;font-weight:700;margin:0 0 6px}
+p{margin:0 0 14px;color:var(--ink2);max-width:65ch}
+.lead{font-size:18.5px;color:var(--ink2);max-width:58ch;margin-bottom:0}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;color:var(--mute);text-transform:uppercase;margin:0 0 13px}
+section{margin-top:54px}
+.sec-n{font-family:var(--mono);font-size:11px;color:var(--mute);letter-spacing:.12em;margin-bottom:5px}
+hr{border:0;border-top:1px solid var(--line);margin:48px 0}
+code,.mono{font-family:var(--mono)}
+code.inl{background:var(--codebg);padding:1.5px 5px;border-radius:3px;font-size:.87em}
+pre{background:var(--codebg);border:1px solid var(--line);border-radius:4px;padding:14px 16px;
+ overflow-x:auto;margin:15px 0;direction:ltr;text-align:left}
+pre code{font-size:12.5px;line-height:1.8;color:var(--ink)}
+.src{font-family:var(--mono);font-size:11.5px;color:var(--mute);direction:ltr;text-align:left;margin:-8px 0 0}
+/* ── שני החוקים ── */
+.laws{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:26px 0}
+@media (max-width:620px){.laws{grid-template-columns:1fr}}
+.law{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--acc);border-radius:4px;padding:19px 20px}
+.law .n{font-family:var(--mono);font-size:11px;color:var(--mute);letter-spacing:.1em;margin-bottom:7px}
+.law h3{font-size:19px;margin-bottom:8px}
+.law p{font-size:14.5px;margin:0}
+.law .says{font-family:var(--mono);font-size:13px;color:var(--ink);background:var(--accbg);
+ padding:9px 11px;border-radius:3px;margin-top:12px}
+/* ── מלאי ── */
+.inv{overflow-x:auto;border:1px solid var(--line);border-radius:4px;margin:20px 0;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:480px}
+th,td{text-align:start;padding:10px 14px;border-bottom:1px solid var(--line2);font-size:14px;color:var(--ink2);vertical-align:top}
+th{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.07em;color:var(--mute);
+ text-transform:uppercase;background:var(--sunk)}
+td:first-child{color:var(--ink);font-weight:500}
+tr:last-child td{border-bottom:0}
+.n{font-family:var(--mono);font-weight:500}
+.yes{color:var(--go);font-weight:700} .no{color:var(--stop);font-weight:700}
+/* ── פריט בנייה ── */
+.item{background:var(--panel);border:1px solid var(--line);border-radius:4px;margin:18px 0;overflow:hidden}
+.item > .hd{background:var(--sunk);padding:13px 17px;border-bottom:1px solid var(--line);
+ display:flex;gap:11px;align-items:baseline;flex-wrap:wrap}
+.item .num{font-family:var(--mono);font-size:19px;font-weight:700;color:var(--ink);line-height:1}
+.item .ttl{font-size:17px;font-weight:900;letter-spacing:-.01em}
+.item .tag{margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.tag.go{background:var(--gobg);color:var(--go)}
+.tag.wait{background:var(--waitbg);color:var(--wait)}
+.tag.stop{background:var(--stopbg);color:var(--stop)}
+.item > .bd{padding:16px 17px}
+.item .bd > p:last-child{margin-bottom:0}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;margin:0 0 14px;font-size:13.5px}
+.kv dt{font-family:var(--mono);font-size:11px;color:var(--mute);letter-spacing:.05em;padding-top:3px;white-space:nowrap}
+.kv dd{margin:0;color:var(--ink2)}
+.kv dd .mono{font-size:12.5px}
+.diff{direction:ltr;text-align:left;font-family:var(--mono);font-size:12.5px;line-height:1.85;
+ background:var(--codebg);border-radius:3px;padding:11px 13px;margin:0 0 13px;overflow-x:auto}
+.diff .m{color:var(--stop)} .diff .p{color:var(--go)}
+/* ── סדר ── */
+.order{border:1px solid var(--line);border-radius:4px;overflow:hidden;margin:20px 0;background:var(--panel)}
+.ord{display:grid;grid-template-columns:30px 1fr auto;gap:0 14px;padding:13px 16px;border-bottom:1px solid var(--line2);align-items:center}
+.ord:last-child{border-bottom:0}
+.ord .i{font-family:var(--mono);font-size:13px;color:var(--mute);font-weight:500}
+.ord .t{font-size:14.5px;color:var(--ink);font-weight:500}
+.ord .t small{display:block;font-size:12.5px;color:var(--mute);font-weight:400;margin-top:2px}
+.ord .w{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.note{background:var(--panel);border:1px solid var(--line);border-inline-start:3px solid var(--acc);
+ border-radius:0 4px 4px 0;padding:18px 20px;margin:22px 0}
+.note p{margin:0;font-size:15px} .note p+p{margin-top:9px}
+.note.warn{border-inline-start-color:var(--stop)}
+ul{margin:13px 0;padding-inline-start:20px;color:var(--ink2)}
+li{margin-bottom:8px;max-width:63ch}
+.foot{margin-top:60px;padding-top:22px;border-top:1px solid var(--line);
+ font-family:var(--mono);font-size:11.5px;color:var(--mute);line-height:1.95}
+</style></head><body>
+<div class="wrap">
+
+<p class="eyebrow">תוכנית בנייה · כל מספר נמדד בהרצה</p>
+<h1>תוכנית הבנייה</h1>
+<p class="lead">שני חוקים, שישה פריטים, וסדר אחד שחייב להישמר. כל מה שלמטה נגזר ממדידה על העץ החי — לא מהערכה.</p>
+
+<hr>
+
+<section>
+<div class="sec-n">00</div>
+<h2>שני החוקים</h2>
+<p>כל התוכנית נשענת על שתי אמירות שלך, והן משלימות זו את זו בדיוק.</p>
+<div class="laws">
+ <div class="law">
+  <div class="n">חוק א · האשף</div>
+  <h3>המחולל לא מחליט</h3>
+  <p>בכל מקום שיש ספק — הוא בונה את <b>שתי</b> האפשרויות ופולט מתג. מקסימום יכולות: הכל נבנה, הבעלים מכבה.</p>
+  <div class="says">«בונה את שניהם · כפתורים שאני מדליק»</div>
+ </div>
+ <div class="law">
+  <div class="n">חוק ב · השער</div>
+  <h3>ואסור לו להמציא</h3>
+  <p>שדה בלי מקור בקלט = אדום. לא אזהרה, לא הערה — חסימה. גם אם המחולל «ירצה», הוא לא יוכל.</p>
+  <div class="says">«מחובר למשטרה ⇒ לא יכול להמציא»</div>
+ </div>
+</div>
+<p><b>למה שניהם ביחד:</b> השער לבדו הופך את המחולל לחסר-אונים — הוא ייעצר בכל משפט שחסר בו מידע. האשף לבדו מאפשר לו להמשיך להמציא בשקט. <b>יחד</b> הם אומרים: «אין לך רשות לנחש — יש לך רשות לבנות הכל ולתת לי לבחור».</p>
+</section>
+
+<section>
+<div class="sec-n">01</div>
+<h2>מה כבר קיים — מלאי מדוד</h2>
+<p>זה החלק שהפתיע אותי הכי הרבה. כמעט הכל בנוי. מה שחסר הם החוטים.</p>
+<div class="inv"><table>
+ <thead><tr><th>החלק</th><th>מה בו</th><th>המחולל משתמש?</th></tr></thead>
+ <tbody>
+  <tr><td>vertical-packs</td><td class="n">13 תחומים — קליניקה · מוסך · אירוח · בנייה · חנות · השכרת חללים · צי רכב · גמ״ח …<br>לכל אחד <span class="mono">terms</span> + <span class="mono">modules</span></td><td class="no">לא</td></tr>
+  <tr><td>schema-fields</td><td class="n">492 שדות ב-54 מחלקות<br>Family 25 · Course 39 · Enrollment 26 · Supporter 24 · Teacher 19 · Member 17 · Room 12</td><td class="no">לא</td></tr>
+  <tr><td>entity-terms</td><td class="n">32 מונחים · מילה עברית ⇐ מחלקה</td><td class="no">לא</td></tr>
+  <tr><td>אטומי-אשף</td><td class="n">12 קבצים — wizard-steps · wizard-step-error · empty-wizard · wizard-industries · wizard_step · wizard_header</td><td class="no">לא</td></tr>
+  <tr><td>signup-wizard</td><td class="n">אשף שלם כדוגמה: 5 שלבים · 9 חוטים · ולידציה לכל שלב</td><td class="no">לא</td></tr>
+  <tr><td>yeshiva/read.mjs</td><td class="n">7 בדיקות · 268 שאלות · 61 תיקונים מכניים על 28 הפירוקים</td><td class="no">לא — מנותק לגמרי</td></tr>
+  <tr><td>sentence.mjs</td><td class="n">פותר משפט ⇐ ישות · יודע לומר «אין המצאה»</td><td class="no">לא</td></tr>
+  <tr><td>המשטרה</td><td class="n">55 שערים · 5 מוכחים · רצפה 5 שמעולם לא עלתה</td><td class="yes">כן</td></tr>
+ </tbody>
+</table></div>
+<div class="note warn">
+ <p><b>שתי מדידות שמסבירות את כל הפער:</b></p>
+ <p>1 · <code class="inl">grep -c "entity-terms" nl-spec.mjs</code> ⇒ <b>0</b>. המודול שמקבל את המשפט שלך לא קורא אף אחד מהאטומים למעלה.</p>
+ <p>2 · המחולל פולט <b>577 קבצי Dart</b>. מספר האשפים ביניהם: <b>0</b>.</p>
+</div>
+</section>
+
+<section>
+<div class="sec-n">02</div>
+<h2>ומה הוא עושה במקום</h2>
+<p>ממציא. וזה נמדד בשני המסלולים בנפרד:</p>
+<div class="inv"><table>
+ <thead><tr><th>המסלול</th><th>נמדד</th><th>מה הומצא</th></tr></thead>
+ <tbody>
+  <tr><td>משפט חופשי<br><span class="mono" style="font-size:11.5px">nl-spec.mjs:48</span></td><td class="n">43 ישויות ב-14 משפטי־הרצפה שלו עצמו</td><td class="no">40 עם הרביעייה (93%)<br><span class="mono" style="font-size:12px">שם · תיאור · תאריך · סטטוס</span></td></tr>
+  <tr><td>מסמכי־פירוק<br><span class="mono" style="font-size:11.5px">peruk.mjs</span></td><td class="n">233 שדות ב-28 פירוקים</td><td class="no">45 בלי מקור במסמך (19%)<br><span class="mono" style="font-size:12px">לקוח · טלפון — ב-12 מסמכים רצופים</span></td></tr>
+ </tbody>
+</table></div>
+<p>שני המסלולים פולטים <b>אותו פורמט</b> — <code class="inl">ישות X עם שדה, שדה</code> — ולכן <b>בדיקה אחת תופסת את שניהם</b>.</p>
+</section>
+
+<hr>
+
+<section>
+<div class="sec-n">03</div>
+<h2>מה לבנות — שישה פריטים</h2>
+
+<div class="item">
+ <div class="hd"><span class="num">1</span><span class="ttl">תיקוני הפותר</span><span class="tag go">בטוח · מוכן · נמדד</span></div>
+ <div class="bd">
+  <dl class="kv">
+   <dt>איפה</dt><dd><span class="mono">sentence.mjs:44</span> · <span class="mono">sentence.mjs:48</span></dd>
+   <dt>למה</dt><dd>הפותר מתאים תת־מחרוזת בכל מקום במילה. «שולחנות» של מסעדה הפכו ל־<span class="mono">ShopStore</span> כי המילה מכילה «חנות». «חברת בנייה» הפכה ל־<span class="mono">Member</span> כי «בנייה» מתחיל ב«בני».</dd>
+   <dt>נמדד</dt><dd>שער־הזהב <b>16/16 לפני ואחרי</b> · תאונות <b>2 ⇐ 0</b></dd>
+  </dl>
+  <div class="diff"><span class="m">− else if (fw.length &gt;= 3 &amp;&amp; w.includes(fw)) s = 1;</span><br><span class="p">+ else if (fw.length &gt;= 3 &amp;&amp; w.startsWith(fw)) s = 1;</span><br><br><span class="m">− if (hit) { const score = …</span><br><span class="p">+ if (hit === fws.length) { const score = …</span></div>
+  <p>מורפולוגיה עברית מוסיפה סיומות בסוף, לא בתחילה — לכן צורה לגיטימית תמיד בתחילת המילה. וצורה דו־מילתית («בני משפחה») חייבת להתאים במלואה. <b>כלל־שפה, לא ידע־תחום</b> — §23 נשמר.</p>
+ </div>
+</div>
+
+<div class="item">
+ <div class="hd"><span class="num">2</span><span class="ttl">תיקוני הפירוק</span><span class="tag go">בטוח · מוכן · נמדד</span></div>
+ <div class="bd">
+  <dl class="kv">
+   <dt>איפה</dt><dd><span class="mono">nl-spec.mjs:25</span> (עוגן) · <span class="mono">nl-spec.mjs:74</span> (כלל־ריבוי)</dd>
+   <dt>למה</dt><dd><b>א ·</b> הביטוי שמזהה «לכל X …» מעוגן לתחילת־מחרוזת או פסיק בלבד. אחרי נקודתיים — מחמיץ.<br><b>ב ·</b> <span class="mono">tailPlural.length</span> — פריט־רבים אחד מעיף את כל הסעיף. ובעברית «ות» היא גם סיומת־יחיד (כמות · עלות · שעות · התמחות).</dd>
+   <dt>נמדד</dt><dd>ניסוחים של אותו משפט: <b>2/6 ⇐ 4/6</b></dd>
+  </dl>
+  <div class="diff"><span class="m">− (?:^|[,،]\s*)</span>  <span class="p">+ (?:^|[,،:;؛]\s*)</span><br><span class="m">− } else if (tailPlural.length) {</span><br><span class="p">+ } else if (tailPlural.length === tailItems.length) {</span></div>
+ </div>
+</div>
+
+<div class="item">
+ <div class="hd"><span class="num">3</span><span class="ttl">חיווט המחולל לאטומים</span><span class="tag wait">הלב · דורש בנייה</span></div>
+ <div class="bd">
+  <dl class="kv">
+   <dt>איפה</dt><dd><span class="mono">nl-spec.mjs</span> · <span class="mono">app-ds.mjs</span></dd>
+   <dt>מה</dt><dd>שרשרת בת שלושה שלבים, שכל איבריה כבר קיימים:</dd>
+  </dl>
+  <pre dir="rtl" style="direction:rtl;text-align:right"><code>משפט  ⇒  זיהוי תחום  ⇒  vertical-packs (13)  ⇒  terms
+                              ↓
+        מילה עברית  ⇒  entity-terms (32)  ⇒  מחלקה
+                              ↓
+              מחלקה  ⇒  schema-fields (492)  ⇒  שדות אמיתיים</code></pre>
+  <p>«מערכת למרפאה עם מטופלים» ⇐ תחום <span class="mono">clinic</span> ⇐ «מטופל» הוא <span class="mono">entity.family</span> ⇐ <span class="mono">Family</span> ⇐ <b>25 שדות אמיתיים</b>: <span class="mono" style="font-size:12px">name · father · mother · phone · phone2 · email · city · address …</span></p>
+  <p><b>מטופל אינו ישות חדשה — הוא Family במילים אחרות.</b> אותה סכימה, 13 עורות של שפה. זה בדיוק §23: המנוע לא יודע עברית, הוא קורא חבילה.</p>
+  <p>ובמקביל — מוחקים את <code class="inl">DEF_FIELDS</code>. נמדד בעותק־בדיקה: <b>המצאות 93% ⇐ 0</b>.</p>
+ </div>
+</div>
+
+<div class="item">
+ <div class="hd"><span class="num">4</span><span class="ttl">פולט־האשף</span><span class="tag wait">הדבר החדש היחיד</span></div>
+ <div class="bd">
+  <dl class="kv">
+   <dt>איפה</dt><dd><span class="mono">app-ds.mjs</span> ⇒ פולט <span class="mono">gen_app_wizard.dart</span> לכל אפליקציה</dd>
+   <dt>מרכיב מ</dt><dd>אטומי־המדף שכבר קיימים — <span class="mono">wizard-steps</span> · <span class="mono">wizard-step-error</span> · <span class="mono">empty-wizard</span> · <span class="mono">wizard_step</span> · <span class="mono">wizard_header</span></dd>
+   <dt>כלל</dt><dd>כל ספק שהיה למחולל בדרך ⇒ שלב באשף עם <b>שתי האפשרויות בנויות</b> ומתג לכל אחת. כל שדה שהוא מכיר ⇒ מתג, דלוק כברירת־מחדל.</dd>
+  </dl>
+  <p><b>אשף חדש בכל אפליקציה</b> — כי הספקות של כל אפליקציה הם שלה. לא תבנית קבועה.</p>
+  <p>וזה לא מנוע חדש אלא <b>הרכבה</b> — בדיוק מה ש־<span class="mono">THE-WAY.md</span> דורש: «המחולל לא כותב קוד — הוא פולט מניפסט־הרכבה מעל אטומים קיימים».</p>
+ </div>
+</div>
+
+<div class="item">
+ <div class="hd"><span class="num">5</span><span class="ttl">שער־ההמצאה</span><span class="tag stop">יאדים מיד · הכרעת־בעלים</span></div>
+ <div class="bd">
+  <dl class="kv">
+   <dt>מה</dt><dd>כל שדה בספק חייב מקור־מילה בקלט. אין מקור = הומצא = אדום.</dd>
+   <dt>איפה</dt><dd>מנוע חדש + שורה ב־<span class="mono">gates.tsv</span> + שורה ב־<span class="mono">police.mjs</span></dd>
+   <dt>כיסוי</dt><dd>שני המסלולים — פירוקים <b>וגם</b> משפט חופשי, כי הפורמט זהה</dd>
+   <dt>נמדד היום</dt><dd>כתבתי אותו והרצתי: <b>45 שדות מתוך 233 יאדימו</b> (19%)</dd>
+  </dl>
+  <p>הבדיקה הזו חסרה גם למנוע הישיבתי. שש משבע בדיקותיו שואלות «מה נפל מהמסמך?» — <b>אף אחת לא שואלת «מה נוסף לספק?»</b>. זה ההבדל בין 268 שאלות ל-45 המצאות: שתי שאלות הפוכות, שתיהן נחוצות.</p>
+ </div>
+</div>
+
+<div class="item">
+ <div class="hd"><span class="num">6</span><span class="ttl">הישיבתי אל המשטרה</span><span class="tag stop">יפתח 268 שאלות</span></div>
+ <div class="bd">
+  <dl class="kv">
+   <dt>מה</dt><dd>שער שמריץ <span class="mono">yeshiva/read.mjs</span> · שאלה שלא נענתה = אדום</dd>
+   <dt>שכבה 2</dt><dd>התשובות שלך תחת <span class="mono">## הצבות</span> בפירוק ⇒ נכנסות לספק</dd>
+   <dt>נמדד</dt><dd>268 שאלות · <b>61 מהן מכניות</b> — לא צריכות אותך כלל<br>הצבות קיימות היום: <b>0 מתוך 28 פירוקים</b></dd>
+  </dl>
+  <p>61 התיקונים המכניים אפשר להחיל אוטומטית: «כסף:» היא כותרת שנכנסה כתוכן־כרטיס · «נעלם Y ימים» — ה־Y היה מציין־מקום והפך לטקסט שהמשתמש יראה על המסך.</p>
+ </div>
+</div>
+</section>
+
+<hr>
+
+<section>
+<div class="sec-n">04</div>
+<h2>הסדר — וזה הדבר הכי חשוב בדף</h2>
+<div class="note warn">
+ <p><b>אסור לבנות את השערים לפני התרופה.</b> אם שער־ההמצאה עולה ראשון, המשטרה תהיה אדומה על 45 שדות ועל 268 שאלות — בלי שום דרך לתקן אותם. הריפו ייתקע.</p>
+ <p>לכן: <b>קודם נותנים למחולל מאיפה לקחת, אחר כך אוסרים עליו להמציא.</b></p>
+</div>
+<div class="order">
+ <div class="ord"><span class="i">1</span><span class="t">תיקוני הפותר<small>16/16 נשמר · אפס סיכון</small></span><span class="w tag go">היום</span></div>
+ <div class="ord"><span class="i">2</span><span class="t">תיקוני הפירוק<small>2/6 ⇐ 4/6 ניסוחים</small></span><span class="w tag go">היום</span></div>
+ <div class="ord"><span class="i">3</span><span class="t">חיווט לאטומים<small>עכשיו יש מאיפה לקחת שדות</small></span><span class="w tag wait">אחרי</span></div>
+ <div class="ord"><span class="i">4</span><span class="t">פולט־האשף<small>עכשיו יש איפה להציג את מה שלא ידוע</small></span><span class="w tag wait">אחרי</span></div>
+ <div class="ord"><span class="i">5</span><span class="t">שער־ההמצאה<small>עכשיו האיסור הוגן — יש תרופה</small></span><span class="w tag stop">רק בסוף</span></div>
+ <div class="ord"><span class="i">6</span><span class="t">הישיבתי אל המשטרה<small>61 מכניים אוטומטית · 268 אליך</small></span><span class="w tag stop">רק בסוף</span></div>
+</div>
+<p><b>1 ו-2 אפשר לשחרר מיד</b> — נמדדו, לא שוברים דבר, עוברים את המשטרה המלאה. <b>3 ו-4 הם הבנייה האמיתית.</b> <b>5 ו-6 הם מתגים</b> שנדלקים רק כששלושת הקודמים עומדים.</p>
+</section>
+
+<section>
+<div class="sec-n">05</div>
+<h2>ומה עדיין לא בדקתי</h2>
+<p>כדי שהתמונה תהיה מלאה, גם החורים:</p>
+<ul>
+<li><b><code class="inl">maor-system</code> ו־<code class="inl">buildsmart</code> לא קיימים במיכל הזה.</b> לכן שלושה שערים דילגו (<span class="mono">enumvalues</span> · <span class="mono">genverify</span> · <span class="mono">goldenharness</span>), ו<b>מעולם לא ראיתי אפליקציה נבנית מקצה לקצה</b>. כל מה שמדדתי הוא שכבת־המפרט.</li>
+<li><b>48 שערים לא־מוכחים לא נבדקו.</b> מתוך 50, מצאתי שניים ריקים (<span class="mono">no-fakers</span> · <span class="mono">goal-proof</span>). היתר — לא יודע.</li>
+<li><b>שכבת האטומים והרינדור.</b> מצאתי שם שלושה באגים בסיבובים קודמים (<span class="mono">particles.mjs:177 · :213 · :225</span>) אבל לא מדדתי כמה הם מקלקלים באפליקציה הסופית.</li>
+<li><b>13 התחומים מכסים הרבה — אבל לא הכל.</b> יש קליניקה, מוסך, אירוח, בנייה, חנות. אין בית־ספר, אין ספרייה, אין מסעדה. בשבילם האשף עדיין יצטרך לשאול.</li>
+</ul>
+</section>
+
+<hr>
+
+<section>
+<h2>בשורה אחת</h2>
+<p>לא חסרים לך מנועים — יש <b>295</b> ואף אחד לא מת. לא חסר לך תכנון — הוא כתוב ב־L57 ועובד ב־<code class="inl">sentence.mjs</code>. לא חסרים לך אטומים — האשף על המדף, השדות בסכימה, המילים בחבילות.</p>
+<p><b>חסרים ארבעה חוטים ושני מתגים.</b> ומה ששניהם יחד אומרים הוא משפט אחד: <b>המחולל לא יחליט במקומך, ולא יורשה לנחש.</b></p>
+</section>
+
+<p class="foot">
+ נמדד בהרצה על העץ החי: nl-spec.mjs:25,48,74 · sentence.mjs:44,48,71,99 · app-ds.mjs:56,65 · vertical-packs.mjs (13) · schema-fields.mjs (492·54) · entity-terms.data.json (32) · signup-wizard.contract.md · yeshiva/read.mjs (7 בדיקות · 268+61) · nl-smoke.txt (14) · peruks/ (28) · specs-ds/ (233 שדות) · gates.tsv (55) · selftest-coverage-baseline.json (5)<br>
+ 295 מנועים · 577 קבצי פלט · 0 אשפים · 0 שינויי־ריפו — כל התיקונים בעותק־בדיקה בלבד.
+</p>
+
+</div></body></html>

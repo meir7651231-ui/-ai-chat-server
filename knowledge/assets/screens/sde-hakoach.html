@@ -1,0 +1,200 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>שדה הכוח</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@200;300;500&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+:root{
+ --void:#03030A; --ink:#F4F4FF; --ink2:#8E8EAE; --dim:#4A4A66;
+ --pack:#FFB13D; --term:#C39BFF; --schema:#3DF0E0; --open:#FF4F8B;
+ --mono:'IBM Plex Mono',ui-monospace,monospace; --sans:'Rubik','Heebo',system-ui,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--void)}
+body{color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;
+ font-variant-numeric:tabular-nums;touch-action:manipulation}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+.ui{position:fixed;inset:0;z-index:1;pointer-events:none;display:flex;flex-direction:column;
+ padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px))}
+.top{text-align:center}
+.kicker{font-family:var(--mono);font-size:9.5px;letter-spacing:.34em;color:var(--dim);text-transform:uppercase;margin:0 0 14px}
+.sent{font-size:clamp(17px,3.2vw,25px);font-weight:200;letter-spacing:-.02em;margin:0;
+ line-height:1.5;display:flex;flex-wrap:wrap;gap:0 .32em;justify-content:center;max-width:26ch;margin-inline:auto}
+.sent span{transition:color .5s,opacity .5s;opacity:.3}
+.sent span.lit{opacity:1}
+.bottom{margin-top:auto;display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.read{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--dim);line-height:2.1}
+.read b{color:var(--ink2);font-weight:400}
+.read .hi{color:var(--ink)}
+.tally{margin-inline-start:auto;display:flex;gap:26px;align-items:flex-end}
+.t b{display:block;font-size:clamp(26px,5vw,40px);font-weight:200;line-height:.9;letter-spacing:-.05em}
+.t small{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;color:var(--dim);
+ text-transform:uppercase;margin-top:8px}
+.t.s b{color:var(--schema)} .t.o b{color:var(--open)} .t.z b{color:var(--ink)}
+.hint{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom,0px));
+ z-index:1;font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--dim);
+ pointer-events:none;transition:opacity .6s;text-align:center}
+.hint.gone{opacity:0}
+@media (max-width:620px){.tally{gap:16px}.bottom{gap:10px}}
+</style></head><body>
+<canvas id="c"></canvas>
+<div class="ui">
+ <div class="top">
+  <p class="kicker">המחולל · שדה</p>
+  <p class="sent" id="sent"></p>
+ </div>
+ <div class="bottom">
+  <div class="read" id="read"></div>
+  <div class="tally">
+   <div class="t s"><b id="tE">2</b><small>ישויות</small></div>
+   <div class="t s"><b id="tF">37</b><small>שדות</small></div>
+   <div class="t o"><b id="tO">3</b><small>בנויות · פתוח</small></div>
+   <div class="t z"><b>0</b><small>המצאות</small></div>
+  </div>
+ </div>
+</div>
+<div class="hint" id="hint">גע בגוף הוורוד — הוא נפתח לאפשרויותיו</div>
+
+<script>
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const c=document.getElementById('c'),x=c.getContext('2d');
+let W,H,DPR=Math.min(devicePixelRatio||1,2);
+function size(){W=innerWidth;H=innerHeight;c.width=W*DPR;c.height=H*DPR;x.setTransform(DPR,0,0,DPR,0,0);layout();}
+
+const HUE={pack:'#FFB13D',term:'#C39BFF',schema:'#3DF0E0',open:'#FF4F8B'};
+/* ── מקורות: כוכבי-כובד ── */
+const STARS=[
+ {k:'pack',  nm:'vertical-packs', he:'חבילות-תחום', n:13,  ax:.20,ay:.30},
+ {k:'term',  nm:'entity-terms',   he:'מונחים',      n:32,  ax:.50,ay:.17},
+ {k:'schema',nm:'schema-fields',  he:'סכימה',       n:492, ax:.80,ay:.30}];
+/* ── גופים ── */
+const BODY=[
+ {w:'מטופלים',  s:'term',  cls:'Family',n:25,star:1,r:28,orb:0,sp:.0042},
+ {w:'חדרי טיפול',s:'term', cls:'Room',  n:12,star:1,r:22,orb:2.4,sp:.0052},
+ {w:'קליניקה',  s:'pack',  cls:'clinic',n:0, star:0,r:19,orb:1.1,sp:.0046},
+ {w:'חבילות טיפול',s:'open',cls:null,  n:0, free:true,r:26,
+  opts:[{l:'Course',n:39,k:'schema'},{l:'ישות חדשה',n:2,k:'open'},{l:'טקסט',n:0,k:'open'}],
+  open:false,pick:-1}];
+const TOK=[['מערכת',0],['לניהול',0],['קליניקה','pack'],['עם',0],['מטופלים','term'],
+           ['חדרי','term'],['טיפול','term'],['וחבילות','open'],['טיפול','open']];
+document.getElementById('sent').innerHTML=TOK.map(([w,s],i)=>
+ '<span data-i="'+i+'"'+(s?' style="color:'+HUE[s]+'"':'')+'>'+w+'</span>').join('');
+
+let T=0,hover=null;
+function layout(){
+ for(const s of STARS){s.x=W*s.ax;s.y=H*s.ay;}
+ const f=BODY.find(b=>b.free);f.x=W*.5;f.y=H*.63;
+}
+function pos(b){
+ if(b.free)return{x:b.x,y:b.y};
+ const s=STARS[b.star],R=Math.min(W,H)*(b.star===1?.19:.15)+b.r*1.5;
+ return{x:s.x+Math.cos(T*b.sp*60+b.orb)*R,y:s.y+Math.sin(T*b.sp*60+b.orb)*R*.55};
+}
+function lit(){const L=new Set();
+ for(const b of BODY) if(!b.free||b.pick>=0) L.add(b.s);
+ document.querySelectorAll('.sent span').forEach((el,i)=>{
+  const s=TOK[i][1]; el.classList.toggle('lit',!!s);});}
+lit();
+
+function draw(){
+ T+=RM?0:.016;
+ x.clearRect(0,0,W,H);
+ /* ── ערפילית ── */
+ for(const s of STARS){
+  const g=x.createRadialGradient(s.x,s.y,0,s.x,s.y,Math.min(W,H)*.34);
+  g.addColorStop(0,HUE[s.k]+'1E');g.addColorStop(1,'transparent');
+  x.fillStyle=g;x.fillRect(0,0,W,H);}
+ /* ── חוטי-כובד ── */
+ for(const b of BODY){
+  if(b.free)continue;
+  const p=pos(b),s=STARS[b.star];
+  x.beginPath();x.moveTo(s.x,s.y);
+  const mx=(s.x+p.x)/2,my=(s.y+p.y)/2-30;
+  x.quadraticCurveTo(mx,my,p.x,p.y);
+  x.strokeStyle=HUE[b.s]+'44';x.lineWidth=.9;x.stroke();}
+ /* ── הגוף הפתוח: חוטים לאפשרויותיו ── */
+ const fr=BODY.find(b=>b.free);
+ if(fr.open) fr.opts.forEach((o,i)=>{
+  const a=-Math.PI/2+(i-1)*.85, R=Math.min(W,H)*.17;
+  o.x=fr.x+Math.cos(a)*R; o.y=fr.y+Math.sin(a)*R*.8;
+  x.beginPath();x.moveTo(fr.x,fr.y);x.lineTo(o.x,o.y);
+  x.strokeStyle=(fr.pick===i?HUE[o.k]:'#FF4F8B')+(fr.pick===i?'99':'3A');
+  x.lineWidth=fr.pick===i?1.5:.8;x.stroke();});
+ /* ── כוכבים ── */
+ for(const s of STARS){
+  const pu=1+Math.sin(T*1.5+s.ax*9)*.05;
+  x.beginPath();x.arc(s.x,s.y,7*pu,0,6.284);
+  x.fillStyle=HUE[s.k];x.shadowColor=HUE[s.k];x.shadowBlur=34;x.fill();x.shadowBlur=0;
+  x.beginPath();x.arc(s.x,s.y,16,0,6.284);x.strokeStyle=HUE[s.k]+'33';x.lineWidth=.8;x.stroke();
+  x.font='400 9px '+getComputedStyle(document.body).getPropertyValue('--mono');
+  x.textAlign='center';x.fillStyle='#4A4A66';
+  x.fillText(s.nm.toUpperCase(),s.x,s.y+32);
+  x.font='300 12px Rubik, sans-serif';x.fillStyle='#8E8EAE';
+  x.fillText(s.he+' · '+s.n,s.x,s.y-26);}
+ /* ── גופים ── */
+ for(const b of BODY){
+  const p=pos(b),H_=HUE[b.s],hv=hover===b;
+  if(!b.free&&b.n){ /* טבעת-שדות */
+   for(let i=0;i<b.n;i++){const a=(i/b.n)*6.284+T*.35;
+    const rr=b.r+9+Math.sin(T*2+i)*1.6;
+    x.beginPath();x.arc(p.x+Math.cos(a)*rr,p.y+Math.sin(a)*rr,1.25,0,6.284);
+    x.fillStyle=HUE.schema+'CC';x.fill();}}
+  if(b.free&&!b.open){ /* פעימת-הפתוח */
+   const pr=b.r+10+Math.sin(T*2.2)*7;
+   x.beginPath();x.arc(p.x,p.y,pr,0,6.284);
+   x.strokeStyle=HUE.open+'55';x.lineWidth=1;x.setLineDash([4,7]);x.stroke();x.setLineDash([]);}
+  const g=x.createRadialGradient(p.x-b.r*.3,p.y-b.r*.35,0,p.x,p.y,b.r);
+  g.addColorStop(0,'#FFFFFF');g.addColorStop(.35,H_);g.addColorStop(1,H_+'22');
+  x.beginPath();x.arc(p.x,p.y,b.r*(hv?1.08:1),0,6.284);
+  x.fillStyle=g;x.shadowColor=H_;x.shadowBlur=hv?46:26;x.fill();x.shadowBlur=0;
+  x.font='300 13px Rubik, sans-serif';x.textAlign='center';x.fillStyle='#F4F4FF';
+  x.fillText(b.w,p.x,p.y+b.r+20);
+  if(b.cls&&b.n){x.font='400 9.5px '+getComputedStyle(document.body).getPropertyValue('--mono');
+   x.fillStyle=H_;x.fillText(b.cls+' · '+b.n,p.x,p.y+b.r+35);}
+  b._p=p;}
+ /* ── אפשרויות ── */
+ if(fr.open) fr.opts.forEach((o,i)=>{
+  const on=fr.pick===i,R=on?19:13,Hc=HUE[o.k];
+  const g=x.createRadialGradient(o.x-R*.3,o.y-R*.3,0,o.x,o.y,R);
+  g.addColorStop(0,'#FFFFFF');g.addColorStop(.4,Hc);g.addColorStop(1,Hc+(on?'33':'11'));
+  x.beginPath();x.arc(o.x,o.y,R,0,6.284);x.fillStyle=g;
+  x.shadowColor=Hc;x.shadowBlur=on?40:14;x.globalAlpha=on?1:.55;x.fill();
+  x.shadowBlur=0;x.globalAlpha=1;
+  x.font='300 12px Rubik, sans-serif';x.textAlign='center';x.fillStyle=on?'#F4F4FF':'#8E8EAE';
+  x.fillText(o.l,o.x,o.y+R+17);
+  if(o.n){x.font='400 9px '+getComputedStyle(document.body).getPropertyValue('--mono');
+   x.fillStyle=Hc;x.fillText(o.n+' שדות',o.x,o.y+R+30);}});
+ requestAnimationFrame(draw);
+}
+function hit(mx,my){
+ const fr=BODY.find(b=>b.free);
+ if(fr.open) for(let i=0;i<fr.opts.length;i++){const o=fr.opts[i];
+  if(Math.hypot(mx-o.x,my-o.y)<26)return{opt:i};}
+ for(const b of BODY){if(!b._p)continue;
+  if(Math.hypot(mx-b._p.x,my-b._p.y)<b.r+8)return{body:b};}
+ return null;}
+function readout(){
+ const fr=BODY.find(b=>b.free);
+ const sel=fr.pick>=0?fr.opts[fr.pick]:null;
+ let e=3,f=25+12;
+ if(sel&&sel.n){f+=sel.n;}
+ document.getElementById('tE').textContent=sel&&sel.n?3:2;
+ document.getElementById('tF').textContent=f;
+ document.getElementById('tO').textContent=fr.open?(sel?'1':'3'):'3';
+ document.getElementById('read').innerHTML=
+  '<b>מטופלים</b> ⇐ <span class="hi">Family</span> · 25 שדות<br>'
+ +'<b>חדרי טיפול</b> ⇐ <span class="hi">Room</span> · 12 שדות<br>'
+ +'<b>חבילות טיפול</b> ⇐ '+(sel?('<span class="hi">'+sel.l+'</span> · נבחר'):'<span class="hi">3 אפשרויות בנויות</span> · טרם נקרס');}
+readout();
+c.addEventListener('pointermove',e=>{const h=hit(e.clientX,e.clientY);
+ hover=h&&h.body?h.body:null;c.style.cursor=h?'pointer':'default';});
+c.addEventListener('pointerdown',e=>{
+ const h=hit(e.clientX,e.clientY);if(!h)return;
+ const fr=BODY.find(b=>b.free);
+ if(h.opt!==undefined){fr.pick=h.opt;}
+ else if(h.body&&h.body.free){fr.open=!fr.open;if(!fr.open)fr.pick=-1;}
+ document.getElementById('hint').classList.add('gone');
+ readout();});
+addEventListener('resize',size);size();draw();
+setTimeout(()=>document.getElementById('hint').classList.add('gone'),9000);
+</script>
+</body></html>

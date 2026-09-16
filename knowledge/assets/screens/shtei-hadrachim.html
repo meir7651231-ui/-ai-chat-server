@@ -1,0 +1,260 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>שתי הדרכים</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+ --bg:#F1F5F4; --panel:#FFFFFF; --sunk:#E7EDEC; --ink:#0D1513; --ink2:#384744; --mute:#687976;
+ --line:#D5DEDC; --line2:#E6ECEB;
+ --acc:#0F5257; --accbg:#E0EDED; --ok:#1C6B48; --okbg:#E1F0E8; --bad:#8E3330; --badbg:#F8E9E7;
+ --codebg:#EBF0EF;
+ --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+ --sans:'Heebo',system-ui,'Segoe UI',Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#0B1211; --panel:#141C1B; --sunk:#101817; --ink:#E9F1EF; --ink2:#AFC0BD; --mute:#768986;
+ --line:#243130; --line2:#1B2524;
+ --acc:#77C6C4; --accbg:#0F2323; --ok:#6DCC9E; --okbg:#0F241C; --bad:#E39089; --badbg:#271715;
+ --codebg:#0F1817;
+}}
+:root[data-theme="dark"]{
+ --bg:#0B1211; --panel:#141C1B; --sunk:#101817; --ink:#E9F1EF; --ink2:#AFC0BD; --mute:#768986;
+ --line:#243130; --line2:#1B2524;
+ --acc:#77C6C4; --accbg:#0F2323; --ok:#6DCC9E; --okbg:#0F241C; --bad:#E39089; --badbg:#271715;
+ --codebg:#0F1817;
+}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+ line-height:1.66;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+.wrap{max-width:880px;margin:0 auto;padding-inline:20px;padding-block:54px 84px}
+h1{font-size:clamp(36px,7.5vw,60px);font-weight:900;line-height:1.02;letter-spacing:-.025em;margin:0 0 16px;text-wrap:balance}
+h2{font-size:clamp(22px,3.8vw,29px);font-weight:700;letter-spacing:-.012em;margin:0 0 8px;text-wrap:balance}
+h3{font-size:18px;font-weight:700;margin:0 0 6px}
+p{margin:0 0 15px;color:var(--ink2);max-width:64ch}
+.lead{font-size:18.5px;color:var(--ink2);max-width:58ch;margin-bottom:0}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.15em;color:var(--acc);
+ text-transform:uppercase;margin:0 0 13px}
+section{margin-top:52px}
+.sec-n{font-family:var(--mono);font-size:11px;color:var(--mute);letter-spacing:.11em;margin-bottom:5px}
+hr{border:0;border-top:1px solid var(--line);margin:46px 0}
+code,.mono{font-family:var(--mono)}
+code.inl{background:var(--codebg);padding:1.5px 5px;border-radius:3px;font-size:.87em;color:var(--ink)}
+pre{background:var(--codebg);border:1px solid var(--line);border-radius:4px;padding:14px 16px;
+ overflow-x:auto;margin:15px 0;direction:ltr;text-align:left}
+pre code{font-size:12.5px;line-height:1.75;color:var(--ink)}
+.src{font-family:var(--mono);font-size:11.5px;color:var(--mute);direction:ltr;text-align:left;margin:-8px 0 0}
+blockquote{margin:0 0 15px;padding:17px 19px;background:var(--accbg);border-inline-start:3px solid var(--acc);
+ border-radius:0 4px 4px 0;color:var(--ink);font-size:16.5px}
+blockquote cite{display:block;font-family:var(--mono);font-size:11.5px;color:var(--acc);font-style:normal;margin-top:9px}
+/* ── שתי הדרכים ── */
+.fork{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+.path{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:18px 18px 20px;
+ display:flex;flex-direction:column}
+.path.good{border-top:3px solid var(--ok)}
+.path.bad{border-top:3px solid var(--bad)}
+.path .who{font-family:var(--mono);font-size:11.5px;color:var(--mute);margin-bottom:8px;direction:ltr;text-align:start}
+.path h3{font-size:16.5px}
+.path .q{font-size:14px;color:var(--ink2);margin:0 0 12px}
+.path .ans{font-family:var(--mono);font-size:12.5px;padding:10px 12px;border-radius:3px;line-height:1.7;
+ direction:ltr;text-align:left;margin-top:auto}
+.path.good .ans{background:var(--okbg);color:var(--ok)}
+.path.bad .ans{background:var(--badbg);color:var(--bad)}
+.path .note{font-size:13px;color:var(--mute);margin:10px 0 0}
+@media (max-width:620px){.fork{grid-template-columns:1fr}}
+/* ── מדדים ── */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(142px,1fr));gap:1px;background:var(--line);
+ border:1px solid var(--line);border-radius:4px;overflow:hidden;margin:28px 0 0}
+.kpi{background:var(--panel);padding:18px 16px}
+.kpi b{display:block;font-size:29px;font-weight:900;line-height:1.12;letter-spacing:-.02em}
+.kpi small{display:block;font-size:12px;color:var(--mute);margin-top:4px;line-height:1.5}
+.kpi.bad b{color:var(--bad)} .kpi.ok b{color:var(--ok)} .kpi.acc b{color:var(--acc)}
+.kpi b .of{font-size:.58em;font-weight:500;color:var(--mute)}
+/* ── שרשרת ── */
+.chain{border:1px solid var(--line);border-radius:4px;overflow:hidden;margin:20px 0;background:var(--panel)}
+.link{display:grid;grid-template-columns:34px 1fr;gap:0 14px;padding:14px 16px;border-bottom:1px solid var(--line2);align-items:start}
+.link:last-child{border-bottom:0}
+.link .i{font-family:var(--mono);font-size:12px;color:var(--acc);font-weight:500;padding-top:2px}
+.link .t{font-size:15px;color:var(--ink);font-weight:500}
+.link .d{font-size:13.5px;color:var(--ink2);margin-top:3px}
+.link .f{font-family:var(--mono);font-size:11.5px;color:var(--mute);margin-top:5px;direction:ltr;text-align:start;word-break:break-word}
+.link.red .t{color:var(--bad)}
+/* ── טבלה ── */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px;margin:20px 0;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:400px}
+th,td{text-align:start;padding:11px 15px;border-bottom:1px solid var(--line2);font-size:14px;color:var(--ink2)}
+th{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;color:var(--mute);
+ text-transform:uppercase;background:var(--sunk)}
+td:first-child{color:var(--ink);font-weight:500}
+tr:last-child td{border-bottom:0}
+.n{font-family:var(--mono);font-weight:500}
+.verdict{background:var(--panel);border:1px solid var(--line);border-inline-start:3px solid var(--acc);
+ border-radius:0 4px 4px 0;padding:19px 21px;margin:24px 0}
+.verdict p{margin:0;font-size:15px}
+.verdict p + p{margin-top:9px}
+ul{margin:13px 0;padding-inline-start:20px;color:var(--ink2)}
+li{margin-bottom:8px;max-width:62ch}
+.foot{margin-top:60px;padding-top:21px;border-top:1px solid var(--line);
+ font-family:var(--mono);font-size:11.5px;color:var(--mute);line-height:1.95}
+</style></head><body>
+<div class="wrap">
+
+<p class="eyebrow">המדידה האחרונה · 16.09.2026</p>
+<h1>שתי הדרכים</h1>
+<p class="lead">שאלה אחת מכריעה מה המחולל: <b>מה עושים כשהמשפט לא אומר?</b> לריפו יש תשובה כתובה, חרוטה ומיושמת. ולמסלול של §22 יש תשובה אחרת — הפוכה.</p>
+
+<div class="kpis">
+ <div class="kpi bad"><b>93<span class="of">%</span></b><small>מהישויות ברצפת־§22 מקבלות סכימה מומצאת</small></div>
+ <div class="kpi bad"><b>0</b><small>פעמים ש־nl-spec קורא את אטום־המונחים</small></div>
+ <div class="kpi ok"><b>32</b><small>מונחים חצובים — כולם מתחום־לקוח אחד</small></div>
+ <div class="kpi ok"><b>55<span class="of"> / </span>55</b><small>שערי־משטרה ירוקים באותו רגע</small></div>
+</div>
+
+<hr>
+
+<section>
+<div class="sec-n">01</div>
+<h2>השאלה</h2>
+<p>«מערכת לניהול מרפאה עם מטופלים, תורים ורופאים». המשפט אומר <em>אילו ישויות</em> יש. הוא לא אומר — ולו במילה — <em>מה יש למטופל</em>. אין בו שם, אין תעודת־זהות, אין תאריך.</p>
+<p>המחולל חייב להכריע. שלוש אפשרויות בלבד: לשאול את הבעלים · לדעת מהתחום (מילון — §23 אוסר) · להמציא (§20 אוסר). כל מחולל־משפט־חופשי מגיע לצומת הזה. הריפו הזה הגיע אליו פעמיים — וענה שתי תשובות שונות.</p>
+</section>
+
+<section>
+<div class="sec-n">02</div>
+<h2>מה שכתוב</h2>
+<blockquote>
+ מה שאין לו מונח («ספקים») ⇐ ∅ מדווח, לא ניחוש. … <b>ANTIPATTERN:</b> <code class="mono" style="font-size:.85em">const HE = { 'מתנדב': 'Volunteer' … }</code> בתוך ‎.mjs של המנוע.
+ <cite>machtzev/LEARNINGS.md:592 — L57 · GATE: sentence</cite>
+</blockquote>
+<p>החוק חד ואינו משתמע: מונח שאין לו מקור־אמת אינו מנוחש. הוא מדווח כחסר. המקור־האמת מוצהר גם הוא — <code class="inl">TERM_DEFS</code> של maor — ונחצב לאטום־דאטה כדי שהמנוע יקרא דאטה ולא «יֵדע עברית».</p>
+</section>
+
+<section>
+<div class="sec-n">03</div>
+<h2>שני מודולים, אותה שאלה</h2>
+<div class="fork">
+ <div class="path good">
+  <div class="who">machtzev/generator/sentence.mjs:71</div>
+  <h3>הדרך שמקיימת את החוק</h3>
+  <p class="q">אין מונח־ישות במשפט. מה מחזירים?</p>
+  <div class="ans">return { module: null, out: null,<br>&nbsp;&nbsp;reason: 'אין מונח-ישות במשפט<br>&nbsp;&nbsp;— מקום-שמור (אין המצאה)' }</div>
+  <p class="note">מדווח ריק. המילים «אין המצאה» כתובות בקוד עצמו.</p>
+ </div>
+ <div class="path bad">
+  <div class="who">machtzev/generator/nl-spec.mjs:48</div>
+  <h3>הדרך שמסלול־§22 עובר בה</h3>
+  <p class="q">אין שדות לישות. מה מחזירים?</p>
+  <div class="ans">ents.push({ name,<br>&nbsp;&nbsp;fields: fs.length ? fs : DEF_FIELDS })<br><br>DEF_FIELDS = ["שם","תיאור",<br>&nbsp;&nbsp;"תאריך","סטטוס"]</div>
+  <p class="note">ממציא ארבעה שדות. שקט, בלי שגיאה, בלי דיווח.</p>
+ </div>
+</div>
+<p>ארבע המילים ב־<code class="inl">DEF_FIELDS</code> יושבות ב־<code class="inl">nl-lang.data.json</code> — קובץ־נתונים צמוד למנוע, שנכתב ביד ולא נחצב מאף מקור־אמת. זו בדיוק צורת האנטי־פטרן ש־L57 מנה בשמו.</p>
+</section>
+
+<section>
+<div class="sec-n">04</div>
+<h2>השרשרת — מהמשפט עד ההמצאה</h2>
+<p>עקבתי אחרי הקלט של §22 צעד־צעד. חמש חוליות, כל אחת נמדדה בהרצה:</p>
+<div class="chain">
+ <div class="link"><div class="i">01</div><div>
+  <div class="t">הקלט נכנס כעברית חופשית</div>
+  <div class="d">app-ds מזהה קלט חסר־מבנה ומנתב אותו למתרגם־המשפטים.</div>
+  <div class="f">app-ds.mjs:56,65 — «צפן §22: קלט חסר-מבנה לגמרי ⇒ עברית-חופשית ⇒ nlToSpec»</div></div></div>
+ <div class="link"><div class="i">02</div><div>
+  <div class="t">nl-spec מפרק את המשפט</div>
+  <div class="d">שני כשלי־פירוק מדודים: עוגן שמחמיץ אחרי נקודתיים, וכלל־ריבוי שבו פריט־רבים אחד מעיף את כל הסעיף.</div>
+  <div class="f">nl-spec.mjs:25 · :74 — הוכחו בתיקון־ניסוי מבודד</div></div></div>
+ <div class="link red"><div class="i">03</div><div>
+  <div class="t">אטום־המונחים לא נקרא — אף פעם</div>
+  <div class="d">entity-terms.data.json נקרא בחמישה מודולים: core-dart · core-from-shape · entity-terms · retarget · sentence. nl-spec אינו אחד מהם.</div>
+  <div class="f">grep -c "entity-terms" nl-spec.mjs ⇒ 0</div></div></div>
+ <div class="link red"><div class="i">04</div><div>
+  <div class="t">במקום ∅ — הרביעייה</div>
+  <div class="d">כל ישות חסרת־שדות מקבלת את אותם ארבעה שדות, בכל תחום, בלי דיווח.</div>
+  <div class="f">nl-spec.mjs:48 · nl-lang.data.json → defaultFields</div></div></div>
+ <div class="link red"><div class="i">05</div><div>
+  <div class="t">שער־הרצפה עובר</div>
+  <div class="d">קריטריון־הקבלה של §22 הוא «לפחות ישות אחת». ישות מומצאת היא ישות.</div>
+  <div class="f">mahulal/nl-smoke.mjs:11 — if (n &lt; 1)</div></div></div>
+</div>
+</section>
+
+<section>
+<div class="sec-n">05</div>
+<h2>למה תיקון מקומי לא סוגר את זה</h2>
+<p>תיקנתי בעותק־בדיקה את שלוש הנקודות — העוגן, כלל־הריבוי, ורשימת־«לכל» — ומדדתי שוב:</p>
+<div class="tbl"><table>
+ <thead><tr><th>מדד</th><th>לפני</th><th>אחרי</th></tr></thead>
+ <tbody>
+  <tr><td>ניסוחים של אותו משפט שנקראו נכון</td><td class="n">2 מתוך 6</td><td class="n" style="color:var(--ok)">4 מתוך 6</td></tr>
+  <tr><td>ישויות מומצאות בקורפוס־הרצפה</td><td class="n">93%</td><td class="n" style="color:var(--bad)">89%</td></tr>
+  <tr><td>משפטים עם שדות־אמת בלבד</td><td class="n">2 מתוך 14</td><td class="n">3 מתוך 14</td></tr>
+ </tbody>
+</table></div>
+<p>הפירוק השתפר כמעט כפליים. הקורפוס כמעט לא זז — וההפרש הזה הוא כל הסיפור. הצורה השלטת בקורפוס היא «מערכת ל⟨תחום⟩ עם א, ב וג», ובה <b>אין מידע על שדות בכלל</b>. שום פירוק, טוב ככל שיהיה, לא יוציא ממשפט מה שלא נאמר בו.</p>
+<div class="verdict">
+ <p><b>לכן שני הבאגים אינם הסיפור המרכזי — הם החלק שניתן לתקן.</b> הסיפור המרכזי הוא שבנקודה שבה למשפט נגמר המידע, המסלול של §22 בוחר להמציא במקום לדווח.</p>
+ <p>וזו אינה מחלוקת דוקטרינרית פתוחה: L57 כבר הכריע, ו־<code class="inl">sentence.mjs</code> כבר מיישם. המנגנון התקין בנוי, עובד, ויושב בתיקייה הסמוכה.</p>
+</div>
+</section>
+
+<section>
+<div class="sec-n">06</div>
+<h2>גבול הכיסוי האמיתי</h2>
+<p>גם המנגנון התקין אינו פותר את §22 לבדו. אטום־המונחים מחזיק 32 מונחים, וכולם מתחום־לקוח אחד:</p>
+<pre dir="ltr"><code>TzCoordinator · רכז     ShopProduct · מוצר      Family · משפחה / לקוח
+TzBox · קופה            ShopStore · חנות        Member · בן/בת משפחה
+TzCampaign · מבצע       ShopCriterion · קריטריון Course · חוג / שיעור
+Volunteer · מתנדב       ShopItem · פריט         Teacher · מורה / מדריכה
+                                                Room · חדר / אולם</code></pre>
+<p class="src">machtzev/generator/entity-terms.data.json · source: maor-system/src/types/features.ts TERM_DEFS</p>
+<p>אין «מטופל», אין «רופא», אין «חדר־מלון», אין «חללית». §23 דורש עיוורון־תחום — שחללית תעבוד כמו מסעדה. המונחים החצובים מכסים תחום אחד, ולכל השאר התשובה לפי L57 היא ∅ מדווח. <b>המחולל אינו צריך לדעת מה יש למטופל. הוא צריך לומר שאינו יודע.</b></p>
+<p>ומקור־האמת עצמו — <code class="inl">maor-system</code> — אינו קיים במיכל הזה כלל, ולכן השער שבודק אותו מדווח ⚪ ונספר כ־<code class="inl">ran</code>.</p>
+</section>
+
+<section>
+<div class="sec-n">07</div>
+<h2>ולמה כל זה ירוק</h2>
+<p>באותו רגע שבו 93% מהסכימות מומצאות, המשטרה החזירה:</p>
+<pre dir="ltr"><code>✅ המשטרה ירוקה — 55 ran · 0 skipped · 0 yellow · 0 failed · מרשם 55</code></pre>
+<p>המשטרה אינה משקרת. היא מודדת מה שנבנתה למדוד, והדבר הזה אינו בתוכו:</p>
+<ul>
+<li><b>5 שערים מתוך 55</b> הוכח עליהם שהם יודעים להאדים (מורעל⇒1 ∧ נקי⇒0). השער <code class="inl">sentence</code> — זה שנושא את <code class="inl">GATE:</code> של L57 — אינו אחד מהחמישה.</li>
+<li><b>רצפת־ההוכחה היא 5, ומעולם לא עלתה.</b> <code class="inl">git log</code> על קובץ־הרצפה מחזיר קומיט אחד: <code class="inl">5dc667e7</code>.</li>
+<li><b>שער־הרצפה של §22 לא יכול לתפוס את באג־§22</b>, כי הקריטריון שלו סופר ישויות ולא שואל מאיפה השדות באו.</li>
+</ul>
+</section>
+
+<section>
+<div class="sec-n">08</div>
+<h2>ומה קורה אם מדווחים ∅</h2>
+<p>לא הסתפקתי באבחנה. הסרתי את <code class="inl">DEF_FIELDS</code> בעותק־הבדיקה — בלי שום תחליף, ∅ נקי — והרצתי את כל 14 משפטי־הרצפה:</p>
+<div class="tbl"><table>
+ <thead><tr><th>תוצאה</th><th>משפטים</th><th>מה הבעלים מקבל</th></tr></thead>
+ <tbody>
+  <tr><td>מפרט שלם ואמיתי</td><td class="n" style="color:var(--ok)">3 מתוך 14</td><td>אפליקציה, בלי שאלות</td></tr>
+  <tr><td>חסר מדווח במפורש</td><td class="n" style="color:var(--acc)">11 מתוך 14</td><td>«לישויות מטופל · תור · רופא אין שדות» — שאלה מדויקת</td></tr>
+  <tr><td>המצאות</td><td class="n" style="color:var(--ok)">0</td><td>—</td></tr>
+ </tbody>
+</table></div>
+<p>והשער שתופס את זה כבר קיים בעץ: הוא בודק ישויות חסרות־שדות וזורק עם שמותיהן ועם השורה שבה נאמרו. כלומר ההמצאה השקטה הופכת ל<b>שאלה אחת מדויקת</b>: «מה יש למטופל?» — וזו בדיוק השאלה שמחולל אמור לשאול כשהמשפט נגמר.</p>
+<div class="verdict">
+ <p>מ־93% המצאה ל־0 — בהסרה אחת. המחיר: 11 מתוך 14 משפטים כבר לא מניבים אפליקציה מיד, אלא שאלה. <b>זו אינה נסיגה מ־§22 — זו הפעם הראשונה ש־§22 נמדד ביושר.</b></p>
+</div>
+</section>
+
+<hr>
+
+<section>
+<h2>מה המחולל צריך לעשות</h2>
+<p>אחרי 293 מנועים, שבעה סשנים ושורה של מדידות ותיקוני־ניסוי, התשובה קצרה מכפי שציפיתי — והיא כבר כתובה בריפו:</p>
+<p><b>לקרוא את המשפט · לחצוב מונחים ממקור־אמת מוצהר · ובנקודה שבה המשפט נגמר — לדווח ∅ במקום להמציא.</b></p>
+<p>הפער מ־§22 אינו חוסר־יכולת ואינו חוסר־מנועים. המנועים קיימים, המנגנון התקין בנוי ועובד, והחוק חרוט. מסלול אחד — דווקא זה שנושא את הצפון — אינו מחובר אליו. זה פער של חיווט, לא של תכנון, והוא נמדד עד השורה.</p>
+</section>
+
+<p class="foot">
+ כל טענה בעמוד הזה נמדדה בהרצה: app-ds.mjs:56,65 · nl-spec.mjs:25,48,74 · sentence.mjs:71 · nl-lang.data.json · entity-terms.data.json (32) · nl-smoke.mjs:11 · nl-smoke.txt (14) · LEARNINGS.md:592 (L57) · police.mjs · police-selftest.mjs · selftest-coverage-baseline.json · 5dc667e7<br>
+ 293 מנועים · 0 מתים · 0 שינויי־ריפו — כל התיקונים נעשו בעותק־בדיקה בלבד.
+</p>
+
+</div></body></html>

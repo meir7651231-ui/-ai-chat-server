@@ -1,0 +1,215 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>אשף המחולל</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+ --bg:#F6F5F7; --panel:#FFFFFF; --sunk:#EFEDF1; --ink:#171319; --ink2:#443D4A; --mute:#71697A;
+ --line:#DFDAE3; --line2:#EDEAF0;
+ --acc:#7B2D5E; --accbg:#F7E9F1; --accline:#D9A9C4; --accink:#FFFFFF;
+ --ok:#1B6248; --okbg:#E3EFEA; --off:#9B93A3;
+ --codebg:#EFEDF1;
+ --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+ --sans:'Heebo',system-ui,'Segoe UI',Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#111015; --panel:#1A171E; --sunk:#151319; --ink:#EFEBF2; --ink2:#B8AFC1; --mute:#847B8E;
+ --line:#2C2732; --line2:#221E27;
+ --acc:#E195C0; --accbg:#2A1522; --accline:#4A2739; --accink:#1A0E15;
+ --ok:#6ECBA1; --okbg:#10241C; --off:#6B6474; --codebg:#151319;
+}}
+:root[data-theme="dark"]{
+ --bg:#111015; --panel:#1A171E; --sunk:#151319; --ink:#EFEBF2; --ink2:#B8AFC1; --mute:#847B8E;
+ --line:#2C2732; --line2:#221E27;
+ --acc:#E195C0; --accbg:#2A1522; --accline:#4A2739; --accink:#1A0E15;
+ --ok:#6ECBA1; --okbg:#10241C; --off:#6B6474; --codebg:#151319;
+}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;
+ -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+.wrap{max-width:900px;margin:0 auto;padding-inline:16px;padding-block:34px 90px}
+h1{font-size:clamp(28px,6vw,42px);font-weight:900;letter-spacing:-.025em;line-height:1.08;margin:0 0 10px}
+p{margin:0 0 13px;color:var(--ink2);max-width:62ch}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--acc);text-transform:uppercase;margin:0 0 11px}
+/* ── קלט ── */
+.said{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:15px 17px;margin:20px 0 6px}
+.said .lb{font-family:var(--mono);font-size:11px;color:var(--mute);margin-bottom:5px}
+.said .tx{font-size:18px;font-weight:700;color:var(--ink);line-height:1.45}
+/* ── שלב ── */
+.step{background:var(--panel);border:1px solid var(--line);border-radius:5px;margin:16px 0;overflow:hidden}
+.step > .hd{background:var(--sunk);padding:12px 16px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.step .n{font-family:var(--mono);font-size:11.5px;color:var(--acc);font-weight:500}
+.step .t{font-size:15.5px;font-weight:700}
+.step .meta{margin-inline-start:auto;font-family:var(--mono);font-size:11.5px;color:var(--mute)}
+.step > .bd{padding:15px 16px}
+.step .q{font-size:14px;color:var(--ink2);margin:0 0 12px}
+/* ── כפתורי-תחום ── */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:inherit;font-size:13.5px;padding:8px 13px;border-radius:20px;cursor:pointer;
+ border:1px solid var(--line);background:var(--panel);color:var(--ink2);transition:.13s}
+.chip:hover{border-color:var(--accline)}
+.chip[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--accink);font-weight:500}
+.chip:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+/* ── זוג אפשרויות ── */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 6px}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+.opt{text-align:start;font-family:inherit;cursor:pointer;border:1.5px solid var(--line);background:var(--panel);
+ border-radius:5px;padding:13px 14px;transition:.13s;color:var(--ink2);display:block;width:100%}
+.opt:hover{border-color:var(--accline)}
+.opt[aria-pressed="true"]{border-color:var(--acc);background:var(--accbg)}
+.opt:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.opt .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--mute);display:block;margin-bottom:4px}
+.opt[aria-pressed="true"] .k{color:var(--acc)}
+.opt .v{font-size:15px;font-weight:700;color:var(--ink);display:block}
+.opt .s{font-size:12.5px;color:var(--mute);display:block;margin-top:3px}
+.opt .mark{float:left;font-size:13px;color:var(--off);font-weight:700}
+.opt[aria-pressed="true"] .mark{color:var(--acc)}
+/* ── שדות ── */
+.fields{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.f{font-family:var(--mono);font-size:12px;padding:5px 10px;border-radius:4px;cursor:pointer;
+ border:1px solid var(--line);background:var(--panel);color:var(--off);direction:ltr;transition:.1s}
+.f[aria-pressed="true"]{background:var(--okbg);border-color:var(--ok);color:var(--ok);font-weight:500}
+.f:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.fbar{display:flex;gap:8px;align-items:center;margin:10px 0 0;flex-wrap:wrap}
+.mini{font-family:var(--mono);font-size:11.5px;padding:4px 9px;border-radius:4px;cursor:pointer;
+ border:1px solid var(--line);background:var(--panel);color:var(--ink2)}
+.mini:hover{border-color:var(--accline)}
+.cnt{font-family:var(--mono);font-size:11.5px;color:var(--mute)}
+/* ── סרגל תחתון ── */
+.bar{position:sticky;bottom:0;background:var(--panel);border:1px solid var(--line);border-radius:5px;
+ padding:13px 16px;margin-top:20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+ box-shadow:0 -2px 14px rgba(0,0,0,.05)}
+.bar .st{display:flex;flex-direction:column}
+.bar .st b{font-size:20px;font-weight:900;line-height:1.1;color:var(--acc)}
+.bar .st small{font-size:11px;color:var(--mute);font-family:var(--mono)}
+.bar .go{margin-inline-start:auto;background:var(--acc);color:var(--accink);border:0;border-radius:5px;
+ padding:11px 22px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.bar .go:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.zero{color:var(--mute);font-size:13px;font-family:var(--mono);margin-top:8px}
+.note{background:var(--accbg);border:1px solid var(--accline);border-radius:5px;padding:14px 16px;margin:22px 0 0}
+.note p{margin:0;font-size:14px;color:var(--ink2)}
+.note p+p{margin-top:7px}
+.note b{color:var(--ink)}
+</style></head><body>
+<div class="wrap">
+
+<p class="eyebrow">הדגמה · נתונים אמיתיים מהריפו שלך</p>
+<h1>אשף המחולל</h1>
+<p>אין שאלה שעוצרת. כל מקום שיש בו ספק — <b>שתי האפשרויות נבנות</b>, ואתה מדליק מה שאתה רוצה.</p>
+
+<div class="said">
+ <div class="lb">מה שכתבת</div>
+ <div class="tx">מערכת לניהול מרפאה עם מטופלים, תורים ורופאים</div>
+</div>
+
+<div id="app"></div>
+
+<div class="bar">
+ <div class="st"><b id="cEnt">0</b><small>ישויות</small></div>
+ <div class="st"><b id="cFld">0</b><small>שדות</small></div>
+ <div class="st"><b id="cScr">0</b><small>מסכים</small></div>
+ <div class="st"><b id="cInv" style="color:var(--ok)">0</b><small>המצאות</small></div>
+ <button class="go" id="go">בנה</button>
+</div>
+
+<div class="note">
+ <p><b>מאיפה השדות.</b> «מטופל» אינו ישות חדשה — בחבילת «קליניקה» הוא <span class="mono">entity.family</span>, כלומר <span class="mono">Family</span>, ול־<span class="mono">Family</span> יש 25 שדות אמיתיים בסכימה. אותה סכימה, מילים אחרות לכל תחום.</p>
+ <p>כל שם־שדה בעמוד הזה נקרא מ־<span class="mono">new/atoms/schema-fields.mjs</span> (492 שדות · 54 מחלקות) ומ־<span class="mono">new/atoms/vertical-packs.mjs</span> (13 תחומים). שום דבר כאן לא הומצא.</p>
+</div>
+
+</div>
+<script>
+const D = {"packs": [{"id": "chesed", "emoji": "🕊️", "label": "עמותת חסד", "sub": "גמ\"ח · קופת צדקה"}, {"id": "clinic", "emoji": "💇", "label": "קליניקה", "sub": "לייזר · קוסמטיקה · רפואה"}, {"id": "shop", "emoji": "🛍️", "label": "חנות / קמעונאות", "sub": "מכירה · שירות"}, {"id": "services", "emoji": "💼", "label": "שירותים / פרילנסר", "sub": "ייעוץ · צלם · טיפול-בית"}, {"id": "rooms", "emoji": "🏠", "label": "השכרת חללים", "sub": "חדרי ישיבות · סטודיו · אולמות"}, {"id": "fleet", "emoji": "🚗", "label": "צי רכב / השכרה", "sub": "רכבים · ציוד · כלים"}, {"id": "garage", "emoji": "🔧", "label": "מוסך / מעבדה", "sub": "תיקונים · שירות · טיפולים"}, {"id": "hospitality", "emoji": "🏨", "label": "אירוח / צימרים", "sub": "מלונית · צימר · אכסניה"}, {"id": "gemach", "emoji": "🧰", "label": "גמ\"ח (השאלת ציוד)", "sub": "קטלוג · השאלות · תורמים"}, {"id": "tzedakot", "emoji": "🪙", "label": "ארגון מבצעי התרמה", "sub": "רכזים · קופות · מבצעים"}, {"id": "digital", "emoji": "💻", "label": "סטודיו דיגיטל", "sub": "אפליקציות · אתרים · פיתוח"}, {"id": "build", "emoji": "🏗️", "label": "בנייה / קבלנות", "sub": "אתרים · קבלני-משנה · שלבי-ביצוע"}, {"id": "studio", "emoji": "🏢", "label": "סטודיו דיגיטל + בנייה", "sub": "פרויקטים · לקוחות · ספקים — משולב"}], "clinic": {"nav.families": "מטופלים", "entity.family": "מטופל", "entity.familyOf": "מטופל", "entity.member": "איש קשר", "entity.members": "אנשי קשר", "entity.enrollments": "טיפולים", "entity.student": "מטופל/ת", "entity.students": "מטופלים", "nav.courses": "חבילות טיפול", "entity.course": "חבילת טיפול", "entity.enrollment": "טיפול", "entity.room": "חדר טיפול", "nav.diary": "חדרי טיפול", "nav.supporters": "מטופלים במעקב", "nav.ayin": "פרוטוקול טיפול", "entity.ayinItem": "אזור טיפול", "ayin.stage.new": "ייעוץ", "ayin.stage.lead": "תוכנית", "ayin.stage.eyes": "טיפול", "ayin.stage.answer": "מעקב", "ayin.stage.done": "שוחרר"}, "F": {"Family": [{"n": "id", "o": false}, {"n": "name", "o": false}, {"n": "father", "o": false}, {"n": "fatherId", "o": false}, {"n": "mother", "o": false}, {"n": "motherId", "o": false}, {"n": "phone", "o": false}, {"n": "phone2", "o": false}, {"n": "email", "o": false}, {"n": "city", "o": false}, {"n": "address", "o": false}, {"n": "community", "o": false}, {"n": "maritalStatus", "o": false}, {"n": "language", "o": false}, {"n": "tzedaka", "o": false}, {"n": "fullSefach", "o": false}, {"n": "discount", "o": false}, {"n": "status", "o": false}, {"n": "notes", "o": false}, {"n": "kidsHome", "o": true}, {"n": "kidsMarried", "o": true}, {"n": "members", "o": false}, {"n": "docs", "o": false}, {"n": "cred", "o": false}, {"n": "createdAt", "o": false}], "Teacher": [{"n": "id", "o": false}, {"n": "name", "o": false}, {"n": "phone", "o": false}, {"n": "phone2", "o": false}, {"n": "email", "o": false}, {"n": "idNum", "o": false}, {"n": "address", "o": false}, {"n": "specialty", "o": false}, {"n": "payRate", "o": false}, {"n": "startDate", "o": false}, {"n": "notes", "o": false}, {"n": "payMethod", "o": true}, {"n": "payToOther", "o": true}, {"n": "payeeName", "o": true}, {"n": "payeePhone", "o": true}, {"n": "payeeIdNum", "o": true}, {"n": "bankName", "o": true}, {"n": "bankBranch", "o": true}, {"n": "bankAccount", "o": true}], "Enrollment": [{"n": "id", "o": false}, {"n": "memberId", "o": false}, {"n": "courseId", "o": false}, {"n": "plan", "o": false}, {"n": "purchased", "o": false}, {"n": "used", "o": false}, {"n": "group", "o": false}, {"n": "absences", "o": false}, {"n": "presents", "o": true}, {"n": "payments", "o": false}, {"n": "totalDue", "o": false}, {"n": "dueDate", "o": false}, {"n": "dueEventId", "o": true}, {"n": "status", "o": false}, {"n": "note", "o": false}, {"n": "enrolledAt", "o": false}, {"n": "endedAt", "o": true}, {"n": "paidFull", "o": true}, {"n": "freq", "o": true}, {"n": "freqUnit", "o": true}, {"n": "term", "o": true}, {"n": "termMonths", "o": true}, {"n": "tier", "o": true}, {"n": "renew", "o": true}, {"n": "renewNote", "o": true}, {"n": "renewedToId", "o": true}], "Room": [{"n": "id", "o": false}, {"n": "name", "o": false}, {"n": "active", "o": false}, {"n": "slot", "o": false}, {"n": "cap", "o": false}, {"n": "location", "o": false}, {"n": "rate", "o": false}, {"n": "from", "o": false}, {"n": "to", "o": false}, {"n": "access", "o": false}, {"n": "notes", "o": false}, {"n": "eq", "o": false}], "Course": [{"n": "id", "o": false}, {"n": "name", "o": false}, {"n": "teacherId", "o": false}, {"n": "roomId", "o": false}, {"n": "description", "o": false}, {"n": "price", "o": false}, {"n": "price1", "o": false}, {"n": "price2", "o": false}, {"n": "price1Name", "o": false}, {"n": "price2Name", "o": false}, {"n": "price3", "o": true}, {"n": "price3Name", "o": true}, {"n": "model", "o": false}, {"n": "size", "o": false}, {"n": "start", "o": false}, {"n": "end", "o": false}, {"n": "weekday", "o": false}, {"n": "time", "o": false}, {"n": "maxStudents", "o": false}, {"n": "gender", "o": false}, {"n": "ageMin", "o": false}, {"n": "ageMax", "o": false}, {"n": "cat", "o": false}, {"n": "semester", "o": false}, {"n": "sector", "o": false}, {"n": "audience", "o": true}, {"n": "img", "o": true}, {"n": "gradeMin", "o": true}, {"n": "gradeMax", "o": true}, {"n": "sessions", "o": false}, {"n": "notes", "o": false}, {"n": "files", "o": true}, {"n": "perLesson", "o": true}, {"n": "lessonPrice", "o": true}, {"n": "lessonPrice1", "o": true}, {"n": "lessonPrice2", "o": true}, {"n": "lessonPrice3", "o": true}, {"n": "year", "o": true}, {"n": "prevYearId", "o": true}]}};
+
+const ENTS = [
+ { word:'מטופלים', a:{key:'entity.family', cls:'Family',     lbl:'מטופל',  sub:'הישות הקיימת בסכימה'},
+                    b:{cls:null, lbl:'ישות חדשה', sub:'רק מה שכתבת במשפט'} },
+ { word:'תורים',   a:{key:'entity.enrollment', cls:'Enrollment', lbl:'טיפול', sub:'הישות הקיימת בסכימה'},
+                    b:{cls:'Course', lbl:'חבילת טיפול', sub:'ישות אחרת בסכימה'} },
+ { word:'רופאים',  a:{key:'entity.teacher', cls:'Teacher', lbl:'מטפל', sub:'הישות הקיימת בסכימה'},
+                    b:{cls:null, lbl:'ישות חדשה', sub:'רק מה שכתבת במשפט'} },
+];
+
+let pack = 'clinic';
+const state = ENTS.map(() => ({ pick:'a', off:new Set() }));
+
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fieldsOf = (cls) => (cls && D.F[cls]) ? D.F[cls] : [];
+
+function render() {
+  const app = document.getElementById('app');
+  let h = '';
+
+  h += '<div class="step"><div class="hd"><span class="n">שלב 1</span><span class="t">תחום העסק</span>'
+     + '<span class="meta">' + D.packs.length + ' חבילות · vertical-packs</span></div><div class="bd">'
+     + '<p class="q">זיהיתי «מרפאה» ⇐ קליניקה. אפשר להחליף — כל התחום משנה את המילים, לא את הסכימה.</p><div class="chips">';
+  for (const p of D.packs) h += '<button class="chip" role="button" aria-pressed="' + (p.id===pack) + '" data-pack="' + p.id + '">'
+     + p.emoji + ' ' + esc(p.label) + '</button>';
+  h += '</div></div></div>';
+
+  ENTS.forEach((e, i) => {
+    const st = state[i], chosen = st.pick === 'a' ? e.a : e.b;
+    const fs = fieldsOf(chosen.cls);
+    const on = fs.filter((f) => !st.off.has(f.n)).length;
+    h += '<div class="step"><div class="hd"><span class="n">שלב ' + (i+2) + '</span><span class="t">«' + esc(e.word) + '» — למה התכוונת?</span>'
+       + '<span class="meta">' + on + ' / ' + fs.length + ' שדות דלוקים</span></div><div class="bd">'
+       + '<p class="q">שתי האפשרויות נבנו. הדלק את מה שאתה רוצה.</p><div class="pair">';
+    for (const k of ['a','b']) {
+      const o = e[k], n = fieldsOf(o.cls).length, sel = st.pick === k;
+      h += '<button class="opt" role="button" aria-pressed="' + sel + '" data-ent="' + i + '" data-pick="' + k + '">'
+         + '<span class="mark">' + (sel ? '● דלוק' : '○ כבוי') + '</span>'
+         + '<span class="k">' + (o.cls ? o.cls : 'חדש') + '</span>'
+         + '<span class="v">' + esc(o.lbl) + '</span>'
+         + '<span class="s">' + esc(o.sub) + ' · ' + (n ? n + ' שדות מוכנים' : 'אין שדות — צריך למלא') + '</span></button>';
+    }
+    h += '</div>';
+    if (fs.length) {
+      h += '<div class="fbar"><button class="mini" data-all="' + i + '">הדלק הכל</button>'
+         + '<button class="mini" data-none="' + i + '">כבה הכל</button>'
+         + '<span class="cnt">חובה מסומן · אפשר לכבות כל אחד</span></div><div class="fields">';
+      for (const f of fs) h += '<button class="f" role="button" aria-pressed="' + (!st.off.has(f.n)) + '" data-ent="' + i + '" data-f="' + esc(f.n) + '">'
+         + esc(f.n) + (f.o ? '' : ' *') + '</button>';
+      h += '</div>';
+    } else {
+      h += '<p class="zero">אין שדות מוכנים לאפשרות הזו — המחולל יבקש אותם ממך, ולא ימציא.</p>';
+    }
+    h += '</div></div>';
+  });
+
+  app.innerHTML = h;
+
+  let ents = 0, flds = 0;
+  ENTS.forEach((e, i) => {
+    const st = state[i], chosen = st.pick === 'a' ? e.a : e.b, fs = fieldsOf(chosen.cls);
+    if (fs.length) { ents++; flds += fs.filter((f) => !st.off.has(f.n)).length; }
+  });
+  document.getElementById('cEnt').textContent = ents;
+  document.getElementById('cFld').textContent = flds;
+  document.getElementById('cScr').textContent = ents * 3;
+  document.getElementById('cInv').textContent = 0;
+}
+
+document.addEventListener('click', (ev) => {
+  const t = ev.target.closest('button'); if (!t) return;
+  if (t.dataset.pack) { pack = t.dataset.pack; return render(); }
+  if (t.dataset.pick) { state[+t.dataset.ent].pick = t.dataset.pick; return render(); }
+  if (t.dataset.all !== undefined) { state[+t.dataset.all].off.clear(); return render(); }
+  if (t.dataset.none !== undefined) {
+    const i = +t.dataset.none, e = ENTS[i], c = state[i].pick === 'a' ? e.a : e.b;
+    fieldsOf(c.cls).forEach((f) => state[i].off.add(f.n)); return render();
+  }
+  if (t.dataset.f) {
+    const i = +t.dataset.ent, n = t.dataset.f;
+    state[i].off.has(n) ? state[i].off.delete(n) : state[i].off.add(n); return render();
+  }
+  if (t.id === 'go') {
+    const n = document.getElementById('cFld').textContent;
+    t.textContent = 'נבנה · ' + n + ' שדות · 0 המצאות';
+    t.style.background = 'var(--ok)';
+  }
+});
+
+render();
+</script></body></html>

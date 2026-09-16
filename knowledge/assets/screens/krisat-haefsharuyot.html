@@ -1,0 +1,227 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>קריסת האפשרויות</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* ══ עולם אחד מכוון: אור דרך זכוכית. כל מקור = גוון משלו. ══
+   הצבע כאן אינו קישוט — הוא המידע. אתה רואה מאיפה כל דבר בא. */
+:root{
+ --void:#08080B; --glass:#101016; --pane:#15151D; --rim:#22222E; --rim2:#1A1A24;
+ --ink:#EFEFF4; --ink2:#9C9CAE; --dim:#5A5A6C;
+ --pack:#F0A63C;   /* חבילות-תחום */
+ --term:#A98BFF;   /* מונחים */
+ --schema:#3FD9E8; /* סכימה */
+ --said:#F4F4F8;   /* המשפט שלך */
+ --open:#FF6B9D;   /* פתוח — טרם נקרס */
+ --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+ --sans:'Rubik','Heebo',system-ui,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:
+  radial-gradient(1100px 700px at 78% -12%,rgba(169,139,255,.07),transparent 60%),
+  radial-gradient(900px 600px at 8% 108%,rgba(63,217,232,.06),transparent 60%),
+  var(--void);
+ color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;
+ font-variant-numeric:tabular-nums;
+ padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:1000px;margin:0 auto;padding-inline:16px;padding-block:44px 90px}
+h1{font-size:clamp(34px,7.4vw,60px);font-weight:300;letter-spacing:-.035em;line-height:1.02;margin:0 0 14px}
+h1 b{font-weight:800}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;color:var(--dim);text-transform:uppercase;margin:0 0 15px}
+.sub{color:var(--ink2);font-size:17px;max-width:56ch;margin:0}
+.sub em{font-style:normal;color:var(--ink)}
+h2{font-size:19px;font-weight:500;margin:0;letter-spacing:-.01em}
+section{margin-top:52px}
+.head{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.head .n{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.head .why{margin-inline-start:auto;font-size:13px;color:var(--dim);max-width:44ch}
+/* ══ מקרא-המקורות ══ */
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin:22px 0 0;padding:13px 15px;
+ background:rgba(255,255,255,.018);border:1px solid var(--rim2);border-radius:10px}
+.lg{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink2)}
+.lg i{width:9px;height:9px;border-radius:2px;display:block;flex:none}
+.lg b{color:var(--ink);font-weight:500}
+.lg small{font-family:var(--mono);font-size:10px;color:var(--dim)}
+/* ══ המשפט ══ */
+.sent{font-size:clamp(20px,4vw,30px);font-weight:300;line-height:1.55;margin:0 0 6px;letter-spacing:-.015em}
+.tok{position:relative;padding:1px 2px;border-radius:3px;transition:.2s}
+.tok[data-s]{cursor:default}
+.tok[data-s="pack"]{color:var(--pack)}
+.tok[data-s="term"]{color:var(--term)}
+.tok[data-s="open"]{color:var(--open)}
+.tok[data-s]::after{content:"";position:absolute;inset-inline:0;bottom:-3px;height:1.5px;
+ background:currentColor;opacity:.45;border-radius:2px}
+.tok[data-s="open"]::after{opacity:.6;
+ background:repeating-linear-gradient(90deg,currentColor 0 4px,transparent 4px 8px)}
+/* ══ הבמה ══ */
+.stage{position:relative;background:linear-gradient(180deg,var(--glass),var(--pane));
+ border:1px solid var(--rim);border-radius:16px;overflow:hidden;
+ box-shadow:0 30px 80px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.045)}
+.bar{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--rim2);background:rgba(0,0,0,.3)}
+.bar .t{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.12em}
+.bar .r{margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;color:var(--ink2)}
+.bar .r b{color:var(--open)}
+.body{padding:20px 18px 22px}
+/* ══ ערימת-האפשרויות ══ */
+.stack{position:relative;margin:0 0 16px}
+.stack .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--dim);
+ text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.stack .lbl i{width:6px;height:6px;border-radius:50%;background:var(--open);display:block;
+ animation:pu 1.8s ease-in-out infinite}
+@keyframes pu{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:1;transform:scale(1.35)}}
+@media (prefers-reduced-motion:reduce){.stack .lbl i{animation:none}}
+.cards{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.card{position:relative;text-align:start;font-family:inherit;cursor:pointer;width:100%;
+ background:rgba(255,255,255,.022);border:1px solid var(--rim);border-radius:11px;padding:14px 15px;
+ transition:border-color .2s,background .2s,transform .2s,opacity .25s;color:var(--ink2)}
+.card:hover{border-color:rgba(255,255,255,.22);transform:translateY(-2px)}
+.card:focus-visible{outline:2px solid var(--open);outline-offset:3px}
+/* לא-נבחר = רוח. קיים, בנוי, שקוף. */
+.card[data-on="false"]{opacity:.42;filter:saturate(.35)}
+.card[data-on="true"]{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.3);opacity:1}
+.card[data-on="true"]::before{content:"";position:absolute;inset:-1px;border-radius:11px;
+ border:1px solid var(--c,var(--schema));opacity:.55;pointer-events:none}
+.card .hd{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
+.card .nm{font-size:16px;font-weight:500;color:var(--ink)}
+.card .cls{font-family:var(--mono);font-size:10.5px;color:var(--c,var(--schema));direction:ltr}
+.card .big{font-size:26px;font-weight:800;line-height:1.1;color:var(--ink);letter-spacing:-.02em;display:block;margin-top:2px}
+.card .big small{font-size:12px;font-weight:400;color:var(--dim);margin-inline-start:7px;letter-spacing:0}
+.card .src{font-family:var(--mono);font-size:9.5px;color:var(--dim);margin-top:9px;
+ direction:rtl;text-align:start;line-height:1.6;
+ padding-top:8px;border-top:1px solid var(--rim2)}
+.card .src b{color:var(--c,var(--schema));font-weight:400}
+.card .src code{font-family:var(--mono);direction:ltr;unicode-bidi:isolate;display:inline-block}
+.card .ghost{position:absolute;top:11px;inset-inline-start:13px;font-family:var(--mono);
+ font-size:9px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+.card[data-on="true"] .ghost{color:var(--c,var(--schema))}
+/* ══ המסך שנבנה ══ */
+.built{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:11px;margin-top:4px}
+.scr{background:rgba(0,0,0,.28);border:1px solid var(--rim2);border-radius:10px;padding:13px 14px}
+.scr .h{font-size:13.5px;font-weight:500;color:var(--ink);display:flex;align-items:baseline;gap:7px;
+ padding-bottom:9px;border-bottom:1px solid var(--rim2);margin-bottom:9px}
+.scr .h .c{font-family:var(--mono);font-size:10px;direction:ltr}
+.flds{display:flex;flex-wrap:wrap;gap:4px}
+.f{font-family:var(--mono);font-size:10px;padding:3px 7px;border-radius:4px;cursor:pointer;direction:ltr;
+ border:1px solid transparent;transition:.12s;background:rgba(63,217,232,.1);color:var(--schema)}
+.f[aria-pressed="false"]{background:transparent;border-color:var(--rim);color:var(--dim);text-decoration:line-through}
+.f:focus-visible{outline:2px solid var(--schema);outline-offset:1px}
+/* ══ המונים ══ */
+.meter{display:flex;gap:1px;background:var(--rim2);border-top:1px solid var(--rim2)}
+.m{flex:1;background:rgba(0,0,0,.36);padding:13px 8px;text-align:center}
+.m b{display:block;font-size:23px;font-weight:800;line-height:1.1;letter-spacing:-.02em}
+.m small{display:block;font-family:var(--mono);font-size:9.5px;color:var(--dim);margin-top:4px;letter-spacing:.08em}
+.m.open b{color:var(--open)} .m.ok b{color:var(--schema)} .m.zero b{color:var(--ink)}
+/* ══ הערה ══ */
+.note{margin-top:20px;padding:16px 18px;background:rgba(255,255,255,.02);
+ border:1px solid var(--rim2);border-inline-start:2px solid var(--open);border-radius:0 10px 10px 0}
+.note p{margin:0;font-size:14.5px;color:var(--ink2)}
+.note p+p{margin-top:8px}
+.note b{color:var(--ink);font-weight:500}
+.foot{margin-top:62px;padding-top:22px;border-top:1px solid var(--rim2);
+ font-family:var(--mono);font-size:10.5px;color:var(--dim);line-height:1.95}
+</style></head><body>
+<div class="wrap">
+
+<p class="eyebrow">עיצוב · המחולל</p>
+<h1>קריסת <b>האפשרויות</b></h1>
+<p class="sub">המחולל לא בוחר. הוא מחזיק את <em>כל</em> הקריאות בבת-אחת — בנויות, לא מוצעות — ואתה קורס אותן בלחיצה. וכל שדה נושא את צבע המקור שלו, תמיד.</p>
+
+<div class="legend">
+ <span class="lg"><i style="background:var(--pack)"></i><b>חבילת-תחום</b><small>vertical-packs</small></span>
+ <span class="lg"><i style="background:var(--term)"></i><b>מונח</b><small>entity-terms</small></span>
+ <span class="lg"><i style="background:var(--schema)"></i><b>סכימה</b><small>schema-fields</small></span>
+ <span class="lg"><i style="background:var(--open)"></i><b>פתוח</b><small>טרם נקרס</small></span>
+</div>
+
+<section>
+ <div class="head"><span class="n">01</span><h2>המשפט</h2>
+  <span class="why">כל מילה צבועה בצבע המקור שפתר אותה. מילה ורודה־מקווקוות = עדיין פתוחה.</span></div>
+ <p class="sent" id="sent"></p>
+</section>
+
+<section>
+ <div class="head"><span class="n">02</span><h2>הקריסה</h2>
+  <span class="why">שלוש האפשרויות כבר בנויות. השקופות אינן «הצעות» — הן קיימות, רק לא נבחרו.</span></div>
+ <div class="stage">
+  <div class="bar"><span class="t">חבילות טיפול</span><span class="r"><b id="openN">3</b> אפשרויות פתוחות</span></div>
+  <div class="body">
+   <div class="stack">
+    <div class="lbl"><i></i>אין מונח — לכן נבנו כולן</div>
+    <div class="cards" id="cards"></div>
+   </div>
+   <div class="built" id="built"></div>
+  </div>
+  <div class="meter">
+   <div class="m ok"><b id="mE">2</b><small>ישויות</small></div>
+   <div class="m ok"><b id="mF">37</b><small>שדות</small></div>
+   <div class="m open"><b id="mO">1</b><small>פתוח</small></div>
+   <div class="m zero"><b>0</b><small>המצאות</small></div>
+  </div>
+ </div>
+ <div class="note">
+  <p><b>למה זה שונה מכפתור רגיל.</b> ממשק רגיל שואל שאלה ואז בונה. כאן הכל כבר בנוי — הלחיצה רק מחליטה מה נשאר. לכן אין מצב ביניים שבו המחולל «חושב», ואין מצב שבו הוא ממציא כדי להמשיך.</p>
+  <p><b>ולמה אי-אפשר לזייף.</b> כל שדה חייב צבע, והצבע בא מהמקור. שדה מומצא הוא שדה בלי צבע — <b>אין לו איך להיראות על המסך הזה.</b></p>
+ </div>
+</section>
+
+<p class="foot">
+ «מטופל» = entity.family בחבילת clinic = Family = 25 שדות · «חדר טיפול» = entity.room = Room = 12 שדות · «חבילות טיפול» — אין מונח באף מקור.<br>
+ vertical-packs.mjs (13) · entity-terms.data.json (32) · schema-fields.mjs (492 שדות · 54 מחלקות). כל שם בעמוד נקרא מהעץ.
+</p>
+</div>
+
+<script>
+/* ── המשפט: כל מילה וצבע-המקור שלה ── */
+(function(){
+ const T=[['מערכת',0],['לניהול',0],['קליניקה','pack'],['עם',0],['מטופלים','term'],
+          ['חדרי','term'],['טיפול','term'],['וחבילות','open'],['טיפול','open']];
+ const el=document.getElementById('sent');
+ el.innerHTML=T.map(([w,s])=>'<span class="tok"'+(s?' data-s="'+s+'"':'')+'>'+w+'</span>').join(' ');
+})();
+
+/* ── שלוש האפשרויות, כולן בנויות ── */
+const OPT=[
+ {id:'course',nm:'חבילת טיפול',cls:'Course',n:39,c:'var(--schema)',on:true,
+  src:'39 שדות מ<code>schema-fields.mjs</code> · <b><code>Course</code></b>',
+  f:['id','name','teacherId','roomId','price','capacity','startDate','status']},
+ {id:'new',nm:'ישות חדשה',cls:'מהמשפט',n:2,c:'var(--said)',on:false,
+  src:'<b>המשפט שלך</b> — «חבילות» · «טיפול»',f:['חבילה','טיפול']},
+ {id:'none',nm:'לא ישות',cls:'—',n:0,c:'var(--dim)',on:false,
+  src:'<b>לא ייבנה מסך</b> · נשאר טקסט',f:[]}];
+
+const FIXED=[
+ {nm:'מטופלים',cls:'Family',n:25,f:['id','name','father','mother','phone','phone2','email','city','address','status','notes','cred']},
+ {nm:'חדרי טיפול',cls:'Room',n:12,f:['id','name','active','slot','cap','location','rate','from','to','eq']}];
+const off=new Set();
+
+function draw(){
+ document.getElementById('cards').innerHTML=OPT.map(o=>
+  '<button class="card" data-id="'+o.id+'" data-on="'+o.on+'" style="--c:'+o.c+'" aria-pressed="'+o.on+'">'
+  +'<span class="ghost">'+(o.on?'● נבחר':'○ בנוי')+'</span>'
+  +'<span class="hd" style="margin-top:14px"><span class="nm">'+o.nm+'</span><span class="cls">'+o.cls+'</span></span>'
+  +'<span class="big">'+(o.n||'—')+(o.n?'<small>שדות</small>':'')+'</span>'
+  +'<span class="src">'+o.src+'</span></button>').join('');
+
+ const sel=OPT.find(o=>o.on);
+ const live=FIXED.concat(sel&&sel.n?[{nm:sel.nm,cls:sel.cls,n:sel.n,f:sel.f,pick:true}]:[]);
+ document.getElementById('built').innerHTML=live.map(e=>
+  '<div class="scr"><div class="h">'+e.nm+'<span class="c" style="color:'+(e.pick?'var(--said)':'var(--schema)')+'">'+e.cls+'</span></div>'
+  +'<div class="flds">'+e.f.map(f=>'<button class="f" data-k="'+e.cls+f+'" aria-pressed="'+(!off.has(e.cls+f))+'">'+f+'</button>').join('')+'</div></div>').join('');
+
+ let en=0,fl=0;
+ for(const e of live){en++;fl+=e.n-e.f.filter(f=>off.has(e.cls+f)).length;}
+ document.getElementById('mE').textContent=en;
+ document.getElementById('mF').textContent=fl;
+ document.getElementById('mO').textContent=OPT.filter(o=>!o.on).length?1:1;
+ document.getElementById('openN').textContent=OPT.length;
+}
+document.addEventListener('click',ev=>{
+ const c=ev.target.closest('.card');
+ if(c){OPT.forEach(o=>o.on=(o.id===c.dataset.id));return draw();}
+ const f=ev.target.closest('.f');
+ if(f){off.has(f.dataset.k)?off.delete(f.dataset.k):off.add(f.dataset.k);draw();}
+});
+draw();
+</script>
+</body></html>

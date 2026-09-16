@@ -1,0 +1,108 @@
+<!doctype html><html lang="he" dir="rtl"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>293 המנועים</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap">
+<style>
+:root{--bg:#F8F7F4;--card:#fff;--ink:#15181A;--ink2:#434A4E;--mute:#767D82;--line:#E2E1DD;--line2:#EEEDEA;
+ --acc:#5A3A82;--accbg:#EEE7F5;--ok:#1B6248;--okbg:#E3EFE9;--warn:#8B5A12;--warnbg:#F8F0E0;
+ --bad:#8E2E2E;--badbg:#F9E7E5;--code:#F2F1EE;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#101013;--card:#18181C;--ink:#EAE9EC;--ink2:#B5B3B9;
+ --mute:#828086;--line:#28272C;--line2:#1F1E22;--acc:#B79BDB;--accbg:#241B33;--ok:#5BBE9A;--okbg:#10291F;
+ --warn:#D8A44A;--warnbg:#2D2310;--bad:#E08880;--badbg:#301818;--code:#141418}}
+:root[data-theme=dark]{--bg:#101013;--card:#18181C;--ink:#EAE9EC;--ink2:#B5B3B9;--mute:#828086;--line:#28272C;
+ --line2:#1F1E22;--acc:#B79BDB;--accbg:#241B33;--ok:#5BBE9A;--okbg:#10291F;--warn:#D8A44A;--warnbg:#2D2310;
+ --bad:#E08880;--badbg:#301818;--code:#141418}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.7 Heebo,system-ui,sans-serif;padding-block:0 76px;padding-inline:16px}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font:900 clamp(32px,6.5vw,58px)/1.05 Heebo;letter-spacing:-.035em;margin:0;text-wrap:balance}
+h2{font:800 clamp(22px,3.6vw,32px)/1.18 Heebo;letter-spacing:-.02em;margin:0 0 8px;text-wrap:balance}
+p{margin:0 0 14px;max-width:66ch}
+code,.m{font-family:var(--mono);font-size:.84em;background:var(--code);padding:1px 5px;border-radius:3px;display:inline-block;direction:ltr}
+.lead{font-size:19px;color:var(--ink2);max-width:58ch;margin-top:16px}
+header{padding-block:64px 30px}
+.kick{font:700 12px/1 Heebo;letter-spacing:.2em;color:var(--acc);margin-bottom:14px}
+section{padding-block:44px;border-top:1px solid var(--line)}
+.sn{display:inline-block;font:800 12px/1 var(--mono);color:var(--acc);background:var(--accbg);padding:6px 9px;border-radius:3px;margin-bottom:12px}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--card);margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:440px}
+th,td{padding:10px 13px;text-align:right;border-bottom:1px solid var(--line2);vertical-align:top}
+thead th{background:var(--card);border-bottom:2px solid var(--line);font-weight:600;font-size:12.5px;color:var(--mute);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td.n{font-variant-numeric:tabular-nums;text-align:center;font-weight:700;white-space:nowrap}
+.big{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);
+ border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:22px 0}
+.big div{background:var(--card);padding:16px 13px}
+.big b{display:block;font:900 32px/1 Heebo;letter-spacing:-.025em;font-variant-numeric:tabular-nums;color:var(--acc)}
+.big span{display:block;font-size:12px;color:var(--mute);margin-top:5px}
+.lay{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:18px 0}
+.lay>div{background:var(--card);padding:14px 16px;display:grid;grid-template-columns:62px 1fr;gap:14px;align-items:start}
+.lay b.c{font:900 26px/1 Heebo;font-variant-numeric:tabular-nums;color:var(--mute);text-align:center}
+.lay.x b.c{color:var(--acc)}
+.lay div.acc b.c{color:var(--acc)} .lay div.ok b.c{color:var(--ok)} .lay div.warn b.c{color:var(--warn)}
+.lay h3{font:700 17px Heebo;margin:0 0 3px}
+.lay p{margin:0;font-size:14.5px;color:var(--ink2)}
+.lay em{font-style:normal;font-size:12.5px;color:var(--mute);display:block;margin-top:2px}
+.bug{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:15px 18px;margin:12px 0}
+.bug .h{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
+.bug .h b{font:700 17px Heebo}
+.bug .h span{font:500 12px var(--mono);color:var(--mute);direction:ltr}
+.bug p{margin:0;font-size:15px;color:var(--ink2)}
+.note{border-inline-start:3px solid var(--bad);background:var(--badbg);padding:16px 18px;border-radius:0 5px 5px 0;margin:18px 0}
+.note.ok{border-color:var(--ok);background:var(--okbg)}
+.note p:last-child{margin-bottom:0}
+footer{padding-block:34px;border-top:1px solid var(--line);color:var(--mute);font-size:13.5px}
+@media(max-width:600px){.lay>div{grid-template-columns:48px 1fr;gap:10px}.lay b.c{font-size:21px}}
+</style>
+<div class="wrap">
+
+<header>
+  <div class="kick">שבעה סשנים · לולאה · אפס עצירות</div>
+  <h1>‏293 המנועים</h1>
+  <p class="lead">אמרתי «20». ספרתי הפעלות ולא מנועים.
+  שבעה סשנים נפרדים, כל אחד עם נחיל משלו, מיפו את הכל.</p>
+  <div class="big">
+    <div><b>293</b><span>מנועים</span></div>
+    <div><b>7</b><span>סשנים</span></div>
+    <div><b>$204</b><span>עלות המיפוי</span></div>
+    <div><b>0</b><span>שינויים בריפו</span></div>
+  </div>
+</header>
+
+<section>
+  <div class="sn">01</div><h2>המבנה — שבע שכבות</h2>
+  <div class="lay x">
+  <div class="acc"><b class="c">16</b><div><h3>הליבה</h3><p><b>כאן ההחלטות.</b> particles · cover · render-ds · nl-spec · atlas · entity · match · look</p><em>מייבאים, לא מופעלים</em></div></div><div class="ok"><b class="c">15</b><div><h3>נקודות-כניסה</h3><p>app-ds ×31 · balagan · peruk · server · behavior-plan · auto-skin</p><em>regen.mjs מריץ</em></div></div><div class="warn"><b class="c">11</b><div><h3>שערי-מחולל</h3><p>gen-verify · golden-harness · synth · balagan-look/one/run</p><em>police מריץ</em></div></div><div class="mute"><b class="c">20</b><div><h3>כלים עצמאיים</h3><p>genesis-gen · web-shell · ship · intent · twins</p><em>ידני</em></div></div><div class="mute"><b class="c">58</b><div><h3>שורש machtzev</h3><p>police · truth · pins · ratchet · compose-engine</p><em>משטרה ומדידה</em></div></div><div class="mute"><b class="c">90</b><div><h3>חילוץ · טוהר · הרכבה</h3><p>החוצבים וסורקי-הטוהר</p><em>extract · purity · assemble · census · tools</em></div></div><div class="mute"><b class="c">83</b><div><h3>gen/</h3><p>מחולל שני שלם — פולט HTML, מוכיח בדפדפן</p><em>ענף מנותק</em></div></div>
+  </div>
+  <div class="note ok"><p><b>הטעות שלי הייתה בשורה הראשונה.</b> ‏<code>regen.mjs</code> מונה 15 הפעלות — ספרתי אותן וקראתי לזה «המחולל».
+  אבל <code>app-ds</code> לבדו <b>מייבא 16 מנועים</b> שעושים את העבודה. ‏<code>particles.mjs</code>, שבו מצאתי את הבאג של «58», <b>לא היה ברשימה שלי</b>.</p></div>
+</section>
+
+<section>
+  <div class="sn">02</div><h2>שישה באגים — כל אחד כלל אחד</h2>
+  <div class="bug"><div class="h"><b><b>אטום ריק מנצח</b></b><span>particles.mjs:225</span></div><p><code>bestScore = -1</code> ⇒ אטום שמילא 0 שקעים מקבל 0 > −1. זה ה-«58» על המסך.</p></div><div class="bug"><div class="h"><b><b>cache שמתעלם מהפרמטר</b></b><span>particles.mjs:177</span></div><p><code>ATLAS ||= buildAtlas({forge: isPaper()})</code>. ‏<b>572 מול 931</b> ווידג׳טים — 359 אטומים נעלמים אם הסדר מתהפך.</p></div><div class="bug"><div class="h"><b><b>פסילה על שקעי-סגנון</b></b><span>particles.mjs:213</span></div><p>פוסל על כל שקע-חובה, כולל <code>radius · height · *Color</code>. §20-ג אוסר לזייף <b>דאטה</b>, לא סגנון. <b>394 אטומים</b> חסומים.</p></div><div class="bug"><div class="h"><b><b>מילה אחת מרעילה פסקה</b></b><span>nl-spec.mjs:68</span></div><p>«סיומת ות = רבים». <code>כמות · עלות · שעות</code> הן יחיד. <b>5 מתוך 6 דומיינים</b> קיבלו מודל שגוי בשקט.</p></div><div class="bug"><div class="h"><b><b>השוואת-מחרוזת בת 2 מילים</b></b><span>render-ds.mjs:35</span></div><p>בורר אטומי-הקלט ⇒ <b>5 עוברים מתוך 924</b>.</p></div><div class="bug"><div class="h"><b><b>השער פוטר את המחולל</b></b><span>goal-proof-check.mjs:20</span></div><p><code>GENOUT</code> ⇒ <b>246 מסכים</b> מחוץ לתחום-השער בהגדרה.</p></div>
+</section>
+
+<section>
+  <div class="sn">03</div><h2>מה כל סשן מצא</h2>
+  <div class="scroll"><table><thead><tr><th>אצווה</th><th>מנועים</th><th>הממצא</th><th>עלות</th></tr></thead><tbody>
+  <tr><td class="n">A</td><td>16 מנועי-הליבה</td><td>מופה 31 ספקים · 5 שורשי-באג · <b>cache שבור</b> · שער שבודק שגיאה כ-falsy</td><td class="n">$41</td></tr><tr><td class="n">B</td><td>15 נקודות-הכניסה</td><td><b>449 קבצי gen_app_ בשליטת app-ds</b> · 4 באגי-ייצור</td><td class="n">$24</td></tr><tr><td class="n">C+D</td><td>11 שערים + 20 כלים</td><td>577 קבצים = <b>441 app-ds + 31 genesis-gen</b> · 3 שערים לא-מודדים</td><td class="n">$37</td></tr><tr><td class="n">E</td><td>58 מנועי-השורש</td><td>מתוך 38 שערים: <b>2 כשלים · 12 מתים · 13 מדולגים</b></td><td class="n">$28</td></tr><tr><td class="n">F+G</td><td>23 חילוץ + 23 טוהר</td><td><b>typescript מסתיר 205 ממצאים</b> · 9 מ-15 חוצבים — הפלט לא נצרך</td><td class="n">$27</td></tr><tr><td class="n">H+I+K</td><td>44 הרכבה וכלים</td><td>3 באגים · 345 בדיקות לא נמדדו (חסר dart בקונטיינר שלהם)</td><td class="n">$22</td></tr><tr><td class="n">J</td><td>83 · gen/ המנותק</td><td>3 מועמדים להעברה: <b>prove · audit · inventory</b></td><td class="n">$24</td></tr>
+  </tbody></table></div>
+</section>
+
+<section>
+  <div class="sn">04</div><h2>וארבע טענות שדחיתי</h2>
+  <p>כל טענה אומתה אצלי בבייטים לפני מסירה. ארבע לא עמדו:</p>
+  <div class="scroll"><table><thead><tr><th>הטענה</th><th>המדידה שלי</th></tr></thead><tbody>
+  <tr><td>«26 מנועים מתים»</td><td>נמדד לפי <b>ספירת-ייבוא</b>. ‏<code>heal.mjs</code> סומן מת — מיובא ע"י 4. ‏<code>gen/studio.mjs</code> סומן מת — הרצתי, <b>0.96MB · 569 אטומים</b>. כל נקודת-כניסה נספרת כמתה.</td></tr><tr><td>«16 לא-נמדדים» + «345 בדיקות»</td><td>גל-2 רץ בקונטיינרים <b>בלי flutter · dart · python3</b>. פער-סביבה שלהם, לא של המחולל.</td></tr><tr><td>«one.mjs יצר 3,015 קבצים»</td><td>נכון <b>אצלם</b>. הקונטיינרים נפרדים — לא קרה אצלי.</td></tr><tr><td>«2 היפוכי קוד-יציאה»</td><td>בדקתי <code>tighten-types</code> ו-<code>auto-logic</code>: <code>exit(1)</code> בכשל, <code>exit(0)</code> בהצלחה. <b>תקינים.</b> לא מוסר עד שאדע על מה הם מדברים.</td></tr>
+  </tbody></table></div>
+  <div class="note"><p><b>הראשונה היא הכי חשובה.</b> שני סשנים מסרו רשימות של «מנועים מתים» שנמדדו לפי
+  <b>כמה קבצים מייבאים אותם</b>. קובץ שמריצים ואף אחד לא מייבא — <b>כל נקודת־כניסה</b> — נספר כמת.
+  לולא האימות הייתי מביא לך רשימה של 26 מנועים מתים שרובם חיים.</p></div>
+</section>
+
+<footer>
+  ‏<span class="m">meir7651231-ui/-ai-chat-server</span> · <span class="m">claude/yeshiva-read</span> · <span class="m">3db1bcc8</span> ·
+  ‏7 סשנים · כל ממצא אומת מולי · <span class="m">git status</span> ריק.
+</footer>
+</div></html>

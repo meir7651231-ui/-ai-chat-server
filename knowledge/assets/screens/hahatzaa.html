@@ -1,0 +1,218 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ההצעה</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+ --bg:#F4F5F6; --panel:#FFFFFF; --sunk:#EAECEE; --ink:#14171A; --ink2:#3E454C; --mute:#6D767E;
+ --line:#DADEE1; --line2:#EAEDEF;
+ --acc:#8A6111; --accbg:#F6EFDD; --accline:#D9C48C;
+ --ok:#1B6248; --okbg:#E2EFEA; --bad:#8E2E2E; --badbg:#F8E8E6;
+ --codebg:#ECEEF0;
+ --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+ --sans:'Heebo',system-ui,'Segoe UI',Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#101214; --panel:#191D21; --sunk:#14181B; --ink:#EDF0F3; --ink2:#B4BDC5; --mute:#7B858E;
+ --line:#282E34; --line2:#1F252A;
+ --acc:#D9AE52; --accbg:#241C0C; --accline:#3E3117;
+ --ok:#6CCCA0; --okbg:#10241D; --bad:#E2908A; --badbg:#271816;
+ --codebg:#13181C;
+}}
+:root[data-theme="dark"]{
+ --bg:#101214; --panel:#191D21; --sunk:#14181B; --ink:#EDF0F3; --ink2:#B4BDC5; --mute:#7B858E;
+ --line:#282E34; --line2:#1F252A;
+ --acc:#D9AE52; --accbg:#241C0C; --accline:#3E3117;
+ --ok:#6CCCA0; --okbg:#10241D; --bad:#E2908A; --badbg:#271816;
+ --codebg:#13181C;
+}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+ line-height:1.66;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+.wrap{max-width:870px;margin:0 auto;padding-inline:20px;padding-block:54px 84px}
+h1{font-size:clamp(36px,7.5vw,58px);font-weight:900;line-height:1.03;letter-spacing:-.025em;margin:0 0 15px;text-wrap:balance}
+h2{font-size:clamp(21px,3.7vw,28px);font-weight:700;letter-spacing:-.012em;margin:0 0 8px;text-wrap:balance}
+h3{font-size:17.5px;font-weight:700;margin:0 0 6px}
+p{margin:0 0 15px;color:var(--ink2);max-width:64ch}
+.lead{font-size:18.5px;color:var(--ink2);max-width:58ch;margin-bottom:0}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.15em;color:var(--acc);text-transform:uppercase;margin:0 0 13px}
+section{margin-top:50px}
+.sec-n{font-family:var(--mono);font-size:11px;color:var(--mute);letter-spacing:.11em;margin-bottom:5px}
+hr{border:0;border-top:1px solid var(--line);margin:46px 0}
+code,.mono{font-family:var(--mono)}
+code.inl{background:var(--codebg);padding:1.5px 5px;border-radius:3px;font-size:.87em;color:var(--ink)}
+pre{background:var(--codebg);border:1px solid var(--line);border-radius:4px;padding:14px 16px;
+ overflow-x:auto;margin:15px 0;direction:ltr;text-align:left}
+pre code{font-size:12.5px;line-height:1.8;color:var(--ink)}
+.src{font-family:var(--mono);font-size:11.5px;color:var(--mute);direction:ltr;text-align:left;margin:-8px 0 0}
+/* ── שינוי מוצע ── */
+.change{background:var(--panel);border:1px solid var(--line);border-radius:4px;margin:18px 0;overflow:hidden}
+.change > .hd{background:var(--sunk);padding:11px 16px;border-bottom:1px solid var(--line);
+ display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.change .num{font-family:var(--mono);font-size:11.5px;color:var(--acc);font-weight:500}
+.change .ttl{font-size:15px;font-weight:700;color:var(--ink)}
+.change .where{font-family:var(--mono);font-size:11.5px;color:var(--mute);margin-inline-start:auto;direction:ltr}
+.change .bd{padding:14px 16px}
+.change .bd p:last-child{margin-bottom:0}
+.diff{direction:ltr;text-align:left;font-family:var(--mono);font-size:12.5px;line-height:1.85;
+ background:var(--codebg);border-radius:3px;padding:11px 13px;margin:0 0 13px;overflow-x:auto}
+.diff .m{color:var(--bad)} .diff .p{color:var(--ok)}
+/* ── טבלה ── */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px;margin:20px 0;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:420px}
+th,td{text-align:start;padding:11px 15px;border-bottom:1px solid var(--line2);font-size:14px;color:var(--ink2)}
+th{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;color:var(--mute);
+ text-transform:uppercase;background:var(--sunk)}
+td:first-child{color:var(--ink);font-weight:500}
+tr:last-child td{border-bottom:0}
+.n{font-family:var(--mono);font-weight:500}
+/* ── מדדים ── */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:1px;background:var(--line);
+ border:1px solid var(--line);border-radius:4px;overflow:hidden;margin:28px 0 0}
+.kpi{background:var(--panel);padding:18px 16px}
+.kpi b{display:block;font-size:28px;font-weight:900;line-height:1.14;letter-spacing:-.02em}
+.kpi small{display:block;font-size:12px;color:var(--mute);margin-top:4px;line-height:1.5}
+.kpi.ok b{color:var(--ok)} .kpi.bad b{color:var(--bad)} .kpi.acc b{color:var(--acc)}
+.note{background:var(--panel);border:1px solid var(--line);border-inline-start:3px solid var(--acc);
+ border-radius:0 4px 4px 0;padding:18px 20px;margin:22px 0}
+.note p{margin:0;font-size:15px} .note p + p{margin-top:9px}
+.note.bad{border-inline-start-color:var(--bad)}
+ul{margin:13px 0;padding-inline-start:20px;color:var(--ink2)}
+li{margin-bottom:8px;max-width:62ch}
+.ask{background:var(--accbg);border:1px solid var(--accline);border-radius:4px;padding:20px 22px;margin:26px 0}
+.ask h3{color:var(--ink)}
+.ask p{color:var(--ink2);margin-bottom:10px}
+.ask ol{margin:12px 0 0;padding-inline-start:20px;color:var(--ink2)}
+.ask li{margin-bottom:9px}
+.foot{margin-top:58px;padding-top:21px;border-top:1px solid var(--line);
+ font-family:var(--mono);font-size:11.5px;color:var(--mute);line-height:1.95}
+</style></head><body>
+<div class="wrap">
+
+<p class="eyebrow">סיבוב 6 · הצעה לאישור</p>
+<h1>ההצעה</h1>
+<p class="lead">שלוש חוליות נשארו לא־מדודות. מדדתי אותן, ומתוכן יצא תיקון מבני בן שני תווים — שנבדק ולא שובר דבר. הוא מחכה להחלטה שלך.</p>
+
+<div class="kpis">
+ <div class="kpi ok"><b>16 <span style="font-size:.58em;font-weight:500;color:var(--mute)">מתוך</span> 16</b><small>שער־הזהב הקיים נשמר אחרי התיקון</small></div>
+ <div class="kpi ok"><b>0</b><small>תאונות־התאמה אחרי (לפני: 2)</small></div>
+ <div class="kpi acc"><b>7</b><small>ישויות נפתרות לשדות אמיתיים</small></div>
+ <div class="kpi acc"><b>21</b><small>מדווחות ∅ ביושר במקום להמציא</small></div>
+</div>
+
+<hr>
+
+<section>
+<div class="sec-n">01</div>
+<h2>חוליה ראשונה: אטום־המונחים לא מחזיק שדות</h2>
+<p>שאלתי אם אפשר פשוט לחווט את <code class="inl">nl-spec</code> לאטום־המונחים. התשובה: לא, כי אין בו שדות בכלל. כל רשומה מחזיקה ארבעה שדות־על בלבד:</p>
+<pre dir="ltr"><code>{ "key": "entity.tzCoordinator", "entity": "TzCoordinator",
+  "forms": ["רכז"], "label": "רכז/ת קופות" }</code></pre>
+<p class="src">machtzev/generator/entity-terms.data.json · 32 מונחים</p>
+<p>השדות יושבים באטום שני, שגם הוא כבר קיים וחצוב: <code class="inl">new/atoms/schema-fields.mjs</code> — <b>492 שדות ב־54 מחלקות</b>. «משפחה» ⇒ <code class="inl">Family</code> ⇒ 25 שדות אמיתיים (id · name · father · fatherId · mother · phone · email · city …).</p>
+<div class="note">
+ <p><b>הצ׳יין התקין הוא דו־שלבי, ושני האיברים שלו בנויים:</b> מילה עברית ⇐ <code class="inl">entity-terms</code> ⇐ מחלקה ⇐ <code class="inl">schema-fields</code> ⇐ שדות. מה שחסר הוא רק החיבור — ו־<code class="inl">nl-spec</code> אינו מחובר לאף אחד מהשניים.</p>
+</div>
+</section>
+
+<section>
+<div class="sec-n">02</div>
+<h2>חוליה שנייה: מה השער sentence אוכף</h2>
+<pre dir="ltr"><code>const bad = gold.filter((g) =&gt; resolve(g.text).entity !== g.entity);</code></pre>
+<p class="src">machtzev/generator/sentence.mjs:99</p>
+<p>16 משפטי־זהב, כל אחד עם ישות צפויה. 15 מצפים למונח, אחד מצפה ל־∅. שלוש סיבות שהוא אינו יכול לתפוס את ההפרה במסלול המקביל:</p>
+<ul>
+<li>הוא בודק את <code class="inl">resolve()</code> של <code class="inl">sentence.mjs</code> בלבד. הוא אינו נוגע ב־<code class="inl">nl-spec.mjs</code> — הקובץ שמסלול §22 באמת עובר בו.</li>
+<li>כל 16 משפטי־הזהב הם מתוך תחום־הלקוח של maor, כלומר בתוך 32 המונחים. הוא לעולם לא נבדק על תחום שאין לו מונח.</li>
+<li>הוא בודק שוויון לישות צפויה — לא את היעדר ההמצאה.</li>
+</ul>
+<p>זהו מבחן־רגרסיה פנים־תחומי, לא אוכף־דוקטרינה. ובנוסף, הוא אחד מ־50 השערים שלא הוכח עליהם שהם יודעים להאדים.</p>
+</section>
+
+<section>
+<div class="sec-n">03</div>
+<h2>מה שלא ציפיתי: גם הדרך התקינה מנחשת</h2>
+<p>לפני שהצעתי לחווט את <code class="inl">nl-spec</code> ל־<code class="inl">resolve()</code>, בדקתי מה <code class="inl">resolve()</code> מחזיר על קורפוס־§22. שתי תשובות היו שגויות בשקט:</p>
+<div class="tbl"><table>
+ <thead><tr><th>קלט</th><th>תשובה</th><th>ציון</th><th>אמת</th></tr></thead>
+ <tbody>
+  <tr><td>חנות</td><td>ShopStore</td><td class="n">3</td><td style="color:var(--ok)">נכון — התאמה מדויקת</td></tr>
+  <tr><td>מוצרים</td><td>ShopProduct</td><td class="n">2</td><td style="color:var(--ok)">נכון — וריאנט מורפולוגי</td></tr>
+  <tr><td>שולחנות</td><td>ShopStore</td><td class="n">1</td><td style="color:var(--bad)">שגוי — «שולחנות» מכיל «חנות»</td></tr>
+  <tr><td>חברת בנייה</td><td>Member</td><td class="n">0.5</td><td style="color:var(--bad)">שגוי — «בנייה» מתחיל ב«בני»</td></tr>
+  <tr><td>חללית · מטופלים</td><td>∅</td><td class="n">0</td><td style="color:var(--ok)">נכון — מדווח חסר</td></tr>
+ </tbody>
+</table></div>
+<p>המנגנון: <code class="inl">sentence.mjs:44</code> נותן ניקוד 1 לכל <b>תת־מחרוזת</b>, ו־<code class="inl">:52</code> מחזיר את המדורג־הראשון בלי שום סף. שולחנות של מסעדה הפכו לחנות מפני שהמילה מכילה אותה.</p>
+<div class="note bad">
+ <p><b>הרעיון הראשון שלי נפסל במדידה.</b> הצעתי סף ציון ≥2 — ואז בדקתי אותו מול 16 משפטי־הזהב: שניים מהם נפתרים <em>נכון</em> בציון 1 («פריטי קטלוג» ⇒ ShopItem · «תיקי מעקב־טיפול» ⇒ AyinCase). סף היה שובר את השער הקיים.</p>
+ <p>מה שמבדיל אינו הציון אלא <b>המיקום</b>: «פריטי» <em>מתחיל</em> ב«פריט», ו«שולחנות» מכיל את «חנות» באמצע.</p>
+</div>
+</section>
+
+<section>
+<div class="sec-n">04</div>
+<h2>התיקון המוצע — שני שינויים, מבניים</h2>
+
+<div class="change">
+ <div class="hd"><span class="num">א</span><span class="ttl">תת־מחרוזת ⇐ תחילית בלבד</span><span class="where">sentence.mjs:44</span></div>
+ <div class="bd">
+  <div class="diff"><span class="m">− else if (fw.length &gt;= 3 &amp;&amp; w.includes(fw)) s = 1;</span><br><span class="p">+ else if (fw.length &gt;= 3 &amp;&amp; w.startsWith(fw)) s = 1;</span></div>
+  <p>מורפולוגיה עברית מוסיפה סיומות בסוף המילה, לא בתחילתה — לכן צורה לגיטימית תמיד יושבת בתחילת המילה. כלל־שפה, לא ידע־תחום (§23 נשמר). <b>תוצאה:</b> «שולחנות» ⇒ ∅ · «פריטי» ו«תיקי» נשמרים.</p>
+ </div>
+</div>
+
+<div class="change">
+ <div class="hd"><span class="num">ב</span><span class="ttl">צורה רב־מילתית חייבת להתאים במלואה</span><span class="where">sentence.mjs:48</span></div>
+ <div class="bd">
+  <div class="diff"><span class="m">− if (hit) { const score = …</span><br><span class="p">+ if (hit === fws.length) { const score = …</span></div>
+  <p>הקוד כבר משקלל שלמות־צורה בהערה שלו, אבל עדיין מקבל התאמה חלקית. «בני משפחה» שרק חציו תאם אינו מונח. <b>תוצאה:</b> «חברת בנייה» ⇒ ∅ · «בני משפחה» ⇒ Member נשמר במלואו.</p>
+ </div>
+</div>
+
+<div class="tbl"><table>
+ <thead><tr><th>מדד</th><th>לפני</th><th>אחרי</th></tr></thead>
+ <tbody>
+  <tr><td>שער־הזהב sentence</td><td class="n">16 / 16</td><td class="n" style="color:var(--ok)">16 / 16 — ללא רגרסיה</td></tr>
+  <tr><td>תאונות־התאמה בקורפוס־§22</td><td class="n" style="color:var(--bad)">2</td><td class="n" style="color:var(--ok)">0</td></tr>
+  <tr><td>ישויות שנפתרות לשדות אמיתיים</td><td class="n">9</td><td class="n">7</td></tr>
+  <tr><td>ישויות שמדווחות ∅ ביושר</td><td class="n">19</td><td class="n" style="color:var(--ok)">21</td></tr>
+ </tbody>
+</table></div>
+<p>תשע ירדו לשבע — <b>וזו התוצאה הרצויה</b>. השתיים שנעלמו הן בדיוק שתי התשובות השגויות. המספר קטן והאמת גדלה.</p>
+</section>
+
+<section>
+<div class="sec-n">05</div>
+<h2>והשינוי השלישי — זה שדורש את ההחלטה שלך</h2>
+<p>שני השינויים למעלה מתקנים את <code class="inl">resolve()</code>. הם אינם נוגעים בהמצאה עצמה. לשם כך צריך שינוי שלישי, גדול יותר באופיו:</p>
+<div class="change">
+ <div class="hd"><span class="num">ג</span><span class="ttl">חיווט מסלול־§22 · הסרת ההמצאה</span><span class="where">nl-spec.mjs:48 · nl-lang.data.json</span></div>
+ <div class="bd">
+  <div class="diff"><span class="m">− const DEF_FIELDS = LANG.defaultFields || [];   // ["שם","תיאור","תאריך","סטטוס"]</span><br><span class="p">+ // L57: שדות מ-entity-terms ⇒ schema-fields · מה שאין לו מונח ⇒ ∅ מדווח</span></div>
+  <p>נמדד בעותק־בדיקה: המצאות <b>93% ⇒ 0</b>. מתוך 14 משפטי־הרצפה — 3 מניבים מפרט שלם, ו־11 מדווחים אילו ישויות חסרות שדות. השער שתופס את זה כבר בעץ.</p>
+ </div>
+</div>
+<div class="note">
+ <p><b>המחיר אמיתי ואני לא מסתיר אותו:</b> 11 מתוך 14 משפטים שהיום «עוברים» יפסיקו להניב אפליקציה מיד, ויחזירו שאלה. שער־הרצפה של §22 יאדים עד שתחליט מה הוא אמור לדרוש.</p>
+ <p>זו הסיבה שאני עוצר כאן ולא נוגע בעץ: השינוי הזה משנה מה נחשב «ירוק», וזו הכרעת־בעלים, לא הכרעת־מדידה.</p>
+</div>
+</section>
+
+<div class="ask">
+ <h3>מה שאני צריך ממך</h3>
+ <p>שלושת השינויים מוכנים ונמדדו. שניים בטוחים לחלוטין, השלישי הוא הכרעה שלך:</p>
+ <ol>
+  <li><b>א+ב (תיקון resolve)</b> — ללא רגרסיה, השער נשאר 16/16. אפשר להעלות דרך המשטרה המלאה מיד באישורך.</li>
+  <li><b>ג (הסרת ההמצאה)</b> — מצריך גם החלטה מה שער־הרצפה של §22 אמור לדרוש: «לפחות ישות אחת» כמו היום, או «אפס שדות מומצאים» כמו ש־L57 קובע.</li>
+  <li><b>הרחבת המונחים</b> — 32 המונחים כולם מתחום maor. כל תחום חדש (מרפאה · מלון · מוסך) מצריך חציבה ממקור־אמת מוצהר. מאיפה?</li>
+ </ol>
+</div>
+
+<p class="foot">
+ נמדד בהרצה: entity-terms.data.json (32) · new/atoms/schema-fields.mjs (492 שדות · 54 מחלקות) · sentence.mjs:44,48,52,71,99 · sentence-golden.json (16) · nl-spec.mjs:25,48,74 · nl-smoke.txt (14) · gates.tsv:20<br>
+ כל התיקונים בעותק־בדיקה בלבד · git status --porcelain ריק · העץ לא נגע.
+</p>
+
+</div></body></html>

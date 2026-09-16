@@ -1,0 +1,2255 @@
+<!doctype html><html lang="he" dir="rtl"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>המחולל · לוח־המדידה</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&display=swap">
+<style>
+:root{
+  --paper:#FBFAF8; --card:#FFFFFF; --ink:#111A1C; --ink2:#3A4649; --mute:#6E7B7E;
+  --line:#DFE3E1; --line2:#EDEFED;
+  --acc:#0E6F6E; --acc-bg:#E4F1F0;
+  --warn:#9A5B06; --warn-bg:#FAF0DC;
+  --bad:#993030; --bad-bg:#FAE6E4;
+  --code:#F3F5F4;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0E1416; --card:#151D1F; --ink:#E7EDEC; --ink2:#B4C0BF; --mute:#7E8C8B;
+  --line:#243033; --line2:#1C2528;
+  --acc:#4FBDB0; --acc-bg:#11302E;
+  --warn:#D9A341; --warn-bg:#31260F;
+  --bad:#E08079; --bad-bg:#331B19;
+  --code:#111A1C;
+}}
+:root[data-theme="dark"]{
+  --paper:#0E1416; --card:#151D1F; --ink:#E7EDEC; --ink2:#B4C0BF; --mute:#7E8C8B;
+  --line:#243033; --line2:#1C2528;
+  --acc:#4FBDB0; --acc-bg:#11302E;
+  --warn:#D9A341; --warn-bg:#31260F;
+  --bad:#E08079; --bad-bg:#331B19;
+  --code:#111A1C;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);
+  font:400 16px/1.65 Heebo,"Segoe UI",system-ui,sans-serif;
+  padding-block:0 64px;padding-inline:16px;-webkit-text-size-adjust:100%}
+.wrap{max-width:1180px;margin:0 auto}
+.mono{font-family:var(--mono);font-size:.86em;direction:ltr;unicode-bidi:embed;display:inline-block}
+td.mono,th.mono{text-align:left}
+.sm{font-size:.78em}
+.num{font-variant-numeric:tabular-nums;text-align:center}
+h1,h2,h3{text-wrap:balance;margin:0}
+h1{font-weight:800;font-size:clamp(28px,5vw,44px);letter-spacing:-.02em;line-height:1.15}
+h2{font-weight:700;font-size:clamp(20px,3vw,27px);letter-spacing:-.01em;margin-bottom:6px}
+h3{font-weight:600;font-size:17px;margin-bottom:8px;color:var(--ink2)}
+p{margin:0 0 12px;max-width:66ch}
+.lead{color:var(--ink2);font-size:18px;max-width:64ch}
+header.top{padding-block:56px 34px;border-bottom:3px solid var(--ink)}
+.kicker{font-size:12px;letter-spacing:.16em;font-weight:700;color:var(--acc);margin-bottom:12px}
+section{padding-block:40px;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+.sec-h{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:18px}
+.sec-n{font:700 13px/1 var(--mono);color:var(--acc);background:var(--acc-bg);
+  padding:5px 8px;border-radius:3px;flex:none}
+/* מדדים */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);margin:20px 0}
+.stat{background:var(--card);padding:16px 14px}
+.stat b{display:block;font:800 30px/1.1 Heebo;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stat span{display:block;font-size:12.5px;color:var(--mute);margin-top:4px}
+.stat.ok b{color:var(--acc)} .stat.sk b{color:var(--warn)} .stat.ms b{color:var(--bad)}
+/* טבלאות */
+.scroll{overflow-x:auto;border:1px solid var(--line);background:var(--card);margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--line2);vertical-align:top}
+thead th{position:sticky;top:0;background:var(--card);border-bottom:2px solid var(--line);
+  font-weight:600;font-size:12.5px;color:var(--mute);white-space:nowrap;z-index:2}
+tbody tr:hover{background:var(--code)}
+tbody tr:last-child td{border-bottom:0}
+td.big{font:700 18px/1 Heebo;font-variant-numeric:tabular-nums}
+td.unit{color:var(--mute);font-size:12.5px;white-space:nowrap}
+td.def{font-size:13px;color:var(--ink2);min-width:20ch}
+td.not{font-size:12.5px;color:var(--mute);min-width:14ch}
+td.strong{font-weight:700}
+.chain{max-width:34ch;white-space:normal;word-break:break-word}
+.none{color:var(--mute);font-style:normal;opacity:.6}
+.sh-at{font-style:normal;color:var(--bad);font-size:.9em}
+.v{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 7px;border-radius:3px;white-space:nowrap}
+.v.ok{color:var(--acc);background:var(--acc-bg)}
+.v.sk{color:var(--warn);background:var(--warn-bg)}
+.v.sh{color:var(--bad);background:var(--bad-bg)}
+.v.ms{color:var(--bad);background:var(--bad-bg)}
+/* פילטר */
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:14px 0;
+  position:sticky;top:0;background:var(--paper);padding-block:10px;z-index:3;border-bottom:1px solid var(--line2)}
+.bar button{font:600 13px Heebo;padding:6px 12px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink2);border-radius:3px;cursor:pointer}
+.bar button[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.bar input{flex:1;min-width:150px;font:400 14px Heebo;padding:6px 10px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:3px}
+.bar button:focus-visible,.bar input:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+/* קופסאות */
+.note{border-inline-start:3px solid var(--acc);background:var(--acc-bg);padding:14px 16px;margin:16px 0}
+.note.w{border-color:var(--warn);background:var(--warn-bg)}
+.note.b{border-color:var(--bad);background:var(--bad-bg)}
+.note p:last-child{margin-bottom:0}
+.note b{font-weight:700}
+pre{background:var(--code);border:1px solid var(--line);padding:12px 14px;overflow-x:auto;
+  font:13px/1.6 var(--mono);direction:ltr;text-align:left;margin:12px 0}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+ul{padding-inline-start:20px;margin:0 0 12px}li{margin-bottom:5px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0}
+.chip{font:500 12px var(--mono);background:var(--code);border:1px solid var(--line);
+  padding:3px 7px;border-radius:3px;direction:ltr}
+.chip.hot{background:var(--bad-bg);border-color:var(--bad);color:var(--bad);font-weight:700}
+footer{padding-block:32px;color:var(--mute);font-size:13px}
+.hide{display:none}
+@media(max-width:620px){.chain{max-width:18ch}td.def,td.not{min-width:0}}
+</style>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">מדידה · לא טענה</div>
+  <h1>המחולל</h1>
+  <p class="lead">כל מספר בעמוד הזה נושא את הפקודה שמייצרת אותו ואת הקובץ שממנו נלקח.
+  אם מספר לא מסכים איתך — הרץ את הפקודה. העמוד לא יכול לזייף את הפלט שלך.</p>
+  <div class="stats">
+    <div class="stat"><b>31</b><span>ספקים חיים</span></div>
+    <div class="stat"><b>230</b><span>חלקיקים</span></div>
+    <div class="stat"><b>422</b><span>מסכים מחוללים</span></div>
+    <div class="stat ok"><b>184</b><span>גזירות מדויקות</span></div>
+    <div class="stat sk"><b>60</b><span>גזירות מיושנות</span></div>
+    <div class="stat"><b>55</b><span>שערי־משטרה</span></div>
+  </div>
+</header>
+
+<section>
+  <div class="sec-h"><span class="sec-n">01</span><h2>מי המחולל</h2></div>
+  <p>לשאלה הזאת היו שתי תשובות בבייטים. עכשיו יש אחת, והיא נמדדה:</p>
+  <div class="scroll"><table>
+    <thead><tr><th>מועמד</th><th>מי מריץ אותו</th><th>על כמה ספקים</th><th>שינוי אחרון</th><th>פסק</th></tr></thead>
+    <tbody>
+    <tr><td class="mono">app-ds.mjs</td><td class="mono sm">regen.mjs:28</td><td class="num strong">31</td><td class="num">2026-09-10</td><td><b class="v ok">המחולל</b></td></tr>
+    <tr><td class="mono">genesis-gen.mjs</td><td class="mono sm">one.mjs:146 (--only)</td><td class="num">ספקי־גלריה חסרים</td><td class="num">2026-09-07</td><td><b class="v sh">חילול נקודתי</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><p><b>הראיה:</b> <code class="mono">regen.mjs:28</code> קורא את התיקייה
+  <code class="mono">specs-ds/</code> ומריץ <code class="mono">app-ds.mjs</code> על כל <code class="mono">.txt</code> שבה —
+  נגזר מהתיקייה, לא מרשימה כתובה. <code class="mono">one.mjs:146</code> מריץ את
+  <code class="mono">genesis-gen</code> רק עם <code class="mono">--only</code>, ורק לספקים שאין להם מסך,
+  כי «הריצה־המלאה משכתבת ~100 מסכי־גלריה».</p></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="sec-n">02</span><h2>חוזה־המדידה</h2></div>
+  <p>שום מספר לא מוצג בלי השורה שלו. העמודה האחרונה — <b>«לא זה»</b> — נועלת את המקור
+  הנפוץ ביותר לוויכוח: מספר שכן שנשמע דומה.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>מונח</th><th>ערך</th><th>יחידה</th><th>פקודה</th><th>מקור</th><th>הגדרה</th><th>לא זה</th></tr></thead>
+    <tbody><tr>
+<th scope="row">ספקים חיים</th><td class="num big">31</td><td class="unit">קובץ</td>
+<td class="mono sm">ls machtzev/generator/specs-ds/*.txt | wc -l</td><td class="mono sm">regen.mjs:28</td><td class="def">כל .txt בתיקייה. regen נגזר מהתיקייה — לא רשימה כתובה.</td>
+<td class="not">‏7 = ספקי gen/ המנותק · 28 = פירוקי-הבעלים</td></tr>
+<tr>
+<th scope="row">ישויות</th><td class="num big">40</td><td class="unit">ישות</td>
+<td class="mono sm">grep -cE '^ *(צור )?(ישות|טופס|טבלת)' specs-ds/*.txt</td><td class="mono sm">app-ds.mjs:ENTITY_RE</td><td class="def">שורה שפותחת ישות בספק. ממנה נגזרים טופס · טבלה · אחסון.</td>
+<td class="not">‏36 = ישויות שחבילת-השרת מכסה (G57)</td></tr>
+<tr>
+<th scope="row">חלקיקים</th><td class="num big">230</td><td class="unit">חלקיק</td>
+<td class="mono sm">grep -c '^ *חלקיק ' specs-ds/*.txt</td><td class="mono sm">particles.mjs:PARTICLE_RE</td><td class="def">‏«חלקיק ישות: שם = צורה». כל אחד מחפש אטום בכל הקטלוג.</td>
+<td class="not">‏230 ≠ 244 שורות-גזירה — חלקיק אחד יכול לפלוט כמה אטומים</td></tr>
+<tr>
+<th scope="row">פריטי-תוכן</th><td class="num big">1,188</td><td class="unit">פריט</td>
+<td class="mono sm">grep -c '^ *תוכן ' specs-ds/*.txt</td><td class="mono sm">particles.mjs:CONTENT_RE</td><td class="def">‏«תוכן קבוצה [תג]: טקסט» — טקסט-מסך, לא קוד.</td>
+<td class="not"><i class="none">—</i></td></tr>
+<tr>
+<th scope="row">חלקי-דוח</th><td class="num big">222</td><td class="unit">חלק</td>
+<td class="mono sm">grep -c '^ *דוח ' specs-ds/*.txt</td><td class="mono sm">particles.mjs:REPORT_RE</td><td class="def">‏«דוח ישות: חלק = ref» — מבנה-קבוע-לרשומה.</td>
+<td class="not"><i class="none">—</i></td></tr>
+<tr>
+<th scope="row">מסכים מחוללים</th><td class="num big">422</td><td class="unit">קובץ dart</td>
+<td class="mono sm">ls new/dart-gen-bs/gen_app_*.dart | wc -l</td><td class="mono sm">render-ds.mjs:write</td><td class="def">קובץ .dart שנכתב תחת מרחב-שם של ספק.</td>
+<td class="not">‏453 = כולל מרחבי-שם שאין להם ספק פעיל</td></tr>
+<tr>
+<th scope="row">שורות-גזירה</th><td class="num big">244</td><td class="unit">שורה</td>
+<td class="mono sm">סריקת כותרות gen_app_*.dart</td><td class="mono sm">particles.mjs:renderParticles</td><td class="def">טענה שהמחולל כתב על עצמו: תווית = צורה ⇒ … ⇒ אטום.</td>
+<td class="not"><i class="none">—</i></td></tr>
+<tr>
+<th scope="row">גזירות מדויקות</th><td class="num big">184</td><td class="unit">שורה</td>
+<td class="mono sm">השוואת שם-האטום מול גוף-הווידג׳ט</td><td class="mono sm">גוף gen_app_*.dart</td><td class="def">האטום שהוצהר הוא האטום שמופיע בקוד.</td>
+<td class="not">‏244 = כל השורות</td></tr>
+<tr>
+<th scope="row">הוחלפו בעור</th><td class="num big">29</td><td class="unit">שורה</td>
+<td class="mono sm">auto-skin.json[role] מול גוף-הווידג׳ט</td><td class="mono sm">auto-skin.json:26</td><td class="def">הכותרת מצהירה אטום-DS; מעבר-העור החליף באטום-forge ולא עדכן.</td>
+<td class="not"><i class="none">—</i></td></tr>
+<tr>
+<th scope="row">מדף מוצהר-שגוי</th><td class="num big">29</td><td class="unit">שורה</td>
+<td class="mono sm">השוואת @shelf מול שורת ה-import</td><td class="mono sm">gen_app_peruk03_px1.dart:4 מול :24</td><td class="def">הכותרת אומרת premium/feedback; הקובץ מייבא dart-ui-bs/auto.</td>
+<td class="not"><i class="none">—</i></td></tr>
+<tr>
+<th scope="row">ייבוא-מיותר</th><td class="num big">29</td><td class="unit">שורה</td>
+<td class="mono sm">ייבוא של אטום שאינו בגוף</td><td class="mono sm">gen_app_peruk01_px1.dart:18</td><td class="def">‏ds_table.dart מיובא, DsTable לא מופיע.</td>
+<td class="not"><i class="none">—</i></td></tr>
+<tr>
+<th scope="row">ווידג׳טים באטלס המוצמד</th><td class="num big">554</td><td class="unit">שם-מחלקה</td>
+<td class="mono sm">‏node -e buildAtlas({}) מול atlas.json</td><td class="mono sm">machtzev/generator/atlas.json</td><td class="def">שמות-מחלקה ייחודיים בקובץ המוצמד.</td>
+<td class="not">‏564 = טרי · 924 = אטמי-תצוגה באינדקס</td></tr>
+<tr>
+<th scope="row">ווידג׳טים שחסרים באטלס</th><td class="num big">10</td><td class="unit">שם-מחלקה</td>
+<td class="mono sm">‏diff טרי ↔ מוצמד</td><td class="mono sm">atlas.mjs:buildAtlas</td><td class="def">קיימים בעץ, נעדרים מהאטלס שעליו נמדד TRUTH.md.</td>
+<td class="not"><i class="none">—</i></td></tr>
+<tr>
+<th scope="row">צרכי-התנהגות</th><td class="num big">43</td><td class="unit">צורך</td>
+<td class="mono sm">node -e 'Object.keys(NEEDS).length'</td><td class="mono sm">behavior-plan.mjs</td><td class="def">פעולת-יסוד עם חתימה+דוגמאות שהבורר חייב לענות מהמדף.</td>
+<td class="not">‏10 = צרכי gen/ המנותק</td></tr>
+<tr>
+<th scope="row">חלקיקי-הרכבה</th><td class="num big">60</td><td class="unit">‏bh*</td>
+<td class="mono sm">grep -oE 'bh[A-Z][A-Za-z0-9]*' behavior-compose.mjs | sort -u | wc -l</td><td class="mono sm">behavior-compose.mjs</td><td class="def">השכבה היחידה שמסך מורשה לקרוא לה. שער behavior אוסר עקיפה.</td>
+<td class="not"><i class="none">—</i></td></tr>
+<tr>
+<th scope="row">תפקידי-עור</th><td class="num big">27</td><td class="unit">תפקיד</td>
+<td class="mono sm">node -e 'Object.keys(auto-skin.json.skin)'</td><td class="mono sm">auto-skin.mjs:17</td><td class="def">חריץ שהמנוע בוחר לו אטום-forge מבנית.</td>
+<td class="not">‏359 = אטומי-forge שמהם בוחרים</td></tr>
+<tr>
+<th scope="row">שערי-משטרה</th><td class="num big">55</td><td class="unit">שער</td>
+<td class="mono sm">wc -l machtzev/gates.tsv</td><td class="mono sm">machtzev/gates.tsv</td><td class="def">מרשם-השערים; כל אחד עם ran-ledger בארבעה מצבים.</td>
+<td class="not"><i class="none">—</i></td></tr>
+<tr>
+<th scope="row">שלבי-הצינור</th><td class="num big">21</td><td class="unit">שלב</td>
+<td class="mono sm">קריאת רשימת-הריצה</td><td class="mono sm">regen.mjs</td><td class="def">סדר-הריצה היחיד. ship ו-one מריצים את אותה רשימה.</td>
+<td class="not"><i class="none">—</i></td></tr></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="sec-n">03</span><h2>פנקס־הגזירה</h2></div>
+  <p>המחולל כותב בראש כל קובץ מאיפה כל דבר על המסך הגיע. <b>244 טענות.</b>
+  כאן כל אחת נבדקה מול הקוד שנשלח בפועל — לא מול עצמה.</p>
+  <div class="stats">
+    <div class="stat ok"><b>184</b><span>ההצהרה = הקוד</span></div>
+    <div class="stat sk"><b>29</b><span>הוחלף במעבר־העור</span></div>
+    <div class="stat ms"><b>29</b><span>מדף מוצהר שגוי</span></div>
+    <div class="stat ms"><b>2</b><span>נעדר מהקוד</span></div>
+  </div>
+  <div class="note w"><p><b>שלוש הדרכים שבהן כותרת מתיישנת — כולן נקובות בשם:</b></p>
+  <ul>
+    <li><code class="mono">DsTable ⇒ ForgeDataGrid</code> · 29 שורות.
+    הכותרת נכתבת ב־<code class="mono">particles.mjs</code> לפני שמעבר־העור רץ;
+    <code class="mono">auto-skin.json:26</code> ממפה <code class="mono">"table":"ForgeDataGrid"</code>
+    ומחליף — בלי לעדכן את הכותרת ובלי להסיר את <code class="mono">import ds_table.dart</code>
+    שנשאר מיותר ב־29 קבצים.</li>
+    <li><code class="mono">EmptyState@premium/feedback</code> · 29 שורות.
+    הכותרת מצהירה מדף <code class="mono">premium/feedback</code>; הקובץ מייבא
+    <code class="mono">dart-ui-bs/auto/empty_state.dart</code>. שני קבצים שונים.</li>
+    <li><code class="mono">DsChip</code> · 2 שורות. הוצהר, ואינו בקוד כלל.</li>
+  </ul>
+  <p>‏75% מהכותרות מדויקות. אין כאן המצאה — יש מעבר־עור
+  שלא מעדכן את הפרוטוקול שלו.</p></div>
+  <div class="bar">
+    <button data-f="all" aria-pressed="true">הכל · 244</button>
+    <button data-f="ok" aria-pressed="false">מדויק · 184</button>
+    <button data-f="skin" aria-pressed="false">הוחלף בעור · 29</button>
+    <button data-f="shelf?" aria-pressed="false">מדף שגוי · 29</button>
+    <button data-f="missing" aria-pressed="false">נעדר · 2</button>
+    <input id="q" type="search" placeholder="סינון: שם־קובץ · תווית · אטום">
+    <span class="mono sm" id="cnt"></span>
+  </div>
+  <div class="scroll"><table id="led">
+    <thead><tr><th>קובץ</th><th>תווית בספק</th><th>צורה</th><th>שרשרת</th><th>הוצהר</th><th>נשלח בפועל</th><th>פסק</th></tr></thead>
+    <tbody><tr data-v="skin" data-s="gen_app_peruk01_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk01_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk01_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk01_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk01_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk01_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk01_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk01_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk01_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk01_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk01_px1.dart לא נכנס dsnote dsnote">
+<td class="mono sm">peruk01_px1</td>
+<td>לא נכנס</td><td class="mono sm">[תוכן לא נכנס]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk01_px1.dart לוח kvline kvline">
+<td class="mono sm">peruk01_px1</td>
+<td>לוח</td><td class="mono sm">[לוח]</td>
+<td class="mono sm chain">dates ⇒ [magnitude] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk01_px2.dart בדיקה dsnote dsnote">
+<td class="mono sm">peruk01_px2</td>
+<td>בדיקה</td><td class="mono sm">[תוכן בדיקה]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk01_px2.dart צבע dssection dssection">
+<td class="mono sm">peruk01_px2</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsSection</td>
+<td class="mono">DsSection</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk01_px2.dart צבע dsnote dsnote">
+<td class="mono sm">peruk01_px2</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk02_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk02_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk02_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk02_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk02_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk02_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk02_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk02_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk02_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk02_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk02_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk02_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk02_px1.dart לוח kvline kvline">
+<td class="mono sm">peruk02_px1</td>
+<td>לוח</td><td class="mono sm">[לוח]</td>
+<td class="mono sm chain">dates ⇒ [magnitude] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk02_px2.dart בדיקה dsnote dsnote">
+<td class="mono sm">peruk02_px2</td>
+<td>בדיקה</td><td class="mono sm">[תוכן בדיקה]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk02_px2.dart צבע dssection dssection">
+<td class="mono sm">peruk02_px2</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsSection</td>
+<td class="mono">DsSection</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk02_px2.dart צבע dsnote dsnote">
+<td class="mono sm">peruk02_px2</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk03_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk03_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk03_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk03_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk03_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk03_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk03_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk03_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk03_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk03_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk03_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk03_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk03_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk03_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk03_px1.dart הודעה למשכיר וואטסאפ תיאור forgemustchip forgemustchip">
+<td class="mono sm">peruk03_px1</td>
+<td>הודעה למשכיר וואטסאפ תיאור</td><td class="mono sm">[הודעה] אופציות אחרי השעון רק = [תוכן הודעה]</td>
+<td class="mono sm chain">message ⇒ [switch, alert] ⇒ ForgeMustChip + DsNote</td>
+<td class="mono">ForgeMustChip</td>
+<td class="mono">ForgeMustChip</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk03_px1.dart הודעה למשכיר וואטסאפ תיאור dsnote dsnote">
+<td class="mono sm">peruk03_px1</td>
+<td>הודעה למשכיר וואטסאפ תיאור</td><td class="mono sm">[הודעה] אופציות אחרי השעון רק = [תוכן הודעה]</td>
+<td class="mono sm chain">message ⇒ [switch, alert] ⇒ ForgeMustChip + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk03_px1.dart הודעה אם אין תשובה forgemustchip forgemustchip">
+<td class="mono sm">peruk03_px1</td>
+<td>הודעה אם אין תשובה</td><td class="mono sm">[הודעה] אופציות אחרי השעון רק = [תוכן הודעה]</td>
+<td class="mono sm chain">message ⇒ [switch, alert] ⇒ ForgeMustChip + DsNote</td>
+<td class="mono">ForgeMustChip</td>
+<td class="mono">ForgeMustChip</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk03_px1.dart הודעה אם אין תשובה dsnote dsnote">
+<td class="mono sm">peruk03_px1</td>
+<td>הודעה אם אין תשובה</td><td class="mono sm">[הודעה] אופציות אחרי השעון רק = [תוכן הודעה]</td>
+<td class="mono sm chain">message ⇒ [switch, alert] ⇒ ForgeMustChip + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk03_px1.dart לוח kvline kvline">
+<td class="mono sm">peruk03_px1</td>
+<td>לוח</td><td class="mono sm">[לוח]</td>
+<td class="mono sm chain">dates ⇒ [magnitude] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk04_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk04_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk04_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk04_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk04_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk04_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk04_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk04_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk04_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk04_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk04_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk04_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk04_px1.dart דיף סעיפים dsdiffrow dsdiffrow">
+<td class="mono sm">peruk04_px1</td>
+<td>דיף סעיפים</td><td class="mono sm">[דיף] שכ״ד ישן ← שכ״ד חדש × 12; בטוחות ישנות ← בטוחות חדשות</td>
+<td class="mono sm chain">diff ⇒ [trend, magnitude] ⇒ DsDiffRow + KvLine</td>
+<td class="mono">DsDiffRow</td>
+<td class="mono">DsDiffRow</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk04_px1.dart דיף סעיפים kvline kvline">
+<td class="mono sm">peruk04_px1</td>
+<td>דיף סעיפים</td><td class="mono sm">[דיף] שכ״ד ישן ← שכ״ד חדש × 12; בטוחות ישנות ← בטוחות חדשות</td>
+<td class="mono sm chain">diff ⇒ [trend, magnitude] ⇒ DsDiffRow + KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk04_px1.dart הודעת תשובה אחת forgemustchip forgemustchip">
+<td class="mono sm">peruk04_px1</td>
+<td>הודעת תשובה אחת</td><td class="mono sm">[הודעה] הודעת תשובה אחת = [תוכן הודעה]</td>
+<td class="mono sm chain">message ⇒ [switch, alert] ⇒ ForgeMustChip + DsNote</td>
+<td class="mono">ForgeMustChip</td>
+<td class="mono">ForgeMustChip</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk04_px1.dart הודעת תשובה אחת dsnote dsnote">
+<td class="mono sm">peruk04_px1</td>
+<td>הודעת תשובה אחת</td><td class="mono sm">[הודעה] הודעת תשובה אחת = [תוכן הודעה]</td>
+<td class="mono sm chain">message ⇒ [switch, alert] ⇒ ForgeMustChip + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk04_px1.dart לוח kvline kvline">
+<td class="mono sm">peruk04_px1</td>
+<td>לוח</td><td class="mono sm">[לוח]</td>
+<td class="mono sm chain">dates ⇒ [magnitude] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk04_px2.dart בדיקה dsnote dsnote">
+<td class="mono sm">peruk04_px2</td>
+<td>בדיקה</td><td class="mono sm">[תוכן בדיקה]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk04_px2.dart צבע dssection dssection">
+<td class="mono sm">peruk04_px2</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsSection</td>
+<td class="mono">DsSection</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk04_px2.dart צבע dsnote dsnote">
+<td class="mono sm">peruk04_px2</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk05_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk05_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk05_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk05_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk05_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk05_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk05_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk05_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk05_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk05_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk05_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk05_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk05_px1.dart הודעה למשכיר מתווך forgemustchip forgemustchip">
+<td class="mono sm">peruk05_px1</td>
+<td>הודעה למשכיר מתווך</td><td class="mono sm">[הודעה] בקשות לתיקון לפני חתימה = [תוכן הודעה]</td>
+<td class="mono sm chain">message ⇒ [switch, alert] ⇒ ForgeMustChip + DsNote</td>
+<td class="mono">ForgeMustChip</td>
+<td class="mono">ForgeMustChip</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk05_px1.dart הודעה למשכיר מתווך dsnote dsnote">
+<td class="mono sm">peruk05_px1</td>
+<td>הודעה למשכיר מתווך</td><td class="mono sm">[הודעה] בקשות לתיקון לפני חתימה = [תוכן הודעה]</td>
+<td class="mono sm chain">message ⇒ [switch, alert] ⇒ ForgeMustChip + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk05_px2.dart בדיקה dsnote dsnote">
+<td class="mono sm">peruk05_px2</td>
+<td>בדיקה</td><td class="mono sm">[תוכן בדיקה]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk05_px2.dart צבע dssection dssection">
+<td class="mono sm">peruk05_px2</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsSection</td>
+<td class="mono">DsSection</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk05_px2.dart צבע dsnote dsnote">
+<td class="mono sm">peruk05_px2</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk06_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk06_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk06_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk06_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk06_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk06_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk06_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk06_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk06_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk06_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk06_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk06_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk06_px2.dart בדיקה dsnote dsnote">
+<td class="mono sm">peruk06_px2</td>
+<td>בדיקה</td><td class="mono sm">[תוכן בדיקה]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk06_px2.dart צבע dssection dssection">
+<td class="mono sm">peruk06_px2</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsSection</td>
+<td class="mono">DsSection</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk06_px2.dart צבע dsnote dsnote">
+<td class="mono sm">peruk06_px2</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk07_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk07_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk07_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk07_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk07_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk07_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk07_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk07_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk07_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk07_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk07_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk07_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk07_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk07_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk08_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk08_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk08_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk08_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk08_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk08_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk08_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk08_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk08_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk08_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk08_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk08_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk08_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk08_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk09_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk09_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk09_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk09_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk09_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk09_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk09_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk09_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk09_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk09_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk09_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk09_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk09_px2.dart בדיקה dsnote dsnote">
+<td class="mono sm">peruk09_px2</td>
+<td>בדיקה</td><td class="mono sm">[תוכן בדיקה]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk09_px2.dart צבע dssection dssection">
+<td class="mono sm">peruk09_px2</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsSection</td>
+<td class="mono">DsSection</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk09_px2.dart צבע dsnote dsnote">
+<td class="mono sm">peruk09_px2</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk10_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk10_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk10_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk10_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk10_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk10_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk10_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk10_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk10_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk10_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk10_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk10_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk10_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk10_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk11_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk11_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk11_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk11_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk11_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk11_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk11_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk11_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk11_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk11_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk11_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk11_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk11_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk11_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk12_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk12_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk12_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk12_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk12_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk12_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk12_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk12_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk12_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk12_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk12_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk12_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk13_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk13_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk13_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk13_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk13_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk13_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk13_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk13_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk13_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk13_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk13_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk13_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk13_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk13_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk14_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk14_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk14_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk14_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk14_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk14_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk14_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk14_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk14_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk14_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk14_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk14_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk14_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk14_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk15_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk15_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk15_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk15_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk15_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk15_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk15_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk15_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk15_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk15_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk15_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk15_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk15_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk15_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk16_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk16_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk16_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk16_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk16_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk16_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk16_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk16_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk16_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk16_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk16_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk16_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk16_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk16_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk17_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk17_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk17_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk17_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk17_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk17_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk17_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk17_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk17_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk17_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk17_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk17_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk17_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk17_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk18_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk18_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk18_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk18_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk18_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk18_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk18_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk18_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk18_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk18_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk18_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk18_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk18_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk18_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk19_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk19_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk19_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk19_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk19_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk19_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk19_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk19_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk19_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk19_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk19_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk19_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk19_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk19_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk19_px1.dart לוח kvline kvline">
+<td class="mono sm">peruk19_px1</td>
+<td>לוח</td><td class="mono sm">[לוח]</td>
+<td class="mono sm chain">dates ⇒ [magnitude] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk20_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk20_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk20_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk20_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk20_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk20_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk20_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk20_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk20_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk20_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk20_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk20_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk20_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk20_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk20_px1.dart לוח kvline kvline">
+<td class="mono sm">peruk20_px1</td>
+<td>לוח</td><td class="mono sm">[לוח]</td>
+<td class="mono sm chain">dates ⇒ [magnitude] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk21_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk21_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk21_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk21_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk21_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk21_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk21_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk21_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk21_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk21_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk21_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk21_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk21_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk21_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk21_px1.dart לוח kvline kvline">
+<td class="mono sm">peruk21_px1</td>
+<td>לוח</td><td class="mono sm">[לוח]</td>
+<td class="mono sm chain">dates ⇒ [magnitude] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk22_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk22_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk22_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk22_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk22_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk22_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk22_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk22_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk22_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk22_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk22_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk22_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk23_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk23_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk23_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk23_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk23_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk23_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk23_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk23_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk23_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk23_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk23_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk23_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk24_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk24_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk24_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk24_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk24_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk24_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk24_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk24_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk24_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk24_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk24_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk24_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk24_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk24_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk25_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk25_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk25_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk25_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk25_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk25_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk25_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk25_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk25_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk25_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk25_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk25_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk25_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk25_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk26_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk26_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk26_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk26_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk26_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk26_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk26_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk26_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk26_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk26_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk26_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk26_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk26_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk26_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk27_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk27_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk27_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk27_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk27_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk27_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk27_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk27_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk27_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk27_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk27_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk27_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk27_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk27_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="skin" data-s="gen_app_peruk28_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">peruk28_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk28_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">peruk28_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_peruk28_px1.dart ריק אין תיקים עדיין emptystate emptystate">
+<td class="mono sm">peruk28_px1</td>
+<td>ריק אין תיקים עדיין</td><td class="mono sm">[ריק] אין תיקים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk28_px1.dart מסגרת dsnote dsnote">
+<td class="mono sm">peruk28_px1</td>
+<td>מסגרת</td><td class="mono sm">[תוכן מסגרת]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk28_px1.dart בלוקים dsnote dsnote">
+<td class="mono sm">peruk28_px1</td>
+<td>בלוקים</td><td class="mono sm">[תוכן בלוקים]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk28_px1.dart סיווג dsnote dsnote">
+<td class="mono sm">peruk28_px1</td>
+<td>סיווג</td><td class="mono sm">[תוכן סיווג]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_peruk28_px1.dart אסור dsnote dsnote">
+<td class="mono sm">peruk28_px1</td>
+<td>אסור</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="missing" data-s="gen_app_sechirut_px1.dart שכירות לשנה dschip ">
+<td class="mono sm">sechirut_px1</td>
+<td>שכירות לשנה</td><td class="mono sm">שכירות לשנה</td>
+<td class="mono sm chain">raw ⇒ [fact] ⇒ DsChip</td>
+<td class="mono">DsChip</td>
+<td class="mono"><i class="none">—</i></td>
+<td><b class="v ms">נעדר</b></td></tr>
+<tr data-v="skin" data-s="gen_app_sechirut_px1.dart טבלה dstable forgedatagrid">
+<td class="mono sm">sechirut_px1</td>
+<td>טבלה</td><td class="mono sm">[טבלה]</td>
+<td class="mono sm chain">table ⇒ [table] ⇒ DsTable</td>
+<td class="mono">DsTable</td>
+<td class="mono">ForgeDataGrid</td>
+<td><b class="v sk">הוחלף בעור</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px1.dart פעולה פתח תיק dschipbutton dschipbutton">
+<td class="mono sm">sechirut_px1</td>
+<td>פעולה פתח תיק</td><td class="mono sm">[פעולה] פתח תיק</td>
+<td class="mono sm chain">act ⇒ [action] ⇒ DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td class="mono">DsChipButton</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px1.dart החלטה dssection dssection">
+<td class="mono sm">sechirut_px1</td>
+<td>החלטה</td><td class="mono sm">החלטה</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsSection</td>
+<td class="mono">DsSection</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px1.dart החלטה dsnote dsnote">
+<td class="mono sm">sechirut_px1</td>
+<td>החלטה</td><td class="mono sm">החלטה</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px1.dart המספר שלך kvline kvline">
+<td class="mono sm">sechirut_px1</td>
+<td>המספר שלך</td><td class="mono sm">[מספר] תקרה לפי 3 חודשים: הבטוחות לא יעלו על הסכום הזה במצטבר</td>
+<td class="mono sm chain">number ⇒ [hero] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px1.dart התשובה forgemustchip forgemustchip">
+<td class="mono sm">sechirut_px1</td>
+<td>התשובה</td><td class="mono sm">[הודעה] החלטה = [תוכן הודעה]</td>
+<td class="mono sm chain">message ⇒ [switch, alert] ⇒ ForgeMustChip + DsNote</td>
+<td class="mono">ForgeMustChip</td>
+<td class="mono">ForgeMustChip</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px1.dart התשובה dsnote dsnote">
+<td class="mono sm">sechirut_px1</td>
+<td>התשובה</td><td class="mono sm">[הודעה] החלטה = [תוכן הודעה]</td>
+<td class="mono sm chain">message ⇒ [switch, alert] ⇒ ForgeMustChip + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px1.dart לוח kvline kvline">
+<td class="mono sm">sechirut_px1</td>
+<td>לוח</td><td class="mono sm">[לוח]</td>
+<td class="mono sm chain">dates ⇒ [magnitude] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px1.dart אסור בפלט dsnote dsnote">
+<td class="mono sm">sechirut_px1</td>
+<td>אסור בפלט</td><td class="mono sm">[תוכן אסור]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px2.dart חורג forgeglowslider forgeglowslider">
+<td class="mono sm">sechirut_px2</td>
+<td>חורג</td><td class="mono sm">סך בטוחות / תקרה לפי 3 חודשים</td>
+<td class="mono sm chain">/ ⇒ [ratio] ⇒ ForgeGlowSlider</td>
+<td class="mono">ForgeGlowSlider</td>
+<td class="mono">ForgeGlowSlider</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px2.dart מעל התקרה kvline kvline">
+<td class="mono sm">sechirut_px2</td>
+<td>מעל התקרה</td><td class="mono sm">מונה(חורג מול 3 חודשים=חורג)</td>
+<td class="mono sm chain">count ⇒ [headline] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px2.dart מה החוק קובע dsnote dsnote">
+<td class="mono sm">sechirut_px2</td>
+<td>מה החוק קובע</td><td class="mono sm">[תוכן חוק]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px3.dart אדומים kvline kvline">
+<td class="mono sm">sechirut_px3</td>
+<td>אדומים</td><td class="mono sm">מונה(צבע=אדום)</td>
+<td class="mono sm chain">count ⇒ [headline] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px3.dart צבע dssection dssection">
+<td class="mono sm">sechirut_px3</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsSection</td>
+<td class="mono">DsSection</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px3.dart צבע dsnote dsnote">
+<td class="mono sm">sechirut_px3</td>
+<td>צבע</td><td class="mono sm">צבע</td>
+<td class="mono sm chain">partition ⇒ [group, alert] ⇒ DsSection + DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="missing" data-s="gen_app_sechirut_px3.dart מה לבקש dschip ">
+<td class="mono sm">sechirut_px3</td>
+<td>מה לבקש</td><td class="mono sm">מה לבקש</td>
+<td class="mono sm chain">raw ⇒ [fact] ⇒ DsChip</td>
+<td class="mono">DsChip</td>
+<td class="mono"><i class="none">—</i></td>
+<td><b class="v ms">נעדר</b></td></tr>
+<tr data-v="shelf?" data-s="gen_app_sechirut_px3.dart ריק אין ממצאים עדיין emptystate emptystate">
+<td class="mono sm">sechirut_px3</td>
+<td>ריק אין ממצאים עדיין</td><td class="mono sm">[ריק] אין ממצאים עדיין</td>
+<td class="mono sm chain">empty ⇒ [empty] ⇒ EmptyState@premium/feedback</td>
+<td class="mono">EmptyState<i class="sh-at">@premium/feedback</i></td>
+<td class="mono">EmptyState</td>
+<td><b class="v sh">מדף שגוי</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px3.dart רשימת בדיקה dsnote dsnote">
+<td class="mono sm">sechirut_px3</td>
+<td>רשימת בדיקה</td><td class="mono sm">[תוכן בדיקה]</td>
+<td class="mono sm chain">content ⇒ [group, alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px3.dart נוסחים לוואטסאפ dsnote dsnote">
+<td class="mono sm">sechirut_px3</td>
+<td>נוסחים לוואטסאפ</td><td class="mono sm">[תוכן בקשה]</td>
+<td class="mono sm chain">content ⇒ [alert] ⇒ DsNote</td>
+<td class="mono">DsNote</td>
+<td class="mono">DsNote</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px4.dart הכנסה kvline kvline">
+<td class="mono sm">sechirut_px4</td>
+<td>הכנסה</td><td class="mono sm">סכום(סכום)</td>
+<td class="mono sm chain">sum ⇒ [headline] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr>
+<tr data-v="ok" data-s="gen_app_sechirut_px4.dart לא שולם kvline kvline">
+<td class="mono sm">sechirut_px4</td>
+<td>לא שולם</td><td class="mono sm">מונה(שולם=לא)</td>
+<td class="mono sm chain">count ⇒ [headline] ⇒ KvLine</td>
+<td class="mono">KvLine</td>
+<td class="mono">KvLine</td>
+<td><b class="v ok">מדויק</b></td></tr></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="sec-n">04</span><h2>הקורפוס</h2></div>
+  <p>‏31 ספקים בעברית ⇒ 422 קבצי Dart.
+  אין כאן מילון־דומייני ואין מודל — כל שורה בטבלה היא ספירה של שורות בקובץ טקסט.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>ספק</th><th>שורות</th><th>ישויות</th><th>חלקיקים</th><th>תוכן</th><th>דוח</th><th>מסכים</th></tr></thead>
+    <tbody><tr><td class="mono">calendar</td><td class="num">6</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num strong">10</td></tr>
+<tr><td class="mono">peruk01</td><td class="num">119</td><td class="num">2</td><td class="num">9</td><td class="num">91</td><td class="num">9</td><td class="num strong">16</td></tr>
+<tr><td class="mono">peruk02</td><td class="num">93</td><td class="num">2</td><td class="num">9</td><td class="num">66</td><td class="num">9</td><td class="num strong">16</td></tr>
+<tr><td class="mono">peruk03</td><td class="num">83</td><td class="num">1</td><td class="num">10</td><td class="num">54</td><td class="num">10</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk04</td><td class="num">85</td><td class="num">2</td><td class="num">11</td><td class="num">57</td><td class="num">7</td><td class="num strong">16</td></tr>
+<tr><td class="mono">peruk05</td><td class="num">77</td><td class="num">2</td><td class="num">9</td><td class="num">51</td><td class="num">7</td><td class="num strong">16</td></tr>
+<tr><td class="mono">peruk06</td><td class="num">92</td><td class="num">2</td><td class="num">8</td><td class="num">67</td><td class="num">8</td><td class="num strong">16</td></tr>
+<tr><td class="mono">peruk07</td><td class="num">83</td><td class="num">1</td><td class="num">7</td><td class="num">59</td><td class="num">8</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk08</td><td class="num">68</td><td class="num">1</td><td class="num">7</td><td class="num">45</td><td class="num">8</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk09</td><td class="num">67</td><td class="num">2</td><td class="num">8</td><td class="num">43</td><td class="num">7</td><td class="num strong">16</td></tr>
+<tr><td class="mono">peruk10</td><td class="num">63</td><td class="num">1</td><td class="num">7</td><td class="num">40</td><td class="num">8</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk11</td><td class="num">56</td><td class="num">1</td><td class="num">7</td><td class="num">34</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk12</td><td class="num">55</td><td class="num">1</td><td class="num">6</td><td class="num">32</td><td class="num">8</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk13</td><td class="num">57</td><td class="num">1</td><td class="num">7</td><td class="num">34</td><td class="num">8</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk14</td><td class="num">56</td><td class="num">1</td><td class="num">7</td><td class="num">33</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk15</td><td class="num">56</td><td class="num">1</td><td class="num">7</td><td class="num">33</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk16</td><td class="num">54</td><td class="num">1</td><td class="num">7</td><td class="num">31</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk17</td><td class="num">53</td><td class="num">1</td><td class="num">7</td><td class="num">30</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk18</td><td class="num">54</td><td class="num">1</td><td class="num">7</td><td class="num">31</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk19</td><td class="num">58</td><td class="num">1</td><td class="num">8</td><td class="num">33</td><td class="num">8</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk20</td><td class="num">55</td><td class="num">1</td><td class="num">8</td><td class="num">30</td><td class="num">8</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk21</td><td class="num">55</td><td class="num">1</td><td class="num">8</td><td class="num">30</td><td class="num">8</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk22</td><td class="num">47</td><td class="num">1</td><td class="num">6</td><td class="num">25</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk23</td><td class="num">47</td><td class="num">1</td><td class="num">6</td><td class="num">25</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk24</td><td class="num">54</td><td class="num">1</td><td class="num">7</td><td class="num">32</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk25</td><td class="num">56</td><td class="num">1</td><td class="num">7</td><td class="num">34</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk26</td><td class="num">53</td><td class="num">1</td><td class="num">7</td><td class="num">31</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk27</td><td class="num">59</td><td class="num">1</td><td class="num">7</td><td class="num">37</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">peruk28</td><td class="num">52</td><td class="num">1</td><td class="num">7</td><td class="num">30</td><td class="num">7</td><td class="num strong">13</td></tr>
+<tr><td class="mono">sechirut</td><td class="num">92</td><td class="num">4</td><td class="num">19</td><td class="num">50</td><td class="num">10</td><td class="num strong">20</td></tr>
+<tr><td class="mono">tasks</td><td class="num">7</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num strong">10</td></tr></tbody>
+    <tfoot><tr style="border-top:2px solid var(--line);font-weight:700">
+      <td>סה״כ</td><td class="num">1,912</td><td class="num">40</td>
+      <td class="num">230</td><td class="num">1,188</td>
+      <td class="num">222</td><td class="num">422</td></tr></tfoot>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="sec-n">05</span><h2>הצינור</h2></div>
+  <p><code class="mono">regen.mjs</code> הוא סדר־הריצה <b>היחיד</b>.
+  ‏<code class="mono">ship</code> ו־<code class="mono">one</code> מריצים את אותה רשימה — לכן אין «שתי דרכים לחולל».</p>
+  <div class="scroll"><table>
+    <thead><tr><th>#</th><th>מנוע</th><th>מה הוא עושה</th></tr></thead>
+    <tbody><tr><td class="num">1</td><td class="mono sm">machtzev/ds-forge.mjs</td><td class="sm">Pure ⇒ אטומי-forge + מניפסט</td></tr>
+<tr><td class="num">2</td><td class="mono sm">auto-skin.mjs</td><td class="sm">G17b · בורר-אטום-לפי-ייעוד ⇒ auto-skin.json (שער autoskin)</td></tr>
+<tr><td class="num">3</td><td class="mono sm">tighten-types.mjs</td><td class="sm">G20 · הידוק-טיפוסים מראיית-בדיקות + הוכחות-קופסאות (שער tighten)</td></tr>
+<tr><td class="num">4</td><td class="mono sm">machtzev/census/logic-census.mjs</td><td class="sm">חתימות-הלוגיקה המהודקות</td></tr>
+<tr><td class="num">5</td><td class="mono sm">machtzev/census/oracle.mjs</td><td class="sm">אינדקס-האמת לפני הבורר</td></tr>
+<tr><td class="num">6</td><td class="mono sm">auto-logic.mjs</td><td class="sm">G18 · בורר-מנוע-לוגיקה-לפי-ייעוד ⇒ auto-logic.json (שער autologic)</td></tr>
+<tr><td class="num">7</td><td class="mono sm">skin-golden.mjs</td><td class="sm">מודולי-הזהב בעור-forge</td></tr>
+<tr><td class="num">8</td><td class="mono sm">core-from-shape.mjs</td><td class="sm">הגרעין מהסכמה+מונחים (שער core)</td></tr>
+<tr><td class="num">9</td><td class="mono sm">core-dart.mjs</td><td class="sm">gen_core_&lt;entity&gt;.dart (שער coredart)</td></tr>
+<tr><td class="num">10</td><td class="mono sm">app-from-sentences.mjs</td><td class="sm">משפט ⇒ אפליקציה (שער appgen)</td></tr>
+<tr><td class="num">11</td><td class="mono sm">behavior-plan.mjs</td><td class="sm">G34 · הכרעה-30: חלקיקי-היסוד נבחרים-בהוכחה-בריצה (לפני כל מודול)</td></tr>
+<tr><td class="num">12</td><td class="mono sm">behavior-compose.mjs</td><td class="sm">G34ב · שכבת-ההרכבה gen_behaviors.dart (bh*) — לפני app-ds/balagan</td></tr>
+<tr><td class="num">13</td><td class="mono sm">peruk.mjs</td><td class="sm">G27 · פירוקי-הבעלים ⇒ ספקי specs-ds (לפני app-ds)</td></tr>
+<tr><td class="num">14</td><td class="mono sm">balagan.mjs</td><td class="sm">G33 · הכרעה-29: כל מודולי-הנייר ⇒ אפליקציה אחת «בלגן» (שער balaganone)</td></tr>
+<tr><td class="num">15</td><td class="mono sm">server.mjs</td><td class="sm">G57 · הכרעה-31: הצהרת `שרת:` בספק ⇒ חבילת-השרת (חוקים+בדיקת-אמולטור+רנבוק); אין הצהרה ⇒ אין פלט</td></tr>
+<tr><td class="num">16</td><td class="mono sm">machtzev/census/logic-census.mjs</td><td class="sm">חתימות-הלוגיקה (מהודקות) לפני האורקל</td></tr>
+<tr><td class="num">17</td><td class="mono sm">machtzev/census/atom-index.mjs</td><td class="sm">אינדקס-התצוגה</td></tr>
+<tr><td class="num">18</td><td class="mono sm">machtzev/census/oracle.mjs</td><td class="sm">אינדקס-האמת המאוחד</td></tr>
+<tr><td class="num">19</td><td class="mono sm">quarry-golden.mjs</td><td class="sm">L92 · קטלוג-שברי-הזהב (שער goldquarry)</td></tr>
+<tr><td class="num">20</td><td class="mono sm">op-census.mjs</td><td class="sm">L92 · ops-map.json מהאינדקס הטרי (שער opcensus/cover)</td></tr>
+<tr><td class="num">21</td><td class="mono sm">machtzev/truth.mjs</td><td class="sm">TRUTH.md + בלוק-האמת ב-CLAUDE.md</td></tr></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="sec-n">06</span><h2>האטלס</h2></div>
+  <p>האטלס הוא הקטלוג שממנו הבורר בוחר. הקובץ המוצמד מתאר עולם שקדם לגלים שבנו
+  את האטומים שהמחולל מחווט <b>היום</b>:</p>
+  <div class="stats">
+    <div class="stat"><b>554</b><span>ווידג׳טים · מוצמד</span></div>
+    <div class="stat ok"><b>564</b><span>ווידג׳טים · טרי</span></div>
+    <div class="stat"><b>844</b><span>פונקציות · מוצמד</span></div>
+    <div class="stat ok"><b>852</b><span>פונקציות · טרי</span></div>
+  </div>
+  <div class="note b"><p><b>10 הווידג׳טים החסרים הם בדיוק המנצחים של גלי G28–G32:</b></p>
+  <div class="chips"><span class="chip hot">DsFold</span><span class="chip hot">DsNote</span><span class="chip hot">DsDiffRow</span><span class="chip hot">DsQuickAdd</span><span class="chip hot">DsPalette</span><span class="chip hot">DsLoadMeter</span><span class="chip hot">DsActionRow</span><span class="chip hot">DsApproveCard</span><span class="chip hot">DsChipButton</span><span class="chip hot">DsLogRow</span></div>
+  <p><b>8 פונקציות חסרות</b> — ובהן
+  <code class="mono">addDaysIso</code> ו־<code class="mono">minutesBetweenIso</code>,
+  שני חלקיקי־היסוד <em>היחידים</em> שנוצרו ב־G34:</p>
+  <div class="chips"><span class="chip hot">addDaysIso</span><span class="chip hot">minutesBetweenIso</span><span class="chip hot">facetTokens</span><span class="chip hot">grouped</span><span class="chip hot">hhmm</span><span class="chip hot">isOrderOpen</span><span class="chip hot">patternOutlets</span><span class="chip hot">pseudonym</span></div>
+  <p>זה חשוב מעבר לעצמו: <code class="mono">TRUTH.md</code> נמדד דרך
+  <code class="mono">truth.mjs:10 → render-ds.mjs:26</code> על האטלס הזה.
+  כל מספר שם מתאר את העבר.</p></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="sec-n">07</span><h2>הצרכים ושכבת־ההרכבה</h2></div>
+  <p>התנהגות אינה נכתבת ביד. כל פעולה היא <b>צורך</b> עם חתימה ודוגמאות; הבורר מוצא
+  מועמדים מכל המנועים <b>ומריץ את הדוגמאות עליהם ב־Dart</b> — נבחר מי שעובר.
+  המסכים קוראים רק ל־<code class="mono">bh*</code>, ושער <code class="mono">behavior</code>
+  אוסר על מסך לעקוף.</p>
+  <div class="cols">
+    <div>
+      <h3>‏43 צרכים</h3>
+      <div class="scroll" style="max-height:420px;overflow-y:auto">
+        <table><thead><tr><th>צורך</th><th>חתימה</th><th>דוגמאות</th></tr></thead><tbody><tr><td class="mono">week.start</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">iso.addDays</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">iso.daysSince</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">iso.inRange</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">task.overdue</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">time.toMin</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">time.minutesBetween</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">text.normSearch</td><td class="mono sm"></td><td class="num">4</td></tr>
+<tr><td class="mono">name.norm</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">phone.digits</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">count.by</td><td class="mono sm"></td><td class="num">1</td></tr>
+<tr><td class="mono">prefix.rule</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">money.fmt</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">search.exact</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">search.contains</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">text.distance</td><td class="mono sm"></td><td class="num">4</td></tr>
+<tr><td class="mono">name.matches</td><td class="mono sm"></td><td class="num">4</td></tr>
+<tr><td class="mono">heb.parts</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">heb.gem</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">phone.key</td><td class="mono sm"></td><td class="num">4</td></tr>
+<tr><td class="mono">dup.groups</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">iso.monthKey</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">ics.escape</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">ics.fold</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">ics.build</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">csv.escape</td><td class="mono sm"></td><td class="num">4</td></tr>
+<tr><td class="mono">csv.build</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">csv.parse</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">vcard.rows</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">heb.holidayOn</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">heb.holidaysAhead</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">heb.inputToIso</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">heb.partsOfIso</td><td class="mono sm"></td><td class="num">1</td></tr>
+<tr><td class="mono">heb.toIsoEn</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">phone.format</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">stat.mode</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">iso.monthsAgo</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">a11y.clamp</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">a11y.step</td><td class="mono sm"></td><td class="num">2</td></tr>
+<tr><td class="mono">iso.monthDay</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">heb.gemYear</td><td class="mono sm"></td><td class="num">1</td></tr>
+<tr><td class="mono">phone.fmtSafe</td><td class="mono sm"></td><td class="num">3</td></tr>
+<tr><td class="mono">heb.dateFull</td><td class="mono sm"></td><td class="num">2</td></tr></tbody></table>
+      </div>
+    </div>
+    <div>
+      <h3>‏60 חלקיקי־הרכבה</h3>
+      <div class="chips"><span class="chip">bhAgoParts</span><span class="chip">bhAheadOffsets</span><span class="chip">bhAheadOffsetsUnion</span><span class="chip">bhClosest</span><span class="chip">bhCsv</span><span class="chip">bhCsvParse</span><span class="chip">bhDate</span><span class="chip">bhDayLabelParts</span><span class="chip">bhDayMonth</span><span class="chip">bhDaysSince</span><span class="chip">bhDigitsQuery</span><span class="chip">bhDueBase</span><span class="chip">bhFreeWindows</span><span class="chip">bhGemToNum</span><span class="chip">bhGroupRows</span><span class="chip">bhHebDate</span><span class="chip">bhHebInputIso</span><span class="chip">bhHebNextYear</span><span class="chip">bhHolidayOn</span><span class="chip">bhHolidaysAhead</span><span class="chip">bhIcs</span><span class="chip">bhInRange</span><span class="chip">bhIso</span><span class="chip">bhIsoT</span><span class="chip">bhMedianHm</span><span class="chip">bhMedianInt</span><span class="chip">bhMinutesUntil</span><span class="chip">bhMode</span><span class="chip">bhMoney</span><span class="chip">bhMonthDay</span><span class="chip">bhMonthEnd</span><span class="chip">bhMonthKey</span><span class="chip">bhMonthsAgo</span><span class="chip">bhNormName</span><span class="chip">bhNormSearch</span><span class="chip">bhOpenCount</span><span class="chip">bhPersonGroups</span><span class="chip">bhPhoneDigits</span><span class="chip">bhPhoneFmt</span><span class="chip">bhPhoneFmtSafe</span><span class="chip">bhPhoneKey</span><span class="chip">bhPlanStart</span><span class="chip">bhPlusDays</span><span class="chip">bhPrefixRest</span><span class="chip">bhRecurCode</span><span class="chip">bhSameMonth</span><span class="chip">bhSameName</span><span class="chip">bhSearchScore</span><span class="chip">bhSilentDays</span><span class="chip">bhSoftShift</span><span class="chip">bhStreakDays</span><span class="chip">bhSumBy</span><span class="chip">bhTextScale</span><span class="chip">bhTextScaleStep</span><span class="chip">bhThousands</span><span class="chip">bhVcardRows</span><span class="chip">bhWaPhone</span><span class="chip">bhWeekRange</span><span class="chip">bhWeekStart</span><span class="chip">bhWeekday</span></div>
+      <h3 style="margin-top:20px">‏27 תפקידי־עור</h3>
+      <div class="chips"><span class="chip">kpi → ForgeStatPlain</span><span class="chip">hero → ForgeStatPlain</span><span class="chip">stat → ForgeStatPlain</span><span class="chip">navTile → ForgeGridHubCard</span><span class="chip">empty → ForgeAnimatedEmpty</span><span class="chip">button → ForgeToneButton</span><span class="chip">statusChip → ForgeStatusChip</span><span class="chip">banner → ForgeToneBanner</span><span class="chip">emptyState → ForgeAnimatedEmpty</span><span class="chip">mediaRow → ForgeContactTile</span><span class="chip">section → ForgeTitledSection</span><span class="chip">frame → ForgeStripPanelFrame</span><span class="chip">segmented → ForgeSegPickerSelection</span><span class="chip">chip → ForgeFacetChip</span><span class="chip">meter → ForgeLinearProgressStatus</span><span class="chip">glass → ForgeStripPanelFrame</span><span class="chip">timeline → ForgeNotifRow</span><span class="chip">field → ForgeDsField</span><span class="chip">enumField → ForgeDsEnumField</span><span class="chip">numberField → ForgeDsNumberField</span><span class="chip">dateField → ForgeDsDateFieldInput</span><span class="chip">search → ForgeDsSearch</span><span class="chip">pageHeader → ForgeCenteredPageHeader</span><span class="chip">table → ForgeDataGrid</span><span class="chip">bars → ForgeWaveformBars</span><span class="chip">board → ForgeKanbanBoard</span><span class="chip">calendar → ForgeEventCalendar</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="sec-n">08</span><h2>55 השערים</h2></div>
+  <p>אף אחד מהמספרים בעמוד הזה אינו מוגן בעצמו. אלה השערים שרצים לפני כל commit:</p>
+  <div class="scroll" style="max-height:440px;overflow-y:auto"><table>
+    <thead><tr><th>שער</th><th>מה הוא בודק</th></tr></thead><tbody><tr><td class="mono">wiring</td><td class="sm">חוקי-החשמלאי: אטום לא מייבא אטום, קופסה לא קופסה, לוח רק קופסאות commit </td></tr>
+<tr><td class="mono">contract</td><td class="sm">חוק-החוזה: לכל אטום חוזה+בדיקה ירוקה + סריקת-PII (חוק-6) commit contract-quality-baseline.json;shrink</td></tr>
+<tr><td class="mono">quarry</td><td class="sm">משטרת-המחצבה: כל טיוטה עם מוצא + parse commit </td></tr>
+<tr><td class="mono">pins</td><td class="sm">נעילת-השוטרים: חתימות-hash על החוקה והמשטרה commit </td></tr>
+<tr><td class="mono">no-fakers</td><td class="sm">מגן-בלי-סטיות (§20-ג): אף מזייף מ-FAKERS של compose-engine בפלט-המחולל/לוחות/מסכים · חוב רק-יורד commit no-fakers-baseli</td></tr>
+<tr><td class="mono">opcensus</td><td class="sm">סנסוס-פעולות-היסוד (GENMAX·G1 · §20-ד): כל אטום באורקל+דאטה ממופה ל-op מצורת-שקעים/חתימה · 0 לא-ממופים · zero=תצוגה בלבד</td></tr>
+<tr><td class="mono">shapeops</td><td class="sm">סכמה⇒פעולות-יסוד (GENMAX·G2 · §20-ד): ops נגזרים מטיפוסי-השדות של schema-fields · כיסוי חלקיקי-הזהב (golden-modules.json</td></tr>
+<tr><td class="mono">cover</td><td class="sm">כיסוי-שקעים=הרכבה (GENMAX·G3 · §20-ב): שחזור טבלת-ATOM הידנית של compose-engine ע&quot;י המנוע (top-1/top-3) — רק-עולה commit</td></tr>
+<tr><td class="mono">particles</td><td class="sm">מפרק-החלקיקים הפתוח (GENMAX·G23 · הכרעה-27): כל חלקיק בכל ספק-specs-ds נמצא בחיפוש-פתוח בכל הקטלוג (צורה⇒פעולות⇒אטומים⇒ש</td></tr>
+<tr><td class="mono">balagan</td><td class="sm">שער-המראה של «בלגן» (GENMAX·G28 · הכרעה-28): 36 כללי-היעד (15 עיצוב · 15 פרואקטיביות · 6 יעד) כמרשם balagan-score.json —</td></tr>
+<tr><td class="mono">peruk</td><td class="sm">קורא-הפירוקים (GENMAX·G27 · הכרעה-27): כל מסמך «פירוק N» ב-generator/peruks/ ⇒ ≥1 שדה-קליטה · ≥1 חלק-פלט · הסתייגות · רש</td></tr>
+<tr><td class="mono">goldquarry</td><td class="sm">חציבת-הזהב (GENMAX·G4a · הכרעה-24 &quot;חוצבים ומרכיבים&quot;): 9 מודולי-הזהב ⇒ קטלוג-שברים דטרמיניסטי; הרכבה-חוזרת ביט-לביט 9/9 ·</td></tr>
+<tr><td class="mono">rendermodule</td><td class="sm">הרכבה-מהקטלוג (GENMAX·G4): --all ≡ מקור 9/9 · מודולי-משנה מינימליים (gen_*_subset.dart) ≡ הרכבה-דטרמיניסטית (סגירת-תלויו</td></tr>
+<tr><td class="mono">retarget</td><td class="sm">שבר-זהב ⇒ ישות אחרת (GENMAX·G5c · §20-ד): מיפוי-מפתחות שם-זהה⇒צורת-טיפוס⇒מקום-שמור, ללא מילון; gen_retarget_*.dart המחוי</td></tr>
+<tr><td class="mono">entityterms</td><td class="sm">גשר-מונחי-ישות כאטום-דאטה חצוב (GENMAX·G5f · §19-ד): entity-terms.data.json ≡ חציבה-טרייה מ-TERM_DEFS של maor + נרדפות-ו</td></tr>
+<tr><td class="mono">sentence</td><td class="sm">משפט-בעברית ⇒ ישות (GENMAX·G5f · §22): משפטי-הזהב ב-sentence-golden.json נפתרים לישות הצפויה — אפס-LLM, אפס-מילון-במנוע </td></tr>
+<tr><td class="mono">enumvalues</td><td class="sm">ערכי-טיפוסים-מנויים כאטום-דאטה חצוב (GENMAX·G6a · §19-ד): enum-values.data.json ≡ חציבה-טרייה מ-domain.ts של maor (13 טי</td></tr>
+<tr><td class="mono">core</td><td class="sm">שכבת-הגרעין מהסכמה (GENMAX·G6a · §20-ד): core-registry.json (ישויות · יחסים · workflows מ-enum · אירועים · חוקים · ערוצי</td></tr>
+<tr><td class="mono">fragops</td><td class="sm">ייחוס-ops פר-שבר (GENMAX·G8b · L49/L60): כל שבר-זהב ⇒ G2-ops מהמפתחות שהוא קורא (טיפוס מהזרע ⇒ fieldOps) — frag-ops.json</td></tr>
+<tr><td class="mono">coredart</td><td class="sm">הגרעין כקוד (GENMAX·G6b): gen_core_&lt;entity&gt;.dart לכל ישות עם workflow — מצבים חצובים · מעבר מאטום-מדף (advanceStatus/nex</td></tr>
+<tr><td class="mono">goldenharness</td><td class="sm">רתמת-הזהב (GENMAX·G4 · השער הקשה): מודול מורכב-מחדש (compose+declared) מוחלף במראה ועובר את בדיקות-הזהב המקוריות בלי שינ</td></tr>
+<tr><td class="mono">appgen</td><td class="sm">משפטים ⇒ אפליקציה (GENMAX·G9 · §22): app-golden.json ⇒ N מודולי-retarget + רכזת-ניווט מחוללת + בדיקת-ניווט מחוללת ≡ טריי</td></tr>
+<tr><td class="mono">autoskin</td><td class="sm">בורר-אטום-לפי-ייעוד (GENMAX·G17b · הכרעה-25 · §20-א): לכל תפקיד-עור המנוע מדרג את כל אטומי-forge לפי אותות-צורה (הדגשת-מ</td></tr>
+<tr><td class="mono">autologic</td><td class="sm">בורר-מנוע-לוגיקה-לפי-ייעוד (GENMAX·G18 · הכרעה-25 · §20-א): לכל פעולת-לוגיקה של מנוע-ההרכבה המנוע מדרג את כל מנועי-האינד</td></tr>
+<tr><td class="mono">tighten</td><td class="sm">הידוק-טיפוסים במנועי-maor (GENMAX·G20 · הכרעה-25 · §20-ד): צורת-הדאטה שזרם בבדיקות-החוזה של ה-JS (מקליט --import) ⇒ טיפו</td></tr>
+<tr><td class="mono">skingolden</td><td class="sm">בית-הספר בעור-forge (GENMAX·G12d): 9 מודולי-SchoolOS מורכבים מהקטלוג + skinPass (KpiTile·DsNavTile·StatHero ⇒ אטומי-forg</td></tr>
+<tr><td class="mono">genverify</td><td class="sm">אימות-בפועל של פלטי-המחולל (GENMAX·G5b · L53): כל gen_*.dart עם מסך נטען ב-flutter test מחולל — אפס-חריגות · DsScaffold </td></tr>
+<tr><td class="mono">compose-determinism</td><td class="sm">קומפוזר-דטרמיניסטי (23-ג): compose-engine על 15 החלקיקים ≡ compose-engine-report.md commit </td></tr>
+<tr><td class="mono">index-complete</td><td class="sm">M3: כל סקריפט ב-machtzev/ עם שורה ב-INDEX.md · חוב רק-יורד commit index-baseline.json;shrink</td></tr>
+<tr><td class="mono">atom-count</td><td class="sm">מספר-אטומים לאזור (new/*) לא יורד (1.7 שהושמט) commit atom-count-baseline.json;grow</td></tr>
+<tr><td class="mono">learn</td><td class="sm">למידה מוכחת (§8): GATE: לכל לקח · אנטי-פטרן לא חזר ב-new/ · טיוטת-M4 מוכחת מול blob-לפני/אחרי+fixture · stuck-loop commi</td></tr>
+<tr><td class="mono">pretool</td><td class="sm">הוכחת-ירי ל-pre-tool: כל הרגל-עקיפה נחסם (2) וכל פקודה כשרה עוברת (0) — fixtures/pretool.tsv commit pretool-fixtures-bas</td></tr>
+<tr><td class="mono">audit-gates</td><td class="sm">G5: כל שער-staging/commit-msg חוסם בפועל על הפרה מוזרעת ב-clone זמני (hooksPath) + ביקורת-שלילית push </td></tr>
+<tr><td class="mono">mutation-dart</td><td class="sm">בדוק-את-הבדיקה ל-Dart (L11): בדיקה ירוקה-על-אטום-חלול ⇒ אדום · דגימה 12/יום ב-push, --all ב-CI push mutation-dart-baseli</td></tr>
+<tr><td class="mono">selftest</td><td class="sm">הוכחת-ירי: כל חוק יורה על fixture מורעל + ביקורת-שלילית push selftest-coverage-baseline.json;grow</td></tr>
+<tr><td class="mono">mutation</td><td class="sm">בדוק-את-הבדיקה: אדום-על-חלול, ירוק-על-אמיתי commit </td></tr>
+<tr><td class="mono">freeref</td><td class="sm">סורק-הפניות-חופשיות: אפס מזהה לא-מוגדר (חוק-1 — שכן לא-מוזרק) commit </td></tr>
+<tr><td class="mono">assembly</td><td class="sm">מבקר-ההרכבה: כל חוט-מתוכנן מחווט בקופסה — נסיגה מ-baseline אסורה (אפס אובדן-יכולת) push assemble/box-coverage-baseline.j</td></tr>
+<tr><td class="mono">datapurity</td><td class="sm">סורק-טוהר-דאטה: אפס דאטה-צרובה במנגנון (הכרעה 16, baseline-ratchet — החוב רק יורד) commit data-purity-baseline.json;shri</td></tr>
+<tr><td class="mono">deeppurity</td><td class="sm">סורק-טוהר-עומק + **נכונות** (הכרעת-בעלים 14.9): אפס דאטה-חדשה במנגנון (הכרעה 19) **וגם** אפס סיכון-נכונות קריטי חדש — בל</td></tr>
+<tr><td class="mono">synth</td><td class="sm">שער-הסינתזה: יכולת-מוזמנת שהוכחה נשארת מוכחת-חי (JS + שקילות-Dart כשזמין) — capabilities ⇄ specs push </td></tr>
+<tr><td class="mono">genratchet</td><td class="sm">רַצֶ'ט-המחולל: buildApp על אפיונים ⇒ דפוסי-חיווט (בחירת-אטום·הרכבה·§21·RLS) נעולים push </td></tr>
+<tr><td class="mono">independence</td><td class="sm">מגן-עצמאות: מאור ובנייה-חכמה לא חוצים-ייבוא · רק הלוח מגשר push </td></tr>
+<tr><td class="mono">puredata</td><td class="sm">טוהר-דאטה-28.8: אפס דאטה-ליטרלית-במנגנון (מעבר ל-datapurity/16 · baseline נפרד) commit purity-baseline.json;shrink</td></tr>
+<tr><td class="mono">acceptance</td><td class="sm">קבלת-§22: אפיון-מערכת-מלא ⇒ 12 יכולות (טופס·טבלה·לוח·KPI·קשרים·RLS·התנהגות) + מגוון-אטומים push </td></tr>
+<tr><td class="mono">nlsmoke</td><td class="sm">רצפת-§22: כל משפט-עברית-חופשית ⇒ אפליקציה נבנית בלי-קריסה push </td></tr>
+<tr><td class="mono">nlquality</td><td class="sm">איכות-§22: חילוץ-ישויות ממשפט-חופשי מעל רצפת-האיכות push </td></tr>
+<tr><td class="mono">truth</td><td class="sm">מקור-האמת: TRUTH.md ≡ מדידה-חיה חוצת-3-שכבות (מספר-ענף לא-יכול-לשקר) commit wired-floor.json;grow</td></tr>
+<tr><td class="mono">oracle</td><td class="sm">אורקל-מאוחד: atom-index-full ≡ תצוגה+לוגיקה (1332) — אפס-אטום-נופל (§21 יסוד) push dup-class-baseline.json;shrink</td></tr>
+<tr><td class="mono">coverage</td><td class="sm">שער-הכיסוי: מחגר רק-עולה על צירי-היכולת — לבנים-ברות-מילוי · מנועים-ברי-הרצה · מהות · תאומי-דאטה push coverage-baseline.</td></tr>
+<tr><td class="mono">boxes</td><td class="sm">שער-הוכחות-הקופסאות: קופסת-Dart ירוקה לא מאדימה (סחף-חתימות-טיהור; baseline-ratchet — החוב רק יורד) push box-proofs-base</td></tr>
+<tr><td class="mono">balaganone</td><td class="sm">האפליקציה-האחת «בלגן» (GENMAX·G33 · הכרעה-29): N מודולי-נייר ≡ פירוקים ≡ ייבוא-Today ב«היום» ≡ מקרי-פתיחה ב«מה קרה?» ≡ «</td></tr>
+<tr><td class="mono">balaganrun</td><td class="sm">שער-«טוב-יותר» במריצה (GENMAX·G33 · הכרעה-29): playwright על האתר הבנוי — רגע-חדש מהמסך-הראשון (שורה+Enter ⇒ טופס-אישור </td></tr>
+<tr><td class="mono">behavior</td><td class="sm">חלקיקי-ההתנהגות של «בלגן» (GENMAX·G34 · הכרעה-30): כל צורך (פעולת-יסוד עם חתימה+דוגמאות) נפתר ע&quot;י חלקיק מהקטלוג שעובר את</td></tr>
+<tr><td class="mono">server</td><td class="sm">חבילת-השרת נגזרת-מהספק (G57 · הכרעה-31): הצהרת `שרת:` ⇒ חבילה נפלטת ומכסה את כל ישויות-האפליקציה; אין הצהרה ⇒ אין פלט (ב</td></tr></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="sec-n">09</span><h2>תאמת בעצמך</h2></div>
+  <p>העמוד נבנה ממדידה. הנה אותן פקודות — הרץ, והשווה מול העמודה «ערך» בסעיף 02:</p>
+  <pre>cd ~/-ai-chat-server
+
+# ספקים · ישויות · חלקיקים
+ls machtzev/generator/specs-ds/*.txt | wc -l          # 31
+grep -hcE '^ *(צור )?(ישות|טופס|טבלת)' machtzev/generator/specs-ds/*.txt | paste -sd+ | bc   # 40
+grep -hc '^ *חלקיק ' machtzev/generator/specs-ds/*.txt | paste -sd+ | bc                     # 230
+
+# מסכים שנפלטו
+ls new/dart-gen-bs/gen_app_*.dart | wc -l             # 422 תחת ספק פעיל
+
+# הכותרת שמתיישנת — הקובץ אומר DsTable, הקוד שולח ForgeDataGrid
+sed -n '2p;18p' new/dart-gen-bs/gen_app_peruk01_px1.dart
+grep -c 'ForgeDataGrid' new/dart-gen-bs/gen_app_peruk01_px1.dart
+
+# האטלס: מוצמד מול טרי
+node --input-type=module -e "
+import {buildAtlas} from './machtzev/generator/atlas.mjs';
+const f=await buildAtlas({}), p=JSON.parse(require('fs').readFileSync('machtzev/generator/atlas.json'));
+const s=new Set(p.widgets.map(w=>w.cls));
+console.log([...new Set(f.widgets.map(w=>w.cls))].filter(c=>!s.has(c)));"
+
+# צרכים · שערים
+node --input-type=module -e "import {NEEDS} from './machtzev/generator/behavior-plan.mjs';console.log(Object.keys(NEEDS).length)"   # 43
+grep -vc '^#' machtzev/gates.tsv                      # 55</pre>
+  <div class="note"><p><b>מה העמוד הזה לא עושה:</b> הוא לא מריץ את המחולל בדפדפן.
+  המסלול החי פולט Dart — להרצה צריך <code class="mono">flutter build web</code>.
+  מי שרוצה לראות את השרשרת רצה חי, עם הוכחה־בריצה מול המדף, זה
+  <code class="mono">gen/out/studio.html</code> — מסלול קטן יותר (‏569 אטומי־JS, פלט HTML),
+  אותה דוקטרינה.</p></div>
+</section>
+
+<footer>
+  נמדד 16.9.2026, 3:28:24 · ‏<span class="mono">meir7651231-ui/-ai-chat-server</span> ·
+  ענף <span class="mono">claude/yeshiva-read</span>. כל מספר נגזר מריצה על העץ הזה.
+</footer>
+</div>
+<script>
+(function(){
+  var tb=document.querySelector('#led tbody'), rows=[].slice.call(tb.rows);
+  var q=document.getElementById('q'), cnt=document.getElementById('cnt'), f='all';
+  function apply(){
+    var t=(q.value||'').trim().toLowerCase(), k=0;
+    rows.forEach(function(r){
+      var okF = f==='all' || r.dataset.v===f;
+      var okQ = !t || r.dataset.s.indexOf(t)>=0;
+      var show = okF && okQ; r.classList.toggle('hide', !show); if(show) k++;
+    });
+    cnt.textContent = k + ' / ' + rows.length;
+  }
+  [].forEach.call(document.querySelectorAll('.bar button'), function(b){
+    b.addEventListener('click', function(){
+      f=b.dataset.f;
+      [].forEach.call(document.querySelectorAll('.bar button'), function(x){
+        x.setAttribute('aria-pressed', String(x===b)); });
+      apply();
+    });
+  });
+  q.addEventListener('input', apply);
+  apply();
+})();
+</script>
+</html>

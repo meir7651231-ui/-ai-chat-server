@@ -1,0 +1,261 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>המשפט החופשי</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+ --bg:#F7F8F9; --panel:#FFFFFF; --ink:#101418; --ink2:#3C464F; --mute:#6E7A85;
+ --line:#DFE3E7; --line2:#EDEFF2; --acc:#1E4470; --accbg:#E6ECF4; --accline:#B9C9DE;
+ --ok:#186145; --okbg:#E4F0EA; --bad:#8C2B2B; --badbg:#F8E8E6; --warn:#7E5510; --warnbg:#F7EFDE;
+ --codebg:#F0F2F4;
+ --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+ --sans:'Heebo',system-ui,'Segoe UI',Arial,sans-serif;
+ --pt:env(safe-area-inset-top,0px); --pb:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#0E1216; --panel:#161B21; --ink:#EDF1F5; --ink2:#B6C1CB; --mute:#7E8B96;
+ --line:#262E37; --line2:#1E252C; --acc:#8FB4DE; --accbg:#17232F; --accline:#2B3E52;
+ --ok:#6FCFA3; --okbg:#122620; --bad:#E5928B; --badbg:#2A1917; --warn:#DBB271; --warnbg:#251D10;
+ --codebg:#111820;
+}}
+:root[data-theme="dark"]{
+ --bg:#0E1216; --panel:#161B21; --ink:#EDF1F5; --ink2:#B6C1CB; --mute:#7E8B96;
+ --line:#262E37; --line2:#1E252C; --acc:#8FB4DE; --accbg:#17232F; --accline:#2B3E52;
+ --ok:#6FCFA3; --okbg:#122620; --bad:#E5928B; --badbg:#2A1917; --warn:#DBB271; --warnbg:#251D10;
+ --codebg:#111820;
+}
+:root{padding-top:var(--pt);padding-bottom:var(--pb)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:400;
+ line-height:1.65;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+.wrap{max-width:860px;margin:0 auto;padding-inline:20px;padding-block:52px 80px}
+h1{font-size:clamp(34px,7vw,56px);font-weight:900;line-height:1.05;letter-spacing:-.02em;margin:0 0 14px;text-wrap:balance}
+h2{font-size:clamp(21px,3.6vw,27px);font-weight:700;letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance}
+p{margin:0 0 14px;color:var(--ink2);max-width:64ch}
+.lead{font-size:18px;color:var(--ink2);max-width:60ch;margin-bottom:0}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--acc);
+ text-transform:uppercase;margin:0 0 12px;display:flex;gap:10px;flex-wrap:wrap}
+.eyebrow span{white-space:nowrap}
+hr{border:0;border-top:1px solid var(--line);margin:44px 0}
+section{margin-top:44px}
+.sec-n{font-family:var(--mono);font-size:11px;color:var(--mute);letter-spacing:.1em;margin-bottom:4px}
+/* ── מדדים ── */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);
+ border:1px solid var(--line);border-radius:3px;overflow:hidden;margin:26px 0 0}
+.kpi{background:var(--panel);padding:18px 16px}
+.kpi b{display:block;font-size:30px;font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.kpi small{display:block;font-size:12px;color:var(--mute);margin-top:3px}
+.kpi.bad b{color:var(--bad)} .kpi.ok b{color:var(--ok)} .kpi.acc b{color:var(--acc)}
+/* ── ציטוט-דוקטרינה ── */
+blockquote{margin:0;padding:16px 18px;background:var(--accbg);border-inline-start:3px solid var(--acc);
+ border-radius:0 3px 3px 0;color:var(--ink);font-size:17px}
+blockquote cite{display:block;font-family:var(--mono);font-size:11.5px;color:var(--acc);font-style:normal;margin-top:8px}
+/* ── קוד ── */
+code,.mono{font-family:var(--mono);font-size:.88em}
+code.inl{background:var(--codebg);padding:1px 5px;border-radius:3px;color:var(--ink)}
+pre{background:var(--codebg);border:1px solid var(--line);border-radius:3px;padding:14px 16px;
+ overflow-x:auto;margin:14px 0;direction:ltr;text-align:left}
+pre code{font-size:12.5px;line-height:1.75;color:var(--ink)}
+.src{font-family:var(--mono);font-size:11.5px;color:var(--mute);direction:ltr;text-align:left;margin-top:-6px}
+/* ── טבלת-ניסוחים ── */
+.rows{border:1px solid var(--line);border-radius:3px;overflow:hidden;margin:18px 0}
+.row{display:grid;grid-template-columns:auto 1fr;gap:0 14px;background:var(--panel);
+ padding:13px 15px;border-bottom:1px solid var(--line2);align-items:start}
+.row:last-child{border-bottom:0}
+.tag{font-family:var(--mono);font-size:10.5px;font-weight:500;padding:3px 7px;border-radius:2px;white-space:nowrap;margin-top:2px}
+.tag.ok{background:var(--okbg);color:var(--ok)} .tag.bad{background:var(--badbg);color:var(--bad)}
+.row .in{font-size:15px;color:var(--ink);font-weight:500}
+.row .out{font-family:var(--mono);font-size:12px;color:var(--ink2);margin-top:5px;word-break:break-word}
+.row .out.bad{color:var(--bad)}
+/* ── טבלה ── */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:3px;margin:18px 0;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:430px}
+th,td{text-align:start;padding:10px 14px;border-bottom:1px solid var(--line2);font-size:14px;color:var(--ink2)}
+th{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;color:var(--mute);
+ text-transform:uppercase;background:var(--codebg)}
+td:first-child{color:var(--ink);font-weight:500}
+tr:last-child td{border-bottom:0}
+td .n{font-family:var(--mono);font-weight:500}
+.tot td{background:var(--codebg);font-weight:700;color:var(--ink)}
+/* ── פסק-דין ── */
+.verdict{background:var(--panel);border:1px solid var(--line);border-inline-start:3px solid var(--bad);
+ border-radius:0 3px 3px 0;padding:18px 20px;margin:22px 0}
+.verdict.ok{border-inline-start-color:var(--ok)}
+.verdict h3{margin:0 0 7px;font-size:17px;font-weight:700;color:var(--ink)}
+.verdict p{margin:0;font-size:15px}
+ul{margin:12px 0;padding-inline-start:20px;color:var(--ink2)}
+li{margin-bottom:7px;max-width:62ch}
+.foot{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);
+ font-family:var(--mono);font-size:11.5px;color:var(--mute);line-height:1.9}
+@media (max-width:460px){.row{grid-template-columns:1fr}.row .tag{justify-self:start;margin-bottom:6px}}
+</style></head><body>
+<div class="wrap">
+
+<p class="eyebrow"><span>מדידה · לא הערכה</span><span>·</span><span>כל מספר נושא file:line</span></p>
+<h1>המשפט החופשי</h1>
+<p class="lead">§22 קובע שמשפט־עברית חופשי אחד חייב להניב אפליקציה עובדת. מדדתי את זה על המחולל החי. התוצאה אינה «עובד חלקית» — היא משהו אחר לגמרי.</p>
+
+<div class="kpis">
+ <div class="kpi bad"><b>2 <span style="font-size:.6em;font-weight:500;color:var(--mute)">מתוך</span> 5</b><small>ניסוחים של אותו משפט שנקראו נכון</small></div>
+ <div class="kpi bad"><b>93%</b><small>מהישויות ברצפת־§22 עם סכימה מומצאת</small></div>
+ <div class="kpi ok"><b>55 <span style="font-size:.6em;font-weight:500;color:var(--mute)">מתוך</span> 55</b><small>שערי־משטרה ירוקים באותו רגע</small></div>
+ <div class="kpi acc"><b>5 <span style="font-size:.6em;font-weight:500;color:var(--mute)">מתוך</span> 55</b><small>שערים שהוכח עליהם שהם יודעים להאדים</small></div>
+</div>
+
+<hr>
+
+<section>
+<div class="sec-n">01</div>
+<h2>מה §22 דורש</h2>
+<blockquote>
+ צפון־המחולל: משפט־עברית חופשי ⇐ אפליקציה ואתר עובדים ב־100%. זו רצפת־קבלה, לא שאיפה.
+ <cite>machtzev/ — דוקטרינה §22</cite>
+</blockquote>
+<p>הדרישה חדה: לא «רוב המשפטים», לא «בניסוח הנכון». כל משפט. לכן המבחן הנכון אינו משפט אחד שעובד — אלא <b>אותו משפט בחמישה ניסוחים טבעיים</b>. אם המחולל קורא תחום ולא תבנית, כולם חייבים להניב אותו דבר.</p>
+</section>
+
+<section>
+<div class="sec-n">02</div>
+<h2>אותו משפט, חמישה ניסוחים</h2>
+<p>הכוונה זהה בכל החמישה: ישות אחת — «פריט» — עם שלושה שדות: קוד, תיאור, מלאי.</p>
+<div class="rows">
+ <div class="row"><span class="tag ok">נכון</span><div>
+  <div class="in">לכל פריט קוד, תיאור, מלאי</div>
+  <div class="out">ישות פריט עם קוד, תיאור, מלאי</div></div></div>
+ <div class="row"><span class="tag ok">נכון</span><div>
+  <div class="in">לפריט יש קוד, תיאור, מלאי</div>
+  <div class="out">ישות פריט עם קוד, תיאור, מלאי</div></div></div>
+ <div class="row"><span class="tag bad">שגוי</span><div>
+  <div class="in">כל פריט: קוד, תיאור, מלאי</div>
+  <div class="out bad">ישות קוד עם שם, תיאור, תאריך, סטטוס · ישות תיאור עם שם, תיאור, תאריך, סטטוס · ישות מלאי עם שם, תיאור, תאריך, סטטוס</div></div></div>
+ <div class="row"><span class="tag bad">שגוי</span><div>
+  <div class="in">עבור כל פריט קוד, תיאור, מלאי</div>
+  <div class="out bad">ישות פריט קוד עם שם, תיאור, תאריך, סטטוס · ישות תיאור … · ישות מלאי …</div></div></div>
+ <div class="row"><span class="tag bad">שגוי</span><div>
+  <div class="in">בכל פריט קוד, תיאור, מלאי</div>
+  <div class="out bad">ישות בכל פריט עם שם, תיאור, תאריך, סטטוס · ישות תיאור … · ישות מלאי …</div></div></div>
+</div>
+<p class="src">node -e "nlToSpec(s)" · machtzev/generator/nl-spec.mjs:41</p>
+<div class="verdict">
+ <h3>שלושה מתוך חמישה לא נכשלים — הם ממציאים</h3>
+ <p>אף אחד מהשלושה לא זרק שגיאה. כל אחד החזיר מפרט תקין־למראה, שבו כל <em>שדה</em> הפך ל<em>ישות</em>, והישות האמיתית נעלמה. זה המצב המסוכן: פלט שנראה כמו הצלחה.</p>
+</div>
+</section>
+
+<section>
+<div class="sec-n">03</div>
+<h2>שתי שורות — בלתי־תלויות</h2>
+<p>חיפשתי שורה אחת ומצאתי שתיים, שכל אחת מפילה את הפירוש לבדה. <b>הראשונה — תווית.</b> הביטוי־הרגולרי שמזהה «לכל X …» מעוגן לתחילת־מחרוזת או לפסיק, ורק להם:</p>
+<pre dir="ltr"><code>const EACH_RE = (EACH.length &amp;&amp; IMPLIED)
+  ? new RegExp(`(?:^|[,،]\s*)(?:${EACH.join('|')})\s+([֐-׿]{2,})\s+(?=[֐-׿])`)
+  : null;</code></pre>
+<p class="src">machtzev/generator/nl-spec.mjs:25</p>
+<p>הוכחה ישירה — אותה מילה, שלושה תווים לפניה:</p>
+<div class="rows">
+ <div class="row"><span class="tag ok">תופס</span><div><div class="in mono" dir="rtl">לכל פריט קוד, תיאור</div><div class="out">תחילת־מחרוזת</div></div></div>
+ <div class="row"><span class="tag ok">תופס</span><div><div class="in mono" dir="rtl">מערכת למחסן<b>,</b> לכל פריט קוד, תיאור</div><div class="out">פסיק — בתוך מחלקת־העוגן</div></div></div>
+ <div class="row"><span class="tag bad">מחמיץ</span><div><div class="in mono" dir="rtl">מערכת למחסן<b>:</b> לכל פריט קוד, תיאור</div><div class="out bad">נקודתיים — מחוץ למחלקת־העוגן</div></div></div>
+</div>
+<p>כשהעוגן מחמיץ, המרקר המובלע («יש») אינו מוזרק, וסעיף־השדות נקרא כרשימת־ישויות. <b>תו אחד מכריע את כל הפירוש.</b></p>
+<h3 style="font-size:18px;font-weight:700;margin:34px 0 6px">השנייה — מילה אחת שמסתיימת ב־ות</h3>
+<p>תיקנתי את העוגן בעותק־בדיקה והרצתי שוב. מקרה־הנקודתיים אכן נרפא — אבל חלק מהמשפטים המשיכו ליפול. בידוד בשינוי <b>מילה אחת בלבד</b>, כשהעוגן כבר מתוקן:</p>
+<div class="rows">
+ <div class="row"><span class="tag ok">נכון</span><div><div class="in">ניהול מלון: לכל חדר מספר, קומה, <b>מחיר</b></div><div class="out">ישות חדר עם מספר, קומה, מחיר</div></div></div>
+ <div class="row"><span class="tag bad">שגוי</span><div><div class="in">ניהול מלון: לכל חדר מספר, קומה, <b>כמות</b></div><div class="out bad">ישות מספר … · ישות קומה … · ישות כמות … &nbsp;(שלוש ישויות־זבל)</div></div></div>
+ <div class="row"><span class="tag bad">שגוי</span><div><div class="in">לכל חדר מספר, קומה, <b>כמות</b> &nbsp;<span style="color:var(--mute);font-weight:400">— בלי נקודתיים כלל</span></div><div class="out bad">אותן שלוש ישויות־זבל</div></div></div>
+</div>
+<p>אותו דבר קורה עם «עלות», «שעות», «התמחות», «בעלות». המנגנון:</p>
+<pre dir="ltr"><code>// nl-spec.mjs:65 — אות-ריבוי מורפולוגי (מבני, לא מילון): מילה ברבים (ים/ות) = ישות · ביחיד = שדה.
+const tailPlural = tailItems.filter((x) =&gt; pluralW(firstW(x)));
+...
+} else if (tailPlural.length) {          // :74 — פריט-רבים <b>אחד</b> מעיף את כל הסעיף</code></pre>
+<p>שתי בעיות בשורה אחת: הסיומת «ות» בעברית היא גם סיומת־<em>יחיד</em> (כמות · עלות · התמחות), ולכן הכלל המורפולוגי פשוט שגוי עליה — והתנאי הוא <code class="inl">tailPlural.length</code>, כלומר פריט־רבים בודד גורר את <b>כל</b> הסעיף, לא רק את עצמו.</p>
+<p>ההערה בקוד מצהירה על הבחירה במפורש: «מבני, לא מילון». זו בחירה נכונה לפי §23, שנשענת על מורפולוגיה עברית שאינה חד־משמעית. הבאג אינו רשלנות — הוא המחיר של הכלל.</p>
+<div class="verdict">
+ <h3>וגם: רשימה סגורה של מילה אחת</h3>
+ <p><code class="inl">eachWords = ["לכל"]</code> — זו כל הרשימה. «כל», «עבור כל», «בכל» אינם בה, ולכן אינם קיימים עבור המחולל. §27 אוסר רשימות־סגורות; כאן הרשימה אינה רק סגורה — היא באורך אחד.</p>
+ <p class="src" style="margin-top:8px">machtzev/generator/nl-lang.data.json · eachWords</p>
+</div>
+</section>
+
+<section>
+<div class="sec-n">04</div>
+<h2>הרביעייה המומצאת</h2>
+<p>כשישות נוצרת בלי שדות, היא אינה נשארת ריקה ואינה מדווחת. היא מקבלת ארבעה שדות קבועים:</p>
+<pre dir="ltr"><code>// nl-lang.data.json
+"defaultFields": ["שם", "תיאור", "תאריך", "סטטוס"]
+
+// nl-spec.mjs:48
+ents.push({ name, fields: fs.length ? fs : DEF_FIELDS });</code></pre>
+<p>ארבע המילים האלה אינן באות מהמשפט של המשתמש. הן נכתבו מראש בקובץ־נתונים ומודבקות על כל ישות חסרת־שדות — בכל תחום, בלי קשר למה שנאמר. §20 אוסר להמציא נתונים; §23 דורש עיוורון־תחום. הרביעייה מפרה את שניהם באותה שורה.</p>
+</section>
+
+<section>
+<div class="sec-n">05</div>
+<h2>רצפת־§22 — 14 המשפטים שהמחולל נמדד עליהם</h2>
+<p>לשער־הרצפה יש קורפוס משלו. הרצתי את כל 14 המשפטים והשוויתי כל ישות לרביעייה:</p>
+<div class="tbl"><table>
+ <thead><tr><th>מדד</th><th>ערך</th></tr></thead>
+ <tbody>
+  <tr><td>משפטים בקורפוס</td><td class="n">14</td></tr>
+  <tr><td>ישויות שנוצרו</td><td class="n">43</td></tr>
+  <tr><td>ישויות עם הרביעייה המומצאת</td><td class="n" style="color:var(--bad)">40 &nbsp;(93%)</td></tr>
+  <tr><td>משפטים שכל ישויותיהם מומצאות</td><td class="n" style="color:var(--bad)">12 מתוך 14</td></tr>
+  <tr class="tot"><td>משפטים עם שדות־אמת בלבד</td><td class="n" style="color:var(--ok)">2</td></tr>
+ </tbody>
+</table></div>
+<p>שני המשפטים שעבדו הם היחידים בקורפוס שנוסחו בצורה <code class="inl">לכל X …</code> או <code class="inl">לX יש …</code>. כל השאר — «מערכת ל… עם א, ב וג» — הניבו ישויות זהות עם אותה סכימה מומצאת.</p>
+<div class="verdict">
+ <h3>למה השער ירוק בכל זאת</h3>
+ <p>קריטריון־הקבלה של רצפת־§22 הוא <code class="inl">if (n &lt; 1)</code> — «לפחות ישות אחת». ישות מומצאת היא ישות. השער אינו בודק שהשדות באו מהמשפט, ולכן <b>אינו יכול לתפוס את הבאג שהוא נבנה לשמור מפניו</b>.</p>
+ <p class="src" style="margin-top:8px">machtzev/mahulal/nl-smoke.mjs:11</p>
+</div>
+</section>
+
+<section>
+<div class="sec-n">06</div>
+<h2>המשטרה באותו רגע</h2>
+<p>הרצתי את כל המשטרה על אותו עץ, באותו רגע שבו 93% מהסכימות מומצאות:</p>
+<pre dir="ltr"><code>✅ המשטרה ירוקה — 55 ran · 0 skipped · 0 yellow · 0 failed · מרשם 55</code></pre>
+<p class="src">node machtzev/police.mjs · 2026-09-16</p>
+<p>המשטרה אינה משקרת על מה שהיא מודדת. היא פשוט אינה מודדת את זה. שלוש עובדות מדודות מסבירות איך:</p>
+<div class="tbl"><table>
+ <thead><tr><th>ממצא</th><th>מדידה</th><th>מקור</th></tr></thead>
+ <tbody>
+  <tr><td>שערים שהוכח עליהם שהם מאדימים</td><td class="n">5 מתוך 55</td><td class="mono" style="font-size:11.5px">police-selftest.mjs</td></tr>
+  <tr><td>רצפת־ההוכחה</td><td class="n">5 — מעולם לא עלתה</td><td class="mono" style="font-size:11.5px">selftest-coverage-baseline.json</td></tr>
+  <tr><td>שערים שרצו אך לא מדדו דבר</td><td class="n">3</td><td class="mono" style="font-size:11.5px">genverify · goldenharness · enumvalues</td></tr>
+ </tbody>
+</table></div>
+<p>רצפת־ההוכחה נקבעה על 5 בקומיט אחד — <code class="inl">5dc667e7</code> — ו־<code class="inl">git log</code> על קובץ־הרצפה מחזיר את הקומיט הזה בלבד. הראצ'ט שאמור לדרוש עוד הוכחות מעולם לא זז. שלושת השערים שלא מדדו נספרים ב־<code class="inl">ran</code> ולא ב־<code class="inl">skipped</code>, כי «skipped» שמור ל־<code class="inl">--fast</code> בלבד <span class="mono" style="font-size:11.5px">(police.mjs:101)</span>.</p>
+</section>
+
+<section>
+<div class="sec-n">07</div>
+<h2>מה שכן בדקתי ונמצא תקין</h2>
+<p>לא כל מה שנראה חשוד היה חשוד. שלוש טענות — שתיים של סוכנים ואחת שלי — נפסלו במדידה:</p>
+<ul>
+<li><b>«26 מנועים מתים»</b> — נמדד לפי ייבוא בלבד, ולכן מסווג כל נקודת־כניסה כמתה. המדידה הנכונה משלבת ייבוא, הפעלה־בשם וסריקת־תיקייה: <b>מתוך 293 מנועים, 0 מתים.</b> 88 מיובאים · 167 מופעלים בשם · 18 נטענים לפי תיקייה · 20 סקריפטי־מחקר שכל אחד מכריז בכותרתו <code class="inl">הרצה: node …</code>.</li>
+<li><b>«38 מנועים לא־נגישים»</b> — המספר הראשון שלי, וגם הוא היה שגוי. הוא כלל את <code class="inl">selftest-fixtures/</code>, שנטענים דינמית ב־<code class="inl">police-selftest.mjs:29</code>. אותה מחלקת־שגיאה בדיוק שפסלתי אצל הסוכנים.</li>
+<li><b>«המשטרה שבורה»</b> — <code class="inl">freeref</code> יצא 2 אצלי. הסיבה הייתה מהדר TypeScript חסר במיכל שלי, לא בריפו. אחרי התקנה — ירוק. סביבה, לא קוד.</li>
+</ul>
+<div class="verdict ok">
+ <h3>הריפו לא נגע</h3>
+ <p>כל המדידות בעמוד הזה נעשו בקריאה והרצה בלבד. <code class="inl">git status --porcelain</code> ריק.</p>
+</div>
+</section>
+
+<hr>
+
+<section>
+<h2>מה זה אומר על המחולל</h2>
+<p>המחולל אינו שבור ואינו עובד־חלקית. הוא עושה משהו שלישי: <b>הוא מזהה תבנית־ניסוח אחת, ובכל מקרה אחר מדביק סכימה שנכתבה מראש</b> — בשקט, בלי שגיאה, ובאופן שעובר את כל 55 השערים.</p>
+<p>לכן הפער מ־§22 אינו פער של איכות אלא של כיוון. §22 דורש לקרוא <em>תחום</em>; מה שנמדד הוא קריאת <em>תבנית</em>. ארבע הנקודות שמחזיקות את הפער — העוגן ב־<code class="inl">nl-spec.mjs:25</code>, כלל־הריבוי ב־<code class="inl">:74</code>, הרשימה בת־המילה־האחת, והרביעייה ב־<code class="inl">defaultFields</code> — הן קטנות, מקומיות ומדודות, ושתיים מהן כבר נבדקו בתיקון־ניסוי. זה גם מה שהופך אותן לנקודת־הפתיחה הנכונה.</p>
+</section>
+
+<p class="foot">
+ מקורות: nl-spec.mjs:25,41,48,52,65,74 · nl-lang.data.json (eachWords · defaultFields) · nl-smoke.mjs:11 · nl-smoke.txt (14) · police.mjs:101 · police-selftest.mjs:29 · selftest-coverage-baseline.json · 5dc667e7<br>
+ 293 מנועים נסרקו · 0 שינויי־ריפו · כל מספר בעמוד הזה נמדד בהרצה, לא הוערך.
+</p>
+
+</div></body></html>

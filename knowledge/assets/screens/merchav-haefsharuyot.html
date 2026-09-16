@@ -1,0 +1,223 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>מרחב האפשרויות</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@200;300;400;500;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+ --void:#050509; --ink:#F2F2F8; --ink2:#9A9AB0; --dim:#53536A;
+ --rim:rgba(255,255,255,.09); --rim2:rgba(255,255,255,.045);
+ --pack:#FFA033; --term:#B592FF; --schema:#2FE3F0; --said:#FFFFFF; --open:#FF5C93;
+ --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+ --sans:'Rubik','Heebo',system-ui,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--void);color:var(--ink);font-family:var(--sans);line-height:1.6;
+ -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;overflow-x:hidden;
+ padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+#field{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55}
+.wrap{position:relative;z-index:1;max-width:1020px;margin:0 auto;padding-inline:16px;padding-block:52px 96px}
+h1{font-size:clamp(36px,8vw,68px);font-weight:200;letter-spacing:-.045em;line-height:.98;margin:0 0 16px}
+h1 b{font-weight:800;background:linear-gradient(96deg,var(--schema),var(--term) 46%,var(--open));
+ -webkit-background-clip:text;background-clip:text;color:transparent}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--dim);text-transform:uppercase;margin:0 0 16px}
+.sub{color:var(--ink2);font-size:17px;max-width:54ch;margin:0}
+.sub em{font-style:normal;color:var(--ink)}
+h2{font-size:18px;font-weight:400;margin:0;letter-spacing:.01em}
+section{margin-top:56px}
+.head{display:flex;align-items:baseline;gap:13px;margin-bottom:18px;flex-wrap:wrap}
+.head .n{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.2em}
+.head .why{margin-inline-start:auto;font-size:12.5px;color:var(--dim);max-width:42ch}
+/* ══ המשפט + חוטי-אור ══ */
+.sentbox{position:relative;padding-bottom:78px}
+.sent{font-size:clamp(21px,4.3vw,34px);font-weight:200;line-height:1.5;margin:0;letter-spacing:-.02em;
+ display:flex;flex-wrap:wrap;gap:0 .34em;justify-content:center}
+.tok{position:relative;transition:.3s}
+.tok[data-s]{color:var(--c)}
+.tok[data-s]::after{content:"";position:absolute;inset-inline:-1px;bottom:-5px;height:1.5px;
+ background:var(--c);box-shadow:0 0 9px var(--c);border-radius:2px}
+.tok[data-s="open"]::after{background:repeating-linear-gradient(90deg,var(--c) 0 5px,transparent 5px 10px);box-shadow:none}
+#threads{position:absolute;inset-inline:0;bottom:0;height:78px;width:100%;overflow:visible}
+#threads path{fill:none;stroke-width:1.1;opacity:.5;
+ stroke-dasharray:var(--L);stroke-dashoffset:var(--L);animation:drw 1.4s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes drw{to{stroke-dashoffset:0}}
+.legend{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
+.lg{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--ink2);
+ padding:6px 12px;border-radius:20px;border:1px solid var(--rim);background:rgba(255,255,255,.028);
+ backdrop-filter:blur(8px)}
+.lg i{width:7px;height:7px;border-radius:50%;display:block;box-shadow:0 0 10px currentColor}
+.lg small{font-family:var(--mono);font-size:9.5px;color:var(--dim)}
+/* ══ מרחב תלת-ממדי ══ */
+.space{perspective:1500px;perspective-origin:50% 42%;padding:34px 0 8px}
+.deck{position:relative;display:flex;justify-content:center;align-items:flex-start;gap:20px;
+ transform-style:preserve-3d;min-height:230px;flex-wrap:wrap}
+.card{position:relative;width:min(260px,82vw);text-align:start;font-family:inherit;cursor:pointer;
+ border-radius:16px;padding:20px 20px 17px;color:var(--ink2);
+ background:linear-gradient(162deg,rgba(255,255,255,.07),rgba(255,255,255,.018));
+ border:1px solid var(--rim);backdrop-filter:blur(14px);
+ transition:transform .62s cubic-bezier(.16,1,.3,1),opacity .5s,box-shadow .5s,border-color .4s;
+ transform-style:preserve-3d}
+.card[data-on="false"]{transform:translateZ(-150px) rotateY(var(--ry,0deg)) scale(.97);opacity:.4;filter:saturate(.3) blur(.4px)}
+.card[data-on="true"]{transform:translateZ(58px);opacity:1;border-color:var(--c);
+ box-shadow:0 0 0 1px var(--c),0 26px 70px -18px var(--c),0 0 90px -34px var(--c)}
+.card:focus-visible{outline:2px solid var(--c);outline-offset:6px}
+.card .tag{font-family:var(--mono);font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.card[data-on="true"] .tag{color:var(--c)}
+.card .nm{display:block;font-size:19px;font-weight:400;color:var(--ink);margin-top:11px;letter-spacing:-.01em}
+.card .cls{display:block;font-family:var(--mono);font-size:10.5px;color:var(--c);margin-top:3px;direction:ltr}
+.card .big{display:block;font-size:44px;font-weight:200;line-height:1;color:var(--ink);
+ margin-top:15px;letter-spacing:-.045em}
+.card .big u{text-decoration:none;font-size:11px;font-weight:400;color:var(--dim);margin-inline-start:8px;letter-spacing:0}
+.card .src{display:block;font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:15px;
+ padding-top:11px;border-top:1px solid var(--rim2);line-height:1.7}
+.card .src code{direction:ltr;unicode-bidi:isolate;display:inline-block;color:var(--c);opacity:.85}
+/* ══ המסכים ══ */
+.built{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:12px;margin-top:30px}
+.scr{border-radius:13px;padding:15px 16px;border:1px solid var(--rim2);
+ background:linear-gradient(170deg,rgba(255,255,255,.04),rgba(255,255,255,.012));backdrop-filter:blur(10px)}
+.scr .h{font-size:13.5px;font-weight:400;color:var(--ink);display:flex;align-items:baseline;gap:8px;
+ padding-bottom:10px;border-bottom:1px solid var(--rim2);margin-bottom:10px}
+.scr .h .c{font-family:var(--mono);font-size:9.5px;direction:ltr;opacity:.9}
+.flds{display:flex;flex-wrap:wrap;gap:4px}
+.f{font-family:var(--mono);font-size:9.5px;padding:3.5px 8px;border-radius:20px;cursor:pointer;direction:ltr;
+ border:1px solid transparent;transition:.14s;background:rgba(47,227,240,.12);color:var(--schema)}
+.f[aria-pressed="false"]{background:transparent;border-color:var(--rim2);color:var(--dim)}
+.f:focus-visible{outline:2px solid var(--schema);outline-offset:2px}
+/* ══ מונים ══ */
+.meter{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+.m{flex:1 1 130px;border-radius:13px;padding:16px 15px;border:1px solid var(--rim2);
+ background:linear-gradient(170deg,rgba(255,255,255,.04),rgba(255,255,255,.01));backdrop-filter:blur(10px)}
+.m b{display:block;font-size:34px;font-weight:200;line-height:1;letter-spacing:-.04em}
+.m small{display:block;font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:7px;letter-spacing:.16em;text-transform:uppercase}
+.m.ok b{color:var(--schema)} .m.open b{color:var(--open)} .m.zero b{color:var(--ink)}
+.note{margin-top:30px;padding:19px 21px;border-radius:14px;border:1px solid var(--rim2);
+ background:linear-gradient(170deg,rgba(255,92,147,.06),rgba(255,255,255,.012));backdrop-filter:blur(10px)}
+.note p{margin:0;font-size:14.5px;color:var(--ink2)} .note p+p{margin-top:9px}
+.note b{color:var(--ink);font-weight:500}
+.foot{margin-top:66px;padding-top:24px;border-top:1px solid var(--rim2);
+ font-family:var(--mono);font-size:10px;color:var(--dim);line-height:2}
+</style></head><body>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="wrap">
+
+<p class="eyebrow">המחולל · מרחב</p>
+<h1>מרחב <b>האפשרויות</b></h1>
+<p class="sub">אפשרות שלא נבחרה אינה נעלמת ואינה «הצעה» — היא <em>יושבת מאחורה בחלל</em>, בנויה. לחיצה מביאה אותה קדימה. וכל מילה קשורה בחוט-אור למקור שפתר אותה.</p>
+
+<section>
+ <div class="head"><span class="n">01</span><h2>מקור</h2>
+  <span class="why">החוט אינו קישוט: שדה בלי חוט הוא שדה בלי מקור — כלומר המצאה. לכן אין לו איך להיראות כאן.</span></div>
+ <div class="sentbox">
+  <p class="sent" id="sent"></p>
+  <svg id="threads" aria-hidden="true"></svg>
+ </div>
+ <div class="legend">
+  <span class="lg" id="lg-pack" style="color:var(--pack)"><i style="background:var(--pack)"></i><span style="color:var(--ink2)">חבילת-תחום</span><small>vertical-packs</small></span>
+  <span class="lg" id="lg-term" style="color:var(--term)"><i style="background:var(--term)"></i><span style="color:var(--ink2)">מונח</span><small>entity-terms</small></span>
+  <span class="lg" id="lg-schema" style="color:var(--schema)"><i style="background:var(--schema)"></i><span style="color:var(--ink2)">סכימה</span><small>schema-fields</small></span>
+  <span class="lg" id="lg-open" style="color:var(--open)"><i style="background:var(--open)"></i><span style="color:var(--ink2)">פתוח</span><small>טרם נקרס</small></span>
+ </div>
+</section>
+
+<section>
+ <div class="head"><span class="n">02</span><h2>קריסה</h2>
+  <span class="why">שלושתן בנויות עכשיו. המרוחקות אינן ממתינות לבנייה — הן ממתינות לבחירה.</span></div>
+ <div class="space"><div class="deck" id="deck"></div></div>
+ <div class="built" id="built"></div>
+ <div class="meter">
+  <div class="m ok"><b id="mE">3</b><small>ישויות</small></div>
+  <div class="m ok"><b id="mF">76</b><small>שדות</small></div>
+  <div class="m open"><b id="mO">3</b><small>בנויות · אחת נבחרה</small></div>
+  <div class="m zero"><b>0</b><small>המצאות</small></div>
+ </div>
+ <div class="note">
+  <p><b>מה שאין כאן.</b> אין מסך-טעינה, אין «המחולל חושב», ואין רגע שבו הוא חייב להמשיך ולכן ממציא. הוא עצר בכל צומת ובנה את כל הדרכים — הלחיצה רק מחליטה מה נשאר קדימה.</p>
+  <p><b>ומה שאי-אפשר.</b> הצבע נגזר מהמקור, והחוט נמתח אליו. <b>שדה מומצא הוא שדה בלי צבע ובלי חוט</b> — אין לו ייצוג במערכת הזאת.</p>
+ </div>
+</section>
+
+<p class="foot">
+ «קליניקה» ⇐ vertical-packs · «מטופל» ⇐ clinic.terms["entity.family"] ⇐ Family ⇐ 25 שדות · «חדר טיפול» ⇐ entity.room ⇐ Room ⇐ 12 · «חבילות טיפול» — אין מונח באף מקור.<br>
+ 13 תחומים · 32 מונחים · 492 שדות ב-54 מחלקות. כל שם בעמוד נקרא מהעץ — שום דבר לא הומצא.
+</p>
+</div>
+
+<script>
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+/* ══ שדה-רקע: קווי-זרימה איטיים ══ */
+(function(){const c=document.getElementById('field'),x=c.getContext('2d');
+ let W,H,R=Math.min(devicePixelRatio||1,2),P=[];
+ const HUE=['#FFA033','#B592FF','#2FE3F0','#FF5C93'];
+ function size(){W=innerWidth;H=innerHeight;c.width=W*R;c.height=H*R;x.setTransform(R,0,0,R,0,0);
+  P=Array.from({length:Math.min(46,Math.round(W/26))},()=>({
+   x:Math.random()*W,y:Math.random()*H,v:.1+Math.random()*.26,
+   r:.6+Math.random()*1.5,h:HUE[(Math.random()*4)|0],p:Math.random()*6.28,a:.1+Math.random()*.3}));}
+ size();addEventListener('resize',size);
+ let t=0;
+ function f(){t+=RM?0:.004;x.clearRect(0,0,W,H);
+  for(const p of P){const dx=Math.sin(t*1.4+p.p)*.35;
+   p.y-=p.v;p.x+=dx;if(p.y<-12){p.y=H+12;p.x=Math.random()*W;}
+   const g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*11);
+   g.addColorStop(0,p.h);g.addColorStop(1,'transparent');
+   x.globalAlpha=p.a;x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,p.r*11,0,6.284);x.fill();}
+  x.globalAlpha=1;requestAnimationFrame(f);}
+ f();})();
+
+/* ══ המשפט + חוטים ══ */
+const TOK=[['מערכת',0],['לניהול',0],['קליניקה','pack'],['עם',0],['מטופלים','term'],
+           ['חדרי','term'],['טיפול','term'],['וחבילות','open'],['טיפול','open']];
+(function(){
+ const el=document.getElementById('sent');
+ el.innerHTML=TOK.map(([w,s])=>'<span class="tok"'+(s?' data-s="'+s+'" style="--c:var(--'+s+')"':'')+'>'+w+'</span>').join('');
+ function thread(){
+  const svg=document.getElementById('threads'),box=svg.getBoundingClientRect();
+  const done=new Set();let d='';
+  document.querySelectorAll('.tok[data-s]').forEach(t=>{
+   const s=t.dataset.s;if(done.has(s))return;done.add(s);
+   const a=t.getBoundingClientRect(),lg=document.getElementById('lg-'+s);if(!lg)return;
+   const b=lg.getBoundingClientRect();
+   const x1=a.left+a.width/2-box.left, y1=a.bottom-box.top+4;
+   const x2=b.left+b.width/2-box.left, y2=b.top-box.top-2;
+   const m=(y1+y2)/2;
+   d+='<path d="M'+x1+','+y1+' C'+x1+','+m+' '+x2+','+m+' '+x2+','+y2+'" stroke="var(--'+s+')" style="--L:400;animation-delay:'+(done.size*.13)+'s"/>';});
+  svg.innerHTML=d;}
+ addEventListener('load',thread);addEventListener('resize',thread);setTimeout(thread,140);
+})();
+
+/* ══ המרחב ══ */
+const OPT=[
+ {id:'course',nm:'חבילת טיפול',cls:'Course',n:39,c:'var(--schema)',on:true,ry:'12deg',
+  src:'39 שדות מ<code>schema-fields.mjs</code>',f:['id','name','teacherId','roomId','price','capacity','startDate','status']},
+ {id:'new',nm:'ישות חדשה',cls:'from sentence',n:2,c:'var(--said)',on:false,ry:'0deg',
+  src:'מהמשפט שלך — «חבילות» · «טיפול»',f:['חבילה','טיפול']},
+ {id:'none',nm:'לא ישות',cls:'—',n:0,c:'var(--dim)',on:false,ry:'-12deg',
+  src:'לא ייבנה מסך · נשאר טקסט',f:[]}];
+const FIXED=[
+ {nm:'מטופלים',cls:'Family',n:25,f:['id','name','father','mother','phone','phone2','email','city','address','status','notes','cred']},
+ {nm:'חדרי טיפול',cls:'Room',n:12,f:['id','name','active','slot','cap','location','rate','from','to','eq']}];
+const off=new Set();
+function draw(){
+ document.getElementById('deck').innerHTML=OPT.map(o=>
+  '<button class="card" data-id="'+o.id+'" data-on="'+o.on+'" aria-pressed="'+o.on+'" style="--c:'+o.c+';--ry:'+o.ry+'">'
+  +'<span class="tag">'+(o.on?'◆ קדימה':'◇ מאחור · בנוי')+'</span>'
+  +'<span class="nm">'+o.nm+'</span><span class="cls">'+o.cls+'</span>'
+  +'<span class="big">'+(o.n||'—')+(o.n?'<u>שדות</u>':'')+'</span>'
+  +'<span class="src">'+o.src+'</span></button>').join('');
+ const sel=OPT.find(o=>o.on);
+ const live=FIXED.concat(sel&&sel.n?[{nm:sel.nm,cls:sel.cls,n:sel.n,f:sel.f,pick:1}]:[]);
+ document.getElementById('built').innerHTML=live.map(e=>
+  '<div class="scr"><div class="h">'+e.nm+'<span class="c" style="color:'+(e.pick?'var(--said)':'var(--schema)')+'">'+e.cls+'</span></div>'
+  +'<div class="flds">'+e.f.map(f=>'<button class="f" data-k="'+e.cls+f+'" aria-pressed="'+(!off.has(e.cls+f))+'">'+f+'</button>').join('')+'</div></div>').join('');
+ let en=0,fl=0;for(const e of live){en++;fl+=e.n-e.f.filter(f=>off.has(e.cls+f)).length;}
+ document.getElementById('mE').textContent=en;
+ document.getElementById('mF').textContent=fl;
+}
+document.addEventListener('click',ev=>{
+ const c=ev.target.closest('.card');
+ if(c){OPT.forEach(o=>o.on=(o.id===c.dataset.id));return draw();}
+ const f=ev.target.closest('.f');
+ if(f){off.has(f.dataset.k)?off.delete(f.dataset.k):off.add(f.dataset.k);draw();}
+});
+draw();
+</script>
+</body></html>

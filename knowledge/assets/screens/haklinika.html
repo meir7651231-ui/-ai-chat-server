@@ -1,0 +1,264 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>קליניקה — נבנה ממשפט</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+ --bg:#F4F6F8; --card:#FFFFFF; --sink:#EDF1F5; --ink:#0F1720; --ink2:#44525F; --mute:#7C8A99;
+ --line:#DFE5EB; --line2:#EDF1F5;
+ --brand:#0E6E7A; --brand2:#E6F2F3; --brandLine:#9CCBD1;
+ --ok:#1A7A4F; --okbg:#E4F2EA; --warn:#9A6B0C; --warnbg:#FBF0DB; --bad:#9E3434; --badbg:#FAE9E7;
+ --mono:'IBM Plex Mono',ui-monospace,monospace; --sans:'Assistant',system-ui,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#0E1216; --card:#161C22; --sink:#11161B; --ink:#EAF0F5; --ink2:#AEBCC8; --mute:#7A8896;
+ --line:#242D36; --line2:#1B222A;
+ --brand:#4FC3CE; --brand2:#12292C; --brandLine:#22454A;
+ --ok:#6BCB98; --okbg:#122419; --warn:#D8AC55; --warnbg:#251D0E; --bad:#E08C86; --badbg:#271613;}}
+:root[data-theme="dark"]{
+ --bg:#0E1216; --card:#161C22; --sink:#11161B; --ink:#EAF0F5; --ink2:#AEBCC8; --mute:#7A8896;
+ --line:#242D36; --line2:#1B222A;
+ --brand:#4FC3CE; --brand2:#12292C; --brandLine:#22454A;
+ --ok:#6BCB98; --okbg:#122419; --warn:#D8AC55; --warnbg:#251D0E; --bad:#E08C86; --badbg:#271613;}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
+ -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;
+ padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+/* ══ פס-מקור ══ */
+.origin{background:var(--brand2);border-bottom:1px solid var(--brandLine);padding:11px 18px;
+ display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.origin .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--brand);text-transform:uppercase;flex:none}
+.origin .q{font-size:14.5px;color:var(--ink);font-weight:600}
+.origin .meta{margin-inline-start:auto;font-family:var(--mono);font-size:10px;color:var(--mute);display:flex;gap:14px;flex-wrap:wrap}
+.origin .meta b{color:var(--brand);font-weight:500}
+/* ══ מעטפת ══ */
+.app{display:grid;grid-template-columns:212px 1fr;min-height:calc(100vh - 46px)}
+@media (max-width:820px){.app{grid-template-columns:1fr}}
+/* ══ צד ══ */
+nav{background:var(--card);border-inline-end:1px solid var(--line);padding:16px 12px;display:flex;flex-direction:column;gap:3px}
+@media (max-width:820px){nav{flex-direction:row;overflow-x:auto;border-inline-end:0;border-bottom:1px solid var(--line);padding:9px 10px}}
+nav .brand{display:flex;align-items:center;gap:9px;padding:6px 10px 16px}
+nav .brand .m{width:26px;height:26px;border-radius:7px;background:var(--brand);flex:none;
+ display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px}
+nav .brand span{font-size:15px;font-weight:700;letter-spacing:-.01em}
+@media (max-width:820px){nav .brand{display:none}}
+.nv{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:8px;cursor:pointer;
+ border:0;background:none;font:inherit;font-size:14px;color:var(--ink2);text-align:start;width:100%;white-space:nowrap;transition:.13s}
+.nv:hover{background:var(--sink)}
+.nv[aria-current="true"]{background:var(--brand2);color:var(--brand);font-weight:600}
+.nv .c{margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;color:var(--mute)}
+.nv[aria-current="true"] .c{color:var(--brand)}
+.nv:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+/* ══ תוכן ══ */
+main{padding:20px 22px 60px;min-width:0}
+.ph{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.ph h1{font-size:25px;font-weight:700;margin:0;letter-spacing:-.02em}
+.ph .sub{font-size:13px;color:var(--mute)}
+.ph .act{margin-inline-start:auto;display:flex;gap:8px}
+.btn{font:inherit;font-size:13.5px;padding:8px 15px;border-radius:8px;cursor:pointer;
+ border:1px solid var(--line);background:var(--card);color:var(--ink2)}
+.btn.p{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.btn:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+/* ══ כרטיסי-מדד ══ */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(142px,1fr));gap:11px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.kpi b{display:block;font-size:27px;font-weight:700;line-height:1.1;letter-spacing:-.025em}
+.kpi small{display:block;font-size:12px;color:var(--mute);margin-top:3px}
+.kpi .d{font-size:11.5px;margin-top:6px;font-weight:600}
+.kpi .d.up{color:var(--ok)} .kpi .d.dn{color:var(--bad)}
+/* ══ טבלה ══ */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.ptop{display:flex;align-items:center;gap:10px;padding:12px 15px;border-bottom:1px solid var(--line2);flex-wrap:wrap}
+.ptop h2{font-size:15px;font-weight:700;margin:0}
+.srch{margin-inline-start:auto;display:flex;align-items:center;gap:7px;border:1px solid var(--line);
+ border-radius:8px;padding:6px 11px;background:var(--sink);min-width:0}
+.srch input{border:0;background:none;font:inherit;font-size:13.5px;color:var(--ink);width:150px;min-width:0}
+.srch input:focus{outline:none}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{text-align:start;padding:10px 15px;font-size:13.5px;border-bottom:1px solid var(--line2);white-space:nowrap}
+th{font-size:11px;font-weight:600;color:var(--mute);background:var(--sink);letter-spacing:.02em;position:sticky;top:0}
+tbody tr{cursor:pointer;transition:.1s}
+tbody tr:hover{background:var(--sink)}
+tbody tr[aria-selected="true"]{background:var(--brand2)}
+td.n{font-weight:600;color:var(--ink)}
+td .sub{display:block;font-size:11.5px;color:var(--mute);font-weight:400}
+.pill{display:inline-block;font-size:11.5px;font-weight:600;padding:2.5px 9px;border-radius:12px}
+.pill.a{background:var(--okbg);color:var(--ok)} .pill.b{background:var(--warnbg);color:var(--warn)}
+.pill.c{background:var(--badbg);color:var(--bad)}
+/* ══ פרטים ══ */
+.split{display:grid;grid-template-columns:1fr 340px;gap:14px;align-items:start}
+@media (max-width:1020px){.split{grid-template-columns:1fr}}
+.det .g{padding:13px 15px;border-bottom:1px solid var(--line2)}
+.det .g:last-child{border-bottom:0}
+.det .gt{font-size:11px;font-weight:600;color:var(--mute);letter-spacing:.03em;margin-bottom:9px}
+.fr{display:grid;grid-template-columns:96px 1fr;gap:5px 10px;font-size:13.5px;align-items:baseline}
+.fr dt{color:var(--mute);font-size:12.5px}
+.fr dd{margin:0;color:var(--ink)}
+.fr dd.mono{font-family:var(--mono);font-size:12px}
+.fr dd.em{color:var(--mute);font-style:italic}
+/* ══ לוח ══ */
+.grid{overflow-x:auto}
+.cal{display:grid;grid-template-columns:76px repeat(6,minmax(84px,1fr));min-width:640px}
+.cal .hd{background:var(--sink);padding:9px 8px;font-size:12px;font-weight:600;text-align:center;
+ border-bottom:1px solid var(--line);color:var(--ink2)}
+.cal .tm{padding:9px 8px;font-family:var(--mono);font-size:11px;color:var(--mute);text-align:center;
+ border-bottom:1px solid var(--line2);border-inline-end:1px solid var(--line2)}
+.cal .cell{border-bottom:1px solid var(--line2);border-inline-end:1px solid var(--line2);padding:4px;min-height:42px}
+.ev{background:var(--brand2);border:1px solid var(--brandLine);border-inline-start:3px solid var(--brand);
+ border-radius:5px;padding:4px 7px;font-size:11.5px;line-height:1.35;height:100%}
+.ev b{display:block;font-weight:600;color:var(--ink)}
+.ev span{color:var(--mute);font-size:10.5px;font-family:var(--mono)}
+.foot{margin-top:24px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:11px;
+ font-size:12.5px;color:var(--mute);line-height:1.8}
+.foot b{color:var(--ink2);font-weight:600}
+.foot code{font-family:var(--mono);font-size:11.5px;color:var(--brand)}
+</style></head><body>
+
+<div class="origin">
+ <span class="tag">נבנה מהמשפט</span>
+ <span class="q">«מערכת לניהול קליניקה עם מטופלים, חדרי טיפול וחבילות טיפול»</span>
+ <span class="meta"><span>תחום <b>clinic</b></span><span><b>3</b> ישויות</span><span><b>76</b> שדות</span><span><b>0</b> המצאות</span><span>‎1.4 שנ׳</span></span>
+</div>
+
+<div class="app">
+ <nav>
+  <div class="brand"><span class="m">ק</span><span>הקליניקה</span></div>
+  <button class="nv" data-p="dash" aria-current="true">לוח בקרה</button>
+  <button class="nv" data-p="pat">מטופלים<span class="c">248</span></button>
+  <button class="nv" data-p="room">חדרי טיפול<span class="c">6</span></button>
+  <button class="nv" data-p="pkg">חבילות טיפול<span class="c">14</span></button>
+ </nav>
+ <main id="main"></main>
+</div>
+
+<script>
+/* ── דאטת-הדגמה (מסומנת ככזו) · השדות עצמם מהסכימה האמיתית ── */
+const PAT=[
+ {id:'F-1041',name:'משפחת אברמוביץ',father:'יוסף',mother:'רחל',phone:'052-8841320',phone2:'03-6741220',
+  email:'y.abr@mail.co.il',city:'בני ברק',address:'רבי עקיבא 84',community:'ויז׳ניץ',maritalStatus:'נשוי',
+  language:'עברית',status:'פעיל',kidsHome:4,kidsMarried:2,discount:'10%',notes:'מגיע בימי שלישי',cred:1240},
+ {id:'F-1058',name:'משפחת שטרן',father:'מנחם',mother:'ברכה',phone:'054-7723901',phone2:'',
+  email:'stern.m@mail.co.il',city:'ירושלים',address:'סורוצקין 17',community:'גור',maritalStatus:'נשוי',
+  language:'עברית',status:'ממתין',kidsHome:6,kidsMarried:1,discount:'—',notes:'',cred:0},
+ {id:'F-1063',name:'משפחת דהן',father:'אליהו',mother:'מרים',phone:'050-3320884',phone2:'08-9912004',
+  email:'dahan@mail.co.il',city:'אלעד',address:'שמעיה 3',community:'ספרדי',maritalStatus:'נשוי',
+  language:'עברית',status:'פעיל',kidsHome:3,kidsMarried:0,discount:'—',notes:'רגישות לתרופה',cred:480},
+ {id:'F-1077',name:'משפחת ויזל',father:'שמואל',mother:'חיה',phone:'053-2201774',phone2:'',
+  email:'weisel@mail.co.il',city:'מודיעין עילית',address:'נתיבות המשפט 22',community:'ליטאי',
+  maritalStatus:'נשוי',language:'אידיש',status:'מוקפא',kidsHome:5,kidsMarried:3,discount:'25%',notes:'',cred:0},
+ {id:'F-1082',name:'משפחת כהן',father:'דוד',mother:'אסתר',phone:'052-9930118',phone2:'',
+  email:'cohen.d@mail.co.il',city:'בית שמש',address:'נהר הירדן 9',community:'חב״ד',maritalStatus:'נשוי',
+  language:'עברית',status:'פעיל',kidsHome:2,kidsMarried:4,discount:'—',notes:'',cred:320}];
+const ROOM=[{id:'R-1',name:'חדר טיפול א׳',cap:1,location:'קומה 1',from:'08:00',to:'19:00',rate:180,active:1,eq:'מיטת טיפול · כיור'},
+ {id:'R-2',name:'חדר טיפול ב׳',cap:1,location:'קומה 1',from:'08:00',to:'17:00',rate:180,active:1,eq:'מיטת טיפול'},
+ {id:'R-3',name:'חדר אבחון',cap:2,location:'קומה 2',from:'09:00',to:'16:00',rate:240,active:1,eq:'מחשב · מקרן'},
+ {id:'R-4',name:'חדר קבוצתי',cap:10,location:'קומה 2',from:'08:00',to:'21:00',rate:320,active:1,eq:'כיסאות · לוח'},
+ {id:'R-5',name:'חדר שקט',cap:1,location:'קומה 1',from:'08:00',to:'19:00',rate:150,active:0,eq:'—'},
+ {id:'R-6',name:'חדר המתנה',cap:12,location:'כניסה',from:'07:30',to:'21:00',rate:0,active:1,eq:'—'}];
+const PKG=[{id:'C-11',name:'סדרת פיזיותרפיה · 10',price:1800,size:10,weekday:'ב׳',time:'09:00',room:'חדר טיפול א׳',max:1},
+ {id:'C-12',name:'אבחון ראשוני',price:420,size:1,weekday:'—',time:'—',room:'חדר אבחון',max:1},
+ {id:'C-14',name:'קבוצת תנועה',price:900,size:12,weekday:'ד׳',time:'17:30',room:'חדר קבוצתי',max:10}];
+const PILL={'פעיל':'a','ממתין':'b','מוקפא':'c'};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let page='dash',sel=0,q='';
+
+function dash(){
+ return `<div class="ph"><h1>לוח בקרה</h1><span class="sub">ראשון, ט״ז אלול</span>
+  <span class="act"><button class="btn">ייצוא</button><button class="btn p">מטופל חדש</button></span></div>
+ <div class="kpis">
+  <div class="kpi"><b>248</b><small>מטופלים</small><div class="d up">+12 החודש</div></div>
+  <div class="kpi"><b>31</b><small>תורים השבוע</small><div class="d up">+4</div></div>
+  <div class="kpi"><b>5</b><small>חדרים פעילים</small><div class="d">מתוך 6</div></div>
+  <div class="kpi"><b>₪ 18,420</b><small>גבייה החודש</small><div class="d dn">−3%</div></div>
+ </div>
+ <div class="split">
+  <div class="panel"><div class="ptop"><h2>תורים היום</h2></div>
+   <div class="grid"><div class="cal">
+    <div class="hd">שעה</div><div class="hd">א׳</div><div class="hd">ב׳</div><div class="hd">ג׳</div><div class="hd">ד׳</div><div class="hd">ה׳</div><div class="hd">ו׳</div>
+    ${['08:00','09:00','10:00','11:00'].map((t,r)=>`<div class="tm">${t}</div>`+
+      [0,1,2,3,4,5].map(d=>{const has=(r+d)%4===1;
+      return `<div class="cell">${has?`<div class="ev"><b>${['אברמוביץ','שטרן','דהן','ויזל'][(r+d)%4]}</b><span>${ROOM[(r+d)%3].name}</span></div>`:''}</div>`;}).join('')).join('')}
+   </div></div></div>
+  <div class="panel"><div class="ptop"><h2>ממתינים לאישור</h2></div>
+   ${PAT.filter(p=>p.status!=='פעיל').map(p=>`<div class="g" style="padding:12px 15px;border-bottom:1px solid var(--line2)">
+    <div style="font-weight:600">${esc(p.name)}</div>
+    <div style="font-size:12.5px;color:var(--mute)">${esc(p.city)} · ${esc(p.phone)}</div>
+    <div style="margin-top:7px"><span class="pill ${PILL[p.status]}">${esc(p.status)}</span></div></div>`).join('')}
+  </div>
+ </div>`;}
+
+function pat(){
+ const rows=PAT.filter(p=>!q||(p.name+p.city+p.phone+p.community).includes(q));
+ const p=PAT[sel];
+ return `<div class="ph"><h1>מטופלים</h1><span class="sub">${rows.length} מתוך ${PAT.length}</span>
+  <span class="act"><button class="btn">ייצוא</button><button class="btn p">מטופל חדש</button></span></div>
+ <div class="split">
+  <div class="panel"><div class="ptop"><h2>רשימה</h2>
+    <span class="srch"><input id="q" placeholder="חיפוש שם · עיר · טלפון" value="${esc(q)}"></span></div>
+   <div class="tw"><table><thead><tr>
+     <th>מטופל</th><th>עיר</th><th>טלפון</th><th>קהילה</th><th>ילדים</th><th>מצב</th></tr></thead><tbody>
+    ${rows.map(r=>{const i=PAT.indexOf(r);return `<tr data-i="${i}" aria-selected="${i===sel}">
+     <td class="n">${esc(r.name)}<span class="sub">${esc(r.father)} ו${esc(r.mother)}</span></td>
+     <td>${esc(r.city)}</td><td class="n" style="font-weight:400">${esc(r.phone)}</td>
+     <td>${esc(r.community)}</td><td>${r.kidsHome}</td>
+     <td><span class="pill ${PILL[r.status]}">${esc(r.status)}</span></td></tr>`;}).join('')}
+   </tbody></table></div></div>
+  <div class="panel det">
+   <div class="ptop"><h2>${esc(p.name)}</h2><span class="pill ${PILL[p.status]}" style="margin-inline-start:auto">${esc(p.status)}</span></div>
+   <div class="g"><div class="gt">זיהוי</div><dl class="fr">
+    <dt>מזהה</dt><dd class="mono">${p.id}</dd>
+    <dt>אב</dt><dd>${esc(p.father)}</dd><dt>אם</dt><dd>${esc(p.mother)}</dd>
+    <dt>מצב אישי</dt><dd>${esc(p.maritalStatus)}</dd><dt>שפה</dt><dd>${esc(p.language)}</dd></dl></div>
+   <div class="g"><div class="gt">קשר</div><dl class="fr">
+    <dt>טלפון</dt><dd class="mono">${esc(p.phone)}</dd>
+    <dt>טלפון נוסף</dt><dd class="${p.phone2?'mono':'em'}">${esc(p.phone2||'לא הוזן')}</dd>
+    <dt>אימייל</dt><dd class="mono">${esc(p.email)}</dd>
+    <dt>עיר</dt><dd>${esc(p.city)}</dd><dt>כתובת</dt><dd>${esc(p.address)}</dd></dl></div>
+   <div class="g"><div class="gt">משפחה וחיוב</div><dl class="fr">
+    <dt>קהילה</dt><dd>${esc(p.community)}</dd>
+    <dt>ילדים בבית</dt><dd>${p.kidsHome}</dd><dt>נשואים</dt><dd>${p.kidsMarried}</dd>
+    <dt>הנחה</dt><dd>${esc(p.discount)}</dd>
+    <dt>יתרה</dt><dd class="mono">₪ ${p.cred.toLocaleString('he-IL')}</dd>
+    <dt>הערות</dt><dd class="${p.notes?'':'em'}">${esc(p.notes||'אין')}</dd></dl></div>
+  </div>
+ </div>
+ <div class="foot"><b>כל שדה במסך הזה בא מהסכימה.</b> «מטופל» בחבילת <code>clinic</code> הוא <code>entity.family</code> ⇐ <code>Family</code>, ול-<code>Family</code> יש <b>25 שדות</b> ב-<code>schema-fields.mjs</code>. הנתונים לדוגמה — <b>השדות אמיתיים</b>.</div>`;}
+
+function room(){
+ return `<div class="ph"><h1>חדרי טיפול</h1><span class="sub">6 חדרים · 5 פעילים</span>
+  <span class="act"><button class="btn p">חדר חדש</button></span></div>
+ <div class="panel"><div class="ptop"><h2>רשימת חדרים</h2></div><div class="tw"><table><thead><tr>
+   <th>חדר</th><th>מיקום</th><th>קיבולת</th><th>שעות</th><th>תעריף</th><th>ציוד</th><th>מצב</th></tr></thead><tbody>
+  ${ROOM.map(r=>`<tr><td class="n">${esc(r.name)}<span class="sub">${r.id}</span></td>
+   <td>${esc(r.location)}</td><td>${r.cap}</td>
+   <td class="n" style="font-weight:400;font-family:var(--mono);font-size:12.5px">${r.from}–${r.to}</td>
+   <td>${r.rate?'₪ '+r.rate:'—'}</td><td>${esc(r.eq)}</td>
+   <td><span class="pill ${r.active?'a':'c'}">${r.active?'פעיל':'סגור'}</span></td></tr>`).join('')}
+ </tbody></table></div></div>
+ <div class="foot"><b>«חדר טיפול»</b> ⇐ <code>entity.room</code> ⇐ <code>Room</code> · <b>12 שדות</b>: id · name · active · slot · cap · location · rate · from · to · access · notes · eq. כל עמודה בטבלה היא שדה אמיתי.</div>`;}
+
+function pkg(){
+ return `<div class="ph"><h1>חבילות טיפול</h1><span class="sub">14 חבילות</span>
+  <span class="act"><button class="btn p">חבילה חדשה</button></span></div>
+ <div class="panel"><div class="ptop"><h2>חבילות</h2></div><div class="tw"><table><thead><tr>
+   <th>חבילה</th><th>מחיר</th><th>מפגשים</th><th>יום</th><th>שעה</th><th>חדר</th><th>מקסימום</th></tr></thead><tbody>
+  ${PKG.map(c=>`<tr><td class="n">${esc(c.name)}<span class="sub">${c.id}</span></td>
+   <td>₪ ${c.price.toLocaleString('he-IL')}</td><td>${c.size}</td><td>${c.weekday}</td>
+   <td class="n" style="font-weight:400;font-family:var(--mono);font-size:12.5px">${c.time}</td>
+   <td>${esc(c.room)}</td><td>${c.max}</td></tr>`).join('')}
+ </tbody></table></div></div>
+ <div class="foot"><b>«חבילת טיפול»</b> ⇐ <code>entity.course</code> ⇐ <code>Course</code> · <b>39 שדות</b> — כולל שלוש רמות תמחור, טווח גילאים, מגדר ומודל-חיוב. המסך מציג שבעה; השאר בטופס העריכה.</div>`;}
+
+const P={dash,pat,room,pkg};
+function render(){document.getElementById('main').innerHTML=P[page]();
+ document.querySelectorAll('.nv').forEach(b=>b.setAttribute('aria-current',b.dataset.p===page));}
+document.addEventListener('click',e=>{
+ const n=e.target.closest('.nv');if(n){page=n.dataset.p;return render();}
+ const r=e.target.closest('tbody tr');if(r&&r.dataset.i!==undefined){sel=+r.dataset.i;return render();}});
+document.addEventListener('input',e=>{if(e.target.id==='q'){q=e.target.value;
+ const v=q;render();const el=document.getElementById('q');if(el){el.focus();el.setSelectionRange(v.length,v.length);}}});
+render();
+</script>
+</body></html>

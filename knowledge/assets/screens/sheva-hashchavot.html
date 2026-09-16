@@ -1,0 +1,242 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>שבע השכבות</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+ --bg:#F6F7F9; --card:#FFFFFF; --sink:#EFF2F5; --ink:#0E151C; --ink2:#41505E; --mute:#78879A;
+ --line:#DEE4EA; --line2:#EDF0F4;
+ --acc:#1B5E8C; --accbg:#E6EEF5; --accline:#A8C6DD;
+ --ok:#186B46; --okbg:#E3F0E9; --gap:#8E3A2E; --gapbg:#FAE9E5; --ref:#6A3E8F; --refbg:#F0E9F7;
+ --mono:'IBM Plex Mono',ui-monospace,monospace; --sans:'Assistant',system-ui,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#0D1116; --card:#151B22; --sink:#10161B; --ink:#E9EFF5; --ink2:#AEBCC9; --mute:#7A8A99;
+ --line:#232C35; --line2:#1A222A;
+ --acc:#63AEDC; --accbg:#12222E; --accline:#274155;
+ --ok:#6CC79A; --okbg:#112319; --gap:#DE9084; --gapbg:#2A1714; --ref:#B58EDA; --refbg:#1F1729;}}
+:root[data-theme="dark"]{
+ --bg:#0D1116; --card:#151B22; --sink:#10161B; --ink:#E9EFF5; --ink2:#AEBCC9; --mute:#7A8A99;
+ --line:#232C35; --line2:#1A222A;
+ --acc:#63AEDC; --accbg:#12222E; --accline:#274155;
+ --ok:#6CC79A; --okbg:#112319; --gap:#DE9084; --gapbg:#2A1714; --ref:#B58EDA; --refbg:#1F1729;}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.62;
+ -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;
+ padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:900px;margin:0 auto;padding-inline:18px;padding-block:48px 90px}
+h1{font-size:clamp(32px,6.6vw,50px);font-weight:800;letter-spacing:-.03em;line-height:1.04;margin:0 0 13px}
+h2{font-size:clamp(20px,3.6vw,27px);font-weight:800;letter-spacing:-.018em;margin:0 0 8px}
+h3{font-size:16.5px;font-weight:700;margin:0 0 5px}
+p{margin:0 0 14px;color:var(--ink2);max-width:66ch}
+.lead{font-size:18px;color:var(--ink2);max-width:58ch;margin:0}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--mute);text-transform:uppercase;margin:0 0 14px}
+section{margin-top:52px}
+.sec-n{font-family:var(--mono);font-size:10.5px;color:var(--mute);letter-spacing:.14em;margin-bottom:5px}
+hr{border:0;border-top:1px solid var(--line);margin:46px 0}
+code{font-family:var(--mono);font-size:.88em;background:var(--sink);padding:1.5px 5px;border-radius:4px}
+/* ══ שכבה ══ */
+.L{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:14px 0;overflow:hidden}
+.L>.h{display:flex;align-items:baseline;gap:11px;padding:13px 16px;background:var(--sink);
+ border-bottom:1px solid var(--line);flex-wrap:wrap}
+.L .num{font-family:var(--mono);font-size:17px;font-weight:700;color:var(--acc);line-height:1}
+.L .ttl{font-size:16.5px;font-weight:800;letter-spacing:-.01em}
+.L .eng{margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;color:var(--mute);direction:ltr}
+.L>.b{padding:15px 16px}
+.L .b>p:last-child{margin-bottom:0}
+.duty{display:grid;grid-template-columns:auto 1fr;gap:7px 12px;margin:0 0 14px;font-size:14px}
+.duty dt{font-family:var(--mono);font-size:10.5px;color:var(--mute);letter-spacing:.05em;padding-top:4px;white-space:nowrap}
+.duty dd{margin:0;color:var(--ink2)}
+.duty dd b{color:var(--ink);font-weight:600}
+.state{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;
+ padding:3px 10px;border-radius:12px;white-space:nowrap}
+.state.ok{background:var(--okbg);color:var(--ok)}
+.state.gap{background:var(--gapbg);color:var(--gap)}
+/* ══ הפניה ══ */
+.ref{background:var(--refbg);border-radius:9px;padding:12px 14px;margin-top:4px}
+.ref .rt{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--ref);
+ text-transform:uppercase;margin-bottom:8px}
+.ref ul{margin:0;padding-inline-start:18px}
+.ref li{margin-bottom:7px;font-size:13.5px;color:var(--ink2)}
+.ref li:last-child{margin-bottom:0}
+.ref li b{color:var(--ink);font-weight:700}
+.ref li em{font-style:normal;color:var(--ref);font-weight:600}
+/* ══ טבלה ══ */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:11px;margin:18px 0;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:520px}
+th,td{text-align:start;padding:10px 14px;border-bottom:1px solid var(--line2);font-size:13.5px;color:var(--ink2);vertical-align:top}
+th{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.07em;color:var(--mute);
+ text-transform:uppercase;background:var(--sink)}
+td:first-child{color:var(--ink);font-weight:600}
+tr:last-child td{border-bottom:0}
+.n{font-family:var(--mono);font-weight:500}
+.note{background:var(--card);border:1px solid var(--line);border-inline-start:3px solid var(--acc);
+ border-radius:0 11px 11px 0;padding:17px 19px;margin:20px 0}
+.note p{margin:0;font-size:14.5px} .note p+p{margin-top:9px}
+.note b{color:var(--ink);font-weight:700}
+.foot{margin-top:58px;padding-top:21px;border-top:1px solid var(--line);
+ font-family:var(--mono);font-size:10.5px;color:var(--mute);line-height:1.95}
+</style></head><body>
+<div class="wrap">
+
+<p class="eyebrow">המחולל · מפרט מלא</p>
+<h1>שבע השכבות</h1>
+<p class="lead">משפט אחד בעברית נכנס. אפליקציה עובדת יוצאת. ביניהם שבע שכבות — לכל אחת חובה מדויקת, מנועים משלה, ומוצר קיים שכבר פתר בדיוק את החלק הזה.</p>
+
+<div class="tbl"><table>
+ <thead><tr><th>סך-הכל</th><th>נמדד</th></tr></thead>
+ <tbody>
+  <tr><td>מנועים</td><td class="n">295 — machtzev 210 · gen 83 · yeshiva 2</td></tr>
+  <tr><td>קבצי פלט</td><td class="n">577 Dart · 130,564 שורות</td></tr>
+  <tr><td>מי מייצר אותם</td><td class="n">app-ds 453 · retarget 37 · core 8 · balagan 9 · שאר 70</td></tr>
+  <tr><td>שערי משטרה</td><td class="n">55 — מהם 5 מוכחים</td></tr>
+ </tbody>
+</table></div>
+
+<hr>
+
+<!-- ══════ 1 ══════ -->
+<div class="L">
+ <div class="h"><span class="num">1</span><span class="ttl">שמיעה</span><span class="eng">nl-spec · sentence</span></div>
+ <div class="b">
+  <dl class="duty">
+   <dt>חובה</dt><dd>משפט־עברית חופשי ⇐ רשימת מילים־ישות. <b>אף מילה לא מנוחשת.</b> ניסוח שונה של אותה כוונה חייב לתת אותה תוצאה.</dd>
+   <dt>קלט</dt><dd><code>"מערכת לניהול קליניקה עם מטופלים"</code> — קול או הקלדה</dd>
+   <dt>פלט</dt><dd>תחום + מילים, כל אחת עם ציון־ודאות</dd>
+   <dt>מצב</dt><dd><span class="state ok">sentence סגור · 16/16</span> <span class="state gap">nl-spec ממציא · 40/43</span></dd>
+  </dl>
+  <div class="ref"><div class="rt">מאיפה לקחת עיצוב</div><ul>
+   <li><b>Lovable · Bolt.new · v0</b> — <em>מסך מפוצל</em>: שיחה בצד אחד, תצוגה חיה בשני. המשפט שלך נשאר גלוי למעלה כ«מקור» שאפשר לערוך ולבנות מחדש.</li>
+   <li><b>Raycast · Linear (⌘K)</b> — <em>שורת־פקודה שמבינה תוך כדי הקלדה</em>: הצעות מופיעות אחרי שתי אותיות, ו־Enter מבצע. זו התחושה שצריכה להיות למשפט.</li>
+   <li><b>Superhuman</b> — <em>מהירות כערך עיצובי</em>: אפס מסכי־טעינה, הכל מיידי.</li>
+  </ul></div>
+ </div>
+</div>
+
+<!-- ══════ 2 ══════ -->
+<div class="L">
+ <div class="h"><span class="num">2</span><span class="ttl">זיהוי תחום</span><span class="eng">vertical-packs</span></div>
+ <div class="b">
+  <dl class="duty">
+   <dt>חובה</dt><dd>לזהות איזה עסק זה, מתוך <b>13 חבילות</b>, ולטעון את מילון־התחום שלו. «מטופל» בקליניקה, «לקוח» במוסך, «אורח» בצימרים — <b>אותה סכימה, מילים אחרות</b>.</dd>
+   <dt>פלט</dt><dd><code>clinic</code> + <code>terms</code> + <code>modules</code> (מה נדלק ומה כבוי)</dd>
+   <dt>מצב</dt><dd><span class="state ok">13 חבילות בנויות</span> <span class="state gap">המחולל לא קורא אותן</span></dd>
+  </dl>
+  <div class="ref"><div class="rt">מאיפה לקחת עיצוב</div><ul>
+   <li><b>Stripe · Shopify — מסך ההקמה</b>: <em>«באיזה תחום אתה?»</em> כרשת אייקונים גדולים. בחירה אחת משנה את כל המוצר. זה בדיוק שלב 1 באשף שלך.</li>
+   <li><b>Notion Templates · Airtable Universe</b> — <em>גלריית־תבניות עם תצוגה מקדימה אמיתית</em>, לא איור. רואים את האפליקציה לפני שבוחרים.</li>
+   <li><b>Salesforce Industry Clouds</b> — <em>אותו מנוע, אוצר־מילים אחר לכל ורטיקל</em>. זה המודל העסקי של vertical-packs, ושווה להסתכל איך הם מציגים את זה.</li>
+  </ul></div>
+ </div>
+</div>
+
+<!-- ══════ 3 ══════ -->
+<div class="L">
+ <div class="h"><span class="num">3</span><span class="ttl">מילה ⇐ סכימה</span><span class="eng">entity-terms · schema-fields</span></div>
+ <div class="b">
+  <dl class="duty">
+   <dt>חובה</dt><dd>«מטופל» ⇐ <code>entity.family</code> ⇐ <code>Family</code> ⇐ <b>25 שדות אמיתיים</b>. ומה שאין לו מונח — <b>מדווח, לא מומצא</b>.</dd>
+   <dt>מאגר</dt><dd>32 מונחים · <b>492 שדות ב-54 מחלקות</b> עם טיפוסים (<code>Id</code> · <code>IsoDate</code> · <code>TimeHM</code> · enum)</dd>
+   <dt>מצב</dt><dd><span class="state ok">שני האטומים חצובים</span> <span class="state gap">nl-spec קורא אותם 0 פעמים</span></dd>
+  </dl>
+  <div class="ref"><div class="rt">מאיפה לקחת עיצוב</div><ul>
+   <li><b>Directus · Strapi — מסך מודל־הנתונים</b>: <em>הקנוני לתחום הזה</em>. אוסף ⇐ שדות ⇐ טיפוס ⇐ ממשק. איך מציגים 25 שדות בלי להטביע — קיבוץ, סדר, וטיפוס כאייקון.</li>
+   <li><b>Supabase Studio — Table Editor</b>: <em>הפאנל הצדדי לעריכת שדה</em> — שם · טיפוס · ברירת־מחדל · חובה · יחס. וה־<em>Schema Visualizer</em> להצגת יחסים.</li>
+   <li><b>Prisma Studio</b> — <em>יחסים כניווט</em>: לוחצים על שדה־יחס ועוברים לרשומה המקושרת.</li>
+  </ul></div>
+ </div>
+</div>
+
+<!-- ══════ 4 ══════ -->
+<div class="L">
+ <div class="h"><span class="num">4</span><span class="ttl">האשף</span><span class="eng">12 אטומי-אשף · signup-wizard</span></div>
+ <div class="b">
+  <dl class="duty">
+   <dt>חובה</dt><dd>בכל צומת־ספק: <b>לבנות את כל האפשרויות</b> ולפלוט מתג. אף פעם לא לבחור, אף פעם לא לשאול שאלה פתוחה. כל שדה שהמחולל מכיר = מתג <b>דלוק כברירת־מחדל</b>.</dd>
+   <dt>לכל אפליקציה</dt><dd>אשף <b>חדש</b> — הספקות של כל אפליקציה הם שלה</dd>
+   <dt>מצב</dt><dd><span class="state ok">12 אטומים על המדף</span> <span class="state gap">0 מתוך 577 קבצי פלט</span></dd>
+  </dl>
+  <div class="ref"><div class="rt">מאיפה לקחת עיצוב</div><ul>
+   <li><b>Linear — מסך ההקמה</b>: <em>הרף העליון לאשף</em>. שלב אחד = שאלה אחת, התקדמות גלויה, אפשר לחזור, והמוצר כבר נבנה מאחורה.</li>
+   <li><b>Figma — פאנל המאפיינים</b>: <em>מתג לכל תכונה, הכל גלוי בבת־אחת</em>, בלי תפריטים נסתרים. זה בדיוק «מקסימום יכולות ואני מכבה».</li>
+   <li><b>Vercel · Railway — מסך הפריסה</b>: <em>ברירות־מחדל חכמות שכולן גלויות ופתוחות לשינוי</em>, ומונה שמתעדכן חי לפי מה שבחרת.</li>
+   <li><b>iOS Control Center</b> — <em>רשת מתגים שמראה מצב ומשנה אותו באותה נגיעה</em>.</li>
+  </ul></div>
+ </div>
+</div>
+
+<!-- ══════ 5 ══════ -->
+<div class="L">
+ <div class="h"><span class="num">5</span><span class="ttl">בניית המסכים</span><span class="eng">app-ds 453 · retarget 37 · core 8</span></div>
+ <div class="b">
+  <dl class="duty">
+   <dt>חובה</dt><dd>ספק ⇐ מסכים אמיתיים. לכל ישות: <b>רשימה · כרטיס · טופס</b>, לוח־בקרה, ניווט, וחיפוש. לא שלד — <b>מסך שאפשר לעבוד בו</b>.</dd>
+   <dt>גרעין</dt><dd><code>core-from-shape</code> גוזר Registry · Relations · Workflow · Events · Rules — ו<b>כל שורה נושאת <code>how</code></b>: מה עובדה ומה הנחה</dd>
+   <dt>מצב</dt><dd><span class="state ok">577 קבצים · 130,564 שורות · עובד</span></dd>
+  </dl>
+  <div class="ref"><div class="rt">מאיפה לקחת עיצוב</div><ul>
+   <li><b>Linear · Height</b> — <em>הרף לצפיפות ומהירות</em>: שורות דקות, מקלדת ראשונה, אפס עומס. זה המראה שאפליקציה מחוללת צריכה להשיג.</li>
+   <li><b>Stripe Dashboard</b> — <em>כרטיס־רשומה קנוני</em>: כותרת + מצב + פעולות למעלה, קיבוץ שדות לקבוצות הגיוניות, ואירועים בציר־זמן מתחת. זה מה שבניתי לך בדמו הקליניקה.</li>
+   <li><b>Airtable</b> — <em>תצוגות מרובות מסכימה אחת</em>: טבלה · לוח · קנבן · גלריה. למחולל שלך זה חינם — הסכימה כבר יודעת.</li>
+   <li><b>Retool</b> — <em>הקשר בין רכיב לדאטה גלוי</em>, לא מוסתר. מתאים לרוח «כל שדה נושא מקור».</li>
+   <li><b>Django Admin</b> — <em>האב הקדמון</em>: מודל ⇐ CRUD מלא אוטומטית. שווה להסתכל מה הם כן ומה לא מייצרים.</li>
+  </ul></div>
+ </div>
+</div>
+
+<!-- ══════ 6 ══════ -->
+<div class="L">
+ <div class="h"><span class="num">6</span><span class="ttl">עור ואתר</span><span class="eng">auto-skin · web-shell · ship</span></div>
+ <div class="b">
+  <dl class="duty">
+   <dt>חובה</dt><dd>עור אוטומטי לפי התחום (27 תפקידים · 359 אטומים), ואז <b>אתר</b> — מניפסט, כותרת, בנייה, פרסום.</dd>
+   <dt>מצב</dt><dd><span class="state ok">בצנרת — ship:90</span></dd>
+  </dl>
+  <div class="ref"><div class="rt">מאיפה לקחת עיצוב</div><ul>
+   <li><b>Vercel · Netlify — מסך הפריסה</b>: <em>לוג חי בזמן הבנייה</em>, ואז כתובת שאפשר ללחוץ. הרגע שבו זה הופך לאמיתי.</li>
+   <li><b>Tailwind UI · shadcn</b> — <em>מערכת־עיצוב שמתלבשת</em>: אותו רכיב, טוקנים אחרים לכל תחום. זה בדיוק auto-skin.</li>
+  </ul></div>
+ </div>
+</div>
+
+<!-- ══════ 7 ══════ -->
+<div class="L">
+ <div class="h"><span class="num">7</span><span class="ttl">המשמעת</span><span class="eng">police 55 · yeshiva</span></div>
+ <div class="b">
+  <dl class="duty">
+   <dt>חובה</dt><dd><b>שדה בלי מקור = אדום.</b> וקושיות על מה שנפל בדרך — 268 בשמונה־עשרים מסמכים, ו<b>המנוע פוסק עליהן בעצמו</b> לפי מהלכיו.</dd>
+   <dt>מצב</dt><dd><span class="state ok">55 שערים ירוקים</span> <span class="state gap">5 בלבד מוכחים · ישיבתי מנותק</span></dd>
+  </dl>
+  <div class="ref"><div class="rt">מאיפה לקחת עיצוב</div><ul>
+   <li><b>GitHub Checks · Vercel Preview</b> — <em>סטטוס לכל שער עם קישור לראיה</em>. ירוק שאפשר ללחוץ עליו ולראות למה.</li>
+   <li><b>Grammarly · ESLint ב־VS Code</b> — <em>הקושיה יושבת על המקום שהיא מדברת עליו</em>, לא ברשימה נפרדת. וזו בדיוק שכבה 1 של הישיבתי: «שורה מודגשת = הישיבה עצרה עליה».</li>
+   <li><b>Figma — מצב תגובות</b>: <em>שאלה פתוחה על אובייקט, ותשובה סוגרת אותה</em>. זה המודל ל־268 הקושיות.</li>
+  </ul></div>
+ </div>
+</div>
+
+<hr>
+
+<section>
+ <h2>ומי הכי קרוב לכל הדבר</h2>
+ <p>אף אחד לא עושה בדיוק את זה — <b>משפט עברית ⇒ אפליקציה, בלי מודל־שפה, עם מקור לכל שדה</b>. אבל שלושה קרובים בחלקים:</p>
+ <div class="tbl"><table>
+  <thead><tr><th>מוצר</th><th>מה הוא עושה</th><th>מה לקחת · ומה לא</th></tr></thead>
+  <tbody>
+   <tr><td>Lovable · Bolt · v0</td><td>תיאור בשפה חופשית ⇐ אפליקציה, בשיחה</td><td><b>לקחת:</b> המסך המפוצל, הבנייה מול העיניים, «ערוך את הבקשה ובנה מחדש».<br><b>לא לקחת:</b> הם ממציאים כשלא יודעים. זה בדיוק מה שאתה אוסר.</td></tr>
+   <tr><td>Directus · Supabase Studio</td><td>סכימה ⇐ ממשק ניהול מלא</td><td><b>לקחת:</b> כל עיצוב הצגת השדות, הטיפוסים והיחסים.<br><b>לא לקחת:</b> הם מתחילים מסכימה, לא ממשפט.</td></tr>
+   <tr><td>Retool · Power Apps</td><td>בונה־כלים פנימיים</td><td><b>לקחת:</b> הקשר הגלוי בין רכיב לדאטה.<br><b>לא לקחת:</b> דורשים גרירה ידנית — אצלך זה אמור להיות אוטומטי.</td></tr>
+  </tbody>
+ </table></div>
+ <div class="note">
+  <p><b>מה שאין לאף אחד מהם — ויש רק לך.</b> שתי הטבלאות: <code>vertical-packs</code> שהופכת תחום למילון, ו־<code>schema-fields</code> עם 492 שדות אמיתיים. לכן הם חייבים להמציא כשחסר מידע, ואתה לא.</p>
+  <p>וזה גם מה שקובע את העיצוב: אצלם «מאיפה זה בא» היא שאלה שאין לה תשובה. <b>אצלך היא התשובה.</b></p>
+ </div>
+</section>
+
+<p class="foot">
+ נמדד: new/dart-gen-bs (577 · app-ds 453 · retarget 37 · core 8) · machtzev 210 mjs · gen 83 · yeshiva 2 · gates.tsv 55 · vertical-packs 13 · entity-terms 32 · schema-fields 492/54 · nl-smoke 40/43 מומצאות · peruks 45/233 בלי מקור.<br>
+ ההפניות למוצרים מתבססות על היכרות עד אמצע 2026 — כדאי לפתוח כל אחד ולראות את המצב העדכני לפני שלוקחים ממנו.
+</p>
+</div></body></html>
