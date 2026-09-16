@@ -94,6 +94,18 @@ export function buildApp(specText) {
   // מקדימים: כל הישויות (לתוכן-הדשבורדים ולזיהוי-קשרים בין-ישויות) + מפת שם→slug יציב
   const entRes = {};
   for (const li of info) if (li.isEnt) entRes[li.i] = entInterpret(li.line);
+  // §22 · ישות בלי שדות = ספק שבור, לא פלט שבור. בלי השער הזה נפלט
+  //   DsTable(labels: const [], rows: rs.map((r) => []).toList()) ⇒ List<List<dynamic>>
+  //   שאינו מתקמפל, והכשל צף רק ב-flutter build web ~70s אחר-כך, בלי שם-הישות.
+  //   הנוסח ב-chrome.data.json (§19 · המנוע עיוור לעברית — ratchet genratchet).
+  {
+    const empty = info.filter((li) => li.isEnt && !(entRes[li.i].schema || []).length);
+    if (empty.length) {
+      // li.i הוא אינדקס ב-lines (אחרי סינון-ההצהרות) ולא מספר-שורה בקובץ ⇒ מצטטים את השורה.
+      const rows = empty.map((li) => T('entNoFieldsRow', { name: entRes[li.i].entity || '?', line: JSON.stringify(li.line.trim().slice(0, 60)) }));
+      throw new Error([T('entNoFields', { n: empty.length }), ...rows, L.entNoFieldsHow].join('\n'));
+    }
+  }
   const entMeta = [];
   const nameToSlug = {};
   for (const li of info) if (li.isEnt) {
