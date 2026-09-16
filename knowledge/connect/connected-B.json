@@ -1886,5 +1886,348 @@
    "git status --short אחרי ההרצה ⇒ ריק",
    "grep -n 'tighten' machtzev/gates.tsv ⇒ שורה 29"
   ]
+ },
+ {
+  "file": "machtzev/assemble/lift-lib.mjs",
+  "lang": "mjs",
+  "lines": 215,
+  "capabilities": [
+   {
+    "cap": "סורק-Dart משותף מודע-מחרוזות, מחרוזות-גולמיות (r'…'), הערות-שורה, הערות-בלוק ואינטרפולציה מקוננת — עם callback פר-תו ומצב (קוד/'/\"/הערה)",
+    "evidence": "machtzev/assemble/lift-lib.mjs:24-53 (dartScan) · 34,40-41,45"
+   },
+   {
+    "cap": "מחלץ גוף-מחלקה מאוזן-סוגריים verbatim (חוק-4) בעזרת אותו סורק",
+    "evidence": "machtzev/assemble/lift-lib.mjs:55-62 (classBody)"
+   },
+   {
+    "cap": "מסנן הערות בשתי צורות: הסרה מלאה (stripComments) ומיסוך-לרווחים באותו אורך לשימור-אינדקסים (maskComments)",
+    "evidence": "machtzev/assemble/lift-lib.mjs:64-68"
+   },
+   {
+    "cap": "ממסך ליטרלי-מחרוזת בשתי גרסאות: אטומה-לגמרי (maskLits) ואחת ששומרת את פנים-האינטרפולציה גלוי כקוד-אמיתי לסריקה סמנטית (maskLitsKeepInterp)",
+    "evidence": "machtzev/assemble/lift-lib.mjs:103-140 · 142-174"
+   },
+   {
+    "cap": "מחליט אם גוף-אטום 'נקי': מחזיר 'hebrew' על ליטרל עברי, 'io' על תבנית-IO (Riverpod watch/read · Navigator · showDialog · MethodChannel · http · SharedPreferences), אחרת null — ועל קוד-בלבד, אחרי הסרת-הערות",
+    "evidence": "machtzev/assemble/lift-lib.mjs:70-80 (HEB_STR · IO_PAT · bodyIssue)"
+   },
+   {
+    "cap": "מחשב גיבוב-מבני מסונוור (blind): מחרוזות ⇒ S · מספרים ⇒ N · שם-המחלקה ⇒ W · רווחים מנורמלים ⇒ sha1 — כדי לזהות זהות-מנגנון בין אטומים שונים-בשם (הכרעה-5)",
+    "evidence": "machtzev/assemble/lift-lib.mjs:82-86"
+   },
+   {
+    "cap": "מחזיק רשימת-היתר של טיפוסי-prop טהורים (OK_TYPES, 35 טיפוסים) ומכריע okType אחרי הסרת '?' ורווחים",
+    "evidence": "machtzev/assemble/lift-lib.mjs:5-14"
+   },
+   {
+    "cap": "מסיק imports דרושים מהקוד לפי 4 כללי-תבנית (Timer/Stream ⇒ dart:async · math. ⇒ dart:math · ImageFilter/lerpDouble ⇒ dart:ui · HapticFeedback/Clipboard/… ⇒ services)",
+    "evidence": "machtzev/assemble/lift-lib.mjs:16-22"
+   },
+   {
+    "cap": "מגדיר אילו יסודות-buildsmart אטום רשאי לצרוך ואיזה import להזריק עבורם (BsTokens · CfgText · CfgVisible · HelpTarget · bsOnAccent · cfgRadius)",
+    "evidence": "machtzev/assemble/lift-lib.mjs:88-101 (FOUNDATION · FOUNDATION_FN)"
+   },
+   {
+    "cap": "מפרסר ארגומנטי-קריאה של widget (named + positional) על מקור ממוסך-ליטרלים, ומחזיר את הטקסט הגולמי מהמקור המקורי",
+    "evidence": "machtzev/assemble/lift-lib.mjs:176-201 (parseCallArgs) · 178,188"
+   },
+   {
+    "cap": "מזהה הקשר-לולאה של widget בשתי צורות Dart — `.map((x) => W(` ו-`for (final x in …) W(` — ומחזיר את ביטוי-הרשימה ואת שם-המשתנה",
+    "evidence": "machtzev/assemble/lift-lib.mjs:203-211 (loopContext)"
+   },
+   {
+    "cap": "ממיר שמות: PascalCase ⇒ snake_case, ונתיב-מסך מפורק ⇒ Pascal (מסיר קידומות screens__/features__ וסיומת _screen)",
+    "evidence": "machtzev/assemble/lift-lib.mjs:213-215"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אפס-IO ואפס-מצב — הוא לא קורא ולא כותב קבצים; הכל פונקציות טהורות על מחרוזות",
+    "evidence": "machtzev/assemble/lift-lib.mjs:1-3 (הייבוא היחיד הוא node:crypto)"
+   },
+   {
+    "claim": "אינו רץ מהשורה, אינו כותב פלט, ואינו שער-משטרה",
+    "evidence": "engine-index card isNot: 'לא-רץ-מהשורה · לא-כותב-פלט · לא-שער-משטרה · לא-ב-INDEX.md'"
+   },
+   {
+    "claim": "אינו מרים אטומים בעצמו — הוא ספריית-העזר; ההרמה היא ב-shelf-lift · data-lift · board-gen · gen-manifest",
+    "evidence": "machtzev/assemble/lift-lib.mjs:1 · engine-index card: importedBy = 6 קבצים"
+   },
+   {
+    "claim": "אינו מפרסר Dart לעץ-תחביר — הכל סריקת-תווים ורגקסים על מקור ממוסך",
+    "evidence": "machtzev/assemble/lift-lib.mjs:25,177-179,206-209"
+   },
+   {
+    "claim": "OK_TYPES היא רשימה כתובה-ביד, לא נגזרת — ובקוד עצמו מתועד שחוסר בה פסל widgets נקיים לגמרי ('הדחייה נרשמה כ-model-prop כאילו זה מודל-של-הפרויקט')",
+    "evidence": "machtzev/assemble/lift-lib.mjs:9-13"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/assemble/board-gen.mjs · data-lift.mjs · gen-manifest.mjs · shelf-lift.mjs · machtzev/generator/atlas.mjs · machtzev/generator/genesis-gen.mjs (6 מייבאים)",
+   "input": "מחרוזות קוד-Dart שהקוראים מספקים (אין קריאת-קבצים בקובץ)",
+   "output": "ערכי-החזרה בלבד",
+   "next": "מנועי-ההרמה משתמשים בו כדי לחצוב אטומים מהמקור, לסנן לא-טהורים, ולזהות כפילויות-מנגנון"
+  },
+  "quality": {
+   "signal": "אין שער בשמו. הוא נצרך ע\"י atlas.mjs ו-genesis-gen שנמצאים בצינור, והאיכות שלו נאכפת בעקיפין דרך שערי-הטוהר (purity · deep-purity · dedup) — אף אחד מהם לא הורץ כאן",
+   "measured": "לא-נמדד — אין gate בשמו (engine-index: gate '-')"
+  },
+  "evidence": [
+   "awk הדפסת machtzev/assemble/lift-lib.mjs שורות 1-215 (נקרא במלואו)",
+   "engine-index card: importedBy = board-gen · data-lift · gen-manifest · shelf-lift · atlas · genesis-gen"
+  ]
+ },
+ {
+  "file": "machtzev/generator/skin-golden.mjs",
+  "lang": "mjs",
+  "lines": 46,
+  "capabilities": [
+   {
+    "cap": "מרכיב כל אחד מ-9 מודולי-הזהב (SchoolOS) מחדש מהקטלוג במצב compose+declared — הרכבה, לא העתקה",
+    "evidence": "machtzev/generator/skin-golden.mjs:23-26"
+   },
+   {
+    "cap": "מפנה ייבוא-אח בין מודולי-הזהב לעותק המעורר-עור המקביל, כך שהרכזת מייבאת את 8 האחרים בעור ולא במקור",
+    "evidence": "machtzev/generator/skin-golden.mjs:27-28"
+   },
+   {
+    "cap": "מריץ את מנוע-הלוגיקה-לפי-ייעוד (logicPass) על הקוד המורכב לפני העור — החלפות מוכחות בלבד",
+    "evidence": "machtzev/generator/skin-golden.mjs:14,29"
+   },
+   {
+    "cap": "מריץ skinPass שמחליף קריאות-DS (KpiTile · DsNavTile · StatHero · BareStat-ב-Wrap) באטומי-forge עם fields, ומחזיר סטטיסטיקת-החלפות פר-תפקיד",
+    "evidence": "machtzev/generator/skin-golden.mjs:3,11,30"
+   },
+   {
+    "cap": "בורר את העור דרך autoSkin ⇒ resolveSkin — כלומר המנוע בוחר, ו-skin-golden.json הוא דריסות בלבד",
+    "evidence": "machtzev/generator/skin-golden.mjs:13-14,20"
+   },
+   {
+    "cap": "כותב כותרת-מקור בכל פלט: מי המחולל, שהזהב לא נגע (חוק-7), מפת תפקידי-העור, וספירת-ההחלפות — כולל הצהרה מה **נשאר** DS ולמה",
+    "evidence": "machtzev/generator/skin-golden.mjs:31-32"
+   },
+   {
+    "cap": "שער-דטרמיניזם: 9 הפלטים חייבים להיות זהים למחולל-טרי; --write מחדש אותם",
+    "evidence": "machtzev/generator/skin-golden.mjs:5,41-44"
+   },
+   {
+    "cap": "נכשל קולנית על עור ריק במקום לפלוט בלי עור",
+    "evidence": "machtzev/generator/skin-golden.mjs:21"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו נוגע בקובצי-הזהב — טעינה-לצד, פלט לקבצים חדשים gen_schoolos_*_forge.dart (חוק-7)",
+    "evidence": "machtzev/generator/skin-golden.mjs:4,18,33"
+   },
+   {
+    "claim": "אינו מעביר צבעי-מצב-DS לעור, ואינו מחליף חיפוש/טבלאות/פילטרים — 'אטומי-forge של קלט הם ציור, לא שדה' (מוצהר בכותרת שהוא כותב)",
+    "evidence": "machtzev/generator/skin-golden.mjs:32"
+   },
+   {
+    "claim": "אינו מרכיב ואינו מעור בעצמו — כל המנגנון מושאל: assemble מ-render-module · skinPass מ-retarget · resolveSkin מ-app-from-sentences · autoSkin · logicPass. הקובץ הוא תזמור בן 46 שורות",
+    "evidence": "machtzev/generator/skin-golden.mjs:10-14"
+   },
+   {
+    "claim": "אינו מקמפל — האימות בפועל הוא ב-ship (analyze + flutter test)",
+    "evidence": "machtzev/generator/ship.mjs:74 מריץ רק --gate של הדטרמיניזם · ship.mjs:62-70 הוא האימות"
+   },
+   {
+    "claim": "אינו מיובא ע\"י אף מנוע — importedBy ריק; הוא צעד-צינור בלבד",
+    "evidence": "engine-index card: importedBy ריק"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/regen.mjs:REGEN ('מודולי-הזהב בעור-forge', אחרי auto-logic) · machtzev/generator/ship.mjs:74 (--gate) · machtzev/police.mjs (שער skingolden)",
+   "input": "machtzev/generator/skin-golden.json (דריסות) + golden-fragments.json דרך assemble + forge-manifest.json דרך autoSkin/resolveSkin",
+   "output": "new/dart-gen-bs/gen_schoolos_<stem>_forge.dart × 9",
+   "next": "ship ממראה ל-buildsmart ⇒ flutter analyze + flutter test ⇒ build web (האתר 'schoolos' ב-SITES נבנה מ-gen_schoolos_forge.dart)"
+  },
+  "quality": {
+   "signal": "`node machtzev/generator/skin-golden.mjs --gate` ⇒ '9/9 מודולי-SchoolOS בעור-forge ≡ מחולל-טרי' (exit 0, `git status --short` ריק אחריו). שער skingolden ב-gates.tsv:30, שלב commit. הוא נשען על רתמת-G4 — round-trip ביט-זהה של assemble, שנמדד בשער rendermodule (9/9)",
+   "measured": "כן — הפקודה למעלה"
+  },
+  "evidence": [
+   "cat -n machtzev/generator/skin-golden.mjs (46 שורות, נקרא במלואו)",
+   "node machtzev/generator/skin-golden.mjs --gate ⇒ exit 0, 9/9",
+   "git status --short אחרי ההרצה ⇒ ריק",
+   "grep -n 'skingolden' machtzev/gates.tsv ⇒ שורה 30"
+  ]
+ },
+ {
+  "file": "machtzev/generator/fillable.mjs",
+  "lang": "mjs",
+  "lines": 3,
+  "capabilities": [
+   {
+    "cap": "מגדיר בביטוי-רגולרי אחד את התשובה לשאלה «איזה טיפוס-prop המחולל יודע למלא ממשפט» — 20+ צורות: פרימיטיבים · List/Set של מספרים · Color · IconData · TextEditingController · VoidCallback · ValueChanged<bool|int|String|TimeOfDay> · List<String> · EdgeInsets(Geometry) · FontWeight · TimeOfDay · Key · Object · Future<void> Function() · List<Type> · רשומות · פרמטרים-named",
+    "evidence": "machtzev/generator/fillable.mjs:3 (FILLABLE)"
+   },
+   {
+    "cap": "משמש SSOT יחיד לשני קוראים בעלי תפקידים שונים: הבורר+הממלא (genesis-gen) והמד (coverage-gate)",
+    "evidence": "machtzev/generator/fillable.mjs:1 · engine-index card: importedBy = coverage-gate · genesis-gen"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו ממלא כלום — הוא רק מגדיר מה **בר-מילוי**; כלל-המילוי עצמו חי ב-fillProp של genesis-gen, והקוד מורה להרחיב את שניהם באותו commit",
+    "evidence": "machtzev/generator/fillable.mjs:2"
+   },
+   {
+    "claim": "אינו מנוע במובן של אלגוריתם — הקובץ הוא הצהרת-קבוע אחת. הוא 'מחובר' כי מייבאים אותו, וזה נכון עובדתית, אבל השוואת-יכולות מולו תמדוד ביטוי-רגולרי ולא מנגנון",
+    "evidence": "machtzev/generator/fillable.mjs:1-3 (3 שורות · ייצוא יחיד)"
+   },
+   {
+    "claim": "אינו רץ מהשורה, אינו כותב פלט, אינו שער-משטרה",
+    "evidence": "engine-index card isNot: 'לא-רץ-מהשורה · לא-כותב-פלט · לא-שער-משטרה'"
+   },
+   {
+    "claim": "הרקע: שני עותקים של הרשימה סטו זה מזה (552 מול 554 לבנים) — הקובץ נולד כדי לסגור את הסטייה (L93)",
+    "evidence": "machtzev/generator/fillable.mjs:1-2"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/coverage-gate.mjs · machtzev/generator/genesis-gen.mjs (ייבוא)",
+   "input": "אין — קבוע",
+   "output": "FILLABLE (RegExp)",
+   "next": "genesis-gen מסנן לפיו אילו props הוא בורר וממלא; coverage-gate סופר לפיו את ציר 'לבנים-ברות-מילוי'"
+  },
+  "quality": {
+   "signal": "אין שער בשמו, אבל הוא נאכף בעקיפין: שער coverage (gates.tsv:54, שלב push, baseline;grow) סופר לפיו לבנים-ברות-מילוי, וכל שינוי בביטוי משנה את המספר. לא הרצתי את coverage-gate (הוא כותב baseline)",
+   "measured": "לא-נמדד — אין gate בשמו ולא הרצתי את שער coverage"
+  },
+  "evidence": [
+   "cat machtzev/generator/fillable.mjs (3 שורות, נקרא במלואו)",
+   "grep -n 'coverage' machtzev/gates.tsv ⇒ שורה 54"
+  ]
+ },
+ {
+  "file": "machtzev/tools/probe-pool.mjs",
+  "lang": "mjs",
+  "lines": 3,
+  "capabilities": [
+   {
+    "cap": "מחזיק סל-קלטים אחד של 38 ערכים לקידום-האוטומטי: מזהי-ת\"ז · סכומים · מפות-תשלום · שמות עבריים · טלפונים · תאריכי-ISO · URL · מספרים · מחרוזות-קצה (ריקה · עברית · אנגלית) · null/undefined · true/false · מבנים ריקים",
+    "evidence": "machtzev/tools/probe-pool.mjs:3 (POOL)"
+   },
+   {
+    "cap": "משמש מקור-אמת יחיד לשני שימושים הפוכים: promote-auto **מקליט ממנו** קלטים, ו-tighten-hook/tighten-types **מזהים לפיו** ראיה-מגישוש שאינה חוזה-קורא ולכן פסולה להידוק-טיפוס (L89)",
+    "evidence": "machtzev/tools/probe-pool.mjs:1-2 · machtzev/generator/tighten-types.mjs:15-22 (POOL_SER · casesProbe)"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו מריץ ואינו בודק כלום — הצהרת-קבוע אחת",
+    "evidence": "machtzev/tools/probe-pool.mjs:1-3"
+   },
+   {
+    "claim": "אינו מנוע במובן של אלגוריתם — כמו fillable, הוא 'מחובר' כי מייבאים אותו; השוואת-יכולות מולו תמדוד רשימת-ערכים",
+    "evidence": "machtzev/tools/probe-pool.mjs:3 (ייצוא יחיד · 3 שורות)"
+   },
+   {
+    "claim": "אינו רץ מהשורה, אינו כותב פלט, אינו שער-משטרה",
+    "evidence": "engine-index card isNot: 'לא-רץ-מהשורה · לא-כותב-פלט · לא-שער-משטרה · לא-ב-INDEX.md'"
+   },
+   {
+    "claim": "הערכים שהתחוללו ממנו מוצהרים במפורש כ**לא-ראיה** — זה ההפך ממה שסל-קלטים בדרך-כלל משמש",
+    "evidence": "machtzev/tools/probe-pool.mjs:1-2"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/tighten-hook.mjs · machtzev/generator/tighten-types.mjs:15 · machtzev/tools/promote-auto.mjs (ייבוא)",
+   "input": "אין — קבוע",
+   "output": "POOL (מערך של 38 ערכים)",
+   "next": "promote-auto מייצר ממנו CASES של Golden-מאפיון; tighten-types מסמן probe:true לבדיקה שכל קלטיה מהסל ולא מהדק ממנה"
+  },
+  "quality": {
+   "signal": "אין שער בשמו, אבל הוא מגודר בשער tighten: `node machtzev/generator/tighten-types.mjs --gate` ⇒ exit 0 — והכלל שהוא מגלם (probe ⇒ לא מהדקים) הוא תנאי בתוך אותו שער (tighten-types.mjs:64,85)",
+   "measured": "חלקית — שער tighten הורץ (exit 0) ומריץ את casesProbe שמשתמש ב-POOL; אין מדידה שמכמתת כמה בדיקות נפסלו כ-probe"
+  },
+  "evidence": [
+   "cat machtzev/tools/probe-pool.mjs (3 שורות, נקרא במלואו)",
+   "machtzev/generator/tighten-types.mjs:15-22 (הצרכן שמממש את L89)",
+   "timeout 500 node machtzev/generator/tighten-types.mjs --gate ⇒ exit 0"
+  ]
+ },
+ {
+  "file": "machtzev/tools/site-shot.mjs",
+  "lang": "mjs",
+  "lines": 28,
+  "capabilities": [
+   {
+    "cap": "מגיש את תיקיית-הבנייה של אפליקציה מחוללת בשרת-HTTP מקומי (python3 -m http.server, כרוך ל-127.0.0.1) ומכבה אותו בסוף",
+    "evidence": "machtzev/tools/site-shot.mjs:12,14,27"
+   },
+   {
+    "cap": "מאתחל את האפליקציה ב-Chromium headless דרך playwright-core, עם איתור-אוטומטי של ספריית-playwright ושל הכרום ב-/opt/pw-browsers",
+    "evidence": "machtzev/tools/site-shot.mjs:5-8,16-17"
+   },
+   {
+    "cap": "מחכה להוכחת-אתחול אמיתית — ש-MaterialApp יקבע את document.title לערך הצפוי — עד 45 שניות, ומדווח booted:false אם לא קרה",
+    "evidence": "machtzev/tools/site-shot.mjs:23"
+   },
+   {
+    "cap": "אוסף שלושה סוגי-כשל מהדפדפן: בקשות-שנכשלו · שגיאות-עמוד · הודעות-console מסוג error",
+    "evidence": "machtzev/tools/site-shot.mjs:19"
+   },
+   {
+    "cap": "סופר את שכבת-הציור של Flutter (flt-glass-pane / flutter-view) כאות נוסף שהאפליקציה באמת רונדרה",
+    "evidence": "machtzev/tools/site-shot.mjs:25"
+   },
+   {
+    "cap": "מצלם את המסך לקובץ-ראיה קבוע תחת machtzev/audit/goals/",
+    "evidence": "machtzev/tools/site-shot.mjs:13,26"
+   },
+   {
+    "cap": "מחזיר שורת-JSON אחת עם כל המדידות: booted · glass · זמן-אתחול במילישניות · גודל-הצילום בבייטים · 3 שגיאות ראשונות",
+    "evidence": "machtzev/tools/site-shot.mjs:28"
+   },
+   {
+    "cap": "מאפשר כוונון זמן-המתנה דרך SHOT_WAIT ופורט דרך ארגומנט",
+    "evidence": "machtzev/tools/site-shot.mjs:11,24"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "אינו בונה — הוא דורש ש-flutter build web כבר רץ, ומצוין בכותרת איזו פקודה מייצרת את הקלט",
+    "evidence": "machtzev/tools/site-shot.mjs:3"
+   },
+   {
+    "claim": "אינו נכשל על אתר שלא עלה — waitForFunction עטוף ב-try ריק; הכשל מדווח כ-booted:false בפלט-ה-JSON, ו-ship קורא לו עם allowFail",
+    "evidence": "machtzev/tools/site-shot.mjs:23 · machtzev/generator/ship.mjs:98"
+   },
+   {
+    "claim": "אינו משווה לצילום-ייחוס — אין baseline ואין diff; הוא מייצר ראיה, לא פסק-דין",
+    "evidence": "machtzev/tools/site-shot.mjs:26-28 (screenshot + הדפסת-מדדים בלבד)"
+   },
+   {
+    "claim": "אינו נייד — נתיבי buildsmart, הפלט ו-/opt/pw-browsers קשיחים בקוד (רק PW_CORE ו-SHOT_WAIT ניתנים להזרקה)",
+    "evidence": "machtzev/tools/site-shot.mjs:12-13,16"
+   },
+   {
+    "claim": "אינו מייצא כלום ואינו שער-משטרה",
+    "evidence": "engine-index card isNot: 'אין-ייצוא (לא ספרייה) · לא-כותב-פלט · לא-שער-משטרה'"
+   },
+   {
+    "claim": "אינו מצלם עמוד-מלא — fullPage:false, כלומר רק מה שנכנס ל-800×1400",
+    "evidence": "machtzev/tools/site-shot.mjs:18,26"
+   }
+  ],
+  "pipeline": {
+   "runBy": "machtzev/generator/ship.mjs:97-99 (השלב 'shot', אחרי בניית-האתרים; allowFail)",
+   "input": "<buildsmart>/build/web-<name> שנבנה קודם + כותרת צפויה + פורט",
+   "output": "machtzev/audit/goals/gen_app_<name>_web.png + שורת-JSON למדידה",
+   "next": "ship מדפיס את השורה האחרונה של הפלט ללוג; הצילום נשאר כראיה בריפו"
+  },
+  "quality": {
+   "signal": "אין שער בשמו. הוא **מייצר** ראיה (booted · glass · ms · bytes · errors) שמישהו צריך לקרוא — ב-ship היא רק מודפסת ללוג ואינה מפילה כלום (allowFail:true). לא הרצתי אותו: הוא דורש buildsmart בנוי + Chromium + playwright-core, ואף אחד מהם אינו בריפו הזה",
+   "measured": "לא-נמדד — אין gate, ולא ניתן להריץ בקלון הזה (אין buildsmart/build/web-*)"
+  },
+  "evidence": [
+   "cat -n machtzev/tools/site-shot.mjs (28 שורות, נקרא במלואו)",
+   "machtzev/generator/ship.mjs:97-99 (הקורא היחיד, עם allowFail)",
+   "engine-index card: importedBy ריק · calledByName: ship"
+  ]
  }
 ]
