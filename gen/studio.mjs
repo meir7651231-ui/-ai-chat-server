@@ -10,11 +10,14 @@ import { LIVE_CSS, LIVE_FONTS } from './live.mjs';
 import { loadLang } from './lang.mjs';
 import { readDartShelf, proveDart, hasDart } from './prove-dart.mjs';
 import { inventory } from './inventory.mjs';
+import { SKIN_CSS as _SKIN, FONTS as _FONTS, BIDI_SHAPES as _BIDI } from './skin.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const read = (f) => fs.readFileSync(path.join(HERE, f), 'utf8');
 const strip = (src) => src.replace(/^import\s[^\n]*\n/gm, '').replace(/^export\s+(default\s+)?/gm, '');
-const CORE = ['spec.mjs', 'sentence.mjs', 'prove.mjs', 'plan.mjs', 'render.mjs', 'live.mjs', 'engine.mjs'].map((f) => `// ══ ${f}\n${strip(read(f))}`).join('\n\n');
+// גשר-דפדפן: skin.mjs הוא מודול-Node (fs · import.meta) ולכן אינו נארז; שלושת הערכים ש-render.mjs מייבא ממנו נצרבים כאן.
+const SKIN_PRELUDE = `// ══ skin (צרוב)\nconst SKIN_CSS = () => ${JSON.stringify(_SKIN())};\nconst FONTS = ${JSON.stringify(_FONTS)};\nconst BIDI_SHAPES = ${JSON.stringify(_BIDI)};`;
+const CORE = [SKIN_PRELUDE].concat(['spec.mjs', 'sentence.mjs', 'prove.mjs', 'plan.mjs', 'render.mjs', 'live.mjs', 'engine.mjs'].map((f) => `// ══ ${f}\n${strip(read(f))}`)).join('\n\n');
 const NEEDS = JSON.parse(read('needs.data.json')).needs;
 const shelf = readShelf().filter((a) => a.kind === 'fn').map(({ test, params, ...a }) => a);
 const example = read('specs/gemach.txt').trim();
