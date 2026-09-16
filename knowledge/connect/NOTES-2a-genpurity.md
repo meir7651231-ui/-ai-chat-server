@@ -83,3 +83,27 @@ affinity cells differing: 1564 of 1584
 - `entity-terms --gate` · `enum-values --gate` ⇒ `⚪ אין maor-system` (‏`ls -d ../maor-system` ⇒ No such file)
 זה **ההיקף** ולא סתירה — CLAUDE.md אומר זאת מראש (‏179 מנועים בריפואים-אחים; בקלון-טרי 336).
 עבור אלה כתבתי `skipped` ולא `ran`, והציון ניתן על סמך קריאת-קוד בלבד — מסומן במפורש.
+
+## 🔴 אזהרה תפעולית — `legacy/entities.mjs` משחית בקלון-טרי
+אותה מחלקה בדיוק כמו `engine-index.mjs --write` שהמנהל אסר:
+- שני מקורותיו (`/home/user/maor-system/src/types/domain.ts`, `/home/user/buildsmart/app_flutter/lib/domain/domain.dart`) **אינם קיימים כאן**.
+- `entities.mjs:22-23` עושה `catch { continue; }` על מקור חסר — בשקט.
+- `entities.mjs:38` כותב `entities.json` **ללא תנאי**.
+- הקובץ המחויב הוא `"count": 60`.
+⇒ הרצה בקלון-טרי הופכת 60 ל-0. **לא הרצתי אותו.** כל שאר ה-42 הורצו או נקראו.
+המלצה למנהל: להוסיף אותו לרשימת-האיסור לצד `engine-index --write`.
+
+## מצב legacy/ — «הוחלף» **ועוד** «שבור» (ראיה, לא הנחה)
+`legacy/README.md:2` מצהיר על ההחלפה. בדקתי בפועל מה עוד רץ:
+| קובץ | ריצה |
+|---|---|
+| `nl.mjs` | ✅ רץ — `«רקע נושם» → GlowPulse (7.7)` (כי הוא מייבא `../match.mjs`, מחוץ ל-legacy) |
+| `compose.mjs` | ✅ רץ — נצרך בהצלחה בתוך nl (‏`screens-seed/machine` ⇒ 254 מסכים קיימים) |
+| `app.mjs` | ❌ קורס — `ENOENT … legacy/specs/app_ent1.txt` (app.mjs:45) |
+| `teach.mjs` | ❌ קורס — `ENOENT … legacy/atlas.json` |
+| `entities.mjs` | ⛔ לא הורץ — משחית (לעיל) |
+הדפוס: כשהתיקייה הועברה ל-`legacy/`, כל נתיב **יחסי-לעצמה** נשבר; מי שמייבא מבחוץ שרד.
+
+## הערך היחיד ששורד ב-legacy הוא קורפוס, לא מנוע
+`screens-seed/machine` — 254 מסכים עם `sectionMap`+`composer` מפורקים. אף מנוע **מחובר** אינו נוגע בו.
+`retrieve-screen.mjs` מאחזר מטקסט-תוכן בלבד ואין לו את המבנה. זו הערה למנהל, לא המלצת-חיבור.

@@ -972,5 +972,281 @@
    "read: machtzev/generator/server-gate.mjs:1-41",
    "read: machtzev/police.mjs:145 · machtzev/generator/regen.mjs:21"
   ]
+ },
+ {
+  "file": "machtzev/generator/legacy/app.mjs",
+  "lang": "mjs",
+  "lines": 119,
+  "does": [
+   {
+    "claim": "היה הדלת-האחת של מחולל-v1: כל שורת-אפיון מנותבת — «ישות X עם …» ⇒ entity.mjs, אחרת ⇒ nl.mjs — ואז לוח-ניווט + workflow + אינוונטר-פלט.",
+    "evidence": "app.mjs:3-6 (הכותרת)"
+   },
+   {
+    "claim": "כותב ספק לכל שורה לתיקיית specs ואז מחולל ממנו.",
+    "evidence": "app.mjs:45 `fs.writeFileSync(...)` — נצפה ישירות ב-stack trace של הריצה: `at buildApp (…/legacy/app.mjs:45:8)`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו רץ — הוא קורס.** הנתיב שאליו הוא כותב אינו קיים.",
+    "evidence": "ran: `node machtzev/generator/legacy/app.mjs \"ישות תלמיד עם שם, טלפון\"` ⇒ `Error: ENOENT: no such file or directory, open '/home/user/-ai-chat-server/machtzev/generator/legacy/specs/app_ent1.txt'` at app.mjs:45. אין תיקיית `legacy/specs/` (‏`ls machtzev/generator/legacy/` ⇒ README.md · app-inventory.json · app.mjs · compose.mjs · entities.json · entities.mjs · nl.mjs · teach.mjs)"
+   },
+   {
+    "claim": "אינו הדור-הנוכחי — הוחלף מפורשות.",
+    "evidence": "machtzev/generator/legacy/README.md:2-3 «`app.mjs`/`nl.mjs`/`compose.mjs`/`teach.mjs` = דור-ראשון של המחולל, **הוחלף** ע\"י `app-ds.mjs`+`render-ds.mjs`+`nl-spec.mjs` (העדכני·העשיר·הנבדק ע\"י genratchet)»"
+   },
+   {
+    "claim": "אין לו אף קורא.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/legacy/app.mjs ⇒ `🚫 לא: … אין-קורא-ידוע · לא-ב-INDEX.md` · `🔌 מחובר: 0 מייבאים`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אפס. ההופעה היחידה מחוץ לעצמו היא machtzev/index-baseline.json:48 (רישום-אינוונטר) ו-legacy/README.md."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — אין נקודה כנה. יורשו app-ds.mjs **הוא** GEN_ENTRY (engine-index.mjs:320), כלומר התפקיד מאויש. חיבורו יחזיר מסלול-פליטה שני ומיושן לאותו יעד."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. הסיבה לאי-החיבור: **הוחלף (legacy)** — וגם **שבור** (קורס ב-ENOENT). שתי הסיבות מתועדות בראיה, לא בהנחה."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/legacy/app.mjs \"ישות תלמיד עם שם, טלפון\" ⇒ ENOENT legacy/specs/app_ent1.txt (app.mjs:45)",
+   "ran: ls -la machtzev/generator/legacy/ ⇒ אין תיקיית specs/",
+   "read: machtzev/generator/legacy/README.md (הצהרת-ההחלפה) · machtzev/generator/legacy/app.mjs:1-10",
+   "ran: node machtzev/census/engine-index.mjs machtzev/generator/legacy/app.mjs ⇒ אין-קורא-ידוע"
+  ]
+ },
+ {
+  "file": "machtzev/generator/legacy/nl.mjs",
+  "lang": "mjs",
+  "lines": 116,
+  "does": [
+   {
+    "claim": "תיאור-חופשי ⇒ פיצול-לביטויים ⇒ אחזור-אטום-לפי-משמעות ⇒ ספק — ו**זה עדיין עובד**.",
+    "evidence": "ran: `node machtzev/generator/legacy/nl.mjs \"רקע נושם, כרטיס פרופיל, גרף מגמה\"` ⇒ `🧠 המחולל הבין (למידה-מהאטומים): «רקע נושם» → GlowPulse (7.7) · «כרטיס פרופיל» → ProfileCard (8.58) · «גרף מגמה» → LineSpark (6.64)` ואז `📋 הספק שנגזר:`"
+   },
+   {
+    "claim": "שואב את כל הידע מ-match.mjs (מחוץ ל-legacy) ומ-compose.board — אין בו רשימת-מילים.",
+    "evidence": "nl.mjs:12-14 `import { retrieve, retrieveLogic } from '../match.mjs'; import { board } from './compose.mjs'; import { teach } from './teach.mjs';`"
+   },
+   {
+    "claim": "מדווח פערים ומציע ללמד — במקום לנחש.",
+    "evidence": "nl.mjs:107 `for (const g of gaps.slice(0,4)) console.log(`   «${g.slice(0,24)}» → node nl.mjs --teach \"<מילה>\" <Atom>`);`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו יכול ללמד בפועל — מסלול ה-`--teach` שלו נשען על teach.mjs, שקורס.",
+    "evidence": "nl.mjs:14 מייבא teach; ran: `node machtzev/generator/legacy/teach.mjs \"עוגה\" DonutChart` ⇒ `🚫 ENOENT … open '…/legacy/atlas.json'`"
+   },
+   {
+    "claim": "אינו הדור-הנוכחי — הוחלף ע\"י nl-spec.mjs.",
+    "evidence": "machtzev/generator/legacy/README.md:2-3"
+   },
+   {
+    "claim": "אינו מחולל אפליקציה — פולט ספק/מסך, והרוכב עליו (app.mjs) שבור.",
+    "evidence": "nl.mjs:3 «תיאור חופשי ⇒ … ⇒ ספק» · app.mjs קורס (ראה הרשומה שלו)"
+   },
+   {
+    "claim": "אינו מגיע מהמחולל — קוראו היחיד הוא app.mjs, שגם הוא לא-מחובר.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/legacy/nl.mjs ⇒ `🔌 מחובר: 1 מייבאים (app.mjs)`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/generator/legacy/app.mjs",
+    "how": "ייבוא סטטי (app.mjs:5 בתיאור הניתוב). app.mjs עצמו לא-מחובר ושבור ⇒ הענף מת."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — היורש `nl-spec.mjs` פעיל והוא הנתיב הנבדק ע\"י genratchet (‏README.md:3). שני מפרשי-עברית מקבילים = שני מקורות-אמת."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **הוחלף (legacy)**. מעניין שהוא עדיין רץ ומחזיר התאמות סבירות — אבל «רץ» אינו «צריך»; היורש קיים ונבדק, ומה ש-nl מוסיף (אחזור-לפי-משמעות) כבר יושב ב-match.mjs שהוא מייבא."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/legacy/nl.mjs \"רקע נושם, כרטיס פרופיל, גרף מגמה\" ⇒ GlowPulse 7.7 · ProfileCard 8.58 · LineSpark 6.64",
+   "ran: node machtzev/generator/legacy/teach.mjs \"עוגה\" DonutChart ⇒ ENOENT legacy/atlas.json (מסלול ה--teach מת)",
+   "read: machtzev/generator/legacy/nl.mjs:1-16 · :91-107 · README.md"
+  ]
+ },
+ {
+  "file": "machtzev/generator/legacy/compose.mjs",
+  "lang": "mjs",
+  "lines": 68,
+  "does": [
+   {
+    "claim": "בונה קורפוס-פירוק מ-254 מסכים אמיתיים (screens-seed/machine/*.json): לכל מסך משמעות (terms) + מבנה (sectionMap/composer/widgets).",
+    "evidence": "compose.mjs:15 `const SEED = path.join(HERE,'../../screens-seed/machine');` · :21-30 הלולאה הבונה; ran: `ls screens-seed/machine | wc -l` ⇒ `254` — הקורפוס קיים"
+   },
+   {
+    "claim": "ההרכבה = הפירוק אחורה: בקשה ⇒ המסך-הדומה-ביותר לפי terms ⇒ המבנה-הרשום שלו ⇒ כל חלק ממופה לאטום-קטלוג ב-matchClass.",
+    "evidence": "compose.mjs:4-7 (הכותרת) · :12 `import { stem, matchClass } from '../match.mjs';`"
+   },
+   {
+    "claim": "אין הרכב כתוב-ביד — נלמד מהפירוק; ומוצהר «מבחן-הקונכייה».",
+    "evidence": "compose.mjs:7-8 «אין הרכב כתוב-ביד — הוא נלמד מהפירוק. מבחן-הקונכייה: מחליף מסכים ⇒ פירוק אחר ⇒ הרכבים אחרים לבד»"
+   },
+   {
+    "claim": "עובד בפועל — נצרך בהצלחה בריצת nl.mjs.",
+    "evidence": "ran: nl.mjs (שמייבא `board` מכאן ב-nl.mjs:13) החזיר ספק מלא בלי שגיאה"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו כותב פלט ואינו שער.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/legacy/compose.mjs ⇒ `🚫 לא: לא-כותב-פלט · לא-שער-משטרה · לא-ב-INDEX.md`"
+   },
+   {
+    "claim": "אינו מגיע מהמחולל — קוראו היחיד הוא nl.mjs, שקוראו היחיד הוא app.mjs השבור.",
+    "evidence": "ran (לעיל) ⇒ `🔌 מחובר: 1 מייבאים (nl.mjs)`; שרשרת: compose ← nl ← app(שבור) ← ∅"
+   },
+   {
+    "claim": "אינו יחיד בתפקידו — retrieve-screen.mjs (באותה קבוצה) עושה אחזור-מסך-לפי-מטרה על אותו רעיון, מקורפוס אחר (screens__*_content.dart במקום screens-seed/machine).",
+    "evidence": "retrieve-screen.mjs:41-52 loadScreens מול compose.mjs:21-30 — שני קורפוסים, שתי מימושים, אותו צורך"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/generator/legacy/nl.mjs:13",
+    "how": "ייבוא סטטי `import { board } from './compose.mjs';`"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ כמות-שהוא. אם בכלל — machtzev/generator/retrieve-screen.mjs, כמאחד-קורפוסים: screens-seed/machine (254 מסכים עם מבנה מפורק) אינו מנוצל ע\"י אף מנוע מחובר",
+   "gives": "הערך היחיד ששורד את ההחלפה הוא **הקורפוס**, לא המנוע: 254 מסכים שהדקומפוזר כבר רשם להם sectionMap+composer. retrieve-screen מאחזר היום מטקסט-תוכן בלבד ואין לו את המבנה. זו הערה למנהל, לא המלצת-חיבור."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **הוחלף (legacy)** — README.md:2 שם אותו במפורש ברשימת-המוחלפים. הוא רץ, אבל שרשרת-הקוראים שלו מסתיימת בקובץ שקורס."
+  },
+  "evidence": [
+   "ran: ls screens-seed/machine | wc -l ⇒ 254",
+   "ran: node machtzev/generator/legacy/nl.mjs \"…\" ⇒ הצליח (מוכיח ש-board נטען ורץ)",
+   "read: machtzev/generator/legacy/compose.mjs:1-30 · README.md",
+   "ran: node machtzev/census/engine-index.mjs machtzev/generator/legacy/compose.mjs"
+  ]
+ },
+ {
+  "file": "machtzev/generator/legacy/entities.mjs",
+  "lang": "mjs",
+  "lines": 41,
+  "does": [
+   {
+    "claim": "מפרק את מודלי-הדומיין של האימפריה (domain.ts · domain.dart) לישויות+שדות, ושומר entities.json כקורפוס לצריכה.",
+    "evidence": "entities.mjs:14-18 (SOURCES) · :26-33 הפרסור · :38 `fs.writeFileSync(path.join(HERE,'entities.json'), JSON.stringify({count: kept.length, entities: kept}, null, 1));`"
+   },
+   {
+    "claim": "שומר רק ישויות עם ≥2 שדות.",
+    "evidence": "entities.mjs:37 `const kept = entities.filter((e) => e.fields.length >= 2);`"
+   },
+   {
+    "claim": "מפרסר שתי שפות באותה לולאה (TS `name?: type;` ו-Dart `final <type> <name>;`).",
+    "evidence": "entities.mjs:30-32"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו בטוח-להרצה בקלון-טרי — הוא ישחית את הפלט המחויב.** שני מקורותיו אינם קיימים כאן, הלולאה עושה `continue` על שניהם, `kept` יוצא ריק, והשורה 38 כותבת `count:0` מעל קובץ מחויב בן 60 ישויות.",
+    "evidence": "ran: `ls -d /home/user/maor-system/src/types/domain.ts /home/user/buildsmart/app_flutter/lib/domain/domain.dart` ⇒ שניהם `No such file or directory` · entities.mjs:22-23 `try { txt = fs.readFileSync(s.file,'utf8'); } catch { continue; }` · entities.mjs:38 כתיבה ללא-תנאי · ran: `head -c 120 machtzev/generator/legacy/entities.json` ⇒ `\"count\": 60`. **לא הרצתי אותו** — זו בדיוק מחלקת-הסיכון של `engine-index --write` בקלון-טרי (515⇒336)."
+   },
+   {
+    "claim": "אינו מוגן בשום בדיקת-שפיות — אין `if (!kept.length) exit`.",
+    "evidence": "entities.mjs:37-38 — בין הסינון לכתיבה אין תנאי"
+   },
+   {
+    "claim": "אינו הדור-הנוכחי; הפלט מוגדר «פלט-יתום של v1».",
+    "evidence": "machtzev/generator/legacy/README.md:4 «`entities.json`/`app-inventory.json` = פלט-יתום של v1. אפס-מייבא-חי (אומת). לא-נמחק.»"
+   },
+   {
+    "claim": "אין לו אף קורא.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/legacy/entities.mjs ⇒ `🚫 לא: … אין-קורא-ידוע` · `🔌 מחובר: 0 מייבאים`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אפס. ההופעה היחידה מחוץ לעצמו: machtzev/index-baseline.json:50."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — התפקיד מאויש ע\"י `new/atoms/schema-fields.mjs` (FIELDS · 54 ישויות · 492 שדות), שהוא מקור-האמת של shape-ops ושל entity-terms. חיבור entities.mjs יוסיף מקור-אמת שני לאותה ישות."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **הוחלף (legacy)** + התפקיד מאויש ע\"י schema-fields.mjs. בנוסף הוא **מסוכן להרצה** בקלון-טרי — מדווח כאזהרה תפעולית למנהל."
+  },
+  "evidence": [
+   "ran: ls -d /home/user/maor-system/src/types/domain.ts /home/user/buildsmart/app_flutter/lib/domain/domain.dart ⇒ שניהם חסרים",
+   "ran: head -c 120 machtzev/generator/legacy/entities.json ⇒ \"count\": 60",
+   "read: machtzev/generator/legacy/entities.mjs:1-41 (הקובץ במלואו) — הכתיבה בשורה 38 ללא-תנאי",
+   "read: machtzev/generator/legacy/README.md:4",
+   "**לא הורץ בכוונה** — הרצה הייתה משחיתה קובץ מחויב"
+  ]
+ },
+ {
+  "file": "machtzev/generator/legacy/teach.mjs",
+  "lang": "mjs",
+  "lines": 36,
+  "does": [
+   {
+    "claim": "קושר מילה עברית לאטום ושומר ב-learned.json, כדי ש-match יתייחס אליה כמו לכותרת.",
+    "evidence": "teach.mjs:14-26 `export function teach(word, cls)` · :24 `fs.writeFileSync(LP, JSON.stringify(doc,null,2)+'\\n');`"
+   },
+   {
+    "claim": "מאמת שהאטום קיים בקטלוג ושהמילה עברית — שתי דחיות מפורשות לפני כתיבה.",
+    "evidence": "teach.mjs:16 `if (!atlas.widgets.some(w=>w.cls===cls)) throw new Error(`אטום «${cls}» לא קיים בקטלוג`);` · :18 `if (!/[֐-׿]/.test(w)) throw new Error('המילה חייבת להיות בעברית');`"
+   },
+   {
+    "claim": "הוא דאטה ולא מנגנון — מוצהר ככזה.",
+    "evidence": "teach.mjs:3 «קושר מילה/ביטוי לאטום (דאטה, לא מנוע)»"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו רץ — הוא קורס.** שני הקבצים שהוא צורך אינם ב-legacy/.",
+    "evidence": "ran: `node machtzev/generator/legacy/teach.mjs \"עוגה\" DonutChart` ⇒ `🚫 ENOENT: no such file or directory, open '/home/user/-ai-chat-server/machtzev/generator/legacy/atlas.json'` · teach.mjs:12 `const LP = path.join(HERE,'knowledge/learned.json')` ו-:15 `path.join(HERE,'atlas.json')` — ran: `ls machtzev/generator/legacy/atlas.json machtzev/generator/legacy/knowledge/` ⇒ שניהם No such file"
+   },
+   {
+    "claim": "והכשל שלו מפיל מסלול חי: `nl.mjs --teach` מייבא אותו.",
+    "evidence": "nl.mjs:14 `import { teach } from './teach.mjs';` · nl.mjs:91-94 מסלול ה---teach"
+   },
+   {
+    "claim": "אינו הדור-הנוכחי.",
+    "evidence": "machtzev/generator/legacy/README.md:2 — teach.mjs ברשימת-המוחלפים"
+   },
+   {
+    "claim": "אינו נקרא מהמחולל.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/generator/legacy/teach.mjs ⇒ `🔌 מחובר: 1 מייבאים (nl.mjs)` — ו-nl.mjs עצמו לא-מחובר"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/generator/legacy/nl.mjs:14",
+    "how": "ייבוא סטטי. nl לא-מחובר ⇒ הענף מת."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — למידה-מהשימוש היא רעיון חי, אבל המימוש הזה שבור ומוחלף. הכיוון העדכני הוא דקדוק-כדאטה (`spec-lang.data.json` · `nl-lang.data.json`, הכרעה-30/G34), שבו השפה כבר מוזרקת ולא נלמדת פר-מילה."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **הוחלף (legacy)** וגם **שבור** — קורס ב-ENOENT בשתי תלויות."
+  },
+  "evidence": [
+   "ran: node machtzev/generator/legacy/teach.mjs \"עוגה\" DonutChart ⇒ ENOENT legacy/atlas.json",
+   "ran: ls -la machtzev/generator/legacy/ ⇒ אין atlas.json ואין knowledge/",
+   "read: machtzev/generator/legacy/teach.mjs:1-35 (הקובץ במלואו) · README.md:2"
+  ]
  }
 ]
