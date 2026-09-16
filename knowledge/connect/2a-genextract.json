@@ -1,5 +1,458 @@
 [
  {
+  "file": "machtzev/audit/diff.mjs",
+  "lang": "mjs",
+  "lines": 144,
+  "does": [
+   {
+    "claim": "משווה כל זוג ORIG↔FORGE בשני מדדים: **raw** (הפרש-אפור פר-פיקסל, רגיש ל-AA של טקסט) ו-**struct** (הקטנה ×0.25 שמממצעת שולי-AA ומשמרת גושים/מיקום/צבע) — ומצהיר ש-struct הוא מדד-הדירוג העיקרי",
+    "evidence": "machtzev/audit/diff.mjs:25-33"
+   },
+   {
+    "claim": "מייצר גיליון-הפרש חזותי (‏orig | forge | heatmap) ל-TOPN הגרועים, כותב `report.json` · `report.md`, ומוסיף שורה ל-`history.jsonl` (קו-מגמה מצטבר)",
+    "evidence": "machtzev/audit/diff.mjs:52-56,102,114"
+   },
+   {
+    "claim": "מול baseline מסווג ל-4 מגמות: רגרסיה · שיפור · תוקן-render · נשבר-render; `--baseline` מקבע חוזה-איכות חדש",
+    "evidence": "machtzev/audit/diff.mjs:109-112,117"
+   },
+   {
+    "claim": "baseline.json בריפו מחזיק **353 אטומים**",
+    "evidence": "ran: node -e \"console.log(Object.keys(require('./machtzev/audit/baseline.json')).length)\" ⇒ 353"
+   },
+   {
+    "claim": "אטום בלי PNG מקבל `diffPct: 999` ו-`note` מפורש (‏no-orig · no-forge · שניהם) — ועולה לראש הדירוג, לא נעלם",
+    "evidence": "machtzev/audit/diff.mjs:42,48"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו שער** — אין `process.exit(1)` על רגרסיה; הוא מדפיס «⚠ רגרסיות: …» ויוצא 0. מי שהופך זאת לפסק-דין הוא `machtzev/one.mjs:195` (סף 1.5%), לא הוא",
+    "evidence": "machtzev/audit/diff.mjs:144 (השורה האחרונה — console.log בלבד) מול machtzev/one.mjs:195-196"
+   },
+   {
+    "claim": "מדרג לפי **raw** אף שהכותרת מצהירה ש-struct הוא «מדד-הדירוג העיקרי» — סתירה בין ההערה לקוד",
+    "evidence": "machtzev/audit/diff.mjs:32 (ההצהרה) מול :47-49 (‏`sortKey = r => r.note ? 1000 : r.diffPct` — raw)"
+   },
+   {
+    "claim": "מריץ ירוק גם על **אפס** אטומים: «✓ diff: 0 הושוו · נקי 0 · ממוצע 0%» ויוצא 0 — index ריק נראה כמו הצלחה",
+    "evidence": "ran: `node machtzev/audit/diff.mjs` עם index ריק ⇒ «✓ diff: 0 הושוו · נקי 0 · ממוצע 0% · 🔴0 🟢0 · report.md»"
+   },
+   {
+    "claim": "`history.jsonl` נכתב ב-append בכל ריצה, כולל ריצות-תת-קבוצה — קו-המגמה מערבב מדגמים שונים בלי לסמן",
+    "evidence": "machtzev/audit/diff.mjs:114 (‏appendFileSync ללא שדה שמבדיל ריצה-מלאה מסינון)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/audit/run.mjs:20",
+    "how": "שלב 4 בצינור"
+   },
+   {
+    "who": "machtzev/audit/heal.mjs:91",
+    "how": "בביטוח-`--full`, עם `TOPN=0` (בלי גיליונות)"
+   },
+   {
+    "who": "machtzev/one.mjs:193-197",
+    "how": "עקיף — one קורא את `shots/report.json` שהוא כתב ומכריע רגרסיה >1.5%"
+   },
+   {
+    "who": "machtzev/audit/README.md:57",
+    "how": "מתועד (`--baseline`)"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/gates.tsv` — כשער עצמאי (‏`diff --gate`) במקום להיות מוכרע מבחוץ ב-one.mjs:195",
+   "gives": "היום הסף (1.5%) יושב ב-`one.mjs`, והמנוע שמייצר את המספר אינו יודע עליו. שער-פנימי היה מצמיד את המדד לפסק-הדין באותו קובץ, ומונע את «ריצה-על-0-אטומים = ירוק» שנמדד למעלה"
+  },
+  "s22": {
+   "score": 2,
+   "why": "המדידה כאן היא מה ש-§22 מכנה «אפס-תקלות» בשכבת-המראה — שני מדדים, heatmap, baseline של 353, וסיווג-מגמה. מה שחסר: פסק-דין. מנוע-מדידה בלי שער הוא דוח"
+  },
+  "evidence": [
+   "ran: node machtzev/audit/diff.mjs (index ריק) ⇒ «✓ diff: 0 הושוו … ממוצע 0%», exit 0",
+   "ran: baseline.json ⇒ 353 מפתחות",
+   "read: machtzev/audit/diff.mjs:25-33,42,47-49,102,109-117,144",
+   "read: machtzev/one.mjs:193-197 (מי באמת מכריע)"
+  ]
+ },
+ {
+  "file": "machtzev/audit/features.mjs",
+  "lang": "mjs",
+  "lines": 49,
+  "does": [
+   {
+    "claim": "טביעת-אצבע-CSS לאטום: אוסף את כל מחלקות-ה-body, מוצא כל בלוק-CSS במשפחה שהסלקטור שלו נוגע במחלקה, מצרף `style=\"…\"` inline, ומחזיר אילו מ-19 תכונות-קשות מופיעות",
+    "evidence": "machtzev/audit/features.mjs:9-29,38-48"
+   },
+   {
+    "claim": "מדד חי: **174 מתוך 359 אטומים** נושאים לפחות תכונה-קשה אחת; `action/primary_btn` ⇒ `[\"filter\",\"backdrop-filter\"]`",
+    "evidence": "ran: node -e \"…fingerprint(y.family,y.origBody)…\" ⇒ «atoms with hard-features = 174» · «first= action primary_btn feats= [\\\"filter\\\",\\\"backdrop-filter\\\"]»"
+   },
+   {
+    "claim": "המטרה המוצהרת והמדידה: להפוך «diff 17%» ל-«diff 17% · חשוד: background-clip:text» — אבחון-שורש במקום מספר",
+    "evidence": "machtzev/audit/features.mjs:3"
+   },
+   {
+    "claim": "‏`filter` מוחרג מ-`backdrop-filter` בעזרת lookbehind (`(?<!backdrop-)`) — הפרדה אמיתית בין שתי תכונות שונות",
+    "evidence": "machtzev/audit/features.mjs:19"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "התאמת-הסלקטור היא **הכלה-במחרוזת** (`sel.includes('.'+c))` — לא פרסור. `.card` יתאים גם ל-`.card-dead` ⇒ תכונות שאינן של האטום נכנסות לטביעה",
+    "evidence": "machtzev/audit/features.mjs:45"
+   },
+   {
+    "claim": "אינו מדרג חומרה ואינו מקשר תכונה⇒תיקון: מחזיר רשימת-שמות בלבד. ה«כיוון-ל-self-heal» שבכותרת נשאר לקורא",
+    "evidence": "machtzev/audit/features.mjs:46-48"
+   },
+   {
+    "claim": "מטמון-ה-CSS פר-משפחה נבנה פעם-אחת מ-`<style>` הראשון בלבד; משפחה עם שני בלוקי-style תאבד את השני",
+    "evidence": "machtzev/audit/features.mjs:33"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/audit/gen-orig.mjs:7",
+    "how": "`import { fingerprint }` ⇒ נכתב לתוך `shots/index.json` פר-אטום"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/look.mjs` (‏G28 — «נייר פוסל אטום-בצבע-קשיח») · `machtzev/police.mjs` gate `balagan`",
+   "gives": "‏look.mjs פוסל אטום לפי **צבע קשיח**. ‏features מוסיף ציר שני: אטום שנשען על תכונת-CSS שאין לה מקבילת-Flutter (‏background-clip:text · conic-gradient · mix-blend) הוא אטום שהעור לא יוכל להחליף. הזרמת `feats` לתוך `look` נותנת לבורר-העור «אל תבחר בזה» מראש, במקום לגלות אחרי הרינדור"
+  },
+  "s22": {
+   "score": 2,
+   "why": "ידע-אמיתי על גבול-ההמרה (‏174/359), בדיוק בציר שהמחולל שובר בו. אבל הוא היום מידע-אחורה בדוח, לא אילוץ-בחירה קדימה בבורר"
+  },
+  "evidence": [
+   "ran: fingerprint על כל 359 ⇒ 174 עם תכונה-קשה",
+   "read: machtzev/audit/features.mjs:9-29,33,38-48",
+   "read: machtzev/audit/gen-orig.mjs:7,13 (הצרכן היחיד)"
+  ]
+ },
+ {
+  "file": "machtzev/audit/gen-forge-dart.mjs",
+  "lang": "mjs",
+  "lines": 63,
+  "does": [
+   {
+    "claim": "קורא `shots/index.json` ומחולל קובץ-בדיקת-Flutter אחד (`zz_pixel_audit_test.dart`) שמצייר כל `Forge<Pascal>` ל-PNG במסגור זהה (‏438/pad16/#08080A/2x)",
+    "evidence": "machtzev/audit/gen-forge-dart.mjs:1-3,9,16-17"
+   },
+   {
+    "claim": "ייבוא-ממוספר פר-משפחה (`as f_<fam>`) — מניעת התנגשות-שמות חוצת-משפחות",
+    "evidence": "machtzev/audit/gen-forge-dart.mjs:2,15-17"
+   },
+   {
+    "claim": "`ONLY=fam__slug,…` מצמצם לתת-קבוצה — זה מה ש-`heal.mjs` משתמש בו לסבב-מהיר",
+    "evidence": "machtzev/audit/gen-forge-dart.mjs:10-12 ⇒ machtzev/audit/heal.mjs:32"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**נופל בריפו הזה** — יעד-הכתיבה הוא נתיב-מוחלט של ריפו אחר, `/home/user/buildsmart/app_flutter/test/zz_pixel_audit_test.dart`, ש-`ls` מראה שאינו קיים",
+    "evidence": "ran: `node machtzev/audit/gen-forge-dart.mjs` ⇒ שגיאת-ENOENT על `path: '/home/user/buildsmart/app_flutter/test/zz_pixel_audit_test.dart'`; machtzev/audit/gen-forge-dart.mjs:8"
+   },
+   {
+    "claim": "אינו מריץ את הבדיקה — רק כותב אותה; ההרצה היא `flutter test` בשלב 3 של run.mjs",
+    "evidence": "machtzev/audit/gen-forge-dart.mjs:1-3 · machtzev/audit/run.mjs:18"
+   },
+   {
+    "claim": "מניח ש-`Forge<Pascal>` ניתן לבנייה עם `const …()` בלי ארגומנטים — אטום שדורש פרמטר-חובה לא יתקמפל ויפיל את **כל** קובץ-הבדיקה, לא רק את עצמו",
+    "evidence": "machtzev/audit/gen-forge-dart.mjs:17 — `const f_${fam}.${cls}()`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/audit/run.mjs:16",
+    "how": "שלב 2 בצינור"
+   },
+   {
+    "who": "machtzev/audit/heal.mjs:32,90",
+    "how": "פעמיים — סבב-ממוקד עם `ONLY`, וסבב-מלא בביטוח-`--full`"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — מחובר נכון בצינור. החסם אינו חיבור אלא סביבה: `/home/user/buildsmart/app_flutter` + Flutter SDK",
+   "gives": "∅"
+  },
+  "s22": {
+   "score": 1,
+   "why": "הצד השני של מדידת-הנאמנות. חשוב לאיכות, אך תלוי בריפו-אח שאינו כאן, ואינו מוסיף יכולת למחולל"
+  },
+  "evidence": [
+   "ran: node machtzev/audit/gen-forge-dart.mjs ⇒ ENOENT על /home/user/buildsmart/app_flutter/test/",
+   "ran: ls /home/user/buildsmart/app_flutter ⇒ MISSING",
+   "read: machtzev/audit/gen-forge-dart.mjs:8-17 · machtzev/audit/heal.mjs:32,90"
+  ]
+ },
+ {
+  "file": "machtzev/audit/gen-orig.mjs",
+  "lang": "mjs",
+  "lines": 28,
+  "does": [
+   {
+    "claim": "מצייר כל אטום-Pure ל-PNG דרך Playwright/Chromium במסגור זהה-ל-FORGE (‏viewport 560×1400 · deviceScaleFactor 2 · `--disable-lcd-text` · `--font-render-hinting=none`) ⇒ `shots/orig/<fam>__<slug>.png`",
+    "evidence": "machtzev/audit/gen-orig.mjs:15-26"
+   },
+   {
+    "claim": "כותב `shots/index.json` — האינדקס שממנו ניזונים `gen-forge-dart` ו-`diff` (‏family · slug · cls · seam · theater · hug · feats)",
+    "evidence": "machtzev/audit/gen-orig.mjs:13"
+   },
+   {
+    "claim": "מקבל שמות-משפחה כארגומנטים לסינון",
+    "evidence": "machtzev/audit/gen-orig.mjs:9-10"
+   },
+   {
+    "claim": "**רץ ירוק בריפו הזה**: `node machtzev/audit/gen-orig.mjs chat` ⇒ «✓ gen-orig: 6 אטומי-מקור» ו-6 קובצי-PNG בפועל",
+    "evidence": "ran: `node machtzev/audit/gen-orig.mjs chat` ⇒ «✓ gen-orig: 6 אטומי-מקור ⇒ …/shots/orig» · `ls shots/orig` ⇒ chat__bubble_states.png … 6 קבצים"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**כתיבת-index.json הרסנית**: כשמסננים משפחה, ה-index נדרס בתת-הקבוצה בלבד (6 רשומות במקום 359). `diff.mjs` שירוץ אחריו יראה 6 אטומים ויכריז «נקי», והיסטוריית-ה-`history.jsonl` תקבל שורה שנראית כמו ריצה-מלאה",
+    "evidence": "ran: אחרי `gen-orig.mjs chat` ⇒ `index.json` הכיל 6 רשומות; machtzev/audit/gen-orig.mjs:10,13 (הסינון קודם לכתיבה, ואין מיזוג)"
+   },
+   {
+    "claim": "כשל-צילום נבלע ל-stderr והלולאה ממשיכה — אטום חסר יתגלה רק בדיף כ-`no-orig`",
+    "evidence": "machtzev/audit/gen-orig.mjs:23"
+   },
+   {
+    "claim": "נתיב-Chromium קשיח (`/opt/pw-browsers/chromium`) ונתיב-playwright קשיח (`/opt/node22/…`) — מקריות-סביבה, לא גילוי",
+    "evidence": "machtzev/audit/gen-orig.mjs:5,15"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/audit/run.mjs:14",
+    "how": "שלב 1 בצינור: `run('node',[HERE+'/gen-orig.mjs', ...fams])`"
+   },
+   {
+    "who": "machtzev/audit/heal.mjs",
+    "how": "עקיף — heal מריץ את `gen-forge-dart` + `diff` שקוראים את ה-index שהוא כתב"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — מחובר נכון בתוך צינור-האודיט. מה שדרוש הוא **מיזוג** ל-index.json במקום דריסה (כדי שסינון-משפחה לא יזייף ריצה-מלאה) — תיקון, לא חיבור",
+   "gives": "∅"
+  },
+  "s22": {
+   "score": 1,
+   "why": "מודד נאמנות-המרה (Pure⇒Flutter), שהוא תנאי ל«אפס-באגים» של §22 — אבל אינו מייצר יכולת. ודריסת-האינדקס היא בדיוק סוג-הבאג שמייצר ירוק-שקרי"
+  },
+  "evidence": [
+   "ran: node machtzev/audit/gen-orig.mjs chat ⇒ 6 PNG + index.json עם 6 רשומות",
+   "read: machtzev/audit/gen-orig.mjs:5,9-13,15-26",
+   "ran: rm -rf machtzev/audit/shots (ניקוי אחרי הבדיקה)"
+  ]
+ },
+ {
+  "file": "machtzev/audit/heal.mjs",
+  "lang": "mjs",
+  "lines": 116,
+  "does": [
+   {
+    "claim": "תיקון-עצמי **מוגן**: מודד מטרות + 12 קנרים (‏12 האטומים הנקיים ביותר ב-baseline) לפני/אחרי שינוי-מנוע בעץ-העבודה, ומכריע קידום או **ביטול-אוטומטי** (`git checkout -- ds-forge.mjs` + בנייה-מחדש + מראה חזרה ל-buildsmart)",
+    "evidence": "machtzev/audit/heal.mjs:1-3,24-26,79,113-115"
+   },
+   {
+    "claim": "`--full` מוסיף ביטוח-מלא: מרנדר את כל 353 האטומים ומאשר קידום רק ב**אפס-רגרסיה בכולם**, לא רק בקנרים",
+    "evidence": "machtzev/audit/heal.mjs:81-93"
+   },
+   {
+    "claim": "סף-קידום מותאם למדגם: בנתיב-המהיר נדרש שיפור > EPS; ב-`--full` די ב-0.15% — כי סריקת-353 היא הביטוח. ההיגיון מתועד בקוד עם דוגמה קונקרטית (`reveal_card` «Label» זז מימין-למרכז)",
+    "evidence": "machtzev/audit/heal.mjs:76-79"
+   },
+   {
+    "claim": "`--suspects` בוחר מטרות מהדוח עצמו (‏raw ≥ 8%) במקום מיד",
+    "evidence": "machtzev/audit/heal.mjs:20"
+   },
+   {
+    "claim": "עדכון-baseline מותנה בהיקף-הראיה: עבר ביטוח-מלא ⇒ מכל-האטומים; אחרת ⇒ מטרות+קנרים בלבד",
+    "evidence": "machtzev/audit/heal.mjs:98-100"
+   },
+   {
+    "claim": "פסק-דין: `process.exit(promote ? 0 : 2)`",
+    "evidence": "machtzev/audit/heal.mjs:116"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו רץ כאן** — תלוי ב-`/home/user/buildsmart/app_flutter` וב-`/home/user/flutter/bin/flutter`, שניהם חסרים",
+    "evidence": "ran: `ls /home/user/buildsmart/app_flutter /home/user/flutter/bin/flutter` ⇒ שניהם MISSING; machtzev/audit/heal.mjs:12-13"
+   },
+   {
+    "claim": "**`--commit` דוחף לענף קשיח בשני ריפואים**: `git push -u origin claude/mah-kora-0by8kw` ב-`-ai-chat-server` וגם ב-`/home/user/buildsmart` — שם-ענף מוטמע בקוד, בלי דגל ובלי אישור-ריצה",
+    "evidence": "machtzev/audit/heal.mjs:103-106"
+   },
+   {
+    "claim": "הביטול-האוטומטי משחזר **רק** `machtzev/ds-forge.mjs`. שינוי-מנוע שנגע בקובץ אחר לא יבוטל — «ביטול-אוטומטי» חלקי",
+    "evidence": "machtzev/audit/heal.mjs:114 — `git checkout -- machtzev/ds-forge.mjs` ותו לא"
+   },
+   {
+    "claim": "`GEN` הוא נתיב-מוחלט קשיח (`/home/user/-ai-chat-server`) — עובד במקרה כאן, נשבר בכל clone אחר",
+    "evidence": "machtzev/audit/heal.mjs:12"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/audit/README.md:36-37,47-48",
+    "how": "מתועד כארבע פקודות-הפעלה"
+   },
+   {
+    "who": "∅",
+    "how": "אין קורא בקוד — one.mjs מריץ `audit/run.mjs` (שאינו כולל heal), ואין אזכור ב-police.mjs או ב-workflows"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/one.mjs:193` — ליד «ביקורת-פיקסל», כשלב-תיקון אחרי שלב-המדידה: `diff` מוצא רגרסיה ⇒ `heal --suspects --full` מנסה ומבטל-עצמית",
+   "gives": "זו הלולאה-הירוקה של הכרעה-21 («אוטונומיה: להפסיק לשאול») על שכבת-המראה: המנוע משנה את עצמו, מודד, ומבטל אם החמיר. היום הלולאה קיימת אך אינה מופעלת מאף מקום. **תנאי מוקדם:** להוציא את `--commit` (‏שם-ענף קשיח, push לשני ריפואים) מהנתיב האוטומטי"
+  },
+  "s22": {
+   "score": 3,
+   "why": "המנוע היחיד ב-60 שמממש «תקן-מדוד-ובטל-אם-החמרת» עם ביטוח על כל 353 — בדיוק רצפת-הקבלה של §22 («אפס-באגים, אפס-תקלות») בשכבה שהמחולל באמת פולט. הוא לא מחובר לכלום, וזו הפער הגדול ביותר שמצאתי בקבוצה"
+  },
+  "evidence": [
+   "ran: ls /home/user/buildsmart/app_flutter · /home/user/flutter/bin/flutter ⇒ שניהם MISSING",
+   "ran: grep -rn 'heal.mjs' --include=*.mjs --include=*.yml . ⇒ אין קורא בקוד",
+   "read: machtzev/audit/heal.mjs:12-13,20,24-26,76-93,98-106,113-116",
+   "read: machtzev/one.mjs:193-197 (נקודת-החיבור המוצעת)"
+  ]
+ },
+ {
+  "file": "machtzev/audit/lib.mjs",
+  "lang": "mjs",
+  "lines": 82,
+  "does": [
+   {
+    "claim": "מקור-אמת יחיד לחציבת-אטומי-Pure: `atomsOf(fam)` חותך תאים מ-`machtzev/pure/<fam>-family.html` דרך אותה `cells()` של `ds-forge.mjs`, מדדפ לפי שם-מחלקה, ולאטום-תאטרון לוקח את **המצב-הראשון** (מה שה-FORGE מצייר)",
+    "evidence": "machtzev/audit/lib.mjs:6,54-66"
+   },
+   {
+    "claim": "מדד חי: `allAtoms()` ⇒ **359 אטומים ב-17 משפחות** (action 50 · card 32 · dataviz 24 · …)",
+    "evidence": "ran: node -e \"import('./machtzev/audit/lib.mjs').then(m=>console.log(m.allAtoms().length, m.familiesOf().length))\" ⇒ 359 · 17"
+   },
+   {
+    "claim": "`rootHug` מכריע אם שורש-האטום «מתכווץ-לתוכן» — פרסור-DOM אמיתי + `styleOf` על מפת-הסגנון, ולא ניחוש-לפי-שם; זה מה שקובע את המסגור בצד-Dart",
+    "evidence": "machtzev/audit/lib.mjs:40-51"
+   },
+   {
+    "claim": "`frameOrig` בונה דף-HTML ממוסגר **זהה-בייט להגדרת-ה-FORGE**: 438px · pad16 · `#08080A` · rtl · `t-indigo` · כל ה-`<defs>` של המשפחה + 11 `@font-face` מקומיים (‏file://) — כדי שהדיף ימדוד ציור, לא גופנים",
+    "evidence": "machtzev/audit/lib.mjs:11,15-27,74-80"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** מצייר ואינו משווה — חציבה ומסגור בלבד. אין Playwright ואין PNG בקובץ הזה",
+    "evidence": "machtzev/audit/lib.mjs:1-82 — אין import של playwright, אין screenshot"
+   },
+   {
+    "claim": "אינו נוגע ב-Dart: הוא צד-ה-ORIG בלבד. הצד השני (`gen-forge-dart`) חי בקובץ אחר",
+    "evidence": "machtzev/audit/lib.mjs:1-2 (הכותרת)"
+   },
+   {
+    "claim": "מדדף על **שם-המחלקה** (`'Forge'+pascal(name)`) ⇒ שני תאים שונים ששמם מתנרמל אותו דבר — השני נשמט בשקט",
+    "evidence": "machtzev/audit/lib.mjs:59-60"
+   },
+   {
+    "claim": "נתיבי-הגופן הם `file://${FONTS}` מוחלטים ⇒ הדף אינו נייד מחוץ למכונה הזו",
+    "evidence": "machtzev/audit/lib.mjs:9,16-26"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/audit/gen-orig.mjs:6",
+    "how": "`import { allAtoms, frameOrig, SHOTS, key }`"
+   },
+   {
+    "who": "machtzev/audit/gen-forge-dart.mjs:6",
+    "how": "`import { SHOTS, FONTS }`"
+   },
+   {
+    "who": "machtzev/audit/diff.mjs:6",
+    "how": "`import { SHOTS }`"
+   },
+   {
+    "who": "machtzev/audit/heal.mjs:10",
+    "how": "`import { SHOTS }`"
+   }
+  ],
+  "connectAt": {
+   "point": "‏`machtzev/generator/ds-forge.mjs` / `machtzev/generator/atom-index-full.json` — מקור-האטומים שהמחולל **כן** סורק (924 אטומי-תצוגה)",
+   "gives": "‏359 אטומי-Pure עם `seam` (‏fields · items · values · control · …) ו-`hug` הם מטא-דאטה שהמחולל צריך כדי לחווט שקע. `ds-forge` כבר מייצא `cells`/`theaterStates`, ולכן ההפרדה כאן נכונה — אין מה «לחבר», יש מה **לא לשכפל**"
+  },
+  "s22": {
+   "score": 2,
+   "why": "יחידת-החציבה שהאודיט כולו יושב עליה, ומייצרת בדיוק את המטא-דאטה של השקעים (‏seam · hug) שהמחולל צורך. רץ ירוק כאן. לא 3 — כי הצרכן שלה הוא האודיט, לא המחולל"
+  },
+  "evidence": [
+   "ran: allAtoms() ⇒ 359 אטומים · 17 משפחות · הראשון: action/primary_btn",
+   "read: machtzev/audit/lib.mjs:6,11,40-51,54-66,74-80"
+  ]
+ },
+ {
+  "file": "machtzev/audit/run.mjs",
+  "lang": "mjs",
+  "lines": 22,
+  "does": [
+   {
+    "claim": "מריץ את צינור-האודיט המלא בארבעה שלבים בסדר קבוע: `gen-orig` (‏ORIG/Playwright) ⇒ `gen-forge-dart` ⇒ `flutter test zz_pixel_audit_test.dart` ⇒ `diff`",
+    "evidence": "machtzev/audit/run.mjs:14,16,18,20"
+   },
+   {
+    "claim": "מעביר ארגומנטי-משפחה לשלב-ה-ORIG בלבד",
+    "evidence": "machtzev/audit/run.mjs:8,14"
+   },
+   {
+    "claim": "`execFileSync` עם `stdio:'inherit'` ⇒ כשל בכל שלב מפיל את כל הצינור מיד — אין בליעה",
+    "evidence": "machtzev/audit/run.mjs:11"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו כולל את `heal.mjs`** — הצינור מודד ומדווח, ואינו מתקן",
+    "evidence": "machtzev/audit/run.mjs:14-20 (ארבעה run בלבד)"
+   },
+   {
+    "claim": "**אינו רץ כאן**: שלב 3 הוא `/home/user/flutter/bin/flutter` ו-`cwd: /home/user/buildsmart/app_flutter` — שניהם חסרים; הוא ייפול כבר בשלב 2",
+    "evidence": "ran: `ls /home/user/flutter/bin/flutter` ⇒ MISSING; machtzev/audit/run.mjs:9-10,18"
+   },
+   {
+    "claim": "מעביר `fams` רק ל-`gen-orig`; `gen-forge-dart` ו-`diff` קוראים את index.json הדרוס ⇒ סינון-משפחה מייצר «ריצה-מלאה» מזויפת בדוח וב-history",
+    "evidence": "machtzev/audit/run.mjs:14 (עם fams) מול :16,20 (בלי) + machtzev/audit/gen-orig.mjs:10,13"
+   },
+   {
+    "claim": "אינו מחזיר פסק-דין משלו — מסתמך על יציאות-השלבים, ו-`diff` יוצא 0 גם עם רגרסיות",
+    "evidence": "machtzev/audit/run.mjs:22 (console.log סיום) · machtzev/audit/diff.mjs:144"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/one.mjs:196",
+    "how": "`run('machtzev/audit/run.mjs')` — **רק** כש-`FULL && HAS_FLUTTER && HAS_PW && fs.existsSync(BS)`; אחרת one מדווח את הדוח-האחרון בלי להריץ"
+   },
+   {
+    "who": "machtzev/audit/README.md:8-9",
+    "how": "מתועד"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — מחובר נכון (‏one.mjs:196, מאחורי 4 תנאי-סביבה מפורשים). מה שכן שווה: להעביר את `fams` גם לשלבים 2 ו-4, כדי שסינון לא יזייף היקף",
+   "gives": "∅"
+  },
+  "s22": {
+   "score": 1,
+   "why": "מנצח-תזמורת קצר וישר, אבל הוא מריץ מדידה בלבד ותלוי בשני נכסים חיצוניים חסרים. הערך נמצא בשלבים, לא בו"
+  },
+  "evidence": [
+   "ran: ls /home/user/flutter/bin/flutter · /home/user/buildsmart/app_flutter ⇒ MISSING",
+   "read: machtzev/audit/run.mjs:8-22",
+   "read: machtzev/one.mjs:190-196 (ארבעת התנאים שמפעילים אותו)"
+  ]
+ },
+ {
   "file": "machtzev/dedup/dedup-atoms.mjs",
   "lang": "mjs",
   "lines": 112,
