@@ -597,6 +597,135 @@
   ]
  },
  {
+  "file": "machtzev/generator/balagan.mjs",
+  "lang": "mjs",
+  "lines": 2160,
+  "capabilities": [
+   {
+    "cap": "**ממזג N מודולים לאפליקציה אחת** («בלגן», הכרעה-29): כל ספק-נייר שיש לו apps/<ns>.json ונמצא ב-peruk-index ⇒ מודול; אפס רשימה סגורה — פירוק חדש ⇒ מודול חדש, בלי יד",
+    "evidence": "machtzev/generator/balagan.mjs:2,8,37-53 (loadModules) · :89-100"
+   },
+   {
+    "cap": "**מסדר את שכבת-הבסיס ראשונה** (משימות · יומן — layer:'base') ואחריה הפירוקים לפי סדרם",
+    "evidence": "machtzev/generator/balagan.mjs:40-45"
+   },
+   {
+    "cap": "**בונה מזהה-רגע TF-IDF דטרמיניסטי** ממסמכי-הפירוקים: כותרת+«הרגע» מוגברים ×3, ומילה שמופיעה ביותר מ-50% מהמסמכים מקבלת משקל 0 — **רשימת-עצירה נגזרת, לא כתובה**",
+    "evidence": "machtzev/generator/balagan.mjs:54-71 (buildIdentifier)"
+   },
+   {
+    "cap": "**בודק את עצמו**: selfTest דורש שכותרת-המודול ו«הרגע» שלו יזהו את המודול עצמו — וכשל מחזיר exit 1",
+    "evidence": "machtzev/generator/balagan.mjs:76-81,2159-2160"
+   },
+   {
+    "cap": "**גוזר סף-חולשה מהנתונים** — חצי מביטחון-הכותרת הנמוך ביותר, כך שכותרת-לבד תמיד מזוהה אבל שורה כללית («לשלם ארנונה מחר») נופלת לשכבת-הבסיס; לא קבוע-קשיח",
+    "evidence": "machtzev/generator/balagan.mjs:96-98"
+   },
+   {
+    "cap": "מנרמל עברית מבנית: סופיות (ך⇒כ …), טוקנים ≥2, וגרסה בלי אות-שימוש קדמית (ו/ה/ב/ל/מ/ש/כ) באורך ≥4",
+    "evidence": "machtzev/generator/balagan.mjs:32-35"
+   },
+   {
+    "cap": "**מזהה סוג-שדה מדקדוק-האפיון ולא ממילון**: טלפון · «מי» (אדם) · אחוז · שעה — כולם דרך spec-lang typePhone/typePerson/typePercent/typeTime",
+    "evidence": "machtzev/generator/balagan.mjs:21-27"
+   },
+   {
+    "cap": "משייך כל מודול לאחד מ-8 נושאי-מסמך-המוצר (balagan-topics.data.json) לפי חפיפת-מילים, עם נפילה-לאחור לכל המסמך ואז «אחר»",
+    "evidence": "machtzev/generator/balagan.mjs:20,81-88"
+   },
+   {
+    "cap": "פולט שכבת-דאטה טהורה ל-Dart (gen_balagan_moments): BalaganModule עם משקלים · שדות-תאריך/מספר/שעה/טלפון/אדם/אחוז · descField · שלבים · שרשרת · selfScore · layer · required",
+    "evidence": "machtzev/generator/balagan.mjs:102-138"
+   },
+   {
+    "cap": "**בונה «היום» מאוחד** ממיזוג ספקי-ה-Today של כל המודולים (באיחור · היום · ממתין · עשיתי-לבד · מחר)",
+    "evidence": "machtzev/generator/balagan.mjs:3,100,1091-1575"
+   },
+   {
+    "cap": "בונה «מה קרה?» — זיהוי-הרגע מטקסט חופשי ⇒ עובדות (תאריך · סכום · טלפון) ⇒ טופס-שורש ממולא-מראש",
+    "evidence": "machtzev/generator/balagan.mjs:4,1576-1696"
+   },
+   {
+    "cap": "בונה «הבנתי כך?» — טופס-אישור של ≤6 שורות (חובה + מה-שזוהה, השאר מקופל) עם **זיכרון-חיים לפי תווית-שדה** («לא מתחיל מאפס»)",
+    "evidence": "machtzev/generator/balagan.mjs:1697-1819"
+   },
+   {
+    "cap": "**פולט בדיקת-Dart מחוללת לעובדות** — תאריכים-יחסיים · סכומים · קרבה-למילת-השדה — עם היום מוזרק (2026-09-08) כדי שתהיה דטרמיניסטית",
+    "evidence": "machtzev/generator/balagan.mjs:461-462"
+   },
+   {
+    "cap": "בונה «חיבורים»: מפתח-הבינה של הלקוח **במכשיר** (חוק-6) ⇒ צילום ⇒ קריאה ⇒ זיהוי; וסעיף-הענן מרונדר מ-cloud-screen (דאטה, לא Dart ביד)",
+    "evidence": "machtzev/generator/balagan.mjs:5,14,1820-1945"
+   },
+   {
+    "cap": "**כותב את חוט-הסנכרון ככלל-ארכיטקטורה**: משיכה ⇒ mergeJson ⇒ דחיפה — «הענן לא מכריע», מצבות-מחיקה מכובדות, המאוחר לפי __at; בלי קונפיג/כניסה ⇒ **אפס רשת**, ומחזיר קוד-מצב מפורש ('' · 'off' · 'net' · 'ok:N')",
+    "evidence": "machtzev/generator/balagan.mjs:111-126"
+   },
+   {
+    "cap": "בונה שלד (היום · מה קרה? · נושאים) עם קיצורי-מקשים ופלטת-פקודות, ו-main עם PureScope-נייר",
+    "evidence": "machtzev/generator/balagan.mjs:2069-2117,2118-2158"
+   },
+   {
+    "cap": "**רושם descField לכל מודול ב-main** (registerDisplay) — התיקון לבאג שבו AppStore החזיר את הערך הראשון בסדר-ההכנסה של המפה ומשימה נקראה «350» במקום «לשלם ארנונה»",
+    "evidence": "machtzev/generator/balagan.mjs:2136 (הלולאה + ההערה G54)"
+   },
+   {
+    "cap": "**בוחר את אטומי-המסך בחיפוש-פתוח** דרך particles (searchOp · wireAtom · pickWired) ולא בשמות קשיחים",
+    "evidence": "machtzev/generator/balagan.mjs:12"
+   },
+   {
+    "cap": "מנקה תוצר-ישן רק במרחב-השם שלו (gen_balagan_*) ופולט balagan-index.json (מודולים + selfTest) כמניפסט",
+    "evidence": "machtzev/generator/balagan.mjs:93,2154"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "**אין לו --gate** — הוא פולט ונכשל על selfTest; השערים (balaganone · balaganrun · balagan) הם קבצים אחרים",
+    "evidence": "machtzev/generator/balagan.mjs:2159-2160 (כל ה-CLI) · ערכי balaganone/balaganrun/balagan ב-machtzev/gates.tsv"
+   },
+   {
+    "claim": "**אינו מאחד סכמות** — כל מודול נשאר עם הישויות שלו; האיחוד הוא בתצוגה («היום» ממזג ספקים) ובחנות אחת",
+    "evidence": "machtzev/generator/balagan.mjs:3,100 (todayCls פר-מודול)"
+   },
+   {
+    "claim": "אינו מכיל מילון-דומייני — «אפס מילון-דומייני של המנוע»; כל מילה מגיעה מהמסמכים או מקובצי-הדקדוק",
+    "evidence": "machtzev/generator/balagan.mjs:8,20-22"
+   },
+   {
+    "claim": "**אין לו בינה בזיהוי** — «אפס-בינה, אפס-מילון»: TF-IDF דטרמיניסטי בלבד; מפתח-הבינה של הלקוח משמש רק לקריאת-צילום, לא לזיהוי-הרגע",
+    "evidence": "machtzev/generator/balagan.mjs:104 (טקסט-הכותרת הנפלטת) · :5"
+   },
+   {
+    "claim": "אין מודולי-נייר ⇒ מדלג בשקט ומחזיר null, לא נכשל",
+    "evidence": "machtzev/generator/balagan.mjs:92"
+   },
+   {
+    "claim": "**כותב את balagan-index.json ל-GEN_DIR גם כש-GEN_OUT מנותב** — רק המסכים והתוכן מכבדים את ההפניה",
+    "evidence": "machtzev/generator/balagan.mjs:93 (R.outDir/R.dataOutDir) מול :2154 (path.join(HERE, …)); אומת בריצה — ראה «נמדד»"
+   },
+   {
+    "claim": "אינו בונה את המודולים — app-ds בנה אותם ופלט apps/<ns>.json; כאן רק מיזוג",
+    "evidence": "machtzev/generator/balagan.mjs:2,37-53 · machtzev/generator/app-ds.mjs:341"
+   }
+  ],
+  "pipeline": {
+   "runBy": "**נקודת-כניסה של המחולל** (GEN_ENTRY ב-engine-index.mjs:321) · machtzev/generator/regen.mjs:22 (אחרי 31 ריצות app-ds, לפני server)",
+   "input": "machtzev/generator/apps/*.json (מניפסטי-המודולים מ-app-ds) ∩ peruk-index.json · peruks/*.md · balagan-topics.data.json · spec-lang.data.json · המדף דרך particles/render-ds",
+   "output": "<GEN_OUT|new/dart-gen-bs>/gen_balagan_{moments,home,ask,confirm,topics,behavior,keys,shell,main}.dart + קובצי-תוכן · machtzev/generator/balagan-index.json",
+   "next": "server.mjs קורא את balagan-index.json לרשימת-המודולים (regen.mjs:23); השערים balaganone (מבנה) · balaganrun (playwright במריצה) · balagan (36 כללי-מראה) מודדים"
+  },
+  "quality": {
+   "signal": "שער «balaganone» (N מודולים ≡ פירוקים ≡ ייבוא-Today ≡ «נושאים»; מזהה-הרגע ⇒ עצמו N/N; אפס שם-מודול ליטרלי; ratchet N רק-עולה) · «balaganrun» (playwright על האתר הבנוי: רגע-חדש ≤2 הקשות · «שלח» הקשה אחת · זמן-מסך-ראשון) · «balagan» (36 כללים מכניים · מד-צפיפות homeSlots כ-ratchet יורד-בלבד). בנוסף המנוע **בודק את עצמו** (selfTest ⇒ exit 1).",
+   "measured": "הורץ עם פלט מנותב: `GEN_OUT=<tmp> GEN_DATA_OUT=<tmp> node machtzev/generator/balagan.mjs` ⇒ exit 0 · «**30 מודולים** ⇒ אפליקציה אחת (היום · מה קרה? · נושאים **9**) · מזהה-הרגע: ✓ כותרת+הרגע ⇒ עצמו ב-**30/30**» ⇒ **9 קובצי-Dart** בתיקייה הזמנית. `balagan-index.json` נכתב ל-GEN_DIR — ו-**git status נשאר ריק**, כלומר הפלט זהה ביט-לביט למחויב (ראיית-דטרמיניזם). את שערי balaganone/balaganrun לא הרצתי (האחרון דורש אתר בנוי + playwright)."
+  },
+  "evidence": [
+   "sed/grep על machtzev/generator/balagan.mjs (2,160 שורות — נקראו הכותרת, loadModules, buildIdentifier/identify/selfTest, topicOf, buildBalagan, חוט-הסנכרון, ה-main, והמבנה המלא ב-grep של 20 מקטעים)",
+   "GEN_OUT=<scratch>/g4 GEN_DATA_OUT=<scratch>/d4 node machtzev/generator/balagan.mjs ⇒ 30 מודולים · 9 נושאים · 30/30 זיהוי-עצמי",
+   "ls <scratch>/g4 ⇒ gen_balagan_{ask,behavior,confirm,home,keys,main,moments,shell,topics}.dart",
+   "git status --short אחרי הריצה ⇒ ריק (balagan-index.json זהה למחויב)"
+  ]
+ },
+ {
   "file": "machtzev/generator/behavior-compose.mjs",
   "lang": "mjs",
   "lines": 203,
@@ -1165,6 +1294,115 @@
    "ls -d /home/user/buildsmart ⇒ No such file or directory",
    "node -e על machtzev/generator/gen-verify-report.json ⇒ rendered 246/283 · atoms 65 (תוצר מחויב, לא ריצה שלי)",
    "cat machtzev/generator/gen-verify-baseline.json ⇒ rendered 74 · screens 111 · atoms 52"
+  ]
+ },
+ {
+  "file": "machtzev/generator/genesis-gen.mjs",
+  "lang": "mjs",
+  "lines": 844,
+  "capabilities": [
+   {
+    "cap": "**המחולל של מסלול-א׳** (הכרעות 17+18): בקשה-בעברית ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך-Dart עובד",
+    "evidence": "machtzev/generator/genesis-gen.mjs:2,137-488 (generate) · :827-844 (CLI)"
+   },
+   {
+    "cap": "**מנוע-טהור, אפס-דאטה בקובץ** — כל הידע בקבצים חיצוניים: lexicon.json (מילת-צורה⇒תפקיד) · roles.json (שם-מחלקה⇒תפקיד-צורני) · tokens.json (prop-צבע⇒טוקן) · logic-lexicon.json · looks.json · האטלס",
+    "evidence": "machtzev/generator/genesis-gen.mjs:4-8,24,33-45"
+   },
+   {
+    "cap": "מפרש שורת-בקשה לחלק מובנה: מילת-צורה + תווית + אימוג׳י + תת-כותרת (|) + אופציות (:) + **תור-ערכים מספריים**",
+    "evidence": "machtzev/generator/genesis-gen.mjs:58-97 (parsePart)"
+   },
+   {
+    "cap": "מחלץ מספרים רק כאסימון עומד-לבדו — «quest1» ו-«ברך 90°» נשארים שלמים, ובשורת-ניווט מספר הוא חלק מזהות ולא ערך",
+    "evidence": "machtzev/generator/genesis-gen.mjs:69-77"
+   },
+   {
+    "cap": "תומך בשלושה תחבירי-הצבעה: `אטום <ClassName>` (האטום הזה בדיוק) · `דאטה <ConstName>` (chips מתוכן אטום-דאטה חי) · `ניווט <slug>` (כרטיס שפותח מסך-מחולל אחר)",
+    "evidence": "machtzev/generator/genesis-gen.mjs:79-90"
+   },
+   {
+    "cap": "**בורר אטום לפי ניקוד רב-ערוצי**: התאמת-תפקיד (5) · אופציות (+2) · hero (+4) · תת-כותרת (+2) · **התאמת-מספרים** (כמה שקעים סקלריים צורכים את מספרי-המשפט) · קנס חוב-טוהר (−3) · קנס מורכבות",
+    "evidence": "machtzev/generator/genesis-gen.mjs:99-135 (pickAtom)"
+   },
+   {
+    "cap": "**פוסל אטום שאין לו איפה לקבל תוכן** — types ריק ואין פוזיציונליים ⇒ לא מועמד (§20-ג)",
+    "evidence": "machtzev/generator/genesis-gen.mjs:110"
+   },
+   {
+    "cap": "**פוסל אטום לא-מתאים-לתפקיד**: תפקיד אינטראקטיבי דורש שקע on* («תווית-דוממת לא משמשת שדה/מתג»); עוגן-דאטה דורש שקע options/items מסוג List<String>",
+    "evidence": "machtzev/generator/genesis-gen.mjs:101,111-114"
+   },
+   {
+    "cap": "**פוסל אטום שלא ניתן למלא את ה-required שלו** — FILLABLE כמקור-אמת יחיד (L93), עם טיפול נפרד ב-Widget/List<Widget> וב-List<(…)> שדורש אופציות",
+    "evidence": "machtzev/generator/genesis-gen.mjs:100,115-122"
+   },
+   {
+    "cap": "תומך בחיבור אטום⇒אטום דרך שורה-מוזחת (ענף של החלק שמעליה)",
+    "evidence": "machtzev/generator/genesis-gen.mjs:139-140"
+   },
+   {
+    "cap": "**שכבת-המטרה (G17c)**: הבעלים מניח משפט-מטרה בלבד ב-goals/, והמנוע לבדו מדרג אטומי-לוגיקה לפי קרבה-למטרה (חפיפת-מילים + הגרלה **זרועה-מהמטרה** ⇒ דטרמיניסטי), גוזר לכל אטום צורת-חיבור מהחתימה (תחום-מוצהר⇒בחירה-מזינה · String⇒שרשרת · DateTime⇒מנוע-חי), ומפצל לחדרים עם ניווט-מסע",
+    "evidence": "machtzev/generator/genesis-gen.mjs:729-760"
+   },
+   {
+    "cap": "כותב לעצמו ספקים מהידע-החי: מסך-כניסה עצמי · שואוקייס · improv · goals",
+    "evidence": "machtzev/generator/genesis-gen.mjs:489-498,552,829"
+   },
+   {
+    "cap": "**מצב --only (חילול-נקודתי)**: רק הסלאגים הנקובים, בלי שכתוב-ספקים ובלי מחיקת תוצרי-מחוללים אחרים — הריצה-המלאה מחקה 116 קובצי-תוכן של GENMAX (L93)",
+    "evidence": "machtzev/generator/genesis-gen.mjs:830-833,836-838"
+   },
+   {
+    "cap": "**לעולם לא rmSync(OUT)** — מוחק רק את שני התוצרים-שלו-עצמו לספק שהוא מעבד (gen_<slug>.dart + gen_<slug>_content.dart), כי dart-gen-bs משותף עם app-from-sentences/retarget/schoolos",
+    "evidence": "machtzev/generator/genesis-gen.mjs:834-838"
+   },
+   {
+    "cap": "מתג-Pure הפיך (חוק-7) שמחליף את משפחת-הטוקנים בפלט בלי לשנות קוד",
+    "evidence": "machtzev/generator/genesis-gen.mjs:42-44"
+   }
+  ],
+  "notCap": [
+   {
+    "claim": "**כותב את האטלס בכל ריצה, גם ב---only** — buildAtlas+writeAtlas רצים בטעינת-המודול, לפני שנקרא בכלל איזה סלאג לחולל",
+    "evidence": "machtzev/generator/genesis-gen.mjs:51-52; אומת בריצה: אחרי `--only entity` עם GEN_OUT מנותב, git status הראה `M atlas.json` ו-`M atlas-data.json` (שיחזרתי ב-git checkout)"
+   },
+   {
+    "claim": "**האטלס המחויב אינו טרי בקלון הזה** — חישוב טרי נותן 572 widgets · 865 functions · **18,205** data, בעוד המחויב נושא 562 · 857 · **2,159**",
+    "evidence": "נמדד: `node -e` שמייבא את atlas.mjs וקורא buildAtlas() בזיכרון ⇒ 572/865/18205; `require('./machtzev/generator/atlas.json').counts` ⇒ {562,857,2159}. לא שיניתי דבר — התוצר המחויב הוחזר ב-git checkout."
+   },
+   {
+    "claim": "אינו מרנדר — הוא פולט Dart; ההוכחה שהמסך עולה היא gen-verify",
+    "evidence": "machtzev/generator/genesis-gen.mjs:2 מול machtzev/generator/gen-verify.mjs:2-4"
+   },
+   {
+    "claim": "**אינו רץ בריצה-המלאה מתוך one.mjs** — one מריץ אותו רק על ספקים שאין להם עדיין פלט, ב---only",
+    "evidence": "machtzev/one.mjs:144-151"
+   },
+   {
+    "claim": "אינו מכיר ישויות/חלקיקים/דוחות — זה מסלול-ב׳ (app-ds · particles); כאן הקלט הוא שורות-צורה",
+    "evidence": "machtzev/generator/genesis-gen.mjs:10-12 (תיאור ה-spec)"
+   },
+   {
+    "claim": "אינו סורק את שכבת-ה-forge — buildAtlas נקרא בלי {forge:true}",
+    "evidence": "machtzev/generator/genesis-gen.mjs:51 · machtzev/generator/atlas.mjs:30"
+   }
+  ],
+  "pipeline": {
+   "runBy": "**נקודת-כניסה של המחולל** (GEN_ENTRY ב-engine-index.mjs:321). בפועל: machtzev/one.mjs:146-151 מריץ אותו ב---only על ספקים-חדשים בלבד",
+   "input": "machtzev/generator/specs/*.txt (בקשות) · goals/*.txt (משפטי-מטרה) · knowledge/{lexicon,roles,tokens,logic-lexicon,looks,self-model}.json · האטלס · screens-seed/terms-catalog.json",
+   "output": "<GEN_OUT|new/dart-gen-bs>/gen_<slug>.dart · <GEN_DATA_OUT|new/dart-data-bs/auto>/gen_<slug>_content.dart · **וגם** machtzev/generator/atlas.json + atlas-data.json",
+   "next": "המדף מוזרק ל-buildsmart (one.mjs:206-216) ו-gen-verify מרנדר ומאמת"
+  },
+  "quality": {
+   "signal": "שערים: «genratchet» (דפוסי-חיווט נעולים על buildApp) · «genverify» (הרנדר-בפועל) · «nlsmoke»/«nlquality»/«acceptance» (רצפת-§22) · «coverage» (לבנים-ברות-מילוי). האיכות המהותית בבורר: אטום נפסל על **חוסר-שקע**, על **חוסר-יכולת-תגובה** ועל **חוסר-מילוי-required** — שלוש פסילות מבניות, לא ניקוד בלבד.",
+   "measured": "הורץ עם פלט מנותב: `GEN_OUT=<tmp> GEN_DATA_OUT=<tmp> node machtzev/generator/genesis-gen.mjs --only entity` ⇒ exit 0 · «entity · \"🗂️ ליד\" · **13/13 חלקים**» עם רשימת-האטומים שנבחרו (CaSubTitle · InlineTextRow · GlowField · NumberStepper · DatePills · FabMenu · DsLogRow · RStat ×2 · DataGrid · CoinBanner) · «1 מסכים · אטלס-מלא: 572 widgets · 865 functions · 18205 data» ⇒ 2 קבצים בתיקיות הזמניות. שני קובצי-האטלס שנדרסו הוחזרו ב-`git checkout --`, ו-git status חזר לריק."
+  },
+  "evidence": [
+   "sed/grep על machtzev/generator/genesis-gen.mjs (844 שורות — נקראו הכותרת, parsePart, pickAtom, שכבת-המטרה, בלוק-ה-CLI, והמבנה המלא ב-grep)",
+   "GEN_OUT=<scratch>/g3 GEN_DATA_OUT=<scratch>/d3 node machtzev/generator/genesis-gen.mjs --only entity ⇒ 13/13 חלקים · 1 מסך",
+   "git status אחרי הריצה ⇒ M atlas.json · M atlas-data.json ⇒ git checkout -- ⇒ ריק",
+   "node -e buildAtlas() בזיכרון ⇒ 572/865/18205 מול atlas.json.counts ⇒ 562/857/2159"
   ]
  },
  {

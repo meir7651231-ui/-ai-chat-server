@@ -145,6 +145,16 @@ GEN_OUT=<scratch>/g2 GEN_DATA_OUT=<scratch>/d2 \
 node yeshiva/purpose.mjs "מערכת לניהול תורים במרפאה עם רופאים ומטופלים"
   ⇒ תחום clinic · «מטופלים» ≡ Family (25 שקעים, 2 ראיות) · «תורים במרפאה»/«רופאים» ⇒ מתגים (0 מועמדים)
   ⇒ שקעי-חובה 0 · רשות 0 · 3 מתגים · 25 מקורות
+GEN_OUT=<scratch>/g3 GEN_DATA_OUT=<scratch>/d3 node machtzev/generator/genesis-gen.mjs --only entity
+  ⇒ entity · "🗂️ ליד" · **13/13 חלקים** ⇒ CaSubTitle · InlineTextRow · GlowField · NumberStepper ·
+     DatePills · FabMenu · DsLogRow · RStat ×2 · DataGrid · CoinBanner
+  ⇒ «אטלס-מלא: 572 widgets · 865 functions · 18205 data»
+  ⚠ דרס את atlas.json + atlas-data.json ⇒ `git checkout --` ⇒ git status ריק
+node -e 'buildAtlas() בזיכרון'  ⇒ 572 · 865 · **18,205**
+require('atlas.json').counts    ⇒ 562 · 857 · **2,159**     ⇒ המחויב אינו טרי בקלון הזה
+GEN_OUT=<scratch>/g4 GEN_DATA_OUT=<scratch>/d4 node machtzev/generator/balagan.mjs
+  ⇒ 30 מודולים ⇒ אפליקציה אחת (היום · מה קרה? · נושאים 9) · מזהה-הרגע ✓ **30/30**
+  ⇒ 9 קובצי-Dart · balagan-index.json נכתב ל-GEN_DIR ו-git status **נשאר ריק** (זהה למחויב)
 ls machtzev/generator/specs-ds/*.txt | wc -l   ⇒ 31
 ls machtzev/generator/peruks/ | wc -l          ⇒ 28
 grep -vc '^#' machtzev/gates.tsv               ⇒ 57 שערים
@@ -178,6 +188,28 @@ grep -rln "atlas.mjs'" --include=*.mjs machtzev | wc -l  ⇒ 8
   בתוך הריפו, אין לו `--gate` ואינו מכבד `GEN_OUT`) ו-`one.mjs`/`census.mjs` (דוחפים commits
   ו/או כותבים ל-`registry/`). ל-`genesis-gen` ו-`balagan` — ראה בכרטיסים שלהם.
 
-## 6 · מה עוד לא נעשה
+## 6 · ממצא שראוי לתשומת-לב (מדידה, לא טענה)
 
-בהמשך הסשן — יתר המנועים ברשימה. הקובץ מתעדכן בכל נחיתה (כל 5 מנועים).
+**האטלס המחויב אינו טרי בקלון הזה.** חישוב טרי של `buildAtlas()` בזיכרון נותן
+**572 widgets · 865 functions · 18,205 data**, בעוד `machtzev/generator/atlas.json` המחויב
+נושא `{"widgets":562,"functions":857,"data":2159}`. הפער בשכבת-הדאטה גדול פי ~8.4.
+אני **לא** מציע הסבר ולא נגעתי בכלום (החזרתי ב-`git checkout --` אחרי ש-`genesis-gen` דרס
+אותם). זו מדידה עם הפקודה שהוציאה אותה; מי שרוצה לדעת למה — יריץ `atlas.mjs` ויבדוק.
+
+נקודה קשורה: **`genesis-gen.mjs` כותב את האטלס בכל ריצה, גם ב-`--only`** — `buildAtlas()`
+ו-`writeAtlas()` יושבים בטעינת-המודול (שורות 51–52), לפני שנקרא בכלל איזה סלאג לחולל.
+
+## 7 · סיכום-הכיסוי
+
+| מדד | ערך |
+|---|---|
+| מנועים | **28/28** (זהה בדיוק לרשימה שהוקצתה — אומת בהשוואת-קבוצות) |
+| שורות-קוד שנקראו | **7,533** (`wc -l`) |
+| יכולות | **296** — כולן עם `file:line` (אומת: 0 יכולות בלי `:<מספר>` בראיה) |
+| עובדות-שלילה | **134** |
+| מנועים שהורצתי בפועל | **14** (‏atom-census · core-dart · ops-particles · quarry-golden · op-census · auto-logic · behavior-plan · behavior-compose · entity · peruk · web-shell · particles · app-ds · genesis-gen · balagan · yeshiva/purpose · gen-verify‑כדילוג) |
+| מנועים עם «לא-נמדד» מוצהר | השאר — עם הסיבה בכרטיס |
+
+**כלל-האמת שהקפדתי עליו:** כל מספר בדוח נושא את הפקודה שהוציאה אותו. מספר שהגיע מתוצר
+מחויב (‏`gen-verify-report.json` · `atlas.json` · baselines) מסומן במפורש כ«תוצר מחויב, לא ריצה
+שלי». כותרת-קובץ לא שימשה כראיה לשום יכולת.
