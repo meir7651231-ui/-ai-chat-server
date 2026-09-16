@@ -1,6 +1,6 @@
 # 2a · `machtzev/*.mjs` (שורש) — מיפוי חיבור-למחולל
 
-**47/51 מנועים ממופים** · 3175 שורות נקראו · פיזור s22: 0⇒20 · 1⇒14 · 2⇒12 · 3⇒1
+**51/51 מנועים ממופים** · 4511 שורות נקראו · פיזור s22: 0⇒21 · 1⇒17 · 2⇒12 · 3⇒1
 
 הגדרת «מחובר» = `machtzev/census/engine-index.mjs:319-333` (נגיש בייבוא טרנזיטיבי מ-6 נקודות-הכניסה, או מורץ-בשם מ-regen/ship). שערים אינם מחוברים — הם שומרים.
 מדידה: `node machtzev/census/engine-index.mjs --connected` ⇒ `57 · 279 · 336`.
@@ -31,6 +31,9 @@
 | `ds-tokens.mjs` | 1 | ∅ | קורא זרע קומפקטי (new/dart-ui-bs/ds/design-seed.json) ומרחיב אותו ל-7 מחלקות-טוקן ב-ds_scale.dart: DsType · DsSpace · DsRadii · DsElev · DsGradient · DsMotion · DsDark |
 | `lib-ts.mjs` | 1 | כבר מחובר בפועל דרך machtzev/emit/ast-js-to-dart.mjs:4 — ראוי רק להכיר בכך | פותר-typescript אחד לכל הכלים: machtzev/node_modules (vendored) ⇒ נפילה ל-maor-system |
 | `mutation-check.mjs` | 1 | ∅ — כי היכולת כבר הועתקה לתוך המחולל | לכל אטום: מחליף את הקובץ בגוף-חלול, מריץ את הבדיקה (חייבת להאדים), משחזר, מריץ שוב (חייבת להוריק) — שני התנאים יחד |
+| `purify-dart-native.mjs` | 1 | ∅ | מוציא מילוני-סיווג שהוטבעו באטומי new/dart לאטום-דאטה ומזריק אותם חזרה כשקעים-שמיים (דפוס chip-vocab) |
+| `purify-dart.mjs` | 1 | ∅ | מיישר תאום-Dart מלוכלך לחתימת ה-JS-המטוהר: שקעי-ה-JS **שנקצרו מבדיקת-האטום (אמת-קרקע)** מוצמדים לתאום, וליטרלים עבריים בגוף מוחלפים בהפניות-שקע לפי שוויון-ערכים |
+| `rethread-boxes.mjs` | 1 | ∅ | מחווט-מחדש קופסאות-Dart שנשארו על API ישן אחרי שמדפי-הטיהור שינו חתימות-אטומים — **מונחה-CFE**: מריץ `dart run` על קובץ-ההוכחה ומתקן לפי השגיאה |
 | `search-proof-check.mjs` | 1 | ∅ | לכל אטום/קופסה **חדשים** ב-6 תיקיות (atoms · logic · boxes · dart · dart-maor · dart-boxes) דורש רשומת-חיפוש שה-creates שלה הוא בדיוק הנתיב |
 | `verify-dart-arg0.mjs` | 1 | ∅ בנפרד — הוא זנב של verify-dart-tests (ראה שם), ואותה נקודת-חיבור מכסה את שניהם | מריץ כל מנוע-Dart-יליד שיש לו מתכון arg0-קבוע, **בהרצה מבודדת job-אחד-לבאץ׳**, כדי שכשל אחד לא ירעיל את השאר |
 | `wiring-check.mjs` | 1 | ∅ | אוכף את שלושת חוקי-החשמלאי על ייבוא יחסי: אטום לא מייבא כלום פנימי · קופסה מייבאת רק אטומים · לוח מייבא רק קופסאות |
@@ -51,6 +54,7 @@
 | `pretool-selftest.mjs` | 0 | ∅ | מזין כל שורה מ-selftest-fixtures/pretool.tsv ל-hook האמיתי כ-JSON של PreToolUse ומשווה את קוד-היציאה לציפייה |
 | `quarry-check.mjs` | 0 | ∅ | לכל טיוטה ב-quarry/: דורש כותרת «מוצא:» ו-parse תקין (new Function על הקוד המופשט) |
 | `ratchet-direction.mjs` | 0 | ∅ | עונה על שאלה אחת — «האם commit B חלש מ-A?» — ותמיד דרך `git show`, **לעולם לא מעץ-העבודה** |
+| `repair-quarantine.mjs` | 0 | ∅ | מרפא שרידי-JS בהמרות-Dart מוסגרות **מונחה-analyzer**: `dart analyze --format=machine` נותן span מדויק לכל שגיאה, והמנוע עוטף נקודתית באותו מקום |
 | `run.mjs` | 0 | ∅ | מפעיל פר-גל בסדר קבוע: מפקד (census פר-ריפו) ⇒ 15 מחלצים פר-ריפו ⇒ reconcile ⇒ wiring-check ⇒ contract-check ⇒ זיקוק ⇒ דדופ ⇒ כתיבת STATUS.md |
 | `verify-independent.mjs` | 0 | ∅ | מריץ את **כלי-המשטרה מ-tag ידוע-טוב (T)** על העץ הנוכחי (H) ובודק כיוון — «לא חומה. עד» |
 | `wave-partition.mjs` | 0 | ∅ | מחשב לכל קובץ-יעד «רדיוס-פגיעה» = הוא + צרכניו הטרנזיטיביים, דרך census/import-graph |

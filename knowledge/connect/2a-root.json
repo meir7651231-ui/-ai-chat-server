@@ -2633,6 +2633,137 @@
     ]
   },
   {
+    "file": "machtzev/purify-dart-native.mjs",
+    "lang": "mjs",
+    "lines": 321,
+    "does": [
+      {
+        "claim": "מוציא מילוני-סיווג שהוטבעו באטומי new/dart לאטום-דאטה ומזריק אותם חזרה כשקעים-שמיים (דפוס chip-vocab)",
+        "evidence": "machtzev/purify-dart-native.mjs:2-9 (ארבעת השלבים) · 15"
+      },
+      {
+        "claim": "מזהה יעד לפי הצהרת-מודול const/final שהאתחול שלה מכיל עברית **מחוץ ל-RegExp** — אותה סימטריית-regex של data-purity-check",
+        "evidence": "machtzev/purify-dart-native.mjs:3-4"
+      },
+      {
+        "claim": "מעביר שם פרטי (_x) לציבורי (x) בעת ההעתקה לאטום-הדאטה, ומשחיל את השקע דרך **גרף-הקריאות** לכל פונקציה שמשתמשת בשם",
+        "evidence": "machtzev/purify-dart-native.mjs:4-6"
+      },
+      {
+        "claim": "ולידציה בהרצה: הבדיקה ירוקה ⇒ נשמר, אחרת **החזרה מלאה**; קובץ בלי בדיקה מדולג «בכנות»",
+        "evidence": "machtzev/purify-dart-native.mjs:8"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "🔴 **מפרק-ה-Dart שלו הוא נתיב-סקרצ'פד מת של סשן אחר, בלי שום נפילה-לאחור**: `DART_BIN || '/tmp/claude-0/-home-user/2d086046-…/scratchpad/dart-sdk/bin/dart'`. בלי DART_BIN בסביבה, כל הרצת-Dart תיכשל על נתיב שאינו קיים",
+        "evidence": "machtzev/purify-dart-native.mjs:18; ran: ls '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin/dart' ⇒ No such file or directory"
+      },
+      {
+        "claim": "בקונטיינר הזה הבאג **ממוסך** כי DART_BIN מוגדר — כלומר זו תקלה רדומה, לא תקלה פעילה. אמרתי זאת במפורש כדי לא להגזים בממצא",
+        "evidence": "ran: echo $DART_BIN ⇒ /root/dart-sdk/bin/dart"
+      },
+      {
+        "claim": "אינו משתמש ב-dart-bin.mjs המשותף, בניגוד להצהרת PROTOCOL «resolver אחד ל-Dart»",
+        "evidence": "ran: grep -c 'dart-bin' machtzev/purify-dart-native.mjs ⇒ 0; machtzev/PROTOCOL.md:129"
+      },
+      {
+        "claim": "אינו שער ואין לו קורא בקוד — לא משטרה, לא one.mjs, לא hook",
+        "evidence": "ran: grep -rn 'purify-dart-native' ⇒ machtzev/index-baseline.json:64 · machtzev/PLAN-100.md:190 בלבד"
+      },
+      {
+        "claim": "נוגע רק ב-new/dart (בנייה-חכמה) ולא ב-dart-maor — זה purify-dart",
+        "evidence": "machtzev/purify-dart-native.mjs:16 — DDIR = new/dart"
+      }
+    ],
+    "callers": [],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה. הוא מנוע-טיהור חד-פעמי שמכין את המדף (כמו box-data-lift), אין לו קורא, ומפרק-ה-Dart שלו שבור-בפוטנציה. גם אילו נחובר, הרצת-טיהור בכל בנייה היא כתיבה בזמן-בנייה — ההפך מדטרמיניזם. החיבור הנכון הוא, כרגיל, דרך הקטלוג: הוא רץ פעם, האורקל קולט, הבורר בוחר."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב בעקיפין. דפוס chip-vocab (מילון ⇒ אטום-דאטה ⇒ שקע-שמי) הוא בדיוק מה ש-§20(ג) והכרעה-26 דורשים, והוא מה שמאפשר לבורר להחליף מנגנון בלי לגרור מילון. אבל המנוע עצמו יתום, ומחוץ לצינור."
+    },
+    "evidence": [
+      "read: machtzev/purify-dart-native.mjs:1-18",
+      "ran: grep -n 'const DART' machtzev/purify-dart-native.mjs ⇒ שורה 18 (הנתיב המת)",
+      "ran: ls '/tmp/claude-0/-home-user/2d086046-…/scratchpad/dart-sdk/bin/dart' ⇒ No such file or directory",
+      "ran: echo $DART_BIN ⇒ /root/dart-sdk/bin/dart (הבאג ממוסך כאן)",
+      "ran: grep -rn 'purify-dart-native' ⇒ index-baseline.json:64 · PLAN-100.md:190 בלבד (אפס קוראים)"
+    ]
+  },
+  {
+    "file": "machtzev/purify-dart.mjs",
+    "lang": "mjs",
+    "lines": 609,
+    "does": [
+      {
+        "claim": "מיישר תאום-Dart מלוכלך לחתימת ה-JS-המטוהר: שקעי-ה-JS **שנקצרו מבדיקת-האטום (אמת-קרקע)** מוצמדים לתאום, וליטרלים עבריים בגוף מוחלפים בהפניות-שקע לפי שוויון-ערכים",
+        "evidence": "machtzev/purify-dart.mjs:2-5 · 26-29 (jsSockets)"
+      },
+      {
+        "claim": "קבוע-מודול-מראָה (const מקומי ששווה כולו לערך-שקע) נמחק ושמו מוסב לשם-השקע",
+        "evidence": "machtzev/purify-dart.mjs:4-5"
+      },
+      {
+        "claim": "ולידציה בהרצה חיה (`dart run --enable-asserts`) עם **החזרה מלאה** בכשל, ודיווח-כן על כל דילוג",
+        "evidence": "machtzev/purify-dart.mjs:7"
+      },
+      {
+        "claim": "מפשיט הערות לפני ניתוח-חתימות, כי ')' בתוך הערת-פרמטר קוטעת את לכידת-הסוגריים",
+        "evidence": "machtzev/purify-dart.mjs:30"
+      },
+      {
+        "claim": "**בוחר יעדים מ-data-purity-baseline.json** (חוב-הטוהר הידוע) ומסנן לקבצים שהעברית בהם היא במחרוזות ולא רק בהערות",
+        "evidence": "machtzev/purify-dart.mjs:593-601"
+      },
+      {
+        "claim": "G62 הוסיף --tables: switch-קבוע ⇒ אטום-דאטה <base>-table.dart והאטום נעשה חיפוש+ברירת-מחדל",
+        "evidence": "machtzev/one.mjs:87 (‏stage 'זרימה⇒טבלה (G62)') + knowledge/CLOSED-GENMAX-G62-2026-09-14.md:16"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אין לו מה לעשות היום: אפס יעדים.** ‏data-purity-baseline.json ריק, ולכן `targets` (שורות 593-594) הוא מערך ריק — הריצה תדפיס «0 טוהרו · 0 דולגו (מתוך 0)»",
+        "evidence": "machtzev/purify-dart.mjs:593-594; ran: node -e (קריאת machtzev/data-purity-baseline.json) ⇒ 0 רשומות · 0 מהן dart-maor/; ו-node machtzev/police.mjs --fast ⇒ '✓ שער-טוהר-דאטה: … חוב-מנוהל 0/0'"
+      },
+      {
+        "claim": "🔴 גם כאן מפרק-Dart עצמאי עם **אותו** נתיב-סקרצ'פד מת, לצד נתיב-flutter שאינו קיים, ונפילה למחרוזת 'dart' חשופה",
+        "evidence": "machtzev/purify-dart.mjs:18; ran: ls '/tmp/claude-0/-home-user/2d086046-…/dart' ⇒ לא קיים · ls -d /home/user/flutter ⇒ לא קיים"
+      },
+      {
+        "claim": "אינו שער — אין gate; הוא שלב אופציונלי",
+        "evidence": "ran: grep -c 'purify-dart' machtzev/police.mjs ⇒ 0"
+      },
+      {
+        "claim": "נוגע רק ב-dart-maor (התאומים מהמרת-מאור), לא ב-new/dart ולא בפלט-המחולל",
+        "evidence": "machtzev/purify-dart.mjs:15,594"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/one.mjs:87",
+        "how": "stage('זרימה⇒טבלה (G62)', … ['--tables'], {optional:true}) — מורץ-בשם, רק במצב --tables"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה, ומשלוש סיבות מצטברות: (א) אפס יעדים — חוב-הטוהר ש-ממנו הוא ניזון התאפס, כלומר הוא סיים את עבודתו; (ב) הוא **כותב** על אטומים, וכתיבה בזמן-בנייה סותרת דטרמיניזם; (ג) הוא upstream של הקטלוג, והמחולל צורך את התוצאה דרך האורקל. הדבר היחיד שראוי לרשום הוא הרעיון שבבסיסו — «אמת-הקרקע לשקע היא מה שבדיקת-האטום קצרה, לא מה שהכותרת מצהירה» — וזה בדיוק העיקרון שהכרעה-30 העלתה לדרגת-חוק בבורר."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב בעקיפין, ובעיקר היסטורית. הוא זה שיישר את תאומי-ה-Dart לשקעים ובכך אפשר את auto-logic/G20; אבל היום החוב שהוא ניזון ממנו הוא 0, והוא מחוץ לצינור."
+    },
+    "evidence": [
+      "read: machtzev/purify-dart.mjs:1-30 · 591-608",
+      "ran: node -e (קריאת data-purity-baseline.json) ⇒ 0 רשומות, 0 dart-maor ⇒ אפס יעדים",
+      "ran: grep -n 'const DART' machtzev/purify-dart.mjs ⇒ שורה 18 (נתיב-סקרצ'פד מת + flutter לא-קיים + נפילה ל-'dart')",
+      "ran: grep -c 'purify-dart' machtzev/police.mjs ⇒ 0",
+      "ran: grep -n 'purify-dart' machtzev/one.mjs ⇒ שורה 87"
+    ]
+  },
+  {
     "file": "machtzev/quarry-check.mjs",
     "lang": "mjs",
     "lines": 20,
@@ -2777,6 +2908,128 @@
       "read: machtzev/ratchet-direction.mjs:1-71 (כל הקובץ)",
       "ran: git commit (batch זה) ⇒ ה-hook הדפיס '✓ [ratchet-down] ✓ ראצ׳ט-כיוון: אין החלשה (57 שערים · 25 baselines)' — כלומר ראיתי אותו יורה בפועל",
       "ran: grep -c 'ratchet-direction' machtzev/police.mjs ⇒ 0 (אינו שער-משטרה)"
+    ]
+  },
+  {
+    "file": "machtzev/repair-quarantine.mjs",
+    "lang": "mjs",
+    "lines": 144,
+    "does": [
+      {
+        "claim": "מרפא שרידי-JS בהמרות-Dart מוסגרות **מונחה-analyzer**: `dart analyze --format=machine` נותן span מדויק לכל שגיאה, והמנוע עוטף נקודתית באותו מקום",
+        "evidence": "machtzev/repair-quarantine.mjs:2-4"
+      },
+      {
+        "claim": "שלושה תיקונים ממוקדים: truthiness ⇒ _truthy · for-in/spread/ארגומנט dynamic ⇒ cast מפורש",
+        "evidence": "machtzev/repair-quarantine.mjs:4"
+      },
+      {
+        "claim": "חוזר עד fixpoint (תיקון חושף שגיאה חדשה), ואז מריץ את בדיקת-האטום החיה",
+        "evidence": "machtzev/repair-quarantine.mjs:4-5"
+      },
+      {
+        "claim": "**קריטריון-שחרור כפול:** strict-נקי **וגם** בדיקה-ירוקה ⇒ הזוג חוזר מההסגר ל-dart-maor; אחרת נשאר בהסגר עם דוח-כן",
+        "evidence": "machtzev/repair-quarantine.mjs:5-6"
+      },
+      {
+        "claim": "--keep מתקן במקום בלי להזיז — הפרדה בין ריפוי לשחרור",
+        "evidence": "machtzev/repair-quarantine.mjs:8"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**ההסגר ריק — אין לו על מה לעבוד.** ‏CLAUDE.md מתעד ש-41 אטומי חוב-ההמרה תוקנו והוחזרו ב-7.9, וההסגר ריק",
+        "evidence": "machtzev/repair-quarantine.mjs:14 (‏Q = new/dart-maor/QUARANTINE); ran: ls new/dart-maor/QUARANTINE ⇒ אינו קיים"
+      },
+      {
+        "claim": "🔴 גם כאן מפרק-Dart עם נתיב-סקרצ'פד מת ו**בלי שום נפילה-לאחור** — זהה ל-purify-dart-native",
+        "evidence": "machtzev/repair-quarantine.mjs:16 — `process.env.DART_BIN || '/tmp/claude-0/…/2d086046-…/dart'`; ran: הנתיב אינו קיים"
+      },
+      {
+        "claim": "**אינו מתקן סטיות-התנהגות** — הן מוצהרות כעבודת-יד (FIXES.md), וזו הפרדה נכונה: analyzer מוכיח טיפוסים, לא כוונה",
+        "evidence": "machtzev/repair-quarantine.mjs:6"
+      },
+      {
+        "claim": "אין לו קורא בקוד — לא משטרה, לא one.mjs, לא hook",
+        "evidence": "ran: grep -rn 'repair-quarantine' ⇒ machtzev/index-baseline.json:67 בלבד"
+      }
+    ],
+    "callers": [],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה. ההסגר ריק, אין לו קורא, והוא כלי-ריפוי חד-פעמי של גל-ההמרה מ-JS ל-Dart — גל שהסתיים. שווה לרשום את הדפוס שלו כי הוא טוב: **הכלי לא מנחש איפה השגיאה, הוא שואל את ה-analyzer ומקבל span.** זה בדיוק ההבדל בין «רגקס על קוד» ל«AST-אמת» שחוזר בכל המחצב, והוא ראוי לכל מנוע-תיקון עתידי."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. גל שהסתיים, הסגר ריק, אפס קוראים. חיבור למחולל לא ייתן דבר, ובמצבו הנוכחי הוא מועמד ל«שריד» יחד עם chisel.mjs ו-run.mjs — הכרעת-בעלים."
+    },
+    "evidence": [
+      "read: machtzev/repair-quarantine.mjs:1-16",
+      "ran: ls new/dart-maor/QUARANTINE ⇒ אינו קיים (ההסגר ריק)",
+      "ran: grep -n 'const DART' machtzev/repair-quarantine.mjs ⇒ שורה 16 (נתיב-סקרצ'פד מת, בלי נפילה)",
+      "ran: grep -rn 'repair-quarantine' ⇒ machtzev/index-baseline.json:67 בלבד (אפס קוראים)"
+    ]
+  },
+  {
+    "file": "machtzev/rethread-boxes.mjs",
+    "lang": "mjs",
+    "lines": 262,
+    "does": [
+      {
+        "claim": "מחווט-מחדש קופסאות-Dart שנשארו על API ישן אחרי שמדפי-הטיהור שינו חתימות-אטומים — **מונחה-CFE**: מריץ `dart run` על קובץ-ההוכחה ומתקן לפי השגיאה",
+        "evidence": "machtzev/rethread-boxes.mjs:2-8 (הכותרת) · machtzev/LEARNINGS.md:320 «מונחה-CFE (השלמת-ארגומנטים מ---sockets…)»"
+      },
+      {
+        "claim": "**מתקן בקופסה בלבד** — האטום הוא המקור והקופסה היא הראיה; זו הפרדה מוצהרת",
+        "evidence": "machtzev/rethread-boxes.mjs:2-3"
+      },
+      {
+        "claim": "🟢 **הוא היחיד במשפחה שמשתמש במפרק-ה-Dart המשותף** — `requireDart('rethread-boxes')`, עם הערה שמתעדת במפורש שהנתיב-הקשיח היה הבאג",
+        "evidence": "machtzev/rethread-boxes.mjs:19,24 — «c2: פותר-Dart משותף (היה: נתיב-סקרצ'פד קשיח של סשן אחר ⇒ 'כשל-ריצה' ריק לכל קופסה)»"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו נקרא בקוד** — הוא כלי-יד; ‏box-proofs-check רק **מזכיר אותו בהודעת-השגיאה** כשקופסה מאדימה, ואינו מריץ אותו",
+        "evidence": "machtzev/box-proofs-check.mjs:45 — טקסט בלבד; ran: grep -rn 'rethread-boxes' ⇒ box-proofs-check.mjs:45 (מחרוזת) · index-baseline.json:68 · דוחות ב-knowledge/ ו-LEARNINGS"
+      },
+      {
+        "claim": "**אין לו על מה לעבוד היום** — box-proofs-baseline.json ריק ו-62 קובצי-ההוכחה מוגדרים כאפס-אדומות",
+        "evidence": "ran: cat machtzev/box-proofs-baseline.json ⇒ [] · ls new/dart-boxes/*-proof.dart | wc -l ⇒ 62"
+      },
+      {
+        "claim": "אינו שער",
+        "evidence": "ran: grep -c 'rethread-boxes' machtzev/police.mjs ⇒ 0"
+      },
+      {
+        "claim": "לא נוגע באטומים — רק ב-new/dart-boxes",
+        "evidence": "machtzev/rethread-boxes.mjs:2-3"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/dart-bin.mjs:19",
+        "how": "ייבוא { requireDart }"
+      },
+      {
+        "who": "machtzev/box-proofs-check.mjs:45",
+        "how": "מוזכר כפקודת-התיקון בהודעת-השגיאה (לא הרצה)"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה. הוא הזוג-המתקן של `box-proofs-check` (השער המאתר), והוא נשאר ביד **במכוון**: חיווט-מחדש אוטומטי בתגובה לשער אדום היה הופך «סחף-חתימות» מאירוע-שמצריך-מבט לתיקון-שקט. ההפרדה «השער מאתר · אדם מפעיל את המתקן» היא החלטה נכונה, לא פער. ראוי לציין לזכותו שהוא **המנוע היחיד במשפחת ה-purify/repair שתוקן** לשימוש ב-dart-bin המשותף — ההערה בשורה 24 מתעדת את הבאג במילים מפורשות, ואותו באג עדיין חי ב-3 אחיו (‏purify-dart:18 · purify-dart-native:18 · repair-quarantine:16)."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב בעקיפין. הוא שומר על שכבת-הקופסאות תואמת-חתימות, ודרך logic-census.mjs:13 הקופסאות הן מועמדות לבורר-המחולל — כלומר סחף-חתימות בקופסה הוא מועמד שבור בקטלוג. אבל הוא כלי-יד, בלי עבודה פתוחה, ומחוץ לצינור."
+    },
+    "evidence": [
+      "read: machtzev/rethread-boxes.mjs:1-24 (הכותרת והמפרק)",
+      "ran: grep -n 'dart-bin\\|requireDart' machtzev/rethread-boxes.mjs ⇒ שורות 19, 24 (המפרק המשותף + ההערה על הבאג)",
+      "ran: cat machtzev/box-proofs-baseline.json ⇒ [] · ls new/dart-boxes/*-proof.dart | wc -l ⇒ 62",
+      "ran: grep -rn 'rethread-boxes' ⇒ box-proofs-check.mjs:45 · index-baseline.json:68 · knowledge/CLOSED-GENMAX-G20:68 · LEARNINGS:320,764 · PLAN-100:97",
+      "ran: grep -c 'rethread-boxes' machtzev/police.mjs ⇒ 0"
     ]
   },
   {
