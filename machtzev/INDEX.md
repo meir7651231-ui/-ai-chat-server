@@ -53,6 +53,7 @@
 | `generator/logic-proof.mjs` | המוכיח-האחד (G34ב): דוגמאות (קלט ⇒ בדיקה) רצות ב-Dart על כל המועמדים תואמי-החתימה (קובץ-מוכיח ב-.prove/, ייבוא-בקידומת) ⇒ {מועמד: ok/total}; משמש behavior-plan ו-auto-logic |
 | `generator/behavior-compose.mjs` · `gen_behaviors.dart` | שכבת-ההרכבה (G34ב): 21 התנהגויות `bh*` מורכבות מ-13 החלקיקים המוכחים במקום אחד; כל קובץ-מחולל קורא `bh*` בלבד (שער behavior ה); בדיקה מחוללת genesis_gen_behaviors_test |
 | `generator/behavior-plan.mjs` · `behavior-plan.json` | בורר-חלקיקי-ההתנהגות של «בלגן» (G34 · הכרעה-30): צורך = פעולת-יסוד (חתימה+דוגמאות) ⇒ מועמדים לפי חתימה מכל הקטלוג ⇒ **הוכחה-בריצה** (.prove/) ⇒ הנבחר; --gate: נפתר · מיובא+נקרא · פרימיטיב-של-חלקיק-קיים אסור בדבק · כפילות-בכניסה |
+| `generator/studio-full.mjs` | לוח-המדידה של המחולל החי (app-ds): אפס מספרים ביד — קורפוס · פנקס-הגזירה (כל טענת-כותרת מול הקוד שנשלח בפועל) · אטלס מוצמד↔טרי · צרכים · שערים, כל ערך עם פקודה+file:line (חוזה-המדידה) ⇒ `gen/out/mechollel.html` (‏STUDIO_OUT לדריסה) |
 | `generator/balagan-one.mjs` · `balagan-one-baseline.json` | שער האפליקציה-האחת (G33): N≡N≡N · מזהה-הרגע N/N · אפס רשימה-סגורה · ratchet |
 | `generator/balagan-look.mjs` · `balagan-score.json` · `balagan-score-baseline.json` | שער-המראה של «בלגן» (G28 · הכרעה-28): 36 כללי-היעד כמרשם + ציון N/36 + ratchet; --gate/--write |
 | `generator/look.mjs` | מצב-המראה של הריצה (G28): setLook/isPaper · stripGlyph (גליף-מוביל) · skinWired/HARD_COLOR (אטום-בצבע-קשיח נפסל בנייר) — מודול-זעיר בלי מעגל-ייבוא |
