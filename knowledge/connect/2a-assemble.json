@@ -1653,5 +1653,719 @@
    "read: machtzev/carve/ast_dehardcode_interp.dart:L1-L18",
    "read: machtzev/purity/ast-purify-interp.mjs:L3,L33 (מול machtzev/purity/ast-purify.mjs:L33)"
   ]
+ },
+ {
+  "file": "machtzev/mahulal/spec-acceptance.mjs",
+  "lang": "mjs",
+  "lines": 43,
+  "does": [
+   {
+    "claim": "יַרְד-מידה «מערכת-מלאה» (§22 · הכרעה-23): מריץ `buildApp` על אפיון-עשיר (generator/acceptance-space.txt) ובודק ש-12 יכולות-ליבה נפלטו בפועל בקוד-ה-Dart.",
+    "evidence": "machtzev/mahulal/spec-acceptance.mjs:L3-L6 · L16 (buildApp) · L19-L32 (מפת-היכולות)"
+   },
+   {
+    "claim": "כל יכולת נבדקת ברגקס על **הקוד שנפלט**, לא על מבנה-פנימי: DsEnumField+num.tryParse · DsTable · DsBoard · DsStat · DsCalendar · countRef/sumRef/Navigator.push · appStore.sum|avg|count · _roleChip/appStore.scoped · שדה-מותנה · מונה-מסונן · _calc · ולידציה.",
+    "evidence": "machtzev/mahulal/spec-acceptance.mjs:L17 (איחוד כל gen_app_*.dart) · L20-L31"
+   },
+   {
+    "claim": "בדיקה 13 היא **מגוון-אטומים לפי §21**: סופר כמה מחלקות שנפלטו נמצאות ב-atom-index.json ודורש ≥23 — רצפה רק-עולה, כדי שהמחולל לא יתכנס ל-DS-בלבד.",
+    "evidence": "machtzev/mahulal/spec-acceptance.mjs:L34-L38"
+   },
+   {
+    "claim": "שער אמיתי: יכולת חסרה ⇒ exit 1; קריסת buildApp ⇒ exit 1 עם ההודעה.",
+    "evidence": "machtzev/mahulal/spec-acceptance.mjs:L16 · L42"
+   },
+   {
+    "claim": "רץ כאן, ירוק, עם 13/13.",
+    "evidence": "ran (GEN_OUT/GEN_DATA_OUT ל-scratch): node machtzev/mahulal/spec-acceptance.mjs ⇒ exit 0 · '§22 קבלה · מערכת-חלל · 6 ישויות · 2 תפקידים · 13 יכולות-נבדקות · 37 אטומי-אימפריה' · כל 13 ✅ כולל '§21 מגוון-אטומים ≥23 (נפלטו 37)'"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו מריץ את האפליקציה** — בודק שדפוס-הקוד נפלט, לא שהוא עובד. 'מתקמפל/נפלט' ≠ 'עובד'; את זה אמורה להוכיח רתמת-behavioral (שחסומה כאן).",
+    "evidence": "machtzev/mahulal/spec-acceptance.mjs:L17 (readFileSync על הפלט) · L20-L31 (RegExp.test בלבד) — אין flutter/dart בקובץ"
+   },
+   {
+    "claim": "אינו בודק משפט-חופשי — קלטו אפיון **מובנה** ועשיר. הבדיקה של עברית-חופשית היא nl-smoke/nl-quality.",
+    "evidence": "machtzev/mahulal/spec-acceptance.mjs:L13 (`acceptance-space.txt`) · L3-L4"
+   },
+   {
+    "claim": "הרצתו כותבת אל `R.outDir()` ו-`R.dataOutDir()` — ברירת-המחדל היא new/dart-gen-bs (577 קבצים מחויבים). בלי GEN_OUT/GEN_DATA_OUT זו דריסה.",
+    "evidence": "machtzev/root.mjs:L14-L15; machtzev/mahulal/spec-acceptance.mjs:L12 `const GEN = (R.outDir() + '/')`"
+   },
+   {
+    "claim": "**יש לו תופעת-לוואי מחוץ ל-outDir**: `buildApp` כותב machtzev/generator/particle-plan-app.json ו-.md, שאינם מכוסים ע\"י GEN_OUT — נמדד.",
+    "evidence": "ran: אחרי ריצת 4 מנועי-mahulal עם GEN_OUT מופנה, git status הראה 'M machtzev/generator/particle-plan-app.json' + '.md'; שוחזר ב-git checkout ⇒ TREE 0"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:126",
+    "how": "שער: gateDirty('acceptance', 'mahulal/spec-acceptance.mjs')"
+   },
+   {
+    "who": "machtzev/gates.tsv:49",
+    "how": "רשום במרשם-השערים: 'קבלת-§22 ... 12 יכולות ... + מגוון-אטומים' · push"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — והתשובה לשאלת-המשימה («האם הם רצים בזמן-הבנייה או רק אחריה») היא: **הם רצים על הבנייה, כשער**. הוא מייבא `buildApp` מ-machtzev/generator/app-ds.mjs — שהיא נקודת-כניסה של המחולל — כלומר הוא **קורא למחולל**, לא נקרא-ממנו. זו בדיוק הסיבה ש-connected() לא רואה אותו: היא מודדת נגישות **מ**נקודות-הכניסה, וכאן הכיוון הפוך.",
+   "gives": "∅ — הוא במקומו הנכון. חיבורו ל-GEN_ENTRY היה יוצר מעגל (המחולל מריץ את שער-הקבלה של עצמו)."
+  },
+  "s22": {
+   "score": 3,
+   "why": "3, ובמובן החזק ביותר בקבוצה: הוא **ההגדרה התפעולית של §22**. §22 אומר «אפליקציה+אתר עובדים 100%» כרצפת-קבלה; המנוע הזה הוא הרצפה הזו בקוד — 12 יכולות + מגוון-אטומים, שער ב-push, ירוק כאן במדידה. הוא יושב ישירות על נתיב אפיון⇒אפליקציה, מריץ את המחולל בפועל, ונכשל-באדום כשהמחולל נסוג. ה-∅ ב-connectAt אינו מוריד את הציון: השאלה «כמה זה מקרב את §22» נפרדת מהשאלה «האם צריך לחבר»."
+  },
+  "evidence": [
+   "ran: GEN_OUT=<scratch>/gen GEN_DATA_OUT=<scratch>/gdata node machtzev/mahulal/spec-acceptance.mjs ⇒ exit 0 · 13/13 ✅ · 6 ישויות · 2 תפקידים · 37 אטומי-אימפריה",
+   "ran: git status אחרי ⇒ 2 קבצים (particle-plan-app.json/.md) ⇒ git checkout ⇒ TREE 0",
+   "ran: grep -nE 'acceptance' machtzev/gates.tsv ⇒ שורה 49",
+   "read: machtzev/mahulal/spec-acceptance.mjs:L1-L43 (הקובץ המלא)",
+   "read: machtzev/police.mjs:L126 · machtzev/root.mjs:L14-L15 · machtzev/census/engine-index.mjs:L310-L333"
+  ]
+ },
+ {
+  "file": "machtzev/mahulal/need-acceptance.mjs",
+  "lang": "mjs",
+  "lines": 32,
+  "does": [
+   {
+    "claim": "מריץ **בדיוק אותן 12 בדיקות-יכולת** של spec-acceptance, אבל על `acceptance-space-need.txt` — אפיון-**צורך** (מה המשתמש רוצה) במקום אפיון-**מימוש** (מה לבנות).",
+    "evidence": "machtzev/mahulal/need-acceptance.mjs:L2-L3 (ההצהרה) · L9 (הקובץ) · L13-L26 (מפת-היכולות, זהה ל-spec-acceptance.mjs:L19-L32)"
+   },
+   {
+    "claim": "מדפיס baseline: כמה מ-12 נגזרו מהצורך-בלבד, ואילו ישויות חולצו.",
+    "evidence": "machtzev/mahulal/need-acceptance.mjs:L28-L32"
+   },
+   {
+    "claim": "רץ כאן ומודד את הפער בדיוק.",
+    "evidence": "ran: GEN_OUT/GEN_DATA_OUT ל-scratch ⇒ exit 0 · 'גזר 5/12 יכולות מהצורך-בלבד'. עוברות: טבלה · KPI · לוח-שנה · קשרים · אגרגט. נופלות: טופס-מוקלד · לוח-מסע · RLS · התנהגות · התנהגות-על · שדה-מחושב · ולידציה"
+   },
+   {
+    "claim": "**חושף גם כשל-חילוץ-ישויות חמור**, לא רק יכולות חסרות: השמות שחולצו מהצורך אינם ישויות אלא פיסות-משפט.",
+    "evidence": "ran ⇒ 'ישויות-שחולצו: מנהל צי · משימות בחלל · החלליות אחת · מצב הדלק · המהירות · המיקום · והאם בעגינה · החללית שמבצעת · ... · וכמה שעות · לנטר מערכות · לקבל התראה · לסמן כבר · ... · המפקד רואה · הבקר רואה' — 27 «ישויות» שרובן שברי-תחביר"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו שער** — אין לו process.exit על כשל-יכולת; הוא מדפיס 5/12 ויוצא 0. מוצהר במפורש כ«baseline».",
+    "evidence": "machtzev/mahulal/need-acceptance.mjs:L2 ('baseline') · L28-L32 (console.log בלבד; ה-exit היחיד הוא L11 על קריסת buildApp); ran ⇒ exit 0 למרות 7 🔴; ran: grep -n 'need-acceptance' machtzev/gates.tsv ⇒ אפס"
+   },
+   {
+    "claim": "אין לו שום קורא — לא משטרה, לא one, לא regen.",
+    "evidence": "ran: grep -rn 'need-acceptance' ⇒ machtzev/index-baseline.json:56 + הקובץ עצמו בלבד"
+   },
+   {
+    "claim": "אינו מודד את איכות-החילוץ במספר — הוא רק מדפיס את השמות; מדד-האיכות (שם-דלף) יושב ב-nl-quality.mjs ועל קורפוס אחר.",
+    "evidence": "machtzev/mahulal/need-acceptance.mjs:L32 (הדפסה בלבד); machtzev/mahulal/nl-quality.mjs:L26-L35 (מדד הדלף)"
+   },
+   {
+    "claim": "אינו מכיל את בדיקת §21 (מגוון-אטומים) שיש באחיו — 12 יכולות ולא 13.",
+    "evidence": "machtzev/mahulal/need-acceptance.mjs:L13-L26 מול machtzev/mahulal/spec-acceptance.mjs:L34-L38; ran ⇒ המכנה '/12' מול '13 יכולות-נבדקות' אצל האח"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אין קורא. הופעה יחידה: machtzev/index-baseline.json:56"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/police.mjs:126 — לצד `gateDirty('acceptance', ...)`, כשער-**מדידה** (ratchet רק-עולה: «≥5/12», לא «12/12»), + שורה ב-machtzev/gates.tsv. זו הנקודה הכנה: לא לדרוש ממנו ירוק, אלא לנעול את המספר מפני נסיגה.",
+   "gives": "**נעילת המדד היחיד שמכמת את הפער האמיתי של §22.** §22 דורש «משפט בעברית-חופשית ⇒ אפליקציה עובדת». spec-acceptance מוכיח 13/13 — אבל מ**אפיון-מובנה**. need-acceptance מראה שמ**צורח-חופשי** אותו מחולל מגיע ל-5/12 ומחלץ 27 שברי-משפט במקום ישויות. בלי שער, המספר הזה יכול לרדת ל-3 ואיש לא יידע."
+  },
+  "s22": {
+   "score": 3,
+   "why": "3: זהו המנוע שמודד את **הצלע החסרה של §22** — לא «אפיון ⇒ מערכת» (שמוכח 13/13) אלא «צורך-חופשי ⇒ מערכת» (5/12). הוא יושב ישירות על נתיב משפט⇒אפליקציה, הוא רץ כאן, והתוצאה שלו היא הפער עצמו, מכומת. 32 שורות שנותנות את המספר החשוב ביותר שמדדתי בכל 33 המנועים — ואין לו קורא, אינו שער, ואיש אינו רואה אותו."
+  },
+  "evidence": [
+   "ran: GEN_OUT=<scratch>/gen GEN_DATA_OUT=<scratch>/gdata node machtzev/mahulal/need-acceptance.mjs ⇒ exit 0 · 'גזר 5/12 יכולות מהצורך-בלבד' · 5✅/7🔴 מפורטים · 27 «ישויות» שרובן שברי-משפט",
+   "ran: node machtzev/mahulal/spec-acceptance.mjs (אותן בדיקות, אפיון-עשיר) ⇒ 13/13 — ההשוואה שמגדירה את הפער",
+   "ran: grep -rn 'need-acceptance' ⇒ אין קורא; grep machtzev/gates.tsv ⇒ אינו שער",
+   "read: machtzev/mahulal/need-acceptance.mjs:L1-L32 (הקובץ המלא)",
+   "read: machtzev/mahulal/spec-acceptance.mjs:L19-L38 (להשוואת מפות-היכולות) · machtzev/police.mjs:L126"
+  ]
+ },
+ {
+  "file": "machtzev/mahulal/nl-quality.mjs",
+  "lang": "mjs",
+  "lines": 44,
+  "does": [
+   {
+    "claim": "מודד את **איכות** חילוץ-הישויות ממשפט-חופשי (ולא רק «בונה» כמו nl-smoke), על קורפוס-אמת generator/nl-quality.txt.",
+    "evidence": "machtzev/mahulal/nl-quality.mjs:L3-L5 · L15"
+   },
+   {
+    "claim": "ארבע מטריקות: קריסת-nlToSpec · אפס-ישויות · כשל-buildApp · **שם-דלף** (שם-ישות שמכיל מילת-פונקציה מתוך nl-lang.data.json, או קידומת-ל על מילה-בודדת).",
+    "evidence": "machtzev/mahulal/nl-quality.mjs:L18 · L22-L34"
+   },
+   {
+    "claim": "רצפת-איכות מפורשת ורק-עולה: FLOOR_CLEAN=0.92 — ≥92% משמות-הישויות נקיים מזבל-ראש.",
+    "evidence": "machtzev/mahulal/nl-quality.mjs:L17 · L43"
+   },
+   {
+    "claim": "שער כפול: כל כשל-קשה (קריסה/אפס/בנייה) ⇒ exit 1; איכות מתחת לרצפה ⇒ exit 1.",
+    "evidence": "machtzev/mahulal/nl-quality.mjs:L42-L43"
+   },
+   {
+    "claim": "רץ כאן, ירוק, הרבה מעל הרצפה.",
+    "evidence": "ran: GEN_OUT/GEN_DATA_OUT ל-scratch ⇒ exit 0 · '§22 יַרְד-מידה · 21 משפטים · 56 שמות-ישות' · 'קריסה:0 אפס:0 כשל-בנייה:0 · שם-דלף:0 · נקי:100.0% (רצפה 92%)'"
+   },
+   {
+    "claim": "מילות-הפונקציה (leadins) מגיעות מאטום-דאטה ולא מהקוד — אפס מילון-דומייני בתוך המנוע.",
+    "evidence": "machtzev/mahulal/nl-quality.mjs:L13-L14 (`nl-lang.data.json` ⇒ LEAD)"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו בודק שהאפליקציה **עובדת** — רק ששמות-הישויות נקיים ושה-build לא זרק.",
+    "evidence": "machtzev/mahulal/nl-quality.mjs:L25 (buildApp בתוך try, ללא בדיקת-פלט) · L27-L35 (הבדיקה היא על ה-spec, לא על הקוד)"
+   },
+   {
+    "claim": "אינו בודק אילו יכולות נפלטו — זה spec-acceptance/need-acceptance. כאן אין מפת-יכולות כלל.",
+    "evidence": "machtzev/mahulal/nl-quality.mjs:L18-L35 (אין RegExp על gen_app_*.dart)"
+   },
+   {
+    "claim": "מדד-הדלף צר במכוון: מזהה רק שני דפוסים (מילת-leadin בשם · קידומת-ל על מילה-בודדת ≥4 אותיות שאינה רבים). שם-ישות שהוא שבר-משפט בלי leadin לא ייתפס — וזה בדיוק מה ש-need-acceptance כן מראה.",
+    "evidence": "machtzev/mahulal/nl-quality.mjs:L32-L34; ran: need-acceptance ⇒ 'החלליות אחת' · 'וכמה שעות' · 'המפקד רואה' עברו בלי leadin"
+   },
+   {
+    "claim": "המדידה 100% היא על קורפוס בן 21 משפטים בלבד.",
+    "evidence": "ran ⇒ '21 משפטים · 56 שמות-ישות'"
+   },
+   {
+    "claim": "הרצתו כותבת ל-outDir + ל-particle-plan-app (אותה תופעת-לוואי של buildApp).",
+    "evidence": "ran: git status אחרי הריצות ⇒ machtzev/generator/particle-plan-app.json/.md"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:128",
+    "how": "שער: gateDirty('nlquality', 'mahulal/nl-quality.mjs', [], FAST)"
+   },
+   {
+    "who": "machtzev/gates.tsv:51",
+    "how": "רשום: 'איכות-§22: חילוץ-ישויות ממשפט-חופשי מעל רצפת-האיכות' · push"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — שער רשום ופועל, וכיוון-הקריאה הפוך (הוא מייבא buildApp מ-app-ds.mjs, נקודת-כניסה). הצעה כנה אחת, שאינה «חיבור»: הרצפה 0.92 בעוד המדידה 100% — ratchet שמעלה את הרצפה למדוד-בפועל היה הופך את הירוק הזה לנעילה אמיתית.",
+   "gives": "∅ כחיבור."
+  },
+  "s22": {
+   "score": 3,
+   "why": "3: מודד ישירות את הצלע הראשונה של §22 — «משפט בעברית-חופשית ⇒ ישויות נכונות». זהו שער-push חי, עם רצפה מספרית, אפס מילון-דומייני, ומדידה ירוקה כאן (0 כשלים · 100% נקי על 21 משפטים)."
+  },
+  "evidence": [
+   "ran: GEN_OUT/GEN_DATA_OUT ל-scratch · node machtzev/mahulal/nl-quality.mjs ⇒ exit 0 · 21 משפטים · 56 שמות · 0/0/0 · דלף 0 · נקי 100.0%",
+   "ran: grep -nE 'nlquality' machtzev/gates.tsv ⇒ שורה 51",
+   "read: machtzev/mahulal/nl-quality.mjs:L1-L44 (הקובץ המלא)",
+   "read: machtzev/police.mjs:L128"
+  ]
+ },
+ {
+  "file": "machtzev/mahulal/nl-smoke.mjs",
+  "lang": "mjs",
+  "lines": 14,
+  "does": [
+   {
+    "claim": "רצפת-§22 המינימלית: כל משפט-חופשי ב-generator/nl-smoke.txt ⇒ `buildApp` לא זורק **ומייצר לפחות ישות אחת**.",
+    "evidence": "machtzev/mahulal/nl-smoke.mjs:L2 · L9-L11"
+   },
+   {
+    "claim": "בודק את הפלט ולא רק את ההיעדר-קריסה: סופר קבצי `gen_app_ent<N>.dart` ודורש ≥1, אחרת '🚨 אפס-ישויות'.",
+    "evidence": "machtzev/mahulal/nl-smoke.mjs:L10"
+   },
+   {
+    "claim": "שער: כל כשל ⇒ exit 1.",
+    "evidence": "machtzev/mahulal/nl-smoke.mjs:L13"
+   },
+   {
+    "claim": "מפריד תחומים במפורש: «הקומפילציה עצמה נבדקת בשער genesis-compile; כאן: buildApp לא-זורק + מייצר ישויות».",
+    "evidence": "machtzev/mahulal/nl-smoke.mjs:L3"
+   },
+   {
+    "claim": "רץ כאן, ירוק, על משפטים אמיתיים ארוכים.",
+    "evidence": "ran: GEN_OUT/GEN_DATA_OUT ל-scratch ⇒ exit 0 · '✅ 3 ישויות · מערכת CRM עם לקוחות, עסקאות ואנשי קשר' · '✅ 7 ישויות · מערכת גדולה לניהול חברת בנייה עם פרויקטים, קבלני משנה, חומרים, תשלומים, עובדים, ציוד ובטיחות' · '✅ רצפת-§22: כל המשפטים-החופשיים בונים אפליקציה'"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו בודק איכות** — «3 ישויות» מספק אותו גם אם השמות שברי-משפט. האיכות היא nl-quality (דלף) והיכולות הן spec/need-acceptance.",
+    "evidence": "machtzev/mahulal/nl-smoke.mjs:L10 (`if (n < 1)` — הסף הוא 1, ואין בדיקת-שם)"
+   },
+   {
+    "claim": "אינו מוודא קומפילציה — אומר זאת בעצמו ומעביר את האחריות לשער genesis-compile.",
+    "evidence": "machtzev/mahulal/nl-smoke.mjs:L3"
+   },
+   {
+    "claim": "**סופר את כל gen_app_ent*.dart שבתיקייה, לא רק את מה שהמשפט הנוכחי יצר** — ואינו מנקה בין משפטים; שאריות מריצה קודמת נספרות. (מבנית מהקוד; לא בודדתי זאת בניסוי.)",
+    "evidence": "machtzev/mahulal/nl-smoke.mjs:L10 `fs.readdirSync((R.outDir() + '/')).filter((f) => /^gen_app_ent\\d+\\.dart$/.test(f)).length` — אין rm ואין סינון-לפי-ריצה"
+   },
+   {
+    "claim": "14 שורות — אין מדד, אין ratchet, אין רצפה מספרית מעבר ל-«≥1».",
+    "evidence": "machtzev/mahulal/nl-smoke.mjs:L1-L14 (הקובץ המלא)"
+   },
+   {
+    "claim": "כותב ל-outDir ומפעיל את תופעת-הלוואי של buildApp על particle-plan-app.",
+    "evidence": "ran: git status אחרי סבב-ההרצות ⇒ machtzev/generator/particle-plan-app.json/.md"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:127",
+    "how": "שער: gateDirty('nlsmoke', 'mahulal/nl-smoke.mjs', [], FAST)"
+   },
+   {
+    "who": "machtzev/gates.tsv:50",
+    "how": "רשום: 'רצפת-§22: כל משפט-עברית-חופשית ⇒ אפליקציה נבנית בלי-קריסה' · push"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — שער רשום ופועל, כיוון-קריאה הפוך (מייבא buildApp).",
+   "gives": "∅"
+  },
+  "s22": {
+   "score": 2,
+   "why": "2 ולא 3: הוא כן על נתיב משפט⇒אפליקציה והוא שער-push ירוק כאן — אבל הסף שלו הוא «≥1 ישות ולא קרס», שזו הרצפה הנמוכה ביותר מבין ארבעת מדדי-ה-mahulal. אחיו nl-quality ו-need/spec-acceptance מודדים את אותו נתיב חזק הרבה יותר, ולכן הוא מקרב פחות."
+  },
+  "evidence": [
+   "ran: GEN_OUT/GEN_DATA_OUT ל-scratch · node machtzev/mahulal/nl-smoke.mjs ⇒ exit 0 · כל המשפטים ✅ (עד 7 ישויות)",
+   "ran: grep -nE 'nlsmoke' machtzev/gates.tsv ⇒ שורה 50",
+   "read: machtzev/mahulal/nl-smoke.mjs:L1-L14 (הקובץ המלא)",
+   "read: machtzev/police.mjs:L127"
+  ]
+ },
+ {
+  "file": "machtzev/mahulal/generator-ratchet.mjs",
+  "lang": "mjs",
+  "lines": 95,
+  "does": [
+   {
+    "claim": "נועל את יכולות-המחולל שנבנו (הכרעות 20+21): מריץ `buildApp` על אפיונים-מכוונים ומוודא שדפוסי-החיווט הצפויים נפלטו — בחירת-אטום · הרכבה · מנוע-רשומה · מיפוי-שדות-למפתחות · RLS.",
+    "evidence": "machtzev/mahulal/generator-ratchet.mjs:L3-L5 · L25 (`ok`) · L88-L90 (RLS/scoped)"
+   },
+   {
+    "claim": "בודק את **הבורר עצמו**, לא רק את הפלט: `selectAtom` חייב להחזיר אטום-KPI, וחייב **לפסול אטום עם שקע-דאטה לא-ממופה** — אכיפת §20(ג) «לעולם לא לזייף דאטה».",
+    "evidence": "machtzev/mahulal/generator-ratchet.mjs:L10 (ייבוא selectAtom/SCREEN_REGISTRY) · L29-L31; ran ⇒ '✓ בורר-מטרה מחזיר אטום-KPI (Callout)' · '✓ בורר פוסל אטום עם שקע-דאטה לא-ממופה (אנטי-זיוף)'"
+   },
+   {
+    "claim": "מחזיק **ratchets יורדים-בלבד על חוב-העברית-במנוע** בשלושה קבצים, עם המספר ההיסטורי בשורה: render-ds 34≤34 (היה 100) · app-ds 37≤39 (היה 96) · entity 45≤45 (היה 107).",
+    "evidence": "ran ⇒ שלוש השורות '✓ ... חוב-עברית-במנוע N ≤ M (רק-יורד; היה K)'"
+   },
+   {
+    "claim": "אוכף «NL-engine עיוור»: אפס מילות-עברית בקוד-המנוע — הדקדוק מגיע מ-spec-lang.data.json ו-chrome.data.json.",
+    "evidence": "ran ⇒ '✓ NL-engine עיוור: 0 מילות-עברית בקוד (חייב 0)' · '✓ אטום-דאטה chrome.data.json קיים' · '✓ render-ds מייבא chrome (תוויות מהדאטה, לא קשיח)' · '✓ entity מושך דקדוק+רמזי-טיפוס מ-spec-lang.data.json'"
+   },
+   {
+    "claim": "**מצלם ומשחזר את פלט-הקנון** (gen + data) בזיכרון כדי לא להשאיר את העץ במצב-בדיקה — בלי תלות ב-/tmp (בטוח-CI).",
+    "evidence": "machtzev/mahulal/generator-ratchet.mjs:L6 · L20-L23 (snap) · L92 (restore)"
+   },
+   {
+    "claim": "רץ כאן, ירוק, 22+ בדיקות.",
+    "evidence": "ran (GEN_OUT/GEN_DATA_OUT ל-scratch) ⇒ exit 0 · 22 שורות ✓ · '✅ רַצֶ'ט-המחולל: כל יכולות-המחולל נעולות'"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מריץ את האפליקציה — RegExp על קוד-הפלט + קריאות ישירות ל-selectAtom/nlToSpec.",
+    "evidence": "machtzev/mahulal/generator-ratchet.mjs:L17-L18 (read/all על קבצי-הפלט) · L88-L90"
+   },
+   {
+    "claim": "**השחזור אינו ב-try/finally** — `snap` ב-L23 ו-`restore` ב-L92 הם קוד ישר. קריסה בין לבין (למשל buildApp זורק) תשאיר את פלט-הקנון במצב-בדיקה. השוו ל-machtzev/behavioral/run.mjs:L15-L20 שכן משתמש ב-try/finally.",
+    "evidence": "machtzev/mahulal/generator-ratchet.mjs:L23 · L92 (אין try/finally ביניהם) מול machtzev/behavioral/run.mjs:L15-L20"
+   },
+   {
+    "claim": "אינו מודד יכולות-מוצר (טבלה/לוח/KPI כפלט-מערכת) — זה spec-acceptance; כאן הנעילה היא על **דפוסי-החיווט ומנגנוני-הבורר**.",
+    "evidence": "machtzev/mahulal/generator-ratchet.mjs:L3-L5 (ההצהרה) · L28-L31"
+   },
+   {
+    "claim": "ratchets-העברית הם ספירת-מחרוזות, לא הוכחה שהמנוע עיוור-לדומיין; 34/37/45 עדיין > 0.",
+    "evidence": "ran ⇒ המספרים עצמם (34 ≤ 34 · 37 ≤ 39 · 45 ≤ 45)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:123",
+    "how": "שער: gate('genratchet', 'mahulal/generator-ratchet.mjs')"
+   },
+   {
+    "who": "machtzev/gates.tsv:46",
+    "how": "רשום: 'רַצֶ'ט-המחולל: buildApp על אפיונים ⇒ דפוסי-חיווט (בחירת-אטום·הרכבה·§21·RLS) נעולים' · push"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — שער רשום ופועל בכל push, וכיוון-הקריאה הפוך (מייבא buildApp · selectAtom · nlToSpec משלושה קבצי-מחולל).",
+   "gives": "∅ כחיבור."
+  },
+  "s22": {
+   "score": 3,
+   "why": "3: הוא נועל את **המנגנונים** שבלעדיהם §22 קורס — הבורר מכוון-המטרה, האנטי-זיוף של §20(ג), עיוורון-הדומיין של מנוע-ה-NL, ו-RLS. הוא רץ על buildApp אמיתי, הוא שער-push, והוא ירוק כאן ב-22 בדיקות. זה המנוע שמונע נסיגה שקטה בדיוק בנקודות שהכרעות 20–21 חרטו."
+  },
+  "evidence": [
+   "ran: GEN_OUT=<scratch>/gen GEN_DATA_OUT=<scratch>/gdata node machtzev/mahulal/generator-ratchet.mjs ⇒ exit 0 · 22 ✓ · 'כל יכולות-המחולל נעולות'",
+   "ran: git checkout -- machtzev/generator/particle-plan-app.* ⇒ TREE 0",
+   "ran: grep -nE 'genratchet' machtzev/gates.tsv ⇒ שורה 46",
+   "read: machtzev/mahulal/generator-ratchet.mjs:L1-L30, L80-L95",
+   "read: machtzev/police.mjs:L123 · machtzev/behavioral/run.mjs:L15-L20 (להשוואת try/finally)"
+  ]
+ },
+ {
+  "file": "machtzev/census/engine-index.mjs",
+  "lang": "mjs",
+  "lines": 392,
+  "does": [
+   {
+    "claim": "אינדקס-האמת לכל מנוע: לכל קובץ-מנוע חמש עובדות נמדדות — איפה · מטרה (עם purposeFrom) · מה עושה (ייצואים · דגלי-CLI · מה כותב · אילו אטומי-דאטה קורא) · **מה הוא לא** · למה מחובר.",
+    "evidence": "machtzev/census/engine-index.mjs:L10-L16 · L335-L348 (card)"
+   },
+   {
+    "claim": "מגדיר «מחובר-למחולל» כפקודה ולא כפרוזה: נגישות טרנזיטיבית בייבוא מ-6 נקודות-הכניסה (GEN_ENTRY), **או** הרצה-בשם מ-regen.mjs/ship.mjs (ואז גם מה שאותו מנוע מייבא).",
+    "evidence": "machtzev/census/engine-index.mjs:L310-L333"
+   },
+   {
+    "claim": "**מוציא שערי-משטרה מהגדרת «מחובר» במפורש** — «הם שומרים על המחולל, לא חלק ממנו» — ומתעד שהחפיפה בין 57 המחוברים ל-57 השערים היא 21 בלבד.",
+    "evidence": "machtzev/census/engine-index.mjs:L316-L317"
+   },
+   {
+    "claim": "סורק 7 שפות ולא רק .mjs, אחרי שנמדד ש-.mjs-בלבד מחמיץ 15 מנועים «ביניהם שכבת-האכיפה כולה»; ומחריג-בהצהרה במקום לבחור-תיקיות, אחרי שבחירת-תיקיות החמיצה 85 קבצים באותו ריפו.",
+    "evidence": "machtzev/census/engine-index.mjs:L40-L45"
+   },
+   {
+    "claim": "סופר ארבע צורות-קריאה שאינן ייבוא-סטטי: נתיב-תבנית `./dir/${x}.mjs` · סריקת-תיקייה+import · הרצה-בשם · **תיעוד-הרצה ב-README** (בלי זה ast_carve.dart נספר כחסר-קורא).",
+    "evidence": "machtzev/census/engine-index.mjs:L186-L210"
+   },
+   {
+    "claim": "‏fail-closed לפי L27: 0 מנועים או 0 מטרות ⇒ exit 2, «הכלי שבור, לא הנתונים».",
+    "evidence": "machtzev/census/engine-index.mjs:L22"
+   },
+   {
+    "claim": "רץ כאן ומחזיר בדיוק את המספרים שהמשימה ציפתה להם.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs --connected ⇒ 'מחוברים-למחולל: 57 · לא-מחוברים: 279 · (מתוך 336 בריפו)' · 'שערים: 57 · בשתי הקבוצות: 21'"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**המטרות אינן מאומתות מול הקוד** — הן דיווח-עצמי מכותרת-הקובץ (או מ-INDEX.md). הוא עצמו מסמן זאת ב-purposeFrom, ו-CLAUDE.md מזהיר על כך. זו הסיבה שכל 33 הכרטיסים כאן נכתבו מקריאת-קוד ולא מהכרטיס.",
+    "evidence": "machtzev/census/engine-index.mjs:L12 ('מה המטרה · מכותרת-הקובץ ⇒ INDEX.md ⇒ ∅ (purposeFrom מדווח מאיפה)'); ran: כרטיס machtzev/assemble/tokens-roundtrip.mjs ⇒ המטרה היא חצי-משפט קטוע מהכותרת ('ב-CSS ומשווים למקור...')"
+   },
+   {
+    "claim": "**אינו צינור-מחולל אלא כלי-מדידה** — וזו התשובה הכנה לשאלת-המשימה עליו. הוא אינו פולט קוד, אינו נקרא ע\"י אף מנוע, ואינו שער.",
+    "evidence": "ran: grep -rn 'census/engine-index.mjs' --include=*.mjs --include=*.tsv ⇒ אפס קוראים (רק הקובץ עצמו); ran: grep -n 'engine-index' machtzev/gates.tsv ⇒ אפס"
+   },
+   {
+    "claim": "אינו עד לעצמו — מחריג את עצמו מסריקת-הקוראים כדי שההערות שבו לא ייספרו כקריאות.",
+    "evidence": "machtzev/census/engine-index.mjs:L203 `const SELF = /census\\/engine-index\\.mjs$/` · L205 `if (SELF.test(cp)) continue;`"
+   },
+   {
+    "claim": "🔴 `--write` מסוכן בקלון-טרי: הוא כותב generator/engine-index.json מהסריקה **המקומית**, ובקלון-טרי הריפואים-האחים חסרים ⇒ 515 ⇒ 336. לא הרצתי אותו.",
+    "evidence": "machtzev/census/engine-index.mjs:L25 (`--write`) · L39 (`const OUT = MACH + 'generator/engine-index.json'`); CLAUDE.md מתעד את ההפרש 515/336 כתלוי-קונטיינר; ran: ls /home/user/maor-system · /home/user/meir7651231-ui/buildsmart ⇒ MISSING"
+   },
+   {
+    "claim": "`runnable` הוא היוריסטיקה (shebang · process.argv · main) ולא הוכחה שהקובץ באמת רץ.",
+    "evidence": "machtzev/census/engine-index.mjs:L157-L159"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אין קורא-קוד. הוא כלי-שורת-פקודה לאדם/סוכן; אינו מיובא, אינו נקרא-בשם, ואינו שער"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — ואין שום נקודה כנה. הוא **מודד** את המחולל; חיבורו אליו היה הופך את האינדקס לחלק ממה שהוא מודד. ההגדרה שלו עצמו (‏:L316) אומרת שאפילו שערים אינם «מחוברים» — וכלי-מדידה רחוק מזה עוד שלב.",
+   "gives": "∅"
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 במפורש, ואני אומר זאת על הכלי שבו השתמשתי לאורך כל המשימה: הוא אינו מקרב את §22 ולו צעד אחד. אין לו קורא, הוא לא שער, הוא לא פולט קוד. ערכו הוא בכך שהוא מונע את הטעות שהוא עצמו מתעד (:L5-L8) — «grep מוצא רק מה שהשואל כבר ידע לשאול». זה ערך אמיתי, אבל הוא ערך לבני-אדם ולסוכנים, לא למחולל."
+  },
+  "evidence": [
+   "ran: node machtzev/census/engine-index.mjs --connected ⇒ 57 · 279 · 336 (תואם לצפוי במשימה)",
+   "ran: node machtzev/census/engine-index.mjs --connected --list ⇒ אימות שכל 33 מנועי-הקבוצה ברשימת הלא-מחוברים",
+   "ran: node machtzev/census/engine-index.mjs <path> ×33 ⇒ כרטיס לכל מנוע בקבוצה",
+   "ran: grep -rn 'census/engine-index.mjs' ⇒ אין קורא; grep machtzev/gates.tsv ⇒ אינו שער",
+   "not-run: --write — אסור מפורשות במשימה, ובקלון-טרי היה משחית 515⇒336",
+   "read: machtzev/census/engine-index.mjs:L1-L45, L150-L160, L185-L210, L300-L348"
+  ]
+ },
+ {
+  "file": "machtzev/census/import-graph.mjs",
+  "lang": "mjs",
+  "lines": 54,
+  "does": [
+   {
+    "claim": "בונה גרף-imports סטטי מעל `new/` ומרחיב רשימת-קבצים-שהשתנו לכל הצרכנים הטרנזיטיביים, כדי ש-`police --inc` תבדוק רק את רדיוס-הפגיעה.",
+    "evidence": "machtzev/census/import-graph.mjs:L2-L3 · L12-L30 (buildGraph) · L32-L48 (consumersOf)"
+   },
+   {
+    "claim": "**fail-closed אמיתי**: קובץ עם `import(` דינמי נכנס ל-`dynamic`, ומשם ל-`unknown` ⇒ המשטרה מריצה מלא. גם קובץ מחוץ ל-NEW ⇒ unknown.",
+    "evidence": "machtzev/census/import-graph.mjs:L4 · L19 · L38 · L46"
+   },
+   {
+    "claim": "מכסה 4 ניבים: `import … from './x.mjs'` · `import './x'` · `require('./x')` · Dart `part '…'`; ומטפל בכלל-Dart שבו `import 'x.dart'` חשוף הוא **יחסי** (R3-3.14), בעוד `package:`/`dart:` הם חיצוניים.",
+    "evidence": "machtzev/census/import-graph.mjs:L20 (הרגקס) · L23-L24 (dartBare)"
+   },
+   {
+    "claim": "מרחיב **זוגות-חוזה**: בדיקה⇒אטום ולהפך, ו-`.contract.md`⇒`.mjs` — כך ששינוי בחוזה גורר את האטום.",
+    "evidence": "machtzev/census/import-graph.mjs:L39-L42"
+   },
+   {
+    "claim": "רץ כאן ומרחיב נכון.",
+    "evidence": "ran: node machtzev/census/import-graph.mjs new/atoms/norm-phone.mjs ⇒ '1 שונו ⇒ 8 לבדיקה (כולל צרכנים) · unknown: 0' עם norm-phone.mjs · norm-phone.test.mjs · boxes/dedup.mjs · boxes/lib-nedarim-sync.mjs · boxes/dedup.test.mjs"
+   },
+   {
+    "claim": "ה-fail-closed אומת בפועל על קובץ מחוץ ל-NEW.",
+    "evidence": "ran: node machtzev/census/import-graph.mjs machtzev/emit/js-to-dart.mjs --json ⇒ '{\"files\":[\".../machtzev/emit/js-to-dart.mjs\"],\"unknown\":[\".../machtzev/emit/js-to-dart.mjs\"]}' — כלומר שינוי במנוע תמיד מפיל את המשטרה לריצה מלאה"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו סורק את machtzev/** — רק `R.NEW` (‏new/). לכן הוא אינו יכול לשמש כגרף-מנועים; ל-engine-index הוא רק מרכיב אחד מתוך שלושה.",
+    "evidence": "machtzev/census/import-graph.mjs:L10 `const NEW = R.NEW` · L14 (`walk(NEW)`); machtzev/census/engine-index.mjs:L18-L20 (מרכיב משלושה)"
+   },
+   {
+    "claim": "אינו מפרס — רגקס אחד על הטקסט; אינו רואה ייבוא בתוך מחרוזת או הערה.",
+    "evidence": "machtzev/census/import-graph.mjs:L20-L22 (matchAll יחיד, בלי הסרת-הערות מלבד ב-L19)"
+   },
+   {
+    "claim": "אינו שער ואינו מריץ בדיקות — הוא ספק-קלט למשטרה.",
+    "evidence": "machtzev/census/import-graph.mjs:L49-L53 (CLI מדפיס בלבד, אפס process.exit); ran: grep -n 'import-graph' machtzev/gates.tsv ⇒ אפס"
+   },
+   {
+    "claim": "אינו נוגע במחולל: אין לו קשר ל-GEN_ENTRY, ל-regen, או לפלט-האפליקציה.",
+    "evidence": "machtzev/census/import-graph.mjs:L1-L54 (הקובץ המלא — אין אזכור generator/)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/police.mjs:40",
+    "how": "ייבוא דינמי: const { consumersOf } = await import('./census/import-graph.mjs') — ליבת ה---inc"
+   },
+   {
+    "who": "machtzev/wave-partition.mjs:11",
+    "how": "ייבוא: import { buildGraph, consumersOf } from './census/import-graph.mjs'"
+   },
+   {
+    "who": "machtzev/pins-check.mjs:22",
+    "how": "נעול-חתימה: 'machtzev/census/import-graph.mjs' ברשימת pins.sha256"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה. הוא תשתית-משטרה (רדיוס-פגיעה ל---inc) ותשתית-נחיל (wave-partition), ובנוסף **נעול-חתימה** ב-pins-check.mjs:22 — כלומר הריפו כבר מתייחס אליו כתשתית קריטית. הוא גם אינו סורק את machtzev/ כלל, כך שאין לו מה לומר על צינור-המחולל.",
+   "gives": "∅"
+  },
+  "s22": {
+   "score": 0,
+   "why": "0: תשתית-בקרה, לא שלב-מחולל. הוא עובד, יש לו 3 קוראים אמיתיים (יותר מרוב ה«מחוברים»), הוא נעול-חתימה, ו-fail-closed שלו אומת במדידה. «לא-מחובר» הוא הסיווג הנכון עבורו, לא פער."
+  },
+  "evidence": [
+   "ran: node machtzev/census/import-graph.mjs new/atoms/norm-phone.mjs ⇒ 1 ⇒ 8 · unknown 0",
+   "ran: node machtzev/census/import-graph.mjs machtzev/emit/js-to-dart.mjs --json ⇒ unknown לא-ריק (fail-closed מאומת)",
+   "ran: grep -n 'import-graph' machtzev/gates.tsv ⇒ ריק (אינו שער)",
+   "read: machtzev/census/import-graph.mjs:L1-L54 (הקובץ המלא)",
+   "read: machtzev/police.mjs:L40 · machtzev/wave-partition.mjs:L11 · machtzev/pins-check.mjs:L22"
+  ]
+ },
+ {
+  "file": "machtzev/behavioral/run.mjs",
+  "lang": "mjs",
+  "lines": 20,
+  "does": [
+   {
+    "claim": "רתמת-זהב התנהגותית: מזריקה 5 אטומי-DS (ds · ds_field · ds_store · ds_persist_stub · ds_persist_web) + שתי בדיקות-ההתנהגות לפרויקט-flutter של buildsmart, ומריצה `flutter test`.",
+    "evidence": "machtzev/behavioral/run.mjs:L2-L4 (ההצהרה) · L13-L14 (ההעתקות) · L16 (flutter test)"
+   },
+   {
+    "claim": "**מנקה אחרי עצמה ב-try/finally** — מוחקת את test/_gen ואת קובצי-הבדיקה מ-buildsmart גם בכשל. זו ההתנהגות שחסרה ל-generator-ratchet.mjs.",
+    "evidence": "machtzev/behavioral/run.mjs:L15-L20; השוו machtzev/mahulal/generator-ratchet.mjs:L23,L92 (snap/restore בלי try/finally)"
+   },
+   {
+    "claim": "מצהירה על הפער שהיא באה לסגור: «מתקמפל»≠«עובד» — הפער בין flutter analyze (מבנה) לבין התנהגות-אמת.",
+    "evidence": "machtzev/behavioral/run.mjs:L2; machtzev/behavioral/README.md:L3-L4"
+   },
+   {
+    "claim": "אטומי-ה-DS שהיא מזריקה קיימים בריפו הזה.",
+    "evidence": "ran: ls new/dart-ui-bs/ds/ds_store.dart new/dart-ui-bs/ds/ds_persist_web.dart ⇒ שניהם קיימים"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינה בת-הרצה כאן — חסם כפול**: (א) `flutter` אינו קיים · (ב) `/home/user/buildsmart/app_flutter` אינו קיים, והיא מעתיקה **לתוכו** ומריצה **בו**.",
+    "evidence": "ran: which flutter ⇒ ריק; ran: ls /home/user/buildsmart ⇒ MISSING; machtzev/behavioral/run.mjs:L10 `const APP = '/home/user/buildsmart/app_flutter'` · L12-L14 · L16 (`cwd: APP`)"
+   },
+   {
+    "claim": "אין לה שסתום-סביבה — APP וה-PATH ל-flutter קשיחים בקוד, בניגוד ל-DART/GEN_OUT/SHELF_OUT/CARVE_OUT שקיימים במנועים אחרים.",
+    "evidence": "machtzev/behavioral/run.mjs:L10 · L16 (`PATH: '/home/user/flutter/bin:...'`) — אפס process.env מלבד הפריסה"
+   },
+   {
+    "claim": "**כותבת לתוך ריפו אחר** (buildsmart), לא לתוך הריפו הזה — היא פולשנית-חוצת-ריפו.",
+    "evidence": "machtzev/behavioral/run.mjs:L11-L14 (`path.join(APP, 'test/_gen')` · `path.join(APP, 'test', t)`)"
+   },
+   {
+    "claim": "אינה שער ואין לה קורא — לא במשטרה, לא ב-one, לא ב-regen.",
+    "evidence": "ran: grep -rn 'behavioral/run' --include=*.mjs --include=*.tsv --include=*.js --include=*.yml . ⇒ אפס תוצאות מחוץ לקובץ עצמו"
+   },
+   {
+    "claim": "אינה מגלה בדיקות — מריצה בדיוק שני שמות קשיחים בשורת-הפקודה, גם אם תתווסף בדיקה שלישית לתיקייה (שאותה כן תעתיק ב-L14).",
+    "evidence": "machtzev/behavioral/run.mjs:L14 (מעתיקה כל *_test.dart) מול L16 (מריצה שני שמות מפורשים) — אי-עקביות בקוד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אין קורא כלל"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/police.mjs — כשער חדש לצד `genratchet` (‏:L123), **אחרי** שני תנאים שאינם מתקיימים כאן: flutter בסביבה, ושסתום `APP` מסביבה במקום נתיב קשיח. בלי שניהם אין נקודת-חיבור כנה.",
+   "gives": "**הראיה היחידה בכל 33 המנועים שלי שהיא «עובד» ולא «נפלט».** spec-acceptance מוכיח 13/13 יכולות בדיקת-רגקס על הקוד; generator-ratchet נועל דפוסי-חיווט; אף אחד מהם לא מריץ את האפליקציה. §22 דורש «אפליקציה עובדת 100%, אפס-באגים» — וזה המנוע שנועד למדוד בדיוק את זה."
+  },
+  "s22": {
+   "score": 2,
+   "why": "2: המטרה שלה היא הלב של §22 («מתקמפל»≠«עובד»), והיא הפער שכל שאר מדדי-הקבלה שלי אינם סוגרים. אבל היא 20 שורות של הזרקה-לריפו-אחר, חסומה כפליים כאן, בלי שסתום, בלי קורא ובלי רישום-שער — כלומר יכולת-על-הנייר. לא 3, כי לא הצלחתי להריץ ולו בדיקה אחת ממנה."
+  },
+  "evidence": [
+   "ran: which flutter ⇒ ריק",
+   "ran: ls /home/user/buildsmart ⇒ MISSING",
+   "ran: ls new/dart-ui-bs/ds/ ⇒ אטומי-ה-DS קיימים (ds.dart · ds_store.dart · ds_persist_web.dart …)",
+   "ran: grep -rn 'behavioral/run' ⇒ אפס קוראים",
+   "not-run: המנוע חסום — דורש flutter + ריפו-אח שאינם כאן",
+   "read: machtzev/behavioral/run.mjs:L1-L20 (הקובץ המלא) · machtzev/behavioral/README.md:L1-L10"
+  ]
+ },
+ {
+  "file": "machtzev/behavioral/gen_store_behavior_test.dart",
+  "lang": "dart",
+  "lines": 165,
+  "does": [
+   {
+    "claim": "בדיקת-התנהגות על `AppStore` — מוח-הריצה של אפליקציה-מחוללת — עם **12 בדיקות** מוצהרות.",
+    "evidence": "machtzev/behavioral/gen_store_behavior_test.dart:L1 (הכותרת) · ran: grep -c 'test(' ⇒ 12; machtzev/behavioral/README.md:L7-L8 מפרט: מזהה · byId · update · removeById · sum/avg · referencing(קשר-הפוך) · options/displayOf(מפתח-זר) · advance/setStage · notify (12/12)"
+   },
+   {
+    "claim": "הבדיקות הן התנהגותיות-אמת ולא מבניות: `add` מקצה מזהה יציב ו-`byId` מאחזר · `update` משנה-במקום ולא נוגע במזהה · `removeById` מוחק והאחרים שורדים.",
+    "evidence": "machtzev/behavioral/gen_store_behavior_test.dart:L6-L25"
+   },
+   {
+    "claim": "בודקת **הגנת-מזהה** מפורשות: ניסיון לדרוס `__id` בתוך update חייב להיכשל.",
+    "evidence": "machtzev/behavioral/gen_store_behavior_test.dart:L17-L21 (`s.update('e', id, {'שם': 'ב', '__id': 'זיוף'})` ואז `expect(s.byId('e', id)?['__id'], id); // המזהה מוגן`)"
+   },
+   {
+    "claim": "מייבאת את האטום דרך `_gen/ds_store.dart` — כלומר בודקת את האטום **האמיתי** מהמדף שרתמת-run.mjs מזריקה, לא עותק.",
+    "evidence": "machtzev/behavioral/gen_store_behavior_test.dart:L3 `import '_gen/ds_store.dart';` · machtzev/behavioral/run.mjs:L13 (מעתיק ds_store.dart ל-test/_gen)"
+   },
+   {
+    "claim": "עובדת בעברית על שדות-אמת (שם · עיר), כלומר על אותה צורת-דאטה שהמחולל פולט.",
+    "evidence": "machtzev/behavioral/gen_store_behavior_test.dart:L8-L20"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינה בת-הרצה כאן** — `import 'package:flutter_test/flutter_test.dart'` דורש flutter, שאינו בסביבה. ‏`dart` לבדו אינו מספיק.",
+    "evidence": "machtzev/behavioral/gen_store_behavior_test.dart:L2; ran: which flutter ⇒ ריק"
+   },
+   {
+    "claim": "אינה בודקת UI — רק את ה-store. לולאת-המסך היא gen_widget_behavior_test.dart.",
+    "evidence": "machtzev/behavioral/README.md:L7-L9 (חלוקת-התפקידים)"
+   },
+   {
+    "claim": "אינה מנוע אלא **נכס-בדיקה**: אין לה main() משלה כנקודת-הרצה עצמאית ואין CLI; היא רצה רק דרך `flutter test` שמופעל ב-run.mjs:16.",
+    "evidence": "machtzev/behavioral/gen_store_behavior_test.dart:L5 (`void main()` של flutter_test) · machtzev/behavioral/run.mjs:L16"
+   },
+   {
+    "claim": "אינה נסרקת ע\"י אף שער ואינה מוזכרת בשום מקום פרט ל-run.mjs.",
+    "evidence": "ran: grep -rn 'gen_store_behavior_test' ⇒ machtzev/behavioral/run.mjs:16 בלבד"
+   },
+   {
+    "claim": "12 הבדיקות הן טענת-README + ספירת-`test(`; **לא ראיתי אותן עוברות** — אף לא אחת מהן הורצה.",
+    "evidence": "ran: grep -c 'test(' machtzev/behavioral/gen_store_behavior_test.dart ⇒ 12; not-run: flutter חסר"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/behavioral/run.mjs:16",
+    "how": "הרצה-בשם בתוך `flutter test test/gen_store_behavior_test.dart ...` — ול-run.mjs עצמה אין קורא"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ בנפרד — גורלה כרוך ב-machtzev/behavioral/run.mjs. אם הרתמה תהפוך לשער (police.mjs, לצד genratchet:L123), הבדיקה הזו נכנסת איתה. כשלעצמה אין לה נקודת-חיבור.",
+   "gives": "∅ בנפרד."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1: היא נכס-בדיקה ולא מנוע, ולא הורצה ולו פעם אחת כאן. לא 0, כי התוכן שלה הוא בדיוק מה ש-§22 דורש ומה שאף מדד אחר בקבוצה לא נותן — התנהגות-אמת של מוח-הריצה (הגנת-מזהה · קשר-הפוך · מפתח-זר · advance), ולא ספירת-דפוסים בקוד."
+  },
+  "evidence": [
+   "ran: grep -c 'test(' machtzev/behavioral/gen_store_behavior_test.dart ⇒ 12",
+   "ran: which flutter ⇒ ריק (החסם)",
+   "ran: grep -rn 'gen_store_behavior_test' ⇒ רק machtzev/behavioral/run.mjs:16",
+   "ran: ls new/dart-ui-bs/ds/ds_store.dart ⇒ קיים (האטום הנבדק)",
+   "not-run: דורש flutter test",
+   "read: machtzev/behavioral/gen_store_behavior_test.dart:L1-L25 · machtzev/behavioral/README.md:L7-L8"
+  ]
+ },
+ {
+  "file": "machtzev/behavioral/gen_widget_behavior_test.dart",
+  "lang": "dart",
+  "lines": 88,
+  "does": [
+   {
+    "claim": "בודקת את **לולאת דפוס-המסך מקצה-לקצה**: הקלדה ⇒ שמירה ⇒ הרשומה מופיעה בטבלה — בדיוק הפער שבין «נפלט» ל«עובד».",
+    "evidence": "machtzev/behavioral/README.md:L9 ('gen_widget_behavior_test.dart — לולאת דפוס-המסך: הקלדה→שמירה→הרשומה מופיעה בטבלה. (1/1)')"
+   },
+   {
+    "claim": "משתמשת ב-`testWidgets` (רתמת-הווידג׳טים של flutter_test) ולא ב-`test` — כלומר מרנדרת עץ-ווידג׳טים אמיתי ומדמה קלט.",
+    "evidence": "ran: grep -c 'testWidgets' machtzev/behavioral/gen_widget_behavior_test.dart ⇒ 2; ran: grep -c 'test(' ⇒ 0"
+   },
+   {
+    "claim": "נבדקת מול אותם אטומי-DS אמיתיים שהרתמה מזריקה (ds · ds_field · ds_store · שכבות-ההתמדה).",
+    "evidence": "machtzev/behavioral/run.mjs:L13 (חמשת הקבצים) · L14 (העתקת כל *_test.dart)"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינה בת-הרצה כאן** — `testWidgets` הוא flutter_test; flutter חסר, ו-buildsmart (יעד-ההזרקה) חסר.",
+    "evidence": "ran: which flutter ⇒ ריק; ran: ls /home/user/buildsmart ⇒ MISSING; machtzev/behavioral/run.mjs:L10,L16"
+   },
+   {
+    "claim": "**יש פער בין התיעוד למדידה**: ה-README מצהיר «(1/1)» — בדיקה אחת — אבל בקובץ שני `testWidgets`. אינני יודע מי משניהם נכון, ולא יכולתי להכריע בהרצה.",
+    "evidence": "machtzev/behavioral/README.md:L9 ('(1/1)') מול ran: grep -c 'testWidgets' ⇒ 2"
+   },
+   {
+    "claim": "אינה מנוע — נכס-בדיקה שרץ רק דרך flutter test ב-run.mjs:16.",
+    "evidence": "machtzev/behavioral/run.mjs:L16 (שם-הקובץ מופיע מפורשות בשורת-הפקודה)"
+   },
+   {
+    "claim": "אין לה קורא מלבד run.mjs, ואין שער שסורק אותה.",
+    "evidence": "ran: grep -rn 'gen_widget_behavior_test' ⇒ machtzev/behavioral/run.mjs:16 בלבד; ran: grep -n 'behavioral' machtzev/gates.tsv ⇒ אפס"
+   },
+   {
+    "claim": "אינה מכסה את המחולל השלם — «לולאת דפוס-המסך» היא מסך-טופס אחד, לא אפליקציה מחוללת מלאה.",
+    "evidence": "machtzev/behavioral/README.md:L9 (ההיקף המוצהר)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "machtzev/behavioral/run.mjs:16",
+    "how": "הרצה-בשם בתוך flutter test — ול-run.mjs אין קורא"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ בנפרד — כרוכה ב-machtzev/behavioral/run.mjs, כמו אחותה.",
+   "gives": "∅ בנפרד."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1: 88 שורות שהן נכס-בדיקה, לא מנוע, ולא הורצו כאן. לא 0 כי לולאת הקלדה⇒שמירה⇒טבלה היא ההוכחה הישירה ביותר ל«אפליקציה עובדת» שמצאתי בקבוצה. הפער בין ה-README («1/1») לשני ה-testWidgets בקובץ הוא בדיוק סוג הדבר שרק הרצה תכריע — ולכן זה נשאר פתוח."
+  },
+  "evidence": [
+   "ran: grep -c 'testWidgets' machtzev/behavioral/gen_widget_behavior_test.dart ⇒ 2 · grep -c 'test(' ⇒ 0",
+   "ran: which flutter ⇒ ריק · ls /home/user/buildsmart ⇒ MISSING",
+   "ran: grep -rn 'gen_widget_behavior_test' ⇒ רק machtzev/behavioral/run.mjs:16",
+   "ran: grep -n 'behavioral' machtzev/gates.tsv ⇒ ריק",
+   "not-run: דורש flutter test",
+   "read: machtzev/behavioral/README.md:L1-L10 · machtzev/behavioral/run.mjs:L13-L16"
+  ]
  }
 ]
