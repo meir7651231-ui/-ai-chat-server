@@ -735,7 +735,7 @@
    }
   ],
   "connectAt": {
-   "point": "זהה ל-full5/audit.mjs — machtzev/generator/balagan-run.mjs. **חיבור אחד לשניהם, לא שניים**",
+   "point": "machtzev/generator/balagan-run.mjs — זהה ל-full5/audit.mjs (עותק-בייטים). חיבור אחד לשניהם, לא שניים",
    "gives": "אותה תרומה בדיוק (‏CHECK הוא אותה פונקציה). הפריט האמיתי כאן אינו «לחבר גם אותו» אלא **לאחד תחילה**: שני עותקי-בייטים של אותו שער הם בדיוק המחלקה ש-`dedup-atoms` נועד לתפוס. ⚠️ מיפוי בלבד — לא אוחד ולא נבדק ב-dedup."
   },
   "s22": {
@@ -1632,7 +1632,7 @@
    }
   ],
   "connectAt": {
-   "point": "machtzev/generator/auto-skin.mjs:19 — התפקיד `table: { need: 'table', fam: ['spatial','list'] }`",
+   "point": "∅ — אין נקודה כנה. נקודת-ההשוואה בלבד: machtzev/generator/auto-skin.mjs:19 (התפקיד table קיים כבר)",
    "gives": "למחולל **כבר יש** תפקיד-עור `table`, והוא בורר לו אטום לפי צורה (`fits`: `!!(a.items && a.items.cells && a.columns)`, ‏auto-skin.mjs:41). כלומר «טבלה» אינה חסר. מה ש-tavla מדגים ואין למחולל הוא **צירוף-ההתנהגויות סביב הטבלה** — חיפוש-חי שמאפס דף · מסנן-סוג נגזר-מהדאטה · דפדוף · ומצב «עזב» במקום מחיקה. אבל זה 6 מאזיני-אירוע ב-JS, וה-forge-atoms של המחולל הם Dart. **אין תפר.** הפריט היחיד בעל ערך-כללי: «איסור-מחיקה באפיון ⇒ סימון-מצב במקום מחיקה» הוא תרגום-כלל-לעיצוב, והמקום שבו זה שייך למחולל הוא `particles.mjs` (‏שקע-חובה ריק ⇒ פסילה) — לא כאן."
   },
   "s22": {
@@ -2663,7 +2663,7 @@
    }
   ],
   "connectAt": {
-   "point": "אותה נקודה כמו medrash/probe — הכרעה-27 (‏app-ds.mjs:75) · hamtzaa.mjs",
+   "point": "machtzev/generator/hamtzaa.mjs · הכרעה-27 (app-ds.mjs:75) — אותה נקודה כמו medrash/probe.mjs",
    "gives": "אותו דפוס-איכות בדיוק: הצהרת-ראיה ⇒ פסילה-לפני-חילוץ ⇒ ∅ מדווח-עם-סיבה. **מה שמוסיף כאן ביחס ל-medrash: הנימוק מדוע הסוג בר-מדידה מלכתחילה** (:2) — כלומר שלב שקודם לבחירת-המקור. זה בדיוק «בחר מקור שאפשר להוכיח ממנו». ⚠️ **וגם החולשה מודגמת כאן חדה יותר:** 3 מתוך 5 הראיות נמדדות ואינן חוסמות, כלומר הסף רופף ממה שהתיעוד מרמז. מי שיעביר את הדפוס חייב שכל ראיה שנמדדת תהיה או חוסמת או מוצהרת כלא-חוסמת."
   },
   "s22": {
@@ -2742,7 +2742,7 @@
    }
   ],
   "connectAt": {
-   "point": "אותה נקודה כמו שני הפרוברים האחרים — הכרעה-27 (‏app-ds.mjs:75)",
+   "point": "machtzev/generator/hamtzaa.mjs · הכרעה-27 (app-ds.mjs:75) — אותה נקודה כמו שני הפרוברים האחרים",
    "gives": "אותו דפוס, והתרומה הייחודית שלו היא **דרישת שתי ראיות בלתי-תלויות** (מילת-דומיין **וגם** צורה, :38-39). זו הגנה ישירה מפני מחלקת-התקלה של `CLAUDE.md` — «אל תחפש בשם, חפש לפי מטרה/צורה»: כאן השם לבדו אינו מספיק והצורה לבדה אינה מספיקה. **אבל** הקובץ הזה גם מדגים למה זה לא תמיד עוזר: 6 מתוך 8 «עברו» בעוד שהם עמודי-שיווק, לא מוצרים — כלומר שתי הראיות התקיימו והמדידה עדיין אינה של מה שביקשו. ⚠️ **זהו הלקח שראוי לנסוע עם הדפוס:** אימות-ראיה מגן מפני מקור-ריק, לא מפני **מקור-לא-נכון**."
   },
   "s22": {
@@ -3020,7 +3020,7 @@
    }
   ],
   "connectAt": {
-   "point": "אותה נקודה כמו btn.mjs — machtzev/generator/balagan-run.mjs",
+   "point": "machtzev/generator/balagan-run.mjs — אותה נקודה כמו people/btn.mjs",
    "gives": "‏compare מוסיף ל-btn את **הצד השני**: לא רק «איך המקור מתנהג» אלא «איך שלנו מתנהג מול המקור, באותו מכשיר». זהו העיקרון של `measure/match.mjs` (אותו מכשיר על שני הצדדים) מיושם על אינטראקציה. **אבל** — ובניגוד ל-match — הוא עוצר בצילום ואינו מייצר ציון. כדי שיהיה בר-חיבור לשער, צריך להחליף את «עין מול צילום» ב«ערך מול ערך», וזה בדיוק מה ש-`btn.mjs` כבר מודד (4 מצבים כערכים). כלומר **החיבור הנכון הוא btn+match, לא compare**."
   },
   "s22": {
@@ -3501,6 +3501,814 @@
    "ran: grep -c EXTRACT על 22 קבצי people ⇒ רק design · mdm · person",
    "ran: grep -c 'VERIFY|reject|wall' ⇒ 0 — אין אימות",
    "ran: grep -rn 'design.json' gen/ machtzev/ ⇒ אפס צרכנים"
+  ]
+ },
+ {
+  "file": "gen/looks/people/undo.mjs",
+  "lang": "mjs",
+  "lines": 58,
+  "summary": "🔴 **מודד את «בצע מיד · אפשר להחזיר · רשום ביומן» ב-11 מוצרים מובילים** — ומנסח את העקיפה של חומת-ההרשמה: «עמודי-העזרה שלהם ציבוריים ומכילים את צילום-הממשק האמיתי». ‏undo.json מחויב, 11 רשומות.",
+  "does": [
+   {
+    "claim": "🔴 **מגדיר את הפעולה שהוא מחפש כשלושה חלקים** — «בצע מיד · אפשר להחזיר · רשום ביומן». זו הגדרה של **התנהגות**, לא של מראה, וזה מה שמבדיל אותו משאר people",
+    "evidence": "undo.mjs:1 `מי בעולם מצטיין ב«בצע מיד · אפשר להחזיר · רשום ביומן».`"
+   },
+   {
+    "claim": "🔴 **פותר את חומת-ההרשמה בדרך חדשה** — לא «נוותר על הנעולים» (הקריטריון של grab3/best) אלא «עמודי-העזרה שלהם ציבוריים ומכילים את צילום-הממשק האמיתי — שם מצלמים»",
+    "evidence": "undo.mjs:2-3 `רוב המוצרים האלה נעולים מאחורי חשבון, אבל **עמודי-העזרה שלהם ציבוריים ומכילים את צילום-הממשק האמיתי** — שם מצלמים.`"
+   },
+   {
+    "claim": "🔴 **11 מוצרים, וכולם מהשורה הראשונה** — gmail · stripe-refund · stripe-events · xero · quickbooks · figma · notion · linear · slack · dropbox · github-revert",
+    "evidence": "ran: node -e על undo.json ⇒ 11 רשומות, המזהים כלעיל"
+   },
+   {
+    "claim": "‏**מפריד בין שני היבטים של אותו מוצר** — `stripe-refund` ו-`stripe-events` הן שתי רשומות: ההחזר עצמו ויומן-האירועים. כלומר «בצע» ו«רשום» נמדדו בנפרד",
+    "evidence": "ran: node -e על undo.json ⇒ שתי רשומות נפרדות ל-Stripe"
+   },
+   {
+    "claim": "שומר `part` (איזה חלק מהתבנית) · `does` (מה המוצר עושה) · `y` (מיקום) · `shots`",
+    "evidence": "ran: node -e על undo.json ⇒ מפתחות id,name,url,y,part,does,shots"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו מודד DOM — הוא מצלם תמונות בעמודי-עזרה.** אין בו EXTRACT, ואף רשומה אינה נושאת מדידה. זו בדיוק המלכודת ש-grab2 נפל בה: צילום-של-צילום",
+    "evidence": "ran: grep -c EXTRACT gen/looks/people/undo.mjs ⇒ 0. ran: node -e על undo.json ⇒ אין מפתח `m` באף רשומה"
+   },
+   {
+    "claim": "**אינו** מאמת — אין VERIFY ואין פסילה",
+    "evidence": "ran: grep -c 'VERIFY\\|reject\\|wall' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "‏`does` הוא תיאור כתוב-ביד, לא נגזר — כמו `why` ב-best.json",
+    "evidence": "ran: node -e על undo.json ⇒ `does` מחרוזת-חופש; אין בקוד גזירה שלו"
+   },
+   {
+    "claim": "פלטיו החזותיים אינם בריפו — `undo/` ו-`undo-demo.png` מוחרגים",
+    "evidence": "cat gen/looks/people/.gitignore ⇒ `undo/` · `undo-demo.png`; ‏git ls-files ⇒ undo.json · undo.mjs · undo-demo.html מחויבים"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/looks/people/demo.mjs",
+    "how": "בעקיפין — demo.mjs:4 מצהיר במפורש «הערכים המספריים נשלפו מעמודי-העזרה הציבוריים שלהם (undo.json) ולא מהזיכרון»"
+   },
+   {
+    "who": "מחוץ ל-people",
+    "how": "∅"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/balagan.mjs — שכבת `decide/logAction/undo` ב-`AppStore` (‏G32) · ו-`snapshotSubtree`/`restoreSubtree` (‏G51)",
+   "gives": "🔴 **זהו הסקר שהמחולל היה יכול להשתמש בו, והוא על הפעולה שהמחולל כבר בנה.** ‏G32 בנה ב«בלגן» בדיוק את התבנית הזו — «בוצע · החזר», זיכרון = הכרעות+יומן, `decide/logAction/undo` — ו-G51 הרחיב אותה למחיקה-במפל. ‏undo.mjs מספק את **מפת-הנוף**: מי בעולם עושה את זה ואיך, על 11 מוצרים, כולל שני היבטים נפרדים של Stripe (ההחזר והיומן). ⚠️ **אבל הוא מספק צילומים, לא ערכים** — הערכים המספריים נכנסו רק דרך `demo.mjs`, שקורא ממנו. כלומר התרומה היא **חומר-רקע להכרעת-עיצוב**, לא מנוע בר-חיבור. ⚠️ **לא נבדק אם ההכרעות של G32 תואמות את מה שנמדד כאן — מיפוי בלבד.**"
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 — מכוון לפעולה הנכונה (בצע·החזר·רשום היא ליבת «בלגן», והמחולל בנה אותה ב-G32/G51), ומספק מפת-נוף של 11 מוצרים מובילים. אבל הוא מצלם ולא מודד, אין בו אימות ואין exit-code, וערכו המספרי הגיע לעולם רק דרך demo.mjs. 1 ולא 2 כי חומר-רקע אינו מנוע."
+  },
+  "evidence": [
+   "read: gen/looks/people/undo.mjs:1-6 (הכותרת המלאה)",
+   "ran: node -e על gen/looks/people/undo.json ⇒ 11 רשומות · מפתחות id,name,url,y,part,does,shots · אין מפתח m",
+   "ran: grep -c EXTRACT ⇒ 0 · grep -c 'VERIFY|reject|wall' ⇒ 0 · grep -c 'process.exit' ⇒ 0",
+   "read: gen/looks/people/demo.mjs:4 — הצרכן היחיד של undo.json",
+   "read: CLAUDE.md G32 (decide/logAction/undo) · G51 (snapshotSubtree/restoreSubtree)"
+  ]
+ },
+ {
+  "file": "gen/looks/people/demo.mjs",
+  "lang": "mjs",
+  "lines": 203,
+  "summary": "🔴 **מסווג את ההחזר לארבע משפחות** — חלון-חרטה · סל-אשפה · ציר-גרסאות · רישום-נגדי — ומממש כל אחת כלוח עובד על אותה פעולה בדיוק. הערכים המספריים מ-`undo.json`, לא מהזיכרון.",
+  "does": [
+   {
+    "claim": "🔴 **טקסונומיה של ארבע משפחות-החזר, נגזרת מ-10 מוצרים** — `חלון-חרטה` (Slack · Gmail · Linear) · `סל-אשפה` (Notion · Apple Photos) · `ציר-גרסאות` (Figma · Dropbox) · `רישום-נגדי` (Stripe · QuickBooks/Xero · GitHub)",
+    "evidence": "demo.mjs:11-42 מערך CARDS — כל כרטיס עם `kind`; :44 `const K = { 'חלון-חרטה':'#9fe870', 'סל-אשפה':'#a5ed6e', 'ציר-גרסאות':'#8cd6ff', 'רישום-נגדי':'#ff9f43' };` — ארבע המשפחות כמפתחות"
+   },
+   {
+    "claim": "🔴 **הפרמטרים של כל משפחה נמדדו ולא הומצאו** — `win` (שניות-חרטה): Slack 15 · Gmail 30 · Linear 8; `days` (ימי-סל): Notion 30 · Apple Photos 30; `every` (תדירות-גרסה): Figma 30",
+    "evidence": "demo.mjs:12 `{ id:'slack', n:1, name:'Slack', kind:'חלון-חרטה', win:15,` · :15 `{ id:'gmail', …, win:30, choose:[5,10,20,30],` · :18 `{ id:'linear', …, win:8, kbd:true,` · :21 `{ id:'notion', …, kind:'סל-אשפה', days:30,` · :27 `{ id:'figma', …, kind:'ציר-גרסאות', every:30, days:30,`. והמקור: :4 `הערכים המספריים נשלפו מעמודי-העזרה הציבוריים שלהם (undo.json) ולא מהזיכרון.`"
+   },
+   {
+    "claim": "🔴 **Gmail נמדד עם בורר ולא עם ערך יחיד** — `choose:[5,10,20,30]`, כלומר המוצר מאפשר למשתמש לקבוע את חלון-החרטה. זו הבחנה שמדידה מגלה והנחה מחמיצה",
+    "evidence": "demo.mjs:15 `choose: [5, 10, 20, 30]`"
+   },
+   {
+    "claim": "🔴 **כל לוח הוא מימוש עובד, לא ציור** — «כל לוח כאן הוא מימוש עובד של הדפוס של אותו מוצר, על אותה פעולה בדיוק: רישום תשלום ₪1,000 · משפחת אונגר»; ה-CARDS מוזרקים לדף כ-JS חי",
+    "evidence": "demo.mjs:2-3 (ההצהרה); :120 `const CARDS = ${JSON.stringify(CARDS)};` — הדאטה עוברת לדף; :122 `const state = {};` — מצב חי"
+   },
+   {
+    "claim": "‏**Linear מסומן `kbd:true`** — כלומר קיצור-מקלדת הוא חלק מהדפוס, לא תוספת",
+    "evidence": "demo.mjs:18 `{ id:'linear', n:3, name:'Linear', kind:'חלון-חרטה', win:8, kbd:true,`"
+   },
+   {
+    "claim": "פולט `undo-demo.html` — **ארטיפקט מחויב**",
+    "evidence": "ran: git ls-files gen/looks/people/ ⇒ undo-demo.html מחויב (‏undo-demo.png מוחרג ב-.gitignore)"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** מודד — הוא צרכן של undo.json. כתובת חיצונית אחת בלבד (גופן)",
+    "evidence": "ran: מטריצת-תכונות ⇒ demo: EXTRACT 0 · screenshot 0 · http 1 · json 1"
+   },
+   {
+    "claim": "**אינו** מכריע — 10 כרטיסים מוצגים זה-לצד-זה; הבחירה בין ארבע המשפחות נשארת לאדם. אין ניקוד ואין המלצה",
+    "evidence": "demo.mjs:11-42 — CARDS הוא מערך-תצוגה; ‏grep -c 'process.exit' ⇒ 0, אין פסק-דין"
+   },
+   {
+    "claim": "**אינו** מקשר משפחה לסוג-פעולה — הטקסונומיה מתארת מי-עושה-מה, ואינה אומרת **מתי** כל משפחה נכונה. (‏שלושת מוצרי-הכסף — Stripe · QuickBooks/Xero — נמצאים כולם ב«רישום-נגדי», אבל הקובץ אינו מנסח זאת ככלל)",
+    "evidence": "demo.mjs:33-42 — שלוש רשומות `רישום-נגדי`, מהן שתיים חשבונאיות; אין בקובץ שדה או משפט שקושר `kind` ל-`domain`"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מיובא ע\"י איש",
+    "evidence": "ran: grep -rn \"demo\\.mjs\" gen/ machtzev/ --include=*.mjs ⇒ ההגדרה בלבד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו. הוא-עצמו צורך את undo.json (:4)"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/balagan.mjs — שכבת `decide/logAction/undo` (‏G32) · ו-`_autopilot` («עשיתי לבד» + החזר)",
+   "gives": "🔴 **זו התרומה המשמעותית ביותר מכל 22 מנועי people, והיא הכרעת-עיצוב ולא קוד.**\n«בלגן» מימש **משפחה אחת** מארבע: חלון-חרטה («בוצע · החזר» מיידי, G32 · ב׳-כ), ו-G51 הוסיף גיבוי-ושחזור. ‏demo מראה שהעולם משתמש בארבע, וש**הבחירה תלויה בסוג-הפעולה**: שלושת מוצרי-הכסף בסקר (Stripe · QuickBooks · Xero) יושבים כולם ב«רישום-נגדי» — כלומר פעולה כספית שבוצעה אינה נמחקת, אלא מקבלת רישום הפוך שנשאר ביומן. ‏«בלגן» כן מנהל כסף (שדה-סכום · «₪ n להיום» · תקציב-חודשי · «שילמתי X»), ולכן השאלה «איזו משפחה נכונה לפעולה כספית» היא שאלה חיה שם.\n⚠️ **אני מדווח זאת כפער-אפשרי שמצאתי במיפוי, לא כממצא-באג: לא בדקתי איך `decide/logAction/undo` מטפל בפעולה כספית שכבר נשלחה.** זו הכרעת-בעלים, והחומר להכרעה יושב ב-`undo-demo.html` המחויב."
+  },
+  "s22": {
+   "score": 2,
+   "why": "2 — נוגע ישירות בשכבה שהמחולל בנה (החזר-ויומן ב«בלגן»), ומספק טקסונומיה נמדדת בת ארבע משפחות עם פרמטרים ממקור-מוצהר, במקום שבו המחולל מימש אחת. לא 3 כי אין כאן קוד בר-חיבור (‏HTML/JS מול Dart), אין הכרעה ואין שער — זהו חומר להכרעת-בעלים."
+  },
+  "evidence": [
+   "read: gen/looks/people/demo.mjs:1-62 (הכותרת · CARDS המלא · מפת-המשפחות K · פונקציית-הכרטיס) · :120-122 (הזרקת-הדאטה לדף)",
+   "ran: node -e על undo.json ⇒ 11 רשומות, המקור המוצהר של הערכים",
+   "ran: מטריצת-תכונות ⇒ demo: 203ש · EXTRACT 0 · write 2 · exit 0 · screenshot 0 · http 1 · json 1",
+   "ran: git ls-files gen/looks/people/ ⇒ undo-demo.html מחויב",
+   "read: CLAUDE.md G32 (decide/logAction/undo · _autopilot) · G51 (גיבוי/שחזור) · ב׳-כ («בוצע · החזר» מיידי)"
+  ]
+ },
+ {
+  "file": "gen/looks/people/toast.mjs",
+  "lang": "mjs",
+  "lines": 86,
+  "summary": "מודד את רכיב-הטוסט/סנאקבר במערכות-העיצוב הציבוריות של המוצרים. 🔴 **7 מתוך 7 נמצאו** (`found`) — שיעור-ההצלחה המלא היחיד מבין מנועי-הצילום ב-people. שומר `secs` (משך) ו-`pos` (מיקום).",
+  "does": [
+   {
+    "claim": "🔴 **בוחר מקור שנועד להיות מדיד** — מערכות-עיצוב ציבוריות, לא עמודי-מוצר. זהו אותו רעיון של `trumot/probe.mjs:2` («בחר סוג שחייב להיות ציבורי»), כאן מיושם על רכיב",
+    "evidence": "toast.mjs:1-2 `איך זה **נראה**: מדידת רכיב הטוסט/סנאקבר במערכות-העיצוב הציבוריות של המוצרים עצמם. לא זיכרון — ערכים מחושבים מהדוגמה החיה.`"
+   },
+   {
+    "claim": "🔴 **7 מתוך 7 נמצאו** — כל רשומה ב-toast.json נושאת `found: true`",
+    "evidence": "ran: node -e על toast.json ⇒ `t.filter(x=>x.found).length` = **7/7**"
+   },
+   {
+    "claim": "🔴 **מודד את שני הממדים שקובעים אם טוסט עובד** — `secs` (כמה זמן הוא נשאר) ו-`pos` (איפה הוא מופיע). משך-טוסט הוא הפרמטר שקובע אם המשתמש הספיק ללחוץ «החזר»",
+    "evidence": "ran: node -e על toast.json ⇒ מפתחות id,name,url,sel,found,secs,pos"
+   },
+   {
+    "claim": "‏**שומר את הבורר** (`sel`) — הראיה איך נמצא הרכיב, לא רק התוצאה. אותו דפוס כמו `cmp.json`",
+    "evidence": "ran: node -e על toast.json ⇒ מפתח `sel` בכל רשומה"
+   },
+   {
+    "claim": "‏toast.json ו-toast.mjs מחויבים",
+    "evidence": "ran: git ls-files gen/looks/people/ ⇒ toast.json · toast.mjs"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** משתמש ב-`EXTRACT` — מדידה ממוקדת-רכיב משלו, כמו `btn.mjs`. כלומר בקבוצה יש שלושה מכשירי-מדידה נפרדים (‏EXTRACT · btn · toast)",
+    "evidence": "ran: grep -c EXTRACT gen/looks/people/toast.mjs ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מודד את הטוסט של המוצר — הוא מודד את **הדוגמה בתיעוד** של מערכת-העיצוב. הדוגמה עשויה להיות מוגדרת אחרת מהשימוש בפועל",
+    "evidence": "toast.mjs:1-2 («במערכות-העיצוב הציבוריות», «מהדוגמה החיה») — המקור הוא דף-תיעוד"
+   },
+   {
+    "claim": "**אינו** מאמת — אין VERIFY ואין פסילה; `found` הוא «נמצא הבורר», לא «הדף הוא מה שנטען»",
+    "evidence": "ran: grep -c 'VERIFY\\|reject\\|wall' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מודד התנהגות — `secs` ו-`pos` הם תצורה; אם הטוסט באמת נעלם אחרי `secs`, ואם «החזר» בתוכו עובד, לא נבדק",
+    "evidence": "ran: node -e על toast.json ⇒ 7 מפתחות בלבד, כולם סטטיים; אין שדה-התנהגות"
+   }
+  ],
+  "callers": [
+   {
+    "who": "gen/looks/people/lab.mjs",
+    "how": "בעקיפין — lab בונה 7 וריאציות-טוסט ומסמן לכל אחת «נמדד» מול «שוחזר» (‏lab.mjs:3-4 · :144)"
+   },
+   {
+    "who": "מחוץ ל-people",
+    "how": "∅"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/balagan.mjs — «בוצע · החזר» (‏G32 · ב׳-כ) · ו-`DsApproveCard`",
+   "gives": "‏«בלגן» מציג «בוצע · החזר» אחרי כל פעולה — כלומר **יש לו טוסט**, והשאלה «כמה זמן הוא נשאר» היא פרמטר שקובע אם ההחזר בר-שימוש בפועל. ‏toast.json נותן 7 ערכי-`secs` נמדדים ממערכות-עיצוב מובילות — כלומר טווח-ייחוס להכרעה, במקום מספר שנבחר בהרגשה. ⚠️ **זו תרומת-דאטה בת שדה-אחד, לא מנוע**, והיא שייכת לאותה הכרעת-בעלים שבה יושב `demo.mjs`. ⚠️ **לא בדקתי איזה משך «בלגן» משתמש בו היום — מיפוי בלבד.**"
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 — מדידה נקייה (7/7) של רכיב שקיים בפועל במוצר-המחולל, ושהפרמטר שלו (משך) משפיע ישירות על האם ההחזר בר-שימוש. 1 ולא 2 כי התרומה היא ערך-ייחוס בשדה אחד, בלי אימות-מקור ובלי מדידת-התנהגות."
+  },
+  "evidence": [
+   "read: gen/looks/people/toast.mjs:1-6 (הכותרת)",
+   "ran: node -e על gen/looks/people/toast.json ⇒ 7 פריטים · **7/7 found** · מפתחות id,name,url,sel,found,secs,pos",
+   "ran: grep -c EXTRACT ⇒ 0 · grep -c 'VERIFY|reject|wall' ⇒ 0 · grep -c 'process.exit' ⇒ 0",
+   "read: gen/looks/people/lab.mjs:3-4,144 — הצרכן",
+   "read: CLAUDE.md G32 · ב׳-כ («בוצע · החזר» מיידי)"
+  ]
+ },
+ {
+  "file": "gen/looks/people/lab.mjs",
+  "lang": "mjs",
+  "lines": 182,
+  "summary": "מעבדת-הטוסט: אותה הודעה («נרשם תשלום ₪1,000») בשבע שפות-עיצוב, כל אחת מימוש עובד עם טיימר ומצב. 🔴 **מסמן על כל וריאציה מה נמדד ומה שוחזר — ומנמק למה חלק לא ניתן למדידה.**",
+  "does": [
+   {
+    "claim": "🔴 **הפרדה מפורשת נמדד/שוחזר, פר-וריאציה, עם נימוק** — «חלק מהרכיבים לא ניתנים למדידה מבחוץ (מאחורי חשבון או מצוירים כתמונה בתיעוד)». זו הצהרה על **גבול-המכשיר**, לא התנצלות",
+    "evidence": "lab.mjs:3-4; ובפלט :144 `<p class=\"src\"><b>נמדד:</b> ${v.measured} · <b>שוחזר:</b> ${v.guess}</p>` — שני השדות זה-לצד-זה בכל לוח"
+   },
+   {
+    "claim": "🔴 **ה«נמדד» ספציפי ובר-בדיקה** — למשל Carbon/IBM: «264×64 · #ffffff על #161616 · top right — נמדד»; Spectrum/Adobe: «ירוק · אייקון+טקסט+× · bottom center · 5 שניות — נמדד מהעמוד»",
+    "evidence": "lab.mjs:20 `measured: '264×64 · #ffffff על #161616 · top right — נמדד', guess: 'פס-הצבע'`; :17 `measured: 'ירוק · אייקון+טקסט+× · bottom center · 5 שניות — נמדד מהעמוד', guess: 'הגוון המדויק'`"
+   },
+   {
+    "claim": "🔴 **ה«שוחזר» צר וכן** — לא «הכל שוחזר» אלא «הגוון המדויק» · «פס-הצבע». כלומר הפער מדויק ולא גורף",
+    "evidence": "lab.mjs:17,20 — שדות `guess` קצרים וממוקדים"
+   },
+   {
+    "claim": "‏**7 וריאציות עם פרמטרים מלאים** — מיקום (`pos`: bottom-center · top-right · bottom-start · inline) · כניסה (`enter`: slide-up · fade · slide-right · none) · משך (`secs`: 6 · 5 · 8 · 8 · 10 · 8 · 0)",
+    "evidence": "lab.mjs:12-33 — מערך V; :12 `{ id:'material', n:1, name:'Material · Gmail', pos:'bottom-center', enter:'slide-up', secs:6,` … :30 `{ id:'inline', n:7, name:'בתוך השורה', pos:'inline', enter:'none', secs:0,`"
+   },
+   {
+    "claim": "🔴 **כל וריאציה היא מימוש עובד עם מצב וטיימר** — לא ציור. יש יתרה מתעדכנת וטיימר פר-וריאציה",
+    "evidence": "lab.mjs:148-151 `const V = ${JSON.stringify(V)}; const st = {}; V.forEach(v => st[v.id] = { bal: 14428, timer: null }); … const setBal = id => document.getElementById('b-'+id).innerHTML = …`"
+   },
+   {
+    "claim": "🔴 **וריאציה 7 היא «בתוך השורה» עם `secs: 0`** — כלומר הסקר כולל גם את האפשרות שאין טוסט בכלל, וההודעה יושבת במקום-הפעולה",
+    "evidence": "lab.mjs:30 `{ id:'inline', n:7, name:'בתוך השורה', pos:'inline', enter:'none', secs:0,`"
+   },
+   {
+    "claim": "פולט `toast-lab.html` — ארטיפקט מחויב",
+    "evidence": "ran: git ls-files gen/looks/people/ ⇒ toast-lab.html מחויב (‏toast-lab.png מוחרג)"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** מודד — צרכן של toast.json. כתובת חיצונית אחת (גופן)",
+    "evidence": "ran: מטריצת-תכונות ⇒ lab: EXTRACT 0 · screenshot 0 · http 1 · json 0"
+   },
+   {
+    "claim": "**אינו** מאמת שהשחזור נאמן — «שוחזר» הוא תווית-כנות, בדיוק כמו ב-`btnlab`. אין השוואה בין המשוחזר לנמדד",
+    "evidence": "lab.mjs:144 — התווית מוצגת; אין בקובץ assert/השוואה (‏grep -c 'process.exit' ⇒ 0)"
+   },
+   {
+    "claim": "**אינו** סופר — אין «כמה מתוך 7 נמדדו במלואם». התווית פר-לוח, בלי סיכום ובלי ratchet",
+    "evidence": "lab.mjs:144 (פר-לוח) — אין בקובץ צבירה של measured/guess"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מיובא ע\"י איש",
+    "evidence": "ran: grep -rn \"lab\\.mjs\" gen/ machtzev/ --include=*.mjs ⇒ ההגדרה בלבד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו. צורך את toast.json"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/balagan.mjs — «בוצע · החזר» · `DsApproveCard` · ו-`hamtzaa.mjs` כמקבילה הרעיונית לתווית נמדד/שוחזר",
+   "gives": "שתי תרומות, שתיהן דאטה ולא קוד:\n(1) **טווח-ייחוס ל«בוצע · החזר»** — 7 תצורות מלאות (מיקום · כניסה · משך), כולל האפשרות `secs:0` «בתוך השורה», שהיא הכרעה לגיטימית ולא חוסר.\n(2) **הדפוס נמדד/שוחזר עם נימוק-גבול-המכשיר** — «מאחורי חשבון או מצוירים כתמונה בתיעוד». זו אותה הבחנה ש-`hamtzaa` אוכף כ-ratchet, וכאן היא מנוסחת כן יותר: לא «אין מקור» אלא **למה** אין מקור. ⚠️ אבל כאן היא תווית בלי ספירה ובלי סף — בדיוק כמו ב-`btnlab`."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 — מעבדה מעוצבת-היטב עם 7 מימושים עובדים ועם הפרדת-מקור כנה ומנומקת, על רכיב שקיים בפועל במוצר-המחולל. 1 ולא 2 כי אין מדידה, אין ספירה, אין סף ואין קורא — התרומה היא טווח-ייחוס וניסוח, לא מנגנון."
+  },
+  "evidence": [
+   "read: gen/looks/people/lab.mjs:1-34 (הכותרת + מערך V המלא) · :144 (שורת המקור בפלט) · :148-151 (המצב החי)",
+   "ran: מטריצת-תכונות ⇒ lab: 182ש · EXTRACT 0 · write 2 · exit 0 · screenshot 0 · http 1 · json 0",
+   "ran: git ls-files gen/looks/people/ ⇒ toast-lab.html מחויב · .gitignore מחריג toast-lab.png ו-toast/",
+   "ran: grep -c 'process.exit' ⇒ 0",
+   "read: gen/looks/people/toast.json (7/7 found) — המקור של ה«נמדד»"
+  ]
+ },
+ {
+  "file": "gen/looks/people/merged.mjs",
+  "lang": "mjs",
+  "lines": 272,
+  "summary": "🔴 **הארוך ב-people והמסקנה שלה**: 12 החלטות-עיצוב שנמדדו ממוצרים מובילים, מורכבות לפעולה אחת עובדת (רישום תשלום · החזר · יומן). **כל החלטה נושאת תווית של המקור ושל הערך שנמדד.** פולט `merged.html` מחויב.",
+  "does": [
+   {
+    "claim": "🔴 **כל אחת מ-12 ההחלטות נושאת ארבעה שדות: מקור · מה · ערך · ראיה** — למשל GOV.UK: «בלחיצה הכפתור **יורד**» · `הצל → inset · translateY(2px)` · **«נמדד: top 67→65»**",
+    "evidence": "merged.mjs:9 `const PLUS = [`; :11 `['GOV.UK', 'בלחיצה הכפתור **יורד**', 'הצל → inset · translateY(2px)', 'נמדד: top 67→65'],` — ארבעת השדות; :179 `${PLUS.map(([s,t,v,w]) => \\`<tr><td class=\"src\">${s}</td><td>${md(t)}<br><span class=\"no\">${w}</span></td><td><code>${v}</code></td></tr>\\`)}`"
+   },
+   {
+    "claim": "🔴 **הראיה היא מדידה של דלתא, לא צילום** — «נמדד: top 67→65» הוא הפרש-פיקסלים בין מצב-מנוחה למצב-לחיצה. זהו בדיוק סוג-הערך ש-`btn.mjs` מייצר (4 מצבים)",
+    "evidence": "merged.mjs:11 (שדה הראיה) · והמקור: btn.mjs:2-3 (מדידת 4 מצבים כולל תזוזה)"
+   },
+   {
+    "claim": "🔴 **טבלת-מקורות מפורשת בפלט** — «כל החלטה והמקור שממנו נמדדה», כלומר הראיה נוסעת עם המוצר ולא נשארת ביומן-הסשן",
+    "evidence": "merged.mjs:177 `<p class=\"sub\">כל החלטה והמקור שממנו נמדדה</p>`; :179 (הלולאה שפולטת שורה לכל החלטה)"
+   },
+   {
+    "claim": "🔴 **מימוש עובד מלא, לא הדגמה** — מצב (`S` עם יתרה · שורות · יומן · רצף · מי-מבצע), ושלוש פעולות: `record()` · `undo(id)` · `credit(id)`",
+    "evidence": "merged.mjs:187 `const S = { bal: 14428, rows: [], log: [], seq: 0, who: 'מזכיר' };`; :218 `const record = () => {`; :238 `const undo = (id) => {`; :248 `const credit = (id) => {`"
+   },
+   {
+    "claim": "🔴 **מממש שתיים מארבע משפחות-ההחזר של `demo.mjs` באותו מסך** — `undo()` (חלון-חרטה) ו-`credit()` (רישום-נגדי, כלומר זיכוי). זו בדיוק ההבחנה שהטקסונומיה של demo מזהה, כאן ממומשת",
+    "evidence": "merged.mjs:238 `const undo = (id) =>` · :248 `const credit = (id) =>` — שתי פעולות נפרדות; והטקסונומיה: demo.mjs:44 `const K = { 'חלון-חרטה':…, 'רישום-נגדי':… }`"
+   },
+   {
+    "claim": "🔴 **חלון-החרטה ניתן לשינוי ע\"י המשתמש** — בורר-שניות עם `aria-label`, בדיוק הדפוס ש-`demo.mjs:15` מדד ב-Gmail (`choose:[5,10,20,30]`)",
+    "evidence": "merged.mjs:156-160 `<label class=\"win\">חלון־חרטה <select id=\"win\" aria-label=\"חלון־חרטה בשניות\">…</select></label>`"
+   },
+   {
+    "claim": "‏**יומן עם מי · מה · מתי** — `add(what,k)` דוחף `{ who, what, t: now(), k }`, והשעה בפורמט עברי",
+    "evidence": "merged.mjs:215 `const add = (what, k) => { S.log.unshift({ who: S.who, what, t: now(), k }); paintLog(); };`; :188 `const now = () => new Date().toLocaleTimeString('he-IL', { hour:'2-digit', minute:'2-digit', second:'2-digit' });`"
+   },
+   {
+    "claim": "‏**כסף עטוף ב-bdi** — טיפול-RTL על כל סכום",
+    "evidence": "merged.mjs:191 `const paintBal = () => $('bal').innerHTML = '<bdi dir=\"ltr\">' + nis(S.bal) + '</bdi>';`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** מודד — צרכן של המדידות הקודמות. אפס EXTRACT, אפס צילום, כתובת חיצונית אחת (גופן)",
+    "evidence": "ran: מטריצת-תכונות ⇒ merged: 272ש · EXTRACT 0 · screenshot 0 · http 1 · json 0"
+   },
+   {
+    "claim": "🔴 **`PLUS` הוא מערך מוקלד-ביד** — 12 ההחלטות וארבעת השדות שלהן נכתבו בקובץ. תווית «נמדד: top 67→65» אינה נשלפת מ-`btn.json` בזמן-פליטה; היא מחרוזת. אם המדידה תשתנה, הטבלה תמשיך לומר את אותו דבר",
+    "evidence": "merged.mjs:9-22 — מערך PLUS ליטרלי; ran: grep -c '\\.json' gen/looks/people/merged.mjs ⇒ **0** — הקובץ אינו קורא אף מדידה"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code, אין ספירה של כמה מ-12 נמדדו באמת",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** Dart — מימוש JS/DOM, לא בר-הזרקה למחולל",
+    "evidence": "merged.mjs:186-248 — כל הלוגיקה ב-`<script>` של הדף"
+   },
+   {
+    "claim": "**אינו** מתמיד — המצב ב-`S` בזיכרון-הדף בלבד; רענון מוחק הכל. אין אחסון ואין גיבוי",
+    "evidence": "merged.mjs:187 `const S = { bal: 14428, … }` — אובייקט בזיכרון; אין localStorage/fetch בקובץ"
+   },
+   {
+    "claim": "**אינו** מיובא ע\"י איש",
+    "evidence": "ran: grep -rn \"merged\" gen/ machtzev/ --include=*.mjs ⇒ ההגדרה בלבד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "machtzev/generator/balagan.mjs — `AppStore` ‏`decide/logAction/undo` (‏G32) · `_autopilot` («עשיתי לבד» + החזר) · ו-G51 `snapshotSubtree`/`restoreSubtree`",
+   "gives": "🔴 **זהו הסיכום של כל תיקיית people, ושלוש נקודות בו נוגעות ישירות בשכבה שהמחולל בנה:**\n(1) **שתי משפחות-החזר באותו מסך** — `undo()` לביטול-מיידי ו-`credit()` לזיכוי. ‏«בלגן» מימש את הראשונה; השנייה היא מה שמוצרי-הכסף בסקר עושים (‏demo.mjs:33-42 — Stripe · QuickBooks/Xero · GitHub כולם «רישום-נגדי»).\n(2) **חלון-חרטה כהעדפת-משתמש** ולא כקבוע (:156-160), מדוד מ-Gmail.\n(3) **יומן עם `who`** (:215) — «בלגן» רושם `logAction`, והשדה «מי ביצע» רלוונטי ברגע שיש יותר ממשתמש אחד.\n⚠️ **סייג מהותי שחייב להיאמר: `PLUS` מוקלד-ביד ואינו נקרא מ-btn.json** (‏0 מופעי `.json` בקובץ). כלומר תוויות-הראיה בטבלה הן **דיווח-עצמי על מדידה שהתרחשה במקום אחר**, לא קריאה חיה ממנה. לפי כלל-האמת, «נמדד: top 67→65» כאן הוא טענה; הראיה עצמה יושבת ב-`btn.json`.\n⚠️ **מיפוי בלבד — לא בדקתי מה `decide/logAction/undo` עושה היום.**"
+  },
+  "s22": {
+   "score": 2,
+   "why": "2 — הפריט המסכם של people: מימוש עובד של הפעולה שהיא ליבת «בלגן» (בצע · החזר · רשום), עם שתי משפחות-החזר, חלון-חרטה כהעדפה, ויומן עם מבצע — כולם מוצמדים למקור. לא 3 בגלל שני דברים שנמדדו: הקוד JS ואינו בר-הזרקה, ו-`PLUS` מוקלד-ביד במקום להיקרא מ-`btn.json`, כך שתוויות-הראיה הן דיווח-עצמי."
+  },
+  "evidence": [
+   "read: gen/looks/people/merged.mjs:1-30 (הכותרת + PLUS) · :135-186 (הפלט · הבורר · טבלת-המקורות) · :186-250 (המימוש החי: S · add · record · undo · credit)",
+   "ran: grep -c '\\.json' gen/looks/people/merged.mjs ⇒ **0** — ראיית-השלילה המרכזית: אינו קורא אף מדידה",
+   "ran: מטריצת-תכונות ⇒ merged: 272ש · EXTRACT 0 · write 2 · exit 0 · screenshot 0 · http 1 · json 0",
+   "ran: git ls-files gen/looks/people/ ⇒ merged.html מחויב · .gitignore מחריג merged.png",
+   "read: gen/looks/people/demo.mjs:33-44 — הטקסונומיה ששתי הפעולות כאן מממשות",
+   "read: CLAUDE.md G32 · G51 — השכבה המקבילה במחולל"
+  ]
+ },
+ {
+  "file": "gen/looks/people/person.mjs",
+  "lang": "mjs",
+  "lines": 62,
+  "summary": "🔴 **מדידה אמיתית (‏EXTRACT) של 12 אתרים שבהם «עמוד-האדם הוא המוצר עצמו»** — ‏person.json מחויב עם **12/12 מדודים**. הקריטריון שגובש ב-grab3, כאן מיושם עם מכשיר.",
+  "does": [
+   {
+    "claim": "🔴 **מייבא את `EXTRACT` ומודד** — אחד מ-3 בלבד מתוך 22 מנועי people",
+    "evidence": "person.mjs:9 `import { EXTRACT } from '../measure/extract.mjs';`. ran: grep -c EXTRACT על 22 ⇒ design · mdm · person בלבד"
+   },
+   {
+    "claim": "🔴 **מחדד את הקריטריון בשלילה מפורשת** — «לא רשימות של מוצרים, לא ערוצי-וידאו, לא מלונות. **אדם.**» כלומר מגדיר גם מה **אינו** נחשב",
+    "evidence": "person.mjs:1-2 `הפעם רק אתרים ש**עמוד-האדם הוא המוצר עצמו**. לא רשימות של מוצרים, לא ערוצי-וידאו, לא מלונות. אדם.`"
+   },
+   {
+    "claim": "🔴 **מנמק למה דווקא אלה נגישים** — «נבחרו כאלה שהפרופיל שלהם ציבורי — כי אצלם הוא **אמור** להיות ציבורי». כלומר הנגישות אינה מקרית אלא נובעת מטבע-המוצר. זהו אותו נימוק של `trumot/probe.mjs:2`",
+    "evidence": "person.mjs:3 `נבחרו כאלה שהפרופיל שלהם ציבורי — כי אצלם הוא אמור להיות ציבורי.`"
+   },
+   {
+    "claim": "🔴 **12 מתוך 12 נמדדו** — כל רשומה נושאת שדה `m`. יחד עם `design.json` (10/10), אלה שתי ערכות-המדידה המלאות של people",
+    "evidence": "ran: node -e על person.json ⇒ 12 פריטים · **12 עם מדידה** · מפתחות id,name,users,core,url,y,m"
+   },
+   {
+    "claim": "שומר `core` — מה הליבה של אותו מוצר; כלומר הנימוק נשמר לצד המדידה",
+    "evidence": "ran: node -e על person.json ⇒ מפתח `core` בכל רשומה"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "**אינו** מאמת מכנית — הקריטריון «הפרופיל ציבורי» מוצהר בכותרת ואינו נבדק בקוד. ‏12/12 «נמדדו» אינו אומר ש-12/12 היו עמוד-אדם",
+    "evidence": "ran: grep -c 'VERIFY\\|reject\\|wall' gen/looks/people/person.mjs ⇒ 0; מול trumot/probe.mjs:31 שבודק חומת-הרשמה מכנית"
+   },
+   {
+    "claim": "**אינו** משווה — מודד צד אחד; אין `file://` ואין ציון",
+    "evidence": "ran: grep -c 'file://' ⇒ 0 · grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מזין דבר — `person.json` מחויב ואיש אינו קורא אותו",
+    "evidence": "ran: grep -rn 'person.json' gen/ machtzev/ --include=*.mjs --include=*.js ⇒ אזכור בתוך person.mjs בלבד"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** דטרמיניסטי — 12 כתובות חיצוניות חיות",
+    "evidence": "ran: grep -c 'https\\?://' ⇒ 12"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו. מייבא את `EXTRACT` (:9)"
+   }
+  ],
+  "connectAt": {
+   "point": "new/dart-ui-bs/ds/ds_pure.dart:128 — מפת `skins`, יחד עם `design.json` ו-`measure/tokens.mjs`",
+   "gives": "ערכת-מדידה שלישית ומלאה (12/12) באותו מכשיר, המכסה דומיין «אדם · פרופיל · רשימת-רשומות» — שהוא בדיוק הצורה שחוזרת בפלט-המחולל (כרטיס-אדם ב«נושאים» · מסך-ישות · תיק). יחד עם `design.json` (10/10) ו-`measured.json` (18 עמודים), זהו מאגר של **40 מדידות באותה סרגל**. אם יוסבו עורים נוספים ל-`DsPureSkin` — נקודת-החיבור היחידה בקבוצה — זה החומר. ⚠️ **אותו סייג כמו design.json: אין שכבת-אימות**, ולכן לפני שימוש יש להריץ את מאמת-הראיה של ה-probes."
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 — מדידה מלאה (12/12) באותו מכשיר, על הדומיין הקרוב-ביותר לפלט-המחולל מבין שלוש ערכות-המדידה. אבל אין אימות, אין השוואה, אין קורא, וערכו מותנה בנקודת-החיבור של tokens.mjs שהיא-עצמה מסויגת."
+  },
+  "evidence": [
+   "read: gen/looks/people/person.mjs:1-9 (הכותרת + הייבוא)",
+   "ran: node -e על gen/looks/people/person.json ⇒ 12 פריטים · **12 עם שדה m** · מפתחות id,name,users,core,url,y,m",
+   "ran: grep -c EXTRACT על 22 קבצי people ⇒ design · mdm · person בלבד",
+   "ran: grep -c 'VERIFY|reject|wall' ⇒ 0 · grep -c 'file://' ⇒ 0 · grep -c 'process.exit' ⇒ 0",
+   "ran: grep -rn 'person.json' gen/ machtzev/ ⇒ אפס צרכנים"
+  ]
+ },
+ {
+  "file": "gen/looks/people/mdm.mjs",
+  "lang": "mjs",
+  "lines": 52,
+  "summary": "בודק 5 ספקי-MDM (ניהול-דאטה-אב) — 🔴 **4 מתוך 5 חסומים מאחורי חומת-הרשמה**. משתמש ב-`EXTRACT`, אך אף רשומה לא הגיעה למדידה. זהו «מבוי-סתום שתועד», ותוצאה לגיטימית.",
+  "does": [
+   {
+    "claim": "🔴 **מנסח את השאלה כשאלת-היתכנות, לא כמדידה** — «האם הממשק שלהם בכלל נראה בלי חשבון, ואיך הוא נמדד מול חמשת האתרים». הבדיקה הראשונה היא «האם אפשר בכלל»",
+    "evidence": "mdm.mjs:1-2 `בדיקה של רשימת ספקי-ה-MDM: האם הממשק שלהם בכלל נראה בלי חשבון, ואיך הוא נמדד מול חמשת האתרים שהבעלים בחר. אותו מכשיר מדידה בדיוק.`"
+   },
+   {
+    "claim": "מייבא את `EXTRACT` — אחד מ-3 בלבד ב-people",
+    "evidence": "mdm.mjs:6 `import { chromium } …`; :7 `import { EXTRACT } from '../measure/extract.mjs';`. ran: grep -c EXTRACT ⇒ 2"
+   },
+   {
+    "claim": "🔴 **בודק חומת-הרשמה מכנית ושומר את התוצאה** — שדה `wall` בכל רשומה, ו-**4 מתוך 5 חסומים**",
+    "evidence": "ran: node -e על mdm.json ⇒ `md.filter(x=>x.wall&&x.wall.length).length` = **4/5**; מפתחות id,name,url,wall,freeTrial,bigMedia,words"
+   },
+   {
+    "claim": "🔴 **שומר שלושה סימנים נוספים מעבר לחומה** — `freeTrial` (יש ניסיון-חינם) · `bigMedia` (יש מדיה גדולה, כלומר צילום-מוצר) · `words` (מילות-דומיין שנמצאו). כלומר מתעד **למה** אי-אפשר, לא רק ש«אי-אפשר»",
+    "evidence": "ran: node -e על mdm.json ⇒ מפתחות freeTrial · bigMedia · words"
+   },
+   {
+    "claim": "‏5 ספקים נבדקו — semarchy · profisee · reltio · informatica · ataccama",
+    "evidence": "ran: node -e על mdm.json ⇒ המזהים כלעיל"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **לא הניב ולו מדידה אחת** — אף רשומה ב-mdm.json אינה נושאת שדה `m`, למרות ש-`EXTRACT` מיובא. הכלי הגיע למסקנה שאין מה למדוד, וכתב אותה",
+    "evidence": "ran: node -e על mdm.json ⇒ 5 פריטים · **0 עם מדידה**; מפתחות id,name,url,wall,freeTrial,bigMedia,words — אין `m`"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מציע חלופה — בניגוד ל-`undo.mjs` שפתר חסימה דומה דרך עמודי-עזרה, כאן הדרך נסגרה ולא נפתחה אחרת",
+    "evidence": "mdm.mjs:1-2 — הכותרת מנסחת בדיקה בלבד; ‏52 שורות, אין בהן מסלול-חלופי. השווה: undo.mjs:2-3 («עמודי-העזרה שלהם ציבוריים … שם מצלמים»)"
+   },
+   {
+    "claim": "**אינו** מיובא ע\"י איש, ו-`mdm.json` אינו נקרא",
+    "evidence": "ran: grep -rn 'mdm' gen/ machtzev/ --include=*.mjs --include=*.js ⇒ ההגדרה בלבד"
+   },
+   {
+    "claim": "**אינו** רלוונטי לדומיין שנבנה — MDM הוא קטגוריית-תוכנה ארגונית, ואין לה מקבילה בפלט-המחולל",
+    "evidence": "ran: node -e על mdm.json ⇒ 5 ספקי-תוכנה ארגונית; אין קשר לישויות של mosad.data.json (12 אגפים · 181 ישויות)"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו. מייבא את `EXTRACT` (:7)"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "‏**זהו ניסוי שהחזיר «לא» ותיעד את התשובה — וזו תוצאה לגיטימית, לא כישלון.** ‏4 מתוך 5 ספקי-ה-MDM חסומים, ולכן קטגוריה שלמה של רפרנסים נסגרה. הערך היחיד: לצד `medrash/probe.json` (0/11), זהו המופע השני בקבוצה שבו כלי החזיר ∅ ודיווח עליו במקום למלא — ובשניהם השדות שנשמרו (‏`wall` · `freeTrial` · `bigMedia` כאן; `rejected` שם) מאפשרים לדעת **למה** ולא רק **ש**. זו שמירת-ראיה-על-כישלון, והיא נכונה."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב, ואומר זאת בכנות: בדיקת-היתכנות חד-פעמית שהחזירה «לא» (‏4/5 חסומים, 0 מדידות), על קטגוריית-תוכנה שאין לה מקבילה בפלט-המחולל. התיעוד של הכישלון נכון — אבל אין כאן מנוע לחבר."
+  },
+  "evidence": [
+   "read: gen/looks/people/mdm.mjs:1-7 (הכותרת + הייבוא)",
+   "ran: node -e על gen/looks/people/mdm.json ⇒ 5 פריטים · **4 עם wall** · **0 עם מדידה** · מפתחות id,name,url,wall,freeTrial,bigMedia,words",
+   "ran: grep -c EXTRACT ⇒ 2 (מיובא) · grep -c 'process.exit' ⇒ 0",
+   "ran: grep -rn 'mdm' gen/ machtzev/ --include=*.mjs ⇒ אפס קוראים",
+   "read: gen/looks/medrash/probe.json (0/11) — המופע המקביל של ∅ מדווח"
+  ]
+ },
+ {
+  "file": "gen/looks/people/money.mjs",
+  "lang": "mjs",
+  "lines": 57,
+  "summary": "🔴 **בחירה לפי מספר-משתמשים בפועל, במפורש לא לפי טעם** — 12 המוצרים הנפוצים בעולם שבהם «לרשום תנועת-כסף ולהחזיר אותה» היא הליבה. ‏money.json מחויב: alipay · paypal · amazon · phonepe · paytm · nubank · revolut · cashapp · venmo · klarna ועוד.",
+  "does": [
+   {
+    "claim": "🔴 **מנסח כלל-בחירה נגד ההטיה של עצמו** — «לא מי שאני בחרתי ולא מערכות-עיצוב: **המוצרים הכי נפוצים בעולם** … נבחרו לפי מספר משתמשים בפועל, לא לפי טעם». זו הגנה מפורשת מפני בחירה-לפי-מוניטין-עיצובי",
+    "evidence": "money.mjs:1-3"
+   },
+   {
+    "claim": "🔴 **הרשימה מוכיחה שהכלל הופעל** — 12 המוצרים כוללים את alipay · phonepe · paytm (הודו/סין, מאות מיליוני משתמשים) לצד venmo · cashapp · klarna. זו אינה רשימת-העיצוב המערבית הרגילה של שאר הקבוצה",
+    "evidence": "ran: node -e על money.json ⇒ alipay paypal paypal-refund amazon phonepe paytm nubank revolut cashapp venmo klarna uber-receipt"
+   },
+   {
+    "claim": "‏**מפריד פעולה מהחזרתה** — `paypal` ו-`paypal-refund` הן שתי רשומות; וכן `uber-receipt` (הקבלה, לא האפליקציה). כלומר «רשום» ו«החזר» נמדדו בנפרד, אותו דפוס כמו `stripe-refund`/`stripe-events` ב-undo.json",
+    "evidence": "ran: node -e על money.json ⇒ שתי רשומות ל-PayPal + uber-receipt"
+   },
+   {
+    "claim": "שומר `act` (הפעולה) · `money` (הסכום שנמצא) · `secs` — כלומר הפרמטרים של «בצע · החזר» נשמרים",
+    "evidence": "ran: node -e על money.json ⇒ מפתחות id,name,users,url,act,money,secs"
+   },
+   {
+    "claim": "שומר `users` — סדר-גודל המשתמשים, שהוא הקריטריון שהצהיר עליו",
+    "evidence": "ran: node -e על money.json ⇒ מפתח `users` בכל רשומה"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו מודד** — 0 מופעי EXTRACT, ואף רשומה אינה נושאת שדה `m`. הוא מצלם ורושם",
+    "evidence": "ran: grep -c EXTRACT gen/looks/people/money.mjs ⇒ 0. ran: node -e על money.json ⇒ 12 פריטים · **0 עם מדידה**"
+   },
+   {
+    "claim": "**אינו** מאמת — אין VERIFY ואין פסילה, למרות שאפליקציות-תשלום הן הקטגוריה הכי חסומה שיש",
+    "evidence": "ran: grep -c 'VERIFY\\|reject\\|wall' ⇒ 0; מול mdm.mjs שכן שומר `wall` ומצא 4/5 חסומים"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "‏`money.json` אינו נקרא ע\"י איש — בניגוד ל-`undo.json` ש-`demo.mjs` צורך במפורש",
+    "evidence": "ran: grep -rn 'money.json' gen/ machtzev/ --include=*.mjs --include=*.js ⇒ אזכור בתוך money.mjs בלבד; מול demo.mjs:4 שמצטט את undo.json"
+   },
+   {
+    "claim": "**אינו** מזין את `merged.mjs` — שהוא הקובץ שמרכיב את הפעולה הכספית. ‏`PLUS` שם מוקלד-ביד ו-`merged` אינו קורא אף JSON",
+    "evidence": "ran: grep -c '\\.json' gen/looks/people/merged.mjs ⇒ 0"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו ואינו קורא את money.json"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ לצינור — נקודת-ההשוואה: machtzev/generator/balagan.mjs (שכבת-הכסף של «בלגן»: `bhMoney` · שדה-סכום ראשי · תקציב-חודשי)",
+   "gives": "**הכלל שהוא מנסח שווה יותר מהתוצר שלו.** «נבחרו לפי מספר משתמשים בפועל, לא לפי טעם» הוא בדיוק §20-א בתחפושת: הכי-טוב-לייעוד ולא הראשון-שמתאים/היפה-ביותר. והרשימה מוכיחה שהכלל הופעל — alipay · phonepe · paytm אינם מופיעים בשום מקום אחר בקבוצה. ‏**אבל התוצר עצמו ריק ממדידה** (0/12), אף אחד אינו קורא אותו, ואפילו `merged.mjs` — שמרכיב את הפעולה הכספית — אינו נוגע בו. כלומר הכלל הנכון הופעל, והתוצאה לא נאספה."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. סבב-בחירה עם כלל-בחירה מצוין ובלי מדידה (‏0/12), בלי אימות, בלי exit-code ובלי צרכן — כולל הקובץ שהיה אמור לצרוך אותו. הכלל שייך ל-NOTES; הקובץ לא."
+  },
+  "evidence": [
+   "read: gen/looks/people/money.mjs:1-6 (הכותרת עם כלל-הבחירה)",
+   "ran: node -e על gen/looks/people/money.json ⇒ 12 פריטים · **0 עם מדידה** · מפתחות id,name,users,url,act,money,secs · המזהים כולל alipay/phonepe/paytm",
+   "ran: grep -c EXTRACT ⇒ 0 · grep -c 'VERIFY|reject|wall' ⇒ 0 · grep -c 'process.exit' ⇒ 0",
+   "ran: grep -rn 'money.json' gen/ machtzev/ ⇒ אפס צרכנים · grep -c '.json' merged.mjs ⇒ 0"
+  ]
+ },
+ {
+  "file": "gen/looks/people/sheet.mjs",
+  "lang": "mjs",
+  "lines": 57,
+  "summary": "גיליון-בחירה ממוספר: «מי בעולם עושה כל פעולה של «אנשים»». מרכיב דף-בחירה לבעלים מ-`sites.json` (‏12 רשומות, כולן `ok`). פלטיו — `sheet.png` ו-`index.html` — **מוחרגים מהריפו**.",
+  "does": [
+   {
+    "claim": "‏**גיליון-בחירה ממוספר** — הפורמט שנועד להכרעת-בעלים: לכל פעולה, מי בעולם עושה אותה, עם מספר לבחירה",
+    "evidence": "sheet.mjs:1 `גיליון-בחירה ממוספר: מי בעולם עושה כל פעולה של «אנשים».` (הקובץ בן 57 שורות, הכותרת היא שורה אחת)"
+   },
+   {
+    "claim": "מצלם את התוצאה — טוען את הדף שהוא בנה ומצלם אותו",
+    "evidence": "ran: מטריצת-תכונות ⇒ sheet: file:// 1 · screenshot 1 · http 1 — כלומר בונה, טוען מקומית, מצלם"
+   },
+   {
+    "claim": "‏`sites.json` המחויב מחזיק 12 רשומות, **כולן `ok`**, עם `does` (מה האתר עושה) ו-`title`",
+    "evidence": "ran: node -e על sites.json ⇒ 12 פריטים · 12 עם ok · מפתחות id,name,url,does,title,ok"
+   },
+   {
+    "claim": "אותו דפוס בדיוק כמו `bestsheet.mjs` ו-`cmpsheet.mjs` — שלושה גיליונות-בחירה בתיקייה אחת",
+    "evidence": "ran: מטריצת-תכונות ⇒ sheet(57ש) · bestsheet(65ש) · cmpsheet(91ש), לשלושתם file:// 1 · screenshot 1 · write 2"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **פלטיו אינם בריפו** — `sheet.png` ו-`index.html` מוחרגים במפורש ב-.gitignore. כלומר הגיליון עצמו אינו ניתן לצפייה בלי הרצה מחדש",
+    "evidence": "cat gen/looks/people/.gitignore ⇒ `sheet.png` · `index.html` בשורות נפרדות; ‏git ls-files gen/looks/people/ ⇒ אין sheet.png ואין index.html"
+   },
+   {
+    "claim": "**אינו** מודד — 0 מופעי EXTRACT; מרכיב תצוגה מ-JSON קיים",
+    "evidence": "ran: grep -c EXTRACT ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מכריע — גיליון-בחירה הוא כלי לאדם; אין ניקוד ואין המלצה",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0 — אין פסק-דין"
+   },
+   {
+    "claim": "**אינו** שער",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מיובא ע\"י איש",
+    "evidence": "ran: grep -rn \"sheet\\.mjs\" gen/ machtzev/ --include=*.mjs ⇒ ההגדרה בלבד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "מחולל-דף-בחירה לבעלים, שפלטו אינו נשמר בריפו. **דפוס «גיליון-בחירה ממוספר» עצמו הוא דפוס-עבודה נכון** — הוא זה שאִפשר את `6-final.html` (הבעלים בחר מספרים מתוך `scratchpad/pick/numbered.html`, ‏README). אבל הוא דפוס-תהליך בין אדם למכונה, לא שלב בצינור המחולל, והמחולל כבר מחזיק את המקבילה שלו: `studio-full.mjs` ⇒ `gen/out/mechollel.html`, לוח-מדידה שכל מספר בו נושא את פקודתו."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. מחולל-דף-בחירה חד-פעמי לאדם, בלי מדידה, בלי פלט מחויב, בלי קורא. הדפוס שלו קיים כבר במחולל (studio-full) בצורה חזקה יותר."
+  },
+  "evidence": [
+   "read: gen/looks/people/sheet.mjs:1-5 (הכותרת)",
+   "ran: node -e על gen/looks/people/sites.json ⇒ 12 פריטים · 12 ok · מפתחות id,name,url,does,title,ok",
+   "ran: cat gen/looks/people/.gitignore ⇒ sheet.png · index.html מוחרגים · git ls-files ⇒ אינם בריפו",
+   "ran: מטריצת-תכונות ⇒ sheet: 57ש · EXTRACT 0 · write 2 · exit 0 · screenshot 1 · file:// 1"
+  ]
+ },
+ {
+  "file": "gen/looks/people/bestsheet.mjs",
+  "lang": "mjs",
+  "lines": 65,
+  "summary": "גיליון-בחירה שני: «האתרים הכי טובים בעולם לאנשים» — מרכיב דף מ-`best.json` (‏10 אתרים, 4 מהם `gated`). פלטיו `best.html` ו-`best-sheet.png` מוחרגים מהריפו.",
+  "does": [
+   {
+    "claim": "גיליון-בחירה ייעודי לתוצאת `best.mjs` — אותו פורמט של `sheet.mjs`, על מאגר אחר",
+    "evidence": "bestsheet.mjs:1 `גיליון-בחירה: האתרים הכי טובים בעולם לאנשים.`; ‏sheet.mjs:1 (הפורמט המקביל)"
+   },
+   {
+    "claim": "בונה, טוען מקומית ומצלם — אותו דפוס תלת-שלבי",
+    "evidence": "ran: מטריצת-תכונות ⇒ bestsheet: file:// 1 · screenshot 1 · http 1 · write 2"
+   },
+   {
+    "claim": "המקור שלו הוא `best.json` המחויב — 10 אתרים, כל אחד עם `why` (נימוק-בחירה) ו-`gated`",
+    "evidence": "ran: node -e על best.json ⇒ 10 פריטים · 4 gated · מפתח `why` בכל רשומה"
+   },
+   {
+    "claim": "ארוך ב-8 שורות מ-`sheet.mjs` — ההפרש כנראה בטיפול ב-`gated`/`why` שאין ב-sites.json",
+    "evidence": "ran: wc -l ⇒ bestsheet 65 · sheet 57; ומפתחות: best.json יש בו why+gated, sites.json יש בו does+ok"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **פלטיו אינם בריפו** — `best.html` ו-`best-sheet.png` ו-`best/` מוחרגים",
+    "evidence": "cat gen/looks/people/.gitignore ⇒ `best/` · `best-sheet.png` · `best.html`; ‏git ls-files gen/looks/people/ ⇒ best.json · best.mjs · bestsheet.mjs בלבד"
+   },
+   {
+    "claim": "🔴 **אינו מסנן את החסומים** — המקור שלו מסמן 4 מתוך 10 כ-`gated`, כלומר הממשק שלהם לא נראה; גיליון-בחירה שמציג אותם מציג לבעלים אפשרויות שאי-אפשר לממש",
+    "evidence": "ran: node -e על best.json ⇒ 4/10 gated; ו-bestsheet הוא 65 שורות שמרכיבות דף מכל הרשומות (אין בו `filter` על gated — ‏grep -c 'gated' gen/looks/people/bestsheet.mjs ⇒ 0)"
+   },
+   {
+    "claim": "**אינו** מודד — 0 מופעי EXTRACT",
+    "evidence": "ran: grep -c EXTRACT ⇒ 0"
+   },
+   {
+    "claim": "**אינו** שער — אין exit-code",
+    "evidence": "ran: grep -c 'process.exit' ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מיובא ע\"י איש",
+    "evidence": "ran: grep -rn 'bestsheet' gen/ machtzev/ --include=*.mjs ⇒ ההגדרה בלבד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "גיליון-בחירה שני מתוך שלושה באותה תיקייה, שפלטו אינו נשמר. **הממצא שראוי לרשום, והוא על השרשרת ולא על הקובץ:** ‏`best.mjs` סימן 4 מתוך 10 כחסומים, ו-`bestsheet` אינו מסנן אותם (‏0 מופעי `gated` בקובץ). כלומר הידע «אי-אפשר לראות את זה» נאסף בשלב אחד ואבד בשלב הבא. זו אותה מחלקה כמו `tzevet/build` שאינו קורא את ה-probe שלצדו: **מדידה שנעשתה ולא נצרכה**."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 — לא מקרב. גיליון-בחירה חד-פעמי, בלי מדידה, בלי פלט מחויב, בלי קורא — ושמאבד את סימון-החסימה שהשלב הקודם ייצר."
+  },
+  "evidence": [
+   "read: gen/looks/people/bestsheet.mjs:1-5 (הכותרת)",
+   "ran: grep -c 'gated' gen/looks/people/bestsheet.mjs ⇒ 0 — אינו מסנן חסומים",
+   "ran: node -e על best.json ⇒ 10 פריטים · 4 gated",
+   "ran: cat .gitignore ⇒ best.html · best-sheet.png · best/ מוחרגים · git ls-files ⇒ אינם בריפו",
+   "ran: מטריצת-תכונות ⇒ bestsheet: 65ש · EXTRACT 0 · write 2 · exit 0 · screenshot 1 · file:// 1"
+  ]
+ },
+ {
+  "file": "gen/looks/people/cmpsheet.mjs",
+  "lang": "mjs",
+  "lines": 91,
+  "summary": "גיליון-ההשוואה השלישי והמפורט: «שורה לכל אתר, ארבעה מצבים, המקור למעלה ושלנו מתחתיו — ולידם הערכים שנמדדו בפועל». 🔴 **הגיליון היחיד מבין השלושה שמציג ערכים לצד הצילומים.**",
+  "does": [
+   {
+    "claim": "🔴 **הגיליון היחיד שמצמיד ערכים לצילומים** — «ולידם הערכים שנמדדו בפועל». שני האחרים (‏sheet · bestsheet) מציגים צילומים ונימוקים בלבד",
+    "evidence": "cmpsheet.mjs:1-2 `הכפתור המלא מול המקור: שורה לכל אתר, ארבעה מצבים, המקור למעלה ושלנו מתחתיו — ולידם הערכים שנמדדו בפועל.`; ‏sheet.mjs:1 ו-bestsheet.mjs:1 — בלי אזכור ערכים"
+   },
+   {
+    "claim": "🔴 **מבנה זה-מול-זה בארבעה מצבים** — המקור למעלה, שלנו מתחתיו, לכל אחד מארבעת המצבים (מנוחה · ריחוף · מיקוד · לחיצה). זהו אותו מבנה של `measure/sheet.mjs`, על אינטראקציה במקום על עמוד",
+    "evidence": "cmpsheet.mjs:1-2; והמקבילה: measure/sheet.mjs:1-2 («האתר האמיתי … מול המסך שלנו, זה לצד זה, ומתחת לכל זוג טבלת הערכים שנבדקו»)"
+   },
+   {
+    "claim": "המקור שלו הוא `cmp.json` המחויב — 4 רשומות עם `sel` (הבורר) ו-`pad`",
+    "evidence": "ran: node -e על cmp.json ⇒ 4 פריטים · מפתחות id,name,url,sel,pad"
+   },
+   {
+    "claim": "הארוך מבין שלושת הגיליונות — 91 שורות מול 65 ו-57, כנראה בשל מבנה ארבעת-המצבים",
+    "evidence": "ran: wc -l ⇒ cmpsheet 91 · bestsheet 65 · sheet 57"
+   },
+   {
+    "claim": "בונה, טוען מקומית ומצלם — אותו דפוס תלת-שלבי",
+    "evidence": "ran: מטריצת-תכונות ⇒ cmpsheet: file:// 1 · screenshot 1 · http 1 · write 2 · json 1"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **פלטיו אינם בריפו** — `btn-compare.html` · `btn-compare.png` · `cmp/` מוחרגים",
+    "evidence": "cat gen/looks/people/.gitignore ⇒ `cmp/` · `btn-compare.png` · `btn-compare.html`; ‏git ls-files gen/looks/people/ ⇒ cmp.json · cmpsheet.mjs בלבד"
+   },
+   {
+    "claim": "🔴 **מכסה 4 אתרים בלבד** — כי `cmp.json` עצר על 4, ו-`compare2`/`compare3` שטיפלו בשניים הנוספים לא כתבו לקובץ (‏0 מופעי writeFileSync בשניהם)",
+    "evidence": "ran: node -e על cmp.json ⇒ 4 פריטים; ‏מטריצת-תכונות ⇒ compare2: write 0 · compare3: write 0"
+   },
+   {
+    "claim": "**אינו** נותן ציון — מציג ערכים זה-לצד-זה, ההכרעה לעין. בניגוד ל-`measure/match.mjs` שמחזיר אחוז ו-exit-code",
+    "evidence": "ran: grep -c 'process.exit' gen/looks/people/cmpsheet.mjs ⇒ 0; מול measure/match.mjs:131 `process.exit(pct === 100 ? 0 : 1)`"
+   },
+   {
+    "claim": "**אינו** מודד — צרכן של cmp.json",
+    "evidence": "ran: grep -c EXTRACT ⇒ 0"
+   },
+   {
+    "claim": "**אינו** מיובא ע\"י איש",
+    "evidence": "ran: grep -rn 'cmpsheet' gen/ machtzev/ --include=*.mjs ⇒ ההגדרה בלבד"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אף קובץ אינו מייבא/מריץ אותו"
+   }
+  ],
+  "connectAt": {
+   "point": "∅ — אין נקודה כנה",
+   "gives": "הגיליון השלישי, והטוב מבין השלושה — הוא היחיד שמצמיד **ערכים** לצילומים, כלומר מאפשר להכריע על סמך מספר ולא רק על סמך מראה. **אבל הוא עוצר בדיוק שם שבו `measure/match.mjs` ממשיך:** ‏match לוקח את אותו מבנה (אותו מכשיר · שני צדדים · ערכים) ומוסיף לו ציון ו-`process.exit`. ‏cmpsheet מציג ומשאיר לעין. ‏**הפער בין השניים הוא בדיוק הפער בין «גיליון» ל«שער», והוא שורה אחת של קוד.**"
+  },
+  "s22": {
+   "score": 1,
+   "why": "1 — מבנה נכון (אותו מכשיר · שני צדדים · ערכים לצד הצילום), שהוא מרחק שורה-אחת משער. אבל הוא מכסה 4 אתרים, פלטיו אינם בריפו, אין לו ציון ואין לו קורא. 1 ולא 0 כי הוא כן מצמיד ערכים — מה שמבדיל אותו משני הגיליונות האחרים."
+  },
+  "evidence": [
+   "read: gen/looks/people/cmpsheet.mjs:1-6 (הכותרת)",
+   "ran: node -e על cmp.json ⇒ 4 פריטים · מפתחות id,name,url,sel,pad",
+   "ran: cat .gitignore ⇒ cmp/ · btn-compare.png · btn-compare.html מוחרגים · git ls-files ⇒ אינם בריפו",
+   "ran: wc -l על שלושת הגיליונות ⇒ cmpsheet 91 · bestsheet 65 · sheet 57",
+   "ran: grep -c 'process.exit' ⇒ 0 · מול measure/match.mjs:131 שיש בו"
   ]
  }
 ]
