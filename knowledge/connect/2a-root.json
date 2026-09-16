@@ -1115,5 +1115,470 @@
       "ran: grep -n \"const DIRS\" machtzev/data-purity-check.mjs ⇒ שורה 12: ['dart-maor','dart','atoms'] — מאשר ש-dart-gen-bs אינו בהיקף",
       "ran: grep -rn 'data-purity-check.mjs' ⇒ police.mjs:119 · carve/carve-land.mjs:274 · chisel.mjs:46 · chisel-all.mjs:85"
     ]
+  },
+  {
+    "file": "machtzev/deep-purity-scan.mjs",
+    "lang": "mjs",
+    "lines": 195,
+    "does": [
+      {
+        "claim": "מחלקה א׳ — טוהר: סורק אטומי-מנגנון ב-new/atoms ו-new/boxes ב-AST של TypeScript ומסווג ל-4 קטגוריות משוקללות: heb(×4) · table(×3) · domstr(×2) · magic(×1)",
+        "evidence": "machtzev/deep-purity-scan.mjs:15 (DIRS) · 40-97 (הסריקה) · 95 (הניקוד)"
+      },
+      {
+        "claim": "«צורת-דאטה טהורה» נבדקת על **שלד-הקוד** אחרי מיסוך תוכן-מחרוזות, כדי ש-'for'/'if' בתוך ערך לא ייחשבו זרימת-בקרה",
+        "evidence": "machtzev/deep-purity-scan.mjs:19-26 (‏skel בשורה 21)"
+      },
+      {
+        "claim": "פטור מוצהר בחלון של 3 שורות למי שמסומן «חוק-6» / «פרוטוקול-חיצוני» / «קבוע-מתמטי», והפטורים נספרים (exempt6)",
+        "evidence": "machtzev/deep-purity-scan.mjs:53-57"
+      },
+      {
+        "claim": "מחריג ליטרל-ריק {}/[] מקטגוריית-טבלה — «אפס-דאטה, לא טבלה»",
+        "evidence": "machtzev/deep-purity-scan.mjs:76"
+      },
+      {
+        "claim": "משתמש ב-getText ולא ב-n.text למספרים, במפורש כדי לא לפספס hex (‏n.text מנורמל לעשרוני)",
+        "evidence": "machtzev/deep-purity-scan.mjs:85 + ההערה באותה שורה"
+      },
+      {
+        "claim": "מחלקה ב׳ — **נכונות** (הכרעת-בעלים 14.9 · G61): 6 גלאים — בליעה-שקטה (a.x||b.x) · קבוע-קסם בהשוואה · רצף-מונה seq++ · כסף-בצפים · תאריך-UTC · JSON.parse לא-מוגן",
+        "evidence": "machtzev/deep-purity-scan.mjs:107-131 (deepFindings)"
+      },
+      {
+        "claim": "רק sev=3 חוסם; sev 1-2 מדווחים בלבד — והחסימה קודמת לבדיקת-הטוהר בסדר-הפסק",
+        "evidence": "machtzev/deep-purity-scan.mjs:143 (corrCrit) · 158-164 (freshC לפני fresh בשורה 165)"
+      },
+      {
+        "claim": "סריקת-הנכונות רחבה מסריקת-הטוהר וכוללת גם Dart — «הבליעה נסעה עם הפורט»",
+        "evidence": "machtzev/deep-purity-scan.mjs:132-133 — CORR_DIRS = ['new/atoms','new/boxes','new/dart-maor','new/dart']"
+      },
+      {
+        "claim": "DEEP_CAL מחריג 16 קבועי-לוח מגלאי-קבוע-הקסם, כי «בלעדיהם השער צועק זאב»",
+        "evidence": "machtzev/deep-purity-scan.mjs:103-106 + 120"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**לא סורק את פלט-המחולל — בשום מחלקה.** לא DIRS ולא CORR_DIRS כוללים new/dart-gen-bs, שבו 577 קובצי-Dart מחוללים",
+        "evidence": "machtzev/deep-purity-scan.mjs:15 ו-133; ran: ls new/dart-gen-bs/*.dart | wc -l ⇒ 577"
+      },
+      {
+        "claim": "שני מתוך ששת גלאי-הנכונות כתובים בניב-JS ולכן מתים על תיקיות-ה-Dart שכן בהיקפם: JSON.parse ו-תאריך-UTC",
+        "evidence": "machtzev/deep-purity-scan.mjs:126-129; ran: grep -rlE 'new Date\\(\\)\\.toISOString\\(\\)\\.slice\\(0, *10\\)' new/atoms new/boxes new/dart-maor new/dart ⇒ 0 קבצים · grep -rl 'JSON\\.parse(' new/dart-gen-bs ⇒ 0, בעוד ש-grep -rl 'jsonDecode(' new/dart-maor ⇒ 4"
+      },
+      {
+        "claim": "**אינו מוכיח באג — הוא מסמן חשד.** בדקתי את הגלאי הרועש-ביותר ומצאתי שהאנלוגיה ל-Dart אינה תקפה: ‏`DateTime.now().toIso8601String()` ב-Dart הוא **מקומי** (בניגוד ל-toISOString של JS), ואין אף toUtc() בפלט — כלומר 66 ההתאמות ל-substring(0,10) ב-dart-gen-bs **אינן** באג-ה-UTC",
+        "evidence": "ran: grep -rhoE '[A-Za-z.()]*\\.?toIso8601String\\(\\)\\.substring\\(0, *10\\)' new/dart-gen-bs ⇒ 66× 'd.…' + 33× 'DateTime.now().…' · grep -rc 'toUtc()' new/dart-gen-bs ⇒ אפס קבצים"
+      },
+      {
+        "claim": "לא מריץ כלום ולא מקמפל — הכל ניתוח סטטי (AST לטוהר, regex לנכונות)",
+        "evidence": "machtzev/deep-purity-scan.mjs:107-131 — matchAll/match בלבד; אין spawn בקובץ"
+      },
+      {
+        "claim": "לא כותב ב---gate; הדוחות נכתבים רק ב---report",
+        "evidence": "machtzev/deep-purity-scan.mjs:155-173 מול 174-193"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/police.mjs:120",
+        "how": "gate('deeppurity','deep-purity-scan.mjs',['--gate']) — מורץ-בשם כשער"
+      },
+      {
+        "who": "machtzev/one.mjs:175",
+        "how": "מורץ-בשם ב---gate בתוך המנוע-האחד"
+      },
+      {
+        "who": "machtzev/chisel.mjs:46 · machtzev/chisel-all.mjs:85",
+        "how": "מורץ-בשם במסנן-השערים של החציבה"
+      },
+      {
+        "who": "machtzev/lib-ts.mjs:28",
+        "how": "ייבוא { requireTs }"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/regen.mjs:22-23 — אחרי balagan.mjs/server.mjs, כשלב-אימות על new/dart-gen-bs; ובפועל: deepFindings (שורות 107-131) מופעל על פלט-המחולל",
+      "gives": "זו נקודת-החיבור הכי-חזקה שמצאתי בקבוצה, ומטעם-§22 ישיר. §22 קובע כרצפת-קבלה «אפליקציה+אתר עובדים 100%, אפס-באגים» — ו**גלאי-הנכונות הוא המנוע היחיד בריפו ששואל 'האם הקוד נכון' ולא רק 'האם הוא נקי'**. הוא כבר יודע לקרוא Dart (CORR_DIRS כולל שתי תיקיות-Dart), כלומר אין כאן מנוע חדש — יש היקף. 4 מתוך 6 הגלאים ניב-ניטרליים ויעבדו על Dart מחולל כמו-שהם (בליעה-שקטה · קבוע-קסם · רצף-מונה · כסף-בצפים), ו-2 דורשים ניב-Dart. מה שזה נותן: הרכבה של אטומים יכולה לייצר פגם שאף אטום בודד לא נשא, וזה בדיוק העיוור-נקודה שבין «כל אטום מוכח» ל«האפליקציה עובדת». **הסתייגות כנה: התשואה לא נמדדה.** בדקתי את הגלאי הרועש והוא הוביל לאפס-באגים (ראה doesNot); מי שיחבר צריך למדוד לפני שיכריז."
+    },
+    "s22": {
+      "score": 3,
+      "why": "3 — ישירות על נתיב משפט⇒אפליקציה, בקצה שלו. רצפת-הקבלה של §22 אינה «הורכב» אלא «עובד, אפס-באגים», וזהו המנוע היחיד שמודד את ההבדל. הציון ניתן על **המיקום**, לא על תשואה מוכחת: 577 קובצי-הפלט אינם נסרקים היום ע\"י שום גלאי-נכונות, וזה פער-היקף אמיתי ולא סברה."
+    },
+    "evidence": [
+      "read: machtzev/deep-purity-scan.mjs:1-194 (כל הקובץ, בשתי קריאות)",
+      "ran: node machtzev/police.mjs --fast ⇒ '✓ שער-טוהר-עומק: אפס זיהום-חדש · חוב-מנוהל 0/0' + '✓ שער-נכונות: אפס סיכון-קריטי חדש · חוב 4/4 · ממצאים נוספים 205 (דיווח)' + 'ran deeppurity 911ms'",
+      "ran: grep -n '^const DIRS\\|^const CORR_DIRS' machtzev/deep-purity-scan.mjs ⇒ 15 · 133 (אף אחד אינו כולל dart-gen-bs)",
+      "ran: ls new/dart-gen-bs/*.dart | wc -l ⇒ 577",
+      "ran: grep -rlE 'new Date\\(\\)\\.toISOString\\(\\)\\.slice\\(0, *10\\)' new/atoms new/boxes new/dart-maor new/dart | wc -l ⇒ 0 (הגלאי הקריטי מת בניב)",
+      "ran: grep -rc 'toUtc()' new/dart-gen-bs ⇒ אפס קבצים (ולכן 66 ההתאמות ב-Dart אינן באג)"
+    ]
+  },
+  {
+    "file": "machtzev/ds-critic.mjs",
+    "lang": "mjs",
+    "lines": 42,
+    "does": [
+      {
+        "claim": "**סורק את פלט-המחולל** — SCAN = R.outDir() = new/dart-gen-bs (או GEN_OUT מהסביבה); זהו אחד המעטים בקבוצה שמסתכל על מה שהמחולל ייצר",
+        "evidence": "machtzev/ds-critic.mjs:12 + machtzev/root.mjs:14 — outDir() = GEN_OUT ?? new/dart-gen-bs"
+      },
+      {
+        "claim": "שלושה כללי-ביקורת כ-regex פר-שורה: inlineHex (‏Color(0x…)) · hardShadow (‏BoxShadow() ) · smallText (fontSize ≤10)",
+        "evidence": "machtzev/ds-critic.mjs:19-23"
+      },
+      {
+        "claim": "מסיר הערות-שורה לפני ההתאמה, כדי שדוגמה בהערה לא תיספר כחוב",
+        "evidence": "machtzev/ds-critic.mjs:27"
+      },
+      {
+        "claim": "סופר **מופעים** ולא קבצים (m.length לכל שורה)",
+        "evidence": "machtzev/ds-critic.mjs:28"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**אינו fail-closed:** אם ה-baseline חסר או שבור, base=null והתנאי `GATE && base` לא מתקיים ⇒ **אפס בדיקה**, ואז שורה 38 כותבת baseline חדש מהמצב הנוכחי. כל חוב-עיצוב קיים היה מתקבע כ«תקין» במחיקת-קובץ אחת. זו התנהגות הפוכה מ-atom-count (:13) ומ-coverage-gate (:51) שמפילים על baseline חסר",
+        "evidence": "machtzev/ds-critic.mjs:33-38"
+      },
+      {
+        "claim": "**כותב baseline בכל ריצה לא-אדומה, גם בלי --gate** — בניגוד לעיקרון-5 («שער לא כותב») ש-contract-check:71 · coverage-gate:55-57 · box-proofs-check:49-50 אימצו במפורש אחרי R2-5.6",
+        "evidence": "machtzev/ds-critic.mjs:38 — `if (!bad) fs.writeFileSync(BASE,…)` בלי תנאי GATE"
+      },
+      {
+        "claim": "לא בודק את מערכת-העיצוב עצמה — new/dart-ui-bs/ds אינו ב-SCAN, ולכן `Color(0xFF6366F1)` שמחולל ds-graphics לתוך ds_graphics.dart לא נספר כ-inlineHex",
+        "evidence": "machtzev/ds-critic.mjs:12 (SCAN=outDir) מול machtzev/ds-graphics.mjs:23 (ההקס הקשיח)"
+      },
+      {
+        "claim": "לא מודד ניגודיות-WCAG · touch≥44 · RTL · היררכיה — למרות ש-DESIGN-ENGINE-PLAN-100.md:88 מתאר אותו ככזה. הקוד מכיל 3 כללים בלבד",
+        "evidence": "machtzev/ds-critic.mjs:19-23 מול knowledge/DESIGN-ENGINE-PLAN-100.md:88 — דוגמה נוספת לכך שתיעוד אינו ראיה"
+      },
+      {
+        "claim": "אינו שער-משטרה — אין לו רשומה ב-police.mjs ולא ב-gates.tsv",
+        "evidence": "ran: grep -n 'ds-critic' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/one.mjs:161",
+        "how": "stage('שער-איכות-העיצוב (ds-critic)', … ['--gate'], {optional:true}) — מורץ-בשם, אופציונלי"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/regen.mjs:24 — כשלב-אימות אחרון בצינור (אחרי server.mjs), במקום one.mjs:161",
+      "gives": "זהו בדיוק «בדיקה שרצה אחרי-הבנייה ויכלה לרוץ בזמן-הבנייה» שהמשימה שואלת עליה — והתשובה כאן חיובית. הוא כבר מודד את הפלט הנכון (dart-gen-bs), אבל הוא יושב ב-one.mjs ולא ב-REGEN, כלומר `ship`/`--genmax` יכולים לייצר אפליקציה **בלי** שאיש מדד את חוב-העיצוב שלה. העברה ל-REGEN הופכת אותו משער-אחרי-הכל לתנאי-קבלה של הבנייה. **לפני ההעברה יש לתקן שני דברים שמדדתי:** ה-fail-open על baseline חסר, והכתיבה-העצמית ללא --gate — אחרת ההעברה רק תקבע את החוב במקום למדוד אותו."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — מקרב ממשית. §22 דורש אפליקציה שעובדת 100%, וחוב-עיצוב (הקס-קשיח שעוקף טוקנים) הוא בדיוק מה ששובר את «העור נבחר ע\"י המנוע». הוא כבר במקום הנכון (הפלט) ובזמן הלא-נכון (אחרי, ואופציונלי). לא 3, כי שלושת הכללים שלו צרים והחוב הנמדד היום הוא 0/0/0."
+    },
+    "evidence": [
+      "read: machtzev/ds-critic.mjs:1-41 (כל הקובץ)",
+      "ran: cat machtzev/ds-critic-baseline.json ⇒ {inlineHex:0, hardShadow:0, smallText:0}",
+      "ran: grep -n 'ds-critic' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט (אינו שער-משטרה)",
+      "ran: grep -n 'outDir' machtzev/root.mjs ⇒ שורה 14 — GEN_OUT ?? new/dart-gen-bs",
+      "ran: ls new/dart-gen-bs/*.dart | wc -l ⇒ 577 קבצים בהיקף-הסריקה"
+    ]
+  },
+  {
+    "file": "machtzev/ds-graphics.mjs",
+    "lang": "mjs",
+    "lines": 94,
+    "does": [
+      {
+        "claim": "מחולל ds_graphics.dart — 5 CustomPainter דטרמיניסטיים (אורורה/מש/גלים/רשת-נקודות/זוהר) מתוך מפרט-דאטה בקובץ",
+        "evidence": "machtzev/ds-graphics.mjs:12-79 (bgs) · 87-93 (הכתיבה)"
+      },
+      {
+        "claim": "הרקעים מושכים צבע מ-DsGradient/DsTokens (טוקנים) ולא מצבע חופשי",
+        "evidence": "machtzev/ds-graphics.mjs:15,22 — DsGradient.aurora · DsTokens.bg"
+      },
+      {
+        "claim": "מצב --check משווה ביט-לביט מול הקובץ הקיים ויוצא 1 אם אינו טרי",
+        "evidence": "machtzev/ds-graphics.mjs:88-91"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**הפלט שלו מת: אפס מייבאים.** ‏ds_graphics.dart אינו מיובא ע\"י שום קובץ ב-new/",
+        "evidence": "ran: grep -rl 'ds_graphics\\.dart' new/ (בלי הקובץ עצמו) ⇒ 0"
+      },
+      {
+        "claim": "אינו נקי בעצמו — MeshBg מחולל `Color(0xFF6366F1)` קשיח לתוך ה-Dart, בדיוק סוג-ההפרה ש-ds-critic קורא לה inlineHex",
+        "evidence": "machtzev/ds-graphics.mjs:23"
+      },
+      {
+        "claim": "אין לו שער — אף אחד לא מריץ --check",
+        "evidence": "ran: grep -n 'ds-graphics' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט"
+      },
+      {
+        "claim": "אינו בצינור-המחולל — הוא רץ רק כשלב אופציונלי ב-one.mjs",
+        "evidence": "machtzev/one.mjs:132; ‏regen.mjs מריץ ds-forge (שורה 7) ולא אותו"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/one.mjs:132",
+        "how": "מורץ-בשם בלולאה של 5 מנועי-העיצוב, {optional:true}"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה. הפלט אינו נצרך ע\"י איש, ו-G12–G13 מצהירות ש-ds-forge החליף את שכבת-ה-DS («ספריית-forge … מחליפה את ה-DS ברכזת ובתוך המודולים»). לחבר לצינור מנוע שמייצר קובץ שאף אחד לא מייבא = להוסיף זמן-ריצה בלי פלט. זהו שריד-דור-קודם, לא שער."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. 5 רקעים יפים שאיש אינו מייבא. §22 מדבר על יכולת שמגיעה למסך; זו יכולת שנעצרת בקובץ."
+    },
+    "evidence": [
+      "read: machtzev/ds-graphics.mjs:1-30,80-93",
+      "ran: grep -rl 'ds_graphics\\.dart' new/ ⇒ רק new/dart-ui-bs/ds/ds_graphics.dart עצמו (0 מייבאים)",
+      "ran: node machtzev/ds-graphics.mjs --check ⇒ '✓ ds-graphics: טרי' (exit 0)",
+      "ran: grep -n 'ds-graphics' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט"
+    ]
+  },
+  {
+    "file": "machtzev/ds-motion.mjs",
+    "lang": "mjs",
+    "lines": 66,
+    "does": [
+      {
+        "claim": "מחולל ds_anim.dart — 5 עוטפי-מושן-כניסה דרך TweenAnimationBuilder (חד-שוט, בלי controller)",
+        "evidence": "machtzev/ds-motion.mjs:13-19 (presets) · 20-35 (התבנית) · 63"
+      },
+      {
+        "claim": "מחולל גם motion-map.json — מפת **כוונה⇒preset**, כולל מפתחות-עברית ('הופעה'⇒FadeInView · 'הירו'⇒RiseView), מיועדת מפורשות לאחזור ע\"י nl.mjs/render-ds",
+        "evidence": "machtzev/ds-motion.mjs:46-52 (‏ההערה בשורה 46) · 64"
+      },
+      {
+        "claim": "--check משווה ביט-לביט את **שני** הפלטים ויוצא 1 אם אחד אינו טרי",
+        "evidence": "machtzev/ds-motion.mjs:57-62"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**הפלט מת בשתי דרכים.** ‏ds_anim.dart: אפס מייבאים. ו-FadeInView/SlideUpView/RiseView מופיעים בכל new/ רק בשני מקומות — בקובץ שחולל אותם ובמפה שמצביעה עליהם",
+        "evidence": "ran: grep -rl 'ds_anim\\.dart' new/ (בלי הקובץ) ⇒ 0 · grep -rl 'FadeInView' new/ ⇒ new/dart-ui-bs/ds/motion-map.json + new/dart-ui-bs/ds/ds_anim.dart בלבד"
+      },
+      {
+        "claim": "motion-map.json — המפה שנבנתה «לאחזור ע\"י nl.mjs/render-ds» — אינה נקראת ע\"י אף מנוע",
+        "evidence": "ran: grep -rn 'motion-map' machtzev new --include=*.mjs --include=*.dart ⇒ אפס תוצאות מחוץ ל-ds-motion.mjs עצמו"
+      },
+      {
+        "claim": "אין לו שער — אף אחד לא מריץ --check",
+        "evidence": "ran: grep -n 'ds-motion' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/one.mjs:132",
+        "how": "מורץ-בשם בלולאת מנועי-העיצוב, {optional:true}"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ — אבל עם הערה שראוי להביא לבעלים",
+      "gives": "אין נקודה כנה **היום**, כי הפלט מנותק. אבל שווה לרשום מה נאבד: `motion-map.json` הוא בדיוק המבנה שהמחולל אוהב — כוונה-בעברית ⇒ אטום ('הופעה'⇒FadeInView), אותה צורה שבה עובד `auto-skin` (26 תפקידי-skin נבחרים ע\"י המנוע). כלומר כאן יש **תבנית נכונה עם צרכן שלא נבנה**. זו לא המלצה לחבר — זו הכרעת-בעלים: או שמחיים את המפה דרך הבורר, או שמצהירים על המנוע כשריד ומסירים. לא נגעתי."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב במצבו הנוכחי. הפלט אינו מגיע לשום מסך ולשום בורר. הציון הוא על המצב הנמדד, לא על הפוטנציאל של מפת-הכוונות."
+    },
+    "evidence": [
+      "read: machtzev/ds-motion.mjs:1-65 (כל הקובץ)",
+      "ran: grep -rl 'ds_anim\\.dart' new/ ⇒ 0 מייבאים",
+      "ran: grep -rl 'FadeInView' new/ ⇒ new/dart-ui-bs/ds/motion-map.json · new/dart-ui-bs/ds/ds_anim.dart (ותו לא)",
+      "ran: grep -rn 'motion-map' machtzev new --include=*.mjs --include=*.dart ⇒ אפס צרכנים",
+      "ran: node machtzev/ds-motion.mjs --check ⇒ '✓ ds-motion: טרי' (exit 0)"
+    ]
+  },
+  {
+    "file": "machtzev/ds-pure.mjs",
+    "lang": "mjs",
+    "lines": 135,
+    "does": [
+      {
+        "claim": "קורא את אטום-הזרע new/atoms/pure-look.mjs (PURE_LOOK) ומחולל דטרמיניסטית את ds_pure.dart — נייטרל · סמנטי · ערכות-אקצנט · fontSets · themeOf()",
+        "evidence": "machtzev/ds-pure.mjs:10 (הייבוא) · 28-29 · 120-123 · 133"
+      },
+      {
+        "claim": "ממיר צבע דטרמיניסטית: #RRGGBB ⇒ Color(0xFFrrggbb) · rgba() ⇒ Color(0xAArrggbb) עם אלפא מחושב — כלומר color-mix נפתר **בזמן-חילול**, בלי מיזוג-ריצה",
+        "evidence": "machtzev/ds-pure.mjs:15-22"
+      },
+      {
+        "claim": "«עור-העיצוב = פרמטר הפיך» — הנייטרל/סמנטי זורמים דרך חריץ ולא כקבוע קשיח",
+        "evidence": "machtzev/ds-pure.mjs:30 (ההערה) · 120 (fontSets כמפה)"
+      },
+      {
+        "claim": "--check משווה ביט-לביט מול הזרע ויוצא 1 אם ds_pure.dart אינו טרי",
+        "evidence": "machtzev/ds-pure.mjs:128-132"
+      },
+      {
+        "claim": "**זה היחיד מבין חמשת מנועי-העיצוב שהפלט שלו באמת נצרך: ‏ds_pure.dart מיובא ע\"י 39 קבצים ב-new/dart-gen-bs — כלומר האפליקציות המחוללות עצמן**",
+        "evidence": "ran: grep -rl 'ds_pure\\.dart' new/ | sed 's|/[^/]*$||' | sort | uniq -c ⇒ 39 new/dart-gen-bs · 2 new/dart-ui-bs/ds · 1 new/dart-ui-bs · 1 new/dart-ui-bs/auto"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "אינו בצינור-המחולל — REGEN מריץ את ds-forge (regen.mjs:7) ולא אותו; ds-pure רץ רק כשלב אופציונלי ב-one.mjs:132",
+        "evidence": "machtzev/generator/regen.mjs:6-24 — אין בו ds-pure; machtzev/one.mjs:132"
+      },
+      {
+        "claim": "אין שער שמריץ את ה---check שלו — טריות ds_pure.dart מול הזרע אינה נאכפת ע\"י המשטרה",
+        "evidence": "ran: grep -n 'ds-pure' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט"
+      },
+      {
+        "claim": "אינו מזריק זהות/סודות — הזרע הוא אטום-דאטה, והזהות מוזרקת בחיווט (חוק-6)",
+        "evidence": "machtzev/ds-pure.mjs:5"
+      },
+      {
+        "claim": "לא מחולל את אטומי-ה-forge — זה ds-forge.mjs, מנוע אחר שאינו ברשימה שלי",
+        "evidence": "machtzev/generator/regen.mjs:7 — ds-forge.mjs הוא ערך נפרד ב-REGEN"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/one.mjs:132",
+        "how": "מורץ-בשם בלולאת מנועי-העיצוב, {optional:true}"
+      },
+      {
+        "who": "machtzev/pure/PURE-ARCHITECTURE.md:48 · PURE-MAP.md:27 · SKIN-HANDOFF.md:15",
+        "how": "תיעוד — «המנוע: זרע → ds_pure.dart»"
+      }
+    ],
+    "connectAt": {
+      "point": "machtzev/generator/regen.mjs:7 — לצד ds-forge.mjs, בראש הצינור",
+      "gives": "נקודה כנה וממוקדת. `ds_pure.dart` הוא הקובץ שממנו **39 אפליקציות מחוללות** לוקחות את הצבע והערכה — כלומר הוא כבר על נתיב משפט⇒אפליקציה בפועל, אבל המנוע שמייצר אותו יושב מחוץ לצינור ובלי שער-טריות. התוצאה: `ship`/`--genmax` יכולים לבנות 39 אפליקציות מעור שאינו תואם את הזרע `pure-look.mjs`, ואיש לא יידע. היום הוא טרי (מדדתי, exit 0) — אבל זו טריות במקרה, לא טריות נאכפת. **וזה לא תיאורטי:** אחיו באותה לולאה, `ds-variants`, **כבר סטה** ואף אחד לא תפס. חיבור = שורה ב-REGEN (או שער-טריות אחד לחמישתם)."
+    },
+    "s22": {
+      "score": 2,
+      "why": "2 — מקרב ממשית. הוא כן נוגע בפלט-האמיתי (39 אפליקציות), וזה מבדיל אותו מארבעת אחיו שהפלט שלהם מת. לא 3, כי הוא אינו מוסיף יכולת-חדשה למחולל אלא מבטיח שהעור שכבר בשימוש נגזר מהזרע; הפער הוא אכיפה, לא תוכן."
+    },
+    "evidence": [
+      "read: machtzev/ds-pure.mjs:1-30,120-134",
+      "ran: node machtzev/ds-pure.mjs --check ⇒ '✓ ds-pure: ds_pure.dart טרי (תואם-זרע)' · exit=0",
+      "ran: grep -rl 'ds_pure\\.dart' new/ ⇒ 43 קבצים, מהם 39 ב-new/dart-gen-bs",
+      "ran: grep -rl 'DsPure\\b' new/dart-gen-bs/ | wc -l ⇒ 41",
+      "ran: grep -n 'ds-pure' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט (אין שער-טריות)"
+    ]
+  },
+  {
+    "file": "machtzev/ds-tokens.mjs",
+    "lang": "mjs",
+    "lines": 139,
+    "does": [
+      {
+        "claim": "קורא זרע קומפקטי (new/dart-ui-bs/ds/design-seed.json) ומרחיב אותו ל-7 מחלקות-טוקן ב-ds_scale.dart: DsType · DsSpace · DsRadii · DsElev · DsGradient · DsMotion · DsDark",
+        "evidence": "machtzev/ds-tokens.mjs:10 (הזרע) · 137-138 (הסיכום)"
+      },
+      {
+        "claim": "טיפוגרפיה נגזרת בנוסחה — בסיס × יחס^n, מעוגל לחצי-נקודה",
+        "evidence": "machtzev/ds-tokens.mjs:21-32"
+      },
+      {
+        "claim": "**רצפת-a11y אכופה בנוסחה עצמה: Math.max(11, …) — אי-אפשר לייצר גופן קטן מ-11 גם אם הזרע יבקש**",
+        "evidence": "machtzev/ds-tokens.mjs:23"
+      },
+      {
+        "claim": "מרווחים/רדיוסים נגזרים מרשת יחידה (gridUnit × [1,2,3,4,6,8,12])",
+        "evidence": "machtzev/ds-tokens.mjs:36-38"
+      },
+      {
+        "claim": "עזרי-הצבע טהורים ודטרמיניסטיים (hx/toHex/scaleRgb/mix) — הכהה נגזר מהבהיר בטרנספורם, לא נכתב ביד",
+        "evidence": "machtzev/ds-tokens.mjs:13-18"
+      },
+      {
+        "claim": "--check משווה ביט-לביט מול ds_scale.dart ויוצא 1 אם הזרע השתנה ולא חוללו-מחדש",
+        "evidence": "machtzev/ds-tokens.mjs:132-136"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "הפלט כמעט-מת: ds_scale.dart מיובא ע\"י 3 קבצים בלבד — ושלושתם הם הפלטים של אחיו (ds_graphics · ds_surface · ds_anim), שבעצמם אפס-מייבאים. כלומר הצרכן היחיד של הטוקנים הוא אשכול דורמנטי סגור",
+        "evidence": "ran: grep -rl 'ds_scale\\.dart' new/ ⇒ new/dart-ui-bs/ds/ds_graphics.dart · ds_surface.dart · ds_anim.dart"
+      },
+      {
+        "claim": "אין שער-טריות — --check אינו מורץ ע\"י המשטרה",
+        "evidence": "ran: grep -n 'ds-tokens' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט"
+      },
+      {
+        "claim": "אינו בצינור-המחולל — רק one.mjs:132",
+        "evidence": "machtzev/generator/regen.mjs:6-24 אינו כולל ds-tokens"
+      },
+      {
+        "claim": "אינו נקי לחלוטין בעצמו — DsElev פולט Color(0x33000000)/Color(0x1A000000) קשיחים לתוך ה-Dart",
+        "evidence": "machtzev/ds-tokens.mjs:125-126"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/one.mjs:132",
+        "how": "מורץ-בשם בלולאת מנועי-העיצוב, {optional:true}"
+      }
+    ],
+    "connectAt": {
+      "point": "∅",
+      "gives": "אין נקודה כנה. בניגוד ל-ds-pure (39 צרכנים ב-dart-gen-bs), הטוקנים של ds_scale.dart מגיעים רק לשלושת הקבצים הדורמנטיים של אחיו. לחבר ל-REGEN מנוע שמזין אשכול סגור אינו מקרב דבר. הערך היחיד ששווה להציל ממנו הוא **רצפת-a11y בנוסחה** (שורה 23) — הרעיון שהמנוע לא *בודק* גופן-קטן אלא *לא יכול לייצר* אותו; זה חזק יותר מכלל smallText של ds-critic, וראוי שיחול על עור-ה-forge שכן בשימוש. זו הכרעת-בעלים, לא חיווט."
+    },
+    "s22": {
+      "score": 1,
+      "why": "1 — מקרב רעיונית ולא בפועל. הנוסחה שלו (רצפת-a11y מובנית · הכהה נגזר מהבהיר) היא בדיוק הדפוס ש-§20 מבקש — נגזר-מהדאטה, אפס-יד. אבל הפלט בפועל אינו מגיע לאף אפליקציה מחוללת."
+    },
+    "evidence": [
+      "read: machtzev/ds-tokens.mjs:1-40,125-138",
+      "ran: node machtzev/ds-tokens.mjs --check ⇒ '✓ ds-tokens: ds_scale.dart טרי (תואם-זרע)' · exit=0",
+      "ran: grep -rl 'ds_scale\\.dart' new/ ⇒ 3 קבצים, כולם new/dart-ui-bs/ds/ (ds_graphics · ds_surface · ds_anim)",
+      "ran: grep -n 'ds-tokens' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט"
+    ]
+  },
+  {
+    "file": "machtzev/ds-variants.mjs",
+    "lang": "mjs",
+    "lines": 88,
+    "does": [
+      {
+        "claim": "מחולל ds_surface.dart — עוטפי-כרטיס פר-תא-מטריצה (מוגבה · מתאר · זכוכית · גרדיאנט), כשהעיצוב מגיע מטוקנים והווידג'ט עיוור",
+        "evidence": "machtzev/ds-variants.mjs:12-79 (variants) · 86"
+      },
+      {
+        "claim": "--check משווה ביט-לביט ויוצא 1 אם הקובץ אינו טרי",
+        "evidence": "machtzev/ds-variants.mjs:82-85"
+      }
+    ],
+    "doesNot": [
+      {
+        "claim": "**הפלט מת: אפס מייבאים ל-ds_surface.dart**",
+        "evidence": "ran: grep -rl 'ds_surface\\.dart' new/ (בלי הקובץ עצמו) ⇒ 0"
+      },
+      {
+        "claim": "**והפלט גם לא-טרי בפועל — וזה לא נתפס ע\"י איש.** ‏`node machtzev/ds-variants.mjs --check` יוצא 1 ומדפיס «ds_surface.dart אינו-טרי», כלומר הקובץ המחויב סטה מהמפרט שבמנוע. אין שער שמריץ את ה---check הזה, ולכן הסחף שקט",
+        "evidence": "ran: node machtzev/ds-variants.mjs --check ⇒ '🚨 ds_surface.dart אינו-טרי — הרץ node machtzev/ds-variants.mjs' · exit=1; ו-grep -n 'ds-variants' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט"
+      },
+      {
+        "claim": "הוא היחיד מבין 5 מנועי-העיצוב שה---check שלו אדום — ארבעת האחרים טריים",
+        "evidence": "ran: ds-pure --check exit=0 · ds-tokens --check ✓ · ds-motion --check ✓ · ds-graphics --check ✓ · ds-variants --check exit=1"
+      }
+    ],
+    "callers": [
+      {
+        "who": "machtzev/one.mjs:132",
+        "how": "מורץ-בשם בלולאת מנועי-העיצוב, {optional:true} — ובלי --check, כלומר ריצה שם הייתה **כותבת** ומעלימה את הסחף במקום לדווח עליו"
+      }
+    ],
+    "connectAt": {
+      "point": "∅ לחיבור; אבל יש כאן ממצא-שער שראוי לדווח",
+      "gives": "אין נקודה כנה לחיבור-למחולל — הפלט אינו נצרך (0 מייבאים) ו-ds-forge החליף את השכבה. הערך היחיד שמצאתי כאן אינו «איפה לחבר» אלא **מה נשבר**: קובץ-מחולל מחויב סטה ממחוללו, ואף שער לא יודע. התיקון הנכון אינו חיווט-למחולל אלא שער-טריות אחד שמריץ `--check` לחמשת מנועי-העיצוב — וגם זה רק אם הבעלים מחליט שהשכבה חיה ולא שריד. לא נגעתי ולא הרצתי כתיבה."
+    },
+    "s22": {
+      "score": 0,
+      "why": "0 — לא מקרב. פלט מנותק, ובנוסף סוטה. חיבור למחולל לא ייתן דבר; ההכרעה הנדרשת היא «שריד או חי», והיא של הבעלים."
+    },
+    "evidence": [
+      "read: machtzev/ds-variants.mjs:1-30,80-87",
+      "ran: node machtzev/ds-variants.mjs --check ⇒ 🚨 אינו-טרי · exit=1",
+      "ran: grep -rl 'ds_surface\\.dart' new/ ⇒ 0 מייבאים",
+      "ran: grep -n 'ds-variants' machtzev/police.mjs machtzev/gates.tsv ⇒ אפס פלט",
+      "ran: git status --porcelain אחרי כל ה---check ⇒ ריק (שום כתיבה)"
+    ]
   }
 ]
