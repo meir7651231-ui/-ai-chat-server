@@ -1921,5 +1921,299 @@
    "read: machtzev/census/engine-index.mjs:162-170 (importsOf)",
    "ran: node machtzev/census/engine-index.mjs machtzev/generator/tighten-loader.mjs ⇒ 0 מייבאים · נקרא-בשם: tighten-hook"
   ]
+ },
+ {
+  "file": "machtzev/purity/ast-purify.mjs",
+  "lang": "mjs",
+  "lines": 173,
+  "does": [
+   {
+    "claim": "מנהל מכונת-AST לדה-הרדקוד: מפעיל `ast_dehardcode.dart` (analyzer), מקבל מקור-משוכתב + terms, כותב קובץ-שמות, מחווט בדיקה+צרכנים, מאמת (analyze+test+proofs) ומחזיר-הכל-אם-נכשל.",
+    "evidence": "ast-purify.mjs:2-4 (הכותרת)"
+   },
+   {
+    "claim": "ממפה מדף ⇒ תיקיית-דאטה לשלושה מדפים.",
+    "evidence": "ast-purify.mjs:14 `const DATADIR = { 'dart':'dart-data', 'dart-maor':'dart-data-maor', 'atoms':'atoms-data' };`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **אינו יכול לרוץ בשום מקום — שני נתיבים קשיחים מצביעים לתיקיית-scratchpad של סשן אחר שמת.**",
+    "evidence": "ast-purify.mjs:11-12 `const AST = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/asttest';` · `const DART = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin';` — ran: `ls -d` על שניהם ⇒ `No such file or directory`. השוו ל-const-normalize.mjs:13 שפותר את Dart דרך env עם נפילה (`process.env.DART_SDK_BIN || '/home/user/flutter/bin/cache/dart-sdk/bin'`)."
+   },
+   {
+    "claim": "🔴 **ושורש-המדף שלו שגוי בעומק אחד** — הוא מצביע ל-`machtzev/new/`, שאינה קיימת.",
+    "evidence": "ast-purify.mjs:10 `const ROOT = new URL('../new/', import.meta.url).pathname;` — הקובץ יושב ב-`machtzev/purity/`, כך שזה נפתר ל-`machtzev/new/`. ran: `ls -d machtzev/new` ⇒ `No such file or directory`. **כל 7 אחיו בתיקייה משתמשים בעומק הנכון**: const-normalize:9 · dehardcode:12 · purify:16 ⇒ `'../../new/'`; purify-engine:13 · purify-hard:15 · reconvert-data:9 ⇒ `'../../'`. ושורת-השימוש עצמה מסגירה את המעבר: ast-purify.mjs:5 «node machtzev/**ast-purify.mjs**» — בלי `purity/`."
+   },
+   {
+    "claim": "🔴 **והכשל שקט וירוק** — `--all` מוצא 0 קבצים ומדווח הצלחה.",
+    "evidence": "ast-purify.mjs:166 `const abs = path.join(ROOT, dir); if (!fs.existsSync(abs)) continue;` ⇒ ran: `node machtzev/purity/ast-purify.mjs --all` ⇒ `═══ מכונת-AST · אצווה: ✅ 0 מנועי-מטרות ═══` · **exit=0**. זה «ירוק-חלול» (L27) בדיוק — כלי שלא רץ מדווח הצלחה."
+   },
+   {
+    "claim": "אינו שער ואינו מייצא כלום.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/purity/ast-purify.mjs ⇒ `🔧 עושה: 0 ייצואים · CLI --enable-asserts --all · כותב 4` · `🚫 לא: אין-ייצוא (לא ספרייה) · לא-שער-משטרה`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אפס. ההזכרות היחידות הן ב-MPRAT.md:51 ו-machtzev/INDEX.md:115 (טבלאות-תיעוד), וב-ast-purify-interp.mjs:5,122 — ששם זו **מחרוזת-שימוש** מודפסת, לא קריאה."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — אין נקודה כנה. הוא שבור בשתי דרכים בלתי-תלויות (נתיב-סשן-מת · עומק-שורש שגוי), ותפקידו (טיהור-מחרוזות ב-Dart) מאויש בפועל ע\"י `machtzev/box-purify.mjs`, שנקרא מ-`machtzev/chisel-all.mjs:105` בנתיב חי."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **נטוש ושבור**. אין כאן החלטה ארכיטקטונית — יש ריקבון-נתיבים שלא נתפס כי הכלי מדווח ירוק על אפס-עבודה."
+  },
+  "evidence": [
+   "ran: ls -d /tmp/claude-0/-home-user/2d086046-.../scratchpad/asttest ו-.../dart-sdk/bin ⇒ שניהם No such file or directory",
+   "ran: ls -d machtzev/new ⇒ No such file or directory",
+   "ran: node machtzev/purity/ast-purify.mjs --all ⇒ ✅ 0 מנועי-מטרות · exit=0 (ירוק-חלול)",
+   "read: machtzev/purity/ast-purify.mjs:1-16 · :162-173",
+   "ran: grep על עומק-ה-ROOT בכל 9 קובצי purity ⇒ ast-purify ו-ast-purify-interp היחידים עם '../new/'"
+  ]
+ },
+ {
+  "file": "machtzev/purity/ast-purify-interp.mjs",
+  "lang": "mjs",
+  "lines": 123,
+  "does": [
+   {
+    "claim": "וריאנט-interp של אותו מנהל-AST — קורא ל-`ast_dehardcode_interp.dart` במקום ל-`ast_dehardcode.dart`.",
+    "evidence": "ast-purify-interp.mjs:3 «קורא ל-ast_dehardcode_interp.dart (analyzer) → מקבל מקור-משוכתב + terms…» — ההבדל היחיד בכותרת מול ast-purify.mjs:3"
+   },
+   {
+    "claim": "אותה מפת מדף ⇒ תיקיית-דאטה.",
+    "evidence": "ast-purify-interp.mjs:14 `const DATADIR = { 'dart':'dart-data', 'dart-maor':'dart-data-maor', 'atoms':'atoms-data' };` — זהה ל-ast-purify.mjs:14"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "🔴 **סובל משתי התקלות של אחיו, מילה במילה** — אותם נתיבי-scratchpad מתים ואותו עומק-שורש שגוי.",
+    "evidence": "ast-purify-interp.mjs:11-12 (זהות לחלוטין ל-ast-purify.mjs:11-12) · :10 `const ROOT = new URL('../new/', import.meta.url).pathname;` ⇒ `machtzev/new/` שאינה קיימת"
+   },
+   {
+    "claim": "🔴 **וגם הוא מדווח ירוק-חלול.**",
+    "evidence": "ran: `node machtzev/purity/ast-purify-interp.mjs --all` ⇒ `═══ מכונת-AST · אצווה: ✅ 0 מנועי-מטרות ═══` · exit=0"
+   },
+   {
+    "claim": "**אינו מתעד את עצמו** — הודעת-השימוש שלו מפנה לקובץ **האחר**, לא לעצמו.",
+    "evidence": "ast-purify-interp.mjs:5 `// שימוש: node machtzev/ast-purify.mjs <file>   |   --all` · :122 `else console.log('שימוש: node machtzev/ast-purify.mjs <file> | --all');` — מצביע ל-`ast-purify.mjs`, לא ל-`ast-purify-interp.mjs`. זה גם מקור ה«קריאה» השגויה שהאינדקס מדווח על ast-purify."
+   },
+   {
+    "claim": "אין לו אף קורא.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/purity/ast-purify-interp.mjs ⇒ `🚫 לא: אין-ייצוא (לא ספרייה) · לא-שער-משטרה · **אין-קורא-ידוע**` · `🔌 מחובר: 0 מייבאים`"
+   },
+   {
+    "claim": "אינו שונה מהותית מאחיו — ההפרש מסתכם בשם-הבינארי של ה-analyzer.",
+    "evidence": "השוואת הכותרות (:2-5 בשני הקבצים) וה-DATADIR (:14) — זהים למעט `_interp`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אפס מייבאים · אפס הרצה-בשם · אפס שער. האזכור היחיד: MPRAT.md:50 ו-machtzev/INDEX.md:116 (טבלאות-תיעוד)."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — שבור זהה לאחיו, ובנוסף כפילות שלו. תפקיד טיהור-המחרוזות מאויש ע\"י box-purify.mjs (chisel-all.mjs:105)."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **נטוש ושבור**, ובנוסף **כפילות** של ast-purify.mjs. הוא אף מדפיס את שם-אחיו כהוראת-השימוש שלו — סימן מובהק לעותק שנשכח."
+  },
+  "evidence": [
+   "ran: node machtzev/purity/ast-purify-interp.mjs --all ⇒ ✅ 0 מנועי-מטרות · exit=0",
+   "read: machtzev/purity/ast-purify-interp.mjs:1-16 · :122",
+   "ran: ls -d machtzev/new ⇒ אינה קיימת · ls על נתיבי-ה-scratchpad ⇒ אינם קיימים",
+   "ran: node machtzev/census/engine-index.mjs machtzev/purity/ast-purify-interp.mjs ⇒ אין-קורא-ידוע"
+  ]
+ },
+ {
+  "file": "machtzev/purity/const-normalize.mjs",
+  "lang": "mjs",
+  "lines": 76,
+  "does": [
+   {
+    "claim": "ממיר אטום-const-דאטה לפונקציה-אפס-ארג בשם זהה (`Type NAME() => <literal>;`), כדי ש-ast-purify יוכל לחלץ ממנו את העברית למפתח-מטרה.",
+    "evidence": "const-normalize.mjs:2-3 (הכותרת) · «3 צורות → `Type NAME() => <literal>;` (const מוסר ⇒ עברית 'חופשית')»"
+   },
+   {
+    "claim": "משכתב גם את הצרכנים: הפניה-חשופה `NAME` (שאינה כבר `NAME(`) ⇒ `NAME()`.",
+    "evidence": "const-normalize.mjs:4 «צרכנים: הפניה-חשופה `NAME` (שאינה כבר `NAME(`) ⇒ `NAME()`. דטרמיניסטי · revert-on-fail»"
+   },
+   {
+    "claim": "רץ ועובד — `--list` מחזיר מועמדים אמיתיים.",
+    "evidence": "ran: `node machtzev/purity/const-normalize.mjs --list` ⇒ `dart/plumbing_accessories` · `dart/project_to_screen` · `dart/quote_text_for`"
+   },
+   {
+    "claim": "פותר את Dart דרך ה-SDK האמיתי ולא דרך עטיפת-flutter — עם לקח מתועד ומכומת.",
+    "evidence": "const-normalize.mjs:10-13 «⚠️ ה-SDK עצמו, לא עטיפת-flutter. `/home/user/flutter/bin/dart` הוא סקריפט-מעטפת שנכנס לשומר-ה-root של flutter ומפיל את `dart analyze`/`dart run` — והנחיתה ספרה את זה ככשל-אטום ומחקה את האטום. **37 אטומים נזרקו כך בלי שנבדקו מעולם**» · :13 `const DART = process.env.DART_SDK_BIN || '/home/user/flutter/bin/cache/dart-sdk/bin';`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אינו מטהר בעצמו — הוא **שלב-הכנה** ל-ast-purify, והצרכן הזה שבור.",
+    "evidence": "const-normalize.mjs:2 «כדי ש-ast-purify יחלץ את העברית למטרה» — ו-ast-purify.mjs אינו יכול לרוץ (ראה הרשומה שלו: נתיבי-scratchpad מתים + ROOT שגוי)"
+   },
+   {
+    "claim": "אין לו אף קורא.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/purity/const-normalize.mjs ⇒ `🚫 לא: אין-ייצוא (לא ספרייה) · לא-שער-משטרה · **אין-קורא-ידוע**` · `🔌 מחובר: 0 מייבאים`"
+   },
+   {
+    "claim": "אינו שער ואינו ב-REGEN ואינו ב-one.mjs.",
+    "evidence": "ran: `grep -rn \"const-normalize\" machtzev/police.mjs machtzev/one.mjs machtzev/generator/regen.mjs` ⇒ אפס תוצאות (האזכורים היחידים: MPRAT.md:52 · machtzev/INDEX.md:118)"
+   },
+   {
+    "claim": "אינו רץ באצווה — מקבל `<dir/base>` יחיד או `--list`.",
+    "evidence": "const-normalize.mjs:5 «שימוש: node machtzev/purity/const-normalize.mjs <dir/base> | --list» · :75 הודעת-השימוש"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אפס מייבאים · אפס הרצה-בשם · אפס שער."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — הוא שלב-הכנה למנוע שבור. חיבורו ללא תיקון ast-purify יקדם אטומים לשום מקום. (הלקח המתועד בשורות 10-13 — 37 אטומים שנמחקו בגלל עטיפת-flutter — שווה יותר מהמנוע עצמו, והוא כבר נשמר בקוד.)"
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **שלב-הכנה למנוע נטוש**. הוא עצמו רץ ותקין — אבל הצרכן היחיד שלו (ast-purify) שבור, ולכן אין לו לאן להזין."
+  },
+  "evidence": [
+   "ran: node machtzev/purity/const-normalize.mjs --list ⇒ 3 מועמדים אמיתיים (dart/plumbing_accessories …)",
+   "read: machtzev/purity/const-normalize.mjs:1-15",
+   "ran: grep -rn const-normalize machtzev/police.mjs machtzev/one.mjs machtzev/generator/regen.mjs ⇒ אפס",
+   "ran: node machtzev/census/engine-index.mjs machtzev/purity/const-normalize.mjs ⇒ אין-קורא-ידוע"
+  ]
+ },
+ {
+  "file": "machtzev/purity/dehardcode.mjs",
+  "lang": "mjs",
+  "lines": 104,
+  "does": [
+   {
+    "claim": "מחליף כל מחרוזת-עברית צרובה במנוע ב-`term('<key>')`, אוסף {key→שם} לקובץ-דאטה, מוסיף שקע `term`, מחווט את הבדיקה, מאמת, ומחזיר-אם-נכשל.",
+    "evidence": "dehardcode.mjs:2-4 (הכותרת)"
+   },
+   {
+    "claim": "הרעיון המרכזי: המנוע מדבר ב**מטרות**, והשם מוזרק ומתחלף פר-ורטיקל.",
+    "evidence": "dehardcode.mjs:5 «המנוע נשאר מדבר ב**מטרות** בלבד; השם מוזרק (מתחלף פר-וורטיקל: תרומה/תשלום/חשבונית)»"
+   },
+   {
+    "claim": "גוזר מפתח קריא בתעתיק עברי→לטיני, עם נפילה למספר-רץ כשהתעתיק ריק.",
+    "evidence": "dehardcode.mjs:16 `// תעתיק-על עברי→לטיני לגזירת-מפתח קריא (חלקי — נופל למספר-רץ אם ריק).`"
+   },
+   {
+    "claim": "שורש-המדף שלו תקין (בניגוד ל-ast-purify).",
+    "evidence": "dehardcode.mjs:12 `const ROOT = new URL('../../new/', import.meta.url).pathname;` — עומק נכון מ-machtzev/purity/"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אין לו אף קורא — אפס ייבוא, אפס הרצה-בשם, אפס שער.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/purity/dehardcode.mjs ⇒ `🚫 לא: אין-ייצוא (לא ספרייה) · לא-שער-משטרה · **אין-קורא-ידוע**` · ran: `grep -rn \"dehardcode\" machtzev/police.mjs machtzev/one.mjs machtzev/generator/regen.mjs` ⇒ אפס (האזכורים: MPRAT.md:53 · machtzev/INDEX.md:117)"
+   },
+   {
+    "claim": "אינו רץ באצווה — קובץ יחיד בלבד, בלי `--all`.",
+    "evidence": "dehardcode.mjs:7 «שימוש: node machtzev/purity/dehardcode.mjs <file>   (dart-maor/atoms/dart)» · :102 `if (!f) console.log('שימוש: node machtzev/purity/dehardcode.mjs <file>');`"
+   },
+   {
+    "claim": "**אינו ייחודי** — זהו אחד מארבעה מנועי-טיהור-מחרוזות בתיקייה אחת (dehardcode · purify · purify-engine · purify-hard), ושניים מהם (purify-engine · purify-hard) כן מורצים מ-one.mjs.",
+    "evidence": "machtzev/one.mjs:173 `run('machtzev/purity/purify-engine.mjs', ['--all']);` · machtzev/one.mjs:174 `run('machtzev/purity/purify-hard.mjs', ['--run','300'])` — dehardcode ו-purify אינם שם"
+   },
+   {
+    "claim": "אינו מכסה מחרוזת שאינה עברית — הגלאי הוא טווח-יוניקוד עברי בלבד.",
+    "evidence": "dehardcode.mjs:14 `const HEB = /[\\u0590-\\u05FF]/;`"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אפס."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — התפקיד מאויש פעמיים בתוך אותה תיקייה ע\"י מנועים שכן רצים (purify-engine · purify-hard ב-one.mjs:173-174). חיבורו יוסיף מסלול-טיהור רביעי לאותה מטרה."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **הוחלף בפועל** — לא ע\"י הצהרה אלא ע\"י כך שאחיו העדכניים יותר (purify-engine/purify-hard) הם שמורצים. הוא עצמו תקין-נתיבים אך חסר-קוראים."
+  },
+  "evidence": [
+   "read: machtzev/purity/dehardcode.mjs:1-16 · :102",
+   "ran: grep -rn dehardcode machtzev/police.mjs machtzev/one.mjs machtzev/generator/regen.mjs ⇒ אפס",
+   "read: machtzev/one.mjs:173-174 (purify-engine · purify-hard כן מורצים)",
+   "ran: node machtzev/census/engine-index.mjs machtzev/purity/dehardcode.mjs ⇒ אין-קורא-ידוע"
+  ]
+ },
+ {
+  "file": "machtzev/purity/gen-data-dart.mjs",
+  "lang": "mjs",
+  "lines": 155,
+  "does": [
+   {
+    "claim": "ממיר אטום-קבוע JS ל-Dart מכנית: קורא את **הערך החי** בייבוא דינמי ופולט getter-Dart.",
+    "evidence": "gen-data-dart.mjs:4 «קורא את הערך-החי (import דינמי), פולט getter-Dart» · :7 «פלט: new/dart-maor/<name>.dart + <name>_test.dart»"
+   },
+   {
+    "claim": "פולט בדיקת-זהב שמשווה `jsonEncode(Dart) ≡ JSON.stringify(JS)` — ההוכחה החזקה ביותר לנתון-טהור.",
+    "evidence": "gen-data-dart.mjs:4-5 «בדיקת-זהב שמשווה jsonEncode(Dart) ≡ JSON.stringify(JS) — ההוכחה החזקה-ביותר לנתון-טהור»"
+   },
+   {
+    "claim": "מדלג במפורש על מה שאינו דאטה, ומדווח GO/SKIP פר-אטום.",
+    "evidence": "gen-data-dart.mjs:8-10 «SKIP: אטום עם export שהוא פונקציה (לא-דאטה — שייך למסלול-הלוגיקה) או ערך לא-סריאליזבל (undefined/Symbol/BigInt)»"
+   },
+   {
+    "claim": "חותם את פלטו בשם המנוע שחולל אותו.",
+    "evidence": "gen-data-dart.mjs:119 `'// ⚛️ אטום-Dart-דאטה (דרגת-חוזה) · ' + name + ' — קודם מכנית ע\"י gen-data-dart.mjs.\\n'`"
+   }
+  ],
+  "doesNot": [
+   {
+    "claim": "אין לו אף קורא.",
+    "evidence": "ran: node machtzev/census/engine-index.mjs machtzev/purity/gen-data-dart.mjs ⇒ `🚫 לא: אין-ייצוא (לא ספרייה) · לא-שער-משטרה · **אין-קורא-ידוע**` · ran: `grep -rn \"gen-data-dart\" machtzev/police.mjs machtzev/one.mjs machtzev/generator/regen.mjs` ⇒ אפס (האזכורים: MPRAT.md:54 · machtzev/INDEX.md:122)"
+   },
+   {
+    "claim": "**התפקיד מאויש ע\"י `reconvert-data.mjs`, שכן מורץ** — ופלטו נמדד ב-410 תאומים מול הרצה חד-אטומית כאן.",
+    "evidence": "machtzev/one.mjs:181 `stage('מנוע-ההמרה-מחדש · דאטה (reconvert-data)', () => last(run('machtzev/purity/reconvert-data.mjs')), { optional:true });` · ran: `node machtzev/purity/reconvert-data.mjs --dry` ⇒ `🔁 המרת-דאטה: 410 תאומי-Dart (dry) ⇒ new/dart-data-maor`. שניהם פולטים ל-`new/dart-data-maor`."
+   },
+   {
+    "claim": "אינו רץ באצווה מהמדף — דורש שמות-אטום מפורשים בארגומנטים.",
+    "evidence": "gen-data-dart.mjs:143 `if (!names.length) { console.error('usage: node gen-data-dart.mjs <atom>...'); process.exit(2); }`"
+   },
+   {
+    "claim": "אינו מריץ את הזהב שהוא פולט.",
+    "evidence": "gen-data-dart.mjs:11 «ריצה: הזהב עצמו מורץ ע\"י המיין-לופ (dart run) — כאן רק חילול»"
+   }
+  ],
+  "callers": [
+   {
+    "who": "∅",
+    "how": "אפס."
+   }
+  ],
+  "connectAt": {
+   "point": "∅",
+   "gives": "∅ — `reconvert-data.mjs` ממלא את אותו תפקיד לאותה תיקיית-יעד, רץ באצווה (410), ומורץ מ-one.mjs:181. חיבור gen-data-dart יוסיף פולט-תאומים שני לאותו יעד."
+  },
+  "s22": {
+   "score": 0,
+   "why": "0 = לא מקרב, במפורש. סיבת אי-החיבור: **הוחלף בפועל** ע\"י reconvert-data (אותו יעד, אצווה, ומורץ). ההבדל היחיד לטובתו — בדיקת-זהב `jsonEncode ≡ JSON.stringify` — הוא רעיון ששווה לשמר, אבל לא כמנוע נוסף."
+  },
+  "evidence": [
+   "ran: node machtzev/purity/reconvert-data.mjs --dry ⇒ 410 תאומי-Dart ⇒ new/dart-data-maor (אותו יעד)",
+   "read: machtzev/purity/gen-data-dart.mjs:1-16 · :119 · :143",
+   "read: machtzev/one.mjs:181 (reconvert-data כן מורץ)",
+   "ran: grep -rn gen-data-dart machtzev/police.mjs machtzev/one.mjs machtzev/generator/regen.mjs ⇒ אפס"
+  ]
  }
 ]
