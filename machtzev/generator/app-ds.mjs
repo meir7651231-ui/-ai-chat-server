@@ -10,6 +10,7 @@ import { interpret as entInterpret } from './entity.mjs';
 import { renderEntity, renderDashboard, renderHub, renderSystem, renderWizard, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write, setLook, getLook } from './render-ds.mjs';
 import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, renderReportTest, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
 import { nlToSpec } from './nl-spec.mjs';
+import { rule as yeshivaRule } from '../../yeshiva/purpose.mjs';   // המנוע הישיבתי — פוסק לפני שנבנה מסך
 import { specFromSentence } from './tzinor.mjs';   // combined pipeline (§20-c): wraps nlToSpec — source-of-truth wins, otherwise reports empty
 import { pickRoot, renderRootPage, renderShell, renderHome, renderBehavior } from './app-shell.mjs';
 import fs0 from 'node:fs';
@@ -68,6 +69,11 @@ export function buildApp(specText) {
     let nl = '';
     try { const t = specFromSentence(free); if (t.spec.trim()) nl = t.spec; } catch (e) { nl = ''; }
     if (!nl.trim()) nl = nlToSpec(free);   // data skeleton — when the pipeline knew no word
+    // ⚖️ הישיבתי **לפני הבנייה** (הכרעה-27): הטיוטה עוברת את שבעת המהלכים מול
+    // מסמך-המטרה, ומה שהוכרע מיושם לפני שנבנה מסך אחד. מה שלא הוכרע נשאר מתג —
+    // המנוע לא ממציא כדי לסגור פער (L57). כישלון ⇒ הטיוטה כמות-שהיא, לא קריסה.
+    // (‏catch ריק במתכוון: פסק שנכשל אינו חוסם בנייה.)
+    try { const y = yeshivaRule(free, nl); if (y && y.spec && y.spec.trim()) nl = y.spec; } catch (e) { void e; }
     if (nl.trim()) specText = [nl, ...roleLines].join('\n');   // חסר-מבנה ⇒ עברית-חופשית + תפקידים
   }
   for (const d of [OUT, R.dataOutDir()]) if (fs.existsSync(d)) for (const f of fs.readdirSync(d)) if (new RegExp(`^gen_${P}[a-z]+\\d*(_content)?\\.dart$`).test(f)) fs.unlinkSync(path.join(d, f));   // G28 · המחולל בעל מרחב-השמות: תוצר-ישן שלא חולל-מחדש (מסך-מגירה שנגרע) לא נשאר

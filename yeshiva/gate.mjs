@@ -11,6 +11,11 @@
 //   4) **מסלול-המטרה (purpose.mjs):** משפט-חופשי ⇒ מסמך-מטרה ⇒ אותם שבעה מהלכים.
 //      זה ה-B שחסר למשפט-חופשי: לא מסמך-בעלים אלא **מה שהמטרה דורשת**, נגזר
 //      משרשרת-המקור (חבילות-ורטיקל ⇒ סכמה) עם ראיה. שדות-עם-מקור רק-עולה.
+//   5) **הוכחת-ירי שהישיבתי באמת פוסק** (‏`rule` — הוא בנתיב-הבנייה של app-ds,
+//      לא רק במדידה). מונה-ממצאים אינו מדד-עומק: 151 «ייתור» על מפתחות-סכמה
+//      באנגלית היו ממצאי-שווא שיישומם מייצר 25 עמודות בשם «שדה». לכן הרצפה
+//      כאן היא **התנהגות**: מתקן מה שיש עליו ראיה · משמיט כותרת · **לא מכריע**
+//      בתאומים · ולעולם לא מכניס שם-לא-עברי לספק.
 //  fail-closed (L27): 0 פירוקים / 0 ממצאים = הכלי שבור, לא הנתונים ⇒ exit 2.
 //  שימוש: node yeshiva/gate.mjs [--gate]
 // ══════════════════════════════════════════════════════════════════════════
@@ -89,10 +94,34 @@ if (findings < BASE.findings) fails.push(`${findings} ממצאים < רצפה ${
 const BP = BASE.purpose || {};
 if (P.sentences < (BP.sentences || 0)) fails.push(`מסלול-המטרה: ${P.sentences} משפטים < רצפה ${BP.sentences} (כיסוי רק-עולה)`);
 if (P.sourced < (BP.sourced || 0)) fails.push(`מסלול-המטרה: ${P.sourced} שדות-עם-מקור < רצפה ${BP.sourced} (מקורות רק-עולים)`);
-if (P.findings < (BP.findings || 0)) fails.push(`מסלול-המטרה: ${P.findings} ממצאים < רצפה ${BP.findings} (הישיבתי רק-מעמיק)`);
+if (P.open < (BP.open || 0)) fails.push(`מסלול-המטרה: ${P.open} מתגים-עם-מקור < רצפה ${BP.open} (שקעים-ידועים רק-עולים)`);
+// ── הוכחת-ירי: הישיבתי **פוסק**, לא רק מודד ─────────────────────────────
+const T = [];
+try {
+  const { rule } = await import(path.join(HERE, 'purpose.mjs'));
+  const ok = (name, cond) => T.push({ name, pass: !!cond });
+  const r1 = rule('מערכת עם תיקים', 'ישות תיק עם תיק\nתוכן כרטיס: נדחה כי Y');
+  ok('מאי X: מציין-מקום מהדוגמה ⇒ {שדה}', r1.changed === 1 && /\{שדה\}/.test(r1.spec) && !/נדחה כי Y/.test(r1.spec));
+  const r2 = rule('מערכת עם תיקים', 'ישות תיק עם תיק\nתוכן בדיקה: מה צריך:');
+  ok('אין מערבין: כותרת-דוגמה מושמטת', r2.changed === 1 && !/מה צריך/.test(r2.spec));
+  const r3 = rule('מערכת עם תיקים', 'ישות תיק עם שם הלקוח, שם לקוח');
+  ok('ורמינהו תאומים: **לא** מכריע לבד ⇒ מתג', r3.decided === 0 && r3.switches.length >= 1 && r3.spec.includes('שם הלקוח') && r3.spec.includes('שם לקוח'));
+  const HE = /[\u05d0-\u05ea]/;
+  let alien = 0;
+  for (const sent of ['מערכת לניהול מרפאה עם מטופלים, תורים ורופאים', 'מערכת לחללית עם טייסים', 'ניהול מלון: חדרים, אורחים']) {
+    const { specFromSentence } = await import(path.join(HERE, '../machtzev/generator/tzinor.mjs'));
+    const out = rule(sent, specFromSentence(sent).spec).spec;
+    for (const l of out.split(/\r?\n/)) { const m = l.match(/^ישות \S+ עם (.+?)(?: \| |$)/); if (!m) continue; for (const f of m[1].split(',')) if (f.trim() && !HE.test(f)) alien++; }
+  }
+  ok('אפס שם-לא-עברי בספק שיצא מהפסק', alien === 0);
+} catch (e) { T.push({ name: 'הוכחת-ירי נטענה', pass: false, why: e.message }); }
+for (const t of T) console.log(`  ${t.pass ? '✓' : '🚨'} ${t.name}${t.why ? ' — ' + t.why : ''}`);
+const shot = T.filter((t) => !t.pass);
+if (shot.length) fails.push(`הוכחת-ירי: ${shot.length}/${T.length} כשלו — הישיבתי אינו פוסק כמוצהר`);
+if (T.length < 4) fails.push(`הוכחת-ירי: ${T.length} בדיקות < 4 (השער התרוקן)`);
 
 console.log(`  ${perukim} פירוקים · ${findings} ממצאים · ${decided} פסק המנוע לבד · ${switches} מתגים (רצפה ${BASE.decided}/${BASE.switches})`);
-console.log(`  מסלול-המטרה: ${P.sentences} משפטים · ${P.sourced} שדות-עם-מקור · ${P.findings} ממצאים · ${P.open} מתגים`);
+console.log(`  מסלול-המטרה: ${P.sentences} משפטים · ${P.sourced} שקעים-עם-מקור · ${P.open} מתגים · ${P.findings} ממצאים`);
 if (fails.length) { for (const m of fails) console.error('🚨 yeshiva: ' + m); process.exit(1); }
 const up = decided - BASE.decided, down = BASE.switches - switches;
 console.log(`✅ yeshiva: הפסק טרי · ${decided}/${findings} הכריע המנוע לבד${up ? ` ⬆ ${up}` : ''}${down ? ` · מתגים ⬇ ${down} — עדכן את המניפסט` : ''}`);

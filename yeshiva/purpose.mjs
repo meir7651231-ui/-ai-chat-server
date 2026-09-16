@@ -20,7 +20,10 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { toSwitches } from '../machtzev/generator/tzinor.mjs';
+import { check, parseSpec } from './read.mjs';
+import { pasak, applyPsak } from './apply.mjs';
 
+const HE_RE = /[\u05d0-\u05ea]/;   // שם-שדה בלי אות-עברית = מפתח-סכמה, לא מונח
 const norm = (s) => String(s).replace(/[״"'׳]/g, '').replace(/\s+/g, ' ').trim();
 
 /** מועמד-אמת יחיד: יש מחלקה · יש שדות · לא רופף. אין יחיד ⇒ null (מתג, לא הכרעה). */
@@ -45,21 +48,47 @@ export function purposeDoc(sentence, origin = 'משפט') {
     const o = soleOption(e);
     if (!o) {
       const n = (e.options || []).filter((x) => x.cls).length;
-      doc.open.push({ word: e.word, options: n });
+      doc.open.push({ word: e.word, options: n, fields: [], from: 'אין מועמד-סכמה יחיד', srcs: [] });
       ev.push(`- «${e.word}» — ${n} מועמדי-סכמה, אין יחיד ⇒ מתג (לא הוכרע)`);
       continue;
     }
     doc.entities.push({ word: e.word, cls: o.cls });
+    const noTerm = [];
     for (const f of o.fields) {
       if (!f.src) continue;                                  // שדה בלי מוצא אינו ראיה
       const n = norm(f.name); if (!n || doc.sources.has(n)) continue;
-      (f.optional ? doc.optional : doc.mandatory).push(n);
       doc.sources.set(n, f.src);
+      // 🔤 שפת-האפיון עברית-בלבד: שקע בלי מונח-עברי **אינו נכנס לחובה/רשות**,
+      // כי אז הישיבתי היה מיישם אותו כשדה ו-`interpret` היה מתייג אותו «שדה»
+      // (נמדד). אין מונח ⇒ מתג עם מוצא. הישיבתי לא ממציא שם — זה בדיוק תפקידו.
+      if (!HE_RE.test(n)) { noTerm.push(n); continue; }
+      (f.optional ? doc.optional : doc.mandatory).push(n);
     }
+    if (noTerm.length) doc.open.push({ word: e.word, cls: o.cls, options: noTerm.length, fields: noTerm, from: 'שקע-סכמה בלי מונח-עברי', srcs: [...new Set(o.fields.filter((f) => noTerm.includes(norm(f.name))).map((f) => f.src))] });
     ev.push(`- «${e.word}» ≡ ${o.cls} (${o.fields.length} שקעים) · ${(o.evidence || []).join(' · ')}`);
   }
   doc.sections['חובה'] = ev;
   return doc;
+}
+
+/**
+ * 🔨 **הישיבתי לפני הבנייה** — זה מה שהופך אותו משופט-שמודד לשופט-שמבצע.
+ * טיוטת-ספק + משפט ⇒ מסמך-המטרה ⇒ שבעת המהלכים ⇒ פסק ⇒ **ספק מתוקן**.
+ * מה שהוכרע מיושם; מה שלא — נשאר מתג, ולא מומצא (L57).
+ * מחזיר `{ spec, rulings, decided, switches, changed }`.
+ */
+export function rule(sentence, draftSpec, origin = 'משפט') {
+  const doc = purposeDoc(sentence, origin);
+  const spec = parseSpec(draftSpec);
+  const findings = check(doc, spec);
+  const rulings = findings.map((f) => pasak(f, doc, spec));
+  const built = applyPsak(spec, rulings);
+  return {
+    spec: built.text, changed: built.changed, rulings,
+    decided: rulings.filter((r) => r.decided).length,
+    switches: rulings.filter((r) => !r.decided),
+    open: doc.open, sources: doc.sources,
+  };
 }
 
 /** שמות-השדות שיש להם מוצא מוצהר בשרשרת-המטרה — סוג-המקור השני של שער-ההמצאה. */

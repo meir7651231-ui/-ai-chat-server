@@ -54,7 +54,7 @@ function moveOf(f) {
 // ── הפסק: לכל מהלך, מה מכריע אותו ועל סמך מה. בלי מהלך — אין פסק. ──
 //   המקור הקובע: הספק נגזר מהמסמך (read.mjs שורה 3: «מה שהבעלים כתב» מול «מה ש-peruk.mjs גזר»),
 //   ולכן בסתירה בין השניים — המסמך גובר. זו העדות, לא סברא.
-function pasak(f, doc, spec) {
+export function pasak(f, doc, spec) {
   const move = moveOf(f);
   const docWords = words(doc.lines.join(' '));
   const base = { move, kind: f.kind, text: f.text, apply: f.apply || null };
@@ -100,7 +100,7 @@ function pasak(f, doc, spec) {
 // ── ההחלה: הפסק ⇒ הספק המתוקן (נמל מ-live/index.html · applyAnswers) ──
 //   שינוי אחד מההדמיה, במכוון: enum קורא את השורה המסומנת כמו שאר הסוגים. בדפדפן אדם עונה על
 //   שאלה-שתיים והשורה נדרסה בלי היזק; כאן המנוע מחיל הכול בבת אחת, ודריסה הייתה מאבדת פסקים.
-function applyPsak(spec, rulings) {
+export function applyPsak(spec, rulings) {
   const lines = spec.raw.split('\n');
   const marks = new Map();
   const extra = [];
