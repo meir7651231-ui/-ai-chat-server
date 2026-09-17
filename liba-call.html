@@ -111,9 +111,9 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 let handsFree=true,busy=false,seen=null,appMode=false,lastAsk=null;
 function post(kind,extra){try{window.parent.postMessage(Object.assign({liba:kind},extra||{}),'*');}catch(e){}}
 window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d=e.data;if(!d||!d.liba)return;
-  if(d.liba==='hello'){appMode=true;armed=true;try{if(!window.__devSent){window.__devSent=true;db.doc('channel/device').set({app:d.ver||'',page:28,at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(()=>{});}}catch(e){}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post('ready',{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+  if(d.liba==='hello'){appMode=true;armed=true;try{if(!window.__devSent){window.__devSent=true;db.doc('channel/device').set({app:d.ver||'',page:31,at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(()=>{});}}catch(e){}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post('ready',{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba==='crash'&&d.text&&db){db.doc('crashes/'+(d.id||Date.now())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post('crashSaved',{id:d.id})).catch(e=>log('crash: '+(e.code||e)));}
-  else if(d.liba==='input'&&d.text){pendingInput=String(d.text);post('tap',{});clearTimeout(pendingT);pendingT=setTimeout(()=>{if(pendingInput){const t=pendingInput;pendingInput=null;send(t);}},1500);}
+  else if(d.liba==='input'&&d.text){if(pendingInput){const prev=pendingInput;pendingInput=null;clearTimeout(pendingT);send(prev);}pendingInput=String(d.text);post('tap',{});clearTimeout(pendingT);pendingT=setTimeout(()=>{if(pendingInput){const t=pendingInput;pendingInput=null;send(t);}},1500);}
 });
 let pendingInput=null,pendingT=null;
 ['pointerdown','click','touchstart'].forEach(ev=>document.addEventListener(ev,()=>{if(pendingInput){const t=pendingInput;pendingInput=null;clearTimeout(pendingT);send(t);}},true));
@@ -137,14 +137,14 @@ function bubble(cls,text){const d=document.createElement('div');d.className=cls;
     taskPrev={};list.forEach(t=>taskPrev[t.id]=t.status);taskSeen=true;lastTasks=list;renderTasks(list);},e=>log('tasks: '+e.code));
   db.doc('channel/quiet').onSnapshot(s=>{quietUntil=(s.exists&&s.data()&&s.data().until)||0;if(quietUntil>Date.now())log('שקט עד '+new Date(quietUntil).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}));pump();},()=>{});
   db.doc('channel/owner').onSnapshot(s=>{owner=(s.exists&&s.data()&&s.data().owner)||'liba';setSt(owner==='manager'?'על הקו: המנהל':'על הקו: ליבה','on');},()=>{});
-  db.collection('inbox').onSnapshot(q=>{const items=q.docs.map(d=>Object.assign({id:d.id},d.data())).filter(d=>(d.text||d.kind==='cmd')&&!d.spoken&&!spokenLocal.has(d.id)).sort((a,b)=>(a.ts||0)-(b.ts||0));items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();},e=>log('inbox: '+e.code));
+  db.collection('inbox').onSnapshot(q=>{const items=q.docs.map(d=>Object.assign({id:d.id},d.data())).filter(d=>(d.text||d.kind==='cmd')&&!d.spoken&&!spokenLocal.has(d.id)).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();},e=>log('inbox: '+e.code));
   db.doc('chat/current').onSnapshot(s=>{if(!s.exists)return;let d=s.data();if(!d||!d.id||d.id===seen||d.spoken)return;d=Object.assign({from:'manager',legacy:true},d);if(!armed){cur=d;H.textContent='יש הודעה';SUB.textContent='לחץ "התחל" כדי לשמוע';return;}incoming(d);},e=>{setSt('שגיאה','warn');log('db: '+e.code);});
 })();
 
 const inboxQ=[],spokenLocal=new Set(),sendQ=[];let pumping=false,owner='liba',quietUntil=0,pumpTimer=null,taskPrev={},taskSeen=false,lastTasks=[],lastRingAt=0;
 function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.some(x=>x.id===d.id)&&!spokenLocal.has(d.id))inboxQ.push(d);pump();}
 /* step 19: priority – urgent bypasses quiet; morning waits for 08:00 */
-function ready(d){if(d.kind==='cmd')return true;const p=d.priority||'normal';if(p==='urgent')return true;if(p==='morning'){const h=new Date().getHours();if(h<8||h>=22)return false;}if(quietUntil>Date.now())return false;return true;}
+function ready(d){if(d.kind==='cmd')return appMode;const p=d.priority||'normal';if(p==='urgent')return true;if(p==='morning'){const h=new Date().getHours();if(h<8||h>=22)return false;}if(quietUntil>Date.now())return false;return true;}
 const NAMES={liba:'ליבה',manager:'המנהל',architect:'האדריכל',builder:'סוכן הבנייה'};
 const KINDW={ask:'שאלה',stuck:'נתקע',done:'סיים'};
 function speakerOf(d){if(d.speaker)return d.speaker;if(/^arch/i.test(d.id||''))return 'האדריכל';return NAMES[d.from||'liba']||d.from||'ליבה';}
@@ -171,10 +171,10 @@ function galleryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(המחולל|תפתח את המחולל|פתח את המחולל|מסך המחולל)$/.test(t)){const u='https://claude.ai/artifact/AcTS4zzdMcXFcxFFvr5UVn';sayLocal('פותחת את המחולל.');if(appMode)post('cmd',{cmd:'open '+u});else window.open(u,'_blank');return true;}
   return false;}
 function memoryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(galleryCmd(text))return true;if(helpCmd(text))return true;
-  let m=t.match(/^(תזכור|תזכרי|זכור|זכרי)\s+(ש|כי|את\s)?\s*(.+)$/);
-  if(m){const note=m[3].trim();if(note.length<2)return false;db.doc('memory/notes').collection('items').doc(String(Date.now())).set({text:note,ts:Date.now(),by:'מאיר'}).then(()=>sayLocal('זכרתי: '+note)).catch(()=>sayLocal('לא הצלחתי לשמור'));return true;}
-  m=t.match(/^(תשכח|תשכחי|שכח|שכחי)\s+(את\s|ש)?\s*(.+)$/);
-  if(m){const q=m[3].trim();db.doc('memory/notes').collection('items').get().then(async r=>{const hits=r.docs.filter(d=>((d.data()||{}).text||'').includes(q));for(const d of hits){try{await d.ref.delete();}catch(e){}}sayLocal(hits.length?'שכחתי '+hits.length+(hits.length===1?' דבר':' דברים')+' על '+q:'לא מצאתי משהו על '+q+' בזיכרון');}).catch(()=>sayLocal('לא הצלחתי'));return true;}
+  let m=t.match(/^(תזכור|תזכרי|זכור|זכרי)\s+(?:(?:כי|את)\s+)?(.+)$/);
+  if(m){const note=m[2].trim();if(note.length<2)return false;db.doc('memory/notes').collection('items').doc(String(Date.now())).set({text:note,ts:Date.now(),by:'מאיר'}).then(()=>sayLocal('זכרתי: '+note)).catch(()=>sayLocal('לא הצלחתי לשמור'));return true;}
+  m=t.match(/^(תשכח|תשכחי|שכח|שכחי)\s+(?:את\s+)?(.+)$/);
+  if(m){const q=m[2].trim();db.doc('memory/notes').collection('items').get().then(async r=>{const hits=r.docs.filter(d=>((d.data()||{}).text||'').includes(q));for(const d of hits){try{await d.ref.delete();}catch(e){}}sayLocal(hits.length?'שכחתי '+hits.length+(hits.length===1?' דבר':' דברים')+' על '+q:'לא מצאתי משהו על '+q+' בזיכרון');}).catch(()=>sayLocal('לא הצלחתי'));return true;}
   m=t.match(/^(אל תשאל(י)? אותי (על|לגבי)|תמיד|אף פעם אל)\s+(.+)$/);
   if(m){db.doc('memory/prefs').collection('items').doc(String(Date.now())).set({text:t,ts:Date.now()}).then(()=>sayLocal('הבנתי, זו העדפה קבועה: '+t)).catch(()=>{});return true;}
   if(/^(מה אתה זוכר|מה את זוכרת|מה בזיכרון|מה זכרת)$/.test(t)){db.doc('memory/notes').collection('items').get().then(r=>{const n=r.docs.map(d=>(d.data()||{}).text).filter(Boolean);sayLocal(n.length?'אני זוכרת '+n.length+' דברים: '+n.slice(-8).join('; '):'הזיכרון של הערות עוד ריק.');}).catch(()=>{});return true;}
@@ -185,21 +185,21 @@ function memoryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(galleryCmd
 function taskCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(מפה|מפת המערכת|תראה מפה|מה כל הסשנים עושים|מי תקוע)$/.test(t)){mapOn=true;renderMap();const m=mapSummary();bubble('li',m);if(appMode)post('say',{text:'ליבה, מפת המערכת: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
   if(/^(תפתח|פתח|תפתח את התוצאה|תראה לי)$/.test(t)){const d=lastTasks.find(x=>x.status==='done'&&x.link)||lastTasks.find(x=>x.link);if(!d)return false;const m='פותחת: '+d.title;bubble('li',m);if(appMode){post('cmd',{cmd:'open '+d.link});post('say',{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});}else{say(m);window.open(d.link,'_blank');}return true;}
-  const pr=t.match(/^(קודם|תעדיף|עדיפות ל|תתחיל עם)\s+(את\s+)?(.+)$/);if(pr){const q=pr[3].trim();const task=lastTasks.find(x=>(x.title||'').includes(q)||q.includes(x.title||'@@'));if(!task)return false;db.doc('tasks/'+task.id).update({priority:Date.now(),updatedAt:Date.now()}).catch(()=>{});const m='בסדר, '+task.title+' קודם.';bubble('li',m);if(appMode)post('say',{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
+  const pr=t.match(/^(קודם|תעדיף|עדיפות ל|תתחיל עם)\s+(את\s+)?(.+)$/);if(pr){const q=pr[3].trim();const task=lastTasks.find(x=>(x.title||'').includes(q));if(!task)return false;db.doc('tasks/'+task.id).update({priority:Date.now(),updatedAt:Date.now()}).catch(()=>{});const m='בסדר, '+task.title+' קודם.';bubble('li',m);if(appMode)post('say',{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
   return false;}
 function switchOwner(text){const t=text.replace(/[?!.,]/g,'').trim();if(quietCmd(text))return true;if(taskCmd(text))return true;if(memoryCmd(text))return true;
   /* simple rule: a sentence that starts with "ליבה" is for ליבה; one that starts with "מנהל" is for the manager */
-  if(/ליבה/.test(t)&&/(תחזור|תחזרי|חזור|חזרי)/.test(t)){const rest=t.replace(/ליבה|תחזור|תחזרי|חזור|חזרי|[, ]+/g,' ').trim();setOwner('liba');if(rest.length>3){setTimeout(()=>send(rest),400);}return true;}
+  if(/^(היי |הי )?ליב[הא],?\s*(תחזור|תחזרי|חזור|חזרי)\s*$/.test(t)){return setOwner('liba');}
   if(owner==='manager'&&/^(תחזור|תחזרי|חזור|חזרי)$/.test(t)){return setOwner('liba');}
   if(owner==='manager'&&/^(היי |הי )?ליב[הא](?=\s|$)/.test(t)){owner='liba';db.doc('channel/owner').set({owner:'liba',since:Date.now()}).catch(()=>{});return false;}
-  if((/(תעלה|העלה|תן ל|תעביר ל).*(מנהל)/.test(t)||/^מנהל$/.test(t))){return setOwner('manager');}
+  if(/^(תעלה|העלה|תן ל|תעביר ל)\s*(את\s+)?ה?מנהל$/.test(t)||/^מנהל$/.test(t)){return setOwner('manager');}
   if(owner==='liba'&&/^(היי |הי )?מנהל(?=\s|$)/.test(t)){owner='manager';db.doc('channel/owner').set({owner:'manager',since:Date.now()}).catch(()=>{});return false;}
   return false;}
 async function setOwner(o){owner=o;try{await db.doc('channel/owner').set({owner:o,since:Date.now()});}catch(e){log('owner: '+(e.code||e));}
-  const msg=o==='liba'?'ליבה על הקו.':'המנהל על הקו. ליבה שותקת עד שתגיד ליבה תחזור.';bubble('li',msg);if(appMode)post('say',{text:msg,kind:'say',options:[]});else say(msg);return true;}
+  const msg=o==='liba'?'ליבה על הקו.':'המנהל על הקו. ליבה שותקת עד שתגיד ליבה תחזור.';bubble('li',msg);if(appMode)post('say',{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(msg);return true;}
 async function pump(){if(pumping||!armed)return;pumping=true;try{const n=inboxQ.filter(d=>ready(d)&&d.kind!=='cmd'&&!spokenLocal.has(d.id)).length;
-  if(n>=2){const asks=inboxQ.filter(d=>ready(d)&&(d.kind==='ask'||d.kind==='stuck')).length;await incoming({id:'batch-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:asks?'stuck':'say',text:'הצטברו '+n+' הודעות'+(asks?', '+asks+' מהן שאלות. אקרא אותן ברצף, צלצול אחד.':'. אקרא אותן ברצף.')});}
-  for(;;){const i=inboxQ.findIndex(ready);if(i<0)break;const d=inboxQ.splice(i,1)[0];if(spokenLocal.has(d.id))continue;spokenLocal.add(d.id);await incoming(d);if(d.local)continue;try{await db.doc('inbox/'+d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){log('ack: '+(e.code||e));}}}finally{pumping=false;if(inboxQ.length){clearTimeout(pumpTimer);pumpTimer=setTimeout(pump,60000);log(inboxQ.length+' הודעות מחכות (שקט/בוקר)');}}}
+  if(n>=2){const asks=inboxQ.filter(d=>ready(d)&&(d.kind==='ask'||d.kind==='stuck')).length;await incoming({id:'batch-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:asks?'stuck':'say',noListen:true,text:'הצטברו '+n+' הודעות'+(asks?', '+asks+' מהן שאלות. אקרא אותן ברצף, צלצול אחד.':'. אקרא אותן ברצף.')});}
+  for(;;){const i=inboxQ.findIndex(ready);if(i<0)break;const d=inboxQ.splice(i,1)[0];if(spokenLocal.has(d.id))continue;if(d.kind==='cmd'){if(!appMode){continue;}spokenLocal.add(d.id);await incoming(d);continue;}spokenLocal.add(d.id);await incoming(d);if(d.local)continue;try{await db.doc('inbox/'+d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){log('ack: '+(e.code||e));}}}finally{pumping=false;if(inboxQ.length){clearTimeout(pumpTimer);pumpTimer=setTimeout(pump,60000);log(inboxQ.length+' הודעות מחכות (שקט/בוקר)');}}}
 const ST={queued:'בתור',running:'רץ',blocked:'תקוע',done:'נגמר'};
 /* step 60: system map – one list: every session, what it does, who is stuck */
 let sessionsList=[],mapOn=false;
@@ -230,7 +230,7 @@ async function idleListen(){app.className='';KIND.textContent='';H.className='';
   if(handsFree&&SR&&!busy){const t=await listen();if(t&&!busy)return send(t);if(handsFree&&!busy&&!listening)setTimeout(idleListen,800);}}
 
 async function incoming(d){
-  if(d.kind==='cmd'){try{await db.doc('inbox/'+d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){log('cmd ack: '+(e.code||e));}if(appMode)post('cmd',{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return;}
+  if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}try{await db.doc('inbox/'+d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){log('cmd ack: '+(e.code||e));}post('cmd',{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return true;}
   cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem('liba.seen',d.id);}catch(e){}
   if(rec){try{rec.abort();}catch(e){}}
   busy=true;TR.querySelectorAll('.think').forEach(x=>x.remove());
@@ -241,14 +241,14 @@ async function incoming(d){
   if(!appMode&&(ak==='call'||ak==='stuck')){app.className='ring';KIND.textContent='ליבה מצלצלת';KIND.className='kind stuck';ringStart();await new Promise(r=>setTimeout(r,2400));ringStop();app.className='';}
   KIND.textContent=k==='done'?'סיימתי':k==='stuck'?'נתקעתי':'';KIND.className='kind '+k;
   bubble('li',prefixOf(d,who)+d.text);HEARD.hidden=true;OPTS.innerHTML='';
-  if(k==='ask'||k==='stuck'||(d.options&&d.options.length))lastAsk={id:d.id,text:d.text,speaker:who,topic:d.topic||'',at:Date.now()};
+  if(k==='ask'||k==='stuck'||(d.options&&d.options.length))lastAsk={id:d.id,text:d.text,speaker:who,topic:d.topic||'',at:Date.now()};else if(!d.local)lastAsk=null;
   try{if(memSettings.logTurns)db.doc('chat/log').collection('turns').doc(String(Date.now())).set({from:d.from||'liba',speaker:who,topic:d.topic||'',kind:k,text:d.text,msg:d.id,ts:Date.now()}).catch(()=>{});}catch(e){}
   await say(spokenText+(d.options&&d.options.length?'. '+d.options.join(', או ')+'?':''));
   if(d.legacy){try{await db.doc('chat/current').update({spoken:true,spokenAt:Date.now()});}catch(e){log('legacy ack: '+(e.code||e));}}
   if(d.options&&d.options.length){OPTS.innerHTML=d.options.map(o=>`<button>${o}</button>`).join('');OPTS.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>send(b.textContent)));}
   showTalk();$('ack').hidden=k!=='done';busy=false;if(micBlocked)return;
   if(appMode)return;
-  if(SR&&(handsFree||d.options||k==='stuck')){const t=await listen();if(t&&!busy)return send(t);if(handsFree&&!busy)idleListen();}
+  if(SR&&!d.noListen&&(handsFree||(d.options&&d.options.length)||k==='stuck')){const t=await listen();if(t&&!busy)return send(t);if(handsFree&&!busy)idleListen();}
 }
 $('talk').addEventListener('click',async()=>{if(busy)return;if(listening){try{rec.stop();}catch(e){}return;}const t=await listen();if(t)send(t);});
 $('sendTyped').addEventListener('click',()=>{const v=$('typed').value.trim();if(v)send(v);});
@@ -258,7 +258,8 @@ $('ack').addEventListener('click',()=>send('הבנתי, תמשיך'));
 /* steps 16-18: outbox (offline), auto-retry, duplicate guard */
 let outbox=[];try{outbox=JSON.parse(localStorage.getItem('liba.outbox')||'[]');}catch(e){}
 function saveOutbox(){try{localStorage.setItem('liba.outbox',JSON.stringify(outbox));}catch(e){}}
-let lastSent={text:'',ts:0},lastIncomingAt=0;
+let lastSent={text:'',id:'',ts:0},lastIncomingAt=0;
+function drainQ(){if(sendQ.length){const nx=sendQ.shift();setTimeout(()=>send(nx),300);return true;}return false;}
 const RETRYABLE=r=>/network|fetch|timeout|unavailable|rate|503|502|429|offline|aborted|internal/i.test(r);
 async function deliver(text){
   let reason='no_comments';
@@ -285,20 +286,20 @@ async function flushOutbox(){
 }
 window.addEventListener('online',()=>setTimeout(flushOutbox,1500));setInterval(flushOutbox,30000);
 async function send(text){
-  if(switchOwner(text)){post('sent',{text});return;}
+  if(switchOwner(text)){post('sent',{text,local:true});if(!busy)drainQ();return;}
   if(busy){sendQ.push(text);post('queued',{text});return;}busy=true;const id=cur?cur.id:'free';cur=null;
   $('typed').value='';OPTS.innerHTML='';$('ack').hidden=true;HEARD.hidden=true;
-  if(text===lastSent.text&&Date.now()-lastSent.ts<20000&&lastIncomingAt<lastSent.ts){log('כפילות – לא נשלח שוב');post('sent',{text,dup:true});busy=false;return;}
+  if(text===lastSent.text&&id!=='free'&&id===lastSent.id&&Date.now()-lastSent.ts<5000){log('כפילות – לא נשלח שוב');post('sent',{text,dup:true});busy=false;drainQ();return;}
   bubble('me',text);const th=bubble('li think','ליבה חושבת…');
-  try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<10*60*1000)){db.doc('decisions/log').collection('items').doc(String(Date.now())).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(()=>{});lastAsk=null;}}catch(e){}
-  try{if(memSettings.logTurns)await db.doc('chat/log').collection('turns').doc(String(Date.now())).set({from:'user',speaker:'מאיר',to:owner,text,re:id,ts:Date.now()});}catch(e){}
+  try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){db.doc('decisions/log').collection('items').doc(String(Date.now())).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(()=>{});lastAsk=null;}}catch(e){}
+  try{if(memSettings.logTurns)db.doc('chat/log').collection('turns').doc(String(Date.now())).set({from:'user',speaker:'מאיר',to:owner,text,re:id,ts:Date.now()}).catch(()=>{});}catch(e){}
   const r=await deliverWithRetry(text);const sent=r.sent,reason=r.reason;
-  if(sent){lastSent={text,ts:Date.now()};}
+  if(sent){lastSent={text,id,ts:Date.now()};}
   else if(RETRYABLE(reason)||reason==='offline'){outbox.push({text,ts:Date.now()});saveOutbox();th.textContent='אין רשת – שמרתי, אשלח כשתחזור';post('outbox',{text,n:outbox.length});const msg='ליבה, בנוגע לרשת: אין רשת. שמרתי את מה שאמרת, ואשלח כשהרשת תחזור.';if(appMode)post('say',{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else await say(msg);}
   else{th.textContent='לא הצלחתי לשלוח ('+reason+') – נסה שוב';await say('לא הצלחתי לשלוח');}
   post(sent?'sent':(outbox.length&&(RETRYABLE(reason)||reason==='offline')?'queued':'error'),{text,reason});
   busy=false;
-  if(sendQ.length){const nx=sendQ.shift();setTimeout(()=>send(nx),300);return;}
+  if(drainQ())return;
   if(!sent&&handsFree&&!outbox.length)idleListen();
 }
 </script>

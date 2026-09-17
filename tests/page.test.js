@@ -9,7 +9,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
 ok(/inbox/.test(html) && /spoken:true/.test(html), 'inbox ack (spoken:true) present');
 ok(/channel\/owner/.test(html), 'owner protocol present');
 ok(/channel\/quiet/.test(html), 'quiet protocol present');
-const cmdLine = (html.split('\n').find(l => l.includes("if(d.kind==='cmd'){")) || '');
+const cmdLine = (html.split('\n').find(l => l.includes("if(d.kind==='cmd'){") && l.includes("post('cmd'")) || '');
 ok(cmdLine.indexOf("update({spoken:true") > -1 && cmdLine.indexOf("update({spoken:true") < cmdLine.indexOf("post('cmd'"), 'cmd is acknowledged before it is relayed');
 ok(/prefixOf/.test(html) && /speakerOf/.test(html), 'speaker + topic prefix present');
 ok(/lastRingAt/.test(html), 'one ring per batch');

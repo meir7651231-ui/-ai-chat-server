@@ -77,6 +77,18 @@ window.__h={db,docs,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSna
   check((await get('channel/owner') || {}).owner === 'liba', 'sentence starting with ליבה → owner liba');
   sentAll = await H(() => window.__h.sent.slice()); check(sentAll[sentAll.length - 1] === '[ליבה] ליבה שומע', 'sent with liba tag: ' + JSON.stringify(sentAll.slice(-1)));
   // 7. quiet: defer normal, pass urgent, release on תפריע
+  // 6b. anchored switches (v31): "תעביר למנהל את הקובץ" is a normal sentence, "ליבה, תחזור" only switches
+  await p.evaluate(() => window.app({ liba: 'input', text: 'תעביר למנהל את הקובץ' })); await flush(2000);
+  sentAll = await H(() => window.__h.sent.slice()); check(sentAll[sentAll.length - 1] === '[ליבה] תעביר למנהל את הקובץ', 'sentence mentioning manager is sent, not a switch: ' + JSON.stringify(sentAll.slice(-1)));
+  await p.evaluate(() => window.app({ liba: 'input', text: 'מנהל' })); await flush(1800);
+  check((await get('channel/owner') || {}).owner === 'manager', 'bare מנהל switches to manager');
+  const nBefore = (await H(() => window.__h.sent.slice())).length;
+  await p.evaluate(() => window.app({ liba: 'input', text: 'ליבה, תחזור' })); await flush(2200);
+  check((await get('channel/owner') || {}).owner === 'liba', 'ליבה, תחזור → owner liba');
+  check((await H(() => window.__h.sent.slice())).length === nBefore, 'ליבה תחזור sends nothing to Claude');
+  // 6c. two inputs within 1.5 s are both sent
+  await p.evaluate(() => { window.app({ liba: 'input', text: 'ראשון' }); setTimeout(() => window.app({ liba: 'input', text: 'שני' }), 300); }); await flush(3500);
+  sentAll = await H(() => window.__h.sent.slice()); check(sentAll.includes('[ליבה] ראשון') && sentAll.includes('[ליבה] שני'), 'two quick inputs both sent: ' + JSON.stringify(sentAll.slice(-2)));
   await p.evaluate(() => window.app({ liba: 'input', text: 'אל תפריע שעה' })); m = await flush(2600);
   check(((await get('channel/quiet') || {}).until || 0) > Date.now(), 'quiet set for an hour');
   await set('inbox/m-4', { from: 'liba', kind: 'say', speaker: 'ליבה', topic: 'רגיל', text: 'הודעה רגילה', spoken: false, ts: 4 });
