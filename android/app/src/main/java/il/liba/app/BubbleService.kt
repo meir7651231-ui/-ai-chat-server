@@ -11,6 +11,8 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.GradientDrawable
 import android.media.AudioManager
 import android.media.ToneGenerator
+import android.net.ConnectivityManager
+import android.net.Network
 import android.os.*
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
@@ -20,15 +22,25 @@ import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
+import android.webkit.RenderProcessGoneDetail
 import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.app.NotificationCompat
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.Locale
 import kotlin.math.abs
 
 class BubbleService : Service(), LibaWeb.Bridge {
-    companion object { @Volatile var running = false; const val CH = "liba" }
+    companion object {
+        @Volatile var running = false
+        @Volatile var instance: BubbleService? = null
+        @Volatile var status = "מתחיל…"
+        const val CH = "liba"
+        val WAKE = listOf("ליבה", "ליבא", "ליבע", "לייבה", "היי ליבה", "הי ליבה")
+    }
 
     private lateinit var wm: WindowManager
     private val main = Handler(Looper.getMainLooper())
@@ -37,35 +49,48 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var bubble: FrameLayout? = null
     private var dot: TextView? = null
     private var label: TextView? = null
-    private var bubbleLp: WindowManager.LayoutParams? = null
     private var tts: TextToSpeech? = null
     private var ttsReady = false
     private var sr: SpeechRecognizer? = null
     private var listening = false
+    private var listenMode = "cmd" // cmd | wake | follow
     private var pulse: ObjectAnimator? = null
     private var pendingListenAfterSpeech = false
     private var pageReady = false
+    private var heyOn = false
+    private var convOn = true
+    private var lastSaid = ""
+    private var sentAt = 0L
+    private var pageLoadedAt = 0L
+    private var lastReloadAt = 0L
+    private var loginWarnedAt = 0L
+    private var systemMuted = false
+    private var errStreak = 0
 
     private fun dp(v: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v, resources.displayMetrics)
-
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
-        running = true
+        running = true; instance = this
         wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         startForegroundNotif()
+        applyPrefs()
         setupTts()
         setupWeb()
         setupBubble()
+        watchNetwork()
+        main.postDelayed(watchdog, 30000)
+        checkUpdate()
     }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
+
+    fun applyPrefs() { heyOn = Prefs.hey(this); convOn = Prefs.conv(this); main.post { if (heyOn) wakeLoop() else if (listenMode == "wake" && listening) sr?.cancel() } }
 
     // ---------- notification ----------
     private fun startForegroundNotif() {
         val nm = getSystemService(NotificationManager::class.java)
-        if (Build.VERSION.SDK_INT >= 26) nm.createNotificationChannel(NotificationChannel(CH, "ליבה", NotificationManager.IMPORTANCE_LOW))
+        nm.createNotificationChannel(NotificationChannel(CH, "ליבה", NotificationManager.IMPORTANCE_LOW))
         val pi = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE)
         val n = NotificationCompat.Builder(this, CH).setSmallIcon(R.drawable.ic_notif).setContentTitle("ליבה מאזינה")
             .setContentText("לחץ על הבועה כדי לדבר").setContentIntent(pi).setOngoing(true).setSilent(true).build()
@@ -89,20 +114,31 @@ class BubbleService : Service(), LibaWeb.Bridge {
         }
     }
     private fun speak(text: String) {
+        lastSaid = text
+        if (listening) { try { sr?.cancel() } catch (e: Exception) {}; listening = false }
         if (!ttsReady) { showLabel(text, 8000); onSpoken(); return }
-        setState(State.SPEAKING)
+        unmuteSystem(); setState(State.SPEAKING)
         tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "liba-" + System.currentTimeMillis())
     }
     private fun onSpoken() {
-        if (pendingListenAfterSpeech) { pendingListenAfterSpeech = false; startListening() } else setState(State.IDLE)
+        when {
+            pendingListenAfterSpeech -> { pendingListenAfterSpeech = false; startListening("cmd") }
+            convOn && listenMode != "wake" && (sentAt > 0 || lastSaid.isNotEmpty()) -> startListening("follow")
+            else -> idleOrWake()
+        }
     }
+    private fun idleOrWake() { setState(if (pageReady) State.IDLE else State.OFFLINE); if (heyOn) wakeLoop() }
 
-    // ---------- hidden WebView (the live ליבה page) ----------
+    // ---------- hidden WebView ----------
     private fun setupWeb() {
         val host = FrameLayout(this).apply { clipChildren = true; clipToPadding = true }
         val w = WebView(this)
         LibaWeb.setup(w, this)
-        // A real-sized viewport inside a 1px window: lazy iframes only load when they are "in view".
+        w.webViewClient = object : android.webkit.WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, request: android.webkit.WebResourceRequest) = false
+            override fun onPageFinished(view: WebView, url: String?) { LibaWeb.injectTop(view); onPage(url ?: "") }
+            override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean { main.post { rebuildWeb() }; return true }
+        }
         val dm = resources.displayMetrics
         host.addView(w, FrameLayout.LayoutParams(dm.widthPixels.coerceAtLeast(720), dm.heightPixels.coerceAtLeast(1280)))
         val lp = WindowManager.LayoutParams(dp(1f).toInt(), dp(1f).toInt(), WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
@@ -110,19 +146,54 @@ class BubbleService : Service(), LibaWeb.Bridge {
         lp.gravity = Gravity.TOP or Gravity.START; lp.alpha = 0.01f
         wm.addView(host, lp)
         w.loadUrl(getString(R.string.artifact_url))
-        web = w; webHost = host
+        web = w; webHost = host; pageLoadedAt = SystemClock.elapsedRealtime()
+    }
+    private fun rebuildWeb() {
+        webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy(); web = null; pageReady = false
+        setupWeb(); showLabel("הדף קרס – טוען מחדש", 4000)
+    }
+    private fun reloadPage(why: String) {
+        val now = SystemClock.elapsedRealtime(); if (now - lastReloadAt < 90000) return
+        lastReloadAt = now; pageReady = false; pageLoadedAt = now; status = "טוען מחדש ($why)"
+        web?.reload()
+    }
+    private val watchdog = object : Runnable { override fun run() {
+        if (!pageReady && SystemClock.elapsedRealtime() - pageLoadedAt > 90000) reloadPage("אין תגובה מהדף")
+        if (pageReady) web?.let { LibaWeb.hello(it) }
+        main.postDelayed(this, 30000)
+    } }
+    private fun watchNetwork() {
+        val cm = getSystemService(ConnectivityManager::class.java)
+        cm.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(n: Network) { main.post { if (!pageReady) reloadPage("רשת חזרה") } }
+        })
+    }
+
+    // ---------- update check ----------
+    private fun checkUpdate() {
+        Thread {
+            try {
+                val c = URL(getString(R.string.update_json)).openConnection() as HttpURLConnection; c.connectTimeout = 8000; c.readTimeout = 8000
+                val j = JSONObject(c.inputStream.bufferedReader().readText())
+                val mine = packageManager.getPackageInfo(packageName, 0).let { if (Build.VERSION.SDK_INT >= 28) it.longVersionCode.toInt() else @Suppress("DEPRECATION") it.versionCode }
+                if (j.getInt("versionCode") > mine) { Prefs.setUpdate(this, j.getString("url"), j.getInt("versionCode")); main.post { showLabel("יש גרסה חדשה (${j.optString("versionName")}) – לחיצה ארוכה עליי להתקנה", 8000) } }
+                else Prefs.setUpdate(this, null, mine)
+            } catch (e: Exception) { Log.d(LibaWeb.TAG, "update: $e") }
+        }.start()
+        main.postDelayed({ checkUpdate() }, 6 * 3600 * 1000L)
     }
 
     // ---------- bubble ----------
-    private enum class State { IDLE, LISTENING, SPEAKING, RINGING, SENDING, OFFLINE }
+    private enum class State { IDLE, LISTENING, WAKE, SPEAKING, RINGING, SENDING, OFFLINE }
     private fun setState(s: State) {
         val d = dot ?: return
         pulse?.cancel(); d.scaleX = 1f; d.scaleY = 1f
         val bg = d.background as GradientDrawable
         when (s) {
             State.IDLE -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#7DF9FF"), Color.parseColor("#8A5CFF"))); d.text = "ל" }
+            State.WAKE -> { bg.setColors(intArrayOf(Color.parseColor("#B8FBFF"), Color.parseColor("#3FBDB9"), Color.parseColor("#2C3140"))); d.text = "ל"; pulseDot(1.06f, 1400) }
             State.OFFLINE -> { bg.setColors(intArrayOf(Color.parseColor("#5B6478"), Color.parseColor("#2C3140"), Color.parseColor("#1A1E28"))); d.text = "…" }
-            State.LISTENING -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#FF5C8A"), Color.parseColor("#8A1F3A"))); d.text = "🎙" ; pulseDot(1.15f, 500) }
+            State.LISTENING -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#FF5C8A"), Color.parseColor("#8A1F3A"))); d.text = "🎙"; pulseDot(1.15f, 500) }
             State.SPEAKING -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#5CFFB0"), Color.parseColor("#0B6E6D"))); d.text = "🔊" }
             State.RINGING -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#FFB454"), Color.parseColor("#C9491D"))); d.text = "☎"; pulseDot(1.35f, 300) }
             State.SENDING -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#7DF9FF"), Color.parseColor("#2C3140"))); d.text = "↑" }
@@ -130,13 +201,10 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
     private fun pulseDot(to: Float, ms: Long) {
         val d = dot ?: return
-        pulse = ObjectAnimator.ofFloat(d, "scaleX", 1f, to).apply { duration = ms; repeatMode = ValueAnimator.REVERSE; repeatCount = ValueAnimator.INFINITE
-            addUpdateListener { d.scaleY = d.scaleX }; start() }
+        pulse = ObjectAnimator.ofFloat(d, "scaleX", 1f, to).apply { duration = ms; repeatMode = ValueAnimator.REVERSE; repeatCount = ValueAnimator.INFINITE; addUpdateListener { d.scaleY = d.scaleX }; start() }
     }
-
     private fun setupBubble() {
-        val root = FrameLayout(this)
-        val size = dp(62f).toInt()
+        val root = FrameLayout(this); val size = dp(62f).toInt()
         val d = TextView(this).apply {
             text = "ל"; setTextColor(Color.parseColor("#04050A")); textSize = 26f; gravity = Gravity.CENTER
             background = GradientDrawable().apply { shape = GradientDrawable.OVAL; gradientType = GradientDrawable.RADIAL_GRADIENT; gradientRadius = dp(40f)
@@ -144,7 +212,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             elevation = dp(8f)
         }
         val l = TextView(this).apply {
-            setTextColor(Color.WHITE); textSize = 15f; setPadding(dp(14f).toInt(), dp(8f).toInt(), dp(14f).toInt(), dp(8f).toInt()); maxWidth = dp(240f).toInt()
+            setTextColor(Color.WHITE); textSize = 15f; setPadding(dp(14f).toInt(), dp(8f).toInt(), dp(14f).toInt(), dp(8f).toInt()); maxWidth = dp(250f).toInt()
             background = GradientDrawable().apply { cornerRadius = dp(16f); setColor(Color.parseColor("#E60A0C16")); setStroke(dp(1f).toInt(), Color.parseColor("#337DF9FF")) }
             visibility = View.GONE; textDirection = View.TEXT_DIRECTION_RTL
         }
@@ -154,10 +222,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, PixelFormat.TRANSLUCENT)
         lp.gravity = Gravity.TOP or Gravity.END; lp.x = dp(12f).toInt(); lp.y = dp(160f).toInt()
         wm.addView(root, lp)
-        bubble = root; dot = d; label = l; bubbleLp = lp
+        bubble = root; dot = d; label = l
         setState(State.OFFLINE)
-
-        // drag / tap / long-press
         var sx = 0f; var sy = 0f; var ox = 0; var oy = 0; var moved = false; var downAt = 0L
         val longPress = Runnable { if (!moved) { moved = true; openMain() } }
         d.setOnTouchListener { _, ev ->
@@ -172,49 +238,43 @@ class BubbleService : Service(), LibaWeb.Bridge {
         }
     }
     private fun openMain() { startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
-
     private var labelHide: Runnable? = null
     private fun showLabel(text: String, ms: Long) {
-        val l = label ?: return
-        l.text = text; l.visibility = View.VISIBLE
-        labelHide?.let { main.removeCallbacks(it) }
-        labelHide = Runnable { l.visibility = View.GONE }.also { main.postDelayed(it, ms) }
+        val l = label ?: return; l.text = text; l.visibility = View.VISIBLE
+        labelHide?.let { main.removeCallbacks(it) }; labelHide = Runnable { l.visibility = View.GONE }.also { main.postDelayed(it, ms) }
     }
-
-    @Volatile var pageState = "טוען את הדף…"
-    override fun onPage(url: String) { main.post {
-        pageState = when {
-            url.startsWith("error:") -> "הדף לא נטען: " + url.removePrefix("error:")
-            url.contains("/login") || url.contains("auth") -> "צריך להתחבר ל‑claude.ai – לחיצה ארוכה עליי, כבה בועה, התחבר, הפעל שוב"
-            url.contains("/artifact/") -> "הדף נטען, מחכה שהוא יתחבר…"
-            else -> "נטען: " + url.take(60)
-        }
-        if (!pageReady) showLabel(pageState, 6000)
-        web?.let { LibaWeb.hello(it) }
-    } }
-
     private fun onTap() {
         when {
-            listening -> sr?.stopListening()
-            tts?.isSpeaking == true -> { tts?.stop(); setState(State.IDLE) }
-            !pageReady -> { showLabel(pageState, 6000); web?.let { LibaWeb.hello(it); if (pageState.startsWith("הדף לא")) it.reload() } }
-            else -> startListening()
+            listening && listenMode != "wake" -> sr?.stopListening()
+            tts?.isSpeaking == true -> { tts?.stop(); idleOrWake() }
+            !pageReady -> { showLabel(status, 6000); web?.let { LibaWeb.hello(it) }; if (status.startsWith("הדף לא")) reloadPage("לחיצה") }
+            else -> startListening("cmd")
         }
     }
 
     // ---------- speech in ----------
-    private fun startListening() {
+    private fun muteSystem() { if (systemMuted) return; try { (getSystemService(AUDIO_SERVICE) as AudioManager).adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_MUTE, 0); systemMuted = true } catch (e: Exception) {} }
+    private fun unmuteSystem() { if (!systemMuted) return; try { (getSystemService(AUDIO_SERVICE) as AudioManager).adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) {}; systemMuted = false }
+    private fun wakeLoop() { if (!heyOn || listening || tts?.isSpeaking == true) return; startListening("wake") }
+    private fun startListening(mode: String) {
         if (listening) return
         if (!SpeechRecognizer.isRecognitionAvailable(this)) { showLabel("אין זיהוי דיבור בטלפון (צריך את אפליקציית Google)", 5000); return }
-        tts?.stop()
+        if (mode != "wake") tts?.stop()
         if (sr == null) sr = SpeechRecognizer.createSpeechRecognizer(this).also { it.setRecognitionListener(recListener) }
         val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, "he-IL"); putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
-            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 1500L)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, if (mode == "wake") 1200L else 1500L)
+            if (mode == "wake") putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 8000L)
         }
-        listening = true; setState(State.LISTENING); showLabel("מקשיב…", 15000)
+        listening = true; listenMode = mode
+        if (mode == "wake") { muteSystem(); setState(State.WAKE) } else { unmuteSystem(); setState(State.LISTENING); showLabel(if (mode == "follow") "…" else "מקשיב…", 15000) }
         sr?.startListening(i)
+    }
+    private fun stripWake(t: String): Pair<Boolean, String> {
+        val low = t.trim()
+        for (w in WAKE.sortedByDescending { it.length }) { val i = low.indexOf(w); if (i >= 0) return true to (low.substring(0, i) + low.substring(i + w.length)).trim().trim(',', '.', '،') }
+        return false to low
     }
     private val recListener = object : RecognitionListener {
         override fun onReadyForSpeech(p: Bundle?) {}
@@ -222,55 +282,94 @@ class BubbleService : Service(), LibaWeb.Bridge {
         override fun onRmsChanged(v: Float) {}
         override fun onBufferReceived(b: ByteArray?) {}
         override fun onEndOfSpeech() {}
-        override fun onPartialResults(p: Bundle?) { p?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()?.let { if (it.isNotBlank()) showLabel(it, 15000) } }
         override fun onEvent(t: Int, p: Bundle?) {}
-        override fun onError(e: Int) { listening = false; setState(State.IDLE)
-            showLabel(when (e) { SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "לא שמעתי כלום"; SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "אין הרשאת מיקרופון"; SpeechRecognizer.ERROR_NETWORK -> "אין אינטרנט לזיהוי"; else -> "שגיאת מיקרופון ($e)" }, 3000) }
-        override fun onResults(r: Bundle?) { listening = false
-            val t = r?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()?.trim().orEmpty()
-            if (t.isEmpty()) { setState(State.IDLE); showLabel("לא שמעתי כלום", 3000); return }
-            setState(State.SENDING); showLabel("→ $t", 6000)
-            web?.let { LibaWeb.sendInput(it, t) } }
+        override fun onPartialResults(p: Bundle?) {
+            val t = p?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull() ?: return
+            if (listenMode == "wake") { if (WAKE.any { t.contains(it) }) { showLabel("כן?", 3000) } } else if (t.isNotBlank()) showLabel(t, 15000)
+        }
+        override fun onError(e: Int) { listening = false
+            if (listenMode == "wake") { errStreak++; if (e == SpeechRecognizer.ERROR_RECOGNIZER_BUSY || e == SpeechRecognizer.ERROR_CLIENT) { sr?.destroy(); sr = null }
+                main.postDelayed({ wakeLoop() }, if (errStreak > 5) 5000 else 400); return }
+            errStreak = 0
+            if (listenMode == "follow" && (e == SpeechRecognizer.ERROR_NO_MATCH || e == SpeechRecognizer.ERROR_SPEECH_TIMEOUT)) { idleOrWake(); return }
+            showLabel(when (e) { SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "לא שמעתי כלום"; SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "אין הרשאת מיקרופון"; SpeechRecognizer.ERROR_NETWORK -> "אין אינטרנט לזיהוי"; else -> "שגיאת מיקרופון ($e)" }, 3000)
+            idleOrWake() }
+        override fun onResults(r: Bundle?) { listening = false; errStreak = 0
+            var t = r?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()?.trim().orEmpty()
+            if (listenMode == "wake") {
+                val (hit, rest) = stripWake(t)
+                if (!hit) { main.postDelayed({ wakeLoop() }, 250); return }
+                if (rest.length < 2) { pendingListenAfterSpeech = true; speak("כן?"); return }
+                t = rest
+            }
+            if (t.isEmpty()) { if (listenMode == "follow") idleOrWake() else { showLabel("לא שמעתי כלום", 3000); idleOrWake() }; return }
+            handleUtterance(t) }
+    }
+
+    // ---------- local commands, then send ----------
+    private fun handleUtterance(t: String) {
+        val n = t.replace("?", "").trim()
+        when {
+            n in listOf("חזור", "תחזור", "תחזור על זה", "עוד פעם", "מה אמרת", "מה") && lastSaid.isNotEmpty() -> { speak(lastSaid); return }
+            n in listOf("מה הסטטוס", "סטטוס", "מה קורה", "מה המצב") -> { speak(localStatus()); return }
+            n in listOf("שקט", "תשתוק", "עצור", "די", "ביטול", "בטל") -> { tts?.stop(); sentAt = 0; lastSaid = ""; setState(State.IDLE); showLabel("שקט.", 1500); if (heyOn) wakeLoop(); return }
+            !pageReady -> { speak("אני לא מחובר לדף כרגע. $status"); return }
+        }
+        Prefs.log(this, "me", t); sentAt = SystemClock.elapsedRealtime()
+        setState(State.SENDING); showLabel("→ $t", 6000)
+        try { ToneGenerator(AudioManager.STREAM_NOTIFICATION, 60).let { it.startTone(ToneGenerator.TONE_PROP_ACK, 120); main.postDelayed({ it.release() }, 300) } } catch (e: Exception) {}
+        web?.let { LibaWeb.sendInput(it, t) }
+    }
+    private fun localStatus(): String {
+        if (!pageReady) return "לא מחובר לדף. $status"
+        if (sentAt > 0) { val s = (SystemClock.elapsedRealtime() - sentAt) / 1000; return "שלחתי לפני $s שניות ומחכה לתשובה." }
+        return "שקט. מחובר, אין הודעות פתוחות."
     }
 
     // ---------- bridge (from the page) ----------
-    override fun onReady() { main.post { if (!pageReady) { pageReady = true; setState(State.IDLE); showLabel("ליבה מחוברת. לחץ עליי ודבר.", 4000) } } }
-    override fun onSent(text: String) { main.post { setState(State.IDLE); showLabel("נשלח. מחכה לתשובה…", 30000) } }
+    override fun onPage(url: String) { main.post {
+        pageLoadedAt = SystemClock.elapsedRealtime()
+        status = when {
+            url.startsWith("error:") -> "הדף לא נטען: " + url.removePrefix("error:")
+            url.contains("/login") || url.contains("auth") -> { val now = SystemClock.elapsedRealtime(); if (now - loginWarnedAt > 3600000) { loginWarnedAt = now; speak("צריך להתחבר ל‑claude.ai. לחיצה ארוכה עליי, כבה בועה, התחבר, והפעל שוב.") }; "צריך להתחבר ל‑claude.ai" }
+            url.contains("/artifact/") -> "הדף נטען, מחכה שהוא יתחבר…"
+            else -> "נטען: " + url.take(60)
+        }
+        if (!pageReady) showLabel(status, 5000)
+        web?.let { LibaWeb.hello(it) }
+    } }
+    override fun onReady() { main.post { if (!pageReady) { pageReady = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000) } } }
     override fun onPageTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
-    override fun onError(text: String, reason: String) { main.post { setState(State.IDLE)
+    override fun onSent(text: String) { main.post { status = "נשלח, מחכה לתשובה…"; setState(State.IDLE); showLabel("נשלח. מחכה…", 30000); if (heyOn) wakeLoop() } }
+    override fun onError(text: String, reason: String) { main.post { sentAt = 0
         val why = when {
-            reason.contains("consent") -> "הדף צריך אישור חד פעמי. לחיצה ארוכה עליי, שלח הודעה אחת מהדף, ואשר."
+            reason.contains("consent") -> "הדף צריך אישור חד פעמי. לחיצה ארוכה עליי, כבה בועה, שלח הודעה אחת מהדף ואשר."
             reason.contains("no_session") -> "אין סשן של קלוד שמאזין עכשיו."
             reason.contains("writers_only") || reason.contains("forbidden") || reason.contains("not_granted") -> "אין הרשאה לשלוח מהחשבון הזה."
             reason.contains("rate") -> "יותר מדי מהר. חכה רגע."
-            reason.contains("gesture") || reason.contains("invalid") -> "השליחה דורשת נגיעה בדף. נסה שוב."
-            reason.isBlank() -> ""
-            else -> "סיבה: $reason"
-        }
-        showLabel("לא נשלח" + (if (reason.isNotBlank()) " · $reason" else ""), 8000)
-        speak("לא הצלחתי לשלוח. $why") } }
+            reason.isBlank() -> "" else -> "סיבה: $reason" }
+        showLabel("לא נשלח" + (if (reason.isNotBlank()) " · $reason" else ""), 8000); speak("לא הצלחתי לשלוח. $why") } }
     override fun onSay(text: String, kind: String, options: List<String>) { main.post {
+        sentAt = 0; status = "מחובר."
+        Prefs.log(this, "liba", text)
         val ask = options.isNotEmpty() || kind == "stuck" || kind == "call" || kind == "ask"
         val spoken = text + if (options.isNotEmpty()) ". " + options.joinToString(", או ") + "?" else ""
         showLabel(text, 20000)
-        if (kind == "call" || kind == "stuck") {
-            setState(State.RINGING); ring()
-            main.postDelayed({ pendingListenAfterSpeech = ask; speak(spoken) }, 2200)
-        } else { pendingListenAfterSpeech = ask; speak(spoken) }
+        if (kind == "call" || kind == "stuck") { setState(State.RINGING); ring(); main.postDelayed({ pendingListenAfterSpeech = ask; speak(spoken) }, 2200) }
+        else { pendingListenAfterSpeech = ask; speak(spoken) }
     } }
     private fun ring() {
+        unmuteSystem()
         try { val tg = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 90); tg.startTone(ToneGenerator.TONE_SUP_RINGTONE, 1800); main.postDelayed({ tg.release() }, 2000) } catch (e: Exception) {}
         val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        if (Build.VERSION.SDK_INT >= 26) v.vibrate(VibrationEffect.createWaveform(longArrayOf(0, 300, 150, 300, 150, 300), -1)) else @Suppress("DEPRECATION") v.vibrate(1200)
+        v.vibrate(VibrationEffect.createWaveform(longArrayOf(0, 300, 150, 300, 150, 300), -1))
     }
 
     override fun onDestroy() {
-        running = false
+        running = false; instance = null; main.removeCallbacksAndMessages(null); unmuteSystem()
         try { sr?.destroy() } catch (e: Exception) {}
         tts?.stop(); tts?.shutdown()
-        bubble?.let { runCatching { wm.removeView(it) } }
-        webHost?.let { runCatching { wm.removeView(it) } }
-        web?.destroy()
+        bubble?.let { runCatching { wm.removeView(it) } }; webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy()
         super.onDestroy()
     }
 }

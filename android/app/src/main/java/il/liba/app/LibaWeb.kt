@@ -86,6 +86,7 @@ object LibaWeb {
         }
     }
 
+    fun injectTop(web: WebView) { web.evaluateJavascript(TOP_SCRIPT, null) }
     fun sendInput(web: WebView, text: String) {
         web.evaluateJavascript("window.__libaInput && window.__libaInput(${JSONObject.quote(text)})", null)
     }
