@@ -57,6 +57,11 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var srOnDevice = false          // step 21: which recognizer `sr` currently is
     private var onDeviceFailed = false      // on-device model has no Hebrew → fall back
     private var vad: VadGate? = null        // step 21: voice gate before the recognizer
+    private var rate = 1.25f                 // step 23: speech rate, remembered
+    private var night = false                // step 26: whisper mode – vibrate + text, no voice
+    private var tones = true                 // step 28: short confirmation tones
+    private val chunks = ArrayDeque<String>() // step 29: long texts read in parts
+    private var paused = false
     private var listening = false
     private var listenMode = "cmd" // cmd | wake | follow
     private var pulse: ObjectAnimator? = null
@@ -96,7 +101,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
 
-    fun applyPrefs() { heyOn = Prefs.hey(this); convOn = Prefs.conv(this); main.post { if (heyOn) wakeLoop() else if (listenMode == "wake" && listening) sr?.cancel() } }
+    fun applyPrefs() { heyOn = Prefs.hey(this); convOn = Prefs.conv(this); rate = Prefs.rate(this); night = Prefs.night(this); tones = Prefs.tones(this); tts?.setSpeechRate(rate); main.post { if (heyOn) wakeLoop() else if (listenMode == "wake" && listening) sr?.cancel() } }
 
     // ---------- notification ----------
     private fun startForegroundNotif() {
@@ -130,26 +135,47 @@ class BubbleService : Service(), LibaWeb.Bridge {
             if (st == TextToSpeech.SUCCESS) {
                 val r = tts?.setLanguage(Locale("he", "IL"))
                 ttsReady = r != TextToSpeech.LANG_MISSING_DATA && r != TextToSpeech.LANG_NOT_SUPPORTED
-                tts?.setSpeechRate(1.25f)
+                tts?.setSpeechRate(rate)
                 tts?.setAudioAttributes(android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION_EVENT).setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build())
                 tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                     override fun onStart(id: String?) {}
                     override fun onError(id: String?) { main.post { onSpoken() } }
-                    override fun onDone(id: String?) { main.post { onSpoken() } }
+                    override fun onDone(id: String?) { main.post { if (chunks.isNotEmpty() && !paused) { main.postDelayed({ speakNextChunk(false) }, 350) } else onSpoken() } }
                 })
                 if (!ttsReady) main.post { showLabel("אין קול עברי בטלפון – התקן Google Text-to-Speech עברית", 6000) }
             }
         }
     }
-    private fun speak(text: String) {
+    private fun speak(text: String, urgent: Boolean = false) {
         lastSaid = text
         stopVad()
         if (listening) { try { sr?.cancel() } catch (e: Exception) {}; listening = false }
+        if (isNight() && !urgent) { vibrate(longArrayOf(0, 120, 80, 120)); showLabel("🌙 " + text, 25000); onSpoken(); return } // step 26
         if (!ttsReady) { showLabel(text, 8000); onSpoken(); return }
-        unmuteSystem(); setState(State.SPEAKING); speaking = true
-        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "liba-" + System.currentTimeMillis())
-        main.postDelayed({ if (speaking) { speaking = false; onSpoken() } }, 4000L + text.length * 120L) // safety net if TTS never reports
+        chunks.clear(); paused = false
+        chunks.addAll(splitChunks(text))
+        speakNextChunk(true)
     }
+    private fun isNight(): Boolean = night // voice command only; no automatic hours (Meir decides)
+    // step 29: ≤300 chars per part, cut at sentence ends
+    private fun splitChunks(t: String): List<String> {
+        if (t.length <= 320) return listOf(t)
+        val out = ArrayList<String>(); var cur = StringBuilder()
+        for (sent in t.split(Regex("(?<=[.!?:;])\\s+"))) { if (cur.length + sent.length > 300 && cur.isNotEmpty()) { out.add(cur.toString().trim()); cur = StringBuilder() }; cur.append(sent).append(' ') }
+        if (cur.isNotBlank()) out.add(cur.toString().trim())
+        return out
+    }
+    private fun speakNextChunk(first: Boolean) {
+        val part = chunks.removeFirstOrNull() ?: run { speaking = false; onSpoken(); return }
+        unmuteSystem(); setState(State.SPEAKING); speaking = true
+        tts?.speak(part, TextToSpeech.QUEUE_FLUSH, null, "liba-" + System.currentTimeMillis())
+        main.postDelayed({ if (speaking) { speaking = false; onSpoken() } }, 4000L + part.length * 120L) // safety net if TTS never reports
+    }
+    private fun vibrate(pattern: LongArray) { try { val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator; if (Build.VERSION.SDK_INT >= 26) v.vibrate(VibrationEffect.createWaveform(pattern, -1)) else @Suppress("DEPRECATION") v.vibrate(pattern, -1) } catch (e: Exception) {} }
+    // step 28: short tones – heard / sent / reply arrived
+    private fun tone(kind: String) { if (!tones || isNight()) return
+        val (t, ms) = when (kind) { "heard" -> ToneGenerator.TONE_PROP_BEEP to 90; "sent" -> ToneGenerator.TONE_PROP_ACK to 120; else -> ToneGenerator.TONE_PROP_PROMPT to 160 }
+        try { ToneGenerator(AudioManager.STREAM_NOTIFICATION, 55).let { it.startTone(t, ms); main.postDelayed({ it.release() }, ms + 200L) } } catch (e: Exception) {} }
     private fun onSpoken() {
         if (!speaking && pendingListenAfterSpeech.not() && listenMode == "follow") return
         speaking = false
@@ -387,12 +413,21 @@ class BubbleService : Service(), LibaWeb.Bridge {
         when {
             n in listOf("חזור", "תחזור", "תחזור על זה", "עוד פעם", "מה אמרת", "מה") && lastSaid.isNotEmpty() -> { speak(lastSaid); return }
             n in listOf("מה הסטטוס", "סטטוס", "מה קורה", "מה המצב", "מה עם המשימות", "משימות") -> { speak(localStatus()); return }
+            n in listOf("לאט יותר", "יותר לאט", "לאט", "תדבר לאט") -> { rate = (rate - 0.15f).coerceIn(0.6f, 2.2f); Prefs.setRate(this, rate); tts?.setSpeechRate(rate); speak("ככה, לאט יותר."); return }
+            n in listOf("מהר יותר", "יותר מהר", "מהר", "תדבר מהר") -> { rate = (rate + 0.15f).coerceIn(0.6f, 2.2f); Prefs.setRate(this, rate); tts?.setSpeechRate(rate); speak("ככה, מהר יותר."); return }
+            n in listOf("מצב לילה", "לחישה", "מצב לחישה", "בלי קול") -> { night = true; Prefs.setNight(this, true); vibrate(longArrayOf(0, 200)); showLabel("🌙 מצב לילה: רטט וטקסט, בלי קול. תגיד 'בטל מצב לילה'.", 8000); return }
+            n in listOf("בטל מצב לילה", "סיים מצב לילה", "עם קול", "תדברי", "תדבר") -> { night = false; Prefs.setNight(this, false); speak("חזרתי לדבר."); return }
+            n in listOf("בלי צלילים", "בטל צלילים") -> { tones = false; Prefs.setTones(this, false); speak("בלי צלילים."); return }
+            n in listOf("עם צלילים", "החזר צלילים") -> { tones = true; Prefs.setTones(this, true); speak("עם צלילים."); return }
+            n in listOf("דלג", "תדלג", "הלאה", "מספיק") && (chunks.isNotEmpty() || speaking) -> { chunks.clear(); paused = false; tts?.stop(); speaking = false; showLabel("דילגתי.", 2000); onSpoken(); return }
+            n in listOf("תמשיך", "המשך", "תמשיכי") && chunks.isNotEmpty() -> { paused = false; speakNextChunk(false); return }
+            n in listOf("רגע", "חכה", "עצור רגע") && (chunks.isNotEmpty() || speaking) -> { paused = true; tts?.stop(); speaking = false; showLabel("עצרתי. תגיד תמשיך.", 8000); return }
             n in listOf("שקט", "תשתוק", "עצור", "די", "ביטול", "בטל") -> { tts?.stop(); sentAt = 0; lastSaid = ""; heyOff(); setState(State.IDLE); showLabel("שקט. מילת ההפעלה כבויה.", 3000); return }
             !pageReady -> { speak("אני לא מחובר לדף כרגע. $status"); return }
         }
         Prefs.log(this, "me", t); sentAt = SystemClock.elapsedRealtime()
         setState(State.SENDING); showLabel("→ $t", 6000)
-        try { ToneGenerator(AudioManager.STREAM_NOTIFICATION, 60).let { it.startTone(ToneGenerator.TONE_PROP_ACK, 120); main.postDelayed({ it.release() }, 300) } } catch (e: Exception) {}
+        tone("heard")
         web?.let { LibaWeb.sendInput(it, t) }
     }
     private fun localStatus(): String {
@@ -421,7 +456,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     override fun onCrashSaved(id: String) { main.post { Prefs.clearCrash(this); showLabel("דוח הקריסה נשלח לליבה", 4000) } }
     override fun onTasks(summary: String, n: Int, blocked: Int) { main.post { taskSummary = summary; taskBlocked = blocked; if (n > 0) status = "מחובר · $n משימות" + (if (blocked > 0) " · $blocked מחכות לך" else "") } }
     override fun onPageTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
-    override fun onSent(text: String) { main.post { status = "נשלח, מחכה לתשובה…"; setState(State.IDLE); showLabel("נשלח. מחכה…", 30000); armWaitReminders(); if (heyOn) wakeLoop() } }
+    override fun onSent(text: String) { main.post { tone("sent"); status = "נשלח, מחכה לתשובה…"; setState(State.IDLE); showLabel("נשלח. מחכה…", 30000); armWaitReminders(); if (heyOn) wakeLoop() } }
     override fun onError(text: String, reason: String) { main.post { sentAt = 0
         val why = when {
             reason.contains("consent") -> "הדף צריך אישור חד פעמי. לחיצה ארוכה עליי, כבה בועה, שלח הודעה אחת מהדף ואשר."
@@ -439,8 +474,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val ask = options.isNotEmpty() || kind == "stuck" || kind == "call" || kind == "ask"
         val spoken = text + if (options.isNotEmpty()) ". " + options.joinToString(", או ") + "?" else ""
         showLabel(text, 20000)
-        if (kind == "call" || kind == "stuck") { setState(State.RINGING); ring(); main.postDelayed({ pendingListenAfterSpeech = ask; speak(spoken) }, 2200) }
-        else { pendingListenAfterSpeech = ask; speak(spoken) }
+        if (kind == "call" || kind == "stuck") { setState(State.RINGING); ring(); main.postDelayed({ pendingListenAfterSpeech = ask; speak(spoken, urgent = true) }, 2200) }
+        else { tone("reply"); pendingListenAfterSpeech = ask; main.postDelayed({ speak(spoken) }, 250) }
     } }
     private fun ring() {
         unmuteSystem()
