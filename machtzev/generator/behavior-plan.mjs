@@ -650,6 +650,68 @@ export async function perokGoal(text, origin = 'מטרה') {
   return { needs, owner, rows, claims: g.claims, fixtures: fixturePool().length };
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+//  `--perok-scan` · מרחב-המדידה של הפירוק = **כל משפט בריפו**, לא מטרה אחת
+//  ────────────────────────────────────────────────────────────────────────────
+//  הוראת-הבעלים (‏17.9 22:37): "אני רוצה שהוא יעבוד על כל משפט". ארבעה מקורות,
+//  כולם קיימים בריפו ונקראים מהדיסק — אפס רשימה-בקוד:
+//    א  machtzev/generator/nl-smoke.txt · nl-quality.txt   — משפטים חופשיים (שורה=יחידה)
+//    ב  machtzev/generator/specs/*.txt                     — משפטי-אפיון (קובץ=יחידה)
+//    ג  gen/mosad.sentences.txt                            — משפטי-מוסד (שורה=יחידה)
+//    ד  machtzev/generator/goals/payments/goal.txt + knowledge/connect/goals/goals-5.txt
+//  לכל יחידה: תביעות · צרכים-שנגזרו · נפסלו-בהמצאה · מתגי-בעלים · ms.
+//  **הצעדים היקרים** (חיפוש · הוכחה · Dart · משטרה) אינם רצים כאן — הם ~170s ליחידה
+//  ולכן נמדדים על תת-קבוצה עם `--sample n --seed s` (דטרמיניסטי, מתועד), וכל יחידה
+//  שלא נמדדה **נספרת ומדווחת** (‏L27: «לא-נמדד» עם סיבה, לא «ירוק»).
+//  ‏`--json` ⇒ פלט-מכונה · ברירת-מחדל ⇒ שורות-TSV + סיכום פר-מקור.
+// ══════════════════════════════════════════════════════════════════════════════
+const SCAN_SRC = [
+  { src: 'א·nl', unit: 'line', files: ['machtzev/generator/nl-smoke.txt', 'machtzev/generator/nl-quality.txt'] },
+  { src: 'ב·specs', unit: 'file', glob: 'machtzev/generator/specs' },
+  { src: 'ג·mosad', unit: 'line', files: ['gen/mosad.sentences.txt'] },
+  { src: 'ד·goals', unit: 'line', files: ['machtzev/generator/goals/payments/goal.txt', 'knowledge/connect/goals/goals-5.txt'] },
+];
+/** יחידות-המדידה מהדיסק (דטרמיניסטי: קבצים ממוינים · שורות בסדר-הקובץ). */
+export function scanUnits() {
+  const out = [];
+  for (const s of SCAN_SRC) {
+    if (s.glob) {
+      let fs2 = []; try { fs2 = fs.readdirSync(path.join(R.ROOT, s.glob)).filter((f) => /\.txt$/.test(f)).sort(); } catch {}
+      for (const f of fs2) { const rel = `${s.glob}/${f}`; let t = ''; try { t = fs.readFileSync(path.join(R.ROOT, rel), 'utf8'); } catch { continue; }
+        if (t.trim()) out.push({ src: s.src, id: f.replace(/\.txt$/, ''), at: rel, text: t }); }
+      continue;
+    }
+    for (const rel of s.files) {
+      let lines = []; try { lines = fs.readFileSync(path.join(R.ROOT, rel), 'utf8').split('\n'); } catch { continue; }
+      lines.forEach((l, i) => { const t = l.trim(); if (!t || /^#/.test(t)) return;
+        out.push({ src: s.src, id: `${path.basename(rel, '.txt')}:${i + 1}`, at: `${rel}:${i + 1}`, text: t }); });
+    }
+  }
+  return out;
+}
+/** ‏mulberry32 — בורר תת-קבוצה **דטרמיניסטי** לפי seed (ראיה ניתנת-לשחזור, לא Math.random). */
+const rng = (seed) => { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
+export function seededSample(arr, n, seed) {
+  const r = rng(seed); const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a.slice(0, n);
+}
+/** פירוק + אפס-המצאה על יחידה אחת, בתהליך (‏hamtzaa דרך הייצוא, לא spawn — 315 יחידות). */
+export async function scanOne(u) {
+  const t0 = Date.now();
+  const H = await import('./hamtzaa.mjs');
+  let r = null, err = null;
+  try { r = await perokGoal(u.text, 'מטרה'); } catch (e) { err = String((e && e.message) || e).slice(0, 120); }
+  if (err) return { ...u, error: err, claims: 0, needs: 0, invented: 0, owner: 0, ms: Date.now() - t0 };
+  let inv = { rows: [], invented: [] };
+  if (Object.keys(r.needs).length) { try { inv = H.detectInventedNeeds(u.text, r.needs); } catch (e) { inv = { rows: [], invented: [], error: String(e.message).slice(0, 80) }; } }
+  return { ...u, claims: r.claims.length, needs: Object.keys(r.needs).length,
+    needIds: Object.keys(r.needs), invented: (inv.invented || []).length,
+    inventedIds: (inv.invented || []).map((x) => x.need), owner: r.owner.length,
+    ownerKinds: [...new Set(r.owner.map((o) => o.kind))], noBehavior: !r.claims.length,
+    ms: Date.now() - t0 };
+}
+
 /** בדיקה-מבנית מינימלית של חוזה-צורך (הרצפה עד ש-hamtzaa יקבל --needs): חוזה בלי דוגמה · שקע-מוצהר בלי ערך = פסילה, לא ניחוש. */
 export function needStructure(need) {
   const bad = [];
@@ -848,6 +910,24 @@ if (isMain && process.argv.includes('--backward')) {
   const imports = opt('--imports') ? JSON.parse(opt('--imports')) : [];
   console.log(JSON.stringify(backwardSearch(at, { examples, imports }), null, 1));
   process.exit(0);
+}
+if (isMain && process.argv.includes('--perok-scan')) {   // w-goal-any · הפירוק על **כל משפט בריפו**
+  const opt = (k, d = null) => { const j = process.argv.indexOf(k); return j >= 0 && process.argv[j + 1] && !process.argv[j + 1].startsWith('--') ? process.argv[j + 1] : d; };
+  const only = opt('--src'); const seed = +(opt('--seed', '0') || 0); const n = +(opt('--sample', '0') || 0);
+  let units = scanUnits(); if (only) units = units.filter((u) => u.src.includes(only));
+  if (n > 0) units = seededSample(units, n, seed);
+  const rows = []; for (const u of units) rows.push(await scanOne(u));
+  if (process.argv.includes('--json')) { console.log(JSON.stringify({ seed, sample: n || null, units: units.length, rows }, null, 1)); process.exit(0); }
+  console.log(['מקור', 'יחידה', 'תביעות', 'צרכים', 'נפסלו-בהמצאה', 'מתגי-בעלים', 'ms', 'הערה'].join('\t'));
+  for (const r of rows) console.log([r.src, r.id, r.claims, r.needs, r.invented, r.owner, r.ms,
+    r.error ? 'כשל: ' + r.error : r.noBehavior ? 'אין תביעת-התנהגות (אין פועל-מטרה במשפט)' : (r.ownerKinds || []).join('/')].join('\t'));
+  const by = {}; for (const r of rows) { const b = (by[r.src] ||= { units: 0, claims: 0, needs: 0, invented: 0, owner: 0, noBeh: 0, withNeeds: 0, ms: 0 });
+    b.units++; b.claims += r.claims; b.needs += r.needs; b.invented += r.invented; b.owner += r.owner; b.ms += r.ms; if (r.noBehavior) b.noBeh++; if (r.needs) b.withNeeds++; }
+  console.log('\n' + ['מקור', 'יחידות', 'תביעות', 'צרכים', 'יחידות-עם-צרכים', 'נפסלו-בהמצאה', 'מתגי-בעלים', 'אין-תביעת-התנהגות', 'ms'].join('\t'));
+  for (const [k, b] of Object.entries(by)) console.log([k, b.units, b.claims, b.needs, b.withNeeds, b.invented, b.owner, b.noBeh, b.ms].join('\t'));
+  const T = Object.values(by).reduce((a, b) => ({ units: a.units + b.units, claims: a.claims + b.claims, needs: a.needs + b.needs, withNeeds: a.withNeeds + b.withNeeds, invented: a.invented + b.invented, owner: a.owner + b.owner, noBeh: a.noBeh + b.noBeh, ms: a.ms + b.ms }), { units: 0, claims: 0, needs: 0, withNeeds: 0, invented: 0, owner: 0, noBeh: 0, ms: 0 });
+  console.log([`סה"כ`, T.units, T.claims, T.needs, T.withNeeds, T.invented, T.owner, T.noBeh, T.ms].join('\t'));
+  process.exit(T.invented ? 1 : 0);   // המצאה אחת ⇒ אדום (§20-ג)
 }
 if (isMain && process.argv.includes('--goal')) {   // up-goal · הפקודה-האחת
   const gi = process.argv.indexOf('--goal'); const gp = process.argv[gi + 1];
