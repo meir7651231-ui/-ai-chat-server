@@ -39,7 +39,7 @@ object LibaWeb {
         fun onSay(text: String, kind: String, options: List<String>)
         fun onSent(text: String)
         fun onError(text: String, reason: String)
-        fun onTap()
+        fun onPageTap()
     }
 
     private class JsBridge(val b: Bridge) {
@@ -50,7 +50,7 @@ object LibaWeb {
         }
         @JavascriptInterface fun sent(text: String) = b.onSent(text)
         @JavascriptInterface fun error(text: String, reason: String) = b.onError(text, reason)
-        @JavascriptInterface fun tap() = b.onTap()
+        @JavascriptInterface fun tap() = b.onPageTap()
     }
 
     @SuppressLint("SetJavaScriptEnabled")

@@ -236,7 +236,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     // ---------- bridge (from the page) ----------
     override fun onReady() { main.post { if (!pageReady) { pageReady = true; setState(State.IDLE); showLabel("ליבה מחוברת. לחץ עליי ודבר.", 4000) } } }
     override fun onSent(text: String) { main.post { setState(State.IDLE); showLabel("נשלח. מחכה לתשובה…", 30000) } }
-    override fun onTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
+    override fun onPageTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
     override fun onError(text: String, reason: String) { main.post { setState(State.IDLE)
         val why = when {
             reason.contains("consent") -> "הדף צריך אישור חד פעמי. לחיצה ארוכה עליי, שלח הודעה אחת מהדף, ואשר."
