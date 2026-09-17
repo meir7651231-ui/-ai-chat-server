@@ -1,0 +1,635 @@
+{
+ "ns": "anyg3",
+ "goal": "אחרי כל ביקור בית לתעד מה נמצא, לסמן משפחות שלא ביקרנו אצלן מעל 60 יום, ולשלוח למתנדב את הכתובת והטלפון",
+ "goalFile": "../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/g3.txt",
+ "at": "2026-09-17T23:05:14.704Z",
+ "ms": 230284,
+ "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/g3.txt --ns anyg3",
+ "summary": {
+  "needs": 4,
+  "rejected": 0,
+  "solved": 2,
+  "rounds": 2,
+  "file": "new/dart-gen-bs/gen_goal_anyg3.dart",
+  "red": 0
+ },
+ "steps": [
+  {
+   "step": 1,
+   "title": "פסק (yeshiva/purpose) על טקסט-המטרה",
+   "status": "עבר",
+   "detail": "37 מקורות · 10 מתגים · חובה 0 · רשות 0 · תחום — · rule: לא נקרא (אין goal.spec)",
+   "psak": {
+    "sources": [
+     {
+      "field": "id",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.id"
+     },
+     {
+      "field": "name",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.name"
+     },
+     {
+      "field": "father",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.father"
+     },
+     {
+      "field": "fatherId",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.fatherId"
+     },
+     {
+      "field": "mother",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.mother"
+     },
+     {
+      "field": "motherId",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.motherId"
+     },
+     {
+      "field": "phone",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.phone"
+     },
+     {
+      "field": "phone2",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.phone2"
+     },
+     {
+      "field": "email",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.email"
+     },
+     {
+      "field": "city",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.city"
+     },
+     {
+      "field": "address",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.address"
+     },
+     {
+      "field": "community",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.community"
+     },
+     {
+      "field": "maritalStatus",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.maritalStatus"
+     },
+     {
+      "field": "language",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.language"
+     },
+     {
+      "field": "tzedaka",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.tzedaka"
+     },
+     {
+      "field": "fullSefach",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.fullSefach"
+     },
+     {
+      "field": "discount",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.discount"
+     },
+     {
+      "field": "status",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.status"
+     },
+     {
+      "field": "notes",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.notes"
+     },
+     {
+      "field": "kidsHome",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.kidsHome"
+     },
+     {
+      "field": "kidsMarried",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.kidsMarried"
+     },
+     {
+      "field": "members",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.members"
+     },
+     {
+      "field": "docs",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.docs"
+     },
+     {
+      "field": "cred",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.cred"
+     },
+     {
+      "field": "createdAt",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Family.createdAt"
+     },
+     {
+      "field": "area",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Volunteer.area"
+     },
+     {
+      "field": "maxDeliveries",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Volunteer.maxDeliveries"
+     },
+     {
+      "field": "active",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Volunteer.active"
+     },
+     {
+      "field": "note",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Volunteer.note"
+     },
+     {
+      "field": "לתעד",
+      "src": "מטרה#תביעה1 (פועל-מטרה \"לתעד\")"
+     },
+     {
+      "field": "בית",
+      "src": "machtzev/generator/entity-terms.data.json:entity.familyOf.forms (\"בית\")"
+     },
+     {
+      "field": "לסמן",
+      "src": "מטרה#תביעה2 (פועל-מטרה \"לסמן\")"
+     },
+     {
+      "field": "משפחות",
+      "src": "machtzev/generator/entity-terms.data.json:entity.family.forms (\"משפחה\")"
+     },
+     {
+      "field": "יום",
+      "src": "machtzev/generator/spec-lang.data.json:typeDate (\"יום\")"
+     },
+     {
+      "field": "60",
+      "src": "מטרה#תביעה2 (ליטרל \"60\")"
+     },
+     {
+      "field": "ולשלוח",
+      "src": "מטרה#תביעה3 (פועל-מטרה \"ולשלוח\")"
+     },
+     {
+      "field": "למתנדב",
+      "src": "machtzev/generator/entity-terms.data.json:entity.volunteer.forms (\"מתנדב\")"
+     }
+    ],
+    "switches": [
+     {
+      "word": "ביקור בית",
+      "options": 25,
+      "from": "שקע-סכמה בלי מונח-עברי"
+     },
+     {
+      "word": "ולשלוח למתנדב",
+      "options": 4,
+      "from": "שקע-סכמה בלי מונח-עברי"
+     },
+     {
+      "word": "הטלפון",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "ביקור",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "נמצא",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "שלא",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "ביקרנו",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "אצלן",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "הכתובת",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "והטלפון",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     }
+    ],
+    "mandatory": [],
+    "optional": [],
+    "domain": null,
+    "ruled": null
+   },
+   "cmd": "node yeshiva/purpose.mjs \"אחרי כל ביקור בית לתעד מה נמצא, לסמן משפחות שלא ביקרנו אצלן …\""
+  },
+  {
+   "step": 2,
+   "title": "פירוק (מטרה ⇒ חלקיקים)",
+   "status": "עבר",
+   "detail": "3 תביעות ⇒ 4 צרכים נגזרו · 3 מתגי-בעלים · דוגמאות מ-9785 ליטרלי-רשומה בריפו",
+   "perok": {
+    "claims": [
+     {
+      "claim": 1,
+      "verb": "לתעד",
+      "text": "אחרי כל ביקור בית לתעד מה נמצא,",
+      "needs": [],
+      "entities": [
+       "Family"
+      ]
+     },
+     {
+      "claim": 2,
+      "verb": "לסמן",
+      "text": "לסמן משפחות שלא ביקרנו אצלן מעל 60 יום,",
+      "needs": [
+       "g2.clock.createdAtDays",
+       "g2.predicate.createdAtOver60",
+       "g2.predicate.recordCreatedAtOver60",
+       "g2.collection.createdAtOver60List"
+      ],
+      "entities": [
+       "Family"
+      ]
+     },
+     {
+      "claim": 3,
+      "verb": "ולשלוח",
+      "text": "ולשלוח למתנדב את הכתובת והטלפון",
+      "needs": [],
+      "entities": [
+       "Volunteer"
+      ]
+     }
+    ],
+    "rows": [
+     {
+      "need": "g2.clock.createdAtDays",
+      "ok": true,
+      "examples": 3,
+      "now": "2026-09-01",
+      "fixtures": [
+       "new/dart-gen-bs/gen_retarget_volunteer_from_fee.dart:140",
+       "new/dart-maor/fam-history-of_test.dart:21",
+       "new/dart-gen-bs/gen_retarget_volunteer_from_fee.dart:155",
+       "new/dart-maor/open-tasks-for_test.dart:11"
+      ],
+      "tokenSources": [
+       {
+        "token": "'createdAt'",
+        "src": "new/atoms/schema-fields.mjs:FIELDS#Family.createdAt"
+       }
+      ],
+      "derive": {
+       "kind": "daysSince",
+       "cls": "Family",
+       "field": "createdAt"
+      }
+     },
+     {
+      "need": "g2.predicate.createdAtOver60",
+      "ok": true,
+      "examples": 6,
+      "now": "2026-09-01",
+      "fixtures": [
+       "new/dart-gen-bs/gen_retarget_volunteer_from_fee.dart:140",
+       "new/dart-maor/fam-history-of_test.dart:21",
+       "new/dart-gen-bs/gen_retarget_volunteer_from_fee.dart:155",
+       "new/dart-maor/open-tasks-for_test.dart:11"
+      ],
+      "tokenSources": [
+       {
+        "token": "'createdAt'",
+        "src": "new/atoms/schema-fields.mjs:FIELDS#Family.createdAt"
+       },
+       {
+        "token": "60",
+        "src": "מטרה#תביעה2 (ליטרל \"60\")"
+       }
+      ],
+      "derive": {
+       "kind": "threshold",
+       "cls": "Family",
+       "field": "createdAt",
+       "k": 60,
+       "cmp": "מעל"
+      }
+     },
+     {
+      "need": "g2.predicate.recordCreatedAtOver60",
+      "ok": true,
+      "examples": 6,
+      "now": "2026-09-01",
+      "fixtures": [
+       "new/dart-gen-bs/gen_retarget_volunteer_from_fee.dart:140",
+       "new/dart-maor/fam-history-of_test.dart:21",
+       "new/dart-gen-bs/gen_retarget_volunteer_from_fee.dart:155",
+       "new/dart-maor/open-tasks-for_test.dart:11"
+      ],
+      "tokenSources": [
+       {
+        "token": "'createdAt'",
+        "src": "new/atoms/schema-fields.mjs:FIELDS#Family.createdAt"
+       },
+       {
+        "token": "60",
+        "src": "מטרה#תביעה2 (ליטרל \"60\")"
+       }
+      ],
+      "derive": {
+       "kind": "recordThreshold",
+       "cls": "Family",
+       "field": "createdAt",
+       "k": 60,
+       "cmp": "מעל"
+      }
+     },
+     {
+      "need": "g2.collection.createdAtOver60List",
+      "ok": true,
+      "examples": 3,
+      "now": "2026-09-01",
+      "fixtures": [
+       "new/dart-gen-bs/gen_retarget_volunteer_from_fee.dart:140",
+       "new/dart-maor/fam-history-of_test.dart:21",
+       "new/dart-gen-bs/gen_retarget_volunteer_from_fee.dart:155",
+       "new/dart-maor/open-tasks-for_test.dart:11"
+      ],
+      "tokenSources": [
+       {
+        "token": "'createdAt'",
+        "src": "new/atoms/schema-fields.mjs:FIELDS#Family.createdAt"
+       },
+       {
+        "token": "60",
+        "src": "מטרה#תביעה2 (ליטרל \"60\")"
+       }
+      ],
+      "derive": {
+       "kind": "filterThreshold",
+       "cls": "Family",
+       "field": "createdAt",
+       "k": 60,
+       "cmp": "מעל"
+      }
+     }
+    ],
+    "owner": [
+     {
+      "claim": 1,
+      "verb": "לתעד",
+      "kind": "ישות-בלי-שקע",
+      "question": "«לתעד» על Family: אין שקע-סכמה מחובר ואין קבוע-סף במטרה — מה נמדד ומול מה?"
+     },
+     {
+      "claim": 2,
+      "verb": "לסמן",
+      "kind": "תביעה-חלקית",
+      "question": "«לסמן»: 4 חוזים נגזרו, אך 3 מילים בתביעה בלי מקור (שלא · ביקרנו · אצלן) — האם אחת מהן שדה/ישות שדרוש לה חוזה?"
+     },
+     {
+      "claim": 3,
+      "verb": "ולשלוח",
+      "kind": "ישות-בלי-שקע",
+      "question": "«ולשלוח» על Volunteer: אין שקע-סכמה מחובר ואין קבוע-סף במטרה — מה נמדד ומול מה?"
+     }
+    ],
+    "fixtures": 9785
+   },
+   "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/g3.txt"
+  },
+  {
+   "step": 3,
+   "title": "אפס-המצאה לכל צורך",
+   "status": "עבר",
+   "detail": "גלאי-ההמצאה על צרכים: 4 נבדקו · 4/4 המשיכו להוכחה",
+   "hamtzaa": {
+    "available": true,
+    "reason": null,
+    "cmd": "node machtzev/generator/hamtzaa.mjs --needs machtzev/generator/goals/anyg3/needs.json --goal machtzev/generator/goals/anyg3/goal.txt --json"
+   },
+   "rejected": {}
+  },
+  {
+   "step": 4,
+   "title": "חיפוש-לפי-מטרה + הוכחה-בריצה + בחירה",
+   "status": "∅",
+   "detail": "סבב 1: 2/4 נפתרו · g2.predicate.recordCreatedAtOver60, g2.collection.createdAtOver60List ∅",
+   "picks": [
+    "g2.clock.createdAtDays: cockpitDaysSince(p0,now) · ties 2 · weak כן · discriminators 1 · depth 1",
+    "g2.predicate.createdAtOver60: cmpGeStr(now,addDaysIso(p0,60)) · ties 8 · weak כן · discriminators 1 · depth 2",
+    "g2.predicate.recordCreatedAtOver60: ∅ · ties 0 · weak לא · discriminators 0 · depth 3",
+    "g2.collection.createdAtOver60List: ∅ · ties 0 · weak לא · discriminators 0 · depth 3"
+   ]
+  },
+  {
+   "step": 5,
+   "title": "שימוש-חוזר (התנהגות-מוכחת = אטום לצורך הבא)",
+   "status": "∅",
+   "detail": "סבב 2: 2 התנהגויות במדף ⇒ 0/2",
+   "rounds": [
+    {
+     "round": 2,
+     "extraRows": 2,
+     "tried": 2,
+     "solved": 0,
+     "ids": []
+    }
+   ],
+   "picks": [
+    "g2.predicate.recordCreatedAtOver60: ∅ · ties 0 · weak לא · discriminators 0 · depth 3",
+    "g2.collection.createdAtOver60List: ∅ · ties 0 · weak לא · discriminators 0 · depth 3"
+   ]
+  },
+  {
+   "step": 6,
+   "title": "חיווט ⇒ Dart (behavior-compose --plan)",
+   "status": "עבר",
+   "detail": "new/dart-gen-bs/gen_goal_anyg3.dart · 2 התנהגויות מוכחות (bhCreatedAtDays, bhCreatedAtOver60) · ∅ 2 · הוכחה: new/dart-gen-bs/gen_goal_anyg3_proof.dart (9 דוגמאות)",
+   "file": "new/dart-gen-bs/gen_goal_anyg3.dart",
+   "proof": "new/dart-gen-bs/gen_goal_anyg3_proof.dart",
+   "plan": "machtzev/generator/goals/anyg3/plan.json",
+   "cmd": "node machtzev/generator/behavior-compose.mjs --plan machtzev/generator/goals/anyg3/plan.json --out new/dart-gen-bs/gen_goal_anyg3.dart"
+  },
+  {
+   "step": 7,
+   "title": "משטרה בתוך הריצה",
+   "status": "עבר",
+   "detail": "dart analyze: עבר · dart run --enable-asserts (הוכחת-ההרכבה): עבר · no-fakers-check: עבר · flutter analyze (מראה): לא-זמין",
+   "checks": [
+    {
+     "name": "dart analyze",
+     "cmd": "/root/dart-sdk/bin/dart analyze /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_anyg3.dart",
+     "status": "עבר",
+     "out": "Analyzing gen_goal_anyg3.dart... | No issues found!"
+    },
+    {
+     "name": "dart run --enable-asserts (הוכחת-ההרכבה)",
+     "cmd": "/root/dart-sdk/bin/dart run --enable-asserts /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_anyg3_proof.dart",
+     "status": "עבר",
+     "out": "✓ 9 דוגמאות · 2 התנהגויות"
+    },
+    {
+     "name": "no-fakers-check",
+     "cmd": "node /home/user/-ai-chat-server/machtzev/no-fakers-check.mjs",
+     "status": "עבר",
+     "out": "✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי"
+    },
+    {
+     "name": "flutter analyze (מראה)",
+     "status": "לא-זמין",
+     "out": "buildsmart=— · flutter=—"
+    }
+   ]
+  },
+  {
+   "step": 8,
+   "title": "כתיבת-הלדג'ר",
+   "status": "עבר",
+   "detail": "machtzev/generator/goals/anyg3/ledger.json · machtzev/generator/goals/anyg3/ledger.md"
+  }
+ ],
+ "needs": {
+  "g2.clock.createdAtDays": {
+   "id": "g2.clock.createdAtDays",
+   "shape": "מועד",
+   "demand": "לסמן משפחות שלא ביקרנו אצלן יום createdAt",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {},
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "cockpitDaysSince(p0,now)",
+   "nodes": 1,
+   "ties": 2,
+   "weakExamples": true,
+   "discriminators": 1,
+   "depth": 1,
+   "sockets": [
+    "clock"
+   ],
+   "round": 1,
+   "candidates": 21,
+   "top3": [
+    "cockpitDaysSince(p0,now):3/3✓:n1:a2:0",
+    "dayDiff(p0,now):3/3✓:n1:a2:0",
+    "supCount:1/3:n1:a1:0"
+   ]
+  },
+  "g2.predicate.createdAtOver60": {
+   "id": "g2.predicate.createdAtOver60",
+   "shape": "מועד",
+   "demand": "לסמן משפחות שלא ביקרנו אצלן יום createdAt מעל",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {
+    "60": "מטרה (ליטרל \"60\")"
+   },
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "cmpGeStr(now,addDaysIso(p0,60))",
+   "nodes": 2,
+   "ties": 8,
+   "weakExamples": true,
+   "discriminators": 1,
+   "depth": 2,
+   "sockets": [
+    "clock",
+    "literal"
+   ],
+   "round": 1,
+   "candidates": 43,
+   "top3": [
+    "cmpGeStr(now,addDaysIso(p0,60)):6/6✓:n2:a3:0",
+    "cmpGtStr(now,addDaysIso(p0,60)):6/6✓:n2:a3:0",
+    "cmpLeStr(addDaysIso(p0,60),now):6/6✓:n2:a3:0"
+   ]
+  },
+  "g2.predicate.recordCreatedAtOver60": {
+   "id": "g2.predicate.recordCreatedAtOver60",
+   "shape": "רשומות",
+   "demand": "לסמן משפחות שלא ביקרנו אצלן יום createdAt מעל",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {
+    "60": "מטרה (ליטרל \"60\")",
+    "'createdAt'": "new/atoms/schema-fields.mjs:FIELDS#Family.createdAt ⇐ «בית» ⇒ Family"
+   },
+   "structure": [],
+   "status": "∅",
+   "reason": null,
+   "pick": null,
+   "nodes": null,
+   "ties": null,
+   "weakExamples": false,
+   "discriminators": 0,
+   "depth": 3,
+   "sockets": [],
+   "round": 2,
+   "candidates": 30,
+   "top3": [
+    "ayinActive:3/6:n1:a1:1",
+    "exportAllowed:3/6:n1:a1:1",
+    "falsy:3/6:n1:a1:1"
+   ]
+  },
+  "g2.collection.createdAtOver60List": {
+   "id": "g2.collection.createdAtOver60List",
+   "shape": "רשומות",
+   "demand": "לסמן משפחות שלא ביקרנו אצלן יום createdAt מעל",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {
+    "60": "מטרה (ליטרל \"60\")",
+    "'createdAt'": "new/atoms/schema-fields.mjs:FIELDS#Family.createdAt ⇐ «בית» ⇒ Family"
+   },
+   "structure": [],
+   "status": "∅",
+   "reason": null,
+   "pick": null,
+   "nodes": null,
+   "ties": null,
+   "weakExamples": false,
+   "discriminators": 0,
+   "depth": 3,
+   "sockets": [],
+   "round": 2,
+   "candidates": 21,
+   "top3": [
+    "templateKeys:1/3:n1:a1:2",
+    "sortTeamMsgs:1/3:n1:a1:1",
+    "langs:1/3:n1:a1:0"
+   ]
+  }
+ },
+ "checks": [
+  {
+   "name": "dart analyze",
+   "cmd": "/root/dart-sdk/bin/dart analyze /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_anyg3.dart",
+   "status": "עבר",
+   "out": "Analyzing gen_goal_anyg3.dart... | No issues found!"
+  },
+  {
+   "name": "dart run --enable-asserts (הוכחת-ההרכבה)",
+   "cmd": "/root/dart-sdk/bin/dart run --enable-asserts /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_anyg3_proof.dart",
+   "status": "עבר",
+   "out": "✓ 9 דוגמאות · 2 התנהגויות"
+  },
+  {
+   "name": "no-fakers-check",
+   "cmd": "node /home/user/-ai-chat-server/machtzev/no-fakers-check.mjs",
+   "status": "עבר",
+   "out": "✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי"
+  },
+  {
+   "name": "flutter analyze (מראה)",
+   "status": "לא-זמין",
+   "out": "buildsmart=— · flutter=—"
+  }
+ ]
+}

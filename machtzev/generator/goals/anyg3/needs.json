@@ -1,0 +1,193 @@
+{
+ "g2.clock.createdAtDays": {
+  "shape": "מועד",
+  "demand": "לסמן משפחות שלא ביקרנו אצלן יום createdAt",
+  "params": [
+   "String"
+  ],
+  "ret": "num",
+  "clock": {
+   "type": "String"
+  },
+  "examples": [
+   [
+    "'2025-09-05'",
+    "r == 361",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "'2026-08-01'",
+    "r == 31",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "'2026-09-01'",
+    "r == 0",
+    {
+     "now": "'2026-09-01'"
+    }
+   ]
+  ]
+ },
+ "g2.predicate.createdAtOver60": {
+  "shape": "מועד",
+  "demand": "לסמן משפחות שלא ביקרנו אצלן יום createdAt מעל",
+  "params": [
+   "String"
+  ],
+  "ret": "bool",
+  "clock": {
+   "type": "String"
+  },
+  "consts": [
+   "60"
+  ],
+  "examples": [
+   [
+    "'2026-01-10'",
+    "r == true",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "'2026-01-05'",
+    "r == true",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "'2026-08-01'",
+    "r == false",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "'2026-08-02'",
+    "r == false",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "'2025-09-05'",
+    "r == true",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "'2026-09-01'",
+    "r == false",
+    {
+     "now": "'2026-09-01'"
+    }
+   ]
+  ]
+ },
+ "g2.predicate.recordCreatedAtOver60": {
+  "shape": "רשומות",
+  "demand": "לסמן משפחות שלא ביקרנו אצלן יום createdAt מעל",
+  "params": [
+   "dynamic"
+  ],
+  "ret": "bool",
+  "clock": {
+   "type": "String"
+  },
+  "consts": [
+   "'createdAt'",
+   "60"
+  ],
+  "entity": "Family",
+  "examples": [
+   [
+    "{'createdAt': '2026-01-10'}",
+    "r == true",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "{'createdAt': '2026-01-05'}",
+    "r == true",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "{'createdAt': '2026-08-01'}",
+    "r == false",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "{'createdAt': '2026-08-02'}",
+    "r == false",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "{'createdAt': '2025-09-05'}",
+    "r == true",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "{'createdAt': '2026-09-01'}",
+    "r == false",
+    {
+     "now": "'2026-09-01'"
+    }
+   ]
+  ]
+ },
+ "g2.collection.createdAtOver60List": {
+  "shape": "רשומות",
+  "demand": "לסמן משפחות שלא ביקרנו אצלן יום createdAt מעל",
+  "params": [
+   "List<dynamic>"
+  ],
+  "ret": "List<dynamic>",
+  "clock": {
+   "type": "String"
+  },
+  "consts": [
+   "'createdAt'",
+   "60"
+  ],
+  "entity": "Family",
+  "examples": [
+   [
+    "<dynamic>[{'createdAt': '2026-01-10'}, {'createdAt': '2026-01-05'}, {'createdAt': '2026-08-01'}, {'createdAt': '2026-08-02'}, {'createdAt': '2025-09-05'}, {'createdAt': '2026-09-01'}]",
+    "r.length == 3",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "<dynamic>[{'createdAt': '2026-08-01'}, {'createdAt': '2026-08-02'}]",
+    "r.isEmpty",
+    {
+     "now": "'2026-09-01'"
+    }
+   ],
+   [
+    "<dynamic>[{'createdAt': '2025-09-05'}]",
+    "r.length == 1",
+    {
+     "now": "'2026-09-01'"
+    }
+   ]
+  ]
+ }
+}
