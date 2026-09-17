@@ -326,8 +326,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
     private fun localStatus(): String {
         if (!pageReady) return "לא מחובר לדף. $status"
-        if (sentAt > 0) { val s = (SystemClock.elapsedRealtime() - sentAt) / 1000; return "שלחתי לפני $s שניות ומחכה לתשובה." }
-        return "שקט. מחובר, אין הודעות פתוחות."
+        val t = if (taskSummary.isNotBlank()) taskSummary else "אין משימות פתוחות"
+        if (sentAt > 0) { val s = (SystemClock.elapsedRealtime() - sentAt) / 1000; return "$t. ושלחתי לפני $s שניות ומחכה לתשובה." }
+        return t
     }
 
     // ---------- bridge (from the page) ----------
