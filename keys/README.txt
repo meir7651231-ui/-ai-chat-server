@@ -1,1 +1,1 @@
-(keystore kept out of the public repo; stored privately)
+keystore.properties and liba.jks are NOT in this repo (stored privately). Without them the build signs with the debug key.

@@ -72,6 +72,8 @@ class MainActivity : AppCompatActivity() {
             running -> BubbleService.status
             else -> "התחבר ל‑claude.ai למעלה (פעם אחת), ואז הפעל את הבועה."
         }
+        val ver = try { packageManager.getPackageInfo(packageName, 0).versionName } catch (e: Exception) { "?" }
+        status.text = "ליבה $ver · " + status.text
         toggle.text = when { !micOk() -> "אשר מיקרופון"; !overlayOk() -> "אשר הצגה מעל אפליקציות"; running -> "כבה בועה"; else -> "הפעל בועה" }
         update.visibility = if (Prefs.updateUrl(this) != null) View.VISIBLE else View.GONE
     }

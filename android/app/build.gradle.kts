@@ -1,14 +1,22 @@
+import java.util.Properties
 plugins { id("com.android.application"); id("org.jetbrains.kotlin.android") }
 android {
     namespace = "il.liba.app"
     compileSdk = 34
-    defaultConfig { applicationId = "il.liba.app"; minSdk = 26; targetSdk = 34; versionCode = 22; versionName = "2.1" }
+    defaultConfig { applicationId = "il.liba.app"; minSdk = 26; targetSdk = 34; versionCode = 23; versionName = "2.1.1" }
+    // Signing credentials live in keys/keystore.properties (never committed); without it the build falls back to the debug key.
+    val ksProps = Properties().apply { val f = rootProject.file("keys/keystore.properties"); if (f.exists()) f.inputStream().use { load(it) } }
     signingConfigs {
-        create("liba") { storeFile = file("../keys/liba.jks"); storePassword = "liba-2026-bubble"; keyAlias = "liba"; keyPassword = "liba-2026-bubble" }
+        create("liba") {
+            if (ksProps.isNotEmpty()) {
+                storeFile = rootProject.file(ksProps.getProperty("storeFile").removePrefix("../"))
+                storePassword = ksProps.getProperty("storePassword"); keyAlias = ksProps.getProperty("keyAlias"); keyPassword = ksProps.getProperty("keyPassword")
+            }
+        }
     }
     buildTypes {
-        debug { signingConfig = signingConfigs.getByName("liba") }
-        release { isMinifyEnabled = false; signingConfig = signingConfigs.getByName("liba") }
+        debug { if (ksProps.isNotEmpty()) signingConfig = signingConfigs.getByName("liba") }
+        release { isMinifyEnabled = false; if (ksProps.isNotEmpty()) signingConfig = signingConfigs.getByName("liba") }
     }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     kotlinOptions { jvmTarget = "17" }
