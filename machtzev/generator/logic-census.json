@@ -174,6 +174,17 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/op-add-str.dart",
+  "name": "addStr",
+  "ret": "String",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/advance-status.dart",
   "name": "advanceStatus",
   "ret": "String",
@@ -1541,6 +1552,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-cmp-le-dyn.dart",
+  "name": "cmpLeDyn",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/cockpit-at-risk.dart",
   "name": "cockpitAtRisk",
   "ret": "List",
@@ -2700,6 +2722,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-div-num.dart",
+  "name": "divNum",
+  "ret": "num",
+  "params": [
+   "num",
+   "num"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart/dn_number.dart",
   "name": "dnNumber",
   "ret": "int",
@@ -3642,6 +3675,17 @@
   "params": [
    "String",
    "List<( String id, String labelHe )> fields"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/op-field-of.dart",
+  "name": "fieldOf",
+  "ret": "dynamic",
+  "params": [
+   "dynamic",
+   "String"
   ],
   "argc": 2,
   "wireable": false
@@ -5164,6 +5208,16 @@
   "ret": "bool",
   "params": [
    "Map"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/op-is-empty-list.dart",
+  "name": "isEmptyList",
+  "ret": "bool",
+  "params": [
+   "List<dynamic>"
   ],
   "argc": 1,
   "wireable": false

@@ -5,19 +5,19 @@
   "textChallenged": 9,
   "swapsProposed": 9,
   "swapsProven": 0,
-  "reach": 920
+  "reach": 925
  },
  "ops": {
   "match": {
    "declared": "smartFilter",
    "declaredFile": "dart-maor/smart-filter.dart",
    "pick": "smartFilter",
-   "candidates": 919,
+   "candidates": 924,
    "declaredRank": 0,
    "top3": [
-    "smartFilter:33.24≡",
-    "supScore:10.55",
-    "filterItems:10.39"
+    "smartFilter:33.28≡",
+    "supScore:10.56",
+    "filterItems:10.41"
    ],
    "swap": null
   },
@@ -28,9 +28,9 @@
    "candidates": 44,
    "declaredRank": 0,
    "top3": [
-    "finderMatches:24.91≡",
-    "coursesOfTeacher:5.03",
-    "visibleSupportersForDesignations:5.03"
+    "finderMatches:24.93≡",
+    "coursesOfTeacher:5.04",
+    "visibleSupportersForDesignations:5.04"
    ],
    "swap": null
   },
@@ -38,12 +38,12 @@
    "declared": "toCsv",
    "declaredFile": "dart-maor/to-csv.dart",
    "pick": "toCsv",
-   "candidates": 544,
+   "candidates": 549,
    "declaredRank": 9,
    "top3": [
-    "monthsAgo:17.82",
-    "supFromCharge:17.82",
-    "curOf:15.82"
+    "monthsAgo:17.84",
+    "supFromCharge:17.84",
+    "curOf:15.84"
    ],
    "swap": {
     "to": "monthsAgo",
@@ -56,12 +56,12 @@
    "declared": "roleOf",
    "declaredFile": "dart-maor/role-of.dart",
    "pick": "roleOf",
-   "candidates": 200,
+   "candidates": 202,
    "declaredRank": 0,
    "top3": [
-    "roleOf:26.47≡",
-    "renderAuditTrail:22.08",
-    "curOf:16.82"
+    "roleOf:26.52≡",
+    "renderAuditTrail:22.11",
+    "curOf:16.84"
    ],
    "swap": null
   },
@@ -69,11 +69,11 @@
    "declared": "canGrantedAction",
    "declaredFile": "dart-maor/can-granted-action.dart",
    "pick": "canGrantedAction",
-   "candidates": 74,
+   "candidates": 76,
    "declaredRank": 0,
    "top3": [
-    "canGrantedAction:22≡",
-    "moduleOn:4.33",
+    "canGrantedAction:22.02≡",
+    "moduleOn:4.34",
     "spotlightBox:1.52"
    ],
    "swap": null
@@ -82,12 +82,12 @@
    "declared": "expiringIntakes",
    "declaredFile": "dart-maor/expiring-intakes.dart",
    "pick": "expiringIntakes",
-   "candidates": 49,
+   "candidates": 50,
    "declaredRank": 0,
    "top3": [
-    "expiringIntakes:16.57≡",
-    "spotlightBox:10.99",
-    "addDyn:2.66"
+    "expiringIntakes:16.58≡",
+    "spotlightBox:11",
+    "fieldOf:3.4"
    ],
    "swap": null
   },
@@ -98,7 +98,7 @@
    "candidates": 20,
    "declaredRank": 0,
    "top3": [
-    "warehouseValue:32.63≡",
+    "warehouseValue:32.66≡",
     "setAllowedPurposes:3.1",
     "siteDonateUrl:1.01"
    ],
@@ -108,12 +108,12 @@
    "declared": "cockpitQueue",
    "declaredFile": "dart-maor/cockpit-queue.dart",
    "pick": "cockpitQueue",
-   "candidates": 59,
+   "candidates": 60,
    "declaredRank": 0,
    "top3": [
-    "cockpitQueue:69.63≡",
+    "cockpitQueue:69.69≡",
     "smartFilter:4.49",
-    "waPaymentText:4.11"
+    "waPaymentText:4.12"
    ],
    "swap": null
   },
@@ -124,9 +124,9 @@
    "candidates": 45,
    "declaredRank": 0,
    "top3": [
-    "cockpitProgress:56.96≡",
-    "supportPreview:4.58",
-    "wheelIndexUnderPointer:4.58"
+    "cockpitProgress:57.01≡",
+    "supportPreview:4.59",
+    "wheelIndexUnderPointer:4.59"
    ],
    "swap": null
   },
@@ -134,12 +134,12 @@
    "declared": "sheetSummary",
    "declaredFile": "dart-maor/sheet-summary.dart",
    "pick": "sheetSummary",
-   "candidates": 544,
+   "candidates": 549,
    "declaredRank": 1,
    "top3": [
-    "addDaysIso:26.25",
-    "sheetSummary:21.25≡",
-    "sheetRoster:21.25"
+    "addDaysIso:26.27",
+    "sheetSummary:21.27≡",
+    "sheetRoster:21.27"
    ],
    "swap": {
     "to": "addDaysIso",
@@ -152,12 +152,12 @@
    "declared": "pendingMakeups",
    "declaredFile": "dart-maor/pending-makeups.dart",
    "pick": "pendingMakeups",
-   "candidates": 38,
+   "candidates": 39,
    "declaredRank": 1,
    "top3": [
-    "sheetSummary:11.38",
+    "sheetSummary:11.39",
     "pendingMakeups:4.5≡",
-    "supportUnread:2.65"
+    "supportUnread:2.66"
    ],
    "swap": {
     "to": "sheetSummary",
@@ -173,7 +173,7 @@
    "candidates": 45,
    "declaredRank": 0,
    "top3": [
-    "payBal:35.54≡",
+    "payBal:35.57≡",
     "sanitizeSupportText:1.99",
     "ui:1.99"
    ],
@@ -186,8 +186,8 @@
    "candidates": 63,
    "declaredRank": 2,
    "top3": [
-    "curOf:15.82",
-    "histDedupKey:15.82",
+    "curOf:15.84",
+    "histDedupKey:15.84",
     "enrollmentPaidStatus:4≡"
    ],
    "swap": {
@@ -201,12 +201,12 @@
    "declared": "hokDue",
    "declaredFile": "dart-maor/hok-due.dart",
    "pick": "hokDue",
-   "candidates": 45,
+   "candidates": 46,
    "declaredRank": 0,
    "top3": [
-    "hokDue:23.79≡",
-    "supAvgDon:8.53",
-    "waitlistFor:8.39"
+    "hokDue:23.81≡",
+    "supAvgDon:8.54",
+    "waitlistFor:8.41"
    ],
    "swap": null
   },
@@ -214,12 +214,12 @@
    "declared": "scheduleClashText",
    "declaredFile": "dart-maor/schedule-clash-text.dart",
    "pick": "scheduleClashText",
-   "candidates": 890,
+   "candidates": 895,
    "declaredRank": 0,
    "top3": [
-    "scheduleClashText:55.46≡",
-    "roomsNow:30.5",
-    "waPaymentText:15.61"
+    "scheduleClashText:55.51≡",
+    "roomsNow:30.54",
+    "waPaymentText:15.63"
    ],
    "swap": null
   },
@@ -230,9 +230,9 @@
    "candidates": 50,
    "declaredRank": 0,
    "top3": [
-    "buildSlots:78.71≡",
-    "waPaymentText:-0.49",
-    "staleBoxes:-5.71"
+    "buildSlots:78.78≡",
+    "waPaymentText:-0.48",
+    "staleBoxes:-5.7"
    ],
    "swap": null
   },
@@ -243,9 +243,9 @@
    "candidates": 69,
    "declaredRank": 0,
    "top3": [
-    "blockReason:50.91≡",
-    "sheetSummary:8.53",
-    "staleBoxes:4.66"
+    "blockReason:50.95≡",
+    "sheetSummary:8.55",
+    "staleBoxes:4.67"
    ],
    "swap": null
   },
@@ -256,9 +256,9 @@
    "candidates": 67,
    "declaredRank": 0,
    "top3": [
-    "holidayOf:27.51≡",
-    "isoOf:19.56",
-    "hebMonthHeWired:12.52"
+    "holidayOf:27.54≡",
+    "isoOf:19.59",
+    "hebMonthHeWired:12.55"
    ],
    "swap": null
   },
@@ -266,11 +266,11 @@
    "declared": "weeklyRoomSessions",
    "declaredFile": "dart-maor/weekly-room-sessions.dart",
    "pick": "weeklyRoomSessions",
-   "candidates": 53,
+   "candidates": 54,
    "declaredRank": 0,
    "top3": [
-    "weeklyRoomSessions:33.85≡",
-    "sessionsOf:5.57",
+    "weeklyRoomSessions:33.87≡",
+    "sessionsOf:5.58",
     "spotlightBox:3.52"
    ],
    "swap": null
@@ -279,12 +279,12 @@
    "declared": "sessionsOf",
    "declaredFile": "dart-maor/sessions-of.dart",
    "pick": "sessionsOf",
-   "candidates": 268,
+   "candidates": 269,
    "declaredRank": 0,
    "top3": [
-    "sessionsOf:35.78≡",
-    "curOf:17.82",
-    "histDedupKey:17.82"
+    "sessionsOf:35.82≡",
+    "curOf:17.84",
+    "histDedupKey:17.84"
    ],
    "swap": null
   },
@@ -292,12 +292,12 @@
    "declared": "enrollCount",
    "declaredFile": "dart-maor/enroll-count.dart",
    "pick": "enrollCount",
-   "candidates": 78,
+   "candidates": 79,
    "declaredRank": 1,
    "top3": [
-    "monthsAgo:18.82",
-    "enrollCount:11.53≡",
-    "coursesOfTeacher:9.88"
+    "monthsAgo:18.84",
+    "enrollCount:11.55≡",
+    "coursesOfTeacher:9.89"
    ],
    "swap": {
     "to": "monthsAgo",
@@ -310,12 +310,12 @@
    "declared": "waitlistFor",
    "declaredFile": "dart-maor/waitlist-for.dart",
    "pick": "waitlistFor",
-   "candidates": 544,
+   "candidates": 549,
    "declaredRank": 3,
    "top3": [
-    "monthsAgo:17.82",
-    "supFromCharge:17.82",
-    "coursesOfTeacher:16.73≡"
+    "monthsAgo:17.84",
+    "supFromCharge:17.84",
+    "coursesOfTeacher:16.75≡"
    ],
    "swap": {
     "to": "monthsAgo",
@@ -328,12 +328,12 @@
    "declared": "coursesOfTeacher",
    "declaredFile": "dart-maor/courses-of-teacher.dart",
    "pick": "coursesOfTeacher",
-   "candidates": 544,
+   "candidates": 549,
    "declaredRank": 0,
    "top3": [
-    "coursesOfTeacher:20.35≡",
-    "monthsAgo:17.82",
-    "supFromCharge:17.82"
+    "coursesOfTeacher:20.37≡",
+    "monthsAgo:17.84",
+    "supFromCharge:17.84"
    ],
    "swap": null
   },
@@ -341,12 +341,12 @@
    "declared": "teacherIdOf",
    "declaredFile": "dart-maor/teacher-id-of.dart",
    "pick": "teacherIdOf",
-   "candidates": 544,
+   "candidates": 549,
    "declaredRank": 19,
    "top3": [
-    "isAdminUser:28.19",
-    "canPlace:23.08",
-    "auditTrail:21.08"
+    "isAdminUser:28.23",
+    "canPlace:23.11",
+    "auditTrail:21.11"
    ],
    "swap": {
     "to": "isAdminUser",
@@ -362,7 +362,7 @@
    "candidates": 38,
    "declaredRank": 0,
    "top3": [
-    "certExpiryStatus:16.48≡",
+    "certExpiryStatus:16.49≡",
     "score:2.3",
     "ui:2.3"
    ],
@@ -372,12 +372,12 @@
    "declared": "waLink",
    "declaredFile": "dart-maor/wa-link.dart",
    "pick": "waLink",
-   "candidates": 708,
+   "candidates": 713,
    "declaredRank": 17,
    "top3": [
-    "isSendableSupportText:17.56",
-    "importableContacts:17.36",
-    "monthsAgo:15.82"
+    "isSendableSupportText:17.58",
+    "importableContacts:17.38",
+    "monthsAgo:15.84"
    ],
    "swap": {
     "to": "isSendableSupportText",
@@ -393,9 +393,9 @@
    "candidates": 39,
    "declaredRank": 0,
    "top3": [
-    "bulkWaRecipients:16.85≡",
-    "coursesOfTeacher:5.36",
-    "visibleSupportersForDesignations:5.36"
+    "bulkWaRecipients:16.87≡",
+    "coursesOfTeacher:5.37",
+    "visibleSupportersForDesignations:5.37"
    ],
    "swap": null
   },
@@ -403,12 +403,12 @@
    "declared": "renderTemplate",
    "declaredFile": "dart-maor/render-template.dart",
    "pick": "renderTemplate",
-   "candidates": 70,
+   "candidates": 71,
    "declaredRank": 0,
    "top3": [
-    "renderTemplate:16.38≡",
-    "resolveLocalized:5.99",
-    "sanitizeSupportText:3.99"
+    "renderTemplate:16.39≡",
+    "resolveLocalized:6",
+    "sanitizeSupportText:4"
    ],
    "swap": null
   },
@@ -419,8 +419,8 @@
    "candidates": 20,
    "declaredRank": 2,
    "top3": [
-    "supUsd:7.15",
-    "expand:3.48",
+    "supUsd:7.16",
+    "expand:3.49",
     "parseCsv:2≡"
    ],
    "swap": {
@@ -437,9 +437,9 @@
    "candidates": 28,
    "declaredRank": 0,
    "top3": [
-    "trendFromScan:96.32≡",
-    "supFromDonor:19.82≡",
-    "sortSupportThreads:7.78"
+    "trendFromScan:96.4≡",
+    "supFromDonor:19.84≡",
+    "sortSupportThreads:7.79"
    ],
    "swap": null
   }
@@ -461,6 +461,7 @@
   "addDaysIso",
   "addDyn",
   "addNum",
+  "addStr",
   "advanceStatus",
   "advisoryHe",
   "ageOf",
@@ -561,6 +562,7 @@
   "cloudDb",
   "cmpGeStr",
   "cmpGtDyn",
+  "cmpLeDyn",
   "cockpitAtRisk",
   "cockpitCollectedThisMonth",
   "cockpitCsvRows",
@@ -652,6 +654,7 @@
   "diffDb",
   "directionalContext",
   "distributionListLines",
+  "divNum",
   "dnNumber",
   "docSkey",
   "donAllowedKeys",
@@ -725,6 +728,7 @@
   "fieldIsNotNull",
   "fieldIsNull",
   "fieldLabelHe",
+  "fieldOf",
   "fieldValue",
   "fillCardFromCharge",
   "filterAyinBoard",
@@ -842,6 +846,7 @@
   "isDataImage",
   "isDirectionalDevice",
   "isDone",
+  "isEmptyList",
   "isEncDoc",
   "isEncrypted",
   "isFitting",

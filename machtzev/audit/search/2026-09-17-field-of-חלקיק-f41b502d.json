@@ -1,0 +1,197 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:10:59.713Z",
+ "query": "field of חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "field",
+  "of",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "07245d303f5cefb70efd0f6c2b4794ef13e3be430f9b760a2961284a96a68cbb",
+  "logicCensusSha": "432d2358561ca52b434340c509588e9af9390575e020372b98612dfed7be1599",
+  "display": 1903,
+  "logic": 979
+ },
+ "candidates": [
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "DsEnumField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_enum_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeAuroraField",
+   "layer": "display",
+   "file": "dart-forge-bs/motion/aurora_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeDsDateField",
+   "layer": "display",
+   "file": "dart-forge-bs/header/ds_date_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeDsDateFieldInput",
+   "layer": "display",
+   "file": "dart-forge-bs/input/ds_date_field_input.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeDsEnumField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/ds_enum_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeDsField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/ds_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeDsNumberField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/ds_number_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeFieldLabel",
+   "layer": "display",
+   "file": "dart-forge-bs/input/field_label.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeFieldRow",
+   "layer": "display",
+   "file": "dart-forge-bs/input/field_row.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeGlowField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/glow_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeLabeledField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/labeled_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeParticleField",
+   "layer": "display",
+   "file": "dart-forge-bs/motion/particle_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgePremiumField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/premium_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "AuroraField",
+  "DsEnumField",
+  "ForgeAuroraField",
+  "ForgeDsDateField",
+  "ForgeDsDateFieldInput",
+  "ForgeDsEnumField",
+  "ForgeDsField",
+  "ForgeDsNumberField",
+  "ForgeField",
+  "ForgeFieldLabel",
+  "ForgeFieldRow",
+  "ForgeGlowField",
+  "ForgeLabeledField",
+  "ForgeParticleField",
+  "ForgePremiumField"
+ ],
+ "creates": "new/dart-maor/op-field-of.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד fieldOf(dynamic, String) => dynamic שנחצב מכנית ע\"י ast_carve --ops (הביטוי m['action'] · מקור למשל dart/action_id_of.dart#actionIdOf); אין מועמד-חזק באותה שכבה",
+ "sig": "f41b502dce779585a287fa0713064d0f3ce6b02c31eae459c497feb6f4b2e7a8"
+}

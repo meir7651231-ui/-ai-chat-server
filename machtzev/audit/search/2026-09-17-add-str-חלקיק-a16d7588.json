@@ -1,0 +1,188 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:10:58.619Z",
+ "query": "add str חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "add",
+  "str",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "a1812aeb772cc5fe28729313b432da2a9e8984d14fdfea67459a975f5c123ebd",
+  "logicCensusSha": "4546f1ec26f7ad7f317ba71c396a3f0ae3beff510a1b1b5973db1d903c65c933",
+  "display": 1900,
+  "logic": 976
+ },
+ "candidates": [
+  {
+   "id": "AddTradeButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/add_trade_button.dart",
+   "score": 4,
+   "hits": [
+    "add",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeAddTradeButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/add_trade_button.dart",
+   "score": 4,
+   "hits": [
+    "add",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeQuickAddForm",
+   "layer": "display",
+   "file": "dart-forge-bs/composite/quick_add_form.dart",
+   "score": 4,
+   "hits": [
+    "add",
+    "תוך"
+   ]
+  },
+  {
+   "id": "addDaysIso",
+   "layer": "logic",
+   "file": "dart-maor/add-days-iso.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "addDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-add-dyn.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "addNum",
+   "layer": "logic",
+   "file": "dart-maor/op-add-num.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "canAddPhoto",
+   "layer": "logic",
+   "file": "dart-maor/can-add-photo.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "cmpGeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-ge-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "containsStr",
+   "layer": "logic",
+   "file": "dart-maor/op-contains-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "DsQuickAdd",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "modeStr",
+   "layer": "logic",
+   "file": "dart-boxes/lib-nedarim-sync.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "planAddName",
+   "layer": "logic",
+   "file": "dart-maor/plan-add-name.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 3,
+   "hits": [
+    "פעולת",
+    "תוך",
+    "אטומים"
+   ]
+  },
+  {
+   "id": "strList",
+   "layer": "logic",
+   "file": "dart/str_list.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "strListOrNull",
+   "layer": "logic",
+   "file": "dart/str_list_or_null.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  }
+ ],
+ "strong": [
+  "addDaysIso",
+  "addDyn",
+  "addNum",
+  "canAddPhoto",
+  "cmpGeStr",
+  "containsStr",
+  "modeStr",
+  "planAddName",
+  "strList",
+  "strListOrNull"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "AddTradeButton",
+  "ForgeAddTradeButton",
+  "ForgeQuickAddForm",
+  "DsQuickAdd",
+  "SettingsScreenShell"
+ ],
+ "creates": "new/dart-maor/op-add-str.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד addStr(String, String) => String שנחצב מכנית ע\"י ast_carve --ops (הביטוי term('ayn-tvrmym-am-trvmvt-bshnt') + year + '.' · מקור למשל dart-maor/annual-all-lines.dart#annualAllLines); המועמדים-החזקים addDaysIso(String, int) => String · addDyn(dynamic, dynamic) => dynamic · addNum(num, num) => num · canAddPhoto(List<Object?>?, int) => bool · cmpGeStr(String, String) => bool · containsStr(String, String) => bool · modeStr(List<String>) => String · planAddName(Map<String, dynamic>, String, dynamic, String, String Function(String) normName, String Function() isoToday, Map<String, String> T) => Map<String, dynamic> · strList(Object?) => List<String> · strListOrNull(Object?) => List<String>? — לאף אחד אין את חתימת-הפעולה-לבדה (String, String) => String (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם",
+ "sig": "a16d758864332f77643a56284fab21434265755d83e5e110b804e5dbae9d14ac"
+}

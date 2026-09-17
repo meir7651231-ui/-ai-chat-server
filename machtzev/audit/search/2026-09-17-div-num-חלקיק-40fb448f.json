@@ -1,0 +1,176 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:10:59.360Z",
+ "query": "div num חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "div",
+  "num",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "219be2d648353676926d95dbf2493f31d4553efec7c09aba37e4ef7ea2178c45",
+  "logicCensusSha": "fedad559f7fc3f9d5224a321f3ba99ab4b74390634f21cf1e55031b015aba7c4",
+  "display": 1902,
+  "logic": 978
+ },
+ "candidates": [
+  {
+   "id": "absNum",
+   "layer": "logic",
+   "file": "dart-maor/op-abs-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "addNum",
+   "layer": "logic",
+   "file": "dart-maor/op-add-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "NumBox",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/num_box.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "numMap",
+   "layer": "logic",
+   "file": "dart/num_map.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "numMatch",
+   "layer": "logic",
+   "file": "dart-maor/num-match.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 3,
+   "hits": [
+    "פעולת",
+    "תוך",
+    "אטומים"
+   ]
+  },
+  {
+   "id": "AddTradeButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/add_trade_button.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "DsEnumField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_enum_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge10Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/10_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge11Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/card/11_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge12Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/media/12_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge14Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/selection/14_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge18Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/action/18_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge2Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/list/2_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  }
+ ],
+ "strong": [
+  "absNum",
+  "addNum",
+  "numMap",
+  "numMatch"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "NumBox",
+  "SettingsScreenShell"
+ ],
+ "creates": "new/dart-maor/op-div-num.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד divNum(num, num) => num שנחצב מכנית ע\"י ast_carve --ops (הביטוי dn / 1000.0 · מקור למשל dart/bore_meters.dart#boreMeters); המועמדים-החזקים absNum(num) => num · addNum(num, num) => num · numMap(Object?) => Map<String, num> · numMatch(dynamic, num) => bool — לרובם אין את חתימת-הפעולה-לבדה (num, num) => num (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: addNum {} — מול divNum {a / b;}",
+ "sig": "40fb448ffa234e7cccffca48441954ec38e074189386fbc1cfd48af70769bbe5"
+}

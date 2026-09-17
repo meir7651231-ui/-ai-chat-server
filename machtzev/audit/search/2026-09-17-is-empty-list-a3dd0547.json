@@ -1,0 +1,196 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:11:00.102Z",
+ "query": "is empty list חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "is",
+  "empty",
+  "list",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "6e3ed144aba57f12b536fd7a59fbe916283b0278837aba63f59eb73eeb345f33",
+  "logicCensusSha": "ae4149d375b1e13e75bc565ea9e75957bfd49d769dbada7e53d75d80128fab37",
+  "display": 1904,
+  "logic": 980
+ },
+ "candidates": [
+  {
+   "id": "Forge4AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/4_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge5AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/5_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge6AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/6_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge7AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/7_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeAnimatedEmpty",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/animated_empty.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeBrandListRow",
+   "layer": "display",
+   "file": "dart-forge-bs/header/brand_list_row.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeBulletList",
+   "layer": "display",
+   "file": "dart-forge-bs/text/bullet_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeEmptyHint",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/empty_hint.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeEmptyState",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/empty_state.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeNumberedList",
+   "layer": "display",
+   "file": "dart-forge-bs/text/numbered_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeProfileRowList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/profile_row_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeSearchEmptyState",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/search_empty_state.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeSwitchRowList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/switch_row_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "AnimatedEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/animated_empty.dart",
+   "score": 3,
+   "hits": [
+    "empty"
+   ]
+  },
+  {
+   "id": "BrandListRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/brand_list_row.dart",
+   "score": 3,
+   "hits": [
+    "list"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "Forge4AtomsList",
+  "Forge5AtomsList",
+  "Forge6AtomsList",
+  "Forge7AtomsList",
+  "ForgeAnimatedEmpty",
+  "ForgeBrandListRow",
+  "ForgeBulletList",
+  "ForgeEmptyHint",
+  "ForgeEmptyState",
+  "ForgeNumberedList",
+  "ForgeProfileRowList",
+  "ForgeSearchEmptyState",
+  "ForgeSwitchRowList",
+  "AnimatedEmpty",
+  "BrandListRow"
+ ],
+ "creates": "new/dart-maor/op-is-empty-list.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד isEmptyList(List<dynamic>) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי t.isEmpty · מקור למשל dart/action_id_of.dart#actionIdOf); אין מועמד-חזק באותה שכבה",
+ "sig": "a3dd0547e11eb0b7e7e1c1d9feb50d174f10df273b0d9d3ec6da5b21231c96f9"
+}

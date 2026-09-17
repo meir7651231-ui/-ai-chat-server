@@ -1,0 +1,177 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:10:58.990Z",
+ "query": "cmp le dyn חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "cmp",
+  "le",
+  "dyn",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "710f46133bd5e6c299b31d6a0d230b56180b7644dd52748e52f27424a7a3b666",
+  "logicCensusSha": "0240f4a7ad41b0a565cfe12c7f0d830c08250d1f91e2f33c3080451802421555",
+  "display": 1901,
+  "logic": 977
+ },
+ "candidates": [
+  {
+   "id": "cmpGtDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-gt-dyn.dart",
+   "score": 6,
+   "hits": [
+    "cmp",
+    "dyn"
+   ]
+  },
+  {
+   "id": "addDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-add-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "cmpGeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-ge-str.dart",
+   "score": 3,
+   "hits": [
+    "cmp"
+   ]
+  },
+  {
+   "id": "dynMap",
+   "layer": "logic",
+   "file": "dart/dyn_map.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 3,
+   "hits": [
+    "פעולת",
+    "תוך",
+    "אטומים"
+   ]
+  },
+  {
+   "id": "AddTradeButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/add_trade_button.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "DsEnumField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_enum_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge10Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/10_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge11Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/card/11_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge12Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/media/12_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge14Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/selection/14_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge18Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/action/18_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge2Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/list/2_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge4Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/4_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  }
+ ],
+ "strong": [
+  "cmpGtDyn",
+  "addDyn",
+  "cmpGeStr",
+  "dynMap"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "SettingsScreenShell"
+ ],
+ "creates": "new/dart-maor/op-cmp-le-dyn.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד cmpLeDyn(dynamic, dynamic) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי d.compareTo(n) <= 0 · מקור למשל dart-maor/next-session-date.dart#nextSessionDate); המועמדים-החזקים cmpGtDyn(dynamic, dynamic) => bool · addDyn(dynamic, dynamic) => dynamic · cmpGeStr(String, String) => bool · dynMap(Object?) => Map<String, dynamic> — לרובם אין את חתימת-הפעולה-לבדה (dynamic, dynamic) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: cmpGtDyn {} — מול cmpLeDyn {a.compareTo(b) <= 0;}",
+ "sig": "3871c641e1c0dbefaba7e9950eeb2b35d24b2ebbb3c12f04ad7897ceb9937261"
+}
