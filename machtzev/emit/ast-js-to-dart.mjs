@@ -75,34 +75,50 @@ export function emit(src, opts = {}) {
 const CTX_STACK = [];   // פונקציה מקוננת (חץ בתוך גוף) — שומרים/משחזרים את הקשר-הטיפוסים של החיצונית
 function fnHead(name, params, body) {
   const inf = INFER ? inferFn(params, body) : { params: {}, ret: null }; const ev = TYPES[name] || {};
-  CTX_STACK.push(CTX); CTX = { params: new Map() };
+  CTX_STACK.push(CTX); CTX = { params: new Map(CTX ? CTX.params : []), locals: new Map(CTX ? CTX.locals : []), nullables: new Set(CTX ? CTX.nullables : []) };   // up-converter · פונקציה-מקוננת יורשת את טיפוסי-הפרמטרים של החיצונית (T.k1 בתוך arrow ⇒ T['k1'])
   for (const p of params) { const nm = p.name.text; const o = ev.params && ev.params[nm]; const t = (FORCE && o) ? (o === 'dynamic' ? null : o) : (o || inf.params[nm] || null); CTX.params.set(nm, t); }
   const ret = (FORCE && ev.ret) ? ev.ret : (ev.ret || inf.ret || 'dynamic');
-  const ps = params.map(param).join(', ');
-  return { ret, ps };
+  let lastReq = -1; params.forEach((p, i) => { if (!p.initializer) lastReq = i; });   // up-converter · ברירת-מחדל לפני פרמטר-חובה ⇒ Dart אוסר [x = v] באמצע; נפלט כחובה (הרתמה מעבירה את כל הארגומנטים)
+  const pre = [];   // up-converter · פרמטר-מפורק ({a,b} / [a,b]) ⇒ dynamic __pN + פירוק בגוף
+  const ps = params.map((p, i) => { if (p.name.kind !== ts.SyntaxKind.Identifier) { const v = '__p' + i; pre.push(...bindingPre(p.name, v)); return `dynamic ${v}`; } return param(p, i < lastReq); }).join(', ');
+  return { ret, ps, pre: pre.join(' ') };
 }
 function gen(n) {
   const K = ts.SyntaxKind;
   switch (n.kind) {
     case K.FunctionDeclaration: {
-      const name = n.name.text; const { ret, ps } = fnHead(name, n.parameters, n.body);
-      const body = gen(n.body); CTX = CTX_STACK.pop();
+      const name = n.name.text; const { ret, ps, pre } = fnHead(name, n.parameters, n.body);
+      const body = withPre(gen(n.body), pre); CTX = CTX_STACK.pop();
       return `${ret} ${name}(${ps}) ${body}`;
     }
     case K.VariableStatement: {
       const d = n.declarationList.declarations[0];
       const init = d.initializer;
       if (init && (init.kind === K.ArrowFunction || init.kind === K.FunctionExpression)) {
-        const { ret, ps } = fnHead(d.name.text, init.parameters, init.body);
-        const body = init.body.kind === K.Block ? gen(init.body) : `=> ${expr(init.body)};`; CTX = CTX_STACK.pop();
+        const { ret, ps, pre } = fnHead(d.name.text, init.parameters, init.body);
+        const body = withPre(init.body.kind === K.Block ? gen(init.body) : `=> ${expr(init.body)};`, pre); CTX = CTX_STACK.pop();
         return `${ret} ${d.name.text}(${ps}) ${body}`;
       }
+      // 3 · הצהרות-מרובות (const a = 1, b = 2) ופירוק (const [d, m, y] = …; const {a, b} = …)
+      if (n.declarationList.declarations.length > 1 || d.name.kind !== K.Identifier) {
+        return n.declarationList.declarations.map((dd, j) => { if (dd.name.kind === K.Identifier) { noteLocal(dd.name.text, dd.initializer); return `var ${dd.name.text} = ${expr(dd.initializer)};`; } const v = `__d${j}`; return `var ${v} = ${expr(dd.initializer)}; ${bindingPre(dd.name, v).join(' ')}`; }).join(' ');
+      }
+      if (CTX && init && init.kind === K.NewExpression && init.expression.kind === K.Identifier && (init.expression.text === 'Set' || init.expression.text === 'Map')) CTX.locals.set(d.name.text, init.expression.text);   // up-converter · Set/Map מקומיים ⇒ API של Dart
+      else noteLocal(d.name.text, init);
+      if (!init) return `dynamic ${d.name.text};`;   // let x; ⇒ dynamic
+      if (init.kind === K.NumericLiteral && !/^[ijkn]$|idx|index|^pos$|^cur$/i.test(d.name.text)) return `num ${d.name.text} = ${expr(init)};`;   // up-converter · var sum = 0 ⇒ num (Dart היה מסיק int ו-+= של num נופל)
       return `var ${d.name.text} = ${expr(init)};`;
     }
     case K.Block: return `{\n${n.statements.map(s => '  ' + gen(s)).join('\n')}\n}`;
     case K.ReturnStatement: return `return ${n.expression ? expr(n.expression) : ''};`;
     case K.IfStatement: return `if (${boolCtx(n.expression)}) ${gen(n.thenStatement)}${n.elseStatement ? ' else ' + gen(n.elseStatement) : ''}`;
-    case K.ForOfStatement: { const v = n.initializer.declarations[0].name.text; return `for (final ${v} in ${expr(n.expression)}) ${gen(n.statement)}`; }
+    case K.ForOfStatement: { const nm = n.initializer.declarations[0].name;
+      if (nm.kind === K.ArrayBindingPattern || nm.kind === K.ObjectBindingPattern) {   // up-converter · for (const [k, v] of …) / for (const {a} of …)
+        const els = nm.elements.filter((e) => e.name).map((e, i) => nm.kind === K.ArrayBindingPattern ? `final ${e.name.text} = __e[${i}];` : `final ${e.name.text} = __e['${(e.propertyName || e.name).text}'];`);
+        const body = n.statement.kind === K.Block ? n.statement.statements.map(gen).join('\n') : gen(n.statement);
+        return `for (final __e in ${expr(n.expression)}) {\n${els.join(' ')}\n${body}\n}`; }
+      const v = nm.text; if (CTX && n.expression.kind === K.Identifier && CTX.locals.get(n.expression.text) === 'List<String>') CTX.locals.set(v, 'String');   // up-converter · for (const line of iso.split(…)) ⇒ line: String
+      return `for (final ${v} in ${expr(n.expression)}) ${gen(n.statement)}`; }
     case K.ExpressionStatement: return expr(n.expression) + ';';
     case K.ContinueStatement: return 'continue;';
     case K.BreakStatement: return 'break;';
@@ -119,6 +135,12 @@ function gen(n) {
       return r;
     }
     case K.SwitchStatement: {
+      const isConst = (e) => [K.StringLiteral, K.NumericLiteral, K.TrueKeyword, K.FalseKeyword, K.NullKeyword, K.NoSubstitutionTemplateLiteral].includes(e.kind);
+      if (n.caseBlock.clauses.some((c) => c.kind !== K.DefaultClause && !isConst(c.expression))) {   // up-converter · case T['k1']: ⇒ Dart דורש קבוע ⇒ שרשרת if/else (בלי fallthrough)
+        const stmts = (c) => c.statements.filter((st) => st.kind !== K.BreakStatement).map(gen).join('\n');
+        const cases = n.caseBlock.clauses.filter((c) => c.kind !== K.DefaultClause), def = n.caseBlock.clauses.find((c) => c.kind === K.DefaultClause);
+        return `{ final __s = ${expr(n.expression)};\n${cases.map((c, i) => `${i ? 'else ' : ''}if (__s == ${expr(c.expression)}) {\n${stmts(c)}\n}`).join('\n')}${def ? `\nelse {\n${stmts(def)}\n}` : ''}\n}`;
+      }
       const cs = n.caseBlock.clauses.map(c => c.kind === K.DefaultClause
         ? `default:\n${c.statements.map(gen).join('\n')}`
         : `case ${expr(c.expression)}:\n${c.statements.map(gen).join('\n')}`).join('\n');
@@ -129,22 +151,51 @@ function gen(n) {
     default: return expr(n) + (n.kind === K.ExpressionStatement ? ';' : '');
   }
 }
-function param(p) {
+// פירוק-קשירה: [a, , b] ⇒ final a = v[0]; final b = v[2]; · {a, b: c} ⇒ final a = v['a']; final c = v['b'];
+function bindingPre(pat, v) { const K = ts.SyntaxKind; const out = [];
+  pat.elements.forEach((e, i) => { if (!e.name) return; if (e.name.kind !== K.Identifier) return;   // קינון עמוק — לא נתמך (נשאר undefined ⇒ נופל באנלייזר)
+    if (pat.kind === K.ArrayBindingPattern) out.push(`final ${e.name.text} = ${v}[${i}];`); else out.push(`final ${e.name.text} = ${v}['${(e.propertyName || e.name).text}'];`); });
+  return out; }
+const withPre = (body, pre) => !pre ? body : body.startsWith('{') ? '{\n  ' + pre + body.slice(1) : `{ ${pre} return ${body.replace(/^=>\s*/, '').replace(/;$/, '')}; }`;
+// up-converter · הסקת-טיפוס מקומית (מבנית, אפס-מילון): ליטרל/תבנית/trim()/… ⇒ String · [ ]/split/map/filter ⇒ List · מספר/אריתמטיקה/length ⇒ num · { } ⇒ Map
+const STR_CALLS = new Set(['trim', 'toLowerCase', 'toUpperCase', 'toString', 'join', 'padStart', 'padEnd', 'replace', 'replaceAll', 'substring', 'substr', 'repeat', 'normalize', 'toFixed', 'trimStart', 'trimEnd', 'charAt']);
+const LIST_CALLS = new Set(['split', 'map', 'filter', 'concat', 'sort', 'reverse', 'flat', 'flatMap', 'keys', 'values', 'entries']);
+function localTypeOf(init) { const K = ts.SyntaxKind; if (!init) return null;
+  if (init.kind === K.StringLiteral || init.kind === K.NoSubstitutionTemplateLiteral || init.kind === K.TemplateExpression) return 'String';
+  if (init.kind === K.NumericLiteral) return 'num'; if (init.kind === K.ArrayLiteralExpression) return 'List'; if (init.kind === K.ObjectLiteralExpression) return 'Map';
+  if (init.kind === K.ParenthesizedExpression) return localTypeOf(init.expression);
+  if (init.kind === K.ConditionalExpression) { const a = localTypeOf(init.whenTrue), b = localTypeOf(init.whenFalse); if (a && a === b) return a; if (init.whenTrue.kind === K.NullKeyword || init.whenFalse.kind === K.NullKeyword) return 'nullable'; return null; }
+  if (init.kind === K.CallExpression && init.expression.kind === K.PropertyAccessExpression && init.expression.name.text === 'split') return 'List<String>';
+  if (init.kind === K.CallExpression && init.expression.kind === K.PropertyAccessExpression && (init.expression.name.text === 'exec' || init.expression.name.text === 'match')) return 'nullable';   // RegExp.exec ⇒ firstMatch ⇒ RegExpMatch?
+  if (init.kind === K.CallExpression) { const c = init.expression; if (c.kind === K.PropertyAccessExpression) { const m = c.name.text; if (STR_CALLS.has(m)) return 'String'; if (LIST_CALLS.has(m)) return 'List'; if (m === 'slice' && !init.arguments.length) return 'List'; if (m === 'slice' && isStrParam(c.expression)) return 'String'; if (c.expression.kind === K.Identifier && c.expression.text === 'Math') return 'num'; }
+    if (c.kind === K.Identifier && c.text === 'String') return 'String'; if (c.kind === K.Identifier && (c.text === 'Number' || c.text === 'parseInt' || c.text === 'parseFloat')) return 'num'; return null; }
+  if (init.kind === K.BinaryExpression) { const op = init.operatorToken.kind; if (op === K.PlusToken) { const l = localTypeOf(init.left), r = localTypeOf(init.right); if (l === 'String' || r === 'String' || isStrParam(init.left) || isStrParam(init.right)) return 'String'; if (l === 'num' && r === 'num') return 'num'; return null; } if ([K.MinusToken, K.AsteriskToken, K.SlashToken, K.PercentToken].includes(op)) return 'num'; return null; }
+  if (init.kind === K.PropertyAccessExpression && init.name.text === 'length') return 'num';
+  return null; }
+const noteLocal = (name, init) => { if (!CTX) return; const t = localTypeOf(init); if (t === 'nullable') { CTX.nullables.add(name); return; } if (t) CTX.locals.set(name, t); };
+function param(p, forceRequired = false) {
   const name = p.name.text; const t = (CTX && CTX.params.get(name)) || 'dynamic';
-  if (p.initializer) { const init = expr(p.initializer); return `[${t === 'dynamic' || init === 'null' ? (t === 'dynamic' ? 'dynamic' : t.replace(/\?$/, '') + '?') : t} ${name} = ${init}]`; }
+  if (p.initializer && !forceRequired) { const init = expr(p.initializer); return `[${t === 'dynamic' || init === 'null' ? (t === 'dynamic' ? 'dynamic' : t.replace(/\?$/, '') + '?') : t} ${name} = ${init}]`; }
   return `${t} ${name}`;
 }
 // G20 · הקשר-בוליאני על פרמטר מוקלד לא-bool (String/num/List/Map) ⇒ `_truthy(x)` (סמנטיקת-JS: '' ו-0 שקריים) — אחרת non_bool_condition
-const boolCtx = (e) => { const K = ts.SyntaxKind; if (!CTX || !e) return expr(e); if (e.kind === K.Identifier) { const t = CTX.params.get(e.text); if (t && t !== 'bool' && t !== 'bool?') return `_truthy(${e.text})`; } if (e.kind === K.ParenthesizedExpression) return `(${boolCtx(e.expression)})`; return expr(e); };
+const boolCtx = (e) => { const K = ts.SyntaxKind; if (!CTX || !e) return expr(e);
+  if (e.kind === K.BinaryExpression && (e.operatorToken.kind === K.AmpersandAmpersandToken || e.operatorToken.kind === K.BarBarToken)) return `(${boolCtx(e.left)} ${e.operatorToken.kind === K.AmpersandAmpersandToken ? '&&' : '||'} ${boolCtx(e.right)})`;   // up-converter · a && b בהקשר-בוליאני ⇒ שני הצדדים בוליאניים
+  if (e.kind === K.PrefixUnaryExpression && e.operator === K.ExclamationToken) return `!${boolCtx(e.operand)}`;
+  if (e.kind === K.Identifier) { if (CTX.nullables.has(e.text)) return `(${e.text} != null)`; const t = CTX.params.get(e.text); if (t && t !== 'bool' && t !== 'bool?') return `_truthy(${e.text})`; const lt = CTX.locals.get(e.text); if (lt && lt !== 'bool') return `_truthy(${e.text})`; } if (e.kind === K.ParenthesizedExpression) return `(${boolCtx(e.expression)})`;
+  if ((e.kind === K.PropertyAccessExpression && e.name.text === 'length') || (e.kind === K.BinaryExpression && [K.MinusToken, K.AsteriskToken, K.SlashToken, K.PercentToken, K.PlusToken].includes(e.operatorToken.kind)) || localTypeOf(e) === 'num' || localTypeOf(e) === 'String') return `_truthy(${expr(e)})`;   // up-converter · length/אריתמטיקה/מחרוזת בהקשר-בוליאני
+  return expr(e); };
 const nullableParam = (e) => { const K = ts.SyntaxKind; if (!CTX || !e || e.kind !== K.Identifier) return false; const t = CTX.params.get(e.text); return !!(t && t.endsWith('?')); };
-const bang = (e) => (nullableParam(e) ? `${e.text}!` : expr(e));   // שימוש-ישיר בפרמטר-nullable (גישה/קריאה/אריתמטיקה) ⇒ `p!` — JS היה זורק על null באותה נקודה
-const isStrParam = (e) => { const K = ts.SyntaxKind; if (!e) return false; if (e.kind === K.StringLiteral || e.kind === K.NoSubstitutionTemplateLiteral || e.kind === K.TemplateExpression) return true; if (!CTX || e.kind !== K.Identifier) return false; const t = CTX.params.get(e.text); return !!(t && /^String\??$/.test(t)); };   // up-crosslang · מקלט מוקלד-String (מהראיות/מטיפוסי-הצורך) ⇒ slice = substring, לא sublist
-const isMapParam = (e) => { const K = ts.SyntaxKind; if (!CTX || !e || e.kind !== K.Identifier) return null; const t = CTX.params.get(e.text); return t && /^Map</.test(t) ? t : null; };
+const bang = (e) => (nullableParam(e) || (CTX && e && e.kind === ts.SyntaxKind.Identifier && CTX.nullables.has(e.text)) ? `${e.text}!` : expr(e));   // up-converter · גם מקומי-nullable (x = cond ? v : null · exec)   // שימוש-ישיר בפרמטר-nullable (גישה/קריאה/אריתמטיקה) ⇒ `p!` — JS היה זורק על null באותה נקודה
+const isStrParam = (e) => { const K = ts.SyntaxKind; if (!e) return false; if (e.kind === K.StringLiteral || e.kind === K.NoSubstitutionTemplateLiteral || e.kind === K.TemplateExpression) return true; if (e.kind === K.ParenthesizedExpression) return isStrParam(e.expression);
+  if (e.kind === K.CallExpression && e.expression.kind === K.PropertyAccessExpression && STR_CALLS.has(e.expression.name.text)) return true;   // .trim().slice(…) ⇒ substring
+  if (!CTX || e.kind !== K.Identifier) return false; const t = CTX.params.get(e.text); if (t && /^String\??$/.test(t)) return true; return CTX.locals.get(e.text) === 'String'; };   // up-crosslang · מקלט מוקלד-String (מהראיות/מטיפוסי-הצורך) ⇒ slice = substring, לא sublist
+const isMapParam = (e) => { const K = ts.SyntaxKind; if (!CTX || !e || e.kind !== K.Identifier) return null; const t = CTX.params.get(e.text); if (t && /^Map</.test(t)) return t; return CTX.locals.get(e.text) === 'Map' ? 'Map<String, dynamic>' : null; };   // up-converter · גם מקומי מאובייקט-ליטרל
 function expr(n) {
   const K = ts.SyntaxKind;
   if (!n) return '';
   switch (n.kind) {
-    case K.Identifier: return n.text;
+    case K.Identifier: return n.text === 'undefined' ? 'null' : n.text === 'NaN' ? 'double.nan' : n.text === 'Infinity' ? 'double.infinity' : n.text;   // up-converter · undefined/NaN/Infinity
     case K.NumericLiteral: return n.text;
     case K.StringLiteral: return `'${esc(n.text)}'`;
     case K.TrueKeyword: return 'true'; case K.FalseKeyword: return 'false';
@@ -159,6 +210,7 @@ function expr(n) {
     case K.PrefixUnaryExpression:
       if (n.operator === K.ExclamationToken && n.operand.kind !== K.ParenthesizedExpression && n.operand.kind !== K.BinaryExpression && n.operand.kind !== K.CallExpression)
         return `_falsy(${expr(n.operand)})`; // truthiness של JS על ערך-דינמי
+      if (n.operator === K.PlusToken) return `_toNum(${expr(n.operand)})`;   // up-converter · +x ⇒ מספר
       return ts.tokenToString(n.operator) + expr(n.operand);
     case K.BinaryExpression: {
       const op = n.operatorToken.kind;
@@ -170,9 +222,10 @@ function expr(n) {
       if ([K.ExclamationEqualsEqualsToken, K.ExclamationEqualsToken].includes(op)) { const t = tof(n.left, n.right, true) || tof(n.right, n.left, true); if (t) return t; }
       const arith = [K.MinusToken, K.AsteriskToken, K.SlashToken, K.PercentToken, K.LessThanToken, K.GreaterThanToken, K.LessThanEqualsToken, K.GreaterThanEqualsToken].includes(op);
       const l = arith ? bang(n.left) : expr(n.left), r = arith ? bang(n.right) : expr(n.right);
+      if ([K.LessThanToken, K.GreaterThanToken, K.LessThanEqualsToken, K.GreaterThanEqualsToken].includes(op) && (isStrParam(n.left) || isStrParam(n.right))) return `(${l}.compareTo(${r}) ${n.operatorToken.getText ? n.operatorToken.getText() : ts.tokenToString(op)} 0)`;   // up-converter · השוואת-מחרוזות ב-JS ⇒ compareTo
       if (op === K.BarBarToken) {
-        const boolish = (x) => [K.BinaryExpression, K.PrefixUnaryExpression, K.ParenthesizedExpression].includes(x.kind)
-          && !(x.kind === K.BinaryExpression && [K.PlusToken, K.MinusToken, K.AsteriskToken].includes(x.operatorToken?.kind));
+        const BOOL_OPS = [K.EqualsEqualsEqualsToken, K.EqualsEqualsToken, K.ExclamationEqualsEqualsToken, K.ExclamationEqualsToken, K.LessThanToken, K.GreaterThanToken, K.LessThanEqualsToken, K.GreaterThanEqualsToken, K.AmpersandAmpersandToken, K.BarBarToken, K.InstanceOfKeyword, K.InKeyword];
+        const boolish = (x) => x.kind === K.ParenthesizedExpression ? boolish(x.expression) : x.kind === K.PrefixUnaryExpression ? x.operator === K.ExclamationToken : x.kind === K.BinaryExpression ? BOOL_OPS.includes(x.operatorToken.kind) : (x.kind === K.TrueKeyword || x.kind === K.FalseKeyword);   // up-converter · +x / ?? / אריתמטיקה אינם בוליאניים
         return boolish(n.left) || boolish(n.right) ? `(${l} || ${r})` : `(${l} ?? ${r})`; // בוליאני מול ברירת-מחדל
       }
       if (op === K.QuestionQuestionToken) return `(${l} ?? ${r})`;
@@ -183,7 +236,8 @@ function expr(n) {
     }
     case K.ConditionalExpression: return `${boolCtx(n.condition)} ? ${expr(n.whenTrue)} : ${expr(n.whenFalse)}`;
     case K.ArrayLiteralExpression: return `[${n.elements.map(expr).join(', ')}]`;
-    case K.ObjectLiteralExpression: return `{${n.properties.map(p => {
+    case K.DeleteExpression: { const t = n.expression; if (t.kind === K.PropertyAccessExpression) return `${expr(t.expression)}.remove('${t.name.text}')`; if (t.kind === K.ElementAccessExpression) return `${expr(t.expression)}.remove(${expr(t.argumentExpression)})`; return `/*?DeleteExpression?*/`; }   // up-converter
+    case K.ObjectLiteralExpression: return `<String, dynamic>{${n.properties.map(p => {
       if (p.kind === K.SpreadAssignment) return `...${expr(p.expression)}`;                       // {...a}
       if (p.kind === K.ShorthandPropertyAssignment) return `'${p.name.text}': ${p.name.text}`;   // {a}
       if (!p.name) return `/*?${ts.SyntaxKind[p.kind]}?*/`;
@@ -194,21 +248,43 @@ function expr(n) {
       const obj = bang(n.expression), name = n.name.text;
       if (obj === 'Math' && MATH[name]) return MATH[name];          // Math.x → helper/dart:math
       if (name === 'length') return `${obj}.length`;
+      if (name === 'size' && CTX && n.expression.kind === K.Identifier && CTX.locals.get(n.expression.text)) return `${obj}.length`;   // up-converter · Set/Map.size
       { const mt = isMapParam(n.expression); if (mt) return `${obj}['${name}']`; }   // G20 · פרמטר-Map ⇒ גישת-מפתח (nullable כבר קיבל !)
       return `${obj}.${name}`;
     }
-    case K.ElementAccessExpression: return `${bang(n.expression)}[${expr(n.argumentExpression)}]`;
+    case K.ElementAccessExpression: { const idx = n.argumentExpression; const rt = CTX && n.expression.kind === K.Identifier ? (CTX.params.get(n.expression.text) || CTX.locals.get(n.expression.text) || '') : '';
+      const listy = /^List/.test(rt); const intIdx = listy && idx.kind !== K.NumericLiteral && idx.kind !== K.StringLiteral && !(idx.kind === K.Identifier && /^[ijk]$/.test(idx.text)) && (idx.kind === K.BinaryExpression || idx.kind === K.CallExpression || idx.kind === K.ParenthesizedExpression || idx.kind === K.Identifier);
+      return `${bang(n.expression)}[${intIdx ? `(${expr(idx)}).toInt()` : expr(idx)}]`; }   // up-converter · אינדקס-num על List ⇒ toInt (JS: כל מספר num)
     case K.CallExpression: {
       const callee = n.expression;
       if (callee.kind === K.PropertyAccessExpression) {
         const obj = bang(callee.expression), m = callee.name.text;
-        if (obj === 'Math') return `${MATH[m] || m}(${n.arguments.map(expr).join(', ')})`;
+        const argE = (a) => a.kind === K.Identifier && a.text === 'Boolean' ? '_truthy' : a.kind === K.Identifier && a.text === 'Number' ? '_toNum' : expr(a);   // up-converter · Boolean/Number כ-callback
+        const A = () => n.arguments.map(argE).join(', ');
+        const loc = (CTX && callee.expression.kind === K.Identifier) ? (CTX.locals.get(callee.expression.text) || (/^Map</.test(CTX.params.get(callee.expression.text) || '') ? 'Map' : null)) : null;   // Set/Map מקומי או פרמטר-Map
+        if (loc === 'Set') { if (m === 'has') return `${obj}.contains(${A()})`; if (m === 'delete') return `${obj}.remove(${A()})`; if (m === 'add') return `${obj}.add(${A()})`; }
+        if (loc === 'Map') { if (m === 'get') return `${obj}[${A()}]`; if (m === 'has') return `${obj}.containsKey(${A()})`; if (m === 'delete') return `${obj}.remove(${A()})`; if (m === 'set' && n.arguments.length === 2) return `(${obj}[${expr(n.arguments[0])}] = ${expr(n.arguments[1])})`; }
+        if (m === 'test' && n.arguments.length === 1) return `${obj}.hasMatch(${A()})`;   // RegExp.test
+        if (m === 'exec' && n.arguments.length === 1) return `${obj}.firstMatch(${A()})`;   // RegExp.exec (קבוצות: API שונה)
+        if (m === 'filter') return `${obj}.where(${A()}).toList()`;
+        if (m === 'push' && n.arguments.length === 1 && n.arguments[0].kind === K.SpreadElement) return `${obj}.addAll(${expr(n.arguments[0].expression)})`;   // push(...xs) ⇒ addAll
+        if (m === 'push' && n.arguments.length > 1) return `${obj}.addAll([${A()}])`;
+        if (obj === 'JSON' && m === 'stringify') return `jsonEncode(${expr(n.arguments[0])})`;
+        if (obj === 'JSON' && m === 'parse') return `jsonDecode(${expr(n.arguments[0])})`;   // where ⇒ Iterable; JS filter ⇒ מערך
+        if (obj === 'Date' && m === 'parse') return `DateTime.parse(${A()}).millisecondsSinceEpoch`;
+        if (obj === 'Date' && m === 'now') return `DateTime.now().millisecondsSinceEpoch`;
+        if (obj === 'Number' && m === 'isNaN') return `((${A()}) is num && (${A()}).isNaN)`;
+        if (obj === 'Number' && m === 'isInteger') return `((${A()}) is int)`;
+        if (m === 'setDate' && n.arguments.length === 1 && n.arguments[0].kind === K.BinaryExpression && n.arguments[0].operatorToken.kind === K.PlusToken && /getDate|\.day\b/.test(expr(n.arguments[0].left))) return `${obj} = ${obj}.add(Duration(days: ${expr(n.arguments[0].right)}))`;   // up-converter · d.setDate(d.getDate()+k)
+        if (obj === 'Object' && m === 'entries') return `(${expr(n.arguments[0])} as Map).entries.map((e) => [e.key, e.value]).toList()`;
+        if (obj === 'Object' && m === 'values') return `(${expr(n.arguments[0])} as Map).values.toList()`;
+        if (obj === 'Math') return `${Object.hasOwn(MATH, m) ? MATH[m] : m}(${n.arguments.map(expr).join(', ')})`;
         if (obj === 'Number' && m === 'isFinite') return `_isFinite(${n.arguments.map(expr).join(', ')})`;
         if (obj === 'Array' && m === 'isArray') return `(${expr(n.arguments[0])} is List)`;
         if (obj === 'Object' && m === 'keys') return `(${expr(n.arguments[0])} as Map).keys.toList()`;
         const DATE = { getTime: '.millisecondsSinceEpoch', getFullYear: '.year', getDate: '.day', getHours: '.hour', getMinutes: '.minute', getDay: '.weekday % 7' };
         if (m === 'getMonth') return `(${obj}.month - 1)`;        // JS 0-אינדקס → Dart 1-אינדקס (חוק-4!)
-        if (DATE[m]) return `${obj}${DATE[m]}`;
+        if (Object.hasOwn(DATE, m)) return `${obj}${DATE[m]}`;
         if (m === 'toISOString') return `${obj}.toIso8601String()`;
         if (m === 'reduce' && n.arguments.length === 2)
           return `${obj}.fold(${expr(n.arguments[1])}, ${expr(n.arguments[0])})`;
@@ -218,13 +294,17 @@ function expr(n) {
         if (m === 'substring' || m === 'substr') return `${obj}.substring(${n.arguments.map(expr).join(', ')})`;
         if (m === 'indexOf') return `${obj}.indexOf(${n.arguments.map(expr).join(', ')})`;
         if (m === 'toFixed') return `${obj}.toStringAsFixed(${n.arguments.map(expr).join(', ')})`;
-        if (m === 'slice' && n.arguments.length && isStrParam(callee.expression)) return `${obj}.substring(${n.arguments.map(expr).join(', ')})`;   // up-crosslang · מחרוזת מוקלדת ⇒ substring
-        if (m === 'slice' && !n.arguments.length) return `${obj}.toList()`;   // JS slice() = העתק; Dart sublist דורש ארגומנט (נחשף ע"י ההקלדה)
+        const intArg = (a) => a.kind === K.NumericLiteral ? expr(a) : `(${expr(a)}).toInt()`;   // up-converter · אינדקסים ל-substring/sublist חייבים int
+        if (m === 'slice' && n.arguments.length && isStrParam(callee.expression)) return `${obj}.substring(${n.arguments.map(intArg).join(', ')})`;   // up-crosslang · מחרוזת מוקלדת ⇒ substring
+        if (m === 'slice' && !n.arguments.length) return `${obj}.toList()`;
+        if (m === 'slice' && n.arguments.length) return `${obj}.sublist(${n.arguments.map(intArg).join(', ')})`;
+        if (m === 'substring' || m === 'substr') return `${obj}.substring(${n.arguments.map(intArg).join(', ')})`;   // JS slice() = העתק; Dart sublist דורש ארגומנט (נחשף ע"י ההקלדה)
         if (m === 'sort') return `(${obj}..sort(${n.arguments.map(expr).join(', ')}))`;
         if (m === 'flat') return `${obj}.expand((x) => x is List ? x : [x]).toList()`;
         if (m === 'flatMap') return `${obj}.expand(${n.arguments.map(expr).join(', ')}).toList()`;
-        const dm = STD[m] || m;
-        return `${obj}.${dm}(${n.arguments.map(expr).join(', ')})`;
+        const dm = Object.hasOwn(STD, m) ? STD[m] : m;   // up-converter · לא STD[m]||m: toLocaleString/toString/constructor הם חברי Object.prototype ⇒ "[native code]" 
+        if (dm.startsWith('_')) return `${dm}(${[obj, ...n.arguments.map(argE)].join(', ')})`;   // up-converter · עוזר (_padStart/_repeat/_concat) הוא פונקציה, לא מתודה
+        return `${obj}.${dm}(${n.arguments.map(argE).join(', ')})`;
       }
       if (callee.kind === K.Identifier) {
         if (callee.text === 'parseInt') return `int.tryParse(${expr(n.arguments[0])}.toString()) ?? 0`;
@@ -233,12 +313,14 @@ function expr(n) {
         if (callee.text === 'Number') return `_toNum(${expr(n.arguments[0])})`;
         if (callee.text === 'Boolean') return `_truthy(${expr(n.arguments[0])})`;
         if (callee.text === 'isNaN') return `(${expr(n.arguments[0])}).isNaN`;
+        if (callee.text === 'encodeURIComponent') return `Uri.encodeComponent(${expr(n.arguments[0])})`;
+        if (callee.text === 'decodeURIComponent') return `Uri.decodeComponent(${expr(n.arguments[0])})`;
       }
       return `${expr(callee)}(${n.arguments.map(expr).join(', ')})`;
     }
     case K.NewExpression: {
       const c = expr(n.expression), args = (n.arguments||[]).map(expr).join(', ');
-      if (c === 'Date') return args ? `DateTime.parse(${args})` : 'DateTime.now()';
+      if (c === 'Date') { const as = (n.arguments || []).map(expr); return as.length >= 2 ? `DateTime(${as[0]}, ${as[1]} + 1${as.slice(2).map((x) => ', ' + x).join('')})` : args ? `DateTime.parse(${args})` : 'DateTime.now()'; }   // up-converter · new Date(y, m0, d) ⇒ חודש 1-אינדקס
       if (c === 'RegExp') return `RegExp(${args})`;
       if (c === 'Set') return `<dynamic>{${args ? '...'+args : ''}}`;
       if (c === 'Map') return '<dynamic, dynamic>{}';

@@ -1,0 +1,1 @@
+DONE · הממיר JS⇒Dart: 777 ⇒ 958/1099 מתקמפלים (71% ⇒ 87%), 0 רגרסיות · 4 סבבים מבניים (פרמטר-ברירת-מחדל באמצע, hasOwn, ירושת-הקשר, פירוק, Map/Set/RegExp/Date/JSON, הסקה-מקומית, boolCtx) · parity-ast --errors (התפלגות-קודים) · police --fast 45/0 · --gate 43/43 · xl.monthKey parity ok, 15 תאומי-JS ברתמה · נותר: Intl/TextDecoder, ראיות-טיפוס שגויות, nullable-שדות
