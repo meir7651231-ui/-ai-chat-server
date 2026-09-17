@@ -13,6 +13,7 @@
             <Switch android:id="@+id/conv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="מצב שיחה  " android:textColor="#EEF1FF" android:textSize="15sp"/>
         </LinearLayout>
         <Button android:id="@+id/toggle" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="הפעל בועה" android:textSize="18sp" android:backgroundTint="#7DF9FF" android:textColor="#04050A"/>
+        <Button android:id="@+id/reveal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="הצג את הדף החי (דקה וחצי)" android:textSize="15sp" android:backgroundTint="#2C3140" android:textColor="#EEF1FF" android:visibility="gone"/>
         <Button android:id="@+id/update" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="יש גרסה חדשה – הורד" android:textSize="15sp" android:backgroundTint="#FFB454" android:textColor="#04050A" android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>

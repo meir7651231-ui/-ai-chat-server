@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         LibaWeb.setup(web, null)
         if (!BubbleService.running) web.loadUrl(getString(R.string.artifact_url))
         toggle.setOnClickListener { onToggle() }
+        findViewById<Button>(R.id.reveal).setOnClickListener { BubbleService.instance?.revealPage(true); moveTaskToBack(true) }
         update.setOnClickListener { Prefs.updateUrl(this)?.let { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it))) } }
         val hey = findViewById<Switch>(R.id.hey); val conv = findViewById<Switch>(R.id.conv)
         hey.isChecked = Prefs.hey(this); conv.isChecked = Prefs.conv(this)
@@ -76,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         status.text = "ליבה $ver · " + status.text
         toggle.text = when { !micOk() -> "אשר מיקרופון"; !overlayOk() -> "אשר הצגה מעל אפליקציות"; running -> "כבה בועה"; else -> "הפעל בועה" }
         update.visibility = if (Prefs.updateUrl(this) != null) View.VISIBLE else View.GONE
+        findViewById<Button>(R.id.reveal).visibility = if (running) View.VISIBLE else View.GONE
     }
 
     private fun onToggle() {

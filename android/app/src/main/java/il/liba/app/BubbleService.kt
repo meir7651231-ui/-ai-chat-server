@@ -46,6 +46,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private val main = Handler(Looper.getMainLooper())
     private var web: WebView? = null
     private var webHost: FrameLayout? = null
+    private var webLp: WindowManager.LayoutParams? = null
+    private var revealed = false
     private var bubble: FrameLayout? = null
     private var dot: TextView? = null
     private var label: TextView? = null
@@ -179,7 +181,25 @@ class BubbleService : Service(), LibaWeb.Bridge {
         lp.gravity = Gravity.TOP or Gravity.START; lp.alpha = 0.01f
         wm.addView(host, lp)
         w.loadUrl(getString(R.string.artifact_url))
-        web = w; webHost = host; pageLoadedAt = SystemClock.elapsedRealtime()
+        web = w; webHost = host; webLp = lp; pageLoadedAt = SystemClock.elapsedRealtime()
+    }
+    /** Step 9: show the live page for a minute (consent dialogs, checks), then hide it again. */
+    fun revealPage(show: Boolean) {
+        val host = webHost ?: return; val lp = webLp ?: return; val w = web ?: return
+        val dm = resources.displayMetrics
+        if (show) {
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT; lp.height = WindowManager.LayoutParams.MATCH_PARENT; lp.alpha = 1f
+            lp.flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+            (w.layoutParams as FrameLayout.LayoutParams).let { it.width = FrameLayout.LayoutParams.MATCH_PARENT; it.height = FrameLayout.LayoutParams.MATCH_PARENT; w.layoutParams = it }
+            revealed = true; main.postDelayed({ if (revealed) revealPage(false) }, 90000)
+        } else {
+            lp.width = dp(1f).toInt(); lp.height = dp(1f).toInt(); lp.alpha = 0.01f
+            lp.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            (w.layoutParams as FrameLayout.LayoutParams).let { it.width = dm.widthPixels.coerceAtLeast(720); it.height = dm.heightPixels.coerceAtLeast(1280); w.layoutParams = it }
+            revealed = false
+        }
+        runCatching { wm.updateViewLayout(host, lp) }
+        bubble?.bringToFront(); bubble?.let { runCatching { wm.removeView(it); wm.addView(it, it.layoutParams) } }
     }
     private fun rebuildWeb() {
         webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy(); web = null; pageReady = false
@@ -376,7 +396,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (!pageReady) showLabel(status, 5000)
         web?.let { LibaWeb.hello(it) }
     } }
-    override fun onReady() { main.post { if (!pageReady) { pageReady = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000) } } }
+    override fun onReady() { main.post { if (!pageReady) { pageReady = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
+        Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } } } } }
+    override fun onCrashSaved(id: String) { main.post { Prefs.clearCrash(this); showLabel("דוח הקריסה נשלח לליבה", 4000) } }
     override fun onTasks(summary: String, n: Int, blocked: Int) { main.post { taskSummary = summary; taskBlocked = blocked; if (n > 0) status = "מחובר · $n משימות" + (if (blocked > 0) " · $blocked מחכות לך" else "") } }
     override fun onPageTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
     override fun onSent(text: String) { main.post { status = "נשלח, מחכה לתשובה…"; setState(State.IDLE); showLabel("נשלח. מחכה…", 30000); armWaitReminders(); if (heyOn) wakeLoop() } }
