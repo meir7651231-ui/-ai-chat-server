@@ -1,0 +1,28 @@
+{
+ "g1.measure.sumKidsHome": {
+  "shape": "רשומות",
+  "demand": "חוב משפחה סכום תאריך אחראי הערה שלבים ממתין תזכורת שיחה הסדר נסגר kidsHome",
+  "params": [
+   "List<dynamic>"
+  ],
+  "ret": "num",
+  "consts": [
+   "'kidsHome'"
+  ],
+  "entity": "Family",
+  "examples": [
+   [
+    "<dynamic>[{'id': 'f1', 'kidsHome': 2}, {'id': 'a', 'kidsHome': 2}, {'id': 'b', 'kidsHome': 5}]",
+    "r == 9"
+   ],
+   [
+    "<dynamic>[]",
+    "r == 0"
+   ],
+   [
+    "<dynamic>[{'id': 'f1', 'kidsHome': 2}]",
+    "r == 2"
+   ]
+  ]
+ }
+}

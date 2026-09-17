@@ -1,0 +1,710 @@
+{
+ "ns": "any_quest2",
+ "goal": "עולם משחק שלם - חדר 2:\nהירו 🎯 עולם משחק שלם של מסע בריחה - חדרים שמובילים זה אל זה חידות חיות שמגיבות לשחקן ושערים נסתרים בדרך אל היציאה | מטרה אחת קיבלתי - את המבנה האטומים והחיבורים בחרתי לבד\nכותרת בורר המנועים - הבחירה מחליפה את המנוע החי המוצג\nבחירה מגיעים כפרמטרים או כותב כי או פרש ימים: מגיעים כפרמטרים / כותב כי / פרש ימים\n  חישוב מגיעים כפרמטרים אין טהור דטרמיניסטי (validDateRange)\n  חישוב כותב כי וא מבוסס (isoLocal)\n  חישוב פרש ימים קלנדרי בין שני תאריכים חסין בונה חצות משני (daysBetweenDst)\nמתג 🔓 מתג השער - פתיחתו חושפת מנוע חבוי\n  חישוב קופסה חיווט לוח עברי מלבנים עיוורות דאטה כרעת טוהר (hebMonthHeWired)\nניווט quest1 חזרה אל תחילת המסע | המסע ממשיך\nבאנר מטרה אחת קיבלתי מהבעלים - את כל השאר תכננתי בחרתי וחיווטתי לבד מהמדף החי",
+ "goalFile": "../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/u-quest2.txt",
+ "at": "2026-09-17T23:11:52.782Z",
+ "ms": 2328,
+ "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/u-quest2.txt --ns any_quest2",
+ "summary": {
+  "needs": 1,
+  "rejected": 0,
+  "solved": 1,
+  "rounds": 1,
+  "file": "new/dart-gen-bs/gen_goal_any_quest2.dart",
+  "red": 0
+ },
+ "steps": [
+  {
+   "step": 1,
+   "title": "פסק (yeshiva/purpose) על טקסט-המטרה",
+   "status": "עבר",
+   "detail": "8 מקורות · 88 מתגים · חובה 0 · רשות 0 · תחום — · rule: לא נקרא (אין goal.spec)",
+   "psak": {
+    "sources": [
+     {
+      "field": "לשחקן",
+      "src": "מטרה#תביעה1 (פועל-מטרה \"לשחקן\")"
+     },
+     {
+      "field": "חדר",
+      "src": "machtzev/generator/entity-terms.data.json:entity.room.forms (\"חדר\")"
+     },
+     {
+      "field": "חדרים",
+      "src": "machtzev/generator/entity-terms.data.json:entity.rooms.forms (\"חדרים\")"
+     },
+     {
+      "field": "בחירה",
+      "src": "machtzev/generator/spec-lang.data.json:typeNum (\"מחיר\")"
+     },
+     {
+      "field": "תאריכים",
+      "src": "machtzev/generator/spec-lang.data.json:typeDate (\"תאריך\")"
+     },
+     {
+      "field": "2",
+      "src": "מטרה#תביעה1 (ליטרל \"2\")"
+     },
+     {
+      "field": "מלבנים",
+      "src": "מטרה#תביעה2 (פועל-מטרה \"מלבנים\")"
+     },
+     {
+      "field": "1",
+      "src": "מטרה#תביעה2 (ליטרל \"1\")"
+     }
+    ],
+    "switches": [
+     {
+      "word": "הירו עולם",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "שערים נסתרים",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "החיבורים בחרתי",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "כותרת בורר",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "מגיעים כפרמטרים",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "חישוב מגיעים",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "מבוסס",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "מתג מתג",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "ניווט חזרה",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "באנר מטרה",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "חיווטתי לבד",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "עולם",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "משחק",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "שלם",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "מסע",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "בריחה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "שמובילים",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "אל",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "חידות",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "חיות",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "שמגיבות",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "ושערים",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "נסתרים",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "בדרך",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "היציאה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "מטרה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "אחת",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "קיבלתי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "המבנה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "האטומים",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "והחיבורים",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "בחרתי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "לבד",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "כותרת",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "בורר",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "המנועים",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "הבחירה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "מחליפה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "המנוע",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "החי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "המוצג",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "מגיעים",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "כפרמטרים",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "כותב",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "פרש",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "ימים",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "חישוב",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "טהור",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "דטרמיניסטי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "וא",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "מבוסס",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "קלנדרי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "שני",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "חסין",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "בונה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "חצות",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "משני",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "מתג",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "השער",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "פתיחתו",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "חושפת",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "מנוע",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "חבוי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "קופסה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "חיווט",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "לוח",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "עברי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "עיוורות",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "דאטה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "כרעת",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "טוהר",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "ניווט",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "אל",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "תחילת",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "המסע",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "ממשיך",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "באנר",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "מטרה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "אחת",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "קיבלתי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "מהבעלים",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "השאר",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "תכננתי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "בחרתי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "וחיווטתי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "לבד",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "מהמדף",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "החי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     }
+    ],
+    "mandatory": [],
+    "optional": [],
+    "domain": null,
+    "ruled": null
+   },
+   "cmd": "node yeshiva/purpose.mjs \"עולם משחק שלם - חדר 2:\nהירו 🎯 עולם משחק שלם של מסע בריחה - …\""
+  },
+  {
+   "step": 2,
+   "title": "פירוק (מטרה ⇒ חלקיקים)",
+   "status": "עבר",
+   "detail": "2 תביעות ⇒ 1 צרכים נגזרו · 2 מתגי-בעלים · דוגמאות מ-9789 ליטרלי-רשומה בריפו",
+   "perok": {
+    "claims": [
+     {
+      "claim": 1,
+      "verb": "לשחקן",
+      "text": "עולם משחק שלם - חדר 2: הירו 🎯 עולם משחק שלם של מסע בריחה - חדרים שמובילים זה אל זה חידות חיות שמגיבות לשחקן ושערים נסתרים בדרך אל היציאה | מטרה אחת קיבלתי - את המבנה האטומים והחיבורים בחרתי לבד כותרת בורר המנועים - הבחירה מחליפה את המנוע החי המוצג בחירה מגיעים כפרמטרים או כותב כי או פרש ימים: מגיעים כפרמטרים / כותב כי / פרש ימים חישוב מגיעים כפרמטרים אין טהור דטרמיניסטי (validDateRange) חישוב כותב כי וא מבוסס (isoLocal) חישוב פרש ימים קלנדרי בין שני תאריכים חסין בונה חצות משני (daysBetweenDst) מתג 🔓 מתג השער - פתיחתו חושפת מנוע חבוי חישוב קופסה חיווט לוח עברי",
+      "needs": [
+       "g1.measure.countSlot"
+      ],
+      "entities": [
+       "Room",
+       "Room"
+      ]
+     },
+     {
+      "claim": 2,
+      "verb": "מלבנים",
+      "text": "מלבנים עיוורות דאטה כרעת טוהר (hebMonthHeWired) ניווט quest1 חזרה אל תחילת המסע | המסע ממשיך באנר מטרה אחת קיבלתי מהבעלים - את כל השאר תכננתי בחרתי וחיווטתי לבד מהמדף החי",
+      "needs": [],
+      "entities": []
+     }
+    ],
+    "rows": [
+     {
+      "need": "g1.measure.countSlot",
+      "ok": true,
+      "examples": 2,
+      "now": null,
+      "fixtures": [
+       "new/dart-maor/build-slots_test.dart:147",
+       "new/dart-maor/room-info-label_test.dart:24",
+       "new/dart-maor/rooms-now_test.dart:22",
+       "new/dart-maor/room-info-label_test.dart:41"
+      ],
+      "tokenSources": [
+       {
+        "token": "'slot'",
+        "src": "new/atoms/schema-fields.mjs:FIELDS#Room.slot"
+       },
+       {
+        "token": "מונה",
+        "src": "machtzev/generator/spec-lang.data.json:pCount (\"מונה\")"
+       }
+      ],
+      "derive": {
+       "kind": "countBy",
+       "cls": "Room",
+       "field": "slot"
+      }
+     }
+    ],
+    "owner": [
+     {
+      "claim": 1,
+      "verb": "לשחקן",
+      "kind": "תביעה-חלקית",
+      "question": "«לשחקן»: 1 חוזים נגזרו, אך 56 מילים בתביעה בלי מקור (עולם · משחק · שלם · מסע · בריחה · שמובילים · אל · חידות) — האם אחת מהן שדה/ישות שדרוש לה חוזה?"
+     },
+     {
+      "claim": 2,
+      "verb": "מלבנים",
+      "kind": "אין-ישות",
+      "question": "«מלבנים»: אין מילה בתביעה שיש לה מחלקת-סכמה (1 · עיוורות · דאטה · כרעת · טוהר · ניווט) — על איזו ישות?"
+     }
+    ],
+    "fixtures": 9789
+   },
+   "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/u-quest2.txt"
+  },
+  {
+   "step": 3,
+   "title": "אפס-המצאה לכל צורך",
+   "status": "עבר",
+   "detail": "גלאי-ההמצאה על צרכים: 1 נבדקו · 1/1 המשיכו להוכחה",
+   "hamtzaa": {
+    "available": true,
+    "reason": null,
+    "cmd": "node machtzev/generator/hamtzaa.mjs --needs machtzev/generator/goals/any_quest2/needs.json --goal machtzev/generator/goals/any_quest2/goal.txt --json"
+   },
+   "rejected": {}
+  },
+  {
+   "step": 4,
+   "title": "חיפוש-לפי-מטרה + הוכחה-בריצה + בחירה",
+   "status": "עבר",
+   "detail": "סבב 1: 1/1 נפתרו",
+   "picks": [
+    "g1.measure.countSlot: lengthList · ties 0 · weak לא · discriminators 0 · depth 0"
+   ]
+  },
+  {
+   "step": 5,
+   "title": "שימוש-חוזר (התנהגות-מוכחת = אטום לצורך הבא)",
+   "status": "עבר",
+   "detail": "אין צורך לא-פתור — סבב שני לא נדרש",
+   "rounds": [],
+   "picks": []
+  },
+  {
+   "step": 6,
+   "title": "חיווט ⇒ Dart (behavior-compose --plan)",
+   "status": "עבר",
+   "detail": "new/dart-gen-bs/gen_goal_any_quest2.dart · 1 התנהגויות מוכחות (bhCountSlot) · ∅ 0 · הוכחה: new/dart-gen-bs/gen_goal_any_quest2_proof.dart (2 דוגמאות)",
+   "file": "new/dart-gen-bs/gen_goal_any_quest2.dart",
+   "proof": "new/dart-gen-bs/gen_goal_any_quest2_proof.dart",
+   "plan": "machtzev/generator/goals/any_quest2/plan.json",
+   "cmd": "node machtzev/generator/behavior-compose.mjs --plan machtzev/generator/goals/any_quest2/plan.json --out new/dart-gen-bs/gen_goal_any_quest2.dart"
+  },
+  {
+   "step": 7,
+   "title": "משטרה בתוך הריצה",
+   "status": "עבר",
+   "detail": "dart analyze: עבר · dart run --enable-asserts (הוכחת-ההרכבה): עבר · no-fakers-check: עבר · flutter analyze (מראה): לא-זמין",
+   "checks": [
+    {
+     "name": "dart analyze",
+     "cmd": "/root/dart-sdk/bin/dart analyze /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_any_quest2.dart",
+     "status": "עבר",
+     "out": "Analyzing gen_goal_any_quest2.dart... | No issues found!"
+    },
+    {
+     "name": "dart run --enable-asserts (הוכחת-ההרכבה)",
+     "cmd": "/root/dart-sdk/bin/dart run --enable-asserts /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_any_quest2_proof.dart",
+     "status": "עבר",
+     "out": "✓ 2 דוגמאות · 1 התנהגויות"
+    },
+    {
+     "name": "no-fakers-check",
+     "cmd": "node /home/user/-ai-chat-server/machtzev/no-fakers-check.mjs",
+     "status": "עבר",
+     "out": "✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי"
+    },
+    {
+     "name": "flutter analyze (מראה)",
+     "status": "לא-זמין",
+     "out": "buildsmart=— · flutter=—"
+    }
+   ]
+  },
+  {
+   "step": 8,
+   "title": "כתיבת-הלדג'ר",
+   "status": "עבר",
+   "detail": "machtzev/generator/goals/any_quest2/ledger.json · machtzev/generator/goals/any_quest2/ledger.md"
+  }
+ ],
+ "needs": {
+  "g1.measure.countSlot": {
+   "id": "g1.measure.countSlot",
+   "shape": "רשומות",
+   "demand": "עולם משחק שלם חדר הירו מסע בריחה חדרים שמובילים אל חידות חיות שמגיבות לשחקן ושערים נסתרים בדרך היציאה מטרה אחת קיבלתי המבנה האטומים והחיבורים בחרתי לבד כותרת בורר המנועים הבחירה מחליפה המנוע החי המוצג בחירה מגיעים כפרמטרים כותב פרש ימים חישוב טהור דטרמיניסטי וא מבוסס קלנדרי שני תאריכים חסין בונה חצות משני מתג השער פתיחתו חושפת מנוע חבוי קופסה חיווט לוח עברי slot מונה",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {
+    "'slot'": "new/atoms/schema-fields.mjs:FIELDS#Room.slot ⇐ «חדר» ⇒ Room"
+   },
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "lengthList",
+   "nodes": 1,
+   "ties": 0,
+   "weakExamples": false,
+   "discriminators": 0,
+   "depth": 0,
+   "sockets": [],
+   "round": 1,
+   "candidates": 21,
+   "top3": [
+    "lengthList:2/2✓:n1:a1:7.31",
+    "warehouseValue:1/2:n1:a1:16.06",
+    "supUsd:1/2:n1:a1:8.95"
+   ]
+  }
+ },
+ "checks": [
+  {
+   "name": "dart analyze",
+   "cmd": "/root/dart-sdk/bin/dart analyze /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_any_quest2.dart",
+   "status": "עבר",
+   "out": "Analyzing gen_goal_any_quest2.dart... | No issues found!"
+  },
+  {
+   "name": "dart run --enable-asserts (הוכחת-ההרכבה)",
+   "cmd": "/root/dart-sdk/bin/dart run --enable-asserts /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_any_quest2_proof.dart",
+   "status": "עבר",
+   "out": "✓ 2 דוגמאות · 1 התנהגויות"
+  },
+  {
+   "name": "no-fakers-check",
+   "cmd": "node /home/user/-ai-chat-server/machtzev/no-fakers-check.mjs",
+   "status": "עבר",
+   "out": "✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי"
+  },
+  {
+   "name": "flutter analyze (מראה)",
+   "status": "לא-זמין",
+   "out": "buildsmart=— · flutter=—"
+  }
+ ]
+}

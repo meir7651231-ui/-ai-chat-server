@@ -1,0 +1,520 @@
+{
+ "ns": "any_mosad_sentences_66",
+ "goal": "לכל תרומה יש תורם, תאריך, סכום, ייעוד (כללי, קרן בניין, מלגות, קמחא דפסחא, הכנסת כלה, ספר תורה), אמצעי, הקדשה; שלבים: הובטחה, התקבלה, קבלה, תודה;",
+ "goalFile": "../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/u-mosad_sentences_66.txt",
+ "at": "2026-09-17T23:09:51.337Z",
+ "ms": 15761,
+ "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/u-mosad_sentences_66.txt --ns any_mosad_sentences_66",
+ "summary": {
+  "needs": 1,
+  "rejected": 0,
+  "solved": 1,
+  "rounds": 1,
+  "file": "new/dart-gen-bs/gen_goal_any_mosad_sentences_66.dart",
+  "red": 0
+ },
+ "steps": [
+  {
+   "step": 1,
+   "title": "פסק (yeshiva/purpose) על טקסט-המטרה",
+   "status": "עבר",
+   "detail": "31 מקורות · 31 מתגים · חובה 0 · רשות 0 · תחום — · rule: לא נקרא (אין goal.spec)",
+   "psak": {
+    "sources": [
+     {
+      "field": "id",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.id"
+     },
+     {
+      "field": "name",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.name"
+     },
+     {
+      "field": "phone",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.phone"
+     },
+     {
+      "field": "email",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.email"
+     },
+     {
+      "field": "address",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.address"
+     },
+     {
+      "field": "city",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.city"
+     },
+     {
+      "field": "idNum",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.idNum"
+     },
+     {
+      "field": "extId",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.extId"
+     },
+     {
+      "field": "cat",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.cat"
+     },
+     {
+      "field": "forWho",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.forWho"
+     },
+     {
+      "field": "notes",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.notes"
+     },
+     {
+      "field": "count",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.count"
+     },
+     {
+      "field": "ils",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.ils"
+     },
+     {
+      "field": "usd",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.usd"
+     },
+     {
+      "field": "first",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.first"
+     },
+     {
+      "field": "last",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.last"
+     },
+     {
+      "field": "nextDate",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.nextDate"
+     },
+     {
+      "field": "nextNote",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.nextNote"
+     },
+     {
+      "field": "photos",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.photos"
+     },
+     {
+      "field": "nextEventId",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.nextEventId"
+     },
+     {
+      "field": "donations",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.donations"
+     },
+     {
+      "field": "hok",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.hok"
+     },
+     {
+      "field": "ayin",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.ayin"
+     },
+     {
+      "field": "calls",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.calls"
+     },
+     {
+      "field": "מלגות",
+      "src": "מטרה#תביעה1 (פועל-מטרה \"מלגות\")"
+     },
+     {
+      "field": "תרומה",
+      "src": "machtzev/generator/entity-terms.data.json:entity.donation.forms (\"תרומה\")"
+     },
+     {
+      "field": "תורם",
+      "src": "machtzev/generator/entity-terms.data.json:entity.supporter.forms (\"תורם\")"
+     },
+     {
+      "field": "תאריך",
+      "src": "machtzev/generator/spec-lang.data.json:typeDate (\"תאריך\")"
+     },
+     {
+      "field": "סכום",
+      "src": "machtzev/generator/spec-lang.data.json:typeNum (\"סכום\")"
+     },
+     {
+      "field": "ספר",
+      "src": "machtzev/generator/spec-lang.data.json:typeNum (\"מספר\")"
+     },
+     {
+      "field": "שלבים",
+      "src": "מטרה#תביעה2 (פועל-מטרה \"שלבים\")"
+     }
+    ],
+    "switches": [
+     {
+      "word": "תורם",
+      "options": 24,
+      "from": "שקע-סכמה בלי מונח-עברי"
+     },
+     {
+      "word": "תאריך",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "סכום",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "ייעוד כללי",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "קרן בניין",
+      "options": 1,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "מלגות",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "קמחא דפסחא",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "הכנסת כלה",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "ספר תורה",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "אמצעי",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "הקדשה",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "שלבים",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "הובטחה",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "התקבלה",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "קבלה",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "תודה",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "ייעוד",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "כללי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "קרן",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "בניין",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "קמחא",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "דפסחא",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "הכנסת",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "כלה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "תורה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "אמצעי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "הקדשה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "הובטחה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "התקבלה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "קבלה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "תודה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     }
+    ],
+    "mandatory": [],
+    "optional": [],
+    "domain": null,
+    "ruled": null
+   },
+   "cmd": "node yeshiva/purpose.mjs \"לכל תרומה יש תורם, תאריך, סכום, ייעוד (כללי, קרן בניין, מלגו…\""
+  },
+  {
+   "step": 2,
+   "title": "פירוק (מטרה ⇒ חלקיקים)",
+   "status": "עבר",
+   "detail": "2 תביעות ⇒ 1 צרכים נגזרו · 2 מתגי-בעלים · דוגמאות מ-9789 ליטרלי-רשומה בריפו",
+   "perok": {
+    "claims": [
+     {
+      "claim": 1,
+      "verb": "מלגות",
+      "text": "לכל תרומה יש תורם, תאריך, סכום, ייעוד (כללי, קרן בניין, מלגות, קמחא דפסחא, הכנסת כלה, ספר תורה), אמצעי, הקדשה;",
+      "needs": [
+       "g1.measure.sumAmount",
+       "g1.measure.sumAmount"
+      ],
+      "entities": [
+       "Donation",
+       "Supporter"
+      ]
+     },
+     {
+      "claim": 2,
+      "verb": "שלבים",
+      "text": "שלבים: הובטחה, התקבלה, קבלה, תודה;",
+      "needs": [],
+      "entities": []
+     }
+    ],
+    "rows": [
+     {
+      "need": "g1.measure.sumAmount",
+      "ok": true,
+      "examples": 3,
+      "now": null,
+      "fixtures": [
+       "new/dart-maor/plan-nedarim-sync_test.dart:282",
+       "new/dart-maor/attach-charge-to_test.dart:53",
+       "new/dart-maor/don-cal-month-line_test.dart:74",
+       "new/dart-maor/org-cal-entries.dart:34"
+      ],
+      "tokenSources": [
+       {
+        "token": "'amount'",
+        "src": "new/atoms/schema-fields.mjs:FIELDS#Donation.amount"
+       },
+       {
+        "token": "סכום",
+        "src": "machtzev/generator/spec-lang.data.json:pSum (\"סכום\")"
+       }
+      ],
+      "derive": {
+       "kind": "sumBy",
+       "cls": "Donation",
+       "field": "amount"
+      }
+     }
+    ],
+    "owner": [
+     {
+      "claim": 1,
+      "verb": "מלגות",
+      "kind": "תביעה-חלקית",
+      "question": "«מלגות»: 2 חוזים נגזרו, אך 11 מילים בתביעה בלי מקור (ייעוד · כללי · קרן · בניין · קמחא · דפסחא · הכנסת · כלה) — האם אחת מהן שדה/ישות שדרוש לה חוזה?"
+     },
+     {
+      "claim": 2,
+      "verb": "שלבים",
+      "kind": "אין-ישות",
+      "question": "«שלבים»: אין מילה בתביעה שיש לה מחלקת-סכמה (הובטחה · התקבלה · קבלה · תודה) — על איזו ישות?"
+     }
+    ],
+    "fixtures": 9789
+   },
+   "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/u-mosad_sentences_66.txt"
+  },
+  {
+   "step": 3,
+   "title": "אפס-המצאה לכל צורך",
+   "status": "עבר",
+   "detail": "גלאי-ההמצאה על צרכים: 1 נבדקו · 1/1 המשיכו להוכחה",
+   "hamtzaa": {
+    "available": true,
+    "reason": null,
+    "cmd": "node machtzev/generator/hamtzaa.mjs --needs machtzev/generator/goals/any_mosad_sentences_66/needs.json --goal machtzev/generator/goals/any_mosad_sentences_66/goal.txt --json"
+   },
+   "rejected": {}
+  },
+  {
+   "step": 4,
+   "title": "חיפוש-לפי-מטרה + הוכחה-בריצה + בחירה",
+   "status": "עבר",
+   "detail": "סבב 1: 1/1 נפתרו",
+   "picks": [
+    "g1.measure.sumAmount: sumBy(p0,λfieldOf(_,'amount')) · ties 1 · weak לא · discriminators 0 · depth 1"
+   ]
+  },
+  {
+   "step": 5,
+   "title": "שימוש-חוזר (התנהגות-מוכחת = אטום לצורך הבא)",
+   "status": "עבר",
+   "detail": "אין צורך לא-פתור — סבב שני לא נדרש",
+   "rounds": [],
+   "picks": []
+  },
+  {
+   "step": 6,
+   "title": "חיווט ⇒ Dart (behavior-compose --plan)",
+   "status": "עבר",
+   "detail": "new/dart-gen-bs/gen_goal_any_mosad_sentences_66.dart · 1 התנהגויות מוכחות (bhSumAmount) · ∅ 0 · הוכחה: new/dart-gen-bs/gen_goal_any_mosad_sentences_66_proof.dart (3 דוגמאות)",
+   "file": "new/dart-gen-bs/gen_goal_any_mosad_sentences_66.dart",
+   "proof": "new/dart-gen-bs/gen_goal_any_mosad_sentences_66_proof.dart",
+   "plan": "machtzev/generator/goals/any_mosad_sentences_66/plan.json",
+   "cmd": "node machtzev/generator/behavior-compose.mjs --plan machtzev/generator/goals/any_mosad_sentences_66/plan.json --out new/dart-gen-bs/gen_goal_any_mosad_sentences_66.dart"
+  },
+  {
+   "step": 7,
+   "title": "משטרה בתוך הריצה",
+   "status": "עבר",
+   "detail": "dart analyze: עבר · dart run --enable-asserts (הוכחת-ההרכבה): עבר · no-fakers-check: עבר · flutter analyze (מראה): לא-זמין",
+   "checks": [
+    {
+     "name": "dart analyze",
+     "cmd": "/root/dart-sdk/bin/dart analyze /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_any_mosad_sentences_66.dart",
+     "status": "עבר",
+     "out": "Analyzing gen_goal_any_mosad_sentences_66.dart... | No issues found!"
+    },
+    {
+     "name": "dart run --enable-asserts (הוכחת-ההרכבה)",
+     "cmd": "/root/dart-sdk/bin/dart run --enable-asserts /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_any_mosad_sentences_66_proof.dart",
+     "status": "עבר",
+     "out": "✓ 3 דוגמאות · 1 התנהגויות"
+    },
+    {
+     "name": "no-fakers-check",
+     "cmd": "node /home/user/-ai-chat-server/machtzev/no-fakers-check.mjs",
+     "status": "עבר",
+     "out": "✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי"
+    },
+    {
+     "name": "flutter analyze (מראה)",
+     "status": "לא-זמין",
+     "out": "buildsmart=— · flutter=—"
+    }
+   ]
+  },
+  {
+   "step": 8,
+   "title": "כתיבת-הלדג'ר",
+   "status": "עבר",
+   "detail": "machtzev/generator/goals/any_mosad_sentences_66/ledger.json · machtzev/generator/goals/any_mosad_sentences_66/ledger.md"
+  }
+ ],
+ "needs": {
+  "g1.measure.sumAmount": {
+   "id": "g1.measure.sumAmount",
+   "shape": "רשומות",
+   "demand": "תרומה תורם תאריך סכום ייעוד כללי קרן בניין מלגות קמחא דפסחא הכנסת כלה ספר תורה אמצעי הקדשה amount",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {
+    "'amount'": "new/atoms/schema-fields.mjs:FIELDS#Donation.amount ⇐ «תרומה» ⇒ Donation"
+   },
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "sumBy(p0,λfieldOf(_,'amount'))",
+   "nodes": 2,
+   "ties": 1,
+   "weakExamples": false,
+   "discriminators": 0,
+   "depth": 1,
+   "sockets": [
+    "literal"
+   ],
+   "round": 1,
+   "candidates": 21,
+   "top3": [
+    "sumBy(p0,λfieldOf(_,'amount')):3/3✓:n2:a2:0",
+    "supUsd:1/3:n1:a1:8.44",
+    "supCount:1/3:n1:a1:7.27"
+   ]
+  }
+ },
+ "checks": [
+  {
+   "name": "dart analyze",
+   "cmd": "/root/dart-sdk/bin/dart analyze /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_any_mosad_sentences_66.dart",
+   "status": "עבר",
+   "out": "Analyzing gen_goal_any_mosad_sentences_66.dart... | No issues found!"
+  },
+  {
+   "name": "dart run --enable-asserts (הוכחת-ההרכבה)",
+   "cmd": "/root/dart-sdk/bin/dart run --enable-asserts /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_any_mosad_sentences_66_proof.dart",
+   "status": "עבר",
+   "out": "✓ 3 דוגמאות · 1 התנהגויות"
+  },
+  {
+   "name": "no-fakers-check",
+   "cmd": "node /home/user/-ai-chat-server/machtzev/no-fakers-check.mjs",
+   "status": "עבר",
+   "out": "✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי"
+  },
+  {
+   "name": "flutter analyze (מראה)",
+   "status": "לא-זמין",
+   "out": "buildsmart=— · flutter=—"
+  }
+ ]
+}

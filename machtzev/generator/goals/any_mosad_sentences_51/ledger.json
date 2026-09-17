@@ -1,0 +1,325 @@
+{
+ "ns": "any_mosad_sentences_51",
+ "goal": "לכל חוב יש משפחה, סכום, תאריך, אחראי, הערה; שלבים: ממתין, תזכורת, שיחה, הסדר, נסגר;",
+ "goalFile": "../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/u-mosad_sentences_51.txt",
+ "at": "2026-09-17T23:09:35.209Z",
+ "ms": 19012,
+ "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/u-mosad_sentences_51.txt --ns any_mosad_sentences_51",
+ "summary": {
+  "needs": 1,
+  "rejected": 0,
+  "solved": 1,
+  "rounds": 1,
+  "file": "new/dart-gen-bs/gen_goal_any_mosad_sentences_51.dart",
+  "red": 0
+ },
+ "steps": [
+  {
+   "step": 1,
+   "title": "פסק (yeshiva/purpose) על טקסט-המטרה",
+   "status": "עבר",
+   "detail": "8 מקורות · 13 מתגים · חובה 0 · רשות 0 · תחום — · rule: לא נקרא (אין goal.spec)",
+   "psak": {
+    "sources": [
+     {
+      "field": "at",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#CallEntry.at"
+     },
+     {
+      "field": "outcome",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#CallEntry.outcome"
+     },
+     {
+      "field": "שלבים",
+      "src": "מטרה#תביעה1 (פועל-מטרה \"שלבים\")"
+     },
+     {
+      "field": "משפחה",
+      "src": "machtzev/generator/entity-terms.data.json:entity.family.forms (\"משפחה\")"
+     },
+     {
+      "field": "שיחה",
+      "src": "machtzev/generator/entity-terms.data.json:entity.callEntry.forms (\"שיחה\")"
+     },
+     {
+      "field": "סכום",
+      "src": "machtzev/generator/spec-lang.data.json:typeNum (\"סכום\")"
+     },
+     {
+      "field": "תאריך",
+      "src": "machtzev/generator/spec-lang.data.json:typeDate (\"תאריך\")"
+     },
+     {
+      "field": "הערה",
+      "src": "machtzev/generator/spec-lang.data.json:typeMultiline (\"הערה\")"
+     }
+    ],
+    "switches": [
+     {
+      "word": "חוב",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "שלבים",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "ממתין",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "תזכורת",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "שיחה",
+      "options": 2,
+      "from": "שקע-סכמה בלי מונח-עברי"
+     },
+     {
+      "word": "הסדר",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "נסגר",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "חוב",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "אחראי",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "ממתין",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "תזכורת",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "הסדר",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "נסגר",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     }
+    ],
+    "mandatory": [],
+    "optional": [],
+    "domain": null,
+    "ruled": null
+   },
+   "cmd": "node yeshiva/purpose.mjs \"לכל חוב יש משפחה, סכום, תאריך, אחראי, הערה; שלבים: ממתין, תז…\""
+  },
+  {
+   "step": 2,
+   "title": "פירוק (מטרה ⇒ חלקיקים)",
+   "status": "עבר",
+   "detail": "1 תביעות ⇒ 1 צרכים נגזרו · 1 מתגי-בעלים · דוגמאות מ-9785 ליטרלי-רשומה בריפו",
+   "perok": {
+    "claims": [
+     {
+      "claim": 1,
+      "verb": "שלבים",
+      "text": "לכל חוב יש משפחה, סכום, תאריך, אחראי, הערה; שלבים: ממתין, תזכורת, שיחה, הסדר, נסגר;",
+      "needs": [
+       "g1.measure.sumKidsHome"
+      ],
+      "entities": [
+       "Family",
+       "CallEntry"
+      ]
+     }
+    ],
+    "rows": [
+     {
+      "need": "g1.measure.sumKidsHome",
+      "ok": true,
+      "examples": 3,
+      "now": null,
+      "fixtures": [
+       "new/dart-maor/merge-families-by-fields_test.dart:56",
+       "new/dart-maor/merge-families-by-fields_test.dart:79",
+       "new/dart-maor/merge-families_test.dart:73",
+       "new/dart-maor/merge-families-by-fields_test.dart:57"
+      ],
+      "tokenSources": [
+       {
+        "token": "'kidsHome'",
+        "src": "new/atoms/schema-fields.mjs:FIELDS#Family.kidsHome"
+       },
+       {
+        "token": "סכום",
+        "src": "machtzev/generator/spec-lang.data.json:pSum (\"סכום\")"
+       }
+      ],
+      "derive": {
+       "kind": "sumBy",
+       "cls": "Family",
+       "field": "kidsHome"
+      }
+     }
+    ],
+    "owner": [
+     {
+      "claim": 1,
+      "verb": "שלבים",
+      "kind": "תביעה-חלקית",
+      "question": "«שלבים»: 1 חוזים נגזרו, אך 6 מילים בתביעה בלי מקור (חוב · אחראי · ממתין · תזכורת · הסדר · נסגר) — האם אחת מהן שדה/ישות שדרוש לה חוזה?"
+     }
+    ],
+    "fixtures": 9785
+   },
+   "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/u-mosad_sentences_51.txt"
+  },
+  {
+   "step": 3,
+   "title": "אפס-המצאה לכל צורך",
+   "status": "עבר",
+   "detail": "גלאי-ההמצאה על צרכים: 1 נבדקו · 1/1 המשיכו להוכחה",
+   "hamtzaa": {
+    "available": true,
+    "reason": null,
+    "cmd": "node machtzev/generator/hamtzaa.mjs --needs machtzev/generator/goals/any_mosad_sentences_51/needs.json --goal machtzev/generator/goals/any_mosad_sentences_51/goal.txt --json"
+   },
+   "rejected": {}
+  },
+  {
+   "step": 4,
+   "title": "חיפוש-לפי-מטרה + הוכחה-בריצה + בחירה",
+   "status": "עבר",
+   "detail": "סבב 1: 1/1 נפתרו",
+   "picks": [
+    "g1.measure.sumKidsHome: sumBy(p0,λfieldOf(_,'kidsHome')) · ties 1 · weak לא · discriminators 0 · depth 1"
+   ]
+  },
+  {
+   "step": 5,
+   "title": "שימוש-חוזר (התנהגות-מוכחת = אטום לצורך הבא)",
+   "status": "עבר",
+   "detail": "אין צורך לא-פתור — סבב שני לא נדרש",
+   "rounds": [],
+   "picks": []
+  },
+  {
+   "step": 6,
+   "title": "חיווט ⇒ Dart (behavior-compose --plan)",
+   "status": "עבר",
+   "detail": "new/dart-gen-bs/gen_goal_any_mosad_sentences_51.dart · 1 התנהגויות מוכחות (bhSumKidsHome) · ∅ 0 · הוכחה: new/dart-gen-bs/gen_goal_any_mosad_sentences_51_proof.dart (3 דוגמאות)",
+   "file": "new/dart-gen-bs/gen_goal_any_mosad_sentences_51.dart",
+   "proof": "new/dart-gen-bs/gen_goal_any_mosad_sentences_51_proof.dart",
+   "plan": "machtzev/generator/goals/any_mosad_sentences_51/plan.json",
+   "cmd": "node machtzev/generator/behavior-compose.mjs --plan machtzev/generator/goals/any_mosad_sentences_51/plan.json --out new/dart-gen-bs/gen_goal_any_mosad_sentences_51.dart"
+  },
+  {
+   "step": 7,
+   "title": "משטרה בתוך הריצה",
+   "status": "עבר",
+   "detail": "dart analyze: עבר · dart run --enable-asserts (הוכחת-ההרכבה): עבר · no-fakers-check: עבר · flutter analyze (מראה): לא-זמין",
+   "checks": [
+    {
+     "name": "dart analyze",
+     "cmd": "/root/dart-sdk/bin/dart analyze /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_any_mosad_sentences_51.dart",
+     "status": "עבר",
+     "out": "Analyzing gen_goal_any_mosad_sentences_51.dart... | No issues found!"
+    },
+    {
+     "name": "dart run --enable-asserts (הוכחת-ההרכבה)",
+     "cmd": "/root/dart-sdk/bin/dart run --enable-asserts /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_any_mosad_sentences_51_proof.dart",
+     "status": "עבר",
+     "out": "✓ 3 דוגמאות · 1 התנהגויות"
+    },
+    {
+     "name": "no-fakers-check",
+     "cmd": "node /home/user/-ai-chat-server/machtzev/no-fakers-check.mjs",
+     "status": "עבר",
+     "out": "✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי"
+    },
+    {
+     "name": "flutter analyze (מראה)",
+     "status": "לא-זמין",
+     "out": "buildsmart=— · flutter=—"
+    }
+   ]
+  },
+  {
+   "step": 8,
+   "title": "כתיבת-הלדג'ר",
+   "status": "עבר",
+   "detail": "machtzev/generator/goals/any_mosad_sentences_51/ledger.json · machtzev/generator/goals/any_mosad_sentences_51/ledger.md"
+  }
+ ],
+ "needs": {
+  "g1.measure.sumKidsHome": {
+   "id": "g1.measure.sumKidsHome",
+   "shape": "רשומות",
+   "demand": "חוב משפחה סכום תאריך אחראי הערה שלבים ממתין תזכורת שיחה הסדר נסגר kidsHome",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {
+    "'kidsHome'": "new/atoms/schema-fields.mjs:FIELDS#Family.kidsHome ⇐ «משפחה» ⇒ Family",
+    "'id'": "new/atoms/schema-fields.mjs:FIELDS#Family.id ⇐ «משפחה» ⇒ Family"
+   },
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "sumBy(p0,λfieldOf(_,'kidsHome'))",
+   "nodes": 2,
+   "ties": 1,
+   "weakExamples": false,
+   "discriminators": 0,
+   "depth": 1,
+   "sockets": [
+    "literal"
+   ],
+   "round": 1,
+   "candidates": 21,
+   "top3": [
+    "sumBy(p0,λfieldOf(_,'kidsHome')):3/3✓:n2:a2:0",
+    "lengthList:1/3:n1:a1:2",
+    "warehouseValue:1/3:n1:a1:2"
+   ]
+  }
+ },
+ "checks": [
+  {
+   "name": "dart analyze",
+   "cmd": "/root/dart-sdk/bin/dart analyze /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_any_mosad_sentences_51.dart",
+   "status": "עבר",
+   "out": "Analyzing gen_goal_any_mosad_sentences_51.dart... | No issues found!"
+  },
+  {
+   "name": "dart run --enable-asserts (הוכחת-ההרכבה)",
+   "cmd": "/root/dart-sdk/bin/dart run --enable-asserts /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_any_mosad_sentences_51_proof.dart",
+   "status": "עבר",
+   "out": "✓ 3 דוגמאות · 1 התנהגויות"
+  },
+  {
+   "name": "no-fakers-check",
+   "cmd": "node /home/user/-ai-chat-server/machtzev/no-fakers-check.mjs",
+   "status": "עבר",
+   "out": "✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי"
+  },
+  {
+   "name": "flutter analyze (מראה)",
+   "status": "לא-זמין",
+   "out": "buildsmart=— · flutter=—"
+  }
+ ]
+}

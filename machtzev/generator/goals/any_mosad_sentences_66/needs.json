@@ -1,0 +1,28 @@
+{
+ "g1.measure.sumAmount": {
+  "shape": "רשומות",
+  "demand": "תרומה תורם תאריך סכום ייעוד כללי קרן בניין מלגות קמחא דפסחא הכנסת כלה ספר תורה אמצעי הקדשה amount",
+  "params": [
+   "List<dynamic>"
+  ],
+  "ret": "num",
+  "consts": [
+   "'amount'"
+  ],
+  "entity": "Donation",
+  "examples": [
+   [
+    "<dynamic>[{'amount': -50}, {'amount': 180}, {'amount': 5000}]",
+    "r == 5130"
+   ],
+   [
+    "<dynamic>[]",
+    "r == 0"
+   ],
+   [
+    "<dynamic>[{'amount': -50}]",
+    "r == -50"
+   ]
+  ]
+ }
+}
