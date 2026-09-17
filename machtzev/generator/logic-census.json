@@ -4711,6 +4711,17 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/op-gt-dyn.dart",
+  "name": "gtDyn",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/op-gt-num.dart",
   "name": "gtNum",
   "ret": "bool",
@@ -5143,6 +5154,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-i-div-num.dart",
+  "name": "iDivNum",
+  "ret": "num",
+  "params": [
+   "num",
+   "num"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/importable-contacts.dart",
   "name": "importableContacts",
   "ret": "List<dynamic>",
@@ -5375,6 +5397,16 @@
   ],
   "argc": 1,
   "wireable": false
+ },
+ {
+  "file": "dart-maor/op-is-empty-str.dart",
+  "name": "isEmptyStr",
+  "ret": "bool",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
  },
  {
   "file": "dart-maor/is-enc-doc.dart",

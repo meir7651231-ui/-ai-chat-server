@@ -1,0 +1,190 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:20:59.524Z",
+ "query": "is empty str חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "is",
+  "empty",
+  "str",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "410c8b9e79b674339b1fc46a4f354cf07d52eb9de12e6e373e0fe11fdb45f28c",
+  "logicCensusSha": "a39992a4632dd5d6899a3db43e5270879edcfbd89a05a7edc21f0ecbf737171c",
+  "display": 1926,
+  "logic": 1002
+ },
+ "candidates": [
+  {
+   "id": "isEmptyList",
+   "layer": "logic",
+   "file": "dart-maor/op-is-empty-list.dart",
+   "score": 6,
+   "hits": [
+    "is",
+    "empty"
+   ]
+  },
+  {
+   "id": "isNotEmptyList",
+   "layer": "logic",
+   "file": "dart-maor/op-is-not-empty-list.dart",
+   "score": 6,
+   "hits": [
+    "is",
+    "empty"
+   ]
+  },
+  {
+   "id": "ForgeAnimatedEmpty",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/animated_empty.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeEmptyHint",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/empty_hint.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeEmptyState",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/empty_state.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeSearchEmptyState",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/search_empty_state.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "addStr",
+   "layer": "logic",
+   "file": "dart-maor/op-add-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "AnimatedEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/animated_empty.dart",
+   "score": 3,
+   "hits": [
+    "empty"
+   ]
+  },
+  {
+   "id": "CaEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_empty.dart",
+   "score": 3,
+   "hits": [
+    "empty"
+   ]
+  },
+  {
+   "id": "cmpGeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-ge-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpGtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-gt-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpLeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-le-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpLtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-lt-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "containsStr",
+   "layer": "logic",
+   "file": "dart-maor/op-contains-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "csvIsBlank",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  }
+ ],
+ "strong": [
+  "isEmptyList",
+  "isNotEmptyList",
+  "addStr",
+  "cmpGeStr",
+  "cmpGtStr",
+  "cmpLeStr",
+  "cmpLtStr",
+  "containsStr",
+  "csvIsBlank"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "ForgeAnimatedEmpty",
+  "ForgeEmptyHint",
+  "ForgeEmptyState",
+  "ForgeSearchEmptyState",
+  "AnimatedEmpty",
+  "CaEmpty"
+ ],
+ "creates": "new/dart-maor/op-is-empty-str.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד isEmptyStr(String) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי storedHash.isEmpty · מקור למשל dart/access_password_matches.dart#accessPasswordMatches); המועמדים-החזקים isEmptyList(List<dynamic>) => bool · isNotEmptyList(List<dynamic>) => bool · addStr(String, String) => String · cmpGeStr(String, String) => bool · cmpGtStr(String, String) => bool · cmpLeStr(String, String) => bool · cmpLtStr(String, String) => bool · containsStr(String, String) => bool · csvIsBlank(List<String>) => bool — לאף אחד אין את חתימת-הפעולה-לבדה (String) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם",
+ "sig": "d3591a0ed3643409664b0395a6d12d18ff9b1eb1dfe6dd4eb5ababec74dfabc4"
+}
