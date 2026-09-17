@@ -7144,6 +7144,17 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/op-ne-str.dart",
+  "name": "neStr",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/net-check-script.dart",
   "name": "netCheckScript",
   "ret": "String",
@@ -10469,6 +10480,17 @@
   ],
   "argc": 2,
   "wireable": false
+ },
+ {
+  "file": "dart-maor/op-sub-num.dart",
+  "name": "subNum",
+  "ret": "num",
+  "params": [
+   "num",
+   "num"
+  ],
+  "argc": 2,
+  "wireable": true
  },
  {
   "file": "dart-maor/subsidy-total.dart",

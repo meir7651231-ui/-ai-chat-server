@@ -1,0 +1,182 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:33:14.110Z",
+ "query": "ne str חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "ne",
+  "str",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "4eb10356981ac19473011659314ff09ce2bf7904e096ccb9c35f12c02e739f85",
+  "logicCensusSha": "dd54d1f55c3e3575e3a3098d6d3597f9462041ec635569d1862687deadba9479",
+  "display": 1942,
+  "logic": 1018
+ },
+ "candidates": [
+  {
+   "id": "addStr",
+   "layer": "logic",
+   "file": "dart-maor/op-add-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpGeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-ge-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpGtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-gt-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpLeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-le-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpLtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-lt-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "containsStr",
+   "layer": "logic",
+   "file": "dart-maor/op-contains-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "eqStr",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "isEmptyStr",
+   "layer": "logic",
+   "file": "dart-maor/op-is-empty-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "isNotEmptyStr",
+   "layer": "logic",
+   "file": "dart-maor/op-is-not-empty-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "lengthStr",
+   "layer": "logic",
+   "file": "dart-maor/op-length-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "lowerStr",
+   "layer": "logic",
+   "file": "dart-maor/op-lower-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "modeStr",
+   "layer": "logic",
+   "file": "dart-boxes/lib-nedarim-sync.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "neBool",
+   "layer": "logic",
+   "file": "dart-maor/op-ne-bool.dart",
+   "score": 3,
+   "hits": [
+    "ne"
+   ]
+  },
+  {
+   "id": "neDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-ne-dyn.dart",
+   "score": 3,
+   "hits": [
+    "ne"
+   ]
+  },
+  {
+   "id": "neNum",
+   "layer": "logic",
+   "file": "dart-maor/op-ne-num.dart",
+   "score": 3,
+   "hits": [
+    "ne"
+   ]
+  }
+ ],
+ "strong": [
+  "addStr",
+  "cmpGeStr",
+  "cmpGtStr",
+  "cmpLeStr",
+  "cmpLtStr",
+  "containsStr",
+  "eqStr",
+  "isEmptyStr",
+  "isNotEmptyStr",
+  "lengthStr",
+  "lowerStr",
+  "modeStr",
+  "neBool",
+  "neDyn",
+  "neNum"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart-maor/op-ne-str.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד neStr(String, String) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי (d as Map)['cur'] != '\\$' · מקור למשל dart-maor/annual-report-lines.dart#annualReportLines); המועמדים-החזקים addStr(String, String) => String · cmpGeStr(String, String) => bool · cmpGtStr(String, String) => bool · cmpLeStr(String, String) => bool · cmpLtStr(String, String) => bool · containsStr(String, String) => bool · eqStr(String, String) => bool · isEmptyStr(String) => bool · isNotEmptyStr(String) => bool · lengthStr(String) => num · lowerStr(String) => String · modeStr(List<String>) => String · neBool(bool, bool) => bool · neDyn(dynamic, dynamic) => bool · neNum(num, num) => bool — לרובם אין את חתימת-הפעולה-לבדה (String, String) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: cmpGeStr {} · cmpGtStr {} · cmpLeStr {} · cmpLtStr {} · containsStr {} · eqStr {} — מול neStr {a != b;}",
+ "sig": "3c6787cc06b53f5fe4cba6b7263a5a5054d7c72a548ec155ca4dad736c2cfd55"
+}

@@ -1,0 +1,183 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:33:14.539Z",
+ "query": "sub num חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "sub",
+  "num",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "51e52cd2491f6fc9f756915aed0e9e44260669431d46c4e2e7e99d49fed86408",
+  "logicCensusSha": "78b4d526916a5f2341fc6753aecb7e7b597d747c3a703a995956b9c74bb1750e",
+  "display": 1943,
+  "logic": 1019
+ },
+ "candidates": [
+  {
+   "id": "absNum",
+   "layer": "logic",
+   "file": "dart-maor/op-abs-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "addNum",
+   "layer": "logic",
+   "file": "dart-maor/op-add-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "AiCardSub",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_sub.dart",
+   "score": 3,
+   "hits": [
+    "sub"
+   ]
+  },
+  {
+   "id": "CaSub",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_sub.dart",
+   "score": 3,
+   "hits": [
+    "sub"
+   ]
+  },
+  {
+   "id": "CaSubTitle",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_sub_title.dart",
+   "score": 3,
+   "hits": [
+    "sub"
+   ]
+  },
+  {
+   "id": "cleanSub",
+   "layer": "logic",
+   "file": "dart/clean_sub.dart",
+   "score": 3,
+   "hits": [
+    "sub"
+   ]
+  },
+  {
+   "id": "divNum",
+   "layer": "logic",
+   "file": "dart-maor/op-div-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "eqNum",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "floorNum",
+   "layer": "logic",
+   "file": "dart-maor/op-floor-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "geNum",
+   "layer": "logic",
+   "file": "dart-maor/op-ge-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "gtNum",
+   "layer": "logic",
+   "file": "dart-maor/op-gt-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "iDivNum",
+   "layer": "logic",
+   "file": "dart-maor/op-i-div-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "leNum",
+   "layer": "logic",
+   "file": "dart-maor/op-le-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "ltNum",
+   "layer": "logic",
+   "file": "dart-maor/op-lt-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "modNum",
+   "layer": "logic",
+   "file": "dart-maor/op-mod-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  }
+ ],
+ "strong": [
+  "absNum",
+  "addNum",
+  "cleanSub",
+  "divNum",
+  "eqNum",
+  "floorNum",
+  "geNum",
+  "gtNum",
+  "iDivNum",
+  "leNum",
+  "ltNum",
+  "modNum"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "AiCardSub",
+  "CaSub",
+  "CaSubTitle"
+ ],
+ "creates": "new/dart-maor/op-sub-num.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד subNum(num, num) => num שנחצב מכנית ע\"י ast_carve --ops (הביטוי y - 1 · מקור למשל dart-maor/academic-year-label.dart#academicYearLabel); המועמדים-החזקים absNum(num) => num · addNum(num, num) => num · cleanSub(String, String Function(String) term) => String · divNum(num, num) => num · eqNum(num, num) => bool · floorNum(num) => num · geNum(num, num) => bool · gtNum(num, num) => bool · iDivNum(num, num) => num · leNum(num, num) => bool · ltNum(num, num) => bool · modNum(num, num) => num — לרובם אין את חתימת-הפעולה-לבדה (num, num) => num (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: addNum {} · divNum {} · iDivNum {} · modNum {} — מול subNum {a - b;}",
+ "sig": "16cf4c1c1b454dcfedb3b4887e4e4afeeb1813def58d4323efa7ce2f37caf825"
+}
