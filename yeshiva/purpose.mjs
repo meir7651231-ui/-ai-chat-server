@@ -211,6 +211,15 @@ export function goalSlots(sentence, origin = 'מטרה') {
 //  עם השאלה המדויקת (L57). הדוגמאות עצמן אינן כאן: החוזה מצהיר `derive` (הסמנטיקה
 //  המבנית), והמקור-לדוגמאות נבחר ע"י הפקודה-האחת מנתוני-fixture שקיימים בריפו.
 const SIGNALS = { sum: SPL.pSum || [], count: SPL.pCount || [], avg: SPL.pAvg || [], list: SPL.pTable || [] };
+// 🔗 **המפרק הקיים מכריע אילו פעולות-יסוד מותרות** (הכרעה-27 · `ops-particles`/`shape-ops`):
+//   לכל ישות ולכל שקע כבר נגזרו פעולות-היסוד מ**טיפוסי-השדות** (‏`shape-ops.json`,
+//   ‏G2). חוזה-צורך אינו נגזר אלא אם פעולת-היסוד שלו מוצהרת שם — התאמת **זהות-שם**
+//   (‏`temporal` · `measure` · `filter`), לא טבלה ולא מילון. ישות/שקע שלא מצהירים
+//   את הפעולה ⇒ מתג-לבעלים, לא חוזה. כך הגזירה נשענת על המפרק שכבר קיים.
+const SOPS = JSON.parse(fs.readFileSync(GENU('shape-ops.json'), 'utf8')).entities || [];
+export const OPS_SRC = 'machtzev/generator/shape-ops.json';
+const entOps = (cls) => (SOPS.find((e) => e.entity === cls) || {}).ops || [];
+const fieldOps = (cls, field) => (((SOPS.find((e) => e.entity === cls) || {}).perField || []).find((f) => f.field === field) || {}).ops || [];
 const CMP_TAG = { 'מעל': 'Over', 'מתחת': 'Under' };
 const cap = (s) => String(s).charAt(0).toUpperCase() + String(s).slice(1);
 /** האם מילות-התביעה נושאות אות-סימן מדקדוק-החלקיקים (התאמת-`stem` של המדף). */
@@ -256,7 +265,13 @@ export function goalNeeds(sentence, origin = 'מטרה') {
     const purp = (extra) => [...new Set([...contentW(heW(d.text)), ...extra])].join(' ');
     for (const { r, s } of thr) {
       const tag = CMP_TAG[r.cmp] || r.cmp; const K = r.word; const F = s.field; const Fc = cap(F);
-      const src = [{ token: `'${F}'`, src: s.src }, { token: K, src: r.src }];
+      const fo = fieldOps(s.cls, F); const eo = entOps(s.cls);
+      if (!fo.includes('temporal')) {   // השקע אינו מצהיר פעולת-זמן ⇒ אין חוזה-סף, גם אם הפסק קשר קבוע
+        owner.push({ claim: i + 1, verb: d.verb, word: r.word, kind: 'פעולת-יסוד-לא-מוצהרת',
+          question: `«${d.verb}»: ${s.cls}.${F} אינו מצהיר \`temporal\` ב-${OPS_SRC} (מצהיר: ${fo.join(', ') || '—'}) — סף-על-${F} אינו פעולת-יסוד שלו. להצהיר, או שזה שקע אחר?` });
+        continue;
+      }
+      const src = [{ token: `'${F}'`, src: s.src }, { token: K, src: r.src }, { token: 'temporal', src: `${OPS_SRC}#${s.cls}.${F}.ops` }];
       ids.push(mk(`g${i + 1}.clock.${F}Days`, { shape: 'מועד', demand: purp([F]), params: ['String'], ret: 'num',
         clock: { type: 'String' }, sources: [src[0]], derive: { kind: 'daysSince', cls: s.cls, field: F } }));
       ids.push(mk(`g${i + 1}.predicate.${F}${tag}${K}`, { shape: 'מועד', demand: purp([F, r.cmp]), params: ['String'], ret: 'bool',
@@ -264,17 +279,28 @@ export function goalNeeds(sentence, origin = 'מטרה') {
       ids.push(mk(`g${i + 1}.predicate.record${Fc}${tag}${K}`, { shape: 'רשומות', demand: purp([F, r.cmp]), params: ['dynamic'], ret: 'bool',
         clock: { type: 'String' }, consts: [`'${F}'`, K], entity: s.cls, sources: src,
         derive: { kind: 'recordThreshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp } }));
-      ids.push(mk(`g${i + 1}.collection.${F}${tag}${K}List`, { shape: 'רשומות', demand: purp([F, r.cmp]), params: ['List<dynamic>'], ret: 'List<dynamic>',
-        clock: { type: 'String' }, consts: [`'${F}'`, K], entity: s.cls, sources: src,
-        derive: { kind: 'filterThreshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp } }));
+      if (eo.includes('filter')) {   // אוסף-מסונן = פעולת-היסוד `filter` של הישות
+        ids.push(mk(`g${i + 1}.collection.${F}${tag}${K}List`, { shape: 'רשומות', demand: purp([F, r.cmp]), params: ['List<dynamic>'], ret: 'List<dynamic>',
+          clock: { type: 'String' }, consts: [`'${F}'`, K], entity: s.cls, op: 'filter',
+          sources: [...src, { token: 'filter', src: `${OPS_SRC}#${s.cls}.ops` }],
+          derive: { kind: 'filterThreshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp } }));
+      } else owner.push({ claim: i + 1, verb: d.verb, kind: 'פעולת-יסוד-לא-מוצהרת',
+        question: `«${d.verb}»: ${s.cls} אינו מצהיר \`filter\` ב-${OPS_SRC} — אין חוזה-אוסף. להצהיר?` });
     }
     for (const { r, s } of nums) {
       const hit = sig.sum || sig.avg || sig.count;
       if (!hit) { owner.push({ claim: i + 1, verb: d.verb, word: r.word, kind: 'אגרגציה-בלי-אות-סימן',
         question: `«${d.verb}» על ${s.cls}.${s.field}: יש שקע-מספר אך אין אות-סימן-אגרגציה במטרה (${[...Object.values(SIGNALS)].flat().slice(0, 4).join('/')}) — סכום? מונה? ממוצע?` }); continue; }
       const fam = sig.sum ? 'sum' : sig.avg ? 'avg' : 'count';
+      const fo2 = fieldOps(s.cls, s.field);
+      if (!fo2.includes('measure')) {
+        owner.push({ claim: i + 1, verb: d.verb, word: r.word, kind: 'פעולת-יסוד-לא-מוצהרת',
+          question: `«${d.verb}»: ${s.cls}.${s.field} אינו מצהיר \`measure\` ב-${OPS_SRC} (מצהיר: ${fo2.join(', ') || '—'}) — אגרגציה אינה פעולת-יסוד שלו. להצהיר?` });
+        continue;
+      }
       ids.push(mk(`g${i + 1}.measure.${fam}${cap(s.field)}`, { shape: 'רשומות', demand: purp([s.field, hit.f]), params: ['List<dynamic>'], ret: 'num',
-        consts: [`'${s.field}'`], entity: s.cls, sources: [{ token: `'${s.field}'`, src: s.src }, { token: hit.f, src: `${GOAL_SRC.spl}:p${cap(fam)} ("${hit.f}")` }],
+        consts: [`'${s.field}'`], entity: s.cls, op: 'measure',
+        sources: [{ token: `'${s.field}'`, src: s.src }, { token: hit.f, src: `${GOAL_SRC.spl}:p${cap(fam)} ("${hit.f}")` }, { token: 'measure', src: `${OPS_SRC}#${s.cls}.${s.field}.ops` }],
         derive: { kind: fam + 'By', cls: s.cls, field: s.field } }));
     }
     if (!ids.length) {

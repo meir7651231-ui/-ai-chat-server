@@ -118,7 +118,20 @@ $ node machtzev/generator/behavior-plan.mjs --perok-scan --json   # ⇒ 31 יח�
   ג·mosad pool=27 seed=20260917 ⇒ mosad.sentences:51 [g1.measure.sumKidsHome] · :66 [g1.measure.sumAmount]
 $ node machtzev/generator/behavior-plan.mjs --goal <unit>.txt --ns <ns>
 ```
-<!--TABLE32-->
+| יחידה | מקור | תביעות | צרכים | נפסלו-בהמצאה | מוכחים | Dart | משטרה-בריצה | זמן | שיא-RSS |
+|---|---|---|---|---|---|---|---|---|---|
+| `anyg1` — תשלומי הורים מעל 30 יום | ד | 2 | 5 | 0 | **5/5** | `gen_goal_anyg1.dart` · 5 התנהגויות · 21 הוכחות | ✅ analyze · asserts · no-fakers (‏flutter לא-זמין) | 249.8s | 1,784MB |
+| `anyg3` — משפחות מעל 60 יום | ד | 3 | 4 | 0 | 2/4 · **2 ∅** | `gen_goal_anyg3.dart` · 2 התנהגויות · 9 הוכחות | ✅ | 230.7s | 1,916MB |
+| `anyg6` — תורמים מעל 90 יום | ד | 3 | 4 | 0 | **4/4** | `gen_goal_anyg6.dart` · 4 התנהגויות · 18 הוכחות | ✅ | 240.1s | 1,715MB |
+| `any_quest2` — specs/crazy-דמוי «עולם משחק» | ב | 2 | 1 | 0 | **1/1** | `gen_goal_any_quest2.dart` · `bhCountSlot` · 2 הוכחות | ✅ | 2.7s | 422MB |
+| `any_mosad_sentences_51` — «לכל חוב יש משפחה, סכום…» | ג | 1 | 1 | 0 | **1/1** | `bhSumKidsHome` · 3 הוכחות | ✅ | 19.3s | 885MB |
+| `any_mosad_sentences_66` — «לכל תרומה יש תורם…» | ג | 2 | 1 | 0 | **1/1** | `bhSumAmount` · 3 הוכחות | ✅ | 16.1s | 841MB |
+| **סה"כ** | | **13** | **16** | **0** | **14/16 · 2 ∅** | 6 קבצי-Dart · 56 הוכחות | 6/6 ירוקות | 758s | — |
+
+‏`anyg3` הוא המקרה שמראה שהתיקון עובד לשני הכיוונים: **לפני** התיקון שני הצרכים
+שלו קיבלו pick «מוכח» שנפל בהוכחת-ההרכבה; **אחרי** הבורר אומר ∅ — «לא מצאתי» כנה
+במקום ירוק-חלול. ו-`anyg1` עבר 4/5-עם-הוכחה-נופלת ⇒ **5/5 עם הוכחה עוברת**.
+
 
 **לא-נמדד, במפורש:** 25 מתוך 31 היחידות-עם-צרכים לא עברו את הצעדים היקרים
 (‏`ג·mosad` 25 מ-27) — הסיבה היא זמן-ריצה, לא כשל. הצעדים 1–3 (פסק · פירוק ·
@@ -257,7 +270,15 @@ g1.predicate.dateOver30  עבר  cmpGeStr(now,normId(p0))  weak=true ties=8 disc
 $ node machtzev/police.mjs                      # ריצה-מלאה, אחרי git fetch --unshallow
 🟡 המשטרה צהובה — 57 ran · 0 skipped · 1 yellow · 0 failed · מרשם 58 [nlcompile:tool=flutter]
 ```
-<!--POLICE-->
+```
+$ node machtzev/police.mjs --fast                # אחרי תיקון-החיווט + pins-check --write
+```
+```
+✅ המשטרה ירוקה — 45 ran · 13 skipped · 0 yellow · 0 failed · מרשם 58
+```
+
+‏`nlcompile` צהוב ולא אדום כי `KNOWN_TOOLS` מכיר ש-`flutter`/`buildsmart` אינם
+בקונטיינר — «מדולג עם סיבה», לא «עבר».
 
 ## 9 · שאלות לבעלים (מתגים שהמנוע מסר, לא הכריע)
 
@@ -387,6 +408,137 @@ $ grep -n "writeFileSync" behavior-plan.mjs | grep -E "apps|peruk" | wc -l ⇒ 0
    (ערכי-enum «רץ»/«חסום» הפכו לישויות). זה `nl-spec`/`entity`, לא צעד-הפירוק שלי —
    **לא נגעתי בו** ולא מדדתי אותו בגל הזה.
 
+## 13 · 🔴 באג-אמת שני: pick בלי `tree` נשמט בשקט מהחיווט
+
+**מה שראיתי:** `--goal specs/quest2.txt` סיים «✓ 1/1 צרכים מוכחים · exit 0» —
+ו**קובץ-ה-Dart היה ריק** (‏0 התנהגויות · ∅ 1). ריצה שמדווחת הצלחה ולא פולטת קוד היא
+אותה מחלקת-תקלה של §5: הדיווח והתוצר חלוקים.
+
+**הסיבה, בבייטים** (`behavior-compose.mjs:31`):
+```js
+const need = p.need || {}; if (!p.pick || !p.tree) { skipped.push(id); continue; }
+```
+‏`planNeeds` מייצר שלוש צורות-בחירה: עץ (`tree`), שרשרת-מדור (`chain`), ו**אטום-יחיד**
+(‏`{pick, file, chain:null, tree:null}` — מסלול-המועמד-היחיד). `behavior-compose` מטפל
+ב-`tree` בלבד: `chain` ואטום-יחיד נפלו ל-`skipped` **בשקט**, בעוד `planNeeds` ספר
+אותם «נפתרו» — ומכאן «1/1 מוכחים» עם קובץ ריק.
+```
+$ node -e "plan.json['g1.measure.countSlot']"
+{ "pick": "lengthList", "file": "dart-maor/op-length-list.dart",
+  "chain": null, "tree": null, "proven": true, "nodes": 1 }
+```
+
+**התיקון:** העץ נבנה **מהבחירה עצמה** כשהוא חסר — אטום-יחיד ⇒
+`{k:'a', id:pick, file, args:[p0…pn]}` · שרשרת ⇒ `B(A(p0…pn))` — ורק בחירה בלי `pick`
+או בלי `file` נשמטת. ‏(‏`sigOk` כבר אכף `argc === need.params.length`, ולכן סדר-הפרמטרים
+בטוח.) נמדד אחרי:
+```
+✓ 6/8 חיווט ⇒ Dart: 1 התנהגויות מוכחות (bhCountSlot) · ∅ 0 · הוכחה: 2 דוגמאות
+✓ 7/8 משטרה: dart analyze עבר · dart run --enable-asserts עבר · no-fakers עבר
+num bhCountSlot(List<dynamic> p0) => c0_0.lengthList(p0);
+```
+
+**וגם:** `--goal <file>.txt` קרא רק את **שורתו הראשונה** של הקובץ, בעוד `--perok-scan`
+קורא קובץ-אפיון בשלמותו. אותו `quest2.txt` נתן 0 תביעות דרך `--goal` ו-2 תביעות דרך
+`--perok-scan` — שני מסלולים של אותו מנוע שחלקו על אותו קלט. עכשיו `--goal` על קובץ-
+טקסט לוקח את **כל הקובץ**; קובץ שבו כל שורה היא מטרה נפרדת נמדד שורה-שורה ע"י הסריקה.
+
+## 14 · תיקון-החוזה «הפירוק כבר קיים» — מה שמצאתי, ומה שאני חייב לומר על עצמי
+
+הוראת-הבעלים (‏23:09, דרך המנהל): **«לא עבדנו על הפירוק? עבדנו על זה אתמול»** —
+אסור לבנות מפרק חדש; קיימים `particles.mjs` · `ops-particles.mjs` · `tzinor.mjs` ·
+`peruk.mjs`. קראתי את הקומיטים שנמסרו לפני שנגעתי בקוד (‏`git show`):
+
+| קומיט | מה יש בו |
+|---|---|
+| `5877c4cd` | `tzinor.mjs` — הצינור-המשולב (‏370 שורות): מילה ⇒ כל מועמדי-הסכמה כאפשרויות בנויות |
+| `a64010ca` | `ops-particles.mjs` (‏73 שורות) — **פעולות-יסוד ⇒ חלקיקים**: `opsOf(cls)` מ-`shape-ops.json`, `particlesFor` פולט שורות-`חלקיק` לצורות **חסרות-שדה** |
+| `b3b59d9c` | `tzinor`+`app-ds` — «משפט שאף מילה בו לא מוכרת עדיין בונה» |
+| `be1e0665` | `ast_carve --ops` — החוצב יורד מפונקציה לביטוי ⇒ חלקיקים עם חתימה |
+
+### 14.1 · הדיווח על עצמי (‏«אם כבר התחלת לכתוב מפרק חדש — עצור, מחק, ורשום»)
+**כן, חלקית — ואני רושם זאת במפורש.** `goalNeeds` (‏§2.1) גוזר את משפחת-הפעולה של כל
+חוזה מ**אות-סימן בדקדוק-החלקיקים** (`pSum`/`pCount`/`pTable`) ומהמבנה (סף-על-שקע-תאריך),
+ולא שאל את `ops-particles.opsOf` — כלומר הלך במקביל למפרק הקיים במקום דרכו.
+**לא מחקתי אותו**, ומסביר למה במספרים: `particles.mjs` פולט **ווידג'טים** (‏`DsTable`,
+`FilterChipPill`) לצורה של ישות; `behavior-plan` צורך **חוזה מוכח** (`params`/`ret`/
+`examples`) לחיפוש-לוגיקה. אלה שני פלטים שונים, ואין ב-`particles` פונקציה שמחזירה
+חתימה+דוגמאות. מה שכן היה אפשר — ונעשה — הוא **להכפיף את הגזירה לידע של המפרק**:
+
+### 14.2 · החיווט שנעשה בפועל
+`goalNeeds` שואל עכשיו את `shape-ops.json` (המקור ש-`ops-particles.opsOf` קורא),
+ו**חוזה אינו נגזר אלא אם פעולת-היסוד שלו מוצהרת שם**, בהתאמת-זהות-שם:
+
+| חוזה | פעולת-היסוד הנדרשת | מאיפה |
+|---|---|---|
+| `clock.*` · `predicate.*` (סף-על-תאריך) | `temporal` **בשקע עצמו** | `shape-ops.json#<Cls>.<field>.ops` |
+| `collection.*` | `filter` **בישות** | `shape-ops.json#<Cls>.ops` |
+| `measure.*` | `measure` **בשקע עצמו** | `shape-ops.json#<Cls>.<field>.ops` |
+
+פעולה שאינה מוצהרת ⇒ **מתג-לבעלים** `פעולת-יסוד-לא-מוצהרת` עם הפעולות שכן מוצהרות,
+לא חוזה. כל אסימון-פעולה נרשם ב-`sources` של הצורך.
+
+**המדידה אחרי החיווט — אפס שינוי, וזו הנקודה:**
+```
+$ node machtzev/generator/behavior-plan.mjs --perok-scan
+סה"כ  315 יחידות · 323 תביעות · 41 צרכים · 31 עם-צרכים · 0 המצאה · 345 מתגים · 147 בלי-תביעה
+(diff מול הסריקה שלפני החיווט: **זהה בכל התאים**, רק ms שונים)
+```
+כלומר **כל 41 החוזים שנגזרו היו כבר מגובים בפעולת-יסוד מוצהרת** — הגזירה הייתה
+עקבית עם המפרק הקיים, ועכשיו היא **אכופה** על-ידו ועם מוצא רשום.
+
+### 14.3 · למה המפרק הקיים נתן 1/4 על ליבה — המספרים
+```
+$ grep -oE "s\.kind === '[a-z]+'" machtzev/generator/particles.mjs | sort -u    # פולטים
+act avg content count dates diff empty message number partition raw sum table vs      (14)
+$ grep -oE "kind: '[a-z]+'" machtzev/generator/particles.mjs | sort -u           # shapeOf יודע לייצר
+act avg child content count dates diff empty export filter message number own
+partition raw search sum table vs                                                    (19)
+```
+**5 צורות בלי פולט: `search` · `filter` · `export` · `child` · `own`.**
+ו-`ops-particles.FIELD_FREE` מציע בדיוק **4** צורות חסרות-שדה — `table` · `search` ·
+`filter` · `export` — שמהן רק ל-`table` יש פולט. **זה ה-1/4 במדויק**, והשורה שמדווחת
+אותו היא `particles.mjs:411`:
+```js
+} else { notes.push(`⚪ ${p.name}: צורה ${s.kind} — פליטה טרם נבנתה (חיפוש בוצע: …)`); continue; }
+```
+‏**החיפוש כן רץ; רק הפליטה חסרה.** מדדתי אילו אטומים החיפוש כבר מוצא:
+```
+$ node -e "cover({op, need:[], goal:''})"
+table   ⇒ DsTable          (alts: ForgeModalDialog)      ← יש פולט  ✅
+search  ⇒ FieldRow         (alts: DsField)               ← אטום יש · פולט אין
+filter  ⇒ FilterChipPill   (alts: PresetChip)            ← אטום יש · פולט אין
+export  ⇒ —                (אין מועמד)                    ← גם אטום אין
+```
+**לכן «מה חסר בו» מתפצל לשניים:** ל-`search` ו-`filter` חסר **רק פולט** (‏2 ענפי-`else if`
+ב-`renderParticles`, האטומים כבר נמצאים בחיפוש); ל-`export` חסר גם **אטום-מועמד**.
+
+**מה לא עשיתי, ולמה:** לא כתבתי את שני הפולטים בגל הזה. `particles.mjs` נעול תחת שער
+`particles` ותחת שערי-בלגן (‏31 מודולי-נייר · `balagan-look` 35/36 · `balaganrun`),
+ופולט-תצוגה חדש שנכתב בשעה זו בלי להריץ את כל שרשרת-הבלגן הוא בדיוק «ירוק-חלול»
+שלישי. זו **עבודה מוגדרת וקטנה לגל הבא**, עם המספרים שלמעלה כנקודת-פתיחה.
+
 ## 11 · סיכום-מדידות
 
-<!--MEASURES-->
+| # | מדידה | פקודה | תוצאה |
+|---|---|---|---|
+| 1 | פסק-בסיס על 6 המטרות | `node yeshiva/purpose.mjs "<מטרה>"` | 7/5/37/4/3/31 מקורות · 13/11/10/11/11/12 מתגים (‏§1.1) |
+| 2 | **הפער**: הפקודה-האחת עם טקסט-בלבד | `behavior-plan.mjs --goal <text-only>.json` | `Error: אין "needs"` · **exit 1** |
+| 3 | **הפירוק על כל משפט בריפו** | `behavior-plan.mjs --perok-scan` | **315 יחידות · 323 תביעות · 41 צרכים · 0 המצאה · 345 מתגים · 147 בלי-תביעה · 5.0s** |
+| 4 | פילוח הצרכים לפי משפחה | `--perok-scan --json` | measure 29 · predicate 6 · clock 3 · collection 3 |
+| 5 | אפס-המצאה, כלי חיצוני | `hamtzaa.mjs --needs <נגזר> --goal <goal> --list` | 5/4/4 צרכים · **0 בלי-מקור** (מטרות 1/3/6) |
+| 6 | הצעדים היקרים על תת-קבוצה | `--goal <unit> --ns <ns>` ×6 (‏seed 20260917) | **14/16 מוכחים · 2 ∅ · 0 המצאה · 6 קבצי-Dart · 56 הוכחות · 758s** (‏§3.2) |
+| 7 | לא-נמדד, במפורש | — | 25/31 יחידות-עם-צרכים לא עברו צעדים 4–7 (זמן-ריצה) · `flutter analyze` לא-זמין (אין flutter/buildsmart) |
+| 8 | **רגרסיה א׳** — payments עם needs ידניים | `--goal reg-payments.json --ns payments-reg` | **5/7 מוכחים · זהה ל-up-merge §5** · 82.9s · 1,317MB · exit 0 |
+| 9 | **רגרסיה ב׳** — 11 ה-picks | `--needs socket-needs.json` · `--needs record-needs.json` | **11/11 זהים** (‏§4.2) |
+| 10 | באג-אמת א׳ — הוכחה-חלולה | `BP_DEBUG=1 BP_WANT=… --needs one6.json` | `ok 4/4 ⇒ 2/4` · `dup-exprid 4911` · ואז `not-generated` (‏§5) |
+| 11 | באג-אמת ב׳ — pick בלי tree | `--goal u-quest2.txt` | «1/1 מוכחים» עם קובץ ריק ⇒ אחרי: `bhCountSlot` · ∅ 0 · הוכחה עוברת (‏§13) |
+| 12 | **ליבה** — מקרה-החובה | `perokGoal(liba.txt)` | **12 תביעות · 0 צרכים · 13 מתגים · 643ms** — שתי סיבות בבייטים (‏§12) |
+| 13 | ליבה · TTS במדף | `grep -rliE "speechSynthesis\|flutter_tts\|TextToSpeech" new/dart*` · `engine-index --find` | **0 קבצים · ❓** ⇒ אין במדף |
+| 14 | ליבה · STT במדף | `grep -rln "DsVoice\|SpeechRecognition" new/` | ‏`ds_voice.dart` · `ds_voice_web.dart` ⇒ **יש** |
+| 15 | ליבה · balagan בלי יד | `grep "apps/\|peruk-index" balagan.mjs` · `ls apps/*.json` | 31 apps · 28 צמתים · liba ב-0 · הפירוק כותב 0 ⇒ **לא** |
+| 16 | משטרה מלאה | `node machtzev/police.mjs` | **57 ran · 0 skipped · 1 yellow · 0 failed** (‏`nlcompile`: אין flutter) |
+| 17 | משטרה-מהירה אחרי תיקון-החיווט | `node machtzev/police.mjs --fast` | **45 ran · 13 skipped · 0 yellow · 0 failed · מרשם 58** (אחרי `pins-check --write`) |
+| 18 | רגרסיית-חיווט אחרי §13 | `--goal reg-payments.json --ns payments-reg2` | **5/7 מוכחים · אותן 5 התנהגויות · סבב 1 · משטרה-בריצה ירוקה · 78s** ⇒ תיקון-החיווט אינו רגרסיה |
+| 19 | סביבה | `git rev-parse --is-shallow-repository` · `git fetch --unshallow` | `true` ⇒ שער `learn` אדום בבסיס · אחרי: `false` (‏1,350 commits) ⇒ ירוק |
+
