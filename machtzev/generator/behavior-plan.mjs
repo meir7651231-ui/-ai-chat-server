@@ -122,7 +122,61 @@ export function readPlan() { return JSON.parse(fs.readFileSync(OUT, 'utf8')); }
 /** למחולל: השם+הקובץ של הנבחר לצורך; צורך לא-פתור ⇒ זריקה (שקע-חובה ריק = פסילה, הכרעה-20ג) */
 export function pick(id) { const p = readPlan()[id]; if (!p || !p.pick) throw new Error(`behavior-plan: אין אטום לצורך ${id} — פסילה (לא כותבים ביד)`); return { name: p.pick, file: p.file, chain: p.chain || null }; }
 
+// ── «כל מנוע יכול לנוע קדימה ואחורה» · הכיוון-ההפוך (up-backward) ──
+//   בהינתן f:(A…)⇒B — מי בקטלוג מקבל B ומחזיר A (או חלק מ-A): מועמדים לכיוון-ההפוך, מסוננים ב-sigOk ומוכחים-בריצה כשיש דוגמאות.
+//   אותו עיקרון של combine-screens (הכיוון-ההפוך של screen-decomp) — כאן על חתימת-אטום, לא על מסך.
+/** חתימת f מהקטלוג (963 אטומי-לוגיקה) */
+export function forwardSigOf(atomId, rows = catalog().rows) {
+  const f = rows.find((r) => r.id === atomId);
+  if (!f) throw new Error(`backward: אטום ${atomId} לא נמצא בקטלוג-הלוגיקה`);
+  return { id: f.id, file: f.file, params: f.params, ret: f.ret, argc: f.argc };
+}
+// אחדת-מספרים לכיוון-ההפוך (int/double/num מתאחדים) — ההיפוך פחות דורש-דיוק-טיפוסי מהחיפוש-קדימה (num⇐→int: cockpitDaysSince⁻¹=addDaysIso)
+const numFam = (t) => (/^(int|double|num)$/.test(t) ? 'num' : t);
+const normNum = (t) => numFam(norm(t));
+const sigOkBack = (c, need) => c.argc === need.params.length
+  && c.params.every((p, i) => { const a = normNum(p), b = normNum(need.params[i]); return a === b || a === 'dynamic' || b === 'dynamic'; })
+  && (normNum(c.ret) === normNum(need.ret) || normNum(c.ret) === 'dynamic' || normNum(need.ret) === 'dynamic');
+const sigExact = (c, need) => c.argc === need.params.length && c.params.every((p, i) => norm(p) === norm(need.params[i])) && norm(c.ret) === norm(need.ret);
+/** הצרכים-ההפוכים: (א) strict = params=[ret], ret=param[i]; (ב) invert (§20-ב) = היפוך-פוזיציוני ששומר שאר-הפרמטרים */
+export function backwardNeeds(sig) {
+  const P = sig.params.slice(), B = sig.ret; const seen = new Set(); const out = [];
+  const add = (n) => { const k = JSON.stringify([n.params, n.ret]); if (seen.has(k)) return; seen.add(k); out.push(n); };
+  P.forEach((a, i) => add({ kind: 'strict', target: i, params: [B], ret: a }));                       // params=[ret של f], ret=params[i]
+  P.forEach((a, i) => { const params = P.slice(); params[i] = B; add({ kind: 'invert', target: i, params, ret: a }); });   // פותר-עבור-A[i] בהינתן השאר+התוצאה
+  return out;
+}
+/** חיפוש-הפוך מלא: חתימה ⇒ צרכים ⇒ סינון-קטלוג ⇒ (אופציונלי) הוכחה-בריצה */
+export function backwardSearch(atomId, { examples = null, imports = [], rows = null } = {}) {
+  rows = rows || catalog().rows;
+  const sig = forwardSigOf(atomId, rows);
+  const needs = backwardNeeds(sig);
+  const byId = new Map();   // (ג) מסנן את כל הקטלוג ב-sigOk (עם אחדת-מספרים) — מועמד תואם-חתימה לאיזה מהצרכים
+  for (const need of needs) for (const c of rows) { if (c.id === atomId || !sigOkBack(c, need)) continue;
+    const exact = sigExact(c, need); const tag = need.kind + '#' + need.target;
+    const prev = byId.get(c.id);
+    if (!prev) byId.set(c.id, { id: c.id, file: c.file, params: c.params, ret: c.ret, argc: c.argc, needs: [tag], exact });
+    else { if (!prev.needs.includes(tag)) prev.needs.push(tag); prev.exact = prev.exact || exact; } }
+  const cands = [...byId.values()];
+  // (ד) הוכחה-בריצה כשיש דוגמאות — proveCandidates מריץ ב-Dart; מועמד שאריתו≠הדוגמה לא-מתקמפל⇒0 (הריצה מכריעה, לא הדירוג)
+  let proof = {};
+  if (examples && examples.length) { const pure = cands.filter((c) => isPure(c.file)).map((c) => ({ id: c.id, file: c.file })); if (pure.length) proof = proveCandidates('backward__' + atomId, pure, examples, imports); }
+  const total = examples ? examples.length : 0;
+  const candidates = cands.map((c) => ({ id: c.id, file: c.file, exact: c.exact, proven: proof[c.id] ? proof[c.id].ok === proof[c.id].total : false, ok: proof[c.id] ? proof[c.id].ok : 0, total, needs: c.needs }))
+    .sort((x, y) => (y.proven - x.proven) || (y.ok - x.ok) || (y.exact - x.exact) || (x.id < y.id ? -1 : 1));
+  return { atom: atomId, forwardSig: `(${sig.params.join(', ')}) ⇒ ${sig.ret}`, file: sig.file, backwardNeed: needs.map((n) => `[${n.kind}#${n.target}] (${n.params.join(', ')}) ⇒ ${n.ret}`), backwardNeeds: needs, candidateCount: candidates.length, provenCount: candidates.filter((c) => c.proven).length, candidates };
+}
+
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain && process.argv.includes('--backward')) {
+  const at = process.argv[process.argv.indexOf('--backward') + 1];
+  if (!at || at.startsWith('--')) { console.error('usage: behavior-plan.mjs --backward <atomId> [--examples <json>] [--imports <json>]'); process.exit(2); }
+  const opt = (k) => { const j = process.argv.indexOf(k); return j >= 0 ? process.argv[j + 1] : null; };
+  const examples = opt('--examples') ? JSON.parse(opt('--examples')) : null;
+  const imports = opt('--imports') ? JSON.parse(opt('--imports')) : [];
+  console.log(JSON.stringify(backwardSearch(at, { examples, imports }), null, 1));
+  process.exit(0);
+}
 if (isMain) {
   const gate = process.argv.includes('--gate');
   const P = plan({ prove: !gate });   // --gate: בלי ריצה מחדש (התוכנית השמורה = ההוכחה); כתיבה = הוכחה-בריצה
