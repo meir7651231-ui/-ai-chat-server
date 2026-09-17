@@ -371,7 +371,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         lp.gravity = Gravity.TOP or Gravity.END; lp.x = 0; lp.y = dp(160f).toInt()
         wm.addView(root, lp)
         bubbleLp = lp; bubbleSize = size
-        bubble = root; dot = d; label = l
+        bubble = root; dot = d; label = l; d.style = Prefs.style(this)
         setState(State.OFFLINE)
         var sx = 0f; var sy = 0f; var ox = 0; var oy = 0; var moved = false; var downAt = 0L
         val longPress = Runnable { if (!moved) { moved = true; toggleMenu(root, size) } }
@@ -602,7 +602,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         if (Prefs.reports(this)) Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } } } } }
     fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) {}; listening = false }; unmuteSystem() }
-    override fun onCmd(cmd: String) { main.post { when (cmd) { "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "update" -> { checkUpdate(); showLabel("בודקת גרסה חדשה…", 4000); main.postDelayed({ if (Prefs.updateUrl(this) != null) installUpdate() else showLabel("אין גרסה חדשה", 3000) }, 5000) }; "reload" -> { pageReady = false; pageOk = false; main.postDelayed({ web?.reload() }, 1500) }
+    override fun onCmd(cmd: String) { main.post { when (cmd) { "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "style 0", "style 1" -> { val st = cmd.removePrefix("style ").trim().toIntOrNull() ?: 1; Prefs.setStyle(this, st); dot?.style = st; showLabel("עיצוב " + (if (st == 1) "משולב" else "אורורה"), 3000) }; "update" -> { checkUpdate(); showLabel("בודקת גרסה חדשה…", 4000); main.postDelayed({ if (Prefs.updateUrl(this) != null) installUpdate() else showLabel("אין גרסה חדשה", 3000) }, 5000) }; "reload" -> { pageReady = false; pageOk = false; main.postDelayed({ web?.reload() }, 1500) }
         else -> if (cmd.startsWith("open ")) { val u = cmd.removePrefix("open ").trim(); val i = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(u)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); try { startActivity(i) } catch (e: Exception) { notifyIntent("ליבה – קישור", u, i) } } } } }
     /** fix 10: when Android refuses an activity start from the background, hand the intent to the user as a tappable notification. */
     private fun notifyIntent(title: String, text: String, i: Intent) {

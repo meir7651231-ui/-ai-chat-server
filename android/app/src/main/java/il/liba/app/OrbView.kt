@@ -51,6 +51,9 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
     private val text = Paint(Paint.ANTI_ALIAS_FLAG).apply { textAlign = Paint.Align.CENTER; typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL) }
     private val rect = RectF()
     private var shader: RuntimeShader? = null
+    private var shader2: RuntimeShader? = null
+    var style: Int = 1
+        set(v) { field = v; invalidate() }
 
     init {
         outlineProvider = object : ViewOutlineProvider() {
@@ -59,6 +62,7 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
         clipToOutline = false
         if (Build.VERSION.SDK_INT >= 33) {
             try { shader = RuntimeShader(AGSL); shaderOk = true } catch (e: Exception) { Log.w("liba", "orb shader: $e"); shaderOk = false; shaderErr = e.message ?: "?" }
+            try { shader2 = RuntimeShader(AGSL_FUSION) } catch (e: Exception) { Log.w("liba", "fusion shader: $e"); shaderErr = "fusion:" + (e.message ?: "?") }
         }
         // the shader needs a GPU canvas; the fallback is happy either way
         setLayerType(LAYER_TYPE_HARDWARE, null)
@@ -109,7 +113,7 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
         val r = min(w, h) / 2 - pad()
         val ac = if (mode == Mode.OFFLINE) GRAY else accent
         val t = phase * 2f * Math.PI.toFloat()
-        val s = shader
+        val s = if (style == 1 && shader2 != null) shader2 else shader
         if (s != null && c.isHardwareAccelerated && Build.VERSION.SDK_INT >= 33) {
             val (a, b, cc) = palette()
             s.setFloatUniform("iRes", w, h); s.setFloatUniform("iTime", time); s.setFloatUniform("iLevel", shown)
@@ -202,6 +206,73 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
         fun withA(c: Int, a: Int) = (c and 0x00FFFFFF) or (a.coerceIn(0, 255) shl 24)
         fun mixC(a: Int, b: Int, k: Float): Int { fun ch(x: Int, y: Int) = (x + (y - x) * k).toInt().coerceIn(0, 255)
             return Color.argb(255, ch(Color.red(a), Color.red(b)), ch(Color.green(a), Color.green(b)), ch(Color.blue(a), Color.blue(b))) }
+
+
+        // Fusion: supernova plasma (1) lights a rotating accretion ring (2) around a liquid-mercury core (3), inside a neon rim (6).
+        const val AGSL_FUSION = """
+uniform float2 iRes;
+uniform float iTime;
+uniform float iLevel;
+uniform float iMode;
+uniform float iPad;
+layout(color) uniform float4 cA;
+layout(color) uniform float4 cB;
+layout(color) uniform float4 cC;
+
+float hash(float2 p) { return fract(sin(dot(p, float2(127.1, 311.7))) * 43758.5453); }
+float noise(float2 p) {
+    float2 i = floor(p); float2 f = fract(p); f = f * f * (3.0 - 2.0 * f);
+    float a = hash(i); float b = hash(i + float2(1.0, 0.0)); float c = hash(i + float2(0.0, 1.0)); float d = hash(i + float2(1.0, 1.0));
+    return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+}
+float fbm(float2 p) {
+    float v = 0.0; float a = 0.5;
+    for (int i = 0; i < 4; i++) { v += a * noise(p); p = p * 2.03 + float2(1.7, 9.2); a *= 0.5; }
+    return v;
+}
+half4 main(float2 fc) {
+    float2 c = iRes * 0.5;
+    float R = min(iRes.x, iRes.y) * 0.5 - iPad;
+    float2 d = fc - c; float r = length(d); float nr = r / R; float2 uv = d / R;
+    float t = iTime; float lv = iLevel;
+    float3 col = float3(0.0);
+    float ang = atan(uv.y, uv.x);
+    float2 q = uv + 0.4 * float2(fbm(uv * 1.4 + t * 0.25), fbm(uv * 1.4 - t * 0.2 + 7.0));
+    float f = fbm(q * 2.2 + t * 0.15);
+    float3 p1 = float3(0.05, 0.02, 0.2); float3 p2 = cB.rgb * 0.75 + float3(0.25, 0.0, 0.1); float3 p3 = float3(1.0, 0.8, 0.35);
+    float3 plasma = mix(p1, p2, smoothstep(0.3, 0.7, f)); plasma = mix(plasma, p3, smoothstep(0.6, 0.95, f + lv * 0.15));
+    float ring = 0.66 + 0.06 * lv; float w = 0.09 + 0.06 * lv; float band = exp(-pow((nr - ring) / w, 2.0));
+    float tex = fbm(float2(ang * 3.0 + t * (1.2 + lv * 2.0), nr * 8.0 - t * 0.6)); float dop = 0.55 + 0.65 * cos(ang - t * 1.5);
+    col += plasma * (0.9 + tex * 0.9) * band * dop; col += plasma * exp(-pow((nr - ring - 0.14) / 0.16, 2.0)) * 0.22;
+    float mf = 0.0; float fx = 0.0; float fy = 0.0; float e = 0.02;
+    for (int i = 0; i < 4; i++) {
+        float fi = float(i);
+        float2 bp = float2(sin(t * (0.7 + fi * 0.3) + fi * 2.0), cos(t * (0.9 + fi * 0.2) + fi)) * (0.1 + 0.08 * lv);
+        float2 d0 = uv - bp; float2 dx = uv + float2(e, 0.0) - bp; float2 dy = uv + float2(0.0, e) - bp;
+        mf += 0.018 / dot(d0, d0); fx += 0.018 / dot(dx, dx); fy += 0.018 / dot(dy, dy);
+    }
+    mf += 0.07 / max(dot(uv, uv), 0.02); float2 ux = uv + float2(e, 0.0); float2 uy = uv + float2(0.0, e);
+    fx += 0.07 / max(dot(ux, ux), 0.02); fy += 0.07 / max(dot(uy, uy), 0.02);
+    float iso = smoothstep(1.1, 1.5, mf) * smoothstep(0.5, 0.42, nr);
+    float3 n = normalize(float3(-(fx - mf), -(fy - mf), 0.3));
+    float3 env = mix(float3(0.03, 0.03, 0.06), float3(0.5, 0.55, 0.7), smoothstep(-0.5, 0.9, n.y)); env = mix(env, plasma, 0.55 * (1.0 - abs(n.y)));
+    float spec = pow(max(0.0, dot(n, normalize(float3(-0.5, 0.8, 0.6)))), 50.0);
+    float3 metal = env * 0.9 + spec * 0.8 + p2 * pow(1.0 - max(0.0, n.z), 3.0) * 0.7;
+    col = mix(col, metal, iso);
+    float3 cy = mix(float3(0.5, 1.0, 1.0), cB.rgb, 0.5);
+    float neon = smoothstep(0.028, 0.0, abs(nr - 0.93)) + exp(-pow((nr - 0.93) / 0.05, 2.0)) * 0.45;
+    float neonK = (iMode == 1.0) ? 0.6 + 0.3 * (0.5 + 0.5 * sin(t * 1.5)) : ((iMode == 6.0) ? 0.25 : 0.9);
+    col += cy * neon * (neonK + 0.5 * lv);
+    float dots = step(0.985, hash(floor(uv * 22.0 + t * 0.2))) * 0.35 * step(0.75, nr); col += cy * dots;
+    if (iMode == 6.0) col *= 0.35;
+    col = 1.0 - exp(-col * 0.95);
+    float edge = 1.0 - smoothstep(R - 1.0, R + 1.0, r);
+    float glow = exp(-(r - R) * (r - R) / (iPad * iPad * 0.5)) * step(R, r) * (0.5 + lv);
+    float3 outc = col * edge + cy * glow * 0.6;
+    float a = edge * max(0.9, length(col)) + glow * 0.6;
+    return half4(half3(outc), half(a));
+}
+"""
 
         // AGSL. Kept GLSL-compatible in spirit so the same text can be previewed in WebGL (see scratch preview).
         const val AGSL = """

@@ -1,0 +1,162 @@
+<title>גלריית בועות ליבה</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;500;800&display=swap">
+<style>
+:root{--bg:#06070D;--surface:#0E1120;--line:#1D2236;--ink:#F3F5FF;--muted:#8B93A8;--cyan:#7DF9FF;--violet:#8A5CFF;color-scheme:dark}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--ink);font-family:Heebo,"Segoe UI",Arial,sans-serif;direction:rtl;padding:0 16px;padding-block:18px 40px}
+header{max-width:720px;margin:0 auto 18px}
+h1{font-weight:800;font-size:28px;margin:0 0 6px;letter-spacing:-.01em;text-wrap:balance}
+h1 span{color:var(--cyan)}
+.lead{margin:0;color:var(--muted);font-size:15px;line-height:1.5;font-weight:300}
+.say{display:inline-block;margin-top:12px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:14px}
+.say b{color:var(--cyan);font-weight:500}
+.grid{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(4,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:14px 12px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;position:relative;transition:transform .15s,border-color .15s}
+.card:active{transform:scale(.97)}
+.card:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.num{position:absolute;top:10px;right:14px;font-weight:800;font-size:22px;color:var(--cyan);font-variant-numeric:tabular-nums}
+.state{position:absolute;top:14px;left:14px;font-size:11px;color:var(--muted);letter-spacing:.06em}
+canvas{width:140px;height:140px;max-width:100%;display:block;margin-top:18px}
+.name{font-weight:800;font-size:17px;margin:0}
+.desc{margin:0;color:var(--muted);font-size:12.5px;line-height:1.45;text-align:center;font-weight:300;min-height:36px}
+.big{position:fixed;inset:0;background:rgba(6,7,13,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;z-index:9}
+.big canvas{width:min(78vw,340px);height:min(78vw,340px);margin:0}
+.big h2{margin:0;font-size:24px;font-weight:800}
+.big h2 small{color:var(--cyan);font-weight:800;margin-left:8px}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.pill{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:10px 16px;font:inherit;font-size:14px;cursor:pointer}
+.pill.on{border-color:var(--cyan);color:var(--cyan)}
+.pill.x{margin-top:6px;color:var(--muted)}
+footer{max-width:720px;margin:26px auto 0;color:var(--muted);font-size:13px;line-height:1.6;font-weight:300}
+@media(prefers-reduced-motion:reduce){.card{transition:none}}
+</style>
+
+<header>
+  <h1>תשע בועות. <span>תבחר אחת.</span></h1>
+  <p class="lead">כל בועה חיה: היא עוברת לבד בין שקט, האזנה ודיבור. לחיצה על כרטיס פותחת אותה גדולה עם כפתורי מצב. מה שתבחר אני מעבירה לטלפון כשיידר על המעבד הגרפי, בדיוק כמו שהיא נראית כאן.</p>
+  <div class="say">בקול: <b>ליבה, עיצוב מספר תשע</b></div>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<footer>מה משותף לכולן: תגובה לעוצמת הקול האמיתית בהאזנה, צבע לפי הדובר בדיבור, סימני מצב קטנים שנוספים מעל. אפשר גם לשלב: "ליבה, עיצוב שתיים עם הצבעים של חמש".</footer>
+
+<script>
+const VS='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+const HEAD=`precision highp float;uniform vec2 iRes;uniform float iTime;uniform float iLevel;uniform float iMode;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float noise(vec2 p){vec2 i=floor(p);vec2 f=fract(p);f=f*f*(3.-2.*f);float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}
+float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*noise(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}
+mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}
+void main(){vec2 c=iRes*.5;float R=min(iRes.x,iRes.y)*.5-6.;vec2 d=gl_FragCoord.xy-c;d.y=-d.y;float r=length(d);float nr=r/R;vec2 uv=d/R;float t=iTime;vec3 col=vec3(0.);float a=1.;`;
+const TAIL=`gl_FragColor=vec4(col*a,a);}`;
+const D=[
+{n:'סופרנובה',d:'פלזמה רותחת עם חוטי אור לבנים. הקול מלהיט אותה.',s:`
+ vec2 q=uv+.4*vec2(fbm(uv*1.4+t*.25),fbm(uv*1.4-t*.2+7.));float f=fbm(q*2.2+t*.15);float fil=pow(1.-abs(fract(f*3.+t*.2)*2.-1.),8.);
+ vec3 c1=vec3(.05,.02,.2),c2=vec3(.9,.15,.45),c3=vec3(1.,.75,.3);col=mix(c1,c2,smoothstep(.3,.7,f));col=mix(col,c3,smoothstep(.6,.95,f+iLevel*.3));col+=vec3(1.,.9,.8)*fil*(.5+iLevel);
+ float sph=sqrt(max(0.,1.-nr*nr));col*=.25+.9*sph;col+=vec3(1.,.6,.4)*exp(-nr*nr*2.)*iLevel*.8;col+=c2*pow(1.-sph,3.)*1.2;
+ float edge=1.-smoothstep(R-1.,R+1.,r);float glow=exp(-(r-R)*(r-R)/60.)*step(R,r)*(.5+iLevel);col=col*edge+c2*glow;a=edge+glow;`},
+{n:'חור שחור',d:'ליבה שחורה וטבעת אור שמסתובבת. בהאזנה הטבעת מתרחבת.',s:`
+ float ang=atan(uv.y,uv.x);float ring=.62+.1*iLevel;float w=.08+.06*iLevel;float band=exp(-pow((nr-ring)/w,2.));
+ float tex=fbm(vec2(ang*3.+t*(1.2+iLevel*2.),nr*8.-t*.6));float dop=.6+.6*cos(ang-t*1.5);vec3 hot=mix(vec3(1.,.45,.1),vec3(1.,.9,.7),tex)*dop;
+ col=hot*band*(1.6+tex);float lens=exp(-pow((nr-ring-.16)/.18,2.))*.35;col+=vec3(1.,.6,.3)*lens;
+ float hole=smoothstep(.36,.42,nr);col*=hole;col+=vec3(.05,.02,.08)*(1.-hole)*(1.-nr);
+ float edge=1.-smoothstep(R-1.,R+1.,r);float glow=exp(-(r-R)*(r-R)/80.)*step(R,r)*.7;col=col*edge+vec3(1.,.5,.2)*glow*(.4+iLevel);a=edge+glow;`},
+{n:'כספית',d:'טיפת מתכת נוזלית שמתנדנדת ומשקפת. הקול מרעיד אותה.',s:`
+ float f=0.;for(int i=0;i<4;i++){float fi=float(i);vec2 p=vec2(sin(t*(.7+fi*.3)+fi*2.),cos(t*(.9+fi*.2)+fi))*(.28+.25*iLevel);f+=.1/dot(uv-p,uv-p);}
+ f+=.55/max(dot(uv,uv),.05);float iso=smoothstep(2.6,3.2,f);
+ float e=.02;float fx=0.,fy=0.;for(int i=0;i<4;i++){float fi=float(i);vec2 p=vec2(sin(t*(.7+fi*.3)+fi*2.),cos(t*(.9+fi*.2)+fi))*(.28+.25*iLevel);vec2 ux=uv+vec2(e,0.)-p;vec2 uy=uv+vec2(0.,e)-p;fx+=.1/dot(ux,ux);fy+=.1/dot(uy,uy);}
+ vec2 uxx=uv+vec2(e,0.);vec2 uyy=uv+vec2(0.,e);fx+=.55/max(dot(uxx,uxx),.05);fy+=.55/max(dot(uyy,uyy),.05);
+ vec3 n=normalize(vec3(-(fx-f),-(fy-f),.35));vec3 env=mix(vec3(.05,.06,.1),vec3(.75,.85,1.),smoothstep(-.6,.8,n.y));env=mix(env,vec3(.4,.2,.6),smoothstep(.2,.9,n.x)*.5);
+ float spec=pow(max(0.,dot(n,normalize(vec3(-.5,.8,.6)))),40.);col=(env*.9+spec)*iso;col+=vec3(.5,.9,1.)*pow(1.-max(0.,n.z),4.)*iso*.6;
+ float edge=1.-smoothstep(R-1.,R+1.,r);col*=edge;a=iso*edge;`},
+{n:'קריסטל',d:'אבן חן מלוטשת, פאות שמסתובבות ושוברות את האור לקשת.',s:`
+ vec2 p=rot(t*.25)*uv*2.6;vec2 g=floor(p);vec2 fr=fract(p);float md=8.;vec2 mp=vec2(0.);
+ for(int y=-1;y<=1;y++)for(int x=-1;x<=1;x++){vec2 o=vec2(float(x),float(y));vec2 pt=o+vec2(hash(g+o),hash(g+o+9.))*.9+.05;float dd=length(fr-pt);if(dd<md){md=dd;mp=g+o;}}
+ float h=hash(mp*.37);vec3 rain=.55+.45*cos(6.28*(h+vec3(0.,.33,.67))+t*.5);float sph=sqrt(max(0.,1.-nr*nr));
+ float facet=.5+.5*sin(h*40.+t*.8);col=mix(vec3(.05,.08,.2),rain,.35+.5*facet)*(.4+.8*sph);
+ float edges=smoothstep(.02,.08,md);col=mix(col+vec3(.9),col,edges);col+=vec3(1.)*pow(1.-sph,4.)*.8;col+=rain*iLevel*exp(-nr*nr*2.);
+ float edge=1.-smoothstep(R-1.,R+1.,r);float glow=exp(-(r-R)*(r-R)/70.)*step(R,r)*(.4+iLevel*.8);col=col*edge+rain*glow;a=edge+glow;`},
+{n:'הולוגרמה',d:'גלובוס קווים תכלת עם קו סריקה וריצוד. עתידני וקריר.',s:`
+ float sph=sqrt(max(0.,1.-nr*nr));vec3 P=vec3(uv.x,uv.y,sph);float ry=t*.6;P.xz=rot(ry)*P.xz;
+ float lat=asin(clamp(P.y,-1.,1.));float lon=atan(P.z,P.x);float lines=smoothstep(.9,1.,abs(sin(lat*9.)))+smoothstep(.9,1.,abs(sin(lon*7.)));
+ vec3 cy=vec3(.35,.95,1.);col=cy*lines*(.5+.5*sph)*.9;col+=cy*.12*(.6+.4*sph);
+ float scan=smoothstep(.02,0.,abs(uv.y-(fract(t*.35)*2.4-1.2)));col+=cy*scan*.8;float flick=.85+.15*sin(t*40.)*step(.97,hash(vec2(floor(t*8.))));col*=flick;
+ col+=cy*pow(1.-sph,3.)*1.1;col+=vec3(1.)*iLevel*exp(-nr*nr*2.)*.6;col*=1.-.3*step(.5,fract(gl_FragCoord.y*.5));
+ float edge=1.-smoothstep(R-1.,R+1.,r);float glow=exp(-(r-R)*(r-R)/60.)*step(R,r)*(.5+iLevel);col=col*edge+cy*glow*.8;a=edge*max(.55,length(col))+glow;`},
+{n:'נאון',d:'שחור מוחלט, טבעת נאון דקה וגל קול בפנים. חד כמו טרון.',s:`
+ vec3 cy=vec3(.5,1.,1.),mg=vec3(1.,.3,.8);float ring=smoothstep(.03,0.,abs(nr-.9))+exp(-pow((nr-.9)/.06,2.))*.5;col=cy*ring*(.8+.4*iLevel);
+ float wave=0.;for(int i=1;i<=4;i++){float fi=float(i);wave+=sin(uv.x*fi*4.+t*(2.+fi))*(.18/fi);}wave*=(.3+iLevel*1.4)*smoothstep(.9,.4,abs(uv.x));
+ float wl=smoothstep(.025,0.,abs(uv.y-wave))+exp(-pow((uv.y-wave)/.05,2.))*.4;col+=mix(cy,mg,.5+.5*sin(uv.x*3.+t))*wl;
+ float dots=step(.985,hash(floor(uv*20.+t*.2)))*.4;col+=cy*dots*(1.-nr);
+ float edge=1.-smoothstep(R-1.,R+1.,r);float glow=exp(-(r-R)*(r-R)/50.)*step(R,r)*(.5+iLevel);col=col*edge+cy*glow*.6;a=edge*max(.92,length(col))+glow;`},
+{n:'גלקסיה',d:'ספירלה של כוכבים שמסתובבת לאט. הקול מסחרר אותה.',s:`
+ float sp=t*(.15+iLevel*.6);vec2 p=rot(sp)*uv;float ang=atan(p.y,p.x);float lr=log(max(nr,.001));
+ float arm=pow(.5+.5*cos(ang*2.-lr*4.),3.);float dust=fbm(p*5.+3.);float dens=arm*(1.-nr)*(.6+.8*dust);
+ vec3 c1=vec3(.3,.5,1.),c2=vec3(1.,.8,.6);col=mix(c1,c2,dust)*dens*1.6;col+=vec3(1.,.9,.8)*exp(-nr*nr*12.)*(1.+iLevel);
+ vec2 sg=floor(p*28.);float st=step(.965,hash(sg))*step(.2,arm+.2)*(.6+.4*sin(t*3.+hash(sg+1.)*6.));col+=vec3(1.)*st*(1.-nr)*.9;
+ col+=vec3(.2,.4,1.)*(1.-nr)*.15;float edge=1.-smoothstep(R-1.,R+1.,r);float glow=exp(-(r-R)*(r-R)/70.)*step(R,r)*(.3+iLevel*.8);col=col*edge+c1*glow;a=edge*max(.85,length(col))+glow;`},
+{n:'אש',d:'כדור להבות שמלחכות למעלה. סגול ותפוז, חם וחי.',s:`
+ vec2 p=uv;p.y-=t*.9;float f=fbm(vec2(uv.x*2.2,p.y*2.2))+fbm(vec2(uv.x*4.+t,p.y*3.))*.4;float h=uv.y*.5+.5;f=f*(1.4+iLevel)-h*1.1+.35;
+ vec3 c1=vec3(.25,0.,.35),c2=vec3(1.,.25,.1),c3=vec3(1.,.85,.3);col=mix(c1,c2,smoothstep(.1,.5,f));col=mix(col,c3,smoothstep(.55,.95,f));col=mix(col,vec3(1.),smoothstep(.95,1.3,f));
+ float sph=sqrt(max(0.,1.-nr*nr));col*=.35+.85*sph;col+=c2*pow(1.-sph,3.)*1.3;
+ float edge=1.-smoothstep(R-1.,R+1.,r);float glow=exp(-(r-R)*(r-R)/70.)*step(R,r)*(.5+iLevel);col=col*edge+c2*glow;a=edge+glow;`},
+{n:'שילוב 1+2+3+6',d:'טבעת נאון בחוץ, טבעת אור של חור שחור בצבעי סופרנובה, וטיפת כספית במרכז שמשקפת הכל.',s:`
+ float ang=atan(uv.y,uv.x);
+ /* 1: supernova plasma as the light source */
+ vec2 q=uv+.4*vec2(fbm(uv*1.4+t*.25),fbm(uv*1.4-t*.2+7.));float f=fbm(q*2.2+t*.15);
+ vec3 p1=vec3(.05,.02,.2),p2=vec3(.95,.2,.5),p3=vec3(1.,.8,.35);vec3 plasma=mix(p1,p2,smoothstep(.3,.7,f));plasma=mix(plasma,p3,smoothstep(.6,.95,f+iLevel*.3));
+ /* 2: accretion ring, rotating, doppler-bright */
+ float ring=.66+.06*iLevel;float w=.09+.06*iLevel;float band=exp(-pow((nr-ring)/w,2.));
+ float tex=fbm(vec2(ang*3.+t*(1.2+iLevel*2.),nr*8.-t*.6));float dop=.55+.65*cos(ang-t*1.5);
+ col+=plasma*(.9+tex*.9)*band*dop;col+=plasma*exp(-pow((nr-ring-.14)/.16,2.))*.22;
+ /* 3: mercury blob core, reflecting the plasma */
+ float mf=0.;float fx=0.,fy=0.;float e=.02;
+ for(int i=0;i<4;i++){float fi=float(i);vec2 bp=vec2(sin(t*(.7+fi*.3)+fi*2.),cos(t*(.9+fi*.2)+fi))*(.1+.08*iLevel);vec2 d0=uv-bp,dx=uv+vec2(e,0.)-bp,dy=uv+vec2(0.,e)-bp;mf+=.018/dot(d0,d0);fx+=.018/dot(dx,dx);fy+=.018/dot(dy,dy);}
+ mf+=.07/max(dot(uv,uv),.02);vec2 ux=uv+vec2(e,0.),uy=uv+vec2(0.,e);fx+=.07/max(dot(ux,ux),.02);fy+=.07/max(dot(uy,uy),.02);
+ float iso=smoothstep(1.1,1.5,mf)*smoothstep(.5,.42,nr);vec3 n=normalize(vec3(-(fx-mf),-(fy-mf),.3));
+ vec3 env=mix(vec3(.03,.03,.06),vec3(.5,.55,.7),smoothstep(-.5,.9,n.y));env=mix(env,plasma,.55*(1.-abs(n.y)));
+ float spec=pow(max(0.,dot(n,normalize(vec3(-.5,.8,.6)))),50.);vec3 metal=env*.9+spec*.8+p2*pow(1.-max(0.,n.z),3.)*.7;
+ col=mix(col,metal,iso);
+ /* 6: neon rim + sparks */
+ vec3 cy=mix(vec3(.5,1.,1.),p2,.35);float neon=smoothstep(.028,0.,abs(nr-.93))+exp(-pow((nr-.93)/.05,2.))*.45;col+=cy*neon*(.9+.5*iLevel);
+ float dots=step(.985,hash(floor(uv*22.+t*.2)))*.35*step(.75,nr);col+=cy*dots;
+ col=1.-exp(-col*.95);
+ float edge=1.-smoothstep(R-1.,R+1.,r);float glow=exp(-(r-R)*(r-R)/60.)*step(R,r)*(.6+iLevel);col=col*edge+cy*glow*.7;a=edge*max(.9,length(col))+glow;`}
+];
+const STATES=['שקט','מקשיבה','מדברת'];
+function make(canvas,def){
+  const gl=canvas.getContext('webgl',{alpha:true,premultipliedAlpha:true,antialias:true});if(!gl)return null;
+  const sh=(t,s)=>{const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)){console.error(def.n,gl.getShaderInfoLog(o));return null;}return o;};
+  const v=sh(gl.VERTEX_SHADER,VS),f=sh(gl.FRAGMENT_SHADER,HEAD+def.s+TAIL);if(!v||!f)return null;
+  const pr=gl.createProgram();gl.attachShader(pr,v);gl.attachShader(pr,f);gl.linkProgram(pr);gl.useProgram(pr);
+  const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+  const lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+  gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
+  const U={res:gl.getUniformLocation(pr,'iRes'),t:gl.getUniformLocation(pr,'iTime'),l:gl.getUniformLocation(pr,'iLevel'),m:gl.getUniformLocation(pr,'iMode')};
+  return {draw(time,level,mode){const w=canvas.width,h=canvas.height;gl.viewport(0,0,w,h);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(U.res,w,h);gl.uniform1f(U.t,time);gl.uniform1f(U.l,level);gl.uniform1f(U.m,mode);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);}};
+}
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const items=[];const grid=document.getElementById('grid');
+D.forEach((def,i)=>{
+  const card=document.createElement('div');card.className='card';card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label','עיצוב '+(i+1)+': '+def.n);
+  card.innerHTML=`<span class="num">${i+1}</span><span class="state"></span><canvas width="300" height="300"></canvas><p class="name">${def.n}</p><p class="desc">${def.d}</p>`;
+  grid.appendChild(card);const cv=card.querySelector('canvas');const st=card.querySelector('.state');
+  const r=make(cv,def);items.push({r,st,mode:i%3,next:performance.now()+2500+i*700,level:0,def,i});
+  card.addEventListener('click',()=>openBig(i));card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openBig(i);}});
+});
+let big=null;
+function openBig(i){closeBig();const def=D[i];const el=document.createElement('div');el.className='big';el.innerHTML=`<h2><small>${i+1}</small>${def.n}</h2><canvas width="680" height="680"></canvas><div class="row"></div><button class="pill x">סגור</button>`;
+  document.body.appendChild(el);const row=el.querySelector('.row');const bi={r:make(el.querySelector('canvas'),def),mode:1,level:0,el};
+  STATES.forEach((s,k)=>{const b=document.createElement('button');b.className='pill'+(k===1?' on':'');b.textContent=s;b.addEventListener('click',()=>{bi.mode=k;row.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));b.classList.add('on');});row.appendChild(b);});
+  el.querySelector('.x').addEventListener('click',closeBig);el.addEventListener('click',e=>{if(e.target===el)closeBig();});big=bi;}
+function closeBig(){if(big){big.el.remove();big=null;}}
+const t0=performance.now();
+function lvl(it,now){const tt=now/1000;if(it.mode===0)return Math.max(0,it.level*0.9);if(it.mode===1){const target=0.3+0.7*Math.abs(Math.sin(tt*2.3+it.i)*Math.sin(tt*5.1+it.i*2));return it.level+(target-it.level)*0.25;}return 0.25+0.6*Math.abs(Math.sin(tt*6+it.i));}
+function frame(now){const time=(reduced?0:(now-t0))/1000;
+  items.forEach(it=>{if(!it.r)return;if(!reduced&&now>it.next){it.mode=(it.mode+1)%3;it.next=now+3500;}it.level=lvl(it,now);it.st.textContent=STATES[it.mode];it.r.draw(time,it.level,it.mode);});
+  if(big&&big.r){big.level=lvl(big,now);big.r.draw(time,big.level,big.mode);}
+  requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+</script>
