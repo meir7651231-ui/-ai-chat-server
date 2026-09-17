@@ -23,7 +23,20 @@
 //    node hamtzaa.mjs --peruk 7           # זוג-בודד
 //    node hamtzaa.mjs --gate              # שני המסלולים · ספירה · exit 1 אם יש המצאות
 //    node hamtzaa.mjs --file <in> <spec>  # זוג-חופשי מהדיסק
+//    node hamtzaa.mjs --needs <needs.json> --goal <goal.txt>   # מצב-החלקיקים (למטה)
 //    (‏--list מפרט כל שדה-מומצא · --json פלט-מכונה)
+//
+//  🧩 **מצב-החלקיקים (‏--needs · 17.9):** הספק אינו הצרכן היחיד של ההמצאה. כשמטרה
+//  חופשית מפורקת לחלקיקי-פעולות-יסוד (‏`behavior-plan --needs`, אותו פורמט JSON),
+//  כל צורך נושא **קבועים** (`consts`) ו**מפתחות-שדה בתוך הדוגמאות** (‏'due' · 'amount').
+//  אלה שדות לכל דבר — ואיש לא בדק שיש להם מקור. כאן נסגר הפער: לכל אסימון
+//  נדרש מקור, לפי אותה שרשרת-מקור של הפסק, בשלושה סוגים בלבד —
+//    (1) **ליטרל** — המספר כתוב במטרה עצמה         (2) **מילה** — `sourceOf` על טקסט-המטרה
+//    (3) **סכמה** — מילת-מטרה ⇒ `soleClassOf` ⇒ שקע ב-`schema-fields` (מפתח-אנגלית)
+//  בלי אף אחד מהשלושה ⇒ **המצאה**, מדווחת בשמה. `--gate` ⇒ exit 1.
+//  ממשק יציב לצינור (‏`behavior-plan --goal` קורא אותו): `--json` ⇒
+//    { mode:'needs', goalWords, needs, chain:{classes,slots,open}, rows:[{need,ok,tokens,missing,sources}] }
+//  fail-closed: 0 צרכים / 0 מילות-מטרה ⇒ exit 2 («הכלי שבור, לא הנתונים»).
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
 import path from 'node:path';
@@ -31,7 +44,7 @@ import { fileURLToPath } from 'node:url';
 import { interpret } from './entity.mjs';
 import { definal } from './match.mjs';
 import { nlToSpec } from './nl-spec.mjs';
-import { specFromSentence } from './tzinor.mjs';   // הצינור המשולב — מה ש-app-ds באמת מריץ
+import { specFromSentence, soleClassOf } from './tzinor.mjs';   // הצינור המשולב — מה ש-app-ds באמת מריץ
 import * as R from '../root.mjs';
 
 const GEN = R.GEN_DIR;
@@ -106,6 +119,73 @@ export function detectInvented(inputText, specText, lang = LANG) {
   return {
     inputWords: inputWords.length, fields: rows.length, rows,
     invented: rows.filter((x) => !x.source), entities: byEnt.size, entsAllInvented,
+  };
+}
+
+// ── מצב-החלקיקים: צורך ⇒ אסימונים ⇒ מקור (§20-ג · L57) ────────────────────
+const KEY_RE = /'([A-Za-z_][A-Za-z0-9_]*)'\s*:|\[\s*'([A-Za-z_][A-Za-z0-9_]*)'\s*\]/g;
+const unq = (t) => String(t).replace(/^['"]|['"]$/g, '');
+
+/** שרשרת-המקור של המטרה: מילת-תוכן ⇒ מחלקה-יחידה ⇒ שקעי-הסכמה שלה (מפתח ⇒ מוצא).
+ *  `soleClassOf` הוא **אותו** כלל-הכרעה שהפסק מריץ (tzinor) — לא כלל שני (L1). */
+export function goalChain(goalText, lang = LANG) {
+  const words = [...new Set(heWords(goalText).filter((w) => !lang.scaffold.has(w)))];
+  const slots = new Map(); const classes = []; const open = [];
+  for (const w of words) {
+    const k = soleClassOf(w); if (!k) continue;
+    if (!k.cls) { open.push({ word: w, options: k.options }); continue; }   // כמה מועמדים ⇒ מתג, לא הכרעה
+    classes.push({ word: w, cls: k.cls });
+    for (const f of (k.fields || [])) if (f.src && !slots.has(f.name)) slots.set(f.name, { src: f.src, cls: k.cls, word: w });
+  }
+  return { slots, classes, open };
+}
+
+/** צורך ⇒ האסימונים שחייבים מקור: כל `consts`, וכל מפתח-שדה שמופיע בדוגמאות
+ *  (‏`{'due': …}` · `r['amount']`). ערכי-דוגמה אינם אסימונים — רק מפתחות. */
+export function needTokens(need) {
+  const out = new Map();
+  for (const c of (need.consts || [])) out.set(String(c), 'consts');
+  const walk = (v) => {
+    if (typeof v === 'string') { for (const m of v.matchAll(KEY_RE)) { const k = "'" + (m[1] || m[2]) + "'"; if (!out.has(k)) out.set(k, 'examples'); } }
+    else if (Array.isArray(v)) v.forEach(walk);
+  };
+  (need.examples || []).forEach(walk);
+  return out;
+}
+
+/** אסימון ⇒ מקור, או null. שלושה סוגים בלבד; אין סוג רביעי ואין ניחוש. */
+export function tokenSource(tok, goalText, chain, inputWords, deprefix) {
+  const raw = unq(tok);
+  if (/^\d[\d.,]*$/.test(raw)) return String(goalText).includes(raw) ? { kind: 'ליטרל', src: `מטרה (ליטרל "${raw}")` } : null;
+  const he = heWords(raw);
+  if (he.length) {
+    const hits = he.map((w) => sourceOf(w, inputWords, deprefix));
+    return hits.every(Boolean) ? { kind: 'מילה', src: `מטרה (מילה "${hits.join(' ')}")` } : null;
+  }
+  const sl = chain.slots.get(raw);
+  if (sl) return { kind: 'סכמה', src: `${sl.src} ⇐ «${sl.word}» ⇒ ${sl.cls}` };
+  return null;
+}
+
+/** גרעין מצב-החלקיקים · טהור: (טקסט-מטרה, אובייקט-צרכים) ⇒ שורה לכל צורך. */
+export function detectInventedNeeds(goalText, needsObj, lang = LANG) {
+  const deprefix = (w) => (w.length > MIN_PFX ? w.replace(new RegExp('^[' + lang.prefixLetters + ']'), '') : w);
+  const inputWords = [...new Set(heWords(goalText).filter((w) => !lang.scaffold.has(w)))];
+  const chain = goalChain(goalText, lang);
+  const rows = [];
+  for (const [id, need] of Object.entries(needsObj || {})) {
+    const toks = needTokens(need || {});
+    const sources = {}; const missing = [];
+    for (const [tok, where] of toks) {
+      const hit = tokenSource(tok, goalText, chain, inputWords, deprefix);
+      if (hit) sources[tok] = hit.src; else missing.push({ token: tok, where });
+    }
+    rows.push({ need: id, ok: !missing.length, tokens: toks.size, missing, sources });
+  }
+  return {
+    mode: 'needs', goalWords: inputWords.length, needs: rows.length,
+    chain: { classes: chain.classes, slots: chain.slots.size, open: chain.open },
+    rows, invented: rows.filter((r) => !r.ok),
   };
 }
 
@@ -220,6 +300,18 @@ function selftest() {
     detectInvented('רשימה של דברים', 'ישות פריט עם רשימה').invented.length === 1
     && detectInvented('רשימה של דברים', 'ישות פריט עם רשימה', noScaf).invented.length === 0);
 
+  // ── מצב-החלקיקים: אותה הרעלה, על צרכים ─────────────────────────────────
+  const G = 'לדעת אילו תשלומים באיחור מעל 30 יום ולשלוח תזכורת עם הסכום';
+  const N = (need) => detectInventedNeeds(G, { n1: need });
+  ok('חלקיקים: קבוע שנכתב במטרה ⇒ מקור', N({ consts: ['30'] }).invented.length === 0);
+  ok('חלקיקים: קבוע שלא נכתב במטרה ⇒ המצאה', N({ consts: ['45'] }).rows[0].missing.map((m) => m.token).join() === '45');
+  ok('חלקיקים: מפתח-שדה מהסכמה ⇒ מקור', N({ examples: [["[{'amount': 5}]", 'r == 5']] }).invented.length === 0);
+  ok('חלקיקים: מפתח-שדה בלי מקור ⇒ המצאה', N({ examples: [["[{'due': 'x'}]", 'r == 1']] }).rows[0].missing.map((m) => m.token).join() === "'due'");
+  ok('חלקיקים: ערך-דוגמה אינו אסימון (רק מפתח)', N({ examples: [["'זזז', 3", "r.contains('זזז')"]] }).rows[0].tokens === 0);
+  ok('חלקיקים: שרשרת-הסכמה נבנתה מהמטרה', detectInventedNeeds(G, { n1: {} }).chain.classes.length >= 1);
+  ok('חלקיקים fail-closed: 0 צרכים מסומן', detectInventedNeeds(G, {}).needs === 0);
+  ok('חלקיקים fail-closed: 0 מילות-מטרה מסומן', detectInventedNeeds('', { n1: { consts: ['30'] } }).goalWords === 0);
+
   const bad = T.filter((t) => !t.pass);
   for (const t of T) console.log(`${t.pass ? '✅' : '🚨'} ${t.name}`);
   console.log(`selftest: ${T.length - bad.length}/${T.length}`);
@@ -232,6 +324,29 @@ if (isMain) {
   const has = (f) => A.includes(f);
   const list = has('--list'), json = has('--json');
   if (has('--selftest')) selftest();
+  // ── מצב-החלקיקים: --needs <needs.json> --goal <goal.txt> ──────────────
+  if (has('--needs')) {
+    const nf = A[A.indexOf('--needs') + 1], gf = has('--goal') ? A[A.indexOf('--goal') + 1] : null;
+    const nraw = readIf(nf), goal = gf ? readIf(gf) : null;
+    if (nraw == null || goal == null) { console.error('🛠️ hamtzaa: --needs <needs.json> --goal <goal.txt> — קובץ חסר (fail-closed)'); process.exit(2); }
+    let needsObj; try { needsObj = JSON.parse(nraw); } catch (e) { console.error(`🛠️ hamtzaa: needs אינו JSON תקין — ${e.message} (fail-closed)`); process.exit(2); }
+    const r = detectInventedNeeds(goal, needsObj);
+    // 🔒 fail-closed (L27): 0 צרכים / 0 מילות-מטרה = הכלי שבור, לא הנתונים
+    if (!r.needs || !r.goalWords) { console.error(`🛠️ hamtzaa: ${r.needs} צרכים · ${r.goalWords} מילות-מטרה — הכלי שבור, לא הנתונים (fail-closed)`); process.exit(2); }
+    if (json) console.log(JSON.stringify(r, null, 2));
+    else {
+      const tk = r.rows.reduce((a, x) => a + x.tokens, 0), miss = r.rows.reduce((a, x) => a + x.missing.length, 0);
+      console.log(`needs: ${r.needs} צרכים · ${tk} אסימונים · ${miss} בלי-מקור (${pct(miss, tk)}%) · ${r.invented.length}/${r.needs} צרכים עם המצאה`);
+      console.log(`  שרשרת: ${r.chain.classes.length} מחלקות (${r.chain.classes.map((c) => `${c.word}⇒${c.cls}`).join(' · ') || '—'}) · ${r.chain.slots} שקעים · ${r.chain.open.length} מתגים`);
+      for (const row of r.rows) {
+        const tag = row.ok ? '✅' : '🚨';
+        console.log(`  ${tag} ${row.need}: ${row.tokens - row.missing.length}/${row.tokens} עם מקור${row.missing.length ? ' — המצאה: ' + row.missing.map((m) => `${m.token}[${m.where}]`).join(', ') : ''}`);
+        if (list) for (const [t, src] of Object.entries(row.sources)) console.log(`       ✓ ${t} ← ${src}`);
+      }
+    }
+    if (has('--gate') && r.invented.length) { console.error(`🚨 hamtzaa: ${r.invented.length}/${r.needs} צרכים עם אסימון בלי מקור במטרה — המצאה (L57)`); process.exit(1); }
+    process.exit(0);
+  }
   let rs = [];
   if (has('--file')) {
     const i = A.indexOf('--file');
@@ -246,7 +361,7 @@ if (isMain) {
   } else if (has('--peruks')) rs = [routePeruks()];
   else if (has('--nl')) rs = [routeNl()];
   else if (has('--gate') || has('--ratchet') || !A.length) rs = [routePeruks(), routeNl()];
-  else { console.log('usage: node hamtzaa.mjs [--gate|--ratchet|--peruks|--nl|--peruk N|--file <in> <spec>] [--list] [--json]'); process.exit(0); }
+  else { console.log('usage: node hamtzaa.mjs [--gate|--ratchet|--peruks|--nl|--peruk N|--file <in> <spec>|--needs <needs.json> --goal <goal.txt>] [--list] [--json]'); process.exit(0); }
 
   assertRan(rs);
   if (json) console.log(JSON.stringify(rs, null, 2));

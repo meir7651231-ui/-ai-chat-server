@@ -252,6 +252,18 @@ export function candidatesFor(word) {
   return [...out, ...noClass];
 }
 
+/** מילה ⇒ **מחלקת-סכמה יחידה** או ספק. כלל-ההכרעה של §20 במקום אחד, כדי ששני
+ *  הצרכנים (‏הפסק `yeshiva/purpose.mjs` ושער-ההמצאה `hamtzaa.mjs`) ישאלו את אותה
+ *  שאלה ויקבלו את אותה תשובה: מועמד-אמת = יש מחלקה · יש שקעים · לא-רופף.
+ *  יחיד ⇒ `{ cls, fields, src }` · כמה ⇒ `{ cls: null, options }` (מתג) · אין ⇒ null. */
+export function soleClassOf(word) {
+  let c = [];
+  try { c = candidatesFor(word).filter((x) => x.cls && x.strict !== false && (x.fields || []).length); } catch { return null; }
+  if (c.length === 1) return { cls: c[0].cls, fields: c[0].fields, src: (c[0].evidence || [])[0] || null };
+  if (c.length > 1) return { cls: null, options: c.map((x) => x.cls) };
+  return null;
+}
+
 /** משפט ⇒ מפרט-מתגים מלא. `pick` תמיד null כשיש יותר מאפשרות-סכמה אחת. */
 export function toSwitches(text, origin = 'משפט') {
   const { words, domainWords } = entityWords(text);
