@@ -33,9 +33,9 @@ footer{max-width:720px;margin:26px auto 0;color:var(--muted);font-size:13px;line
 </style>
 
 <header>
-  <h1>תשע בועות. <span>תבחר אחת.</span></h1>
+  <h1>עשר בועות. <span>תבחר אחת.</span></h1>
   <p class="lead">כל בועה חיה: היא עוברת לבד בין שקט, האזנה ודיבור. לחיצה על כרטיס פותחת אותה גדולה עם כפתורי מצב. מה שתבחר אני מעבירה לטלפון כשיידר על המעבד הגרפי, בדיוק כמו שהיא נראית כאן.</p>
-  <div class="say">בקול: <b>ליבה, עיצוב מספר תשע</b></div>
+  <div class="say">בקול: <b>ליבה, עיצוב מספר עשר</b></div>
 </header>
 
 <div class="grid" id="grid"></div>
@@ -123,7 +123,34 @@ const D=[
  vec3 cy=mix(vec3(.5,1.,1.),p2,.35);float neon=smoothstep(.028,0.,abs(nr-.93))+exp(-pow((nr-.93)/.05,2.))*.45;col+=cy*neon*(.9+.5*iLevel);
  float dots=step(.985,hash(floor(uv*22.+t*.2)))*.35*step(.75,nr);col+=cy*dots;
  col=1.-exp(-col*.95);
- float edge=1.-smoothstep(R-1.,R+1.,r);float glow=exp(-(r-R)*(r-R)/60.)*step(R,r)*(.6+iLevel);col=col*edge+cy*glow*.7;a=edge*max(.9,length(col))+glow;`}
+ float edge=1.-smoothstep(R-1.,R+1.,r);float glow=exp(-(r-R)*(r-R)/60.)*step(R,r)*(.6+iLevel);col=col*edge+cy*glow*.7;a=edge*max(.9,length(col))+glow;`},
+{n:'יצור חי',d:'בלי קצה ובלי טבעת. גוף פלזמה נושם עם זרועות אור, ורידים בוערים ועין שמתרחבת כשאתה מדבר.',s:`
+ float ang=atan(uv.y,uv.x);vec2 uu=uv*.72;float rr=length(uu);
+ /* breathing organic silhouette + tendrils */
+ float breath=1.+.06*sin(t*1.7)+.1*iLevel;
+ float shape=fbm(vec2(ang*1.3+t*.3,t*.4))*.28+fbm(vec2(ang*4.-t*.5,rr*2.+t*.2))*.12;
+ float bodyR=(.62+shape)*breath;
+ float tend=pow(max(0.,fbm(vec2(ang*3.5+t*.6,rr*1.5-t*.9))-.35),1.6)*(1.2+iLevel*2.);
+ float reach=bodyR+tend*.9;
+ float body=1.-smoothstep(reach-.08,reach+.05,rr);
+ float wisp=smoothstep(reach+.35,reach-.05,rr)*tend*.8;
+ /* burning veins */
+ vec2 q=uu+.35*vec2(fbm(uu*1.6+t*.3),fbm(uu*1.6-t*.25+7.));float f=fbm(q*2.4+t*.2);
+ float vein=pow(1.-abs(fract(f*3.2+t*.15)*2.-1.),10.)*(.8+iLevel*1.2);
+ vec3 dark=vec3(.06,.01,.09),hot=vec3(.95,.2,.45),fire=vec3(1.,.6,.2);
+ vec3 skin=mix(dark,hot,smoothstep(.35,.8,f)*.7);skin+=fire*vein;skin+=hot*pow(1.-rr/max(reach,.01),1.5)*.35;
+ /* the eye: black pupil, rotating fire iris, wet highlight */
+ float pupil=.16-.06*iLevel;float irisR=.34;
+ float irisBand=exp(-pow((rr-irisR)/(.09+.04*iLevel),2.));float tex=fbm(vec2(ang*4.+t*(1.5+iLevel*2.),rr*10.-t));float dop=.6+.6*cos(ang-t*2.);
+ vec3 iris=mix(fire,vec3(1.,.9,.6),tex)*irisBand*(1.3+tex)*dop;
+ float pup=1.-smoothstep(pupil-.02,pupil+.03,rr);
+ vec3 eye=mix(skin,iris+skin*.3,smoothstep(irisR+.16,irisR+.02,rr));eye=mix(eye,vec3(0.),pup);
+ vec2 hl=uu-vec2(-.13,-.15);eye+=vec3(1.)*exp(-dot(hl,hl)*120.)*.9*(1.-pup*.3);
+ col=eye*body+skin*wisp;
+ float glow=exp(-max(0.,rr-reach)*4.)*(.35+iLevel*.6);col+=hot*glow*(1.-body);
+ col=1.-exp(-col*1.1);
+ float fade=1.-smoothstep(.78,1.02,nr);col*=fade;
+ a=(max(body,wisp)*.98+glow*(1.-body)*.9)*fade;`}
 ];
 const STATES=['שקט','מקשיבה','מדברת'];
 function make(canvas,def){

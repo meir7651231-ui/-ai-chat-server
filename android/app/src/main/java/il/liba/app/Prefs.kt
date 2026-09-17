@@ -9,7 +9,7 @@ object Prefs {
     private fun p(c: Context) = c.getSharedPreferences("liba", Context.MODE_PRIVATE)
     fun hey(c: Context) = p(c).getBoolean("hey", false)
     fun setHey(c: Context, v: Boolean) = p(c).edit().putBoolean("hey", v).apply()
-    fun style(c: Context) = p(c).getInt("style", 1)
+    fun style(c: Context) = p(c).getInt("style", 2)
     fun setStyle(c: Context, v: Int) = p(c).edit().putInt("style", v).apply()
     fun conv(c: Context) = p(c).getBoolean("conv", true)
     fun setConv(c: Context, v: Boolean) = p(c).edit().putBoolean("conv", v).apply()

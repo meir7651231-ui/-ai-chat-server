@@ -52,6 +52,7 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
     private val rect = RectF()
     private var shader: RuntimeShader? = null
     private var shader2: RuntimeShader? = null
+    private var shader3: RuntimeShader? = null
     var style: Int = 1
         set(v) { field = v; invalidate() }
 
@@ -63,6 +64,7 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
         if (Build.VERSION.SDK_INT >= 33) {
             try { shader = RuntimeShader(AGSL); shaderOk = true } catch (e: Exception) { Log.w("liba", "orb shader: $e"); shaderOk = false; shaderErr = e.message ?: "?" }
             try { shader2 = RuntimeShader(AGSL_FUSION) } catch (e: Exception) { Log.w("liba", "fusion shader: $e"); shaderErr = "fusion:" + (e.message ?: "?") }
+            try { shader3 = RuntimeShader(AGSL_CREATURE) } catch (e: Exception) { Log.w("liba", "creature shader: $e"); shaderErr = "creature:" + (e.message ?: "?") }
         }
         // the shader needs a GPU canvas; the fallback is happy either way
         setLayerType(LAYER_TYPE_HARDWARE, null)
@@ -113,7 +115,7 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
         val r = min(w, h) / 2 - pad()
         val ac = if (mode == Mode.OFFLINE) GRAY else accent
         val t = phase * 2f * Math.PI.toFloat()
-        val s = if (style == 1 && shader2 != null) shader2 else shader
+        val s = if (style == 2 && shader3 != null) shader3 else if (style == 1 && shader2 != null) shader2 else shader
         if (s != null && c.isHardwareAccelerated && Build.VERSION.SDK_INT >= 33) {
             val (a, b, cc) = palette()
             s.setFloatUniform("iRes", w, h); s.setFloatUniform("iTime", time); s.setFloatUniform("iLevel", shown)
@@ -130,9 +132,9 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
                 c.drawCircle(cx, cy, r * (0.9f + 0.38f * p), ring)
             }
         }
-        // state ring
+        // state ring (the creature has no edge – it shows state through its eye instead)
         ring.strokeWidth = dp(1.25f)
-        when (mode) {
+        if (style != 2 || s == null) when (mode) {
             Mode.SENDING -> {
                 ring.color = withA(Color.WHITE, 40); c.drawCircle(cx, cy, r - dp(1f), ring)
                 ring.color = Color.WHITE; ring.strokeWidth = dp(2f); rect.set(cx - r + dp(1f), cy - r + dp(1f), cx + r - dp(1f), cy + r - dp(1f))
@@ -271,6 +273,63 @@ half4 main(float2 fc) {
     float3 outc = col * edge + cy * glow * 0.6;
     float a = edge * max(0.9, length(col)) + glow * 0.6;
     return half4(half3(outc), half(a));
+}
+"""
+
+
+        // Creature: no edge and no ring. A breathing plasma body with light tendrils, burning veins and a fire eye whose pupil dilates with the voice.
+        const val AGSL_CREATURE = """
+uniform float2 iRes;
+uniform float iTime;
+uniform float iLevel;
+uniform float iMode;
+uniform float iPad;
+layout(color) uniform float4 cA;
+layout(color) uniform float4 cB;
+layout(color) uniform float4 cC;
+
+float hash(float2 p) { return fract(sin(dot(p, float2(127.1, 311.7))) * 43758.5453); }
+float noise(float2 p) {
+    float2 i = floor(p); float2 f = fract(p); f = f * f * (3.0 - 2.0 * f);
+    float a = hash(i); float b = hash(i + float2(1.0, 0.0)); float c = hash(i + float2(0.0, 1.0)); float d = hash(i + float2(1.0, 1.0));
+    return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+}
+float fbm(float2 p) {
+    float v = 0.0; float a = 0.5;
+    for (int i = 0; i < 4; i++) { v += a * noise(p); p = p * 2.03 + float2(1.7, 9.2); a *= 0.5; }
+    return v;
+}
+half4 main(float2 fc) {
+    float2 c = iRes * 0.5;
+    float R = min(iRes.x, iRes.y) * 0.5 - 2.0;
+    float2 d = fc - c; float r = length(d); float nr = r / R; float2 uv = d / R;
+    float t = iTime; float lv = iLevel;
+    if (iMode == 6.0) lv = 0.0;
+    float ang = atan(uv.y, uv.x); float2 uu = uv * 0.72; float rr = length(uu);
+    float breath = 1.0 + 0.06 * sin(t * 1.7) + 0.1 * lv;
+    float shape = fbm(float2(ang * 1.3 + t * 0.3, t * 0.4)) * 0.28 + fbm(float2(ang * 4.0 - t * 0.5, rr * 2.0 + t * 0.2)) * 0.12;
+    float bodyR = (0.62 + shape) * breath;
+    float tend = pow(max(0.0, fbm(float2(ang * 3.5 + t * 0.6, rr * 1.5 - t * 0.9)) - 0.35), 1.6) * (1.2 + lv * 2.0);
+    float reach = bodyR + tend * 0.9;
+    float body = 1.0 - smoothstep(reach - 0.08, reach + 0.05, rr);
+    float wisp = smoothstep(reach + 0.35, reach - 0.05, rr) * tend * 0.8;
+    float2 q = uu + 0.35 * float2(fbm(uu * 1.6 + t * 0.3), fbm(uu * 1.6 - t * 0.25 + 7.0)); float f = fbm(q * 2.4 + t * 0.2);
+    float vein = pow(1.0 - abs(fract(f * 3.2 + t * 0.15) * 2.0 - 1.0), 10.0) * (0.8 + lv * 1.2);
+    float3 dark = float3(0.06, 0.01, 0.09); float3 hot = mix(float3(0.95, 0.2, 0.45), cB.rgb, 0.35); float3 fire = mix(float3(1.0, 0.6, 0.2), cC.rgb, 0.25);
+    float3 skin = mix(dark, hot, smoothstep(0.35, 0.8, f) * 0.7); skin += fire * vein; skin += hot * pow(1.0 - rr / max(reach, 0.01), 1.5) * 0.35;
+    float pupil = 0.16 - 0.06 * lv; float irisR = 0.34;
+    float irisBand = exp(-pow((rr - irisR) / (0.09 + 0.04 * lv), 2.0)); float tex = fbm(float2(ang * 4.0 + t * (1.5 + lv * 2.0), rr * 10.0 - t)); float dop = 0.6 + 0.6 * cos(ang - t * 2.0);
+    float3 iris = mix(fire, float3(1.0, 0.9, 0.6), tex) * irisBand * (1.3 + tex) * dop;
+    float pup = 1.0 - smoothstep(pupil - 0.02, pupil + 0.03, rr);
+    float3 eye = mix(skin, iris + skin * 0.3, smoothstep(irisR + 0.16, irisR + 0.02, rr)); eye = mix(eye, float3(0.0), pup);
+    float2 hl = uu - float2(-0.13, -0.15); eye += float3(1.0) * exp(-dot(hl, hl) * 120.0) * 0.9 * (1.0 - pup * 0.3);
+    float3 col = eye * body + skin * wisp;
+    float glow = exp(-max(0.0, rr - reach) * 4.0) * (0.35 + lv * 0.6); col += hot * glow * (1.0 - body);
+    col = 1.0 - exp(-col * 1.1);
+    if (iMode == 6.0) col *= 0.4;
+    float fade = 1.0 - smoothstep(0.78, 1.02, nr); col *= fade;
+    float a = (max(body, wisp) * 0.98 + glow * (1.0 - body) * 0.9) * fade;
+    return half4(half3(col), half(a));
 }
 """
 
