@@ -1,2 +1,2 @@
-up-backward · behavior-plan.mjs --backward · 6 מנועים · round-trip cockpitDaysSince⇄addDaysIso מוכח · police לא הורע (44 ran · 1 failed [learn] קדם-קיים)
-DONE | --backward עובד על 6 מנועים עם פלט אמיתי · gate זהה · pins עודכן · נותר: כלום
+up-backward · behavior-plan.mjs --backward · 6 מנועים עם פלט אמיתי · round-trip cockpitDaysSince⇄addDaysIso מוכח 3/3 · gate זהה לפני/אחרי · police ירוקה 45 ran · 0 failed (learn תוקן ע"י git fetch --unshallow) · pins עודכן
+DONE · --backward עובד על 6 מנועים · gate ללא-שינוי · police ירוקה · נותר: כלום
