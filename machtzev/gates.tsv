@@ -49,6 +49,7 @@ puredata	טוהר-דאטה-28.8: אפס דאטה-ליטרלית-במנגנון (
 acceptance	קבלת-§22: אפיון-מערכת-מלא ⇒ 12 יכולות (טופס·טבלה·לוח·KPI·קשרים·RLS·התנהגות) + מגוון-אטומים	push	
 nlsmoke	רצפת-§22: כל משפט-עברית-חופשית ⇒ אפליקציה נבנית בלי-קריסה	push	
 nlquality	איכות-§22: חילוץ-ישויות ממשפט-חופשי מעל רצפת-האיכות	push	
+nlcompile	קומפילציה-§22: כל משפט-חופשי ⇒ אפליקציה ש-flutter analyze מאשר (0 errors); מדולג בלי flutter/buildsmart	push	
 truth	מקור-האמת: TRUTH.md ≡ מדידה-חיה חוצת-3-שכבות (מספר-ענף לא-יכול-לשקר)	commit	wired-floor.json;grow
 oracle	אורקל-מאוחד: atom-index-full ≡ תצוגה+לוגיקה (1332) — אפס-אטום-נופל (§21 יסוד)	push	dup-class-baseline.json;shrink
 coverage	שער-הכיסוי: מחגר רק-עולה על צירי-היכולת — לבנים-ברות-מילוי · מנועים-ברי-הרצה · מהות · תאומי-דאטה	push	coverage-baseline.json;grow

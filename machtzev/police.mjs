@@ -71,9 +71,11 @@ const ran = new Set(), skipped = new Set(), yellow = new Map(), failed = new Set
 const hasTimeout = (() => { try { execFileSync('timeout', ['--version'], { stdio: 'ignore' }); return true; } catch { return false; } })();
 
 // אימות "הכלי באמת חסר" — צהוב-כוזב (exit 2 עם כלי קיים) = אדום.
-const KNOWN_TOOLS = new Set(['dart', 'typescript', 'node', 'git', 'jq', 'timeout']);   // R3-3.1: צהוב רק לכלי-חיצוני מוצהר, לא לכל מחרוזת
+const KNOWN_TOOLS = new Set(['dart', 'typescript', 'node', 'git', 'jq', 'timeout', 'flutter', 'buildsmart']);   // R3-3.1: צהוב רק לכלי-חיצוני מוצהר, לא לכל מחרוזת
 const toolMissing = (tool) => {
   if (tool === 'dart') return !resolveDart();
+  if (tool === 'flutter') return !(process.env.FLUTTER && fs.existsSync(path.join(process.env.FLUTTER, 'flutter'))) && !fs.existsSync('/root/flutter/bin/flutter') && (() => { try { execFileSync('bash', ['-lc', 'command -v flutter'], { stdio: 'ignore' }); return false; } catch { return true; } })();
+  if (tool === 'buildsmart') return !R.bsRoot();
   if (tool === 'typescript') return !fs.existsSync(HERE + 'node_modules/typescript/package.json') && !fs.existsSync('/home/user/maor-system/node_modules/typescript/package.json');
   try { execFileSync('bash', ['-lc', `command -v ${tool}`], { stdio: 'ignore' }); return false; } catch { return true; }
 };
@@ -126,6 +128,7 @@ gate('puredata', 'purity/purity-data.mjs', ['--gate']);
 gateDirty('acceptance', 'mahulal/spec-acceptance.mjs');
 gateDirty('nlsmoke', 'mahulal/nl-smoke.mjs', [], FAST);
 gateDirty('nlquality', 'mahulal/nl-quality.mjs', [], FAST);
+gateDirty('nlcompile', 'mahulal/nl-smoke.mjs', ['--compile'], FAST);   // §22: משפט ⇒ אפליקציה ש-flutter analyze מאשר; ⚪ בלי flutter/buildsmart
 gate('oracle', 'census/oracle.mjs', ['--gate']);
 gate('truth', 'truth.mjs', ['--gate']);
 gate('coverage', 'coverage-gate.mjs');
