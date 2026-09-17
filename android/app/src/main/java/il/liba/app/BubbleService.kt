@@ -81,7 +81,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         super.onCreate()
         running = true; instance = this
         wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        try { (getSystemService(AUDIO_SERVICE) as AudioManager).adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) {}
+        val am0 = getSystemService(AUDIO_SERVICE) as AudioManager; intArrayOf(AudioManager.STREAM_SYSTEM, AudioManager.STREAM_MUSIC).forEach { try { am0.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) {} }
         startForegroundNotif()
         runCatching { applyPrefs() }
         runCatching { setupTts() }
@@ -128,6 +128,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 val r = tts?.setLanguage(Locale("he", "IL"))
                 ttsReady = r != TextToSpeech.LANG_MISSING_DATA && r != TextToSpeech.LANG_NOT_SUPPORTED
                 tts?.setSpeechRate(1.25f)
+                tts?.setAudioAttributes(android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION_EVENT).setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build())
                 tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                     override fun onStart(id: String?) {}
                     override fun onError(id: String?) { main.post { onSpoken() } }
@@ -308,8 +309,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
 
     // ---------- speech in ----------
-    private fun muteSystem() { if (systemMuted) return; try { (getSystemService(AUDIO_SERVICE) as AudioManager).adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_MUTE, 0); systemMuted = true } catch (e: Exception) {} }
-    private fun unmuteSystem() { if (!systemMuted) return; try { (getSystemService(AUDIO_SERVICE) as AudioManager).adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) {}; systemMuted = false }
+    private val muteStreams = intArrayOf(AudioManager.STREAM_SYSTEM, AudioManager.STREAM_MUSIC)
+    private fun muteSystem() { if (systemMuted) return; val am = getSystemService(AUDIO_SERVICE) as AudioManager; if (am.isMusicActive) return; muteStreams.forEach { try { am.adjustStreamVolume(it, AudioManager.ADJUST_MUTE, 0) } catch (e: Exception) {} }; systemMuted = true }
+    private fun unmuteSystem() { if (!systemMuted) return; val am = getSystemService(AUDIO_SERVICE) as AudioManager; muteStreams.forEach { try { am.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) {} }; systemMuted = false }
     private fun wakeLoop() { if (!heyOn || listening || speaking || tts?.isSpeaking == true) return; startListening("wake") }
     private fun startListening(mode: String) {
         if (listening) return
@@ -322,7 +324,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, "he-IL"); putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
             putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, if (mode == "wake") 1200L else 1500L)
-            if (mode == "wake") putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 8000L)
+            if (mode == "wake") { putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 30000L); putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 30000L) }
         }
         listening = true; listenMode = mode
         if (mode == "wake") { muteSystem(); setState(State.WAKE) } else { unmuteSystem(); setState(State.LISTENING); showLabel(if (mode == "follow") "…" else "מקשיב…", 15000) }
@@ -369,7 +371,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         when {
             n in listOf("חזור", "תחזור", "תחזור על זה", "עוד פעם", "מה אמרת", "מה") && lastSaid.isNotEmpty() -> { speak(lastSaid); return }
             n in listOf("מה הסטטוס", "סטטוס", "מה קורה", "מה המצב", "מה עם המשימות", "משימות") -> { speak(localStatus()); return }
-            n in listOf("שקט", "תשתוק", "עצור", "די", "ביטול", "בטל") -> { tts?.stop(); sentAt = 0; lastSaid = ""; setState(State.IDLE); showLabel("שקט.", 1500); if (heyOn) wakeLoop(); return }
+            n in listOf("שקט", "תשתוק", "עצור", "די", "ביטול", "בטל") -> { tts?.stop(); sentAt = 0; lastSaid = ""; heyOff(); setState(State.IDLE); showLabel("שקט. מילת ההפעלה כבויה.", 3000); return }
             !pageReady -> { speak("אני לא מחובר לדף כרגע. $status"); return }
         }
         Prefs.log(this, "me", t); sentAt = SystemClock.elapsedRealtime()
@@ -398,6 +400,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     } }
     override fun onReady() { main.post { if (!pageReady) { pageReady = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } } } } }
+    fun heyOff() { heyOn = false; Prefs.setHey(this, false); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) {}; listening = false }; unmuteSystem() }
+    override fun onCmd(cmd: String) { main.post { when (cmd) { "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "reload" -> web?.reload() } } }
     override fun onCrashSaved(id: String) { main.post { Prefs.clearCrash(this); showLabel("דוח הקריסה נשלח לליבה", 4000) } }
     override fun onTasks(summary: String, n: Int, blocked: Int) { main.post { taskSummary = summary; taskBlocked = blocked; if (n > 0) status = "מחובר · $n משימות" + (if (blocked > 0) " · $blocked מחכות לך" else "") } }
     override fun onPageTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }

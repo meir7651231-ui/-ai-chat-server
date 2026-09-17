@@ -26,6 +26,7 @@ object LibaWeb {
     else if(d.liba==='sent'){LibaBridge.sent(String(d.text||''));}
     else if(d.liba==='error'){LibaBridge.error(String(d.text||''),String(d.reason||''));}
     else if(d.liba==='tap'){LibaBridge.tap();}
+    else if(d.liba==='cmd'){LibaBridge.cmd(String(d.cmd||''));}
     else if(d.liba==='crashSaved'){LibaBridge.crashSaved(String(d.id||''));}
     else if(d.liba==='tasks'){LibaBridge.tasks(String(d.summary||''),Number(d.n||0),Number(d.blocked||0));}
   });
@@ -46,6 +47,7 @@ object LibaWeb {
         fun onPageTap()
         fun onTasks(summary: String, n: Int, blocked: Int)
         fun onCrashSaved(id: String)
+        fun onCmd(cmd: String)
     }
 
     private class JsBridge(val b: Bridge) {
@@ -59,6 +61,7 @@ object LibaWeb {
         @JavascriptInterface fun tap() = b.onPageTap()
         @JavascriptInterface fun tasks(summary: String, n: Int, blocked: Int) = b.onTasks(summary, n, blocked)
         @JavascriptInterface fun crashSaved(id: String) = b.onCrashSaved(id)
+        @JavascriptInterface fun cmd(cmd: String) = b.onCmd(cmd)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
