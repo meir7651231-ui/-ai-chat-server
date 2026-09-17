@@ -1,0 +1,201 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:12:58.178Z",
+ "query": "is not empty list חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "is",
+  "not",
+  "empty",
+  "list",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "fb06ccadd19abcedded18a05d1674bcfdd383fe6caeb67a55902e987a4bef3ca",
+  "logicCensusSha": "dcce4d75b4b90d9555b4b3eb30be0ae89c84fbc00fa8903d3c74da9315040277",
+  "display": 1910,
+  "logic": 986
+ },
+ "candidates": [
+  {
+   "id": "isEmptyList",
+   "layer": "logic",
+   "file": "dart-maor/op-is-empty-list.dart",
+   "score": 9,
+   "hits": [
+    "is",
+    "empty",
+    "list"
+   ]
+  },
+  {
+   "id": "fieldIsNotNull",
+   "layer": "logic",
+   "file": "dart-maor/op-field-is-not-null.dart",
+   "score": 6,
+   "hits": [
+    "is",
+    "not"
+   ]
+  },
+  {
+   "id": "Forge4AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/4_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge5AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/5_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge6AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/6_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge7AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/7_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeAnimatedEmpty",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/animated_empty.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeBrandListRow",
+   "layer": "display",
+   "file": "dart-forge-bs/header/brand_list_row.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeBulletList",
+   "layer": "display",
+   "file": "dart-forge-bs/text/bullet_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeEmptyHint",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/empty_hint.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeEmptyState",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/empty_state.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeNumberedList",
+   "layer": "display",
+   "file": "dart-forge-bs/text/numbered_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeProfileRowList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/profile_row_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeSearchEmptyState",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/search_empty_state.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeSwitchRowList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/switch_row_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  }
+ ],
+ "strong": [
+  "isEmptyList",
+  "fieldIsNotNull"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "Forge4AtomsList",
+  "Forge5AtomsList",
+  "Forge6AtomsList",
+  "Forge7AtomsList",
+  "ForgeAnimatedEmpty",
+  "ForgeBrandListRow",
+  "ForgeBulletList",
+  "ForgeEmptyHint",
+  "ForgeEmptyState",
+  "ForgeNumberedList",
+  "ForgeProfileRowList",
+  "ForgeSearchEmptyState",
+  "ForgeSwitchRowList"
+ ],
+ "creates": "new/dart-maor/op-is-not-empty-list.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד isNotEmptyList(List<dynamic>) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי d.isNotEmpty · מקור למשל dart-maor/allowed-designations-for.dart#allowedDesignationsFor); המועמדים-החזקים isEmptyList(List<dynamic>) => bool · fieldIsNotNull(dynamic, String) => bool — לרובם אין את חתימת-הפעולה-לבדה (List<dynamic>) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: isEmptyList {} — מול isNotEmptyList {xs.isNotEmpty;}",
+ "sig": "e421ad0a8cd9aa76c95fe58019080577a39f34543e320151d7b1807d1a62fb8c"
+}

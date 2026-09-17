@@ -1,0 +1,186 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:12:56.380Z",
+ "query": "add to חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "add",
+  "to",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "3407e4de6efe593ce36cbae42573a0d3584c4df314b266e972bb9c52ee0f25ba",
+  "logicCensusSha": "7218498f5e0ca8aeb7951c17adb09c883f37de2d42843af5b459d0f9a7c0983a",
+  "display": 1905,
+  "logic": 981
+ },
+ "candidates": [
+  {
+   "id": "AddTradeButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/add_trade_button.dart",
+   "score": 4,
+   "hits": [
+    "add",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeAddTradeButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/add_trade_button.dart",
+   "score": 4,
+   "hits": [
+    "add",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeQuickAddForm",
+   "layer": "display",
+   "file": "dart-forge-bs/composite/quick_add_form.dart",
+   "score": 4,
+   "hits": [
+    "add",
+    "תוך"
+   ]
+  },
+  {
+   "id": "addDaysIso",
+   "layer": "logic",
+   "file": "dart-maor/add-days-iso.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "addDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-add-dyn.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "addNum",
+   "layer": "logic",
+   "file": "dart-maor/op-add-num.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "addStr",
+   "layer": "logic",
+   "file": "dart-maor/op-add-str.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "attachChargeTo",
+   "layer": "logic",
+   "file": "dart-maor/attach-charge-to.dart",
+   "score": 3,
+   "hits": [
+    "to"
+   ]
+  },
+  {
+   "id": "canAddPhoto",
+   "layer": "logic",
+   "file": "dart-maor/can-add-photo.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "chargeToHist",
+   "layer": "logic",
+   "file": "dart-maor/charge-to-hist.dart",
+   "score": 3,
+   "hits": [
+    "to"
+   ]
+  },
+  {
+   "id": "colRefToIndex",
+   "layer": "logic",
+   "file": "dart-maor/col-ref-to-index.dart",
+   "score": 3,
+   "hits": [
+    "to"
+   ]
+  },
+  {
+   "id": "configOpsToJson",
+   "layer": "logic",
+   "file": "dart-boxes/bs-config.dart",
+   "score": 3,
+   "hits": [
+    "to"
+   ]
+  },
+  {
+   "id": "contactToRow",
+   "layer": "logic",
+   "file": "dart-maor/contact-to-row.dart",
+   "score": 3,
+   "hits": [
+    "to"
+   ]
+  },
+  {
+   "id": "DsQuickAdd",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "excelSerialToIso",
+   "layer": "logic",
+   "file": "dart-maor/excel-serial-to-iso.dart",
+   "score": 3,
+   "hits": [
+    "to"
+   ]
+  }
+ ],
+ "strong": [
+  "addDaysIso",
+  "addDyn",
+  "addNum",
+  "addStr",
+  "attachChargeTo",
+  "canAddPhoto",
+  "chargeToHist",
+  "colRefToIndex",
+  "configOpsToJson",
+  "contactToRow",
+  "excelSerialToIso"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "AddTradeButton",
+  "ForgeAddTradeButton",
+  "ForgeQuickAddForm",
+  "DsQuickAdd"
+ ],
+ "creates": "new/dart-maor/op-add-to.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד addTo(List<dynamic>, dynamic) => void שנחצב מכנית ע\"י ast_carve --ops (הביטוי (cur['phones'] as List).add({'value' : v, 'label' : phoneLabel(params)}) · מקור למשל dart-maor/parse-vcards.dart#parseVcards); המועמדים-החזקים addDaysIso(String, int) => String · addDyn(dynamic, dynamic) => dynamic · addNum(num, num) => num · addStr(String, String) => String · attachChargeTo(List, Object?, Map, String Function(Map) chargeDedupKey, String Function(Map) histDedupKey, Map Function(Map) chargeToHist, Map Function(Map, Map) fillCardFromCharge, Map Function(Map, Map) withNedarimHok) => Map<String, Object?> · canAddPhoto(List<Object?>?, int) => bool · chargeToHist(Map<String, dynamic>, String Function(Map<String, dynamic>) curOf, String Function(dynamic) providerClearer) => Map<String, dynamic> · colRefToIndex(String) => int · configOpsToJson(List<ConfigOp>) => List<Map<String, dynamic>> · contactToRow(Map<String, dynamic>) => Map<String, String> · excelSerialToIso(Object?) => String — לאף אחד אין את חתימת-הפעולה-לבדה (List<dynamic>, dynamic) => void (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם",
+ "sig": "050a8395b58b36a70aa04dd1a0070626c2ebd3d0f62d29adf280f4f90f8a5197"
+}

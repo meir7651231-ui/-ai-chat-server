@@ -185,6 +185,17 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/op-add-to.dart",
+  "name": "addTo",
+  "ret": "void",
+  "params": [
+   "List<dynamic>",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/advance-status.dart",
   "name": "advanceStatus",
   "ret": "String",
@@ -1552,6 +1563,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-cmp-gt-str.dart",
+  "name": "cmpGtStr",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/op-cmp-le-dyn.dart",
   "name": "cmpLeDyn",
   "ret": "bool",
@@ -2722,6 +2744,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-div-dyn.dart",
+  "name": "divDyn",
+  "ret": "dynamic",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/op-div-num.dart",
   "name": "divNum",
   "ret": "num",
@@ -3300,6 +3333,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-eq-num.dart",
+  "name": "eqNum",
+  "ret": "bool",
+  "params": [
+   "num",
+   "num"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/receipt-html.dart",
   "name": "esc",
   "ret": "String",
@@ -3688,6 +3732,18 @@
    "String"
   ],
   "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/op-field-pred.dart",
+  "name": "fieldPred",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "String",
+   "bool Function(dynamic) f"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -5333,6 +5389,16 @@
   ],
   "argc": 2,
   "wireable": true
+ },
+ {
+  "file": "dart-maor/op-is-not-empty-list.dart",
+  "name": "isNotEmptyList",
+  "ret": "bool",
+  "params": [
+   "List<dynamic>"
+  ],
+  "argc": 1,
+  "wireable": false
  },
  {
   "file": "dart-maor/iso-days-ago.dart",

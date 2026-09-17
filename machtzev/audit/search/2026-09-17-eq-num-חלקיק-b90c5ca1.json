@@ -1,0 +1,181 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:12:57.478Z",
+ "query": "eq num חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "eq",
+  "num",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "089c76a5d1406e338aca38e29b851616785f42be1037508bfaba2560fbb57551",
+  "logicCensusSha": "bfb46a90474f9930e25dde3864d3c1917cc166979da0b9f8ef7dffeccdd792bc",
+  "display": 1908,
+  "logic": 984
+ },
+ "candidates": [
+  {
+   "id": "absNum",
+   "layer": "logic",
+   "file": "dart-maor/op-abs-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "addNum",
+   "layer": "logic",
+   "file": "dart-maor/op-add-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "divNum",
+   "layer": "logic",
+   "file": "dart-maor/op-div-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "eqBool",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-bool.dart",
+   "score": 3,
+   "hits": [
+    "eq"
+   ]
+  },
+  {
+   "id": "eqList",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-list.dart",
+   "score": 3,
+   "hits": [
+    "eq"
+   ]
+  },
+  {
+   "id": "hebAnnualEq",
+   "layer": "logic",
+   "file": "dart-maor/heb-annual-eq.dart",
+   "score": 3,
+   "hits": [
+    "eq"
+   ]
+  },
+  {
+   "id": "NumBox",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/num_box.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "numMap",
+   "layer": "logic",
+   "file": "dart/num_map.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "numMatch",
+   "layer": "logic",
+   "file": "dart-maor/num-match.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 3,
+   "hits": [
+    "פעולת",
+    "תוך",
+    "אטומים"
+   ]
+  },
+  {
+   "id": "sizeTableEq",
+   "layer": "logic",
+   "file": "dart/size_table_eq.dart",
+   "score": 3,
+   "hits": [
+    "eq"
+   ]
+  },
+  {
+   "id": "AddTradeButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/add_trade_button.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "DsEnumField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_enum_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge10Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/10_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  }
+ ],
+ "strong": [
+  "absNum",
+  "addNum",
+  "divNum",
+  "eqBool",
+  "eqList",
+  "hebAnnualEq",
+  "numMap",
+  "numMatch",
+  "sizeTableEq"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "NumBox",
+  "SettingsScreenShell"
+ ],
+ "creates": "new/dart-maor/op-eq-num.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד eqNum(num, num) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי md == 0 · מקור למשל dart-maor/age-of.dart#ageOf); המועמדים-החזקים absNum(num) => num · addNum(num, num) => num · divNum(num, num) => num · eqBool(bool, bool) => bool · eqList(List<dynamic>, List<dynamic>) => bool · hebAnnualEq(( int day, String month ) anchor, ( int day, String month, int? year ) query, ( List<String> seq, Set<String> has30 ) Function(int year) scanHebYear) => bool · numMap(Object?) => Map<String, num> · numMatch(dynamic, num) => bool · sizeTableEq(List<List<String>>?, List<List<String>>?, bool Function(List<String> x, List<String> y) rowEq = _listEq) => bool — לאף אחד אין את חתימת-הפעולה-לבדה (num, num) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם",
+ "sig": "b90c5ca156325238e958b954150e44d382104b9f991713a4f0a8f8f6734e757b"
+}
