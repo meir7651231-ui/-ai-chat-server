@@ -16,7 +16,8 @@
 //   התקנה: machtzev/RUNBOOK-DART.md §Flutter.
 import fs from 'node:fs';
 import path from 'node:path';
-import { spawnSync, execFileSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
+import { resolveFlutter, parseAnalyze } from '../dart-bin.mjs';   // פותר-flutter + פרסור-analyze: **עותק אחד** (‏w-goal-flutter · 17.9)
 import { buildApp } from '../generator/app-ds.mjs';
 import { mirror } from '../generator/mirror.mjs';   // שלב-2 של ship — עותק אחד (לא העתק-ביד)
 import * as R from '../root.mjs';
@@ -43,13 +44,7 @@ if (!COMPILE) {
 const ROOT = R.ROOT.replace(/\/$/, '');
 const OUT = R.outDir(), DATA = R.dataOutDir();
 
-/** נתיב ל-flutter, או null. FLUTTER=<bin> · /root/flutter/bin · PATH. אין ניחוש-שקט (L26). */
-function resolveFlutter() {
-  const cands = [process.env.FLUTTER && path.join(process.env.FLUTTER.replace(/\/flutter$/, ''), 'flutter'), '/root/flutter/bin/flutter'];
-  for (const c of cands) if (c && fs.existsSync(c)) return c;
-  try { return execFileSync('bash', ['-lc', 'command -v flutter'], { encoding: 'utf8' }).trim() || null; } catch { return null; }
-}
-const FLUTTER = resolveFlutter();
+const FLUTTER = resolveFlutter();   // dart-bin — פותר אחד לשני הצרכנים (‏behavior-plan צעד-6 חיפש במקום אחר ⇒ «לא-זמין» כוזב; 17.9)
 const APP = R.bsApp();
 if (!FLUTTER || !APP) {
   const what = !FLUTTER ? 'flutter' : 'buildsmart';
@@ -113,21 +108,7 @@ try {
   const tAn = Date.now();
   const an = spawnSync(FLUTTER, ['analyze', '--no-fatal-infos', '--no-fatal-warnings', 'lib/genesis'], { cwd: APP, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   const anS = secs(tAn);
-  const lines = (an.stdout + an.stderr).split('\n');
-  // ⚠️ `flutter analyze` **מיישר את עמודת-החומרה לרוחב הארוכה-ביותר בפלט**: כשיש warning (7 תווים)
-  //    השורות `error`/`info` מוזחות והמילה `warning` יושבת בעמודה 0. הגרסה הראשונה סיננה
-  //    `^\s+warning •` ודיווחה **0 אזהרות** מול 75 אמיתיות. `^\s*` — והספירה נבדקת מול
-  //    «N issues found» של הכלי עצמו, כדי שתת-ספירה לא תעבור בשקט (תת-ספירה = אזעקה).
-  const sev = (k) => lines.filter((l) => new RegExp(`^\\s*${k} •`).test(l));
-  const errs = sev('error').map((l) => {
-    const m = l.match(/^\s*error • (.*) • (\S+):(\d+):(\d+) • (\S+)\s*$/);
-    return m ? { msg: m[1], file: m[2], line: +m[3], col: +m[4], code: m[5], raw: l.trim() } : { msg: l.trim(), file: '?', line: 0, col: 0, code: '?', raw: l.trim() };
-  });
-  const warnN = sev('warning').length, infoN = sev('info').length;
-  const issues = (((an.stdout + an.stderr).match(/^(\d+) issues? found\./m) || [])[1] ?? ((/No issues found!/.test(an.stdout + an.stderr) ? '0' : null)));
-  let miscount = '';
-  if (issues === null) miscount = `🚨 analyze לא הפיק שורת-סיכום (exit ${an.status}${an.error ? ' · ' + an.error.message : ''}) — אין ראיה, ולכן אין ירוק`;   // אחרת כלי-שקרס נקרא «0 שגיאות»
-  else if (+issues !== errs.length + warnN + infoN) miscount = `🚨 ספירה לא-סוגרת: ${errs.length}+${warnN}+${infoN} ≠ ${issues} «issues found» — הפלט השתנה, הפרסור לא`;
+  const { errs, warnN, infoN, issues, miscount } = parseAnalyze(an.stdout + an.stderr, an.status, an.error);
   console.log(`🔎 analyze: ${errs.length} שגיאות · ${warnN} אזהרות · ${infoN} infos · ${issues ?? '?'} issues found · ${anS}s`);
   if (miscount) console.log(miscount);
   console.log('');
