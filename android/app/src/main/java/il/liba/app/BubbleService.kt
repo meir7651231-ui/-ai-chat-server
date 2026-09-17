@@ -401,7 +401,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     override fun onReady() { main.post { if (!pageReady) { pageReady = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } } } } }
     fun heyOff() { heyOn = false; Prefs.setHey(this, false); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) {}; listening = false }; unmuteSystem() }
-    override fun onCmd(cmd: String) { main.post { when (cmd) { "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "reload" -> web?.reload() } } }
+    override fun onCmd(cmd: String) { main.post { when (cmd) { "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "reload" -> main.postDelayed({ web?.reload() }, 1500) } } }
     override fun onCrashSaved(id: String) { main.post { Prefs.clearCrash(this); showLabel("דוח הקריסה נשלח לליבה", 4000) } }
     override fun onTasks(summary: String, n: Int, blocked: Int) { main.post { taskSummary = summary; taskBlocked = blocked; if (n > 0) status = "מחובר · $n משימות" + (if (blocked > 0) " · $blocked מחכות לך" else "") } }
     override fun onPageTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
@@ -414,8 +414,11 @@ class BubbleService : Service(), LibaWeb.Bridge {
             reason.contains("rate") -> "יותר מדי מהר. חכה רגע."
             reason.isBlank() -> "" else -> "סיבה: $reason" }
         showLabel("לא נשלח" + (if (reason.isNotBlank()) " · $reason" else ""), 8000); speak("לא הצלחתי לשלוח. $why") } }
-    override fun onSay(text: String, kind: String, options: List<String>) { main.post {
+    override fun onSay(text: String, kind: String, options: List<String>, speaker: String) { main.post {
         sentAt = 0; status = "מחובר."; waitTimer?.let { main.removeCallbacks(it) }
+        // step 14: a different voice per speaker – ליבה neutral, המנהל lower, האדריכל higher, others slightly low
+        val pitch = when { speaker.isBlank() || speaker.contains("ליבה") -> 1.0f; speaker.contains("מנהל") -> 0.8f; speaker.contains("אדריכל") -> 1.2f; else -> 0.9f }
+        try { tts?.setPitch(pitch) } catch (e: Exception) {}
         Prefs.log(this, "liba", text)
         val ask = options.isNotEmpty() || kind == "stuck" || kind == "call" || kind == "ask"
         val spoken = text + if (options.isNotEmpty()) ". " + options.joinToString(", או ") + "?" else ""

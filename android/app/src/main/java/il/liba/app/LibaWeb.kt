@@ -22,7 +22,7 @@ object LibaWeb {
   var ready=false;
   window.addEventListener('message',function(e){var d=e.data;if(!d||!d.liba||!window.LibaBridge)return;
     if(d.liba==='ready'){ready=true;LibaBridge.ready();}
-    else if(d.liba==='say'){LibaBridge.say(String(d.text||''),String(d.kind||'say'),JSON.stringify(d.options||[]));}
+    else if(d.liba==='say'){LibaBridge.say(String(d.text||''),String(d.kind||'say'),JSON.stringify(d.options||[]),String(d.speaker||''));}
     else if(d.liba==='sent'){LibaBridge.sent(String(d.text||''));}
     else if(d.liba==='error'){LibaBridge.error(String(d.text||''),String(d.reason||''));}
     else if(d.liba==='tap'){LibaBridge.tap();}
@@ -41,7 +41,7 @@ object LibaWeb {
     interface Bridge {
         fun onPage(url: String)
         fun onReady()
-        fun onSay(text: String, kind: String, options: List<String>)
+        fun onSay(text: String, kind: String, options: List<String>, speaker: String)
         fun onSent(text: String)
         fun onError(text: String, reason: String)
         fun onPageTap()
@@ -52,9 +52,9 @@ object LibaWeb {
 
     private class JsBridge(val b: Bridge) {
         @JavascriptInterface fun ready() = b.onReady()
-        @JavascriptInterface fun say(text: String, kind: String, optionsJson: String) {
+        @JavascriptInterface fun say(text: String, kind: String, optionsJson: String, speaker: String) {
             val opts = try { val a = org.json.JSONArray(optionsJson); List(a.length()) { a.getString(it) } } catch (e: Exception) { emptyList() }
-            b.onSay(text, kind, opts)
+            b.onSay(text, kind, opts, speaker)
         }
         @JavascriptInterface fun sent(text: String) = b.onSent(text)
         @JavascriptInterface fun error(text: String, reason: String) = b.onError(text, reason)
