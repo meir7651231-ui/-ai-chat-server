@@ -338,6 +338,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private enum class State { IDLE, LISTENING, WAKE, SPEAKING, RINGING, SENDING, OFFLINE }
     private fun setState(s: State) {
         val d = dot ?: return
+        if (s == State.IDLE || s == State.WAKE || s == State.OFFLINE) schedulePeek() else unpeek()
+        if (s == State.LISTENING && d.mode != OrbView.Mode.LISTENING) haptic()
         val speakerColor = when { curSpeaker.contains("מנהל") -> OrbView.VIOLET; curSpeaker.contains("אדריכל") || curSpeaker.contains("עובד") || curSpeaker.contains("סוכן") -> OrbView.MINT; else -> OrbView.CYAN }
         when (s) {
             State.IDLE -> d.set(OrbView.Mode.IDLE, OrbView.CYAN)
@@ -363,20 +365,21 @@ class BubbleService : Service(), LibaWeb.Bridge {
         root.addView(d, FrameLayout.LayoutParams(size, size).apply { gravity = Gravity.TOP or Gravity.END })
         root.addView(l, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.END; topMargin = size + dp(6f).toInt() })
         val lp = WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, PixelFormat.TRANSLUCENT)
-        lp.gravity = Gravity.TOP or Gravity.END; lp.x = dp(12f).toInt(); lp.y = dp(160f).toInt()
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, PixelFormat.TRANSLUCENT)
+        lp.gravity = Gravity.TOP or Gravity.END; lp.x = 0; lp.y = dp(160f).toInt()
         wm.addView(root, lp)
+        bubbleLp = lp; bubbleSize = size
         bubble = root; dot = d; label = l
         setState(State.OFFLINE)
         var sx = 0f; var sy = 0f; var ox = 0; var oy = 0; var moved = false; var downAt = 0L
         val longPress = Runnable { if (!moved) { moved = true; toggleMenu(root, size) } }
         d.setOnTouchListener { _, ev ->
             when (ev.actionMasked) {
-                MotionEvent.ACTION_DOWN -> { sx = ev.rawX; sy = ev.rawY; ox = lp.x; oy = lp.y; moved = false; downAt = SystemClock.uptimeMillis(); d.press(true); main.postDelayed(longPress, 600); true }
+                MotionEvent.ACTION_DOWN -> { snapAnim?.cancel(); unpeek(); sx = ev.rawX; sy = ev.rawY; ox = lp.x; oy = lp.y; moved = false; downAt = SystemClock.uptimeMillis(); d.press(true); main.postDelayed(longPress, 600); true }
                 MotionEvent.ACTION_MOVE -> { val dx = sx - ev.rawX; val dy = ev.rawY - sy
                     if (abs(dx) > dp(6f) || abs(dy) > dp(6f)) { moved = true; main.removeCallbacks(longPress) }
                     lp.x = (ox + dx).toInt(); lp.y = (oy + dy).toInt(); clampBubble(lp, size); wm.updateViewLayout(root, lp); true }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> { main.removeCallbacks(longPress); d.press(false); if (!moved && SystemClock.uptimeMillis() - downAt < 600) onTap(); true }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> { main.removeCallbacks(longPress); d.press(false); if (!moved && SystemClock.uptimeMillis() - downAt < 600) { haptic(); onTap() } else if (moved && menu == null) snapToEdge(); schedulePeek(); true }
                 else -> false
             }
         }
@@ -385,6 +388,27 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val dm = resources.displayMetrics
         lp.x = lp.x.coerceIn(0, (dm.widthPixels - size).coerceAtLeast(0)); lp.y = lp.y.coerceIn(0, (dm.heightPixels - size - dp(40f).toInt()).coerceAtLeast(0))
     }
+    // premium feel: the orb docks to the nearest edge with a spring, then tucks itself a little when nobody is using it
+    private var bubbleLp: WindowManager.LayoutParams? = null; private var bubbleSize = 0
+    private var snapAnim: ValueAnimator? = null; private var peeked = false
+    private val peekRun = Runnable { peek() }
+    private fun snapToEdge() {
+        val root = bubble ?: return; val lp = bubbleLp ?: return; val w = resources.displayMetrics.widthPixels
+        val target = if (lp.x + bubbleSize / 2 < w / 2) 0 else (w - bubbleSize).coerceAtLeast(0)
+        snapAnim?.cancel()
+        snapAnim = ValueAnimator.ofInt(lp.x, target).apply { duration = 340; interpolator = android.view.animation.OvershootInterpolator(1.1f)
+            addUpdateListener { lp.x = it.animatedValue as Int; runCatching { wm.updateViewLayout(root, lp) } }; start() }
+    }
+    private fun schedulePeek() { main.removeCallbacks(peekRun); main.postDelayed(peekRun, 9000) }
+    private fun peek() {
+        val root = bubble ?: return; val lp = bubbleLp ?: return
+        if (menu != null || label?.visibility == View.VISIBLE || listening || speaking || tts?.isSpeaking == true) { schedulePeek(); return }
+        val w = resources.displayMetrics.widthPixels; val dockedRight = lp.x < w / 2
+        peeked = true; root.animate().translationX(if (dockedRight) bubbleSize * 0.28f else -bubbleSize * 0.28f).alpha(0.86f).setDuration(420).setInterpolator(android.view.animation.DecelerateInterpolator()).start()
+    }
+    private fun unpeek() { main.removeCallbacks(peekRun); if (!peeked) return; peeked = false; bubble?.animate()?.translationX(0f)?.alpha(1f)?.setDuration(220)?.start() }
+    private fun haptic() { try { val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT >= 29) v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)) else @Suppress("DEPRECATION") v.vibrate(12) } catch (e: Exception) {} }
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
         super.onConfigurationChanged(newConfig) // fix 9: fold / unfold / rotate – keep the bubble on the visible screen
         val root = bubble ?: return; val lp = root.layoutParams as? WindowManager.LayoutParams ?: return
@@ -428,8 +452,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
     private var labelHide: Runnable? = null
     private fun showLabel(text: String, ms: Long) {
-        val l = label ?: return; l.text = text; l.visibility = View.VISIBLE
-        labelHide?.let { main.removeCallbacks(it) }; labelHide = Runnable { l.visibility = View.GONE }.also { main.postDelayed(it, ms) }
+        val l = label ?: return; l.text = text; unpeek()
+        if (l.visibility != View.VISIBLE) { l.alpha = 0f; l.translationY = -dp(6f); l.visibility = View.VISIBLE; l.animate().alpha(1f).translationY(0f).setDuration(180).start() }
+        labelHide?.let { main.removeCallbacks(it) }; labelHide = Runnable { l.animate().alpha(0f).setDuration(160).withEndAction { l.visibility = View.GONE; schedulePeek() }.start() }.also { main.postDelayed(it, ms) }
     }
     private fun onTap() {
         when {
