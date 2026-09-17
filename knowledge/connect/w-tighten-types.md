@@ -196,7 +196,7 @@ $ git status --short
 **אפס שינוי.** זה הפלט הנכון לעץ שכבר מהודק במלואו — `--gate` מאשר: `0 חתימות שניתן להדק
 ונותרו dynamic`. לא קיבעתי ולא ערכתי שום פלט ביד.
 
-### 4.3 · שבע חבלות-מכוונות (הפער נתפס ⇒ נסגר ⇒ **והאמת נשמרה**)
+### 4.3 · ארבע חבלות-מכוונות + בקרה-חיובית (הפער נתפס ⇒ נסגר ⇒ **והאמת נשמרה**)
 כל חבלה הורצה מול המנוע המתוקן. הסקריפטים ב-scratchpad, לא בריפו (רתמת-מדידה, לא מנוע).
 
 **מדידה 3 · `dart run` נכשל בשקט** (stub: `analyze` אמת · `run` ⇒ `exit 1`, אפס פלט — בדיוק הדפוס שהמציא 35 אדומות):
@@ -276,30 +276,74 @@ $ git cat-file -e 4feb63e4… ; git cat-file -e 294bd1cb…   ⇒ present · pre
 מנוהלים** (`git status` נשאר על שני הקבצים שלי). לכל עובד בקלון-טרי `learn` ייפול כך —
 פריט-סביבה, לא פריט-קוד.
 
-### 4.5 · `regen` המלא — הצעד החוסם עבר
+### 4.5 · `regen` המלא — **50 צעדים · 0 כשלים**
 
 אותה רשימה ש-ship/one מריצים (`REGEN` מ-`regen.mjs`, `runRegen` עם `spawnSync` כמו ב-ship;
 המריץ ממשיך אחרי כשל-שלב כדי לראות את כל הצנרת — רתמת-מדידה ב-scratchpad, לא בריפו):
 ```
-[1s]  ✓ 0.6s   ds-forge
-[1s]  ✓ 0.1s   entity-terms        [1s]  ✓ 0.0s  enum-values      [1s]  ✓ 0.1s  auto-skin
-[40s] ✓ 39.4s  tighten-types --record --apply     ← היה ✗ exit=1 · 24.3s · "35 קופסאות אדומות"
-[40s] ✓ 0.1s   logic-census        [40s] ✓ 0.1s  oracle --write   [41s] ✓ 0.2s  auto-logic
-[41s] ✓ 0.3s   frag-ops            [42s] ✓ 1.5s  synth            [43s] ✓ 0.3s  skin-golden
-[43s] ✓ 0.1s   core-from-shape     [43s] ✓ 0.1s  core-dart        [44s] ✓ 1.2s  app-from-sentences
-[…]   behavior-plan (‏~1,000s לפי w-regen-oom §3.2) ⇒ behavior-compose · peruk · 31×app-ds · balagan · server
-```
-**‏`tighten-types` ירוק בתוך הצנרת: exit 0 · 39.4s.** הצעד היחיד שנכשל ב-regen של w-regen-oom
-אינו נכשל עוד. ובאותה נקודה בצנרת:
-```
-$ git status --short          # אחרי app-from-sentences, לפני behavior-plan
-?? knowledge/connect/…        # הדוח בלבד
-```
-**אפס קבצים מנוהלים שונו** — במקום ש-`tighten` ירפף 76 חתימות ויכתוב מחדש שני JSON.
+[1s]    ✓ 0.6s     ds-forge
+[1s]    ✓ 0.1s     entity-terms      [1s]    ✓ 0.0s  enum-values   [1s]    ✓ 0.1s  auto-skin
+[40s]   ✓ 39.4s    tighten-types --record --apply    ← היה ✗ exit=1 · 24.3s · «35 קופסאות אדומות»
+[40s]   ✓ 0.1s     logic-census      [40s]   ✓ 0.1s  oracle --write [41s]  ✓ 0.2s  auto-logic
+[41s]   ✓ 0.3s     frag-ops          [42s]   ✓ 1.5s  synth          [43s]  ✓ 0.3s  skin-golden
+[43s]   ✓ 0.1s     core-from-shape   [43s]   ✓ 0.1s  core-dart      [44s]  ✓ 1.2s  app-from-sentences
+[1125s] ✓ 1080.5s  behavior-plan
+[1125s] ✓ 0.3s     behavior-compose  [1125s] ✓ 0.1s  peruk --all
+[1126s…] ✓ 31 × app-ds (‏0.6–0.7s כל אחד)
+[1147s] ✓ 0.6s     balagan           [1147s] ✓ 0.0s  server
 
-‏**זנב-הצנרת (‏behavior-plan ⇒ server) עדיין בריצה בשעת הקומיט הזה** ולכן אינו מדווח כאן;
-הוא נמדד ומצורף בקומיט-המשך (‏w-regen-oom מדד את אותו זנב ירוק, 1,054s בסך-הכל). מה שהגל הזה
-היה אמור לשנות — הצעד החוסם — נמדד ומדווח למעלה.
+סה"כ 1147s · צעדים 50 · כשלים: 0        (real 19m6.751s)
+```
+| | exit | הצעד החוסם |
+|---|---|---|
+| ‏w-regen-oom §3.6 (בסיס) | **1 כשל** | ‏`tighten-types` ✗ exit=1 · 24.3s · `why` ריק |
+| כאן | **0 כשלים** | ‏`tighten-types` **✓ exit 0 · 39.4s** |
+
+### 4.6 · רגרסיה: `git status` אחרי `regen` — **אפס בפלטי-ההידוק**, והשאר מוסבר עד השורה
+```
+$ git status --short | wc -l
+126
+$ git status --short | awk '{print $1, $2}' | sed 's#/[^/]*$##' | sort | uniq -c | sort -rn
+     32 M  new/dart-gen-bs          32 M  new/dart-data-bs/auto
+     31 ?? new/dart-gen-bs          31 ?? new/dart-data-bs/auto
+$ git status --short new/dart-maor machtzev/generator/tighten-{applied,rejected}.json machtzev/generator/type-evidence.json | wc -l
+0
+```
+**‏0 — כל ארבעת פלטי-ההידוק זהים-לבייט למחויב** (מול 78 קבצים ב-w-regen-oom §3.6, שמהם 76
+חתימות רופפו). ומכיוון שהם לא זזו, גם כל מה שקורא אותם החזיר פלט זהה-לבייט: `logic-census` ·
+`oracle` · `auto-logic` · **`behavior-plan.json`** — אף אחד מהם אינו ב-`git status`. ‏(ב-regen
+של w-regen-oom הקטלוג זז מתחת לבורר בגלל 76 ההידוקים שנפלו: מועמדים 1,163⇒1,358. עכשיו הוא
+לא זז בכלל.)
+
+**‏126 הקבצים כולם פלט של `app-ds`, וכולם קדמו לגל הזה:**
+| # | מה | ראיה |
+|---|---|---|
+| ‏31 `??` `*_wizard.dart` + 31 `??` `dart-data-bs/auto` | מסך-האשף **נוצר ואינו מחויב** — אותה קבוצה שתועדה ב-w-regen-oom §3.6 | ‏`git status` ⇒ `??` (אין גרסה מחויבת להשוות אליה) |
+| ‏31 `M` `*_hub.dart` | **חיווט האשף בלבד**: `+import …_wizard.dart` ×28 · `+DsNavTile(… WizardScreen())` ×28 · `_vis` גדל באריח אחד ×30 | ‏`git diff -U0 … \| sed 's/[0-9]\+/N/g' \| sort \| uniq -c` — שלוש צורות-שורה, אפס אחרות |
+| ‏1 `M` `gen_app_peruk12_ent1.dart` | פלט-`app-ds` **מיושן**, לא שלי | להלן |
+
+הקובץ הבודד שאינו חיווט-אשף (`_labelsAll` הוזז מ-`c9,c10,c11,c13,c14,c15` ל-`c9…c14`;
+‏`import maps-search-url.dart` נשמט) — **הפלט המחויב מקדים את מנועיו בימים**:
+```
+$ git log --oneline -1 -- new/dart-gen-bs/gen_app_peruk12_ent1.dart
+de8e89d0  2026-09-08T23:59:00Z   גל G33 ב׳-כד
+$ git log -1 --format=%cI 9490fc1d   # spec-lang.data.json (G57)   ⇒ 2026-09-10T12:27:06Z
+$ git log -1 --format=%cI ccf861e5   # app-ds.mjs        (up-plan) ⇒ 2026-09-17T10:30:19Z
+```
+והמדידה שמכריעה — **העץ הוחזר למצב-המחויב ו-`app-ds` הורץ לבדו, אפס `tighten`:**
+```
+$ git checkout -- new/ && git clean -fdq new/dart-gen-bs new/dart-data-bs && git status --short | wc -l
+0
+$ node machtzev/generator/app-ds.mjs -f machtzev/generator/specs-ds/peruk12.txt --name peruk12 --skin
+exit=0
+$ git diff --stat new/dart-gen-bs/gen_app_peruk12_ent1.dart
+ 1 file changed, 13 insertions(+), 28 deletions(-)
+```
+אותו דיף מופיע **בלי שהשינוי הזה נוגע בכלום**. פריט-חוב של `app-ds` (פלט מחויב שלא חודש אחרי
+‏G57/up-plan), לא רגרסיה של הגל.
+
+**העץ הוחזר למצב-המחויב בסוף המדידה** (`git checkout -- new/` + `git clean -fdq` לפי נתיבים
+מפורשים ⇒ `git status --short` = 0). **לא קיבעתי ולא ערכתי שום פלט ביד.**
 
 ---
 

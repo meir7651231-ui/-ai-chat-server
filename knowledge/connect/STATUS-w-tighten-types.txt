@@ -20,9 +20,13 @@ w-tighten-types · claude/w-tighten-types-260917 · בסיס claude/up-connect-2
 [17] בקרה-חיובית (אותו הידוק ממתין, כלי אמיתי): הודקו 1/1 · שלוש השכבות אישרו · הפנקס חזר ל-105 — השומרים אינם חוסמים עבודה אמיתית
 [18] --gate ירוק (0.7s) · pins-check --write (139 מקובעים) · police --fast ירוקה: 45 ran · 13 skipped · 0 yellow · 0 failed · מרשם 58
 [19] שתי אדומות בדרך: pins (שלי — tighten-types.mjs מקובע ⇒ pins-check --write באותו commit) · learn (קלון-שטוח: 9 בלובים MISSING ב-git cat-file -e, present אחרי git fetch --unshallow, אפס שינוי בקבצים מנוהלים)
-[20] regen המלא (REGEN מ-regen.mjs · runRegen+spawnSync כמו ship): tighten-types --record --apply ⇒ ✓ exit 0 · 39.4s — הצעד שחסם את ship/one כבר אינו חוסם. 14 הצעדים עד app-from-sentences ירוקים (44s), ובאותה נקודה git status = 0 קבצים מנוהלים (לפני: 76 רופפו + 2 JSON)
-[21] זנב-הצנרת (behavior-plan ~1,000s ⇒ behavior-compose · peruk · 31×app-ds · balagan · server) היה בריצה בשעת הקומיט — נמדד ומצורף בקומיט-המשך
+[20] regen המלא (REGEN מ-regen.mjs · runRegen+spawnSync כמו ship): 50 צעדים · 0 כשלים · 1147s (real 19m6.751s) — ובתוכו tighten-types --record --apply ⇒ ✓ exit 0 · 39.4s. הצעד היחיד שנכשל ב-regen של w-regen-oom אינו נכשל עוד (behavior-plan 1080.5s ✓)
+[21] רגרסיה בפלטי-ההידוק אחרי regen: git status --short new/dart-maor tighten-applied.json tighten-rejected.json type-evidence.json ⇒ 0 קבצים — זהים-לבייט למחויב (לפני: 78 קבצים, 76 מהם חתימות שרופפו). ומכיוון שלא זזו, גם logic-census/oracle/auto-logic/behavior-plan.json החזירו פלט זהה-לבייט ואינם ב-git status (ב-regen הקודם הקטלוג זז: מועמדים 1,163⇒1,358)
+[22] 126 הקבצים שכן השתנו הם כולם פלט app-ds וקדמו לגל: 31+31 ?? מסכי-אשף שנוצרים ואינם מחויבים (אותה קבוצה שתועדה ב-w-regen-oom §3.6) · 31 M האבים עם חיווט-האשף בלבד (שלוש צורות-שורה, נמדד ב-uniq -c על הדיף) · קובץ אחד (gen_app_peruk12_ent1.dart) שהוא חוב-app-ds: הפלט המחויב מ-2026-09-08 מקדים את spec-lang (2026-09-10) ואת app-ds.mjs (2026-09-17), והדיף משוחזר על עץ ≡ HEAD בהרצת app-ds לבדה, אפס tighten
+[23] העץ הוחזר למצב-המחויב בסוף המדידות (git checkout -- new/ + git clean -fdq לפי נתיבים מפורשים ⇒ git status --short = 0). אפס קיבוע-ידני, אפס עריכת-פלט ביד
 
 BLOCKED (נעוץ, טלאי מוצע בדוח §5): machtzev/LEARNINGS.md — L111/L111ב/L111ג/L111ד
 לא שונו: 6 סבבי-ההוכחות · אלגוריתם-הייחוס · generalize/dartType · כלל-ה-probe (L89) · שלוש השכבות וסדרן · plan/record/--gate · מבנה הפנקס והדחיות
 פתוח למנהל: 4 מנועים עם אותו פותר-שלישי (emit/fuzz-parity · emit/parity-ast · emit/parity-js-dart · tools/dart-test) — לא נגעתי, מחוץ למנדט
+
+DONE · 23 מדידות
