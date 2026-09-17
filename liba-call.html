@@ -111,7 +111,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 let handsFree=true,busy=false,seen=null,appMode=false,lastAsk=null;
 function post(kind,extra){try{window.parent.postMessage(Object.assign({liba:kind},extra||{}),'*');}catch(e){}}
 window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d=e.data;if(!d||!d.liba)return;
-  if(d.liba==='hello'){appMode=true;armed=true;try{db.doc('channel/device').set({app:d.ver||'',page:27,at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(()=>{});}catch(e){}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post('ready',{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+  if(d.liba==='hello'){appMode=true;armed=true;try{if(!window.__devSent){window.__devSent=true;db.doc('channel/device').set({app:d.ver||'',page:28,at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(()=>{});}}catch(e){}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post('ready',{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba==='crash'&&d.text&&db){db.doc('crashes/'+(d.id||Date.now())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post('crashSaved',{id:d.id})).catch(e=>log('crash: '+(e.code||e)));}
   else if(d.liba==='input'&&d.text){pendingInput=String(d.text);post('tap',{});clearTimeout(pendingT);pendingT=setTimeout(()=>{if(pendingInput){const t=pendingInput;pendingInput=null;send(t);}},1500);}
 });
@@ -191,9 +191,9 @@ function switchOwner(text){const t=text.replace(/[?!.,]/g,'').trim();if(quietCmd
   /* simple rule: a sentence that starts with "ליבה" is for ליבה; one that starts with "מנהל" is for the manager */
   if(/ליבה/.test(t)&&/(תחזור|תחזרי|חזור|חזרי)/.test(t)){const rest=t.replace(/ליבה|תחזור|תחזרי|חזור|חזרי|[, ]+/g,' ').trim();setOwner('liba');if(rest.length>3){setTimeout(()=>send(rest),400);}return true;}
   if(owner==='manager'&&/^(תחזור|תחזרי|חזור|חזרי)$/.test(t)){return setOwner('liba');}
-  if(owner==='manager'&&/^(היי |הי )?ליב[הא]\b/.test(t)){owner='liba';db.doc('channel/owner').set({owner:'liba',since:Date.now()}).catch(()=>{});return false;}
+  if(owner==='manager'&&/^(היי |הי )?ליב[הא](?=\s|$)/.test(t)){owner='liba';db.doc('channel/owner').set({owner:'liba',since:Date.now()}).catch(()=>{});return false;}
   if((/(תעלה|העלה|תן ל|תעביר ל).*(מנהל)/.test(t)||/^מנהל$/.test(t))){return setOwner('manager');}
-  if(owner==='liba'&&/^(היי |הי )?מנהל\b/.test(t)){owner='manager';db.doc('channel/owner').set({owner:'manager',since:Date.now()}).catch(()=>{});return false;}
+  if(owner==='liba'&&/^(היי |הי )?מנהל(?=\s|$)/.test(t)){owner='manager';db.doc('channel/owner').set({owner:'manager',since:Date.now()}).catch(()=>{});return false;}
   return false;}
 async function setOwner(o){owner=o;try{await db.doc('channel/owner').set({owner:o,since:Date.now()});}catch(e){log('owner: '+(e.code||e));}
   const msg=o==='liba'?'ליבה על הקו.':'המנהל על הקו. ליבה שותקת עד שתגיד ליבה תחזור.';bubble('li',msg);if(appMode)post('say',{text:msg,kind:'say',options:[]});else say(msg);return true;}
@@ -231,7 +231,7 @@ async function idleListen(){app.className='';KIND.textContent='';H.className='';
 
 async function incoming(d){
   if(d.kind==='cmd'){try{await db.doc('inbox/'+d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){log('cmd ack: '+(e.code||e));}if(appMode)post('cmd',{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return;}
-  cur=d;seen=d.id;try{localStorage.setItem('liba.seen',d.id);}catch(e){}
+  cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem('liba.seen',d.id);}catch(e){}
   if(rec){try{rec.abort();}catch(e){}}
   busy=true;TR.querySelectorAll('.think').forEach(x=>x.remove());
   const k=d.kind||'say';let ak=(d.priority==='urgent'&&(k==='say'||k==='ask'))?'call':k;
@@ -258,7 +258,7 @@ $('ack').addEventListener('click',()=>send('הבנתי, תמשיך'));
 /* steps 16-18: outbox (offline), auto-retry, duplicate guard */
 let outbox=[];try{outbox=JSON.parse(localStorage.getItem('liba.outbox')||'[]');}catch(e){}
 function saveOutbox(){try{localStorage.setItem('liba.outbox',JSON.stringify(outbox));}catch(e){}}
-let lastSent={text:'',ts:0};
+let lastSent={text:'',ts:0},lastIncomingAt=0;
 const RETRYABLE=r=>/network|fetch|timeout|unavailable|rate|503|502|429|offline|aborted|internal/i.test(r);
 async function deliver(text){
   let reason='no_comments';
@@ -288,7 +288,7 @@ async function send(text){
   if(switchOwner(text)){post('sent',{text});return;}
   if(busy){sendQ.push(text);post('queued',{text});return;}busy=true;const id=cur?cur.id:'free';cur=null;
   $('typed').value='';OPTS.innerHTML='';$('ack').hidden=true;HEARD.hidden=true;
-  if(text===lastSent.text&&Date.now()-lastSent.ts<20000){log('כפילות – לא נשלח שוב');post('sent',{text,dup:true});busy=false;return;}
+  if(text===lastSent.text&&Date.now()-lastSent.ts<20000&&lastIncomingAt<lastSent.ts){log('כפילות – לא נשלח שוב');post('sent',{text,dup:true});busy=false;return;}
   bubble('me',text);const th=bubble('li think','ליבה חושבת…');
   try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<10*60*1000)){db.doc('decisions/log').collection('items').doc(String(Date.now())).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(()=>{});lastAsk=null;}}catch(e){}
   try{if(memSettings.logTurns)await db.doc('chat/log').collection('turns').doc(String(Date.now())).set({from:'user',speaker:'מאיר',to:owner,text,re:id,ts:Date.now()});}catch(e){}
