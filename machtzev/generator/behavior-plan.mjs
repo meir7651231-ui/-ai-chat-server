@@ -749,7 +749,11 @@ async function runGoal(goalPath, opts = {}) {
   const t0 = Date.now();
   // קובץ-המטרה = JSON (`{text, needs?}`) **או טקסט-מטרה גולמי**. הבעלים כותב מטרה, לא JSON.
   const raw = fs.readFileSync(goalPath, 'utf8');
-  const goal = /^\s*\{/.test(raw) ? JSON.parse(raw) : { text: raw.split('\n').filter((l) => l.trim())[0] || '' };
+  // קובץ-טקסט ⇒ **כל הקובץ** היא המטרה, לא שורתו הראשונה. נמדד: `--goal specs/quest2.txt`
+  //   החזיר 0 תביעות (שורה 1 = כותרת בלי פועל) בעוד `--perok-scan`, שקורא את הקובץ
+  //   השלם, מצא 2 תביעות ו-1 צורך — שני מסלולים של אותו מנוע שחלקו על אותו קלט.
+  //   קובץ שבו כל שורה היא מטרה נפרדת (‏goals-5.txt) נמדד שורה-שורה ע"י `--perok-scan`.
+  const goal = /^\s*\{/.test(raw) ? JSON.parse(raw) : { text: raw.trim() };
   const text = String(goal.text || '').trim();
   if (!text) throw new Error('--goal: אין "text" (המטרה בעברית) בקובץ-המטרה');
   const ns = opts.ns || path.basename(goalPath).replace(/\.(json|txt)$/, '');

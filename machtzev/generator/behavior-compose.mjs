@@ -27,8 +27,20 @@ import { treeDart } from './logic-proof.mjs';   // up-compose · אותו מיפ
     const camel = (id) => { const last = id.split('.').pop(); return 'bh' + last.charAt(0).toUpperCase() + last.slice(1); };
     const names = new Map(); const fns = []; const imports = new Set(); const proofs = []; const skipped = [];
     let i = 0;
-    for (const [id, p] of Object.entries(plan)) {
-      const need = p.need || {}; if (!p.pick || !p.tree) { skipped.push(id); continue; }
+    for (let [id, p] of Object.entries(plan)) {
+      const need = p.need || {};
+      if (!p.pick) { skipped.push(id); continue; }
+      // 🔴 ירוק-חלול שנמדד: צורך שנפתר ע"י **אטום-יחיד** (‏`{pick, chain:null, tree:null}` —
+      //   מסלול-המועמד-היחיד) או ע"י **שרשרת-מדור** נפל כאן ל-`skipped`, בעוד `planNeeds`
+      //   ספר אותו «נפתר». התוצאה: «1/1 צרכים מוכחים · exit 0» עם **קובץ-Dart ריק**
+      //   (נמדד על `--goal specs/quest2.txt` ⇒ `lengthList`). הפלט חייב לשקף את הבחירה,
+      //   ולכן העץ נבנה כאן מהבחירה עצמה במקום להישמט בשקט.
+      const P0 = (need.params || []).map((_, j) => ({ k: 'p', i: j }));
+      const tree = p.tree
+        || (p.chain ? { k: 'a', id: p.chain[1].id, file: p.chain[1].file, args: [{ k: 'a', id: p.chain[0].id, file: p.chain[0].file, args: P0 }] }
+          : (p.file ? { k: 'a', id: p.pick, file: p.file, args: P0 } : null));
+      if (!tree) { skipped.push(id); continue; }
+      p = { ...p, tree };
       let name = camel(id); while ([...names.values()].includes(name)) name += '_'; names.set(id, name);
       const { imports: imps, expr } = treeDart(p.tree, i++, rel); imps.forEach((x) => imports.add(x));
       // הידוק-טיפוס מהאטום (לא המרה שקטה): פרמטר-צורך 'num' שזורם ישירות לשקע 'int'/'double' של האטום ⇒ החתימה הנפלטת מהודקת לטיפוס-האטום (הדוגמאות שהוכיחו הן אלה שעברו). נמדד: pp(int,String) מול num ⇒ שגיאת-קומפילציה
