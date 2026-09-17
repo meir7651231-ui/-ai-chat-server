@@ -3,4 +3,8 @@ w-regen-oom · צנרת-המחולל נופלת ב-behavior-plan (OOM)
 [2] אומת באג-בחירה: השרשרת-הזוכה formatIsraeliPhone∘normPhone יושבת במקום 800,193 בסדר-הגנרטור ⇒ נופלת מחוץ ל-CAP2=100000 ⇒ הבחירה אבדה עוד לפני שהזיכרון נגמר
 [3] אותרה סיבת-הזיכרון במדידה: 26MB חיים מול 7,474MB ערמה — lambdas() בנתה 22,805,874 צירופים בפעימה אחת (reduce+flatMap) לפני בדיקת-עלות
 [4] שודרג המנוע (זרימה · העמקה-לפי-עלות · גזם-ענף · שומר-הטובים) — צורך חיצוני x.phoneShow: 2m12s/6,773MB ⇒ 41s/283MB, אותו pick בדיוק
-IN-PROGRESS · 4 מדידות
+[5] הצעד עצמו רץ עד הסוף: node machtzev/generator/behavior-plan.mjs ⇒ exit 0 · 1,018s · שיא-RSS 285MB (ps כל 5 שנ׳ ו-VmHWM) — היעד <4,000MB
+[6] 43/43 צרכים נפתרו · 43 מוכחים · 1 בשרשרת (phone.fmtSafe) — ו-0 שינויי-pick מול ה-JSON המחויב (גם file וגם chain זהים)
+[7] --gate ירוק (0.6s) · police --fast ירוקה (45 ran · 0 failed) בקומיט 6a1355bb
+[8] רגרסיה על צורך חיצוני, שני המסלולים: values 39.5s⇒34.8s · blind 2m12s/6,773MB⇒41s/283MB — pick·file·top3 זהים
+IN-PROGRESS · 8 מדידות
