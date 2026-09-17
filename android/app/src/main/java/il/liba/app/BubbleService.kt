@@ -99,10 +99,12 @@ class BubbleService : Service(), LibaWeb.Bridge {
 
     // ---------- hidden WebView (the live ליבה page) ----------
     private fun setupWeb() {
-        val host = FrameLayout(this)
+        val host = FrameLayout(this).apply { clipChildren = true; clipToPadding = true }
         val w = WebView(this)
         LibaWeb.setup(w, this)
-        host.addView(w, FrameLayout.LayoutParams(dp(1f).toInt(), dp(1f).toInt()))
+        // A real-sized viewport inside a 1px window: lazy iframes only load when they are "in view".
+        val dm = resources.displayMetrics
+        host.addView(w, FrameLayout.LayoutParams(dm.widthPixels.coerceAtLeast(720), dm.heightPixels.coerceAtLeast(1280)))
         val lp = WindowManager.LayoutParams(dp(1f).toInt(), dp(1f).toInt(), WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSLUCENT)
         lp.gravity = Gravity.TOP or Gravity.START; lp.alpha = 0.01f
@@ -179,11 +181,23 @@ class BubbleService : Service(), LibaWeb.Bridge {
         labelHide = Runnable { l.visibility = View.GONE }.also { main.postDelayed(it, ms) }
     }
 
+    @Volatile var pageState = "טוען את הדף…"
+    override fun onPage(url: String) { main.post {
+        pageState = when {
+            url.startsWith("error:") -> "הדף לא נטען: " + url.removePrefix("error:")
+            url.contains("/login") || url.contains("auth") -> "צריך להתחבר ל‑claude.ai – לחיצה ארוכה עליי, כבה בועה, התחבר, הפעל שוב"
+            url.contains("/artifact/") -> "הדף נטען, מחכה שהוא יתחבר…"
+            else -> "נטען: " + url.take(60)
+        }
+        if (!pageReady) showLabel(pageState, 6000)
+        web?.let { LibaWeb.hello(it) }
+    } }
+
     private fun onTap() {
         when {
             listening -> sr?.stopListening()
             tts?.isSpeaking == true -> { tts?.stop(); setState(State.IDLE) }
-            !pageReady -> { showLabel("עוד לא מחובר לדף – פתח את ליבה והתחבר ל‑claude.ai", 4000); web?.let { LibaWeb.hello(it) } }
+            !pageReady -> { showLabel(pageState, 6000); web?.let { LibaWeb.hello(it); if (pageState.startsWith("הדף לא")) it.reload() } }
             else -> startListening()
         }
     }

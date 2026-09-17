@@ -3,6 +3,7 @@ package il.liba.app
 import android.annotation.SuppressLint
 import android.util.Log
 import android.webkit.*
+import android.webkit.WebResourceError
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
 import org.json.JSONObject
@@ -32,6 +33,7 @@ object LibaWeb {
 """
 
     interface Bridge {
+        fun onPage(url: String)
         fun onReady()
         fun onSay(text: String, kind: String, options: List<String>)
         fun onSent(text: String)
@@ -67,6 +69,10 @@ object LibaWeb {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean = false
             override fun onPageFinished(view: WebView, url: String?) {
                 if (bridge != null) view.evaluateJavascript(TOP_SCRIPT, null) // fallback when document-start injection is unsupported
+                bridge?.onPage(url ?: "")
+            }
+            override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
+                if (request.isForMainFrame) bridge?.onPage("error:" + error.description)
             }
         }
         if (bridge != null) {
