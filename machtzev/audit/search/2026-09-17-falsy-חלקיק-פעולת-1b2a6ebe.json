@@ -1,0 +1,167 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:02:42.181Z",
+ "query": "falsy חלקיק פעולת-יסוד נחצב מתוך פרטי ציבורי",
+ "tokens": [
+  "falsy",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "פרטי",
+  "ציבורי"
+ ],
+ "oracle": {
+  "atomIndexSha": "d965a36dd6ecc6e551d681641370b034d2ca02eaf1ae441a0bb9c0bb2857b39d",
+  "logicCensusSha": "ce896454491c978033ff3a4bcee95fe5a96a14ee0a95834c2809d540a8c209c7",
+  "display": 1891,
+  "logic": 967
+ },
+ "candidates": [
+  {
+   "id": "NameChip",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/name_chip.dart",
+   "score": 2,
+   "hits": [
+    "תוך",
+    "פרטי"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 2,
+   "hits": [
+    "פעולת",
+    "תוך"
+   ]
+  },
+  {
+   "id": "AddTradeButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/add_trade_button.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "DsEnumField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_enum_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge10Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/10_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge11Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/card/11_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge12Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/media/12_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge14Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/selection/14_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge18Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/action/18_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge2Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/list/2_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge4Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/4_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge4AtomsInput",
+   "layer": "display",
+   "file": "dart-forge-bs/input/4_atoms_input.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge4AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/4_atoms_list.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge4AtomsSelection",
+   "layer": "display",
+   "file": "dart-forge-bs/selection/4_atoms_selection.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  }
+ ],
+ "strong": [],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart-maor/op-falsy.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד falsy(dynamic) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי ? · מקור למשל ?); אין מועמד-חזק באותה שכבה",
+ "sig": "1b2a6ebe0c064fa37b8be24655f36a29758799828b58130a4bb12833a0722ce0"
+}

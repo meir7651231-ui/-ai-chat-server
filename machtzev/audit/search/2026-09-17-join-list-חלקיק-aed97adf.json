@@ -1,0 +1,192 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:02:42.875Z",
+ "query": "join list חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "join",
+  "list",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "c05c72f855edfc604e7a4fabb25771b69a49b878e2f3e8451111f54028b2e083",
+  "logicCensusSha": "edf6426dc905ee6fc0f9204d344070c2f869757f0d3c455b4dffc8e3f4457433",
+  "display": 1893,
+  "logic": 969
+ },
+ "candidates": [
+  {
+   "id": "Forge4AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/4_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge5AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/5_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge6AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/6_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge7AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/7_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeBrandListRow",
+   "layer": "display",
+   "file": "dart-forge-bs/header/brand_list_row.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeBulletList",
+   "layer": "display",
+   "file": "dart-forge-bs/text/bullet_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeNumberedList",
+   "layer": "display",
+   "file": "dart-forge-bs/text/numbered_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeProfileRowList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/profile_row_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeSwitchRowList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/switch_row_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "BrandListRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/brand_list_row.dart",
+   "score": 3,
+   "hits": [
+    "list"
+   ]
+  },
+  {
+   "id": "cockpitWorkListText",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-work-list-text.dart",
+   "score": 3,
+   "hits": [
+    "list"
+   ]
+  },
+  {
+   "id": "deliveryListLines",
+   "layer": "logic",
+   "file": "dart-maor/delivery-list-lines.dart",
+   "score": 3,
+   "hits": [
+    "list"
+   ]
+  },
+  {
+   "id": "distributionListLines",
+   "layer": "logic",
+   "file": "dart-maor/distribution-list-lines.dart",
+   "score": 3,
+   "hits": [
+    "list"
+   ]
+  },
+  {
+   "id": "ForgedList",
+   "layer": "display",
+   "file": "dart-ui-bs/forged/forged_list.dart",
+   "score": 3,
+   "hits": [
+    "list"
+   ]
+  },
+  {
+   "id": "genJoinCode",
+   "layer": "logic",
+   "file": "dart-maor/gen-join-code.dart",
+   "score": 3,
+   "hits": [
+    "join"
+   ]
+  }
+ ],
+ "strong": [
+  "cockpitWorkListText",
+  "deliveryListLines",
+  "distributionListLines",
+  "genJoinCode"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "Forge4AtomsList",
+  "Forge5AtomsList",
+  "Forge6AtomsList",
+  "Forge7AtomsList",
+  "ForgeBrandListRow",
+  "ForgeBulletList",
+  "ForgeNumberedList",
+  "ForgeProfileRowList",
+  "ForgeSwitchRowList",
+  "BrandListRow",
+  "ForgedList"
+ ],
+ "creates": "new/dart-maor/op-join-list.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד joinList(List<dynamic>, String) => String שנחצב מכנית ע\"י ast_carve --ops (הביטוי categories.join('\\n') · מקור למשל dart/assistant_intent_prompt.dart#assistantIntentPrompt); המועמדים-החזקים cockpitWorkListText(Map, Map<String, String> T) => String · deliveryListLines(List<Map<String, dynamic>>, String Function(dynamic status) statusLabel, String Function(String) term) => List<String> · distributionListLines(Map<String, dynamic>, Object?, Object?, Map<String, dynamic> Function(Map<String, dynamic> db, dynamic component) itemOf, String Function(Map<String, dynamic> db, dynamic assignment, Object? config) beneficiaryLabel, Map<String, dynamic> T) => List<String> · genJoinCode(String) => String — לאף אחד אין את חתימת-הפעולה-לבדה (List<dynamic>, String) => String (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם",
+ "sig": "aed97adf7d504d78f09943193e844fa17455020eec0d7514625ea02e5d438af3"
+}

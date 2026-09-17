@@ -10,6 +10,16 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-abs-num.dart",
+  "name": "absNum",
+  "ret": "num",
+  "params": [
+   "num"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/academic-year-label.dart",
   "name": "academicYearLabel",
   "ret": "String",
@@ -140,6 +150,17 @@
   ],
   "argc": 2,
   "wireable": true
+ },
+ {
+  "file": "dart-maor/op-add-dyn.dart",
+  "name": "addDyn",
+  "ret": "dynamic",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
  },
  {
   "file": "dart-maor/advance-status.dart",
@@ -1485,6 +1506,17 @@
   ],
   "argc": 2,
   "wireable": false
+ },
+ {
+  "file": "dart-maor/op-cmp-ge-str.dart",
+  "name": "cmpGeStr",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
  },
  {
   "file": "dart-maor/cockpit-at-risk.dart",
@@ -3180,6 +3212,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-eq-bool.dart",
+  "name": "eqBool",
+  "ret": "bool",
+  "params": [
+   "bool",
+   "bool"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/receipt-html.dart",
   "name": "esc",
   "ret": "String",
@@ -3388,6 +3431,16 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/op-falsy.dart",
+  "name": "falsy",
+  "ret": "bool",
+  "params": [
+   "dynamic"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/fam-enrollments.dart",
   "name": "famEnrollments",
   "ret": "List<Object?>",
@@ -3514,6 +3567,17 @@
    "Iterable<String> Function(String id) propKeysFor"
   ],
   "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/op-field-is-not-null.dart",
+  "name": "fieldIsNotNull",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "String"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -5442,6 +5506,17 @@
    "Iterable<dynamic> Function(dynamic assignment) liveRedemptions"
   ],
   "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/op-join-list.dart",
+  "name": "joinList",
+  "ret": "String",
+  "params": [
+   "List<dynamic>",
+   "String"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
