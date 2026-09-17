@@ -236,7 +236,19 @@ class BubbleService : Service(), LibaWeb.Bridge {
     // ---------- bridge (from the page) ----------
     override fun onReady() { main.post { if (!pageReady) { pageReady = true; setState(State.IDLE); showLabel("ליבה מחוברת. לחץ עליי ודבר.", 4000) } } }
     override fun onSent(text: String) { main.post { setState(State.IDLE); showLabel("נשלח. מחכה לתשובה…", 30000) } }
-    override fun onError(text: String) { main.post { setState(State.IDLE); speak("לא הצלחתי לשלוח. נסה שוב.") } }
+    override fun onTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
+    override fun onError(text: String, reason: String) { main.post { setState(State.IDLE)
+        val why = when {
+            reason.contains("consent") -> "הדף צריך אישור חד פעמי. לחיצה ארוכה עליי, שלח הודעה אחת מהדף, ואשר."
+            reason.contains("no_session") -> "אין סשן של קלוד שמאזין עכשיו."
+            reason.contains("writers_only") || reason.contains("forbidden") || reason.contains("not_granted") -> "אין הרשאה לשלוח מהחשבון הזה."
+            reason.contains("rate") -> "יותר מדי מהר. חכה רגע."
+            reason.contains("gesture") || reason.contains("invalid") -> "השליחה דורשת נגיעה בדף. נסה שוב."
+            reason.isBlank() -> ""
+            else -> "סיבה: $reason"
+        }
+        showLabel("לא נשלח" + (if (reason.isNotBlank()) " · $reason" else ""), 8000)
+        speak("לא הצלחתי לשלוח. $why") } }
     override fun onSay(text: String, kind: String, options: List<String>) { main.post {
         val ask = options.isNotEmpty() || kind == "stuck" || kind == "call" || kind == "ask"
         val spoken = text + if (options.isNotEmpty()) ". " + options.joinToString(", או ") + "?" else ""

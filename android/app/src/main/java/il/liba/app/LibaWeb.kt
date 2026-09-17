@@ -24,7 +24,8 @@ object LibaWeb {
     if(d.liba==='ready'){ready=true;LibaBridge.ready();}
     else if(d.liba==='say'){LibaBridge.say(String(d.text||''),String(d.kind||'say'),JSON.stringify(d.options||[]));}
     else if(d.liba==='sent'){LibaBridge.sent(String(d.text||''));}
-    else if(d.liba==='error'){LibaBridge.error(String(d.text||''));}
+    else if(d.liba==='error'){LibaBridge.error(String(d.text||''),String(d.reason||''));}
+    else if(d.liba==='tap'){LibaBridge.tap();}
   });
   window.__libaHello=function(){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'hello'},'*');}catch(e){}});};
   window.__libaInput=function(t){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'input',text:t},'*');}catch(e){}});};
@@ -37,7 +38,8 @@ object LibaWeb {
         fun onReady()
         fun onSay(text: String, kind: String, options: List<String>)
         fun onSent(text: String)
-        fun onError(text: String)
+        fun onError(text: String, reason: String)
+        fun onTap()
     }
 
     private class JsBridge(val b: Bridge) {
@@ -47,7 +49,8 @@ object LibaWeb {
             b.onSay(text, kind, opts)
         }
         @JavascriptInterface fun sent(text: String) = b.onSent(text)
-        @JavascriptInterface fun error(text: String) = b.onError(text)
+        @JavascriptInterface fun error(text: String, reason: String) = b.onError(text, reason)
+        @JavascriptInterface fun tap() = b.onTap()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -85,6 +88,13 @@ object LibaWeb {
 
     fun sendInput(web: WebView, text: String) {
         web.evaluateJavascript("window.__libaInput && window.__libaInput(${JSONObject.quote(text)})", null)
+    }
+    /** A real touch through the view pipeline gives the page user activation (needed for sending to Claude). */
+    fun simulateTap(web: WebView) {
+        val x = web.width / 2f; val y = web.height / 2f; val t = android.os.SystemClock.uptimeMillis()
+        val down = android.view.MotionEvent.obtain(t, t, android.view.MotionEvent.ACTION_DOWN, x, y, 0)
+        val up = android.view.MotionEvent.obtain(t, t + 60, android.view.MotionEvent.ACTION_UP, x, y, 0)
+        web.dispatchTouchEvent(down); web.postDelayed({ web.dispatchTouchEvent(up); down.recycle(); up.recycle() }, 60)
     }
     fun hello(web: WebView) { web.evaluateJavascript("window.__libaHello && window.__libaHello()", null) }
 }
