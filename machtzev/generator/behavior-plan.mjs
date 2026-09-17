@@ -250,7 +250,11 @@ export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLev
       const gc = glevel.map((e) => ({ id: idOf(e), file: treeAtoms(e.node)[0].file, chain: null, tree: e.node, argc: P.length, nodes: e.nodes, sumArgc: e.cost, root: e.node, isVoid: true }));
       if (gc.length) { const gr = interp.error ? {} : evalInterp(interp, gc.map((c) => ({ id: c.id, tree: c.tree, void: true })), need.examples.length); if (!gr.error) { evaluated += gc.length; for (const [k, v] of Object.entries(gr)) proof[k] = { ok: v.ok, total: v.total, unknown: v.unknown || 0 }; for (let i = 0; i < gc.length; i++) { const v = gr[gc[i].id]; if (v && v.ok === v.total) wins.push(gc[i]); } dbg('guards', gc.length, 'wins', wins.length); } }
     }
-    if (wins.length) { wins.sort((a, b) => (a.nodes - b.nodes) || (a.sumArgc - b.sumArgc) || (a.id < b.id ? -1 : 1)); return { pick: wins[0], wins, proof, evaluated, depth, cands: wins, overflow: exprs.length > capLevel }; }   // מחזירים רק את העצים שעברו (זיכרון)
+    if (wins.length) { wins.sort((a, b) => (a.nodes - b.nodes) || (a.sumArgc - b.sumArgc) || (a.id < b.id ? -1 : 1));
+      // up-examples · תיקו (כמה עצים עברו את כל הדוגמאות) ⇒ קלטים-מבחינים: מוטציות של הדוגמה הראשונה שעליהן הזוכים חולקים — הדוגמאות חלשות, הבעלים מכריע (שקע-אדם), לא הסדר-המבני
+      const discriminators = []; if (wins.length > 1 && !interp.error) { const top = wins.slice(0, 8); const pr = evalInterp(interp, top.map((w) => ({ id: w.id, tree: w.tree, void: w.isVoid })), 0, { probe: true });
+        if (!pr.error && pr.__probes) for (let p = 0; p < pr.__probes.length && discriminators.length < 5; p++) { const outs = top.map((w) => JSON.stringify((pr[w.id] || {}).vals?.[p])); if (new Set(outs).size > 1) discriminators.push({ args: pr.__probes[p], outputs: Object.fromEntries(top.map((w, k) => [w.id, (pr[w.id] || {}).vals?.[p]])) }); } }
+      return { pick: wins[0], wins, proof, evaluated, depth, cands: wins, overflow: exprs.length > capLevel, ties: wins.length, discriminators }; }   // מחזירים רק את העצים שעברו (זיכרון)
     if (!fresh.length) break;
   }
   return { pick: null, wins: [], proof, evaluated, depth: maxDepth, cands: [], overflow: false };
@@ -283,7 +287,7 @@ export function plan({ prove = true, needs = NEEDS, earlyExit = false, values = 
       if (values) {   // up-values · חיפוש-מונחה-ערכים במקום מניית-כל-העצים (גם שומר-סף)
         const vs = valueSearch({ ...need, __id: id }, pureRows, ENV, proveCandidates);
         proofs[id] = { ...pf0, ...vs.proof };
-        chainsOf[id] = { admissible: vs.evaluated, depth: vs.depth, overflow: vs.overflow, values: true, cands: Object.fromEntries(vs.cands.map((c) => [c.id, { chain: null, tree: c.tree, nodes: c.nodes, sumArgc: c.sumArgc, score: 0, parity: c.parity || null, crossLang: c.crossLang || [] }])) };
+        chainsOf[id] = { ties: vs.ties || 0, discriminators: vs.discriminators || [], admissible: vs.evaluated, depth: vs.depth, overflow: vs.overflow, values: true, cands: Object.fromEntries(vs.cands.map((c) => [c.id, { chain: null, tree: c.tree, nodes: c.nodes, sumArgc: c.sumArgc, score: 0, parity: c.parity || null, crossLang: c.crossLang || [] }])) };
         continue;
       }
       const cap2 = need.reuse ? Math.min(CAP2, 5000) : CAP2;   // שימוש-חוזר מנפח את המרחב (כל שקע-num יכול לקבל p0) ⇒ תקרה דטרמיניסטית
@@ -334,7 +338,7 @@ export function plan({ prove = true, needs = NEEDS, earlyExit = false, values = 
     // שקע-ספק: מועמד שכל תאיו ok/∅ (אף כישלון) = ספק, לא כשל — מדווח, לא נבחר (§20-ג)
     const doubt = Object.entries(pf).filter(([k, v]) => v && v.unknown > 0 && v.ok + v.unknown === v.total).map(([k]) => k).slice(0, 5);
     const socketsUsed = ok && top.tree ? [...new Set(leafKinds(top.tree))].filter((k) => k !== 'p').map((k) => ({ c: 'literal', t: 'clock', h: 'human', w: 'world' })[k] || k).concat(top.tree.k === 'g' ? ['guard'] : []).concat(top.crossLang && top.crossLang.length ? ['cross-language'] : []) : [];
-    out[id] = { shape: need.shape, routine: need.routine || null, doubt, sockets: socketsUsed, parity: ok && top.parity ? top.parity : null, crossLang: ok && top.crossLang ? top.crossLang : [], pick: ok ? top.id : null, file: ok ? top.file : null, chain: ok && top.chain ? top.chain : null, tree: ok && top.tree ? top.tree : null, nodes: top ? top.nodes : 0, score: top ? top.score : 0, proven: !!(top && top.proven), candidates: singles.length, chainsAdmissible: chainsOf[id] ? chainsOf[id].admissible : 0, treeDepth: chainsOf[id] ? chainsOf[id].depth : 0, treeOverflow: chainsOf[id] ? !!chainsOf[id].overflow : false, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.ok}/${need.examples ? need.examples.length : 0}${c.proven ? '✓' : ''}:n${c.nodes}:a${c.sumArgc}:${c.score}`), proof: pf, chains: chainsOf[id] || null };
+    out[id] = { shape: need.shape, routine: need.routine || null, doubt, ties: (chainsOf[id] || {}).ties || 0, weakExamples: !!((chainsOf[id] || {}).discriminators || []).length, discriminators: (chainsOf[id] || {}).discriminators || [], sockets: socketsUsed, parity: ok && top.parity ? top.parity : null, crossLang: ok && top.crossLang ? top.crossLang : [], pick: ok ? top.id : null, file: ok ? top.file : null, chain: ok && top.chain ? top.chain : null, tree: ok && top.tree ? top.tree : null, nodes: top ? top.nodes : 0, score: top ? top.score : 0, proven: !!(top && top.proven), candidates: singles.length, chainsAdmissible: chainsOf[id] ? chainsOf[id].admissible : 0, treeDepth: chainsOf[id] ? chainsOf[id].depth : 0, treeOverflow: chainsOf[id] ? !!chainsOf[id].overflow : false, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.ok}/${need.examples ? need.examples.length : 0}${c.proven ? '✓' : ''}:n${c.nodes}:a${c.sumArgc}:${c.score}`), proof: pf, chains: chainsOf[id] || null };
   }
   return out;
 }

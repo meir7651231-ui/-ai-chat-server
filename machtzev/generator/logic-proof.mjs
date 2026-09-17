@@ -160,9 +160,36 @@ dynamic ev(Map<String, dynamic> n, List<dynamic> p, int j, dynamic w) {
   }
 }
 
+// up-examples · חיישן-דוגמאות-חלשות: מוטציות של הדוגמה הראשונה (null/''/0/false/'x' · מחרוזת+x · רשימה בלי ראשון · מפה בלי מפתח) ⇒ קלטים-מבחינים בין עצים שעברו את כל הדוגמאות
+List<dynamic> _mut(dynamic v) {
+  if (v == null) return <dynamic>['', 0, false, 'x'];
+  if (v is bool) return <dynamic>[!v, null];
+  if (v is num) return <dynamic>[0, 1, -1, v + 1, v * 2, null];
+  if (v is String) return <dynamic>['', 'a', v + 'x', ' ' + v, null];
+  if (v is List) { final out = <dynamic>[<dynamic>[]]; if (v.isNotEmpty) { out.add(v.sublist(1)); for (final m in _mut(v[0])) out.add(<dynamic>[m, ...v.sublist(1)]); } return out; }
+  if (v is Map) { final out = <dynamic>[]; try { out.add(<String, dynamic>{}); for (final k in v.keys) { for (final m in <dynamic>[null, '', 0, false, 'x']) { final c = Map<String, dynamic>.from(v); c[k] = m; out.add(c); } final d = Map<String, dynamic>.from(v); d.remove(k); out.add(d); } } catch (_) {} return out; }
+  return <dynamic>[];
+}
+List<List<dynamic>> _probes() {
+  final out = <List<dynamic>>[]; if (EX.isEmpty) return out; final base = EX[0];
+  for (var i = 0; i < base.length; i++) for (final m in _mut(base[i])) { final c = List<dynamic>.from(base); c[i] = m; out.add(c); if (out.length >= 80) return out; }
+  return out;
+}
 void main(List<String> argv) {
   final trees = (jsonDecode(File(argv[0]).readAsStringSync()) as List);
   final out = StringBuffer();
+  if (argv.length > 1 && argv[1] == '--probe') {
+    final ps = _probes();
+    for (var p = 0; p < ps.length; p++) out.write('P:\$p:\${_v(ps[p])}\\n');
+    for (var i = 0; i < trees.length; i++) {
+      final t = trees[i] as Map<String, dynamic>; final isVoid = t['void'] == true; final root = t['tree'] as Map<String, dynamic>;
+      for (var p = 0; p < ps.length; p++) {
+        try { final w = newWorld(); dynamic r = ev(root, ps[p], 0, w); if (isVoid) r = w; out.write('\$i:\$p:1:\${_v(r)}\\n'); }
+        catch (_) { out.write('\$i:\$p:2:\\n'); }
+      }
+    }
+    stdout.write(out.toString()); return;
+  }
   for (var i = 0; i < trees.length; i++) {
     final t = trees[i] as Map<String, dynamic>; final isVoid = t['void'] == true; final root = t['tree'] as Map<String, dynamic>;
     for (var j = 0; j < EX.length; j++) {
@@ -186,10 +213,15 @@ void main(List<String> argv) {
   return { dill, file, compileMs: Date.now() - t0 };
 }
 /** מעריך עצים ברתמה מקומפלת: trees [{id, tree, void}] ⇒ {id: {ok,total,unknown,vals}} */
-export function evalInterp(interp, trees, nEx) {
-  const treesFile = interp.dill.replace(/\.dill$/, '.trees.json');
+export function evalInterp(interp, trees, nEx, opts = {}) {
+  const treesFile = interp.dill.replace(/\.dill$/, (opts.probe ? '.probe' : '') + '.trees.json');
   fs.writeFileSync(treesFile, JSON.stringify(trees.map((t) => ({ tree: t.tree, void: !!t.void }))));
-  const r = spawnSync(DART, [interp.dill, treesFile], { encoding: 'utf8', timeout: 600000, maxBuffer: 1 << 28 });
+  const r = spawnSync(DART, [interp.dill, treesFile, ...(opts.probe ? ['--probe'] : [])], { encoding: 'utf8', timeout: 600000, maxBuffer: 1 << 28 });
+  if (opts.probe) {   // up-examples · {__probes: [argsJson…], [id]: {vals: [...]}}
+    const lines = (r.stdout || '').split('\n'); const probes = []; for (const l of lines) { const m = l.match(/^P:(\d+):(.*)$/); if (m) { try { probes[+m[1]] = JSON.parse(m[2]); } catch { probes[+m[1]] = m[2]; } } }
+    const out = { __probes: probes }; for (const t of trees) out[t.id] = { vals: Array(probes.length).fill(undefined) };
+    for (const l of lines) { const m = l.match(/^(\d+):(\d+):([012]):(.*)$/); if (!m) continue; const e = out[trees[+m[1]].id]; if (!e) continue; e.vals[+m[2]] = m[3] === '2' ? '∅' : (() => { try { return JSON.parse(m[4]); } catch { return m[4]; } })(); }
+    return out; }
   if (r.status !== 0 && !(r.stdout || '').trim()) return { error: (r.stderr || '').split('\n').filter((l) => l.trim()).slice(0, 2).join(' | ') || 'run failed' };
   const out = {}; for (const t of trees) out[t.id] = { ok: 0, total: nEx, unknown: 0, vals: Array(nEx).fill(null) };
   for (const l of (r.stdout || '').split('\n')) { const m = l.match(/^(\d+):(\d+):([012]):(.*)$/); if (!m) continue; const e = out[trees[+m[1]].id]; if (!e) continue; if (m[3] === '1') e.ok++; if (m[3] === '2') e.unknown++; if (m[4]) { try { e.vals[+m[2]] = JSON.parse(m[4]); } catch { e.vals[+m[2]] = m[4]; } } }

@@ -1,0 +1,1 @@
+DONE · חיישן-דוגמאות-חלשות: הרתמה במצב --probe (מוטציות של הדוגמה הראשונה) + valueSearch מדווח ties/weakExamples/discriminators · fn-needs2 73s (noOwnerNull: 4 זוכים, owner=""/0/false) · sock-needs 99s (t3/t5/t6 חלשים, קלטים-מבחינים מדווחים) · xl ✓ · --gate 43/43 · police --fast 45/0 · הבחירה לא השתנתה, הדיווח כן
