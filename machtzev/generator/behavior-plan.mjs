@@ -9,7 +9,9 @@
 //   --gate: (א) כל צורך נפתר; (ב) הנבחר מיובא ונקרא בפועל בקבצי-בלגן המחוללים; (ג) המתאמים ב-Dart דקים (הלבשת-מונחים בלבד, אין מימוש-מחדש).
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { resolveDart } from '../dart-bin.mjs';
 import { catalog } from './auto-logic.mjs';
 import { proveCandidates, isPure, buildInterp, evalInterp, jsTwinRows, jsParity } from './logic-proof.mjs';
 import * as R from '../root.mjs';
@@ -216,7 +218,7 @@ function take(pureRows, need, exactNodes, { keep = Infinity, examine = Infinity,
 // ══════════════════════════════════════════════════════════════════════════════
 const SEP = String.fromCharCode(1);
 const cvOf = (d) => { const s = String(d).trim(); if (/^'.*'$/.test(s)) return s.slice(1, -1).replace(/\\'/g, "'"); if (/^-?\d+(\.\d+)?$/.test(s)) return +s; if (s === 'true') return true; if (s === 'false') return false; if (s === 'null') return null; return s; };   // ליטרל-Dart ⇒ ערך לפרשן
-export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLevel = +(process.env.BP_CAPV || 20000) } = {}) {   // up-crosslang · 4000 גזר את lengthList(whereList(p0,λ…)) ב-countNoOwner (9,781 ביטויים בעומק-2); ההערכה ברתמה-המקומפלת זולה ⇒ 20000
+export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLevel = +(process.env.BP_CAPV || 40000) } = {}) {   // up-crosslang · 4000 גזר את lengthList(whereList(p0,λ…)) ב-countNoOwner (9,781 ביטויים בעומק-2); ההערכה ברתמה-המקומפלת זולה ⇒ 20000   // up-goal · 20000 היה על-הסכין: g2 (‏cmpGtStr(now,addDaysIso(p0,30))) נמצא ב-21,514 ביטויי-עומק-1, כלומר 1,514 מעל התקרה. שקע-מוצהר-בתוך-למבדה מגדיל את הרמה ⇒ addDaysIso(p0,30) נגזם והבחירה נעלמה. 40000 מחזיר את הקליטה (נמדד: 11/11 רגרסיה · 6/6 מטרה), במחיר ×2 זמן
   const P = need.params, R = need.ret; const isVoid = normT(R) === 'void';
   const usable = pureRows.filter((c) => c.argc >= 1 && normT(c.ret) !== 'void');
   const effects = isVoid ? pureRows.filter((c) => c.argc >= 1 && normT(c.ret) === 'void') : [];
@@ -230,14 +232,18 @@ export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLev
     ...(need.world ? [{ node: { k: 'w' }, type: need.world.type, nodes: 0, cost: 0, ps: [] }] : [])];
   // תקעי-למבדה לפרמטר-פונקציה (שקע-פונקציה): חלקיק-יחיד + ליטרלים/תקע-מקונן לפרמטרים הנותרים
   const plugMemo = new Map(); const PLUG_CAP = +(process.env.BP_PLUGS || 1500); const PLUG_PER = 40;   // תקרה גלובלית + תקרה פר-חלקיק (שקע-סכמה: 17 מפתחות × חלקיק)
+  // up-goal · **שקע-מוצהר גם בתוך למבדה**: הפרמטרים-הנותרים של חלקיק-בתקע התמלאו מליטרלים בלבד — ולכן שקע-שעון/אדם/עולם
+  //   **שהצורך הצהיר** לא יכול היה להיכנס ללמבדה (נמדד על g3: λbhRecordOverdue30(_,'due') במקום λbhRecordOverdue30(_,now) ⇒ usesAll('t') נכשל).
+  //   אותה מחלקה של ה-off-by-one למטה: שקע שהוצהר ואינו מגיע. הפרשן (‏logic-proof.ev · case 'f') ו-treeDart כבר תומכים בצומת-שקע בתוך args — רק הייצור לא ייצר.
+  const SOCK_LEAVES = [...(need.clock ? [{ k: 't', type: need.clock.type || 'String' }] : []), ...(need.human || []).map((h) => ({ k: 'h', name: h.name, type: h.type })), ...(need.world ? [{ k: 'w', type: need.world.type }] : [])];
   const plugsFor = (want) => { if (plugMemo.has(want)) return plugMemo.get(want); const ft = parseFnT(want); if (!ft) return []; const out = [];
     const inner = (w2) => { const f2 = parseFnT(w2); if (!f2) return []; return usable.filter((g) => g.argc === f2.params.length && tmatchT(g.ret, f2.ret) && f2.params.every((t, j) => tmatchT(g.params[j], t))).map((g) => ({ k: 'f', id: g.id, file: g.file, m: g.argc, args: [] })); };
     for (const g of usable) { const m = ft.params.length; if (g.argc < m || !tmatchT(g.ret, ft.ret) || !ft.params.every((t, j) => tmatchT(g.params[j], t))) continue;
-      const opts = g.params.slice(m).map((t) => parseFnT(t) ? inner(t) : CONSTS.filter((c) => tmatchT(c.type, t)).map((c) => ({ k: 'c', dart: c.dart, type: c.type, cv: cvOf(c.dart) })));
+      const opts = g.params.slice(m).map((t) => parseFnT(t) ? inner(t) : [...CONSTS.filter((c) => tmatchT(c.type, t)).map((c) => ({ k: 'c', dart: c.dart, type: c.type, cv: cvOf(c.dart) })), ...SOCK_LEAVES.filter((s) => tmatchT(s.type, t)).map((s) => ({ ...s }))]);
       if (opts.some((o) => !o.length)) continue;
       let pc = [[]]; for (const o of opts) { const nx = []; for (const a of pc) { for (const c of o.slice(0, 60)) { nx.push([...a, c]); if (nx.length >= 200) break; } if (nx.length >= 200) break; } pc = nx; }   // מכפלה חסומה — לא flatMap על מאות×מאות
       let per = 0; for (const args of pc) { out.push({ node: { k: 'f', id: g.id, file: g.file, m, args }, type: want, nodes: 1, cost: 0, ps: [] }); if (++per >= PLUG_PER) break; } if (out.length > PLUG_CAP * 4) break; }
-    out.sort((a, b) => (exprId(a.node) < exprId(b.node) ? -1 : 1)); const capped = out.slice(0, PLUG_CAP); plugMemo.set(want, capped); return capped; };
+    out.sort((a, b) => (exprId(a.node) < exprId(b.node) ? -1 : 1)); const capped = out.slice(0, PLUG_CAP); if (process.env.BP_DEBUG) console.error('[values] plugs', want, out.length, '=>', capped.length, process.env.BP_WANT && capped.some((x) => process.env.BP_WANT.includes(exprId(x.node))) ? '(BP_WANT inside)' : ''); plugMemo.set(want, capped); return capped; };
   // הישג-לאחור: אילו טיפוסים מגיעים לטיפוס-התשובה ב-k צעדים (dynamic מגיע לכל דבר)
   const reach = [new Set([normT(R)])]; for (let k = 1; k <= maxDepth; k++) { const s = new Set(reach[k - 1]); for (const g of usable) if (s.has(normT(g.ret)) || s.has('dynamic')) for (const t of g.params) s.add(normT(t)); reach.push(s); }
   const canReach = (type, left) => left >= 0 && (normT(type) === 'dynamic' || reach[Math.min(left, maxDepth)].has(normT(type)) || reach[Math.min(left, maxDepth)].has('dynamic'));
@@ -277,7 +283,8 @@ export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLev
     const cands = level.map((e) => ({ id: idOf(e), file: treeAtoms(e.node)[0].file, chain: null, tree: e.node, argc: P.length, nodes: e.nodes, sumArgc: e.cost, root: e.node, isVoid: e.isVoid }));
     let res = {}; if (!interp.error) { const ev = evalInterp(interp, cands.map((c) => ({ id: c.id, tree: c.tree, void: c.isVoid })), need.examples.length); if (ev.error) { if (DBG0) console.error('[values] eval error', ev.error); } else res = ev; }
     if (interp.error || !Object.keys(res).length) { const VB = 120; for (let b = 0; b < cands.length; b += VB) Object.assign(res, proveFn(`${need.__id || 'need'}__v${depth}_b${b / VB}`, cands.slice(b, b + VB), need.examples, need.imports || [], { ...ENV, values: true })); }   // נפילה-לאחור: אצוות של 120
-    evaluated += cands.length; for (const [k, v] of Object.entries(res)) proof[k] = { ok: v.ok, total: v.total, unknown: v.unknown || 0 }; dbg('evaluated', cands.length, 'results', Object.keys(res).length);   // ערכי-הביניים משמשים רק לשכבה הזו (זיכרון)
+    evaluated += cands.length; for (const [k, v] of Object.entries(res)) proof[k] = { ok: v.ok, total: v.total, unknown: v.unknown || 0 }; dbg('evaluated', cands.length, 'results', Object.keys(res).length);
+    if (process.env.BP_WANT) { const j = cands.findIndex((c) => c.id === process.env.BP_WANT); dbg('want', process.env.BP_WANT, j < 0 ? (exprs.some((e) => idOf(e) === process.env.BP_WANT) ? 'generated-but-pruned' : 'not-generated') : 'evaluated ' + JSON.stringify(res[cands[j].id])); }   // up-goal · שקע-מדידה: למה עץ מסוים אינו הבחירה (נוצר? נגזם בתקרה? הוערך ונכשל?)   // ערכי-הביניים משמשים רק לשכבה הזו (זיכרון)
     const wins = []; fresh = [];
     for (let i = 0; i < level.length; i++) { const e = level[i], r = res[cands[i].id]; if (!r) continue;
       const covers = e.ps.length === P.length;
@@ -293,7 +300,7 @@ export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLev
       if ((r.unknown || 0) === r.total) continue;   // כל התאים ∅ ⇒ אין ערך חי (ok=0 עם ערכים = חי, רק לא התשובה)
       if (!r.vals || r.vals.every((v) => v === null)) continue;
       const sig = normT(e.type) + '|' + r.vals.map((v) => String(v)).join(SEP); if (seenSig.has(sig)) continue; seenSig.add(sig);   // אותם ערכים = אותו דבר; נשארת הזולה
-      if (e.isVoid) { effectExprs.push({ ...e, r }); continue; } if (!canReach(e.type, maxDepth - depth - 1) && !tmatchT(e.type, R)) continue;
+      if (e.isVoid) { effectExprs.push({ ...e, r }); continue; } if (!canReach(e.type, maxDepth - depth) && !tmatchT(e.type, R)) continue;   // up-goal · off-by-one: לביטוי-בעומק-d נותרו maxDepth-depth צעדים (לא −1). נמדד ב-BP_DEBUG על g3a: «depth 2 … evaluated 60000» ואז fresh=0 ⇒ שום עץ-עומק-3 לא נוצר
       const item = { ...e, sig }; pool.push(item); fresh.push(item); }
     pool.sort(byCost);
     // שומר-סף (need.guard, צורך-אפקט): pred = ערך-בול מהמאגר (הוערך) · body = עץ-אפקט שהוערך ⇒ {k:'g'} ; יחד מכסים את כל הפרמטרים; הפרשן מריץ body רק כש-pred אמת
@@ -314,8 +321,21 @@ export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLev
   return { pick: null, wins: [], proof, evaluated, depth: maxDepth, cands: [], overflow: false };
 }
 
-export function plan({ prove = true, needs = NEEDS, earlyExit = false, values = false } = {}) {   // values: חיפוש-מונחה-ערכים (צרכים חיצוניים); NEEDS: ללא שינוי   // earlyExit (צרכים חיצוניים): עוצרים את ההוכחה באצווה הראשונה שבה מועמד עבר-הכל (סדר דטרמיניסטי: sumArgc ⇒ id); NEEDS הקשיחים: תמיד ממצה (אפס-שינוי)   // needs: ברירת-המחדל = NEEDS הקשיח; planNeeds מזין צרכים חיצוניים על אותו מנגנון בדיוק
-  const { rows, idf } = catalog();
+// ── up-goal · שימוש-חוזר: התנהגות-שהוכחה = אטום לצורך הבא (אותו בורר, מדף גדול באטום אחד) ──
+//   קורא את **נקודות-הכניסה** של קובץ-Dart מחולל (‏gen_goal_<ns>.dart) כשורות-קטלוג. אפס ניקוד-מילים (titleTok ריק) —
+//   הבחירה נשארת הוכחה-בריצה בלבד; השורה רק מצטרפת למועמדים, כמו כל אטום במדף.
+export function rowsFromDart(relFile) {
+  const src = fs.readFileSync(path.join(R.NEW, relFile), 'utf8'); const out = [];
+  for (const m of src.matchAll(/^([A-Za-z_][\w<>, ?]*?)\s+([a-zA-Z]\w*)\(([^)]*)\)\s*(?:=>|\{)/gm)) {
+    const ret = m[1].trim(); if (/^(import|export|class|final|const|var|return)$/.test(ret)) continue;
+    const params = m[3].trim() ? m[3].split(',').map((x) => x.trim().replace(/\s+\w+$/, '')) : [];
+    out.push({ id: m[2], file: relFile, params, ret, argc: params.length, layer: 'logic', title: `התנהגות-מוכחת ${m[2]}`, titleTok: new Set(), bodyTok: new Set(), origin: relFile });
+  }
+  return out;
+}
+export function plan({ prove = true, needs = NEEDS, earlyExit = false, values = false, extraRows = [] } = {}) {   // extraRows (up-goal): שורות-קטלוג נוספות (התנהגויות-שהוכחו בסבב קודם) — מצטרפות למדף לפני החיפוש   // values: חיפוש-מונחה-ערכים (צרכים חיצוניים); NEEDS: ללא שינוי   // earlyExit (צרכים חיצוניים): עוצרים את ההוכחה באצווה הראשונה שבה מועמד עבר-הכל (סדר דטרמיניסטי: sumArgc ⇒ id); NEEDS הקשיחים: תמיד ממצה (אפס-שינוי)   // needs: ברירת-המחדל = NEEDS הקשיח; planNeeds מזין צרכים חיצוניים על אותו מנגנון בדיוק
+  const { rows: rows0, idf } = catalog();
+  const rows = extraRows.length ? [...rows0, ...extraRows] : rows0;   // up-goal · המדף + ההתנהגויות-שהוכחו (שימוש-חוזר)
   const out = {};
   const needsIds = Object.keys(needs);
   // מועמדים לפי חתימה — רק אטומים טהורים (אפס import; חוק-1) שניתן להריץ בבידוד
@@ -425,7 +445,7 @@ export function plan({ prove = true, needs = NEEDS, earlyExit = false, values = 
   return out;
 }
 /** צרכים-חיצוניים (JSON) על אותו plan() בדיוק — בלי לגעת ב-NEEDS הקשיח וב-behavior-plan.json. משמש --needs ואת סשני-החיבור. */
-export function planNeeds(needsObj, { prove = true, earlyExit = true, values = true } = {}) { return plan({ prove, needs: needsObj, earlyExit, values }); }   // צרכים חיצוניים: מונחה-ערכים כברירת-מחדל (--blind מחזיר למניית-עצים)   // צרכים חיצוניים: earlyExit כברירת-מחדל (--exhaustive מבטל)
+export function planNeeds(needsObj, { prove = true, earlyExit = true, values = true, extraRows = [] } = {}) { return plan({ prove, needs: needsObj, earlyExit, values, extraRows }); }   // צרכים חיצוניים: מונחה-ערכים כברירת-מחדל (--blind מחזיר למניית-עצים)   // צרכים חיצוניים: earlyExit כברירת-מחדל (--exhaustive מבטל)
 export function readPlan() { return JSON.parse(fs.readFileSync(OUT, 'utf8')); }
 /** למחולל: השם+הקובץ של הנבחר לצורך; צורך לא-פתור ⇒ זריקה (שקע-חובה ריק = פסילה, הכרעה-20ג) */
 export function pick(id) { const p = readPlan()[id]; if (!p || !p.pick) throw new Error(`behavior-plan: אין אטום לצורך ${id} — פסילה (לא כותבים ביד)`); return { name: p.pick, file: p.file, chain: p.chain || null }; }
@@ -475,6 +495,179 @@ export function backwardSearch(atomId, { examples = null, imports = [], rows = n
   return { atom: atomId, forwardSig: `(${sig.params.join(', ')}) ⇒ ${sig.ret}`, file: sig.file, backwardNeed: needs.map((n) => `[${n.kind}#${n.target}] (${n.params.join(', ')}) ⇒ ${n.ret}`), backwardNeeds: needs, candidateCount: candidates.length, provenCount: candidates.filter((c) => c.proven).length, candidates };
 }
 
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  up-goal · **הפקודה-האחת**: מטרה-בעברית ⇒ לדג'ר אחד + קובץ-Dart מורכב.
+//  ────────────────────────────────────────────────────────────────────────────
+//  `node behavior-plan.mjs --goal <goal.json>` · goal.json = {"text": "<המטרה>", "needs": {…כמו --needs}}
+//  שבעה צעדים, כל אחד שורה בלדג'ר (עבר · ∅ · נפסל · לא-זמין · כשל):
+//    1 פסק (yeshiva/purpose) על הטקסט ⇒ מקורות · מתגים          4 שימוש-חוזר: התנהגות-שהוכחה = אטום לסבב הבא (עד קיבעון)
+//    2 אפס-המצאה לכל צורך (hamtzaa --needs כשקיים)               5 חיווט ⇒ Dart (behavior-compose --plan)
+//    3 חיפוש+הוכחה+בחירה (planNeeds — אותו בורר)                 6 משטרה בתוך הריצה (analyze · proof · no-fakers · מראה)
+//                                                                7 כתיבת-הלדג'ר (ledger.json + ledger.md)
+//  🔒 אפס לוגיקה חדשה של בחירה/הוכחה — רק חיווט של המנועים הקיימים בסדר, עם דיווח. כשל-משטרה = שורה אדומה + exit 1.
+// ══════════════════════════════════════════════════════════════════════════════
+const GOALS = path.join(HERE, 'goals');
+const ST_ICON = { 'עבר': '✓', '∅': '', 'נפסל': '⛔', 'לא-זמין': '🟡', 'כשל': '🔴' };
+
+/** בדיקה-מבנית מינימלית של חוזה-צורך (הרצפה עד ש-hamtzaa יקבל --needs): חוזה בלי דוגמה · שקע-מוצהר בלי ערך = פסילה, לא ניחוש. */
+export function needStructure(need) {
+  const bad = [];
+  if (!Array.isArray(need.params) || need.params.some((t) => !t || typeof t !== 'string')) bad.push('params אינו רשימת-טיפוסים');
+  if (!need.ret || typeof need.ret !== 'string') bad.push('אין ret (טיפוס-התשובה)');
+  if (!Array.isArray(need.examples) || !need.examples.length) bad.push('אין דוגמאות — בלי דוגמה אין הוכחה-בריצה (§20-ג)');
+  else need.examples.forEach((ex, j) => { if (!Array.isArray(ex) || typeof ex[0] !== 'string' || typeof ex[1] !== 'string' || !ex[1].trim()) bad.push(`דוגמה ${j}: חסר [קלט, בדיקה]`); });
+  if (need.clock) { if (!need.clock.type) bad.push('שקע-שעון בלי type');
+    (Array.isArray(need.examples) ? need.examples : []).forEach((ex, j) => { if (!(ex && ex[2] && ex[2].now)) bad.push(`דוגמה ${j}: שקע-שעון הוצהר ואין now (ברירת-מחדל שקטה)`); }); }
+  if (need.world && !need.world.type) bad.push('שקע-עולם בלי type');
+  if (need.human && !Array.isArray(need.human)) bad.push('human אינו רשימת-שקעים');
+  return bad;
+}
+
+/** גלאי-ההמצאה על **צרכים** — הממשק שעובד-מקביל בונה (`--needs <needs.json> --goal <goal.txt> --json`).
+ *  אין ⇒ {available:false, reason} ⇒ שורת «לא-זמין» בלדג'ר. לעולם לא דילוג-שקט (L27: ירוק-חלול). */
+export function hamtzaaNeeds(needsPath, goalPath) {
+  const tool = path.join(HERE, 'hamtzaa.mjs');
+  if (!fs.existsSync(tool)) return { available: false, reason: 'hamtzaa.mjs לא קיים' };
+  try {
+    const r = spawnSync(process.execPath, [tool, '--needs', needsPath, '--goal', goalPath, '--json'], { encoding: 'utf8', timeout: 300000, cwd: R.ROOT });
+    const out = String(r.stdout || '').trim();
+    if (r.status !== 0) return { available: false, reason: `exit ${r.status}: ${String(r.stderr || out).split('\n')[0].slice(0, 140)}` };
+    let j = null; try { j = JSON.parse(out); } catch { return { available: false, reason: `הפלט אינו JSON — --needs עוד לא נתמך (${out.split('\n')[0].slice(0, 90)})` }; }
+    const rows = Array.isArray(j) ? j : (j.needs || j.rows || []);
+    if (!Array.isArray(rows) || !rows.length || !rows.every((x) => x && typeof x.need === 'string' && typeof x.ok === 'boolean')) return { available: false, reason: 'הפלט אינו {need, ok, missing, sources}' };
+    return { available: true, rows, cmd: `node machtzev/generator/hamtzaa.mjs --needs ${path.relative(R.ROOT, needsPath)} --goal ${path.relative(R.ROOT, goalPath)} --json` };
+  } catch (e) { return { available: false, reason: String((e && e.message) || e).slice(0, 160) }; }
+}
+
+/** התוכנית כפי שהמחולל צורך אותה (pick · עץ · הצורך) — בלי מפת-ההוכחה הענקית. */
+const slimPlan = (P, needs) => Object.fromEntries(Object.entries(P).map(([id, p]) => [id, { pick: p.pick, file: p.file, tree: p.tree, chain: p.chain, nodes: p.nodes, proven: p.proven, need: needs[id] }]));
+
+async function runGoal(goalPath, opts = {}) {
+  const t0 = Date.now();
+  const goal = JSON.parse(fs.readFileSync(goalPath, 'utf8'));
+  const text = String(goal.text || '').trim();
+  const needs = goal.needs || {};
+  if (!text) throw new Error('--goal: אין "text" (המטרה בעברית) בקובץ-המטרה');
+  if (!Object.keys(needs).length) throw new Error('--goal: אין "needs" בקובץ-המטרה');
+  const ns = opts.ns || path.basename(goalPath).replace(/\.json$/, '');
+  const outRel = opts.out || `dart-gen-bs/gen_goal_${ns}.dart`;
+  const outAbs = path.join(R.NEW, outRel);
+  const dir = path.join(GOALS, ns); fs.mkdirSync(dir, { recursive: true });
+  const needsPath = path.join(dir, 'needs.json'); fs.writeFileSync(needsPath, JSON.stringify(needs, null, 1) + '\n');
+  const goalTxt = path.join(dir, 'goal.txt'); fs.writeFileSync(goalTxt, text + '\n');
+  const steps = []; const perNeed = {};
+  const say = (n, title, status, detail, extra = {}) => { const row = { step: n, title, status, detail, ...extra }; steps.push(row); console.log(`${ST_ICON[status] || ''} ${n}/7 ${title}: ${status} — ${detail}`); return row; };
+
+  // ── 1 · לפני: פסק על טקסט-המטרה (המקורות/המתגים של הישיבתי) ──
+  let psak = null;
+  try {
+    const Y = await import('../../yeshiva/purpose.mjs');
+    const doc = Y.purposeDoc(text, 'מטרה');
+    psak = { sources: [...doc.sources.entries()].map(([field, src]) => ({ field, src })), switches: (doc.open || []).map((o) => ({ word: o.word, options: o.options, from: o.from })), mandatory: doc.mandatory || [], optional: doc.optional || [], domain: (doc.domain && doc.domain.pick) || null, ruled: null };
+    if (goal.spec) { const draft = fs.existsSync(path.resolve(path.dirname(goalPath), goal.spec)) ? fs.readFileSync(path.resolve(path.dirname(goalPath), goal.spec), 'utf8') : String(goal.spec); const r = Y.rule(text, draft, 'מטרה'); psak.ruled = { decided: r.decided, switches: r.switches.length, changed: r.changed }; }
+    say(1, 'פסק (yeshiva/purpose) על טקסט-המטרה', psak.sources.length ? 'עבר' : '∅',
+      `${psak.sources.length} מקורות · ${psak.switches.length} מתגים · חובה ${psak.mandatory.length} · רשות ${psak.optional.length} · תחום ${psak.domain || '—'}` + (psak.ruled ? ` · rule: ${psak.ruled.decided} הוכרעו` : ' · rule: לא נקרא (אין goal.spec)'),
+      { psak, cmd: `node yeshiva/purpose.mjs "${text.slice(0, 60)}…"` });
+  } catch (e) { say(1, 'פסק (yeshiva/purpose) על טקסט-המטרה', 'לא-זמין', `yeshiva/purpose: ${String((e && e.message) || e).slice(0, 160)}`); }
+
+  // ── 2 · תוך כדי: אפס-המצאה לכל צורך (גלאי-ההמצאה כשקיים · בדיקה-מבנית תמיד) ──
+  const ham = hamtzaaNeeds(needsPath, goalTxt);
+  const hamBy = ham.available ? new Map(ham.rows.map((r) => [r.need, r])) : null;
+  const rejected = {};
+  for (const [id, need] of Object.entries(needs)) {
+    const struct = needStructure(need);
+    const h = hamBy ? hamBy.get(id) : null;
+    const reasons = [...struct, ...(h && h.ok === false ? [`המצאה: ${(h.missing || []).join(', ') || 'אין מקור בקלט'}`] : [])];
+    perNeed[id] = { id, shape: need.shape || null, demand: need.demand || null, hamtzaa: h ? (h.ok ? 'עבר' : 'נפסל') : (ham.available ? 'לא-נמדד' : 'לא-זמין'), hamtzaaSources: h ? (h.sources || []) : [], structure: struct, status: reasons.length ? 'נפסל' : 'ממתין', reason: reasons.join(' · ') || null };
+    if (reasons.length) rejected[id] = reasons;
+  }
+  const nRej = Object.keys(rejected).length;
+  say(2, 'אפס-המצאה לכל צורך', nRej ? 'נפסל' : (ham.available ? 'עבר' : 'לא-זמין'),
+    (ham.available ? `גלאי-ההמצאה על צרכים: ${ham.rows.length} נבדקו` : `גלאי-ההמצאה על צרכים לא זמין (${ham.reason}) ⇒ בדיקה-מבנית בלבד`) + ` · ${Object.keys(needs).length - nRej}/${Object.keys(needs).length} המשיכו להוכחה` + (nRej ? ` · נפסלו: ${Object.keys(rejected).join(', ')}` : ''),
+    { hamtzaa: { available: ham.available, reason: ham.reason || null, cmd: ham.cmd || null }, rejected });
+
+  // ── 3 · חיפוש + הוכחה + בחירה (אותו בורר: planNeeds) ──
+  const live = Object.fromEntries(Object.entries(needs).filter(([id]) => !rejected[id]));
+  const merged = {}; const rounds = [];
+  const absorb = (P, round) => { for (const [id, p] of Object.entries(P)) { merged[id] = p;
+    Object.assign(perNeed[id], { status: p.pick ? 'עבר' : '∅', pick: p.pick, nodes: p.pick ? p.nodes : null, ties: p.pick ? (p.ties || 0) : null, weakExamples: p.pick ? !!p.weakExamples : false, discriminators: p.pick ? (p.discriminators || []).length : 0, depth: p.treeDepth || 0, sockets: p.sockets || [], round, candidates: p.candidates, top3: p.top3 || [] }); } };
+  const r1 = planNeeds(live); absorb(r1, 1); rounds.push({ round: 1, extra: 0, solved: Object.values(r1).filter((p) => p.pick).length, of: Object.keys(live).length });
+  const line = (id) => { const p = merged[id]; return `${id}: ${p.pick ? p.pick : '∅'} · ties ${p.ties || 0} · weak ${p.weakExamples ? 'כן' : 'לא'} · discriminators ${(p.discriminators || []).length} · depth ${p.treeDepth || 0}`; };
+  say(3, 'חיפוש-לפי-מטרה + הוכחה-בריצה + בחירה', Object.values(r1).every((p) => p.pick) ? 'עבר' : '∅',
+    `סבב 1: ${rounds[0].solved}/${rounds[0].of} נפתרו${rounds[0].solved < rounds[0].of ? ' · ' + Object.keys(r1).filter((id) => !r1[id].pick).join(', ') + ' ∅' : ''}`,
+    { picks: Object.keys(r1).map(line) });
+
+  // ── 4 · שימוש-חוזר: התנהגות-שהוכחה = אטום לצורך הבא (עד קיבעון) ──
+  const composeTo = (P, why) => { const pf = path.join(dir, 'plan.json'); fs.writeFileSync(pf, JSON.stringify(slimPlan(P, needs), null, 1) + '\n');
+    const c = spawnSync(process.execPath, [path.join(HERE, 'behavior-compose.mjs'), '--plan', pf, '--out', 'new/' + outRel], { encoding: 'utf8', cwd: R.ROOT, timeout: 600000 });
+    return { ok: c.status === 0, out: String(c.stdout || '').trim(), err: String(c.stderr || '').trim(), why, planFile: pf }; };
+  const reuse = [];
+  let open = Object.keys(live).filter((id) => !merged[id].pick);
+  let round = 1;
+  while (open.length && Object.values(merged).some((p) => p.pick) && round < Object.keys(live).length + 2) {
+    round++;
+    const c = composeTo(Object.fromEntries(Object.entries(merged).filter(([, p]) => p.pick)), `סבב ${round}`);
+    if (!c.ok) { reuse.push({ round, error: c.err.slice(0, 200) }); break; }
+    const extraRows = rowsFromDart(outRel);
+    const P = planNeeds(Object.fromEntries(open.map((id) => [id, live[id]])), { extraRows });
+    absorb(P, round);
+    const solved = open.filter((id) => merged[id].pick);
+    reuse.push({ round, extraRows: extraRows.length, tried: open.length, solved: solved.length, ids: solved });
+    rounds.push({ round, extra: extraRows.length, solved: solved.length, of: open.length });
+    if (!solved.length) break;
+    open = open.filter((id) => !merged[id].pick);
+  }
+  const gained = reuse.reduce((n, r) => n + (r.solved || 0), 0);
+  say(4, 'שימוש-חוזר (התנהגות-מוכחת = אטום לצורך הבא)', reuse.length ? (gained ? 'עבר' : '∅') : 'עבר',
+    reuse.length ? reuse.map((r) => `סבב ${r.round}: ${r.extraRows || 0} התנהגויות במדף ⇒ ${r.solved || 0}/${r.tried || 0}${(r.ids || []).length ? ' (' + r.ids.join(', ') + ')' : ''}${r.error ? ' · שגיאת-הרכבה: ' + r.error : ''}`).join(' · ') : 'אין צורך לא-פתור — סבב שני לא נדרש',
+    { rounds: reuse, picks: open.length ? open.map(line) : [] });
+
+  // ── 5 · חיווט ⇒ Dart (behavior-compose --plan) ──
+  const fin = composeTo(merged, 'סופי');
+  const proofRel = outRel.replace(/\.dart$/, '_proof.dart'); const proofAbs = path.join(R.NEW, proofRel);
+  say(5, 'חיווט ⇒ Dart (behavior-compose --plan)', fin.ok ? 'עבר' : 'כשל',
+    fin.ok ? `${fin.out.replace(/^🧩 /, '')}` : `כשל-הרכבה: ${fin.err.slice(0, 200)}`,
+    { file: 'new/' + outRel, proof: 'new/' + proofRel, plan: path.relative(R.ROOT, fin.planFile), cmd: `node machtzev/generator/behavior-compose.mjs --plan ${path.relative(R.ROOT, fin.planFile)} --out new/${outRel}` });
+
+  // ── 6 · אחרי: משטרה בתוך הריצה ──
+  const DART = resolveDart();
+  const checks = [];
+  const run = (name, cmd, args, o = {}) => { const r = spawnSync(cmd, args, { encoding: 'utf8', cwd: R.ROOT, timeout: o.timeout || 900000 });
+    const row = { name, cmd: [cmd === process.execPath ? 'node' : cmd, ...args].join(' '), status: r.status === 0 ? 'עבר' : 'כשל', out: String(r.stdout || r.stderr || '').trim().split('\n').slice(-4).join(' | ').slice(0, 300) };
+    checks.push(row); return row; };
+  if (!DART) checks.push({ name: 'dart analyze', status: 'לא-זמין', out: 'אין בינארי Dart (dart-bin.resolveDart ⇒ null)' });
+  else { run('dart analyze', DART, ['analyze', outAbs]); run('dart run --enable-asserts (הוכחת-ההרכבה)', DART, ['run', '--enable-asserts', proofAbs]); }
+  run('no-fakers-check', process.execPath, [path.join(R.MACH, 'no-fakers-check.mjs')]);
+  const bs = R.bsRoot ? R.bsRoot() : null; const flutter = ['/home/user/flutter/bin/flutter', process.env.FLUTTER_BIN].filter((f) => f && fs.existsSync(f))[0] || null;
+  if (bs && flutter) run('flutter analyze (מראה)', flutter, ['analyze'], { cwd: path.join(bs, 'app_flutter') });
+  else checks.push({ name: 'flutter analyze (מראה)', status: 'לא-זמין', out: `buildsmart=${bs || '—'} · flutter=${flutter || '—'}` });
+  const red = checks.filter((c) => c.status === 'כשל');
+  say(6, 'משטרה בתוך הריצה', red.length ? 'כשל' : 'עבר',
+    checks.map((c) => `${c.name}: ${c.status}`).join(' · ') + (red.length ? ` · ${red.map((c) => c.name + ' ⇒ ' + c.out).join(' ; ')}` : ''), { checks });
+
+  // ── 7 · הלדג'ר ──
+  const solved = Object.values(merged).filter((p) => p.pick).length, total = Object.keys(needs).length;
+  const ledger = { ns, goal: text, goalFile: path.relative(R.ROOT, path.resolve(goalPath)), at: new Date().toISOString(), ms: Date.now() - t0,
+    cmd: `node machtzev/generator/behavior-plan.mjs --goal ${path.relative(R.ROOT, path.resolve(goalPath))}${opts.ns ? ' --ns ' + ns : ''}`,
+    summary: { needs: total, rejected: nRej, solved, rounds: rounds.length, file: 'new/' + outRel, red: red.length },
+    steps, needs: perNeed, checks };
+  say(7, "כתיבת-הלדג'ר", 'עבר', `${path.relative(R.ROOT, path.join(dir, 'ledger.json'))} · ${path.relative(R.ROOT, path.join(dir, 'ledger.md'))}`);   // השורה נכתבת לפני העיבוד כדי שתופיע בטבלה
+  fs.writeFileSync(path.join(dir, 'ledger.json'), JSON.stringify(ledger, null, 1) + '\n');
+  const md = [`# לדג'ר-מטרה · ${ns}`, '', `> ${text}`, '',
+    `\`${ledger.cmd}\` · ${new Date().toISOString().slice(0, 19).replace('T', ' ')} · ${(ledger.ms / 1000).toFixed(1)}s`, '',
+    '## שבעת הצעדים', '', '| # | צעד | מצב | מדידה |', '|---|---|---|---|',
+    ...steps.map((r) => `| ${r.step} | ${r.title} | ${ST_ICON[r.status] || ''} ${r.status} | ${String(r.detail).replace(/\|/g, '/')} |`), '',
+    '## הצרכים', '', '| צורך | מצב | נבחר | צמתים | תיקו | דוגמאות-חלשות | עומק | שקעים | סבב |', '|---|---|---|---|---|---|---|---|---|',
+    ...Object.values(perNeed).map((n) => `| ${n.id} | ${ST_ICON[n.status] || ''} ${n.status} | ${n.pick ? '`' + n.pick + '`' : (n.reason || '—')} | ${n.nodes ?? '—'} | ${n.ties ?? '—'} | ${n.weakExamples ? 'כן' : 'לא'} | ${n.depth ?? '—'} | ${(n.sockets || []).join(',') || '—'} | ${n.round ?? '—'} |`), '',
+    '## משטרה', '', '| בדיקה | מצב | פלט |', '|---|---|---|',
+    ...checks.map((c) => `| ${c.name} | ${ST_ICON[c.status] || ''} ${c.status} | ${String(c.out || '').replace(/\|/g, '/').slice(0, 160)} |`), '',
+    `## סיכום`, '', `- צרכים: **${solved}/${total}** נפתרו · ${nRej} נפסלו · ${rounds.length} סבבים`, `- פלט: \`new/${outRel}\` + \`new/${proofRel}\``, `- לדג'ר: \`${path.relative(R.ROOT, path.join(dir, 'ledger.json'))}\``, ''].join('\n');
+  fs.writeFileSync(path.join(dir, 'ledger.md'), md);
+  console.log(`\n${red.length ? '🔴' : '✓'} מטרה «${text.slice(0, 50)}…» ⇒ ${solved}/${total} צרכים מוכחים · ${rounds.length} סבבים · new/${outRel} · ${(((Date.now() - t0) / 1000) | 0)}s`);
+  return red.length ? 1 : 0;
+}
+
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain && process.argv.includes('--backward')) {
   const at = process.argv[process.argv.indexOf('--backward') + 1];
@@ -485,6 +678,13 @@ if (isMain && process.argv.includes('--backward')) {
   console.log(JSON.stringify(backwardSearch(at, { examples, imports }), null, 1));
   process.exit(0);
 }
+if (isMain && process.argv.includes('--goal')) {   // up-goal · הפקודה-האחת
+  const gi = process.argv.indexOf('--goal'); const gp = process.argv[gi + 1];
+  if (!gp || gp.startsWith('--')) { console.error('usage: behavior-plan.mjs --goal <goal.json> [--ns <שם>] [--out <dart-gen-bs/gen_goal_x.dart>]'); process.exit(2); }
+  const opt = (k) => { const j = process.argv.indexOf(k); return j >= 0 ? process.argv[j + 1] : null; };
+  const code = await runGoal(gp, { ns: opt('--ns'), out: opt('--out') });
+  process.exit(code);
+}
 if (isMain) {
   // --needs <path.json>: הרצת plan() על צרכים חיצוניים (אפס שינוי בברירת-המחדל · לא נוגע ב-behavior-plan.json). פלט: --out <path> או stdout.
   const ni = process.argv.indexOf('--needs');
@@ -492,7 +692,8 @@ if (isMain) {
     const needsPath = process.argv[ni + 1];
     if (!needsPath) { console.error('--needs דורש נתיב ל-JSON'); process.exit(2); }
     const needsObj = JSON.parse(fs.readFileSync(needsPath, 'utf8'));
-    const P = planNeeds(needsObj, { prove: true, earlyExit: !process.argv.includes('--exhaustive'), values: !process.argv.includes('--blind') });
+    const extraRows = process.argv.flatMap((a, i) => (a === '--extra' && process.argv[i + 1] ? rowsFromDart(process.argv[i + 1].replace(/^new\//, '')) : []));   // up-goal · מדף-נוסף: קובץ-Dart מחולל (התנהגויות-שהוכחו)
+    const P = planNeeds(needsObj, { prove: true, earlyExit: !process.argv.includes('--exhaustive'), values: !process.argv.includes('--blind'), extraRows });
     const oi = process.argv.indexOf('--out');
     const json = JSON.stringify(P, null, 1) + '\n';
     if (oi >= 0 && process.argv[oi + 1]) fs.writeFileSync(process.argv[oi + 1], json); else process.stdout.write(json);

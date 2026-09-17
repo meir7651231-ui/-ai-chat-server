@@ -23,7 +23,7 @@ import { treeDart } from './logic-proof.mjs';   // up-compose · אותו מיפ
     const plan = JSON.parse(fs.readFileSync(planPath, 'utf8'));
     const CENSUS = new Map(); { const cf = path.join(R.GEN_DIR, 'logic-census.json'); if (fs.existsSync(cf)) { const j = JSON.parse(fs.readFileSync(cf, 'utf8')); const arr = Array.isArray(j) ? j : (j.atoms || j.functions || j.rows || Object.values(j).find(Array.isArray) || []); for (const x of arr) { const ps = (x.params || []).map((t) => String(t).replace(/\s.*$/, '')); CENSUS.set(x.name + '@' + x.file, ps); if (!CENSUS.has(x.name)) CENSUS.set(x.name, ps); } } }
     const outAbs = path.resolve(R.ROOT, out); const outDir = path.dirname(outAbs);
-    const rel = (file) => path.relative(outDir, path.join(R.NEW, file)).split(path.sep).join('/');
+    const rel = (file) => { const r = path.relative(outDir, path.join(R.NEW, file)).split(path.sep).join('/'); return /^\.{1,2}\//.test(r) ? r : './' + r; };   // up-goal · קובץ באותה תיקייה ⇒ './x.dart' ולא 'x.dart': ייבוא בלי-נקודה נראה ל-isPure כחבילה ⇒ הקובץ-המחולל נפל מהמדף בסבב-השימוש-החוזר (נמדד: isPure=false על גן-הזהב שלו עצמו)
     const camel = (id) => { const last = id.split('.').pop(); return 'bh' + last.charAt(0).toUpperCase() + last.slice(1); };
     const names = new Map(); const fns = []; const imports = new Set(); const proofs = []; const skipped = [];
     let i = 0;

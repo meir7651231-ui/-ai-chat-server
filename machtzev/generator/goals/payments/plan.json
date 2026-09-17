@@ -1,0 +1,441 @@
+{
+ "g1.clock.overdueDays": {
+  "pick": "cockpitDaysSince(p0,now)",
+  "file": "dart-maor/cockpit-days-since.dart",
+  "tree": {
+   "k": "a",
+   "id": "cockpitDaysSince",
+   "file": "dart-maor/cockpit-days-since.dart",
+   "args": [
+    {
+     "k": "p",
+     "i": 0
+    },
+    {
+     "k": "t"
+    }
+   ]
+  },
+  "chain": null,
+  "nodes": 1,
+  "proven": true,
+  "need": {
+   "shape": "מועד",
+   "demand": "ימים מאז מועד התשלום עד היום",
+   "params": [
+    "String"
+   ],
+   "ret": "num",
+   "clock": {
+    "type": "String"
+   },
+   "examples": [
+    [
+     "'2026-08-01'",
+     "r == 47",
+     {
+      "now": "'2026-09-17'"
+     }
+    ],
+    [
+     "'2026-09-01'",
+     "r == 16",
+     {
+      "now": "'2026-09-17'"
+     }
+    ],
+    [
+     "'2026-09-17'",
+     "r == 0",
+     {
+      "now": "'2026-09-17'"
+     }
+    ]
+   ]
+  }
+ },
+ "g2.predicate.overdue30": {
+  "pick": "cmpGtStr(now,addDaysIso(p0,30))",
+  "file": "dart-maor/op-cmp-gt-str.dart",
+  "tree": {
+   "k": "a",
+   "id": "cmpGtStr",
+   "file": "dart-maor/op-cmp-gt-str.dart",
+   "args": [
+    {
+     "k": "t"
+    },
+    {
+     "k": "a",
+     "id": "addDaysIso",
+     "file": "dart-maor/add-days-iso.dart",
+     "args": [
+      {
+       "k": "p",
+       "i": 0
+      },
+      {
+       "k": "c",
+       "dart": "30",
+       "type": "num",
+       "cv": 30
+      }
+     ]
+    }
+   ]
+  },
+  "chain": null,
+  "nodes": 2,
+  "proven": true,
+  "need": {
+   "shape": "מועד",
+   "demand": "האם התשלום באיחור מעל 30 יום",
+   "params": [
+    "String"
+   ],
+   "ret": "bool",
+   "clock": {
+    "type": "String"
+   },
+   "consts": [
+    "30"
+   ],
+   "examples": [
+    [
+     "'2026-08-01'",
+     "r == true",
+     {
+      "now": "'2026-09-17'"
+     }
+    ],
+    [
+     "'2026-09-01'",
+     "r == false",
+     {
+      "now": "'2026-09-17'"
+     }
+    ],
+    [
+     "'2026-08-18'",
+     "r == false",
+     {
+      "now": "'2026-09-17'"
+     }
+    ],
+    [
+     "'2026-08-17'",
+     "r == true",
+     {
+      "now": "'2026-09-17'"
+     }
+    ]
+   ]
+  }
+ },
+ "g3a.predicate.recordOverdue30": {
+  "pick": "fieldPred(p0,'due',λbhOverdue30(_,now))",
+  "file": "dart-maor/op-field-pred.dart",
+  "tree": {
+   "k": "a",
+   "id": "fieldPred",
+   "file": "dart-maor/op-field-pred.dart",
+   "args": [
+    {
+     "k": "p",
+     "i": 0
+    },
+    {
+     "k": "c",
+     "dart": "'due'",
+     "type": "String",
+     "cv": "due"
+    },
+    {
+     "k": "f",
+     "id": "bhOverdue30",
+     "file": "dart-gen-bs/gen_goal_payments.dart",
+     "m": 1,
+     "args": [
+      {
+       "k": "t",
+       "type": "String"
+      }
+     ]
+    }
+   ]
+  },
+  "chain": null,
+  "nodes": 2,
+  "proven": true,
+  "need": {
+   "shape": "רשומות",
+   "demand": "האם רשומת תשלום באיחור מעל 30 יום לפי שדה due",
+   "params": [
+    "dynamic"
+   ],
+   "ret": "bool",
+   "clock": {
+    "type": "String"
+   },
+   "consts": [
+    "'due'",
+    "30"
+   ],
+   "examples": [
+    [
+     "{'id': 'a', 'due': '2026-08-01'}",
+     "r == true",
+     {
+      "now": "'2026-09-17'"
+     }
+    ],
+    [
+     "{'id': 'b', 'due': '2026-09-10'}",
+     "r == false",
+     {
+      "now": "'2026-09-17'"
+     }
+    ],
+    [
+     "{'id': 'c', 'due': '2026-08-18'}",
+     "r == false",
+     {
+      "now": "'2026-09-17'"
+     }
+    ],
+    [
+     "{'id': 'd', 'due': '2026-08-17'}",
+     "r == true",
+     {
+      "now": "'2026-09-17'"
+     }
+    ]
+   ]
+  }
+ },
+ "g3.collection.overdueList": {
+  "pick": "whereList(p0,λbhRecordOverdue30(_,now))",
+  "file": "dart-maor/op-where-list.dart",
+  "tree": {
+   "k": "a",
+   "id": "whereList",
+   "file": "dart-maor/op-where-list.dart",
+   "args": [
+    {
+     "k": "p",
+     "i": 0
+    },
+    {
+     "k": "f",
+     "id": "bhRecordOverdue30",
+     "file": "dart-gen-bs/gen_goal_payments.dart",
+     "m": 1,
+     "args": [
+      {
+       "k": "t",
+       "type": "String"
+      }
+     ]
+    }
+   ]
+  },
+  "chain": null,
+  "nodes": 2,
+  "proven": true,
+  "need": {
+   "shape": "רשומות",
+   "demand": "רק התשלומים שבאיחור מעל 30 יום",
+   "params": [
+    "List<dynamic>"
+   ],
+   "ret": "List<dynamic>",
+   "clock": {
+    "type": "String"
+   },
+   "consts": [
+    "'due'",
+    "30"
+   ],
+   "examples": [
+    [
+     "[{'id': 'a', 'due': '2026-08-01'}, {'id': 'b', 'due': '2026-09-10'}]",
+     "r.length == 1 && r.first['id'] == 'a'",
+     {
+      "now": "'2026-09-17'"
+     }
+    ],
+    [
+     "[{'id': 'a', 'due': '2026-09-15'}]",
+     "r.isEmpty",
+     {
+      "now": "'2026-09-17'"
+     }
+    ],
+    [
+     "[{'id': 'a', 'due': '2026-07-01'}, {'id': 'b', 'due': '2026-07-02'}]",
+     "r.length == 2",
+     {
+      "now": "'2026-09-17'"
+     }
+    ]
+   ]
+  }
+ },
+ "g4.measure.totalDue": {
+  "pick": "sumBy(p0,λfieldOf(_,'amount'))",
+  "file": "dart-maor/op-sum-by.dart",
+  "tree": {
+   "k": "a",
+   "id": "sumBy",
+   "file": "dart-maor/op-sum-by.dart",
+   "args": [
+    {
+     "k": "p",
+     "i": 0
+    },
+    {
+     "k": "f",
+     "id": "fieldOf",
+     "file": "dart-maor/op-field-of.dart",
+     "m": 1,
+     "args": [
+      {
+       "k": "c",
+       "dart": "'amount'",
+       "type": "String",
+       "cv": "amount"
+      }
+     ]
+    }
+   ]
+  },
+  "chain": null,
+  "nodes": 2,
+  "proven": true,
+  "need": {
+   "shape": "רשומות",
+   "demand": "כמה הם חייבים בסך הכל סכום כולל",
+   "params": [
+    "List<dynamic>"
+   ],
+   "ret": "num",
+   "consts": [
+    "'amount'"
+   ],
+   "examples": [
+    [
+     "[{'amount': 120}, {'amount': 80}]",
+     "r == 200"
+    ],
+    [
+     "<dynamic>[]",
+     "r == 0"
+    ],
+    [
+     "[{'amount': 50}]",
+     "r == 50"
+    ]
+   ]
+  }
+ },
+ "g5.format.reminder": {
+  "pick": "pp(p1,p0)",
+  "file": "dart/pp.dart",
+  "tree": {
+   "k": "a",
+   "id": "pp",
+   "file": "dart/pp.dart",
+   "args": [
+    {
+     "k": "p",
+     "i": 1
+    },
+    {
+     "k": "p",
+     "i": 0
+    }
+   ]
+  },
+  "chain": null,
+  "nodes": 1,
+  "proven": true,
+  "need": {
+   "shape": "טקסט",
+   "demand": "נוסח תזכורת להורה עם שם וסכום",
+   "params": [
+    "String",
+    "num"
+   ],
+   "ret": "String",
+   "examples": [
+    [
+     "'כהן', 200",
+     "r.contains('כהן') && r.contains('200')"
+    ],
+    [
+     "'לוי', 80",
+     "r.contains('לוי') && r.contains('80')"
+    ],
+    [
+     "'x', 0",
+     "r.contains('x') && r.contains('0')"
+    ]
+   ]
+  }
+ },
+ "g6.world.sendReminder": {
+  "pick": "addTo(w,addDyn(p0,p1))",
+  "file": "dart-maor/op-add-to.dart",
+  "tree": {
+   "k": "a",
+   "id": "addTo",
+   "file": "dart-maor/op-add-to.dart",
+   "args": [
+    {
+     "k": "w"
+    },
+    {
+     "k": "a",
+     "id": "addDyn",
+     "file": "dart-maor/op-add-dyn.dart",
+     "args": [
+      {
+       "k": "p",
+       "i": 0
+      },
+      {
+       "k": "p",
+       "i": 1
+      }
+     ]
+    }
+   ]
+  },
+  "chain": null,
+  "nodes": 2,
+  "proven": true,
+  "need": {
+   "shape": "יומן",
+   "demand": "שלח תזכורת לטלפון רשום שנשלח",
+   "params": [
+    "String",
+    "String"
+   ],
+   "ret": "void",
+   "world": {
+    "type": "List<dynamic>",
+    "init": "<dynamic>[]"
+   },
+   "examples": [
+    [
+     "'0501234567', 'תזכורת 200'",
+     "r.length == 1 && r.first.toString().contains('0501234567') && r.first.toString().contains('200')"
+    ],
+    [
+     "'0521111111', 'x'",
+     "r.length == 1 && r.first.toString().contains('x')"
+    ]
+   ]
+  }
+ }
+}
