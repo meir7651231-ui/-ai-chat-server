@@ -1,0 +1,234 @@
+{
+ "g1.clock.overdueDays": {
+  "shape": "מועד",
+  "demand": "ימים מאז מועד התשלום עד היום",
+  "params": [
+   "String"
+  ],
+  "ret": "num",
+  "clock": {
+   "type": "String"
+  },
+  "examples": [
+   [
+    "'2026-08-01'",
+    "r == 47",
+    {
+     "now": "'2026-09-17'"
+    }
+   ],
+   [
+    "'2026-09-01'",
+    "r == 16",
+    {
+     "now": "'2026-09-17'"
+    }
+   ],
+   [
+    "'2026-09-17'",
+    "r == 0",
+    {
+     "now": "'2026-09-17'"
+    }
+   ]
+  ]
+ },
+ "g2.predicate.overdue30": {
+  "shape": "מועד",
+  "demand": "האם התשלום באיחור מעל 30 יום",
+  "params": [
+   "String"
+  ],
+  "ret": "bool",
+  "clock": {
+   "type": "String"
+  },
+  "consts": [
+   "30"
+  ],
+  "examples": [
+   [
+    "'2026-08-01'",
+    "r == true",
+    {
+     "now": "'2026-09-17'"
+    }
+   ],
+   [
+    "'2026-09-01'",
+    "r == false",
+    {
+     "now": "'2026-09-17'"
+    }
+   ],
+   [
+    "'2026-08-18'",
+    "r == false",
+    {
+     "now": "'2026-09-17'"
+    }
+   ],
+   [
+    "'2026-08-17'",
+    "r == true",
+    {
+     "now": "'2026-09-17'"
+    }
+   ]
+  ]
+ },
+ "g3a.predicate.recordOverdue30": {
+  "shape": "רשומות",
+  "demand": "האם רשומת תשלום באיחור מעל 30 יום לפי שדה due",
+  "params": [
+   "dynamic"
+  ],
+  "ret": "bool",
+  "clock": {
+   "type": "String"
+  },
+  "consts": [
+   "'due'",
+   "30"
+  ],
+  "examples": [
+   [
+    "{'id': 'a', 'due': '2026-08-01'}",
+    "r == true",
+    {
+     "now": "'2026-09-17'"
+    }
+   ],
+   [
+    "{'id': 'b', 'due': '2026-09-10'}",
+    "r == false",
+    {
+     "now": "'2026-09-17'"
+    }
+   ],
+   [
+    "{'id': 'c', 'due': '2026-08-18'}",
+    "r == false",
+    {
+     "now": "'2026-09-17'"
+    }
+   ],
+   [
+    "{'id': 'd', 'due': '2026-08-17'}",
+    "r == true",
+    {
+     "now": "'2026-09-17'"
+    }
+   ]
+  ]
+ },
+ "g3.collection.overdueList": {
+  "shape": "רשומות",
+  "demand": "רק התשלומים שבאיחור מעל 30 יום",
+  "params": [
+   "List<dynamic>"
+  ],
+  "ret": "List<dynamic>",
+  "clock": {
+   "type": "String"
+  },
+  "consts": [
+   "'due'",
+   "30"
+  ],
+  "examples": [
+   [
+    "[{'id': 'a', 'due': '2026-08-01'}, {'id': 'b', 'due': '2026-09-10'}]",
+    "r.length == 1 && r.first['id'] == 'a'",
+    {
+     "now": "'2026-09-17'"
+    }
+   ],
+   [
+    "[{'id': 'a', 'due': '2026-09-15'}]",
+    "r.isEmpty",
+    {
+     "now": "'2026-09-17'"
+    }
+   ],
+   [
+    "[{'id': 'a', 'due': '2026-07-01'}, {'id': 'b', 'due': '2026-07-02'}]",
+    "r.length == 2",
+    {
+     "now": "'2026-09-17'"
+    }
+   ]
+  ]
+ },
+ "g4.measure.totalDue": {
+  "shape": "רשומות",
+  "demand": "כמה הם חייבים בסך הכל סכום כולל",
+  "params": [
+   "List<dynamic>"
+  ],
+  "ret": "num",
+  "consts": [
+   "'amount'"
+  ],
+  "examples": [
+   [
+    "[{'amount': 120}, {'amount': 80}]",
+    "r == 200"
+   ],
+   [
+    "<dynamic>[]",
+    "r == 0"
+   ],
+   [
+    "[{'amount': 50}]",
+    "r == 50"
+   ]
+  ]
+ },
+ "g5.format.reminder": {
+  "shape": "טקסט",
+  "demand": "נוסח תזכורת להורה עם שם וסכום",
+  "params": [
+   "String",
+   "num"
+  ],
+  "ret": "String",
+  "examples": [
+   [
+    "'כהן', 200",
+    "r.contains('כהן') && r.contains('200')"
+   ],
+   [
+    "'לוי', 80",
+    "r.contains('לוי') && r.contains('80')"
+   ],
+   [
+    "'x', 0",
+    "r.contains('x') && r.contains('0')"
+   ]
+  ]
+ },
+ "g6.world.sendReminder": {
+  "shape": "יומן",
+  "demand": "שלח תזכורת לטלפון רשום שנשלח",
+  "params": [
+   "String",
+   "String"
+  ],
+  "ret": "void",
+  "world": {
+   "type": "List<dynamic>",
+   "init": "<dynamic>[]"
+  },
+  "examples": [
+   [
+    "'0501234567', 'תזכורת 200'",
+    "r.length == 1 && r.first.toString().contains('0501234567') && r.first.toString().contains('200')"
+   ],
+   [
+    "'0521111111', 'x'",
+    "r.length == 1 && r.first.toString().contains('x')"
+   ]
+  ]
+ }
+}
