@@ -313,37 +313,50 @@ half4 main(float2 fc) {
     float t = iTime; float iLevelIn = iLevel; if (iMode == 6.0) iLevelIn = 0.0;
     float3 col = float3(0.0); float a = 1.0;
 
- float lv=iLevelIn;float2 wander=float2(.14*sin(t*.5)+.06*sin(t*1.9),.12*cos(t*.37)+.05*cos(t*1.5));float2 uu=(uv-wander)*1.45;
- float sac=floor(t*.7);float sf=smoothstep(0.,.25,fract(t*.7));
+ float lv=iLevelIn;float2 wander=float2(.12*sin(t*.35)+.05*sin(t*1.3),.1*cos(t*.27)+.04*cos(t*1.1));float2 uu=(uv-wander)*1.45;
+ float sac=floor(t*.5);float sf=smoothstep(0.,.35,fract(t*.5));
  float2 look0=float2(hash(float2(sac,1.)),hash(float2(sac,7.)))-.5;float2 look1=float2(hash(float2(sac+1.,1.)),hash(float2(sac+1.,7.)))-.5;
- float2 ep=mix(look0,look1,sf)*.34+float2(.06*sin(t*.9),.04*cos(t*1.3));
- float2 ec=uu-ep;float wob=t*.5;float2 sc=float2(1.+.22*sin(wob),1.-.18*sin(wob+1.3));float2 ey=rot(.35*sin(t*.31))*(ec*sc);float er=length(ey);
+ float2 ep=mix(look0,look1,sf)*.3+float2(.04*sin(t*.7),.03*cos(t*.9));
+ float2 ec=uu-ep;float wob=t*.4;float2 sc=float2(1.+.16*sin(wob),1.-.14*sin(wob+1.3));float2 ey=rot(.3*sin(t*.23))*(ec*sc);float er=length(ey);
  float ang=atan(uu.y,uu.x);float rr=length(uu);
- float breath=1.+.14*(noise(float2(t*.9,3.))-.5)+.1*lv;
- float lumpA=t*.45;float dl=abs(mod(ang-lumpA+3.14159,6.28318)-3.14159);float lump=.22*exp(-dl*dl/.35)*(.6+.4*sin(t*2.1));
- float shape=fbm(float2(ang*1.3+t*.3,t*.4))*.3+fbm(float2(ang*4.-t*.5,rr*2.+t*.2))*.12+lump;
- float2 tilt=float2(-.5,-.3)*ep;float bodyR=(.55+shape)*breath+dot(uu/max(rr,.001),tilt);
- float tend=pow(max(0.,fbm(float2(ang*3.5+t*.6,rr*1.5-t*.9))-.35),1.6)*(1.2+lv*2.);
- float tent=0.;for(int k=0;k<5;k++){float fk=float(k);float ak=fk*1.2566+.5*sin(t*(.25+.07*fk)+fk*2.);float da=ang-ak-.45*sin(rr*5.-t*(2.2+.3*fk)+fk);float len=.75+.45*sin(t*(.6+.11*fk)+fk*1.7)+.4*lv;tent+=pow(max(0.,cos(da)),10.+50.*rr)*len;}
- float reach=bodyR+tend*.9+tent;
- float body=1.-smoothstep(reach-.08,reach+.05,rr);
- float wisp=smoothstep(reach+.35,reach-.05,rr)*(tend*.8+tent*.6);
- float2 q=uu+.35*float2(fbm(uu*1.6+t*.3),fbm(uu*1.6-t*.25+7.));float f=fbm(q*2.4+t*.2);
- float vein=pow(1.-abs(fract(f*3.2+t*.15-er*.8)*2.-1.),10.)*(.8+lv*1.2);
- float3 dark=float3(.06,.01,.09);float3 hot=float3(.95,.2,.45);float3 fire=float3(1.,.6,.2);
- float3 skin=mix(dark,hot,smoothstep(.35,.8,f)*.7);skin+=fire*vein;skin+=hot*pow(max(0.,1.-rr/max(reach,.01)),1.5)*.35;
- float pupil=.15-.06*lv;float irisR=.3;
- float irisBand=exp(-pow((er-irisR)/(.08+.04*lv),2.));float ea=atan(ey.y,ey.x);float tex=fbm(float2(ea*4.+t*(1.5+lv*2.),er*10.-t));float dop=.6+.6*cos(ea-t*2.);
- float3 iris=mix(fire,float3(1.,.9,.6),tex)*irisBand*(1.3+tex)*dop;
- float pup=1.-smoothstep(pupil-.02,pupil+.03,er);
- float3 eye=mix(skin,iris+skin*.3,smoothstep(irisR+.16,irisR+.02,er));eye=mix(eye,float3(0.),pup);
- float2 hl=ey-float2(-.11,-.13);eye+=float3(1.)*exp(-dot(hl,hl)*120.)*.9*(1.-pup*.3);
- float open=1.-pow(max(0.,sin(t*.6+2.)),40.)*.95;float lid=smoothstep(open*.45-.03,open*.45+.03,abs(ey.y));eye=mix(eye,skin*.8,lid*smoothstep(irisR+.2,irisR,er));
+ float breath=1.+.1*(noise(float2(t*.6,3.))-.5)+.08*lv;
+ float lumpA=t*.3;float dl=abs(mod(ang-lumpA+3.14159,6.28318)-3.14159);float lump=.16*exp(-dl*dl/.4)*(.6+.4*sin(t*1.4));
+ float shape=fbm(float2(ang*1.3+t*.2,t*.3))*.26+fbm(float2(ang*4.-t*.35,rr*2.+t*.15))*.1+lump;
+ float bodyR=(.52+shape)*breath;
+ /* arms: smooth, tapered, with light pulses travelling outward */
+ float tent=0.;float pulse=0.;
+ for(int k=0;k<5;k++){float fk=float(k);float ak=fk*1.2566+.45*sin(t*(.18+.05*fk)+fk*2.);float da=ang-ak-.4*sin(rr*4.-t*(1.4+.2*fk)+fk);float len=.8+.4*sin(t*(.45+.09*fk)+fk*1.7)+.35*lv;
+  float prof=pow(max(0.,cos(da)),8.+60.*rr);tent+=prof*len;pulse+=prof*pow(.5+.5*sin(rr*9.-t*(2.5+.4*fk)+fk*2.),10.);}
+ float reach=bodyR+tent;
+ float body=1.-smoothstep(reach-.06,reach+.04,rr);
+ float wisp=smoothstep(reach+.25,reach-.03,rr)*tent*.7;
+ /* iridescent gel */
+ float2 q=uu+.3*float2(fbm(uu*1.4+t*.2),fbm(uu*1.4-t*.18+7.));float f=fbm(q*2.2+t*.12);
+ float3 iri=.5+.5*cos(6.28318*(f*.6+ang*.15+t*.05+float3(0.,.33,.67)));iri=mix(float3(.4,.7,.9),iri,.55);
+ float3 deep=float3(.02,.03,.1);float3 cyan=float3(.45,.95,1.);float3 mag=float3(.85,.4,1.);
+ float3 skin=mix(deep,iri*.55,smoothstep(.3,.8,f));
+ float vein=pow(1.-abs(fract(f*3.+t*.1-er*.6)*2.-1.),14.)*(.5+lv*.9);skin+=cyan*vein*.8;
+ skin+=iri*pow(max(0.,1.-rr/max(reach,.01)),2.)*.25;
+ skin+=mix(cyan,mag,.5+.5*sin(t*.7+ang))*pulse*(.9+lv);
+ /* lens eye */
+ float pupil=.13-.05*lv;float irisR=.27;
+ float ea=atan(ey.y,ey.x);float fib=fbm(float2(ea*6.+t*.3,er*14.));float rings=pow(.5+.5*sin(er*70.-t*2.),6.);
+ float3 irisC=mix(cyan,mag,.5+.5*sin(ea*2.+t*.5+fib*3.));
+ float irisM=smoothstep(irisR+.05,irisR-.02,er)*smoothstep(pupil,pupil+.03,er);
+ float3 iris=irisC*(.35+.5*fib+.6*rings)*irisM;
+ float pup=1.-smoothstep(pupil-.015,pupil+.02,er);
+ float rim=exp(-pow((er-irisR)/.03,2.))*.9;
+ float3 eye=skin+iris+cyan*rim;eye=mix(eye,float3(.0,.0,.02),pup);
+ float2 hl=ey-float2(-.09,-.1);eye+=float3(1.)*exp(-dot(hl,hl)*160.)*.8;float2 hl2=ey-float2(.08,.09);eye+=cyan*exp(-dot(hl2,hl2)*300.)*.4;
+ float open=1.-pow(max(0.,sin(t*.45+2.)),50.)*.95;float lid=smoothstep(open*.4-.03,open*.4+.03,abs(ey.y));eye=mix(eye,skin*.9,lid*smoothstep(irisR+.15,irisR,er));
  col=eye*body+skin*wisp;
- float glow=exp(-max(0.,rr-reach)*4.)*(.35+lv*.6);col+=hot*glow*(1.-body);
- col=1.-exp(-col*1.1);
+ /* motes */
+ float2 mg=floor(uu*9.+float2(t*.15,-t*.1));float2 mf=fract(uu*9.+float2(t*.15,-t*.1))-.5;float mh=hash(mg);float2 mo=float2(hash(mg+3.),hash(mg+7.))-.5;float mote=exp(-dot(mf-mo*.6,mf-mo*.6)*60.)*step(.85,mh)*(.5+.5*sin(t*3.+mh*20.));
+ col+=mix(cyan,mag,mh)*mote*(1.-body)*.8;
+ float glow=exp(-max(0.,rr-reach)*3.5)*(.3+lv*.5);col+=mix(cyan,mag,.5+.5*sin(t*.5))*glow*(1.-body)*.6;
+ col=1.-exp(-col*1.15);
  float fade=1.-smoothstep(.9,1.02,nr);col*=fade;
- a=(max(body,wisp)*.98+glow*(1.-body)*.9)*fade;
+ a=(max(body,wisp)*.96+(glow*.8+mote*.9)*(1.-body))*fade;
     col = mix(col, cB.rgb * col, 0.3);
     if (iMode == 6.0) col *= 0.4;
     return half4(half3(col * a), half(a));
