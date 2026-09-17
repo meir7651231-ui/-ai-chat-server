@@ -5531,6 +5531,16 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-is-not-empty-str.dart",
+  "name": "isNotEmptyStr",
+  "ret": "bool",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/op-is-not-null.dart",
   "name": "isNotNull",
   "ret": "bool",
@@ -5963,6 +5973,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-le-dyn.dart",
+  "name": "leDyn",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/op-length-list.dart",
   "name": "lengthList",
   "ret": "num",
@@ -6196,6 +6217,17 @@
    "String"
   ],
   "argc": 1,
+  "wireable": true
+ },
+ {
+  "file": "dart-maor/op-lt-num.dart",
+  "name": "ltNum",
+  "ret": "bool",
+  "params": [
+   "num",
+   "num"
+  ],
+  "argc": 2,
   "wireable": true
  },
  {

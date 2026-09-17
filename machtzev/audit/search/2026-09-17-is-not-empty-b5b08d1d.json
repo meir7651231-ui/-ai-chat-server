@@ -1,0 +1,196 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:22:59.726Z",
+ "query": "is not empty str חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "is",
+  "not",
+  "empty",
+  "str",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "5b5afc5f2e0e044b6e6ed5ee0dfc62b5a9da3d70439b0bccf92f68158cd368f6",
+  "logicCensusSha": "947cedad4ea409728c03d50736556c33190ecd3324fd903ef1c29703e57a9cc0",
+  "display": 1927,
+  "logic": 1003
+ },
+ "candidates": [
+  {
+   "id": "isEmptyStr",
+   "layer": "logic",
+   "file": "dart-maor/op-is-empty-str.dart",
+   "score": 9,
+   "hits": [
+    "is",
+    "empty",
+    "str"
+   ]
+  },
+  {
+   "id": "isNotEmptyList",
+   "layer": "logic",
+   "file": "dart-maor/op-is-not-empty-list.dart",
+   "score": 9,
+   "hits": [
+    "is",
+    "not",
+    "empty"
+   ]
+  },
+  {
+   "id": "fieldIsNotNull",
+   "layer": "logic",
+   "file": "dart-maor/op-field-is-not-null.dart",
+   "score": 6,
+   "hits": [
+    "is",
+    "not"
+   ]
+  },
+  {
+   "id": "isEmptyList",
+   "layer": "logic",
+   "file": "dart-maor/op-is-empty-list.dart",
+   "score": 6,
+   "hits": [
+    "is",
+    "empty"
+   ]
+  },
+  {
+   "id": "isNotNull",
+   "layer": "logic",
+   "file": "dart-maor/op-is-not-null.dart",
+   "score": 6,
+   "hits": [
+    "is",
+    "not"
+   ]
+  },
+  {
+   "id": "ForgeAnimatedEmpty",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/animated_empty.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeEmptyHint",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/empty_hint.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeEmptyState",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/empty_state.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeSearchEmptyState",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/search_empty_state.dart",
+   "score": 4,
+   "hits": [
+    "empty",
+    "תוך"
+   ]
+  },
+  {
+   "id": "addStr",
+   "layer": "logic",
+   "file": "dart-maor/op-add-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "AnimatedEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/animated_empty.dart",
+   "score": 3,
+   "hits": [
+    "empty"
+   ]
+  },
+  {
+   "id": "CaEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_empty.dart",
+   "score": 3,
+   "hits": [
+    "empty"
+   ]
+  },
+  {
+   "id": "cmpGeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-ge-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpGtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-gt-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpLeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-le-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  }
+ ],
+ "strong": [
+  "isEmptyStr",
+  "isNotEmptyList",
+  "fieldIsNotNull",
+  "isEmptyList",
+  "isNotNull",
+  "addStr",
+  "cmpGeStr",
+  "cmpGtStr",
+  "cmpLeStr"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "ForgeAnimatedEmpty",
+  "ForgeEmptyHint",
+  "ForgeEmptyState",
+  "ForgeSearchEmptyState",
+  "AnimatedEmpty",
+  "CaEmpty"
+ ],
+ "creates": "new/dart-maor/op-is-not-empty-str.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד isNotEmptyStr(String) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי k.trim().isNotEmpty · מקור למשל dart/action_id_of.dart#actionIdOf); המועמדים-החזקים isEmptyStr(String) => bool · isNotEmptyList(List<dynamic>) => bool · fieldIsNotNull(dynamic, String) => bool · isEmptyList(List<dynamic>) => bool · isNotNull(dynamic) => bool · addStr(String, String) => String · cmpGeStr(String, String) => bool · cmpGtStr(String, String) => bool · cmpLeStr(String, String) => bool — לרובם אין את חתימת-הפעולה-לבדה (String) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: isEmptyStr {} — מול isNotEmptyStr {xs.isNotEmpty;}",
+ "sig": "b5b08d1d82a994e7c608eb3d90db331b9e3465900f2c3f8349f8d620b5dec56a"
+}
