@@ -354,51 +354,35 @@ half4 main(float2 fc) {
     float t = iTime; float iLevelIn = iLevel; if (iMode == 6.0) iLevelIn = 0.0;
     float3 col = float3(0.0); float a = 1.0;
 
- float lv=iLevelIn;float2 wander=float2(.12*sin(t*.35)+.05*sin(t*1.3),.1*cos(t*.27)+.04*cos(t*1.1));float2 uu=(uv-wander)*1.45;
- float sac=floor(t*.5);float sf=smoothstep(0.,.35,fract(t*.5));
- float2 look0=float2(hash(float2(sac,1.)),hash(float2(sac,7.)))-.5;float2 look1=float2(hash(float2(sac+1.,1.)),hash(float2(sac+1.,7.)))-.5;
- float2 ep=mix(look0,look1,sf)*.3+float2(.04*sin(t*.7),.03*cos(t*.9));
- float2 ec=uu-ep;float wob=t*.4;float2 sc=float2(1.+.16*sin(wob),1.-.14*sin(wob+1.3));float2 ey=rot(.3*sin(t*.23))*(ec*sc);float er=length(ey);
- float ang=atan(uu.y,uu.x);float rr=length(uu);
- float breath=1.+.1*(noise(float2(t*.6,3.))-.5)+.08*lv;
- float lumpA=t*.3;float dl=abs(mod(ang-lumpA+3.14159,6.28318)-3.14159);float lump=.16*exp(-dl*dl/.4)*(.6+.4*sin(t*1.4));
- float shape=fbm(float2(ang*1.3+t*.2,t*.3))*.26+fbm(float2(ang*4.-t*.35,rr*2.+t*.15))*.1+lump;
- float bodyR=(.52+shape)*breath;
- /* arms: smooth, tapered, with light pulses travelling outward */
- float tent=0.;float pulse=0.;
- for(int k=0;k<5;k++){float fk=float(k);float ak=fk*1.2566+.45*sin(t*(.18+.05*fk)+fk*2.);float da=ang-ak-.4*sin(rr*4.-t*(1.4+.2*fk)+fk);float len=.8+.4*sin(t*(.45+.09*fk)+fk*1.7)+.35*lv;
-  float prof=pow(max(0.,cos(da)),8.+60.*rr);tent+=prof*len;pulse+=prof*pow(.5+.5*sin(rr*9.-t*(2.5+.4*fk)+fk*2.),10.);}
- float reach=bodyR+tent;
- float body=1.-smoothstep(reach-.06,reach+.04,rr);
- float wisp=smoothstep(reach+.25,reach-.03,rr)*tent*.7;
- /* iridescent gel */
- float2 q=uu+.3*float2(fbm(uu*1.4+t*.2),fbm(uu*1.4-t*.18+7.));float f=fbm(q*2.2+t*.12);
- float3 iri=.5+.5*cos(6.28318*(f*.6+ang*.15+t*.05+float3(0.,.33,.67)));iri=mix(float3(.4,.7,.9),iri,.55);
- float3 deep=float3(.02,.03,.1);float3 cyan=float3(.45,.95,1.);float3 mag=float3(.85,.4,1.);
- float3 skin=mix(deep,iri*.55,smoothstep(.3,.8,f));
- float vein=pow(1.-abs(fract(f*3.+t*.1-er*.6)*2.-1.),14.)*(.5+lv*.9);skin+=cyan*vein*.8;
- skin+=iri*pow(max(0.,1.-rr/max(reach,.01)),2.)*.25;
- skin+=mix(cyan,mag,.5+.5*sin(t*.7+ang))*pulse*(.9+lv);
- /* lens eye */
- float pupil=.13-.05*lv;float irisR=.27;
- float ea=atan(ey.y,ey.x);float fib=fbm(float2(ea*6.+t*.3,er*14.));float rings=pow(.5+.5*sin(er*70.-t*2.),6.);
- float3 irisC=mix(cyan,mag,.5+.5*sin(ea*2.+t*.5+fib*3.));
- float irisM=smoothstep(irisR+.05,irisR-.02,er)*smoothstep(pupil,pupil+.03,er);
- float3 iris=irisC*(.35+.5*fib+.6*rings)*irisM;
- float pup=1.-smoothstep(pupil-.015,pupil+.02,er);
- float rim=exp(-pow((er-irisR)/.03,2.))*.9;
- float3 eye=skin+iris+cyan*rim;eye=mix(eye,float3(.0,.0,.02),pup);
- float2 hl=ey-float2(-.09,-.1);eye+=float3(1.)*exp(-dot(hl,hl)*160.)*.8;float2 hl2=ey-float2(.08,.09);eye+=cyan*exp(-dot(hl2,hl2)*300.)*.4;
- float open=1.-pow(max(0.,sin(t*.45+2.)),50.)*.95;float lid=smoothstep(open*.4-.03,open*.4+.03,abs(ey.y));eye=mix(eye,skin*.9,lid*smoothstep(irisR+.15,irisR,er));
- col=eye*body+skin*wisp;
- /* motes */
- float2 mg=floor(uu*9.+float2(t*.15,-t*.1));float2 mf=fract(uu*9.+float2(t*.15,-t*.1))-.5;float mh=hash(mg);float2 mo=float2(hash(mg+3.),hash(mg+7.))-.5;float mote=exp(-dot(mf-mo*.6,mf-mo*.6)*60.)*step(.85,mh)*(.5+.5*sin(t*3.+mh*20.));
- col+=mix(cyan,mag,mh)*mote*(1.-body)*.8;
- float glow=exp(-max(0.,rr-reach)*3.5)*(.3+lv*.5);col+=mix(cyan,mag,.5+.5*sin(t*.5))*glow*(1.-body)*.6;
- col=1.-exp(-col*1.15);
+ float lv=iLevelIn;float2 uu=uv*1.0;
+ /* blobs drifting on slow curved paths; the voice agitates them */
+ float f=0.;float fx=0.;float fy=0.;float e=.015;
+ for(int k=0;k<7;k++){float fk=float(k);float ph=fk*1.7;
+  float2 c=float2(.55*sin(t*(.21+.04*fk)+ph)*cos(t*.09+fk),.5*cos(t*(.17+.05*fk)+ph*1.3)*sin(t*.11+fk*.7));
+  c+=float2(fbm(float2(t*.3+fk,fk*3.))-.5,fbm(float2(fk*5.,t*.25+fk))-.5)*(.25+.5*lv);
+  float rad=.07+.035*sin(t*.8+fk)+.02*lv;
+  float2 d0=uu-c;float2 dx=uu+float2(e,0.)-c;float2 dy=uu+float2(0.,e)-c;
+  f+=rad/dot(d0,d0);fx+=rad/dot(dx,dx);fy+=rad/dot(dy,dy);}
+ /* organic edge: low-frequency noise bends the surface, stringy bridges appear and vanish */
+ float nz=fbm(uu*2.2+t*.35)-.5;f+=nz*.9;fx+=(fbm((uu+float2(e,0.))*2.2+t*.35)-.5)*.9;fy+=(fbm((uu+float2(0.,e))*2.2+t*.35)-.5)*.9;
+ float iso=smoothstep(1.2,1.6,f);
+ float3 n=normalize(float3(-(fx-f)/e*.03,-(fy-f)/e*.03,.5));
+ /* liquid metal with a thin-film rainbow */
+ float3 env=mix(float3(.01,.02,.05),float3(.7,.78,.95),smoothstep(-.15,.35,n.y));env+=float3(.9,.95,1.)*exp(-pow((n.y-.12)/.08,2.))*.6;
+ float film=fbm(uu*2.5+t*.2)*1.2+n.x*.4;float3 rain=.5+.5*cos(6.28318*(film*.7+t*.04+float3(0.,.33,.67)));
+ float fres=pow(1.-max(0.,n.z),3.);
+ float3 col0=env*.6+rain*.35*(.2+fres*1.5)+float3(.35,.9,1.)*fres*.7;
+ float spec=pow(max(0.,dot(n,normalize(float3(-.5,.8,.7)))),80.);col0+=float3(1.)*spec*1.2;
+ float spec2=pow(max(0.,dot(n,normalize(float3(.6,-.4,.7)))),50.);col0+=float3(.7,.5,1.)*spec2*.45;
+ /* voice: waves of colour run through the mass when speaking */
+ float wave=pow(.5+.5*sin(uu.x*6.+uu.y*3.-t*3.),8.)*step(1.5,iMode)*(1.-step(2.5,iMode));col0+=float3(.5,1.,1.)*wave*.7;
+ col0+=rain*lv*.35;
+ col=col0*iso;
+ float halo=exp(-max(0.,1.55-f)*4.)*(1.-iso)*.25;col+=float3(.3,.7,1.)*halo;
+ col=1.-exp(-col*1.1);
  float fade=1.-smoothstep(.9,1.02,nr);col*=fade;
- a=(max(body,wisp)*.96+(glow*.8+mote*.9)*(1.-body))*fade;
-    col = mix(col, cB.rgb * col, 0.3);
+ a=(iso*.97+halo)*fade;
+    col = mix(col, cB.rgb * col, 0.25);
     if (iMode == 6.0) col *= 0.4;
     return half4(half3(col * a), half(a));
 }
