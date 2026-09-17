@@ -1,0 +1,17 @@
+w-compile-gate · שער-קומפילציה-למשפטים (nl-smoke --compile)
+[1] Flutter 3.47.4 הותקן (/root/flutter · tar 1,576,174,568B) · flutter --version אומת
+[2] buildsmart@claude/hei-rxv1v1 נקלון · 577 gen · flutter pub get exit 0
+[3] mirror.mjs — שלב-2 של ship הוצא לפונקציה מיוצאת · ship מייבא · המראה על קלון-טרי = 0 שינויים תחת lib/genesis (165ms)
+[4] nl-smoke --compile: 35 משפטים · 35/35 נבנו 16.5s · מראה 1127 gen · analyze 42.7s (קר) · exit 1
+[5] פסק-הבסיס: 21 ירוקים · 14 אדומים · 40 שגיאות — כולן ב-gen_app_corpNN_wizard.dart
+[6] הצלבה: 5 שגיאות payLink = corp02/08/14/25/34 בדיוק (רשימת-המנהל); 31+4 הנוספות = טלאי-האשף שהיה כבר בעותק-העבודה שלו ⇒ 40 = 35 + 5
+[7] --run: 21/21 אפליקציות-ירוקות עולות בפועל (pumpWidget מחולל · All tests passed · 11.3s)
+[8] באג שנתפס במדידה: process.exit() דילג על finally ⇒ 35 אפליקציות נשארו בעץ; תוקן (process.exitCode) ואומת ב-git status
+[9] שחזוריות: 3 ריצות · פסק זהה שורה-בשורה ל-35 המשפטים · שני העצים נחים
+[10] באג שני שנתפס: flutter analyze מיישר עמודת-חומרה ⇒ 'warning' בעמודה 0 ⇒ דווחו 0 אזהרות מול 75; תוקן (^\s*) + מאמת מול "N issues found" (40+75+2351=2466 סוגר)
+[11] המשטרה: index-complete (שורה ב-INDEX.md ל-mirror.mjs) · truth (generator קנוני 60⇒61) · pins — כולם נסגרו; truth נבדק על עץ-נקי ועבר ⇒ הכשל שלי; learn נכשל זהה גם על הבסיס — קלון רדוד (80 קומיטים) ⇒ git fetch --unshallow ⇒ 1338 ⇒ learn-check exit 0
+[12] באג שלישי (החמור): שתי ריצות במקביל ⇒ המראה נוקתה מתחת ל-analyze ⇒ דווח 35/35 ירוקים · 0 שגיאות על עץ בלי אף אפליקציה; תוקן — «ירוק» דורש נוכחות-בבייטים במראה (missing נכנס לקוד-היציאה; שורת-המראה: 35/35 מרחבי-מדידה)
+[13] מסלול-הדילוג נבדק בפועל: בלי flutter ⇒ exit 2 + tool=flutter · בלי buildsmart ⇒ exit 2 + tool=buildsmart (שניהם הוחזרו)
+[14] ריצה סופית סדרתית: 35/35 במראה · 21 ירוקים · 14 אדומים · 40 שגיאות · --run 21/21 עוברות · exit 1 · פסק זהה לריצה הראשונה · שני העצים נחים
+[15] BLOCKED להכרעת-בעלים: רישום gates.tsv/police.mjs (נעוצים) + KNOWN_TOOLS+='flutter','buildsmart' — השורות המוצעות בדוח §3
+DONE · 15 מדידות
