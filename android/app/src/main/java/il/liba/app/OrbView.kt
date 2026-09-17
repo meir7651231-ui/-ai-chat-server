@@ -60,6 +60,8 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
     /** roaming: the view covers the whole screen and the creature swims around inside it; drawing happens only in a box around it */
     var roam: Boolean = false
     var boxPx: Float = 0f
+    /** the screen the creature roams in (the window itself is only boxPx wide and follows pos) */
+    var arenaW: Float = 0f; var arenaH: Float = 0f
     val pos = android.graphics.PointF(-1f, -1f)
     private val goal = android.graphics.PointF()
     private var nextPick = 0L
@@ -70,15 +72,15 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
     fun setPos(x: Float, y: Float) { pos.set(x, y); goal.set(x, y); report(true) }
     private fun report(force: Boolean) { val dx = pos.x - lastReported.x; val dy = pos.y - lastReported.y; if (force || dx * dx + dy * dy > dp(6f) * dp(6f)) { lastReported.set(pos.x, pos.y); onMoved?.invoke(pos.x, pos.y) } }
     private fun wander(dtS: Float) {
-        if (!roam || width == 0 || height == 0) return
+        if (!roam || arenaW <= 0f || arenaH <= 0f) return
         val half = boxPx / 2; val m = dp(8f)
-        if (pos.x < 0) { pos.set(width - half - m, height * 0.3f); goal.set(pos) }
+        if (pos.x < 0) { pos.set(arenaW - half - m, arenaH * 0.3f); goal.set(pos); report(true) }
         if (held) return
         val now = System.currentTimeMillis()
         if (now > nextPick) {
             val r = java.util.Random()
             if (r.nextFloat() < 0.35f) { goal.set(pos) ; nextPick = now + 1500 + r.nextInt(3000) } // a pause
-            else { goal.set(half + m + r.nextFloat() * (width - 2 * (half + m)), half + m + r.nextFloat() * (height - 2 * (half + m))); nextPick = now + 4000 + r.nextInt(6000) }
+            else { goal.set(half + m + r.nextFloat() * (arenaW - 2 * (half + m)), half + m + r.nextFloat() * (arenaH - 2 * (half + m))); nextPick = now + 4000 + r.nextInt(6000) }
         }
         val slow = when (mode) { Mode.LISTENING, Mode.SPEAKING, Mode.RINGING -> 0.25f; Mode.OFFLINE -> 0.3f; else -> 1f }
         val speed = dp(26f) * slow * dtS
@@ -86,7 +88,7 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
         if (d > 1f) { val step = Math.min(speed, d * 0.06f + speed * 0.3f); pos.x += dx / d * step; pos.y += dy / d * step }
         // liquid drift
         pos.x += (Math.sin((time * 0.9f).toDouble()) * 0.15 * dp(1f)).toFloat(); pos.y += (Math.cos((time * 0.7f).toDouble()) * 0.15 * dp(1f)).toFloat()
-        pos.x = pos.x.coerceIn(half + m, width - half - m); pos.y = pos.y.coerceIn(half + m, height - half - m)
+        pos.x = pos.x.coerceIn(half + m, arenaW - half - m); pos.y = pos.y.coerceIn(half + m, arenaH - half - m)
         report(false)
     }
 
@@ -109,7 +111,7 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
     private fun pad() = dp(9f - 5f * activeK)
 
     fun set(m: Mode, color: Int = accent) { mode = m; accent = color; activeTarget = if (m == Mode.LISTENING || m == Mode.SPEAKING || m == Mode.RINGING) 1f else 0f; startAnim(); invalidate() }
-    fun press(down: Boolean) { pressed = down; animate().scaleX(if (down) 0.9f else 1f).scaleY(if (down) 0.9f else 1f).setDuration(140).start() }
+    fun press(down: Boolean) { pressed = down; if (roam) return; animate().scaleX(if (down) 0.9f else 1f).scaleY(if (down) 0.9f else 1f).setDuration(140).start() }
 
     private fun startAnim() {
         if (anim != null) return
@@ -148,15 +150,8 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
     override fun onDraw(c: Canvas) {
         val creature = style == 2 && shader3 != null
         c.save()
-        val w: Float; val h: Float
-        if (roam && boxPx > 0f) {
-            if (pos.x < 0) { c.restore(); return }
-            val bw = if (creature) boxPx else boxPx * bodyFrac
-            c.translate(pos.x - bw / 2, pos.y - bw / 2); w = bw; h = bw
-        } else {
-            val inset = if (creature) 0f else (min(width, height) * (1f - bodyFrac) / 2f)
-            c.translate(inset, inset); w = width - 2 * inset; h = height - 2 * inset
-        }
+        val inset = if (creature) 0f else (min(width, height) * (1f - bodyFrac) / 2f)
+        c.translate(inset, inset); val w = width - 2 * inset; val h = height - 2 * inset
         val cx = w / 2; val cy = h / 2
         val r = min(w, h) / 2 - pad()
         val ac = if (mode == Mode.OFFLINE) GRAY else accent

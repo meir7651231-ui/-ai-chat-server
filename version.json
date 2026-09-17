@@ -1,1 +1,1 @@
-{"versionCode": 47, "versionName": "3.11.0", "url": "https://raw.githubusercontent.com/meir7651231-ui/-ai-chat-server/liba-android/liba.apk", "notes": "נוזל חי: בלי גוף ובלי עין, מסה נוזלית מבריקה שזורמת על המסך, נמתחת, מתפצלת לטיפות ומתמזגת, עם צבעי קשת על הפנים"}
+{"versionCode": 48, "versionName": "3.11.1", "url": "https://raw.githubusercontent.com/meir7651231-ui/-ai-chat-server/liba-android/liba.apk", "notes": "תיקון: החלון השקוף לא מכסה יותר את כל המסך (חסם את כפתור ההתקנה ודיאלוגים), אלא עוקב אחרי הנוזל; הבועה מסתתרת בזמן התקנה; נוזל חי כברירת מחדל"}

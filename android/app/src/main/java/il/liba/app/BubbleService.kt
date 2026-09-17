@@ -308,6 +308,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     // ---------- update check ----------
     /** step 92: download the new APK and hand it to the package installer – no browser, no file manager. */
     fun installUpdate() {
+        hideBubble(45000)
         val url = Prefs.updateUrl(this) ?: run { speak("אין עדכון ממתין."); return }
         showLabel("מורידה עדכון…", 20000)
         Thread {
@@ -353,18 +354,22 @@ class BubbleService : Service(), LibaWeb.Bridge {
             State.SENDING -> d.set(OrbView.Mode.SENDING, OrbView.CYAN)
         }
     }
-    // two windows: a full-screen, untouchable canvas where the creature roams (drawn only around its body, so it is cheap),
-    // and a small invisible handle that follows the body and takes taps, long-presses and drags
+    // two windows, both small: an untouchable canvas (2.8x the body) that follows the creature as it roams the screen,
+    // and an invisible handle over the body that takes taps, long-presses and drags. Nothing covers the rest of the screen,
+    // so installers, permission dialogs and every other app keep working underneath.
     private var handle: View? = null; private var rootLp: WindowManager.LayoutParams? = null; private var bigSize = 0
     private var dragging = false
-    private fun bodyPos(): Pair<Float, Float> { val d = dot ?: return 0f to 0f; return d.pos.x to d.pos.y }
-    private fun syncHandle() { val h = handle ?: return; val lp = bubbleLp ?: return; val d = dot ?: return; if (d.pos.x < 0 || dragging) return
-        val w = resources.displayMetrics.widthPixels
-        lp.x = (w - d.pos.x - bubbleSize / 2).toInt(); lp.y = (d.pos.y - bubbleSize / 2).toInt(); runCatching { wm.updateViewLayout(h, lp) }; positionAttachments() }
-    private fun positionAttachments() { val d = dot ?: return; val w = resources.displayMetrics.widthPixels
+    private fun syncWindows() { val root = bubble ?: return; val h = handle ?: return; val lp = rootLp ?: return; val lpH = bubbleLp ?: return; val d = dot ?: return; if (d.pos.x < 0) return
+        lp.x = (d.pos.x - bigSize / 2).toInt(); lp.y = (d.pos.y - bigSize / 2).toInt(); lpH.x = (d.pos.x - bubbleSize / 2).toInt(); lpH.y = (d.pos.y - bubbleSize / 2).toInt()
+        runCatching { wm.updateViewLayout(root, lp) }; runCatching { wm.updateViewLayout(h, lpH) } }
+    private fun syncHandle() = syncWindows()
+    private fun positionAttachments() { val c = bigSize / 2f
         listOf<View?>(label, menu).forEach { v -> if (v != null && v.visibility == View.VISIBLE) { v.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-            val vw = if (v.width > 0) v.width else v.measuredWidth; var x = d.pos.x - vw / 2f; x = x.coerceIn(dp(6f), (w - vw - dp(6f)).coerceAtLeast(dp(6f))); v.translationX = x; v.translationY = d.pos.y + bubbleSize / 2f + dp(8f) } } }
-    private fun syncRoot() { syncHandle() }
+            val vw = if (v.width > 0) v.width else v.measuredWidth; v.translationX = c - vw / 2f; v.translationY = c + bubbleSize / 2f + dp(8f) } } }
+    private fun syncRoot() = syncWindows()
+    private fun arena() { val d = dot ?: return; val dm = resources.displayMetrics; d.arenaW = dm.widthPixels.toFloat(); d.arenaH = dm.heightPixels.toFloat() }
+    /** hide both windows while the package installer (or another secure dialog) needs the screen */
+    fun hideBubble(ms: Long) { bubble?.visibility = View.GONE; handle?.visibility = View.GONE; main.postDelayed({ bubble?.visibility = View.VISIBLE; handle?.visibility = View.VISIBLE }, ms) }
     private fun setupBubble() {
         val root = FrameLayout(this); val sw = resources.configuration.smallestScreenWidthDp; val size = dp(if (sw >= 600) 78f else 62f).toInt() // step 40: bigger on tablets / unfolded
         val big = (size * 2.8f).toInt()
@@ -375,19 +380,21 @@ class BubbleService : Service(), LibaWeb.Bridge {
             background = GradientDrawable().apply { cornerRadius = dp(18f); setColor(Color.parseColor("#F2121628")); setStroke(dp(1f).toInt(), Color.parseColor("#2EFFFFFF")) }
             elevation = dp(4f); visibility = View.GONE; textDirection = View.TEXT_DIRECTION_RTL
         }
-        root.addView(d, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
+        root.addView(d, FrameLayout.LayoutParams(big, big))
         root.addView(l, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.START })
-        val lp = WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+        val lp = WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT)
-        lp.gravity = Gravity.TOP or Gravity.START; lp.x = 0; lp.y = 0
+        lp.gravity = Gravity.TOP or Gravity.START
         val h = View(this).apply { contentDescription = "ליבה. לחיצה: דבר. לחיצה ארוכה: תפריט"; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES }
         val lpH = WindowManager.LayoutParams(size, size, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT)
-        lpH.gravity = Gravity.TOP or Gravity.END; lpH.x = 0; lpH.y = dp(160f).toInt()
+        lpH.gravity = Gravity.TOP or Gravity.START
         bubbleLp = lpH; bubbleSize = size; bigSize = big; rootLp = lp
-        wm.addView(root, lp); wm.addView(h, lpH)
         bubble = root; dot = d; label = l; handle = h; d.style = Prefs.style(this)
-        d.onMoved = { _, _ -> main.post { syncHandle() } }
+        arena(); val dm = resources.displayMetrics; d.setPos(dm.widthPixels - big / 2f - dp(8f), dm.heightPixels * 0.3f)
+        lp.x = (d.pos.x - big / 2).toInt(); lp.y = (d.pos.y - big / 2).toInt(); lpH.x = (d.pos.x - size / 2).toInt(); lpH.y = (d.pos.y - size / 2).toInt()
+        wm.addView(root, lp); wm.addView(h, lpH)
+        d.onMoved = { _, _ -> main.post { syncWindows() } }
         setState(State.OFFLINE)
         var sx = 0f; var sy = 0f; var ox = 0f; var oy = 0f; var moved = false; var downAt = 0L
         val longPress = Runnable { if (!moved) { moved = true; toggleMenu(root, size) } }
@@ -396,7 +403,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 MotionEvent.ACTION_DOWN -> { snapAnim?.cancel(); unpeek(); sx = ev.rawX; sy = ev.rawY; ox = d.pos.x; oy = d.pos.y; moved = false; dragging = true; d.hold(true); downAt = SystemClock.uptimeMillis(); d.press(true); main.postDelayed(longPress, 600); true }
                 MotionEvent.ACTION_MOVE -> { val dx = ev.rawX - sx; val dy = ev.rawY - sy
                     if (abs(dx) > dp(6f) || abs(dy) > dp(6f)) { moved = true; main.removeCallbacks(longPress) }
-                    d.setPos(ox + dx, oy + dy); val w = resources.displayMetrics.widthPixels; lpH.x = (w - d.pos.x - size / 2).toInt(); lpH.y = (d.pos.y - size / 2).toInt(); runCatching { wm.updateViewLayout(h, lpH) }; positionAttachments(); true }
+                    d.setPos(ox + dx, oy + dy); syncWindows(); true }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> { main.removeCallbacks(longPress); d.press(false); dragging = false; d.hold(false); if (!moved && SystemClock.uptimeMillis() - downAt < 600) { haptic(); onTap() }; true }
                 else -> false
             }
@@ -432,7 +439,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (Build.VERSION.SDK_INT >= 29) v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)) else @Suppress("DEPRECATION") v.vibrate(12) } catch (e: Exception) {} }
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
         super.onConfigurationChanged(newConfig) // fix 9: fold / unfold / rotate – keep the bubble on the visible screen
-        val d = dot ?: return; if (d.roam) { d.setPos(-1f, -1f); return }
+        val d = dot ?: return; arena(); if (d.roam) { val dm = resources.displayMetrics; d.setPos(d.pos.x.coerceIn(bigSize / 2f, dm.widthPixels - bigSize / 2f), d.pos.y.coerceIn(bigSize / 2f, dm.heightPixels - bigSize / 2f)); syncWindows(); return }
         val h = handle ?: return; val lp = bubbleLp ?: return
         clampBubble(lp, bubbleSize); runCatching { wm.updateViewLayout(h, lp) }; syncRoot()
     }
