@@ -1,0 +1,185 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:14:56.115Z",
+ "query": "cmp le str חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "cmp",
+  "le",
+  "str",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "370219f4b4ce8a2e25a5b018d9dde79a3c0390cb39807a3bc4ef5c5c4e4fd30d",
+  "logicCensusSha": "3c1646d9025d6c8a61dc7dbe52a7083dc08fa20dcb4560f457349c418bb3d9f8",
+  "display": 1911,
+  "logic": 987
+ },
+ "candidates": [
+  {
+   "id": "cmpGeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-ge-str.dart",
+   "score": 6,
+   "hits": [
+    "cmp",
+    "str"
+   ]
+  },
+  {
+   "id": "cmpGtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-gt-str.dart",
+   "score": 6,
+   "hits": [
+    "cmp",
+    "str"
+   ]
+  },
+  {
+   "id": "cmpLeDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-le-dyn.dart",
+   "score": 6,
+   "hits": [
+    "cmp",
+    "le"
+   ]
+  },
+  {
+   "id": "addStr",
+   "layer": "logic",
+   "file": "dart-maor/op-add-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpGtDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-gt-dyn.dart",
+   "score": 3,
+   "hits": [
+    "cmp"
+   ]
+  },
+  {
+   "id": "containsStr",
+   "layer": "logic",
+   "file": "dart-maor/op-contains-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "modeStr",
+   "layer": "logic",
+   "file": "dart-boxes/lib-nedarim-sync.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 3,
+   "hits": [
+    "פעולת",
+    "תוך",
+    "אטומים"
+   ]
+  },
+  {
+   "id": "strList",
+   "layer": "logic",
+   "file": "dart/str_list.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "strListOrNull",
+   "layer": "logic",
+   "file": "dart/str_list_or_null.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "strMap",
+   "layer": "logic",
+   "file": "dart/str_map.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "AddTradeButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/add_trade_button.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "DsEnumField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_enum_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge10Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/10_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  }
+ ],
+ "strong": [
+  "cmpGeStr",
+  "cmpGtStr",
+  "cmpLeDyn",
+  "addStr",
+  "cmpGtDyn",
+  "containsStr",
+  "modeStr",
+  "strList",
+  "strListOrNull",
+  "strMap"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "SettingsScreenShell"
+ ],
+ "creates": "new/dart-maor/op-cmp-le-str.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד cmpLeStr(String, String) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי (ea as String).compareTo(iso) <= 0 · מקור למשל dart-maor/build-course-daily-rows.dart#buildCourseDailyRows); המועמדים-החזקים cmpGeStr(String, String) => bool · cmpGtStr(String, String) => bool · cmpLeDyn(dynamic, dynamic) => bool · addStr(String, String) => String · cmpGtDyn(dynamic, dynamic) => bool · containsStr(String, String) => bool · modeStr(List<String>) => String · strList(Object?) => List<String> · strListOrNull(Object?) => List<String>? · strMap(Map<dynamic, dynamic>) => Map<String, dynamic> — לרובם אין את חתימת-הפעולה-לבדה (String, String) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: cmpGeStr {} · cmpGtStr {} · containsStr {} — מול cmpLeStr {a.compareTo(b) <= 0;}",
+ "sig": "864a17de6d134307cfb7479baa9a525b093b9acc024e2a8ee3ddfac50764255a"
+}

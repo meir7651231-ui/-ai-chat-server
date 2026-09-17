@@ -1585,6 +1585,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-cmp-le-str.dart",
+  "name": "cmpLeStr",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/cockpit-at-risk.dart",
   "name": "cockpitAtRisk",
   "ret": "List",
@@ -3322,6 +3333,17 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/op-eq-dyn.dart",
+  "name": "eqDyn",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/op-eq-list.dart",
   "name": "eqList",
   "ret": "bool",
@@ -4144,6 +4166,16 @@
   ],
   "argc": 2,
   "wireable": false
+ },
+ {
+  "file": "dart-maor/op-floor-num.dart",
+  "name": "floorNum",
+  "ret": "num",
+  "params": [
+   "num"
+  ],
+  "argc": 1,
+  "wireable": true
  },
  {
   "file": "dart/flow_role.dart",
@@ -5401,6 +5433,16 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-is-not-null.dart",
+  "name": "isNotNull",
+  "ret": "bool",
+  "params": [
+   "dynamic"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/iso-days-ago.dart",
   "name": "isoDaysAgo",
   "ret": "String",
@@ -5810,6 +5852,16 @@
    "List<dynamic> Function(List<dynamic> boxes, dynamic coordId) coordinatorBoxes"
   ],
   "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/op-length-list.dart",
+  "name": "lengthList",
+  "ret": "num",
+  "params": [
+   "List<dynamic>"
+  ],
+  "argc": 1,
   "wireable": false
  },
  {
