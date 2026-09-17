@@ -1,0 +1,5 @@
+up-quarry · claude/up-connect-260917
+ast_carve --ops: צבירה (for/+= · fold) ⇒ sumBy · foldList/reduceList/mapList/anyList/everyList; הריפו והעותק-בריצה אוחדו (fieldOf/fieldPred/addTo היו רק בעותק)
+op-sum-by.dart נחת (search-record מול האורקל-שלפני · reindex · search-proof ✓)
+logic-proof: למבדה מוקלדת לפי השקע (PT/want) — ∅ כוזב של 40,540 «unknown» תוקן
+g4 «כמה בסך הכל» ⇒ sumBy(p0,λfieldOf(_,'amount')) 4/4 · goal ⇒ 5 התנהגויות · analyze 0 · proof 15/15

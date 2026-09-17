@@ -735,6 +735,11 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
 }
 
 // עוזר: מבקר שמריץ callback על כל הצהרת-פונקציה/מתודה
+class _AccumFinder extends RecursiveAstVisitor<void> {
+  bool found = false;
+  @override
+  void visitAssignmentExpression(AssignmentExpression n) { if (n.operator.lexeme == '+=' && n.leftHandSide is SimpleIdentifier) found = true; super.visitAssignmentExpression(n); }
+}
 class _FindDecl extends RecursiveAstVisitor<void> {
   final void Function(Declaration) cb;
   _FindDecl(this.cb);
@@ -826,9 +831,22 @@ class _OpsVisitor extends RecursiveAstVisitor<void> {
     }
     super.visitBinaryExpression(n);
   }
+  // גישה-לשדה לפי מפתח-ליטרלי ⇒ `fieldOf(r, key)`; קריאה `f(r['k'])` ⇒ `fieldPred(r, key, f)` — **שקע-פונקציה** (חוק-3): הפרדיקט נתקע מבחוץ
+  @override
+  void visitIndexExpression(IndexExpression n) {
+    if (n.index is SimpleStringLiteral) emit('transform', 'fieldOf', ['dynamic', 'String'], ['r', 'key'], 'dynamic', '(r is Map ? r[key] : null)', n);
+    super.visitIndexExpression(n);
+  }
+  @override
+  void visitFunctionExpressionInvocation(FunctionExpressionInvocation n) { _predOnField(n.argumentList.arguments, n); super.visitFunctionExpressionInvocation(n); }
+  void _predOnField(NodeList<Expression> args, AstNode n) {
+    if (args.length == 1 && args.first is IndexExpression && (args.first as IndexExpression).index is SimpleStringLiteral)
+      emit('predicate', 'fieldPred', ['dynamic', 'String', 'bool Function(dynamic)'], ['r', 'key', 'f'], 'bool', 'f(r is Map ? r[key] : null)', n);
+  }
   @override
   void visitMethodInvocation(MethodInvocation n) {
     final t = n.target; final m = n.methodName.name; final args = n.argumentList.arguments;
+    if (t == null) _predOnField(args, n);   // קריאה-לפונקציה-מקומית/שכן: falsy(t['due']) ⇒ fieldPred
     if (t != null) {
       final tt = norm(typeOf(t));
       if (m == 'split' && args.length == 1) emit('collection', 'splitStr', ['String', 'String'], ['s', 'sep'], 'List<dynamic>', 's.split(sep)', n);
@@ -837,11 +855,25 @@ class _OpsVisitor extends RecursiveAstVisitor<void> {
       else if (m == 'contains' && args.length == 1 && tt == 'String') emit('predicate', 'containsStr', ['String', 'String'], ['s', 'q'], 'bool', 's.contains(q)', n);
       else if (m == 'startsWith' && args.length == 1) emit('predicate', 'startsWithStr', ['String', 'String'], ['s', 'q'], 'bool', 's.startsWith(q)', n);
       else if (m == 'where' && args.length == 1) emit('collection', 'whereList', ['List<dynamic>', 'bool Function(dynamic)'], ['xs', 'f'], 'List<dynamic>', 'xs.where(f).toList()', n);
+      else if (m == 'map' && args.length == 1 && tt.startsWith('List')) emit('collection', 'mapList', ['List<dynamic>', 'dynamic Function(dynamic)'], ['xs', 'f'], 'List<dynamic>', 'xs.map(f).toList()', n);
+      else if (m == 'any' && args.length == 1 && tt.startsWith('List')) emit('predicate', 'anyList', ['List<dynamic>', 'bool Function(dynamic)'], ['xs', 'f'], 'bool', 'xs.any(f)', n);
+      else if (m == 'every' && args.length == 1 && tt.startsWith('List')) emit('predicate', 'everyList', ['List<dynamic>', 'bool Function(dynamic)'], ['xs', 'f'], 'bool', 'xs.every(f)', n);
+      // צבירה: fold/reduce ⇒ חלקיק-צבירה עם שקע-פונקציה; `fold(0, (a, x) => a + f(x))` על מספרים = סכום-של-שדה (sumBy) — החלקיק שחסר למדד «כמה בסך הכל» (up-quarry)
+      else if (m == 'fold' && args.length == 2 && tt.startsWith('List')) { emit('measure', 'foldList', ['List<dynamic>', 'dynamic', 'dynamic Function(dynamic, dynamic)'], ['xs', 'init', 'f'], 'dynamic', 'xs.fold(init, f)', n); if (args.first is IntegerLiteral || args.first is DoubleLiteral) _sumBy(n); }
+      else if (m == 'reduce' && args.length == 1 && tt.startsWith('List')) emit('measure', 'reduceList', ['List<dynamic>', 'dynamic Function(dynamic, dynamic)'], ['xs', 'f'], 'dynamic', 'xs.reduce(f)', n);
       else if (m == 'join' && args.length == 1) emit('format', 'joinList', ['List<dynamic>', 'String'], ['xs', 'sep'], 'String', 'xs.join(sep)', n);
       else if (m == 'abs' && args.isEmpty) emit('measure', 'absNum', ['num'], ['a'], 'num', 'a.abs()', n);
+      else if (m == 'add' && args.length == 1 && tt.startsWith('List')) emit('effect', 'addTo', ['List<dynamic>', 'dynamic'], ['xs', 'x'], 'void', 'xs.add(x)', n);   // אפקט: כתיבה ליומן (שקע-עולם)
       else if (m == 'floor' && args.isEmpty) emit('measure', 'floorNum', ['num'], ['a'], 'num', 'a.floor()', n);
     }
     super.visitMethodInvocation(n);
+  }
+  // צבירה בלולאה: `for (final x in xs) { … acc += E(x); }` ⇒ אותו חלקיק-צבירה (סכום-של-שדה): xs ⇒ רשימה, E ⇒ שקע-פונקציה. נמדד: boxTotal/campaignTotal (5 סכומים דומייניים, אותו גרעין) לא הניבו חלקיק-צבירה לפני זה
+  void _sumBy(AstNode n) => emit('measure', 'sumBy', ['List<dynamic>', 'num Function(dynamic)'], ['xs', 'f'], 'num', 'xs.fold<num>(0, (a, x) => a + f(x))', n);
+  @override
+  void visitForStatement(ForStatement n) {
+    if (n.forLoopParts is ForEachParts) { final acc = _AccumFinder(); n.body.visitChildren(acc); if (acc.found) _sumBy(n); }
+    super.visitForStatement(n);
   }
   void _prop(String prop, Expression target, AstNode n) {
     final tt = norm(typeOf(target));

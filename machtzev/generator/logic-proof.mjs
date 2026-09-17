@@ -104,6 +104,8 @@ function buildInterpOnce(needId, rows, examples, env = {}, extraImports = []) {
   const imps = [...extraImports.map((f) => `import '${rel(f)}';`), ...files.map((f) => `import '${rel(f)}' as ${pre.get(f)};`)];
   const table = rows.map((r) => `  '${r.id}': ${pre.get(r.file)}.${r.id},`);
   const rets = rows.map((r) => `  '${r.id}': '${dartLambdaType(r.ret)}',`);
+  // up-quarry · טיפוס-השקע של כל פרמטר-פונקציה (sumBy(List, num Function(dynamic)) ⇒ ['', 'num']): הלמבדה מוקלדת לפי השקע שאליו היא נתקעת, לא לפי ret של החלקיק-התקוע (fieldOf ⇒ dynamic; שקע num ⇒ Dart זורק בזמן-ריצה ⇒ «∅» כוזב)
+  const pts = rows.map((r) => `  '${r.id}': <String>[${(r.params || []).map((t) => { const m = String(t || '').match(/^(.+?)\s+Function\(/); return `'${m ? dartLambdaType(m[1].trim()) : ''}'`; }).join(', ')}],`);
   const envOf = (ex) => (ex && ex[2] && typeof ex[2] === 'object') ? ex[2] : {};
   const EX = examples.map((ex) => `  <dynamic>[${ex[0]}],`).join('\n');
   const CK = examples.map((ex) => `  (dynamic r) => (${ex[1]}),`).join('\n');
@@ -120,6 +122,9 @@ ${table.join('\n')}
 };
 final Map<String, String> RET = <String, String>{
 ${rets.join('\n')}
+};
+final Map<String, List<String>> PT = <String, List<String>>{
+${pts.join('\n')}
 };
 final List<List<dynamic>> EX = <List<dynamic>>[
 ${EX}
@@ -150,7 +155,7 @@ Function lam(Function g, int m, List<dynamic> rest, String ret) {
   }
 }
 
-dynamic ev(Map<String, dynamic> n, List<dynamic> p, int j, dynamic w) {
+dynamic ev(Map<String, dynamic> n, List<dynamic> p, int j, dynamic w, [String? want]) {
   switch (n['k']) {
     case 'p': return p[n['i'] as int];
     case 'c': return n['cv'];
@@ -158,8 +163,8 @@ dynamic ev(Map<String, dynamic> n, List<dynamic> p, int j, dynamic w) {
     case 'h': { final h = HUM[j]; if (!h.containsKey(n['name'])) throw Missing(); return h[n['name']]; }
     case 'w': return w;
     case 'g': { final ok = ev(n['pred'] as Map<String, dynamic>, p, j, w); if (ok == true) ev(n['body'] as Map<String, dynamic>, p, j, w); return w; }
-    case 'f': { final g = T[n['id']]!; final rest = [for (final a in (n['args'] as List)) ev(a as Map<String, dynamic>, p, j, w)]; return lam(g, n['m'] as int, rest, RET[n['id']] ?? 'dynamic'); }
-    default: { final g = T[n['id']]!; final args = [for (final a in (n['args'] as List)) ev(a as Map<String, dynamic>, p, j, w)]; return Function.apply(g, args); }
+    case 'f': { final g = T[n['id']]!; final rest = [for (final a in (n['args'] as List)) ev(a as Map<String, dynamic>, p, j, w)]; return lam(g, n['m'] as int, rest, (want != null && want.isNotEmpty) ? want : (RET[n['id']] ?? 'dynamic')); }
+    default: { final g = T[n['id']]!; final pts = PT[n['id']]; final al = n['args'] as List; final args = [for (var i = 0; i < al.length; i++) ev(al[i] as Map<String, dynamic>, p, j, w, (pts != null && i < pts.length) ? pts[i] : null)]; return Function.apply(g, args); }
   }
 }
 
