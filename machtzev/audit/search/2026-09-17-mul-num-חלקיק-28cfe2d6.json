@@ -1,0 +1,183 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:29:06.237Z",
+ "query": "mul num חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "mul",
+  "num",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "d4cdc400ea67e5d7733e614cee8d2b39940a7df6cb4e8087c56d7c0b73e370b7",
+  "logicCensusSha": "031aef7b1210df587fa0cdf8e718f911692bf9869c1718ad024cd23170707713",
+  "display": 1936,
+  "logic": 1012
+ },
+ "candidates": [
+  {
+   "id": "absNum",
+   "layer": "logic",
+   "file": "dart-maor/op-abs-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "addNum",
+   "layer": "logic",
+   "file": "dart-maor/op-add-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "divNum",
+   "layer": "logic",
+   "file": "dart-maor/op-div-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "eqNum",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "floorNum",
+   "layer": "logic",
+   "file": "dart-maor/op-floor-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "geNum",
+   "layer": "logic",
+   "file": "dart-maor/op-ge-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "gtNum",
+   "layer": "logic",
+   "file": "dart-maor/op-gt-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "iDivNum",
+   "layer": "logic",
+   "file": "dart-maor/op-i-div-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "leNum",
+   "layer": "logic",
+   "file": "dart-maor/op-le-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "ltNum",
+   "layer": "logic",
+   "file": "dart-maor/op-lt-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "modNum",
+   "layer": "logic",
+   "file": "dart-maor/op-mod-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "mulDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-mul-dyn.dart",
+   "score": 3,
+   "hits": [
+    "mul"
+   ]
+  },
+  {
+   "id": "NumBox",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/num_box.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "numMap",
+   "layer": "logic",
+   "file": "dart/num_map.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "numMatch",
+   "layer": "logic",
+   "file": "dart-maor/num-match.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  }
+ ],
+ "strong": [
+  "absNum",
+  "addNum",
+  "divNum",
+  "eqNum",
+  "floorNum",
+  "geNum",
+  "gtNum",
+  "iDivNum",
+  "leNum",
+  "ltNum",
+  "modNum",
+  "mulDyn",
+  "numMap",
+  "numMatch"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "NumBox"
+ ],
+ "creates": "new/dart-maor/op-mul-num.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד mulNum(num, num) => num שנחצב מכנית ע\"י ast_carve --ops (הביטוי (amt - whole) * 100 · מקור למשל dart-maor/amount-in-words.dart#amountInWords); המועמדים-החזקים absNum(num) => num · addNum(num, num) => num · divNum(num, num) => num · eqNum(num, num) => bool · floorNum(num) => num · geNum(num, num) => bool · gtNum(num, num) => bool · iDivNum(num, num) => num · leNum(num, num) => bool · ltNum(num, num) => bool · modNum(num, num) => num · mulDyn(dynamic, dynamic) => dynamic · numMap(Object?) => Map<String, num> · numMatch(dynamic, num) => bool — לרובם אין את חתימת-הפעולה-לבדה (num, num) => num (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: addNum {} · divNum {} · iDivNum {} · modNum {} — מול mulNum {a * b;}",
+ "sig": "28cfe2d699e3e41ac1495c180fe1562849798b29ae7def9776988ba7b4f6a635"
+}

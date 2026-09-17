@@ -1,0 +1,184 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:29:07.092Z",
+ "query": "split str חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "split",
+  "str",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "1a54f0f6d313e61e9c46d656ccbb298134f6feeca41a6a0c893b521b37a8401f",
+  "logicCensusSha": "c2d74e074a48d06594b22f4fdf2d225d9244c830405ddce29ba09fca70261eef",
+  "display": 1938,
+  "logic": 1014
+ },
+ "candidates": [
+  {
+   "id": "ForgeSplitControl",
+   "layer": "display",
+   "file": "dart-forge-bs/composite/split_control.dart",
+   "score": 4,
+   "hits": [
+    "split",
+    "תוך"
+   ]
+  },
+  {
+   "id": "addStr",
+   "layer": "logic",
+   "file": "dart-maor/op-add-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpGeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-ge-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpGtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-gt-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpLeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-le-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpLtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-lt-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "containsStr",
+   "layer": "logic",
+   "file": "dart-maor/op-contains-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "donationSplitOn",
+   "layer": "logic",
+   "file": "dart-maor/donation-split-on.dart",
+   "score": 3,
+   "hits": [
+    "split"
+   ]
+  },
+  {
+   "id": "eqStr",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "isEmptyStr",
+   "layer": "logic",
+   "file": "dart-maor/op-is-empty-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "isNotEmptyStr",
+   "layer": "logic",
+   "file": "dart-maor/op-is-not-empty-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "lengthStr",
+   "layer": "logic",
+   "file": "dart-maor/op-length-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "lowerStr",
+   "layer": "logic",
+   "file": "dart-maor/op-lower-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "modeStr",
+   "layer": "logic",
+   "file": "dart-boxes/lib-nedarim-sync.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "setDonationSplit",
+   "layer": "logic",
+   "file": "dart-maor/set-donation-split.dart",
+   "score": 3,
+   "hits": [
+    "split"
+   ]
+  }
+ ],
+ "strong": [
+  "addStr",
+  "cmpGeStr",
+  "cmpGtStr",
+  "cmpLeStr",
+  "cmpLtStr",
+  "containsStr",
+  "donationSplitOn",
+  "eqStr",
+  "isEmptyStr",
+  "isNotEmptyStr",
+  "lengthStr",
+  "lowerStr",
+  "modeStr",
+  "setDonationSplit"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "ForgeSplitControl"
+ ],
+ "creates": "new/dart-maor/op-split-str.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד splitStr(String, String) => List<dynamic> שנחצב מכנית ע\"י ast_carve --ops (הביטוי product.nameHe.split(RegExp(r'\\s+')) · מקור למשל dart/base_color.dart#baseColor); המועמדים-החזקים addStr(String, String) => String · cmpGeStr(String, String) => bool · cmpGtStr(String, String) => bool · cmpLeStr(String, String) => bool · cmpLtStr(String, String) => bool · containsStr(String, String) => bool · donationSplitOn(Map<String, dynamic>) => bool · eqStr(String, String) => bool · isEmptyStr(String) => bool · isNotEmptyStr(String) => bool · lengthStr(String) => num · lowerStr(String) => String · modeStr(List<String>) => String · setDonationSplit(Object?) => Object? — לאף אחד אין את חתימת-הפעולה-לבדה (String, String) => List<dynamic> (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם",
+ "sig": "f1b483f561d9e23ec35a9119a3c70999701539babf3ba11a48dfa0092569b9e7"
+}

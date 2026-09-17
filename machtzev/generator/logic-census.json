@@ -6998,6 +6998,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-mul-num.dart",
+  "name": "mulNum",
+  "ret": "num",
+  "params": [
+   "num",
+   "num"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/name-index.dart",
   "name": "nameIndex",
   "ret": "dynamic",
@@ -7074,6 +7085,17 @@
   ],
   "argc": 2,
   "wireable": true
+ },
+ {
+  "file": "dart-maor/op-ne-dyn.dart",
+  "name": "neDyn",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
  },
  {
   "file": "dart-maor/need-label.dart",
@@ -10091,6 +10113,17 @@
   ],
   "argc": 1,
   "wireable": true
+ },
+ {
+  "file": "dart-maor/op-split-str.dart",
+  "name": "splitStr",
+  "ret": "List<dynamic>",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": false
  },
  {
   "file": "dart-maor/spotlight-box.dart",
