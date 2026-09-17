@@ -5994,6 +5994,27 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-length-str.dart",
+  "name": "lengthStr",
+  "ret": "num",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
+  "file": "dart-maor/op-le-num.dart",
+  "name": "leNum",
+  "ret": "bool",
+  "params": [
+   "num",
+   "num"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/lesson-price-for-tier.dart",
   "name": "lessonPriceForTier",
   "ret": "num",
@@ -6218,6 +6239,17 @@
   ],
   "argc": 1,
   "wireable": true
+ },
+ {
+  "file": "dart-maor/op-lt-dyn.dart",
+  "name": "ltDyn",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
  },
  {
   "file": "dart-maor/op-lt-num.dart",

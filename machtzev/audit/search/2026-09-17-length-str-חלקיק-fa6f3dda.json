@@ -1,0 +1,185 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:25:01.427Z",
+ "query": "length str חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "length",
+  "str",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "cc9925d139b40667ca73c4a5ffcb5d0188c4be038cf686421e48b2f320fd2b33",
+  "logicCensusSha": "5a9c1e8410fb9c1fb69077b03882312f8a7dcd69f61503a1ced353f7877592c4",
+  "display": 1931,
+  "logic": 1007
+ },
+ "candidates": [
+  {
+   "id": "addStr",
+   "layer": "logic",
+   "file": "dart-maor/op-add-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpGeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-ge-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpGtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-gt-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpLeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-le-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpLtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-lt-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "containsStr",
+   "layer": "logic",
+   "file": "dart-maor/op-contains-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "eqStr",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "isEmptyStr",
+   "layer": "logic",
+   "file": "dart-maor/op-is-empty-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "isNotEmptyStr",
+   "layer": "logic",
+   "file": "dart-maor/op-is-not-empty-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "lengthList",
+   "layer": "logic",
+   "file": "dart-maor/op-length-list.dart",
+   "score": 3,
+   "hits": [
+    "length"
+   ]
+  },
+  {
+   "id": "modeStr",
+   "layer": "logic",
+   "file": "dart-boxes/lib-nedarim-sync.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 3,
+   "hits": [
+    "פעולת",
+    "תוך",
+    "אטומים"
+   ]
+  },
+  {
+   "id": "strList",
+   "layer": "logic",
+   "file": "dart/str_list.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "strListOrNull",
+   "layer": "logic",
+   "file": "dart/str_list_or_null.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "strMap",
+   "layer": "logic",
+   "file": "dart/str_map.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  }
+ ],
+ "strong": [
+  "addStr",
+  "cmpGeStr",
+  "cmpGtStr",
+  "cmpLeStr",
+  "cmpLtStr",
+  "containsStr",
+  "eqStr",
+  "isEmptyStr",
+  "isNotEmptyStr",
+  "lengthList",
+  "modeStr",
+  "strList",
+  "strListOrNull",
+  "strMap"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "SettingsScreenShell"
+ ],
+ "creates": "new/dart-maor/op-length-str.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד lengthStr(String) => num שנחצב מכנית ע\"י ast_carve --ops (הביטוי birth.length · מקור למשל dart-maor/age-of.dart#ageOf); המועמדים-החזקים addStr(String, String) => String · cmpGeStr(String, String) => bool · cmpGtStr(String, String) => bool · cmpLeStr(String, String) => bool · cmpLtStr(String, String) => bool · containsStr(String, String) => bool · eqStr(String, String) => bool · isEmptyStr(String) => bool · isNotEmptyStr(String) => bool · lengthList(List<dynamic>) => num · modeStr(List<String>) => String · strList(Object?) => List<String> · strListOrNull(Object?) => List<String>? · strMap(Map<dynamic, dynamic>) => Map<String, dynamic> — לאף אחד אין את חתימת-הפעולה-לבדה (String) => num (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם",
+ "sig": "fa6f3ddab22575db77eee69a98e333f75de71d420940a2117dd0169add565773"
+}

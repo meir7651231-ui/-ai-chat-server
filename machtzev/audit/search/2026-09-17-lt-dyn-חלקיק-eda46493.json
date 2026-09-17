@@ -1,0 +1,184 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:25:01.911Z",
+ "query": "lt dyn חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "lt",
+  "dyn",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "3541e7bb30236ae164250209b9226f0442e05fbe605ec3e87993a0b85d74171f",
+  "logicCensusSha": "3a220ad79c118136037a2247372aaccf30831cab013494926600e0ee9e7645d1",
+  "display": 1932,
+  "logic": 1008
+ },
+ "candidates": [
+  {
+   "id": "cmpLtDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-lt-dyn.dart",
+   "score": 6,
+   "hits": [
+    "lt",
+    "dyn"
+   ]
+  },
+  {
+   "id": "addDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-add-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "cmpGtDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-gt-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "cmpLeDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-le-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "cmpLtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-lt-str.dart",
+   "score": 3,
+   "hits": [
+    "lt"
+   ]
+  },
+  {
+   "id": "divDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-div-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "dynMap",
+   "layer": "logic",
+   "file": "dart/dyn_map.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "eqDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "geDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-ge-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "gtDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-gt-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "leDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-le-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "ltNum",
+   "layer": "logic",
+   "file": "dart-maor/op-lt-num.dart",
+   "score": 3,
+   "hits": [
+    "lt"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 3,
+   "hits": [
+    "פעולת",
+    "תוך",
+    "אטומים"
+   ]
+  },
+  {
+   "id": "AddTradeButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/add_trade_button.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  }
+ ],
+ "strong": [
+  "cmpLtDyn",
+  "addDyn",
+  "cmpGtDyn",
+  "cmpLeDyn",
+  "cmpLtStr",
+  "divDyn",
+  "dynMap",
+  "eqDyn",
+  "geDyn",
+  "gtDyn",
+  "leDyn",
+  "ltNum"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "SettingsScreenShell"
+ ],
+ "creates": "new/dart-maor/op-lt-dyn.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד ltDyn(dynamic, dynamic) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי n.day < d.day · מקור למשל dart-maor/age-of.dart#ageOf); המועמדים-החזקים cmpLtDyn(dynamic, dynamic) => bool · addDyn(dynamic, dynamic) => dynamic · cmpGtDyn(dynamic, dynamic) => bool · cmpLeDyn(dynamic, dynamic) => bool · cmpLtStr(String, String) => bool · divDyn(dynamic, dynamic) => dynamic · dynMap(Object?) => Map<String, dynamic> · eqDyn(dynamic, dynamic) => bool · geDyn(dynamic, dynamic) => bool · gtDyn(dynamic, dynamic) => bool · leDyn(dynamic, dynamic) => bool · ltNum(num, num) => bool — לרובם אין את חתימת-הפעולה-לבדה (dynamic, dynamic) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: cmpLtDyn {} · cmpGtDyn {} · cmpLeDyn {} · eqDyn {} · geDyn {} · gtDyn {} · leDyn {} — מול ltDyn {a < b;}",
+ "sig": "eda46493d28a843d34d2d47708f90c10eabf0e0c61ed20921f3c7c2c507c9594"
+}
