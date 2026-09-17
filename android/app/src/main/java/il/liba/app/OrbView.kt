@@ -349,36 +349,47 @@ half4 main(float2 fc) {
     float t = iTime; float iLevelIn = iLevel; if (iMode == 6.0) iLevelIn = 0.0;
     float3 col = float3(0.0); float a = 1.0;
 
- float lv=iLevelIn;float2 uu=uv*1.0;
- /* blobs drifting on slow curved paths; the voice agitates them */
- float f=0.;float fx=0.;float fy=0.;float e=.015;
- for(int k=0;k<7;k++){float fk=float(k);float ph=fk*1.7;
-  float2 c=float2(.55*sin(t*(.21+.04*fk)+ph)*cos(t*.09+fk),.5*cos(t*(.17+.05*fk)+ph*1.3)*sin(t*.11+fk*.7));
-  c+=float2(fbm(float2(t*.3+fk,fk*3.))-.5,fbm(float2(fk*5.,t*.25+fk))-.5)*(.25+.5*lv);
-  float rad=.07+.035*sin(t*.8+fk)+.02*lv;
-  float2 d0=uu-c;float2 dx=uu+float2(e,0.)-c;float2 dy=uu+float2(0.,e)-c;
-  f+=rad/dot(d0,d0);fx+=rad/dot(dx,dx);fy+=rad/dot(dy,dy);}
- /* organic edge: low-frequency noise bends the surface, stringy bridges appear and vanish */
- float nz=fbm(uu*2.2+t*.35)-.5;f+=nz*.9;fx+=(fbm((uu+float2(e,0.))*2.2+t*.35)-.5)*.9;fy+=(fbm((uu+float2(0.,e))*2.2+t*.35)-.5)*.9;
- float iso=smoothstep(1.2,1.6,f);
- float3 n=normalize(float3(-(fx-f)/e*.03,-(fy-f)/e*.03,.5));
- /* liquid metal with a thin-film rainbow */
- float3 env=mix(float3(.01,.02,.05),float3(.7,.78,.95),smoothstep(-.15,.35,n.y));env+=float3(.9,.95,1.)*exp(-pow((n.y-.12)/.08,2.))*.6;
- float film=fbm(uu*2.5+t*.2)*1.2+n.x*.4;float3 rain=.5+.5*cos(6.28318*(film*.7+t*.04+float3(0.,.33,.67)));
- float fres=pow(1.-max(0.,n.z),3.);
- float3 col0=env*.6+rain*.35*(.2+fres*1.5)+float3(.35,.9,1.)*fres*.7;
- float spec=pow(max(0.,dot(n,normalize(float3(-.5,.8,.7)))),80.);col0+=float3(1.)*spec*1.2;
- float spec2=pow(max(0.,dot(n,normalize(float3(.6,-.4,.7)))),50.);col0+=float3(.7,.5,1.)*spec2*.45;
- /* voice: waves of colour run through the mass when speaking */
- float wave=pow(.5+.5*sin(uu.x*6.+uu.y*3.-t*3.),8.)*step(1.5,iMode)*(1.-step(2.5,iMode));col0+=float3(.5,1.,1.)*wave*.7;
- col0+=rain*lv*.35;
+ float lv=iLevelIn;float2 uu=uv*1.05;
+ /* soft floating: the whole drop bobs */
+ uu-=float2(.04*sin(t*.6),.05*sin(t*.45+1.));
+ float ang=atan(uu.y,uu.x);float rr=length(uu);
+ /* main drop: slowly undulating outline (liquid, not a circle) */
+ float und=.06*sin(ang*2.+t*.9)+.04*sin(ang*3.-t*.7+1.)+.03*sin(ang*5.+t*1.3)+.05*(fbm(float2(ang*1.5+t*.2,t*.3))-.5)+.05*lv*sin(ang*7.+t*6.);
+ float R0=.56+und;
+ float f=(R0*R0)/max(dot(uu,uu),1e-4);
+ /* satellites: small drops that drift out and merge back */
+ float fx=0.;float fy=0.;float e=.012;
+ for(int k=0;k<3;k++){float fk=float(k);float ph=fk*2.1;float orb=.55+.28*sin(t*(.23+.05*fk)+ph);
+  float2 c=float2(cos(t*(.15+.04*fk)+ph),sin(t*(.15+.04*fk)+ph))*orb;float rad=.11+.03*sin(t*.7+fk);
+  float2 d0=uu-c;f+=rad*rad/max(dot(d0,d0),1e-4);}
+ float2 dx=uu+float2(e,0.);float2 dy=uu+float2(0.,e);
+ float fdx=(R0*R0)/max(dot(dx,dx),1e-4);float fdy=(R0*R0)/max(dot(dy,dy),1e-4);
+ for(int k=0;k<3;k++){float fk=float(k);float ph=fk*2.1;float orb=.55+.28*sin(t*(.23+.05*fk)+ph);
+  float2 c=float2(cos(t*(.15+.04*fk)+ph),sin(t*(.15+.04*fk)+ph))*orb;float rad=.11+.03*sin(t*.7+fk);
+  float2 d1=dx-c;float2 d2=dy-c;fdx+=rad*rad/max(dot(d1,d1),1e-4);fdy+=rad*rad/max(dot(d2,d2),1e-4);}
+ float iso=smoothstep(.92,1.06,f);float inner=smoothstep(1.0,1.6,f);
+ float3 n=normalize(float3(-(fdx-f)/e*.05,-(fdy-f)/e*.05,1.));
+ /* surface ripples */
+ float rip=fbm(uu*6.+float2(t*.5,-t*.4))-.5;n=normalize(n+float3(rip*.25*(1.+lv*2.),rip*.2,0.));
+ /* pastel body: aqua above, lavender below, blush at the edge */
+ float3 aqua=float3(.62,.93,1.);float3 lav=float3(.75,.7,1.);float3 blush=float3(1.,.72,.9);
+ float3 body=mix(aqua,lav,smoothstep(-.6,.6,uu.y));body=mix(body,blush,smoothstep(.2,.9,rr)*.5);
+ /* refracted light inside: soft bright pool up-left, faint caustics */
+ float2 hl=uu-float2(-.2,-.22);float pool=exp(-dot(hl,hl)*7.);float caus=pow(.5+.5*sin(fbm(uu*4.+t*.3)*12.+t),6.)*.25;
+ float fres=pow(1.-max(0.,n.z),2.);
+ float3 col0=body*(.55+.35*inner)+float3(1.)*pool*.45+float3(.9,1.,1.)*caus+float3(1.)*fres*.6;
+ float spec=pow(max(0.,dot(n,normalize(float3(-.4,.7,.8)))),90.);col0+=float3(1.)*spec*.8;
+ float rim=exp(-pow((f-1.0)/.06,2.))*.9;col0+=float3(1.)*rim*.7;
+ /* speaking: a soft wave of colour passes through */
+ float wave=pow(.5+.5*sin(uu.x*4.-t*2.5),6.)*step(1.5,iMode)*(1.-step(2.5,iMode));col0+=blush*wave*.5;
  col=col0*iso;
- float halo=exp(-max(0.,1.55-f)*4.)*(1.-iso)*.25;col+=float3(.3,.7,1.)*halo;
- col=1.-exp(-col*1.1);
- float fade=1.-smoothstep(.9,1.02,nr);col*=fade;
- a=(iso*.97+halo)*fade;
-    col = mix(col, cB.rgb * col, 0.25);
-    if (iMode == 6.0) col *= 0.4;
+ /* translucency: the screen shows through the middle */
+ float alpha=iso*(.68+.3*fres+rim*.3);alpha=min(alpha,.97);
+ float halo=exp(-max(0.,1.0-f)*6.)*(1.-iso)*.35;col+=aqua*halo;alpha+=halo;
+ float fade=1.-smoothstep(.92,1.02,nr);col*=fade;
+ a=alpha*fade;
+    col = mix(col, cB.rgb * col, 0.2);
+    if (iMode == 6.0) { col *= 0.5; a *= 0.7; }
     return half4(half3(col * a), half(a));
 }
 """

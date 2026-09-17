@@ -1,1 +1,1 @@
-{"versionCode": 48, "versionName": "3.11.1", "url": "https://raw.githubusercontent.com/meir7651231-ui/-ai-chat-server/liba-android/liba.apk", "notes": "תיקון: החלון השקוף לא מכסה יותר את כל המסך (חסם את כפתור ההתקנה ודיאלוגים), אלא עוקב אחרי הנוזל; הבועה מסתתרת בזמן התקנה; נוזל חי כברירת מחדל"}
+{"versionCode": 49, "versionName": "3.12.0", "url": "https://raw.githubusercontent.com/meir7651231-ui/-ai-chat-server/liba-android/liba.apk", "notes": "נוזל צף: טיפה גדולה של נוזל שקוף בצבעי פסטל שרואים דרכה את המסך, קו שמתנדנד לאט, טיפות קטנות שנפרדות וחוזרות, צפה על המסך"}
