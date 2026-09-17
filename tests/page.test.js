@@ -15,7 +15,7 @@ ok(/prefixOf/.test(html) && /speakerOf/.test(html), 'speaker + topic prefix pres
 ok(/lastRingAt/.test(html), 'one ring per batch');
 ok(/outbox/.test(html) && /deliverWithRetry/.test(html), 'outbox + retry present');
 ok(/memory\/notes'\)\.collection\('items'\)/.test(html), 'memory notes path is a valid collection');
-ok(!/db\.doc\('memory'\)\.collection/.test(html), 'no invalid 2-segment memory paths');
+ok(!/db\.doc\('(memory|decisions|chat)'\)\.collection/.test(html), 'no invalid 2-segment db paths');
 ok(/apple-touch-icon/.test(html) && /manifest\.json/.test(html), 'PWA tags present');
 // 3. voice command regexes accept the canonical phrases
 const must = [['תזכור שהרואה חשבון הוא דני', /תזכור/], ['אל תפריע שעה', /אל תפריע/], ['ליבה תחזור', /ליבה/], ['מה בניתי השבוע', /מה בניתי השבוע/], ['מה את יודעת', /מה את יודעת/]];

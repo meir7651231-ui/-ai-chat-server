@@ -286,7 +286,7 @@ async function send(text){
   $('typed').value='';OPTS.innerHTML='';$('ack').hidden=true;HEARD.hidden=true;
   if(text===lastSent.text&&Date.now()-lastSent.ts<20000){log('כפילות – לא נשלח שוב');post('sent',{text,dup:true});busy=false;return;}
   bubble('me',text);const th=bubble('li think','ליבה חושבת…');
-  try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<10*60*1000)){db.doc('decisions').collection('log').doc(String(Date.now())).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(()=>{});lastAsk=null;}}catch(e){}
+  try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<10*60*1000)){db.doc('decisions/log').collection('items').doc(String(Date.now())).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(()=>{});lastAsk=null;}}catch(e){}
   try{if(memSettings.logTurns)await db.doc('chat/log').collection('turns').doc(String(Date.now())).set({from:'user',speaker:'מאיר',to:owner,text,re:id,ts:Date.now()});}catch(e){}
   const r=await deliverWithRetry(text);const sent=r.sent,reason=r.reason;
   if(sent){lastSent={text,ts:Date.now()};}
