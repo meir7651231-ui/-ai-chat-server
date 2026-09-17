@@ -55,6 +55,8 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
     private var shader3: RuntimeShader? = null
     var style: Int = 1
         set(v) { field = v; invalidate() }
+    /** sphere styles draw in this central fraction of the view (the creature always uses the whole view) */
+    var bodyFrac: Float = 1f
 
     init {
         outlineProvider = object : ViewOutlineProvider() {
@@ -111,7 +113,10 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
     }
 
     override fun onDraw(c: Canvas) {
-        val w = width.toFloat(); val h = height.toFloat(); val cx = w / 2; val cy = h / 2
+        val creature = style == 2 && shader3 != null
+        val inset = if (creature) 0f else (min(width, height) * (1f - bodyFrac) / 2f)
+        c.save(); c.translate(inset, inset)
+        val w = width - 2 * inset; val h = height - 2 * inset; val cx = w / 2; val cy = h / 2
         val r = min(w, h) / 2 - pad()
         val ac = if (mode == Mode.OFFLINE) GRAY else accent
         val t = phase * 2f * Math.PI.toFloat()
@@ -180,6 +185,7 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
                 if (mode == Mode.WAKE) { ink.color = Color.WHITE; c.drawCircle(cx + r * 0.58f, cy - r * 0.58f, dp(2.5f), ink) }
             }
         }
+        c.restore()
     }
 
     /** fallback body: drawn glass orb with a radial glow */
@@ -307,7 +313,7 @@ half4 main(float2 fc) {
     float t = iTime; float iLevelIn = iLevel; if (iMode == 6.0) iLevelIn = 0.0;
     float3 col = float3(0.0); float a = 1.0;
 
- float lv=iLevelIn;float2 uu=uv*.72;
+ float lv=iLevelIn;float2 wander=float2(.14*sin(t*.5)+.06*sin(t*1.9),.12*cos(t*.37)+.05*cos(t*1.5));float2 uu=(uv-wander)*1.45;
  float sac=floor(t*.7);float sf=smoothstep(0.,.25,fract(t*.7));
  float2 look0=float2(hash(float2(sac,1.)),hash(float2(sac,7.)))-.5;float2 look1=float2(hash(float2(sac+1.,1.)),hash(float2(sac+1.,7.)))-.5;
  float2 ep=mix(look0,look1,sf)*.34+float2(.06*sin(t*.9),.04*cos(t*1.3));
@@ -318,8 +324,7 @@ half4 main(float2 fc) {
  float shape=fbm(float2(ang*1.3+t*.3,t*.4))*.3+fbm(float2(ang*4.-t*.5,rr*2.+t*.2))*.12+lump;
  float2 tilt=float2(-.5,-.3)*ep;float bodyR=(.55+shape)*breath+dot(uu/max(rr,.001),tilt);
  float tend=pow(max(0.,fbm(float2(ang*3.5+t*.6,rr*1.5-t*.9))-.35),1.6)*(1.2+lv*2.);
- float ta=1.2+.6*sin(t*.4);float tb=-2.+.5*cos(t*.33);
- float tent=pow(max(0.,cos(ang-ta)),40.)*(.35+.25*sin(t*1.7))+pow(max(0.,cos(ang-tb)),60.)*(.3+.3*sin(t*1.1+2.));
+ float tent=0.;for(int k=0;k<5;k++){float fk=float(k);float ak=fk*1.2566+.5*sin(t*(.25+.07*fk)+fk*2.);float da=ang-ak-.45*sin(rr*5.-t*(2.2+.3*fk)+fk);float len=.75+.45*sin(t*(.6+.11*fk)+fk*1.7)+.4*lv;tent+=pow(max(0.,cos(da)),10.+50.*rr)*len;}
  float reach=bodyR+tend*.9+tent;
  float body=1.-smoothstep(reach-.08,reach+.05,rr);
  float wisp=smoothstep(reach+.35,reach-.05,rr)*(tend*.8+tent*.6);
@@ -337,7 +342,7 @@ half4 main(float2 fc) {
  col=eye*body+skin*wisp;
  float glow=exp(-max(0.,rr-reach)*4.)*(.35+lv*.6);col+=hot*glow*(1.-body);
  col=1.-exp(-col*1.1);
- float fade=1.-smoothstep(.8,1.04,nr);col*=fade;
+ float fade=1.-smoothstep(.9,1.02,nr);col*=fade;
  a=(max(body,wisp)*.98+glow*(1.-body)*.9)*fade;
     col = mix(col, cB.rgb * col, 0.3);
     if (iMode == 6.0) col *= 0.4;

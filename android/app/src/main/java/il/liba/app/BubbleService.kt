@@ -279,7 +279,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             revealed = false
         }
         runCatching { wm.updateViewLayout(host, lp) }
-        bubble?.bringToFront(); bubble?.let { runCatching { wm.removeView(it); wm.addView(it, it.layoutParams) } }
+        bubble?.bringToFront(); bubble?.let { runCatching { wm.removeView(it); wm.addView(it, it.layoutParams) } }; handle?.let { runCatching { wm.removeView(it); wm.addView(it, it.layoutParams) } }
     }
     private fun rebuildWeb() {
         webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy(); web = null; pageReady = false; pageOk = false
@@ -353,34 +353,42 @@ class BubbleService : Service(), LibaWeb.Bridge {
             State.SENDING -> d.set(OrbView.Mode.SENDING, OrbView.CYAN)
         }
     }
+    // two windows: a big, untouchable canvas (so the creature's arms have room and never block taps on the app below)
+    // and a small invisible handle over the body that takes taps, long-presses and drags
+    private var handle: View? = null; private var rootLp: WindowManager.LayoutParams? = null; private var bigSize = 0
+    private fun syncRoot() { val root = bubble ?: return; val lp = rootLp ?: return; val h = bubbleLp ?: return; val off = (bigSize - bubbleSize) / 2; lp.x = h.x - off; lp.y = h.y - off; runCatching { wm.updateViewLayout(root, lp) } }
     private fun setupBubble() {
         val root = FrameLayout(this); val sw = resources.configuration.smallestScreenWidthDp; val size = dp(if (sw >= 600) 78f else 62f).toInt() // step 40: bigger on tablets / unfolded
-        val d = OrbView(this).apply {
-            elevation = dp(6f); contentDescription = "ליבה. לחיצה: דבר. לחיצה ארוכה: תפריט"; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-        }
+        val big = (size * 2.6f).toInt(); val off = (big - size) / 2
+        val d = OrbView(this).apply { bodyFrac = size.toFloat() / big; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO }
         val l = TextView(this).apply {
             setTextColor(Color.parseColor("#F3F5FF")); textSize = 14f; setPadding(dp(14f).toInt(), dp(8f).toInt(), dp(14f).toInt(), dp(8f).toInt()); maxWidth = dp(240f).toInt()
             typeface = android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL); setLineSpacing(0f, 1.15f)
             background = GradientDrawable().apply { cornerRadius = dp(18f); setColor(Color.parseColor("#F2121628")); setStroke(dp(1f).toInt(), Color.parseColor("#2EFFFFFF")) }
             elevation = dp(4f); visibility = View.GONE; textDirection = View.TEXT_DIRECTION_RTL
         }
-        root.addView(d, FrameLayout.LayoutParams(size, size).apply { gravity = Gravity.TOP or Gravity.END })
-        root.addView(l, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.END; topMargin = size + dp(6f).toInt() })
+        root.addView(d, FrameLayout.LayoutParams(big, big).apply { gravity = Gravity.TOP or Gravity.END })
+        root.addView(l, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.END; topMargin = off + size + dp(6f).toInt(); marginEnd = off })
         val lp = WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, PixelFormat.TRANSLUCENT)
-        lp.gravity = Gravity.TOP or Gravity.END; lp.x = 0; lp.y = dp(160f).toInt()
-        wm.addView(root, lp)
-        bubbleLp = lp; bubbleSize = size
-        bubble = root; dot = d; label = l; d.style = Prefs.style(this)
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSLUCENT)
+        lp.gravity = Gravity.TOP or Gravity.END
+        val h = View(this).apply { contentDescription = "ליבה. לחיצה: דבר. לחיצה ארוכה: תפריט"; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES }
+        val lpH = WindowManager.LayoutParams(size, size, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, PixelFormat.TRANSLUCENT)
+        lpH.gravity = Gravity.TOP or Gravity.END; lpH.x = 0; lpH.y = dp(160f).toInt()
+        bubbleLp = lpH; bubbleSize = size; bigSize = big; rootLp = lp
+        lp.x = lpH.x - off; lp.y = lpH.y - off
+        wm.addView(root, lp); wm.addView(h, lpH)
+        bubble = root; dot = d; label = l; handle = h; d.style = Prefs.style(this)
         setState(State.OFFLINE)
         var sx = 0f; var sy = 0f; var ox = 0; var oy = 0; var moved = false; var downAt = 0L
         val longPress = Runnable { if (!moved) { moved = true; toggleMenu(root, size) } }
-        d.setOnTouchListener { _, ev ->
+        h.setOnTouchListener { _, ev ->
             when (ev.actionMasked) {
-                MotionEvent.ACTION_DOWN -> { snapAnim?.cancel(); unpeek(); sx = ev.rawX; sy = ev.rawY; ox = lp.x; oy = lp.y; moved = false; downAt = SystemClock.uptimeMillis(); d.press(true); main.postDelayed(longPress, 600); true }
+                MotionEvent.ACTION_DOWN -> { snapAnim?.cancel(); unpeek(); sx = ev.rawX; sy = ev.rawY; ox = lpH.x; oy = lpH.y; moved = false; downAt = SystemClock.uptimeMillis(); d.press(true); main.postDelayed(longPress, 600); true }
                 MotionEvent.ACTION_MOVE -> { val dx = sx - ev.rawX; val dy = ev.rawY - sy
                     if (abs(dx) > dp(6f) || abs(dy) > dp(6f)) { moved = true; main.removeCallbacks(longPress) }
-                    lp.x = (ox + dx).toInt(); lp.y = (oy + dy).toInt(); clampBubble(lp, size); wm.updateViewLayout(root, lp); true }
+                    lpH.x = (ox + dx).toInt(); lpH.y = (oy + dy).toInt(); clampBubble(lpH, size); runCatching { wm.updateViewLayout(h, lpH) }; syncRoot(); true }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> { main.removeCallbacks(longPress); d.press(false); if (!moved && SystemClock.uptimeMillis() - downAt < 600) { haptic(); onTap() } else if (moved && menu == null) snapToEdge(); schedulePeek(); true }
                 else -> false
             }
@@ -398,8 +406,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val root = bubble ?: return; val lp = bubbleLp ?: return; val w = resources.displayMetrics.widthPixels
         val target = if (lp.x + bubbleSize / 2 < w / 2) 0 else (w - bubbleSize).coerceAtLeast(0)
         snapAnim?.cancel()
+        val h = handle ?: return
         snapAnim = ValueAnimator.ofInt(lp.x, target).apply { duration = 340; interpolator = android.view.animation.OvershootInterpolator(1.1f)
-            addUpdateListener { lp.x = it.animatedValue as Int; runCatching { wm.updateViewLayout(root, lp) } }; start() }
+            addUpdateListener { lp.x = it.animatedValue as Int; runCatching { wm.updateViewLayout(h, lp) }; syncRoot() }; start() }
     }
     private fun schedulePeek() { main.removeCallbacks(peekRun); main.postDelayed(peekRun, 9000) }
     private fun peek() {
@@ -413,13 +422,13 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (Build.VERSION.SDK_INT >= 29) v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)) else @Suppress("DEPRECATION") v.vibrate(12) } catch (e: Exception) {} }
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
         super.onConfigurationChanged(newConfig) // fix 9: fold / unfold / rotate – keep the bubble on the visible screen
-        val root = bubble ?: return; val lp = root.layoutParams as? WindowManager.LayoutParams ?: return
-        clampBubble(lp, dp(62f).toInt()); runCatching { wm.updateViewLayout(root, lp) }
+        val h = handle ?: return; val lp = bubbleLp ?: return
+        clampBubble(lp, bubbleSize); runCatching { wm.updateViewLayout(h, lp) }; syncRoot()
     }
     private fun openMain() { startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
     // step 31: long-press menu on the bubble – no screen to open
     private fun toggleMenu(root: FrameLayout, size: Int) {
-        menu?.let { root.removeView(it); menu = null; return }
+        menu?.let { closeMenu(root); return }
         val m = android.widget.LinearLayout(this).apply { orientation = android.widget.LinearLayout.VERTICAL; layoutDirection = View.LAYOUT_DIRECTION_RTL
             background = GradientDrawable().apply { cornerRadius = dp(20f); setColor(Color.parseColor("#F5121628")); setStroke(dp(1f).toInt(), Color.parseColor("#2EFFFFFF")) }; elevation = dp(10f); setPadding(dp(8f).toInt(), dp(8f).toInt(), dp(8f).toInt(), dp(8f).toInt()); minimumWidth = dp(200f).toInt() }
         fun item(t: String, act: () -> Unit) { m.addView(TextView(this).apply { text = t; setTextColor(Color.parseColor("#F3F5FF")); textSize = 15f; typeface = android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL); setPadding(dp(16f).toInt(), dp(11f).toInt(), dp(16f).toInt(), dp(11f).toInt())
@@ -432,9 +441,12 @@ class BubbleService : Service(), LibaWeb.Bridge {
         item("🖥 הצג/הסתר דף") { revealPage(!pageShown) }
         if (Prefs.updateUrl(this) != null) item("⬇ התקן גרסה חדשה") { installUpdate() }
         item("⏻ כבה בועה") { stopSelf() }
-        root.addView(m, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.END; topMargin = size + dp(6f).toInt() })
-        menu = m; main.postDelayed({ if (menu === m) { root.removeView(m); menu = null } }, 8000)
+        val off = (bigSize - bubbleSize) / 2
+        root.addView(m, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.END; topMargin = off + size + dp(6f).toInt(); marginEnd = off })
+        rootLp?.let { it.flags = it.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv(); runCatching { wm.updateViewLayout(root, it) } }
+        menu = m; main.postDelayed({ if (menu === m) closeMenu(root) }, 8000)
     }
+    private fun closeMenu(root: FrameLayout) { menu?.let { root.removeView(it) }; menu = null; rootLp?.let { it.flags = it.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE; runCatching { wm.updateViewLayout(root, it) } } }
     // step 25: headset / car button = "דבר" (opt-in – would otherwise steal the button from music apps)
     private fun setupMediaSession() {
         if (!headsetBtn) { mediaSession?.let { it.isActive = false; it.release() }; mediaSession = null; return }
@@ -646,7 +658,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         running = false; instance = null; main.removeCallbacksAndMessages(null); stopVad(); bargeVad?.stop(); netCb?.let { runCatching { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) } }; mediaSession?.let { it.isActive = false; it.release() }; unmuteSystem()
         try { sr?.destroy() } catch (e: Exception) {}
         tts?.stop(); tts?.shutdown()
-        bubble?.let { runCatching { wm.removeView(it) } }; webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy()
+        bubble?.let { runCatching { wm.removeView(it) } }; handle?.let { runCatching { wm.removeView(it) } }; webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy()
         super.onDestroy()
     }
 }
