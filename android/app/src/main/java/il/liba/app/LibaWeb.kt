@@ -26,6 +26,7 @@ object LibaWeb {
     else if(d.liba==='sent'){LibaBridge.sent(String(d.text||''));}
     else if(d.liba==='error'){LibaBridge.error(String(d.text||''),String(d.reason||''));}
     else if(d.liba==='tap'){LibaBridge.tap();}
+    else if(d.liba==='tasks'){LibaBridge.tasks(String(d.summary||''),Number(d.n||0),Number(d.blocked||0));}
   });
   window.__libaHello=function(){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'hello'},'*');}catch(e){}});};
   window.__libaInput=function(t){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'input',text:t},'*');}catch(e){}});};
@@ -40,6 +41,7 @@ object LibaWeb {
         fun onSent(text: String)
         fun onError(text: String, reason: String)
         fun onPageTap()
+        fun onTasks(summary: String, n: Int, blocked: Int)
     }
 
     private class JsBridge(val b: Bridge) {
@@ -51,6 +53,7 @@ object LibaWeb {
         @JavascriptInterface fun sent(text: String) = b.onSent(text)
         @JavascriptInterface fun error(text: String, reason: String) = b.onError(text, reason)
         @JavascriptInterface fun tap() = b.onPageTap()
+        @JavascriptInterface fun tasks(summary: String, n: Int, blocked: Int) = b.onTasks(summary, n, blocked)
     }
 
     @SuppressLint("SetJavaScriptEnabled")

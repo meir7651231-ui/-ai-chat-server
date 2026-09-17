@@ -2,7 +2,7 @@ plugins { id("com.android.application"); id("org.jetbrains.kotlin.android") }
 android {
     namespace = "il.liba.app"
     compileSdk = 34
-    defaultConfig { applicationId = "il.liba.app"; minSdk = 26; targetSdk = 34; versionCode = 21; versionName = "2.0.1" }
+    defaultConfig { applicationId = "il.liba.app"; minSdk = 26; targetSdk = 34; versionCode = 22; versionName = "2.1" }
     signingConfigs {
         create("liba") { storeFile = file("../keys/liba.jks"); storePassword = "liba-2026-bubble"; keyAlias = "liba"; keyPassword = "liba-2026-bubble" }
     }

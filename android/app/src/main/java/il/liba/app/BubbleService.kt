@@ -66,6 +66,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var loginWarnedAt = 0L
     private var systemMuted = false
     private var errStreak = 0
+    private var taskSummary = ""
+    private var taskBlocked = 0
 
     private fun dp(v: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v, resources.displayMetrics)
     override fun onBind(intent: Intent?): IBinder? = null
@@ -313,7 +315,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val n = t.replace("?", "").trim()
         when {
             n in listOf("חזור", "תחזור", "תחזור על זה", "עוד פעם", "מה אמרת", "מה") && lastSaid.isNotEmpty() -> { speak(lastSaid); return }
-            n in listOf("מה הסטטוס", "סטטוס", "מה קורה", "מה המצב") -> { speak(localStatus()); return }
+            n in listOf("מה הסטטוס", "סטטוס", "מה קורה", "מה המצב", "מה עם המשימות", "משימות") -> { speak(localStatus()); return }
             n in listOf("שקט", "תשתוק", "עצור", "די", "ביטול", "בטל") -> { tts?.stop(); sentAt = 0; lastSaid = ""; setState(State.IDLE); showLabel("שקט.", 1500); if (heyOn) wakeLoop(); return }
             !pageReady -> { speak("אני לא מחובר לדף כרגע. $status"); return }
         }
@@ -341,6 +343,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         web?.let { LibaWeb.hello(it) }
     } }
     override fun onReady() { main.post { if (!pageReady) { pageReady = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000) } } }
+    override fun onTasks(summary: String, n: Int, blocked: Int) { main.post { taskSummary = summary; taskBlocked = blocked; if (n > 0) status = "מחובר · $n משימות" + (if (blocked > 0) " · $blocked מחכות לך" else "") } }
     override fun onPageTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
     override fun onSent(text: String) { main.post { status = "נשלח, מחכה לתשובה…"; setState(State.IDLE); showLabel("נשלח. מחכה…", 30000); if (heyOn) wakeLoop() } }
     override fun onError(text: String, reason: String) { main.post { sentAt = 0
