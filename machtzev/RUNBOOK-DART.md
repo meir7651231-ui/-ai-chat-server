@@ -65,3 +65,15 @@ node machtzev/mahulal/nl-smoke.mjs --compile --run    # + בדיקת-עשן מח
 ```
 בלי flutter/buildsmart: `⚪ מדולג: אין flutter` + `tool=…` ב-stderr + exit 2 (**yellow**, לא ירוק-חלול).
 המנוע מנקה את מרחב-המדידה (‏`gen_app_corpNN_*` · `apps/corpNN.json` · בדיקת-העשן) ב-`finally` — העץ חוזר לנוח (L14).
+
+## 5 · אותו Flutter גם ב**הפקודה-האחת** (‏behavior-plan צעד-6) — 17.9, w-goal-flutter
+```bash
+FLUTTER=/root/flutter/bin BUILDSMART=/home/user/buildsmart/app_flutter \
+  node machtzev/generator/behavior-plan.mjs --goal <goal.json> --ns <ns>
+#   ⇒ 6/7 ... flutter analyze (מראה): עבר — 10 קבצים במראה · 0 שגיאות · … · 1.6s
+```
+צעד-6 **משקף קודם** (‏`generator/mirror.mjs` — אותה פונקציה של ship שלב-2 ושל `nl-smoke --compile`)
+ואז מריץ `flutter analyze` על קובץ-ההרכבה + `_proof` + **האטומים שהם מייבאים** (G48ב, נגזר מהייבואים
+שבבייטים). בלי המראה ה-analyze רץ על עץ שבו הקובץ-המחולל **כלל אינו נמצא** — ירוק-חלול (L27).
+הפותר הוא אחד לשני הצרכנים: `machtzev/dart-bin.mjs` ⇒ `resolveFlutter()` · `parseAnalyze()`.
+‏`$FLUTTER` מקבל גם `<sdk>/bin`, גם `<sdk>` וגם את הבינארי עצמו (נמדד: ארבע הצורות ⇒ אותו נתיב).

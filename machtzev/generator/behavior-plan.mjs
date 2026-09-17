@@ -11,7 +11,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { resolveDart } from '../dart-bin.mjs';
+import { resolveDart, resolveFlutter, parseAnalyze } from '../dart-bin.mjs';
+import { mirror } from './mirror.mjs';   // שלב-2 של ship — אותה מראה בדיוק (‏nl-smoke --compile משתמש בה)
 import { catalog } from './auto-logic.mjs';
 import { proveCandidates, isPure, buildInterp, evalInterp, jsTwinRows, jsParity } from './logic-proof.mjs';
 import * as R from '../root.mjs';
@@ -639,9 +640,34 @@ async function runGoal(goalPath, opts = {}) {
   if (!DART) checks.push({ name: 'dart analyze', status: 'לא-זמין', out: 'אין בינארי Dart (dart-bin.resolveDart ⇒ null)' });
   else { run('dart analyze', DART, ['analyze', outAbs]); run('dart run --enable-asserts (הוכחת-ההרכבה)', DART, ['run', '--enable-asserts', proofAbs]); }
   run('no-fakers-check', process.execPath, [path.join(R.MACH, 'no-fakers-check.mjs')]);
-  const bs = R.bsRoot ? R.bsRoot() : null; const flutter = ['/home/user/flutter/bin/flutter', process.env.FLUTTER_BIN].filter((f) => f && fs.existsSync(f))[0] || null;
-  if (bs && flutter) run('flutter analyze (מראה)', flutter, ['analyze'], { cwd: path.join(bs, 'app_flutter') });
-  else checks.push({ name: 'flutter analyze (מראה)', status: 'לא-זמין', out: `buildsmart=${bs || '—'} · flutter=${flutter || '—'}` });
+  // 🪞 **המראה קודמת ל-analyze.** קודם: `flutter analyze` על app_flutter **בלי מראה** — הקובץ-המחולל
+  //    לא היה בעץ-הנבדק כלל, ולכן «עבר» היה ירוק-חלול (L27); ובנוסף הבינארי נחפש רק ב-`/home/user`
+  //    ו-`$FLUTTER_BIN` בזמן ש-nl-smoke מצא אותו ב-`$FLUTTER`/`/root` — ולכן «לא-זמין» גם על מכונה
+  //    עם Flutter (נמדד 17.9: `flutter=—` מול `/root/flutter/bin/flutter` קיים). הפותר עכשיו אחד (dart-bin).
+  //    הנבדקים: קובץ-ההרכבה + `_proof` + **האטומים שהם מייבאים** (‏G48ב) — נגזר מהייבואים שבבייטים, לא מרשימה.
+  const bs = R.bsRoot(), flutter = resolveFlutter();
+  if (!bs || !flutter) checks.push({ name: 'flutter analyze (מראה)', status: 'לא-זמין',
+    out: `buildsmart=${bs || '— (BUILDSMART=<app_flutter> · ../buildsmart · ../meir7651231-ui/buildsmart)'} · flutter=${flutter || '— ($FLUTTER=<flutter/bin> · /root/flutter/bin · PATH; RUNBOOK-DART.md §Flutter)'}` });
+  else {
+    const app = path.join(bs, 'app_flutter'), lib = path.join(app, 'lib/genesis');
+    const tM = Date.now();
+    mirror(R.ROOT, app);
+    // מי **באמת** במראה — נגזר מהדיסק. חסר ⇒ «לא נבדק, ולכן אינו ירוק» (‏w-compile-gate §ח), לא ⚪
+    const absent = [outRel, proofRel].filter((rel) => !fs.existsSync(path.join(lib, rel)));
+    const seen = new Set(), queue = [outRel, proofRel].map((rel) => path.join(lib, rel)).filter((f) => fs.existsSync(f));
+    while (queue.length) { const f = queue.shift(); if (seen.has(f)) continue; seen.add(f);
+      for (const m of fs.readFileSync(f, 'utf8').matchAll(/^import '(\.[^']+)'/gm)) { const q = path.resolve(path.dirname(f), m[1]); if (fs.existsSync(q) && !seen.has(q)) queue.push(q); } }
+    const files = [...seen].map((f) => path.relative(app, f));
+    if (absent.length) checks.push({ name: 'flutter analyze (מראה)', status: 'כשל', out: `אינו במראה: ${absent.join(', ')} — לא נבדק, ולכן אינו ירוק (mirror ⇒ ${lib})` });
+    else {
+      const an = spawnSync(flutter, ['analyze', '--no-fatal-infos', '--no-fatal-warnings', ...files], { cwd: app, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 900000 });
+      const { errs, warnN, infoN, issues, miscount } = parseAnalyze(String(an.stdout || '') + String(an.stderr || ''), an.status, an.error);
+      checks.push({ name: 'flutter analyze (מראה)', status: (errs.length || miscount) ? 'כשל' : 'עבר',
+        cmd: `${flutter} analyze --no-fatal-infos --no-fatal-warnings ${files.join(' ')}   # cwd=${app}`,
+        out: `${files.length} קבצים במראה · ${errs.length} שגיאות · ${warnN} אזהרות · ${infoN} infos · ${issues ?? '?'} issues found · ${((Date.now() - tM) / 1000).toFixed(1)}s`
+          + (miscount ? ` · ${miscount}` : '') + (errs.length ? ' · ' + errs.slice(0, 4).map((e) => `${e.file}:${e.line}:${e.col} · ${e.code} · ${e.msg}`).join(' ; ') : '') });
+    }
+  }
   const red = checks.filter((c) => c.status === 'כשל');
   say(6, 'משטרה בתוך הריצה', red.length ? 'כשל' : 'עבר',
     checks.map((c) => `${c.name}: ${c.status}`).join(' · ') + (red.length ? ` · ${red.map((c) => c.name + ' ⇒ ' + c.out).join(' ; ')}` : ''), { checks });

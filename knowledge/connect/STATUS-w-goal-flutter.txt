@@ -1,0 +1,21 @@
+# ‏[W] goal-flutter · claude/w-goal-flutter-260917 · בסיס claude/up-connect-260917 @ 29bd7932
+# סביבה: FLUTTER=/root/flutter/bin (3.47.4 · Dart 3.13.3) · BUILDSMART=/home/user/buildsmart/app_flutter (hei-rxv1v1)
+
+1. בסיס · behavior-plan --goal --ns payments-w6 ⇒ «flutter analyze (מראה): לא-זמין» · out="buildsmart=/home/user/buildsmart · flutter=—" · EXIT=0 · 82s
+2. בסיס · הקובץ-המחולל אינו בעץ-הנבדק: ls …/lib/genesis/dart-gen-bs/gen_goal_payments-w6.dart ⇒ No such file (568 gen_* בלעדיו) — ירוק-חלול גם אילו נמצא flutter
+3. בסיס · nl-smoke --compile ⇒ 35 משפטים · 35 ירוקים · 0 אדומים · 0 שגיאות-analyze · 0 לא-במראה · EXIT=0 · 75.5s
+4. בסיס · 11 picks (sock-needs 7 · fn-needs2 4) · 152s
+5. פותר · resolveFlutter על 4 צורות של $FLUTTER (bin · sdk-root · הבינארי · bin/) ⇒ /root/flutter/bin/flutter ×4
+6. אחרי · אותה פקודה ⇒ «flutter analyze (מראה): עבר — 10 קבצים במראה · 0 שגיאות · 0 אזהרות · 0 infos · 0 issues found · 1.6s» · EXIT=0 · 67s
+7. אחרי · 10 = 2 מחוללים + 8 אטומים שנעקבו מהייבואים (G48ב); 8 האטומים לא היו במראה קודם (?? ב-git status של buildsmart)
+8. חבלה א · שגיאה בקובץ-המשוקף + הרצת ה-cmd שהלדג'ר רשם ⇒ «כשל · 1 שגיאות · 1 issues found · gen_goal_payments-w6.dart:27:21 · undefined_identifier»; אחרי החזרה ⇒ «עבר · 0 שגיאות»
+9. חבלה ב · mv /root/flutter + mv /home/user/buildsmart ⇒ flutter=null · bsRoot=null · ענף=לא-זמין עם הסיבה; שניהם הוחזרו
+10. רגרסיה · nl-smoke --compile ⇒ 35/35 · EXIT=0 · 27.1s · diff על הפסק פר-משפט (35 שורות) = ריק
+11. רגרסיה · 11 picks ⇒ diff = ריק (7/7 + 4/4, זהים גם לטבלת w-goal-pipeline §3) · 147s
+12. משטרה · pins-check --write ⇒ 139 קבצים · police --fast ⇒ 45 ran · 13 skipped · 0 yellow · 0 failed · מרשם 58 · 75s
+    (הריצה הראשונה: failed learn — קלון רדוד, נכשל גם על הבסיס; git fetch --unshallow ⇒ 88⇒1350 קומיטים ⇒ learn-check exit 0)
+
+לא נגעתי בקבצים נעוצים-STATIC (gates.tsv · police.mjs · CLAUDE.md · LAW.md · LEARNINGS.md) — הצעת L111 בדוח §7.
+לא נמדד: flutter build web · police מלא · הענף absent (קובץ שאינו במראה) נבדק בקריאת-קוד בלבד.
+
+DONE · 12 מדידות
