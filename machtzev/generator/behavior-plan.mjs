@@ -116,7 +116,13 @@ function* streamTrees(pureRows, need, exactNodes, partial = false, bound = { max
   const atomsByRet = (want) => { const w = normT(want); let a = byRetMemo.get(w); if (a === undefined) { a = w === 'dynamic' ? usable : (byRet.get(w) || []).concat(byRet.get('dynamic') || []); byRetMemo.set(w, a); } return a; };
   const fnTMemo = new Map();   // parseFnT = regex על מחרוזת-טיפוס, נקרא באותה תדירות
   const fnT = (want) => { let f = fnTMemo.get(want); if (f === undefined) { f = parseFnT(want); fnTMemo.set(want, f); } return f; };
-  const CONSTS = [...(need.consts || []).map((c) => typeof c === 'string' ? { dart: c, type: /^'/.test(c) ? 'String' : /^-?\d/.test(c) ? 'num' : /^(true|false)$/.test(c) ? 'bool' : 'dynamic' } : c), ...(need.entity ? schemaKeys(need.entity) : [])];   // שקע-סכמה: שמות-השדות של הישות
+  // ⚠️ **דדופ לפי הליטרל** — לא קוסמטיקה: כשהצורך מצהיר גם `consts:["'date'"]` וגם
+  //   `entity` שיש לו שקע בשם `date`, אותו ליטרל נכנס פעמיים ⇒ **שני עצים שונים עם
+  //   אותו exprId**; `evalInterp` ממפתח תוצאות לפי id, ולכן שתי ריצות של 2/4 התמזגו
+  //   לרשומה אחת של 4/4 ו«הוכיחו» אטום שמחזיר false תמיד (נמדד: hokRecordedThisMonth
+  //   נבחר ב-3 מטרות, הוכחת-ההרכבה נפלה). ירוק-חלול · L27.
+  const CONSTS = [...(need.consts || []).map((c) => typeof c === 'string' ? { dart: c, type: /^'/.test(c) ? 'String' : /^-?\d/.test(c) ? 'num' : /^(true|false)$/.test(c) ? 'bool' : 'dynamic' } : c), ...(need.entity ? schemaKeys(need.entity) : [])]
+    .filter((c, i, a) => a.findIndex((x) => x.dart === c.dart) === i);   // שקע-סכמה: שמות-השדות של הישות
   // שקע-פונקציה: want='R Function(A..)' ⇒ כל חלקיק g עם ret~R ו-m הפרמטרים הראשונים ~A..; השאר (אם יש) נקשרים משקעי-הדאטה של הצורך לפי טיפוס. צומת אחד.
   const plugMemo = new Map();   // אותו סיפור לתקע-המקונן: התוצאה תלויה רק בחתימה המנורמלת
   const innerPlugsOf = (want) => { const k = ftKey(want); if (k === null) return EMPTY; let a = plugMemo.get(k); if (a === undefined) { a = [...innerPlugs(want)]; plugMemo.set(k, a); } return a; };
@@ -279,8 +285,14 @@ export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLev
         const ps = [...new Set(args.flatMap((x) => x.ps))]; const node = { k: 'a', id: g.id, file: g.file, args: args.map((x) => x.node) };
         exprs.push({ node, type: g.ret, nodes, cost: args.filter((x) => x.node.k !== 'c').length + args.reduce((n, x) => n + x.cost, 0), ps, isVoid: normT(g.ret) === 'void' });
         if (exprs.length > capLevel * 3) { exprs.sort(byCost); exprs.length = capLevel; } } }   // גיזום-ביניים (id מחושב פעם אחת): לא מחזיקים מיליוני ביטויים בזיכרון
-    dbg('exprs', exprs.length); exprs.sort(byCost); const level = exprs.slice(0, capLevel); dbg('level', level.length);
-    const cands = level.map((e) => ({ id: idOf(e), file: treeAtoms(e.node)[0].file, chain: null, tree: e.node, argc: P.length, nodes: e.nodes, sumArgc: e.cost, root: e.node, isVoid: e.isVoid }));
+    dbg('exprs', exprs.length); exprs.sort(byCost); const levelAll = exprs.slice(0, capLevel); const level = levelAll.slice(); dbg('level', level.length);
+    let cands = level.map((e) => ({ id: idOf(e), file: treeAtoms(e.node)[0].file, chain: null, tree: e.node, argc: P.length, nodes: e.nodes, sumArgc: e.cost, root: e.node, isVoid: e.isVoid }));
+    // 🔒 מגן-קשיח על אותה מחלקת-תקלה: תוצאות-ההערכה ממופתחות ב-id, ולכן **אסור** ששני
+    //   מועמדים יישאו אותו exprId — אחרת ה-ok שלהם מתחבר ו-2/4+2/4 נקרא 4/4 (ירוק-חלול).
+    //   דדופ מוקדם: הראשון (הזול, לפי byCost) נשאר; הכפילויות יוצאות עם המדידה.
+    { const seen = new Set(); const kept = []; let dup = 0;
+      for (let i = 0; i < cands.length; i++) { if (seen.has(cands[i].id)) { dup++; continue; } seen.add(cands[i].id); kept.push(i); }
+      if (dup) { dbg('dup-exprid', dup); cands = kept.map((i) => cands[i]); level.length = 0; level.push(...kept.map((i) => levelAll[i])); } }
     let res = {}; if (!interp.error) { const ev = evalInterp(interp, cands.map((c) => ({ id: c.id, tree: c.tree, void: c.isVoid })), need.examples.length); if (ev.error) { if (DBG0) console.error('[values] eval error', ev.error); } else res = ev; }
     if (interp.error || !Object.keys(res).length) { const VB = 120; for (let b = 0; b < cands.length; b += VB) Object.assign(res, proveFn(`${need.__id || 'need'}__v${depth}_b${b / VB}`, cands.slice(b, b + VB), need.examples, need.imports || [], { ...ENV, values: true })); }   // נפילה-לאחור: אצוות של 120
     evaluated += cands.length; for (const [k, v] of Object.entries(res)) proof[k] = { ok: v.ok, total: v.total, unknown: v.unknown || 0 }; dbg('evaluated', cands.length, 'results', Object.keys(res).length);
@@ -583,7 +595,10 @@ export function goalExamples(id, need) {
   if (!fx.rows.length) return { owner: `${id}: ${fx.why} — מאיפה לוקחים דוגמאות ל-${d.cls}.${d.field}?` };
   const srcs = [...new Set(fx.rows.map((r) => r.src))];
   if (numeric) {
-    const pick = fx.rows.slice(0, 3);
+    // פריסה על **טווח-הערכים** (מינימום · חציון · מקסימום), לא שלושת-הקטנים: שלושה
+    // ערכים צמודים (‏-50 · 0 · 0 — נמדד) אינם מבדילים בין סכום · מונה · מינימום.
+    const at = [0, Math.floor(fx.rows.length / 2), fx.rows.length - 1].filter((i, j, a) => a.indexOf(i) === j);
+    const pick = at.map((i) => fx.rows[i]);
     const keys = [...new Set(pick.flatMap((r) => r.keys))].filter((k) => pick.every((r) => r.row[k]));
     const lst = (rs) => `<dynamic>[${rs.map((r) => dartMap(r.row, keys)).join(', ')}]`;
     const sum = pick.reduce((s, r) => s + r.v, 0);
@@ -602,7 +617,13 @@ export function goalExamples(id, need) {
   const hit = (r) => (d.cmp === 'מתחת' ? daysBetween(r.v, now) < d.k : daysBetween(r.v, now) > d.k);
   const yes = fx.rows.filter(hit), no = fx.rows.filter((r) => !hit(r));
   if (!yes.length || !no.length) return { owner: `${id}: ל-${d.cls}.${d.field} יש ${fx.rows.length} ערכי-fixture אך כולם ${yes.length ? 'עוברים' : 'נופלים'} את הסף ${d.k} מול ${now} — אין דוגמה נגדית ממקור. להרחיב את המטרה או את ה-fixture?` };
-  const P = [...yes.slice(0, 2), ...no.slice(0, 2)];
+  // 🎯 **בחירה-מבדילה**: הדוגמאות הקרובות-לסף משני צדיו + הקצוות. נמדד: בחירת-
+  //  קצוות-בלבד נתנה ties 8–24 ו-`cmpGeStr(now,normId(p0))` («now ≥ p0», מתעלם מהסף)
+  //  עבר את כולן — דוגמה שאינה נוגעת בסף אינה מבדילה בין «מעל K» ל«בעבר».
+  const dist = (r) => Math.abs(daysBetween(r.v, now) - d.k);
+  const near = (rs) => rs.slice().sort((a, b) => dist(a) - dist(b) || (a.src < b.src ? -1 : 1));
+  const P = [...new Set([...near(yes).slice(0, 2), ...near(no).slice(0, 2),
+    yes[0], yes[yes.length - 1], no[0], no[no.length - 1]].filter(Boolean))];
   const ctx = ctx0;
   if (d.kind === 'threshold') return { examples: P.map((r) => [dqf(r.v), `r == ${hit(r)}`, ctx]), sources: srcs.slice(0, 4), now, rows: P.length };
   const keys = [...new Set(P.flatMap((r) => r.keys))].filter((k) => P.every((r) => r.row[k]));
