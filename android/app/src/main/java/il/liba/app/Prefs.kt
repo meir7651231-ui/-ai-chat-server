@@ -11,6 +11,8 @@ object Prefs {
     fun setHey(c: Context, v: Boolean) = p(c).edit().putBoolean("hey", v).apply()
     fun conv(c: Context) = p(c).getBoolean("conv", true)
     fun setConv(c: Context, v: Boolean) = p(c).edit().putBoolean("conv", v).apply()
+    fun crash(c: Context): String? = p(c).getString("crash", null)
+    fun clearCrash(c: Context) = p(c).edit().remove("crash").apply()
     fun updateUrl(c: Context): String? = p(c).getString("updateUrl", null)
     fun setUpdate(c: Context, url: String?, code: Int) = p(c).edit().putString("updateUrl", url).putInt("updateCode", code).apply()
 

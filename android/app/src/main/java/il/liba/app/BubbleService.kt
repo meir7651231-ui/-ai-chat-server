@@ -75,13 +75,13 @@ class BubbleService : Service(), LibaWeb.Bridge {
         running = true; instance = this
         wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         startForegroundNotif()
-        applyPrefs()
-        setupTts()
-        setupWeb()
-        setupBubble()
-        watchNetwork()
+        runCatching { applyPrefs() }
+        runCatching { setupTts() }
+        runCatching { setupWeb() }.onFailure { status = "WebView נכשל: $it" }
+        runCatching { setupBubble() }.onFailure { status = "בועה נכשלה: $it" }
+        runCatching { watchNetwork() }
         main.postDelayed(watchdog, 30000)
-        checkUpdate()
+        runCatching { checkUpdate() }
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
 
@@ -163,10 +163,12 @@ class BubbleService : Service(), LibaWeb.Bridge {
         main.postDelayed(this, 30000)
     } }
     private fun watchNetwork() {
-        val cm = getSystemService(ConnectivityManager::class.java)
-        cm.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(n: Network) { main.post { if (!pageReady) reloadPage("רשת חזרה") } }
-        })
+        try {
+            val cm = getSystemService(ConnectivityManager::class.java)
+            cm.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(n: Network) { main.post { if (!pageReady) reloadPage("רשת חזרה") } }
+            })
+        } catch (e: Exception) { Log.w(LibaWeb.TAG, "network watch: $e") }
     }
 
     // ---------- update check ----------

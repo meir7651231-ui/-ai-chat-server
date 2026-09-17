@@ -63,7 +63,10 @@ class MainActivity : AppCompatActivity() {
         web.visibility = if (running) View.GONE else View.VISIBLE
         logWrap.visibility = if (running) View.VISIBLE else View.GONE
         if (running) { val t = Prefs.logText(this); if (logView.text.toString() != t) { logView.text = t; logWrap.post { logWrap.fullScroll(View.FOCUS_DOWN) } } }
+        val crash = Prefs.crash(this)
+        if (crash != null && !running) { logWrap.visibility = View.VISIBLE; web.visibility = View.GONE; logView.text = "קריסה אחרונה (לחיצה ארוכה = העתק, ואז שלח לליבה):\n\n" + crash; logView.setOnLongClickListener { (getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager).setPrimaryClip(android.content.ClipData.newPlainText("crash", crash)); Prefs.clearCrash(this); true } }
         status.text = when {
+            crash != null && !running -> "האפליקציה קרסה. הפרטים למעלה. לחץ 'הפעל בועה' כדי לנסות שוב."
             !micOk() -> "צריך הרשאת מיקרופון"
             !overlayOk() -> "צריך הרשאה להצגה מעל אפליקציות אחרות"
             running -> BubbleService.status
