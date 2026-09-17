@@ -31,7 +31,7 @@ object LibaWeb {
     else if(d.liba==='tasks'){LibaBridge.tasks(String(d.summary||''),Number(d.n||0),Number(d.blocked||0));}
   });
   window.__libaRect=function(){var f=document.querySelector('iframe');if(!f)return '';var r=f.getBoundingClientRect();return JSON.stringify([r.left,r.top,r.width,r.height]);};
-  window.__libaHello=function(){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'hello'},'*');}catch(e){}});};
+  window.__libaHello=function(){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'hello',ver:window.__libaVer||''},'*');}catch(e){}});};
   window.__libaCrash=function(id,ver,t){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'crash',id:id,version:ver,text:t},'*');}catch(e){}});};
   window.__libaInput=function(t){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'input',text:t},'*');}catch(e){}});};
   setInterval(function(){if(!ready)window.__libaHello();},3000);
@@ -122,5 +122,8 @@ object LibaWeb {
         web.dispatchTouchEvent(down); web.postDelayed({ web.dispatchTouchEvent(up); down.recycle(); up.recycle() }, 50)
     }
     fun sendCrash(web: WebView, id: String, ver: String, text: String) { web.evaluateJavascript("window.__libaCrash && window.__libaCrash(${JSONObject.quote(id)},${JSONObject.quote(ver)},${JSONObject.quote(text)})", null) }
-    fun hello(web: WebView) { web.evaluateJavascript("window.__libaHello && window.__libaHello()", null) }
+    fun hello(web: WebView) {
+        val ver = try { web.context.packageManager.getPackageInfo(web.context.packageName, 0).versionName } catch (e: Exception) { "?" }
+        web.evaluateJavascript("window.__libaVer='" + ver + "';window.__libaHello && window.__libaHello()", null)
+    }
 }
