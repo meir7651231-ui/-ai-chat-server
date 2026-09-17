@@ -57,8 +57,10 @@ const selfContained = (shelf, file) => { const s = srcOf(shelf, file); return s 
 // מובנה, לא ערך-שדה בודד — פוסלים אותו מבריכת-הטרנספורם (מבני-טהור, לא רשימת-שמות). זה גם
 // מסלק את התאמות-הרעש (‎'מידע רפואי'→שורת-מידע-על-חדר) וגם מונע Map-גולמי בניתוח-הקפדני.
 const scalarBody = (shelf, file) => { const s = srcOf(shelf, file); return s != null && !/\bas\s+(Map|List)\b/.test(s); };
+// ארגומנטים-חובה מהחתימה: הפרמטרים לפני ה-'[' / '{' הראשון בעומק-0 (payLink(String, num, [..]) ⇒ 2 — לא מועמד לקריאה-בארגומנט-אחד). נמדד: '[' בכל מקום בחתימה הכניס 5 אטומים דו-ארגומנטיים לאשף ⇒ 5 שגיאות-קומפילציה
+const requiredArity = (sig, params) => { if (!sig) return (params || []).length; const o = sig.indexOf('('); if (o < 0) return (params || []).length; let d = 0, n = 0, seen = false; for (let i = o + 1; i < sig.length; i++) { const c = sig[i]; if (c === '(' || c === '<') d++; else if (c === '>' ) d--; else if (c === ')') { if (d === 0) break; d--; } else if (d === 0 && (c === '[' || c === '{')) break; else if (d === 0 && c === ',') n++; else if (d === 0 && !/\s/.test(c)) seen = true; } return seen ? n + 1 : 0; };
 const XFORM = atlas.functions
-  .filter((f) => RET_OK.has(f.ret) && (f.params || []).length >= 1 && PRIM.has(f.params[0].type) && ((f.params.length === 1) || /\[/.test(f.sig || '')) && (f.he || []).length && selfContained(f.shelf, f.file) && scalarBody(f.shelf, f.file))
+  .filter((f) => RET_OK.has(f.ret) && (f.params || []).length >= 1 && PRIM.has(f.params[0].type) && requiredArity(f.sig, f.params) === 1 && (f.he || []).length && selfContained(f.shelf, f.file) && scalarBody(f.shelf, f.file))
   .map((f) => {
     const hw = (f.he || []).filter((w) => w.length >= 2);            // מילות-ה-he המקוריות
     return {
@@ -1480,7 +1482,7 @@ export function renderWizard(slug, { entities, screenCount }) {
         const lbl = k(s.label);
         rows.push(c.cls === 'DsField'
           ? `          if (_on[${i}]) DsField(label: ${lbl}, hint: '', value: _t[${t}] ?? '', onChanged: (v) => setState(() => _t[${t}] = v)),`
-          : `          if (_on[${i}]) ${c.cls}(label: ${lbl}),`);
+          : `          if (_on[${i}]) ${c.cls}(label: ${lbl}, value: _t[${t}] ?? '', onChanged: (v) => setState(() => _t[${t}] = v)),`);   // DsNumberField/DsDateField/DsToggleTile: value+onChanged חובה (חוזה-הווידג'ט) — נמדד: אשף בלי value/onChanged ⇒ 2 שגיאות-קומפילציה
       }
       for (const f of rankXforms(s.label)) {
         if (seenX.has(f.name) && seenX.get(f.name) !== f.file) continue;   // שם תפוס ע"י אטום אחר
@@ -1493,7 +1495,10 @@ export function renderWizard(slug, { entities, screenCount }) {
           : nt === 'double' ? `(double.tryParse(_t[${t}] ?? '') ?? 0)`
           : nt === 'num' ? `(num.tryParse(_t[${t}] ?? '') ?? 0)`
           : `(_t[${t}] ?? '')`;
-        rows.push(`          if (_on[${i}] && (_t[${t}] ?? '').trim().isNotEmpty) _live(${k(f.name)}, ${f.name}(${arg})),`);
+        // _live(String, String): פלט-האטום עטוף לפי טיפוס-ההחזרה — אותה עטיפה כמו במסך-הישות (bool ⇒ כן/לא · num ⇒ toString · String? ⇒ ?? ''). נמדד: bool/int/String? גולמיים ⇒ 4 שגיאות-קומפילציה
+        const call = `${f.name}(${arg})`;
+        const wrapped = f.ret === 'bool' ? `(${call} ? ${k(L.yes)} : ${k(L.no)})` : /^(int|num|double)$/.test(f.ret) ? `${call}.toString()` : /\?$/.test(f.ret || '') ? `(${call} ?? '')` : call;
+        rows.push(`          if (_on[${i}] && (_t[${t}] ?? '').trim().isNotEmpty) _live(${k(f.name)}, ${wrapped}),`);
       }
       kids.push(`        DsSection(title: ${k(s.label)}, children: [\n${rows.join('\n')}\n        ]),`);
     });
