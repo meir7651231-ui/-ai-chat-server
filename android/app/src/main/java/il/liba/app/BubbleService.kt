@@ -434,7 +434,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun startVad() {
         if (vad?.active == true || listening) return
         if (!ensureMicFgs()) return
-        muteSystem(); setState(State.WAKE)
+        unmuteSystem(); setState(State.WAKE)
         vad = VadGate { main.post { vad = null; if (heyOn && !listening && !speaking) startListening("wake") else wakeLoop() } }.also { it.start() }
     }
     private fun stopVad() { vad?.stop(); vad = null }
@@ -455,7 +455,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             if (mode == "wake") { putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 4000L); putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 2000L); putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true) }
         }
         listening = true; listenMode = mode
-        if (mode == "wake") { muteSystem(); setState(State.WAKE) } else { unmuteSystem(); setState(State.LISTENING); showLabel(if (mode == "follow") "…" else "מקשיב…", 15000) }
+        if (mode == "wake") { muteSystem(); setState(State.WAKE); main.postDelayed({ if (listenMode == "wake") unmuteSystem() }, 6000) } else { unmuteSystem(); setState(State.LISTENING); showLabel(if (mode == "follow") "…" else "מקשיב…", 15000) }
         sr?.startListening(i)
     }
     private fun stripWake(t: String): Pair<Boolean, String> {
@@ -474,7 +474,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             val t = p?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull() ?: return
             if (listenMode == "wake") { if (WAKE.any { t.contains(it) }) { showLabel("כן?", 3000) } } else if (t.isNotBlank()) showLabel(t, 15000)
         }
-        override fun onError(e: Int) { listening = false
+        override fun onError(e: Int) { listening = false; if (listenMode == "wake") unmuteSystem()
             if (listenMode == "wake") { errStreak++; if (e == SpeechRecognizer.ERROR_RECOGNIZER_BUSY || e == SpeechRecognizer.ERROR_CLIENT) { sr?.destroy(); sr = null }
                 if (srOnDevice && (e == 12 || e == 13 || e == SpeechRecognizer.ERROR_SERVER)) { onDeviceFailed = true; try { sr?.destroy() } catch (x: Exception) {}; sr = null; Log.i("liba", "on-device recognizer has no Hebrew – falling back") }
                 main.postDelayed({ wakeLoop() }, if (speaking) 1500 else if (errStreak > 5) 5000 else 400); return }
@@ -482,7 +482,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             if (listenMode == "follow" && (e == SpeechRecognizer.ERROR_NO_MATCH || e == SpeechRecognizer.ERROR_SPEECH_TIMEOUT)) { idleOrWake(); return }
             showLabel(when (e) { SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "לא שמעתי כלום"; SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "אין הרשאת מיקרופון"; SpeechRecognizer.ERROR_NETWORK -> "אין אינטרנט לזיהוי"; else -> "שגיאת מיקרופון ($e)" }, 3000)
             idleOrWake() }
-        override fun onResults(r: Bundle?) { listening = false; errStreak = 0
+        override fun onResults(r: Bundle?) { listening = false; errStreak = 0; if (listenMode == "wake") unmuteSystem()
             var t = r?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()?.trim().orEmpty()
             if (listenMode == "wake") {
                 val (hit, rest) = stripWake(t)
