@@ -62,6 +62,12 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var tones = true                 // step 28: short confirmation tones
     private val chunks = ArrayDeque<String>() // step 29: long texts read in parts
     private var paused = false
+    private var bargeIn = false              // step 24: interrupt me mid-sentence (echo-cancelled mic)
+    private var bargeVad: VadGate? = null
+    private var headsetBtn = false           // step 25: headset button = "דבר"
+    private var mediaSession: android.media.session.MediaSession? = null
+    private var curSpeaker = "ליבה"          // step 37: bubble colour per speaker
+    private var menu: android.widget.LinearLayout? = null // step 31: long-press menu
     private var listening = false
     private var listenMode = "cmd" // cmd | wake | follow
     private var pulse: ObjectAnimator? = null
@@ -99,17 +105,29 @@ class BubbleService : Service(), LibaWeb.Bridge {
         main.postDelayed(watchdog, 30000)
         runCatching { checkUpdate() }
     }
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.action) { // step 32: actions from the permanent notification
+            "il.liba.TALK" -> main.post { if (tts?.isSpeaking == true) tts?.stop(); startListening("cmd") }
+            "il.liba.QUIET" -> main.post { tts?.stop(); chunks.clear(); heyOff(); setState(State.IDLE); showLabel("שקט.", 2000) }
+        }
+        return START_STICKY
+    }
+    private fun notif(): Notification {
+        val pi = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE)
+        val talk = PendingIntent.getService(this, 1, Intent(this, BubbleService::class.java).setAction("il.liba.TALK"), PendingIntent.FLAG_IMMUTABLE)
+        val quiet = PendingIntent.getService(this, 2, Intent(this, BubbleService::class.java).setAction("il.liba.QUIET"), PendingIntent.FLAG_IMMUTABLE)
+        return NotificationCompat.Builder(this, CH).setSmallIcon(R.drawable.ic_notif).setContentTitle("ליבה מאזינה").setContentText("לחץ על הבועה כדי לדבר")
+            .setContentIntent(pi).setOngoing(true).setSilent(true).addAction(0, "🎙 דבר", talk).addAction(0, "שקט", quiet).build()
+    }
 
-    fun applyPrefs() { heyOn = Prefs.hey(this); convOn = Prefs.conv(this); rate = Prefs.rate(this); night = Prefs.night(this); tones = Prefs.tones(this); tts?.setSpeechRate(rate); main.post { if (heyOn) wakeLoop() else if (listenMode == "wake" && listening) sr?.cancel() } }
+    fun applyPrefs() { heyOn = Prefs.hey(this); convOn = Prefs.conv(this); rate = Prefs.rate(this); night = Prefs.night(this); tones = Prefs.tones(this); bargeIn = Prefs.barge(this); headsetBtn = Prefs.headset(this); tts?.setSpeechRate(rate); main.post { setupMediaSession() }; main.post { if (heyOn) wakeLoop() else if (listenMode == "wake" && listening) sr?.cancel() } }
 
     // ---------- notification ----------
     private fun startForegroundNotif() {
         val nm = getSystemService(NotificationManager::class.java)
         nm.createNotificationChannel(NotificationChannel(CH, "ליבה", NotificationManager.IMPORTANCE_LOW))
         val pi = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE)
-        val n = NotificationCompat.Builder(this, CH).setSmallIcon(R.drawable.ic_notif).setContentTitle("ליבה מאזינה")
-            .setContentText("לחץ על הבועה כדי לדבר").setContentIntent(pi).setOngoing(true).setSilent(true).build()
+        val n = notif()
         try {
             if (Build.VERSION.SDK_INT >= 34) startForeground(1, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
             else if (Build.VERSION.SDK_INT >= 29) startForeground(1, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE) else startForeground(1, n)
@@ -123,9 +141,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun ensureMicFgs(): Boolean {
         if (micFgs || Build.VERSION.SDK_INT < 34) return true
         return try {
-            val pi = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE)
-            val n = NotificationCompat.Builder(this, CH).setSmallIcon(R.drawable.ic_notif).setContentTitle("ליבה מאזינה").setContentText("לחץ על הבועה כדי לדבר").setContentIntent(pi).setOngoing(true).setSilent(true).build()
-            startForeground(1, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE); micFgs = true; true
+            startForeground(1, notif(), ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE); micFgs = true; true
         } catch (e: Exception) { showLabel("אנדרואיד לא נותן מיקרופון ברקע – פתח את ליבה ולחץ הפעל בועה", 6000); false }
     }
 
@@ -139,8 +155,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 tts?.setAudioAttributes(android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION_EVENT).setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build())
                 tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                     override fun onStart(id: String?) {}
-                    override fun onError(id: String?) { main.post { onSpoken() } }
-                    override fun onDone(id: String?) { main.post { if (chunks.isNotEmpty() && !paused) { main.postDelayed({ speakNextChunk(false) }, 350) } else onSpoken() } }
+                    override fun onError(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { bargeVad?.stop(); bargeVad = null; onSpoken() } }
+                    override fun onDone(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { bargeVad?.stop(); bargeVad = null; if (chunks.isNotEmpty() && !paused) { main.postDelayed({ speakNextChunk(false) }, 350) } else onSpoken() } }
                 })
                 if (!ttsReady) main.post { showLabel("אין קול עברי בטלפון – התקן Google Text-to-Speech עברית", 6000) }
             }
@@ -168,8 +184,24 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun speakNextChunk(first: Boolean) {
         val part = chunks.removeFirstOrNull() ?: run { speaking = false; onSpoken(); return }
         unmuteSystem(); setState(State.SPEAKING); speaking = true
-        tts?.speak(part, TextToSpeech.QUEUE_FLUSH, null, "liba-" + System.currentTimeMillis())
+        speakSegments(part)
+        if (bargeIn) { bargeVad?.stop(); bargeVad = VadGate(sens = 6.0, minRms = 1800.0, comm = true) { main.post { if (speaking) { tts?.stop(); chunks.clear(); speaking = false; bargeVad = null; showLabel("כן?", 3000); startListening("cmd") } } }.also { it.start() } }
         main.postDelayed({ if (speaking) { speaking = false; onSpoken() } }, 4000L + part.length * 120L) // safety net if TTS never reports
+    }
+    // step 30: Hebrew with English terms – Latin runs are spoken by the English voice
+    private fun speakSegments(text: String) {
+        val t = tts ?: return
+        val segs = ArrayList<Pair<Boolean, String>>() // (latin, text)
+        val m = Regex("[A-Za-z][A-Za-z0-9+#._/\\-]*(?:\\s+[A-Za-z][A-Za-z0-9+#._/\\-]*)*").findAll(text); var last = 0
+        for (r in m) { if (r.range.first > last) segs.add(false to text.substring(last, r.range.first)); segs.add(true to r.value); last = r.range.last + 1 }
+        if (last < text.length) segs.add(false to text.substring(last))
+        val clean = segs.filter { it.second.isNotBlank() }
+        if (clean.isEmpty()) { t.speak(text, TextToSpeech.QUEUE_FLUSH, null, "liba-" + System.currentTimeMillis()); return }
+        clean.forEachIndexed { i, (latin, s) ->
+            try { t.language = if (latin) Locale.US else Locale("he", "IL") } catch (e: Exception) {}
+            t.speak(s, if (i == 0) TextToSpeech.QUEUE_FLUSH else TextToSpeech.QUEUE_ADD, null, (if (i == clean.size - 1) "liba-" else "seg-") + System.currentTimeMillis() + "-" + i)
+        }
+        try { t.language = Locale("he", "IL") } catch (e: Exception) {}
     }
     private fun vibrate(pattern: LongArray) { try { val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator; if (Build.VERSION.SDK_INT >= 26) v.vibrate(VibrationEffect.createWaveform(pattern, -1)) else @Suppress("DEPRECATION") v.vibrate(pattern, -1) } catch (e: Exception) {} }
     // step 28: short tones – heard / sent / reply arrived
@@ -215,7 +247,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
         web = w; webHost = host; webLp = lp; pageLoadedAt = SystemClock.elapsedRealtime()
     }
     /** Step 9: show the live page for a minute (consent dialogs, checks), then hide it again. */
+    private var pageShown = false
     fun revealPage(show: Boolean) {
+        pageShown = show
         val host = webHost ?: return; val lp = webLp ?: return; val w = web ?: return
         val dm = resources.displayMetrics
         if (show) {
@@ -280,7 +314,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
             State.WAKE -> { bg.setColors(intArrayOf(Color.parseColor("#B8FBFF"), Color.parseColor("#3FBDB9"), Color.parseColor("#2C3140"))); d.text = "ל"; pulseDot(1.06f, 1400) }
             State.OFFLINE -> { bg.setColors(intArrayOf(Color.parseColor("#5B6478"), Color.parseColor("#2C3140"), Color.parseColor("#1A1E28"))); d.text = "…" }
             State.LISTENING -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#FF5C8A"), Color.parseColor("#8A1F3A"))); d.text = "🎙"; pulseDot(1.15f, 500) }
-            State.SPEAKING -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#5CFFB0"), Color.parseColor("#0B6E6D"))); d.text = "🔊" }
+            State.SPEAKING -> { val c = when { curSpeaker.contains("מנהל") -> "#8A5CFF" to "#3B1F7A"; curSpeaker.contains("אדריכל") || curSpeaker.contains("עובד") || curSpeaker.contains("סוכן") -> "#5CFFB0" to "#0B6E6D"; else -> "#7DF9FF" to "#0B5E6D" }
+                bg.setColors(intArrayOf(Color.WHITE, Color.parseColor(c.first), Color.parseColor(c.second))); d.text = "🔊" }
             State.RINGING -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#FFB454"), Color.parseColor("#C9491D"))); d.text = "☎"; pulseDot(1.35f, 300) }
             State.SENDING -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#7DF9FF"), Color.parseColor("#2C3140"))); d.text = "↑" }
         }
@@ -311,7 +346,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         bubble = root; dot = d; label = l
         setState(State.OFFLINE)
         var sx = 0f; var sy = 0f; var ox = 0; var oy = 0; var moved = false; var downAt = 0L
-        val longPress = Runnable { if (!moved) { moved = true; openMain() } }
+        val longPress = Runnable { if (!moved) { moved = true; toggleMenu(root, size) } }
         d.setOnTouchListener { _, ev ->
             when (ev.actionMasked) {
                 MotionEvent.ACTION_DOWN -> { sx = ev.rawX; sy = ev.rawY; ox = lp.x; oy = lp.y; moved = false; downAt = SystemClock.uptimeMillis(); main.postDelayed(longPress, 600); true }
@@ -324,6 +359,39 @@ class BubbleService : Service(), LibaWeb.Bridge {
         }
     }
     private fun openMain() { startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+    // step 31: long-press menu on the bubble – no screen to open
+    private fun toggleMenu(root: FrameLayout, size: Int) {
+        menu?.let { root.removeView(it); menu = null; return }
+        val m = android.widget.LinearLayout(this).apply { orientation = android.widget.LinearLayout.VERTICAL; layoutDirection = View.LAYOUT_DIRECTION_RTL
+            background = GradientDrawable().apply { cornerRadius = dp(14f); setColor(Color.parseColor("#F00E111A")); setStroke(dp(1f).toInt(), Color.parseColor("#337DF9FF")) }; elevation = dp(10f); setPadding(dp(6f).toInt(), dp(6f).toInt(), dp(6f).toInt(), dp(6f).toInt()) }
+        fun item(t: String, act: () -> Unit) { m.addView(TextView(this).apply { text = t; setTextColor(Color.parseColor("#EEF1FF")); textSize = 15f; setPadding(dp(14f).toInt(), dp(9f).toInt(), dp(14f).toInt(), dp(9f).toInt()); setOnClickListener { toggleMenu(root, size); act() } }) }
+        item("🎙 דבר") { startListening("cmd") }
+        item(if (heyOn) "🔇 שקט (כבה מילת הפעלה)" else "🔔 הפעל מילת הפעלה") { if (heyOn) { tts?.stop(); heyOff() } else { heyOn = true; Prefs.setHey(this, true); wakeLoop() } }
+        item("📋 סטטוס") { speak(localStatus()) }
+        item(if (night) "🔊 בטל מצב לילה" else "🌙 מצב לילה") { night = !night; Prefs.setNight(this, night); showLabel(if (night) "🌙 מצב לילה" else "חזרתי לדבר", 2500) }
+        item("🕘 יומן והגדרות") { openMain() }
+        item("🖥 הצג/הסתר דף") { revealPage(!pageShown) }
+        item("⏻ כבה בועה") { stopSelf() }
+        root.addView(m, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.END; topMargin = size + dp(6f).toInt() })
+        menu = m; main.postDelayed({ if (menu === m) { root.removeView(m); menu = null } }, 8000)
+    }
+    // step 25: headset / car button = "דבר" (opt-in – would otherwise steal the button from music apps)
+    private fun setupMediaSession() {
+        if (!headsetBtn) { mediaSession?.let { it.isActive = false; it.release() }; mediaSession = null; return }
+        if (mediaSession != null) return
+        try {
+            val ms = android.media.session.MediaSession(this, "liba")
+            ms.setCallback(object : android.media.session.MediaSession.Callback() {
+                override fun onMediaButtonEvent(i: Intent): Boolean { val ev = i.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT) ?: return false
+                    if (ev.action == KeyEvent.ACTION_DOWN && (ev.keyCode == KeyEvent.KEYCODE_HEADSETHOOK || ev.keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE || ev.keyCode == KeyEvent.KEYCODE_MEDIA_PLAY)) { main.post { onTap() }; return true }
+                    return false }
+                override fun onPlay() { main.post { onTap() } }
+                override fun onPause() { main.post { onTap() } }
+            })
+            ms.setPlaybackState(android.media.session.PlaybackState.Builder().setActions(android.media.session.PlaybackState.ACTION_PLAY or android.media.session.PlaybackState.ACTION_PAUSE or android.media.session.PlaybackState.ACTION_PLAY_PAUSE).setState(android.media.session.PlaybackState.STATE_PLAYING, 0, 1f).build())
+            ms.isActive = true; mediaSession = ms
+        } catch (e: Exception) { Log.w("liba", "media session: $e") }
+    }
     private var labelHide: Runnable? = null
     private fun showLabel(text: String, ms: Long) {
         val l = label ?: return; l.text = text; l.visibility = View.VISIBLE
@@ -399,7 +467,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
             var t = r?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()?.trim().orEmpty()
             if (listenMode == "wake") {
                 val (hit, rest) = stripWake(t)
-                if (!hit) { main.postDelayed({ wakeLoop() }, 250); return }
+                val words = t.split(Regex("\\s+")).filter { it.isNotBlank() }
+                val early = words.take(4).any { w -> WAKE.any { w.contains(it) } }
+                if (!hit || !early || words.size > 25) { main.postDelayed({ wakeLoop() }, 250); return } // TV / other people: ignore
                 if (rest.length < 2) { pendingListenAfterSpeech = true; speak("כן?"); return }
                 t = rest
             }
@@ -417,6 +487,10 @@ class BubbleService : Service(), LibaWeb.Bridge {
             n in listOf("מהר יותר", "יותר מהר", "מהר", "תדבר מהר") -> { rate = (rate + 0.15f).coerceIn(0.6f, 2.2f); Prefs.setRate(this, rate); tts?.setSpeechRate(rate); speak("ככה, מהר יותר."); return }
             n in listOf("מצב לילה", "לחישה", "מצב לחישה", "בלי קול") -> { night = true; Prefs.setNight(this, true); vibrate(longArrayOf(0, 200)); showLabel("🌙 מצב לילה: רטט וטקסט, בלי קול. תגיד 'בטל מצב לילה'.", 8000); return }
             n in listOf("בטל מצב לילה", "סיים מצב לילה", "עם קול", "תדברי", "תדבר") -> { night = false; Prefs.setNight(this, false); speak("חזרתי לדבר."); return }
+            n in listOf("תני להפריע", "תן להפריע", "אפשר להפריע לך") -> { bargeIn = true; Prefs.setBarge(this, true); speak("בסדר, אפשר להפריע לי באמצע."); return }
+            n in listOf("אל תני להפריע", "אל תן להפריע", "בלי הפרעות באמצע") -> { bargeIn = false; Prefs.setBarge(this, false); bargeVad?.stop(); bargeVad = null; speak("בסדר, בלי הפרעות באמצע."); return }
+            n in listOf("אוזניות", "כפתור אוזניה", "מצב אוזניות", "מצב רכב") -> { headsetBtn = true; Prefs.setHeadset(this, true); setupMediaSession(); speak("כפתור האוזניה עכשיו אומר דבר."); return }
+            n in listOf("בלי אוזניות", "בטל אוזניות", "בטל מצב רכב") -> { headsetBtn = false; Prefs.setHeadset(this, false); setupMediaSession(); speak("כפתור האוזניה חזר למוזיקה."); return }
             n in listOf("בלי צלילים", "בטל צלילים") -> { tones = false; Prefs.setTones(this, false); speak("בלי צלילים."); return }
             n in listOf("עם צלילים", "החזר צלילים") -> { tones = true; Prefs.setTones(this, true); speak("עם צלילים."); return }
             n in listOf("דלג", "תדלג", "הלאה", "מספיק") && (chunks.isNotEmpty() || speaking) -> { chunks.clear(); paused = false; tts?.stop(); speaking = false; showLabel("דילגתי.", 2000); onSpoken(); return }
@@ -467,6 +541,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         showLabel("לא נשלח" + (if (reason.isNotBlank()) " · $reason" else ""), 8000); speak("לא הצלחתי לשלוח. $why") } }
     override fun onSay(text: String, kind: String, options: List<String>, speaker: String) { main.post {
         sentAt = 0; status = "מחובר."; waitTimer?.let { main.removeCallbacks(it) }
+        curSpeaker = if (speaker.isBlank()) "ליבה" else speaker
         // step 14: a different voice per speaker – ליבה neutral, המנהל lower, האדריכל higher, others slightly low
         val pitch = when { speaker.isBlank() || speaker.contains("ליבה") -> 1.0f; speaker.contains("מנהל") -> 0.8f; speaker.contains("אדריכל") -> 1.2f; else -> 0.9f }
         try { tts?.setPitch(pitch) } catch (e: Exception) {}
@@ -485,7 +560,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
 
     override fun onDestroy() {
-        running = false; instance = null; main.removeCallbacksAndMessages(null); stopVad(); unmuteSystem()
+        running = false; instance = null; main.removeCallbacksAndMessages(null); stopVad(); bargeVad?.stop(); mediaSession?.let { it.isActive = false; it.release() }; unmuteSystem()
         try { sr?.destroy() } catch (e: Exception) {}
         tts?.stop(); tts?.shutdown()
         bubble?.let { runCatching { wm.removeView(it) } }; webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy()

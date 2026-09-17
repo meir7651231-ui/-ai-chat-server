@@ -7,7 +7,7 @@ import kotlin.math.sqrt
 
 /** Step 21: on-device voice gate. Holds the mic cheaply and fires once real speech is heard,
  *  so the (chiming, network-hungry) SpeechRecognizer only runs when someone actually talks. */
-class VadGate(private val onVoice: () -> Unit) {
+class VadGate(private val sens: Double = 3.0, private val minRms: Double = 700.0, private val comm: Boolean = false, private val onVoice: () -> Unit) {
     @Volatile private var running = false
     private var thread: Thread? = null
     @Volatile var floor = 300.0; private set
@@ -19,7 +19,7 @@ class VadGate(private val onVoice: () -> Unit) {
     private fun run() {
         val rate = 16000; val ch = AudioFormat.CHANNEL_IN_MONO; val fmt = AudioFormat.ENCODING_PCM_16BIT
         val min = AudioRecord.getMinBufferSize(rate, ch, fmt); if (min <= 0) { running = false; return }
-        val rec = try { AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, rate, ch, fmt, maxOf(min, 6400)) } catch (e: Exception) { running = false; return }
+        val rec = try { AudioRecord(if (comm) MediaRecorder.AudioSource.VOICE_COMMUNICATION else MediaRecorder.AudioSource.VOICE_RECOGNITION, rate, ch, fmt, maxOf(min, 6400)) } catch (e: Exception) { running = false; return }
         if (rec.state != AudioRecord.STATE_INITIALIZED) { running = false; try { rec.release() } catch (e: Exception) {}; return }
         val buf = ShortArray(320) // 20 ms frames
         var hot = 0; var frames = 0; var fired = false
@@ -33,7 +33,7 @@ class VadGate(private val onVoice: () -> Unit) {
                 // adaptive noise floor: follows quiet quickly, loud slowly
                 floor = if (rms < floor * 1.5) floor * 0.97 + rms * 0.03 else floor * 0.998 + rms * 0.002
                 floor = floor.coerceIn(60.0, 5000.0)
-                if (frames > 30 && rms > maxOf(floor * 3.0, 700.0)) hot++ else hot = 0
+                if (frames > 30 && rms > maxOf(floor * sens, minRms)) hot++ else hot = 0
                 if (hot >= 5) { fired = true; break } // ~100 ms of clear speech energy
             }
         } catch (e: Exception) {} finally {
