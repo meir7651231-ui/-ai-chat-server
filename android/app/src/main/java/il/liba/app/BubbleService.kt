@@ -51,7 +51,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var webLp: WindowManager.LayoutParams? = null
     private var revealed = false
     private var bubble: FrameLayout? = null
-    private var dot: TextView? = null
+    private var dot: OrbView? = null
     private var label: TextView? = null
     private var tts: TextToSpeech? = null
     private var ttsReady = false
@@ -76,7 +76,6 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var menu: android.widget.LinearLayout? = null // step 31: long-press menu
     private var listening = false
     private var listenMode = "cmd" // cmd | wake | follow
-    private var pulse: ObjectAnimator? = null
     private var pendingListenAfterSpeech = false
     private var pageReady = false
     private var heyOn = false
@@ -339,35 +338,27 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private enum class State { IDLE, LISTENING, WAKE, SPEAKING, RINGING, SENDING, OFFLINE }
     private fun setState(s: State) {
         val d = dot ?: return
-        pulse?.cancel(); d.scaleX = 1f; d.scaleY = 1f
-        val bg = d.background as GradientDrawable
+        val speakerColor = when { curSpeaker.contains("מנהל") -> OrbView.VIOLET; curSpeaker.contains("אדריכל") || curSpeaker.contains("עובד") || curSpeaker.contains("סוכן") -> OrbView.MINT; else -> OrbView.CYAN }
         when (s) {
-            State.IDLE -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#7DF9FF"), Color.parseColor("#8A5CFF"))); d.text = "ל" }
-            State.WAKE -> { bg.setColors(intArrayOf(Color.parseColor("#B8FBFF"), Color.parseColor("#3FBDB9"), Color.parseColor("#2C3140"))); d.text = "ל"; pulseDot(1.06f, 1400) }
-            State.OFFLINE -> { bg.setColors(intArrayOf(Color.parseColor("#5B6478"), Color.parseColor("#2C3140"), Color.parseColor("#1A1E28"))); d.text = "…" }
-            State.LISTENING -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#FF5C8A"), Color.parseColor("#8A1F3A"))); d.text = "🎙"; pulseDot(1.15f, 500) }
-            State.SPEAKING -> { val c = when { curSpeaker.contains("מנהל") -> "#8A5CFF" to "#3B1F7A"; curSpeaker.contains("אדריכל") || curSpeaker.contains("עובד") || curSpeaker.contains("סוכן") -> "#5CFFB0" to "#0B6E6D"; else -> "#7DF9FF" to "#0B5E6D" }
-                bg.setColors(intArrayOf(Color.WHITE, Color.parseColor(c.first), Color.parseColor(c.second))); d.text = "🔊" }
-            State.RINGING -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#FFB454"), Color.parseColor("#C9491D"))); d.text = "☎"; pulseDot(1.35f, 300) }
-            State.SENDING -> { bg.setColors(intArrayOf(Color.WHITE, Color.parseColor("#7DF9FF"), Color.parseColor("#2C3140"))); d.text = "↑" }
+            State.IDLE -> d.set(OrbView.Mode.IDLE, OrbView.CYAN)
+            State.WAKE -> d.set(OrbView.Mode.WAKE, OrbView.CYAN)
+            State.OFFLINE -> d.set(OrbView.Mode.OFFLINE, OrbView.GRAY)
+            State.LISTENING -> d.set(OrbView.Mode.LISTENING, OrbView.ROSE)
+            State.SPEAKING -> d.set(OrbView.Mode.SPEAKING, speakerColor)
+            State.RINGING -> d.set(OrbView.Mode.RINGING, OrbView.AMBER)
+            State.SENDING -> d.set(OrbView.Mode.SENDING, OrbView.CYAN)
         }
-    }
-    private fun pulseDot(to: Float, ms: Long) {
-        val d = dot ?: return
-        pulse = ObjectAnimator.ofFloat(d, "scaleX", 1f, to).apply { duration = ms; repeatMode = ValueAnimator.REVERSE; repeatCount = ValueAnimator.INFINITE; addUpdateListener { d.scaleY = d.scaleX }; start() }
     }
     private fun setupBubble() {
         val root = FrameLayout(this); val sw = resources.configuration.smallestScreenWidthDp; val size = dp(if (sw >= 600) 78f else 62f).toInt() // step 40: bigger on tablets / unfolded
-        val d = TextView(this).apply {
-            text = "ל"; setTextColor(Color.parseColor("#04050A")); textSize = 26f; gravity = Gravity.CENTER
-            background = GradientDrawable().apply { shape = GradientDrawable.OVAL; gradientType = GradientDrawable.RADIAL_GRADIENT; gradientRadius = dp(40f)
-                setColors(intArrayOf(Color.WHITE, Color.parseColor("#7DF9FF"), Color.parseColor("#8A5CFF"))); setStroke(dp(1f).toInt(), Color.parseColor("#66FFFFFF")) }
-            elevation = dp(8f); contentDescription = "ליבה. לחיצה: דבר. לחיצה ארוכה: תפריט"; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+        val d = OrbView(this).apply {
+            elevation = dp(6f); contentDescription = "ליבה. לחיצה: דבר. לחיצה ארוכה: תפריט"; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
         }
         val l = TextView(this).apply {
-            setTextColor(Color.WHITE); textSize = 15f; setPadding(dp(14f).toInt(), dp(8f).toInt(), dp(14f).toInt(), dp(8f).toInt()); maxWidth = dp(250f).toInt()
-            background = GradientDrawable().apply { cornerRadius = dp(16f); setColor(Color.parseColor("#E60A0C16")); setStroke(dp(1f).toInt(), Color.parseColor("#337DF9FF")) }
-            visibility = View.GONE; textDirection = View.TEXT_DIRECTION_RTL
+            setTextColor(Color.parseColor("#F3F5FF")); textSize = 14f; setPadding(dp(14f).toInt(), dp(8f).toInt(), dp(14f).toInt(), dp(8f).toInt()); maxWidth = dp(240f).toInt()
+            typeface = android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL); setLineSpacing(0f, 1.15f)
+            background = GradientDrawable().apply { cornerRadius = dp(18f); setColor(Color.parseColor("#F2121628")); setStroke(dp(1f).toInt(), Color.parseColor("#2EFFFFFF")) }
+            elevation = dp(4f); visibility = View.GONE; textDirection = View.TEXT_DIRECTION_RTL
         }
         root.addView(d, FrameLayout.LayoutParams(size, size).apply { gravity = Gravity.TOP or Gravity.END })
         root.addView(l, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.END; topMargin = size + dp(6f).toInt() })
@@ -381,11 +372,11 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val longPress = Runnable { if (!moved) { moved = true; toggleMenu(root, size) } }
         d.setOnTouchListener { _, ev ->
             when (ev.actionMasked) {
-                MotionEvent.ACTION_DOWN -> { sx = ev.rawX; sy = ev.rawY; ox = lp.x; oy = lp.y; moved = false; downAt = SystemClock.uptimeMillis(); main.postDelayed(longPress, 600); true }
+                MotionEvent.ACTION_DOWN -> { sx = ev.rawX; sy = ev.rawY; ox = lp.x; oy = lp.y; moved = false; downAt = SystemClock.uptimeMillis(); d.press(true); main.postDelayed(longPress, 600); true }
                 MotionEvent.ACTION_MOVE -> { val dx = sx - ev.rawX; val dy = ev.rawY - sy
                     if (abs(dx) > dp(6f) || abs(dy) > dp(6f)) { moved = true; main.removeCallbacks(longPress) }
                     lp.x = (ox + dx).toInt(); lp.y = (oy + dy).toInt(); clampBubble(lp, size); wm.updateViewLayout(root, lp); true }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> { main.removeCallbacks(longPress); if (!moved && SystemClock.uptimeMillis() - downAt < 600) onTap(); true }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> { main.removeCallbacks(longPress); d.press(false); if (!moved && SystemClock.uptimeMillis() - downAt < 600) onTap(); true }
                 else -> false
             }
         }
@@ -404,8 +395,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun toggleMenu(root: FrameLayout, size: Int) {
         menu?.let { root.removeView(it); menu = null; return }
         val m = android.widget.LinearLayout(this).apply { orientation = android.widget.LinearLayout.VERTICAL; layoutDirection = View.LAYOUT_DIRECTION_RTL
-            background = GradientDrawable().apply { cornerRadius = dp(14f); setColor(Color.parseColor("#F00E111A")); setStroke(dp(1f).toInt(), Color.parseColor("#337DF9FF")) }; elevation = dp(10f); setPadding(dp(6f).toInt(), dp(6f).toInt(), dp(6f).toInt(), dp(6f).toInt()) }
-        fun item(t: String, act: () -> Unit) { m.addView(TextView(this).apply { text = t; setTextColor(Color.parseColor("#EEF1FF")); textSize = 15f; setPadding(dp(14f).toInt(), dp(9f).toInt(), dp(14f).toInt(), dp(9f).toInt()); setOnClickListener { toggleMenu(root, size); act() } }) }
+            background = GradientDrawable().apply { cornerRadius = dp(20f); setColor(Color.parseColor("#F5121628")); setStroke(dp(1f).toInt(), Color.parseColor("#2EFFFFFF")) }; elevation = dp(10f); setPadding(dp(8f).toInt(), dp(8f).toInt(), dp(8f).toInt(), dp(8f).toInt()); minimumWidth = dp(200f).toInt() }
+        fun item(t: String, act: () -> Unit) { m.addView(TextView(this).apply { text = t; setTextColor(Color.parseColor("#F3F5FF")); textSize = 15f; typeface = android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL); setPadding(dp(16f).toInt(), dp(11f).toInt(), dp(16f).toInt(), dp(11f).toInt())
+            background = android.graphics.drawable.RippleDrawable(android.content.res.ColorStateList.valueOf(Color.parseColor("#337DF9FF")), null, GradientDrawable().apply { cornerRadius = dp(12f); setColor(Color.WHITE) }); setOnClickListener { toggleMenu(root, size); act() } }) }
         item("🎙 דבר") { startListening("cmd") }
         item(if (heyOn) "🔇 שקט (כבה מילת הפעלה)" else "🔔 הפעל מילת הפעלה") { if (heyOn) { tts?.stop(); heyOff() } else { heyOn = true; Prefs.setHey(this, true); wakeLoop() } }
         item("📋 סטטוס") { speak(localStatus()) }
@@ -493,7 +485,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private val recListener = object : RecognitionListener {
         override fun onReadyForSpeech(p: Bundle?) {}
         override fun onBeginningOfSpeech() { if (listenMode == "wake") main.post { unmuteSystem() } }
-        override fun onRmsChanged(v: Float) {}
+        override fun onRmsChanged(v: Float) { dot?.level = ((v + 2f) / 12f).coerceIn(0f, 1f) }
         override fun onBufferReceived(b: ByteArray?) {}
         override fun onEndOfSpeech() { main.post { unmuteSystem() } }
         override fun onEvent(t: Int, p: Bundle?) {}
