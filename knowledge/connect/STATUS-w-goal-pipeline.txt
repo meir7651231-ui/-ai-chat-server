@@ -1,0 +1,13 @@
+[W] goal-pipeline · ענף claude/w-goal-pipeline-260917 · בסיס claude/up-connect-260917 (27c7cc12)
+--------------------------------------------------------------------------------
+1. מדידת-בסיס (לפני כל שינוי) — 11/11 picks זהים למה שהמנהל מדד; goal-needs 5/7 (g3a · g3 ∅)
+2. הפקודה-האחת נבנתה כמצב במנוע הקיים: behavior-plan.mjs --goal <goal.json>
+   node machtzev/generator/behavior-plan.mjs --goal /tmp/gp/goal.json --ns payments
+   ⇒ 7 שורות-צעד · 7/7 צרכים מוכחים (g3a בסבב 2 · g3 בסבב 3 — שימוש-חוזר) · 209s · exit 0
+   ⇒ dart analyze עבר · dart run --enable-asserts 22/22 עבר · no-fakers עבר · flutter analyze לא-זמין (אין flutter/buildsmart)
+3. רגרסיה אחרי התיקונים: 11/11 picks זהים (sock-needs 7 · fn-needs2 4)
+4. node machtzev/police.mjs --fast ⇒ 45 ran · 12 skipped · 0 yellow · 0 failed
+   (שער learn היה אדום גם על העץ-הנקי של הבסיס — shallow clone; תוקן ב-git fetch --unshallow)
+5. פתוח ומדווח, לא מוסתר: hamtzaa --needs עוד לא קיים ⇒ צעד 2 רץ כ«לא-זמין» + בדיקה-מבנית (0 צרכים נפסלו);
+   purposeDoc על המטרה ⇒ 0 מקורות · 3 מתגים; flutter analyze לא נמדד.
+DONE · 5 מדידות
