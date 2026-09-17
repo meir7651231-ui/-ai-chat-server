@@ -145,3 +145,45 @@ node machtzev/generator/behavior-plan.mjs --gate   (0.6s)
 |---|---|---|---|
 | ‏`--needs` (ברירת-מחדל = מונחה-ערכים, **לא נגעתי בו**) | 39.5s · `formatIsraeliPhone(normId(p0))` | 34.8s · אותו pick | ✅ pick · file · top3 |
 | ‏`--needs --blind` (מניית-עצים — **המסלול ששודרג**) | ראה 3.6 | 41s · 283MB · `formatIsraeliPhone∘normPhone` | ✅ |
+
+### 3.6 · ‏`regen` המלא (אותה רשימה ש-ship/one מריצים — ‏`REGEN` מ-`regen.mjs`, ‏`runRegen` עם `spawnSync` כמו ב-ship)
+```
+סה"כ 1054s · כשלים: 1
+[1s]    ✓ 0.6s   ds-forge
+[1s]    ✓ 0.0s   entity-terms          [1s]  ✓ 0.0s  enum-values      [1s]   ✓ 0.1s  auto-skin
+[25s]   ✗ exit=1 24.3s  tighten-types --record --apply     ← לא שלי, ראה למטה
+[25s]   ✓ 0.1s   logic-census          [25s] ✓ 0.1s  oracle --write   [25s]  ✓ 0.2s  auto-logic
+[26s]   ✓ 0.2s   frag-ops              [27s] ✓ 1.3s  synth            [27s]  ✓ 0.3s  skin-golden
+[27s]   ✓ 0.1s   core-from-shape       [27s] ✓ 0.0s  core-dart        [29s]  ✓ 1.2s  app-from-sentences
+[1035s] ✓ 1006.6s  **behavior-plan**   ← הצעד שחסם את ship/one · עכשיו exit 0
+[1035s] ✓ 0.2s   behavior-compose      [1036s] ✓ 0.1s peruk --all
+[1036s…] ✓ 31 × app-ds (‏0.4–0.6s כל אחד)
+[1054s] ✓ 0.5s   balagan               [1054s] ✓ 0.0s server
+```
+**הכשל היחיד — `tighten-types` — אינו של השינוי הזה, ונמדד בנפרד על עץ נקי:**
+```
+git stash push -u   ⇒   0 שינויים בעץ
+node machtzev/generator/tighten-types.mjs --record --apply   ⇒ exit 1 · 24.3s
+Error: tighten: 35 קופסאות אדומות שאינן של ההידוק — a11y:  · audit:  · ayin:
+```
+אותו כשל בדיוק, על עץ נקי שכולל **רק** את שני הקומיטים שלי (‏behavior-plan.mjs/json + knowledge) —
+קבצים ש-`tighten-types` אינו קורא. הסיבה שהוא מדפיס ריקה (`a11y: ` בלי `why`), כלומר ההודעה עצמה
+לא אומרת למה הקופסה אדומה. **זה פריט נפרד להעברה למנהל, לא נגעתי בו.**
+‏(המריץ שלי ממשיך אחרי כשל-שלב כדי לראות את כל הצנרת; ‏ship היה נעצר שם.)
+
+**‏`git status --short` בסוף הריצה — 208 קבצים (‏146 M · 62 חדשים):**
+```
+  76  new/dart-maor/*.dart        ← tighten-types --apply הספיק להדק לפני שנפל
+  31  new/dart-gen-bs/*.dart      +31 חדשים   ← app-ds כותב 31 אפליקציות-ספק מחדש (מסך-אשף שאינו מחויב)
+  31  new/dart-data-bs/auto/*     +31 חדשים   ← אותו דבר
+   6  machtzev/generator/*.json   ← atom-index-full · logic-census · auto-logic · tighten-applied ·
+                                     tighten-rejected · behavior-plan
+```
+**‏`behavior-plan.json` של הריצה-בתוך-regen שונה מזה שמחויב — ומוסבר:** ‏`tighten-types --apply`
+הידק 76 אטומים *לפני* שנפל, ‏`logic-census`/`oracle`/`auto-logic` רצו על העץ המהודק, ולכן הקטלוג
+שהבורר קיבל אחר: **מועמדים 1,163 ⇒ 1,358 · admissible 212,364 ⇒ 223,809**. ולמרות זאת:
+```
+needs 43 · pick שונים 0 · file 0 · chain 0 · score 2 · proof 42
+```
+כלומר הבחירה יציבה גם כשהקטלוג זז. **לא קימטתי קבצי-פלט:** לא קיבעתי אותם ולא ערכתי אותם ביד —
+הריצה תועדה כאן והעץ הוחזר למצב-המחויב (`git checkout --` לפי רשימת-נתיבים מפורשת · `git stash drop`).

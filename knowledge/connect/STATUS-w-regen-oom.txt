@@ -8,3 +8,7 @@ w-regen-oom · צנרת-המחולל נופלת ב-behavior-plan (OOM)
 [7] --gate ירוק (0.6s) · police --fast ירוקה (45 ran · 0 failed) בקומיט 6a1355bb
 [8] רגרסיה על צורך חיצוני, שני המסלולים: values 39.5s⇒34.8s · blind 2m12s/6,773MB⇒41s/283MB — pick·file·top3 זהים
 IN-PROGRESS · 8 מדידות
+[10] regen המלא (REGEN מ-regen.mjs, כמו ship): 1054s · behavior-plan 1006.6s exit 0 — הצעד שחסם כבר לא חוסם · 50 שלבים, כשל אחד
+[11] הכשל היחיד ב-regen הוא tighten-types --record --apply (35 «קופסאות אדומות», why ריק) — שוחזר זהה על עץ נקי בלי שינויי-regen ⇒ פריט נפרד, לא של השינוי הזה
+[12] behavior-plan שרץ בתוך regen קיבל קטלוג מהודק (מועמדים 1,163⇒1,358 · admissible 212,364⇒223,809) — ובכל זאת pick/file/chain זהים ב-43/43
+DONE · 12 מדידות
