@@ -86,6 +86,12 @@ window.__h={db,docs,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSna
   await p.evaluate(() => window.app({ liba: 'input', text: 'ליבה, תחזור' })); await flush(2200);
   check((await get('channel/owner') || {}).owner === 'liba', 'ליבה, תחזור → owner liba');
   check((await H(() => window.__h.sent.slice())).length === nBefore, 'ליבה תחזור sends nothing to Claude');
+  // 6d. a manager sentence right after a liba sentence still routes to the manager
+  await p.evaluate(() => window.app({ liba: 'input', text: 'ליבה תחזור' })); await flush(2000);
+  await p.evaluate(() => { window.app({ liba: 'input', text: 'העיצוב טוב אבל יותר מפלצתי' }); setTimeout(() => window.app({ liba: 'input', text: 'מנהל שומע אם כן עבור' }), 2500); }); await flush(6500);
+  sentAll = await H(() => window.__h.sent.slice()); check(sentAll.includes('[ליבה→מנהל] מנהל שומע אם כן עבור'), 'manager sentence after a liba sentence is tagged for the manager: ' + JSON.stringify(sentAll.slice(-2)));
+  check((await get('channel/owner') || {}).owner === 'manager', 'owner is manager after it');
+  await p.evaluate(() => window.app({ liba: 'input', text: 'ליבה תחזור' })); await flush(2000);
   // 6c. two inputs within 1.5 s are both sent
   await p.evaluate(() => { window.app({ liba: 'input', text: 'ראשון' }); setTimeout(() => window.app({ liba: 'input', text: 'שני' }), 300); }); await flush(3500);
   sentAll = await H(() => window.__h.sent.slice()); check(sentAll.includes('[ליבה] ראשון') && sentAll.includes('[ליבה] שני'), 'two quick inputs both sent: ' + JSON.stringify(sentAll.slice(-2)));
