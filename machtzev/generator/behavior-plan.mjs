@@ -77,7 +77,8 @@ const agree = (c, need) => { let n = 0; c.params.forEach((p, i) => { if (norm(p)
 // ── up-chain3 · «אין-יחיד ⇒ שלב כמה עד שהמטרה מושגת» (§20-ב · הכללת השרשור מ-B(A(args)) לעץ-הרכבה) ──
 // אחדת-מספרים int/double/num — **רק בשכבת-העצים** (normT); sigOk/norm של היחידים לא נוגעים ⇒ אפס-רגרסיה בקבוצות-המועמדים היחידים.
 const NUMT = /^(int|double|num)$/;
-const normT = (t) => { const s = norm(t); return NUMT.test(s) ? 'num' : s; };
+const NORMT = new Map();   // up-stream (17.9): normT/tmatchT נקראים מיליוני פעמים במנייה, וכל קריאה בנתה מחרוזת חדשה (norm = replace+toLowerCase). קבוצת-הטיפוסים סגורה ⇒ מטמון.
+const normT = (t) => { let v = NORMT.get(t); if (v === undefined) { const s = norm(t); v = NUMT.test(s) ? 'num' : s; NORMT.set(t, v); } return v; };
 // עץ-ההרכבה מייבא אטומים באצוות — קובץ שאינו מתקמפל-לבד (‏`part`/`part of` — ספרייה שמצפה לחלק חיצוני) מרעיל אצווה שלמה
 // (שגיאה בקובץ-המיובא, לא בשורת-הגוף ⇒ אין מיפוי-לתא ⇒ פר-מועמד). מסונן **רק משכבת-העצים** (לא מ-candsOf ⇒ אפס-רגרסיה ביחידים).
 const STANDALONE = new Map();
@@ -104,53 +105,106 @@ const toCandidate = (root, P, nodes, isVoid = false) => {
   return { id: exprId(root), file: treeAtoms(root)[0].file, chain: null, tree: root, argc: P.length, nodes, sumArgc, root, isVoid };
 };
 // מונה עצים בעלי בדיוק exactNodes צמתים-אטום, שצורכים את **כל** פרמטרי-הצורך פעם-אחת-משמאל-לימין ומחזירים את טיפוס-ההחזרה — מועמדות-לפי-טיפוס בלבד (בלי מילים)
-function enumTrees(pureRows, need, exactNodes, cap, partial = false) {   // partial: מותר לצרוך תת-קבוצה של הפרמטרים (לשומר-סף: pred+body יחד מכסים)
+function* streamTrees(pureRows, need, exactNodes, partial = false, bound = { max: Infinity }) {   // bound.max = ה-argc-הכולל הגבוה-ביותר שעוד יכול להישמר (יורד-בלבד, מתעדכן ע"י take) ⇒ גזם-ענפים בזמן-המנייה   // partial: מותר לצרוך תת-קבוצה של הפרמטרים (לשומר-סף: pred+body יחד מכסים)
   const P = need.params, T = need.ret; const isVoid = normT(T) === 'void';
   const usable = pureRows.filter((c) => c.argc >= 1 && normT(c.ret) !== 'void');
   const effects = pureRows.filter((c) => c.argc >= 1 && normT(c.ret) === 'void');   // שורשי-אפקט (צורך-void עם שקע-עולם)
   const byRet = new Map(); for (const c of usable) { const k = normT(c.ret); if (!byRet.has(k)) byRet.set(k, []); byRet.get(k).push(c); }
-  const atomsByRet = (want) => { const w = normT(want); return w === 'dynamic' ? usable : (byRet.get(w) || []).concat(byRet.get('dynamic') || []); };
-  const results = []; const seen = new Set(); let overflow = false;
+  const byRetMemo = new Map();   // up-stream (17.9): ה-concat הזה הוקצה מחדש בכל קריאת gen — מיליוני מערכים בני ~1000 איברים. אותה תשובה בדיוק, פעם אחת לטיפוס.
+  const atomsByRet = (want) => { const w = normT(want); let a = byRetMemo.get(w); if (a === undefined) { a = w === 'dynamic' ? usable : (byRet.get(w) || []).concat(byRet.get('dynamic') || []); byRetMemo.set(w, a); } return a; };
+  const fnTMemo = new Map();   // parseFnT = regex על מחרוזת-טיפוס, נקרא באותה תדירות
+  const fnT = (want) => { let f = fnTMemo.get(want); if (f === undefined) { f = parseFnT(want); fnTMemo.set(want, f); } return f; };
   const CONSTS = [...(need.consts || []).map((c) => typeof c === 'string' ? { dart: c, type: /^'/.test(c) ? 'String' : /^-?\d/.test(c) ? 'num' : /^(true|false)$/.test(c) ? 'bool' : 'dynamic' } : c), ...(need.entity ? schemaKeys(need.entity) : [])];   // שקע-סכמה: שמות-השדות של הישות
   // שקע-פונקציה: want='R Function(A..)' ⇒ כל חלקיק g עם ret~R ו-m הפרמטרים הראשונים ~A..; השאר (אם יש) נקשרים משקעי-הדאטה של הצורך לפי טיפוס. צומת אחד.
+  const plugMemo = new Map();   // אותו סיפור לתקע-המקונן: התוצאה תלויה רק בחתימה המנורמלת
+  const innerPlugsOf = (want) => { const k = ftKey(want); if (k === null) return EMPTY; let a = plugMemo.get(k); if (a === undefined) { a = [...innerPlugs(want)]; plugMemo.set(k, a); } return a; };
   function* innerPlugs(want) {   // תקע-מקונן: חלקיק שכל פרמטריו הם פרמטרי-הלמבדה (m) — ללא ליטרלים, ללא קינון-נוסף
     const ft = parseFnT(want); if (!ft) return;
     for (const g of usable) { const m = ft.params.length; if (g.argc !== m || !tmatchT(g.ret, ft.ret)) continue; if (!ft.params.every((t, j) => tmatchT(g.params[j], t))) continue; yield { k: 'f', id: g.id, file: g.file, m, args: [] }; }
   }
-  function* lambdas(want) {
+  const EMPTY = [];
+  const lamMemo = new Map();   // up-stream (17.9): lambdas(want) תלוי **רק** ב-want (ובמדף/בליטרלים הקבועים) — והוא נבנה מחדש בכל שקע-פונקציה של כל אטום-שורש,
+  //   כולל ה-combos המלא (reduce+flatMap) ו-innerPlugs. זה, ולא כמות-העצים, היה 5GB ו-18 שניות **גם כשנמנו 7,332 עצים בלבד**. אותה רשימה בדיוק, פעם אחת לטיפוס.
+  //   המפתח הוא **חתימת-הפונקציה המנורמלת** ולא מחרוזת-הטיפוס: 'String Function(String s) gem' ו-'String Function(String y)' הם אותו שקע בדיוק
+  //   (‏tmatchT מקלף שם ומאחד int/double/num) — מפתח-לפי-מחרוזת נתן כמעט-אפס-פגיעות כי שמות-הפרמטרים ייחודיים לכל אטום.
+  const ftKey = (want) => { const ft = fnT(want); return ft ? normT(ft.ret) + '(' + ft.params.map(normT).join(',') + ')' : null; };
+  const lambdasOf = (want, cap) => { const k = ftKey(want); if (k === null) return EMPTY; const kk = k + '|' + cap; let a = lamMemo.get(kk); if (a === undefined) { a = [...lambdas(want, cap)]; lamMemo.set(kk, a); } return a; };
+  // up-stream (17.9): מכפלת-השקעים נבנתה כמערך-מלא (reduce+flatMap) **לפני** שנבדקה עלותה — מדידה: קריאה אחת בנתה 22,805,874 צירופים
+  //   (7.4GB זבל בפעימה אחת, גם כשכל המנייה הניבה 7,332 עצים). עכשיו היא זורמת, וכל צירוף שכבר חורג מ-maxArgc גוזם את הענף.
+  function* combos(opts, i, acc, argc, maxArgc) {
+    if (i === opts.length) { yield acc.slice(); return; }
+    for (const c of opts[i]) { const a2 = argc + (c.k === 'c' ? 0 : 1); if (a2 > maxArgc) continue; acc.push(c); yield* combos(opts, i + 1, acc, a2, maxArgc); acc.pop(); }
+  }
+  function* lambdas(want, maxArgc) {
     const ft = parseFnT(want); if (!ft) return;
     for (const g of usable) {
       const m = ft.params.length; if (g.argc < m || !tmatchT(g.ret, ft.ret)) continue;
       if (!ft.params.every((t, j) => tmatchT(g.params[j], t))) continue;
       const rest = g.params.slice(m);
       // פרמטר-נותר מטיפוס-פונקציה ⇒ תקע-מקונן (חלקיק-יחיד, בלי המשך-קינון); אחרת ליטרל-שקע מהצורך
-      const opts = rest.map((t) => parseFnT(t) ? [...innerPlugs(t)] : CONSTS.filter((c) => tmatchT(c.type, t)).map((c) => ({ k: 'c', dart: c.dart, type: c.type })));
+      const opts = rest.map((t) => parseFnT(t) ? innerPlugsOf(t) : CONSTS.filter((c) => tmatchT(c.type, t)).map((c) => ({ k: 'c', dart: c.dart, type: c.type })));
       if (opts.some((o) => !o.length)) continue;
-      const combos = opts.reduce((acc, o) => acc.flatMap((a) => o.map((c) => [...a, c])), [[]]);
-      for (const args of combos) yield { k: 'f', id: g.id, file: g.file, m, args };
+      for (const args of combos(opts, 0, [], 0, maxArgc)) yield { k: 'f', id: g.id, file: g.file, m, args };
     }
   }
-  function* gen(want, cursor, budget) {
-    if (cursor < P.length && tmatchT(P[cursor], want)) yield { value: { k: 'p', i: cursor }, cursor: cursor + 1, used: 0 };
-    if (need.reuse) for (let i = 0; i < cursor; i++) if (tmatchT(P[i], want)) yield { value: { k: 'p', i }, cursor, used: 0 };   // שימוש-חוזר: פרמטר שכבר נצרך (גרף)
-    if (need.clock && tmatchT(need.clock.type || 'String', want)) yield { value: { k: 't' }, cursor, used: 0 };   // שקע-זמן
-    for (const h of need.human || []) if (tmatchT(h.type, want)) yield { value: { k: 'h', name: h.name, type: h.type }, cursor, used: 0 };   // שקע-אדם
-    if (need.world && tmatchT(need.world.type, want)) yield { value: { k: 'w' }, cursor, used: 0 };   // שקע-עולם
-    if (parseFnT(want)) { if (budget >= 1) for (const f of lambdas(want)) yield { value: f, cursor, used: 1 }; return; }   // פרמטר-פונקציה: רק תקע-למבדה (לא ערך)
-    if (budget >= 1) for (const C of atomsByRet(want)) yield* fill(C, 0, cursor, budget - 1, [], 0);
+  function* gen(want, cursor, budget, cap) {   // cap = ה-argc-הפנימי המרבי שהערך הזה עוד רשאי לשאת (נגזר מ-bound.max פחות מה שכבר נצבר) — גוזם את השקעים היקרים **לפני** שהם נבנים
+    if (cap < 0) return;   // אין מקום אפילו לעלה
+    if (cursor < P.length && tmatchT(P[cursor], want)) yield { value: { k: 'p', i: cursor }, cursor: cursor + 1, used: 0, argc: 0 };
+    if (need.reuse) for (let i = 0; i < cursor; i++) if (tmatchT(P[i], want)) yield { value: { k: 'p', i }, cursor, used: 0, argc: 0 };   // שימוש-חוזר: פרמטר שכבר נצרך (גרף)
+    if (need.clock && tmatchT(need.clock.type || 'String', want)) yield { value: { k: 't' }, cursor, used: 0, argc: 0 };   // שקע-זמן
+    for (const h of need.human || []) if (tmatchT(h.type, want)) yield { value: { k: 'h', name: h.name, type: h.type }, cursor, used: 0, argc: 0 };   // שקע-אדם
+    if (need.world && tmatchT(need.world.type, want)) yield { value: { k: 'w' }, cursor, used: 0, argc: 0 };   // שקע-עולם
+    if (fnT(want)) { if (budget >= 1) for (const f of lambdasOf(want, cap)) yield { value: f, cursor, used: 1, argc: f.__argc ?? (f.__argc = sumArgcOf(f)) }; return; }   // פרמטר-פונקציה: רק תקע-למבדה (לא ערך)
+    if (budget >= 1) for (const C of atomsByRet(want)) yield* fill(C, 0, cursor, budget - 1, [], 0, 0, cap);
   }
-  function* fill(C, ai, cursor, budgetRemain, acc, usedAcc) {
-    if (ai === C.argc) { yield { value: { k: 'a', id: C.id, file: C.file, args: acc }, cursor, used: 1 + usedAcc }; return; }
-    for (const sub of gen(C.params[ai], cursor, budgetRemain)) yield* fill(C, ai + 1, sub.cursor, budgetRemain - sub.used, [...acc, sub.value], usedAcc + sub.used);
+  function* fill(C, ai, cursor, budgetRemain, acc, usedAcc, argcAcc, cap) {
+    if (ai === C.argc) { yield { value: { k: 'a', id: C.id, file: C.file, args: acc.slice() }, cursor, used: 1 + usedAcc, argc: argcAcc }; return; }   // slice: acc משותף לענף (push/pop) ⇒ עותק אחד בעלה במקום עותק בכל הצבת-ארגומנט
+    for (const sub of gen(C.params[ai], cursor, budgetRemain, cap - argcAcc - 1)) {   // תקציב-המשנה: מה שנשאר אחרי מה שנצבר ואחרי הארגומנט הזה עצמו
+      const a2 = argcAcc + (sub.value.k === 'c' ? 0 : 1) + sub.argc;
+      if (a2 > cap) continue;   // **גזם-הענף**: ה-argc-הכולל רק עולה ⇒ ענף שכבר חורג מהסף לא יניב מועמד שיישמר
+      acc.push(sub.value); yield* fill(C, ai + 1, sub.cursor, budgetRemain - sub.used, acc, usedAcc + sub.used, a2, cap); acc.pop();
+    }
   }
-  const rootGen = isVoid ? (function* () { for (const E of effects) yield* fill(E, 0, 0, exactNodes - 1, [], 0); })() : gen(T, 0, exactNodes);   // צורך-void: השורש הוא אפקט
+  const rootGen = isVoid ? (function* () { for (const E of effects) yield* fill(E, 0, 0, exactNodes - 1, [], 0, 0, bound.max); })() : gen(T, 0, exactNodes, bound.max);   // צורך-void: השורש הוא אפקט
   for (const r of rootGen) {
     if ((!partial && r.cursor !== P.length) || r.used !== exactNodes) continue;
-    const id = exprId(r.value); if (seen.has(id)) continue; seen.add(id);
-    results.push(toCandidate(r.value, P, exactNodes, isVoid));
-    if (results.length >= cap) { overflow = true; break; }
+    yield r.value;   // **שורש גולמי בלבד** — המזהה (exprId) והמועמד (toCandidate) נבנים רק למי שעבר את מסנן-העלות ב-take (ראה שם)
   }
-  return { results, overflow };
+}
+// argc-כולל בלי הקצאה (≡ treeAtoms(root).reduce(args≠ליטרל)) — נמדד לכל עץ נמנה, לכן אסור שיקצה מערכים
+const sumArgcOf = (v) => (v.k === 'p' || v.k === 'c' || v.k === 't' || v.k === 'h' || v.k === 'w') ? 0 : v.k === 'g' ? sumArgcOf(v.pred) + sumArgcOf(v.body) : v.args.reduce((s, a) => s + (a.k === 'c' ? 0 : 1) + sumArgcOf(a), 0);
+// סדר-העלות של הבורר (argc-כולל ⇒ id לקסיקוגרפי) — בדיוק הסדר שבו הוכחו העצים מאז ומעולם (byCost)
+const costCmp = (a, b) => ((a.sumArgc ?? a.argc ?? 0) - (b.sumArgc ?? b.argc ?? 0)) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+// up-stream · **המנייה בזרימה** (17.9): streamTrees פולט מועמד-אחד-בכל-פעם; take מחזיק רק את `keep` הזולים לפי סדר-הבורר ומשחרר את השאר מיד —
+//   מרחב-המנייה אינו יושב בזיכרון. `examine` = תקרת-מנייה בסדר-הגנרטור (ה-cap שהיה), `keep` = תקרת-שמירה לפי-עלות.
+//   L108 (נמדד): המרחב האמיתי של phone.fmtSafe בעומק-2 = 1,856,146 עצים · 8.9GB אם מחזיקים אותם — וה-cap הישן חתך **בסדר-הגנרטור**,
+//   כך שהשרשרת-הזוכה (formatIsraeliPhone∘normPhone, מקום 800,193 בסדר-הגנרטור · מקום 1,698 בסדר-העלות) נפלה מחוץ לתקרה.
+//   כלומר התקרה-בסדר-הגנרטור לא רק פוצצה את הזיכרון — היא זרקה את הבחירה. אותה תקרה בדיוק (keep=CAP2), בסדר-הבורר.
+function take(pureRows, need, exactNodes, { keep = Infinity, examine = Infinity, partial = false } = {}) {
+  const lim = keep === Infinity ? Infinity : keep + Math.max(keep >> 2, 256);   // חוצץ-עבודה: ממיינים וגוזמים כשהוא מתמלא (amortized), לא בכל הוספה
+  const P = need.params, isVoid = normT(need.ret) === 'void';
+  const ceil = exactNodes * Math.max(1, ...pureRows.map((r) => r.argc));   // תקרת-argc אפשרית: exactNodes צמתים × הארגומנטים-הרבים-ביותר במדף
+  const buf = []; const seen = new Set(); let cut = null, enumerated = 0, overflow = false, done = false, passes = 0;
+  // **העמקה-הדרגתית לפי עלות**: מעבר b מונה **רק** עצים שה-argc-הכולל שלהם ≤ b (bound.max גוזם את הענף ברגע שהוא חורג) ⇒
+  //   נעצרים ברגע שיש keep — והמרחב היקר (ב-phone.fmtSafe: 1,674,218 מתוך 1,856,146 עצים) **אינו נחקר כלל**, לא נבנה ולא נאסף.
+  for (let bmax = 0; bmax <= ceil && !done; bmax++) {
+    passes++;
+    for (const root of streamTrees(pureRows, need, exactNodes, partial, { max: bmax })) {
+      if (enumerated >= examine) { overflow = true; done = true; break; }
+      enumerated++;
+      const sa = sumArgcOf(root);
+      if (cut && sa > cut.sumArgc) { overflow = true; continue; }
+      const id = exprId(root);   // המזהה נבנה רק אחרי מסנן-העלות
+      if (cut && sa === cut.sumArgc && id >= cut.id) { overflow = true; continue; }
+      if (seen.has(id)) continue; seen.add(id);
+      buf.push(toCandidate(root, P, exactNodes, isVoid));
+      if (buf.length >= lim) { buf.sort(costCmp); buf.length = keep; cut = buf[keep - 1]; }
+    }
+    if (buf.length >= keep) { overflow = true; done = true; }   // כל עצי-העלות ≤ bmax נמנו ויש כבר keep ⇒ הזולים-ביותר בידינו; היקרים מהם לא יכולים להיכנס
+  }
+  buf.sort(costCmp); if (buf.length > keep) { buf.length = keep; overflow = true; }
+  if (process.env.BP_DEBUG) console.error(`[take] עומק ${exactNodes} · מעברים ${passes} · נמנו ${enumerated} · נשמרו ${buf.length} · סף-argc ${cut ? cut.sumArgc : '-'} · RSS ${(process.memoryUsage().rss / 1048576).toFixed(0)}MB`);
+  return { results: buf, overflow, enumerated };
 }
 
 
@@ -275,9 +329,36 @@ export function plan({ prove = true, needs = NEEDS, earlyExit = false, values = 
   const rowById = new Map(rows.map((r) => [r.id, r]));
   const BATCH = 120;   // אצוות-הוכחה: 120 מועמדים לקובץ-Dart כדי לא להתפוצץ בקומפילציה (המשטרה מודדת זמן בפלט)
   let ENV = {};   // up-sockets · סביבת-ההוכחה של הצורך הנוכחי: clock/human/world ⇒ המוכיח מצהיר now/<אדם>/w לכל דוגמה
-  const byCost = (arr) => arr.slice().sort((a, b) => ((a.sumArgc ?? a.argc ?? 0) - (b.sumArgc ?? b.argc ?? 0)) || (a.id < b.id ? -1 : 1));
+  // ניקוד-הייעוד (מילות-הדרישה מול כותרת/גוף המנוע) — חישוב אחד לשני המעברים: הזרימה מדרגת עצים תוך-כדי, והלולאה-השנייה מדרגת יחידים
+  const scorerFor = (need) => { const demand = bag(heTok(need.demand)); const nodeScore = (c) => { let s = 0; if (!c) return 0; for (const t of c.titleTok) if (demand.has(t)) s += 2 * idf(t); for (const t of c.bodyTok) if (demand.has(t) && !c.titleTok.has(t)) s += idf(t); return s; }; return { nodeScore, singleScore: (c) => nodeScore(c) + agree(c, need), compScore: (c) => (c.chain ? c.chain : treeAtoms(c.tree)).reduce((s, n) => s + nodeScore(rowById.get(n.id)), 0) }; };
+  // up-stream · **שומר-הטובים**: כלל-ההכרעה של הבורר (מוכח ⇒ ok ⇒ צמתים ⇒ argc-כולל ⇒ ניקוד ⇒ id) מופעל **תוך-כדי ההוכחה** על כל עץ שהוכח;
+  //   מי שאינו בין KEEPN הטובים לא יכול להיבחר ולא יכול להיכנס ל-top3 ⇒ משוחרר מיד. הזיכרון קבוע בגודל-המרחב, והבחירה זהה לממצה.
+  const KEEPN = +(process.env.BP_KEEP || 64);
+  const rankCmp = (x, y) => (y.proven - x.proven) || (y.ok - x.ok) || (x.nodes - y.nodes) || (x.sumArgc - y.sumArgc) || (y.score - x.score) || (x.id < y.id ? -1 : 1);   // ≡ כלל-ההכרעה בלולאה-השנייה, מצומצם לעצים (כולם לא-exact, כולם «עץ»)
+  const keeper = (need) => { const { compScore } = scorerFor(need); const nEx = need.examples.length; const best = []; const doubts = []; let proved = 0, seenN = 0;
+    const trim = (n) => { best.sort(rankCmp); if (best.length > n) best.length = n; };
+    return {
+      add(c, pr) { const p = pr || { ok: 0, total: nEx, unknown: 0 }; seenN++; if (p.ok === p.total) proved++;
+        if (doubts.length < 5 && p.unknown > 0 && p.ok + p.unknown === p.total) doubts.push([c.id, p]);   // שקע-ספק (§20-ג): חמשת-הראשונים בסדר-ההוכחה — בדיוק מה ש-doubt חתך
+        best.push({ id: c.id, chain: c.chain || null, tree: c.tree || null, nodes: c.nodes, sumArgc: c.sumArgc, score: +compScore(c).toFixed(2), proven: p.ok === p.total, ok: p.ok, pf: p });
+        if (best.length > KEEPN * 2) trim(KEEPN); },
+      done() { trim(KEEPN); return best; },
+      proved: () => proved, seen: () => seenN,
+      proofs() { const o = {}; for (const [k, v] of doubts) o[k] = v; for (const e of this.done()) o[e.id] = e.pf; return o; },
+      cands() { const o = {}; for (const e of this.done()) o[e.id] = { chain: e.chain, tree: e.tree, nodes: e.nodes, sumArgc: e.sumArgc, score: e.score }; return o; },
+    }; };
+  // הוכחה-בזרימה: אצווה ⇒ שומר-הטובים ⇒ **שחרור העצים של האצווה**. המרחב עובר דרך הזיכרון, לא יושב בו.
+  const proveStream = (tag, cands, need, K) => { let full = false;
+    for (let i = 0; i < cands.length; i += BATCH) {
+      const slice = cands.slice(i, i + BATCH);
+      const res = proveCandidates(`${tag}__b${i / BATCH}`, slice, need.examples, need.imports || [], ENV);
+      for (const c of slice) { const p = res[c.id]; if (p && p.ok === p.total) full = true; K.add(c, p); }
+      for (let k = i; k < i + BATCH && k < cands.length; k++) cands[k] = null;
+      if (earlyExit && full) break;
+    }
+    return full; };
   const proveBatched = (id, cands, examples, imports) => { const out = {}; for (let i = 0; i < cands.length; i += BATCH) { Object.assign(out, proveCandidates(`${id}__b${i / BATCH}`, cands.slice(i, i + BATCH), examples, imports, ENV)); if (earlyExit && Object.values(out).some((r) => r && r.ok === r.total)) break; } return out; };
-  const CAP2 = 100000, CAP3 = +(process.env.BP_CAP3 || 2000);   // BP_CAP3: תקרת-עומק-3 ניתנת-לכיוונון (מדידה), ברירת-מחדל ללא שינוי   // עומק≤2: הכל (בפועל אלפים אחרי חסם-הסדר); עומק-3: תקרה דטרמיניסטית 2000
+  const CAP2 = 100000, CAP3 = +(process.env.BP_CAP3 || 2000), ENUM = +(process.env.BP_ENUM || 5000000);   // ENUM: תקרת-**מנייה** (כמה עצים נבחנים בכלל) — 50× מה-cap הישן שהיה גם תקרת-מנייה וגם תקרת-שמירה; בפועל phone.fmtSafe מונה 1,856,146 < ENUM ⇒ ממצה   // BP_CAP3: תקרת-עומק-3 ניתנת-לכיוונון (מדידה), ברירת-מחדל ללא שינוי   // עומק≤2: הכל (בפועל אלפים אחרי חסם-הסדר); עומק-3: תקרה דטרמיניסטית 2000
   const fullPass = (m) => Object.values(m).some((r) => r && r.ok === r.total);
   if (prove) { for (const id of needsIds) { const need = needs[id]; if (!need.examples) continue;
       ENV = { clock: need.clock || null, human: need.human || [], world: need.world || null };
@@ -291,42 +372,43 @@ export function plan({ prove = true, needs = NEEDS, earlyExit = false, values = 
         continue;
       }
       const cap2 = need.reuse ? Math.min(CAP2, 5000) : CAP2;   // שימוש-חוזר מנפח את המרחב (כל שקע-num יכול לקבל p0) ⇒ תקרה דטרמיניסטית
-      const d2 = enumTrees(pureRows, need, 2, cap2);   // כל עצי-עומק-2 הקבילים-לפי-טיפוס
       const isVoidNeed = normT(need.ret) === 'void';
-      if (isVoidNeed && need.world) d2.results = [...enumTrees(pureRows, need, 1, CAP2).results, ...d2.results];   // צורך-אפקט: גם אפקט-יחיד(פרמטרים, w) הוא עץ (אין לו יחיד-בחתימה כי w אינו פרמטר)
+      const d2 = take(pureRows, need, 2, { keep: cap2, examine: ENUM });   // **כל** עצי-עומק-2 נמנים בזרימה; נשמרים cap2 הזולים (סדר-הבורר) — אותה תקרה, בלי להחזיק את המרחב
+      let admissible = d2.enumerated, overflow = d2.overflow, depthUsed = 2, pool = d2.results;
+      if (isVoidNeed && need.world) { const d1 = take(pureRows, need, 1, { keep: cap2, examine: ENUM }); admissible += d1.enumerated; pool = [...d1.results, ...pool]; }   // צורך-אפקט: גם אפקט-יחיד(פרמטרים, w) הוא עץ (אין לו יחיד-בחתימה כי w אינו פרמטר)
       if (isVoidNeed && need.guard) {   // שומר-סף: pred (בול על תת-קבוצת-פרמטרים) × body (אפקט) — יחד מכסים את כל הפרמטרים; תקרה דטרמיניסטית
         const boolNeed = { ...need, ret: 'bool', world: null, guard: false };
-        const preds = [...enumTrees(pureRows, boolNeed, 1, CAP2, true).results, ...enumTrees(pureRows, boolNeed, 2, CAP2, true).results].sort((a, b) => (a.sumArgc - b.sumArgc) || (a.id < b.id ? -1 : 1)).slice(0, 60);
-        const bodies = [...enumTrees(pureRows, { ...need, guard: false }, 1, CAP2, true).results, ...enumTrees(pureRows, { ...need, guard: false }, 2, CAP2, true).results].sort((a, b) => (a.sumArgc - b.sumArgc) || (a.id < b.id ? -1 : 1)).slice(0, 60);
+        const best60 = (nd) => [...take(pureRows, nd, 1, { keep: 60, examine: CAP2, partial: true }).results, ...take(pureRows, nd, 2, { keep: 60, examine: CAP2, partial: true }).results].sort(costCmp).slice(0, 60);
+        const preds = best60(boolNeed), bodies = best60({ ...need, guard: false });
         const usedP = (root) => new Set(leafKinds(root).length ? JSON.stringify(root).match(/"k":"p","i":(\d+)/g)?.map((m) => +m.match(/\d+$/)[0]) || [] : []);
         const gs = []; for (const pr of preds) for (const bd of bodies) { const u = new Set([...usedP(pr.root), ...usedP(bd.root)]); if (u.size !== need.params.length) continue; gs.push(toCandidate({ k: 'g', pred: pr.root, body: bd.root }, need.params, pr.nodes + bd.nodes, true)); }
-        d2.results = [...d2.results, ...gs];
+        pool = [...pool, ...gs];
       }
-      d2.results = byCost(d2.results);   // סדר-הוכחה דטרמיניסטי: זול ⇒ יקר (earlyExit עוצר בזול-ביותר שעובר)
-      let treeCands = d2.results, depthUsed = 2, overflow = d2.overflow;
-      let cp = treeCands.length ? proveBatched(`${id}__d2`, treeCands, need.examples, need.imports || []) : {};
-      if (!fullPass(cp)) {   // up-fnsocket · עומק-3 **מבני** קודם: שורש-אונרי מעל עץ-עומק-2 (§20-ב «שלב כמה עד שהמטרה מושגת» — מה שהושג נעטף), memo לפי טיפוס-הפרמטר
+      pool.sort(costCmp);   // סדר-הוכחה דטרמיניסטי: זול ⇒ יקר (earlyExit עוצר בזול-ביותר שעובר)
+      const seenW = new Set(pool.map((c) => c.id));   // נאסף לפני ההוכחה — אחריה העצים משוחררים
+      const K = keeper(need);
+      let full = pool.length ? proveStream(`${id}__d2`, pool, need, K) : false;
+      if (!full) {   // up-fnsocket · עומק-3 **מבני** קודם: שורש-אונרי מעל עץ-עומק-2 (§20-ב «שלב כמה עד שהמטרה מושגת» — מה שהושג נעטף), memo לפי טיפוס-הפרמטר
         const unary = pureRows.filter((u) => u.argc === 1 && normT(u.ret) !== 'void' && tmatchT(u.ret, need.ret) && compilableStandalone(u.file));
-        const subMemo = new Map(); const wraps = []; const seenW = new Set(d2.results.map((c) => c.id));
-        for (const U of unary) { const key = normT(U.params[0]); if (!subMemo.has(key)) subMemo.set(key, enumTrees(pureRows, { ...need, ret: U.params[0] }, 2, CAP2).results); for (const sub of subMemo.get(key)) { const c = toCandidate({ k: 'a', id: U.id, file: U.file, args: [sub.root] }, need.params, 3); if (!seenW.has(c.id)) { seenW.add(c.id); wraps.push(c); } } }
-        const wrapsSorted = wraps.sort((a, b) => (a.sumArgc - b.sumArgc) || (a.id < b.id ? -1 : 1)).slice(0, CAP3);
-        if (wrapsSorted.length) { const cw = proveBatched(`${id}__d3w`, wrapsSorted, need.examples, need.imports || []); treeCands = [...treeCands, ...wrapsSorted]; cp = { ...cp, ...cw }; depthUsed = 3; }
+        const subMemo = new Map(); const wraps = []; let wcut = null;   // רק CAP3 העטיפות הזולות שורדות ⇒ די בתת-העצים הזולים לכל טיפוס (עטיפה יורשת את עלות-התת-עץ)
+        const pushW = (c) => { if (seenW.has(c.id) || (wcut && costCmp(c, wcut) >= 0)) return; seenW.add(c.id); wraps.push(c); if (wraps.length >= CAP3 * 2) { wraps.sort(costCmp); wraps.length = CAP3; wcut = wraps[CAP3 - 1]; } };
+        for (const U of unary) { const key = normT(U.params[0]); if (!subMemo.has(key)) subMemo.set(key, take(pureRows, { ...need, ret: U.params[0] }, 2, { keep: CAP3, examine: CAP2 }).results); for (const sub of subMemo.get(key)) pushW(toCandidate({ k: 'a', id: U.id, file: U.file, args: [sub.root] }, need.params, 3)); }
+        wraps.sort(costCmp); if (wraps.length > CAP3) wraps.length = CAP3;
+        if (wraps.length) { full = proveStream(`${id}__d3w`, wraps, need, K) || full; depthUsed = 3; }
       }
-      if (!fullPass(cp)) {   // עומק-3 רק אם עומק-2 לא הניב מעבר-מלא — תקרה דטרמיניסטית: argc-כולל עולה ⇒ id לקסיקוגרפי, עד CAP3
-        const d3 = enumTrees(pureRows, need, 3, CAP3 * 8);
-        const sorted = d3.results.sort((a, b) => (a.sumArgc - b.sumArgc) || (a.id < b.id ? -1 : 1)).slice(0, CAP3);
-        const cp3 = sorted.length ? proveBatched(`${id}__d3`, sorted, need.examples, need.imports || []) : {};
-        treeCands = [...treeCands, ...sorted]; cp = { ...cp, ...cp3 }; depthUsed = 3; overflow = overflow || d3.overflow || d3.results.length > CAP3;
+      if (!full) {   // עומק-3 רק אם עומק-2 לא הניב מעבר-מלא — תקרה דטרמיניסטית: argc-כולל עולה ⇒ id לקסיקוגרפי, עד CAP3
+        const d3 = take(pureRows, need, 3, { keep: CAP3, examine: CAP3 * 8 });
+        if (d3.results.length) full = proveStream(`${id}__d3`, d3.results, need, K) || full;
+        depthUsed = 3; overflow = overflow || d3.overflow;
       }
-      proofs[id] = { ...pf0, ...cp };
-      chainsOf[id] = { admissible: d2.results.length, depth: depthUsed, overflow, cands: Object.fromEntries(treeCands.map((c) => [c.id, { chain: c.chain, tree: c.tree, nodes: c.nodes, sumArgc: c.sumArgc }])) };
+      if (process.env.BP_DEBUG) console.error(`[stream] ${id}: נמנו ${admissible} · הוכחו ${K.proved()} · נשמרו ${K.done().length} · עומק ${depthUsed} · RSS ${(process.memoryUsage().rss / 1048576).toFixed(0)}MB`);
+      proofs[id] = { ...pf0, ...K.proofs() };
+      chainsOf[id] = { admissible, depth: depthUsed, overflow, cands: K.cands() };
     }
   } else if (fs.existsSync(OUT)) { const saved = JSON.parse(fs.readFileSync(OUT, 'utf8')); for (const id of needsIds) { if (saved[id] && saved[id].proof) proofs[id] = saved[id].proof; if (saved[id] && saved[id].chains) chainsOf[id] = saved[id].chains; } }
   for (const id of needsIds) {
-    const need = needs[id], P = need.params; const demand = bag(heTok(need.demand));
-    const nodeScore = (c) => { let s = 0; if (!c) return 0; for (const t of c.titleTok) if (demand.has(t)) s += 2 * idf(t); for (const t of c.bodyTok) if (demand.has(t) && !c.titleTok.has(t)) s += idf(t); return s; };
-    const singleScore = (c) => nodeScore(c) + agree(c, need);
-    const compScore = (c) => (c.chain ? c.chain : treeAtoms(c.tree)).reduce((s, n) => s + nodeScore(rowById.get(n.id)), 0);   // ניקוד-עץ = סכום-ניקוד-הצמתים (בלי agree — כמו שרשרת-מדור); שובר-שוויון-מבני-מוחלט בלבד
+    const need = needs[id], P = need.params;
+    const { singleScore, compScore } = scorerFor(need);   // ניקוד-עץ = סכום-ניקוד-הצמתים (בלי agree — כמו שרשרת-מדור); שובר-שוויון-מבני-מוחלט בלבד
     const pf = proofs[id] || {};
     const singles = candsOf(need).map((c) => ({ id: c.id, file: c.file, chain: null, tree: null, nodes: 1, sumArgc: c.argc, score: +singleScore(c).toFixed(2), exact: c.params.every((p, i) => norm(p) === norm(need.params[i])) && norm(c.ret) === norm(need.ret), proven: pf[c.id] ? pf[c.id].ok === pf[c.id].total : false, ok: pf[c.id] ? pf[c.id].ok : 0 }));
     // עצים (כולל שרשראות-מדור): יחיד-מוכח תמיד גובר; עץ נכנס רק דרך ההוכחה. תאימות-לאחור: cands שמורים ישנים = {chain,score} בלבד
