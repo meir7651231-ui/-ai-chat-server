@@ -27,12 +27,12 @@ window.__h={db,docs,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSna
   p.on('pageerror', e => errs.push('PAGEERROR: ' + e.message));
   await p.addInitScript(STUB);
   const html = fs.readFileSync(require('path').join(__dirname, '..', 'liba-call.html'), 'utf8');
-  fs.writeFileSync('h_inner.html', '<!doctype html><html><head><meta charset="utf-8"></head><body>' + html + '</body></html>');
-  fs.writeFileSync('h_host.html', `<!doctype html><html><body><iframe id=f src="h_inner.html" style="width:400px;height:800px"></iframe><script>
+  const os=require('os');const tmp=fs.mkdtempSync(require('path').join(os.tmpdir(),'liba-e2e-'));fs.writeFileSync(tmp+'/h_inner.html', '<!doctype html><html><head><meta charset="utf-8"></head><body>' + html + '</body></html>');
+  fs.writeFileSync(tmp+'/h_host.html', `<!doctype html><html><body><iframe id=f src="h_inner.html" style="width:400px;height:800px"></iframe><script>
     window.msgs=[];window.addEventListener('message',e=>{window.msgs.push(e.data);});
     window.app=(d)=>document.getElementById('f').contentWindow.postMessage(d,'*');
   </script></body></html>`);
-  await p.goto('file://' + process.cwd() + '/h_host.html', { waitUntil: 'load' });
+  await p.goto('file://' + tmp + '/h_host.html', { waitUntil: 'load' });
   const f = () => p.frames()[1];
   const fr = f(); await fr.waitForFunction(() => window.__h && window.claude, null, { timeout: 5000 });
   await p.waitForTimeout(600);
