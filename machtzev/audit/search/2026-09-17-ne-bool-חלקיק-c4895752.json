@@ -1,0 +1,172 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:08:58.073Z",
+ "query": "ne bool חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "ne",
+  "bool",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "1b5df9289e3193d757bd376f72bf4368dd0180a527d79c01bddb2d41441fea5f",
+  "logicCensusSha": "8d0c6f6fc9943e597c87aa7b0e9ed647772e1f411d0685d93b1605ebeeda4964",
+  "display": 1899,
+  "logic": 975
+ },
+ "candidates": [
+  {
+   "id": "eqBool",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-bool.dart",
+   "score": 3,
+   "hits": [
+    "bool"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 3,
+   "hits": [
+    "פעולת",
+    "תוך",
+    "אטומים"
+   ]
+  },
+  {
+   "id": "AddTradeButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/add_trade_button.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "DsEnumField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_enum_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge10Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/10_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge11Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/card/11_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge12Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/media/12_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge14Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/selection/14_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge18Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/action/18_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge2Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/list/2_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge4Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/4_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge4AtomsInput",
+   "layer": "display",
+   "file": "dart-forge-bs/input/4_atoms_input.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge4AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/4_atoms_list.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge4AtomsSelection",
+   "layer": "display",
+   "file": "dart-forge-bs/selection/4_atoms_selection.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  }
+ ],
+ "strong": [
+  "eqBool"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "SettingsScreenShell"
+ ],
+ "creates": "new/dart-maor/op-ne-bool.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד neBool(bool, bool) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי planAddName(a, nm, '', '')['ok'] != true · מקור למשל dart-maor/apply-ayin-names.dart#applyAyinNames); המועמדים-החזקים eqBool(bool, bool) => bool — לרובם אין את חתימת-הפעולה-לבדה (bool, bool) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: eqBool {} — מול neBool {a != b;}",
+ "sig": "c4895752de023615dee4d050eea330cb83d99884deb924f754dd02753f29729b"
+}

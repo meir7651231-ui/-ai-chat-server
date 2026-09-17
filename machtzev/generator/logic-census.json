@@ -163,6 +163,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-add-num.dart",
+  "name": "addNum",
+  "ret": "num",
+  "params": [
+   "num",
+   "num"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/advance-status.dart",
   "name": "advanceStatus",
   "ret": "String",
@@ -1519,6 +1530,17 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/op-cmp-gt-dyn.dart",
+  "name": "cmpGtDyn",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/cockpit-at-risk.dart",
   "name": "cockpitAtRisk",
   "ret": "List",
@@ -1981,6 +2003,17 @@
   ],
   "argc": 1,
   "wireable": false
+ },
+ {
+  "file": "dart-maor/op-contains-str.dart",
+  "name": "containsStr",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
  },
  {
   "file": "dart/contractor_credit.dart",
@@ -3223,6 +3256,17 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/op-eq-list.dart",
+  "name": "eqList",
+  "ret": "bool",
+  "params": [
+   "List<dynamic>",
+   "List<dynamic>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/receipt-html.dart",
   "name": "esc",
   "ret": "String",
@@ -3572,6 +3616,17 @@
  {
   "file": "dart-maor/op-field-is-not-null.dart",
   "name": "fieldIsNotNull",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/op-field-is-null.dart",
+  "name": "fieldIsNull",
   "ret": "bool",
   "params": [
    "dynamic",
@@ -6632,6 +6687,17 @@
   ],
   "argc": 3,
   "wireable": false
+ },
+ {
+  "file": "dart-maor/op-ne-bool.dart",
+  "name": "neBool",
+  "ret": "bool",
+  "params": [
+   "bool",
+   "bool"
+  ],
+  "argc": 2,
+  "wireable": true
  },
  {
   "file": "dart-maor/need-label.dart",

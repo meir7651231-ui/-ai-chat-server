@@ -1,0 +1,186 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:08:56.239Z",
+ "query": "add num חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "add",
+  "num",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "7a41796bf470c42f27f47a2a8ccdf18aea31d93f40e86768c87a1c9058b91320",
+  "logicCensusSha": "350470eda8d3f2648208117649df748500ef32eb88dc656ff1a0d28303cda2b2",
+  "display": 1894,
+  "logic": 970
+ },
+ "candidates": [
+  {
+   "id": "AddTradeButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/add_trade_button.dart",
+   "score": 4,
+   "hits": [
+    "add",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeAddTradeButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/add_trade_button.dart",
+   "score": 4,
+   "hits": [
+    "add",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeQuickAddForm",
+   "layer": "display",
+   "file": "dart-forge-bs/composite/quick_add_form.dart",
+   "score": 4,
+   "hits": [
+    "add",
+    "תוך"
+   ]
+  },
+  {
+   "id": "absNum",
+   "layer": "logic",
+   "file": "dart-maor/op-abs-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "addDaysIso",
+   "layer": "logic",
+   "file": "dart-maor/add-days-iso.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "addDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-add-dyn.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "canAddPhoto",
+   "layer": "logic",
+   "file": "dart-maor/can-add-photo.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "DsQuickAdd",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "NumBox",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/num_box.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "numMap",
+   "layer": "logic",
+   "file": "dart/num_map.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "numMatch",
+   "layer": "logic",
+   "file": "dart-maor/num-match.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "planAddName",
+   "layer": "logic",
+   "file": "dart-maor/plan-add-name.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 3,
+   "hits": [
+    "פעולת",
+    "תוך",
+    "אטומים"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "DsEnumField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_enum_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  }
+ ],
+ "strong": [
+  "absNum",
+  "addDaysIso",
+  "addDyn",
+  "canAddPhoto",
+  "numMap",
+  "numMatch",
+  "planAddName"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "AddTradeButton",
+  "ForgeAddTradeButton",
+  "ForgeQuickAddForm",
+  "DsQuickAdd",
+  "NumBox",
+  "SettingsScreenShell"
+ ],
+ "creates": "new/dart-maor/op-add-num.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד addNum(num, num) => num שנחצב מכנית ע\"י ast_carve --ops (הביטוי startYear + 1 · מקור למשל dart-maor/academic-year-label.dart#academicYearLabel); המועמדים-החזקים absNum(num) => num · addDaysIso(String, int) => String · addDyn(dynamic, dynamic) => dynamic · canAddPhoto(List<Object?>?, int) => bool · numMap(Object?) => Map<String, num> · numMatch(dynamic, num) => bool · planAddName(Map<String, dynamic>, String, dynamic, String, String Function(String) normName, String Function() isoToday, Map<String, String> T) => Map<String, dynamic> — לאף אחד אין את חתימת-הפעולה-לבדה (num, num) => num (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם",
+ "sig": "d59ee729243432f88ea704cd9e1696d7ecf5456d1dbcb01c02f24eb8f0ec9de5"
+}

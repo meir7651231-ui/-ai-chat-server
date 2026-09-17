@@ -1,0 +1,200 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:08:57.711Z",
+ "query": "field is null חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "field",
+  "is",
+  "null",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "0fe67e9ad9a1eb9c79691883e1fc537f6af7e1e16e1f39c089d846b035e949ab",
+  "logicCensusSha": "cab4a1e93e3ca481514c1cf312bcf980de74462e16731188d08ee6e44802fbb1",
+  "display": 1898,
+  "logic": 974
+ },
+ "candidates": [
+  {
+   "id": "fieldIsNotNull",
+   "layer": "logic",
+   "file": "dart-maor/op-field-is-not-null.dart",
+   "score": 9,
+   "hits": [
+    "field",
+    "is",
+    "null"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "DsEnumField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_enum_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeAuroraField",
+   "layer": "display",
+   "file": "dart-forge-bs/motion/aurora_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeDsDateField",
+   "layer": "display",
+   "file": "dart-forge-bs/header/ds_date_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeDsDateFieldInput",
+   "layer": "display",
+   "file": "dart-forge-bs/input/ds_date_field_input.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeDsEnumField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/ds_enum_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeDsField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/ds_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeDsNumberField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/ds_number_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeFieldLabel",
+   "layer": "display",
+   "file": "dart-forge-bs/input/field_label.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeFieldRow",
+   "layer": "display",
+   "file": "dart-forge-bs/input/field_row.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeGlowField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/glow_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeLabeledField",
+   "layer": "display",
+   "file": "dart-forge-bs/input/labeled_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeParticleField",
+   "layer": "display",
+   "file": "dart-forge-bs/motion/particle_field.dart",
+   "score": 4,
+   "hits": [
+    "field",
+    "תוך"
+   ]
+  }
+ ],
+ "strong": [
+  "fieldIsNotNull"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "AuroraField",
+  "DsEnumField",
+  "ForgeAuroraField",
+  "ForgeDsDateField",
+  "ForgeDsDateFieldInput",
+  "ForgeDsEnumField",
+  "ForgeDsField",
+  "ForgeDsNumberField",
+  "ForgeField",
+  "ForgeFieldLabel",
+  "ForgeFieldRow",
+  "ForgeGlowField",
+  "ForgeLabeledField",
+  "ForgeParticleField"
+ ],
+ "creates": "new/dart-maor/op-field-is-null.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד fieldIsNull(dynamic, String) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי spm['ayin'] == null · מקור למשל dart-maor/apply-ayin-sheet.dart#applyAyinSheet); המועמדים-החזקים fieldIsNotNull(dynamic, String) => bool — לרובם אין את חתימת-הפעולה-לבדה (dynamic, String) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: fieldIsNotNull {} — מול fieldIsNull {(r is Map ? r[key] : null) == null;}",
+ "sig": "d9efff47ed817f63946db91c1184de575f716b06f0ffbd836246c1f2aea90b04"
+}

@@ -1,0 +1,177 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:08:56.973Z",
+ "query": "contains str חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "contains",
+  "str",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "9916b360e98240df799572b4406739ab526ffd8cb0a9463e48cda91079d08ad0",
+  "logicCensusSha": "d7574a66ce5e0cf01a95ce0ca8fbf7ecfa64033ad3b5c6bec26948da2f470f95",
+  "display": 1896,
+  "logic": 972
+ },
+ "candidates": [
+  {
+   "id": "cmpGeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-ge-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "modeStr",
+   "layer": "logic",
+   "file": "dart-boxes/lib-nedarim-sync.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "ruleContains",
+   "layer": "logic",
+   "file": "dart-maor/rule-contains.dart",
+   "score": 3,
+   "hits": [
+    "contains"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 3,
+   "hits": [
+    "פעולת",
+    "תוך",
+    "אטומים"
+   ]
+  },
+  {
+   "id": "strList",
+   "layer": "logic",
+   "file": "dart/str_list.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "strListOrNull",
+   "layer": "logic",
+   "file": "dart/str_list_or_null.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "strMap",
+   "layer": "logic",
+   "file": "dart/str_map.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "AddTradeButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/add_trade_button.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "DsEnumField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_enum_field.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge10Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/feedback/10_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge11Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/card/11_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge12Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/media/12_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge14Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/selection/14_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge18Atoms",
+   "layer": "display",
+   "file": "dart-forge-bs/action/18_atoms.dart",
+   "score": 1,
+   "hits": [
+    "תוך"
+   ]
+  }
+ ],
+ "strong": [
+  "cmpGeStr",
+  "modeStr",
+  "ruleContains",
+  "strList",
+  "strListOrNull",
+  "strMap"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "SettingsScreenShell"
+ ],
+ "creates": "new/dart-maor/op-contains-str.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד containsStr(String, String) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי name.contains('45') · מקור למשל dart/is45.dart#is45); המועמדים-החזקים cmpGeStr(String, String) => bool · modeStr(List<String>) => String · ruleContains(String, String) => int? · strList(Object?) => List<String> · strListOrNull(Object?) => List<String>? · strMap(Map<dynamic, dynamic>) => Map<String, dynamic> — לרובם אין את חתימת-הפעולה-לבדה (String, String) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: cmpGeStr {} — מול containsStr {s.contains(q);}",
+ "sig": "8ec02307e864feecae881abb25837d52e40f8ff54aa4d99d8d369eabeaf3b9bf"
+}
