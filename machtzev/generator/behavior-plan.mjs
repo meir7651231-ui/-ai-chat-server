@@ -74,6 +74,47 @@ const stripName = (t) => { const m = String(t || '').trim().match(/^(.*?)\s+([A-
 const norm = (t) => stripName(String(t || 'dynamic')).replace(/\s+/g, '').replace(/\?$/, '');
 const sigOk = (c, need) => c.argc === need.params.length && c.params.every((p, i) => { const a = norm(p), b = norm(need.params[i]); return a === b || a === 'dynamic'; }) && (norm(c.ret) === norm(need.ret) || norm(c.ret) === 'dynamic');
 const agree = (c, need) => { let n = 0; c.params.forEach((p, i) => { if (norm(p) !== 'dynamic' && norm(p) === norm(need.params[i])) n++; }); if (norm(c.ret) !== 'dynamic' && norm(c.ret) === norm(need.ret)) n++; return n; };
+// ── up-chain3 · «אין-יחיד ⇒ שלב כמה עד שהמטרה מושגת» (§20-ב · הכללת השרשור מ-B(A(args)) לעץ-הרכבה) ──
+// אחדת-מספרים int/double/num — **רק בשכבת-העצים** (normT); sigOk/norm של היחידים לא נוגעים ⇒ אפס-רגרסיה בקבוצות-המועמדים היחידים.
+const NUMT = /^(int|double|num)$/;
+const normT = (t) => { const s = norm(t); return NUMT.test(s) ? 'num' : s; };
+// עץ-ההרכבה מייבא אטומים באצוות — קובץ שאינו מתקמפל-לבד (‏`part`/`part of` — ספרייה שמצפה לחלק חיצוני) מרעיל אצווה שלמה
+// (שגיאה בקובץ-המיובא, לא בשורת-הגוף ⇒ אין מיפוי-לתא ⇒ פר-מועמד). מסונן **רק משכבת-העצים** (לא מ-candsOf ⇒ אפס-רגרסיה ביחידים).
+const STANDALONE = new Map();
+const compilableStandalone = (file) => { if (STANDALONE.has(file)) return STANDALONE.get(file); let ok = false; try { ok = !/^\s*part\s+(?:of\b|['"])/m.test(fs.readFileSync(path.join(R.NEW, file), 'utf8')); } catch {} STANDALONE.set(file, ok); return ok; };
+const tmatchT = (a, b) => { const x = normT(a), y = normT(b); return x === y || x === 'dynamic' || y === 'dynamic'; };
+const exprId = (v) => v.k === 'p' ? `p${v.i}` : `${v.id}(${v.args.map(exprId).join(',')})`;   // מזהה-עץ קנוני: formatIsraeliPhone(normPhone(p0))
+const treeAtoms = (v) => v.k === 'p' ? [] : [v, ...v.args.flatMap(treeAtoms)];
+// עץ = B(A(p0..p_{n-1})) — שורש-אונרי על אטום-שצורך-את-כל-הפרמטרים-בסדר ⇒ נשמר בצורת-שרשרת-מדור (id 'B∘A', שדה chain) לתאימות-לאחור מלאה
+const isLegacyChain = (root, P) => root.k === 'a' && root.args.length === 1 && root.args[0].k === 'a' && root.args[0].args.length === P.length && root.args[0].args.every((a, i) => a.k === 'p' && a.i === i);
+const toCandidate = (root, P, nodes) => {
+  const sumArgc = treeAtoms(root).reduce((s, n) => s + n.args.length, 0);
+  if (isLegacyChain(root, P)) { const B = root, A = root.args[0]; return { id: `${B.id}∘${A.id}`, file: A.file, chain: [{ id: A.id, file: A.file }, { id: B.id, file: B.file }], tree: null, nodes, sumArgc }; }
+  return { id: exprId(root), file: treeAtoms(root)[0].file, chain: null, tree: root, argc: P.length, nodes, sumArgc };
+};
+// מונה עצים בעלי בדיוק exactNodes צמתים-אטום, שצורכים את **כל** פרמטרי-הצורך פעם-אחת-משמאל-לימין ומחזירים את טיפוס-ההחזרה — מועמדות-לפי-טיפוס בלבד (בלי מילים)
+function enumTrees(pureRows, need, exactNodes, cap) {
+  const P = need.params, T = need.ret;
+  const usable = pureRows.filter((c) => c.argc >= 1 && normT(c.ret) !== 'void');
+  const byRet = new Map(); for (const c of usable) { const k = normT(c.ret); if (!byRet.has(k)) byRet.set(k, []); byRet.get(k).push(c); }
+  const atomsByRet = (want) => { const w = normT(want); return w === 'dynamic' ? usable : (byRet.get(w) || []).concat(byRet.get('dynamic') || []); };
+  const results = []; const seen = new Set(); let overflow = false;
+  function* gen(want, cursor, budget) {
+    if (cursor < P.length && tmatchT(P[cursor], want)) yield { value: { k: 'p', i: cursor }, cursor: cursor + 1, used: 0 };
+    if (budget >= 1) for (const C of atomsByRet(want)) yield* fill(C, 0, cursor, budget - 1, [], 0);
+  }
+  function* fill(C, ai, cursor, budgetRemain, acc, usedAcc) {
+    if (ai === C.argc) { yield { value: { k: 'a', id: C.id, file: C.file, args: acc }, cursor, used: 1 + usedAcc }; return; }
+    for (const sub of gen(C.params[ai], cursor, budgetRemain)) yield* fill(C, ai + 1, sub.cursor, budgetRemain - sub.used, [...acc, sub.value], usedAcc + sub.used);
+  }
+  for (const r of gen(T, 0, exactNodes)) {
+    if (r.cursor !== P.length || r.used !== exactNodes) continue;
+    const id = exprId(r.value); if (seen.has(id)) continue; seen.add(id);
+    results.push(toCandidate(r.value, P, exactNodes));
+    if (results.length >= cap) { overflow = true; break; }
+  }
+  return { results, overflow };
+}
 
 export function plan({ prove = true, needs = NEEDS } = {}) {   // needs: ברירת-המחדל = NEEDS הקשיח; planNeeds מזין צרכים חיצוניים על אותו מנגנון בדיוק
   const { rows, idf } = catalog();
@@ -83,38 +124,46 @@ export function plan({ prove = true, needs = NEEDS } = {}) {   // needs: ברי�
   const candsOf = (need) => rows.filter((c) => sigOk(c, need)).filter((c) => isPure(c.file));
   // הוכחה-בריצה: קובץ-מוכיח לכל צורך — כל המועמדים מיובאים עם קידומת, כל דוגמה נבדקת; פלט = "i:j:1/0"
   const proofs = {};
-  // הכרעה-20ב · «אין-יחיד ⇒ שלב כמה עד שהמטרה מושגת»: נפילה-לאחור לשרשרת-של-שניים — נדלקת **רק** כשאף מועמד-יחיד לא עובר את כל הדוגמאות.
-  // הגרף רועש (String ⇒ String משתרשר עם הכל: ~17K קשתות) ⇒ רק CHAIN_K המובילים-לפי-ייעוד עוברים להוכחה-בריצה; ההוכחה מכריעה, לא הדירוג.
-  const CHAIN_K = 24; const chainsOf = {};
-  const pureRows = rows.filter((c) => isPure(c.file));
-  const chainCands = (need, demand, score) => {
-    const As = pureRows.filter((a) => a.argc === need.params.length && a.params.every((p, i) => { const x = norm(p), y = norm(need.params[i]); return x === y || x === 'dynamic'; }) && !/^void$/.test(norm(a.ret)));
-    const out = [];
-    for (const a of As) { const o = norm(a.ret); for (const b of pureRows) { if (b.argc !== 1) continue; const bi = norm(b.params[0]); if (!(bi === o || bi === 'dynamic' || o === 'dynamic')) continue; const br = norm(b.ret); if (!(br === norm(need.ret) || br === 'dynamic')) continue; if (a.id === b.id) continue;
-      out.push({ id: `${b.id}∘${a.id}`, chain: [{ id: a.id, file: a.file }, { id: b.id, file: b.file }], score: +(score(a) + score(b)).toFixed(2) }); } }
-    return { admissible: out.length, top: out.sort((x, y) => y.score - x.score || (x.id < y.id ? -1 : 1)).slice(0, CHAIN_K) };
-  };
-  if (prove) { for (const id of needsIds) { const need = needs[id]; const cands = candsOf(need); if (!need.examples) continue;
-      if (cands.length) proofs[id] = proveCandidates(id, cands, need.examples, need.imports || []);
-      const pf = proofs[id] || {}; const singleOk = Object.values(pf).some((r) => r && r.ok === r.total);
-      if (singleOk) continue;
-      const demand = bag(heTok(need.demand)); const score = (c) => { let s = 0; for (const t of c.titleTok) if (demand.has(t)) s += 2 * idf(t); for (const t of c.bodyTok) if (demand.has(t) && !c.titleTok.has(t)) s += idf(t); return s; };
-      const { admissible, top } = chainCands(need, demand, score); if (!top.length) continue;
-      const cp = proveCandidates(id + '__chain', top, need.examples, need.imports || []);
-      chainsOf[id] = { admissible, cands: Object.fromEntries(top.map((c) => [c.id, { chain: c.chain, score: c.score }])) };
-      proofs[id] = { ...pf, ...cp }; }
+  // הכרעה-20ב/§20-ב · «אין-יחיד ⇒ שלב כמה»: נדלק **רק** כשאף מועמד-יחיד לא עובר. עץ-הרכבה של עד 3 צמתים, מועמדות-לפי-טיפוס בלבד
+  // (בלי CHAIN_K · בלי ניקוד-מילים) — **כל** עצי-עומק-2 עוברים להוכחה-בריצה באצוות; עומק-3 רק אם עומק-2 לא הניב מעבר-מלא, בתקרה דטרמיניסטית.
+  const chainsOf = {};
+  const pureRows = rows.filter((c) => isPure(c.file) && compilableStandalone(c.file));   // עצים בלבד: אטומים טהורים **ומתקמפלים-לבד**
+  const rowById = new Map(rows.map((r) => [r.id, r]));
+  const BATCH = 120;   // אצוות-הוכחה: 120 מועמדים לקובץ-Dart כדי לא להתפוצץ בקומפילציה (המשטרה מודדת זמן בפלט)
+  const proveBatched = (id, cands, examples, imports) => { const out = {}; for (let i = 0; i < cands.length; i += BATCH) Object.assign(out, proveCandidates(`${id}__b${i / BATCH}`, cands.slice(i, i + BATCH), examples, imports)); return out; };
+  const CAP2 = 100000, CAP3 = 2000;   // עומק≤2: הכל (בפועל אלפים אחרי חסם-הסדר); עומק-3: תקרה דטרמיניסטית 2000
+  const fullPass = (m) => Object.values(m).some((r) => r && r.ok === r.total);
+  if (prove) { for (const id of needsIds) { const need = needs[id]; if (!need.examples) continue;
+      const cands = candsOf(need);
+      if (cands.length) proofs[id] = proveBatched(id, cands, need.examples, need.imports || []);
+      const pf0 = proofs[id] || {}; if (fullPass(pf0)) continue;   // יחיד עבר ⇒ אין שרשור (יחיד תמיד גובר)
+      const d2 = enumTrees(pureRows, need, 2, CAP2);   // כל עצי-עומק-2 הקבילים-לפי-טיפוס
+      let treeCands = d2.results, depthUsed = 2, overflow = d2.overflow;
+      let cp = treeCands.length ? proveBatched(`${id}__d2`, treeCands, need.examples, need.imports || []) : {};
+      if (!fullPass(cp)) {   // עומק-3 רק אם עומק-2 לא הניב מעבר-מלא — תקרה דטרמיניסטית: argc-כולל עולה ⇒ id לקסיקוגרפי, עד CAP3
+        const d3 = enumTrees(pureRows, need, 3, CAP3 * 8);
+        const sorted = d3.results.sort((a, b) => (a.sumArgc - b.sumArgc) || (a.id < b.id ? -1 : 1)).slice(0, CAP3);
+        const cp3 = sorted.length ? proveBatched(`${id}__d3`, sorted, need.examples, need.imports || []) : {};
+        treeCands = [...treeCands, ...sorted]; cp = { ...cp, ...cp3 }; depthUsed = 3; overflow = overflow || d3.overflow || d3.results.length > CAP3;
+      }
+      proofs[id] = { ...pf0, ...cp };
+      chainsOf[id] = { admissible: d2.results.length, depth: depthUsed, overflow, cands: Object.fromEntries(treeCands.map((c) => [c.id, { chain: c.chain, tree: c.tree, nodes: c.nodes, sumArgc: c.sumArgc }])) };
+    }
   } else if (fs.existsSync(OUT)) { const saved = JSON.parse(fs.readFileSync(OUT, 'utf8')); for (const id of needsIds) { if (saved[id] && saved[id].proof) proofs[id] = saved[id].proof; if (saved[id] && saved[id].chains) chainsOf[id] = saved[id].chains; } }
   for (const id of needsIds) {
-    const need = needs[id]; const demand = bag(heTok(need.demand));
-    const score = (c) => { let s = 0; for (const t of c.titleTok) if (demand.has(t)) s += 2 * idf(t); for (const t of c.bodyTok) if (demand.has(t) && !c.titleTok.has(t)) s += idf(t); return s + agree(c, need); };
+    const need = needs[id], P = need.params; const demand = bag(heTok(need.demand));
+    const nodeScore = (c) => { let s = 0; if (!c) return 0; for (const t of c.titleTok) if (demand.has(t)) s += 2 * idf(t); for (const t of c.bodyTok) if (demand.has(t) && !c.titleTok.has(t)) s += idf(t); return s; };
+    const singleScore = (c) => nodeScore(c) + agree(c, need);
+    const compScore = (c) => (c.chain ? c.chain : treeAtoms(c.tree)).reduce((s, n) => s + nodeScore(rowById.get(n.id)), 0);   // ניקוד-עץ = סכום-ניקוד-הצמתים (בלי agree — כמו שרשרת-מדור); שובר-שוויון-מבני-מוחלט בלבד
     const pf = proofs[id] || {};
-    const singles = candsOf(need).map((c) => ({ id: c.id, file: c.file, chain: null, score: +score(c).toFixed(2), exact: c.params.every((p, i) => norm(p) === norm(need.params[i])) && norm(c.ret) === norm(need.ret), proven: pf[c.id] ? pf[c.id].ok === pf[c.id].total : false, ok: pf[c.id] ? pf[c.id].ok : 0 }));
-    // שרשראות: יחיד-מוכח תמיד גובר (exact ⇒ יחיד ראשון בשוויון); שרשרת נכנסת רק דרך ההוכחה
-    const chains = chainsOf[id] ? Object.entries(chainsOf[id].cands).map(([cid, c]) => ({ id: cid, file: c.chain[0].file, chain: c.chain, score: c.score, exact: false, proven: pf[cid] ? pf[cid].ok === pf[cid].total : false, ok: pf[cid] ? pf[cid].ok : 0 })) : [];
-    const cands = [...singles, ...chains]
-      .sort((x, y) => (y.proven - x.proven) || (y.ok - x.ok) || ((x.chain ? 1 : 0) - (y.chain ? 1 : 0)) || (y.score - x.score) || (x.exact === y.exact ? (x.id < y.id ? -1 : 1) : x.exact ? -1 : 1));
+    const singles = candsOf(need).map((c) => ({ id: c.id, file: c.file, chain: null, tree: null, nodes: 1, sumArgc: c.argc, score: +singleScore(c).toFixed(2), exact: c.params.every((p, i) => norm(p) === norm(need.params[i])) && norm(c.ret) === norm(need.ret), proven: pf[c.id] ? pf[c.id].ok === pf[c.id].total : false, ok: pf[c.id] ? pf[c.id].ok : 0 }));
+    // עצים (כולל שרשראות-מדור): יחיד-מוכח תמיד גובר; עץ נכנס רק דרך ההוכחה. תאימות-לאחור: cands שמורים ישנים = {chain,score} בלבד
+    const comps = chainsOf[id] ? Object.entries(chainsOf[id].cands).map(([cid, c]) => { const nodes = c.nodes ?? (c.tree ? treeAtoms(c.tree).length : (c.chain ? c.chain.length : 1)); const sumArgc = c.sumArgc ?? (c.chain ? P.length + 1 : 0); const file = c.chain ? c.chain[0].file : (c.tree ? treeAtoms(c.tree)[0].file : null); return { id: cid, file, chain: c.chain || null, tree: c.tree || null, nodes, sumArgc, score: c.score ?? +compScore(c).toFixed(2), exact: false, proven: pf[cid] ? pf[cid].ok === pf[cid].total : false, ok: pf[cid] ? pf[cid].ok : 0 }; }) : [];
+    // הכרעה (כלל-3): מוכח > (ok) > יחיד-לפני-עץ > **פחות-צמתים** > **argc-כולל קטן** > score (שובר-שוויון-מבני-מוחלט · אפס-רגרסיה) > exact > id לקסיקוגרפי
+    const cands = [...singles, ...comps]
+      .sort((x, y) => (y.proven - x.proven) || (y.ok - x.ok) || ((x.chain || x.tree ? 1 : 0) - (y.chain || y.tree ? 1 : 0)) || (x.nodes - y.nodes) || (x.sumArgc - y.sumArgc) || (y.score - x.score) || (x.exact === y.exact ? (x.id < y.id ? -1 : 1) : x.exact ? -1 : 1));
     const top = cands[0] || null; const ok = top && (pf.error ? top.score > 0 : top.proven);
-    out[id] = { shape: need.shape, pick: ok ? top.id : null, file: ok ? top.file : null, chain: ok && top.chain ? top.chain : null, score: top ? top.score : 0, proven: !!(top && top.proven), candidates: singles.length, chainsAdmissible: chainsOf[id] ? chainsOf[id].admissible : 0, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.ok}/${need.examples ? need.examples.length : 0}${c.proven ? '✓' : ''}:${c.score}`), proof: pf, chains: chainsOf[id] || null };
+    out[id] = { shape: need.shape, pick: ok ? top.id : null, file: ok ? top.file : null, chain: ok && top.chain ? top.chain : null, tree: ok && top.tree ? top.tree : null, nodes: top ? top.nodes : 0, score: top ? top.score : 0, proven: !!(top && top.proven), candidates: singles.length, chainsAdmissible: chainsOf[id] ? chainsOf[id].admissible : 0, treeDepth: chainsOf[id] ? chainsOf[id].depth : 0, treeOverflow: chainsOf[id] ? !!chainsOf[id].overflow : false, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.ok}/${need.examples ? need.examples.length : 0}${c.proven ? '✓' : ''}:n${c.nodes}:a${c.sumArgc}:${c.score}`), proof: pf, chains: chainsOf[id] || null };
   }
   return out;
 }
