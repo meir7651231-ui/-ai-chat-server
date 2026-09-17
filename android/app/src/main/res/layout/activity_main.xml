@@ -6,6 +6,11 @@
         <TextView android:id="@+id/brand" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="ליבה" android:textColor="#7DF9FF" android:textSize="30sp" android:textStyle="bold" android:contentDescription="ליבה"/>
         <TextView android:id="@+id/dot" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="● מנותק" android:textColor="#5B6478" android:textSize="12sp" android:fontFamily="monospace"/>
     </LinearLayout>
+    <LinearLayout android:id="@+id/steps" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingStart="18dp" android:paddingEnd="18dp" android:paddingBottom="8dp">
+        <TextView android:id="@+id/s1" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="① התחבר" android:textColor="#7DF9FF" android:textSize="14sp" android:gravity="center" android:background="#0E111A" android:padding="8dp"/>
+        <TextView android:id="@+id/s2" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="② אשר" android:textColor="#5B6478" android:textSize="14sp" android:gravity="center" android:background="#0E111A" android:padding="8dp" android:layout_marginStart="6dp"/>
+        <TextView android:id="@+id/s3" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="③ דבר" android:textColor="#5B6478" android:textSize="14sp" android:gravity="center" android:background="#0E111A" android:padding="8dp" android:layout_marginStart="6dp"/>
+    </LinearLayout>
     <WebView android:id="@+id/web" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:contentDescription="התחברות ל-claude.ai"/>
     <ScrollView android:id="@+id/logWrap" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:visibility="gone" android:paddingStart="16dp" android:paddingEnd="16dp">
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">

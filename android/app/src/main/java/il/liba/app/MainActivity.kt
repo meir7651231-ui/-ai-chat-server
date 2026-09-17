@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         if (!BubbleService.running) web.loadUrl(getString(R.string.artifact_url))
         toggle.setOnClickListener { onToggle() }
         findViewById<Button>(R.id.reveal).setOnClickListener { BubbleService.instance?.revealPage(true); moveTaskToBack(true) }
-        update.setOnClickListener { Prefs.updateUrl(this)?.let { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it))) } }
+        update.setOnClickListener { BubbleService.instance?.installUpdate() ?: Prefs.updateUrl(this)?.let { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it))) } }
         val hey = findViewById<Switch>(R.id.hey); val conv = findViewById<Switch>(R.id.conv)
         hey.isChecked = Prefs.hey(this); conv.isChecked = Prefs.conv(this)
         hey.setOnCheckedChangeListener { _, v -> Prefs.setHey(this, v); BubbleService.instance?.applyPrefs() }
@@ -88,6 +88,10 @@ class MainActivity : AppCompatActivity() {
             running -> BubbleService.status
             else -> "התחבר ל‑claude.ai למעלה (פעם אחת), ואז הפעל את הבועה."
         }
+        // step 97: first-run guide – which of the three steps is next
+        val stage = when { running -> 3; micOk() && overlayOk() -> 3; !web.url.isNullOrBlank() && web.url != "about:blank" && (micOk() || overlayOk()) -> 2; else -> 1 }
+        listOf(R.id.s1, R.id.s2, R.id.s3).forEachIndexed { i, id -> findViewById<TextView>(id).setTextColor(android.graphics.Color.parseColor(if (i + 1 <= stage) "#7DF9FF" else "#5B6478")) }
+        findViewById<View>(R.id.steps).visibility = if (running) View.GONE else View.VISIBLE
         val ver = try { packageManager.getPackageInfo(packageName, 0).versionName } catch (e: Exception) { "?" }
         status.text = "ליבה $ver · " + status.text
         toggle.text = when { !micOk() -> "אשר מיקרופון"; !overlayOk() -> "אשר הצגה מעל אפליקציות"; running -> "כבה בועה"; else -> "הפעל בועה" }

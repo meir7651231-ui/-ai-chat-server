@@ -293,6 +293,21 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
 
     // ---------- update check ----------
+    /** step 92: download the new APK and hand it to the package installer – no browser, no file manager. */
+    fun installUpdate() {
+        val url = Prefs.updateUrl(this) ?: run { speak("אין עדכון ממתין."); return }
+        showLabel("מורידה עדכון…", 20000)
+        Thread {
+            try {
+                val dir = java.io.File(cacheDir, "apk").apply { mkdirs() }; val f = java.io.File(dir, "liba.apk")
+                val c = URL(url).openConnection() as HttpURLConnection; c.connectTimeout = 15000; c.readTimeout = 60000
+                c.inputStream.use { i -> f.outputStream().use { o -> i.copyTo(o) } }
+                val uri = androidx.core.content.FileProvider.getUriForFile(this, "il.liba.app.files", f)
+                val i = Intent(Intent.ACTION_VIEW).setDataAndType(uri, "application/vnd.android.package-archive").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                main.post { showLabel("מתקינה… אשר בחלון", 8000); try { startActivity(i) } catch (e: Exception) { showLabel("לא הצלחתי לפתוח מתקין: $e", 8000) } }
+            } catch (e: Exception) { main.post { showLabel("הורדה נכשלה: $e", 8000); speak("ההורדה נכשלה. נסה מהמסך הראשי.") } }
+        }.start()
+    }
     private fun checkUpdate() {
         Thread {
             try {
@@ -374,6 +389,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         item(if (night) "🔊 בטל מצב לילה" else "🌙 מצב לילה") { night = !night; Prefs.setNight(this, night); showLabel(if (night) "🌙 מצב לילה" else "חזרתי לדבר", 2500) }
         item("🕘 יומן והגדרות") { openMain() }
         item("🖥 הצג/הסתר דף") { revealPage(!pageShown) }
+        if (Prefs.updateUrl(this) != null) item("⬇ התקן גרסה חדשה") { installUpdate() }
         item("⏻ כבה בועה") { stopSelf() }
         root.addView(m, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.END; topMargin = size + dp(6f).toInt() })
         menu = m; main.postDelayed({ if (menu === m) { root.removeView(m); menu = null } }, 8000)
@@ -499,6 +515,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
             n in listOf("בטל מצב רכב", "הגעתי", "סיימתי לנהוג") -> { carMode = false; label?.textSize = 15f; speak("יצאתי ממצב רכב."); return }
             n in listOf("אוזניות", "כפתור אוזניה", "מצב אוזניות") -> { headsetBtn = true; Prefs.setHeadset(this, true); setupMediaSession(); speak("כפתור האוזניה עכשיו אומר דבר."); return }
             n in listOf("בלי אוזניות", "בטל אוזניות", "בטל מצב רכב") -> { headsetBtn = false; Prefs.setHeadset(this, false); setupMediaSession(); speak("כפתור האוזניה חזר למוזיקה."); return }
+            n in listOf("בלי דוחות", "בטל דוחות", "אל תשלח דוחות") -> { Prefs.setReports(this, false); speak("בסדר, בלי דוחות קריסה."); return }
+            n in listOf("עם דוחות", "תשלח דוחות") -> { Prefs.setReports(this, true); speak("דוחות קריסה פועלים."); return }
+            n in listOf("תתקין", "התקן", "תתקין את העדכון", "עדכן", "תעדכן") -> { installUpdate(); return }
             n in listOf("בלי צלילים", "בטל צלילים") -> { tones = false; Prefs.setTones(this, false); speak("בלי צלילים."); return }
             n in listOf("עם צלילים", "החזר צלילים") -> { tones = true; Prefs.setTones(this, true); speak("עם צלילים."); return }
             n in listOf("דלג", "תדלג", "הלאה", "מספיק") && (chunks.isNotEmpty() || speaking) -> { chunks.clear(); paused = false; tts?.stop(); speaking = false; showLabel("דילגתי.", 2000); onSpoken(); return }
@@ -532,7 +551,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         web?.let { LibaWeb.hello(it) }
     } }
     override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
-        Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } } } } }
+        if (Prefs.reports(this)) Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } } } } }
     fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) {}; listening = false }; unmuteSystem() }
     override fun onCmd(cmd: String) { main.post { when (cmd) { "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "reload" -> main.postDelayed({ web?.reload() }, 1500)
         else -> if (cmd.startsWith("open ")) { val u = cmd.removePrefix("open ").trim(); try { startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(u)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } catch (e: Exception) { showLabel("לא הצלחתי לפתוח: $u", 5000) } } } } }

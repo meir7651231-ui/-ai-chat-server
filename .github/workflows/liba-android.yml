@@ -1,0 +1,28 @@
+# צעד 91: כל שינוי בענף liba-android → APK. חתום כשיש סודות (LIBA_KEYSTORE_B64, LIBA_KEYSTORE_PASS, LIBA_KEY_PASS), אחרת debug.
+name: liba-android
+on:
+  push:
+    branches: [liba-android]
+    paths: ['android/**', '.github/workflows/liba-android.yml']
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: android-actions/setup-android@v3
+      - name: Keystore from secrets (optional)
+        if: ${{ env.KS != '' }}
+        env: { KS: ${{ secrets.LIBA_KEYSTORE_B64 }} }
+        run: |
+          mkdir -p android/keys
+          echo "$KS" | base64 -d > android/keys/liba.jks
+          printf 'storeFile=keys/liba.jks\nstorePassword=%s\nkeyAlias=liba\nkeyPassword=%s\n' "${{ secrets.LIBA_KEYSTORE_PASS }}" "${{ secrets.LIBA_KEY_PASS }}" > android/keys/keystore.properties
+      - name: Build
+        working-directory: android
+        run: |
+          (test -f gradlew && chmod +x gradlew && ./gradlew assembleRelease -q) || (sudo apt-get install -y gradle >/dev/null && gradle assembleRelease -q)
+      - uses: actions/upload-artifact@v4
+        with: { name: liba-apk, path: android/app/build/outputs/apk/release/*.apk }

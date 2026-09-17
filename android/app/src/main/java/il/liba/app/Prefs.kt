@@ -23,6 +23,8 @@ object Prefs {
     fun setHeadset(c: Context, v: Boolean) = p(c).edit().putBoolean("headset", v).apply()
     fun pendingShare(c: Context): String? = p(c).getString("share", null)
     fun setPendingShare(c: Context, v: String?) = p(c).edit().putString("share", v).apply()
+    fun reports(c: Context) = p(c).getBoolean("reports", true)
+    fun setReports(c: Context, v: Boolean) = p(c).edit().putBoolean("reports", v).apply()
     fun crash(c: Context): String? = p(c).getString("crash", null)
     fun clearCrash(c: Context) = p(c).edit().remove("crash").apply()
     fun updateUrl(c: Context): String? = p(c).getString("updateUrl", null)
