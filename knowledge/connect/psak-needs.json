@@ -1,0 +1,65 @@
+{
+  "psak.daysSince": {
+    "shape": "מועד",
+    "demand": "ימים בין תאריך ISO ליום ייחוס הפרש ימים מאז אות אחרון",
+    "params": ["String", "String"],
+    "ret": "num",
+    "examples": [
+      ["'2026-09-01', '2026-09-08'", "r == 7"],
+      ["'2026-09-08', '2026-09-08'", "r == 0"],
+      ["'2026-09-08', '2026-09-01'", "r == -7"]
+    ]
+  },
+  "psak.over7": {
+    "shape": "מועד",
+    "demand": "האם ערך מספרי גדול מסף עבר את הגבול חורג",
+    "params": ["num", "num"],
+    "ret": "bool",
+    "examples": [
+      ["8, 7", "r == true"],
+      ["3, 7", "r == false"],
+      ["7, 7", "r == false"]
+    ]
+  },
+  "psak.bochurLate": {
+    "shape": "מועד",
+    "demand": "האם בחור באיחור עברו יותר מסף ימים מאז האות האחרון",
+    "params": ["String", "String", "int"],
+    "ret": "bool",
+    "examples": [
+      ["'2026-09-01', '2026-09-09', 7", "r == true"],
+      ["'2026-09-06', '2026-09-09', 7", "r == false"],
+      ["'2026-09-02', '2026-09-09', 7", "r == false"]
+    ]
+  },
+  "psak.noOwner": {
+    "shape": "רשומות",
+    "demand": "סינון רשומות בלי אחראי owner ריק חסר מסונן רק הן",
+    "params": ["List<dynamic>"],
+    "ret": "List<dynamic>",
+    "examples": [
+      ["[{'id': 'a', 'owner': 'x'}, {'id': 'b', 'owner': null}, {'id': 'c', 'owner': ''}]", "r.length == 2 && r.any((e) => e['id'] == 'b') && r.any((e) => e['id'] == 'c') && !r.any((e) => e['id'] == 'a')"],
+      ["[{'id': 'a', 'owner': null}, {'id': 'b', 'owner': 'z'}, {'id': 'c', 'owner': ''}]", "r.length == 2 && r.any((e) => e['id'] == 'a') && r.any((e) => e['id'] == 'c') && !r.any((e) => e['id'] == 'b')"],
+      ["[{'id': 'a', 'owner': 'x'}, {'id': 'b', 'owner': 'y'}]", "r.isEmpty"],
+      ["[{'id': 'a', 'owner': ''}, {'id': 'b', 'owner': null}]", "r.length == 2 && r.every((e) => e['id'] == 'a' || e['id'] == 'b')"],
+      ["<dynamic>[]", "r.isEmpty"]
+    ]
+  },
+  "psak.countNoOwner": {
+    "shape": "רשומות",
+    "demand": "ספירת רשומות בלי אחראי owner ריק חסר כמה",
+    "params": ["List<dynamic>"],
+    "ret": "num",
+    "examples": [
+      ["[{'id': 'a', 'owner': 'x'}, {'id': 'b', 'owner': null}, {'id': 'c', 'owner': ''}]", "r == 2"],
+      ["[{'id': 'a', 'owner': 'x'}]", "r == 0"],
+      ["<dynamic>[]", "r == 0"]
+    ]
+  },
+  "psak.recordSignal": {
+    "shape": "יומן",
+    "demand": "רישום אות אחרון לרשומה עדכון תאריך אפקט",
+    "params": ["String", "String"],
+    "ret": "void"
+  }
+}

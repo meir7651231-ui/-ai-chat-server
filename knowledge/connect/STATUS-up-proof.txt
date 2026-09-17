@@ -1,0 +1,6 @@
+up-proof — «הפסק מגיע להוכחה-בריצה ישירות»
+
+מנועים: logic-proof.mjs (resolveDart) · behavior-plan.mjs (--needs/planNeeds) · psak-needs.json · psak-plan.json · up-proof.md
+נעשה: logic-proof פותר Dart דרך resolveDart (בלי DART מוגדר ⇒ /root/dart-sdk); behavior-plan מקבל צרכים חיצוניים ב---needs בלי לגעת ב-NEEDS/behavior-plan.json; הרצה על 6 צרכי-פסק ⇒ psak-plan.json אמיתי (proof רץ ב-Dart, daysSince נפתר מהמדף=dayDiff 3/3); behavior --gate 43/43 זהה; police ירוק-מלא (45 ran · 0 failed) אחרי git fetch --unshallow שהחזיר את בלוקי-הלמידה (ה-[learn] האדום היה ארטיפקט קלון-רדוד, לא קוד).
+נשאר: over7/bochurLate/countNoOwner/recordSignal לא-פתורים (צרכים מורכבים/void — דיווח בלבד, לא הרחבתי chainCands).
+DONE · שדרגתי logic-proof+behavior-plan והרצתי צרכי-פסק בהוכחה-בריצה, psak-plan.json אמיתי, police ירוק-מלא · נותר: צרכים-מורכבים (over7/bochurLate/countNoOwner) לפירוק ע"י שילוב-חלקיקים

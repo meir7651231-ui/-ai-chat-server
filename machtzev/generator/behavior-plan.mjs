@@ -75,10 +75,10 @@ const norm = (t) => stripName(String(t || 'dynamic')).replace(/\s+/g, '').replac
 const sigOk = (c, need) => c.argc === need.params.length && c.params.every((p, i) => { const a = norm(p), b = norm(need.params[i]); return a === b || a === 'dynamic'; }) && (norm(c.ret) === norm(need.ret) || norm(c.ret) === 'dynamic');
 const agree = (c, need) => { let n = 0; c.params.forEach((p, i) => { if (norm(p) !== 'dynamic' && norm(p) === norm(need.params[i])) n++; }); if (norm(c.ret) !== 'dynamic' && norm(c.ret) === norm(need.ret)) n++; return n; };
 
-export function plan({ prove = true } = {}) {
+export function plan({ prove = true, needs = NEEDS } = {}) {   // needs: ברירת-המחדל = NEEDS הקשיח; planNeeds מזין צרכים חיצוניים על אותו מנגנון בדיוק
   const { rows, idf } = catalog();
   const out = {};
-  const needsIds = Object.keys(NEEDS);
+  const needsIds = Object.keys(needs);
   // מועמדים לפי חתימה — רק אטומים טהורים (אפס import; חוק-1) שניתן להריץ בבידוד
   const candsOf = (need) => rows.filter((c) => sigOk(c, need)).filter((c) => isPure(c.file));
   // הוכחה-בריצה: קובץ-מוכיח לכל צורך — כל המועמדים מיובאים עם קידומת, כל דוגמה נבדקת; פלט = "i:j:1/0"
@@ -94,7 +94,7 @@ export function plan({ prove = true } = {}) {
       out.push({ id: `${b.id}∘${a.id}`, chain: [{ id: a.id, file: a.file }, { id: b.id, file: b.file }], score: +(score(a) + score(b)).toFixed(2) }); } }
     return { admissible: out.length, top: out.sort((x, y) => y.score - x.score || (x.id < y.id ? -1 : 1)).slice(0, CHAIN_K) };
   };
-  if (prove) { for (const id of needsIds) { const need = NEEDS[id]; const cands = candsOf(need); if (!need.examples) continue;
+  if (prove) { for (const id of needsIds) { const need = needs[id]; const cands = candsOf(need); if (!need.examples) continue;
       if (cands.length) proofs[id] = proveCandidates(id, cands, need.examples, need.imports || []);
       const pf = proofs[id] || {}; const singleOk = Object.values(pf).some((r) => r && r.ok === r.total);
       if (singleOk) continue;
@@ -105,7 +105,7 @@ export function plan({ prove = true } = {}) {
       proofs[id] = { ...pf, ...cp }; }
   } else if (fs.existsSync(OUT)) { const saved = JSON.parse(fs.readFileSync(OUT, 'utf8')); for (const id of needsIds) { if (saved[id] && saved[id].proof) proofs[id] = saved[id].proof; if (saved[id] && saved[id].chains) chainsOf[id] = saved[id].chains; } }
   for (const id of needsIds) {
-    const need = NEEDS[id]; const demand = bag(heTok(need.demand));
+    const need = needs[id]; const demand = bag(heTok(need.demand));
     const score = (c) => { let s = 0; for (const t of c.titleTok) if (demand.has(t)) s += 2 * idf(t); for (const t of c.bodyTok) if (demand.has(t) && !c.titleTok.has(t)) s += idf(t); return s + agree(c, need); };
     const pf = proofs[id] || {};
     const singles = candsOf(need).map((c) => ({ id: c.id, file: c.file, chain: null, score: +score(c).toFixed(2), exact: c.params.every((p, i) => norm(p) === norm(need.params[i])) && norm(c.ret) === norm(need.ret), proven: pf[c.id] ? pf[c.id].ok === pf[c.id].total : false, ok: pf[c.id] ? pf[c.id].ok : 0 }));
@@ -118,12 +118,26 @@ export function plan({ prove = true } = {}) {
   }
   return out;
 }
+/** צרכים-חיצוניים (JSON) על אותו plan() בדיוק — בלי לגעת ב-NEEDS הקשיח וב-behavior-plan.json. משמש --needs ואת סשני-החיבור. */
+export function planNeeds(needsObj, { prove = true } = {}) { return plan({ prove, needs: needsObj }); }
 export function readPlan() { return JSON.parse(fs.readFileSync(OUT, 'utf8')); }
 /** למחולל: השם+הקובץ של הנבחר לצורך; צורך לא-פתור ⇒ זריקה (שקע-חובה ריק = פסילה, הכרעה-20ג) */
 export function pick(id) { const p = readPlan()[id]; if (!p || !p.pick) throw new Error(`behavior-plan: אין אטום לצורך ${id} — פסילה (לא כותבים ביד)`); return { name: p.pick, file: p.file, chain: p.chain || null }; }
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
+  // --needs <path.json>: הרצת plan() על צרכים חיצוניים (אפס שינוי בברירת-המחדל · לא נוגע ב-behavior-plan.json). פלט: --out <path> או stdout.
+  const ni = process.argv.indexOf('--needs');
+  if (ni >= 0) {
+    const needsPath = process.argv[ni + 1];
+    if (!needsPath) { console.error('--needs דורש נתיב ל-JSON'); process.exit(2); }
+    const needsObj = JSON.parse(fs.readFileSync(needsPath, 'utf8'));
+    const P = planNeeds(needsObj, { prove: true });
+    const oi = process.argv.indexOf('--out');
+    const json = JSON.stringify(P, null, 1) + '\n';
+    if (oi >= 0 && process.argv[oi + 1]) fs.writeFileSync(process.argv[oi + 1], json); else process.stdout.write(json);
+    process.exit(0);
+  }
   const gate = process.argv.includes('--gate');
   const P = plan({ prove: !gate });   // --gate: בלי ריצה מחדש (התוכנית השמורה = ההוכחה); כתיבה = הוכחה-בריצה
   if (!gate) { fs.writeFileSync(OUT, JSON.stringify(P, null, 1) + '\n'); }

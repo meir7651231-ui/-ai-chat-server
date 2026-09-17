@@ -1,0 +1,2113 @@
+{
+ "psak.daysSince": {
+  "shape": "מועד",
+  "pick": "dayDiff",
+  "file": "dart-maor/intel-day-diff.dart",
+  "chain": null,
+  "score": 48.48,
+  "proven": true,
+  "candidates": 22,
+  "chainsAdmissible": 0,
+  "top3": [
+   "dayDiff:3/3✓:48.48",
+   "cockpitDaysSince:3/3✓:38.77",
+   "sheetSummary:0/3:18.17"
+  ],
+  "proof": {
+   "campaignTotal": {
+    "ok": 0,
+    "total": 3
+   },
+   "cockpitDaysSince": {
+    "ok": 3,
+    "total": 3
+   },
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 3
+   },
+   "dayDiff": {
+    "ok": 3,
+    "total": 3
+   },
+   "ruleExact": {
+    "ok": 0,
+    "total": 3
+   },
+   "ruleSkeleton": {
+    "ok": 0,
+    "total": 3
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 3
+   },
+   "score": {
+    "ok": 0,
+    "total": 3
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 3
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 3
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 3
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 3
+   },
+   "ui": {
+    "ok": 0,
+    "total": 3
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 3
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "vocab": {
+    "ok": 0,
+    "total": 3
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 3
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 3
+   }
+  },
+  "chains": null
+ },
+ "psak.over7": {
+  "shape": "מועד",
+  "pick": null,
+  "file": null,
+  "chain": null,
+  "score": 7.04,
+  "proven": false,
+  "candidates": 22,
+  "chainsAdmissible": 1431,
+  "top3": [
+   "taskOverdue:2/3:7.04",
+   "isOverdue:2/3:1",
+   "isDataImage∘taskOverdue:2/3:18.25"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 3
+   },
+   "isOverdue": {
+    "ok": 2,
+    "total": 3
+   },
+   "numMatch": {
+    "ok": 1,
+    "total": 3
+   },
+   "sameJson": {
+    "ok": 1,
+    "total": 3
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 3
+   },
+   "score": {
+    "ok": 0,
+    "total": 3
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 3
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 3
+   },
+   "supporterVisibleForDesignations": {
+    "ok": 1,
+    "total": 3
+   },
+   "taskOverdue": {
+    "ok": 2,
+    "total": 3
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 3
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 3
+   },
+   "ui": {
+    "ok": 0,
+    "total": 3
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 3
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "vocab": {
+    "ok": 0,
+    "total": 3
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 3
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘taskOverdue": {
+    "ok": 2,
+    "total": 3
+   },
+   "isEncDoc∘taskOverdue": {
+    "ok": 2,
+    "total": 3
+   },
+   "isEncrypted∘taskOverdue": {
+    "ok": 2,
+    "total": 3
+   },
+   "popCall∘taskOverdue": {
+    "ok": 2,
+    "total": 3
+   },
+   "isDataImage∘campaign": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘campaignTotal": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘coursesOfTeacher": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘enrollCount": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘envPath": {
+    "ok": 2,
+    "total": 3
+   },
+   "isDataImage∘isOverdue": {
+    "ok": 2,
+    "total": 3
+   },
+   "isDataImage∘localize": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘mergeFamilyImport": {
+    "ok": 2,
+    "total": 3
+   },
+   "isDataImage∘metaPath": {
+    "ok": 2,
+    "total": 3
+   },
+   "isDataImage∘numMatch": {
+    "ok": 2,
+    "total": 3
+   },
+   "isDataImage∘roleOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘sameJson": {
+    "ok": 2,
+    "total": 3
+   },
+   "isDataImage∘sanitizeSupportText": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘score": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘segulaReminders": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘sheetRoster": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘sheetSummary": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘siteLangs": {
+    "ok": 2,
+    "total": 3
+   },
+   "isDataImage∘steps": {
+    "ok": 0,
+    "total": 3
+   },
+   "isDataImage∘supportPreview": {
+    "ok": 0,
+    "total": 3
+   }
+  },
+  "chains": {
+   "admissible": 1431,
+   "cands": {
+    "isDataImage∘taskOverdue": {
+     "chain": [
+      {
+       "id": "taskOverdue",
+       "file": "dart-maor/task-overdue.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 18.25
+    },
+    "isEncDoc∘taskOverdue": {
+     "chain": [
+      {
+       "id": "taskOverdue",
+       "file": "dart-maor/task-overdue.dart"
+      },
+      {
+       "id": "isEncDoc",
+       "file": "dart-maor/is-enc-doc.dart"
+      }
+     ],
+     "score": 18.25
+    },
+    "isEncrypted∘taskOverdue": {
+     "chain": [
+      {
+       "id": "taskOverdue",
+       "file": "dart-maor/task-overdue.dart"
+      },
+      {
+       "id": "isEncrypted",
+       "file": "dart-maor/is-encrypted.dart"
+      }
+     ],
+     "score": 18.25
+    },
+    "popCall∘taskOverdue": {
+     "chain": [
+      {
+       "id": "taskOverdue",
+       "file": "dart-maor/task-overdue.dart"
+      },
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      }
+     ],
+     "score": 13.79
+    },
+    "isDataImage∘campaign": {
+     "chain": [
+      {
+       "id": "campaign",
+       "file": "dart-boxes/public-site.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘campaignTotal": {
+     "chain": [
+      {
+       "id": "campaignTotal",
+       "file": "dart-maor/campaign-total.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘coursesOfTeacher": {
+     "chain": [
+      {
+       "id": "coursesOfTeacher",
+       "file": "dart-maor/courses-of-teacher.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘enrollCount": {
+     "chain": [
+      {
+       "id": "enrollCount",
+       "file": "dart-maor/enroll-count.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘envPath": {
+     "chain": [
+      {
+       "id": "envPath",
+       "file": "dart-maor/env-path.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘isOverdue": {
+     "chain": [
+      {
+       "id": "isOverdue",
+       "file": "dart-boxes/worktasks.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘localize": {
+     "chain": [
+      {
+       "id": "localize",
+       "file": "dart-boxes/public-site.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘mergeFamilyImport": {
+     "chain": [
+      {
+       "id": "mergeFamilyImport",
+       "file": "dart-maor/merge-family-import.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘metaPath": {
+     "chain": [
+      {
+       "id": "metaPath",
+       "file": "dart-maor/meta-path.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘numMatch": {
+     "chain": [
+      {
+       "id": "numMatch",
+       "file": "dart-maor/num-match.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘roleOf": {
+     "chain": [
+      {
+       "id": "roleOf",
+       "file": "dart-maor/role-of.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘sameJson": {
+     "chain": [
+      {
+       "id": "sameJson",
+       "file": "dart-boxes/cloud-diff.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘sanitizeSupportText": {
+     "chain": [
+      {
+       "id": "sanitizeSupportText",
+       "file": "dart-maor/sanitize-support-text.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘score": {
+     "chain": [
+      {
+       "id": "score",
+       "file": "dart-boxes/search.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘segulaReminders": {
+     "chain": [
+      {
+       "id": "segulaReminders",
+       "file": "dart-maor/segula-reminders.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘sheetRoster": {
+     "chain": [
+      {
+       "id": "sheetRoster",
+       "file": "dart-maor/sheet-roster.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘sheetSummary": {
+     "chain": [
+      {
+       "id": "sheetSummary",
+       "file": "dart-maor/sheet-summary.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘siteLangs": {
+     "chain": [
+      {
+       "id": "siteLangs",
+       "file": "dart-maor/site-langs.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘steps": {
+     "chain": [
+      {
+       "id": "steps",
+       "file": "dart-boxes/tour.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    },
+    "isDataImage∘supportPreview": {
+     "chain": [
+      {
+       "id": "supportPreview",
+       "file": "dart-maor/support-preview.dart"
+      },
+      {
+       "id": "isDataImage",
+       "file": "dart-maor/is-data-image.dart"
+      }
+     ],
+     "score": 12.21
+    }
+   }
+  }
+ },
+ "psak.bochurLate": {
+  "shape": "מועד",
+  "pick": null,
+  "file": null,
+  "chain": null,
+  "score": 1,
+  "proven": false,
+  "candidates": 4,
+  "chainsAdmissible": 382,
+  "top3": [
+   "assignmentRedeemed:0/3:1",
+   "strongMatchForCharge:0/3:0",
+   "termOf:0/3:0"
+  ],
+  "proof": {
+   "assignmentRedeemed": {
+    "ok": 0,
+    "total": 3
+   },
+   "strongMatchForCharge": {
+    "ok": 0,
+    "total": 3
+   },
+   "termOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "waLink": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall∘assignmentRedeemed": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall∘buildSmtpAccount": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall∘exportNames": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall∘loadHint": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall∘ruleTypo": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall∘stats": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall∘strongMatchForCharge": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall∘termOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall∘tourAdvance": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall∘waLink": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime∘assignmentRedeemed": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime∘buildSmtpAccount": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime∘exportNames": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime∘loadHint": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime∘ruleTypo": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime∘stats": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime∘strongMatchForCharge": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime∘termOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime∘tourAdvance": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime∘waLink": {
+    "ok": 0,
+    "total": 3
+   },
+   "ayinActive∘assignmentRedeemed": {
+    "ok": 0,
+    "total": 3
+   },
+   "ayinActive∘buildSmtpAccount": {
+    "ok": 0,
+    "total": 3
+   },
+   "ayinActive∘exportNames": {
+    "ok": 0,
+    "total": 3
+   },
+   "ayinActive∘loadHint": {
+    "ok": 0,
+    "total": 3
+   }
+  },
+  "chains": {
+   "admissible": 382,
+   "cands": {
+    "popCall∘assignmentRedeemed": {
+     "chain": [
+      {
+       "id": "assignmentRedeemed",
+       "file": "dart-boxes/shop.dart"
+      },
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      }
+     ],
+     "score": 19.74
+    },
+    "popCall∘buildSmtpAccount": {
+     "chain": [
+      {
+       "id": "buildSmtpAccount",
+       "file": "dart-boxes/smtp-url.dart"
+      },
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      }
+     ],
+     "score": 19.74
+    },
+    "popCall∘exportNames": {
+     "chain": [
+      {
+       "id": "exportNames",
+       "file": "dart-boxes/names-export.dart"
+      },
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      }
+     ],
+     "score": 19.74
+    },
+    "popCall∘loadHint": {
+     "chain": [
+      {
+       "id": "loadHint",
+       "file": "dart-boxes/distribution.dart"
+      },
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      }
+     ],
+     "score": 19.74
+    },
+    "popCall∘ruleTypo": {
+     "chain": [
+      {
+       "id": "ruleTypo",
+       "file": "dart-maor/rule-typo.dart"
+      },
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      }
+     ],
+     "score": 19.74
+    },
+    "popCall∘stats": {
+     "chain": [
+      {
+       "id": "stats",
+       "file": "dart-boxes/worktasks.dart"
+      },
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      }
+     ],
+     "score": 19.74
+    },
+    "popCall∘strongMatchForCharge": {
+     "chain": [
+      {
+       "id": "strongMatchForCharge",
+       "file": "dart-maor/strong-match-for-charge.dart"
+      },
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      }
+     ],
+     "score": 19.74
+    },
+    "popCall∘termOf": {
+     "chain": [
+      {
+       "id": "termOf",
+       "file": "dart-maor/term-of.dart"
+      },
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      }
+     ],
+     "score": 19.74
+    },
+    "popCall∘tourAdvance": {
+     "chain": [
+      {
+       "id": "tourAdvance",
+       "file": "dart-maor/tour-advance.dart"
+      },
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      }
+     ],
+     "score": 19.74
+    },
+    "popCall∘waLink": {
+     "chain": [
+      {
+       "id": "waLink",
+       "file": "dart-maor/wa-link.dart"
+      },
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      }
+     ],
+     "score": 19.74
+    },
+    "supportMsgTime∘assignmentRedeemed": {
+     "chain": [
+      {
+       "id": "assignmentRedeemed",
+       "file": "dart-boxes/shop.dart"
+      },
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      }
+     ],
+     "score": 10
+    },
+    "supportMsgTime∘buildSmtpAccount": {
+     "chain": [
+      {
+       "id": "buildSmtpAccount",
+       "file": "dart-boxes/smtp-url.dart"
+      },
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      }
+     ],
+     "score": 10
+    },
+    "supportMsgTime∘exportNames": {
+     "chain": [
+      {
+       "id": "exportNames",
+       "file": "dart-boxes/names-export.dart"
+      },
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      }
+     ],
+     "score": 10
+    },
+    "supportMsgTime∘loadHint": {
+     "chain": [
+      {
+       "id": "loadHint",
+       "file": "dart-boxes/distribution.dart"
+      },
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      }
+     ],
+     "score": 10
+    },
+    "supportMsgTime∘ruleTypo": {
+     "chain": [
+      {
+       "id": "ruleTypo",
+       "file": "dart-maor/rule-typo.dart"
+      },
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      }
+     ],
+     "score": 10
+    },
+    "supportMsgTime∘stats": {
+     "chain": [
+      {
+       "id": "stats",
+       "file": "dart-boxes/worktasks.dart"
+      },
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      }
+     ],
+     "score": 10
+    },
+    "supportMsgTime∘strongMatchForCharge": {
+     "chain": [
+      {
+       "id": "strongMatchForCharge",
+       "file": "dart-maor/strong-match-for-charge.dart"
+      },
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      }
+     ],
+     "score": 10
+    },
+    "supportMsgTime∘termOf": {
+     "chain": [
+      {
+       "id": "termOf",
+       "file": "dart-maor/term-of.dart"
+      },
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      }
+     ],
+     "score": 10
+    },
+    "supportMsgTime∘tourAdvance": {
+     "chain": [
+      {
+       "id": "tourAdvance",
+       "file": "dart-maor/tour-advance.dart"
+      },
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      }
+     ],
+     "score": 10
+    },
+    "supportMsgTime∘waLink": {
+     "chain": [
+      {
+       "id": "waLink",
+       "file": "dart-maor/wa-link.dart"
+      },
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      }
+     ],
+     "score": 10
+    },
+    "ayinActive∘assignmentRedeemed": {
+     "chain": [
+      {
+       "id": "assignmentRedeemed",
+       "file": "dart-boxes/shop.dart"
+      },
+      {
+       "id": "ayinActive",
+       "file": "dart-maor/ayin-active.dart"
+      }
+     ],
+     "score": 6.04
+    },
+    "ayinActive∘buildSmtpAccount": {
+     "chain": [
+      {
+       "id": "buildSmtpAccount",
+       "file": "dart-boxes/smtp-url.dart"
+      },
+      {
+       "id": "ayinActive",
+       "file": "dart-maor/ayin-active.dart"
+      }
+     ],
+     "score": 6.04
+    },
+    "ayinActive∘exportNames": {
+     "chain": [
+      {
+       "id": "exportNames",
+       "file": "dart-boxes/names-export.dart"
+      },
+      {
+       "id": "ayinActive",
+       "file": "dart-maor/ayin-active.dart"
+      }
+     ],
+     "score": 6.04
+    },
+    "ayinActive∘loadHint": {
+     "chain": [
+      {
+       "id": "loadHint",
+       "file": "dart-boxes/distribution.dart"
+      },
+      {
+       "id": "ayinActive",
+       "file": "dart-maor/ayin-active.dart"
+      }
+     ],
+     "score": 6.04
+    }
+   }
+  }
+ },
+ "psak.noOwner": {
+  "shape": "רשומות",
+  "pick": null,
+  "file": null,
+  "chain": null,
+  "score": 1.98,
+  "proven": false,
+  "candidates": 21,
+  "chainsAdmissible": 1067,
+  "top3": [
+   "sortTeamMsgs:2/5:1.98",
+   "sortSupportMsgs:2/5:0",
+   "sortSupportThreads:2/5:0"
+  ],
+  "proof": {
+   "donateUrl": {
+    "ok": 0,
+    "total": 5
+   },
+   "expand": {
+    "ok": 0,
+    "total": 5
+   },
+   "langs": {
+    "ok": 0,
+    "total": 5
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 5
+   },
+   "palette": {
+    "ok": 0,
+    "total": 5
+   },
+   "popCall": {
+    "ok": 1,
+    "total": 5
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 5
+   },
+   "setAllowedPurposes": {
+    "ok": 1,
+    "total": 5
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 5
+   },
+   "sortSupportMsgs": {
+    "ok": 2,
+    "total": 5
+   },
+   "sortSupportThreads": {
+    "ok": 2,
+    "total": 5
+   },
+   "sortTeamMsgs": {
+    "ok": 2,
+    "total": 5
+   },
+   "stripAuditMeta": {
+    "ok": 2,
+    "total": 5
+   },
+   "stripSupKey": {
+    "ok": 2,
+    "total": 5
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 5
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 5
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 5
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 5
+   },
+   "templateKeys": {
+    "ok": 1,
+    "total": 5
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 5
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘supportMsgTime": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘callStats": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘scheduleTasks": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘sessionsOf": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘siteDonateUrl": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘supCount": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘donateUrl": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘expand": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘langs": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘monthLabel": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘normalize": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘normalizeConfig": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘normalizeSite": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘palette": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘popCall": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘setAllowedPurposes": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘sortSupportMsgs": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘sortSupportThreads": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘stripAuditMeta": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘stripSupKey": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘supIls": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘supUsd": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘timeToMin": {
+    "ok": 0,
+    "total": 5
+   },
+   "liveRedemptions∘waDigits": {
+    "ok": 0,
+    "total": 5
+   }
+  },
+  "chains": {
+   "admissible": 1067,
+   "cands": {
+    "liveRedemptions∘supportMsgTime": {
+     "chain": [
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 11.93
+    },
+    "liveRedemptions∘callStats": {
+     "chain": [
+      {
+       "id": "callStats",
+       "file": "dart-maor/call-stats.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 9.26
+    },
+    "liveRedemptions∘scheduleTasks": {
+     "chain": [
+      {
+       "id": "scheduleTasks",
+       "file": "dart-maor/schedule-tasks.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 9.26
+    },
+    "liveRedemptions∘sessionsOf": {
+     "chain": [
+      {
+       "id": "sessionsOf",
+       "file": "dart-maor/sessions-of.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 9.26
+    },
+    "liveRedemptions∘siteDonateUrl": {
+     "chain": [
+      {
+       "id": "siteDonateUrl",
+       "file": "dart-maor/site-donate-url.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 9.26
+    },
+    "liveRedemptions∘supCount": {
+     "chain": [
+      {
+       "id": "supCount",
+       "file": "dart-maor/sup-count.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 9.26
+    },
+    "liveRedemptions∘donateUrl": {
+     "chain": [
+      {
+       "id": "donateUrl",
+       "file": "dart-boxes/public-site.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘expand": {
+     "chain": [
+      {
+       "id": "expand",
+       "file": "dart-boxes/search.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘langs": {
+     "chain": [
+      {
+       "id": "langs",
+       "file": "dart-boxes/public-site.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘monthLabel": {
+     "chain": [
+      {
+       "id": "monthLabel",
+       "file": "dart-maor/month-label.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘normalize": {
+     "chain": [
+      {
+       "id": "normalize",
+       "file": "dart-boxes/pricing.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘normalizeConfig": {
+     "chain": [
+      {
+       "id": "normalizeConfig",
+       "file": "dart-boxes/config.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘normalizeSite": {
+     "chain": [
+      {
+       "id": "normalizeSite",
+       "file": "dart-boxes/config.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘palette": {
+     "chain": [
+      {
+       "id": "palette",
+       "file": "dart-boxes/public-site.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘popCall": {
+     "chain": [
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘setAllowedPurposes": {
+     "chain": [
+      {
+       "id": "setAllowedPurposes",
+       "file": "dart-maor/set-allowed-purposes.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘sortSupportMsgs": {
+     "chain": [
+      {
+       "id": "sortSupportMsgs",
+       "file": "dart-maor/sort-support-msgs.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘sortSupportThreads": {
+     "chain": [
+      {
+       "id": "sortSupportThreads",
+       "file": "dart-maor/sort-support-threads.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘stripAuditMeta": {
+     "chain": [
+      {
+       "id": "stripAuditMeta",
+       "file": "dart-maor/strip-audit-meta.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘stripSupKey": {
+     "chain": [
+      {
+       "id": "stripSupKey",
+       "file": "dart-maor/strip-sup-key.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘supIls": {
+     "chain": [
+      {
+       "id": "supIls",
+       "file": "dart-maor/sup-ils.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘supUsd": {
+     "chain": [
+      {
+       "id": "supUsd",
+       "file": "dart-maor/sup-usd.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘timeToMin": {
+     "chain": [
+      {
+       "id": "timeToMin",
+       "file": "dart-maor/time-to-min.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    },
+    "liveRedemptions∘waDigits": {
+     "chain": [
+      {
+       "id": "waDigits",
+       "file": "dart-maor/wa-digits.dart"
+      },
+      {
+       "id": "liveRedemptions",
+       "file": "dart-maor/live-redemptions.dart"
+      }
+     ],
+     "score": 8.28
+    }
+   }
+  }
+ },
+ "psak.countNoOwner": {
+  "shape": "רשומות",
+  "pick": null,
+  "file": null,
+  "chain": null,
+  "score": 2,
+  "proven": false,
+  "candidates": 20,
+  "chainsAdmissible": 1202,
+  "top3": [
+   "warehouseValue:2/3:2",
+   "supCount:2/3:0",
+   "supIls:2/3:0"
+  ],
+  "proof": {
+   "donateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "expand": {
+    "ok": 0,
+    "total": 3
+   },
+   "langs": {
+    "ok": 0,
+    "total": 3
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 3
+   },
+   "palette": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall": {
+    "ok": 0,
+    "total": 3
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripAuditMeta": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 3
+   },
+   "supCount": {
+    "ok": 2,
+    "total": 3
+   },
+   "supIls": {
+    "ok": 2,
+    "total": 3
+   },
+   "supUsd": {
+    "ok": 2,
+    "total": 3
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 3
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 3
+   },
+   "warehouseValue": {
+    "ok": 2,
+    "total": 3
+   },
+   "supportMsgTime∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "matCostTotal∘supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "timeCostTotal∘supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "timeHoursTotal∘supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "donateUrl∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "expand∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "langs∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "monthLabel∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "palette∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "sessionsOf∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "setAllowedPurposes∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteDonateUrl∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportMsgs∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportThreads∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripAuditMeta∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripSupKey∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "supCount∘reenrollCounts": {
+    "ok": 2,
+    "total": 3
+   },
+   "supIls∘reenrollCounts": {
+    "ok": 2,
+    "total": 3
+   },
+   "supUsd∘reenrollCounts": {
+    "ok": 2,
+    "total": 3
+   },
+   "timeToMin∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "waDigits∘reenrollCounts": {
+    "ok": 0,
+    "total": 3
+   },
+   "matCostTotal∘donateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "matCostTotal∘expand": {
+    "ok": 0,
+    "total": 3
+   }
+  },
+  "chains": {
+   "admissible": 1202,
+   "cands": {
+    "supportMsgTime∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      }
+     ],
+     "score": 14.17
+    },
+    "matCostTotal∘supportMsgTime": {
+     "chain": [
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      },
+      {
+       "id": "matCostTotal",
+       "file": "dart-maor/mat-cost-total.dart"
+      }
+     ],
+     "score": 13
+    },
+    "timeCostTotal∘supportMsgTime": {
+     "chain": [
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      },
+      {
+       "id": "timeCostTotal",
+       "file": "dart-maor/time-cost-total.dart"
+      }
+     ],
+     "score": 13
+    },
+    "timeHoursTotal∘supportMsgTime": {
+     "chain": [
+      {
+       "id": "supportMsgTime",
+       "file": "dart-maor/support-msg-time.dart"
+      },
+      {
+       "id": "timeHoursTotal",
+       "file": "dart-maor/time-hours-total.dart"
+      }
+     ],
+     "score": 13
+    },
+    "donateUrl∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "donateUrl",
+       "file": "dart-boxes/public-site.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "expand∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "expand",
+       "file": "dart-boxes/search.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "langs∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "langs",
+       "file": "dart-boxes/public-site.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "monthLabel∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "monthLabel",
+       "file": "dart-maor/month-label.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "palette∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "palette",
+       "file": "dart-boxes/public-site.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "popCall∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "popCall",
+       "file": "dart-maor/pop-call.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "sessionsOf∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "sessionsOf",
+       "file": "dart-maor/sessions-of.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "setAllowedPurposes∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "setAllowedPurposes",
+       "file": "dart-maor/set-allowed-purposes.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "siteDonateUrl∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "siteDonateUrl",
+       "file": "dart-maor/site-donate-url.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "sortSupportMsgs∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "sortSupportMsgs",
+       "file": "dart-maor/sort-support-msgs.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "sortSupportThreads∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "sortSupportThreads",
+       "file": "dart-maor/sort-support-threads.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "stripAuditMeta∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "stripAuditMeta",
+       "file": "dart-maor/strip-audit-meta.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "stripSupKey∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "stripSupKey",
+       "file": "dart-maor/strip-sup-key.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "supCount∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "supCount",
+       "file": "dart-maor/sup-count.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "supIls∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "supIls",
+       "file": "dart-maor/sup-ils.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "supUsd∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "supUsd",
+       "file": "dart-maor/sup-usd.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "timeToMin∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "timeToMin",
+       "file": "dart-maor/time-to-min.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "waDigits∘reenrollCounts": {
+     "chain": [
+      {
+       "id": "reenrollCounts",
+       "file": "dart-maor/reenroll-counts.dart"
+      },
+      {
+       "id": "waDigits",
+       "file": "dart-maor/wa-digits.dart"
+      }
+     ],
+     "score": 10.52
+    },
+    "matCostTotal∘donateUrl": {
+     "chain": [
+      {
+       "id": "donateUrl",
+       "file": "dart-boxes/public-site.dart"
+      },
+      {
+       "id": "matCostTotal",
+       "file": "dart-maor/mat-cost-total.dart"
+      }
+     ],
+     "score": 9.35
+    },
+    "matCostTotal∘expand": {
+     "chain": [
+      {
+       "id": "expand",
+       "file": "dart-boxes/search.dart"
+      },
+      {
+       "id": "matCostTotal",
+       "file": "dart-maor/mat-cost-total.dart"
+      }
+     ],
+     "score": 9.35
+    }
+   }
+  }
+ },
+ "psak.recordSignal": {
+  "shape": "יומן",
+  "pick": null,
+  "file": null,
+  "chain": null,
+  "score": 9.58,
+  "proven": false,
+  "candidates": 17,
+  "chainsAdmissible": 0,
+  "top3": [
+   "undoLast:0/0:9.58",
+   "segulaReminders:0/0:7.65",
+   "coursesOfTeacher:0/0:0"
+  ],
+  "proof": {},
+  "chains": null
+ }
+}

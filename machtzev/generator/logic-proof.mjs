@@ -7,8 +7,11 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import * as R from '../root.mjs';
+import { resolveDart } from '../dart-bin.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const DART = process.env.DART || (fs.existsSync('/home/user/flutter/bin/cache/dart-sdk/bin/dart') ? '/home/user/flutter/bin/cache/dart-sdk/bin/dart' : 'dart');
+// c2 · פותר-Dart אחד לכל הכלים (dart-bin.resolveDart): DART_BIN ⇒ $HOME/dart-sdk ⇒ /home/user/flutter ⇒ PATH.
+//   עדיפות ל-$DART אם הוגדר במפורש (מחרוזת לא-ריקה); אין בינארי ⇒ null ⇒ proveFile מחזיר {error:'tool=dart'} (L34: אין-כלי ≠ כשל, לא בליעה שקטה).
+const DART = process.env.DART || resolveDart();
 /** מועמד טהור = אטום בלי import (חוק-1) — ניתן להרצה בבידוד */
 export const isPure = (file) => { try { const src = fs.readFileSync(path.join(R.NEW, file), 'utf8'); return [...src.matchAll(/^import\s+'([^']+)'/gm)].every((m) => /^(\.\.?\/)/.test(m[1]) || /^dart:(convert|math|core|collection|typed_data)$/.test(m[1])); } catch { return false; } };   // G48 · טהור = אפס-import, או ייבוא-יחסי מהמדף / ספריית-dart טהורה (קופסאות); package:/dart:io/ui/html ⇒ לא
 /** @param id מזהה-הצורך · cands [{id,file}] · examples [[argsDart, checkDart]] ⇒ {candId: {ok,total}} | {error} */
@@ -22,6 +25,7 @@ export function proveCandidates(id, cands, examples, extraImports = []) {   // e
   return out;
 }
 function proveFile(id, pure, examples, extraImports) {
+  if (!DART) return { error: 'tool=dart' };   // אין בינארי Dart ⇒ סמן במפורש (לא מחרוזת ריקה) — הבורר יידע שלא הוכח, לא ש"נכשל"
   const dir = path.join(HERE, '.prove'); fs.mkdirSync(dir, { recursive: true });
   const rel = (f) => path.relative(dir, path.join(R.NEW, f)).split(path.sep).join('/');
   const imps = [...extraImports.map((f) => `import '${rel(f)}';`), ...pure.flatMap((c, i) => c.chain ? c.chain.map((q, k) => `import '${rel(q.file)}' as c${i}_${k};`) : [`import '${rel(c.file)}' as c${i};`])].join('\n');
