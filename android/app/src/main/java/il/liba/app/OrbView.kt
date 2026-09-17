@@ -25,7 +25,7 @@ import kotlin.math.sin
  *  aurora light drifting inside a sphere, fresnel rim, specular, soft glow – and it reacts to the real mic level.
  *  Older devices (or a software canvas) get the drawn glass orb. State glyphs are drawn on top either way:
  *  IDLE monogram · WAKE breathing ring · LISTENING level bars · SPEAKING wave in the speaker's colour · RINGING ripples · SENDING turning arc · OFFLINE dim dash. */
-class OrbView(ctx: Context) : View(ctx) {
+class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.AttributeSet? = null) : View(ctx, attrs) {
     enum class Mode { IDLE, WAKE, LISTENING, SPEAKING, RINGING, SENDING, OFFLINE }
 
     var mode: Mode = Mode.OFFLINE; private set
@@ -40,6 +40,7 @@ class OrbView(ctx: Context) : View(ctx) {
     private var lastT = 0L
     private var anim: ValueAnimator? = null
     private var pressed = false
+    private var activeK = 0f; private var activeTarget = 0f
 
     private val glow = Paint(Paint.ANTI_ALIAS_FLAG)
     private val body = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -65,9 +66,9 @@ class OrbView(ctx: Context) : View(ctx) {
     }
 
     private fun dp(v: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v, resources.displayMetrics)
-    private fun pad() = dp(9f)
+    private fun pad() = dp(9f - 5f * activeK)
 
-    fun set(m: Mode, color: Int = accent) { mode = m; accent = color; startAnim(); invalidate() }
+    fun set(m: Mode, color: Int = accent) { mode = m; accent = color; activeTarget = if (m == Mode.LISTENING || m == Mode.SPEAKING || m == Mode.RINGING) 1f else 0f; startAnim(); invalidate() }
     fun press(down: Boolean) { pressed = down; animate().scaleX(if (down) 0.9f else 1f).scaleY(if (down) 0.9f else 1f).setDuration(140).start() }
 
     private fun startAnim() {
@@ -79,6 +80,7 @@ class OrbView(ctx: Context) : View(ctx) {
                 phase = it.animatedValue as Float
                 val now = System.nanoTime(); time += ((now - lastT) / 1e9f).coerceIn(0f, 0.1f); lastT = now
                 shown += (target - shown) * 0.35f; if (mode != Mode.LISTENING) target *= 0.9f
+                activeK += (activeTarget - activeK) * 0.18f; if (kotlin.math.abs(activeTarget - activeK) < 0.005f) activeK = activeTarget
                 invalidate()
             }
             start()

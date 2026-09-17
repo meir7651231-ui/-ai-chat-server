@@ -74,13 +74,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun refresh() {
         val running = BubbleService.running
-        web.visibility = if (running) View.GONE else View.VISIBLE
+        findViewById<View>(R.id.webWrap).visibility = if (running) View.GONE else View.VISIBLE
         logWrap.visibility = if (running) View.VISIBLE else View.GONE
         if (running) { val t = Prefs.logText(this); if (logView.text.toString() != t) { logView.text = t; logWrap.post { logWrap.fullScroll(View.FOCUS_DOWN) } }
             findViewById<TextView>(R.id.tasks).text = BubbleService.tasksSummary.ifBlank { "אין משימות פתוחות" } }
+        findViewById<OrbView>(R.id.orb).set(if (running && BubbleService.pageOk) OrbView.Mode.IDLE else if (running) OrbView.Mode.WAKE else OrbView.Mode.OFFLINE, OrbView.CYAN)
         findViewById<TextView>(R.id.dot).apply { text = if (running && BubbleService.pageOk) "● מחובר" else if (running) "● מתחבר" else "● כבוי"; setTextColor(android.graphics.Color.parseColor(if (running && BubbleService.pageOk) "#5CFFB0" else "#5B6478")) }
         val crash = Prefs.crash(this)
-        if (crash != null && !running) { logWrap.visibility = View.VISIBLE; web.visibility = View.GONE; logView.text = "קריסה אחרונה (לחיצה ארוכה = העתק, ואז שלח לליבה):\n\n" + crash; logView.setOnLongClickListener { (getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager).setPrimaryClip(android.content.ClipData.newPlainText("crash", crash)); Prefs.clearCrash(this); true } }
+        if (crash != null && !running) { logWrap.visibility = View.VISIBLE; findViewById<View>(R.id.webWrap).visibility = View.GONE; logView.text = "קריסה אחרונה (לחיצה ארוכה = העתק, ואז שלח לליבה):\n\n" + crash; logView.setOnLongClickListener { (getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager).setPrimaryClip(android.content.ClipData.newPlainText("crash", crash)); Prefs.clearCrash(this); true } }
         status.text = when {
             crash != null && !running -> "האפליקציה קרסה. הפרטים למעלה. לחץ 'הפעל בועה' כדי לנסות שוב."
             !micOk() -> "צריך הרשאת מיקרופון"
@@ -90,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         }
         // step 97: first-run guide – which of the three steps is next
         val stage = when { running -> 3; micOk() && overlayOk() -> 3; !web.url.isNullOrBlank() && web.url != "about:blank" && (micOk() || overlayOk()) -> 2; else -> 1 }
-        listOf(R.id.s1, R.id.s2, R.id.s3).forEachIndexed { i, id -> findViewById<TextView>(id).setTextColor(android.graphics.Color.parseColor(if (i + 1 <= stage) "#7DF9FF" else "#5B6478")) }
+        listOf(R.id.s1, R.id.s2, R.id.s3).forEachIndexed { i, id -> findViewById<TextView>(id).apply { setTextColor(android.graphics.Color.parseColor(if (i + 1 <= stage) "#7DF9FF" else "#9AA3B8")); setBackgroundResource(if (i + 1 <= stage) R.drawable.chip_step_on else R.drawable.chip_step) } }
         findViewById<View>(R.id.steps).visibility = if (running) View.GONE else View.VISIBLE
         val ver = try { packageManager.getPackageInfo(packageName, 0).versionName } catch (e: Exception) { "?" }
         status.text = "ליבה $ver · " + status.text

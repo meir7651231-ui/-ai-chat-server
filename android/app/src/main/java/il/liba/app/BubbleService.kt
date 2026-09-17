@@ -340,6 +340,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val d = dot ?: return
         if (s == State.IDLE || s == State.WAKE || s == State.OFFLINE) schedulePeek() else unpeek()
         if (s == State.LISTENING && d.mode != OrbView.Mode.LISTENING) haptic()
+        val lc = when (s) { State.LISTENING -> OrbView.ROSE; State.RINGING -> OrbView.AMBER; State.OFFLINE -> OrbView.GRAY; State.SPEAKING -> when { curSpeaker.contains("מנהל") -> OrbView.VIOLET; curSpeaker.contains("אדריכל") || curSpeaker.contains("עובד") || curSpeaker.contains("סוכן") -> OrbView.MINT; else -> OrbView.CYAN }; else -> OrbView.CYAN }
+        (label?.background as? GradientDrawable)?.setStroke(dp(1f).toInt(), OrbView.withA(lc, 130))
         val speakerColor = when { curSpeaker.contains("מנהל") -> OrbView.VIOLET; curSpeaker.contains("אדריכל") || curSpeaker.contains("עובד") || curSpeaker.contains("סוכן") -> OrbView.MINT; else -> OrbView.CYAN }
         when (s) {
             State.IDLE -> d.set(OrbView.Mode.IDLE, OrbView.CYAN)
