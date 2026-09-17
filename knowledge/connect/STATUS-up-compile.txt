@@ -1,0 +1,4 @@
+up-compile · Flutter 3.47.4 מותקן · מראה = שלב-2 של ship על buildsmart@claude/hei-rxv1v1
+לפני: משפט-דמו 6 שגיאות-קומפילציה (אשף) · קורפוס 35 משפטים: +5 (payLink, 2 ארגומנטים)
+אחרי (render-ds.renderWizard: עטיפת-פלט לפי טיפוס · value/onChanged לשדות-מוקלדים · requiredArity===1): 36/36 אפליקציות 0 שגיאות · עשן 36/36 · genesis suite 297/297
+פתוח: render-ds.mjs נעוץ ⇒ Allow: pins-write של הבעלים · שער-קומפילציה למשפטים (gates.tsv/police נעוצים) · behavior-plan (regen) OOM

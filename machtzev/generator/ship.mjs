@@ -59,6 +59,9 @@ for (const f of fs.readdirSync(genDst)) if (/^zz_shot_/.test(f)) fs.unlinkSync(p
 // G48 · קופסאות שנבחרו-בהוכחה (gen_behaviors מייבא ../dart-boxes/…) ⇒ מראה נקודתית (רק הנבחרות; לא כל 62)
 { const gb = path.join(GEN, 'gen_behaviors.dart'); if (fs.existsSync(gb)) { const boxes = [...fs.readFileSync(gb, 'utf8').matchAll(/^import '\.\.\/(dart-boxes\/[^']+)'(?: as \w+)?;/gm)].map((m) => m[1]); if (boxes.length) { fs.mkdirSync(path.join(LIB, 'dart-boxes'), { recursive: true }); for (const b of boxes) fs.copyFileSync(path.join(ROOT, 'new', b), path.join(LIB, b)); } } }
 
+// G48ב · up-compose: המראה עוקבת אחרי הייבואים של **כל** קובץ-מחולל — אטום (dart-maor/dart/dart-boxes) שקובץ gen_* מייבא ואינו במראה ⇒ מועתק נקודתית (לא כל המדף). נמדד: gen_goal_*.dart (behavior-compose --plan) ייבא 3 אטומי-op חדשים שלא היו במראה ⇒ 3 שגיאות-URI ב-flutter analyze
+{ let n = 0; for (const f of fs.readdirSync(genDst)) { if (!/^gen_.*\.dart$/.test(f)) continue; for (const m of fs.readFileSync(path.join(genDst, f), 'utf8').matchAll(/^import '\.\.\/((?:dart-maor|dart|dart-boxes)\/[^']+)'/gm)) { const src = path.join(ROOT, 'new', m[1]), dst = path.join(LIB, m[1]); if (fs.existsSync(src) && !fs.existsSync(dst)) { fs.mkdirSync(path.dirname(dst), { recursive: true }); fs.copyFileSync(src, dst); n++; } } } if (n) log(`mirror · ייבואים-נעקבים: ${n} אטומים הועתקו`); }
+
 // ── 3 · אימות: analyze 0 · flutter test genesis_* · שערי-המחולל · אינדקס+אמת ──
 log('verify · flutter analyze lib/genesis');
 const an = run('flutter', ['analyze', '--no-fatal-infos', '--no-fatal-warnings', 'lib/genesis'], APP, { quiet: true, allowFail: true });

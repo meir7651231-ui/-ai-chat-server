@@ -9,6 +9,54 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as R from '../root.mjs';
 import { readPlan } from './behavior-plan.mjs';
+import { treeDart } from './logic-proof.mjs';   // up-compose · אותו מיפוי-שקעים כמו ברתמת-ההוכחה
+// ── up-compose · מצב-צרכים-חיצוניים: תכנית (behavior-plan --needs … --out plan.json, מועשרת ב-need) ⇒ ספריית-Dart + הוכחה ──
+//   node behavior-compose.mjs --plan <plan.json> --out new/dart-gen-bs/gen_<ns>.dart
+//   לכל צורך מוכח: פונקציה bh<שם> (חתימה מ-need.params/ret · שקע-שעון ⇒ פרמטר now · שקע-עולם ⇒ פרמטר w · שקע-אדם ⇒ פרמטר בשמו),
+//   הגוף = עץ-החיווט (treeDart — אפס קוד-ביד), הייבואים = קובצי-האטומים. ובנוסף <out>_proof.dart: main() עם assert לכל דוגמה
+//   מהחוזה (`dart run --enable-asserts`) — הדוגמאות שהוכיחו את הבחירה מוכיחות גם את ההרכבה. צורך בלי pick ⇒ נרשם ∅, לא מומצא.
+{
+  const pi = process.argv.indexOf('--plan');
+  if (pi >= 0) {
+    const planPath = process.argv[pi + 1]; const oi = process.argv.indexOf('--out'); const out = oi >= 0 ? process.argv[oi + 1] : null;
+    if (!planPath || !out) { console.error('--plan <plan.json> --out <file.dart>'); process.exit(2); }
+    const plan = JSON.parse(fs.readFileSync(planPath, 'utf8'));
+    const CENSUS = new Map(); { const cf = path.join(R.GEN_DIR, 'logic-census.json'); if (fs.existsSync(cf)) { const j = JSON.parse(fs.readFileSync(cf, 'utf8')); const arr = Array.isArray(j) ? j : (j.atoms || j.functions || j.rows || Object.values(j).find(Array.isArray) || []); for (const x of arr) { const ps = (x.params || []).map((t) => String(t).replace(/\s.*$/, '')); CENSUS.set(x.name + '@' + x.file, ps); if (!CENSUS.has(x.name)) CENSUS.set(x.name, ps); } } }
+    const outAbs = path.resolve(R.ROOT, out); const outDir = path.dirname(outAbs);
+    const rel = (file) => path.relative(outDir, path.join(R.NEW, file)).split(path.sep).join('/');
+    const camel = (id) => { const last = id.split('.').pop(); return 'bh' + last.charAt(0).toUpperCase() + last.slice(1); };
+    const names = new Map(); const fns = []; const imports = new Set(); const proofs = []; const skipped = [];
+    let i = 0;
+    for (const [id, p] of Object.entries(plan)) {
+      const need = p.need || {}; if (!p.pick || !p.tree) { skipped.push(id); continue; }
+      let name = camel(id); while ([...names.values()].includes(name)) name += '_'; names.set(id, name);
+      const { imports: imps, expr } = treeDart(p.tree, i++, rel); imps.forEach((x) => imports.add(x));
+      // הידוק-טיפוס מהאטום (לא המרה שקטה): פרמטר-צורך 'num' שזורם ישירות לשקע 'int'/'double' של האטום ⇒ החתימה הנפלטת מהודקת לטיפוס-האטום (הדוגמאות שהוכיחו הן אלה שעברו). נמדד: pp(int,String) מול num ⇒ שגיאת-קומפילציה
+      const tight = {}; (function walk(v) { if (v.k === 'a' || v.k === 'f') { const at = CENSUS.get(v.id + '@' + v.file) || CENSUS.get(v.id) || []; v.args.forEach((x, j) => { if (x.k === 'p' && (need.params || [])[x.i] === 'num' && /^(int|double)$/.test(at[j] || '')) tight[x.i] = at[j]; else walk(x); }); } else if (v.k === 'g') { walk(v.pred); walk(v.body); } })(p.tree);
+      const params = (need.params || []).map((t, j) => `${tight[j] || t} p${j}`);
+      if (need.clock) params.push(`${need.clock.type || 'String'} now`);
+      for (const h of (need.human || [])) params.push(`dynamic ${typeof h === 'string' ? h : h.name}`);
+      if (need.world) params.push(`${need.world.type || 'List<dynamic>'} w`);
+      const ret = need.ret || 'dynamic'; const isVoid = ret === 'void';
+      fns.push(`/// ${(need.demand || id).replace(/\n/g, ' ')} — ${p.pick}\n${ret} ${name}(${params.join(', ')}) ${isVoid ? `{ ${expr}; }` : `=> ${expr};`}`);
+      (need.examples || []).forEach((ex, j) => {
+        const env = (ex[2] && typeof ex[2] === 'object') ? ex[2] : {};
+        const args = [ex[0]]; if (need.clock) args.push(env.now ?? "''"); for (const h of (need.human || [])) { const hn = typeof h === 'string' ? h : h.name; args.push(env.human && env.human[hn] != null ? env.human[hn] : 'null'); }
+        const wInit = need.world ? (need.world.init || '<dynamic>[]') : null; if (need.world) args.push('w');
+        proofs.push(isVoid
+          ? `  { final w = ${wInit}; ${name}(${args.join(', ')}); final r = w; assert(${ex[1]}, '${id} #${j}'); }`
+          : `  { ${need.world ? `final w = ${wInit}; ` : ''}final r = ${name}(${args.join(', ')}); assert(${ex[1]}, '${id} #${j}'); }`);
+      });
+    }
+    const header = `// 🧩 חולל ע"י behavior-compose --plan (up-compose · הכרעה-30): צרכים-חיצוניים ⇒ התנהגויות מחלקיקים מוכחים. אל תערוך ידנית.\n// מקור: ${path.relative(R.ROOT, path.resolve(planPath))} · ${fns.length} מוכחים · ${skipped.length} ∅ (${skipped.join(', ') || '—'})\n`;
+    fs.mkdirSync(outDir, { recursive: true });
+    fs.writeFileSync(outAbs, header + [...imports].join('\n') + '\n\n' + fns.join('\n\n') + '\n');
+    const proofPath = outAbs.replace(/\.dart$/, '_proof.dart');
+    fs.writeFileSync(proofPath, `// 🧩 הוכחת-ההרכבה (חוללה): כל דוגמה מהחוזה ⇒ assert · dart run --enable-asserts\nimport '${path.basename(outAbs)}';\n\nvoid main() {\n${proofs.join('\n')}\n  print('✓ ${proofs.length} דוגמאות · ${fns.length} התנהגויות');\n}\n`);
+    console.log(`🧩 ${path.relative(R.ROOT, outAbs)} · ${fns.length} התנהגויות מוכחות (${[...names.values()].join(', ')}) · ∅ ${skipped.length} · הוכחה: ${path.relative(R.ROOT, proofPath)} (${proofs.length} דוגמאות)`);
+    process.exit(0);
+  }
+}
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const P = readPlan();
 const files = [...new Set(Object.values(P).filter((p) => p.pick).flatMap((p) => p.chain ? p.chain.map((x) => x.file) : [p.file]))].sort();   // הכרעה-20ב · שרשרת = שני קבצים

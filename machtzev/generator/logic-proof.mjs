@@ -28,12 +28,15 @@ export function proveCandidates(id, cands, examples, extraImports = [], env = {}
   const out = {}; for (const c of pure) { const r = proveFile(id + '__' + c.id, [c], examples, extraImports, env); out[c.id] = r.error ? { ok: 0, total: examples.length, error: r.error } : (r[c.id] || { ok: 0, total: examples.length }); }
   return out;
 }
+/** up-compose · עץ-חיווט ⇒ ביטוי-Dart + ייבואים (up-sockets: p=פרמטר · c=ליטרל · t=שעון(now) · h=אדם · w=עולם · g=שומר-סף · f=תקע-למבדה · a=אטום).
+ *  אותו מיפוי משמש את רתמת-ההוכחה ואת שכבת-ההרכבה — עותק אחד. `rel(file)` = נתיב-ייבוא יחסי מהקובץ הפולט. */
+export function treeDart(root, i, rel) { const imports = []; let k = 0; const walk = (v) => { if (v.k === 'p') return `p${v.i}`; if (v.k === 'c') return v.dart; if (v.k === 't') return 'now'; if (v.k === 'h') return v.name; if (v.k === 'w') return 'w'; if (v.k === 'g') return `if (${walk(v.pred)}) { ${walk(v.body)}; }`; const idx = k++; imports.push(`import '${rel(v.file)}' as c${i}_${idx};`); if (v.k === 'f') { const xs = Array.from({ length: v.m }, (_, j) => `x${idx}_${j}`); return `(${xs.join(', ')}) => c${i}_${idx}.${v.id}(${xs.concat(v.args.map(walk)).join(', ')})`; } const inner = v.args.map(walk).join(', '); return `c${i}_${idx}.${v.id}(${inner})`; }; return { imports, expr: walk(root) }; }
 function proveFile(id, pure, examples, extraImports, env = {}) {
   if (!DART) return { error: 'tool=dart' };   // אין בינארי Dart ⇒ סמן במפורש (לא מחרוזת ריקה) — הבורר יידע שלא הוכח, לא ש"נכשל"
   const dir = path.join(HERE, '.prove'); fs.mkdirSync(dir, { recursive: true });
   const rel = (f) => path.relative(dir, path.join(R.NEW, f)).split(path.sep).join('/');
   // up-chain3 · עץ-הרכבה: לכל מועמד-עץ, לכל צומת-אטום קידומת ייחודית c{i}_{k}; הביטוי משתמש בפרמטרי-הצורך p0..pn (למבדה) ובקריאות-הצמתים
-  const treeParts = (root, i) => { const imports = []; let k = 0; const walk = (v) => { if (v.k === 'p') return `p${v.i}`; if (v.k === 'c') return v.dart; if (v.k === 't') return 'now'; if (v.k === 'h') return v.name; if (v.k === 'w') return 'w'; if (v.k === 'g') return `if (${walk(v.pred)}) { ${walk(v.body)}; }`; const idx = k++; imports.push(`import '${rel(v.file)}' as c${i}_${idx};`); if (v.k === 'f') { const xs = Array.from({ length: v.m }, (_, j) => `x${idx}_${j}`); return `(${xs.join(', ')}) => c${i}_${idx}.${v.id}(${xs.concat(v.args.map(walk)).join(', ')})`; } const inner = v.args.map(walk).join(', '); return `c${i}_${idx}.${v.id}(${inner})`; }; return { imports, expr: walk(root) }; };   // up-fnsocket · צומת 'f' = תקע-למבדה · צומת 'c' = ליטרל-שקע
+  const treeParts = (root, i) => treeDart(root, i, rel);
   const meta = pure.map((c, i) => c.tree ? treeParts(c.tree, i) : null);
   const imps = [...extraImports.map((f) => `import '${rel(f)}';`), ...pure.flatMap((c, i) => c.chain ? c.chain.map((q, k) => `import '${rel(q.file)}' as c${i}_${k};`) : c.tree ? meta[i].imports : [`import '${rel(c.file)}' as c${i};`])].join('\n');
   // up-sockets · הצהרות-סביבה לכל דוגמה: now (שקע-זמן) · <אדם> (שקע-אדם) · w (שקע-עולם). הדוגמה נושאת אותן ב-ex[2].
