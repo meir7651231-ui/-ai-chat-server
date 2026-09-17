@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:background="#04050A">
-    <WebView android:id="@+id/web" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
-    <ScrollView android:id="@+id/logWrap" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:visibility="gone" android:padding="16dp">
-        <TextView android:id="@+id/log" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="#EEF1FF" android:textSize="16sp" android:lineSpacingExtra="6dp" android:textDirection="rtl"/>
+    android:orientation="vertical" android:background="#04050A" android:layoutDirection="rtl">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="18dp" android:paddingEnd="18dp" android:paddingTop="14dp" android:paddingBottom="6dp">
+        <TextView android:id="@+id/brand" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="ליבה" android:textColor="#7DF9FF" android:textSize="30sp" android:textStyle="bold" android:contentDescription="ליבה"/>
+        <TextView android:id="@+id/dot" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="● מנותק" android:textColor="#5B6478" android:textSize="12sp" android:fontFamily="monospace"/>
+    </LinearLayout>
+    <WebView android:id="@+id/web" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:contentDescription="התחברות ל-claude.ai"/>
+    <ScrollView android:id="@+id/logWrap" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:visibility="gone" android:paddingStart="16dp" android:paddingEnd="16dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="משימות" android:textColor="#7DF9FF" android:textSize="20sp" android:paddingTop="6dp" android:paddingBottom="4dp"/>
+            <TextView android:id="@+id/tasks" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="#EEF1FF" android:textSize="15sp" android:lineSpacingExtra="5dp" android:background="#0E111A" android:padding="12dp" android:text="אין משימות פתוחות" android:contentDescription="לוח משימות"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="יומן" android:textColor="#7DF9FF" android:textSize="20sp" android:paddingTop="14dp" android:paddingBottom="4dp"/>
+            <TextView android:id="@+id/log" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="#EEF1FF" android:textSize="16sp" android:lineSpacingExtra="6dp" android:textDirection="rtl" android:contentDescription="יומן השיחה"/>
+        </LinearLayout>
     </ScrollView>
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="14dp" android:background="#0A0C16">
-        <TextView android:id="@+id/status" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="#9AA3B8" android:textSize="14sp" android:gravity="center"/>
+        <TextView android:id="@+id/status" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="#9AA3B8" android:textSize="14sp" android:gravity="center" android:contentDescription="מצב"/>
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:gravity="center">
-            <Switch android:id="@+id/hey" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="״ליבה״ – מילת הפעלה  " android:textColor="#EEF1FF" android:textSize="15sp" android:layout_marginEnd="18dp"/>
-            <Switch android:id="@+id/conv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="מצב שיחה  " android:textColor="#EEF1FF" android:textSize="15sp"/>
+            <Switch android:id="@+id/hey" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="״ליבה״ – מילת הפעלה  " android:textColor="#EEF1FF" android:textSize="15sp" android:layout_marginEnd="18dp" android:contentDescription="מילת הפעלה"/>
+            <Switch android:id="@+id/conv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="מצב שיחה  " android:textColor="#EEF1FF" android:textSize="15sp" android:contentDescription="מצב שיחה"/>
         </LinearLayout>
-        <Button android:id="@+id/toggle" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="הפעל בועה" android:textSize="18sp" android:backgroundTint="#7DF9FF" android:textColor="#04050A"/>
+        <Button android:id="@+id/toggle" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="הפעל בועה" android:textSize="18sp" android:backgroundTint="#7DF9FF" android:textColor="#04050A" android:contentDescription="הפעל או כבה את הבועה"/>
         <Button android:id="@+id/reveal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="הצג את הדף החי (דקה וחצי)" android:textSize="15sp" android:backgroundTint="#2C3140" android:textColor="#EEF1FF" android:visibility="gone"/>
         <Button android:id="@+id/update" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="יש גרסה חדשה – הורד" android:textSize="15sp" android:backgroundTint="#FFB454" android:textColor="#04050A" android:visibility="gone"/>
     </LinearLayout>

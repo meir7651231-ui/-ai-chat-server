@@ -39,6 +39,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         @Volatile var instance: BubbleService? = null
         @Volatile var status = "מתחיל…"
         const val CH = "liba"
+        @Volatile var tasksSummary = ""
+        @Volatile var pageOk = false
         val WAKE = listOf("ליבה", "ליבא", "ליבע", "לייבה", "היי ליבה", "הי ליבה")
     }
 
@@ -66,6 +68,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var bargeVad: VadGate? = null
     private var headsetBtn = false           // step 25: headset button = "דבר"
     private var mediaSession: android.media.session.MediaSession? = null
+    private var carMode = false                // step 35
     private var curSpeaker = "ליבה"          // step 37: bubble colour per speaker
     private var menu: android.widget.LinearLayout? = null // step 31: long-press menu
     private var listening = false
@@ -267,12 +270,12 @@ class BubbleService : Service(), LibaWeb.Bridge {
         bubble?.bringToFront(); bubble?.let { runCatching { wm.removeView(it); wm.addView(it, it.layoutParams) } }
     }
     private fun rebuildWeb() {
-        webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy(); web = null; pageReady = false
+        webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy(); web = null; pageReady = false; pageOk = false
         setupWeb(); showLabel("הדף קרס – טוען מחדש", 4000)
     }
     private fun reloadPage(why: String) {
         val now = SystemClock.elapsedRealtime(); if (now - lastReloadAt < 90000) return
-        lastReloadAt = now; pageReady = false; pageLoadedAt = now; status = "טוען מחדש ($why)"
+        lastReloadAt = now; pageReady = false; pageOk = false; pageLoadedAt = now; status = "טוען מחדש ($why)"
         web?.reload()
     }
     private val watchdog = object : Runnable { override fun run() {
@@ -325,12 +328,12 @@ class BubbleService : Service(), LibaWeb.Bridge {
         pulse = ObjectAnimator.ofFloat(d, "scaleX", 1f, to).apply { duration = ms; repeatMode = ValueAnimator.REVERSE; repeatCount = ValueAnimator.INFINITE; addUpdateListener { d.scaleY = d.scaleX }; start() }
     }
     private fun setupBubble() {
-        val root = FrameLayout(this); val size = dp(62f).toInt()
+        val root = FrameLayout(this); val sw = resources.configuration.smallestScreenWidthDp; val size = dp(if (sw >= 600) 78f else 62f).toInt() // step 40: bigger on tablets / unfolded
         val d = TextView(this).apply {
             text = "ל"; setTextColor(Color.parseColor("#04050A")); textSize = 26f; gravity = Gravity.CENTER
             background = GradientDrawable().apply { shape = GradientDrawable.OVAL; gradientType = GradientDrawable.RADIAL_GRADIENT; gradientRadius = dp(40f)
                 setColors(intArrayOf(Color.WHITE, Color.parseColor("#7DF9FF"), Color.parseColor("#8A5CFF"))); setStroke(dp(1f).toInt(), Color.parseColor("#66FFFFFF")) }
-            elevation = dp(8f)
+            elevation = dp(8f); contentDescription = "ליבה. לחיצה: דבר. לחיצה ארוכה: תפריט"; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
         }
         val l = TextView(this).apply {
             setTextColor(Color.WHITE); textSize = 15f; setPadding(dp(14f).toInt(), dp(8f).toInt(), dp(14f).toInt(), dp(8f).toInt()); maxWidth = dp(250f).toInt()
@@ -489,7 +492,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
             n in listOf("בטל מצב לילה", "סיים מצב לילה", "עם קול", "תדברי", "תדבר") -> { night = false; Prefs.setNight(this, false); speak("חזרתי לדבר."); return }
             n in listOf("תני להפריע", "תן להפריע", "אפשר להפריע לך") -> { bargeIn = true; Prefs.setBarge(this, true); speak("בסדר, אפשר להפריע לי באמצע."); return }
             n in listOf("אל תני להפריע", "אל תן להפריע", "בלי הפרעות באמצע") -> { bargeIn = false; Prefs.setBarge(this, false); bargeVad?.stop(); bargeVad = null; speak("בסדר, בלי הפרעות באמצע."); return }
-            n in listOf("אוזניות", "כפתור אוזניה", "מצב אוזניות", "מצב רכב") -> { headsetBtn = true; Prefs.setHeadset(this, true); setupMediaSession(); speak("כפתור האוזניה עכשיו אומר דבר."); return }
+            n in listOf("מצב רכב", "אני נוהג", "נוהג") -> { headsetBtn = true; Prefs.setHeadset(this, true); setupMediaSession(); night = false; Prefs.setNight(this, false); carMode = true; label?.textSize = 22f; speak("מצב רכב. קול בלבד, כפתור האוזניה אומר דבר. תגיד בטל מצב רכב כשתגיע."); return }
+            n in listOf("בטל מצב רכב", "הגעתי", "סיימתי לנהוג") -> { carMode = false; label?.textSize = 15f; speak("יצאתי ממצב רכב."); return }
+            n in listOf("אוזניות", "כפתור אוזניה", "מצב אוזניות") -> { headsetBtn = true; Prefs.setHeadset(this, true); setupMediaSession(); speak("כפתור האוזניה עכשיו אומר דבר."); return }
             n in listOf("בלי אוזניות", "בטל אוזניות", "בטל מצב רכב") -> { headsetBtn = false; Prefs.setHeadset(this, false); setupMediaSession(); speak("כפתור האוזניה חזר למוזיקה."); return }
             n in listOf("בלי צלילים", "בטל צלילים") -> { tones = false; Prefs.setTones(this, false); speak("בלי צלילים."); return }
             n in listOf("עם צלילים", "החזר צלילים") -> { tones = true; Prefs.setTones(this, true); speak("עם צלילים."); return }
@@ -523,12 +528,12 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (!pageReady) showLabel(status, 5000)
         web?.let { LibaWeb.hello(it) }
     } }
-    override fun onReady() { main.post { if (!pageReady) { pageReady = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
+    override fun onReady() { main.post { if (!pageReady) { pageReady = true; pageOk = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } } } } }
     fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) {}; listening = false }; unmuteSystem() }
     override fun onCmd(cmd: String) { main.post { when (cmd) { "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "reload" -> main.postDelayed({ web?.reload() }, 1500) } } }
     override fun onCrashSaved(id: String) { main.post { Prefs.clearCrash(this); showLabel("דוח הקריסה נשלח לליבה", 4000) } }
-    override fun onTasks(summary: String, n: Int, blocked: Int) { main.post { taskSummary = summary; taskBlocked = blocked; if (n > 0) status = "מחובר · $n משימות" + (if (blocked > 0) " · $blocked מחכות לך" else "") } }
+    override fun onTasks(summary: String, n: Int, blocked: Int) { tasksSummary = summary; main.post { taskSummary = summary; taskBlocked = blocked; if (n > 0) status = "מחובר · $n משימות" + (if (blocked > 0) " · $blocked מחכות לך" else "") } }
     override fun onPageTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
     override fun onSent(text: String) { main.post { tone("sent"); status = "נשלח, מחכה לתשובה…"; setState(State.IDLE); showLabel("נשלח. מחכה…", 30000); armWaitReminders(); if (heyOn) wakeLoop() } }
     override fun onError(text: String, reason: String) { main.post { sentAt = 0
