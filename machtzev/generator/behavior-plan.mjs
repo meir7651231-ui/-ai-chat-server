@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { catalog } from './auto-logic.mjs';
-import { proveCandidates, isPure } from './logic-proof.mjs';
+import { proveCandidates, isPure, buildInterp, evalInterp } from './logic-proof.mjs';
 import * as R from '../root.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(HERE, 'behavior-plan.json');
@@ -83,40 +83,167 @@ const normT = (t) => { const s = norm(t); return NUMT.test(s) ? 'num' : s; };
 const STANDALONE = new Map();
 const compilableStandalone = (file) => { if (STANDALONE.has(file)) return STANDALONE.get(file); let ok = false; try { ok = !/^\s*part\s+(?:of\b|['"])/m.test(fs.readFileSync(path.join(R.NEW, file), 'utf8')); } catch {} STANDALONE.set(file, ok); return ok; };
 const tmatchT = (a, b) => { const x = normT(a), y = normT(b); return x === y || x === 'dynamic' || y === 'dynamic'; };
-const exprId = (v) => v.k === 'p' ? `p${v.i}` : `${v.id}(${v.args.map(exprId).join(',')})`;   // מזהה-עץ קנוני: formatIsraeliPhone(normPhone(p0))
-const treeAtoms = (v) => v.k === 'p' ? [] : [v, ...v.args.flatMap(treeAtoms)];
+// up-fnsocket · שני סוגי-צומת נוספים: {k:'c',dart,type} = שקע-דאטה מהצורך (ליטרל, למשל שם-שדה) · {k:'f',id,file,m,args} = **שקע-פונקציה**:
+//   חלקיק שנתקע לפרמטר מטיפוס-פונקציה כלמבדה `(x0..x_{m-1}) => g(x0.., <args-קבועים>)` — אותו עיקרון של שקע-ערך, על סוג-שקע נוסף (חוק-3 של המחצב).
+// up-sockets · צמתים נוספים (הכרעת-בעלים "כולם במכה אחת"): {k:'t'} שקע-זמן (now מהסביבה) · {k:'h',name,type} שקע-אדם (ערך מאדם; חסר ⇒ ∅ לא 0) ·
+//   {k:'w'} שקע-עולם (יומן-אפקטים מוזרק — אפקט מוכח דרך מה שנכתב בו) · {k:'g',pred,body} שומר-סף (פרדיקט שחוסם אפקט) · reuse: פרמטר פעמיים (גרף, לא עץ) ·
+//   entity: שקע-סכמה (שמות-שדות מ-shape-ops.json, לא מהיד) · routine: שקע-רוטינה (מטא-דאטה לקופסה, לא מוכח בריצה).
+const exprId = (v) => v.k === 'p' ? `p${v.i}` : v.k === 'c' ? v.dart : v.k === 't' ? 'now' : v.k === 'h' ? `?${v.name}` : v.k === 'w' ? 'w' : v.k === 'g' ? `if(${exprId(v.pred)}){${exprId(v.body)}}` : v.k === 'f' ? `λ${v.id}(${Array.from({ length: v.m }, (_, j) => '_').concat(v.args.map(exprId)).join(',')})` : `${v.id}(${v.args.map(exprId).join(',')})`;   // מזהה-עץ קנוני: whereList(p0,λfieldIsNull(_,'owner'))
+const treeAtoms = (v) => (v.k === 'p' || v.k === 'c' || v.k === 't' || v.k === 'h' || v.k === 'w') ? [] : v.k === 'g' ? [...treeAtoms(v.pred), ...treeAtoms(v.body)] : [v, ...v.args.flatMap(treeAtoms)];
+const SHAPE_OPS = (() => { try { return JSON.parse(fs.readFileSync(path.join(HERE, 'shape-ops.json'), 'utf8')).entities; } catch { return []; } })();
+const schemaKeys = (entity) => { const e = SHAPE_OPS.find((x) => x.entity === entity); return e ? e.perField.map((f) => ({ dart: `'${f.field}'`, type: 'String', field: f.field })) : []; };   // שקע-סכמה
+const leafKinds = (v) => v.k === 'a' || v.k === 'f' ? v.args.flatMap(leafKinds) : v.k === 'g' ? [...leafKinds(v.pred), ...leafKinds(v.body)] : [v.k];
+const FNT = /^(.+?)\s+Function\((.*)\)$/;   // 'bool Function(dynamic)' ⇒ {ret:'bool', params:['dynamic']}
+const parseFnT = (t) => { const m = stripName(String(t || '')).replace(/\?$/, '').trim().match(FNT); return m ? { ret: m[1].trim(), params: m[2].trim() ? m[2].split(',').map((x) => x.trim().split(/\s+/)[0]) : [] } : null; };   // stripName מקלף שם-פרמטר בלי למחוק רווחים (norm היה נותן 'boolFunction(dynamic)')
 // עץ = B(A(p0..p_{n-1})) — שורש-אונרי על אטום-שצורך-את-כל-הפרמטרים-בסדר ⇒ נשמר בצורת-שרשרת-מדור (id 'B∘A', שדה chain) לתאימות-לאחור מלאה
 const isLegacyChain = (root, P) => root.k === 'a' && root.args.length === 1 && root.args[0].k === 'a' && root.args[0].args.length === P.length && root.args[0].args.every((a, i) => a.k === 'p' && a.i === i);
-const toCandidate = (root, P, nodes) => {
-  const sumArgc = treeAtoms(root).reduce((s, n) => s + n.args.length, 0);
-  if (isLegacyChain(root, P)) { const B = root, A = root.args[0]; return { id: `${B.id}∘${A.id}`, file: A.file, chain: [{ id: A.id, file: A.file }, { id: B.id, file: B.file }], tree: null, nodes, sumArgc }; }
-  return { id: exprId(root), file: treeAtoms(root)[0].file, chain: null, tree: root, argc: P.length, nodes, sumArgc };
+const toCandidate = (root, P, nodes, isVoid = false) => {
+  const sumArgc = treeAtoms(root).reduce((s, n) => s + n.args.filter((a) => a.k !== 'c').length, 0);
+  if (root.k === 'g') return { id: exprId(root), file: treeAtoms(root)[0].file, chain: null, tree: root, argc: P.length, nodes, sumArgc, root, isVoid: true };   // ליטרל-שקע אינו ארגומנט-מחושב
+  if (isLegacyChain(root, P)) { const B = root, A = root.args[0]; return { id: `${B.id}∘${A.id}`, file: A.file, chain: [{ id: A.id, file: A.file }, { id: B.id, file: B.file }], tree: null, nodes, sumArgc, root }; }
+  return { id: exprId(root), file: treeAtoms(root)[0].file, chain: null, tree: root, argc: P.length, nodes, sumArgc, root, isVoid };
 };
 // מונה עצים בעלי בדיוק exactNodes צמתים-אטום, שצורכים את **כל** פרמטרי-הצורך פעם-אחת-משמאל-לימין ומחזירים את טיפוס-ההחזרה — מועמדות-לפי-טיפוס בלבד (בלי מילים)
-function enumTrees(pureRows, need, exactNodes, cap) {
-  const P = need.params, T = need.ret;
+function enumTrees(pureRows, need, exactNodes, cap, partial = false) {   // partial: מותר לצרוך תת-קבוצה של הפרמטרים (לשומר-סף: pred+body יחד מכסים)
+  const P = need.params, T = need.ret; const isVoid = normT(T) === 'void';
   const usable = pureRows.filter((c) => c.argc >= 1 && normT(c.ret) !== 'void');
+  const effects = pureRows.filter((c) => c.argc >= 1 && normT(c.ret) === 'void');   // שורשי-אפקט (צורך-void עם שקע-עולם)
   const byRet = new Map(); for (const c of usable) { const k = normT(c.ret); if (!byRet.has(k)) byRet.set(k, []); byRet.get(k).push(c); }
   const atomsByRet = (want) => { const w = normT(want); return w === 'dynamic' ? usable : (byRet.get(w) || []).concat(byRet.get('dynamic') || []); };
   const results = []; const seen = new Set(); let overflow = false;
+  const CONSTS = [...(need.consts || []).map((c) => typeof c === 'string' ? { dart: c, type: /^'/.test(c) ? 'String' : /^-?\d/.test(c) ? 'num' : /^(true|false)$/.test(c) ? 'bool' : 'dynamic' } : c), ...(need.entity ? schemaKeys(need.entity) : [])];   // שקע-סכמה: שמות-השדות של הישות
+  // שקע-פונקציה: want='R Function(A..)' ⇒ כל חלקיק g עם ret~R ו-m הפרמטרים הראשונים ~A..; השאר (אם יש) נקשרים משקעי-הדאטה של הצורך לפי טיפוס. צומת אחד.
+  function* innerPlugs(want) {   // תקע-מקונן: חלקיק שכל פרמטריו הם פרמטרי-הלמבדה (m) — ללא ליטרלים, ללא קינון-נוסף
+    const ft = parseFnT(want); if (!ft) return;
+    for (const g of usable) { const m = ft.params.length; if (g.argc !== m || !tmatchT(g.ret, ft.ret)) continue; if (!ft.params.every((t, j) => tmatchT(g.params[j], t))) continue; yield { k: 'f', id: g.id, file: g.file, m, args: [] }; }
+  }
+  function* lambdas(want) {
+    const ft = parseFnT(want); if (!ft) return;
+    for (const g of usable) {
+      const m = ft.params.length; if (g.argc < m || !tmatchT(g.ret, ft.ret)) continue;
+      if (!ft.params.every((t, j) => tmatchT(g.params[j], t))) continue;
+      const rest = g.params.slice(m);
+      // פרמטר-נותר מטיפוס-פונקציה ⇒ תקע-מקונן (חלקיק-יחיד, בלי המשך-קינון); אחרת ליטרל-שקע מהצורך
+      const opts = rest.map((t) => parseFnT(t) ? [...innerPlugs(t)] : CONSTS.filter((c) => tmatchT(c.type, t)).map((c) => ({ k: 'c', dart: c.dart, type: c.type })));
+      if (opts.some((o) => !o.length)) continue;
+      const combos = opts.reduce((acc, o) => acc.flatMap((a) => o.map((c) => [...a, c])), [[]]);
+      for (const args of combos) yield { k: 'f', id: g.id, file: g.file, m, args };
+    }
+  }
   function* gen(want, cursor, budget) {
     if (cursor < P.length && tmatchT(P[cursor], want)) yield { value: { k: 'p', i: cursor }, cursor: cursor + 1, used: 0 };
+    if (need.reuse) for (let i = 0; i < cursor; i++) if (tmatchT(P[i], want)) yield { value: { k: 'p', i }, cursor, used: 0 };   // שימוש-חוזר: פרמטר שכבר נצרך (גרף)
+    if (need.clock && tmatchT(need.clock.type || 'String', want)) yield { value: { k: 't' }, cursor, used: 0 };   // שקע-זמן
+    for (const h of need.human || []) if (tmatchT(h.type, want)) yield { value: { k: 'h', name: h.name, type: h.type }, cursor, used: 0 };   // שקע-אדם
+    if (need.world && tmatchT(need.world.type, want)) yield { value: { k: 'w' }, cursor, used: 0 };   // שקע-עולם
+    if (parseFnT(want)) { if (budget >= 1) for (const f of lambdas(want)) yield { value: f, cursor, used: 1 }; return; }   // פרמטר-פונקציה: רק תקע-למבדה (לא ערך)
     if (budget >= 1) for (const C of atomsByRet(want)) yield* fill(C, 0, cursor, budget - 1, [], 0);
   }
   function* fill(C, ai, cursor, budgetRemain, acc, usedAcc) {
     if (ai === C.argc) { yield { value: { k: 'a', id: C.id, file: C.file, args: acc }, cursor, used: 1 + usedAcc }; return; }
     for (const sub of gen(C.params[ai], cursor, budgetRemain)) yield* fill(C, ai + 1, sub.cursor, budgetRemain - sub.used, [...acc, sub.value], usedAcc + sub.used);
   }
-  for (const r of gen(T, 0, exactNodes)) {
-    if (r.cursor !== P.length || r.used !== exactNodes) continue;
+  const rootGen = isVoid ? (function* () { for (const E of effects) yield* fill(E, 0, 0, exactNodes - 1, [], 0); })() : gen(T, 0, exactNodes);   // צורך-void: השורש הוא אפקט
+  for (const r of rootGen) {
+    if ((!partial && r.cursor !== P.length) || r.used !== exactNodes) continue;
     const id = exprId(r.value); if (seen.has(id)) continue; seen.add(id);
-    results.push(toCandidate(r.value, P, exactNodes));
+    results.push(toCandidate(r.value, P, exactNodes, isVoid));
     if (results.length >= cap) { overflow = true; break; }
   }
   return { results, overflow };
 }
 
-export function plan({ prove = true, needs = NEEDS } = {}) {   // needs: ברירת-המחדל = NEEDS הקשיח; planNeeds מזין צרכים חיצוניים על אותו מנגנון בדיוק
+
+// ══════════════════════════════════════════════════════════════════════════════
+// up-values · חיפוש-מונחה-ערכים («המנוע יודע מה הוא מחפש»): synth.mjs נותן את העיקרון (חזית של ערכי-ביניים, dedup לפי ערך,
+//   זכייה כשהערכים שווים לתשובה) · behavior-plan נותן עצים-רב-ארגומנטיים ואת כל השקעים · logic-proof (values) נותן את הערכים ב-Dart.
+//   קדימה: כל חלקיק רץ על ערכי-הדוגמאות פעם אחת (אצווה) ⇒ ערכי-ביניים; שתי הבעות עם אותם ערכים = אותו דבר (נשארת הזולה).
+//   אחורה: טיפוס-ביניים שאינו יכול להגיע לטיפוס-התשובה בצעדים שנותרו — נזרק (reach). ההוכחה = אותה ריצה. אפס מילים.
+// ══════════════════════════════════════════════════════════════════════════════
+const SEP = String.fromCharCode(1);
+const cvOf = (d) => { const s = String(d).trim(); if (/^'.*'$/.test(s)) return s.slice(1, -1).replace(/\\'/g, "'"); if (/^-?\d+(\.\d+)?$/.test(s)) return +s; if (s === 'true') return true; if (s === 'false') return false; if (s === 'null') return null; return s; };   // ליטרל-Dart ⇒ ערך לפרשן
+export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLevel = +(process.env.BP_CAPV || 4000) } = {}) {
+  const P = need.params, R = need.ret; const isVoid = normT(R) === 'void';
+  const usable = pureRows.filter((c) => c.argc >= 1 && normT(c.ret) !== 'void');
+  const effects = isVoid ? pureRows.filter((c) => c.argc >= 1 && normT(c.ret) === 'void') : [];
+  const CONSTS = [...(need.consts || []).map((c) => typeof c === 'string' ? { dart: c, type: /^'/.test(c) ? 'String' : /^-?\d/.test(c) ? 'num' : /^(true|false)$/.test(c) ? 'bool' : 'dynamic' } : c), ...(need.entity ? schemaKeys(need.entity) : [])];
+  // עלים: פרמטרים · ליטרלים/סכמה · זמן · אדם · עולם
+  const leaves = [...P.map((t, i) => ({ node: { k: 'p', i }, type: t, nodes: 0, cost: 0, ps: [i] })),
+    ...CONSTS.map((c) => ({ node: { k: 'c', dart: c.dart, type: c.type, cv: cvOf(c.dart) }, type: c.type, nodes: 0, cost: 0, ps: [] })),
+    ...(need.clock ? [{ node: { k: 't' }, type: need.clock.type || 'String', nodes: 0, cost: 0, ps: [] }] : []),
+    ...(need.human || []).map((h) => ({ node: { k: 'h', name: h.name, type: h.type }, type: h.type, nodes: 0, cost: 0, ps: [] })),
+    ...(need.world ? [{ node: { k: 'w' }, type: need.world.type, nodes: 0, cost: 0, ps: [] }] : [])];
+  // תקעי-למבדה לפרמטר-פונקציה (שקע-פונקציה): חלקיק-יחיד + ליטרלים/תקע-מקונן לפרמטרים הנותרים
+  const plugMemo = new Map(); const PLUG_CAP = +(process.env.BP_PLUGS || 1500); const PLUG_PER = 40;   // תקרה גלובלית + תקרה פר-חלקיק (שקע-סכמה: 17 מפתחות × חלקיק)
+  const plugsFor = (want) => { if (plugMemo.has(want)) return plugMemo.get(want); const ft = parseFnT(want); if (!ft) return []; const out = [];
+    const inner = (w2) => { const f2 = parseFnT(w2); if (!f2) return []; return usable.filter((g) => g.argc === f2.params.length && tmatchT(g.ret, f2.ret) && f2.params.every((t, j) => tmatchT(g.params[j], t))).map((g) => ({ k: 'f', id: g.id, file: g.file, m: g.argc, args: [] })); };
+    for (const g of usable) { const m = ft.params.length; if (g.argc < m || !tmatchT(g.ret, ft.ret) || !ft.params.every((t, j) => tmatchT(g.params[j], t))) continue;
+      const opts = g.params.slice(m).map((t) => parseFnT(t) ? inner(t) : CONSTS.filter((c) => tmatchT(c.type, t)).map((c) => ({ k: 'c', dart: c.dart, type: c.type, cv: cvOf(c.dart) })));
+      if (opts.some((o) => !o.length)) continue;
+      let pc = [[]]; for (const o of opts) { const nx = []; for (const a of pc) { for (const c of o.slice(0, 60)) { nx.push([...a, c]); if (nx.length >= 200) break; } if (nx.length >= 200) break; } pc = nx; }   // מכפלה חסומה — לא flatMap על מאות×מאות
+      let per = 0; for (const args of pc) { out.push({ node: { k: 'f', id: g.id, file: g.file, m, args }, type: want, nodes: 1, cost: 0, ps: [] }); if (++per >= PLUG_PER) break; } if (out.length > PLUG_CAP * 4) break; }
+    out.sort((a, b) => (exprId(a.node) < exprId(b.node) ? -1 : 1)); const capped = out.slice(0, PLUG_CAP); plugMemo.set(want, capped); return capped; };
+  // הישג-לאחור: אילו טיפוסים מגיעים לטיפוס-התשובה ב-k צעדים (dynamic מגיע לכל דבר)
+  const reach = [new Set([normT(R)])]; for (let k = 1; k <= maxDepth; k++) { const s = new Set(reach[k - 1]); for (const g of usable) if (s.has(normT(g.ret)) || s.has('dynamic')) for (const t of g.params) s.add(normT(t)); reach.push(s); }
+  const canReach = (type, left) => left >= 0 && (normT(type) === 'dynamic' || reach[Math.min(left, maxDepth)].has(normT(type)) || reach[Math.min(left, maxDepth)].has('dynamic'));
+  // סדר-מבני (אפס מילים): כיסוי-פרמטרים גדול קודם (הצורך חייב לצרוך את כולם) ⇒ טיפוס-שורש שמתאים לתשובה ⇒ פחות צמתים ⇒ עלות ⇒ id
+  const cov = (x) => (x.ps || []).length; const hitsR = (x) => normT(x.type) === normT(R) ? 0 : tmatchT(x.type, R) ? 1 : 2;   // התאמה מדויקת לטיפוס-התשובה לפני dynamic
+  const idOf = (x) => x.id || (x.id = exprId(x.node));
+  const byCost = (a, b) => (cov(b) - cov(a)) || (hitsR(a) - hitsR(b)) || (a.nodes - b.nodes) || (a.cost - b.cost) || (idOf(a) < idOf(b) ? -1 : 1);
+  let pool = leaves.slice(); let fresh = leaves.slice(); const seenSig = new Set(); const proof = {}; let evaluated = 0; const allCands = []; const effectExprs = [];   // effectExprs: עצי-אפקט שהוערכו (לשומר-סף)
+  const interp = buildInterp(need.__id || 'need', pureRows, need.examples, ENV, need.imports || []);   // לקמפל פעם אחת: כל המדף + הדוגמאות + הפרשן
+  const DBG0 = !!process.env.BP_DEBUG; if (DBG0) console.error('[values] interp', interp.error ? 'ERROR ' + interp.error : `compiled ${((interp.compileMs || 0) / 1000).toFixed(1)}s`);
+  const DBG = !!process.env.BP_DEBUG; const dbg = (...a) => { if (DBG) console.error('[values]', ...a); };
+  dbg('start', need.__id, 'usable', usable.length, 'leaves', leaves.length);
+  for (let depth = 1; depth <= maxDepth; depth++) {
+    const exprs = []; const roots = isVoid ? [...usable, ...effects] : usable; dbg('depth', depth, 'pool', pool.length, 'fresh', fresh.length);
+    for (const g of roots) {
+      const left = maxDepth - depth; if (normT(g.ret) !== 'void' && !canReach(g.ret, left) && !tmatchT(g.ret, R)) continue;
+      const slots = g.params.map((t) => parseFnT(t) ? plugsFor(t) : pool.filter((x) => tmatchT(x.type, t) && x.nodes + 1 <= maxDepth).slice(0, 1000));   // pool ממוין (כיסוי⇒עלות) ⇒ 1000 הראשונים; ההערכה זולה, הדדופ-לפי-ערך עושה את העבודה
+      if (slots.some((s) => !s.length)) continue;
+      // צירופים: לפחות ארגומנט אחד מהשכבה הטרייה (חוץ מעומק-1), סך-צמתים ≤ maxDepth; תקרה פר-חלקיק דטרמיניסטית
+      const COMBO_CAP = +(process.env.BP_COMBOS || 2000); const PROD = 20000;
+      // צירופים הוגנים-לעלות: מכפלה מלאה כשקטנה, אחרת כל שקע מקבל את N הזולים כך שהמכפלה ≤ PROD; ממוינים לפי עלות-כוללת ⇒ COMBO_CAP
+      let prod = slots.reduce((n, s) => n * s.length, 1); let sl = slots;
+      if (prod > PROD) { const n = Math.max(2, Math.floor(Math.pow(PROD, 1 / slots.length))); sl = slots.map((s) => s.slice(0, n)); }
+      let combos = [[]]; for (const s of sl) combos = combos.flatMap((a) => s.map((x) => [...a, x]));
+      const ccov = (c) => new Set(c.flatMap((x) => x.ps || [])).size; const ccost = (c) => c.reduce((n, x) => n + x.cost + x.nodes, 0);
+      combos.sort((a, b) => (ccov(b) - ccov(a)) || (ccost(a) - ccost(b))); if (combos.length > COMBO_CAP) combos.length = COMBO_CAP;   // כיסוי-פרמטרים קודם, אחר-כך עלות
+      for (const args of combos) { const nodes = 1 + args.reduce((n, x) => n + x.nodes, 0); if (nodes > maxDepth) continue;
+        if (depth > 1 && !args.some((x) => fresh.includes(x))) continue; if (depth === 1 && args.some((x) => x.nodes > 0 && x.node.k !== 'f')) continue;
+        const ps = [...new Set(args.flatMap((x) => x.ps))]; const node = { k: 'a', id: g.id, file: g.file, args: args.map((x) => x.node) };
+        exprs.push({ node, type: g.ret, nodes, cost: args.filter((x) => x.node.k !== 'c').length + args.reduce((n, x) => n + x.cost, 0), ps, isVoid: normT(g.ret) === 'void' });
+        if (exprs.length > capLevel * 3) { exprs.sort(byCost); exprs.length = capLevel; } } }   // גיזום-ביניים (id מחושב פעם אחת): לא מחזיקים מיליוני ביטויים בזיכרון
+    dbg('exprs', exprs.length); exprs.sort(byCost); const level = exprs.slice(0, capLevel); dbg('level', level.length);
+    const cands = level.map((e) => ({ id: idOf(e), file: treeAtoms(e.node)[0].file, chain: null, tree: e.node, argc: P.length, nodes: e.nodes, sumArgc: e.cost, root: e.node, isVoid: e.isVoid }));
+    let res = {}; if (!interp.error) { const ev = evalInterp(interp, cands.map((c) => ({ id: c.id, tree: c.tree, void: c.isVoid })), need.examples.length); if (ev.error) { if (DBG0) console.error('[values] eval error', ev.error); } else res = ev; }
+    if (interp.error || !Object.keys(res).length) { const VB = 120; for (let b = 0; b < cands.length; b += VB) Object.assign(res, proveFn(`${need.__id || 'need'}__v${depth}_b${b / VB}`, cands.slice(b, b + VB), need.examples, need.imports || [], { ...ENV, values: true })); }   // נפילה-לאחור: אצוות של 120
+    evaluated += cands.length; for (const [k, v] of Object.entries(res)) proof[k] = { ok: v.ok, total: v.total, unknown: v.unknown || 0 }; dbg('evaluated', cands.length, 'results', Object.keys(res).length);   // ערכי-הביניים משמשים רק לשכבה הזו (זיכרון)
+    const wins = []; fresh = [];
+    for (let i = 0; i < level.length; i++) { const e = level[i], r = res[cands[i].id]; if (!r) continue;
+      const covers = e.ps.length === P.length;
+      if (r.ok === r.total && covers && (isVoid ? e.isVoid : tmatchT(e.type, R))) wins.push(cands[i]);   // צורך-אפקט: רק עץ שהשורש שלו אפקט (w נבדק), לא ערך שבמקרה עובר את הבדיקה
+      if ((r.unknown || 0) === r.total) continue;   // כל התאים ∅ ⇒ אין ערך חי (ok=0 עם ערכים = חי, רק לא התשובה)
+      if (!r.vals || r.vals.every((v) => v === null)) continue;
+      const sig = normT(e.type) + '|' + r.vals.map((v) => String(v)).join(SEP); if (seenSig.has(sig)) continue; seenSig.add(sig);   // אותם ערכים = אותו דבר; נשארת הזולה
+      if (e.isVoid) { effectExprs.push({ ...e, r }); continue; } if (!canReach(e.type, maxDepth - depth - 1) && !tmatchT(e.type, R)) continue;
+      const item = { ...e, sig }; pool.push(item); fresh.push(item); }
+    pool.sort(byCost);
+    // שומר-סף (need.guard, צורך-אפקט): pred = ערך-בול מהמאגר (הוערך) · body = עץ-אפקט שהוערך ⇒ {k:'g'} ; יחד מכסים את כל הפרמטרים; הפרשן מריץ body רק כש-pred אמת
+    if (isVoid && need.guard && effectExprs.length) {
+      const preds = pool.filter((x) => normT(x.type) === 'bool' && x.nodes >= 0).slice(0, 300); const bodies = effectExprs.slice().sort(byCost).slice(0, 300);
+      const gs = []; for (const pr of preds) for (const bd of bodies) { const ps = [...new Set([...(pr.ps || []), ...(bd.ps || [])])]; if (ps.length !== P.length) continue; const node = { k: 'g', pred: pr.node, body: bd.node }; gs.push({ node, type: 'void', nodes: pr.nodes + bd.nodes, cost: pr.cost + bd.cost, ps, isVoid: true }); }
+      gs.sort(byCost); const glevel = gs.slice(0, capLevel);
+      const gc = glevel.map((e) => ({ id: idOf(e), file: treeAtoms(e.node)[0].file, chain: null, tree: e.node, argc: P.length, nodes: e.nodes, sumArgc: e.cost, root: e.node, isVoid: true }));
+      if (gc.length) { const gr = interp.error ? {} : evalInterp(interp, gc.map((c) => ({ id: c.id, tree: c.tree, void: true })), need.examples.length); if (!gr.error) { evaluated += gc.length; for (const [k, v] of Object.entries(gr)) proof[k] = { ok: v.ok, total: v.total, unknown: v.unknown || 0 }; for (let i = 0; i < gc.length; i++) { const v = gr[gc[i].id]; if (v && v.ok === v.total) wins.push(gc[i]); } dbg('guards', gc.length, 'wins', wins.length); } }
+    }
+    if (wins.length) { wins.sort((a, b) => (a.nodes - b.nodes) || (a.sumArgc - b.sumArgc) || (a.id < b.id ? -1 : 1)); return { pick: wins[0], wins, proof, evaluated, depth, cands: wins, overflow: exprs.length > capLevel }; }   // מחזירים רק את העצים שעברו (זיכרון)
+    if (!fresh.length) break;
+  }
+  return { pick: null, wins: [], proof, evaluated, depth: maxDepth, cands: [], overflow: false };
+}
+
+export function plan({ prove = true, needs = NEEDS, earlyExit = false, values = false } = {}) {   // values: חיפוש-מונחה-ערכים (צרכים חיצוניים); NEEDS: ללא שינוי   // earlyExit (צרכים חיצוניים): עוצרים את ההוכחה באצווה הראשונה שבה מועמד עבר-הכל (סדר דטרמיניסטי: sumArgc ⇒ id); NEEDS הקשיחים: תמיד ממצה (אפס-שינוי)   // needs: ברירת-המחדל = NEEDS הקשיח; planNeeds מזין צרכים חיצוניים על אותו מנגנון בדיוק
   const { rows, idf } = catalog();
   const out = {};
   const needsIds = Object.keys(needs);
@@ -130,16 +257,44 @@ export function plan({ prove = true, needs = NEEDS } = {}) {   // needs: ברי�
   const pureRows = rows.filter((c) => isPure(c.file) && compilableStandalone(c.file));   // עצים בלבד: אטומים טהורים **ומתקמפלים-לבד**
   const rowById = new Map(rows.map((r) => [r.id, r]));
   const BATCH = 120;   // אצוות-הוכחה: 120 מועמדים לקובץ-Dart כדי לא להתפוצץ בקומפילציה (המשטרה מודדת זמן בפלט)
-  const proveBatched = (id, cands, examples, imports) => { const out = {}; for (let i = 0; i < cands.length; i += BATCH) Object.assign(out, proveCandidates(`${id}__b${i / BATCH}`, cands.slice(i, i + BATCH), examples, imports)); return out; };
-  const CAP2 = 100000, CAP3 = 2000;   // עומק≤2: הכל (בפועל אלפים אחרי חסם-הסדר); עומק-3: תקרה דטרמיניסטית 2000
+  let ENV = {};   // up-sockets · סביבת-ההוכחה של הצורך הנוכחי: clock/human/world ⇒ המוכיח מצהיר now/<אדם>/w לכל דוגמה
+  const byCost = (arr) => arr.slice().sort((a, b) => ((a.sumArgc ?? a.argc ?? 0) - (b.sumArgc ?? b.argc ?? 0)) || (a.id < b.id ? -1 : 1));
+  const proveBatched = (id, cands, examples, imports) => { const out = {}; for (let i = 0; i < cands.length; i += BATCH) { Object.assign(out, proveCandidates(`${id}__b${i / BATCH}`, cands.slice(i, i + BATCH), examples, imports, ENV)); if (earlyExit && Object.values(out).some((r) => r && r.ok === r.total)) break; } return out; };
+  const CAP2 = 100000, CAP3 = +(process.env.BP_CAP3 || 2000);   // BP_CAP3: תקרת-עומק-3 ניתנת-לכיוונון (מדידה), ברירת-מחדל ללא שינוי   // עומק≤2: הכל (בפועל אלפים אחרי חסם-הסדר); עומק-3: תקרה דטרמיניסטית 2000
   const fullPass = (m) => Object.values(m).some((r) => r && r.ok === r.total);
   if (prove) { for (const id of needsIds) { const need = needs[id]; if (!need.examples) continue;
+      ENV = { clock: need.clock || null, human: need.human || [], world: need.world || null };
       const cands = candsOf(need);
       if (cands.length) proofs[id] = proveBatched(id, cands, need.examples, need.imports || []);
       const pf0 = proofs[id] || {}; if (fullPass(pf0)) continue;   // יחיד עבר ⇒ אין שרשור (יחיד תמיד גובר)
-      const d2 = enumTrees(pureRows, need, 2, CAP2);   // כל עצי-עומק-2 הקבילים-לפי-טיפוס
+      if (values) {   // up-values · חיפוש-מונחה-ערכים במקום מניית-כל-העצים (גם שומר-סף)
+        const vs = valueSearch({ ...need, __id: id }, pureRows, ENV, proveCandidates);
+        proofs[id] = { ...pf0, ...vs.proof };
+        chainsOf[id] = { admissible: vs.evaluated, depth: vs.depth, overflow: vs.overflow, values: true, cands: Object.fromEntries(vs.cands.map((c) => [c.id, { chain: null, tree: c.tree, nodes: c.nodes, sumArgc: c.sumArgc, score: 0 }])) };
+        continue;
+      }
+      const cap2 = need.reuse ? Math.min(CAP2, 5000) : CAP2;   // שימוש-חוזר מנפח את המרחב (כל שקע-num יכול לקבל p0) ⇒ תקרה דטרמיניסטית
+      const d2 = enumTrees(pureRows, need, 2, cap2);   // כל עצי-עומק-2 הקבילים-לפי-טיפוס
+      const isVoidNeed = normT(need.ret) === 'void';
+      if (isVoidNeed && need.world) d2.results = [...enumTrees(pureRows, need, 1, CAP2).results, ...d2.results];   // צורך-אפקט: גם אפקט-יחיד(פרמטרים, w) הוא עץ (אין לו יחיד-בחתימה כי w אינו פרמטר)
+      if (isVoidNeed && need.guard) {   // שומר-סף: pred (בול על תת-קבוצת-פרמטרים) × body (אפקט) — יחד מכסים את כל הפרמטרים; תקרה דטרמיניסטית
+        const boolNeed = { ...need, ret: 'bool', world: null, guard: false };
+        const preds = [...enumTrees(pureRows, boolNeed, 1, CAP2, true).results, ...enumTrees(pureRows, boolNeed, 2, CAP2, true).results].sort((a, b) => (a.sumArgc - b.sumArgc) || (a.id < b.id ? -1 : 1)).slice(0, 60);
+        const bodies = [...enumTrees(pureRows, { ...need, guard: false }, 1, CAP2, true).results, ...enumTrees(pureRows, { ...need, guard: false }, 2, CAP2, true).results].sort((a, b) => (a.sumArgc - b.sumArgc) || (a.id < b.id ? -1 : 1)).slice(0, 60);
+        const usedP = (root) => new Set(leafKinds(root).length ? JSON.stringify(root).match(/"k":"p","i":(\d+)/g)?.map((m) => +m.match(/\d+$/)[0]) || [] : []);
+        const gs = []; for (const pr of preds) for (const bd of bodies) { const u = new Set([...usedP(pr.root), ...usedP(bd.root)]); if (u.size !== need.params.length) continue; gs.push(toCandidate({ k: 'g', pred: pr.root, body: bd.root }, need.params, pr.nodes + bd.nodes, true)); }
+        d2.results = [...d2.results, ...gs];
+      }
+      d2.results = byCost(d2.results);   // סדר-הוכחה דטרמיניסטי: זול ⇒ יקר (earlyExit עוצר בזול-ביותר שעובר)
       let treeCands = d2.results, depthUsed = 2, overflow = d2.overflow;
       let cp = treeCands.length ? proveBatched(`${id}__d2`, treeCands, need.examples, need.imports || []) : {};
+      if (!fullPass(cp)) {   // up-fnsocket · עומק-3 **מבני** קודם: שורש-אונרי מעל עץ-עומק-2 (§20-ב «שלב כמה עד שהמטרה מושגת» — מה שהושג נעטף), memo לפי טיפוס-הפרמטר
+        const unary = pureRows.filter((u) => u.argc === 1 && normT(u.ret) !== 'void' && tmatchT(u.ret, need.ret) && compilableStandalone(u.file));
+        const subMemo = new Map(); const wraps = []; const seenW = new Set(d2.results.map((c) => c.id));
+        for (const U of unary) { const key = normT(U.params[0]); if (!subMemo.has(key)) subMemo.set(key, enumTrees(pureRows, { ...need, ret: U.params[0] }, 2, CAP2).results); for (const sub of subMemo.get(key)) { const c = toCandidate({ k: 'a', id: U.id, file: U.file, args: [sub.root] }, need.params, 3); if (!seenW.has(c.id)) { seenW.add(c.id); wraps.push(c); } } }
+        const wrapsSorted = wraps.sort((a, b) => (a.sumArgc - b.sumArgc) || (a.id < b.id ? -1 : 1)).slice(0, CAP3);
+        if (wrapsSorted.length) { const cw = proveBatched(`${id}__d3w`, wrapsSorted, need.examples, need.imports || []); treeCands = [...treeCands, ...wrapsSorted]; cp = { ...cp, ...cw }; depthUsed = 3; }
+      }
       if (!fullPass(cp)) {   // עומק-3 רק אם עומק-2 לא הניב מעבר-מלא — תקרה דטרמיניסטית: argc-כולל עולה ⇒ id לקסיקוגרפי, עד CAP3
         const d3 = enumTrees(pureRows, need, 3, CAP3 * 8);
         const sorted = d3.results.sort((a, b) => (a.sumArgc - b.sumArgc) || (a.id < b.id ? -1 : 1)).slice(0, CAP3);
@@ -163,12 +318,15 @@ export function plan({ prove = true, needs = NEEDS } = {}) {   // needs: ברי�
     const cands = [...singles, ...comps]
       .sort((x, y) => (y.proven - x.proven) || (y.ok - x.ok) || ((x.chain || x.tree ? 1 : 0) - (y.chain || y.tree ? 1 : 0)) || (x.nodes - y.nodes) || (x.sumArgc - y.sumArgc) || (y.score - x.score) || (x.exact === y.exact ? (x.id < y.id ? -1 : 1) : x.exact ? -1 : 1));
     const top = cands[0] || null; const ok = top && (pf.error ? top.score > 0 : top.proven);
-    out[id] = { shape: need.shape, pick: ok ? top.id : null, file: ok ? top.file : null, chain: ok && top.chain ? top.chain : null, tree: ok && top.tree ? top.tree : null, nodes: top ? top.nodes : 0, score: top ? top.score : 0, proven: !!(top && top.proven), candidates: singles.length, chainsAdmissible: chainsOf[id] ? chainsOf[id].admissible : 0, treeDepth: chainsOf[id] ? chainsOf[id].depth : 0, treeOverflow: chainsOf[id] ? !!chainsOf[id].overflow : false, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.ok}/${need.examples ? need.examples.length : 0}${c.proven ? '✓' : ''}:n${c.nodes}:a${c.sumArgc}:${c.score}`), proof: pf, chains: chainsOf[id] || null };
+    // שקע-ספק: מועמד שכל תאיו ok/∅ (אף כישלון) = ספק, לא כשל — מדווח, לא נבחר (§20-ג)
+    const doubt = Object.entries(pf).filter(([k, v]) => v && v.unknown > 0 && v.ok + v.unknown === v.total).map(([k]) => k).slice(0, 5);
+    const socketsUsed = ok && top.tree ? [...new Set(leafKinds(top.tree))].filter((k) => k !== 'p').map((k) => ({ c: 'literal', t: 'clock', h: 'human', w: 'world' })[k] || k).concat(top.tree.k === 'g' ? ['guard'] : []) : [];
+    out[id] = { shape: need.shape, routine: need.routine || null, doubt, sockets: socketsUsed, pick: ok ? top.id : null, file: ok ? top.file : null, chain: ok && top.chain ? top.chain : null, tree: ok && top.tree ? top.tree : null, nodes: top ? top.nodes : 0, score: top ? top.score : 0, proven: !!(top && top.proven), candidates: singles.length, chainsAdmissible: chainsOf[id] ? chainsOf[id].admissible : 0, treeDepth: chainsOf[id] ? chainsOf[id].depth : 0, treeOverflow: chainsOf[id] ? !!chainsOf[id].overflow : false, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.ok}/${need.examples ? need.examples.length : 0}${c.proven ? '✓' : ''}:n${c.nodes}:a${c.sumArgc}:${c.score}`), proof: pf, chains: chainsOf[id] || null };
   }
   return out;
 }
 /** צרכים-חיצוניים (JSON) על אותו plan() בדיוק — בלי לגעת ב-NEEDS הקשיח וב-behavior-plan.json. משמש --needs ואת סשני-החיבור. */
-export function planNeeds(needsObj, { prove = true } = {}) { return plan({ prove, needs: needsObj }); }
+export function planNeeds(needsObj, { prove = true, earlyExit = true, values = true } = {}) { return plan({ prove, needs: needsObj, earlyExit, values }); }   // צרכים חיצוניים: מונחה-ערכים כברירת-מחדל (--blind מחזיר למניית-עצים)   // צרכים חיצוניים: earlyExit כברירת-מחדל (--exhaustive מבטל)
 export function readPlan() { return JSON.parse(fs.readFileSync(OUT, 'utf8')); }
 /** למחולל: השם+הקובץ של הנבחר לצורך; צורך לא-פתור ⇒ זריקה (שקע-חובה ריק = פסילה, הכרעה-20ג) */
 export function pick(id) { const p = readPlan()[id]; if (!p || !p.pick) throw new Error(`behavior-plan: אין אטום לצורך ${id} — פסילה (לא כותבים ביד)`); return { name: p.pick, file: p.file, chain: p.chain || null }; }
@@ -181,7 +339,7 @@ if (isMain) {
     const needsPath = process.argv[ni + 1];
     if (!needsPath) { console.error('--needs דורש נתיב ל-JSON'); process.exit(2); }
     const needsObj = JSON.parse(fs.readFileSync(needsPath, 'utf8'));
-    const P = planNeeds(needsObj, { prove: true });
+    const P = planNeeds(needsObj, { prove: true, earlyExit: !process.argv.includes('--exhaustive'), values: !process.argv.includes('--blind') });
     const oi = process.argv.indexOf('--out');
     const json = JSON.stringify(P, null, 1) + '\n';
     if (oi >= 0 && process.argv[oi + 1]) fs.writeFileSync(process.argv[oi + 1], json); else process.stdout.write(json);

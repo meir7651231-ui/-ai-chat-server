@@ -1,0 +1,1 @@
+DONE · valueSearch (מונחה-ערכים, synth×behavior-plan) + רתמה-מקומפלת-פעם-אחת + 11/12 סוגי-שקע · psak 6 ב-86s (bochurLate מוכח) · records 4/4 ב-66s · sockets 1–7 מוכחים חוץ מ-human (דוגמאות חלשות) · --gate 43/43 · נותר: חוצה-שפה, נחיתת 58 חלקיקים, police

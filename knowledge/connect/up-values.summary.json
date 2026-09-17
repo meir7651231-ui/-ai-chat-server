@@ -1,0 +1,238 @@
+{
+ "psak": {
+  "psak.daysSince": {
+   "pick": "dayDiff",
+   "proven": true,
+   "evaluated": 27,
+   "passedAll": [
+    "cockpitDaysSince",
+    "dayDiff"
+   ],
+   "sockets": [],
+   "routine": null,
+   "doubtN": 5
+  },
+  "psak.over7": {
+   "pick": "gtNum",
+   "proven": true,
+   "evaluated": 41,
+   "passedAll": [
+    "cmpGtDyn",
+    "gtDyn",
+    "gtNum"
+   ],
+   "sockets": [],
+   "routine": null,
+   "doubtN": 5
+  },
+  "psak.bochurLate": {
+   "pick": "cmpGtDyn(cockpitDaysSince(p0,p1),p2)",
+   "proven": true,
+   "evaluated": 80004,
+   "passedAll": [
+    "cmpGtDyn(cockpitDaysSince(p0,p1),p2)",
+    "cmpGtDyn(p1,addDaysIso(p0,p2))",
+    "cmpGtStr(p1,addDaysIso(p0,p2))",
+    "cmpLtDyn(addDaysIso(p0,p2),p1)",
+    "cmpLtDyn(p2,cockpitDaysSince(p0,p1))",
+    "cmpLtStr(addDaysIso(p0,p2),p1)"
+   ],
+   "sockets": [],
+   "routine": null,
+   "doubtN": 5
+  },
+  "psak.noOwner": {
+   "pick": null,
+   "proven": false,
+   "evaluated": 51785,
+   "passedAll": [],
+   "sockets": [],
+   "routine": null,
+   "doubtN": 5
+  },
+  "psak.countNoOwner": {
+   "pick": "lengthList(popCall(p0))",
+   "proven": true,
+   "evaluated": 44997,
+   "passedAll": [
+    "lengthList(popCall(p0))"
+   ],
+   "sockets": [],
+   "routine": null,
+   "doubtN": 5
+  },
+  "psak.recordSignal": {
+   "pick": null,
+   "proven": false,
+   "evaluated": 0,
+   "passedAll": [],
+   "sockets": [],
+   "routine": null,
+   "doubtN": 0
+  }
+ },
+ "records": {
+  "psak.noOwner": {
+   "pick": "whereList(p0,λfieldPred(_,'owner',λexportAllowed(_)))",
+   "proven": true,
+   "evaluated": 19453,
+   "passedAll": [
+    "whereList(p0,λfieldPred(_,'owner',λexportAllowed(_)))",
+    "whereList(p0,λfieldPred(_,'owner',λfalsy(_)))"
+   ],
+   "sockets": [
+    "literal"
+   ],
+   "routine": null,
+   "doubtN": 5
+  },
+  "psak.countNoOwner": {
+   "pick": "lengthList(whereList(p0,λfieldPred(_,'owner',λexportAllowed(_))))",
+   "proven": true,
+   "evaluated": 59453,
+   "passedAll": [
+    "lengthList(whereList(p0,λfieldPred(_,'owner',λexportAllowed(_))))"
+   ],
+   "sockets": [
+    "literal"
+   ],
+   "routine": null,
+   "doubtN": 5
+  },
+  "psak.noOwnerNull": {
+   "pick": "whereList(p0,λfieldIsNull(_,'owner'))",
+   "proven": true,
+   "evaluated": 19453,
+   "passedAll": [
+    "whereList(p0,λfieldIsNull(_,'owner'))",
+    "whereList(p0,λfieldPred(_,'owner',λexportAllowed(_)))",
+    "whereList(p0,λfieldPred(_,'owner',λfalsy(_)))",
+    "whereList(p0,λfieldPred(_,'owner',λisNull(_)))"
+   ],
+   "sockets": [
+    "literal"
+   ],
+   "routine": null,
+   "doubtN": 5
+  },
+  "psak.countNoOwnerNull": {
+   "pick": "lengthList(whereList(p0,λfieldIsNull(_,'owner')))",
+   "proven": true,
+   "evaluated": 59453,
+   "passedAll": [
+    "lengthList(whereList(p0,λfieldIsNull(_,'owner')))"
+   ],
+   "sockets": [
+    "literal"
+   ],
+   "routine": null,
+   "doubtN": 5
+  }
+ },
+ "sockets-1-5": {
+  "t1.reuse.square": {
+   "pick": "mulDyn(p0,p0)",
+   "proven": true,
+   "evaluated": 19942,
+   "passedAll": [
+    "mulNum(p0,p0)",
+    "mulDyn(p0,p0)"
+   ],
+   "sockets": [],
+   "routine": null,
+   "doubtN": 5
+  },
+  "t2.schema.noFirst": {
+   "pick": "whereList(p0,λfieldIsNull(_,'first'))",
+   "proven": true,
+   "evaluated": 40021,
+   "passedAll": [
+    "whereList(p0,λfieldIsNull(_,'first'))"
+   ],
+   "sockets": [
+    "literal"
+   ],
+   "routine": null,
+   "doubtN": 5
+  },
+  "t3.clock.daysSince": {
+   "pick": "cockpitDaysSince(p0,now)",
+   "proven": true,
+   "evaluated": 40021,
+   "passedAll": [
+    "cockpitDaysSince(p0,now)",
+    "dayDiff(p0,now)"
+   ],
+   "sockets": [
+    "clock"
+   ],
+   "routine": null,
+   "doubtN": 5
+  },
+  "t4.human.overLimit": {
+   "pick": "exportAllowed(priLabel(p0))",
+   "proven": true,
+   "evaluated": 67959,
+   "passedAll": [
+    "exportAllowed(priLabel(p0))",
+    "falsy(priLabel(p0))",
+    "isNull(priLabel(p0))",
+    "supporterVisibleForDesignations(p0,priLabel(p0))",
+    "eqDyn(donateUrl(p0),priLabel(p0))",
+    "eqDyn(normalizeConfig(p0),priLabel(p0))"
+   ],
+   "sockets": [],
+   "routine": null,
+   "doubtN": 5
+  },
+  "t5.world.record": {
+   "pick": "addTo(w,addDyn(p0,p1))",
+   "proven": true,
+   "evaluated": 35850,
+   "passedAll": [
+    "addTo(w,addDyn(p0,p1))",
+    "addTo(w,addDyn(p1,p0))",
+    "addTo(termOf(p0,p1,w),addDyn(p0,p1))",
+    "addTo(termOf(p0,p1,w),addDyn(p1,p0))",
+    "expand(addDyn(p0,p1))",
+    "expand(addDyn(p1,p0))"
+   ],
+   "sockets": [
+    "world"
+   ],
+   "routine": null,
+   "doubtN": 5
+  }
+ },
+ "sockets-6-7": {
+  "t6.guard.recordIf": {
+   "pick": "if(p2){addTo(w,addDyn(p0,p1))}",
+   "proven": true,
+   "evaluated": 39467,
+   "passedAll": [
+    "if(p2){addTo(w,addDyn(p0,p1))}",
+    "if(p2){addTo(w,addDyn(p1,p0))}",
+    "if(p2){addTo(w,toTenantId(p0,p1))}"
+   ],
+   "sockets": [
+    "world",
+    "guard"
+   ],
+   "routine": null,
+   "doubtN": 5
+  },
+  "t7.routine.weekly": {
+   "pick": "siteLangs",
+   "proven": true,
+   "evaluated": 22,
+   "passedAll": [
+    "siteLangs"
+   ],
+   "sockets": [],
+   "routine": {
+    "every": "week"
+   },
+   "doubtN": 5
+  }
+ }
+}

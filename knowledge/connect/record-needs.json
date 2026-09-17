@@ -1,0 +1,130 @@
+{
+ "psak.noOwner": {
+  "shape": "רשומות",
+  "demand": "סינון רשומות בלי אחראי owner ריק חסר מסונן רק הן",
+  "params": [
+   "List<dynamic>"
+  ],
+  "ret": "List<dynamic>",
+  "examples": [
+   [
+    "[{'id': 'a', 'owner': 'x'}, {'id': 'b', 'owner': null}, {'id': 'c', 'owner': ''}]",
+    "r.length == 2 && r.any((e) => e['id'] == 'b') && r.any((e) => e['id'] == 'c') && !r.any((e) => e['id'] == 'a')"
+   ],
+   [
+    "[{'id': 'a', 'owner': null}, {'id': 'b', 'owner': 'z'}, {'id': 'c', 'owner': ''}]",
+    "r.length == 2 && r.any((e) => e['id'] == 'a') && r.any((e) => e['id'] == 'c') && !r.any((e) => e['id'] == 'b')"
+   ],
+   [
+    "[{'id': 'a', 'owner': 'x'}, {'id': 'b', 'owner': 'y'}]",
+    "r.isEmpty"
+   ],
+   [
+    "[{'id': 'a', 'owner': ''}, {'id': 'b', 'owner': null}]",
+    "r.length == 2 && r.every((e) => e['id'] == 'a' || e['id'] == 'b')"
+   ],
+   [
+    "<dynamic>[]",
+    "r.isEmpty"
+   ]
+  ],
+  "consts": [
+   "'owner'"
+  ]
+ },
+ "psak.countNoOwner": {
+  "shape": "רשומות",
+  "demand": "כמה רשומות בלי אחראי ספירה",
+  "params": [
+   "List<dynamic>"
+  ],
+  "ret": "num",
+  "consts": [
+   "'owner'"
+  ],
+  "examples": [
+   [
+    "[{'owner': null}, {'owner': 'x'}, {'owner': ''}]",
+    "r == 2"
+   ],
+   [
+    "[{'owner': 'a'}, {'owner': 'b'}]",
+    "r == 0"
+   ],
+   [
+    "[{'owner': null}, {'owner': null}, {'owner': null}]",
+    "r == 3"
+   ],
+   [
+    "[{'owner': 'z'}, {'owner': null}]",
+    "r == 1"
+   ],
+   [
+    "<dynamic>[]",
+    "r == 0"
+   ]
+  ]
+ },
+ "psak.noOwnerNull": {
+  "shape": "רשומות",
+  "demand": "רשומות שהשדה אחראי שלהן null",
+  "params": [
+   "List<dynamic>"
+  ],
+  "ret": "List<dynamic>",
+  "consts": [
+   "'owner'"
+  ],
+  "examples": [
+   [
+    "[{'id': 'a', 'owner': 'x'}, {'id': 'b', 'owner': null}, {'id': 'c', 'owner': null}]",
+    "r.length == 2 && r.any((e) => e['id'] == 'b') && r.any((e) => e['id'] == 'c') && !r.any((e) => e['id'] == 'a')"
+   ],
+   [
+    "[{'id': 'a', 'owner': 'x'}, {'id': 'b', 'owner': 'y'}]",
+    "r.isEmpty"
+   ],
+   [
+    "[{'id': 'a', 'owner': null}]",
+    "r.length == 1 && r.first['id'] == 'a'"
+   ],
+   [
+    "<dynamic>[]",
+    "r.isEmpty"
+   ]
+  ]
+ },
+ "psak.countNoOwnerNull": {
+  "shape": "רשומות",
+  "demand": "כמה רשומות עם אחראי null",
+  "params": [
+   "List<dynamic>"
+  ],
+  "ret": "num",
+  "consts": [
+   "'owner'"
+  ],
+  "examples": [
+   [
+    "[{'owner': null}, {'owner': 'x'}, {'owner': null}]",
+    "r == 2"
+   ],
+   [
+    "[{'owner': 'a'}, {'owner': 'b'}]",
+    "r == 0"
+   ],
+   [
+    "[{'owner': null}]",
+    "r == 1"
+   ],
+   [
+    "[{'owner': 'z'}, {'owner': null}, {'owner': null}, {'owner': null}]",
+    "r == 3"
+   ],
+   [
+    "<dynamic>[]",
+    "r == 0"
+   ]
+  ]
+ }
+}
