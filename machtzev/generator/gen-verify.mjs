@@ -9,7 +9,7 @@ import { spawnSync } from 'node:child_process';
 import * as R from '../root.mjs';
 
 const ROOT = R.ROOT, GEN = path.join(ROOT, 'machtzev/generator'), DIR = path.join(ROOT, 'new/dart-gen-bs');
-const BS = process.env.BUILDSMART || path.resolve(ROOT, '../buildsmart/app_flutter');
+const BS = R.bsApp() || path.resolve(ROOT, '../buildsmart/app_flutter');   // ‏R.bsApp()/bsRoot() מאתרים את buildsmart בכל פריסה (‏BUILDSMART · ‏../buildsmart · ‏../meir7651231-ui/buildsmart)
 const FLUTTER = process.env.FLUTTER || (fs.existsSync('/home/user/flutter/bin/flutter') ? '/home/user/flutter/bin/flutter' : 'flutter');
 const BASE = path.join(GEN, 'gen-verify-baseline.json');
 const MAP = JSON.parse(fs.readFileSync(path.join(GEN, 'ops-map.json'), 'utf8'));

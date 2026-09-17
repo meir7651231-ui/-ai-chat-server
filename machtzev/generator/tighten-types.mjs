@@ -13,6 +13,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { unify } from './tighten-hook.mjs';
 import { POOL } from '../tools/probe-pool.mjs';
+import * as R from '../root.mjs';   // bsApp/bsRoot — איתור-buildsmart
 const POOL_SER = new Set(POOL.map((v) => JSON.stringify(v === undefined ? null : v)));
 // L89 · בדיקת-Golden-מגישוש: כל ה-CASES של promote-auto הם איברי-סל ⇒ הצורות שנרשמו הן גישוש, לא חוזה-קורא (העטיפה בבדיקה מוסיפה שקעים-כרוכים, לכן הזיהוי מהמקור ולא מהקריאה)
 function casesProbe(testFile) {
@@ -31,7 +32,7 @@ const LED = path.join(GEN, 'tighten-applied.json');   // G20 · פנקס-היד�
 const ledger = () => (fs.existsSync(LED) ? JSON.parse(fs.readFileSync(LED, 'utf8')) : {});
 const saveLedger = (l) => fs.writeFileSync(LED, JSON.stringify(l, null, 1) + '\n');
 const evKey = (e) => JSON.stringify([e.params, e.ret]);
-const BS = process.env.BUILDSMART || path.resolve(ROOT, '../buildsmart/app_flutter');
+const BS = R.bsApp() || path.resolve(ROOT, '../buildsmart/app_flutter');
 const DART = process.env.DART || '/home/user/flutter/bin/dart', FLUTTER = process.env.FLUTTER || '/home/user/flutter/bin/flutter';
 
 const sigRe = (name) => new RegExp(`^([A-Za-z_][\\w<>?,. ]*?)\\s+${name}\\(`, 'm');

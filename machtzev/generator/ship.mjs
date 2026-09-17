@@ -9,11 +9,12 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { REGEN, INDEX, runRegen, label } from './regen.mjs';
+import * as R from '../root.mjs';   // bsApp/bsRoot — איתור-buildsmart
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '../..');
 const GEN = path.join(ROOT, 'new/dart-gen-bs'), FORGE = path.join(ROOT, 'new/dart-forge-bs'), DS = path.join(ROOT, 'new/dart-ui-bs/ds');
-const APP = process.env.BUILDSMART || '/home/user/buildsmart/app_flutter';
+const APP = R.bsApp() || '/home/user/buildsmart/app_flutter';
 const BS = path.resolve(APP, '..');
 const LIB = path.join(APP, 'lib/genesis');
 const GHP = process.env.GHP_DIR || path.join(BS, '..', 'buildsmart-gh-pages');

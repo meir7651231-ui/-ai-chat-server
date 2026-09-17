@@ -11,7 +11,7 @@ import * as R from '../root.mjs';
 import { assemble, PARTICLE_IDS } from './render-module.mjs';
 
 const ROOT = R.ROOT, GEN = path.join(ROOT, 'machtzev/generator');
-const BS = process.env.BUILDSMART || path.resolve(ROOT, '../buildsmart/app_flutter');
+const BS = R.bsApp() || path.resolve(ROOT, '../buildsmart/app_flutter');
 const FLUTTER = process.env.FLUTTER || (fs.existsSync('/home/user/flutter/bin/flutter') ? '/home/user/flutter/bin/flutter' : 'flutter');
 const BASE = path.join(GEN, 'render-module-baseline.json');
 // מודול-זהב ⇒ קובצי-הבדיקה שלו (schoolos.dart = מסך-המלאי + ניווט-ההאב)
