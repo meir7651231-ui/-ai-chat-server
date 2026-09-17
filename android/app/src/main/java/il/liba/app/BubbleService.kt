@@ -54,6 +54,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var tts: TextToSpeech? = null
     private var ttsReady = false
     private var sr: SpeechRecognizer? = null
+    private var srOnDevice = false          // step 21: which recognizer `sr` currently is
+    private var onDeviceFailed = false      // on-device model has no Hebrew → fall back
+    private var vad: VadGate? = null        // step 21: voice gate before the recognizer
     private var listening = false
     private var listenMode = "cmd" // cmd | wake | follow
     private var pulse: ObjectAnimator? = null
@@ -140,6 +143,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
     private fun speak(text: String) {
         lastSaid = text
+        stopVad()
         if (listening) { try { sr?.cancel() } catch (e: Exception) {}; listening = false }
         if (!ttsReady) { showLabel(text, 8000); onSpoken(); return }
         unmuteSystem(); setState(State.SPEAKING); speaking = true
@@ -312,19 +316,30 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private val muteStreams = intArrayOf(AudioManager.STREAM_SYSTEM, AudioManager.STREAM_MUSIC)
     private fun muteSystem() { if (systemMuted) return; val am = getSystemService(AUDIO_SERVICE) as AudioManager; if (am.isMusicActive) return; muteStreams.forEach { try { am.adjustStreamVolume(it, AudioManager.ADJUST_MUTE, 0) } catch (e: Exception) {} }; systemMuted = true }
     private fun unmuteSystem() { if (!systemMuted) return; val am = getSystemService(AUDIO_SERVICE) as AudioManager; muteStreams.forEach { try { am.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) {} }; systemMuted = false }
-    private fun wakeLoop() { if (!heyOn || listening || speaking || tts?.isSpeaking == true) return; startListening("wake") }
+    private fun wakeLoop() { if (!heyOn || listening || speaking || tts?.isSpeaking == true) return; startVad() }
+    // step 21: hold the mic with a cheap energy gate; only when speech is heard start the real recognizer (no chime loop, no network idle)
+    private fun startVad() {
+        if (vad?.active == true || listening) return
+        if (!ensureMicFgs()) return
+        muteSystem(); setState(State.WAKE)
+        vad = VadGate { main.post { vad = null; if (heyOn && !listening && !speaking) startListening("wake") else wakeLoop() } }.also { it.start() }
+    }
+    private fun stopVad() { vad?.stop(); vad = null }
     private fun startListening(mode: String) {
         if (listening) return
         if (speaking && mode != "cmd") return
         if (!ensureMicFgs()) return
         if (!SpeechRecognizer.isRecognitionAvailable(this)) { showLabel("אין זיהוי דיבור בטלפון (צריך את אפליקציית Google)", 5000); return }
         if (mode != "wake") tts?.stop()
-        if (sr == null) sr = SpeechRecognizer.createSpeechRecognizer(this).also { it.setRecognitionListener(recListener) }
+        stopVad()
+        val wantOnDevice = mode == "wake" && !onDeviceFailed && Build.VERSION.SDK_INT >= 31 && runCatching { SpeechRecognizer.isOnDeviceRecognitionAvailable(this) }.getOrDefault(false)
+        if (sr != null && srOnDevice != wantOnDevice) { try { sr?.destroy() } catch (e: Exception) {}; sr = null }
+        if (sr == null) { sr = (if (wantOnDevice) SpeechRecognizer.createOnDeviceSpeechRecognizer(this) else SpeechRecognizer.createSpeechRecognizer(this)).also { it.setRecognitionListener(recListener) }; srOnDevice = wantOnDevice }
         val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, "he-IL"); putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
             putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, if (mode == "wake") 1200L else 1500L)
-            if (mode == "wake") { putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 30000L); putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 30000L) }
+            if (mode == "wake") { putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 4000L); putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 2000L); putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true) }
         }
         listening = true; listenMode = mode
         if (mode == "wake") { muteSystem(); setState(State.WAKE) } else { unmuteSystem(); setState(State.LISTENING); showLabel(if (mode == "follow") "…" else "מקשיב…", 15000) }
@@ -348,6 +363,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         }
         override fun onError(e: Int) { listening = false
             if (listenMode == "wake") { errStreak++; if (e == SpeechRecognizer.ERROR_RECOGNIZER_BUSY || e == SpeechRecognizer.ERROR_CLIENT) { sr?.destroy(); sr = null }
+                if (srOnDevice && (e == 12 || e == 13 || e == SpeechRecognizer.ERROR_SERVER)) { onDeviceFailed = true; try { sr?.destroy() } catch (x: Exception) {}; sr = null; Log.i("liba", "on-device recognizer has no Hebrew – falling back") }
                 main.postDelayed({ wakeLoop() }, if (speaking) 1500 else if (errStreak > 5) 5000 else 400); return }
             errStreak = 0
             if (listenMode == "follow" && (e == SpeechRecognizer.ERROR_NO_MATCH || e == SpeechRecognizer.ERROR_SPEECH_TIMEOUT)) { idleOrWake(); return }
@@ -400,7 +416,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     } }
     override fun onReady() { main.post { if (!pageReady) { pageReady = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } } } } }
-    fun heyOff() { heyOn = false; Prefs.setHey(this, false); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) {}; listening = false }; unmuteSystem() }
+    fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) {}; listening = false }; unmuteSystem() }
     override fun onCmd(cmd: String) { main.post { when (cmd) { "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "reload" -> main.postDelayed({ web?.reload() }, 1500) } } }
     override fun onCrashSaved(id: String) { main.post { Prefs.clearCrash(this); showLabel("דוח הקריסה נשלח לליבה", 4000) } }
     override fun onTasks(summary: String, n: Int, blocked: Int) { main.post { taskSummary = summary; taskBlocked = blocked; if (n > 0) status = "מחובר · $n משימות" + (if (blocked > 0) " · $blocked מחכות לך" else "") } }
@@ -434,7 +450,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
 
     override fun onDestroy() {
-        running = false; instance = null; main.removeCallbacksAndMessages(null); unmuteSystem()
+        running = false; instance = null; main.removeCallbacksAndMessages(null); stopVad(); unmuteSystem()
         try { sr?.destroy() } catch (e: Exception) {}
         tts?.stop(); tts?.shutdown()
         bubble?.let { runCatching { wm.removeView(it) } }; webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy()
