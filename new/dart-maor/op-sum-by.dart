@@ -1,0 +1,3 @@
+// ⚛️ חלקיק פעולת-יסוד · נחצב ע"י ast_carve --ops מתוך 3 אטומים (למשל dart-maor/box-total.dart#boxTotal · campaign-total#campaignTotal · grand-total#grandTotal) · אפס-import · הביטוי-המקורי: for (final c in collections) {final amount = (c as Map)['amount']; total += _isFiniteNumber(amount) ? (amount as num) : 0;}
+// up-quarry · צבירה: `for (x in xs) acc += E(x)` / `fold(0, (a,x) => a + f(x))` ⇒ סכום-של-שדה — E הוא שקע-פונקציה (חוק-3), לא שדה צרוב. חמישה סכומים דומייניים במדף (box/campaign/grand/boq/coordinator-total) הם אותו גרעין.
+num sumBy(List<dynamic> xs, num Function(dynamic) f) => xs.fold<num>(0, (a, x) => a + f(x));

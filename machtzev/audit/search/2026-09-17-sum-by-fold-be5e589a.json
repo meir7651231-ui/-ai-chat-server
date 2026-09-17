@@ -1,0 +1,309 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T19:59:46.588Z",
+ "query": "sumBy sum fold accumulate total סכום צבירה סך",
+ "tokens": [
+  "sum",
+  "by",
+  "fold",
+  "accumulate",
+  "total",
+  "סכום",
+  "צבירה",
+  "סך"
+ ],
+ "oracle": {
+  "atomIndexSha": "0eb462715e30264fac2dea6ccfe3eb86b7e3f6b98f32b025afcd3f1c395c32cd",
+  "logicCensusSha": "f6c640bcca837e6dae112eb176a8b0aaa8d8eac0382297db51081939d13a5661",
+  "display": 1945,
+  "logic": 1021
+ },
+ "candidates": [
+  {
+   "id": "activeByMonth",
+   "layer": "logic",
+   "file": "dart-maor/portfolio-active-by-month.dart",
+   "score": 3,
+   "hits": [
+    "by"
+   ]
+  },
+  {
+   "id": "boqTotal",
+   "layer": "logic",
+   "file": "dart-maor/boq-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "boxTotal",
+   "layer": "logic",
+   "file": "dart-maor/box-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "brandById",
+   "layer": "logic",
+   "file": "dart/brand_by_id.dart",
+   "score": 3,
+   "hits": [
+    "by"
+   ]
+  },
+  {
+   "id": "campaignTotal",
+   "layer": "logic",
+   "file": "dart-maor/campaign-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "coordinatorTotal",
+   "layer": "logic",
+   "file": "dart-maor/coordinator-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "countBy",
+   "layer": "logic",
+   "file": "dart-maor/count-by.dart",
+   "score": 3,
+   "hits": [
+    "by"
+   ]
+  },
+  {
+   "id": "DsFold",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "fold"
+   ]
+  },
+  {
+   "id": "eyesTotal",
+   "layer": "logic",
+   "file": "dart-maor/eyes-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "familiesByKind",
+   "layer": "logic",
+   "file": "dart/families_by_kind.dart",
+   "score": 3,
+   "hits": [
+    "by"
+   ]
+  },
+  {
+   "id": "filterSmartBySystem",
+   "layer": "logic",
+   "file": "dart/filter_smart_by_system.dart",
+   "score": 3,
+   "hits": [
+    "by"
+   ]
+  },
+  {
+   "id": "foldIcsLine",
+   "layer": "logic",
+   "file": "dart-maor/fold-ics-line.dart",
+   "score": 3,
+   "hits": [
+    "fold"
+   ]
+  },
+  {
+   "id": "grandTotal",
+   "layer": "logic",
+   "file": "dart-maor/grand-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "hokMonthlyTotal",
+   "layer": "logic",
+   "file": "dart-maor/hok-monthly-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "matCostTotal",
+   "layer": "logic",
+   "file": "dart-maor/mat-cost-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "mergeFamiliesByFields",
+   "layer": "logic",
+   "file": "dart-maor/merge-families-by-fields.dart",
+   "score": 3,
+   "hits": [
+    "by"
+   ]
+  },
+  {
+   "id": "mergeSupportersByFields",
+   "layer": "logic",
+   "file": "dart-maor/merge-supporters-by-fields.dart",
+   "score": 3,
+   "hits": [
+    "by"
+   ]
+  },
+  {
+   "id": "relabelHistByTxn",
+   "layer": "logic",
+   "file": "dart-maor/relabel-hist-by-txn.dart",
+   "score": 3,
+   "hits": [
+    "by"
+   ]
+  },
+  {
+   "id": "smartProductByKey",
+   "layer": "logic",
+   "file": "dart/smart_product_by_key.dart",
+   "score": 3,
+   "hits": [
+    "by"
+   ]
+  },
+  {
+   "id": "subsidyTotal",
+   "layer": "logic",
+   "file": "dart-maor/subsidy-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "supTotalIls",
+   "layer": "logic",
+   "file": "dart-maor/sup-total-ils.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "timeCostTotal",
+   "layer": "logic",
+   "file": "dart-maor/time-cost-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "timeHoursTotal",
+   "layer": "logic",
+   "file": "dart-maor/time-hours-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "totalLabel",
+   "layer": "logic",
+   "file": "dart-maor/total-label.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "wfUnitsTotal",
+   "layer": "logic",
+   "file": "dart/wf_units_total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "DsNumberField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_number_field.dart",
+   "score": 1,
+   "hits": [
+    "סכום"
+   ]
+  },
+  {
+   "id": "GenerativeCanvas",
+   "layer": "display",
+   "file": "dart-ui-bs/generative_canvas.dart",
+   "score": 1,
+   "hits": [
+    "סכום"
+   ]
+  },
+  {
+   "id": "OrderRowCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/order_row_card.dart",
+   "score": 1,
+   "hits": [
+    "סכום"
+   ]
+  }
+ ],
+ "strong": [
+  "activeByMonth",
+  "boqTotal",
+  "boxTotal",
+  "brandById",
+  "campaignTotal",
+  "coordinatorTotal",
+  "countBy",
+  "eyesTotal",
+  "familiesByKind",
+  "filterSmartBySystem",
+  "foldIcsLine",
+  "grandTotal",
+  "hokMonthlyTotal",
+  "matCostTotal",
+  "mergeFamiliesByFields",
+  "mergeSupportersByFields",
+  "relabelHistByTxn",
+  "smartProductByKey",
+  "subsidyTotal",
+  "supTotalIls",
+  "timeCostTotal",
+  "timeHoursTotal",
+  "totalLabel",
+  "wfUnitsTotal"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "DsFold"
+ ],
+ "creates": "new/dart-maor/op-sum-by.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד sumBy(List<dynamic>, num Function(dynamic)) => num שנחצב מכנית ע\"י ast_carve --ops (up-quarry: תבנית-צבירה for/+= ו-fold) מתוך boxTotal · campaignTotal · grandTotal. המועמדים החזקים ולמה אינם הגרעין: boxTotal · campaignTotal · coordinatorTotal · grandTotal · boqTotal · eyesTotal · subsidyTotal · supTotalIls · timeCostTotal · timeHoursTotal · matCostTotal · wfUnitsTotal · hokMonthlyTotal — סכומים דומייניים עם שדה צרוב (amount/hours/cost) ומבנה צרוב (box.collections · campaignId · boq.names · hok) — כולם מופעים של אותו גרעין-צבירה, אף אחד אינו הגרעין עם שקע-פונקציה; countBy — ספירה לפי מפתח (מחזיר זוגות), לא סכום; activeByMonth · familiesByKind · brandById · smartProductByKey · filterSmartBySystem · relabelHistByTxn · mergeFamiliesByFields · mergeSupportersByFields — קיבוץ/אחזור/מיזוג לפי מפתח, לא צבירה מספרית; foldIcsLine — קיפול-שורות ICS (טקסט), לא fold מספרי; totalLabel — תווית-תצוגה, לא חישוב; DsFold — ווידג'ט קיפול. אין במדף צבירה גנרית עם שקע-פונקציה — לכן המדד «כמה בסך הכל» נשאר ∅ בהוכחה-בריצה (goal-needs g4).",
+ "sig": "be5e589a28f031479af23d004cc61a30d0b9df5097cbb3288733032aac10cdcd"
+}

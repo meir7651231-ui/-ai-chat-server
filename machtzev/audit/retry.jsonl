@@ -2112,3 +2112,4 @@
 {"ts":1789632284,"attempt":1789632284,"gate":"autologic","path":"new/dart-maor/op-add-dyn.dart","sha":"e7f4e3cdc5a78dd27bf23d4c144cf320540867ff","blob_before":null,"resolved":true}
 {"ts":1789632284,"attempt":1789632284,"gate":"autologic","path":"new/dart-maor/op-cmp-ge-str.dart","sha":"e7f4e3cdc5a78dd27bf23d4c144cf320540867ff","blob_before":null,"resolved":true}
 {"ts":1789632284,"attempt":1789632284,"gate":"pins","path":null,"sha":"e7f4e3cdc5a78dd27bf23d4c144cf320540867ff","blob_before":null,"resolved":true}
+{"ts":1789676218,"attempt":1789676218,"gate":"truth","path":null,"sha":"0be0107edea6d380a3467f4487f036fe9146036d","blob_before":null,"resolved":true}

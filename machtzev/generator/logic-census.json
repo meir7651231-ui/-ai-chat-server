@@ -10519,6 +10519,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-sum-by.dart",
+  "name": "sumBy",
+  "ret": "num",
+  "params": [
+   "List<dynamic>",
+   "num Function(dynamic) f"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/sup12m.dart",
   "name": "sup12m",
   "ret": "num",
