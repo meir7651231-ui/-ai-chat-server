@@ -54,7 +54,8 @@ function parseRole(line) {
   return { name, all, ents, scope, hide, ro };
 }
 
-export function buildApp(specText) {
+export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=false: בנייה בלי כתיבת particle-plan/report-plan (שערי-דגימה nl-smoke/nl-quality) — אחרת שלושה שערים דורסים את אותו particle-plan-app.json והאחרון-במצב מנצח
+  const writePlan = opts.writePlan !== false;
   // 🗣️ צפן §22: קלט חסר-מבנה לגמרי (אף ישות/דשבורד/תפקיד) ⇒ עברית-חופשית ⇒ nlToSpec.
   // מבנה קיים ⇒ ביט-זהה (לא נוגעים). כך אותה דלת מקבלת גם משפט-חופשי וגם אפיון-מדויק.
   const raw = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2 && !PARTICLE_RE.test(l));
@@ -270,7 +271,7 @@ export function buildApp(specText) {
       particleScreens.push({ slug: pslug, cls: r.cls, kind: 'entity', name: `🧩 ${T('particlesTitle', { ent: e.name })}`, icon: '🧩', sub: `${r.count} ${L.particlesLive}${r.notes.length ? ` · ${r.notes.length} ${L.particlesUnres}` : ''}` });
     }
     const gen = R.GEN_DIR; const nsName = NS || 'app';
-    fs.writeFileSync(path.join(R.GEN_DIR, `particle-plan-${nsName}.json`), JSON.stringify(plan.map((p) => ({ entity: p.entity, name: p.name, expr: p.expr, ok: p.ok, why: p.why || null, shape: p.shape ? p.shape.kind : null, ops: p.ops || [], picks: (p.picks || []).map((k) => ({ op: k.op, atoms: k.atoms, alts: k.alts.slice(0, 3) })), wired: p.wired || [] })), null, 1) + '\n');
+    if (writePlan) fs.writeFileSync(path.join(R.GEN_DIR, `particle-plan-${nsName}.json`), JSON.stringify(plan.map((p) => ({ entity: p.entity, name: p.name, expr: p.expr, ok: p.ok, why: p.why || null, shape: p.shape ? p.shape.kind : null, ops: p.ops || [], picks: (p.picks || []).map((k) => ({ op: k.op, atoms: k.atoms, alts: k.alts.slice(0, 3) })), wired: p.wired || [] })), null, 1) + '\n');
     const reports = planReports({ reports: parseReportLines(reportLines), plan, entities: pents, content });
     let ri = 0;
     for (const rp of reports) {
@@ -285,11 +286,11 @@ export function buildApp(specText) {
       reportScreens.push({ slug: rslug, cls: r.cls, kind: 'entity', name: `📄 ${T('reportTitle', { ent: rp.entity })}`, icon: '📄', sub: `${r.count} ${L.reportSections}${r.notes.length ? ` · ${r.notes.length} ${L.reportUnres}` : ''}` });
       reportByEnt[rp.entity] = { slug: rslug, cls: r.cls, textFn: r.textFn, export: r.export };
     }
-    fs.writeFileSync(path.join(gen, `particle-plan-${nsName}.md`), planReport(plan) + (reports.length ? reportsMd(reports) : ''));
-    if (reportLines.length) fs.writeFileSync(path.join(gen, `report-plan-${nsName}.json`), JSON.stringify(reports.map((r) => ({ entity: r.entity, ok: r.ok, unresolved: r.unresolved, export: r.export ? { label: r.export.label, toField: r.export.toField, ok: r.export.ok, action: (r.export.action.atoms[0] || null), link: r.export.link ? r.export.link.name : null } : null, sections: r.sections.map((s) => ({ name: s.name, refs: s.refs.map((x) => ({ raw: x.raw, mode: x.mode || null, why: x.why || null, wired: x.p && x.p.wired ? x.p.wired : [] })) })) })), null, 1));
+    if (writePlan) fs.writeFileSync(path.join(gen, `particle-plan-${nsName}.md`), planReport(plan) + (reports.length ? reportsMd(reports) : ''));
+    if (writePlan && reportLines.length) fs.writeFileSync(path.join(gen, `report-plan-${nsName}.json`), JSON.stringify(reports.map((r) => ({ entity: r.entity, ok: r.ok, unresolved: r.unresolved, export: r.export ? { label: r.export.label, toField: r.export.toField, ok: r.export.ok, action: (r.export.action.atoms[0] || null), link: r.export.link ? r.export.link.name : null } : null, sections: r.sections.map((s) => ({ name: s.name, refs: s.refs.map((x) => ({ raw: x.raw, mode: x.mode || null, why: x.why || null, wired: x.p && x.p.wired ? x.p.wired : [] })) })) })), null, 1));
     console.log(`🧩 ${L.particlesLog}: ${plan.filter((p) => p.wired && p.wired.length).length}/${plan.length} ${L.particlesFound} · ${particleScreens.length} ${L.particleScreens}${content.length ? ` · ${content.length} ${L.contentItems}` : ''}${reports.length ? ` · ${reportScreens.length} ${L.reportScreens}` : ''}`);
   }
-  if (!particleLines.length && !reportLines.length && NS) { fs.writeFileSync(path.join(R.GEN_DIR, `particle-plan-${NS}.json`), '[]'); }   // G33 · ספק בלי חלקיקים (משימות/יומן) = תוכנית ריקה, מדווחת — לא חסרה
+  if (writePlan && !particleLines.length && !reportLines.length && NS) { fs.writeFileSync(path.join(R.GEN_DIR, `particle-plan-${NS}.json`), '[]'); }   // G33 · ספק בלי חלקיקים (משימות/יומן) = תוכנית ריקה, מדווחת — לא חסרה
   // מסכי-מערכת (kind='system' — גלויים רק לתפקיד 'הכל')
   const sys = [];
   const a = renderSystem(`${P}audit`, { title: L.auditTitle, icon: '🧾', sectionTitle: L.auditSection, kind: 'empty', items: [L.auditEmpty] });

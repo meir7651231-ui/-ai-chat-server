@@ -22,7 +22,7 @@ for (const s of sents) {
   try { spec = nlToSpec(s); } catch (e) { crash++; bad.push(`CRASH · ${s} · ${e.message}`); continue; }
   const ents = spec.split('\n').filter((l) => l.trim());
   if (!ents.length) { zero++; bad.push(`ZERO · ${s}`); continue; }
-  try { buildApp(s); } catch (e) { buildFail++; bad.push(`BUILD-FAIL · ${s} · ${e.message}`); continue; }
+  try { buildApp(s, { writePlan: false }); } catch (e) { buildFail++; bad.push(`BUILD-FAIL · ${s} · ${e.message}`); continue; }
   // שם-ישות = בין 'ישות' ל-'עם'. דלף = מילת-פונקציה (leadin) בתוך השם, או קידומת-ל על מילה-בודדת.
   for (const line of ents) {
     const m = line.match(/^ישות\s+(.+?)\s+עם\s/);

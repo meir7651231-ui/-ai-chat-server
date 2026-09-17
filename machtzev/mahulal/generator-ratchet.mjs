@@ -7,6 +7,7 @@
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs'; import path from 'node:path';
 import { buildApp } from '../generator/app-ds.mjs';
+const buildAppNoPlan = (spec) => buildApp(spec, { writePlan: false });   // up-plan · שער-ראצ'ט בונה 4 ספקים לדגימה — בלי לדרוס את particle-plan-app של האפיון-המלא (acceptance)
 import { SCREEN_REGISTRY, selectAtom } from '../generator/render-ds.mjs';
 import { nlToSpec } from '../generator/nl-spec.mjs';
 import * as R from '../root.mjs';
@@ -35,7 +36,7 @@ const wide = selectAtom({ value: { re: /^(value|val|amount)$/, ty: /^String\??$/
 ok(wide && wide.cls && !/^Ds/.test(wide.cls), `§21: בורר-המטרה מגיע למאגר-הרחב (${wide && wide.cls})`);
 
 // 2) הרכבה + ניווט + מנוע-רשומה + מיפוי-מפתחות
-buildApp('ישות סעיף עם קוד, כמות, מחיר, סכום=boqLineAmount(כמות→qty, מחיר→price)\nישות תורם עם שם, טלפון, חידוש=isRenewed');
+buildAppNoPlan('ישות סעיף עם קוד, כמות, מחיר, סכום=boqLineAmount(כמות→qty, מחיר→price)\nישות תורם עם שם, טלפון, חידוש=isRenewed');
 const s2 = all();
 ok(/Callout\(|DsTable\(|DsBoard\(/.test(s2), 'מסך-הרכבה מרכיב אטומי-אמת');
 ok(/boqLineAmount\(<String, String>\{/.test(s2), 'מנוע-רשומה מחווט על הרשומה');
@@ -43,14 +44,14 @@ ok(/isRenewed\(<String, String>\{/.test(s2) && /\? gen_app_\w+ : gen_app_\w+\)/.
 ok(/Navigator\.of\(context\)\.push/.test(s2), 'ניווט שורה⇒כרטיס');
 
 // 2.4) התנהגות (§23-ד) — שדה-מותנה 'A op B ? then : else' ⇒ סטטוס-חי (מד-ניטור/סף אמיתי)
-buildApp('ישות מד עם ערך(0..100), סף(0..100), מצב = ערך > סף ? חריגה : תקין');
+buildAppNoPlan('ישות מד עם ערך(0..100), סף(0..100), מצב = ערך > סף ? חריגה : תקין');
 const sCond = all();
 ok(/num\.tryParse[^\n]*[<>][^\n]*\?\s*gen_app_\w+\s*:\s*gen_app_\w+/.test(sCond), 'שדה-מותנה ⇒ סטטוס-חי מהשוואת-סף (התנהגות, לא CRUD סטטי)');
 
 // 2.5) צפן §22 — עברית-חופשית ⇒ אפיון + אפליקציה-עובדת · המנוע-העיוור (אפס-מילה-בקוד)
 const nl = nlToSpec('מערכת עם תלמידים, מורים וכיתות');
 ok(nl.split('\n').filter((l) => l.trim()).length >= 3, `NL: 'מערכת עם A,B,C' ⇒ ${nl.split('\n').length} ישויות`);
-buildApp('מערכת לניהול מרפאה עם מטופלים, תורים ורופאים');   // קלט-חופשי ישיר לדלת ⇒ לא-קורס
+buildAppNoPlan('מערכת לניהול מרפאה עם מטופלים, תורים ורופאים');   // קלט-חופשי ישיר לדלת ⇒ לא-קורס
 ok(/GenApp\w+Screen/.test(all()), 'NL: משפט-חופשי ⇒ אפליקציה נבנתה (רצפת-§22)');
 // המנוע עצמו עיוור: אפס מילה-עברית בקוד nl-spec (מחוץ להערות/טווח-יוניקוד)
 const nlSrc = fs.readFileSync((R.GEN_DIR + 'nl-spec.mjs'), 'utf8').split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n');   // מסיר הערות (מלאות+פנימיות)
@@ -84,7 +85,7 @@ const q4 = nlToSpec('מערכת עם לקוחות, הזמנות');
 ok(/לקוחות/.test(q4), 'NL: deprefix לא פוגע ברבים-אמת (לקוחות נשמר, לא קוחות)');
 
 // 3) RLS — scoped כשיש שדה-היקף
-buildApp('ישות חוג עם שם, מורה, מחיר, סטטוס | שלבים: פתוח, מלא\nישות תלמיד עם שם, מורה, ממוצע\nתפקיד מזכירה: הכל\nתפקיד מורה: חוג, תלמיד | היקף: חוג.מורה, תלמיד.מורה');
+buildAppNoPlan('ישות חוג עם שם, מורה, מחיר, סטטוס | שלבים: פתוח, מלא\nישות תלמיד עם שם, מורה, ממוצע\nתפקיד מזכירה: הכל\nתפקיד מורה: חוג, תלמיד | היקף: חוג.מורה, תלמיד.מורה');
 const s3 = all();
 ok(/appStore\.scoped\('app_ent\d+',/.test(s3), 'RLS: מסכי-חיווט מכבדים scoped');
 
