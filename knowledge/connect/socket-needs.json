@@ -1,15 +1,329 @@
 {
- "t1.reuse.square":  {"shape":"מספר","demand":"ריבוע מספר כפול עצמו","params":["num"],"ret":"num","reuse":true,"examples":[["3","r == 9"],["4","r == 16"],["0","r == 0"]]},
- "t2.schema.noFirst": {"shape":"רשומות","demand":"רשומות בלי שם פרטי","params":["List<dynamic>"],"ret":"List<dynamic>","entity":"Member",
-   "examples":[["[{'id': 'a', 'first': 'x'}, {'id': 'b', 'first': null}]","r.length == 1 && r.first['id'] == 'b'"],["[{'id': 'a', 'first': 'x'}]","r.isEmpty"],["[{'id': 'q', 'first': null}, {'id': 'z', 'first': null}]","r.length == 2"]]},
- "t3.clock.daysSince": {"shape":"מועד","demand":"ימים מאז תאריך עד היום","params":["String"],"ret":"num","clock":{"type":"String"},
-   "examples":[["'2026-09-01'","r == 7",{"now":"'2026-09-08'"}],["'2026-09-08'","r == 0",{"now":"'2026-09-08'"}],["'2026-08-30'","r == 2",{"now":"'2026-09-01'"}]]},
- "t4.human.overLimit": {"shape":"מספר","demand":"חרג מסף שאדם קובע","params":["num"],"ret":"bool","human":[{"name":"limit","type":"num"}],
-   "examples":[["8","r == true",{"human":{"limit":"7"}}],["3","r == false",{"human":{"limit":"7"}}],["5","r == true",{}]]},
- "t5.world.record": {"shape":"יומן","demand":"רשום אות ביומן","params":["String","String"],"ret":"void","world":{"type":"List<dynamic>","init":"<dynamic>[]"},
-   "examples":[["'a', '2026-09-08'","r.length == 1 && r.first.toString().contains('a') && r.first.toString().contains('2026-09-08')"],["'b', '2026-09-09'","r.length == 1 && r.first.toString().contains('b')"]]},
- "t6.guard.recordIf": {"shape":"יומן","demand":"רשום אות רק אם מותר","params":["String","String","bool"],"ret":"void","guard":true,"world":{"type":"List<dynamic>","init":"<dynamic>[]"},
-   "examples":[["'a', '2026-09-08', true","r.length == 1 && r.first.toString().contains('a')"],["'a', '2026-09-08', false","r.isEmpty"],["'c', '2026-09-10', true","r.length == 1 && r.first.toString().contains('c')"]]},
- "t7.routine.weekly": {"shape":"יומן","demand":"אות שבועי","params":["String","String"],"ret":"void","routine":{"every":"week"},"world":{"type":"List<dynamic>","init":"<dynamic>[]"},
-   "examples":[["'a', '2026-09-08'","r.length == 1"]]}
+ "t1.reuse.square": {
+  "shape": "מספר",
+  "demand": "ריבוע מספר כפול עצמו",
+  "params": [
+   "num"
+  ],
+  "ret": "num",
+  "reuse": true,
+  "examples": [
+   [
+    "3",
+    "r == 9"
+   ],
+   [
+    "4",
+    "r == 16"
+   ],
+   [
+    "0",
+    "r == 0"
+   ]
+  ]
+ },
+ "t2.schema.noFirst": {
+  "shape": "רשומות",
+  "demand": "רשומות בלי שם פרטי",
+  "params": [
+   "List<dynamic>"
+  ],
+  "ret": "List<dynamic>",
+  "entity": "Member",
+  "examples": [
+   [
+    "[{'id': 'a', 'first': 'x'}, {'id': 'b', 'first': null}]",
+    "r.length == 1 && r.first['id'] == 'b'"
+   ],
+   [
+    "[{'id': 'a', 'first': 'x'}]",
+    "r.isEmpty"
+   ],
+   [
+    "[{'id': 'q', 'first': null}, {'id': 'z', 'first': null}]",
+    "r.length == 2"
+   ]
+  ]
+ },
+ "t3.clock.daysSince": {
+  "shape": "מועד",
+  "demand": "ימים מאז תאריך עד היום",
+  "params": [
+   "String"
+  ],
+  "ret": "num",
+  "clock": {
+   "type": "String"
+  },
+  "examples": [
+   [
+    "'2026-09-01'",
+    "r == 7",
+    {
+     "now": "'2026-09-08'"
+    }
+   ],
+   [
+    "'2026-09-08'",
+    "r == 0",
+    {
+     "now": "'2026-09-08'"
+    }
+   ],
+   [
+    "'2026-08-30'",
+    "r == 2",
+    {
+     "now": "'2026-09-01'"
+    }
+   ]
+  ]
+ },
+ "t4.human.overLimit": {
+  "shape": "מספר",
+  "demand": "חרג מסף שאדם קובע",
+  "params": [
+   "num"
+  ],
+  "ret": "bool",
+  "human": [
+   {
+    "name": "limit",
+    "type": "num"
+   }
+  ],
+  "examples": [
+   [
+    "8",
+    "r == true",
+    {
+     "human": {
+      "limit": "7"
+     }
+    }
+   ],
+   [
+    "3",
+    "r == false",
+    {
+     "human": {
+      "limit": "7"
+     }
+    }
+   ],
+   [
+    "5",
+    "r == true",
+    {}
+   ]
+  ]
+ },
+ "t5.world.record": {
+  "shape": "יומן",
+  "demand": "רשום אות ביומן",
+  "params": [
+   "String",
+   "String"
+  ],
+  "ret": "void",
+  "world": {
+   "type": "List<dynamic>",
+   "init": "<dynamic>[]"
+  },
+  "examples": [
+   [
+    "'a', '2026-09-08'",
+    "r.length == 1 && r.first.toString().contains('a') && r.first.toString().contains('2026-09-08')"
+   ],
+   [
+    "'b', '2026-09-09'",
+    "r.length == 1 && r.first.toString().contains('b')"
+   ]
+  ]
+ },
+ "t6.guard.recordIf": {
+  "shape": "יומן",
+  "demand": "רשום אות רק אם מותר",
+  "params": [
+   "String",
+   "String",
+   "bool"
+  ],
+  "ret": "void",
+  "guard": true,
+  "world": {
+   "type": "List<dynamic>",
+   "init": "<dynamic>[]"
+  },
+  "examples": [
+   [
+    "'a', '2026-09-08', true",
+    "r.length == 1 && r.first.toString().contains('a')"
+   ],
+   [
+    "'a', '2026-09-08', false",
+    "r.isEmpty"
+   ],
+   [
+    "'c', '2026-09-10', true",
+    "r.length == 1 && r.first.toString().contains('c')"
+   ]
+  ]
+ },
+ "t7.routine.weekly": {
+  "shape": "יומן",
+  "demand": "אות שבועי",
+  "params": [
+   "String",
+   "String"
+  ],
+  "ret": "void",
+  "routine": {
+   "every": "week"
+  },
+  "world": {
+   "type": "List<dynamic>",
+   "init": "<dynamic>[]"
+  },
+  "examples": [
+   [
+    "'a', '2026-09-08'",
+    "r.length == 1"
+   ]
+  ]
+ },
+ "t4b.human.overLimit.strong": {
+  "shape": "מספר",
+  "demand": "חרג מסף שאדם קובע",
+  "params": [
+   "num"
+  ],
+  "ret": "bool",
+  "human": [
+   {
+    "name": "limit",
+    "type": "num"
+   }
+  ],
+  "examples": [
+   [
+    "8",
+    "r == true",
+    {
+     "human": {
+      "limit": "7"
+     }
+    }
+   ],
+   [
+    "3",
+    "r == false",
+    {
+     "human": {
+      "limit": "7"
+     }
+    }
+   ],
+   [
+    "5",
+    "r == true",
+    {
+     "human": {
+      "limit": "4"
+     }
+    }
+   ],
+   [
+    "5",
+    "r == false",
+    {
+     "human": {
+      "limit": "5"
+     }
+    }
+   ]
+  ]
+ },
+ "x.look.pick": {
+  "shape": "טקסט",
+  "demand": "בחירת מזהה-מראה ממשפט לפי מילון-סיגנלים",
+  "params": [
+   "String",
+   "Map<dynamic, dynamic>"
+  ],
+  "ret": "String?",
+  "examples": [
+   [
+    "'מסך כהה: כפתור', <String, dynamic>{'כהה': 'dark', 'לילה': 'dark'}",
+    "r == 'dark'"
+   ],
+   [
+    "'מסך לילה', <String, dynamic>{'כהה': 'dark', 'לילה': 'dark'}",
+    "r == 'dark'"
+   ],
+   [
+    "'מסך: כפתור, שדה', <String, dynamic>{'כהה': 'dark'}",
+    "r == null"
+   ],
+   [
+    "'', <String, dynamic>{'כהה': 'dark'}",
+    "r == null"
+   ]
+  ]
+ },
+ "xl.levenshtein": {
+  "shape": "טקסט",
+  "demand": "מרחק עריכה בין מחרוזות",
+  "params": [
+   "String",
+   "String"
+  ],
+  "ret": "num",
+  "hideDart": [
+   "levenshtein"
+  ],
+  "examples": [
+   [
+    "'ארנונה', 'ארנונא'",
+    "r == 1"
+   ],
+   [
+    "'kitten', 'sitting'",
+    "r == 3"
+   ],
+   [
+    "'a', 'a'",
+    "r == 0"
+   ],
+   [
+    "'', 'abc'",
+    "r == 3"
+   ]
+  ]
+ },
+ "xl.monthKey": {
+  "shape": "מועד",
+  "demand": "מפתח חודש מתאריך ISO",
+  "params": [
+   "String"
+  ],
+  "ret": "String",
+  "hideDart": [
+   "monthKey"
+  ],
+  "examples": [
+   [
+    "'2026-09-08'",
+    "r == '2026-09'"
+   ],
+   [
+    "'2025-01-31'",
+    "r == '2025-01'"
+   ],
+   [
+    "'2026-12-01'",
+    "r == '2026-12'"
+   ]
+  ]
+ }
 }

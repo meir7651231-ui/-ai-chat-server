@@ -138,6 +138,7 @@ function param(p) {
 const boolCtx = (e) => { const K = ts.SyntaxKind; if (!CTX || !e) return expr(e); if (e.kind === K.Identifier) { const t = CTX.params.get(e.text); if (t && t !== 'bool' && t !== 'bool?') return `_truthy(${e.text})`; } if (e.kind === K.ParenthesizedExpression) return `(${boolCtx(e.expression)})`; return expr(e); };
 const nullableParam = (e) => { const K = ts.SyntaxKind; if (!CTX || !e || e.kind !== K.Identifier) return false; const t = CTX.params.get(e.text); return !!(t && t.endsWith('?')); };
 const bang = (e) => (nullableParam(e) ? `${e.text}!` : expr(e));   // שימוש-ישיר בפרמטר-nullable (גישה/קריאה/אריתמטיקה) ⇒ `p!` — JS היה זורק על null באותה נקודה
+const isStrParam = (e) => { const K = ts.SyntaxKind; if (!e) return false; if (e.kind === K.StringLiteral || e.kind === K.NoSubstitutionTemplateLiteral || e.kind === K.TemplateExpression) return true; if (!CTX || e.kind !== K.Identifier) return false; const t = CTX.params.get(e.text); return !!(t && /^String\??$/.test(t)); };   // up-crosslang · מקלט מוקלד-String (מהראיות/מטיפוסי-הצורך) ⇒ slice = substring, לא sublist
 const isMapParam = (e) => { const K = ts.SyntaxKind; if (!CTX || !e || e.kind !== K.Identifier) return null; const t = CTX.params.get(e.text); return t && /^Map</.test(t) ? t : null; };
 function expr(n) {
   const K = ts.SyntaxKind;
@@ -217,6 +218,7 @@ function expr(n) {
         if (m === 'substring' || m === 'substr') return `${obj}.substring(${n.arguments.map(expr).join(', ')})`;
         if (m === 'indexOf') return `${obj}.indexOf(${n.arguments.map(expr).join(', ')})`;
         if (m === 'toFixed') return `${obj}.toStringAsFixed(${n.arguments.map(expr).join(', ')})`;
+        if (m === 'slice' && n.arguments.length && isStrParam(callee.expression)) return `${obj}.substring(${n.arguments.map(expr).join(', ')})`;   // up-crosslang · מחרוזת מוקלדת ⇒ substring
         if (m === 'slice' && !n.arguments.length) return `${obj}.toList()`;   // JS slice() = העתק; Dart sublist דורש ארגומנט (נחשף ע"י ההקלדה)
         if (m === 'sort') return `(${obj}..sort(${n.arguments.map(expr).join(', ')}))`;
         if (m === 'flat') return `${obj}.expand((x) => x is List ? x : [x]).toList()`;

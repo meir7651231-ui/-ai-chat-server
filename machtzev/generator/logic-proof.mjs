@@ -8,6 +8,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import * as R from '../root.mjs';
 import { resolveDart } from '../dart-bin.mjs';
+import { emit as jsToDart } from '../emit/ast-js-to-dart.mjs';   // up-crosslang · הממיר JS⇒Dart (מנוע קיים)
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 // c2 · פותר-Dart אחד לכל הכלים (dart-bin.resolveDart): DART_BIN ⇒ $HOME/dart-sdk ⇒ /home/user/flutter ⇒ PATH.
 //   עדיפות ל-$DART אם הוגדר במפורש (מחרוזת לא-ריקה); אין בינארי ⇒ null ⇒ proveFile מחזיר {error:'tool=dart'} (L34: אין-כלי ≠ כשל, לא בליעה שקטה).
@@ -85,8 +86,15 @@ function proveFile(id, pure, examples, extraImports, env = {}) {
 const dartLambdaType = (ret) => { const t = String(ret || 'dynamic').replace(/\?$/, ''); return /^(bool|String|int|double|num)$/.test(t) ? t : /^List/.test(t) ? 'List<dynamic>' : /^Map/.test(t) ? 'Map<dynamic, dynamic>' : 'dynamic'; };
 /** מקמפל פעם אחת רתמה לצורך: rows = כל אטומי-המדף הטהורים [{id,file,ret}] · examples [[argsDart, checkDart, env?]] · env {clock,human,world,imports}
  *  ⇒ {dill} או {error}. */
-export function buildInterp(needId, rows, examples, env = {}, extraImports = []) {
+export function buildInterp(needId, rows0, examples, env = {}, extraImports = [], jsRows = []) {
   if (!DART) return { error: 'tool=dart' };
+  let rows = [...rows0, ...jsRows]; let dropped = [];
+  for (let round = 0; round < 12; round++) { const r = buildInterpOnce(needId, rows, examples, env, extraImports); if (!r.error || !jsRows.length) return { ...r, rows, dropped };
+    const bad = jsRows.filter((j) => r.error.includes(path.basename(j.file))); if (!bad.length) { const keep = rows.filter((x) => !x.x); return { ...buildInterpOnce(needId, keep, examples, env, extraImports), rows: keep, dropped: jsRows.map((j) => j.id) }; }
+    dropped = [...dropped, ...bad.map((j) => j.id)]; rows = rows.filter((x) => !bad.includes(x)); jsRows = jsRows.filter((x) => !bad.includes(x)); }
+  return { error: 'interp: too many rounds', rows, dropped };
+}
+function buildInterpOnce(needId, rows, examples, env = {}, extraImports = []) {
   const dir = path.join(HERE, '.prove', 'interp'); fs.mkdirSync(dir, { recursive: true });
   const rel = (f) => path.relative(dir, path.join(R.NEW, f)).split(path.sep).join('/');
   const files = [...new Set(rows.map((r) => r.file))]; const pre = new Map(files.map((f, i) => [f, `a${i}`]));
@@ -124,6 +132,7 @@ ${HUM}
 ];
 ${WORLD}
 class Missing implements Exception {}
+String _v(dynamic r) { try { return jsonEncode(jsonEncode(r)); } catch (_) { return jsonEncode(r.toString()); } }   // ערך כ-JSON כשאפשר (שקילות חוצה-שפה), אחרת toString
 
 Function lam(Function g, int m, List<dynamic> rest, String ret) {
   // תקע-למבדה מוקלד לפי טיפוס-ההחזרה של החלקיק (Dart בודק טיפוסי-פונקציה בזמן-ריצה)
@@ -161,7 +170,7 @@ void main(List<String> argv) {
         final w = newWorld();
         dynamic r = ev(root, EX[j], j, w); if (isVoid) r = w;
         final ok = CK[j](r);
-        out.write('\$i:\$j:\${ok ? 1 : 0}:\${jsonEncode(r.toString())}\\n');
+        out.write('\$i:\$j:\${ok ? 1 : 0}:\${_v(r)}\\n');
       } on Missing catch (_) { out.write('\$i:\$j:2:\\n'); }
       catch (_) { out.write('\$i:\$j:2:\\n'); }
     }
@@ -173,7 +182,7 @@ void main(List<String> argv) {
   fs.writeFileSync(file, src);
   const t0 = Date.now();
   const c = spawnSync(DART, ['compile', 'kernel', file, '-o', dill], { cwd: dir, encoding: 'utf8', timeout: 600000 });
-  if (c.status !== 0 || !fs.existsSync(dill)) return { error: 'compile: ' + (c.stderr || c.stdout || '').split('\n').filter((l) => /rror/.test(l)).slice(0, 3).join(' | '), file };
+  if (c.status !== 0 || !fs.existsSync(dill)) return { error: 'compile: ' + (c.stderr || c.stdout || '').split('\n').filter((l) => /rror/.test(l)).slice(0, 80).join(' | '), file };
   return { dill, file, compileMs: Date.now() - t0 };
 }
 /** מעריך עצים ברתמה מקומפלת: trees [{id, tree, void}] ⇒ {id: {ok,total,unknown,vals}} */
@@ -185,4 +194,51 @@ export function evalInterp(interp, trees, nEx) {
   const out = {}; for (const t of trees) out[t.id] = { ok: 0, total: nEx, unknown: 0, vals: Array(nEx).fill(null) };
   for (const l of (r.stdout || '').split('\n')) { const m = l.match(/^(\d+):(\d+):([012]):(.*)$/); if (!m) continue; const e = out[trees[+m[1]].id]; if (!e) continue; if (m[3] === '1') e.ok++; if (m[3] === '2') e.unknown++; if (m[4]) { try { e.vals[+m[2]] = JSON.parse(m[4]); } catch { e.vals[+m[2]] = m[4]; } } }
   return out;
+}
+
+
+// ══════════════════════════════════════════════════════════════════════════════
+// up-crosslang · שקע חוצה-שפה: אטום-JS טהור בלי תאום-Dart ⇒ ast-js-to-dart ממיר ⇒ נכנס לרתמה-המקומפלת כמועמד ⇒ אם ניצח,
+//   שקילות-על-הדוגמאות מול ה-JS המקורי (ה-JS = אמת, כעיקרון fuzz-parity). לא מתקמפל ⇒ נזרק בשקט (לא ∅ של הצורך).
+// ══════════════════════════════════════════════════════════════════════════════
+const SIG_RE = /^([A-Za-z_][A-Za-z0-9_<>?,. ]*?)\s+([a-z][A-Za-z0-9_]*)\(([\s\S]*?)\)\s*(?:\{|=>|async)/m;
+let JS_ROWS_CACHE = null;
+const JS_HELPERS = (() => { try { const m = fs.readFileSync(path.join(HERE, '..', 'emit', 'parity-ast.mjs'), 'utf8').match(/const H = `([^]*?)`;/); return m ? m[1].replace(/\\n/g, '\n') : ''; } catch { return ''; } })();   // עוזרי-הממיר (_falsy, _round…) מ-parity-ast
+export function jsTwinRows(hideDart = [], sig = null) {   // hideDart: מצב-בדיקה ("אילו לא היה תאום") · sig {params,ret}: טיפוסי-השקעים של הצורך מכוונים את הממיר (slice⇒substring/sublist)
+  const cacheKey = hideDart.join(',') + '|' + (sig ? JSON.stringify(sig) : ''); if (JS_ROWS_CACHE && JS_ROWS_CACHE.key === cacheKey) return JS_ROWS_CACHE.rows;
+  const EV = (() => { try { return JSON.parse(fs.readFileSync(path.join(HERE, 'type-evidence.json'), 'utf8')); } catch { return {}; } })();   // ראיות-טיפוס מוקלטות (tighten) לפי שם-קובץ
+  const dir = path.join(HERE, '.prove', 'interp', 'js'); fs.mkdirSync(dir, { recursive: true });
+  const census = new Set((() => { try { return JSON.parse(fs.readFileSync(path.join(HERE, 'logic-census.json'), 'utf8')).map((r) => r.name); } catch { return []; } })()); for (const h of hideDart) census.delete(h);
+  const atoms = path.join(R.NEW, 'atoms'); const rows = [];
+  if (!fs.existsSync(atoms)) { JS_ROWS_CACHE = { key: cacheKey, rows }; return rows; }
+  for (const f of fs.readdirSync(atoms).filter((x) => x.endsWith('.mjs') && !x.endsWith('.test.mjs'))) {
+    const src = fs.readFileSync(path.join(atoms, f), 'utf8'); if (/^import\s/m.test(src)) continue;   // טהור בלבד (חוק-1)
+    const m = src.match(/export\s+function\s+([A-Za-z_$][\w$]*)\s*\(([^)]*)\)/); if (!m || !m[2].trim() || census.has(m[1])) continue;
+    const pnames = m[2].split(',').map((x) => x.trim().split('=')[0].trim()).filter(Boolean);
+    let types = {}; const ev = EV[f.replace(/\.mjs$/, '')]; if (ev && Array.isArray(ev.params)) types[m[1]] = { params: Object.fromEntries(pnames.map((n, i) => [n, ev.params[i] && ev.params[i] !== 'null' ? ev.params[i] : 'dynamic'])), ret: ev.ret };
+    if (sig && sig.params && sig.params.length === pnames.length) types[m[1]] = { params: Object.fromEntries(pnames.map((n, i) => [n, String(sig.params[i]).replace(/\?$/, '')])), ret: sig.ret };   // טיפוסי-הצורך גוברים כשהאריות שווה
+    let dart; try { dart = jsToDart(src, { types, force: true }); } catch { continue; }
+    const dsig = dart.match(SIG_RE); if (!dsig || dsig[2] !== m[1]) continue;
+    const params = dsig[3].trim() ? dsig[3].split(',').map((p) => p.trim().replace(/\s+[A-Za-z_]\w*$/, '').replace(/\?$/, '')) : [];
+    const body = dart + '\n' + JS_HELPERS.split('\n').filter((l) => !/^import /.test(l) && !new RegExp('\\b' + (l.match(/^\w+\s+(_\w+)\(/) || [])[1] + '\\(').test(dart)).join('\n');   // עוזרים רק כשהאטום לא מגדיר אותם בעצמו
+    const out = path.join(dir, m[1] + '.dart'); fs.writeFileSync(out, `// 🌉 תאום-Dart שהומר אוטומטית מ-new/atoms/${f} (ast-js-to-dart) · שקע חוצה-שפה · ה-JS = אמת\nimport 'dart:math';\n` + body + '\n');
+    rows.push({ id: m[1], file: path.relative(R.NEW, out).split(path.sep).join('/'), params, ret: dsig[1].trim(), argc: params.length, x: 'js', jsFile: path.join(atoms, f) });
+  }
+  JS_ROWS_CACHE = { key: cacheKey, rows }; return rows;
+}
+/** שקילות-על-הדוגמאות (סינכרוני, בתהליך-node נפרד): אטום-ה-JS על ארגומנטי-הדוגמאות (ליטרלי-Dart ⇒ JS) מול ערכי-Dart ⇒ {ok, checked, mismatches} */
+export function jsParity(row, examplesArgs, dartVals) {
+  const script = `
+    const toJs = (a) => a.replace(/<[^<>]*(?:<[^<>]*>)?[^<>]*>\\s*(?=[\\[{])/g, '');
+    const norm = (v) => JSON.stringify(v === undefined ? null : v);
+    const [jsFile, id, argsJson, valsJson] = process.argv.slice(1);
+    const args = JSON.parse(argsJson), vals = JSON.parse(valsJson);
+    import('file://' + jsFile).then((mod) => { const fn = mod[id]; const mm = []; let checked = 0;
+      for (let j = 0; j < args.length; j++) { let a; try { a = new Function('return [' + toJs(args[j]) + '];')(); } catch (e) { mm.push('ex' + j + ': args ' + e.message.slice(0, 40)); continue; }
+        let v; try { v = fn(...a); } catch { v = '__THROW__'; } checked++;
+        let d = vals[j]; try { d = JSON.parse(d); } catch {}
+        if (norm(v) !== norm(d)) mm.push('ex' + j + ': js=' + norm(v).slice(0, 40) + ' dart=' + norm(d).slice(0, 40)); }
+      console.log(JSON.stringify({ ok: checked > 0 && !mm.length, checked, mismatches: mm })); }).catch((e) => console.log(JSON.stringify({ ok: false, checked: 0, mismatches: ['import: ' + e.message] })));`;
+  const r = spawnSync(process.execPath, ['--input-type=module', '-e', script, row.jsFile, row.id, JSON.stringify(examplesArgs), JSON.stringify(dartVals)], { encoding: 'utf8', timeout: 60000 });
+  try { return JSON.parse((r.stdout || '').trim().split('\n').pop()); } catch { return { ok: false, checked: 0, mismatches: ['parity: ' + (r.stderr || '').slice(0, 80)] }; }
 }

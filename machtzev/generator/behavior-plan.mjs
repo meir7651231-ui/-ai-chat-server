@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { catalog } from './auto-logic.mjs';
-import { proveCandidates, isPure, buildInterp, evalInterp } from './logic-proof.mjs';
+import { proveCandidates, isPure, buildInterp, evalInterp, jsTwinRows, jsParity } from './logic-proof.mjs';
 import * as R from '../root.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(HERE, 'behavior-plan.json');
@@ -162,10 +162,11 @@ function enumTrees(pureRows, need, exactNodes, cap, partial = false) {   // part
 // ══════════════════════════════════════════════════════════════════════════════
 const SEP = String.fromCharCode(1);
 const cvOf = (d) => { const s = String(d).trim(); if (/^'.*'$/.test(s)) return s.slice(1, -1).replace(/\\'/g, "'"); if (/^-?\d+(\.\d+)?$/.test(s)) return +s; if (s === 'true') return true; if (s === 'false') return false; if (s === 'null') return null; return s; };   // ליטרל-Dart ⇒ ערך לפרשן
-export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLevel = +(process.env.BP_CAPV || 4000) } = {}) {
+export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLevel = +(process.env.BP_CAPV || 20000) } = {}) {   // up-crosslang · 4000 גזר את lengthList(whereList(p0,λ…)) ב-countNoOwner (9,781 ביטויים בעומק-2); ההערכה ברתמה-המקומפלת זולה ⇒ 20000
   const P = need.params, R = need.ret; const isVoid = normT(R) === 'void';
   const usable = pureRows.filter((c) => c.argc >= 1 && normT(c.ret) !== 'void');
   const effects = isVoid ? pureRows.filter((c) => c.argc >= 1 && normT(c.ret) === 'void') : [];
+  const requiredKinds = [...(need.clock ? ['t'] : []), ...((need.human || []).length ? ['h'] : []), ...(need.world ? ['w'] : [])];   // שקעים מוצהרים ⇒ העץ המנצח חייב להשתמש בהם
   const CONSTS = [...(need.consts || []).map((c) => typeof c === 'string' ? { dart: c, type: /^'/.test(c) ? 'String' : /^-?\d/.test(c) ? 'num' : /^(true|false)$/.test(c) ? 'bool' : 'dynamic' } : c), ...(need.entity ? schemaKeys(need.entity) : [])];
   // עלים: פרמטרים · ליטרלים/סכמה · זמן · אדם · עולם
   const leaves = [...P.map((t, i) => ({ node: { k: 'p', i }, type: t, nodes: 0, cost: 0, ps: [i] })),
@@ -191,7 +192,11 @@ export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLev
   const idOf = (x) => x.id || (x.id = exprId(x.node));
   const byCost = (a, b) => (cov(b) - cov(a)) || (hitsR(a) - hitsR(b)) || (a.nodes - b.nodes) || (a.cost - b.cost) || (idOf(a) < idOf(b) ? -1 : 1);
   let pool = leaves.slice(); let fresh = leaves.slice(); const seenSig = new Set(); const proof = {}; let evaluated = 0; const allCands = []; const effectExprs = [];   // effectExprs: עצי-אפקט שהוערכו (לשומר-סף)
-  const interp = buildInterp(need.__id || 'need', pureRows, need.examples, ENV, need.imports || []);   // לקמפל פעם אחת: כל המדף + הדוגמאות + הפרשן
+  const hide = need.hideDart || []; const jsRows = need.crossLang === false ? [] : jsTwinRows(hide, { params: need.params, ret: need.ret });   // שקע חוצה-שפה: תאומי-JS מומרים (רק כאלה שאין להם תאום-Dart); hideDart = מצב-בדיקה
+  if (hide.length) { const hs = new Set(hide); for (let i = usable.length - 1; i >= 0; i--) if (hs.has(usable[i].id)) usable.splice(i, 1); }
+  const interp = buildInterp(need.__id || 'need', pureRows, need.examples, ENV, need.imports || [], jsRows);   // לקמפל פעם אחת: כל המדף + תאומי-JS + הדוגמאות + הפרשן
+  const jsOk = (interp.rows || []).filter((r) => r.x === 'js'); const jsIds = new Set(jsOk.map((r) => r.id));
+  usable.push(...jsOk.filter((r) => r.argc >= 1 && normT(r.ret) !== 'void'));
   const DBG0 = !!process.env.BP_DEBUG; if (DBG0) console.error('[values] interp', interp.error ? 'ERROR ' + interp.error : `compiled ${((interp.compileMs || 0) / 1000).toFixed(1)}s`);
   const DBG = !!process.env.BP_DEBUG; const dbg = (...a) => { if (DBG) console.error('[values]', ...a); };
   dbg('start', need.__id, 'usable', usable.length, 'leaves', leaves.length);
@@ -222,7 +227,15 @@ export function valueSearch(need, pureRows, ENV, proveFn, { maxDepth = 3, capLev
     const wins = []; fresh = [];
     for (let i = 0; i < level.length; i++) { const e = level[i], r = res[cands[i].id]; if (!r) continue;
       const covers = e.ps.length === P.length;
-      if (r.ok === r.total && covers && (isVoid ? e.isVoid : tmatchT(e.type, R))) wins.push(cands[i]);   // צורך-אפקט: רק עץ שהשורש שלו אפקט (w נבדק), לא ערך שבמקרה עובר את הבדיקה
+      const usesAll = requiredKinds.every((k) => leafKinds(e.node).includes(k));
+      if (r.ok === r.total && covers && usesAll && (isVoid ? e.isVoid : tmatchT(e.type, R))) {   // צורך-אפקט: רק עץ שהשורש שלו אפקט; שקע מוצהר חייב להיות בשימוש
+        const jsNodes = treeAtoms(e.node).filter((n) => jsIds.has(n.id)); let parity = null;
+        if (jsNodes.length) {   // שקע חוצה-שפה: שקילות-על-הדוגמאות מול ה-JS (רק כשארגומנטי-הצומת הם פרמטרים/ליטרלים — אחרת לא-מאומת ⇒ לא מנצח)
+          const direct = jsNodes.length === 1 && jsNodes[0] === e.node && e.node.args.every((a) => a.k === 'p' || a.k === 'c');
+          parity = direct ? jsParity(jsOk.find((q) => q.id === jsNodes[0].id), need.examples.map((ex) => ex[0]), r.vals || []) : { ok: false, checked: 0, mismatches: ['unverified: js node not at root with direct args'] };
+          if (!parity.ok) { proof[cands[i].id] = { ...proof[cands[i].id], parity }; continue; }
+        }
+        wins.push({ ...cands[i], parity, vals: r.vals, crossLang: jsNodes.map((n) => n.id) }); }
       if ((r.unknown || 0) === r.total) continue;   // כל התאים ∅ ⇒ אין ערך חי (ok=0 עם ערכים = חי, רק לא התשובה)
       if (!r.vals || r.vals.every((v) => v === null)) continue;
       const sig = normT(e.type) + '|' + r.vals.map((v) => String(v)).join(SEP); if (seenSig.has(sig)) continue; seenSig.add(sig);   // אותם ערכים = אותו דבר; נשארת הזולה
@@ -264,13 +277,13 @@ export function plan({ prove = true, needs = NEEDS, earlyExit = false, values = 
   const fullPass = (m) => Object.values(m).some((r) => r && r.ok === r.total);
   if (prove) { for (const id of needsIds) { const need = needs[id]; if (!need.examples) continue;
       ENV = { clock: need.clock || null, human: need.human || [], world: need.world || null };
-      const cands = candsOf(need);
+      const hideS = new Set(need.hideDart || []); const cands = candsOf(need).filter((c) => !hideS.has(c.id));   // hideDart (מצב-בדיקה של השקע חוצה-השפה) חל גם על היחידים
       if (cands.length) proofs[id] = proveBatched(id, cands, need.examples, need.imports || []);
       const pf0 = proofs[id] || {}; if (fullPass(pf0)) continue;   // יחיד עבר ⇒ אין שרשור (יחיד תמיד גובר)
       if (values) {   // up-values · חיפוש-מונחה-ערכים במקום מניית-כל-העצים (גם שומר-סף)
         const vs = valueSearch({ ...need, __id: id }, pureRows, ENV, proveCandidates);
         proofs[id] = { ...pf0, ...vs.proof };
-        chainsOf[id] = { admissible: vs.evaluated, depth: vs.depth, overflow: vs.overflow, values: true, cands: Object.fromEntries(vs.cands.map((c) => [c.id, { chain: null, tree: c.tree, nodes: c.nodes, sumArgc: c.sumArgc, score: 0 }])) };
+        chainsOf[id] = { admissible: vs.evaluated, depth: vs.depth, overflow: vs.overflow, values: true, cands: Object.fromEntries(vs.cands.map((c) => [c.id, { chain: null, tree: c.tree, nodes: c.nodes, sumArgc: c.sumArgc, score: 0, parity: c.parity || null, crossLang: c.crossLang || [] }])) };
         continue;
       }
       const cap2 = need.reuse ? Math.min(CAP2, 5000) : CAP2;   // שימוש-חוזר מנפח את המרחב (כל שקע-num יכול לקבל p0) ⇒ תקרה דטרמיניסטית
@@ -313,15 +326,15 @@ export function plan({ prove = true, needs = NEEDS, earlyExit = false, values = 
     const pf = proofs[id] || {};
     const singles = candsOf(need).map((c) => ({ id: c.id, file: c.file, chain: null, tree: null, nodes: 1, sumArgc: c.argc, score: +singleScore(c).toFixed(2), exact: c.params.every((p, i) => norm(p) === norm(need.params[i])) && norm(c.ret) === norm(need.ret), proven: pf[c.id] ? pf[c.id].ok === pf[c.id].total : false, ok: pf[c.id] ? pf[c.id].ok : 0 }));
     // עצים (כולל שרשראות-מדור): יחיד-מוכח תמיד גובר; עץ נכנס רק דרך ההוכחה. תאימות-לאחור: cands שמורים ישנים = {chain,score} בלבד
-    const comps = chainsOf[id] ? Object.entries(chainsOf[id].cands).map(([cid, c]) => { const nodes = c.nodes ?? (c.tree ? treeAtoms(c.tree).length : (c.chain ? c.chain.length : 1)); const sumArgc = c.sumArgc ?? (c.chain ? P.length + 1 : 0); const file = c.chain ? c.chain[0].file : (c.tree ? treeAtoms(c.tree)[0].file : null); return { id: cid, file, chain: c.chain || null, tree: c.tree || null, nodes, sumArgc, score: c.score ?? +compScore(c).toFixed(2), exact: false, proven: pf[cid] ? pf[cid].ok === pf[cid].total : false, ok: pf[cid] ? pf[cid].ok : 0 }; }) : [];
+    const comps = chainsOf[id] ? Object.entries(chainsOf[id].cands).map(([cid, c]) => { const nodes = c.nodes ?? (c.tree ? treeAtoms(c.tree).length : (c.chain ? c.chain.length : 1)); const sumArgc = c.sumArgc ?? (c.chain ? P.length + 1 : 0); const file = c.chain ? c.chain[0].file : (c.tree ? treeAtoms(c.tree)[0].file : null); return { parity: c.parity || null, crossLang: c.crossLang || [], id: cid, file, chain: c.chain || null, tree: c.tree || null, nodes, sumArgc, score: c.score ?? +compScore(c).toFixed(2), exact: false, proven: pf[cid] ? pf[cid].ok === pf[cid].total : false, ok: pf[cid] ? pf[cid].ok : 0 }; }) : [];
     // הכרעה (כלל-3): מוכח > (ok) > יחיד-לפני-עץ > **פחות-צמתים** > **argc-כולל קטן** > score (שובר-שוויון-מבני-מוחלט · אפס-רגרסיה) > exact > id לקסיקוגרפי
     const cands = [...singles, ...comps]
       .sort((x, y) => (y.proven - x.proven) || (y.ok - x.ok) || ((x.chain || x.tree ? 1 : 0) - (y.chain || y.tree ? 1 : 0)) || (x.nodes - y.nodes) || (x.sumArgc - y.sumArgc) || (y.score - x.score) || (x.exact === y.exact ? (x.id < y.id ? -1 : 1) : x.exact ? -1 : 1));
     const top = cands[0] || null; const ok = top && (pf.error ? top.score > 0 : top.proven);
     // שקע-ספק: מועמד שכל תאיו ok/∅ (אף כישלון) = ספק, לא כשל — מדווח, לא נבחר (§20-ג)
     const doubt = Object.entries(pf).filter(([k, v]) => v && v.unknown > 0 && v.ok + v.unknown === v.total).map(([k]) => k).slice(0, 5);
-    const socketsUsed = ok && top.tree ? [...new Set(leafKinds(top.tree))].filter((k) => k !== 'p').map((k) => ({ c: 'literal', t: 'clock', h: 'human', w: 'world' })[k] || k).concat(top.tree.k === 'g' ? ['guard'] : []) : [];
-    out[id] = { shape: need.shape, routine: need.routine || null, doubt, sockets: socketsUsed, pick: ok ? top.id : null, file: ok ? top.file : null, chain: ok && top.chain ? top.chain : null, tree: ok && top.tree ? top.tree : null, nodes: top ? top.nodes : 0, score: top ? top.score : 0, proven: !!(top && top.proven), candidates: singles.length, chainsAdmissible: chainsOf[id] ? chainsOf[id].admissible : 0, treeDepth: chainsOf[id] ? chainsOf[id].depth : 0, treeOverflow: chainsOf[id] ? !!chainsOf[id].overflow : false, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.ok}/${need.examples ? need.examples.length : 0}${c.proven ? '✓' : ''}:n${c.nodes}:a${c.sumArgc}:${c.score}`), proof: pf, chains: chainsOf[id] || null };
+    const socketsUsed = ok && top.tree ? [...new Set(leafKinds(top.tree))].filter((k) => k !== 'p').map((k) => ({ c: 'literal', t: 'clock', h: 'human', w: 'world' })[k] || k).concat(top.tree.k === 'g' ? ['guard'] : []).concat(top.crossLang && top.crossLang.length ? ['cross-language'] : []) : [];
+    out[id] = { shape: need.shape, routine: need.routine || null, doubt, sockets: socketsUsed, parity: ok && top.parity ? top.parity : null, crossLang: ok && top.crossLang ? top.crossLang : [], pick: ok ? top.id : null, file: ok ? top.file : null, chain: ok && top.chain ? top.chain : null, tree: ok && top.tree ? top.tree : null, nodes: top ? top.nodes : 0, score: top ? top.score : 0, proven: !!(top && top.proven), candidates: singles.length, chainsAdmissible: chainsOf[id] ? chainsOf[id].admissible : 0, treeDepth: chainsOf[id] ? chainsOf[id].depth : 0, treeOverflow: chainsOf[id] ? !!chainsOf[id].overflow : false, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.ok}/${need.examples ? need.examples.length : 0}${c.proven ? '✓' : ''}:n${c.nodes}:a${c.sumArgc}:${c.score}`), proof: pf, chains: chainsOf[id] || null };
   }
   return out;
 }

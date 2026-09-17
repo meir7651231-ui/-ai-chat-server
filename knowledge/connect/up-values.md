@@ -27,3 +27,22 @@
 
 ## לא נעשה
 - שקע חוצה-שפה (ast-js-to-dart ⇒ פרשן): לא נבנה. · 58 החלקיקים לא נחתו (הכרעת-בעלים, שער search-proof).
+
+## up-crosslang — שקע #12 (חוצה-שפה) · 12/12 · תיקוני-כלים (17.9 · 07:00–08:00Z)
+ענף: claude/up-fnsocket-260917 (המשך). כל מספר עם הפקודה שלו; DART=/root/dart-sdk/bin/dart.
+1. **logic-proof.mjs — `jsTwinRows(hideDart, sig)`**: אטום-JS טהור ב-new/atoms בלי תאום-Dart (לפי logic-census) ⇒ ast-js-to-dart ממיר (טיפוסי-השקעים של הצורך מכוונים את הממיר כשהאריות שווה; אחרת type-evidence.json) ⇒ `.prove/interp/js/<name>.dart` ⇒ נכנס לרתמה-המקומפלת כמועמד. לא מתקמפל ⇒ נזרק (לולאת-drop עד 12 סבבים ב-`buildInterp`). ניצח ⇒ `jsParity`: ה-JS המקורי על ארגומנטי-הדוגמאות מול ערכי-Dart (ה-JS = אמת). באג שתוקן: `sig` הוצל ע"י `const sig` (ReferenceError) ⇒ `dsig`.
+2. **ast-js-to-dart.mjs — `isStrParam`**: מקלט מוקלד-String (ליטרל / פרמטר מוקלד מהראיות או מטיפוסי-הצורך) ⇒ `slice(a,b)` = `substring`, לא `sublist`. מדידה: `node emit/parity-ast.mjs --evidence` ⇒ **777/1099** מתקמפלים (היה 774/1099; אותו יתר-שגיאות).
+3. **behavior-plan.mjs — `capLevel` 4000 ⇒ 20000** (BP_CAPV): countNoOwner/countNoOwnerNull יצאו ∅ כי 4000 גזר 9,781 ביטויים בעומק-2 (נבדק: זהה גם בלי תאומי-JS ⇒ לא השקע החדש). ההערכה ברתמה-המקומפלת זולה ⇒ התקרה עלתה.
+4. **search-record.mjs — `OUT` הוחזר**: G63 (0771b19b) הסיר את `OUT` יחד עם IDX/LOG כשעברו ל-search-score ⇒ הכלי קרס (ReferenceError) על כל רשומה. תוקן.
+
+| סט (`--needs knowledge/connect/socket-needs.json` / `/tmp/fn-needs2.json`) | זמן | תוצאה |
+|---|---|---|
+| xl.monthKey (hideDart: monthKey) | 37s (עם xl.levenshtein) | **pick=monthKey(p0) · sockets=[cross-language] · parity ok 3/3** — התאום שהומר מ-new/atoms/month-key.mjs |
+| xl.levenshtein (hideDart: levenshtein) | (שם) | damerauLevenshtein(p0,p1) מהמדף — התאום המומר לא נדרש |
+| x.look.pick | 43s (עם t4b) | ∅ — pickLook: `for-in` לא נתמך בממיר (מגבלה מוצהרת) |
+| t4b.human.overLimit.strong | (שם) | cmpGtDyn(p0,?limit) · sockets=[human] |
+| socket-needs t1–t7 (cap 20000) | 98s | t1 mulDyn(p0,p0) · t2 whereList(p0,λfieldIsNull(_,'first')) · t3 cockpitDaysSince(p0,now) · t4 ∅ (דוגמאות חלשות, ראה t4b) · t5 addTo(w,addDyn(p0,p1)) · t6 if(p2){addTo(w,addDyn(p0,p1))} · t7 routine {every:week} |
+| record-needs 4 (cap 20000) | 75s | **4/4** (ב-cap 4000: 2/4 — countNoOwner ∅) |
+
+12 סוגי-שקע מוכחים בריצה: p · a · c · f · t · h · w · g · ∅ · reuse · routine · cross-language.
+הערה: המדידות רצות עם 58 החלקיקים על המדף (נוחתים בקומיטים הבאים דרך search-record ⇒ search-proof).

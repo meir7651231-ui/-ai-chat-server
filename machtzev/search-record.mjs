@@ -14,6 +14,7 @@ const opt = (k) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : nu
 const query = argv.filter((a, i) => !a.startsWith('--') && (i === 0 || !argv[i - 1].startsWith('--'))).join(' ').trim();
 if (!query) { console.error('usage: search-record "<מילות-חיפוש>" [--creates <path>] [--choose <id> | --none "<למה>"]'); process.exit(2); }
 import { IDX, LOG, tok, scoreFor, loadOracle, layerOf } from './search-score.mjs';   // G63 · ניקוד אחד משותף לשער
+const OUT = R.MACH + 'audit/search/';   // G63 הסיר את OUT יחד עם IDX/LOG כשעברו ל-search-score ⇒ הכלי קרס (ReferenceError) על כל רשומה
 const sha = (s) => crypto.createHash('sha256').update(s).digest('hex');
 const { display, logic, all } = loadOracle();
 const oracle = { atomIndexSha: sha(fs.readFileSync(IDX)), logicCensusSha: sha(fs.readFileSync(LOG)), display: display.length, logic: logic.length };
