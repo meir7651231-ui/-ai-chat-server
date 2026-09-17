@@ -44,6 +44,19 @@ class MainActivity : AppCompatActivity() {
         hey.setOnCheckedChangeListener { _, v -> Prefs.setHey(this, v); BubbleService.instance?.applyPrefs() }
         conv.setOnCheckedChangeListener { _, v -> Prefs.setConv(this, v); BubbleService.instance?.applyPrefs() }
         requestRuntimePermissions()
+        handleShare(intent)
+    }
+    override fun onNewIntent(intent: Intent?) { super.onNewIntent(intent); handleShare(intent) }
+    // step 63: "שתף" → ליבה. Text or link shared from any app becomes a message to the channel.
+    private fun handleShare(i: Intent?) {
+        if (i?.action != Intent.ACTION_SEND) return
+        val t = (i.getStringExtra(Intent.EXTRA_TEXT) ?: "").trim(); val subj = (i.getStringExtra(Intent.EXTRA_SUBJECT) ?: "").trim()
+        if (t.isEmpty() && subj.isEmpty()) return
+        val msg = "שיתפתי איתך: " + (if (subj.isNotEmpty() && !t.contains(subj)) "$subj – " else "") + t
+        val svc = BubbleService.instance
+        if (svc != null && BubbleService.running) { svc.sendShared(msg); h.postDelayed({ moveTaskToBack(true) }, 400) }
+        else { Prefs.setPendingShare(this, msg); status.text = "השיתוף נשמר – הפעל את הבועה ותגיד 'תטפל בזה'." }
+        intent = Intent(this, MainActivity::class.java)
     }
 
     override fun onResume() { super.onResume(); h.post(tick) }

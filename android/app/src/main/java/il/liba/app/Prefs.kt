@@ -21,6 +21,8 @@ object Prefs {
     fun setBarge(c: Context, v: Boolean) = p(c).edit().putBoolean("barge", v).apply()
     fun headset(c: Context) = p(c).getBoolean("headset", false)
     fun setHeadset(c: Context, v: Boolean) = p(c).edit().putBoolean("headset", v).apply()
+    fun pendingShare(c: Context): String? = p(c).getString("share", null)
+    fun setPendingShare(c: Context, v: String?) = p(c).edit().putString("share", v).apply()
     fun crash(c: Context): String? = p(c).getString("crash", null)
     fun clearCrash(c: Context) = p(c).edit().remove("crash").apply()
     fun updateUrl(c: Context): String? = p(c).getString("updateUrl", null)
