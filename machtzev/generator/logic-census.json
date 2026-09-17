@@ -11269,6 +11269,16 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/op-trim-str.dart",
+  "name": "trimStr",
+  "ret": "String",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/trust-report.dart",
   "name": "trustReport",
   "ret": "Map<String, dynamic>",
