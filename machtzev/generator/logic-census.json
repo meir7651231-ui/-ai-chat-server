@@ -1596,6 +1596,17 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/op-cmp-lt-dyn.dart",
+  "name": "cmpLtDyn",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/cockpit-at-risk.dart",
   "name": "cockpitAtRisk",
   "ret": "List",
@@ -3366,6 +3377,17 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/op-eq-str.dart",
+  "name": "eqStr",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/receipt-html.dart",
   "name": "esc",
   "ret": "String",
@@ -4507,6 +4529,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-ge-num.dart",
+  "name": "geNum",
+  "ret": "bool",
+  "params": [
+   "num",
+   "num"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/given-value.dart",
   "name": "givenValue",
   "ret": "num",
@@ -5435,6 +5468,16 @@
  {
   "file": "dart-maor/op-is-not-null.dart",
   "name": "isNotNull",
+  "ret": "bool",
+  "params": [
+   "dynamic"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/op-is-null.dart",
+  "name": "isNull",
   "ret": "bool",
   "params": [
    "dynamic"
@@ -11594,6 +11637,17 @@
   "params": [
    "dynamic",
    "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/op-where-list.dart",
+  "name": "whereList",
+  "ret": "List<dynamic>",
+  "params": [
+   "List<dynamic>",
+   "bool Function(dynamic) f"
   ],
   "argc": 2,
   "wireable": false

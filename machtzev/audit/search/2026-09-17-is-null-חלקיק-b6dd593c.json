@@ -1,0 +1,185 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:16:59.060Z",
+ "query": "is null חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "is",
+  "null",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "434a7d245f1a554a11b30deb001dd7fb8e0bb58d396e608552f4c53bd56e40d6",
+  "logicCensusSha": "d87962c4156937ec1d444064a10dc418bdbe2c4fe5d7b8e4327d7747a08a0517",
+  "display": 1919,
+  "logic": 995
+ },
+ "candidates": [
+  {
+   "id": "fieldIsNotNull",
+   "layer": "logic",
+   "file": "dart-maor/op-field-is-not-null.dart",
+   "score": 6,
+   "hits": [
+    "is",
+    "null"
+   ]
+  },
+  {
+   "id": "fieldIsNull",
+   "layer": "logic",
+   "file": "dart-maor/op-field-is-null.dart",
+   "score": 6,
+   "hits": [
+    "is",
+    "null"
+   ]
+  },
+  {
+   "id": "isNotNull",
+   "layer": "logic",
+   "file": "dart-maor/op-is-not-null.dart",
+   "score": 6,
+   "hits": [
+    "is",
+    "null"
+   ]
+  },
+  {
+   "id": "csvIsBlank",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "csvIsComment",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "isAdmin",
+   "layer": "logic",
+   "file": "dart-maor/is-admin.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "isAdminUser",
+   "layer": "logic",
+   "file": "dart-maor/is-admin-user.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "isBrightImage",
+   "layer": "logic",
+   "file": "dart/is_bright_image.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "isContiguousSubsequence",
+   "layer": "logic",
+   "file": "dart/is_contiguous_subsequence.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "isDataImage",
+   "layer": "logic",
+   "file": "dart-maor/is-data-image.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "isDirectionalDevice",
+   "layer": "logic",
+   "file": "dart/is_directional_device.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "isDone",
+   "layer": "logic",
+   "file": "dart-maor/is-done.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "isEmptyList",
+   "layer": "logic",
+   "file": "dart-maor/op-is-empty-list.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "isEncDoc",
+   "layer": "logic",
+   "file": "dart-maor/is-enc-doc.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  },
+  {
+   "id": "isEncrypted",
+   "layer": "logic",
+   "file": "dart-maor/is-encrypted.dart",
+   "score": 3,
+   "hits": [
+    "is"
+   ]
+  }
+ ],
+ "strong": [
+  "fieldIsNotNull",
+  "fieldIsNull",
+  "isNotNull",
+  "csvIsBlank",
+  "csvIsComment",
+  "isAdmin",
+  "isAdminUser",
+  "isBrightImage",
+  "isContiguousSubsequence",
+  "isDataImage",
+  "isDirectionalDevice",
+  "isDone",
+  "isEmptyList",
+  "isEncDoc",
+  "isEncrypted"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart-maor/op-is-null.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד isNull(dynamic) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי acts == null · מקור למשל dart/action_ids_for.dart#actionIdsFor); המועמדים-החזקים fieldIsNotNull(dynamic, String) => bool · fieldIsNull(dynamic, String) => bool · isNotNull(dynamic) => bool · csvIsBlank(List<String>) => bool · csvIsComment(List<String>) => bool · isAdmin(List<String>?, String?) => bool · isAdminUser(Map<String, dynamic>, String?) => bool · isBrightImage(String?, int Function(String?) imageBrightness) => bool · isContiguousSubsequence(List<String>, List<String>) => bool · isDataImage(dynamic) => bool · isDirectionalDevice(DevicePart, String Function(String) term) => bool · isDone(Map) => bool · isEmptyList(List<dynamic>) => bool · isEncDoc(dynamic) => bool · isEncrypted(dynamic) => bool — לרובם אין את חתימת-הפעולה-לבדה (dynamic) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: isNotNull {} · isDataImage {return s is String && RegExp(r'^data:image\\/(png|jpe?g|webp|gif);base64,').hasMatch(s); }} · isEncDoc {return d is Map && d['enc'] is String && d['iv'] is String; }} · isEncrypted {} — מול isNull {a == null;}",
+ "sig": "b6dd593cace41f8589a10e7148595e6aaffe0cf0092b5cada15b3171c5b98ec1"
+}

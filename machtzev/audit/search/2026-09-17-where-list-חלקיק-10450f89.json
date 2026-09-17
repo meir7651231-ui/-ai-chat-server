@@ -1,0 +1,192 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:16:59.413Z",
+ "query": "where list חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "where",
+  "list",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "d3a4fb37cc195033e267f7445986a533d057e3c41ebc6c2faebde1be872e6705",
+  "logicCensusSha": "5f02d8f03817ab825701612dd38ee380942cff9b69d6e239f5da9464b4c6d54b",
+  "display": 1920,
+  "logic": 996
+ },
+ "candidates": [
+  {
+   "id": "Forge4AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/4_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge5AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/5_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge6AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/6_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "Forge7AtomsList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/7_atoms_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeBrandListRow",
+   "layer": "display",
+   "file": "dart-forge-bs/header/brand_list_row.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeBulletList",
+   "layer": "display",
+   "file": "dart-forge-bs/text/bullet_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeNumberedList",
+   "layer": "display",
+   "file": "dart-forge-bs/text/numbered_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeProfileRowList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/profile_row_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "ForgeSwitchRowList",
+   "layer": "display",
+   "file": "dart-forge-bs/list/switch_row_list.dart",
+   "score": 4,
+   "hits": [
+    "list",
+    "תוך"
+   ]
+  },
+  {
+   "id": "BrandListRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/brand_list_row.dart",
+   "score": 3,
+   "hits": [
+    "list"
+   ]
+  },
+  {
+   "id": "cockpitWorkListText",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-work-list-text.dart",
+   "score": 3,
+   "hits": [
+    "list"
+   ]
+  },
+  {
+   "id": "deliveryListLines",
+   "layer": "logic",
+   "file": "dart-maor/delivery-list-lines.dart",
+   "score": 3,
+   "hits": [
+    "list"
+   ]
+  },
+  {
+   "id": "distributionListLines",
+   "layer": "logic",
+   "file": "dart-maor/distribution-list-lines.dart",
+   "score": 3,
+   "hits": [
+    "list"
+   ]
+  },
+  {
+   "id": "eqList",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-list.dart",
+   "score": 3,
+   "hits": [
+    "list"
+   ]
+  },
+  {
+   "id": "ForgedList",
+   "layer": "display",
+   "file": "dart-ui-bs/forged/forged_list.dart",
+   "score": 3,
+   "hits": [
+    "list"
+   ]
+  }
+ ],
+ "strong": [
+  "cockpitWorkListText",
+  "deliveryListLines",
+  "distributionListLines",
+  "eqList"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "Forge4AtomsList",
+  "Forge5AtomsList",
+  "Forge6AtomsList",
+  "Forge7AtomsList",
+  "ForgeBrandListRow",
+  "ForgeBulletList",
+  "ForgeNumberedList",
+  "ForgeProfileRowList",
+  "ForgeSwitchRowList",
+  "BrandListRow",
+  "ForgedList"
+ ],
+ "creates": "new/dart-maor/op-where-list.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד whereList(List<dynamic>, bool Function(dynamic)) => List<dynamic> שנחצב מכנית ע\"י ast_carve --ops (הביטוי rows.where((d) => (d as Map)['cur'] != '\\$') · מקור למשל dart-maor/annual-report-lines.dart#annualReportLines); המועמדים-החזקים cockpitWorkListText(Map, Map<String, String> T) => String · deliveryListLines(List<Map<String, dynamic>>, String Function(dynamic status) statusLabel, String Function(String) term) => List<String> · distributionListLines(Map<String, dynamic>, Object?, Object?, Map<String, dynamic> Function(Map<String, dynamic> db, dynamic component) itemOf, String Function(Map<String, dynamic> db, dynamic assignment, Object? config) beneficiaryLabel, Map<String, dynamic> T) => List<String> · eqList(List<dynamic>, List<dynamic>) => bool — לאף אחד אין את חתימת-הפעולה-לבדה (List<dynamic>, bool Function(dynamic)) => List<dynamic> (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם",
+ "sig": "10450f891413923c4dc76f0e43a03bfd81f7eebeb7342b95ad4cf4f6b14861a5"
+}
