@@ -1,6 +1,6 @@
 [
  {
-  "entity": "מטופלים",
+  "entity": "קבלני משנה",
   "name": "ייצוא",
   "expr": "[ייצוא]",
   "ok": true,
@@ -29,15 +29,15 @@
     ],
     "alts": [
      "exportAllowed",
-     "eventsCsvRows",
-     "ayinSheetRows"
+     "contractorCredit",
+     "reenrollCsvRows"
     ]
    }
   ],
   "wired": []
  },
  {
-  "entity": "מטופלים",
+  "entity": "קבלני משנה",
   "name": "חריגה",
   "expr": "[חריגה]",
   "ok": true,
@@ -62,19 +62,19 @@
    {
     "op": "predicate",
     "atoms": [
-     "isGrantableFeature"
+     "contractorCredit"
     ],
     "alts": [
-     "isGrantableFeature",
-     "liveSuggestions",
-     "cockpitProgress"
+     "contractorCredit",
+     "isRenewed",
+     "supLastInPeriod"
     ]
    }
   ],
   "wired": []
  },
  {
-  "entity": "מטופלים",
+  "entity": "קבלני משנה",
   "name": "איתור",
   "expr": "[איתור]",
   "ok": true,
@@ -99,19 +99,157 @@
    {
     "op": "match",
     "atoms": [
-     "liveSuggestions"
+     "contractorCredit"
     ],
     "alts": [
-     "liveSuggestions",
-     "configOpFromJson",
-     "templateFor"
+     "contractorCredit",
+     "isRenewed",
+     "supLastInPeriod"
     ]
    }
   ],
   "wired": []
  },
  {
-  "entity": "מטופלים",
+  "entity": "קבלני משנה",
+  "name": "טבלה",
+  "expr": "[טבלה]",
+  "ok": true,
+  "why": null,
+  "shape": "table",
+  "ops": [
+   "table"
+  ],
+  "picks": [
+   {
+    "op": "table",
+    "atoms": [
+     "DsTable"
+    ],
+    "alts": [
+     "DsTable",
+     "ForgeModalDialog",
+     "ForgeSplitControl"
+    ]
+   }
+  ],
+  "wired": [
+   "DsTable"
+  ]
+ },
+ {
+  "entity": "תשלומים",
+  "name": "ייצוא",
+  "expr": "[ייצוא]",
+  "ok": true,
+  "why": null,
+  "shape": "export",
+  "ops": [
+   "action",
+   "serialize"
+  ],
+  "picks": [
+   {
+    "op": "action",
+    "atoms": [
+     "StoreSettingsActionRow"
+    ],
+    "alts": [
+     "StoreSettingsActionRow",
+     "PaymentChip",
+     "DsChipButton"
+    ]
+   },
+   {
+    "op": "serialize",
+    "atoms": [
+     "enrollmentPaidStatus"
+    ],
+    "alts": [
+     "enrollmentPaidStatus",
+     "exportAllowed",
+     "payLink"
+    ]
+   }
+  ],
+  "wired": []
+ },
+ {
+  "entity": "תשלומים",
+  "name": "חריגה",
+  "expr": "[חריגה]",
+  "ok": true,
+  "why": null,
+  "shape": "filter",
+  "ops": [
+   "filter",
+   "predicate"
+  ],
+  "picks": [
+   {
+    "op": "filter",
+    "atoms": [
+     "FilterChipPill"
+    ],
+    "alts": [
+     "FilterChipPill",
+     "PresetChip",
+     "SeverityChip"
+    ]
+   },
+   {
+    "op": "predicate",
+    "atoms": [
+     "enrollmentPaidStatus"
+    ],
+    "alts": [
+     "enrollmentPaidStatus",
+     "payLink",
+     "isGrantableFeature"
+    ]
+   }
+  ],
+  "wired": []
+ },
+ {
+  "entity": "תשלומים",
+  "name": "איתור",
+  "expr": "[איתור]",
+  "ok": true,
+  "why": null,
+  "shape": "search",
+  "ops": [
+   "search",
+   "match"
+  ],
+  "picks": [
+   {
+    "op": "search",
+    "atoms": [
+     "DsSearch"
+    ],
+    "alts": [
+     "DsSearch",
+     "DsToggleTile",
+     "PremiumToggle"
+    ]
+   },
+   {
+    "op": "match",
+    "atoms": [
+     "enrollmentPaidStatus"
+    ],
+    "alts": [
+     "enrollmentPaidStatus",
+     "payLink",
+     "waPaymentText"
+    ]
+   }
+  ],
+  "wired": []
+ },
+ {
+  "entity": "תשלומים",
   "name": "טבלה",
   "expr": "[טבלה]",
   "ok": true,
