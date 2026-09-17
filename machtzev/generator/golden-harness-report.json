@@ -1,95 +1,18 @@
 {
- "regenerated": 0,
+ "skipped": "אין קובצי-בדיקת-זהב בעץ-היעד",
+ "at": "/home/user/meir7651231-ui/buildsmart/app_flutter",
+ "missing": [
+  "genesis_attendance_test.dart",
+  "genesis_rooms_test.dart",
+  "genesis_teachers_test.dart",
+  "genesis_parents_test.dart",
+  "genesis_dashboard_test.dart",
+  "genesis_fees_test.dart",
+  "genesis_students_test.dart",
+  "genesis_courses_test.dart",
+  "genesis_inventory_states_test.dart",
+  "genesis_schoolos_nav_test.dart"
+ ],
  "modules": 9,
- "tests": 0,
- "testsTotal": 10,
- "rows": [
-  {
-   "module": "schoolos_attendance.dart",
-   "fragments": "193/193",
-   "identical": true,
-   "dead": [],
-   "tests": "0/1",
-   "green": false,
-   "fail": "genesis_attendance_test.dart:1"
-  },
-  {
-   "module": "schoolos_rooms.dart",
-   "fragments": "189/190",
-   "identical": false,
-   "dead": [
-    "_RoomsScreenState._anyCap"
-   ],
-   "tests": "0/1",
-   "green": false,
-   "fail": "genesis_rooms_test.dart:1 סחף-מראה(mirror≠genesis)"
-  },
-  {
-   "module": "schoolos_teachers.dart",
-   "fragments": "177/177",
-   "identical": true,
-   "dead": [],
-   "tests": "0/1",
-   "green": false,
-   "fail": "genesis_teachers_test.dart:1"
-  },
-  {
-   "module": "schoolos_parents.dart",
-   "fragments": "202/202",
-   "identical": true,
-   "dead": [],
-   "tests": "0/1",
-   "green": false,
-   "fail": "genesis_parents_test.dart:1"
-  },
-  {
-   "module": "schoolos_dashboard.dart",
-   "fragments": "143/143",
-   "identical": true,
-   "dead": [],
-   "tests": "0/1",
-   "green": false,
-   "fail": "genesis_dashboard_test.dart:1"
-  },
-  {
-   "module": "schoolos_fees.dart",
-   "fragments": "203/203",
-   "identical": true,
-   "dead": [],
-   "tests": "0/1",
-   "green": false,
-   "fail": "genesis_fees_test.dart:1"
-  },
-  {
-   "module": "schoolos_students.dart",
-   "fragments": "220/221",
-   "identical": false,
-   "dead": [
-    "_StuData.daysSince"
-   ],
-   "tests": "0/1",
-   "green": false,
-   "fail": "genesis_students_test.dart:1 סחף-מראה(mirror≠genesis)"
-  },
-  {
-   "module": "schoolos_courses.dart",
-   "fragments": "222/223",
-   "identical": false,
-   "dead": [
-    "_CoursesData.coursesInRoom"
-   ],
-   "tests": "0/1",
-   "green": false,
-   "fail": "genesis_courses_test.dart:1 סחף-מראה(mirror≠genesis)"
-  },
-  {
-   "module": "schoolos.dart",
-   "fragments": "115/116",
-   "identical": false,
-   "dead": [],
-   "tests": "0/2",
-   "green": false,
-   "fail": "genesis_inventory_states_test.dart:1 genesis_schoolos_nav_test.dart:1 סחף-מראה(mirror≠genesis)"
-  }
- ]
+ "rows": []
 }
