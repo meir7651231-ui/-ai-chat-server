@@ -534,7 +534,7 @@ export function hamtzaaNeeds(needsPath, goalPath) {
     const out = String(r.stdout || '').trim();
     if (r.status !== 0) return { available: false, reason: `exit ${r.status}: ${String(r.stderr || out).split('\n')[0].slice(0, 140)}` };
     let j = null; try { j = JSON.parse(out); } catch { return { available: false, reason: `הפלט אינו JSON — --needs עוד לא נתמך (${out.split('\n')[0].slice(0, 90)})` }; }
-    const rows = Array.isArray(j) ? j : (j.needs || j.rows || []);
+    const rows = Array.isArray(j) ? j : Array.isArray(j.rows) ? j.rows : Array.isArray(j.needs) ? j.needs : [];   // hamtzaa --json: rows=[…], needs=<מספר> — לא מערך (נתפס במיזוג w-psak-goal⨉w-goal-pipeline)
     if (!Array.isArray(rows) || !rows.length || !rows.every((x) => x && typeof x.need === 'string' && typeof x.ok === 'boolean')) return { available: false, reason: 'הפלט אינו {need, ok, missing, sources}' };
     return { available: true, rows, cmd: `node machtzev/generator/hamtzaa.mjs --needs ${path.relative(R.ROOT, needsPath)} --goal ${path.relative(R.ROOT, goalPath)} --json` };
   } catch (e) { return { available: false, reason: String((e && e.message) || e).slice(0, 160) }; }
