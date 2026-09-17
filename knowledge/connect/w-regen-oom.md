@@ -94,3 +94,96 @@ bmax=4 yields=181928  hist={"2":7332,"3":15772,"4":158824}
 - **L108ג · גבול-גזם רופף = אין גזם.** גזם לפי «העלות הכוללת ≤ b» חסך אפס כל עוד הוא לא ידע כמה כבר נצבר;
   רק העברת **התקציב-הנותר לשקע** (`cap - argcAcc - 1`) הפכה 32.6s/8.1GB ל-0.4s/157MB — באותה תוצאה בדיוק.
 ```
+
+### 3.2 · הצעד עצמו (`node machtzev/generator/behavior-plan.mjs`, ‏NEEDS הקשיח · ממצה)
+```
+[take]   עומק 2 · מעברים 5 · נמנו 212364 · נשמרו 100000 · סף-argc 4 · RSS 271MB
+[stream] phone.fmtSafe: נמנו 212364 · הוכחו 4 · נשמרו 64 · עומק 2 · RSS 279MB
+✓ behavior: 43/43 צרכים ⇒ חלקיקים נבחרו-בהוכחה-בריצה (43 מוכחים · 1 בשרשרת) מ-1022 מנועים
+[מדידה] full · exit=0 · 1018s · שיא-RSS(ps כל 5 שנ׳)=285MB · שיא-RSS(VmHWM)=285MB
+```
+| | exit | זמן | שיא-RSS |
+|---|---|---|---|
+| ‏27c7cc12 (המנהל) | **null · OOM** | 1,546s | — |
+| ‏d897bc6e (המנהל) | **134** | 1,513s | **9,020MB** |
+| אחרי | **0** | **1,018s** | **285MB** |
+
+‏(הזמן כולל ~2 דק׳ של תחרות-CPU: `police --fast` של קומיט-הביניים ולולאת-המתנה שגויה שנהרגה.
+ שיא-ה-RSS אינו מושפע.)
+
+### 3.3 · `git diff --stat machtzev/generator/behavior-plan.json` — **לא ריק**, וזה מוסבר עד השורה
+```
+machtzev/generator/behavior-plan.json | 6072 ++++++++++++++------- (4693 insertions, 1379 deletions)
+```
+**הבדיקה שקובעת — ‏0 שינויי-בחירה:**
+```
+needs old/new: 43 43 · added: - · removed: -
+picks שונים: 0        (וגם: אף file ואף chain לא השתנה)
+```
+ארבעה מקורות לדיף, **אף אחד מהם אינו השינוי הזה**:
+1. **‏12 שדות חדשים לכל צורך** (43 צרכים): `routine · doubt · ties · weakExamples · discriminators ·
+   sockets · parity · crossLang · tree · nodes · treeDepth · treeOverflow`. ה-JSON המחויב נוצר
+   ב-760ca9a, **לפני** גלי up-sockets/up-values/up-crosslang; הקוד פולט אותם מאז, והצעד לא הצליח
+   לרוץ מאז כדי לכתוב אותם. אימות: `git log --oneline -1 -- machtzev/generator/behavior-plan.json`.
+2. **פורמט `top3`** — ‏43/43 השתנו: `id:ok/total✓:score` ⇒ `id:ok/total✓:n<צמתים>:a<argc>:score`.
+   גם זה קוד קיים (up-chain3), לא השינוי הזה.
+3. **‏`score` ב-33 צרכים** (למשל `week.start` 5.83⇒5.88): ניקוד-הייעוד הוא **idf על הקטלוג**,
+   והקטלוג גדל ל-1,022 מנועי-לוגיקה. אותה נוסחה בדיוק (הועברה כמות-שהיא ל-`scorerFor`), קלט אחר.
+4. **‏`proof`/`candidates`/`chainsAdmissible` גדלו** (‏`phone.digits` 65⇒67 מועמדים ·
+   `chainsAdmissible` 6,563⇒212,364 · `chains.cands` 24⇒64): יותר אטומים תואמי-חתימה בקטלוג,
+   ו-`chains.cands` מוגבל עכשיו ל-KEEPN=64 הטובים במקום «כל מה שהוכח» (השאר משוחרר — §2/7).
+
+### 3.4 · `--gate` ירוק
+```
+node machtzev/generator/behavior-plan.mjs --gate   (0.6s)
+✓ behavior: 43/43 צרכים ⇒ חלקיקים נבחרו-בהוכחה-בריצה (43 מוכחים · 1 בשרשרת — הכרעה-20ב)
+  מ-1022 מנועים · מיובאים+נקראים · מתאמים דקים
+```
+
+### 3.5 · רגרסיה על צורך חיצוני — שני המסלולים, אותה בחירה
+| מסלול | לפני (‏HEAD 27c7cc12) | אחרי | זהה? |
+|---|---|---|---|
+| ‏`--needs` (ברירת-מחדל = מונחה-ערכים, **לא נגעתי בו**) | 39.5s · `formatIsraeliPhone(normId(p0))` | 34.8s · אותו pick | ✅ pick · file · top3 |
+| ‏`--needs --blind` (מניית-עצים — **המסלול ששודרג**) | ראה 3.6 | 41s · 283MB · `formatIsraeliPhone∘normPhone` | ✅ |
+
+### 3.6 · ‏`regen` המלא (אותה רשימה ש-ship/one מריצים — ‏`REGEN` מ-`regen.mjs`, ‏`runRegen` עם `spawnSync` כמו ב-ship)
+```
+סה"כ 1054s · כשלים: 1
+[1s]    ✓ 0.6s   ds-forge
+[1s]    ✓ 0.0s   entity-terms          [1s]  ✓ 0.0s  enum-values      [1s]   ✓ 0.1s  auto-skin
+[25s]   ✗ exit=1 24.3s  tighten-types --record --apply     ← לא שלי, ראה למטה
+[25s]   ✓ 0.1s   logic-census          [25s] ✓ 0.1s  oracle --write   [25s]  ✓ 0.2s  auto-logic
+[26s]   ✓ 0.2s   frag-ops              [27s] ✓ 1.3s  synth            [27s]  ✓ 0.3s  skin-golden
+[27s]   ✓ 0.1s   core-from-shape       [27s] ✓ 0.0s  core-dart        [29s]  ✓ 1.2s  app-from-sentences
+[1035s] ✓ 1006.6s  **behavior-plan**   ← הצעד שחסם את ship/one · עכשיו exit 0
+[1035s] ✓ 0.2s   behavior-compose      [1036s] ✓ 0.1s peruk --all
+[1036s…] ✓ 31 × app-ds (‏0.4–0.6s כל אחד)
+[1054s] ✓ 0.5s   balagan               [1054s] ✓ 0.0s server
+```
+**הכשל היחיד — `tighten-types` — אינו של השינוי הזה, ונמדד בנפרד על עץ נקי:**
+```
+git stash push -u   ⇒   0 שינויים בעץ
+node machtzev/generator/tighten-types.mjs --record --apply   ⇒ exit 1 · 24.3s
+Error: tighten: 35 קופסאות אדומות שאינן של ההידוק — a11y:  · audit:  · ayin:
+```
+אותו כשל בדיוק, על עץ נקי שכולל **רק** את שני הקומיטים שלי (‏behavior-plan.mjs/json + knowledge) —
+קבצים ש-`tighten-types` אינו קורא. הסיבה שהוא מדפיס ריקה (`a11y: ` בלי `why`), כלומר ההודעה עצמה
+לא אומרת למה הקופסה אדומה. **זה פריט נפרד להעברה למנהל, לא נגעתי בו.**
+‏(המריץ שלי ממשיך אחרי כשל-שלב כדי לראות את כל הצנרת; ‏ship היה נעצר שם.)
+
+**‏`git status --short` בסוף הריצה — 208 קבצים (‏146 M · 62 חדשים):**
+```
+  76  new/dart-maor/*.dart        ← tighten-types --apply הספיק להדק לפני שנפל
+  31  new/dart-gen-bs/*.dart      +31 חדשים   ← app-ds כותב 31 אפליקציות-ספק מחדש (מסך-אשף שאינו מחויב)
+  31  new/dart-data-bs/auto/*     +31 חדשים   ← אותו דבר
+   6  machtzev/generator/*.json   ← atom-index-full · logic-census · auto-logic · tighten-applied ·
+                                     tighten-rejected · behavior-plan
+```
+**‏`behavior-plan.json` של הריצה-בתוך-regen שונה מזה שמחויב — ומוסבר:** ‏`tighten-types --apply`
+הידק 76 אטומים *לפני* שנפל, ‏`logic-census`/`oracle`/`auto-logic` רצו על העץ המהודק, ולכן הקטלוג
+שהבורר קיבל אחר: **מועמדים 1,163 ⇒ 1,358 · admissible 212,364 ⇒ 223,809**. ולמרות זאת:
+```
+needs 43 · pick שונים 0 · file 0 · chain 0 · score 2 · proof 42
+```
+כלומר הבחירה יציבה גם כשהקטלוג זז. **לא קימטתי קבצי-פלט:** לא קיבעתי אותם ולא ערכתי אותם ביד —
+הריצה תועדה כאן והעץ הוחזר למצב-המחויב (`git checkout --` לפי רשימת-נתיבים מפורשת · `git stash drop`).

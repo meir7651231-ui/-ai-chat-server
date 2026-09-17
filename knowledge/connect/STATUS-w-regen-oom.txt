@@ -1,6 +1,22 @@
-w-regen-oom · צנרת-המחולל נופלת ב-behavior-plan (OOM)
-[1] אומת הממצא: המרחב האמיתי של phone.fmtSafe בעומק-2 = 1,856,146 עצים (מדידה: streamTrees ללא תקרה) · החזקתם = 8,921MB RSS
-[2] אומת באג-בחירה: השרשרת-הזוכה formatIsraeliPhone∘normPhone יושבת במקום 800,193 בסדר-הגנרטור ⇒ נופלת מחוץ ל-CAP2=100000 ⇒ הבחירה אבדה עוד לפני שהזיכרון נגמר
-[3] אותרה סיבת-הזיכרון במדידה: 26MB חיים מול 7,474MB ערמה — lambdas() בנתה 22,805,874 צירופים בפעימה אחת (reduce+flatMap) לפני בדיקת-עלות
-[4] שודרג המנוע (זרימה · העמקה-לפי-עלות · גזם-ענף · שומר-הטובים) — צורך חיצוני x.phoneShow: 2m12s/6,773MB ⇒ 41s/283MB, אותו pick בדיוק
-IN-PROGRESS · 4 מדידות
+w-regen-oom · הצעד שעצר את ship/one: behavior-plan (מנייה) נופל ב-OOM
+
+[1] הממצא אומת: המרחב האמיתי של phone.fmtSafe בעומק-2 = 1,856,146 עצים (streamTrees ללא תקרה) · החזקתם = 8,921MB RSS
+[2] באג-בחירה: השרשרת-הזוכה formatIsraeliPhone∘normPhone יושבת במקום 800,193 בסדר-הגנרטור ⇒ מחוץ ל-CAP2=100000 ⇒ הבחירה אבדה עוד לפני שהזיכרון נגמר (בסדר-העלות היא במקום 1,698)
+[3] סיבת-הזיכרון נמדדה: 26MB חיים מול 7,474MB ערמה (--expose-gc) — lambdas() בנתה 22,805,874 צירופים בפעימה אחת (reduce+flatMap) לפני בדיקת-עלות
+[4] נתיב-עומק-3: subMemo החזיקה מרחב-מלא לכל טיפוס-פרמטר במקביל + wraps שהצטבר לפני slice — משם 9,020MB שהמנהל מדד
+[5] גזם רופף = אין גזם: רק תקציב הדוק לכל שקע (cap - argcAcc - 1) הפך מנייה בגבול argc≤2 מ-32.6s/8,101MB ל-0.4s/157MB, באותה ספירת-עצים בדיוק (7,332)
+[6] מדידת-בסיס מול הקוד המחויב (git show HEAD:behavior-plan.mjs · --needs --blind · אותו צורך): exit=null SIGABRT · 1,183s · שיא-RSS 9,027MB · אין פלט
+[7] אחרי, אותו צורך: exit 0 · 41s · שיא-RSS 283MB · pick·file·top3 זהים לצפוי (formatIsraeliPhone∘normPhone)
+[8] הצעד עצמו (NEEDS הקשיח, ממצה): node machtzev/generator/behavior-plan.mjs ⇒ exit 0 · 1,018s · שיא-RSS 285MB (ps כל 5 שנ׳ = VmHWM) — היעד היה <4,000MB
+[9] 43/43 צרכים נפתרו · 43 מוכחים · 1 בשרשרת — ו-0 שינויי-pick מול ה-JSON המחויב (גם file וגם chain). הדיף ב-JSON מוסבר עד השורה בדוח (12 שדות חדשים · פורמט top3 · idf על קטלוג שגדל · proof/candidates)
+[10] --gate ירוק (0.6s) · police --fast ירוקה (45 ran · 12 skipped · 0 failed)
+[11] רגרסיה במסלול-הערכים (ברירת-המחדל של --needs, לא נגעתי בו): 39.5s ⇒ 34.8s · pick·file·top3 זהים
+[12] regen המלא (REGEN מ-regen.mjs, runRegen+spawnSync כמו ship): 1,054s · behavior-plan 1,006.6s exit 0 — הצעד שחסם כבר לא חוסם
+[13] הכשל היחיד ב-regen: tighten-types --record --apply (35 «קופסאות אדומות», why ריק) — שוחזר זהה על עץ נקי בלי שינויי-regen ⇒ פריט נפרד למנהל, לא של השינוי הזה
+[14] behavior-plan שרץ בתוך regen קיבל קטלוג מהודק (מועמדים 1,163⇒1,358 · admissible 212,364⇒223,809) — ובכל זאת pick/file/chain זהים ב-43/43
+[15] git status בסוף regen: 208 קבצים (76 dart מ-tighten · 31+31 app-ds · 6 json) — תועדו בדוח, לא קומטו; העץ הוחזר למצב-המחויב
+
+BLOCKED (נעוץ, טלאי מוצע בדוח §4): machtzev/LEARNINGS.md — L108/L108ב/L108ג
+לא שונו: CAP2 · CAP3 · BATCH · earlyExit · סדר-ההוכחה · כלל-ההכרעה · קבוצות-היחידים
+
+DONE · 15 מדידות
