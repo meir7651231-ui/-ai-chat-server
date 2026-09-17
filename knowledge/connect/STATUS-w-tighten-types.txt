@@ -1,0 +1,28 @@
+w-tighten-types · claude/w-tighten-types-260917 · בסיס claude/up-connect-260917 @ 313caaea
+מכונה: node v22.22.2 · DART_BIN=/root/dart-sdk/bin/dart (מוצהר בסביבה) · flutter ואינו קיים · buildsmart אינו קיים
+
+[1] הכשל שוחזר בדיוק, כמו ב-regen (אותו cwd, DART לא מוגדר): node machtzev/generator/tighten-types.mjs --record --apply ⇒ exit 1 · 28.2s · "35 קופסאות אדומות שאינן של ההידוק — a11y:  · audit:  · ayin: "
+[2] מי מייצר את 35 הקופסאות: אף אחד. אותה פקודה עם DART=/root/dart-sdk/bin/dart ⇒ exit 0 · 44.3s · git status 0 קבצים. 35/35 ירוקות. אין "מתי הפכו אדומות" ולא היה מה ל-bisect
+[3] "35/62" אינו 35-מתוך-62 אלא בדיוק מספר הקופסאות שמייבאות אטום-מהודק — כלומר כל מה שנבדק נכשל: טביעה של כשל-סביבה, לא של קוד
+[4] השורש: פותר-כלים שלישי. tighten-types.mjs:36 קרא process.env.DART || '/home/user/flutter/bin/dart' — נתיב שאינו קיים; resolveDart() מ-dart-bin.mjs (L110, a7df048e) מחזיר /root/dart-sdk/bin/dart
+[5] הכלי היה מוצהר בסביבה: DART_BIN=/root/dart-sdk/bin/dart. resolveDart בודק DART_BIN ראשון; tighten בדק DART בלבד — הצרכן היחיד שהתעלם מהצהרת-session-start (logic-proof הריץ את אותו בינארי באותה צנרת)
+[6] למה ה-why ריק: spawnSync ב-ENOENT ⇒ status=null · stdout/stderr=undefined ⇒ out=(r.stdout||'')+(r.stderr||'')='' — שאינו null, ולכן נכנס למסלול-הכישלון. r.error לא נקרא מעולם. ה-why הוא ציטוט מתוך '' (נמדד ב-node -e)
+[7] why ריק בשני מקומות: :159 (נפילה-לאחור ''.split('\n').pop() ⇒ '') ו-:167 (אין נפילה-לאחור בכלל)
+[8] הנזק שהתגלה גדול מהדיווח: git status אחרי הכשל = 78 קבצים, ו-76 מהם ב-new/dart-maor הם שחזורים ולא הידוקים — 76 חתימות חזרו ל-dynamic; ledger 105⇒29 · rejected 82⇒158 (w-regen-oom §3.6 שיער "הספיק להדק 76"; ההפך)
+[9] והנזק מתקבע: זיכרון-הדחיות מדלג "עד שהראיה תשתנה" ⇒ ריצה בריאה אחר-כך הידקה 0 אטומים, ו---gate דיווח ירוק ("0 חתימות שניתן להדק") על עץ עם 76 חתימות מרופפות (git diff --stat: 76 files changed)
+[10] ובאותו קוד ירוק-חלול: analyzeErrors קרא את אותו out='' ⇒ "אפס שגיאות" ⇒ שכבה (א) dart analyze "עברה" בלי לרוץ
+[11] תוקן במנוע הקיים (קובץ אחד, אפס מנוע חדש): פותר-אחד · runBox בשלוש תוצאות (עברה/נפלה-עם-פלט/לא-רצה) · whyOf = סיבה+קובץ:שורה:עמודה · analyzeErrors זועק כשלא רץ · כשל-כלי מחזיר כתיבות ואינו רושם דחייה · requireDart לפני הכתיבה הראשונה · רישום ירוקות/אדומות/לא-רצו
+[12] אחרי, אותה פקודה ואותו ENV: exit 0 · 38.9s · "35 נבדקו ⇒ ירוקות 35 · אדומות 0 · לא-רצו 0" · git status 0 קבצים. ההפרש 28.2s⇒38.9s הוא 35 dart run אמיתיים (נמדד פר-קופסה: 0.308s · 0.402s)
+[13] חבלה "dart run נכשל בשקט" (exit 1, אפס פלט): ירוקות 0 · אדומות 0 · לא-רצו 35 · exit 1 · tighten-applied.json UNCHANGED · git status new/dart-maor = 0 (לפני: 35 אדומות-כזב + 76 רופפו)
+[14] חבלה "קופסה אדומה באמת" (שגיאת-טיפוס ב-audit-proof.dart:23): נשארה אדומה · exit 1 · "audit: A value of type 'String' can't be assigned to a variable of type 'int'. @ audit-proof.dart:23:20" (לפני: "audit: " ריק). לא צהוב · לא דילוג · לא סף מונמך
+[15] חבלה "dart analyze נכשל בשקט" עם הידוק ממתין: exit 1 עם הסיבה (בינארי · ארגומנטים · exit · cwd) · הקובץ ≡ מצבו מלפני (diff -q IDENTICAL) · tighten-rejected.json UNCHANGED (לפני: ירוק-חלול)
+[16] חבלה "אין בינארי כלל": exit 2 · YELLOW tool=dart (L34, מנגנון-הריפו שהמשטרה מאמתת) · אפס כתיבה. מצב אחר מהקופסאות — שקוף להכרעת-המנהל בדוח §3.1
+[17] בקרה-חיובית (אותו הידוק ממתין, כלי אמיתי): הודקו 1/1 · שלוש השכבות אישרו · הפנקס חזר ל-105 — השומרים אינם חוסמים עבודה אמיתית
+[18] --gate ירוק (0.7s) · pins-check --write (139 מקובעים) · police --fast ירוקה: 45 ran · 13 skipped · 0 yellow · 0 failed · מרשם 58
+[19] שתי אדומות בדרך: pins (שלי — tighten-types.mjs מקובע ⇒ pins-check --write באותו commit) · learn (קלון-שטוח: 9 בלובים MISSING ב-git cat-file -e, present אחרי git fetch --unshallow, אפס שינוי בקבצים מנוהלים)
+[20] regen המלא (REGEN מ-regen.mjs · runRegen+spawnSync כמו ship): tighten-types --record --apply ⇒ ✓ exit 0 · 39.4s — הצעד שחסם את ship/one כבר אינו חוסם. 14 הצעדים עד app-from-sentences ירוקים (44s), ובאותה נקודה git status = 0 קבצים מנוהלים (לפני: 76 רופפו + 2 JSON)
+[21] זנב-הצנרת (behavior-plan ~1,000s ⇒ behavior-compose · peruk · 31×app-ds · balagan · server) היה בריצה בשעת הקומיט — נמדד ומצורף בקומיט-המשך
+
+BLOCKED (נעוץ, טלאי מוצע בדוח §5): machtzev/LEARNINGS.md — L111/L111ב/L111ג/L111ד
+לא שונו: 6 סבבי-ההוכחות · אלגוריתם-הייחוס · generalize/dartType · כלל-ה-probe (L89) · שלוש השכבות וסדרן · plan/record/--gate · מבנה הפנקס והדחיות
+פתוח למנהל: 4 מנועים עם אותו פותר-שלישי (emit/fuzz-parity · emit/parity-ast · emit/parity-js-dart · tools/dart-test) — לא נגעתי, מחוץ למנדט
