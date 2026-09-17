@@ -23,6 +23,8 @@ if (isMain) {
     if (!fs.existsSync(OUT) || fs.readFileSync(OUT, 'utf8') !== fresh) { console.log('🔴 enumvalues: enum-values.data.json ≠ חציבה-טרייה מ-domain.ts (הרץ enum-values.mjs)'); process.exit(1); }
     console.log(`✓ enumvalues: ${Object.keys(JSON.parse(fresh).enums).length} טיפוסים-מנויים חצובים ≡ domain.ts`); process.exit(0);
   }
+  // L80 · שלב-regen: בלי maor-system אין ממה לחצוב — הקובץ המחויב הוא האמת (אותו כלל כמו --gate), לא קריסה של הצנרת
+  if (!fs.existsSync(MAOR)) { console.log(`⚪ enumvalues: אין maor-system (${MAOR}) — הקובץ המחויב הוא האמת`); process.exit(0); }
   const d = quarry(); fs.writeFileSync(OUT, JSON.stringify(d, null, 1));
   console.log(`✓ ${Object.keys(d.enums).length} טיפוסים-מנויים ⇒ enum-values.data.json · ${Object.entries(d.enums).map(([k, v]) => k + '(' + v.length + ')').join(' ')}`);
 }

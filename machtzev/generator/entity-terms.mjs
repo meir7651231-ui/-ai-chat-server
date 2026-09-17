@@ -32,6 +32,8 @@ if (isMain) {
     if (!fs.existsSync(OUT) || fs.readFileSync(OUT, 'utf8') !== fresh) { console.log('🔴 entityterms: entity-terms.data.json ≠ חציבה-טרייה מ-TERM_DEFS (הרץ entity-terms.mjs)'); process.exit(1); }
     const d = JSON.parse(fresh); console.log(`✓ entityterms: ${d.terms.length} מונחי-ישות חצובים (${d.terms.filter((t) => t.entity).length} פתורים לסכמה · ${d.terms.filter((t) => !t.entity).length} בלי ישות-סכמה) ≡ TERM_DEFS`); process.exit(0);
   }
+  // L80 · שלב-regen: בלי maor-system אין ממה לחצוב — הקובץ המחויב הוא האמת (אותו כלל כמו --gate), לא קריסה של הצנרת
+  if (!fs.existsSync(MAOR)) { console.log(`⚪ entityterms: אין maor-system (${MAOR}) — הקובץ המחויב הוא האמת`); process.exit(0); }
   const d = quarry(); fs.writeFileSync(OUT, JSON.stringify(d, null, 1));
   console.log(`✓ ${d.terms.length} מונחי-ישות ⇒ entity-terms.data.json · פתורים: ${d.terms.filter((t) => t.entity).map((t) => `${t.key.replace('entity.', '')}⇒${t.entity}`).join(' ')} · בלי-ישות: ${d.terms.filter((t) => !t.entity).map((t) => t.key.replace('entity.', '')).join(' ')}`);
 }

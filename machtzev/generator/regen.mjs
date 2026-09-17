@@ -5,11 +5,16 @@ import { existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 export const REGEN = [
   { rel: 'machtzev/ds-forge.mjs', args: [], note: 'Pure ⇒ אטומי-forge + מניפסט' },
+  // L80(א) · מחוללי-הקלט-הנגזר יושבים בצנרת, לא רק כשערים: מונחים ⇒ enums ⇒ (retarget · sentence · tzinor · core-from-shape קוראים אותם)
+  { rel: 'machtzev/generator/entity-terms.mjs', args: [], quiet: true, note: 'G5g · מונחי-ישות חצובים מ-TERM_DEFS ⇒ entity-terms.data.json (שער entityterms)' },
+  { rel: 'machtzev/generator/enum-values.mjs', args: [], quiet: true, note: 'G6a · ערכי-טיפוסים-מנויים מ-domain.ts ⇒ enum-values.data.json (שער enumvalues)' },
   { rel: 'machtzev/generator/auto-skin.mjs', args: [], note: 'G17b · בורר-אטום-לפי-ייעוד ⇒ auto-skin.json (שער autoskin)' },
   { rel: 'machtzev/generator/tighten-types.mjs', args: ['--record', '--apply'], note: 'G20 · הידוק-טיפוסים מראיית-בדיקות + הוכחות-קופסאות (שער tighten)' },
   { rel: 'machtzev/census/logic-census.mjs', args: [], quiet: true, note: 'חתימות-הלוגיקה המהודקות' },
   { rel: 'machtzev/census/oracle.mjs', args: ['--write'], quiet: true, note: 'אינדקס-האמת לפני הבורר' },
   { rel: 'machtzev/generator/auto-logic.mjs', args: [], note: 'G18 · בורר-מנוע-לוגיקה-לפי-ייעוד ⇒ auto-logic.json (שער autologic)' },
+  { rel: 'machtzev/generator/frag-ops.mjs', args: [], quiet: true, note: 'G8b · ייחוס-ops פר-שבר-זהב ⇒ frag-ops.json (render-module קורא · שער fragops)' },
+  { rel: 'machtzev/generator/synth.mjs', args: [], quiet: true, note: 'הזמנות-יכולת ⇒ הרכבה-מוכחת ⇒ specs/cap*.txt (genesis-gen קורא · שער synth)' },
   { rel: 'machtzev/generator/skin-golden.mjs', args: [], note: 'מודולי-הזהב בעור-forge' },
   { rel: 'machtzev/generator/core-from-shape.mjs', args: [], note: 'הגרעין מהסכמה+מונחים (שער core)' },
   { rel: 'machtzev/generator/core-dart.mjs', args: [], note: 'gen_core_<entity>.dart (שער coredart)' },

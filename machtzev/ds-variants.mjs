@@ -8,13 +8,13 @@ import path from 'node:path';
 const DS = new URL('../new/dart-ui-bs/ds/', import.meta.url).pathname;
 const CHECK = process.argv.includes('--check');
 
-// מטריצת-הסגנון (הזרע): שם · תיאור-עברי · גוף-build (משתמש ב-p=padding, child)
+// מטריצת-הסגנון (הזרע): שם · תיאור-עברי · גוף-build (משתמש ב-p=padding, child; `lk` = DsLook.of(context) — חריץ-העור G28: card/line מהעור המוזרק, לא מטוקן-קבוע)
 const variants = [
   ['DsCardElevated', 'כרטיס-מוגבה — משטח לבן, צל-e2, פינות-lg (ברירת-המחדל)',
     `Container(
         padding: const EdgeInsets.all(DsSpace.lg),
         decoration: BoxDecoration(
-          color: DsTokens.card,
+          color: lk.card,
           borderRadius: BorderRadius.circular(DsRadii.lg),
           boxShadow: DsElev.e2,
         ),
@@ -24,9 +24,9 @@ const variants = [
     `Container(
         padding: const EdgeInsets.all(DsSpace.lg),
         decoration: BoxDecoration(
-          color: DsTokens.card,
+          color: lk.card,
           borderRadius: BorderRadius.circular(DsRadii.lg),
-          border: Border.all(color: DsTokens.line),
+          border: Border.all(color: lk.line),
         ),
         child: child,
       )`],
@@ -64,7 +64,10 @@ class ${name} extends StatelessWidget {
   const ${name}({required this.child, super.key});
   final Widget child;
   @override
-  Widget build(BuildContext context) => ${body};
+  Widget build(BuildContext context) {
+    final lk = DsLook.of(context);
+    return ${body};
+  }
 }`;
 
 const out = `// ✨ מאגר-העיצוב · וריאנטי-משטח (Surface Variants) — **מחולל ע"י machtzev/ds-variants.mjs.**

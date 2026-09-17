@@ -1,0 +1,5 @@
+up-connect · קבוצה 1 · claude/up-connect-260917
+מחוברים-קדימה: 62 ⇒ 66 · לא-מחוברים: 274 ⇒ 270 · שערים-מחוברים: 27 ⇒ 31  (engine-index --connected)
+צנרת (regen.mjs): + entity-terms · enum-values · frag-ops · synth (סדר-תלות, L80א)
+שדרוג: entity-terms/enum-values בלי maor ⇒ ⚪ קובץ-מחויב (היה ENOENT) · ds-variants --check ירוק (היה אדום)
+פתוח לבעלים: op-bridge.json מיושן (אין שער/צרכן) · מנועי-DS ⇒ regen דורש שערים (pinned) · generate.mjs/one.mjs כנקודות-כניסה (71 / 96)
