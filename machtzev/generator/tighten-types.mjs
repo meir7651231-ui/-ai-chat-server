@@ -14,6 +14,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { unify } from './tighten-hook.mjs';
 import { POOL } from '../tools/probe-pool.mjs';
 import * as R from '../root.mjs';   // bsApp/bsRoot — איתור-buildsmart
+import { resolveDart, resolveFlutter, requireDart } from '../dart-bin.mjs';   // L110 · פותר-כלים אחד
 const POOL_SER = new Set(POOL.map((v) => JSON.stringify(v === undefined ? null : v)));
 // L89 · בדיקת-Golden-מגישוש: כל ה-CASES של promote-auto הם איברי-סל ⇒ הצורות שנרשמו הן גישוש, לא חוזה-קורא (העטיפה בבדיקה מוסיפה שקעים-כרוכים, לכן הזיהוי מהמקור ולא מהקריאה)
 function casesProbe(testFile) {
@@ -33,7 +34,10 @@ const ledger = () => (fs.existsSync(LED) ? JSON.parse(fs.readFileSync(LED, 'utf8
 const saveLedger = (l) => fs.writeFileSync(LED, JSON.stringify(l, null, 1) + '\n');
 const evKey = (e) => JSON.stringify([e.params, e.ret]);
 const BS = R.bsApp() || path.resolve(ROOT, '../buildsmart/app_flutter');
-const DART = process.env.DART || '/home/user/flutter/bin/dart', FLUTTER = process.env.FLUTTER || '/home/user/flutter/bin/flutter';
+// L111 · כאן ישב **פותר-כלים שלישי** (`process.env.DART || '/home/user/flutter/bin/dart'`) שלא היה קיים בקונטיינר: כל `spawnSync` נכשל ב-ENOENT,
+//   ‏`stdout`/`stderr` חזרו `undefined`, ו-`out = ''` נקרא כ«הקופסה נפלה בלי הודעה» ⇒ 35 «קופסאות אדומות» עם `why` ריק (בעוד 35/35 ירוקות באמת).
+//   הפותר-האחד (`machtzev/dart-bin.mjs`, c2 · L110) מוצא את אותו בינארי ש-`logic-proof` מריץ. שני פותרים = שתי אמיתות שסוחפות בשקט.
+const DART = process.env.DART || resolveDart(), FLUTTER = process.env.FLUTTER || resolveFlutter();
 
 const sigRe = (name) => new RegExp(`^([A-Za-z_][\\w<>?,. ]*?)\\s+${name}\\(`, 'm');
 export function dartSig(file) {
@@ -105,14 +109,27 @@ export function plan(ev) {
   }
   return out;
 }
+// L111 · «לא רץ» ≠ «אפס שגיאות»: בינארי-חסר החזיר `out=''` ⇒ אפס התאמות ⇒ שכבה (א) הייתה **ירוק-חלול**.
+//   אין ראיה ⇒ אין ירוק (אותה דוקטרינה של `parseAnalyze.miscount` ב-dart-bin.mjs): exit≠0 בלי שורת-אנלייזר ובלי שורת-סיכום = הכלי לא רץ.
 function analyzeErrors(cwd, args) {
+  if (!args[0]) throw new Error(`tighten: אין בינארי לאנלייזר (${args[1] === 'analyze' ? 'dart' : 'flutter'}) — הגדר DART_BIN/FLUTTER_BIN או הרץ session-start`);
   const r = spawnSync(args[0], args.slice(1), { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   const out = (r.stdout || '') + (r.stderr || '');
-  return [...out.matchAll(/error • (.*?) • ([^\s:]+\.dart):(\d+):\d+/g)].map((m) => ({ msg: m[1], file: m[2], line: +m[3] }));
+  const errs = [...out.matchAll(/error • (.*?) • ([^\s:]+\.dart):(\d+):\d+/g)].map((m) => ({ msg: m[1], file: m[2], line: +m[3] }));
+  const spoke = errs.length || /^\s*(error|warning|info) •|^\d+ issues? found\.|No issues found!/m.test(out);
+  if (r.error || r.signal || (r.status !== 0 && !spoke)) {
+    const tail = out.trim().split('\n').filter(Boolean).slice(-3).join(' | ').slice(0, 240) || 'אפס פלט (stdout+stderr ריקים)';
+    throw Object.assign(new Error(`tighten: האנלייזר לא רץ — ${args[0]} ${args.slice(1, 3).join(' ')} · exit=${r.status}${r.signal ? ` · signal=${r.signal}` : ''}${r.error ? ` · ${r.error.code}` : ''} · cwd=${cwd} — ${tail}`), { tool: true });
+  }
+  return errs;
 }
 // ── (ג) הוכחות-הקופסאות (new/dart-boxes/<b>-proof.dart · dart run): הקוראים-האמיתיים עם ריצה, לא רק אנלייזר.
 //    כישלון-קומפילציה ⇒ המזהה בעמודת-השגיאה (ואז השורה) · חריגת-ריצה ⇒ המסגרת הראשונה ב-dart-maor (ואז שורת-הקופסה) · בלי ייחוס ⇒ כל
 //    האטומים-המהודקים שהקופסה מייבאת. קופסה שנשארת אדומה אחרי שחזור-מלא ⇒ כישלון קולני (אינה של ההידוק).
+//    L111 · **שלוש תוצאות, לא שתיים:** עברה · נפלה-עם-פלט · **לא-רצה** (ספאון-שנכשל · אות · יציאה בלי שום פלט). «לא-רצה» = אין ראיה,
+//    ולכן אין פסק-דין: לא שחזור-אטום, לא «קופסה אדומה» — אלא כשל קולני נפרד. קודם `out=''` נכנס למסלול-הכישלון והמציא 35 אדומות
+//    ‏(‏`why` ריק כי אין מה לצטט), שחזר 105 הידוקים, והרעיל את זיכרון-הדחיות כך שריצה בריאה אחר-כך לא הידקה **אף אטום**.
+//    `why` מלא = **סיבה + קובץ:שורה** (`whyOf`), כדי שההודעה תאמר למה הקופסה אדומה ולא רק שהיא אדומה.
 function boxProofStage(known, fnOf, revert, log) {
   const BOXES = path.join(NEW, 'dart-boxes');
   if (!fs.existsSync(BOXES)) return [];
@@ -131,19 +148,36 @@ function boxProofStage(known, fnOf, revert, log) {
     if (byCol.length) return byCol;
     return pool.filter((k) => { const fn = fnOf.get(k); return fn && new RegExp(`\\b${fn}\\b`).test(txt); });
   };
-  const run = (b) => {
+  // שלוש תוצאות: {ok:true} · {out} (נפלה עם פלט) · {unran} (לא רצה — אין ראיה)
+  const runBox = (b) => {
+    if (!DART) return { unran: `אין בינארי Dart (פותר-הכלים האחד לא מצא) — dart run ${b}-proof.dart` };
     const r = spawnSync(DART, ['run', '--enable-asserts', path.join(BOXES, b + '-proof.dart')], { cwd: BOXES, encoding: 'utf8', timeout: 180000, maxBuffer: 64 * 1024 * 1024 });
-    if (r.status === 0) return null;
-    return (r.stdout || '') + (r.stderr || '');
+    if (r.status === 0) return { ok: true };
+    const out = (r.stdout || '') + (r.stderr || '');
+    if (r.error || r.signal || !out.trim()) return { unran: `${DART} run ${b}-proof.dart · exit=${r.status}${r.signal ? ` · signal=${r.signal}` : ''}${r.error ? ` · ${r.error.code}: ${r.error.message}` : ''}${out.trim() ? '' : ' · אפס פלט (stdout+stderr ריקים)'}` };
+    return { out };
   };
-  const red = [];
+  // ה-why של קופסה אדומה = **סיבה + קובץ:שורה[:עמודה]** (שגיאת-קומפילציה ⇒ מקומה · חריגת-ריצה ⇒ המסגרת הראשונה)
+  const whyOf = (b, out) => {
+    const ce = out.match(/^([\w./-]+\.dart):(\d+):(\d+): Error: ([^\n]+)/m);
+    const frame = out.match(/^#\d+\s+\S+ \(file:\/\/(\S+?):(\d+):(\d+)\)/m);
+    if (ce) return { why: ce[4].trim(), at: `${path.basename(ce[1])}:${ce[2]}:${ce[3]}` };
+    const ue = out.match(/Unhandled exception:\s*\n([^\n]+)/);
+    const at = frame ? `${path.basename(frame[1])}:${frame[2]}:${frame[3]}` : `${b}-proof.dart`;
+    if (ue) return { why: ue[1].trim(), at };
+    return { why: (out.trim().split('\n').filter(Boolean).pop() || '').slice(0, 200), at };
+  };
+  const red = [], unran = new Map();
   let pending = boxes.filter((b) => [...importsOf(b)].some((k) => known().has(k)));
+  const total = pending.length; let pass = 0;
   log(`🧪 tighten·boxes: ${pending.length}/${boxes.length} קופסאות מייבאות אטומים-מהודקים — מריץ הוכחות`);
   for (let round = 0; round < 6 && pending.length; round++) {
     const next = [];
     for (const b of pending) {
-      const out = run(b);
-      if (out == null) continue;
+      const res = runBox(b);
+      if (res.ok) { pass++; continue; }
+      if (res.unran) { unran.set(b, res.unran); continue; }   // אין ראיה ⇒ לא נוגעים באטומים ולא מכריזים אדומה
+      const out = res.out;
       const pool = [...importsOf(b)].filter((k) => known().has(k));
       const hit = new Set();
       for (const m of out.matchAll(/^([\w./-]+\.dart):(\d+):(\d+): Error: ([^\n]+)/gm)) {
@@ -156,18 +190,28 @@ function boxProofStage(known, fnOf, revert, log) {
         if (/\/dart-maor\//.test(m[1]) && known().has(f)) { hit.add(f); break; }
         if (/\/dart-boxes\//.test(m[1])) { const a = attribute(m[1], +m[2], +m[3], pool); if (a.length) { a.forEach((k) => hit.add(k)); break; } }
       }
-      const why = (out.match(/Error: ([^\n]+)|Unhandled exception:\n([^\n]+)/) || []).slice(1).filter(Boolean)[0] || out.trim().split('\n').pop() || '';
+      const { why, at } = whyOf(b, out);
       if (!hit.size) pool.forEach((k) => hit.add(k));
-      if (!hit.size) { red.push({ b, why }); continue; }   // אין אטום-מהודק שנותר בקופסה — לא של ההידוק
-      for (const k of hit) revert(k, `box ${b} — ${why.slice(0, 90)}`);
+      if (!hit.size) { red.push({ b, why, at }); continue; }   // אין אטום-מהודק שנותר בקופסה — לא של ההידוק
+      for (const k of hit) revert(k, `box ${b} — ${why.slice(0, 90)} @ ${at}`);
       next.push(b);
     }
     pending = next;
   }
-  for (const b of pending) { const out = run(b); if (out != null) red.push({ b, why: (out.match(/Error: ([^\n]+)|Unhandled exception:\n([^\n]+)/) || []).slice(1).filter(Boolean)[0] || '' }); }
-  return red;
+  for (const b of pending) {
+    const res = runBox(b);
+    if (res.ok) { pass++; continue; }
+    if (res.unran) { unran.set(b, res.unran); continue; }
+    red.push({ b, ...whyOf(b, res.out) });
+  }
+  log(`🧪 tighten·boxes: ${total} נבדקו ⇒ ירוקות ${pass} · אדומות ${red.length} · לא-רצו ${unran.size}`);   // רישום: כל קופסה נספרת באחת משלוש
+  return { red, unran };
 }
 export function apply(ev) {
+  // L111 · `--apply` **כותב** חתימות, וכל תוקפו נשען על שלוש שכבות-האימות. אין בינארי Dart = אין מאמת ⇒ לא כותבים כלום
+  //   (‏requireDart: exit 2 · tool=dart · L34 «אין-כלי ≠ כשל»; police מאמת שהכלי באמת חסר — צהוב עם כלי-קיים = אדום).
+  //   קודם הבינארי-החסר לא עצר כלום: שכבה (א) חזרה ירוקה-חלולה ושכבה (ג) הכריזה 35 אדומות-כזב ושחזרה 105 הידוקים.
+  if (!DART) requireDart('tighten --apply · dart analyze + הוכחות-הקופסאות');
   const P = plan(ev); const applied = new Map(); const led = ledger();
   for (const p of P) { const src = fs.readFileSync(p.file, 'utf8'); applied.set(p.k, src); fs.writeFileSync(p.file, p.apply(src)); }
   const reverted = [];
@@ -179,7 +223,12 @@ export function apply(ev) {
     reverted.push({ k, why }); if (ev[k]) rejMap[k] = { key: evKey(ev[k]), why }; fs.writeFileSync(REJ, JSON.stringify(rejMap, null, 1) + '\n'); saveLedger(led);
   };
   const known = () => new Set([...applied.keys(), ...Object.keys(led)]);
+  // L111 · כשל-**כלי** (האנלייזר/ה-VM לא רצו) אינו פסק-דין על הקוד: מחזירים את כל מה שנכתב בריצה הזו ו**לא** רושמים דחייה —
+  //   זיכרון-הדחיות (`tighten-rejected.json`) הוא ראיה על חתימה שהאנלייזר פסל, לא על מכונה חסרת-כלים. הרעלתו היא שהפכה
+  //   ריצה-אחת-שנכשלה ל-76 אטומים שלא הודקו **לעולם** (ואז שער-ירוק על עץ מרופף).
+  const undoToolFailure = () => { for (const [k, src] of applied) fs.writeFileSync(path.join(DM, k + '.dart'), src); applied.clear(); };
   for (const k of Object.keys(led)) if (ev[k] && ev[k].probe) revert(k, 'probe-evidence (L89)');   // הידוק-עבר שראייתו התבררה כגישוש ⇒ שחזור
+  try {
   // (א) טהור: dart analyze על האטומים שהשתנו
   for (let round = 0; round < 3 && applied.size; round++) {
     const errs = analyzeErrors(ROOT, [DART, 'analyze', ...[...applied.keys()].map((k) => `new/dart-maor/${k}.dart`)]);
@@ -217,13 +266,15 @@ export function apply(ev) {
     mirrorSync = sync;
   }
   // (ג) הוכחות-הקופסאות — ריצה אמיתית של הקוראים (קומפילציה + חריגות-ריצה: Map<dynamic,dynamic> שאינו Map<String,dynamic> וכד׳)
-  const redBoxes = boxProofStage(known, fnOf, revert, (m) => console.log(m));
+  const { red: redBoxes, unran } = boxProofStage(known, fnOf, revert, (m) => console.log(m));
   mirrorSync();
-  if (redBoxes.length) throw new Error(`tighten: ${redBoxes.length} קופסאות אדומות שאינן של ההידוק — ${redBoxes.slice(0, 3).map((r) => `${r.b}: ${r.why.slice(0, 70)}`).join(' · ')}`);
+  if (unran.size) throw Object.assign(new Error(`tighten: ${unran.size} הוכחות-קופסאות לא רצו — אין ראיה, ולכן אין פסק-דין (לא שוחזר אטום, לא הוכרזה קופסה אדומה):\n${[...unran].map(([b, u]) => `  · ${b}: ${u}`).join('\n')}`), { tool: true });
+  if (redBoxes.length) throw new Error(`tighten: ${redBoxes.length} קופסאות אדומות שאינן של ההידוק — ${redBoxes.map((r) => `${r.b}: ${r.why.slice(0, 120)} @ ${r.at}`).join(' · ')}`);
   if (fs.existsSync(mirror)) {
     const fin = analyzeErrors(BS, [FLUTTER, 'analyze', '--no-fatal-infos', '--no-fatal-warnings', 'lib/genesis']);
     if (fin.length) { for (const k of [...applied.keys()]) revert(k, 'final-analyze-red'); mirrorSync(); throw new Error(`tighten: המראה אדומה אחרי ההידוק (${fin.length}) — הכל שוחזר`); }
   }
+  } catch (e) { if (e && e.tool) { undoToolFailure(); console.error('↩ tighten: כשל-כלי ⇒ כל מה שנכתב בריצה הזו הוחזר · אפס דחיות נרשמו'); } throw e; }
   for (const k of applied.keys()) { const p = P.find((x) => x.k === k); const sg = dartSig(path.join(DM, k + '.dart')); const s0 = applied.get(k); const before = (() => { const t = dartSig.__from ? null : null; return t; })(); led[k] = { fn: p.fn, before: { ret: p.ret0, raw: p.raw0 }, after: { ret: sg.ret, raw: sg.raw } }; }
   saveLedger(led);
   return { applied: [...applied.keys()], reverted, plan: P };
