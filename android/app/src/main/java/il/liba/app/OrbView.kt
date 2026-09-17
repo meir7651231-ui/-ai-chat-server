@@ -299,37 +299,49 @@ float fbm(float2 p) {
     for (int i = 0; i < 4; i++) { v += a * noise(p); p = p * 2.03 + float2(1.7, 9.2); a *= 0.5; }
     return v;
 }
+float2x2 rot(float a) { float c = cos(a); float s = sin(a); return float2x2(c, -s, s, c); }
 half4 main(float2 fc) {
     float2 c = iRes * 0.5;
     float R = min(iRes.x, iRes.y) * 0.5 - 2.0;
     float2 d = fc - c; float r = length(d); float nr = r / R; float2 uv = d / R;
-    float t = iTime; float lv = iLevel;
-    if (iMode == 6.0) lv = 0.0;
-    float ang = atan(uv.y, uv.x); float2 uu = uv * 0.72; float rr = length(uu);
-    float breath = 1.0 + 0.06 * sin(t * 1.7) + 0.1 * lv;
-    float shape = fbm(float2(ang * 1.3 + t * 0.3, t * 0.4)) * 0.28 + fbm(float2(ang * 4.0 - t * 0.5, rr * 2.0 + t * 0.2)) * 0.12;
-    float bodyR = (0.62 + shape) * breath;
-    float tend = pow(max(0.0, fbm(float2(ang * 3.5 + t * 0.6, rr * 1.5 - t * 0.9)) - 0.35), 1.6) * (1.2 + lv * 2.0);
-    float reach = bodyR + tend * 0.9;
-    float body = 1.0 - smoothstep(reach - 0.08, reach + 0.05, rr);
-    float wisp = smoothstep(reach + 0.35, reach - 0.05, rr) * tend * 0.8;
-    float2 q = uu + 0.35 * float2(fbm(uu * 1.6 + t * 0.3), fbm(uu * 1.6 - t * 0.25 + 7.0)); float f = fbm(q * 2.4 + t * 0.2);
-    float vein = pow(1.0 - abs(fract(f * 3.2 + t * 0.15) * 2.0 - 1.0), 10.0) * (0.8 + lv * 1.2);
-    float3 dark = float3(0.06, 0.01, 0.09); float3 hot = mix(float3(0.95, 0.2, 0.45), cB.rgb, 0.35); float3 fire = mix(float3(1.0, 0.6, 0.2), cC.rgb, 0.25);
-    float3 skin = mix(dark, hot, smoothstep(0.35, 0.8, f) * 0.7); skin += fire * vein; skin += hot * pow(1.0 - rr / max(reach, 0.01), 1.5) * 0.35;
-    float pupil = 0.16 - 0.06 * lv; float irisR = 0.34;
-    float irisBand = exp(-pow((rr - irisR) / (0.09 + 0.04 * lv), 2.0)); float tex = fbm(float2(ang * 4.0 + t * (1.5 + lv * 2.0), rr * 10.0 - t)); float dop = 0.6 + 0.6 * cos(ang - t * 2.0);
-    float3 iris = mix(fire, float3(1.0, 0.9, 0.6), tex) * irisBand * (1.3 + tex) * dop;
-    float pup = 1.0 - smoothstep(pupil - 0.02, pupil + 0.03, rr);
-    float3 eye = mix(skin, iris + skin * 0.3, smoothstep(irisR + 0.16, irisR + 0.02, rr)); eye = mix(eye, float3(0.0), pup);
-    float2 hl = uu - float2(-0.13, -0.15); eye += float3(1.0) * exp(-dot(hl, hl) * 120.0) * 0.9 * (1.0 - pup * 0.3);
-    float3 col = eye * body + skin * wisp;
-    float glow = exp(-max(0.0, rr - reach) * 4.0) * (0.35 + lv * 0.6); col += hot * glow * (1.0 - body);
-    col = 1.0 - exp(-col * 1.1);
+    float t = iTime; float iLevelIn = iLevel; if (iMode == 6.0) iLevelIn = 0.0;
+    float3 col = float3(0.0); float a = 1.0;
+
+ float lv=iLevelIn;float2 uu=uv*.72;
+ float sac=floor(t*.7);float sf=smoothstep(0.,.25,fract(t*.7));
+ float2 look0=float2(hash(float2(sac,1.)),hash(float2(sac,7.)))-.5;float2 look1=float2(hash(float2(sac+1.,1.)),hash(float2(sac+1.,7.)))-.5;
+ float2 ep=mix(look0,look1,sf)*.34+float2(.06*sin(t*.9),.04*cos(t*1.3));
+ float2 ec=uu-ep;float wob=t*.5;float2 sc=float2(1.+.22*sin(wob),1.-.18*sin(wob+1.3));float2 ey=rot(.35*sin(t*.31))*(ec*sc);float er=length(ey);
+ float ang=atan(uu.y,uu.x);float rr=length(uu);
+ float breath=1.+.14*(noise(float2(t*.9,3.))-.5)+.1*lv;
+ float lumpA=t*.45;float dl=abs(mod(ang-lumpA+3.14159,6.28318)-3.14159);float lump=.22*exp(-dl*dl/.35)*(.6+.4*sin(t*2.1));
+ float shape=fbm(float2(ang*1.3+t*.3,t*.4))*.3+fbm(float2(ang*4.-t*.5,rr*2.+t*.2))*.12+lump;
+ float2 tilt=float2(-.5,-.3)*ep;float bodyR=(.55+shape)*breath+dot(uu/max(rr,.001),tilt);
+ float tend=pow(max(0.,fbm(float2(ang*3.5+t*.6,rr*1.5-t*.9))-.35),1.6)*(1.2+lv*2.);
+ float ta=1.2+.6*sin(t*.4);float tb=-2.+.5*cos(t*.33);
+ float tent=pow(max(0.,cos(ang-ta)),40.)*(.35+.25*sin(t*1.7))+pow(max(0.,cos(ang-tb)),60.)*(.3+.3*sin(t*1.1+2.));
+ float reach=bodyR+tend*.9+tent;
+ float body=1.-smoothstep(reach-.08,reach+.05,rr);
+ float wisp=smoothstep(reach+.35,reach-.05,rr)*(tend*.8+tent*.6);
+ float2 q=uu+.35*float2(fbm(uu*1.6+t*.3),fbm(uu*1.6-t*.25+7.));float f=fbm(q*2.4+t*.2);
+ float vein=pow(1.-abs(fract(f*3.2+t*.15-er*.8)*2.-1.),10.)*(.8+lv*1.2);
+ float3 dark=float3(.06,.01,.09);float3 hot=float3(.95,.2,.45);float3 fire=float3(1.,.6,.2);
+ float3 skin=mix(dark,hot,smoothstep(.35,.8,f)*.7);skin+=fire*vein;skin+=hot*pow(max(0.,1.-rr/max(reach,.01)),1.5)*.35;
+ float pupil=.15-.06*lv;float irisR=.3;
+ float irisBand=exp(-pow((er-irisR)/(.08+.04*lv),2.));float ea=atan(ey.y,ey.x);float tex=fbm(float2(ea*4.+t*(1.5+lv*2.),er*10.-t));float dop=.6+.6*cos(ea-t*2.);
+ float3 iris=mix(fire,float3(1.,.9,.6),tex)*irisBand*(1.3+tex)*dop;
+ float pup=1.-smoothstep(pupil-.02,pupil+.03,er);
+ float3 eye=mix(skin,iris+skin*.3,smoothstep(irisR+.16,irisR+.02,er));eye=mix(eye,float3(0.),pup);
+ float2 hl=ey-float2(-.11,-.13);eye+=float3(1.)*exp(-dot(hl,hl)*120.)*.9*(1.-pup*.3);
+ float open=1.-pow(max(0.,sin(t*.6+2.)),40.)*.95;float lid=smoothstep(open*.45-.03,open*.45+.03,abs(ey.y));eye=mix(eye,skin*.8,lid*smoothstep(irisR+.2,irisR,er));
+ col=eye*body+skin*wisp;
+ float glow=exp(-max(0.,rr-reach)*4.)*(.35+lv*.6);col+=hot*glow*(1.-body);
+ col=1.-exp(-col*1.1);
+ float fade=1.-smoothstep(.8,1.04,nr);col*=fade;
+ a=(max(body,wisp)*.98+glow*(1.-body)*.9)*fade;
+    col = mix(col, cB.rgb * col, 0.3);
     if (iMode == 6.0) col *= 0.4;
-    float fade = 1.0 - smoothstep(0.78, 1.02, nr); col *= fade;
-    float a = (max(body, wisp) * 0.98 + glow * (1.0 - body) * 0.9) * fade;
-    return half4(half3(col), half(a));
+    return half4(half3(col * a), half(a));
 }
 """
 
