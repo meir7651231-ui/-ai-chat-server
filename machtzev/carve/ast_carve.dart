@@ -354,6 +354,32 @@ class _MemberUse extends RecursiveAstVisitor<void> {
 String? _pub(String name) => name.startsWith('_') ? name.substring(1) : name;
 
 void main(List<String> args) {
+  // מצב --ops: פעולות-היסוד שבתוך גוף-הפונקציה ⇒ חלקיקים עם חתימה (רמה אחת מתחת לפונקציה).
+  //   --ops <file> <fnName> [startLine]  ·  --ops-batch jobs.json ⇒ [{file,name,line}] → חלקיקים-ייחודיים + ספירת-מוצא
+  if (args.isNotEmpty && args[0] == '--ops') {
+    final startLine = args.length > 3 ? int.tryParse(args[3]) : null;
+    stdout.write(jsonEncode(ops(args[1], args[2], startLine)));
+    return;
+  }
+  if (args.isNotEmpty && args[0] == '--ops-batch') {
+    final jobs = (jsonDecode(File(args[1]).readAsStringSync()) as List);
+    final uniq = <String, Map<String, dynamic>>{}; final origins = <String, List<String>>{}; var okFns = 0, failed = 0;
+    for (final j in jobs) {
+      Map<String, dynamic> r;
+      try { r = ops(j['file'], j['name'], j['line'] is int ? j['line'] : int.tryParse('${j['line']}')); } catch (e) { r = {'ok': false, 'reason': 'exception: $e'}; }
+      if (r['ok'] != true) { failed++; continue; }
+      okFns++;
+      for (final p in (r['particles'] as List)) {
+        final key = p['name'] as String;
+        uniq.putIfAbsent(key, () => Map<String, dynamic>.from(p));
+        (origins[key] ??= []).add('${j['file']}#${j['name']}');
+      }
+    }
+    final list = uniq.values.map((p) { final o = origins[p['name']]!; return {...p, 'count': o.length, 'origins': o.take(5).toList()}; }).toList()
+      ..sort((a, b) => (b['count'] as int).compareTo(a['count'] as int));
+    stdout.write(jsonEncode({'functions': okFns, 'failed': failed, 'particles': list}));
+    return;
+  }
   // מצב-אצווה: VM אחד, פרסור-רב. --batch jobs.json ⇒ [{file,name,line}] → [{result}]
   if (args.isNotEmpty && args[0] == '--batch') {
     final jobs = (jsonDecode(File(args[1]).readAsStringSync()) as List);
@@ -716,4 +742,144 @@ class _FindDecl extends RecursiveAstVisitor<void> {
   void visitFunctionDeclaration(FunctionDeclaration node){ cb(node); super.visitFunctionDeclaration(node); }
   @override
   void visitMethodDeclaration(MethodDeclaration node){ cb(node); super.visitMethodDeclaration(node); }
+}
+
+
+// ══════════════════════════════════════════════════════════════════════════
+// --ops · פעולות-היסוד שבתוך גוף-הפונקציה ⇒ חלקיקים (רמה אחת מתחת לפונקציה).
+//   כל ביטוי-בינארי / קריאת-מתודה-של-core / גישה-לתכונה הופך לפונקציה-עצמאית
+//   עם חתימה (טיפוסים מ-cast/ליטרל/פרמטר-מוצהר; אחרת dynamic) — אפס ניחוש-דומיין.
+//   ליטרל-מפתח בתוך `r['key'] == null` הופך לשקע (פרמטר), לא נשאר צרוב.
+// ══════════════════════════════════════════════════════════════════════════
+String _opWord(String op) => const {'<': 'Lt', '>': 'Gt', '<=': 'Le', '>=': 'Ge', '==': 'Eq', '!=': 'Ne', '+': 'Add', '-': 'Sub', '*': 'Mul', '/': 'Div', '%': 'Mod', '~/': 'IDiv'}[op] ?? 'Op';
+String _tWord(String t) => t == 'num' ? 'Num' : t == 'String' ? 'Str' : t == 'bool' ? 'Bool' : t.startsWith('List') ? 'List' : 'Dyn';
+
+class _OpsVisitor extends RecursiveAstVisitor<void> {
+  final Map<String, String> paramTypes;
+  final List<Map<String, dynamic>> out = [];
+  _OpsVisitor(this.paramTypes);
+
+  String norm(String t) {
+    t = t.replaceAll('?', '').trim();
+    if (t == 'int' || t == 'double') return 'num';
+    if (t == 'Null') return 'dynamic';
+    if (t.startsWith('List') || t.startsWith('Iterable')) return 'List<dynamic>';
+    if (t.startsWith('Map')) return 'Map<dynamic, dynamic>';
+    return t.isEmpty ? 'dynamic' : t;
+  }
+  String typeOf(Expression e) {
+    if (e is ParenthesizedExpression) return typeOf(e.expression);
+    if (e is IntegerLiteral || e is DoubleLiteral) return 'num';
+    if (e is SimpleStringLiteral || e is StringInterpolation || e is AdjacentStrings) return 'String';
+    if (e is BooleanLiteral) return 'bool';
+    if (e is NullLiteral) return 'Null';
+    if (e is ListLiteral) return 'List<dynamic>';
+    if (e is AsExpression) return e.type.toSource();
+    if (e is SimpleIdentifier) return paramTypes[e.name] ?? 'dynamic';
+    if (e is PrefixExpression && e.operator.lexeme == '-') return typeOf(e.operand);
+    String? prop; if (e is PropertyAccess) prop = e.propertyName.name; if (e is PrefixedIdentifier) prop = e.identifier.name;
+    if (prop != null) { if (prop == 'length') return 'num'; if (prop == 'isEmpty' || prop == 'isNotEmpty') return 'bool'; return 'dynamic'; }
+    if (e is MethodInvocation) {
+      final m = e.methodName.name;
+      if (const {'compareTo', 'indexOf', 'floor', 'round', 'ceil', 'truncate'}.contains(m)) return 'num';
+      if (const {'toString', 'trim', 'toLowerCase', 'toUpperCase', 'substring', 'replaceAll', 'join', 'padLeft', 'padRight'}.contains(m)) return 'String';
+      if (const {'contains', 'startsWith', 'endsWith', 'any', 'every'}.contains(m)) return 'bool';
+      if (const {'split', 'where', 'map', 'toList', 'take', 'skip'}.contains(m)) return 'List<dynamic>';
+      return 'dynamic';
+    }
+    if (e is BinaryExpression) {
+      final op = e.operator.lexeme;
+      if (const {'<', '>', '<=', '>=', '==', '!=', '&&', '||'}.contains(op)) return 'bool';
+      final l = typeOf(e.leftOperand); return l == 'dynamic' ? typeOf(e.rightOperand) : l;
+    }
+    return 'dynamic';
+  }
+  void emit(String kind, String name, List<String> ps, List<String> names, String ret, String body, AstNode node) {
+    final sig = '(' + [for (var i = 0; i < ps.length; i++) '${ps[i]} ${names[i]}'].join(', ') + ') => $ret';
+    final src = '$ret $name(' + [for (var i = 0; i < ps.length; i++) '${ps[i]} ${names[i]}'].join(', ') + ') => $body;';
+    out.add({'name': name, 'kind': kind, 'params': ps, 'ret': ret, 'sig': sig, 'source': src, 'expr': node.toSource()});
+  }
+  @override
+  void visitBinaryExpression(BinaryExpression n) {
+    final op = n.operator.lexeme; final L = n.leftOperand; final R = n.rightOperand;
+    const cmp = {'<', '>', '<=', '>=', '==', '!='}; const ar = {'+', '-', '*', '/', '%', '~/'};
+    if (cmp.contains(op) && L is MethodInvocation && L.methodName.name == 'compareTo' && L.target != null && L.argumentList.arguments.length == 1 && R is IntegerLiteral && R.value == 0) {
+      final t = norm(typeOf(L.target!)); final u = norm(typeOf(L.argumentList.arguments.first)); final tt = t == 'dynamic' ? u : t;
+      emit('predicate', 'cmp${_opWord(op)}${_tWord(tt)}', [tt, tt], ['a', 'b'], 'bool', 'a.compareTo(b) $op 0', n);
+    } else if (cmp.contains(op) && (op == '==' || op == '!=')) {
+      final idx = L is IndexExpression ? L : (R is IndexExpression ? R : null); final other = idx == null ? (L is NullLiteral ? L : R) : (identical(idx, L) ? R : L);
+      if (idx != null && idx.index is SimpleStringLiteral && other is NullLiteral) {
+        emit('predicate', op == '==' ? 'fieldIsNull' : 'fieldIsNotNull', ['dynamic', 'String'], ['r', 'key'], 'bool', '(r is Map ? r[key] : null) $op null', n);
+      } else if (other is NullLiteral) {
+        emit('predicate', op == '==' ? 'isNull' : 'isNotNull', ['dynamic'], ['a'], 'bool', 'a $op null', n);
+      } else {
+        final t = norm(typeOf(L)); final u = norm(typeOf(R)); final tt = t == 'dynamic' ? u : t;
+        emit('predicate', '${op == '==' ? 'eq' : 'ne'}${_tWord(tt)}', [tt, tt], ['a', 'b'], 'bool', 'a $op b', n);
+      }
+    } else if (cmp.contains(op)) {
+      final t = norm(typeOf(L)); final u = norm(typeOf(R)); final tt = t == 'dynamic' ? u : t;
+      final w = _opWord(op); emit('predicate', '${w[0].toLowerCase()}${w.substring(1)}${_tWord(tt)}', [tt, tt], ['a', 'b'], 'bool', 'a $op b', n);
+    } else if (ar.contains(op)) {
+      final t = norm(typeOf(L)); final u = norm(typeOf(R)); final tt = (t == 'num' || u == 'num') ? 'num' : (t == 'String' && op == '+') ? 'String' : 'dynamic';
+      final ret = tt == 'String' ? 'String' : tt == 'num' ? 'num' : 'dynamic';
+      final w = _opWord(op); emit('measure', '${w[0].toLowerCase()}${w.substring(1)}${_tWord(tt)}', [tt, tt], ['a', 'b'], ret, 'a $op b', n);
+    }
+    super.visitBinaryExpression(n);
+  }
+  @override
+  void visitMethodInvocation(MethodInvocation n) {
+    final t = n.target; final m = n.methodName.name; final args = n.argumentList.arguments;
+    if (t != null) {
+      final tt = norm(typeOf(t));
+      if (m == 'split' && args.length == 1) emit('collection', 'splitStr', ['String', 'String'], ['s', 'sep'], 'List<dynamic>', 's.split(sep)', n);
+      else if (m == 'trim' && args.isEmpty) emit('format', 'trimStr', ['String'], ['s'], 'String', 's.trim()', n);
+      else if (m == 'toLowerCase' && args.isEmpty) emit('format', 'lowerStr', ['String'], ['s'], 'String', 's.toLowerCase()', n);
+      else if (m == 'contains' && args.length == 1 && tt == 'String') emit('predicate', 'containsStr', ['String', 'String'], ['s', 'q'], 'bool', 's.contains(q)', n);
+      else if (m == 'startsWith' && args.length == 1) emit('predicate', 'startsWithStr', ['String', 'String'], ['s', 'q'], 'bool', 's.startsWith(q)', n);
+      else if (m == 'where' && args.length == 1) emit('collection', 'whereList', ['List<dynamic>', 'bool Function(dynamic)'], ['xs', 'f'], 'List<dynamic>', 'xs.where(f).toList()', n);
+      else if (m == 'join' && args.length == 1) emit('format', 'joinList', ['List<dynamic>', 'String'], ['xs', 'sep'], 'String', 'xs.join(sep)', n);
+      else if (m == 'abs' && args.isEmpty) emit('measure', 'absNum', ['num'], ['a'], 'num', 'a.abs()', n);
+      else if (m == 'floor' && args.isEmpty) emit('measure', 'floorNum', ['num'], ['a'], 'num', 'a.floor()', n);
+    }
+    super.visitMethodInvocation(n);
+  }
+  void _prop(String prop, Expression target, AstNode n) {
+    final tt = norm(typeOf(target));
+    if (prop == 'length') emit('measure', tt == 'String' ? 'lengthStr' : 'lengthList', [tt == 'String' ? 'String' : 'List<dynamic>'], ['xs'], 'num', 'xs.length', n);
+    else if (prop == 'isEmpty') emit('predicate', tt == 'String' ? 'isEmptyStr' : 'isEmptyList', [tt == 'String' ? 'String' : 'List<dynamic>'], ['xs'], 'bool', 'xs.isEmpty', n);
+    else if (prop == 'isNotEmpty') emit('predicate', tt == 'String' ? 'isNotEmptyStr' : 'isNotEmptyList', [tt == 'String' ? 'String' : 'List<dynamic>'], ['xs'], 'bool', 'xs.isNotEmpty', n);
+  }
+  @override
+  void visitPropertyAccess(PropertyAccess n) { final t = n.target; if (t != null) _prop(n.propertyName.name, t, n); super.visitPropertyAccess(n); }
+  @override
+  void visitPrefixedIdentifier(PrefixedIdentifier n) { _prop(n.identifier.name, n.prefix, n); super.visitPrefixedIdentifier(n); }
+}
+
+Map<String, dynamic> ops(String file, String fnName, int? startLine) {
+  final src = File(file).readAsStringSync();
+  final parsed = parseString(content: src, throwIfDiagnostics: false);
+  final unit = parsed.unit; final lineInfo = parsed.lineInfo;
+  FunctionDeclaration? fn; MethodDeclaration? method;
+  bool near(Declaration d) {
+    if (startLine == null) return true;
+    final a = lineInfo.getLocation(d.offset).lineNumber;
+    final b = lineInfo.getLocation(d.firstTokenAfterCommentAndMetadata.offset).lineNumber;
+    return (a - startLine).abs() <= 2 || (b - startLine).abs() <= 2;
+  }
+  unit.visitChildren(_FindDecl((d) {
+    if (d is FunctionDeclaration && d.name.lexeme == fnName) { if (near(d)) fn = d; }
+    else if (d is MethodDeclaration && d.name.lexeme == fnName) { if (near(d)) method = d; }
+  }));
+  final body = fn?.functionExpression.body ?? method?.body;
+  final params = fn?.functionExpression.parameters ?? method?.parameters;
+  if (body == null) return {'ok': false, 'reason': 'function not found: $fnName', 'name': fnName};
+  final pt = <String, String>{};
+  for (final p in params?.parameters ?? const <FormalParameter>[]) {
+    final q = p is DefaultFormalParameter ? p.parameter : p;
+    if (q is SimpleFormalParameter) { final nm = q.name?.lexeme; if (nm != null) pt[nm] = q.type?.toSource() ?? 'dynamic'; }
+  }
+  final v = _OpsVisitor(pt); body.visitChildren(v);
+  final seen = <String>{}; final uniq = <Map<String, dynamic>>[];
+  for (final p in v.out) { if (seen.add(p['name'] as String)) uniq.add(p); }
+  return {'ok': true, 'name': fnName, 'file': file, 'particles': uniq};
 }

@@ -5,4 +5,4 @@ description: כלי-החציבה של המחצבה — analyzer אמיתי, אפ
 environment:
   sdk: ">=3.0.0 <4.0.0"
 dependencies:
-  analyzer: ^6.11.0
+  analyzer: ^7.4.0

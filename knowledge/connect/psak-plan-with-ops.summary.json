@@ -1,0 +1,69 @@
+{
+ "psak.daysSince": {
+  "pick": "dayDiff",
+  "chain": null,
+  "proven": true,
+  "candidates": 26,
+  "ran": 26,
+  "passedAll": [
+   "cockpitDaysSince",
+   "dayDiff"
+  ]
+ },
+ "psak.over7": {
+  "pick": "gtNum",
+  "chain": null,
+  "proven": true,
+  "candidates": 41,
+  "ran": 41,
+  "passedAll": [
+   "cmpGtDyn",
+   "gtDyn",
+   "gtNum"
+  ]
+ },
+ "psak.bochurLate": {
+  "pick": "cmpGtDyn(cockpitDaysSince(p0,p1),p2)",
+  "chain": null,
+  "proven": true,
+  "candidates": 4,
+  "ran": 7175,
+  "passedAll": [
+   "cmpGtDyn(cockpitDaysSince(p0,p1),p2)",
+   "cmpGtDyn(dayDiff(p0,p1),p2)",
+   "gtDyn(cockpitDaysSince(p0,p1),p2)",
+   "gtDyn(dayDiff(p0,p1),p2)",
+   "gtNum(cockpitDaysSince(p0,p1),p2)",
+   "gtNum(dayDiff(p0,p1),p2)"
+  ]
+ },
+ "psak.noOwner": {
+  "pick": null,
+  "chain": null,
+  "proven": false,
+  "candidates": 21,
+  "ran": 3109,
+  "passedAll": []
+ },
+ "psak.countNoOwner": {
+  "pick": "lengthList∘popCall",
+  "chain": [
+   "popCall",
+   "lengthList"
+  ],
+  "proven": true,
+  "candidates": 21,
+  "ran": 1763,
+  "passedAll": [
+   "lengthList∘popCall"
+  ]
+ },
+ "psak.recordSignal": {
+  "pick": null,
+  "chain": null,
+  "proven": false,
+  "candidates": 21,
+  "ran": 0,
+  "passedAll": []
+ }
+}
