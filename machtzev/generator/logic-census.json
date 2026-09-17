@@ -1607,6 +1607,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-cmp-lt-str.dart",
+  "name": "cmpLtStr",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/cockpit-at-risk.dart",
   "name": "cockpitAtRisk",
   "ret": "List",
@@ -4473,6 +4484,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-ge-dyn.dart",
+  "name": "geDyn",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/gematria.dart",
   "name": "gem",
   "ret": "String",
@@ -4686,6 +4708,17 @@
    "int"
   ],
   "argc": 1,
+  "wireable": true
+ },
+ {
+  "file": "dart-maor/op-gt-num.dart",
+  "name": "gtNum",
+  "ret": "bool",
+  "params": [
+   "num",
+   "num"
+  ],
+  "argc": 2,
   "wireable": true
  },
  {
