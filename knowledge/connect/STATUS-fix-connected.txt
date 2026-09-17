@@ -1,0 +1,7 @@
+DONE | claude/fix-connected-260916 | forward 59 / reverse 10 (both 4) / none 277 — מתוך 342. לפני: 57 / — / 285.
+
+פקודה: node machtzev/census/engine-index.mjs --connected
+עם one.mjs כנקודת-כניסה (מדידה בלבד, הכרעת-בעלים): forward 92 / none 244
+פקודה: node machtzev/census/engine-index.mjs --connected --with-entry machtzev/one.mjs
+משטרה זהה לפני/אחרי: 45 ran · 12 skipped · 0 yellow · 0 failed · מרשם 57
+שינוי-קוד: machtzev/census/engine-index.mjs בלבד (קומיט f09a9c4f). engine-index.json לא נגעתי.
