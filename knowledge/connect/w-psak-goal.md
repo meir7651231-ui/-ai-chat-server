@@ -239,3 +239,20 @@ $ node machtzev/generator/hamtzaa.mjs --ratchet
 | `yeshiva/yeshiva-baseline.json` | רצפת-מסלול-המטרה: sourced 179⇒189 · open 43⇒50 |
 | `machtzev/pins.sha256` | `pins-check --write` (hamtzaa.mjs · yeshiva-baseline.json) |
 | `knowledge/connect/goals/*` | הקלטים: `payments.txt` · `payments-needs.json` · `goals-5.txt` |
+
+---
+
+## 7 · סיכום-מדידות (22)
+
+| # | מדידה | פקודה | תוצאה |
+|---|---|---|---|
+| 1–2 | פסק על מטרת-התשלומים לפני/אחרי | `node yeshiva/purpose.mjs "<מטרה>"` | 0→7 מקורות · 0→2 תביעות · 0→17 דרישות (7 מקור · 10 ∅) |
+| 3–12 | פסק על 5 מטרות נוספות לפני/אחרי | אותה פקודה, `knowledge/connect/goals/goals-5.txt` | §3.2 |
+| 13 | אפס-המצאה לחלקיקים | `hamtzaa --needs … --goal …` | 6 צרכים · 5 אסימונים · 2 בלי-מקור · 1/6 עם המצאה |
+| 14 | שער-החלקיקים חוסם | `… --gate` | exit 1 |
+| 15 | fail-closed · קובץ חסר | `--needs /nope.json` | exit 2 |
+| 16 | fail-closed · 0 צרכים | `--needs empty.json` | exit 2 |
+| 17 | הוכחת-ירי | `hamtzaa --selftest` | 20/20 (12 קיימות + 8 חדשות) |
+| 18 | אי-נסיגה במסלולים הקיימים | `hamtzaa --ratchet` | 51/288, רצפה 51 — ללא שינוי |
+| 19–20 | שער ישיבתי לפני/אחרי | `node yeshiva/gate.mjs --gate` | 179→189 שקעים-עם-מקור · 43→50 מתגים · 333/286/47 ללא שינוי |
+| 21–22 | משטרה לפני/אחרי | `node machtzev/police.mjs --fast` | 1 failed (`learn`, shallow-clone) → **0 failed · 45 ran** |
