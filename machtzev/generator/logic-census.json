@@ -6241,6 +6241,16 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/op-lower-str.dart",
+  "name": "lowerStr",
+  "ret": "String",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/op-lt-dyn.dart",
   "name": "ltDyn",
   "ret": "bool",
@@ -6892,6 +6902,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-mod-num.dart",
+  "name": "modNum",
+  "ret": "num",
+  "params": [
+   "num",
+   "num"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/module-on.dart",
   "name": "moduleOn",
   "ret": "bool",
@@ -6964,6 +6985,17 @@
   ],
   "argc": 2,
   "wireable": true
+ },
+ {
+  "file": "dart-maor/op-mul-dyn.dart",
+  "name": "mulDyn",
+  "ret": "dynamic",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
+  "wireable": false
  },
  {
   "file": "dart-maor/name-index.dart",
