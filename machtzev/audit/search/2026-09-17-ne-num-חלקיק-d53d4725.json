@@ -1,0 +1,183 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:31:09.798Z",
+ "query": "ne num חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "ne",
+  "num",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "f40ae635c9deea80edf60c10884af1f6e89da125174aa7b6b38acb27dec11f3c",
+  "logicCensusSha": "bb200ce123fb0c772bbb959f41802667e74cd0149c7f499a2a6c3c096acb9bb0",
+  "display": 1939,
+  "logic": 1015
+ },
+ "candidates": [
+  {
+   "id": "absNum",
+   "layer": "logic",
+   "file": "dart-maor/op-abs-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "addNum",
+   "layer": "logic",
+   "file": "dart-maor/op-add-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "divNum",
+   "layer": "logic",
+   "file": "dart-maor/op-div-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "eqNum",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "floorNum",
+   "layer": "logic",
+   "file": "dart-maor/op-floor-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "geNum",
+   "layer": "logic",
+   "file": "dart-maor/op-ge-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "gtNum",
+   "layer": "logic",
+   "file": "dart-maor/op-gt-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "iDivNum",
+   "layer": "logic",
+   "file": "dart-maor/op-i-div-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "leNum",
+   "layer": "logic",
+   "file": "dart-maor/op-le-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "ltNum",
+   "layer": "logic",
+   "file": "dart-maor/op-lt-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "modNum",
+   "layer": "logic",
+   "file": "dart-maor/op-mod-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "mulNum",
+   "layer": "logic",
+   "file": "dart-maor/op-mul-num.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  },
+  {
+   "id": "neBool",
+   "layer": "logic",
+   "file": "dart-maor/op-ne-bool.dart",
+   "score": 3,
+   "hits": [
+    "ne"
+   ]
+  },
+  {
+   "id": "neDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-ne-dyn.dart",
+   "score": 3,
+   "hits": [
+    "ne"
+   ]
+  },
+  {
+   "id": "NumBox",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/num_box.dart",
+   "score": 3,
+   "hits": [
+    "num"
+   ]
+  }
+ ],
+ "strong": [
+  "absNum",
+  "addNum",
+  "divNum",
+  "eqNum",
+  "floorNum",
+  "geNum",
+  "gtNum",
+  "iDivNum",
+  "leNum",
+  "ltNum",
+  "modNum",
+  "mulNum",
+  "neBool",
+  "neDyn"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "NumBox"
+ ],
+ "creates": "new/dart-maor/op-ne-num.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד neNum(num, num) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי t != 0 · מקור למשל dart-maor/balance-of.dart#balanceOf); המועמדים-החזקים absNum(num) => num · addNum(num, num) => num · divNum(num, num) => num · eqNum(num, num) => bool · floorNum(num) => num · geNum(num, num) => bool · gtNum(num, num) => bool · iDivNum(num, num) => num · leNum(num, num) => bool · ltNum(num, num) => bool · modNum(num, num) => num · mulNum(num, num) => num · neBool(bool, bool) => bool · neDyn(dynamic, dynamic) => bool — לרובם אין את חתימת-הפעולה-לבדה (num, num) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: eqNum {} · geNum {} · gtNum {} · leNum {} · ltNum {} — מול neNum {a != b;}",
+ "sig": "d53d47254e6de663a6a64a73e86f131d6e125ef64058027a403c854b193c0adb"
+}

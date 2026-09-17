@@ -1,0 +1,183 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:31:10.663Z",
+ "query": "sub dyn חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "sub",
+  "dyn",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "fc3b4a43a4fb2ecd6718d5bce856317f34cf0d1c64ab1d1d6b0b9e4e0fba4038",
+  "logicCensusSha": "66a7b68a3da6e585b782b6d1f91a3d015634b63f7bc1738ecd685bb1910e03b2",
+  "display": 1941,
+  "logic": 1017
+ },
+ "candidates": [
+  {
+   "id": "addDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-add-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "AiCardSub",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_sub.dart",
+   "score": 3,
+   "hits": [
+    "sub"
+   ]
+  },
+  {
+   "id": "CaSub",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_sub.dart",
+   "score": 3,
+   "hits": [
+    "sub"
+   ]
+  },
+  {
+   "id": "CaSubTitle",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_sub_title.dart",
+   "score": 3,
+   "hits": [
+    "sub"
+   ]
+  },
+  {
+   "id": "cleanSub",
+   "layer": "logic",
+   "file": "dart/clean_sub.dart",
+   "score": 3,
+   "hits": [
+    "sub"
+   ]
+  },
+  {
+   "id": "cmpGtDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-gt-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "cmpLeDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-le-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "cmpLtDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-lt-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "divDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-div-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "dynMap",
+   "layer": "logic",
+   "file": "dart/dyn_map.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "eqDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "geDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-ge-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "gtDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-gt-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "leDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-le-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  },
+  {
+   "id": "ltDyn",
+   "layer": "logic",
+   "file": "dart-maor/op-lt-dyn.dart",
+   "score": 3,
+   "hits": [
+    "dyn"
+   ]
+  }
+ ],
+ "strong": [
+  "addDyn",
+  "cleanSub",
+  "cmpGtDyn",
+  "cmpLeDyn",
+  "cmpLtDyn",
+  "divDyn",
+  "dynMap",
+  "eqDyn",
+  "geDyn",
+  "gtDyn",
+  "leDyn",
+  "ltDyn"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "AiCardSub",
+  "CaSub",
+  "CaSubTitle"
+ ],
+ "creates": "new/dart-maor/op-sub-dyn.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד subDyn(dynamic, dynamic) => dynamic שנחצב מכנית ע\"י ast_carve --ops (הביטוי n.year - d.year · מקור למשל dart-maor/age-of.dart#ageOf); המועמדים-החזקים addDyn(dynamic, dynamic) => dynamic · cleanSub(String, String Function(String) term) => String · cmpGtDyn(dynamic, dynamic) => bool · cmpLeDyn(dynamic, dynamic) => bool · cmpLtDyn(dynamic, dynamic) => bool · divDyn(dynamic, dynamic) => dynamic · dynMap(Object?) => Map<String, dynamic> · eqDyn(dynamic, dynamic) => bool · geDyn(dynamic, dynamic) => bool · gtDyn(dynamic, dynamic) => bool · leDyn(dynamic, dynamic) => bool · ltDyn(dynamic, dynamic) => bool — לרובם אין את חתימת-הפעולה-לבדה (dynamic, dynamic) => dynamic (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: addDyn {} · divDyn {} — מול subDyn {a - b;}",
+ "sig": "a994917a403d3c3f4f0581f6645b91bdda7f2da7c8910e7cb92ad96c414b1cc7"
+}

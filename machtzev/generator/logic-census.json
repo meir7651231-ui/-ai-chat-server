@@ -7133,6 +7133,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-ne-num.dart",
+  "name": "neNum",
+  "ret": "bool",
+  "params": [
+   "num",
+   "num"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/net-check-script.dart",
   "name": "netCheckScript",
   "ret": "String",
@@ -10208,6 +10219,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/op-starts-with-str.dart",
+  "name": "startsWithStr",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-boxes/worktasks.dart",
   "name": "stats",
   "ret": "Map<String, dynamic>",
@@ -10435,6 +10457,17 @@
    "String Function(String) colorHe"
   ],
   "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/op-sub-dyn.dart",
+  "name": "subDyn",
+  "ret": "dynamic",
+  "params": [
+   "dynamic",
+   "dynamic"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {

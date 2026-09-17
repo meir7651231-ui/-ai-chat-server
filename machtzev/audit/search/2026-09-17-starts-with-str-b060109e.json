@@ -1,0 +1,187 @@
+{
+ "v": 1,
+ "ts": "2026-09-17T08:31:10.270Z",
+ "query": "starts with str חלקיק פעולת-יסוד נחצב מתוך אטומים למשל",
+ "tokens": [
+  "starts",
+  "with",
+  "str",
+  "חלקיק",
+  "פעולת",
+  "יסוד",
+  "נחצב",
+  "תוך",
+  "אטומים",
+  "משל"
+ ],
+ "oracle": {
+  "atomIndexSha": "9c869d3395665f6d27f4f2748ad7e388d192bb088b9b99a06c9a2bd0f2e54186",
+  "logicCensusSha": "90def68c33bcf798870199a191b3f7457c1b3cb51d47924e33558c8639d4163a",
+  "display": 1940,
+  "logic": 1016
+ },
+ "candidates": [
+  {
+   "id": "ForgeStarRating",
+   "layer": "display",
+   "file": "dart-forge-bs/selection/star_rating.dart",
+   "score": 4,
+   "hits": [
+    "starts",
+    "תוך"
+   ]
+  },
+  {
+   "id": "addStr",
+   "layer": "logic",
+   "file": "dart-maor/op-add-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpGeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-ge-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpGtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-gt-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpLeStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-le-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "cmpLtStr",
+   "layer": "logic",
+   "file": "dart-maor/op-cmp-lt-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "compatibleWith",
+   "layer": "logic",
+   "file": "dart/compatible_with.dart",
+   "score": 3,
+   "hits": [
+    "with"
+   ]
+  },
+  {
+   "id": "containsStr",
+   "layer": "logic",
+   "file": "dart-maor/op-contains-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "eqStr",
+   "layer": "logic",
+   "file": "dart-maor/op-eq-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "isEmptyStr",
+   "layer": "logic",
+   "file": "dart-maor/op-is-empty-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "isNotEmptyStr",
+   "layer": "logic",
+   "file": "dart-maor/op-is-not-empty-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "lengthStr",
+   "layer": "logic",
+   "file": "dart-maor/op-length-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "lowerStr",
+   "layer": "logic",
+   "file": "dart-maor/op-lower-str.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "modeStr",
+   "layer": "logic",
+   "file": "dart-boxes/lib-nedarim-sync.dart",
+   "score": 3,
+   "hits": [
+    "str"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 3,
+   "hits": [
+    "פעולת",
+    "תוך",
+    "אטומים"
+   ]
+  }
+ ],
+ "strong": [
+  "addStr",
+  "cmpGeStr",
+  "cmpGtStr",
+  "cmpLeStr",
+  "cmpLtStr",
+  "compatibleWith",
+  "containsStr",
+  "eqStr",
+  "isEmptyStr",
+  "isNotEmptyStr",
+  "lengthStr",
+  "lowerStr",
+  "modeStr"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [
+  "ForgeStarRating",
+  "SettingsScreenShell"
+ ],
+ "creates": "new/dart-maor/op-starts-with-str.dart",
+ "chosen": "none",
+ "why": "חלקיק-פעולת-יסוד startsWithStr(String, String) => bool שנחצב מכנית ע\"י ast_carve --ops (הביטוי k.startsWith('ext:') · מקור למשל dart-maor/candidate-supporters-for-charge.dart#candidateSupportersForCharge); המועמדים-החזקים addStr(String, String) => String · cmpGeStr(String, String) => bool · cmpGtStr(String, String) => bool · cmpLeStr(String, String) => bool · cmpLtStr(String, String) => bool · compatibleWith(CompatNode, List<CompatNode>, bool Function(CompatNode a, CompatNode b) canConnect, bool Function(CompatNode p, int tempC) suitableForTemp, int) => List<CompatNode> · containsStr(String, String) => bool · eqStr(String, String) => bool · isEmptyStr(String) => bool · isNotEmptyStr(String) => bool · lengthStr(String) => num · lowerStr(String) => String · modeStr(List<String>) => String — לרובם אין את חתימת-הפעולה-לבדה (String, String) => bool (נבדק מכנית מול logic-census), הם פונקציות אחרות שמכילות/דומות בשם · חתימה-זהה אך גוף שונה: cmpGeStr {} · cmpGtStr {} · cmpLeStr {} · cmpLtStr {} · containsStr {} · eqStr {} — מול startsWithStr {s.startsWith(q);}",
+ "sig": "b060109e7fce44d488a4400df06437d293ab41747edc7531580cb2e64b584b21"
+}
