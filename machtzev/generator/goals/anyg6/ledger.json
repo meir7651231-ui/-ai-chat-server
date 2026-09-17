@@ -1,0 +1,632 @@
+{
+ "ns": "anyg6",
+ "goal": "בסוף כל חודש לסכם כמה תרומות התקבלו, לזהות תורמים שלא תרמו מעל 90 יום, ולשלוח להם מכתב תודה",
+ "goalFile": "../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/g6.txt",
+ "at": "2026-09-17T23:09:14.919Z",
+ "ms": 239757,
+ "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/g6.txt --ns anyg6",
+ "summary": {
+  "needs": 4,
+  "rejected": 0,
+  "solved": 4,
+  "rounds": 3,
+  "file": "new/dart-gen-bs/gen_goal_anyg6.dart",
+  "red": 0
+ },
+ "steps": [
+  {
+   "step": 1,
+   "title": "פסק (yeshiva/purpose) על טקסט-המטרה",
+   "status": "עבר",
+   "detail": "31 מקורות · 12 מתגים · חובה 0 · רשות 0 · תחום — · rule: לא נקרא (אין goal.spec)",
+   "psak": {
+    "sources": [
+     {
+      "field": "id",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.id"
+     },
+     {
+      "field": "name",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.name"
+     },
+     {
+      "field": "phone",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.phone"
+     },
+     {
+      "field": "email",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.email"
+     },
+     {
+      "field": "address",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.address"
+     },
+     {
+      "field": "city",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.city"
+     },
+     {
+      "field": "idNum",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.idNum"
+     },
+     {
+      "field": "extId",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.extId"
+     },
+     {
+      "field": "cat",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.cat"
+     },
+     {
+      "field": "forWho",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.forWho"
+     },
+     {
+      "field": "notes",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.notes"
+     },
+     {
+      "field": "count",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.count"
+     },
+     {
+      "field": "ils",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.ils"
+     },
+     {
+      "field": "usd",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.usd"
+     },
+     {
+      "field": "first",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.first"
+     },
+     {
+      "field": "last",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.last"
+     },
+     {
+      "field": "nextDate",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.nextDate"
+     },
+     {
+      "field": "nextNote",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.nextNote"
+     },
+     {
+      "field": "photos",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.photos"
+     },
+     {
+      "field": "nextEventId",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.nextEventId"
+     },
+     {
+      "field": "donations",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.donations"
+     },
+     {
+      "field": "hok",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.hok"
+     },
+     {
+      "field": "ayin",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.ayin"
+     },
+     {
+      "field": "calls",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#Supporter.calls"
+     },
+     {
+      "field": "לסכם",
+      "src": "מטרה#תביעה1 (פועל-מטרה \"לסכם\")"
+     },
+     {
+      "field": "תרומות",
+      "src": "machtzev/generator/entity-terms.data.json:entity.donations.forms (\"תרומות\")"
+     },
+     {
+      "field": "לזהות",
+      "src": "מטרה#תביעה2 (פועל-מטרה \"לזהות\")"
+     },
+     {
+      "field": "תורמים",
+      "src": "machtzev/generator/entity-terms.data.json:entity.supporter.forms (\"תורם\")"
+     },
+     {
+      "field": "יום",
+      "src": "machtzev/generator/spec-lang.data.json:typeDate (\"יום\")"
+     },
+     {
+      "field": "90",
+      "src": "מטרה#תביעה2 (ליטרל \"90\")"
+     },
+     {
+      "field": "ולשלוח",
+      "src": "מטרה#תביעה3 (פועל-מטרה \"ולשלוח\")"
+     }
+    ],
+    "switches": [
+     {
+      "word": "בסוף חודש",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "לזהות תורמים",
+      "options": 24,
+      "from": "שקע-סכמה בלי מונח-עברי"
+     },
+     {
+      "word": "ולשלוח להם",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "בסוף",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "חודש",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "כמה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "התקבלו",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "שלא",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "תרמו",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "להם",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "מכתב",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "תודה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     }
+    ],
+    "mandatory": [],
+    "optional": [],
+    "domain": null,
+    "ruled": null
+   },
+   "cmd": "node yeshiva/purpose.mjs \"בסוף כל חודש לסכם כמה תרומות התקבלו, לזהות תורמים שלא תרמו מ…\""
+  },
+  {
+   "step": 2,
+   "title": "פירוק (מטרה ⇒ חלקיקים)",
+   "status": "עבר",
+   "detail": "3 תביעות ⇒ 4 צרכים נגזרו · 3 מתגי-בעלים · דוגמאות מ-9785 ליטרלי-רשומה בריפו",
+   "perok": {
+    "claims": [
+     {
+      "claim": 1,
+      "verb": "לסכם",
+      "text": "בסוף כל חודש לסכם כמה תרומות התקבלו,",
+      "needs": [],
+      "entities": [
+       "Donation"
+      ]
+     },
+     {
+      "claim": 2,
+      "verb": "לזהות",
+      "text": "לזהות תורמים שלא תרמו מעל 90 יום,",
+      "needs": [
+       "g2.clock.dateDays",
+       "g2.predicate.dateOver90",
+       "g2.predicate.recordDateOver90",
+       "g2.collection.dateOver90List"
+      ],
+      "entities": [
+       "Supporter"
+      ]
+     },
+     {
+      "claim": 3,
+      "verb": "ולשלוח",
+      "text": "ולשלוח להם מכתב תודה",
+      "needs": [],
+      "entities": []
+     }
+    ],
+    "rows": [
+     {
+      "need": "g2.clock.dateDays",
+      "ok": true,
+      "examples": 3,
+      "now": "2026-10-20",
+      "fixtures": [
+       "new/dart-maor/reassemble-donations_test.dart:27",
+       "new/dart-maor/annual-all-lines_test.dart:42",
+       "new/dart-maor/build-custom-export_test.dart:110",
+       "new/dart-maor/build-custom-export_test.dart:129"
+      ],
+      "tokenSources": [
+       {
+        "token": "'date'",
+        "src": "new/atoms/schema-fields.mjs:FIELDS#Donation.date"
+       }
+      ],
+      "derive": {
+       "kind": "daysSince",
+       "cls": "Donation",
+       "field": "date"
+      }
+     },
+     {
+      "need": "g2.predicate.dateOver90",
+      "ok": true,
+      "examples": 6,
+      "now": "2026-10-20",
+      "fixtures": [
+       "new/dart-maor/reassemble-donations_test.dart:27",
+       "new/dart-maor/annual-all-lines_test.dart:42",
+       "new/dart-maor/build-custom-export_test.dart:110",
+       "new/dart-maor/build-custom-export_test.dart:129"
+      ],
+      "tokenSources": [
+       {
+        "token": "'date'",
+        "src": "new/atoms/schema-fields.mjs:FIELDS#Donation.date"
+       },
+       {
+        "token": "90",
+        "src": "מטרה#תביעה2 (ליטרל \"90\")"
+       }
+      ],
+      "derive": {
+       "kind": "threshold",
+       "cls": "Donation",
+       "field": "date",
+       "k": 90,
+       "cmp": "מעל"
+      }
+     },
+     {
+      "need": "g2.predicate.recordDateOver90",
+      "ok": true,
+      "examples": 6,
+      "now": "2026-10-20",
+      "fixtures": [
+       "new/dart-maor/reassemble-donations_test.dart:27",
+       "new/dart-maor/annual-all-lines_test.dart:42",
+       "new/dart-maor/build-custom-export_test.dart:110",
+       "new/dart-maor/build-custom-export_test.dart:129"
+      ],
+      "tokenSources": [
+       {
+        "token": "'date'",
+        "src": "new/atoms/schema-fields.mjs:FIELDS#Donation.date"
+       },
+       {
+        "token": "90",
+        "src": "מטרה#תביעה2 (ליטרל \"90\")"
+       }
+      ],
+      "derive": {
+       "kind": "recordThreshold",
+       "cls": "Donation",
+       "field": "date",
+       "k": 90,
+       "cmp": "מעל"
+      }
+     },
+     {
+      "need": "g2.collection.dateOver90List",
+      "ok": true,
+      "examples": 3,
+      "now": "2026-10-20",
+      "fixtures": [
+       "new/dart-maor/reassemble-donations_test.dart:27",
+       "new/dart-maor/annual-all-lines_test.dart:42",
+       "new/dart-maor/build-custom-export_test.dart:110",
+       "new/dart-maor/build-custom-export_test.dart:129"
+      ],
+      "tokenSources": [
+       {
+        "token": "'date'",
+        "src": "new/atoms/schema-fields.mjs:FIELDS#Donation.date"
+       },
+       {
+        "token": "90",
+        "src": "מטרה#תביעה2 (ליטרל \"90\")"
+       }
+      ],
+      "derive": {
+       "kind": "filterThreshold",
+       "cls": "Donation",
+       "field": "date",
+       "k": 90,
+       "cmp": "מעל"
+      }
+     }
+    ],
+    "owner": [
+     {
+      "claim": 1,
+      "verb": "לסכם",
+      "kind": "ישות-בלי-שקע",
+      "question": "«לסכם» על Donation: אין שקע-סכמה מחובר ואין קבוע-סף במטרה — מה נמדד ומול מה?"
+     },
+     {
+      "claim": 2,
+      "verb": "לזהות",
+      "kind": "תביעה-חלקית",
+      "question": "«לזהות»: 4 חוזים נגזרו, אך 2 מילים בתביעה בלי מקור (שלא · תרמו) — האם אחת מהן שדה/ישות שדרוש לה חוזה?"
+     },
+     {
+      "claim": 3,
+      "verb": "ולשלוח",
+      "kind": "אין-ישות",
+      "question": "«ולשלוח»: אין מילה בתביעה שיש לה מחלקת-סכמה (להם · מכתב · תודה) — על איזו ישות?"
+     }
+    ],
+    "fixtures": 9785
+   },
+   "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/g6.txt"
+  },
+  {
+   "step": 3,
+   "title": "אפס-המצאה לכל צורך",
+   "status": "עבר",
+   "detail": "גלאי-ההמצאה על צרכים: 4 נבדקו · 4/4 המשיכו להוכחה",
+   "hamtzaa": {
+    "available": true,
+    "reason": null,
+    "cmd": "node machtzev/generator/hamtzaa.mjs --needs machtzev/generator/goals/anyg6/needs.json --goal machtzev/generator/goals/anyg6/goal.txt --json"
+   },
+   "rejected": {}
+  },
+  {
+   "step": 4,
+   "title": "חיפוש-לפי-מטרה + הוכחה-בריצה + בחירה",
+   "status": "∅",
+   "detail": "סבב 1: 2/4 נפתרו · g2.predicate.recordDateOver90, g2.collection.dateOver90List ∅",
+   "picks": [
+    "g2.clock.dateDays: cockpitDaysSince(p0,now) · ties 2 · weak כן · discriminators 1 · depth 1",
+    "g2.predicate.dateOver90: cmpGeStr(now,addDaysIso(p0,90)) · ties 8 · weak כן · discriminators 1 · depth 2",
+    "g2.predicate.recordDateOver90: ∅ · ties 0 · weak לא · discriminators 0 · depth 3",
+    "g2.collection.dateOver90List: ∅ · ties 0 · weak לא · discriminators 0 · depth 3"
+   ]
+  },
+  {
+   "step": 5,
+   "title": "שימוש-חוזר (התנהגות-מוכחת = אטום לצורך הבא)",
+   "status": "עבר",
+   "detail": "סבב 2: 2 התנהגויות במדף ⇒ 1/2 (g2.predicate.recordDateOver90) · סבב 3: 3 התנהגויות במדף ⇒ 1/1 (g2.collection.dateOver90List)",
+   "rounds": [
+    {
+     "round": 2,
+     "extraRows": 2,
+     "tried": 2,
+     "solved": 1,
+     "ids": [
+      "g2.predicate.recordDateOver90"
+     ]
+    },
+    {
+     "round": 3,
+     "extraRows": 3,
+     "tried": 1,
+     "solved": 1,
+     "ids": [
+      "g2.collection.dateOver90List"
+     ]
+    }
+   ],
+   "picks": []
+  },
+  {
+   "step": 6,
+   "title": "חיווט ⇒ Dart (behavior-compose --plan)",
+   "status": "עבר",
+   "detail": "new/dart-gen-bs/gen_goal_anyg6.dart · 4 התנהגויות מוכחות (bhDateDays, bhDateOver90, bhRecordDateOver90, bhDateOver90List) · ∅ 0 · הוכחה: new/dart-gen-bs/gen_goal_anyg6_proof.dart (18 דוגמאות)",
+   "file": "new/dart-gen-bs/gen_goal_anyg6.dart",
+   "proof": "new/dart-gen-bs/gen_goal_anyg6_proof.dart",
+   "plan": "machtzev/generator/goals/anyg6/plan.json",
+   "cmd": "node machtzev/generator/behavior-compose.mjs --plan machtzev/generator/goals/anyg6/plan.json --out new/dart-gen-bs/gen_goal_anyg6.dart"
+  },
+  {
+   "step": 7,
+   "title": "משטרה בתוך הריצה",
+   "status": "עבר",
+   "detail": "dart analyze: עבר · dart run --enable-asserts (הוכחת-ההרכבה): עבר · no-fakers-check: עבר · flutter analyze (מראה): לא-זמין",
+   "checks": [
+    {
+     "name": "dart analyze",
+     "cmd": "/root/dart-sdk/bin/dart analyze /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_anyg6.dart",
+     "status": "עבר",
+     "out": "Analyzing gen_goal_anyg6.dart... | No issues found!"
+    },
+    {
+     "name": "dart run --enable-asserts (הוכחת-ההרכבה)",
+     "cmd": "/root/dart-sdk/bin/dart run --enable-asserts /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_anyg6_proof.dart",
+     "status": "עבר",
+     "out": "✓ 18 דוגמאות · 4 התנהגויות"
+    },
+    {
+     "name": "no-fakers-check",
+     "cmd": "node /home/user/-ai-chat-server/machtzev/no-fakers-check.mjs",
+     "status": "עבר",
+     "out": "✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי"
+    },
+    {
+     "name": "flutter analyze (מראה)",
+     "status": "לא-זמין",
+     "out": "buildsmart=— · flutter=—"
+    }
+   ]
+  },
+  {
+   "step": 8,
+   "title": "כתיבת-הלדג'ר",
+   "status": "עבר",
+   "detail": "machtzev/generator/goals/anyg6/ledger.json · machtzev/generator/goals/anyg6/ledger.md"
+  }
+ ],
+ "needs": {
+  "g2.clock.dateDays": {
+   "id": "g2.clock.dateDays",
+   "shape": "מועד",
+   "demand": "לזהות תורמים שלא תרמו יום date",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {},
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "cockpitDaysSince(p0,now)",
+   "nodes": 1,
+   "ties": 2,
+   "weakExamples": true,
+   "discriminators": 1,
+   "depth": 1,
+   "sockets": [
+    "clock"
+   ],
+   "round": 1,
+   "candidates": 21,
+   "top3": [
+    "cockpitDaysSince(p0,now):3/3✓:n1:a2:0",
+    "dayDiff(p0,now):3/3✓:n1:a2:0",
+    "supCount:1/3:n1:a1:0"
+   ]
+  },
+  "g2.predicate.dateOver90": {
+   "id": "g2.predicate.dateOver90",
+   "shape": "מועד",
+   "demand": "לזהות תורמים שלא תרמו יום date מעל",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {
+    "90": "מטרה (ליטרל \"90\")"
+   },
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "cmpGeStr(now,addDaysIso(p0,90))",
+   "nodes": 2,
+   "ties": 8,
+   "weakExamples": true,
+   "discriminators": 1,
+   "depth": 2,
+   "sockets": [
+    "clock",
+    "literal"
+   ],
+   "round": 1,
+   "candidates": 43,
+   "top3": [
+    "cmpGeStr(now,addDaysIso(p0,90)):6/6✓:n2:a3:0",
+    "cmpGtStr(now,addDaysIso(p0,90)):6/6✓:n2:a3:0",
+    "cmpLeStr(addDaysIso(p0,90),now):6/6✓:n2:a3:0"
+   ]
+  },
+  "g2.predicate.recordDateOver90": {
+   "id": "g2.predicate.recordDateOver90",
+   "shape": "רשומות",
+   "demand": "לזהות תורמים שלא תרמו יום date מעל",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {
+    "90": "מטרה (ליטרל \"90\")",
+    "'date'": "new/atoms/schema-fields.mjs:FIELDS#Donation.date ⇐ «תרומות» ⇒ Donation"
+   },
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "bhDateOver90(fieldOf(p0,'date'),now)",
+   "nodes": 2,
+   "ties": 1,
+   "weakExamples": false,
+   "discriminators": 0,
+   "depth": 2,
+   "sockets": [
+    "literal",
+    "clock"
+   ],
+   "round": 2,
+   "candidates": 30,
+   "top3": [
+    "bhDateOver90(fieldOf(p0,'date'),now):6/6✓:n2:a3:0",
+    "ayinActive:3/6:n1:a1:1",
+    "exportAllowed:3/6:n1:a1:1"
+   ]
+  },
+  "g2.collection.dateOver90List": {
+   "id": "g2.collection.dateOver90List",
+   "shape": "רשומות",
+   "demand": "לזהות תורמים שלא תרמו יום date מעל",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {
+    "90": "מטרה (ליטרל \"90\")",
+    "'date'": "new/atoms/schema-fields.mjs:FIELDS#Donation.date ⇐ «תרומות» ⇒ Donation"
+   },
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "whereList(p0,λbhRecordDateOver90(_,now))",
+   "nodes": 2,
+   "ties": 1,
+   "weakExamples": false,
+   "discriminators": 0,
+   "depth": 1,
+   "sockets": [
+    "clock"
+   ],
+   "round": 3,
+   "candidates": 21,
+   "top3": [
+    "whereList(p0,λbhRecordDateOver90(_,now)):3/3✓:n2:a2:0",
+    "templateKeys:1/3:n1:a1:2",
+    "sortTeamMsgs:1/3:n1:a1:1"
+   ]
+  }
+ },
+ "checks": [
+  {
+   "name": "dart analyze",
+   "cmd": "/root/dart-sdk/bin/dart analyze /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_anyg6.dart",
+   "status": "עבר",
+   "out": "Analyzing gen_goal_anyg6.dart... | No issues found!"
+  },
+  {
+   "name": "dart run --enable-asserts (הוכחת-ההרכבה)",
+   "cmd": "/root/dart-sdk/bin/dart run --enable-asserts /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_anyg6_proof.dart",
+   "status": "עבר",
+   "out": "✓ 18 דוגמאות · 4 התנהגויות"
+  },
+  {
+   "name": "no-fakers-check",
+   "cmd": "node /home/user/-ai-chat-server/machtzev/no-fakers-check.mjs",
+   "status": "עבר",
+   "out": "✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי"
+  },
+  {
+   "name": "flutter analyze (מראה)",
+   "status": "לא-זמין",
+   "out": "buildsmart=— · flutter=—"
+  }
+ ]
+}

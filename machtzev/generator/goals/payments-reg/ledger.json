@@ -1,0 +1,405 @@
+{
+ "ns": "payments-reg",
+ "goal": "כל בוקר לדעת אילו תשלומי הורים באיחור מעל 30 יום, כמה הם חייבים בסך הכל, ולשלוח לכל אחד תזכורת בוואטסאפ עם הסכום",
+ "goalFile": "../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/reg-payments.json",
+ "at": "2026-09-17T22:56:13.500Z",
+ "ms": 82580,
+ "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../../../tmp/claude-0/-home-user--ai-chat-server/30f5158b-7d41-5ed6-a2fa-5d7012d773a9/scratchpad/reg-payments.json --ns payments-reg",
+ "summary": {
+  "needs": 7,
+  "rejected": 2,
+  "solved": 5,
+  "rounds": 1,
+  "file": "new/dart-gen-bs/gen_goal_payments-reg.dart",
+  "red": 0
+ },
+ "steps": [
+  {
+   "step": 1,
+   "title": "פסק (yeshiva/purpose) על טקסט-המטרה",
+   "status": "עבר",
+   "detail": "7 מקורות · 13 מתגים · חובה 0 · רשות 0 · תחום — · rule: לא נקרא (אין goal.spec)",
+   "psak": {
+    "sources": [
+     {
+      "field": "לדעת",
+      "src": "מטרה#תביעה1 (פועל-מטרה \"לדעת\")"
+     },
+     {
+      "field": "תשלומי",
+      "src": "new/atoms/vertical-packs.mjs:rooms.terms.entity.donation (\"תשלום\")"
+     },
+     {
+      "field": "הורים",
+      "src": "machtzev/generator/spec-lang.data.json:typePerson (\"מורה\")"
+     },
+     {
+      "field": "יום",
+      "src": "machtzev/generator/spec-lang.data.json:typeDate (\"יום\")"
+     },
+     {
+      "field": "30",
+      "src": "מטרה#תביעה1 (ליטרל \"30\")"
+     },
+     {
+      "field": "ולשלוח",
+      "src": "מטרה#תביעה2 (פועל-מטרה \"ולשלוח\")"
+     },
+     {
+      "field": "הסכום",
+      "src": "machtzev/generator/spec-lang.data.json:typeNum (\"סכום\")"
+     }
+    ],
+    "switches": [
+     {
+      "word": "בוקר לדעת",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "כמה הם",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "ולשלוח אחד",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "בוקר",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "אילו",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "באיחור",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "כמה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "חייבים",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "בסך",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "הכל",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "אחד",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "תזכורת",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "בוואטסאפ",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     }
+    ],
+    "mandatory": [],
+    "optional": [],
+    "domain": null,
+    "ruled": null
+   },
+   "cmd": "node yeshiva/purpose.mjs \"כל בוקר לדעת אילו תשלומי הורים באיחור מעל 30 יום, כמה הם חיי…\""
+  },
+  {
+   "step": 2,
+   "title": "פירוק (מטרה ⇒ חלקיקים)",
+   "status": "לא-נדרש",
+   "detail": "הצרכים הגיעו בקובץ-המטרה (7) — הפירוק לא רץ"
+  },
+  {
+   "step": 3,
+   "title": "אפס-המצאה לכל צורך",
+   "status": "נפסל",
+   "detail": "גלאי-ההמצאה על צרכים: 7 נבדקו · 5/7 המשיכו להוכחה · נפסלו: g3a.predicate.recordOverdue30, g3.collection.overdueList",
+   "hamtzaa": {
+    "available": true,
+    "reason": null,
+    "cmd": "node machtzev/generator/hamtzaa.mjs --needs machtzev/generator/goals/payments-reg/needs.json --goal machtzev/generator/goals/payments-reg/goal.txt --json"
+   },
+   "rejected": {
+    "g3a.predicate.recordOverdue30": [
+     "המצאה: [object Object], [object Object]"
+    ],
+    "g3.collection.overdueList": [
+     "המצאה: [object Object], [object Object]"
+    ]
+   }
+  },
+  {
+   "step": 4,
+   "title": "חיפוש-לפי-מטרה + הוכחה-בריצה + בחירה",
+   "status": "עבר",
+   "detail": "סבב 1: 5/5 נפתרו",
+   "picks": [
+    "g1.clock.overdueDays: cockpitDaysSince(p0,now) · ties 2 · weak כן · discriminators 1 · depth 1",
+    "g2.predicate.overdue30: cmpGtStr(now,addDaysIso(p0,30)) · ties 4 · weak כן · discriminators 1 · depth 2",
+    "g4.measure.totalDue: sumBy(p0,λfieldOf(_,'amount')) · ties 1 · weak לא · discriminators 0 · depth 1",
+    "g5.format.reminder: pp(p1,p0) · ties 2 · weak כן · discriminators 5 · depth 1",
+    "g6.world.sendReminder: addTo(w,addDyn(p0,p1)) · ties 4 · weak כן · discriminators 5 · depth 2"
+   ]
+  },
+  {
+   "step": 5,
+   "title": "שימוש-חוזר (התנהגות-מוכחת = אטום לצורך הבא)",
+   "status": "עבר",
+   "detail": "אין צורך לא-פתור — סבב שני לא נדרש",
+   "rounds": [],
+   "picks": []
+  },
+  {
+   "step": 6,
+   "title": "חיווט ⇒ Dart (behavior-compose --plan)",
+   "status": "עבר",
+   "detail": "new/dart-gen-bs/gen_goal_payments-reg.dart · 5 התנהגויות מוכחות (bhOverdueDays, bhOverdue30, bhTotalDue, bhReminder, bhSendReminder) · ∅ 0 · הוכחה: new/dart-gen-bs/gen_goal_payments-reg_proof.dart (15 דוגמאות)",
+   "file": "new/dart-gen-bs/gen_goal_payments-reg.dart",
+   "proof": "new/dart-gen-bs/gen_goal_payments-reg_proof.dart",
+   "plan": "machtzev/generator/goals/payments-reg/plan.json",
+   "cmd": "node machtzev/generator/behavior-compose.mjs --plan machtzev/generator/goals/payments-reg/plan.json --out new/dart-gen-bs/gen_goal_payments-reg.dart"
+  },
+  {
+   "step": 7,
+   "title": "משטרה בתוך הריצה",
+   "status": "עבר",
+   "detail": "dart analyze: עבר · dart run --enable-asserts (הוכחת-ההרכבה): עבר · no-fakers-check: עבר · flutter analyze (מראה): לא-זמין",
+   "checks": [
+    {
+     "name": "dart analyze",
+     "cmd": "/root/dart-sdk/bin/dart analyze /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_payments-reg.dart",
+     "status": "עבר",
+     "out": "Analyzing gen_goal_payments-reg.dart... | No issues found!"
+    },
+    {
+     "name": "dart run --enable-asserts (הוכחת-ההרכבה)",
+     "cmd": "/root/dart-sdk/bin/dart run --enable-asserts /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_payments-reg_proof.dart",
+     "status": "עבר",
+     "out": "✓ 15 דוגמאות · 5 התנהגויות"
+    },
+    {
+     "name": "no-fakers-check",
+     "cmd": "node /home/user/-ai-chat-server/machtzev/no-fakers-check.mjs",
+     "status": "עבר",
+     "out": "✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי"
+    },
+    {
+     "name": "flutter analyze (מראה)",
+     "status": "לא-זמין",
+     "out": "buildsmart=— · flutter=—"
+    }
+   ]
+  },
+  {
+   "step": 8,
+   "title": "כתיבת-הלדג'ר",
+   "status": "עבר",
+   "detail": "machtzev/generator/goals/payments-reg/ledger.json · machtzev/generator/goals/payments-reg/ledger.md"
+  }
+ ],
+ "needs": {
+  "g1.clock.overdueDays": {
+   "id": "g1.clock.overdueDays",
+   "shape": "מועד",
+   "demand": "ימים מאז מועד התשלום עד היום",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {},
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "cockpitDaysSince(p0,now)",
+   "nodes": 1,
+   "ties": 2,
+   "weakExamples": true,
+   "discriminators": 1,
+   "depth": 1,
+   "sockets": [
+    "clock"
+   ],
+   "round": 1,
+   "candidates": 21,
+   "top3": [
+    "cockpitDaysSince(p0,now):3/3✓:n1:a2:0",
+    "dayDiff(p0,now):3/3✓:n1:a2:0",
+    "supCount:1/3:n1:a1:0"
+   ]
+  },
+  "g2.predicate.overdue30": {
+   "id": "g2.predicate.overdue30",
+   "shape": "מועד",
+   "demand": "האם התשלום באיחור מעל 30 יום",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {
+    "30": "מטרה (ליטרל \"30\")"
+   },
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "cmpGtStr(now,addDaysIso(p0,30))",
+   "nodes": 2,
+   "ties": 4,
+   "weakExamples": true,
+   "discriminators": 1,
+   "depth": 2,
+   "sockets": [
+    "clock",
+    "literal"
+   ],
+   "round": 1,
+   "candidates": 43,
+   "top3": [
+    "cmpGtStr(now,addDaysIso(p0,30)):4/4✓:n2:a3:0",
+    "cmpLtStr(addDaysIso(p0,30),now):4/4✓:n2:a3:0",
+    "gtNum(cockpitDaysSince(p0,now),30):4/4✓:n2:a3:0"
+   ]
+  },
+  "g3a.predicate.recordOverdue30": {
+   "id": "g3a.predicate.recordOverdue30",
+   "shape": "רשומות",
+   "demand": "האם רשומת תשלום באיחור מעל 30 יום לפי שדה due",
+   "hamtzaa": "נפסל",
+   "hamtzaaSources": {
+    "30": "מטרה (ליטרל \"30\")"
+   },
+   "structure": [],
+   "status": "נפסל",
+   "reason": "המצאה: [object Object], [object Object]"
+  },
+  "g3.collection.overdueList": {
+   "id": "g3.collection.overdueList",
+   "shape": "רשומות",
+   "demand": "רק התשלומים שבאיחור מעל 30 יום",
+   "hamtzaa": "נפסל",
+   "hamtzaaSources": {
+    "30": "מטרה (ליטרל \"30\")"
+   },
+   "structure": [],
+   "status": "נפסל",
+   "reason": "המצאה: [object Object], [object Object]"
+  },
+  "g4.measure.totalDue": {
+   "id": "g4.measure.totalDue",
+   "shape": "רשומות",
+   "demand": "כמה הם חייבים בסך הכל סכום כולל",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {
+    "'amount'": "new/atoms/schema-fields.mjs:FIELDS#Donation.amount ⇐ «תשלומי» ⇒ Donation"
+   },
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "sumBy(p0,λfieldOf(_,'amount'))",
+   "nodes": 2,
+   "ties": 1,
+   "weakExamples": false,
+   "discriminators": 0,
+   "depth": 1,
+   "sockets": [
+    "literal"
+   ],
+   "round": 1,
+   "candidates": 21,
+   "top3": [
+    "sumBy(p0,λfieldOf(_,'amount')):3/3✓:n2:a2:0",
+    "warehouseValue:1/3:n1:a1:17.84",
+    "supCount:1/3:n1:a1:15.84"
+   ]
+  },
+  "g5.format.reminder": {
+   "id": "g5.format.reminder",
+   "shape": "טקסט",
+   "demand": "נוסח תזכורת להורה עם שם וסכום",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {},
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "pp(p1,p0)",
+   "nodes": 1,
+   "ties": 2,
+   "weakExamples": true,
+   "discriminators": 5,
+   "depth": 1,
+   "sockets": [],
+   "round": 1,
+   "candidates": 25,
+   "top3": [
+    "pp(p1,p0):3/3✓:n1:a2:0",
+    "payLink(p0,p1,p0,λpad2(_)):3/3✓:n2:a4:0",
+    "toTenantId:0/3:n1:a2:3.27"
+   ]
+  },
+  "g6.world.sendReminder": {
+   "id": "g6.world.sendReminder",
+   "shape": "יומן",
+   "demand": "שלח תזכורת לטלפון רשום שנשלח",
+   "hamtzaa": "עבר",
+   "hamtzaaSources": {},
+   "structure": [],
+   "status": "עבר",
+   "reason": null,
+   "pick": "addTo(w,addDyn(p0,p1))",
+   "nodes": 2,
+   "ties": 4,
+   "weakExamples": true,
+   "discriminators": 5,
+   "depth": 2,
+   "sockets": [
+    "world"
+   ],
+   "round": 1,
+   "candidates": 22,
+   "top3": [
+    "addTo(w,addDyn(p0,p1)):2/2✓:n2:a4:0",
+    "addTo(w,addDyn(p1,p0)):2/2✓:n2:a4:0",
+    "addTo(termOf(p0,p1,w),addDyn(p0,p1)):2/2✓:n3:a7:0"
+   ]
+  }
+ },
+ "checks": [
+  {
+   "name": "dart analyze",
+   "cmd": "/root/dart-sdk/bin/dart analyze /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_payments-reg.dart",
+   "status": "עבר",
+   "out": "Analyzing gen_goal_payments-reg.dart... | No issues found!"
+  },
+  {
+   "name": "dart run --enable-asserts (הוכחת-ההרכבה)",
+   "cmd": "/root/dart-sdk/bin/dart run --enable-asserts /home/user/-ai-chat-server/new/dart-gen-bs/gen_goal_payments-reg_proof.dart",
+   "status": "עבר",
+   "out": "✓ 15 דוגמאות · 5 התנהגויות"
+  },
+  {
+   "name": "no-fakers-check",
+   "cmd": "node /home/user/-ai-chat-server/machtzev/no-fakers-check.mjs",
+   "status": "עבר",
+   "out": "✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי"
+  },
+  {
+   "name": "flutter analyze (מראה)",
+   "status": "לא-זמין",
+   "out": "buildsmart=— · flutter=—"
+  }
+ ]
+}
