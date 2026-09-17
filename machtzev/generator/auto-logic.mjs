@@ -13,11 +13,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import * as R from '../root.mjs';   // bsApp/bsRoot — איתור-buildsmart
 const GEN = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(GEN, '../..');
 const NEW = path.join(ROOT, 'new');
 const OUT = path.join(GEN, 'auto-logic.json');
-const BS = process.env.BUILDSMART || path.resolve(ROOT, '../buildsmart/app_flutter');
+const BS = R.bsApp() || path.resolve(ROOT, '../buildsmart/app_flutter');
 const FLUTTER = process.env.FLUTTER || (fs.existsSync('/home/user/flutter/bin/flutter') ? '/home/user/flutter/bin/flutter' : 'flutter');
 
 const heTok = (s) => [...String(s).matchAll(/[֐-׿][֐-׿"'\-״]{1,}/g)].map((m) => m[0].replace(/^["'\-]+|["'\-]+$/g, '')).filter((t) => t.length >= 2);

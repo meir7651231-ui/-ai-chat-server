@@ -26,7 +26,10 @@
 //    node engine-index.mjs --find "<מטרה>"    # חיפוש-לפי-מטרה (לא לפי שם!)
 //    node engine-index.mjs <path|שם>          # כרטיס-מנוע מלא
 //    node engine-index.mjs --orphans          # בלי-מטרה · בלי-קורא
-//    node engine-index.mjs --connected [--list]  # מחוברים-למחולל מול לא-מחוברים
+//    node engine-index.mjs --connected            # קדימה · אחורה · בשניהם · לא-מחוברים
+//    node engine-index.mjs --connected --list     # רשימת הלא-מחוברים (○)
+//    node engine-index.mjs --connected --list-reverse       # הקוראים-למחולל + נקודת-הכניסה
+//    node engine-index.mjs --connected --with-entry <קובץ>  # מדידה עם נקודת-כניסה זמנית
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
 import path from 'node:path';
@@ -158,8 +161,19 @@ const runnable = (s) => /^#!/.test(s) || /process\.argv/.test(s) || /^void main\
   || /^def main\(|__name__ == ['"]__main__['"]/m.test(s) || /^python3 -m /m.test(s);
 const writesOf = (s) => uniq([...s.matchAll(/writeFileSync\(\s*([^,]{1,90}?)\s*,/g)].map((m) => m[1].replace(/\s+/g, ' ').slice(0, 60)));
 const dataOf = (s) => uniq([...s.matchAll(/([A-Za-z0-9._-]+\.(?:data\.json|json))['"`]/g)].map((m) => m[1])).slice(0, 12);
+// 🔌 ייבוא **דינמי**: `await import` · `import(…).then(…)` עם נתיב-ליטרלי.
+// ‏⚠️ אין כאן דוגמה-במרכאות בכוונה: הסורק קורא את הקובץ הזה גם הוא, והערה
+// שמכילה נתיב הייתה נספרת כייבוא (נמדד: הדוגמה הראשונה שכתבתי הופיעה ב-`importsDyn`).
+// נמדד: `importsOf` תפס `from '…'` בלבד, ולכן מנוע שמגיעים אליו **רק** בייבוא
+// דינמי נספר «לא-מחובר» גם כשהוא רץ בפועל (‏`generator/intent.mjs` מ-`tzinor.mjs:435`).
+// נתיב **יחסי-ליטרלי בלבד**, כמו בסטטי — נתיב-תבנית `${}` כבר מטופל ע"י `dirCalls`.
+// `(?<![\w$.])` מונע התאמה ל-`reimport(` / `x.import(`.
+const DYN_IMPORT_RE = /(?<![\w$.])import\s*\(\s*['"](\.[^'"]+?)['"]\s*\)/g;
+const dynImportsOf = (s) => uniq([...s.matchAll(DYN_IMPORT_RE)]
+  .map((m) => (/\.(mjs|js|ts)$/.test(m[1]) ? m[1] : m[1] + '.ts')));
 const importsOf = (s) => uniq([
   ...[...s.matchAll(/from\s+'(\.[^']+\.mjs)'/g)].map((m) => m[1]),
+  ...dynImportsOf(s),
   // Python: `from .daf import X` · `from . import y` — ייבוא-יחסי בתוך החבילה.
   // בלי זה 90 מודולי המנוע-הישיבתי נראים 90 קבצים מנותקים (נמדד).
   ...[...s.matchAll(/^from\s+\.([A-Za-z_][\w]*)\s+import/gm)].map((m) => `./${m[1]}.py`),
@@ -245,7 +259,7 @@ export function build() {
       file: p, lang: LANG_OF(p), lines: src.split('\n').length,
       purpose, purposeFrom,
       exports: exportsOf(src), cli: flagsOf(src), writes: writesOf(src), reads: dataOf(src),
-      imports: importsOf(src), importedBy: [],
+      imports: importsOf(src), importsDyn: dynImportsOf(src), importedBy: [],
       gate, gateRegistered: !!gateRow,
       calledByName: uniq([
         police.includes(fromMach) && 'police', one.includes(fromMach) && 'one', regen.includes(fromMach) && 'regen',
@@ -309,27 +323,62 @@ export function find(q, engines, k = 5) {
 
 /**
  * 🔌 **מחוברים-למחולל** — ההגדרה, מפורשת, כפקודה ולא כפרוזה.
- * מנוע «מחובר» אם הוא נגיש מנקודת-כניסה של המחולל באחת משתי הדרכים:
- *   (1) **ייבוא** טרנזיטיבי מאחת מ-6 נקודות-הכניסה (ENTRY למטה)
- *   (2) **הרצה-בשם** מצינור-המחולל (`regen.mjs` · `ship.mjs`) — ואז גם כל
- *       מה שאותו מנוע מייבא
- * שערי-משטרה **אינם** נחשבים מחוברים: הם שומרים על המחולל, לא חלק ממנו.
- * (‏נמדד: «57 מחוברים» ו-«57 שערים» הם **קבוצות שונות באותו גודל** — חיתוך 21.)
+ * ‏**שלוש** קבוצות, לא שתיים — כי לחיבור יש **שני כיוונים**:
+ *   • `forward` — המחולל **מגיע אליהם**: נגישות טרנזיטיבית בייבוא מ-6
+ *     נקודות-הכניסה (`GEN_ENTRY`), **ועוד** הרצה-בשם מצינור-המחולל
+ *     (`regen.mjs` · `ship.mjs`) — ואז גם כל מה שאותו מנוע מייבא.
+ *   • `reverse` — הם **קוראים למחולל**: שרשרת-ייבוא שלהם מסתיימת בנקודת-
+ *     כניסה. צרכן-של-המחולל הוא מחובר בדיוק כמו ספק — הקשת אחת,
+ *     שני כיוונים (‏נמדד: 5 מנועי-`mahulal` מייבאים `buildApp` מ-`app-ds.mjs`
+ *     ונספרו «לא-מחוברים»).
+ *   • `none` — כל השאר. מנוע יכול להיות גם forward וגם reverse.
+ * 🔒 `reverse` הוא **שרשרת-ייבוא מכוונת בלבד, לא רכיב-קשירות**. אחרת כל מי
+ *    שמייבא `root.mjs` (שנקודות-הכניסה מייבאות) היה נספר «מחובר» — וזה שקר.
+ * שערי-משטרה אינם מחוברים **מעצם היותם שער**: הם שומרים על המחולל, לא חלק
+ * ממנו — אבל שער ש**מייבא** נקודת-כניסה יופיע ב-`reverse`, וזו עובדה נמדדת.
+ * ‏@param {Array} engines · @param {string[]} extraEntry — נקודות-כניסה **זמניות**
+ *    (`--with-entry`) למדידה בלבד. הן אינן נכנסות ל-`GEN_ENTRY` — הכרעת-בעלים.
+ * ‏@returns {{forward:Set,reverse:Map,none:Set,entries:string[]}} — `reverse` ממפה
+ *    קובץ ⇒ נקודת-הכניסה שאליה שרשרת-הייבוא שלו מגיעה.
+ *    ‏⚠️ חוזה-ההחזרה השתנה מ-`Set` יחיד (נמדד: אפס צרכנים בריפו מחוץ לקובץ הזה).
  */
 export const GEN_ENTRY = [
   'machtzev/generator/app-ds.mjs', 'machtzev/generator/regen.mjs', 'machtzev/generator/ship.mjs',
   'machtzev/generator/genesis-gen.mjs', 'machtzev/generator/app-from-sentences.mjs', 'machtzev/generator/balagan.mjs',
 ];
-export function connected(engines) {
+export function connected(engines, extraEntry = [], runByNameExtra = []) {
+  const byFile = new Map(engines.map((e) => [e.file, e]));
+  const entries = uniq([...GEN_ENTRY, ...extraEntry]).filter((x) => byFile.has(x));
+  // kids[p] = מה ש-p **מייבא** (הרזולוציה נעשתה ב-`build` לפי נתיב, לא לפי שם)
   const kids = {}; for (const e of engines) for (const p of e.importedBy) (kids[p] = kids[p] || []).push(e.file);
-  const out = new Set(GEN_ENTRY.filter((x) => engines.some((e) => e.file === x)));
-  const walk = () => { const q = [...out]; while (q.length) { const c = q.shift(); for (const k of (kids[c] || [])) if (!out.has(k)) { out.add(k); q.push(k); } } };
+  // ── קדימה: מה שנגיש **מ**נקודות-הכניסה (זהה להתנהגות שלפני הפיצול)
+  const forward = new Set(entries);
+  const walk = () => { const q = [...forward]; while (q.length) { const c = q.shift(); for (const k of (kids[c] || [])) if (!forward.has(k)) { forward.add(k); q.push(k); } } };
   walk();
-  const pipe = ['machtzev/generator/regen.mjs', 'machtzev/generator/ship.mjs']
+  // הרצה-בשם: צינור-המחולל מריץ מנועים ב-`execFileSync('node', <נתיב>)`, לא בייבוא
+  // ⇒ סריקת-טקסט של קבצי-הצינור. `runByNameExtra` מחיל את **אותו כלל**
+  // על קובץ נוסף (`--with-entry`), כדי שההשוואה תהיה שווה-מול-שווה.
+  const pipe = ['machtzev/generator/regen.mjs', 'machtzev/generator/ship.mjs', ...runByNameExtra]
     .map((f) => readIf(path.join(ROOT, f)) || '').join('\n');
-  for (const e of engines) { const b = e.file.replace(/^machtzev\//, ''); if (b && pipe.includes(b)) out.add(e.file); }
+  for (const e of engines) { const b = e.file.replace(/^machtzev\//, ''); if (b && pipe.includes(b)) forward.add(e.file); }
   walk();
-  return out;
+  // ── אחורה: מי ש**מייבא** נקודת-כניסה, טרנזיטיבית. BFS מכל נקודת-כניסה
+  // על `importedBy` בלבד ⇒ כל צומת שנה הוא **אב** של הנקודה בגרף-הייבוא.
+  // הצעד הראשון חובה (נקודת-כניסה אינה reverse של עצמה).
+  const reverse = new Map();   // קובץ ⇒ נקודת-הכניסה שאליה שרשרת-הייבוא שלו מגיעה
+  for (const ent of entries) {
+    const seen = new Set([ent]); const q = [ent];
+    while (q.length) {
+      const c = q.shift();
+      for (const parent of (byFile.get(c)?.importedBy || [])) {
+        if (seen.has(parent)) continue;
+        seen.add(parent); q.push(parent);
+        if (!reverse.has(parent)) reverse.set(parent, ent);
+      }
+    }
+  }
+  const none = new Set(engines.filter((e) => !forward.has(e.file) && !reverse.has(e.file)).map((e) => e.file));
+  return { forward, reverse, none, entries };
 }
 
 const card = (e) => {
@@ -365,14 +414,29 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   } else if (A.includes('--connected')) {
     // ההיקף: רק מנועים **בתוך הריפו** — ריפואים-אחים אינם חלק מהמחולל הזה
     const own = engines.filter((e) => !/^(yeshiva-engine|buildsmart)\//.test(e.file));
-    const C = connected(own);
-    const mine = own.filter((e) => C.has(e.file));
+    // `--with-entry <קובץ>` — נקודת-כניסה **זמנית, למדידה בלבד**. לא נכנסת
+    // ל-`GEN_ENTRY`: השאלה «האם `one.mjs` הוא נקודת-כניסה» היא הכרעת-בעלים,
+    // והכלי נותן לה מספר, לא תשובה.
+    const wi = A.indexOf('--with-entry');
+    const extra = wi >= 0 && A[wi + 1] && !A[wi + 1].startsWith('--') ? [A[wi + 1].replace(/^\.\//, '')] : [];
+    const { forward, reverse, none, entries } = connected(own, extra, extra);
+    // שתי קריאות כדי שההפרש יהיה גלוי: נמדד ש-`one.mjs` **מריץ** מנועים
+    // (`execFileSync('node', …)`, `one.mjs:31`) ואינו מייבא אותם ⇒ נקודת-כניסה
+    // בייבוא-בלבד היא מדידה אמיתית וריקה. השני הוא המספר המעניין.
+    const impOnly = extra.length ? connected(own, extra) : null;
+    const fwd = own.filter((e) => forward.has(e.file));
+    const rev = own.filter((e) => reverse.has(e.file));
+    const both = own.filter((e) => forward.has(e.file) && reverse.has(e.file));
     const G = own.filter((e) => e.gate);
-    const both = mine.filter((e) => e.gate).length;
-    console.log(`מחוברים-למחולל: ${mine.length} · לא-מחוברים: ${own.length - mine.length} · (מתוך ${own.length} בריפו)`);
-    console.log(`שערים: ${G.length} · בשתי הקבוצות: ${both} — קבוצות שונות, לא אותו דבר`);
-    if (A.includes('--list')) for (const e of own.filter((x) => !C.has(x.file))) console.log(`  ○ ${e.file}`);
-    else console.log('(‏--connected --list = רשימת הלא-מחוברים)');
+    const gateConn = G.filter((e) => forward.has(e.file) || reverse.has(e.file)).length;
+    if (extra.length) console.log(extra.every((x) => entries.includes(x))
+      ? `נקודת-כניסה נוספת (זמנית · לא ב-GEN_ENTRY): ${extra.join(', ')}\n  בייבוא-בלבד: קדימה ${[...impOnly.forward].length} · אחורה ${impOnly.reverse.size} · לא-מחוברים ${impOnly.none.size}  — ועם הרצה-בשם מאותו קובץ:`
+      : `⚠️ «${extra.join(', ')}» אינו מנוע מאונדקס — התעלמתי ממנו`);
+    console.log(`מחוברים-קדימה (המחולל מגיע אליהם): ${fwd.length} · מחוברים-אחורה (קוראים למחולל): ${rev.length} · בשניהם: ${both.length} · לא-מחוברים: ${none.size} · (מתוך ${own.length} בריפו)`);
+    console.log(`שערים: ${G.length} · מהם מחוברים (קדימה או אחורה): ${gateConn} — קבוצות שונות, לא אותו דבר`);
+    if (A.includes('--list-reverse')) for (const e of rev) console.log(`  ← ${e.file}   ⇒ ${reverse.get(e.file)}`);
+    else if (A.includes('--list')) for (const e of own.filter((x) => none.has(x.file))) console.log(`  ○ ${e.file}`);
+    else console.log('(‏--connected --list = הלא-מחוברים · --list-reverse = הקוראים-למחולל + נקודת-הכניסה · --with-entry <קובץ> = מדידה עם נקודת-כניסה נוספת)');
   } else if (A.includes('--orphans')) {
     console.log(`בלי-מטרה: ${engines.length - withP} · בלי-קורא: ${orphan.length}\n`);
     for (const e of engines.filter((x) => !x.purpose)) console.log(`  ∅ מטרה   ${e.file}`);
@@ -387,6 +451,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     console.log('לפי שורש: ' + Object.entries(byRoot).map(([k, v]) => `${k} ${v}`).join(' · '));
     console.log(`מקור-המטרה: כותרת ${engines.filter((e) => e.purposeFrom === 'כותרת-הקובץ').length} · INDEX.md ${engines.filter((e) => e.purposeFrom === 'INDEX.md').length} · ∅ ${engines.length - withP}`);
     console.log(`שערים: ${engines.filter((e) => e.gate).length} · מהם לא-במרשם: ${engines.filter((e) => e.gate && !e.gateRegistered).length}`);
-    console.log('\nusage: --write | --find "<מטרה>" | <שם-קובץ> | --orphans | --connected [--list]');
+    console.log('\nusage: --write | --find "<מטרה>" | <שם-קובץ> | --orphans | --connected [--list | --list-reverse] [--with-entry <קובץ>]');
   }
 }

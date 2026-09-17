@@ -7,8 +7,9 @@
 //   אפס-ליטרל פר-אפליקציה. השימוש: web-shell --site <name> --entry <gen_x.dart> לפני כל build.
 //   ואחרי הבנייה: --prune <buildDir> מסיר משפחות-גופן שאינן מוזכרות ב-main.dart.js של אותה אפליקציה.
 import fs from 'fs'; import path from 'path'; import vm from 'node:vm'; import { fileURLToPath } from 'url';
+import * as R from '../root.mjs';   // bsApp/bsRoot — איתור-buildsmart
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const APP = process.env.BUILDSMART || '/home/user/buildsmart/app_flutter';
+const APP = R.bsApp() || '/home/user/buildsmart/app_flutter';
 const GEN = path.join(ROOT, 'new/dart-gen-bs'), DATA = path.join(ROOT, 'new/dart-data-bs/auto'), DS = path.join(ROOT, 'new/dart-ui-bs/ds');
 const argv = process.argv.slice(2);
 const opt = (f) => { const i = argv.indexOf(f); return i >= 0 ? argv[i + 1] : null; };

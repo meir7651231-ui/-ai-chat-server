@@ -10,9 +10,10 @@ import net from 'node:net';
 import os from 'node:os';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import * as R from '../root.mjs';   // bsApp/bsRoot — איתור-buildsmart
 const require = createRequire(import.meta.url);
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const SITE = process.env.BALAGAN_SITE || path.join(process.env.BUILDSMART || '/home/user/buildsmart/app_flutter', 'build/web-balagan');
+const SITE = process.env.BALAGAN_SITE || path.join(R.bsApp() || '/home/user/buildsmart/app_flutter', 'build/web-balagan');   // ‏R.bsApp()/bsRoot() מאתרים את buildsmart בכל פריסה (‏BUILDSMART · ‏../buildsmart · ‏../meir7651231-ui/buildsmart)
 const BASE = path.join(HERE, 'balagan-run-baseline.json'), OUT = path.join(HERE, 'balagan-run.json');
 const gate = process.argv.includes('--gate');
 if (!fs.existsSync(path.join(SITE, 'index.html'))) { console.log(`⚪ balagan-run: אין אתר בנוי ב-${SITE} — מדולג (flutter build web -t gen_balagan_main.dart)`); process.exit(0); }

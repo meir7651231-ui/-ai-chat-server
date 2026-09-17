@@ -14,7 +14,7 @@ import { normSearch } from '../../new/atoms/norm-search.mjs';
 import { NORM_SEARCH_T } from '../../new/atoms/norm-search-strings.mjs';
 
 const ROOT = R.ROOT, GEN = path.join(ROOT, 'machtzev/generator'), DIR = path.join(ROOT, 'new/dart-gen-bs');
-const BS = process.env.BUILDSMART || path.resolve(ROOT, '../buildsmart/app_flutter');
+const BS = R.bsApp() || path.resolve(ROOT, '../buildsmart/app_flutter');
 const FLUTTER = process.env.FLUTTER || (fs.existsSync('/home/user/flutter/bin/flutter') ? '/home/user/flutter/bin/flutter' : 'flutter');
 const pascal = (s) => s.replace(/[^A-Za-z0-9]+(.)?/g, (_, c) => (c ? c.toUpperCase() : '')).replace(/^./, (c) => c.toUpperCase());
 const q = (s) => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$')}'`;
