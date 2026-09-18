@@ -195,6 +195,106 @@ export function goalSlots(sentence, origin = 'מטרה') {
   return out;
 }
 
+// ══ צעד «פירוק»: מטרה ⇒ **חוזי-צרכים** (הכרעה-22 «כל מטרה», הבעלים 17.9 22:40) ══
+//  הפער שנמדד לפני: `behavior-plan --goal` דרש `needs` שנכתבו **ביד** — כלומר הצעד
+//  שהופך מטרה לחלקיקים לא נעשה ע"י המחולל, והמטרה היחידה שעבדה הייתה זו שלה
+//  נכתבו הצרכים. כאן נגזר החוזה מהפסק עצמו, ולכן **אותו** קוד רץ על כל מטרה.
+//
+//  🔒 שלושה מקורות בלבד לכל שדה בחוזה, בדיוק אותם שלושה של `goalPsak`:
+//    (1) **שם-שדה** — רק שקע-סכמה שהפסק קשר (`r.slot`), עם `src`. אין שם-שדה מהיד.
+//    (2) **קבוע** — רק ליטרל שנכתב במטרה (`kind:'קבוע'`), עם המשווה מהאטום.
+//    (3) **מילות-הייעוד** (`demand`) — רק מילות-המטרה עצמה + המונח-העברי של השקע.
+//  אות-סימן לאגרגציה נלקחת מדקדוק-החלקיקים הקיים (`spec-lang.data.json:pSum/pCount/
+//  pAvg/pTable`) בהתאמת-`stem` — אטום-דאטה קיים, לא מילון חדש (§19-ד).
+//
+//  מה שאין לו מקור **אינו מומצא ואינו נשמט**: התביעה יוצאת כ-`owner` — מתג-לבעלים
+//  עם השאלה המדויקת (L57). הדוגמאות עצמן אינן כאן: החוזה מצהיר `derive` (הסמנטיקה
+//  המבנית), והמקור-לדוגמאות נבחר ע"י הפקודה-האחת מנתוני-fixture שקיימים בריפו.
+const SIGNALS = { sum: SPL.pSum || [], count: SPL.pCount || [], avg: SPL.pAvg || [], list: SPL.pTable || [] };
+const CMP_TAG = { 'מעל': 'Over', 'מתחת': 'Under' };
+const cap = (s) => String(s).charAt(0).toUpperCase() + String(s).slice(1);
+/** האם מילות-התביעה נושאות אות-סימן מדקדוק-החלקיקים (התאמת-`stem` של המדף). */
+const signalsIn = (words) => {
+  const st = new Set(words.flatMap(stemsOf));
+  return Object.fromEntries(Object.entries(SIGNALS).map(([k, forms]) => [k,
+    forms.map((f) => ({ f, s: stemsOf(f) })).filter((x) => x.s.length && x.s.every((y) => st.has(y)))[0] || null]));
+};
+/** שקע-הסכמה של דרישה ⇒ {cls, field, type, src}. הטיפוס/המוצא מגיעים מ**מאגר
+ *  השקעים של הישויות שהפסק הכריע** (‏`classOf(<מילת-ישות>).fields`) — לא מ-`classOf`
+ *  של מילת-הדרישה עצמה, שעבור קבוע היא מספר ואין לה מחלקה (נמדד). */
+const slotPool = (psak) => psak.requirements.filter((r) => r.kind === 'ישות' && r.cls)
+  .flatMap((e) => ((classOf(e.word) || {}).fields || []).map((f) => ({ cls: e.cls, ...f })));
+const slotOf = (r, pool) => {
+  if (!r.slot) return null;
+  const [cls, field] = String(r.slot).split('.');
+  const f = pool.find((x) => x.cls === cls && x.name === field) || null;
+  return { cls, field, type: f ? f.type : null, src: r.slotSrc || (f ? f.src : null) };
+};
+
+/**
+ * 🧩 **הפירוק**: מטרה-בעברית ⇒ `{ needs, owner, claims }` — חוזי-צרכים בפורמט
+ * ש-`behavior-plan --needs` צורך (‏shape · demand · params · ret · consts · clock ·
+ * world · entity), **בלי דוגמאות** (אלה מגיעות ממקור-דוגמאות, לא מהחוזה).
+ * כל צורך נושא `sources` (file:key לכל אסימון) ו-`derive` (הסמנטיקה המבנית).
+ */
+export function goalNeeds(sentence, origin = 'מטרה') {
+  const g = goalPsak(sentence, origin);
+  const pool = slotPool(g);
+  const needs = {}; const owner = []; const claims = [];
+  g.demands.forEach((d, i) => {
+    const reqs = g.requirements.filter((r) => r.demand === i);
+    const words = reqs.map((r) => r.word);
+    const sig = signalsIn(heW(d.text));
+    const ents = reqs.filter((r) => r.kind === 'ישות' && r.cls);
+    const amb = reqs.filter((r) => r.kind === 'ישות' && !r.cls);
+    // קבוע-סף שהפסק קשר לשקע-סכמה = הסמנטיקה היחידה שהמבנה מכריע לבד
+    const thr = reqs.filter((r) => r.kind === 'קבוע' && r.cmp && r.slot).map((r) => ({ r, s: slotOf(r, pool) }));
+    const nums = reqs.filter((r) => r.kind === 'שדה' && r.type === 'typeNum' && r.slot).map((r) => ({ r, s: slotOf(r, pool) }));
+    const mk = (id, need) => { needs[id] = need; return id; };
+    const ids = [];
+    // מילות-הייעוד = מילות-**התוכן** של התביעה (בלי פיגום) + שם-השקע. מקור: המטרה עצמה.
+    const purp = (extra) => [...new Set([...contentW(heW(d.text)), ...extra])].join(' ');
+    for (const { r, s } of thr) {
+      const tag = CMP_TAG[r.cmp] || r.cmp; const K = r.word; const F = s.field; const Fc = cap(F);
+      const src = [{ token: `'${F}'`, src: s.src }, { token: K, src: r.src }];
+      ids.push(mk(`g${i + 1}.clock.${F}Days`, { shape: 'מועד', demand: purp([F]), params: ['String'], ret: 'num',
+        clock: { type: 'String' }, sources: [src[0]], derive: { kind: 'daysSince', cls: s.cls, field: F } }));
+      ids.push(mk(`g${i + 1}.predicate.${F}${tag}${K}`, { shape: 'מועד', demand: purp([F, r.cmp]), params: ['String'], ret: 'bool',
+        clock: { type: 'String' }, consts: [K], sources: src, derive: { kind: 'threshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp } }));
+      ids.push(mk(`g${i + 1}.predicate.record${Fc}${tag}${K}`, { shape: 'רשומות', demand: purp([F, r.cmp]), params: ['dynamic'], ret: 'bool',
+        clock: { type: 'String' }, consts: [`'${F}'`, K], entity: s.cls, sources: src,
+        derive: { kind: 'recordThreshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp } }));
+      ids.push(mk(`g${i + 1}.collection.${F}${tag}${K}List`, { shape: 'רשומות', demand: purp([F, r.cmp]), params: ['List<dynamic>'], ret: 'List<dynamic>',
+        clock: { type: 'String' }, consts: [`'${F}'`, K], entity: s.cls, sources: src,
+        derive: { kind: 'filterThreshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp } }));
+    }
+    for (const { r, s } of nums) {
+      const hit = sig.sum || sig.avg || sig.count;
+      if (!hit) { owner.push({ claim: i + 1, verb: d.verb, word: r.word, kind: 'אגרגציה-בלי-אות-סימן',
+        question: `«${d.verb}» על ${s.cls}.${s.field}: יש שקע-מספר אך אין אות-סימן-אגרגציה במטרה (${[...Object.values(SIGNALS)].flat().slice(0, 4).join('/')}) — סכום? מונה? ממוצע?` }); continue; }
+      const fam = sig.sum ? 'sum' : sig.avg ? 'avg' : 'count';
+      ids.push(mk(`g${i + 1}.measure.${fam}${cap(s.field)}`, { shape: 'רשומות', demand: purp([s.field, hit.f]), params: ['List<dynamic>'], ret: 'num',
+        consts: [`'${s.field}'`], entity: s.cls, sources: [{ token: `'${s.field}'`, src: s.src }, { token: hit.f, src: `${GOAL_SRC.spl}:p${cap(fam)} ("${hit.f}")` }],
+        derive: { kind: fam + 'By', cls: s.cls, field: s.field } }));
+    }
+    if (!ids.length) {
+      // תביעה בלי חוזה — **השאלה המדויקת**, לא ניחוש ולא השמטה (L57)
+      const q = amb.length
+        ? `«${amb[0].word}» — ${(amb[0].options || []).length} מועמדי-סכמה (${(amb[0].options || []).slice(0, 4).join(', ')}): איזה?`
+        : !ents.length
+          ? `«${d.verb}»: אין מילה בתביעה שיש לה מחלקת-סכמה (${words.filter((w) => w !== d.verb).slice(0, 6).join(' · ') || '—'}) — על איזו ישות?`
+          : `«${d.verb}» על ${ents.map((e) => e.cls).join('/')}: אין שקע-סכמה מחובר ואין קבוע-סף במטרה — מה נמדד ומול מה?`;
+      owner.push({ claim: i + 1, verb: d.verb, kind: ents.length ? 'ישות-בלי-שקע' : amb.length ? 'ישות-לא-מוכרעת' : 'אין-ישות', question: q });
+    }
+    // תביעה שנגזר לה חוזה אך נשארו בה מילות-∅ — **לא נשמטת בשקט**: מה שלא נגזר נרשם.
+    const nil = reqs.filter((r) => r.kind === '∅').map((r) => r.word);
+    if (ids.length && nil.length) owner.push({ claim: i + 1, verb: d.verb, kind: 'תביעה-חלקית',
+      question: `«${d.verb}»: ${ids.length} חוזים נגזרו, אך ${nil.length} מילים בתביעה בלי מקור (${nil.slice(0, 8).join(' · ')}) — האם אחת מהן שדה/ישות שדרוש לה חוזה?` });
+    claims.push({ claim: i + 1, verb: d.verb, text: d.text, needs: ids, entities: ents.map((e) => e.cls) });
+  });
+  return { sentence, needs, owner, claims, psak: g };
+}
+
 /**
  * משפט-חופשי ⇒ אובייקט בצורת-`doc` של read.mjs (‏title · sections · optional · mandatory).
  * `check(doc, spec)` רץ עליו בלי שינוי — אותם שבעה מהלכים, אותו פסק.

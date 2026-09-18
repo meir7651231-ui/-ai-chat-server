@@ -1,0 +1,323 @@
+מקור	יחידה	תביעות	צרכים	נפסלו-בהמצאה	מתגי-בעלים	ms	הערה
+א·nl	nl-smoke:1	0	0	0	0	527	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-smoke:2	0	0	0	0	5	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-smoke:3	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-smoke:4	0	0	0	0	2	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-smoke:5	1	0	0	1	13	ישות-בלי-שקע
+א·nl	nl-smoke:6	0	0	0	0	10	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-smoke:7	1	0	0	1	12	ישות-בלי-שקע
+א·nl	nl-smoke:8	0	0	0	0	2	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-smoke:9	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-smoke:10	1	0	0	1	10	אין-ישות
+א·nl	nl-smoke:11	0	0	0	0	3	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-smoke:12	1	0	0	1	4	אין-ישות
+א·nl	nl-smoke:13	0	0	0	0	2	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-smoke:14	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:1	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:2	1	0	0	1	8	אין-ישות
+א·nl	nl-quality:3	0	0	0	0	2	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:4	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:5	1	0	0	1	8	אין-ישות
+א·nl	nl-quality:6	0	0	0	0	2	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:7	1	0	0	1	5	אין-ישות
+א·nl	nl-quality:8	0	0	0	0	2	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:9	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:10	0	0	0	0	2	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:11	0	0	0	0	3	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:12	0	0	0	0	2	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:13	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:14	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:15	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:16	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:17	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:18	0	0	0	0	2	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:19	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:20	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+א·nl	nl-quality:21	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	app_audit	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	app_ent1	2	0	0	3	58	אגרגציה-בלי-אות-סימן/ישות-בלי-שקע
+ב·specs	app_ent10	2	0	0	2	41	אין-ישות
+ב·specs	app_ent11	1	0	0	1	27	אין-ישות
+ב·specs	app_ent12	2	0	0	2	30	אין-ישות
+ב·specs	app_ent13	1	0	0	1	32	ישות-בלי-שקע
+ב·specs	app_ent14	1	0	0	3	38	אגרגציה-בלי-אות-סימן/ישות-בלי-שקע
+ב·specs	app_ent15	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	app_ent16	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	app_ent17	2	0	0	2	36	אין-ישות
+ב·specs	app_ent18	1	0	0	1	32	אין-ישות
+ב·specs	app_ent19	2	0	0	2	39	ישות-בלי-שקע/אין-ישות
+ב·specs	app_ent2	1	0	0	1	38	ישות-לא-מוכרעת
+ב·specs	app_ent20	1	0	0	1	35	ישות-לא-מוכרעת
+ב·specs	app_ent21	1	0	0	1	23	אין-ישות
+ב·specs	app_ent22	8	0	0	9	55	אין-ישות/ישות-בלי-שקע/אגרגציה-בלי-אות-סימן
+ב·specs	app_ent23	2	0	0	2	34	אין-ישות
+ב·specs	app_ent24	1	0	0	1	25	אין-ישות
+ב·specs	app_ent25	1	0	0	1	28	ישות-בלי-שקע
+ב·specs	app_ent26	3	0	0	3	47	ישות-בלי-שקע
+ב·specs	app_ent27	0	0	0	0	2	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	app_ent28	3	0	0	3	44	ישות-לא-מוכרעת/אין-ישות
+ב·specs	app_ent29	0	0	0	0	3	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	app_ent3	3	0	0	3	51	ישות-בלי-שקע/אין-ישות
+ב·specs	app_ent4	1	0	0	1	27	אין-ישות
+ב·specs	app_ent5	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	app_ent6	1	0	0	1	26	ישות-לא-מוכרעת
+ב·specs	app_ent7	1	0	0	1	30	ישות-לא-מוכרעת
+ב·specs	app_ent8	3	0	0	3	39	אין-ישות
+ב·specs	app_ent9	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	app_flags	0	0	0	0	1	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	app_hub	19	0	0	20	122	ישות-בלי-שקע/אין-ישות/אגרגציה-בלי-אות-סימן
+ב·specs	app_scr30	6	0	0	6	44	ישות-בלי-שקע/אין-ישות
+ב·specs	app_scr31	2	0	0	2	23	אין-ישות
+ב·specs	app_scr32	6	0	0	6	49	ישות-בלי-שקע/אין-ישות
+ב·specs	app_scr33	5	0	0	5	35	ישות-בלי-שקע/אין-ישות
+ב·specs	app_scr34	6	0	0	7	48	ישות-בלי-שקע/אין-ישות/אגרגציה-בלי-אות-סימן
+ב·specs	app_settings	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	business	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	capautodream	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	capclockcalendar	4	0	0	4	61	ישות-לא-מוכרעת/אין-ישות
+ב·specs	capmailphone	3	0	0	3	65	אין-ישות/ישות-לא-מוכרעת
+ב·specs	captimegematria	9	0	0	9	80	אין-ישות/ישות-לא-מוכרעת
+ב·specs	cards11	1	0	0	1	30	ישות-בלי-שקע
+ב·specs	charts	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	components	1	0	0	1	34	אין-ישות
+ב·specs	controls	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	crazy	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	dash11	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	entity	2	0	0	3	28	אגרגציה-בלי-אות-סימן/ישות-בלי-שקע
+ב·specs	entry	22	0	0	24	253	אין-ישות/אגרגציה-בלי-אות-סימן/ישות-בלי-שקע
+ב·specs	feedback10	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	form9	1	0	0	1	22	ישות-לא-מוכרעת
+ב·specs	improv	5	0	0	5	58	אין-ישות
+ב·specs	input9	0	0	0	0	1	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	media	1	0	0	1	29	אין-ישות
+ב·specs	mission	8	0	0	10	86	ישות-בלי-שקע/אין-ישות/אגרגציה-בלי-אות-סימן
+ב·specs	navflow	2	0	0	2	35	ישות-בלי-שקע/אין-ישות
+ב·specs	nl	6	0	0	6	44	ישות-בלי-שקע/אין-ישות/ישות-לא-מוכרעת
+ב·specs	overlay10	2	0	0	2	25	אין-ישות
+ב·specs	quest1	2	0	0	3	67	ישות-בלי-שקע/אגרגציה-בלי-אות-סימן
+ב·specs	quest2	2	1	0	2	135	תביעה-חלקית/אין-ישות
+ב·specs	quest3	2	0	0	2	50	ישות-בלי-שקע/אין-ישות
+ב·specs	rich	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	shipping	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	showcase	13	0	0	14	182	אגרגציה-בלי-אות-סימן/אין-ישות/ישות-בלי-שקע
+ב·specs	states	1	0	0	1	32	ישות-לא-מוכרעת
+ב·specs	team	1	0	0	2	15	אגרגציה-בלי-אות-סימן/ישות-בלי-שקע
+ב·specs	text	1	0	0	1	26	אין-ישות
+ב·specs	viz	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ב·specs	widgets	4	0	0	4	47	אין-ישות/ישות-בלי-שקע
+ג·mosad	mosad.sentences:1	0	0	0	0	2	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:2	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:3	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:4	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:5	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:6	1	0	0	1	16	ישות-בלי-שקע
+ג·mosad	mosad.sentences:8	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:9	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:10	1	0	0	1	18	ישות-בלי-שקע
+ג·mosad	mosad.sentences:11	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:12	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:13	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:14	1	0	0	1	8	אין-ישות
+ג·mosad	mosad.sentences:15	1	0	0	1	14	אין-ישות
+ג·mosad	mosad.sentences:16	1	0	0	1	11	ישות-בלי-שקע
+ג·mosad	mosad.sentences:17	1	0	0	1	11	אין-ישות
+ג·mosad	mosad.sentences:18	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:19	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:20	3	0	0	3	14	אין-ישות
+ג·mosad	mosad.sentences:21	1	0	0	1	22	ישות-בלי-שקע
+ג·mosad	mosad.sentences:22	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:23	1	0	0	1	11	אין-ישות
+ג·mosad	mosad.sentences:24	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:25	2	0	0	4	13	אגרגציה-בלי-אות-סימן/ישות-בלי-שקע/אין-ישות
+ג·mosad	mosad.sentences:26	1	0	0	1	7	אין-ישות
+ג·mosad	mosad.sentences:27	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:28	1	0	0	1	13	ישות-בלי-שקע
+ג·mosad	mosad.sentences:29	1	0	0	1	12	ישות-בלי-שקע
+ג·mosad	mosad.sentences:30	1	0	0	1	8	אין-ישות
+ג·mosad	mosad.sentences:31	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:32	1	0	0	1	11	אין-ישות
+ג·mosad	mosad.sentences:33	1	0	0	1	11	אין-ישות
+ג·mosad	mosad.sentences:34	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:36	1	0	0	1	27	ישות-בלי-שקע
+ג·mosad	mosad.sentences:37	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:38	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:39	1	0	0	1	9	אין-ישות
+ג·mosad	mosad.sentences:40	1	0	0	1	9	אין-ישות
+ג·mosad	mosad.sentences:41	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:42	1	0	0	1	15	ישות-בלי-שקע
+ג·mosad	mosad.sentences:43	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:44	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:45	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:47	1	1	0	1	25	תביעה-חלקית
+ג·mosad	mosad.sentences:48	1	1	0	1	30	תביעה-חלקית
+ג·mosad	mosad.sentences:49	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:50	1	1	0	1	24	תביעה-חלקית
+ג·mosad	mosad.sentences:51	1	1	0	1	26	תביעה-חלקית
+ג·mosad	mosad.sentences:52	1	1	0	1	26	תביעה-חלקית
+ג·mosad	mosad.sentences:53	1	1	0	1	20	תביעה-חלקית
+ג·mosad	mosad.sentences:54	1	0	0	1	13	אין-ישות
+ג·mosad	mosad.sentences:55	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:56	1	1	0	1	23	תביעה-חלקית
+ג·mosad	mosad.sentences:57	1	0	0	1	10	אין-ישות
+ג·mosad	mosad.sentences:58	1	1	0	1	26	תביעה-חלקית
+ג·mosad	mosad.sentences:59	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:60	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:61	1	1	0	1	29	תביעה-חלקית
+ג·mosad	mosad.sentences:62	1	1	0	1	22	תביעה-חלקית
+ג·mosad	mosad.sentences:63	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:65	1	0	0	1	27	ישות-בלי-שקע
+ג·mosad	mosad.sentences:66	2	1	0	2	40	תביעה-חלקית/אין-ישות
+ג·mosad	mosad.sentences:67	1	1	0	1	24	תביעה-חלקית
+ג·mosad	mosad.sentences:68	1	0	0	1	14	אין-ישות
+ג·mosad	mosad.sentences:69	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:70	1	1	0	1	21	תביעה-חלקית
+ג·mosad	mosad.sentences:71	1	1	0	1	33	תביעה-חלקית
+ג·mosad	mosad.sentences:72	1	0	0	1	15	ישות-בלי-שקע
+ג·mosad	mosad.sentences:73	1	0	0	1	7	אין-ישות
+ג·mosad	mosad.sentences:74	1	0	0	1	13	אין-ישות
+ג·mosad	mosad.sentences:75	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:76	1	0	0	1	11	אין-ישות
+ג·mosad	mosad.sentences:77	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:78	1	0	0	1	13	ישות-בלי-שקע
+ג·mosad	mosad.sentences:79	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:80	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:81	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:82	1	0	0	1	11	ישות-בלי-שקע
+ג·mosad	mosad.sentences:83	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:84	1	0	0	1	10	אין-ישות
+ג·mosad	mosad.sentences:85	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:86	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:87	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:88	1	1	0	1	28	תביעה-חלקית
+ג·mosad	mosad.sentences:89	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:90	1	0	0	1	10	אין-ישות
+ג·mosad	mosad.sentences:92	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:93	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:94	1	1	0	1	28	תביעה-חלקית
+ג·mosad	mosad.sentences:95	0	0	0	0	1	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:96	1	0	0	1	15	אין-ישות
+ג·mosad	mosad.sentences:97	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:98	1	0	0	1	10	אין-ישות
+ג·mosad	mosad.sentences:99	2	0	0	2	18	ישות-בלי-שקע/אין-ישות
+ג·mosad	mosad.sentences:100	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:101	1	0	0	1	9	ישות-בלי-שקע
+ג·mosad	mosad.sentences:102	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:103	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:104	1	1	0	1	22	תביעה-חלקית
+ג·mosad	mosad.sentences:105	1	0	0	2	15	אגרגציה-בלי-אות-סימן/ישות-בלי-שקע
+ג·mosad	mosad.sentences:106	1	1	0	1	21	תביעה-חלקית
+ג·mosad	mosad.sentences:107	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:108	1	0	0	1	8	אין-ישות
+ג·mosad	mosad.sentences:109	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:110	1	0	0	1	15	אין-ישות
+ג·mosad	mosad.sentences:111	2	0	0	2	16	ישות-בלי-שקע/אין-ישות
+ג·mosad	mosad.sentences:113	1	1	0	1	26	תביעה-חלקית
+ג·mosad	mosad.sentences:114	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:115	1	0	0	1	10	אין-ישות
+ג·mosad	mosad.sentences:116	1	0	0	1	9	אין-ישות
+ג·mosad	mosad.sentences:117	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:118	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:119	1	1	0	1	24	תביעה-חלקית
+ג·mosad	mosad.sentences:120	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:121	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:122	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:123	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:124	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:125	0	0	0	0	1	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:126	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:127	4	0	0	4	15	אין-ישות
+ג·mosad	mosad.sentences:128	1	0	0	1	14	ישות-בלי-שקע
+ג·mosad	mosad.sentences:129	0	0	0	0	1	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:130	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:131	1	0	0	1	6	אין-ישות
+ג·mosad	mosad.sentences:132	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:133	1	0	0	1	10	אין-ישות
+ג·mosad	mosad.sentences:134	0	0	0	0	1	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:136	1	0	0	1	17	אין-ישות
+ג·mosad	mosad.sentences:137	1	0	0	1	11	אין-ישות
+ג·mosad	mosad.sentences:138	1	0	0	1	11	ישות-בלי-שקע
+ג·mosad	mosad.sentences:139	1	0	0	2	15	אגרגציה-בלי-אות-סימן/ישות-בלי-שקע
+ג·mosad	mosad.sentences:140	1	1	0	1	16	תביעה-חלקית
+ג·mosad	mosad.sentences:141	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:142	1	0	0	1	14	ישות-בלי-שקע
+ג·mosad	mosad.sentences:143	1	0	0	1	8	אין-ישות
+ג·mosad	mosad.sentences:144	1	0	0	1	12	אין-ישות
+ג·mosad	mosad.sentences:145	1	0	0	1	12	אין-ישות
+ג·mosad	mosad.sentences:146	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:148	2	1	0	2	32	תביעה-חלקית/אין-ישות
+ג·mosad	mosad.sentences:149	1	0	0	1	5	אין-ישות
+ג·mosad	mosad.sentences:150	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:151	1	1	0	1	27	תביעה-חלקית
+ג·mosad	mosad.sentences:152	1	0	0	1	13	ישות-בלי-שקע
+ג·mosad	mosad.sentences:153	1	0	0	1	10	ישות-בלי-שקע
+ג·mosad	mosad.sentences:154	2	0	0	2	12	ישות-בלי-שקע/אין-ישות
+ג·mosad	mosad.sentences:155	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:156	1	1	0	1	23	תביעה-חלקית
+ג·mosad	mosad.sentences:157	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:158	2	0	0	2	14	אין-ישות
+ג·mosad	mosad.sentences:159	1	1	0	1	27	תביעה-חלקית
+ג·mosad	mosad.sentences:161	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:162	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:163	1	0	0	1	10	ישות-בלי-שקע
+ג·mosad	mosad.sentences:164	0	0	0	0	1	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:165	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:166	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:167	1	0	0	1	14	אין-ישות
+ג·mosad	mosad.sentences:168	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:169	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:170	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:171	1	0	0	3	14	אגרגציה-בלי-אות-סימן/ישות-בלי-שקע
+ג·mosad	mosad.sentences:172	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:173	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:174	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:175	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:176	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:177	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:178	2	0	0	2	16	ישות-בלי-שקע/אין-ישות
+ג·mosad	mosad.sentences:179	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:181	1	0	0	1	11	אין-ישות
+ג·mosad	mosad.sentences:182	1	0	0	1	9	אין-ישות
+ג·mosad	mosad.sentences:183	2	0	0	3	18	אגרגציה-בלי-אות-סימן/אין-ישות/ישות-בלי-שקע
+ג·mosad	mosad.sentences:184	2	0	0	2	11	אין-ישות
+ג·mosad	mosad.sentences:185	1	1	0	1	27	תביעה-חלקית
+ג·mosad	mosad.sentences:186	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:187	1	1	0	1	14	תביעה-חלקית
+ג·mosad	mosad.sentences:188	1	0	0	1	11	ישות-בלי-שקע
+ג·mosad	mosad.sentences:189	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:190	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:191	1	0	0	1	12	אין-ישות
+ג·mosad	mosad.sentences:192	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:193	1	0	0	1	14	אין-ישות
+ג·mosad	mosad.sentences:194	0	0	0	0	1	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:195	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:197	1	0	0	1	14	אין-ישות
+ג·mosad	mosad.sentences:198	0	0	0	0	1	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:199	1	0	0	1	15	ישות-בלי-שקע
+ג·mosad	mosad.sentences:200	1	0	0	1	10	אין-ישות
+ג·mosad	mosad.sentences:201	1	0	0	1	9	אין-ישות
+ג·mosad	mosad.sentences:202	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:203	0	0	0	0	1	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:204	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:205	1	0	0	2	10	אגרגציה-בלי-אות-סימן/ישות-בלי-שקע
+ג·mosad	mosad.sentences:206	1	0	0	1	7	אין-ישות
+ג·mosad	mosad.sentences:207	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:208	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:209	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:210	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:211	1	0	0	1	22	ישות-בלי-שקע
+ג·mosad	mosad.sentences:212	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:213	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ג·mosad	mosad.sentences:214	0	0	0	0	0	אין תביעת-התנהגות (אין פועל-מטרה במשפט)
+ד·goals	goal:1	2	5	0	2	51	תביעה-חלקית
+ד·goals	goals-5:1	4	0	0	4	18	אין-ישות
+ד·goals	goals-5:2	3	4	0	3	43	ישות-בלי-שקע/תביעה-חלקית
+ד·goals	goals-5:3	2	0	0	2	15	ישות-בלי-שקע/אין-ישות
+ד·goals	goals-5:4	2	0	0	2	11	ישות-לא-מוכרעת/אין-ישות
+ד·goals	goals-5:5	3	4	0	3	47	ישות-בלי-שקע/תביעה-חלקית/אין-ישות
+
+מקור	יחידות	תביעות	צרכים	יחידות-עם-צרכים	נפסלו-בהמצאה	מתגי-בעלים	אין-תביעת-התנהגות	ms
+א·nl	35	7	0	0	0	7	28	626
+ב·specs	71	181	1	1	0	195	20	2567
+ג·mosad	203	119	27	27	0	127	99	1659
+ד·goals	6	16	13	3	0	16	0	185
+סה"כ	315	323	41	31	0	345	147	5037
