@@ -32,6 +32,7 @@
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import * as R from '../root.mjs';
 import { VERTICAL_PACKS } from '../../new/atoms/vertical-packs.mjs';
@@ -282,6 +283,60 @@ export function candidatesFor(word) {
   return [...out, ...noClass];
 }
 
+// ══ 🕯️ הפסק-הישיבתי על «ישות-לא-מוכרעת» (‏w-agg-26 · PLAN-100 §4 · L114) ══════
+//  L114 פסקה: «בחירה בין מועמדים: **לא בתוך המנוע** — המנוע שואל את הישיבה».
+//  לכן `soleClassOf` **אינו מכריע** כשיש כמה מועמדים; הוא קורא פסק שהישיבה
+//  כבר נתנה (`node yeshiva/entity-psak.mjs --write` ⇒ `yeshiva/psak/entity-psak.json`,
+//  ‏`KnowledgeBase.claim/ask`, בקשה אחת לריצה). כאן **אין שורת-הכרעה אחת**:
+//  קוראים את השדה `psak` ומצייתים לו.
+//
+//  למה מהדיסק ולא בזמן-ריצה: אחרת המחולל היה מתנהג אחרת בקונטיינר עם ישיבה
+//  ובקונטיינר בלעדיה — הבאג-השקט של L110 מילה-במילה. הפסק בדיף, נקרא ע"י אדם,
+//  והשער (`yeshiva/entity-psak.mjs --gate`) מוודא שהוא ≡ ריצה טרייה.
+//
+//  🔒 **טביעת-שאלה** (`fp`): הפסק תקף רק כל עוד המועמדים הם אותם מועמדים
+//  (מחלקה · ניקוד · סוגי-מקור). השתנו ⇒ הפסק אינו על השאלה הזאת ⇒ **מתעלמים**
+//  וחוזרים למתג. פסק ישן שממשיך להכריע = ירוק-חלול (L27).
+//  ⚠️ אין `catch {}` על קריאת-הקובץ מעבר להיעדרו: `existsSync` ואז `readFileSync`
+//     — קובץ פגום ייזרק ולא ייבלע כ«אין פסק» (L26 · L110-2).
+//  🔴 **הקריאה עצלה, והדגל נבדק בכל קריאה.** הבאג שנתפס כאן בעליית-השער: הפסק
+//     נקרא ברגע **טעינת-המודול**, ואז `YESHIVA_PSAK_OFF=1` שנקבע אחרי הטעינה כבר
+//     לא השפיע — כותב-הפסק סרק קורפוס **שהפסק כבר הוחל עליו**, מצא מילה אחת
+//     במקום שבע, וה«סחף» היה שלו. קונפיג שנתפס בזמן-ייבוא הוא L110 בעותק שלישי.
+const PSAK_PATH = R.ROOT + 'yeshiva/psak/entity-psak.json';
+let _psakCache = null;
+const entityPsakFile = () => {
+  if (process.env.YESHIVA_PSAK_OFF) return { words: {}, off: true };
+  if (_psakCache) return _psakCache;
+  _psakCache = fs.existsSync(PSAK_PATH) ? JSON.parse(fs.readFileSync(PSAK_PATH, 'utf8')) : { words: {}, missing: true };
+  return _psakCache;
+};
+/** טביעת-השאלה — **אותו חישוב** של `yeshiva/entity-psak.mjs:fingerprint` (עותק-אחד: הוא מייבא מכאן). */
+export function psakFingerprint(cands) {
+  const norm = cands.map((c) => [c.cls, c.score, [...c.kinds].sort().join('+')].join(':')).sort().join('|');
+  return createHash('sha256').update(norm).digest('hex').slice(0, 16);
+}
+/** סוגי-המקור של מועמד, לפי `SRC` (לא לפי מחרוזת שזכרתי). */
+export function evidenceKinds(evidence) {
+  const k = new Set();
+  for (const e of evidence || []) {
+    if (e.startsWith(SRC.terms)) k.add('terms');
+    else if (e.startsWith(SRC.packs)) k.add('packs');
+    else if (e.startsWith(SRC.sentence)) k.add('sentence');
+    else if (e.startsWith(SRC.screens)) k.add('screens');
+    else k.add('אחר');
+  }
+  return k;
+}
+/** הפסק על המילה, או null (אין פסק · כבוי · טביעה לא תואמת). אפס הכרעה כאן. */
+export function entityPsak(word, cands) {
+  const p = (entityPsakFile().words || {})[word];
+  if (!p) return null;
+  const fp = psakFingerprint(cands.map((x) => ({ cls: x.cls, score: x.score, kinds: evidenceKinds(x.evidence) })));
+  if (p.fp !== fp) return { ...p, stale: `טביעת-השאלה השתנתה (${p.fp} ⇒ ${fp}) — המועמדים אינם אותם מועמדים` };
+  return p;
+}
+
 /** מילה ⇒ **מחלקת-סכמה יחידה** או ספק. כלל-ההכרעה של §20 במקום אחד, כדי ששני
  *  הצרכנים (‏הפסק `yeshiva/purpose.mjs` ושער-ההמצאה `hamtzaa.mjs`) ישאלו את אותה
  *  שאלה ויקבלו את אותה תשובה: מועמד-אמת = יש מחלקה · יש שקעים · לא-רופף.
@@ -289,19 +344,43 @@ export function candidatesFor(word) {
 export function soleClassOf(word) {
   let c = [], all = [];
   try { all = candidatesFor(word); c = all.filter((x) => x.cls && x.strict !== false && (x.fields || []).length); } catch { return null; }
+  // 🕯️ הפסק-הישיבתי נשאל **רק כשיש בחירה** (‏c.length > 1) — זה בדיוק הגדר של L114
+  //    («בחירה בין מועמדים עולה לישיבה»). מועמד יחיד אינו בחירה, ולכן המסלול שלו
+  //    נשאר ביט-זהה לאתמול, ואין שינוי-התנהגות גורף בעקבות פסק על מילה אחרת.
+  const P = c.length > 1 ? entityPsak(word, c) : null;
+  const applied = P && !P.stale ? P : null;
   // 🕯️ שלוש התוצאות כאן הן שלוש «אין» **שונות** שנראו זהות לקורא: יחיד ⇒ הכרעה · כמה ⇒ מתג
   //    (‏L114: בחירה בין מועמדים אינה מוכרעת בתוך המנוע) · אפס ⇒ «אין-ישות», הפער שמודד
   //    PLAN-100 §2-ב ב-88 יחידות. עכשיו כל מועמד שהשרשרת העלתה נפסק בשמו ובסיבת-הפסילה
   //    שלו, והפנקס נושא את מפת-העבודה: מי נפל על «בלי-שקעים» ומי על «רופף».
   rminhu({ engine: 'tzinor.soleClassOf', matter: `מילה «${word}» ⇒ מחלקת-סכמה`,
-    searched: Object.keys(SRC),
+    searched: [...Object.keys(SRC), 'yeshiva/psak/entity-psak.json'],
     rulings: all.map((x) => (c.length === 1 && x === c[0]
       ? had(x.cls || `(${word})`, `מועמד-אמת יחיד · ${(x.fields || []).length} שקעים · מוצא ${((x.evidence || [])[0]) || '?'}`)
       : c.includes(x)
-        ? pliga(x.cls, `מועמד-אמת אך אינו יחיד — ${c.length} מועמדים (${c.map((y) => y.cls).join('/')}), ולכן מתג-לבעלים ולא הכרעה-במנוע (L114)`)
+        ? (applied && applied.psak === 'הלכתא' && applied.cls === x.cls
+          ? had(x.cls, `הלכתא מהישיבה (entity-psak · fp ${applied.fp}) — ${applied.why}`)
+          : applied && applied.psak === 'הלכתא'
+            ? pliga(x.cls, `הישיבה פסקה «לא» עליו והכריעה ${applied.cls} (entity-psak · fp ${applied.fp}) — ${applied.why}`)
+            : applied && applied.psak === 'לא-ישות'
+              ? pliga(x.cls, `הישיבה פסקה ש«${word}» אינה מילת-ישות (entity-psak · fp ${applied.fp}) — ${applied.why}`)
+              : applied
+                ? pliga(x.cls, `תיקו בישיבה (entity-psak · fp ${applied.fp}) — ${applied.why}; ההכרעה לבעלים ולא במנוע (L114)`)
+                : pliga(x.cls, `מועמד-אמת אך אינו יחיד — ${c.length} מועמדים (${c.map((y) => y.cls).join('/')})${P && P.stale ? ` · פסק בדיסק הוזנח: ${P.stale}` : ' · אין פסק-ישיבה למילה'}, ולכן מתג-לבעלים ולא הכרעה-במנוע (L114)`))
         : pliga(x.cls || `(${word})`, `נמצא בשרשרת אך אינו מועמד-אמת: ${!x.cls ? 'אין מחלקה' : x.strict === false ? 'התאמה רופפת (strict=false)' : 'אין שקעי-סכמה'} — זה חסר-שקע, לא חסר-ישות`))) });
   if (c.length === 1) return { cls: c[0].cls, fields: c[0].fields, src: (c[0].evidence || [])[0] || null };
-  if (c.length > 1) return { cls: null, options: c.map((x) => x.cls) };
+  if (c.length > 1) {
+    // ⬇️ ציות לפסק. **אין כאן הכרעה** — יש קריאה של `psak` והחלה שלו.
+    if (applied && applied.psak === 'הלכתא') {
+      const w = c.find((x) => x.cls === applied.cls);
+      if (w) return { cls: w.cls, fields: w.fields, psak: 'הלכתא',
+        src: `${(w.evidence || [])[0] || '?'} ⇐ yeshiva/psak/entity-psak.json (הלכתא · fp ${applied.fp})` };
+    }
+    if (applied && applied.psak === 'לא-ישות') return null;   // «אין-ישות», ולא מתג-רעש לבעלים
+    return { cls: null, options: c.map((x) => x.cls),
+      psak: applied ? 'תיקו' : null, question: applied ? applied.question : null,
+      stale: P && P.stale ? P.stale : null };
+  }
   return null;
 }
 

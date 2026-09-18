@@ -61,15 +61,22 @@ export function checkRuling(r) {
 // מונע התנפחות: אותו (מנוע · עניין · טביעת-הפסקים) נרשם פעם אחת לריצה.
 const seen = new Set();
 let wrote = 0;
-const CAP = Number(process.env.YESHIVA_LEDGER_CAP || 400);
+// 🔴 **התקרה נקראת בכל קריאה, לא בזמן-ייבוא.** נמדד (w-agg-26 · 18.9): `const CAP = …`
+//    ב-top-level נתפס ברגע הייבוא, ולכן תוכנית שקובעת `YESHIVA_LEDGER_CAP` בתוך עצמה
+//    (‏ולא בשורת-הפקודה) לא השפיעה כלל. אותה מחלקת-באג של L110 («קונפיג שנתפס בזמן-ייבוא»).
+const cap = () => Number(process.env.YESHIVA_LEDGER_CAP || 400);
 const SEP = String.fromCharCode(0);
 
-/** רשומה לפנקס — בצורת-הרשומה של `gate rminhu`, בקובץ שלו. מחזיר את הנתיב, או null אם לא נרשם. */
+/** רשומה לפנקס — בצורת-הרשומה של `gate rminhu`, בקובץ שלו. מחזיר את הנתיב, או null אם לא נרשם.
+ *  ‏`rec.always` — **מהלך-הכותרת של המנוע עוקף את התקרה.** נמדד: סריקת-קורפוס מייצרת
+ *  אלפי מהלכי-מִשנה, התקרה נסגרת עליהם, והמהלך שבשבילו רץ הכלי (‏7 פסקי-ישיבה) **לא נרשם
+ *  כלל** — «מהלך בלי דיווח = חצי מהלך» (L114) נשבר דווקא במקום היחיד שחשוב. התקרה נועדה
+ *  נגד לולאה, לא נגד הכותרת; לכן `always` פטור ממנה (וגם ממנו נספר ב-`wrote`). */
 export function report(rec) {
   const key = [rec.engine, rec.matter, rec.fp].join(SEP);
   if (seen.has(key)) return null;
   seen.add(key);
-  if (wrote >= CAP) return null;                       // תקרה, לא בליעה: reported().capped אומר שנחתך
+  if (!rec.always && wrote >= cap()) return null;      // תקרה, לא בליעה: reported().capped אומר שנחתך
   const body = rec.none ? { matter: rec.matter, none: rec.none }
     : { matter: rec.matter, sources: rec.rulings.map((r) => [r.src, `${r.verdict}: ${r.why}`]) };
   const line = JSON.stringify({ t: Date.now() / 1000, prompt: `${rec.engine} · ${rec.matter}`, engine: rec.engine, searched: rec.searched || [], rminhu: body });
@@ -101,14 +108,14 @@ export function printNotes(label = '') {
  *  `hit` = הפסק הראשון «חד שיעורא» (⇒ המנוע פולט אותו ואינו אומר «אין»).
  *  `line` = המשפט שהמנוע מדפיס: מה נחפש · כמה מקורות · ולמה כל אחד נדחה.
  */
-export function rminhu({ engine, matter, searched = [], rulings = [], none = '' } = {}) {
+export function rminhu({ engine, matter, searched = [], rulings = [], none = '', always = false } = {}) {
   if (!engine) throw new Error('ורמינהו: חסר engine — הפנקס נרשם בשם המנוע');
   if (!matter) throw new Error('ורמינהו: חסר matter — על איזה עניין מחפשים מקורות אחרים?');
   if (!rulings.length) {
     //    אין מקורות בכלל ⇒ «לא מצינו», והוא חייב לומר **מה** נחפש (gate.py: --none ≥12 תווים).
     const txt = none || (searched.length ? `חיפשתי ב-${searched.join(' · ')}; לא מצינו` : '');
     if (txt.length < 12) throw new Error(`ורמינהו על «${matter}»: «לא מצינו» חייב לומר מה חיפשת (searched או none) — «אין» = «לא-חיפשת»`);
-    const ledger = report({ engine, matter, searched, none: txt, fp: 'none' });
+    const ledger = report({ engine, matter, searched, none: txt, fp: 'none', always });
     const line = `⚪ ${engine}: ${matter} — ורמינהו: ${txt}`;
     if (ledger) lines.push(line);
     return { hit: null, rulings: [], digest: '', line, ledger };
@@ -118,7 +125,7 @@ export function rminhu({ engine, matter, searched = [], rulings = [], none = '' 
   const hit = rulings.find((r) => r.verdict === HAD) || null;
   const digest = digestOf(rulings);
   const fp = rulings.map((r) => `${r.src}=${r.verdict}`).join('|');
-  const ledger = report({ engine, matter, searched, rulings, fp });
+  const ledger = report({ engine, matter, searched, rulings, fp, always });
   const line = hit
     ? `🕯️ ${engine}: ${matter} — ורמינהו: ${rulings.length} מקורות · חד שיעורא ${hit.src} · ${digest}`
     : `⚪ ${engine}: ${matter} — ורמינהו: ${rulings.length} מקורות נפסקו, לא מצינו חד-שיעורא: ${digest}${searched.length ? ` · חיפשתי: ${searched.join('/')}` : ''}`;
