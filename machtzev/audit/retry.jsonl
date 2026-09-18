@@ -2116,3 +2116,5 @@
 {"ts":1789682065,"attempt":1789682065,"gate":"index-complete","path":null,"sha":"6a1355bb92534a96de66c07d68312b513cc2c8f9","blob_before":null,"resolved":true}
 {"ts":1789682065,"attempt":1789682065,"gate":"truth","path":null,"sha":"6a1355bb92534a96de66c07d68312b513cc2c8f9","blob_before":null,"resolved":true}
 {"ts":1789700895,"attempt":1789700895,"gate":"pins","path":null,"sha":"80fabc3343d9bd7655b4a8eb58177b63c92723ad","blob_before":null,"resolved":true}
+{"ts":1789723807,"attempt":1789723807,"gate":"nobinary","path":null,"sha":"c42f206706a5b416d819c71cd6ee06a10be9a001","blob_before":null,"resolved":true}
+{"ts":1789723935,"attempt":1789723935,"gate":"nobinary","path":null,"sha":"c42f206706a5b416d819c71cd6ee06a10be9a001","blob_before":null,"resolved":true}

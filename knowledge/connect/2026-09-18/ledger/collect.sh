@@ -75,6 +75,18 @@ q node machtzev/cross-source-check.mjs --files "new/atoms/academic-year-label-st
 q node machtzev/generator/cover.mjs --gate
 q node -e 'import("./machtzev/generator/cover.mjs").then((m)=>{m.coverLogic({op:"predicate",need:[],goal:""});m.cover({op:"zzqnope",need:["label"],goal:"קרפדה"})})'
 
+# ── גל-ב׳ (נעוצים) · חלקיקים ───────────────────────────────────────────────
+#   particles · הדפוס היה בענף-אחד מ-15; `firstWired` הוא צוואר-הבקבוק של כל השאר
+q node machtzev/generator/particles.mjs --gate
+q node knowledge/connect/2026-09-18/ledger/particles-probe.mjs sechirut peruk01 peruk12
+#   op-census · «0 לא-ממופים» שאינו יכול להיכשל · כלל-ראשון-גובר · forge-ללא-צורה
+q node machtzev/generator/op-census.mjs --gate
+#   peruk · סעיף-שלא-נכתב · שלושת-מעברי-ההסתייגות · מדף-ריק ⇒ ירוק
+q node machtzev/generator/peruk.mjs --gate
+#   hamtzaa · שלוש דרכי-ההתאמה · שלושת סוגי-המקור · interpret שזרק
+q node machtzev/generator/hamtzaa.mjs --ratchet
+q node machtzev/generator/hamtzaa.mjs --needs machtzev/generator/goals/payments/needs.json --goal knowledge/connect/goals/payments.txt   # tokenSource · שלושת סוגי-המקור
+
 # הרצת-המנוע-המלאה על מטרת-הליבה — המקור הגדול של מהלכים
 q node machtzev/generator/behavior-plan.mjs --goal knowledge/connect/goals/liba.txt
 # שחזור תופעות-הלוואי: המנועים כותבים תוצרים, והראיה אינה שינוי-עץ.
