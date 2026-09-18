@@ -22,7 +22,7 @@ object LibaWeb {
   var ready=false;
   window.addEventListener('message',function(e){var d=e.data;if(!d||!d.liba||!window.LibaBridge)return;
     if(d.liba==='ready'){ready=true;LibaBridge.ready();}
-    else if(d.liba==='say'){LibaBridge.say(String(d.text||''),String(d.kind||'say'),JSON.stringify(d.options||[]),String(d.speaker||''));}
+    else if(d.liba==='say'){LibaBridge.say(String(d.text||''),String(d.kind||'say'),JSON.stringify(d.options||[]),String(d.speaker||''),String(d.id||''));}
     else if(d.liba==='sent'){LibaBridge.sent(String(d.text||''));}
     else if(d.liba==='error'){LibaBridge.error(String(d.text||''),String(d.reason||''));}
     else if(d.liba==='tap'){LibaBridge.tap();}
@@ -33,6 +33,7 @@ object LibaWeb {
   window.__libaRect=function(){var f=document.querySelector('iframe');if(!f)return '';var r=f.getBoundingClientRect();return JSON.stringify([r.left,r.top,r.width,r.height]);};
   window.__libaHello=function(){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'hello',ver:window.__libaVer||''},'*');}catch(e){}});};
   window.__libaCrash=function(id,ver,t){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'crash',id:id,version:ver,text:t},'*');}catch(e){}});};
+  window.__libaSpoke=function(id){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'spoke',id:id},'*');}catch(e){}});};
   window.__libaInput=function(t){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'input',text:t},'*');}catch(e){}});};
   setInterval(function(){if(!ready)window.__libaHello();},3000);
 })();
@@ -41,7 +42,7 @@ object LibaWeb {
     interface Bridge {
         fun onPage(url: String)
         fun onReady()
-        fun onSay(text: String, kind: String, options: List<String>, speaker: String)
+        fun onSay(text: String, kind: String, options: List<String>, speaker: String, id: String)
         fun onSent(text: String)
         fun onError(text: String, reason: String)
         fun onPageTap()
@@ -52,9 +53,9 @@ object LibaWeb {
 
     private class JsBridge(val b: Bridge) {
         @JavascriptInterface fun ready() = b.onReady()
-        @JavascriptInterface fun say(text: String, kind: String, optionsJson: String, speaker: String) {
+        @JavascriptInterface fun say(text: String, kind: String, optionsJson: String, speaker: String, id: String) {
             val opts = try { val a = org.json.JSONArray(optionsJson); List(a.length()) { a.getString(it) } } catch (e: Exception) { emptyList() }
-            b.onSay(text, kind, opts, speaker)
+            b.onSay(text, kind, opts, speaker, id)
         }
         @JavascriptInterface fun sent(text: String) = b.onSent(text)
         @JavascriptInterface fun error(text: String, reason: String) = b.onError(text, reason)
@@ -121,6 +122,8 @@ object LibaWeb {
         val up = android.view.MotionEvent.obtain(t, t + 50, android.view.MotionEvent.ACTION_UP, x, y, 0)
         web.dispatchTouchEvent(down); web.postDelayed({ web.dispatchTouchEvent(up); down.recycle(); up.recycle() }, 50)
     }
+    /** 3.14.0: tell the page that the utterance it sent has finished being spoken, so it acks in order. */
+    fun sendSpoke(web: WebView, id: String) { web.evaluateJavascript("window.__libaSpoke && window.__libaSpoke(${JSONObject.quote(id)})", null) }
     fun sendCrash(web: WebView, id: String, ver: String, text: String) { web.evaluateJavascript("window.__libaCrash && window.__libaCrash(${JSONObject.quote(id)},${JSONObject.quote(ver)},${JSONObject.quote(text)})", null) }
     fun hello(web: WebView) {
         val ver = try { web.context.packageManager.getPackageInfo(web.context.packageName, 0).versionName } catch (e: Exception) { "?" }

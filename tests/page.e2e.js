@@ -121,6 +121,15 @@ window.__h={db,docs,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSna
   check((await get('chat/current') || {}).spoken === true, 'legacy message acked');
   await set('chat/current', { id: 'r-1', kind: 'say', text: 'הודעה ישנה מהמנהל', ts: 6, spoken: true }); m = await flush(1000);
   check(!m.some(x => x.liba === 'say' && /ישנה/.test(x.text)), 'legacy rewrite not replayed');
+  // 12. v36: with a 3.14 app the ack waits until the phone finished speaking
+  await p.evaluate(() => window.app({ liba: 'hello', ver: '3.14.0' })); await flush(500);
+  await set('inbox/m-spoke', { from: 'liba', kind: 'say', speaker: 'ליבה', topic: 'קול', text: 'משפט שממתין לסיום הדיבור', spoken: false, ts: 99 });
+  m = await flush(1500);
+  const sayMsg = m.find(x => x.liba === 'say' && /שממתין/.test(x.text));
+  check(!!(sayMsg && sayMsg.id), 'say carries an utterance id');
+  check((await get('inbox/m-spoke') || {}).spoken !== true, 'ack held while the phone is still speaking');
+  await p.evaluate(id => window.app({ liba: 'spoke', id }), sayMsg && sayMsg.id); await flush(900);
+  check((await get('inbox/m-spoke') || {}).spoken === true, 'ack written once the phone reported it finished');
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

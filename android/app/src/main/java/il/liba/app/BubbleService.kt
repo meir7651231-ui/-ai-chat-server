@@ -54,6 +54,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var dot: OrbView? = null
     private var label: TextView? = null
     private var tts: TextToSpeech? = null
+    private var sayId: String? = null   // id of the page utterance being spoken now
     private var ttsReady = false
     private var sr: SpeechRecognizer? = null
     private var srOnDevice = false          // step 21: which recognizer `sr` currently is
@@ -175,6 +176,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun stopSpeaking() {
         try { tts?.stop() } catch (e: Exception) {}
         chunks.clear(); paused = false; speaking = false; pendingListenAfterSpeech = false
+        sayId?.let { id -> sayId = null; web?.let { w -> LibaWeb.sendSpoke(w, id) } } // skipped mid-sentence: don't leave the page waiting
         bargeVad?.stop(); bargeVad = null
         speakGuard?.let { main.removeCallbacks(it) }; speakGuard = null
     }
@@ -229,6 +231,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         try { ToneGenerator(AudioManager.STREAM_NOTIFICATION, 55).let { it.startTone(t, ms); main.postDelayed({ it.release() }, ms + 200L) } } catch (e: Exception) {} }
     private fun onSpoken() {
         speaking = false
+        sayId?.let { id -> sayId = null; web?.let { w -> LibaWeb.sendSpoke(w, id) } } // fix: the page acks only once the phone finished speaking
         main.postDelayed({ afterSpeech() }, 600)
     }
     private fun afterSpeech() {
@@ -668,7 +671,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
             reason.contains("rate") -> "יותר מדי מהר. חכה רגע."
             reason.isBlank() -> "" else -> "סיבה: $reason" }
         showLabel("לא נשלח" + (if (reason.isNotBlank()) " · $reason" else ""), 8000); speak("לא הצלחתי לשלוח. $why") } }
-    override fun onSay(text: String, kind: String, options: List<String>, speaker: String) { main.post {
+    override fun onSay(text: String, kind: String, options: List<String>, speaker: String, id: String) { main.post {
+        sayId?.let { prev -> web?.let { w -> LibaWeb.sendSpoke(w, prev) } } // a new utterance arrived before the old one reported: release the page
+        sayId = id.ifBlank { null }
         sentAt = 0; status = "מחובר."; waitTimer?.let { main.removeCallbacks(it) }
         curSpeaker = if (speaker.isBlank()) "ליבה" else speaker
         // step 14: a different voice per speaker – ליבה neutral, המנהל lower, האדריכל higher, others slightly low
