@@ -24,6 +24,7 @@ import { toSwitches, soleClassOf } from '../machtzev/generator/tzinor.mjs';
 import { stem } from '../machtzev/generator/match.mjs';
 import { check, parseSpec, STOP } from './read.mjs';
 import { pasak, applyPsak } from './apply.mjs';
+import { rminhu, had, pliga, lo } from './rminhu.mjs';   // 🕯️ ∅ הוא «אין» — ופסק עליו נרשם בפנקס (הכרעה-23 · L114)
 
 const HE_RE = /[\u05d0-\u05ea]/;   // שם-שדה בלי אות-עברית = מפתח-סכמה, לא מונח
 const norm = (s) => String(s).replace(/[״"'׳]/g, '').replace(/\s+/g, ' ').trim();
@@ -133,6 +134,24 @@ export const classOf = soleClassOf;   // כלל-ההכרעה חי ב-tzinor (מ�
  */
 export function goalPsak(sentence, origin = 'מטרה') {
   const demands = demandsOf(sentence);
+  //  🕯️ «אין פועל-מטרה» — הפער הגדול ביותר במדידה (148 מתוך 319, PLAN-100 §2-א). עד כה
+  //  השכבה **שתקה** כאן במכוון («משפט-ישות ממשיך ביט-זהה»), והשתיקה נכונה לפלט אבל לא
+  //  לדיווח: 148 משפטים נשרו בלי שאיש יֵדע על אילו מילים. עכשיו כל מילת-תוכן נפסקת מול
+  //  אותו משמר שפסל אותה — `isGoalVerb` נופל על שרשרת-המקור, לא על מילון — והפלט לא זז.
+  if (!demands.length) {
+    const ws = [...new Set(contentW(heW(sentence)))];
+    rminhu({ engine: 'purpose.demandsOf', matter: `מטרה בלי פועל-מטרה (${origin}): «${String(sentence).slice(0, 60)}»`,
+      searched: [`spec-lang.prefixLetters="${SPL.prefixLetters || ''}"`, 'שם-פועל ל… באורך ≥4', 'שרשרת-הסכמה (מה שיש לו מחלקה/רמז-טיפוס הוא שם-עצם, לא פועל)'],
+      rulings: ws.map((w) => {
+        const PFX = SPL.prefixLetters || '';
+        const cands = [w]; if (w.length > 4 && PFX.includes(w[0])) cands.push(w.slice(1));
+        if (!cands.some((v) => v.length >= 4 && v[0] === 'ל')) return lo(w, 'אינה בצורת שם-פועל (ל… באורך ≥4) — אינה מועמדת לפועל-מטרה מבנית, ולא נפסלה בשרשרת');
+        const k = (() => { try { return classOf(w); } catch { return null; } })();
+        const t = typeHint(w);
+        if (k || t) return pliga(w, `בצורת ל… אך ${k ? `יש לה מחלקת-סכמה (${k.cls || (k.options || []).join('/')})` : `יש לה רמז-טיפוס (${t.type || (t.options || []).join('/')})`} — ל־ כאן היא אות-שימוש על שם-עצם, לא שם-פועל; המשמר הוא שרשרת-המקור ולא מילון`);
+        return pliga(w, 'בצורת ל… ואין לה מחלקה ואין רמז-טיפוס — כלומר `isGoalVerb` כן אמור להדליק אותה; אם התביעה לא נוצרה, הפער הוא בחיתוך-התביעות ולא בזיהוי-הפועל');
+      }) });
+  }
   const reqs = []; const claimed = new Set();
   demands.forEach((d, di) => {
     // הפועל עצמו הוא דרישה: **פעולה**. מקורו — הליטרל במטרה (סוג-המקור השלישי).
@@ -166,7 +185,26 @@ export function goalPsak(sentence, origin = 'מטרה') {
       reqs.push({ kind: 'קבוע', demand: di, verb: d.verb, word: m[1], unit, cmp, type: t ? t.type : null, src: `${origin}#תביעה${di + 1} (ליטרל "${m[1]}")`, slot: null });
     }
     // (4) ∅ — מילת-תוכן שאין לה אף מקור. מדווחת, לא מנוחשת.
-    for (const w of words) if (!claimed.has(w)) reqs.push({ kind: '∅', demand: di, verb: d.verb, word: w, src: null, why: 'אין מקור בשרשרת-המטרה' });
+    //  🕯️ וכאן ה«אין» של המחולל בגדול שלו: זה הפער ש-PLAN-100 §2 מודד (148 «אין פועל-מטרה» ·
+    //  88 «אין-ישות» · 53 «ישות-בלי-שקע»). עד כה ∅ נשא סיבה אחת — «אין מקור בשרשרת-המטרה» —
+    //  שאינה אומרת **איזה** מקור נבדק ונפל. הדוקבלוק למעלה כבר נוקב שלושה סוגי-מקור; עכשיו
+    //  כל אחד משלושתם נפסק בשמו, לכל מילה, ונרשם בפנקס. הפנקס הופך למפת-העבודה של שלבים 1-4.
+    for (const w of words) if (!claimed.has(w)) {
+      const k = (() => { try { return classOf(w); } catch { return null; } })();
+      const t = typeHint(w);
+      const r = rminhu({ engine: 'purpose.goalPsak', matter: `מילת-תוכן «${w}» בתביעה «${d.verb}» (${origin})`,
+        searched: ['שרשרת-הסכמה (חבילות-ורטיקל ⇒ entity-terms ⇒ schema-fields)', `רמז-טיפוס (${GOAL_SRC.spl})`, 'ליטרל במטרה עצמה'],
+        rulings: [
+          k && k.cls ? had(`סכמה:${k.cls}`, `מחלקה יחידה · ${(k.fields || []).length} שקעים`)
+            : k ? pliga(`סכמה:${(k.options || []).join('/')}`, `${(k.options || []).length} מועמדי-סכמה — ישות-לא-מוכרעת, ולכן מתג-לבעלים ולא הכרעה-במנוע (L114 · PLAN-100 §2-ה)`)
+              : lo('שרשרת-הסכמה', 'אין למילה מחלקת-סכמה באף אחד משלושת מקורות-השרשרת — «אין-ישות» (PLAN-100 §2-ב), וזה חסר-מקור, לא חסר-יכולת'),
+          t && t.type ? had(`טיפוס:${t.type}`, `רמז-טיפוס מדקדוק-האפיון · ${t.src}`)
+            : t ? pliga(`טיפוס:${(t.options || []).join('/')}`, `${(t.options || []).length} רמזי-טיפוס שונים על אותה מילה — ספק, ולכן מתג ולא הכרעה (§20 · הכרעה-24)`)
+              : lo('רמז-טיפוס', `אין למילה צורת-ערך מוכרת ב-${GOAL_SRC.spl} (typeDate/typeNum/typePercent/typeBool) — לא נקשר לשקע, ו∅ אינו ניחוש (L57)`),
+          lo('ליטרל במטרה', 'המילה אינה מספר ואינה יחידה שאחרי מספר — סוג-המקור השלישי אינו חל עליה'),
+        ] });
+      reqs.push({ kind: '∅', demand: di, verb: d.verb, word: w, src: null, why: `אין מקור בשרשרת-המטרה · ורמינהו: ${r.digest}`, rminhu: r.rulings });
+    }
   });
   // קשירת-שקע: שדה/קבוע עם צורת-ערך ⇒ שקע-סכמה באותה צורה, מהישויות שהוכרעו.
   const cls = reqs.filter((r) => r.kind === 'ישות' && r.cls);

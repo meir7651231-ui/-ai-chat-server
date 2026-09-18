@@ -116,7 +116,7 @@ export function rminhu({ engine, matter, searched = [], rulings = [], none = '' 
   const bad = rulings.map(checkRuling).filter(Boolean);
   if (bad.length) throw new Error(`ורמינהו על «${matter}» — פסק פסול:\n  ` + bad.join('\n  '));
   const hit = rulings.find((r) => r.verdict === HAD) || null;
-  const digest = rulings.map((r) => `${r.src}=${r.verdict}(${r.why})`).join(' · ');
+  const digest = digestOf(rulings);
   const fp = rulings.map((r) => `${r.src}=${r.verdict}`).join('|');
   const ledger = report({ engine, matter, searched, rulings, fp });
   const line = hit
@@ -124,6 +124,25 @@ export function rminhu({ engine, matter, searched = [], rulings = [], none = '' 
     : `⚪ ${engine}: ${matter} — ורמינהו: ${rulings.length} מקורות נפסקו, לא מצינו חד-שיעורא: ${digest}${searched.length ? ` · חיפשתי: ${searched.join('/')}` : ''}`;
   if (ledger) lines.push(line);
   return { hit, rulings, digest, line, ledger };
+}
+
+// ── הפסק המלא נשמר **בפנקס**; השורה-לאדם מקבצת פסקים זהים. 38 פעולות-יסוד שנפלו על
+//    אותה סיבה אחת הן עובדה אחת, לא 38 — ושורה של 6,000 תווים אינה דיווח, היא רעש
+//    (ומי שקורא אותה לומד פחות ממי שקורא «34× פליגא: <הסיבה>»). מי שצריך את הכל: `gate log`.
+function digestOf(rulings, maxGroups = 6) {
+  const groups = new Map();
+  for (const r of rulings) {
+    const k = `${r.verdict}\u0001${r.why}`;
+    if (!groups.has(k)) groups.set(k, { verdict: r.verdict, why: r.why, srcs: [] });
+    groups.get(k).srcs.push(r.src);
+  }
+  const parts = [...groups.values()].slice(0, maxGroups).map((g) => {
+    const names = g.srcs.slice(0, 3).join(',') + (g.srcs.length > 3 ? `,+${g.srcs.length - 3}` : '');
+    const why = g.why.length > 110 ? g.why.slice(0, 110) + '…' : g.why;
+    return g.srcs.length === 1 ? `${names}=${g.verdict}(${why})` : `${g.srcs.length}× ${g.verdict} [${names}]: ${why}`;
+  });
+  if (groups.size > maxGroups) parts.push(`ועוד ${groups.size - maxGroups} פסקים (בפנקס)`);
+  return parts.join(' · ');
 }
 
 /** קיצור למנוע שכל המועמדים שלו נדחו על אותה רצפה: (src, why) ⇒ פסק מנומק. */

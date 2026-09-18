@@ -22,6 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as R from '../root.mjs';
+import { rminhu, had, pliga } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 
 const GEN = R.GEN_DIR;
 const SOPS = JSON.parse(fs.readFileSync(GEN + 'shape-ops.json', 'utf8'));
@@ -53,6 +54,20 @@ export function particlesFor(cls, entityWord) {
     lines.push(`${SL.particleWord} ${entityWord}: [${w}]`);
     used.push(op);
   }
+  // 🕯️ ה-`skipped` הזה הוא ה«אין» של המנוע: פעולת-יסוד שהישות תומכת בה ושלא נפלט לה
+  //    חלקיק. עד כה היא נשרה בשקט משני `continue` שונים, וה-CLI הדפיס רק מונה. עכשיו כל
+  //    פעולה נפסקת **בשמה ובסיבתה**, והסיבות אינן אותה סיבה: צורה-חסרת-שדה שיש לה מילה
+  //    ⇒ חד שיעורא · צורה-חסרת-שדה שאין לה מילה באטום-השפה ⇒ פליגא (חסר-דאטה בשפה, לא
+  //    חסר-יכולת) · צורה שדורשת שם-שדה ⇒ פליגא, וזה ∅ שמדווח ולא ניחוש (L57).
+  rminhu({ engine: 'ops-particles', matter: `פעולות-היסוד של ${cls} (${entityWord})`,
+    searched: ['shape-ops.json (פעולות מטיפוסי-השדות)', 'spec-lang.data.json (מילות-הצורה)'],
+    rulings: ops.map((op) => {
+      const k = FIELD_FREE[op];
+      if (!k) return pliga(op, 'צורתה דורשת שם-שדה עברי, ובכל הריפו 0 מונחי-שדה — ∅ מדווח, לא ניחוש (L57): המילה היא שחסרה, לא הפעולה');
+      const w = word(k);
+      if (!w) return pliga(`${op}→${k}`, `הצורה חסרת-שדה אך ${k} אינו באטום-השפה spec-lang.data.json — חסר-דאטה בשפה, לא חסר-יכולת במדף`);
+      return had(`${op}→${k}`, `נפלט חלקיק «${SL.particleWord} ${entityWord}: [${w}]»`);
+    }) });
   return { lines, ops, used, skipped: ops.filter((o) => !FIELD_FREE[o]) };
 }
 
@@ -68,6 +83,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   }
   const r = particlesFor(cls, w);
   console.log(`${cls}: ${r.ops.length} פעולות-יסוד · ${r.lines.length} חלקיקים`);
+  (await import('../../yeshiva/rminhu.mjs')).printNotes('ops-particles');
   for (const l of r.lines) console.log('  ' + l);
   console.log(`  דורשות שם-שדה (מתג): ${r.skipped.length} — ${r.skipped.slice(0, 10).join(', ')}`);
 }
