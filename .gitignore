@@ -16,3 +16,9 @@ server-gen/*/firestore-debug.log
 gen/looks/site/shots/
 gen/looks/app/shots/
 gen/looks/first10/shots/
+
+# מרחב-המדידה של מד-100 (machtzev/mahulal/meter-100.mjs · שלב-0): כל ריצה יוצרת
+# goals/meterNNN + gen_goal_meterNNN*.dart ומוחקת אותם ב-finally (העץ חוזר לנוח · L14).
+# תוצר-מדידה, לא מקור — ואסור שיהיה ניתן-לקומיט גם באמצע ריצה.
+machtzev/generator/goals/meter[0-9]*/
+new/dart-gen-bs/gen_goal_meter[0-9]*.dart
