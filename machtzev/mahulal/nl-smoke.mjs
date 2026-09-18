@@ -102,9 +102,19 @@ if (METER) {
   function climb(u, i) {
     const ns = NS + String(i + 1).padStart(3, '0');
     const dir = path.join(GOALS, ns);
-    const tmp = path.join(dir, '_unit.txt');
+    // 🔴 **היחידה כולה מגיעה למנוע** (w-works-121 · 18.9). קובץ-מטרה **גולמי** נקרא ב-`runGoal`
+    //   כ-`raw.split('\n').filter(l => l.trim())[0]` — שורה ראשונה בלבד; `perokGoal`/`scanOne`
+    //   (שמהם נמדדים שלבים 1–2) פועלים על **כל** טקסט-היחידה. אותו קובץ, שני קוראים, שתי אמיתות:
+    //   6 יחידות רב-שורתיות נרשמו «לא-מדיד» בעוד המנוע עצמו פותר אותן — גידור שקרי, לא יכולת חסרה.
+    //   המנוע מצהיר בעצמו על שתי צורות לקובץ-המטרה (`behavior-plan.mjs:runGoal`: «קובץ-המטרה = JSON
+    //   (`{text, needs?}`) **או** טקסט-מטרה גולמי»), וצורת-ה-JSON מעבירה את הטקסט **כמות-שהוא**.
+    //   לכן המד כותב JSON: זו הצורה הקיימת של המנוע, לא שיטוח-טקסט ולא כיפוף — הטקסט אינו נוגע.
+    //   ⚠️ הפער בענף-הגולמי **נשאר פתוח** ואינו מוסתר: `behavior-plan.mjs` נעוץ ואישור-הבעלים
+    //   (`knowledge/connect/2026-09-18/APPROVAL-pins.md`) אינו מכסה את התיקון הזה ⇒ בקשה נפרדת
+    //   (`REQUEST-pins-behavior-plan-runGoal.md`). בעלים שכותב goal.txt רב-שורתי עדיין מקבל שורה-1.
+    const tmp = path.join(dir, '_unit.json');
     fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(tmp, u.text.replace(/\r/g, '') + '\n');
+    fs.writeFileSync(tmp, JSON.stringify({ text: u.text.replace(/\r/g, '') }, null, 1) + '\n');
     const t = Date.now();
     const r = spawnSync(process.execPath, [BP, '--goal', tmp, '--ns', ns],
       { cwd: R.ROOT, encoding: 'utf8', timeout: 900000, maxBuffer: 64 * 1024 * 1024, env: { ...process.env, DART: process.env.DART || resolveDart() || '' } });
@@ -119,15 +129,6 @@ if (METER) {
         || errLines.find((l) => !/^(at |Node\.js v|\^+$)/.test(l)) || errLines.pop() || '';
       return { stage: 2, ms, why: `הלדג'ר לא נכתב (exit ${r.status}${r.signal ? ' · signal ' + r.signal : ''}): ${why}`.slice(0, 200) };
     }
-
-    // 🔴 פער-מנוע שהמדידה חשפה (‏18.9): `runGoal` קורא **שורה אחת** מקובץ-המטרה
-    //   (`raw.split('\n').filter(l => l.trim())[0]`), בעוד `perokGoal`/`scanOne` פועלים על
-    //   **כל** טקסט-היחידה. ליחידה רב-שורתית (‏`ב·specs`, קובץ=יחידה) שלבים 3–5 היו נמדדים
-    //   על השורה הראשונה בלבד — מדידה שאינה של היחידה. נרשם, לא מוסתר ולא «מתוקן» ע"י
-    //   שיטוח-הטקסט (זה היה כיפוף-קוד כדי שמספר ייראה טוב).
-    const nLines = u.text.split('\n').filter((l) => l.trim()).length;
-    if (nLines > 1) return { stage: 2, ms, lines: nLines,
-      why: `יחידה רב-שורתית (${nLines} שורות) · runGoal קורא שורה-אחת מקובץ-המטרה ⇒ שלבים 3–5 אינם מדידים ליחידה הזו (פער-מנוע, behavior-plan.mjs:runGoal)` };
 
     // ‏0 צרכים בריצה-המלאה ⇒ `ledger0` נכתב **בלי** `summary` (מסלול «כל התביעות מתגי-בעלים»).
     //   בלי השומר הזה `path.join(NEW,'')` הוא תיקייה ⇒ readFileSync זורק EISDIR והמד מת באמצע.
