@@ -6,6 +6,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const dir = process.argv[2];
 const files = fs.readdirSync(dir).filter(f => f.endsWith('.dart'));
 
@@ -46,6 +47,23 @@ const inDup = exactDup.reduce((a, g) => a + g.length, 0);
 console.log(`🔁 דדופ-widgets · ${all.length} widgets מ-${files.length} מסכים`);
 console.log(`   מנגנונים ייחודיים (לפי-מבנה): ${uniqueMech} ⇒ חיסכון: ${all.length - uniqueMech} widgets הם שכפול-מבני`);
 console.log(`   קבוצות-זהות-מבנה: ${exactDup.length} (מכסות ${inDup} widgets) · משפחות-קרובות (רופף): ${looseOnly.length}`);
+// 🕯️ ורמינהו על הכפילות: `looseOnly` — «משפחות-קרובות» — נמנה ומעולם לא הוסבר. קבוצה
+//    רופפת היא בדיוק המקרה שבו החיפוש **הביא מקורות** ולא הכריע, ולכן חייב פסק לכל אחד:
+//    אותה חתימת-exact בתוך הקבוצה ⇒ חד שיעורא (מנגנון-אחד + שורות-דאטה, מלטשים פעם-אחת) ·
+//    חתימת-exact אחרת ⇒ פליגא, **ולמה**: המבנה זהה רק אחרי סינוור-מזהי-השדות, כלומר
+//    ההבדל הוא בשמות-השקעים — וזו קרבה, לא זהות. איחוד כאן הוא הכרעת-בעלים, לא של המנוע (L114).
+for (const g of Object.values(lg).filter((x) => x.length > 1)) {
+  const byExact = {};
+  for (const w of g) (byExact[w.exact] ??= []).push(w);
+  const big = Object.values(byExact).sort((a, b) => b.length - a.length)[0];
+  rminhu({ engine: 'widget-dedup', matter: `משפחה-רופפת ${g[0].loose} (${g.length} widgets · ${g[0].loc}ש)`,
+    searched: [`${all.length} widgets מ-${files.length} מסכים`, 'חתימת-exact (סינוור מחרוזות+מספרים+שם-מחלקה)', 'חתימת-loose (גם מזהי-שדות מסונוורים)'],
+    rulings: g.map((w) => (w.exact === big[0].exact && big.length > 1
+      ? had(`${w.screen}:${w.name}`, `חתימת-exact ${w.exact} · ${big.length} חברים — מנגנון-אחד + שורות-דאטה, מלטשים פעם-אחת`)
+      : big.length > 1
+        ? pliga(`${w.screen}:${w.name}`, `חתימת-exact ${w.exact} שונה מ-${big[0].exact} של הרוב — המבנה זהה רק אחרי סינוור מזהי-השדות, כלומר ההבדל הוא בשמות-השקעים: קרבה ולא זהות, והאיחוד הוא הכרעת-בעלים`)
+        : pliga(`${w.screen}:${w.name}`, `אין בקבוצה שני חברים בעלי אותה חתימת-exact (${Object.keys(byExact).length} חתימות ל-${g.length} חברים) — הקבוצה נוצרה מחתימת-loose בלבד, כלומר קרבת-מבנה אחרי סינוור-מזהים: משפחה, לא תאום`))) });
+}
 console.log('\n🔝 קבוצות-הכפילות הגדולות (מנגנון-אחד + דאטה):');
 for (const g of exactDup.sort((a, b) => b.length - a.length).slice(0, 15)) {
   const names = [...new Set(g.map(x => x.name))].slice(0, 4).join(',');
@@ -55,3 +73,4 @@ for (const g of exactDup.sort((a, b) => b.length - a.length).slice(0, 15)) {
 // פלט-JSON לגל-הליטוש
 fs.writeFileSync('screens-seed/widget-dedup.json', JSON.stringify({ total: all.length, uniqueMech, groups: exactDup.map(g => ({ n: g.length, loc: g[0].loc, members: g.map(x => x.screen + ':' + x.name) })) }, null, 1));
 console.log('\n⇒ screens-seed/widget-dedup.json');
+(await import('../../yeshiva/rminhu.mjs')).printNotes('widget-dedup');

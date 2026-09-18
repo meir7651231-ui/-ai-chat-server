@@ -9,6 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { cover, coverLogic, OPFAM } from './cover.mjs';
+import { rminhu, had, pliga, lo, printNotes, HAD } from '../../yeshiva/rminhu.mjs';   // 🕯️ L114: מהלך בלי דיווח = חצי מהלך
 import { ops as opsOfKind } from '../compose-engine.mjs';
 import { buildAtlas } from './atlas.mjs';
 import * as R from '../root.mjs';
@@ -163,7 +164,25 @@ export function opsOf(shape) {
   if (shape.kind === 'dates') return ['magnitude'];             // G29 · לוח: שורת תווית+ערך (כמו עובדות-השורש), ממוינת
   if (shape.kind === 'partition') return ['group', 'alert'];   // חלוקה-למצבים: קבוצה-פר-ערך + שורה-פר-רשומה (G24: השורה דרך אטום, לא Text חשוף)
   const f = { kind: shape.kind, headline: shape.headline };
-  try { return opsOfKind(f).map((o) => o.op); } catch { return null; }
+  //    🕯️ `catch { return null }` בלע **שתי «אין» הפוכות**: (א) `opsOfKind` אינו מכיר את הצורה —
+  //    חוסר-דאטה אמיתי · (ב) `opsOfKind` **זרק** (שגיאת-תכנות, ייבוא חסר, שדה שהשתנה) — L26/L110
+  //    מילה-במילה: קריסה נראית בדיוק כמו «אין». הקורא קיבל «אין אלגברת-הרכבה לצורה X» לשתיהן.
+  //    הערך המוחזר אינו זז (null בשני המקרים, חוק-7); מה שזז הוא שהשנייה אומרת את עצמה.
+  try {
+    const ops = opsOfKind(f).map((o) => o.op);
+    if (!ops.length) {
+      rminhu({ engine: 'particles.opsOf', matter: `צורה «${shape.kind}»${shape.headline ? ' (כותרת)' : ''} ⇒ אלגברת-הרכבה`,
+        searched: ['compose-engine.opsOfKind (טבלת-הצורות)'],
+        none: `לא מצינו: opsOfKind אינו מחזיר אף op לצורה «${shape.kind}» — חסר בטבלת-הצורות, לא שגיאה` });
+      return null;
+    }
+    return ops;
+  } catch (e) {
+    rminhu({ engine: 'particles.opsOf', matter: `צורה «${shape.kind}» ⇒ אלגברת-הרכבה`,
+      searched: ['compose-engine.opsOfKind (טבלת-הצורות)'],
+      rulings: [lo('compose-engine.opsOfKind', `**זרק** ${e && e.name ? e.name : 'שגיאה'}: ${String((e && e.message) || e).slice(0, 120)} — זו קריסה ולא «אין אלגברה»; L26: catch סביב חיפוש בולע גם שגיאת-תכנות`)] });
+    return null;
+  }
 }
 export function searchOp(op, goal, need = null, k = 3) {   // need: דריסת-צורך (G26: fact עם label+value ⇒ שורת מפתח-ערך)
   if (isPaper()) k = Math.max(k, 12);   // G28 · נייר: אטומים בצבע-קשיח נפסלים ⇒ צוללים עמוק יותר עד הלובש-עור
@@ -317,8 +336,41 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) 
   const strOf = (lbl) => `(r[${k(lbl)}] ?? '')`;
   const imports = new Set(); const widgets = []; const notes = [];
   const wired = (cls, ctx) => { const w = wireAtom(cls, ctx); if (w) imports.add(`import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`); return w; };
-  const firstWired = (pick, ctx) => pickWired([...pick.atoms, ...pick.alts], (c) => wired(c, ctx));
+  // 🕯️ **צוואר-הבקבוק, לא 14 עותקים.** `rminhuAtom` קיים כאן מקומיט 80fabc33 — אבל הוא הופעל
+  //    בענף-הצורות-הגנריות **בלבד**; 14 הענפים האחרים (agg · / · partition · diff · number ·
+  //    message · dates · raw · act · table · empty · content) אמרו «⚪ אין אטום-X מתחווט» בלי
+  //    לפסוק על אף מקור — כלומר הכרעה-23 הופרה בתוך המנוע שהוא **מקור-הדפוס**. כולם עוברים
+  //    דרך `firstWired`, ולכן הפסק נכנס **כאן**, פעם אחת (L111: פותר אחד, לא «מהר להעתיק»).
+  //    `pickWired` נשאר המכריע — הערך המוחזר אינו זז (חוק-7); מה שנוסף הוא הפסק והדיווח (L114).
+  let cur = null;   // החלקיק שבטיפול — כדי ש-firstWired ידע על מה הוא פוסק בלי ארגומנט ב-14 אתרי-קריאה
+  const firstWired = (pick, ctx) => {
+    const cands = [...pick.atoms, ...pick.alts];
+    // 🔴 **תופעת-לוואי, לא רק ערך-מוחזר:** `wired()` מוסיף `import` ל-`imports` בכל הצלחה.
+    //    אם הפסק יקרא לו על **כל** המועמדים, ייווספו ייבואים שלא היו — בכהה `pickWired` עוצר
+    //    בראשון-שמתחווט ואינו נוגע בשאר. לכן: ההכרעה רצה על `wired` **בדיוק כמו קודם**, והפסק
+    //    משתמש במה שכבר חושב, ולמה שלא — ב-`wireAtom` **הטהור** (בלי ייבוא). חוק-7 הוא גם על
+    //    תופעות-לוואי, לא רק על מה שחוזר.
+    const seenW = new Map();
+    const wireForPick = (c) => { const w = wired(c, ctx); seenW.set(c, w); return w; };
+    const w = pickWired(cands, wireForPick);
+    const probe = (c) => (seenW.has(c) ? seenW.get(c) : wireAtom(c, ctx));
+    const rulings = cands.map((cand) => {
+      const cls = cand.split('@')[0];
+      const r = rminhuAtom(cls, ctx, probe);
+      if (r.verdict !== HAD) return { src: cls, verdict: r.verdict, why: r.why };
+      return w && w.cls === cls
+        ? had(cls, `${r.why} — ${isPaper() ? 'ומולא הגבוה ביותר (§20-א הכי-טוב-לייעוד)' : 'והראשון בדירוג (כהה = ביט-זהות)'}`)
+        : pliga(cls, `מתחווט (${r.why}), אך ${w ? `${w.cls} גובר — ${isPaper() ? 'מלוא-שקעים גבוה יותר (§20-א)' : 'קודם בדירוג (כהה = ביט-זהות)'}` : 'נדחה בבורר'}`);
+    });
+    rminhu({ engine: 'particles.firstWired',
+      matter: `${cur ? `${cur.name} · צורה ${cur.shape ? cur.shape.kind : '?'}` : 'חלקיק'} ⇒ op «${pick.op}»`,
+      searched: [`cover(${pick.fam || pick.op}) ⇒ ${pick.atoms.length} נבחרים + ${pick.alts.length} חלופות${pick.missing && pick.missing.length ? ` · שקעים שלא כוסו: ${pick.missing.join(',')}` : ''}`],
+      rulings,
+      none: `לא מצינו: cover לא החזיר אף מועמד ל-op «${pick.op}»${pick.missing && pick.missing.length ? ` (שקעים שלא כוסו: ${pick.missing.join(',')})` : ''} — החסר הוא באטלס/ops-map, לא בחלקיק` });
+    return w;
+  };
   for (const p of plan) {
+    cur = p;
     if (!p.ok) { notes.push(`⚪ ${p.name}: ${p.why}`); continue; }
     const s = p.shape; const lbl = k(p.name);
     const agg = /^(count|sum|avg)$/.test(s.kind);
@@ -431,6 +483,12 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) 
         if (r.verdict === 'חד שיעורא' && !hit) hit = { ...r.w, cand };
       }
       p.rminhu = { matter: `${p.name} · צורה ${s.kind}`, searched: kd.map(([o]) => o), rulings };
+      //   🕯️ L114 · הפסק הזה קיים כאן מקומיט 80fabc33 ו**מעולם לא הגיע לפנקס**. עכשיו כן,
+      //   באותה צורת-רשומה של `gate rminhu`, ובלי לשנות את הבחירה (`hit` נשאר הראשון-שמתחווט).
+      rminhu({ engine: 'particles', matter: `${p.name} · צורה ${s.kind}`,
+        searched: kd.map(([o, pk]) => `${o} (${pk.atoms.length}+${pk.alts.length} מועמדים)`),
+        rulings: rulings.map((r) => ({ src: `${r.atom}[${r.op}]`, verdict: r.verdict, why: r.why })),
+        none: `לא מצינו: אף מועמד לא הוחזר מ-cover ל-${kd.map(([o]) => o).join('/')} עבור צורה «${s.kind}»` });
       const digest = rulings.map((r) => `${r.atom}[${r.op}]=${r.verdict}(${r.why})`).join(' · ');
       if (hit) { widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${hit.call})`); p.wired = [hit.cand]; notes.push(`🕯️ ${p.name}: צורה ${s.kind} — ורמינהו: ${rulings.length} מקורות · חד שיעורא ${hit.cls} · ${digest}`); continue; }
       notes.push(`⚪ ${p.name}: צורה ${s.kind} — ורמינהו: ${rulings.length} מקורות נפסקו, לא מצינו חד-שיעורא: ${digest || '—'} · חיפשתי: ${kd.map(([o]) => o).join('/')}`); continue;

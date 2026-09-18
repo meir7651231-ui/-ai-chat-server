@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import * as R from '../root.mjs';
+import { rminhu, had, pliga } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 
 const DIR = (R.dataOutDir() + '/');
 const HE = /[֐-׿][֐-׿״׳]*/g;
@@ -70,11 +71,22 @@ export function retrieveScreen(need, top = 3) {
     for (const w of q) if (set.has(w)) { s += IDF[w] || 0; hits.push(w); }
     scored.push({ name, score: +s.toFixed(2), hits });
   }
-  return scored.sort((a, b) => b.score - a.score).slice(0, top);
+  const out = scored.sort((a, b) => b.score - a.score).slice(0, top);
+  // 🕯️ כאן ה«אין» היה **מוסתר**: המנוע מחזיר top-N תמיד, גם בציון 0 — כלומר גם כשאף מונח
+  //    מהצורך לא נגע באף מסך. הקורא רואה שם-מסך ומניח שנמצא. עכשיו כל מסך שחוזר נפסק בשמו:
+  //    ציון>0 עם המונחים שנגעו ⇒ חד שיעורא · ציון 0 ⇒ פליגא, «זה סדר, לא התאמה». הערך
+  //    המוחזר לא זז (חוק-7) — מי שקורא בלי לבדוק ציון ימשיך לקבל אותו דבר, אבל הפנקס יידע.
+  rminhu({ engine: 'retrieve-screen', matter: `צורך «${String(need).slice(0, 60)}»`,
+    searched: [`${Object.keys(byScreen).length} מסכי-מקור (${DIR})`, `מונחי-הצורך: ${[...q].join('/') || '—'}`],
+    rulings: out.map((r) => (r.score > 0
+      ? had(r.name, `ציון ${r.score} · מונחים שנגעו: ${r.hits.join(' ')}`)
+      : pliga(r.name, 'ציון 0 — אף מונח מהצורך לא נמצא בטקסט-האמת של המסך; הוא חוזר מפני שהוא בראש הסדר, וזה סדר ולא התאמה'))) });
+  return out;
 }
 
 if (import.meta.url === 'file://' + process.argv[1]) {
   const need = process.argv.slice(2).join(' ');
   if (!need) { console.error('שימוש: node retrieve-screen.mjs "<צורך>"'); process.exit(1); }
   for (const r of retrieveScreen(need, 3)) console.log(`  ${r.score.toString().padStart(6)}  ${r.name}   [${r.hits.join(' ')}]`);
+  (await import('../../yeshiva/rminhu.mjs')).printNotes('retrieve-screen');
 }

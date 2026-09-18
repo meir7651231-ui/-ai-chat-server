@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+# ראיית-הפנקס, מחוללת ולא מוקלדת: מריץ את המנועים שחוברו לשכבה `yeshiva/rminhu.mjs`
+# ואוסף את מהלכי-ה«ורמינהו» שהם רשמו **בריצה אמיתית**. הפלט הוא הראיה שהקומיט נושא.
+#
+#   bash knowledge/connect/2026-09-18/ledger/collect.sh [<קובץ-פלט>]
+#
+# והישיבה קוראת אותו verbatim (בלי שינוי ב-yeshiva-engine):
+#   mkdir -p /tmp/pk/.maimatai && cp <קובץ-פלט> /tmp/pk/.maimatai/log.jsonl
+#   cd /tmp/pk && PYTHONPATH=/home/user/yeshiva-engine python3 -m yeshiva.gate log </dev/null
+set -uo pipefail
+cd "$(dirname "$0")/../../../.." || exit 1
+OUT="${1:-$(mktemp -d)/ledger.jsonl}"
+: > "$OUT"
+export YESHIVA_LEDGER="$OUT"
+q() { "$@" >/dev/null 2>&1; }
+
+# ── גל-1 · מדף-אטומים ─────────────────────────────────────────────────────
+q node machtzev/generator/match.mjs "טבלת תשלומים"          # match.best · חד שיעורא
+q node machtzev/generator/match.mjs "קרפדה סגלגלה"           # match.best · «לא מצינו»
+q node -e 'import("./machtzev/generator/match.mjs").then((m)=>{m.matchClass("_MetricGrid");m.matchClass("_Zzqqx")})'
+q node -e 'import("./machtzev/generator/atlas.mjs").then((m)=>m.buildAtlas({forge:true}))'   # atlas.shelf · 6 מדפים
+q node machtzev/search-proof-check.mjs --files new/atoms/zzq-nonexistent.mjs                  # search-proof-check
+q node -e 'import("./machtzev/generator/capability.mjs").then((m)=>{try{m.emitApp("הצג את מפלס המים כאשר הלחץ עולה על הסף")}catch{};try{m.emitApp("קרפדה")}catch{}})'
+q node -e 'import("./machtzev/search-score.mjs").then((m)=>m.loadOracle())'                   # search-score · שני קובצי-האורקל
+
+# ── גל-2 · חלקיקים ────────────────────────────────────────────────────────
+q node machtzev/generator/ops-particles.mjs Family משפחה                                      # ops-particles · 38 פעולות
+
+# ── גל-3 · משפט ⇒ כוונה ───────────────────────────────────────────────────
+q node machtzev/generator/intent.mjs "רשימת לקוחות עם סטטוס"                                  # intent
+q node machtzev/generator/retrieve-screen.mjs "קרפדה סגלגלה"                                  # retrieve-screen · ציון-0 המוסתר
+q node machtzev/census/engine-index.mjs --find "הקראה בקול"                                    # engine-index --find
+q node -e 'import("./machtzev/generator/tzinor.mjs").then((m)=>{for(const w of ["הודעה","שיחה","הלקוח","קרפדה"])m.soleClassOf(w)})'
+q node -e 'import("./yeshiva/purpose.mjs").then((m)=>{m.goalPsak("לשמור את השיחה עם הלקוח ולשלוח תזכורת מעל 3 ימים","ליבה");m.goalPsak("מערכת ניהול מלאי","ליבה")})'
+
+# ── גל-4 · חציבה ──────────────────────────────────────────────────────────
+SCR=$(ls new/dart-ui-bs/screens__*/*.dart 2>/dev/null | head -1)
+[ -n "$SCR" ] && q node machtzev/carve/screen-decomp.mjs "$SCR"      # screen-decomp · אטום-לקידום
+q node machtzev/carve/widget-dedup.mjs new/dart-ui-bs                 # widget-dedup · משפחות-רופפות
+# carve-land (הצד-ה-JS של ast_carve.dart) — נחיתה לתיקייה זמנית, לא למדף (CARVE_OUT)
+CO=$(mktemp -d); mkdir -p "$CO/dart" "$CO/dart-maor"
+cat > "$CO/carved.json" <<'JSON'
+[{"name":"qqWubble","ok":true,"trivial":true,"_srcRef":"buildsmart/app_flutter/lib/util/qqw.dart:10-12",
+  "fnSource":"int qqWubble(int n) => n * n;","origName":"qqWubble","paramsSimple":true,
+  "origParams":[{"name":"n","type":"int"}],"imports":[],"inlineTypes":[],"copiedTypes":[],"erasedTypes":[],
+  "socketDecls":[],"socketMeta":[],"typeSamples":{"int":["1","2","3"]},"autoSocket":false}]
+JSON
+CARVE_OUT="$CO/" DART_SDK_BIN="${DART_SDK_BIN:-/root/dart-sdk/bin}" q node machtzev/carve/carve-land.mjs "$CO/carved.json"
+q node machtzev/extract/functions.mjs maor                            # דורש machtzev/registry (צד-maor) — כאן קורס לפני הפסק
+
+# ── גל-5 · כפילות ─────────────────────────────────────────────────────────
+q node machtzev/dedup/dedup-atoms.mjs                                 # dedup-atoms · 4 עדשות
+q node machtzev/dedup/dedup-cross.mjs                                 # dedup-cross · עדשת-שם בלבד
+q node machtzev/dedup/dedup-cross-dart.mjs                            # dedup-cross-dart · שתי עדשות
+q node machtzev/dedup/dedup.mjs                                       # dedup.load · קובצי-מרשם חסרים
+q node machtzev/dedup/dedup-deep.mjs                                  # דורש machtzev/registry — קורס לפני הפסק
+q node machtzev/dedup/reconcile.mjs                                   # דורש machtzev/registry — קורס לפני הפסק
+
+# ── גל-6 · שילובים (1 מ-5) ────────────────────────────────────────────────
+#   logic-proof · «אף מועמד אינו טהור» מול «אין דוגמאות» — שתי «אין» שחזרו כמפה ריקה אחת
+q node -e 'import("./machtzev/generator/logic-proof.mjs").then((m)=>{m.proveCandidates("zzq_no_examples",[{id:"x",file:"dart/qq.dart"}],[]);m.proveCandidates("zzq_no_cands",[],[[["1"],"r==1"]])})'
+
+# ── גל-7 · אינדקסים (4 מ-11) ──────────────────────────────────────────────
+q node machtzev/tools/box-coverage.mjs                                # box-coverage · 6 סיבות-נפילה
+q node machtzev/empire-coverage.mjs                                   # empire-coverage · מכנה-אפס ⇒ NaN
+q node machtzev/census.mjs "$PWD/machtzev/carve" carvetest            # census · תחומים + תיקיות-אטומות
+rm -rf machtzev/registry 2>/dev/null || true                          # תוצר-המפקד, לא נכנס לעץ
+
+# ── גל-א׳ (נעוצים) · מדף-אטומים ───────────────────────────────────────────
+#   cross-source · שתי «אין» שהדפיסו שורה אחת: «--files ריק» מול «נמצא-ונדחה»
+q node machtzev/cross-source-check.mjs
+q node machtzev/cross-source-check.mjs --files "CLAUDE.md,machtzev/root.mjs"
+q node machtzev/cross-source-check.mjs --files "new/atoms/academic-year-label-strings.mjs,new/dart-ui-bs/ds/ds.dart"
+#   cover · פער-כיסוי (מונה) ⇒ פסק · coverLogic · «יש» כוזב על תיקו-מלא
+q node machtzev/generator/cover.mjs --gate
+q node -e 'import("./machtzev/generator/cover.mjs").then((m)=>{m.coverLogic({op:"predicate",need:[],goal:""});m.cover({op:"zzqnope",need:["label"],goal:"קרפדה"})})'
+
+# ── גל-ב׳ (נעוצים) · חלקיקים ───────────────────────────────────────────────
+#   particles · הדפוס היה בענף-אחד מ-15; `firstWired` הוא צוואר-הבקבוק של כל השאר
+q node machtzev/generator/particles.mjs --gate
+q node knowledge/connect/2026-09-18/ledger/particles-probe.mjs sechirut peruk01 peruk12
+#   op-census · «0 לא-ממופים» שאינו יכול להיכשל · כלל-ראשון-גובר · forge-ללא-צורה
+q node machtzev/generator/op-census.mjs --gate
+#   peruk · סעיף-שלא-נכתב · שלושת-מעברי-ההסתייגות · מדף-ריק ⇒ ירוק
+q node machtzev/generator/peruk.mjs --gate
+#   hamtzaa · שלוש דרכי-ההתאמה · שלושת סוגי-המקור · interpret שזרק
+q node machtzev/generator/hamtzaa.mjs --ratchet
+q node machtzev/generator/hamtzaa.mjs --needs machtzev/generator/goals/payments/needs.json --goal knowledge/connect/goals/payments.txt   # tokenSource · שלושת סוגי-המקור
+
+# ── גל-ג׳ (נעוצים) · חציבה ושילובים ────────────────────────────────────────
+#   auto-skin · «נבחרו מבנית» כשהתיקו-בראש הוכרע באלפבית
+q node machtzev/generator/auto-skin.mjs --gate
+#   auto-logic · ה-continue שהניח «אטום-תצוגה» · «unadaptable» כמילה אחת לשלוש דחיות
+q node machtzev/generator/auto-logic.mjs --gate
+#   synth · ארבעת ה-continue בלולאת-החיפוש · «כישלון כן» בלי חשבון
+q node machtzev/generator/synth.mjs
+#   quarry-golden · הצהרת-⊕ מול ops-map ומול גוף-השבר
+q node machtzev/generator/quarry-golden.mjs --gate
+#   behavior-plan · ok/n כמונה · pf.error ⇒ הסמכה בלי הוכחה
+q node machtzev/generator/behavior-plan.mjs --goal knowledge/connect/goals/liba.txt
+git checkout -- machtzev/generator/goals 2>/dev/null || true
+
+# ── גל-ד׳ (נעוצים) · אינדקסים ───────────────────────────────────────────────
+#   logic-census · 467 שמות שנשמטו · מדף שנעלם · seen שלושה-ב-אחד
+q node machtzev/census/logic-census.mjs
+#   atom-index · הכרעה-K («הראשון מנצח בשקט») · זרעי-מסך שנבלעו ב-catch{}
+q node machtzev/census/atom-index.mjs
+#   atom-census · walk שבלע מדף · caps⇒'chrome' כנפילה-אחורה
+q node machtzev/census/atom-census.mjs
+#   oracle · «אטום נפל!» בלי שם · מי מוסתר בכפילות-מחלקה
+q node machtzev/census/oracle.mjs --gate
+#   import-graph · הרדיוס שמחליט כמה מהמשטרה תרוץ
+q node machtzev/census/import-graph.mjs new/dart-ui-bs/ds/ds.dart CLAUDE.md
+git checkout -- machtzev/generator/atom-index.json machtzev/generator/logic-census.json machtzev/generator/atom-index-full.json 2>/dev/null || true
+rm -f machtzev/generator/atom-census.json 2>/dev/null || true
+
+# הרצת-המנוע-המלאה על מטרת-הליבה — המקור הגדול של מהלכים
+q node machtzev/generator/behavior-plan.mjs --goal knowledge/connect/goals/liba.txt
+# שחזור תופעות-הלוואי: המנועים כותבים תוצרים, והראיה אינה שינוי-עץ.
+# **פר-נתיב**: `git checkout` עם רשימה נכשל כולו על נתיב-אחד-לא-מעוקב, וזה בדיוק
+# איך שני קבצים נשארו דרוסים בריצה הראשונה (‏L110 §5: פקודת-שחזור שאיש לא בודק).
+for f in machtzev/generator/goals machtzev/generator/atlas.json machtzev/generator/atlas-data.json \
+         screens-seed machtzev/dedup/DEDUP-REPORT.md machtzev/dedup/OPTWINS-REPORT.md; do
+  git checkout -- "$f" 2>/dev/null || true
+done
+git checkout -- machtzev/dedup/optwins.json 2>/dev/null || true
+rm -f machtzev/dedup/dupdeep.json 2>/dev/null || true
+#   רק **תוצרים**, לא מקורות-המנועים (אחרת הבדיקה סופרת את העבודה שבעץ כדריסה)
+DIRTY=$(git status --porcelain machtzev/generator/goals machtzev/generator/atlas.json \
+        machtzev/generator/atlas-data.json screens-seed \
+        machtzev/dedup/DEDUP-REPORT.md machtzev/dedup/OPTWINS-REPORT.md 2>/dev/null)
+[ -n "$DIRTY" ] && { echo "🔴 שחזור נכשל — העץ נשאר דרוס:"; echo "$DIRTY"; exit 1; }
+
+echo "פנקס: $OUT · $(wc -l < "$OUT") מהלכים"
+python3 - "$OUT" <<'PY'
+import collections, json, sys
+c = collections.Counter()
+v = collections.Counter()
+for line in open(sys.argv[1], encoding='utf-8'):
+    r = json.loads(line)
+    c[r['engine']] += 1
+    b = r['rminhu']
+    if 'none' in b:
+        v['לא מצינו'] += 1
+    else:
+        for _, psak in b.get('sources', []):
+            v[psak.split(':')[0]] += 1
+print('לפי מנוע:')
+for k, n in c.most_common():
+    print(f'  {n:5d}  {k}')
+print('לפי פסק:')
+for k, n in v.most_common():
+    print(f'  {n:5d}  {k}')
+PY

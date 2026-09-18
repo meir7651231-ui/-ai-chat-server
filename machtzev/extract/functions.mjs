@@ -4,6 +4,7 @@
  *  שדרוג-מקסימום (v2): סורק engines+source · חתימות רב-שורתיות · מסנן-טוהר Dart-מודע.
  *  אפס-כתיבה-למקור; פלט לרישום בלבד. */
 import fs from 'node:fs';
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const census = JSON.parse(fs.readFileSync(new URL(`../registry/census-${process.argv[2]}.json`, import.meta.url)));
 
 // ── מסנן-טוהר: כל סימן שמפר טוהר (IO/DOM/UI/מצב/שעון/אקראי) ⇒ pure:false ──
@@ -65,7 +66,19 @@ for (const f of census.files.filter(f => ['engines', 'source'].includes(f.domain
       source: `${census.repo}/${f.path}:${start}-${end}` });
   });
 }
+// 🕯️ ורמינהו על החציבה: `atoms` הוא מה שעבר; מה ש**לא** עבר נשר מארבעה `return null`
+//    ומ-`NON_ATOM`/span<2 — חמש סיבות-פסילה שונות שהמונה בסוף מציג כאחת. הפסק נרשם לפי
+//    סיבה, לא לפי קובץ (פסק פר-קובץ = אלפי רשומות; פסק פר-סיבה = העובדה).
+rminhu({ engine: 'extract/functions', matter: `מפקד ${census.repo} ⇒ פונקציות-כחוטים`,
+  searched: [`${census.files.filter((f) => ['engines', 'source'].includes(f.domain)).length} קבצים ב-engines+source`, 'dartSigAt/jsSigAt (חתימה, כולל רב-שורתית)', 'NON_ATOM (מחזור-חיים Flutter · סריאליזציה · UI-hooks)', 'IMPURE (IO/DOM/UI/מצב/שעון/אקראי)'],
+  rulings: [
+    atoms.length ? had(`${atoms.length} פונקציות`, `נחצבו · ${atoms.filter((a) => a.pure).length} טהורות · ${atoms.filter((a) => a.domain === 'source').length} מ-source`) : null,
+    atoms.filter((a) => !a.pure).length ? pliga(`${atoms.filter((a) => !a.pure).length} לא-טהורות`, 'נחצבו ונרשמו אך `IMPURE` הדליק עליהן — אינן אטום-מדף כמו-שהן; זה חסר-חיווט (השקע שנוגע ב-IO צריך לצאת), לא חסר-חוט') : null,
+    lo(`${NON_ATOM.size} שמות ב-NON_ATOM`, 'מחזור-חיים Flutter · סריאליזציה-boilerplate · UI-hooks — לעולם אינם אטום-עסקי; נפסלים בשם, לא בגוף'),
+    lo('span<2 · RESERVED · depth>0 · בלי {/=>', 'חמשת מסנני-הצורה של `dartSigAt`: סגירה-מקוננת · מילה-שמורה · סוגריים לא-מאוזנים · אין גוף — פסילת-תחביר, לא פסילת-יכולת'),
+  ].filter(Boolean) });
 fs.writeFileSync(new URL(`../registry/atoms-L6b-${census.repo}.json`, import.meta.url), JSON.stringify(atoms, null, 1));
 const pure = atoms.filter(a => a.pure).length;
 const fromSrc = atoms.filter(a => a.domain === 'source').length;
 console.log(`L6b ${census.repo}: ${atoms.length} פונקציות-כחוטים (‏${pure} טהורות · ${fromSrc} מ-source) — פירוק-מקסימום`);
+(await import('../../yeshiva/rminhu.mjs')).printNotes('extract/functions');

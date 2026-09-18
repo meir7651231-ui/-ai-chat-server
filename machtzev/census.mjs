@@ -6,6 +6,7 @@
  * שימוש: node census.mjs <repo-root> <repo-name>
  */
 import fs from 'node:fs';
+import { rminhu, had, pliga, lo } from '../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 import path from 'node:path';
 
 const ROOT = process.argv[2], NAME = process.argv[3] || path.basename(ROOT);
@@ -57,8 +58,21 @@ const out = { repo: NAME, root: ROOT, generatedBy: 'machtzev/census v1',
 fs.mkdirSync(new URL('./registry/', import.meta.url).pathname, { recursive: true });
 fs.writeFileSync(new URL(`./registry/census-${NAME}.json`, import.meta.url).pathname, JSON.stringify(out, null, 1));
 
+// 🕯️ ורמינהו על המפקד: `✓ 100% מהקבצים משויכים — אפס יתומים` הוא «אין» — ושער שאימת
+//    אפס קבצים מדפיס בדיוק את אותו ✓ כמו שער שאימת 50,000 (‏L110 §1: ירוק-חלול). עכשיו כל
+//    תחום נפסק **עם ההיקף שלו**, ואפס-היקף הוא פליגא ולא ✓. ובנוסף `opaqueDirs` — תיקיות
+//    שהמפקד לא נכנס אליהן — נפסקות «לא שייך» **בשמן**, כי «100% משויכים» נכון רק בתוך
+//    הגדר, ומי שקורא את המספר בלי הגדר קורא מספר אחר (L110 §4).
+rminhu({ engine: 'census', matter: `מפקד ${NAME} (${ROOT})`, searched: [ROOT, ...(opaqueDirs || [])],
+  rulings: [
+    ...Object.entries(byDomain).map(([d, v]) => had(`תחום ${d}`, `${v.files} קבצים · ${v.lines} שורות`)),
+    ...(files.length ? [] : [pliga('המפקד עצמו', '0 קבצים נסרקו — «אפס יתומים» נובע מאפס-קלט, וזה ✓ על ריקנות ולא על שלמות (L110 §1)')]),
+    ...(orphans.length ? [pliga(`${orphans.length} יתומים`, `ללא שיוך לדלי/תחום: ${orphans.slice(0, 5).join(' · ')} — קובץ בלי שיוך אינו «לא-רלוונטי», הוא חור-בכיסוי`)] : []),
+    ...(opaqueDirs || []).map((d) => lo(`תיקייה אטומה ${d}`, 'המפקד לא נכנס אליה במכוון — «100% משויכים» נכון בתוך הגדר בלבד, והגדר נאמרת')),
+  ] });
 console.log(`── מפקד ${NAME}: ${out.totals.files} קבצים · ${out.totals.lines.toLocaleString()} שורות`);
 for (const [d, v] of Object.entries(byDomain).sort((a,b)=>b[1].lines-a[1].lines))
   console.log(`   ${d.padEnd(10)} ${String(v.files).padStart(5)} קבצים ${String(v.lines.toLocaleString()).padStart(9)} שורות`);
 if (orphans.length) { console.error(`\n🚨 אזעקה: ${orphans.length} קבצים יתומים ללא שיוך:`); orphans.slice(0,20).forEach(o=>console.error('   ✗ '+o)); process.exit(1); }
 console.log('   ✓ 100% מהקבצים משויכים — אפס יתומים');
+(await import('../yeshiva/rminhu.mjs')).printNotes('census');

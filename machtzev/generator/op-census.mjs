@@ -11,6 +11,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import * as R from '../root.mjs';
+import { rminhu, had, pliga, lo, printNotes } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 
 const ROOT = R.ROOT;
 const GEN = path.join(ROOT, 'machtzev/generator');
@@ -63,7 +64,27 @@ const DISPLAY_RULES = [
 ];
 // ── forge (dart-forge-bs): הבנאי הוא תמיד {fields, child} ⇒ שקעי-`this.` אינם צורה (הכול היה 'panel'). הצורה חיה במניפסט של ds-forge
 //    (תפר · items · columns · values · control · actions · sig.input/series/numEmph/root.interactive) — אותות-DOM, אפס-מילון (L92).
-const FORGE = (() => { try { return new Map(JSON.parse(fs.readFileSync(path.join(ROOT, 'new/dart-forge-bs/forge-manifest.json'), 'utf8')).atoms.map((m) => [m.cls, m])); } catch { return new Map(); } })();
+// 🕯️ `catch { return new Map() }` בלע **שלוש «אין» שונות**: הקובץ אינו קיים · הקובץ פגום ·
+//    שגיאת-תכנות (‏L26/L110). בכל שלושתן כל אטומי-forge נופלים ל-classifyDisplay, שלפי ההערה
+//    שמתחתיו נותן להם `panel` — כלומר **מדף-forge שלם נעלם בשקט** והדוח נראה תקין.
+const FORGE_MANIFEST = path.join(ROOT, 'new/dart-forge-bs/forge-manifest.json');
+const FORGE = (() => {
+  if (!fs.existsSync(FORGE_MANIFEST)) {
+    rminhu({ engine: 'op-census.forge', matter: 'מניפסט-forge ⇒ צורת-אטומי-forge',
+      searched: ['new/dart-forge-bs/forge-manifest.json'],
+      none: 'לא מצינו: forge-manifest.json אינו על הדיסק — כל אטומי-forge ייפלו ל-classifyDisplay (⇒ panel). זה חֶסֶר-מקור, לא «אין צורה» (L110 §3)' });
+    return new Map();
+  }
+  try {
+    const m = JSON.parse(fs.readFileSync(FORGE_MANIFEST, 'utf8'));
+    return new Map(m.atoms.map((a) => [a.cls, a]));
+  } catch (e) {
+    rminhu({ engine: 'op-census.forge', matter: 'מניפסט-forge ⇒ צורת-אטומי-forge',
+      searched: ['new/dart-forge-bs/forge-manifest.json'],
+      rulings: [lo('forge-manifest.json', `**זרק** ${e && e.name ? e.name : 'שגיאה'}: ${String((e && e.message) || e).slice(0, 110)} — הקובץ קיים ואינו נקרא; קריסה, לא «אין מדף»`)] });
+    return new Map();
+  }
+})();
 const FORGE_RULES = [
   ['zero',     (m, s) => m.seam === 'zero'],
   ['table',    (m, s) => !!(m.items && m.columns)],
@@ -87,8 +108,26 @@ function classifyForge(a, m) {
   // G28 · שקעי-האמת: דגלי-המניפסט + הפרמטרים-הנקובים של הבנאי בפועל (selected · onSelect · bare · … — G21 נתן לאטומי-forge שקעי-דאטה
   //   שהמניפסט לא מונה; בלי זה חיפוש-לפי-צורך לא מוצא בורר עם items+selected+onSelect). סדר: מניפסט קודם, ואז החדשים.
   const real = sockets(a.file, a.id); const all = [...D, ...real.filter((x) => !D.includes(x))];
-  for (const [op, test] of FORGE_RULES) if (test(m, s)) return { op, sockets: all, why: 'צורת-מניפסט-forge' };
-  return { op: 'panel', sockets: all, why: 'forge ללא צורה' };
+  // 🕯️ שני דברים היו מוסתרים כאן: (א) הכלל האחרון הוא `['panel', () => true]` ⇒ הלולאה **תמיד**
+  //    מחזירה, ולכן `why: 'forge ללא צורה'` שאחריה הוא **קוד-מת** — אטום שאף כלל-צורה אמיתי לא
+  //    תפס מקבל בדיוק אותו `why` («צורת-מניפסט-forge») כמו אטום שסווג בוודאות. (ב) כמה כללים
+  //    מתאימים לאותו אטום, והראשון-בטבלה גובר — סדר, לא ראיה. שניהם נאמרים עכשיו בפסק.
+  const hits = FORGE_RULES.filter(([, test]) => test(m, s)).map(([op]) => op);
+  const op = hits[0] || 'panel';
+  const fallback = hits.length <= 1 && op === 'panel';   // רק הכלל-התמידי תפס ⇒ «לא מצינו צורה», ולא «panel»
+  if (fallback || hits.length > 1) {
+    rminhu({ engine: 'op-census.forge', matter: `אטום-forge «${a.id}» (תפר ${m.seam || '—'}) ⇒ פעולת-יסוד`,
+      searched: [`FORGE_RULES (${FORGE_RULES.length} כללי-צורה על מניפסט-forge) · שקעים: ${all.join(',') || '—'}`],
+      rulings: fallback
+        ? [pliga('FORGE_RULES', `אף כלל-צורה אמיתי לא תפס; רק הכלל-התמידי «panel» — כלומר «אין צורה מוכרת», ולא «זה מיכל». התפר «${m.seam || '—'}» אינו באף כלל`)]
+        : hits.map((h, i) => (i === 0
+          ? had(h, `הכלל הראשון בטבלה שתפס (תפר ${m.seam || '—'})`)
+          : pliga(h, `גם הוא תפס על אותו אטום, אך «${hits[0]}» קודם לו ב-FORGE_RULES — **סדר-הטבלה** מכריע, לא ראיה חזקה יותר`))) });
+  }
+  //    **חוק-7:** ה-`why` המוחזר נשאר כשהיה (‏'צורת-מניפסט-forge') — תיקון-האמת שלו מזיז
+  //    13 שורות ב-ops-map.json (‏SSOT מחולל) ולכן הוא הכרעת-בעלים, לא שלי. הפסק והפנקס
+  //    אומרים את האמת; הבייטים לא זזים.
+  return { op, sockets: all, why: 'צורת-מניפסט-forge' };
 }
 function classifyDisplay(a) {
   const fm = /^dart-forge-bs\//.test(a.file) ? FORGE.get(a.id) : null; if (fm) return classifyForge(a, fm);
@@ -99,8 +138,24 @@ function classifyDisplay(a) {
   if (data.length === 0 && structural.length === 0) return { op: 'zero', sockets: all, why: 'אין שקע-דאטה ⇒ מזייף (§20-ג)' };   // G21: תפר-האינדקס לא דורס שקעים-אמיתיים (ReportTable.rows · DsCalendar.records היו 'zero')
   // חוקי-הצורה רואים את **כל** השקעים (tone/glyph הם ראיה-לצורה); בדיקות-גודל על שקעי-הדאטה.
   const S = new Set(all), D = new Set(data.length ? data : structural);
-  for (const [op, test] of DISPLAY_RULES) if (test(S, D)) return { op, sockets: [...D], why: 'צורת-שקעים' };
-  return { op: 'container', sockets: [...D], why: 'שקעי-דאטה ללא צורה-מוכרת' };
+  // 🕯️ `for … if (test) return` הסתיר שני דברים: כמה כללים תפסו על אותו אטום (הראשון-בטבלה
+  //    גובר — **סדר, לא ראיה**), ומה נבדק כשאף כלל לא תפס. הנפילה ל-`container` היא «אין»
+  //    מלאה, ומעולם לא אמרה על אילו 22 צורות נשאל האטום. הערך המוחזר אינו זז (חוק-7).
+  const hits = DISPLAY_RULES.filter(([, test]) => test(S, D)).map(([op]) => op);
+  if (!hits.length) {
+    rminhu({ engine: 'op-census.display', matter: `אטום-תצוגה «${a.id}» (${a.file}) ⇒ פעולת-יסוד`,
+      searched: [`DISPLAY_RULES (${DISPLAY_RULES.length} צורות: ${DISPLAY_RULES.map(([o]) => o).join('/')}) · שקעי-דאטה: ${[...D].join(',') || '—'} · כל השקעים: ${all.join(',') || '—'}`],
+      none: `לא מצינו: אף אחת מ-${DISPLAY_RULES.length} צורות-השקעים אינה תופסת את «${[...D].join(',') || '—'}» — נרשם container, וזה «צורה לא-מוכרת» ולא «מיכל»` });
+    return { op: 'container', sockets: [...D], why: 'שקעי-דאטה ללא צורה-מוכרת' };
+  }
+  if (hits.length > 1) {
+    rminhu({ engine: 'op-census.display', matter: `אטום-תצוגה «${a.id}» ⇒ פעולת-יסוד`,
+      searched: [`DISPLAY_RULES (${DISPLAY_RULES.length} צורות) · שקעי-דאטה: ${[...D].join(',') || '—'}`],
+      rulings: hits.map((h, i) => (i === 0
+        ? had(h, `הכלל הראשון בטבלה שתפס על השקעים ${[...D].join(',') || '—'}`)
+        : pliga(h, `גם הוא תפס על אותם שקעים, אך «${hits[0]}» קודם לו ב-DISPLAY_RULES — סדר-הטבלה מכריע, ואין כאן ניקוד שמעדיף אחד על השני`))) });
+  }
+  return { op: hits[0], sockets: [...D], why: 'צורת-שקעים' };
 }
 
 // ── חוקי-צורה ללוגיקה: חתימה ⇒ op-משפחה (ret ראשון, ואז צורת-params). שם-הפונקציה אינו ראיה (אפס-מילון).
@@ -130,7 +185,12 @@ function classifyLogic(a) {
 // ── דאטה (dart-data-maor): סוג-קובץ ⇒ op
 function dataAtoms() {
   const dir = path.join(ROOT, 'new/dart-data-maor');
-  if (!fs.existsSync(dir)) return [];
+  if (!fs.existsSync(dir)) {   // 🕯️ L110 מילה-במילה: «נתיב-ברירת-מחדל קשיח לא נכשל — הוא מדלג»
+    rminhu({ engine: 'op-census.data', matter: 'מדף-הדאטה ⇒ אטומי-דאטה',
+      searched: ['new/dart-data-maor'],
+      none: 'לא מצינו: תיקיית new/dart-data-maor אינה על הדיסק — 0 אטומי-דאטה. זה ∅ עם שם-המדף החסר, לא «אין דאטה» (L110 §3)' });
+    return [];
+  }
   return fs.readdirSync(dir).filter((f) => f.endsWith('.dart') && !f.endsWith('_test.dart')).map((f) => {
     const kind = /-terms\.dart$/.test(f) ? 'terms' : /-sockets\.dart$/.test(f) ? 'sockets' : /-strings\.dart$/.test(f) ? 'strings' : 'table';
     return { id: f.replace(/\.dart$/, ''), layer: 'data', file: 'dart-data-maor/' + f, op: 'data:' + kind, sockets: [], why: 'סוג-קובץ' };
@@ -192,6 +252,12 @@ if (process.argv.includes('--gate')) {
   if (base && out.length < base.total) errs.push(`ספירה ירדה ${base.total}⇒${out.length}`);
   if (base && Object.keys(byOp).length < base.ops) errs.push(`אוצר-ops ירד ${base.ops}⇒${Object.keys(byOp).length}`);
   if (errs.length) { console.log('🔴 opcensus: ' + errs.join(' · ')); process.exit(1); }
+  //    🕯️ «0 לא-ממופים» הוא **טענה שאינה יכולה להיכשל**: classifyDisplay/classifyLogic תמיד
+  //    מחזירים op (‏container/panel/transform הן נפילות-אחורה), ולכן `!x.op` ריק מבנית — «✓ 100%»
+  //    שמודפס זהה על 0 ועל 2,502 (‏L110 §1). המספר שבאמת נמדד הוא כמה נפלו **אחורה**.
+  const fell = out.filter((x) => /^(שקעי-דאטה ללא צורה-מוכרת|forge ללא צורה)$/.test(x.why || ''));
+  printNotes('op-census');
+  console.log(`   🕯️ נפילה-אחורה (צורה לא-מוכרת, נרשמו container/panel): ${fell.length} — «0 לא-ממופים» אינו יכול להיכשל (נפילה-אחורה מחזירה op)`);
   console.log(`✓ opcensus: ${out.length} אטומים ⇒ ${Object.keys(byOp).length} ops · 0 לא-ממופים · zero ${zero.length} (תצוגה בלבד)`);
   process.exit(0);
 }

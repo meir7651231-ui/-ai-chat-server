@@ -7,6 +7,7 @@
  *  שמות: camelCase⇒kebab (מספר נצמד: pad2) · UPPER_SNAKE⇒lower_snake במחצבה,
  *  ובדרגת-חוזה גם kebab (הסוכנים מקדמים לשם-kebab). */
 import fs from 'node:fs';
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const ROOT = new URL('../..', import.meta.url).pathname;
 const atoms = new Set(fs.readdirSync(ROOT + 'new/atoms').map(f => f.replace(/\..*$/, '')));
 const quarry = new Set((fs.existsSync(ROOT + 'quarry') ? fs.readdirSync(ROOT + 'quarry') : []).map(f => f.replace(/@.*$/, '')));
@@ -53,6 +54,21 @@ for (const bd of fs.readdirSync(ROOT + 'box-drafts').filter(f => f.endsWith('.bo
     else if (CLUSTERED.has(w)) clustered++;
     else { missing.push(w); alarms++; }
   }
+  // 🕯️ ורמינהו על המוכנות: כל חוט עובר **שרשרת של שש בדיקות** ונופל באחת מהן — ובדוח
+  //    זה הופך לשש עמודות-מונה. מונה אינו פסק: «חסר» ו«גבול-IO» ו«חוק-6» הם שלוש «אין»
+  //    שונות לחלוטין — הראשונה חור-כיסוי (לחצוב), השנייה חיווט-קופסה (לא אטום מעולם),
+  //    השלישית איסור-חרוט (חוק-6, לעולם לא אטום). עכשיו כל קבוצה נפסקת בשמה ובסיבתה.
+  rminhu({ engine: 'box-coverage', matter: `קופסה ${box} (${wires.length} חוטים)`,
+    searched: [`new/atoms (${atoms.size} בדרגת-חוזה)`, `quarry (${quarry.size} במחצבה)`, 'IO_DRAFTS · IO_RE/IO_NAMES · LAW6 · CLUSTERED'],
+    rulings: [
+      have ? had(`${have} בדרגת-חוזה`, 'קיימים ב-new/atoms בשם או בשם-מפורק-בהתנגשות — מחווטים כמו-שהם') : null,
+      inq ? pliga(`${inq} במחצבה`, 'קיימים ב-quarry ולא בדרגת-חוזה — חסר **קידום** (חוזה+בדיקה), לא חסר-קוד: הקוד נחצב וממתין') : null,
+      clustered ? lo(`${clustered} באשכול`, 'מכוסים ע"י אטום-אשכול אחר — אינם חור, הם כבר מיוצגים') : null,
+      io.length ? lo(`${io.length} גבול-IO`, `${io.slice(0, 4).join(',')} — פונקציית-גבול (DOM/localStorage/fetch/firebase): חיווט-קופסה, **לא אטום** — לעולם לא תהיה כאן חציבה, וזה ייעוד ולא פער`) : null,
+      law6.length ? lo(`${law6.length} חוק-6`, `${law6.slice(0, 4).join(',')} — זהות/סודות: חיווט-הצבה, לעולם לא אטום (חוק-6 חרוט)`) : null,
+      missing.length ? pliga(`${missing.length} חסר`, `${missing.slice(0, 5).join(',')} — **חור-כיסוי אמיתי**: לא בחוזה, לא במחצבה, לא גבול-IO, לא חוק-6, לא באשכול; זה לחצוב או לתעד, ואינו אותו דבר כמו חמש הקבוצות שמעליו`) : null,
+      wires.length ? null : pliga(box, '0 חוטים בתוכנית-הקופסה — «🟢 מוכנה» על אפס-חוטים הוא ירוק-חלול (have===wires.length===0)'),
+    ].filter(Boolean) });
   const ready = have === wires.length ? '🟢 מוכנה' : missing.length ? '🔴' : '🟡';
   rows.push({ box, total: wires.length, have, inq, clustered, io, law6, missing, ready });
 }
@@ -66,4 +82,5 @@ const green = rows.filter(r => r.ready === '🟢 מוכנה').length;
 md.push('', `**${green}/${rows.length} קופסאות מוכנות-לחיווט · ${alarms} חורי-כיסוי (אזעקה אם >0 אחרי מחצבה-ריקה)**`);
 fs.writeFileSync(ROOT + 'box-drafts/READINESS.md', md.join('\n') + '\n');
 console.log(`מד-מוכנות: ${green}/${rows.length} קופסאות מוכנות · ${alarms} חורים אמיתיים · דוח: box-drafts/READINESS.md`);
+(await import('../../yeshiva/rminhu.mjs')).printNotes('box-coverage');
 if (process.argv.includes('--strict') && alarms > 0) process.exit(1);

@@ -14,6 +14,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import * as R from '../root.mjs';   // bsApp/bsRoot — איתור-buildsmart
+import { rminhu, had, pliga, lo, printNotes } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const GEN = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(GEN, '../..');
 const NEW = path.join(ROOT, 'new');
@@ -72,11 +73,15 @@ export function sigOf(file, name) {
 const typeOf = (p) => { const m = String(p || 'dynamic').match(/^(.+Function\([^)]*\)\??)\s+\w+$/); return (m ? m[1] : String(p || 'dynamic')).trim(); };
 const norm = (t) => String(t || 'dynamic').replace(/\s+/g, '').replace(/\?$/, '').replace(/^(\w+(?:<[^>]*>)?)Function.*$/, '$1Function');
 // עטיפת-חתימה (G19): המנוע-הנבחר מקבל פרמטרים בחתימת-הזהב ומעביר למועמד עם cast; פרמטרי-יתר של הזהב נשמטים (קידומת-פוזיציונית); לא ממציאים ארגומנטים (§20-ג)
-export function adapterCode(from, to, d, c) {
-  const sd = sigOf(d.file, from), sc = sigOf(c.file, to); if (!sd || !sc) return null;
+// 🕯️ שלוש דחיות שונות החזירו `null`, והקורא כתב על שלושתן מילה אחת: «unadaptable».
+//    `why` (מערך אופציונלי) אוסף את הסיבה בשמה — בלי לשנות את הערך המוחזר (חוק-7).
+export function adapterCode(from, to, d, c, why = []) {
+  const sd = sigOf(d.file, from), sc = sigOf(c.file, to);
+  if (!sd || !sc) { why.push(`חתימה לא נקראה מהמקור: ${!sd ? `${from} ב-${d.file}` : `${to} ב-${c.file}`} — אין על מה לבנות עטיפה (זו קריאת-קובץ שנכשלה, לא אי-התאמה)`); return null; }
   const dPos = [...sd.pos, ...sd.opt], cPos = [...sc.pos, ...sc.opt];
-  if (sc.named.some((p) => p.required && !sd.named.find((q) => q.name === p.name))) return null;   // named-חובה בלי מקור ⇒ אין המצאה (§20-ג)
-  if (sc.pos.length > dPos.length) return null;
+  const missingNamed = sc.named.filter((p) => p.required && !sd.named.find((q) => q.name === p.name)).map((p) => p.name);
+  if (missingNamed.length) { why.push(`למועמד יש פרמטרים-named חובה שאין להם מקור בזהב (${missingNamed.join(',')}) — §20-ג: אין להמציא ארגומנט`); return null; }
+  if (sc.pos.length > dPos.length) { why.push(`למועמד ${sc.pos.length} פרמטרים פוזיציוניים ולזהב ${dPos.length} — עטיפה הייתה חייבת להמציא ${sc.pos.length - dPos.length}`); return null; }
   const args = cPos.slice(0, Math.min(cPos.length, dPos.length)).map((p, i) => { const a = norm(p.type), b = norm(dPos[i].type); return a === 'dynamic' || a === b ? dPos[i].name : `${dPos[i].name} as ${p.type}`; });
   for (const p of sc.named) { const q = sd.named.find((x) => x.name === p.name); if (q) args.push(`${p.name}: ${q.name}`); }
   const call = `${to}(${args.join(', ')})`;
@@ -93,8 +98,21 @@ export function rankAll() {
   const gold = fs.readdirSync(path.join(NEW, 'dart-gen-bs')).filter((f) => /^schoolos.*\.dart$/.test(f)).map((f) => fs.readFileSync(path.join(NEW, 'dart-gen-bs', f), 'utf8')).join('\n');
   const impCom = {}; for (const m of gold.matchAll(/^import '\.\.\/(dart-maor|dart)\/([^']+)';\s*\/\/\s*(.+)$/gm)) { const k = m[1] + '/' + m[2]; (impCom[k] ||= []).push(...heTok(m[3])); }
   const out = {}; const reach = new Set();   // L91 · reach = כל מנוע שכשיר-בחתימה לפעולה כלשהי — מה שהבורר באמת שוקל
+  // 🕯️ ה-`continue` הזה **הניח** «אטום-תצוגה». זו הנחה ולא מדידה: אותו `continue` בולע גם
+  //    אטום-לוגיקה שפשוט **אינו באינדקס** — וזה בדיוק L113 («מה שלא במדף, המנוע מכריז אין
+  //    עליו»). עכשיו נשאל ops-map מה השכבה בפועל, וכל פעולה שנשמטת אומרת למה.
+  const LAYER = (() => { try { return new Map(JSON.parse(fs.readFileSync(path.join(GEN, 'ops-map.json'), 'utf8')).map((a) => [String(a.id).split('@')[0], a.layer])); } catch { return null; } })();
   for (const [op, atom] of Object.entries(ATOM)) {
-    const d = byId.get(atom); if (!d) continue;   // אטום-תצוגה — לא כאן (auto-skin)
+    const d = byId.get(atom);
+    if (!d) {
+      const layer = LAYER ? LAYER.get(atom) : undefined;
+      rminhu({ engine: 'auto-logic', matter: `פעולה «${op}» (אטום-הזהב «${atom}») ⇒ מנוע-לוגיקה`,
+        searched: [`אינדקס-האמת · ${rows.length} מנועי-לוגיקה${LAYER ? ` · ops-map (${LAYER.size} אטומים)` : ' · ops-map לא נקרא'}`],
+        rulings: [layer === 'display'
+          ? lo(atom, 'אטום-תצוגה (‏ops-map layer=display) — הבחירה שלו היא של auto-skin; לא «אין מנוע», אלא **שכבה אחרת**')
+          : pliga(atom, `אינו באינדקס-הלוגיקה ו${LAYER ? (layer ? `ב-ops-map הוא layer=${layer}` : 'אינו ב-ops-map כלל') : '-ops-map לא נקרא'} — זה **L113**: מה שלא במדף, המנוע מכריז «אין» עליו. חסר-רישום, לא חסר-מנוע`)] });
+      continue;
+    }
     const demand = bag([...(impCom[d.file] || []), ...particlesOf(op).flatMap(heTok)]);
     const score = (c) => { let s = 0; for (const t of c.titleTok) if (demand.has(t)) s += 2 * idf(t); for (const t of c.bodyTok) if (demand.has(t) && !c.titleTok.has(t)) s += idf(t); return s + agree(c, d) + (d.origin && c.origin === d.origin ? 1.5 : 0); };
     const cands = rows.filter((c) => compat(c, d)).map((c) => ({ id: c.id, file: c.file, score: +(score(c) - (d.argc - c.argc) * 2).toFixed(2), ident: ident(c, d), argc: c.argc, params: c.params, ret: c.ret }))   // פרמטר שנשמט = ייעוד חלקי (-2 לכל אחד)
@@ -102,10 +120,29 @@ export function rankAll() {
     for (const c of cands) reach.add(c.id);
     const top = cands[0]; const declaredRank = cands.findIndex((c) => c.id === atom);
     let swap = null;
+    const adWhy = [];
     if (top && top.id !== atom && top.score > (cands[declaredRank] ? cands[declaredRank].score : 0)) {
-      const ad = top.ident ? null : adapterCode(atom, top.id, d, top);
+      const ad = top.ident ? null : adapterCode(atom, top.id, d, top, adWhy);
       swap = top.ident || ad ? { to: top.id, file: top.file, mode: top.ident ? 'ident' : 'adapter', adapter: ad } : { to: top.id, file: top.file, mode: 'unadaptable', adapter: null };   // G19 · לא-≡ ⇒ עטיפת-חתימה; אין עטיפה כשרה (named-חובה/עודף-פרמטרים) ⇒ לא מיושם
     }
+    // 🕯️ הפסק על הפעולה: הזהב מול המאתגר, ולמה. `declaredRank` היה **מספר** — הוא אומר
+    //    «הזהב במקום ה-n» ולא **מי** גבר עליו ובאיזו ראיה; ו«unadaptable» הוא מילה אחת
+    //    לשלוש דחיות. הערך המוחזר אינו זז (חוק-7); ההכרעה (הוכחה בלבד מדיחה זהב) לא שונתה.
+    rminhu({ engine: 'auto-logic', matter: `פעולה «${op}» · זהב «${atom}» ⇒ המנוע הכי-טוב-לייעוד`,
+      searched: [`אינדקס-האמת (${rows.length} מנועים) · ${cands.length} עברו התאמת-חתימה (compat) · ${rows.length - cands.length} נפסלו בחתימה`],
+      rulings: cands.slice(0, 5).map((c, i) => {
+        const isGold = c.id === atom;
+        if (i === 0 && !swap) return had(c.id, isGold ? `ציון ${c.score} — הזהב עצמו הגבוה בדירוג (חוק-4: הקוד-החלוץ קדוש)` : `ציון ${c.score} מול ${cands[declaredRank] ? cands[declaredRank].score : '—'} של הזהב ${atom} — לא הוצעה החלפה`);
+        if (swap && c.id === swap.to) {
+          return swap.mode === 'unadaptable'
+            ? pliga(c.id, `ציון ${c.score} > ${cands[declaredRank] ? cands[declaredRank].score : '—'} של הזהב, **אך אין עטיפת-חתימה כשרה**: ${adWhy.join(' · ') || 'סיבה לא נרשמה'} — נדחה מבנית, לא על ייעוד`)
+            : had(c.id, `ציון ${c.score} > ${cands[declaredRank] ? cands[declaredRank].score : '—'} של הזהב · ${swap.mode === 'ident' ? 'חתימה ≡' : 'עטיפת-חתימה נבנתה'} — **מוצע**, ומיושם רק אחרי הוכחה בבדיקות-הזהב (הכרעה-30)`);
+        }
+        return pliga(c.id, isGold
+          ? `הזהב, במקום ${declaredRank + 1} בדירוג עם ציון ${c.score} — מאותגר בטקסט; **אינו מודח בלי הוכחה בריצה** (G34ב)`
+          : `ציון ${c.score} מול ${cands[0].score} של ${cands[0].id} — חפיפת-ייעוד/הסכמת-טיפוסים נמוכה יותר`);
+      }),
+      none: `לא מצינו: אף אחד מ-${rows.length} מנועי-הלוגיקה אינו תואם-חתימה ל-${atom}(${d.params ? d.params.join(',') : ''}) ⇒ ${d.ret} — גם הזהב עצמו אינו בין המועמדים, וזה אומר שהאינדקס אינו מכיר אותו (L113)` });
     out[op] = { declared: atom, declaredFile: d.file, pick: swap ? top.id : atom, candidates: cands.length, declaredRank, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.score}${c.ident ? '≡' : ''}`), swap };
   }
   Object.defineProperty(out, 'reach', { value: [...reach].sort(), enumerable: false });   // לא נכנס ל-ops ב-JSON; נכתב בנפרד
@@ -170,9 +207,11 @@ if (isMain) {
   const fresh = JSON.stringify({ summary: { ops: n, confirmed, textChallenged, swapsProposed: swaps, swapsProven: proven, reach: (ops.reach || []).length }, ops, reach: ops.reach || [] }, null, 1) + '\n';   // reach ⇒ truth.mjs (L91)
   if (process.argv.includes('--gate')) {
     if (!fs.existsSync(OUT) || fs.readFileSync(OUT, 'utf8') !== fresh) { console.log('🔴 autologic: auto-logic.json ≠ בורר-טרי (הרץ node machtzev/generator/auto-logic.mjs)'); process.exit(1); }
+    printNotes('auto-logic');
     console.log(`✓ autologic: ${n} פעולות-לוגיקה × ${catalog().N} מנועים · הזהב הכי-טוב-בהוכחה ${confirmed}/${n} (מאותגר-בטקסט-בלבד ${textChallenged}) · החלפות מוצעות ${swaps} · מוכחות ${proven}`); process.exit(0);
   }
   fs.writeFileSync(OUT, fresh);
+  printNotes('auto-logic');
   for (const [op, r] of Object.entries(ops)) console.log(`${op.padEnd(12)} ${r.declared.padEnd(22)} ${r.declaredRank === 0 ? '✓' : '✗ #' + (r.declaredRank + 1)} · ${r.candidates} מועמדים · ${r.top3.join(' · ')}${r.swap ? ` ⇒ swap ${r.swap.to} [${r.swap.mode}]${r.swap.proof ? ' ' + (r.swap.proof.proven ? '✓' : '✗') + r.swap.proof.verdict : r.swap.mode === 'unadaptable' ? ' (אין עטיפה כשרה)' : ' (טרם הוכח)'}` : ''}`);
   console.log(`✍️ auto-logic.json · ${n} פעולות · הכי-טוב-בהוכחה ${confirmed}/${n} (מאותגר-בטקסט ${textChallenged}) · החלפות ${swaps} (מוכחות ${proven})`);
 }

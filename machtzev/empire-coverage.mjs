@@ -6,6 +6,7 @@
  *  פלט: machtzev/emit/EMPIRE-COVERAGE.md + סיכום. שקוף, חוזר, בר-מעקב. */
 import fs from 'node:fs';
 import path from 'node:path';
+import { rminhu, had, pliga, lo } from '../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const ROOT = new URL('../', import.meta.url).pathname;
 // שלוש-מערכות-האימפריה: maor (TS) · buildsmart (Dart החי, app_flutter) · yoman (JS)
 const SRC = {
@@ -107,6 +108,18 @@ for (const [sys, srcRoot] of Object.entries(SRC)) {
   gHidden += hid.size; gHiddenCovered += hidCov; gMethods += emp.methods;
   const realByFile = {};
   for (const [n, f] of gaps) if (!impure(f)) (realByFile[f] = realByFile[f] || []).push(n);
+  // 🕯️ ורמינהו על הכיסוי: המד מסווג כל פער ל«אימפיורי-מתוכנן» או «פער-לוגיקה-אמיתי»,
+  //    והסיווג הוא **הכרעה** שמעולם לא נפסקה בשמה. וגלוי יותר: הכיסוי נמדד ב**התאמת-שם**
+  //    מול המדף — בדיוק משפחת-הבאגים של L112 — ולכן «נחצבו 60%» פירושו «60% נמצא להם שם
+  //    תואם», לא «60% מהיכולת קיימת». הפסק אומר את שני הדברים.
+  rminhu({ engine: 'empire-coverage', matter: `כיסוי ${sys}: ${emp.size} פונקציות-מקור`,
+    searched: [`מקור: ${emp.size} פונקציות-מיוצאות`, `מדף: ${shelf.size} שמות`, 'עדשה: התאמת-שם-מנורמל'],
+    rulings: [
+      covered ? had(`${covered} מכוסות`, `${Math.round(covered / emp.size * 100)}% — **נמצא שם תואם במדף**; זו עדשת-שם, ולא הוכחה שהיכולת זהה (L112)`) : null,
+      impureN ? lo(`${impureN} אימפיורי-מתוכנן`, 'רכיבי-React/store/ענן/DOM/hooks/.d.ts — הופכים לקופסה/שלד ולא לאטום-טהור, ולכן אינם פער אלא ייעוד אחר; זה סיווג, והוא נאמר') : null,
+      realN ? pliga(`${realN} פער-לוגיקה-אמיתי`, `קובצי-lib/pure שעדיין לא נחצבו — מה שהמחולל לא יוכל להרכיב; ${Object.keys(realByFile).length} קבצים נושאים אותם`) : null,
+      emp.size ? null : pliga(`המד עצמו (${sys})`, '0 פונקציות-מקור נמצאו — אחוז-כיסוי על מכנה-אפס אינו מדידה, והוא ייקרא כ-100% או כ-NaN בלי שאיש יֵדע (L110 §4)'),
+    ].filter(Boolean) });
   lines.push(`## ${sys}`, `- פונקציות-מקור: **${emp.size}** · נחצבו: **${covered}** (${Math.round(covered / emp.size * 100)}%)`,
     `- פערים: ${gaps.length} — אימפיורי-מתוכנן ${impureN} · **פער-לוגיקה-אמיתי ${realN}**`,
     `- כיסוי-לוגיקה-טהורה: **${Math.round(covered / (covered + realN) * 100)}%** (${covered}/${covered + realN})`,
@@ -151,3 +164,4 @@ console.log(`🗺️ שלמות-אימפריה: מקור ${gTotal} · נחצבו
 console.log(`   רוחב (G62): עוזרים-נסתרים ${gHidden} (נחצבו ${gHiddenCovered}) · מתודות-מחלקה ${gMethods} (נספרות, מחוץ-לתחום) ⇒ מכנה-מלא ${gTotal + gHidden} + ${gMethods}`);
 console.log(`   מקסימליות (G62): מנועים ${ws.N} · מחווטים-בפועל ${ws.W} · pulled-not-wired ${ws.N - ws.W}`);
 console.log(`   כיסוי-לוגיקה-טהורה: ${Math.round(gCovered / (gCovered + gReal) * 100)}% (${gCovered}/${gCovered + gReal}) · הדוח: machtzev/emit/EMPIRE-COVERAGE.md`);
+(await import('../yeshiva/rminhu.mjs')).printNotes('empire-coverage');

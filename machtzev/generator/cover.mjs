@@ -11,6 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { retrieve, retrieveLogic } from './match.mjs';
 import * as R from '../root.mjs';
+import { rminhu, had, pliga, printNotes } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 
 const ROOT = R.ROOT;
 const GEN = path.join(ROOT, 'machtzev/generator');
@@ -37,9 +38,12 @@ export function cover({ op, need = [], goal = '', k = 3 }) {   // k: עומק-ה
   if (LOGIC_OPS.has(op)) return coverLogic({ op, need, goal });
   const goalRank = new Map();
   if (goal) retrieve(goal, 12).forEach((r, i) => goalRank.set(r.cls, i));
-  const pool = (ops) => MAP.filter((a) => a.layer === 'display' && ops.includes(a.op) && !FAKERS.has(a.id.split('@')[0]));
+  const poolRaw = (ops) => MAP.filter((a) => a.layer === 'display' && ops.includes(a.op));
+  const pool = (ops) => poolRaw(ops).filter((a) => !FAKERS.has(a.id.split('@')[0]));
   let cands = pool([op]);
-  if (!cands.length) cands = pool(NEAR[op] || []);
+  const nearOps = NEAR[op] || [];
+  const usedNear = !cands.length;
+  if (usedNear) cands = pool(nearOps);
   const ranked = cands.map((a) => ({ a, s: scoreDisplay(a, need, goalRank) })).sort((x, y) => y.s - x.s || x.a.sockets.length - y.a.sockets.length || x.a.id.localeCompare(y.a.id));
   const chosen = [], covered = new Set();
   for (const { a } of ranked) {
@@ -49,6 +53,22 @@ export function cover({ op, need = [], goal = '', k = 3 }) {   // k: עומק-ה
     if (chosen.length >= 4) break;                                   // עומק-הרכבה מקסימלי (כמו synth)
   }
   const missing = need.filter((n) => !covered.has(n));
+  // 🕯️ `missing` הוא **רשימת-שקעים**, לא פסק: הוא אומר מה לא כוסה ולא **למה**, ושלוש סיבות שונות
+  //    הפיקו אותו בדיוק אותו דבר — (א) אין מועמד ל-op בכלל · (ב) היו מועמדים והם **מזייפים
+  //    מוצהרים** ונפסלו ב-§20-ג · (ג) היו מועמדים טהורים ואף אחד אינו מספק את השקע. השנייה היא
+  //    בדיוק ה-«אין» ההפוכה של L110 §1 («אף מועמד אינו טהור» ≠ «אין מועמדים»), והיא נבלעה
+  //    ב-`pool()` בשקט. עכשיו כל מועמד נפסק בשמו לפני שהקורא רואה פער-כיסוי.
+  const fakers = poolRaw(usedNear ? nearOps : [op]).filter((a) => FAKERS.has(a.id.split('@')[0]));
+  const chosenSet = new Set(chosen);
+  rminhu({ engine: 'cover', matter: `op «${op}» ⇒ ${need.length ? 'שקעים ' + need.join('/') : 'אטום-תצוגה (בלי שקעים נדרשים)'}`,
+    searched: [`ops-map.json layer=display · op=${op} (${poolRaw([op]).length} מועמדים)${usedNear ? ` · ריק ⇒ משפחות-שכנות ${nearOps.join('/') || '(אין NEAR ל-op הזה)'} (${poolRaw(nearOps).length})` : ''}`],
+    rulings: [
+      ...ranked.slice(0, 8).map(({ a, s: sc }) => (chosenSet.has(a.id)
+        ? had(a.id, `ציון ${sc.toFixed(1)} · שקעים ${a.sockets.join(',') || '—'} · מכסה ${need.filter((n) => a.sockets.includes(n)).join(',') || '(ראשון-בדירוג, בלי שקע נדרש)'}`)
+        : pliga(a.id, `ציון ${sc.toFixed(1)} מול ${ranked[0].s.toFixed(1)} של ${ranked[0].a.id} — אינו מוסיף שקע שטרם כוסה (כוסו: ${[...covered].join(',') || 'אפס'})`))),
+      ...fakers.map((a) => pliga(a.id, `מזייף מוצהר (FAKERS ב-compose-engine) — §20-ג: אטום שממציא ערך נפסל גם כששקעיו (${a.sockets.join(',') || '—'}) תואמים; זו פסילה, לא «אין מועמד»`)),
+    ],
+    none: `לא מצינו: אין ב-ops-map אף אטום-תצוגה ל-op «${op}»${nearOps.length ? ` ולא במשפחות-השכנות ${nearOps.join('/')}` : ' ול-op הזה לא הוגדרה משפחה-שכנה ב-NEAR'} — החסר הוא באטלס, לא בבקשה` });
   return { op, need, atoms: chosen, alts: ranked.slice(0, k).map((x) => x.a.id), composed: chosen.length > 1, missing, ok: chosen.length > 0 && missing.length === 0 };
 }
 
@@ -71,15 +91,39 @@ export function coverLogic({ op, need = [], goal = '' }) {
   const ranked = LOGIC.map((a) => {
     let s = 0; for (const t of q) if (a.st.includes(t)) s += lidf(t);
     s = s / Math.sqrt(Math.max(4, a.st.length));                       // נרמול-אורך: כותרת-מילולית לא זוכה בגלל אורכה
+    const g = s;                                                     // 🕯️ החלק שבא **מהמטרה** — לפני הבונוסים המבניים; הוא הראיה, הם לא
     if (a.op === op) s += 0.4;                                       // משפחת-הצורה = בונוס, לא סינון-קשיח (הסיווג גס: ret dynamic ⇒ transform)
     if (flagsNeed.every((f) => (a.flags || []).includes(f))) s += 0.5;
-    return { a, s: +s.toFixed(2) };
+    return { a, s: +s.toFixed(2), g };
   }).filter((x) => x.s > 0.6).sort((x, y) => y.s - x.s || x.a.id.localeCompare(y.a.id));
   // atlas.he (אם יש) כעד-שני: מעלה מועמד שגם match.retrieveLogic מדרג
   const atl = goal ? new Map(retrieveLogic(goal, 12, false).map((r, i) => [r.name, i])) : new Map();
   ranked.forEach((x) => { if (atl.has(x.a.id)) x.s += Math.max(0, 1.2 - atl.get(x.a.id) * 0.2); });
   ranked.sort((x, y) => y.s - x.s || x.a.id.localeCompare(y.a.id));
   const chosen = ranked.slice(0, 1).map((x) => x.a.id);
+  // 🕯️ `missing:['אין מנוע שמטרתו תואמת']` היה **טענה** ולא פסק, והוא נאמר גם כשלא היה מה
+  //    להשוות: `q` ריק (מטרה בלי אף מונח-עברי) ⇒ כל הציונים ≤0.9 ⇒ המנוע מודיע «אין מנוע
+  //    שמטרתו תואמת» כשהאמת היא «לא נמסרה מטרה». ועוד: אטום-לוגיקה שכותרתו לא נקראה
+  //    (‏`catch` בשורה 61) יוצא עם `st` ריק ולכן **לעולם** אינו נמצא — «אין» שהוא «לא-נשאל» (L113).
+  //    הערך המוחזר אינו זז (חוק-7); ההבחנה עולה לפסק ולפנקס, ששם היא נמדדת.
+  const blind = LOGIC.filter((a) => !a.st.length).length;
+  //    🔴 והממצא ששינה את ההשערה: הציון אינו רק חפיפת-מטרה — `+0.4` (משפחת-הצורה) ו-`+0.5`
+  //    (‏`flagsNeed.every` על מערך ריק הוא **true**) מעלים כל אטום באותו op ל-0.90, מעל רצפת-0.6.
+  //    לכן `goal:''` אינו מחזיר «אין»: הוא מחזיר `ok:true` עם אטום שנבחר **באלפבית** מבין
+  //    כל שווי-ה-0.90. לא «אין» כוזב — **«יש» כוזב**, וזה חמור יותר. הערך המוחזר אינו זז
+  //    (חוק-7); הפסק אומר את זה בשמו, ובחירה-בין-מועמדים היא של הישיבה ולא של המנוע (L114).
+  const tie = ranked.filter((x) => ranked.length && x.s === ranked[0].s).length;
+  const noGoalEvidence = ranked.length > 0 && ranked[0].g === 0;
+  rminhu({ engine: 'cover.coverLogic', matter: `op «${op}» · מטרה «${String(goal).slice(0, 60) || '(ריקה)'}»`,
+    searched: [`ops-map.json layer=logic (${LOGIC.length} מנועים · ${blind} בלי כותרת-עברית ⇒ אינם נמצאים לעולם) · מונחי-המטרה: ${q.join('/') || '(אפס)'}`],
+    rulings: ranked.slice(0, 6).map((x, i) => (i === 0
+      ? had(x.a.id, noGoalEvidence
+        ? `ציון ${x.s.toFixed(2)} — כולו בונוס-מבני (op ${x.a.op}${x.a.op === op ? ' +0.4' : ''} · flags +0.5), **אפס חפיפת-מטרה**; נבחר כראשון-באלפבית מבין ${tie} שווי-ציון. זה סדר, לא התאמה`
+        : `ציון ${x.s.toFixed(2)} (מתוכו ${x.g.toFixed(2)} מחפיפת-המטרה) ≥ רצפה 0.6 · op ${x.a.op}${x.a.op === op ? ' (משפחת-הצורה)' : ''}${tie > 1 ? ` — ${tie} שווי-ציון, הוכרע באלפבית` : ' — הגבוה בדירוג'}`)
+      : pliga(x.a.id, `ציון ${x.s.toFixed(2)} (מטרה ${x.g.toFixed(2)}) מול ${ranked[0].s.toFixed(2)} של ${ranked[0].a.id} — אותו מנגנון, חפיפת-מטרה נמוכה יותר`))),
+    none: q.length
+      ? `לא מצינו: ${LOGIC.length} מנועי-לוגיקה נוקדו מול ${q.length} מונחי-המטרה (${q.join('/')}), אף אחד לא עבר רצפת-0.6 — החסר הוא מנוע, ו-${blind} מהם לא נשאלו כלל (כותרת-עברית ריקה)`
+      : `לא נמסרה מטרה-בעברית (goal ${goal ? 'בלי אף מונח עברי' : 'ריק'}) ⇒ לא נסרק דבר. «אין מנוע שמטרתו תואמת» כאן הוא «לא-חיפשנו», לא «אין»` });
   return { op, need, atoms: chosen, alts: ranked.slice(0, 3).map((x) => x.a.id), composed: false, missing: chosen.length ? [] : ['אין מנוע שמטרתו תואמת'], ok: chosen.length > 0 };
 }
 
@@ -132,8 +176,10 @@ if (__isMain && (process.argv.includes('--gate') || process.argv.includes('--rep
   if (process.argv.includes('--gate')) {
     const base = fs.existsSync(BASE) ? JSON.parse(fs.readFileSync(BASE, 'utf8')) : { hits: 0, hits3: 0 };
     if (hits < base.hits || hits3 < (base.hits3 || 0)) { console.log(`🔴 cover: שחזור-ATOM ירד top1 ${base.hits}⇒${hits} · top3 ${base.hits3}⇒${hits3}`); process.exit(1); }
+    printNotes('cover');
     console.log(`✓ cover: שחזור-ATOM top-1 ${hits}/${res.length} · top-3 ${hits3}/${res.length} (רצפה ${base.hits}/${base.hits3 || 0})`); process.exit(0);
   }
+  printNotes('cover');
   fs.writeFileSync(REPORT, md);
   if (process.argv.includes('--write-baseline') || !fs.existsSync(BASE)) fs.writeFileSync(BASE, JSON.stringify({ hits, hits3, total: res.length }));
   process.stdout.write(md);

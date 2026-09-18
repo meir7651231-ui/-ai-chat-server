@@ -10,6 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync, execSync } from 'node:child_process';
+import { rminhu, had, pliga, lo, printNotes } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 import { buildAtlas } from './atlas.mjs';
 import { buildTwinRegistry, twinMeta, dartLit } from './twins.mjs';
 import { resolveDart, requireDart } from '../dart-bin.mjs';
@@ -73,6 +74,12 @@ function synthesize(desc, examples) {
   const dwords = new Set((desc.match(/[֐-׿]+/g) || []).map(norm));
   const cohere = (f) => f.he.reduce((n, w) => n + (dwords.has(norm(w)) ? 1 : 0), 0);
   const fns = pool.filter(wirable).sort((a, b) => cohere(b) - cohere(a));
+  // 🕯️ ארבעה `continue` בלולאת-החיפוש נראו זהים והם ארבע דחיות שונות לגמרי: האטום **זרק** ·
+  //    החזיר null (אינו חל על הקלט) · הפלט ריק/ארוך-מ-200 (מסלול-מת) · המצב כבר נראה (מעגל).
+  //    ה«אין» של המנוע — «לא נמצאה הרכבה (עומק≤4) — כישלון כן» — לא אמר על מה הוא רץ ולא
+  //    מה נפל. «כישלון כן» שאינו אומר מה נוסה אינו כן יותר מ«אין».
+  const why = { threw: 0, nullOut: 0, deadOut: 0, seen: 0, expanded: 0 };
+  let reached = 0;
   const inputs = examples.map(e => String(e.in));
   const want = examples.map(e => e.out);
   const sig = (v) => JSON.stringify(v);
@@ -84,25 +91,42 @@ function synthesize(desc, examples) {
     for (const st of frontier) {
       for (const f of fns) {
         let outs;
-        try { outs = st.vals.map(v => stepFn(f, v)); } catch { continue; }
-        if (outs.some(o => o === null)) continue;
+        try { outs = st.vals.map(v => stepFn(f, v)); } catch { why.threw++; continue; }
+        if (outs.some(o => o === null)) { why.nullOut++; continue; }
         if (outs.every((o, i) => o === want[i])) { wins.push([...st.path, f.name]); continue; }
-        if (outs.some(o => o.length > 200 || o === '')) continue;
+        if (outs.some(o => o.length > 200 || o === '')) { why.deadOut++; continue; }
         const s2 = sig(outs);
-        if (seenV.has(s2)) continue;
+        if (seenV.has(s2)) { why.seen++; continue; }
         seenV.add(s2);
-        if (next.length < 4000) next.push({ vals: outs, path: [...st.path, f.name] });
+        if (next.length < 4000) { why.expanded++; next.push({ vals: outs, path: [...st.path, f.name] }); }
       }
     }
+    reached = depth;
     if (wins.length) {
       // בחירה: הפתרון הקוהרנטי-ביותר לתיאור; השאר מדווחים כחלופות (שקיפות-חיפוש)
       const score = (p) => p.reduce((n, x) => n + cohere(fnsBy.get(x)), 0);
       wins.sort((a, b) => score(b) - score(a));
+      rminhu({ engine: 'synth', matter: `יכולת «${String(desc).slice(0, 50)}» · ${examples.length} דוגמאות ⇒ הרכבה`,
+        searched: [`${pool.length} אטומי-אטלס · ${fns.length} ברי-חיווט (twins+טיפוס) · BFS עומק ${depth}/4`],
+        rulings: wins.slice(0, 5).map((w, i) => (i === 0
+          ? had(w.join('∘'), `מוכיח את כל ${examples.length} הדוגמאות בעומק ${depth} · קוהרנטיות-תיאור ${score(w)} — הגבוה`
+          ) : pliga(w.join('∘'), `גם הוא מוכיח את כל ${examples.length} הדוגמאות באותו עומק, אך קוהרנטיות-תיאור ${score(w)} מול ${score(wins[0])} — **שקול בהוכחה**, נבחר לפי קרבה לתיאור`))) });
       return { chain: wins[0], alts: wins.length - 1, shortcut: depth === 1 };
     }
     frontier = next;
     if (!frontier.length) break;
   }
+  //    «כישלון כן» עם החשבון: על כמה רצנו, עד איזה עומק, ומה הפיל כל מועמד.
+  rminhu({ engine: 'synth', matter: `יכולת «${String(desc).slice(0, 50)}» · ${examples.length} דוגמאות ⇒ הרכבה`,
+    searched: [`${pool.length} אטומי-אטלס · ${fns.length} ברי-חיווט · BFS עד עומק ${reached}/4`],
+    rulings: [
+      pool.length - fns.length ? lo('wirable (תאום-Dart + טיפוס-בר-הזנה)', `${pool.length - fns.length} אטומים לא נכנסו לחיפוש כלל: אין להם תאום-Dart או שהפרמטר-הראשון אינו בר-הזנה ממחרוזת-מסך — פסילה **לפני** ההרצה, לא כישלון-הוכחה`) : null,
+      why.threw ? lo('האטום זרק', `${why.threw} הרצות נפלו בחריגה — האטום אינו חל על הקלט הזה (ולא «הפלט שגוי»)`) : null,
+      why.nullOut ? lo('פלט null', `${why.nullOut} הרצות החזירו null — האטום רץ ולא ידע לענות`) : null,
+      why.deadOut ? pliga('פלט ריק / ארוך מ-200', `${why.deadOut} הרצות הפיקו מסלול-מת שנגזם — **ייתכן שכאן נחתכה ההרכבה**, וזו גזימה שלנו ולא חוסר-אטום`) : null,
+      why.seen ? lo('מצב כבר נראה', `${why.seen} הרצות חזרו למצב קיים (מעגל) — נחסמו כדי שהחיפוש יסתיים`) : null,
+    ].filter(Boolean),
+    none: `לא מצינו: ${fns.length} אטומים ברי-חיווט הורצו עד עומק ${reached}/4 ואף שרשרת לא הוכיחה את ${examples.length} הדוגמאות (${why.expanded} מצבים הורחבו). זה «לא נמצא בעומק-4», לא «אין הרכבה»` });
   return null;
 }
 
@@ -194,6 +218,7 @@ if (GATE) {
     if (bad) console.error('   gate.dart נשמר לאבחון: ' + tf); else fs.rmSync(tmpDir, { recursive: true, force: true });
   }
   if (!bad) console.log(`✓ שער-הסינתזה: ${n} יכולות-מוזמנות מוכחות-חי · ${dartNote}`);
+  printNotes('synth');
   process.exit(bad);
 }
 
@@ -268,4 +293,5 @@ if (fs.existsSync(CAPS)) for (const cf of fs.readdirSync(CAPS).filter(x => x.end
   console.log(`🧪 ${cf}: ✅ הרכבה נמצאה — ${chain.join(' ∘ ')} ⇒ specs/${slug}.txt`);
   made++;
 }
+printNotes('synth');
 console.log(`🧪 סינתזה: ${made} יכולות-מוזמנות הורכבו (מאגר-חיווט: ${pool.filter(wirable).length} · ברי-הרצה: ${twins.size})`);

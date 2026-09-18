@@ -10,15 +10,26 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { classBody, stripComments } from '../assemble/lift-lib.mjs';
 import * as R from '../root.mjs';
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 
 const ROOT = R.ROOT;
 const WIDGET_SHELVES = ['new/dart-ui-bs'];
 const LOGIC_SHELVES = ['new/dart-maor', 'new/dart'];
 const DATA_SHELVES = ['new/dart-data-bs', 'new/dart-data-maor'];
 
+// 🕯️ `if (!fs.existsSync(abs)) return []` היה **הדילוג-השקט** שעליו נכתב L110: מדף שאינו
+//    בקונטיינר מחזיר [] ונראה בדיוק כמו מדף ריק, וכל האטלס נבנה חסר בלי שאיש יֵדע. עכשיו כל
+//    מדף-מוצהר נפסק בשמו — יש קבצים ⇒ חד שיעורא · קיים וריק ⇒ פליגא · אינו בקונטיינר ⇒ לא שייך
+//    (‏ChILD: ∅ עם השם החסר, לא 0 · L110 §3) — ומדווח לפנקס. הערך המוחזר לא זז (חוק-7).
 const dartFiles = (dir) => {
   const abs = path.join(ROOT, dir);
-  if (!fs.existsSync(abs)) return [];
+  const rule = (verdict, why) => { rminhu({ engine: 'atlas.shelf', matter: `מדף-מוצהר «${dir}»`, searched: [abs], rulings: [verdict(dir, why)] }); };
+  if (!fs.existsSync(abs)) { rule(lo, `אינו בקונטיינר הזה — ∅ עם השם החסר, לא 0 (L110 §3): אטלס שנבנה בלעדיו חסר, ולא «ריק»`); return []; }
+  const out = dartFiles_(abs, dir);
+  rule(out.length ? had : pliga, out.length ? `${out.length} קבצי-dart` : 'התיקייה קיימת ואין בה אף .dart שאינו בדיקה/הסגר — מדף שנמחק תחת הרגליים נראה כמו מדף ריק');
+  return out;
+};
+const dartFiles_ = (abs, dir) => {
   return fs.readdirSync(abs, { recursive: true }).map(String)
     .filter(f => f.endsWith('.dart') && !f.endsWith('_test.dart') && !f.includes('QUARANTINE'))
     .filter(f => fs.statSync(path.join(abs, f)).isFile())
@@ -138,4 +149,5 @@ if (import.meta.url === 'file://' + process.argv[1]) {
   const a = buildAtlas();
   writeAtlas(a);
   console.log(`🗺️ אטלס-מלא · widgets: ${a.widgets.length} · functions: ${a.functions.length} · data: ${a.data.length}`);
+  (await import('../../yeshiva/rminhu.mjs')).printNotes('atlas · מדפים-מוצהרים');
 }

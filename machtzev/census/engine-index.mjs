@@ -35,6 +35,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tok, near } from '../search-score.mjs';   // אותו ניקוד-חיפוש של האטומים — עותק אחד, לא שניים
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 import * as R from '../root.mjs';
 
 const MACH = R.MACH;                       // machtzev/
@@ -312,13 +313,30 @@ export function find(q, engines, k = 5) {
   const df = {}; for (const e of docs) for (const t of new Set(tok(e.purpose))) df[t] = (df[t] || 0) + 1;
   const idf = (t) => Math.log(docs.length / (1 + (df[t] || 0)));
   const qs = [...new Set(tok(q))];
-  return docs.map((e) => {
+  const scored = docs.map((e) => {
     // התאמה דרך `near` (‏search-score): זהות או קידומת ≥4 — «המציא» ≡ «המצאה».
     // שוויון-מחרוזות בלבד היה מחמיץ את גלאי-ההמצאה על השאלה «המציא שדה» (נמדד).
     const ts = tok(e.purpose + ' ' + e.exports.join(' '));
     let sc = 0; for (const t of qs) if (ts.some((x) => near(x, t))) sc += idf(t);
     return { ...e, score: +sc.toFixed(2) };
-  }).filter((x) => x.score > 0).sort((a, b) => b.score - a.score).slice(0, k);
+  });
+  const out = scored.filter((x) => x.score > 0).sort((a, b) => b.score - a.score).slice(0, k);
+  // 🕯️ זה המנוע שכל CLAUDE.md מפנה אליו לפני «אין מנוע ל-X» — והוא עצמו החזיר [] בשתיקה.
+  //    עכשיו הוא פוסק: מה שחזר ⇒ חד שיעורא עם הציון · מנוע עם מטרה שלא נגע ⇒ לא שייך
+  //    (רק הראשונים, כדי לא לשפוך 500 שורות) · ומעל הכל — **הכמה-לא-נסרקו**: המטרות הן
+  //    דיווח-עצמי מכותרת-הקובץ, ומנוע בלי מטרה מתועדת אינו חלק מהחיפוש בכלל, ולכן
+  //    «לא מצינו» כאן אינו «אין מנוע» אלא «אין מנוע **בין אלה שתיעדו את עצמם**» (L113).
+  const blind = engines.length - docs.length;
+  rminhu({ engine: 'engine-index.find', matter: `מטרה «${String(q).slice(0, 60)}»`,
+    searched: [`${docs.length} מנועים עם מטרה-מתועדת מתוך ${engines.length}`, `מונחי-השאילתה: ${qs.join('/') || '—'}`],
+    rulings: out.map((e) => had(e.file, `ציון ${e.score} · ${(e.purpose || '').slice(0, 70)}`))
+      .concat(blind ? [lo(`${blind} מנועים בלי מטרה-מתועדת`, 'אינם בקורפוס-החיפוש בכלל — המטרות הן דיווח-עצמי מכותרת-הקובץ (CLAUDE.md), ולכן «לא מצינו» כאן הוא «אין בין אלה שתיעדו את עצמם», לא «אין מנוע» (L113)')] : [])
+      //  קרוב-ונפל: מנוע שמונח-שאילתה מופיע בתוך המטרה שלו כתת-מחרוזת אך `near` (זהות/
+      //  קידומת ≥4) לא הדליק אותו. אלה המקורות היחידים ששווה לפסוק עליהם בשמם — חמישה
+      //  מנועים בסדר-המערך אינם «מקורות שהחיפוש הביא», הם סתם חמשת הראשונים בתיקייה.
+      .concat(out.length ? [] : scored.filter((x) => x.score === 0 && qs.some((t) => String(x.purpose || '').includes(t))).slice(0, 5)
+        .map((e) => pliga(e.file, `מונח מהשאילתה מופיע במטרה שהוא מדווח על עצמו, אך לא כמילה שלמה ולא כקידומת ≥4 (${qs.join('/')}) — התאמה-חלקית שהניקוד פוסל; אם זה המנוע, השאילתה היא שצריכה את מונחיו`))) });
+  return out;
 }
 
 /**
@@ -411,6 +429,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     if (!q) { console.log('usage: --find "<מטרה בעברית>"'); process.exit(0); }
     console.log(`❓ ${q}\n`);
     for (const r of find(q, engines)) console.log(`${String(r.score).padStart(6)}  ${r.file}\n        ${(r.purpose || '').slice(0, 150)}\n`);
+    (await import('../../yeshiva/rminhu.mjs')).printNotes('engine-index --find');
   } else if (A.includes('--connected')) {
     // ההיקף: רק מנועים **בתוך הריפו** — ריפואים-אחים אינם חלק מהמחולל הזה
     const own = engines.filter((e) => !/^(yeshiva-engine|buildsmart)\//.test(e.file));

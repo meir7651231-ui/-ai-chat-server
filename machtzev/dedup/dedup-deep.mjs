@@ -3,6 +3,7 @@
  *  regex זהים, ועיצוב-מולחם שכבר יש לו אטום בפלטה (מועמד-חיווט-מיידי). */
 import fs from 'node:fs';
 import crypto from 'node:crypto';
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const R = new URL('../registry/', import.meta.url).pathname;
 const load = f => { try { return JSON.parse(fs.readFileSync(R + f)); } catch { return []; } };
 const roots = Object.fromEntries(fs.readdirSync(R).filter(f=>f.startsWith('census-')).map(f=>{const c=JSON.parse(fs.readFileSync(R+f));return [c.repo,c.root];}));
@@ -42,6 +43,14 @@ for (const a of load('atoms-L0b-maor.json'))
   if (pigments.has(String(a.value).toLowerCase()))
     findings.styleRewire.push({ style: a.prop + ':' + a.value, count: a.count });
 
+// 🕯️ ורמינהו על ארבע העדשות: כל אחת מחזירה רשימה, ורשימה ריקה נבלעה במונה. עכשיו כל
+//    עדשה נפסקת בשמה — הדליקה ⇒ חד שיעורא עם ההיקף · לא הדליקה ⇒ פליגא, **וההיקף שנסרק**
+//    נאמר, כדי ש«0» לא ייקרא כ«אין תאומים» כשהוא «אין קלט» (L110 §4).
+rminhu({ engine: 'dedup-deep', matter: 'כפילויות ברזולוציית-הפירוק-המלא', searched: [R],
+  rulings: [['bodyTwins', 'גופי-פונקציה זהים'], ['nameTwins', 'שם-זהה בקבצים שונים'], ['regexTwins', 'regex זהה ≥3 מקומות'], ['styleRewire', 'עיצוב-מולחם שיש לו פיגמנט']]
+    .map(([k, he]) => ((findings[k] || []).length
+      ? had(`${k} (${he})`, `${findings[k].length} ממצאים`)
+      : pliga(`${k} (${he})`, `0 ממצאים — והשאלה היא אם אין תאומים או אין קלט: המרשם ${fs.existsSync(R) ? 'קיים' : 'אינו בקונטיינר הזה'}, ולכן 0 כאן אינו ראיה לניקיון (L110 §4)`))) });
 fs.writeFileSync(R + 'dupdeep.json', JSON.stringify(findings, null, 1));
 const bt = findings.bodyTwins.reduce((s, g) => s + g.members.length, 0);
 let md = `# 🔍 מחצב — כפילויות ברזולוציית-הפירוק-המלא\n\n`;
@@ -55,3 +64,4 @@ md += `\n## 4. עיצוב-מולחם שכבר יש לו פיגמנט בפלטה 
 findings.styleRewire.sort((a, b) => b.count - a.count).slice(0, 10).forEach(g => md += `| ${g.style} | ${g.count} |\n`);
 fs.writeFileSync(new URL('./DUPDEEP-REPORT.md', import.meta.url), md);
 console.log(`עומק: ${findings.bodyTwins.length} קבוצות גוף-זהה (${bt} פונקציות) · ${findings.nameTwins.length} שמות-כפולים · ${findings.regexTwins.length} regex-כפולים · ${findings.styleRewire.length} עיצובים-לחיווט-מיידי`);
+(await import('../../yeshiva/rminhu.mjs')).printNotes('dedup-deep');

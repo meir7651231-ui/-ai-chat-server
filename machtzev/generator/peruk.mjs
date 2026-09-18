@@ -9,6 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as R from '../root.mjs';
+import { rminhu, had, pliga, lo, printNotes } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 
 const GEN = R.GEN_DIR;
 const P = JSON.parse(fs.readFileSync(GEN + 'peruk-lang.data.json', 'utf8'));
@@ -105,7 +106,19 @@ const q = (s) => String(s).replace(/[|\[\]=]/g, ' ').replace(/\s+/g, ' ').trim()
 // ── 5 · הצומת ⇒ ספק ──
 export function perukToSpec(md, ns) {
   const d = parsePeruk(md);
-  const S = (k) => d.sections.find((s) => s.kind === k) || null;
+  // 🕯️ `S(k)` הוא **חיפוש**: הוא שואל את שלד-המסמך על סעיף, ומחזיר null. הקוראים
+  //    (‏chain · price · example · notin) הפכו את ה-null ל-`[]`, וכך «הסעיף לא נכתב במסמך»
+  //    ו«הסעיף נכתב ולא הפיק פריטים» יצאו כאותו מערך ריק. הפסק אומר מה **כן** היה בשלד.
+  const S = (k) => {
+    const hit = d.sections.find((s) => s.kind === k) || null;
+    if (!hit) {
+      const kinds = d.sections.map((x) => x.kind).filter(Boolean);
+      rminhu({ engine: 'peruk.section', matter: `פירוק «${d.id || d.title || '?'}» ⇒ סעיף «${k}»`,
+        searched: [`שלד-המסמך (${d.sections.length} סעיפים)`],
+        none: `לא מצינו: במסמך יש ${d.sections.length} סעיפים${kinds.length ? ` (${[...new Set(kinds)].join('/')})` : ''} ואף אחד אינו «${k}» — הכותרת לא נכתבה בפירוק, וזה חסר-מקור ולא חסר-יכולת (L57)` });
+    }
+    return hit;
+  };
   const product = S('product');
   const inputSec = product ? product.subs.find((s) => P.inputsHead.some((h) => s.head.includes(h))) : null;
   const outputSec = product ? product.subs.find((s) => P.outputsHead.some((h) => s.head.includes(h))) : null;
@@ -139,8 +152,23 @@ export function perukToSpec(md, ns) {
   }
   if (!disclaimer) { for (const sec of d.sections) for (const raw of allText(sec)) { const t = norm(raw); if (quoted(raw) && /לא ייעוץ|לא חוות/.test(t)) { disclaimer = t; break; } if (disclaimer) break; } }
   forbidden.forEach((t) => content.push({ group: groups.forbidden, tag: null, text: t }));
+  // 🕯️ ההסתייגות עוברת **שלושה** מעברים — (א) בלוק «חובה…:» / שורה-מצוטטת בסעיף «אסור» ·
+  //    (ב) סריקה-חוזרת של כל המסמך אחרי «לא ייעוץ/לא חוות» · (ג) הסתייגות-המוצר כברירת-מחדל.
+  //    השער דיווח רק «אין הסתייגות» או ⚠-ברירת-מחדל, ולא **איזה מהשלושה** נפל. שלוש «אין».
+  const discPass1 = !!disclaimer;
   let disclaimerDefault = false;
-  if (!disclaimer && P.defaultDisclaimer) { disclaimer = P.defaultDisclaimer; disclaimerDefault = true; }   // הכרעה-29 §11: חוקי-האחריות של המוצר = ברירת-מחדל כשהפירוק לא כתב הסתייגות — מדווח (⚠), לא מומצא
+  if (!disclaimer && P.defaultDisclaimer) { disclaimer = P.defaultDisclaimer; disclaimerDefault = true; }
+  rminhu({ engine: 'peruk.disclaimer', matter: `פירוק «${d.id || d.title || '?'}» ⇒ הסתייגות`,
+    searched: [`${d.sections.length} סעיפים · שורות-מצוטטות · P.defaultDisclaimer`],
+    rulings: [
+      discPass1 ? had('מעבר-1 (בלוק «חובה»/מצוטט ב«אסור»)', `נמצאה במסמך עצמו: «${String(disclaimer).slice(0, 60)}»`)
+        : lo('מעבר-1 (בלוק «חובה»/מצוטט ב«אסור»)', 'אין בלוק-חובה ואין שורה-מצוטטת בסעיף «אסור» — הכותרת/הציטוט לא נכתבו'),
+      discPass1 ? lo('מעבר-2 (סריקה-חוזרת «לא ייעוץ/לא חוות»)', 'לא רץ — מעבר-1 כבר הכריע')
+        : disclaimerDefault ? lo('מעבר-2 (סריקה-חוזרת «לא ייעוץ/לא חוות»)', 'רץ על כל שורות-המסמך ולא מצא שורה מצוטטת עם «לא ייעוץ»/«לא חוות»')
+          : had('מעבר-2 (סריקה-חוזרת «לא ייעוץ/לא חוות»)', `נמצאה בסריקה-החוזרת: «${String(disclaimer).slice(0, 60)}»`),
+      disclaimerDefault ? had('מעבר-3 (P.defaultDisclaimer)', 'הסתייגות-המוצר כברירת-מחדל (הכרעה-29 §11) — **מדווח** ⚠, לא מומצא')
+        : lo('מעבר-3 (P.defaultDisclaimer)', disclaimer ? 'לא נדרש — ההסתייגות נמצאה במסמך' : 'אין P.defaultDisclaimer בדאטה-השפה'),
+    ] });   // הכרעה-29 §11: חוקי-האחריות של המוצר = ברירת-מחדל כשהפירוק לא כתב הסתייגות — מדווח (⚠), לא מומצא
   if (disclaimer) content.push({ group: groups.disclaimer, tag: null, text: disclaimer });
   const notin = S('notin'); if (notin) content.push(...contentOf(notin, groups.notin));
   const ex = S('example'); if (ex) content.push(...contentOf(ex, groups.example));
@@ -216,7 +244,18 @@ export function perukToSpec(md, ns) {
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
   const dir = path.join(GEN, 'peruks'); const out = path.join(GEN, 'specs-ds');
+  // 🕯️ **«✓ peruk: 0 פירוקים ⇒ 0 ספקים» הוא ירוק שמודפס זהה על מדף-מלא ועל מדף-שנמחק** —
+  //    L110 §1 בשער חוסם. הפסק אומר איזה מהשניים; **קוד-היציאה לא שוניתי** (זו הכרעת-בעלים:
+  //    L110 §3 אומר «חֶסֶר-חלקי = אדום, אחרת מחיקת-קובץ הופכת לדרך להשתיק שער»).
   const docs = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith('.md')).sort() : [];
+  if (!docs.length) {
+    const other = fs.existsSync(dir) ? fs.readdirSync(dir) : null;
+    rminhu({ engine: 'peruk', matter: 'מדף-הפירוקים ⇒ ספקי-app-ds',
+      searched: [`${path.relative(R.ROOT, dir)} (*.md)`],
+      none: other === null
+        ? `לא מצינו: תיקיית ${path.relative(R.ROOT, dir)} אינה על הדיסק — 0 פירוקים, והשער בכל זאת ירוק. זה ∅ עם שם-המדף החסר, לא «אין פירוקים» (L110 §3)`
+        : `לא מצינו: ${path.relative(R.ROOT, dir)} קיימת ובה ${other.length} פריטים ואף אחד אינו .md — המדף שם, הפירוקים לא` });
+  }
   const gate = process.argv.includes('--gate'); let bad = 0; const index = [];
   for (const f of docs) {
     const ns = f.replace(/\.md$/, '').replace(/-/g, '');
@@ -238,6 +277,7 @@ if (isMain) {
   }
   if (!gate) fs.writeFileSync(path.join(GEN, 'peruk-index.json'), JSON.stringify(index, null, 1));
   else { const stored = fs.existsSync(path.join(GEN, 'peruk-index.json')) ? fs.readFileSync(path.join(GEN, 'peruk-index.json'), 'utf8') : ''; if (stored !== JSON.stringify(index, null, 1)) { bad++; console.log('🔴 peruk-index.json ≠ המחולל'); } }
+  printNotes('peruk');
   if (bad) process.exit(1);
   console.log(`${gate ? '✓ peruk' : '📄 peruk'}: ${docs.length} פירוקים ⇒ ${docs.length} ספקים (הכרעה-27 · G27)`);
 }

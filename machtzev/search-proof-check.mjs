@@ -8,6 +8,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import * as R from './root.mjs';
 import { scoreFor, loadOracle, layerOf } from './search-score.mjs';
+import { rminhu, pliga } from '../yeshiva/rminhu.mjs';   // 🕯️ «אין רשומה» גם הוא «אין» (הכרעה-23) — פסק על כל רשומה + פנקס
 const argv = process.argv.slice(2);
 const fi = argv.indexOf('--files');
 const added = fi >= 0 ? argv[fi + 1].split(',').filter(Boolean) : [];
@@ -22,7 +23,18 @@ const cur = { atomIndexSha: sha(fs.readFileSync(R.MACH + 'generator/atom-index-f
 const bad = [];
 for (const t of targets) {
   const rec = records.filter((r) => r.creates === t).sort((a, b) => (b.ts || '').localeCompare(a.ts || ''))[0];
-  if (!rec) { bad.push(`${t}: אין רשומת-חיפוש (node machtzev/search-record.mjs "<מילות-המטרה>" --creates ${t} --none "<למה>") — "אין" = "לא-חיפשת" (23-ד)`); continue; }
+  if (!rec) {
+    // 🕯️ ורמינהו לפני «אין רשומת-חיפוש» — השער עצמו היה נופל בדיוק לחטא שהוא אוכף: הוא בדק
+    //    שוויון-נתיב **מדויק** והכריז «אין», בלי לומר שסרק N רשומות ובלי לנקוב את הקרובות.
+    //    רשומה על אותו basename בנתיב אחר (אטום שהוזז/שונה-שם) היא מקור שחייב פסק, לא שתיקה.
+    const base = path.basename(t);
+    const near = records.filter((r) => r.creates && path.basename(r.creates) === base);
+    const r = rminhu({ engine: 'search-proof-check', matter: `רשומת-חיפוש ל-${t}`,
+      searched: [`${path.relative(R.ROOT, DIR)} (${records.length} רשומות)`],
+      rulings: near.map((n) => pliga(`${n.file} ⇒ ${n.creates}`, `אותו שם-קובץ (${base}) אך נתיב אחר — הרשומה תוכיחַ «אין» על נתיב שאינו הנבדק; אם האטום הוזז, הרץ חיפוש חדש עם --creates ${t}`)) });
+    bad.push(`${t}: אין רשומת-חיפוש (node machtzev/search-record.mjs "<מילות-המטרה>" --creates ${t} --none "<למה>") — "אין" = "לא-חיפשת" (23-ד)${r.rulings.length ? ` · ורמינהו: ${r.digest}` : ` · ורמינהו: ${records.length} רשומות נסרקו, אין אף אחת על ${base}`}`);
+    continue;
+  }
   const { file, sig, ...body } = rec;
   if (sha('machtzev-search-v1\n' + JSON.stringify({ ...body, sig: undefined })) !== sig) { bad.push(`${t}: רשומת-החיפוש ${file} נערכה אחרי החתימה (sig לא תואם) — הרץ מחדש`); continue; }
   if (rec.chosen !== 'none') { bad.push(`${t}: ברשומה נבחר ${rec.chosen || '(לא הוכרע)'} — אם יש אטום מתאים, חבר אותו; אטום חדש דורש --none "<למה>"`); continue; }
@@ -48,5 +60,6 @@ for (const t of targets) {
   const ignored = (rec.strong || []).filter((id) => !(rec.why || '').includes(id));
   if (ignored.length) bad.push(`${t}: מועמדים-חזקים שלא נזכרו ב-why: ${ignored.join(' · ')}`);
 }
-if (bad.length) { console.log(`🔴 search-proof: ${bad.length} אטומים חדשים בלי הוכחת-חיפוש תקפה:`); bad.forEach((b) => console.log('   ✗ ' + b)); process.exit(1); }
+if (bad.length) { console.log(`🔴 search-proof: ${bad.length} אטומים חדשים בלי הוכחת-חיפוש תקפה:`); bad.forEach((b) => console.log('   ✗ ' + b)); (await import('../yeshiva/rminhu.mjs')).printNotes('search-proof-check'); process.exit(1); }
 console.log(`✓ search-proof: ${targets.length} חדשים · לכולם רשומת-חיפוש חתומה על האורקל הנוכחי עם "אין" מנומק`);
+(await import('../yeshiva/rminhu.mjs')).printNotes('search-proof-check');

@@ -46,6 +46,7 @@ import { definal } from './match.mjs';
 import { nlToSpec } from './nl-spec.mjs';
 import { specFromSentence, soleClassOf } from './tzinor.mjs';   // הצינור המשולב — מה ש-app-ds באמת מריץ
 import * as R from '../root.mjs';
+import { rminhu, had, pliga, lo, printNotes } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 
 const GEN = R.GEN_DIR;
 // 📦 ידע-השפה — מאטומי-הדאטה הקיימים בלבד (§19-ד). אין פה טבלת-מילים.
@@ -89,6 +90,36 @@ function sourceOf(fieldWord, inputWords, deprefix) {
   }
   return null;
 }
+// 🕯️ למה `sourceOf` החזיר null — **שלוש** דרכי-התאמה נבדקות (זהות אחרי `definal` · אות-שימוש
+//    משני הצדדים · תחילית ≥MIN_PFX), והתשובה «אין מקור» יצאה אחת לשלושתן. בשער **חוסם**, שאומר
+//    למשתמש «המצאת שדה», זה ההבדל בין «המילה לא נאמרה» לבין «נאמרה בצורה שהכלל לא תפס».
+//    וגם: הקרוב-שנפל לא נאמר מעולם — «סעיפים» מול «סעיף» ו«ארנונה» מול «ארנונא» נראו זהה.
+const near = (fieldWord, inputWords, deprefix) => {
+  let best = null, bestN = 0;
+  for (const u of inputWords) for (const x of [u, deprefix(u)]) for (const f of [fieldWord, deprefix(fieldWord)]) {
+    const a = definal(x), b = definal(f); let n = 0;
+    while (n < a.length && n < b.length && a[n] === b[n]) n++;
+    if (n > bestN) { bestN = n; best = u; }
+  }
+  return { word: best, n: bestN };
+};
+export function sourcePsak(fieldWord, inputWords, deprefix, src, where) {
+  if (src) {
+    return rminhu({ engine: 'hamtzaa.sourceOf', matter: `${where} · מילת-שדה «${fieldWord}» ⇒ מקור בקלט`,
+      searched: [`${inputWords.length} מילות-תוכן בקלט`],
+      rulings: [had(src, definal(deprefix(src)) === definal(deprefix(fieldWord)) ? `זהות אחרי נרמול-אות-סופית/אות-שימוש (definal) — המילה נאמרה` : `תחילית משותפת ≥${MIN_PFX} אחרי definal — אותו שורש, נטייה אחרת`)] });
+  }
+  const nr = near(fieldWord, inputWords, deprefix);
+  return rminhu({ engine: 'hamtzaa.sourceOf', matter: `${where} · מילת-שדה «${fieldWord}» ⇒ מקור בקלט`,
+    searched: [`${inputWords.length} מילות-תוכן בקלט`],
+    rulings: [
+      lo('זהות (definal)', `אף מילת-קלט אינה זהה ל-«${fieldWord}» אחרי נרמול-אות-סופית — לא נאמרה כמות-שהיא`),
+      lo('אות-שימוש (deprefix)', `הסרת אות-שימוש משני הצדדים (${'' + (inputWords.length ? 'על כל מילות-הקלט' : 'אין מילות-קלט')}) לא יצרה זהות`),
+      nr.word
+        ? pliga(`תחילית (MIN_PFX=${MIN_PFX})`, `הקרוב ביותר הוא «${nr.word}» עם ${nr.n} תווים משותפים — ${nr.n >= MIN_PFX ? 'ובכל זאת אינו תחילית מלאה של אחד מהם' : `מתחת לרצפת-${MIN_PFX}, ולכן אינו ראיה (תחילית קצרה הייתה מאשרת כל שדה)`}`)
+        : lo(`תחילית (MIN_PFX=${MIN_PFX})`, 'אין אף מילת-קלט להשוות אליה — הקלט ריק ממילות-תוכן, וזה «לא-קראנו» ולא «המציא»'),
+    ] });
+}
 
 /** גרעין-השער · טהור: (קלט, ספק) ⇒ כל שדה עם/בלי מקור.
  *  spec = טקסט-הספק כמו-שהוא (שורות `ישות … עם …`); input = טקסט-המקור. */
@@ -102,13 +133,24 @@ export function detectInvented(inputText, specText, lang = LANG) {
   for (const line of String(specText || '').split(/\r?\n/)) {
     const t = line.trim();
     if (!t || !entRe.test(t)) continue;
-    let r; try { r = interpret(t); } catch { continue; }
+    // 🕯️ `catch { continue }` דילג על **שורת-ספק שלמה** בשקט: שורה שהצרכן-האמיתי לא מצליח
+    //    לפרסר אינה נבדקת להמצאה, והשער נשאר ירוק עליה. הנעילה fail-closed שבראש הקובץ תופסת
+    //    רק «אפס שדות בכלל»; **חֶסֶר-חלקי** (‏L110 §3) עבר בשתיקה. הזרימה לא שוניתי (חוק-7) —
+    //    מה שנוסף הוא שהדילוג אומר את עצמו, ובשם השגיאה.
+    let r;
+    try { r = interpret(t); } catch (e) {
+      rminhu({ engine: 'hamtzaa.interpret', matter: `שורת-ספק «${t.slice(0, 50)}» ⇒ סכמה`,
+        searched: ['entity.interpret (הצרכן-האמיתי של הספק)'],
+        rulings: [lo('entity.interpret', `**זרק** ${e && e.name ? e.name : 'שגיאה'}: ${String((e && e.message) || e).slice(0, 100)} — השורה מדולגת ושדותיה **אינם נבדקים להמצאה**; ירוק כאן הוא «לא-נבדק»`)] });
+      continue;
+    }
     for (const s of (r.schema || [])) {
       let fw = contentWords(heWords(s.label));
       if (!fw.length) fw = heWords(s.label);   // שדה שכולו-פיגום: בודקים אותו כמו-שהוא, לא פוטרים
       if (!fw.length) continue;                // אין מילה-עברית כלל ⇒ לא שדה-עברית
       let src = null;
       for (const w of fw) { src = sourceOf(w, inputWords, deprefix); if (src) break; }
+      sourcePsak(fw[0], inputWords, deprefix, src, `ישות «${r.entity}» · שדה «${s.label}»`);
       rows.push({ entity: r.entity, field: s.label, source: src });
     }
   }
@@ -156,13 +198,42 @@ export function needTokens(need) {
 /** אסימון ⇒ מקור, או null. שלושה סוגים בלבד; אין סוג רביעי ואין ניחוש. */
 export function tokenSource(tok, goalText, chain, inputWords, deprefix) {
   const raw = unq(tok);
-  if (/^\d[\d.,]*$/.test(raw)) return String(goalText).includes(raw) ? { kind: 'ליטרל', src: `מטרה (ליטרל "${raw}")` } : null;
+  // 🕯️ התיעוד כאן אומר «שלושה סוגים בלבד; אין סוג רביעי ואין ניחוש» — והקוד **לא אמר איזה
+  //    מהשלושה נפל**. שלושת המסלולים בלעדיים (מספר ⇒ ליטרל · עברית ⇒ מילה · אחרת ⇒ סכמה),
+  //    ולכן `null` נשא שלוש משמעויות שונות לגמרי. זו בדיוק ∅ של `purpose.goalPsak` (דוח-הסגירה
+  //    §6), וכאן היא עוד לא תוקנה. הערך המוחזר אינו זז (חוק-7).
+  const psak = (rulings) => rminhu({ engine: 'hamtzaa.tokenSource', matter: `אסימון «${raw}» ⇒ מקור`,
+    searched: [`מטרה (${inputWords.length} מילות-תוכן) · שרשרת-סכמה (${chain.slots.size} שקעים · ${chain.classes.length} מחלקות)`], rulings });
+  if (/^\d[\d.,]*$/.test(raw)) {
+    const inGoal = String(goalText).includes(raw);
+    psak([
+      inGoal ? had('ליטרל במטרה', `המספר "${raw}" מופיע בטקסט-המטרה כמות-שהוא`)
+        : lo('ליטרל במטרה', `המספר "${raw}" אינו מופיע בטקסט-המטרה — קבוע שנכתב בקוד ולא נאמר (§20-ג)`),
+      lo('מילה במטרה', `"${raw}" הוא מספר ולא מילה-עברית — סוג-המקור השני אינו חל עליו`),
+      lo('שרשרת-סכמה', `"${raw}" הוא מספר — שרשרת-הסכמה ממפה מילות-תוכן למחלקות, לא ליטרלים`),
+    ]);
+    return inGoal ? { kind: 'ליטרל', src: `מטרה (ליטרל "${raw}")` } : null;
+  }
   const he = heWords(raw);
   if (he.length) {
     const hits = he.map((w) => sourceOf(w, inputWords, deprefix));
-    return hits.every(Boolean) ? { kind: 'מילה', src: `מטרה (מילה "${hits.join(' ')}")` } : null;
+    const ok = hits.every(Boolean);
+    const miss = he.filter((w, i) => !hits[i]);
+    psak([
+      lo('ליטרל במטרה', `"${raw}" אינו מספר — סוג-המקור הראשון אינו חל עליו`),
+      ok ? had('מילה במטרה', `כל ${he.length} מילות-האסימון נמצאו בקלט: ${hits.join(' ')}`)
+        : lo('מילה במטרה', `${miss.length} מ-${he.length} מילות-האסימון בלי מקור בקלט: ${miss.join('/')} — **חלקי הוא כישלון** (מילה אחת שנאמרה אינה ממקרת אסימון שלם)`),
+      lo('שרשרת-סכמה', `"${raw}" מכיל עברית ⇒ נבדק כמילה; שרשרת-הסכמה נבדקת רק על מפתחות לועזיים`),
+    ]);
+    return ok ? { kind: 'מילה', src: `מטרה (מילה "${hits.join(' ')}")` } : null;
   }
   const sl = chain.slots.get(raw);
+  psak([
+    lo('ליטרל במטרה', `"${raw}" אינו מספר`),
+    lo('מילה במטרה', `"${raw}" אינו מכיל אות עברית — מפתח לועזי, ולכן נשאל רק מול שרשרת-הסכמה`),
+    sl ? had('שרשרת-סכמה', `${sl.src} ⇐ «${sl.word}» ⇒ ${sl.cls}`)
+      : lo('שרשרת-סכמה', `המפתח "${raw}" אינו באף אחד מ-${chain.slots.size} שקעי-הסכמה של ${chain.classes.length} המחלקות שהמטרה הגיעה אליהן${chain.open && chain.open.length ? ` (${chain.open.length} מילות-מטרה נשארו בלי מחלקה-יחידה)` : ''} — «אין-ישות», לא «אין-יכולת» (PLAN-100 §2-ב)`),
+  ]);
   if (sl) return { kind: 'סכמה', src: `${sl.src} ⇐ «${sl.word}» ⇒ ${sl.cls}` };
   return null;
 }
@@ -344,6 +415,7 @@ if (isMain) {
         if (list) for (const [t, src] of Object.entries(row.sources)) console.log(`       ✓ ${t} ← ${src}`);
       }
     }
+    printNotes('hamtzaa');
     if (has('--gate') && r.invented.length) { console.error(`🚨 hamtzaa: ${r.invented.length}/${r.needs} צרכים עם אסימון בלי מקור במטרה — המצאה (L57)`); process.exit(1); }
     process.exit(0);
   }
@@ -364,6 +436,7 @@ if (isMain) {
   else { console.log('usage: node hamtzaa.mjs [--gate|--ratchet|--peruks|--nl|--peruk N|--file <in> <spec>|--needs <needs.json> --goal <goal.txt>] [--list] [--json]'); process.exit(0); }
 
   assertRan(rs);
+  printNotes('hamtzaa');
   if (json) console.log(JSON.stringify(rs, null, 2));
   else rs.forEach((r) => report(r, list || !(has('--gate') || has('--ratchet'))));
   const bad = rs.reduce((a, r) => a + r.invented.length, 0);

@@ -10,6 +10,7 @@ import path from 'node:path';
 import * as R from '../root.mjs';
 import { atomIndex } from './atom-index.mjs';
 import { logicCensus } from './logic-census.mjs';
+import { rminhu, had, pliga, lo, printNotes } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const G = R.GEN_DIR;
 const rj = (f) => JSON.parse(fs.readFileSync(path.join(G, f), 'utf8'));
 
@@ -46,12 +47,35 @@ if (process.argv.includes('--gate')) {
   const DUPB = R.MACH + 'dup-class-baseline.json';
   const known = new Set(fs.existsSync(DUPB) ? JSON.parse(fs.readFileSync(DUPB, 'utf8')) : []);
   const freshDup = dups.filter((c) => !known.has(c));
+  // 🕯️ ההערה מעל אומרת את זה במילים שלה: «הראשון-אלפביתית מנצח **בשקט**». הירוק סופר
+  //    «כפילויות-מחלקה N (חוב-מנוהל)» — מספר. **מי** מוסתר, ובאיזה קובץ, לא נאמר מעולם,
+  //    וזה בדיוק האטום שאף מנוע-חיפוש לא יראה. הראצ׳ט והבסיס לא זזו.
+  rminhu({ engine: 'oracle.dup', matter: `שמות-מחלקה כפולים ב-dart-ui-bs ⇒ מי מוסתר`,
+    searched: [`new/dart-ui-bs · ${Object.keys(byCls).length} שמות-מחלקה · ${known.size} ברצפה`],
+    rulings: dups.slice(0, 10).map((c) => pliga(c, `${byCls[c].length} קבצים: ${byCls[c].join(' | ')} — האינדקס לוקח את **${byCls[c][0]}**, והשאר מוסתרים מכל מנוע-חיפוש (הכרעה-K)`)),
+    none: 'לא מצינו: אין שם-מחלקה שמופיע ביותר מקובץ אחד תחת dart-ui-bs' });
   if (freshDup.length) { console.error(`🔴 שם-מחלקה כפול חדש (${freshDup.length}): ${freshDup.map((c) => c + ' [' + byCls[c].join(' | ') + ']').join(' · ')}`); process.exit(1); }
   if (dups.length < known.size) console.log(`ℹ️ baseline may shrink: dup-class ${known.size}→${dups.length} — מוחל בטבעת-push`);
   let full; try { full = rj('atom-index-full.json'); } catch { console.error('🔴 אין atom-index-full.json — הרץ --write'); process.exit(1); }
-  if (full.length !== expect) { console.error(`🔴 אורקל לא-שלם: ${full.length} ≠ ${expect} (תצוגה+לוגיקה) — אטום נפל!`); process.exit(1); }
+  if (full.length !== expect) {
+    // 🕯️ «אטום נפל!» היה **מספר מול מספר**. איזה אטום נפל — לא נאמר, וזו בדיוק השאלה
+    //    שהשער קיים כדי לענות עליה. הפסק נוקב בשמות לפני שהוא נופל.
+    const inFull = new Set(full.map((a) => a.layer + '\u0001' + a.id));
+    const lost = merged.filter((a) => !inFull.has(a.layer + '\u0001' + a.id));
+    const extra = full.filter((a) => !merged.some((m) => m.layer === a.layer && m.id === a.id));
+    rminhu({ engine: 'oracle', matter: `אורקל-מאוחד: ${full.length} בקובץ מול ${expect} בעץ-החי`,
+      searched: [`atom-index.json (${disp.length}) + logic-census.json (${logic.length}) ⇒ atom-index-full.json (${full.length})`],
+      rulings: [
+        ...lost.slice(0, 8).map((a) => pliga(`${a.layer}/${a.id}`, `קיים במיזוג-החי (${a.file}) ו**אינו** ב-atom-index-full.json — זה האטום שנפל, והשער ידע רק לומר «אטום נפל»`)),
+        ...extra.slice(0, 5).map((a) => lo(`${a.layer}/${a.id}`, `קיים בקובץ ואינו במיזוג-החי — האינדקס מחזיק אטום שכבר אינו על המדף (ההפך מ«נפל»)`)),
+      ],
+      none: `לא מצינו: הספירות שונות (${full.length} מול ${expect}) אך אף אטום אינו חסר או עודף בשמו — ההפרש הוא כפילות-זהות בתוך אותה שכבה` });
+    printNotes('oracle');
+    console.error(`🔴 אורקל לא-שלם: ${full.length} ≠ ${expect} (תצוגה+לוגיקה) — אטום נפל: ${lost.slice(0, 5).map((a) => a.id).join(', ') || '(ההפרש אינו בשם — ראה הפסק)'}`); process.exit(1);
+  }
   const d = full.filter((a) => a.layer === 'display').length, l = full.filter((a) => a.layer === 'logic').length;
   if (d !== disp.length || l !== logic.length) { console.error(`🔴 אורקל לא-מאוזן: display ${d}/${disp.length} · logic ${l}/${logic.length}`); process.exit(1); }
+  printNotes('oracle');
   console.log(`✓ אורקל-מאוחד שלם: ${full.length} = תצוגה ${d} + לוגיקה ${l} (אפס-איבוד) · אינדקס ≡ עץ-חי · כפילויות-מחלקה ${dups.length} (חוב-מנוהל, רק-יורד)`);
   process.exit(0);
 }

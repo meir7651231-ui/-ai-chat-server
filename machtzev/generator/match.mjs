@@ -8,6 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import * as R from '../root.mjs';
+import { rminhu, had, pliga } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 
 const HERE = R.GEN_DIR;
 const readJson = (p, d) => { try { return JSON.parse(fs.readFileSync(path.join(HERE, p), 'utf8')); } catch { return d; } };
@@ -52,7 +53,18 @@ export function retrieve(phrase, top = 5) {
     .slice(0, top);
 }
 
-export const best = (phrase, min = 1.5) => { const r = retrieve(phrase, 1)[0]; return r && r.s >= min ? r : null; };
+// 🕯️ best = נקודת-ה«אין» של האחזור-לתצוגה: מחזיר null ⇒ הקורא מכריז «אין אטום». לפני ה-null,
+//    ורמינהו על **כל** מועמד שהדירוג העלה, בשמו: ציון ≥ min ⇒ חד שיעורא (נפלט) · ציון מתחת
+//    לרצפה ⇒ פליגא, עם הציון והרצפה · אפס מועמדים ⇒ «לא מצינו» שאומר מה נסרק. ואז null.
+export const best = (phrase, min = 1.5) => {
+  const cands = retrieve(phrase, 5);
+  const r = rminhu({ engine: 'match.best', matter: `ביטוי «${String(phrase).slice(0, 60)}»`,
+    searched: [`atlas.widgets (${N} אטומי-תצוגה עם תיאור-עצמי)`],
+    rulings: cands.map((c) => (c.s >= min
+      ? had(c.cls, `ציון ${c.s} ≥ רצפה ${min} · כיסוי ${c.cover}`)
+      : pliga(c.cls, `ציון ${c.s} מתחת לרצפה ${min} (כיסוי ${c.cover}: ${c.m} מילים מהביטוי נגעו) — מסגור מקרי, לא בקשת-אטום`))) });
+  return r.hit ? cands.find((c) => c.cls === r.hit.src) : null;
+};
 
 // ── שכבת-לוגיקה: אחזור אטומי-לוגיקה לפי-משמעות (אותו מנגנון, מעל atlas.functions) ──
 const RETS = new Set(['String', 'String?', 'int', 'double', 'num', 'bool']);
@@ -81,9 +93,16 @@ const clsWords = (cls) => cls.replace(/^_+/, '').replace(/([a-z0-9])([A-Z])/g, '
 const WCLS = atlas.widgets.map((w) => ({ cls: w.cls, words: clsWords(w.cls) }));
 export function matchClass(name) {
   const q = clsWords(name);
-  const r = WCLS.map((w) => { let s = 0; for (const t of q) if (w.words.includes(t)) s++; return { cls: w.cls, s }; })
-    .filter((x) => x.s > 0).sort((a, b) => b.s - a.s)[0];
-  return r || null;
+  const ranked = WCLS.map((w) => { let s = 0; for (const t of q) if (w.words.includes(t)) s++; return { cls: w.cls, s }; })
+    .filter((x) => x.s > 0).sort((a, b) => b.s - a.s);
+  //    🕯️ ורמינהו לפני ה-null: הראשון-בדירוג ⇒ חד שיעורא · השאר ⇒ פליגא (חפיפה קטנה יותר).
+  //    אפס חפיפה ⇒ «לא מצינו» שאומר על אילו מילות-מחלקה נסרקו 'WCLS.length' אטומים.
+  const r = rminhu({ engine: 'match.matchClass', matter: `שם-מחלקה «${name}» ⇒ אטום-קטלוג`,
+    searched: [`atlas.widgets (${WCLS.length} שמות-מחלקה) · מילות-השאילתה: ${q.join('/') || '—'}`],
+    rulings: ranked.slice(0, 5).map((x, i) => (i === 0
+      ? had(x.cls, `${x.s} מילות-מחלקה חופפות — הגבוה בדירוג`)
+      : pliga(x.cls, `${x.s} מילות-מחלקה חופפות מול ${ranked[0].s} של ${ranked[0].cls} — הגבוה גובר (אותו מנגנון, ציון נמוך)`))) });
+  return r.hit ? ranked[0] : null;
 }
 
 // ── CLI: בדיקת-אחזור מהירה ──
@@ -92,4 +111,6 @@ if (import.meta.url === 'file://' + process.argv[1]) {
   if (!q) { console.log('שימוש: node match.mjs "<ביטוי>"'); process.exit(0); }
   console.log(`🔎 "${q}" · נלמד מ-${N} אטומים`);
   for (const r of retrieve(q, 6)) console.log(`   ${r.s}\t${r.cls}`);
+  best(q);
+  (await import('../../yeshiva/rminhu.mjs')).printNotes('match');
 }

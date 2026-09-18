@@ -9,6 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import * as R from '../root.mjs';
+import { rminhu, had, pliga, lo, printNotes } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 
 const ROOT = R.ROOT;
 const GEN = path.join(ROOT, 'machtzev/generator');
@@ -63,9 +64,23 @@ export function quarry(file) {
     if (isClose(first)) curCls = '(top)';                        // אחרי סוגר-המחלקה: רמת-קובץ (זנב/פונקציות-חופשיות אינם של המחלקה)
     const hdrLine = code.find((l) => isHeader(l) || isSub(l));
     const header = hdrLine ? hdrLine.replace(/^\s*\/\/\s*[═─]+\s*/, '').replace(/\s*[═─]+\s*$/, '').trim() : (isBuilder(first) ? first.trim() : (isClass(first) ? first.trim() : ''));
-    const declared = hdrLine && header.includes('=') ? [...header.split('=').pop().matchAll(/\b([A-Za-z_][A-Za-z0-9_]*)\b/g)].map((m) => m[1]).filter((s) => ATOM_IDS.has(s)) : [];
+    // 🕯️ `filter(ATOM_IDS.has)` הוא **חיפוש במדף**, והנשר ממנו נעלם: מזהה שהבנאי כתב בהצהרת-ה-⊕
+    //    ואינו ב-ops-map פשוט אינו נספר, והדוח מדפיס «⇒ [A ⊕ B]» כאילו זו ההצהרה המלאה. זה L113
+    //    («מה שלא במדף, המנוע מכריז אין עליו») בתוך מנוע-החציבה. וגם: אטום **שהוצהר ואינו בקוד**
+    //    נבלע — ההצהרה והמימוש לא הושוו מעולם. הערכים המוחזרים אינם זזים (חוק-7).
+    const rawDecl = hdrLine && header.includes('=') ? [...header.split('=').pop().matchAll(/\b([A-Za-z_][A-Za-z0-9_]*)\b/g)].map((m) => m[1]) : [];
+    const declared = rawDecl.filter((s) => ATOM_IDS.has(s));
     const ids = new Set([...code.join('\n').matchAll(/\b([A-Za-z_][A-Za-z0-9_]*)\b/g)].map((m) => m[1]));
     const used = [...ids].filter((s) => ATOM_IDS.has(s) && !/^(String|List|Map|Set|Widget|Text|int|num|bool)$/.test(s));
+    if (rawDecl.length) {
+      rminhu({ engine: 'quarry-golden', matter: `שבר «${file}#${idx}» · הצהרת-⊕ «${header.slice(0, 60)}»`,
+        searched: [`ops-map (${ATOM_IDS.size} מזהי-אטום) · ${ids.size} מזהים בגוף-השבר`],
+        rulings: rawDecl.map((sym) => (!ATOM_IDS.has(sym)
+          ? lo(sym, `הבנאי הצהיר עליו ב-⊕ והוא **אינו ב-ops-map** — נשמט מ-declaredAtoms בשקט; L113: חסר-רישום, ולא «הבנאי כתב שטות»`)
+          : ids.has(sym)
+            ? had(sym, 'מוצהר ב-⊕ **וגם** מופיע בגוף-השבר — ההצהרה והמימוש נפגשים')
+            : pliga(sym, `מוצהר ב-⊕ אך **אינו מופיע בגוף-השבר** — ההצהרה מבטיחה אטום שהקוד כאן אינו קורא לו (ייתכן שהוא בשבר אחר, וייתכן שההצהרה מיושנת)`))) });
+    }
     const ops = [...new Set(used.map((s) => atomById.get(s).op))];
     const need = imports.filter((im) => ids.has(im.sym)).map((im) => im.path);
     // הגדרות שהשבר תורם (לסגירת-תלויות בהרכבה): מתודות/שדות סטטיים · בוני-תצוגה · שדות-state · מחלקות
@@ -129,10 +144,12 @@ if (process.argv.includes('--gate')) {
   if (frags.length < base.fragments) errs.push(`שברים ירדו ${base.fragments}⇒${frags.length}`);
   if (insight.length < base.insight) errs.push(`תובנות ירדו ${base.insight}⇒${insight.length}`);
   if (errs.length) { console.log('🔴 goldquarry: ' + errs.join(' · ')); process.exit(1); }
+  printNotes('quarry-golden');
   console.log(`✓ goldquarry: ${all.length} מודולי-זהב ⇒ ${frags.length} שברים (${insight.length} תובנות) · round-trip ביט-לביט 9/9`); process.exit(0);
 }
 // הקטלוג = מטא-דאטה בלבד (טווחים, לא טקסט): הבייטים נקראים מהמקור לפי range בעת ההרכבה — המקור הוא ה-fixture, והקטלוג נשאר < 1MB (nobinary)
 fs.writeFileSync(OUT, JSON.stringify({ modules: all.map((q) => ({ file: q.file, lines: q.lines, roundTrip: q.roundTrip })), fragments: frags.map(({ lines, ...f }) => f) }, null, 0));
+printNotes('quarry-golden');
 fs.writeFileSync(REPORT, md);
 if (process.argv.includes('--write-baseline') || !fs.existsSync(BASE)) fs.writeFileSync(BASE, JSON.stringify({ fragments: frags.length, insight: insight.length }));
 process.stdout.write(md.split('\n').slice(0, 16).join('\n') + '\n');

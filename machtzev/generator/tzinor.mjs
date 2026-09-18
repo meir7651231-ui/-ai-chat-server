@@ -36,6 +36,7 @@ import { fileURLToPath } from 'node:url';
 import * as R from '../root.mjs';
 import { VERTICAL_PACKS } from '../../new/atoms/vertical-packs.mjs';
 import { FIELDS } from '../../new/atoms/schema-fields.mjs';
+import { rminhu, had, pliga } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 import { normSearch } from '../../new/atoms/norm-search.mjs';
 import { NORM_SEARCH_T } from '../../new/atoms/norm-search-strings.mjs';
 import { stem } from './match.mjs';
@@ -257,8 +258,19 @@ export function candidatesFor(word) {
  *  שאלה ויקבלו את אותה תשובה: מועמד-אמת = יש מחלקה · יש שקעים · לא-רופף.
  *  יחיד ⇒ `{ cls, fields, src }` · כמה ⇒ `{ cls: null, options }` (מתג) · אין ⇒ null. */
 export function soleClassOf(word) {
-  let c = [];
-  try { c = candidatesFor(word).filter((x) => x.cls && x.strict !== false && (x.fields || []).length); } catch { return null; }
+  let c = [], all = [];
+  try { all = candidatesFor(word); c = all.filter((x) => x.cls && x.strict !== false && (x.fields || []).length); } catch { return null; }
+  // 🕯️ שלוש התוצאות כאן הן שלוש «אין» **שונות** שנראו זהות לקורא: יחיד ⇒ הכרעה · כמה ⇒ מתג
+  //    (‏L114: בחירה בין מועמדים אינה מוכרעת בתוך המנוע) · אפס ⇒ «אין-ישות», הפער שמודד
+  //    PLAN-100 §2-ב ב-88 יחידות. עכשיו כל מועמד שהשרשרת העלתה נפסק בשמו ובסיבת-הפסילה
+  //    שלו, והפנקס נושא את מפת-העבודה: מי נפל על «בלי-שקעים» ומי על «רופף».
+  rminhu({ engine: 'tzinor.soleClassOf', matter: `מילה «${word}» ⇒ מחלקת-סכמה`,
+    searched: Object.keys(SRC),
+    rulings: all.map((x) => (c.length === 1 && x === c[0]
+      ? had(x.cls || `(${word})`, `מועמד-אמת יחיד · ${(x.fields || []).length} שקעים · מוצא ${((x.evidence || [])[0]) || '?'}`)
+      : c.includes(x)
+        ? pliga(x.cls, `מועמד-אמת אך אינו יחיד — ${c.length} מועמדים (${c.map((y) => y.cls).join('/')}), ולכן מתג-לבעלים ולא הכרעה-במנוע (L114)`)
+        : pliga(x.cls || `(${word})`, `נמצא בשרשרת אך אינו מועמד-אמת: ${!x.cls ? 'אין מחלקה' : x.strict === false ? 'התאמה רופפת (strict=false)' : 'אין שקעי-סכמה'} — זה חסר-שקע, לא חסר-ישות`))) });
   if (c.length === 1) return { cls: c[0].cls, fields: c[0].fields, src: (c[0].evidence || [])[0] || null };
   if (c.length > 1) return { cls: null, options: c.map((x) => x.cls) };
   return null;
