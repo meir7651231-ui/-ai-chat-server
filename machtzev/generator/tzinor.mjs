@@ -48,6 +48,7 @@ export const SRC = {
   fields: 'new/atoms/schema-fields.mjs',
   lang: 'machtzev/generator/nl-lang.data.json',
   sentence: 'machtzev/generator/sentence.mjs',
+  screens: 'knowledge/assets/screens',
 };
 
 const LANG = JSON.parse(fs.readFileSync(R.GEN_DIR + 'nl-lang.data.json', 'utf8'));
@@ -64,6 +65,7 @@ const EACH = LANG.eachWords || [];
 const IMPLIED = LANG.impliedMark || '';
 const PLURAL_RE = new RegExp('(' + (LANG.pluralSuffixes || []).join('|') + ')$');
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿'"׳״]*/g)].map((m) => m[0]);
+const HE_W = /[\u05d0-\u05ea]/;   // תא בלי אות-עברית אינו שם-ישות
 const content = (ws) => ws.filter((w) => w.length > 1 && !LEAD.has(w) && !MARK.includes(w) && !CONJ.includes(w));
 const pluralW = (w) => PLURAL_RE.test(w || '');
 const deL = (w) => (w.length >= 4 && w[0] === 'ל' && !PLURAL_RE.test(w)) ? w.slice(1) : w;
@@ -210,6 +212,67 @@ export function domainsFor(words) {
   return { ranked, pick: top.length === 1 ? top[0].id : null };
 }
 
+// ══ מסכי-הידע: מקור-סכמה רביעי (L113 · «המדף עיוור ל-knowledge ול-HTML») ══════
+//  הבעלים כתב תוכניות-מוסד כ-HTML, ובהן טבלאות שכל שורה בהן היא **הצהרת-ישות**:
+//  ‏<th>ישות</th><th>שדות עיקריים</th>. המדף מעולם לא סרק אותן, ולכן `classOf`
+//  הכריז «אין» על ישויות שהבעלים הצהיר עליהן בכתב — «אין» כוזב (הכרעה-23).
+//
+//  🔒 **מבנה, לא מחרוזת.** הקורא נכנס רק דרך הכותרות: טבלה בלי <th>ישות</th>
+//  אינה נקראת. זו בדיוק ההגנה שהמדידה-לפי-grep חסרה — `grep "תור"` החזיר
+//  «תורם · תורה · תורת» (6 תאונות-תת-מחרוזת, 0 ישויות); הקורא הזה מחזיר 0.
+//
+//  🔒 **אפס-המצאה.** `cls` = שם-הישות **כלשונו** — לא תעתיק, לא PascalCase
+//  מומצא. שם-מחלקה שאינו בשום מקום הוא דאטה שהמצאתי (§20-ג). כל שדה נושא
+//  `file:line` של השורה שממנה נחצב, ולכן `audit()` מקבל אותו.
+//  מחלקת-סכמה ומסך שנפגשים על אותה מילה ⇒ שני מועמדים ⇒ `soleClassOf` מחזיר
+//  מתג, לא הכרעה (הכרעה-24). הקורא **אינו** מכריע ביניהם.
+const SCREENS_DIR = path.join(R.ROOT, SRC.screens);
+const TH_ENT = /^ישות/, TH_FLD = /שדות/;
+const stripTags = (h) => h.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&')
+  .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
+// פיצול ברמה-העליונה בלבד — «נושא (ברכה / עצה / שידוך)» הוא שדה אחד, לא ארבעה.
+const splitTop = (s0) => { const out = []; let d = 0, cur = '';
+  for (const ch of s0) { if (ch === '(') d++; else if (ch === ')') d--; 
+    if (ch === ',' && d <= 0) { out.push(cur); cur = ''; } else cur += ch; }
+  if (cur.trim()) out.push(cur); return out.map((x) => x.trim()).filter(Boolean); };
+
+let SCREEN_ENTS = null;
+/** מסכי-ה-HTML ⇒ הצהרות-ישות. דטרמיניסטי · נקרא-פעם-אחת · אפס-רשת. */
+export function screenEntities() {
+  if (SCREEN_ENTS) return SCREEN_ENTS;
+  const out = [];
+  let files = []; try { files = fs.readdirSync(SCREENS_DIR).filter((f) => f.endsWith('.html')).sort(); } catch { return (SCREEN_ENTS = out); }
+  for (const f of files) {
+    let src; try { src = fs.readFileSync(path.join(SCREENS_DIR, f), 'utf8'); } catch { continue; }
+    const lineAt = (i) => src.slice(0, i).split('\n').length;   // file:line לכל שורת-הצהרה
+    for (const tb of src.matchAll(/<table[^>]*>([\s\S]*?)<\/table>/g)) {
+      const body = tb[1];
+      const heads = [...body.matchAll(/<th[^>]*>([\s\S]*?)<\/th>/g)].map((m) => stripTags(m[1]));
+      const ie = heads.findIndex((h) => TH_ENT.test(h)), ifl = heads.findIndex((h) => TH_FLD.test(h));
+      if (ie < 0 || ifl < 0) continue;   // לא טבלת-ישויות ⇒ לא נקראת כלל
+      for (const tr of body.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/g)) {
+        const tds = [...tr[1].matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)].map((m) => stripTags(m[1]));
+        if (tds.length <= Math.max(ie, ifl)) continue;
+        const name = tds[ie], fldCell = tds[ifl];
+        if (!name || !HE_W.test(name)) continue;
+        const at = `${SRC.screens}/${f}:${lineAt(tb.index + tr.index)}`;
+        // «קוויטל / פדיון נפש» = שם אחד בשתי צורות (כלל-הפורמט של altForms), לא שתי ישויות
+        const forms = name.split('/').map((x) => x.trim()).filter(Boolean);
+        const fields = splitTop(fldCell).map((raw) => {
+          const par = raw.match(/\(([^)]*)\)/);
+          const fname = raw.replace(/\([^)]*\)/g, ' ').replace(/\s+/g, ' ').trim();
+          // סוגריים עם «/» = רשימת-ערכים מוצהרת; בלי «/» = הערה. צורה, לא מילון.
+          const en = par && par[1].includes('/') ? par[1].split('/').map((x) => x.trim()).filter(Boolean) : null;
+          return fname ? { name: fname, type: null, optional: true, enum: en, src: `${at}#${name}.${fname}` } : null;
+        }).filter(Boolean);
+        if (!fields.length) continue;   // הצהרה בלי שדות אינה שקע — לא נכנסת (§20-ג)
+        out.push({ cls: forms[0], forms, fields, file: `${SRC.screens}/${f}`, at });
+      }
+    }
+  }
+  return (SCREEN_ENTS = out);
+}
+
 /** מילת-ישות ⇒ **כל** המועמדים, ממוזגים למחלקה. כל מועמד נושא את כל ראיותיו. */
 export function candidatesFor(word) {
   const own = heWords(word).map(nz);
@@ -248,6 +311,17 @@ export function candidatesFor(word) {
     else if (CLASSES.has(cls)) byClass.set(cls, { kind: 'מחלקת-סכמה', cls, keys: [], via: [`${SRC.sentence}:resolve (המסלול-הסגור)`], score: r.score, strict: false, evidence: [r.src] });
   }
   const out = [...byClass.values()].map((c) => ({ ...c, fields: fieldsOf(c.cls) }));
+  // מקור רביעי: הצהרות-הישות במסכי-הידע (L113). אותו `scoreForm` בדיוק — אותו סף,
+  // אותה מורפולוגיה. מסך אינו גובר על סכמה ואינו נדחה מפניה: שניהם מועמדים,
+  // והריבוי הופך ל**מתג** ב-`soleClassOf` (הכרעה-24).
+  for (const se of screenEntities()) {
+    const sc = Math.max(...se.forms.flatMap(altForms).map((f) => scoreForm(own, f)), 0);
+    if (sc < 3) continue;   // סף-זהות מלא: התאמה חלקית למסך היא תאונה (נמדד — «תור»⇒«תורם»)
+    const prev = out.find((c) => c.cls === se.cls);
+    if (prev) { prev.evidence.push(`${se.at} (טבלת ישות/שדות)`); continue; }
+    out.push({ kind: 'ישות-ממסך', cls: se.cls, keys: [], via: [`${se.at} (טבלת ישות/שדות)`],
+      score: sc, strict: true, evidence: [`${se.at} (טבלת ישות/שדות)`], fields: se.fields });
+  }
   out.sort((a, b) => (b.strict - a.strict) || (b.score - a.score) || a.cls.localeCompare(b.cls));
   return [...out, ...noClass];
 }

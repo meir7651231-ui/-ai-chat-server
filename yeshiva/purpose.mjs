@@ -123,6 +123,27 @@ export function typeHint(word) {
  *  כמה מועמדים ⇒ `{ options }` ו**לא** מכריעים (§20 · הכרעה-24). */
 export const classOf = soleClassOf;   // כלל-ההכרעה חי ב-tzinor (מקור אחד לשני הצרכנים)
 
+// ── שקעי-מסך: **צורת-הערך נגזרת, לא מומצאת** (L113 · המשך-ישיר של הסריקה) ──────
+//  הצהרת-ישות במסך-HTML נושאת שם-שדה ולא טיפוס — ולכן `TYPE_SHAPE` לא מצא לה
+//  צורה, והפסק דיווח «ישות-בלי-שקע» על ישות שהוא **כן** מצא. הפער אינו חסר-מקור:
+//  שם-השדה מוצהר בטבלה, ורמזי-הטיפוס מוצהרים ב-`spec-lang.data.json:type*` —
+//  אותו אטום ואותו `typeHint` שהפסק כבר מריץ על מילות-המטרה (שלב 2 ב-goalPsak).
+//  לכן זו **גזירה משני מקורות מצוטטים**, לא השלמת-ברירת-מחדל: שם-שדה בלי רמז
+//  נשאר חסר-צורה (∅), ולא מקבל טיפוס-ניחוש. הטוקן נכתב באוצר-המילים של הסכמה
+//  עצמה (‏IsoDate · number · boolean) כדי שלא ייווצר ניב-טיפוסים שני.
+const DERIVED_T = { typeDate: 'IsoDate', typeNum: 'number', typePercent: 'number', typeBool: 'boolean' };
+/** מילת-ישות ⇒ שקעיה, אחרי גזירת-צורה לשדות-מסך. שדה-סכמה אינו נוגע. */
+export function slotsOfWord(word) {
+  let k; try { k = classOf(word); } catch { return []; }
+  const fields = (k && k.fields) || [];
+  return fields.map((f) => {
+    if (f.type) return f;                       // שדה-סכמה: הטיפוס מוצהר — לא נוגעים
+    const t = typeHint(f.name);
+    if (!t || !t.type || !DERIVED_T[t.type]) return f;   // אין רמז-יחיד ⇒ ∅, לא ניחוש
+    return { ...f, type: DERIVED_T[t.type], typeFrom: t.src };
+  });
+}
+
 /**
  * 🎯 **הפסק על מטרה חופשית.** מטרה ⇒ תביעות ⇒ דרישות (ישות · שדה · קבוע), לכל
  * דרישה מקור או ∅. שלושה סוגי-מקור, לפי הסדר:
@@ -143,7 +164,7 @@ export function goalPsak(sentence, origin = 'מטרה') {
     for (const w of words) {
       const k = classOf(w); if (!k) continue;
       claimed.add(w);
-      if (k.cls) reqs.push({ kind: 'ישות', demand: di, verb: d.verb, word: w, cls: k.cls, slots: k.fields.length, src: k.src });
+      if (k.cls) reqs.push({ kind: 'ישות', demand: di, verb: d.verb, word: w, cls: k.cls, slots: slotsOfWord(w).length, src: k.src });
       else reqs.push({ kind: 'ישות', demand: di, verb: d.verb, word: w, cls: null, options: k.options, src: null, why: `${k.options.length} מועמדי-סכמה — לא מכריעים` });
     }
     // (2) שדות — רמז-טיפוס; נקשר לשקע-סכמה של ישות שהוכרעה, לפי **צורת-הערך**
@@ -170,7 +191,7 @@ export function goalPsak(sentence, origin = 'מטרה') {
   });
   // קשירת-שקע: שדה/קבוע עם צורת-ערך ⇒ שקע-סכמה באותה צורה, מהישויות שהוכרעו.
   const cls = reqs.filter((r) => r.kind === 'ישות' && r.cls);
-  const slotsOf = (c) => { try { return (classOf(c.word) || {}).fields || []; } catch { return []; } };
+  const slotsOf = (c) => slotsOfWord(c.word);
   const pool = cls.flatMap((c) => slotsOf(c).map((f) => ({ cls: c.cls, ...f })));
   for (const r of reqs) {
     const shape = TYPE_SHAPE[r.type]; if (!shape) continue;
@@ -190,7 +211,7 @@ export function goalSlots(sentence, origin = 'מטרה') {
   const out = new Map();
   for (const r of goalPsak(sentence, origin).requirements) {
     if (r.kind !== 'ישות' || !r.cls) continue;
-    for (const f of ((classOf(r.word) || {}).fields || [])) if (!out.has(f.name)) out.set(f.name, { src: f.src, cls: r.cls, word: r.word });
+    for (const f of slotsOfWord(r.word)) if (!out.has(f.name)) out.set(f.name, { src: f.src, cls: r.cls, word: r.word });
   }
   return out;
 }
@@ -223,7 +244,7 @@ const signalsIn = (words) => {
  *  השקעים של הישויות שהפסק הכריע** (‏`classOf(<מילת-ישות>).fields`) — לא מ-`classOf`
  *  של מילת-הדרישה עצמה, שעבור קבוע היא מספר ואין לה מחלקה (נמדד). */
 const slotPool = (psak) => psak.requirements.filter((r) => r.kind === 'ישות' && r.cls)
-  .flatMap((e) => ((classOf(e.word) || {}).fields || []).map((f) => ({ cls: e.cls, ...f })));
+  .flatMap((e) => slotsOfWord(e.word).map((f) => ({ cls: e.cls, ...f })));
 const slotOf = (r, pool) => {
   if (!r.slot) return null;
   const [cls, field] = String(r.slot).split('.');

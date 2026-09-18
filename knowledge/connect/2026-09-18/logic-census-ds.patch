@@ -1,0 +1,57 @@
+diff --git a/machtzev/census/logic-census.mjs b/machtzev/census/logic-census.mjs
+index e99c561..2049836 100644
+--- a/machtzev/census/logic-census.mjs
++++ b/machtzev/census/logic-census.mjs
+@@ -10,7 +10,14 @@ import fs from 'node:fs'; import path from 'node:path';
+ import * as R from '../root.mjs';
+ const ROOT = R.NEW;
+ const OUT = (R.GEN_DIR + 'logic-census.json');
+-const SCAN = ['dart-maor', 'dart', 'dart-boxes'];   // G48 · קופסאות = הרכבות-חיווט על המדף (§21 רקורסיבי); שמות שכבר-באטומים מדולגים (הקופסה מייצאת-מחדש) — רק נקודות-כניסה ייחודיות נכנסות
++const SCAN = ['dart-maor', 'dart', 'dart-boxes', 'dart-ui-bs/ds'];   // G48 · קופסאות = הרכבות-חיווט על המדף (§21 רקורסיבי); שמות שכבר-באטומים מדולגים (הקופסה מייצאת-מחדש) — רק נקודות-כניסה ייחודיות נכנסות
++// ⬆ L113 · **אטומי-ההצבה במפקד.** `dart-ui-bs/ds` הוא ספריית-העיצוב, ולכן נסרק ע"י
++//   `atom-index` (ווידג׳טים) — אבל בתוכו יושבים גם **אטומי-הצבה**: פונקציות-גבול-פלטפורמה
++//   בתבנית ייצוא-מותנה (`ds_x.dart` ⇒ `_web`/`_stub`). הן אינן ווידג׳טים ולכן לא נכנסו
++//   לאינדקס-התצוגה, והן אינן ב-3 שורשי-הלוגיקה ולכן לא נכנסו לכאן — **24 אטומים שהמדף
++//   לא ראה מעולם**, ובהם `voiceListen` (הקובץ היחיד עם `@JS(` ב-new/), שחוּוט ביד
++//   ב-`balagan.mjs:1617`. מנוע-מדף שאינו רואה אטום מכריז עליו «אין» — «אין» כוזב.
++//   הכלל עקרוני ולא רשימה: כל נקודת-כניסה עליונה בספריית-ההצבה, כמו בכל שורש אחר.
+ const PRIM = new Set(['String', 'int', 'double', 'num', 'bool']);
+ 
+ // פיצול רשימת-פרמטרים ברמה-העליונה בלבד (מכבד <> ו-() של טיפוסי-פונקציה/גנריות).
+@@ -40,6 +47,20 @@ export function logicCensus() {
+     let files; try { files = fs.readdirSync(path.join(ROOT, dir)).filter((f) => f.endsWith('.dart') && !f.endsWith('_test.dart') && !f.endsWith('-proof.dart')); } catch { continue; }
+     for (const f of files.sort()) {
+       const src = fs.readFileSync(path.join(ROOT, dir, f), 'utf8');
++      // L113 · **נקודת-הכניסה היא החזית, לא הענף.** אטום-הצבה חי בשלושה קבצים:
++      //   `ds_x.dart` (‏export ... if (dart.library.js_interop) ...) · `ds_x_web` · `ds_x_stub`.
++      //   המפקד רואה גוף-פונקציה רק בענפים, והדדופ-לפי-שם שומר את הראשון-אלפביתית —
++      //   כלומר את ה-**stub**, שמחזיר תמיד null/false. מנוע שיחווט לפיו יקבל פיצ'ר
++      //   מת-בשקט (אותה מחלקה של G55). לכן: כשקיימת חזית שמייצאת את הענף, הקובץ
++      //   הרשום הוא החזית — נגזר משורת-ה-export שבדיסק, לא מהשם.
++      const br = f.match(/^(.+)_(web|stub)\.dart$/);
++      let entry = dir + '/' + f, branches = null;
++      if (br) { const fc = path.join(ROOT, dir, br[1] + '.dart');
++        try { if (fs.readFileSync(fc, 'utf8').includes(`'${f}'`)) entry = dir + '/' + br[1] + '.dart'; } catch { /* אין חזית */ }
++        // אין חזית ⇒ הייבוא-המותנה יושב אצל הקורא (נמדד: ds_store.dart:7 · ds_push.dart:9 ·
++        // gen_balagan_keys.dart:6). אז **שני הענפים נרשמים**, כדי שאיש לא יחווט ענף יחיד
++        // ויקבל את הסטאב תמיד — זו בדיוק תקלת-«מת-בשקט» של G55, וכאן היא נמנעת בהצהרה.
++        if (entry === dir + '/' + f) branches = ['web', 'stub'].map((b) => `${dir}/${br[1]}_${b}.dart`).filter((x) => fs.existsSync(path.join(ROOT, x))); }
+       // פונקציה-עליונה (כולל רב-שורתית + named-params): <ret> <name>(<params>) { | => | async
+       for (const m of src.matchAll(/^([A-Za-z_][A-Za-z0-9_<>?,. ]*?)\s+([a-z][A-Za-z0-9_]*)\(([\s\S]*?)\)\s*(?:\{|=>|async)/gm)) {
+         const [, ret0, name, paramStr] = m;
+@@ -49,8 +70,13 @@ export function logicCensus() {
+         seen.add(name);
+         const params = paramStr.trim() ? splitParams(paramStr).map(paramType) : [];
+         const allPrim = params.length > 0 && params.every(isPrim);
+-        atoms.push({ file: dir + '/' + f, name, ret, params, argc: params.length,
+-          wireable: allPrim && isDisplayable(ret) });   // קלט-פרימיטיבי + פלט-מוצג ⇒ ניתן-לחיווט כשדה-מחושב
++        // L113 · אטום-הצבה אינו שדה-מחושב. `downloadText(String,String,String) ⇒ bool`
++        // עובר את מבחן-הפרימיטיביים, אבל הוא **מוריד קובץ** — חיווטו כשדה-מחושב הוא
++        // תופעת-לוואי שמתחזה לחישוב. גבול-פלטפורמה ⇒ `wireable:false`, בהצהרה.
++        const placement = dir === 'dart-ui-bs/ds';
++        atoms.push({ file: entry, name, ret, params, argc: params.length,
++          ...(placement ? { seam: 'placement' } : {}), ...(branches && branches.length ? { branches } : {}),
++          wireable: !placement && allPrim && isDisplayable(ret) });   // קלט-פרימיטיבי + פלט-מוצג ⇒ ניתן-לחיווט כשדה-מחושב
+       }
+     }
+   }

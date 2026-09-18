@@ -5,7 +5,7 @@
   "resolved": 22,
   "open": 21,
   "multi": 6,
-  "fieldsTotal": 465,
+  "fieldsTotal": 475,
   "invented": 0
  },
  "rows": [
@@ -40,7 +40,7 @@
   "9:הזמנות=ShopAssignment[9]",
   "10:ספר=—",
   "10:שואל=—",
-  "11:רכב=Member[17]+Room[12]",
+  "11:רכב=Member[17]+Room[12]+רכב[10]",
   "12:מכון כושר=—",
   "13:לקוחות=Family[25]+Supporter[24]",
   "13:עסקאות=—",
