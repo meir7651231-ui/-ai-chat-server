@@ -56,6 +56,16 @@ q node machtzev/dedup/dedup.mjs                                       # dedup.lo
 q node machtzev/dedup/dedup-deep.mjs                                  # דורש machtzev/registry — קורס לפני הפסק
 q node machtzev/dedup/reconcile.mjs                                   # דורש machtzev/registry — קורס לפני הפסק
 
+# ── גל-6 · שילובים (1 מ-5) ────────────────────────────────────────────────
+#   logic-proof · «אף מועמד אינו טהור» מול «אין דוגמאות» — שתי «אין» שחזרו כמפה ריקה אחת
+q node -e 'import("./machtzev/generator/logic-proof.mjs").then((m)=>{m.proveCandidates("zzq_no_examples",[{id:"x",file:"dart/qq.dart"}],[]);m.proveCandidates("zzq_no_cands",[],[[["1"],"r==1"]])})'
+
+# ── גל-7 · אינדקסים (4 מ-11) ──────────────────────────────────────────────
+q node machtzev/tools/box-coverage.mjs                                # box-coverage · 6 סיבות-נפילה
+q node machtzev/empire-coverage.mjs                                   # empire-coverage · מכנה-אפס ⇒ NaN
+q node machtzev/census.mjs "$PWD/machtzev/carve" carvetest            # census · תחומים + תיקיות-אטומות
+rm -rf machtzev/registry 2>/dev/null || true                          # תוצר-המפקד, לא נכנס לעץ
+
 # הרצת-המנוע-המלאה על מטרת-הליבה — המקור הגדול של מהלכים
 q node machtzev/generator/behavior-plan.mjs --goal knowledge/connect/goals/liba.txt
 # שחזור תופעות-הלוואי: המנועים כותבים תוצרים, והראיה אינה שינוי-עץ.

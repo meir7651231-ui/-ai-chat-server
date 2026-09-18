@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «לא הוכח» ≠ «נכשל» ≠ «אין כלי» (הכרעה-23 · L34)
 import * as R from '../root.mjs';
 import { resolveDart } from '../dart-bin.mjs';
 import { emit as jsToDart } from '../emit/ast-js-to-dart.mjs';   // up-crosslang · הממיר JS⇒Dart (מנוע קיים)
@@ -21,7 +22,23 @@ const filesOf = (c) => c.chain ? c.chain.map((q) => q.file) : c.tree ? treeAtoms
 /** @param id מזהה-הצורך · cands [{id,file}] | {chain:[{id,file},{id,file}]} | {tree:root,argc} · examples [[argsDart, checkDart]] ⇒ {candId: {ok,total}} | {error} */
 export function proveCandidates(id, cands, examples, extraImports = [], env = {}) {   // env: {clock,human,world} — שקעי-סביבה (up-sockets); examples[j][2] = {now, human:{…}} לכל דוגמה   // extraImports: שקעים מהקטלוג (אטומי-דאטה/מנועים) שהדוגמאות קוראות להם בלי קידומת
   // הכרעה-20ב · «אין-יחיד ⇒ שלב כמה»: מועמד = יחיד · שרשרת B(A(args)) · **עץ-הרכבה** של עד 3 צמתים (up-chain3); כל צמתיו חייבים להיות טהורים
-  const pure = cands.filter((c) => filesOf(c).every(isPure)); if (!pure.length || !examples || !examples.length) return {};
+  const pure = cands.filter((c) => filesOf(c).every(isPure));
+  // 🕯️ ה-`return {}` הזה הוא ה«אין» המרכזי של הבורר, והוא **בלע שתי סיבות שונות לגמרי**:
+  //    «אף מועמד אינו טהור» (‏המדף — יש קוד, הוא נוגע ב-IO) מול «אין דוגמאות» (‏החוזה — אין
+  //    מה להוכיח בכלל). מפה ריקה נקראת אצל הקורא כ«לא הוכח», והוא אינו יכול לדעת מי מהשתיים.
+  //    L34 כבר קבע את ההבחנה על `tool=dart` («אין-כלי ≠ כשל»); כאן היא מורחבת לשתי האחרות.
+  if (!pure.length || !examples || !examples.length) {
+    rminhu({ engine: 'logic-proof.proveCandidates', matter: `צורך «${id}»`,
+      searched: [`${cands.length} מועמדים תואמי-חתימה`, `${(examples || []).length} דוגמאות-זהב`, 'מסנן-טוהר isPure על כל קובץ של כל מועמד'],
+      rulings: [
+        cands.length && !pure.length
+          ? pliga(`${cands.length} מועמדים`, `כולם נפסלו במסנן-הטוהר (${cands.slice(0, 4).map((c) => c.id).join(',')}) — יש קוד שעושה את זה, והוא נוגע ב-IO/מצב/שעון: זה חסר-**טהרה**, לא חסר-יכולת, והתיקון הוא הוצאת-השקע ולא כתיבת-אטום חדש`)
+          : cands.length ? null : lo('מועמדים תואמי-חתימה', 'אף מועמד לא הגיע לבורר — הסינון קרה למעלה (חתימה), ולכן «לא הוכח» כאן אינו עדות על המדף'),
+        (examples && examples.length) ? null
+          : pliga('דוגמאות-זהב', 'אין אף דוגמה (קלט ⇒ בדיקה) לצורך הזה — אין מה להריץ, ולכן המפה הריקה היא חסר-**חוזה** ולא כשל-מועמד; הוכחה קודמת לתיאור, ובלי דוגמה אין הוכחה לשום כיוון'),
+      ].filter(Boolean) });
+    return {};
+  }
   const all = proveFile(id, pure, examples, extraImports, env);
   if (!all.error) return all;
   // G36 · מועמד אחד שאינו מתקמפל מול הדוגמאות (חתימה-בקטלוג ≠ גוף) לא מפיל את כולם: מוכיחים כל מועמד בקובץ-משלו; הנכשל-בקומפילציה = 0/total עם השגיאה
