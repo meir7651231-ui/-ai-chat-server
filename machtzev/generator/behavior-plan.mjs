@@ -16,6 +16,7 @@ import { mirror } from './mirror.mjs';   // שלב-2 של ship — אותה מר
 import { catalog } from './auto-logic.mjs';
 import { proveCandidates, isPure, buildInterp, evalInterp, jsTwinRows, jsParity } from './logic-proof.mjs';
 import * as R from '../root.mjs';
+import { rminhu, had, pliga, lo, printNotes } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(HERE, 'behavior-plan.json');
 
@@ -452,6 +453,28 @@ export function plan({ prove = true, needs = NEEDS, earlyExit = false, values = 
     const top = cands[0] || null; const ok = top && (pf.error ? top.score > 0 : top.proven);
     // שקע-ספק: מועמד שכל תאיו ok/∅ (אף כישלון) = ספק, לא כשל — מדווח, לא נבחר (§20-ג)
     const doubt = Object.entries(pf).filter(([k, v]) => v && v.unknown > 0 && v.ok + v.unknown === v.total).map(([k]) => k).slice(0, 5);
+    // 🕯️ **`ok/n` בשורה הירוקה הוא מונה.** צורך לא-פתור נושא שלוש סיבות שונות לגמרי, והמונה
+    //    מאחד אותן: (א) **אפס מועמדים** — החתימה לא מצאה כלום · (ב) היו מועמדים ואף אחד לא
+    //    עבר את הדוגמאות · (ג) הנבחר הוא **ספק** (כל תאיו ok/∅ ⇒ הדוגמאות לא מפעילות אותו).
+    //    ו-🔴 סיבה רביעית שאינה «אין» אלא **הסמכה חלופית**: `pf.error` ⇒ הקריטריון מתחלף
+    //    מ-`proven` ל-`score > 0` — כלומר כשמריץ-ההוכחה נפל, הצורך יכול לעבור **בלי הוכחה**.
+    //    זה ירוק שנשען על ניקוד-טקסט (‏L27), והוא לא נאמר באף מקום. ההתנהגות לא שוניתי.
+    rminhu({ engine: 'behavior-plan', matter: `צורך «${id}» (${need.params.join(',')}) ⇒ ${need.ret}`,
+      searched: [`קטלוג-הלוגיקה · ${singles.length} מועמדים-יחידים בחתימה · ${comps.length} הרכבות/עצים${chainsOf[id] ? ` (עומק ${chainsOf[id].depth || 0}${chainsOf[id].overflow ? ' · גלש' : ''})` : ''} · ${need.examples ? need.examples.length : 0} דוגמאות`],
+      rulings: cands.slice(0, 5).map((c, i) => {
+        const cell = `${c.ok}/${need.examples ? need.examples.length : 0}`;
+        if (i === 0 && ok) {
+          return had(c.id, pf.error
+            ? `🔴 נבחר **בלי הוכחה**: מריץ-ההוכחה נפל (${String(pf.error).slice(0, 60)}) והקריטריון התחלף ל-score ${c.score} > 0 — הסמכה חלופית, לא הוכחה בריצה`
+            : `עבר ${cell} דוגמאות${c.chain || c.tree ? ` · הרכבה (${c.nodes} צמתים · argc ${c.sumArgc})` : ' · יחיד'} · score ${c.score}${doubt.includes(c.id) ? ' · 🔴 **ספק**: כל תאיו ok/∅ — הדוגמאות אינן מפעילות אותו' : ''}`);
+        }
+        return pliga(c.id, c.proven
+          ? `גם הוא עבר ${cell}, אך ${cands[0].id} גובר בסדר-ההכרעה (מוכח > ok > יחיד-לפני-עץ > פחות-צמתים > argc > score)`
+          : `עבר ${cell} בלבד — לא כל הדוגמאות; ${doubt.includes(c.id) ? 'ובנוסף כל תאיו ok/∅ ⇒ **ספק**, לא כשל' : 'כשל-הוכחה בריצה, לא ניקוד-טקסט'}`);
+      }),
+      none: singles.length + comps.length === 0
+        ? `לא מצינו: **אפס מועמדים** — אף מנוע בקטלוג אינו תואם-חתימה ל-(${need.params.join(',')}) ⇒ ${need.ret}, וגם אין הרכבה כשרה${chainsOf[id] && chainsOf[id].overflow ? ' (מרחב-החיפוש גלש — ייתכן שהחסר הוא עומק, לא אטום)' : ''}. זה חסר-אטום`
+        : `לא מצינו: ${singles.length + comps.length} מועמדים נוקדו ואף אחד לא עבר את ${need.examples ? need.examples.length : 0} הדוגמאות — יש אטומים, אין הוכחה. זה חסר-התאמה, לא חסר-אטום` });
     const socketsUsed = ok && top.tree ? [...new Set(leafKinds(top.tree))].filter((k) => k !== 'p').map((k) => ({ c: 'literal', t: 'clock', h: 'human', w: 'world' })[k] || k).concat(top.tree.k === 'g' ? ['guard'] : []).concat(top.crossLang && top.crossLang.length ? ['cross-language'] : []) : [];
     out[id] = { shape: need.shape, routine: need.routine || null, doubt, ties: (chainsOf[id] || {}).ties || 0, weakExamples: !!((chainsOf[id] || {}).discriminators || []).length, discriminators: (chainsOf[id] || {}).discriminators || [], sockets: socketsUsed, parity: ok && top.parity ? top.parity : null, crossLang: ok && top.crossLang ? top.crossLang : [], pick: ok ? top.id : null, file: ok ? top.file : null, chain: ok && top.chain ? top.chain : null, tree: ok && top.tree ? top.tree : null, nodes: top ? top.nodes : 0, score: top ? top.score : 0, proven: !!(top && top.proven), candidates: singles.length, chainsAdmissible: chainsOf[id] ? chainsOf[id].admissible : 0, treeDepth: chainsOf[id] ? chainsOf[id].depth : 0, treeOverflow: chainsOf[id] ? !!chainsOf[id].overflow : false, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.ok}/${need.examples ? need.examples.length : 0}${c.proven ? '✓' : ''}:n${c.nodes}:a${c.sumArgc}:${c.score}`), proof: pf, chains: chainsOf[id] || null };
   }
@@ -1006,5 +1029,6 @@ if (isMain) {
   const n = Object.keys(P).length, ok = Object.values(P).filter((p) => p.pick).length;
   if (fails.length) { console.log(`🔴 behavior: ${fails.length} כשלים\n  ` + fails.slice(0, 12).join('\n  ')); process.exit(1); }
   const ch = Object.values(P).filter((p) => p.chain).length;
+  printNotes('behavior-plan');
   console.log(`✓ behavior: ${ok}/${n} צרכים ⇒ חלקיקים נבחרו-בהוכחה-בריצה (${Object.values(P).filter((p) => p.proven).length} מוכחים · ${ch} בשרשרת — הכרעה-20ב) מ-${catalog().rows.length} מנועים` + (gate ? ' · מיובאים+נקראים · מתאמים דקים' : ' · behavior-plan.json'));
 }

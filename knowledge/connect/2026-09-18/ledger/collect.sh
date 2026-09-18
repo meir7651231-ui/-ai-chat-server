@@ -87,6 +87,33 @@ q node machtzev/generator/peruk.mjs --gate
 q node machtzev/generator/hamtzaa.mjs --ratchet
 q node machtzev/generator/hamtzaa.mjs --needs machtzev/generator/goals/payments/needs.json --goal knowledge/connect/goals/payments.txt   # tokenSource · שלושת סוגי-המקור
 
+# ── גל-ג׳ (נעוצים) · חציבה ושילובים ────────────────────────────────────────
+#   auto-skin · «נבחרו מבנית» כשהתיקו-בראש הוכרע באלפבית
+q node machtzev/generator/auto-skin.mjs --gate
+#   auto-logic · ה-continue שהניח «אטום-תצוגה» · «unadaptable» כמילה אחת לשלוש דחיות
+q node machtzev/generator/auto-logic.mjs --gate
+#   synth · ארבעת ה-continue בלולאת-החיפוש · «כישלון כן» בלי חשבון
+q node machtzev/generator/synth.mjs
+#   quarry-golden · הצהרת-⊕ מול ops-map ומול גוף-השבר
+q node machtzev/generator/quarry-golden.mjs --gate
+#   behavior-plan · ok/n כמונה · pf.error ⇒ הסמכה בלי הוכחה
+q node machtzev/generator/behavior-plan.mjs --goal knowledge/connect/goals/liba.txt
+git checkout -- machtzev/generator/goals 2>/dev/null || true
+
+# ── גל-ד׳ (נעוצים) · אינדקסים ───────────────────────────────────────────────
+#   logic-census · 467 שמות שנשמטו · מדף שנעלם · seen שלושה-ב-אחד
+q node machtzev/census/logic-census.mjs
+#   atom-index · הכרעה-K («הראשון מנצח בשקט») · זרעי-מסך שנבלעו ב-catch{}
+q node machtzev/census/atom-index.mjs
+#   atom-census · walk שבלע מדף · caps⇒'chrome' כנפילה-אחורה
+q node machtzev/census/atom-census.mjs
+#   oracle · «אטום נפל!» בלי שם · מי מוסתר בכפילות-מחלקה
+q node machtzev/census/oracle.mjs --gate
+#   import-graph · הרדיוס שמחליט כמה מהמשטרה תרוץ
+q node machtzev/census/import-graph.mjs new/dart-ui-bs/ds/ds.dart CLAUDE.md
+git checkout -- machtzev/generator/atom-index.json machtzev/generator/logic-census.json machtzev/generator/atom-index-full.json 2>/dev/null || true
+rm -f machtzev/generator/atom-census.json 2>/dev/null || true
+
 # הרצת-המנוע-המלאה על מטרת-הליבה — המקור הגדול של מהלכים
 q node machtzev/generator/behavior-plan.mjs --goal knowledge/connect/goals/liba.txt
 # שחזור תופעות-הלוואי: המנועים כותבים תוצרים, והראיה אינה שינוי-עץ.

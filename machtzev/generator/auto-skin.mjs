@@ -7,6 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { rminhu, had, pliga, lo, printNotes } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const GEN = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(GEN, '../..');
 const MANIFEST = path.join(ROOT, 'new/dart-forge-bs/forge-manifest.json');
@@ -120,9 +121,36 @@ export function score(role, a) {
 }
 export function rank(role, atoms) {
   const R = ROLES[role]; const out = [];
-  for (const a of atoms) { if (!fits(a, R)) continue; const sc = score(role, a); if (sc == null) continue; out.push({ cls: a.cls, family: a.family, score: sc }); }
+  // 🕯️ **שני `continue` שנראו זהים ואינם.** `fits` נופל על דרישת-הצורה הקשה (need/משפחה);
+  //    `score()==null` הוא **וטו של התפקיד עצמו** («KPI = מספר מודגש» · «כפתור = <button>» …).
+  //    שניהם נעלמו בשקט, וזו בדיוק משפחת-ה-`ops-particles` (34 מ-38 נשרו משני continue).
+  const noFit = [], vetoed = [];
+  for (const a of atoms) {
+    if (!fits(a, R)) { noFit.push(a.cls); continue; }
+    const sc = score(role, a);
+    if (sc == null) { vetoed.push(a.cls); continue; }
+    out.push({ cls: a.cls, family: a.family, score: sc });
+  }
   const fi = (f) => (R.fam ? R.fam.indexOf(f) : 0);
-  return out.sort((x, y) => y.score - x.score || fi(x.family) - fi(y.family) || (x.cls < y.cls ? -1 : 1));
+  const ranked = out.sort((x, y) => y.score - x.score || fi(x.family) - fi(y.family) || (x.cls < y.cls ? -1 : 1));
+  //    🔴 ו**התיקו**: `sort` שובר שוויון לפי סדר-המשפחה ואז **אלפבית**. הירוק אומר «נבחרו
+  //    מבנית», ובתפקידים שבהם כמה אטומים מקבלים את אותו ציון בדיוק — «מבנית» הוא סדר-שמות.
+  const tie = ranked.filter((x) => ranked.length && x.score === ranked[0].score);
+  rminhu({ engine: 'auto-skin', matter: `תפקיד-עור «${role}» (need ${R.need}${R.fam ? ` · משפחות ${R.fam.join('/')}` : ''}) ⇒ אטום-forge`,
+    searched: [`forge-manifest (${atoms.length} אטומים) · ${noFit.length} נפלו בדרישת-הצורה · ${vetoed.length} נפסלו בווטו-התפקיד · ${ranked.length} נוקדו`],
+    rulings: [
+      ...ranked.slice(0, 6).map((x, i) => (i === 0
+        ? had(x.cls, tie.length > 1
+          ? `ציון ${x.score} — ו**${tie.length} אטומים באותו ציון בדיוק** (${tie.slice(1, 4).map((y) => y.cls).join(',')}${tie.length > 4 ? ',+' : ''}); ההכרעה היא סדר-המשפחה ואז אלפבית, כלומר **סדר ולא ראיה**`
+          : `ציון ${x.score} · משפחה ${x.family} — הגבוה יחיד בדירוג`)
+        : pliga(x.cls, x.score === ranked[0].score
+          ? `ציון ${x.score} **זהה** ל-${ranked[0].cls} — נדחה על סדר-המשפחה/אלפבית בלבד, לא על צורה`
+          : `ציון ${x.score} מול ${ranked[0].score} של ${ranked[0].cls} — צורה פחות מתאימה לתפקיד`))),
+      noFit.length ? lo(`fits(need=${R.need}${R.fam ? `,fam=${R.fam.join('/')}` : ''})`, `${noFit.length} אטומים אינם עומדים בדרישת-הצורה הקשה — לא נוקדו כלל; זו **פסילה מבנית**, לא ציון נמוך`) : null,
+      vetoed.length ? lo(`וטו-התפקיד (score⇒null)`, `${vetoed.length} אטומים עומדים בצורה אך התפקיד פסל אותם בתנאי משלו (דוגמה: ${vetoed.slice(0, 3).join(',')}) — «אין» שונה לגמרי מ-fits, ושניהם היו אותו continue`) : null,
+    ].filter(Boolean),
+    none: `לא מצינו: אף אחד מ-${atoms.length} אטומי-forge לא הגיע לניקוד לתפקיד «${role}» — ${noFit.length} נפלו בדרישת-הצורה (${R.need}) ו-${vetoed.length} בווטו-התפקיד. אין ברירת-מחדל, והתפקיד יישאר **בלי אטום**` });
+  return ranked;
 }
 // גשר-טונים: DS tone 0 accent · 1 success · 2 danger · 3 warning ⇒ טוקן-tone של Pure (הסמנטיקה ok/warn/err קבועה במשפחה — לא מילון-דומיין)
 export function toneMapOf(a) {
@@ -152,10 +180,18 @@ if (isMain) {
     if (!fs.existsSync(OUT) || fs.readFileSync(OUT, 'utf8') !== fresh) { console.log('🔴 autoskin: auto-skin.json ≠ בורר-טרי (הרץ node machtzev/generator/auto-skin.mjs)'); process.exit(1); }
     const bad = ['kpi', 'hero', 'stat'].filter((r) => /StatBlock|MetricTile/.test(skin[r] || ''));
     if (bad.length) { console.log(`🔴 autoskin: ${bad.join('/')} = אטום-מגמה בלי נתון-מגמה (L73)`); process.exit(1); }
+    //    🕯️ «נבחרו **מבנית**» הוא הטענה — והפסק מודד אותה: כמה מהתפקידים הוכרעו בתיקו-בראש,
+    //    כלומר בסדר-שמות ולא בצורה. גם «N תפקידים נבחרו» מסתיר תפקיד שלא קיבל אף מועמד:
+    //    הוא פשוט אינו נספר, ואיש לא רואה **מי** חסר.
+    const missing = Object.keys(ROLES).filter((r) => !skin[r]);
+    printNotes('auto-skin');
+    console.log(`   🕯️ תפקידים שהוכרעו בתיקו-בראש (סדר-משפחה/אלפבית, לא צורה): ${Object.entries(report).filter(([, v]) => v.length > 1 && v[0].score === v[1].score).map(([r, v]) => `${r}(${v[0].cls}≡${v[1].cls})`).join(' · ') || 'אפס'}`);
+    if (missing.length) console.log(`   🕯️ תפקידים בלי אף מועמד (אינם נספרים בירוק): ${missing.join(' · ')}`);
     console.log(`✓ autoskin: ${Object.keys(skin).filter((k) => k !== 'toneMap').length} תפקידים נבחרו מבנית מ-${JSON.parse(fs.readFileSync(MANIFEST, 'utf8')).atoms.length} אטומים · toneMap ${Object.keys(skin.toneMap || {}).length}`);
     process.exit(0);
   }
   fs.writeFileSync(OUT, fresh);
+  printNotes('auto-skin');
   for (const [role, v] of Object.entries(report)) console.log(`${role.padEnd(12)} ⇒ ${(skin[role] || '—').padEnd(36)} | ${v.map((x) => `${x.cls}(${x.score})`).join(' · ')}`);
   console.log(`✍️ auto-skin.json · ${Object.keys(skin).filter((k) => k !== 'toneMap').length} תפקידים`);
 }

@@ -7,6 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import * as R from '../root.mjs';
+import { rminhu, had, pliga, lo, printNotes } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const NEW = R.NEW;
 const SRC = /\.(mjs|js|dart)$/;
 export function buildGraph() {
@@ -44,11 +45,28 @@ export function consumersOf(changed, graph = buildGraph()) {
   }
   // כל קובץ שמייבא דינמית — צרכניו לא ידועים; וגם קבצים ש-NEW אינו מכיל (דאטה/JSON) ⇒ unknown
   for (const f of seen) if (!f.startsWith(NEW.replace(/\/$/, ''))) unknown.add(f);
-  return { files: [...seen].filter((f) => fs.existsSync(f)), unknown: [...unknown] };
+  const files = [...seen].filter((f) => fs.existsSync(f));
+  // 🕯️ זה מנוע-החיפוש שמחליט **כמה מהמשטרה תרוץ**. «אין צרכנים» כאן אינו ניטרלי: הוא מצמצם
+  //    את רדיוס-הבדיקה, ולכן «לא מצאתי» חייב להיאמר בשם. שלוש «אין» שונות ישבו בשתיקה:
+  //    (א) הקובץ אינו תחת new/ ⇒ **unknown** (המשטרה תרוץ מלא — זה נכון, ולא נאמר) ·
+  //    (ב) יש ייבוא-דינמי ⇒ unknown · (ג) אין אף מייבא — קובץ-עלה אמיתי.
+  const roots = changed.map((f) => path.resolve(f));
+  const leaves = roots.filter((f) => !(graph.importers.get(f) || new Set()).size && !graph.dynamic.has(f) && f.startsWith(NEW.replace(/\/$/, '')));
+  const outside = roots.filter((f) => !f.startsWith(NEW.replace(/\/$/, '')));
+  rminhu({ engine: 'import-graph', matter: `${roots.length} קבצים-שהשתנו ⇒ רדיוס-הבדיקה של המשטרה`,
+    searched: [`גרף-הייבוא על new/ (${graph.files.length} קבצים · ${graph.importers.size} יעדים עם מייבאים · ${graph.dynamic.size} עם import( דינמי)`],
+    rulings: [
+      files.length > roots.length ? had(`${files.length - roots.length} צרכנים טרנזיטיביים`, `נמצאו מעל ${roots.length} הקבצים-שהשתנו — הרדיוס מורחב אליהם`) : null,
+      ...outside.slice(0, 5).map((f) => lo(path.relative(R.ROOT, f), 'מחוץ ל-new/ — הגרף אינו מכיר את צרכניו ⇒ **unknown**, והמשטרה תרוץ מלא. זו לא «אין צרכנים», זו «לא-חיפשנו»')),
+      ...[...unknown].filter((f) => graph.dynamic.has(f)).slice(0, 5).map((f) => pliga(path.relative(R.ROOT, f), 'מכיל `import(` דינמי — צרכניו אינם ניתנים לחישוב סטטי ⇒ unknown (fail-closed, ובצדק)')),
+      ...leaves.slice(0, 5).map((f) => lo(path.relative(R.ROOT, f), 'אף קובץ תחת new/ אינו מייבא אותו — **עלה אמיתי**: רדיוס-הבדיקה מצטמצם, וזו מדידה ולא ברירת-מחדל')),
+    ].filter(Boolean),
+    none: `לא מצינו: ${roots.length} קבצים-שהשתנו, ואף אחד אינו תחת new/ ואין לו צרכן ידוע — הרדיוס לא הורחב` });
+  return { files, unknown: [...unknown] };
 }
 if (import.meta.url === `file://${process.argv[1]}`) {
   const args = process.argv.slice(2).filter((a) => !a.startsWith('--'));
   const r = consumersOf(args);
   if (process.argv.includes('--json')) console.log(JSON.stringify(r));
-  else { console.log(`${args.length} שונו ⇒ ${r.files.length} לבדיקה (כולל צרכנים) · unknown: ${r.unknown.length}`); r.files.slice(0, 20).forEach((f) => console.log('  ' + path.relative(R.ROOT, f))); }
+  else { printNotes('import-graph'); console.log(`${args.length} שונו ⇒ ${r.files.length} לבדיקה (כולל צרכנים) · unknown: ${r.unknown.length}`); r.files.slice(0, 20).forEach((f) => console.log('  ' + path.relative(R.ROOT, f))); }
 }
