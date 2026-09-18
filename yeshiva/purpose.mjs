@@ -56,6 +56,31 @@ const GRAM = [...(SPL.amountAbove || []), ...(SPL.amountBelow || []), ...(SPL.ra
 const SCAF = new Set([...(NLL.leadins || []), ...(NLL.fieldMarks || []), ...(NLL.listConj || []),
   ...(NLL.eachWords || []), NLL.impliedMark, SPL.withWord, SPL.fieldsWord, SPL.fallbackField, SPL.fallbackEntity,
   ...STOP, ...GRAM].filter(Boolean));
+// 🕯️ **שרשרת-המקור של שפת-האפיון** (w-verb-147 · 18.9 · PLAN-100 §3-שלב-1).
+//  הפער שנמדד: `isGoalVerb` הוא מבחן-**צורה** (ל… באורך ≥4 אחרי קילוף אות-שימוש
+//  אחת), וה«משמר היחיד שמונע שם-עצם» הוא שרשרת-המקור — אלא ששני אטומי-דאטה
+//  שמצהירים מילות-דקדוק **לא נקראו כאן מעולם**: `knowledge/lexicon.json`
+//  (מילת-חלק ⇒ תפקיד-צורני, 120 מילים) ומפתחות-הסימון של `spec-lang`
+//  (‏sectionMarkers · stagePrefixes · markRules · markDelete · markGuards ·
+//  entityNouns). התוצאה נמדדה: «שלבים» (‏ש∈prefixLetters ⇒ «לבים») נקרא כפועל-
+//  מטרה ב-120 תביעות · 74 יחידות — מילה שמוצהרת **בשני** מקורות כסימן-מקטע.
+//  כאן היא נכנסת לשרשרת, והמשמר הקיים עובד מעצמו: אפס כלל-מורפולוגיה חדש.
+//  ‏**לא** מצורף ל-SCAF: SCAF מסנן גם את `contentW`, ושם המילים האלה כן דרישות
+//  («תאריך» · «מספר» · «כתובת» הם רמזי-טיפוס אמיתיים). זהו משמר של פועל בלבד.
+const LEX = JSON.parse(fs.readFileSync(GENU('knowledge/lexicon.json'), 'utf8'));
+export const LEX_SRC = 'machtzev/generator/knowledge/lexicon.json';
+const LEX_KEYS = Object.keys(LEX).filter((k) => !k.startsWith('_'));
+//  ‏`MARK_KEYS` — מה שמצהיר **מקטע-התנהגות** בשפת-האפיון: שלבים · סטטוסים · מצבים ·
+//  חוקים · ולידציה · מחיקה · מעברים · שערים. ‏`GRAM_ONLY` — מה שמצהיר **מבנה** ולא
+//  התנהגות (ישות · טבלה · טופס): הוא משמר-פועל בלבד, ואינו הצהרת-תביעה.
+const MARK_KEYS = ['sectionMarkers', 'stagePrefixes', 'markRules', 'markDelete', 'markGuards'];
+const GRAM_ONLY = ['entityNouns'];
+const MARKW = MARK_KEYS.flatMap((k) => (Array.isArray(SPL[k]) ? SPL[k] : []));
+/** מילה ⇒ המקור שמצהיר אותה כדקדוק-שפת-האפיון (ולכן אינה פועל-מטרה). */
+const GRAMW = new Map([
+  ...LEX_KEYS.map((w) => [w, `${LEX_SRC}:${LEX[w]} ("${w}")`]),
+  ...[...MARK_KEYS, ...GRAM_ONLY].flatMap((k) => (Array.isArray(SPL[k]) ? SPL[k] : []).map((w) => [w, `${GOAL_SRC.spl}:${k} ("${w}")`])),
+]);
 // רמזי-הטיפוס של דקדוק-האפיון: **כל** מפתח `type*` באטום — נקרא, לא נכתב.
 const TYPE_KEYS = Object.keys(SPL).filter((k) => /^type[A-Z]/.test(k) && Array.isArray(SPL[k]));
 // צורת-הערך שרמז-טיפוס דורש משקע-סכמה. מיפוי **צורה⇒צורה**, לא מילון-דומייני:
@@ -76,33 +101,118 @@ export function isGoalVerb(w) {
   // היה משאיר «הפיק» ומפספס את הפועל (נמדד — «לרשום»/«להפיק» נפלו ל-∅).
   const cands = [w]; if (w.length > 4 && PFX.includes(w[0])) cands.push(w.slice(1));
   if (SCAF.has(w)) return false;
+  // מילה שמוצהרת כדקדוק-שפת-האפיון (לקסיקון-החלקים · סימני-המקטע) אינה פועל.
+  if (GRAMW.has(w)) return false;
   if (!cands.some((v) => v.length >= 4 && v[0] === 'ל' && !SCAF.has(v))) return false;
   // ל־ היא גם אות-שימוש על שם-עצם («למתנדב»). ההכרעה נופלת על **שרשרת-המקור**,
   // לא על מילון: מה שיש לו מחלקת-סכמה או רמז-טיפוס הוא שם-עצם, ולא פועל-מטרה.
   return !classOf(w) && !typeHint(w);
 }
 
-/** מטרה ⇒ תביעות. חיתוך בכל פועל-מטרה; מקטע-פתיחה בלי פועל נצמד לתביעה שאחריו
- *  (‏«כל בוקר» הוא ההקשר של «לדעת», לא תביעה בפני עצמה). אין פועל ⇒ אין תביעות,
- *  והשכבה שותקת — משפט-ישות ממשיך בדיוק כמו קודם (ביט-זהה). */
+// ══ תביעה **מוצהרת** — מה שכבר נכתב בשפת-האפיון, עם מוצא ═══════════════════
+//  ‏`isGoalVerb` הוא מבחן-צורה, ולכן הוא רואה **רק** שם-פועל (ל…). מה שנמדד:
+//  תביעות שכבר **הוצהרו במפורש** בטקסט — בשפה שהמחולל עצמו כותב וקורא —
+//  היו בלתי-נראות לו, ונתפסו רק במקרה דרך שם-עצם עם ל־ שבתוכן («חישוב תאריך
+//  ‏**לתצוגה** (fmtDate)» נספר 27 פעם כ«פועל-מטרה לתצוגה»). זה בדיוק אותו
+//  גידור-שווא של שלב-3: היכולת הייתה, הקורא לא היה.
+//
+//  🔒 שני מקורות, שניהם קיימים בדיסק, ושניהם נותנים **מוצא** — אפס מורפולוגיה:
+//   (1) **הצהרת-מקטע** `<סימן>: ע1, ע2…` — `spec-lang.data.json` כבר מצהיר את
+//       הסימנים (`sectionMarkers`/`stagePrefixes`), והמחולל כבר בונה מהם מכונת-
+//       מצבים (שער `coredart`: «מצבים חצובים · advanceStatus/nextStage»).
+//       הצהרת-שלבים היא התנהגות, והמוצא הוא מפתח-האטום שמצהיר את הסימן.
+//   (2) **עיגון-אטום מפורש** `… (fnName)` בסוף שורת-חלק — התחביר שהמחולל
+//       עצמו פולט (`entity.mjs:142` · `genesis-gen.mjs:239` «⇒ האטום המדויק»).
+//       המוצא אינו מילה אלא **האטום עצמו**: הוא חייב להיות שכבת-לוגיקה
+//       באורקל (`atom-index-full.json`), אחרת אין תביעה. שם שאינו במדף ⇒ ∅.
+//
+//  ⚠️ מה שזה **לא**: לא רשימת-פעלים, לא זיהוי-ציווי, ולא תפקיד-לקסיקון שנבחר
+//  ביד. מילת-החלק נלקחת מהלקסיקון **כפי שהיא**, וההכרעה נופלת על האטום המעוגן.
+const MARK_SRC = new Map(MARK_KEYS.flatMap((k) => (Array.isArray(SPL[k]) ? SPL[k] : []).map((w) => [w, k])));
+const esc = (x) => String(x).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const MARK_RE = MARKW.length
+  ? new RegExp(`(?:^|[\\n;·|])\\s*(${[...new Set(MARKW)].map(esc).join('|')})\\s*:\\s*\\S`, 'g') : null;
+const PART_RE = /^[ \t]*(\S+)[ \t]+.*\(([A-Za-z_]\w*)\)[ \t]*$/;
+
+/** אטום-לוגיקה לפי שם — מהאורקל המאוחד, בטעינה עצלה (825KB נקראים רק אם יש עוגן). */
+let LOGIC = null;
+function logicAtom(name) {
+  if (LOGIC === null) {
+    LOGIC = new Map();
+    try {
+      for (const a of JSON.parse(fs.readFileSync(GENU('atom-index-full.json'), 'utf8')))
+        if (a && a.layer === 'logic' && a.id && !LOGIC.has(a.id)) LOGIC.set(a.id, a);
+    } catch { /* אין אורקל ⇒ אין תביעה-מעוגנת; נרשם ב-`declaredSearched` */ }
+  }
+  return LOGIC.get(name) || null;
+}
+// 🎬 **תפקיד-פעולה — נגזר משני האטומים, לא נבחר ביד.** `spec-lang.pAct` מצהיר
+//  את מילת-**צורת-הפעולה** של דקדוק-החלקיקים (G23: «צורה⇒פעולות»), והלקסיקון
+//  מצהיר לאיזה תפקיד-צורני אותה מילה שייכת. חיתוך השניים נותן את התפקיד שהוא
+//  פעולה — ולא מפני שבחרתי שם-תפקיד: `pAct=["פעולה"]` ∩ `lexicon["פעולה"]="button"`
+//  ⇒ `{button}`. מילת-חלק בתפקיד הזה היא הצהרת-פעולה, והמוצא הוא שני האטומים.
+const ACTION_ROLES = new Set((SPL.pAct || []).map((w) => LEX[w]).filter(Boolean));
+const ACTION_WORDS = new Map(LEX_KEYS.filter((w) => ACTION_ROLES.has(LEX[w]))
+  .map((w) => [w, `${GOAL_SRC.spl}:pAct ("${(SPL.pAct || []).find((x) => LEX[x] === LEX[w]) || ''}") · ${LEX_SRC}:${LEX[w]} ("${w}")`]));
+
+/** מה נסרק בדרך לתביעה-מוצהרת — נאמר בשמו בפנקס, גם כשלא נמצא דבר. */
+export const declaredSearched = () => [
+  `הצהרת-מקטע «<סימן>: ערכים» (${GOAL_SRC.spl}:${MARK_KEYS.join('/')} · ${new Set(MARKW).size} סימנים)`,
+  `עיגון-אטום מפורש «חלק … (fn)» (${LEX_SRC} · ${LEX_KEYS.length} מילות-חלק) מול שכבת-הלוגיקה באורקל (atom-index-full.json)`,
+  `חלק בתפקיד-פעולה (${GOAL_SRC.spl}:pAct ∩ ${LEX_SRC} ⇒ ${[...ACTION_WORDS.keys()].join('/') || '—'})`,
+];
+
+/** טקסט ⇒ מילות-התביעה שהוצהרו בו, כל אחת עם מוצאה. Map<מילה, {src, kind}>. */
+export function declaredDemands(text) {
+  const out = new Map(); const s = String(text || '');
+  if (MARK_RE) { MARK_RE.lastIndex = 0;
+    for (const m of s.matchAll(MARK_RE)) if (!out.has(m[1]))
+      out.set(m[1], { kind: 'הצהרת-מקטע', src: `${GOAL_SRC.spl}:${MARK_SRC.get(m[1])} ("${m[1]}")` });
+  }
+  for (const line of s.split('\n')) {
+    const mm = line.match(PART_RE); if (!mm) continue;
+    const [, head, fn] = mm;
+    if (!LEX_KEYS.includes(head) || out.has(head)) continue;   // מילת-החלק חייבת להיות בלקסיקון
+    const a = logicAtom(fn); if (!a) continue;                 // והעוגן חייב להיות אטום-לוגיקה קיים
+    out.set(head, { kind: 'עיגון-אטום', src: `new/${a.file} (${fn}) · ${LEX_SRC}:${LEX[head]} ("${head}")` });
+  }
+  // מעבר שני ולא מיזוג: עוגן-אטום גובר על תפקיד-פעולה **בכל הטקסט**, לא רק בשורה
+  // שלו — שורה עם `(fn)` נותנת מוצא חזק יותר לאותה מילת-חלק מאשר תפקיד-הלקסיקון.
+  for (const line of s.split('\n')) {
+    const head = line.trim().split(/\s+/)[0] || '';
+    if (!ACTION_WORDS.has(head) || out.has(head)) continue;     // מילת-חלק בתפקיד-פעולה בראש שורה
+    out.set(head, { kind: 'תפקיד-פעולה', src: ACTION_WORDS.get(head) });
+  }
+  return out;
+}
+
+/** מטרה ⇒ תביעות. חיתוך בכל **מילת-תביעה** — פועל-מטרה מבני או תביעה-מוצהרת.
+ *  מקטע-פתיחה בלי תביעה נצמד לזו שאחריו (‏«כל בוקר» הוא ההקשר של «לדעת»).
+ *  אין תביעה ⇒ אין תביעות, והשכבה שותקת — משפט-ישות ממשיך ביט-זהה. */
 export function demandsOf(text) {
+  const decl = declaredDemands(text);
+  const isD = (w) => isGoalVerb(w) || decl.has(w);
   const segs = []; let cur = [];
   for (const tok of String(text || '').split(/\s+/).filter(Boolean)) {
     const w = heW(tok)[0] || '';
-    if (w && isGoalVerb(w) && cur.length) { segs.push(cur.join(' ')); cur = []; }
+    if (w && isD(w) && cur.length) { segs.push(cur.join(' ')); cur = []; }
     cur.push(tok);
   }
   if (cur.length) segs.push(cur.join(' '));
   const out = []; let lead = '';
   for (const seg of segs) {
-    const verb = heW(seg).find(isGoalVerb);
+    const verb = heW(seg).find(isD);
     if (!verb) { lead = lead ? lead + ' ' + seg : seg; continue; }
-    out.push({ verb, text: (lead ? lead + ' ' : '') + seg });
+    const d = decl.get(verb) || null;
+    out.push({ verb, text: (lead ? lead + ' ' : '') + seg, src: d ? d.src : null, declared: d ? d.kind : null });
     lead = '';
   }
-  if (out.length && lead) out[out.length - 1].text += ' ' + lead;   // זנב בלי פועל שייך לתביעה האחרונה
+  if (out.length && lead) out[out.length - 1].text += ' ' + lead;   // זנב בלי תביעה שייך לאחרונה
   return out;
 }
+
+/** האם המילה היא מילת-תביעה בטקסט הזה (פועל-מבני או מוצהרת). */
+export const isDemandWord = (w, decl) => isGoalVerb(w) || (decl ? decl.has(w) : false);
 
 /** מילה ⇒ רמז-טיפוס מדקדוק-האפיון, בהתאמת-`stem` של המדף (לא מחרוזת, לא מילון חדש). */
 export function typeHint(word) {
@@ -135,30 +245,40 @@ export const classOf = soleClassOf;   // כלל-ההכרעה חי ב-tzinor (מ�
  */
 export function goalPsak(sentence, origin = 'מטרה') {
   const demands = demandsOf(sentence);
+  const decl = declaredDemands(sentence);   // אותו קורא, פעם אחת — מילת-תביעה אינה גם דרישה
   //  🕯️ «אין פועל-מטרה» — הפער הגדול ביותר במדידה (148 מתוך 319, PLAN-100 §2-א). עד כה
   //  השכבה **שתקה** כאן במכוון («משפט-ישות ממשיך ביט-זהה»), והשתיקה נכונה לפלט אבל לא
   //  לדיווח: 148 משפטים נשרו בלי שאיש יֵדע על אילו מילים. עכשיו כל מילת-תוכן נפסקת מול
   //  אותו משמר שפסל אותה — `isGoalVerb` נופל על שרשרת-המקור, לא על מילון — והפלט לא זז.
   if (!demands.length) {
     const ws = [...new Set(contentW(heW(sentence)))];
-    rminhu({ engine: 'purpose.demandsOf', matter: `מטרה בלי פועל-מטרה (${origin}): «${String(sentence).slice(0, 60)}»`,
-      searched: [`spec-lang.prefixLetters="${SPL.prefixLetters || ''}"`, 'שם-פועל ל… באורך ≥4', 'שרשרת-הסכמה (מה שיש לו מחלקה/רמז-טיפוס הוא שם-עצם, לא פועל)'],
-      rulings: ws.map((w) => {
+    // 🕯️ «אין תביעה» עובר ורמינהו על **שני** מסלולי-התביעה, לא על אחד: המבני
+    //    (שם-פועל) והמוצהר (הצהרת-מקטע · עיגון-אטום). פסק על כל מסלול בשמו.
+    const declMiss = [
+      lo('הצהרת-מקטע', `אין בטקסט שורה בצורת «<סימן>: ערכים» מתוך ${new Set(MARKW).size} הסימנים המוצהרים ב-${GOAL_SRC.spl} (${MARK_KEYS.join('/')}) — ולכן אין הצהרת-שלבים/מקטע לפסוק עליה`),
+      lo('עיגון-אטום', `אין בטקסט שורת-חלק שמסתיימת ב-«(fn)» עם שם שהוא אטום-שכבת-לוגיקה באורקל (atom-index-full.json), ומילת-החלק שלה בלקסיקון (${LEX_SRC}) — ולכן אין אטום מעוגן שיהיה מקור לתביעה`),
+      lo('תפקיד-פעולה', `אין שורה שראשה אחת ממילות-החלק שתפקידן פעולה (${[...ACTION_WORDS.keys()].join('/') || '—'}, נגזר מ-${GOAL_SRC.spl}:pAct ∩ ${LEX_SRC}) — ולכן אין הצהרת-פעולה`),
+    ];
+    rminhu({ engine: 'purpose.demandsOf', matter: `מטרה בלי תביעת-התנהגות (${origin}): «${String(sentence).slice(0, 60)}»`,
+      searched: [`spec-lang.prefixLetters="${SPL.prefixLetters || ''}"`, 'שם-פועל ל… באורך ≥4', 'שרשרת-הסכמה (מה שיש לו מחלקה/רמז-טיפוס הוא שם-עצם, לא פועל)', ...declaredSearched()],
+      rulings: declMiss.concat(ws.map((w) => {
         const PFX = SPL.prefixLetters || '';
         const cands = [w]; if (w.length > 4 && PFX.includes(w[0])) cands.push(w.slice(1));
         if (!cands.some((v) => v.length >= 4 && v[0] === 'ל')) return lo(w, 'אינה בצורת שם-פועל (ל… באורך ≥4) — אינה מועמדת לפועל-מטרה מבנית, ולא נפסלה בשרשרת');
         const k = (() => { try { return classOf(w); } catch { return null; } })();
         const t = typeHint(w);
         if (k || t) return pliga(w, `בצורת ל… אך ${k ? `יש לה מחלקת-סכמה (${k.cls || (k.options || []).join('/')})` : `יש לה רמז-טיפוס (${t.type || (t.options || []).join('/')})`} — ל־ כאן היא אות-שימוש על שם-עצם, לא שם-פועל; המשמר הוא שרשרת-המקור ולא מילון`);
+        if (GRAMW.has(w)) return pliga(w, `בצורת ל… אך מוצהרת כדקדוק-שפת-האפיון (${GRAMW.get(w)}) — מילת-חלק/סימן-מקטע אינה פועל-מטרה; המשמר הוא שרשרת-המקור ולא מילון`);
         return pliga(w, 'בצורת ל… ואין לה מחלקה ואין רמז-טיפוס — כלומר `isGoalVerb` כן אמור להדליק אותה; אם התביעה לא נוצרה, הפער הוא בחיתוך-התביעות ולא בזיהוי-הפועל');
-      }) });
+      })) });
   }
   const reqs = []; const claimed = new Set();
   demands.forEach((d, di) => {
     // הפועל עצמו הוא דרישה: **פעולה**. מקורו — הליטרל במטרה (סוג-המקור השלישי).
     // כך תביעה אינה נעלמת מהמדידה גם כשאין לה שדה, וזה הסימן שצריך לה חלקיק.
-    reqs.push({ kind: 'פעולה', demand: di, verb: d.verb, word: d.verb, src: `${origin}#תביעה${di + 1} (פועל-מטרה "${d.verb}")` });
-    const words = [...new Set(contentW(heW(d.text)))].filter((w) => !isGoalVerb(w));
+    reqs.push({ kind: 'פעולה', demand: di, verb: d.verb, word: d.verb, declared: d.declared || null,
+      src: d.src || `${origin}#תביעה${di + 1} (פועל-מטרה "${d.verb}")` });
+    const words = [...new Set(contentW(heW(d.text)))].filter((w) => !isDemandWord(w, decl));
     // (1) ישויות — קודם, כדי שהשקעים שלהן יהיו זמינים לקשירת-הקבועים
     for (const w of words) {
       const k = classOf(w); if (!k) continue;
