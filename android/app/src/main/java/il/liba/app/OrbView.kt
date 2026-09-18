@@ -110,7 +110,9 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
     private fun dp(v: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v, resources.displayMetrics)
     private fun pad() = dp(9f - 5f * activeK)
 
-    fun set(m: Mode, color: Int = accent) { mode = m; accent = color; activeTarget = if (m == Mode.LISTENING || m == Mode.SPEAKING || m == Mode.RINGING) 1f else 0f; startAnim(); invalidate() }
+    fun set(m: Mode, color: Int = accent) { mode = m; accent = color; activeTarget = if (m == Mode.LISTENING || m == Mode.SPEAKING || m == Mode.RINGING) 1f else 0f
+        if (isAttachedToWindow && visibility == VISIBLE) startAnim() // never wake the shader on a hidden or detached view
+        invalidate() }
     fun press(down: Boolean) { pressed = down; if (roam) return; animate().scaleX(if (down) 0.9f else 1f).scaleY(if (down) 0.9f else 1f).setDuration(140).start() }
 
     private fun startAnim() {

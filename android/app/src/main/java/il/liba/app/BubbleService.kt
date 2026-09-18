@@ -67,6 +67,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var speakGuard: Runnable? = null      // fix 1: one cancellable safety timer
     private var pendingSay: String? = null        // fix 8: reply that arrived while the user was talking
     private var netCb: ConnectivityManager.NetworkCallback? = null
+    private var screenCb: android.content.BroadcastReceiver? = null
     private var bargeIn = false              // step 24: interrupt me mid-sentence (echo-cancelled mic)
     private var bargeVad: VadGate? = null
     private var headsetBtn = false           // step 25: headset button = "דבר"
@@ -75,7 +76,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var curSpeaker = "ליבה"          // step 37: bubble colour per speaker
     private var menu: android.widget.LinearLayout? = null // step 31: long-press menu
     private var listening = false
-    private var listenMode = "cmd" // cmd | wake | follow
+    private var listenMode = "wake" // cmd | wake | follow
+    private var lastUserAt = 0L      // when Meir himself last spoke to us
+    private var followStreak = 0     // consecutive follow results, so a room conversation cannot chain
     private var pendingListenAfterSpeech = false
     private var pageReady = false
     private var heyOn = false
@@ -230,8 +233,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
     private fun afterSpeech() {
         when {
-            pendingListenAfterSpeech -> { pendingListenAfterSpeech = false; startListening("cmd") }
-            convOn && listenMode != "wake" && (sentAt > 0 || lastSaid.isNotEmpty()) -> startListening("follow")
+            pendingListenAfterSpeech -> { pendingListenAfterSpeech = false; followStreak = 0; startListening("cmd") }
+            convOn && listenMode != "wake" && SystemClock.elapsedRealtime() - lastUserAt < 60_000L && followStreak < 2 -> startListening("follow")
             else -> idleOrWake()
         }
     }
@@ -303,12 +306,17 @@ class BubbleService : Service(), LibaWeb.Bridge {
             }
             cm.registerDefaultNetworkCallback(cb); netCb = cb
         } catch (e: Exception) { Log.w(LibaWeb.TAG, "network watch: $e") }
+        runCatching { // fix: the overlay never gets onVisibilityChanged, so the shader would keep drawing with the screen off
+            val sc = object : android.content.BroadcastReceiver() {
+                override fun onReceive(c: Context?, i: Intent?) { main.post { dot?.visibility = if (i?.action == Intent.ACTION_SCREEN_OFF) View.INVISIBLE else View.VISIBLE } }
+            }
+            registerReceiver(sc, android.content.IntentFilter().apply { addAction(Intent.ACTION_SCREEN_OFF); addAction(Intent.ACTION_SCREEN_ON) }); screenCb = sc
+        }
     }
 
     // ---------- update check ----------
     /** step 92: download the new APK and hand it to the package installer – no browser, no file manager. */
     fun installUpdate() {
-        hideBubble(45000)
         val url = Prefs.updateUrl(this) ?: run { speak("אין עדכון ממתין."); return }
         showLabel("מורידה עדכון…", 20000)
         Thread {
@@ -318,11 +326,14 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 c.inputStream.use { i -> f.outputStream().use { o -> i.copyTo(o) } }
                 val uri = androidx.core.content.FileProvider.getUriForFile(this, "il.liba.app.files", f)
                 val i = Intent(Intent.ACTION_VIEW).setDataAndType(uri, "application/vnd.android.package-archive").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                main.post { showLabel("מתקינה… אשר בחלון", 8000); try { startActivity(i) } catch (e: Exception) { notifyIntent("התקנת ליבה", "לחץ כדי להתקין את הגרסה החדשה", i) } }
+                main.post { showLabel("מתקינה… אשר בחלון", 8000); hideBubble(45000)
+                    try { startActivity(i) } catch (e: Exception) {}
+                    notifyIntent("התקנת ליבה", "לחץ כדי להתקין את הגרסה החדשה", i) } // a background start can be dropped silently: always leave a tappable notification
             } catch (e: Exception) { main.post { showLabel("הורדה נכשלה: $e", 8000); speak("ההורדה נכשלה. נסה מהמסך הראשי.") } }
         }.start()
     }
-    private fun checkUpdate() {
+    private val recheck = Runnable { checkUpdate() }
+    private fun checkUpdate(onDone: (() -> Unit)? = null) {
         Thread {
             try {
                 val c = URL(getString(R.string.update_json)).openConnection() as HttpURLConnection; c.connectTimeout = 8000; c.readTimeout = 8000
@@ -331,8 +342,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 if (j.getInt("versionCode") > mine) { Prefs.setUpdate(this, j.getString("url"), j.getInt("versionCode")); main.post { showLabel("יש גרסה חדשה (${j.optString("versionName")}) – לחיצה ארוכה עליי להתקנה", 8000) } }
                 else Prefs.setUpdate(this, null, mine)
             } catch (e: Exception) { Log.d(LibaWeb.TAG, "update: $e") }
+            main.post { onDone?.invoke() }
         }.start()
-        main.postDelayed({ checkUpdate() }, 6 * 3600 * 1000L)
+        main.removeCallbacks(recheck); main.postDelayed(recheck, 6 * 3600 * 1000L)
     }
 
     // ---------- bubble ----------
@@ -359,20 +371,20 @@ class BubbleService : Service(), LibaWeb.Bridge {
     // so installers, permission dialogs and every other app keep working underneath.
     private var handle: View? = null; private var rootLp: WindowManager.LayoutParams? = null; private var bigSize = 0
     private var dragging = false
+    private var rootW = 0
     private fun syncWindows() { val root = bubble ?: return; val h = handle ?: return; val lp = rootLp ?: return; val lpH = bubbleLp ?: return; val d = dot ?: return; if (d.pos.x < 0) return
-        lp.x = (d.pos.x - bigSize / 2).toInt(); lp.y = (d.pos.y - bigSize / 2).toInt(); lpH.x = (d.pos.x - bubbleSize / 2).toInt(); lpH.y = (d.pos.y - bubbleSize / 2).toInt()
+        lp.x = (d.pos.x - rootW / 2).toInt(); lp.y = (d.pos.y - bigSize / 2).toInt(); lpH.x = (d.pos.x - bubbleSize / 2).toInt(); lpH.y = (d.pos.y - bubbleSize / 2).toInt()
         runCatching { wm.updateViewLayout(root, lp) }; runCatching { wm.updateViewLayout(h, lpH) } }
     private fun syncHandle() = syncWindows()
-    private fun positionAttachments() { val c = bigSize / 2f
-        listOf<View?>(label, menu).forEach { v -> if (v != null && v.visibility == View.VISIBLE) { v.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-            val vw = if (v.width > 0) v.width else v.measuredWidth; v.translationX = c - vw / 2f; v.translationY = c + bubbleSize / 2f + dp(8f) } } }
+    /** label and menu are laid out by the FrameLayout itself (centred under the body), so nothing needs moving */
+    private fun positionAttachments() {}
     private fun syncRoot() = syncWindows()
     private fun arena() { val d = dot ?: return; val dm = resources.displayMetrics; d.arenaW = dm.widthPixels.toFloat(); d.arenaH = dm.heightPixels.toFloat() }
     /** hide both windows while the package installer (or another secure dialog) needs the screen */
     fun hideBubble(ms: Long) { bubble?.visibility = View.GONE; handle?.visibility = View.GONE; main.postDelayed({ bubble?.visibility = View.VISIBLE; handle?.visibility = View.VISIBLE }, ms) }
     private fun setupBubble() {
         val root = FrameLayout(this); val sw = resources.configuration.smallestScreenWidthDp; val size = dp(if (sw >= 600) 78f else 62f).toInt() // step 40: bigger on tablets / unfolded
-        val big = (size * 2.8f).toInt()
+        val big = (size * 2.8f).toInt(); val touchSize = (size * 1.5f).toInt()
         val d = OrbView(this).apply { bodyFrac = size.toFloat() / big; roam = true; boxPx = big.toFloat(); importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO }
         val l = TextView(this).apply {
             setTextColor(Color.parseColor("#F3F5FF")); textSize = 14f; setPadding(dp(14f).toInt(), dp(8f).toInt(), dp(14f).toInt(), dp(8f).toInt()); maxWidth = dp(240f).toInt()
@@ -380,16 +392,17 @@ class BubbleService : Service(), LibaWeb.Bridge {
             background = GradientDrawable().apply { cornerRadius = dp(18f); setColor(Color.parseColor("#F2121628")); setStroke(dp(1f).toInt(), Color.parseColor("#2EFFFFFF")) }
             elevation = dp(4f); visibility = View.GONE; textDirection = View.TEXT_DIRECTION_RTL
         }
-        root.addView(d, FrameLayout.LayoutParams(big, big))
-        root.addView(l, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.START })
-        val lp = WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+        val rw = maxOf(big, dp(300f).toInt()); val rh = big / 2 + dp(460f).toInt(); rootW = rw
+        root.addView(d, FrameLayout.LayoutParams(big, big).apply { gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL })
+        root.addView(l, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL; topMargin = big / 2 + size / 2 + dp(8f).toInt() })
+        val lp = WindowManager.LayoutParams(rw, rh, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT)
         lp.gravity = Gravity.TOP or Gravity.START
         val h = View(this).apply { contentDescription = "ליבה. לחיצה: דבר. לחיצה ארוכה: תפריט"; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES }
-        val lpH = WindowManager.LayoutParams(size, size, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+        val lpH = WindowManager.LayoutParams(touchSize, touchSize, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT)
         lpH.gravity = Gravity.TOP or Gravity.START
-        bubbleLp = lpH; bubbleSize = size; bigSize = big; rootLp = lp
+        bubbleLp = lpH; bubbleSize = touchSize; bigSize = big; rootLp = lp
         bubble = root; dot = d; label = l; handle = h; d.style = Prefs.style(this)
         arena(); val dm = resources.displayMetrics; d.setPos(dm.widthPixels - big / 2f - dp(8f), dm.heightPixels * 0.3f)
         lp.x = (d.pos.x - big / 2).toInt(); lp.y = (d.pos.y - big / 2).toInt(); lpH.x = (d.pos.x - size / 2).toInt(); lpH.y = (d.pos.y - size / 2).toInt()
@@ -403,8 +416,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 MotionEvent.ACTION_DOWN -> { snapAnim?.cancel(); unpeek(); sx = ev.rawX; sy = ev.rawY; ox = d.pos.x; oy = d.pos.y; moved = false; dragging = true; d.hold(true); downAt = SystemClock.uptimeMillis(); d.press(true); main.postDelayed(longPress, 600); true }
                 MotionEvent.ACTION_MOVE -> { val dx = ev.rawX - sx; val dy = ev.rawY - sy
                     if (abs(dx) > dp(6f) || abs(dy) > dp(6f)) { moved = true; main.removeCallbacks(longPress) }
-                    d.setPos(ox + dx, oy + dy); syncWindows(); true }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> { main.removeCallbacks(longPress); d.press(false); dragging = false; d.hold(false); if (!moved && SystemClock.uptimeMillis() - downAt < 600) { haptic(); onTap() }; true }
+                    d.setPos(ox + dx, oy + dy); true }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> { main.removeCallbacks(longPress); d.press(false); dragging = false; d.hold(false); if (!moved && SystemClock.uptimeMillis() - downAt < 600) onTap(); true }
                 else -> false
             }
         }
@@ -439,7 +452,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (Build.VERSION.SDK_INT >= 29) v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)) else @Suppress("DEPRECATION") v.vibrate(12) } catch (e: Exception) {} }
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
         super.onConfigurationChanged(newConfig) // fix 9: fold / unfold / rotate – keep the bubble on the visible screen
-        val d = dot ?: return; arena(); if (d.roam) { val dm = resources.displayMetrics; d.setPos(d.pos.x.coerceIn(bigSize / 2f, dm.widthPixels - bigSize / 2f), d.pos.y.coerceIn(bigSize / 2f, dm.heightPixels - bigSize / 2f)); syncWindows(); return }
+        val d = dot ?: return; arena(); if (d.roam) { val dm = resources.displayMetrics
+            val hx = (bigSize / 2f).coerceAtMost(dm.widthPixels / 2f); val hy = (bigSize / 2f).coerceAtMost(dm.heightPixels / 2f)
+            d.setPos(d.pos.x.coerceIn(hx, (dm.widthPixels - hx).coerceAtLeast(hx)), d.pos.y.coerceIn(hy, (dm.heightPixels - hy).coerceAtLeast(hy))); syncWindows(); return }
         val h = handle ?: return; val lp = bubbleLp ?: return
         clampBubble(lp, bubbleSize); runCatching { wm.updateViewLayout(h, lp) }; syncRoot()
     }
@@ -459,8 +474,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         item("🖥 הצג/הסתר דף") { revealPage(!pageShown) }
         if (Prefs.updateUrl(this) != null) item("⬇ התקן גרסה חדשה") { installUpdate() }
         item("⏻ כבה בועה") { stopSelf() }
-        root.addView(m, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.START })
-        m.visibility = View.VISIBLE; main.post { positionAttachments() }
+        root.addView(m, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL; topMargin = bigSize / 2 + bubbleSize / 2 + dp(8f).toInt() })
+        m.visibility = View.VISIBLE
         rootLp?.let { it.flags = it.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv(); runCatching { wm.updateViewLayout(root, it) } }
         menu = m; main.postDelayed({ if (menu === m) closeMenu(root) }, 8000)
     }
@@ -485,7 +500,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var labelHide: Runnable? = null
     private fun showLabel(text: String, ms: Long) {
         val l = label ?: return; l.text = text; unpeek()
-        if (l.visibility != View.VISIBLE) { l.alpha = 0f; l.visibility = View.VISIBLE; positionAttachments(); l.animate().alpha(1f).setDuration(180).start() } else positionAttachments()
+        if (l.visibility != View.VISIBLE) { l.alpha = 0f; l.visibility = View.VISIBLE; l.animate().alpha(1f).setDuration(180).start() }
         labelHide?.let { main.removeCallbacks(it) }; labelHide = Runnable { l.animate().alpha(0f).setDuration(160).withEndAction { l.visibility = View.GONE; schedulePeek() }.start() }.also { main.postDelayed(it, ms) }
     }
     private fun onTap() {
@@ -568,10 +583,11 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 val words = t.split(Regex("\\s+")).filter { it.isNotBlank() }
                 val early = words.take(4).any { w -> WAKE.any { w.contains(it) } }
                 if (!hit || !early || words.size > 25) { main.postDelayed({ wakeLoop() }, 250); return } // TV / other people: ignore
-                if (rest.length < 2) { pendingListenAfterSpeech = true; speak("כן?"); return }
-                t = rest
+                if (rest.length < 2) { lastUserAt = SystemClock.elapsedRealtime(); followStreak = 0; pendingListenAfterSpeech = true; speak("כן?"); return }
+                t = rest; lastUserAt = SystemClock.elapsedRealtime(); followStreak = 0
             }
             if (t.isEmpty()) { if (listenMode == "follow") idleOrWake() else { showLabel("לא שמעתי כלום", 3000); idleOrWake() }; return }
+            if (listenMode == "follow") followStreak++ else { lastUserAt = SystemClock.elapsedRealtime(); followStreak = 0 }
             handleUtterance(t) }
     }
 
@@ -632,7 +648,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         if (Prefs.reports(this)) Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } } } } }
     fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) {}; listening = false }; unmuteSystem() }
-    override fun onCmd(cmd: String) { main.post { when (cmd) { "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "style 0", "style 1", "style 2" -> { val st = cmd.removePrefix("style ").trim().toIntOrNull() ?: 2; Prefs.setStyle(this, st); dot?.style = st; showLabel("עיצוב " + (when (st) { 2 -> "יצור חי"; 1 -> "משולב"; else -> "אורורה" }), 3000) }; "update" -> { checkUpdate(); showLabel("בודקת גרסה חדשה…", 4000); main.postDelayed({ if (Prefs.updateUrl(this) != null) installUpdate() else showLabel("אין גרסה חדשה", 3000) }, 5000) }; "reload" -> { pageReady = false; pageOk = false; main.postDelayed({ web?.reload() }, 1500) }
+    override fun onCmd(cmd: String) { main.post { when (cmd) { "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "style 0", "style 1", "style 2" -> { val st = cmd.removePrefix("style ").trim().toIntOrNull() ?: 2; Prefs.setStyle(this, st); dot?.style = st; showLabel("עיצוב " + (when (st) { 2 -> "יצור חי"; 1 -> "משולב"; else -> "אורורה" }), 3000) }; "update" -> { showLabel("בודקת גרסה חדשה…", 4000); checkUpdate { if (Prefs.updateUrl(this) != null) installUpdate() else showLabel("אין גרסה חדשה", 3000) } }; "reload" -> { pageReady = false; pageOk = false; main.postDelayed({ web?.reload() }, 1500) }
         else -> if (cmd.startsWith("open ")) { val u = cmd.removePrefix("open ").trim(); val i = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(u)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); try { startActivity(i) } catch (e: Exception) { notifyIntent("ליבה – קישור", u, i) } } } } }
     /** fix 10: when Android refuses an activity start from the background, hand the intent to the user as a tappable notification. */
     private fun notifyIntent(title: String, text: String, i: Intent) {
@@ -673,7 +689,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
 
     override fun onDestroy() {
-        running = false; instance = null; main.removeCallbacksAndMessages(null); stopVad(); bargeVad?.stop(); netCb?.let { runCatching { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) } }; mediaSession?.let { it.isActive = false; it.release() }; unmuteSystem()
+        running = false; instance = null; main.removeCallbacksAndMessages(null); stopVad(); bargeVad?.stop(); screenCb?.let { runCatching { unregisterReceiver(it) } }; screenCb = null; netCb?.let { runCatching { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) } }; mediaSession?.let { it.isActive = false; it.release() }; unmuteSystem()
         try { sr?.destroy() } catch (e: Exception) {}
         tts?.stop(); tts?.shutdown()
         bubble?.let { runCatching { wm.removeView(it) } }; handle?.let { runCatching { wm.removeView(it) } }; webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy()

@@ -3,7 +3,7 @@ plugins { id("com.android.application"); id("org.jetbrains.kotlin.android") }
 android {
     namespace = "il.liba.app"
     compileSdk = 34
-    defaultConfig { applicationId = "il.liba.app"; minSdk = 26; targetSdk = 34; versionCode = 49; versionName = "3.12.0" }
+    defaultConfig { applicationId = "il.liba.app"; minSdk = 26; targetSdk = 34; versionCode = 50; versionName = "3.13.0" }
     // Signing credentials live in keys/keystore.properties (never committed); without it the build falls back to the debug key.
     val ksProps = Properties().apply { val f = rootProject.file("keys/keystore.properties"); if (f.exists()) f.inputStream().use { load(it) } }
     signingConfigs {
