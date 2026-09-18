@@ -16,3 +16,4 @@ server-gen/*/firestore-debug.log
 gen/looks/site/shots/
 gen/looks/app/shots/
 gen/looks/first10/shots/
+.maimatai/

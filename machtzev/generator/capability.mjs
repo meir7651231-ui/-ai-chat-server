@@ -5,6 +5,7 @@ import { retrieve } from './match.mjs';
 import { selectAtom } from './render-ds.mjs';
 import fs from 'node:fs';
 import * as R from '../root.mjs';
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const ATOM_INDEX = JSON.parse(fs.readFileSync((R.GEN_DIR + 'atom-index.json'), 'utf8'));
 const fileOf = (cls) => { const a = ATOM_INDEX.find((e) => e.cls === cls); return a ? a.file : null; };
 
@@ -52,12 +53,19 @@ export function detectAlertClause(text) {
 }
 
 // בחירת אטום-תצוגה לכוונה — דרך match (מטרת-אטום), לא מיפוי. מחזיר cls או null.
+// 🕯️ ורמינהו לפני ה-null: הראשון-בדירוג ⇒ חד שיעורא · השאר ⇒ פליגא עם הציון · אפס ⇒ «לא מצינו».
 export function pickAtom(phrase) {
   const r = retrieve(phrase, 3) || [];
-  return r.length ? r[0].cls : null;
+  const p = rminhu({ engine: 'capability.pickAtom', matter: `אות-כוונה «${String(phrase).slice(0, 50)}»`,
+    searched: ['match.retrieve מעל atlas.widgets (מטרות-אטומים מאינדקס-המסכים)'],
+    rulings: r.map((c, i) => (i === 0
+      ? had(c.cls, `ציון ${c.s} · כיסוי ${c.cover} — הגבוה בדירוג`)
+      : pliga(c.cls, `ציון ${c.s} מול ${r[0].s} של ${r[0].cls} — אותו מנגנון-חפיפה, ציון נמוך, הגבוה גובר`))) });
+  return p.hit ? r[0].cls : null;
 }
 
 const NUM_RE = /^(value|val|pct|level|amount|reading|num|score|percent)$/;
+const NUME = () => NUM_RE.source;
 const STR_RE = /^(label|title|caption|name|text|msg|message)$/;
 
 // רב-סעיפים: פיצול לפי מחברי-ריבוי **דקדוקיים** (וגם/גם/;/שורה) ⇒ סעיף-תנאי בכל מקטע. כך "A וגם B"
@@ -83,13 +91,32 @@ export function emitApp(text, cls = 'GenCapScreen') {
     // אין תנאי ⇒ צורך של יכולת-**אחת** (תצוגה). עוגן: מושא-ישיר 'את X' (חלקיק דקדוקי, אפס-מילון).
     const m = String(text || '').match(/(?:^|\s)את\s+(.+)/);
     const val = m ? cleanPhrase(hw(m[1]).slice(0, 3)) : '';
-    if (!val) throw new Error('לא נמצאו יכולות במשפט (אין תנאי ואין מושא-ישיר להצגה)');
+    if (!val) {
+      //    🕯️ «לא נמצאו יכולות» היא «אין» על **המשפט**, ולכן נפסק על כל חלקיק-דקדוק שנסרק בשמו
+      //    (הכרעה-23: אומרים את החסר בשפת-החלקיקים — «ל-X אין מילוי», לא «אין יכולת»).
+      const r = rminhu({ engine: 'capability.emitApp', matter: `משפט «${String(text || '').slice(0, 60)}»`,
+        searched: ['WHEN (כאשר/ברגע ש/כש)', `REL (${REL.map((x) => x.op).join(',')})`, 'מושא-ישיר «את X»'],
+        rulings: [
+          (WHEN.test(String(text || '')) ? pliga : lo)('חלקיק WHEN (כאשר/ברגע ש/כש)', WHEN.test(String(text || '')) ? 'נמצא במשפט אך detectAllClauses לא הוציא ממנו סעיף — אין יחס (REL) או שאחד מצדדיו ריק' : 'אין במשפט מרקר-תנאי — המשפט אינו מותנה, וזו צורה תקינה, לא חסר'),
+          lo('מושא-ישיר «את X»', 'אין במשפט «את» ואחריו צירוף-שם — אין עוגן-תצוגה שממנו נגזרת יכולת-אחת'),
+        ] });
+      throw new Error(`לא נמצאו יכולות במשפט — ${r.digest}`);
+    }
     units = [{ i: 0, label: val, op: null, alert: false, trigger: '' }];
   }
   // אטומים נגזרים פעם-אחת: ערך/קריאה לפי-צורה (selectAtom), התראה לפי-מטרה (match).
   const gauge = selectAtom({ value: { re: NUM_RE, ty: /double|num/ } });
   const readout = selectAtom({ value: { re: NUM_RE, ty: /double|num/ }, label: { re: STR_RE, ty: /String/ } });
-  if (!gauge || !readout) throw new Error('לא נגזר אטום-ערך/קריאה מהמצע');
+  if (!gauge || !readout) {
+    //    🕯️ «לא נגזר אטום» היא «אין» על **המדף**: כל אחת משתי הדרישות נפסקת בשמה ובשקעיה.
+    const r = rminhu({ engine: 'capability.emitApp', matter: `אטומי-ערך/קריאה למצע «${String(text || '').slice(0, 40)}»`,
+      searched: ['selectAtom(value:double|num)', 'selectAtom(value:double|num + label:String)'],
+      rulings: [
+        (gauge ? had : pliga)(`מד-ערך ${gauge || '(אין)'}`, gauge ? `נבחר מהמדף עם שקע-ערך ${NUM_RE.source}` : `אף אטום במדף אינו נושא שקע-ערך בשם ${NUME()} ובטיפוס double|num — השקע ריק, ואטום שמציג ערך חייב שקע-דאטה (הכרעה-26)`),
+        (readout ? had : pliga)(`קריאה ${readout || '(אין)'}`, readout ? `נבחר מהמדף עם שקע-ערך + שקע-תווית` : `אף אטום במדף אינו נושא שקע-ערך double|num **וגם** שקע-תווית String — צירוף-השקעים הוא שחסר, לא האטום`),
+      ] });
+    throw new Error(`לא נגזר אטום-ערך/קריאה מהמצע — ${r.digest}`);
+  }
   const trig = units.find((u) => u.alert)?.trigger || '';
   const picked = pickAtom(trig);
   const alertAtom = new Set(['AlertBanner']).has(picked) ? picked : 'AlertBanner';

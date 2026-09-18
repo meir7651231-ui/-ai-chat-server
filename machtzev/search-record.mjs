@@ -14,6 +14,7 @@ const opt = (k) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : nu
 const query = argv.filter((a, i) => !a.startsWith('--') && (i === 0 || !argv[i - 1].startsWith('--'))).join(' ').trim();
 if (!query) { console.error('usage: search-record "<מילות-חיפוש>" [--creates <path>] [--choose <id> | --none "<למה>"]'); process.exit(2); }
 import { IDX, LOG, tok, scoreFor, loadOracle, layerOf } from './search-score.mjs';   // G63 · ניקוד אחד משותף לשער
+import { rminhu, had, pliga, lo } from '../yeshiva/rminhu.mjs';   // 🕯️ הפסק על כל מועמד + דיווח לפנקס (L114)
 const OUT = R.MACH + 'audit/search/';   // G63 הסיר את OUT יחד עם IDX/LOG כשעברו ל-search-score ⇒ הכלי קרס (ReferenceError) על כל רשומה
 const sha = (s) => crypto.createHash('sha256').update(s).digest('hex');
 const { display, logic, all } = loadOracle();
@@ -39,6 +40,21 @@ else if (none !== null) {
   if (ignored.length) { console.error(`❌ מועמדים-חזקים (ציון ≥3) שלא נזכרו ב---none: ${ignored.map((c) => c.id).join(' · ')} — "אין" חייב להתייחס אליהם בשמם`); process.exit(1); }
   record.chosen = 'none'; record.why = none;
 }
+// 🕯️ ורמינהו — הרשומה כבר אכפה «--none ≥40 תווים» ו«מועמד-חזק נזכר בשמו», אבל היא **לא פסקה
+//    על כל מקור בשמו ולא דיווחה לפנקס**. עכשיו כן: הנבחר ⇒ חד שיעורא · מועמד-חזק שנדחה ⇒ פליגא
+//    (הוא מחויב-התייחסות, וההסבר הוא ה---none עצמו) · מועמד-חלש ⇒ לא שייך עם הציון · אפס
+//    מועמדים ⇒ «לא מצינו» שנוקב את שני קובצי-האורקל. הפנקס הוא זה של `gate rminhu` (פנקס אחד).
+const strongIds = new Set(strong.map((c) => c.id));
+const psak = rminhu({
+  engine: 'search-record',
+  matter: `שאילתה «${query}»${record.creates ? ` ⇒ ${record.creates}` : ''}`,
+  searched: [`${path.basename(IDX)} (${oracle.display} רשומות)`, `${path.basename(LOG)} (${oracle.logic} רשומות)`],
+  rulings: candidates.map((c) => (c.id === record.chosen
+    ? had(c.id, `נבחר · ציון ${c.score} · ${c.layer} · ${c.file}`)
+    : strongIds.has(c.id)
+      ? pliga(c.id, `מועמד-חזק (ציון ${c.score}, ${c.layer}) שנדחה — ${record.why ? String(record.why).replace(/\s+/g, ' ').slice(0, 140) : 'הרשומה עדיין בלי הכרעה: הוסף --choose או --none'}`)
+      : lo(c.id, `ציון ${c.score} < 3 (${c.layer}) — התאמת-ייעוד בלבד, לא התאמת-שם`))),
+});
 const body = JSON.stringify({ ...record, sig: undefined });
 record.sig = sha('machtzev-search-v1\n' + body);
 fs.mkdirSync(OUT, { recursive: true });
@@ -49,3 +65,4 @@ console.log(`🔎 חיפוש "${query}" באורקל-המאוחד (${oracle.disp
 candidates.slice(0, 10).forEach((c) => console.log(`  ${c.score >= 4 ? '★' : ' '} ${String(c.score).padStart(2)}  ${c.id}  (${c.layer} · ${c.file})`));
 console.log(record.chosen === 'none' ? `  ⇒ אין: ${record.why.slice(0, 80)}…` : record.chosen ? `  ⇒ נבחר: ${record.chosen}` : '  ⇒ (ללא הכרעה — הוסף --choose <id> או --none "<למה>")');
 console.log(`📄 ${path.relative(R.ROOT, file)}`);
+console.log(`🕯️ ${psak.line}`);
