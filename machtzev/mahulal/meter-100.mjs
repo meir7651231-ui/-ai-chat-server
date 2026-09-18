@@ -9,7 +9,7 @@
 //   1 · המשפט מזוהה כמטרה      תביעת-התנהגות > 0            (yeshiva/purpose · scanOne)
 //   2 · צרכים נגזרו             חוזה עם ישות+שקע+דוגמאות     (perokGoal · scanOne)
 //   3 · Dart נפלט               behavior-compose ⇒ bh* בקובץ (behavior-plan צעד-6)
-//   4 · מתקמפל                  dart analyze · 0 errors      (behavior-plan צעד-7)
+//   4 · מתקמפל                  dart analyze + flutter analyze (מראה) · 0 errors  (behavior-plan צעד-7)
 //   5 · **עובד מול המטרה**      dart run --enable-asserts    (behavior-plan צעד-7)
 //        ‏assert(r == <תשובה-צפויה-מחושבת-מהנתונים>) — `goalExamples` מחשב את התשובה
 //        מהליטרלים שבדיסק, לא מניחוש. זו ההגדרה של «עובד», והיא נמדדת בהרצה.
@@ -125,27 +125,34 @@ function climb(u, i) {
   }
   const ck = (name) => (L.checks || []).find((c) => c.name === name) || null;
 
-  // שלב 4 · מתקמפל: dart analyze על הקובץ-המחולל.
+  // שלב 4 · מתקמפל: `dart analyze` על הקובץ-המחולל, **וגם** `flutter analyze` על המראה
+  //   כשהכלי קיים. קובץ-המטרה הוא Dart טהור ולכן `dart analyze` הוא הבדיקה הנכונה לו,
+  //   אבל «מתקמפל» אמיתי הוא בתוך האפליקציה — ‏`flutter analyze (מראה)` בודק אותו שם.
+  //   אין flutter ⇒ הבדיקה מדווחת «לא-זמין» ואינה מפילה (‏L34: אין-כלי ≠ כשל), והעובדה
+  //   שהיא לא רצה **נרשמת ביחידה** (‏mirrorChecked) כדי שלא ייראה כאילו נבדקה.
   const an = ck('dart analyze');
   if (!an || an.status !== 'עבר') return { stage: 3, ms, bh, solved, why: `analyze: ${an ? an.status + ' — ' + String(an.out).slice(0, 110) : 'לא רץ'}` };
+  const fa = ck('flutter analyze (מראה)');
+  const mirrorChecked = !!(fa && fa.status === 'עבר');
+  if (fa && fa.status === 'כשל') return { stage: 3, ms, bh, solved, mirrorChecked, why: `flutter analyze (מראה): כשל — ${String(fa.out).slice(0, 130)}` };
 
   // שלב 5 · עובד מול המטרה: dart run --enable-asserts על קובץ-ההוכחה.
   //   ‏assert(r == <תשובה-צפויה>) לכל דוגמה. **שומר אנטי-ריק**: «✓ N דוגמאות · M התנהגויות»
   //   חייב N≥1 ו-M≥1 — תוכנית בלי דוגמאות עוברת את `dart run` בלי לבדוק דבר.
   const pr = ck('dart run --enable-asserts (הוכחת-ההרכבה)');
-  if (!pr || pr.status !== 'עבר') return { stage: 4, ms, bh, solved, why: `הוכחה: ${pr ? pr.status + ' — ' + String(pr.out).slice(0, 110) : 'לא רץ'}` };
+  if (!pr || pr.status !== 'עבר') return { stage: 4, ms, bh, solved, mirrorChecked, why: `הוכחה: ${pr ? pr.status + ' — ' + String(pr.out).slice(0, 110) : 'לא רץ'}` };
   const m = String(pr.out || '').match(/✓\s*(\d+)\s*דוגמאות\s*·\s*(\d+)\s*התנהגויות/);
   const ex = m ? +m[1] : 0, beh = m ? +m[2] : 0;
   const needN = L.summary.needs || 0;
-  if (!ex || !beh) return { stage: 4, ms, bh, solved, needs: needN, why: `הוכחה ריקה (${ex} דוגמאות · ${beh} התנהגויות) — «עבר» בלי לבדוק דבר` };
+  if (!ex || !beh) return { stage: 4, ms, bh, solved, needs: needN, mirrorChecked, why: `הוכחה ריקה (${ex} דוגמאות · ${beh} התנהגויות) — «עבר» בלי לבדוק דבר` };
 
   // 🔴 «עובד מול המטרה» = **המטרה**, לא חלק ממנה. מטרה שנגזרו לה 4 צרכים ורק 1 קיבל
   //   התנהגות-מוכחת אינה עושה את מה שהמשפט ביקש — ההוכחה שעברה מעידה רק על מה שנפלט.
   //   לכן שלב 5 דורש `solved === needs`: כל צורך שנגזר קיבל התנהגות שעוברת את דוגמאותיו.
   //   חלקי ⇒ נעצר בשלב 4 עם היחס, והפנקס מראה כמה חסר. (אחרת «100%» היה נמדד על תת-קבוצה.)
-  if (solved !== needN) return { stage: 4, ms, bh, solved, needs: needN, examples: ex,
+  if (solved !== needN) return { stage: 4, ms, bh, solved, needs: needN, examples: ex, mirrorChecked,
     why: `חלקי: ${solved}/${needN} צרכים קיבלו התנהגות-מוכחת — ההוכחה עברה על מה שנפלט, לא על המטרה` };
-  return { stage: 5, ms, bh, solved, needs: needN, examples: ex, behaviors: beh, why: null };
+  return { stage: 5, ms, bh, solved, needs: needN, examples: ex, behaviors: beh, mirrorChecked, why: null };
 }
 
 // ── --seal · חתימת-רצפה מריצה-מלאה שהושלמה (בלי מדידה מחדש) ────────────────
@@ -186,7 +193,7 @@ try {
     log(`   שלבים 3–5 על ${climbers.length} יחידות-עם-צרכים${skipped ? ` (‏${skipped} לא-נמדדו · --limit)` : ''}:`);
     climbers.forEach((row, i) => {
       const c = climb(units.find((u) => u.id === row.id && u.src === row.src), i);
-      Object.assign(row, { stage: c.stage, why: c.why, bh: c.bh, examples: c.examples, lines: c.lines, solved: c.solved, ms35: c.ms });
+      Object.assign(row, { stage: c.stage, why: c.why, bh: c.bh, examples: c.examples, lines: c.lines, solved: c.solved, mirrorChecked: c.mirrorChecked, ms35: c.ms });
       log(`     ${String(i + 1).padStart(3)}/${climbers.length} ${['','','',' 3',' 4','✅5'][c.stage] || c.stage} ${row.src} ${row.id} · ${(c.ms / 1000).toFixed(1)}s${c.why ? ' · ' + c.why : ` · ${c.examples} דוגמאות`}`);
     });
   }
@@ -195,9 +202,9 @@ try {
   const N = rows.length;
   const at = (k) => rows.filter((r) => r.stage >= k).length;
   const pct = (n) => (n * 100 / N).toFixed(1);
-  const NAMES = ['המשפט מזוהה כמטרה', 'צרכים נגזרו', 'Dart נפלט', 'מתקמפל (dart analyze)', '**עובד מול המטרה**'];
+  const NAMES = ['המשפט מזוהה כמטרה', 'צרכים נגזרו', 'Dart נפלט', 'מתקמפל (dart analyze + flutter analyze במראה)', '**עובד מול המטרה**'];
   const measured = QUICK ? 2 : 5;
-  const summary = { units: N, at: {}, quick: QUICK, limit: isFinite(LIMIT) ? LIMIT : null, notMeasured: skipped };
+  const summary = { units: N, at: {}, quick: QUICK, limit: isFinite(LIMIT) ? LIMIT : null, notMeasured: skipped, mirrorChecked: rows.filter((r) => r.mirrorChecked).length };
   log('');
   log(`📊 הסולם · ${N} יחידות`);
   log('| שלב | מה זה אומר | יחידות | אחוז |');
