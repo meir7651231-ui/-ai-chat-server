@@ -136,6 +136,37 @@ const gates = uniq(grab('\\b(k[A-Z][A-Za-z]+|modOn\\([^)]+\\)|featOn\\([^)]+\\))
 // **המונח-העברי אינו נחצב כאן.** הוא אינו מוצהר באף מקור (ורמינהו · 40 מקורות,
 // כולם אתרי-חיווט), והסקתו מתדירות-מחרוזות היא ניחוש-לפי-מחרוזת — בדיוק משפחת
 // הבאגים שהאינדקס נבנה כדי למנוע. ישות בלי מונח יוצאת כ-**מתג-לבעלים** (§20-ג · L57).
+// ── 🔤 **שתי אוצרות-מילים לאותו שדה** — הפער ש-w-wall-130 מדד (18.9) ──────────
+//  החציבה מצהירה את טיפוס-**Dart** (`int` · `String` · `bool`), והקושר-שקעים
+//  שבמורד-הזרם (`yeshiva/purpose.mjs:TYPE_SHAPE`) קורא אוצר-**סכמה**
+//  (`number` · `IsoDate` · `boolean` — כך `schema-fields.mjs` מצהיר).
+//  ‏`/number/i.test('int')` = false, ולכן שקע-מספר של ישות-מסך **אינו נקשר לעולם**:
+//  גם אם הבעלים היה נותן מונח-עברי לכל 29 הישויות, אף יחידה לא הייתה זזה משלב-1.
+//  זו בדיוק מחלקת-התקלה של L56 («השוואת סטים משני אוצרות») ושל L110 («התאמה לפי
+//  שם שזכרתי במקום לפי המקור המוצהר») — לא חֶסֶר-יכולת, חוסם.
+//
+//  הגשר **נגזר משני מקורות מוצהרים שכבר בריפו**, אפס טבלה-חדשה במנוע (L57):
+//    • `machtzev/generator/entity.mjs:127`  TYPE_IN — טיפוס-אפיון ⇒ טיפוסי-Dart שהוא מקבל
+//    • `machtzev/generator/sentence.mjs:79` T2      — טיפוס-אפיון ⇒ טיפוס-סכמה
+//  ההיפוך: טיפוס-Dart ⇒ אילו טיפוסי-אפיון מקבלים אותו. **יחיד ⇒ נגזר**
+//  (‏`int`/`double`/`num` ⇒ num ⇒ `number` · `DateTime` ⇒ date ⇒ `IsoDate`).
+//  **כמה ⇒ אינו נגזר** (‏`String` מתקבל ע"י date·num·text·multiline — ארבעה):
+//  בחירה ביניהם היא הכרעה-במנוע, ו-L114 אוסר אותה ⇒ `shape:null` עם הסיבה.
+//  **אפס ⇒ אינו נגזר** (‏`bool` · `VoidCallback` · `Color` · `Widget`): אין להם
+//  שורה ב-TYPE_IN. ‏`bool` ממשיך להיקשר כפי שנקשר תמיד — `TYPE_SHAPE.typeBool`
+//  היא `/bool/i` והיא מתאימה למחרוזת `bool` כמות-שהיא; לא נגענו בזה, כי שינוי
+//  שם-הטיפוס שם היה **מבטל** קשירה קיימת, וזו לא התקלה שנמדדה.
+const TYPE_IN = { date: ['DateTime', 'String', 'Object'], num: ['num', 'int', 'double', 'Object', 'dynamic', 'String'], text: ['String', 'Object', 'dynamic'], multiline: ['String', 'Object'] };   // ⇐ machtzev/generator/entity.mjs:127
+const T2 = { date: 'IsoDate', num: 'number', bool: 'boolean', text: 'string', multiline: 'string' };                                                                                                  // ⇐ machtzev/generator/sentence.mjs:79
+/** טיפוס-Dart ⇒ `{shape, from}` באוצר-הסכמה. רב-משמעי/חסר-מקור ⇒ `shape:null` **עם הסיבה**. */
+function shapeOfDart(dart) {
+  const bare = String(dart).replace(/\?$/, '').trim();
+  const specs = Object.keys(TYPE_IN).filter((k) => TYPE_IN[k].includes(bare));
+  if (specs.length === 1) return { shape: T2[specs[0]] || null, from: `machtzev/generator/entity.mjs:127 TYPE_IN.${specs[0]} ∋ ${bare} ⇒ machtzev/generator/sentence.mjs:79 T2.${specs[0]}` };
+  if (specs.length > 1) return { shape: null, from: `רב-משמעי: ${bare} מתקבל ע"י ${specs.length} טיפוסי-אפיון (${specs.join('/')}) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג` };
+  return { shape: null, from: `אין ל-${bare} שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)` };
+}
+
 const SKIP_CLS = /Tokens$|Composed$|^_/;
 const entities = [];
 for (const m of src.matchAll(/^class ([A-Za-z0-9_]+)\s*\{/gm)) {
@@ -144,7 +175,9 @@ for (const m of src.matchAll(/^class ([A-Za-z0-9_]+)\s*\{/gm)) {
   const startLine = lineAt(m.index);
   const fields = [];
   for (const fm of body.matchAll(/\n\s*final\s+([A-Za-z0-9_<>,?\s]+?)\s+([a-zA-Z_][A-Za-z0-9_]*)\s*;/g)) {
-    fields.push({ name: fm[2], type: fm[1].trim().replace(/\s+/g, ' '), line: lineAt(bi + fm.index + 1) });   // +1: fm.index מצביע על ה-\n שלפני השורה
+    const dartT = fm[1].trim().replace(/\s+/g, ' ');
+    const sh = shapeOfDart(dartT);
+    fields.push({ name: fm[2], type: dartT, shape: sh.shape, shapeFrom: sh.from, line: lineAt(bi + fm.index + 1) });   // +1: fm.index מצביע על ה-\n שלפני השורה
   }
   if (!fields.length) continue;   // בלי שקעים אין ישות — לא נרשמת
   entities.push({ cls, line: startLine, src: `${file}:${startLine}`, fields,
@@ -189,6 +222,8 @@ for (const w of sections) console.log(`     ${w.name} (${w.loc}ש) ← קורא:
 console.log(`  ש6 קומפוזר: ${composer.join(',') || '—'} · מיפוי-סקציות: ${sectionMap.length} · שערים: ${gates.join(' · ')}`);
 console.log(`  ש7 שקעי-לוח: ${board.reads.length} קריאות · ${board.writes.length} כתיבות · ${board.navsAndCalls.length} ניווטים/קריאות`);
 console.log(`  ש8 ישויות: ${entities.length} מחלקות-שורה · ${entities.reduce((a, e) => a + e.fields.length, 0)} שקעים · מונח-עברי מוצהר: ${entities.filter((e) => e.he).length}/${entities.length} (השאר = מתגי-בעלים)`);
+const shaped = entities.flatMap((e) => e.fields).filter((f) => f.shape);
+console.log(`     צורת-סכמה נגזרה: ${shaped.length}/${entities.reduce((a, e) => a + e.fields.length, 0)} שקעים (${[...new Set(shaped.map((f) => f.type + '⇒' + f.shape))].join(' · ') || '—'}); השאר בלי מקור-מוצהר ⇒ טיפוס-Dart כמות-שהוא`);
 for (const e of entities) console.log(`     ${e.cls} (${e.fields.length} שקעים) ${e.src}${e.he ? ' ⇒ ' + e.he : '  ⚑ ' + e.ask}`);
 console.log(`  📊 סה"כ אטומים-מזוהים: ${pigments.tokens.length + heStrings.length + icons.length + glyphs.length + logicCandidates.length + widgets.length}`);
 (await import('../../yeshiva/rminhu.mjs')).printNotes('screen-decomp');

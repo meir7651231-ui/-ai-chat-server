@@ -22,21 +22,29 @@
     {
      "name": "ic",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 13
     },
     {
      "name": "title",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 14
     },
     {
      "name": "sub",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 15
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 16
     }
    ],
@@ -52,21 +60,29 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 25
     },
     {
      "name": "desc",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 26
     },
     {
      "name": "count",
      "type": "int",
+     "shape": "number",
+     "shapeFrom": "machtzev/generator/entity.mjs:127 TYPE_IN.num ∋ int ⇒ machtzev/generator/sentence.mjs:79 T2.num",
      "line": 27
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 28
     }
    ],
@@ -82,16 +98,22 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 34
     },
     {
      "name": "onLoad",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 35
     },
     {
      "name": "onDelete",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 36
     }
    ],
@@ -107,16 +129,22 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 42
     },
     {
      "name": "isSelected",
      "type": "bool",
+     "shape": null,
+     "shapeFrom": "אין ל-bool שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 43
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 44
     }
    ],
@@ -132,6 +160,8 @@
     {
      "name": "onApprove",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 14
     }
    ],
@@ -147,16 +177,22 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 10
     },
     {
      "name": "selected",
      "type": "bool",
+     "shape": null,
+     "shapeFrom": "אין ל-bool שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 11
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 12
     }
    ],
@@ -172,11 +208,15 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 13
     },
     {
      "name": "value",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 14
     }
    ],
@@ -192,11 +232,15 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 23
     },
     {
      "name": "hit",
      "type": "bool",
+     "shape": null,
+     "shapeFrom": "אין ל-bool שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 24
     }
    ],
@@ -212,21 +256,29 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 27
     },
     {
      "name": "desc",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 28
     },
     {
      "name": "count",
      "type": "int",
+     "shape": "number",
+     "shapeFrom": "machtzev/generator/entity.mjs:127 TYPE_IN.num ∋ int ⇒ machtzev/generator/sentence.mjs:79 T2.num",
      "line": 29
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 30
     }
    ],
@@ -242,16 +294,22 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 36
     },
     {
      "name": "onLoad",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 37
     },
     {
      "name": "onDelete",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 38
     }
    ],
@@ -267,16 +325,22 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 44
     },
     {
      "name": "isSelected",
      "type": "bool",
+     "shape": null,
+     "shapeFrom": "אין ל-bool שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 45
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 46
     }
    ],
@@ -292,16 +356,22 @@
     {
      "name": "value",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 18
     },
     {
      "name": "isSelected",
      "type": "bool",
+     "shape": null,
+     "shapeFrom": "אין ל-bool שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 19
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 20
     }
    ],
@@ -317,16 +387,22 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 29
     },
     {
      "name": "count",
      "type": "int",
+     "shape": "number",
+     "shapeFrom": "machtzev/generator/entity.mjs:127 TYPE_IN.num ∋ int ⇒ machtzev/generator/sentence.mjs:79 T2.num",
      "line": 30
     },
     {
      "name": "color",
      "type": "Color",
+     "shape": null,
+     "shapeFrom": "אין ל-Color שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 31
     }
    ],
@@ -342,11 +418,15 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 37
     },
     {
      "name": "value",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 38
     }
    ],
@@ -362,16 +442,22 @@
     {
      "name": "title",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 10
     },
     {
      "name": "sub",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 11
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 12
     }
    ],
@@ -387,21 +473,29 @@
     {
      "name": "ic",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 14
     },
     {
      "name": "title",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 15
     },
     {
      "name": "sub",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 16
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 17
     }
    ],
@@ -417,6 +511,8 @@
     {
      "name": "child",
      "type": "Widget",
+     "shape": null,
+     "shapeFrom": "אין ל-Widget שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 20
     }
    ],
@@ -432,21 +528,29 @@
     {
      "name": "ic",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 26
     },
     {
      "name": "t",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 27
     },
     {
      "name": "s",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 28
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 29
     }
    ],
@@ -462,16 +566,22 @@
     {
      "name": "title",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 16
     },
     {
      "name": "sub",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 17
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 18
     }
    ],
@@ -487,11 +597,15 @@
     {
      "name": "value",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 10
     },
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 11
     }
    ],
@@ -507,6 +621,8 @@
     {
      "name": "name",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 23
     }
    ],
@@ -522,16 +638,22 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 29
     },
     {
      "name": "active",
      "type": "bool",
+     "shape": null,
+     "shapeFrom": "אין ל-bool שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 30
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 31
     }
    ],
@@ -547,16 +669,22 @@
     {
      "name": "color",
      "type": "Color",
+     "shape": null,
+     "shapeFrom": "אין ל-Color שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 13
     },
     {
      "name": "selected",
      "type": "bool",
+     "shape": null,
+     "shapeFrom": "אין ל-bool שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 14
     },
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 15
     }
    ],
@@ -572,21 +700,29 @@
     {
      "name": "name",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 20
     },
     {
      "name": "workerLabel",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 21
     },
     {
      "name": "onApprove",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 22
     },
     {
      "name": "onReject",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 23
     }
    ],
@@ -602,31 +738,43 @@
     {
      "name": "id",
      "type": "int",
+     "shape": "number",
+     "shapeFrom": "machtzev/generator/entity.mjs:127 TYPE_IN.num ∋ int ⇒ machtzev/generator/sentence.mjs:79 T2.num",
      "line": 29
     },
     {
      "name": "name",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 30
     },
     {
      "name": "workerLabel",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 31
     },
     {
      "name": "days",
      "type": "int",
+     "shape": "number",
+     "shapeFrom": "machtzev/generator/entity.mjs:127 TYPE_IN.num ∋ int ⇒ machtzev/generator/sentence.mjs:79 T2.num",
      "line": 32
     },
     {
      "name": "onApprove",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 33
     },
     {
      "name": "onReject",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 34
     }
    ],
@@ -642,6 +790,8 @@
     {
      "name": "text",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 14
     }
    ],
@@ -657,6 +807,8 @@
     {
      "name": "text",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 20
     }
    ],
@@ -672,6 +824,8 @@
     {
      "name": "onTap",
      "type": "VoidCallback",
+     "shape": null,
+     "shapeFrom": "אין ל-VoidCallback שורה ב-TYPE_IN (machtzev/generator/entity.mjs:127) — חסר-מקור, לא ניחוש (§20-ג)",
      "line": 10
     }
    ],
@@ -687,11 +841,15 @@
     {
      "name": "label",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 11
     },
     {
      "name": "value",
      "type": "String",
+     "shape": null,
+     "shapeFrom": "רב-משמעי: String מתקבל ע\"י 4 טיפוסי-אפיון (date/num/text/multiline) — בחירה ביניהם היא הכרעה-במנוע (L114) ⇒ מתג",
      "line": 12
     }
    ],

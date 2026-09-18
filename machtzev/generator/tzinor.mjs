@@ -29,6 +29,7 @@
 //  הרצה:  node machtzev/generator/tzinor.mjs --text "<משפט>"
 //         node machtzev/generator/tzinor.mjs --gate        (מול tzinor-golden.json)
 //         node machtzev/generator/tzinor.mjs --smoke       (מדידה על nl-smoke.txt)
+//         node machtzev/generator/tzinor.mjs --screen-map  (מפת-ערך: כמה שווה כל מתג-ישות-מסך)
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
 import path from 'node:path';
@@ -338,8 +339,14 @@ export function candidatesFor(word) {
   for (const h of screenHits) {
     const p = out.find((o) => o.cls === h.e.cls);
     if (p) { p.evidence.push(h.src); continue; }
+    // 🔤 **`type` של שקע בשרשרת הוא אוצר-הסכמה**, לא אוצר-Dart — כך `schema-fields.mjs`
+    //    מצהיר (`number` · `IsoDate` · `boolean`) וכך `purpose.mjs:TYPE_SHAPE` קורא.
+    //    החציבה גוזרת אותו למי שיש לו מקור מוצהר (`shape` · w-wall-130) ומשאירה
+    //    את טיפוס-Dart ב-`dart` — עובדת-החציבה אינה נמחקת, רק מתורגמת.
+    //    בלי `shape` (‏String רב-משמעי · bool/VoidCallback/Color חסרי-שורה ב-TYPE_IN)
+    //    נשאר טיפוס-Dart **כמות-שהוא**, בדיוק כפי שהיה — אפס שינוי-התנהגות שם.
     out.push({ kind: 'ישות-מסך', cls: h.e.cls, keys: [], via: [`${SRC.screens} (חצוב ממסך · ש8)`], score: h.score, strict: true,
-      evidence: [h.src], fields: h.e.fields.map((f) => ({ name: f.name, type: f.type, optional: /\?$/.test(f.type), src: `${h.e.src.replace(/:\d+$/, '')}:${f.line}` })) });
+      evidence: [h.src], fields: h.e.fields.map((f) => ({ name: f.name, type: f.shape || f.type, dart: f.type, shapeFrom: f.shapeFrom || null, optional: /\?$/.test(f.type), src: `${h.e.src.replace(/:\d+$/, '')}:${f.line}` })) });
   }
   out.sort((a, b) => (b.strict - a.strict) || (b.score - a.score) || a.cls.localeCompare(b.cls));
   return [...out, ...noClass];
@@ -561,7 +568,149 @@ if (isMain && arg('--text')) {
   console.log(JSON.stringify({ ...spec, audit: a }, null, 1));
   process.exit(a.ok ? 0 : 1);
 }
-if (isMain) console.log('usage: tzinor.mjs --text "<משפט>" | --smoke | --gate | --write-golden');
+
+// ══════════════════════════════════════════════════════════════════════════
+//  🗺️ `--screen-map` · **כמה שווה כל מתג** — מפת-ערך ל-29 ישויות-המסך (w-wall-130)
+//  ────────────────────────────────────────────────────────────────────────
+//  הקיר שנמדד: מתוך 315 יחידות-המדידה, 130 עומדות בשלב-1, ומהן **73 על
+//  «אין-ישות»** (`nl-smoke --meter`). ‏G64 העמיד 29 ישויות-מסך עם שקעים ומוצא
+//  ו-`he:null` — כלומר 29 שאלות פתוחות לבעלים, **בלי סדר-ערך ביניהן**.
+//
+//  השאלה שהמצב הזה מייצר אצל הבעלים היא «תן לי 29 מילים», והיא שאלה גרועה.
+//  השאלה הטובה: «המילה הזאת שווה N משפטים, וזאת שווה אחד». המצב הזה מודד
+//  בדיוק את זה — ו**אינו ממציא את המילה** (§20-ג · L57): הוא לוקח את
+//  מילות-ה-∅ **של היחידה עצמה** (מילים שנאמרו במשפט ואין להן מקור בשרשרת),
+//  מציב אותן זמנית ב-`he` **בזיכרון בלבד**, מודד, ומחזיר. אף מילה אינה
+//  נכתבת לדיסק ואף מתג אינו נדלק — `he` חוזר ל-null בכל מקרה (‏finally),
+//  והמצב מאמת את ההחזרה לפני שהוא מדפיס (L110 §5: «רשת-ביטחון נמדדת»).
+//
+//  ⚠️ **מה המספר אומר ומה לא:** «N» = כמה יחידות היו עוברות לשלב-2 (צרכים>0)
+//  **אילו** הבעלים היה קורא לישות הזאת באחת מהמילים שהמשפט כבר אמר. הוא
+//  **אינו** טענה שהמילה נכונה — זו הכרעת-הבעלים, והשאלה עצמה (`e.ask`) נוסעת
+//  עם כל שורה.
+//
+//  הפקודה:  node machtzev/generator/tzinor.mjs --screen-map [--json <out>]
+// ══════════════════════════════════════════════════════════════════════════
+/** צורת-הערך שהפסק קושר בה שקע — **נקראת מ-`purpose.mjs`, לא מועתקת** (L111: פותר אחד). */
+export async function screenEntityMap({ log = () => {} } = {}) {
+  const BP = await import('./behavior-plan.mjs');
+  const P = await import('../../yeshiva/purpose.mjs');
+  const units = BP.scanUnits();
+  // ── א. הרצפה: מי בשלב-1 על «אין-ישות» **בעץ הזה**, לא מקובץ-מדידה ישן ──
+  const base = [];
+  for (const u of units) {
+    let r = null; try { r = await BP.perokGoal(u.text, 'מטרה'); } catch (e) { r = null; }
+    if (!r) { base.push({ u, kinds: ['קריסת-פירוק'], claims: 0, needs: 0 }); continue; }
+    base.push({ u, claims: r.claims.length, needs: Object.keys(r.needs).length,
+      kinds: [...new Set(r.owner.map((o) => o.kind))] });
+  }
+  const targets = base.filter((b) => b.claims && !b.needs && b.kinds.join('/') === 'אין-ישות');
+  log(`   רצפה: ${units.length} יחידות · ${targets.length} על «אין-ישות» (שלב-1)`);
+  // ── ב. מילות-המועמד לכל יחידה: מילות-∅ של תביעה שאין בה אף ישות ──
+  for (const t of targets) {
+    const g = P.goalPsak(t.u.text, 'מטרה');
+    t.claimWords = g.demands.map((d, i) => {
+      const rq = g.requirements.filter((r) => r.demand === i);
+      if (rq.some((r) => r.kind === 'ישות' && r.cls)) return [];
+      return rq.filter((r) => r.kind === '∅').map((r) => r.word);
+    }).filter((w) => w.length);
+  }
+  // ── ג. הבדיקה: מציבים מונח **בזיכרון**, מודדים, מחזירים ──────────────────
+  //  התקרה מורדת ל-0 בזמן הבדיקה כדי שאלפי מהלכי-משנה לא יציפו את הפנקס
+  //  המשותף; מהלך-הכותרת של המצב עצמו נרשם עם `always` ואינו נחתך (rminhu.mjs).
+  const capWas = process.env.YESHIVA_LEDGER_CAP;
+  process.env.YESHIVA_LEDGER_CAP = '0';
+  const rows = []; let probes = 0;
+  try {
+    for (const e of SCREEN_ENTS) {
+      if (e.he !== null) { rows.push({ cls: e.cls, src: e.src, skipped: `כבר נושאת מונח «${e.he}»` }); continue; }
+      const eT = Date.now();
+      const opened = []; const reasons = new Map();
+      for (const t of targets) {
+        let hit = null;
+        for (const words of t.claimWords) {
+          for (const w of words) {
+            probes += 1;
+            let res = null;
+            try { e.he = w; res = P.goalNeeds(t.u.text, 'מטרה'); } catch (err) { res = null; } finally { e.he = null; }
+            if (!res) continue;
+            // האם הישות אכן נבחרה? מילה שלא ניקדה אינה בדיקה — ממשיכים למילה הבאה.
+            const picked = res.claims.some((c) => (c.entities || []).includes(e.cls));
+            if (!picked) continue;
+            const n = Object.keys(res.needs).length;
+            if (n) { hit = { word: w, needs: n }; break; }
+            for (const o of res.owner) if (o.kind !== 'אין-ישות') reasons.set(o.kind, (reasons.get(o.kind) || 0) + 1);
+          }
+          if (hit) break;
+        }
+        if (hit) opened.push({ id: t.u.id, at: t.u.at, word: hit.word, needs: hit.needs });
+      }
+      rows.push({ cls: e.cls, src: e.src, fields: e.fields.map((f) => `${f.name}:${f.type}${f.shape ? '⇒' + f.shape : ''}`),
+        ask: e.ask, opens: opened.length, units: opened,
+        blocked: [...reasons.entries()].sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ×${v}`) });
+      log(`     ${String(rows.length).padStart(2)}/${SCREEN_ENTS.length} ${String(e.cls).padEnd(24)} ⇒ ${opened.length} · ${((Date.now() - eT) / 1000).toFixed(0)}s`);
+    }
+  } finally {
+    if (capWas === undefined) delete process.env.YESHIVA_LEDGER_CAP; else process.env.YESHIVA_LEDGER_CAP = capWas;
+  }
+  // ── 🕯️ ורמינהו לפני כל «שווה 0» ────────────────────────────────────────────
+  //  «המתג הזה לא מזיז כלום» הוא «אין», ו«אין» = «לא-חיפשת» (הכרעה-23 · L112).
+  //  לכן כל ישות שנמדדה באפס פוסקת **על כל שקע שלה בשמו ובמוצאו**: שקע שצורתו
+  //  נקשרת לרמז-טיפוס = «חד שיעורא» (ואז המספר אינו אפס); שקע שצורתו אינה
+  //  באוצר-הסכמה = «פליגא» עם החילוק; שקע-פעולה (`VoidCallback`) = «לא שייך».
+  const SHAPES = { IsoDate: 'רמז-תאריך (typeDate)', number: 'רמז-מספר (typeNum/typePercent)', boolean: 'רמז-בוליאני (typeBool)', bool: 'רמז-בוליאני (typeBool)' };
+  for (const r of rows) {
+    if (r.skipped || r.opens) continue;
+    const e = SCREEN_ENTS.find((x) => x.cls === r.cls && x.src === r.src) || { fields: [] };
+    rminhu({ engine: 'tzinor.screenEntityMap', matter: `ערך-המתג «${r.cls}» (${r.src}) מול ${targets.length} יחידות «אין-ישות»`,
+      searched: ['שרשרת-הסכמה (schema-fields ⇒ TYPE_SHAPE)', 'חציבה (screen-decomp ש8 · שקעי-המסך)', 'גשר-אוצרות (entity.mjs TYPE_IN ⇒ sentence.mjs T2)', `מילות-∅ של ${targets.length} היחידות עצמן`],
+      rulings: e.fields.length
+        ? e.fields.map((f) => {
+          const shp = f.shape || f.type;
+          return SHAPES[shp]
+            ? pliga(`${r.cls}.${f.name}@${r.src.replace(/:\d+$/, '')}:${f.line}`, `שקע בצורת ${shp} (${SHAPES[shp]}) — נקשר, אך אף תביעה חסרת-ישות לא נשאה גם מילת-∅ שבוחרת את הישות וגם את הרמז הזה; זה חסר-צירוף, לא חסר-שקע`)
+            : pliga(`${r.cls}.${f.name}@${r.src.replace(/:\d+$/, '')}:${f.line}`, `טיפוס-Dart «${f.type}» אינו באוצר-הסכמה ש-TYPE_SHAPE קורא, ואין לו מקור-גזירה מוצהר — ${f.shapeFrom || 'לא נגזר'}`);
+        })
+        : [], none: e.fields.length ? '' : `חיפשתי שקעים ל-${r.cls} בחציבת-המסך; לא מצינו` });
+  }
+  // ── ד. אימות-ההחזרה: אף מתג לא נשאר דלוק, לא בזיכרון ולא בדיסק ──────────
+  const stillOn = SCREEN_ENTS.filter((e) => e.he !== null).map((e) => e.cls);
+  const onDisk = (() => {
+    try { return (JSON.parse(fs.readFileSync(R.GEN_DIR + 'screen-entities.data.json', 'utf8')).entities || []).filter((e) => e.he).length; } catch { return -1; }
+  })();
+  if (stillOn.length) throw new Error(`screen-map: ${stillOn.length} מתגים נשארו דלוקים בזיכרון (${stillOn.join(',')}) — הבדיקה לא הוחזרה`);
+  if (onDisk !== 0) throw new Error(`screen-map: ${onDisk} מתגים דלוקים בקובץ-הדאטה — הבדיקה נגעה בדיסק`);
+  return { units: units.length, targets: targets.length, probes, rows, restored: { memory: 0, disk: onDisk } };
+}
+
+// ⚠️ **בלי `await` ברמת-המודול.** נמדד: `import('./behavior-plan.mjs')` בתוך await
+//    עליון תופס את tzinor במצב «מעריך», ו-behavior-plan (שמייבא אותו בחזרה דרך
+//    purpose) ממתין לו — קיפאון שקט שנראה כמו «התוכנית לא עשתה כלום»
+//    (‏`Detected unsettled top-level await`). לכן המודול מסיים להיטען, ורק אז רצה
+//    העבודה. אותה מחלקת-תקלה של L110: דילוג שנראה כמו «אין מה למדוד».
+if (isMain && process.argv.includes('--screen-map')) {
+  const t0 = Date.now();
+  screenEntityMap({ log: (s) => console.log(s) }).then((m) => {
+  const sorted = m.rows.slice().sort((a, b) => (b.opens || 0) - (a.opens || 0) || String(a.cls).localeCompare(String(b.cls)));
+  console.log(`\n🗺️ מפת-ערך-המתגים · ${m.rows.length} ישויות-מסך מול ${m.targets} יחידות «אין-ישות» · ${m.probes} בדיקות · ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+  for (const r of sorted) {
+    if (r.skipped) { console.log(`   ⏭️  ${String(r.cls).padEnd(24)} ${r.skipped}`); continue; }
+    console.log(`   ${String(r.opens).padStart(3)} ${String(r.cls).padEnd(24)} ${r.src}`);
+    if (r.opens) console.log(`       יחידות: ${r.units.slice(0, 6).map((u) => `${u.id}("${u.word}")`).join(' · ')}${r.units.length > 6 ? ' …' : ''}`);
+    else console.log(`       חסום על: ${r.blocked.join(' · ') || '(הישות לא נבחרה ע"י אף מילת-∅)'}`);
+  }
+  const tot = sorted.reduce((a, r) => a + (r.opens || 0), 0);
+  console.log(`\n   סה"כ יחידות שנפתחות ע"י מתג-אחד: ${tot === 0 ? '0 — **אף מתג אינו מזיז יחידה**' : tot}`);
+  console.log(`   ✓ הוחזר: 0 מתגים בזיכרון · ${m.restored.disk} בדיסק`);
+  const out = arg('--json');
+  if (out) { fs.writeFileSync(out, JSON.stringify({ cmd: 'node machtzev/generator/tzinor.mjs --screen-map', at: new Date().toISOString(), ...m }, null, 1) + '\n'); console.log(`   ✍️  ${out}`); }
+  process.exit(0);
+  }).catch((e) => { console.log('🔴 screen-map: ' + (e && e.stack || e)); process.exit(1); });
+}
+
+// `--screen-map` אינו נעצר כאן ב-`process.exit` (הוא ממתין להבטחה), ולכן הוא מוחרג
+// במפורש — אחרת שורת-ה-usage נדפסת **לפני** התוצאה ונקראת כמו «הפקודה לא הוכרה».
+if (isMain && !process.argv.includes('--screen-map')) console.log('usage: tzinor.mjs --text "<משפט>" | --smoke | --gate | --screen-map | --write-golden');
 
 // ── גשר-אל-app-ds: מתגים ⇒ מחרוזת-ספק (הפורמט שהמחולל קורא) ────────────────
 //  ורמינהו (BUILD-ORDER-INTENT:16 — «nlToSpec נשאר לשלד-הנתונים»): לא מחליפים אותו,
