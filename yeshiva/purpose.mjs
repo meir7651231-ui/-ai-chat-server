@@ -164,7 +164,11 @@ export function goalPsak(sentence, origin = 'מטרה') {
       const k = classOf(w); if (!k) continue;
       claimed.add(w);
       if (k.cls) reqs.push({ kind: 'ישות', demand: di, verb: d.verb, word: w, cls: k.cls, slots: k.fields.length, src: k.src });
-      else reqs.push({ kind: 'ישות', demand: di, verb: d.verb, word: w, cls: null, options: k.options, src: null, why: `${k.options.length} מועמדי-סכמה — לא מכריעים` });
+      // 🕯️ `psak`/`question` באים מ-`soleClassOf` כשהישיבה כבר דנה במילה (‏entity-psak · L114).
+      //    תיקו ⇒ **השאלה המדויקת של הישיבה** נוסעת עם המתג, ולא הניסוח הגנרי «איזה?» (§20-ג).
+      else reqs.push({ kind: 'ישות', demand: di, verb: d.verb, word: w, cls: null, options: k.options, src: null,
+        psak: k.psak || null, ask: k.question || null,
+        why: `${k.options.length} מועמדי-סכמה — לא מכריעים${k.psak ? ` · ${k.psak} בישיבה` : ''}` });
     }
     // (2) שדות — רמז-טיפוס; נקשר לשקע-סכמה של ישות שהוכרעה, לפי **צורת-הערך**
     for (const w of words) {
@@ -386,7 +390,7 @@ export function goalNeeds(sentence, origin = 'מטרה') {
       }
       // תביעה בלי חוזה — **השאלה המדויקת**, לא ניחוש ולא השמטה (L57)
       const q = amb.length
-        ? `«${amb[0].word}» — ${(amb[0].options || []).length} מועמדי-סכמה (${(amb[0].options || []).slice(0, 4).join(', ')}): איזה?`
+        ? (amb[0].ask || `«${amb[0].word}» — ${(amb[0].options || []).length} מועמדי-סכמה (${(amb[0].options || []).slice(0, 4).join(', ')}): איזה?`)
         : !ents.length
           ? `«${d.verb}»: אין מילה בתביעה שיש לה מחלקת-סכמה (${words.filter((w) => w !== d.verb).slice(0, 6).join(' · ') || '—'}) — על איזו ישות?`
           : `«${d.verb}» על ${ents.map((e) => e.cls).join('/')}: אין שקע-סכמה מחובר ואין קבוע-סף במטרה — מה נמדד ומול מה?`;
