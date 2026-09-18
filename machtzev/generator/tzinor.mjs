@@ -48,10 +48,22 @@ export const SRC = {
   fields: 'new/atoms/schema-fields.mjs',
   lang: 'machtzev/generator/nl-lang.data.json',
   sentence: 'machtzev/generator/sentence.mjs',
+  screens: 'machtzev/generator/screen-entities.data.json',   // G64 · ישויות-מסך חצובות (screen-decomp ש8)
 };
 
 const LANG = JSON.parse(fs.readFileSync(R.GEN_DIR + 'nl-lang.data.json', 'utf8'));
 const ALL_TERMS = JSON.parse(fs.readFileSync(R.GEN_DIR + 'entity-terms.data.json', 'utf8')).terms;
+// G64 · ישויות-מסך חצובות (‏screen-decomp שכבה-8). **מקור רביעי בשרשרת, לא אינדקס-אטומים**:
+// נמדד ש-`atom-index`/`oracle` אינם נקראים כאן כלל, ולכן הוספה להם לא הייתה מזיזה את classOf.
+// ישות כאן נכנסת עם שקעים ועם file:line. `he:null` = המונח-העברי אינו מוצהר באף מקור ⇒
+// היא **אינה** נבחרת ע"י מילה עברית (אין המצאה), אלא ממתינה למתג-בעלים.
+const SCREEN_ENTS = (() => {
+  try { return JSON.parse(fs.readFileSync(R.GEN_DIR + 'screen-entities.data.json', 'utf8')).entities || []; } catch { return []; }
+})();
+/** ישויות-מסך שכבר קיבלו מונח-עברי מוצהר מהבעלים. בלי מונח ⇒ אינה מועמדת. */
+export const screenEntitiesWithTerm = () => SCREEN_ENTS.filter((e) => e.he);
+/** ישויות-מסך שממתינות למונח — הרשימה הסופית של השאלות לבעלים (§20-ג). */
+export const screenEntitySwitches = () => SCREEN_ENTS.filter((e) => !e.he).map((e) => ({ cls: e.cls, src: e.src, fields: e.fields.map((f) => f.name), ask: e.ask }));
 const BY_KEY = new Map(ALL_TERMS.map((t) => [t.key, t]));
 const CLASSES = new Set(FIELDS.map((f) => f.e));
 
@@ -229,6 +241,17 @@ export function candidatesFor(word) {
   }
   // המסלול-הסגור: ranked (עד 4). כל מועמד שלו הופך לאפשרות — גם כשהניקוד-המתוקן דוחה אותו,
   // ואז הוא מסומן `strict:false` (חשוד כהתאמת-תאונה) ומגיע לבעלים מסומן, לא מושתק.
+  // G64 · המקור הרביעי: ישות-מסך חצובה שהבעלים כבר נתן לה מונח. שקעיה באים מהמסך
+  // עצמו (‏`final <type> <name>` + file:line), לא מ-schema-fields — ולכן ישות שאין לה
+  // מחלקה ב-FIELDS עדיין נגישה, בלי להמציא לה סכמה.
+  const screenHits = [];
+  for (const e of SCREEN_ENTS) {
+    if (!e.he) continue;   // בלי מונח מוצהר — לא מועמדת. אפס ניחוש-לפי-מחרוזת.
+    for (const f of altForms(e.he)) {
+      const sc = scoreForm(own, f);
+      if (sc) { screenHits.push({ e, score: sc, src: `${SRC.screens}:${e.cls} ("${f}") ⇐ ${e.src}` }); break; }
+    }
+  }
   const rk = sentenceResolve(word).ranked || [];
   const fromResolve = new Map();
   rk.forEach(([cls, sc], i) => fromResolve.set(cls, { score: sc, src: `${SRC.sentence}:resolve#ranked[${i}] (ניקוד ${sc})` }));
@@ -248,6 +271,12 @@ export function candidatesFor(word) {
     else if (CLASSES.has(cls)) byClass.set(cls, { kind: 'מחלקת-סכמה', cls, keys: [], via: [`${SRC.sentence}:resolve (המסלול-הסגור)`], score: r.score, strict: false, evidence: [r.src] });
   }
   const out = [...byClass.values()].map((c) => ({ ...c, fields: fieldsOf(c.cls) }));
+  for (const h of screenHits) {
+    const p = out.find((o) => o.cls === h.e.cls);
+    if (p) { p.evidence.push(h.src); continue; }
+    out.push({ kind: 'ישות-מסך', cls: h.e.cls, keys: [], via: [`${SRC.screens} (חצוב ממסך · ש8)`], score: h.score, strict: true,
+      evidence: [h.src], fields: h.e.fields.map((f) => ({ name: f.name, type: f.type, optional: /\?$/.test(f.type), src: `${h.e.src.replace(/:\d+$/, '')}:${f.line}` })) });
+  }
   out.sort((a, b) => (b.strict - a.strict) || (b.score - a.score) || a.cls.localeCompare(b.cls));
   return [...out, ...noClass];
 }
