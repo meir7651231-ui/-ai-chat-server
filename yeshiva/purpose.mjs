@@ -20,7 +20,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { toSwitches, soleClassOf } from '../machtzev/generator/tzinor.mjs';
+import { toSwitches, soleClassOf, slotSources } from '../machtzev/generator/tzinor.mjs';
 import { stem } from '../machtzev/generator/match.mjs';
 import { check, parseSpec, STOP } from './read.mjs';
 import { pasak, applyPsak } from './apply.mjs';
@@ -61,6 +61,7 @@ const TYPE_KEYS = Object.keys(SPL).filter((k) => /^type[A-Z]/.test(k) && Array.i
 // צורת-הערך שרמז-טיפוס דורש משקע-סכמה. מיפוי **צורה⇒צורה**, לא מילון-דומייני:
 // רק שלוש צורות חד-משמעיות; רמז בלי צורה מוכרת אינו נקשר לשקע (∅, לא ניחוש).
 const TYPE_SHAPE = { typeDate: /date/i, typeNum: /number/i, typePercent: /number/i, typeBool: /bool/i };
+const DATE_SHAPE = TYPE_SHAPE.typeDate;   // צורת-הערך של שקע-תאריך — **אותו** ביטוי, לא עותק שני
 const CMP_WORDS = [['מעל', SPL.amountAbove || []], ['מתחת', SPL.amountBelow || []]];
 
 const heW = (s) => [...String(s || '').matchAll(/[א-ת][א-ת'"״׳]*/g)].map((m) => m[0]);
@@ -292,11 +293,20 @@ export function goalNeeds(sentence, origin = 'מטרה') {
     const ids = [];
     // מילות-הייעוד = מילות-**התוכן** של התביעה (בלי פיגום) + שם-השקע. מקור: המטרה עצמה.
     const purp = (extra) => [...new Set([...contentW(heW(d.text)), ...extra])].join(' ');
+    // 🕯️ **צורך-השעון** — חולץ מלולאת-הסף כדי שיהיה לו **קורא שני** (שלב-3 · PLAN-100).
+    //  הוא לא השתנה בבייט: אותו `shape` · אותו `derive:daysSince` · אותו מקור-יחיד
+    //  (שם-השקע). מה שהשתנה הוא מי רשאי לקרוא לו — ראה `dates` מתחת ללולאה.
+    const clockSeen = new Set();
+    const clockNeed = (s) => {
+      const F = s.field; const id = `g${i + 1}.clock.${F}Days`;
+      if (clockSeen.has(id)) return null; clockSeen.add(id);
+      return mk(id, { shape: 'מועד', demand: purp([F]), params: ['String'], ret: 'num',
+        clock: { type: 'String' }, sources: [{ token: `'${F}'`, src: s.src }], derive: { kind: 'daysSince', cls: s.cls, field: F } });
+    };
     for (const { r, s } of thr) {
       const tag = CMP_TAG[r.cmp] || r.cmp; const K = r.word; const F = s.field; const Fc = cap(F);
       const src = [{ token: `'${F}'`, src: s.src }, { token: K, src: r.src }];
-      ids.push(mk(`g${i + 1}.clock.${F}Days`, { shape: 'מועד', demand: purp([F]), params: ['String'], ret: 'num',
-        clock: { type: 'String' }, sources: [src[0]], derive: { kind: 'daysSince', cls: s.cls, field: F } }));
+      const c0 = clockNeed(s); if (c0) ids.push(c0);
       ids.push(mk(`g${i + 1}.predicate.${F}${tag}${K}`, { shape: 'מועד', demand: purp([F, r.cmp]), params: ['String'], ret: 'bool',
         clock: { type: 'String' }, consts: [K], sources: src, derive: { kind: 'threshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp } }));
       ids.push(mk(`g${i + 1}.predicate.record${Fc}${tag}${K}`, { shape: 'רשומות', demand: purp([F, r.cmp]), params: ['dynamic'], ret: 'bool',
@@ -305,6 +315,44 @@ export function goalNeeds(sentence, origin = 'מטרה') {
       ids.push(mk(`g${i + 1}.collection.${F}${tag}${K}List`, { shape: 'רשומות', demand: purp([F, r.cmp]), params: ['List<dynamic>'], ret: 'List<dynamic>',
         clock: { type: 'String' }, consts: [`'${F}'`, K], entity: s.cls, sources: src,
         derive: { kind: 'filterThreshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp } }));
+    }
+    // ── 🕯️ שקע-תאריך שהתביעה **כבר קשרה**, בלי קבוע-סף (שלב-3 · PLAN-100 §3) ──────
+    //  מה שנמדד: 40 מתוך 75 התביעות שנפלו על «ישות-בלי-שקע» נושאות דרישה שכבר
+    //  נקשרה לשקע-תאריך של הישות שהוכרעה (`r.slot` + `r.slotSrc`, שניהם עם מוצא) —
+    //  ואז נזרקה, כי `goalNeeds` צרך **שתי** צורות בלבד: סף (קבוע+משווה) ואגרגציה
+    //  (שדה-מספר+אות-סימן). הקשירה הייתה, החוזה לא נגזר.
+    //
+    //  ‏**אפס סמנטיקה חדשה:** הצורך היחיד שנגזר כאן הוא `clock.<F>Days` — בדיוק
+    //  אותו חוזה שהמנוע כבר פולט בלולאת-הסף שמעל, ושמקור-הדוגמאות שלו כבר יודע
+    //  לגזור בלי סף («אין סף — פריסה על ציר-הזמן», behavior-plan.mjs:goalExamples).
+    //  המשווה והקבוע אינם משתתפים בו כלל, ולכן הגידור מאחוריהם היה **צימוד-שווא**.
+    //  שלושת הצרכים שכן צורכים אותם (predicate · record · filter) נשארים מגודרים.
+    //
+    //  ⚠️ ולא יותר מזה: שקע שאין מילה בתביעה שקושרת אליו **אינו** נבחר כאן. בחירת-
+    //  שקע-במנוע היא הכרעה אסורה (L114 · §20-ג) — היא נשארת מתג-בעלים.
+    //
+    //  🔒 **ובדיוק כאן נעצרים:** קשירת-השקע נעשית לפי **צורת-הערך** (`TYPE_SHAPE`), והיא
+    //  לוקחת את השקע ה**ראשון** שצורתו מתאימה. כשלישות יש שקע-תאריך אחד — זו ממה-נפשך.
+    //  כשיש כמה (‏`Supporter.first/last/nextDate` — נמדד: 25 תביעות ב-24 יחידות) — «הראשון»
+    //  הוא **הכרעה-במנוע**, ו-L114 אוסר אותה. אין מונח-עברי לשקע באף מקור (נמדד: 0 מתוך
+    //  492 שדות ב-`schema-fields` נושאים אות עברית), ולכן אין דרך לפסוק מי מהם — ⇒ מתג.
+    //
+    //  ורדיוס-הפגיעה מצומצם לפער שנמדד בלבד: דרישה שלולאת-הסף כבר צרכה **אינה**
+    //  נכנסת לכאן (נמדד: 3 תביעות-סף בקורפוס, אחת מהן על בריכה עם 3 שקעי-תאריך).
+    //  הקשירה-השרירותית שבמסלול-הסף היא ממצא לבעלים, לא שינוי של הגל הזה.
+    const thrReqs = new Set(thr.map((x) => x.r));
+    const poolDates = pool.filter((f) => DATE_SHAPE.test(String(f.type || '')));
+    const dates = reqs.filter((r) => r.slot && !thrReqs.has(r)).map((r) => ({ r, s: slotOf(r, pool) }))
+      .filter((x) => x.s && DATE_SHAPE.test(String(x.s.type || '')));
+    const askedDate = new Set();
+    for (const { r, s } of dates) {
+      if (poolDates.length > 1) {
+        if (askedDate.has(r.word)) continue; askedDate.add(r.word);
+        owner.push({ claim: i + 1, verb: d.verb, word: r.word, kind: 'שקע-תאריך-לא-מוכרע',
+          question: `«${r.word}» בתביעה «${d.verb}»: ${poolDates.length} שקעי-תאריך מועמדים (${poolDates.map((f) => f.cls + '.' + f.name).join(' · ')}) — הקשירה לפי צורת-הערך אינה מבדילה ביניהם, ולשקע אין מונח-עברי באף מקור, ולכן הבחירה אינה של המנוע (L114). איזה מהם?` });
+        continue;
+      }
+      const c = clockNeed(s); if (c) ids.push(c);
     }
     for (const { r, s } of nums) {
       const hit = sig.sum || sig.avg || sig.count;
@@ -316,6 +364,26 @@ export function goalNeeds(sentence, origin = 'מטרה') {
         derive: { kind: fam + 'By', cls: s.cls, field: s.field } }));
     }
     if (!ids.length) {
+      // ── 🕯️ ורמינהו לפני «ישות-בלי-שקע» (שלב-3 · PLAN-100 §3) ──────────────────
+      //  «אין» = «לא-חיפשת» (LAW.md · הכרעה-23). עד כה הטענה «אין שקע-סכמה מחובר»
+      //  נכתבה 59 פעמים בלי לנקוב **איזה** מקור-שקע נבדק — ושתי משפחות-חיפוש,
+      //  **חציבה** ו**כפילות**, מעולם לא רצו על העניין. `slotSources` (tzinor) מביא
+      //  את שלושתן בשמן; הפסק כאן אומר על כל אחת למה היא אינה סוגרת את התביעה.
+      //
+      //  ⚠️ ואי-אפשר שיהיה כאן «חד שיעורא»: אנו בענף הזה **מפני** שאף מילה בתביעה
+      //  לא נקשרה לשקע. מקור שנושא שקעים ואין מילה שקושרת אליהם אינו תשובה — בחירה
+      //  בו הייתה הכרעה-במנוע (L114). לכן הפסק הוא «פליגא» מנומק, והמתג נשאר לבעלים.
+      if (ents.length) {
+        const conn = reqs.filter((r) => r.slot).length;
+        for (const e of ents) {
+          const srcs = (() => { try { return slotSources(e.cls); } catch { return []; } })();
+          rminhu({ engine: 'purpose.goalNeeds', matter: `שקע לתביעה «${d.verb}» על ${e.cls} (${origin})`,
+            searched: ['שרשרת (schema-fields)', 'חציבה (shape-ops · screen-decomp ש8)', 'כפילות (מחלקת-אח באותו סט-שמות-שדות)'],
+            rulings: srcs.map((x) => (x.slots.length
+              ? pliga(x.src, `${x.family}: נושא ${x.slots.length} שקעים ל-${e.cls}${x.family === 'שרשרת' ? '' : x.adds.length ? ` (${x.adds.length} מהם אינם ב-schema-fields: ${x.adds.slice(0, 4).join(',')})` : ' — 0 שקעים שאינם כבר בשרשרת, כלומר אותו מקור בצורה שנייה ולא מקור נוסף'}, אך ${conn ? 'אף אחד מהם אינו השקע שהתביעה קשרה' : 'אף מילה בתביעה אינה נקשרת לאף אחד מהם'}; בחירת-שקע בלי מילה שקושרת אליו היא הכרעה-במנוע (L114) ⇒ מתג-לבעלים`)
+              : lo(x.src, `${x.family}: ${x.why}`))) });
+        }
+      }
       // תביעה בלי חוזה — **השאלה המדויקת**, לא ניחוש ולא השמטה (L57)
       const q = amb.length
         ? `«${amb[0].word}» — ${(amb[0].options || []).length} מועמדי-סכמה (${(amb[0].options || []).slice(0, 4).join(', ')}): איזה?`
