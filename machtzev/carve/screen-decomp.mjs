@@ -6,6 +6,39 @@
  *  שימוש: node screen-decomp.mjs <file.dart> [--json out.json] */
 import fs from 'node:fs';
 import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
+// ── מצב-חציבה על תיקייה (G64): מריץ את המנוע הזה על כל קובץ ומאחד את שכבה-8 ⇒ אטום-דאטה.
+// self-invoke ולא מנוע-שני: אותה חציבה בדיוק, פעם לכל קובץ (יקום סגור).
+if (process.argv[2] === '--carve-dir') {
+  const { execFileSync } = await import('node:child_process');
+  const os = await import('node:os');
+  const oi = process.argv.indexOf('--out');
+  const out = oi > 0 ? process.argv[oi + 1] : null;
+  const dirs = process.argv.slice(3).filter((a, i) => !a.startsWith('--') && (oi < 0 || i + 3 !== oi + 1));
+  const walk = (d) => { let o = []; for (const e of fs.readdirSync(d, { withFileTypes: true })) { const q = d + '/' + e.name; if (e.isDirectory()) o = o.concat(walk(q)); else o.push(q); } return o; };
+  const rows = []; const scanned = [];
+  for (const d of dirs) {
+    if (!fs.existsSync(d)) { scanned.push({ dir: d, files: 0, entities: 0, note: 'לא קיים' }); continue; }
+    const files = walk(d).sort(); let n = 0;
+    for (const f of files) {
+      const tmp = os.tmpdir() + '/sd-' + process.pid + '.json';
+      try { execFileSync(process.execPath, [process.argv[1], f, '--json', tmp], { stdio: 'ignore' }); } catch { continue; }
+      let m; try { m = JSON.parse(fs.readFileSync(tmp, 'utf8')); } catch { continue; }
+      for (const e of m.entities || []) { rows.push(e); n++; }
+    }
+    scanned.push({ dir: d, files: files.length, entities: n });
+  }
+  const data = {
+    source: 'machtzev/carve/screen-decomp.mjs --carve-dir (שכבה 8)',
+    note: 'ישות-עם-שקעים מהמסך, עם מוצא. he=null ⇒ מתג-לבעלים: המונח-העברי אינו מוצהר באף מקור ואינו מנוחש (§20-ג · L57).',
+    scanned, entities: rows,
+  };
+  if (out) fs.writeFileSync(out, JSON.stringify(data, null, 1) + '\n');
+  console.log(`🪨 חציבת-ישויות · ${rows.length} ישויות · ${rows.reduce((a, e) => a + e.fields.length, 0)} שקעים · מונח מוצהר ${rows.filter((e) => e.he).length}/${rows.length}`);
+  for (const sc of scanned) console.log(`   ${sc.dir}: ${sc.files} קבצים ⇒ ${sc.entities} ישויות${sc.note ? ' (' + sc.note + ')' : ''}`);
+  if (out) console.log(`   ⇒ ${out}`);
+  process.exit(0);
+}
+
 const file = process.argv[2];
 if (!file) { console.error('שימוש: screen-decomp.mjs <screen.dart>'); process.exit(1); }
 const src = fs.readFileSync(file, 'utf8');
@@ -96,6 +129,29 @@ const composer = widgets.filter(w => /for\s*\(\s*final|visibleIds|\.map\(/.test(
 const gates = uniq(grab('\\b(k[A-Z][A-Za-z]+|modOn\\([^)]+\\)|featOn\\([^)]+\\))\\b'));
 
 // ── שכבה 7 · שקעי-לוח מצרפיים ──
+// ── שכבה 8 · ישויות (G64) · מחלקת-שורה = ישות-עם-שקעים, עם מוצא ─────────────
+// למה כאן ולא ב-atom-index/oracle: אלה אינדקסי-**אטומים** (ווידג׳ט/פונקציה), ושרשרת
+// `classOf` אינה קוראת אותם כלל (נמדד: 0 הפניות). המקום של ישות-עם-שקעים הוא
+// מנוע-פירוק-המסך, שכבר מפרק את המסך — ומכאן היא נכנסת לשרשרת דרך tzinor.
+// **המונח-העברי אינו נחצב כאן.** הוא אינו מוצהר באף מקור (ורמינהו · 40 מקורות,
+// כולם אתרי-חיווט), והסקתו מתדירות-מחרוזות היא ניחוש-לפי-מחרוזת — בדיוק משפחת
+// הבאגים שהאינדקס נבנה כדי למנוע. ישות בלי מונח יוצאת כ-**מתג-לבעלים** (§20-ג · L57).
+const SKIP_CLS = /Tokens$|Composed$|^_/;
+const entities = [];
+for (const m of src.matchAll(/^class ([A-Za-z0-9_]+)\s*\{/gm)) {
+  const cls = m[1]; if (SKIP_CLS.test(cls)) continue;
+  const [body, bi] = bodyOf(m.index);
+  const startLine = lineAt(m.index);
+  const fields = [];
+  for (const fm of body.matchAll(/\n\s*final\s+([A-Za-z0-9_<>,?\s]+?)\s+([a-zA-Z_][A-Za-z0-9_]*)\s*;/g)) {
+    fields.push({ name: fm[2], type: fm[1].trim().replace(/\s+/g, ' '), line: lineAt(bi + fm.index + 1) });   // +1: fm.index מצביע על ה-\n שלפני השורה
+  }
+  if (!fields.length) continue;   // בלי שקעים אין ישות — לא נרשמת
+  entities.push({ cls, line: startLine, src: `${file}:${startLine}`, fields,
+    he: null, heFrom: 'none',
+    ask: `מה השם העברי של ${cls} (${fields.map((f) => f.name).join(' · ')}) במסך ${file.split('/').pop()}?` });
+}
+
 const board = {
   reads: uniq(widgets.flatMap(w => w.reads)),
   writes: uniq(widgets.flatMap(w => w.writes)),
@@ -103,7 +159,7 @@ const board = {
 };
 
 // ── פלט ──
-const manifest = { file, lines: lines.length, pigments, terms: heStrings, icons, glyphs, logicCandidates, widgets, sectionMap, composer, gates, board };
+const manifest = { file, lines: lines.length, pigments, terms: heStrings, icons, glyphs, logicCandidates, widgets, sectionMap, composer, gates, board, entities };
 const jsonOut = process.argv.indexOf('--json');
 if (jsonOut > 0) fs.writeFileSync(process.argv[jsonOut + 1], JSON.stringify(manifest, null, 1));
 
@@ -132,5 +188,7 @@ console.log(`  ש5 סקציות/מחוברים: ${sections.length}`);
 for (const w of sections) console.log(`     ${w.name} (${w.loc}ש) ← קורא:[${w.reads.join(',')}] פועל:[${[...w.writes.map(x => 'set:' + x), ...w.actions].join(',')}]`);
 console.log(`  ש6 קומפוזר: ${composer.join(',') || '—'} · מיפוי-סקציות: ${sectionMap.length} · שערים: ${gates.join(' · ')}`);
 console.log(`  ש7 שקעי-לוח: ${board.reads.length} קריאות · ${board.writes.length} כתיבות · ${board.navsAndCalls.length} ניווטים/קריאות`);
+console.log(`  ש8 ישויות: ${entities.length} מחלקות-שורה · ${entities.reduce((a, e) => a + e.fields.length, 0)} שקעים · מונח-עברי מוצהר: ${entities.filter((e) => e.he).length}/${entities.length} (השאר = מתגי-בעלים)`);
+for (const e of entities) console.log(`     ${e.cls} (${e.fields.length} שקעים) ${e.src}${e.he ? ' ⇒ ' + e.he : '  ⚑ ' + e.ask}`);
 console.log(`  📊 סה"כ אטומים-מזוהים: ${pigments.tokens.length + heStrings.length + icons.length + glyphs.length + logicCandidates.length + widgets.length}`);
 (await import('../../yeshiva/rminhu.mjs')).printNotes('screen-decomp');

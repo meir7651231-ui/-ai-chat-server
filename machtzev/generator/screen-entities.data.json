@@ -1,0 +1,703 @@
+{
+ "source": "machtzev/carve/screen-decomp.mjs --carve-dir (שכבה 8)",
+ "note": "ישות-עם-שקעים מהמסך, עם מוצא. he=null ⇒ מתג-לבעלים: המונח-העברי אינו מוצהר באף מקור ואינו מנוחש (§20-ג · L57).",
+ "scanned": [
+  {
+   "dir": "new/dart-screens-bs",
+   "files": 83,
+   "entities": 29
+  },
+  {
+   "dir": "knowledge/assets/screens",
+   "files": 25,
+   "entities": 0
+  }
+ ],
+ "entities": [
+  {
+   "cls": "AiFinTileItem",
+   "line": 11,
+   "src": "new/dart-screens-bs/ai_hub_screen.g.dart:11",
+   "fields": [
+    {
+     "name": "ic",
+     "type": "String",
+     "line": 13
+    },
+    {
+     "name": "title",
+     "type": "String",
+     "line": 14
+    },
+    {
+     "name": "sub",
+     "type": "String",
+     "line": 15
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 16
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של AiFinTileItem (ic · title · sub · onTap) במסך ai_hub_screen.g.dart?"
+  },
+  {
+   "cls": "FacetRowItem",
+   "line": 23,
+   "src": "new/dart-screens-bs/catalog_screen.g.dart:23",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 25
+    },
+    {
+     "name": "desc",
+     "type": "String",
+     "line": 26
+    },
+    {
+     "name": "count",
+     "type": "int",
+     "line": 27
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 28
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של FacetRowItem (label · desc · count · onTap) במסך catalog_screen.g.dart?"
+  },
+  {
+   "cls": "SavedVersionChipItem",
+   "line": 32,
+   "src": "new/dart-screens-bs/catalog_screen.g.dart:32",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 34
+    },
+    {
+     "name": "onLoad",
+     "type": "VoidCallback",
+     "line": 35
+    },
+    {
+     "name": "onDelete",
+     "type": "VoidCallback",
+     "line": 36
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של SavedVersionChipItem (label · onLoad · onDelete) במסך catalog_screen.g.dart?"
+  },
+  {
+   "cls": "AxisChipItem",
+   "line": 40,
+   "src": "new/dart-screens-bs/catalog_screen.g.dart:40",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 42
+    },
+    {
+     "name": "isSelected",
+     "type": "bool",
+     "line": 43
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 44
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של AxisChipItem (label · isSelected · onTap) במסך catalog_screen.g.dart?"
+  },
+  {
+   "cls": "VacationRowItem",
+   "line": 12,
+   "src": "new/dart-screens-bs/contractor_hr_sheet.g.dart:12",
+   "fields": [
+    {
+     "name": "onApprove",
+     "type": "VoidCallback",
+     "line": 14
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של VacationRowItem (onApprove) במסך contractor_hr_sheet.g.dart?"
+  },
+  {
+   "cls": "PresetChipItem",
+   "line": 8,
+   "src": "new/dart-screens-bs/courier_certs_screen.g.dart:8",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 10
+    },
+    {
+     "name": "selected",
+     "type": "bool",
+     "line": 11
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 12
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של PresetChipItem (label · selected · onTap) במסך courier_certs_screen.g.dart?"
+  },
+  {
+   "cls": "KvRowItem",
+   "line": 11,
+   "src": "new/dart-screens-bs/courier_reports_tab.g.dart:11",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 13
+    },
+    {
+     "name": "value",
+     "type": "String",
+     "line": 14
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של KvRowItem (label · value) במסך courier_reports_tab.g.dart?"
+  },
+  {
+   "cls": "ThrRowItem",
+   "line": 21,
+   "src": "new/dart-screens-bs/finance_hub_sheets.g.dart:21",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 23
+    },
+    {
+     "name": "hit",
+     "type": "bool",
+     "line": 24
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של ThrRowItem (label · hit) במסך finance_hub_sheets.g.dart?"
+  },
+  {
+   "cls": "FacetRowItem",
+   "line": 25,
+   "src": "new/dart-screens-bs/gen_combined.g.dart:25",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 27
+    },
+    {
+     "name": "desc",
+     "type": "String",
+     "line": 28
+    },
+    {
+     "name": "count",
+     "type": "int",
+     "line": 29
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 30
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של FacetRowItem (label · desc · count · onTap) במסך gen_combined.g.dart?"
+  },
+  {
+   "cls": "SavedVersionChipItem",
+   "line": 34,
+   "src": "new/dart-screens-bs/gen_combined.g.dart:34",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 36
+    },
+    {
+     "name": "onLoad",
+     "type": "VoidCallback",
+     "line": 37
+    },
+    {
+     "name": "onDelete",
+     "type": "VoidCallback",
+     "line": 38
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של SavedVersionChipItem (label · onLoad · onDelete) במסך gen_combined.g.dart?"
+  },
+  {
+   "cls": "AxisChipItem",
+   "line": 42,
+   "src": "new/dart-screens-bs/gen_combined.g.dart:42",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 44
+    },
+    {
+     "name": "isSelected",
+     "type": "bool",
+     "line": 45
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 46
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של AxisChipItem (label · isSelected · onTap) במסך gen_combined.g.dart?"
+  },
+  {
+   "cls": "PickerOptionItem",
+   "line": 16,
+   "src": "new/dart-screens-bs/lipskey_product_sheet.g.dart:16",
+   "fields": [
+    {
+     "name": "value",
+     "type": "String",
+     "line": 18
+    },
+    {
+     "name": "isSelected",
+     "type": "bool",
+     "line": 19
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 20
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של PickerOptionItem (value · isSelected · onTap) במסך lipskey_product_sheet.g.dart?"
+  },
+  {
+   "cls": "PipelineRowItem",
+   "line": 27,
+   "src": "new/dart-screens-bs/manager_dashboard_screen.g.dart:27",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 29
+    },
+    {
+     "name": "count",
+     "type": "int",
+     "line": 30
+    },
+    {
+     "name": "color",
+     "type": "Color",
+     "line": 31
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של PipelineRowItem (label · count · color) במסך manager_dashboard_screen.g.dart?"
+  },
+  {
+   "cls": "ManageRowItem",
+   "line": 35,
+   "src": "new/dart-screens-bs/manager_dashboard_screen.g.dart:35",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 37
+    },
+    {
+     "name": "value",
+     "type": "String",
+     "line": 38
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של ManageRowItem (label · value) במסך manager_dashboard_screen.g.dart?"
+  },
+  {
+   "cls": "PortalTileButtonItem",
+   "line": 8,
+   "src": "new/dart-screens-bs/persona_portal.g.dart:8",
+   "fields": [
+    {
+     "name": "title",
+     "type": "String",
+     "line": 10
+    },
+    {
+     "name": "sub",
+     "type": "String",
+     "line": 11
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 12
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של PortalTileButtonItem (title · sub · onTap) במסך persona_portal.g.dart?"
+  },
+  {
+   "cls": "FinTileItem",
+   "line": 12,
+   "src": "new/dart-screens-bs/rewards_hub_screen.g.dart:12",
+   "fields": [
+    {
+     "name": "ic",
+     "type": "String",
+     "line": 14
+    },
+    {
+     "name": "title",
+     "type": "String",
+     "line": 15
+    },
+    {
+     "name": "sub",
+     "type": "String",
+     "line": 16
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 17
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של FinTileItem (ic · title · sub · onTap) במסך rewards_hub_screen.g.dart?"
+  },
+  {
+   "cls": "SiteHubCaCardItem",
+   "line": 18,
+   "src": "new/dart-screens-bs/site_hub_screen.g.dart:18",
+   "fields": [
+    {
+     "name": "child",
+     "type": "Widget",
+     "line": 20
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של SiteHubCaCardItem (child) במסך site_hub_screen.g.dart?"
+  },
+  {
+   "cls": "HubTileItem",
+   "line": 24,
+   "src": "new/dart-screens-bs/site_hub_screen.g.dart:24",
+   "fields": [
+    {
+     "name": "ic",
+     "type": "String",
+     "line": 26
+    },
+    {
+     "name": "t",
+     "type": "String",
+     "line": 27
+    },
+    {
+     "name": "s",
+     "type": "String",
+     "line": 28
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 29
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של HubTileItem (ic · t · s · onTap) במסך site_hub_screen.g.dart?"
+  },
+  {
+   "cls": "PortalTileButtonItem",
+   "line": 14,
+   "src": "new/dart-screens-bs/store_dashboard_screen.g.dart:14",
+   "fields": [
+    {
+     "name": "title",
+     "type": "String",
+     "line": 16
+    },
+    {
+     "name": "sub",
+     "type": "String",
+     "line": 17
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 18
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של PortalTileButtonItem (title · sub · onTap) במסך store_dashboard_screen.g.dart?"
+  },
+  {
+   "cls": "SStatItem",
+   "line": 8,
+   "src": "new/dart-screens-bs/store_profile_screen.g.dart:8",
+   "fields": [
+    {
+     "name": "value",
+     "type": "String",
+     "line": 10
+    },
+    {
+     "name": "label",
+     "type": "String",
+     "line": 11
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של SStatItem (value · label) במסך store_profile_screen.g.dart?"
+  },
+  {
+   "cls": "StoreSupplierHeaderItem",
+   "line": 21,
+   "src": "new/dart-screens-bs/store_screen.g.dart:21",
+   "fields": [
+    {
+     "name": "name",
+     "type": "String",
+     "line": 23
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של StoreSupplierHeaderItem (name) במסך store_screen.g.dart?"
+  },
+  {
+   "cls": "StoreProjectChipItem",
+   "line": 27,
+   "src": "new/dart-screens-bs/store_screen.g.dart:27",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 29
+    },
+    {
+     "name": "active",
+     "type": "bool",
+     "line": 30
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 31
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של StoreProjectChipItem (label · active · onTap) במסך store_screen.g.dart?"
+  },
+  {
+   "cls": "SwatchItem",
+   "line": 11,
+   "src": "new/dart-screens-bs/studio_panes_theme_pane.g.dart:11",
+   "fields": [
+    {
+     "name": "color",
+     "type": "Color",
+     "line": 13
+    },
+    {
+     "name": "selected",
+     "type": "bool",
+     "line": 14
+    },
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 15
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של SwatchItem (color · selected · onTap) במסך studio_panes_theme_pane.g.dart?"
+  },
+  {
+   "cls": "ApprovalCardItem",
+   "line": 18,
+   "src": "new/dart-screens-bs/tasks_screen.g.dart:18",
+   "fields": [
+    {
+     "name": "name",
+     "type": "String",
+     "line": 20
+    },
+    {
+     "name": "workerLabel",
+     "type": "String",
+     "line": 21
+    },
+    {
+     "name": "onApprove",
+     "type": "VoidCallback",
+     "line": 22
+    },
+    {
+     "name": "onReject",
+     "type": "VoidCallback",
+     "line": 23
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של ApprovalCardItem (name · workerLabel · onApprove · onReject) במסך tasks_screen.g.dart?"
+  },
+  {
+   "cls": "ProposalCardItem",
+   "line": 27,
+   "src": "new/dart-screens-bs/tasks_screen.g.dart:27",
+   "fields": [
+    {
+     "name": "id",
+     "type": "int",
+     "line": 29
+    },
+    {
+     "name": "name",
+     "type": "String",
+     "line": 30
+    },
+    {
+     "name": "workerLabel",
+     "type": "String",
+     "line": 31
+    },
+    {
+     "name": "days",
+     "type": "int",
+     "line": 32
+    },
+    {
+     "name": "onApprove",
+     "type": "VoidCallback",
+     "line": 33
+    },
+    {
+     "name": "onReject",
+     "type": "VoidCallback",
+     "line": 34
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של ProposalCardItem (id · name · workerLabel · days · onApprove · onReject) במסך tasks_screen.g.dart?"
+  },
+  {
+   "cls": "MatchChipItem",
+   "line": 12,
+   "src": "new/dart-screens-bs/trade_builder_attribute_schema_editor.g.dart:12",
+   "fields": [
+    {
+     "name": "text",
+     "type": "String",
+     "line": 14
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של MatchChipItem (text) במסך trade_builder_attribute_schema_editor.g.dart?"
+  },
+  {
+   "cls": "ValueChipItem",
+   "line": 18,
+   "src": "new/dart-screens-bs/trade_builder_attribute_schema_editor.g.dart:18",
+   "fields": [
+    {
+     "name": "text",
+     "type": "String",
+     "line": 20
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של ValueChipItem (text) במסך trade_builder_attribute_schema_editor.g.dart?"
+  },
+  {
+   "cls": "NotifRowItem",
+   "line": 8,
+   "src": "new/dart-screens-bs/worker_notifs_sheet.g.dart:8",
+   "fields": [
+    {
+     "name": "onTap",
+     "type": "VoidCallback",
+     "line": 10
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של NotifRowItem (onTap) במסך worker_notifs_sheet.g.dart?"
+  },
+  {
+   "cls": "KvLineItem",
+   "line": 9,
+   "src": "new/dart-screens-bs/worker_report_drilldowns.g.dart:9",
+   "fields": [
+    {
+     "name": "label",
+     "type": "String",
+     "line": 11
+    },
+    {
+     "name": "value",
+     "type": "String",
+     "line": 12
+    }
+   ],
+   "he": null,
+   "heFrom": "none",
+   "ask": "מה השם העברי של KvLineItem (label · value) במסך worker_report_drilldowns.g.dart?"
+  }
+ ]
+}
