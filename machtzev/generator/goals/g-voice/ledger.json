@@ -1,0 +1,163 @@
+{
+ "ns": "g-voice",
+ "goal": "אפליקציה שאני מדבר איתה בקול והיא עונה לי בקול, שומרת את השיחות, ומראה לי מה נשאר לעשות",
+ "goalFile": "../g-voice.txt",
+ "at": "2026-09-18T05:35:08.849Z",
+ "ms": 678,
+ "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../g-voice.txt",
+ "steps": [
+  {
+   "step": 1,
+   "title": "פסק (yeshiva/purpose) על טקסט-המטרה",
+   "status": "עבר",
+   "detail": "4 מקורות · 13 מתגים · חובה 0 · רשות 0 · תחום — · rule: לא נקרא (אין goal.spec)",
+   "psak": {
+    "sources": [
+     {
+      "field": "at",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#CallEntry.at"
+     },
+     {
+      "field": "outcome",
+      "src": "new/atoms/schema-fields.mjs:FIELDS#CallEntry.outcome"
+     },
+     {
+      "field": "לעשות",
+      "src": "מטרה#תביעה1 (פועל-מטרה \"לעשות\")"
+     },
+     {
+      "field": "השיחות",
+      "src": "machtzev/generator/entity-terms.data.json:entity.callEntry.forms (\"שיחה\")"
+     }
+    ],
+    "switches": [
+     {
+      "word": "שאני מדבר",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "עונה בקול",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "שומרת השיחות",
+      "options": 2,
+      "from": "שקע-סכמה בלי מונח-עברי"
+     },
+     {
+      "word": "ומראה נשאר",
+      "options": 0,
+      "from": "אין מועמד-סכמה יחיד"
+     },
+     {
+      "word": "שאני",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "מדבר",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "איתה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "בקול",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "והיא",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "עונה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "שומרת",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "ומראה",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     },
+     {
+      "word": "נשאר",
+      "options": 0,
+      "from": "מטרה·∅: אין מקור בשרשרת-המטרה"
+     }
+    ],
+    "mandatory": [],
+    "optional": [],
+    "domain": null,
+    "ruled": null
+   },
+   "cmd": "node yeshiva/purpose.mjs \"אפליקציה שאני מדבר איתה בקול והיא עונה לי בקול, שומרת את השי…\""
+  },
+  {
+   "step": 2,
+   "title": "פירוק (מטרה ⇒ חלקיקים)",
+   "status": "∅",
+   "detail": "1 תביעות ⇒ 0 צרכים נגזרו · 1 מתגי-בעלים · דוגמאות מ-9785 ליטרלי-רשומה בריפו",
+   "perok": {
+    "claims": [
+     {
+      "claim": 1,
+      "verb": "לעשות",
+      "text": "אפליקציה שאני מדבר איתה בקול והיא עונה לי בקול, שומרת את השיחות, ומראה לי מה נשאר לעשות",
+      "needs": [],
+      "entities": [
+       "CallEntry"
+      ]
+     }
+    ],
+    "rows": [],
+    "owner": [
+     {
+      "claim": 1,
+      "verb": "לעשות",
+      "kind": "ישות-בלי-שקע",
+      "question": "«לעשות» על CallEntry: אין שקע-סכמה מחובר ואין קבוע-סף במטרה — מה נמדד ומול מה?"
+     }
+    ],
+    "fixtures": 9785
+   },
+   "cmd": "node machtzev/generator/behavior-plan.mjs --goal ../g-voice.txt"
+  }
+ ],
+ "needs": {},
+ "perok": {
+  "claims": [
+   {
+    "claim": 1,
+    "verb": "לעשות",
+    "text": "אפליקציה שאני מדבר איתה בקול והיא עונה לי בקול, שומרת את השיחות, ומראה לי מה נשאר לעשות",
+    "needs": [],
+    "entities": [
+     "CallEntry"
+    ]
+   }
+  ],
+  "rows": [],
+  "owner": [
+   {
+    "claim": 1,
+    "verb": "לעשות",
+    "kind": "ישות-בלי-שקע",
+    "question": "«לעשות» על CallEntry: אין שקע-סכמה מחובר ואין קבוע-סף במטרה — מה נמדד ומול מה?"
+   }
+  ]
+ },
+ "solved": 0,
+ "total": 0
+}
