@@ -1,14 +1,14 @@
 {
- "at": "2026-09-18T06:55:48.086Z",
+ "at": "2026-09-18T13:57:12.941Z",
  "units": 315,
  "at5": {
   "1": 168,
-  "2": 31,
-  "3": 30,
-  "4": 30,
-  "5": 29
+  "2": 46,
+  "3": 39,
+  "4": 39,
+  "5": 38
  },
- "ms": 943290,
+ "ms": 1507582,
  "from": "knowledge/connect/2026-09-18/meter-100.json",
- "cmd": "node machtzev/mahulal/meter-100.mjs --gate"
+ "cmd": "node machtzev/mahulal/nl-smoke.mjs --meter --gate"
 }
