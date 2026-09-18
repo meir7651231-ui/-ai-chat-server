@@ -1,0 +1,808 @@
+{
+ "cmd": "node machtzev/generator/tzinor.mjs --screen-map",
+ "at": "2026-09-18T17:27:25.143Z",
+ "units": 315,
+ "targets": 73,
+ "probes": 31111,
+ "rows": [
+  {
+   "cls": "AiFinTileItem",
+   "src": "new/dart-screens-bs/ai_hub_screen.g.dart:11",
+   "fields": [
+    "ic:String",
+    "title:String",
+    "sub:String",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של AiFinTileItem (ic · title · sub · onTap) במסך ai_hub_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "FacetRowItem",
+   "src": "new/dart-screens-bs/catalog_screen.g.dart:23",
+   "fields": [
+    "label:String",
+    "desc:String",
+    "count:int⇒number",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של FacetRowItem (label · desc · count · onTap) במסך catalog_screen.g.dart?",
+   "opens": 15,
+   "units": [
+    {
+     "id": "app_ent8",
+     "at": "machtzev/generator/specs/app_ent8.txt",
+     "word": "הירו",
+     "needs": 1
+    },
+    {
+     "id": "improv",
+     "at": "machtzev/generator/specs/improv.txt",
+     "word": "יכולת",
+     "needs": 1
+    },
+    {
+     "id": "text",
+     "at": "machtzev/generator/specs/text.txt",
+     "word": "רכיבים",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:57",
+     "at": "gen/mosad.sentences.txt:57",
+     "word": "קובץ",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:73",
+     "at": "gen/mosad.sentences.txt:73",
+     "word": "מוזמן",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:74",
+     "at": "gen/mosad.sentences.txt:74",
+     "word": "מודעה",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:76",
+     "at": "gen/mosad.sentences.txt:76",
+     "word": "משולח",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:96",
+     "at": "gen/mosad.sentences.txt:96",
+     "word": "תמיכה",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:108",
+     "at": "gen/mosad.sentences.txt:108",
+     "word": "תביעת",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:115",
+     "at": "gen/mosad.sentences.txt:115",
+     "word": "נדר",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:116",
+     "at": "gen/mosad.sentences.txt:116",
+     "word": "קידוש",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:137",
+     "at": "gen/mosad.sentences.txt:137",
+     "word": "קוויטל",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:149",
+     "at": "gen/mosad.sentences.txt:149",
+     "word": "החזר",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:158",
+     "at": "gen/mosad.sentences.txt:158",
+     "word": "עזרה",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:184",
+     "at": "gen/mosad.sentences.txt:184",
+     "word": "נרשם",
+     "needs": 1
+    }
+   ],
+   "blocked": [
+    "ישות-בלי-שקע ×1195",
+    "אגרגציה-בלי-אות-סימן ×513"
+   ]
+  },
+  {
+   "cls": "SavedVersionChipItem",
+   "src": "new/dart-screens-bs/catalog_screen.g.dart:32",
+   "fields": [
+    "label:String",
+    "onLoad:VoidCallback",
+    "onDelete:VoidCallback"
+   ],
+   "ask": "מה השם העברי של SavedVersionChipItem (label · onLoad · onDelete) במסך catalog_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "AxisChipItem",
+   "src": "new/dart-screens-bs/catalog_screen.g.dart:40",
+   "fields": [
+    "label:String",
+    "isSelected:bool",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של AxisChipItem (label · isSelected · onTap) במסך catalog_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "VacationRowItem",
+   "src": "new/dart-screens-bs/contractor_hr_sheet.g.dart:12",
+   "fields": [
+    "onApprove:VoidCallback"
+   ],
+   "ask": "מה השם העברי של VacationRowItem (onApprove) במסך contractor_hr_sheet.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "PresetChipItem",
+   "src": "new/dart-screens-bs/courier_certs_screen.g.dart:8",
+   "fields": [
+    "label:String",
+    "selected:bool",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של PresetChipItem (label · selected · onTap) במסך courier_certs_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "KvRowItem",
+   "src": "new/dart-screens-bs/courier_reports_tab.g.dart:11",
+   "fields": [
+    "label:String",
+    "value:String"
+   ],
+   "ask": "מה השם העברי של KvRowItem (label · value) במסך courier_reports_tab.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "ThrRowItem",
+   "src": "new/dart-screens-bs/finance_hub_sheets.g.dart:21",
+   "fields": [
+    "label:String",
+    "hit:bool"
+   ],
+   "ask": "מה השם העברי של ThrRowItem (label · hit) במסך finance_hub_sheets.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "FacetRowItem",
+   "src": "new/dart-screens-bs/gen_combined.g.dart:25",
+   "fields": [
+    "label:String",
+    "desc:String",
+    "count:int⇒number",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של FacetRowItem (label · desc · count · onTap) במסך gen_combined.g.dart?",
+   "opens": 15,
+   "units": [
+    {
+     "id": "app_ent8",
+     "at": "machtzev/generator/specs/app_ent8.txt",
+     "word": "הירו",
+     "needs": 1
+    },
+    {
+     "id": "improv",
+     "at": "machtzev/generator/specs/improv.txt",
+     "word": "יכולת",
+     "needs": 1
+    },
+    {
+     "id": "text",
+     "at": "machtzev/generator/specs/text.txt",
+     "word": "רכיבים",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:57",
+     "at": "gen/mosad.sentences.txt:57",
+     "word": "קובץ",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:73",
+     "at": "gen/mosad.sentences.txt:73",
+     "word": "מוזמן",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:74",
+     "at": "gen/mosad.sentences.txt:74",
+     "word": "מודעה",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:76",
+     "at": "gen/mosad.sentences.txt:76",
+     "word": "משולח",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:96",
+     "at": "gen/mosad.sentences.txt:96",
+     "word": "תמיכה",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:108",
+     "at": "gen/mosad.sentences.txt:108",
+     "word": "תביעת",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:115",
+     "at": "gen/mosad.sentences.txt:115",
+     "word": "נדר",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:116",
+     "at": "gen/mosad.sentences.txt:116",
+     "word": "קידוש",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:137",
+     "at": "gen/mosad.sentences.txt:137",
+     "word": "קוויטל",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:149",
+     "at": "gen/mosad.sentences.txt:149",
+     "word": "החזר",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:158",
+     "at": "gen/mosad.sentences.txt:158",
+     "word": "עזרה",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:184",
+     "at": "gen/mosad.sentences.txt:184",
+     "word": "נרשם",
+     "needs": 1
+    }
+   ],
+   "blocked": [
+    "ישות-בלי-שקע ×1195",
+    "אגרגציה-בלי-אות-סימן ×513"
+   ]
+  },
+  {
+   "cls": "SavedVersionChipItem",
+   "src": "new/dart-screens-bs/gen_combined.g.dart:34",
+   "fields": [
+    "label:String",
+    "onLoad:VoidCallback",
+    "onDelete:VoidCallback"
+   ],
+   "ask": "מה השם העברי של SavedVersionChipItem (label · onLoad · onDelete) במסך gen_combined.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "AxisChipItem",
+   "src": "new/dart-screens-bs/gen_combined.g.dart:42",
+   "fields": [
+    "label:String",
+    "isSelected:bool",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של AxisChipItem (label · isSelected · onTap) במסך gen_combined.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "PickerOptionItem",
+   "src": "new/dart-screens-bs/lipskey_product_sheet.g.dart:16",
+   "fields": [
+    "value:String",
+    "isSelected:bool",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של PickerOptionItem (value · isSelected · onTap) במסך lipskey_product_sheet.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "PipelineRowItem",
+   "src": "new/dart-screens-bs/manager_dashboard_screen.g.dart:27",
+   "fields": [
+    "label:String",
+    "count:int⇒number",
+    "color:Color"
+   ],
+   "ask": "מה השם העברי של PipelineRowItem (label · count · color) במסך manager_dashboard_screen.g.dart?",
+   "opens": 15,
+   "units": [
+    {
+     "id": "app_ent8",
+     "at": "machtzev/generator/specs/app_ent8.txt",
+     "word": "הירו",
+     "needs": 1
+    },
+    {
+     "id": "improv",
+     "at": "machtzev/generator/specs/improv.txt",
+     "word": "יכולת",
+     "needs": 1
+    },
+    {
+     "id": "text",
+     "at": "machtzev/generator/specs/text.txt",
+     "word": "רכיבים",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:57",
+     "at": "gen/mosad.sentences.txt:57",
+     "word": "קובץ",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:73",
+     "at": "gen/mosad.sentences.txt:73",
+     "word": "מוזמן",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:74",
+     "at": "gen/mosad.sentences.txt:74",
+     "word": "מודעה",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:76",
+     "at": "gen/mosad.sentences.txt:76",
+     "word": "משולח",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:96",
+     "at": "gen/mosad.sentences.txt:96",
+     "word": "תמיכה",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:108",
+     "at": "gen/mosad.sentences.txt:108",
+     "word": "תביעת",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:115",
+     "at": "gen/mosad.sentences.txt:115",
+     "word": "נדר",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:116",
+     "at": "gen/mosad.sentences.txt:116",
+     "word": "קידוש",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:137",
+     "at": "gen/mosad.sentences.txt:137",
+     "word": "קוויטל",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:149",
+     "at": "gen/mosad.sentences.txt:149",
+     "word": "החזר",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:158",
+     "at": "gen/mosad.sentences.txt:158",
+     "word": "עזרה",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:184",
+     "at": "gen/mosad.sentences.txt:184",
+     "word": "נרשם",
+     "needs": 1
+    }
+   ],
+   "blocked": [
+    "ישות-בלי-שקע ×1195",
+    "אגרגציה-בלי-אות-סימן ×513"
+   ]
+  },
+  {
+   "cls": "ManageRowItem",
+   "src": "new/dart-screens-bs/manager_dashboard_screen.g.dart:35",
+   "fields": [
+    "label:String",
+    "value:String"
+   ],
+   "ask": "מה השם העברי של ManageRowItem (label · value) במסך manager_dashboard_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "PortalTileButtonItem",
+   "src": "new/dart-screens-bs/persona_portal.g.dart:8",
+   "fields": [
+    "title:String",
+    "sub:String",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של PortalTileButtonItem (title · sub · onTap) במסך persona_portal.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "FinTileItem",
+   "src": "new/dart-screens-bs/rewards_hub_screen.g.dart:12",
+   "fields": [
+    "ic:String",
+    "title:String",
+    "sub:String",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של FinTileItem (ic · title · sub · onTap) במסך rewards_hub_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "SiteHubCaCardItem",
+   "src": "new/dart-screens-bs/site_hub_screen.g.dart:18",
+   "fields": [
+    "child:Widget"
+   ],
+   "ask": "מה השם העברי של SiteHubCaCardItem (child) במסך site_hub_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "HubTileItem",
+   "src": "new/dart-screens-bs/site_hub_screen.g.dart:24",
+   "fields": [
+    "ic:String",
+    "t:String",
+    "s:String",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של HubTileItem (ic · t · s · onTap) במסך site_hub_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "PortalTileButtonItem",
+   "src": "new/dart-screens-bs/store_dashboard_screen.g.dart:14",
+   "fields": [
+    "title:String",
+    "sub:String",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של PortalTileButtonItem (title · sub · onTap) במסך store_dashboard_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "SStatItem",
+   "src": "new/dart-screens-bs/store_profile_screen.g.dart:8",
+   "fields": [
+    "value:String",
+    "label:String"
+   ],
+   "ask": "מה השם העברי של SStatItem (value · label) במסך store_profile_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "StoreSupplierHeaderItem",
+   "src": "new/dart-screens-bs/store_screen.g.dart:21",
+   "fields": [
+    "name:String"
+   ],
+   "ask": "מה השם העברי של StoreSupplierHeaderItem (name) במסך store_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "StoreProjectChipItem",
+   "src": "new/dart-screens-bs/store_screen.g.dart:27",
+   "fields": [
+    "label:String",
+    "active:bool",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של StoreProjectChipItem (label · active · onTap) במסך store_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "SwatchItem",
+   "src": "new/dart-screens-bs/studio_panes_theme_pane.g.dart:11",
+   "fields": [
+    "color:Color",
+    "selected:bool",
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של SwatchItem (color · selected · onTap) במסך studio_panes_theme_pane.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "ApprovalCardItem",
+   "src": "new/dart-screens-bs/tasks_screen.g.dart:18",
+   "fields": [
+    "name:String",
+    "workerLabel:String",
+    "onApprove:VoidCallback",
+    "onReject:VoidCallback"
+   ],
+   "ask": "מה השם העברי של ApprovalCardItem (name · workerLabel · onApprove · onReject) במסך tasks_screen.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "ProposalCardItem",
+   "src": "new/dart-screens-bs/tasks_screen.g.dart:27",
+   "fields": [
+    "id:int⇒number",
+    "name:String",
+    "workerLabel:String",
+    "days:int⇒number",
+    "onApprove:VoidCallback",
+    "onReject:VoidCallback"
+   ],
+   "ask": "מה השם העברי של ProposalCardItem (id · name · workerLabel · days · onApprove · onReject) במסך tasks_screen.g.dart?",
+   "opens": 15,
+   "units": [
+    {
+     "id": "app_ent8",
+     "at": "machtzev/generator/specs/app_ent8.txt",
+     "word": "הירו",
+     "needs": 1
+    },
+    {
+     "id": "improv",
+     "at": "machtzev/generator/specs/improv.txt",
+     "word": "יכולת",
+     "needs": 1
+    },
+    {
+     "id": "text",
+     "at": "machtzev/generator/specs/text.txt",
+     "word": "רכיבים",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:57",
+     "at": "gen/mosad.sentences.txt:57",
+     "word": "קובץ",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:73",
+     "at": "gen/mosad.sentences.txt:73",
+     "word": "מוזמן",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:74",
+     "at": "gen/mosad.sentences.txt:74",
+     "word": "מודעה",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:76",
+     "at": "gen/mosad.sentences.txt:76",
+     "word": "משולח",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:96",
+     "at": "gen/mosad.sentences.txt:96",
+     "word": "תמיכה",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:108",
+     "at": "gen/mosad.sentences.txt:108",
+     "word": "תביעת",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:115",
+     "at": "gen/mosad.sentences.txt:115",
+     "word": "נדר",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:116",
+     "at": "gen/mosad.sentences.txt:116",
+     "word": "קידוש",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:137",
+     "at": "gen/mosad.sentences.txt:137",
+     "word": "קוויטל",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:149",
+     "at": "gen/mosad.sentences.txt:149",
+     "word": "החזר",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:158",
+     "at": "gen/mosad.sentences.txt:158",
+     "word": "עזרה",
+     "needs": 1
+    },
+    {
+     "id": "mosad.sentences:184",
+     "at": "gen/mosad.sentences.txt:184",
+     "word": "נרשם",
+     "needs": 1
+    }
+   ],
+   "blocked": [
+    "ישות-בלי-שקע ×1195",
+    "אגרגציה-בלי-אות-סימן ×513"
+   ]
+  },
+  {
+   "cls": "MatchChipItem",
+   "src": "new/dart-screens-bs/trade_builder_attribute_schema_editor.g.dart:12",
+   "fields": [
+    "text:String"
+   ],
+   "ask": "מה השם העברי של MatchChipItem (text) במסך trade_builder_attribute_schema_editor.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "ValueChipItem",
+   "src": "new/dart-screens-bs/trade_builder_attribute_schema_editor.g.dart:18",
+   "fields": [
+    "text:String"
+   ],
+   "ask": "מה השם העברי של ValueChipItem (text) במסך trade_builder_attribute_schema_editor.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "NotifRowItem",
+   "src": "new/dart-screens-bs/worker_notifs_sheet.g.dart:8",
+   "fields": [
+    "onTap:VoidCallback"
+   ],
+   "ask": "מה השם העברי של NotifRowItem (onTap) במסך worker_notifs_sheet.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  },
+  {
+   "cls": "KvLineItem",
+   "src": "new/dart-screens-bs/worker_report_drilldowns.g.dart:9",
+   "fields": [
+    "label:String",
+    "value:String"
+   ],
+   "ask": "מה השם העברי של KvLineItem (label · value) במסך worker_report_drilldowns.g.dart?",
+   "opens": 0,
+   "units": [],
+   "blocked": [
+    "ישות-בלי-שקע ×1427"
+   ]
+  }
+ ],
+ "restored": {
+  "memory": 0,
+  "disk": 0
+ }
+}

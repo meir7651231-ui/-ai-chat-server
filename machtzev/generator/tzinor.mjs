@@ -662,7 +662,11 @@ export async function screenEntityMap({ log = () => {} } = {}) {
   for (const r of rows) {
     if (r.skipped || r.opens) continue;
     const e = SCREEN_ENTS.find((x) => x.cls === r.cls && x.src === r.src) || { fields: [] };
-    rminhu({ engine: 'tzinor.screenEntityMap', matter: `ערך-המתג «${r.cls}» (${r.src}) מול ${targets.length} יחידות «אין-ישות»`,
+    // 🔴 `always` **חובה כאן, לא נוחות.** נמדד: שלב-א (‏`perokGoal` על 315 יחידות) מייצר
+    //    אלפי מהלכי-מִשנה ב-`soleClassOf`, והתקרה (400) נסגרת **לפני** שהגענו לכאן —
+    //    ‏25 מהלכי-הפסק שבשבילם הכלי רץ לא נרשמו כלל. זה בדיוק המקרה שדוקבלוק
+    //    `rminhu.report` מתאר: «התקרה נועדה נגד לולאה, לא נגד הכותרת».
+    rminhu({ engine: 'tzinor.screenEntityMap', always: true, matter: `ערך-המתג «${r.cls}» (${r.src}) מול ${targets.length} יחידות «אין-ישות»`,
       searched: ['שרשרת-הסכמה (schema-fields ⇒ TYPE_SHAPE)', 'חציבה (screen-decomp ש8 · שקעי-המסך)', 'גשר-אוצרות (entity.mjs TYPE_IN ⇒ sentence.mjs T2)', `מילות-∅ של ${targets.length} היחידות עצמן`],
       rulings: e.fields.length
         ? e.fields.map((f) => {
