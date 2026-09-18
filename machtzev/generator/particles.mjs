@@ -218,6 +218,16 @@ export function wireAtom(cls, ctx) {
   return { cls, file: w.file, call: `${cls}(${args.join(', ')})`, filled, sockets };
 }
 
+// 🕯️ ורמינהו על אטום אחד: מתחווט מדאטה ⇒ חד שיעורא · דורש שקע-התנהגות (פעולה שטרם הוכחה) ⇒ פליגא · שקע-חובה בלי דאטה ⇒ פליגא, בשם השקע · לא באטלס ⇒ לא שייך
+const BEHAV = /^(onTap|onPressed|onSelect|onChanged|onSelected|onSubmitted)$/;
+export function rminhuAtom(cls, ctx, wire) {
+  const w0 = widgetOf(cls); if (!w0) return { verdict: 'לא שייך', why: 'אינו באטלס' };
+  const behav = [...w0.types.keys()].filter((n) => BEHAV.test(n));
+  if (behav.length) return { verdict: 'פליגא', why: `דורש פעולה (${behav.join(',')}) שטרם הוכחה` };
+  const w = wire(cls); if (w) return { verdict: 'חד שיעורא', why: `מתחווט (${w.filled.join(',')})`, w };
+  const missing = [...w0.types].filter(([n]) => w0.required.has(n) || w0.positional.includes(n)).map(([n]) => n).filter((n) => !Object.keys(SOCK).some((s) => SOCK[s].test(n) && ctx[s] != null));
+  return { verdict: 'פליגא', why: `שקע-חובה בלי דאטה: ${missing.join(',') || '?'}` };
+}
 // G28 · בחירה בין מועמדים שמתחווטים: כהה = הראשון (ביט-זהה) · נייר = הכי-טוב-לייעוד (§20-א): מלוא-השקעים המולא הגבוה ביותר
 //   (אטום עם שקע-טקסט ריק מצייר placeholder — לא "הכי-טוב"); שוויון ⇒ הקודם בדירוג. wire = (cls) ⇒ תוצאת-wireAtom|null.
 export function pickWired(cands, wire) {
@@ -408,7 +418,23 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) 
         out = `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${groups.join(', ')}])`;
       } else out = `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${rows.map((w) => w.call).join(', ')}])`;
       widgets.push(out); p.wired = [rows[0].cand]; continue;
-    } else { notes.push(`⚪ ${p.name}: צורה ${s.kind} — פליטה טרם נבנתה (חיפוש בוצע: ${kd.map(([o, pk]) => o + '⇒' + (pk.atoms[0] || '—')).join(' · ')})`); continue; }
+    } else {   // 🕯️ ורמינהו (הישיבה בתוך המנוע): לפני «אין» — כל מקור שהחיפוש הביא נפסק בשמו: חד שיעורא = מתחווט מדאטה ⇒ נפלט ·
+      //   פליגא = נמצא ואינו מתחווט, ולמה (איזה שקע-חובה ריק / דורש פעולה שטרם הוכחה) · ורק אז «לא מצינו» — עם מה שחיפשו. אין «פליטה טרם נבנתה» סתם.
+      //   שקעי-התנהגות (tap/onSelect/onChanged) בכוונה אינם מסופקים: פעולה ריקה = זיוף (§20-ג) ⇒ אטום שדורש אותם = פליגא עד שתוכח פעולה.
+      const ctxG = { label: lbl, sub: k(p.expr), glyph: k('🧩'), message: k(p.expr), tone: 0, value: { str: `${recs}.length.toString()`, num: `${recs}.length.toDouble()` },
+        labels: entity.schema.map((f) => k(f.label)), items: `[${entity.schema.map((f) => k(f.label)).join(', ')}]`, selected: 0,
+        rows: `[for (final r in ${recs}) [${entity.schema.map((f) => `(r[${k(f.label)}] ?? '')`).join(', ')}]]` };
+      const rulings = []; let hit = null;
+      for (const [op, pk] of kd) for (const cand of [...pk.atoms, ...pk.alts]) {
+        const cls = cand.split('@')[0]; const r = rminhuAtom(cls, ctxG, (c) => wired(c, ctxG));
+        rulings.push({ op, atom: cls, verdict: r.verdict, why: r.why });
+        if (r.verdict === 'חד שיעורא' && !hit) hit = { ...r.w, cand };
+      }
+      p.rminhu = { matter: `${p.name} · צורה ${s.kind}`, searched: kd.map(([o]) => o), rulings };
+      const digest = rulings.map((r) => `${r.atom}[${r.op}]=${r.verdict}(${r.why})`).join(' · ');
+      if (hit) { widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${hit.call})`); p.wired = [hit.cand]; notes.push(`🕯️ ${p.name}: צורה ${s.kind} — ורמינהו: ${rulings.length} מקורות · חד שיעורא ${hit.cls} · ${digest}`); continue; }
+      notes.push(`⚪ ${p.name}: צורה ${s.kind} — ורמינהו: ${rulings.length} מקורות נפסקו, לא מצינו חד-שיעורא: ${digest || '—'} · חיפשתי: ${kd.map(([o]) => o).join('/')}`); continue;
+    }
     widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [for (final r in ${rowSrc}) Padding(padding: const EdgeInsets.only(bottom: 8), child: ${rowOf.call})]))`);
   }
   return { imports, widgets, notes, firstWired };
