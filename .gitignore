@@ -22,3 +22,12 @@ gen/looks/first10/shots/
 # תוצר-מדידה, לא מקור — ואסור שיהיה ניתן-לקומיט גם באמצע ריצה.
 machtzev/generator/goals/meter[0-9]*/
 new/dart-gen-bs/gen_goal_meter[0-9]*.dart
+
+# מרחב-המדידה של nl-smoke --compile (‏NS_PREFIX='corp'): כל ריצה בונה אפליקציה למשפט
+# ומוחקת את כולן ב-finally (‏wipe · העץ חוזר לנוח · L14). תוצר-מדידה, לא מקור —
+# ואסור שיהיה ניתן-לקומיט באמצע ריצה (786 קבצים לא-עקובים נמדדו 18.9).
+machtzev/generator/apps/corp[0-9]*.json
+machtzev/generator/particle-plan-corp[0-9]*.json
+machtzev/generator/report-plan-corp[0-9]*.md
+new/dart-gen-bs/gen_app_corp[0-9]*.dart
+new/dart-data-bs/auto/gen_app_corp[0-9]*.dart
