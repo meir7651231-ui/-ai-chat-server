@@ -50,6 +50,7 @@ export const SRC = {
   lang: 'machtzev/generator/nl-lang.data.json',
   sentence: 'machtzev/generator/sentence.mjs',
   screens: 'machtzev/generator/screen-entities.data.json',   // G64 · ישויות-מסך חצובות (screen-decomp ש8)
+  ops: 'machtzev/generator/shape-ops.json',                  // שלב-3 · שקעי-החציבה של op-census (perField)
 };
 
 const LANG = JSON.parse(fs.readFileSync(R.GEN_DIR + 'nl-lang.data.json', 'utf8'));
@@ -140,6 +141,67 @@ export function fieldsOf(cls) {
   return FIELDS.filter((f) => f.e === cls).map((f) => ({
     name: f.n, type: f.t, optional: !!f.o, src: `${SRC.fields}:FIELDS#${cls}.${f.n}`,
   }));
+}
+
+// ── 🕯️ מקורות-השקע של מחלקה — שלב-3 · «ורמינהו על החציבה והכפילות» ─────────────
+//  הפער שזה סוגר (PLAN-100 §3-שלב-3): «ישות-בלי-שקע» נכתב 59 פעמים בלי שאיש נקב
+//  **איזה** מקור-שקע נבדק ונפל. «אין» = «לא-חיפשת» (LAW.md · הכרעה-23), ושתי
+//  משפחות-חיפוש — **חציבה** ו**כפילות** — מעולם לא רצו על העניין הזה.
+//
+//  שלושה מקורות, כולם **נקראים מהדיסק כדאטה** (אפס רשימה-בקוד · אפס מנוע חדש):
+//    • שרשרת  — `schema-fields.mjs:FIELDS`            — השקעים שהפסק כבר משתמש בהם
+//    • חציבה  — `shape-ops.json#entities[].perField`  (op-census)
+//               `screen-entities.data.json`           (screen-decomp ש8 · G64)
+//    • כפילות — מחלקה אחרת ב-FIELDS עם **אותו סט-שמות-שדות** בדיוק (מחלקת-אח)
+//
+//  ⚠️ הפונקציה **אינה בוחרת** שקע ואינה מרחיבה את בריכת-ההכרעה. היא מחזירה מקורות
+//  עם שמם ועם מה שיש בהם, כדי שהפסק ינקוב אותם. בחירת-שקע בלי מילה שקושרת אליו
+//  היא בדיוק ההכרעה-במנוע ש-L114 אוסר.
+const SHAPE_OPS = (() => {
+  try { return JSON.parse(fs.readFileSync(R.GEN_DIR + 'shape-ops.json', 'utf8')).entities || []; } catch { return []; }
+})();
+/** מחלקה ⇒ סט-שמות-השדות שלה ב-FIELDS (לזיהוי מחלקות-אח — עדשת-הכפילות). */
+const FIELD_NAMES = (() => {
+  const by = new Map();
+  for (const f of FIELDS) { if (!by.has(f.e)) by.set(f.e, []); by.get(f.e).push(f.n); }
+  return by;
+})();
+const sigOf = (c) => (FIELD_NAMES.get(c) || []).slice().sort().join(',');
+
+/**
+ * 🕯️ מחלקה ⇒ **כל** מקורות-השקע שידועים לריפו, כל אחד בשמו, עם מה שיש בו ומה אין.
+ * `{ family, src, slots:[{name,type}], adds:[<שקע שאין בשרשרת>], why }`.
+ * מקור בלי שקעים למחלקה חוזר עם `slots:[]` ועם `why` — כדי שהפסק יאמר «לא שייך»
+ * בשמו ולא בשתיקה. אין כאן הכרעה, אין ניקוד, ואין הרחבת-בריכה.
+ */
+export function slotSources(cls) {
+  const base = fieldsOf(cls);
+  const baseNames = new Set(base.map((f) => f.name));
+  const out = [{ family: 'שרשרת', src: `${SRC.fields}:FIELDS#${cls}`, slots: base.map((f) => ({ name: f.name, type: f.type })), adds: [],
+    why: base.length ? null : `אין ל-${cls} אף שדה ב-FIELDS` }];
+
+  // חציבה א' · op-census — perField של אותה ישות
+  const so = SHAPE_OPS.find((x) => x.entity === cls);
+  const soF = (so && so.perField) || [];
+  out.push({ family: 'חציבה', src: `${SRC.ops}#entities.${cls}.perField`,
+    slots: soF.map((f) => ({ name: f.field, type: f.type })),
+    adds: soF.filter((f) => !baseNames.has(f.field)).map((f) => f.field),
+    why: so ? null : `${SRC.ops} נושא ${SHAPE_OPS.length} ישויות ו-${cls} אינה ביניהן` });
+
+  // חציבה ב' · screen-decomp ש8 — ישות-מסך חצובה באותו שם
+  const se = SCREEN_ENTS.find((e) => e.cls === cls);
+  out.push({ family: 'חציבה', src: `${SRC.screens}#${cls}`,
+    slots: se ? se.fields.map((f) => ({ name: f.name, type: f.type })) : [],
+    adds: se ? se.fields.filter((f) => !baseNames.has(f.name)).map((f) => f.name) : [],
+    why: se ? null : `החציבה נושאת ${SCREEN_ENTS.length} מחלקות-מסך (${SCREEN_ENTS.filter((e) => e.he).length} עם מונח-עברי) ו-${cls} אינה ביניהן` });
+
+  // כפילות · מחלקת-אח ב-FIELDS עם אותו סט-שמות-שדות בדיוק
+  const sig = sigOf(cls);
+  const twins = sig ? [...FIELD_NAMES.keys()].filter((c) => c !== cls && sigOf(c) === sig) : [];
+  out.push({ family: 'כפילות', src: twins.length ? twins.map((c) => `${SRC.fields}:FIELDS#${c}`).join(' · ') : `${SRC.fields}:FIELDS (עדשת סט-שמות-שדות)`,
+    slots: twins.length ? fieldsOf(twins[0]).map((f) => ({ name: f.name, type: f.type })) : [], adds: [],
+    twins, why: twins.length ? null : `אין ב-FIELDS מחלקה אחרת עם אותו סט-שמות-שדות של ${cls} (${base.length} שדות) — אין מחלקת-אח שתתרום שקע` });
+  return out;
 }
 
 /** משפט ⇒ מילות-ישות מועמדות (+ מילות-תחום). אפס הכרעה: מילה שהיא גם שדה-אפשרי
