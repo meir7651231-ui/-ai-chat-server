@@ -1,0 +1,39 @@
+{
+ "v": 1,
+ "ts": "2026-09-18T03:03:43.699Z",
+ "query": "voice speak tts דיבור קול השמעה",
+ "tokens": [
+  "voice",
+  "speak",
+  "tts",
+  "דיבור",
+  "קול",
+  "שמעה"
+ ],
+ "oracle": {
+  "atomIndexSha": "f97af5c814caa32f6fab0f44cb35046ca529ce232db3fddf1483e175cbc77890",
+  "logicCensusSha": "0ba74d4cef64a1235753333b361abdb455c5191765c67e7990bd4cf328d333eb",
+  "display": 1946,
+  "logic": 1022
+ },
+ "candidates": [
+  {
+   "id": "ForgeVoicePair",
+   "layer": "display",
+   "file": "dart-forge-bs/text/voice_pair.dart",
+   "score": 3,
+   "hits": [
+    "voice"
+   ]
+  }
+ ],
+ "strong": [
+  "ForgeVoicePair"
+ ],
+ "strongLayer": null,
+ "strongOtherLayers": [],
+ "creates": null,
+ "chosen": "none",
+ "why": "ForgeVoicePair (ציון 3): אטום-טקסט (forge text family, voice_pair.dart:8), התאמת-שם בלבד, אינו דיבור. TTS קיים רק כ-JS ב-hamecholel.html:227-233. הפסק: חיווט nav, לא אטום חדש. LEARNED-2026-09-18 §3",
+ "sig": "a82683da80bb3942d712274ed5c8aa6f94330a327f5cd5df88038d889d845b75"
+}

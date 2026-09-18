@@ -11209,6 +11209,18 @@
   "why": "צורת-שקעים"
  },
  {
+  "id": "absNum",
+  "layer": "logic",
+  "file": "dart-maor/op-abs-num.dart",
+  "op": "measure",
+  "sockets": [
+   "num"
+  ],
+  "ret": "num",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "absenceReasonChips",
   "layer": "logic",
   "file": "dart-maor/absence-reason-chips.dart",
@@ -11393,6 +11405,60 @@
   ],
   "ret": "String",
   "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "addDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-add-dyn.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "dynamic",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "addNum",
+  "layer": "logic",
+  "file": "dart-maor/op-add-num.dart",
+  "op": "measure",
+  "sockets": [
+   "num",
+   "num"
+  ],
+  "ret": "num",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "addStr",
+  "layer": "logic",
+  "file": "dart-maor/op-add-str.dart",
+  "op": "format",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "addTo",
+  "layer": "logic",
+  "file": "dart-maor/op-add-to.dart",
+  "op": "effect",
+  "sockets": [
+   "List<dynamic>",
+   "dynamic"
+  ],
+  "ret": "void",
+  "flags": [
+   "listIn"
+  ],
   "why": "צורת-חתימה"
  },
  {
@@ -13142,6 +13208,97 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "cmpGeStr",
+  "layer": "logic",
+  "file": "dart-maor/op-cmp-ge-str.dart",
+  "op": "predicate",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "cmpGtDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-cmp-gt-dyn.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "cmpGtStr",
+  "layer": "logic",
+  "file": "dart-maor/op-cmp-gt-str.dart",
+  "op": "predicate",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "cmpLeDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-cmp-le-dyn.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "cmpLeStr",
+  "layer": "logic",
+  "file": "dart-maor/op-cmp-le-str.dart",
+  "op": "predicate",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "cmpLtDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-cmp-lt-dyn.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "cmpLtStr",
+  "layer": "logic",
+  "file": "dart-maor/op-cmp-lt-str.dart",
+  "op": "predicate",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "cockpitAtRisk",
   "layer": "logic",
   "file": "dart-maor/cockpit-at-risk.dart",
@@ -13733,6 +13890,19 @@
    "Map<String, dynamic>"
   ],
   "ret": "Map<String, String>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "containsStr",
+  "layer": "logic",
+  "file": "dart-maor/op-contains-str.dart",
+  "op": "predicate",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "bool",
   "flags": [],
   "why": "צורת-חתימה"
  },
@@ -14610,6 +14780,32 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "divDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-div-dyn.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "dynamic",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "divNum",
+  "layer": "logic",
+  "file": "dart-maor/op-div-num.dart",
+  "op": "measure",
+  "sockets": [
+   "num",
+   "num"
+  ],
+  "ret": "num",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "dnNumber",
   "layer": "logic",
   "file": "dart/dn_number.dart",
@@ -15311,6 +15507,73 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "eqBool",
+  "layer": "logic",
+  "file": "dart-maor/op-eq-bool.dart",
+  "op": "predicate",
+  "sockets": [
+   "bool",
+   "bool"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "eqDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-eq-dyn.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "eqList",
+  "layer": "logic",
+  "file": "dart-maor/op-eq-list.dart",
+  "op": "predicate",
+  "sockets": [
+   "List<dynamic>",
+   "List<dynamic>"
+  ],
+  "ret": "bool",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "eqNum",
+  "layer": "logic",
+  "file": "dart-maor/op-eq-num.dart",
+  "op": "predicate",
+  "sockets": [
+   "num",
+   "num"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "eqStr",
+  "layer": "logic",
+  "file": "dart-maor/op-eq-str.dart",
+  "op": "predicate",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "esc",
   "layer": "logic",
   "file": "dart-maor/receipt-html.dart",
@@ -15580,6 +15843,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "falsy",
+  "layer": "logic",
+  "file": "dart-maor/op-falsy.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "famEnrollments",
   "layer": "logic",
   "file": "dart-maor/fam-enrollments.dart",
@@ -15750,6 +16025,32 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "fieldIsNotNull",
+  "layer": "logic",
+  "file": "dart-maor/op-field-is-not-null.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "fieldIsNull",
+  "layer": "logic",
+  "file": "dart-maor/op-field-is-null.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "fieldLabelHe",
   "layer": "logic",
   "file": "dart/field_label_he.dart",
@@ -15761,6 +16062,35 @@
   "ret": "String",
   "flags": [
    "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "fieldOf",
+  "layer": "logic",
+  "file": "dart-maor/op-field-of.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic",
+   "String"
+  ],
+  "ret": "dynamic",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "fieldPred",
+  "layer": "logic",
+  "file": "dart-maor/op-field-pred.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "String",
+   "bool Function(dynamic) f"
+  ],
+  "ret": "bool",
+  "flags": [
+   "ho"
   ],
   "why": "צורת-חתימה"
  },
@@ -16284,6 +16614,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "floorNum",
+  "layer": "logic",
+  "file": "dart-maor/op-floor-num.dart",
+  "op": "measure",
+  "sockets": [
+   "num"
+  ],
+  "ret": "num",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "flowRole",
   "layer": "logic",
   "file": "dart/flow_role.dart",
@@ -16623,6 +16965,32 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "geDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-ge-dyn.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "geNum",
+  "layer": "logic",
+  "file": "dart-maor/op-ge-num.dart",
+  "op": "predicate",
+  "sockets": [
+   "num",
+   "num"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "gem",
   "layer": "logic",
   "file": "dart-maor/gematria.dart",
@@ -16896,6 +17264,32 @@
   "flags": [
    "ho"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "gtDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-gt-dyn.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "gtNum",
+  "layer": "logic",
+  "file": "dart-maor/op-gt-num.dart",
+  "op": "predicate",
+  "sockets": [
+   "num",
+   "num"
+  ],
+  "ret": "bool",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -17390,6 +17784,19 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "iDivNum",
+  "layer": "logic",
+  "file": "dart-maor/op-i-div-num.dart",
+  "op": "measure",
+  "sockets": [
+   "num",
+   "num"
+  ],
+  "ret": "num",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "icsEscape",
   "layer": "logic",
   "file": "dart-maor/ics-escape.dart",
@@ -17724,6 +18131,32 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "isEmptyList",
+  "layer": "logic",
+  "file": "dart-maor/op-is-empty-list.dart",
+  "op": "predicate",
+  "sockets": [
+   "List<dynamic>"
+  ],
+  "ret": "bool",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "isEmptyStr",
+  "layer": "logic",
+  "file": "dart-maor/op-is-empty-str.dart",
+  "op": "predicate",
+  "sockets": [
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "isEncDoc",
   "layer": "logic",
   "file": "dart-maor/is-enc-doc.dart",
@@ -17860,6 +18293,56 @@
   "sockets": [
    "String",
    "bool"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "isNotEmptyList",
+  "layer": "logic",
+  "file": "dart-maor/op-is-not-empty-list.dart",
+  "op": "predicate",
+  "sockets": [
+   "List<dynamic>"
+  ],
+  "ret": "bool",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "isNotEmptyStr",
+  "layer": "logic",
+  "file": "dart-maor/op-is-not-empty-str.dart",
+  "op": "predicate",
+  "sockets": [
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "isNotNull",
+  "layer": "logic",
+  "file": "dart-maor/op-is-not-null.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "isNull",
+  "layer": "logic",
+  "file": "dart-maor/op-is-null.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic"
   ],
   "ret": "bool",
   "flags": [],
@@ -18231,6 +18714,21 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "joinList",
+  "layer": "logic",
+  "file": "dart-maor/op-join-list.dart",
+  "op": "format",
+  "sockets": [
+   "List<dynamic>",
+   "String"
+  ],
+  "ret": "String",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "kForType",
   "layer": "logic",
   "file": "dart/k_for_type.dart",
@@ -18360,6 +18858,32 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "leDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-le-dyn.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "leNum",
+  "layer": "logic",
+  "file": "dart-maor/op-le-num.dart",
+  "op": "predicate",
+  "sockets": [
+   "num",
+   "num"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "leaderboard",
   "layer": "logic",
   "file": "dart-maor/leaderboard.dart",
@@ -18375,6 +18899,32 @@
    "ho",
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "lengthList",
+  "layer": "logic",
+  "file": "dart-maor/op-length-list.dart",
+  "op": "aggregate",
+  "sockets": [
+   "List<dynamic>"
+  ],
+  "ret": "num",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "lengthStr",
+  "layer": "logic",
+  "file": "dart-maor/op-length-str.dart",
+  "op": "measure",
+  "sockets": [
+   "String"
+  ],
+  "ret": "num",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -18652,6 +19202,44 @@
   "op": "predicate",
   "sockets": [
    "String"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "lowerStr",
+  "layer": "logic",
+  "file": "dart-maor/op-lower-str.dart",
+  "op": "format",
+  "sockets": [
+   "String"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "ltDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-lt-dyn.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "ltNum",
+  "layer": "logic",
+  "file": "dart-maor/op-lt-num.dart",
+  "op": "predicate",
+  "sockets": [
+   "num",
+   "num"
   ],
   "ret": "bool",
   "flags": [],
@@ -19429,6 +20017,19 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "modNum",
+  "layer": "logic",
+  "file": "dart-maor/op-mod-num.dart",
+  "op": "measure",
+  "sockets": [
+   "num",
+   "num"
+  ],
+  "ret": "num",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "modeOf",
   "layer": "logic",
   "file": "dart-boxes/lib-nedarim-sync.dart",
@@ -19562,6 +20163,32 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "mulDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-mul-dyn.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "dynamic",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "mulNum",
+  "layer": "logic",
+  "file": "dart-maor/op-mul-num.dart",
+  "op": "measure",
+  "sockets": [
+   "num",
+   "num"
+  ],
+  "ret": "num",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "nameIndex",
   "layer": "logic",
   "file": "dart-maor/name-index.dart",
@@ -19646,6 +20273,58 @@
   "flags": [
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "neBool",
+  "layer": "logic",
+  "file": "dart-maor/op-ne-bool.dart",
+  "op": "predicate",
+  "sockets": [
+   "bool",
+   "bool"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "neDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-ne-dyn.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "neNum",
+  "layer": "logic",
+  "file": "dart-maor/op-ne-num.dart",
+  "op": "predicate",
+  "sockets": [
+   "num",
+   "num"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "neStr",
+  "layer": "logic",
+  "file": "dart-maor/op-ne-str.dart",
+  "op": "predicate",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -23452,6 +24131,19 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "splitStr",
+  "layer": "logic",
+  "file": "dart-maor/op-split-str.dart",
+  "op": "collection",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "List<dynamic>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "spotlightBox",
   "layer": "logic",
   "file": "dart-maor/spotlight-box.dart",
@@ -23549,6 +24241,19 @@
   "flags": [
    "temporal"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "startsWithStr",
+  "layer": "logic",
+  "file": "dart-maor/op-starts-with-str.dart",
+  "op": "predicate",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "bool",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -23839,6 +24544,32 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "subDyn",
+  "layer": "logic",
+  "file": "dart-maor/op-sub-dyn.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "dynamic",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "subNum",
+  "layer": "logic",
+  "file": "dart-maor/op-sub-num.dart",
+  "op": "measure",
+  "sockets": [
+   "num",
+   "num"
+  ],
+  "ret": "num",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "subsidyTotal",
   "layer": "logic",
   "file": "dart-maor/subsidy-total.dart",
@@ -23868,6 +24599,22 @@
   ],
   "ret": "List<dynamic>",
   "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "sumBy",
+  "layer": "logic",
+  "file": "dart-maor/op-sum-by.dart",
+  "op": "aggregate",
+  "sockets": [
+   "List<dynamic>",
+   "num Function(dynamic) f"
+  ],
+  "ret": "num",
+  "flags": [
+   "ho",
+   "listIn"
+  ],
   "why": "צורת-חתימה"
  },
  {
@@ -24800,6 +25547,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "trimStr",
+  "layer": "logic",
+  "file": "dart-maor/op-trim-str.dart",
+  "op": "format",
+  "sockets": [
+   "String"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "trustReport",
   "layer": "logic",
   "file": "dart-maor/trust-report.dart",
@@ -25569,6 +26328,22 @@
   ],
   "ret": "dynamic",
   "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "whereList",
+  "layer": "logic",
+  "file": "dart-maor/op-where-list.dart",
+  "op": "collection",
+  "sockets": [
+   "List<dynamic>",
+   "bool Function(dynamic) f"
+  ],
+  "ret": "List<dynamic>",
+  "flags": [
+   "ho",
+   "listIn"
+  ],
   "why": "צורת-חתימה"
  },
  {

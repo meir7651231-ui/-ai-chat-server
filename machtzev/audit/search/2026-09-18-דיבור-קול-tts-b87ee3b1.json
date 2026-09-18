@@ -1,0 +1,25 @@
+{
+ "v": 1,
+ "ts": "2026-09-18T03:03:43.485Z",
+ "query": "דיבור קול TTS speech",
+ "tokens": [
+  "דיבור",
+  "קול",
+  "tts",
+  "speech"
+ ],
+ "oracle": {
+  "atomIndexSha": "f97af5c814caa32f6fab0f44cb35046ca529ce232db3fddf1483e175cbc77890",
+  "logicCensusSha": "0ba74d4cef64a1235753333b361abdb455c5191765c67e7990bd4cf328d333eb",
+  "display": 1946,
+  "logic": 1022
+ },
+ "candidates": [],
+ "strong": [],
+ "strongLayer": null,
+ "strongOtherLayers": [],
+ "creates": null,
+ "chosen": "none",
+ "why": "חיפשתי דיבור|קול|TTS|speech באורקל: 0 מועמדים. ורמינהו/grep: TTS קיים רק כ-JS ב-knowledge/assets/screens/hamecholel.html:227-233 (say), לא במדף. הפסק: לא בונים אטום; מילוי שלישי לשקע nav (particles.mjs:186) + חציבת say ל-ds_voice_web.dart כאח של voiceListen. מבחן 18.9, LEARNED-2026-09-18 §3",
+ "sig": "b87ee3b17b55fc7133483a38d9daa72f1e918f8dcb32595ed4af3db92b937734"
+}

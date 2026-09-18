@@ -9,7 +9,7 @@
 - **🔌 מחווטים-למחולל בפועל:** 108 (5.5%) · 1838 מפורקים-אך-לא-מחווטים
 - **  ↳ מול כשירים-לחיווט (eligible):** 108/1914 (5.6%) · כשירים: תצוגה 892 (תפר≠zero ∧ לא-מזייף) + לוגיקה 1022 (חתימה נקראת; wireable-כשדה-מחושב 150)
 - **  ↳ נגישים-לבוררים-הנוכחיים (reach · auto-skin ∪ auto-logic ∪ cover(ops-map) ∪ קופסאות):** 1914/1914 (100.0%) · תצוגה 892 · לוגיקה 1022
-- **  ↳ ממופים-לפעולת-יסוד (G1 ops-map · תצוגה+לוגיקה, כולל לא-באורקל):** 1895/1895
+- **  ↳ ממופים-לפעולת-יסוד (G1 ops-map · תצוגה+לוגיקה, כולל לא-באורקל):** 1954/1954
 - **  ↳ לא-כשירים-במכוון (§20-ג · אין-שקע-דאטה/מזייף — נספרים, לא נעלמים):** 32 תצוגה: AuroraBg · BarcodeReticle · Dot · DotGridBg · DotsLoader · ForgedChat · ForgedComposite · ForgedFeedback · ForgedHeader · ForgedInput · ForgedList · ForgedMotion · ForgedNav · ForgedSelection · ForgedSpatial · ForgedStatus · ForgedTemporal · ForgedText · GlowBg · Grip · LipskeyProductSheetDivider · LiveDot · MeshBg · OrbitSpinner · SelectionBand · SheetHandle · SkeletonBlock · SkeletonCard · StatusDot · ThumbPlaceholder · Typing · WaveBg
 - **  ↳ כשירים-שאף-בורר-לא-רואה (הפער האמיתי):** 0 — אין
 - **  ↳ חיווט-תצוגה (נבחרו: DS-selectVaried ∪ auto-skin):** 68/924 (7.4%)
@@ -37,4 +37,4 @@
 
 ## אזהרת-אמת (הלקח שנקנה ביוקר)
 "סידור-הענף" = פריסת-קבצים. "כמה/מה-מחובר" = **מדידה חוצת-3-שכבות**. אל תסיק תקרה משכבה-אחת.
-המחולל מחובר: נבחרו-בפועל תצוגה=68 · לוגיקה=40 · נגישים-לבוררים 1914/1914 · ממופים-לפעולה 1895/1895. "נבחר" ≠ "נגיש": בורר בוחר אחד לתפקיד (L91) — מה שלא נבחר עדיין נגיש למשפט הבא.
+המחולל מחובר: נבחרו-בפועל תצוגה=68 · לוגיקה=40 · נגישים-לבוררים 1914/1914 · ממופים-לפעולה 1954/1954. "נבחר" ≠ "נגיש": בורר בוחר אחד לתפקיד (L91) — מה שלא נבחר עדיין נגיש למשפט הבא.
