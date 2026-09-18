@@ -66,6 +66,15 @@ q node machtzev/empire-coverage.mjs                                   # empire-c
 q node machtzev/census.mjs "$PWD/machtzev/carve" carvetest            # census · תחומים + תיקיות-אטומות
 rm -rf machtzev/registry 2>/dev/null || true                          # תוצר-המפקד, לא נכנס לעץ
 
+# ── גל-א׳ (נעוצים) · מדף-אטומים ───────────────────────────────────────────
+#   cross-source · שתי «אין» שהדפיסו שורה אחת: «--files ריק» מול «נמצא-ונדחה»
+q node machtzev/cross-source-check.mjs
+q node machtzev/cross-source-check.mjs --files "CLAUDE.md,machtzev/root.mjs"
+q node machtzev/cross-source-check.mjs --files "new/atoms/academic-year-label-strings.mjs,new/dart-ui-bs/ds/ds.dart"
+#   cover · פער-כיסוי (מונה) ⇒ פסק · coverLogic · «יש» כוזב על תיקו-מלא
+q node machtzev/generator/cover.mjs --gate
+q node -e 'import("./machtzev/generator/cover.mjs").then((m)=>{m.coverLogic({op:"predicate",need:[],goal:""});m.cover({op:"zzqnope",need:["label"],goal:"קרפדה"})})'
+
 # הרצת-המנוע-המלאה על מטרת-הליבה — המקור הגדול של מהלכים
 q node machtzev/generator/behavior-plan.mjs --goal knowledge/connect/goals/liba.txt
 # שחזור תופעות-הלוואי: המנועים כותבים תוצרים, והראיה אינה שינוי-עץ.
