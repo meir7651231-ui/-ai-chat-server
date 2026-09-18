@@ -1,0 +1,14 @@
+{
+ "at": "2026-09-18T06:55:48.086Z",
+ "units": 315,
+ "at5": {
+  "1": 168,
+  "2": 31,
+  "3": 30,
+  "4": 30,
+  "5": 29
+ },
+ "ms": 943290,
+ "from": "knowledge/connect/2026-09-18/meter-100.json",
+ "cmd": "node machtzev/mahulal/meter-100.mjs --gate"
+}
