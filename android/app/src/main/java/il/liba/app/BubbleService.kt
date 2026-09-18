@@ -325,14 +325,21 @@ class BubbleService : Service(), LibaWeb.Bridge {
         Thread {
             try {
                 val dir = java.io.File(cacheDir, "apk").apply { mkdirs() }; val f = java.io.File(dir, "liba.apk")
-                val c = URL(url).openConnection() as HttpURLConnection; c.connectTimeout = 15000; c.readTimeout = 60000
-                c.inputStream.use { i -> f.outputStream().use { o -> i.copyTo(o) } }
+                val c = URL(url).openConnection() as HttpURLConnection; c.connectTimeout = 15000; c.readTimeout = 60000; c.instanceFollowRedirects = true
+                if (c.responseCode != 200) throw java.io.IOException("שרת העדכון ענה " + c.responseCode)
+                val want = c.contentLengthLong
+                val got = c.inputStream.use { i -> f.outputStream().use { o -> i.copyTo(o) } }
+                // a half-downloaded or wrong file installs as "האפליקציה לא הותקנה" with no reason: check it here instead
+                if (want > 0 && got != want) throw java.io.IOException("ההורדה נקטעה (" + got / 1024 + " מתוך " + want / 1024 + " קילובייט)")
+                val head = ByteArray(2); java.io.FileInputStream(f).use { it.read(head) }
+                if (got < 100000 || head[0] != 'P'.code.toByte() || head[1] != 'K'.code.toByte()) throw java.io.IOException("הקובץ שהתקבל אינו אפליקציה")
                 val uri = androidx.core.content.FileProvider.getUriForFile(this, "il.liba.app.files", f)
                 val i = Intent(Intent.ACTION_VIEW).setDataAndType(uri, "application/vnd.android.package-archive").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 main.post { showLabel("מתקינה… אשר בחלון", 8000); hideBubble(45000)
                     try { startActivity(i) } catch (e: Exception) {}
                     notifyIntent("התקנת ליבה", "לחץ כדי להתקין את הגרסה החדשה", i) } // a background start can be dropped silently: always leave a tappable notification
-            } catch (e: Exception) { main.post { showLabel("הורדה נכשלה: $e", 8000); speak("ההורדה נכשלה. נסה מהמסך הראשי.") } }
+            } catch (e: Exception) { val why = e.message ?: e.toString()
+                main.post { showLabel("הורדה נכשלה: $why", 10000); speak("ההורדה נכשלה. " + why + ". אפשר לנסות שוב מהמסך הראשי.") } }
         }.start()
     }
     private val recheck = Runnable { checkUpdate() }
@@ -384,7 +391,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun syncRoot() = syncWindows()
     private fun arena() { val d = dot ?: return; val dm = resources.displayMetrics; d.arenaW = dm.widthPixels.toFloat(); d.arenaH = dm.heightPixels.toFloat() }
     /** hide both windows while the package installer (or another secure dialog) needs the screen */
-    fun hideBubble(ms: Long) { bubble?.visibility = View.GONE; handle?.visibility = View.GONE; main.postDelayed({ bubble?.visibility = View.VISIBLE; handle?.visibility = View.VISIBLE }, ms) }
+    private var hideToken = 0
+    fun hideBubble(ms: Long) { hideToken++; val t = hideToken; bubble?.visibility = View.GONE; handle?.visibility = View.GONE
+        main.postDelayed({ if (t == hideToken) { bubble?.visibility = View.VISIBLE; handle?.visibility = View.VISIBLE } }, ms) } // an overlapping hide must not un-hide the newer one
     private fun setupBubble() {
         val root = FrameLayout(this); val sw = resources.configuration.smallestScreenWidthDp; val size = dp(if (sw >= 600) 78f else 62f).toInt() // step 40: bigger on tablets / unfolded
         val big = (size * 2.8f).toInt(); val touchSize = (size * 1.5f).toInt()

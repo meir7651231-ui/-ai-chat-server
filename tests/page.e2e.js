@@ -130,6 +130,16 @@ window.__h={db,docs,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSna
   check((await get('inbox/m-spoke') || {}).spoken !== true, 'ack held while the phone is still speaking');
   await p.evaluate(id => window.app({ liba: 'spoke', id }), sayMsg && sayMsg.id); await flush(900);
   check((await get('inbox/m-spoke') || {}).spoken === true, 'ack written once the phone reported it finished');
+  // 13. a sentence said while ליבה is still speaking is sent once she finishes, not lost
+  await set('inbox/m-spoke2', { from: 'liba', kind: 'ask', speaker: 'ליבה', topic: 'קול', text: 'שאלה שנאמרת לאט', options: ['כן', 'לא'], spoken: false, ts: 100 });
+  m = await flush(1200);
+  const say2 = m.find(x => x.liba === 'say' && /לאט/.test(x.text));
+  await p.evaluate(() => window.app({ liba: 'input', text: 'תשובה תוך כדי דיבור' })); await flush(1200);
+  let sentMid = await H(() => window.__h.sent.slice());
+  check(!sentMid.some(t => /תוך כדי/.test(t)), 'answer given mid-sentence waits in the queue');
+  await p.evaluate(id => window.app({ liba: 'spoke', id }), say2 && say2.id); await flush(2000);
+  sentMid = await H(() => window.__h.sent.slice());
+  check(sentMid.some(t => /תוך כדי/.test(t)), 'queued answer is sent once she finished speaking: ' + JSON.stringify(sentMid.slice(-1)));
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

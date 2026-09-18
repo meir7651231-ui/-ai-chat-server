@@ -115,7 +115,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 let handsFree=true,busy=false,seen=null,appMode=false,lastAsk=null;
 function post(kind,extra){try{window.parent.postMessage(Object.assign({liba:kind},extra||{}),'*');}catch(e){}}
 window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d=e.data;if(!d||!d.liba)return;
-  if(d.liba==='hello'){appMode=true;armed=true;appVer=String(d.ver||'');try{if(!window.__devSent){window.__devSent=true;db.doc('channel/device').set({app:d.ver||'',page:36,at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(()=>{});}}catch(e){}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post('ready',{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+  if(d.liba==='hello'){appMode=true;armed=true;appVer=String(d.ver||'');try{if(!window.__devSent){window.__devSent=true;db.doc('channel/device').set({app:d.ver||'',page:37,at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(()=>{});}}catch(e){}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post('ready',{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba==='spoke'){const f=sayWait.get(String(d.id||''));if(f)f();}
   else if(d.liba==='crash'&&d.text&&db){db.doc('crashes/'+(d.id||Date.now())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post('crashSaved',{id:d.id})).catch(e=>log('crash: '+(e.code||e)));}
   else if(d.liba==='input'&&d.text){if(pendingInput){const prev=pendingInput;pendingInput=null;clearTimeout(pendingT);send(prev);}pendingInput=String(d.text);post('tap',{});clearTimeout(pendingT);pendingT=setTimeout(()=>{if(pendingInput){const t=pendingInput;pendingInput=null;send(t);}},1500);}
@@ -255,7 +255,7 @@ async function incoming(d){
   if(d.legacy){try{await db.doc('chat/current').update({spoken:true,spokenAt:Date.now()});}catch(e){log('legacy ack: '+(e.code||e));}}
   if(d.options&&d.options.length){OPTS.innerHTML=d.options.map(o=>`<button>${o}</button>`).join('');OPTS.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>send(b.textContent)));}
   showTalk();$('ack').hidden=k!=='done';
-  }finally{busy=false;}
+  }finally{busy=false;drainQ();} /* v36: a sentence said while ליבה was speaking waits in the queue – release it here */
   if(micBlocked)return;
   if(appMode)return;
   if(SR&&!d.noListen&&(handsFree||(d.options&&d.options.length)||k==='stuck')){const t=await listen();if(t&&!busy)return send(t);if(handsFree&&!busy)idleListen();}
