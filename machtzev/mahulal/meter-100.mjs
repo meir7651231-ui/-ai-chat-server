@@ -45,6 +45,10 @@ const JSONOUT = ARGV.includes('--json');
 const LIMIT = ARGV.includes('--limit') ? +ARGV[ARGV.indexOf('--limit') + 1] : Infinity;
 const GATE = ARGV.includes('--gate');
 const WRITE = ARGV.includes('--write-baseline');
+// ‏--seal: חותם רצפה מה-JSON של ריצה-מלאה **שכבר הושלמה** (‏meter-100.json), בלי למדוד שוב
+//   16 דק׳. מאמת שהריצה הייתה מלאה (‏quick=false · limit=null) ואחרת מסרב — רצפה חלקית
+//   אינה רצפה. זו חתימה בלבד; **השער עצמו (`--gate`) תמיד מודד טרי** (פסק ישן = ירוק-חלול).
+const SEAL = ARGV.includes('--seal');
 const BASELINE = path.join(R.MACH, 'mahulal/meter-100-baseline.json');
 const NS = 'meter';                                   // מרחב-המדידה: gen_goal_meterNNN*
 const BP = path.join(R.GEN_DIR, 'behavior-plan.mjs');
@@ -142,6 +146,18 @@ function climb(u, i) {
   if (solved !== needN) return { stage: 4, ms, bh, solved, needs: needN, examples: ex,
     why: `חלקי: ${solved}/${needN} צרכים קיבלו התנהגות-מוכחת — ההוכחה עברה על מה שנפלט, לא על המטרה` };
   return { stage: 5, ms, bh, solved, needs: needN, examples: ex, behaviors: beh, why: null };
+}
+
+// ── --seal · חתימת-רצפה מריצה-מלאה שהושלמה (בלי מדידה מחדש) ────────────────
+if (SEAL) {
+  const jf = path.join(R.ROOT, 'knowledge/connect/2026-09-18/meter-100.json');
+  if (!fs.existsSync(jf)) { console.log(`🚨 --seal: אין ${path.relative(R.ROOT, jf)} — הרץ מדידה מלאה קודם`); process.exit(2); }
+  const J = JSON.parse(fs.readFileSync(jf, 'utf8')); const S = J.summary || {};
+  if (S.quick || S.limit != null || S.notMeasured) { console.log(`🚨 --seal: הריצה לא הייתה מלאה (quick=${!!S.quick} · limit=${S.limit} · לא-נמדדו=${S.notMeasured}) — רצפה חלקית אינה רצפה`); process.exit(2); }
+  if (!S.units || !S.at || S.at[5] == null) { console.log('🚨 --seal: ה-JSON אינו נושא חמישה שלבים מלאים'); process.exit(2); }
+  fs.writeFileSync(BASELINE, JSON.stringify({ at: J.at, units: S.units, at5: S.at, ms: J.ms, from: path.relative(R.ROOT, jf), cmd: 'node machtzev/mahulal/meter-100.mjs --gate' }, null, 1) + '\n');
+  console.log(`✍️  רצפה ⇒ ${path.relative(R.ROOT, BASELINE)} · ${S.units} יחידות · ${[1,2,3,4,5].map((k) => k + ':' + S.at[k]).join(' · ')}`);
+  process.exit(0);
 }
 
 // ══ הריצה ══════════════════════════════════════════════════════════════════
