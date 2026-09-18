@@ -1,23 +1,23 @@
 {
- "at": "2026-09-18T12:52:21.066Z",
- "ms": 947161,
+ "at": "2026-09-18T14:22:28.341Z",
+ "ms": 1441835,
  "cmd": "node machtzev/mahulal/nl-smoke.mjs --meter",
  "summary": {
   "units": 315,
   "at": {
-   "1": 168,
-   "2": 32,
-   "3": 30,
-   "4": 30,
-   "5": 29
+   "1": 175,
+   "2": 45,
+   "3": 39,
+   "4": 39,
+   "5": 38
   },
   "quick": false,
   "limit": null,
   "notMeasured": 0,
-  "mirrorChecked": 30,
+  "mirrorChecked": 0,
   "forms": {
-   "available": true,
-   "cmd": "node machtzev/mahulal/nl-smoke.mjs --compile"
+   "available": false,
+   "reason": "flutter=— · buildsmart=—"
   }
  },
  "rows": [
@@ -30,7 +30,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 293
+   "ms12": 395
   },
   {
    "src": "א·nl",
@@ -41,7 +41,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 6
+   "ms12": 7
   },
   {
    "src": "א·nl",
@@ -63,7 +63,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 4
+   "ms12": 5
   },
   {
    "src": "א·nl",
@@ -74,7 +74,7 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע",
-   "ms12": 12
+   "ms12": 17
   },
   {
    "src": "א·nl",
@@ -85,7 +85,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 4
+   "ms12": 5
   },
   {
    "src": "א·nl",
@@ -96,7 +96,7 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע",
-   "ms12": 9
+   "ms12": 14
   },
   {
    "src": "א·nl",
@@ -107,7 +107,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 2
+   "ms12": 5
   },
   {
    "src": "א·nl",
@@ -118,7 +118,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "א·nl",
@@ -129,7 +129,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 10
+   "ms12": 13
   },
   {
    "src": "א·nl",
@@ -140,7 +140,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 3
+   "ms12": 4
   },
   {
    "src": "א·nl",
@@ -151,7 +151,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 4
+   "ms12": 6
   },
   {
    "src": "א·nl",
@@ -195,7 +195,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 8
+   "ms12": 11
   },
   {
    "src": "א·nl",
@@ -206,7 +206,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 2
+   "ms12": 3
   },
   {
    "src": "א·nl",
@@ -228,7 +228,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 7
+   "ms12": 10
   },
   {
    "src": "א·nl",
@@ -239,7 +239,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 3
+   "ms12": 2
   },
   {
    "src": "א·nl",
@@ -250,7 +250,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 3
+   "ms12": 5
   },
   {
    "src": "א·nl",
@@ -283,7 +283,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 4
+   "ms12": 3
   },
   {
    "src": "א·nl",
@@ -404,35 +404,103 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "ב·specs",
    "id": "app_audit",
    "at": "machtzev/generator/specs/app_audit.txt",
    "text": "הירו 🧾 יומן פעולות | audit — כל שינוי מתועד כותרת פעולות אחרונות אטום DataGrid יומן פעולות חישוב תיעוד פעולה (runAudit)",
-   "claims": 0,
+   "claims": 1,
    "needs": 0,
-   "stage": 0,
-   "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "stage": 1,
+   "why": "אין-ישות",
+   "ms12": 43
   },
   {
    "src": "ב·specs",
    "id": "app_ent1",
    "at": "machtzev/generator/specs/app_ent1.txt",
    "text": "הירו 🗂️ ליד | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail ליד: חדש / קשר / אפיון / סיור / תמחור / הצעה / זכה כותרת ט",
-   "claims": 2,
+   "claims": 4,
    "needs": 0,
    "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 63
+   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע/אין-ישות",
+   "ms12": 81
   },
   {
    "src": "ב·specs",
    "id": "app_ent10",
    "at": "machtzev/generator/specs/app_ent10.txt",
    "text": "הירו 🗂️ משימה | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail משימה: מתוכננת / מוכנה / בתהליך / בבדיקה / הושלמה כותרת ",
+   "claims": 4,
+   "needs": 0,
+   "stage": 1,
+   "why": "אין-ישות",
+   "ms12": 74
+  },
+  {
+   "src": "ב·specs",
+   "id": "app_ent11",
+   "at": "machtzev/generator/specs/app_ent11.txt",
+   "text": "הירו 🗂️ דוח יומי | ישות מורכבת — טופס + טבלה כותרת טופס דוח יומי אטום FieldRow פרויקט אטום FieldRow תאריך אטום FieldRow",
+   "claims": 2,
+   "needs": 0,
+   "stage": 1,
+   "why": "אין-ישות",
+   "ms12": 53
+  },
+  {
+   "src": "ב·specs",
+   "id": "app_ent12",
+   "at": "machtzev/generator/specs/app_ent12.txt",
+   "text": "הירו 🗂️ עובד | ישות מורכבת — טופס + טבלה כותרת טופס עובד אטום FieldRow שם אטום FieldRow תפקיד אטום FieldRow טלפון אטום ",
+   "claims": 4,
+   "needs": 0,
+   "stage": 1,
+   "why": "אין-ישות",
+   "ms12": 52
+  },
+  {
+   "src": "ב·specs",
+   "id": "app_ent13",
+   "at": "machtzev/generator/specs/app_ent13.txt",
+   "text": "הירו 🗂️ קבלן משנה | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail קבלן משנה: מועמד / נבדק / אושר / פעיל כותרת טופס קבל",
+   "claims": 2,
+   "needs": 0,
+   "stage": 1,
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע",
+   "ms12": 68
+  },
+  {
+   "src": "ב·specs",
+   "id": "app_ent14",
+   "at": "machtzev/generator/specs/app_ent14.txt",
+   "text": "הירו 🗂️ הזמנת רכש | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail הזמנת רכש: בקשה / אושר / הוזמן / נמסר כותרת טופס הזמ",
+   "claims": 3,
+   "needs": 0,
+   "stage": 1,
+   "why": "שקע-תאריך-לא-מוכרע/אגרגציה-בלי-אות-סימן/ישות-בלי-שקע/אין-ישות",
+   "ms12": 74
+  },
+  {
+   "src": "ב·specs",
+   "id": "app_ent15",
+   "at": "machtzev/generator/specs/app_ent15.txt",
+   "text": "הירו 🗂️ חומר | ישות מורכבת — טופס + טבלה כותרת טופס חומר אטום FieldRow קוד אטום FieldRow שם אטום FieldRow קטגוריה אטום ",
+   "claims": 1,
+   "needs": 1,
+   "stage": 2,
+   "why": "יחידה רב-שורתית (15 שורות) · runGoal קורא שורה-אחת מקובץ-המטרה ⇒ שלבים 3–5 אינם מדידים ליחידה הזו (פער-מנוע, behavior-plan.mjs:runGoal)",
+   "ms12": 88,
+   "lines": 15,
+   "ms35": 790
+  },
+  {
+   "src": "ב·specs",
+   "id": "app_ent16",
+   "at": "machtzev/generator/specs/app_ent16.txt",
+   "text": "הירו 🗂️ ציוד | ישות מורכבת — טופס + טבלה כותרת טופס ציוד אטום FieldRow שם אטום FieldRow סוג אטום NumberStepper מספר סיד",
    "claims": 2,
    "needs": 0,
    "stage": 1,
@@ -441,168 +509,102 @@
   },
   {
    "src": "ב·specs",
-   "id": "app_ent11",
-   "at": "machtzev/generator/specs/app_ent11.txt",
-   "text": "הירו 🗂️ דוח יומי | ישות מורכבת — טופס + טבלה כותרת טופס דוח יומי אטום FieldRow פרויקט אטום FieldRow תאריך אטום FieldRow",
-   "claims": 1,
-   "needs": 0,
-   "stage": 1,
-   "why": "אין-ישות",
-   "ms12": 32
-  },
-  {
-   "src": "ב·specs",
-   "id": "app_ent12",
-   "at": "machtzev/generator/specs/app_ent12.txt",
-   "text": "הירו 🗂️ עובד | ישות מורכבת — טופס + טבלה כותרת טופס עובד אטום FieldRow שם אטום FieldRow תפקיד אטום FieldRow טלפון אטום ",
-   "claims": 2,
-   "needs": 0,
-   "stage": 1,
-   "why": "אין-ישות",
-   "ms12": 36
-  },
-  {
-   "src": "ב·specs",
-   "id": "app_ent13",
-   "at": "machtzev/generator/specs/app_ent13.txt",
-   "text": "הירו 🗂️ קבלן משנה | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail קבלן משנה: מועמד / נבדק / אושר / פעיל כותרת טופס קבל",
-   "claims": 1,
-   "needs": 0,
-   "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 39
-  },
-  {
-   "src": "ב·specs",
-   "id": "app_ent14",
-   "at": "machtzev/generator/specs/app_ent14.txt",
-   "text": "הירו 🗂️ הזמנת רכש | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail הזמנת רכש: בקשה / אושר / הוזמן / נמסר כותרת טופס הזמ",
-   "claims": 1,
-   "needs": 0,
-   "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 40
-  },
-  {
-   "src": "ב·specs",
-   "id": "app_ent15",
-   "at": "machtzev/generator/specs/app_ent15.txt",
-   "text": "הירו 🗂️ חומר | ישות מורכבת — טופס + טבלה כותרת טופס חומר אטום FieldRow קוד אטום FieldRow שם אטום FieldRow קטגוריה אטום ",
-   "claims": 0,
-   "needs": 0,
-   "stage": 0,
-   "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
-  },
-  {
-   "src": "ב·specs",
-   "id": "app_ent16",
-   "at": "machtzev/generator/specs/app_ent16.txt",
-   "text": "הירו 🗂️ ציוד | ישות מורכבת — טופס + טבלה כותרת טופס ציוד אטום FieldRow שם אטום FieldRow סוג אטום NumberStepper מספר סיד",
-   "claims": 0,
-   "needs": 0,
-   "stage": 0,
-   "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 1
-  },
-  {
-   "src": "ב·specs",
    "id": "app_ent17",
    "at": "machtzev/generator/specs/app_ent17.txt",
    "text": "הירו 🗂️ מסמך | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail מסמך: טיוטה / נבדק / אושר כותרת טופס מסמך אטום FieldRow פ",
-   "claims": 2,
+   "claims": 4,
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 40
+   "ms12": 56
   },
   {
    "src": "ב·specs",
    "id": "app_ent18",
    "at": "machtzev/generator/specs/app_ent18.txt",
    "text": "הירו 🗂️ שדה | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail שדה: חדש / נשלח / בבדיקה / נענה / מאושר / סגור כותרת טופס ",
-   "claims": 1,
+   "claims": 2,
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 38
+   "ms12": 60
   },
   {
    "src": "ב·specs",
    "id": "app_ent19",
    "at": "machtzev/generator/specs/app_ent19.txt",
    "text": "הירו 🗂️ שדה | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail שדה: הוגש / בבדיקה / תיקונים / אושר / נסגר כותרת טופס שדה ",
-   "claims": 2,
+   "claims": 3,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע/אין-ישות",
-   "ms12": 45
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע/אין-ישות",
+   "ms12": 62
   },
   {
    "src": "ב·specs",
    "id": "app_ent2",
    "at": "machtzev/generator/specs/app_ent2.txt",
    "text": "הירו 🗂️ לקוח | ישות מורכבת — טופס + טבלה כותרת טופס לקוח אטום FieldRow שם אטום FieldRow חברה אטום NumberStepper מספר עו",
-   "claims": 1,
+   "claims": 4,
    "needs": 0,
    "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 47
+   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע/אין-ישות",
+   "ms12": 74
   },
   {
    "src": "ב·specs",
    "id": "app_ent20",
    "at": "machtzev/generator/specs/app_ent20.txt",
    "text": "הירו 🗂️ שינוי עבודה | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail שינוי עבודה: בקשה / תומחר / אושר פנימי / אושר לקוח",
-   "claims": 1,
+   "claims": 2,
    "needs": 0,
    "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 48
+   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע/אין-ישות",
+   "ms12": 82
   },
   {
    "src": "ב·specs",
    "id": "app_ent21",
    "at": "machtzev/generator/specs/app_ent21.txt",
    "text": "הירו 🗂️ בדיקת איכות | ישות מורכבת — טופס + טבלה כותרת טופס בדיקת איכות אטום FieldRow פרויקט אטום FieldRow שלב אטום Fiel",
-   "claims": 1,
+   "claims": 2,
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 27
+   "ms12": 46
   },
   {
    "src": "ב·specs",
    "id": "app_ent22",
    "at": "machtzev/generator/specs/app_ent22.txt",
    "text": "הירו 🗂️ ליקוי | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail ליקוי: נפתח / בטיפול / תוקן / נבדק / נסגר כותרת טופס ליק",
-   "claims": 8,
+   "claims": 10,
    "needs": 0,
    "stage": 1,
-   "why": "אין-ישות/ישות-בלי-שקע/אגרגציה-בלי-אות-סימן",
-   "ms12": 51
+   "why": "אין-ישות/ישות-בלי-שקע/שקע-תאריך-לא-מוכרע/אגרגציה-בלי-אות-סימן",
+   "ms12": 76
   },
   {
    "src": "ב·specs",
    "id": "app_ent23",
    "at": "machtzev/generator/specs/app_ent23.txt",
    "text": "הירו 🗂️ אירוע בטיחות | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail אירוע בטיחות: דווח / נחסם / בתחקיר / טופל / נסגר ",
-   "claims": 2,
+   "claims": 3,
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 39
+   "ms12": 58
   },
   {
    "src": "ב·specs",
    "id": "app_ent24",
    "at": "machtzev/generator/specs/app_ent24.txt",
    "text": "הירו 🗂️ נוכחות | ישות מורכבת — טופס + טבלה כותרת טופס נוכחות אטום FieldRow עובד אטום FieldRow פרויקט אטום FieldRow תארי",
-   "claims": 1,
+   "claims": 2,
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 24
+   "ms12": 42
   },
   {
    "src": "ב·specs",
@@ -613,75 +615,75 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע",
-   "ms12": 27
+   "ms12": 40
   },
   {
    "src": "ב·specs",
    "id": "app_ent26",
    "at": "machtzev/generator/specs/app_ent26.txt",
    "text": "הירו 🗂️ מסירה | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail מסירה: בדיקות / ליקויים / תיקונים / חתימה / הושלם כותרת ",
-   "claims": 3,
+   "claims": 4,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 48
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע/אין-ישות",
+   "ms12": 63
   },
   {
    "src": "ב·specs",
    "id": "app_ent27",
    "at": "machtzev/generator/specs/app_ent27.txt",
    "text": "הירו 🗂️ אחריות | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail אחריות: דווח / אושר / בטיפול / נסגר כותרת טופס אחריות א",
-   "claims": 0,
+   "claims": 1,
    "needs": 0,
-   "stage": 0,
-   "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 2
+   "stage": 1,
+   "why": "שקע-תאריך-לא-מוכרע/אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
+   "ms12": 47
   },
   {
    "src": "ב·specs",
    "id": "app_ent28",
    "at": "machtzev/generator/specs/app_ent28.txt",
    "text": "הירו 🗂️ חשבונית | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail חשבונית: טיוטה / הופקה / נשלחה / שולמה כותרת טופס חשבו",
-   "claims": 3,
-   "needs": 1,
+   "claims": 6,
+   "needs": 2,
    "stage": 2,
    "why": "יחידה רב-שורתית (19 שורות) · runGoal קורא שורה-אחת מקובץ-המטרה ⇒ שלבים 3–5 אינם מדידים ליחידה הזו (פער-מנוע, behavior-plan.mjs:runGoal)",
-   "ms12": 65,
+   "ms12": 97,
    "lines": 19,
-   "ms35": 730
+   "ms35": 794
   },
   {
    "src": "ב·specs",
    "id": "app_ent29",
    "at": "machtzev/generator/specs/app_ent29.txt",
    "text": "הירו 🗂️ חשבון חלקי | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail חשבון חלקי: הוכן / אושר מנהל / אושר מפקח / אושר לקו",
-   "claims": 0,
+   "claims": 1,
    "needs": 0,
-   "stage": 0,
-   "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 3
+   "stage": 1,
+   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
+   "ms12": 56
   },
   {
    "src": "ב·specs",
    "id": "app_ent3",
    "at": "machtzev/generator/specs/app_ent3.txt",
    "text": "הירו 🗂️ פרויקט | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail פרויקט: תכנון / הצעה / חוזה / ביצוע / מסירה / נסגר כותר",
-   "claims": 3,
+   "claims": 9,
    "needs": 0,
    "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע/אין-ישות",
-   "ms12": 54
+   "why": "שקע-תאריך-לא-מוכרע/אגרגציה-בלי-אות-סימן/ישות-בלי-שקע/אין-ישות",
+   "ms12": 80
   },
   {
    "src": "ב·specs",
    "id": "app_ent4",
    "at": "machtzev/generator/specs/app_ent4.txt",
    "text": "הירו 🗂️ שדה | ישות מורכבת — טופס + טבלה כותרת טופס שדה אטום FieldRow קוד אטום FieldRow שם אטום FieldRow שלב אטום FieldR",
-   "claims": 1,
+   "claims": 4,
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 31
+   "ms12": 48
   },
   {
    "src": "ב·specs",
@@ -699,33 +701,37 @@
    "id": "app_ent6",
    "at": "machtzev/generator/specs/app_ent6.txt",
    "text": "הירו 🗂️ אומדן | ישות מורכבת — טופס + טבלה כותרת טופס אומדן אטום FieldRow פרויקט אטום FieldRow לקוח אטום FieldRow גרסה א",
-   "claims": 1,
-   "needs": 0,
-   "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 29
+   "claims": 2,
+   "needs": 1,
+   "stage": 2,
+   "why": "יחידה רב-שורתית (17 שורות) · runGoal קורא שורה-אחת מקובץ-המטרה ⇒ שלבים 3–5 אינם מדידים ליחידה הזו (פער-מנוע, behavior-plan.mjs:runGoal)",
+   "ms12": 72,
+   "lines": 17,
+   "ms35": 777
   },
   {
    "src": "ב·specs",
    "id": "app_ent7",
    "at": "machtzev/generator/specs/app_ent7.txt",
    "text": "הירו 🗂️ הצעה | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail הצעה: טיוטה / נשלחה / במשא ומתן / אושרה / נדחתה כותרת טופ",
-   "claims": 1,
-   "needs": 0,
-   "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 34
+   "claims": 2,
+   "needs": 1,
+   "stage": 2,
+   "why": "יחידה רב-שורתית (17 שורות) · runGoal קורא שורה-אחת מקובץ-המטרה ⇒ שלבים 3–5 אינם מדידים ליחידה הזו (פער-מנוע, behavior-plan.mjs:runGoal)",
+   "ms12": 83,
+   "lines": 17,
+   "ms35": 765
   },
   {
    "src": "ב·specs",
    "id": "app_ent8",
    "at": "machtzev/generator/specs/app_ent8.txt",
    "text": "הירו 🗂️ חוזה | ישות מורכבת — טופס + טבלה אטום BreadcrumbTrail חוזה: טיוטה / נחתם / פעיל / הושלם כותרת טופס חוזה אטום Nu",
-   "claims": 3,
+   "claims": 6,
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 40
+   "ms12": 61
   },
   {
    "src": "ב·specs",
@@ -747,73 +753,73 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 2
+   "ms12": 3
   },
   {
    "src": "ב·specs",
    "id": "app_hub",
    "at": "machtzev/generator/specs/app_hub.txt",
    "text": "הירו 🏗️ האפליקציה שלי | נבנתה מאפיון-חופשי אטום LiveStatusDot מחובר · מסונכרן ניווט app_ent1 🗂️ ליד | 9 שדות · 7 שלבים",
-   "claims": 19,
+   "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע/אין-ישות/אגרגציה-בלי-אות-סימן",
-   "ms12": 108
+   "why": "שקע-תאריך-לא-מוכרע/אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
+   "ms12": 102
   },
   {
    "src": "ב·specs",
    "id": "app_scr30",
    "at": "machtzev/generator/specs/app_scr30.txt",
    "text": "הירו 🎯 דשבורד הנהלה עם פרויקטים | נבנה מתיאור חופשי אטום FinHead ליד | 9 שדות · 7 שלבים אטום FinRow לקוח | 8 שדות אטום ",
-   "claims": 6,
+   "claims": 3,
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע/אין-ישות",
-   "ms12": 49
+   "ms12": 57
   },
   {
    "src": "ב·specs",
    "id": "app_scr31",
    "at": "machtzev/generator/specs/app_scr31.txt",
    "text": "הירו 🎯 דשבורד מנהל פרויקט עם התקדמות | נבנה מתיאור חופשי אטום LinearProgress התקדמות אטום GanttBar גאנט אטום Breadcrumb",
-   "claims": 2,
+   "claims": 3,
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 25
+   "ms12": 41
   },
   {
    "src": "ב·specs",
    "id": "app_scr32",
    "at": "machtzev/generator/specs/app_scr32.txt",
    "text": "הירו 🎯 דשבורד מנהל אתר עם משימות היום | נבנה מתיאור חופשי אטום StripGroupCard ליד | 9 שדות · 7 שלבים אטום StockTab לקוח",
-   "claims": 6,
+   "claims": 3,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע/אין-ישות",
-   "ms12": 51
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע/אין-ישות",
+   "ms12": 59
   },
   {
    "src": "ב·specs",
    "id": "app_scr33",
    "at": "machtzev/generator/specs/app_scr33.txt",
    "text": "הירו 🎯 דשבורד כספים עם הכנסות | נבנה מתיאור חופשי אטום FinHead ליד | 9 שדות · 7 שלבים אטום FinRow לקוח | 8 שדות אטום Fi",
-   "claims": 5,
+   "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע/אין-ישות",
-   "ms12": 37
+   "why": "ישות-בלי-שקע",
+   "ms12": 45
   },
   {
    "src": "ב·specs",
    "id": "app_scr34",
    "at": "machtzev/generator/specs/app_scr34.txt",
    "text": "הירו 🎯 דשבורד בטיחות עם בדיקות פתוחות | נבנה מתיאור חופשי אטום QuickToolsList ליד | 9 שדות · 7 שלבים אטום CartChatBubbl",
-   "claims": 6,
+   "claims": 3,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע/אין-ישות/אגרגציה-בלי-אות-סימן",
-   "ms12": 53
+   "why": "ישות-בלי-שקע/אגרגציה-בלי-אות-סימן/אין-ישות",
+   "ms12": 59
   },
   {
    "src": "ב·specs",
@@ -831,55 +837,55 @@
    "id": "business",
    "at": "machtzev/generator/specs/business.txt",
    "text": "פרופיל עסק: כותרת פרטי העסק שדה שם העסק בחירה סוג עסק: קבלן / חנות / ספק תגיות תחומי עבודה: חשמל / אינסטלציה / צבע מתג \ud83d",
-   "claims": 0,
+   "claims": 1,
    "needs": 0,
-   "stage": 0,
-   "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "stage": 1,
+   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
+   "ms12": 32
   },
   {
    "src": "ב·specs",
    "id": "capautodream",
    "at": "machtzev/generator/specs/capautodream.txt",
    "text": "הזמנה-עצמית - יכולת שחלמתי היום והוכחתי לבד - מיון חוטי תמיכה ואז נרמול מייל: הירו 🧪 הזמנה-עצמית - יכולת שחלמתי היום וה",
-   "claims": 0,
+   "claims": 4,
    "needs": 0,
-   "stage": 0,
-   "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "stage": 1,
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע/אין-ישות",
+   "ms12": 97
   },
   {
    "src": "ב·specs",
    "id": "capclockcalendar",
    "at": "machtzev/generator/specs/capclockcalendar.txt",
    "text": "מסע-בזמן של השעון - שעת-יממה נהפכת לתאריך-תצוגה כשכל דקה מחצות נספרת כיום שלם בלוח: הירו 🧪 מסע-בזמן של השעון - שעת-יממה",
-   "claims": 4,
+   "claims": 10,
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 70
+   "ms12": 102
   },
   {
    "src": "ב·specs",
    "id": "capmailphone",
    "at": "machtzev/generator/specs/capmailphone.txt",
    "text": "שחזור מספר טלפון לתצוגה ישראלית תקנית מתוך שורה שהגיעה עטופה בקידוד-מייל ישן: הירו 🧪 שחזור מספר טלפון לתצוגה ישראלית תק",
-   "claims": 3,
+   "claims": 7,
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 80
+   "ms12": 125
   },
   {
    "src": "ב·specs",
    "id": "captimegematria",
    "at": "machtzev/generator/specs/captimegematria.txt",
    "text": "חתימת-אותיות עברית לשעה על השעון - כמה דקות עברו מחצות הלילה כתוב בגימטריה: הירו 🧪 חתימת-אותיות עברית לשעה על השעון - כ",
-   "claims": 9,
+   "claims": 13,
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 81
+   "ms12": 131
   },
   {
    "src": "ב·specs",
@@ -890,7 +896,7 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע",
-   "ms12": 27
+   "ms12": 51
   },
   {
    "src": "ב·specs",
@@ -912,7 +918,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 33
+   "ms12": 63
   },
   {
    "src": "ב·specs",
@@ -934,7 +940,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "ב·specs",
@@ -952,22 +958,24 @@
    "id": "entity",
    "at": "machtzev/generator/specs/entity.txt",
    "text": "הירו 🗂️ ליד | ישות מורכבת — טופס + טבלה כותרת טופס ליד אטום InlineTextRow שם אטום GlowField טלפון אטום NumberStepper תק",
-   "claims": 2,
+   "claims": 5,
    "needs": 0,
    "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 24
+   "why": "שקע-תאריך-לא-מוכרע/אגרגציה-בלי-אות-סימן/ישות-בלי-שקע/אין-ישות",
+   "ms12": 44
   },
   {
    "src": "ב·specs",
    "id": "entry",
    "at": "machtzev/generator/specs/entry.txt",
    "text": "המחולל: הירו 🧬 המחולל של המחצב | דיוקן עצמי חי - את כל ההדגמות כאן בחרתי בעצמי כותרת המפעל במספרים - עדכון חי מהאטלס נת",
-   "claims": 22,
-   "needs": 0,
-   "stage": 1,
-   "why": "אין-ישות/אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 229
+   "claims": 24,
+   "needs": 2,
+   "stage": 2,
+   "why": "יחידה רב-שורתית (35 שורות) · runGoal קורא שורה-אחת מקובץ-המטרה ⇒ שלבים 3–5 אינם מדידים ליחידה הזו (פער-מנוע, behavior-plan.mjs:runGoal)",
+   "ms12": 554,
+   "lines": 35,
+   "ms35": 765
   },
   {
    "src": "ב·specs",
@@ -989,18 +997,18 @@
    "needs": 0,
    "stage": 1,
    "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 22
+   "ms12": 43
   },
   {
    "src": "ב·specs",
    "id": "improv",
    "at": "machtzev/generator/specs/improv.txt",
    "text": "יכולת מאולתרת - שרשרת חמישה: הירו 🎲 יכולת מאולתרת - חמישה אטומים שהגרלתי וחיברתי לבד | תבחר 5 אטומים רנדלמיים תחבר בין ",
-   "claims": 5,
+   "claims": 10,
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 56
+   "ms12": 102
   },
   {
    "src": "ב·specs",
@@ -1022,40 +1030,42 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 28
+   "ms12": 55
   },
   {
    "src": "ב·specs",
    "id": "mission",
    "at": "machtzev/generator/specs/mission.txt",
    "text": "חדר בקרה - משימה לירח: הירו 🚀 חדר בקרה - משימה לירח | אטומים שנולדו לצדקה ולבניין - מחווטים לעולם הפוך כותרת אות קריאה ",
-   "claims": 8,
+   "claims": 9,
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע/אין-ישות/אגרגציה-בלי-אות-סימן",
-   "ms12": 79
+   "ms12": 147
   },
   {
    "src": "ב·specs",
    "id": "navflow",
    "at": "machtzev/generator/specs/navflow.txt",
    "text": "רכיבים חיים - ניווט ודשבורד: הירו 🧭 ניווט ודשבורד | שלבים צירים ומקטעים ממשפט כותרת ניווט מקטעים 44 תצוגה: יומי / שבועי",
-   "claims": 2,
+   "claims": 0,
    "needs": 0,
-   "stage": 1,
-   "why": "ישות-בלי-שקע/אין-ישות",
-   "ms12": 28
+   "stage": 0,
+   "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
+   "ms12": 1
   },
   {
    "src": "ב·specs",
    "id": "nl",
    "at": "machtzev/generator/specs/nl.txt",
    "text": "הירו 🎯 לוח בקרה לאירוח עם כרטיס אורח | נבנה מתיאור חופשי אטום BareStat כרטיס אורח אטום DataGrid טבלת הזמנות אטום MiniCa",
-   "claims": 6,
-   "needs": 0,
-   "stage": 1,
-   "why": "ישות-בלי-שקע/אין-ישות/ישות-לא-מוכרעת",
-   "ms12": 36
+   "claims": 9,
+   "needs": 1,
+   "stage": 2,
+   "why": "יחידה רב-שורתית (10 שורות) · runGoal קורא שורה-אחת מקובץ-המטרה ⇒ שלבים 3–5 אינם מדידים ליחידה הזו (פער-מנוע, behavior-plan.mjs:runGoal)",
+   "ms12": 91,
+   "lines": 10,
+   "ms35": 805
   },
   {
    "src": "ב·specs",
@@ -1066,42 +1076,40 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 24
+   "ms12": 46
   },
   {
    "src": "ב·specs",
    "id": "quest1",
    "at": "machtzev/generator/specs/quest1.txt",
    "text": "עולם משחק שלם - חדר 1: הירו 🎯 עולם משחק שלם של מסע בריחה - חדרים שמובילים זה אל זה חידות חיות שמגיבות לשחקן ושערים נסתר",
-   "claims": 2,
+   "claims": 6,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע/אגרגציה-בלי-אות-סימן",
-   "ms12": 64
+   "why": "ישות-בלי-שקע/אין-ישות/אגרגציה-בלי-אות-סימן",
+   "ms12": 134
   },
   {
    "src": "ב·specs",
    "id": "quest2",
    "at": "machtzev/generator/specs/quest2.txt",
    "text": "עולם משחק שלם - חדר 2: הירו 🎯 עולם משחק שלם של מסע בריחה - חדרים שמובילים זה אל זה חידות חיות שמגיבות לשחקן ושערים נסתר",
-   "claims": 2,
-   "needs": 1,
-   "stage": 2,
-   "why": "יחידה רב-שורתית (11 שורות) · runGoal קורא שורה-אחת מקובץ-המטרה ⇒ שלבים 3–5 אינם מדידים ליחידה הזו (פער-מנוע, behavior-plan.mjs:runGoal)",
-   "ms12": 102,
-   "lines": 11,
-   "ms35": 636
+   "claims": 6,
+   "needs": 0,
+   "stage": 1,
+   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע/אין-ישות",
+   "ms12": 141
   },
   {
    "src": "ב·specs",
    "id": "quest3",
    "at": "machtzev/generator/specs/quest3.txt",
    "text": "עולם משחק שלם - חדר 3: הירו 🎯 עולם משחק שלם של מסע בריחה - חדרים שמובילים זה אל זה חידות חיות שמגיבות לשחקן ושערים נסתר",
-   "claims": 2,
+   "claims": 3,
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע/אין-ישות",
-   "ms12": 53
+   "ms12": 93
   },
   {
    "src": "ב·specs",
@@ -1112,18 +1120,18 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "ב·specs",
    "id": "shipping",
    "at": "machtzev/generator/specs/shipping.txt",
    "text": "הגדרות משלוחים: מתג איסוף עצמי מהחנות שדה כתובת ברירת מחדל מתג עדכוני סטטוס בוואטסאפ מספר ימי אספקה כפתור שמירת הגדרות",
-   "claims": 0,
+   "claims": 1,
    "needs": 0,
-   "stage": 0,
-   "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "stage": 1,
+   "why": "אין-ישות",
+   "ms12": 22
   },
   {
    "src": "ב·specs",
@@ -1133,8 +1141,8 @@
    "claims": 13,
    "needs": 0,
    "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/אין-ישות/ישות-בלי-שקע",
-   "ms12": 176
+   "why": "אגרגציה-בלי-אות-סימן/אין-ישות/ישות-בלי-שקע/שקע-תאריך-לא-מוכרע",
+   "ms12": 322
   },
   {
    "src": "ב·specs",
@@ -1145,18 +1153,18 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע",
-   "ms12": 31
+   "ms12": 61
   },
   {
    "src": "ב·specs",
    "id": "team",
    "at": "machtzev/generator/specs/team.txt",
    "text": "ניהול צוות: שדה שם העובד מספר ימי עבודה בשבוע מתג קבלת התראות מתג גישה למחסן כפתור הוספת עובד",
-   "claims": 1,
+   "claims": 2,
    "needs": 0,
    "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 12
+   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע/אין-ישות",
+   "ms12": 20
   },
   {
    "src": "ב·specs",
@@ -1167,7 +1175,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 24
+   "ms12": 45
   },
   {
    "src": "ב·specs",
@@ -1178,18 +1186,18 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "ב·specs",
    "id": "widgets",
    "at": "machtzev/generator/specs/widgets.txt",
    "text": "רכיבים חיים - וידג'טים מורכבים: הירו 🧩 וידג'טים מורכבים | טאבים אקורדיון והיפוך שהמחולל מרכיב ממשפט כותרת ניווט ותוכן ל",
-   "claims": 4,
+   "claims": 2,
    "needs": 0,
    "stage": 1,
-   "why": "אין-ישות/ישות-בלי-שקע",
-   "ms12": 43
+   "why": "ישות-בלי-שקע/אין-ישות",
+   "ms12": 76
   },
   {
    "src": "ג·mosad",
@@ -1254,8 +1262,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 12
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע",
+   "ms12": 22
   },
   {
    "src": "ג·mosad",
@@ -1266,7 +1274,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "ג·mosad",
@@ -1285,10 +1293,15 @@
    "at": "gen/mosad.sentences.txt:10",
    "text": "לכל תלמיד יש אדם, משפחה, מוסד, כיתה, תאריך כניסה, קופת חולים, רגישויות, הערה; שלבים: מועמד, ראיון, ועדת קבלה, התקבל, פעי",
    "claims": 1,
-   "needs": 0,
-   "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 15
+   "needs": 1,
+   "stage": 5,
+   "why": null,
+   "ms12": 45,
+   "bh": 1,
+   "examples": 3,
+   "solved": 1,
+   "mirrorChecked": false,
+   "ms35": 13660
   },
   {
    "src": "ג·mosad",
@@ -1332,7 +1345,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 8
+   "ms12": 11
   },
   {
    "src": "ג·mosad",
@@ -1343,7 +1356,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 12
+   "ms12": 21
   },
   {
    "src": "ג·mosad",
@@ -1351,10 +1364,15 @@
    "at": "gen/mosad.sentences.txt:16",
    "text": "לכל אברך יש אדם, כולל, תאריך כניסה, מצב משפחתי, ילדים; שלבים: מועמד, פעיל, סיים;",
    "claims": 1,
-   "needs": 0,
-   "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 9
+   "needs": 1,
+   "stage": 5,
+   "why": null,
+   "ms12": 24,
+   "bh": 1,
+   "examples": 3,
+   "solved": 1,
+   "mirrorChecked": false,
+   "ms35": 11001
   },
   {
    "src": "ג·mosad",
@@ -1365,7 +1383,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 10
+   "ms12": 19
   },
   {
    "src": "ג·mosad",
@@ -1398,7 +1416,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 11
+   "ms12": 17
   },
   {
    "src": "ג·mosad",
@@ -1408,8 +1426,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 21
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע",
+   "ms12": 39
   },
   {
    "src": "ג·mosad",
@@ -1431,7 +1449,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 10
+   "ms12": 18
   },
   {
    "src": "ג·mosad",
@@ -1442,7 +1460,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "ג·mosad",
@@ -1453,7 +1471,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע/אין-ישות",
-   "ms12": 9
+   "ms12": 15
   },
   {
    "src": "ג·mosad",
@@ -1464,7 +1482,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 6
+   "ms12": 10
   },
   {
    "src": "ג·mosad",
@@ -1485,8 +1503,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 12
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע",
+   "ms12": 19
   },
   {
    "src": "ג·mosad",
@@ -1494,10 +1512,15 @@
    "at": "gen/mosad.sentences.txt:29",
    "text": "לכל ליווי יש תלמיד, סוג (יועץ, משפיע), מלווה, תאריך, סיכום, הפניה (כן, לא);",
    "claims": 1,
-   "needs": 0,
-   "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 8
+   "needs": 1,
+   "stage": 5,
+   "why": null,
+   "ms12": 27,
+   "bh": 1,
+   "examples": 3,
+   "solved": 1,
+   "mirrorChecked": false,
+   "ms35": 10951
   },
   {
    "src": "ג·mosad",
@@ -1508,7 +1531,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 8
+   "ms12": 12
   },
   {
    "src": "ג·mosad",
@@ -1530,7 +1553,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 10
+   "ms12": 16
   },
   {
    "src": "ג·mosad",
@@ -1541,7 +1564,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 14
+   "ms12": 18
   },
   {
    "src": "ג·mosad",
@@ -1552,7 +1575,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "ג·mosad",
@@ -1562,8 +1585,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 25
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע",
+   "ms12": 40
   },
   {
    "src": "ג·mosad",
@@ -1596,7 +1619,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 6
+   "ms12": 10
   },
   {
    "src": "ג·mosad",
@@ -1607,7 +1630,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 7
+   "ms12": 11
   },
   {
    "src": "ג·mosad",
@@ -1618,7 +1641,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 1
+   "ms12": 0
   },
   {
    "src": "ג·mosad",
@@ -1628,8 +1651,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 12
+   "why": "תביעה-חלקית/צורך-בלי-דוגמה",
+   "ms12": 21
   },
   {
    "src": "ג·mosad",
@@ -1673,12 +1696,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 17,
+   "ms12": 28,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15665
+   "mirrorChecked": false,
+   "ms35": 19113
   },
   {
    "src": "ג·mosad",
@@ -1686,15 +1709,15 @@
    "at": "gen/mosad.sentences.txt:48",
    "text": "לכל הוראת קבע יש משפחה, אמצעי (מסב, אשראי), יום חיוב, סכום, תאריך תוקף; שלבים: נחתם, פעיל, נכשל, בוטל;",
    "claims": 1,
-   "needs": 1,
+   "needs": 2,
    "stage": 5,
    "why": null,
-   "ms12": 21,
-   "bh": 1,
-   "examples": 3,
-   "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15923
+   "ms12": 36,
+   "bh": 2,
+   "examples": 6,
+   "solved": 2,
+   "mirrorChecked": false,
+   "ms35": 28819
   },
   {
    "src": "ג·mosad",
@@ -1713,15 +1736,15 @@
    "at": "gen/mosad.sentences.txt:50",
    "text": "לכל צק יש משפחה, מספר, בנק, סכום, תאריך פירעון; שלבים: התקבל, הופקד, נפרע, חזר;",
    "claims": 1,
-   "needs": 1,
+   "needs": 2,
    "stage": 5,
    "why": null,
-   "ms12": 17,
-   "bh": 1,
-   "examples": 3,
-   "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15622
+   "ms12": 32,
+   "bh": 2,
+   "examples": 6,
+   "solved": 2,
+   "mirrorChecked": false,
+   "ms35": 28675
   },
   {
    "src": "ג·mosad",
@@ -1732,12 +1755,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 17,
+   "ms12": 29,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15603
+   "mirrorChecked": false,
+   "ms35": 19376
   },
   {
    "src": "ג·mosad",
@@ -1748,12 +1771,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 15,
+   "ms12": 29,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15741
+   "mirrorChecked": false,
+   "ms35": 19393
   },
   {
    "src": "ג·mosad",
@@ -1764,12 +1787,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 13,
+   "ms12": 23,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15627
+   "mirrorChecked": false,
+   "ms35": 19244
   },
   {
    "src": "ג·mosad",
@@ -1780,7 +1803,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 11
+   "ms12": 22
   },
   {
    "src": "ג·mosad",
@@ -1802,12 +1825,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 17,
+   "ms12": 27,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15313
+   "mirrorChecked": false,
+   "ms35": 19821
   },
   {
    "src": "ג·mosad",
@@ -1818,7 +1841,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 9
+   "ms12": 16
   },
   {
    "src": "ג·mosad",
@@ -1829,12 +1852,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 17,
+   "ms12": 30,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15450
+   "mirrorChecked": false,
+   "ms35": 19699
   },
   {
    "src": "ג·mosad",
@@ -1864,15 +1887,15 @@
    "at": "gen/mosad.sentences.txt:61",
    "text": "לכל חיוב חד פעמי יש חייב (משפחה, תלמיד), סוג (טיול, ספרים, נזק, קייטנה), סכום, תאריך; שלבים: נוצר, שולם;",
    "claims": 1,
-   "needs": 1,
+   "needs": 2,
    "stage": 5,
    "why": null,
-   "ms12": 21,
-   "bh": 1,
-   "examples": 3,
-   "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15378
+   "ms12": 38,
+   "bh": 2,
+   "examples": 6,
+   "solved": 2,
+   "mirrorChecked": false,
+   "ms35": 28879
   },
   {
    "src": "ג·mosad",
@@ -1883,12 +1906,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 15,
+   "ms12": 26,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15477
+   "mirrorChecked": false,
+   "ms35": 19991
   },
   {
    "src": "ג·mosad",
@@ -1910,7 +1933,7 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע",
-   "ms12": 24
+   "ms12": 42
   },
   {
    "src": "ג·mosad",
@@ -1921,12 +1944,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 29,
+   "ms12": 50,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 13154
+   "mirrorChecked": false,
+   "ms35": 16648
   },
   {
    "src": "ג·mosad",
@@ -1937,12 +1960,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 14,
+   "ms12": 25,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 14927
+   "mirrorChecked": false,
+   "ms35": 19215
   },
   {
    "src": "ג·mosad",
@@ -1953,7 +1976,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 13
+   "ms12": 21
   },
   {
    "src": "ג·mosad",
@@ -1975,12 +1998,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 13,
+   "ms12": 24,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15048
+   "mirrorChecked": false,
+   "ms35": 18767
   },
   {
    "src": "ג·mosad",
@@ -1991,12 +2014,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 23,
+   "ms12": 42,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15198
+   "mirrorChecked": false,
+   "ms35": 18938
   },
   {
    "src": "ג·mosad",
@@ -2006,8 +2029,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 12
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע",
+   "ms12": 21
   },
   {
    "src": "ג·mosad",
@@ -2018,7 +2041,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 6
+   "ms12": 11
   },
   {
    "src": "ג·mosad",
@@ -2029,7 +2052,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 11
+   "ms12": 18
   },
   {
    "src": "ג·mosad",
@@ -2051,7 +2074,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 11
+   "ms12": 18
   },
   {
    "src": "ג·mosad",
@@ -2073,7 +2096,7 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע",
-   "ms12": 10
+   "ms12": 20
   },
   {
    "src": "ג·mosad",
@@ -2084,7 +2107,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "ג·mosad",
@@ -2117,7 +2140,7 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע",
-   "ms12": 9
+   "ms12": 16
   },
   {
    "src": "ג·mosad",
@@ -2139,7 +2162,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 9
+   "ms12": 15
   },
   {
    "src": "ג·mosad",
@@ -2183,12 +2206,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 18,
+   "ms12": 33,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15090
+   "mirrorChecked": false,
+   "ms35": 18779
   },
   {
    "src": "ג·mosad",
@@ -2210,7 +2233,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 10
+   "ms12": 18
   },
   {
    "src": "ג·mosad",
@@ -2243,12 +2266,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 19,
+   "ms12": 44,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 14828
+   "mirrorChecked": false,
+   "ms35": 18476
   },
   {
    "src": "ג·mosad",
@@ -2270,7 +2293,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 15
+   "ms12": 25
   },
   {
    "src": "ג·mosad",
@@ -2292,7 +2315,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 9
+   "ms12": 12
   },
   {
    "src": "ג·mosad",
@@ -2302,8 +2325,8 @@
    "claims": 2,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע/אין-ישות",
-   "ms12": 15
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע/אין-ישות",
+   "ms12": 26
   },
   {
    "src": "ג·mosad",
@@ -2314,7 +2337,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 1
+   "ms12": 0
   },
   {
    "src": "ג·mosad",
@@ -2325,7 +2348,7 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע",
-   "ms12": 6
+   "ms12": 10
   },
   {
    "src": "ג·mosad",
@@ -2358,12 +2381,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 14,
+   "ms12": 24,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 14625
+   "mirrorChecked": false,
+   "ms35": 18997
   },
   {
    "src": "ג·mosad",
@@ -2373,8 +2396,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 12
+   "why": "שקע-תאריך-לא-מוכרע/אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
+   "ms12": 23
   },
   {
    "src": "ג·mosad",
@@ -2385,12 +2408,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 12,
+   "ms12": 22,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 13182
+   "mirrorChecked": false,
+   "ms35": 16624
   },
   {
    "src": "ג·mosad",
@@ -2412,7 +2435,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 7
+   "ms12": 11
   },
   {
    "src": "ג·mosad",
@@ -2423,7 +2446,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "ג·mosad",
@@ -2434,7 +2457,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 14
+   "ms12": 23
   },
   {
    "src": "ג·mosad",
@@ -2445,7 +2468,7 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע/אין-ישות",
-   "ms12": 13
+   "ms12": 22
   },
   {
    "src": "ג·mosad",
@@ -2453,15 +2476,15 @@
    "at": "gen/mosad.sentences.txt:113",
    "text": "בית המדרש: לכל מקום יש אזור, שורה, מספר, בעלים, סכום, תאריך תוקף; שלבים: פנוי, נמכר, הועבר;",
    "claims": 1,
-   "needs": 1,
+   "needs": 2,
    "stage": 5,
    "why": null,
-   "ms12": 18,
-   "bh": 1,
-   "examples": 3,
-   "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 14851
+   "ms12": 32,
+   "bh": 2,
+   "examples": 6,
+   "solved": 2,
+   "mirrorChecked": false,
+   "ms35": 28804
   },
   {
    "src": "ג·mosad",
@@ -2483,7 +2506,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 10
+   "ms12": 16
   },
   {
    "src": "ג·mosad",
@@ -2494,7 +2517,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 8
+   "ms12": 12
   },
   {
    "src": "ג·mosad",
@@ -2524,15 +2547,15 @@
    "at": "gen/mosad.sentences.txt:119",
    "text": "לכל אירוע באולם יש תאריך, שוכר, סוג, סכום, פיקדון; שלבים: בקשה, אושר, פיקדון, התקיים, נוקה;",
    "claims": 1,
-   "needs": 1,
+   "needs": 2,
    "stage": 5,
    "why": null,
-   "ms12": 18,
-   "bh": 1,
-   "examples": 3,
-   "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 14162
+   "ms12": 29,
+   "bh": 2,
+   "examples": 6,
+   "solved": 2,
+   "mirrorChecked": false,
+   "ms35": 27280
   },
   {
    "src": "ג·mosad",
@@ -2620,7 +2643,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 10
+   "ms12": 16
   },
   {
    "src": "ג·mosad",
@@ -2631,7 +2654,7 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע",
-   "ms12": 12
+   "ms12": 20
   },
   {
    "src": "ג·mosad",
@@ -2664,7 +2687,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 5
+   "ms12": 7
   },
   {
    "src": "ג·mosad",
@@ -2675,7 +2698,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "ג·mosad",
@@ -2686,7 +2709,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 8
+   "ms12": 13
   },
   {
    "src": "ג·mosad",
@@ -2708,7 +2731,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 18
+   "ms12": 29
   },
   {
    "src": "ג·mosad",
@@ -2719,7 +2742,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 8
+   "ms12": 14
   },
   {
    "src": "ג·mosad",
@@ -2729,8 +2752,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 9
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע",
+   "ms12": 15
   },
   {
    "src": "ג·mosad",
@@ -2740,8 +2763,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 12
+   "why": "שקע-תאריך-לא-מוכרע/אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
+   "ms12": 20
   },
   {
    "src": "ג·mosad",
@@ -2752,12 +2775,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 10,
+   "ms12": 19,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 14444
+   "mirrorChecked": false,
+   "ms35": 17855
   },
   {
    "src": "ג·mosad",
@@ -2776,10 +2799,15 @@
    "at": "gen/mosad.sentences.txt:142",
    "text": "לכל שיחה של הרבי יש תאריך, נושא, פרשה, קובץ, עורך; שלבים: הוקלט, תומלל, נערך, הוגה, אושר, פורסם;",
    "claims": 1,
-   "needs": 0,
-   "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 12
+   "needs": 1,
+   "stage": 5,
+   "why": null,
+   "ms12": 31,
+   "bh": 1,
+   "examples": 3,
+   "solved": 1,
+   "mirrorChecked": false,
+   "ms35": 11604
   },
   {
    "src": "ג·mosad",
@@ -2790,7 +2818,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 8
+   "ms12": 14
   },
   {
    "src": "ג·mosad",
@@ -2801,7 +2829,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 8
+   "ms12": 12
   },
   {
    "src": "ג·mosad",
@@ -2812,7 +2840,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 9
+   "ms12": 16
   },
   {
    "src": "ג·mosad",
@@ -2823,7 +2851,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 1
+   "ms12": 0
   },
   {
    "src": "ג·mosad",
@@ -2831,15 +2859,15 @@
    "at": "gen/mosad.sentences.txt:148",
    "text": "חסד: לכל הלוואה יש משפחה, סכום, תאריך, מטרה, ערב ראשון, ערב שני; שלבים: בקשה, ועדה, אושר, ניתן, בהחזר, נפרע, באיחור;",
    "claims": 2,
-   "needs": 1,
+   "needs": 2,
    "stage": 5,
    "why": null,
-   "ms12": 21,
-   "bh": 1,
-   "examples": 3,
-   "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15290
+   "ms12": 42,
+   "bh": 2,
+   "examples": 6,
+   "solved": 2,
+   "mirrorChecked": false,
+   "ms35": 29316
   },
   {
    "src": "ג·mosad",
@@ -2850,7 +2878,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 4
+   "ms12": 5
   },
   {
    "src": "ג·mosad",
@@ -2869,15 +2897,15 @@
    "at": "gen/mosad.sentences.txt:151",
    "text": "לכל תמיכה יש משפחה, סוג (חודשי, חד פעמי, חג, רפואי), סכום, תאריך; שלבים: בקשה, ועדה, אושר, שולם;",
    "claims": 1,
-   "needs": 1,
+   "needs": 2,
    "stage": 5,
    "why": null,
-   "ms12": 18,
-   "bh": 1,
-   "examples": 3,
-   "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15481
+   "ms12": 35,
+   "bh": 2,
+   "examples": 6,
+   "solved": 2,
+   "mirrorChecked": false,
+   "ms35": 30123
   },
   {
    "src": "ג·mosad",
@@ -2888,7 +2916,7 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע",
-   "ms12": 11
+   "ms12": 19
   },
   {
    "src": "ג·mosad",
@@ -2898,8 +2926,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 8
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע",
+   "ms12": 13
   },
   {
    "src": "ג·mosad",
@@ -2907,10 +2935,15 @@
    "at": "gen/mosad.sentences.txt:154",
    "text": "לכל ארוחה לחסד יש משפחה, תאריך, מבשל, מסלול; שלבים: נדרש, שובץ, נמסר",
    "claims": 2,
-   "needs": 0,
-   "stage": 1,
-   "why": "ישות-בלי-שקע/אין-ישות",
-   "ms12": 10
+   "needs": 1,
+   "stage": 5,
+   "why": null,
+   "ms12": 25,
+   "bh": 1,
+   "examples": 3,
+   "solved": 1,
+   "mirrorChecked": false,
+   "ms35": 11161
   },
   {
    "src": "ג·mosad",
@@ -2929,15 +2962,15 @@
    "at": "gen/mosad.sentences.txt:156",
    "text": "לכל הכנסת כלה יש משפחה, תאריך חתונה, צורך, סכום; שלבים: בקשה, ועדה, נרכש, נמסר;",
    "claims": 1,
-   "needs": 1,
+   "needs": 2,
    "stage": 5,
    "why": null,
-   "ms12": 15,
-   "bh": 1,
-   "examples": 3,
-   "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 14689
+   "ms12": 31,
+   "bh": 2,
+   "examples": 6,
+   "solved": 2,
+   "mirrorChecked": false,
+   "ms35": 29864
   },
   {
    "src": "ג·mosad",
@@ -2959,7 +2992,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 12
+   "ms12": 20
   },
   {
    "src": "ג·mosad",
@@ -2970,12 +3003,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 18,
+   "ms12": 32,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15133
+   "mirrorChecked": false,
+   "ms35": 19782
   },
   {
    "src": "ג·mosad",
@@ -2986,7 +3019,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "ג·mosad",
@@ -3005,10 +3038,15 @@
    "at": "gen/mosad.sentences.txt:163",
    "text": "לכל נוכחות לילה יש תלמיד, תאריך, מצב (נוכח, בבית, חסר), בודק;",
    "claims": 1,
-   "needs": 0,
-   "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 8
+   "needs": 1,
+   "stage": 5,
+   "why": null,
+   "ms12": 23,
+   "bh": 1,
+   "examples": 3,
+   "solved": 1,
+   "mirrorChecked": false,
+   "ms35": 11243
   },
   {
    "src": "ג·mosad",
@@ -3019,7 +3057,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 1
+   "ms12": 3
   },
   {
    "src": "ג·mosad",
@@ -3052,7 +3090,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 13
+   "ms12": 22
   },
   {
    "src": "ג·mosad",
@@ -3095,8 +3133,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 10
+   "why": "שקע-תאריך-לא-מוכרע/אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
+   "ms12": 17
   },
   {
    "src": "ג·mosad",
@@ -3107,7 +3145,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 0
+   "ms12": 1
   },
   {
    "src": "ג·mosad",
@@ -3170,10 +3208,15 @@
    "at": "gen/mosad.sentences.txt:178",
    "text": "לכל נכס להשכרה יש נכס, שוכר, שכר דירה, פיקדון, תאריך התחלה, תאריך סיום; שלבים: פנוי, חוזה, פעיל, חידוש, פינוי;",
    "claims": 2,
-   "needs": 0,
-   "stage": 1,
-   "why": "ישות-בלי-שקע/אין-ישות",
-   "ms12": 12
+   "needs": 1,
+   "stage": 5,
+   "why": null,
+   "ms12": 34,
+   "bh": 1,
+   "examples": 3,
+   "solved": 1,
+   "mirrorChecked": false,
+   "ms35": 11508
   },
   {
    "src": "ג·mosad",
@@ -3195,7 +3238,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 11
+   "ms12": 18
   },
   {
    "src": "ג·mosad",
@@ -3206,7 +3249,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 8
+   "ms12": 11
   },
   {
    "src": "ג·mosad",
@@ -3216,8 +3259,8 @@
    "claims": 2,
    "needs": 0,
    "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/אין-ישות/ישות-בלי-שקע",
-   "ms12": 13
+   "why": "שקע-תאריך-לא-מוכרע/אגרגציה-בלי-אות-סימן/אין-ישות/ישות-בלי-שקע",
+   "ms12": 23
   },
   {
    "src": "ג·mosad",
@@ -3228,7 +3271,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 9
+   "ms12": 15
   },
   {
    "src": "ג·mosad",
@@ -3239,12 +3282,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 18,
+   "ms12": 32,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 15584
+   "mirrorChecked": false,
+   "ms35": 20190
   },
   {
    "src": "ג·mosad",
@@ -3266,12 +3309,12 @@
    "needs": 1,
    "stage": 5,
    "why": null,
-   "ms12": 10,
+   "ms12": 19,
    "bh": 1,
    "examples": 3,
    "solved": 1,
-   "mirrorChecked": true,
-   "ms35": 14877
+   "mirrorChecked": false,
+   "ms35": 19140
   },
   {
    "src": "ג·mosad",
@@ -3281,8 +3324,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 9
+   "why": "שקע-תאריך-לא-מוכרע/ישות-בלי-שקע",
+   "ms12": 17
   },
   {
    "src": "ג·mosad",
@@ -3315,7 +3358,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 9
+   "ms12": 17
   },
   {
    "src": "ג·mosad",
@@ -3337,7 +3380,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 13
+   "ms12": 21
   },
   {
    "src": "ג·mosad",
@@ -3370,7 +3413,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 14
+   "ms12": 22
   },
   {
    "src": "ג·mosad",
@@ -3389,10 +3432,15 @@
    "at": "gen/mosad.sentences.txt:199",
    "text": "לכל טופס יש סוג (רישום, הנחה, הוראת קבע, אישור טיול, בריאות, צילום), משפחה, תאריך; שלבים: נשלח, מולא, נחתם, נקלט;",
    "claims": 1,
-   "needs": 0,
-   "stage": 1,
-   "why": "ישות-בלי-שקע",
-   "ms12": 19
+   "needs": 1,
+   "stage": 5,
+   "why": null,
+   "ms12": 39,
+   "bh": 1,
+   "examples": 3,
+   "solved": 1,
+   "mirrorChecked": false,
+   "ms35": 11258
   },
   {
    "src": "ג·mosad",
@@ -3403,7 +3451,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 11
+   "ms12": 14
   },
   {
    "src": "ג·mosad",
@@ -3414,7 +3462,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 11
+   "ms12": 13
   },
   {
    "src": "ג·mosad",
@@ -3436,7 +3484,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 1
+   "ms12": 0
   },
   {
    "src": "ג·mosad",
@@ -3457,8 +3505,8 @@
    "claims": 1,
    "needs": 0,
    "stage": 1,
-   "why": "אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
-   "ms12": 9
+   "why": "שקע-תאריך-לא-מוכרע/אגרגציה-בלי-אות-סימן/ישות-בלי-שקע",
+   "ms12": 14
   },
   {
    "src": "ג·mosad",
@@ -3469,7 +3517,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 9
+   "ms12": 10
   },
   {
    "src": "ג·mosad",
@@ -3524,7 +3572,7 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע",
-   "ms12": 29
+   "ms12": 39
   },
   {
    "src": "ג·mosad",
@@ -3535,7 +3583,7 @@
    "needs": 0,
    "stage": 0,
    "why": "אין תביעת-התנהגות (אין פועל-מטרה במשפט)",
-   "ms12": 1
+   "ms12": 0
   },
   {
    "src": "ג·mosad",
@@ -3568,12 +3616,12 @@
    "needs": 5,
    "stage": 5,
    "why": null,
-   "ms12": 46,
+   "ms12": 56,
    "bh": 6,
    "examples": 21,
    "solved": 5,
-   "mirrorChecked": true,
-   "ms35": 189587
+   "mirrorChecked": false,
+   "ms35": 258666
   },
   {
    "src": "ד·goals",
@@ -3584,7 +3632,7 @@
    "needs": 0,
    "stage": 1,
    "why": "אין-ישות",
-   "ms12": 15
+   "ms12": 23
   },
   {
    "src": "ד·goals",
@@ -3595,12 +3643,12 @@
    "needs": 4,
    "stage": 4,
    "why": "חלקי: 2/4 צרכים קיבלו התנהגות-מוכחת — ההוכחה עברה על מה שנפלט, לא על המטרה",
-   "ms12": 34,
+   "ms12": 47,
    "bh": 2,
    "examples": 9,
    "solved": 2,
-   "mirrorChecked": true,
-   "ms35": 168635
+   "mirrorChecked": false,
+   "ms35": 231212
   },
   {
    "src": "ד·goals",
@@ -3608,10 +3656,15 @@
    "at": "knowledge/connect/goals/goals-5.txt:3",
    "text": "בכל יום ראשון להפיק רשימת מטופלים שהתור שלהם בשבוע הקרוב, ולשלוח להם תזכורת עם השעה",
    "claims": 2,
-   "needs": 0,
-   "stage": 1,
-   "why": "ישות-בלי-שקע/אין-ישות",
-   "ms12": 17
+   "needs": 1,
+   "stage": 5,
+   "why": null,
+   "ms12": 33,
+   "bh": 1,
+   "examples": 3,
+   "solved": 1,
+   "mirrorChecked": false,
+   "ms35": 11142
   },
   {
    "src": "ד·goals",
@@ -3622,7 +3675,7 @@
    "needs": 0,
    "stage": 1,
    "why": "ישות-בלי-שקע/אין-ישות",
-   "ms12": 13
+   "ms12": 19
   },
   {
    "src": "ד·goals",
@@ -3633,12 +3686,12 @@
    "needs": 4,
    "stage": 5,
    "why": null,
-   "ms12": 38,
+   "ms12": 51,
    "bh": 5,
    "examples": 18,
    "solved": 4,
-   "mirrorChecked": true,
-   "ms35": 176695
+   "mirrorChecked": false,
+   "ms35": 243929
   }
  ]
 }
