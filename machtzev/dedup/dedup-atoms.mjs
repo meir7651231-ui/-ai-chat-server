@@ -10,6 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const DIR = new URL('../../new/atoms/', import.meta.url).pathname;
 const files = fs.readdirSync(DIR).filter(f => f.endsWith('.mjs') && !f.endsWith('.test.mjs'));
 const norm = (s) => s
@@ -54,6 +55,23 @@ console.log(`\n— תאומי-שם (${nameTwins.length} קבוצות, גוף ש�
 for (const g of nameTwins) if (!bodyTwins.some(b => b.join() === g.join())) console.log('  ' + g.join(' ~ '));
 console.log(`\n— תאומי-מוצא (${srcTwins.length} קבוצות):`);
 for (const g of srcTwins) console.log('  ' + g.join(' + ') + '  ← ' + srcOf(g[0]));
+
+// 🕯️ ורמינהו על ארבע העדשות (הכרעה-5). עד כה כל אחת הדפיסה מונה, ושלוש-עדשות-ריקות נראו
+//    כמו «המדף נקי מכפילות» — אבל שלוש העדשות הראשונות הן **סינטקס** (גוף · שם · מוצא)
+//    והרביעית היא **הוכחה** (‏--semantic). מדף שעבר שלוש ולא נבדק ברביעית אינו נקי, הוא
+//    לא-נבדק, וזו בדיוק הטענה שנופלת כשמשווים לפי שם/מחרוזת ולא לפי המקור המוצהר (L112).
+rminhu({ engine: 'dedup-atoms', matter: `מדף new/atoms (${files.length} אטומים) ⇒ תאומים`,
+  searched: ['עדשה א: גוף-מנורמל (sha256)', 'עדשה ב: שם-מנורמל (מילים ממוינות)', 'עדשה ג: מוצא מוצהר (שורת «מוצא:»)', 'עדשה ד: הוכחה צולבת של דוגמאות-הזהב (--semantic)'],
+  rulings: [
+    bodyTwins.length ? had(`עדשה א · ${bodyTwins.length} קבוצות`, bodyTwins.map((g) => g.join('≡')).slice(0, 3).join(' | ')) : pliga('עדשה א: גוף-מנורמל', `0 קבוצות מתוך ${files.length} אטומים — אין שני אטומים עם גוף זהה אחרי נרמול-הערות/רווחים; עדשת-סינטקס, אינה רואה יכולת-שקולה בניסוח שונה`),
+    nameTwins.length ? had(`עדשה ב · ${nameTwins.length} קבוצות`, 'וריאנטים של אותו שם (kebab/underscore/מילים-הפוכות)') : pliga('עדשה ב: שם-מנורמל', `0 קבוצות — אבל זו התאמה **לפי שם**, והיא בדיוק העדשה שהחמיצה שמונה באגים באותה משפחה (L112); «אין» כאן הוא «אין חפיפת-שם»`),
+    srcTwins.length ? had(`עדשה ג · ${srcTwins.length} קבוצות`, 'שני אטומים מצביעים על אותו קובץ:שורות') : pliga('עדשה ג: מוצא מוצהר', `0 קבוצות · ${files.filter((f) => srcOf(f)).length} מתוך ${files.length} אטומים מצהירים מוצא בכלל — אטום בלי שורת «מוצא:» אינו בעדשה הזאת, ולכן 0 אינו ראיה`),
+    process.argv.includes('--semantic')
+      ? had('עדשה ד: הוכחה', 'רצה — הפסק בהמשך, פר-קבוצת-חתימה')
+      : lo('עדשה ד: הוכחה', 'לא רצה (בלי --semantic) — ולכן «המדף נקי» אינו נאמר כאן: שלוש עדשות-סינטקס עברו, ההוכחה לא נבדקה, ומדף לא-נבדק אינו מדף-נקי'),
+  ] });
+
+if (!process.argv.includes('--semantic')) (await import('../../yeshiva/rminhu.mjs')).printNotes('dedup-atoms');
 
 // ד) תאומי-פעולה — הוכחה צולבת של דוגמאות-הזהב (--semantic; איטי: ריצת-Dart לכל מנוע-עם-דוגמאות)
 if (process.argv.includes('--semantic')) {
@@ -109,4 +127,15 @@ if (process.argv.includes('--semantic')) {
   fs.writeFileSync(new URL('./OPTWINS-REPORT.md', import.meta.url), md);
   console.log(`\n— תאומי-פעולה (סמנטי · הוכחה): ${res.groups} קבוצות-חתימה · ${tested} נבדקו · ${pairs.length} תאומים · ${contains.length} מכיל ⇒ machtzev/dedup/OPTWINS-REPORT.md`);
   for (const p of pairs) console.log(`  ${p.a} ≡ ${p.b}  (${p.sig})`);
+  // 🕯️ ופסק פר-תאום: דו-כיווני ⇒ חד שיעורא · חד-כיווני («מכיל») ⇒ פליגא, וההיקף הוא החילוק ·
+  //    בעלים שלא עובר את דוגמאות-עצמו ⇒ לא שייך (חילוץ-הדוגמאות לא-נאמן — לא נשפט, ונאמר).
+  rminhu({ engine: 'dedup-atoms --semantic', matter: `תאומי-פעולה · ${res.groups} קבוצות-חתימה · ${tested} נבדקו`,
+    searched: ['logic-census.json (חתימה: ret(params))', 'דוגמאות-הזהב מ-<atom>_test.dart', 'logic-proof.proveCandidates (ריצת-Dart)'],
+    rulings: [
+      ...pairs.map((p) => had(`${p.a}≡${p.b}`, `דו-כיווני על ${p.sig} · ${p.na}+${p.nb} דוגמאות — מועמד-לאיחוד, הכרעת-בעלים`)),
+      ...contains.map((c) => pliga(`${c.wide}⊃${c.narrow}`, `${c.wide} עובר את כל ${c.n} דוגמאות ${c.narrow}, ולא להפך — «מכיל» ולא תאום: האיחוד היה מאבד את מה שהרחב עושה מעבר`)),
+      ...selfFailed.map((f) => lo(f.name, `עובר ${Math.round(f.self * 100)}% מדוגמאות-עצמו (<80%) — חילוץ-הדוגמאות אינו נאמן למנוע הזה, ולכן הוא אינו נשפט; זו כנות-המנוע ולא ממצא`)),
+      ...(pairs.length || contains.length || selfFailed.length ? [] : [pliga('עדשת-ההוכחה', `${res.groups} קבוצות-חתימה נסרקו ו-${tested} מנועים נבדקו בריצת-Dart, ואין תאום ואין «מכיל» — זה ממצא מדוד ולא היעדר-בדיקה`)]),
+    ] });
+  (await import('../../yeshiva/rminhu.mjs')).printNotes('dedup-atoms --semantic');
 }

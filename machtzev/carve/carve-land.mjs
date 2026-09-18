@@ -6,6 +6,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין ייעוד» = «לא-חיפשת» (הכרעה-23 · G63)
 
 // יעד-הנחיתה: new/ כברירת-מחדל. CARVE_OUT מאפשר ריצת-ניסוי לתיקייה זמנית
 // בלי לגעת במדף — נחיתה למדף היא החלטה, לא תופעת-לוואי של הרצה.
@@ -221,6 +222,20 @@ function landOne(r, seen) {
 
   // חוזה
   const doc = (r.fnSource.match(/\/\/\/[^\n]*/g) || []).join('\n').replace(/\/\/\/ ?/g, '');
+  // 🕯️ ורמינהו על הייעוד: `purposeOf` (‏G63) מחזיר `from:'none'` ⇒ החוזה נכתב «(אין —
+  //    לא נמצא הקשר עברי במקור/בקוראים/בגוף)». זו «אין» על **ארבעה מקורות מדורגים** שהמנוע
+  //    כבר בדק — והוא לא אמר איזה מהם נבדק ונפל. עכשיו כל אחד מהם נפסק בשמו, ונרשם בפנקס.
+  //    (‏`ast_carve.dart` עצמו הוא מחלץ-AST ואין בו נקודת-«אין»; ה«אין» של שכבת-החציבה
+  //     חי כאן, בצד-ה-JS שמנחית — ולכן הפסק כאן ולא בשכפול השכבה ל-Dart, L111.)
+  const PURPOSE_SRC = ['תיעוד-עצמי (doc צמוד)', 'מונחי-מסך-המקור', 'מונחי-מסך-הקורא', 'ליטרלים-בגוף'];
+  rminhu({ engine: 'carve-land.purposeOf', matter: `ייעוד-עברי ל-${r.name} (${srcRef})`,
+    searched: PURPOSE_SRC,
+    rulings: PURPOSE_SRC.map((s, i) => {
+      const mine = ['doc', 'source', 'caller', 'body'][i];
+      if (purpose.from === mine) return had(s, `${purpose.words.slice(0, 12).join(' · ')}${purpose.key ? ` (${purpose.key})` : ''}`);
+      if (purpose.from !== 'none') return lo(s, `מקור מדורג נמוך יותר מ-«${purpose.from}» שכבר הכריע — לא נבדק, ולא נפסל`);
+      return pliga(s, `נבדק ולא העלה מונח עברי לפונקציה הזאת — ${mine === 'doc' ? 'אין doc צמוד בעברית' : mine === 'body' ? 'אין ליטרל עברי בגוף' : 'אין הקשר עברי במסך ' + (mine === 'source' ? 'שממנו נחצבה' : 'של הקוראים')}; חסר-הקשר, לא חסר-ייעוד`);
+    }) });
   const md = `# חוזה · ${r.name}\n\n> אטום-Dart · נחצב אוטומטית ע"י חצב-AST (חוק-4 — verbatim מהמקור).\n\n## מקור\n${srcRef}\n\n## התנהגות\n${doc || '(ראה גוף-האטום)'}\n\n## ייעוד-עברי\n${purpose.from === 'none' ? '(אין — לא נמצא הקשר עברי במקור/בקוראים/בגוף)' : `מקור: ${purpose.from}${purpose.key ? ' · ' + purpose.key : ''} — ${purpose.words.slice(0, 12).join(' · ')}`}\n\n## אימות\nבדיקת-Golden (\`${kb}_test.dart\`): אפיון דטרמיניסטי על סל-קלטים — הוקלט מהרצת הקוד-החלוץ. הרצה: \`dart run --enable-asserts new/dart/${kb}_test.dart\`.\n`;
   fs.writeFileSync(path.join(ROOT, 'dart', `${kb}.contract.md`), md);
   return { name: r.name, landed: `${kb}.dart`, base: kb, golden: combos.length,

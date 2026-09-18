@@ -33,9 +33,45 @@ q node machtzev/census/engine-index.mjs --find "הקראה בקול"            
 q node -e 'import("./machtzev/generator/tzinor.mjs").then((m)=>{for(const w of ["הודעה","שיחה","הלקוח","קרפדה"])m.soleClassOf(w)})'
 q node -e 'import("./yeshiva/purpose.mjs").then((m)=>{m.goalPsak("לשמור את השיחה עם הלקוח ולשלוח תזכורת מעל 3 ימים","ליבה");m.goalPsak("מערכת ניהול מלאי","ליבה")})'
 
+# ── גל-4 · חציבה ──────────────────────────────────────────────────────────
+SCR=$(ls new/dart-ui-bs/screens__*/*.dart 2>/dev/null | head -1)
+[ -n "$SCR" ] && q node machtzev/carve/screen-decomp.mjs "$SCR"      # screen-decomp · אטום-לקידום
+q node machtzev/carve/widget-dedup.mjs new/dart-ui-bs                 # widget-dedup · משפחות-רופפות
+# carve-land (הצד-ה-JS של ast_carve.dart) — נחיתה לתיקייה זמנית, לא למדף (CARVE_OUT)
+CO=$(mktemp -d); mkdir -p "$CO/dart" "$CO/dart-maor"
+cat > "$CO/carved.json" <<'JSON'
+[{"name":"qqWubble","ok":true,"trivial":true,"_srcRef":"buildsmart/app_flutter/lib/util/qqw.dart:10-12",
+  "fnSource":"int qqWubble(int n) => n * n;","origName":"qqWubble","paramsSimple":true,
+  "origParams":[{"name":"n","type":"int"}],"imports":[],"inlineTypes":[],"copiedTypes":[],"erasedTypes":[],
+  "socketDecls":[],"socketMeta":[],"typeSamples":{"int":["1","2","3"]},"autoSocket":false}]
+JSON
+CARVE_OUT="$CO/" DART_SDK_BIN="${DART_SDK_BIN:-/root/dart-sdk/bin}" q node machtzev/carve/carve-land.mjs "$CO/carved.json"
+q node machtzev/extract/functions.mjs maor                            # דורש machtzev/registry (צד-maor) — כאן קורס לפני הפסק
+
+# ── גל-5 · כפילות ─────────────────────────────────────────────────────────
+q node machtzev/dedup/dedup-atoms.mjs                                 # dedup-atoms · 4 עדשות
+q node machtzev/dedup/dedup-cross.mjs                                 # dedup-cross · עדשת-שם בלבד
+q node machtzev/dedup/dedup-cross-dart.mjs                            # dedup-cross-dart · שתי עדשות
+q node machtzev/dedup/dedup.mjs                                       # dedup.load · קובצי-מרשם חסרים
+q node machtzev/dedup/dedup-deep.mjs                                  # דורש machtzev/registry — קורס לפני הפסק
+q node machtzev/dedup/reconcile.mjs                                   # דורש machtzev/registry — קורס לפני הפסק
+
 # הרצת-המנוע-המלאה על מטרת-הליבה — המקור הגדול של מהלכים
 q node machtzev/generator/behavior-plan.mjs --goal knowledge/connect/goals/liba.txt
-git checkout -- machtzev/generator/goals/ machtzev/generator/atlas.json machtzev/generator/atlas-data.json 2>/dev/null
+# שחזור תופעות-הלוואי: המנועים כותבים תוצרים, והראיה אינה שינוי-עץ.
+# **פר-נתיב**: `git checkout` עם רשימה נכשל כולו על נתיב-אחד-לא-מעוקב, וזה בדיוק
+# איך שני קבצים נשארו דרוסים בריצה הראשונה (‏L110 §5: פקודת-שחזור שאיש לא בודק).
+for f in machtzev/generator/goals machtzev/generator/atlas.json machtzev/generator/atlas-data.json \
+         screens-seed machtzev/dedup/DEDUP-REPORT.md machtzev/dedup/OPTWINS-REPORT.md; do
+  git checkout -- "$f" 2>/dev/null || true
+done
+git checkout -- machtzev/dedup/optwins.json 2>/dev/null || true
+rm -f machtzev/dedup/dupdeep.json 2>/dev/null || true
+#   רק **תוצרים**, לא מקורות-המנועים (אחרת הבדיקה סופרת את העבודה שבעץ כדריסה)
+DIRTY=$(git status --porcelain machtzev/generator/goals machtzev/generator/atlas.json \
+        machtzev/generator/atlas-data.json screens-seed \
+        machtzev/dedup/DEDUP-REPORT.md machtzev/dedup/OPTWINS-REPORT.md 2>/dev/null)
+[ -n "$DIRTY" ] && { echo "🔴 שחזור נכשל — העץ נשאר דרוס:"; echo "$DIRTY"; exit 1; }
 
 echo "פנקס: $OUT · $(wc -l < "$OUT") מהלכים"
 python3 - "$OUT" <<'PY'

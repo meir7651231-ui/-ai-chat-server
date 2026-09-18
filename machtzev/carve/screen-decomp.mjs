@@ -5,6 +5,7 @@
  *  וסקציות (כולל קריאות/פעולות פר-widget) · 6-קומפוזר · 7-שקעי-לוח.
  *  שימוש: node screen-decomp.mjs <file.dart> [--json out.json] */
 import fs from 'node:fs';
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const file = process.argv[2];
 if (!file) { console.error('שימוש: screen-decomp.mjs <screen.dart>'); process.exit(1); }
 const src = fs.readFileSync(file, 'utf8');
@@ -107,6 +108,18 @@ const jsonOut = process.argv.indexOf('--json');
 if (jsonOut > 0) fs.writeFileSync(process.argv[jsonOut + 1], JSON.stringify(manifest, null, 1));
 
 const pure = widgets.filter(w => w.pure), sections = widgets.filter(w => !w.pure);
+// 🕯️ ורמינהו על החציבה: «כמה אטומים נקיים יצאו מהמסך» נאמר עד כה כמונה, ומונה אינו פסק.
+//    שלוש התוצאות כאן הן שלוש «אין» **שונות**, ומי שקורא מונה אחד לא רואה את ההבדל:
+//    טהור-IO ו🧼נקי-מדאטה ⇒ חד שיעורא (אטום שניתן לקדם כמו-שהוא) · טהור-IO עם דאטה-צרובה
+//    ⇒ פליגא, וזה חסר-**חיווט** (הדאטה צריכה לצאת לשקע), לא חסר-אטום · לא-טהור ⇒ לא שייך
+//    (סקציה מחוברת, לא אטום — והיא בכוונה לא מקודמת). זה החיפוש שרואה מה שהמדף לא רואה (L113).
+rminhu({ engine: 'screen-decomp', matter: `מסך ${file.split('/').pop()} ⇒ אטומים-לקידום`,
+  searched: [`${widgets.length} מחלקות-widget ב-${lines.length} שורות`, 'מסנן-טוהר: reads/writes/navs/toast', 'מסנן-דאטה: מחרוזות-צרובות'],
+  rulings: widgets.map((w) => (w.pure && w.dataClean
+    ? had(w.name, `טהור-IO ונקי-מדאטה · ${w.loc} שורות — ניתן לקדם כמו-שהוא`)
+    : w.pure
+      ? pliga(w.name, `טהור-IO אך ${w.strings} מחרוזות צרובות בגוף — זה חסר-חיווט (הדאטה צריכה לצאת לשקע), לא חסר-אטום; קידום כמו-שהוא היה מנציח דאטה באטום (חוק-1)`)
+      : lo(w.name, `אינו טהור — קורא:[${w.reads.join(',') || '—'}] פועל:[${[...w.writes.map((x) => 'set:' + x), ...w.actions].join(',') || '—'}]: סקציה-מחוברת, לא אטום`))) });
 console.log(`🔬 פירוק-מסך · ${file.split('/').pop()} — ${lines.length} שורות`);
 console.log(`  ש0 פיגמנטים: ${pigments.tokens.length} טוקנים · גפנים ${pigments.fontSizes.join('/')} · אטימויות ${pigments.opacities.length} · תפקידי-צבע=${pigments.roleRecord ? 'כן (חוק-3)' : 'לא'}`);
 console.log(`  ש1 מונחים: ${heStrings.length} מחרוזות-עבריות`);
@@ -120,3 +133,4 @@ for (const w of sections) console.log(`     ${w.name} (${w.loc}ש) ← קורא:
 console.log(`  ש6 קומפוזר: ${composer.join(',') || '—'} · מיפוי-סקציות: ${sectionMap.length} · שערים: ${gates.join(' · ')}`);
 console.log(`  ש7 שקעי-לוח: ${board.reads.length} קריאות · ${board.writes.length} כתיבות · ${board.navsAndCalls.length} ניווטים/קריאות`);
 console.log(`  📊 סה"כ אטומים-מזוהים: ${pigments.tokens.length + heStrings.length + icons.length + glyphs.length + logicCandidates.length + widgets.length}`);
+(await import('../../yeshiva/rminhu.mjs')).printNotes('screen-decomp');

@@ -2,8 +2,22 @@
 /** מחצב · שלב 2ב — הכרעת-כפילויות: קבוצות ⇒ קנוני-מנצח או תוכנית-שילוב ("הכל-הכל").
  *  אינווריאנט: הקנוני חייב להכיל 100% מכל כפיל. קבוצה בלי הכרעה = אדום בדוח. */
 import fs from 'node:fs';
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const R = new URL('../registry/', import.meta.url).pathname;
-const load = f => { try { return JSON.parse(fs.readFileSync(R + f)); } catch { return []; } };
+// 🕯️ ה-`catch { return [] }` הזה הוא L26/L110 מילה-במילה: קובץ-מרשם חסר, פגום, או שגיאת-
+//    תכנות — כל השלושה חוזרים כ«אין כפילויות». עכשיו כל קריאה נפסקת בשמה: נטען עם N ⇒
+//    חד שיעורא · קיים וריק ⇒ פליגא · אינו בקונטיינר ⇒ לא שייך (∅ עם השם, לא 0).
+const load = f => {
+  let arr = null, why = '';
+  try { arr = JSON.parse(fs.readFileSync(R + f)); }
+  catch (e) { why = e.code === 'ENOENT' ? 'ENOENT' : `${e.constructor.name}: ${e.message.slice(0, 80)}`; }
+  rminhu({ engine: 'dedup.load', matter: `קובץ-מרשם ${f}`, searched: [R],
+    rulings: [Array.isArray(arr) && arr.length ? had(f, `${arr.length} רשומות`)
+      : why === 'ENOENT' ? lo(f, 'אינו בקונטיינר הזה (‏machtzev/registry נבנה בצד-maor) — ∅ עם השם החסר, לא 0: «אפס כפילויות» כאן הוא חסר-מרשם ולא חסר-תאומים (L110 §3)')
+        : why ? pliga(f, `קיים ולא נקרא — ${why}; שגיאת-תכנות/קובץ-פגום נראית בדיוק כמו «אין כפילויות», ולכן היא נאמרת ולא נבלעת (L26)`)
+          : pliga(f, 'נטען ונקרא אך החזיר 0 רשומות — מרשם ריק, לא מדף בלי תאומים')] });
+  return Array.isArray(arr) ? arr : [];
+};
 const groups = [];
 
 /* ── 1) צבעים: אותו ערך בכמה שמות ── */
@@ -74,4 +88,13 @@ groups.filter(g => g.kind === 'string').sort((a,b) => b.members.length - a.membe
 md += `\n## צבעים לאיחוד — ‏${groups.filter(g=>g.kind==='color').length} קבוצות\n| ערך | קנוני | חברים |\n|---|---|---|\n`;
 groups.filter(g => g.kind === 'color').slice(0, 15).forEach(g => md += `| \`${g.key.split('|')[1]}\` | ${g.canonical.split(':').pop()} | ${g.members.length} |\n`);
 fs.writeFileSync(new URL('./DEDUP-REPORT.md', import.meta.url), md);
+// 🕯️ ופסק על ההכרעה עצמה: `winner` ⇒ חד שיעורא (הקנוני מכיל 100%) · `merge` ⇒ פליגא,
+//    ואצלו `coverage` הוא **החילוק** — מה ייחודי לכל צד, ולכן איחוד ולא מנצח (L114).
+for (const g of groups.filter((x) => x.kind === 'engine')) {
+  rminhu({ engine: 'dedup', matter: `תאומי-מנוע ${g.key}`, searched: ['atoms-L6-maor.json', 'atoms-L6-buildsmart.json'],
+    rulings: g.members.map((id) => (g.decision === 'winner' && id === g.canonical
+      ? had(id, `קנוני · ${g.coverage} · ניקוד ${g.scores ? g.scores.maor + ':' + g.scores.buildsmart : '?'}`)
+      : pliga(id, `${g.decision === 'winner' ? 'מכוסה 100% ע"י ' + g.canonical : 'דורש שילוב'} — ${g.coverage}`))) });
+}
 console.log(`הכרעת-כפילויות: ${groups.length} קבוצות — 🏆 ${counts.winner} מנצחים · 🧬 ${counts.merge} שילובים · 🚨 ${counts.undecided} ללא-הכרעה ⇒ DEDUP-REPORT.md`);
+(await import('../../yeshiva/rminhu.mjs')).printNotes('dedup');
