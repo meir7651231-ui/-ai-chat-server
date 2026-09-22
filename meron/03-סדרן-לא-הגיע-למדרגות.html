@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>סדרן לא הגיע לעמדה במדרגות — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4EFE6;--sur:#FFFDF9;--bd:#E7DFD2;--tx:#1C1917;--mu:#6B6259;--acc:#C2410C;--g:#2F7A4D;--y:#B45309;--r:#B91C1C;
+--dbg:#14110F;--dsur:#1F1B18;--dbd:#332C27;--dtx:#F4EFE6;--dmu:#A89F94}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Heebo,system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1500px;margin:0 auto;padding:32px 28px 80px}
+h1{font-family:"Frank Ruhl Libre",serif;font-size:34px;margin:0 0 4px}
+h2{font-family:"Frank Ruhl Libre",serif;font-size:24px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--tx)}
+h3{font-size:16px;margin:22px 0 8px}
+.lead{color:var(--mu);font-size:15px;margin:0 0 18px}
+.lbl{font-size:11px;color:var(--mu)}
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--sur)}
+td,th{border:1px solid var(--bd);padding:7px 10px;text-align:right;vertical-align:top}
+th{background:#EDE5D8;font-weight:700}
+ul{margin:6px 0;padding-right:22px}li{margin:3px 0}
+.tag{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;background:#EDE5D8;color:var(--mu);margin-left:4px}
+.tag.auto{background:#E3F1E8;color:var(--g)}.tag.dec{background:#FDE7D6;color:var(--y)}.tag.sys{background:#E8EEF8;color:#1D4ED8}
+.demo{background:var(--dbg);color:var(--dtx);border-radius:16px;padding:22px 24px;margin-top:14px}
+.demo .lbl{color:var(--dmu)}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0 22px}
+.tl div{background:var(--dsur);border:1px solid var(--dbd);border-radius:10px;padding:10px 12px}
+.tl b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:20px;color:#F59E0B}
+.tl b.g{color:#2FA36B}.tl b.r{color:#EF4444}
+.tl span{font-size:12px;color:var(--dmu)}
+.hub{background:#1E2A3A;border:2px solid #60A5FA;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+.hub .n{font-family:"Frank Ruhl Libre",serif;font-size:26px;font-weight:700}
+.hub .k{display:flex;flex-direction:column;gap:2px;font-size:12px;color:#BFDBFE}
+.fan{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.fan .col{background:var(--dsur);border:1px solid var(--dbd);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.fan .col h4{margin:0 0 2px;font-size:13px;color:#F59E0B;border-bottom:1px solid var(--dbd);padding-bottom:6px}
+.rc{background:#26211D;border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:1px}
+.rc b{font-size:12px;color:var(--dtx)}.rc i{font-style:normal;color:var(--dmu)}.rc .m{color:#FCD9A8}
+.rc.dec{border-right:3px solid #F59E0B}.rc.auto{border-right:3px solid #2FA36B}.rc.sys{border-right:3px solid #60A5FA}.rc.cond{border-right:3px solid #7F1D1D;opacity:.85}
+.leg{display:flex;gap:14px;font-size:11px;color:var(--dmu);margin-top:10px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.leg .a::before{background:#2FA36B}.leg .d::before{background:#F59E0B}.leg .s::before{background:#60A5FA}.leg .c::before{background:#7F1D1D}
+.screens{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.scr{border:1px solid var(--dbd);border-radius:14px;overflow:hidden;background:var(--dsur);display:flex;flex-direction:column}
+.scr .h{padding:8px 12px;border-bottom:1px solid var(--dbd);font-size:11px;color:var(--dmu)}
+.scr .b{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.bigbtn{border-radius:12px;padding:14px 10px;text-align:center;font-weight:700;font-size:15px;border:2px solid var(--dbd);background:#26211D}
+.bigbtn.on{background:#B91C1C;border-color:#B91C1C;color:#fff}.bigbtn.g{background:#12301F;border-color:#2FA36B;color:#BBF0D0}.bigbtn.y{background:#3F2A10;border-color:#F59E0B;color:#FCD9A8}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.pill.g{background:#12301F;color:#BBF0D0}.pill.y{background:#3F2A10;color:#FCD9A8}.pill.r{background:#3B1111;color:#FCA5A5}
+.evt{background:#1E2A3A;border:1px solid #60A5FA;border-radius:10px;padding:8px 10px;font-size:12px}
+.done{font-size:11px;color:#BBF0D0}.done::before{content:"✓ "}
+.ask{background:#3F2A10;border:1px solid #F59E0B;border-radius:8px;padding:6px 8px;font-size:11px}.ask b{color:#FCD9A8}
+.msg{background:#1C1917;color:#F4EFE6;border-radius:12px;padding:10px 12px;font-size:13px}.msg small{display:block;color:#D6CFC4;font-size:11px;margin-top:3px}
+.line{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;border-radius:8px;padding:8px 10px;color:#D6CFC4}
+.bar{height:8px;border-radius:4px;background:#3A2E24;overflow:hidden}.bar>i{display:block;height:100%}
+.posts{display:flex;flex-direction:column;gap:3px}
+.post{display:grid;grid-template-columns:110px 1fr 40px 60px;gap:6px;align-items:center;font-size:11px;background:#26211D;border-radius:6px;padding:4px 6px}
+.six{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.who .card{padding:10px 12px}.who b{display:block}.who .why{color:var(--mu);font-size:12px}.who .get{font-size:12px;margin-top:3px}
+.no-list{background:#F3E8E8;border:1px solid #E5C4C4}
+.people{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.pp{background:#26211D;border-radius:6px;padding:4px 6px;font-size:10px;text-align:center}
+.pp.ok{border-bottom:3px solid #2FA36B}.pp.no{border-bottom:3px solid #EF4444}.pp.res{border-bottom:3px solid #60A5FA}
+@media (max-width:1100px){.fan{grid-template-columns:repeat(3,1fr)}.screens{grid-template-columns:repeat(2,1fr)}.six,.who{grid-template-columns:1fr}.tl{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>סדרן לא הגיע לעמדה במדרגות — ניהול חי</h1>
+<p class="lead">נושא 03 (רנדומלי). העמדה: המדרגות — המקום שבו 2021 קרה. תקן: 6 (4 סדרנים מארגון-מתנדבים + 2 שוטרים). החלפת משמרת 22:00. סדרן אחד לא הגיע. לא אירוע — <b>ניהול</b>: שהעמדה לא תהיה חסרה לרגע, ושאף אחד לא יגלה את זה ב-22:05 כשהמדרגות ב-3.5.</p>
+
+<h2>חלק א' — הדמיה</h2>
+<div class="demo">
+  <div class="lbl">ציר הזמן — המניעה (ירוק) ומה שקורה כשאין רזרבה מוסמכת (אדום)</div>
+  <div class="tl">
+    <div><b class="g">21:30</b><span><b style="color:#BBF0D0;display:inline">מניעה.</b> 30 דק' לפני החלפה, המערכת עוברת על כל 22:00: 41 עמדות, 188 אנשים. 6 לא במתחם, 3 לא סרקו בנקודת התדרוך. במדרגות: [שם] סרק כניסה ב-20:15 — במתחם. לא סרק תדרוך. BLE אחרון: הכנסת אורחים צפון, 21:22. תזכורת נשלחת: "המשמרת שלך 22:00, מדרגות עמדה 3, 8 דק' הליכה, תדרוך ב-B".</span></div>
+    <div><b class="g">21:45</b><span>אין תגובה (הסלולר בצפון קורס — נושא ידוע). המערכת מכינה: רזרבה מוסמכת-מדרגות במאגר א-2: [שם2], נח 3 שעות, 6 דק' הליכה. עדיין לא משגרת — נותנת ל-[שם] עוד 5 דקות ושולחת רץ להכנסת אורחים צפון ("הוא 4 דק' ממך").</span></div>
+    <div><b class="g">21:50 → 22:00</b><span>הרץ לא מצא. 21:50: [שם2] משוגר, תדרוך-60-שניות בטלפון, מסלול. 21:57 סורק תדרוך ב-B. 22:00 בעמדה. 6/6. <b style="color:#BBF0D0;display:inline">המדרגות לא היו חסרות שנייה. אף אחד לא שם לב.</b> [שם] מגיע 22:12 — מופנה לעמדה לא-קריטית (הכנסת אורחים). בארגון שלו: איחור.</span></div>
+    <div><b class="r">21:50</b><span><b style="color:#FCA5A5;display:inline">נכשל.</b> 3 הרזרבות המוסמכות-מדרגות כבר שוגרו (שתי חסרויות אחרות + ילד אבוד). אין מי שמוסמך. במדרגות עכשיו 2.9 נפש/מ"ר ועולה לקראת ההדלקה.</span></div>
+    <div><b class="r">21:52</b><span>המערכת מציגה למפקד גזרה 3 אפשרויות עם המחיר של כל אחת: (א) להשאיר את [שם3] ממשמרת 1 עוד שעתיים — הוא ב-6 שעות רצוף, סף 8. (ב) לקחת שוטר משער דרום — שער דרום ב-7/10 כבר. (ג) לעבוד 5/6 — יכולת המדרגות יורדת ל-83% → הנעילה האוטומטית תגיע 12 דק' מוקדם → +400 למעבר המערבי.</span></div>
+    <div><b class="r">21:55</b><span>מפקד הגזרה: (א) — [שם3] נשאר עד 00:00, אוכל ומים אליו, מנוחה חובה אחרי. קצין כוח-האדם: פותח הכשרת-מדרגות מהירה ל-2 רזרבות רגילות (20 דק' עם המדריך) — לשעה הבאה. ב-22:00: 6/6. ב-00:00: [שם3] יורד, מוסמך-חדש עולה. הכל רשום.</span></div>
+  </div>
+
+  <div class="hub">
+    <div><div class="n">מדרגות · עמדה 3 · 22:00 · חסר</div><div class="lbl">[שם] · ארגון [שם] · מוסמך-מדרגות ✓ · במתחם מ-20:15 · לא סרק תדרוך · BLE: הכנסת אורחים צפון 21:22 · טלפון: לא זמין</div></div>
+    <div class="k"><span>בעמדה עכשיו (משמרת 1): 6/6 · [שם3] ב-6 שעות רצוף</span><span>מדרגות: 2.9 נפש/מ"ר · ▲ · הדלקה בעוד 68 דק'</span><span>תקן 22:00: 6 · מגיעים: 5</span></div>
+    <div class="k"><span>רזרבה מוסמכת-מדרגות: 3 → 0</span><span>רזרבה כללית: 12 · לא מוסמכות</span><span>שער דרום: 7/10</span></div>
+  </div>
+
+  <div class="lbl" style="margin-top:14px">מי מקבל מה — לפי שש השאלות</div>
+  <div class="fan">
+    <div class="col"><h4>1 · מי בתוך</h4>
+      <div class="rc auto"><b>הסדרן שלא הגיע [שם]</b><i>21:30 / 21:45</i><span class="m">"המשמרת 22:00 · 8 דק' · תדרוך B" ← "אתה מאחר. מגיע? כן / 5 דק' / לא"</span></div>
+      <div class="rc auto"><b>הרזרבה [שם2]</b><i>21:50</i><span class="m">"מדרגות עמדה 3 · 6 דק' · תדרוך 60 שנ' · סרוק ב-B"</span></div>
+      <div class="rc dec"><b>ראש העמדה במדרגות</b><i>21:45</i><span class="m">"5/6 ב-22:00 · רזרבה בדרך / אין רזרבה — 3 אפשרויות"</span></div>
+      <div class="rc auto"><b>[שם3] — משמרת 1 שנשאר</b><i>21:55</i><span class="m">"נשאר עד 00:00 · אוכל ומים בדרך · מנוחה חובה אחרי"</span></div>
+      <div class="rc auto"><b>5 האחרים בעמדה</b><i>22:00</i><span class="m">"עמדה 3: [שם2] במקום [שם]"</span></div>
+      <div class="rc auto"><b>השוטר בעמדה</b><i>21:50</i><span class="m">"סדרן חסר · רזרבה 22:00" — הוא האחראי בשטח</span></div>
+      <div class="rc auto"><b>הרץ</b><i>21:45</i><span class="m">"חפש את [שם] בהכנסת אורחים צפון · 4 דק'"</span></div>
+      <div class="rc auto"><b>רכז הארגון של [שם]</b><i>21:45</i><span class="m">"[שם] לא בתדרוך · אתה יודע איפה הוא?"</span></div>
+    </div>
+    <div class="col"><h4>2 · מי מחכה לזה</h4>
+      <div class="rc sys"><b>ניהול הקהל — המדרגות</b><i>מערכת</i><span class="m">5/6 → מקדם ספיקה 83% → נעילה 12 דק' מוקדם</span></div>
+      <div class="rc dec"><b>מפקד גזרה צפון</b><i>21:52</i><span class="m">3 אפשרויות עם המחיר. הוא מחליט.</span></div>
+      <div class="rc auto"><b>נקודת התדרוך B</b><i>21:50</i><span class="m">"[שם2] מגיע · תדרוך-מדרגות · 60 שנ'"</span></div>
+      <div class="rc auto"><b>רווחה (אוכל לכוחות)</b><i>21:55</i><span class="m">"ארוחה + מים למדרגות עמדה 1 — [שם3] מוארך"</span></div>
+      <div class="rc sys"><b>מתכנן משמרת 02:00</b><i>מערכת</i><span class="m">"[שם3] לא זמין ל-02:00 (מנוחה) · [שם2] יורד 02:00"</span></div>
+      <div class="rc sys"><b>המעבר המערבי</b><i>אם 5/6</i><span class="m">"+400 צפויים · 4/4 מספיק?"</span></div>
+      <div class="rc cond"><b>המפקד</b><i>2+ עמדות קריטיות חסרות בו-זמנית</i><span class="m">"3 עמדות קריטיות ב-22:00 חסרות"</span></div>
+    </div>
+    <div class="col"><h4>3 · מי באותו מאגר / שעה</h4>
+      <div class="rc auto"><b>מאגר הרזרבה א-2</b><i>21:50</i><span class="m">"[שם2] יצא · נשארו 12 · 0 מוסמכי-מדרגות"</span></div>
+      <div class="rc sys"><b>40 העמדות האחרות של 22:00</b><i>מערכת</i><span class="m">"6 לא במתחם · 3 לא סרקו · 2 עמדות קריטיות בסיכון"</span></div>
+      <div class="rc sys"><b>מרשם ההסמכות</b><i>מערכת</i><span class="m">"מוסמכי-מדרגות במתחם: 9 · 6 בעמדה · 3 שוגרו · 0 פנויים"</span></div>
+      <div class="rc auto"><b>המדריך (הכשרות)</b><i>21:55</i><span class="m">"הכשרת-מדרגות מהירה ל-2 · 20 דק' · ב-B"</span></div>
+      <div class="rc sys"><b>אוטובוס 14 (נושא 01)</b><i>מערכת</i><span class="m">"האם [שם] על אוטובוס תקוע?" — לא. הוא במתחם.</span></div>
+      <div class="rc sys"><b>הסלולר בצפון</b><i>מערכת</i><span class="m">"5 בעלי-תפקידים לא מגיבים באזור צפון" → רשת, לא אנשים</span></div>
+      <div class="rc cond"><b>שער דרום</b><i>אם אפשרות (ב)</i><span class="m">"שוטר יוצא · 7/10 → 6/10"</span></div>
+    </div>
+    <div class="col"><h4>4 · מי אחראי</h4>
+      <div class="rc dec"><b>קצין כוח-האדם (הרשות)</b><i>21:30</i><span class="m">41 עמדות · חסרים · רזרבות · הסמכות · עייפות</span></div>
+      <div class="rc auto"><b>ראש ארגון המתנדבים</b><i>21:50</i><span class="m">"עמדה קריטית שלך לא אוישה · הסכם: 4 מוסמכים למשמרת"</span></div>
+      <div class="rc auto"><b>מפקד גזרה (משטרה)</b><i>21:50</i><span class="m">המדרגות באחריות משטרה גם כשמאוישות במתנדבים</span></div>
+      <div class="rc auto"><b>קצין הבטיחות של האירוע</b><i>רישום</i><span class="m">"עמדה קריטית — סיכון איוש 21:45–22:00 · נסגר"</span></div>
+      <div class="rc sys"><b>קצין ההכשרות</b><i>מערכת</i><span class="m">"רזרבה מוסמכת-מדרגות נגמרה ב-21:50 · תכנון: 6, לא 3"</span></div>
+      <div class="rc sys"><b>ביטוח מתנדבים</b><i>מערכת</i><span class="m">"[שם3] 8 שעות רצוף — בתוך הפוליסה?"</span></div>
+      <div class="rc sys"><b>מנהל ההסכם עם הארגון</b><i>אחרי</i><span class="m">אי-עמידה: 1</span></div>
+    </div>
+    <div class="col"><h4>5 · מה זה עושה לעתיד</h4>
+      <div class="rc sys"><b>עייפות — [שם3]</b><i>מערכת</i><span class="m">6 → 8 שעות · מנוחה 4 שעות חובה · לא זמין 02:00</span></div>
+      <div class="rc sys"><b>משמרת 02:00 — כל העמדות</b><i>מערכת</i><span class="m">"מדרגות: 1 חסר · רזרבה: 2 מוסמכי-מהיר"</span></div>
+      <div class="rc sys"><b>עמדות הבוקר (יציאה 04:00)</b><i>מערכת</i><span class="m">"מדרגות ביציאה: כיוון הפוך · 6 · מי?"</span></div>
+      <div class="rc sys"><b>ציון האמינות של הארגון</b><i>מערכת</i><span class="m">איחורים: 1 · אי-הגעות: 0</span></div>
+      <div class="rc sys"><b>[שם] — הרשומה שלו</b><i>מערכת</i><span class="m">"איחור 12 דק' לעמדה קריטית · לא זמין בטלפון"</span></div>
+      <div class="rc sys"><b>התקן לשנה הבאה</b><i>מערכת</i><span class="m">"רזרבה מוסמכת-מדרגות: 6 · תזכורת 60 דק' לפני, לא 30"</span></div>
+      <div class="rc sys"><b>עלות</b><i>מערכת</i><span class="m">שעות-נוספות [שם3] · הכשרה-מהירה ×2</span></div>
+    </div>
+    <div class="col"><h4>6 · האם זה תבנית</h4>
+      <div class="rc cond"><b>קצין כוח-האדם + ראש הארגון</b><i>3 חסרים מאותו ארגון</i><span class="m">"זו בעיה בארגון, לא ב-3 אנשים"</span></div>
+      <div class="rc cond"><b>המפקד</b><i>2+ עמדות קריטיות חסרות</i><span class="m">"22:00 — 3 עמדות קריטיות · לפני ההדלקה"</span></div>
+      <div class="rc cond"><b>מתכנן המשמרות</b><i>אותה שעה כל שנה</i><span class="m">"22:00 = כולם הולכים לראות את ההדלקה · להזיז את ההחלפה ל-21:30"</span></div>
+      <div class="rc cond"><b>קצין כוח-האדם</b><i>אותו אדם 3 פעמים</i><span class="m">"[שם] — לא לעמדות קריטיות"</span></div>
+      <div class="rc cond"><b>תמיכה טכנית</b><i>5 לא מגיבים באותו אזור</i><span class="m">"הרשת בצפון — לא האנשים"</span></div>
+      <div class="rc sys"><b>מנהל האירוע</b><i>בבוקר</i><span class="m">"188 עמדות-משמרת · 9 חסרים · 0 עמדות קריטיות ריקות · 2 הארכות"</span></div>
+      <div class="rc"><b style="color:#FCA5A5">לא מקבלים כלום</b><i>בכוונה</i><span class="m">המפקד (עמדה אחת) · הציבור · מד"א · כב"ה · צה"ל · החצרות · 40 העמדות האחרות · הארגונים האחרים</span></div>
+    </div>
+  </div>
+  <div class="leg"><span class="a">אוטומטי</span><span class="d">החלטה של בן-אדם</span><span class="s">מערכת מעדכנת את עצמה</span><span class="c">מותנה — רק אם</span></div>
+
+  <div class="lbl" style="margin-top:26px">מה כל אחד רואה</div>
+  <div class="screens">
+    <div class="scr"><div class="h">הסדרן [שם] · טלפון · 21:30 → 21:45</div><div class="b">
+      <div class="msg" style="background:#26211D"><b>המשמרת שלך: 22:00 · מדרגות · עמדה 3</b><small>8 דק' הליכה ממך · תדרוך בנקודה B (ליד הציון) · ראש עמדה: [שם] · ערוץ 4</small><small style="color:#FCD9A8">עמדה קריטית — בלי תדרוך אין כניסה לעמדה.</small></div>
+      <div class="msg" style="background:#3B1111"><b>21:45 · אתה מאחר לתדרוך</b><small>אם לא תאשר תוך 5 דק' — רזרבה תישלח במקומך.</small></div>
+      <div class="row" style="gap:6px"><div class="bigbtn g" style="flex:1;font-size:13px;padding:10px">בדרך — 5 דק'</div><div class="bigbtn y" style="flex:1;font-size:13px;padding:10px">מאחר 15</div><div class="bigbtn on" style="flex:1;font-size:13px;padding:10px">לא מגיע</div></div>
+      <div class="lbl" style="color:#FCA5A5">(לא נשלח — אין קליטה בצפון. המערכת יודעת שאין קליטה שם, ולא מחכה.)</div>
+      <div class="msg" style="background:#26211D"><b>22:12 · הגעת</b><small>העמדה שלך אוישה. עבור להכנסת אורחים צפון (לא-קריטית). רשום: איחור.</small></div>
+    </div></div>
+
+    <div class="scr"><div class="h">ראש העמדה · מדרגות · 21:52</div><div class="b">
+      <div class="evt"><b>22:00 · 5 / 6 · [שם] לא הגיע</b><br><span style="color:#BFDBFE">במתחם מ-20:15 · לא סרק תדרוך · BLE צפון 21:22 · רץ לא מצא · רזרבה מוסמכת: 0</span></div>
+      <div class="lbl">העמדה עכשיו · משמרת 1</div>
+      <div class="people"><div class="pp ok">[שם3]<br>6h</div><div class="pp ok">[שם]<br>4h</div><div class="pp ok">[שם]<br>4h</div><div class="pp ok">[שם]<br>3h</div><div class="pp ok">שוטר<br>4h</div><div class="pp ok">שוטר<br>4h</div></div>
+      <div class="lbl">22:00 · מי מגיע</div>
+      <div class="people"><div class="pp no">[שם]<br>חסר</div><div class="pp ok">[שם]<br>✓B</div><div class="pp ok">[שם]<br>✓B</div><div class="pp ok">[שם]<br>✓B</div><div class="pp ok">שוטר<br>✓</div><div class="pp ok">שוטר<br>✓</div></div>
+      <div class="row" style="justify-content:space-between;font-size:11px"><span>מדרגות עכשיו</span><span style="color:#FCD9A8">2.9 נפש/מ"ר ▲ · הדלקה בעוד 68'</span></div><div class="bar"><i style="width:72%;background:#D97706"></i></div>
+      <div class="ask"><b>מפקד הגזרה מחליט — המחיר של כל אפשרות:</b><br>
+        <span class="row" style="margin-top:4px"><span class="pill g">א · [שם3] נשאר עד 00:00 · 8h רצוף · מנוחה אחרי</span></span>
+        <span class="row" style="margin-top:3px"><span class="pill y">ב · שוטר משער דרום · דרום 7→6/10</span></span>
+        <span class="row" style="margin-top:3px"><span class="pill r">ג · 5/6 · ספיקה 83% · נעילה 12' מוקדם · +400 למערבי</span></span></div>
+    </div></div>
+
+    <div class="scr"><div class="h">קצין כוח-האדם · חמ"ל · החלפת 22:00</div><div class="b">
+      <div class="lbl">41 עמדות · 188 אנשים · 30 דק' לפני</div>
+      <div class="row" style="gap:10px;font-size:12px"><span>✓ סרקו תדרוך <b>179</b></span><span style="color:#FCD9A8">לא במתחם <b>6</b></span><span style="color:#FCA5A5">במתחם, לא סרקו <b>3</b></span></div>
+      <div class="lbl">עמדות קריטיות בסיכון</div>
+      <div class="posts">
+        <div class="post" style="border-right:3px solid #EF4444"><span>מדרגות 3</span><span>[שם] · לא סרק · BLE צפון</span><span style="color:#FCA5A5">5/6</span><span style="color:#FCA5A5">רזרבה 0</span></div>
+        <div class="post" style="border-right:3px solid #D97706"><span>שער צפון 7</span><span>[שם] · לא במתחם · על אוטובוס?</span><span style="color:#FCD9A8">11/12</span><span style="color:#BBF0D0">רזרבה ✓</span></div>
+        <div class="post" style="border-right:3px solid #D97706"><span>איסוף ילדים א-1</span><span>[שם] · לא במתחם</span><span style="color:#FCD9A8">3/4</span><span style="color:#BBF0D0">רזרבה ✓</span></div>
+        <div class="post" style="border-right:3px solid #2FA36B"><span>38 אחרות</span><span>מלא</span><span style="color:#BBF0D0">✓</span><span></span></div>
+      </div>
+      <div class="lbl">רזרבה א-2 · 12 · לפי הסמכה</div>
+      <div class="row" style="gap:6px;font-size:11px"><span class="pill r">מדרגות 0/3 (שוגרו)</span><span class="pill g">שער 4</span><span class="pill g">ילדים 3</span><span class="pill g">כללי 5</span></div>
+      <div class="done">תזכורות 21:30 · רץ לצפון · [שם2] הוקצה ואז בוטל (שוגר לחסר אחר)</div>
+      <div class="ask"><b>שלך:</b> <span class="row" style="margin-top:4px"><span class="pill y">הכשרת-מדרגות מהירה ל-2 כלליים · 20'</span><span class="pill g">בקש 3 מוסמכים מארגון ב'</span><span class="pill r">העלה למפקד — 3 קריטיות</span></span></div>
+      <div class="lbl">עייפות: 4 מעל 7h · 0 מעל 8h · הפוליסה: 8h</div>
+    </div></div>
+
+    <div class="scr"><div class="h">כל השאר — שורה אחת</div><div class="b">
+      <div class="lbl">הרזרבה [שם2] · 21:50 (במסלול המניעה)</div><div class="line">מדרגות עמדה 3 · 6 דק' · תדרוך 60 שנ' (וידאו) · סרוק ב-B · ראש עמדה [שם] · ערוץ 4</div>
+      <div class="lbl">רכז הארגון · 21:45</div><div class="line">[שם] לא בתדרוך · BLE צפון · טלפון לא זמין · אתה יודע איפה? · הסכם: 4 מוסמכים</div>
+      <div class="lbl">ניהול הקהל · מערכת</div><div class="line">מדרגות 5/6 → ספיקה 83% → סף נעילה מוקדם 12' · מערבי: +400 צפוי</div>
+      <div class="lbl">רווחה · 21:55</div><div class="line">ארוחה + מים → מדרגות עמדה 1 · [שם3] מוארך עד 00:00 · מנוחה 4h אחרי</div>
+      <div class="lbl">המדריך · 21:55</div><div class="line">הכשרת-מדרגות מהירה: [שם4], [שם5] · ב-B · 20' · זמין 22:20</div>
+      <div class="lbl">קצין הבטיחות · יומן</div><div class="line">21:45–22:00 עמדה קריטית מדרגות — סיכון איוש · נפתר (הארכה) · 0 חסר בפועל</div>
+      <div class="lbl">המפקד</div><div class="line" style="color:#6F665D">(כלום. עמדה אחת. אלא אם 2+ קריטיות — אז "3 עמדות קריטיות ב-22:00".)</div>
+      <div class="lbl">תמיכה טכנית · 21:47</div><div class="line">5 בעלי-תפקידים לא מגיבים · כולם באזור צפון · הרשת, לא האנשים → רץ, לא טלפון</div>
+    </div></div>
+  </div>
+</div>
+
+<h2>חלק ב' — הרישום המלא</h2>
+
+<h3>1. מה המערכת יודעת לפני שקורה משהו</h3>
+<div class="card">על כל עמדה (41): איפה, תקן לכל שעה, האם קריטית (מדרגות, שערים, איסוף ילדים, ציר חירום), איזו הסמכה נדרשת, מי ראש העמדה, ערוץ קשר. על כל בעל-תפקיד (~600 הלילה): מי, מאיזה ארגון, הסמכות, משמרות (מתי, איפה), סרק כניסה למתחם?, סרק תדרוך?, מיקום אחרון (BLE/GPS), שעות רצופות, מתי אכל, מתי נח, טלפון זמין?, היסטוריה (איחורים). על הרזרבה: כמה, איפה, אילו הסמכות, מי הבא. על ההסכמים: כל ארגון התחייב ל-X מוסמכים למשמרת. על הפוליסה: מקסימום שעות רצופות. על הקשר בין עמדה לקהל: <b>כמה סדרנים = כמה ספיקה</b> — 5/6 במדרגות אומר שהמדרגות "צרות יותר".</div>
+
+<h3>2. המניעה — הניהול האמיתי</h3>
+<div class="card">
+<ul>
+<li><b>60 דקות לפני כל החלפה</b> (לא 30 — הלקח): המערכת עוברת על כל העמדות של ההחלפה. לכל אדם: במתחם? סרק תדרוך? איפה? זמין? נח מספיק? מוסמך?</li>
+<li><b>תזכורת אישית</b> עם מסלול, זמן הליכה, ונקודת תדרוך. עמדה קריטית — "בלי תדרוך אין כניסה".</li>
+<li><b>מדרגה שנייה — 15 דק' לפני:</b> מי לא אישר → רכז הארגון שלו + רץ אם ה-BLE יודע איפה הוא + רזרבה מוכנה (לא משוגרת).</li>
+<li><b>מדרגה שלישית — 10 דק' לפני:</b> רזרבה משוגרת. עם ההסמכה הנכונה. עם תדרוך-60-שניות בטלפון. עם מסלול.</li>
+<li><b>הרשת:</b> אם 5 אנשים באותו אזור לא מגיבים — זו הרשת, לא הם. המערכת לא מחכה לטלפון, שולחת רץ.</li>
+<li><b>מי שהגיע מאוחר</b> — לא מקבל את העמדה הקריטית בחזרה באמצע. הולך ללא-קריטית. הרשומה שלו מתעדכנת.</li>
+<li><b>אם הכל עובד — אף עמדה קריטית לא חסרה שנייה.</b> ראש העמדה לא יודע שהיה "כמעט". זה רוב הלילה.</li>
+</ul></div>
+
+<h3>3. דקה אחר דקה — כשאין רזרבה מוסמכת</h3>
+<table>
+<tr><th style="width:80px">מתי</th><th>מה קורה</th><th style="width:110px">מי</th></tr>
+<tr><td>21:30</td><td>סריקה של 41 עמדות. 6 לא במתחם, 3 במתחם ולא סרקו. מדרגות עמדה 3: [שם] במתחם (סרק כניסה 20:15), לא סרק תדרוך, BLE אחרון 21:22 הכנסת אורחים צפון. תזכורת נשלחת. רכז הארגון מקבל שורה.</td><td>אוטומט</td></tr>
+<tr><td>21:45</td><td>אין תגובה. המערכת: "5 בעלי-תפקידים באזור צפון לא מגיבים" → הרשת. רץ נשלח לצפון. רזרבה מוסמכת-מדרגות: 0 — כל השלוש שוגרו ב-21:20–21:40 (שתי חסרויות + ילד אבוד). <b>התראה לקצין כוח-האדם: "מדרגות 22:00 — 5/6, אין רזרבה מוסמכת".</b></td><td>אוטומט</td></tr>
+<tr><td>21:50</td><td>הרץ לא מצא. המערכת מציגה למפקד הגזרה ולראש העמדה 3 אפשרויות עם המחיר: (א) הארכת [שם3] — 8 שעות רצוף, בגבול הפוליסה, מנוחה חובה אחרי, לא זמין ל-02:00. (ב) שוטר משער דרום — דרום כבר 7/10, קצב הבידוק שם יורד. (ג) 5/6 — ניהול הקהל מחשב: ספיקת המדרגות 83%, הנעילה האוטומטית תגיע ב-22:28 במקום 22:40, +400 איש למעבר המערבי שהוא 4/4.</td><td>אוטומט → החלטה</td></tr>
+<tr><td>21:55</td><td>מפקד הגזרה בוחר (א). רווחה שולחת אוכל ומים. משמרת 02:00 מתעדכנת: [שם3] לא זמין. קצין כוח-האדם פותח הכשרת-מדרגות מהירה ל-2 רזרבות כלליות — 20 דק' עם המדריך ב-B — כדי שב-00:00 יהיה למי להחליף. הבטיחות רושמת.</td><td>מפקד גזרה / כ"א</td></tr>
+<tr><td>22:00</td><td>6/6. [שם3] ממשיך. ההדלקה ב-23:00 — המדרגות מגיעות ל-3.8, מוגבלות, לא ננעלות. עם 5/6 היו ננעלות ב-22:28.</td><td>—</td></tr>
+<tr><td>22:12</td><td>[שם] מגיע לתדרוך. "העמדה אוישה. עבור להכנסת אורחים צפון." הרשומה: איחור 12 דק', לא זמין בטלפון (רשת). הארגון: איחור 1.</td><td>אוטומט</td></tr>
+<tr><td>00:00</td><td>[שם3] יורד. מוסמך-חדש [שם4] עולה. מנוחה 4 שעות ל-[שם3] — לא זמין ליציאה של 04:00. מתכנן היציאה ידע מ-21:55.</td><td>מערכת</td></tr>
+<tr><td>בבוקר</td><td>"188 עמדות-משמרת ב-22:00 · 9 חסרים · 0 עמדות קריטיות ריקות בפועל · 2 הארכות · 4 מעל 7 שעות · רזרבה מוסמכת-מדרגות נגמרה ב-21:40 — שנה הבאה: 6." </td><td>מערכת</td></tr>
+</table>
+
+<h3>4. מה אוטומטי ומה בן-אדם מחליט</h3>
+<div class="six">
+  <div class="card"><b>אוטומטי</b><ul><li>סריקת כל העמדות 60 ו-15 דק' לפני החלפה</li><li>תזכורת אישית עם מסלול ותדרוך</li><li>זיהוי "במתחם / לא במתחם / לא סרק / איפה"</li><li>זיהוי רשת-נפולה מול אדם-לא-מגיב</li><li>רץ לפי BLE</li><li>הקצאת רזרבה לפי הסמכה, מנוחה, מרחק</li><li>תדרוך-60-שניות בטלפון</li><li>חישוב המחיר של כל אפשרות (עייפות, שער אחר, ספיקת קהל)</li><li>עדכון משמרת 02:00, יציאת 04:00, רווחה, רשומות</li></ul></div>
+  <div class="card"><b>בן-אדם מחליט</b><ul><li>איזו אפשרות כשאין רזרבה — מפקד הגזרה (המדרגות = משטרה)</li><li>הכשרה מהירה — קצין כוח-האדם</li><li>לבקש מוסמכים מארגון אחר — קצין כוח-האדם</li><li>להעלות למפקד — קצין כוח-האדם</li><li>מה עושים עם מי שאיחר — ראש העמדה / רכז הארגון</li></ul></div>
+  <div class="card"><b>מגיע למפקד רק אם</b><ul><li>2+ עמדות קריטיות חסרות בו-זמנית</li><li>הפתרון היחיד הוא להוריד ספיקה במעבר (ג) לפני ההדלקה</li><li>ארגון שלם לא הגיע</li></ul></div>
+</div>
+
+<h3>5. כל מי שצריך לדעת — לפי שש השאלות</h3>
+
+<h3 style="margin-top:14px">שאלה 1 — מי בתוך</h3>
+<div class="who">
+<div class="card"><b>1. הסדרן שלא הגיע <span class="tag auto">אוטומטי</span></b><span class="why">תזכורת, ואז "אתה מאחר", ואז "העמדה אוישה". והרשומה שלו.</span><span class="get">3 הודעות, 3 כפתורים.</span></div>
+<div class="card"><b>2. הרזרבה <span class="tag auto">אוטומטי</span></b><span class="why">לאן, מתי, מה לעשות — בלי לחפש מישהו שיסביר.</span><span class="get">עמדה, מסלול, תדרוך-60-שניות, ראש עמדה, ערוץ.</span></div>
+<div class="card"><b>3. ראש העמדה <span class="tag dec">החלטה</span></b><span class="why">הוא מנהל 6 אנשים על המקום הכי מסוכן במירון. צריך לדעת 15 דק' לפני, לא ב-22:05.</span><span class="get">מי מגיע, מי חסר, מה בדרך, האפשרויות.</span></div>
+<div class="card"><b>4. מי שנשאר מעבר למשמרת <span class="tag auto">אוטומטי</span></b><span class="why">שידע שזה עד 00:00 ולא "עד שיבוא מישהו". ושיקבל אוכל.</span><span class="get">"עד 00:00 · אוכל בדרך · מנוחה אחרי".</span></div>
+<div class="card"><b>5. 5 האחרים בעמדה <span class="tag auto">אוטומטי</span></b><span class="why">שידעו מי לידם.</span><span class="get">"עמדה 3: [שם2] במקום [שם]".</span></div>
+<div class="card"><b>6. השוטר בעמדה <span class="tag auto">אוטומטי</span></b><span class="why">האחראי בשטח מטעם המשטרה.</span><span class="get">שורה.</span></div>
+<div class="card"><b>7. הרץ <span class="tag auto">אוטומטי</span></b><span class="why">כשהטלפון לא עובד — רגליים. ה-BLE יודע איפה לחפש.</span><span class="get">"חפש את [שם] בצפון · 4 דק'".</span></div>
+<div class="card"><b>8. רכז הארגון של הסדרן <span class="tag auto">אוטומטי</span></b><span class="why">הוא מכיר אותו. אולי יודע. ואחראי עליו לפי ההסכם.</span><span class="get">"[שם] לא בתדרוך · יודע איפה?".</span></div>
+</div>
+
+<h3>שאלה 2 — מי מחכה לזה</h3>
+<div class="who">
+<div class="card"><b>9. ניהול הקהל <span class="tag sys">מערכת</span></b><span class="why"><b>הקשר החשוב:</b> 5/6 במדרגות = ספיקה 83% = נעילה 12 דק' מוקדם = +400 למערבי. כוח-אדם הוא פרמטר של ניהול קהל.</span><span class="get">מקדם ספיקה מתעדכן.</span></div>
+<div class="card"><b>10. מפקד הגזרה <span class="tag dec">החלטה</span></b><span class="why">המדרגות באחריות משטרה. הוא מחליט בין הארכה, שוטר משער אחר, או 5/6.</span><span class="get">3 אפשרויות עם המחיר של כל אחת.</span></div>
+<div class="card"><b>11. נקודת התדרוך <span class="tag auto">אוטומטי</span></b><span class="why">מי מגיע, איזה תדרוך.</span><span class="get">שורה.</span></div>
+<div class="card"><b>12. רווחה <span class="tag auto">אוטומטי</span></b><span class="why">מי שמוארך — אוכל ומים אליו.</span><span class="get">משימה.</span></div>
+<div class="card"><b>13. מתכנן משמרת 02:00 <span class="tag sys">מערכת</span></b><span class="why">[שם3] לא יהיה זמין. [שם2] יורד ב-02:00 במקום ב-06:00.</span><span class="get">עדכון.</span></div>
+<div class="card"><b>14. המעבר המערבי <span class="tag sys">אם 5/6</span></b><span class="why">הקהל שלא עובר במדרגות עובר שם.</span><span class="get">"+400 · 4/4 מספיק?".</span></div>
+</div>
+
+<h3>שאלה 3 — מי באותו מאגר / שעה</h3>
+<div class="who">
+<div class="card"><b>15. מאגר הרזרבה <span class="tag auto">אוטומטי</span></b><span class="why">מי יצא, מי נשאר, מי מוסמך למה.</span><span class="get">ספירה לפי הסמכה.</span></div>
+<div class="card"><b>16. 40 העמדות האחרות של אותה החלפה <span class="tag sys">מערכת</span></b><span class="why">אם 3 עמדות קריטיות בסיכון בו-זמנית — זה לא 3 אנשים, זה ההחלפה.</span><span class="get">רשימת סיכון.</span></div>
+<div class="card"><b>17. מרשם ההסמכות <span class="tag sys">מערכת</span></b><span class="why">"מוסמכי-מדרגות במתחם: 9. 6 בעמדה, 3 שוגרו, 0 פנויים." זה המספר שקבע הכל.</span><span class="get">—</span></div>
+<div class="card"><b>18. המדריך <span class="tag auto">אוטומטי</span></b><span class="why">הכשרה מהירה ל-2 — כדי שב-00:00 יהיה מי.</span><span class="get">"2 · ב-B · 20'".</span></div>
+<div class="card"><b>19. אוטובוס 14 (נושא 01) <span class="tag sys">מערכת</span></b><span class="why">"האם החסר על אוטובוס תקוע?" — השאלה השביעית. כאן: לא. בשער צפון 7 — כן.</span><span class="get">חיבור אוטומטי.</span></div>
+<div class="card"><b>20. הסלולר באזור <span class="tag sys">מערכת</span></b><span class="why">5 לא מגיבים באותו אזור = רשת. לא לחכות לטלפון.</span><span class="get">"רץ, לא טלפון".</span></div>
+<div class="card"><b>21. שער דרום <span class="tag">אם אפשרות ב'</span></b><span class="why">לוקחים ממנו.</span><span class="get">"7→6/10".</span></div>
+</div>
+
+<h3>שאלה 4 — מי אחראי</h3>
+<div class="who">
+<div class="card"><b>22. קצין כוח-האדם (הרשות) <span class="tag dec">החלטה</span></b><span class="why">בעל כל המשמרות, הרזרבות, ההסמכות, העייפות.</span><span class="get">מסך ההחלפה.</span></div>
+<div class="card"><b>23. ראש ארגון המתנדבים <span class="tag auto">אוטומטי</span></b><span class="why">ההסכם: 4 מוסמכים למשמרת במדרגות. לא עמד.</span><span class="get">"עמדה קריטית שלך לא אוישה".</span></div>
+<div class="card"><b>24. מפקד הגזרה (משטרה) <span class="tag auto">אוטומטי</span></b><span class="why">האחריות על המדרגות היא של המשטרה, גם כשהמתנדבים מאיישים.</span><span class="get">האירוע.</span></div>
+<div class="card"><b>25. קצין הבטיחות של האירוע <span class="tag auto">רישום</span></b><span class="why">סיכון איוש בעמדה קריטית = אירוע בטיחות, גם אם נסגר.</span><span class="get">שורה ביומן.</span></div>
+<div class="card"><b>26. קצין ההכשרות <span class="tag sys">מערכת</span></b><span class="why">3 רזרבות מוסמכות-מדרגות נגמרו ב-21:40. התכנון היה קצר.</span><span class="get">"שנה הבאה: 6".</span></div>
+<div class="card"><b>27. ביטוח מתנדבים <span class="tag sys">מערכת</span></b><span class="why">8 שעות רצוף — בתוך הפוליסה? המערכת בודקת לפני שמאשרים הארכה.</span><span class="get">"בגבול".</span></div>
+<div class="card"><b>28. מנהל ההסכם עם הארגון <span class="tag sys">אחרי</span></b><span class="why">—</span><span class="get">אי-עמידה: 1.</span></div>
+</div>
+
+<h3>שאלה 5 — מה זה עושה לעתיד</h3>
+<div class="who">
+<div class="card"><b>29. עייפות <span class="tag sys">מערכת</span></b><span class="why">[שם3] 8 שעות → 4 שעות מנוחה → לא זמין ל-02:00 ולא ליציאה של 04:00.</span><span class="get">—</span></div>
+<div class="card"><b>30. משמרת 02:00 <span class="tag sys">מערכת</span></b><span class="why">חור חדש שנוצר עכשיו.</span><span class="get">"מדרגות: 1 חסר · 2 מוסמכי-מהיר".</span></div>
+<div class="card"><b>31. עמדות הבוקר <span class="tag sys">מערכת</span></b><span class="why">היציאה ב-04:00 — המדרגות בכיוון הפוך, 6 אנשים. מי?</span><span class="get">—</span></div>
+<div class="card"><b>32. ציון האמינות של הארגון <span class="tag sys">מערכת</span></b><span class="why">שנה הבאה: למי נותנים עמדות קריטיות.</span><span class="get">איחורים 1.</span></div>
+<div class="card"><b>33. הרשומה של הסדרן <span class="tag sys">מערכת</span></b><span class="why">איחור 12 דק' לעמדה קריטית. פעם אחת — כלום. שלוש — לא לקריטיות.</span><span class="get">—</span></div>
+<div class="card"><b>34. התקן לשנה הבאה <span class="tag sys">מערכת</span></b><span class="why">רזרבה מוסמכת 6 לא 3. תזכורת 60 דק' לא 30. החלפה ב-21:30 לא 22:00.</span><span class="get">—</span></div>
+<div class="card"><b>35. עלות <span class="tag sys">מערכת</span></b><span class="why">שעות נוספות, הכשרות.</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 6 — האם זה תבנית</h3>
+<div class="who">
+<div class="card"><b>3 חסרים מאותו ארגון <span class="tag">→ כ"א + ראש הארגון</span></b><span class="why">זו בעיה בארגון (תדרוך? הסעה? אוכל?), לא ב-3 אנשים.</span><span class="get">—</span></div>
+<div class="card"><b>2+ עמדות קריטיות חסרות <span class="tag">→ המפקד</span></b><span class="why">לפני ההדלקה. זה כבר ניהול קהל.</span><span class="get">—</span></div>
+<div class="card"><b>אותה שעה כל שנה <span class="tag">→ מתכנן המשמרות</span></b><span class="why">22:00 = כולם הולכים לראות את ההדלקה. להזיז את ההחלפה ל-21:30 או 23:30.</span><span class="get">—</span></div>
+<div class="card"><b>אותו אדם 3 פעמים <span class="tag">→ כ"א</span></b><span class="why">לא לעמדות קריטיות.</span><span class="get">—</span></div>
+<div class="card"><b>5 לא מגיבים באותו אזור <span class="tag">→ תמיכה טכנית</span></b><span class="why">הרשת.</span><span class="get">—</span></div>
+</div>
+
+<h3>6. מי לא מקבל כלום — בכוונה</h3>
+<div class="card no-list">המפקד (עמדה אחת) · הציבור · מד"א · כב"ה · צה"ל · החצרות · 40 העמדות האחרות · הארגונים האחרים · המשפחה של הסדרן. <b>סדרן אחד שאיחר מגיע ל-15 אנשים.</b> 3 עמדות קריטיות — למפקד.</div>
+
+<h3>7. מקרי קצה</h3>
+<ul>
+<li><b>הסדרן על אוטובוס 14 (נושא 01):</b> המערכת יודעת — הכרטיס שלו בעל-תפקיד, האוטובוס עומד. "מתעכב 15 דק'" יוצא לעמדה שלו לפני שמישהו שם לב. הרזרבה מוכנה מ-21:16.</li>
+<li><b>הרזרבה עצמה לא מגיעה:</b> אותו מנגנון, מדרגה שנייה. אחרי 5 דק' — הבאה.</li>
+<li><b>מי שהוארך מתמוטט מעייפות:</b> המערכת חסמה 8 שעות. אם המפקד עקף — נרשם. אם אין ברירה — חובש בעמדה.</li>
+<li><b>לא מוסמך בעמדה קריטית (מישהו "עלה לעזור"):</b> התג שלו לא פותח את העמדה. ראש העמדה רואה "לא מוסמך". הוא יכול לאשר — נרשם — או לא.</li>
+<li><b>הסדרן הגיע לעמדה בלי תדרוך:</b> הסורק ב-B לא נסרק → המערכת רואה "בעמדה, לא תודרך" → ראש העמדה מקבל שורה.</li>
+<li><b>ההדלקה נדחתה:</b> החלפת 22:00 בסדר, אבל השיא זז. המערכת מחוברת ללו"ז — מחשבת מחדש מתי העמדה קריטית ביותר.</li>
+<li><b>שבת:</b> אין טלפונים, אין סריקה. תדרוך פיזי, רשימות נייר, רץ. המערכת יודעת שהיא בשבת ולא מצפה לסריקה.</li>
+<li><b>נשים בעמדות נשים:</b> מאגר רזרבה נפרד, הסמכות נפרדות, מסלול נפרד. אותו מנגנון.</li>
+<li><b>ארגון שלם לא הגיע (אוטובוס ההסעה שלהם לא יצא):</b> 12 עמדות בבת אחת. זה למפקד. וזה חיבור לנושא תחבורה — ההסעה של המתנדבים היא רכב במערכת.</li>
+</ul>
+
+<h3>8. מה צריך כדי שזה יעבוד</h3>
+<ul>
+<li><b>תג לכל בעל-תפקיד</b> — סורקים בכניסה למתחם ובנקודת התדרוך. בלי זה המערכת לא יודעת מי הגיע.</li>
+<li><b>מרשם הסמכות</b> — מי מוסמך למדרגות, לשער, לילדים. עמדה קריטית = הסמכה חובה. בלי מרשם — כל אחד יכול לעמוד במדרגות.</li>
+<li><b>תקן כתוב לכל עמדה לכל שעה</b> — 6 במדרגות ב-22:00. מהמשטרה, לא מהארגון.</li>
+<li><b>הסכמים עם ארגוני המתנדבים</b> — X מוסמכים למשמרת, תדרוך חובה, תגים. ומה קורה כשלא.</li>
+<li><b>רזרבה מוסמכת של ממש</b> — 6 מוסמכי-מדרגות שיושבים ומחכים, לא "נמצא מישהו".</li>
+<li><b>נקודת תדרוך עם סורק</b> — ליד העמדות הקריטיות, לא בחניון.</li>
+<li><b>תדרוך-60-שניות מוקלט</b> לכל עמדה קריטית — כדי שרזרבה תוכל לעלות בלי מדריך.</li>
+<li><b>BLE/מיקום לבעלי תפקידים</b> — כדי לשלוח רץ, לא לחכות לטלפון.</li>
+<li><b>החיבור לניהול הקהל</b> — כמה אנשים בעמדה = כמה ספיקה. זה מה שהופך "סדרן איחר" מבעיית משאבי-אנוש לבעיית בטיחות.</li>
+<li><b>החיבור לתחבורה</b> — בעל-תפקיד על אוטובוס תקוע = עמדה חסרה בעוד 15 דק'.</li>
+</ul>
+
+<h3>9. מה יוצא מהחיבור לשני הנושאים הקודמים</h3>
+<div class="card">
+<b>אנשים הם ישות משותפת.</b> בנושא 01 "שוטר על האוטובוס" היה שורה אחת. בנושא 02 "14 מתנדבים" היו שורה. כאן הם המרכז — ומתגלה שלכל אחד יש: תפקיד, הסמכה, משמרת, מיקום, עייפות, ארגון, היסטוריה. <b>אותו אדם</b> הוא נוסע על אוטובוס 14 (01), אוכל בהכנסת אורחים צפון (02), ואמור להיות במדרגות ב-22:00 (03). שלושה נושאים, אדם אחד.<br><br>
+<b>הישויות המשותפות אחרי 3 נושאים:</b> מסלול · רכב · צפיפות הרחבה · אנשים (עכשיו עם הסמכה ועייפות) · שער/עמדה (עכשיו עם תקן) · לו"ז (ההדלקה מזיזה את שלושתם) · מאגר (רזרבת אוטובוסים, מלאי כוסות, רזרבת סדרנים — אותו דבר: כמות, סף, מי הבא) · חוזה (SLA גרר, ספק, ארגון מתנדבים) · <b>חדש: הסמכה</b> · <b>חדש: הרשת</b> (הסלולר בצפון קורס — הופיע ב-01 בהערה, ב-02 לא, כאן הוא קובע).<br><br>
+<b>החוק חוצה-הנושאים שנולד כאן:</b> "כמות האנשים בעמדה היא פרמטר של ספיקת המעבר." סדרן שאיחר = מדרגות צרות יותר = נעילה מוקדמת = עוד 400 במעבר המערבי. אף אחד לא היה כותב את זה בנושא "כוח אדם" לבד.<br><br>
+<b>13 האנשים שהופיעו בשני הראשונים</b> — כאן מופיעים: המפקד (תבנית), מנהל האירוע (בוקר), ניהול הקהל, קצין הבטיחות, תמיכה טכנית, המודל לשנה הבאה, מנהל החוזה. <b>7 מתוך 13.</b> עמוד השדרה מתאמת.
+</div>
+
+</div>
+</body>
+</html>
