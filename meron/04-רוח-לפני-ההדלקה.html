@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>רוח חזקה 40 דקות לפני ההדלקה — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4EFE6;--sur:#FFFDF9;--bd:#E7DFD2;--tx:#1C1917;--mu:#6B6259;--acc:#C2410C;--g:#2F7A4D;--y:#B45309;--r:#B91C1C;
+--dbg:#14110F;--dsur:#1F1B18;--dbd:#332C27;--dtx:#F4EFE6;--dmu:#A89F94}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Heebo,system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1500px;margin:0 auto;padding:32px 28px 80px}
+h1{font-family:"Frank Ruhl Libre",serif;font-size:34px;margin:0 0 4px}
+h2{font-family:"Frank Ruhl Libre",serif;font-size:24px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--tx)}
+h3{font-size:16px;margin:22px 0 8px}
+.lead{color:var(--mu);font-size:15px;margin:0 0 18px}
+.lbl{font-size:11px;color:var(--mu)}
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--sur)}
+td,th{border:1px solid var(--bd);padding:7px 10px;text-align:right;vertical-align:top}
+th{background:#EDE5D8;font-weight:700}
+ul{margin:6px 0;padding-right:22px}li{margin:3px 0}
+.tag{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;background:#EDE5D8;color:var(--mu);margin-left:4px}
+.tag.auto{background:#E3F1E8;color:var(--g)}.tag.dec{background:#FDE7D6;color:var(--y)}.tag.sys{background:#E8EEF8;color:#1D4ED8}
+.demo{background:var(--dbg);color:var(--dtx);border-radius:16px;padding:22px 24px;margin-top:14px}
+.demo .lbl{color:var(--dmu)}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0 22px}
+.tl div{background:var(--dsur);border:1px solid var(--dbd);border-radius:10px;padding:10px 12px}
+.tl b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:20px;color:#F59E0B}
+.tl b.g{color:#2FA36B}.tl b.r{color:#EF4444}
+.tl span{font-size:12px;color:var(--dmu)}
+.hub{background:#3B2A0A;border:2px solid #F59E0B;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+.hub .n{font-family:"Frank Ruhl Libre",serif;font-size:26px;font-weight:700}
+.hub .k{display:flex;flex-direction:column;gap:2px;font-size:12px;color:#FDE68A}
+.fan{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.fan .col{background:var(--dsur);border:1px solid var(--dbd);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.fan .col h4{margin:0 0 2px;font-size:13px;color:#F59E0B;border-bottom:1px solid var(--dbd);padding-bottom:6px}
+.rc{background:#26211D;border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:1px}
+.rc b{font-size:12px;color:var(--dtx)}.rc i{font-style:normal;color:var(--dmu)}.rc .m{color:#FCD9A8}
+.rc.dec{border-right:3px solid #F59E0B}.rc.auto{border-right:3px solid #2FA36B}.rc.sys{border-right:3px solid #60A5FA}.rc.cond{border-right:3px solid #7F1D1D;opacity:.85}
+.leg{display:flex;gap:14px;font-size:11px;color:var(--dmu);margin-top:10px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.leg .a::before{background:#2FA36B}.leg .d::before{background:#F59E0B}.leg .s::before{background:#60A5FA}.leg .c::before{background:#7F1D1D}
+.screens{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.scr{border:1px solid var(--dbd);border-radius:14px;overflow:hidden;background:var(--dsur);display:flex;flex-direction:column}
+.scr .h{padding:8px 12px;border-bottom:1px solid var(--dbd);font-size:11px;color:var(--dmu)}
+.scr .b{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.scr.light{background:#F4EFE6;color:var(--tx)}.scr.light .h{color:var(--mu);border-color:var(--bd)}
+.bigbtn{border-radius:12px;padding:14px 10px;text-align:center;font-weight:700;font-size:15px;border:2px solid var(--dbd);background:#26211D}
+.bigbtn.on{background:#B91C1C;border-color:#B91C1C;color:#fff}.bigbtn.g{background:#12301F;border-color:#2FA36B;color:#BBF0D0}.bigbtn.y{background:#3F2A10;border-color:#F59E0B;color:#FCD9A8}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.pill.g{background:#12301F;color:#BBF0D0}.pill.y{background:#3F2A10;color:#FCD9A8}.pill.r{background:#3B1111;color:#FCA5A5}
+.evt{background:#3B2A0A;border:1px solid #F59E0B;border-radius:10px;padding:8px 10px;font-size:12px}
+.done{font-size:11px;color:#BBF0D0}.done::before{content:"✓ "}
+.ask{background:#3F2A10;border:1px solid #F59E0B;border-radius:8px;padding:6px 8px;font-size:11px}.ask b{color:#FCD9A8}
+.msg{background:#1C1917;color:#F4EFE6;border-radius:12px;padding:10px 12px;font-size:13px}.msg small{display:block;color:#D6CFC4;font-size:11px;margin-top:3px}
+.line{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;border-radius:8px;padding:8px 10px;color:#D6CFC4}
+.bar{height:8px;border-radius:4px;background:#3A2E24;overflow:hidden}.bar>i{display:block;height:100%}
+.wind{display:flex;align-items:flex-end;gap:3px;height:56px}
+.wind i{display:block;width:10px;background:#60A5FA;border-radius:2px 2px 0 0;position:relative}
+.wind i.hi{background:#F59E0B}.wind i.x{background:#EF4444}
+.six{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.who .card{padding:10px 12px}.who b{display:block}.who .why{color:var(--mu);font-size:12px}.who .get{font-size:12px;margin-top:3px}
+.no-list{background:#F3E8E8;border:1px solid #E5C4C4}
+@media (max-width:1100px){.fan{grid-template-columns:repeat(3,1fr)}.screens{grid-template-columns:repeat(2,1fr)}.six,.who{grid-template-columns:1fr}.tl{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>רוח חזקה 40 דקות לפני ההדלקה — ניהול חי</h1>
+<p class="lead">נושא 04 (רנדומלי). ההדלקה המרכזית — בויאן, 23:00, על גג הציון. 1,200 על הגג, 6,000 בציון מתחת, 30,000 ברחבה מחכים, 40,000 בשידור. סף כב"ה למדורה על הגג: 35 קמ"ש קבוע. ב-22:20 הרוח עולה מ-22 ל-38, משבים 45, צפון-מערב. <b>ההדלקה היא השעון של כל הלילה — כל דקה שהיא זזה, כל השאר זז.</b></p>
+
+<h2>חלק א' — הדמיה</h2>
+<div class="demo">
+  <div class="lbl">ציר הזמן — המניעה (ירוק) ומה שקורה כשהמשב מגיע בכל זאת (אדום)</div>
+  <div class="tl">
+    <div><b class="g">20:00</b><span><b style="color:#BBF0D0;display:inline">מניעה.</b> התחזית ל-6 שעות מגיעה למערכת: רוח עולה אחרי 22:00, שיא 22:30–23:15 ב-36–40 קמ"ש, יורדת ל-28 עד 23:40. ההדלקה של 23:00 בתוך חלון הסיכון. המערכת פותחת: "הדלקה 23:00 — סיכון רוח". לא למפקד — לקצין כב"ה, למנהל האירוע, לגבאי.</span></div>
+    <div><b class="g">20:30–20:45</b><span>ארבעה בחדר (או במסך): כב"ה, מנהל האירוע, הגבאי של בויאן, מפקד גזרת הציון. אפשרויות: להקדים ל-22:30 (לפני השיא — הגבאי: "לא, הזמן קבוע"), לאחר ל-23:40 (אחרי — "אולי"), או 23:00 עם מדורה מוקטנת. הוחלט: 23:00 נשאר · דלק חצי · 2 צוותי כיבוי במקום 1 · 4 מיכלי מים על הגג · הודעה מוכנה "ייתכן עיכוב" · <b style="color:#BBF0D0;display:inline">ניהול הקהל: לא לתת לרחבה למלא לרמת-הדלקה לפני 22:45</b> — אם יהיה עיכוב, שלא יהיו 30,000 דחוסים 40 דקות מיותרות.</span></div>
+    <div><b class="g">22:20</b><span>הרוח 38. החיישן על הגג משדר כל 10 שניות. המערכת: "מעל סף · משבים 45 · תחזית ירידה מ-23:25". קצין כב"ה על הגג רואה. עדיין 40 דקות. הכל מוכן. הקהל בציון 4,800 לא 6,000 — כי הכניסה הואטה מ-22:00.</span></div>
+    <div><b class="r">22:50</b><span><b style="color:#FCA5A5;display:inline">המשב.</b> 47 קמ"ש. הרוח לא יורדת. קצין כב"ה על הגג: "לא מדליקים ב-23:00". זו ההחלטה שלו — לא של הגבאי, לא של המפקד. חתומה, מנומקת: 47 מול 35, כיוון צפון-מערב = ניצוצות לרחבת הדלקה ב' ולאוהלי הכנסת האורחים.</span></div>
+    <div><b class="r">22:51</b><span>המערכת לבד: לו"ז — כל ההדלקות אחרי זזות (23:40 → 00:20, 00:20 → 01:00); שידור — "עיכוב, הישארו איתנו"; ניהול הקהל — "משיכה לציון נמשכת 40 דק' יותר" → הכניסה לציון נעצרת, המדרגות נעולות, הרחבה מקבלת הודעה; כוחות — משמרת 00:00 (נושא 03) פוגשת עכשיו את גל היציאה של ההדלקה; שאטלים — גל היציאה זז ב-40 דק'; מד"א — עשן/ניצוצות: כיוון; הכנסת אורחים ב' וההדלקה ב' — במורד הרוח.</span></div>
+    <div><b class="r">22:55 · 23:35</b><span>מנהל האירוע + הגבאי + כב"ה: מה אומרים ל-37,000 ומתי. 23:00 כריזה + שידור + טלפונים: "ההדלקה בעוד כ-30 דקות — רוח. הישארו במקומכם. מים בעמדות." 23:25 הרוח 31. 23:30 כב"ה: "מותר — מדורה מוקטנת". 23:35 ההדלקה. 35 דקות איחור. 0 נפגעים. הגג 1,200 — לא זז אחד. הכל רשום: מי החליט, על סמך איזה מספר, מתי.</span></div>
+  </div>
+
+  <div class="hub">
+    <div><div class="n">רוח · גג הציון · 47 קמ"ש</div><div class="lbl">22:50 · צפון-מערב · סף 35 · תחזית: 31 ב-23:25 · חיישן גג #1 + #2 מסכימים · שירות מטאורולוגי: מאשר</div></div>
+    <div class="k"><span>גג 1,200 · ציון 4,800 · רחבה 31,000 · שידור 41,000</span><span>מדורה: דלק חצי · 2 צוותים · 4 מיכלים</span><span>במורד הרוח: הדלקה ב' (3,400) · אוהלי הכנסת אורחים ב'</span></div>
+    <div class="k"><span>ההדלקה הבאה: 23:40 → ?</span><span>משמרת כוחות: 00:00</span><span>גל יציאה צפוי: 23:20 → ?</span></div>
+  </div>
+
+  <div class="lbl" style="margin-top:14px">מי מקבל מה — לפי שש השאלות</div>
+  <div class="fan">
+    <div class="col"><h4>1 · מי בתוך</h4>
+      <div class="rc dec"><b>קצין כב"ה על הגג</b><i>22:50</i><span class="m">המספר, הכיוון, התחזית, כפתור "לא / כן-מוקטן / כן"</span></div>
+      <div class="rc auto"><b>הגבאי של החצר</b><i>22:50</i><span class="m">"כב"ה: לא ב-23:00 · 47 · צפוי 31 ב-23:25 · הצעה: 23:35"</span></div>
+      <div class="rc auto"><b>העוזר של האדמו"ר</b><i>22:50</i><span class="m">"עיכוב ~30 · האדמו"ר נשאר בחדר / עולה ב-23:25"</span></div>
+      <div class="rc auto"><b>צוות המדורה (דלק, שמן)</b><i>22:50</i><span class="m">"עצור · אל תוסיפו דלק · מוקטן כשיאושר"</span></div>
+      <div class="rc auto"><b>2 צוותי הכיבוי על הגג</b><i>22:50</i><span class="m">"המתנה · מים מוכנים · ניצוצות → דרום-מזרח"</span></div>
+      <div class="rc auto"><b>1,200 על הגג</b><i>23:00 · כריזה</i><span class="m">"ההדלקה מתעכבת בגלל הרוח · הישארו · מים מחולקים"</span></div>
+      <div class="rc auto"><b>מפקד גזרת הציון (משטרה)</b><i>22:50</i><span class="m">"עיכוב 30–40 · הגג נשאר מלא · לא להוריד ולא להעלות"</span></div>
+      <div class="rc auto"><b>חובש הגג + ציון</b><i>22:50</i><span class="m">"1,200 עומדים 40 דק' יותר · מים · עשן אח"כ"</span></div>
+      <div class="rc auto"><b>מהנדס המבנה (גג)</b><i>22:50</i><span class="m">"1,200 × 40 דק' נוספות · עומס סטטי · בסדר"</span></div>
+      <div class="rc auto"><b>הסאונד / הכריזה על הגג</b><i>22:50</i><span class="m">"נוסח עיכוב · 3 שפות · לא לפני 22:58"</span></div>
+      <div class="rc auto"><b>אבטחת האדמו"ר</b><i>22:50</i><span class="m">"נשאר בחדר · עלייה 23:25 · אותו מסלול"</span></div>
+    </div>
+    <div class="col"><h4>2 · מי מחכה לזה</h4>
+      <div class="rc sys"><b>ניהול הקהל</b><i>22:51</i><span class="m">משיכה לציון ×2 נמשכת עד 23:35 · כניסה לציון: עצור · מדרגות: נעול · רחבה: לא לפתוח כניסות</span></div>
+      <div class="rc auto"><b>31,000 ברחבה</b><i>23:00 · כריזה + לוחות + טלפון</i><span class="m">"ההדלקה בעוד ~30 · רוח · הישארו · מים"</span></div>
+      <div class="rc auto"><b>4,800 בציון</b><i>23:00</i><span class="m">אותו נוסח · "אין יציאה ואין כניסה עד ההדלקה"</span></div>
+      <div class="rc auto"><b>השידור (41,000)</b><i>22:51</i><span class="m">הקריין: "עיכוב — רוח. הישארו איתנו." + הרוח על המסך</span></div>
+      <div class="rc auto"><b>החצר הבאה (23:40)</b><i>22:51</i><span class="m">"ההדלקה שלכם → 00:20 · הקהל שלכם: להמתין ברחבת ב'"</span></div>
+      <div class="rc auto"><b>החצר אחריה (00:20)</b><i>22:51</i><span class="m">"→ 01:00"</span></div>
+      <div class="rc sys"><b>שאטלים — גל היציאה</b><i>מערכת</i><span class="m">"גל 23:20 → 00:00 · מקצב יציאה מוכן ב-23:50"</span></div>
+      <div class="rc sys"><b>משמרת כוחות 00:00 (נושא 03)</b><i>מערכת</i><span class="m">"ההחלפה פוגשת את גל היציאה · לדחות ל-00:30?"</span></div>
+      <div class="rc auto"><b>מוקד המידע / דוברות</b><i>22:51</i><span class="m">"עיכוב — רוח — ~23:35"</span></div>
+      <div class="rc sys"><b>הכנסת אורחים — מים</b><i>מערכת</i><span class="m">37,000 עומדים 40 דק' יותר · +8,000 כוסות (נושא 02)</span></div>
+    </div>
+    <div class="col"><h4>3 · מי במורד הרוח / באותו זמן</h4>
+      <div class="rc auto"><b>רחבת הדלקה ב' (3,400)</b><i>22:50</i><span class="m">"ניצוצות לכיוונכם אם מדליקים · המדורה שלכם: אותו סף"</span></div>
+      <div class="rc auto"><b>אוהלי הכנסת אורחים ב'</b><i>22:50</i><span class="m">"במורד הרוח · בד · כיבוי-יד מוכן"</span></div>
+      <div class="rc auto"><b>עזרת הנשים</b><i>22:50</i><span class="m">"עשן לכיוונכן אחרי ההדלקה · מסלול יציאה"</span></div>
+      <div class="rc auto"><b>מפקד כב"ה (תחנה)</b><i>22:50</i><span class="m">"הגג: לא · 2 צוותים בהמתנה · הדלקה ב' — אותה רוח"</span></div>
+      <div class="rc sys"><b>כל המדורות האחרות (6)</b><i>מערכת</i><span class="m">"סף 40 ברחבות · 38 עכשיו · ב' ו-ג' — מוכנות, לא מודלקות"</span></div>
+      <div class="rc auto"><b>השירות המטאורולוגי</b><i>22:50</i><span class="m">"עדכון תחזית ל-30 דק' — מבוקש"</span></div>
+      <div class="rc sys"><b>חיישן גג #2 + חניון</b><i>מערכת</i><span class="m">הצלבה: 46 · 41 · מסכימים — לא חיישן מקולקל</span></div>
+      <div class="rc cond"><b>רט"ג (שמורה)</b><i>אם ניצוץ יצא מהמתחם</i><span class="m">"רוח 47 צפ'-מע' · היער ממזרח"</span></div>
+      <div class="rc cond"><b>רחפני משטרה</b><i>מערכת</i><span class="m">"מעל 40 — קרקע" (חיל האוויר: אותו כלל)</span></div>
+      <div class="rc auto"><b>לוחות ה-LED ומבנים זמניים</b><i>מערכת</i><span class="m">"47 · סף מבנים זמניים 50 · מהנדס בכוננות"</span></div>
+    </div>
+    <div class="col"><h4>4 · מי אחראי</h4>
+      <div class="rc dec"><b>קצין כב"ה</b><i>המחליט</i><span class="m">האש — שלו. חתום, מנומק, בזמן.</span></div>
+      <div class="rc dec"><b>מנהל האירוע (הרשות)</b><i>22:50</i><span class="m">מה אומרים, מתי, ומה עם שאר הלו"ז — הוא מול החצרות</span></div>
+      <div class="rc dec"><b>מפקד האירוע (משטרה)</b><i>22:50 · כן מגיע</i><span class="m">37,000 מחכים 40 דק' יותר = ניהול קהל. "עצור כניסות · הודעה · יציאה מאוחרת"</span></div>
+      <div class="rc auto"><b>ראש החצר / הגבאי</b><i>22:50</i><span class="m">ההדלקה שלהם. לא מחליטים על האש. מחליטים אם 23:35 או 23:50.</span></div>
+      <div class="rc auto"><b>רב האתר / הלכה</b><i>22:50</i><span class="m">"עד מתי מותר להדליק הלילה? — אין מגבלה" (כתוב מראש)</span></div>
+      <div class="rc auto"><b>קצין הבטיחות של האירוע</b><i>רישום</i><span class="m">"47 מול 35 · עיכוב 35 דק' · 0 נפגעים"</span></div>
+      <div class="rc sys"><b>ביטוח האירוע</b><i>מערכת</i><span class="m">"הדלקה בהתאם לאישור כב"ה · תיעוד"</span></div>
+      <div class="rc auto"><b>הדוברות</b><i>22:52</i><span class="m">"ההדלקה מתעכבת — רוח — לא דרמה" לפני שזה כותרת</span></div>
+    </div>
+    <div class="col"><h4>5 · מה זה עושה לעתיד</h4>
+      <div class="rc sys"><b>כל הלו"ז</b><i>מערכת</i><span class="m">+35 דק' לכל מה שאחרי: הדלקות, מניינים, חלאקה (06:40 לא זז), יציאה</span></div>
+      <div class="rc sys"><b>גל היציאה</b><i>מערכת</i><span class="m">23:20 → 00:00 · פוגש החלפת משמרת · שאטלים: מקצב יציאה 00:00</span></div>
+      <div class="rc sys"><b>מים וכוסות</b><i>מערכת</i><span class="m">+40 דק' × 37,000 = +8,000 כוסות · צפון (נושא 02) — שוב</span></div>
+      <div class="rc sys"><b>עייפות כוחות</b><i>מערכת</i><span class="m">"משמרת 1 עוד 35 דק' בשיא · 3 מעל 8 שעות → החלפה 00:30"</span></div>
+      <div class="rc sys"><b>הרוח בהמשך הלילה</b><i>מערכת</i><span class="m">"31 ב-23:25 · 22 ב-01:00 · הדלקות ב' ג' — בסדר"</span></div>
+      <div class="rc sys"><b>מלאי דלק/שמן למדורה</b><i>מערכת</i><span class="m">"מוקטן = חצי · נשאר לחצרות הבאות"</span></div>
+      <div class="rc sys"><b>המודל לשנה הבאה</b><i>מערכת</i><span class="m">"רוח מעל 35 ב-3 מ-5 השנים בין 22:30–23:30 · לשקול 22:15 עם החצר"</span></div>
+      <div class="rc sys"><b>עלות</b><i>מערכת</i><span class="m">שעות נוספות · שידור מוארך</span></div>
+    </div>
+    <div class="col"><h4>6 · האם זה תבנית</h4>
+      <div class="rc cond"><b>מנהל האירוע + החצר</b><i>3 מ-5 שנים</i><span class="m">"השעה 23:00 והרוח — לא מסתדרים. לדבר בחורף, לא ב-22:50."</span></div>
+      <div class="rc cond"><b>קצין כב"ה</b><i>סף 35 מול 40 בפועל</i><span class="m">"המדורה המוקטנת עבדה ב-31 — הסף לגג יכול להיות 38?"</span></div>
+      <div class="rc cond"><b>ניהול הקהל</b><i>כל עיכוב</i><span class="m">"37,000 × 35 דק' — לא הגענו ל-4.0 כי הכניסה הואטה מ-22:00. זה עבד."</span></div>
+      <div class="rc cond"><b>תמיכה טכנית</b><i>חיישן אחד חורג</i><span class="m">"#1 47 · #2 46 · חניון 41 — תקין. אם #1 לבד — לבדוק."</span></div>
+      <div class="rc sys"><b>מנהל האירוע</b><i>בבוקר</i><span class="m">"1 עיכוב 35 דק' · רוח 47 · 0 נפגעים · 0 שריפות · הלו"ז הוזז לבד"</span></div>
+      <div class="rc"><b style="color:#FCA5A5">לא מקבלים כלום</b><i>בכוונה</i><span class="m">צה"ל · מד"א מעבר לשורה · המועצה · תושבי מירון · 12 הכנסות האורחים שלא במורד הרוח · הספקים · החניונים (רק השאטלים)</span></div>
+    </div>
+  </div>
+  <div class="leg"><span class="a">אוטומטי</span><span class="d">החלטה של בן-אדם</span><span class="s">מערכת מעדכנת את עצמה</span><span class="c">מותנה — רק אם</span></div>
+
+  <div class="lbl" style="margin-top:26px">מה כל אחד רואה</div>
+  <div class="screens">
+    <div class="scr"><div class="h">קצין כב"ה · על הגג · טאבלט · 22:50</div><div class="b">
+      <div class="evt"><b>רוח · 47 קמ"ש · צפון-מערב · סף 35</b><br><span style="color:#FDE68A">חיישן #1 47 · #2 46 · חניון 41 · שירות מטאורולוגי: מאשר · תחזית: 31 ב-23:25</span></div>
+      <div class="lbl">20 הדקות האחרונות (קמ"ש)</div>
+      <div class="wind"><i style="height:22px"></i><i style="height:24px"></i><i style="height:26px"></i><i style="height:30px"></i><i class="hi" style="height:36px"></i><i class="hi" style="height:38px"></i><i class="hi" style="height:37px"></i><i class="x" style="height:42px"></i><i class="x" style="height:45px"></i><i class="hi" style="height:39px"></i><i class="x" style="height:44px"></i><i class="x" style="height:47px"></i></div>
+      <div class="lbl">ניצוצות ← דרום-מזרח: רחבת הדלקה ב' (3,400) · אוהלי הכנסת אורחים ב' (בד) · 60 מ'</div>
+      <div class="lbl">מוכן על הגג: דלק ½ · 2 צוותים · 4 מיכלים · 1,200 איש · חובש</div>
+      <div class="row" style="gap:6px"><div class="bigbtn on" style="flex:1;font-size:13px">לא מדליקים<br><span style="font-size:10px;font-weight:400">חתום + סיבה</span></div><div class="bigbtn y" style="flex:1;font-size:13px">כן — מוקטן<br><span style="font-size:10px;font-weight:400">מתחת 35</span></div><div class="bigbtn g" style="flex:1;font-size:13px">כן</div></div>
+      <div class="lbl" style="color:#FCD9A8">ההחלטה שלך. לא של הגבאי, לא של המפקד. המערכת תזיז את הכל.</div>
+      <div class="msg" style="background:#26211D"><b>23:25 · 31 קמ"ש · 4 דק' מתחת לסף</b><small>מותר להדליק מוקטן. הרוח יורדת. כפתור "כן — מוקטן" פעיל.</small></div>
+    </div></div>
+
+    <div class="scr"><div class="h">מנהל האירוע · חמ"ל · 22:51</div><div class="b">
+      <div class="evt" style="background:#3B1111;border-color:#7F1D1D"><b>ההדלקה המרכזית — לא ב-23:00 (כב"ה)</b><br><span style="color:#FCA5A5">47 קמ"ש · צפוי 31 ב-23:25 · הצעה: 23:35 מוקטן</span></div>
+      <div class="lbl">זז לבד</div>
+      <div class="done">לו"ז: 23:40→00:20 · 00:20→01:00 · 2 חצרות עודכנו</div>
+      <div class="done">שידור: "עיכוב — רוח" · ניהול קהל: ציון עצור, מדרגות נעול, רחבה סגורה לכניסה</div>
+      <div class="done">גל יציאה 23:20→00:00 · שאטלים · משמרת 00:00 — מסומנת</div>
+      <div class="done">מד"א, הדלקה ב', הכנסת אורחים ב', עזרת נשים — במורד הרוח</div>
+      <div class="ask"><b>שלך — עם הגבאי ועם המפקד:</b><br>
+        <span class="row" style="margin-top:4px"><span class="pill y">מתי מודיעים ל-37,000: עכשיו / 22:58 / כשיודעים שעה</span></span>
+        <span class="row" style="margin-top:3px"><span class="pill y">23:35 (תחזית) או 23:50 (ביטחון)?</span></span>
+        <span class="row" style="margin-top:3px"><span class="pill r">משמרת 00:00 → 00:30? (פוגשת יציאה)</span></span>
+        <span class="row" style="margin-top:3px"><span class="pill g">מים לרחבה: +8,000 כוסות — אישור</span></span></div>
+      <div class="lbl">הגבאי: "23:35 — כן, אם כב"ה מאשר" · המפקד: "כניסות סגורות עד ההדלקה · הודעה ב-22:58"</div>
+    </div></div>
+
+    <div class="scr light"><div class="h">אדם ברחבה · טלפון · 22:58</div><div class="b">
+      <div class="msg"><b>ההדלקה מתעכבת בכ-30 דקות</b><small>בגלל רוח חזקה על הגג. כב"ה החליטו. ההדלקה צפויה ב-23:35.</small><small style="color:#FDE68A">הישארו במקומכם — לא ללכת לציון, הכניסה סגורה עד ההדלקה. מים מחולקים בעמדות.</small></div>
+      <div class="card" style="font-size:12px"><b>מה אפשר בינתיים</b><br><span style="color:var(--mu)">שידור חי מהגג — הרוח על המסך · הכנסת אורחים צפון: 3 דק' · מניין ערבית 23:10 בעזרת גברים ב'</span></div>
+      <div class="card" style="font-size:12px"><b>ההדלקה של [חצר] 23:40</b><br><span style="color:var(--mu)">נדחתה ל-00:20. רחבת הדלקה ב'.</span></div>
+      <div class="card" style="font-size:12px"><b>השאטל שלך</b><br><span style="color:var(--mu)">יציאה מומלצת עודכנה: 00:10–01:00.</span></div>
+    </div></div>
+
+    <div class="scr"><div class="h">כל השאר — שורה אחת</div><div class="b">
+      <div class="lbl">הגבאי · 22:50</div><div class="line">כב"ה: לא ב-23:00 · 47 · צפוי 31 ב-23:25 · הצעה 23:35 מוקטן · אשר / 23:50</div>
+      <div class="lbl">הקריין · שידור · 22:51</div><div class="line">"ההדלקה מתעכבת — רוח. הישארו איתנו." · הרוח על המסך · אין ספקולציות</div>
+      <div class="lbl">ניהול הקהל · מערכת</div><div class="line">attractor ציון ×2 עד 23:35 (לא 23:00) · כניסה לציון: 0 · מדרגות: נעול · רחבה: כניסות סגורות · 3.1→3.4 צפוי</div>
+      <div class="lbl">רחבת הדלקה ב' · 22:50</div><div class="line">במורד הרוח 60 מ' · ניצוצות אפשריים · כיבוי-יד · ההדלקה שלכם 23:40→00:20</div>
+      <div class="lbl">קצין כוח-האדם · 22:51 (נושא 03)</div><div class="line">גל יציאה 00:00 = החלפת משמרת · הצעה: החלפה 00:30 · 3 מעל 8h — אישור</div>
+      <div class="lbl">קצין הלוגיסטיקה · 22:51 (נושא 02)</div><div class="line">+40 דק' × 37,000 · +8,000 כוסות · צפון: 2,000 · עגלה</div>
+      <div class="lbl">מד"א · 22:50</div><div class="line">1,200 על הגג +40 דק' · עשן → דרום-מזרח אחרי ההדלקה · כוויות: 2 צוותים בהמתנה</div>
+      <div class="lbl">המפקד · 22:50</div><div class="line" style="color:#FCD9A8">כן מגיע: 37,000 × 40 דק' = ניהול קהל. "כניסות סגורות · הודעה 22:58 · יציאה 00:00"</div>
+    </div></div>
+  </div>
+</div>
+
+<h2>חלק ב' — הרישום המלא</h2>
+
+<h3>1. מה המערכת יודעת לפני שקורה משהו</h3>
+<div class="card">על כל מדורה (7): איפה, מתי, איזו חצר, כמה קהל, סף רוח (גג 35, רחבות 40 — לפי החשיפה ומה במורד הרוח), דלק מתוכנן, צוותי כיבוי, מיכלי מים, מי קצין כב"ה האחראי, מה במורד הרוח בכל כיוון (אוהלים, בד, קהל, יער). על הרוח: 3 חיישנים (גג #1, #2, חניון) כל 10 שניות, תחזית ל-6 שעות מהשירות המטאורולוגי, מגמה. על הלו"ז: כל ההדלקות, מה תלוי במה, מי החצר, מי הגבאי, מתי האדמו"ר עולה. על הקהל: כמה מחכים להדלקה ואיפה, מתי גל היציאה. <b>על הקשר:</b> ההדלקה היא השעון — כניסת הקהל לציון, מקצב השאטלים, החלפת המשמרות, מלאי המים — כולם מכוונים אליה.</div>
+
+<h3>2. המניעה — הניהול האמיתי</h3>
+<div class="card"><ul>
+<li><b>התחזית נכנסת למערכת ב-20:00</b> ומצטלבת עם הלו"ז: "הדלקה 23:00 בחלון רוח 36–40". לא למפקד — לארבעה: כב"ה, מנהל האירוע, הגבאי, מפקד גזרת הציון.</li>
+<li><b>השיחה ב-20:30, לא ב-22:50.</b> להקדים? החצר אומרת לא — הזמן קבוע. לאחר? אולי. מה שכן: דלק חצי, צוות כפול, מים כפולים, נוסח עיכוב מוכן, והכי חשוב — <b>ניהול הקהל מתכונן לעיכוב:</b> לא לתת לרחבה למלא לרמת-הדלקה לפני 22:45. אם ההדלקה תזוז, שלא יהיו 30,000 דחוסים 40 דקות מיותרות.</li>
+<li><b>סף כתוב, מוסכם, לפני.</b> 35 על הגג. מי מחליט: קצין כב"ה. לא ויכוח ב-22:50 עם גבאי כועס. הסף והסמכות נחתמו בחורף.</li>
+<li><b>הצלבת חיישנים.</b> חיישן אחד = אולי מקולקל. שלושה + שירות מטאורולוגי = רוח.</li>
+<li><b>נוסחים מוכנים.</b> "ההדלקה מתעכבת — רוח" ב-3 שפות, מאושר מראש ע"י החצר. לא מנסחים ב-22:58.</li>
+<li><b>אם הרוח לא עולה — אף אחד לא ראה כלום.</b> אבל המדורה הייתה מוקטנת, הצוות כפול, והרחבה פחות דחוסה. זה עלה קצת. זה ניהול.</li>
+</ul></div>
+
+<h3>3. דקה אחר דקה — כשהמשב מגיע</h3>
+<table>
+<tr><th style="width:80px">מתי</th><th>מה קורה</th><th style="width:120px">מי</th></tr>
+<tr><td>22:20</td><td>38 קמ"ש. מעל סף. 40 דקות לפני. המערכת: "מעל סף · משבים 45 · תחזית ירידה מ-23:25". קצין כב"ה על הגג רואה את הגרף. הגבאי רואה. המפקד רואה שורה. הכל מוכן מ-20:45.</td><td>אוטומט</td></tr>
+<tr><td>22:50</td><td>משב 47. קצין כב"ה: "לא ב-23:00". חתום: 47 מול 35, כיוון צפון-מערב, ניצוצות לרחבת ב' ולאוהלים. זו ההחלטה שלו בלבד. המערכת לא שואלת את הגבאי ולא את המפקד — היא מודיעה להם.</td><td><b>כב"ה</b></td></tr>
+<tr><td>22:51</td><td>המערכת מזיזה: לו"ז (2 חצרות +40), שידור (נוסח), ניהול קהל (משיכה לציון נמשכת, כניסה לציון עצור, מדרגות נעול, רחבה סגורה לכניסה), גל יציאה (23:20→00:00), שאטלים, משמרת 00:00 (מסומנת: פוגשת יציאה), מים (+8,000 כוסות), מד"א (כיוון עשן), במורד הרוח (הדלקה ב', אוהלים, עזרת נשים), רט"ג (כוננות), רחפנים (קרקע), מבנים זמניים (מהנדס). 14 מקבלים בדקה.</td><td>אוטומט</td></tr>
+<tr><td>22:52–22:58</td><td>מנהל האירוע + הגבאי + המפקד: מתי מודיעים ל-37,000 (22:58 — לא לפני, שלא יתחילו לזוז; לא אחרי 23:00, שלא יחשבו ששכחו). 23:35 או 23:50 (23:35 — עם "צפוי"). משמרת 00:00 → 00:30 (כן, 3 מעל 8 שעות — אישור). האדמו"ר נשאר בחדר, עולה ב-23:25.</td><td>החלטות</td></tr>
+<tr><td>22:58</td><td>הודעה: כריזה (גג, ציון, רחבה), לוחות, טלפונים, שידור, Cell-Broadcast. "ההדלקה בעוד כ-30 דקות — רוח. הישארו במקומכם. הכניסה לציון סגורה עד ההדלקה. מים בעמדות." 3 שפות. הקהל ברחבה: 3.1 → 3.3. לא 4.0 — כי הכניסה הואטה מ-22:00.</td><td>מנהל האירוע</td></tr>
+<tr><td>23:00–23:25</td><td>המתנה. מים מחולקים (עגלה לצפון — נושא 02). מניין ערבית ב-23:10 ברחבה — מוסיפים בכוונה, שיהיה מה לעשות. חובש הגג: 2 התעלפויות, מטופלות. הרוח: 44, 41, 38, 35, 31.</td><td>—</td></tr>
+<tr><td>23:25</td><td>31 קמ"ש, 4 דקות מתחת לסף, מגמה יורדת. קצין כב"ה: "כן — מוקטן". האדמו"ר עולה. 23:30 הודעה: "ההדלקה ב-23:35". 23:35 ההדלקה. ניצוצות דרום-מזרח — צוות ב' מכבה 3 על הבד. 0 נפגעים.</td><td>כב"ה</td></tr>
+<tr><td>23:40–00:30</td><td>גל היציאה מתחיל 23:55 — 40 דק' אחרי המתוכנן. השאטלים במקצב יציאה מ-23:50. החלפת המשמרת ב-00:30 במקום 00:00 — אחרי הגל. ההדלקה של החצר הבאה ב-00:20 ברחבת ב', רוח 26.</td><td>מערכת</td></tr>
+<tr><td>בבוקר</td><td>"עיכוב 35 דק' · רוח 47 · החלטת כב"ה 22:50 · הודעה 22:58 · 0 נפגעים · 0 שריפות · 3 ניצוצות כובו · שיא רחבה 3.4 · הלו"ז הוזז לבד · +8,000 כוסות · המודל: 3 מ-5 שנים רוח מעל 35 ב-22:30–23:30."</td><td>מערכת</td></tr>
+</table>
+
+<h3>4. מה אוטומטי ומה בן-אדם מחליט</h3>
+<div class="six">
+  <div class="card"><b>אוטומטי</b><ul><li>הצלבת תחזית עם לו"ז ההדלקות — 3 שעות לפני</li><li>הצלבת 3 חיישנים + שירות מטאורולוגי</li><li>התראה מעל סף — לכב"ה, לא למפקד</li><li>כשכב"ה אומר "לא": הזזת כל הלו"ז, השידור, ניהול הקהל, גל היציאה, השאטלים, המשמרות, המים, מד"א, במורד הרוח, רט"ג, רחפנים, מבנים</li><li>נוסחים מוכנים ב-3 שפות</li><li>רישום: מי, מתי, איזה מספר</li></ul></div>
+  <div class="card"><b>בן-אדם מחליט</b><ul><li><b>האש — קצין כב"ה. לבד.</b> לא / מוקטן / כן.</li><li>מתי מודיעים ולאיזו שעה — מנהל האירוע עם הגבאי</li><li>23:35 או 23:50 — הגבאי (בתוך מה שכב"ה מאשר)</li><li>כניסות סגורות, הודעה, יציאה — המפקד</li><li>משמרת 00:00 → 00:30 — קצין כוח-האדם</li><li>להקדים/לאחר בחורף — החצר עם הרשות</li></ul></div>
+  <div class="card"><b>מגיע למפקד — כן, תמיד</b><ul><li>37,000 מחכים 40 דקות יותר. זה ניהול קהל. הוא מקבל בדקה 1.</li><li>אבל: הוא לא מחליט על האש. הוא מחליט מה עושים עם הקהל בזמן שמחכים.</li></ul></div>
+</div>
+
+<h3>5. כל מי שצריך לדעת — לפי שש השאלות</h3>
+
+<h3 style="margin-top:14px">שאלה 1 — מי בתוך</h3>
+<div class="who">
+<div class="card"><b>1. קצין כב"ה על הגג <span class="tag dec">המחליט</span></b><span class="why">האש שלו. המספר, הכיוון, התחזית, ומה במורד הרוח. הכפתור שלו.</span><span class="get">גרף רוח חי, הצלבה, תחזית, 3 כפתורים.</span></div>
+<div class="card"><b>2. הגבאי של החצר <span class="tag auto">אוטומטי</span></b><span class="why">ההדלקה שלו. לא מחליט על האש — מחליט על השעה החדשה בתוך מה שמותר.</span><span class="get">"כב"ה: לא · 47 · צפוי 31 ב-23:25 · הצעה 23:35".</span></div>
+<div class="card"><b>3. העוזר של האדמו"ר <span class="tag auto">אוטומטי</span></b><span class="why">האדמו"ר לא צריך לעמוד על הגג 40 דקות. עולה ב-23:25.</span><span class="get">"נשאר · עלייה 23:25".</span></div>
+<div class="card"><b>4. צוות המדורה <span class="tag auto">אוטומטי</span></b><span class="why">שלא יוסיפו דלק. שיכינו מוקטן.</span><span class="get">"עצור · מוקטן כשיאושר".</span></div>
+<div class="card"><b>5. צוותי הכיבוי (2) <span class="tag auto">אוטומטי</span></b><span class="why">לאן הניצוצות.</span><span class="get">"המתנה · דרום-מזרח".</span></div>
+<div class="card"><b>6. 1,200 על הגג <span class="tag auto">כריזה</span></b><span class="why">40 דקות יותר בעמידה. שידעו למה, ושיהיו מים.</span><span class="get">נוסח + מים.</span></div>
+<div class="card"><b>7. מפקד גזרת הציון <span class="tag auto">אוטומטי</span></b><span class="why">הגג נשאר מלא — לא להוריד (יעלו אחרים) ולא להעלות.</span><span class="get">"עיכוב · הגג קפוא".</span></div>
+<div class="card"><b>8. חובש הגג + ציון <span class="tag auto">אוטומטי</span></b><span class="why">עמידה ארוכה, ואחר כך עשן.</span><span class="get">"מים · עשן אח"כ".</span></div>
+<div class="card"><b>9. מהנדס המבנה <span class="tag auto">אוטומטי</span></b><span class="why">1,200 על הגג 40 דקות יותר — עומס סטטי, לא דינמי. בסדר, אבל שידע.</span><span class="get">שורה.</span></div>
+<div class="card"><b>10. הסאונד/כריזה על הגג <span class="tag auto">אוטומטי</span></b><span class="why">הנוסח, ומתי — לא לפני 22:58.</span><span class="get">נוסח מוכן.</span></div>
+<div class="card"><b>11. אבטחת האדמו"ר <span class="tag auto">אוטומטי</span></b><span class="why">המסלול שלו זז ב-25 דקות.</span><span class="get">"עלייה 23:25 · אותו מסלול".</span></div>
+</div>
+
+<h3>שאלה 2 — מי מחכה לזה</h3>
+<div class="who">
+<div class="card"><b>12. ניהול הקהל <span class="tag sys">מערכת</span></b><span class="why"><b>הליבה.</b> ההדלקה היא מגנט. עיכוב = המגנט נמשך 40 דקות יותר. הכניסה לציון נעצרת, המדרגות נעולות, הרחבה לא מקבלת עוד. ובגלל שהכניסה הואטה מ-22:00 — הרחבה ב-3.4, לא 4.0.</span><span class="get">attractor, שערים, תחזית.</span></div>
+<div class="card"><b>13. 31,000 ברחבה <span class="tag auto">כריזה + לוחות + טלפון</span></b><span class="why">אם לא יודעים — זזים. אם זזים — דוחפים.</span><span class="get">"~30 דק' · רוח · הישארו · מים".</span></div>
+<div class="card"><b>14. 4,800 בציון <span class="tag auto">כריזה</span></b><span class="why">"אין יציאה ואין כניסה" — שלא ינסו.</span><span class="get">נוסח.</span></div>
+<div class="card"><b>15. השידור (41,000) <span class="tag auto">אוטומטי</span></b><span class="why">41,000 בבית = 41,000 שלא באו. הקריין: "עיכוב — רוח, הישארו איתנו". הרוח על המסך — אמינות.</span><span class="get">נוסח + נתון.</span></div>
+<div class="card"><b>16. החצרות הבאות (23:40, 00:20) <span class="tag auto">אוטומטי</span></b><span class="why">ההדלקה שלהם זזה. הקהל שלהם צריך לדעת איפה לחכות.</span><span class="get">"→ 00:20 · → 01:00".</span></div>
+<div class="card"><b>17. שאטלים — גל היציאה <span class="tag sys">מערכת</span></b><span class="why">גל היציאה מגיע 40 דקות אחרי ההדלקה. זז — השאטלים זזים.</span><span class="get">"מקצב יציאה 23:50".</span></div>
+<div class="card"><b>18. משמרת 00:00 (נושא 03) <span class="tag sys">מערכת</span></b><span class="why">ההחלפה נופלת בדיוק על גל היציאה. לדחות ל-00:30.</span><span class="get">"פוגשת יציאה".</span></div>
+<div class="card"><b>19. מוקד המידע / דוברות <span class="tag auto">אוטומטי</span></b><span class="why">"למה לא הדליקו?" — 500 שיחות.</span><span class="get">"רוח · ~23:35".</span></div>
+<div class="card"><b>20. הכנסת אורחים — מים (נושא 02) <span class="tag sys">מערכת</span></b><span class="why">37,000 × 40 דקות = +8,000 כוסות. צפון — שוב.</span><span class="get">משימת אספקה.</span></div>
+</div>
+
+<h3>שאלה 3 — מי במורד הרוח / באותו זמן</h3>
+<div class="who">
+<div class="card"><b>21. רחבת הדלקה ב' (3,400) <span class="tag auto">אוטומטי</span></b><span class="why">60 מטר במורד הרוח. ניצוצות. והמדורה שלהם — אותה רוח.</span><span class="get">"ניצוצות · כיבוי-יד · שלכם → 00:20".</span></div>
+<div class="card"><b>22. אוהלי הכנסת אורחים ב' <span class="tag auto">אוטומטי</span></b><span class="why">בד. במורד הרוח. הדבר שנדלק.</span><span class="get">"כיבוי-יד מוכן".</span></div>
+<div class="card"><b>23. עזרת הנשים <span class="tag auto">אוטומטי</span></b><span class="why">העשן אחרי ההדלקה הולך לשם.</span><span class="get">"מסלול יציאה · 10 דק' אחרי".</span></div>
+<div class="card"><b>24. מפקד כב"ה (תחנה) <span class="tag auto">אוטומטי</span></b><span class="why">הקצין על הגג החליט. המפקד שלו יודע.</span><span class="get">שורה + כל המדורות.</span></div>
+<div class="card"><b>25. 6 המדורות האחרות <span class="tag sys">מערכת</span></b><span class="why">סף שונה (40 ברחבות), אותה רוח. מוכנות, לא מודלקות.</span><span class="get">סטטוס.</span></div>
+<div class="card"><b>26. השירות המטאורולוגי <span class="tag auto">אוטומטי</span></b><span class="why">תחזית ל-30 דקות — עכשיו זה חשוב.</span><span class="get">"עדכון מבוקש".</span></div>
+<div class="card"><b>27. חיישנים #2 + חניון <span class="tag sys">מערכת</span></b><span class="why">שלא נדחה הדלקה בגלל חיישן מקולקל.</span><span class="get">הצלבה.</span></div>
+<div class="card"><b>28. רט"ג <span class="tag">אם ניצוץ יצא</span></b><span class="why">היער ממזרח. רוח 47.</span><span class="get">כוננות.</span></div>
+<div class="card"><b>29. רחפני משטרה + חיל האוויר <span class="tag sys">מערכת</span></b><span class="why">מעל 40 — קרקע. אותו כלל.</span><span class="get">"קרקע".</span></div>
+<div class="card"><b>30. לוחות LED ומבנים זמניים <span class="tag sys">מערכת</span></b><span class="why">סף 50. 47 קרוב. מהנדס בכוננות.</span><span class="get">שורה.</span></div>
+</div>
+
+<h3>שאלה 4 — מי אחראי</h3>
+<div class="who">
+<div class="card"><b>31. קצין כב"ה <span class="tag dec">האש</span></b><span class="why">—</span><span class="get">הכפתור.</span></div>
+<div class="card"><b>32. מנהל האירוע (הרשות) <span class="tag dec">הלו"ז והחצרות</span></b><span class="why">הוא מול הגבאי. הוא מחליט מה אומרים ומתי.</span><span class="get">הפאנל.</span></div>
+<div class="card"><b>33. מפקד האירוע (משטרה) <span class="tag dec">הקהל</span></b><span class="why">כן מגיע. 37,000 × 40 דקות. כניסות, הודעה, יציאה.</span><span class="get">האירוע + מה זז.</span></div>
+<div class="card"><b>34. ראש החצר <span class="tag auto">אוטומטי</span></b><span class="why">ההדלקה שלו, אבל לא האש שלו.</span><span class="get">שורה.</span></div>
+<div class="card"><b>35. רב האתר / הלכה <span class="tag auto">כתוב מראש</span></b><span class="why">"עד מתי מותר להדליק הלילה?" — התשובה נכתבה בחורף. אין מגבלה. אבל אם הייתה — זה היה קובע.</span><span class="get">—</span></div>
+<div class="card"><b>36. קצין הבטיחות של האירוע <span class="tag auto">רישום</span></b><span class="why">—</span><span class="get">"47 מול 35 · 35 דק' · 0".</span></div>
+<div class="card"><b>37. ביטוח האירוע <span class="tag sys">מערכת</span></b><span class="why">הדלקה בניגוד לכב"ה = אין ביטוח. התיעוד הוא הביטוח.</span><span class="get">רשומה.</span></div>
+<div class="card"><b>38. הדוברות <span class="tag auto">אוטומטי</span></b><span class="why">"ההדלקה במירון מתעכבת" תהיה כותרת תוך 10 דקות. שהיא תהיה "רוח", לא "כאוס".</span><span class="get">נוסח 22:52.</span></div>
+</div>
+
+<h3>שאלה 5 — מה זה עושה לעתיד</h3>
+<div class="who">
+<div class="card"><b>39. כל הלו"ז <span class="tag sys">מערכת</span></b><span class="why">+35 לכל מה שאחרי. חוץ ממה שלא תלוי (חלאקה 06:40).</span><span class="get">הזזה.</span></div>
+<div class="card"><b>40. גל היציאה + שאטלים + משמרות <span class="tag sys">מערכת</span></b><span class="why">שלושה שהיו מכוונים ל-23:20 — עכשיו 00:00.</span><span class="get">—</span></div>
+<div class="card"><b>41. מים וכוסות <span class="tag sys">מערכת</span></b><span class="why">+8,000.</span><span class="get">—</span></div>
+<div class="card"><b>42. עייפות כוחות <span class="tag sys">מערכת</span></b><span class="why">משמרת 1 עוד 35 דקות בשיא.</span><span class="get">"3 מעל 8h".</span></div>
+<div class="card"><b>43. הרוח בהמשך <span class="tag sys">מערכת</span></b><span class="why">ההדלקות הבאות — בסדר.</span><span class="get">—</span></div>
+<div class="card"><b>44. דלק/שמן <span class="tag sys">מערכת</span></b><span class="why">מוקטן = חצי. נשאר.</span><span class="get">—</span></div>
+<div class="card"><b>45. המודל לשנה הבאה <span class="tag sys">מערכת</span></b><span class="why">3 מ-5 שנים רוח מעל 35 בין 22:30–23:30. השיחה עם החצר על 22:15 — בחורף.</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 6 — האם זה תבנית</h3>
+<div class="who">
+<div class="card"><b>3 מ-5 שנים <span class="tag">→ מנהל האירוע + החצר</span></b><span class="why">השעה והרוח לא מסתדרות. זו שיחה של חורף, לא של 22:50.</span><span class="get">—</span></div>
+<div class="card"><b>הסף עצמו <span class="tag">→ כב"ה</span></b><span class="why">המוקטנת עבדה ב-31. אולי הסף לגג-מוקטן הוא 38?</span><span class="get">—</span></div>
+<div class="card"><b>הרחבה לא הגיעה ל-4.0 <span class="tag">→ ניהול הקהל</span></b><span class="why">כי הכניסה הואטה מ-22:00. המניעה עבדה. לרשום.</span><span class="get">—</span></div>
+<div class="card"><b>חיישן אחד חורג <span class="tag">→ תמיכה טכנית</span></b><span class="why">אם רק #1 — לבדוק אותו, לא לדחות הדלקה.</span><span class="get">—</span></div>
+</div>
+
+<h3>6. מי לא מקבל כלום — בכוונה</h3>
+<div class="card no-list">צה"ל · מד"א מעבר לשורה · המועצה · תושבי מירון · 12 הכנסות האורחים שלא במורד הרוח · הספקים · החניונים (רק השאטלים). <b>הרוח על הגג מגיעה ל-45 אנשים — כי 37,000 מחכים לה. זה לא פנצ'ר.</b></div>
+
+<h3>7. מקרי קצה</h3>
+<ul>
+<li><b>הגבאי אומר "מדליקים בכל זאת":</b> לא. הסף והסמכות נחתמו בחורף. אם מדליקים בניגוד לכב"ה — אין ביטוח, ויש תיעוד. המערכת לא נותנת "כן" בלי כב"ה.</li>
+<li><b>הרוח לא יורדת עד 00:30:</b> אפשרות: הדלקה סמלית (לפיד, בלי מדורה) — מוסכם מראש עם החצר כאפשרות אחרונה. או ביטול. 37,000 צריכים הודעה ברורה ומסלול יציאה מסודר — זה כבר "פינוי מתוכנן".</li>
+<li><b>חיישן אחד אומר 47, השניים האחרים 28:</b> חיישן. לא דוחים. מחליפים חיישן.</li>
+<li><b>הרוח יורדת ל-33 ל-3 דקות ואז חוזרת:</b> "מתחת לסף" = 5 דקות רצופות + מגמה יורדת. לא משב אחד.</li>
+<li><b>ניצוץ הגיע לאוהל:</b> כיבוי-יד תוך 20 שניות. אם לא — אירוע כב"ה + פינוי מקומי של הכנסת אורחים ב'. זה נושא אחר.</li>
+<li><b>העיכוב פוגש שבת</b> (אם ל"ג בעומר יוצא בליל שישי — לא קורה, אבל ערב שבת כן): יש שעה שאחריה לא מדליקים. הרב קבע מראש. המערכת יודעת.</li>
+<li><b>האדמו"ר לא מוכן לחכות:</b> העוזר שלו מקבל את המספרים. הגבאי מדבר. לא המערכת.</li>
+<li><b>הקהל ברחבה מתחיל לזוז לפני ההודעה:</b> לכן ההודעה ב-22:58 — לא לפני (יזוזו) ולא אחרי 23:00 (יחשבו ששכחו).</li>
+<li><b>גשם עם הרוח:</b> מדרגות חלקות → קיבולת המדרגות יורדת → ניהול הקהל. פרמטר נוסף, אותו מנגנון.</li>
+</ul>
+
+<h3>8. מה צריך כדי שזה יעבוד</h3>
+<ul>
+<li><b>סף רוח כתוב לכל מדורה</b> — מכב"ה, חתום, לפני. עם "מוקטן" כאפשרות ביניים.</li>
+<li><b>סמכות כתובה:</b> קצין כב"ה על הגג מחליט על האש. הגבאי על השעה בתוך המותר. המפקד על הקהל. מנהל האירוע על ההודעה. נחתם בחורף עם החצר.</li>
+<li><b>3 חיישני רוח</b> (גג ×2 + חניון) + חיבור לשירות המטאורולוגי.</li>
+<li><b>תחזית 6 שעות שנכנסת ללו"ז</b> — כדי שהשיחה תהיה ב-20:30.</li>
+<li><b>נוסחי עיכוב מאושרים מראש</b> ע"י החצר, ב-3 שפות.</li>
+<li><b>לו"ז שיודע מה תלוי במה</b> — הדלקה זזה → 2 חצרות, גל יציאה, שאטלים, משמרות, מים זזים לבד.</li>
+<li><b>ניהול הקהל שמתכונן לעיכוב</b> — להאט כניסה לפני הדלקה שבסיכון.</li>
+<li><b>מפת "במורד הרוח"</b> לכל מדורה ולכל כיוון — מה נדלק, מי נושם עשן.</li>
+<li><b>אפשרות "הדלקה סמלית"</b> מוסכמת מראש עם החצר — למקרה שהרוח לא יורדת.</li>
+</ul>
+
+<h3>9. מה יוצא מהחיבור לשלושת הקודמים</h3>
+<div class="card">
+<b>הלו"ז הוא ישות משותפת — והוא השעון של הכל.</b> בנושאים 01–03 ההדלקה הופיעה כ"הקצב קופץ ב-23:00" (כוסות), "הקהל מגיע מוקדם" (אוטובוס), "כולם הולכים לראות" (סדרן). כאן היא המרכז — ומתגלה שכשהיא זזה 35 דקות, <b>ארבעת הנושאים הקודמים זזים איתה:</b> גל היציאה והשאטלים (01), +8,000 כוסות (02), החלפת המשמרת פוגשת את היציאה (03).<br><br>
+<b>ישויות חדשות:</b> מזג אוויר (היה "פרמטר" בניהול הקהל — כאן הוא המחליט) · במורד הרוח (מרחב, לא רק מקום) · סמכות (מי מחליט על מה — נחתם לפני, לא מתווכח בזמן).<br><br>
+<b>החוק חוצה-הנושאים שנולד כאן:</b> "כשהלו"ז זז — כל מה שמכוון אליו זז לבד, ומה שלא תלוי בו (חלאקה 06:40) לא זז." ו: "מי שמחליט על הסיכון (כב"ה) לא מחליט על מה שהסיכון עושה לקהל (המפקד) — שני מחליטים, החלטה אחת, שתי סמכויות כתובות."<br><br>
+<b>עמוד השדרה:</b> המפקד (הפעם כן — מדקה 1), מנהל האירוע, ניהול הקהל, קצין הבטיחות, מד"א-שורה, מוקד המידע, הדוברות, תמיכה טכנית, המודל לשנה הבאה, ביטוח. <b>10 מתוך 13.</b> ועוד אחד שמופיע בפעם הרביעית ולא היה ברשימה: <b>הכנסת אורחים צפון.</b> היא לא "עמוד שדרה" — היא פשוט המקום שהכל עובר דרכו.
+</div>
+
+</div>
+</body>
+</html>
