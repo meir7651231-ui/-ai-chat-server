@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>גל היציאה של הבוקר — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4EFE6;--sur:#FFFDF9;--bd:#E7DFD2;--tx:#1C1917;--mu:#6B6259;--acc:#C2410C;--g:#2F7A4D;--y:#B45309;--r:#B91C1C;
+--dbg:#14110F;--dsur:#1F1B18;--dbd:#332C27;--dtx:#F4EFE6;--dmu:#A89F94}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Heebo,system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1500px;margin:0 auto;padding:32px 28px 80px}
+h1{font-family:"Frank Ruhl Libre",serif;font-size:34px;margin:0 0 4px}
+h2{font-family:"Frank Ruhl Libre",serif;font-size:24px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--tx)}
+h3{font-size:16px;margin:22px 0 8px}
+.lead{color:var(--mu);font-size:15px;margin:0 0 18px}
+.lbl{font-size:11px;color:var(--mu)}
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--sur)}
+td,th{border:1px solid var(--bd);padding:7px 10px;text-align:right;vertical-align:top}
+th{background:#EDE5D8;font-weight:700}
+ul{margin:6px 0;padding-right:22px}li{margin:3px 0}
+.tag{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;background:#EDE5D8;color:var(--mu);margin-left:4px}
+.tag.auto{background:#E3F1E8;color:var(--g)}.tag.dec{background:#FDE7D6;color:var(--y)}.tag.sys{background:#E8EEF8;color:#1D4ED8}
+.demo{background:var(--dbg);color:var(--dtx);border-radius:16px;padding:22px 24px;margin-top:14px}
+.demo .lbl{color:var(--dmu)}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0 22px}
+.tl div{background:var(--dsur);border:1px solid var(--dbd);border-radius:10px;padding:10px 12px}
+.tl b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:20px;color:#F59E0B}
+.tl b.g{color:#2FA36B}.tl b.r{color:#EF4444}
+.tl span{font-size:12px;color:var(--dmu)}
+.hub{background:#2C1A0E;border:2px solid #FB923C;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+.hub .n{font-family:"Frank Ruhl Libre",serif;font-size:26px;font-weight:700}
+.hub .k{display:flex;flex-direction:column;gap:2px;font-size:12px;color:#FED7AA}
+.fan{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.fan .col{background:var(--dsur);border:1px solid var(--dbd);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.fan .col h4{margin:0 0 2px;font-size:13px;color:#F59E0B;border-bottom:1px solid var(--dbd);padding-bottom:6px}
+.rc{background:#26211D;border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:1px}
+.rc b{font-size:12px;color:var(--dtx)}.rc i{font-style:normal;color:var(--dmu)}.rc .m{color:#FCD9A8}
+.rc.dec{border-right:3px solid #F59E0B}.rc.auto{border-right:3px solid #2FA36B}.rc.sys{border-right:3px solid #60A5FA}.rc.cond{border-right:3px solid #7F1D1D;opacity:.85}
+.leg{display:flex;gap:14px;font-size:11px;color:var(--dmu);margin-top:10px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.leg .a::before{background:#2FA36B}.leg .d::before{background:#F59E0B}.leg .s::before{background:#60A5FA}.leg .c::before{background:#7F1D1D}
+.screens{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.scr{border:1px solid var(--dbd);border-radius:14px;overflow:hidden;background:var(--dsur);display:flex;flex-direction:column}
+.scr .h{padding:8px 12px;border-bottom:1px solid var(--dbd);font-size:11px;color:var(--dmu)}
+.scr .b{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.scr.light{background:#F4EFE6;color:var(--tx)}.scr.light .h{color:var(--mu);border-color:var(--bd)}
+.bigbtn{border-radius:12px;padding:14px 10px;text-align:center;font-weight:700;font-size:15px;border:2px solid var(--dbd);background:#26211D}
+.bigbtn.on{background:#B91C1C;border-color:#B91C1C;color:#fff}.bigbtn.g{background:#12301F;border-color:#2FA36B;color:#BBF0D0}.bigbtn.y{background:#3F2A10;border-color:#F59E0B;color:#FCD9A8}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.pill.g{background:#12301F;color:#BBF0D0}.pill.y{background:#3F2A10;color:#FCD9A8}.pill.r{background:#3B1111;color:#FCA5A5}
+.evt{background:#2C1A0E;border:1px solid #FB923C;border-radius:10px;padding:8px 10px;font-size:12px}
+.done{font-size:11px;color:#BBF0D0}.done::before{content:"✓ "}
+.ask{background:#3F2A10;border:1px solid #F59E0B;border-radius:8px;padding:6px 8px;font-size:11px}.ask b{color:#FCD9A8}
+.msg{background:#1C1917;color:#F4EFE6;border-radius:12px;padding:10px 12px;font-size:13px}.msg small{display:block;color:#D6CFC4;font-size:11px;margin-top:3px}
+.line{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;border-radius:8px;padding:8px 10px;color:#D6CFC4}
+.bar{height:8px;border-radius:4px;background:#3A2E24;overflow:hidden}.bar>i{display:block;height:100%}
+.wave{display:flex;align-items:flex-end;gap:2px;height:54px}
+.wave i{display:block;width:9px;border-radius:2px 2px 0 0;background:#FB923C}
+.wave i.q{background:#60A5FA}
+.slot{display:grid;grid-template-columns:70px 1fr 60px 60px;gap:6px;background:#26211D;border-radius:6px;padding:4px 6px;font-size:11px;align-items:center}
+.slot .t{color:#F59E0B;font-weight:700}
+.six{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.who .card{padding:10px 12px}.who b{display:block}.who .why{color:var(--mu);font-size:12px}.who .get{font-size:12px;margin-top:3px}
+.no-list{background:#F3E8E8;border:1px solid #E5C4C4}
+@media (max-width:1100px){.fan{grid-template-columns:repeat(3,1fr)}.screens{grid-template-columns:repeat(2,1fr)}.six,.who{grid-template-columns:1fr}.tl{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>גל היציאה של הבוקר — ניהול חי</h1>
+<p class="lead">נושא 11 — גדול. 03:30–08:00. 58,000 עדיין במתחם. 26 שאטלים — 90 לשעה × 55 = <b>4,950 איש בשעה</b>. 58,000 ÷ 4,950 = 12 שעות. זו הסכנה השנייה של מירון: <b>לא הכניסה — היציאה.</b> כולם רוצים לצאת באותה שעה, לאותה תחנה, לאותם אוטובוסים. ב-2021 המעיכה הייתה במעבר. הבוקר — התחנה. ניהול חי כאן = לפרוס 58,000 על 5 שעות בלי שאף אחד ירגיש שנאמר לו "חכה".</p>
+
+<h2>חלק א' — הדמיה</h2>
+<div class="demo">
+  <div class="lbl">ציר הזמן — המניעה (ירוק) ומה קורה כשהזריחה מושכת את כולם בבת אחת (אדום)</div>
+  <div class="tl">
+    <div><b class="g">חורף · כניסה</b><span><b style="color:#BBF0D0;display:inline">מניעה.</b> כל כרטיס מקבל <b>חלון יציאה מומלץ</b> בכניסה (03:30–04:30 / 04:30–05:30 / ...), לפי אזור ולפי מה שיש לו בבוקר (חלאקה 06:40 → חלון 07:30). הצי לבוקר: 26 שאטלים + 40 אוטובוסים אזוריים שמגיעים ריקים מ-03:00 (חוזה). התחנה: נחש-תור בקיבולת 3,000, אזורי המתנה עם תה (02) ומסכים. "מצב יציאה" מוגדר — כמו פינוי, רק לאט, והמפקד מקבל הכל.</span></div>
+    <div><b class="g">03:00</b><span>המערכת: 58,000 בפנים · הצי: 66 אוטובוסים = 12,500/שעה · 4.6 שעות · תפילת ותיקין 05:41 — 12,000 יישארו לשחרית עד 06:30 · חלאקה 06:00–08:00 — 2,000 משפחות · <b>שני שיאים: 04:00 (מי שלא מתפלל) ו-06:30 (מי שכן).</b> חלונות היציאה כבר מחולקים. "מצב יציאה" מוכרז 03:30. כוחות: החלפה ב-03:00 (לא 06:00 — הלקח מ-03/04), 240 בעמדות היציאה.</span></div>
+    <div><b class="r">04:10</b><span><b style="color:#FCA5A5;display:inline">השיא הראשון.</b> 9,000 בתחנה ובנחש — קיבולת 3,000 + נחש 4,000 = 7,000. עודף 2,000. הצפיפות בכניסה לתחנה 3.2 ועולה. המערכת לבד: הכניסה לנחש → מוגבלת · אזורי ההמתנה ברחבה → "חכו כאן, תה, מסך, 25 דק'" · CB: "חלון 04:30 — עדיין לא" · שאטלים: 100% שיגור · המדרגות: כיוון ירידה בלבד · המפקד: "תחנה 3.2 · נחש מלא · המתנה 25'".</span></div>
+    <div><b class="r">04:15</b><span>המפקד מחליט: לפתוח יציאה שנייה — שער דרום → חניון דרומי (12 אוטובוסים אזוריים מופנים לשם) · הכריזה: "יציאה גם דרך שער דרום · 8 דק' הליכה · בלי תור" · 2,000 עוברים לדרום תוך 20 דק'. התחנה יורדת ל-2.6. <b>הזמן שהוא לקח: 90 שניות. כי האפשרות הייתה כתובה.</b></span></div>
+    <div><b class="r">05:41–06:45</b><span>הזריחה. 12,000 מתפללים בציון וברחבה. 06:15 שחרית נגמרת. <b>השיא השני — 12,000 בבת אחת + 2,000 משפחות חלאקה שנשארות.</b> אבל: 30,000 כבר יצאו. הצי פנוי. הנחש ריק. 06:20–07:10: 12,000 יוצאים ב-50 דק'. הצפיפות בתחנה — 2.4 שיא. 07:00 הכביש למושב (06) נפתח לתושבים. 08:00: 3,800 נשארו (חלאקה, מנקים, כוחות). <b>מצב יציאה מבוטל 08:15.</b></span></div>
+    <div><b class="r">אחרי</b><span>58,000 ב-4:45 · שיא 3.2 (04:10, 6 דק') · 0 נפגעים · 2 ילדים אבודים (09) · 14 התעלפויות · תה: 31,000 כוסות (02) · שער דרום פתח 2,000 · הרשומה: "חלונות היציאה: 61% עמדו · 04:00 היה 140% מהתחזית — מי שלא מתפלל יוצא מוקדם יותר ממה שחשבנו". שנה הבאה: חלון 03:00 לחצי מהלא-מתפללים, שער דרום פתוח מ-03:30 תמיד.</span></div>
+  </div>
+
+  <div class="hub">
+    <div><div class="n">מצב יציאה · 03:30–08:15</div><div class="lbl">58,000 · 66 אוטובוסים (26 + 40 אזוריים) · 12,500/שעה · תחנה 3,000 · נחש 4,000 · 2 שיאים: 04:00, 06:30 · 240 כוחות · חלונות יציאה: 5</div></div>
+    <div class="k"><span>04:10: תחנה+נחש 9,000 · 3.2 · עודף 2,000 → דרום</span><span>05:41 זריחה · 12,000 נשארים · 06:15 יוצאים</span><span>חלאקה 06:00–08:00 · 2,000 משפחות · חלון 07:30</span></div>
+    <div class="k"><span>המדרגות: ירידה בלבד · הציון: יציאה בלבד מ-06:15</span><span>כוחות: החלפה 03:00 · 240 · עייפות: 18 מעל 8h</span><span>866 יוצא: מלא · תושבים 07:00</span></div>
+  </div>
+
+  <div class="lbl" style="margin-top:14px">מי מקבל מה — לפי שש השאלות</div>
+  <div class="fan">
+    <div class="col"><h4>1 · מי בתוך</h4>
+      <div class="rc auto"><b>58,000 — כל אחד</b><i>03:30 · אפליקציה + CB + לוחות</i><span class="m">"החלון שלך: 04:30–05:30 · תחנה: 25 דק' · חכה ברחבה עם תה · המסך"</span></div>
+      <div class="rc auto"><b>9,000 בתחנה ובנחש</b><i>04:10 · כריזה</i><span class="m">"התור זז · 25 דק' · אל תדחפו · יציאה גם בדרום"</span></div>
+      <div class="rc auto"><b>2,000 שהופנו לדרום</b><i>04:15</i><span class="m">"שער דרום · 8 דק' · בלי תור · אוטובוסים לחניון דרומי → עליות"</span></div>
+      <div class="rc auto"><b>12,000 המתפללים</b><i>06:10</i><span class="m">"אחרי שחרית: יציאה מהציון בלבד · המדרגות ירידה · הנחש ריק · 06:20"</span></div>
+      <div class="rc auto"><b>2,000 משפחות החלאקה</b><i>03:30</i><span class="m">"החלון שלכם 07:30 · אל תעמדו בתור עכשיו · תה בהכנסת אורחים ב'"</span></div>
+      <div class="rc auto"><b>66 נהגי האוטובוסים</b><i>03:00</i><span class="m">"סבב יציאה · 100% · ריקים למתחם, מלאים לעליות · 4:45"</span></div>
+      <div class="rc auto"><b>240 כוחות היציאה</b><i>03:00</i><span class="m">"עמדות יציאה · נחש · תחנה · המדרגות ירידה · 03:00–08:30"</span></div>
+      <div class="rc auto"><b>סדרני הנחש (24)</b><i>04:10</i><span class="m">"הכניסה לנחש מוגבלת · 3,000 · 25' · אזורי המתנה"</span></div>
+      <div class="rc sys"><b>המדרגות</b><i>מערכת</i><span class="m">"ירידה בלבד מ-03:30 · כיוון אחד · 6 סדרנים"</span></div>
+    </div>
+    <div class="col"><h4>2 · מי מחכה לזה</h4>
+      <div class="rc dec"><b>המפקד — הכל</b><i>03:30–08:15</i><span class="m">מצב יציאה = כמו פינוי, לאט. תחנה, נחש, שיאים, שער דרום, כוחות. הוא רואה הכל ומחליט.</span></div>
+      <div class="rc sys"><b>ניהול הקהל — הפוך</b><i>מערכת</i><span class="m">הכניסות סגורות · המעברים בכיוון אחד · הצפיפות בתחנה — לא ברחבה · הנחש = מעבר</span></div>
+      <div class="rc sys"><b>מקצב השאטלים — הפוך</b><i>מערכת</i><span class="m">"100% שיגור · הברז פתוח · המגבלה: התחנה, לא המתחם"</span></div>
+      <div class="rc auto"><b>סדרן הרציף בעליות</b><i>03:00</i><span class="m">"12,500/שעה מגיעים · חניון: רכבים יוצאים · 866 יוצא מלא"</span></div>
+      <div class="rc auto"><b>הכנסת אורחים — תה (02)</b><i>03:00</i><span class="m">"31,000 כוסות · 15 נקודות · אזורי ההמתנה = הנקודות"</span></div>
+      <div class="rc auto"><b>נקודות איסוף ילדים (09)</b><i>03:30</i><span class="m">"שיא שני · תגבור · 2 הלילה"</span></div>
+      <div class="rc auto"><b>מפקד ציר 866</b><i>03:30</i><span class="m">"יוצא: מלא 4:45 · נכנס: ריקים · תושבים 07:00 · צפת"</span></div>
+      <div class="rc auto"><b>חניון דרומי (שער דרום)</b><i>04:15</i><span class="m">"12 אוטובוסים אזוריים · 2,000 · פתח"</span></div>
+      <div class="rc sys"><b>עזרת הנשים</b><i>מערכת</i><span class="m">"יציאה נפרדת · נחש נפרד · אותו מנגנון"</span></div>
+    </div>
+    <div class="col"><h4>3 · מי באותו זמן / מסלול</h4>
+      <div class="rc sys"><b>תפילת ותיקין 05:41</b><i>לו"ז</i><span class="m">"12,000 נשארים · השיא השני 06:15 · לא זז (הזריחה)"</span></div>
+      <div class="rc sys"><b>החלאקה 06:00–08:00</b><i>לו"ז</i><span class="m">"2,000 משפחות · חלון 07:30 · לא בתור"</span></div>
+      <div class="rc sys"><b>ההדלקה שנדחתה (04)</b><i>מערכת</i><span class="m">"נגמרה 23:35 · גל הלילה זז · 58,000 ב-03:30 במקום 52,000"</span></div>
+      <div class="rc sys"><b>300 של חצר ב' (08)</b><i>מערכת</i><span class="m">"5 אוטובוסים ב-H · יוצאים לבד 01:30 · לא בשאטלים"</span></div>
+      <div class="rc auto"><b>תושבי מירון (06)</b><i>07:00</i><span class="m">"הכביש נפתח 07:00 · המחסום · 866 עדיין מלא — 08:00 רגיל"</span></div>
+      <div class="rc auto"><b>הרכבת כרמיאל</b><i>03:00</i><span class="m">"רכבות מ-05:00 · 4 בשעה · שאטל מהחניון"</span></div>
+      <div class="rc auto"><b>צוותי הניקיון</b><i>05:00</i><span class="m">"הרחבה מתרוקנת · כניסה מ-05:30 · 60 טון"</span></div>
+      <div class="rc auto"><b>קופות הצדקה (07)</b><i>08:00</i><span class="m">"ריקון סופי · 40 · אחרי היציאה"</span></div>
+      <div class="rc sys"><b>אבידות</b><i>מערכת</i><span class="m">"שיא: 06:00–08:00 · נקודה בחניון"</span></div>
+    </div>
+    <div class="col"><h4>4 · מי אחראי</h4>
+      <div class="rc dec"><b>המפקד</b><i>הקהל</i><span class="m">מצב יציאה. הוא מחליט על שער דרום, על הגבלת הנחש, על הכל.</span></div>
+      <div class="rc dec"><b>קצין התחבורה</b><i>הצי</i><span class="m">66 אוטובוסים · סבבים · חניון דרומי · הרכבת</span></div>
+      <div class="rc dec"><b>קצין כוח-האדם (03)</b><i>הכוחות</i><span class="m">240 · החלפה 03:00 · 18 מעל 8h · הרזרבה ליציאה</span></div>
+      <div class="rc auto"><b>מנהל האירוע</b><i>03:30</i><span class="m">"מצב יציאה · החצרות · הכנסת אורחים · הניקיון"</span></div>
+      <div class="rc auto"><b>קצין הבטיחות</b><i>רישום</i><span class="m">"התחנה: קיבולת 3,000 · שיא 3.2 · 6 דק'"</span></div>
+      <div class="rc auto"><b>מד"א</b><i>03:30</i><span class="m">"עייפות · התעלפויות · 14 · נקודה בתחנה"</span></div>
+      <div class="rc sys"><b>מנהל החוזה — אוטובוסים אזוריים</b><i>מערכת</i><span class="m">"40 מ-03:00 · הגיעו 38 · 2 חסרים"</span></div>
+      <div class="rc auto"><b>הדוברות</b><i>04:15</i><span class="m">"היציאה מסודרת · 4–5 שעות · שני שערים"</span></div>
+    </div>
+    <div class="col"><h4>5 · מה זה עושה לעתיד</h4>
+      <div class="rc sys"><b>חלונות היציאה — המודל</b><i>מערכת</i><span class="m">"61% עמדו · 04:00 היה 140% · לא-מתפללים יוצאים מוקדם · חלון 03:00"</span></div>
+      <div class="rc sys"><b>שער דרום</b><i>מערכת</i><span class="m">"פתח 2,000 ב-20' · שנה הבאה: פתוח מ-03:30 תמיד"</span></div>
+      <div class="rc sys"><b>הצי</b><i>מערכת</i><span class="m">"66 · 4:45 · מספיק · 2 אזוריים חסרו · חוזה"</span></div>
+      <div class="rc sys"><b>עייפות הכוחות</b><i>מערכת</i><span class="m">"18 מעל 8h ב-06:00 · החלפה 03:00 עבדה · 04:00 היה הקשה"</span></div>
+      <div class="rc sys"><b>הניקיון</b><i>מערכת</i><span class="m">"60 טון · 05:30–12:00"</span></div>
+      <div class="rc sys"><b>התחקיר</b><i>מערכת</i><span class="m">"הלילה כולו · replay · הוועדה · ילדים · נפגעים · החלטות"</span></div>
+    </div>
+    <div class="col"><h4>6 · האם זה תבנית</h4>
+      <div class="rc cond"><b>המפקד</b><i>תחנה מעל 3.5</i><span class="m">"עצור כניסה לנחש · הכל לדרום · CB"</span></div>
+      <div class="rc cond"><b>מתכנן היציאה</b><i>אותו שיא כל שנה</i><span class="m">"04:00 · הלא-מתפללים · חלונות"</span></div>
+      <div class="rc cond"><b>קצין התחבורה</b><i>אזוריים מאחרים</i><span class="m">"3 שנים · חוזה"</span></div>
+      <div class="rc sys"><b>מנהל האירוע</b><i>08:15</i><span class="m">"58,000 · 4:45 · שיא 3.2 · 0 נפגעים · 14 התעלפויות · 31,000 כוסות · שער דרום 2,000"</span></div>
+      <div class="rc"><b style="color:#FCA5A5">לא מקבלים כלום</b><i>בכוונה</i><span class="m">צה"ל · כב"ה (אין מדורות) · החצרות (חוץ מהחלאקה) · הקופות (עד 08:00)</span></div>
+    </div>
+  </div>
+  <div class="leg"><span class="a">אוטומטי</span><span class="d">החלטה של בן-אדם</span><span class="s">מערכת מעדכנת את עצמה</span><span class="c">מותנה — רק אם</span></div>
+
+  <div class="lbl" style="margin-top:26px">מה כל אחד רואה</div>
+  <div class="screens">
+    <div class="scr"><div class="h">המפקד · מצב יציאה · 04:10</div><div class="b">
+      <div class="evt" style="background:#3B1111;border-color:#7F1D1D"><b>תחנה + נחש · 9,000 / 7,000 · 3.2 ▲</b><br><span style="color:#FCA5A5">השיא הראשון · 04:00 היה 140% מהתחזית · הכניסה לנחש: מוגבלת אוטומטית</span></div>
+      <div class="lbl">היציאה — כמה יצאו · כמה בתור · כמה נשארו</div>
+      <div class="wave"><i style="height:18px"></i><i style="height:30px"></i><i style="height:48px"></i><i style="height:52px"></i><i class="q" style="height:40px"></i><i class="q" style="height:36px"></i><i style="height:30px"></i><i style="height:24px"></i><i style="height:20px"></i><i style="height:16px"></i><i style="height:14px"></i><i style="height:38px"></i><i style="height:50px"></i><i style="height:44px"></i><i style="height:22px"></i><i style="height:10px"></i></div>
+      <div class="lbl">03:30 → 08:00 · כתום = יוצאים/שעה · כחול = בתור · השיא השני 06:20</div>
+      <div class="row" style="justify-content:space-between;font-size:11px"><span>יצאו 8,400 · בתור 9,000 · נשארו 40,600</span><span>צי: 66 · 100% · 12,500/שעה</span></div>
+      <div class="done">נחש מוגבל · אזורי המתנה · CB "חלון 04:30 — עדיין לא" · המדרגות ירידה · תה</div>
+      <div class="ask"><b>שלך:</b> <span class="row" style="margin-top:4px"><span class="pill g">פתח שער דרום → חניון דרומי · 12 אזוריים · 2,000</span><span class="pill y">עצור כניסה לנחש 10'</span><span class="pill r">CB: "חכו ברחבה"</span></span><br><span style="color:#FCD9A8">שער דרום: 8 דק' הליכה · 12 אוטובוסים · 20 דק' · התחנה → 2.6</span></div>
+      <div class="lbl">05:41 זריחה · 12,000 בציון · השיא השני 06:15 · הצי יהיה פנוי · הנחש ריק</div>
+    </div></div>
+
+    <div class="scr"><div class="h">קצין התחבורה · 03:00 → 04:15</div><div class="b">
+      <div class="lbl">הצי · סבב יציאה</div>
+      <div class="slot"><span class="t">26</span><span>שאטלים · עליות ↔ מתחם · 55 · 90/שעה</span><span>4,950/ש'</span><span class="pill g">✓</span></div>
+      <div class="slot"><span class="t">38/40</span><span>אזוריים · ריקים מ-03:00 · 2 חסרים</span><span>7,600/ש'</span><span class="pill y">-2</span></div>
+      <div class="slot"><span class="t">12</span><span>אזוריים → חניון דרומי · 04:15</span><span>2,000</span><span class="pill g">פתח</span></div>
+      <div class="slot"><span class="t">5</span><span>חצר ב' (08) · H · יצאו 01:30</span><span>—</span><span class="pill g">✓</span></div>
+      <div class="lbl">חניון עליות: 12,500/שעה מגיעים · רכבים יוצאים · 866 יוצא · צפת · הרכבת 05:00</div>
+      <div class="ask"><b>שלך:</b> <span class="row" style="margin-top:4px"><span class="pill g">12 אזוריים → דרומי</span><span class="pill y">רכבת: שאטל נוסף</span><span class="pill r">2 חסרים — חוזה</span></span></div>
+      <div class="lbl">06:15: השיא השני · הצי פנוי · 12,000 ב-50' · 07:00 תושבים · 08:00 866 רגיל</div>
+    </div></div>
+
+    <div class="scr light"><div class="h">אדם ברחבה · טלפון · 03:30 → 04:10</div><div class="b">
+      <div class="msg"><b>החלון שלך: 04:30–05:30</b><small>עכשיו התחנה עמוסה (25 דק'). חכה ברחבה — תה בהכנסת אורחים צפון, 3 דק'. נודיע לך.</small></div>
+      <div class="card" style="font-size:12px"><b>04:10 · יציאה גם דרך שער דרום</b><br><span style="color:var(--mu)">8 דק' הליכה · בלי תור · אוטובוסים לחניון דרומי ומשם לעליות. אם אתה ממהר — דרום.</span></div>
+      <div class="card" style="font-size:12px"><b>המדרגות</b><br><span style="color:var(--mu)">ירידה בלבד. לציון — דרך המערבי.</span></div>
+      <div class="card" style="font-size:12px"><b>הילדים</b><br><span style="color:var(--mu)">צמידים על היד. נקודת מפגש נ-4 — אם מתפצלים בתור.</span></div>
+      <div class="msg" style="background:#2F7A4D"><b>04:35 · החלון שלך פתוח</b><small>התחנה: 12 דק'. לך עכשיו.</small></div>
+    </div></div>
+
+    <div class="scr"><div class="h">כל השאר — שורה אחת</div><div class="b">
+      <div class="lbl">240 כוחות היציאה · 03:00</div><div class="line">החלפה 03:00 · עמדות: נחש 24 · תחנה 40 · מדרגות 6 · שער דרום 12 (04:15) · עד 08:30 · 18 מעל 8h — החלפה 06:00</div>
+      <div class="lbl">סדרני הנחש · 04:10</div><div class="line">כניסה מוגבלת · 3,000 · 25' · אל תדחפו · "יציאה בדרום" — כריזה · המפקד רואה</div>
+      <div class="lbl">הכנסת אורחים · תה (02) · 03:00</div><div class="line">31,000 כוסות · 15 נקודות · אזורי ההמתנה = הנקודות · צפון: 2,000/שעה · אספקה 02:30 ✓</div>
+      <div class="lbl">נקודות איסוף ילדים (09) · 03:30</div><div class="line">שיא שני · 3 נקודות · תגבור · 2 ילדים הלילה · 0 לא נאספו</div>
+      <div class="lbl">מפקד ציר 866 · 03:30</div><div class="line">יוצא: 66 אוטובוסים 4:45 · נכנס: ריקים · תושבים 07:00 · צפת · Waze</div>
+      <div class="lbl">קצין הקישור לתושבים (06) · 07:00</div><div class="line">הכביש נפתח · המחסום · 866 עדיין מלא — 08:00 · הוועד</div>
+      <div class="lbl">צוותי הניקיון · 05:30</div><div class="line">הרחבה מתרוקנת · כניסה · 60 טון · 12:00</div>
+      <div class="lbl">קצין הבטיחות · 08:15</div><div class="line">מצב יציאה 03:30–08:15 · 58,000 · שיא תחנה 3.2 (04:10, 6') · 0 נפגעים · שער דרום 2,000 · 61% עמדו בחלון</div>
+    </div></div>
+  </div>
+</div>
+
+<h2>חלק ב' — הרישום המלא</h2>
+
+<h3>1. מה המערכת יודעת לפני שקורה משהו</h3>
+<div class="card">כמה במתחם (58,000 — אחרי ההדלקה שנדחתה, 08). לכל כרטיס: חלון יציאה מומלץ, מה יש לו בבוקר (חלאקה, מניין), איפה הוא. הצי: 26 + 40 אזוריים (חוזה: מ-03:00), קיבולת/שעה, סבבים. התחנה: 3,000. הנחש: 4,000. אזורי המתנה: איפה, קיבולת, תה. שער דרום: חניון דרומי, 12 אוטובוסים, 8 דק' הליכה — <b>אפשרות כתובה מראש.</b> הלו"ז: זריחה 05:41 (לא זז), שחרית עד 06:15, חלאקה 06:00–08:00, תושבים 07:00. הכוחות: 240, החלפה 03:00, עייפות. <b>המודל:</b> מי יוצא מתי — לפי שנה שעברה: 40% לפני הזריחה, 35% אחרי שחרית, 25% אחרי.</div>
+
+<h3>2. המניעה — הניהול האמיתי</h3>
+<div class="card"><ul>
+<li><b>חלון יציאה בכניסה.</b> כל אחד מקבל שעה. לא חובה — המלצה עם סיבה ("התחנה תהיה 25 דק'"). 61% עמדו. זה מספיק כדי לפרוס.</li>
+<li><b>הצי לבוקר גדול מהצי ללילה.</b> 66 במקום 26. אוטובוסים אזוריים ריקים מ-03:00 — בחוזה. 12,500/שעה. 4:45 במקום 12 שעות.</li>
+<li><b>התחנה היא המעבר הצר של הבוקר.</b> 3,000. נחש 4,000. הכניסה לנחש מוגבלת ב-3.0 — אוטומטית, כמו המדרגות בלילה. הצפיפות שמודדים בבוקר היא שם, לא ברחבה.</li>
+<li><b>אזורי המתנה עם תה ומסך.</b> "חכה" עובד רק עם תה. הכנסת אורחים (02) היא אזור ההמתנה.</li>
+<li><b>שני שיאים ידועים.</b> 04:00 (מי שלא מתפלל) ו-06:15 (מי שכן). הזריחה לא זזה. השני קל — כי הראשון כבר יצא והצי פנוי.</li>
+<li><b>יציאה שנייה כתובה.</b> שער דרום → חניון דרומי → 12 אוטובוסים. לא ממציאים ב-04:10. לוחצים.</li>
+<li><b>החלפת כוחות ב-03:00, לא ב-06:00.</b> הלקח מ-03 ו-04: ההחלפה לא פוגשת את הגל.</li>
+<li><b>מצב יציאה.</b> כמו פינוי — המפקד מקבל הכל, המעברים בכיוון אחד, הכניסות סגורות. רק לאט.</li>
+</ul></div>
+
+<h3>3. דקה אחר דקה</h3>
+<table>
+<tr><th style="width:80px">מתי</th><th>מה קורה</th><th style="width:120px">מי</th></tr>
+<tr><td>03:00</td><td>החלפת כוחות. 240 בעמדות היציאה. האזוריים מגיעים: 38/40. הסבב: ריקים למתחם, מלאים לעליות. תה: 31,000 כוסות מוכנות (02). המדרגות → ירידה בלבד. נקודות איסוף: תגבור (09).</td><td>כוחות / צי</td></tr>
+<tr><td>03:30</td><td><b>מצב יציאה.</b> המפקד מקבל הכל. הכניסות סגורות. 58,000 מקבלים: "החלון שלך · התחנה עכשיו · חכה עם תה". CB + לוחות + אפליקציה (הרשת חזרה — 10). החלאקה: "07:30 · לא בתור".</td><td>אוטומט + מפקד</td></tr>
+<tr><td>04:00–04:10</td><td>השיא הראשון — 140% מהתחזית. 9,000 בתחנה ובנחש. 3.2 ועולה. אוטומטי: הכניסה לנחש מוגבלת (3.0), אזורי המתנה, CB "חלון 04:30 — עדיין לא", שאטלים 100%. המפקד: "תחנה 3.2 · עודף 2,000 · שער דרום?" עם המחיר: 8 דק' הליכה, 12 אוטובוסים, 20 דק' → 2.6.</td><td>אוטומט</td></tr>
+<tr><td>04:15</td><td>המפקד: שער דרום. 90 שניות. קצין התחבורה: 12 אזוריים → דרומי. כריזה + CB: "יציאה גם בדרום · 8 דק' · בלי תור". 12 כוחות מהרזרבה לשער דרום (03). 2,000 עוברים תוך 20'. התחנה 2.6.</td><td>מפקד / תחבורה</td></tr>
+<tr><td>04:30–05:40</td><td>זרימה. 12,500/שעה. 2 ילדים אבודים (09) — 14 ו-19 דק'. 9 התעלפויות — עייפות, מד"א בתחנה. 05:00 הרכבת. 05:30 הניקיון נכנס לרחבה המערבית. 30,000 יצאו.</td><td>—</td></tr>
+<tr><td>05:41–06:15</td><td>זריחה. ותיקין. 12,000 בציון וברחבה. הנחש ריק. הצי ממתין. שקט.</td><td>—</td></tr>
+<tr><td>06:15–07:10</td><td>השיא השני. 12,000 בבת אחת — אבל הנחש ריק והצי פנוי. הציון: יציאה בלבד. המדרגות ירידה. 50 דק'. שיא בתחנה 2.4. 07:00 הכביש למושב נפתח (06).</td><td>—</td></tr>
+<tr><td>07:10–08:15</td><td>החלאקה מסתיימת. 2,000 משפחות יוצאות בחלון 07:30. 08:00: 3,800 נשארו (חלאקה אחרונים, ניקיון, כוחות, גבאים). ריקון סופי של הקופות (07). <b>08:15 מצב יציאה מבוטל.</b> 866 רגיל.</td><td>אוטומט</td></tr>
+<tr><td>אחרי</td><td>"58,000 · 4:45 · שיא 3.2 · 0 נפגעים · 14 התעלפויות · 2 ילדים · 31,000 כוסות · שער דרום 2,000 · 61% בחלון · 04:00 = 140%." שנה הבאה: חלון 03:00 לחצי מהלא-מתפללים · שער דרום מ-03:30 תמיד · 42 אזוריים. ואז — <b>התחקיר של כל הלילה.</b></td><td>מערכת</td></tr>
+</table>
+
+<h3>4. מה אוטומטי ומה בן-אדם מחליט</h3>
+<div class="six">
+  <div class="card"><b>אוטומטי</b><ul><li>חלונות יציאה בכניסה — לפי אזור ולו"ז אישי</li><li>מצב יציאה: כיוונים, כניסות, מעברים</li><li>הגבלת הכניסה לנחש ב-3.0</li><li>אזורי המתנה + תה + הודעות "חכה"</li><li>שיגור 100%</li><li>המחיר של שער דרום — מחושב, מוצג</li><li>"החלון שלך פתוח" — כשהתחנה מתפנה</li><li>עדכון: תושבים, רכבת, ניקיון, קופות, ילדים, תה</li></ul></div>
+  <div class="card"><b>בן-אדם מחליט</b><ul><li><b>שער דרום — המפקד.</b> 90 שניות, כי כתוב.</li><li>עצירת כניסה לנחש — המפקד</li><li>אזוריים לאן — קצין התחבורה</li><li>החלפה 06:00 למי שמעל 8h — קצין כוח-האדם</li><li>ביטול מצב יציאה — המפקד</li></ul></div>
+  <div class="card"><b>מגיע למפקד — הכל</b><ul><li>מצב יציאה = הוא רואה הכל ומחליט הכל. 5 שעות. זה הלילה השני שלו.</li><li>ההבדל מפינוי: לאט, מתוכנן, עם תה.</li></ul></div>
+</div>
+
+<h3>5. כל מי שצריך לדעת — בקיצור (הרשימה בהדמיה)</h3>
+<div class="who">
+<div class="card"><b>1. 58,000 — כל אחד עם חלון <span class="tag auto">אוטומטי</span></b><span class="why">לא "צאו" — "החלון שלך, ולמה, ומה לעשות בינתיים".</span><span class="get">—</span></div>
+<div class="card"><b>2. התחנה והנחש — הסדרנים <span class="tag auto">אוטומטי</span></b><span class="why">המעבר הצר של הבוקר. 3.0 = הגבלה. הם המדרגות של היום.</span><span class="get">—</span></div>
+<div class="card"><b>3. הצי — 66 נהגים <span class="tag auto">אוטומטי</span></b><span class="why">סבב הפוך. ריקים פנימה.</span><span class="get">—</span></div>
+<div class="card"><b>4. המפקד <span class="tag dec">הכל</span></b><span class="why">מצב יציאה.</span><span class="get">—</span></div>
+<div class="card"><b>5. הכנסת אורחים — תה (02) <span class="tag auto">אוטומטי</span></b><span class="why">אזורי ההמתנה. בלי תה אין "חכה".</span><span class="get">—</span></div>
+<div class="card"><b>6. המתפללים והחלאקה <span class="tag sys">לו"ז</span></b><span class="why">שני הדברים שלא זזים. השיא השני והחלון של 07:30.</span><span class="get">—</span></div>
+<div class="card"><b>7. שער דרום — 12 כוחות + 12 אוטובוסים <span class="tag dec">מפקד</span></b><span class="why">האפשרות הכתובה.</span><span class="get">—</span></div>
+<div class="card"><b>8. ילדים (09), תושבים (06), קופות (07), ניקיון, רכבת, 866 <span class="tag sys">מערכת</span></b><span class="why">כולם מכוונים ליציאה.</span><span class="get">—</span></div>
+<div class="card"><b>9. כוח-האדם (03) <span class="tag dec">החלפה</span></b><span class="why">03:00 לא 06:00. 18 מעל 8h.</span><span class="get">—</span></div>
+<div class="card"><b>10. קצין הבטיחות, מד"א, הדוברות, המודל <span class="tag sys">מערכת</span></b><span class="why">עמוד השדרה.</span><span class="get">—</span></div>
+</div>
+
+<h3>6. מי לא מקבל כלום — בכוונה</h3>
+<div class="card no-list">צה"ל · כב"ה (אין מדורות) · החצרות מעבר לחלאקה · הקופות עד 08:00. <b>בבוקר כמעט כולם מקבלים. זה הנושא שבו "מי לא" הוא הרשימה הקצרה.</b></div>
+
+<h3>7. מקרי קצה</h3>
+<ul>
+<li><b>התחנה מגיעה ל-3.5:</b> עצירת כניסה לנחש. הכל לדרום. CB. המפקד. זה הפינוי-של-היציאה.</li>
+<li><b>גשם ב-05:00:</b> המדרגות חלקות → קיבולת יורדת → הציון מתרוקן לאט יותר → השיא השני מתארך. תה חם. מד"א.</li>
+<li><b>2 אזוריים חסרים → 10:</b> 10,000/שעה. 5:48. חלונות מתארכים. הודעה. חוזה.</li>
+<li><b>אזעקה ב-04:10 עם 9,000 בתחנה:</b> נושא אחר (הגדול הבא). כאן: התחנה היא המקום הכי מסוכן לאזעקה במירון.</li>
+<li><b>מישהו שאין לו חלון (בלי כרטיס — 08):</b> ברירת מחדל: החלון האחרון. או "כשהתחנה ירוקה".</li>
+<li><b>ההדלקה נדחתה ל-01:00 (04 קיצוני):</b> הגל של הלילה זז ל-01:40, 58,000 → 62,000 ב-03:30. חלונות מחושבים מחדש ב-01:00.</li>
+<li><b>הרשת קורסת בבוקר (10):</b> "החלון שלך" — לא. CB: "חלון 04:30 — עכשיו". לוחות. הסדרנים. P1 בבוקר קל יותר — פחות וידאו.</li>
+<li><b>שבת (ל"ג בעומר יום שישי):</b> אין יציאה עד מוצ"ש. 20,000 נשארים. זה נושא שלם.</li>
+<li><b>תושב צריך לצאת ב-05:00 (06):</b> הכביש מלא ביוצאים. הנתיב הנגדי פנוי. המחסום. קצין הקישור.</li>
+</ul>
+
+<h3>8. מה צריך כדי שזה יעבוד</h3>
+<ul>
+<li><b>חלון יציאה בכל כרטיס</b> — בכניסה, לפי אזור ולו"ז.</li>
+<li><b>צי בוקר בחוזה</b> — 40+ אזוריים ריקים מ-03:00.</li>
+<li><b>התחנה עם קיבולת מדודה ונחש</b> — והגבלה אוטומטית.</li>
+<li><b>אזורי המתנה עם תה ומסך</b> — הכנסת אורחים.</li>
+<li><b>יציאה שנייה כתובה</b> — שער דרום, חניון, אוטובוסים, כוחות.</li>
+<li><b>מצב יציאה מוגדר</b> — כיוונים, כניסות, מי מחליט.</li>
+<li><b>החלפת כוחות לפני הגל</b> — 03:00.</li>
+<li><b>המודל של שני השיאים</b> — מתפללים / לא.</li>
+<li><b>החיבורים:</b> תה (02), ילדים (09), תושבים (06), קופות (07), רשת (10), כוחות (03), לו"ז (04).</li>
+</ul>
+
+<h3>9. מה יוצא מהחיבור לעשרת הקודמים</h3>
+<div class="card">
+<b>הבוקר הוא הלילה בהיפוך.</b> הברז שסגרנו בלילה (שאטלים) — פתוח 100%. המעבר הצר — לא המדרגות, התחנה. הכיוונים — הפוכים. המפקד — לא "רק בתבנית", אלא הכל. <b>ניהול הקהל יש לו שני מצבים, והם מראה זה של זה.</b><br><br>
+<b>המפקד מקבל הכל.</b> ב-01–09 החוק היה "המפקד לא מקבל, אלא אם". כאן — הכל. <b>החוק לא נשבר — הוא מותנה במצב:</b> בשגרה — תבניות; במצב יציאה/פינוי — הכל. המצב קובע את הסינון. זה מה שהיה חסר.<br><br>
+<b>הלו"ז שלא זז.</b> ב-04 "כשהלו"ז זז — הכל זז". כאן: הזריחה לא זזה, החלאקה לא זזה. <b>יש לו"ז שהמערכת מזיזה (הדלקה) ולו"ז שמזיז את המערכת (זריחה).</b> ההבחנה הזו חדשה.<br><br>
+<b>עשרה נושאים מתכנסים לבוקר:</b> תה (02), כוחות ב-03:00 (03), ההדלקה שנדחתה שדחפה 6,000 לבוקר (04), 300 שיצאו לבד (08), ילדים בשיא השני (09), הרשת שחזרה (10), תושבים ב-07:00 (06), קופות ב-08:00 (07), הרכבת והאוטובוסים (01). <b>הבוקר הוא המקום שבו כל הנושאים נפגשים — כי כולם צריכים לצאת.</b><br><br>
+<b>ישויות חדשות:</b> חלון יציאה · נחש (תור עם קיבולת) · מצב (יציאה/פינוי/שגרה — קובע מה המפקד רואה) · יציאה שנייה (אפשרות כתובה) · לו"ז קבוע (זריחה) מול לו"ז מנוהל (הדלקה).<br><br>
+<b>החוקים:</b> "מה שהמפקד רואה תלוי במצב, לא באירוע (11)" · "הברז של הלילה הוא היעד של הבוקר (11↔קהל)" · "החלפת כוחות לפני הגל, לא באמצע (03,04→11)" · "אפשרות כתובה = החלטה של 90 שניות (04,06,11)" · "'חכה' עובד רק עם תה (02→11)".<br><br>
+<b>עמוד השדרה:</b> כולם. 13 מתוך 13. הבוקר.
+</div>
+
+</div>
+</body>
+</html>

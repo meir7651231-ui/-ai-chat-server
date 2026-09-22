@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>הסלולר קורס בצפון 40 דקות לפני ההדלקה — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4EFE6;--sur:#FFFDF9;--bd:#E7DFD2;--tx:#1C1917;--mu:#6B6259;--acc:#C2410C;--g:#2F7A4D;--y:#B45309;--r:#B91C1C;
+--dbg:#14110F;--dsur:#1F1B18;--dbd:#332C27;--dtx:#F4EFE6;--dmu:#A89F94}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Heebo,system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1500px;margin:0 auto;padding:32px 28px 80px}
+h1{font-family:"Frank Ruhl Libre",serif;font-size:34px;margin:0 0 4px}
+h2{font-family:"Frank Ruhl Libre",serif;font-size:24px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--tx)}
+h3{font-size:16px;margin:22px 0 8px}
+.lead{color:var(--mu);font-size:15px;margin:0 0 18px}
+.lbl{font-size:11px;color:var(--mu)}
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--sur)}
+td,th{border:1px solid var(--bd);padding:7px 10px;text-align:right;vertical-align:top}
+th{background:#EDE5D8;font-weight:700}
+ul{margin:6px 0;padding-right:22px}li{margin:3px 0}
+.tag{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;background:#EDE5D8;color:var(--mu);margin-left:4px}
+.tag.auto{background:#E3F1E8;color:var(--g)}.tag.dec{background:#FDE7D6;color:var(--y)}.tag.sys{background:#E8EEF8;color:#1D4ED8}
+.demo{background:var(--dbg);color:var(--dtx);border-radius:16px;padding:22px 24px;margin-top:14px}
+.demo .lbl{color:var(--dmu)}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0 22px}
+.tl div{background:var(--dsur);border:1px solid var(--dbd);border-radius:10px;padding:10px 12px}
+.tl b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:20px;color:#F59E0B}
+.tl b.g{color:#2FA36B}.tl b.r{color:#EF4444}
+.tl span{font-size:12px;color:var(--dmu)}
+.hub{background:#1A1A2E;border:2px solid #818CF8;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+.hub .n{font-family:"Frank Ruhl Libre",serif;font-size:26px;font-weight:700}
+.hub .k{display:flex;flex-direction:column;gap:2px;font-size:12px;color:#C7D2FE}
+.fan{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.fan .col{background:var(--dsur);border:1px solid var(--dbd);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.fan .col h4{margin:0 0 2px;font-size:13px;color:#F59E0B;border-bottom:1px solid var(--dbd);padding-bottom:6px}
+.rc{background:#26211D;border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:1px}
+.rc b{font-size:12px;color:var(--dtx)}.rc i{font-style:normal;color:var(--dmu)}.rc .m{color:#FCD9A8}
+.rc.dec{border-right:3px solid #F59E0B}.rc.auto{border-right:3px solid #2FA36B}.rc.sys{border-right:3px solid #60A5FA}.rc.cond{border-right:3px solid #7F1D1D;opacity:.85}
+.leg{display:flex;gap:14px;font-size:11px;color:var(--dmu);margin-top:10px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.leg .a::before{background:#2FA36B}.leg .d::before{background:#F59E0B}.leg .s::before{background:#60A5FA}.leg .c::before{background:#7F1D1D}
+.screens{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.scr{border:1px solid var(--dbd);border-radius:14px;overflow:hidden;background:var(--dsur);display:flex;flex-direction:column}
+.scr .h{padding:8px 12px;border-bottom:1px solid var(--dbd);font-size:11px;color:var(--dmu)}
+.scr .b{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.scr.light{background:#F4EFE6;color:var(--tx)}.scr.light .h{color:var(--mu);border-color:var(--bd)}
+.bigbtn{border-radius:12px;padding:14px 10px;text-align:center;font-weight:700;font-size:15px;border:2px solid var(--dbd);background:#26211D}
+.bigbtn.on{background:#B91C1C;border-color:#B91C1C;color:#fff}.bigbtn.g{background:#12301F;border-color:#2FA36B;color:#BBF0D0}.bigbtn.y{background:#3F2A10;border-color:#F59E0B;color:#FCD9A8}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.pill.g{background:#12301F;color:#BBF0D0}.pill.y{background:#3F2A10;color:#FCD9A8}.pill.r{background:#3B1111;color:#FCA5A5}
+.evt{background:#1A1A2E;border:1px solid #818CF8;border-radius:10px;padding:8px 10px;font-size:12px}
+.done{font-size:11px;color:#BBF0D0}.done::before{content:"✓ "}
+.ask{background:#3F2A10;border:1px solid #F59E0B;border-radius:8px;padding:6px 8px;font-size:11px}.ask b{color:#FCD9A8}
+.msg{background:#1C1917;color:#F4EFE6;border-radius:12px;padding:10px 12px;font-size:13px}.msg small{display:block;color:#D6CFC4;font-size:11px;margin-top:3px}
+.line{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;border-radius:8px;padding:8px 10px;color:#D6CFC4}
+.chan{display:grid;grid-template-columns:120px 1fr 70px;gap:6px;background:#26211D;border-radius:6px;padding:4px 6px;font-size:11px;align-items:center}
+.chan .ok{color:#BBF0D0}.chan .bad{color:#FCA5A5}.chan .slow{color:#FCD9A8}
+.six{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.who .card{padding:10px 12px}.who b{display:block}.who .why{color:var(--mu);font-size:12px}.who .get{font-size:12px;margin-top:3px}
+.no-list{background:#F3E8E8;border:1px solid #E5C4C4}
+@media (max-width:1100px){.fan{grid-template-columns:repeat(3,1fr)}.screens{grid-template-columns:repeat(2,1fr)}.six,.who{grid-template-columns:1fr}.tl{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>הסלולר קורס בצפון 40 דקות לפני ההדלקה — ניהול חי</h1>
+<p class="lead">נושא 10 — גדול. 22:20. 78,000 איש. שלוש חברות הסלולר בצפון המתחם (הרחבה, הציון, הכנסת אורחים צפון, המושב) — התאים עמוסים ב-400%. 41,000 צופים בשידור החי — 15,000 מהם <b>בתוך המתחם, על הסלולר</b>. הודעות לא יוצאות. SMS מתעכב 20 דקות. אפליקציות לא מסנכרנות. <b>הנושא הזה בודק את כל תשעת הקודמים בבת אחת: מה מכל מה שבנינו עובד כשהטלפונים לא.</b></p>
+
+<h2>חלק א' — הדמיה</h2>
+<div class="demo">
+  <div class="lbl">ציר הזמן — המניעה (ירוק) ומה קורה כשזה קורה בכל זאת (אדום)</div>
+  <div class="tl">
+    <div><b class="g">חורף</b><span><b style="color:#BBF0D0;display:inline">מניעה.</b> הנחת יסוד: <b>הסלולר יקרוס.</b> לכן: (1) רשת פרטית לכוחות — LTE פרטי + mesh + רדיו, לא תלויה במפעילים. (2) Cell-Broadcast — הערוץ היחיד שעובד גם בתא עמוס, מוסכם עם המפעילים ופקע"ר. (3) כל אפליקציית ציבור offline-first: כרטיס, מפה, נקודת מפגש, צמיד — בלי רשת. (4) חיישנים, מצלמות, מונים — על סיב, לא על סלולר. (5) 3 תאים ניידים (COW) של המפעילים בחניון — נדלקים ב-20:00. (6) לוחות LED, כריזה, סדרנים — "אותו מסר". (7) <b>רמת-כשל P1 מוגדרת:</b> "ערוץ ציבורי מנוון" — עם רשימה של מה עובר לאן.</span></div>
+    <div><b class="g">21:50</b><span>ניטור: תאי הצפון ב-280%, זמן תגובה 8 שנ'. המערכת: "P1 צפוי תוך 30 דק' · שיא לפני ההדלקה". לבד: השידור באפליקציה עובר ל"שמע בלבד" בתוך המתחם (15,000 × וידאו = הסיבה) · הודעה: "השידור על המסכים הגדולים · חסכו בסלולר" · המפעילים: "הפעילו את התאים הניידים — עכשיו" · הסדרנים: "בדקו רדיו".</span></div>
+    <div><b class="r">22:20</b><span><b style="color:#FCA5A5;display:inline">קרס.</b> 3 מפעילים, 4 תאים, 400%. המערכת רואה: 340 מכשירי-כוחות בצפון לא מסנכרנים · 0 דחיפות מאושרות ב-5 דק' · המפעילים מאשרים. <b>P1 מוכרז אוטומטית לצפון.</b> תוך 30 שניות: כל הודעה לציבור בצפון → Cell-Broadcast + כריזה + לוחות · כל הודעה לכוחות בצפון → רדיו + LTE פרטי · רצים במקום טלפונים · כפתורי הדיווח (כוסות, סדרן, תושב, קופה) → כפילות לרדיו/מוקד · המפקד: "P1 צפון · 40' להדלקה".</span></div>
+    <div><b class="r">22:21–22:35</b><span>מה נשבר ומה לא, מתוך 9 הנושאים: 01 נהג — בדרום, עובד; משפחות — לא, נקודת מפגש. 02 כפתור כוסות — לא; הספירה — כן; רץ. 03 תזכורות — לא; BLE (רשת פרטית) — כן; רץ. 04 חיישני רוח — סיב, כן; הודעה לציבור — CB, כן. 05 עין אנושית — רדיו. 06 כפתור תושב — לא; קו קרקע + מחסום ברדיו. 07 התראת קופה — כפילות למוקד. 08 פורטל גבאי — לא; הקישור הולך אליו. 09 "איבדתי ילד" — לא; נקודת מפגש + סדרנים. <b>המנגנון: 6 מ-9 נשענים על גיבוי שכבר היה כתוב.</b></span></div>
+    <div><b class="r">22:40</b><span>התאים הניידים חיים — 22:38. הצפון יורד ל-220%. הודעות אישיות עדיין לא. Cell-Broadcast — כן. השידור באפליקציה שמע-בלבד עד 00:00. הרוח ב-38 (04) — ההודעה "ייתכן עיכוב" יוצאת ב-CB ב-22:58 — עובדת. 37,000 שומעים. <b>P1 נשאר עד 23:50.</b></span></div>
+    <div><b class="r">אחרי</b><span>P1: 90 דקות. 0 הודעות-חירום שלא הגיעו (CB). 12 כפתורים שלא נלחצו — 12 רצים. 4 משפחות בנקודות מפגש במקום בטלפון. השידור: 15,000 צופים בסלולר בתוך המתחם — הסיבה. שנה הבאה: השידור באפליקציה בתוך המתחם — שמע בלבד תמיד; 5 תאים ניידים, מ-19:00; ו-Wi-Fi ציבורי ב-3 רחבות. הכי חשוב: <b>P1 היה מתורגל.</b> אף אחד לא חיפש מה לעשות.</span></div>
+  </div>
+
+  <div class="hub">
+    <div><div class="n">P1 · ערוץ ציבורי מנוון · צפון</div><div class="lbl">22:20 · 3 מפעילים · 4 תאים · 400% · 340 מכשירי-כוחות לא מסנכרנים · 0/1,200 דחיפות אושרו · תאים ניידים: מופעלים 22:38</div></div>
+    <div class="k"><span>עובד: Cell-Broadcast · רדיו · LTE פרטי · BLE · סיב (מצלמות, מונים, חיישנים) · כריזה · לוחות · רצים</span><span>לא: דחיפה · SMS (20') · אפליקציות · כפתורים · טלפון</span></div>
+    <div class="k"><span>ההדלקה בעוד 40' · הרוח 38 (04)</span><span>הסיבה: 15,000 × וידאו בתוך המתחם</span><span>P1 מתורגל: כן · 3 תרגילים</span></div>
+  </div>
+
+  <div class="lbl" style="margin-top:14px">מי מקבל מה — לפי שש השאלות (ובאיזה ערוץ — כי זה הנושא)</div>
+  <div class="fan">
+    <div class="col"><h4>1 · מי בתוך (הערוצים)</h4>
+      <div class="rc sys"><b>ניטור הרשת</b><i>21:50 / 22:20</i><span class="m">"280% → 400% · 340 לא מסנכרנים · 0 דחיפות · P1 צפון"</span></div>
+      <div class="rc sys"><b>מנתב ההודעות</b><i>30 שנ'</i><span class="m">ציבור-צפון → CB+כריזה+לוחות · כוחות-צפון → רדיו+LTE-פרטי · כפתורים → כפילות</span></div>
+      <div class="rc auto"><b>3 המפעילים (NOC)</b><i>21:50 / 22:20</i><span class="m">"הפעילו תאים ניידים" ← "P1 · אשרו עומס · ETA"</span></div>
+      <div class="rc auto"><b>השידור — האפליקציה</b><i>21:50</i><span class="m">"בתוך המתחם: שמע בלבד · וידאו על המסכים"</span></div>
+      <div class="rc auto"><b>340 בעלי-תפקידים בצפון</b><i>22:20 · רדיו</i><span class="m">"P1 · טלפון לא · רדיו ערוץ 4 · BLE עובד · רצים"</span></div>
+      <div class="rc auto"><b>הסדרנים — רצים</b><i>22:20</i><span class="m">"12 כפתורים לא עובדים · אתה הכפתור · מסלול"</span></div>
+      <div class="rc auto"><b>הציבור בצפון (45,000)</b><i>22:22 · CB</i><span class="m">"הרשת עמוסה · נקודות מפגש · השידור על המסכים · הודעות בכריזה"</span></div>
+      <div class="rc sys"><b>אפליקציית הציבור</b><i>מערכת</i><span class="m">מצב offline: כרטיס ✓ מפה ✓ מפגש ✓ צמיד ✓ · "אין רשת — הכל שמור"</span></div>
+    </div>
+    <div class="col"><h4>2 · מי מחכה (9 הנושאים)</h4>
+      <div class="rc sys"><b>01 · משפחות הנוסעים</b><i>מערכת</i><span class="m">הודעה אישית — לא · "נקודת המפגש" — מודפס · CB כללי</span></div>
+      <div class="rc sys"><b>02 · כפתור "נגמרו כוסות"</b><i>מערכת</i><span class="m">לא · הספירה מהמלאי — כן · רץ מהנקודה למוקד</span></div>
+      <div class="rc sys"><b>03 · תזכורות משמרת</b><i>מערכת</i><span class="m">לא · BLE (רשת פרטית) יודע איפה · רץ · "5 לא מגיבים = רשת" — עכשיו 340</span></div>
+      <div class="rc sys"><b>04 · הרוח וההודעה</b><i>מערכת</i><span class="m">חיישנים — סיב ✓ · "ייתכן עיכוב" — CB ✓ · 37,000 שמעו</span></div>
+      <div class="rc sys"><b>05 · עין אנושית</b><i>מערכת</i><span class="m">דיווח 1–5 — ברדיו, לא בטלפון · מצלמות — סיב ✓</span></div>
+      <div class="rc sys"><b>06 · כפתור תושב</b><i>מערכת</i><span class="m">לא · קו קרקע לקישור · המחסום ברדיו · הנט"ן ב-LTE פרטי</span></div>
+      <div class="rc sys"><b>07 · התראת קופה</b><i>מערכת</i><span class="m">לטלפון — לא · למוקד — כן (הלקח) · סדרן ברדיו</span></div>
+      <div class="rc sys"><b>08 · פורטל הגבאי</b><i>מערכת</i><span class="m">לא · מתאם החצרות הולך אליו · הודעה ל-300 — CB</span></div>
+      <div class="rc sys"><b>09 · "איבדתי ילד"</b><i>מערכת</i><span class="m">לא · נקודת מפגש מודפסת · סדרנים בנ-4 · "מצאתי" — רדיו</span></div>
+      <div class="rc dec"><b>המפקד</b><i>22:20 · כן</i><span class="m">"P1 צפון · 40' להדלקה · ערוץ ציבורי = כלי קהל · מאשר CB לכל הודעה"</span></div>
+    </div>
+    <div class="col"><h4>3 · מי באותה רשת</h4>
+      <div class="rc auto"><b>פקע"ר — Cell-Broadcast</b><i>22:20</i><span class="m">"P1 מירון · CB מקומי מופעל · לא אזעקה"</span></div>
+      <div class="rc auto"><b>משרד התקשורת</b><i>22:20</i><span class="m">"3 מפעילים · 400% · תאים ניידים · תיעוד"</span></div>
+      <div class="rc sys"><b>הרשת הפרטית (כוחות)</b><i>מערכת</i><span class="m">"LTE פרטי 62% · mesh ✓ · רדיו ✓ · 340 עברו"</span></div>
+      <div class="rc sys"><b>BLE gateways</b><i>מערכת</i><span class="m">"רשת פרטית · 180 בעלי-תפקידים ממוקמים · לא תלוי בסלולר"</span></div>
+      <div class="rc auto"><b>מוקד 100/101 ארצי</b><i>22:20</i><span class="m">"P1 מירון · שיחות מהמתחם לא יגיעו · CB · מוקד המתחם ברדיו"</span></div>
+      <div class="rc sys"><b>הדרום</b><i>מערכת</i><span class="m">"180% · לא P1 · נהגים ב-866 — עובד · הודעות לדרום — רגיל"</span></div>
+      <div class="rc sys"><b>המושב (06)</b><i>מערכת</i><span class="m">"על תא צפון · תושבים בלי אפליקציה · קו קרקע · הוועד"</span></div>
+      <div class="rc auto"><b>תמיכה טכנית</b><i>22:20</i><span class="m">"זה לא אנחנו · זה הסלולר · לא לגעת בשרתים"</span></div>
+      <div class="rc cond"><b>ספק השידור</b><i>21:50</i><span class="m">"שמע בלבד בתוך המתחם · geo-fence"</span></div>
+    </div>
+    <div class="col"><h4>4 · מי אחראי</h4>
+      <div class="rc dec"><b>המפקד</b><i>הקהל</i><span class="m">ערוץ ציבורי מנוון = כל הודעה לקהל דרך CB/כריזה — הוא מאשר</span></div>
+      <div class="rc dec"><b>ראש התמיכה הטכנית</b><i>הרשתות</i><span class="m">P1 — הכרזה, ניתוב, מפעילים, תאים ניידים</span></div>
+      <div class="rc auto"><b>קצין התקשורת (משטרה)</b><i>22:20</i><span class="m">רדיו · ערוצים · 340 עברו</span></div>
+      <div class="rc auto"><b>מנהל האירוע</b><i>22:20</i><span class="m">"P1 · השידור שמע · המפעילים · הדוברות"</span></div>
+      <div class="rc sys"><b>מנהל החוזה — המפעילים</b><i>מערכת</i><span class="m">"תאים ניידים: 20:00 בחוזה · הופעלו 22:38 · הפרה"</span></div>
+      <div class="rc auto"><b>הדוברות</b><i>22:22</i><span class="m">"אין קליטה במירון" יהיה כותרת · "הודעות החירום עובדות (CB) · השידור על מסכים"</span></div>
+      <div class="rc sys"><b>קצין הבטיחות</b><i>רישום</i><span class="m">"P1 90' · 0 הודעות חירום שלא הגיעו · 12 כפתורים → רצים"</span></div>
+      <div class="rc sys"><b>ממונה הפרטיות</b><i>מערכת</i><span class="m">"CB = לכולם בתא · אין הודעות אישיות · לא לשדר שמות"</span></div>
+    </div>
+    <div class="col"><h4>5 · מה זה עושה לעתיד</h4>
+      <div class="rc sys"><b>ההדלקה (04)</b><i>מערכת</i><span class="m">"ההודעה ב-22:58 — CB · עובד · 37,000"</span></div>
+      <div class="rc sys"><b>גל היציאה</b><i>מערכת</i><span class="m">"P1 עד 23:50 · הודעות יציאה — CB + לוחות · 'השאטל שלך' — לא"</span></div>
+      <div class="rc sys"><b>כל הכפתורים</b><i>מערכת</i><span class="m">"12 לא נלחצו ב-90' · 12 רצים · 0 פספוסים · השיטה עובדת"</span></div>
+      <div class="rc sys"><b>השידור — הלקח</b><i>מערכת</i><span class="m">"15,000 וידאו בסלולר בתוך המתחם = הסיבה · שנה הבאה: שמע בלבד תמיד בפנים"</span></div>
+      <div class="rc sys"><b>תאים ניידים</b><i>מערכת</i><span class="m">"3 → 5 · מ-19:00 · חוזה"</span></div>
+      <div class="rc sys"><b>Wi-Fi ציבורי</b><i>מערכת</i><span class="m">"3 רחבות · לשידור ולהודעות · לא לסלולר"</span></div>
+      <div class="rc sys"><b>P1 — הנוהל</b><i>מערכת</i><span class="m">"עבד · 3 תרגילים · להוסיף: 'שידור שמע' אוטומטי ב-250%"</span></div>
+    </div>
+    <div class="col"><h4>6 · האם זה תבנית</h4>
+      <div class="rc cond"><b>המפקד</b><i>P1 בכל המתחם (לא רק צפון)</i><span class="m">"P2 · הכל CB · רדיו · רצים · L2?"</span></div>
+      <div class="rc cond"><b>ראש התמיכה</b><i>P1 כל שנה באותה שעה</i><span class="m">"22:00–23:30 · השידור · לתכנן, לא להגיב"</span></div>
+      <div class="rc cond"><b>מנהל החוזה</b><i>תאים ניידים מאחרים</i><span class="m">"3 שנים · חוזה"</span></div>
+      <div class="rc cond"><b>קצין הבטיחות</b><i>כפתור שלא נלחץ ולא היה רץ</i><span class="m">"פספוס · איפה · למה"</span></div>
+      <div class="rc sys"><b>מנהל האירוע</b><i>בבוקר</i><span class="m">"P1 צפון 90' · 0 חירום שלא הגיע · 12 רצים · 4 משפחות בנקודות · השידור הסיבה"</span></div>
+      <div class="rc"><b style="color:#FCA5A5">לא מקבלים כלום</b><i>בכוונה</i><span class="m">הדרום (רגיל) · כב"ה · צה"ל (חוץ מפקע"ר-CB) · החצרות (חוץ מהגבאי ב-08) · תושבים מעבר לוועד · השאטלים בדרום</span></div>
+    </div>
+  </div>
+  <div class="leg"><span class="a">אוטומטי</span><span class="d">החלטה של בן-אדם</span><span class="s">מערכת מעדכנת את עצמה</span><span class="c">מותנה — רק אם</span></div>
+
+  <div class="lbl" style="margin-top:26px">מה כל אחד רואה</div>
+  <div class="screens">
+    <div class="scr"><div class="h">ראש התמיכה · חמ"ל · 22:20 · טבלת הערוצים</div><div class="b">
+      <div class="evt"><b>P1 · צפון · 22:20 · אוטומטי</b><br><span style="color:#C7D2FE">3 מפעילים 400% · 340 לא מסנכרנים · 0/1,200 דחיפות · ההדלקה 40'</span></div>
+      <div class="lbl">ערוץ · מצב · מה עובר אליו</div>
+      <div class="chan"><span>דחיפה</span><span>ציבור צפון</span><span class="bad">✗</span></div>
+      <div class="chan"><span>Cell-Broadcast</span><span>ציבור צפון — הכל</span><span class="ok">✓</span></div>
+      <div class="chan"><span>SMS</span><span>20 דק' — לא לחירום</span><span class="slow">איטי</span></div>
+      <div class="chan"><span>כריזה · לוחות</span><span>ציבור צפון — הכל</span><span class="ok">✓</span></div>
+      <div class="chan"><span>רדיו · LTE פרטי</span><span>340 כוחות צפון</span><span class="ok">✓</span></div>
+      <div class="chan"><span>BLE</span><span>מיקום 180 בעלי-תפקידים</span><span class="ok">✓</span></div>
+      <div class="chan"><span>סיב</span><span>42 מצלמות · 38 מונים · רוח</span><span class="ok">✓</span></div>
+      <div class="chan"><span>כפתורים (12)</span><span>→ רצים + כפילות למוקד</span><span class="slow">רצים</span></div>
+      <div class="chan"><span>קו קרקע</span><span>תושבים · המוקד</span><span class="ok">✓</span></div>
+      <div class="done">ניתוב הופעל · מפעילים · שידור שמע · רצים · המפקד · פקע"ר CB</div>
+      <div class="ask"><b>שלך:</b> <span class="row" style="margin-top:4px"><span class="pill y">תאים ניידים — לחץ על המפעילים</span><span class="pill g">השאר P1 עד 250%</span><span class="pill r">P2 אם הדרום עובר 300%</span></span></div>
+    </div></div>
+
+    <div class="scr"><div class="h">המפקד · 22:20</div><div class="b">
+      <div class="evt" style="background:#3B1111;border-color:#7F1D1D"><b>P1 · ערוץ ציבורי מנוון · צפון · 40' להדלקה</b><br><span style="color:#FCA5A5">45,000 בצפון · הודעות אישיות לא · CB + כריזה + לוחות — כן · כוחות ברדיו · חיישנים תקינים</span></div>
+      <div class="lbl">מה זה משנה לך</div>
+      <div class="done">ניהול הקהל — אותם מספרים (סיב)</div>
+      <div class="done">כוחות — רדיו · BLE · 340 עברו · 0 אבודים</div>
+      <div class="done">"ייתכן עיכוב" (04) — יצא ב-CB ב-22:58 · 37,000</div>
+      <div class="ask"><b>שלך:</b> כל הודעה לציבור בצפון עכשיו = CB (כולם בתא, לא אישי). <span class="row" style="margin-top:4px"><span class="pill g">מאשר — CB לכל הודעת קהל</span><span class="pill y">כריזה בלבד</span></span><br><span style="color:#FCD9A8">"השאטל שלך", "הילד שלך", "המשפחה שלך" — לא עובדים. נקודות מפגש. הסדרנים יודעים.</span></div>
+      <div class="lbl">P1 מתורגל. 3 תרגילים. אף אחד לא שואל "מה עכשיו".</div>
+    </div></div>
+
+    <div class="scr light"><div class="h">אדם ברחבה · טלפון · 22:22 · אין רשת</div><div class="b">
+      <div class="msg" style="background:#B91C1C"><b>הודעת Cell-Broadcast · מירון</b><small>הרשת הסלולרית עמוסה. הודעות חשובות יגיעו כך ובכריזה. השידור — על המסכים הגדולים. נקודת המפגש שלכם — על הצמיד.</small></div>
+      <div class="card" style="font-size:12px;border-color:#B45309"><b>אין רשת — הכל שמור</b><br><span style="color:var(--mu)">הכרטיס שלך ✓ · המפה ✓ · נקודת מפגש נ-4 ✓ · צמידי הילדים ✓ · לו"ז ההדלקות (22:00) ✓</span></div>
+      <div class="card" style="font-size:12px"><b>השידור החי</b><br><span style="color:var(--mu)">שמע בלבד בתוך המתחם. וידאו — על המסכים ברחבה ובחניון.</span></div>
+      <div class="card" style="font-size:12px"><b>אם איבדת ילד</b><br><span style="color:var(--mu)">הכפתור לא עובד עכשיו. לך לסדרן הקרוב (אפוד צהוב) או לנקודת המפגש שלכם.</span></div>
+      <div class="msg"><b>22:58 · Cell-Broadcast</b><small>ההדלקה מתעכבת בכ-30 דקות — רוח. הישארו במקומכם.</small></div>
+    </div></div>
+
+    <div class="scr"><div class="h">כל השאר — שורה אחת (ובאיזה ערוץ)</div><div class="b">
+      <div class="lbl">340 כוחות צפון · רדיו · 22:20</div><div class="line">P1 · טלפון לא · ערוץ 4 · BLE יודע איפה אתה · דיווחים ברדיו · רצים במקום כפתורים</div>
+      <div class="lbl">אחראי הכנסת אורחים צפון (02) · רדיו</div><div class="line">כפתור כוסות לא · הספירה שלך במערכת — כן · נגמר? רץ למוקד · האספקה של 21:30 בדרך</div>
+      <div class="lbl">קצין כוח-האדם (03) · חמ"ל</div><div class="line">340 לא מגיבים = P1, לא אנשים · תזכורות 22:00 → רצים · BLE: 179/188 במתחם</div>
+      <div class="lbl">קצין הקישור לתושבים (06) · קו קרקע</div><div class="line">כפתור תושב לא · קו החם — קרקע · המחסום ברדיו · הנט"ן ב-LTE פרטי · הוועד יודע</div>
+      <div class="lbl">קצין הביטחון (07) · חמ"ל</div><div class="line">התראות קופה → מוקד (לא לטלפונים) · 40 קופות · סדרנים ברדיו</div>
+      <div class="lbl">מתאם החצרות (08) · ברגל</div><div class="line">פורטל הגבאי לא · אתה הולך אליו · 300 ב-H — CB בחניון (דרום — עובד)</div>
+      <div class="lbl">3 המפעילים · NOC · 22:20</div><div class="line">P1 מירון צפון · 400% · תאים ניידים — עכשיו (חוזה: 20:00) · אשרו · ETA</div>
+      <div class="lbl">פקע"ר · 22:20</div><div class="line">CB מקומי מירון — מופעל לאירוע · לא אזעקה · הודעות מהחמ"ל</div>
+      <div class="lbl">הדוברות · 22:22</div><div class="line">"אין קליטה במירון" — כן. "הודעות החירום מגיעות (CB), השידור על מסכים, המערכת עובדת."</div>
+    </div></div>
+  </div>
+</div>
+
+<h2>חלק ב' — הרישום המלא</h2>
+
+<h3>1. מה המערכת יודעת לפני שקורה משהו</h3>
+<div class="card">על כל ערוץ: מה הוא, על מה הוא רץ (סלולר / סיב / רשת פרטית / רדיו / אוויר), מה עובר בו, למי, ומה קורה כשהוא נופל — <b>הגיבוי כתוב לכל ערוץ.</b> על הרשת: 3 מפעילים, 4 תאים בצפון, 3 בדרום, עומס בזמן אמת (מה-NOC), תאים ניידים (איפה, מתי בחוזה). על המכשירים: 600 בעלי-תפקידים — מי על סלולר, מי על LTE פרטי, מי עם רדיו, מתי סנכרנו לאחרונה. על הכפתורים: 12 סוגים (כוסות, סדרן, תושב, קופה, ילד, SOS...) — לכל אחד גיבוי אנושי. <b>על רמות הכשל:</b> L0–L4 (המערכת) ו-P0–P2 (הערוץ הציבורי) — מוגדרות, מתורגלות, עם רשימה של מה עובר לאן.</div>
+
+<h3>2. המניעה — הניהול האמיתי</h3>
+<div class="card"><ul>
+<li><b>ההנחה: הסלולר יקרוס.</b> לא "אם". כל מה שקריטי לא יושב עליו: חיישנים על סיב, כוחות על רשת פרטית + רדיו, ציבור על CB + כריזה + לוחות + נייר (צמיד, נקודת מפגש).</li>
+<li><b>Cell-Broadcast</b> — הערוץ היחיד שעובד בתא עמוס. מוסכם עם המפעילים ופקע"ר בחורף. זה מה שהציל את ההודעה של 22:58.</li>
+<li><b>offline-first לציבור:</b> כשאין רשת, האפליקציה לא "שבורה" — היא מראה מה שמור ואומרת מה לא עובד ומה לעשות במקום.</li>
+<li><b>הסיבה ידועה מראש:</b> 15,000 איש בתוך המתחם צופים בווידאו בסלולר. השידור באפליקציה — שמע בלבד בתוך geo-fence, וידאו על המסכים. זה מוריד 60% מהעומס לפני שהוא קורה.</li>
+<li><b>תאים ניידים מ-20:00 בחוזה</b>, לא "כשצריך".</li>
+<li><b>P1 מתורגל 3 פעמים.</b> כל בעל תפקיד יודע: כשהטלפון מת — רדיו, BLE, רץ. לא שואלים.</li>
+<li><b>אם הכל עובד:</b> ב-21:50 השידור עובר לשמע, התאים הניידים עולים, הצפון נשאר ב-250%, P1 לא מוכרז. אף אחד לא יודע כמה קרוב זה היה.</li>
+</ul></div>
+
+<h3>3. דקה אחר דקה</h3>
+<table>
+<tr><th style="width:80px">מתי</th><th>מה קורה</th><th style="width:120px">מי</th></tr>
+<tr><td>21:50</td><td>280%. "P1 צפוי תוך 30'". השידור באפליקציה → שמע בתוך המתחם. הודעה: "השידור על המסכים". המפעילים: "תאים ניידים — עכשיו". הסדרנים: "בדקו רדיו". המפקד: שורה.</td><td>אוטומט</td></tr>
+<tr><td>22:20</td><td>400%. 340 לא מסנכרנים. 0 דחיפות. המפעילים מאשרים. <b>P1 צפון — אוטומטי.</b> 30 שניות: מנתב ההודעות מחליף ערוצים לכל 45,000 בצפון ולכל 340 הכוחות. 12 כפתורים → רצים + מוקד. פקע"ר: CB מקומי. מוקד 100/101: "שיחות מהמתחם לא יגיעו". המפקד: "P1 · 40' להדלקה". הדוברות: נוסח. הדרום: רגיל.</td><td>אוטומט</td></tr>
+<tr><td>22:21</td><td>המפקד מאשר: כל הודעת קהל בצפון = CB. ראש התמיכה: לוחץ על המפעילים. מנהל האירוע: "השידור שמע עד 00:00".</td><td>החלטות</td></tr>
+<tr><td>22:22</td><td>CB ראשון: "הרשת עמוסה · הודעות כך ובכריזה · השידור על המסכים · נקודת מפגש על הצמיד". 45,000 קיבלו. האפליקציה: מצב offline — "הכל שמור".</td><td>—</td></tr>
+<tr><td>22:22–22:38</td><td>9 הנושאים במצב P1: 01 — נהגים בדרום (עובד), משפחות → נקודות מפגש. 02 — הספירה עובדת, כפתור → רץ. 03 — BLE עובד, תזכורות → רצים. 04 — חיישנים סיב, ההודעה CB. 05 — עין אנושית ברדיו. 06 — קו קרקע, מחסום ברדיו. 07 — התראות למוקד. 08 — הקישור הולך לגבאי. 09 — נקודת מפגש, "מצאתי" ברדיו. <b>12 כפתורים לא נלחצו. 12 רצים. 0 פספוסים.</b></td><td>המנגנון</td></tr>
+<tr><td>22:38</td><td>תאים ניידים חיים (חוזה: 20:00 — הפרה). 220%. דחיפות עדיין לא. CB כן. P1 נשאר.</td><td>מפעילים</td></tr>
+<tr><td>22:58</td><td>"ייתכן עיכוב — רוח" (04) — CB. 37,000 שמעו. <b>זו ההודעה שלולא CB לא הייתה מגיעה, 2 דקות לפני שהקהל מתחיל לזוז.</b></td><td>—</td></tr>
+<tr><td>23:50</td><td>ההדלקה נגמרה. 180%. P1 מבוטל. דחיפות חוזרות. "השאטל שלך" חוזר. הרשומה: 90 דקות.</td><td>אוטומט</td></tr>
+<tr><td>אחרי</td><td>"P1 90' · 0 חירום שלא הגיע · 12 רצים · 4 משפחות בנקודות · תאים ניידים 2:38 באיחור · הסיבה: 15,000 וידאו." שנה הבאה: שמע-בלבד בפנים תמיד · 5 תאים מ-19:00 · Wi-Fi ב-3 רחבות · "שידור שמע" אוטומטי ב-250%.</td><td>מערכת</td></tr>
+</table>
+
+<h3>4. מה אוטומטי ומה בן-אדם מחליט</h3>
+<div class="six">
+  <div class="card"><b>אוטומטי</b><ul><li>ניטור עומס (NOC) + סנכרון מכשירים + אישורי דחיפה</li><li>אזהרה ב-250%, שידור שמע, מפעילים</li><li>הכרזת P1 לאזור</li><li>ניתוב כל הודעה לערוץ שעובד — לפי אזור וקהל</li><li>כפילות כפתורים למוקד + רצים</li><li>אפליקציה → מצב offline עם הנחיות</li><li>פקע"ר CB, מוקד ארצי, דוברות — נוסחים</li><li>ביטול P1 כשהעומס יורד</li></ul></div>
+  <div class="card"><b>בן-אדם מחליט</b><ul><li>CB לכל הודעת קהל — המפקד (כי CB הוא לכולם, לא אישי)</li><li>לחץ על המפעילים, P2 — ראש התמיכה</li><li>השידור שמע עד מתי — מנהל האירוע</li><li>מה אומרים לתקשורת — הדוברות</li></ul></div>
+  <div class="card"><b>מגיע למפקד — כן, מיד</b><ul><li>ערוץ ציבורי = כלי ניהול קהל. בלי הודעות אישיות — נקודות מפגש, סדרנים, CB. 40' לפני ההדלקה. הוא צריך לדעת שהכלי השתנה.</li><li>P2 (כל המתחם) — L2?</li></ul></div>
+</div>
+
+<h3>5. כל מי שצריך לדעת — לפי שש השאלות (מקוצר — הרשימה בהדמיה)</h3>
+<div class="who">
+<div class="card"><b>1. מנתב ההודעות <span class="tag sys">מערכת</span></b><span class="why"><b>הליבה של הנושא:</b> כל הודעה במערכת יש לה קהל וערוץ. כשערוץ נופל — המנתב מחליף לגיבוי הכתוב. אף אחד לא שולח "ל-WhatsApp".</span><span class="get">טבלת ערוצים.</span></div>
+<div class="card"><b>2. 340 הכוחות בצפון <span class="tag auto">רדיו</span></b><span class="why">"טלפון לא. רדיו כן. BLE יודע איפה אתה. רצים."</span><span class="get">—</span></div>
+<div class="card"><b>3. 45,000 בצפון <span class="tag auto">CB + כריזה</span></b><span class="why">שידעו שיש ערוץ. ומה לא עובד. ומה לעשות במקום.</span><span class="get">—</span></div>
+<div class="card"><b>4. 9 הנושאים הקודמים <span class="tag sys">מערכת</span></b><span class="why">כל אחד עם הגיבוי שלו. 6 מ-9 נשענו על משהו שכבר היה כתוב. 3 (02, 06, 08) — הרץ / הקו / ההליכה.</span><span class="get">—</span></div>
+<div class="card"><b>5. המפקד <span class="tag dec">כן</span></b><span class="why">הכלי שלו לקהל השתנה.</span><span class="get">—</span></div>
+<div class="card"><b>6. המפעילים + פקע"ר + משרד התקשורת <span class="tag auto">אוטומטי</span></b><span class="why">התאים, ה-CB, התיעוד.</span><span class="get">—</span></div>
+<div class="card"><b>7. מוקד 100/101 ארצי <span class="tag auto">אוטומטי</span></b><span class="why">שיחות מהמתחם לא יגיעו. שידעו למה.</span><span class="get">—</span></div>
+<div class="card"><b>8. תמיכה טכנית <span class="tag auto">אוטומטי</span></b><span class="why">"זה לא אנחנו" — לא לגעת בשרתים.</span><span class="get">—</span></div>
+<div class="card"><b>9. הדוברות <span class="tag auto">אוטומטי</span></b><span class="why">"אין קליטה במירון" — כותרת בטוחה. התשובה מוכנה.</span><span class="get">—</span></div>
+<div class="card"><b>10. ממונה הפרטיות <span class="tag sys">מערכת</span></b><span class="why">CB לכולם בתא — לא שמות, לא פרטים.</span><span class="get">—</span></div>
+<div class="card"><b>11. מנהל החוזה <span class="tag sys">אחרי</span></b><span class="why">תאים ניידים ב-22:38 במקום 20:00.</span><span class="get">—</span></div>
+<div class="card"><b>12. קצין הבטיחות <span class="tag sys">רישום</span></b><span class="why">P1 90' · מה הגיע ומה לא.</span><span class="get">—</span></div>
+</div>
+
+<h3>6. מי לא מקבל כלום — בכוונה</h3>
+<div class="card no-list">הדרום (180% — רגיל) · כב"ה · צה"ל מעבר ל-CB · החצרות מעבר לגבאי ב-08 · תושבים מעבר לוועד · השאטלים בדרום. <b>P1 בצפון הוא לא P1 במירון. המערכת יודעת איפה.</b></div>
+
+<h3>7. מקרי קצה</h3>
+<ul>
+<li><b>P2 — כל המתחם:</b> גם הדרום. הנהגים בדרך — רדיו. הכל CB. המפקד: L2? לא — המערכת עובדת (סיב, רשת פרטית). רק הציבור מנותק. "P2 ≠ L2" — זה ההבדל שצריך לדעת.</li>
+<li><b>גם הרשת הפרטית נופלת:</b> רדיו בלבד. BLE — לא. זה L3. רשימות נייר. מתורגל.</li>
+<li><b>CB לא עובד (המפעיל לא הפעיל):</b> כריזה + לוחות + סדרנים בלבד. 45,000 — כריזה אזורית, לא כללית. פקע"ר על הקו.</li>
+<li><b>ההודעה של 22:58 (04) נופלת בדיוק ב-P1 בלי CB:</b> 37,000 לא יודעים על העיכוב. ב-23:00 מתחילים לזוז. זה התרחיש שבנינו נגדו. כריזה בכל אזור בו-זמנית, 3 שפות.</li>
+<li><b>מישהו לוחץ SOS ב-P1:</b> לא מגיע. הסדרנים יודעים: "SOS = צעק לסדרן". CB אמר את זה. ואם לא — 100 ארצי לא מקבל, וזה חור. הפתרון: SOS דרך SMS-קדימות (מוסכם עם המפעילים) — לשנה הבאה.</li>
+<li><b>הרץ לא מגיע (עמוס):</b> 12 כפתורים, 8 רצים. תעדוף: תושב, ילד, קופה — לפני כוסות.</li>
+<li><b>מפעיל אחד קרס, שניים לא:</b> P1 חלקי. המערכת יודעת איזה מכשיר על איזה מפעיל. 120 מ-340 עובדים. הודעות אישיות — למי שאפשר.</li>
+<li><b>שבת:</b> רדיו — כן (פיקוח נפש, מוגדר). CB — כן. הסדרנים — רגל. P1 בשבת = כמעט רגיל.</li>
+</ul>
+
+<h3>8. מה צריך כדי שזה יעבוד</h3>
+<ul>
+<li><b>לכל ערוץ — גיבוי כתוב.</b> טבלה: ערוץ · על מה רץ · מה עובר · גיבוי. בלי זה P1 הוא בלגן.</li>
+<li><b>רשת פרטית לכוחות</b> — LTE + mesh + רדיו. הדבר הכי יקר ברשימה. הדבר הכי חשוב.</li>
+<li><b>Cell-Broadcast</b> — הסכם עם המפעילים ופקע"ר. הסמכות לשלוח — המפקד.</li>
+<li><b>סיב לחיישנים</b> — מצלמות, מונים, רוח. לא סלולר. אף פעם.</li>
+<li><b>אפליקציה offline-first</b> עם מצב "אין רשת" שאומר מה לעשות.</li>
+<li><b>שידור שמע-בלבד בתוך המתחם</b> — geo-fence. זה 60% מהבעיה.</li>
+<li><b>תאים ניידים בחוזה</b> — מ-19:00, 5, עם קנס.</li>
+<li><b>רצים</b> — 8 סדרנים שהתפקיד שלהם ב-P1 הוא רק זה.</li>
+<li><b>ניטור עומס מה-NOC</b> של המפעילים — בזמן אמת.</li>
+<li><b>תרגול P1</b> — 3 פעמים. כל בעל תפקיד.</li>
+</ul>
+
+<h3>9. מה יוצא מהחיבור לתשעת הקודמים</h3>
+<div class="card">
+<b>זה הנושא שבדק את כולם.</b> תשעה נושאים, כל אחד עם כפתורים, הודעות, אפליקציות. הסלולר נפל — ומה נשאר? <b>6 מ-9 עמדו על גיבוי שכבר היה כתוב בתוכם:</b> נקודת המפגש (01, 09), הספירה (02), BLE (03), הסיב (04, 05), הקו הקרקעי (06), כפילות למוקד (07). 3 נשענו על אדם שהולך (02, 06, 08). <b>0 נשענו על הסלולר בלבד.</b> זה לא מקרה — זה כי בכל נושא שאלנו "מה קורה כשהרשת נופלת". השאלה הזו היא חלק מהשלד.<br><br>
+<b>הערוץ הוא ישות.</b> לא "הודעה" — "הודעה + ערוץ + גיבוי". ומנתב ההודעות הוא הליבה: הוא יודע לכל הודעה למי, באיזה ערוץ, ומה כשהערוץ נופל. <b>זה הדבר שלא היה בשום נושא קודם ומופיע בכולם.</b><br><br>
+<b>הרשת הופיעה ב-03 כהערה, ב-05 כבדיקה, ב-07 כסיבה — וכאן היא הנושא.</b> "5 לא מגיבים = רשת" הפך ל"340 לא מגיבים = P1". אותו חוק, קנה מידה אחר.<br><br>
+<b>P ≠ L.</b> המערכת עובדת (L0) והציבור מנותק (P1). שתי רמות-כשל נפרדות. המפקד צריך לדעת את שתיהן.<br><br>
+<b>ישויות חדשות:</b> ערוץ (על מה רץ, למי, גיבוי) · מנתב הודעות · רמת-כשל ציבורית (P0–P2) · רץ (אדם כערוץ).<br><br>
+<b>החוקים:</b> "כל הודעה = קהל + ערוץ + גיבוי כתוב (10)" · "הסלולר יקרוס — הנחת יסוד, לא סיכון (10)" · "P ≠ L — הציבור מנותק ≠ המערכת מנותקת (10)" · "כשכפתור לא עובד — יש אדם שהתפקיד שלו הוא הכפתור (10←02,06,07)" · "מה שגורם לעומס (השידור) — המערכת מכבה לפני שהעומס גורם ל-P1 (10←04)".<br><br>
+<b>עמוד השדרה:</b> תמיכה טכנית (המרכז), המפקד (מיד), מנהל האירוע, מוקד 100/101, הדוברות, קצין הבטיחות, ממונה הפרטיות, מנהל החוזה, המודל. <b>9 מתוך 13.</b> ואחד שהיה בכל הנושאים בלי שם: <b>מנתב ההודעות.</b> מעכשיו יש לו שם.
+</div>
+
+</div>
+</body>
+</html>

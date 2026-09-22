@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>סדרן מצא ילד בלי צמיד בזמן גל היציאה — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4EFE6;--sur:#FFFDF9;--bd:#E7DFD2;--tx:#1C1917;--mu:#6B6259;--acc:#C2410C;--g:#2F7A4D;--y:#B45309;--r:#B91C1C;
+--dbg:#14110F;--dsur:#1F1B18;--dbd:#332C27;--dtx:#F4EFE6;--dmu:#A89F94}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Heebo,system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1500px;margin:0 auto;padding:32px 28px 80px}
+h1{font-family:"Frank Ruhl Libre",serif;font-size:34px;margin:0 0 4px}
+h2{font-family:"Frank Ruhl Libre",serif;font-size:24px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--tx)}
+h3{font-size:16px;margin:22px 0 8px}
+.lead{color:var(--mu);font-size:15px;margin:0 0 18px}
+.lbl{font-size:11px;color:var(--mu)}
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--sur)}
+td,th{border:1px solid var(--bd);padding:7px 10px;text-align:right;vertical-align:top}
+th{background:#EDE5D8;font-weight:700}
+ul{margin:6px 0;padding-right:22px}li{margin:3px 0}
+.tag{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;background:#EDE5D8;color:var(--mu);margin-left:4px}
+.tag.auto{background:#E3F1E8;color:var(--g)}.tag.dec{background:#FDE7D6;color:var(--y)}.tag.sys{background:#E8EEF8;color:#1D4ED8}
+.demo{background:var(--dbg);color:var(--dtx);border-radius:16px;padding:22px 24px;margin-top:14px}
+.demo .lbl{color:var(--dmu)}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0 22px}
+.tl div{background:var(--dsur);border:1px solid var(--dbd);border-radius:10px;padding:10px 12px}
+.tl b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:20px;color:#F59E0B}
+.tl b.g{color:#2FA36B}.tl b.r{color:#EF4444}
+.tl span{font-size:12px;color:var(--dmu)}
+.hub{background:#3B1111;border:2px solid #EF4444;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+.hub .n{font-family:"Frank Ruhl Libre",serif;font-size:26px;font-weight:700}
+.hub .k{display:flex;flex-direction:column;gap:2px;font-size:12px;color:#FECACA}
+.fan{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.fan .col{background:var(--dsur);border:1px solid var(--dbd);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.fan .col h4{margin:0 0 2px;font-size:13px;color:#F59E0B;border-bottom:1px solid var(--dbd);padding-bottom:6px}
+.rc{background:#26211D;border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:1px}
+.rc b{font-size:12px;color:var(--dtx)}.rc i{font-style:normal;color:var(--dmu)}.rc .m{color:#FCD9A8}
+.rc.dec{border-right:3px solid #F59E0B}.rc.auto{border-right:3px solid #2FA36B}.rc.sys{border-right:3px solid #60A5FA}.rc.cond{border-right:3px solid #7F1D1D;opacity:.85}
+.leg{display:flex;gap:14px;font-size:11px;color:var(--dmu);margin-top:10px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.leg .a::before{background:#2FA36B}.leg .d::before{background:#F59E0B}.leg .s::before{background:#60A5FA}.leg .c::before{background:#7F1D1D}
+.screens{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.scr{border:1px solid var(--dbd);border-radius:14px;overflow:hidden;background:var(--dsur);display:flex;flex-direction:column}
+.scr .h{padding:8px 12px;border-bottom:1px solid var(--dbd);font-size:11px;color:var(--dmu)}
+.scr .b{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.scr.light{background:#F4EFE6;color:var(--tx)}.scr.light .h{color:var(--mu);border-color:var(--bd)}
+.bigbtn{border-radius:12px;padding:14px 10px;text-align:center;font-weight:700;font-size:15px;border:2px solid var(--dbd);background:#26211D}
+.bigbtn.on{background:#B91C1C;border-color:#B91C1C;color:#fff}.bigbtn.g{background:#12301F;border-color:#2FA36B;color:#BBF0D0}.bigbtn.y{background:#3F2A10;border-color:#F59E0B;color:#FCD9A8}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.pill.g{background:#12301F;color:#BBF0D0}.pill.y{background:#3F2A10;color:#FCD9A8}.pill.r{background:#3B1111;color:#FCA5A5}
+.evt{background:#3B1111;border:1px solid #EF4444;border-radius:10px;padding:8px 10px;font-size:12px}
+.done{font-size:11px;color:#BBF0D0}.done::before{content:"✓ "}
+.ask{background:#3F2A10;border:1px solid #F59E0B;border-radius:8px;padding:6px 8px;font-size:11px}.ask b{color:#FCD9A8}
+.msg{background:#1C1917;color:#F4EFE6;border-radius:12px;padding:10px 12px;font-size:13px}.msg small{display:block;color:#D6CFC4;font-size:11px;margin-top:3px}
+.line{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;border-radius:8px;padding:8px 10px;color:#D6CFC4}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.match div{background:#26211D;border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:2px}
+.match .ok{border-right:3px solid #2FA36B}.match .no{border-right:3px solid #EF4444}
+.six{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.who .card{padding:10px 12px}.who b{display:block}.who .why{color:var(--mu);font-size:12px}.who .get{font-size:12px;margin-top:3px}
+.no-list{background:#F3E8E8;border:1px solid #E5C4C4}
+@media (max-width:1100px){.fan{grid-template-columns:repeat(3,1fr)}.screens{grid-template-columns:repeat(2,1fr)}.six,.who{grid-template-columns:1fr}.tl{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>סדרן מצא ילד בלי צמיד בזמן גל היציאה — ניהול חי</h1>
+<p class="lead">נושא 09. הצד השני של "ילד אבוד": לא ההורה שמדווח — הסדרן שמוצא. 23:50, ההדלקה נגמרה (באיחור — נושא 04), גל היציאה מתחיל. במעבר המערבי, ילד בן 3, בוכה, יידיש, <b>בלי צמיד</b>. ההורים עוד לא שמו לב — הם בזרם. הנושא בודק שני דברים: מה קורה כשהמנגנון (צמיד) לא שם, ומה קורה כשיש <b>שני</b> אבות שמחפשים ילד בן 3 שדובר יידיש.</p>
+
+<h2>חלק א' — הדמיה</h2>
+<div class="demo">
+  <div class="lbl">ציר הזמן — המניעה (ירוק) ומה קורה כשהצמיד ירד (אדום)</div>
+  <div class="tl">
+    <div><b class="g">חורף · כניסה</b><span><b style="color:#BBF0D0;display:inline">מניעה.</b> צמיד לכל ילד בכניסה (שער, שאטל, H — נושא 08). ההורה רושם: שם, גיל, תמונה, שפה, סימנים, טלפון. נקודת מפגש משפחתית נבחרת בכניסה ומודפסת על הצמיד. 3 נקודות איסוף מאוישות (2 מוסמכים כל אחת — 03), יידיש. "אם איבדת ילד" — כפתור. "אם מצאת ילד" — כפתור לסדרן. מנוע התאמה: דיווח-הורה מול דיווח-מוצא, כל 30 שניות.</span></div>
+    <div><b class="g">21:25</b><span>המשפחה נכנסת עם ה-66 מ-H (08). 3 ילדים, 3 צמידים, נקודת מפגש נ-4. הילד בן 3 — הוא הילד של החלאקה מחר ב-06:40. הצמיד על היד. <b style="color:#BBF0D0;display:inline">אם הצמיד היה נשאר — הסיפור נגמר ב-23:52 עם סריקה אחת.</b></span></div>
+    <div><b class="r">23:50</b><span><b style="color:#FCA5A5;display:inline">נמצא.</b> סדרן [שם] במעבר המערבי. ילד בן ~3, בוכה, יידיש, בלי צמיד. לוחץ "מצאתי ילד". 20 שניות: תמונה, גיל משוער, שפה, מיקום · "אין דיווח-הורה פתוח שמתאים" · נקודת איסוף א-1 — 3 דק', הסדרן מלווה · לכל הסדרנים ברדיוס 150 מ': "ילד נמצא · אם הורה מחפש — א-1" · replay מצלמות המעבר: מאיפה הגיע (05) · המפקד: כלום.</span></div>
+    <div><b class="r">23:58</b><span>האב שם לב בתחנת השאטלים. לוחץ "איבדתי ילד": [שם], 3, יידיש, חולצה לבנה, צמיד M-7R2K. המערכת: הצמיד לא נסרק מ-21:25. <b>התאמה למוצא ב-23:50: 87%.</b> אבל — יש דיווח-הורה שני מ-23:55: ילד בן 3, יידיש, חולצה לבנה, מהציון. <b style="color:#FCA5A5;display:inline">שני אבות. ילד אחד בא-1.</b></span></div>
+    <div><b class="r">23:59–00:12</b><span>המערכת לא מחליטה — היא מציגה לשני האבות: "ילד נמצא בא-1 — ייתכן שלכם — בואו". ולמתנדבת בא-1: "2 מועמדים · אמת: תמונה מהרישום, סימנים, הילד מזהה, ת"ז, קוד". האב הראשון — נגד זרם היציאה, סדרן מלווה, 9 דק'. 00:08 מגיע. התמונה מהרישום — זה הוא. הילד רץ אליו. קוד 4-ספרות. ת"ז. <b>מסירה.</b> 00:12 האב השני מגיע — לא הוא. הילד שלו עדיין אבוד. הדיווח שלו נשאר פתוח, עם עדיפות.</span></div>
+    <div><b class="r">אחרי</b><span>ילד 1: 22 דק' מהמציאה לאיחוד. הצמיד: הוריד לבד — הרישום מציין "צמיד ירד" לשנה הבאה (צמיד שלא יורד לבן 3). המשפחה: השאטל שלהם זז ל-00:40. החלאקה 06:40 — לא זזה. ילד 2: נמצא 00:31 בעזרת הנשים — עם האמא. הרשומה: 2 דיווחים, 1 מציאה, 0 מסירות שגויות. שנה הבאה: צמידים לגיל 3 — סוג אחר.</span></div>
+  </div>
+
+  <div class="hub">
+    <div><div class="n">ילד נמצא · מעבר מערבי · בלי צמיד</div><div class="lbl">23:50 · בן ~3 · יידיש · חולצה לבנה · בוכה · לא פצוע · סדרן [שם] · נקודת איסוף א-1 · 3 דק'</div></div>
+    <div class="k"><span>דיווחי-הורה פתוחים: 0 (23:50) → 2 (23:58)</span><span>התאמה: אב א' 87% · אב ב' 81%</span><span>גל היציאה: מתחיל · מערבי ↓ 60/דק'</span></div>
+    <div class="k"><span>א-1: 2 מתנדבות (יידיש ✓) · 1 ילד · מים</span><span>מצלמות המעבר: replay 23:40–23:50</span><span>ילדים אבודים פתוחים במתחם: 2</span></div>
+  </div>
+
+  <div class="lbl" style="margin-top:14px">מי מקבל מה — לפי שש השאלות</div>
+  <div class="fan">
+    <div class="col"><h4>1 · מי בתוך</h4>
+      <div class="rc auto"><b>הסדרן שמצא</b><i>23:50</i><span class="m">"צלם · גיל · שפה · לא לשאול שמות מהקהל · לווה לא-1 · 3 דק'"</span></div>
+      <div class="rc sys"><b>הילד — הרשומה הזמנית</b><i>מערכת</i><span class="m">תמונה · ~3 · יידיש · לבן · מערבי · 23:50 · <b>נמחק אחרי איחוד</b></span></div>
+      <div class="rc auto"><b>2 המתנדבות בא-1</b><i>23:50</i><span class="m">"ילד מגיע · יידיש · בלי צמיד · הרגיעי · אל תשאלי 'איפה אבא' 20 פעם"</span></div>
+      <div class="rc auto"><b>האב א' (המדווח 23:58)</b><i>23:58</i><span class="m">"ילד שמתאים לתיאור נמצא בא-1 · בוא · סדרן ילווה · הבא ת"ז"</span></div>
+      <div class="rc auto"><b>האב ב' (המדווח 23:55)</b><i>23:58</i><span class="m">אותה הודעה · "ייתכן" — לא "נמצא"</span></div>
+      <div class="rc auto"><b>האמא (נ-4, עם 2 ילדים)</b><i>00:00</i><span class="m">"[שם] בא-1 · אבא בדרך · הישארי בנ-4"</span></div>
+      <div class="rc auto"><b>הסדרן המלווה את האב</b><i>23:59</i><span class="m">"אב → א-1 · נגד הזרם · מסלול הולכי רגל · 9 דק'"</span></div>
+      <div class="rc sys"><b>הצמיד M-7R2K</b><i>מערכת</i><span class="m">"לא נסרק מ-21:25 · ירד · לרשומה"</span></div>
+      <div class="rc auto"><b>חובש א-1</b><i>23:52</i><span class="m">"ילד 3 · בוכה · לא פצוע · מים" — בדיקה</span></div>
+    </div>
+    <div class="col"><h4>2 · מי מחכה לזה</h4>
+      <div class="rc sys"><b>מנוע ההתאמה</b><i>כל 30 שנ'</i><span class="m">מוצא 23:50 ↔ הורים 23:55, 23:58 · 81% · 87% · <b>לא מכריע</b> — מציג לשניהם</span></div>
+      <div class="rc auto"><b>סדרנים ברדיוס 150 מ'</b><i>23:50</i><span class="m">"ילד נמצא · בן 3 · אם הורה מחפש — א-1"</span></div>
+      <div class="rc sys"><b>ספירת ילדים אבודים</b><i>מערכת</i><span class="m">1 → 2 → 1 → 0 · המפקד רואה מספר</span></div>
+      <div class="rc sys"><b>replay מצלמות המעבר (05)</b><i>23:50</i><span class="m">23:40–23:50 · מאיפה הגיע · עם מי היה</span></div>
+      <div class="rc sys"><b>ניהול הקהל</b><i>מערכת</i><span class="m">"אב נגד זרם היציאה במערבי · סדרן מלווה · 1 אדם — בסדר"</span></div>
+      <div class="rc sys"><b>השאטל של המשפחה</b><i>מערכת</i><span class="m">"00:10 → 00:40 · 5 מקומות · לא נספר"</span></div>
+      <div class="rc sys"><b>החלאקה 06:40</b><i>מערכת</i><span class="m">"התור לא זז · הילד — זה הילד"</span></div>
+      <div class="rc auto"><b>מוקד המידע</b><i>23:50</i><span class="m">"ילד נמצא במערבי · א-1"</span></div>
+      <div class="rc cond"><b>המפקד</b><i>3+ בו-זמנית / לא נאסף עד 01:00</i><span class="m">אחרת — המספר בלבד</span></div>
+    </div>
+    <div class="col"><h4>3 · מי באותו זמן / מסלול</h4>
+      <div class="rc sys"><b>הדיווח השני (אב ב')</b><i>מערכת</i><span class="m">"נשאר פתוח · עדיפות · ילד 2 עדיין אבוד"</span></div>
+      <div class="rc sys"><b>גל היציאה (04)</b><i>מערכת</i><span class="m">"ילדים אבודים × 3 בזמן יציאה · נקודות איסוף: תגבור"</span></div>
+      <div class="rc auto"><b>סדרני התחנה</b><i>23:58</i><span class="m">"אב עוזב את התור · חוזר · המשפחה מחכה"</span></div>
+      <div class="rc sys"><b>עזרת הנשים</b><i>00:20</i><span class="m">"ילד 2 — ייתכן עם האמא · דיווח לסדרניות"</span></div>
+      <div class="rc sys"><b>הכניסה של המשפחה (08)</b><i>מערכת</i><span class="m">"נכנסו 21:25 מ-H · 3 צמידים · נ-4"</span></div>
+      <div class="rc cond"><b>מד"א</b><i>אם פצוע</i><span class="m">לא הפעם</span></div>
+      <div class="rc cond"><b>המשטרה</b><i>לא נאסף עד 01:00</i><span class="m">רווחה · לא הפעם</span></div>
+    </div>
+    <div class="col"><h4>4 · מי אחראי</h4>
+      <div class="rc dec"><b>המתנדבת בא-1 — המסירה</b><i>00:08</i><span class="m">תמונה מהרישום · סימנים · הילד מזהה · ת"ז · קוד — <b>5 מתוך 5</b></span></div>
+      <div class="rc auto"><b>אחראי נקודות האיסוף (הרשות)</b><i>23:50</i><span class="m">3 נקודות · תפוסה · 2 מועמדים לילד אחד</span></div>
+      <div class="rc auto"><b>מפקד גזרה מערב</b><i>23:50</i><span class="m">שורה · סדרן יצא ללוות</span></div>
+      <div class="rc sys"><b>ממונה הפרטיות (05)</b><i>מערכת</i><span class="m">"תמונת הילד: לא-1 + להורה המתאים · לא לרדיוס · נמחקת 00:12"</span></div>
+      <div class="rc sys"><b>קצין הבטיחות</b><i>רישום</i><span class="m">"צמיד ירד · 22 דק' · 2 מועמדים · 0 מסירות שגויות"</span></div>
+      <div class="rc cond"><b>רווחה / משטרה</b><i>01:00</i><span class="m">ילד לא נאסף = מקרה רווחה. לא הפעם.</span></div>
+    </div>
+    <div class="col"><h4>5 · מה זה עושה לעתיד</h4>
+      <div class="rc sys"><b>הצמיד — הלקח</b><i>מערכת</i><span class="m">"בן 3 · ירד · צמיד לגיל 2–4: סוג אחר (לא נפתח)"</span></div>
+      <div class="rc sys"><b>ההורים — הרשומה</b><i>מערכת</i><span class="m">"איחוד 00:08 · נמחק 00:12 · נשאר: 'אירוע 2431 · 22 דק' · תקין'"</span></div>
+      <div class="rc sys"><b>נקודות האיסוף בגל היציאה</b><i>מערכת</i><span class="m">"3 ילדים ב-40 דק' · תגבור 2 מתנדבות ל-א-1 עד 01:00"</span></div>
+      <div class="rc sys"><b>המודל</b><i>מערכת</i><span class="m">"ילדים אבודים: שיא ב-15 דק' אחרי ההדלקה · לתגבר אז"</span></div>
+      <div class="rc sys"><b>ילד 2</b><i>מערכת</i><span class="m">"נמצא 00:31 · עם האמא · 36 דק'"</span></div>
+    </div>
+    <div class="col"><h4>6 · האם זה תבנית</h4>
+      <div class="rc cond"><b>המפקד</b><i>3+ בו-זמנית</i><span class="m">"צפיפות? נקודות איסוף עמוסות?"</span></div>
+      <div class="rc cond"><b>אחראי נקודות האיסוף</b><i>צמידים שיורדים</i><span class="m">"5 הלילה · כולם בני 2–4 · הצמיד"</span></div>
+      <div class="rc cond"><b>קצין הבטיחות</b><i>מסירה שגויה</i><span class="m">אף פעם. אם קרה — הכל עוצר.</span></div>
+      <div class="rc sys"><b>מנהל האירוע</b><i>בבוקר</i><span class="m">"14 ילדים אבודים · ממוצע 18 דק' · 0 לא נאספו · 0 מסירות שגויות · 5 צמידים ירדו"</span></div>
+      <div class="rc"><b style="color:#FCA5A5">לא מקבלים כלום</b><i>בכוונה</i><span class="m">הציבור (לא כריזה, לא תמונה) · הדוברות · כב"ה · צה"ל · החצרות · תושבים · הסדרנים מחוץ לרדיוס</span></div>
+    </div>
+  </div>
+  <div class="leg"><span class="a">אוטומטי</span><span class="d">החלטה של בן-אדם</span><span class="s">מערכת מעדכנת את עצמה</span><span class="c">מותנה — רק אם</span></div>
+
+  <div class="lbl" style="margin-top:26px">מה כל אחד רואה</div>
+  <div class="screens">
+    <div class="scr"><div class="h">הסדרן שמצא · טלפון · 23:50</div><div class="b">
+      <div class="bigbtn on">מצאתי ילד</div>
+      <div class="msg" style="background:#26211D"><b>3 דברים, 20 שניות</b><small>📷 תמונה · גיל: 2 / 3–5 / 6–9 / 10+ · שפה: יידיש / עברית / אחר</small><small style="color:#FCD9A8">לא לשאול אנשים בקהל "של מי הילד". לא למסור לאף אחד.</small></div>
+      <div class="msg" style="background:#12301F"><b>לווה אותו לנקודת איסוף א-1</b><small>3 דק' · מסלול הולכי רגל · [שם המתנדבת] מחכה · דוברת יידיש</small></div>
+      <div class="lbl">אין דיווח-הורה שמתאים כרגע. תקבל הודעה כשיש.</div>
+      <div class="msg" style="background:#26211D"><b>23:58</b><small>הורה דיווח. ייתכן שזה הילד. הוא בדרך לא-1. תודה — חזור לעמדה.</small></div>
+      <div class="bigbtn g" style="padding:10px;font-size:13px">מסרתי לא-1 — [שם]</div>
+    </div></div>
+
+    <div class="scr"><div class="h">המתנדבת · נקודת איסוף א-1 · טאבלט · 00:07</div><div class="b">
+      <div class="evt"><b>ילד 2431 · בן ~3 · יידיש · מ-23:53</b><br><span style="color:#FCA5A5">2 מועמדים. לא למסור בלי 5 מתוך 5.</span></div>
+      <div class="match">
+        <div class="ok"><b>אב א' · דיווח 23:58 · 87%</b><span>[שם] · 3 · יידיש · לבן · צמיד M-7R2K (ירד) · תמונה מהרישום: ✓ דומה · סימן: שומה לחי שמאל</span><span style="color:#BBF0D0">בדרך · 2 דק'</span></div>
+        <div class="no"><b>אב ב' · דיווח 23:55 · 81%</b><span>[שם] · 3 · יידיש · לבן · צמיד M-2Q8V (ירד) · תמונה: ✗ לא דומה · סימן: —</span><span style="color:#FCD9A8">בדרך · 6 דק'</span></div>
+      </div>
+      <div class="lbl">אימות מסירה — כולם חובה</div>
+      <div class="row" style="gap:5px"><span class="pill g">תמונה מהרישום ✓</span><span class="pill g">סימן (שומה) ✓</span><span class="pill g">הילד רץ אליו ✓</span><span class="pill y">ת"ז —</span><span class="pill y">קוד 4 ספרות —</span></div>
+      <div class="row" style="gap:6px"><div class="bigbtn g" style="flex:1;font-size:13px;padding:10px">מסירה — 5/5</div><div class="bigbtn" style="flex:1;font-size:13px;padding:10px;color:#6F665D">לא תואם — הבא</div></div>
+      <div class="lbl">אחרי המסירה: התמונה נמחקת. הרשומה: "2431 · 22 דק' · תקין".</div>
+    </div></div>
+
+    <div class="scr light"><div class="h">האב · טלפון · 23:58 → 00:08</div><div class="b">
+      <div class="msg" style="background:#B91C1C"><b>דיווח: [שם] אבוד</b><small>3 · יידיש · חולצה לבנה · צמיד M-7R2K · נראה לאחרונה: תחנת שאטלים 23:50</small></div>
+      <div class="msg"><b>23:58 · ייתכן שנמצא</b><small>ילד שמתאים לתיאור בנקודת איסוף א-1 מ-23:53. סדרן [שם] ילווה אותך — הוא לידך. 9 דק' נגד הזרם.</small><small style="color:#FDE68A">הבא תעודת זהות. הקוד שלך: 7 3 1 9.</small></div>
+      <div class="card" style="font-size:12px"><b>[שם האמא] יודעת</b><br><span style="color:var(--mu)">"הישארי בנ-4 עם הילדים. אבא בדרך לא-1."</span></div>
+      <div class="msg" style="background:#2F7A4D"><b>00:08 · זה הוא</b><small>מסירה אושרה. השאטל שלכם: 00:40, קו 3. החלאקה 06:40 — כרגיל.</small></div>
+    </div></div>
+
+    <div class="scr"><div class="h">כל השאר — שורה אחת</div><div class="b">
+      <div class="lbl">סדרנים ברדיוס 150 מ' · 23:50</div><div class="line">ילד נמצא · בן ~3 · יידיש · מערבי · אם הורה מחפש — א-1 · (בלי תמונה)</div>
+      <div class="lbl">אב ב' · 23:58</div><div class="line">ייתכן שנמצא · א-1 · בוא · (00:12: לא הילד שלך · הדיווח שלך פתוח · עדיפות · 00:31: נמצא עם האמא)</div>
+      <div class="lbl">הסדרן המלווה · 23:59</div><div class="line">לווה את [שם] מהתחנה לא-1 · נגד הזרם · מסלול הולכי רגל מערבי · 9 דק'</div>
+      <div class="lbl">ניהול הקהל · מערכת</div><div class="line">1 אדם נגד זרם במערבי · מלווה · בסדר · נקודות איסוף: 3 ילדים ב-40' → תגבור א-1</div>
+      <div class="lbl">replay מצלמות המעבר (05) · 23:50</div><div class="line">23:47 ילד עם קבוצה של 5 · 23:49 נשאר מאחור · 23:50 סדרן · → הקבוצה: לכיוון התחנה</div>
+      <div class="lbl">ממונה הפרטיות · מערכת</div><div class="line">תמונת 2431: א-1 + 2 מועמדים · לא לרדיוס · נמחקה 00:12 · נשאר: מספר, זמנים, "תקין"</div>
+      <div class="lbl">קצין הבטיחות · יומן</div><div class="line">2431 · צמיד ירד (בן 3) · מציאה→איחוד 22' · 2 מועמדים · אימות 5/5 · 0 שגויות</div>
+      <div class="lbl">המפקד</div><div class="line" style="color:#6F665D">ילדים אבודים: 2 → 1 → 0. (המספר. לא הילד.)</div>
+    </div></div>
+  </div>
+</div>
+
+<h2>חלק ב' — הרישום המלא</h2>
+
+<h3>1. מה המערכת יודעת לפני שקורה משהו</h3>
+<div class="card">על כל ילד עם צמיד: קוד, שם, גיל, תמונה, שפה, סימנים, טלפון הורה, נקודת מפגש, מתי נסרק לאחרונה ואיפה. <b>מוצפן. נמחק אחרי הלילה.</b> על נקודות האיסוף: 3, איפה, מי מאייש (מוסמכים — 03), שפות, תפוסה. על הסדרנים: מי ברדיוס, מי מוסמך ללוות. על המצלמות: מה רואה כל מעבר (05). על הזמן: מתי ילדים הולכים לאיבוד (15 דק' אחרי ההדלקה, גל היציאה). <b>על האימות:</b> 5 בדיקות למסירה — תמונה מהרישום, סימן, הילד מזהה, ת"ז, קוד. לא 3 מתוך 5. חמש.</div>
+
+<h3>2. המניעה — הניהול האמיתי</h3>
+<div class="card"><ul>
+<li><b>צמיד לכל ילד, בכניסה, חובה.</b> בשער, בשאטל, ב-H. עם נקודת מפגש מודפסת — התוכנית לכשהרשת נופלת.</li>
+<li><b>צמיד שלא יורד לבן 3.</b> הלקח של הלילה. ילדים בני 2–4 מורידים. סוג אחר.</li>
+<li><b>נקודות איסוף מאוישות במוסמכים, דוברי יידיש, לפני השיא.</b> תגבור 15 דק' אחרי ההדלקה — כי אז זה קורה.</li>
+<li><b>שני כפתורים:</b> "איבדתי" להורה, "מצאתי" לסדרן. ומנוע שמצליב אותם כל 30 שניות. הסדרן לא מחפש הורה — המערכת מחפשת.</li>
+<li><b>הסדרן לא שואל את הקהל "של מי הילד".</b> זה הכלל שמונע מסירה למי שאומר "שלי".</li>
+<li><b>אם הכל עובד:</b> הצמיד נסרק ב-23:50, ההורה מקבל הודעה ב-23:50:20, האיחוד ב-23:58. 8 דקות. לא 22.</li>
+</ul></div>
+
+<h3>3. דקה אחר דקה</h3>
+<table>
+<tr><th style="width:80px">מתי</th><th>מה קורה</th><th style="width:120px">מי</th></tr>
+<tr><td>23:50</td><td>הסדרן מוצא. "מצאתי ילד": תמונה, ~3, יידיש. אין צמיד. המערכת: אין דיווח-הורה מתאים. א-1 — 3 דק', הסדרן מלווה. סדרנים ברדיוס: "ילד נמצא, אם הורה — א-1" (בלי תמונה — פרטיות). replay מצלמות המעבר. חובש א-1. מוקד המידע. המפקד: המספר 1.</td><td>אוטומט</td></tr>
+<tr><td>23:53</td><td>הילד בא-1. המתנדבת (יידיש). מים. חובש: לא פצוע. הרשומה הזמנית: 2431.</td><td>א-1</td></tr>
+<tr><td>23:55</td><td>אב ב' מדווח (מהציון): ילד 3, יידיש, לבן, צמיד M-2Q8V. המערכת: התאמה ל-2431: 81%. "ייתכן שנמצא — א-1". הוא בדרך — 6 דק'.</td><td>אוטומט</td></tr>
+<tr><td>23:58</td><td>אב א' מדווח (מהתחנה): [שם], 3, יידיש, לבן, M-7R2K, שומה. התאמה: 87%. "ייתכן — א-1 — סדרן ילווה — ת"ז — קוד". האמא בנ-4: "הישארי". <b>המערכת לא מכריעה בין 87 ל-81.</b> היא מציגה לא-1: "2 מועמדים. 5/5 חובה."</td><td>אוטומט</td></tr>
+<tr><td>00:08</td><td>אב א' בא-1. תמונה מהרישום ✓. שומה ✓. הילד רץ אליו ✓. ת"ז ✓. קוד ✓. מסירה. התמונה נמחקת. השאטל 00:40. החלאקה 06:40 — לא זזה.</td><td>מתנדבת</td></tr>
+<tr><td>00:12</td><td>אב ב' בא-1. "לא הילד שלך." הדיווח שלו נשאר פתוח, עדיפות, replay מהציון. 00:31 — הילד שלו נמצא עם האמא בעזרת הנשים. הצמיד שלו — גם ירד.</td><td>אוטומט</td></tr>
+<tr><td>אחרי</td><td>"14 ילדים הלילה · ממוצע 18 דק' · 0 לא נאספו · 0 מסירות שגויות · 5 צמידים ירדו, כולם בני 2–4 → צמיד אחר · שיא 15 דק' אחרי ההדלקה → תגבור." הרשומות האישיות נמחקו. נשארו מספרים.</td><td>מערכת</td></tr>
+</table>
+
+<h3>4. מה אוטומטי ומה בן-אדם מחליט</h3>
+<div class="six">
+  <div class="card"><b>אוטומטי</b><ul><li>קליטת "מצאתי" — תמונה, גיל, שפה, מיקום</li><li>הפניה לנקודת איסוף הקרובה, עם ליווי</li><li>הודעה לסדרנים ברדיוס — בלי תמונה</li><li>replay מצלמות</li><li>הצלבה עם דיווחי-הורה כל 30 שנ'</li><li>"ייתכן" לכל הורה מתאים — לא "נמצא"</li><li>ליווי להורה נגד הזרם</li><li>עדכון שאטל, חלאקה, האמא</li><li>מחיקת תמונה אחרי איחוד</li><li>תגבור נקודות איסוף לפי קצב</li></ul></div>
+  <div class="card"><b>בן-אדם מחליט</b><ul><li><b>המסירה — המתנדבת בא-1. 5 מתוך 5. תמיד.</b> המערכת מציעה, לא מוסרת.</li><li>כשיש 2 מועמדים — היא בודקת את שניהם. לא "הראשון שהגיע".</li><li>ילד שלא נאסף עד 01:00 — אחראי נקודות האיסוף → משטרה/רווחה</li></ul></div>
+  <div class="card"><b>מגיע למפקד רק אם</b><ul><li>3+ ילדים אבודים בו-זמנית — אות על צפיפות או על נקודות איסוף עמוסות</li><li>ילד לא נאסף עד 01:00</li><li>מסירה שגויה — הכל עוצר</li><li>אחרת — המספר. לא הילד.</li></ul></div>
+</div>
+
+<h3>5. כל מי שצריך לדעת — לפי שש השאלות</h3>
+<h3 style="margin-top:14px">שאלה 1 — מי בתוך</h3>
+<div class="who">
+<div class="card"><b>1. הסדרן שמצא <span class="tag auto">אוטומטי</span></b><span class="why">20 שניות, 3 שדות. ולא לשאול את הקהל. ולא למסור לאף אחד — גם לא ל"דוד".</span><span class="get">כפתור + הנחיות + ליווי.</span></div>
+<div class="card"><b>2. הרשומה הזמנית של הילד <span class="tag sys">מערכת</span></b><span class="why">תמונה, גיל, שפה. קיימת עד האיחוד. נמחקת.</span><span class="get">—</span></div>
+<div class="card"><b>3. המתנדבות בא-1 <span class="tag auto">אוטומטי</span></b><span class="why">יידיש. להרגיע. ולבדוק 5 מתוך 5.</span><span class="get">הילד + המועמדים + האימות.</span></div>
+<div class="card"><b>4. שני האבות <span class="tag auto">אוטומטי · "ייתכן"</span></b><span class="why">שניהם מקבלים אותה הודעה. "ייתכן" — לא "נמצא". כדי שהשני לא יגיע בטוח ויתפרק.</span><span class="get">א-1, ליווי, ת"ז, קוד.</span></div>
+<div class="card"><b>5. האמא <span class="tag auto">אוטומטי</span></b><span class="why">בנ-4 עם 2 ילדים. שלא תתחיל לרוץ.</span><span class="get">"הישארי".</span></div>
+<div class="card"><b>6. הסדרן המלווה את האב <span class="tag auto">אוטומטי</span></b><span class="why">אב לבד נגד גל היציאה — לא. מלווה, מסלול הולכי רגל.</span><span class="get">משימה.</span></div>
+<div class="card"><b>7. הצמיד <span class="tag sys">מערכת</span></b><span class="why">"לא נסרק מ-21:25" — הוא ירד. לרשומה, לשנה הבאה.</span><span class="get">—</span></div>
+<div class="card"><b>8. חובש א-1 <span class="tag auto">אוטומטי</span></b><span class="why">בוכה ≠ פצוע. בודקים.</span><span class="get">—</span></div>
+</div>
+<h3>שאלה 2 — מי מחכה לזה</h3>
+<div class="who">
+<div class="card"><b>9. מנוע ההתאמה <span class="tag sys">מערכת</span></b><span class="why"><b>הליבה:</b> הסדרן לא מחפש הורה. ההורה לא מחפש ילד. המערכת מצליבה. ו<b>כשיש שניים — לא מכריעה.</b> 87 ו-81 זה לא "הראשון". זה "שניהם, 5/5".</span><span class="get">—</span></div>
+<div class="card"><b>10. סדרנים ברדיוס <span class="tag auto">בלי תמונה</span></b><span class="why">שידעו לאן להפנות הורה שמחפש. בלי תמונת הילד — פרטיות.</span><span class="get">שורה.</span></div>
+<div class="card"><b>11. ספירת ילדים אבודים <span class="tag sys">מערכת</span></b><span class="why">המפקד רואה מספר. 1→2→1→0.</span><span class="get">—</span></div>
+<div class="card"><b>12. replay מצלמות (05) <span class="tag sys">מערכת</span></b><span class="why">מאיפה הגיע, עם מי היה. עוזר להתאמה.</span><span class="get">—</span></div>
+<div class="card"><b>13. ניהול הקהל <span class="tag sys">מערכת</span></b><span class="why">אב נגד הזרם. 1. עם ליווי. ו: 3 ילדים ב-40 דקות = לתגבר נקודות.</span><span class="get">—</span></div>
+<div class="card"><b>14. השאטל, החלאקה <span class="tag sys">מערכת</span></b><span class="why">זזים / לא זזים לבד.</span><span class="get">—</span></div>
+<div class="card"><b>15. המפקד <span class="tag">מספר</span></b><span class="why">3+ בו-זמנית — כן. אחד — מספר.</span><span class="get">—</span></div>
+</div>
+<h3>שאלה 3–6 — בקיצור</h3>
+<div class="who">
+<div class="card"><b>16. הדיווח השני <span class="tag sys">מערכת</span></b><span class="why">אב ב' — הילד שלו עדיין אבוד. הדיווח לא נסגר בטעות. עדיפות.</span><span class="get">—</span></div>
+<div class="card"><b>17. גל היציאה (04) <span class="tag sys">מערכת</span></b><span class="why">שיא הילדים האבודים. תגבור.</span><span class="get">—</span></div>
+<div class="card"><b>18. סדרני התחנה <span class="tag auto">אוטומטי</span></b><span class="why">אב עוזב את התור. המשפחה נשארת. המקום שלהם.</span><span class="get">—</span></div>
+<div class="card"><b>19. עזרת הנשים <span class="tag sys">מערכת</span></b><span class="why">ילד 2 — עם האמא שם. הסדרניות מקבלות תיאור.</span><span class="get">—</span></div>
+<div class="card"><b>20. המתנדבת — המסירה <span class="tag dec">5/5</span></b><span class="why">ההחלטה היחידה. והיא לא מוותרת על אף אחת מהחמש. גם כשהילד רץ אליו. גם כשהאב בוכה.</span><span class="get">—</span></div>
+<div class="card"><b>21. ממונה הפרטיות (05) <span class="tag sys">מערכת</span></b><span class="why">תמונת ילד: לנקודה ולמועמדים. לא לרדיוס. לא לכריזה. נמחקת.</span><span class="get">—</span></div>
+<div class="card"><b>22. קצין הבטיחות <span class="tag sys">רישום</span></b><span class="why">צמיד ירד · 22' · 2 מועמדים · 0 שגויות.</span><span class="get">—</span></div>
+<div class="card"><b>23. רווחה / משטרה <span class="tag">01:00</span></b><span class="why">לא נאסף = רווחה. לא הפעם.</span><span class="get">—</span></div>
+<div class="card"><b>24. הצמיד לשנה הבאה <span class="tag sys">מערכת</span></b><span class="why">5 ירדו, כולם 2–4. סוג אחר.</span><span class="get">—</span></div>
+<div class="card"><b>25. תגבור נקודות האיסוף <span class="tag sys">מערכת</span></b><span class="why">15 דק' אחרי ההדלקה. המודל.</span><span class="get">—</span></div>
+</div>
+
+<h3>6. מי לא מקבל כלום — בכוונה</h3>
+<div class="card no-list">הציבור — <b>לא כריזה, לא תמונה על מסך.</b> ילד אבוד בכריזה = 100 "הורים". הדוברות · כב"ה · צה"ל · החצרות · תושבים · הסדרנים מחוץ לרדיוס. <b>ילד אבוד מגיע ל-12 אנשים. התמונה שלו — ל-3.</b></div>
+
+<h3>7. מקרי קצה</h3>
+<ul>
+<li><b>מישהו בקהל אומר "זה הילד של השכן שלי, אני אקח אותו":</b> לא. הכפתור אומר לסדרן: לא למסור לאף אחד. רק בנקודת איסוף, 5/5. "הדוד" יכול ללוות לא-1.</li>
+<li><b>שני מועמדים — שניהם עוברים 4/5:</b> לא מוסרים. משטרה. זה נדיר. זה קורה.</li>
+<li><b>אין דיווח-הורה עד 00:30:</b> ההורים לא שמו לב (ישנים? באוטובוס?). המערכת: replay — עם מי היה ב-23:47 → הקבוצה → כרטיס משפחתי → טלפון להורה. הפוך: המערכת מוצאת את ההורה.</li>
+<li><b>הילד לא מדבר (2, או בהלם):</b> אין שפה, אין שם. תמונה + סימנים + replay בלבד. ההתאמה חלשה יותר — האימות 5/5 חשוב יותר.</li>
+<li><b>ילד עם צמיד — אבל ההורה לא רשם פרטים:</b> הקוד קיים, הרישום ריק. הסריקה נותנת "M-7R2K — לא רשום". הטלפון של הקונה? אם יש. אם לא — כמו בלי צמיד.</li>
+<li><b>ההורה בלי טלפון (או הרשת קרסה — נושא 10):</b> נקודת המפגש המודפסת. הכריזה בנקודת המפגש בלבד (לא כללית). הסדרנים בנ-4.</li>
+<li><b>ילד פצוע:</b> מד"א קודם. נקודת האיסוף אחרי. ההורה מקבל "בטיפול רפואי, בסדר, בוא ל-רפואה 2".</li>
+<li><b>ילד לא נאסף עד 01:00:</b> אחראי נקודות האיסוף → משטרה → רווחה. ההורים? replay, כרטיס, טלפון. זה כבר לא "אבוד" — זה "ננטש?".</li>
+<li><b>שבת:</b> הצמיד — כן (לא כותבים, סורקים? — הרב קבע). הכפתור — פיקוח נפש. נקודות המפגש — חשובות פי שניים.</li>
+</ul>
+
+<h3>8. מה צריך כדי שזה יעבוד</h3>
+<ul>
+<li><b>צמיד חובה, בכניסה</b> — עם רישום שההורה באמת ממלא (2 דקות). ואחר לגיל 2–4.</li>
+<li><b>נקודת מפגש מודפסת על הצמיד.</b></li>
+<li><b>3 נקודות איסוף מאוישות במוסמכים, יידיש, עם חובש, מים, ומקום לילד.</b></li>
+<li><b>שני כפתורים ומנוע התאמה</b> שלא מכריע — מציג.</li>
+<li><b>אימות 5/5 כתוב, ומתנדבות שלא מוותרות.</b></li>
+<li><b>סדרנים מלווים</b> — לילד לנקודה, להורה נגד הזרם.</li>
+<li><b>מחיקה אוטומטית</b> של תמונות ופרטים אחרי איחוד.</li>
+<li><b>תגבור בזמן</b> — 15 דק' אחרי ההדלקה, גל היציאה.</li>
+<li><b>החיבור ל-replay</b> — "עם מי היה".</li>
+<li><b>החיבור לכרטיס המשפחתי</b> — למצוא הורה שלא דיווח.</li>
+</ul>
+
+<h3>9. מה יוצא מהחיבור לשמונת הקודמים</h3>
+<div class="card">
+<b>המשפחה היא ישות.</b> הופיעה ב-01 (המשפחה של הנוסע), 06 (הבן של התושב), 08 (300 עם 40 ילדים). כאן היא המרכז: כרטיס משפחתי, נקודת מפגש, צמידים, מי איפה. <b>וגם: אותה משפחה בשלושה נושאים</b> — נכנסו מ-H (08), הילד של החלאקה, השאטל שזז.<br><br>
+<b>המערכת לא מכריעה כשיש ספק על אדם.</b> ב-05 היא הורידה ביטחון ואמרה "medium". כאן: 87% ו-81% — לא "הראשון". <b>החוק: כשההחלטה היא על מי מקבל ילד, כסף (07), או כניסה (08) — המערכת מציגה, אדם מחליט, לפי כלל כתוב.</b><br><br>
+<b>הפרטיות (05) הפכה למנגנון:</b> תמונת ילד היא הדבר הכי רגיש במערכת. לרדיוס — בלי. לכריזה — אף פעם. נמחקת. "מי לא מקבל" הוא כאן חלק מהבטיחות, לא נימוס.<br><br>
+<b>ישויות חדשות:</b> משפחה · התאמה (ציון, מועמדים, לא מכריעה) · אימות (5 בדיקות, כולן) · רשומה זמנית (קיימת עד האיחוד, נמחקת).<br><br>
+<b>החוקים חוצי-הנושאים:</b> "מוצא ומאבד לא מחפשים זה את זה — המערכת מצליבה (09)" · "כשיש 2 מועמדים — מציגים לשניהם 'ייתכן', מאמתים 5/5, לא מכריעים (09, 07, 08)" · "ליווי נגד הזרם = סדרן, לא לבד (09→קהל)" · "השיא של ילדים אבודים = 15 דק' אחרי ההדלקה — לו"ז (04) קובע תגבור (09)".<br><br>
+<b>עמוד השדרה:</b> ניהול הקהל, קצין הבטיחות, ממונה הפרטיות (הפעם במרכז), מוקד המידע, המודל, מנהל האירוע, המפקד (מספר). <b>7 מתוך 13.</b> הדוברות — לא. מד"א — לא. זה נושא שקט בכוונה.
+</div>
+
+</div>
+</body>
+</html>
