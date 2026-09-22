@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>חצר מגיעה עם 300 איש בלי כרטיסים — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4EFE6;--sur:#FFFDF9;--bd:#E7DFD2;--tx:#1C1917;--mu:#6B6259;--acc:#C2410C;--g:#2F7A4D;--y:#B45309;--r:#B91C1C;
+--dbg:#14110F;--dsur:#1F1B18;--dbd:#332C27;--dtx:#F4EFE6;--dmu:#A89F94}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Heebo,system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1500px;margin:0 auto;padding:32px 28px 80px}
+h1{font-family:"Frank Ruhl Libre",serif;font-size:34px;margin:0 0 4px}
+h2{font-family:"Frank Ruhl Libre",serif;font-size:24px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--tx)}
+h3{font-size:16px;margin:22px 0 8px}
+.lead{color:var(--mu);font-size:15px;margin:0 0 18px}
+.lbl{font-size:11px;color:var(--mu)}
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--sur)}
+td,th{border:1px solid var(--bd);padding:7px 10px;text-align:right;vertical-align:top}
+th{background:#EDE5D8;font-weight:700}
+ul{margin:6px 0;padding-right:22px}li{margin:3px 0}
+.tag{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;background:#EDE5D8;color:var(--mu);margin-left:4px}
+.tag.auto{background:#E3F1E8;color:var(--g)}.tag.dec{background:#FDE7D6;color:var(--y)}.tag.sys{background:#E8EEF8;color:#1D4ED8}
+.demo{background:var(--dbg);color:var(--dtx);border-radius:16px;padding:22px 24px;margin-top:14px}
+.demo .lbl{color:var(--dmu)}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0 22px}
+.tl div{background:var(--dsur);border:1px solid var(--dbd);border-radius:10px;padding:10px 12px}
+.tl b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:20px;color:#F59E0B}
+.tl b.g{color:#2FA36B}.tl b.r{color:#EF4444}
+.tl span{font-size:12px;color:var(--dmu)}
+.hub{background:#1F2937;border:2px solid #93C5FD;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+.hub .n{font-family:"Frank Ruhl Libre",serif;font-size:26px;font-weight:700}
+.hub .k{display:flex;flex-direction:column;gap:2px;font-size:12px;color:#DBEAFE}
+.fan{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.fan .col{background:var(--dsur);border:1px solid var(--dbd);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.fan .col h4{margin:0 0 2px;font-size:13px;color:#F59E0B;border-bottom:1px solid var(--dbd);padding-bottom:6px}
+.rc{background:#26211D;border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:1px}
+.rc b{font-size:12px;color:var(--dtx)}.rc i{font-style:normal;color:var(--dmu)}.rc .m{color:#FCD9A8}
+.rc.dec{border-right:3px solid #F59E0B}.rc.auto{border-right:3px solid #2FA36B}.rc.sys{border-right:3px solid #60A5FA}.rc.cond{border-right:3px solid #7F1D1D;opacity:.85}
+.leg{display:flex;gap:14px;font-size:11px;color:var(--dmu);margin-top:10px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.leg .a::before{background:#2FA36B}.leg .d::before{background:#F59E0B}.leg .s::before{background:#60A5FA}.leg .c::before{background:#7F1D1D}
+.screens{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.scr{border:1px solid var(--dbd);border-radius:14px;overflow:hidden;background:var(--dsur);display:flex;flex-direction:column}
+.scr .h{padding:8px 12px;border-bottom:1px solid var(--dbd);font-size:11px;color:var(--dmu)}
+.scr .b{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.scr.light{background:#F4EFE6;color:var(--tx)}.scr.light .h{color:var(--mu);border-color:var(--bd)}
+.bigbtn{border-radius:12px;padding:14px 10px;text-align:center;font-weight:700;font-size:15px;border:2px solid var(--dbd);background:#26211D}
+.bigbtn.on{background:#B91C1C;border-color:#B91C1C;color:#fff}.bigbtn.g{background:#12301F;border-color:#2FA36B;color:#BBF0D0}.bigbtn.y{background:#3F2A10;border-color:#F59E0B;color:#FCD9A8}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.pill.g{background:#12301F;color:#BBF0D0}.pill.y{background:#3F2A10;color:#FCD9A8}.pill.r{background:#3B1111;color:#FCA5A5}
+.evt{background:#1F2937;border:1px solid #93C5FD;border-radius:10px;padding:8px 10px;font-size:12px}
+.done{font-size:11px;color:#BBF0D0}.done::before{content:"✓ "}
+.ask{background:#3F2A10;border:1px solid #F59E0B;border-radius:8px;padding:6px 8px;font-size:11px}.ask b{color:#FCD9A8}
+.msg{background:#1C1917;color:#F4EFE6;border-radius:12px;padding:10px 12px;font-size:13px}.msg small{display:block;color:#D6CFC4;font-size:11px;margin-top:3px}
+.line{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;border-radius:8px;padding:8px 10px;color:#D6CFC4}
+.bar{height:8px;border-radius:4px;background:#3A2E24;overflow:hidden}.bar>i{display:block;height:100%}
+.opt{display:grid;grid-template-columns:36px 1fr 90px;gap:6px;background:#26211D;border-radius:6px;padding:5px 6px;font-size:11px;align-items:center}
+.opt .t{color:#F59E0B;font-weight:700}
+.six{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.who .card{padding:10px 12px}.who b{display:block}.who .why{color:var(--mu);font-size:12px}.who .get{font-size:12px;margin-top:3px}
+.no-list{background:#F3E8E8;border:1px solid #E5C4C4}
+@media (max-width:1100px){.fan{grid-template-columns:repeat(3,1fr)}.screens{grid-template-columns:repeat(2,1fr)}.six,.who{grid-template-columns:1fr}.tl{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>חצר מגיעה עם 300 איש בלי כרטיסים — ניהול חי</h1>
+<p class="lead">נושא 08 (רנדומלי). 21:05. חמישה אוטובוסים מאורגנים של [חצר ב'] נכנסים לחניון עליות. 300 איש. המכסה של החצר: 1,200. הונפקו: 1,134. נסרקו: 812. ה-300 האלה — לא ברשימה. הגבאי: "הם שלנו, האדמו"ר אמר, נסדר את זה בשער". <b>זה הרגע שבו "הקיבולת היא מקור האמת" פוגשת את מירון האמיתי. ניהול חי = שההחלטה תתקבל ב-21:15, ע"י מי שמוסמך, עם סיבה כתובה, ושה-300 ישמעו אותה ביידיש מהגבאי שלהם — ולא ב-22:30 משוטר בשער.</b></p>
+
+<h2>חלק א' — הדמיה</h2>
+<div class="demo">
+  <div class="lbl">ציר הזמן — המניעה (ירוק) ומה קורה כשהאזהרה נדחתה (אדום)</div>
+  <div class="tl">
+    <div><b class="g">חורף</b><span><b style="color:#BBF0D0;display:inline">מניעה.</b> פורטל חצר: מכסה 1,200, כרטיסים אישיים, "בלי כרטיס אין כניסה — נקודת הסירוב בחניון עליות, לא בשער". <b>מאגר רזרבה 2,000</b> בידי מנהל האירוע, עם כללי הקצאה כתובים: רק אחרי ההדלקה, לפי בקשה כתובה, עם סיבה, שקוף לכל החצרות. ההסעות המאורגנות רשומות (נושא 01): חצר ב' — 5 אוטובוסים, 1,450 מושבים.</span></div>
+    <div><b class="g">18:00</b><span>המערכת מצליבה: חצר ב' — 1,450 מושבים בהסעות מול 1,134 כרטיסים. <b>316 אנשים עם מושב ובלי כרטיס.</b> אזהרה לגבאי ולמנהל האירוע: "פער 316 · לפתור לפני 21:00 · האפשרויות: 66 מהמכסה שלכם + בקשה מהרזרבה לאחרי ההדלקה". הגבאי: "נסדר בשער". 20:00: אזהרה שנייה. <b style="color:#FCD9A8;display:inline">לא נפתר.</b></span></div>
+    <div><b class="r">21:05</b><span><b style="color:#FCA5A5;display:inline">הגיעו.</b> 5 אוטובוסים בחניון. מניפסט נסרק: 300 · 0 כרטיסים · 40 ילדים · 12 קשישים. המערכת לבד: אוטובוסים → אזור המתנה H (לא לתור השאטלים) · הגבאי: "300 שלך בלי כרטיסים · החלטה תוך 10 דק'" · מנהל האירוע: הבקשה + 4 אפשרויות עם המחיר · משטרת החניון: "300 ממתינים · חיכוך אפשרי · לא לסרב בשער" · הכנסת אורחים חניון: מים ל-300 · פורטל החצר: הבקשה פתוחה.</span></div>
+    <div><b class="r">21:08</b><span>המערכת מחשבת את המחיר: 300 עכשיו = הרחבה +0.02 (כלום) — <b>אבל</b> הם ילכו לציון (97%) → תור במדרגות (מוגבל) → נעילה 8 דק' מוקדם. אחרי ההדלקה (23:40+) הציון מתרוקן → 300 = כלום. רשימת ההמתנה: 40 ממתינים ל-66 של החצר מ-23:30. הרזרבה: 2,000 · הוקצו 0.</span></div>
+    <div><b class="r">21:15</b><span>מנהל האירוע מחליט (הוא, לא השוטר, לא הגבאי): <b>66 עכשיו</b> (המכסה שלהם — ילדים וקשישים קודם) · <b>234 ב-00:00 מהרזרבה</b> · סיבה כתובה: "פער הסעות/כרטיסים · אחרי ההדלקה · לפי כלל 3" · <b>רשימת ההמתנה מקבלת 40 מהרזרבה ב-00:00 — אותו כלל</b> · שאר החצרות רואות בפורטל. הגבאי מודיע ל-300 ביידיש. צמידים ל-40 ילדים — בחניון. 5 האוטובוסים ל-H עד 00:00.</span></div>
+    <div><b class="r">00:00 · אחרי</b><span>234 + 40 נכנסים ב-6 שאטלים, 00:00–00:25, אחרי ההדלקה (שנדחתה — נושא 04 — אז בפועל 00:20). הציון 61%. 0 אירועים בחניון. הרשומה: אזהרה 18:00, 20:00 · לא נפתר · הגעה 21:05 · החלטה 21:15 · סיבה · 66+234+40. שנה הבאה: המכסה של חצר ב' — לפי הסעות, לא לפי בקשה; ואזהרה שלא נענתה עד 20:30 → מנהל האירוע מתקשר, לא שולח.</span></div>
+  </div>
+
+  <div class="hub">
+    <div><div class="n">חצר ב' · 300 בלי כרטיסים · חניון עליות</div><div class="lbl">21:05 · 5 אוטובוסים · מניפסט 300 · 40 ילדים · 12 קשישים · 30 דוברי צרפתית · גבאי [שם] · אזהרות 18:00, 20:00 — לא נענו</div></div>
+    <div class="k"><span>מכסה 1,200 · הונפקו 1,134 · נסרקו 812 · לא מנוצל 66 (פג 23:30)</span><span>רזרבה 2,000 · הוקצו 0 · כלל: אחרי ההדלקה, כתוב, שקוף</span><span>רשימת המתנה: 40</span></div>
+    <div class="k"><span>מתחם 82% · ציון 97% · מדרגות מוגבל</span><span>300 עכשיו: ציון +5% → נעילה 8' מוקדם</span><span>300 ב-00:00: ציון 61% → כלום</span></div>
+  </div>
+
+  <div class="lbl" style="margin-top:14px">מי מקבל מה — לפי שש השאלות</div>
+  <div class="fan">
+    <div class="col"><h4>1 · מי בתוך</h4>
+      <div class="rc auto"><b>הגבאי של חצר ב'</b><i>18:00 / 20:00 / 21:05</i><span class="m">"פער 316" ← "לא נפתר" ← "300 בחניון · החלטה תוך 10' · אתה מודיע להם"</span></div>
+      <div class="rc auto"><b>300 האנשים</b><i>21:16 · ביידיש · מהגבאי + Cell-Broadcast</i><span class="m">"66 עכשיו (ילדים, קשישים) · השאר 00:00 אחרי ההדלקה · מים ואוכל כאן · שידור על המסך"</span></div>
+      <div class="rc auto"><b>40 הילדים</b><i>21:20 · בחניון</i><span class="m">צמידים — עמדה בחניון, לא בשער</span></div>
+      <div class="rc auto"><b>12 הקשישים</b><i>21:16</i><span class="m">ב-66 הראשונים · ישיבה עד השאטל</span></div>
+      <div class="rc auto"><b>5 נהגי האוטובוסים</b><i>21:05</i><span class="m">"אזור H · חנייה עד 00:00 · לא לתור השאטלים · מים"</span></div>
+      <div class="rc auto"><b>העוזר של האדמו"ר</b><i>21:16</i><span class="m">"66 + 234 ב-00:00 · הכלל · כתוב · שקוף לכולם"</span></div>
+      <div class="rc sys"><b>66 הכרטיסים הלא-מנוצלים</b><i>מערכת</i><span class="m">מונפקים עכשיו ל-66 מה-300 · לא פגים ב-23:30 · רשימת ההמתנה מפוצה מהרזרבה</span></div>
+      <div class="rc sys"><b>234 כרטיסים מהרזרבה</b><i>מערכת</i><span class="m">חלון 00:00–01:00 · אזורים: הכל · הרזרבה 2,000 → 1,726 (עם ה-40)</span></div>
+    </div>
+    <div class="col"><h4>2 · מי מחכה לזה</h4>
+      <div class="rc dec"><b>מנהל האירוע (הרשות)</b><i>21:05</i><span class="m">הבקשה · 4 אפשרויות · המחיר של כל אחת · הכלל · כפתור + סיבה</span></div>
+      <div class="rc sys"><b>ניהול הקהל</b><i>21:08</i><span class="m">"300 עכשיו → ציון +5% → מדרגות נעילה 8' מוקדם · ב-00:00 → כלום"</span></div>
+      <div class="rc auto"><b>משטרת גזרת החניון</b><i>21:05</i><span class="m">"300 ממתינים ב-H · חיכוך אפשרי · 2 שוטרים · לא לסרב — ההחלטה מהרשות"</span></div>
+      <div class="rc auto"><b>סדרן הרציף בחניון</b><i>21:05</i><span class="m">"5 אוטובוסים ל-H · לא לתור · 66 לשאטל 21:25 · 274 ב-00:00"</span></div>
+      <div class="rc auto"><b>הכנסת אורחים חניון (02)</b><i>21:05</i><span class="m">"300 × 3 שעות · מים 600 · אוכל · שירותים · כוסות +900"</span></div>
+      <div class="rc sys"><b>רשימת ההמתנה (40)</b><i>21:15</i><span class="m">"ה-66 הלכו לחצר · אתם: 40 מהרזרבה ב-00:00 — אותו כלל"</span></div>
+      <div class="rc sys"><b>שאטלים — 00:00</b><i>מערכת</i><span class="m">"274 + 40 = 6 אוטובוסים · 00:00–00:25 · אחרי גל היציאה? לא — במקביל"</span></div>
+      <div class="rc sys"><b>פורטל החצר — כל 30 החצרות</b><i>21:15</i><span class="m">"חצר ב' · בקשה 300 · 66 מהמכסה + 234 מהרזרבה 00:00 · כלל 3" — שקוף</span></div>
+      <div class="rc cond"><b>המפקד</b><i>אי-סדר בחניון</i><span class="m">"300 · חיכוך" — אחרת לא</span></div>
+    </div>
+    <div class="col"><h4>3 · מי באותו מאגר / אותה שעה</h4>
+      <div class="rc sys"><b>29 החצרות האחרות</b><i>21:15</i><span class="m">"רזרבה: 2,000 → 1,726 · הכלל · מי שיבקש — אותו דבר"</span></div>
+      <div class="rc sys"><b>ההסעות המאורגנות (01)</b><i>18:00</i><span class="m">"1,450 מושבים vs 1,134 כרטיסים" — זה מה שגילה את הפער</span></div>
+      <div class="rc sys"><b>חצרות עם פער דומה</b><i>18:00</i><span class="m">"חצר ז': 80 · חצר ט': 120 — נפתרו ב-19:00"</span></div>
+      <div class="rc sys"><b>חניון עליות — תפוסה</b><i>מערכת</i><span class="m">"5 אוטובוסים ב-H · 3 שעות · H: 12 מקומות · נשאר 7"</span></div>
+      <div class="rc sys"><b>סורק שער צפון — 00:00</b><i>מערכת</i><span class="m">"274 בבת אחת · תור · 3 סורקים · 8'"</span></div>
+      <div class="rc auto"><b>מפקד ציר 866</b><i>21:05</i><span class="m">"5 אוטובוסים מאורגנים ב-H · יוצאים 01:30"</span></div>
+      <div class="rc sys"><b>גל היציאה (04)</b><i>מערכת</i><span class="m">"274 נכנסים ב-00:00 = בזמן שאחרים יוצאים · כיוונים מנוגדים בתחנה"</span></div>
+      <div class="rc cond"><b>קצין הביטחון</b><i>300 בלי כרטיס = 300 בלי בידוק-רישום</i><span class="m">"בידוק מלא ב-00:00 · לא מהיר"</span></div>
+    </div>
+    <div class="col"><h4>4 · מי אחראי</h4>
+      <div class="rc dec"><b>מנהל האירוע (הרשות)</b><i>ההחלטה</i><span class="m">הרזרבה שלו. הכלל שלו. הסיבה שלו — כתובה.</span></div>
+      <div class="rc auto"><b>הגבאי / ראש החצר</b><i>הפער</i><span class="m">"316 בלי כרטיס · הוזהרת פעמיים" — רשום</span></div>
+      <div class="rc auto"><b>מתאם החצרות (הרשות)</b><i>21:05</i><span class="m">הפורטל · השקיפות · מי שואל למה</span></div>
+      <div class="rc auto"><b>מפקד גזרת החניון (משטרה)</b><i>21:05</i><span class="m">הסדר ב-H · לא ההחלטה</span></div>
+      <div class="rc auto"><b>היועץ המשפטי של הרשות</b><i>מראש</i><span class="m">"הסמכות לסרב + הסמכות להקצות רזרבה — כתובות" (בחורף)</span></div>
+      <div class="rc sys"><b>קצין הבטיחות</b><i>רישום</i><span class="m">"נקודת הסירוב עבדה: 300 בחניון, לא בשער · 0 חיכוך"</span></div>
+      <div class="rc auto"><b>הדוברות</b><i>21:16</i><span class="m">"החצר קיבלה 300 · 66 עכשיו, השאר אחרי ההדלקה · לפי הכלל" — לפני "המשטרה חסמה חסידים"</span></div>
+      <div class="rc sys"><b>קצין הכספים</b><i>מערכת</i><span class="m">"300 × שאטל · הכנסת אורחים 3 שעות" — מי משלם</span></div>
+    </div>
+    <div class="col"><h4>5 · מה זה עושה לעתיד</h4>
+      <div class="rc sys"><b>הרזרבה</b><i>מערכת</i><span class="m">2,000 → 1,726 · 21:15 · לפני ההדלקה · "אם עוד 3 חצרות — נגמר ב-23:00"</span></div>
+      <div class="rc sys"><b>ציון ב-00:00</b><i>מערכת</i><span class="m">"+274 · 61% → 66% · בסדר"</span></div>
+      <div class="rc sys"><b>שאטלים 00:00</b><i>מערכת</i><span class="m">"6 אוטובוסים נכנסים בזמן היציאה · הרציף: 2 כיוונים"</span></div>
+      <div class="rc sys"><b>הכנסת אורחים חניון</b><i>מערכת</i><span class="m">"+900 כוסות · +600 מים · 3 שעות" (02)</span></div>
+      <div class="rc sys"><b>המכסה של חצר ב' — שנה הבאה</b><i>מערכת</i><span class="m">"הביאה 1,450 על 1,200 · הוזהרה פעמיים · מכסה לפי הסעות, לא לפי בקשה"</span></div>
+      <div class="rc sys"><b>האזהרה — הלקח</b><i>מערכת</i><span class="m">"18:00 + 20:00 לא נענו → 20:30 מנהל האירוע מתקשר. הודעה זה לא מספיק."</span></div>
+      <div class="rc sys"><b>H — אזור ההמתנה</b><i>מערכת</i><span class="m">"12 אוטובוסים · 3 שעות · צריך: ישיבה, מים, שירותים, מסך שידור"</span></div>
+    </div>
+    <div class="col"><h4>6 · האם זה תבנית</h4>
+      <div class="rc cond"><b>מנהל האירוע</b><i>3+ חצרות עם פער באותו לילה</i><span class="m">"הכללים לא ברורים לחצרות — או ברורים ולא מכבדים"</span></div>
+      <div class="rc cond"><b>המפקד</b><i>הרזרבה נגמרת לפני ההדלקה</i><span class="m">"אין מה לתת · סירוב מלא · חיכוך" — כן</span></div>
+      <div class="rc cond"><b>מתאם החצרות</b><i>אותה חצר כל שנה</i><span class="m">"המכסה שלה לא ריאלית — או שהיא בודקת גבולות"</span></div>
+      <div class="rc cond"><b>קצין הבטיחות</b><i>סירוב בשער במקום בחניון</i><span class="m">"נקודת הסירוב זזה — למה"</span></div>
+      <div class="rc sys"><b>מנהל האירוע</b><i>בבוקר</i><span class="m">"4 בקשות רזרבה · 640 הוקצו · 0 סירובים בשער · 1 אזהרה לא נענתה"</span></div>
+      <div class="rc"><b style="color:#FCA5A5">לא מקבלים כלום</b><i>בכוונה</i><span class="m">הציבור במתחם · מד"א · כב"ה · צה"ל · תושבים · 29 החצרות מעבר לפורטל · השוטר בשער (הוא לא צריך לסרב לאף אחד)</span></div>
+    </div>
+  </div>
+  <div class="leg"><span class="a">אוטומטי</span><span class="d">החלטה של בן-אדם</span><span class="s">מערכת מעדכנת את עצמה</span><span class="c">מותנה — רק אם</span></div>
+
+  <div class="lbl" style="margin-top:26px">מה כל אחד רואה</div>
+  <div class="screens">
+    <div class="scr"><div class="h">מנהל האירוע · חמ"ל · 21:05</div><div class="b">
+      <div class="evt"><b>חצר ב' · 300 בלי כרטיסים · חניון עליות · H</b><br><span style="color:#DBEAFE">אזהרות 18:00, 20:00 — לא נענו · 40 ילדים · 12 קשישים · גבאי [שם] בקו</span></div>
+      <div class="lbl">המחיר של כל אפשרות — מחושב</div>
+      <div class="opt"><span class="t">א</span><span>סירוב מלא · 300 חוזרים · 5 אוטובוסים · חיכוך · "המשטרה חסמה"</span><span style="color:#FCA5A5">לא</span></div>
+      <div class="opt"><span class="t">ב</span><span>300 עכשיו מהרזרבה · ציון +5% · מדרגות נעילה 8' מוקדם · תקדים</span><span style="color:#FCA5A5">לא</span></div>
+      <div class="opt"><span class="t">ג</span><span>66 עכשיו (מכסה) + 234 ב-00:00 (רזרבה, כלל 3) · ציון 61% · 0 עלות קהל</span><span style="color:#BBF0D0">מומלץ</span></div>
+      <div class="opt"><span class="t">ד</span><span>66 עכשיו · 234 סירוב · חצי חיכוך</span><span style="color:#FCD9A8">אפשרי</span></div>
+      <div class="lbl">רזרבה: 2,000 · הוקצו 0 · רשימת המתנה: 40 (מפוצים מהרזרבה — אותו כלל)</div>
+      <div class="ask"><b>שלך:</b> <span class="row" style="margin-top:4px"><span class="pill g">ג · 66 + 234 @ 00:00 + 40 להמתנה</span><span class="pill y">ד</span><span class="pill r">א</span></span><br><span style="color:#FCD9A8">סיבה (חובה): "פער הסעות/כרטיסים · אחרי ההדלקה · כלל 3" · מתפרסם לכל החצרות</span></div>
+      <div class="done">אוטובוסים → H · משטרת חניון · מים ל-300 · צמידים · הגבאי ממתין להודעה</div>
+    </div></div>
+
+    <div class="scr"><div class="h">הגבאי של חצר ב' · פורטל · 18:00 → 21:16</div><div class="b">
+      <div class="msg" style="background:#3F2A10"><b>18:00 · פער: 316 מושבים בלי כרטיס</b><small>הסעות: 1,450 · כרטיסים: 1,134. לפתור לפני 21:00: 66 מהמכסה שלכם + בקשה מהרזרבה (אחרי ההדלקה).</small></div>
+      <div class="msg" style="background:#3B1111"><b>20:00 · לא נפתר</b><small>אם יגיעו — נקודת הסירוב בחניון. לא בשער.</small></div>
+      <div class="msg" style="background:#1F2937"><b>21:05 · 300 שלכם בחניון · H</b><small>החלטה תוך 10 דק'. אתה מודיע להם — לא השוטר.</small></div>
+      <div class="msg" style="background:#12301F"><b>21:15 · ההחלטה</b><small>66 עכשיו — ילדים וקשישים קודם, סרוק ב-H. 234 ב-00:00 מהרזרבה. סיבה: כלל 3. כל החצרות רואות.</small><small style="color:#FDE68A">הנוסח ביידיש מוכן. לחץ "הודעתי".</small></div>
+      <div class="row" style="gap:6px"><div class="bigbtn g" style="flex:1;font-size:12px;padding:10px">הודעתי ל-300</div><div class="bigbtn" style="flex:1;font-size:12px;padding:10px">בקש שינוי</div></div>
+      <div class="lbl">המכסה שלכם: 1,200 → 1,200 (66 נוצלו) · רזרבה שקיבלתם: 234 · שנה הבאה: לפי הסעות</div>
+    </div></div>
+
+    <div class="scr light"><div class="h">אחד מה-300 · טלפון · 21:16 · Cell-Broadcast + הגבאי</div><div class="b">
+      <div class="msg"><b>[חצר ב'] — הודעה מהגבאי</b><small>ילדים וקשישים — 66 — נכנסים עכשיו. סרוק בעמדה H. השאר — ב-00:00, אחרי ההדלקה. כולם נכנסים.</small><small style="color:#FDE68A">מים ואוכל כאן בחניון. ההדלקה על המסך הגדול. אל תלכו ברגל.</small></div>
+      <div class="card" style="font-size:12px"><b>הכרטיס שלך</b><br><span style="color:var(--mu)">חלון כניסה: 00:00–01:00 · שאטל: קו 5 · 00:05 · אזורים: הכל</span></div>
+      <div class="card" style="font-size:12px"><b>ילדים</b><br><span style="color:var(--mu)">צמידים בעמדה H — עכשיו, לא בשער.</span></div>
+      <div class="card" style="font-size:12px"><b>למה לא עכשיו</b><br><span style="color:var(--mu)">הציון מלא (97%). ב-00:00 יהיה 61%. הכלל זהה לכל החצרות.</span></div>
+    </div></div>
+
+    <div class="scr"><div class="h">כל השאר — שורה אחת</div><div class="b">
+      <div class="lbl">משטרת גזרת החניון · 21:05</div><div class="line">300 ב-H · חיכוך אפשרי · 2 שוטרים · <b>לא לסרב — ההחלטה מהרשות תוך 10'</b> · הגבאי מודיע</div>
+      <div class="lbl">סדרן הרציף · 21:05</div><div class="line">5 אוטובוסים → H · לא לתור · 66 לשאטל 21:25 · 274 ב-00:00 · 6 אוטובוסים</div>
+      <div class="lbl">הכנסת אורחים חניון (02) · 21:05</div><div class="line">300 × 3 שעות · מים 600 · אוכל 300 · כוסות +900 · שירותים · מסך שידור ב-H</div>
+      <div class="lbl">ניהול הקהל · 21:08</div><div class="line">300@21:15: ציון 97→102% · מדרגות נעילה 22:32 במקום 22:40 · 300@00:00: ציון 61→66% · אפס</div>
+      <div class="lbl">29 החצרות · פורטל · 21:15</div><div class="line">חצר ב' · 300 · 66 מכסה + 234 רזרבה @00:00 · כלל 3 · רזרבה 1,726 · אותו כלל לכולם</div>
+      <div class="lbl">רשימת ההמתנה (40) · 21:15</div><div class="line">ה-66 → חצר ב' (המכסה שלהם) · אתם: 40 מהרזרבה @00:00 · כרטיסים נשלחו</div>
+      <div class="lbl">הדוברות · 21:16</div><div class="line">"300 מחצר ב' הגיעו בלי כרטיסים · 66 נכנסו, 234 אחרי ההדלקה · לפי הכלל · אף אחד לא נחסם"</div>
+      <div class="lbl">המפקד</div><div class="line" style="color:#6F665D">(כלום. אלא אם אי-סדר ב-H, או שהרזרבה נגמרת לפני ההדלקה.)</div>
+    </div></div>
+  </div>
+</div>
+
+<h2>חלק ב' — הרישום המלא</h2>
+
+<h3>1. מה המערכת יודעת לפני שקורה משהו</h3>
+<div class="card">על כל חצר (30): מכסה, כמה הונפקו, כמה נסרקו, כמה לא מנוצלים ומתי פגים, הגבאי, ההסעות המאורגנות שלה (כמה אוטובוסים, כמה מושבים — נושא 01), ההדלקה שלה, ההיסטוריה (כמה הביאה בשנים קודמות מול המכסה). על הרזרבה: 2,000, מי מחליט (מנהל האירוע), הכללים (כתובים, ממוספרים: כלל 1 — רק אחרי ההדלקה; כלל 2 — בקשה כתובה עם סיבה; כלל 3 — פער הסעות/כרטיסים; כלל 4 — שקוף לכל החצרות; כלל 5 — רשימת ההמתנה מפוצה באותו יחס). על נקודת הסירוב: חניון עליות, אזור H, 12 אוטובוסים, מים, שירותים, מסך. על הקהל: מה 300 עושים לציון עכשיו ומה ב-00:00. על רשימת ההמתנה: מי, כמה, מה הובטח.</div>
+
+<h3>2. המניעה — הניהול האמיתי</h3>
+<div class="card"><ul>
+<li><b>הצלבת הסעות מול כרטיסים — ב-18:00.</b> חצר שהזמינה 1,450 מושבים והנפיקה 1,134 כרטיסים — יש לה 316 אנשים שיגיעו בלי כרטיס. המערכת רואה את זה שלוש שעות לפני. זו הנקודה: <b>הפער ידוע לפני שהאוטובוסים יוצאים מירושלים.</b></li>
+<li><b>אזהרה עם פתרון, לא רק אזהרה.</b> "66 מהמכסה שלכם + בקשה מהרזרבה לאחרי ההדלקה — לחץ כאן". הגבאי יכול לפתור ב-18:05.</li>
+<li><b>אזהרה שלא נענתה עד 20:30 → שיחת טלפון ממנהל האירוע.</b> הודעה בפורטל זה לא מספיק לגבאי ב-ל"ג בעומר. (הלקח של הלילה הזה.)</li>
+<li><b>הרזרבה עם כללים כתובים ושקופים.</b> בלי זה — כל הקצאה היא "פרוטקציה", וכל חצר שלא קיבלה — כועסת בצדק. עם זה — ההקצאה היא הפעלת כלל, וכולם רואים.</li>
+<li><b>נקודת הסירוב רחוק מהשער.</b> 300 איש שנעצרים בשער עם 30,000 מאחוריהם — זה אירוע קהל. 300 שנעצרים בחניון עם מים ומסך — זה המתנה. הכלל הזה נקבע בחורף והחצרות יודעות.</li>
+<li><b>אם הכל עובד:</b> הגבאי פותר ב-18:05, ה-300 מקבלים כרטיסים ל-00:00 לפני שהם עולים לאוטובוס, ואף אחד לא מחכה 3 שעות בחניון.</li>
+</ul></div>
+
+<h3>3. דקה אחר דקה</h3>
+<table>
+<tr><th style="width:80px">מתי</th><th>מה קורה</th><th style="width:120px">מי</th></tr>
+<tr><td>18:00</td><td>הצלבה: חצר ב' 1,450 מושבים / 1,134 כרטיסים = 316. אזהרה לגבאי ולמנהל האירוע, עם שתי אפשרויות. חצרות ז' (80) ו-ט' (120) — אותה אזהרה — פותרות ב-19:00. חצר ב' — "נסדר בשער".</td><td>אוטומט</td></tr>
+<tr><td>20:00</td><td>אזהרה שנייה: "לא נפתר · נקודת הסירוב בחניון". לא נענתה. (הלקח: ב-20:30 — טלפון.)</td><td>אוטומט</td></tr>
+<tr><td>21:05</td><td>5 אוטובוסים בשער החניון. המניפסט נסרק (הסעה מאורגנת = רשימת נוסעים): 300, 0 כרטיסים, 40 ילדים, 12 קשישים, 30 צרפתית. תוך דקה: אוטובוסים → H (לא לתור השאטלים — הסדרן יודע), הגבאי: "300 שלך · 10 דק' · אתה מודיע", מנהל האירוע: הבקשה + 4 אפשרויות + מחיר, משטרת החניון: "300 · חיכוך · לא לסרב", הכנסת אורחים חניון: מים ל-300, צמידים: עמדה ב-H, פורטל: הבקשה פתוחה לכל החצרות, מפקד ציר: 5 אוטובוסים ב-H.</td><td>אוטומט</td></tr>
+<tr><td>21:08</td><td>ניהול הקהל מחשב: 300 עכשיו — הרחבה כלום, אבל הם הולכים לציון (97%) → 102% → המדרגות ננעלות ב-22:32 במקום 22:40 → +400 למערבי. 300 ב-00:00 — הציון 61% → 66% — כלום. רשימת ההמתנה: 40 ממתינים ל-66 מ-23:30.</td><td>מערכת</td></tr>
+<tr><td>21:15</td><td>מנהל האירוע: אפשרות ג'. 66 עכשיו (המכסה שלהם — ילדים וקשישים קודם, סריקה ב-H). 234 ב-00:00 מהרזרבה, כלל 3, סיבה כתובה. רשימת ההמתנה: 40 מהרזרבה ב-00:00 (כלל 5). הרזרבה 2,000 → 1,726. מתפרסם ל-30 החצרות. הגבאי מקבל נוסח ביידיש. הדוברות מקבלת נוסח. העוזר של האדמו"ר — שורה.</td><td>מנהל האירוע</td></tr>
+<tr><td>21:16–21:30</td><td>הגבאי מודיע. Cell-Broadcast ל-300 (מספרי הטלפון מהמניפסט). 66 סורקים ב-H, צמידים ל-40 ילדים, שאטל 21:25. 234 מקבלים כרטיסים לחלון 00:00–01:00. האוטובוסים ב-H. מסך השידור ב-H. 0 חיכוך.</td><td>גבאי / חניון</td></tr>
+<tr><td>00:00–00:25</td><td>274 (234 + 40) ב-6 שאטלים. בידוק מלא בשער צפון (בלי רישום מוקדם — קצין הביטחון). הציון 61% → 66%. ההדלקה בפועל הייתה ב-23:35 (04) — הציון כבר התרוקן. הרציף: כיוונים מנוגדים עם גל היציאה — הסדרן יודע מ-21:15.</td><td>—</td></tr>
+<tr><td>אחרי</td><td>הרשומה: אזהרות 18:00, 20:00 · לא נענו · 21:05 · 21:15 · ג' · כלל 3 · 66+234+40 · 0 סירובים בשער · 0 חיכוך. חצר ב' — שנה הבאה: מכסה לפי הסעות. הכלל החדש: אזהרה לא נענתה עד 20:30 → טלפון. H — צריך ישיבה ל-300.</td><td>מערכת</td></tr>
+</table>
+
+<h3>4. מה אוטומטי ומה בן-אדם מחליט</h3>
+<div class="six">
+  <div class="card"><b>אוטומטי</b><ul><li>הצלבת הסעות מול כרטיסים — 18:00, 20:00</li><li>סריקת מניפסט בשער החניון → "300 בלי כרטיס"</li><li>הפניה ל-H, לא לתור</li><li>הבקשה למנהל האירוע עם 4 אפשרויות ומחיר מחושב</li><li>הודעה למשטרת החניון: "לא לסרב — ההחלטה מהרשות"</li><li>מים, צמידים, מסך ב-H</li><li>אחרי ההחלטה: כרטיסים, חלונות, שאטלים, פיצוי לרשימת ההמתנה, פרסום לחצרות, נוסח לגבאי ולדוברות</li><li>עדכון הרזרבה, הציון, השאטלים, ההכנסת אורחים</li></ul></div>
+  <div class="card"><b>בן-אדם מחליט</b><ul><li><b>ההקצאה — מנהל האירוע. לבד.</b> לא השוטר בחניון, לא הגבאי, לא המפקד. עם סיבה כתובה.</li><li>מה אומרים ל-300 — הגבאי (בנוסח מוכן)</li><li>בידוק מלא או מהיר ב-00:00 — קצין הביטחון</li><li>שיחת טלפון ב-20:30 — מנהל האירוע (הלקח)</li><li>המכסה של שנה הבאה — מתאם החצרות</li></ul></div>
+  <div class="card"><b>מגיע למפקד רק אם</b><ul><li>אי-סדר ב-H — 300 כועסים, 2 שוטרים</li><li>הרזרבה נגמרת לפני ההדלקה — סירוב מלא לחצר הבאה</li><li>מישהו מנסה להיכנס ברגל מ-H לאורך 866 (06: הולכי רגל)</li><li>אחרת — לא. זו הרשות, לא המשטרה.</li></ul></div>
+</div>
+
+<h3>5. כל מי שצריך לדעת — לפי שש השאלות</h3>
+
+<h3 style="margin-top:14px">שאלה 1 — מי בתוך</h3>
+<div class="who">
+<div class="card"><b>1. הגבאי <span class="tag auto">אוטומטי · 3 פעמים</span></b><span class="why">הוזהר פעמיים. עכשיו הוא הצינור ל-300 — לא השוטר. הוא מודיע ביידיש, בנוסח מוכן.</span><span class="get">18:00 · 20:00 · 21:05 · 21:15.</span></div>
+<div class="card"><b>2. 300 האנשים <span class="tag auto">אוטומטי · ביידיש</span></b><span class="why">אם הם שומעים "לא" משוטר — חיכוך. אם הם שומעים "66 עכשיו, השאר ב-00:00, כולם נכנסים" מהגבאי — המתנה.</span><span class="get">Cell-Broadcast + הגבאי + כרטיסים לטלפון.</span></div>
+<div class="card"><b>3. 40 הילדים <span class="tag auto">אוטומטי</span></b><span class="why">צמידים. בחניון, לא בשער. 3 שעות המתנה עם ילדים — נקודת המפגש נקבעת כאן.</span><span class="get">עמדה ב-H.</span></div>
+<div class="card"><b>4. 12 הקשישים <span class="tag auto">אוטומטי</span></b><span class="why">ב-66 הראשונים. לא מחכים 3 שעות בחניון.</span><span class="get">—</span></div>
+<div class="card"><b>5. 5 נהגי האוטובוסים <span class="tag auto">אוטומטי</span></b><span class="why">לאן לחנות, עד מתי, לא לתור השאטלים.</span><span class="get">"H · 00:00 · מים".</span></div>
+<div class="card"><b>6. העוזר של האדמו"ר <span class="tag auto">אוטומטי</span></b><span class="why">"האדמו"ר אמר" — האדמו"ר צריך לדעת מה הוחלט ולמה. הכלל, לא הוויכוח.</span><span class="get">שורה.</span></div>
+<div class="card"><b>7. 66 הכרטיסים הלא-מנוצלים <span class="tag sys">מערכת</span></b><span class="why">היו אמורים לפוג ב-23:30 ולעבור לרשימת ההמתנה. עכשיו — לחצר. ההמתנה מפוצה מהרזרבה.</span><span class="get">—</span></div>
+<div class="card"><b>8. 234 כרטיסי הרזרבה <span class="tag sys">מערכת</span></b><span class="why">חלון 00:00–01:00. לא לפני.</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 2 — מי מחכה לזה</h3>
+<div class="who">
+<div class="card"><b>9. מנהל האירוע <span class="tag dec">ההחלטה</span></b><span class="why">הרזרבה שלו. 4 אפשרויות, המחיר של כל אחת מחושב — לא מנוחש. הסיבה — חובה, מתפרסמת.</span><span class="get">הפאנל.</span></div>
+<div class="card"><b>10. ניהול הקהל <span class="tag sys">מערכת</span></b><span class="why"><b>הליבה:</b> 300 לא משנים את הרחבה — משנים את הציון. 97%→102%. המדרגות ננעלות 8 דקות מוקדם. ב-00:00 — כלום. זה מה שהופך "מתי" לחשוב יותר מ"כמה".</span><span class="get">המחיר.</span></div>
+<div class="card"><b>11. משטרת גזרת החניון <span class="tag auto">אוטומטי</span></b><span class="why">"לא לסרב — ההחלטה מהרשות תוך 10 דקות." השוטר לא צריך להיות הרע. הוא שומר על הסדר, לא מחליט.</span><span class="get">שורה + 2 שוטרים.</span></div>
+<div class="card"><b>12. סדרן הרציף <span class="tag auto">אוטומטי</span></b><span class="why">5 אוטובוסים לא לתור. 66 לשאטל. 274 ב-00:00 — 6 אוטובוסים.</span><span class="get">—</span></div>
+<div class="card"><b>13. הכנסת אורחים חניון (02) <span class="tag auto">אוטומטי</span></b><span class="why">300 × 3 שעות. מים, אוכל, כוסות, שירותים. הצריכה קופצת — המערכת יודעת מ-21:05.</span><span class="get">משימת אספקה.</span></div>
+<div class="card"><b>14. רשימת ההמתנה <span class="tag sys">מערכת</span></b><span class="why">הובטחו להם ה-66. לקחו אותם. כלל 5: מפוצים מהרזרבה באותו יחס. אחרת — "החצרות מקבלות, אנחנו לא".</span><span class="get">40 כרטיסים.</span></div>
+<div class="card"><b>15. שאטלים 00:00 <span class="tag sys">מערכת</span></b><span class="why">274 נכנסים בזמן שאחרים יוצאים. הרציף בשני כיוונים.</span><span class="get">—</span></div>
+<div class="card"><b>16. פורטל החצר — 30 חצרות <span class="tag sys">מערכת</span></b><span class="why">שקיפות (07). כולם רואים: מי ביקש, מה קיבל, לפי איזה כלל. אין "למה הם כן".</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 3 — מי באותו מאגר / אותה שעה</h3>
+<div class="who">
+<div class="card"><b>17. 29 החצרות האחרות <span class="tag sys">מערכת</span></b><span class="why">הרזרבה משותפת. 2,000 → 1,726. מי שיבקש — אותו כלל.</span><span class="get">—</span></div>
+<div class="card"><b>18. ההסעות המאורגנות (01) <span class="tag sys">מערכת</span></b><span class="why">זה מה שגילה את הפער ב-18:00. בלי רישום הסעות — הפער מתגלה ב-21:05.</span><span class="get">—</span></div>
+<div class="card"><b>19. חצרות עם פער דומה <span class="tag sys">מערכת</span></b><span class="why">ז' ו-ט' פתרו ב-19:00. זה מוכיח שהמנגנון עובד — כשעונים.</span><span class="get">—</span></div>
+<div class="card"><b>20. חניון עליות — H <span class="tag sys">מערכת</span></b><span class="why">12 מקומות לאוטובוסים. 5 תפוסים 3 שעות.</span><span class="get">—</span></div>
+<div class="card"><b>21. סורקי שער צפון ב-00:00 <span class="tag sys">מערכת</span></b><span class="why">274 בבת אחת. 3 סורקים. 8 דקות.</span><span class="get">—</span></div>
+<div class="card"><b>22. מפקד ציר 866 <span class="tag auto">אוטומטי</span></b><span class="why">5 אוטובוסים מאורגנים יוצאים ב-01:30.</span><span class="get">—</span></div>
+<div class="card"><b>23. גל היציאה (04) <span class="tag sys">מערכת</span></b><span class="why">נכנסים ויוצאים באותה תחנה. הסדרן ידע מ-21:15.</span><span class="get">—</span></div>
+<div class="card"><b>24. קצין הביטחון <span class="tag">300 בלי רישום</span></b><span class="why">כרטיס = רישום = בידוק מהיר. בלי — בידוק מלא. 274 ב-00:00.</span><span class="get">החלטה.</span></div>
+</div>
+
+<h3>שאלה 4 — מי אחראי</h3>
+<div class="who">
+<div class="card"><b>25. מנהל האירוע <span class="tag dec">הרזרבה</span></b><span class="why">—</span><span class="get">—</span></div>
+<div class="card"><b>26. הגבאי / ראש החצר <span class="tag auto">הפער</span></b><span class="why">הוזהר פעמיים. רשום.</span><span class="get">—</span></div>
+<div class="card"><b>27. מתאם החצרות <span class="tag auto">אוטומטי</span></b><span class="why">הפורטל, השקיפות, מי שואל "למה הם".</span><span class="get">—</span></div>
+<div class="card"><b>28. מפקד גזרת החניון <span class="tag auto">אוטומטי</span></b><span class="why">הסדר ב-H. לא ההחלטה.</span><span class="get">—</span></div>
+<div class="card"><b>29. היועץ המשפטי <span class="tag">מראש</span></b><span class="why">הסמכות לסרב, הסמכות להקצות — כתובות בחורף. ב-21:15 לא שואלים "מותר לי?".</span><span class="get">—</span></div>
+<div class="card"><b>30. קצין הבטיחות <span class="tag sys">רישום</span></b><span class="why">נקודת הסירוב עבדה. 300 בחניון, לא בשער.</span><span class="get">—</span></div>
+<div class="card"><b>31. הדוברות <span class="tag auto">אוטומטי</span></b><span class="why">"המשטרה חסמה חסידים במירון" — תוך 10 דקות. התשובה: "כולם נכנסים, לפי הכלל, 66 כבר בפנים".</span><span class="get">נוסח.</span></div>
+<div class="card"><b>32. קצין הכספים <span class="tag sys">מערכת</span></b><span class="why">300 שאטלים, 3 שעות הכנסת אורחים — מי משלם. החצר?</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 5 — מה זה עושה לעתיד</h3>
+<div class="who">
+<div class="card"><b>33. הרזרבה <span class="tag sys">מערכת</span></b><span class="why">1,726. אם עוד 3 חצרות — נגמר ב-23:00. המפקד יודע.</span><span class="get">—</span></div>
+<div class="card"><b>34. הציון ב-00:00 <span class="tag sys">מערכת</span></b><span class="why">+274. בסדר.</span><span class="get">—</span></div>
+<div class="card"><b>35. המכסה של חצר ב' — שנה הבאה <span class="tag sys">מערכת</span></b><span class="why">הביאה 1,450 על 1,200. הוזהרה פעמיים. המכסה הבאה — לפי הסעות שהזמינה.</span><span class="get">—</span></div>
+<div class="card"><b>36. הכלל החדש: 20:30 — טלפון <span class="tag sys">מערכת</span></b><span class="why">הודעה בפורטל לא מספיקה. שיחה.</span><span class="get">—</span></div>
+<div class="card"><b>37. H <span class="tag sys">מערכת</span></b><span class="why">300 איש 3 שעות בחניון — צריך ישיבה, לא רק מים.</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 6 — האם זה תבנית</h3>
+<div class="who">
+<div class="card"><b>3+ חצרות עם פער <span class="tag">→ מנהל האירוע</span></b><span class="why">הכללים לא ברורים — או ברורים ולא מכבדים. שיחה בחורף.</span><span class="get">—</span></div>
+<div class="card"><b>הרזרבה נגמרת לפני ההדלקה <span class="tag">→ המפקד</span></b><span class="why">סירוב מלא. חיכוך. כן.</span><span class="get">—</span></div>
+<div class="card"><b>אותה חצר כל שנה <span class="tag">→ מתאם החצרות</span></b><span class="why">המכסה לא ריאלית — או בדיקת גבולות.</span><span class="get">—</span></div>
+<div class="card"><b>סירוב בשער במקום בחניון <span class="tag">→ בטיחות</span></b><span class="why">נקודת הסירוב זזה. למה.</span><span class="get">—</span></div>
+</div>
+
+<h3>6. מי לא מקבל כלום — בכוונה</h3>
+<div class="card no-list">הציבור במתחם · מד"א · כב"ה · צה"ל · תושבים · 29 החצרות מעבר לשורה בפורטל · <b>השוטר בשער צפון</b> — הוא לא צריך לסרב לאף אחד. עד שהם מגיעים אליו, יש להם כרטיס. זה כל הרעיון.</div>
+
+<h3>7. מקרי קצה</h3>
+<ul>
+<li><b>הגבאי אומר "לא מקבל, כולם נכנסים עכשיו או אף אחד":</b> ההחלטה של מנהל האירוע. ה-300 מקבלים את ההודעה ב-Cell-Broadcast גם בלי הגבאי. 66 נכנסים. 234 ב-00:00. מי שלא רוצה — האוטובוס שלו ב-H. הכלל שקוף ל-29 האחרות — זה מה שמחזיק אותו.</li>
+<li><b>הרזרבה נגמרה (3 חצרות לפני):</b> 66 מהמכסה, ו-234 סירוב — עם המתנה ל-23:30 כשכרטיסים לא-מנוצלים של כל החצרות פגים (בדרך כלל 800+). "ב-23:30 יתפנו — אתם ראשונים בתור". זה עדיין לא "לא".</li>
+<li><b>ה-300 הולכים ברגל מהחניון (06):</b> 866 בלילה. הניידת. הסדרנים. "אל תלכו ברגל" בהודעה — מראש.</li>
+<li><b>אי-סדר ב-H:</b> המפקד. 2 שוטרים → 8. הגבאי בטלפון. לא נכנסים בכוח — הכרטיסים ב-00:00 עומדים.</li>
+<li><b>אין מניפסט (הסעה לא רשומה):</b> סופרים בירידה. 300 — לא 300 שמות. הצמידים לילדים — ידני. הכרטיסים — ל-"חצר ב' 234" ולא לשמות. פחות טוב, עובד.</li>
+<li><b>ההדלקה נדחתה (04) — ה-00:00 כבר לא "אחרי":</b> החלון זז אוטומטית ל-30 דקות אחרי ההדלקה בפועל. הכרטיסים מתעדכנים. ה-300 מקבלים הודעה.</li>
+<li><b>חצר ג' רואה בפורטל ומבקשת 200 "כמו ב'":</b> אותו כלל. אם יש בה פער הסעות/כרטיסים — כן. אם לא — כלל 3 לא חל, ויש כלל 2 (סיבה כתובה). זה עובד רק כי זה כתוב.</li>
+<li><b>מדובר באדמו"ר עצמו שהגיע עם 300 בלי לתאם:</b> אותו נוהל. האדמו"ר נכנס (VIP — נושא אחר). ה-300 — הכלל. העוזר שלו מקבל את המספרים.</li>
+<li><b>שבת:</b> אין הסעות. לא רלוונטי.</li>
+</ul>
+
+<h3>8. מה צריך כדי שזה יעבוד</h3>
+<ul>
+<li><b>רזרבה עם כללים כתובים, ממוספרים, שקופים</b> — נחתמים בחורף עם כל החצרות. בלי זה, כל הקצאה היא פרוטקציה.</li>
+<li><b>סמכות אחת</b> — מנהל האירוע. לא השוטר, לא הגבאי, לא המפקד. כתוב.</li>
+<li><b>רישום הסעות מאורגנות</b> (01) — כדי שהפער יתגלה ב-18:00, לא ב-21:05.</li>
+<li><b>פורטל חצר</b> שהגבאי באמת פותח — ושיחת טלפון כשהוא לא.</li>
+<li><b>נקודת סירוב בחניון</b> עם: אזור H, ישיבה, מים, שירותים, מסך שידור, עמדת צמידים, עמדת סריקה.</li>
+<li><b>מניפסט להסעות</b> — רשימת נוסעים, כדי לדעת מי ה-300.</li>
+<li><b>נוסחים ביידיש</b> לגבאי — מוכנים.</li>
+<li><b>מחשבון מחיר</b> — מה 300 עושים לציון עכשיו ומה ב-00:00. בלי זה ההחלטה היא רגש.</li>
+<li><b>פיצוי לרשימת ההמתנה</b> — כלל, לא חסד.</li>
+<li><b>החיבור לגל היציאה</b> — הכניסה ב-00:00 פוגשת יציאה.</li>
+</ul>
+
+<h3>9. מה יוצא מהחיבור לשבעת הקודמים</h3>
+<div class="card">
+<b>המכסה היא ישות — והיא פוליטית.</b> ב-01–07 "הקיבולת" הייתה מספר הנדסי. כאן מתגלה החלק השני: <b>מי מקבל את המספרים</b>. 30 חצרות, רזרבה אחת, מנהל אירוע אחד. ההגנה היחידה על ההחלטה היא הכלל הכתוב והשקיפות — בדיוק כמו הקופות (07). <b>שקיפות היא בטיחות גם כשהיא על כרטיסים.</b><br><br>
+<b>"מתי" חשוב יותר מ"כמה".</b> 300 עכשיו = הציון נחנק. 300 ב-00:00 = כלום. ניהול הקהל (הליבה) הופך החלטה פוליטית להחלטה עם מחיר מחושב. וההדלקה שנדחתה (04) הזיזה את ה-00:00.<br><br>
+<b>ההסעות המאורגנות (01) גילו את הפער</b> — 1,450 מושבים מול 1,134 כרטיסים, ב-18:00. הרכב שוב: הפעם לא כמסלול אלא כרשימת נוסעים. הכנסת אורחים חניון (02) קיבלה 300 ל-3 שעות. הצמידים (ילדים) בחניון, לא בשער.<br><br>
+<b>נקודת הסירוב</b> — עיקרון שהיה כתוב בניהול הקהל ("מסלול-דחייה מסודר, לא ויכוח בשער") — כאן הוא מקום פיזי עם צרכים: H, ישיבה, מים, מסך.<br><br>
+<b>ישויות חדשות:</b> מכסה (מספר + בעלים + כללי הקצאה) · רזרבה (מאגר עם סמכות אחת וכללים כתובים) · נקודת סירוב (מקום, לא רעיון) · מניפסט (מי על ההסעה) · כלל (ממוספר, שקוף — הדבר שמחזיק החלטה כשהאדמו"ר אמר אחרת).<br><br>
+<b>החוקים חוצי-הנושאים שנולדו:</b> "פער בין הסעות לכרטיסים מתגלה ב-18:00, לא בשער (01→08)" · "300 איש = לא 'כמה' אלא 'מתי ולאן' — ניהול הקהל מחשב את המחיר (08→קהל)" · "אזהרה שלא נענתה פעמיים → אדם מתקשר (03, 05, 07, 08 — הפעם הרביעית שהודעה לא הספיקה)" · "מי שמקבל מהרזרבה — כולם רואים, ומי שהובטח לו — מפוצה (08)".<br><br>
+<b>עמוד השדרה:</b> ניהול הקהל, מנהל האירוע (הפעם המחליט), קצין הבטיחות, הדוברות, המפקד (רק באי-סדר), קצין הכספים, המודל לשנה הבאה, מוקד המידע. <b>8 מתוך 13</b> + חדשים: <b>מתאם החצרות</b> ו<b>היועץ המשפטי</b> — שניהם עובדים בחורף, ובלילה רק הכללים שלהם עובדים.
+</div>
+
+</div>
+</body>
+</html>
