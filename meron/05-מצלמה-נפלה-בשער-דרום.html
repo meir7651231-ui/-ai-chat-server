@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מצלמה 17 בשער דרום נפלה — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4EFE6;--sur:#FFFDF9;--bd:#E7DFD2;--tx:#1C1917;--mu:#6B6259;--acc:#C2410C;--g:#2F7A4D;--y:#B45309;--r:#B91C1C;
+--dbg:#14110F;--dsur:#1F1B18;--dbd:#332C27;--dtx:#F4EFE6;--dmu:#A89F94}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Heebo,system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1500px;margin:0 auto;padding:32px 28px 80px}
+h1{font-family:"Frank Ruhl Libre",serif;font-size:34px;margin:0 0 4px}
+h2{font-family:"Frank Ruhl Libre",serif;font-size:24px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--tx)}
+h3{font-size:16px;margin:22px 0 8px}
+.lead{color:var(--mu);font-size:15px;margin:0 0 18px}
+.lbl{font-size:11px;color:var(--mu)}
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--sur)}
+td,th{border:1px solid var(--bd);padding:7px 10px;text-align:right;vertical-align:top}
+th{background:#EDE5D8;font-weight:700}
+ul{margin:6px 0;padding-right:22px}li{margin:3px 0}
+.tag{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;background:#EDE5D8;color:var(--mu);margin-left:4px}
+.tag.auto{background:#E3F1E8;color:var(--g)}.tag.dec{background:#FDE7D6;color:var(--y)}.tag.sys{background:#E8EEF8;color:#1D4ED8}
+.demo{background:var(--dbg);color:var(--dtx);border-radius:16px;padding:22px 24px;margin-top:14px}
+.demo .lbl{color:var(--dmu)}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0 22px}
+.tl div{background:var(--dsur);border:1px solid var(--dbd);border-radius:10px;padding:10px 12px}
+.tl b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:20px;color:#F59E0B}
+.tl b.g{color:#2FA36B}.tl b.r{color:#EF4444}
+.tl span{font-size:12px;color:var(--dmu)}
+.hub{background:#2A1F3D;border:2px solid #C084FC;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+.hub .n{font-family:"Frank Ruhl Libre",serif;font-size:26px;font-weight:700}
+.hub .k{display:flex;flex-direction:column;gap:2px;font-size:12px;color:#E9D5FF}
+.fan{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.fan .col{background:var(--dsur);border:1px solid var(--dbd);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.fan .col h4{margin:0 0 2px;font-size:13px;color:#F59E0B;border-bottom:1px solid var(--dbd);padding-bottom:6px}
+.rc{background:#26211D;border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:1px}
+.rc b{font-size:12px;color:var(--dtx)}.rc i{font-style:normal;color:var(--dmu)}.rc .m{color:#FCD9A8}
+.rc.dec{border-right:3px solid #F59E0B}.rc.auto{border-right:3px solid #2FA36B}.rc.sys{border-right:3px solid #60A5FA}.rc.cond{border-right:3px solid #7F1D1D;opacity:.85}
+.leg{display:flex;gap:14px;font-size:11px;color:var(--dmu);margin-top:10px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.leg .a::before{background:#2FA36B}.leg .d::before{background:#F59E0B}.leg .s::before{background:#60A5FA}.leg .c::before{background:#7F1D1D}
+.screens{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.scr{border:1px solid var(--dbd);border-radius:14px;overflow:hidden;background:var(--dsur);display:flex;flex-direction:column}
+.scr .h{padding:8px 12px;border-bottom:1px solid var(--dbd);font-size:11px;color:var(--dmu)}
+.scr .b{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.bigbtn{border-radius:12px;padding:14px 10px;text-align:center;font-weight:700;font-size:15px;border:2px solid var(--dbd);background:#26211D}
+.bigbtn.on{background:#B91C1C;border-color:#B91C1C;color:#fff}.bigbtn.g{background:#12301F;border-color:#2FA36B;color:#BBF0D0}.bigbtn.y{background:#3F2A10;border-color:#F59E0B;color:#FCD9A8}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.pill.g{background:#12301F;color:#BBF0D0}.pill.y{background:#3F2A10;color:#FCD9A8}.pill.r{background:#3B1111;color:#FCA5A5}.pill.p{background:#2A1F3D;color:#E9D5FF}
+.evt{background:#2A1F3D;border:1px solid #C084FC;border-radius:10px;padding:8px 10px;font-size:12px}
+.done{font-size:11px;color:#BBF0D0}.done::before{content:"✓ "}
+.ask{background:#3F2A10;border:1px solid #F59E0B;border-radius:8px;padding:6px 8px;font-size:11px}.ask b{color:#FCD9A8}
+.msg{background:#1C1917;color:#F4EFE6;border-radius:12px;padding:10px 12px;font-size:13px}.msg small{display:block;color:#D6CFC4;font-size:11px;margin-top:3px}
+.line{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;border-radius:8px;padding:8px 10px;color:#D6CFC4}
+.tree{font-family:ui-monospace,monospace;font-size:11px;display:flex;flex-direction:column;gap:2px}
+.tree div{padding:3px 6px;border-radius:4px;background:#26211D}
+.tree .ok{color:#BBF0D0}.tree .bad{color:#FCA5A5;background:#3B1111}.tree .q{color:#FCD9A8}
+.cam{background:#0F0D0B;border-radius:8px;height:70px;display:flex;align-items:flex-end;padding:6px 8px;font-size:10px;color:var(--dmu);position:relative}
+.cam::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 2px,transparent 2px 4px);border-radius:8px}
+.cam.dead{color:#6F665D;border:1px dashed #7F1D1D}
+.six{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.who .card{padding:10px 12px}.who b{display:block}.who .why{color:var(--mu);font-size:12px}.who .get{font-size:12px;margin-top:3px}
+.no-list{background:#F3E8E8;border:1px solid #E5C4C4}
+@media (max-width:1100px){.fan{grid-template-columns:repeat(3,1fr)}.screens{grid-template-columns:repeat(2,1fr)}.six,.who{grid-template-columns:1fr}.tl{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>מצלמה 17 בשער דרום נפלה — ניהול חי</h1>
+<p class="lead">נושא 05 (רנדומלי). המצלמה שמסתכלת על תור הבידוק והמעבר של שער דרום. 42 מצלמות במתחם; 17 היא "קריטית" — היא אחת משני המקורות לצפיפות בשער, והיא העין של הבידוק. ב-21:29 היא נעלמת. <b>הנושא כאן הוא לא המצלמה — הוא מה המערכת עושה כשהיא מתעוורת בעין אחת, ואיך היא ממשיכה לספור.</b></p>
+
+<h2>חלק א' — הדמיה</h2>
+<div class="demo">
+  <div class="lbl">ציר הזמן — המניעה (ירוק) ומה קורה כשהיא נופלת בכל זאת (אדום)</div>
+  <div class="tl">
+    <div><b class="g">חורף</b><span><b style="color:#BBF0D0;display:inline">מניעה.</b> תכנון: כל שער קריטי מכוסה ב-2 מצלמות עם חפיפה 60% (17 + 18). ארון S-2 על UPS. כבל 17 בצינור, לא חשוף. מצלמה חלופית + כבל במחסן הטכני. נוהל "עין אנושית" כתוב: סדרן מדווח 1–5 כל 5 דק' כשאין וידאו. ספי הנעילה: עם וידאו 4.0, בלי — 3.6.</span></div>
+    <div><b class="g">21:10</b><span>ניטור בריאות: מצלמה 17 מאבדת פריימים (25→14 fps), צריכת PoE קופצת. המערכת: "17 — סימני תקלה · 45 דק' לשיא". טיקט לתמיכה: "בדוק 17 לפני 22:00". התמיכה עסוקה בסורק בשער צפון. הטיקט מחכה. <b style="color:#FCD9A8;display:inline">זה הרגע שנפספס.</b></span></div>
+    <div><b class="r">21:29</b><span><b style="color:#FCA5A5;display:inline">נפלה.</b> אין אות. תוך 3 שניות המערכת יודעת ומה היא עושה לבד: צפיפות שער דרום עוברת ל"מונים + סריקות + BLE" · ביטחון: "מ-medium" · סף נעילה 4.0→3.6 · מצלמה 18 (PTZ) מוסטת לכסות 60% · סדרן 4 בשער דרום מקבל "עין אנושית — דווח כל 5 דק'" · מפקד גזרה דרום: "עיוור חלקית" · תמיכה: טיקט דחוף עם שרשרת סיבות · הרשומה: "פער וידאו 21:29–?" · ביטחון: "בידוק ללא תיעוד".</span></div>
+    <div><b class="r">21:30–21:40</b><span>מפקד גזרה דרום מחליט: הבידוק ממשיך, יותר בדיקות ידניות (קצב 90→75/דק'). קצין הביטחון: מקבל. תמיכה מנתחת מהשולחן: ארון S-2 — מצלמות 15, 16, 18 חיות → לא הארון. PoE ל-17 ירד לאפס → כבל או מצלמה. הפריים האחרון 21:28:57: טנדר אספקה #37 נוסע אחורה ליד העמוד. <b style="color:#FCD9A8;display:inline">→ הטנדר מנושא 02 פגע בכבל.</b> טכנאי יוצא עם כבל וסולם, 9 דק'.</span></div>
+    <div><b class="r">21:41–21:52</b><span>הטכנאי: כבל קרוע בבסיס העמוד. מחליף, מחזיר. 21:52 — 17 חיה. ספים חוזרים ל-4.0. ביטחון "high". סדרן 4 חוזר לסדרנות. הרשומה: "פער 21:29–21:52 · 23 דק' · כיסוי חלקי ע"י 18 · עין אנושית 4 דיווחים · שיא צפיפות בפער: 2.4 (מונים) / 2 (אנושי)".</span></div>
+    <div><b class="r">אחרי</b><span>נהג הטנדר: "פגעת בעמוד?" — לא ידע. 17 נופלת בשנה השלישית ברצף באותו מקום. שנה הבאה: העמוד זז 2 מטר, בולארד, הכבל בצינור פלדה. והטיקט של 21:10 שחיכה — "סימני תקלה לפני שיא = עדיפות על סורק". 0 השפעה על הקהל. 23 דקות בלי עין בבידוק — נרשם לוועדה.</span></div>
+  </div>
+
+  <div class="hub">
+    <div><div class="n">מצלמה 17 · שער דרום · אין אות</div><div class="lbl">21:29:03 · ארון S-2 · PoE 0W · פריים אחרון 21:28:57 · תפקיד: צפיפות שער דרום + בידוק + מסלול חיפוש · קריטית</div></div>
+    <div class="k"><span>שער דרום עכשיו: 2.1 (מונים) · ביטחון: medium · סף: 3.6</span><span>כוחות בשער 7/10 (נושא 03) · בידוק 90/דק'</span><span>מצלמה 18: PTZ · חפיפה 60% · מוסטת</span></div>
+    <div class="k"><span>S-2: 15 ✓ 16 ✓ 18 ✓ · UPS ✓ · רשת ✓</span><span>מלאי: מצלמה 1 · כבל 3 · טכנאי: צפון (סורק) · 9 דק'</span><span>המערכת: L0 עם כתם עיוור</span></div>
+  </div>
+
+  <div class="lbl" style="margin-top:14px">מי מקבל מה — לפי שש השאלות</div>
+  <div class="fan">
+    <div class="col"><h4>1 · מי בתוך</h4>
+      <div class="rc sys"><b>חישוב הצפיפות — שער דרום</b><i>3 שנ'</i><span class="m">וידאו נפל → מונים + סריקות + BLE · ביטחון medium</span></div>
+      <div class="rc sys"><b>חוק הנעילה האוטומטית</b><i>3 שנ'</i><span class="m">סף 4.0 → 3.6 (פחות ודאות = יותר שמרנות)</span></div>
+      <div class="rc sys"><b>התחזית — שער דרום</b><i>3 שנ'</i><span class="m">ביטחון יורד · טווח במקום מספר</span></div>
+      <div class="rc auto"><b>מצלמה 18 (PTZ)</b><i>10 שנ'</i><span class="m">מוסטת לכסות 60% משדה 17 · מסומן "מוסטת"</span></div>
+      <div class="rc auto"><b>סדרן 4 בשער דרום — "עין אנושית"</b><i>21:29</i><span class="m">"דווח צפיפות 1–5 + תמונה כל 5 דק' עד הודעה חדשה"</span></div>
+      <div class="rc auto"><b>2 השוטרים בבידוק</b><i>21:29</i><span class="m">"בידוק ללא תיעוד וידאו · הנחיה בדרך"</span></div>
+      <div class="rc sys"><b>הרשומה (replay)</b><i>21:29</i><span class="m">"פער וידאו 17: 21:29–? · כיסוי: 18 חלקי + אנושי"</span></div>
+      <div class="rc sys"><b>מסלול החיפוש — ילד 2411</b><i>21:29</i><span class="m">"17 לא זמינה למסלול · 18 מוסטת · סדרן 4 יודע"</span></div>
+      <div class="rc auto"><b>סורק הכרטיסים בשער דרום</b><i>מערכת</i><span class="m">"אתה עכשיו מקור ראשי לספירת כניסות"</span></div>
+    </div>
+    <div class="col"><h4>2 · מי מחכה לזה</h4>
+      <div class="rc dec"><b>מפקד גזרה דרום</b><i>21:29</i><span class="m">"עיוור חלקית · מונים 2.1 · סף 3.6 · עין אנושית · בידוק: ידני יותר?"</span></div>
+      <div class="rc dec"><b>קצין הביטחון</b><i>21:29</i><span class="m">"בידוק דרום ללא וידאו · 90/דק' · להאט ל-75 עם יותר ידני?"</span></div>
+      <div class="rc sys"><b>ניהול הקהל</b><i>מערכת</i><span class="m">"דרום: ביטחון medium · שאטלים לדרום: 40%→35%"</span></div>
+      <div class="rc auto"><b>המפקד — רק הרצועה</b><i>21:29</i><span class="m">"L0 · מצלמות 41/42 · כתם עיוור: שער דרום · אנושי"</span></div>
+      <div class="rc auto"><b>חיפוש ילד 2411 (פתוח מ-21:12)</b><i>21:29</i><span class="m">"עין 17 נפלה במסלול · סדרן 4 מדווח"</span></div>
+      <div class="rc sys"><b>קצין הבטיחות — יומן</b><i>מערכת</i><span class="m">"שער קריטי ללא וידאו · 21:29–?"</span></div>
+      <div class="rc sys"><b>קיר המצלמות בחמ"ל</b><i>מערכת</i><span class="m">17 → "אין אות" · 18 → "מוסטת"</span></div>
+      <div class="rc cond"><b>רחפן משטרה</b><i>אם > 15 דק' וצפיפות > 3</i><span class="m">"כסה שער דרום 20 דק'" (חיל האוויר: מאושר בגזרה)</span></div>
+    </div>
+    <div class="col"><h4>3 · מי באותו ארון / כבל / ציר</h4>
+      <div class="rc sys"><b>ארון S-2 — מצלמות 15, 16, 18</b><i>3 שנ'</i><span class="m">"חיות → לא הארון, לא ה-UPS, לא הרשת"</span></div>
+      <div class="rc sys"><b>PoE ל-17</b><i>3 שנ'</i><span class="m">"0W → כבל או מצלמה, לא תוכנה"</span></div>
+      <div class="rc sys"><b>הפריים האחרון</b><i>מערכת</i><span class="m">"21:28:57 — טנדר #37 נוסע אחורה ליד העמוד"</span></div>
+      <div class="rc auto"><b>קצין הלוגיסטיקה (נושא 02)</b><i>21:32</i><span class="m">"טנדר #37 — כנראה פגע בכבל 17 · הנהג: עצור, בדוק"</span></div>
+      <div class="rc auto"><b>נהג הטנדר</b><i>21:32</i><span class="m">"פגעת בעמוד ליד שער דרום? · שאר הנסיעה: זהירות · מסלול"</span></div>
+      <div class="rc sys"><b>גנרטור 3 (מזין S-2)</b><i>מערכת</i><span class="m">"עומס 88% · לא הסיבה · אבל אם ייפול — S-2 על UPS 40 דק'"</span></div>
+      <div class="rc sys"><b>5 חיישני-רשת בדרום</b><i>מערכת</i><span class="m">"מגיבים → לא הרשת" (נושא 03: 5 לא מגיבים = רשת)</span></div>
+      <div class="rc auto"><b>מוקד ה-VMS של המשטרה (ארצי)</b><i>21:29</i><span class="m">"17 offline · ידוע · מטופל באתר"</span></div>
+      <div class="rc auto"><b>ה-NOC של ספק המצלמות</b><i>21:29</i><span class="m">"17 · אין אות · PoE 0 · SLA 30 דק' · טכנאי שלנו בדרך"</span></div>
+      <div class="rc cond"><b>החשמלאי</b><i>אם היה ארון</i><span class="m">לא הפעם</span></div>
+    </div>
+    <div class="col"><h4>4 · מי אחראי</h4>
+      <div class="rc dec"><b>ראש התמיכה הטכנית (באתר)</b><i>21:29</i><span class="m">הטיקט, שרשרת הסיבות, מי יוצא, מה במלאי</span></div>
+      <div class="rc auto"><b>הטכנאי</b><i>21:32</i><span class="m">"17 · כבל בבסיס העמוד · קח כבל + סולם · 9 דק'"</span></div>
+      <div class="rc auto"><b>קצין הביטחון</b><i>21:29</i><span class="m">בידוק ללא תיעוד — ההחלטה שלו</span></div>
+      <div class="rc auto"><b>מפקד גזרה דרום</b><i>21:29</i><span class="m">השער שלו — עם עין אחת</span></div>
+      <div class="rc sys"><b>קצין הבטיחות</b><i>מערכת</i><span class="m">"23 דק' ללא וידאו בשער קריטי" — לרשומה</span></div>
+      <div class="rc sys"><b>ממונה הפרטיות</b><i>מערכת</i><span class="m">"18 מוסטת — השדה החדש לא כולל עזרת נשים ✓"</span></div>
+      <div class="rc sys"><b>מנהל החוזה עם הספק</b><i>אחרי</i><span class="m">"טכנאי הספק הגיע? · SLA 30 · שלנו תיקן ב-23"</span></div>
+      <div class="rc sys"><b>ביטוח</b><i>מערכת</i><span class="m">"נזק לתשתית ע"י רכב אספקה · #37"</span></div>
+      <div class="rc sys"><b>אגף הטכנולוגיה במשטרה</b><i>אחרי</i><span class="m">"VMS: פער 23 דק' במצלמה קריטית"</span></div>
+    </div>
+    <div class="col"><h4>5 · מה זה עושה לעתיד</h4>
+      <div class="rc sys"><b>מלאי טכני</b><i>מערכת</i><span class="m">כבלים 3→2 · מצלמות 1 · "אם עוד אחת — אין"</span></div>
+      <div class="rc sys"><b>הספים</b><i>21:52</i><span class="m">3.6→4.0 · ביטחון high · 18 חוזרת לשדה שלה</span></div>
+      <div class="rc sys"><b>הרשומה לוועדה</b><i>מערכת</i><span class="m">"פער 21:29–21:52 · מה כיסה · שיא בפער · החלטות"</span></div>
+      <div class="rc sys"><b>הטיקט של 21:10</b><i>מערכת</i><span class="m">"סימני תקלה 19 דק' לפני · לא טופל · סורק קיבל עדיפות"</span></div>
+      <div class="rc sys"><b>שנה הבאה — העמוד</b><i>מערכת</i><span class="m">"17 נפלה 3 שנים ברצף · להזיז 2 מ' · בולארד · צינור פלדה"</span></div>
+      <div class="rc sys"><b>סדרן 4 — הרשומה</b><i>מערכת</i><span class="m">"עין אנושית 23 דק' · 4 דיווחים · הוסמך-בפועל"</span></div>
+      <div class="rc sys"><b>מסלולי רכבי אספקה</b><i>מערכת</i><span class="m">"עמוד 17 = מכשול · הוסף למפת המסלול"</span></div>
+      <div class="rc sys"><b>עלות</b><i>מערכת</i><span class="m">כבל · שעת טכנאי · ניכוי מהספק?</span></div>
+    </div>
+    <div class="col"><h4>6 · האם זה תבנית</h4>
+      <div class="rc cond"><b>תמיכה טכנית</b><i>3 מצלמות באותו ארון</i><span class="m">"זה חשמל/רשת, לא מצלמות → חשמלאי, לא טכנאי"</span></div>
+      <div class="rc cond"><b>המפקד</b><i>≥3 קריטיות או שער בלי שום עין</i><span class="m">"L0 → L2 · המערכת עיוורת בדרום · אנושי בלבד"</span></div>
+      <div class="rc cond"><b>ראש התמיכה</b><i>אותה מצלמה כל שנה</i><span class="m">"17 — המיקום, לא המצלמה"</span></div>
+      <div class="rc cond"><b>ראש התמיכה</b><i>סימני תקלה לפני נפילה</i><span class="m">"14 fps ב-21:10 → 0 ב-21:29 · אזהרה מוקדמת עובדת · לתעדף"</span></div>
+      <div class="rc cond"><b>קצין הלוגיסטיקה</b><i>2 פגיעות ע"י רכבי אספקה</i><span class="m">"נהגים — תדריך · מסלולים — מכשולים"</span></div>
+      <div class="rc sys"><b>מנהל האירוע</b><i>בבוקר</i><span class="m">"3 תקלות מצלמה · 1 קריטית · 23 דק' · 0 השפעה על הקהל · טיקט אחד לא טופל בזמן"</span></div>
+      <div class="rc"><b style="color:#FCA5A5">לא מקבלים כלום</b><i>בכוונה</i><span class="m">הציבור · מד"א · כב"ה · צה"ל · החצרות · 40 המצלמות האחרות · הגזרות האחרות · ילדים אבודים בגזרות אחרות</span></div>
+    </div>
+  </div>
+  <div class="leg"><span class="a">אוטומטי</span><span class="d">החלטה של בן-אדם</span><span class="s">מערכת מעדכנת את עצמה</span><span class="c">מותנה — רק אם</span></div>
+
+  <div class="lbl" style="margin-top:26px">מה כל אחד רואה</div>
+  <div class="screens">
+    <div class="scr"><div class="h">תמיכה טכנית · חמ"ל · 21:29–21:32</div><div class="b">
+      <div class="evt"><b>מצלמה 17 · שער דרום · אין אות · קריטית</b><br><span style="color:#E9D5FF">21:29:03 · PoE 0W · פריים אחרון 21:28:57 · טיקט 21:10 פתוח: "14 fps"</span></div>
+      <div class="lbl">שרשרת סיבות — מהשולחן</div>
+      <div class="tree">
+        <div class="ok">ארון S-2 · UPS ✓ · switch ✓ · uplink ✓</div>
+        <div class="ok">  מצלמה 15 ✓ 25fps · 16 ✓ 25fps · 18 ✓ 25fps</div>
+        <div class="bad">  מצלמה 17 ✗ · PoE 0W · אין ping</div>
+        <div class="q">  → לא ארון · לא רשת · לא תוכנה → כבל או מצלמה</div>
+        <div class="q">  פריים אחרון: טנדר #37 נוסע אחורה ליד העמוד → כבל</div>
+      </div>
+      <div class="cam dead">17 · אין אות · 21:29</div>
+      <div class="done">18 מוסטת 60% · ספי דרום 3.6 · סדרן 4 עין · NOC ספק · VMS משטרה · לוגיסטיקה: טנדר #37</div>
+      <div class="ask"><b>שלך:</b> <span class="row" style="margin-top:4px"><span class="pill g">טכנאי [שם] מצפון → דרום · כבל + סולם · 9'</span><span class="pill y">להשאיר את הסורק בצפון חצי-מתוקן</span><span class="pill p">רחפן אם >15'</span></span></div>
+      <div class="lbl">מלאי: כבל 3 · מצלמה 1 · טכנאים 2 (1 בצפון) · ספק: 30 דק'</div>
+    </div></div>
+
+    <div class="scr"><div class="h">מפקד גזרה דרום · טאבלט · 21:29</div><div class="b">
+      <div class="evt" style="background:#3B1111;border-color:#7F1D1D"><b>שער דרום — עיוור חלקית</b><br><span style="color:#FCA5A5">מצלמה 17 נפלה · צפיפות ממונים בלבד · ביטחון medium</span></div>
+      <div class="row" style="justify-content:space-between;font-size:11px"><span>צפיפות (מונים+סריקות+BLE)</span><span style="color:#FCD9A8">2.1 ± 0.4</span></div>
+      <div class="lbl">סף נעילה זמני: <b style="color:#FCD9A8">3.6</b> (במקום 4.0) · תחזית 15': 2.4–2.9</div>
+      <div class="lbl">עין אנושית — סדרן 4</div>
+      <div class="line">21:34 · "2" · תור 40 מ' · זורם · [תמונה]</div>
+      <div class="line">21:39 · "2" · תור 45 מ' · זורם · [תמונה]</div>
+      <div class="lbl">מצלמה 18 — מוסטת, 60% משדה 17</div>
+      <div class="cam">18 · PTZ · מוסט · 21:29 · תור הבידוק חלקי</div>
+      <div class="ask"><b>שלך:</b> בידוק ללא וידאו. <span class="row" style="margin-top:4px"><span class="pill y">יותר ידני · 90→75/דק'</span><span class="pill g">כרגיל · 90</span><span class="pill r">האט שאטלים לדרום</span></span></div>
+      <div class="lbl">כוחות 7/10 (נושא 03) · סדרן 4 = עין, לא זרימה → 6 לזרימה</div>
+    </div></div>
+
+    <div class="scr"><div class="h">סדרן 4 · שער דרום · טלפון · 21:29</div><div class="b">
+      <div class="msg" style="background:#2A1F3D"><b>אתה העין של שער דרום</b><small>המצלמה נפלה. עד הודעה חדשה: כל 5 דקות — כמה צפוף (1–5) + תמונה של התור. 20 שניות.</small></div>
+      <div class="lbl">21:34 · כמה צפוף עכשיו?</div>
+      <div class="row" style="gap:5px"><div class="bigbtn g" style="flex:1;padding:12px 4px;font-size:13px">1<br><span style="font-size:9px;font-weight:400">רווח</span></div><div class="bigbtn g" style="flex:1;padding:12px 4px;font-size:13px;background:#12301F;border-color:#2FA36B">2<br><span style="font-size:9px;font-weight:400">זורם</span></div><div class="bigbtn y" style="flex:1;padding:12px 4px;font-size:13px">3<br><span style="font-size:9px;font-weight:400">צפוף</span></div><div class="bigbtn on" style="flex:1;padding:12px 4px;font-size:13px">4<br><span style="font-size:9px;font-weight:400">לא זז</span></div><div class="bigbtn on" style="flex:1;padding:12px 4px;font-size:13px;background:#7F1D1D">5<br><span style="font-size:9px;font-weight:400">דוחפים</span></div></div>
+      <div class="bigbtn" style="padding:10px;font-size:13px">📷 צלם את התור</div>
+      <div class="lbl">נשלח: 21:34 "2" · הבא: 21:39 · המפקד רואה</div>
+      <div class="msg" style="background:#26211D"><b>21:52 · המצלמה חזרה</b><small>תודה. חזור לסדרנות. 4 דיווחים נרשמו.</small></div>
+    </div></div>
+
+    <div class="scr"><div class="h">כל השאר — שורה אחת</div><div class="b">
+      <div class="lbl">המפקד · הרצועה העליונה</div><div class="line">L0 · מצלמות 41/42 · <span style="color:#FCD9A8">כתם עיוור: שער דרום · אנושי + 18</span> · (לא קופץ)</div>
+      <div class="lbl">קצין הביטחון · 21:29</div><div class="line">בידוק דרום ללא תיעוד וידאו · 90/דק' · 2 שוטרים · החלטה: ידני יותר / כרגיל</div>
+      <div class="lbl">ניהול הקהל · מערכת</div><div class="line">דרום: מקור=מונים · ביטחון medium · סף 3.6 · שאטלים→דרום 40%→35%</div>
+      <div class="lbl">חיפוש ילד 2411 · 21:29</div><div class="line">מצלמה 17 לא זמינה למסלול · 18 מוסטת · סדרן 4 בשער — תיאור נשלח אליו</div>
+      <div class="lbl">קצין הלוגיסטיקה · 21:32 (נושא 02)</div><div class="line">טנדר #37 — כנראה פגע בכבל 17 ב-21:28 · הנהג: עצור ובדוק · המשך במסלול</div>
+      <div class="lbl">NOC ספק · 21:29</div><div class="line">17 offline · PoE 0 · SLA 30' · טכנאי ספק: 40' · שלנו: 9' → שלנו</div>
+      <div class="lbl">VMS משטרה ארצי · 21:29</div><div class="line">17 offline · ידוע · מטופל באתר · אין צורך בפעולה</div>
+      <div class="lbl">קצין הבטיחות · יומן · 21:52</div><div class="line">שער דרום ללא וידאו 21:29–21:52 · 23' · כיסוי: 18 חלקי + אנושי ×4 · שיא 2.4 · 0 אירועים</div>
+      <div class="lbl">ממונה הפרטיות · מערכת</div><div class="line">18 מוסטת — שדה חדש: תור בידוק בלבד · לא כולל עזרת נשים ✓</div>
+    </div></div>
+  </div>
+</div>
+
+<h2>חלק ב' — הרישום המלא</h2>
+
+<h3>1. מה המערכת יודעת לפני שקורה משהו</h3>
+<div class="card">על כל מצלמה (42): איפה, מה היא רואה, לאילו חישובים היא מקור (צפיפות של איזה אזור, בידוק, מסלולי חיפוש), האם קריטית, מי מגבה אותה (18 מגבה 17 ב-60%), איזה ארון, איזה כבל, איזה גנרטור מזין, fps ו-PoE בזמן אמת, היסטוריית תקלות. על כל ארון: UPS, switch, מה מחובר. על כל חישוב שתלוי בחיישנים: <b>מה המקורות שלו, ומה קורה כשמקור נופל</b> — צפיפות שער דרום = וידאו (17,18) + מונים + סריקות + BLE; בלי וידאו — ביטחון יורד, סף יורד. על התמיכה: כמה טכנאים, איפה, מלאי חלפים, SLA של הספק. על הנוהל: "עין אנושית" — מי, איך, כל כמה זמן.</div>
+
+<h3>2. המניעה — הניהול האמיתי</h3>
+<div class="card"><ul>
+<li><b>בחורף:</b> כל שער קריטי ב-2 מצלמות עם חפיפה. ארונות על UPS. כבלים בצינור. חלפים במחסן הטכני. נוהל עין-אנושית כתוב ומתורגל. <b>ספי נעילה כפולים:</b> עם וידאו 4.0, בלי — 3.6. זה הלב: המערכת יודעת מראש כמה היא בטוחה, ומתנהגת בהתאם.</li>
+<li><b>ניטור בריאות רציף:</b> fps, PoE, טמפרטורה, ping. מצלמה שיורדת ל-14 fps ב-21:10 — זו אזהרה 19 דקות לפני. הטיקט נפתח לבד.</li>
+<li><b>תעדוף:</b> "סימני תקלה במצלמה קריטית לפני שיא" > "סורק בצפון". זה הלקח. הטיקט של 21:10 חיכה — והמצלמה נפלה ב-21:29.</li>
+<li><b>מסלולי רכבי אספקה</b> עם מכשולים מסומנים — עמוד 17 ליד שער דרום. הנהג רואה. (לא היה — יהיה.)</li>
+<li><b>אם הכל עובד:</b> הטכנאי מחליף כבל ב-21:15, המצלמה לא נופלת, אף אחד לא יודע.</li>
+</ul></div>
+
+<h3>3. דקה אחר דקה</h3>
+<table>
+<tr><th style="width:80px">מתי</th><th>מה קורה</th><th style="width:120px">מי</th></tr>
+<tr><td>21:10</td><td>17: 25→14 fps, PoE קופץ. טיקט: "בדוק 17 לפני 22:00". התמיכה על סורק בצפון. מחכה.</td><td>אוטומט</td></tr>
+<tr><td>21:29:03</td><td>אין אות. תוך 3 שניות: צפיפות דרום → מונים+סריקות+BLE, ביטחון medium, סף 3.6, תחזית לטווח. 18 מוסטת (10 שנ'). סדרן 4 → עין אנושית. שוטרי הבידוק → "ללא תיעוד". מפקד גזרה דרום, קצין הביטחון → החלטה. תמיכה → טיקט דחוף עם שרשרת סיבות אוטומטית (S-2 חי, 15/16/18 חיות, PoE 0 → כבל/מצלמה, פריים אחרון → טנדר). VMS משטרה, NOC ספק → "ידוע". חיפוש 2411 → "17 לא זמינה". הרשומה → "פער 21:29–?". המפקד → הרצועה בלבד.</td><td>אוטומט</td></tr>
+<tr><td>21:30</td><td>מפקד גזרה דרום: בידוק ידני יותר, 90→75/דק'. קצין הביטחון: מקבל. ניהול הקהל: שאטלים לדרום 40%→35% (פחות עומס על שער בביטחון medium).</td><td>החלטה</td></tr>
+<tr><td>21:32</td><td>ראש התמיכה: הפריים האחרון — טנדר #37. לוגיסטיקה מקבלת: "הטנדר פגע בכבל". הנהג: "עצור, בדוק". טכנאי [שם] מצפון → דרום, כבל + סולם, 9 דק'. הסורק בצפון נשאר חצי-מתוקן (סריקה ידנית שם).</td><td>תמיכה</td></tr>
+<tr><td>21:34, 39, 44, 49</td><td>סדרן 4: "2", "2", "2", "3". תמונות. המפקד רואה במקום וידאו. הצפיפות מהמונים 2.1–2.4. תואם.</td><td>סדרן</td></tr>
+<tr><td>21:41</td><td>הטכנאי: כבל קרוע בבסיס העמוד. מחליף. 21:52: 17 חיה, 25 fps. ספים 4.0. ביטחון high. 18 חוזרת. סדרן 4 חוזר לסדרנות. הרשומה נסגרת: 23 דק', כיסוי חלקי, 4 דיווחים, שיא 2.4, 0 אירועים.</td><td>טכנאי / אוטומט</td></tr>
+<tr><td>אחרי</td><td>"17 — 3 שנים ברצף אותו מקום" → העמוד זז, בולארד, צינור פלדה. "טיקט 21:10 לא טופל" → תעדוף. "טנדר #37" → מכשולים במפת המסלול, תדריך נהגים. ניכוי מהספק: לא (שלנו תיקן). ביטוח: נזק ע"י רכב אספקה.</td><td>מערכת</td></tr>
+</table>
+
+<h3>4. מה אוטומטי ומה בן-אדם מחליט</h3>
+<div class="six">
+  <div class="card"><b>אוטומטי (3 שניות)</b><ul><li>מעבר למקורות חלופיים לכל חישוב שתלוי במצלמה</li><li>הורדת ביטחון, הורדת סף נעילה, תחזית לטווח</li><li>הסטת מצלמה מגבה (PTZ) — עם בדיקת פרטיות של השדה החדש</li><li>הפעלת "עין אנושית" — מי הכי קרוב</li><li>שרשרת סיבות: ארון/רשת/PoE/פריים אחרון</li><li>טיקט לתמיכה, לספק, ל-VMS</li><li>סימון פער ברשומה</li><li>עדכון חיפושים שמשתמשים במצלמה</li><li>חזרה לספים כשהמצלמה חוזרת</li></ul></div>
+  <div class="card"><b>בן-אדם מחליט</b><ul><li>בידוק ללא וידאו: ידני יותר או כרגיל — קצין הביטחון + מפקד הגזרה</li><li>מי יוצא לתקן ומה נשאר לא-מתוקן — ראש התמיכה</li><li>רחפן לכיסוי — מפקד הגזרה (עם אישור חיל האוויר בגזרה)</li><li>להאט שאטלים לדרום — ניהול הקהל / המפקד</li></ul></div>
+  <div class="card"><b>מגיע למפקד רק אם</b><ul><li>≥3 מצלמות קריטיות, או שער בלי שום עין (לא 18, לא אנושי) → L2</li><li>ארון שלם (3+) → זה חשמל, וזה משפיע על עוד דברים</li><li>אחרת — הרצועה העליונה: "41/42 · כתם עיוור: דרום · אנושי". לא קופץ.</li></ul></div>
+</div>
+
+<h3>5. כל מי שצריך לדעת — לפי שש השאלות</h3>
+
+<h3 style="margin-top:14px">שאלה 1 — מי בתוך</h3>
+<div class="who">
+<div class="card"><b>1. חישוב הצפיפות של שער דרום <span class="tag sys">מערכת</span></b><span class="why">17 הייתה מקור. עכשיו: מונים + סריקות + BLE. פחות בטוח. המערכת <b>אומרת</b> שהיא פחות בטוחה — לא מעמידה פנים.</span><span class="get">ביטחון medium · ± 0.4.</span></div>
+<div class="card"><b>2. חוק הנעילה האוטומטית <span class="tag sys">מערכת</span></b><span class="why">פחות ודאות = יותר שמרנות. 4.0 → 3.6.</span><span class="get">סף זמני.</span></div>
+<div class="card"><b>3. התחזית <span class="tag sys">מערכת</span></b><span class="why">טווח במקום מספר.</span><span class="get">2.4–2.9.</span></div>
+<div class="card"><b>4. מצלמה 18 <span class="tag auto">אוטומטי</span></b><span class="why">PTZ. מוסטת לכסות 60%. מסומנת "מוסטת" — כי השדה שלה שלה נפגע.</span><span class="get">פקודת הסטה + בדיקת פרטיות.</span></div>
+<div class="card"><b>5. סדרן 4 — העין האנושית <span class="tag auto">אוטומטי</span></b><span class="why">כשאין וידאו — בן אדם. 1–5 + תמונה כל 5 דק'. 20 שניות. הוא יוצא מהזרימה — השער 7/10 → 6 לזרימה (נושא 03).</span><span class="get">הנחיה + כפתורים.</span></div>
+<div class="card"><b>6. 2 שוטרי הבידוק <span class="tag auto">אוטומטי</span></b><span class="why">בידוק בלי תיעוד — שידעו, ושיקבלו הנחיה.</span><span class="get">"ללא תיעוד · הנחיה בדרך".</span></div>
+<div class="card"><b>7. הרשומה / replay <span class="tag sys">מערכת</span></b><span class="why">פער בווידאו הוא עובדה לוועדה. מסומן, לא מוסתר. ומה כיסה אותו.</span><span class="get">"פער 21:29–21:52 · 18 חלקי · אנושי ×4".</span></div>
+<div class="card"><b>8. חיפוש ילד 2411 <span class="tag sys">מערכת</span></b><span class="why">המצלמה במסלול החיפוש. הסדרן בשער מקבל את התיאור במקום.</span><span class="get">עדכון מסלול.</span></div>
+<div class="card"><b>9. סורק הכרטיסים בדרום <span class="tag sys">מערכת</span></b><span class="why">עכשיו הוא מקור ראשי לספירה. אם גם הוא ייפול — אנושי בלבד.</span><span class="get">משקל.</span></div>
+</div>
+
+<h3>שאלה 2 — מי מחכה לזה</h3>
+<div class="who">
+<div class="card"><b>10. מפקד גזרה דרום <span class="tag dec">החלטה</span></b><span class="why">השער שלו עם עין אחת. הוא מחליט על הבידוק.</span><span class="get">"עיוור חלקית" + מונים + עין + כפתורים.</span></div>
+<div class="card"><b>11. קצין הביטחון <span class="tag dec">החלטה</span></b><span class="why">בידוק בלי תיעוד וידאו. להאט ולבדוק יותר ידנית, או לקבל.</span><span class="get">האירוע.</span></div>
+<div class="card"><b>12. ניהול הקהל <span class="tag sys">מערכת</span></b><span class="why">שער בביטחון medium מקבל פחות שאטלים.</span><span class="get">40%→35%.</span></div>
+<div class="card"><b>13. המפקד <span class="tag auto">הרצועה בלבד</span></b><span class="why">"41/42 · כתם עיוור: דרום · אנושי". שידע שהמערכת עיוורת בעין אחת ומה מכסה. לא קופץ.</span><span class="get">שורה.</span></div>
+<div class="card"><b>14. קצין הבטיחות <span class="tag sys">רישום</span></b><span class="why">שער קריטי ללא וידאו = אירוע בטיחות.</span><span class="get">יומן.</span></div>
+<div class="card"><b>15. קיר המצלמות <span class="tag sys">מערכת</span></b><span class="why">"אין אות" ו"מוסטת" — לא מסך שחור סתם.</span><span class="get">—</span></div>
+<div class="card"><b>16. רחפן משטרה <span class="tag">אם >15' וצפיפות >3</span></b><span class="why">עין מהאוויר ל-20 דק'. עם אישור חיל האוויר בגזרה (נושא 04: מעל 40 קמ"ש — קרקע).</span><span class="get">משימה.</span></div>
+</div>
+
+<h3>שאלה 3 — מי באותו ארון / כבל / ציר</h3>
+<div class="who">
+<div class="card"><b>17. מצלמות 15, 16, 18 — ארון S-2 <span class="tag sys">מערכת</span></b><span class="why">חיות → לא הארון. זו הבדיקה הראשונה, אוטומטית.</span><span class="get">—</span></div>
+<div class="card"><b>18. PoE <span class="tag sys">מערכת</span></b><span class="why">0W = פיזי. לא תוכנה.</span><span class="get">—</span></div>
+<div class="card"><b>19. הפריים האחרון <span class="tag sys">מערכת</span></b><span class="why">21:28:57 — טנדר #37 נוסע אחורה. המערכת מציעה סיבה.</span><span class="get">—</span></div>
+<div class="card"><b>20. קצין הלוגיסטיקה + נהג הטנדר (נושא 02) <span class="tag auto">אוטומטי</span></b><span class="why">הטנדר של הכוסות פגע בכבל של המצלמה. הנהג לא ידע. שידע, שיעצור, שהמסלול שלו יתעדכן.</span><span class="get">"פגעת בעמוד?".</span></div>
+<div class="card"><b>21. גנרטור 3 <span class="tag sys">מערכת</span></b><span class="why">מזין S-2. לא הסיבה הפעם. אבל "אם ייפול — S-2 על UPS 40 דק'".</span><span class="get">—</span></div>
+<div class="card"><b>22. הרשת בדרום <span class="tag sys">מערכת</span></b><span class="why">5 חיישנים מגיבים → לא הרשת. (נושא 03: 5 לא מגיבים = רשת.)</span><span class="get">—</span></div>
+<div class="card"><b>23. VMS משטרה ארצי <span class="tag auto">אוטומטי</span></b><span class="why">הם רואים 17 offline. שידעו שזה ידוע ומטופל — לא לפתוח טיקט משלהם.</span><span class="get">"ידוע".</span></div>
+<div class="card"><b>24. NOC של ספק המצלמות <span class="tag auto">אוטומטי</span></b><span class="why">SLA 30 דק'. הטכנאי שלהם 40 דק'. שלנו 9. אבל שיידעו — זה החוזה.</span><span class="get">טיקט.</span></div>
+<div class="card"><b>25. החשמלאי <span class="tag">אם ארון</span></b><span class="why">לא הפעם.</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 4 — מי אחראי</h3>
+<div class="who">
+<div class="card"><b>26. ראש התמיכה הטכנית <span class="tag dec">החלטה</span></b><span class="why">הטיקטים, מי יוצא, מה נשאר לא-מתוקן, מלאי.</span><span class="get">הפאנל.</span></div>
+<div class="card"><b>27. הטכנאי <span class="tag auto">אוטומטי</span></b><span class="why">—</span><span class="get">"17 · כבל · סולם · 9'".</span></div>
+<div class="card"><b>28. ממונה הפרטיות <span class="tag sys">מערכת</span></b><span class="why">18 מוסטת — השדה החדש עלול לכלול עזרת נשים. המערכת בודקת לפני שמסיטה. אם כן — לא מסיטה, או מטשטשת.</span><span class="get">"✓ לא כולל".</span></div>
+<div class="card"><b>29. מנהל החוזה עם הספק <span class="tag sys">אחרי</span></b><span class="why">SLA 30. הספק לא הגיע (40). שלנו תיקן. ניכוי?</span><span class="get">רשומה.</span></div>
+<div class="card"><b>30. ביטוח <span class="tag sys">מערכת</span></b><span class="why">נזק לתשתית ע"י רכב אספקה — יש אחראי.</span><span class="get">—</span></div>
+<div class="card"><b>31. אגף הטכנולוגיה במשטרה <span class="tag sys">אחרי</span></b><span class="why">פער במצלמה קריטית — לדוח שלהם.</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 5 — מה זה עושה לעתיד</h3>
+<div class="who">
+<div class="card"><b>32. מלאי טכני <span class="tag sys">מערכת</span></b><span class="why">כבלים 3→2, מצלמות 1. "אם עוד אחת — אין."</span><span class="get">—</span></div>
+<div class="card"><b>33. הטיקט של 21:10 <span class="tag sys">מערכת</span></b><span class="why">האזהרה עבדה. התעדוף לא. "מצלמה קריטית עם סימני תקלה לפני שיא" = עדיפות ראשונה.</span><span class="get">כלל חדש.</span></div>
+<div class="card"><b>34. העמוד <span class="tag sys">מערכת</span></b><span class="why">3 שנים ברצף. להזיז, בולארד, פלדה.</span><span class="get">משימה לחורף.</span></div>
+<div class="card"><b>35. מסלולי רכבי אספקה <span class="tag sys">מערכת</span></b><span class="why">עמוד 17 = מכשול. הנהגים רואים.</span><span class="get">—</span></div>
+<div class="card"><b>36. סדרן 4 <span class="tag sys">מערכת</span></b><span class="why">שימש עין 23 דק'. הוסמך-בפועל. שנה הבאה — מוסמך.</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 6 — האם זה תבנית</h3>
+<div class="who">
+<div class="card"><b>3 מצלמות באותו ארון <span class="tag">→ חשמלאי</span></b><span class="why">זה לא מצלמות. זה חשמל או רשת. טכנאי מצלמות לא יעזור.</span><span class="get">—</span></div>
+<div class="card"><b>≥3 קריטיות / שער בלי עין <span class="tag">→ המפקד · L2</span></b><span class="why">המערכת עיוורת. "אנושי בלבד" הוא מצב שהמפקד צריך להכריז.</span><span class="get">—</span></div>
+<div class="card"><b>אותה מצלמה כל שנה <span class="tag">→ ראש התמיכה</span></b><span class="why">המיקום, לא הציוד.</span><span class="get">—</span></div>
+<div class="card"><b>סימני תקלה לפני נפילה <span class="tag">→ ראש התמיכה</span></b><span class="why">הניטור המוקדם עובד. לתת לו עדיפות.</span><span class="get">—</span></div>
+<div class="card"><b>2 פגיעות ע"י רכבי אספקה <span class="tag">→ לוגיסטיקה</span></b><span class="why">הנהגים, המסלולים.</span><span class="get">—</span></div>
+</div>
+
+<h3>6. מי לא מקבל כלום — בכוונה</h3>
+<div class="card no-list">הציבור · מד"א · כב"ה · צה"ל · החצרות · 40 המצלמות האחרות · הגזרות האחרות. <b>מצלמה אחת מגיעה ל-20 אנשים ו-8 מערכות. המפקד רואה שורה ברצועה. אם היה קופץ אצלו על כל מצלמה — הוא היה מפסיק להסתכל.</b></div>
+
+<h3>7. מקרי קצה</h3>
+<ul>
+<li><b>גם 18 נופלת (אותו טנדר, אותו כבל?):</b> שער דרום בלי שום עין. זה L2 לגזרה. המפקד מקבל. עין אנושית ×2, רחפן, שאטלים לדרום 35%→20%.</li>
+<li><b>ארון S-2 כולו (15,16,17,18):</b> חשמל. חשמלאי, לא טכנאי. UPS נותן 40 דק'. גנרטור 3 — נושא אחר שכבר מחובר.</li>
+<li><b>המצלמה חיה אבל מישהו כיסה אותה (בכוונה):</b> "פריים שחור עם PoE תקין" ≠ "אין אות". זה ביטחוני. קצין הביטחון, לא תמיכה.</li>
+<li><b>18 מוסטת והשדה החדש כולל עזרת נשים:</b> המערכת לא מסיטה. או מסיטה עם טשטוש. ממונה הפרטיות רואה. הצניעות במירון היא לא הערת שוליים.</li>
+<li><b>הספק אומר "זו לא מצלמה שלנו, הכבל שלכם":</b> הרשומה יודעת מי תיקן, מה נמצא, כמה זמן. הוויכוח על הכסף — אחרי, עם עובדות.</li>
+<li><b>אין טכנאי פנוי (שניהם בצפון):</b> עין אנושית + 18 מוסטת עד שמתפנה. או הטכנאי של הספק (40 דק'). או סדרן עם כבל (לא — לא מוסמך לעלות על סולם ליד קהל).</li>
+<li><b>הרשת של החמ"ל נפלה (לא המצלמה):</b> כל המצלמות "אין אות" בבת אחת. זה לא 42 תקלות — זו אחת. המערכת יודעת להבדיל: "אין אות מהשרת" ≠ "אין אות מהמצלמה". L1.</li>
+<li><b>ההקלטה קיימת במצלמה (edge) גם כשאין אות לשרת:</b> הפער ברשומה הוא פער בשידור, לא בהקלטה. אחרי — מושכים. הוועדה מקבלת את הכל.</li>
+<li><b>שבת:</b> אין טכנאי שמדליק/מכבה. עין אנושית ורחפן — לפי הרב. מוסכם מראש.</li>
+</ul>
+
+<h3>8. מה צריך כדי שזה יעבוד</h3>
+<ul>
+<li><b>לכל חישוב — רשימת מקורות וסדר נפילה.</b> "צפיפות שער דרום = 17,18 → מונים → סריקות → BLE → אנושי". בלי זה, מצלמה שנופלת = מספר שנעלם.</li>
+<li><b>ביטחון כמספר.</b> המערכת אומרת כמה היא בטוחה. הספים מגיבים לזה לבד.</li>
+<li><b>מצלמה מגבה לכל קריטית</b>, PTZ, עם שדה-הסטה שנבדק מראש לפרטיות.</li>
+<li><b>ניטור בריאות</b> (fps, PoE, ping) — ותעדוף: קריטית + סימני תקלה + לפני שיא = ראשון.</li>
+<li><b>נוהל עין אנושית</b> כתוב, כפתורים, מתורגל. סדרנים יודעים מה זה "3".</li>
+<li><b>שרשרת סיבות אוטומטית</b>: ארון → רשת → PoE → פריים אחרון. הטכנאי יוצא עם החלק הנכון.</li>
+<li><b>מלאי חלפים במתחם</b> — לא בחניון.</li>
+<li><b>חיבור ל-VMS משטרה ול-NOC של הספק</b> — "ידוע, מטופל".</li>
+<li><b>סימון פערים ברשומה</b> — לא מסתירים. מה כיסה.</li>
+<li><b>מפת מכשולים לרכבי אספקה</b> — העמוד של 17 עליה.</li>
+</ul>
+
+<h3>9. מה יוצא מהחיבור לארבעת הקודמים</h3>
+<div class="card">
+<b>החיישנים הם ישות — והביטחון במספר הוא חלק מהמספר.</b> ב-01–04 "הצפיפות ברחבה 3.2" הייתה עובדה. כאן מתגלה שהיא חישוב ממקורות, ושכשמקור נופל המספר נשאר אבל הביטחון בו יורד — והמערכת מתנהגת אחרת (סף 3.6). <b>כל ההחלטות ב-01–04 שהתבססו על "3.2" — עכשיו יודעות לשאול "כמה בטוח".</b><br><br>
+<b>הטנדר מנושא 02 הפיל את המצלמה.</b> שלושה נושאים על אותו רכב: פנצ'ר תקע אותו (01), הוא הביא כוסות (02), הוא קרע כבל (05). <b>הרכב הוא ישות, והמסלול שלו הוא רשימת כל מה שהוא יכול לפגוע בו.</b><br><br>
+<b>ישויות חדשות:</b> חיישן (מקור, בריאות, מגבה, מה תלוי בו) · ביטחון (רמת ודאות של כל מספר) · פער (בזמן, בכיסוי — מסומן, מכוסה) · פרטיות (שדה ראייה = מה מותר לראות).<br><br>
+<b>החוקים חוצי-הנושאים שנולדו:</b> "כשמקור נופל — הביטחון יורד והסף יורד, אוטומטית" · "עין אנושית = סדרן שיוצא מהזרימה = פחות ספיקה (03)" · "רכב שנוסע במתחם = רשימת מכשולים שהוא יכול לפגוע בהם (02→05)" · "5 דברים שנופלים באותו מקום = דבר אחד (03: רשת · 05: ארון)".<br><br>
+<b>עמוד השדרה:</b> תמיכה טכנית (הפעם במרכז), קצין הבטיחות, ניהול הקהל, המפקד (רצועה), מנהל האירוע (בוקר), המודל לשנה הבאה, מנהל החוזה, ביטוח, מוקד-ארצי (VMS במקום 100). <b>9 מתוך 13.</b> ואחד חדש שיהיה בכולם מעכשיו: <b>ממונה הפרטיות</b> — כי כל מצלמה, כל BLE, כל צמיד, הוא גם שאלה של מה מותר לראות.
+</div>
+
+</div>
+</body>
+</html>
