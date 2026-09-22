@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>נגמרו כוסות בהכנסת אורחים — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4EFE6;--sur:#FFFDF9;--bd:#E7DFD2;--tx:#1C1917;--mu:#6B6259;--acc:#C2410C;--g:#2F7A4D;--y:#B45309;--r:#B91C1C;
+--dbg:#14110F;--dsur:#1F1B18;--dbd:#332C27;--dtx:#F4EFE6;--dmu:#A89F94}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Heebo,system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1500px;margin:0 auto;padding:32px 28px 80px}
+h1{font-family:"Frank Ruhl Libre",serif;font-size:34px;margin:0 0 4px}
+h2{font-family:"Frank Ruhl Libre",serif;font-size:24px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--tx)}
+h3{font-size:16px;margin:22px 0 8px}
+.lead{color:var(--mu);font-size:15px;margin:0 0 18px}
+.lbl{font-size:11px;color:var(--mu)}
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--sur)}
+td,th{border:1px solid var(--bd);padding:7px 10px;text-align:right;vertical-align:top}
+th{background:#EDE5D8;font-weight:700}
+ul{margin:6px 0;padding-right:22px}li{margin:3px 0}
+.tag{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;background:#EDE5D8;color:var(--mu);margin-left:4px}
+.tag.auto{background:#E3F1E8;color:var(--g)}.tag.dec{background:#FDE7D6;color:var(--y)}.tag.sys{background:#E8EEF8;color:#1D4ED8}
+.demo{background:var(--dbg);color:var(--dtx);border-radius:16px;padding:22px 24px;margin-top:14px}
+.demo .lbl{color:var(--dmu)}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0 22px}
+.tl div{background:var(--dsur);border:1px solid var(--dbd);border-radius:10px;padding:10px 12px}
+.tl b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:20px;color:#F59E0B}
+.tl b.g{color:#2FA36B}.tl b.r{color:#EF4444}
+.tl span{font-size:12px;color:var(--dmu)}
+.hub{background:#3F2A10;border:2px solid #D97706;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+.hub .n{font-family:"Frank Ruhl Libre",serif;font-size:26px;font-weight:700}
+.hub .k{display:flex;flex-direction:column;gap:2px;font-size:12px;color:#FCD9A8}
+.fan{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.fan .col{background:var(--dsur);border:1px solid var(--dbd);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.fan .col h4{margin:0 0 2px;font-size:13px;color:#F59E0B;border-bottom:1px solid var(--dbd);padding-bottom:6px}
+.rc{background:#26211D;border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:1px}
+.rc b{font-size:12px;color:var(--dtx)}.rc i{font-style:normal;color:var(--dmu)}.rc .m{color:#FCD9A8}
+.rc.dec{border-right:3px solid #F59E0B}.rc.auto{border-right:3px solid #2FA36B}.rc.sys{border-right:3px solid #60A5FA}.rc.cond{border-right:3px solid #7F1D1D;opacity:.85}
+.leg{display:flex;gap:14px;font-size:11px;color:var(--dmu);margin-top:10px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.leg .a::before{background:#2FA36B}.leg .d::before{background:#F59E0B}.leg .s::before{background:#60A5FA}.leg .c::before{background:#7F1D1D}
+.screens{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.scr{border:1px solid var(--dbd);border-radius:14px;overflow:hidden;background:var(--dsur);display:flex;flex-direction:column}
+.scr .h{padding:8px 12px;border-bottom:1px solid var(--dbd);font-size:11px;color:var(--dmu)}
+.scr .b{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.scr.light{background:#F4EFE6;color:var(--tx)}.scr.light .h{color:var(--mu);border-color:var(--bd)}
+.bigbtn{border-radius:12px;padding:14px 10px;text-align:center;font-weight:700;font-size:15px;border:2px solid var(--dbd);background:#26211D}
+.bigbtn.on{background:#B91C1C;border-color:#B91C1C;color:#fff}.bigbtn.g{background:#12301F;border-color:#2FA36B;color:#BBF0D0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.pill.g{background:#12301F;color:#BBF0D0}.pill.y{background:#3F2A10;color:#FCD9A8}.pill.r{background:#3B1111;color:#FCA5A5}
+.evt{background:#3F2A10;border:1px solid #D97706;border-radius:10px;padding:8px 10px;font-size:12px}
+.done{font-size:11px;color:#BBF0D0}.done::before{content:"✓ "}
+.ask{background:#3F2A10;border:1px solid #F59E0B;border-radius:8px;padding:6px 8px;font-size:11px}.ask b{color:#FCD9A8}
+.msg{background:#1C1917;color:#F4EFE6;border-radius:12px;padding:10px 12px;font-size:13px}.msg small{display:block;color:#D6CFC4;font-size:11px;margin-top:3px}
+.line{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;border-radius:8px;padding:8px 10px;color:#D6CFC4}
+.bar{height:8px;border-radius:4px;background:#3A2E24;overflow:hidden}.bar>i{display:block;height:100%}
+.pts{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.pt{background:#26211D;border-radius:6px;padding:5px 6px;font-size:10px;display:flex;flex-direction:column;gap:2px}
+.pt b{font-size:11px}
+.six{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.who .card{padding:10px 12px}.who b{display:block}.who .why{color:var(--mu);font-size:12px}.who .get{font-size:12px;margin-top:3px}
+.no-list{background:#F3E8E8;border:1px solid #E5C4C4}
+@media (max-width:1100px){.fan{grid-template-columns:repeat(3,1fr)}.screens{grid-template-columns:repeat(2,1fr)}.six,.who{grid-template-columns:1fr}.tl{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>נגמרו כוסות בהכנסת אורחים — ניהול חי</h1>
+<p class="lead">נושא 02. הנקודה: הכנסת אורחים צפון. 12,000 כוסות בפתיחה, 15 נקודות במתחם, מחסן מרכזי בחניון. ניהול חי אומר קודם כל: <b>שלא ייגמר</b>. ואם נגמר בכל זאת — מה קורה.</p>
+
+<h2>חלק א' — הדמיה</h2>
+<div class="demo">
+  <div class="lbl">ציר הזמן — שני מסלולים: המניעה (ירוק) ומה שקורה כשהמניעה נכשלה (אדום)</div>
+  <div class="tl">
+    <div><b class="g">20:40</b><span><b style="color:#BBF0D0;display:inline">מניעה.</b> המערכת מחשבת: צפון — 6,400 כוסות · 1,500/שעה · לפני ההדלקה ×1.6 → <b style="color:#FCD9A8;display:inline">ייגמר ב-22:50</b>. סף: שעתיים מלאי. נפתחת משימת אספקה: 6,000 מהמחסן, יציאה 21:30 — לפני שהרחבה צפופה מדי לרכב.</span></div>
+    <div><b class="g">21:00–21:55</b><span>קצין הלוגיסטיקה מאשר (או: אישור אוטומטי לפריט סטנדרטי). המחסנאי אוסף: כוסות + מים + לחם לאותה נסיעה (איחוד). המשטרה פותחת שער שירות ב-21:30 — הרחבה 1.9 נפש/מ"ר, מותר. 21:55 נמסר. <b style="color:#BBF0D0;display:inline">לא נגמר. אף אחד לא שם לב. זה הניהול.</b></span></div>
+    <div><b class="r">22:35</b><span><b style="color:#FCA5A5;display:inline">נכשל.</b> הטנדר נתקע מאחורי הפנצ'ר (נושא 01), הקהל להדלקה הגיע מוקדם, הקצב קפץ ל-2,600/שעה. מתנדב לוחץ: "נגמרו כוסות". במלאי: 300.</span></div>
+    <div><b class="r">22:36</b><span>המערכת לבד: הנקודה הקרובה עם עודף — דרום, 8,000 · 1,000/שעה. 2,000 יוצאות בעגלה, 9 דק'. הטנדר מקבל עדיפות. האפליקציה: "שתייה בצפון מוגבלת — מים בדרום, במערב". מד"א: "מים בצפון — מוגבל". ניהול-הקהל: צפון כבר לא מקום להפנות אליו קהל.</span></div>
+    <div><b class="r">22:38</b><span>אחראי הנקודה מחליט: כוס רק עם שתייה חמה. מים — מהברז לבקבוקים אישיים. לא שוטפים כוסות (משרד הבריאות). קצין הלוגיסטיקה מחליט: העגלה כן, הטנדר ממתין לפתיחת ציר.</span></div>
+    <div><b class="r">22:47 · 23:10</b><span>העגלה מגיעה — 2,000. חוזרים לשגרה. 23:10 הטנדר — 6,000 + מים. הכל רשום: 12 דקות בלי כוסות, 0 נפגעים, תחזית פספסה ב-40 דקות → המודל מתעדכן לשנה הבאה.</span></div>
+  </div>
+
+  <div class="hub">
+    <div><div class="n">הכנסת אורחים צפון · כוסות</div><div class="lbl">אחראי [שם] · ארגון [שם] · 14 מתנדבים · 22:35 · מלאי 300 · קצב 2,600/שעה · 0:07 עד סוף</div></div>
+    <div class="k"><span>בתור: ~180 · 40 ילדים · שתייה חמה: כן</span><span>מים מברז: יש · בקבוקים: 400</span><span>אשפה: 3 מכלים מלאים</span></div>
+    <div class="k"><span>דרום: 8,000 · עגלה 9 דק'</span><span>מחסן: 54,000 · טנדר תקוע</span><span>מערב: 3,100 · לא לקחת</span></div>
+  </div>
+
+  <div class="lbl" style="margin-top:14px">מי מקבל מה — לפי שש השאלות</div>
+  <div class="fan">
+    <div class="col"><h4>1 · מי בתוך / צורך</h4>
+      <div class="rc auto"><b>המתנדב בדלפק</b><i>22:35</i><span class="m">כפתור אחד. חוזר: "עגלה מדרום 9 דק' · כוס רק עם חם"</span></div>
+      <div class="rc dec"><b>אחראי הנקודה</b><i>22:35</i><span class="m">מלאי, קצב, מה בדרך, 3 החלטות: קיצוב / סגירת שתייה / בקבוקים</span></div>
+      <div class="rc auto"><b>14 המתנדבים</b><i>22:36</i><span class="m">"כוס רק עם חם. מים — לבקבוק אישי. לא שוטפים."</span></div>
+      <div class="rc auto"><b>~180 בתור</b><i>22:36 · כריזה + שלט</i><span class="m">"מים בדרום (4 דק') ובמערב. שתייה חמה כאן."</span></div>
+      <div class="rc auto"><b>עמדת התה / המרק</b><i>22:36</i><span class="m">"הכוסות שלכם — עדיפות. אל תתנו לקר."</span></div>
+      <div class="rc auto"><b>חובש הנקודה</b><i>22:36</i><span class="m">"מים מוגבלים 15 דק' · שימו לב לילדים/קשישים"</span></div>
+      <div class="rc sys"><b>הורים עם ילדים בתור</b><i>אפליקציה</i><span class="m">"מים לילדים — עמדת דרום 4 דק'"</span></div>
+      <div class="rc sys"><b>צוות הניקיון של הנקודה</b><i>מערכת</i><span class="m">3 מכלים מלאים → פינוי (גם זה "כוסות")</span></div>
+    </div>
+    <div class="col"><h4>2 · מי מחכה לזה</h4>
+      <div class="rc auto"><b>אפליקציית הציבור</b><i>22:36</i><span class="m">"שתייה בצפון מוגבלת · מים: דרום, מערב"</span></div>
+      <div class="rc sys"><b>ניהול הקהל</b><i>מערכת</i><span class="m">צפון לא "מושך" יותר → כפתור "הפנה להכנסת אורחים צפון" נכבה</span></div>
+      <div class="rc auto"><b>אחראי דרום</b><i>22:36</i><span class="m">"2,000 יוצאות ממך לצפון · נשאר לך 3.5 שעות"</span></div>
+      <div class="rc auto"><b>אחראי מערב</b><i>22:36</i><span class="m">"צפו ל-+300/שעה מצפון · יש לך 2 שעות"</span></div>
+      <div class="rc cond"><b>מפקד גזרה צפון (משטרה)</b><i>אם התור > 300</i><span class="m">"תור בהכנסת אורחים לא מתקדם"</span></div>
+      <div class="rc auto"><b>הכריזה בנקודה</b><i>22:36</i><span class="m">נוסח מוכן, 3 שפות</span></div>
+      <div class="rc sys"><b>מוקד המידע</b><i>22:36</i><span class="m">"צפון: כוסות בדרך 9 דק'"</span></div>
+      <div class="rc cond"><b>מד"א</b><i>שורה</i><span class="m">"מים בצפון — מוגבל 15 דק'" (לילה, ילדים)</span></div>
+    </div>
+    <div class="col"><h4>3 · מי על ציר האספקה</h4>
+      <div class="rc auto"><b>המחסנאי</b><i>20:40 / 22:36</i><span class="m">רשימת ליקוט: כוסות 6,000 + מים 40 ארגזים + לחם</span></div>
+      <div class="rc auto"><b>נהג הטנדר</b><i>22:36</i><span class="m">"עדיפות · ממתין לציר · יעד: צפון"</span></div>
+      <div class="rc dec"><b>שער השירות (משטרה)</b><i>21:30 / 23:05</i><span class="m">"טנדר אספקה מבקש — רחבה 1.9 → מותר / 3.2 → לא"</span></div>
+      <div class="rc sys"><b>ניהול הקהל — הציר</b><i>מערכת</i><span class="m">בודק צפיפות על מסלול הרכב לפני אישור</span></div>
+      <div class="rc auto"><b>2 מתנדבי עגלה מדרום</b><i>22:36</i><span class="m">"2,000 כוסות → צפון · מסלול הולכי רגל · 9 דק'"</span></div>
+      <div class="rc cond"><b>סדרן חניון (רכב אספקה)</b><i>אם הטנדר יוצא מהחניון</i><span class="m">"טנדר יוצא דרך שער 2"</span></div>
+      <div class="rc sys"><b>פריטים אחרים על אותה נסיעה</b><i>מערכת</i><span class="m">איחוד: מים, לחם, שקיות אשפה — נסיעה אחת</span></div>
+      <div class="rc cond"><b>הספק החיצוני</b><i>אם המחסן < 20,000</i><span class="m">"משלוח לילה: 40,000 עד 03:00"</span></div>
+      <div class="rc sys"><b>פינוי אשפה</b><i>מערכת</i><span class="m">+6,000 כוסות = +6,000 בפח · סבב נוסף</span></div>
+    </div>
+    <div class="col"><h4>4 · מי אחראי</h4>
+      <div class="rc dec"><b>קצין הלוגיסטיקה (הרשות)</b><i>20:40 / 22:35</i><span class="m">15 נקודות · מי ייגמר מתי · אישור נסיעות · עגלה או טנדר</span></div>
+      <div class="rc auto"><b>הארגון שמפעיל את הנקודה</b><i>22:35</i><span class="m">"צפון נגמר · תיקון בדרך" (הכסף שלהם, השם שלהם)</span></div>
+      <div class="rc cond"><b>מפקח משרד הבריאות</b><i>אם דווח "שטפו כוסות"</i><span class="m">חד-פעמי בלבד. שטיפה = סגירה.</span></div>
+      <div class="rc sys"><b>גזבר הארגון</b><i>אחרי</i><span class="m">6,000 כוסות = X ₪ · מהתרומות</span></div>
+      <div class="rc sys"><b>מנהל החוזה עם הספק</b><i>אחרי</i><span class="m">משלוח לילה — עמד בזמן?</span></div>
+      <div class="rc auto"><b>מתאם הכנסת האורחים (הרשות)</b><i>22:35</i><span class="m">כל 15 הנקודות · מי עוזר למי</span></div>
+    </div>
+    <div class="col"><h4>5 · מה זה עושה לעתיד</h4>
+      <div class="rc sys"><b>תחזית הלילה — כל הנקודות</b><i>מערכת</i><span class="m">הקצב קפץ ב-22:20 · מעדכן: מערב ייגמר 00:30, מזרח 01:10</span></div>
+      <div class="rc sys"><b>תה של הבוקר (04:00–06:00)</b><i>מערכת</i><span class="m">2,000/שעה בכל נקודה · צריך 30,000 עד 03:30</span></div>
+      <div class="rc sys"><b>מלאי המחסן</b><i>מערכת</i><span class="m">54,000 → 48,000 · סף הזמנה 20,000</span></div>
+      <div class="rc sys"><b>בקבוקים</b><i>מערכת</i><span class="m">400 → 150 · יקר יותר, יותר אשפה</span></div>
+      <div class="rc sys"><b>המודל לשנה הבאה</b><i>מערכת</i><span class="m">"לפני ההדלקה ×1.8, לא ×1.6 · הקהל מגיע 40 דק' מוקדם"</span></div>
+      <div class="rc sys"><b>ציר השירות</b><i>מערכת</i><span class="m">"אחרי 22:00 — אין רכב. כל אספקה לפני."</span></div>
+    </div>
+    <div class="col"><h4>6 · האם זה תבנית</h4>
+      <div class="rc cond"><b>המפקד</b><i>3 נקודות נגמרות באותה שעה</i><span class="m">"יותר אנשים ממה שספרנו" — זה אות על הקהל, לא על כוסות</span></div>
+      <div class="rc cond"><b>קצין הלוגיסטיקה</b><i>נקודה אחת נגמרת כל שנה</i><span class="m">"צפון תמיד — להגדיל מלאי פתיחה"</span></div>
+      <div class="rc cond"><b>מתאם הכנסת האורחים</b><i>נקודה מדווחת "נגמר" עם 3,000 במלאי</i><span class="m">אוגרת? סופרת לא נכון? ביקור</span></div>
+      <div class="rc sys"><b>מנהל האירוע</b><i>בבוקר</i><span class="m">"2 נקודות נגמרו · 12 + 20 דק' · 0 רפואי · המודל עודכן"</span></div>
+      <div class="rc"><b style="color:#FCA5A5">לא מקבלים כלום</b><i>בכוונה</i><span class="m">המפקד (בשגרה) · המשטרה (חוץ מהשער) · כב"ה · צה"ל · החצרות · 12 הנקודות האחרות · הציבור שלא בצפון</span></div>
+    </div>
+  </div>
+  <div class="leg"><span class="a">אוטומטי</span><span class="d">החלטה של בן-אדם</span><span class="s">מערכת מעדכנת את עצמה</span><span class="c">מותנה — רק אם</span></div>
+
+  <div class="lbl" style="margin-top:26px">מה כל אחד רואה</div>
+  <div class="screens">
+    <div class="scr"><div class="h">מתנדב בדלפק · טלפון · 22:35</div><div class="b">
+      <div class="lbl">הכנסת אורחים צפון · דלפק 2</div>
+      <div class="row" style="gap:6px"><div class="bigbtn on" style="flex:1">נגמרו כוסות</div><div class="bigbtn" style="flex:1">נגמרו מים</div></div>
+      <div class="row" style="gap:6px"><div class="bigbtn" style="flex:1">נגמר אוכל</div><div class="bigbtn" style="flex:1">אין גז</div></div>
+      <div class="msg" style="background:#26211D"><b>בדרך אליך</b><small>עגלה מדרום — 2,000 — 9 דק' · טנדר — 6,000 — ממתין לציר</small><small style="color:#FCD9A8">עד אז: כוס רק עם שתייה חמה. מים — לבקבוק של האורח. לא לשטוף כוסות.</small></div>
+      <div class="bigbtn g" style="padding:10px;font-size:13px">הגיעה העגלה — קיבלתי 2,000</div>
+    </div></div>
+
+    <div class="scr"><div class="h">אחראי הנקודה · טאבלט · 22:35</div><div class="b">
+      <div class="evt"><b>כוסות · 300 · 0:07 עד סוף</b><br><span style="color:#FCD9A8">קצב 2,600/שעה (תחזית הייתה 2,400 מ-22:40 — הגיעו מוקדם)</span></div>
+      <div class="lbl">מלאי הנקודה</div>
+      <div class="row" style="justify-content:space-between;font-size:11px"><span>כוסות</span><span style="color:#FCA5A5">300</span></div><div class="bar"><i style="width:3%;background:#EF4444"></i></div>
+      <div class="row" style="justify-content:space-between;font-size:11px"><span>מים (ארגזים)</span><span>28 · 1.5 שעות</span></div><div class="bar"><i style="width:45%;background:#D97706"></i></div>
+      <div class="row" style="justify-content:space-between;font-size:11px"><span>בקבוקים</span><span>400</span></div><div class="bar"><i style="width:60%;background:#2FA36B"></i></div>
+      <div class="row" style="justify-content:space-between;font-size:11px"><span>גז · לחם · אשפה</span><span>4 שע' · 3 שע' · <span style="color:#FCD9A8">3 מלאים</span></span></div>
+      <div class="lbl">יצא לבד</div>
+      <div class="done">עגלה מדרום 2,000 · 9 דק' · טנדר בעדיפות</div>
+      <div class="done">ציבור: "שתייה בצפון מוגבלת" · חובש · כריזה · דרום ומערב</div>
+      <div class="ask"><b>ההחלטות שלך:</b><br><span class="row" style="margin-top:4px"><span class="pill r">כוס רק עם חם</span><span class="pill y">סגור שתייה קרה 10 דק'</span><span class="pill g">בקבוקים לילדים</span></span></div>
+    </div></div>
+
+    <div class="scr"><div class="h">קצין הלוגיסטיקה · חמ"ל · 15 נקודות</div><div class="b">
+      <div class="lbl">כוסות — מלאי · שעות עד סוף · (תחזית 20:40 מול עכשיו)</div>
+      <div class="pts">
+        <div class="pt" style="border-right:3px solid #EF4444"><b>צפון</b>300 · 0.1<br><span style="color:#FCA5A5">נגמר</span></div>
+        <div class="pt" style="border-right:3px solid #2FA36B"><b>דרום</b>6,000 · 3.5</div>
+        <div class="pt" style="border-right:3px solid #D97706"><b>מערב</b>3,100 · 2.0<br><span style="color:#FCD9A8">00:30</span></div>
+        <div class="pt" style="border-right:3px solid #D97706"><b>מזרח</b>3,900 · 2.6</div>
+        <div class="pt" style="border-right:3px solid #2FA36B"><b>ציון</b>5,200 · 4</div>
+        <div class="pt" style="border-right:3px solid #2FA36B"><b>חניון</b>9,000 · 9</div>
+        <div class="pt" style="border-right:3px solid #2FA36B"><b>הדלקה ב'</b>4,400 · 3</div>
+        <div class="pt" style="border-right:3px solid #2FA36B"><b>נשים 1</b>4,000 · 5</div>
+        <div class="pt" style="border-right:3px solid #2FA36B"><b>נשים 2</b>3,800 · 4.5</div>
+        <div class="pt" style="border-right:3px solid #2FA36B"><b>+5</b>תקין</div>
+      </div>
+      <div class="evt" style="background:#3B1111;border-color:#7F1D1D"><b>צפון נגמר · 22:35</b><br><span style="color:#FCA5A5">הטנדר של 21:30 לא יצא — תקוע מאחורי אוטובוס 14. הקצב קפץ ×1.8. התחזית פספסה ב-40 דק'.</span></div>
+      <div class="done">עגלה 2,000 מדרום · טנדר בעדיפות · 3 נקודות עודכנו</div>
+      <div class="ask"><b>ההחלטות שלך:</b> ציר השירות — רחבה 3.2 נפש/מ"ר. לא רכב. <span class="row" style="margin-top:4px"><span class="pill r">עגלה בלבד עד שהרחבה יורדת</span><span class="pill y">בקש מהמשטרה פתיחה יזומה</span><span class="pill g">עוד עגלה ממזרח</span></span></div>
+      <div class="lbl">מחסן 54,000 · ספק: משלוח לילה 03:00 · תה של הבוקר: 30,000 נדרש</div>
+    </div></div>
+
+    <div class="scr"><div class="h">כל השאר — שורה אחת</div><div class="b">
+      <div class="lbl">המחסנאי · 20:40</div><div class="line">ליקוט #37 → צפון: כוסות 6,000 · מים 40 · לחם 20 · שקיות 200 · יציאה 21:30</div>
+      <div class="lbl">שער השירות · משטרה · 21:30</div><div class="line">טנדר אספקה #37 מבקש · רחבה 1.9 · <span style="color:#BBF0D0">מותר</span> · 8 דק' פנימה-החוצה</div>
+      <div class="lbl">שער השירות · 23:05</div><div class="line">טנדר #37 מבקש · רחבה 3.2 · <span style="color:#FCA5A5">לא</span> · חלופה: עגלה / המתן</div>
+      <div class="lbl">2 מתנדבי עגלה · דרום · 22:36</div><div class="line">2,000 כוסות → צפון · מסלול הולכי רגל מערבי · 9 דק' · "הגעתי"</div>
+      <div class="lbl">הציבור · אפליקציה · 22:36</div><div class="line">שתייה חמה בצפון ✓ · מים: דרום (4 דק'), מערב (6 דק')</div>
+      <div class="lbl">חובש צפון</div><div class="line">מים מוגבלים 15 דק' · ילדים/קשישים · בקבוקים 400</div>
+      <div class="lbl">ניהול הקהל · מערכת</div><div class="line">הכנסת אורחים צפון: attractor=off · ציר שירות: סגור מעל 3.0</div>
+      <div class="lbl">המפקד</div><div class="line" style="color:#6F665D">(כלום. אלא אם 3 נקודות נגמרות יחד — אז זה אות על הקהל.)</div>
+      <div class="lbl">משרד הבריאות</div><div class="line" style="color:#6F665D">(כלום. אלא אם מישהו שטף כוסות.)</div>
+    </div></div>
+  </div>
+</div>
+
+<h2>חלק ב' — הרישום המלא</h2>
+
+<h3>1. מה המערכת יודעת לפני שקורה משהו</h3>
+<div class="card">על כל נקודת הכנסת אורחים (15): מי מפעיל, מי אחראי, כמה מתנדבים, מה מגישים (חם/קר/אוכל), מלאי פתיחה של כל פריט (כוסות, מים, בקבוקים, גז, לחם, שקיות, נייר), <b>קצב צריכה לפי שעה</b> (משנה שעברה + השעה האחרונה), כמה בתור, איפה הנקודה ביחס לציר השירות ולמסלולי הולכי רגל, מי הנקודות השכנות. על המחסן: מלאי, מי מחסנאי, אילו רכבים, סף הזמנה מהספק. על ציר השירות: מתי מותר רכב (לפי צפיפות הרחבה — לא לפי שעון). על הקהל: כמה במתחם, מתי ההדלקה — כי זה קובע את הקצב.</div>
+
+<h3>2. המניעה — הניהול האמיתי</h3>
+<div class="card">
+<b>כל 10 דקות המערכת מחשבת לכל נקודה ולכל פריט:</b> מלאי ÷ קצב-צפוי = מתי נגמר. הקצב הצפוי לוקח בחשבון: השעה, כמה אנשים במתחם, מתי ההדלקה (×1.6–1.8 בשעה שלפני), מזג אוויר (חם = יותר מים), מה קרה בשעה האחרונה.
+<ul>
+<li><b>סף:</b> פחות משעתיים מלאי → נפתחת משימת אספקה. פחות משעה → דחוף. פריט סטנדרטי (כוסות, מים) — אישור אוטומטי. פריט מיוחד — קצין הלוגיסטיקה.</li>
+<li><b>תזמון לפי הקהל, לא לפי הצורך:</b> המערכת יודעת שאחרי 22:00 הרחבה מעל 3 נפש/מ"ר ואין רכב. אז כל מה שצריך להגיע בין 22:00 ל-01:00 — יוצא לפני 21:45. זו הנקודה: <b>לוגיסטיקה כפופה לניהול הקהל.</b></li>
+<li><b>איחוד נסיעות:</b> טנדר אחד לצפון לוקח את כל מה שצפון יצטרך עד הבוקר, ואת מה שמזרח (בדרך) יצטרך. לא 6 נסיעות.</li>
+<li><b>העברה בין נקודות לפני המחסן:</b> דרום עם עודף ליד צפון עם חוסר — עגלה, 9 דקות, בלי רכב, בלי שער. המערכת מציעה את זה קודם.</li>
+<li><b>אם הכל עובד — אף אחד לא רואה כלום.</b> המתנדב לא לוחץ. הציבור לא יודע. זה מה שקורה ב-95% מהלילה, וזה מה שלא קורה היום.</li>
+</ul></div>
+
+<h3>3. דקה אחר דקה — כשהמניעה נכשלה</h3>
+<table>
+<tr><th style="width:80px">מתי</th><th>מה קורה</th><th style="width:110px">מי</th></tr>
+<tr><td>22:20</td><td>הקצב בצפון קופץ מ-1,500 ל-2,600/שעה — הקהל להדלקה הגיע 40 דק' מוקדם. המערכת מעדכנת: "ייגמר 22:38, לא 22:50". הטנדר של 21:30 עדיין לא יצא (תקוע מאחורי אוטובוס 14 — נושא 01). התראה לקצין הלוגיסטיקה: "צפון — 18 דק' · הטנדר לא יצא".</td><td>אוטומט</td></tr>
+<tr><td>22:35</td><td>300 כוסות. המתנדב לוחץ "נגמרו כוסות" (או לא — המערכת כבר יודעת מהספירה). המערכת: הנקודה הקרובה עם עודף = דרום (8,000, 1,000/שעה, 3.5 שעות אחרי העברה). 2 מתנדבים שם מקבלים: "2,000 → צפון, עגלה, מסלול מערבי, 9 דק'". הטנדר: עדיפות. ציבור, חובש, כריזה, דרום, מערב, מוקד — שורה לכל אחד. ניהול הקהל: צפון כבר לא יעד להפניה.</td><td>אוטומט</td></tr>
+<tr><td>22:38</td><td>אחראי הנקודה: כוס רק עם שתייה חמה · מים לבקבוק אישי · בקבוקים לילדים · לא שוטפים (בריאות). קצין הלוגיסטיקה: הרחבה 3.2 — הטנדר לא נכנס. עגלה בלבד. עוד עגלה ממזרח? לא — מזרח עצמו ב-2.6 שעות.</td><td>החלטה</td></tr>
+<tr><td>22:47</td><td>העגלה מגיעה. "קיבלתי 2,000". שגרה חוזרת. הציבור: "שתייה בצפון — חזרה". 12 דקות בלי כוסות קרות.</td><td>מתנדב</td></tr>
+<tr><td>23:05</td><td>הטנדר מבקש ציר. הרחבה 3.2 → לא. 23:20 הרחבה יורדת ל-2.7 אחרי ההדלקה → מותר. 23:30 נמסר 6,000 + מים + לחם. צפון מכוסה עד הבוקר.</td><td>שער / אוטומט</td></tr>
+<tr><td>אחרי</td><td>רשומה: צפון נגמר 22:35–22:47 · סיבה: קצב ×1.8 (תחזית ×1.6) + טנדר תקוע · 0 רפואי · המודל מתעדכן: לפני ההדלקה ×1.8, והקהל מגיע 40 דק' מוקדם. שנה הבאה: מלאי פתיחה בצפון 16,000, ואספקה אחרונה ב-21:00.</td><td>מערכת</td></tr>
+</table>
+
+<h3>4. מה אוטומטי ומה בן-אדם מחליט</h3>
+<div class="six">
+  <div class="card"><b>אוטומטי</b><ul><li>חישוב "מתי נגמר" כל 10 דק' לכל פריט בכל נקודה</li><li>פתיחת משימת אספקה בסף שעתיים</li><li>תזמון הנסיעה לפי צפיפות הרחבה, לא לפי שעון</li><li>איחוד פריטים לנסיעה</li><li>הצעת העברה מנקודה שכנה לפני המחסן</li><li>כשנגמר: עגלה מהשכנה, עדיפות לטנדר, הודעות לציבור/חובש/כריזה/שכנות/מוקד, כיבוי "attractor"</li><li>עדכון תחזית לכל 15 הנקודות כשהקצב משתנה</li><li>הזמנה מהספק כשהמחסן יורד מהסף</li></ul></div>
+  <div class="card"><b>בן-אדם מחליט</b><ul><li>קיצוב / סגירת שתייה קרה / בקבוקים (אחראי הנקודה)</li><li>עגלה או טנדר, מאיזו נקודה לקחת (קצין לוגיסטיקה)</li><li>פתיחת ציר שירות ברחבה צפופה (משטרה — לא לוגיסטיקה)</li><li>לבקש מהספק משלוח לילה מוקדם (קצין לוגיסטיקה)</li><li>לסגור נקודה (אחראי + מתאם)</li></ul></div>
+  <div class="card"><b>מגיע למפקד רק אם</b><ul><li>3 נקודות נגמרות באותה שעה — יש יותר אנשים ממה שספרנו (אות על הקהל!)</li><li>אין מים בכלל בנקודה בלילה חם — רפואי</li><li>ציר השירות נדרש ברחבה אדומה — הכרעה שלו</li></ul></div>
+</div>
+
+<h3>5. כל מי שצריך לדעת — לפי שש השאלות</h3>
+
+<h3 style="margin-top:14px">שאלה 1 — מי בתוך / צורך</h3>
+<div class="who">
+<div class="card"><b>1. המתנדב בדלפק <span class="tag auto">אוטומטי</span></b><span class="why">כפתור אחד לכל פריט. לא "כמה נשאר" — "נגמר". המערכת כבר יודעת כמה.</span><span class="get">חוזר: מה בדרך, מתי, ומה לעשות עד אז.</span></div>
+<div class="card"><b>2. אחראי הנקודה <span class="tag dec">החלטה</span></b><span class="why">בעל הנקודה. מקבל 3 החלטות מקומיות.</span><span class="get">מלאי כל הפריטים, קצב, מה בדרך, כפתורי קיצוב.</span></div>
+<div class="card"><b>3. 14 המתנדבים <span class="tag auto">אוטומטי</span></b><span class="why">כולם צריכים לומר אותו דבר לאורחים.</span><span class="get">"כוס רק עם חם. מים לבקבוק. לא שוטפים."</span></div>
+<div class="card"><b>4. ~180 בתור <span class="tag auto">אוטומטי</span></b><span class="why">אחרת התור לא זז ואנשים כועסים.</span><span class="get">כריזה + שלט + אפליקציה: "מים בדרום 4 דק'".</span></div>
+<div class="card"><b>5. עמדת התה / המרק <span class="tag auto">אוטומטי</span></b><span class="why">כוסות לחם — עדיפות. שתייה חמה בלילה קר זה לא מותרות.</span><span class="get">"300 האחרונות — לחם בלבד."</span></div>
+<div class="card"><b>6. חובש הנקודה <span class="tag auto">אוטומטי</span></b><span class="why">מים מוגבלים בלילה = ילדים וקשישים.</span><span class="get">"15 דק' בלי מים קרים · בקבוקים 400".</span></div>
+<div class="card"><b>7. הורים עם ילדים <span class="tag sys">מערכת</span></b><span class="why">ילד צמא לא מחכה 12 דקות.</span><span class="get">אפליקציה: "מים לילדים — דרום, 4 דק'".</span></div>
+<div class="card"><b>8. צוות הניקיון <span class="tag sys">מערכת</span></b><span class="why">6,000 כוסות שנכנסות = 6,000 שיוצאות לפח. 3 מכלים כבר מלאים.</span><span class="get">סבב פינוי נוסף.</span></div>
+</div>
+
+<h3>שאלה 2 — מי מחכה לזה</h3>
+<div class="who">
+<div class="card"><b>9. אפליקציית הציבור <span class="tag auto">אוטומטי</span></b><span class="why">"איפה יש שתייה עכשיו" — צפון יורד מהרשימה 12 דקות.</span><span class="get">"שתייה בצפון מוגבלת · מים: דרום, מערב".</span></div>
+<div class="card"><b>10. ניהול הקהל <span class="tag sys">מערכת</span></b><span class="why">הכנסת אורחים היא מקום שמפנים אליו קהל מרחבה צפופה. בלי שתייה — לא. הכפתור "הפנה לצפון" נכבה. וההפך: אם המפקד הפנה לצפון 2,000 איש — הלוגיסטיקה צריכה לדעת שהקצב יקפוץ.</span><span class="get">attractor=off / on.</span></div>
+<div class="card"><b>11. אחראי דרום <span class="tag auto">אוטומטי</span></b><span class="why">2,000 יוצאות ממנו. שיידע לפני שהמתנדבים שלו נעלמים עם עגלה.</span><span class="get">"2,000 → צפון · נשאר לך 3.5 שעות".</span></div>
+<div class="card"><b>12. אחראי מערב <span class="tag auto">אוטומטי</span></b><span class="why">הקהל מצפון יבוא אליו.</span><span class="get">"+300/שעה צפויים · יש לך 2 שעות".</span></div>
+<div class="card"><b>13. מפקד גזרה צפון (משטרה) <span class="tag">אם התור > 300</span></b><span class="why">תור שלא זז ליד רחבה צפופה = בעיית קהל, לא בעיית כוסות.</span><span class="get">שורה אחת.</span></div>
+<div class="card"><b>14. הכריזה בנקודה <span class="tag auto">אוטומטי</span></b><span class="why">—</span><span class="get">נוסח מוכן, 3 שפות.</span></div>
+<div class="card"><b>15. מוקד המידע <span class="tag sys">מערכת</span></b><span class="why">"למה אין כוסות בצפון?"</span><span class="get">"בדרך, 9 דק'".</span></div>
+<div class="card"><b>16. מד"א <span class="tag">שורה</span></b><span class="why">לילה, ילדים, 15 דקות בלי מים קרים.</span><span class="get">שורה אחת במסך שלהם.</span></div>
+</div>
+
+<h3>שאלה 3 — מי על ציר האספקה</h3>
+<div class="who">
+<div class="card"><b>17. המחסנאי <span class="tag auto">אוטומטי</span></b><span class="why">מקבל רשימת ליקוט, לא טלפון.</span><span class="get">"#37 → צפון: כוסות 6,000 · מים 40 · לחם 20 · שקיות 200".</span></div>
+<div class="card"><b>18. נהג הטנדר <span class="tag auto">אוטומטי</span></b><span class="why">—</span><span class="get">יעד, מסלול, "ממתין לציר", "עדיפות".</span></div>
+<div class="card"><b>19. שער השירות — משטרה <span class="tag dec">החלטה</span></b><span class="why">רכב ברחבה עם 3.2 נפש/מ"ר — לא. זו החלטה משטרתית, והמערכת נותנת לה את המספר.</span><span class="get">"טנדר #37 מבקש · רחבה 1.9 → מותר / 3.2 → לא".</span></div>
+<div class="card"><b>20. ניהול הקהל — הציר <span class="tag sys">מערכת</span></b><span class="why">בודקת צפיפות על כל מסלול הרכב לפני שהיא בכלל מציעה טנדר.</span><span class="get">—</span></div>
+<div class="card"><b>21. 2 מתנדבי עגלה <span class="tag auto">אוטומטי</span></b><span class="why">הפתרון המהיר. מסלול הולכי רגל, לא רחבה.</span><span class="get">"2,000 → צפון · מסלול מערבי · 9 דק'".</span></div>
+<div class="card"><b>22. סדרן החניון <span class="tag">אם הטנדר יוצא מהחניון</span></b><span class="why">רכב יוצא דרך שער שאנשים עומדים בו.</span><span class="get">"טנדר יוצא שער 2".</span></div>
+<div class="card"><b>23. פריטים אחרים לאותה נסיעה <span class="tag sys">מערכת</span></b><span class="why">אם כבר נוסעים — מים, לחם, שקיות. נסיעה אחת במקום שלוש.</span><span class="get">איחוד אוטומטי.</span></div>
+<div class="card"><b>24. הספק החיצוני <span class="tag">אם המחסן < 20,000</span></b><span class="why">משלוח לילה לוקח 3 שעות. מזמינים ב-00:00, לא ב-03:00.</span><span class="get">"40,000 עד 03:00".</span></div>
+<div class="card"><b>25. פינוי אשפה <span class="tag sys">מערכת</span></b><span class="why">כל כוס שנכנסת יוצאת לפח.</span><span class="get">+סבב.</span></div>
+</div>
+
+<h3>שאלה 4 — מי אחראי</h3>
+<div class="who">
+<div class="card"><b>26. קצין הלוגיסטיקה (הרשות) <span class="tag dec">החלטה</span></b><span class="why">בעל הלוגיסטיקה של כל האירוע. 15 נקודות, מחסן, רכבים, ספק.</span><span class="get">מפת מלאי, מי ייגמר מתי, נסיעות, החלטות.</span></div>
+<div class="card"><b>27. הארגון שמפעיל את הנקודה <span class="tag auto">אוטומטי</span></b><span class="why">זה השם שלהם, הכסף שלהם (תרומות), האורחים שלהם.</span><span class="get">"צפון נגמר · תיקון בדרך".</span></div>
+<div class="card"><b>28. מתאם הכנסת האורחים (הרשות) <span class="tag auto">אוטומטי</span></b><span class="why">מי עוזר למי בין 15 ארגונים שונים — צריך מתאם, לא ויכוח.</span><span class="get">כל הנקודות.</span></div>
+<div class="card"><b>29. מפקח משרד הבריאות <span class="tag">אם דווח "שטפו כוסות"</span></b><span class="why">כוסות חד-פעמיות. בלי כוסות מתנדב עלול לשטוף ולהשתמש שוב. זה סגירת נקודה.</span><span class="get">רק במקרה כזה.</span></div>
+<div class="card"><b>30. גזבר הארגון <span class="tag sys">אחרי</span></b><span class="why">6,000 כוסות מהמחסן המרכזי — מי משלם?</span><span class="get">רישום.</span></div>
+<div class="card"><b>31. מנהל החוזה עם הספק <span class="tag sys">אחרי</span></b><span class="why">משלוח לילה — עמד?</span><span class="get">SLA.</span></div>
+</div>
+
+<h3>שאלה 5 — מה זה עושה לעתיד</h3>
+<div class="who">
+<div class="card"><b>32. תחזית כל 15 הנקודות <span class="tag sys">מערכת</span></b><span class="why">אם הקצב קפץ בצפון — הוא יקפוץ במערב ובמזרח. מעדכנים את כולם, לא רק את צפון.</span><span class="get">"מערב 00:30 · מזרח 01:10".</span></div>
+<div class="card"><b>33. תה של הבוקר <span class="tag sys">מערכת</span></b><span class="why">04:00–06:00 — כולם יוצאים, כולם רוצים תה. 2,000/שעה בכל נקודה. 30,000 כוסות צריכות להיות בנקודות עד 03:30 — כשהרחבה כבר פנויה לרכב.</span><span class="get">משימות אספקה של הלילה.</span></div>
+<div class="card"><b>34. מלאי המחסן + סף הזמנה <span class="tag sys">מערכת</span></b><span class="why">54,000 → 48,000. סף 20,000.</span><span class="get">—</span></div>
+<div class="card"><b>35. בקבוקים <span class="tag sys">מערכת</span></b><span class="why">התחליף. יקר, יותר אשפה, נגמר מהר.</span><span class="get">400 → 150.</span></div>
+<div class="card"><b>36. המודל לשנה הבאה <span class="tag sys">מערכת</span></b><span class="why">התחזית פספסה ב-40 דקות. למה? ×1.8 לא ×1.6, והקהל הגיע מוקדם. זה נכנס למודל.</span><span class="get">"צפון: מלאי פתיחה 16,000 · אספקה אחרונה 21:00".</span></div>
+<div class="card"><b>37. ציר השירות — הכלל <span class="tag sys">מערכת</span></b><span class="why">"אחרי 22:00 אין רכב" — לא לפי שעון, לפי צפיפות. אבל בפועל: כל מה שצריך להגיע בלילה — יוצא לפני.</span><span class="get">תכנון הנסיעות.</span></div>
+</div>
+
+<h3>שאלה 6 — האם זה תבנית</h3>
+<div class="who">
+<div class="card"><b>המפקד <span class="tag">3 נקודות באותה שעה</span></b><span class="why"><b>הכי חשוב בנושא הזה:</b> כוסות שנגמרות ב-3 נקודות בו-זמנית זה לא בעיית לוגיסטיקה. זה אומר שיש יותר אנשים ממה שהמונים סופרים. הכוסות הן חיישן-קהל.</span><span class="get">"3 נקודות נגמרו 22:30–22:45 — בדוק ספירה".</span></div>
+<div class="card"><b>קצין הלוגיסטיקה <span class="tag">אותה נקודה כל שנה</span></b><span class="why">צפון נגמרת שלוש שנים ברצף = מלאי הפתיחה קטן מדי, לא מזל רע.</span><span class="get">—</span></div>
+<div class="card"><b>מתאם הכנסת האורחים <span class="tag">"נגמר" עם 3,000 במלאי</span></b><span class="why">נקודה שמדווחת "נגמר" כשיש לה — אוגרת, או סופרת לא נכון. ביקור.</span><span class="get">—</span></div>
+<div class="card"><b>מנהל האירוע <span class="tag sys">בבוקר</span></b><span class="why">—</span><span class="get">"2 נקודות נגמרו · 12+20 דק' · 0 רפואי · המודל עודכן".</span></div>
+</div>
+
+<h3>6. מי לא מקבל כלום — בכוונה</h3>
+<div class="card no-list">המפקד (בשגרה) · המשטרה (חוץ מהשער ומפקד הגזרה בתור ארוך) · כב"ה · צה"ל · החצרות · 12 הנקודות האחרות · הציבור שלא ליד צפון · מד"א מעבר לשורה. <b>כוסות שנגמרו זה 12 דקות ו-180 איש בתור. זה מגיע ל-25 אנשים, לא ל-250.</b></div>
+
+<h3>7. מקרי קצה</h3>
+<ul>
+<li><b>המתנדב לא לוחץ:</b> המערכת יודעת מהספירה (מלאי פתיחה פחות קצב). ב-500 היא מתריעה לאחראי בלי שאף אחד לחץ. הכפתור הוא גיבוי, לא המקור.</li>
+<li><b>אין ספירה אמיתית</b> (מתנדבים לא סופרים): הקצב מוערך מהתור ומהשנה שעברה. פחות מדויק — עדיין עובד. ובכניסה למתחם סופרים ארגזים, לא כוסות.</li>
+<li><b>דרום גם על הסף:</b> המערכת לא לוקחת ממנה. הבאה בתור: ציון (5,200). אם אין אף שכנה עם עודף — טנדר בלבד, וההחלטה עולה לקצין.</li>
+<li><b>הרחבה אדומה והטנדר חייב:</b> אין רכב. נקודה. עגלות, או להמתין. אם אין מים בכלל בלילה חם — זה עולה למפקד, והוא מחליט אם לפתוח ציר לרכב. לא הלוגיסטיקה.</li>
+<li><b>מתנדב שוטף כוסות:</b> אסור. משרד הבריאות סוגר נקודות על זה. ההנחיה "לא שוטפים" יוצאת אוטומטית עם "נגמר", לפני שמישהו חושב על זה.</li>
+<li><b>נגמרו גם הבקבוקים:</b> מים מהברז ישירות, כוסות-חם בלבד. חובש מתודרך.</li>
+<li><b>שבת:</b> אם ל"ג בעומר סמוך לשבת — כל מה שצריך לשבת נכנס לפני. אין אספקה בשבת. המודל יודע.</li>
+<li><b>נקודת נשים:</b> נקודות נפרדות, מתנדבות, מסלול עגלה נפרד. אותו מנגנון, רשת נפרדת.</li>
+<li><b>הכוסות הגיעו ואין מקום לאחסן:</b> 6,000 כוסות = 30 ארגזים. הנקודה קטנה. חלק נשאר בטנדר/במחסן משנה.</li>
+<li><b>ההדלקה נדחתה ב-30 דקות:</b> הקצב לא קופץ מתי שחשבנו. המערכת מחוברת ללו"ז ההדלקות — מזיזה את התחזית.</li>
+</ul>
+
+<h3>8. מה צריך כדי שזה יעבוד</h3>
+<ul>
+<li><b>ספירת מלאי פתיחה בכל נקודה</b> — ארגזים, לא כוסות. 5 דקות לנקודה. בלי זה אין תחזית.</li>
+<li><b>קצב צריכה משנה שעברה</b> — או, בפעם הראשונה, מהשעה הראשונה של הלילה.</li>
+<li><b>אפליקציה למתנדב: 4 כפתורים</b> (כוסות / מים / אוכל / גז) + "קיבלתי". לא טפסים.</li>
+<li><b>טאבלט לאחראי הנקודה</b> עם מלאי, קצב, מה בדרך, קיצוב.</li>
+<li><b>מחסן אחד עם מחסנאי ורשימות ליקוט</b> — לא "תביא כוסות".</li>
+<li><b>עגלות ומסלולי הולכי רגל מסומנים</b> בין נקודות שכנות — הפתרון בלי רכב.</li>
+<li><b>ציר שירות עם כלל כתוב:</b> רכב רק מתחת ל-X נפש/מ"ר — והמשטרה מחליטה, המערכת נותנת את המספר.</li>
+<li><b>הסכם עם 15 הארגונים:</b> הם מדווחים מלאי, הם מקבלים אספקה מרוכזת, הם לא אוגרים. בלי ההסכם — כל ארגון לבד, ו"נגמר" חוזר.</li>
+<li><b>ספק עם משלוח לילה מוסכם מראש.</b></li>
+<li><b>החיבור לניהול הקהל</b> — בשני הכיוונים: הצפיפות קובעת מתי יש רכב; ההפניות של המפקד קובעות את הקצב.</li>
+</ul>
+
+<h3>9. הכלל</h3>
+<div class="card">כוסות זה הפריט הכי קטן במירון. אבל: <b>(א)</b> בלי כוסות אין מים בלילה, וזה רפואי. <b>(ב)</b> נקודה בלי שתייה מפסיקה למשוך קהל, וזה ניהול קהל. <b>(ג)</b> אספקה = רכב ברחבה, וזה בטיחות. <b>(ד)</b> כוסות שנגמרות ב-3 מקומות = יותר אנשים ממה שספרנו, וזה האות הכי מוקדם שיש. הפריט הקטן ביותר מחובר לדבר הגדול ביותר. <b>ניהול חי</b> אומר שהמערכת ידעה ב-20:40 שצפון תיגמר ב-22:50, ושלחה טנדר ב-21:30. שהוא נתקע מאחורי פנצ'ר — זה נושא 01. ששני הנושאים מדברים — זה המערכת.</div>
+
+</div>
+</body>
+</html>
