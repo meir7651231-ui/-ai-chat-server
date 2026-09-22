@@ -25,7 +25,7 @@ import { stem } from '../machtzev/generator/match.mjs';
 import { check, parseSpec, STOP } from './read.mjs';
 import { pasak, applyPsak } from './apply.mjs';
 import { rminhu, had, pliga, lo } from './rminhu.mjs';
-import { askMaimatai } from './kashe.mjs';   // 🕯️ המקשה (חוט-1, מגודר KASHE_WIRE — דיווח בלבד, L57)   // 🕯️ ∅ הוא «אין» — ופסק עליו נרשם בפנקס (הכרעה-23 · L114)
+import { askMaimatai, kasheQuestions, askFor } from './kashe.mjs';   // 🕯️ המקשה (חוט-1): דיווח מגודר KASHE_WIRE + שאלה על המתג (§20-ג)   // 🕯️ ∅ הוא «אין» — ופסק עליו נרשם בפנקס (הכרעה-23 · L114)
 
 const HE_RE = /[\u05d0-\u05ea]/;   // שם-שדה בלי אות-עברית = מפתח-סכמה, לא מונח
 const norm = (s) => String(s).replace(/[״"'׳]/g, '').replace(/\s+/g, ' ').trim();
@@ -290,6 +290,10 @@ export function goalPsak(sentence, origin = 'מטרה') {
       })) });
   }
   const reqs = []; const claimed = new Set();
+  //  🕯️ חוט-1 צעד-2: שאלת-המקשה רוכבת על המתג (§20-ג). **עצל** — python נקרא רק
+  //  כשיש מתג בפועל, ו**פעם אחת** למשפט (L114). כיבוי: KASHE_OFF=1. אין ישיבה/python
+  //  ⇒ מפה ריקה, וה-∅ נשאר כפי שהיה — התנהגות-של-היום (L27 · L110).
+  let _kq; const KQof = () => process.env.KASHE_OFF ? null : (_kq !== undefined ? _kq : (_kq = kasheQuestions(sentence)));
   demands.forEach((d, di) => {
     // הפועל עצמו הוא דרישה: **פעולה**. מקורו — הליטרל במטרה (סוג-המקור השלישי).
     // כך תביעה אינה נעלמת מהמדידה גם כשאין לה שדה, וזה הסימן שצריך לה חלקיק.
@@ -345,7 +349,11 @@ export function goalPsak(sentence, origin = 'מטרה') {
               : lo('רמז-טיפוס', `אין למילה צורת-ערך מוכרת ב-${GOAL_SRC.spl} (typeDate/typeNum/typePercent/typeBool) — לא נקשר לשקע, ו∅ אינו ניחוש (L57)`),
           lo('ליטרל במטרה', 'המילה אינה מספר ואינה יחידה שאחרי מספר — סוג-המקור השלישי אינו חל עליה'),
         ] });
-      reqs.push({ kind: '∅', demand: di, verb: d.verb, word: w, src: null, why: `אין מקור בשרשרת-המטרה · ורמינהו: ${r.digest}`, rminhu: r.rulings });
+      //  🕯️ §20-ג: מה שאין לו מקור הוא מתג-לבעלים **עם השאלה המדויקת**. השאלה היא
+      //  של המקשה כלשונו (`מאן קתני`/`מאי`) — לא ניסוח גנרי «איזה?». אין שאלה ⇒ null.
+      const _kq2 = KQof();
+      reqs.push({ kind: '∅', demand: di, verb: d.verb, word: w, src: null, why: `אין מקור בשרשרת-המטרה · ורמינהו: ${r.digest}`, rminhu: r.rulings,
+        ask: askFor(_kq2, w), askSrc: _kq2 && _kq2.ok ? 'maimatai/gate detect' : null });
     }
   });
   // קשירת-שקע: שדה/קבוע עם צורת-ערך ⇒ שקע-סכמה באותה צורה, מהישויות שהוכרעו.
