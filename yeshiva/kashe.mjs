@@ -86,8 +86,14 @@ export function kasheQuestions(sentence) {
   const k = askMaimatai(key);
   const map = new Map();
   if (k.ok) {
-    for (const s of k.seeds) if (s.kind === 'מאן קתני') for (const w of quoted(s.text).slice(0, 1)) map.set(w, s.text);
-    for (const s of k.seeds) if (s.kind === 'מאי') for (const w of quoted(s.text)) if (!map.has(w)) map.set(w, s.text);
+    //  ⚙️ **לפי צורה, לא לפי מילים** (L107). זרע שמצטט מילים ב-« » הוא שאלה על
+    //  מילה — וזה נכר מהמבנה. שם-זרע מקודד («מאי»/«מאן קתני») היה לקסיקון-עברי
+    //  בתוך המנוע: נשבר בשקט ברגע שהישיבה משנה שם, ועיוור לכל זרע חדש.
+    const cands = k.seeds.map((sd) => ({ sd, w: quoted(sd.text) })).filter((x) => x.w.length);
+    //  ספציפי גובר על כללי — **לפי מספר הציטוטים**: מי שמצטט פחות מילים מכוון
+    //  לאותה מילה בדיוק; מי שמצטט רשימה הוא השאלה הכללית. אין כאן שם ואין מילון.
+    cands.sort((a, b) => a.w.length - b.w.length);
+    for (const c of cands) for (const w of c.w) if (!map.has(w)) map.set(w, c.sd.text);
   }
   const out = { available: k.available, ok: !!k.ok, reason: k.reason || null, map };
   _qCache.set(key, out);
