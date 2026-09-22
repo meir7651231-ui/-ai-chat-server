@@ -64,3 +64,44 @@ export function askMaimatai(sentence, { timeout = 60000 } = {}) {
   const seeds = String(r.stdout || '').split('\n').map((l) => l.trimEnd()).filter(Boolean).map(parseSeed).filter(Boolean);
   return { available: true, ok: true, engine: home, seeds, wall };
 }
+
+// ── חוט-1 צעד-2: השאלה של המקשה רוכבת על המתג ─────────────────────────────
+//  🕯️ §20-ג מילה-במילה: שדה בלי מקור ⇒ **מתג-לבעלים עם השאלה המדויקת**. עד כה
+//  ה-∅ נשא סיבה גנרית («אין מקור בשרשרת-המטרה») ואפס שאלה. למקשה **יש** שאלה
+//  על בדיוק אותן מילים — `מאן קתני` (מי זה?) ו`מאי` (הגדרה אחת ויחידה?).
+//  כאן היא נקשרת למילה. אפס-הכרעה: הטקסט הוא של המקשה כלשונו, לא ניסוח שלי.
+
+const _qCache = new Map();   // משפט ⇒ תוצאה. בקשה אחת לריצה (L114) — לא פעם לכל צרכן.
+
+/** מילים בין « » בטקסט-זרע. */
+const quoted = (t) => [...String(t).matchAll(/«([^»]+)»/g)].map((m) => m[1]);
+
+/**
+ * 🕯️ מילה ⇒ השאלה של המקשה עליה. `מאן קתני` (ספציפי) גובר על `מאי` (כללי).
+ * ⇒ `{ available, ok, reason, map: Map<מילה, שאלה> }` · אין ישיבה ⇒ map ריקה **ולא ניחוש**.
+ */
+export function kasheQuestions(sentence) {
+  const key = String(sentence);
+  if (_qCache.has(key)) return _qCache.get(key);
+  const k = askMaimatai(key);
+  const map = new Map();
+  if (k.ok) {
+    for (const s of k.seeds) if (s.kind === 'מאן קתני') for (const w of quoted(s.text).slice(0, 1)) map.set(w, s.text);
+    for (const s of k.seeds) if (s.kind === 'מאי') for (const w of quoted(s.text)) if (!map.has(w)) map.set(w, s.text);
+  }
+  const out = { available: k.available, ok: !!k.ok, reason: k.reason || null, map };
+  _qCache.set(key, out);
+  return out;
+}
+
+/**
+ * שאלת-המקשה על מילה, עם התאמה סלחנית לאותיות-שימוש (המחולל מנרמל, המקשה
+ * מצטט מהמשפט הגולמי: «וטלפון» מול «טלפון»). אין התאמה ⇒ `null` — **לא ניחוש**.
+ */
+export function askFor(kq, word) {
+  if (!kq || !kq.map.size) return null;
+  const w = String(word);
+  if (kq.map.has(w)) return kq.map.get(w);
+  for (const [k, v] of kq.map) if (k.endsWith(w) || w.endsWith(k)) return v;
+  return null;
+}
