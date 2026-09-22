@@ -32,8 +32,8 @@ const ANSWERS = () => process.env.MAVIN_ANSWERS || path.join(R.ROOT, '.maimatai'
 export const toks = (s) => [...String(s || '').matchAll(/[֐-׿]+|\d+|[A-Za-z]+/g)].map((m) => m[0]);
 const stripLead = (w) => { const out = [w]; for (let k = 1; k <= 2 && w.length - k >= 3; k++) out.push(w.slice(k)); return out; };   // (ג)
 const isMany = (w) => w.length >= 4 && /(ים|ות)$/.test(w);                                                                    // (א)
-const stem = (w) => w.replace(/(ים|ות)$/, '');
-const itemMany = (item) => isMany(item[0]) || (item.length > 1 && /י$/.test(item[0]));   // «קבלני משנה» — סמיכות-רבים (י + מילה שנייה)
+const stem = (w) => w.replace(/(ים|ות|ה)$/, '');   // (ג') גם «ה» סופית להשוואת יחיד↔רבים (משימה↔משימות)
+const itemMany = (item) => isMany(item[0]) || isMany(item[item.length - 1]) || (item.length > 1 && /י$/.test(item[0]));   // «קבלני משנה» — סמיכות-רבים (י + מילה שנייה)
 
 // ── פיזור מהקטלוג: על כמה מינים שונים של חלקיקים כתובה המילה (משפט-המטרה בראש הקובץ) ──
 let _spread = null, _ops = 0;
@@ -63,11 +63,19 @@ function listOf(segment) {
   const vi = last.findIndex((w, i) => i > 0 && /^ו[֐-׿]{2,}/.test(w));
   if (vi > 0) { parts[parts.length - 1] = last.slice(0, vi); parts.push([last[vi].slice(1), ...last.slice(vi + 1)]); }
   if (parts.length < 2) return null;
+  // חלק ארוך (≥3 מילים) בין חלקים קצרים = פסוקית חדשה, לא איבר («ניהול משימות, לכל משימה כותרת, …») ⇒ הרשימה נחתכת לפניו
+  const cutAt = parts.findIndex((p, i) => i > 0 && p.length >= 3);
+  if (cutAt > 0) { const rest = parts.slice(cutAt).map((p) => p.join(' ')).join(', '); parts.length = cutAt; if (parts.length < 2) return { rest, only: true, head: parts[0] }; return { ...listCore(parts), rest }; }
+  return listCore(parts);
+}
+function listCore(parts) {
+  const first0 = parts[0];
   // האיבר הראשון נושא את «לפני-הרשימה»: מילותיו המפוזרות (ועד המילה המפוזרת האחרונה) הן הקשר; מה שאחריה — האיבר עצמו
-  const first = parts[0];
+  const first = first0;
   let cut = -1; for (let i = 0; i < first.length - 1; i++) if (isSpread(first[i])) cut = i + 1;   // האיבר עצמו (המילה האחרונה) לעולם אינו «מפוזר» — מיקום ברשימה קובע
   if (cut < 0) cut = first.length - 1;   // אין מילה מפוזרת לפני ⇒ האיבר = המילה האחרונה בלבד («לרכב יש יצרן» ⇒ «יצרן»)
-  const before = first.slice(0, cut), item0 = first.slice(cut);
+  let before = first.slice(0, cut), item0 = first.slice(cut);
+  if (item0.length > 1 && isMany(item0[item0.length - 1]) && !/י$/.test(item0[0])) { before = [...before, ...item0.slice(0, -1)]; item0 = item0.slice(-1); }   // «לניהול לקוחות» ⇒ האיבר «לקוחות», «לניהול» להורה
   const items = [item0, ...parts.slice(1)].filter((it) => it.length);
   return { before, items };
 }
@@ -78,27 +86,34 @@ export function formOf(sentence) {
   const segments = sentence.split(/[:;]/).map((s) => s.trim()).filter(Boolean);
   const things = [];   // { label, many, fields:[{label}], under, src }
   const frame = [];    // מילים מפוזרות (מסגרת/קישור) — מדווחות, לא מפורשות
-  const find = (w) => things.find((t) => stripLead(stem(w)).some((f) => f === stem(t.label)));
-  for (const seg of segments) {
-    const L = listOf(seg);
-    const pre = L ? L.before : toks(seg);
+  const find = (w) => things.find((t) => toks(t.label).some((lw) => stripLead(stem(w)).some((f) => f === stem(lw))));   // «לרכב» ⇔ «ניהול רכבים»: כל מילה בתווית
+  const queue = [...segments];
+  while (queue.length) { const seg = queue.shift();
+    let L = listOf(seg), head = null; if (L && L.rest) { queue.unshift(L.rest); if (L.only) { head = L.head; L = null; } }
+    const pre = L ? L.before : (head || toks(seg));
     const lowPre = pre.filter((w) => !/^\d+$/.test(w) && !isSpread(w));
     pre.filter((w) => isSpread(w)).forEach((w) => frame.push(w));
-    if (!L) { for (const w of lowPre) if (!find(w)) things.push({ label: bareLabel(w), many: isMany(w), fields: [], under: null, src: seg }); continue; }
+    if (!L) {   // קטע בלי רשימה: הרצף הנמוך-פיזור **האחרון** = דבר אחד («משרד עורכי דין»); רצפים שלפני מילה מפוזרת = מסגרת («תעשה לי מערכת …»)
+      const runs = []; let cur = []; for (const w of pre) { if (isSpread(w) || /^\d+$/.test(w)) { if (cur.length) runs.push(cur); cur = []; } else cur.push(w); } if (cur.length) runs.push(cur);
+      runs.slice(0, -1).forEach((r) => r.forEach((w) => frame.push(w)));
+      const run = runs[runs.length - 1] || []; if (run.length && !find(run[run.length - 1])) things.push({ label: [bareLabel(run[0]), ...run.slice(1)].join(' '), many: isMany(run[run.length - 1]), fields: [], under: null, src: seg });
+      continue; }
     const manyItems = L.items.filter(itemMany).length, oneItems = L.items.length - manyItems;
     // הורה: המילה הנמוכה-פיזור האחרונה לפני הרשימה (אחרי הסרת אות פותחת), אם יש
     let run = [], i = pre.length - 1; while (i >= 0 && isSpread(pre[i])) i--;   // מדלגים על הקישור («עם»)
+    { let j = i; while (j >= 0 && !isSpread(pre[j])) j--; for (let q = 0; q < j; q++) if (!isSpread(pre[q])) frame.push(pre[q]); }   // «הכן» לפני «מערכת» = מסגרת, לא נעלם
     for (; i >= 0 && !isSpread(pre[i]) && !/^\d+$/.test(pre[i]); i--) run.unshift(pre[i]);   // הרצף הנמוך-פיזור שלפניו = ההורה («חדר כושר»)
-    const ownerW = run.length ? run[run.length - 1] : null;   // המילה הצמודה ביותר לרשימה מזהה הורה קיים («לרכב» ⇒ «רכבים»)
-    let owner = ownerW ? (find(ownerW) || null) : null;
+    const ownerW = run.length ? run[run.length - 1] : null;
+    let owner = null; for (let j = run.length - 1; j >= 0 && !owner; j--) owner = find(run[j]) || null;   // מילה כלשהי ברצף מזהה הורה קיים («לרכב יש» ⇒ «רכבים»)
+    if (owner) (owner.refs = owner.refs || []).push(...run);   // המילים שהצביעו על ההורה — נספרות כמכוסות
     if (ownerW && !owner) { owner = { label: [bareLabel(run[0]), ...run.slice(1)].join(' '), many: isMany(run[0]), fields: [], under: null, src: seg }; things.push(owner); }
     for (const it of L.items) {
       const label = it.join(' ');
-      if (itemMany(it) || (oneItems === 0)) { if (!find(it[0])) things.push({ label, many: true, fields: [], under: owner ? owner.label : null, src: seg }); }
+      if (itemMany(it) || (oneItems === 0) || manyItems > oneItems) {   // רוב-רבים ⇒ גם היחיד ברשימה הוא דבר («… עובדים, ציוד ובטיחות»)
+        if (!find(it[0])) things.push({ label, many: itemMany(it), fields: [], under: owner ? owner.label : null, src: seg }); }
       else if (owner) owner.fields.push({ label });
       else things.push({ label, many: false, fields: [], under: null, src: seg });
     }
-    void manyItems;
   }
   return { sentence, words, segments, things, frame: [...new Set(frame)] };
 }
