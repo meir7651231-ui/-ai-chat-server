@@ -24,7 +24,8 @@ import { toSwitches, soleClassOf, slotSources } from '../machtzev/generator/tzin
 import { stem } from '../machtzev/generator/match.mjs';
 import { check, parseSpec, STOP } from './read.mjs';
 import { pasak, applyPsak } from './apply.mjs';
-import { rminhu, had, pliga, lo } from './rminhu.mjs';   // 🕯️ ∅ הוא «אין» — ופסק עליו נרשם בפנקס (הכרעה-23 · L114)
+import { rminhu, had, pliga, lo } from './rminhu.mjs';
+import { askMaimatai } from './kashe.mjs';   // 🕯️ המקשה (חוט-1, מגודר KASHE_WIRE — דיווח בלבד, L57)   // 🕯️ ∅ הוא «אין» — ופסק עליו נרשם בפנקס (הכרעה-23 · L114)
 
 const HE_RE = /[\u05d0-\u05ea]/;   // שם-שדה בלי אות-עברית = מפתח-סכמה, לא מונח
 const norm = (s) => String(s).replace(/[״"'׳]/g, '').replace(/\s+/g, ' ').trim();
@@ -243,8 +244,24 @@ export const classOf = soleClassOf;   // כלל-ההכרעה חי ב-tzinor (מ�
  *   3. ליטרל במטרה עצמה — מספר שנכתב במטרה הוא מקור לעצמו
  * מה שאין לו אף אחד מהשלושה **אינו מנוחש** — הוא ∅/מתג (L57).
  */
+/**
+ * 🕯️ חוט-1 (WIRE-PLAN §3, צעד 1): המקשה נשאל לפני ההכרעה — **דיווח בלבד**.
+ * מגודר `KASHE_WIRE`: כבוי כברירת-מחדל ⇒ כל ריצה קיימת ביט-זהה ומהירה.
+ * אין ישיבה ⇒ נרשמת הסיבה, וההתנהגות נשארת של-היום (L27 · L110). אפס חסימה.
+ */
+function kasheObserve(sentence, demands, origin) {
+  let k;
+  try { k = askMaimatai(sentence); } catch (e) { process.stderr.write(`מקשה: תקלת-גשר — ${e.message}\n`); return; }
+  if (!k.available) { process.stderr.write(`מקשה: לא-נמדד — ${k.reason}\n`); return; }
+  if (!k.ok) { process.stderr.write(`מקשה: ${k.reason}\n`); return; }
+  const asked = k.seeds.filter((s) => s.kind === 'מאי' || s.kind === 'מאן קתני').map((s) => s.kind);
+  const nWith = demands.filter((d) => d && d.src).length;
+  process.stderr.write(`מקשה [${origin}]: ${k.seeds.length} זרעים (${asked.join('/') || '—'}); ${nWith}/${demands.length} דרישות עם מקור · ${k.wall}ms\n`);
+}
+
 export function goalPsak(sentence, origin = 'מטרה') {
   const demands = demandsOf(sentence);
+  if (process.env.KASHE_WIRE) kasheObserve(sentence, demands, origin);   // חוט-1: המקשה לפני ההכרעה — דיווח בלבד, לא חוסם
   const decl = declaredDemands(sentence);   // אותו קורא, פעם אחת — מילת-תביעה אינה גם דרישה
   //  🕯️ «אין פועל-מטרה» — הפער הגדול ביותר במדידה (148 מתוך 319, PLAN-100 §2-א). עד כה
   //  השכבה **שתקה** כאן במכוון («משפט-ישות ממשיך ביט-זהה»), והשתיקה נכונה לפלט אבל לא
