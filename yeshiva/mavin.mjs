@@ -127,7 +127,7 @@ export function needsFrom(form, answers = {}) {
     for (const act of a.acts) {
       if (act === 'list') needs.push({ thing: t.label, act, op: 'group', need: ['items', 'fields'], goal: t.label });
       if (act === 'one') needs.push({ thing: t.label, act, op: 'fact', need: ['fields', 'label'], goal: t.label, shape: { str: fields.length - nums, num: nums } });
-      if (act === 'add' || act === 'edit') { for (const f of fields) needs.push({ thing: t.label, act, field: f.label, op: 'field', need: ['label', 'value', 'onChanged'], goal: f.label }); needs.push({ thing: t.label, act, op: 'action', need: ['label', 'onTap'], goal: t.label }); }
+      if (act === 'add' || act === 'edit') { for (const f of fields) needs.push({ thing: t.label, act, field: f.label, type: f.type || 'text', op: 'field', need: ['label', 'value', 'onChanged'], goal: f.label }); needs.push({ thing: t.label, act, op: 'action', need: ['label', 'onTap'], goal: t.label }); }
       if (act === 'del') needs.push({ thing: t.label, act, op: 'action', need: ['label', 'onTap'], goal: t.label });
       if (act === 'sum') needs.push({ thing: t.label, act, op: 'stat', need: ['value', 'label'], goal: t.label });
     }
@@ -144,6 +144,42 @@ export function mavin(sentence, { answers = {} } = {}) {
   const form = formOf(sentence);
   const proposals = Object.fromEntries(form.things.map((t) => [t.label, recall(t.label)]).filter(([, v]) => v));
   return { ...form, proposals, questions: questionsFor(form, answers), needs: needsFrom(form, answers) };
+}
+
+// ── סוג-הערך של חלקיק-שדה — נגזר ממה שהקוד עושה עם value (ממצא 22.9: הקטלוג והטיפוס המוצהר
+//    לא מבדילים — DsToggleTile/DsDateField/DsNumberField כולם `String value`). צורות-קוד, לא מילים. ──
+const KIND_RE = {
+  date: /DateTime\.(tryParse|parse)\(\s*value|showDatePicker/,
+  bool: /value\s*==\s*.true.|\bbool value\b|Switch\(|Checkbox\(/,
+  num: /(num|int|double)\.(tryParse|parse)\(\s*value|TextInputType\.number|\b(int|num|double) (value|high|low)\b/,
+  ref: /options\.contains\(\s*value|DropdownButton/,
+};
+const FIELD_NEAR = { field: ['search', 'switch'] };   // מינים-שכנים לשדה (כמו NEAR של cover — צורה, לא מילים)
+let _kinds = null;
+export function valueKinds() {
+  if (_kinds) return _kinds;
+  const map = JSON.parse(fs.readFileSync(R.GEN_DIR + 'ops-map.json', 'utf8'));
+  _kinds = new Map();
+  for (const a of map) { if (a.layer !== 'display') continue; let src = ''; try { src = fs.readFileSync(R.NEW + a.file, 'utf8'); } catch { continue; }
+    const k = Object.entries(KIND_RE).filter(([, re]) => re.test(src)).map(([n]) => n); _kinds.set(a.id.split('@')[0], k.length ? k : ['text']); }
+  return _kinds;
+}
+export const kindOf = (id) => valueKinds().get(String(id).split('@')[0]) || ['text'];
+
+// ── צורה שנענתה ⇒ מנוע 3 (cover) · דיווח: אטום/חסר לכל בקשה. «חסר» מדווח, לא מזויף (§20-ג) ──
+//    שדה עם סוג: מבין חלופות-cover נבחרת הראשונה שסוג-הערך שלה תואם; אין ⇒ missing כולל `type:<סוג>`.
+export async function coverNeeds(needs) {
+  const { cover } = await import('../machtzev/generator/cover.mjs');
+  return needs.filter((n) => n.op).map((n) => {
+    const c = cover({ op: n.op, need: n.need, goal: '', k: n.type ? 12 : 3 });
+    let atoms = c.atoms, missing = c.missing.slice(), alts = c.alts || [];
+    if (n.type) {   // שדה עם סוג: החלופה הראשונה שסוג-ערכה תואם; אין ב-op ⇒ גם במין-השכן (ממצא: DsField יושב תחת 'search', לא 'field')
+      let fit = alts.find((id) => kindOf(id).includes(n.type)), via = n.op;
+      for (const near of (FIELD_NEAR[n.op] || [])) { if (fit) break; const c2 = cover({ op: near, need: n.need, goal: '', k: 12 }); fit = (c2.alts || []).find((id) => kindOf(id).includes(n.type)); if (fit) { via = near; alts = c2.alts; } }
+      if (fit) { atoms = [fit]; n = { ...n, via }; } else missing.push('type:' + n.type);
+    }
+    return { ...n, atoms, alts: alts.slice(0, 3), missing };
+  });
 }
 
 // ── CLI ──
@@ -166,8 +202,3 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   } else await after(show(args.filter((a) => !a.startsWith('--') && a !== (ai >= 0 ? args[ai + 1] : null))[0] || ''));
 }
 
-// ── צורה שנענתה ⇒ מנוע 3 (cover) · דיווח: אטום/חסר לכל בקשה. «חסר» מדווח, לא מזויף (§20-ג) ──
-export async function coverNeeds(needs) {
-  const { cover } = await import('../machtzev/generator/cover.mjs');
-  return needs.filter((n) => n.op).map((n) => { const c = cover({ op: n.op, need: n.need, goal: '' }); return { ...n, atoms: c.atoms, alts: (c.alts || []).slice(0, 3), missing: c.missing }; });
-}
