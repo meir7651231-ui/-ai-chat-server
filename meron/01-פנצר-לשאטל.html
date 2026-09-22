@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>פנצ'ר לשאטל — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4EFE6;--sur:#FFFDF9;--bd:#E7DFD2;--tx:#1C1917;--mu:#6B6259;--acc:#C2410C;--g:#2F7A4D;--y:#B45309;--r:#B91C1C;
+--dbg:#14110F;--dsur:#1F1B18;--dbd:#332C27;--dtx:#F4EFE6;--dmu:#A89F94}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Heebo,system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1500px;margin:0 auto;padding:32px 28px 80px}
+h1{font-family:"Frank Ruhl Libre",serif;font-size:34px;margin:0 0 4px}
+h2{font-family:"Frank Ruhl Libre",serif;font-size:24px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--tx)}
+h3{font-size:16px;margin:22px 0 8px}
+.lead{color:var(--mu);font-size:15px;margin:0 0 18px}
+.lbl{font-size:11px;color:var(--mu)}
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--sur)}
+td,th{border:1px solid var(--bd);padding:7px 10px;text-align:right;vertical-align:top}
+th{background:#EDE5D8;font-weight:700}
+ul{margin:6px 0;padding-right:22px}li{margin:3px 0}
+.tag{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;background:#EDE5D8;color:var(--mu);margin-left:4px}
+.tag.auto{background:#E3F1E8;color:var(--g)}.tag.dec{background:#FDE7D6;color:var(--y)}.tag.sys{background:#E8EEF8;color:#1D4ED8}.tag.no{background:#F3E8E8;color:var(--r)}
+
+/* ---------- הדמיה ---------- */
+.demo{background:var(--dbg);color:var(--dtx);border-radius:16px;padding:22px 24px;margin-top:14px}
+.demo .lbl{color:var(--dmu)}
+.tl{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0 22px}
+.tl div{background:var(--dsur);border:1px solid var(--dbd);border-radius:10px;padding:10px 12px;position:relative}
+.tl b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:22px;color:#F59E0B}
+.tl span{font-size:12px;color:var(--dmu)}
+.hub{background:#3B1111;border:2px solid #EF4444;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+.hub .n{font-family:"Frank Ruhl Libre",serif;font-size:26px;font-weight:700}
+.hub .k{display:flex;flex-direction:column;gap:2px;font-size:12px;color:#FECACA}
+.fan{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.fan .col{background:var(--dsur);border:1px solid var(--dbd);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.fan .col h4{margin:0 0 2px;font-size:13px;color:#F59E0B;border-bottom:1px solid var(--dbd);padding-bottom:6px}
+.rc{background:#26211D;border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:1px}
+.rc b{font-size:12px;color:var(--dtx)}
+.rc i{font-style:normal;color:var(--dmu)}
+.rc .m{color:#FCD9A8}
+.rc.dec{border-right:3px solid #F59E0B}.rc.auto{border-right:3px solid #2FA36B}.rc.sys{border-right:3px solid #60A5FA}.rc.cond{border-right:3px solid #7F1D1D;opacity:.85}
+.leg{display:flex;gap:14px;font-size:11px;color:var(--dmu);margin-top:10px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.leg .a::before{background:#2FA36B}.leg .d::before{background:#F59E0B}.leg .s::before{background:#60A5FA}.leg .c::before{background:#7F1D1D}
+.screens{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.scr{border:1px solid var(--dbd);border-radius:14px;overflow:hidden;background:var(--dsur);display:flex;flex-direction:column}
+.scr .h{padding:8px 12px;border-bottom:1px solid var(--dbd);font-size:11px;color:var(--dmu)}
+.scr .b{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.scr.light{background:#F4EFE6;color:var(--tx)}.scr.light .h{color:var(--mu);border-color:var(--bd)}
+.bigbtn{border-radius:12px;padding:16px 10px;text-align:center;font-weight:700;font-size:16px;border:2px solid var(--dbd);background:#26211D}
+.bigbtn.on{background:#B91C1C;border-color:#B91C1C;color:#fff}
+.bigbtn.g{background:#12301F;border-color:#2FA36B;color:#BBF0D0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.pill.g{background:#12301F;color:#BBF0D0}.pill.y{background:#3F2A10;color:#FCD9A8}.pill.r{background:#3B1111;color:#FCA5A5}
+.evt{background:#3B1111;border:1px solid #7F1D1D;border-radius:10px;padding:8px 10px;font-size:12px}
+.done{font-size:11px;color:#BBF0D0}.done::before{content:"✓ ";}
+.ask{background:#3F2A10;border:1px solid #F59E0B;border-radius:8px;padding:6px 8px;font-size:11px}
+.ask b{color:#FCD9A8}
+.msg{background:#1C1917;color:#F4EFE6;border-radius:12px;padding:10px 12px;font-size:13px}
+.msg small{display:block;color:#D6CFC4;font-size:11px;margin-top:3px}
+.line{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;border-radius:8px;padding:8px 10px;color:#D6CFC4}
+.six{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.who .card{padding:10px 12px}
+.who b{display:block}
+.who .why{color:var(--mu);font-size:12px}
+.who .get{font-size:12px;margin-top:3px}
+.no-list{background:#F3E8E8;border:1px solid #E5C4C4}
+@media (max-width:1100px){.fan{grid-template-columns:repeat(3,1fr)}.screens{grid-template-columns:repeat(2,1fr)}.six,.who{grid-template-columns:1fr}.tl{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>פנצ'ר לשאטל — ניהול חי</h1>
+<p class="lead">נושא אחד, מכל הכיוונים. חלק א' — הדמיה: מה קורה, מי מקבל מה, ומה כל אחד רואה. חלק ב' — הרישום המלא.</p>
+
+<!-- ================= חלק א' — הדמיה ================= -->
+<h2>חלק א' — הדמיה</h2>
+<div class="demo">
+  <div class="lbl">ציר הזמן · אוטובוס 14 · כביש 866 ק"מ 3.2 · 800 מ' מהמתחם · 52 כרטיסים</div>
+  <div class="tl">
+    <div><b>דקה 0</b><span>האוטובוס נעצר. ה-GPS רואה "עומד 60 שניות בקטע בלי תחנה". הנהג לוחץ: תקלה → פנצ'ר → "יכול לזוז לשוליים: כן".</span></div>
+    <div><b>דקה 1</b><span>המערכת לבד: 14 יוצא מהמקצב · גרר 3 שוגר · רזרבה 27 שוגרה · ניידת 12 שוגרה · 25 הנהגים קיבלו "אוטובוס עומד" · 52 הנוסעים קיבלו הודעה · המשפחות קיבלו · החניון: המתנה 18→20.</span></div>
+    <div><b>דקה 2–4</b><span>קצין התחבורה מחליט: גרירה מיידית (הציר נחסם חלקית) · הנוסעים עוברים ל-27 בכביש · הרזרבה נשארת 2 — מספיק.</span></div>
+    <div><b>דקה 9–12</b><span>27 אוסף. הנהג סופר ראשים (לא כרטיסים): 52 כרטיסים · 56 ראשים. "כולם עלו". הגרר מגיע, גורר לחניון. המוסך מכין צמיג.</span></div>
+    <div><b>דקה 40</b><span>מכונאי: "תוקן". קצין בטיחות בתעבורה: "מאושר". 14 חוזר לרזרבה. 26 בסיבוב. המתנה חוזרת ל-18. הכל רשום.</span></div>
+  </div>
+
+  <div class="hub">
+    <div><div class="n">אוטובוס 14 · פנצ'ר</div><div class="lbl">21:14 · 866 ק"מ 3.2 · שוליים · נהג [שם] · צמיג קדמי ימני</div></div>
+    <div class="k"><span>52 כרטיסים · 56 ראשים · 2 תינוקות</span><span>1 סימון רפואי · 1 כיסא גלגלים · 30 דוברי צרפתית</span><span>1 שוטר בדרך למשמרת · 1 גבאי · 3 ילדים עם צמיד</span></div>
+    <div class="k"><span>גרר 3 — 7 דק'</span><span>רזרבה 27 — 9 דק'</span><span>ניידת 12 — 3 דק'</span></div>
+  </div>
+
+  <div class="lbl" style="margin-top:14px">מי מקבל מה — לפי שש השאלות. כל כרטיס = מקבל אחד, הודעה אחת, רק מה שנוגע לו.</div>
+  <div class="fan">
+    <div class="col"><h4>1 · מי עליו</h4>
+      <div class="rc auto"><b>הנהג</b><i>דקה 0</i><span class="m">"גרר 7 דק' · חלופי 9 · הישאר עם הנוסעים · ספור ראשים"</span></div>
+      <div class="rc auto"><b>52 הנוסעים</b><i>דקה 1 · בשפה מהכרטיס</i><span class="m">"תקלה. אוטובוס חלופי בדרך. הישארו על האוטובוס."</span></div>
+      <div class="rc auto"><b>שוטר בדרך למשמרת</b><i>דקה 1 → מערכת הכוחות</i><span class="m">"שער דרום: איוש מתעכב 15 דק'"</span></div>
+      <div class="rc auto"><b>גבאי / חזן</b><i>דקה 1 → לו"ז</i><span class="m">"הדלקת [חצר] 23:40 — הגבאי בדרך, מתעכב"</span></div>
+      <div class="rc auto"><b>נוסע עם סימון רפואי</b><i>דקה 1 → חובש קרוב</i><span class="m">"1 סימון רפואי על אוטובוס עומד"</span></div>
+      <div class="rc auto"><b>כיסא גלגלים</b><i>דקה 1 → לפני שיגור 27</i><span class="m">"27 מונגש? ✓" (אחרת — שולח אחר)</span></div>
+      <div class="rc sys"><b>ילדים עם צמיד</b><i>מערכת</i><span class="m">מיקום: "על 14" → "על 27"</span></div>
+      <div class="rc sys"><b>תינוקות בלי כרטיס</b><i>מערכת</i><span class="m">"52 כרטיסים · ספירת ראשים: 56"</span></div>
+      <div class="rc auto"><b>ראש קבוצה מאורגנת</b><i>דקה 1</i><span class="m">"ה-52 שלך בדרך, +15 דק'"</span></div>
+      <div class="rc sys"><b>מטען שנשכח</b><i>→ אבידות</i><span class="m">"חפצים מ-14 → חניון עליות"</span></div>
+      <div class="rc cond"><b>מלווה ביטחוני</b><i>רק בכוננות</i><span class="m">מדווח למערכת שלו</span></div>
+    </div>
+    <div class="col"><h4>2 · מי מחכה לו</h4>
+      <div class="rc auto"><b>המשפחות (כרטיס משפחתי)</b><i>דקה 1</i><span class="m">"[שם] מתעכב 15 דק'. תקלה בשאטל. הכל בסדר."</span></div>
+      <div class="rc auto"><b>סדרן הרציף בחניון</b><i>דקה 1</i><span class="m">"27 לא מגיע · הבא: 9 · המתנה 20"</span></div>
+      <div class="rc auto"><b>סדרן התחנה במתחם</b><i>דקה 1</i><span class="m">"במקום 14 → 27, +15 דק'"</span></div>
+      <div class="rc auto"><b>הממתינים בחניון</b><i>דקה 1</i><span class="m">"המתנה ~20 דק'" (בלי "פנצ'ר")</span></div>
+      <div class="rc auto"><b>הכריזה בחניון</b><i>דקה 1</i><span class="m">"עיכוב קל, 2 דקות"</span></div>
+      <div class="rc auto"><b>גבאי החצר / מכסה</b><i>דקה 1</i><span class="m">"52 מהמכסה שלך בדרך, מאחרים"</span></div>
+      <div class="rc sys"><b>חלון הכניסה של 52 הכרטיסים</b><i>מערכת</i><span class="m">מוארך אוטומטית</span></div>
+      <div class="rc sys"><b>תורים (חלאקה, הדלקה)</b><i>מערכת</i><span class="m">מוזז / הודעה</span></div>
+      <div class="rc auto"><b>מוקד המידע / דוברות</b><i>דקה 1</i><span class="m">אותה שורה: "פנצ'ר · חלופי · 15 דק'"</span></div>
+      <div class="rc cond"><b>מפקד גזרת החניון</b><i>אם המתנה > 25</i><span class="m">"המתנה עולה"</span></div>
+      <div class="rc cond"><b>מנהל החניון — מים</b><i>אם המתנה > 30</i><span class="m">"פתח נקודת מים"</span></div>
+    </div>
+    <div class="col"><h4>3 · מי על הכביש איתו</h4>
+      <div class="rc auto"><b>25 הנהגים האחרים</b><i>דקה 0 · קולי</i><span class="m">"אוטובוס עומד 866 ק"מ 3.2 — האט"</span></div>
+      <div class="rc auto"><b>ניידת 12</b><i>דקה 1</i><span class="m">"אבטח אוטובוס עומד + הולכי רגל בקטע"</span></div>
+      <div class="rc dec"><b>מפקד ציר 866</b><i>דקה 1</i><span class="m">"סגור נתיב? הורד מהירות?" + Waze</span></div>
+      <div class="rc auto"><b>תנועה נגדית</b><i>דקה 1</i><span class="m">"גרר על הנתיב הנגדי ק"מ 3.2"</span></div>
+      <div class="rc auto"><b>מוקד מד"א — ציר</b><i>דקה 1</i><span class="m">"866 איטי, שוליים חסומים" (לפני פינוי דחוף)</span></div>
+      <div class="rc auto"><b>מוקד 100/101 הארצי</b><i>דקה 1</i><span class="m">"אירוע ידוע · מטופל ע"י חמ"ל מירון"</span></div>
+      <div class="rc auto"><b>הולכי רגל על הכביש</b><i>דרך הניידת</i><span class="m">הפניה לשוליים השני</span></div>
+      <div class="rc cond"><b>תושבי מירון / ספסופה / כפר שמאי</b><i>אם חוסם כניסה</i><span class="m">"חסימה זמנית, 15 דק'"</span></div>
+      <div class="rc cond"><b>חניון כרמיאל + רכבת</b><i>רק אם הציר נחסם</i><span class="m">"אתם הכניסה הראשית עכשיו"</span></div>
+      <div class="rc cond"><b>קצין ביטחון</b><i>פנצ'ר שני באותו ק"מ</i><span class="m">"בדוק — מסמרים?"</span></div>
+      <div class="rc cond"><b>נתיבי ישראל</b><i>אחרי הביטחון</i><span class="m">"טאטא ק"מ 3.2"</span></div>
+      <div class="rc cond"><b>כב"ה</b><i>אם הנהג לחץ "יש עשן"</i><span class="m">שורה אחת</span></div>
+      <div class="rc cond"><b>קישור צה"ל</b><i>רק בכוננות</i><span class="m">"אוטובוס עומד עם 52 ליד הקו"</span></div>
+    </div>
+    <div class="col"><h4>4 · מי אחראי עליו</h4>
+      <div class="rc dec"><b>קצין התחבורה (חמ"ל)</b><i>דקה 1</i><span class="m">האירוע + 3 משימות שיצאו + 2 החלטות</span></div>
+      <div class="rc auto"><b>סדרן הצי של המפעיל</b><i>דקה 1</i><span class="m">כל האירוע, בלי כפתורי החלטה</span></div>
+      <div class="rc auto"><b>מוקד הבקרה הארצי של החברה</b><i>דקה 1</i><span class="m">"מטופל במקום" (שלא יתקשרו לנהג)</span></div>
+      <div class="rc dec"><b>קצין בטיחות בתעבורה</b><i>דקה 40</i><span class="m">"14 · צמיג הוחלף · ממתין לאישורך"</span></div>
+      <div class="rc auto"><b>גרר 3 (הנהג)</b><i>דקה 1</i><span class="m">"14 · ק"מ 3.2 · 52 נוסעים · גרור לחניון"</span></div>
+      <div class="rc auto"><b>סדרן חברת הגרירה</b><i>דקה 1</i><span class="m">"הגרר שלך תפוס 40 דק'"</span></div>
+      <div class="rc auto"><b>המוסך בחניון</b><i>דקה 12</i><span class="m">"14 מגיע ב-15 דק' · צמיג קדמי ימני"</span></div>
+      <div class="rc auto"><b>קצין הבטיחות של האירוע</b><i>דקה 1 · רישום</i><span class="m">"52 אזרחים על כביש חי — אירוע בטיחות"</span></div>
+      <div class="rc auto"><b>רווחת נהגים</b><i>דקה 12</i><span class="m">"נהג 14 — 40 דק' בשוליים. מים, הפסקה."</span></div>
+      <div class="rc sys"><b>המפקח של משרד התחבורה</b><i>אחרי</i><span class="m">SLA: גרר 12 דק' (יעד 10) — הופר</span></div>
+      <div class="rc sys"><b>ביטוח / חוזה</b><i>אחרי</i><span class="m">רשומה מלאה</span></div>
+    </div>
+    <div class="col"><h4>5 · מה זה עושה לעתיד</h4>
+      <div class="rc sys"><b>מקצב השאטלים</b><i>מערכת</i><span class="m">26 → 25 → 26</span></div>
+      <div class="rc sys"><b>מונה הרזרבה</b><i>מערכת</i><span class="m">3 → 2</span></div>
+      <div class="rc auto"><b>הנהג הבא ברזרבה</b><i>דקה 1</i><span class="m">"אתה ראשון עכשיו. היה מוכן."</span></div>
+      <div class="rc sys"><b>תחזית הקהל</b><i>מערכת</i><span class="m">14 לא בדרך → פחות 52 ב-15 דק'</span></div>
+      <div class="rc auto"><b>מתכנן היציאה בבוקר</b><i>אם 14 לא חוזר</i><span class="m">"25 אוטובוסים בבוקר, לא 26"</span></div>
+      <div class="rc cond"><b>מתאם ההסעות המאורגנות</b><i>אם הרזרבה דקה</i><span class="m">"האוטובוסים של החצרות = רזרבה הבאה"</span></div>
+      <div class="rc sys"><b>דלק של 27</b><i>מערכת</i><span class="m">"27 נכנס לסיבובים — דלק 60%"</span></div>
+      <div class="rc sys"><b>מלאי צמיגים</b><i>מערכת</i><span class="m">2 → 1 · הזמן</span></div>
+      <div class="rc sys"><b>שעות הנהיגה</b><i>מערכת</i><span class="m">שני הנהגים</span></div>
+      <div class="rc sys"><b>יומן התחזוקה של 14</b><i>מערכת</i><span class="m">פנצ'ר · קדמי ימני · 21:14</span></div>
+      <div class="rc sys"><b>מפת הכבישים + Waze</b><i>מערכת</i><span class="m">"שוליים חסומים ק"מ 3.2"</span></div>
+    </div>
+    <div class="col"><h4>6 · האם זה תבנית</h4>
+      <div class="rc cond"><b>המפקד</b><i>רק אם זה השלישי הלילה</i><span class="m">"3 תקלות ב-2 שעות — בעיה בצי"</span></div>
+      <div class="rc cond"><b>מנהל המפעיל</b><i>אותו טריגר</i><span class="m">"3 תקלות — מה קורה?"</span></div>
+      <div class="rc cond"><b>קצין ביטחון</b><i>2 באותו ק"מ</i><span class="m">"לא מקרי?"</span></div>
+      <div class="rc cond"><b>תמיכה טכנית</b><i>5 נהגים בלי סנכרון</i><span class="m">"זו תקלה במערכת, לא באוטובוסים"</span></div>
+      <div class="rc sys"><b>מנהל האירוע (הפרויקטור)</b><i>בבוקר</i><span class="m">"4 תקלות · 0 נפגעים · ממוצע 35 דק' · SLA הופר פעם אחת"</span></div>
+      <div class="rc sys"><b>דוח הלילה</b><i>מערכת</i><span class="m">+1 תקלה · 40 דק' · 52 נוסעים · 0 נפגעים</span></div>
+      <div class="rc"><b style="color:#FCA5A5">לא מקבלים כלום</b><i>בכוונה</i><span class="m">המפקד (בשגרה) · הציבור במתחם · כב"ה בלי עשן · צה"ל בלי כוננות · החצרות האחרות · המועצה · הכנסת האורחים</span></div>
+    </div>
+  </div>
+  <div class="leg"><span class="a">אוטומטי — יוצא לבד בדקה 1</span><span class="d">החלטה של בן-אדם</span><span class="s">מערכת מעדכנת את עצמה</span><span class="c">מותנה — רק אם</span></div>
+
+  <div class="lbl" style="margin-top:26px">מה כל אחד רואה — המסכים</div>
+  <div class="screens">
+    <div class="scr"><div class="h">הנהג · טלפון · 21:14</div><div class="b">
+      <div class="lbl">אוטובוס 14 · קו עליות ← מתחם · 52 כרטיסים</div>
+      <div class="bigbtn on">פנצ'ר</div>
+      <div class="row" style="gap:6px"><div class="bigbtn" style="flex:1;font-size:13px;padding:10px">תקלת מנוע</div><div class="bigbtn" style="flex:1;font-size:13px;padding:10px">יש עשן</div></div>
+      <div class="row" style="gap:6px"><div class="bigbtn g" style="flex:1;font-size:13px;padding:10px">יכול לזוז לשוליים</div><div class="bigbtn" style="flex:1;font-size:13px;padding:10px">חוסם נתיב</div></div>
+      <div class="msg" style="background:#26211D"><b>מה קורה עכשיו</b><small>גרר 3 — 7 דק' · רזרבה 27 — 9 דק' · ניידת 12 — 3 דק'</small><small>הישאר עם הנוסעים. הודעה נשלחה להם ולמשפחות.</small></div>
+      <div class="msg" style="background:#26211D"><b>ספירת ראשים</b><small>52 כרטיסים · ראשים: <span style="color:#F59E0B;font-size:16px">56</span> (תינוקות +2, בלי כרטיס +2)</small></div>
+      <div class="bigbtn g" style="padding:10px;font-size:14px">כולם עלו ל-27</div>
+    </div></div>
+
+    <div class="scr"><div class="h">קצין התחבורה · חמ"ל · פאנל האירוע</div><div class="b">
+      <div class="evt"><b>תחבורה · פנצ'ר · אוטובוס 14</b><br><span style="color:#FCA5A5">21:14 · 866 ק"מ 3.2 · שוליים · 52 כרטיסים / 56 ראשים · 1 רפואי · 1 כיסא גלגלים</span></div>
+      <div class="lbl">יצא לבד בדקה 1</div>
+      <div class="done">14 הוצא מהמקצב · 26 → 25 · המתנה בחניון 18 → 20</div>
+      <div class="done">גרר 3 שוגר · ETA 7 · ניידת 12 שוגרה · ETA 3</div>
+      <div class="done">רזרבה 27 (מונגש ✓) שוגרה · ETA 9 · רזרבה 3 → 2</div>
+      <div class="done">25 נהגים · 52 נוסעים (30 בצרפתית) · 19 משפחות · 2 סדרנים · מוקד · מד"א ציר · 100 ארצי</div>
+      <div class="lbl">צריך אותך — 2 החלטות</div>
+      <div class="ask"><b>הציר:</b> 14 חוסם חצי נתיב. כל עוד עומד — 25 אוטובוסים ב-20 קמ"ש במקום 40 = +4 דק' לכולם.<br><span class="row" style="margin-top:4px"><span class="pill r">גרור מיד — תיקון בחניון</span><span class="pill y">תקן במקום (20 דק')</span></span></div>
+      <div class="ask"><b>הנוסעים:</b> להעביר ל-27 בכביש (חושך, שוליים, ניידת מאבטחת) או לגרור אותם 800 מ' עם האוטובוס?<br><span class="row" style="margin-top:4px"><span class="pill r">27 אוסף</span><span class="pill y">גרר עם הנוסעים</span></span></div>
+      <div class="lbl">רזרבה אחרי: 2 · תקלה ממוצעת הלילה: 1 ל-40 דק' · <span style="color:#BBF0D0">מספיק</span></div>
+    </div></div>
+
+    <div class="scr light"><div class="h">נוסע על האוטובוס · טלפון · 21:15</div><div class="b">
+      <div class="msg"><b>האוטובוס נעצר בגלל תקלה</b><small>אוטובוס חלופי בדרך — 9 דקות. נשארים על האוטובוס. שוטר בדרך לאבטח.</small><small style="color:#F59E0B">Le bus s'est arrêté (panne). Un bus de remplacement arrive dans 9 min. Restez à bord.</small></div>
+      <div class="msg" style="background:#2F7A4D"><b>21:23 · עולים לאוטובוס 27</b><small>עלו בזהירות מהשוליים. ילדים ביד. מגיעים למתחם בעוד 4 דק'.</small></div>
+      <div class="card" style="font-size:12px"><b>המשפחה שלך יודעת</b><br><span style="color:var(--mu)">שלחנו ל-[בת זוג] בנקודת מפגש נ-4: "מתעכב 15 דק', הכל בסדר".</span></div>
+      <div class="card" style="font-size:12px"><b>הכרטיס שלך</b><br><span style="color:var(--mu)">חלון הכניסה הוארך ל-23:20. התור לחלאקה (06:40) לא השתנה.</span></div>
+    </div></div>
+
+    <div class="scr"><div class="h">כל השאר — שורה אחת לכל אחד</div><div class="b">
+      <div class="lbl">המשפחה · נ-4</div><div class="line">[שם] מתעכב 15 דק' · תקלה בשאטל · הכל בסדר</div>
+      <div class="lbl">סדרן הרציף · חניון עליות</div><div class="line">27 לא מגיע → הבא: 9 · המתנה 20 · אל תפתח תור ל-27</div>
+      <div class="lbl">25 הנהגים · קולי</div><div class="line">אוטובוס עומד 866 ק"מ 3.2 שוליים ימין — האט</div>
+      <div class="lbl">מוקד מד"א · ציר</div><div class="line">866 ק"מ 3.2 שוליים חסומים · ציר איטי · 25 דק'</div>
+      <div class="lbl">מוקד 100 צפת</div><div class="line">אירוע ידוע · מטופל · חמ"ל מירון · אין צורך בניידת</div>
+      <div class="lbl">שער דרום · כוחות</div><div class="line">שוטר [שם] מתעכב 15 דק' · עמדה 7/10 → 6/10</div>
+      <div class="lbl">קצין בטיחות האירוע · יומן</div><div class="line">21:14 אירוע בטיחות · 56 אזרחים על כביש חי · 40 דק' · 0 נפגעים</div>
+      <div class="lbl">המפקד</div><div class="line" style="color:#6F665D">(כלום. שורה ברשימת "תחבורה · מטופל". לא קופץ.)</div>
+      <div class="lbl">קצין בטיחות בתעבורה · 21:54</div><div class="line">14 · צמיג הוחלף · <span style="color:#F59E0B">ממתין לאישורך</span> לפני חזרה לקו</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ================= חלק ב' — הרישום ================= -->
+<h2>חלק ב' — הרישום המלא</h2>
+
+<h3>1. מה המערכת יודעת לפני שקורה משהו</h3>
+<div class="card">על כל אוטובוס: מספר, נהג, קו, מיקום (GPS), כמה נוסעים ומי הם (כרטיסים — עם שפה, סימון רפואי, נגישות, תפקיד, קבוצה, משפחה, ילדים עם צמיד), מתי יצא, מתי אמור להגיע, כמה סיבובים הלילה, דלק, מתי נבדק. על הצי: 26 אוטובוסים — כמה בדרך, בתחנה, בחניון, ברזרבה. גרר: איפה, פנוי או לא. מוסך שדה: איפה, מי, מה יש (צמיגים, ג'ק). מי מחכה למי: נקודות מפגש, קבוצות, לו"ז (הדלקות, חלאקה, מניינים, משמרות).</div>
+
+<h3>2. דקה אחר דקה</h3>
+<table>
+<tr><th style="width:80px">מתי</th><th>מה קורה</th><th style="width:110px">מי</th></tr>
+<tr><td>0</td><td>האוטובוס נעצר. GPS: "עומד 60 שניות בקטע בלי תחנה" — שאלה נפתחת גם אם הנהג לא לחץ. הנהג: תקלה → פנצ'ר → "יכול לזוז לשוליים". 3 לחיצות. אם לא לחץ: אחרי 2 דק' המערכת מתקשרת, אחרי 4 שולחת ניידת.</td><td>נהג / אוטומט</td></tr>
+<tr><td>1</td><td>14 יוצא מהמקצב (26→25), המתנה בחניון 18→20. גרר, רזרבה (אחרי בדיקת נגישות), ניידת — משוגרים. הודעות: 25 נהגים (קולי), 52 נוסעים (בשפתם), משפחות, סדרנים, כריזה, מוקד, מד"א-ציר, 100 ארצי, מוקד המפעיל, גבאי, כוחות (אם יש בעל תפקיד), חובש (אם יש סימון רפואי), רזרבה הבאה. חלון הכניסה מוארך. תחזית הקהל מעודכנת.</td><td>אוטומט</td></tr>
+<tr><td>2–4</td><td>קצין התחבורה מחליט: (א) גרירה מיידית או תיקון במקום — המערכת מראה מה זה עושה לכל הקו. (ב) נוסעים עוברים בכביש או נגררים עם האוטובוס. (ג) האם הרזרבה שנשארה מספיקה. מפקד ציר 866 מחליט: נתיב, מהירות, Waze.</td><td>החלטה</td></tr>
+<tr><td>9</td><td>27 מגיע. הנהג סופר ראשים (52 כרטיסים · 56 ראשים). "כולם עלו" — מיקום 56 האנשים והצמידים עובר ל-27. אם 3 לא עלו — "3 לא הגיעו עם 27" — הלכו ברגל? הניידת מחפשת.</td><td>נהג 27</td></tr>
+<tr><td>12</td><td>גרר: "הגעתי". גורר לחניון. 14 = "בתיקון · צמיג". המוסך מכין. רווחת נהגים: מים לנהג 14. אבידות: "חפצים מ-14 → חניון".</td><td>גרר / מערכת</td></tr>
+<tr><td>13</td><td>27 בתחנה במתחם. 56 יורדים. סורקים בשער — החלון הוארך, אין ויכוח. השוטר שהיה על האוטובוס מגיע לעמדה.</td><td>—</td></tr>
+<tr><td>40</td><td>מכונאי: "תוקן". קצין בטיחות בתעבורה: "מאושר" (חובה לפי חוק לפני נוסעים). 14 חוזר לרזרבה או לקו — החלטת קצין התחבורה. 26 בסיבוב. מלאי צמיגים 2→1. SLA גרר: 12 דק' (יעד 10) — סימון.</td><td>מוסך / בטיחות</td></tr>
+<tr><td>בבוקר</td><td>סיכום למנהל האירוע: תקלות, זמנים, נפגעים, SLA. אם 14 לא חזר — מתכנן היציאה ידע מ-22:00.</td><td>מערכת</td></tr>
+</table>
+
+<h3>3. מה אוטומטי ומה בן-אדם מחליט</h3>
+<div class="six">
+  <div class="card"><b>אוטומטי (דקה 1)</b><ul><li>הוצאה מהמקצב וחישוב המתנה</li><li>שיגור גרר, רזרבה, ניידת</li><li>בדיקת נגישות לפני שיגור רזרבה</li><li>כל ההודעות — לכל אחד רק מה שנוגע לו, בשפה שלו</li><li>הארכת חלון כניסה</li><li>עדכון תחזית, מפה, Waze, רזרבה, דלק, שעות נהיגה</li><li>איתור בעלי תפקיד / סימונים רפואיים בין הנוסעים</li></ul></div>
+  <div class="card"><b>בן-אדם מחליט</b><ul><li>גרירה מיידית או תיקון במקום (קצין תחבורה)</li><li>נוסעים בכביש או עם הגרר (קצין תחבורה)</li><li>נתיב, מהירות, Waze (מפקד ציר)</li><li>14 חוזר לקו או לרזרבה (קצין תחבורה + מפעיל)</li><li>אישור בטיחות לפני חזרה (קצין בטיחות בתעבורה)</li><li>לפתוח מים בחניון (מנהל חניון — אם >30 דק')</li></ul></div>
+  <div class="card"><b>מגיע למפקד רק אם</b><ul><li>הציר נחסם לגמרי — תוך 10 דק' זה ניהול קהל</li><li>נוסע נפגע</li><li>שני פנצ'רים באותו קטע — משהו על הכביש</li><li>הרזרבה נגמרה</li><li>שלוש תקלות ב-2 שעות — בעיה בצי</li></ul></div>
+</div>
+
+<h3>4. כל מי שצריך לדעת — לפי שש השאלות</h3>
+<p class="lead" style="margin:0 0 10px">55 מקבלים + מערכות. <span class="tag auto">אוטומטי</span><span class="tag dec">החלטה</span><span class="tag sys">מערכת</span><span class="tag">מותנה</span></p>
+
+<h3 style="margin-top:14px">שאלה 1 — מי על האוטובוס</h3>
+<div class="who">
+<div class="card"><b>1. הנהג <span class="tag auto">אוטומטי</span></b><span class="why">הוא הראשון והיחיד שרואה. 3 כפתורים גדולים, לא טפסים.</span><span class="get">מקבל: מה בדרך ומתי, "הישאר עם הנוסעים", ספירת ראשים, "כולם עלו".</span></div>
+<div class="card"><b>2. 52 הנוסעים <span class="tag auto">אוטומטי</span></b><span class="why">אחרת מתקשרים ל-100 ויורדים לכביש.</span><span class="get">מקבל: "תקלה, חלופי בדרך, הישארו" ← "עולים ל-27" ← "מגיעים ב-4 דק'". בשפה מהכרטיס.</span></div>
+<div class="card"><b>3. שוטר / חובש / סדרן שנוסע למשמרת <span class="tag auto">אוטומטי</span></b><span class="why">הכרטיס שלו הוא כרטיס בעל-תפקיד. העמדה שלו תישאר ריקה.</span><span class="get">מערכת הכוחות: "שער דרום — איוש מתעכב 15 דק'".</span></div>
+<div class="card"><b>4. גבאי / חזן / מי שהלו"ז תלוי בו <span class="tag auto">אוטומטי</span></b><span class="why">ההדלקה או המניין לא מתחילים בלעדיו.</span><span class="get">מערכת הלו"ז: "מתעכב — מחליף או דחייה".</span></div>
+<div class="card"><b>5. נוסע עם סימון רפואי <span class="tag auto">אוטומטי</span></b><span class="why">40 דק' על אוטובוס עומד — לרוב כלום, למישהו לא.</span><span class="get">חובש קרוב: "1 סימון רפואי על אוטובוס עומד".</span></div>
+<div class="card"><b>6. נוסע בכיסא גלגלים <span class="tag auto">אוטומטי</span></b><span class="why">27 חייב להיות מונגש, אחרת שולחים אחר.</span><span class="get">בדיקה לפני שיגור. מתאם ההנגשה מקבל התראה.</span></div>
+<div class="card"><b>7. ילדים עם צמיד <span class="tag sys">מערכת</span></b><span class="why">אם מישהו ידווח "ילד אבוד" — הילד "על אוטובוס 14", לא נעלם.</span><span class="get">מיקום מתעדכן: 14 → 27 → תחנה.</span></div>
+<div class="card"><b>8. תינוקות ומי שבלי כרטיס <span class="tag sys">מערכת</span></b><span class="why">52 כרטיסים ≠ 56 ראשים. סופרים ראשים.</span><span class="get">מסך הנהג: "כרטיסים 52 · ראשים ___".</span></div>
+<div class="card"><b>9. שפת הנוסעים <span class="tag sys">מערכת</span></b><span class="why">30 רשמו צרפתית. ההודעה יוצאת בצרפתית, לא בעברית עם תרגום אחר כך.</span><span class="get">—</span></div>
+<div class="card"><b>10. ראש קבוצה מאורגנת <span class="tag auto">אוטומטי</span></b><span class="why">לפני שהוא מתחיל לחפש 52 איש.</span><span class="get">"ה-52 שלך בדרך, +15".</span></div>
+<div class="card"><b>11. מטען שנשכח <span class="tag sys">מערכת</span></b><span class="why">14 נגרר לחניון עם התיקים.</span><span class="get">אבידות: "חפצים מ-14 → חניון עליות".</span></div>
+<div class="card"><b>12. מלווה ביטחוני <span class="tag">רק בכוננות</span></b><span class="why">הוא בתפקיד, לא נוסע.</span><span class="get">מדווח למערכת שלו.</span></div>
+<div class="card"><b>13. מי שירד והלך ברגל <span class="tag sys">מערכת</span></b><span class="why">יצא מהמערכת. לא באוטובוס, לא במתחם.</span><span class="get">"3 לא הגיעו עם 27" — הניידת מחפשת על הכביש.</span></div>
+</div>
+
+<h3>שאלה 2 — מי מחכה לו</h3>
+<div class="who">
+<div class="card"><b>14. המשפחות <span class="tag auto">אוטומטי</span></b><span class="why">אמא בנקודת מפגש נ-4 לא יודעת למה אבא לא מגיע. המערכת יודעת שהם משפחה (כרטיס).</span><span class="get">"[שם] מתעכב 15 דק', תקלה בשאטל, הכל בסדר". מונע שיחה ל-100 וריצה.</span></div>
+<div class="card"><b>15. סדרן הרציף בחניון <span class="tag auto">אוטומטי</span></b><span class="why">אחרת מכניס 55 איש לתור של 27 שלא יגיע.</span><span class="get">"27 לא מגיע · הבא: 9 · המתנה 20".</span></div>
+<div class="card"><b>16. סדרן התחנה במתחם <span class="tag auto">אוטומטי</span></b><span class="why">מצפה ל-14.</span><span class="get">"27 במקום 14, +15".</span></div>
+<div class="card"><b>17. הממתינים בחניון <span class="tag auto">אוטומטי</span></b><span class="why">לא צריכים "פנצ'ר". צריכים מספר.</span><span class="get">"המתנה ~20 דק'".</span></div>
+<div class="card"><b>18. הכריזה בחניון <span class="tag auto">אוטומטי</span></b><span class="why">שקט מייצר שמועות.</span><span class="get">"עיכוב קל, 2 דקות".</span></div>
+<div class="card"><b>19. גבאי החצר / מכסה <span class="tag auto">אוטומטי</span></b><span class="why">52 מהמכסה שלו לא נעלמו, הם בדרך.</span><span class="get">שורה אחת.</span></div>
+<div class="card"><b>20. חלון הכניסה של 52 הכרטיסים <span class="tag sys">מערכת</span></b><span class="why">אחרת הסורק אומר "פג תוקף" ו-52 איש רבים עם שוטר.</span><span class="get">מוארך לבד.</span></div>
+<div class="card"><b>21. מי שיש לו תור <span class="tag sys">מערכת</span></b><span class="why">חלאקה, מקום בהדלקה, מניין.</span><span class="get">מוזז או הודעה.</span></div>
+<div class="card"><b>22. מוקד המידע / דוברות <span class="tag auto">אוטומטי</span></b><span class="why">נוסעים והורים יתקשרו. "לא ידוע לנו" = פאניקה.</span><span class="get">אותה שורה: "פנצ'ר · חלופי · 15 דק'".</span></div>
+<div class="card"><b>23. מפקד גזרת החניון <span class="tag">אם המתנה >25</span></b><span class="why">תור שגדל = אנשים עצבניים בלילה.</span><span class="get">"המתנה עולה".</span></div>
+<div class="card"><b>24. מנהל החניון — מים ושירותים <span class="tag">אם המתנה >30</span></b><span class="why">אנשים בחניון חצי שעה צריכים מים.</span><span class="get">"פתח נקודת מים".</span></div>
+</div>
+
+<h3>שאלה 3 — מי על הכביש איתו</h3>
+<div class="who">
+<div class="card"><b>25. 25 הנהגים האחרים <span class="tag auto">אוטומטי · הכי דחוף</span></b><span class="why">אוטובוס עומד בשוליים בכביש חד-נתיבי בלילה.</span><span class="get">קולי, ברגע הלחיצה: "אוטובוס עומד 866 ק"מ 3.2 — האט".</span></div>
+<div class="card"><b>26. ניידת תנועה <span class="tag auto">אוטומטי</span></b><span class="why">לאבטח אוטובוס עומד, נוסעים שעוברים בחושך, הולכי רגל.</span><span class="get">משימה: "אבטח 866 ק"מ 3.2".</span></div>
+<div class="card"><b>27. מפקד ציר 866 <span class="tag dec">החלטה</span></b><span class="why">לא רק ניידת — מי שמחליט על נתיב ומהירות.</span><span class="get">האירוע + "סגור נתיב?" + Waze.</span></div>
+<div class="card"><b>28. תנועה נגדית <span class="tag auto">אוטומטי</span></b><span class="why">תושבים, ספקים, אמבולנס בחזרה — פוגשים גרר על הנתיב שלהם.</span><span class="get">"גרר על הנתיב הנגדי ק"מ 3.2".</span></div>
+<div class="card"><b>29. מוקד מד"א — הציר <span class="tag auto">אוטומטי</span></b><span class="why">866 הוא גם הדרך לזיו. שוליים חסומים = ציר איטי.</span><span class="get">"866 איטי" — לפני שהם שולחים פינוי דחוף דרך שם.</span></div>
+<div class="card"><b>30. מד"א — שורה אחת <span class="tag auto">אוטומטי</span></b><span class="why">56 אנשים על אוטובוס עומד 40 דק'. אם מישהו שם יתקשר — שידעו.</span><span class="get">שורה במסך.</span></div>
+<div class="card"><b>31. מוקד 100 / 101 הארצי <span class="tag auto">אוטומטי</span></b><span class="why">נוסע מתקשר ל-100. המוקד בצפת לא יודע על מירון — שולח ניידת משלו.</span><span class="get">"אירוע ידוע · מטופל ע"י חמ"ל מירון".</span></div>
+<div class="card"><b>32. הולכי רגל על הכביש <span class="tag auto">דרך הניידת</span></b><span class="why">יש שיורדים מהחניון ברגל. עכשיו יש גם גרר.</span><span class="get">הפניה לשוליים השני.</span></div>
+<div class="card"><b>33. תושבי מירון / ספסופה / כפר שמאי <span class="tag">אם חוסם כניסה</span></b><span class="why">הגרר או האוטובוס חוסם את הכניסה למושב.</span><span class="get">"חסימה זמנית, 15 דק'".</span></div>
+<div class="card"><b>34. חניון כרמיאל והרכבת <span class="tag">רק אם הציר נחסם</span></b><span class="why">ההגעות מופנות אליהם.</span><span class="get">"אתם הכניסה הראשית עכשיו".</span></div>
+<div class="card"><b>35. קצין ביטחון <span class="tag">2 פנצ'רים באותו ק"מ</span></b><span class="why">מסמרים על ציר השאטלים היחיד = חבלה. קודם ביטחון, אחר כך תחזוקה.</span><span class="get">"בדוק ק"מ 3.2".</span></div>
+<div class="card"><b>36. נתיבי ישראל <span class="tag">אחרי הביטחון</span></b><span class="why">משהו על הכביש. לטאטא.</span><span class="get">"2 פנצ'רים ק"מ 3.2 תוך שעה".</span></div>
+<div class="card"><b>37. כב"ה <span class="tag">אם "יש עשן"</span></b><span class="why">צמיג חם + 56 איש.</span><span class="get">שורה אחת. לכן לנהג יש כפתור רביעי.</span></div>
+<div class="card"><b>38. קישור צה"ל / פקע"ר <span class="tag">רק בכוננות</span></b><span class="why">866 קרוב לגבול. אוטובוס עומד עם 56 איש בזמן כוננות.</span><span class="get">שורה אחת.</span></div>
+</div>
+
+<h3>שאלה 4 — מי אחראי עליו</h3>
+<div class="who">
+<div class="card"><b>39. קצין התחבורה בחמ"ל <span class="tag dec">החלטה</span></b><span class="why">בעל האירוע.</span><span class="get">האירוע, 3 המשימות שיצאו, 2 ההחלטות, מה זה עושה לכל הקו.</span></div>
+<div class="card"><b>40. סדרן הצי של המפעיל <span class="tag auto">אוטומטי</span></b><span class="why">האוטובוס שלו, הנהג שלו, הביטוח שלו. מחליט אם 14 חוזר לקו.</span><span class="get">כל האירוע, בלי כפתורי ההחלטה של החמ"ל.</span></div>
+<div class="card"><b>41. מוקד הבקרה הארצי של החברה <span class="tag auto">אוטומטי</span></b><span class="why">הטלמטריה שלחה להם "עצירה חריגה". הם יתקשרו לנהג באמצע.</span><span class="get">"מטופל במקום".</span></div>
+<div class="card"><b>42. קצין בטיחות בתעבורה <span class="tag dec">החלטה</span></b><span class="why">לפי חוק — רכב אחרי תקלה נבדק לפני נוסעים. "תוקן" של מכונאי לא מספיק.</span><span class="get">"14 · צמיג הוחלף · ממתין לאישורך". בלי אישור — לא חוזר.</span></div>
+<div class="card"><b>43. נהג הגרר <span class="tag auto">אוטומטי</span></b><span class="why">—</span><span class="get">"14 · ק"מ 3.2 · 52 נוסעים · לחניון". "הגעתי". "גררתי".</span></div>
+<div class="card"><b>44. סדרן חברת הגרירה <span class="tag auto">אוטומטי</span></b><span class="why">אם יש עוד קריאה — מי הבא?</span><span class="get">"הגרר שלך תפוס 40 דק'".</span></div>
+<div class="card"><b>45. המוסך בחניון <span class="tag auto">אוטומטי</span></b><span class="why">להכין צמיג לפני שהאוטובוס מגיע.</span><span class="get">"14 מגיע ב-15 · צמיג קדמי ימני".</span></div>
+<div class="card"><b>46. קצין הבטיחות של האירוע <span class="tag auto">רישום</span></b><span class="why">56 אזרחים על כביש חי בלילה = אירוע בטיחות, גם אם נגמר טוב.</span><span class="get">שורה ברשימה שלו.</span></div>
+<div class="card"><b>47. רווחת נהגים <span class="tag auto">אוטומטי</span></b><span class="why">40 דק' בשוליים עם 56 איש עצבניים. הנהג הבא לא צריך לקבל אותו רועד.</span><span class="get">"נהג 14 — מים, הפסקה, מישהו ששואל".</span></div>
+<div class="card"><b>48. המפקח של משרד התחבורה <span class="tag sys">אחרי</span></b><span class="why">חוזה: גרר תוך 10, רזרבה תוך 10. הוא מודד.</span><span class="get">SLA: גרר 12 (יעד 10) — הופר.</span></div>
+<div class="card"><b>49. ביטוח / מנהל החוזה ברשות <span class="tag sys">אחרי</span></b><span class="why">כסף.</span><span class="get">רשומה מלאה.</span></div>
+</div>
+
+<h3>שאלה 5 — מה זה עושה לעתיד</h3>
+<div class="who">
+<div class="card"><b>50. הנהג הבא ברזרבה <span class="tag auto">אוטומטי</span></b><span class="why">27 יצא. מי שהיה שני — עכשיו ראשון.</span><span class="get">"היה מוכן". אחרת בפנצ'ר הבא הוא בשירותים.</span></div>
+<div class="card"><b>51. מתכנן היציאה בבוקר <span class="tag auto">אם 14 לא חוזר</span></b><span class="why">בבוקר 25 אוטובוסים לפינוי, לא 26.</span><span class="get">ב-22:00, לא ב-04:00.</span></div>
+<div class="card"><b>52. מתאם ההסעות המאורגנות <span class="tag">אם הרזרבה דקה</span></b><span class="why">האוטובוסים של החצרות בחניון הם הרזרבה הבאה.</span><span class="get">"הרזרבה דקה".</span></div>
+<div class="card"><b>53. מלאי צמיגים <span class="tag sys">מערכת</span></b><span class="why">היו 2, עכשיו 1.</span><span class="get">"צמיגים: 1 — הזמן".</span></div>
+<div class="card"><b>54. תחזית הקהל <span class="tag sys">מערכת</span></b><span class="why">סופרת שאטלים בדרך. 14 לא בדרך. אם הציר נחסם — אף אחד לא בדרך.</span><span class="get">מתעדכנת, אחרת היא שקרנית.</span></div>
+<div class="card"><b>55. מערכות שמעדכנות את עצמן <span class="tag sys">מערכת</span></b><span class="why">—</span><span class="get">מפת כבישים + Waze · מקצב 26→25→26 · רזרבה 3→2 · דלק של 27 · שעות נהיגה של שני הנהגים · יומן תחזוקה של 14 · מיקום 56 האנשים והצמידים · חלון הכניסה · SLA · דוח הלילה.</span></div>
+</div>
+
+<h3>שאלה 6 — האם זה תבנית</h3>
+<div class="who">
+<div class="card"><b>המפקד <span class="tag">רק אם זה השלישי</span></b><span class="why">פנצ'ר אחד לא מגיע אליו. שלושה ב-2 שעות — בעיה בצי.</span><span class="get">"3 תקלות — מפעיל".</span></div>
+<div class="card"><b>מנהל המפעיל <span class="tag">אותו טריגר</span></b><span class="why">—</span><span class="get">"3 תקלות — מה קורה?"</span></div>
+<div class="card"><b>תמיכה טכנית <span class="tag">5 נהגים בלי סנכרון</span></b><span class="why">זו תקלה במערכת, לא באוטובוסים.</span><span class="get">התראה.</span></div>
+<div class="card"><b>מנהל האירוע (הפרויקטור) <span class="tag sys">בבוקר</span></b><span class="why">לא בזמן אמת.</span><span class="get">"4 תקלות · 0 נפגעים · ממוצע 35 דק' · SLA הופר פעם אחת".</span></div>
+</div>
+
+<h3>5. מי לא מקבל כלום — בכוונה</h3>
+<div class="card no-list">המפקד (בשגרה) · הציבור במתחם · מד"א מעבר לשורה · כב"ה בלי עשן · צה"ל בלי כוננות · החצרות האחרות · המועצה · הכנסת האורחים. <b>מערכת ששולחת לכולם הכל — מפסיקים לקרוא אותה.</b> פנצ'ר מגיע ל-30 הנכונים, לא ל-300.</div>
+
+<h3>6. מקרי קצה</h3>
+<ul>
+<li><b>הנהג לא לוחץ כלום</b> (אין קליטה, לחץ, לא יודע): GPS "עומד 60 שניות" → 2 דק' טלפון → 4 דק' ניידת. לא מחכים לנהג.</li>
+<li><b>אין GPS:</b> הנהג בקשר, או הסדרן בתחנה רואה ש-14 לא הגיע בזמן. אחד משניהם מספיק.</li>
+<li><b>פנצ'ר בבוקר (בחזרה לחניון):</b> הפוך — הרזרבה באה מהמתחם, הממתינים בתחנה במתחם הם הבעיה.</li>
+<li><b>פנצ'ר בתוך התחנה:</b> חוסם רציף, 3 אוטובוסים מאחור. להזיז 20 מטר ידנית לפני הגרר.</li>
+<li><b>הנוסעים מסרבים לרדת בכביש</b> (חושך, ילדים): מחכים לגרר עם האוטובוס. 15 דק' במקום 9. קצין התחבורה יודע.</li>
+<li><b>חלק הלכו ברגל:</b> אנשים על כביש חשוך עם אוטובוסים. ניידת מלווה. "3 לא הגיעו עם 27".</li>
+<li><b>27 גם עם תקלה בדרך:</b> קורה. הרזרבה הבאה יוצאת לבד.</li>
+<li><b>יש עשן:</b> כפתור רביעי לנהג. כב"ה מקבל שורה. הנוסעים יורדים מיד — לא מחכים.</li>
+<li><b>נוסע בכיסא גלגלים ו-27 לא מונגש:</b> המערכת בדקה לפני השיגור. אם לא הייתה בודקת — 27 מגיע ולא יכול לקחת אותו.</li>
+<li><b>שני פנצ'רים באותו ק"מ:</b> קודם ביטחון (מסמרים?), אחר כך תחזוקה (לטאטא).</li>
+<li><b>ל"ג בעומר סמוך לשבת:</b> נהג שומר שבת, גרר, שעות — הכל משתנה בבוקר.</li>
+</ul>
+
+<h3>7. מה צריך כדי שזה יעבוד</h3>
+<ul>
+<li>GPS על כל אוטובוס (הטלפון של הנהג מספיק).</li>
+<li>אפליקציה לנהג: 4 כפתורים גדולים (פנצ'ר / מנוע / עשן / חוסם), ספירת ראשים, "כולם עלו". לא טפסים.</li>
+<li>כרטיסים אישיים עם: שפה, סימון רפואי, נגישות, תפקיד, קבוצה, משפחה. בלי זה המערכת לא יודעת מי על האוטובוס — וחצי מהרשימה נופל.</li>
+<li>גרר אחד בכוננות בקצה כל ציר. שני צמיגים בחניון. מוסך שדה.</li>
+<li>2–3 אוטובוסים ברזרבה עם נהגים שיושבים ומחכים — לפחות אחד מונגש.</li>
+<li>הסכם עם המפעיל: הנהגים שלו משתמשים באפליקציה, קצין הבטיחות שלו מאשר במערכת. אחרת אין כלום.</li>
+<li>הודעות מוכנות מראש ב-6 שפות.</li>
+<li>ניידת תנועה אחת שהמשימה שלה היא רק "אוטובוסים עומדים".</li>
+<li>חיבור למוקד 100 ו-101 הארציים: "אירוע ידוע".</li>
+<li>ספירת ראשים — לא כרטיסים.</li>
+</ul>
+
+<h3>8. הכלל שמוצא את כולם</h3>
+<div class="card">שואלים שש שאלות על האוטובוס שעומד: <b>מי עליו</b> (ובאיזה תפקיד, סימון, שפה) · <b>מי מחכה לו</b> (תחנה, חניון, בית, מפגש, הדלקה) · <b>מי על הכביש איתו</b> (נהגים, תושבים, תנועה, אמבולנסים, הולכי רגל, מי אחראי על הכביש) · <b>מי אחראי עליו</b> (מפעיל, בטיחות, ביטוח, חוזה) · <b>מה זה עושה לעתיד</b> (בוקר, רזרבה, מלאי, תחזית) · <b>האם זה תבנית</b> (השני, השלישי, אותו מקום). כשהתשובות לשש נגמרות — הרשימה מלאה מהשולחן. מה שלא נמצא מהשולחן: מה שיודע נהג שעשה 20 לילות במירון, קצין תנועה שניהל את 866, ומכונאי שהחליף צמיג בשוליים בחושך. הם ימצאו עוד 2–3. הרשימה הזאת היא מה שמביאים לפגישה איתם.</div>
+
+<h3>9. מה זה בסך הכל</h3>
+<div class="card">פנצ'ר זה 40 דקות ו-56 איש. <b>בלי המערכת:</b> נהג מתקשר למוקד, המוקד למפעיל, המפעיל מחפש גרר, הנוסעים מתקשרים ל-100, המשפחה רצה לחפש, החניון לא יודע, המתנה קופצת ל-30 ואף אחד לא יודע למה, השוטר לא מגיע לשער ואף אחד לא יודע שהוא על האוטובוס. <b>עם המערכת:</b> 3 לחיצות, 4 משימות ו-30 הודעות יוצאות לבד, 2 החלטות של בן-אדם, הכל נרשם, והמפקד לא שמע על זה.</div>
+
+</div>
+</body>
+</html>
