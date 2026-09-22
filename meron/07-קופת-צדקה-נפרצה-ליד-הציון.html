@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>קופת צדקה נפרצה ליד הציון — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4EFE6;--sur:#FFFDF9;--bd:#E7DFD2;--tx:#1C1917;--mu:#6B6259;--acc:#C2410C;--g:#2F7A4D;--y:#B45309;--r:#B91C1C;
+--dbg:#14110F;--dsur:#1F1B18;--dbd:#332C27;--dtx:#F4EFE6;--dmu:#A89F94}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Heebo,system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1500px;margin:0 auto;padding:32px 28px 80px}
+h1{font-family:"Frank Ruhl Libre",serif;font-size:34px;margin:0 0 4px}
+h2{font-family:"Frank Ruhl Libre",serif;font-size:24px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--tx)}
+h3{font-size:16px;margin:22px 0 8px}
+.lead{color:var(--mu);font-size:15px;margin:0 0 18px}
+.lbl{font-size:11px;color:var(--mu)}
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--sur)}
+td,th{border:1px solid var(--bd);padding:7px 10px;text-align:right;vertical-align:top}
+th{background:#EDE5D8;font-weight:700}
+ul{margin:6px 0;padding-right:22px}li{margin:3px 0}
+.tag{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;background:#EDE5D8;color:var(--mu);margin-left:4px}
+.tag.auto{background:#E3F1E8;color:var(--g)}.tag.dec{background:#FDE7D6;color:var(--y)}.tag.sys{background:#E8EEF8;color:#1D4ED8}
+.demo{background:var(--dbg);color:var(--dtx);border-radius:16px;padding:22px 24px;margin-top:14px}
+.demo .lbl{color:var(--dmu)}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0 22px}
+.tl div{background:var(--dsur);border:1px solid var(--dbd);border-radius:10px;padding:10px 12px}
+.tl b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:20px;color:#F59E0B}
+.tl b.g{color:#2FA36B}.tl b.r{color:#EF4444}
+.tl span{font-size:12px;color:var(--dmu)}
+.hub{background:#2E2A10;border:2px solid #EAB308;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+.hub .n{font-family:"Frank Ruhl Libre",serif;font-size:26px;font-weight:700}
+.hub .k{display:flex;flex-direction:column;gap:2px;font-size:12px;color:#FEF3C7}
+.fan{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.fan .col{background:var(--dsur);border:1px solid var(--dbd);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.fan .col h4{margin:0 0 2px;font-size:13px;color:#F59E0B;border-bottom:1px solid var(--dbd);padding-bottom:6px}
+.rc{background:#26211D;border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:1px}
+.rc b{font-size:12px;color:var(--dtx)}.rc i{font-style:normal;color:var(--dmu)}.rc .m{color:#FCD9A8}
+.rc.dec{border-right:3px solid #F59E0B}.rc.auto{border-right:3px solid #2FA36B}.rc.sys{border-right:3px solid #60A5FA}.rc.cond{border-right:3px solid #7F1D1D;opacity:.85}
+.leg{display:flex;gap:14px;font-size:11px;color:var(--dmu);margin-top:10px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.leg .a::before{background:#2FA36B}.leg .d::before{background:#F59E0B}.leg .s::before{background:#60A5FA}.leg .c::before{background:#7F1D1D}
+.screens{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.scr{border:1px solid var(--dbd);border-radius:14px;overflow:hidden;background:var(--dsur);display:flex;flex-direction:column}
+.scr .h{padding:8px 12px;border-bottom:1px solid var(--dbd);font-size:11px;color:var(--dmu)}
+.scr .b{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.bigbtn{border-radius:12px;padding:14px 10px;text-align:center;font-weight:700;font-size:15px;border:2px solid var(--dbd);background:#26211D}
+.bigbtn.on{background:#B91C1C;border-color:#B91C1C;color:#fff}.bigbtn.g{background:#12301F;border-color:#2FA36B;color:#BBF0D0}.bigbtn.y{background:#3F2A10;border-color:#F59E0B;color:#FCD9A8}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.pill.g{background:#12301F;color:#BBF0D0}.pill.y{background:#3F2A10;color:#FCD9A8}.pill.r{background:#3B1111;color:#FCA5A5}
+.evt{background:#2E2A10;border:1px solid #EAB308;border-radius:10px;padding:8px 10px;font-size:12px}
+.done{font-size:11px;color:#BBF0D0}.done::before{content:"✓ "}
+.ask{background:#3F2A10;border:1px solid #F59E0B;border-radius:8px;padding:6px 8px;font-size:11px}.ask b{color:#FCD9A8}
+.msg{background:#1C1917;color:#F4EFE6;border-radius:12px;padding:10px 12px;font-size:13px}.msg small{display:block;color:#D6CFC4;font-size:11px;margin-top:3px}
+.line{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;border-radius:8px;padding:8px 10px;color:#D6CFC4}
+.boxes{display:grid;grid-template-columns:repeat(8,1fr);gap:3px}
+.bx{background:#26211D;border-radius:4px;padding:3px 2px;font-size:9px;text-align:center;border-bottom:3px solid #2FA36B}
+.bx.w{border-bottom-color:#F59E0B}.bx.b{border-bottom-color:#EF4444;background:#3B1111}
+.chain{display:flex;flex-direction:column;gap:3px;font-size:11px}
+.chain div{display:grid;grid-template-columns:44px 1fr;gap:6px;background:#26211D;border-radius:6px;padding:4px 6px}
+.chain .t{color:#F59E0B;font-weight:700}
+.six{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.who .card{padding:10px 12px}.who b{display:block}.who .why{color:var(--mu);font-size:12px}.who .get{font-size:12px;margin-top:3px}
+.no-list{background:#F3E8E8;border:1px solid #E5C4C4}
+@media (max-width:1100px){.fan{grid-template-columns:repeat(3,1fr)}.screens{grid-template-columns:repeat(2,1fr)}.six,.who{grid-template-columns:1fr}.tl{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>קופת צדקה נפרצה ליד הציון — ניהול חי</h1>
+<p class="lead">נושא 07 (רנדומלי). 40 קופות צדקה במתחם — כל אחת שייכת לגוף אחר (הקדש, ארגון, ישיבה). קופה 7, בכניסה לציון, של [הקדש]. ב-01:10 סדרן רואה: המנעול שבור, שטרות בפנים, מטבעות על הרצפה, ואנשים מסתכלים. <b>כסף במירון הוא הנושא הכי רגיש שיש — לא בגלל הסכום, בגלל האמון. ניהול חי כאן = שכל שקל נספר, ושכשמשהו נפרץ, ברור לכולם שזה מבחוץ.</b></p>
+
+<h2>חלק א' — הדמיה</h2>
+<div class="demo">
+  <div class="lbl">ציר הזמן — המניעה (ירוק) ומה קורה כשההתראה לא הגיעה לאף אחד (אדום)</div>
+  <div class="tl">
+    <div><b class="g">חורף</b><span><b style="color:#BBF0D0;display:inline">מניעה.</b> 40 הקופות רשומות: מיקום, בעלים, מספר, חותם ממוספר, חיישן פתיחה, איזו מצלמה רואה אותה (7 → מצלמה 22). ריקון פעמיים בלילה (22:00, 02:00) ע"י צוות של שניים — סופרים, מצלמים, חותמים, קבלה לבעלים. <b>כל ריקון רשום.</b> הבעלים רואה בזמן אמת. התראת-פריצה הולכת ל-3: קצין הביטחון, הגבאי של הבעלים, הסדרן הקרוב.</span></div>
+    <div><b class="g">22:00</b><span>ריקון מתוכנן של 7: 3,420 ₪ · 2 מונים · חותם 0417 · קבלה לגבאי · מצלמה 22 מתעדת. הגבאי רואה בטלפון: "7 · 22:04 · 3,420 · חותם 0417". <b style="color:#BBF0D0;display:inline">זה הניהול — לפני שקורה משהו.</b></span></div>
+    <div><b class="r">00:52</b><span><b style="color:#FCA5A5;display:inline">הפריצה.</b> חיישן הפתיחה של 7 קופץ. ההתראה יוצאת ל-3 — אבל הטלפון של הגבאי ברשימה הוא מהשנה שעברה, קצין הביטחון באירוע חפץ חשוד בחניון, והסדרן הקרוב לא הוגדר (7 בין שתי עמדות). <b>18 דקות אף אחד לא יודע.</b> מצלמה 22 מתעדת.</span></div>
+    <div><b class="r">01:10</b><span>סדרן [שם] רואה. לוחץ "קופה פרוצה". המערכת לבד: "אל תיגע · צלם · הרחק אנשים 3 מ'" · קצין הביטחון: "7 · פריצה 00:52 (חיישן) · מצלמה 22 · 18 דק' בלי מענה" · הגבאי (הטלפון הנכון — מהרישום) · המרכז למקומות קדושים · replay 22 מ-00:50 · <b style="color:#FCD9A8;display:inline">בדיקת 39 האחרות: חיישנים תקינים, 2 ללא כיסוי מצלמה</b> · בילוש: "תיאור מ-22 בעוד 2 דק'" · הערכת חסר: 22:04→00:52 ≈ 1,900 ₪ לפי קצב.</span></div>
+    <div><b class="r">01:12–01:25</b><span>קצין הביטחון מחליט: שוטר לקופה, לא מז"פ (6,000 איש, 01:10 — צילום ומספיק). replay: 00:53 גבר, 40, כובע, 25 שניות, יוצא למדרגות. תיאור לבילוש ולסדרני המדרגות (03). המרכז למקומות קדושים: צוות ריקון-חירום לקופה 7 עכשיו: 2 מונים + שוטר, סופרים מה נשאר (1,140 ₪ + 38 ₪ מהרצפה), חותם חדש 0533, קבלה, הקופה מוחלפת. <b>הגבאי רואה הכל בטלפון תוך כדי.</b></span></div>
+    <div><b class="r">אחרי</b><span>נרשם: פריצה 00:52, גילוי 01:10, ריקון 01:25, חסר משוער 1,900 ₪ (לא ודאי — קצב), ראיות: replay 22 + צילומים + 2 חתומים. ההתראה שלא הגיעה: 3 תיקונים (טלפון, כפילות למוקד, סדרן לכל קופה). 2 קופות בלי מצלמה — מוזזות מחר בבוקר. ריקון של 02:00 מוקדם ל-01:30 לכל 40 — עם ליווי. הבעלים: "ראינו הכל. זה מבחוץ." <b style="color:#BBF0D0;display:inline">זה המשפט שהמערכת בנויה בשבילו.</b></span></div>
+  </div>
+
+  <div class="hub">
+    <div><div class="n">קופה 7 · כניסה לציון · פרוצה</div><div class="lbl">בעלים: [הקדש] · גבאי [שם] · ריקון אחרון 22:04 · 3,420 ₪ · חותם 0417 · חיישן: 00:52 · גילוי: 01:10 · מצלמה 22 ✓</div></div>
+    <div class="k"><span>חסר משוער: ~1,900 ₪ (קצב 22:00–01:00 משנה שעברה)</span><span>נשאר: 1,140 + 38 מהרצפה</span><span>ראיות: replay 22 · 6 צילומים · חותם שבור 0417</span></div>
+    <div class="k"><span>39 האחרות: חיישנים ✓ · 2 בלי מצלמה</span><span>ריקון 02:00 → 01:30 · 8 צוותים · ליווי</span><span>חשוד: 00:53 · 25 שנ' · למדרגות</span></div>
+  </div>
+
+  <div class="lbl" style="margin-top:14px">מי מקבל מה — לפי שש השאלות</div>
+  <div class="fan">
+    <div class="col"><h4>1 · מי בתוך</h4>
+      <div class="rc auto"><b>הסדרן שמצא</b><i>01:10</i><span class="m">"אל תיגע · צלם 3 זוויות · הרחק 3 מ' · שוטר 2 דק'"</span></div>
+      <div class="rc auto"><b>הגבאי של הבעלים</b><i>01:10 · הטלפון מהרישום</i><span class="m">"7 פרוצה · 00:52 · ריקון אחרון 3,420 · replay זמין · צוות בדרך"</span></div>
+      <div class="rc auto"><b>גזבר ההקדש</b><i>01:10</i><span class="m">"7 · חסר משוער ~1,900 · לא ודאי · ריקון-חירום 01:25"</span></div>
+      <div class="rc dec"><b>קצין הביטחון</b><i>01:10</i><span class="m">שוטר / מז"פ / בילוש · 18 דק' בלי מענה — למה</span></div>
+      <div class="rc auto"><b>צוות ריקון-חירום (2 + שוטר)</b><i>01:12</i><span class="m">"7 · ספור · צלם · חותם 0533 · החלף קופה · קבלה"</span></div>
+      <div class="rc sys"><b>הקופה — הרשומה</b><i>מערכת</i><span class="m">22:04 ריקון → 00:52 פריצה → 01:10 גילוי → 01:25 ריקון</span></div>
+      <div class="rc auto"><b>הסדרנים במדרגות (03)</b><i>01:14</i><span class="m">"גבר 40 כובע · יצא לכיוונכם 00:53 · לא לעצור — לדווח"</span></div>
+      <div class="rc sys"><b>המטבעות על הרצפה</b><i>מערכת</i><span class="m">38 ₪ · נספרו בנפרד · "נמצא" ולא "בקופה"</span></div>
+      <div class="rc auto"><b>האנשים שמסתכלים (~15)</b><i>סדרן</i><span class="m">"בבקשה, 3 מטר" — וזה גם כייסות: קהל שמסתכל על כסף</span></div>
+    </div>
+    <div class="col"><h4>2 · מי מחכה לזה</h4>
+      <div class="rc auto"><b>המרכז למקומות קדושים (מנהל האתר)</b><i>01:10</i><span class="m">"7 · פריצה · ריקון-חירום · 39 האחרות נבדקו"</span></div>
+      <div class="rc auto"><b>קצין הכספים של הרשות</b><i>01:10</i><span class="m">"7 · חסר משוער · ראיות · ביטוח"</span></div>
+      <div class="rc dec"><b>מנהל הריקון</b><i>01:12</i><span class="m">"ריקון 02:00 → 01:30 לכל 40? · 8 צוותים · ליווי (03)"</span></div>
+      <div class="rc auto"><b>הבילוש</b><i>01:12</i><span class="m">"תיאור + 4 פריימים · מדרגות → רחבה · 17 דק'"</span></div>
+      <div class="rc sys"><b>replay מצלמה 22 (05)</b><i>01:10</i><span class="m">00:50–01:12 · נשמר · נעול לראיה · לא נמחק ב-30 יום</span></div>
+      <div class="rc sys"><b>ניהול הקהל</b><i>מערכת</i><span class="m">"התקהלות 15 בכניסה לציון · סדרן מפזר · לא אירוע"</span></div>
+      <div class="rc cond"><b>המפקד</b><i>2+ קופות באותה שעה</i><span class="m">"סדרה · לא מקרי"</span></div>
+      <div class="rc auto"><b>קצין הבטיחות</b><i>רישום</i><span class="m">"חיישן 00:52 · אף אחד · 18 דק'" — הכשל, לא הפריצה</span></div>
+    </div>
+    <div class="col"><h4>3 · מי באותה שרשרת</h4>
+      <div class="rc sys"><b>39 הקופות האחרות</b><i>01:10</i><span class="m">"חיישנים ✓ · 2 בלי מצלמה (14, 31) · 6 מעל 4,000 ₪ משוער"</span></div>
+      <div class="rc sys"><b>ההתראה של 00:52 — לאן הלכה</b><i>מערכת</i><span class="m">"גבאי: טלפון 2025 · ביטחון: עסוק · סדרן: לא מוגדר" → 3 תיקונים</span></div>
+      <div class="rc auto"><b>קצין הביטחון — החפץ החשוד בחניון</b><i>מערכת</i><span class="m">"היית עסוק 00:48–01:05 · ההתראה לא הוכפלה למוקד"</span></div>
+      <div class="rc sys"><b>מצלמה 22 — הבריאות</b><i>מערכת</i><span class="m">✓ 25fps · "לא כמו 17"</span></div>
+      <div class="rc sys"><b>הכייסות הלילה</b><i>מערכת</i><span class="m">"4 דיווחים ברחבה 23:30–00:40 · אותו תיאור? → בילוש"</span></div>
+      <div class="rc auto"><b>8 צוותי הריקון</b><i>01:15</i><span class="m">"ריקון מוקדם 01:30 · רשימה · ליווי שוטר לכל צוות"</span></div>
+      <div class="rc cond"><b>כוח-אדם (03)</b><i>ליווי</i><span class="m">"8 שוטרים ל-45 דק' · מהרזרבה · 01:30 לפני גל היציאה"</span></div>
+      <div class="rc sys"><b>ההקדשות האחרים (39 בעלים)</b><i>מערכת</i><span class="m">"7 נפרצה · שלכם תקינות · ריקון מוקדם — תראו בטלפון"</span></div>
+    </div>
+    <div class="col"><h4>4 · מי אחראי</h4>
+      <div class="rc dec"><b>קצין הביטחון (משטרה)</b><i>הפלילי</i><span class="m">גניבה · ראיות · חשוד</span></div>
+      <div class="rc dec"><b>המרכז למקומות קדושים</b><i>הקופות</i><span class="m">הרישום, הריקון, החותמות, השקיפות</span></div>
+      <div class="rc auto"><b>ההקדש (הבעלים)</b><i>הכסף</i><span class="m">שלהם. הם רואים הכל. הם לא סופרים לבד.</span></div>
+      <div class="rc auto"><b>קצין הכספים של הרשות</b><i>01:10</i><span class="m">ביטוח · דיווח · רו"ח</span></div>
+      <div class="rc cond"><b>רב האתר</b><i>מטבעות שנמצאו</i><span class="m">"38 ₪ מהרצפה — של ההקדש" (נקבע מראש)</span></div>
+      <div class="rc sys"><b>ביטוח</b><i>מערכת</i><span class="m">"פריצה · חיישן · מצלמה · חסר משוער · ראיות" — תיק שלם</span></div>
+      <div class="rc sys"><b>רואה החשבון / מבקר</b><i>אחרי</i><span class="m">"7: 22:04 3,420 · 01:25 1,178 · חסר ~1,900 · חותמות 0417→0533"</span></div>
+      <div class="rc auto"><b>הדוברות</b><i>01:12</i><span class="m">"קופה נפרצה · מתועד · מטופל" — לפני "גנבו את הצדקה במירון"</span></div>
+      <div class="rc sys"><b>ממונה הפרטיות (05)</b><i>מערכת</i><span class="m">"replay 22 — פני תורמים · לראיה בלבד · לא לפרסום"</span></div>
+    </div>
+    <div class="col"><h4>5 · מה זה עושה לעתיד</h4>
+      <div class="rc sys"><b>ריקון 02:00 → 01:30</b><i>מערכת</i><span class="m">כל 40 · לפני גל היציאה (04: 00:00→?) · ליווי</span></div>
+      <div class="rc sys"><b>ההתראה — 3 תיקונים</b><i>מערכת</i><span class="m">טלפון מהרישום לא מהזיכרון · כפילות למוקד · סדרן לכל קופה</span></div>
+      <div class="rc sys"><b>קופות 14, 31 — בלי מצלמה</b><i>מערכת</i><span class="m">"להזיז מחר בבוקר · או מצלמה"</span></div>
+      <div class="rc sys"><b>קופה 7 — המיקום</b><i>מערכת</i><span class="m">"כניסה לציון · צפוף · 2 מ' ממצלמה 22 · אבל בין עמדות" → עמדה</span></div>
+      <div class="rc sys"><b>מלאי חותמות / קופות חלופיות</b><i>מערכת</i><span class="m">חותמות 60→59 · קופות חלופיות 3→2</span></div>
+      <div class="rc sys"><b>קצב התרומות — המודל</b><i>מערכת</i><span class="m">"7: 22–01 ≈ 1,900 · לשנה הבאה: ריקון ב-00:00 לקופות מעל 1,500/שעה"</span></div>
+      <div class="rc sys"><b>הרשומה לביטוח ולהקדש</b><i>מערכת</i><span class="m">תיק שלם, חתום, בזמן</span></div>
+    </div>
+    <div class="col"><h4>6 · האם זה תבנית</h4>
+      <div class="rc cond"><b>המפקד + ביטחון</b><i>2+ קופות באותה שעה</i><span class="m">"סדרה · צוות · לסגור יציאות?"</span></div>
+      <div class="rc cond"><b>הבילוש</b><i>אותו תיאור בכייסות</i><span class="m">"4 כייסות + פריצה = אותו אדם?"</span></div>
+      <div class="rc cond"><b>המרכז למקומות קדושים</b><i>אותה קופה כל שנה</i><span class="m">"7 — המיקום, לא המנעול"</span></div>
+      <div class="rc cond"><b>קצין הכספים</b><i>קופה שהחסר שלה תמיד "משוער" גבוה</i><span class="m">"הקצב לא נכון או משהו אחר" — מבקר</span></div>
+      <div class="rc cond"><b>קצין הבטיחות</b><i>התראה שלא הגיעה — שוב</i><span class="m">"רשימת נמענים — לבדוק את כל 40 לפני הלילה"</span></div>
+      <div class="rc sys"><b>מנהל האירוע</b><i>בבוקר</i><span class="m">"1 פריצה · ~1,900 · 18 דק' בלי מענה · 39 תקינות · ריקון מוקדם · הבעלים ראו הכל"</span></div>
+      <div class="rc"><b style="color:#FCA5A5">לא מקבלים כלום</b><i>בכוונה</i><span class="m">הציבור · מד"א · כב"ה · צה"ל · החצרות · 39 ההקדשות (חוץ מ"שלכם תקינות") · התורמים · השאטלים</span></div>
+    </div>
+  </div>
+  <div class="leg"><span class="a">אוטומטי</span><span class="d">החלטה של בן-אדם</span><span class="s">מערכת מעדכנת את עצמה</span><span class="c">מותנה — רק אם</span></div>
+
+  <div class="lbl" style="margin-top:26px">מה כל אחד רואה</div>
+  <div class="screens">
+    <div class="scr"><div class="h">הסדרן שמצא · טלפון · 01:10</div><div class="b">
+      <div class="lbl">כניסה לציון · עמדה 2</div>
+      <div class="bigbtn on">קופה פרוצה</div>
+      <div class="msg" style="background:#3B1111"><b>אל תיגע בכלום</b><small>לא בקופה, לא בכסף על הרצפה. שוטר בעוד 2 דק'.</small></div>
+      <div class="row" style="gap:6px"><div class="bigbtn y" style="flex:1;font-size:13px;padding:10px">📷 צלם — 3 זוויות</div><div class="bigbtn" style="flex:1;font-size:13px;padding:10px">הרחק 3 מ'</div></div>
+      <div class="lbl">קופה 7 · [הקדש] · מצלמה 22 רואה · הגבאי הותרע · צוות ריקון בדרך</div>
+      <div class="msg" style="background:#26211D"><b>01:14 · חשוד</b><small>גבר ~40, כובע, יצא 00:53 לכיוון המדרגות. אם אתה רואה — דווח. לא לעצור.</small></div>
+      <div class="bigbtn g" style="padding:10px;font-size:13px">השוטר הגיע — מסרתי</div>
+    </div></div>
+
+    <div class="scr"><div class="h">קצין הביטחון · חמ"ל · 01:10</div><div class="b">
+      <div class="evt" style="background:#3B1111;border-color:#7F1D1D"><b>קופה 7 · פריצה · חיישן 00:52 · גילוי 01:10</b><br><span style="color:#FCA5A5">18 דק' בלי מענה: גבאי — טלפון ישן · אתה — חפץ חשוד חניון · סדרן — לא מוגדר</span></div>
+      <div class="lbl">מצלמה 22 · replay 00:50–01:12</div>
+      <div class="chain"><div><span class="t">00:52:40</span><span>גבר ~40 · כובע · מתכופף לקופה</span></div><div><span class="t">00:53:05</span><span>מנעול · 25 שנ' · שטרות לכיס</span></div><div><span class="t">00:53:10</span><span>יוצא למדרגות · 4 פריימים נשמרו</span></div><div><span class="t">01:10:20</span><span>סדרן מגיע · 15 מסתכלים</span></div></div>
+      <div class="done">גבאי (טלפון נכון) · המרכז · גזבר · ביטוח · replay נעול · 39 נבדקו</div>
+      <div class="ask"><b>שלך:</b> <span class="row" style="margin-top:4px"><span class="pill g">שוטר + צילום · לא מז"פ (6,000 איש)</span><span class="pill y">מז"פ — 40 דק'</span><span class="pill g">תיאור לבילוש + מדרגות</span><span class="pill r">2+ קופות? → סדרה → המפקד</span></span></div>
+      <div class="lbl">כייסות הלילה: 4 · 23:30–00:40 · רחבה · תיאור דומה? — הבילוש בודק</div>
+    </div></div>
+
+    <div class="scr"><div class="h">הגבאי של [הקדש] · טלפון · 01:10</div><div class="b">
+      <div class="evt"><b>קופה 7 שלכם — נפרצה</b><br><span style="color:#FEF3C7">00:52 (חיישן) · גילוי 01:10 · שוטר במקום · צוות ריקון בדרך</span></div>
+      <div class="lbl">הרשומה של 7 הלילה</div>
+      <div class="chain"><div><span class="t">22:04</span><span>ריקון · 3,420 ₪ · [שם] + [שם] · חותם 0417 · קבלה #118</span></div><div><span class="t">00:52</span><span>חיישן: פתיחה · <span style="color:#FCA5A5">התראה לא הגיעה אליך — טלפון ישן ברישום</span></span></div><div><span class="t">01:25</span><span>ריקון-חירום · 1,140 + 38 (רצפה) · [שם] + [שם] + שוטר · חותם 0533 · קבלה #131</span></div></div>
+      <div class="lbl">חסר משוער: <b style="color:#FCD9A8">~1,900 ₪</b> — לפי קצב 22:00–01:00 משנה שעברה. לא ודאי. הביטוח יודע.</div>
+      <div class="msg" style="background:#26211D"><b>replay מצלמה 22</b><small>זמין לך לצפייה (לא להורדה). 25 שניות. הבילוש מטפל.</small></div>
+      <div class="row" style="gap:6px"><div class="bigbtn g" style="flex:1;font-size:12px;padding:10px">ראיתי · מאשר קבלה #131</div><div class="bigbtn" style="flex:1;font-size:12px;padding:10px">עדכן טלפון</div></div>
+    </div></div>
+
+    <div class="scr"><div class="h">כל השאר — שורה אחת</div><div class="b">
+      <div class="lbl">המרכז למקומות קדושים · 01:10</div><div class="line">7 פרוצה · 39 תקינות · 2 בלי מצלמה (14, 31) · ריקון 02:00 → 01:30? · 8 צוותים · ליווי</div>
+      <div class="lbl">צוות ריקון-חירום · 01:12</div><div class="line">קופה 7 · שוטר במקום · ספור · צלם · חותם 0533 · החלף · קבלה לגבאי · 12 דק'</div>
+      <div class="lbl">הבילוש · 01:12</div><div class="line">גבר ~40 · כובע · 00:53 מדרגות→רחבה · 4 פריימים · כייסות 23:30–00:40 — השווה</div>
+      <div class="lbl">קצין כוח-האדם (03) · 01:15</div><div class="line">8 שוטרים לליווי ריקון 01:30–02:15 · מהרזרבה · לפני גל היציאה</div>
+      <div class="lbl">40 הקופות · מצב</div><div class="boxes"><div class="bx b">7</div><div class="bx w">14</div><div class="bx w">31</div><div class="bx">1</div><div class="bx">2</div><div class="bx">3</div><div class="bx">4</div><div class="bx">5</div><div class="bx">6</div><div class="bx">8</div><div class="bx">9</div><div class="bx">10</div><div class="bx">11</div><div class="bx">12</div><div class="bx">13</div><div class="bx">+24</div></div>
+      <div class="lbl">קצין הבטיחות · יומן</div><div class="line">התראת-פריצה 00:52 → 0 נמענים תקינים → 18 דק' · הכשל: רשימת נמענים · תיקון: 3</div>
+      <div class="lbl">הדוברות · 01:12</div><div class="line">"קופה אחת נפרצה · מתועד במצלמה · הבעלים ראו בזמן אמת · מטופל" — לפני הכותרת</div>
+      <div class="lbl">המפקד</div><div class="line" style="color:#6F665D">(כלום. קופה אחת. אלא אם 2+ — סדרה.)</div>
+    </div></div>
+  </div>
+</div>
+
+<h2>חלק ב' — הרישום המלא</h2>
+
+<h3>1. מה המערכת יודעת לפני שקורה משהו</h3>
+<div class="card">על כל קופה (40): מיקום מדויק, בעלים (הקדש/ארגון), גבאי + טלפון <b>מהרישום של השנה</b>, מספר קופה, חותם נוכחי, חיישן פתיחה, איזו מצלמה רואה אותה (ומה קורה אם היא נופלת — 05), איזה סדרן אחראי, לוח ריקון, קצב תרומות לפי שעה (משנה שעברה), מי מורשה לרוקן. על הריקון: צוותים (2 בכל אחד, מזוהים), ליווי, חותמות ממוספרות, קבלות, צילום. על ההיסטוריה: כל ריקון, כל סכום, כל חותם — <b>הבעלים רואה בזמן אמת.</b> על ההתראות: 3 נמענים לכל קופה + כפילות למוקד. על הפלילי: תיאור כייסות הלילה, מסלולי חשודים.</div>
+
+<h3>2. המניעה — הניהול האמיתי</h3>
+<div class="card"><ul>
+<li><b>השקיפות היא ההגנה.</b> כל ריקון: שניים, סופרים, מצלמים, חותמים, קבלה. הבעלים רואה בטלפון. אם קופה נפרצת — ברור לכולם שזה מבחוץ, כי כל מה שמבפנים רשום. במקום שבו 40 גופים לא סומכים זה על זה, זה מה שמונע את הריב — לא הפריצה.</li>
+<li><b>ריקון לפי קצב, לא לפי שעון.</b> קופה בכניסה לציון מקבלת 1,500/שעה לפני ההדלקה. לא מחכים ל-02:00 — מרוקנים כשיש 3,000. פחות בקופה = פחות לגנוב.</li>
+<li><b>חיישן + מצלמה + סדרן לכל קופה.</b> שלושה. אם אחד נופל (05) — שניים.</li>
+<li><b>נמעני ההתראה נבדקים לפני הלילה.</b> "טלפון מהשנה שעברה" זה הכשל הכי טיפשי ויש. המערכת שולחת הודעת-בדיקה לכל נמען ב-18:00 ודורשת "קיבלתי".</li>
+<li><b>נוהל "מצאתי קופה פרוצה"</b> — אל תיגע, צלם, הרחק, שוטר. כתוב בכפתור.</li>
+<li><b>אם הכל עובד:</b> ההתראה ב-00:52 מגיעה לסדרן שנמצא 15 מטר — הוא שם תוך 30 שניות, הגנב עם 25 שניות ראש. אולי נתפס, אולי לא — אבל 18 דקות של קופה פתוחה ליד 6,000 איש לא קורות.</li>
+</ul></div>
+
+<h3>3. דקה אחר דקה</h3>
+<table>
+<tr><th style="width:80px">מתי</th><th>מה קורה</th><th style="width:120px">מי</th></tr>
+<tr><td>22:04</td><td>ריקון מתוכנן של 7. 3,420 ₪. [שם]+[שם]. חותם 0417. קבלה #118. מצלמה 22. הגבאי רואה. שגרה.</td><td>צוות ריקון</td></tr>
+<tr><td>00:52</td><td>חיישן 7 קופץ. התראה ל-3: גבאי (טלפון 2025 — לא מגיע), קצין הביטחון (חפץ חשוד בחניון 00:48–01:05 — לא רואה), סדרן קרוב (לא מוגדר — 7 בין שתי עמדות). כפילות למוקד — לא מוגדרת. <b>0 נמענים תקינים.</b> מצלמה 22 מתעדת: גבר ~40, כובע, 25 שניות, יוצא למדרגות 00:53.</td><td>אוטומט — נכשל</td></tr>
+<tr><td>01:10</td><td>סדרן [שם] רואה. לוחץ. המערכת: "אל תיגע, צלם, הרחק". קצין הביטחון: כל האירוע כולל "18 דק' בלי מענה — למה". הגבאי — בטלפון הנכון מהרישום (המערכת לוקחת מהרישום, לא מרשימת הנמענים הישנה). המרכז למקומות קדושים. גזבר. קצין הכספים. replay 22 נעול לראיה. 39 האחרות: חיישנים ✓, 2 בלי מצלמה. הערכת חסר: ~1,900. הכייסות של הלילה — 4, תיאור דומה? — לבילוש.</td><td>אוטומט</td></tr>
+<tr><td>01:12</td><td>קצין הביטחון: שוטר + צילום, לא מז"פ (6,000 איש, 01:10). תיאור לבילוש ולסדרני המדרגות — "לדווח, לא לעצור". המרכז: ריקון-חירום ל-7 עכשיו, וריקון 02:00 מוקדם ל-01:30 לכל 40 עם ליווי — 8 שוטרים מהרזרבה (03) לפני גל היציאה (04). הדוברות: נוסח.</td><td>3 החלטות</td></tr>
+<tr><td>01:14–01:25</td><td>שוטר במקום. צוות ריקון-חירום: סופרים מה נשאר (1,140), מטבעות מהרצפה בנפרד (38 — "נמצא"), חותם שבור 0417 נשמר, חותם חדש 0533, קופה מוחלפת, קבלה #131 לגבאי — הוא מאשר בטלפון. הכל מצולם. 12 דקות.</td><td>צוות + שוטר</td></tr>
+<tr><td>01:30–02:15</td><td>ריקון מוקדם של 39 הקופות. 8 צוותים, 8 מלווים. 6 קופות מעל 4,000 — ראשונות. הבעלים רואים. 14 ו-31 (בלי מצלמה) — מרוקנות ולא מוחזרות עד הבוקר.</td><td>המרכז</td></tr>
+<tr><td>אחרי</td><td>תיק: פריצה 00:52, גילוי 01:10, ריקון 01:25, חסר משוער ~1,900 (לא ודאי), ראיות (replay, 6 צילומים, חותם), 18 דק' בלי מענה → 3 תיקונים (טלפון מהרישום, כפילות למוקד, סדרן לכל קופה, ובדיקת-נמענים ב-18:00). 14, 31 → מצלמה או הזזה. 7 → עמדת סדרן. הבילוש: אותו תיאור ב-2 מ-4 הכייסות. הבעלים: "ראינו הכל. מבחוץ."</td><td>מערכת</td></tr>
+</table>
+
+<h3>4. מה אוטומטי ומה בן-אדם מחליט</h3>
+<div class="six">
+  <div class="card"><b>אוטומטי</b><ul><li>ריקון לפי קצב — משימות לצוותים</li><li>התראת-פריצה ל-3 נמענים + מוקד, מהרישום</li><li>בדיקת-נמענים ב-18:00</li><li>כשמדווח: הנחיות לסדרן, נעילת replay, הגבאי, המרכז, הכספים, ביטוח</li><li>בדיקת 39 האחרות + מי בלי מצלמה</li><li>הערכת חסר לפי קצב — עם "לא ודאי"</li><li>הצלבה עם כייסות הלילה</li><li>תיאור לסדרנים במסלול היציאה של החשוד</li><li>ניתוח: למה ההתראה לא הגיעה</li></ul></div>
+  <div class="card"><b>בן-אדם מחליט</b><ul><li>מז"פ או צילום — קצין הביטחון</li><li>ריקון מוקדם לכל 40 — המרכז (עם ליווי מכוח-האדם)</li><li>מה אומרים — הדוברות</li><li>"38 ₪ מהרצפה — של מי" — הרב, מראש</li><li>לסגור יציאות אם סדרה — המפקד</li></ul></div>
+  <div class="card"><b>מגיע למפקד רק אם</b><ul><li>2+ קופות באותה שעה — סדרה, צוות, אולי לסגור יציאות</li><li>אלימות סביב הקופה</li><li>אחרת — לא. קופה אחת היא פלילי + כספים, לא ניהול קהל.</li></ul></div>
+</div>
+
+<h3>5. כל מי שצריך לדעת — לפי שש השאלות</h3>
+
+<h3 style="margin-top:14px">שאלה 1 — מי בתוך</h3>
+<div class="who">
+<div class="card"><b>1. הסדרן שמצא <span class="tag auto">אוטומטי</span></b><span class="why">הדבר הראשון שהוא רוצה לעשות זה לאסוף את הכסף. אסור. הכפתור אומר לו.</span><span class="get">"אל תיגע · צלם · הרחק · שוטר 2'".</span></div>
+<div class="card"><b>2. הגבאי של הבעלים <span class="tag auto">אוטומטי · הטלפון מהרישום</span></b><span class="why">הכסף שלו. הוא צריך לראות הכל — בזמן אמת — כדי שלא יחשוד באף אחד מבפנים.</span><span class="get">הרשומה, replay, קבלה לאישור.</span></div>
+<div class="card"><b>3. גזבר ההקדש <span class="tag auto">אוטומטי</span></b><span class="why">חסר משוער, ביטוח.</span><span class="get">שורה.</span></div>
+<div class="card"><b>4. קצין הביטחון <span class="tag dec">החלטה</span></b><span class="why">פלילי. ראיות. חשוד. וגם: למה 18 דקות.</span><span class="get">האירוע + replay + הכשל.</span></div>
+<div class="card"><b>5. צוות ריקון-חירום <span class="tag auto">אוטומטי</span></b><span class="why">שניים + שוטר. סופרים מה נשאר. חותם חדש. קבלה.</span><span class="get">משימה.</span></div>
+<div class="card"><b>6. הרשומה של הקופה <span class="tag sys">מערכת</span></b><span class="why">22:04 → 00:52 → 01:10 → 01:25. זה התיק.</span><span class="get">—</span></div>
+<div class="card"><b>7. הסדרנים במדרגות (03) <span class="tag auto">אוטומטי</span></b><span class="why">החשוד יצא לכיוונם. "לדווח, לא לעצור" — הם לא שוטרים.</span><span class="get">תיאור.</span></div>
+<div class="card"><b>8. המטבעות על הרצפה <span class="tag sys">מערכת</span></b><span class="why">"נמצא" ≠ "בקופה". נספר בנפרד. הרב קבע של מי.</span><span class="get">—</span></div>
+<div class="card"><b>9. האנשים שמסתכלים <span class="tag auto">סדרן</span></b><span class="why">קהל שמסתכל על כסף = קהל שלא שם לב לכיס שלו. גם התקהלות בכניסה לציון.</span><span class="get">"3 מטר".</span></div>
+</div>
+
+<h3>שאלה 2 — מי מחכה לזה</h3>
+<div class="who">
+<div class="card"><b>10. המרכז למקומות קדושים <span class="tag auto">אוטומטי</span></b><span class="why">מנהל האתר. הקופות באחריותו. הריקון שלו.</span><span class="get">האירוע + 39.</span></div>
+<div class="card"><b>11. קצין הכספים של הרשות <span class="tag auto">אוטומטי</span></b><span class="why">ביטוח, דיווח.</span><span class="get">שורה.</span></div>
+<div class="card"><b>12. מנהל הריקון <span class="tag dec">החלטה</span></b><span class="why">להקדים את 02:00 ל-01:30 — לכל 40, עם ליווי. לפני גל היציאה.</span><span class="get">הצעה + כפתור.</span></div>
+<div class="card"><b>13. הבילוש <span class="tag auto">אוטומטי</span></b><span class="why">תיאור, פריימים, מסלול. והצלבה עם הכייסות של הלילה.</span><span class="get">—</span></div>
+<div class="card"><b>14. replay מצלמה 22 (05) <span class="tag sys">מערכת</span></b><span class="why">ראיה. נעול. לא נמחק. לגבאי — צפייה, לא הורדה.</span><span class="get">—</span></div>
+<div class="card"><b>15. ניהול הקהל <span class="tag sys">מערכת</span></b><span class="why">15 מסתכלים בכניסה לציון. סדרן מפזר. לא אירוע.</span><span class="get">—</span></div>
+<div class="card"><b>16. קצין הבטיחות <span class="tag auto">רישום</span></b><span class="why">לא הפריצה — הכשל. "התראה ל-0 נמענים תקינים" הוא אירוע בטיחות.</span><span class="get">יומן.</span></div>
+</div>
+
+<h3>שאלה 3 — מי באותה שרשרת</h3>
+<div class="who">
+<div class="card"><b>17. 39 הקופות האחרות <span class="tag sys">מערכת</span></b><span class="why">חיישנים? מצלמות? כמה בכל אחת? מי בסיכון.</span><span class="get">"תקינות · 2 בלי מצלמה · 6 מעל 4,000".</span></div>
+<div class="card"><b>18. ההתראה של 00:52 <span class="tag sys">מערכת</span></b><span class="why">לאן הלכה, למה לא הגיעה. שלושה כשלים שונים. שלושה תיקונים.</span><span class="get">ניתוח.</span></div>
+<div class="card"><b>19. החפץ החשוד בחניון <span class="tag sys">מערכת</span></b><span class="why">קצין הביטחון היה שם. ההתראה לא הוכפלה. זה החיבור: אירוע אחד מעוור את השני.</span><span class="get">—</span></div>
+<div class="card"><b>20. מצלמה 22 — הבריאות (05) <span class="tag sys">מערכת</span></b><span class="why">אם 22 הייתה נופלת כמו 17 — אין replay, אין תיאור, אין ראיה.</span><span class="get">✓</span></div>
+<div class="card"><b>21. הכייסות של הלילה <span class="tag sys">מערכת</span></b><span class="why">4 דיווחים. אותו תיאור? המערכת מצליבה.</span><span class="get">→ בילוש.</span></div>
+<div class="card"><b>22. 8 צוותי הריקון <span class="tag auto">אוטומטי</span></b><span class="why">ריקון מוקדם.</span><span class="get">רשימה + ליווי.</span></div>
+<div class="card"><b>23. כוח-אדם (03) <span class="tag">ליווי</span></b><span class="why">8 שוטרים ל-45 דקות מהרזרבה. לפני גל היציאה. בזמן שהמשמרת מתחלפת ב-00:30 (04).</span><span class="get">בקשה.</span></div>
+<div class="card"><b>24. 39 הבעלים האחרים <span class="tag sys">מערכת</span></b><span class="why">"7 נפרצה, שלכם תקינות, ריקון מוקדם — תראו בטלפון". לפני שהם שומעים שמועה.</span><span class="get">שורה.</span></div>
+</div>
+
+<h3>שאלה 4 — מי אחראי</h3>
+<div class="who">
+<div class="card"><b>25. קצין הביטחון <span class="tag dec">הפלילי</span></b><span class="why">—</span><span class="get">—</span></div>
+<div class="card"><b>26. המרכז למקומות קדושים <span class="tag dec">הקופות</span></b><span class="why">הרישום, הריקון, החותמות, השקיפות — כל המערכת הזו שלו.</span><span class="get">—</span></div>
+<div class="card"><b>27. ההקדש <span class="tag auto">הכסף</span></b><span class="why">שלהם. רואים הכל. לא סופרים לבד — זה הכלל שמגן עליהם.</span><span class="get">—</span></div>
+<div class="card"><b>28. רב האתר <span class="tag">מראש</span></b><span class="why">"כסף שנמצא ליד קופה — של הקופה." נקבע בחורף. לא מתווכחים ב-01:15.</span><span class="get">—</span></div>
+<div class="card"><b>29. ביטוח <span class="tag sys">מערכת</span></b><span class="why">התיק שלם בזמן אמת: חיישן, מצלמה, ריקון אחרון, חסר משוער, ראיות.</span><span class="get">—</span></div>
+<div class="card"><b>30. רואה חשבון / מבקר <span class="tag sys">אחרי</span></b><span class="why">כל ריקון, כל חותם. השקיפות.</span><span class="get">—</span></div>
+<div class="card"><b>31. הדוברות <span class="tag auto">אוטומטי</span></b><span class="why">"גנבו את הצדקה במירון" תוך 10 דקות. שהתשובה תהיה מוכנה: "מתועד, הבעלים ראו, מטופל".</span><span class="get">נוסח.</span></div>
+<div class="card"><b>32. ממונה הפרטיות (05) <span class="tag sys">מערכת</span></b><span class="why">ה-replay מראה תורמים. לראיה — כן. לפרסום — לא. לגבאי — צפייה בלבד.</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 5 — מה זה עושה לעתיד</h3>
+<div class="who">
+<div class="card"><b>33. ריקון 02:00 → 01:30 <span class="tag sys">מערכת</span></b><span class="why">לפני גל היציאה. עם ליווי.</span><span class="get">—</span></div>
+<div class="card"><b>34. 3 תיקונים להתראה <span class="tag sys">מערכת</span></b><span class="why">טלפון מהרישום · כפילות למוקד · סדרן לכל קופה · בדיקת-נמענים 18:00.</span><span class="get">—</span></div>
+<div class="card"><b>35. קופות 14, 31 <span class="tag sys">מערכת</span></b><span class="why">בלי מצלמה. מחר בבוקר.</span><span class="get">—</span></div>
+<div class="card"><b>36. קופה 7 — המיקום <span class="tag sys">מערכת</span></b><span class="why">בין עמדות. עמדה.</span><span class="get">—</span></div>
+<div class="card"><b>37. המודל <span class="tag sys">מערכת</span></b><span class="why">קצב 7 בשעות האלה. ריקון ב-00:00 לקופות מהירות.</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 6 — האם זה תבנית</h3>
+<div class="who">
+<div class="card"><b>2+ קופות באותה שעה <span class="tag">→ המפקד + ביטחון</span></b><span class="why">סדרה. צוות. יציאות.</span><span class="get">—</span></div>
+<div class="card"><b>אותו תיאור בכייסות <span class="tag">→ בילוש</span></b><span class="why">אדם אחד, 5 אירועים.</span><span class="get">—</span></div>
+<div class="card"><b>אותה קופה כל שנה <span class="tag">→ המרכז</span></b><span class="why">המיקום.</span><span class="get">—</span></div>
+<div class="card"><b>חסר "משוער" תמיד גבוה בקופה מסוימת <span class="tag">→ מבקר</span></b><span class="why">הקצב לא נכון — או משהו אחר. השקיפות מגלה גם את זה.</span><span class="get">—</span></div>
+<div class="card"><b>התראה שלא הגיעה — שוב <span class="tag">→ בטיחות</span></b><span class="why">רשימות נמענים. כל 40. לפני.</span><span class="get">—</span></div>
+</div>
+
+<h3>6. מי לא מקבל כלום — בכוונה</h3>
+<div class="card no-list">הציבור · מד"א · כב"ה · צה"ל · החצרות · התורמים · השאטלים · 39 ההקדשות מעבר ל"שלכם תקינות". <b>קופה אחת מגיעה ל-25 אנשים. הכסף — ל-4. ה-replay — ל-3.</b></div>
+
+<h3>7. מקרי קצה</h3>
+<ul>
+<li><b>הסדרן אסף את הכסף "כדי שלא ייקחו":</b> קרה. עכשיו יש 38 ₪ ביד של סדרן, בלי עדים, בלי ספירה. הכפתור אומר "אל תיגע" בדיוק בשביל זה. אם קרה — הוא מוסר לשוטר, נספר בשניים, נרשם "נאסף ע"י סדרן". לא חשד — נוהל.</li>
+<li><b>הגבאי מגיע וסופר לבד:</b> לא. הוא רואה — לא סופר. שניים סופרים, הוא מאשר. זה הכלל שמגן עליו מהשמועה.</li>
+<li><b>מצלמה 22 נפלה (05):</b> אין replay. יש חיישן, יש ריקון אחרון, יש חסר משוער. הראיה חסרה. הביטוח יודע. זה "פער" — מסומן.</li>
+<li><b>החיישן קפץ אבל הקופה שלמה:</b> מישהו נשען. סדרן בודק תוך דקה. "שווא" — נרשם, לא מתעלמים בפעם הבאה.</li>
+<li><b>2 קופות בו-זמנית:</b> סדרה. המפקד. יציאות. זה כבר ניהול קהל.</li>
+<li><b>הקדש אומר "היה שם 8,000, לא 3,420":</b> הרשומה של 22:04 — שניים, צילום, חותם, קבלה שהגבאי אישר בטלפון. הוויכוח נגמר לפני שהתחיל.</li>
+<li><b>שבת:</b> אין ריקון, אין טלפון. חיישן → מוקד → שוטר. הקופה נשארת סגורה עד מוצ"ש. הרב קבע.</li>
+<li><b>קופה של ארגון שלא נרשם במערכת:</b> יש כאלה. הם לא בשקיפות. אם נפרצת — יש להם רק את המילה שלהם. זו הסיבה שכולם נרשמים.</li>
+<li><b>הגנב נתפס עם הכסף:</b> הכסף ראיה. לא חוזר לקופה הלילה. הביטוח, ההקדש, המשטרה — הכל רשום.</li>
+</ul>
+
+<h3>8. מה צריך כדי שזה יעבוד</h3>
+<ul>
+<li><b>רישום כל הקופות</b> — עם הבעלים, הטלפון של השנה, המיקום, המצלמה, הסדרן. בחורף. חובה לכל מי שרוצה קופה במתחם.</li>
+<li><b>ריקון בשניים, מצולם, חתום, עם קבלה</b> — והבעלים רואה בזמן אמת. זה לא בקרה — זה ההגנה של הבעלים.</li>
+<li><b>חיישן פתיחה + חותם ממוספר</b> לכל קופה.</li>
+<li><b>מצלמה שרואה כל קופה</b> — או שהקופה זזה.</li>
+<li><b>3 נמענים + מוקד להתראה, ובדיקת-נמענים לפני הלילה.</b></li>
+<li><b>ריקון לפי קצב</b>, לא לפי שעון.</li>
+<li><b>נוהל "אל תיגע"</b> בכפתור.</li>
+<li><b>הכרעות הרב מראש</b> — כסף שנמצא, שבת.</li>
+<li><b>הצלבה עם כייסות</b> — הבילוש רואה את שניהם.</li>
+<li><b>ליווי לריקון</b> — מכוח-האדם, מתוכנן, לא "תביא שוטר".</li>
+</ul>
+
+<h3>9. מה יוצא מהחיבור לששת הקודמים</h3>
+<div class="card">
+<b>הכסף הוא ישות — והוא שונה מכל האחרות.</b> אוטובוס, כוסות, סדרן, רוח, מצלמה, תושב — בכולם השאלה היא "מה קורה". כאן השאלה היא <b>"מי יאמין למי"</b>. 40 גופים שלא סומכים זה על זה, במקום שבו ריבים על כסף הם היסטוריה. המערכת לא מונעת פריצה — היא מונעת את הריב שאחרי. <b>שקיפות היא סוג של בטיחות.</b><br><br>
+<b>ההתראה שלא הגיעה</b> — זה נושא 03 (5 לא מגיבים = רשת) ו-05 (טיקט שחיכה) בגרסה שלישית: <b>מערכת שמתריעה לאף אחד = מערכת שלא מתריעה.</b> החוק: כל התראה עם 0 נמענים תקינים = כשל בטיחות, נבדק לפני הלילה.<br><br>
+<b>אירוע אחד מעוור את השני:</b> קצין הביטחון היה בחפץ חשוד כשהקופה נפרצה. ב-05 הטכנאי היה בסורק כשהמצלמה נתנה סימנים. ב-03 הרזרבה יצאה לילד אבוד כשהסדרן חסר. <b>החוק: כשבעל תפקיד עסוק באירוע, ההתראות שלו מוכפלות למישהו אחר — אוטומטית.</b><br><br>
+<b>ישויות חדשות:</b> כסף (מאגר שהשאלה עליו היא אמון, לא כמות) · ראיה (replay נעול, צילום, חותם — עם שרשרת משמורת) · שקיפות (מי רואה מה בזמן אמת, כהגנה) · בעלות (40 בעלים שונים באתר אחד).<br><br>
+<b>מצלמה 22 עשתה את מה ש-17 לא יכלה (05).</b> הסדרנים במדרגות (03) קיבלו תיאור. הליווי לריקון בא מהרזרבה (03) לפני גל היציאה שנדחה (04). הרב הכריע מראש (04: "עד מתי מותר להדליק" — אותו עיקרון).<br><br>
+<b>עמוד השדרה:</b> קצין הבטיחות (הפעם על הכשל, לא על הפריצה), הדוברות, ביטוח, המודל לשנה הבאה, מנהל האירוע, ממונה הפרטיות, המפקד (רק בסדרה), ניהול הקהל (שורה), תמיכה טכנית (ההתראה). <b>9 מתוך 13</b> + חדש: <b>המרכז למקומות קדושים</b> — בעל האתר, שהופיע רק כאן, ויופיע מעכשיו בכל מה שנוגע למבנה, לקופות, לציון עצמו.
+</div>
+
+</div>
+</body>
+</html>
