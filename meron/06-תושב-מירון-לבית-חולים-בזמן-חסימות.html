@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>תושב מירון צריך בית חולים בזמן שהכבישים חסומים — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4EFE6;--sur:#FFFDF9;--bd:#E7DFD2;--tx:#1C1917;--mu:#6B6259;--acc:#C2410C;--g:#2F7A4D;--y:#B45309;--r:#B91C1C;
+--dbg:#14110F;--dsur:#1F1B18;--dbd:#332C27;--dtx:#F4EFE6;--dmu:#A89F94}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Heebo,system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1500px;margin:0 auto;padding:32px 28px 80px}
+h1{font-family:"Frank Ruhl Libre",serif;font-size:34px;margin:0 0 4px}
+h2{font-family:"Frank Ruhl Libre",serif;font-size:24px;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--tx)}
+h3{font-size:16px;margin:22px 0 8px}
+.lead{color:var(--mu);font-size:15px;margin:0 0 18px}
+.lbl{font-size:11px;color:var(--mu)}
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--sur)}
+td,th{border:1px solid var(--bd);padding:7px 10px;text-align:right;vertical-align:top}
+th{background:#EDE5D8;font-weight:700}
+ul{margin:6px 0;padding-right:22px}li{margin:3px 0}
+.tag{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;background:#EDE5D8;color:var(--mu);margin-left:4px}
+.tag.auto{background:#E3F1E8;color:var(--g)}.tag.dec{background:#FDE7D6;color:var(--y)}.tag.sys{background:#E8EEF8;color:#1D4ED8}
+.demo{background:var(--dbg);color:var(--dtx);border-radius:16px;padding:22px 24px;margin-top:14px}
+.demo .lbl{color:var(--dmu)}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0 22px}
+.tl div{background:var(--dsur);border:1px solid var(--dbd);border-radius:10px;padding:10px 12px}
+.tl b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:20px;color:#F59E0B}
+.tl b.g{color:#2FA36B}.tl b.r{color:#EF4444}
+.tl span{font-size:12px;color:var(--dmu)}
+.hub{background:#3B1111;border:2px solid #EF4444;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+.hub .n{font-family:"Frank Ruhl Libre",serif;font-size:26px;font-weight:700}
+.hub .k{display:flex;flex-direction:column;gap:2px;font-size:12px;color:#FECACA}
+.fan{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.fan .col{background:var(--dsur);border:1px solid var(--dbd);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.fan .col h4{margin:0 0 2px;font-size:13px;color:#F59E0B;border-bottom:1px solid var(--dbd);padding-bottom:6px}
+.rc{background:#26211D;border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:1px}
+.rc b{font-size:12px;color:var(--dtx)}.rc i{font-style:normal;color:var(--dmu)}.rc .m{color:#FCD9A8}
+.rc.dec{border-right:3px solid #F59E0B}.rc.auto{border-right:3px solid #2FA36B}.rc.sys{border-right:3px solid #60A5FA}.rc.cond{border-right:3px solid #7F1D1D;opacity:.85}
+.leg{display:flex;gap:14px;font-size:11px;color:var(--dmu);margin-top:10px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.leg .a::before{background:#2FA36B}.leg .d::before{background:#F59E0B}.leg .s::before{background:#60A5FA}.leg .c::before{background:#7F1D1D}
+.screens{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.scr{border:1px solid var(--dbd);border-radius:14px;overflow:hidden;background:var(--dsur);display:flex;flex-direction:column}
+.scr .h{padding:8px 12px;border-bottom:1px solid var(--dbd);font-size:11px;color:var(--dmu)}
+.scr .b{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.scr.light{background:#F4EFE6;color:var(--tx)}.scr.light .h{color:var(--mu);border-color:var(--bd)}
+.bigbtn{border-radius:12px;padding:14px 10px;text-align:center;font-weight:700;font-size:15px;border:2px solid var(--dbd);background:#26211D}
+.bigbtn.on{background:#B91C1C;border-color:#B91C1C;color:#fff}.bigbtn.g{background:#12301F;border-color:#2FA36B;color:#BBF0D0}.bigbtn.y{background:#3F2A10;border-color:#F59E0B;color:#FCD9A8}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.pill.g{background:#12301F;color:#BBF0D0}.pill.y{background:#3F2A10;color:#FCD9A8}.pill.r{background:#3B1111;color:#FCA5A5}
+.evt{background:#3B1111;border:1px solid #EF4444;border-radius:10px;padding:8px 10px;font-size:12px}
+.done{font-size:11px;color:#BBF0D0}.done::before{content:"✓ "}
+.ask{background:#3F2A10;border:1px solid #F59E0B;border-radius:8px;padding:6px 8px;font-size:11px}.ask b{color:#FCD9A8}
+.msg{background:#1C1917;color:#F4EFE6;border-radius:12px;padding:10px 12px;font-size:13px}.msg small{display:block;color:#D6CFC4;font-size:11px;margin-top:3px}
+.line{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;border-radius:8px;padding:8px 10px;color:#D6CFC4}
+.route{display:flex;flex-direction:column;gap:4px;font-size:11px}
+.route div{display:grid;grid-template-columns:44px 1fr 60px;gap:6px;background:#26211D;border-radius:6px;padding:4px 6px;align-items:center}
+.route .t{color:#F59E0B;font-weight:700}
+.six{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.who .card{padding:10px 12px}.who b{display:block}.who .why{color:var(--mu);font-size:12px}.who .get{font-size:12px;margin-top:3px}
+.no-list{background:#F3E8E8;border:1px solid #E5C4C4}
+@media (max-width:1100px){.fan{grid-template-columns:repeat(3,1fr)}.screens{grid-template-columns:repeat(2,1fr)}.six,.who{grid-template-columns:1fr}.tl{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>תושב מירון צריך בית חולים בזמן שהכבישים חסומים — ניהול חי</h1>
+<p class="lead">נושא 06 (רנדומלי). 22:40, עשרים דקות לפני ההדלקה — שיא התנועה הנכנסת ב-866. במושב מירון, 400 מטר מהמתחם, גבר בן 74 עם כאבים בחזה. הכביש היחיד החוצה הוא ציר השאטלים. המחסום בכניסה למושב מאויש. <b>התושבים אמרו "נהפכנו לבני ערובה". הנושא הזה הוא התשובה: מה קורה כשתושב צריך לצאת — ברגע הכי גרוע.</b></p>
+
+<h2>חלק א' — הדמיה</h2>
+<div class="demo">
+  <div class="lbl">ציר הזמן — המניעה (ירוק) ומה קורה כשזה קורה בשיא (אדום)</div>
+  <div class="tl">
+    <div><b class="g">חורף</b><span><b style="color:#BBF0D0;display:inline">מניעה.</b> כל תושב רשום: כתובת, רכב + תו, טלפון, סימון רפואי (קשיש, כרוני). קו חם לתושבים עם עדיפות. <b>נוהל "חירום תושב בזמן חסימה"</b> חתום עם מד"א, המשטרה והמועצה: נט"ן (טיפול נמרץ נייד) במתחם מוקצה גם לתושבים · מסלול יציאה קבוע דרך ציר החירום המערבי · המחסום מתודרך · קצין קישור לתושבים בחמ"ל · זיו בכוננות. כפתור אחד באפליקציית התושב: "חירום".</span></div>
+    <div><b class="g">20:00</b><span>ההיערכות: 14 תושבים עם סימון רפואי. הנט"ן במתחם יודע את הכתובות. ציר החירום המערבי — 4 דקות למושב. קצין הקישור בעמדה. הוועד קיבל: "הקו החם פתוח, נט"ן זמין, ציר קבוע". <b style="color:#BBF0D0;display:inline">אם לא יקרה כלום — אף אחד לא ידע שהיה נוהל.</b></span></div>
+    <div><b class="r">22:40</b><span><b style="color:#FCA5A5;display:inline">הקריאה.</b> הבת לוחצת "חירום" באפליקציה (או 101). המערכת יודעת: תושב רשום, סימון "לב", כתובת, 400 מ' מהמתחם. תוך 20 שניות: הנט"ן במתחם מקבל · ציר החירום המערבי נפתח (ניהול הקהל: 3 סדרנים למעבר) · המחסום: "נט"ן יוצא, רכב משפחה עשוי לצאת" · מד"א 101 ארצי: "ידוע, נט"ן בדרך, אל תשלחו מצפת" · זיו: "גבר 74, חזה, ETA 30" · תנועה 866: "נתיב יוצא לנט"ן ב-22:50, החזק שאטלים 3 דק'".</span></div>
+    <div><b class="r">22:42–22:46</b><span>מפקד מד"א במתחם מחליט: הנט"ן יוצא (המתחם נשאר עם 2 אמבולנסים רגילים + רופא — 25 דק'). מסוק? רוח 47 (נושא 04) — לא. הבת: "לא לנסוע לבד — הנט"ן ב-4 דק'". קצין הקישור מתקשר אליה. 22:46 הנט"ן בבית.</span></div>
+    <div><b class="r">22:46–22:55</b><span>טיפול בבית: אק"ג, אספירין, מורפין, חמצן. אוטם. לזיו — צנתור. הבן של התושב מתנדב בהכנסת אורחים צפון (נושא 02) — המערכת יודעת, קצין הקישור מודיע לו, סדרן מחליף אותו. 22:52 תנועה: נתיב יוצא ב-866 נפתח, 25 נהגי השאטלים: "נט"ן יוצא, עצור בצד 3 דק'", אוטובוס 14 (עדיין בשוליים? — כבר נגרר, נושא 01). ניידת מובילה. 22:55 הנט"ן יוצא מהמושב.</span></div>
+    <div><b class="r">23:20 · אחרי</b><span>זיו 23:20. צנתור 23:35. חי. הנט"ן חוזר למתחם 00:10 — 35 דק' בלי נט"ן במתחם, בזמן ההדלקה. השאטלים עצרו 3 דק' — המתנה בחניון +2. הוועד: "עבד". הרשומה: 15 דק' מהלחיצה עד טיפול, 40 עד בית חולים. הבן חזר לעמדה ב-00:30. שנה הבאה: נט"ן שני, לתושבים ולמחסומים.</span></div>
+  </div>
+
+  <div class="hub">
+    <div><div class="n">חירום תושב · מושב מירון · לב</div><div class="lbl">22:40 · [שם] · 74 · סימון: לב, סוכרת · כתובת: [רחוב] · 400 מ' מהמתחם · 4 דק' דרך ציר מערבי · הבת מדווחת</div></div>
+    <div class="k"><span>נט"ן במתחם: פנוי · 4 דק' · נשארים: 2 אמבולנסים + רופא</span><span>מסוק: רוח 47 → לא · זיו: 30 דק' דרך 866</span><span>הבן: מתנדב בהכנסת אורחים צפון</span></div>
+    <div class="k"><span>866: שיא נכנס · 25 שאטלים · 14 נגרר</span><span>ציר מערבי: רחבה 3.4 · 3 סדרנים נדרשים</span><span>מחסום מושב: מאויש · תו משפחה: ✓</span></div>
+  </div>
+
+  <div class="lbl" style="margin-top:14px">מי מקבל מה — לפי שש השאלות</div>
+  <div class="fan">
+    <div class="col"><h4>1 · מי בתוך</h4>
+      <div class="rc auto"><b>הבת (המדווחת)</b><i>20 שנ'</i><span class="m">"נט"ן בדרך — 4 דק'. אל תסעו לבד. פתחי דלת, הכיני תרופות."</span></div>
+      <div class="rc sys"><b>התושב — הרשומה</b><i>מערכת</i><span class="m">74 · לב · סוכרת · תרופות · רופא · קופת חולים → לנט"ן</span></div>
+      <div class="rc auto"><b>צוות הנט"ן</b><i>20 שנ'</i><span class="m">"מושב מירון [כתובת] · 74 · לב · ציר מערבי · 4 דק' · מחסום פתוח"</span></div>
+      <div class="rc dec"><b>מפקד מד"א במתחם</b><i>22:41</i><span class="m">"נט"ן לתושב? המתחם נשאר: 2 + רופא · ההדלקה בעוד 19'"</span></div>
+      <div class="rc auto"><b>הבן — מתנדב בצפון (נושא 02)</b><i>22:44 · קצין הקישור</i><span class="m">"אבא שלך — נט"ן אצלו. מחליף בדרך. לך."</span></div>
+      <div class="rc auto"><b>אחראי הכנסת אורחים צפון</b><i>22:44</i><span class="m">"[שם] יוצא — משפחה · מחליף מרזרבה"</span></div>
+      <div class="rc auto"><b>קצין הקישור לתושבים</b><i>20 שנ'</i><span class="m">האירוע · הבת · הבן · הוועד · מה זז</span></div>
+      <div class="rc sys"><b>רכב המשפחה (תו תושב)</b><i>מערכת</i><span class="m">"עשוי לצאת אחרי הנט"ן · המחסום יודע"</span></div>
+      <div class="rc auto"><b>זיו — מיון</b><i>22:41</i><span class="m">"גבר 74 · חזה · אוטם? · ETA 23:20 · צנתור בכוננות"</span></div>
+    </div>
+    <div class="col"><h4>2 · מי מחכה לזה</h4>
+      <div class="rc sys"><b>ניהול הקהל — ציר מערבי</b><i>20 שנ'</i><span class="m">"נט"ן יוצא דרך המערבי · רחבה 3.4 · 3 סדרנים · 90 שנ' סגירה"</span></div>
+      <div class="rc auto"><b>3 סדרני המעבר המערבי</b><i>22:41</i><span class="m">"נט"ן עובר בעוד 2' · פנו 3 מ' · עצור זרימה 90 שנ'"</span></div>
+      <div class="rc auto"><b>המחסום בכניסה למושב</b><i>20 שנ'</i><span class="m">"נט"ן נכנס 22:46 · יוצא ~22:55 · רכב [מספר] אחריו"</span></div>
+      <div class="rc auto"><b>מוקד מד"א 101 ארצי (נושא 01)</b><i>20 שנ'</i><span class="m">"ידוע · נט"ן מהמתחם · אל תשלחו מצפת"</span></div>
+      <div class="rc sys"><b>כיסוי רפואי במתחם</b><i>מערכת</i><span class="m">"נט"ן בחוץ 35' · בזמן ההדלקה · 2 + רופא · סף ר"נ: להתריע"</span></div>
+      <div class="rc auto"><b>ועד המושב / הקו החם</b><i>22:42</i><span class="m">"תושב — נט"ן אצלו · הציר פתוח · לא לנסוע"</span></div>
+      <div class="rc cond"><b>המפקד</b><i>ציר החירום דרך רחבה 3.4</i><span class="m">"נט"ן יוצא במערבי · 90 שנ' · לפני ההדלקה" — כן, שורה</span></div>
+      <div class="rc auto"><b>מוקד המידע</b><i>22:42</i><span class="m">"עיכוב שאטלים 3' ב-22:52 — רפואי"</span></div>
+    </div>
+    <div class="col"><h4>3 · מי על אותו כביש</h4>
+      <div class="rc dec"><b>מפקד ציר 866 (תנועה)</b><i>22:41</i><span class="m">"נתיב יוצא לנט"ן 22:52–22:56 · החזק שאטלים · ניידת מובילה"</span></div>
+      <div class="rc auto"><b>25 נהגי השאטלים</b><i>22:50 · קולי</i><span class="m">"נט"ן יוצא · עצור בצד ימין 3 דק' · אל תזוז עד הודעה"</span></div>
+      <div class="rc auto"><b>ניידת 12</b><i>22:41</i><span class="m">"הובל נט"ן מהמושב לצפת · 22:55"</span></div>
+      <div class="rc sys"><b>מקצב השאטלים</b><i>מערכת</i><span class="m">"3 דק' עצירה = 4 אוטובוסים מאחרים · המתנה +2"</span></div>
+      <div class="rc sys"><b>אוטובוס 14 (נושא 01)</b><i>מערכת</i><span class="m">"נגרר 21:26 · הכביש פנוי" (אם לא — נתיב אחר)</span></div>
+      <div class="rc auto"><b>סדרן הרציף בחניון</b><i>22:50</i><span class="m">"3 דק' עצירה · רפואי · המתנה +2"</span></div>
+      <div class="rc auto"><b>מחסום צפת / כניסה לעיר</b><i>22:52</i><span class="m">"נט"ן ממירון לזיו · 23:15"</span></div>
+      <div class="rc cond"><b>המסוק / חיל האוויר (נושא 04)</b><i>נבדק</i><span class="m">"רוח 47 · לא · קרקע"</span></div>
+      <div class="rc auto"><b>Waze</b><i>22:50</i><span class="m">"רכב חירום 866 יוצא"</span></div>
+      <div class="rc cond"><b>תושבי ספסופה / כפר שמאי</b><i>אם הנתיב שלהם</i><span class="m">"2 דק'"</span></div>
+    </div>
+    <div class="col"><h4>4 · מי אחראי</h4>
+      <div class="rc dec"><b>מפקד מד"א במתחם</b><i>הרפואה</i><span class="m">נט"ן או אמבולנס רגיל · לאן · מה נשאר</span></div>
+      <div class="rc dec"><b>מפקד ציר 866</b><i>הכביש</i><span class="m">הנתיב, השאטלים, הליווי</span></div>
+      <div class="rc dec"><b>קצין הקישור לתושבים (הרשות)</b><i>התושב</i><span class="m">המשפחה, הוועד, הבן, "עבד/לא עבד"</span></div>
+      <div class="rc auto"><b>מפקד גזרת המחסומים</b><i>22:41</i><span class="m">המחסום שלו פותח לנט"ן ולרכב</span></div>
+      <div class="rc auto"><b>המועצה האזורית — מוקד</b><i>22:42</i><span class="m">"תושב מירון · רפואי · מטופל · הנוהל עבד"</span></div>
+      <div class="rc sys"><b>קצין הבטיחות של האירוע</b><i>רישום</i><span class="m">"ציר חירום דרך רחבה 3.4 · 90 שנ' · 0 אירועים"</span></div>
+      <div class="rc sys"><b>הרשות — חובת הזהירות</b><i>מערכת</i><span class="m">"המדינה חסמה · המדינה דאגה · 15 דק' לטיפול" — לרשומה</span></div>
+      <div class="rc sys"><b>פרטיות רפואית</b><i>מערכת</i><span class="m">הרשומה הרפואית → נט"ן וזיו בלבד · לא לחמ"ל</span></div>
+    </div>
+    <div class="col"><h4>5 · מה זה עושה לעתיד</h4>
+      <div class="rc sys"><b>כיסוי רפואי במתחם</b><i>מערכת</i><span class="m">"נט"ן בחוץ עד 00:10 · ההדלקה בלי נט"ן · סף התרעה לר"נ יורד"</span></div>
+      <div class="rc sys"><b>גל היציאה + שאטלים</b><i>מערכת</i><span class="m">"+2 המתנה · 4 אוטובוסים מאחרים · מתאזן ב-23:20"</span></div>
+      <div class="rc sys"><b>הבן — משמרת (נושא 03)</b><i>מערכת</i><span class="m">"יצא 22:44 · חזר 00:30 · לא נספר כאיחור"</span></div>
+      <div class="rc sys"><b>רשומת התושב</b><i>מערכת</i><span class="m">"22:40 · לב · נט"ן 6' · זיו 40' · חי"</span></div>
+      <div class="rc sys"><b>שנה הבאה — נט"ן שני</b><i>מערכת</i><span class="m">"נט"ן יצא 35' בשיא · צריך שני: תושבים + מחסומים"</span></div>
+      <div class="rc sys"><b>מדיניות החסימות</b><i>מערכת</i><span class="m">"14 תושבים עם סימון רפואי · 1 אירוע · 15' לטיפול — למועצה"</span></div>
+      <div class="rc sys"><b>ציר החירום המערבי</b><i>מערכת</i><span class="m">"שימוש 2 הלילה (אמב' 4 + נט"ן) · 90 שנ' כל אחד · עובד"</span></div>
+    </div>
+    <div class="col"><h4>6 · האם זה תבנית</h4>
+      <div class="rc cond"><b>מפקד מד"א + הרשות</b><i>2+ אירועי תושבים בלילה</i><span class="m">"נט"ן ייעודי לתושבים — לא מהמתחם"</span></div>
+      <div class="rc cond"><b>המפקד</b><i>נט"ן בחוץ + ר"נ במתחם</i><span class="m">"אין נט"ן · הזנק מצפת · 25'" — זה מגיע</span></div>
+      <div class="rc cond"><b>המועצה + הרשות</b><i>תלונות תושבים על אותו דבר</i><span class="m">"הקו החם לא ענה" / "המחסום לא ידע" — הנוהל, לא האנשים</span></div>
+      <div class="rc cond"><b>מפקד ציר 866</b><i>3 פתיחות נתיב בשעה</i><span class="m">"הציר לא מספיק · נתיב חירום קבוע"</span></div>
+      <div class="rc sys"><b>מנהל האירוע</b><i>בבוקר</i><span class="m">"1 אירוע תושב · 15' לטיפול · 40' לבי"ח · חי · שאטלים -3' · הנוהל עבד"</span></div>
+      <div class="rc"><b style="color:#FCA5A5">לא מקבלים כלום</b><i>בכוונה</i><span class="m">הציבור במתחם · כב"ה · צה"ל · החצרות · שאר התושבים (רק הוועד) · הדוברות (רפואי-פרטי) · השכנים</span></div>
+    </div>
+  </div>
+  <div class="leg"><span class="a">אוטומטי</span><span class="d">החלטה של בן-אדם</span><span class="s">מערכת מעדכנת את עצמה</span><span class="c">מותנה — רק אם</span></div>
+
+  <div class="lbl" style="margin-top:26px">מה כל אחד רואה</div>
+  <div class="screens">
+    <div class="scr light"><div class="h">הבת · אפליקציית תושב · 22:40</div><div class="b">
+      <div class="lbl">תושב מירון · [רחוב] · תו רכב ✓</div>
+      <div class="bigbtn on" style="font-size:18px;padding:20px">חירום רפואי</div>
+      <div class="row" style="gap:6px"><div class="bigbtn" style="flex:1;font-size:12px;padding:10px;background:#FFFDF9;border-color:#E7DFD2;color:#1C1917">צריך לצאת — לא חירום</div><div class="bigbtn" style="flex:1;font-size:12px;padding:10px;background:#FFFDF9;border-color:#E7DFD2;color:#1C1917">חסימה בכניסה</div></div>
+      <div class="msg"><b>נט"ן בדרך — 4 דקות</b><small>צוות טיפול נמרץ מהמתחם. אל תסעו לבד — הכביש חסום ואנחנו מהירים יותר.</small><small style="color:#FDE68A">פתחי את הדלת. הכיני את התרופות שלו. הישארי איתו.</small></div>
+      <div class="msg" style="background:#2F7A4D"><b>22:46 · הצוות אצלכם</b><small>קצין הקישור [שם] יתקשר אלייך עכשיו. [שם הבן] קיבל הודעה.</small></div>
+      <div class="card" style="font-size:12px"><b>אם תרצו לנסוע אחרי הנט"ן</b><br><span style="color:var(--mu)">המחסום יודע את הרכב שלכם. הנתיב ל-866 ייפתח 22:52. עקבו אחרי הניידת.</span></div>
+    </div></div>
+
+    <div class="scr"><div class="h">מפקד מד"א במתחם · 22:41</div><div class="b">
+      <div class="evt"><b>תושב · מושב מירון · 74 · חזה · סימון לב</b><br><span style="color:#FCA5A5">400 מ' · ציר מערבי 4' · הבת מדווחת · תרופות: [רשימה] · קופ"ח: [שם]</span></div>
+      <div class="lbl">אפשרויות — עם המחיר</div>
+      <div class="route"><div><span class="t">נט"ן</span><span>מהמתחם · ציר מערבי · 4' · המתחם נשאר 2 + רופא · 35' בלי נט"ן בהדלקה</span><span style="color:#BBF0D0">מומלץ</span></div>
+      <div><span class="t">אמב'</span><span>רגיל מהמתחם · 4' · בלי רופא · אוטם? — לא מספיק</span><span style="color:#FCD9A8">חלש</span></div>
+      <div><span class="t">צפת</span><span>אמבולנס מצפת · 866 נגד השאטלים · 25'</span><span style="color:#FCA5A5">לא</span></div>
+      <div><span class="t">מסוק</span><span>רוח 47 (נושא 04) · חיל האוויר: קרקע</span><span style="color:#FCA5A5">לא</span></div></div>
+      <div class="done">זיו הותרע · 101 ארצי "ידוע" · ציר מערבי מבוקש · מחסום · ניידת</div>
+      <div class="ask"><b>שלך:</b> <span class="row" style="margin-top:4px"><span class="pill g">נט"ן יוצא</span><span class="pill y">אמבולנס + רופא במקום נט"ן</span></span><br><span style="color:#FCD9A8">אם ר"נ במתחם בזמן שהנט"ן בחוץ — הזנקה מצפת 25'. ההדלקה בעוד 19'.</span></div>
+    </div></div>
+
+    <div class="scr"><div class="h">מפקד ציר 866 · תנועה · 22:41</div><div class="b">
+      <div class="evt" style="background:#3F2A10;border-color:#F59E0B"><b>נט"ן יוצא ממירון לזיו · 22:52 · 866 מערבה</b><br><span style="color:#FCD9A8">שיא נכנס · 25 שאטלים על הציר · 14 נגרר ✓ · שוליים ק"מ 3.2 פנויים</span></div>
+      <div class="lbl">מה המערכת מציעה</div>
+      <div class="route"><div><span class="t">22:50</span><span>הודעה קולית ל-25 נהגים: "עצור בצד ימין"</span><span></span></div>
+      <div><span class="t">22:52</span><span>ניידת 12 מובילה מהמושב · נתיב יוצא פנוי</span><span></span></div>
+      <div><span class="t">22:56</span><span>שחרור שאטלים · 4 מאחרים · המתנה +2</span><span></span></div>
+      <div><span class="t">23:15</span><span>כניסה לצפת · מחסום העיר יודע</span><span></span></div></div>
+      <div class="ask"><b>שלך:</b> <span class="row" style="margin-top:4px"><span class="pill g">אשר — החזק שאטלים 3'</span><span class="pill y">נתיב נגדי בלי עצירה (סיכון)</span><span class="pill r">ליווי בלי עצירה — לא</span></span></div>
+      <div class="lbl">אחרי: 3 דק' × 25 אוטובוסים · המתנה בחניון 18→20 · מתאזן 23:20</div>
+    </div></div>
+
+    <div class="scr"><div class="h">כל השאר — שורה אחת</div><div class="b">
+      <div class="lbl">צוות הנט"ן · 22:40</div><div class="line">מושב מירון [כתובת] · 74 · לב, סוכרת · תרופות [..] · ציר מערבי · מחסום פתוח · הבת בבית · זיו מוכן</div>
+      <div class="lbl">3 סדרני המעבר המערבי · 22:41</div><div class="line">נט"ן עובר בעוד 2' · פנו 3 מ' · עצור זרימה 90 שנ' · אח"כ שחרר</div>
+      <div class="lbl">המחסום · כניסה למושב · 22:41</div><div class="line">נט"ן נכנס 22:46 · יוצא ~22:55 · רכב [מספר] (תו תושב) אחריו · פתח</div>
+      <div class="lbl">מוקד מד"א 101 ארצי</div><div class="line">קריאה ממירון · ידוע · נט"ן מהמתחם · אל תשלחו מצפת · זיו הותרע</div>
+      <div class="lbl">קצין הקישור לתושבים · 22:41</div><div class="line">[שם] 74 · נט"ן 4' · הבת [טלפון] · הבן מתנדב צפון → הודעה · הוועד → שורה</div>
+      <div class="lbl">הבן · הכנסת אורחים צפון · 22:44</div><div class="line">אבא שלך — נט"ן אצלו. מחליף בדרך אליך. לך הביתה (4 דק' דרך המערבי). לא נספר כאיחור.</div>
+      <div class="lbl">ועד המושב · 22:42</div><div class="line">תושב · רפואי · נט"ן אצלו · הציר פתוח · לא לנסוע · הקו החם פנוי</div>
+      <div class="lbl">המפקד · 22:41</div><div class="line" style="color:#FCD9A8">כן, שורה: "נט"ן יוצא במערבי · רחבה 3.4 · 90 שנ' · 22:41 · לפני ההדלקה · המתחם: 2 + רופא"</div>
+      <div class="lbl">ניהול הקהל · מערכת</div><div class="line">מערבי: עצור 90 שנ' 22:41 · מדרגות מקבלות +60/דק' · בסדר · הדלקה 19'</div>
+    </div></div>
+  </div>
+</div>
+
+<h2>חלק ב' — הרישום המלא</h2>
+
+<h3>1. מה המערכת יודעת לפני שקורה משהו</h3>
+<div class="card">על כל תושב מירון (וכל הכפרים בטבעת החסימה): מי, כתובת, טלפון, רכב ותו, סימון רפואי (14 עם קשיש/כרוני), מי במשפחה, מי מהם בעל תפקיד במתחם (הבן). על המחסומים: איפה, מי מאייש, מה הכלל (תו תושב = כן). על הרפואה: מה יש במתחם (נט"ן, 2 אמבולנסים, רופא, 7 נקודות), מה בצפת, זמן לכל כתובת בכל מסלול, זיו — כוננות. על הצירים: ציר החירום המערבי (מהמתחם למושב, 4 דק', דרך קצה הרחבה — כמה סדרנים צריך לפי צפיפות), 866 (מצב, מה עליו, מי יכול לפתוח נתיב), המסוק (רוח). על הנוהל: מי מחליט מה, מי מתקשר למי, מה אומרים לוועד. <b>על הקשר:</b> תושב = משפחה = לפעמים בעל תפקיד במתחם; מושב = על אותו כביש כמו השאטלים; חירום תושב = נט"ן יוצא = המתחם בלי נט"ן.</div>
+
+<h3>2. המניעה — הניהול האמיתי</h3>
+<div class="card"><ul>
+<li><b>רישום תושבים בחורף</b> — עם סימון רפואי מרצון. 14 מתוך 400. הנט"ן יודע את הכתובות לפני הלילה.</li>
+<li><b>נוהל חתום:</b> מד"א + משטרה + מועצה + הרשות. "חירום תושב בזמן חסימה": נט"ן מהמתחם, ציר מערבי, מחסום מתודרך, נתיב ב-866 תוך 10 דק', זיו בכוננות. מי מחליט: מד"א על הרפואה, תנועה על הכביש, קצין הקישור על המשפחה.</li>
+<li><b>כפתור אחד לתושב.</b> לא 101 שלא יודע מה זה מירון הלילה. הכפתור מגיע ישר לנט"ן ול-101 ביחד.</li>
+<li><b>קצין קישור לתושבים בחמ"ל</b> — אדם שהתפקיד שלו הוא רק התושבים. הוועד מכיר אותו.</li>
+<li><b>ציר החירום המערבי — עם מחיר ידוע:</b> 90 שניות עצירת זרימה, 3 סדרנים. ניהול הקהל יודע לפתוח אותו בלי לשאול.</li>
+<li><b>אם לא קורה כלום:</b> הנט"ן ישב במתחם כל הלילה, 14 תושבים ישנו בשקט, הוועד ידע שיש למי להתקשר. זה כל הנוהל.</li>
+</ul></div>
+
+<h3>3. דקה אחר דקה</h3>
+<table>
+<tr><th style="width:80px">מתי</th><th>מה קורה</th><th style="width:120px">מי</th></tr>
+<tr><td>22:40:00</td><td>הבת לוחצת "חירום רפואי". המערכת: תושב רשום, סימון לב, כתובת, 4 דק' דרך המערבי, נט"ן פנוי, מסוק לא (רוח 47), זיו 30'. תוך 20 שניות: נט"ן, ציר מערבי (3 סדרנים, 90 שנ'), מחסום, 101 ארצי "ידוע", זיו "ETA 23:20", תנועה "נתיב 22:52", קצין הקישור, הבן (מתנדב בצפון) — הודעה, אחראי צפון — מחליף. הבת מקבלת: "נט"ן 4 דק', אל תסעו לבד".</td><td>אוטומט</td></tr>
+<tr><td>22:41</td><td>מפקד מד"א: נט"ן יוצא (המתחם: 2 + רופא, 35 דק', בזמן ההדלקה — סף ר"נ יורד, צפת בכוננות). מפקד ציר 866: נתיב יוצא 22:52, שאטלים עוצרים 3 דק', ניידת 12 מובילה. המפקד: שורה — "מערבי 90 שנ' לפני ההדלקה" — מאשר. ניהול הקהל: המדרגות מקבלות +60/דק' ל-90 שנ' — בסדר.</td><td>3 החלטות</td></tr>
+<tr><td>22:42</td><td>הנט"ן יוצא. המערבי נעצר 90 שנ'. הוועד: שורה. המועצה: שורה. מוקד המידע: "שאטלים -3' ב-22:52".</td><td>—</td></tr>
+<tr><td>22:44</td><td>קצין הקישור מתקשר לבת. הבן מקבל: "אבא — נט"ן אצלו. לך." המחליף בדרך לצפון. הבן הולך הביתה דרך המערבי (הציר עדיין פתוח לרגל).</td><td>קישור</td></tr>
+<tr><td>22:46</td><td>הנט"ן בבית. אק"ג: אוטם. טיפול. זיו: "אוטם · צנתור". הרשומה הרפואית — לנט"ן ולזיו. לא לחמ"ל. החמ"ל רואה "רפואי · תושב · בטיפול · פינוי 22:55".</td><td>נט"ן</td></tr>
+<tr><td>22:50–22:56</td><td>22:50 25 נהגים: "עצור בצד ימין". 22:52 ניידת מובילה, הנתיב פנוי, הנט"ן יוצא מהמושב. 22:55 עובר ק"מ 3.2 (14 כבר נגרר). 22:56 שאטלים משוחררים. 4 מאחרים, המתנה +2. רכב המשפחה — הבת נשארה בבית עם הנכדים; הבן נוסע אחרי הנט"ן ברכב עם התו.</td><td>תנועה</td></tr>
+<tr><td>23:15–23:35</td><td>צפת. זיו 23:20. צנתור 23:35. חי. הבן שם. הנט"ן חוזר 00:10. המתחם היה בלי נט"ן בזמן ההדלקה (23:35 — נושא 04 דחה אותה — במקרה זה עזר).</td><td>—</td></tr>
+<tr><td>אחרי</td><td>הרשומה: 15 דק' מלחיצה לטיפול · 40 לבי"ח · שאטלים -3' · המערבי 90 שנ' · 0 אירועים · הבן חזר 00:30, לא איחור · הנוהל עבד. למועצה: "14 מסומנים · 1 אירוע · 15'". שנה הבאה: נט"ן שני לתושבים ולמחסומים — לא מהמתחם.</td><td>מערכת</td></tr>
+</table>
+
+<h3>4. מה אוטומטי ומה בן-אדם מחליט</h3>
+<div class="six">
+  <div class="card"><b>אוטומטי (20 שניות)</b><ul><li>זיהוי התושב, הסימון, הכתובת, המסלול, הזמן</li><li>בדיקת נט"ן פנוי, מסוק (רוח), צפת</li><li>שיגור נט"ן, פתיחת ציר מערבי (עם הסדרנים), מחסום, ניידת</li><li>101 ארצי "ידוע", זיו "ETA", תנועה "נתיב"</li><li>איתור בני משפחה שהם בעלי תפקיד — והחלפה</li><li>הודעה לבת, לוועד, למועצה, למוקד</li><li>הפרדה: רשומה רפואית → רפואה בלבד</li></ul></div>
+  <div class="card"><b>בן-אדם מחליט</b><ul><li>נט"ן או אמבולנס+רופא — מפקד מד"א (הרפואה)</li><li>נתיב ב-866, עצירת שאטלים, ליווי — מפקד ציר (הכביש)</li><li>ציר מערבי דרך רחבה 3.4 לפני ההדלקה — המפקד (הקהל) · 90 שנ' — כן</li><li>מה אומרים למשפחה ולוועד — קצין הקישור</li><li>אם הבת רוצה לנסוע לבד — קצין הקישור מדבר, לא המערכת</li></ul></div>
+  <div class="card"><b>מגיע למפקד — כן, שורה</b><ul><li>ציר חירום דרך רחבה בשיא = ניהול קהל. 90 שניות. הוא מאשר בלחיצה.</li><li>נט"ן בחוץ + ר"נ במתחם = כן, מיד.</li><li>הרפואה של התושב — לא שלו, לא רואה.</li></ul></div>
+</div>
+
+<h3>5. כל מי שצריך לדעת — לפי שש השאלות</h3>
+
+<h3 style="margin-top:14px">שאלה 1 — מי בתוך</h3>
+<div class="who">
+<div class="card"><b>1. הבת <span class="tag auto">אוטומטי</span></b><span class="why">"4 דקות, אל תסעו לבד" — כי המשפחה ברגע הזה רוצה לנסוע, והכביש חסום, וזה יגמר רע.</span><span class="get">3 הודעות + קצין הקישור בטלפון.</span></div>
+<div class="card"><b>2. רשומת התושב <span class="tag sys">מערכת</span></b><span class="why">סימון, תרופות, קופ"ח — לנט"ן לפני שהוא מגיע.</span><span class="get">→ נט"ן, זיו.</span></div>
+<div class="card"><b>3. צוות הנט"ן <span class="tag auto">אוטומטי</span></b><span class="why">—</span><span class="get">כתובת, מסלול, מחסום פתוח, מה ידוע.</span></div>
+<div class="card"><b>4. מפקד מד"א במתחם <span class="tag dec">החלטה</span></b><span class="why">הנט"ן שלו. אם הוא יוצא — המתחם בלי נט"ן 35 דק' בזמן ההדלקה.</span><span class="get">האפשרויות עם המחיר.</span></div>
+<div class="card"><b>5. הבן — מתנדב בצפון (נושא 02) <span class="tag auto">אוטומטי</span></b><span class="why">המערכת יודעת שהוא בן של התושב ושהוא בעמדה. הוא צריך לדעת, ולהיות משוחרר, עם מחליף.</span><span class="get">"אבא שלך — לך."</span></div>
+<div class="card"><b>6. אחראי הכנסת אורחים צפון <span class="tag auto">אוטומטי</span></b><span class="why">מתנדב שלו יוצא. מחליף בדרך.</span><span class="get">שורה.</span></div>
+<div class="card"><b>7. קצין הקישור לתושבים <span class="tag dec">המשפחה</span></b><span class="why">האדם. לא הודעה. מתקשר לבת, מדבר עם הוועד, עוקב עד זיו.</span><span class="get">האירוע כולו.</span></div>
+<div class="card"><b>8. רכב המשפחה <span class="tag sys">מערכת</span></b><span class="why">תו תושב. אם נוסעים אחרי הנט"ן — המחסום יודע, הנתיב יודע.</span><span class="get">—</span></div>
+<div class="card"><b>9. זיו — מיון <span class="tag auto">אוטומטי</span></b><span class="why">30 דקות התראה. צנתור בכוננות.</span><span class="get">"74 · חזה · ETA".</span></div>
+</div>
+
+<h3>שאלה 2 — מי מחכה לזה</h3>
+<div class="who">
+<div class="card"><b>10. ניהול הקהל — הציר המערבי <span class="tag sys">מערכת</span></b><span class="why">נט"ן דרך קצה הרחבה ב-3.4 = 90 שניות עצירה, 3 סדרנים, המדרגות מקבלות +60/דק'. המחיר ידוע מראש — לכן זה 20 שניות ולא ויכוח.</span><span class="get">פקודת ציר.</span></div>
+<div class="card"><b>11. 3 סדרני המעבר <span class="tag auto">אוטומטי</span></b><span class="why">הם פותחים את הדרך פיזית.</span><span class="get">"בעוד 2' · 3 מ' · 90 שנ'".</span></div>
+<div class="card"><b>12. המחסום בכניסה למושב <span class="tag auto">אוטומטי</span></b><span class="why">שלא יעצור נט"ן. ושידע על הרכב אחריו.</span><span class="get">"נכנס 22:46 · יוצא 22:55 · רכב [..]".</span></div>
+<div class="card"><b>13. מוקד 101 ארצי (נושא 01) <span class="tag auto">אוטומטי</span></b><span class="why">אם הבת התקשרה גם ל-101 — שלא ישלחו אמבולנס מצפת נגד השאטלים.</span><span class="get">"ידוע · נט"ן מהמתחם".</span></div>
+<div class="card"><b>14. כיסוי רפואי במתחם <span class="tag sys">מערכת</span></b><span class="why">35 דקות בלי נט"ן. סף ההתרעה לר"נ יורד. צפת בכוננות.</span><span class="get">—</span></div>
+<div class="card"><b>15. ועד המושב / הקו החם <span class="tag auto">אוטומטי</span></b><span class="why">התושבים ישאלו. הוועד צריך לדעת לפני.</span><span class="get">"נט"ן אצלו · לא לנסוע".</span></div>
+<div class="card"><b>16. המפקד <span class="tag">שורה</span></b><span class="why">ציר דרך רחבה בשיא. 90 שניות. מאשר.</span><span class="get">שורה.</span></div>
+<div class="card"><b>17. מוקד המידע <span class="tag auto">אוטומטי</span></b><span class="why">"למה השאטלים עצרו?"</span><span class="get">"רפואי · 3'".</span></div>
+</div>
+
+<h3>שאלה 3 — מי על אותו כביש</h3>
+<div class="who">
+<div class="card"><b>18. מפקד ציר 866 <span class="tag dec">החלטה</span></b><span class="why">נתיב יוצא בשיא הנכנס. איך: עצירת שאטלים 3' + ניידת מובילה.</span><span class="get">ההצעה + כפתור.</span></div>
+<div class="card"><b>19. 25 נהגי השאטלים <span class="tag auto">קולי</span></b><span class="why">"עצור בצד ימין, אל תזוז" — אחרת אחד יזוז והנט"ן ייתקע.</span><span class="get">קולי, 22:50.</span></div>
+<div class="card"><b>20. ניידת 12 <span class="tag auto">אוטומטי</span></b><span class="why">מובילה.</span><span class="get">משימה.</span></div>
+<div class="card"><b>21. מקצב השאטלים <span class="tag sys">מערכת</span></b><span class="why">3' עצירה = 4 מאחרים = המתנה +2.</span><span class="get">—</span></div>
+<div class="card"><b>22. אוטובוס 14 (נושא 01) <span class="tag sys">מערכת</span></b><span class="why">אם עדיין בשוליים — הנתיב חסום שם. נגרר ב-21:26. פנוי.</span><span class="get">בדיקה.</span></div>
+<div class="card"><b>23. סדרן הרציף בחניון <span class="tag auto">אוטומטי</span></b><span class="why">3' בלי אוטובוסים.</span><span class="get">שורה.</span></div>
+<div class="card"><b>24. מחסום צפת <span class="tag auto">אוטומטי</span></b><span class="why">הנט"ן נכנס לעיר.</span><span class="get">"23:15".</span></div>
+<div class="card"><b>25. המסוק / חיל האוויר (נושא 04) <span class="tag">נבדק</span></b><span class="why">רוח 47. לא. המערכת בדקה לפני שהציעה.</span><span class="get">—</span></div>
+<div class="card"><b>26. Waze <span class="tag auto">אוטומטי</span></b><span class="why">—</span><span class="get">"רכב חירום".</span></div>
+<div class="card"><b>27. תושבי הכפרים בדרך <span class="tag">אם הנתיב שלהם</span></b><span class="why">2 דקות.</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 4 — מי אחראי</h3>
+<div class="who">
+<div class="card"><b>28. מפקד מד"א <span class="tag dec">הרפואה</span></b><span class="why">—</span><span class="get">—</span></div>
+<div class="card"><b>29. מפקד ציר 866 <span class="tag dec">הכביש</span></b><span class="why">—</span><span class="get">—</span></div>
+<div class="card"><b>30. קצין הקישור לתושבים <span class="tag dec">התושב</span></b><span class="why">תפקיד שלא היה. עכשיו יש. הוא "עבד / לא עבד" מול הוועד.</span><span class="get">—</span></div>
+<div class="card"><b>31. מפקד גזרת המחסומים <span class="tag auto">אוטומטי</span></b><span class="why">המחסום שלו.</span><span class="get">שורה.</span></div>
+<div class="card"><b>32. המועצה האזורית <span class="tag auto">אוטומטי</span></b><span class="why">התושב שלה. הנוהל שלה.</span><span class="get">"מטופל · הנוהל עבד".</span></div>
+<div class="card"><b>33. קצין הבטיחות <span class="tag sys">רישום</span></b><span class="why">ציר דרך רחבה 3.4.</span><span class="get">יומן.</span></div>
+<div class="card"><b>34. הרשות — חובת הזהירות <span class="tag sys">מערכת</span></b><span class="why">המדינה חסמה את הכביש. המדינה חייבת לדאוג. "15 דקות לטיפול" היא ההגנה המשפטית — והמוסרית.</span><span class="get">רשומה.</span></div>
+<div class="card"><b>35. פרטיות רפואית <span class="tag sys">מערכת</span></b><span class="why">האק"ג, התרופות — לנט"ן ולזיו. החמ"ל רואה "רפואי · תושב · בטיפול". לא יותר.</span><span class="get">הפרדה.</span></div>
+</div>
+
+<h3>שאלה 5 — מה זה עושה לעתיד</h3>
+<div class="who">
+<div class="card"><b>36. כיסוי רפואי בהדלקה <span class="tag sys">מערכת</span></b><span class="why">בלי נט"ן. הסף לר"נ יורד.</span><span class="get">—</span></div>
+<div class="card"><b>37. שאטלים <span class="tag sys">מערכת</span></b><span class="why">+2, מתאזן 23:20.</span><span class="get">—</span></div>
+<div class="card"><b>38. הבן — משמרת (נושא 03) <span class="tag sys">מערכת</span></b><span class="why">יצא 22:44, חזר 00:30. לא איחור — משפחה.</span><span class="get">—</span></div>
+<div class="card"><b>39. רשומת התושב <span class="tag sys">מערכת</span></b><span class="why">—</span><span class="get">"חי".</span></div>
+<div class="card"><b>40. נט"ן שני <span class="tag sys">מערכת</span></b><span class="why">35 דקות בלי נט"ן במתחם בשיא. לא שוב. נט"ן לתושבים ולמחסומים.</span><span class="get">—</span></div>
+<div class="card"><b>41. מדיניות החסימות <span class="tag sys">מערכת</span></b><span class="why">14 מסומנים, 1 אירוע, 15'. זה הנתון שהמועצה מביאה לדיון.</span><span class="get">—</span></div>
+</div>
+
+<h3>שאלה 6 — האם זה תבנית</h3>
+<div class="who">
+<div class="card"><b>2+ אירועי תושבים בלילה <span class="tag">→ מד"א + הרשות</span></b><span class="why">נט"ן ייעודי, לא מהמתחם.</span><span class="get">—</span></div>
+<div class="card"><b>נט"ן בחוץ + ר"נ במתחם <span class="tag">→ המפקד</span></b><span class="why">"אין נט"ן · צפת 25'". מיד.</span><span class="get">—</span></div>
+<div class="card"><b>אותה תלונה מתושבים <span class="tag">→ המועצה + הרשות</span></b><span class="why">"הקו החם לא ענה" — הנוהל, לא האנשים.</span><span class="get">—</span></div>
+<div class="card"><b>3 פתיחות נתיב בשעה <span class="tag">→ מפקד ציר</span></b><span class="why">הציר לא מספיק. נתיב חירום קבוע.</span><span class="get">—</span></div>
+</div>
+
+<h3>6. מי לא מקבל כלום — בכוונה</h3>
+<div class="card no-list">הציבור במתחם · כב"ה · צה"ל · החצרות · שאר 399 התושבים (רק הוועד) · הדוברות (רפואי-פרטי — לא כותרת) · השכנים · הגבאי. <b>תושב אחד עם לב מגיע ל-30 אנשים ו-6 מערכות. והרפואה שלו — ל-2.</b></div>
+
+<h3>7. מקרי קצה</h3>
+<ul>
+<li><b>המשפחה נוסעת לבד בכל זאת:</b> המחסום רואה את הרכב (תו). "רפואי — פתח, הודע לתנועה". הניידת תופסת אותם ב-866 ומובילה. לא עוצרים אותם. לא רבים.</li>
+<li><b>אין נט"ן פנוי (בטיפול בר"נ במתחם):</b> אמבולנס + רופא מהמתחם. או מצפת עם נתיב. המערכת מציגה מה יש. מפקד מד"א מחליט. זה קורה.</li>
+<li><b>הציר המערבי ב-4.0 (נעול):</b> נט"ן לא עובר בקהל דחוס. מסלול חלופי: מהחניון (נט"ן שני — אם יש). או 8 דקות במקום 4. או פינוי מקומי של 3 מ'. המפקד.</li>
+<li><b>מסוק אפשרי (רוח 20):</b> מנחת בחניון, 12 דק' לרמב"ם. המערכת מציעה. חיל האוויר מאשר. זה נושא 04 הפוך.</li>
+<li><b>התושב לא רשום (אורח אצל תושב):</b> אין סימון, אין תו. הנוהל עובד — פחות מידע. הכפתור באפליקציה של המארח.</li>
+<li><b>לא חירום — "צריך לצאת" (לידה בשבוע 39, טיסה):</b> כפתור אחר. קצין הקישור. חלון יציאה מתואם עם תנועה. לא נט"ן.</li>
+<li><b>תושב שצריך להיכנס (חוזר מבי"ח):</b> הפוך. המחסום, הנתיב הנכנס — הוא כבר בכיוון הנכון.</li>
+<li><b>אזעקה בזמן שהנט"ן במושב:</b> נושא אחר. הנט"ן ממשיך. המושב יש לו מיגון משלו.</li>
+<li><b>שבת:</b> הכפתור עובד (פיקוח נפש). הרב קבע. הנהג — מד"א. המחסום — שוטר. הבן — הולך ברגל.</li>
+<li><b>הבת לא דוברת עברית (עובדת זרה מטפלת):</b> הכפתור בשפה שלה. קצין הקישור מתקשר עם מתורגמן.</li>
+</ul>
+
+<h3>8. מה צריך כדי שזה יעבוד</h3>
+<ul>
+<li><b>רישום תושבים</b> עם סימון רפואי מרצון, רכב, טלפון, בני משפחה. בחורף. עם הוועד.</li>
+<li><b>נוהל חתום</b> — מד"א, משטרה, מועצה, הרשות. מי מחליט מה. מה המחיר של ציר מערבי. מתי מסוק.</li>
+<li><b>נט"ן במתחם שמוקצה גם לתושבים</b> — ואם אפשר, שני.</li>
+<li><b>ציר חירום קבוע מהמתחם למושב</b> — 4 דקות, ידוע לסדרנים, מחיר ידוע לניהול הקהל.</li>
+<li><b>מחסום שיודע</b> — טאבלט עם רשימת רכבי תושבים ופקודות בזמן אמת.</li>
+<li><b>קצין קישור לתושבים</b> — אדם, בחמ"ל, שהוועד מכיר.</li>
+<li><b>כפתור אחד</b> באפליקציית התושב — שמגיע לנט"ן ול-101 ביחד.</li>
+<li><b>חיבור לכוח-האדם</b> — בן משפחה שהוא בעל תפקיד משוחרר לבד.</li>
+<li><b>חיבור לתנועה</b> — נתיב יוצא ב-866 תוך 10 דק', עם השאטלים והניידת.</li>
+<li><b>חיבור למסוק</b> — עם הרוח.</li>
+<li><b>הפרדה רפואית</b> — הרשומה למד"א ולבי"ח. החמ"ל רואה סטטוס.</li>
+</ul>
+
+<h3>9. מה יוצא מהחיבור לחמשת הקודמים</h3>
+<div class="card">
+<b>התושבים הם ישות — והם היו חסרים.</b> ב-01–05 "תושבי מירון" הופיעו כ"אם הגרר חוסם את הכניסה" (01) ו"לא מקבלים כלום" (04). כאן מתגלה: 400 איש שהמדינה סגרה להם את הכביש, 14 עם סימון רפואי, ובן אחד שמתנדב במתחם. <b>הם לא רקע. הם חלק מהמערכת, עם חובת זהירות.</b><br><br>
+<b>אותו כביש בפעם השלישית.</b> 866: פנצ'ר (01), טנדר תקוע (02), נט"ן יוצא (06). <b>הכביש הוא ישות עם רשימה של כל מי שצריך אותו, ומי מחליט על כל נתיב.</b><br><br>
+<b>הרוח מנושא 04 סגרה את המסוק.</b> ההדלקה שנדחתה (04) — הנט"ן היה בחוץ בדיוק בזמן ההדלקה המקורית, וחזר לפני ההדלקה בפועל. הבן מנושא 02 שוחרר, והמשמרת מנושא 03 לא ספרה איחור.<br><br>
+<b>ישויות חדשות:</b> תושב (רישום, סימון, רכב, משפחה, בעל-תפקיד) · מחסום (נקודת החלטה על הכביש) · ציר חירום (מסלול עם מחיר ידוע לקהל) · חובת זהירות (מה המדינה חייבת למי שהיא חסמה) · פרטיות רפואית (הרשומה לרפואה, הסטטוס לחמ"ל).<br><br>
+<b>החוקים חוצי-הנושאים שנולדו:</b> "משאב שיוצא מהמתחם (נט"ן) = כיסוי במתחם יורד = סף התרעה יורד" · "בן משפחה של מי שבאירוע = אם הוא בעל תפקיד, משוחרר לבד ומוחלף (06→03)" · "ציר חירום דרך קהל = מחיר קבוע (90 שנ', 3 סדרנים) — מאושר מראש, לא מתווכח" · "מי שנפגע מהחסימה — יש לו כפתור, יש לו אדם, יש לו נוהל".<br><br>
+<b>עמוד השדרה:</b> מוקד 101 ארצי, המפקד (שורה), ניהול הקהל, קצין הבטיחות, מוקד המידע, המודל לשנה הבאה, מנהל האירוע, ממונה הפרטיות (רפואית הפעם). <b>8 מתוך 13</b> + חדש שיישאר: <b>קצין הקישור לתושבים.</b>
+</div>
+
+</div>
+</body>
+</html>
