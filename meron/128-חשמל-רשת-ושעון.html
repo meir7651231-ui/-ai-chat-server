@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>חשמל, רשת ושעון — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_style.css">
+<style>
+.org{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;color:#D6CFC4;border-radius:10px;padding:14px 16px;white-space:pre;overflow-x:auto;line-height:1.5}
+table.roles td:nth-child(2){text-align:center;width:44px}
+.sum td{font-weight:700}
+.lock{background:#3B1111;color:#FCA5A5;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700}
+.phones{display:flex;gap:16px;flex-wrap:wrap}
+.phone{width:260px;background:#0F0D0B;color:#E8E2D8;border-radius:22px;padding:16px 14px;border:2px solid #3A332B;font-size:13px;line-height:1.5}
+.phone h5{margin:0 0 8px;font-size:14px;color:#fff}
+.phone .row{background:#1C1916;border-radius:8px;padding:7px 9px;margin-bottom:6px}
+.phone .row b{color:#fff}
+.phone .red{background:#3B1111;color:#FECACA}
+.phone .yel{background:#2E2208;color:#FDE68A}
+.phone .grn{background:#0F2A1C;color:#BBF0D0}
+.phone .btn{display:block;text-align:center;border-radius:10px;padding:9px;margin-top:8px;font-weight:700;background:#3A332B;color:#fff}
+.phone .muted{color:#9A9085;font-size:11px}
+</style></head>
+<body><div class="wrap">
+
+<h1>חשמל, רשת, מחשבים ושעון — ניהול חי</h1>
+<p class="lead">נושא 128. כתבנו שהסלולר קורס (10) ושהחשמל נופל (39). לא כתבנו <b>איפה המערכת עצמה רצה</b>, מה <b>מחליף</b> את הסלולר, ו<b>מה השעה</b>. השאלה האחרונה נשמעת קטנה — היא לא: ועדת חקירה תשאל "מה קרה קודם?" — ואם לכל מכשיר שעון אחר, <b>אי אפשר לענות</b>.</p>
+
+<h2>1. איפה המערכת רצה</h2>
+<table>
+<tr><th>אפשרות</th><th>טוב</th><th>רע</th></tr>
+<tr><td>רק בענן</td><td>לא נשרף, לא נגנב</td><td>הקו מההר לעולם נחתך → <b>החמ"ל עיוור</b></td></tr>
+<tr><td>רק שרת בהר</td><td>עובד בלי העולם</td><td>חשמל / אש / גניבה בהר → הכל הלך</td></tr>
+<tr><td><b>שניהם</b> (מוצע)</td><td>שרת בחמ"ל <b>עובד לבד</b>, מסונכרן לענן כשיש קו · עותק שלישי במקום אחר</td><td>יקר יותר, מסובך יותר</td></tr>
+</table>
+<p><b>הכלל:</b> החמ"ל, הקיר (97), כפתור העצירה והיומן — <b>עובדים גם כשההר מנותק מהעולם</b>. מה שצריך עולם (SMS לציבור, מסך לשר) — נופל בחן.</p>
+
+<h2>2. מה מחליף את הסלולר</h2>
+<table>
+<tr><th>מה</th><th>למי</th><th>הערה</th></tr>
+<tr><td><b>רשת פרטית</b> (סלולר פרטי / LTE פרטי)</td><td>מכשירי העבודה (101), סורקים, מונים</td><td>לא תלויה בעומס של הציבור · צריך תדר ואישור (למשרד התקשורת)</td></tr>
+<tr><td><b>סיבים</b></td><td>מצלמות, שלטים, כריזה</td><td>קבוע (107) — 2025 כבר התחיל (45)</td></tr>
+<tr><td><b>אנטנות ניידות</b> (COW) של החברות</td><td>הציבור</td><td>מגדיל, לא פותר (10)</td></tr>
+<tr><td>WiFi</td><td>רק בחמ"ל ובעמדות</td><td>לא לציבור — עומס, וקהל שרובו בלי סמארטפון (100)</td></tr>
+<tr><td>קשר (125)</td><td>כולם</td><td>הגיבוי האחרון</td></tr>
+</table>
+
+<h2>3. חשמל</h2>
+<div class="six">
+<div class="card"><b>שלוש שכבות</b><br>רשת חשמל ← גנרטור (25) ← <b>UPS</b> לכל ארון (05). הדבר החשוב — עובר בלי הפסקה.</div>
+<div class="card"><b>מה לא נופל לעולם</b><br>רשימה: חמ"ל · כריזה · תאורת חירום · ממסרי קשר · מצלמות קריטיות · מוני מעבר. <b>על גנרטור נפרד</b> מההפקה.</div>
+<div class="card"><b>טעינה</b><br>1,300 מכשירי עבודה + סורקים + קשר. <b>עמדות טעינה</b> בכל גזרה · סוללות מלאות מוכנות · חילוף בכל משמרת (92).</div>
+</div>
+
+<h2>4. שעון אחד</h2>
+<table>
+<tr><th>מה</th><th>איך</th></tr>
+<tr><td>מקור אחד</td><td>כל מכשיר לוקח שעה <b>מאותו מקור</b> (שרת הזמן של החמ"ל, מכוון ל-GPS)</td></tr>
+<tr><td>בלי רשת</td><td>המכשיר רושם את <b>השעה שלו</b> + כמה זמן עבר מהסנכרון האחרון → מתקנים אחר כך</td></tr>
+<tr><td>היומן</td><td>כל שורה: שעה + מאיפה השעה + <b>חתימה</b> (אי אפשר לשנות בדיעבד — 72)</td></tr>
+<tr><td>בדיקה</td><td>לפני האירוע (130): כל מכשיר — סטייה פחות משנייה</td></tr>
+</table>
+
+<h2>5. סייבר — הדברים הפיזיים</h2>
+<div class="six">
+<div class="card">מצלמות ומונים — <b>על רשת נפרדת</b>, לא על האינטרנט (59).</div>
+<div class="card">ארונות תקשורת — <b>נעולים</b>, עם חיישן פתיחה.</div>
+<div class="card">מכשיר שנגנב — <b>מבוטל מרחוק</b> (121).</div>
+</div>
+
+<div class="card" style="margin-top:12px"><b>חוקים:</b> "החמ"ל, העצירה והיומן — עובדים בלי העולם (128←72)" · "שרת בהר + ענן + עותק שלישי (128)" · "רשת פרטית למכשירי הצוות (128←101)" · "רשימת 'לא נופל לעולם' על גנרטור נפרד (128←25)" · "שעון אחד לכל המכשירים; שורה ביומן = שעה + מקור + חתימה (128←72)".<br>
+<b>לשטח:</b> משרד התקשורת (תדר לרשת פרטית) · חברות הסלולר · חברת החשמל · מה פרוס היום.</div>
+
+</div></body></html>
