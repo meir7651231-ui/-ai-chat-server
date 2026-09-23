@@ -51,6 +51,7 @@ G0 = await generateAll(sentence, { answers, outDir: process.env.GEN_OUT, name: '
 }
 for (const r of G0.routes) console.log(`  מסלול · «${r.thing}» ⇒ ${r.route} · ${r.why}`);
 for (const n of G0.notes) console.log('  ' + n);
+if (G0.questions && G0.questions.length) { console.log(`שאלות (מה שלא נאמר, ובמקומו ברירת-מחדל של מנוע): ${G0.questions.length}`); for (const q of G0.questions.slice(0, 12)) console.log(`  ? ${q.q}`); if (G0.questions.length > 12) console.log(`  … ועוד ${G0.questions.length - 12}`); }
 const appEntry = G0.files.find((f) => f.route === 'appds'); if (appEntry) console.log(`מסכים: ${appEntry.screens.join(' · ')}`);
 const sv = G0.files.find((f) => f.route === 'server'); if (sv) console.log(`שרת: ${sv.count} קבצים ב-${sv.dir} · ישויות ${sv.entities.join(', ')}`);
 if (G0.node) console.log(`צומת-פירוק: ${G0.node.id ?? '?'} «${G0.node.title || ''}» · שדות ${G0.node.fields ?? '?'} · פלטים ${(G0.node.outputs || []).length}`);

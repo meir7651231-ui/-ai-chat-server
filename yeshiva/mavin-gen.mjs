@@ -94,11 +94,30 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
 /** שומר-ניקיון: נתיב-פלט ריק או בתוך new/ (המדף) ⇒ אסור לכתוב. משותף ל-app-ds ול-genesis-gen. */
 const inRepo = (p) => !p || path.resolve(p).startsWith(path.resolve(R.ROOT, 'new'));
 /** app-ds על ספק (שומר-ניקיון: GEN_OUT/GEN_DATA_OUT מחוץ ל-new/). מחזיר את האפליקציה או null. */
-async function runAppDs(spec, files, notes) {
+async function runAppDs(spec, files, notes, questions = []) {
   let app = null;
   if (spec && (inRepo(process.env.GEN_OUT) || inRepo(process.env.GEN_DATA_OUT))) { notes.push('⛔ app-ds לא הופעל: GEN_OUT/GEN_DATA_OUT חייבים להצביע מחוץ ל-new/ לפני הייבוא הראשון (שומר-ניקיון)'); }
   else if (spec) { const { buildApp } = await import('../machtzev/generator/app-ds.mjs'); const logs = []; const _l = console.log; console.log = (...a) => logs.push(a.join(' ')); try { app = buildApp(spec, { writePlan: false }); } finally { console.log = _l; } for (const l of logs) if (/נמצאו-ומחווטים/.test(l)) notes.push(l.slice(0, 140)); files.push({ route: 'appds', screens: app.screens.map((s) => `${s.kind}:${s.name}`) }); }
+  if (app) markSilentDefaults(spec, notes, questions);
   return app;
+}
+/** ברירות-מחדל שקטות (הכרעת-בעלים 23.9 «לא דעה קדומה, לא קשיח»): מה שהספק לא אמר ו-app-ds השלים לבד — נהיה שאלה, והפלט מסומן במפורש (defaults.json + שורת-הערה בקובץ-הכניסה).
+ *  המילים = מילות שפת-הספק (spec-lang.data.json: עיצוב · אפליקציה) — אפס מילון בדלת. המנוע הקיים לא שונה. */
+function markSilentDefaults(spec, notes, questions) {
+  let SL; try { SL = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); } catch { return; }
+  const has = (word) => word && new RegExp('^\\s*' + word + '\\s*:', 'm').test(spec);
+  const silent = [];
+  if (!has(SL.lookWord)) silent.push({ what: SL.lookWord, engine: 'app-ds', value: 'dark', say: `${SL.lookWord}: ${Object.keys(SL.looks || {}).join(' / ')}` });
+  if (!has(SL.appWord)) silent.push({ what: SL.appWord, engine: 'app-ds', value: 'L.appTitle («האפליקציה שלי» — מילון-הכרום של app-ds)', say: `${SL.appWord}: <שם>` });
+  if (!silent.length) return;
+  for (const s of silent) questions.push({ thing: 'האפליקציה', ask: s.what, q: `${s.what} — לא נאמר במשפט; ${s.engine} הניח לבד (${s.value}). לומר: «${s.say}»` });
+  const out = R.outDir();
+  try {
+    fs.writeFileSync(path.join(out, 'defaults.json'), JSON.stringify(silent, null, 1));
+    const entry = path.join(out, 'gen_app_main.dart');
+    if (fs.existsSync(entry)) fs.writeFileSync(entry, `// ⚠️ ברירת-מחדל של מנוע, לא מהמשפט: ${silent.map((s) => `${s.what} = ${s.value}`).join(' · ')} — ראה defaults.json; המילים שיסירו: ${silent.map((s) => `«${s.say}»`).join(' ')}\n` + fs.readFileSync(entry, 'utf8'));
+  } catch {}
+  notes.push(`⚠️ ברירות-מחדל שקטות (${silent.length}): ${silent.map((s) => `${s.what}=${s.value}`).join(' · ')} — סומנו ב-defaults.json ובקובץ-הכניסה; נפתחו ${silent.length} שאלות`);
 }
 /** «בלגן» — האפליקציה-האחת מכל מודולי-הבעלים (apps/*.json שנגזרו מפירוקיו) ⇒ gen_balagan_*.dart ל-GEN_OUT/GEN_DATA_OUT בלבד (בלי אינדקס, בלי קובץ-בדיקה).
  *  balagan קורא את המודולים מהדיסק (apps/ · peruk-index) — כניסה של «כל המודולים», לא של משפט אחד. שומר-ניקיון: רץ רק כשהסביבה מופנית מחוץ ל-new/. */
@@ -121,9 +140,9 @@ export async function mosadSpecs() {
 }
 /** דלת שנייה — מסמך של הבעלים במקום משפט: ספק מוכן (specs-ds/*.txt, נגזר ממסמך-«פירוק») ⇒ app-ds ⇒ outDir. */
 export async function generateFromSpec(spec, { outDir, name = 'spec' } = {}) {
-  fs.mkdirSync(outDir, { recursive: true }); const files = [], notes = [];
-  const app = await runAppDs(spec, files, notes);
-  return { spec, files, notes, screens: app ? app.screens.map((s) => `${s.kind}:${s.name}`) : [] };
+  fs.mkdirSync(outDir, { recursive: true }); const files = [], notes = [], questions = [];
+  const app = await runAppDs(spec, files, notes, questions);
+  return { spec, files, notes, questions, screens: app ? app.screens.map((s) => `${s.kind}:${s.name}`) : [] };
 }
 /** מסמך-«פירוק» (markdown של הבעלים, שלד peruk-lang) ⇒ peruk.perukToSpec ⇒ ספק ⇒ app-ds. אפס כתיבה ל-specs-ds. */
 export async function generateFromDoc(md, { outDir, name = 'doc' } = {}) {
@@ -139,6 +158,20 @@ export async function generateFromDoc(md, { outDir, name = 'doc' } = {}) {
     r.notes.push(`הקורא (מסמך מול ספק): שאלות לבעלים ${qs.length} · תיקונים מכניים ${fixes.length}${qs.length ? ' · ' + qs.slice(0, 3).map((f) => `[${f.kind}] ${f.text.slice(0, 90)}`).join(' ¦ ') : ''}`);
     r.docCheck = { questions: qs.length, fixes: fixes.length, file: path.join(outDir, 'doc-check.json') };
   } catch (e) { r.notes.push(`הקורא לא רץ: ${String(e.message || e).slice(0, 120)}`); }
+  // השלמות של peruk (הכרעה-27: שדות-אדם, שלבים — מהדאטה שלו, לא מהמסמך) ⇒ שאלות: תווית שאף מילה שלה (גזע ≥3) אינה במסמך = הושלמה, לא נאמרה
+  try {
+    const st = (w) => w.replace(/(ים|ות|ה)$/, ''); const docStems = new Set(toks(md).map(st).filter((w) => w.length >= 3));
+    const said = (label) => toks(label).map(st).filter((w) => w.length >= 3).some((w) => docStems.has(w));
+    const completed = [];
+    for (const l of spec.split('\n')) {
+      const m = l.match(/^ישות\s+(.+?)\s+עם\s+(.+)$/); if (!m) continue;
+      const [fieldsPart, ...secs] = m[2].split(/\s*\|\s*/);
+      for (const f of fieldsPart.split(',').map((x) => x.replace(/\{[^}]*\}|\*|\[[^\]]*\]/g, '').trim()).filter(Boolean)) if (!said(f)) completed.push({ entity: m[1], kind: 'שדה', value: f });
+      for (const s of secs) { const sm = s.match(/^\S+\s*:?\s*(.+)$/); if (!sm) continue; for (const v of sm[1].split(',').map((x) => x.trim()).filter(Boolean)) if (!said(v)) completed.push({ entity: m[1], kind: 'שלב', value: v }); }
+    }
+    for (const c of completed) r.questions.push({ thing: c.entity, ask: c.kind, q: `${c.kind} «${c.value}» ב${c.entity} — לא כתוב במסמך; peruk השלים מהדאטה שלו. לאשר, לשנות, או להוריד?` });
+    if (completed.length) { r.notes.push(`⚠️ השלמות של peruk שלא נאמרו במסמך: ${completed.length} (${completed.slice(0, 6).map((c) => c.value).join(' · ')}${completed.length > 6 ? ' …' : ''}) — נפתחו כשאלות`); fs.writeFileSync(path.join(outDir, 'defaults-peruk.json'), JSON.stringify(completed, null, 1)); }
+  } catch (e) { r.notes.push(`בדיקת-השלמות לא רצה: ${String(e.message || e).slice(0, 120)}`); }
   return { ...r, node };
 }
 /** הפעלה: כל מסלול למנוע שלו; כתיבה רק ל-outDir. מחזיר את הקבצים שנוצרו ופערים. */
@@ -149,7 +182,7 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   const routes = proposals ? allRoutes : allRoutes.filter((r) => !r.proposal);
   const held = allRoutes.filter((r) => r.proposal && !proposals);
   fs.mkdirSync(outDir, { recursive: true });
-  const files = [], notes = [];
+  const files = [], notes = [], questions = [];
   for (const r of held) notes.push(`הצעה לא נבנתה («${r.thing}» ⇒ ${r.route}): ${r.why.replace(/^הצעה \(תוכן ממקום אחר\): /, '')} — לבנייה: proposals / --proposals`);
   // 1 · capability — פעם אחת לכל קטע-תנאי
   const capSegs = [...new Map(routes.filter((r) => r.route === 'capability').map((r) => [r.seg, r.clauses])).entries()];
@@ -157,7 +190,7 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   // 2 · app-ds — כל הישויות בקריאה אחת (GEN_OUT/GEN_DATA_OUT של הקורא)
   // 🔒 שומר-ניקיון: app-ds/render-ds קוראים GEN_OUT/GEN_DATA_OUT **בזמן-טעינה**. אם לא הופנו מחוץ למדף לפני הייבוא הראשון —
   //    הבנייה כותבת ל-new/dart-gen-bs ו-new/dart-data-bs/auto ומוחקת יתומים (קרה 23.9, שוחזר מ-git). כאן: מסרבים, לא מלכלכים.
-  const app = await runAppDs(spec, files, notes);
+  const app = await runAppDs(spec, files, notes, questions);
   // 2ב · server — רק כשהספק מצהיר (`שרת: ענן`): חבילת-שרת לישויות שנבנו, בזיכרון ⇒ outDir/server/ (לא server-gen/)
   const SV = await import('../machtzev/generator/server.mjs');
   if (SV.declaredServer(spec)) { const ents = app ? app.screens.filter((s) => s.kind === 'entity').map((s) => s.slug) : [];
@@ -235,5 +268,5 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       if (g.status === 0 && hit) files.push({ route: 'combine', file: path.join(R.ROOT, hit[1]), sources, sections: sections.length }); else notes.push(`gen-screen נכשל: ${out.trim().slice(0, 160)}`);
     }
   }
-  return { form, routes: allRoutes, held: held.map((r) => r.thing), spec, skipped, files, notes, none: allRoutes.filter((r) => r.route === 'none').map((r) => r.thing) };
+  return { form, routes: allRoutes, held: held.map((r) => r.thing), spec, skipped, files, notes, questions, none: allRoutes.filter((r) => r.route === 'none').map((r) => r.thing) };
 }
