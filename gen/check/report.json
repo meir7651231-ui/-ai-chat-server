@@ -320,7 +320,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 488,
+   "ms": 363,
    "proven": [
     {
      "name": "norm-search",
@@ -387,7 +387,7 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 14,
+   "ms": 23,
    "proven": [
     {
      "name": "shekel",
@@ -462,7 +462,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 13,
+   "ms": 19,
    "proven": [
     {
      "name": "fmt-date",
@@ -538,7 +538,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 114
    },
-   "ms": 19,
+   "ms": 108,
    "proven": [
     {
      "name": "cockpit-days-since",
@@ -615,7 +615,7 @@
     "פלט שונה": 201,
     "אורך-קריאה": 13
    },
-   "ms": 16,
+   "ms": 20,
    "proven": [
     {
      "name": "csv-escape",
@@ -717,7 +717,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 147
    },
-   "ms": 74,
+   "ms": 24,
    "proven": [
     {
      "name": "to-csv",
@@ -812,7 +812,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 9,
+   "ms": 17,
    "proven": [
     {
      "name": "grand-total",
@@ -931,7 +931,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 136
    },
-   "ms": 12,
+   "ms": 20,
    "proven": [
     {
      "name": "count-by",
@@ -1067,8 +1067,8 @@
  },
  "meta": {
   "slug": "check",
-  "built": "2026-09-23T06:59:46.469Z",
-  "ms": 11979,
+  "built": "2026-09-23T17:30:32.864Z",
+  "ms": 15423,
   "shelf": 1096,
   "fns": 569,
   "dart": 394,
@@ -1094,8 +1094,10 @@
    "gen_app_gencheck_over2.dart",
    "gen_app_gencheck_rec1.dart",
    "gen_app_gencheck_rec2.dart",
+   "gen_app_gencheck_root.dart",
    "gen_app_gencheck_scr3.dart",
    "gen_app_gencheck_settings.dart",
+   "gen_app_gencheck_shell.dart",
    "gen_app_gencheck_wizard.dart"
   ],
   "displayAtoms": [
@@ -1109,8 +1111,10 @@
    "dart-data-bs/auto/gen_app_gencheck_over2_content.dart",
    "dart-data-bs/auto/gen_app_gencheck_rec1_content.dart",
    "dart-data-bs/auto/gen_app_gencheck_rec2_content.dart",
+   "dart-data-bs/auto/gen_app_gencheck_root_content.dart",
    "dart-data-bs/auto/gen_app_gencheck_scr3_content.dart",
    "dart-data-bs/auto/gen_app_gencheck_settings_content.dart",
+   "dart-data-bs/auto/gen_app_gencheck_shell_content.dart",
    "dart-data-bs/auto/gen_app_gencheck_wizard_content.dart",
    "dart-data-maor/wizard-step-error-sockets.dart",
    "dart-maor/empty-wizard.dart",
@@ -1145,13 +1149,15 @@
    "dart-ui-bs/ds/ds_store.dart",
    "dart-ui-bs/ds/ds_table.dart",
    "dart-ui-bs/ds/ds_toggle_tile.dart",
+   "dart-ui-bs/premium/actions/segmented_switch.dart",
    "dart-ui-bs/premium/dataviz/kpi_tile.dart",
    "dart-ui-bs/premium/dataviz/neon_bars.dart",
    "dart-ui-bs/premium/lists/expandable_tile.dart",
    "dart-ui-bs/premium/lists/glass_list_tile.dart",
-   "dart-ui-bs/premium/showcase/premium_stat.dart"
+   "dart-ui-bs/premium/surfaces/stat_hero.dart"
   ],
   "moved": [
+   "machtzev/generator/apps/gencheck.json",
    "machtzev/generator/particle-plan-gencheck.json"
   ],
   "treeClean": true,
@@ -1165,7 +1171,7 @@
   "site": "gen/out/check/site",
   "entry": "gen_app_gencheck_main.dart",
   "files": 55,
-  "bytes": 36099088,
-  "ms": 29694
+  "bytes": 36112301,
+  "ms": 35463
  }
 }
