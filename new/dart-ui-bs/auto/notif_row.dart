@@ -2,6 +2,7 @@
 // מוצא: screens__worker_settings_screen:_NotifRow (בנייה-חכמה main) · צרור-1 · props-שורש: fallback, onTap
 // התוכן: new/dart-data-bs/auto/screens__worker_settings_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 
@@ -31,7 +32,7 @@ class NotifRow extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        trailing: const Icon(Icons.chevron_left, color: Colors.black54),
+        trailing: const Icon(Icons.chevron_left, color: DsAtomColors.autoNotifRow1),
         onTap: onTap,
       ),
     );

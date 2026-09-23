@@ -2,6 +2,7 @@
 // מוצא: screens__studio__panes__theme_pane:_Swatch (בנייה-חכמה main) · צרור-1 · props-שורש: label
 // התוכן: new/dart-data-bs/auto/screens__studio__panes__theme_pane_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class Swatch extends StatelessWidget {
@@ -32,12 +33,12 @@ class Swatch extends StatelessWidget {
               color: color,
               shape: BoxShape.circle,
               border: Border.all(
-                color: selected ? BsTokens.inkLight : Colors.black12,
+                color: selected ? BsTokens.inkLight : DsAtomColors.autoSwatch1,
                 width: selected ? 3 : 1,
               ),
             ),
             child: selected
-                ? const Icon(Icons.check, color: Colors.white, size: 22)
+                ? const Icon(Icons.check, color: DsAtomColors.autoSwatch2, size: 22)
                 : null,
           ),
         ),

@@ -2,6 +2,7 @@
 // מוצא: screens__store_screen:_SummaryCard (בנייה-חכמה main) · צרור-3 · props-שורש: label, label2, label3, label4, value, label5
 // התוכן: new/dart-data-bs/auto/screens__store_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class SummaryCard extends StatelessWidget {
@@ -50,7 +51,7 @@ class SummaryCard extends StatelessWidget {
           ),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
-            child: Divider(color: Color(0xFFF5F5F5), height: 1),
+            child: Divider(color: DsAtomColors.autoSummaryCard1, height: 1),
           ),
           _SummaryLine(label: label5, value: _price(total), bold: true),
         ],
@@ -79,7 +80,7 @@ class _SummaryLine extends StatelessWidget {
               fontSize: 15,
               fontWeight: FontWeight.w800,
             )
-            : const TextStyle(color: Color(0xFF888888), fontSize: 13);
+            : const TextStyle(color: DsAtomColors.autoSummaryCard2, fontSize: 13);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [Text(label, style: style), Text(value, style: style)],

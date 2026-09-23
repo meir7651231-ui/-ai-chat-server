@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__catalog_screen:_SheetSection (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class SheetSection extends StatelessWidget {
@@ -53,7 +54,7 @@ class SheetSection extends StatelessWidget {
                   ),
                 const SizedBox(width: 6),
                 Icon(expanded ? Icons.expand_less : Icons.expand_more,
-                    color: const Color(0xFF888888), size: 20),
+                    color: DsAtomColors.autoSheetSection1, size: 20),
               ],
             ),
           ),

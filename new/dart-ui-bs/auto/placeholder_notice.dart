@@ -2,6 +2,7 @@
 // מוצא: screens__legal_screen:_PlaceholderNotice (בנייה-חכמה main) · צרור-1 · props-שורש: label
 // התוכן: new/dart-data-bs/auto/screens__legal_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class PlaceholderNotice extends StatelessWidget {
@@ -13,9 +14,9 @@ class PlaceholderNotice extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(BsTokens.space3),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF7E8),
+        color: DsAtomColors.autoPlaceholderNotice1,
         borderRadius: BorderRadius.circular(BsTokens.space3),
-        border: Border.all(color: const Color(0xFFF3DFB6)),
+        border: Border.all(color: DsAtomColors.autoPlaceholderNotice2),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

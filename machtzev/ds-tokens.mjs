@@ -99,6 +99,8 @@ const identity = [
   `  static const chipBg = ${c(I.chipBg)};`,
   `  static const barGlow = ${c(I.barGlow)};`,
   `  static const graphMid = ${c(I.graphMid)};`,
+  `  static const graphHalo = ${c(I.graphHalo)};`,
+  `  static const surfaceHi = ${c(I.surfaceHi)};`,
 ];
 
 const out = `// ✨ מאגר-העיצוב · סקאלות-טוקנים (Design Tokens) — **מחולל ע"י machtzev/ds-tokens.mjs מ-design-seed.json.**

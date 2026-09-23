@@ -2,6 +2,7 @@
 // מוצא: screens__rewards_hub_screen:_Referral (בנייה-חכמה main) · צרור-5 · props-שורש: title, sub, fallback, text, label, label2, label3, value, label4, onTap
 // התוכן: new/dart-data-bs/auto/screens__rewards_hub_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/state/rewards_state.dart';
@@ -37,7 +38,7 @@ class Referral extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(cfgRadius(context)),
-            border: Border.all(color: const Color(0xFFEEEEEE)),
+            border: Border.all(color: DsAtomColors.autoReferral1),
           ),
           child: Column(
             children: [
@@ -140,7 +141,7 @@ class _FinRow extends StatelessWidget {
               style: const TextStyle(color: BsTokens.inkLight, fontSize: 14)),
           Text(value,
               style: TextStyle(
-                color: up ? const Color(0xFF2E7D32) : BsTokens.inkLight,
+                color: up ? DsAtomColors.autoReferral2 : BsTokens.inkLight,
                 fontWeight: FontWeight.w800,
                 fontSize: 14,
               )),

@@ -2,6 +2,7 @@
 // מוצא: screens__store_screen:_StepBtn (בנייה-חכמה main) · צרור-1 · props-שורש: message, message2, label, label2
 // התוכן: new/dart-data-bs/auto/screens__store_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class StoreStepBtn extends StatelessWidget {
@@ -32,7 +33,7 @@ class StoreStepBtn extends StatelessWidget {
               child: Icon(
                 icon,
                 size: 18,
-                color: onTap != null ? BsTokens.brand : const Color(0xFF444444),
+                color: onTap != null ? BsTokens.brand : DsAtomColors.autoStoreStepBtn1,
               ),
             ),
           ),

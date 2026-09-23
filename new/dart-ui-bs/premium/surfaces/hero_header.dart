@@ -1,5 +1,6 @@
 // ✨ HeroHeader — כותרת-על עם אייקון-גרדיאנט זוהר ורקע-רדיאלי; מקבל title/subtitle/glyph
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class HeroHeader extends StatelessWidget {
   const HeroHeader({
@@ -13,15 +14,15 @@ class HeroHeader extends StatelessWidget {
   final String subtitle;
   final String glyph;
 
-  static const Color _bg = Color(0xFF07070D);
-  static const Color _radialCore = Color(0x557C3AED);
-  static const Color _radialEdge = Color(0x0007070D);
-  static const Color _text = Color(0xFFF2F3FF);
-  static const Color _sub = Color(0xFF9A9CC4);
-  static const Color _glyphA = Color(0xFF7C3AED);
-  static const Color _glyphB = Color(0xFFEC4899);
-  static const Color _glyphGlow = Color(0x66EC4899);
-  static const Color _border = Color(0x1AFFFFFF);
+  static const Color _bg = DsAtomColors.premiumSurfacesHeroHeader1;
+  static const Color _radialCore = DsAtomColors.premiumSurfacesHeroHeader2;
+  static const Color _radialEdge = DsAtomColors.premiumSurfacesHeroHeader3;
+  static const Color _text = DsAtomColors.premiumSurfacesHeroHeader4;
+  static const Color _sub = DsAtomColors.premiumSurfacesHeroHeader5;
+  static const Color _glyphA = DsAtomColors.premiumSurfacesHeroHeader6;
+  static const Color _glyphB = DsAtomColors.premiumSurfacesHeroHeader7;
+  static const Color _glyphGlow = DsAtomColors.premiumSurfacesHeroHeader8;
+  static const Color _border = DsAtomColors.premiumSurfacesHeroHeader9;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +68,7 @@ class HeroHeader extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         glyph,
-                        style: const TextStyle(fontSize: 30, color: Colors.white),
+                        style: const TextStyle(fontSize: 30, color: DsAtomColors.premiumSurfacesHeroHeader10),
                       ),
                     ),
                     const SizedBox(width: 18),

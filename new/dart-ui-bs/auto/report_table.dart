@@ -1,13 +1,14 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__finance_hub_sheets:_ReportTable (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 
 class ReportTable extends StatelessWidget {
   const ReportTable({required this.rows});
   final List<(String, String, bool)> rows; // (label, value, big)
   @override
   Widget build(BuildContext context) {
-    const border = BorderSide(color: Color(0xFFDDDDDD));
+    const border = BorderSide(color: DsAtomColors.autoReportTable1);
     return Table(
       border: const TableBorder(
         top: border,
@@ -27,7 +28,7 @@ class ReportTable extends StatelessWidget {
                 child: Text(
                   r.$1,
                   style: const TextStyle(
-                    color: Color(0xFF16191D),
+                    color: DsAtomColors.autoReportTable2,
                     fontSize: 13,
                   ),
                 ),
@@ -38,7 +39,7 @@ class ReportTable extends StatelessWidget {
                   r.$2,
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                    color: const Color(0xFF16191D),
+                    color: DsAtomColors.autoReportTable2,
                     fontSize: r.$3 ? 16 : 13,
                     fontWeight: r.$3 ? FontWeight.w800 : FontWeight.w400,
                   ),

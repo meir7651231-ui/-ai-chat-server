@@ -1,5 +1,6 @@
 // ✨ FeaturePanel — פאנל-פיצ'ר: אייקון-glyph זוהר, כותרת וגוף-טקסט; מקבל title/body/glyph
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class FeaturePanel extends StatelessWidget {
   const FeaturePanel({
@@ -13,15 +14,15 @@ class FeaturePanel extends StatelessWidget {
   final String body;
   final String glyph;
 
-  static const Color _surface = Color(0xFF101127);
-  static const Color _surfaceLow = Color(0xFF0A0A18);
-  static const Color _border = Color(0x1FFFFFFF);
-  static const Color _title = Color(0xFFF2F3FF);
-  static const Color _body = Color(0xFF9A9CC4);
-  static const Color _glyphA = Color(0xFF22D3EE);
-  static const Color _glyphB = Color(0xFF7C3AED);
-  static const Color _glyphGlow = Color(0x4022D3EE);
-  static const Color _shadow = Color(0x59000000);
+  static const Color _surface = DsAtomColors.premiumSurfacesFeaturePanel1;
+  static const Color _surfaceLow = DsAtomColors.premiumSurfacesFeaturePanel2;
+  static const Color _border = DsAtomColors.premiumSurfacesFeaturePanel3;
+  static const Color _title = DsAtomColors.premiumSurfacesFeaturePanel4;
+  static const Color _body = DsAtomColors.premiumSurfacesFeaturePanel5;
+  static const Color _glyphA = DsAtomColors.premiumSurfacesFeaturePanel6;
+  static const Color _glyphB = DsAtomColors.premiumSurfacesFeaturePanel7;
+  static const Color _glyphGlow = DsAtomColors.premiumSurfacesFeaturePanel8;
+  static const Color _shadow = DsAtomColors.premiumSurfacesFeaturePanel9;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +68,7 @@ class FeaturePanel extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   glyph,
-                  style: const TextStyle(fontSize: 26, color: Colors.white),
+                  style: const TextStyle(fontSize: 26, color: DsAtomColors.premiumSurfacesFeaturePanel10),
                 ),
               ),
               const SizedBox(height: 16),

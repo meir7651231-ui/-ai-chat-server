@@ -1,6 +1,7 @@
 // ✨ GlassButton — כפתור-זכוכית (BackdropFilter+blur) עם גבול-אור עדין ורקע שקוף. מקבל label · onTap · icon אופציונלי.
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class GlassButton extends StatelessWidget {
   const GlassButton({
@@ -27,17 +28,17 @@ class GlassButton extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Colors.white.withValues(alpha: 0.14),
-                Colors.white.withValues(alpha: 0.04),
+                DsAtomColors.premiumActionsGlassButton1.withValues(alpha: 0.14),
+                DsAtomColors.premiumActionsGlassButton1.withValues(alpha: 0.04),
               ],
             ),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.20),
+              color: DsAtomColors.premiumActionsGlassButton1.withValues(alpha: 0.20),
               width: 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF07070D).withValues(alpha: 0.40),
+                color: DsAtomColors.premiumActionsGlassButton2.withValues(alpha: 0.40),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
@@ -49,8 +50,8 @@ class GlassButton extends StatelessWidget {
             child: InkWell(
               onTap: onTap,
               borderRadius: BorderRadius.circular(16),
-              splashColor: Colors.white.withValues(alpha: 0.14),
-              highlightColor: Colors.white.withValues(alpha: 0.05),
+              splashColor: DsAtomColors.premiumActionsGlassButton1.withValues(alpha: 0.14),
+              highlightColor: DsAtomColors.premiumActionsGlassButton1.withValues(alpha: 0.05),
               child: Padding(
                 padding: const EdgeInsetsDirectional.symmetric(
                   horizontal: 22,
@@ -63,14 +64,14 @@ class GlassButton extends StatelessWidget {
                       Icon(
                         icon,
                         size: 19,
-                        color: const Color(0xFFF2F3FF),
+                        color: DsAtomColors.premiumActionsGlassButton3,
                       ),
                       const SizedBox(width: 10),
                     ],
                     Text(
                       label,
                       style: const TextStyle(
-                        color: Color(0xFFF2F3FF),
+                        color: DsAtomColors.premiumActionsGlassButton3,
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.3,

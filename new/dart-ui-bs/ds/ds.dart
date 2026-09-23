@@ -3,6 +3,7 @@
 // אפס-דאטה (כל טקסט מוזרק בחיווט); material בלבד; פוקוס/מצב פנימיים. חוק-1/חוק-5.
 // ⚠️ חתימות-הבנאי קפואות (תפר atom-census) — כאן משתנה רק המראה (build/צבעים/צללים).
 import 'package:flutter/material.dart';
+import 'ds_atoms.dart';
 import 'ds_pure.dart'; // 🎨 עיצוב-Pure (הכרעת-בעלים 1.9) — הפלטה מופנית ל-DsPure. הפיך: שחזור-קובץ ⇒ הישן.
 import 'ds_scale.dart'; // 🎨 DsIdentity (הכרעת-בעלים 23.9 «לא קשיח, לא דעה קדומה»): צבעי-הזהות (ניאון · זוהר · צללים · גוונים) מהזרע design-seed.json דרך ds-tokens — אפס צבע כתוב ביד כאן
 import 'ds_seam.dart'; // G28 · חריץ-העור: DsLook.of(context) — כרום-ה-DS לובש את העור המוזרק (paper) או נשאר ביט-זהה (כהה)
@@ -438,7 +439,7 @@ class DsLoadMeter extends StatelessWidget {
         Row(mainAxisSize: MainAxisSize.min, children: [for (var i = 0; i < 5; i++) Container(width: 12, height: 18, margin: const EdgeInsets.only(left: 3), decoration: BoxDecoration(color: i < on ? c : lk.line, borderRadius: BorderRadius.circular(2)))]),
         const SizedBox(width: 10),
         Expanded(child: Text(label, style: TextStyle(color: lk.ink, fontSize: 15))),
-        Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2), decoration: BoxDecoration(color: c, borderRadius: BorderRadius.circular(999)), child: Text(stateLabels[state.clamp(0, stateLabels.length - 1)], style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+        Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2), decoration: BoxDecoration(color: c, borderRadius: BorderRadius.circular(999)), child: Text(stateLabels[state.clamp(0, stateLabels.length - 1)], style: const TextStyle(color: DsAtomColors.dsDs1, fontSize: 12, fontWeight: FontWeight.w600))),
       ]),
     );
   }
@@ -493,7 +494,7 @@ class DsApproveCard extends StatelessWidget {
         Text(question, style: TextStyle(color: lk.ink, fontSize: 16, height: 1.4)),
         if (source.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 2), child: Text(source, style: TextStyle(color: lk.muted, fontSize: 13))),
         Padding(padding: const EdgeInsets.only(top: 10), child: Row(children: [
-          GestureDetector(onTap: onOk, child: Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7), decoration: BoxDecoration(color: lk.accent, borderRadius: BorderRadius.circular(9)), child: Text(okLabel, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600)))),
+          GestureDetector(onTap: onOk, child: Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7), decoration: BoxDecoration(color: lk.accent, borderRadius: BorderRadius.circular(9)), child: Text(okLabel, style: const TextStyle(color: DsAtomColors.dsDs1, fontSize: 14, fontWeight: FontWeight.w600)))),
           const SizedBox(width: 8),
           GestureDetector(onTap: onNo, child: Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7), decoration: BoxDecoration(border: Border.all(color: lk.line), borderRadius: BorderRadius.circular(9)), child: Text(noLabel, style: TextStyle(color: lk.ink, fontSize: 14, fontWeight: FontWeight.w600)))),
           if (onAlways != null && alwaysLabel.isNotEmpty) ...[const SizedBox(width: 8), GestureDetector(onTap: onAlways, child: Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7), decoration: BoxDecoration(border: Border.all(color: lk.line), borderRadius: BorderRadius.circular(9)), child: Text(alwaysLabel, style: TextStyle(color: lk.ink, fontSize: 14, fontWeight: FontWeight.w600))))],
@@ -583,7 +584,7 @@ class DsWorkflow extends StatelessWidget {
               border: Border.all(color: done ? Colors.transparent : lk.line, width: 2),
               boxShadow: paper ? null : (i == current ? DsTokens.glow : null),
             ),
-            child: Text('${i + 1}', style: TextStyle(color: done ? Colors.white : lk.faint, fontSize: 13, fontWeight: FontWeight.w800)),
+            child: Text('${i + 1}', style: TextStyle(color: done ? DsAtomColors.dsDs1 : lk.faint, fontSize: 13, fontWeight: FontWeight.w800)),
           ),
           const SizedBox(height: 6),
           SizedBox(
@@ -632,7 +633,7 @@ class DsPrimaryButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(13),
                 border: Border.all(color: DsIdentity.hairline),
               ),
-              child: Text(label, style: TextStyle(color: Colors.white, fontSize: paper ? 16 : 15.5, fontWeight: paper ? FontWeight.w600 : FontWeight.w800, letterSpacing: paper ? 0 : 0.2)),
+              child: Text(label, style: TextStyle(color: DsAtomColors.dsDs1, fontSize: paper ? 16 : 15.5, fontWeight: paper ? FontWeight.w600 : FontWeight.w800, letterSpacing: paper ? 0 : 0.2)),
             ),
           ),
         ),
@@ -696,7 +697,7 @@ class DsStat extends StatelessWidget {
                 else
                   ShaderMask(
                     shaderCallback: (r) => DsTokens.inkGrad.createShader(r),
-                    child: Text(value, style: const TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w800, letterSpacing: -0.6, fontFamily: DsTokens.fontHead)),
+                    child: Text(value, style: const TextStyle(color: DsAtomColors.dsDs1, fontSize: 25, fontWeight: FontWeight.w800, letterSpacing: -0.6, fontFamily: DsTokens.fontHead)),
                   ),
               ],
             ),

@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__connection_rule_studio:_EmptyConnectors (בנייה-חכמה main) · צרור-2 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__connection_rule_studio_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
@@ -21,7 +22,7 @@ class EmptyConnectors extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
-        border: Border.all(color: const Color(0xFFEDEDED)),
+        border: Border.all(color: DsAtomColors.autoEmptyConnectors1),
       ),
       child: Column(
         children: [

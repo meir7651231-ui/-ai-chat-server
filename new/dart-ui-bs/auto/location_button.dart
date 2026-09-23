@@ -2,6 +2,7 @@
 // מוצא: screens__worker_attendance_screen:_LocationButton (בנייה-חכמה main) · צרור-1 · props-שורש: label2, fallback, onTap
 // התוכן: new/dart-data-bs/auto/screens__worker_attendance_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -30,7 +31,7 @@ class LocationButton extends StatelessWidget {
       child: CfgVisible(
         'worker_attendance_screen.open_nav',
         child: Material(
-        color: const Color(0xFFEAF3FF),
+        color: DsAtomColors.autoLocationButton1,
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         child: InkWell(
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),
@@ -40,21 +41,21 @@ class LocationButton extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: BsTokens.space3),
             child: Row(
               children: [
-                const Icon(Icons.place, color: Color(0xFF1D6FE0), size: 20),
+                const Icon(Icons.place, color: DsAtomColors.autoLocationButton2, size: 20),
                 const SizedBox(width: BsTokens.space2),
                 Expanded(
                   child: CfgText(
                     'worker_attendance_screen.open_nav',
                     fallback,
                     style: const TextStyle(
-                      color: Color(0xFF1D4ED8),
+                      color: DsAtomColors.autoLocationButton3,
                       fontWeight: FontWeight.w700,
                       fontSize: 13.5,
                     ),
                   ),
                 ),
                 const Icon(Icons.navigation_outlined,
-                    color: Color(0xFF1D6FE0), size: 18),
+                    color: DsAtomColors.autoLocationButton2, size: 18),
               ],
             ),
           ),

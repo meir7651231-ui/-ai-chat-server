@@ -2,6 +2,7 @@
 // מוצא: screens__store_screen:_EmptyState (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__store_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 
 class StoreEmptyState extends StatelessWidget {
   StoreEmptyState({required this.label, required this.label2, required this.query});
@@ -28,7 +29,7 @@ class StoreEmptyState extends StatelessWidget {
                           ? label
                           : '${label2}$query"',
                       style: const TextStyle(
-                        color: Color(0xFF888888),
+                        color: DsAtomColors.autoStoreEmptyState1,
                         fontSize: 15,
                       ),
                       textAlign: TextAlign.center,

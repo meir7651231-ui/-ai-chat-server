@@ -2,6 +2,7 @@
 // מוצא: screens__courier_dashboard_screen:_Stat (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__courier_profile_screen:_PStat · screens__store_dashboard_screen:_Stat
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
 
@@ -21,7 +22,7 @@ class Stat extends StatelessWidget {
           borderRadius: BorderRadius.circular(cfgRadius(context)),
           boxShadow: const [
             BoxShadow(
-              color: Color(0x0F000000),
+              color: DsAtomColors.autoStat1,
               blurRadius: 8,
               offset: Offset(0, 2),
             ),

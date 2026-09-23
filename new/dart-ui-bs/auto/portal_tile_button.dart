@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__persona_portal:PortalTileButton (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class PortalTileButton extends StatelessWidget {
@@ -21,7 +22,7 @@ class PortalTileButton extends StatelessWidget {
       color: Theme.of(context).colorScheme.surface,
       borderRadius: BorderRadius.circular(BsTokens.radiusCard),
       elevation: 1,
-      shadowColor: Colors.black26,
+      shadowColor: DsAtomColors.autoPortalTileButton1,
       child: InkWell(
         borderRadius: BorderRadius.circular(BsTokens.radiusCard),
         onTap: onTap,

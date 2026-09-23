@@ -2,6 +2,7 @@
 // מוצא: screens__courier_attendance_screen:_SendReportButton (בנייה-חכמה main) · צרור-1 · props-שורש: title, body
 // התוכן: new/dart-data-bs/auto/screens__courier_attendance_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/help_target.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
@@ -31,7 +32,7 @@ class CourierAttendanceSendReportButton extends StatelessWidget {
         label: label,
         excludeSemantics: true,
         child: Material(
-          color: enabled ? BsTokens.brand : const Color(0xFFE9EAEC),
+          color: enabled ? BsTokens.brand : DsAtomColors.autoCourierAttendanceSendReportButton1,
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),
           child: InkWell(
             borderRadius: BorderRadius.circular(BsTokens.radiusPill),

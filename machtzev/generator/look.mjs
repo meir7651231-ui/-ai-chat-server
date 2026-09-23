@@ -9,16 +9,18 @@ import * as R from '../root.mjs';
 const SL = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
 export const DEFAULT_LOOK = SL.looks[SL.defaultLook] || Object.values(SL.looks)[0];
 export const defaultLookWord = SL.defaultLook || Object.keys(SL.looks)[0];
-let LOOK = DEFAULT_LOOK;
-export const setLook = (l) => { LOOK = l || DEFAULT_LOOK; };
+let LOOK = DEFAULT_LOOK, THEME = null;
+export const setLook = (l, theme = null) => { LOOK = l || DEFAULT_LOOK; THEME = theme || null; };
 export const getLook = () => LOOK;
-export const isPaper = () => LOOK === 'paper';
+// עור-Pure (PureScope בשורש): כל מראה שיש לו lookScope בדאטה (paper · build …) — לא רק 'paper'. הערכה (theme) = המילה השנייה בשורת-העיצוב, אחרת מהדאטה.
+export const isPaper = () => !!(SL.lookScope || {})[LOOK];
+export const getScope = () => { const sc = (SL.lookScope || {})[LOOK]; return sc ? { ...sc, theme: THEME || sc.theme } : null; };
 const GLYPH_RE = /^(?:[\p{Extended_Pictographic}☀-➿⬀-⯿\u{1F000}-\u{1FAFF}][️‍]?)+\s*/u;
 export const stripGlyph = (s) => String(s).replace(GLYPH_RE, '');
 
 // אטום "לובש-עור" = forge (כל צבע דרך DsSeam) או כרום-DS (DsLook) — או קובץ בלי צבע-קשיח. צבע-קשיח (חוץ משקוף) ⇒ לא-לובש ⇒ בנייר נפסל.
 // צבע-קשיח = ליטרל שאינו שקוף: Color(0x…) · Colors.x · Color.fromARGB/RGBO (DsTokens/DsLook/skin.* = טוקנים, לא ליטרל)
-export const HARD_COLOR = /Color\(0x(?!00000000)[0-9A-Fa-f]{8}\)|Colors\.(?!transparent\b)[a-z]|Color\.from(?:ARGB|RGBO)\(|BsTokens\.(?:brand|brandDark|danger|dangerDark|success)\b/;   // BsTokens.brand/סמנטי = פלטת-הלגאסי הקבועה (כתום), לא חריץ; inkLight/mutedLight/space = נייטרלים
+export const HARD_COLOR = /Color\(0x(?!00000000)[0-9A-Fa-f]{8}\)|Colors\.(?!transparent\b)[a-z]|Color\.from(?:ARGB|RGBO)\(|BsTokens\.(?:brand|brandDark|danger|dangerDark|success)\b|DsAtomColors\./;   // DsAtomColors = הליטרלים שעברו לזרע (ds-atoms): אותו צבע, לא-לובש-עור — הגדר לא זז   // BsTokens.brand/סמנטי = פלטת-הלגאסי הקבועה (כתום), לא חריץ; inkLight/mutedLight/space = נייטרלים
 const CACHE = new Map();
 export function skinWired(file) {
   if (!file) return true;

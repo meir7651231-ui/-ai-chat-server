@@ -2,6 +2,7 @@
 // מוצא: screens__camera_sheet:_GalleryAllBtn (בנייה-חכמה main) · צרור-1 · props-שורש: label, message, fallback
 // התוכן: new/dart-data-bs/auto/screens__camera_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 
@@ -27,7 +28,7 @@ class GalleryAllBtn extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             child: Container(
               width: 72, height: 72,
-              color: const Color(0xFF222222),
+              color: DsAtomColors.autoGalleryAllBtn1,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

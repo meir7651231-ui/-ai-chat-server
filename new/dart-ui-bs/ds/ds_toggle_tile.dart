@@ -2,6 +2,7 @@
 // מאושר · חסום · נגיש. תווית + מתג (ערך 'true'/'false'). חוט-טהור: אפס-דאטה, material בלבד.
 // (התיאור-העצמי הזה הוא ה-he שהמנוע אוחז לפיו — הידע חי על האטום, לא במנוע.)
 import 'package:flutter/material.dart';
+import 'ds_atoms.dart';
 import 'ds.dart';
 
 class DsToggleTile extends StatelessWidget {
@@ -22,7 +23,7 @@ class DsToggleTile extends StatelessWidget {
             value: on,
             onChanged: onChanged == null ? null : (v) => onChanged!(v ? 'true' : 'false'),
             activeTrackColor: lk.accent,
-            thumbColor: WidgetStateProperty.all(Colors.white),
+            thumbColor: WidgetStateProperty.all(DsAtomColors.dsDsToggleTile1),
           ),
         ],
       ),

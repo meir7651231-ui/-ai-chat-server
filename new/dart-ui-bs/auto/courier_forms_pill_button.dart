@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__courier_forms_screen:_PillButton (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -41,7 +42,7 @@ class CourierFormsPillButton extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(BsTokens.radiusPill),
               border:
-                  filled ? null : Border.all(color: const Color(0xFFE2E2E2)),
+                  filled ? null : Border.all(color: DsAtomColors.autoCourierFormsPillButton1),
             ),
             child: CfgText(
               id,

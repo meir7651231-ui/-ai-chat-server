@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__finder_screen:_ChipScroll (בנייה-חכמה main) · Stateful+State
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 
 class ChipScroll extends StatefulWidget {
   const ChipScroll({required this.children});
@@ -61,7 +62,7 @@ class ChipScrollState extends State<ChipScroll> {
                   gradient: LinearGradient(
                     begin: Alignment.centerRight,
                     end: Alignment.centerLeft,
-                    colors: [Color(0x00FFFFFF), Colors.white],
+                    colors: [DsAtomColors.autoChipScroll1, DsAtomColors.autoChipScroll2],
                   ),
                 ),
                 alignment: Alignment.centerLeft,
@@ -75,4 +76,4 @@ class ChipScrollState extends State<ChipScroll> {
   }
 }
 
-const _mute = Color(0xFF888888);
+const _mute = DsAtomColors.autoChipScroll3;

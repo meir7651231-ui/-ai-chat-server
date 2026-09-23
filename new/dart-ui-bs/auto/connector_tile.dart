@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__connection_rule_studio:_ConnectorTile (בנייה-חכמה main) · צרור-2 · מודל-שוטח: 1 שדות · props-שורש: label, tooltip, nameHe
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__connection_rule_studio_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
 
@@ -21,7 +22,7 @@ class ConnectorTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(cfgRadius(context)),
-          border: Border.all(color: const Color(0xFFEDEDED))),
+          border: Border.all(color: DsAtomColors.autoConnectorTile1)),
         child: Row(
           children: [
             Container(

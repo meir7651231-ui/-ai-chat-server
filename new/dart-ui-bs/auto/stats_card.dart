@@ -2,6 +2,7 @@
 // מוצא: screens__worker_profile_screen:_StatsCard (בנייה-חכמה main) · צרור-2 · props-שורש: fallback, label, label2, label3
 // התוכן: new/dart-data-bs/auto/screens__worker_profile_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 
@@ -31,7 +32,7 @@ class StatsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(BsTokens.radiusCard),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000),
+            color: DsAtomColors.autoStatsCard1,
             blurRadius: 10,
             offset: Offset(0, 2),
           ),
@@ -69,7 +70,7 @@ class StatsCard extends StatelessWidget {
             child: LinearProgressIndicator(
               value: total == 0 ? 0 : done / total,
               minHeight: 8,
-              backgroundColor: const Color(0xFFEDEDED),
+              backgroundColor: DsAtomColors.autoStatsCard2,
               valueColor: const AlwaysStoppedAnimation<Color>(BsTokens.brand),
             ),
           ),

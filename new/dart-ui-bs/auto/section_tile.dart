@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__courier_settings_screen:_SectionTile (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
 
@@ -29,8 +30,8 @@ class SectionTile extends StatelessWidget {
         child: ExpansionTile(
           tilePadding: const EdgeInsets.symmetric(horizontal: 16),
           childrenPadding: const EdgeInsets.only(bottom: 8),
-          iconColor: Colors.black54,
-          collapsedIconColor: Colors.black54,
+          iconColor: DsAtomColors.autoSectionTile1,
+          collapsedIconColor: DsAtomColors.autoSectionTile1,
           leading: Text(emoji, style: const TextStyle(fontSize: 22)),
           trailing:
               _activeCount == 0

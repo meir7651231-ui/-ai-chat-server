@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__catalog_screen:_ChipWrap (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
 
@@ -31,13 +32,13 @@ class ChipWrap extends StatelessWidget {
                 border: Border.all(
                   color: selected == o
                       ? BsTokens.brand
-                      : const Color(0xFFC8C8CE),
+                      : DsAtomColors.autoChipWrap1,
                 ),
               ),
               child: Text(
                 o,
                 style: TextStyle(
-                  color: selected == o ? bsOnAccent(context) : const Color(0xFF6E6E73),
+                  color: selected == o ? bsOnAccent(context) : DsAtomColors.autoChipWrap2,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),

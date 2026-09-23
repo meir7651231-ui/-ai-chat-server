@@ -2,6 +2,7 @@
 // מוצא: screens__ai_hub_screen:_ThreeWay (בנייה-חכמה main) · צרור-6 · props-שורש: title, sub, text, pill, pill2, label, label2, label3, fallback
 // התוכן: new/dart-data-bs/auto/screens__ai_hub_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/logic/ai_hub_logic.dart';
@@ -72,7 +73,7 @@ class ThreeWay extends StatelessWidget {
                     'ai_hub_screen.t02',
                     fallback,
                     style: TextStyle(
-                      color: Color(0xFFC62828),
+                      color: DsAtomColors.autoThreeWay1,
                       fontWeight: FontWeight.w700,
                       fontSize: 12,
                     ),
@@ -159,7 +160,7 @@ class _AiCard extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
         border: Border.all(
-          color: overdue ? const Color(0xFFE57373) : const Color(0xFFEEEEEE),
+          color: overdue ? DsAtomColors.autoThreeWay2 : DsAtomColors.autoThreeWay3,
         ),
       ),
       child: child,
@@ -198,13 +199,13 @@ class _AiCardTop extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
-            color: danger ? const Color(0xFFFFEBEE) : const Color(0xFFF1F1F1),
+            color: danger ? DsAtomColors.autoThreeWay4 : DsAtomColors.autoThreeWay5,
             borderRadius: BorderRadius.circular(BsTokens.radiusPill),
           ),
           child: Text(
             pill,
             style: TextStyle(
-              color: danger ? const Color(0xFFC62828) : BsTokens.inkLight,
+              color: danger ? DsAtomColors.autoThreeWay1 : BsTokens.inkLight,
               fontWeight: FontWeight.w700,
               fontSize: 12,
             ),
@@ -239,7 +240,7 @@ class _ThreeCol extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-              color: bad ? const Color(0xFFC62828) : BsTokens.inkLight,
+              color: bad ? DsAtomColors.autoThreeWay1 : BsTokens.inkLight,
               fontWeight: FontWeight.w800,
               fontSize: 13,
             ),

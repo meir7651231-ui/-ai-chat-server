@@ -1,5 +1,6 @@
 // ✨ ExpandableTile — אריח מתקפל: כותרת + גוף נחשף באנימציה + חץ מסתובב
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class ExpandableTile extends StatefulWidget {
   final String title;
@@ -17,10 +18,10 @@ class ExpandableTile extends StatefulWidget {
 
 class _ExpandableTileState extends State<ExpandableTile>
     with SingleTickerProviderStateMixin {
-  static const Color _card = Color(0xFF101127);
-  static const Color _accent = Color(0xFF7C3AED);
-  static const Color _text = Color(0xFFF2F3FF);
-  static const Color _muted = Color(0xFF9AA0BE);
+  static const Color _card = DsAtomColors.premiumListsExpandableTile1;
+  static const Color _accent = DsAtomColors.premiumListsExpandableTile2;
+  static const Color _text = DsAtomColors.premiumListsExpandableTile3;
+  static const Color _muted = DsAtomColors.premiumListsExpandableTile4;
 
   bool _open = false;
 
@@ -39,7 +40,7 @@ class _ExpandableTileState extends State<ExpandableTile>
           border: Border.all(
             color: _open
                 ? _accent.withValues(alpha: 0.45)
-                : Colors.white.withValues(alpha: 0.06),
+                : DsAtomColors.premiumListsExpandableTile5.withValues(alpha: 0.06),
           ),
           boxShadow: _open
               ? [
@@ -91,7 +92,7 @@ class _ExpandableTileState extends State<ExpandableTile>
                           alignment: Alignment.center,
                           child: const Icon(
                             Icons.keyboard_arrow_down_rounded,
-                            color: Color(0xFFC4B5FD),
+                            color: DsAtomColors.premiumListsExpandableTile6,
                             size: 20,
                           ),
                         ),

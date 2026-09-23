@@ -2,6 +2,7 @@
 // מוצא: screens__notif_settings_screen:_SnoozeSheet (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2, label3, label4, fallback, onTap
 // התוכן: new/dart-data-bs/auto/screens__notif_settings_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 
@@ -34,7 +35,7 @@ class SnoozeSheet extends StatelessWidget {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.black12,
+                color: DsAtomColors.autoSnoozeSheet1,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -53,7 +54,7 @@ class SnoozeSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          const Divider(color: Color(0xFFF5F5F5), height: 1),
+          const Divider(color: DsAtomColors.autoSnoozeSheet2, height: 1),
           ..._options.map(
             (o) => ListTile(
               title: Text(
@@ -62,7 +63,7 @@ class SnoozeSheet extends StatelessWidget {
               ),
               trailing: const Icon(
                 Icons.chevron_left,
-                color: Color(0xFF888888),
+                color: DsAtomColors.autoSnoozeSheet3,
               ),
               onTap: onTap,
             ),

@@ -2,6 +2,7 @@
 // מוצא: screens__tasks_screen:_NewTaskButton (בנייה-חכמה main) · צרור-1 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__tasks_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -21,7 +22,7 @@ class NewTaskButton extends StatelessWidget {
           color: BsTokens.brand,
           borderRadius: BorderRadius.circular(cfgRadius(context)),
           elevation: 1,
-          shadowColor: Colors.black26,
+          shadowColor: DsAtomColors.autoNewTaskButton1,
           child: InkWell(
             key: const ValueKey('task-new'),
             borderRadius: BorderRadius.circular(cfgRadius(context)),

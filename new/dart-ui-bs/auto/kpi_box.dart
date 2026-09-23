@@ -2,6 +2,7 @@
 // מוצא: screens__worker_reports_tab:_KpiBox (בנייה-חכמה main) · צרור-1 · props-שורש: label2
 // התוכן: new/dart-data-bs/auto/screens__worker_reports_tab_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class KpiBox extends StatelessWidget {
@@ -46,7 +47,7 @@ class KpiBox extends StatelessWidget {
           borderRadius: BorderRadius.circular(BsTokens.radiusCard),
           boxShadow: const [
             BoxShadow(
-              color: Color(0x14000000),
+              color: DsAtomColors.autoKpiBox1,
               blurRadius: 10,
               offset: Offset(0, 2),
             ),

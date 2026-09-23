@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__store_screen:_ProjectChip (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
 
@@ -28,7 +29,7 @@ class StoreProjectChip extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            color: active ? bsOnAccent(context) : const Color(0xFF595959),
+            color: active ? bsOnAccent(context) : DsAtomColors.autoStoreProjectChip1,
             fontSize: 13,
             fontWeight: active ? FontWeight.w600 : FontWeight.w400,
           ),

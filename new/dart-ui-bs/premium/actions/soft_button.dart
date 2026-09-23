@@ -1,5 +1,6 @@
 // ✨ SoftButton — כפתור רך שקוף-גוון עם גבול עדין. tone: 0 accent(סגול)·1 success(ציאן-ירקרק)·2 danger(מגנטה-אדום). מקבל label · onTap · tone.
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class SoftButton extends StatelessWidget {
   const SoftButton({
@@ -14,9 +15,9 @@ class SoftButton extends StatelessWidget {
   final int tone;
 
   static const List<Color> _tones = [
-    Color(0xFF7C3AED), // accent
-    Color(0xFF2DD4A7), // success
-    Color(0xFFF43F5E), // danger
+    DsAtomColors.premiumActionsSoftButton1, // accent
+    DsAtomColors.premiumActionsSoftButton2, // success
+    DsAtomColors.premiumActionsSoftButton3, // danger
   ];
 
   @override
@@ -65,7 +66,7 @@ class SoftButton extends StatelessWidget {
                 Text(
                   label,
                   style: TextStyle(
-                    color: Color.lerp(c, const Color(0xFFF2F3FF), 0.55),
+                    color: Color.lerp(c, DsAtomColors.premiumActionsSoftButton4, 0.55),
                     fontSize: 14.5,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.2,

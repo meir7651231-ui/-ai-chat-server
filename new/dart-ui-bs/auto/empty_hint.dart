@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__lipskey_product_sheet:_EmptyHint (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 
 class EmptyHint extends StatelessWidget {
   const EmptyHint(this.text);
@@ -11,7 +12,7 @@ class EmptyHint extends StatelessWidget {
         child: Text(text,
             textAlign: TextAlign.right,
             style: const TextStyle(
-                color: Color(0xFF9AA3B2),
+                color: DsAtomColors.autoEmptyHint1,
                 fontSize: 11,
                 fontStyle: FontStyle.italic)),
       );

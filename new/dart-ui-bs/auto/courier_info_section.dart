@@ -2,6 +2,7 @@
 // מוצא: screens__courier_settings_screen:_CourierInfoSection (בנייה-חכמה main) · צרור-2 · props-שורש: title, title2, body, fallback, title3, body2, fallback2, onTap, onTap2
 // התוכן: new/dart-data-bs/auto/screens__courier_settings_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/help_target.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -91,8 +92,8 @@ class _SectionTile extends StatelessWidget {
         child: ExpansionTile(
           tilePadding: const EdgeInsets.symmetric(horizontal: 16),
           childrenPadding: const EdgeInsets.only(bottom: 8),
-          iconColor: Colors.black54,
-          collapsedIconColor: Colors.black54,
+          iconColor: DsAtomColors.autoCourierInfoSection1,
+          collapsedIconColor: DsAtomColors.autoCourierInfoSection1,
           leading: Text(emoji, style: const TextStyle(fontSize: 22)),
           trailing:
               _activeCount == 0

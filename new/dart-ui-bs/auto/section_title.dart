@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__lipskey_product_sheet:_SectionTitle (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class SectionTitle extends StatelessWidget {
@@ -35,7 +36,7 @@ class SectionTitle extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                        color: Color(0xFF888888), fontSize: 11)),
+                        color: DsAtomColors.autoSectionTitle1, fontSize: 11)),
               ),
             ],
           ],

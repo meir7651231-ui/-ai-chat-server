@@ -1,5 +1,6 @@
 // ✨ BadgeCount — תג-מונה עגול גרדיאנט עם זוהר; דאטה: int count (מוצג, 99+ מעל התקרה)
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class BadgeCount extends StatelessWidget {
   final int count;
@@ -20,13 +21,13 @@ class BadgeCount extends StatelessWidget {
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFEC4899), Color(0xFF7C3AED)],
+            colors: [DsAtomColors.premiumFeedbackBadgeCount1, DsAtomColors.premiumFeedbackBadgeCount2],
           ),
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.18), width: 1),
+          border: Border.all(color: DsAtomColors.premiumFeedbackBadgeCount3.withValues(alpha: 0.18), width: 1),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFFEC4899).withValues(alpha: 0.55),
+              color: DsAtomColors.premiumFeedbackBadgeCount1.withValues(alpha: 0.55),
               blurRadius: 14,
               spreadRadius: 0.5,
             ),
@@ -36,7 +37,7 @@ class BadgeCount extends StatelessWidget {
           text,
           textAlign: TextAlign.center,
           style: const TextStyle(
-            color: Color(0xFFF2F3FF),
+            color: DsAtomColors.premiumFeedbackBadgeCount4,
             fontSize: 12,
             height: 1.0,
             fontWeight: FontWeight.w800,

@@ -1,17 +1,18 @@
 // ✨ GradientCard — כרטיס משטח גרדיאנט-כהה + צל רך; מקבל child כתוכן
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class GradientCard extends StatelessWidget {
   const GradientCard({super.key, required this.child});
 
   final Widget child;
 
-  static const Color _top = Color(0xFF161738);
-  static const Color _mid = Color(0xFF101127);
-  static const Color _bottom = Color(0xFF0A0A18);
-  static const Color _border = Color(0x1AFFFFFF);
-  static const Color _shadow = Color(0x73000000);
-  static const Color _accentGlow = Color(0x26EC4899);
+  static const Color _top = DsAtomColors.premiumSurfacesGradientCard1;
+  static const Color _mid = DsAtomColors.premiumSurfacesGradientCard2;
+  static const Color _bottom = DsAtomColors.premiumSurfacesGradientCard3;
+  static const Color _border = DsAtomColors.premiumSurfacesGradientCard4;
+  static const Color _shadow = DsAtomColors.premiumSurfacesGradientCard5;
+  static const Color _accentGlow = DsAtomColors.premiumSurfacesGradientCard6;
 
   @override
   Widget build(BuildContext context) {

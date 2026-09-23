@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__worker_attendance_screen:_SendReportButton (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
 
@@ -23,7 +24,7 @@ class SendReportButton extends StatelessWidget {
       label: label,
       excludeSemantics: true,
       child: Material(
-        color: enabled ? BsTokens.brand : const Color(0xFFE9EAEC),
+        color: enabled ? BsTokens.brand : DsAtomColors.autoSendReportButton1,
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         child: InkWell(
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),

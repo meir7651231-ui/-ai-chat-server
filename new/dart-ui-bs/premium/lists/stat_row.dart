@@ -1,5 +1,6 @@
 // ✨ StatRow — שורת-סטטיסטיקה: תווית + פס-התקדמות-ניאון (fraction 0..1) + ערך
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class StatRow extends StatelessWidget {
   final String label;
@@ -13,10 +14,10 @@ class StatRow extends StatelessWidget {
     required this.fraction,
   });
 
-  static const Color _card = Color(0xFF101127);
-  static const Color _accent = Color(0xFF7C3AED);
-  static const Color _text = Color(0xFFF2F3FF);
-  static const Color _muted = Color(0xFF9AA0BE);
+  static const Color _card = DsAtomColors.premiumListsStatRow1;
+  static const Color _accent = DsAtomColors.premiumListsStatRow2;
+  static const Color _text = DsAtomColors.premiumListsStatRow3;
+  static const Color _muted = DsAtomColors.premiumListsStatRow4;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class StatRow extends StatelessWidget {
         decoration: BoxDecoration(
           color: _card,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+          border: Border.all(color: DsAtomColors.premiumListsStatRow5.withValues(alpha: 0.06)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +68,7 @@ class StatRow extends StatelessWidget {
                     Container(
                       height: 8,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.06),
+                        color: DsAtomColors.premiumListsStatRow5.withValues(alpha: 0.06),
                         borderRadius: BorderRadius.circular(6),
                       ),
                     ),
@@ -77,7 +78,7 @@ class StatRow extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
                         gradient: const LinearGradient(
-                          colors: [_accent, Color(0xFFEC4899)],
+                          colors: [_accent, DsAtomColors.premiumListsStatRow6],
                         ),
                         boxShadow: [
                           BoxShadow(

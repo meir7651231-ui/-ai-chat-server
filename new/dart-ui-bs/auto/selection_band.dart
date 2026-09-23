@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: features__catalog_config__wheel_picker:_SelectionBand (בנייה-חכמה main) · צרור-4
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class SelectionBand extends StatelessWidget {
@@ -22,6 +23,6 @@ class SelectionBand extends StatelessWidget {
 
 const double _kItemExtent = 36;
 
-const Color _kBandFill = Color(0x14FF7A18);
+const Color _kBandFill = DsAtomColors.autoSelectionBand1;
 
-const Color _kBandLine = Color(0x66FF7A18);
+const Color _kBandLine = DsAtomColors.autoSelectionBand2;

@@ -1,14 +1,15 @@
 // ✨ RatingStars — 5 כוכבים לפי value 0..5 (מלא/חצי/ריק), זהב זוהר; דאטה: double value + size
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class RatingStars extends StatelessWidget {
   final double value;
   final double size;
   const RatingStars({super.key, required this.value, this.size = 22});
 
-  static const Color _gold = Color(0xFFF59E0B);
-  static const Color _empty = Color(0xFF3A3352);
+  static const Color _gold = DsAtomColors.premiumFeedbackRatingStars1;
+  static const Color _empty = DsAtomColors.premiumFeedbackRatingStars2;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,7 @@ class _StarPainter extends CustomPainter {
         star,
         Paint()
           ..shader = const LinearGradient(
-            colors: [Color(0xFFFFD98A), RatingStars._gold],
+            colors: [DsAtomColors.premiumFeedbackRatingStars3, RatingStars._gold],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ).createShader(Rect.fromLTWH(0, 0, size.width, size.height)),

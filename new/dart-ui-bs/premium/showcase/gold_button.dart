@@ -10,6 +10,7 @@
 // חוט-טהור: material + dart:math בלבד · פיגמנט const · טקסט דרך פרמטר · RTL. אומת 3×.
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 enum GoldButtonKind { primary, secondary, ghost }
 
@@ -30,30 +31,30 @@ class GoldButton extends StatefulWidget {
   final GoldButtonKind kind;
 
   // ── טוקנים ──
-  static const _onAccent = Color(0xFFFFFFFF);
-  static const _ink = Color(0xFFF4F5F7);
-  static const _muted = Color(0xFF9AA0AC);
-  static const _hair = Color(0x1FFFFFFF);
-  static const _ring = Color(0xFF9C8CFF);
+  static const _onAccent = DsAtomColors.premiumShowcaseGoldButton1;
+  static const _ink = DsAtomColors.premiumShowcaseGoldButton2;
+  static const _muted = DsAtomColors.premiumShowcaseGoldButton3;
+  static const _hair = DsAtomColors.premiumShowcaseGoldButton4;
+  static const _ring = DsAtomColors.premiumShowcaseGoldButton5;
   static const _radius = 15.0;
 
   // גוף-אורורה (מבטא-אינדיגו · לבן עליו עובר 4.5:1)
-  static const _bodyA = Color(0xFF7A6BFF);
-  static const _bodyB = Color(0xFF5B4CE0);
-  static const _bodyC = Color(0xFF3E31B0);
-  static const _auroraViolet = Color(0x669D7BFF);
-  static const _auroraCyan = Color(0x4622D3EE);
-  static const _glow = Color(0xFF6C5CE7);
+  static const _bodyA = DsAtomColors.premiumShowcaseGoldButton6;
+  static const _bodyB = DsAtomColors.premiumShowcaseGoldButton7;
+  static const _bodyC = DsAtomColors.premiumShowcaseGoldButton8;
+  static const _auroraViolet = DsAtomColors.premiumShowcaseGoldButton9;
+  static const _auroraCyan = DsAtomColors.premiumShowcaseGoldButton10;
+  static const _glow = DsAtomColors.premiumShowcaseGoldButton11;
 
   // טבעת-הקונכית (conic)
-  static const _ringHi = Color(0xFFB9AEFF);
-  static const _ringLo = Color(0xFF5B4CE0);
-  static const _ringCyan = Color(0xFF39D6F0);
-  static const _ringMag = Color(0xFFC66BFF);
+  static const _ringHi = DsAtomColors.premiumShowcaseGoldButton12;
+  static const _ringLo = DsAtomColors.premiumShowcaseGoldButton7;
+  static const _ringCyan = DsAtomColors.premiumShowcaseGoldButton13;
+  static const _ringMag = DsAtomColors.premiumShowcaseGoldButton14;
 
   // משטח secondary
-  static const _surfaceTop = Color(0xFF1C1D26);
-  static const _surface = Color(0xFF14141B);
+  static const _surfaceTop = DsAtomColors.premiumShowcaseGoldButton15;
+  static const _surface = DsAtomColors.premiumShowcaseGoldButton16;
 
   @override
   State<GoldButton> createState() => _GoldButtonState();
@@ -142,7 +143,7 @@ class _GoldButtonState extends State<GoldButton> with SingleTickerProviderStateM
               spreadRadius: down ? -3 : 0,
               offset: Offset(0, down ? 4 : 12),
             ),
-            const BoxShadow(color: Color(0x40000000), blurRadius: 8, offset: Offset(0, 3)),
+            const BoxShadow(color: DsAtomColors.premiumShowcaseGoldButton17, blurRadius: 8, offset: Offset(0, 3)),
           ],
         ];
 
@@ -305,7 +306,7 @@ class _GoldButtonState extends State<GoldButton> with SingleTickerProviderStateM
                 gradient: RadialGradient(
                   center: Alignment(_hx, _hy),
                   radius: 0.9,
-                  colors: const [Color(0x38FFFFFF), Color(0x00FFFFFF)],
+                  colors: const [DsAtomColors.premiumShowcaseGoldButton18, DsAtomColors.premiumShowcaseGoldButton19],
                 ),
               ),
             ),
@@ -319,7 +320,7 @@ class _GoldButtonState extends State<GoldButton> with SingleTickerProviderStateM
           child: DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0x00FFFFFF), Color(0x8FFFFFFF), Color(0x00FFFFFF)],
+                colors: [DsAtomColors.premiumShowcaseGoldButton19, DsAtomColors.premiumShowcaseGoldButton20, DsAtomColors.premiumShowcaseGoldButton19],
               ),
             ),
           ),
@@ -361,7 +362,7 @@ class _GlowRing extends CustomPainter {
           ..style = PaintingStyle.stroke
           ..strokeWidth = 3
           ..shader = shader
-          ..color = Colors.white.withValues(alpha: a)
+          ..color = DsAtomColors.premiumShowcaseGoldButton1.withValues(alpha: a)
           ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6),
       )
       ..drawRRect(
@@ -395,7 +396,7 @@ class _Sparkles extends CustomPainter {
       final y = (by * 0.7 + 0.15) * size.height;
       final tw = 0.5 + 0.5 * math.sin((t * 2 + fi) * 2 * math.pi);
       final r = 0.5 + 1.1 * tw;
-      paint.color = Colors.white.withValues(alpha: 0.05 + 0.22 * tw);
+      paint.color = DsAtomColors.premiumShowcaseGoldButton1.withValues(alpha: 0.05 + 0.22 * tw);
       canvas.drawCircle(Offset(x, y), r, paint);
     }
   }
@@ -415,7 +416,7 @@ class _Sweep extends CustomPainter {
     final bandW = size.width * 0.3;
     final rect = Rect.fromLTWH(center - bandW, 0, bandW * 2, size.height);
     final shader = const LinearGradient(
-      colors: [Color(0x00FFFFFF), Color(0x2EFFFFFF), Color(0x00FFFFFF)],
+      colors: [DsAtomColors.premiumShowcaseGoldButton19, DsAtomColors.premiumShowcaseGoldButton21, DsAtomColors.premiumShowcaseGoldButton19],
     ).createShader(rect);
     canvas
       ..save()

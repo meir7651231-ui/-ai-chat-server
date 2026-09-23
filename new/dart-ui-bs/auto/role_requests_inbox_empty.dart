@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__role_requests_inbox_screen:_Empty (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class RoleRequestsInboxEmpty extends StatelessWidget {
@@ -15,7 +16,7 @@ class RoleRequestsInboxEmpty extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 54, color: const Color(0xFFBBBBBB)),
+          Icon(icon, size: 54, color: DsAtomColors.autoRoleRequestsInboxEmpty1),
           const SizedBox(height: BsTokens.space3),
           Text(
             text,

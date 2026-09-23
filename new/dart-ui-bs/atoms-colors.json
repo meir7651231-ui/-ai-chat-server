@@ -1,0 +1,1038 @@
+{
+ "_": "זרע צבעי-האטומים (הכרעת-בעלים 23.9 «לא קשיח»): לכל קובץ-אטום הצבעים שישבו בו ביד, AARRGGBB, בסדר ההופעה. ds-atoms.mjs ⇒ ds_atoms.dart (DsAtomColors). שינוי צבע = כאן.",
+ "files": {
+  "auto/acc_row.dart": [
+   "FFF2A516",
+   "FFEDEDED",
+   "FFC8C8CE",
+   "FFFFFFFF",
+   "FF888888",
+   "FF666666",
+   "FFF0F0F3",
+   "8A000000",
+   "FFCCCCCC"
+  ],
+  "auto/accessory_tile.dart": [
+   "FFEDEDED",
+   "FFB45309"
+  ],
+  "auto/ai_bar.dart": [
+   "FFE53935"
+  ],
+  "auto/ai_card.dart": [
+   "FFE57373",
+   "FFEEEEEE"
+  ],
+  "auto/ai_card_top.dart": [
+   "FFFFEBEE",
+   "FFF1F1F1",
+   "FFC62828"
+  ],
+  "auto/ai_fin_tile.dart": [
+   "FFEEEEEE"
+  ],
+  "auto/ai_primary.dart": [
+   "FFFFFFFF"
+  ],
+  "auto/ai_section.dart": [
+   "8A000000",
+   "FFFFFFFF"
+  ],
+  "auto/approval_button.dart": [
+   "FFFFFFFF",
+   "FFE2E2E2"
+  ],
+  "auto/approval_card.dart": [
+   "42000000"
+  ],
+  "auto/assign_button.dart": [
+   "FFE2E2E2",
+   "FFFFFFFF"
+  ],
+  "auto/big_button.dart": [
+   "FFFFF0E3"
+  ],
+  "auto/brand_header.dart": [
+   "FF0D1B2A",
+   "FF13132A",
+   "FF3D5A80",
+   "FF64FFDA",
+   "61000000"
+  ],
+  "auto/ca_card.dart": [
+   "FFE57373",
+   "FFEEEEEE"
+  ],
+  "auto/ca_pill.dart": [
+   "24737578",
+   "241F6F6B"
+  ],
+  "auto/ca_top.dart": [
+   "FFFFEBEE",
+   "FFF1F1F1",
+   "FFC62828"
+  ],
+  "auto/callout.dart": [
+   "FFEEEEEE"
+  ],
+  "auto/card_done.dart": [
+   "FF1F8A4C"
+  ],
+  "auto/catalog_config_catalog_config_count_badge.dart": [
+   "FFFFFFFF"
+  ],
+  "auto/catalog_count_badge.dart": [
+   "FFFFFFFF"
+  ],
+  "auto/category_tile.dart": [
+   "FFEDEDED"
+  ],
+  "auto/chat_settings_action_row.dart": [
+   "FFFF5252"
+  ],
+  "auto/chat_settings_section_tile.dart": [
+   "8A000000",
+   "FFFFFFFF"
+  ],
+  "auto/chip_scroll.dart": [
+   "00FFFFFF",
+   "FFFFFFFF",
+   "FF888888"
+  ],
+  "auto/chip_wrap.dart": [
+   "FFC8C8CE",
+   "FF6E6E73"
+  ],
+  "auto/coin_banner.dart": [
+   "FFFFF3E0",
+   "FFFFE0B2",
+   "FFFFCC80"
+  ],
+  "auto/company_catalog_import_card.dart": [
+   "FFEEEEEE",
+   "61000000"
+  ],
+  "auto/connector_tile.dart": [
+   "FFEDEDED"
+  ],
+  "auto/contractor_tools_sheets_sheet_handle.dart": [
+   "1F000000",
+   "FF888888"
+  ],
+  "auto/contrast_warning.dart": [
+   "FFFFF4E5",
+   "FFFFB74D",
+   "FFE65100",
+   "FF7A3E00"
+  ],
+  "auto/courier_attendance_send_report_button.dart": [
+   "FFE9EAEC"
+  ],
+  "auto/courier_forms_pill_button.dart": [
+   "FFE2E2E2"
+  ],
+  "auto/courier_info_section.dart": [
+   "8A000000"
+  ],
+  "auto/courier_personal_area_card.dart": [
+   "0F000000",
+   "FFF2F3F5"
+  ],
+  "auto/cut_tile.dart": [
+   "FF23303D",
+   "FF7FC08A",
+   "FFFFFFFF"
+  ],
+  "auto/date_chip.dart": [
+   "FFD9EDD3",
+   "14000000",
+   "FF4A5040"
+  ],
+  "auto/date_header.dart": [
+   "FF888888"
+  ],
+  "auto/decide_button.dart": [
+   "FFDDDDDD",
+   "FFFFFFFF"
+  ],
+  "auto/decision_line.dart": [
+   "FFEDEDED",
+   "FF8A6D00",
+   "FFE0E0E0"
+  ],
+  "auto/dot.dart": [
+   "FF22A75A"
+  ],
+  "auto/empty_accessories.dart": [
+   "FFEDEDED"
+  ],
+  "auto/empty_connectors.dart": [
+   "FFEDEDED"
+  ],
+  "auto/empty_hint.dart": [
+   "FF9AA3B2"
+  ],
+  "auto/empty_products.dart": [
+   "FFEDEDED"
+  ],
+  "auto/empty_section.dart": [
+   "FF888888"
+  ],
+  "auto/facet_chip.dart": [
+   "22FF7A18",
+   "FFCC6614"
+  ],
+  "auto/facet_row.dart": [
+   "FF888888",
+   "FFFFFFFF"
+  ],
+  "auto/fin_callout.dart": [
+   "FFEAF5F4",
+   "FFCDE7E4"
+  ],
+  "auto/fin_rows.dart": [
+   "FFF6F7F9",
+   "FFE6E8EC"
+  ],
+  "auto/fin_tile.dart": [
+   "FFEEEEEE"
+  ],
+  "auto/flat_card.dart": [
+   "0F000000"
+  ],
+  "auto/form_card.dart": [
+   "14000000"
+  ],
+  "auto/gallery_all_btn.dart": [
+   "FF222222"
+  ],
+  "auto/gallery_thumb.dart": [
+   "61000000",
+   "62FFFFFF"
+  ],
+  "auto/grip.dart": [
+   "FFD8D8D8"
+  ],
+  "auto/hierarchy_chip_pill.dart": [
+   "FFF1F1F4",
+   "FF1C1C1E",
+   "FFE0E0E5"
+  ],
+  "auto/home_shell_badged_icon.dart": [
+   "FFFFFFFF"
+  ],
+  "auto/hub_tile.dart": [
+   "FFE6E6E6"
+  ],
+  "auto/info_section.dart": [
+   "8A000000",
+   "FFFFFFFF"
+  ],
+  "auto/inline_text_row.dart": [
+   "8A000000",
+   "FF999999",
+   "FFF2F3F5"
+  ],
+  "auto/kpi_box.dart": [
+   "14000000"
+  ],
+  "auto/lb_row.dart": [
+   "FFFFF3E0",
+   "FFFFB74D",
+   "FFEEEEEE"
+  ],
+  "auto/lens_group_header.dart": [
+   "FFF0FBF4",
+   "FFF7F7F8",
+   "FF888888"
+  ],
+  "auto/link_btn.dart": [
+   "FFF7F8FA"
+  ],
+  "auto/link_row.dart": [
+   "FFEEEEEE"
+  ],
+  "auto/lipskey_brand_section_card.dart": [
+   "FFEEEEEE",
+   "FF3D5A80",
+   "FF64FFDA",
+   "FF888888"
+  ],
+  "auto/lipskey_product_sheet_divider.dart": [
+   "FFEEEEEE"
+  ],
+  "auto/location_button.dart": [
+   "FFEAF3FF",
+   "FF1D6FE0",
+   "FF1D4ED8"
+  ],
+  "auto/log_button.dart": [
+   "42000000"
+  ],
+  "auto/manage_section.dart": [
+   "FFEDEDED"
+  ],
+  "auto/match_chip.dart": [
+   "FF1F8A4C"
+  ],
+  "auto/material_dots.dart": [
+   "FFCFD4DA"
+  ],
+  "auto/mini_qty_btn.dart": [
+   "8A000000",
+   "FFCCCCCC"
+  ],
+  "auto/mini_tracker.dart": [
+   "FFEDEDED"
+  ],
+  "auto/mode_frame.dart": [
+   "61000000",
+   "8A000000",
+   "FFFFFFFF"
+  ],
+  "auto/must_chip.dart": [
+   "FFB45309"
+  ],
+  "auto/new_task_button.dart": [
+   "42000000"
+  ],
+  "auto/notif_row.dart": [
+   "8A000000"
+  ],
+  "auto/notif_settings_section_tile.dart": [
+   "8A000000",
+   "FFFFFFFF"
+  ],
+  "auto/num_box.dart": [
+   "FFEAEAEA",
+   "FF888888"
+  ],
+  "auto/number_row.dart": [
+   "8A000000"
+  ],
+  "auto/penalty_card.dart": [
+   "FFF6F7F9",
+   "FFE6E8EC"
+  ],
+  "auto/picker_option.dart": [
+   "FFFF9D4D",
+   "FF2A2A2A",
+   "FF444444",
+   "FFCCCCCC"
+  ],
+  "auto/pill.dart": [
+   "FFAAAAAA"
+  ],
+  "auto/pipe_link.dart": [
+   "FF000000"
+  ],
+  "auto/placeholder_notice.dart": [
+   "FFFFF7E8",
+   "FFF3DFB6"
+  ],
+  "auto/portal_tile_button.dart": [
+   "42000000"
+  ],
+  "auto/preset_chip.dart": [
+   "FFE2E2E2"
+  ],
+  "auto/price_chip.dart": [
+   "FFEDEDED"
+  ],
+  "auto/privacy_notice.dart": [
+   "FFFFF8E1",
+   "14000000",
+   "FF5C5C3A"
+  ],
+  "auto/product_tile.dart": [
+   "FFEDEDED"
+  ],
+  "auto/profile_row.dart": [
+   "8A000000"
+  ],
+  "auto/project_done.dart": [
+   "FFE9F7EE",
+   "FF1F6F3F"
+  ],
+  "auto/proof_thumb.dart": [
+   "FFF2F3F5"
+  ],
+  "auto/proposal_card.dart": [
+   "42000000"
+  ],
+  "auto/propose_primary_btn.dart": [
+   "FFE9EAEC"
+  ],
+  "auto/quick_action.dart": [
+   "8A000000",
+   "FFF44336",
+   "FFFFFFFF"
+  ],
+  "auto/quick_actions_section.dart": [
+   "8A000000",
+   "FFFFFFFF"
+  ],
+  "auto/rcard.dart": [
+   "0F000000"
+  ],
+  "auto/referral.dart": [
+   "FFEEEEEE",
+   "FF2E7D32"
+  ],
+  "auto/regression_panel_check_row.dart": [
+   "FF888888"
+  ],
+  "auto/report_table.dart": [
+   "FFDDDDDD",
+   "FF16191D"
+  ],
+  "auto/rewards_hub_fin_row.dart": [
+   "FF2E7D32"
+  ],
+  "auto/rewards_hub_pill.dart": [
+   "FFFFEBEE",
+   "FFF1F1F1",
+   "FFC62828"
+  ],
+  "auto/role_requests_inbox_empty.dart": [
+   "FFBBBBBB"
+  ],
+  "auto/rstat.dart": [
+   "0F000000"
+  ],
+  "auto/save_draft_button.dart": [
+   "FFE2E2E2"
+  ],
+  "auto/saved_version_chip.dart": [
+   "FFEDE9FE",
+   "FF5B21B6",
+   "FF7C3AED"
+  ],
+  "auto/section_card.dart": [
+   "14000000"
+  ],
+  "auto/section_tile.dart": [
+   "8A000000"
+  ],
+  "auto/section_title.dart": [
+   "FF888888"
+  ],
+  "auto/selection_band.dart": [
+   "14FF7A18",
+   "66FF7A18"
+  ],
+  "auto/send_report_button.dart": [
+   "FFE9EAEC"
+  ],
+  "auto/severity_chip.dart": [
+   "FFDDDDDD",
+   "FFFFFFFF"
+  ],
+  "auto/sheet_advance_button.dart": [
+   "FF1F8A4C",
+   "FFFFFFFF"
+  ],
+  "auto/sheet_section.dart": [
+   "FF888888"
+  ],
+  "auto/shutter_button.dart": [
+   "FF555555",
+   "FFFFFFFF"
+  ],
+  "auto/sicha_sheet.dart": [
+   "FF333333",
+   "61000000",
+   "1F000000"
+  ],
+  "auto/site_hub_ca_card.dart": [
+   "FFF2A516",
+   "FFE6E6E6"
+  ],
+  "auto/smart_project_hero.dart": [
+   "14000000",
+   "FFEDEDED"
+  ],
+  "auto/snooze_sheet.dart": [
+   "1F000000",
+   "FFF5F5F5",
+   "FF888888"
+  ],
+  "auto/specialty_derived_row.dart": [
+   "FFE2E2E2"
+  ],
+  "auto/split_control.dart": [
+   "FFE0E0E0"
+  ],
+  "auto/sstat.dart": [
+   "FFEDEDED"
+  ],
+  "auto/stat.dart": [
+   "0F000000"
+  ],
+  "auto/stats_card.dart": [
+   "14000000",
+   "FFEDEDED"
+  ],
+  "auto/status_chip.dart": [
+   "FF1F8A4C"
+  ],
+  "auto/stock_row.dart": [
+   "FFEAEAEA",
+   "FF888888"
+  ],
+  "auto/stock_tab.dart": [
+   "FFEAEAEA"
+  ],
+  "auto/store_empty_state.dart": [
+   "FF888888"
+  ],
+  "auto/store_pill.dart": [
+   "FF595959"
+  ],
+  "auto/store_project_chip.dart": [
+   "FF595959"
+  ],
+  "auto/store_settings_section_tile.dart": [
+   "8A000000",
+   "FFFFFFFF"
+  ],
+  "auto/store_sheet_scaffold.dart": [
+   "1F000000"
+  ],
+  "auto/store_step_btn.dart": [
+   "FF444444"
+  ],
+  "auto/store_summary_line.dart": [
+   "FF888888"
+  ],
+  "auto/store_supplier_header.dart": [
+   "FF888888"
+  ],
+  "auto/sub_row.dart": [
+   "FFF6F7F9",
+   "FFE6E8EC"
+  ],
+  "auto/summary_card.dart": [
+   "FFF5F5F5",
+   "FF888888"
+  ],
+  "auto/supplier_tile.dart": [
+   "FFEEEEEE",
+   "61000000"
+  ],
+  "auto/swatch.dart": [
+   "1F000000",
+   "FFFFFFFF"
+  ],
+  "auto/target_subject.dart": [
+   "FFE2E2E2"
+  ],
+  "auto/thr_row.dart": [
+   "FFFFF3E0",
+   "FFF6F7F9",
+   "FFFFCC80",
+   "FFE6E8EC"
+  ],
+  "auto/three_col.dart": [
+   "FFC62828"
+  ],
+  "auto/three_way.dart": [
+   "FFC62828",
+   "FFE57373",
+   "FFEEEEEE",
+   "FFFFEBEE",
+   "FFF1F1F1"
+  ],
+  "auto/thumb_placeholder.dart": [
+   "FFF2F3F5"
+  ],
+  "auto/trade_builder_accessory_rule_editor_pill_button.dart": [
+   "FFE2E2E2"
+  ],
+  "auto/trade_builder_trade_builder_home_status_chip.dart": [
+   "FF1F8A4C",
+   "FFB45309"
+  ],
+  "auto/trade_builder_trade_define_step_color_swatch.dart": [
+   "FFEDEDED",
+   "FFFFFFFF"
+  ],
+  "auto/tree_coming_soon.dart": [
+   "FF888888"
+  ],
+  "auto/typing_bubble.dart": [
+   "18000000",
+   "FF888888"
+  ],
+  "auto/vacation_row.dart": [
+   "FFEDEDED",
+   "FF1F8A4C",
+   "FFDDDDDD",
+   "FFFFFFFF"
+  ],
+  "auto/value_chip.dart": [
+   "FFEDEDED"
+  ],
+  "auto/warn_chip.dart": [
+   "FFB45309"
+  ],
+  "auto/wide_warning.dart": [
+   "FFFFF4E5",
+   "FFFFB74D",
+   "FFE65100",
+   "FF7A3E00"
+  ],
+  "auto/wizard_header.dart": [
+   "FFEDEDED"
+  ],
+  "auto/worker_employer_stock_sheet_stock_row.dart": [
+   "FFEAEAEA",
+   "FFF2F3F5",
+   "FFFFF0E3"
+  ],
+  "auto/worker_equipment_checklist_sheet_primary_btn.dart": [
+   "FFE0E0E0"
+  ],
+  "auto/worker_forms_pill_button.dart": [
+   "FFE2E2E2"
+  ],
+  "auto/worker_nav.dart": [
+   "FF888888"
+  ],
+  "auto/worker_reports_tab_card.dart": [
+   "14000000"
+  ],
+  "auto/worker_settings_section_card.dart": [
+   "8A000000"
+  ],
+  "auto/zoom_hint.dart": [
+   "8A000000",
+   "1F000000"
+  ],
+  "ds/ds.dart": [
+   "FFFFFFFF"
+  ],
+  "ds/ds_toggle_tile.dart": [
+   "FFFFFFFF"
+  ],
+  "gradient_text.dart": [
+   "FFFFFFFF"
+  ],
+  "premium/actions/fab_action.dart": [
+   "FF7C3AED",
+   "FFEC4899",
+   "FFFFFFFF"
+  ],
+  "premium/actions/glass_button.dart": [
+   "FFFFFFFF",
+   "FF07070D",
+   "FFF2F3FF"
+  ],
+  "premium/actions/grad_button.dart": [
+   "FF7C3AED",
+   "FFEC4899",
+   "FFFFFFFF",
+   "FFF2F3FF"
+  ],
+  "premium/actions/neon_button.dart": [
+   "FF22D3EE",
+   "FFEC4899",
+   "FF7C3AED",
+   "FF0B0B16",
+   "FFF2F3FF"
+  ],
+  "premium/actions/segmented_switch.dart": [
+   "FF0E0B1A",
+   "FFFFFFFF",
+   "FF7C3AED",
+   "FFEC4899",
+   "FFF2F3FF"
+  ],
+  "premium/actions/soft_button.dart": [
+   "FF7C3AED",
+   "FF2DD4A7",
+   "FFF43F5E",
+   "FFF2F3FF"
+  ],
+  "premium/actions/split_action.dart": [
+   "FF171427",
+   "FF0E0B1A",
+   "FF7C3AED",
+   "FFEC4899",
+   "FFF2F3FF",
+   "FF22D3EE"
+  ],
+  "premium/dataviz/donut_chart.dart": [
+   "FF22E1FF",
+   "FF7A5CFF",
+   "FFFF3DCB",
+   "FF3DFFB0",
+   "FFFFC24B",
+   "FF5C7CFF",
+   "FFFFFFFF",
+   "FF1A1B33"
+  ],
+  "premium/dataviz/gauge_meter.dart": [
+   "FF22E1FF",
+   "FF7A5CFF",
+   "FFFF3DCB",
+   "FF6EE7B7",
+   "FF34D399",
+   "FF059669",
+   "FFFB7185",
+   "FFF43F5E",
+   "FFBE123C",
+   "FFFCD34D",
+   "FFF59E0B",
+   "FFD97706",
+   "FFFFFFFF",
+   "FF1A1B33"
+  ],
+  "premium/dataviz/kpi_tile.dart": [
+   "FF12132A",
+   "FF8A8CB8",
+   "FF22E1FF",
+   "FF7A5CFF",
+   "FFFF3DCB",
+   "FFFFFFFF"
+  ],
+  "premium/dataviz/neon_bars.dart": [
+   "FF0E0F1E",
+   "FF1A1B33",
+   "FF22E1FF",
+   "FF7A5CFF",
+   "FFFF3DCB",
+   "FFEAEBFF",
+   "FF8A8CB8",
+   "FF6EE7B7",
+   "FF34D399",
+   "FF059669",
+   "FFFB7185",
+   "FFF43F5E",
+   "FFBE123C",
+   "FFFCD34D",
+   "FFF59E0B",
+   "FFD97706",
+   "FFFFFFFF"
+  ],
+  "premium/dataviz/progress_ring.dart": [
+   "FF8A8CB8",
+   "FF22E1FF",
+   "FFFF3DCB",
+   "FFFFFFFF",
+   "FF1A1B33",
+   "FF7A5CFF"
+  ],
+  "premium/dataviz/sparkline.dart": [
+   "FF22E1FF",
+   "FF7A5CFF",
+   "FFFF3DCB",
+   "FFFFFFFF"
+  ],
+  "premium/dataviz/trend_stat.dart": [
+   "FF12132A",
+   "FFF2F3FF",
+   "FF8A8CB8",
+   "FF3DFFB0",
+   "FFFF5C7A",
+   "FFFFFFFF"
+  ],
+  "premium/feedback/alert_banner.dart": [
+   "FF7C3AED",
+   "FF34D399",
+   "FFF43F5E",
+   "FFF59E0B",
+   "FFF2F3FF"
+  ],
+  "premium/feedback/badge_count.dart": [
+   "FFEC4899",
+   "FF7C3AED",
+   "FFFFFFFF",
+   "FFF2F3FF"
+  ],
+  "premium/feedback/empty_state.dart": [
+   "FF211B3A",
+   "FF120E22",
+   "FF7C3AED",
+   "FFF2F3FF"
+  ],
+  "premium/feedback/rating_stars.dart": [
+   "FFF59E0B",
+   "FF3A3352",
+   "FFFFD98A"
+  ],
+  "premium/feedback/skeleton_block.dart": [
+   "FF1B1730",
+   "FF2E2650"
+  ],
+  "premium/feedback/status_chip.dart": [
+   "FF7C3AED",
+   "FF34D399",
+   "FFF43F5E",
+   "FFF59E0B",
+   "FFF2F3FF"
+  ],
+  "premium/feedback/status_dot.dart": [
+   "FF22D3EE",
+   "FF34D399",
+   "FFF43F5E",
+   "FFF59E0B",
+   "FFFFFFFF"
+  ],
+  "premium/feedback/toast_card.dart": [
+   "FF7C3AED",
+   "FF34D399",
+   "FFF43F5E",
+   "FFF59E0B",
+   "FF181328",
+   "FF120E22",
+   "FF000000",
+   "FFFFFFFF",
+   "FFF2F3FF"
+  ],
+  "premium/lists/avatar_tile.dart": [
+   "FF101127",
+   "FF7C3AED",
+   "FFF2F3FF",
+   "FF9AA0BE",
+   "FF0C0D1E",
+   "FFFFFFFF",
+   "FFEC4899",
+   "FF4338CA"
+  ],
+  "premium/lists/expandable_tile.dart": [
+   "FF101127",
+   "FF7C3AED",
+   "FFF2F3FF",
+   "FF9AA0BE",
+   "FFFFFFFF",
+   "FFC4B5FD"
+  ],
+  "premium/lists/glass_list_tile.dart": [
+   "FF7C3AED",
+   "FFF2F3FF",
+   "FF9AA0BE",
+   "FFFFFFFF",
+   "FFEC4899",
+   "FFC4B5FD"
+  ],
+  "premium/lists/media_row.dart": [
+   "FF101127",
+   "FF7C3AED",
+   "FFF2F3FF",
+   "FF9AA0BE",
+   "FFFFFFFF",
+   "FF4338CA",
+   "FFC4B5FD"
+  ],
+  "premium/lists/nav_row.dart": [
+   "FF101127",
+   "FF7C3AED",
+   "FFF2F3FF",
+   "FF9AA0BE",
+   "FFFFFFFF",
+   "FF4338CA"
+  ],
+  "premium/lists/stat_row.dart": [
+   "FF101127",
+   "FF7C3AED",
+   "FFF2F3FF",
+   "FF9AA0BE",
+   "FFFFFFFF",
+   "FFEC4899"
+  ],
+  "premium/lists/timeline_item.dart": [
+   "FF7C3AED",
+   "FFF2F3FF",
+   "FF9AA0BE",
+   "FFEC4899",
+   "FFC4B5FD"
+  ],
+  "premium/showcase/gold_button.dart": [
+   "FFFFFFFF",
+   "FFF4F5F7",
+   "FF9AA0AC",
+   "1FFFFFFF",
+   "FF9C8CFF",
+   "FF7A6BFF",
+   "FF5B4CE0",
+   "FF3E31B0",
+   "669D7BFF",
+   "4622D3EE",
+   "FF6C5CE7",
+   "FFB9AEFF",
+   "FF39D6F0",
+   "FFC66BFF",
+   "FF1C1D26",
+   "FF14141B",
+   "40000000",
+   "38FFFFFF",
+   "00FFFFFF",
+   "8FFFFFFF",
+   "2EFFFFFF"
+  ],
+  "premium/showcase/premium_avatar.dart": [
+   "FF7A6BFF",
+   "FF5B4CE0",
+   "FF39D6F0",
+   "FF2A8CF0",
+   "FFC66BFF",
+   "FF8B3BE0",
+   "FFFF8A5B",
+   "FFE0563B",
+   "FF34D399",
+   "FF10A5A0",
+   "FFF7B733",
+   "FFE08C2A",
+   "FFF87171",
+   "FFFFFFFF",
+   "FF06060B"
+  ],
+  "premium/showcase/premium_chip.dart": [
+   "FF7A6BFF",
+   "FF5B4CE0",
+   "FF6C5CE7",
+   "FF16171F",
+   "1FFFFFFF",
+   "FFF4F5F7",
+   "FF9AA0AC",
+   "FFFFFFFF",
+   "2EFFFFFF",
+   "33FFFFFF",
+   "14FFFFFF"
+  ],
+  "premium/showcase/premium_field.dart": [
+   "FF14151C",
+   "1FFFFFFF",
+   "FF7A6BFF",
+   "FF6C5CE7",
+   "FFF4F5F7",
+   "FF9AA0AC",
+   "FF60636E",
+   "FF39D6F0",
+   "FFC66BFF"
+  ],
+  "premium/showcase/premium_ring.dart": [
+   "FF1A1B23",
+   "FF39D6F0",
+   "FF7A6BFF",
+   "FFC66BFF",
+   "FF6C5CE7",
+   "FFF4F5F7",
+   "FF9AA0AC",
+   "FFFFFFFF"
+  ],
+  "premium/showcase/premium_stat.dart": [
+   "FF131922",
+   "FF0F141C",
+   "14FFFFFF",
+   "FF9AA7B5",
+   "FF828E9E",
+   "FF34D399",
+   "FFF87171",
+   "24818CF8",
+   "59000000",
+   "40000000",
+   "33818CF8",
+   "FFFFFFFF",
+   "FFB9C2FF",
+   "00818CF8",
+   "FF4F46E5",
+   "FF818CF8",
+   "55818CF8"
+  ],
+  "premium/showcase/premium_toggle.dart": [
+   "FF1B1C24",
+   "FFFFFFFF",
+   "FF7A6BFF",
+   "FF5B4CE0",
+   "FF6C5CE7",
+   "FFE9EDF3",
+   "1FFFFFFF",
+   "33FFFFFF",
+   "59000000",
+   "FF9AA0AC"
+  ],
+  "premium/surfaces/elevated_card.dart": [
+   "FF101127",
+   "FF0B0B1A",
+   "22FFFFFF",
+   "99000000",
+   "4D000000",
+   "1A7C3AED"
+  ],
+  "premium/surfaces/feature_panel.dart": [
+   "FF101127",
+   "FF0A0A18",
+   "1FFFFFFF",
+   "FFF2F3FF",
+   "FF9A9CC4",
+   "FF22D3EE",
+   "FF7C3AED",
+   "4022D3EE",
+   "59000000",
+   "FFFFFFFF"
+  ],
+  "premium/surfaces/glass_card.dart": [
+   "14FFFFFF",
+   "08FFFFFF",
+   "33FFFFFF",
+   "66FFFFFF",
+   "337C3AED",
+   "66000000",
+   "00FFFFFF"
+  ],
+  "premium/surfaces/gradient_card.dart": [
+   "FF161738",
+   "FF101127",
+   "FF0A0A18",
+   "1AFFFFFF",
+   "73000000",
+   "26EC4899"
+  ],
+  "premium/surfaces/hero_header.dart": [
+   "FF07070D",
+   "557C3AED",
+   "0007070D",
+   "FFF2F3FF",
+   "FF9A9CC4",
+   "FF7C3AED",
+   "FFEC4899",
+   "66EC4899",
+   "1AFFFFFF",
+   "FFFFFFFF"
+  ],
+  "premium/surfaces/neon_card.dart": [
+   "FF0B0B18",
+   "FF7C3AED",
+   "FFEC4899",
+   "FF22D3EE",
+   "557C3AED",
+   "4022D3EE"
+  ],
+  "premium/surfaces/stat_hero.dart": [
+   "FF22D3EE",
+   "FF7C3AED",
+   "FFEC4899",
+   "FF9A9CC4",
+   "FFFFFFFF"
+  ],
+  "pure_bubble.dart": [
+   "8A000000"
+  ],
+  "screens__manager_dashboard_screen/gradient_hero_card.dart": [
+   "FFFFFFFF"
+  ],
+  "screens__manager_dashboard_screen/status_dot.dart": [
+   "FF22A75A"
+  ],
+  "stat_tile.dart": [
+   "0F000000"
+  ],
+  "work_path_card.dart": [
+   "3DFFFFFF",
+   "FFFFFFFF",
+   "B3FFFFFF"
+  ]
+ }
+}

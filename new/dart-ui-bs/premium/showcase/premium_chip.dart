@@ -2,6 +2,7 @@
 // וזוהר-מבטא בנבחר · משטח+hairline בלא-נבחר · נקודת-מצב · מונה · מיקרו-לחיצה.
 // a11y: Semantics(selected/button) · reduced-motion · אין-צבע-לבד (אייקון+נקודה). חוט-טהור.
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class PremiumChip extends StatefulWidget {
   const PremiumChip({
@@ -19,13 +20,13 @@ class PremiumChip extends StatefulWidget {
   final VoidCallback? onTap;
   final int? count;
 
-  static const _accentA = Color(0xFF7A6BFF);
-  static const _accentB = Color(0xFF5B4CE0);
-  static const _glow = Color(0xFF6C5CE7);
-  static const _surface = Color(0xFF16171F);
-  static const _hair = Color(0x1FFFFFFF);
-  static const _ink = Color(0xFFF4F5F7);
-  static const _muted = Color(0xFF9AA0AC);
+  static const _accentA = DsAtomColors.premiumShowcasePremiumChip1;
+  static const _accentB = DsAtomColors.premiumShowcasePremiumChip2;
+  static const _glow = DsAtomColors.premiumShowcasePremiumChip3;
+  static const _surface = DsAtomColors.premiumShowcasePremiumChip4;
+  static const _hair = DsAtomColors.premiumShowcasePremiumChip5;
+  static const _ink = DsAtomColors.premiumShowcasePremiumChip6;
+  static const _muted = DsAtomColors.premiumShowcasePremiumChip7;
 
   @override
   State<PremiumChip> createState() => _PremiumChipState();
@@ -39,7 +40,7 @@ class _PremiumChipState extends State<PremiumChip> {
   Widget build(BuildContext context) {
     final reduce = MediaQuery.of(context).disableAnimations;
     final sel = widget.selected;
-    final fg = sel ? Colors.white : PremiumChip._muted;
+    final fg = sel ? DsAtomColors.premiumShowcasePremiumChip8 : PremiumChip._muted;
 
     final chip = AnimatedContainer(
       duration: Duration(milliseconds: reduce ? 0 : 180),
@@ -52,7 +53,7 @@ class _PremiumChipState extends State<PremiumChip> {
             : null,
         color: sel ? null : PremiumChip._surface,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: sel ? const Color(0x2EFFFFFF) : PremiumChip._hair),
+        border: Border.all(color: sel ? DsAtomColors.premiumShowcasePremiumChip9 : PremiumChip._hair),
         boxShadow: sel
             ? [BoxShadow(color: PremiumChip._glow.withValues(alpha: 0.4), blurRadius: 14, offset: const Offset(0, 5))]
             : null,
@@ -67,7 +68,7 @@ class _PremiumChipState extends State<PremiumChip> {
             Container(
               width: 6,
               height: 6,
-              decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+              decoration: const BoxDecoration(color: DsAtomColors.premiumShowcasePremiumChip8, shape: BoxShape.circle),
             ),
             const SizedBox(width: 7),
           ],
@@ -84,13 +85,13 @@ class _PremiumChipState extends State<PremiumChip> {
             Container(
               padding: const EdgeInsetsDirectional.fromSTEB(7, 2, 7, 2),
               decoration: BoxDecoration(
-                color: sel ? const Color(0x33FFFFFF) : const Color(0x14FFFFFF),
+                color: sel ? DsAtomColors.premiumShowcasePremiumChip10 : DsAtomColors.premiumShowcasePremiumChip11,
                 borderRadius: BorderRadius.circular(999),
               ),
               child: Text(
                 '${widget.count}',
                 style: TextStyle(
-                    color: sel ? Colors.white : PremiumChip._muted,
+                    color: sel ? DsAtomColors.premiumShowcasePremiumChip8 : PremiumChip._muted,
                     fontSize: 11.5,
                     fontWeight: FontWeight.w700),
               ),

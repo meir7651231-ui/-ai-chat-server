@@ -2,6 +2,7 @@
 // מוצא: screens__worker_employer_stock_sheet:_StockRow (בנייה-חכמה main) · צרור-1 · מודל-שוטח: 2 שדות · props-שורש: label, label2, location, name
 // התוכן: new/dart-data-bs/auto/screens__worker_employer_stock_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class WorkerEmployerStockSheetStockRow extends StatelessWidget {
@@ -23,7 +24,7 @@ class WorkerEmployerStockSheetStockRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-        border: Border.all(color: const Color(0xFFEAEAEA)),
+        border: Border.all(color: DsAtomColors.autoWorkerEmployerStockSheetStockRow1),
       ),
       child: Row(
         children: [
@@ -43,8 +44,8 @@ class WorkerEmployerStockSheetStockRow extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
               color: warehouse
-                  ? const Color(0xFFF2F3F5)
-                  : const Color(0xFFFFF0E3),
+                  ? DsAtomColors.autoWorkerEmployerStockSheetStockRow2
+                  : DsAtomColors.autoWorkerEmployerStockSheetStockRow3,
               borderRadius: BorderRadius.circular(BsTokens.radiusPill),
             ),
             child: Text(

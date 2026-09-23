@@ -3,6 +3,7 @@
 // חוט-טהור: material + dart:math בלבד · פיגמנט const · טקסט דרך פרמטר · RTL.
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class PremiumRing extends StatefulWidget {
   const PremiumRing({
@@ -18,13 +19,13 @@ class PremiumRing extends StatefulWidget {
   final String? caption;
   final double size;
 
-  static const _track = Color(0xFF1A1B23);
-  static const _arcA = Color(0xFF39D6F0);
-  static const _arcB = Color(0xFF7A6BFF);
-  static const _arcC = Color(0xFFC66BFF);
-  static const _glow = Color(0xFF6C5CE7);
-  static const _ink = Color(0xFFF4F5F7);
-  static const _muted = Color(0xFF9AA0AC);
+  static const _track = DsAtomColors.premiumShowcasePremiumRing1;
+  static const _arcA = DsAtomColors.premiumShowcasePremiumRing2;
+  static const _arcB = DsAtomColors.premiumShowcasePremiumRing3;
+  static const _arcC = DsAtomColors.premiumShowcasePremiumRing4;
+  static const _glow = DsAtomColors.premiumShowcasePremiumRing5;
+  static const _ink = DsAtomColors.premiumShowcasePremiumRing6;
+  static const _muted = DsAtomColors.premiumShowcasePremiumRing7;
 
   @override
   State<PremiumRing> createState() => _PremiumRingState();
@@ -155,7 +156,7 @@ class _RingPainter extends CustomPainter {
       center.dy + radius * math.sin(start + sweep),
     );
     canvas
-      ..drawCircle(end, stroke * 0.5, Paint()..color = Colors.white.withValues(alpha: 0.9))
+      ..drawCircle(end, stroke * 0.5, Paint()..color = DsAtomColors.premiumShowcasePremiumRing8.withValues(alpha: 0.9))
       ..drawCircle(end, stroke * 0.22, Paint()..color = PremiumRing._arcB);
   }
 

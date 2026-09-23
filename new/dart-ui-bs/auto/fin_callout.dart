@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__finance_hub_sheets:_FinCallout (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
 
@@ -29,9 +30,9 @@ class FinCallout extends StatelessWidget {
       margin: const EdgeInsets.only(top: BsTokens.space4),
       padding: const EdgeInsets.all(BsTokens.space4),
       decoration: BoxDecoration(
-        color: const Color(0xFFEAF5F4),
+        color: DsAtomColors.autoFinCallout1,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
-        border: Border.all(color: const Color(0xFFCDE7E4)),
+        border: Border.all(color: DsAtomColors.autoFinCallout2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

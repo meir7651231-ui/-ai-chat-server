@@ -2,6 +2,7 @@
 // מוצא: screens__smart_project_screen:_Hero (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__smart_project_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
 
@@ -27,7 +28,7 @@ class SmartProjectHero extends StatelessWidget {
         borderRadius: BorderRadius.circular(cfgRadius(context)),
         boxShadow: const [
           BoxShadow(
-              color: Color(0x14000000), blurRadius: 10, offset: Offset(0, 2)),
+              color: DsAtomColors.autoSmartProjectHero1, blurRadius: 10, offset: Offset(0, 2)),
         ],
       ),
       child: Column(
@@ -44,7 +45,7 @@ class SmartProjectHero extends StatelessWidget {
             child: LinearProgressIndicator(
               value: total == 0 ? 0 : done / total,
               minHeight: 10,
-              backgroundColor: const Color(0xFFEDEDED),
+              backgroundColor: DsAtomColors.autoSmartProjectHero2,
               valueColor:
                   const AlwaysStoppedAnimation<Color>(BsTokens.brand),
             ),

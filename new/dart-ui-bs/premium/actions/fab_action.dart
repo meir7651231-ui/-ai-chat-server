@@ -1,5 +1,6 @@
 // ✨ FabAction — כפתור-פעולה צף עגול, גרדיאנט סגול→מגנטה עם זוהר ניאון כפול. מקבל icon · onTap.
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class FabAction extends StatelessWidget {
   const FabAction({
@@ -19,16 +20,16 @@ class FabAction extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF7C3AED), Color(0xFFEC4899)],
+          colors: [DsAtomColors.premiumActionsFabAction1, DsAtomColors.premiumActionsFabAction2],
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF7C3AED).withValues(alpha: 0.50),
+            color: DsAtomColors.premiumActionsFabAction1.withValues(alpha: 0.50),
             blurRadius: 22,
             offset: const Offset(0, 8),
           ),
           BoxShadow(
-            color: const Color(0xFFEC4899).withValues(alpha: 0.36),
+            color: DsAtomColors.premiumActionsFabAction2.withValues(alpha: 0.36),
             blurRadius: 34,
             spreadRadius: -4,
           ),
@@ -40,8 +41,8 @@ class FabAction extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
-          splashColor: Colors.white.withValues(alpha: 0.22),
-          highlightColor: Colors.white.withValues(alpha: 0.08),
+          splashColor: DsAtomColors.premiumActionsFabAction3.withValues(alpha: 0.22),
+          highlightColor: DsAtomColors.premiumActionsFabAction3.withValues(alpha: 0.08),
           child: Container(
             width: 58,
             height: 58,
@@ -49,11 +50,11 @@ class FabAction extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.24),
+                color: DsAtomColors.premiumActionsFabAction3.withValues(alpha: 0.24),
                 width: 1,
               ),
             ),
-            child: Icon(icon, size: 25, color: Colors.white),
+            child: Icon(icon, size: 25, color: DsAtomColors.premiumActionsFabAction3),
           ),
         ),
       ),

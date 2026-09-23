@@ -1,6 +1,7 @@
 // 🧼 אטום-משותף · StatTile — אריח-סטטיסטיקה בכרטיס (איחד _Stat/_PStat ×3).
 // מוצא: courier_dashboard_screen.dart · verbatim, טוקנים מוזרקים.
 import 'package:flutter/material.dart';
+import 'ds/ds_atoms.dart';
 
 class StatTile extends StatelessWidget {
   const StatTile({
@@ -20,7 +21,7 @@ class StatTile extends StatelessWidget {
           decoration: BoxDecoration(
             color: surfaceColor,
             borderRadius: BorderRadius.circular(radius),
-            boxShadow: const [BoxShadow(color: Color(0x0F000000), blurRadius: 8, offset: Offset(0, 2))],
+            boxShadow: const [BoxShadow(color: DsAtomColors.statTile1, blurRadius: 8, offset: Offset(0, 2))],
           ),
           child: Column(children: [
             Text(value, style: TextStyle(color: inkColor, fontWeight: FontWeight.w800, fontSize: 17)),

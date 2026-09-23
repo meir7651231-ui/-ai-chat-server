@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__home_shell:_BadgedIcon (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class HomeShellBadgedIcon extends StatelessWidget {
@@ -31,7 +32,7 @@ class HomeShellBadgedIcon extends StatelessWidget {
             child: Text(
               count > 9 ? '9+' : '$count',
               style: const TextStyle(
-                color: Colors.white,
+                color: DsAtomColors.autoHomeShellBadgedIcon1,
                 fontSize: 8,
                 fontWeight: FontWeight.w700,
               ),

@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__projects_screen:_LinkBtn (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class LinkBtn extends StatelessWidget {
@@ -10,7 +11,7 @@ class LinkBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Expanded(
         child: Material(
-          color: const Color(0xFFF7F8FA),
+          color: DsAtomColors.autoLinkBtn1,
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),
           child: InkWell(
             borderRadius: BorderRadius.circular(BsTokens.radiusPill),

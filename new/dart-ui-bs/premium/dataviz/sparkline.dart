@@ -1,6 +1,7 @@
 // ✨ Sparkline — קו-מגמה זעיר עם מילוי-גרדיאנט ונקודת-קצה מודגשת (CustomPainter)
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class Sparkline extends StatelessWidget {
   const Sparkline({super.key, required this.values, this.height = 56});
@@ -25,9 +26,9 @@ class _SparkPainter extends CustomPainter {
 
   final List<double> values;
 
-  static const Color _cyan = Color(0xFF22E1FF);
-  static const Color _violet = Color(0xFF7A5CFF);
-  static const Color _magenta = Color(0xFFFF3DCB);
+  static const Color _cyan = DsAtomColors.premiumDatavizSparkline1;
+  static const Color _violet = DsAtomColors.premiumDatavizSparkline2;
+  static const Color _magenta = DsAtomColors.premiumDatavizSparkline3;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -95,7 +96,7 @@ class _SparkPainter extends CustomPainter {
     final Offset end = pts.last;
     canvas.drawCircle(end, 8, Paint()..color = _magenta.withValues(alpha: 0.28));
     canvas.drawCircle(end, 4.5, Paint()..color = _magenta);
-    canvas.drawCircle(end, 2, Paint()..color = Colors.white);
+    canvas.drawCircle(end, 2, Paint()..color = DsAtomColors.premiumDatavizSparkline4);
   }
 
   @override

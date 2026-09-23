@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__catalog_screen:_CountBadge (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 
 class CatalogCountBadge extends StatelessWidget {
   const CatalogCountBadge({
@@ -23,7 +24,7 @@ class CatalogCountBadge extends StatelessWidget {
       child: Text(
         '$label $count',
         style: const TextStyle(
-          color: Colors.white,
+          color: DsAtomColors.autoCatalogCountBadge1,
           fontSize: 11,
           fontWeight: FontWeight.w700,
         ),

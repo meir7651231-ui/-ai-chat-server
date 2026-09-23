@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__chat_settings_screen:_InlineTextRow (בנייה-חכמה main) · Stateful+State
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class InlineTextRow extends StatefulWidget {
@@ -48,7 +49,7 @@ class InlineTextRowState extends State<InlineTextRow> {
         children: [
           Text(
             widget.label,
-            style: const TextStyle(color: Colors.black54, fontSize: 13),
+            style: const TextStyle(color: DsAtomColors.autoInlineTextRow1, fontSize: 13),
           ),
           const SizedBox(height: 6),
           TextField(
@@ -58,9 +59,9 @@ class InlineTextRowState extends State<InlineTextRow> {
             maxLines: 2,
             decoration: InputDecoration(
               hintText: widget.hint,
-              hintStyle: const TextStyle(color: Color(0xFF999999)),
+              hintStyle: const TextStyle(color: DsAtomColors.autoInlineTextRow2),
               filled: true,
-              fillColor: const Color(0xFFF2F3F5),
+              fillColor: DsAtomColors.autoInlineTextRow3,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide.none,

@@ -2,6 +2,20 @@
 > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
 > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
 
+## L2026-09-23-contract-5c09e9 · זרע התרחב (ערכה/עור חדשים) והחוזה נשאר סופר «ארבע» — הרחבת-זרע = חוזה+צילום באותו שינוי
+GATE: contract
+ref: 5c09e9e02c5bff6ccae4b7799be1be5b657c7427:new/atoms/pure-look.test.mjs
+ANTIPATTERN: '(שלוש|ארבע|חמש|שש|שבע) ערכות \(
+RULE: כשזרע מתרחב (ערכה · עור · מפתח) — contract.md ומבחן-הצילום שלו מתעדכנים באותו שינוי; מבחן שסופר מספר בטקסט קשיח («ארבע») במקום לתאר את הזרע = אדום בהרחבה הבאה.
+מה נכשל: הוספתי ל-pure-look.mjs את themes.t-build ו-skins.build (הכרעת-בעלים 23.9 «1 ו-2») בלי לגעת ב-pure-look.test.mjs — האסרט «ארבע ערכות» והצילום-המלא נפלו. הראיה: ref (git show).
+
+## L2026-09-23-genratchet-e93c7a · תיעוד-בלוק `/** */` בעברית בתוך מנוע = חוב-עברית-במנוע (המונה מסיר רק `//`)
+GATE: genratchet
+ref: e93c7a0d3146165ac93f2707624fe377d7c56498:machtzev/generator/app-ds.mjs
+ANTIPATTERN: ^\/\*\* «עיצוב: <עור>
+RULE: במנועי machtzev/generator תיעוד בעברית = שורות `//` בלבד (וטקסט-לוג בלי עברית חדשה); בלוק `/** … */` נספר ע"י generator-ratchet כחוב-עברית-במנוע (הוא מסיר רק `//`) ⇒ הראצ׳ט רק-יורד מאדים.
+מה נכשל: parseLookLine ב-app-ds.mjs קיבל בלוק-תיעוד `/** «עיצוב: <עור> [<ערכה>]» … */` + לוג עברי ⇒ app-ds חוב-עברית 69 > 39. תוקן: `//` + לוג בלי עברית ⇒ 37. הראיה: ref (git show).
+
 ## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
 GATE: police
 ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart

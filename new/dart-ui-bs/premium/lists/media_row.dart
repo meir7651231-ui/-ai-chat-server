@@ -1,5 +1,6 @@
 // ✨ MediaRow — שורת-מדיה: אייקון-גרדיאנט + כותרת/תת-כותרת + trailing אופציונלי
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class MediaRow extends StatelessWidget {
   final String title;
@@ -15,10 +16,10 @@ class MediaRow extends StatelessWidget {
     this.trailing,
   });
 
-  static const Color _card = Color(0xFF101127);
-  static const Color _accent = Color(0xFF7C3AED);
-  static const Color _text = Color(0xFFF2F3FF);
-  static const Color _muted = Color(0xFF9AA0BE);
+  static const Color _card = DsAtomColors.premiumListsMediaRow1;
+  static const Color _accent = DsAtomColors.premiumListsMediaRow2;
+  static const Color _text = DsAtomColors.premiumListsMediaRow3;
+  static const Color _muted = DsAtomColors.premiumListsMediaRow4;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class MediaRow extends StatelessWidget {
             decoration: BoxDecoration(
               color: _card,
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+              border: Border.all(color: DsAtomColors.premiumListsMediaRow5.withValues(alpha: 0.06)),
             ),
             child: Row(
               children: [
@@ -46,7 +47,7 @@ class MediaRow extends StatelessWidget {
                     gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [_accent, Color(0xFF4338CA)],
+                      colors: [_accent, DsAtomColors.premiumListsMediaRow6],
                     ),
                     boxShadow: [
                       BoxShadow(
@@ -101,7 +102,7 @@ class MediaRow extends StatelessWidget {
                     child: Text(
                       trailing!,
                       style: const TextStyle(
-                        color: Color(0xFFC4B5FD),
+                        color: DsAtomColors.premiumListsMediaRow7,
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),

@@ -140,7 +140,19 @@
  "defaultLook": "כהה",
  "looks": {
   "נייר": "paper",
-  "כהה": "dark"
+  "כהה": "dark",
+  "בנייה חכמה": "build"
+ },
+ "lookScope": {
+  "paper": { "skin": "paper", "theme": "t-balagan", "fonts": "heebo" },
+  "build": { "skin": "build", "theme": "t-build", "fonts": "heebo" }
+ },
+ "themes": {
+  "אינדיגו": "t-indigo",
+  "טורקיז": "t-teal",
+  "ענבר": "t-amber",
+  "כחול": "t-balagan",
+  "כתום": "t-build"
  },
  "questionWord": "שאלה",
  "questionTargets": {

@@ -1,6 +1,7 @@
 // ✨ TrendStat — ערך + תווית + צ׳יפ-מגמה (delta>0 ירוק↑ / <0 אדום↓)
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class TrendStat extends StatelessWidget {
   const TrendStat({
@@ -14,11 +15,11 @@ class TrendStat extends StatelessWidget {
   final double delta;
   final String label;
 
-  static const Color _bg = Color(0xFF12132A);
-  static const Color _ink = Color(0xFFF2F3FF);
-  static const Color _mute = Color(0xFF8A8CB8);
-  static const Color _up = Color(0xFF3DFFB0);
-  static const Color _down = Color(0xFFFF5C7A);
+  static const Color _bg = DsAtomColors.premiumDatavizTrendStat1;
+  static const Color _ink = DsAtomColors.premiumDatavizTrendStat2;
+  static const Color _mute = DsAtomColors.premiumDatavizTrendStat3;
+  static const Color _up = DsAtomColors.premiumDatavizTrendStat4;
+  static const Color _down = DsAtomColors.premiumDatavizTrendStat5;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class TrendStat extends StatelessWidget {
         decoration: BoxDecoration(
           color: _bg,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+          border: Border.all(color: DsAtomColors.premiumDatavizTrendStat6.withValues(alpha: 0.06)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

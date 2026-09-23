@@ -2,6 +2,7 @@
 // מוצא: screens__studio__panes__theme_pane:_ContrastWarning (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__studio__panes__theme_pane_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class ContrastWarning extends StatelessWidget {
@@ -16,15 +17,15 @@ class ContrastWarning extends StatelessWidget {
         key: const Key('studio-contrast-warning'),
         padding: const EdgeInsets.all(BsTokens.space3),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFF4E5),
+          color: DsAtomColors.autoContrastWarning1,
           borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-          border: Border.all(color: const Color(0xFFFFB74D)),
+          border: Border.all(color: DsAtomColors.autoContrastWarning2),
         ),
         child: Row(
           children: [
             const Icon(
               Icons.warning_amber_rounded,
-              color: Color(0xFFE65100),
+              color: DsAtomColors.autoContrastWarning3,
             ),
             const SizedBox(width: BsTokens.space2),
             Expanded(
@@ -34,7 +35,7 @@ class ContrastWarning extends StatelessWidget {
                 // char would itself trip the analyzer. [round-2 a11y]
                 '${label}${ratio.toStringAsFixed(1)}${label2}',
                 style: const TextStyle(
-                  color: Color(0xFF7A3E00),
+                  color: DsAtomColors.autoContrastWarning4,
                   fontSize: BsTokens.typeBody,
                 ),
               ),

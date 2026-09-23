@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__trade_define_step:_ColorSwatch (בנייה-חכמה main) · צרור-1 · props-שורש: label
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__trade_define_step_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class TradeBuilderTradeDefineStepColorSwatch extends StatelessWidget {
@@ -36,10 +37,10 @@ class TradeBuilderTradeDefineStepColorSwatch extends StatelessWidget {
             shape: BoxShape.circle,
             border: selected
                 ? Border.all(color: BsTokens.inkLight, width: 3)
-                : Border.all(color: const Color(0xFFEDEDED)),
+                : Border.all(color: DsAtomColors.autoTradeBuilderTradeDefineStepColorSwatch1),
           ),
           child: selected
-              ? const Icon(Icons.check, size: 16, color: Colors.white)
+              ? const Icon(Icons.check, size: 16, color: DsAtomColors.autoTradeBuilderTradeDefineStepColorSwatch2)
               : null,
         ),
       ),

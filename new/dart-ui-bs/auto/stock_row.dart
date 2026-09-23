@@ -2,6 +2,7 @@
 // מוצא: screens__stock_screen:_StockRow (בנייה-חכמה main) · צרור-3 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__stock_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class StockRow extends StatelessWidget {
@@ -24,7 +25,7 @@ class StockRow extends StatelessWidget {
     decoration: BoxDecoration(
       color: Theme.of(context).colorScheme.surface,
       borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: const Color(0xFFEAEAEA)),
+      border: Border.all(color: DsAtomColors.autoStockRow1),
     ),
     child: Row(
       children: [
@@ -78,4 +79,4 @@ class StockRow extends StatelessWidget {
 
 const _ink = BsTokens.inkLight;
 
-const _muted = Color(0xFF888888);
+const _muted = DsAtomColors.autoStockRow2;

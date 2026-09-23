@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__trade_builder__attribute_schema_editor:_MatchChip (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class MatchChip extends StatelessWidget {
@@ -28,4 +29,4 @@ class MatchChip extends StatelessWidget {
   }
 }
 
-const Color _kMatchColor = Color(0xFF1F8A4C);
+const Color _kMatchColor = DsAtomColors.autoMatchChip1;

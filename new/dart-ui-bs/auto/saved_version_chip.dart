@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_SavedVersionChip (בנייה-חכמה main) · צרור-1 · props-שורש: message, label2, message2, label3
 // התוכן: new/dart-data-bs/auto/screens__catalog_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 
 class SavedVersionChip extends StatelessWidget {
   SavedVersionChip({required this.message, required this.label2, required this.message2, required this.label3, 
@@ -22,7 +23,7 @@ class SavedVersionChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFEDE9FE),
+        color: DsAtomColors.autoSavedVersionChip1,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -46,7 +47,7 @@ class SavedVersionChip extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(8, 3, 6, 3),
                       child: Text(label,
                           style: const TextStyle(
-                              color: Color(0xFF5B21B6),
+                              color: DsAtomColors.autoSavedVersionChip2,
                               fontSize: 10.5,
                               fontWeight: FontWeight.w600)),
                     ),
@@ -69,7 +70,7 @@ class SavedVersionChip extends StatelessWidget {
                   height: 48,
                   child: Center(
                     child: Icon(Icons.close,
-                        size: 12, color: Color(0xFF7C3AED)),
+                        size: 12, color: DsAtomColors.autoSavedVersionChip3),
                   ),
                 ),
               ),

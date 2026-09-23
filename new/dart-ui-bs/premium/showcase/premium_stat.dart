@@ -5,6 +5,7 @@
 // + כיבוד reduced-motion) · inclusive-design (Semantics·ניגוד·tabular·no-color-alone). חוט-טהור.
 import 'dart:ui' show FontFeature;
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class PremiumStat extends StatefulWidget {
   const PremiumStat({
@@ -27,14 +28,14 @@ class PremiumStat extends StatefulWidget {
   final VoidCallback? onTap;
 
   // ── טוקנים (Studio Dark · מבטא-אינדיגו יחיד · 60/30/10) ──
-  static const _surface = Color(0xFF131922);
-  static const _surface2 = Color(0xFF0F141C);
-  static const _line = Color(0x14FFFFFF);
-  static const _muted = Color(0xFF9AA7B5); // secondary ≥4.5:1
-  static const _faint = Color(0xFF828E9E); // tertiary
-  static const _success = Color(0xFF34D399);
-  static const _danger = Color(0xFFF87171);
-  static const _accentSoft = Color(0x24818CF8);
+  static const _surface = DsAtomColors.premiumShowcasePremiumStat1;
+  static const _surface2 = DsAtomColors.premiumShowcasePremiumStat2;
+  static const _line = DsAtomColors.premiumShowcasePremiumStat3;
+  static const _muted = DsAtomColors.premiumShowcasePremiumStat4; // secondary ≥4.5:1
+  static const _faint = DsAtomColors.premiumShowcasePremiumStat5; // tertiary
+  static const _success = DsAtomColors.premiumShowcasePremiumStat6;
+  static const _danger = DsAtomColors.premiumShowcasePremiumStat7;
+  static const _accentSoft = DsAtomColors.premiumShowcasePremiumStat8;
 
   @override
   State<PremiumStat> createState() => _PremiumStatState();
@@ -131,8 +132,8 @@ class _PremiumStatState extends State<PremiumStat> with SingleTickerProviderStat
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: PremiumStat._line),
         boxShadow: const [
-          BoxShadow(color: Color(0x59000000), blurRadius: 3, offset: Offset(0, 1)),
-          BoxShadow(color: Color(0x40000000), blurRadius: 18, offset: Offset(0, 9)),
+          BoxShadow(color: DsAtomColors.premiumShowcasePremiumStat9, blurRadius: 3, offset: Offset(0, 1)),
+          BoxShadow(color: DsAtomColors.premiumShowcasePremiumStat10, blurRadius: 18, offset: Offset(0, 9)),
         ],
       ),
       child: Column(
@@ -150,7 +151,7 @@ class _PremiumStatState extends State<PremiumStat> with SingleTickerProviderStat
                   decoration: BoxDecoration(
                     color: PremiumStat._accentSoft,
                     borderRadius: BorderRadius.circular(9),
-                    border: Border.all(color: const Color(0x33818CF8)),
+                    border: Border.all(color: DsAtomColors.premiumShowcasePremiumStat11),
                   ),
                   child: Text(widget.glyph, style: const TextStyle(fontSize: 15)),
                 ),
@@ -182,12 +183,12 @@ class _PremiumStatState extends State<PremiumStat> with SingleTickerProviderStat
                 shaderCallback: (r) => const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFFFFFFFF), Color(0xFFB9C2FF)],
+                  colors: [DsAtomColors.premiumShowcasePremiumStat12, DsAtomColors.premiumShowcasePremiumStat13],
                 ).createShader(r),
                 child: Text(
                   valueText,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: DsAtomColors.premiumShowcasePremiumStat12,
                     fontSize: 48,
                     fontWeight: FontWeight.w800,
                     height: 1,
@@ -293,7 +294,7 @@ class _Spark extends CustomPainter {
         ..shader = const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0x33818CF8), Color(0x00818CF8)],
+          colors: [DsAtomColors.premiumShowcasePremiumStat11, DsAtomColors.premiumShowcasePremiumStat14],
         ).createShader(Offset.zero & size),
     );
     // קו
@@ -303,13 +304,13 @@ class _Spark extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2
         ..strokeCap = StrokeCap.round
-        ..shader = const LinearGradient(colors: [Color(0xFF4F46E5), Color(0xFF818CF8)])
+        ..shader = const LinearGradient(colors: [DsAtomColors.premiumShowcasePremiumStat15, DsAtomColors.premiumShowcasePremiumStat16])
             .createShader(Offset.zero & size),
     );
     // נקודת-קצה
     final end = at(n - 1);
-    canvas.drawCircle(end, 4.5, Paint()..color = const Color(0x55818CF8));
-    canvas.drawCircle(end, 2.6, Paint()..color = const Color(0xFFB9C2FF));
+    canvas.drawCircle(end, 4.5, Paint()..color = DsAtomColors.premiumShowcasePremiumStat17);
+    canvas.drawCircle(end, 2.6, Paint()..color = DsAtomColors.premiumShowcasePremiumStat13);
   }
 
   @override

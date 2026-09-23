@@ -3,6 +3,7 @@
 // גוברת. a11y: Semantics(image/label) · אין-צבע-לבד (טבעת). חוט-טהור: material+dart:math · RTL.
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 enum AvatarStatus { none, online, away, busy }
 
@@ -22,19 +23,19 @@ class PremiumAvatar extends StatelessWidget {
 
   // פלטת-גרדיאנטים דטרמיניסטית (נבחרת לפי-שם)
   static const List<List<Color>> _palettes = [
-    [Color(0xFF7A6BFF), Color(0xFF5B4CE0)],
-    [Color(0xFF39D6F0), Color(0xFF2A8CF0)],
-    [Color(0xFFC66BFF), Color(0xFF8B3BE0)],
-    [Color(0xFFFF8A5B), Color(0xFFE0563B)],
-    [Color(0xFF34D399), Color(0xFF10A5A0)],
-    [Color(0xFFF7B733), Color(0xFFE08C2A)],
+    [DsAtomColors.premiumShowcasePremiumAvatar1, DsAtomColors.premiumShowcasePremiumAvatar2],
+    [DsAtomColors.premiumShowcasePremiumAvatar3, DsAtomColors.premiumShowcasePremiumAvatar4],
+    [DsAtomColors.premiumShowcasePremiumAvatar5, DsAtomColors.premiumShowcasePremiumAvatar6],
+    [DsAtomColors.premiumShowcasePremiumAvatar7, DsAtomColors.premiumShowcasePremiumAvatar8],
+    [DsAtomColors.premiumShowcasePremiumAvatar9, DsAtomColors.premiumShowcasePremiumAvatar10],
+    [DsAtomColors.premiumShowcasePremiumAvatar11, DsAtomColors.premiumShowcasePremiumAvatar12],
   ];
-  static const _online = Color(0xFF34D399);
-  static const _away = Color(0xFFF7B733);
-  static const _busy = Color(0xFFF87171);
-  static const _ringLo = Color(0xFF5B4CE0);
-  static const _ringHi = Color(0xFFC66BFF);
-  static const _ringCyan = Color(0xFF39D6F0);
+  static const _online = DsAtomColors.premiumShowcasePremiumAvatar9;
+  static const _away = DsAtomColors.premiumShowcasePremiumAvatar11;
+  static const _busy = DsAtomColors.premiumShowcasePremiumAvatar13;
+  static const _ringLo = DsAtomColors.premiumShowcasePremiumAvatar2;
+  static const _ringHi = DsAtomColors.premiumShowcasePremiumAvatar5;
+  static const _ringCyan = DsAtomColors.premiumShowcasePremiumAvatar3;
 
   String get _initials {
     final parts = name.trim().split(RegExp(r'\s+')).where((s) => s.isNotEmpty).toList();
@@ -88,7 +89,7 @@ class PremiumAvatar extends StatelessWidget {
           ? Text(
               _initials,
               style: TextStyle(
-                color: Colors.white,
+                color: DsAtomColors.premiumShowcasePremiumAvatar14,
                 fontSize: inner * 0.36,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0.5,
@@ -120,7 +121,7 @@ class PremiumAvatar extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: sc,
                     shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xFF06060B), width: size * 0.05),
+                    border: Border.all(color: DsAtomColors.premiumShowcasePremiumAvatar15, width: size * 0.05),
                     boxShadow: [BoxShadow(color: sc.withValues(alpha: 0.6), blurRadius: 6)],
                   ),
                 ),

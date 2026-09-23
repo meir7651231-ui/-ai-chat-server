@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__courier_reports_tab:_RCard (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class RCard extends StatelessWidget {
@@ -18,7 +19,7 @@ class RCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(BsTokens.radiusCard),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x0F000000),
+            color: DsAtomColors.autoRcard1,
             blurRadius: 8,
             offset: Offset(0, 2),
           ),

@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__defects_sheet:_SeverityChip (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class SeverityChip extends StatelessWidget {
@@ -28,13 +29,13 @@ class SeverityChip extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(BsTokens.radiusPill),
             border: Border.all(
-              color: selected ? BsTokens.brand : const Color(0xFFDDDDDD),
+              color: selected ? BsTokens.brand : DsAtomColors.autoSeverityChip1,
             ),
           ),
           child: Text(
             label,
             style: TextStyle(
-              color: selected ? const Color(0xFFFFFFFF) : BsTokens.inkLight,
+              color: selected ? DsAtomColors.autoSeverityChip2 : BsTokens.inkLight,
               fontWeight: FontWeight.w700,
               fontSize: 13.5,
             ),

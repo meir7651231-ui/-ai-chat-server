@@ -123,4 +123,6 @@ class DsIdentity {
   static const chipBg = Color(0xFFF1F5F9);
   static const barGlow = Color(0x557C3AED);
   static const graphMid = Color(0xFF6366F1);
+  static const graphHalo = Color(0xFFFFFFFF);
+  static const surfaceHi = Color(0xFFFFFFFF);
 }

@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__rewards_hub_screen:_CaCard (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
 
@@ -19,7 +20,7 @@ class CaCard extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
         border: Border.all(
-          color: overdue ? const Color(0xFFE57373) : const Color(0xFFEEEEEE),
+          color: overdue ? DsAtomColors.autoCaCard1 : DsAtomColors.autoCaCard2,
         ),
       ),
       child: child,

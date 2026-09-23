@@ -2,6 +2,7 @@
 // מוצא: screens__finance_hub_sheets:_PenaltyCard (בנייה-חכמה main) · צרור-2 · מודל-שוטח: 5 שדות · props-שורש: label, label2, id, amount, days, perDay, createdAt
 // התוכן: new/dart-data-bs/auto/screens__finance_hub_sheets_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
 import 'package:buildsmart/data/contractor_seeds.dart';
@@ -22,9 +23,9 @@ class PenaltyCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: BsTokens.space2),
       padding: const EdgeInsets.all(BsTokens.space3),
       decoration: BoxDecoration(
-        color: const Color(0xFFF6F7F9),
+        color: DsAtomColors.autoPenaltyCard1,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
-        border: Border.all(color: const Color(0xFFE6E8EC))),
+        border: Border.all(color: DsAtomColors.autoPenaltyCard2)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

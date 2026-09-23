@@ -1,5 +1,6 @@
 // ✨ SkeletonBlock — טוען-שלד עם shimmer נע; דאטה: double width, height (מידות בלבד)
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class SkeletonBlock extends StatefulWidget {
   final double width;
@@ -51,9 +52,9 @@ class _SkeletonBlockState extends State<SkeletonBlock>
                 begin: Alignment(-1 + t * 2 - 0.6, 0),
                 end: Alignment(-1 + t * 2 + 0.6, 0),
                 colors: const [
-                  Color(0xFF1B1730),
-                  Color(0xFF2E2650),
-                  Color(0xFF1B1730),
+                  DsAtomColors.premiumFeedbackSkeletonBlock1,
+                  DsAtomColors.premiumFeedbackSkeletonBlock2,
+                  DsAtomColors.premiumFeedbackSkeletonBlock1,
                 ],
                 stops: const [0.25, 0.5, 0.75],
               ),

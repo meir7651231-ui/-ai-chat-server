@@ -2,6 +2,7 @@
 // מוצא: screens__lipskey_brand_screen:_BrandHeader (בנייה-חכמה main) · צרור-1 · props-שורש: fallback, label, label2
 // התוכן: new/dart-data-bs/auto/screens__lipskey_brand_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 
 class BrandHeader extends StatelessWidget {
@@ -21,11 +22,11 @@ class BrandHeader extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Color(0xFF0D1B2A), Color(0xFF13132A)],
+          colors: [DsAtomColors.autoBrandHeader1, DsAtomColors.autoBrandHeader2],
         ),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-            color: const Color(0xFF3D5A80).withOpacity(0.4), width: 0.8),
+            color: DsAtomColors.autoBrandHeader3.withOpacity(0.4), width: 0.8),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Row(
@@ -39,12 +40,12 @@ class BrandHeader extends StatelessWidget {
                 CfgText(
                     'lipskey_brand_screen.header_title', fallback,
                     style: TextStyle(
-                        color: Color(0xFF64FFDA),
+                        color: DsAtomColors.autoBrandHeader4,
                         fontSize: 14,
                         fontWeight: FontWeight.w700)),
                 Text('$totalProducts${label}$totalCats${label2}',
                     style: const TextStyle(
-                        color: Colors.black38, fontSize: 11)),
+                        color: DsAtomColors.autoBrandHeader5, fontSize: 11)),
               ],
             ),
           ),

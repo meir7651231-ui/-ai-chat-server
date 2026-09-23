@@ -3,6 +3,7 @@
 // system=מתאר מרוכז · sending=raised. timestamp LTR+tnum · read-tick=accent-מורף, delivered=שחור-רך.
 // נייטרל/דיו קבועים (DsPure); רק האקצנט+הפונט זורמים דרך החריץ (DsSeam). התוכן מוזרק (חוק-5/6). material בלבד.
 import 'package:flutter/material.dart';
+import 'ds/ds_atoms.dart';
 import 'ds/ds_seam.dart';
 
 enum PureBubbleKind { incoming, outgoing, system, sending }
@@ -89,7 +90,7 @@ class PureBubble extends StatelessWidget {
                         fontFamily: fonts.grotesk,
                         fontFeatures: const [FontFeature.tabularFigures()],
                         fontSize: 9.5,
-                        color: out ? Colors.black54 : skin.faint,
+                        color: out ? DsAtomColors.pureBubble1 : skin.faint,
                       ),
                     ),
                     if (out && receipt != PureReceipt.none) ...[
@@ -97,7 +98,7 @@ class PureBubble extends StatelessWidget {
                       Icon(
                         receipt == PureReceipt.sent ? Icons.done : Icons.done_all,
                         size: 13,
-                        color: receipt == PureReceipt.read ? theme.a800 : Colors.black54,
+                        color: receipt == PureReceipt.read ? theme.a800 : DsAtomColors.pureBubble1,
                       ),
                     ],
                   ],

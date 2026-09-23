@@ -2,6 +2,7 @@
 // כפתור-קפיץ שמחליק (spring), זוהר-מבטא, אייקון-מצב פנימי. a11y: Semantics(toggled) ·
 // reduced-motion · touch≥48. חוט-טהור: material בלבד · פיגמנט const · טקסט דרך פרמטר · RTL.
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class PremiumToggle extends StatelessWidget {
   const PremiumToggle({required this.value, this.onChanged, this.label, super.key});
@@ -10,13 +11,13 @@ class PremiumToggle extends StatelessWidget {
   final ValueChanged<bool>? onChanged;
   final String? label;
 
-  static const _trackOff = Color(0xFF1B1C24);
-  static const _knob = Color(0xFFFFFFFF);
-  static const _accentA = Color(0xFF7A6BFF);
-  static const _accentB = Color(0xFF5B4CE0);
-  static const _glow = Color(0xFF6C5CE7);
-  static const _ink = Color(0xFFE9EDF3);
-  static const _hair = Color(0x1FFFFFFF);
+  static const _trackOff = DsAtomColors.premiumShowcasePremiumToggle1;
+  static const _knob = DsAtomColors.premiumShowcasePremiumToggle2;
+  static const _accentA = DsAtomColors.premiumShowcasePremiumToggle3;
+  static const _accentB = DsAtomColors.premiumShowcasePremiumToggle4;
+  static const _glow = DsAtomColors.premiumShowcasePremiumToggle5;
+  static const _ink = DsAtomColors.premiumShowcasePremiumToggle6;
+  static const _hair = DsAtomColors.premiumShowcasePremiumToggle7;
 
   bool get _enabled => onChanged != null;
 
@@ -37,7 +38,7 @@ class PremiumToggle extends StatelessWidget {
             : null,
         color: value ? null : _trackOff,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: value ? const Color(0x33FFFFFF) : _hair),
+        border: Border.all(color: value ? DsAtomColors.premiumShowcasePremiumToggle8 : _hair),
         boxShadow: value
             ? [BoxShadow(color: _glow.withValues(alpha: 0.42), blurRadius: 14, offset: const Offset(0, 4))]
             : null,
@@ -54,7 +55,7 @@ class PremiumToggle extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: _knob,
                 shape: BoxShape.circle,
-                boxShadow: [BoxShadow(color: Color(0x59000000), blurRadius: 4, offset: Offset(0, 2))],
+                boxShadow: [BoxShadow(color: DsAtomColors.premiumShowcasePremiumToggle9, blurRadius: 4, offset: Offset(0, 2))],
               ),
               child: AnimatedSwitcher(
                 duration: d,
@@ -62,7 +63,7 @@ class PremiumToggle extends StatelessWidget {
                   value ? Icons.check_rounded : Icons.close_rounded,
                   key: ValueKey(value),
                   size: 15,
-                  color: value ? _accentB : const Color(0xFF9AA0AC),
+                  color: value ? _accentB : DsAtomColors.premiumShowcasePremiumToggle10,
                 ),
               ),
             ),

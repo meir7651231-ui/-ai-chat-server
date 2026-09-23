@@ -2,6 +2,7 @@
 // מוצא: screens__install_studio_screen:_PipeLink (בנייה-חכמה main) · צרור-3 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__install_studio_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'dart:math' as math;
 
@@ -55,7 +56,7 @@ class _PipePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final x = size.width / 2;
     final track = Paint()
-      ..color = Colors.black.withOpacity(0.08)
+      ..color = DsAtomColors.autoPipeLink1.withOpacity(0.08)
       ..strokeWidth = 3
       ..strokeCap = StrokeCap.round;
     canvas.drawLine(Offset(x, 0), Offset(x, size.height), track);

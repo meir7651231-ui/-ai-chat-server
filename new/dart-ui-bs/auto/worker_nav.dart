@@ -2,6 +2,7 @@
 // מוצא: screens__worker_app_screen:_WorkerNav (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2, label3, label4
 // התוכן: new/dart-data-bs/auto/screens__worker_app_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class WorkerNav extends StatelessWidget {
@@ -40,7 +41,7 @@ class WorkerNav extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       backgroundColor: Theme.of(context).colorScheme.surface,
       selectedItemColor: BsTokens.brand,
-      unselectedItemColor: const Color(0xFF888888),
+      unselectedItemColor: DsAtomColors.autoWorkerNav1,
       selectedFontSize: 12,
       unselectedFontSize: 11,
       items: [

@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__budget_screen:_NumBox (בנייה-חכמה main) · צרור-3
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class NumBox extends StatelessWidget {
@@ -25,7 +26,7 @@ class NumBox extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFEAEAEA)),
+                border: Border.all(color: DsAtomColors.autoNumBox1),
               ),
               child: Column(
                 children: [
@@ -47,4 +48,4 @@ class NumBox extends StatelessWidget {
 
 const _ink = BsTokens.inkLight;
 
-const _muted = Color(0xFF888888);
+const _muted = DsAtomColors.autoNumBox2;

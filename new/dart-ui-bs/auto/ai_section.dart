@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_settings_screen:_AiSection (בנייה-חכמה main) · צרור-3 · props-שורש: title, label, label2, label3, label4, fallback, onTap
 // התוכן: new/dart-data-bs/auto/screens__catalog_settings_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/state/under_construction.dart';
@@ -69,8 +70,8 @@ class _SectionTile extends StatelessWidget {
         child: ExpansionTile(
           tilePadding: const EdgeInsets.symmetric(horizontal: 16),
           childrenPadding: const EdgeInsets.only(bottom: 8),
-          iconColor: Colors.black54,
-          collapsedIconColor: Colors.black54,
+          iconColor: DsAtomColors.autoAiSection1,
+          collapsedIconColor: DsAtomColors.autoAiSection1,
           leading: Text(emoji, style: const TextStyle(fontSize: 22)),
           // Count badge replaces the default expand chevron.
           trailing:
@@ -88,7 +89,7 @@ class _SectionTile extends StatelessWidget {
                     child: Text(
                       '$_activeCount',
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: DsAtomColors.autoAiSection2,
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),

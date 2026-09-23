@@ -1,5 +1,6 @@
 // ✨ StatHero — מספר-ענק בגרדיאנט-טקסט (ShaderMask) עם תווית מתחת; מקבל value/label
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class StatHero extends StatelessWidget {
   const StatHero({super.key, required this.value, required this.label});
@@ -7,10 +8,10 @@ class StatHero extends StatelessWidget {
   final String value;
   final String label;
 
-  static const Color _shaderA = Color(0xFF22D3EE);
-  static const Color _shaderB = Color(0xFF7C3AED);
-  static const Color _shaderC = Color(0xFFEC4899);
-  static const Color _label = Color(0xFF9A9CC4);
+  static const Color _shaderA = DsAtomColors.premiumSurfacesStatHero1;
+  static const Color _shaderB = DsAtomColors.premiumSurfacesStatHero2;
+  static const Color _shaderC = DsAtomColors.premiumSurfacesStatHero3;
+  static const Color _label = DsAtomColors.premiumSurfacesStatHero4;
 
   static const Gradient _grad = LinearGradient(
     begin: Alignment.topLeft,
@@ -34,7 +35,7 @@ class StatHero extends StatelessWidget {
             child: Text(
               value,
               style: const TextStyle(
-                color: Colors.white,
+                color: DsAtomColors.premiumSurfacesStatHero5,
                 fontSize: 54,
                 fontWeight: FontWeight.w900,
                 height: 1.0,

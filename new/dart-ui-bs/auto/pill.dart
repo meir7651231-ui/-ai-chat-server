@@ -2,6 +2,7 @@
 // מוצא: screens__chats_screen:_Pill (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__regression_panel_screen:_Pill
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
 
@@ -28,7 +29,7 @@ class Pill extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: active ? bsOnAccent(context) : const Color(0xFFAAAAAA),
+              color: active ? bsOnAccent(context) : DsAtomColors.autoPill1,
               fontSize: 13,
               fontWeight: active ? FontWeight.w600 : FontWeight.w400,
             ),

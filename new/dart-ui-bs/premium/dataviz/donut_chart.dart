@@ -2,6 +2,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class DonutChart extends StatelessWidget {
   const DonutChart({super.key, required this.values, this.size = 176});
@@ -10,12 +11,12 @@ class DonutChart extends StatelessWidget {
   final double size;
 
   static const List<Color> palette = [
-    Color(0xFF22E1FF),
-    Color(0xFF7A5CFF),
-    Color(0xFFFF3DCB),
-    Color(0xFF3DFFB0),
-    Color(0xFFFFC24B),
-    Color(0xFF5C7CFF),
+    DsAtomColors.premiumDatavizDonutChart1,
+    DsAtomColors.premiumDatavizDonutChart2,
+    DsAtomColors.premiumDatavizDonutChart3,
+    DsAtomColors.premiumDatavizDonutChart4,
+    DsAtomColors.premiumDatavizDonutChart5,
+    DsAtomColors.premiumDatavizDonutChart6,
   ];
 
   @override
@@ -33,12 +34,12 @@ class DonutChart extends StatelessWidget {
           CustomPaint(size: Size.square(size), painter: _DonutPainter(values)),
           ShaderMask(
             shaderCallback: (r) => const LinearGradient(
-              colors: [Color(0xFF22E1FF), Color(0xFFFF3DCB)],
+              colors: [DsAtomColors.premiumDatavizDonutChart1, DsAtomColors.premiumDatavizDonutChart3],
             ).createShader(r),
             child: Text(
               _fmt(total),
               style: TextStyle(
-                color: Colors.white,
+                color: DsAtomColors.premiumDatavizDonutChart7,
                 fontSize: size * 0.19,
                 fontWeight: FontWeight.w900,
                 letterSpacing: -1.5,
@@ -65,7 +66,7 @@ class _DonutPainter extends CustomPainter {
 
   final List<double> values;
 
-  static const Color _track = Color(0xFF1A1B33);
+  static const Color _track = DsAtomColors.premiumDatavizDonutChart8;
 
   @override
   void paint(Canvas canvas, Size size) {

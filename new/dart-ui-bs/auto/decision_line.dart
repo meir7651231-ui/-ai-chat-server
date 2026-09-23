@@ -2,6 +2,7 @@
 // מוצא: screens__persona_picking_sheet:_DecisionLine (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2, fallback, fallback2
 // התוכן: new/dart-data-bs/auto/screens__persona_picking_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -32,7 +33,7 @@ class DecisionLine extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-          border: Border.all(color: const Color(0xFFEDEDED)),
+          border: Border.all(color: DsAtomColors.autoDecisionLine1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +50,7 @@ class DecisionLine extends StatelessWidget {
             Text(
               '${label}$qty${label2}',
               style: const TextStyle(
-                color: Color(0xFF8A6D00),
+                color: DsAtomColors.autoDecisionLine2,
                 fontSize: 12.5,
               ),
             ),
@@ -90,7 +91,7 @@ class DecisionLine extends StatelessWidget {
                       onPressed: onRemove,
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 13),
-                        side: const BorderSide(color: Color(0xFFE0E0E0)),
+                        side: const BorderSide(color: DsAtomColors.autoDecisionLine3),
                         shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(BsTokens.radiusPill),

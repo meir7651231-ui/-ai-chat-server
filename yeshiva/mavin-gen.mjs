@@ -10,7 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { formOf, specOf, answerFor, toks, serverDeclOf, lookDeclOf, planBehaviors } from './mavin.mjs';
+import { formOf, specOf, answerFor, toks, serverDeclOf, lookDeclOf, headOf, planBehaviors } from './mavin.mjs';
 import { detectAllClauses, relOpOf, emitAppFrom } from '../machtzev/generator/capability.mjs';
 import { retrieveScreen } from '../machtzev/generator/retrieve-screen.mjs';
 import * as R from '../machtzev/root.mjs';
@@ -76,10 +76,11 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
   const routes = [];
   const capSegs = new Map();   // קטע ⇒ סעיפים (מהטקסט, או מהצורה)
   for (const seg of form.segments) { const c = detectAllClauses(seg); if (c.length) capSegs.set(seg, { clauses: c, how: 'טקסט' }); else { const f = clausesByForm(seg, form.frame); if (f.length) capSegs.set(seg, { clauses: f, how: 'צורה' }); } }
-  const srv = serverDeclOf(form), lk = lookDeclOf(form);
+  const srv = serverDeclOf(form), lk = lookDeclOf(form), head = headOf(form);
   for (const t of form.things) {
+    if (head && t.src === form.segments[0] && !(srv && t === srv.thing) && !(lk && t === lk.thing) && !entLabels.has(t.label)) { routes.push({ thing: t.label, route: 'head', why: `ראש-המשפט (לפני הנקודתיים) ⇒ שם-האפליקציה «${head}» + לוח-הבית (אריח לכל ישות)` }); continue; }
     if (srv && t === srv.thing) { routes.push({ thing: t.label, route: 'server', why: `הצהרת-שרת «${srv.value}» ⇒ server.mjs (חבילת-שרת לישויות שנבנו)` }); continue; }
-    if (lk && t === lk.thing) { routes.push({ thing: t.label, route: 'look', why: `הצהרת-עיצוב «${lk.value}» ⇒ app-ds.setLook (עור מהמדף: ds-pure/ds-tokens)` }); continue; }
+    if (lk && t === lk.thing) { routes.push({ thing: t.label, route: 'look', why: `הצהרת-עיצוב «${lk.value}${lk.extra ? ' ' + lk.extra : ''}» ⇒ app-ds.setLook (עור מהמדף: ds-pure/ds-tokens)` }); continue; }
     if (capSegs.has(t.src)) { const c = capSegs.get(t.src); routes.push({ thing: t.label, route: 'capability', why: c.how === 'טקסט' ? 'סעיף-תנאי מבני בקטע (capability.detectAllClauses)' : `תנאי לפי צורה: «${c.clauses[0].x}» ${c.clauses[0].op} ${c.clauses[0].n}`, seg: t.src, clauses: c.clauses }); continue; }
     if (entLabels.has(t.label)) { routes.push({ thing: t.label, route: 'appds', why: 'דבר עם שדות ⇒ ישות' }); continue; }
     const [b] = retrieveScreen(t.label, 1);
@@ -94,23 +95,29 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
 /** שומר-ניקיון: נתיב-פלט ריק או בתוך new/ (המדף) ⇒ אסור לכתוב. משותף ל-app-ds ול-genesis-gen. */
 const inRepo = (p) => !p || path.resolve(p).startsWith(path.resolve(R.ROOT, 'new'));
 /** app-ds על ספק (שומר-ניקיון: GEN_OUT/GEN_DATA_OUT מחוץ ל-new/). מחזיר את האפליקציה או null. */
-async function runAppDs(spec, files, notes, questions = []) {
+async function runAppDs(spec, files, notes, questions = [], opts = {}) {
   let app = null;
   if (spec && (inRepo(process.env.GEN_OUT) || inRepo(process.env.GEN_DATA_OUT))) { notes.push('⛔ app-ds לא הופעל: GEN_OUT/GEN_DATA_OUT חייבים להצביע מחוץ ל-new/ לפני הייבוא הראשון (שומר-ניקיון)'); }
-  else if (spec) { const { buildApp } = await import('../machtzev/generator/app-ds.mjs'); const logs = []; const _l = console.log; console.log = (...a) => logs.push(a.join(' ')); try { app = buildApp(spec, { writePlan: false }); } finally { console.log = _l; } for (const l of logs) if (/נמצאו-ומחווטים/.test(l)) notes.push(l.slice(0, 140)); files.push({ route: 'appds', screens: app.screens.map((s) => `${s.kind}:${s.name}`) }); }
-  if (app) markSilentDefaults(spec, notes, questions);
+  else if (spec) { const { buildApp } = await import('../machtzev/generator/app-ds.mjs'); const logs = []; const _l = console.log; console.log = (...a) => logs.push(a.join(' ')); try { app = buildApp(spec, { writePlan: false, ...opts }); } finally { console.log = _l; } for (const l of logs) if (/נמצאו-ומחווטים/.test(l)) notes.push(l.slice(0, 140)); files.push({ route: 'appds', screens: app.screens.map((s) => `${s.kind}:${s.name}`) }); }
+  if (app) { const { parseLookLine } = await import('../machtzev/generator/app-ds.mjs'); markSilentDefaults(spec, notes, questions, parseLookLine); }
   return app;
 }
 /** ברירות-מחדל שקטות (הכרעת-בעלים 23.9 «לא דעה קדומה, לא קשיח»): מה שהספק לא אמר ו-app-ds השלים לבד — נהיה שאלה, והפלט מסומן במפורש (defaults.json + שורת-הערה בקובץ-הכניסה).
  *  המילים = מילות שפת-הספק (spec-lang.data.json: עיצוב · אפליקציה) — אפס מילון בדלת. המנוע הקיים לא שונה. */
-function markSilentDefaults(spec, notes, questions) {
+function markSilentDefaults(spec, notes, questions, parseLookLine = null) {
   let SL; try { SL = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); } catch { return; }
   const has = (word) => word && new RegExp('^\\s*' + word + '\\s*:', 'm').test(spec);
   const silent = [];
+  const lookLine = SL.lookWord && spec.match(new RegExp('^\\s*' + SL.lookWord + '\\s*:\\s*(.+)$', 'm'));
+  if (lookLine && parseLookLine) {   // נאמר — אבל מילה שאינה בדאטה (עור/ערכה לא-מוכרים) ⇒ app-ds היה נופל לברירת-המחדל בשקט ⇒ שאלה
+    const lk = parseLookLine(lookLine[1]);
+    if (lk.unknownLook) silent.push({ said: lk.unknownLook, what: SL.lookWord, engine: 'app-ds', value: `«${lk.unknownLook}» לא עור מהמדף ⇒ ${SL.defaultLook}`, say: `${SL.lookWord}: ${Object.keys(SL.looks || {}).join(' / ')}` });
+    if (lk.unknownTheme) silent.push({ said: lk.unknownTheme, what: SL.lookWord, engine: 'app-ds', value: `«${lk.unknownTheme}» לא ערכת-צבע מהמדף ⇒ ערכת-העור`, say: `${SL.lookWord}: ${lk.look === 'dark' ? SL.defaultLook : Object.keys(SL.looks).find((k) => SL.looks[k] === lk.look)} ${Object.keys(SL.themes || {}).join(' / ')}` });
+  }
   if (!has(SL.lookWord)) silent.push({ what: SL.lookWord, engine: 'app-ds', value: `${SL.defaultLook} = ${SL.looks?.[SL.defaultLook]} (spec-lang.defaultLook)`, say: `${SL.lookWord}: ${Object.keys(SL.looks || {}).join(' / ')}` });
   if (!has(SL.appWord)) silent.push({ what: SL.appWord, engine: 'app-ds', value: 'L.appTitle («האפליקציה שלי» — מילון-הכרום של app-ds)', say: `${SL.appWord}: <שם>` });
   if (!silent.length) return;
-  for (const s of silent) questions.push({ thing: 'האפליקציה', ask: s.what, q: `${s.what} — לא נאמר במשפט; ${s.engine} הניח לבד (${s.value}). לומר: «${s.say}»` });
+  for (const s of silent) questions.push({ thing: 'האפליקציה', ask: s.what, q: s.said ? `${s.what} — נאמר «${s.said}» אבל אין כזה במדף; ${s.engine} הניח לבד (${s.value}). לומר: «${s.say}»` : `${s.what} — לא נאמר במשפט; ${s.engine} הניח לבד (${s.value}). לומר: «${s.say}»` });
   const out = R.outDir();
   try {
     fs.writeFileSync(path.join(out, 'defaults.json'), JSON.stringify(silent, null, 1));
@@ -141,7 +148,8 @@ export async function mosadSpecs() {
 /** דלת שנייה — מסמך של הבעלים במקום משפט: ספק מוכן (specs-ds/*.txt, נגזר ממסמך-«פירוק») ⇒ app-ds ⇒ outDir. */
 export async function generateFromSpec(spec, { outDir, name = 'spec' } = {}) {
   fs.mkdirSync(outDir, { recursive: true }); const files = [], notes = [], questions = [];
-  const app = await runAppDs(spec, files, notes, questions);
+  const caps = capSegs.map(([seg, clauses], i) => ({ slug: `cap${i + 1}`, cls: `GenCap${i + 1}Screen`, kind: 'capability', name: seg.trim(), icon: '🔔', sub: clauses.map((c) => `${c.x || ''} ${c.op || ''} ${c.n ?? ''}`.trim()).join(' · ') }));   // מסך-ההתראה ⇒ אריח ברכזת (הרכבה: לא קובץ-ליד)
+  const app = await runAppDs(spec, files, notes, questions, { extraScreens: caps });
   return { spec, files, notes, questions, screens: app ? app.screens.map((s) => `${s.kind}:${s.name}`) : [] };
 }
 /** מסמך-«פירוק» (markdown של הבעלים, שלד peruk-lang) ⇒ peruk.perukToSpec ⇒ ספק ⇒ app-ds. אפס כתיבה ל-specs-ds. */

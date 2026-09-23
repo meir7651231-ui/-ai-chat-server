@@ -2,6 +2,7 @@
 // מוצא: screens__courier_dashboard_screen:_FlatCard (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__store_dashboard_screen:_FlatCard
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
 
@@ -19,7 +20,7 @@ class FlatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(cfgRadius(context)),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x0F000000),
+            color: DsAtomColors.autoFlatCard1,
             blurRadius: 8,
             offset: Offset(0, 2),
           ),

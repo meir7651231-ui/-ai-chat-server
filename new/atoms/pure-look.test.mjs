@@ -6,7 +6,10 @@ import assert from 'node:assert';
 // מבנה
 assert.deepStrictEqual(Object.keys(PURE_LOOK), ["defaultTheme","neutral","semantic","themes","skins","fontSets","fonts"], 'מפתחות-על');
 assert.deepStrictEqual(Object.keys(PURE_LOOK.fonts), ['serif', 'serifHe', 'grotesk', 'he'], 'ארבע משפחות-פונט');
-assert.deepStrictEqual(Object.keys(PURE_LOOK.themes), ['t-indigo', 't-teal', 't-amber', 't-balagan'], 'ארבע ערכות (3 Pure + בלגן)');
+assert.deepStrictEqual(Object.keys(PURE_LOOK.themes), ['t-indigo', 't-teal', 't-amber', 't-balagan', 't-build'], 'ערכות: 3 Pure + בלגן + בנייה-חכמה (הכרעת-בעלים 23.9) — לא סופרים במילים (L2026-09-23-contract-5c09e9)');
+assert.deepStrictEqual(Object.keys(PURE_LOOK.skins), ['paper', 'build'], 'שני עורות: נייר + בנייה-חכמה (BsTokens verbatim)');
+assert.strictEqual(PURE_LOOK.themes['t-build']['--a'], '#F26B1D', 'אקצנט בנייה-חכמה = BsTokens.brand');
+assert.strictEqual(PURE_LOOK.skins.build['--canvas'], '#FAFAFA', 'קנבס בנייה-חכמה = BsTokens.bgLight');
 assert.ok(PURE_LOOK.themes[PURE_LOOK.defaultTheme], 'defaultTheme קיים בערכות');
 
 // סימטריית-שקעים: כל ערכה חושפת בדיוק אותו סט-אקצנט
@@ -94,6 +97,14 @@ const SNAP = {
       '--gl': 'rgba(47, 111, 237, 0)',
       '--c2': '#2F6FED',
       '--c3': '#2F6FED'
+    },
+    't-build': {
+      '--a-hi': '#F26B1D',
+      '--a': '#F26B1D',
+      '--a-800': '#D65A0E',
+      '--gl': 'rgba(242, 107, 29, 0)',
+      '--c2': '#F26B1D',
+      '--c3': '#F26B1D'
     }
   },
   skins: {
@@ -115,6 +126,25 @@ const SNAP = {
       '--warn': '#C98A00',
       '--err': '#C8321E',
       '--gold': '#C98A00'
+    },
+    build: {
+      '--canvas': '#FAFAFA',
+      '--sunken': '#F5F5F5',
+      '--surface': '#FFFFFF',
+      '--raised': '#FAF8F5',
+      '--raised2': '#E9E2D9',
+      '--ink': '#1A1A1A',
+      '--mut': '#6E655B',
+      '--faint': 'rgba(26, 26, 26, 0.4)',
+      '--hair': '#E9E2D9',
+      '--hair2': 'rgba(233, 226, 217, 0.5)',
+      '--on-a': '#FFFFFF',
+      '--hi': '#FFFFFF',
+      '--shade': 'rgba(0, 0, 0, 0)',
+      '--ok': '#1F9D57',
+      '--warn': '#B45309',
+      '--err': '#CE3A32',
+      '--gold': '#F2A516'
     }
   },
   fontSets: {
@@ -134,4 +164,4 @@ const SNAP = {
 };
 assert.deepStrictEqual(PURE_LOOK, SNAP, 'צילום-ערך-מלא');
 
-console.log('OK pure-look — 4 ערכות · אקצנט-מורף · ok/warn/err/gold קבועים · עור-נייר + heebo · ' + allColors.length + ' פיגמנטים ליטרליים');
+console.log('OK pure-look — ${Object.keys(PURE_LOOK.themes).length} ערכות · אקצנט-מורף · ok/warn/err/gold קבועים · עור-נייר + heebo · ' + allColors.length + ' פיגמנטים ליטרליים');

@@ -1,17 +1,18 @@
 // ✨ ElevatedCard — כרטיס-כהה עם ראמפת-צל-עמוקה כפולה ותאורת-קצה עדינה; מקבל child כתוכן
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class ElevatedCard extends StatelessWidget {
   const ElevatedCard({super.key, required this.child});
 
   final Widget child;
 
-  static const Color _surface = Color(0xFF101127);
-  static const Color _surfaceLow = Color(0xFF0B0B1A);
-  static const Color _edge = Color(0x22FFFFFF);
-  static const Color _shadowDeep = Color(0x99000000);
-  static const Color _shadowMid = Color(0x4D000000);
-  static const Color _ambient = Color(0x1A7C3AED);
+  static const Color _surface = DsAtomColors.premiumSurfacesElevatedCard1;
+  static const Color _surfaceLow = DsAtomColors.premiumSurfacesElevatedCard2;
+  static const Color _edge = DsAtomColors.premiumSurfacesElevatedCard3;
+  static const Color _shadowDeep = DsAtomColors.premiumSurfacesElevatedCard4;
+  static const Color _shadowMid = DsAtomColors.premiumSurfacesElevatedCard5;
+  static const Color _ambient = DsAtomColors.premiumSurfacesElevatedCard6;
 
   @override
   Widget build(BuildContext context) {

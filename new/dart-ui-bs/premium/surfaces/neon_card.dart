@@ -1,17 +1,18 @@
 // ✨ NeonCard — כרטיס עם טבעת-גרדיאנט-ניאון זוהרת סביב גוף כהה; מקבל child כתוכן
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class NeonCard extends StatelessWidget {
   const NeonCard({super.key, required this.child});
 
   final Widget child;
 
-  static const Color _bg = Color(0xFF0B0B18);
-  static const Color _ringA = Color(0xFF7C3AED);
-  static const Color _ringB = Color(0xFFEC4899);
-  static const Color _ringC = Color(0xFF22D3EE);
-  static const Color _glowPurple = Color(0x557C3AED);
-  static const Color _glowCyan = Color(0x4022D3EE);
+  static const Color _bg = DsAtomColors.premiumSurfacesNeonCard1;
+  static const Color _ringA = DsAtomColors.premiumSurfacesNeonCard2;
+  static const Color _ringB = DsAtomColors.premiumSurfacesNeonCard3;
+  static const Color _ringC = DsAtomColors.premiumSurfacesNeonCard4;
+  static const Color _glowPurple = DsAtomColors.premiumSurfacesNeonCard5;
+  static const Color _glowCyan = DsAtomColors.premiumSurfacesNeonCard6;
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@
 // אפס-דאטה — טקסט · גובה · שלושה גווני-גרדיאנט/רקע מוזרקים בחיווט.
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'ds/ds_atoms.dart';
 
 class GradientText extends StatefulWidget {
   const GradientText({
@@ -40,7 +41,7 @@ class _GradientTextState extends State<GradientText> with SingleTickerProviderSt
             ).createShader(rect),
             child: Text(
               widget.text,
-              style: TextStyle(color: Colors.white, fontSize: widget.height * 0.42, fontWeight: FontWeight.w900),
+              style: TextStyle(color: DsAtomColors.gradientText1, fontSize: widget.height * 0.42, fontWeight: FontWeight.w900),
             ),
           ),
         ),

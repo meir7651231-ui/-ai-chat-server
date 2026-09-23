@@ -1,5 +1,6 @@
 // ✨ NavRow — שורת-ניווט: אייקון-גרדיאנט + כותרת/תת + chevron לוגי + onTap
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class NavRow extends StatelessWidget {
   final String glyph;
@@ -15,10 +16,10 @@ class NavRow extends StatelessWidget {
     this.onTap,
   });
 
-  static const Color _card = Color(0xFF101127);
-  static const Color _accent = Color(0xFF7C3AED);
-  static const Color _text = Color(0xFFF2F3FF);
-  static const Color _muted = Color(0xFF9AA0BE);
+  static const Color _card = DsAtomColors.premiumListsNavRow1;
+  static const Color _accent = DsAtomColors.premiumListsNavRow2;
+  static const Color _text = DsAtomColors.premiumListsNavRow3;
+  static const Color _muted = DsAtomColors.premiumListsNavRow4;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class NavRow extends StatelessWidget {
             decoration: BoxDecoration(
               color: _card,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+              border: Border.all(color: DsAtomColors.premiumListsNavRow5.withValues(alpha: 0.05)),
             ),
             child: Row(
               children: [
@@ -48,7 +49,7 @@ class NavRow extends StatelessWidget {
                       end: Alignment.bottomRight,
                       colors: [
                         _accent.withValues(alpha: 0.9),
-                        const Color(0xFF4338CA).withValues(alpha: 0.9),
+                        DsAtomColors.premiumListsNavRow6.withValues(alpha: 0.9),
                       ],
                     ),
                   ),

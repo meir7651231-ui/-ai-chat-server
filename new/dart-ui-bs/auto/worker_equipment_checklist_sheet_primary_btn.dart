@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__worker_equipment_checklist_sheet:_PrimaryBtn (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
 
@@ -17,7 +18,7 @@ class WorkerEquipmentChecklistSheetPrimaryBtn extends StatelessWidget {
       button: true,
       label: label,
       child: Material(
-        color: enabled ? BsTokens.brand : const Color(0xFFE0E0E0),
+        color: enabled ? BsTokens.brand : DsAtomColors.autoWorkerEquipmentChecklistSheetPrimaryBtn1,
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         child: InkWell(
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),

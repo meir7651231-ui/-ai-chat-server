@@ -24,7 +24,7 @@ class _AuroraBgPainter extends CustomPainter {
     canvas.drawRect(rect, Paint()..shader = DsGradient.aurora.createShader(rect));
     for (var i = 0; i < 3; i++) {
       final c = Offset(size.width * (0.2 + i * 0.3), size.height * (0.3 + (i.isEven ? 0.1 : -0.1)));
-      canvas.drawCircle(c, size.width * 0.22, Paint()..color = Colors.white.withValues(alpha: 0.06)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 40));
+      canvas.drawCircle(c, size.width * 0.22, Paint()..color = DsIdentity.graphHalo.withValues(alpha: 0.06)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 40));
     }
   }
 

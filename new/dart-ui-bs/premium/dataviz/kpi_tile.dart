@@ -1,6 +1,7 @@
 // ✨ KpiTile — אריח-KPI (glyph + value בגרדיאנט-טקסט + label) על כרטיס-זכוכית
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class KpiTile extends StatelessWidget {
   const KpiTile({
@@ -14,11 +15,11 @@ class KpiTile extends StatelessWidget {
   final String value;
   final String label;
 
-  static const Color _bg = Color(0xFF12132A);
-  static const Color _mute = Color(0xFF8A8CB8);
-  static const Color _cyan = Color(0xFF22E1FF);
-  static const Color _violet = Color(0xFF7A5CFF);
-  static const Color _magenta = Color(0xFFFF3DCB);
+  static const Color _bg = DsAtomColors.premiumDatavizKpiTile1;
+  static const Color _mute = DsAtomColors.premiumDatavizKpiTile2;
+  static const Color _cyan = DsAtomColors.premiumDatavizKpiTile3;
+  static const Color _violet = DsAtomColors.premiumDatavizKpiTile4;
+  static const Color _magenta = DsAtomColors.premiumDatavizKpiTile5;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class KpiTile extends StatelessWidget {
             colors: [Color(0xFF16173063), _bg],
           ),
           color: _bg,
-          border: Border.all(color: Colors.white.withValues(alpha: 0.07)),
+          border: Border.all(color: DsAtomColors.premiumDatavizKpiTile6.withValues(alpha: 0.07)),
           boxShadow: [
             BoxShadow(
               color: _violet.withValues(alpha: 0.14),
@@ -57,7 +58,7 @@ class KpiTile extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [_cyan.withValues(alpha: 0.22), _magenta.withValues(alpha: 0.22)],
                 ),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                border: Border.all(color: DsAtomColors.premiumDatavizKpiTile6.withValues(alpha: 0.08)),
               ),
               child: Text(glyph, style: const TextStyle(fontSize: 20, height: 1)),
             ),
@@ -71,7 +72,7 @@ class KpiTile extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: DsAtomColors.premiumDatavizKpiTile6,
                   fontSize: 30,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -1.6,

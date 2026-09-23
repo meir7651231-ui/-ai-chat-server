@@ -137,7 +137,7 @@ export function formOf(sentence0) {
     return { label, many: plain.length ? isMany(plain[plain.length - 1]) : false, fields: [], under, src, acts, values, asks, kinds, rel };
   };
   // מילת-הצהרה של שפת-הספק (שרת · עיצוב) פותחת רצף משלה — כמו מילה מפוזרת, אבל היא נשארת ברצף (ההצהרה = המילה + הערך): «ניהול לקוחות בעיצוב נייר» ⇒ [ניהול לקוחות] [בעיצוב נייר]
-  const runsOf = (ws) => { const runs = []; let cur = []; for (const w of ws) { if (!isNum(w) && isSpreadTok(w)) { if (cur.length) runs.push(cur); cur = []; frame.push(w); } else if (isDeclWord(w) && cur.length) { runs.push(cur); cur = [w]; } else cur.push(w); } if (cur.length) runs.push(cur); return runs; };   // מספר לעולם אינו «מפוזר» — נשאר ברצף כערך
+  const runsOf = (ws) => { const runs = []; let cur = []; for (let i = 0; i < ws.length; i++) { const w = ws[i]; const n = multiDeclAt(ws, i); if (n) { cur.push(...ws.slice(i, i + n)); i += n - 1; continue; } if (!isNum(w) && isSpreadTok(w)) { if (cur.length) runs.push(cur); cur = []; frame.push(w); } else if (isDeclWord(w) && cur.length) { runs.push(cur); cur = [w]; } else cur.push(w); } if (cur.length) runs.push(cur); return runs; };   // מספר לעולם אינו «מפוזר» — נשאר ברצף כערך
   const queue = [...segments];
   while (queue.length) { const seg = queue.shift();
     // ── שלבים לפי צורה (העיקרון של מחזור-חיים, מהמילים של הבעלים בלבד): ──
@@ -267,19 +267,36 @@ const isDeclWord = (w) => DECLS.some((d) => stripLead(w).includes(d.word));     
 // מילת-הצהרה או ערך-הצהרה של שפת-הספק לעולם אינם «מפוזרים» — הם אוצר-המילים המבני של מנוע 4 (נמדד: «עיצוב» 15 מינים · «כהה» 14 ⇒ היו נופלים למסגרת)
 const isDeclTok = (w) => DECLS.some((d) => stripLead(w).some((f) => f === d.word || d.values.includes(f)));
 const isSpreadTok = (w) => isSpread(w) && !isDeclTok(w);
-const isDeclItem = (ws) => DECLS.some((d) => ws.some((w) => stripLead(w).includes(d.word)) && ws.some((w) => d.values.some((v) => stripLead(w).includes(v))));
+const isDeclItem = (ws) => DECLS.some((d) => ws.some((w) => stripLead(w).includes(d.word)) && (ws.some((w) => d.values.some((v) => stripLead(w).includes(v))) || d.values.some((v) => v.includes(' ') && ws.join(' ').includes(v))));
+// ערך-הצהרה רב-מילי («בנייה חכמה») = רצף אחד: המילים שלו לא נחתכות ולא מפוזרות בתוך ההצהרה — אבל כל מילה לבדה («בנייה») נשארת מילה רגילה בכל מקום אחר
+const MULTI_DECL = DECLS.flatMap((d) => d.values.filter((v) => v.includes(' ')).map((v) => v.split(' ')));
+const multiDeclAt = (ws, i) => (MULTI_DECL.find((m) => m.every((x, k) => ws[i + k] !== undefined && stripLead(ws[i + k]).includes(x))) || []).length;
 function declOf(form, decl, skip = null) {
   if (!decl.word) return null;
-  const has = (t, w) => toks(t.label).some((x) => stripLead(x).includes(w));
+  const has = (t, w) => w.includes(' ') ? String(t.label).includes(w) : toks(t.label).some((x) => stripLead(x).includes(w));   // ערך רב-מילי («בנייה חכמה») = רצף בתווית
   const t = form.things.find((t) => t !== skip && has(t, decl.word) && decl.values.some((v) => has(t, v)));
-  return t ? { thing: t, value: decl.values.find((v) => has(t, v)) } : null;
+  if (!t) return null;
+  const value = decl.values.find((v) => has(t, v));
+  const vw = value.split(' ');   // מה שנשאר בהצהרה אחרי המילה והערך («בעיצוב נייר טורקיז» ⇒ «טורקיז») עובר כמו-שהוא לשורת-הספק — app-ds מכריע (ערכה מהדאטה / שאלה)
+  const extra = toks(t.label).filter((x) => !stripLead(x).includes(decl.word) && !vw.some((v) => stripLead(x).includes(v))).join(' ') || null;
+  return { thing: t, value, extra };
 }
 export function serverDeclOf(form) { return declOf(form, SL_DECL.server); }
 export function lookDeclOf(form) { return declOf(form, SL_DECL.look, (serverDeclOf(form) || {}).thing || null); }
+/** ראש-המשפט (צורה, לא משמעות): מה שלפני הנקודתיים הראשונות = השלם שכל השאר בתוכו. «ניהול מוסד: לכל תלמיד יש…» ⇒ ראש «ניהול מוסד».
+ *  הראש = הדברים של הקטע הראשון בלי הצהרות (עיצוב/שרת). אין נקודתיים ⇒ אין ראש (לא ממציאים שם). */
+export function headOf(form) {
+  const s = String(form.sentence || ''); const ci = s.indexOf(':'); if (ci <= 0) return null;
+  const seg0 = s.slice(0, ci).trim(); if (!form.segments.length || form.segments[0] !== seg0) return null;
+  const decl = new Set([serverDeclOf(form), lookDeclOf(form)].filter(Boolean).map((d) => d.thing));
+  const head = form.things.filter((t) => t.src === seg0 && !decl.has(t)).map((t) => t.label).join(' ').trim();
+  return head || null;
+}
 export function specOf(form, answers = {}) {
   const lines = [], skipped = [], builtin = [];
   const srv = serverDeclOf(form), lk = lookDeclOf(form);
   const decl = new Set([srv && srv.thing, lk && lk.thing].filter(Boolean));
+  const head = headOf(form);
   const ents = form.things.filter((t) => !decl.has(t) && (t.many || t.fields.length || (answerFor(t, answers).fields)));
   const names = new Set(ents.map((t) => t.label));
   for (const t of ents) {
@@ -314,7 +331,9 @@ export function specOf(form, answers = {}) {
   const metrics = [];
   for (const t of ents) { const a = answerFor(t, answers); if (!(a.acts && a.acts.includes('sum'))) continue; metrics.push(`מונה(${t.label})`); for (const f of (a.fields || [])) if (f.type === 'num') metrics.push(`סכום(${t.label}.${f.label})`); }
   if (metrics.length) lines.push(`לוח בקרה עם ${metrics.join(', ')}`);
-  if (lk && lines.length) lines.push(`${SL_DECL.look.word}: ${lk.value}`);   // הצהרת-עיצוב של הבעלים ⇒ app-ds.setLook (עור מהמדף); בלי הצהרה — ברירת-המחדל של app-ds
+  // הראש ⇒ שם-האפליקציה (שורת appWord של שפת-הספק) + לוח-הבית על שמו (שורה שאינה ישות/תפקיד/הצהרה = לוח-בקרה ב-app-ds: אריח-מונה לכל ישות)
+  if (head && lines.length) { const SL = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')); lines.unshift(`${SL.appWord}: ${head}`); if (!metrics.length) lines.push(head); builtin.push(`ראש «${head}» ⇒ ${SL.appWord} + לוח-הבית`); }
+  if (lk && lines.length) lines.push(`${SL_DECL.look.word}: ${lk.value}${lk.extra ? ' ' + lk.extra : ''}`);   // הצהרת-עיצוב של הבעלים ⇒ app-ds.setLook (עור מהמדף); בלי הצהרה — ברירת-המחדל של app-ds
   if (srv && lines.length) lines.push(`${SL_SERVER.word}: ${srv.value}`);   // הצהרה של הבעלים ⇒ server.mjs פולט חבילת-שרת מאותן ישויות
   if (lines.length) lines.push('תפקיד בודק: הכל');
   return { spec: lines.join('\n'), skipped, builtin };

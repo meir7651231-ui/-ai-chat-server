@@ -1,5 +1,6 @@
 // ✨ StatusChip — שבב-סטטוס מואר עם מסגרת-שקופה; דאטה: String label + int tone (0..3)
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class StatusChip extends StatelessWidget {
   final String label;
@@ -7,10 +8,10 @@ class StatusChip extends StatelessWidget {
   const StatusChip({super.key, required this.label, this.tone = 0});
 
   static const List<Color> _tones = [
-    Color(0xFF7C3AED), // 0 accent
-    Color(0xFF34D399), // 1 success
-    Color(0xFFF43F5E), // 2 danger
-    Color(0xFFF59E0B), // 3 warning
+    DsAtomColors.premiumFeedbackStatusChip1, // 0 accent
+    DsAtomColors.premiumFeedbackStatusChip2, // 1 success
+    DsAtomColors.premiumFeedbackStatusChip3, // 2 danger
+    DsAtomColors.premiumFeedbackStatusChip4, // 3 warning
   ];
 
   @override
@@ -51,7 +52,7 @@ class StatusChip extends StatelessWidget {
               label,
               overflow: TextOverflow.ellipsis, softWrap: false, // G7a: תווית ארוכה ברוחב-מוגבל — קיצוץ במקום גלישה (RenderFlex overflow 44px בפאנל)
               style: const TextStyle(
-                color: Color(0xFFF2F3FF),
+                color: DsAtomColors.premiumFeedbackStatusChip5,
                 fontSize: 12.5,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0.2,

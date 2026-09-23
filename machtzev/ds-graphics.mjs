@@ -15,12 +15,12 @@ const bgs = [
     canvas.drawRect(rect, Paint()..shader = DsGradient.aurora.createShader(rect));
     for (var i = 0; i < 3; i++) {
       final c = Offset(size.width * (0.2 + i * 0.3), size.height * (0.3 + (i.isEven ? 0.1 : -0.1)));
-      canvas.drawCircle(c, size.width * 0.22, Paint()..color = Colors.white.withValues(alpha: 0.06)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 40));
+      canvas.drawCircle(c, size.width * 0.22, Paint()..color = DsIdentity.graphHalo.withValues(alpha: 0.06)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 40));
     }`],
   ['MeshBg', 'רקע-מֶש — שלוש כתמי-גרדיאנט רדיאליים',
     `final rect = Offset.zero & size;
     canvas.drawRect(rect, Paint()..color = DsTokens.bg);
-    const cols = [DsTokens.accent, Color(0xFF6366F1), DsTokens.success];
+    const cols = [DsTokens.accent, DsIdentity.graphMid, DsTokens.success];
     for (var i = 0; i < cols.length; i++) {
       final c = Offset(size.width * (0.25 + i * 0.28), size.height * (i.isEven ? 0.28 : 0.66));
       final r = size.width * 0.4;

@@ -2,6 +2,7 @@
 // מוצא: screens__regression_panel_screen:_CheckRow (בנייה-חכמה main) · צרור-1 · מודל-שוטח: 5 שדות · props-שורש: label, label2, pass, name, detail, expected, got
 // התוכן: new/dart-data-bs/auto/screens__regression_panel_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class RegressionPanelCheckRow extends StatelessWidget {
@@ -46,7 +47,7 @@ class RegressionPanelCheckRow extends StatelessWidget {
                   Text(
                     detail!,
                     style: const TextStyle(
-                      color: Color(0xFF888888),
+                      color: DsAtomColors.autoRegressionPanelCheckRow1,
                       fontSize: 11,
                     ),
                   ),

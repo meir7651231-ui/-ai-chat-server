@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__site_hub_screen:_CardDone (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 
 class CardDone extends StatelessWidget {
   const CardDone(this.text);
@@ -20,4 +21,4 @@ class CardDone extends StatelessWidget {
       );
 }
 
-const Color _kOk = Color(0xFF1F8A4C);
+const Color _kOk = DsAtomColors.autoCardDone1;

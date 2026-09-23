@@ -1,5 +1,6 @@
 // ✨ EmptyState — מצב-ריק עם אייקון בעיגול-כהה זוהר; דאטה: String glyph + String message
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class EmptyState extends StatelessWidget {
   final String glyph;
@@ -20,11 +21,11 @@ class EmptyState extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: const RadialGradient(
-                colors: [Color(0xFF211B3A), Color(0xFF120E22)],
+                colors: [DsAtomColors.premiumFeedbackEmptyState1, DsAtomColors.premiumFeedbackEmptyState2],
               ),
-              border: Border.all(color: const Color(0xFF7C3AED).withValues(alpha: 0.35), width: 1),
+              border: Border.all(color: DsAtomColors.premiumFeedbackEmptyState3.withValues(alpha: 0.35), width: 1),
               boxShadow: [
-                BoxShadow(color: const Color(0xFF7C3AED).withValues(alpha: 0.30), blurRadius: 28, spreadRadius: 1),
+                BoxShadow(color: DsAtomColors.premiumFeedbackEmptyState3.withValues(alpha: 0.30), blurRadius: 28, spreadRadius: 1),
               ],
             ),
             child: Text(glyph, style: const TextStyle(fontSize: 36)),
@@ -34,7 +35,7 @@ class EmptyState extends StatelessWidget {
             message,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: const Color(0xFFF2F3FF).withValues(alpha: 0.72),
+              color: DsAtomColors.premiumFeedbackEmptyState4.withValues(alpha: 0.72),
               fontSize: 14,
               height: 1.4,
               fontWeight: FontWeight.w500,

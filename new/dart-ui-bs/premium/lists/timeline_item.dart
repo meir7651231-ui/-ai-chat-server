@@ -1,5 +1,6 @@
 // ✨ TimelineItem — פריט-ציר-זמן: נקודה+קו זוהרים + כותרת/שעה/גוף
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class TimelineItem extends StatelessWidget {
   final String title;
@@ -13,9 +14,9 @@ class TimelineItem extends StatelessWidget {
     this.body,
   });
 
-  static const Color _accent = Color(0xFF7C3AED);
-  static const Color _text = Color(0xFFF2F3FF);
-  static const Color _muted = Color(0xFF9AA0BE);
+  static const Color _accent = DsAtomColors.premiumListsTimelineItem1;
+  static const Color _text = DsAtomColors.premiumListsTimelineItem2;
+  static const Color _muted = DsAtomColors.premiumListsTimelineItem3;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class TimelineItem extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: const LinearGradient(
-                      colors: [_accent, Color(0xFFEC4899)],
+                      colors: [_accent, DsAtomColors.premiumListsTimelineItem4],
                     ),
                     boxShadow: [
                       BoxShadow(
@@ -88,7 +89,7 @@ class TimelineItem extends StatelessWidget {
                         Text(
                           time,
                           style: const TextStyle(
-                            color: Color(0xFFC4B5FD),
+                            color: DsAtomColors.premiumListsTimelineItem5,
                             fontSize: 11.5,
                             fontWeight: FontWeight.w600,
                           ),

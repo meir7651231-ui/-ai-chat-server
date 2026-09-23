@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
-import { renderEntity, renderDashboard, renderHub, renderSystem, renderWizard, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write, setLook, getLook } from './render-ds.mjs';
+import { renderEntity, renderDashboard, renderHub, renderSystem, renderWizard, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write, setLook, getLook, isPaper } from './render-ds.mjs';
 import { DEFAULT_LOOK } from './look.mjs';
 import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, renderReportTest, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
 import { nlToSpec } from './nl-spec.mjs';
@@ -55,6 +55,17 @@ function parseRole(line) {
   return { name, all, ents, scope, hide, ro };
 }
 
+// «עיצוב: <עור> [<ערכה>]» — העור = הרצף הארוך ביותר מתחילת הערך שהוא מפתח ב-SL.looks («בנייה חכמה» = שתי מילים); המילה שאחריו = ערכה (SL.themes).
+// לא-מוכר ⇒ null (הדלת הופכת לשאלה); העור ⇒ DEFAULT_LOOK מהדאטה.
+export function parseLookLine(value) {
+  const ws = String(value || '').trim().split(/\s+/).filter(Boolean);
+  let look = null, used = 0;
+  for (let n = ws.length; n >= 1; n--) { const key = ws.slice(0, n).join(' '); if (SL.looks[key]) { look = SL.looks[key]; used = n; break; } }
+  const themeWord = look ? ws[used] || null : null;   // עור לא-מוכר ⇒ השאלה על העור בלבד
+  const theme = themeWord ? (SL.themes || {})[themeWord] || null : null;
+  return { look: look || DEFAULT_LOOK, theme, unknownLook: ws.length && !look ? ws.join(' ') : null, unknownTheme: themeWord && !theme ? themeWord : null };
+}
+
 export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=false: בנייה בלי כתיבת particle-plan/report-plan (שערי-דגימה nl-smoke/nl-quality) — אחרת שלושה שערים דורסים את אותו particle-plan-app.json והאחרון-במצב מנצח
   const writePlan = opts.writePlan !== false;
   // 🗣️ צפן §22: קלט חסר-מבנה לגמרי (אף ישות/דשבורד/תפקיד) ⇒ עברית-חופשית ⇒ nlToSpec.
@@ -87,8 +98,8 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
   const appLine = all0.map((l) => l.match(APP_RE)).find(Boolean); const appName = appLine ? appLine[1].trim() : null;
   // G28 · `עיצוב: נייר` ⇒ עור-הנייר (setLook) · `שאלה <מסך>: <טקסט>` ⇒ המסך עונה על שאלה (PLAN §1: מסך = שאלה אחת)
   const LOOK_RE = new RegExp('^\\s*' + SL.lookWord + '\\s*:\\s*(.+)$');
-  const lookLine = all0.map((l) => l.match(LOOK_RE)).find(Boolean); const look = lookLine ? (SL.looks[lookLine[1].trim()] || DEFAULT_LOOK) : DEFAULT_LOOK;   // הכרעת-בעלים 23.9: לא 'dark' קשיח — ברירת-המחדל מהדאטה (look.mjs ⇐ spec-lang.defaultLook)
-  setLook(look);
+  const lookLine = all0.map((l) => l.match(LOOK_RE)).find(Boolean); const lk = parseLookLine(lookLine ? lookLine[1] : '');   // הכרעת-בעלים 23.9: לא 'dark' קשיח — ברירת-המחדל מהדאטה (look.mjs ⇐ spec-lang.defaultLook) · «עיצוב: נייר טורקיז» = עור + ערכה
+  setLook(lk.look, lk.theme);
   const Q_RE = new RegExp('^\\s*' + SL.questionWord + '\\s+(\\S+)\\s*:\\s*(.+)$');
   const questions = {}; for (const l of all0) { const m = l.match(Q_RE); if (m && SL.questionTargets[m[1]]) questions[SL.questionTargets[m[1]]] = m[2].trim(); }
   const CHAIN_RE = new RegExp('^\\s*' + SL.chainWord + '\\s*:\\s*(.+)$');   // G32 · `שרשרת: א, ב, ג` — הצעד-הבא בשלב-האחרון (P14)
@@ -221,7 +232,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
 
   const bindScreens = [];
   // G28 · נייר: מסכי-המגירה (מסך-אמת · כרטיס-רשומה · סקירה) לא קיימים למשתמש (PLAN §2.3) ותבניותיהם נושאות אטומים בצבע-קשיח ⇒ לא מחוללים
-  const drawer = getLook() !== 'paper';
+  const drawer = !isPaper();
   const bindN = drawer ? Math.min(entMeta.length, SCREEN_REGISTRY.length) : 0;
   for (let bi = 0; bi < bindN; bi++) {
     const ent = entMeta[bi];
@@ -300,7 +311,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
   sys.push({ ...fl, kind: 'system', name: L.flagsTitle, icon: '🎚️', sub: L.flagsSub });
   const st = renderSystem(`${P}settings`, { title: L.settingsTitle, icon: '⚙️', sectionTitle: L.settingsSection, kind: 'toggles', items: [L.settingsItem1, L.settingsItem2, L.settingsItem3] });
   sys.push({ ...st, kind: 'system', name: L.settingsTitle, icon: '⚙️', sub: L.settingsSub });
-  if (getLook() === 'paper') { const bh = renderBehavior(`${P}behavior`); sys.push({ ...bh, kind: 'system', name: L.behaviorTitle, icon: '', sub: L.behaviorSub }); }   // G32 · התנהגות (נייר)
+  if (isPaper()) { const bh = renderBehavior(`${P}behavior`); sys.push({ ...bh, kind: 'system', name: L.behaviorTitle, icon: '', sub: L.behaviorSub }); }   // G32 · התנהגות (נייר)
 
   // RLS · שדות-היקף ייחודיים (slug+שדה) — למילוי בורר-"מי-אני" בלוח.
   const scopeFields = [];
@@ -313,9 +324,14 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     const wiz = renderWizard(`${P}wizard`, { entities: wEnts, screenCount: screens.length + sys.length + 2 });
     if (wiz && wiz.slug) wizTile = { slug: wiz.slug, cls: wiz.cls, name: L.wizTitle, icon: '🧙', sub: `${wiz.steps} ${L.wizSteps} · ${wiz.options} ${L.wizOpts} · ${wiz.inventions} ${L.wizInv}` };
   } catch (e) { wizTile = null; }
-  const hub = renderHub(`${P}hub`, { title: appTitle, icon: '🏗️', screens: [...screens, ...reportScreens, ...particleScreens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys, ...(wizTile ? [wizTile] : [])], roles, scopeFields });
+  const extraScreens = Array.isArray(opts.extraScreens) ? opts.extraScreens : [];   // הרכבה (הדלת): מסכים שנבנו ליד (התראה של capability) ⇒ אריח ברכזת, לא קובץ-יתום
+  const hub = renderHub(`${P}hub`, { title: appTitle, icon: '🏗️', screens: [...screens, ...extraScreens, ...reportScreens, ...particleScreens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys, ...(wizTile ? [wizTile] : [])], roles, scopeFields });
   // 🧭 G26 · ניווט-מקשרים: השורש = הישות עם הכי-הרבה מצביעים (backRefs); יש שורש ⇒ שלד (בית · שורש · עוד) הוא הבית, הרכזת = "עוד" (ביט-זהה)
-  const rootMeta = pickRoot(entMeta, backRefs);
+  // הרכבה: אין שורש לפי קשרים אבל יש לוח-בית (ראש-המשפט) ⇒ הישות הראשונה שנאמרה = לשונית-השורש, והלוח = לשונית-הבית (לא הרכזת, לא «היום» של ישות אחת)
+  const rootByRefs = pickRoot(entMeta, backRefs);
+  const headDash = screens.find((x) => x.kind === 'dashboard') || null;
+  const rootMeta = rootByRefs || (headDash && entMeta.length ? entMeta[0] : null);
+  const rootIsFirst = !rootByRefs && !!rootMeta;
   let home = { slug: `${P}hub`, cls: hub.cls };
   if (rootMeta) {
     const entOf = (name) => { const sc = screens.find((x) => x.kind === 'entity' && x.name === name); const li = info.find((x) => x.isEnt && entRes[x.i] && entRes[x.i].entity === name); const r = li ? entRes[li.i] : null; return { name, slug: nameToSlug[name], cls: sc ? sc.cls : null, schema: r ? r.schema : [], stages: r ? (r.stages || []) : [], icon: '🗂️' }; };
@@ -327,7 +343,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     const dash = screens.find((x) => x.kind === 'dashboard') || null;
     // G30 · נייר: «היום» = דבר-אחד לכל רשומה פתוחה (חלקיק-ההודעה של השורש + שליחת-הדוח) במקום לוח-הבקרה בלשונית-הבית
     let homeScr = null;
-    if (getLook() === 'paper') {
+    if (isPaper() && !rootIsFirst) {
       const rep = reportByEnt[rootMeta.name] || null;
       const msgP = planAll.find((x) => x.ok && x.entity === rootMeta.name && x.shape && x.shape.kind === 'message') || null;
       homeScr = renderHome(`${P}home`, { root: rootE, rootPage, report: rep, message: msgP ? { entity: pentsAll.find((e) => e.name === rootMeta.name), p: msgP } : null, title: questions.home || L.shellHome, chain, appTitle });
@@ -336,7 +352,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     home = { slug: `${P}shell`, cls: shell.cls };
     // G33 · מניפסט-המודול (הכרעה-29): מה ש«בלגן» (האפליקציה-האחת) צריך כדי למזג את המודול — מסכים · שורש · שדות · שרשרת. נגזר, לא יד.
     if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [] })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
-    console.log(`🧭 ${L.shellLog}: ${L.shellRootWord} ${rootMeta.name} · ${kids.length} ${L.shellChildrenWord} · ${shell.nav || '—'}${[...rootPage.notes, ...shell.notes].length ? ' · ⚪ ' + [...rootPage.notes, ...shell.notes].join(' · ') : ''}`);
+    console.log(`🧭 ${L.shellLog}: ${L.shellRootWord} ${rootMeta.name}${rootIsFirst ? ' (1st)' : ''} · ${kids.length} ${L.shellChildrenWord} · ${shell.nav || '—'}${[...rootPage.notes, ...shell.notes].length ? ' · ⚪ ' + [...rootPage.notes, ...shell.notes].join(' · ') : ''}`);
   }
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
   renderMain(`${P}main`, { title: appTitle, hubSlug: home.slug, hubCls: home.cls, edges });
@@ -354,11 +370,11 @@ if (import.meta.url === 'file://' + process.argv[1]) {
   if (process.argv.includes('--skin')) {
     const [{ skinPass }, { resolveSkin }, { autoSkin }] = await Promise.all([import('./retarget.mjs'), import('./app-from-sentences.mjs'), import('./auto-skin.mjs')]);
     const sk = resolveSkin(autoSkin().skin); const tot = {};
-    if (sk && getLook() === 'paper') { delete sk.navTile; delete sk.section; delete sk.pageHeader; delete sk.button; }   // G28 · נייר: שורה-לא-כרטיס (DsNavTile 52px · קו) · חלק שטוח (DsSection: כותרת 15/700 + שורות, בלי כרטיס-בתוך-כרטיס) · כותרת-מסך של ה-DS (22/600 + קו) — כלל-13 של PLAN §5.3
+    if (sk && isPaper()) { delete sk.navTile; delete sk.section; delete sk.pageHeader; delete sk.button; }   // G28 · נייר: שורה-לא-כרטיס (DsNavTile 52px · קו) · חלק שטוח (DsSection: כותרת 15/700 + שורות, בלי כרטיס-בתוך-כרטיס) · כותרת-מסך של ה-DS (22/600 + קו) — כלל-13 של PLAN §5.3
     for (const f of fs.readdirSync(OUT)) {
       if (!new RegExp(`^gen_${P}(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|shell|root|home|behavior)\\d*\\.dart$`).test(f)) continue;
       const fp = path.join(OUT, f); let { code, stats } = skinPass(fs.readFileSync(fp, 'utf8'), sk);
-      if (getLook() === 'paper') code = code.replace(/^import '\.\.\/dart-ui-bs\/((?:premium|auto)\/[^']+)';\n/gm, (line, rel) => { const src = fs.readFileSync(path.join(R.ROOT, 'new/dart-ui-bs', rel), 'utf8'); const cls = (src.match(/^class ([A-Za-z0-9_]+)/m) || [])[1]; return cls && new RegExp('\\b' + cls + '\\(').test(code) ? line : ''; });   // G28 · נייר: ייבוא-אטום שהוחלף בעור ולא נותר בשימוש נגזם (אחרת האטום הקשיח "מיובא" למסך-נייר)
+      if (isPaper()) code = code.replace(/^import '\.\.\/dart-ui-bs\/((?:premium|auto)\/[^']+)';\n/gm, (line, rel) => { const src = fs.readFileSync(path.join(R.ROOT, 'new/dart-ui-bs', rel), 'utf8'); const cls = (src.match(/^class ([A-Za-z0-9_]+)/m) || [])[1]; return cls && new RegExp('\\b' + cls + '\\(').test(code) ? line : ''; });   // G28 · נייר: ייבוא-אטום שהוחלף בעור ולא נותר בשימוש נגזם (אחרת האטום הקשיח "מיובא" למסך-נייר)
       fs.writeFileSync(fp, code); for (const [k, v] of Object.entries(stats)) tot[k] = (tot[k] || 0) + v;
     }
     console.log(`🎨 ${L.skinLog}: ${Object.entries(tot).filter(([, v]) => v).map(([k, v]) => `${k}×${v}`).join(' · ') || '—'}`);

@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_FacetRow (בנייה-חכמה main) · צרור-1 · props-שורש: label2
 // התוכן: new/dart-data-bs/auto/screens__catalog_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class FacetRow extends StatelessWidget {
@@ -53,7 +54,7 @@ class FacetRow extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                            color: Color(0xFF888888), fontSize: 13),
+                            color: DsAtomColors.autoFacetRow1, fontSize: 13),
                       ),
                     ],
                   ),
@@ -68,7 +69,7 @@ class FacetRow extends StatelessWidget {
                   child: Text(
                     '$count',
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: DsAtomColors.autoFacetRow2,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                     ),

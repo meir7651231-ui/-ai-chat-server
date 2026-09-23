@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__site_hub_screen:_HubTile (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class HubTile extends StatelessWidget {
@@ -26,7 +27,7 @@ class HubTile extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(BsTokens.space3),
           decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFFE6E6E6)),
+            border: Border.all(color: DsAtomColors.autoHubTile1),
             borderRadius: BorderRadius.circular(BsTokens.radiusCard),
           ),
           child: Column(

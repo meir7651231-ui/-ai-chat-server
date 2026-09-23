@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__trade_builder__attribute_schema_editor:_WarnChip (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class WarnChip extends StatelessWidget {
@@ -28,4 +29,4 @@ class WarnChip extends StatelessWidget {
   }
 }
 
-const Color _kWarnColor = Color(0xFFB45309);
+const Color _kWarnColor = DsAtomColors.autoWarnChip1;

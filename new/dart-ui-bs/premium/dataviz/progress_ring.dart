@@ -2,6 +2,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class ProgressRing extends StatelessWidget {
   const ProgressRing({super.key, required this.value, this.label, this.size = 148});
@@ -10,7 +11,7 @@ class ProgressRing extends StatelessWidget {
   final String? label;
   final double size;
 
-  static const Color _mute = Color(0xFF8A8CB8);
+  static const Color _mute = DsAtomColors.premiumDatavizProgressRing1;
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +31,12 @@ class ProgressRing extends StatelessWidget {
               children: [
                 ShaderMask(
                   shaderCallback: (r) => const LinearGradient(
-                    colors: [Color(0xFF22E1FF), Color(0xFFFF3DCB)],
+                    colors: [DsAtomColors.premiumDatavizProgressRing2, DsAtomColors.premiumDatavizProgressRing3],
                   ).createShader(r),
                   child: Text(
                     '$pct%',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: DsAtomColors.premiumDatavizProgressRing4,
                       fontSize: size * 0.24,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -1.5,
@@ -70,7 +71,7 @@ class _RingPainter extends CustomPainter {
 
   final double value;
 
-  static const Color _track = Color(0xFF1A1B33);
+  static const Color _track = DsAtomColors.premiumDatavizProgressRing5;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -95,7 +96,7 @@ class _RingPainter extends CustomPainter {
     const SweepGradient grad = SweepGradient(
       startAngle: -math.pi / 2,
       endAngle: 3 * math.pi / 2,
-      colors: [Color(0xFF22E1FF), Color(0xFF7A5CFF), Color(0xFFFF3DCB), Color(0xFF22E1FF)],
+      colors: [DsAtomColors.premiumDatavizProgressRing2, DsAtomColors.premiumDatavizProgressRing6, DsAtomColors.premiumDatavizProgressRing3, DsAtomColors.premiumDatavizProgressRing2],
     );
 
     canvas.drawArc(
@@ -124,12 +125,12 @@ class _RingPainter extends CustomPainter {
 
     final double ang = start + sweep;
     final Offset head = Offset(c.dx + r * math.cos(ang), c.dy + r * math.sin(ang));
-    canvas.drawCircle(head, stroke * 0.62, Paint()..color = Colors.white);
+    canvas.drawCircle(head, stroke * 0.62, Paint()..color = DsAtomColors.premiumDatavizProgressRing4);
     canvas.drawCircle(
       head,
       stroke * 0.62,
       Paint()
-        ..color = const Color(0xFFFF3DCB).withValues(alpha: 0.6)
+        ..color = DsAtomColors.premiumDatavizProgressRing3.withValues(alpha: 0.6)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6),
     );
   }

@@ -1,6 +1,8 @@
 /** אטום-דאטה · pure-look — שפת-Pure כתכנית role→pigment (שכבה A · הכרעה 19: מראה=דאטה).
  *  מבנה: neutral (סולם, לא-מורף) · semantic (err/warn/gold — קבוע) · themes (סט-אקצנט מורף פר-ערכה) · fonts (משפחות קבועות — לא מורף).
  *  G28 (הכרעה-28): on-a/hi/shade = ליטרלים שהיו צרובים ב-15 משפחות-Pure (דיו-על-אקצנט · הבהקה · בסיס-צל) — עכשיו טוקנים, ערכי-הכהה = הליטרלים (ביט-זהה);
+ *  skins.build + themes.t-build = הפלטה של «בנייה חכמה» עצמה, verbatim מ-new/dart-ui-bs/auto/bs_tokens.dart (BsTokens: bgLight · surfaceMid · cardLight · bgLightAlt · divider · inkLight ·
+ *    mutedLight · success · warnText · danger · warnBright · brand · brandDark) — הכרעת-בעלים 23.9 («1 ו-2»): העור השלישי. faint/hair2 = אלפא על inkLight/divider (אין להם מקבילה ב-BsTokens).
  *  skins.paper = עור-הנייר של «בלגן» (לבן · #37352F · קו 8% · צל-שקוף) · themes.t-balagan = כחול-יחיד בלי גרדיאנט/זוהר · fontSets.heebo = גופן-אחד.
  *  ערכים ליטרליים בלבד, אפס var(), אפס-import (חוק-1). הזהות מוזרקת בקופסה, לא באטום (חוק-5/6).
  *  מקור: machtzev/pure/action-family.html:11-15 (טוקני-Pure מאומתים-בעין). חוזה: pure-look.contract.md */
@@ -59,6 +61,14 @@ export const PURE_LOOK = {
    "--gl": "rgba(47, 111, 237, 0)",
    "--c2": "#2F6FED",
    "--c3": "#2F6FED"
+  },
+  "t-build": {
+   "--a-hi": "#F26B1D",
+   "--a": "#F26B1D",
+   "--a-800": "#D65A0E",
+   "--gl": "rgba(242, 107, 29, 0)",
+   "--c2": "#F26B1D",
+   "--c3": "#F26B1D"
   }
  },
  "skins": {
@@ -80,6 +90,25 @@ export const PURE_LOOK = {
    "--warn": "#C98A00",
    "--err": "#C8321E",
    "--gold": "#C98A00"
+  },
+  "build": {
+   "--canvas": "#FAFAFA",
+   "--sunken": "#F5F5F5",
+   "--surface": "#FFFFFF",
+   "--raised": "#FAF8F5",
+   "--raised2": "#E9E2D9",
+   "--ink": "#1A1A1A",
+   "--mut": "#6E655B",
+   "--faint": "rgba(26, 26, 26, 0.4)",
+   "--hair": "#E9E2D9",
+   "--hair2": "rgba(233, 226, 217, 0.5)",
+   "--on-a": "#FFFFFF",
+   "--hi": "#FFFFFF",
+   "--shade": "rgba(0, 0, 0, 0)",
+   "--ok": "#1F9D57",
+   "--warn": "#B45309",
+   "--err": "#CE3A32",
+   "--gold": "#F2A516"
   }
  },
  "fontSets": {

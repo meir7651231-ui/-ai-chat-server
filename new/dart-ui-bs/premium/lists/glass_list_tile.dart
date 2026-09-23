@@ -1,6 +1,7 @@
 // ✨ GlassListTile — שורת-זכוכית: BackdropFilter מטושטש + כותרת/תת + trailing
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class GlassListTile extends StatelessWidget {
   final String title;
@@ -14,9 +15,9 @@ class GlassListTile extends StatelessWidget {
     this.trailing,
   });
 
-  static const Color _accent = Color(0xFF7C3AED);
-  static const Color _text = Color(0xFFF2F3FF);
-  static const Color _muted = Color(0xFF9AA0BE);
+  static const Color _accent = DsAtomColors.premiumListsGlassListTile1;
+  static const Color _text = DsAtomColors.premiumListsGlassListTile2;
+  static const Color _muted = DsAtomColors.premiumListsGlassListTile3;
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +40,12 @@ class GlassListTile extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.white.withValues(alpha: 0.10),
-                      Colors.white.withValues(alpha: 0.03),
+                      DsAtomColors.premiumListsGlassListTile4.withValues(alpha: 0.10),
+                      DsAtomColors.premiumListsGlassListTile4.withValues(alpha: 0.03),
                     ],
                   ),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.14),
+                    color: DsAtomColors.premiumListsGlassListTile4.withValues(alpha: 0.14),
                   ),
                 ),
                 child: Row(
@@ -57,7 +58,7 @@ class GlassListTile extends StatelessWidget {
                         gradient: const LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [_accent, Color(0xFFEC4899)],
+                          colors: [_accent, DsAtomColors.premiumListsGlassListTile5],
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -103,7 +104,7 @@ class GlassListTile extends StatelessWidget {
                       Text(
                         trailing!,
                         style: const TextStyle(
-                          color: Color(0xFFC4B5FD),
+                          color: DsAtomColors.premiumListsGlassListTile6,
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                         ),

@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__docs_readiness_gate:_SectionCard (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class SectionCard extends StatelessWidget {
@@ -25,7 +26,7 @@ class SectionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(BsTokens.radiusCard),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000),
+            color: DsAtomColors.autoSectionCard1,
             blurRadius: 10,
             offset: Offset(0, 2),
           ),

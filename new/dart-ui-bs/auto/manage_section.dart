@@ -2,6 +2,7 @@
 // מוצא: screens__manager_dashboard_screen:_ManageSection (בנייה-חכמה main) · צרור-2 · props-שורש: title2, body, label
 // התוכן: new/dart-data-bs/auto/screens__manager_dashboard_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/help_target.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -46,7 +47,7 @@ class ManageSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
-        border: Border.all(color: const Color(0xFFEDEDED)),
+        border: Border.all(color: DsAtomColors.autoManageSection1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

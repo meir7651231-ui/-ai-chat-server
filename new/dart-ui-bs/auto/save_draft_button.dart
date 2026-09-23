@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__trade_define_step:_SaveDraftButton (בנייה-חכמה main) · צרור-1 · props-שורש: label, fallback
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__trade_define_step_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -25,7 +26,7 @@ class SaveDraftButton extends StatelessWidget {
         enabled: enabled,
         label: label,
         child: Material(
-          color: enabled ? BsTokens.brand : const Color(0xFFE2E2E2),
+          color: enabled ? BsTokens.brand : DsAtomColors.autoSaveDraftButton1,
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),
           child: InkWell(
             borderRadius: BorderRadius.circular(BsTokens.radiusPill),

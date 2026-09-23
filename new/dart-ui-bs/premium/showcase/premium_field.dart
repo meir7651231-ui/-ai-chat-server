@@ -2,6 +2,7 @@
 // תווית-צפה שעולה בפוקוס · טבעת-פוקוס זוהרת · קו-אורורה תחתון שנדלק · אייקון מוביל.
 // a11y: TextField נגיש (label/hint) · reduced-motion · ניגוד. חוט-טהור: material בלבד · RTL.
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class PremiumField extends StatefulWidget {
   const PremiumField({
@@ -21,12 +22,12 @@ class PremiumField extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final bool obscure;
 
-  static const _surface = Color(0xFF14151C);
-  static const _hair = Color(0x1FFFFFFF);
-  static const _accent = Color(0xFF7A6BFF);
-  static const _glow = Color(0xFF6C5CE7);
-  static const _ink = Color(0xFFF4F5F7);
-  static const _muted = Color(0xFF9AA0AC);
+  static const _surface = DsAtomColors.premiumShowcasePremiumField1;
+  static const _hair = DsAtomColors.premiumShowcasePremiumField2;
+  static const _accent = DsAtomColors.premiumShowcasePremiumField3;
+  static const _glow = DsAtomColors.premiumShowcasePremiumField4;
+  static const _ink = DsAtomColors.premiumShowcasePremiumField5;
+  static const _muted = DsAtomColors.premiumShowcasePremiumField6;
 
   @override
   State<PremiumField> createState() => _PremiumFieldState();
@@ -110,7 +111,7 @@ class _PremiumFieldState extends State<PremiumField> {
                     border: InputBorder.none,
                     hintText: widget.hint,
                     hintStyle: const TextStyle(
-                        color: Color(0xFF60636E), fontSize: 15, fontWeight: FontWeight.w400),
+                        color: DsAtomColors.premiumShowcasePremiumField7, fontSize: 15, fontWeight: FontWeight.w400),
                   ),
                 ),
               ),
@@ -127,7 +128,7 @@ class _PremiumFieldState extends State<PremiumField> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2),
             gradient: const LinearGradient(
-              colors: [Color(0xFF39D6F0), Color(0xFF7A6BFF), Color(0xFFC66BFF)],
+              colors: [DsAtomColors.premiumShowcasePremiumField8, DsAtomColors.premiumShowcasePremiumField3, DsAtomColors.premiumShowcasePremiumField9],
             ),
           ),
         ),

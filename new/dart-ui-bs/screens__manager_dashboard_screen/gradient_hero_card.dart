@@ -4,6 +4,7 @@
 // התרת-סבך: claudeGatewayProvider/studioCoEditorProvider ⇒ הקופסה בוחרת subtitle
 // (live/offline · ai/manual מה-content) ומגדרת הרכבה; ניווט ⇒ onTap.
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 
 class GradientHeroCard extends StatelessWidget {
   const GradientHeroCard({
@@ -60,7 +61,7 @@ class GradientHeroCard extends StatelessWidget {
                         Text(
                           title,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: DsAtomColors.screensManagerDashboardScreenGradientHeroCard1,
                             fontSize: 17,
                             fontWeight: FontWeight.w800,
                           ),
@@ -74,7 +75,7 @@ class GradientHeroCard extends StatelessWidget {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: DsAtomColors.screensManagerDashboardScreenGradientHeroCard1,
                                   fontSize: 17,
                                   fontWeight: FontWeight.w800,
                                 ),
@@ -88,12 +89,12 @@ class GradientHeroCard extends StatelessWidget {
                       // לבן-מלא במקור — white70 על מותג נכשל בניגודיות.
                       Text(
                         subtitle,
-                        style: const TextStyle(color: Colors.white, fontSize: 12.5),
+                        style: const TextStyle(color: DsAtomColors.screensManagerDashboardScreenGradientHeroCard1, fontSize: 12.5),
                       ),
                     ],
                   ),
                 ),
-                const Icon(Icons.chevron_left, color: Colors.white),
+                const Icon(Icons.chevron_left, color: DsAtomColors.screensManagerDashboardScreenGradientHeroCard1),
               ],
             ),
           ),

@@ -2,6 +2,7 @@
 // מוצא: screens__lipskey_brand_screen:_SectionCard (בנייה-חכמה main) · צרור-1 · מודל-שוטח: 2 שדות · props-שורש: label, label2, emoji, name
 // התוכן: new/dart-data-bs/auto/screens__lipskey_brand_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class LipskeyBrandSectionCard extends StatelessWidget {
@@ -27,7 +28,7 @@ class LipskeyBrandSectionCard extends StatelessWidget {
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-              color: const Color(0xFFEEEEEE),
+              color: DsAtomColors.autoLipskeyBrandSectionCard1,
               width: 0.8)),
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -53,17 +54,17 @@ class LipskeyBrandSectionCard extends StatelessWidget {
                           horizontal: 7, vertical: 2),
                       decoration: BoxDecoration(
                         color:
-                            const Color(0xFF3D5A80).withOpacity(0.25),
+                            DsAtomColors.autoLipskeyBrandSectionCard2.withOpacity(0.25),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text('$prodCount${label}',
                           style: const TextStyle(
-                              color: Color(0xFF64FFDA), fontSize: 11)),
+                              color: DsAtomColors.autoLipskeyBrandSectionCard3, fontSize: 11)),
                     ),
                     const SizedBox(width: 6),
                     Text('$catCount${label2}',
                         style: const TextStyle(
-                            color: Color(0xFF888888), fontSize: 10)),
+                            color: DsAtomColors.autoLipskeyBrandSectionCard4, fontSize: 10)),
                   ],
                 ),
               ],

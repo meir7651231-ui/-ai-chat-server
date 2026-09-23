@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_AccRow (בנייה-חכמה main) · צרור-2 · מודל-שוטח: 4 שדות · props-שורש: label, label2, onTap, name, emoji, why, price, label3, label4
 // התוכן: new/dart-data-bs/auto/screens__catalog_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/logic/money_format.dart';
 
@@ -44,7 +45,7 @@ class AccRow extends StatelessWidget {
             ? BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: const Color(0xFFF2A516).withAlpha(115),
+                  color: DsAtomColors.autoAccRow1.withAlpha(115),
                   width: 1.5),
               )
             : null,
@@ -69,17 +70,17 @@ class AccRow extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: selected
                           ? BsTokens.brand
-                          : const Color(0xFFEDEDED),
+                          : DsAtomColors.autoAccRow2,
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
                         color: selected
                             ? BsTokens.brand
-                            : const Color(0xFFC8C8CE),
+                            : DsAtomColors.autoAccRow3,
                       ),
                     ),
                     child: selected
                         ? const Icon(Icons.check,
-                            color: Colors.white, size: 13)
+                            color: DsAtomColors.autoAccRow4, size: 13)
                         : null,
                   ),
                 ),
@@ -115,14 +116,14 @@ class AccRow extends StatelessWidget {
                           color: BsTokens.success,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: const Color(0xFFFFFFFF),
+                            color: DsAtomColors.autoAccRow4,
                             width: 1.5,
                           ),
                         ),
                         alignment: Alignment.center,
                         child: const Icon(
                           Icons.check,
-                          color: Colors.white,
+                          color: DsAtomColors.autoAccRow4,
                           size: 10,
                         ),
                       ),
@@ -174,7 +175,7 @@ class AccRow extends StatelessWidget {
                   Text(
                     why,
                     style: const TextStyle(
-                      color: Color(0xFF888888),
+                      color: DsAtomColors.autoAccRow5,
                       fontSize: 11,
                     ),
                   ),
@@ -193,7 +194,7 @@ class AccRow extends StatelessWidget {
                   style: TextStyle(
                     color: selected
                         ? BsTokens.brand
-                        : const Color(0xFF666666),
+                        : DsAtomColors.autoAccRow6,
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                   ),
@@ -201,7 +202,7 @@ class AccRow extends StatelessWidget {
                 const SizedBox(height: 4),
                 Container(
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF0F0F3),
+                    color: DsAtomColors.autoAccRow7,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -266,8 +267,8 @@ class _MiniQtyBtn extends StatelessWidget {
               icon,
               size: 12,
               color: onTap != null
-                  ? Colors.black54
-                  : const Color(0xFFCCCCCC),
+                  ? DsAtomColors.autoAccRow8
+                  : DsAtomColors.autoAccRow9,
             ),
           ),
         ),

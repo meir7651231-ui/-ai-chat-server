@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__stock_screen:_StockTab (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
 
@@ -21,7 +22,7 @@ class StockTab extends StatelessWidget {
           color: on ? BsTokens.brand : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(999),
           border: Border.all(
-            color: on ? BsTokens.brand : const Color(0xFFEAEAEA),
+            color: on ? BsTokens.brand : DsAtomColors.autoStockTab1,
           ),
         ),
         child: Text(

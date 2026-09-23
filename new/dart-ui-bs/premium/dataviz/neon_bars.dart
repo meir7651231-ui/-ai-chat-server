@@ -1,5 +1,6 @@
 // ✨ NeonBars — עמודות אופקיות גרדיאנט-ניאון מנורמלות-למקסימום + ערך טבלאי
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class NeonBars extends StatelessWidget {
   const NeonBars({super.key, required this.labels, required this.values, this.tone = 0});
@@ -8,20 +9,20 @@ class NeonBars extends StatelessWidget {
   final List<double> values;
   final int tone; // 0=ניאון(ברירת-מחדל, ביט-זהה) · 1=success · 2=danger · 3=warning — פיגמנט מוזרק (חוק-6)
 
-  static const Color _bg = Color(0xFF0E0F1E);
-  static const Color _track = Color(0xFF1A1B33);
-  static const Color _cyan = Color(0xFF22E1FF);
-  static const Color _violet = Color(0xFF7A5CFF);
-  static const Color _magenta = Color(0xFFFF3DCB);
-  static const Color _ink = Color(0xFFEAEBFF);
-  static const Color _mute = Color(0xFF8A8CB8);
+  static const Color _bg = DsAtomColors.premiumDatavizNeonBars1;
+  static const Color _track = DsAtomColors.premiumDatavizNeonBars2;
+  static const Color _cyan = DsAtomColors.premiumDatavizNeonBars3;
+  static const Color _violet = DsAtomColors.premiumDatavizNeonBars4;
+  static const Color _magenta = DsAtomColors.premiumDatavizNeonBars5;
+  static const Color _ink = DsAtomColors.premiumDatavizNeonBars6;
+  static const Color _mute = DsAtomColors.premiumDatavizNeonBars7;
 
   // גרדיאנטי-tone לפס-המילוי — הצבע מגיב-למצב במקום קשיח.
   static const List<List<Color>> tones = [
     [_cyan, _violet, _magenta],                                       // 0 ניאון
-    [Color(0xFF6EE7B7), Color(0xFF34D399), Color(0xFF059669)],        // 1 success
-    [Color(0xFFFB7185), Color(0xFFF43F5E), Color(0xFFBE123C)],        // 2 danger
-    [Color(0xFFFCD34D), Color(0xFFF59E0B), Color(0xFFD97706)],        // 3 warning
+    [DsAtomColors.premiumDatavizNeonBars8, DsAtomColors.premiumDatavizNeonBars9, DsAtomColors.premiumDatavizNeonBars10],        // 1 success
+    [DsAtomColors.premiumDatavizNeonBars11, DsAtomColors.premiumDatavizNeonBars12, DsAtomColors.premiumDatavizNeonBars13],        // 2 danger
+    [DsAtomColors.premiumDatavizNeonBars14, DsAtomColors.premiumDatavizNeonBars15, DsAtomColors.premiumDatavizNeonBars16],        // 3 warning
   ];
 
   @override
@@ -40,7 +41,7 @@ class NeonBars extends StatelessWidget {
         decoration: BoxDecoration(
           color: _bg,
           borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+          border: Border.all(color: DsAtomColors.premiumDatavizNeonBars17.withValues(alpha: 0.06)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

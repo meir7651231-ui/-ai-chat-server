@@ -1,18 +1,19 @@
 // ✨ GlassCard — כרטיס-זכוכית (BackdropFilter+blur) עם highlight עליון; מקבל child כתוכן
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class GlassCard extends StatelessWidget {
   const GlassCard({super.key, required this.child});
 
   final Widget child;
 
-  static const Color _tint = Color(0x14FFFFFF);
-  static const Color _tintLow = Color(0x08FFFFFF);
-  static const Color _border = Color(0x33FFFFFF);
-  static const Color _highlight = Color(0x66FFFFFF);
-  static const Color _glow = Color(0x337C3AED);
-  static const Color _shadow = Color(0x66000000);
+  static const Color _tint = DsAtomColors.premiumSurfacesGlassCard1;
+  static const Color _tintLow = DsAtomColors.premiumSurfacesGlassCard2;
+  static const Color _border = DsAtomColors.premiumSurfacesGlassCard3;
+  static const Color _highlight = DsAtomColors.premiumSurfacesGlassCard4;
+  static const Color _glow = DsAtomColors.premiumSurfacesGlassCard5;
+  static const Color _shadow = DsAtomColors.premiumSurfacesGlassCard6;
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +52,9 @@ class GlassCard extends StatelessWidget {
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Color(0x00FFFFFF),
+                            DsAtomColors.premiumSurfacesGlassCard7,
                             _highlight,
-                            Color(0x00FFFFFF),
+                            DsAtomColors.premiumSurfacesGlassCard7,
                           ],
                         ),
                       ),

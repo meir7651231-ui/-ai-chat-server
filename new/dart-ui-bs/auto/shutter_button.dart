@@ -2,6 +2,7 @@
 // מוצא: screens__camera_sheet:_ShutterButton (בנייה-חכמה main) · צרור-1 · props-שורש: label2, label3, label4
 // התוכן: new/dart-data-bs/auto/screens__camera_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class ShutterButton extends StatelessWidget {
@@ -24,7 +25,7 @@ class ShutterButton extends StatelessWidget {
       button: true,
       label: '${label2}$label',
       child: Material(
-        color: busy ? const Color(0xFF555555) : BsTokens.brand,
+        color: busy ? DsAtomColors.autoShutterButton1 : BsTokens.brand,
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         child: InkWell(
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),
@@ -40,7 +41,7 @@ class ShutterButton extends StatelessWidget {
                     height: 16,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      color: Colors.white,
+                      color: DsAtomColors.autoShutterButton2,
                     ),
                   )
                 else
@@ -49,7 +50,7 @@ class ShutterButton extends StatelessWidget {
                 Text(
                   busy ? label3 : '${label4}$label',
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: DsAtomColors.autoShutterButton2,
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
                   ),

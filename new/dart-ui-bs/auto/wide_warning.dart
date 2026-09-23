@@ -2,6 +2,7 @@
 // מוצא: screens__studio__panes__find_replace_pane:_WideWarning (בנייה-חכמה main) · צרור-1 · props-שורש: label
 // התוכן: new/dart-data-bs/auto/screens__studio__panes__find_replace_pane_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class WideWarning extends StatelessWidget {
@@ -15,18 +16,18 @@ class WideWarning extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: BsTokens.space4),
         padding: const EdgeInsets.all(BsTokens.space3),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFF4E5),
+          color: DsAtomColors.autoWideWarning1,
           borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-          border: Border.all(color: const Color(0xFFFFB74D)),
+          border: Border.all(color: DsAtomColors.autoWideWarning2),
         ),
         child: Row(
           children: [
-            const Icon(Icons.warning_amber_rounded, color: Color(0xFFE65100)),
+            const Icon(Icons.warning_amber_rounded, color: DsAtomColors.autoWideWarning3),
             const SizedBox(width: BsTokens.space2),
             Expanded(
               child: Text(
                 '$count${label}',
-                style: const TextStyle(color: Color(0xFF7A3E00)),
+                style: const TextStyle(color: DsAtomColors.autoWideWarning4),
               ),
             ),
           ],

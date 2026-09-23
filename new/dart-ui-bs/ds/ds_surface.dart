@@ -58,9 +58,9 @@ class DsCardGlass extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(DsSpace.lg),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.55),
+              color: DsIdentity.surfaceHi.withValues(alpha: 0.55),
               borderRadius: BorderRadius.circular(DsRadii.lg),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
+              border: Border.all(color: DsIdentity.surfaceHi.withValues(alpha: 0.5)),
             ),
             child: child,
           ),
@@ -83,7 +83,7 @@ class DsCardGradient extends StatelessWidget {
           borderRadius: BorderRadius.circular(DsRadii.lg),
           boxShadow: DsElev.e2,
         ),
-        child: DefaultTextStyle.merge(style: const TextStyle(color: Colors.white), child: child),
+        child: DefaultTextStyle.merge(style: const TextStyle(color: DsIdentity.surfaceHi), child: child),
       );
   }
 }

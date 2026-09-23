@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_TreeComingSoon (בנייה-חכמה main) · צרור-1 · מודל-שוטח: 2 שדות · props-שורש: fallback, fallback2, title, emoji
 // התוכן: new/dart-data-bs/auto/screens__catalog_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -65,7 +66,7 @@ class TreeComingSoon extends StatelessWidget {
             CfgText('catalog_screen.t22', 
               fallback2,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Color(0xFF888888), fontSize: 13),
+              style: TextStyle(color: DsAtomColors.autoTreeComingSoon1, fontSize: 13),
             ),
           ],
         ),

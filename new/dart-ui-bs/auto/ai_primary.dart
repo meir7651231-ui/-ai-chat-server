@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__ai_hub_screen:AiPrimary (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class AiPrimary extends StatelessWidget {
@@ -25,7 +26,7 @@ class AiPrimary extends StatelessWidget {
           label,
           style: const TextStyle(
             fontWeight: FontWeight.w800,
-            color: Colors.white,
+            color: DsAtomColors.autoAiPrimary1,
           ),
         ),
       ),

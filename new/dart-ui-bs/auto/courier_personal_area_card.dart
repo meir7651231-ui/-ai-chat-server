@@ -2,6 +2,7 @@
 // מוצא: screens__courier_profile_screen:_CourierPersonalAreaCard (בנייה-חכמה main) · צרור-1 · props-שורש: title, body, fallback, fallback2, title2, body2, fallback3, fallback4, title3, body3, fallback5, fallback6, title4, body4, fallback7, fallback8, onTap, onTap2, onTap3, onTap4
 // התוכן: new/dart-data-bs/auto/screens__courier_profile_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/help_target.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -38,7 +39,7 @@ class CourierPersonalAreaCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(cfgRadius(context)),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x0F000000),
+            color: DsAtomColors.autoCourierPersonalAreaCard1,
             blurRadius: 8,
             offset: Offset(0, 2),
           ),
@@ -74,7 +75,7 @@ class CourierPersonalAreaCard extends StatelessWidget {
                     onTap,
               ),
             ),
-            const Divider(height: 1, color: Color(0xFFF2F3F5)),
+            const Divider(height: 1, color: DsAtomColors.autoCourierPersonalAreaCard2),
             HelpTarget(
               title: title2,
               body: body2,
@@ -98,7 +99,7 @@ class CourierPersonalAreaCard extends StatelessWidget {
                     onTap2,
               ),
             ),
-            const Divider(height: 1, color: Color(0xFFF2F3F5)),
+            const Divider(height: 1, color: DsAtomColors.autoCourierPersonalAreaCard2),
             HelpTarget(
               title: title3,
               body:
@@ -123,7 +124,7 @@ class CourierPersonalAreaCard extends StatelessWidget {
                     onTap3,
               ),
             ),
-            const Divider(height: 1, color: Color(0xFFF2F3F5)),
+            const Divider(height: 1, color: DsAtomColors.autoCourierPersonalAreaCard2),
             HelpTarget(
               title: title4,
               body:

@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__lipskey_product_sheet:_PickerOption (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 
 class PickerOption extends StatelessWidget {
   const PickerOption({
@@ -21,12 +22,12 @@ class PickerOption extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFFFF9D4D).withValues(alpha: 0.2)
-              : const Color(0xFF2A2A2A),
+              ? DsAtomColors.autoPickerOption1.withValues(alpha: 0.2)
+              : DsAtomColors.autoPickerOption2,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
             color:
-                isSelected ? const Color(0xFFFF9D4D) : const Color(0xFF444444),
+                isSelected ? DsAtomColors.autoPickerOption1 : DsAtomColors.autoPickerOption3,
             width: isSelected ? 1.5 : 1.0,
           ),
         ),
@@ -34,7 +35,7 @@ class PickerOption extends StatelessWidget {
           value,
           style: TextStyle(
             color:
-                isSelected ? const Color(0xFFFF9D4D) : const Color(0xFFCCCCCC),
+                isSelected ? DsAtomColors.autoPickerOption1 : DsAtomColors.autoPickerOption4,
             fontSize: 12,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
           ),

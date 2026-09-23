@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__lipskey_products_screen:_HierarchyChipPill (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
 
@@ -16,13 +17,13 @@ class HierarchyChipPill extends StatelessWidget {
     final isSize = RegExp(r'^["”]?\d|^\d').hasMatch(word);
     final bg = isOpen
         ? BsTokens.brand
-        : (isSize ? BsTokens.brand : const Color(0xFFF1F1F4));
-    final fg = (isOpen || isSize) ? bsOnAccent(context) : const Color(0xFF1C1C1E);
+        : (isSize ? BsTokens.brand : DsAtomColors.autoHierarchyChipPill1);
+    final fg = (isOpen || isSize) ? bsOnAccent(context) : DsAtomColors.autoHierarchyChipPill2;
     final border = isOpen
         ? BsTokens.brand
         : (isSize
             ? BsTokens.brand
-            : const Color(0xFFE0E0E5));
+            : DsAtomColors.autoHierarchyChipPill3);
     return GestureDetector(
       onTap: onTap,
       child: Container(

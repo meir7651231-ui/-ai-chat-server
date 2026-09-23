@@ -1,5 +1,6 @@
 // ✨ AvatarTile — אריח-אווטאר: ראשי-תיבות בגרדיאנט זוהר + כותרת/תת-כותרת
 import 'package:flutter/material.dart';
+import '../../ds/ds_atoms.dart';
 
 class AvatarTile extends StatelessWidget {
   final String initials;
@@ -13,10 +14,10 @@ class AvatarTile extends StatelessWidget {
     required this.subtitle,
   });
 
-  static const Color _card = Color(0xFF101127);
-  static const Color _accent = Color(0xFF7C3AED);
-  static const Color _text = Color(0xFFF2F3FF);
-  static const Color _muted = Color(0xFF9AA0BE);
+  static const Color _card = DsAtomColors.premiumListsAvatarTile1;
+  static const Color _accent = DsAtomColors.premiumListsAvatarTile2;
+  static const Color _text = DsAtomColors.premiumListsAvatarTile3;
+  static const Color _muted = DsAtomColors.premiumListsAvatarTile4;
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +34,10 @@ class AvatarTile extends StatelessWidget {
               gradient: const LinearGradient(
                 begin: AlignmentDirectional.centerEnd,
                 end: AlignmentDirectional.centerStart,
-                colors: [_card, Color(0xFF0C0D1E)],
+                colors: [_card, DsAtomColors.premiumListsAvatarTile5],
               ),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+              border: Border.all(color: DsAtomColors.premiumListsAvatarTile6.withValues(alpha: 0.06)),
             ),
             child: Row(
               children: [
@@ -48,8 +49,8 @@ class AvatarTile extends StatelessWidget {
                     gradient: const SweepGradient(
                       colors: [
                         _accent,
-                        Color(0xFFEC4899),
-                        Color(0xFF4338CA),
+                        DsAtomColors.premiumListsAvatarTile7,
+                        DsAtomColors.premiumListsAvatarTile8,
                         _accent,
                       ],
                     ),
@@ -67,7 +68,7 @@ class AvatarTile extends StatelessWidget {
                     height: 46,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color(0xFF0C0D1E),
+                      color: DsAtomColors.premiumListsAvatarTile5,
                     ),
                     alignment: Alignment.center,
                     child: Text(

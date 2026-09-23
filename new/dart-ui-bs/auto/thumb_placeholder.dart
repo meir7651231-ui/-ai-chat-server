@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__worker_reports_tab:_ThumbPlaceholder (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class ThumbPlaceholder extends StatelessWidget {
@@ -15,7 +16,7 @@ class ThumbPlaceholder extends StatelessWidget {
       height: 48,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: const Color(0xFFF2F3F5),
+        color: DsAtomColors.autoThumbPlaceholder1,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text(
