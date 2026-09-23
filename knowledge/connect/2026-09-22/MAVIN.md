@@ -309,6 +309,18 @@ build-check.mjs "ניהול לקוחות: … . כשחוב של לקוח עול�
   לא «האפליקציה כולה מתקמפלת». אימות מלא (test/build) דורש buildsmart אמיתי — הכרעת-בעלים (מארח אמיתי; stub-תמה = המצאה ⇒ לא).
 · **לקח-תהליך:** לפני נגיעה במנוע קיים — `grep -c <file> machtzev/pins.sha256`. עשיתי זאת ל-capability ול-server, לא ל-gen-verify.
 
+## סבב 26 (23.9): buildsmart האמיתי — «מוצג-בפועל» נמדד סוף-סוף, ותיקון אחד באפליקציה שהמארח הרך הסתיר
+· **המארח:** הבעלים נתן גישה ל-`meir7651231-ui/buildsmart` (שכפול שטוח ל-`/home/user/buildsmart`, HEAD `1d09aa8`). כדי לא ללכלך את השכפול, `app_flutter` הועתק
+  ל-`scratchpad/bs-real/app_flutter` + `flutter pub get`. build-check: משקף גם `new/dart-boxes` · `dart-data` · `dart-boards-bs` (gen_behaviors ⇒ dart-boxes) וגם `screens__*_content2.dart`
+  (ai_hub_screen.g.dart מייבא אותו) — שני חוסרים שרק `flutter test` חשף.
+· **נמדד (`--verify`, המארח האמיתי):** `--spec peruk01.txt` ⇒ analyze ✅ 0 · **6/6 מסכים רונדרו** · 0 חריגות (ent1: DsScaffold·DsWorkflow·DsSection·DsField·DsDateField·DsEnumField).
+  «ניהול משימות … סטטוסים: חדשה, בעבודה, הושלמה» ⇒ **3/4** — gen_app_rec1 (פאנל-רשומה) בלי רשומות מצייר `Center(Text)` בלי DsScaffold **בכוונה** (מוטמע, לא מסך-כניסה) ⇒ ציפיית-הבדיקה, לא כשל.
+· **ממצא שהמארח הרך הסתיר:** `--spec peruk07.txt` / `peruk12.txt` ⇒ **26 שגיאות** במארח האמיתי (very_good_analysis: strict-casts): `gen_app_home.dart` — `static const _dates = [];`
+  (ספק בלי שדות-תאריך ⇒ `List<dynamic>` ⇒ `f.label`/`f.hard` dynamic). במארח-הסקראצ' (lints ברירת-מחדל) עבר «✅ 0». **תיקון (app-shell.mjs, לא נעוץ):** `static const List<_D> _dates`.
+  אחרי: peruk07 ⇒ analyze ✅ 0 · **5/5 רונדרו** · 0 חריגות.
+· **גבול שנשאר:** סריקת-הטאפים סופרת 0 — היא מחפשת IconButton/SoftButton, ומסכי-DS משתמשים בכפתורים אחרים (DsChipButton·DsNavTile·ActionRow); אינטראקציה לא נמדדה.
+  `--verify` על משפט עם «→» נחסם ע"י המסווג (המשפט עצמו) — הורץ עם פסיקים; הצורה זהה.
+
 ## סוג-שדה ⇒ מנוע 3 (נפתר בצד מנוע 2, 22.9)
 נמדד: לא הקטלוג (DsToggleTile/DsDateField/DsNumberField = str2·num0·cb1 זהים) ולא הטיפוס המוצהר
 (`String value` בכולם) מבדילים סוג. מה שמבדיל: **מה הקוד עושה עם value** (`DateTime.tryParse` · `value == 'true'` ·

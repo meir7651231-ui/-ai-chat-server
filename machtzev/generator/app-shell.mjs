@@ -161,7 +161,7 @@ class _D { const _D(this.label, this.hard); final String label; final bool hard;
 // G33 · ספק-«היום» של המודול (הכרעה-29): נגזרות · הצעות · כרטיס-רשומה · טייס-אוטומטי — ציבורי, כדי ש«היום» המאוחד של «בלגן» ימזג את כל המודולים
 class ${cls}Today {
   static const module = ${k(appTitle || title)};
-  static const _dates = ${dateList};
+  static const List<_D> _dates = ${dateList};   // טיפוס מפורש: רשימה ריקה (ספק בלי שדות-תאריך) הייתה List<dynamic> ⇒ 26 שגיאות strict-analyzer במארח האמיתי (very_good_analysis)
   static const List<String> _times = ${timeList};
   static const List<String> _phones = ${phoneList};
   static const List<String> _nums = ${numList};
