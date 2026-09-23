@@ -22,7 +22,7 @@ const pascal = (slug) => 'GenApp' + slug.replace(/^app_/, '').replace(/(^|[_-])(
 // לתיאור-העצמי — אפס regex, אפס רשימת-מילים במנוע. מבחן-קונכייה: מחליף אטום ⇒ לומד מחדש.
 import { readAtlas } from './atlas.mjs';
 import { searchOp, wireAtom, pickWired } from './particles.mjs';
-import { isPaper, stripGlyph } from './look.mjs';   // הכרעה-27 · חיפוש-פתוח לאריחי-אגרגט
+import { isPaper, stripGlyph, getScope } from './look.mjs';   // הכרעה-27 · חיפוש-פתוח לאריחי-אגרגט
 const atlas = readAtlas();   // L93: atlas.json + atlas-data.json
 const heToks = (s) => [...String(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => stem(m[0])).filter((t) => t.length > 1);
 // מילים-עבריות שלמות (לא-גזומות) — לאימות-חפיפה מול הגזם (הגזם מקבץ, המילה מאשרת).
@@ -750,7 +750,7 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
 
 // ── דשבורד: רשת אריחי-KPI מנתוני-הישויות. metrics = המילים אחרי 'עם' באפיון ⇒ מציג
 //    בדיוק את המדדים שביקשת (מותאמים-קידומת לישויות-אמת), לא את כל-הישויות. נופל-לכל אם אין. ──
-export function renderDashboard(slug, { title, icon = '📊', entities, metrics = [], aggs = [] }) {
+export function renderDashboard(slug, { title, icon = '📊', entities, metrics = [], aggs = [], extras = [] }) {   // extras = מסכים שנבנו ליד (התראה של capability): אריח בבית, לא רק ברכזת
   const { k, dump } = makeConsts(slug);
   const cTitle = k(title);
   let shown = entities;
@@ -793,18 +793,38 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
     tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${wired.call})`);
     barLabels.push(lbl); barVals.push(num);
   }
+  // אריח-מונה לישות: בנייר — אותו חיפוש-עור של אריחי-האגרגט (אטום בצבע-קשיח נפסל, הלובש-עור נמצא); בכהה — PremiumStat כמו שהיה (ביט-זהה). אין לובש-עור ⇒ כמו שהיה
+  let usedPremium = false;
+  const countTile = (lbl, num, g, sub, navExpr, navImport) => {
+    if (isPaper()) {
+      const pk = searchOp('headline', `${lbl} ${sub}`, null, 12);
+      const wired = pickWired([...pk.atoms, ...pk.alts], (c) => wireAtom(c, { label: lbl, value: { str: `${num}.toStringAsFixed(0)`, num }, glyph: g, sub, nav: navExpr }));
+      if (wired) { if (navImport) imports.add(navImport); imports.add(`import '../${wired.file.startsWith('dart-') ? wired.file : 'dart-ui-bs/' + wired.file}';`); return `AnimatedBuilder(animation: appStore, builder: (context, _) => ${wired.call})`; }
+    }
+    usedPremium = true; if (navImport) imports.add(navImport);
+    return `AnimatedBuilder(animation: appStore, builder: (context, _) => PremiumStat(label: ${lbl}, value: ${num}, glyph: ${g}${navExpr ? `, onTap: ${navExpr}` : ''}))`;
+  };
   for (const e of shown) {
     const lbl = k(e.name);
     const sub = k(`${e.fields} ${L.fieldsWord}${e.stages ? ` · ${e.stages} ${L.stagesWord}` : ''}`);
     const g = k(e.icon || '🗂️');
-    tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => PremiumStat(label: ${lbl}, value: appStore.count('${e.slug || ''}').toDouble(), glyph: ${g}${nav(e.slug)}))`);
-    barLabels.push(lbl); barVals.push(`appStore.count('${e.slug || ''}').toDouble()`);
+    const num = `appStore.count('${e.slug || ''}').toDouble()`;
+    tiles.push(countTile(lbl, num, g, sub, e.slug ? `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${pascal(e.slug)}()))` : null, e.slug ? `import 'gen_${e.slug}.dart';` : null));
+    barLabels.push(lbl); barVals.push(num);
+  }
+  for (const x of extras) {   // מסך-ליד (התראה): הערך = המספר של הבעלים (הסף), הניווט = המסך עצמו
+    const lbl = k(x.name), sub = k(x.sub || ''), g = k(x.icon || '🔔');
+    const num = x.value != null && /^\d+(\.\d+)?$/.test(String(x.value)) ? `${Number(x.value)}.toDouble()` : '0.0';
+    tiles.push(countTile(lbl, num, g, sub, `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}()))`, `import 'gen_${x.slug}.dart';`));
   }
   const cSub = k(`${tiles.length} ${L.metricsWord} · ${L.overview}`);
   const cChart = k(L.liveCompare);
-  const barsBlock = barVals.length >= 2
-    ? `      AnimatedBuilder(animation: appStore, builder: (context, _) => NeonBars(labels: const [${barLabels.join(', ')}], values: [${barVals.join(', ')}])),\n`
-    : '';
+  // תרשים-עמודות: בכהה NeonBars כמו שהיה; בנייר — בלי (ראה למטה)
+  let barsBlock = '';
+  if (barVals.length >= 2) {
+    if (!isPaper()) barsBlock = `      AnimatedBuilder(animation: appStore, builder: (context, _) => NeonBars(labels: const [${barLabels.join(', ')}], values: [${barVals.join(', ')}])),\n`;
+    // נייר: אין שקע-values בחיווט (particles.wire) ⇒ אטום-תרשים היה עולה עם המספרים המובנים שלו = נתונים מומצאים (§20-ג) ⇒ בלי תרשים
+  }
   const rows = [];
   for (let i = 0; i < tiles.length; i += 2) {
     const a = tiles[i], b = tiles[i + 1];
@@ -815,7 +835,7 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — דשבורד מנתוני-הישויות החיים (drill-down). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
-${tiles.length ? "import '../dart-ui-bs/ds/ds_store.dart';\nimport '../dart-ui-bs/premium/showcase/premium_stat.dart';\n" : ''}${barsBlock ? "import '../dart-ui-bs/premium/dataviz/neon_bars.dart';\n" : ''}${[...imports].sort().join('\n')}
+${tiles.length ? "import '../dart-ui-bs/ds/ds_store.dart';\n" : ''}${usedPremium ? "import '../dart-ui-bs/premium/showcase/premium_stat.dart';\n" : ''}${barsBlock && !isPaper() ? "import '../dart-ui-bs/premium/dataviz/neon_bars.dart';\n" : ''}${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
 class ${cls} extends StatelessWidget {
@@ -911,7 +931,7 @@ ${actorMethod}${showChips ? `
           onTap: () => setState(() => appStore.setRole(i)),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            child: Text(label, style: TextStyle(color: sel ? Colors.white : lk.muted, fontSize: 13, fontWeight: FontWeight.w700)),
+            child: Text(label, style: TextStyle(color: sel ? lk.onAccent : lk.muted, fontSize: 13, fontWeight: FontWeight.w700)),
           ),
         ),
       ),
@@ -967,7 +987,8 @@ ${regs}
   }
   const relImport = hasEdges ? `import 'gen_${relSlug}.dart';\nimport '../dart-ui-bs/ds/ds_store.dart';\n` : '';
   const mainLine = hasEdges ? `void main() { registerAppRelations(appStore); runApp(const ${cls}()); }` : `void main() => runApp(const ${cls}());`;
-  const paper = isPaper();   // G28 · עור-הנייר מוזרק בשורש (חוק-6: הזהות בחיווט) — כל אטום-forge וכרום-DS קוראים אותו מהחריץ
+  const paper = isPaper(), sc = getScope() || {};   // עור/ערכה/גופן מהדאטה (spec-lang.lookScope + המילה השנייה של «עיצוב:») — לא 'paper'/'t-balagan'/'heebo' קשיחים
+  // G28 · עור-הנייר מוזרק בשורש (חוק-6: הזהות בחיווט) — כל אטום-forge וכרום-DS קוראים אותו מהחריץ
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — שורש-האפליקציה (main + MaterialApp + theme + RTL${paper ? ' + PureScope · עור-נייר (G28)' : ''}). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 ${paper ? `import '../dart-ui-bs/ds/ds_pure.dart';
@@ -988,13 +1009,13 @@ ${paper ? `        theme: ThemeData(
           useMaterial3: true,
           brightness: Brightness.light,
           fontFamily: 'Heebo',
-          scaffoldBackgroundColor: DsPure.skins['paper']!.canvas,
-          colorScheme: ColorScheme.fromSeed(seedColor: DsPure.themes['t-balagan']!.a, brightness: Brightness.light),
+          scaffoldBackgroundColor: DsPure.skins['${sc.skin}']!.canvas,
+          colorScheme: ColorScheme.fromSeed(seedColor: DsPure.themes['${sc.theme}']!.a, brightness: Brightness.light),
         ),
         builder: (context, child) => PureScope(
-          theme: DsPure.themes['t-balagan']!,
-          skin: DsPure.skins['paper']!,
-          fonts: DsPure.fontSets['heebo']!,
+          theme: DsPure.themes['${sc.theme}']!,
+          skin: DsPure.skins['${sc.skin}']!,
+          fonts: DsPure.fontSets['${sc.fonts}']!,
           child: Directionality(textDirection: TextDirection.rtl, child: child ?? const SizedBox.shrink()),
         ),` : `        theme: ThemeData(
           useMaterial3: true,
@@ -1039,7 +1060,7 @@ const atomCtor = (relFile, cls) => {
 const _fillStyle = (ty) => {
   const t = (ty || '').replace(/\?$/, '');
   const cb = _cb(t); if (cb) return cb;
-  if (t === 'Color') return 'Colors.grey';
+  if (t === 'Color') return 'DsIdentity.propFallback';
   if (t === 'IconData') return 'Icons.circle';
   if (t === 'Widget') return 'const SizedBox.shrink()';
   if (t === 'List<Widget>') return 'const <Widget>[]';
@@ -1274,7 +1295,7 @@ const _itemField = (ty, nm) => {
   if (t === 'String') return /^(ic|icon|glyph)$/.test(nm) ? "'\u{1F5C2}\u{FE0F}'" : "''";
   if (t === 'int' || t === 'double' || t === 'num') return '0';
   if (t === 'bool') return 'false';
-  if (t === 'Color') return 'Colors.grey';
+  if (t === 'Color') return 'DsIdentity.propFallback';
   if (t === 'IconData') return 'Icons.circle';
   return null;
 };
@@ -1284,7 +1305,7 @@ const _scalarFill = (ty, nm) => {
   if (t === 'String') return "''";
   if (t === 'int' || t === 'double' || t === 'num') return '0';
   if (t === 'bool') return 'false';
-  if (t === 'Color') return 'Colors.grey';
+  if (t === 'Color') return 'DsIdentity.propFallback';
   if (t === 'IconData') return 'Icons.circle';
   if (t === 'Widget') return 'const SizedBox.shrink()';
   return ty.endsWith('?') ? 'null' : null;

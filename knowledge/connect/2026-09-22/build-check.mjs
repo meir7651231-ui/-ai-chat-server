@@ -119,8 +119,16 @@ if (args.includes('--web') && errors.length === 0) {
   }
 }
 // --shot · היכולת של ship בלי הפרסום: flutter build web מנקודת-הכניסה שנוצרה ⇒ הגשה מקומית ⇒ צילום ב-Chromium headless ⇒ <outDir>/shot.png. אפס git, אפס gh-pages.
-if (args.includes('--shot') && errors.length === 0) {
-  const entry = gen.find((f) => /_main\.dart$/.test(f));
+const shotArg = args.find((a) => /^--shot=/.test(a));
+if ((args.includes('--shot') || shotArg) && errors.length === 0) {
+  let entry = gen.find((f) => /_main\.dart$/.test(f));
+  if (shotArg && entry) {   // --shot=<Cls>: אותו main, רק home = המסך המבוקש (צילום של מסך פנימי — ראיה, לא מוצר)
+    const cls = shotArg.slice(7); const dir = path.join(HOST, 'lib/genesis/dart-gen-bs');
+    const src = fs.readFileSync(path.join(dir, entry), 'utf8');
+    const file = gen.find((f) => new RegExp(`class ${cls}\\b`).test(fs.readFileSync(path.join(dir, f), 'utf8')));
+    if (!file || !/home: const \w+\(\),/.test(src)) console.log(`⚪ shot: לא נמצא מסך ${cls} בפלט`);
+    else { const tmpEntry = entry.replace(/_main\.dart$/, `_shot_main.dart`); fs.writeFileSync(path.join(dir, tmpEntry), src.replace(/home: const \w+\(\),/, `home: const ${cls}(),`).replace(/^(import 'package:flutter\/material\.dart';)$/m, `import '${file}';\n$1`)); entry = tmpEntry; }
+  }
   const CHROME = ['/opt/pw-browsers/chromium', process.env.CHROME].find((p) => p && fs.existsSync(p));
   if (!entry) console.log('⚪ shot: אין נקודת-כניסה (*_main.dart) בפלט');
   else if (!CHROME) console.log('⚪ shot: אין Chromium (/opt/pw-browsers/chromium)');
