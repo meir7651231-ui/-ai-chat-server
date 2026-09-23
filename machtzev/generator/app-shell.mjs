@@ -492,7 +492,7 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
     const isSet = liveIsSet(x.live); const aggE = isSet ? liveAggExpr(x.live, base, k) : null; if (isSet && liveAggImport(x.live)) imports.add(liveAggImport(x.live));
     const grouped = liveIsGrouped(x.live); if (grouped && liveAggImport({ ...x.live, kind: 'agg' })) imports.add(liveAggImport({ ...x.live, kind: 'agg' }));
     const recsE = grouped ? liveGroupsExpr(x.live, base, k) : base;
-    const live = isSet ? `((${aggE} * 10).round() / 10)` : `${recsE}.where((r) => ${liveValue(x.live, 'r', k)} ${x.live.op} ${liveThreshold(x.live)}).length`;   // קבוצה ⇒ ערך-הקבוצה עצמו; קבוצות ⇒ מונה-הקבוצות החורגות; אחרת מונה-החורגים
+    const live = isSet ? `((${aggE} * 10).round() / 10)` : x.live.op ? `${recsE}.where((r) => ${liveValue(x.live, 'r', k)} ${x.live.op} ${liveThreshold(x.live)}).length` : `${recsE}.length`;   // מדרגות: מונה-הקבוצות   // קבוצה ⇒ ערך-הקבוצה עצמו; קבוצות ⇒ מונה-הקבוצות החורגות; אחרת מונה-החורגים
     const ctx = { label: k(x.name), value: { str: `${live}.toString()`, num: `${live}.toDouble()` }, sub: k(x.sub || ''), glyph: k(x.icon || '🔔'), message: k(x.name), nav: `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}()))`, need: purpose.need };
     let r = judge({ purpose, cands, widgetOf, skinWired, wire: (c) => wireForge(c, ctx, { widgetOf, wireAtom }) });
     let synthNote = '';

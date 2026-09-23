@@ -79,6 +79,14 @@ const STR_RE = /^(label|title|caption|name|text|msg|message)$/;
 
 // רב-סעיפים: פיצול לפי מחברי-ריבוי **דקדוקיים** (וגם/גם/;/שורה) ⇒ סעיף-תנאי בכל מקטע. כך "A וגם B"
 // = 2 מסגרות (יכולת-ההתראה מופעלת פעמיים). מחברים = חלקיקים מבניים (כמו של/עם), אפס-מילון-דומייני.
+/** צורת-מדרגות (הכרעת-בעלים 23.9 «צא לדרך»): ראש «<תווית> לפי <שדה>» + זנב «<n>, <n>» (שני קטעים, כי הדלת מפצלת על נקודתיים). מבני בלבד. */
+export function detectLevelsClause(head, tail) {
+  if (!COND.levels) return null;
+  const hm = String(head || '').trim().match(new RegExp(COND.levels.head)), tm = String(tail || '').trim().match(new RegExp(COND.levels.tail));
+  if (!hm || !tm) return null;
+  const [high, mid] = [+tm[1], +tm[2]].sort((a, b) => b - a);
+  return { kind: 'levels', label: hm[1].trim(), x: cleanPhrase(hw(hm[2])), high, mid, op: null, n: null, y: null, trigger: hm[1].trim() };
+}
 export function detectAllClauses(text) {
   const out = [];
   // קטע = תנאי אחד; מחבר-ריבוי («וגם») בתוך קטע = צירוף: הסעיף הבא יורש את מילת-התנאי של הראשון ומסומן and (הרכבה: מסנן על מסנן — whereList בתוך whereList)

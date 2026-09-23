@@ -13,7 +13,7 @@ import { spawnSync } from 'node:child_process';
 import { formOf, specOf, answerFor, toks, serverDeclOf, lookDeclOf, headOf, planBehaviors, sameStem, leadOf, recall, remember, carriersOf } from './mavin.mjs';
 import { askMaimatai } from './kashe.mjs';   // המקשה (18 גלאים) — שאלות על המשפט, לא הנחות
 import { rule as yeshivaRule } from './purpose.mjs';   // הפוסק (9 מהלכים) על האפיון שיצא
-import { detectAllClauses, relOpOf, emitAppFrom } from '../machtzev/generator/capability.mjs';
+import { detectAllClauses, detectLevelsClause, relOpOf, emitAppFrom } from '../machtzev/generator/capability.mjs';
 import { retrieveScreen } from '../machtzev/generator/retrieve-screen.mjs';
 import * as R from '../machtzev/root.mjs';
 
@@ -82,12 +82,14 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
   const routes = [];
   const capSegs = new Map();   // קטע ⇒ סעיפים (מהטקסט, או מהצורה)
   for (const seg of form.segments) { const c = detectAllClauses(seg); if (c.length) capSegs.set(seg, { clauses: c, how: 'טקסט' }); else { const f = clausesByForm(seg, form.frame); if (f.length) capSegs.set(seg, { clauses: f, how: 'צורה' }); } }
+  // צורת-מדרגות: ראש «<תווית> לפי <שדה>» + הקטע הבא «<n>, <n>» (הדלת פיצלה על נקודתיים) — רק כשהשדה קיים באיזו ישות (אחרת נשאר none עם החיפוש)
+  form.segments.forEach((seg, i) => { const lv = detectLevelsClause(seg, form.segments[i + 1]); if (!lv) return; const has = form.things.some((t) => (t.fields || []).some((f) => sameStem(lv.x, f.label) || f.label === lv.x)); if (!has) return; capSegs.set(seg, { clauses: [lv], how: 'מדרגות' }); capSegs.set(form.segments[i + 1], { clauses: [lv], how: 'מדרגות', tail: seg }); });
   const srv = serverDeclOf(form), lk = lookDeclOf(form), head = headOf(form);
   for (const t of form.things) {
     if (head && t.src === form.segments[0] && !(srv && t === srv.thing) && !(lk && t === lk.thing) && !entLabels.has(t.label)) { routes.push({ thing: t.label, route: 'head', why: `ראש-המשפט (לפני הנקודתיים) ⇒ שם-האפליקציה «${head}» + לוח-הבית (אריח לכל ישות)` }); continue; }
     if (srv && t === srv.thing) { routes.push({ thing: t.label, route: 'server', why: `הצהרת-שרת «${srv.value}» ⇒ server.mjs (חבילת-שרת לישויות שנבנו)` }); continue; }
     if (lk && t === lk.thing) { routes.push({ thing: t.label, route: 'look', why: `הצהרת-עיצוב «${lk.value}${lk.extra ? ' ' + lk.extra : ''}» ⇒ app-ds.setLook (עור מהמדף: ds-pure/ds-tokens)` }); continue; }
-    if (capSegs.has(t.src)) { const c = capSegs.get(t.src); routes.push({ thing: t.label, route: 'capability', why: c.how === 'טקסט' ? 'סעיף-תנאי מבני בקטע (capability.detectAllClauses)' : `תנאי לפי צורה: «${c.clauses[0].x}» ${c.clauses[0].op} ${c.clauses[0].n}`, seg: t.src, clauses: c.clauses }); continue; }
+    if (capSegs.has(t.src)) { const c = capSegs.get(t.src); routes.push({ thing: t.label, route: 'capability', tail: c.tail || null, why: c.how === 'טקסט' ? 'סעיף-תנאי מבני בקטע (capability.detectAllClauses)' : c.how === 'מדרגות' ? `מדרגות (capability.detectLevelsClause): «${c.clauses[0].label}» לפי «${c.clauses[0].x}» — ${c.clauses[0].high}, ${c.clauses[0].mid}` : `תנאי לפי צורה: «${c.clauses[0].x}» ${c.clauses[0].op} ${c.clauses[0].n}`, seg: t.src, clauses: c.clauses }); continue; }
     if (entLabels.has(t.label)) { routes.push({ thing: t.label, route: 'appds', why: 'דבר עם שדות ⇒ ישות' }); continue; }
     const [b] = retrieveScreen(t.label, 1);
     if (b && b.score > 0) { routes.push({ thing: t.label, route: 'combine', proposal: true, why: `הצעה (תוכן ממקום אחר): דומה במילים למסך רשום ${b.name} (${(+b.score).toFixed(2)})`, screen: b.name, score: +b.score }); continue; }
@@ -276,12 +278,12 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   if (yesh.rulings.length) notes.push(`הפוסק: ${yesh.rulings.filter((r) => r.decided).length} הוכרעו · ${yesh.switches.length} מתגים`);
   for (const r of held) notes.push(`הצעה לא נבנתה («${r.thing}» ⇒ ${r.route}): ${r.why.replace(/^הצעה \(תוכן ממקום אחר\): /, '')} — לבנייה: proposals / --proposals`);
   // 1 · capability — פעם אחת לכל קטע-תנאי
-  const capSegs = [...new Map(routes.filter((r) => r.route === 'capability').map((r) => [r.seg, r.clauses])).entries()];
-  capSegs.forEach(([seg, clauses], i) => { const cls = `GenCap${i + 1}Screen`; const code = emitAppFrom(clauses, seg, cls); const f = path.join(outDir, `gen_cap${i + 1}.dart`); fs.writeFileSync(f, code); files.push({ route: 'capability', file: f, seg, thresholds: clauses.map((c) => `${c.x} ${c.op} ${c.n ?? '?'}`) }); });
+  const capSegs = [...new Map(routes.filter((r) => r.route === 'capability' && !r.tail).map((r) => [r.seg, r.clauses])).entries()];   // מדרגות: קטע-הזנב («90, 60») שייך לראש
+  capSegs.forEach(([seg, clauses], i) => { const cls = `GenCap${i + 1}Screen`; if (clauses.every((c) => c.kind === 'levels')) return; const code = emitAppFrom(clauses.filter((c) => c.kind !== 'levels'), seg, cls); const f = path.join(outDir, `gen_cap${i + 1}.dart`); fs.writeFileSync(f, code); files.push({ route: 'capability', file: f, seg, thresholds: clauses.map((c) => `${c.x} ${c.op} ${c.n ?? '?'}`) }); });
   // 2 · app-ds — כל הישויות בקריאה אחת (GEN_OUT/GEN_DATA_OUT של הקורא)
   // 🔒 שומר-ניקיון: app-ds/render-ds קוראים GEN_OUT/GEN_DATA_OUT **בזמן-טעינה**. אם לא הופנו מחוץ למדף לפני הייבוא הראשון —
   //    הבנייה כותבת ל-new/dart-gen-bs ו-new/dart-data-bs/auto ומוחקת יתומים (קרה 23.9, שוחזר מ-git). כאן: מסרבים, לא מלכלכים.
-  const caps = capSegs.map(([seg, clauses], i) => ({ slug: `cap${i + 1}`, cls: `GenCap${i + 1}Screen`, kind: 'capability', name: seg.trim(), icon: '🔔', value: (clauses.find((c) => c.n != null) || {}).n ?? null, clause: (() => { const main = clauses.find((c) => c.n != null && !c.and) || clauses.find((c) => c.n != null) || null; const ands = clauses.filter((c) => c !== main && c.and && c.n != null); return main ? (ands.length ? { ...main, and: ands } : main) : null; })(), sub: clauses.map((c) => { const i = c.x ? seg.indexOf(c.x) : -1; return i >= 0 ? seg.slice(i).trim() : `${c.x || ''} ${c.op || ''} ${c.n ?? ''}`.trim(); }).join(' · ') }));   // המילים של הבעלים («ציון מתחת ל-55»), לא סימן   // מסך-ההתראה ⇒ אריח בלוח-הבית וברכזת (הרכבה: לא קובץ-ליד)
+  const caps = capSegs.map(([seg, clauses], i) => ({ slug: `cap${i + 1}`, cls: `GenCap${i + 1}Screen`, kind: 'capability', name: seg.trim(), icon: '🔔', value: (clauses.find((c) => c.n != null) || {}).n ?? (clauses.find((c) => c.kind === 'levels') || {}).high ?? null, clause: (() => { const main = clauses.find((c) => c.kind === 'levels') || clauses.find((c) => c.n != null && !c.and) || clauses.find((c) => c.n != null) || null; const ands = clauses.filter((c) => c !== main && c.and && c.n != null); return main ? (ands.length ? { ...main, and: ands } : main) : null; })(), sub: clauses.map((c) => { const i = c.x ? seg.indexOf(c.x) : -1; return i >= 0 ? seg.slice(i).trim() : `${c.x || ''} ${c.op || ''} ${c.n ?? ''}`.trim(); }).join(' · ') }));   // המילים של הבעלים («ציון מתחת ל-55»), לא סימן   // מסך-ההתראה ⇒ אריח בלוח-הבית וברכזת (הרכבה: לא קובץ-ליד)
   const app = await runAppDs(spec, files, notes, questions, { extraScreens: caps });
   // 2א · הרכבה (insight.mjs · הכרעת-בעלים 23.9 «תחבר»): התראה עם קישור-נתונים ⇒ מסך-תובנה אחד מהנתונים האמיתיים במקום הדמו של capability
   if (app && Array.isArray(app.liveExtras) && !inRepo(process.env.GEN_OUT)) {
@@ -298,7 +300,8 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       let expect = null; const SLd = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
       if (ent && SLd.exampleWord) { const exLine = spec.split('\n').find((l) => l.startsWith(`${SLd.exampleWord} ${ent.name}:`)); if (exLine) { const LE0 = await import('../machtzev/generator/live-expr.mjs'); const recs = exLine.slice(exLine.indexOf(':') + 1).split(';').map((r) => r.split(/[,،]/).map((v) => v.trim())).filter((r) => LE0.livePreOk(x.live, r, (f) => ent.fields.indexOf(f))); const fi = ent.fields.indexOf(x.live.field); const thr0 = LE0.liveThreshold(x.live); const lt0 = x.live.op === '<';
         const sampleOf = (r) => x.live.kind === 'refCount' ? childCount(r) : LE0.liveSample(x.live, r[fi]);   // מונה-קשר: כמה רשומות-בנות בדוגמאות מצביעות על ההורה
-        if (x.live.kind === 'aggBy') { const bi = ent.fields.indexOf(x.live.by); const gs = LE0.liveGroupsSample(x.live, recs, fi, bi).filter((g) => g[1] != null); const rows = gs.filter((g) => (lt0 ? g[1] < thr0 : g[1] > thr0)).map((g) => [g[0], String(g[1])]); expect = { count: rows.length, rows, groups: gs }; }
+        if (x.live.kind === 'levels') { const gs = LE0.liveGroupsSample(x.live, recs, fi, -1).filter((g) => g[0] !== '' && g[1] != null); const rows = gs.sort((a, b) => (b[0] > a[0] ? 1 : -1)).map((g) => [g[0], String(g[1])]); expect = { count: rows.length, rows, groups: gs }; }
+        else if (x.live.kind === 'aggBy') { const bi = ent.fields.indexOf(x.live.by); const gs = LE0.liveGroupsSample(x.live, recs, fi, bi).filter((g) => g[1] != null); const rows = gs.filter((g) => (lt0 ? g[1] < thr0 : g[1] > thr0)).map((g) => [g[0], String(g[1])]); expect = { count: rows.length, rows, groups: gs }; }
         else if (x.live.kind === 'agg') { const v = LE0.liveAggSample(x.live, recs, fi); const hit = v != null && (lt0 ? v < thr0 : v > thr0); expect = { count: v == null ? '' : (Math.round(v * 10) / 10).toString(), rows: hit ? recs.map((r) => [r[0] || '', r[fi] || '']) : [], agg: v }; }
         else { const rows = recs.filter((r) => { const v = sampleOf(r); return v != null && (lt0 ? v < thr0 : v > thr0); }).map((r) => [r[0] || '', x.live.kind === 'refCount' ? String(childCount(r)) : (r[fi] || '')]); expect = { count: rows.length, rows }; } } }   // הציפייה בצורת-התנאי (מספר / ותק / מונה-קשר / קבוצה)
       const seedSlug = fs.existsSync(path.join(outDir, 'gen_app_seed.dart')) ? 'app_seed' : null;
@@ -308,7 +311,12 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
         const LE = await import('../machtzev/generator/live-expr.mjs'); const thr = LE.liveThreshold(x.live);
         const recs0 = exLine ? exLine.slice(exLine.indexOf(':') + 1).split(';').map((r) => r.split(/[,،]/).map((v) => v.trim())) : [];
         const vals = x.live.kind === 'aggBy' ? LE.liveGroupsSample(x.live, recs0, fi, ent.fields.indexOf(x.live.by)).map((g) => g[1]).filter((v) => v != null) : x.live.kind === 'agg' ? [LE.liveAggSample(x.live, recs0, fi)].filter((v) => v != null) : x.live.kind === 'refCount' ? recs0.map((r) => childCount(r)) : (exLine && fi >= 0 ? recs0.map((r) => LE.liveSample(x.live, (r[fi] || '').trim())).filter((v) => v != null) : []);
-        if (vals.length) { const lt = x.live.op === '<'; const examples = [...vals.map((v) => [`${v}, ${thr}`, `r == ${lt ? v < thr : v > thr}`]), [`${thr}, ${thr}`, 'r == false']];
+        if (x.live.kind === 'levels' && exLine && fi >= 0) {   // מדרגות: אטום-ההחלטה = מי שמחזיר את המדרגה לפי הצורה (≥גבוה ⇒ 2 · ≥בינוני ⇒ 1 · 0) על הדוגמאות — הוכחה-בריצה, לא שם
+          const lv = recs0.map((r) => parseFloat(r[fi])).filter((v) => !isNaN(v)); const examples = lv.map((v) => [`${Math.trunc(v)}, ${x.live.high}, ${x.live.mid}`, `r == ${LE.levelOf(x.live, v)}`]);
+          if (examples.length) { try { const BP = await import('../machtzev/generator/behavior-plan.mjs'); const id = `lvl.${x.slug}`; const P = BP.planNeeds({ [id]: { shape: 'מספר', demand: x.sub || x.name, params: ['int', 'int', 'int'], ret: 'int', examples } }, { prove: true, earlyExit: true }); const pr = P[id];
+            if (pr && pr.pick && pr.proven) { decide = { name: pr.pick, file: pr.file, proven: true, examples }; notes.push(`החלטה «${x.name}»: ${pr.pick} (${pr.file}) הוכח על ${examples.length} דוגמאות${pr.ties ? ` · ${pr.ties} תיקו` : ''}`); }
+            else notes.push(`החלטה «${x.name}»: אין אטום-מדרגות מוכח בקטלוג ⇒ השוואה ביד (מדווח)`); } catch (e) { notes.push(`החלטה «${x.name}»: behavior-plan נכשל — ${String(e.message || e).slice(0, 120)}`); } } }
+        else if (vals.length) { const lt = x.live.op === '<'; const examples = [...vals.map((v) => [`${v}, ${thr}`, `r == ${lt ? v < thr : v > thr}`]), [`${thr}, ${thr}`, 'r == false']];
           try { const BP = await import('../machtzev/generator/behavior-plan.mjs'); const id = `sev.${x.slug}`; const P = BP.planNeeds({ [id]: { shape: 'מספר', demand: x.sub || x.name, params: ['num', 'num'], ret: 'bool', examples } }, { prove: true, earlyExit: true }); const pr = P[id];
             if (pr && pr.pick && pr.proven) { decide = { name: pr.pick, file: pr.file, proven: true, examples }; notes.push(`החלטה «${x.name}»: ${pr.pick} (${pr.file}) הוכח על ${examples.length} דוגמאות${pr.ties ? ` · ${pr.ties} תיקו` : ''}`); }
             else notes.push(`החלטה «${x.name}»: אין אטום מוכח בקטלוג ⇒ השוואה ביד (מדווח)`); } catch (e) { notes.push(`החלטה «${x.name}»: behavior-plan נכשל — ${String(e.message || e).slice(0, 120)}`); } } }
