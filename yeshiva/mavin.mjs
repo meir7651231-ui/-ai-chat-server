@@ -97,10 +97,10 @@ export function formOf(sentence) {
   const find = (w) => things.find((t) => toks(t.label).some((lw) => stripLead(stem(w)).some((f) => f.length >= 3 && f === stem(lw))));   // «לרכב» ⇔ «ניהול רכבים»: כל מילה בתווית; גזע ≥3 אותיות («כמ» לא)
   // רצף מילים נמוכות-פיזור ⇒ יחידה: מילים שהקטלוג מצביע בהן לחישוב = עשייה-מוצעת; השאר = דבר; מספר צמוד = ערך
   const unitOf = (run, src, under = null) => {
-    const acts = [], plain = [], values = [], asks = [];
+    const acts = [], plain = [], values = [], asks = [], kinds = [];
     for (let i = 0; i < run.length; i++) { const w = run[i];
       if (isNum(w)) { values.push({ num: +w, unit: run[i + 1] && !isNum(run[i + 1]) ? run[i + 1] : null }); continue; }
-      plain.push(w); const h = hintOf(w); if (h.hint === 'act') acts.push({ word: w, ops: h.ops.slice(0, 3) }); else if (h.hint === 'ask') asks.push(w); }   // התווית נשארת שלמה; הרמזים = הערות עליה, לא מחיקה ממנה
+      plain.push(w); const h = hintOf(w); if (h.hint === 'act') acts.push({ word: w, ops: h.ops.slice(0, 3) }); else if (h.hint === 'ask') asks.push(w); else if (h.ops.length) kinds.push({ word: w, ops: h.ops.slice(0, 4) }); }   // התווית נשארת שלמה; הרמזים = הערות עליה, לא מחיקה ממנה. kinds: «תמונה» ⇒ מיני-ציור שכתוב עליהם
     const label = plain.length ? plain.join(' ') : run.join(' ');   // התווית = המילים שלך כמו שכתבת («מטופלים» לא הופך ל«טופל»); הסרת-אות משמשת להשוואה בלבד
     // יחס לפי מיקום (אפס דקדוק): נושא = המילה הראשונה · מושא = המילה הבאה שהקטלוג מכיר כדבר או שצורתה רבים · מה שביניהן = היחס
     let rel = null;
@@ -111,7 +111,7 @@ export function formOf(sentence) {
       if (!object && values.length) object = values.map((v) => v.num + (v.unit ? ' ' + v.unit : '')).join(', ');   // אין מושא-מילה ⇒ הערך הוא המושא («מעל 200 שקל»)
       if (words.length) rel = { subject: plain[0], words, object: object || null, proposal: [...new Set(words.flatMap((w) => hintOf(w).ops))].slice(0, 3) };
     }
-    return { label, many: plain.length ? isMany(plain[plain.length - 1]) : false, fields: [], under, src, acts, values, asks, rel };
+    return { label, many: plain.length ? isMany(plain[plain.length - 1]) : false, fields: [], under, src, acts, values, asks, kinds, rel };
   };
   const runsOf = (ws) => { const runs = []; let cur = []; for (const w of ws) { if (!isNum(w) && isSpread(w)) { if (cur.length) runs.push(cur); cur = []; frame.push(w); } else cur.push(w); } if (cur.length) runs.push(cur); return runs; };   // מספר לעולם אינו «מפוזר» — נשאר ברצף כערך
   const queue = [...segments];
@@ -121,7 +121,11 @@ export function formOf(sentence) {
     const runs = runsOf(pre);
     const attachOrPush = (run, under = null) => { const hit = run.length === 1 ? find(run[0]) : null; if (hit) (hit.refs = hit.refs || []).push(...run); else things.push(unitOf(run, seg, under)); };   // מילה בודדת שמצביעה על דבר קיים = הפניה; אחרת יחידה משלה. אף מילה לא נעלמת
     if (L) L.dropped.forEach((w) => frame.push(w));
-    if (!L) { for (const run of runs) attachOrPush(run); continue; }
+    if (!L) {   // קטע בלי רשימה: כל רצף = יחידה; רצף, מילת-קישור אחת, רצף ⇒ השני הוא **תוכן** של הראשון («תמונה של חתול»: «חתול» = הכיתוב של «תמונה»)
+      const before = things.length; for (const run of runs) attachOrPush(run);
+      const made = things.slice(before);
+      if (made.length === 2 && runs.length === 2) { const gap = pre.slice(pre.indexOf(runs[0][runs[0].length - 1]) + 1, pre.indexOf(runs[1][0])); if (gap.length === 1) { made[0].content = made[1].label; made[0].via = gap[0]; made[1].contentOf = made[0].label; } }
+      continue; }
     // רשימה: הרצף הצמוד לרשימה = ההורה; רצפים קודמים = יחידות משלהן («תעשה לי» ⇒ יחידה עם שאלות)
     const run = runs.length ? runs[runs.length - 1] : [];
     for (const r of runs.slice(0, -1)) attachOrPush(r);
@@ -148,6 +152,7 @@ export function questionsFor(form, answers = {}) {
     if (!t.fields.length && !(a.fields && a.fields.length)) qs.push({ thing: t.label, ask: 'fields', options: TYPES });
     for (const f of t.fields) { const af = (a.fields || []).find((x) => x.label === f.label); if (!af || !af.type) qs.push({ thing: t.label, ask: 'type', field: f.label, options: TYPES }); }
     if (!(a.acts && a.acts.length)) qs.push({ thing: t.label, ask: 'acts', options: ACTS, proposal: (t.acts || []).map((x) => x.word) });
+    for (const k of (t.kinds || [])) if (!(a.kind)) qs.push({ thing: t.label, ask: 'kind', word: k.word, proposal: k.ops, options: [...k.ops, 'other', 'skip'] });   // «תמונה» כתובה על חלקיקי container/group/text ⇒ הצעת-מין
     const inRel = new Set(t.rel ? t.rel.words : []);
     if (t.rel && !a.rel) qs.push({ thing: t.label, ask: 'rel', subject: t.rel.subject, words: t.rel.words, object: t.rel.object, objectOptions: t.rel.object ? [] : form.things.filter((x) => x !== t).map((x) => x.label), proposal: t.rel.proposal, options: ['ref', 'act', 'cond', 'value', 'skip'] });   // אין מושא ⇒ הדברים האחרים במשפט כאפשרויות   // «A» —מילים→ «B»: מצביע / פעולה / תנאי / ערך / דלג
     for (const w of (t.asks || [])) if (!inRel.has(w)) qs.push({ thing: t.label, ask: 'word', word: w, options: ['thing', 'act', 'field', 'skip'] });   // מילה שאינה כתובה על שום חלקיק
@@ -161,7 +166,9 @@ export function questionsFor(form, answers = {}) {
 export function needsFrom(form, answers = {}) {
   const needs = [];
   for (const t of form.things) {
-    const a = answers[t.label]; if (!a || !a.acts) continue;
+    const a = answers[t.label];
+    if (t.kinds && t.kinds.length && !(a && a.acts)) for (const k of t.kinds) needs.push({ thing: t.label, act: 'kind', op: k.ops[0], need: ['fields'], goal: k.word, word: k.word, content: t.content || null });   // «תמונה» ⇒ חלקיק שכתוב עליו «תמונה», עם הכיתוב «חתול»; תשובת-בעלים גוברת
+    if (!a || !a.acts) continue;
     const fields = (a.fields && a.fields.length) ? a.fields : t.fields.map((f) => ({ label: f.label, type: 'text' }));
     const nums = fields.filter((f) => f.type === 'num').length;
     for (const act of a.acts) {
@@ -241,8 +248,13 @@ export const kindOf = (id) => valueKinds().get(String(id).split('@')[0]) || ['te
 export async function coverNeeds(needs) {
   const { cover } = await import('../machtzev/generator/cover.mjs');
   return needs.filter((n) => n.op).map((n) => {
-    const c = cover({ op: n.op, need: n.need, goal: n.goal && n.act === 'cond' ? n.goal : '', k: n.type ? 12 : 3 });
+    const c = cover({ op: n.op, need: n.need, goal: n.goal && n.act === 'cond' ? n.goal : '', k: (n.type || n.word) ? 12 : 3 });
     let atoms = c.atoms, missing = c.missing.slice(), alts = c.alts || [];
+    if (n.word) {   // המילה כתובה על חלקיקים ⇒ הם קודמים לכל דירוג אחר (הכותרת של החלקיק = מה שמי-שכתב-אותו אמר)
+      const named = m => { try { return toks(fs.readFileSync(R.NEW + m.file, 'utf8').split('\n').filter((l) => /^\s*\/\/\/?/.test(l)).slice(0, 4).join(' ')).includes(n.word); } catch { return false; } };
+      const map = JSON.parse(fs.readFileSync(R.GEN_DIR + 'ops-map.json', 'utf8')).filter((x) => x.layer === 'display' && named(x)).sort((x, y) => x.sockets.length - y.sockets.length || x.id.localeCompare(y.id));   // כל מין; הפשוט (הכי פחות שקעים) קודם
+      if (map.length) { atoms = [map[0].id]; alts = map.map((x) => x.id); }
+    }
     if (n.type) {   // שדה עם סוג: החלופה הראשונה שסוג-ערכה תואם; אין ב-op ⇒ גם במין-השכן (ממצא: DsField יושב תחת 'search', לא 'field')
       let fit = alts.find((id) => kindOf(id).includes(n.type)), via = n.op;
       for (const near of (FIELD_NEAR[n.op] || [])) { if (fit) break; const c2 = cover({ op: near, need: n.need, goal: '', k: 12 }); fit = (c2.alts || []).find((id) => kindOf(id).includes(n.type)); if (fit) { via = near; alts = c2.alts; } }
@@ -259,7 +271,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const show = (s) => {
     const r = mavin(s, { answers });
     console.log(`\n«${s}»\n  מנוע 1: ${r.words.length} מילים · מסגרת/קישור (מפוזר ≥${SPREAD()} מ-${opsCount()} מינים): ${r.frame.map((w) => `${w}(${spreadOf(w).ops})`).join(' ') || '—'}`);
-    for (const t of r.things) console.log(`  דבר «${t.label}» · ${t.many ? 'הרבה' : 'אחד'}${t.under ? ` · בתוך «${t.under}»` : ''}${t.fields.length ? ` · שדות: ${t.fields.map((f) => f.label).join(', ')}` : ''}${t.rel ? ` · יחס: «${t.rel.subject}» —${t.rel.words.join(' ')}→ ${t.rel.object ? `«${t.rel.object}»` : '?'}${t.rel.proposal.length ? ` (קטלוג: ${t.rel.proposal.join('/')})` : ''}` : ''}${t.values && t.values.length ? ` · ערכים: ${t.values.map((v) => v.num + (v.unit ? ' ' + v.unit : '')).join(', ')}` : ''}`);
+    for (const t of r.things) console.log(`  דבר «${t.label}» · ${t.many ? 'הרבה' : 'אחד'}${t.under ? ` · בתוך «${t.under}»` : ''}${t.fields.length ? ` · שדות: ${t.fields.map((f) => f.label).join(', ')}` : ''}${t.rel ? ` · יחס: «${t.rel.subject}» —${t.rel.words.join(' ')}→ ${t.rel.object ? `«${t.rel.object}»` : '?'}${t.rel.proposal.length ? ` (קטלוג: ${t.rel.proposal.join('/')})` : ''}` : ''}${t.values && t.values.length ? ` · ערכים: ${t.values.map((v) => v.num + (v.unit ? ' ' + v.unit : '')).join(', ')}` : ''}${t.kinds && t.kinds.length ? ` · הקטלוג מכיר: ${t.kinds.map((k) => `«${k.word}»⇒${k.ops.join('/')}`).join(' ')}` : ''}`);
     console.log(`  שאלות: ${r.questions.length} · ${r.questions.map((q) => q.ask + (q.field ? `(${q.field})` : '')).join(' ')}`);
     if (r.needs.length) console.log(`  בקשות למנוע 3: ${r.needs.map((n) => `${n.op || 'ref'}[${(n.need || []).join(',')}]←${n.thing}`).join(' · ')}`);
     return r;
