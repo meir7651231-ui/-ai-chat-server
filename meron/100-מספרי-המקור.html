@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מספרי המקור — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_style.css">
+<style>
+.org{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;color:#D6CFC4;border-radius:10px;padding:14px 16px;white-space:pre;overflow-x:auto;line-height:1.5}
+table.roles td:nth-child(2){text-align:center;width:44px}
+.sum td{font-weight:700}
+.lock{background:#3B1111;color:#FCA5A5;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700}
+.phones{display:flex;gap:16px;flex-wrap:wrap}
+.phone{width:260px;background:#0F0D0B;color:#E8E2D8;border-radius:22px;padding:16px 14px;border:2px solid #3A332B;font-size:13px;line-height:1.5}
+.phone h5{margin:0 0 8px;font-size:14px;color:#fff}
+.phone .row{background:#1C1916;border-radius:8px;padding:7px 9px;margin-bottom:6px}
+.phone .row b{color:#fff}
+.phone .red{background:#3B1111;color:#FECACA}
+.phone .yel{background:#2E2208;color:#FDE68A}
+.phone .grn{background:#0F2A1C;color:#BBF0D0}
+.phone .btn{display:block;text-align:center;border-radius:10px;padding:9px;margin-top:8px;font-weight:700;background:#3A332B;color:#fff}
+.phone .muted{color:#9A9085;font-size:11px}
+</style></head>
+<body><div class="wrap">
+
+<style>.ok{color:#2FA36B;font-weight:700}.part{color:#F59E0B;font-weight:700}.miss{color:#EF4444;font-weight:700}table.n td{font-size:12.5px;vertical-align:top}</style>
+<h1>מספרי המקור — ובדיקת העקביות — ניהול חי</h1>
+<p class="lead">נושא 100. בדקתי את כל 99 הקבצים: אותו מספר מופיע בהרבה מקומות, <b>וחלק לא תואמים</b>. כאן: <b>מקור אחד לכל מספר</b>. כל קובץ שמשתמש במספר — <b>המספר הנכון הוא זה שכאן</b>. <span class="ok">מאומת</span> = נמצא במקור (45, 70) · <span class="part">הערכה</span> = שלנו, סבירה · <span class="miss">הנחה</span> = לא נבדק, <b>לשטח</b>.</p>
+
+<h2>1. מה מצאה הבדיקה</h2>
+<table>
+<tr><th>סוג</th><th>מה</th><th>מה נעשה</th></tr>
+<tr><td><b>ישן בגוף הטקסט</b></td><td>"26 שאטלים" (01, 11) · "500–800 טיפולים" (22 — תוקן) · אוכל ואוהלים על ההר (02, 15, 20, 25–28, 38, 39)</td><td>הערת עדכון בכל קובץ (45 / 100) · התרחישים — המחשה, נשארים</td></tr>
+<tr><td><b>סתירה שלי</b></td><td><b>באיאן ב-23:00</b> על הקיר בנושא 34 ובנושא 36 — אחרי שהמחקר (45) מצא 20:30</td><td><b>תוקן</b> בגוף הקובץ</td></tr>
+<tr><td><b>"58,000" מול "63,000"</b></td><td>נושאים 11–61: 58,000 (הנחה מוקדמת) · 45 ואילך: 63,000 (התקרה ב-2025)</td><td>שניהם נכונים <b>בהקשר</b>: 63,000 = התקרה; 58,000 = כמה בפועל ברגע נתון בתרחיש</td></tr>
+<tr><td><b>"1,200 על הגג"</b></td><td>6 קבצים</td><td><b>הנחה</b> — לא נמצא מספר מאושר לגג (45) · סומן</td></tr>
+</table>
+
+<h2>2. מספרי המקור</h2>
+<table class="n">
+<tr><th>נושא</th><th>ערך</th><th>סטטוס</th><th>מקור / הערה</th></tr>
+<tr><td colspan="4"><b>קהל ותקרות</b></td></tr>
+<tr><td>תקרה בו-זמנית</td><td><b>63,000</b> (2025) · 50,500 (2023) · 16,000 (2022)</td><td class="ok">מאומת</td><td>חוק / צו (45)</td></tr>
+<tr><td>לפי מתחם (2025)</td><td>ציון 20,000 · מתחם 89 33,000 · בני עקיבא 5,000</td><td class="ok">מאומת</td><td>45 — הסכום לא 63,000 (לא ודאי)</td></tr>
+<tr><td>שהייה לכרטיס</td><td><b>עד 5 שעות</b></td><td class="ok">מאומת</td><td>2023–2025</td></tr>
+<tr><td>הגיעו בתחבורה ציבורית</td><td>95,000 (2025)</td><td class="ok">מאומת</td><td>ToI</td></tr>
+<tr><td>על הגג</td><td>1,200</td><td class="miss">הנחה</td><td>לא נמצא — מהמהנדס</td></tr>
+<tr><td>ברגע נתון בלילה</td><td>~58,000</td><td class="part">הערכה</td><td>לתרחישים</td></tr>
+<tr><td colspan="4"><b>זרימה ובטיחות קהל</b></td></tr>
+<tr><td>ספיקה — משטח ישר</td><td>82 איש/מטר/דקה</td><td class="ok">מאומת</td><td>Green Guide</td></tr>
+<tr><td>ספיקה — שיפוע/מדרגות</td><td>66 איש/מטר/דקה</td><td class="ok">מאומת</td><td>Green Guide</td></tr>
+<tr><td>עמידה מקסימלית</td><td>4.7 למ"ר (טרסות) · 2 למ"ר (תכנון)</td><td class="ok">מאומת</td><td>Green / Purple Guide</td></tr>
+<tr><td>ספי האדום שלנו</td><td>עומדים 3.5 · זזים 2.5 · מדרגות 2 · שוכבים 1.2</td><td class="part">הערכה</td><td>שמרני מהתקן בכוונה (33) — למומחה</td></tr>
+<tr><td>עצירת זרימה</td><td>≤60 שנ'</td><td class="part">הערכה</td><td>23 — למומחה</td></tr>
+<tr><td>ריקון אחרי טקס</td><td>≤15 דק'</td><td class="part">הערכה</td><td>69</td></tr>
+<tr><td colspan="4"><b>2021</b></td></tr>
+<tr><td>רחבת תולדות אהרן</td><td>~3,200 מאושר · ~20,000 בפועל</td><td class="ok">מאומת</td><td>45</td></tr>
+<tr><td>המעבר</td><td>5–7 מ' · שיפוע · 11 מדרגות 4 מ'</td><td class="ok">מאומת</td><td>45</td></tr>
+<tr><td>ציר הזמן</td><td>00:41 עשרות · 00:44 יציאה · 00:47 אין תנועה</td><td class="ok">מאומת</td><td>ToI</td></tr>
+<tr><td colspan="4"><b>כוחות</b></td></tr>
+<tr><td>אנשי ביטחון</td><td>~8,000 (2022, 2023)</td><td class="ok">מאומת</td><td>45</td></tr>
+<tr><td>מד"א — מטופלים</td><td>185 (2023) · 158–257 (2025)</td><td class="ok">מאומת</td><td>45</td></tr>
+<tr><td>כבאות</td><td>160+ (2025)</td><td class="ok">מאומת</td><td>45</td></tr>
+<tr><td>עובדים בלילה — סה"כ</td><td>~17,000–20,000</td><td class="part">הערכה</td><td>52</td></tr>
+<tr><td>מתנדבים</td><td>~4,500</td><td class="part">הערכה</td><td>27</td></tr>
+<tr><td colspan="4"><b>תחבורה</b></td></tr>
+<tr><td>שאטלים</td><td><b>~420</b> (2023) · ~500 אוטובוסים (2025)</td><td class="ok">מאומת</td><td>45 — <b>לא 26</b></td></tr>
+<tr><td>חלוקת כרטיסים</td><td>15% קהילות · 60% קווים · 20% פרטיים</td><td class="ok">מאומת</td><td>45</td></tr>
+<tr><td>עלות תחבורה</td><td>12.5 מיליון ₪ (2025)</td><td class="ok">מאומת</td><td>ToI</td></tr>
+<tr><td>זמן סבב שאטל</td><td>35 דק'</td><td class="miss">הנחה</td><td>משרד התחבורה</td></tr>
+<tr><td>המתנה בתחנה — יעד</td><td>≤30 דק'</td><td class="part">הערכה</td><td>24</td></tr>
+<tr><td colspan="4"><b>לו"ז</b></td></tr>
+<tr><td>באיאן</td><td><b>20:30</b></td><td class="ok">מאומת</td><td>45 — <b>לא 23:00</b></td></tr>
+<tr><td>הדלקות</td><td>23–30 בשנה</td><td class="ok">מאומת</td><td>48</td></tr>
+<tr><td colspan="4"><b>ציבור וקשר</b></td></tr>
+<tr><td>בלי סמארטפון</td><td>70% (למ"ס 2020) · 84% כשר (JPPI)</td><td class="ok">מאומת</td><td>45</td></tr>
+<tr><td>מוקד</td><td>*2111 · *8787</td><td class="ok">מאומת</td><td>45</td></tr>
+<tr><td>אוכל על ההר</td><td><b>אין מאז 2022</b> — רק מים</td><td class="ok">מאומת</td><td>45</td></tr>
+<tr><td colspan="4"><b>כסף</b></td></tr>
+<tr><td>תשתית שפורקה</td><td>~100 מיליון ₪ (2026)</td><td class="part">מדווח</td><td>ynet</td></tr>
+<tr><td>גדר ליישוב</td><td>~1.5 מיליון ₪</td><td class="part">מדווח</td><td>ynet</td></tr>
+</table>
+
+<h2>3. הכלל מעכשיו</h2>
+<div class="six">
+<div class="card"><b>מספר אחד — מקום אחד.</b> קובץ שצריך מספר — מפנה לכאן, לא כותב אותו מחדש.</div>
+<div class="card"><b>כל מספר עם סטטוס.</b> "הנחה" בצבע אדום — לא נכנס לספר ההחלטות (86) עד שאומת.</div>
+<div class="card"><b>במערכת עצמה</b> — אותו דבר: <code>Datum</code> עם מקור ותאריך (72). מספר שהתיישן — נראה ישן (30).</div>
+</div>
+
+</div></body></html>
