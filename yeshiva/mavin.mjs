@@ -29,7 +29,9 @@ export const TYPES = ['text', 'num', 'date', 'bool', 'ref'];            // 5 ס�
 export const ACTS = ['list', 'one', 'add', 'edit', 'del', 'sum', 'search', 'filter', 'empty', 'export', 'message'];   // צורות-עשייה = תגי-האפיון הקיימים (spec-lang: pTable/pAct/pCount/pSearch/pFilter/pEmpty/pExport/pMessage)
 const ANSWERS = () => process.env.MAVIN_ANSWERS || path.join(R.ROOT, '.maimatai', 'mavin-answers.jsonl');
 
-export const toks = (s) => [...String(s || '').matchAll(/[֐-׿]+(?:\s*\/\s*[֐-׿]+)+|[֐-׿]+|\d+|[A-Za-z]+/g)].map((m) => m[0].replace(/\s*\/\s*/g, '/'));   // «בעד/נגד/נמנע» = אסימון אחד: בחירה-אחת-מכמה (צורה)
+// מילה עברית = רצף אותיות, גם עם גרשיים/גרש בפנים («ת"ז», «ח"פ», «צה"ל») — ראשי-תיבות של הבעלים הם מילה אחת, לא שתיים
+//   «_» בתוך מילה = רווח של ערך רב-מילי בסוגריים («חבר קהילה» ⇒ «חבר_קהילה» ב-formOf; enumOf מחזיר את הרווח)
+export const toks = (s) => [...String(s || '').matchAll(/[֐-׿]+(?:["״׳'_][֐-׿]+)*(?:\s*\/\s*[֐-׿]+(?:["״׳'_][֐-׿]+)*)+|[֐-׿]+(?:["״׳'_][֐-׿]+)*|\d+|[A-Za-z]+/g)].map((m) => m[0].replace(/\s*\/\s*/g, '/'));   // «בעד/נגד/נמנע» = אסימון אחד: בחירה-אחת-מכמה (צורה)
 const stripLead = (w) => { const out = [w]; for (let k = 1; k <= 2 && w.length - k >= 3; k++) out.push(w.slice(k)); return out; };   // (ג)
 const isMany = (w) => w.length >= 4 && /(ים|ות)$/.test(w);                                                                    // (א)
 const stem = (w) => w.replace(/(ים|ות|ה)$/, '');   // (ג') גם «ה» סופית להשוואת יחיד↔רבים (משימה↔משימות)
@@ -66,7 +68,13 @@ export function hintOf(w) {
 const isNum = (w) => /^\d+$/.test(w);
 const STAGE_WORDS = (() => { try { return new Set(JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')).stagePrefixes || []); } catch { return new Set(); } })();   // מילות-«שלבים» של שפת-הספק הקיימת (דאטה של מנוע 4)
 const ARROW = /\s*(?:→|->|⇒|»)\s*/;   // חץ בין מילים = סדר (צורה): «חדשה → בעבודה → הושלמה» ⇒ שלבים
-const enumOf = (it) => { const g = it.find((w) => w.includes('/')); return g ? g.split('/').filter(Boolean) : null; };   // איבר עם «/» ⇒ ערכים-מותרים
+// סמני-שדות ומילות-«כל» של מנוע-המשפט הקיים (nl-lang.data.json — דאטה של מנוע 1/4): «לכל תלמיד יש …» ⇒ הדבר = «תלמיד», וכל איברי-הרשימה = שדות (גם ברבים)
+const NL = (() => { try { const d = JSON.parse(fs.readFileSync(R.GEN_DIR + 'nl-lang.data.json', 'utf8')); return { marks: new Set(d.fieldMarks || []), each: new Set(d.eachWords || []), leadins: new Set(d.leadins || []) }; } catch { return { marks: new Set(), each: new Set(), leadins: new Set() }; } })();
+const isMark = (w) => NL.marks.has(w);
+const isLeadin = (w) => NL.leadins.has(w);   // «יש גם שכונה» ⇒ «גם» = מילת-פתיחה של מנוע-המשפט, לא חלק מתווית-השדה
+const isEach = (w) => stripLead(w).some((f) => NL.each.has(f));   // «לכל» ⇒ «כל»
+const cleanHead = (run) => { let a = [...run]; while (a.length > 1 && isMark(a[a.length - 1])) a.pop(); while (a.length > 1 && isEach(a[0])) a.shift(); return a; };
+const enumOf = (it) => { const g = it.find((w) => w.includes('/')); return g ? g.split('/').filter(Boolean).map((v) => v.replace(/_/g, ' ')) : null; };   // «חבר_קהילה» ⇒ «חבר קהילה»   // איבר עם «/» ⇒ ערכים-מותרים
 const deVav = (it) => (it.length && /^ו[֐-׿]{2,}/.test(it[0]) ? [it[0].slice(1), ...it.slice(1)] : it);   // (ב) «ו»-החיבור על ראש איבר
 
 // ── רשימה בקטע: חלקי-פסיק; «X וY» נחצה ב-«ו» (ב); מילים מפוזרות בראש איבר עוברות ל«לפני» ──
@@ -78,21 +86,29 @@ function listOf(segment) {
   if (vi > 0) { parts[parts.length - 1] = last.slice(0, vi); parts.push([last[vi], ...last.slice(vi + 1)]); }
   if (parts.length < 2) return null;
   // חלק ארוך (≥3 מילים) אחרי הראשון = פסוקית חדשה, לא איבר («ניהול משימות, לכל משימה כותרת, …») ⇒ הרשימה נחתכת לפניו
-  const cutAt = parts.findIndex((p, i) => i > 0 && deVav(p).filter((w) => !isSpread(w)).length >= 3);
+  // ראש עם סמן-שדות ⇒ כל החלקים הם שדות (אין חיתוך לפסוקית); אסימון-ערכים («רווק/נשוי/אלמן») אינו נספר כמילה («מצב משפחתי רווק/נשוי» = שדה, לא פסוקית)
+  const headMarked = parts[0].some(isMark);
+  const cutAt = headMarked ? -1 : parts.findIndex((p, i) => i > 0 && deVav(p).filter((w) => !isSpreadTok(w) && !w.includes('/')).length >= 3);
   let rest = null;
   if (cutAt > 0) { rest = parts.slice(cutAt).map((p) => p.join(' ')).join(', '); parts = parts.slice(0, cutAt); if (parts.length < 2) return { rest, only: true, head: parts[0] }; }
   const first = parts[0];
-  let cut = -1; for (let i = 0; i < first.length - 1; i++) if (isSpreadTok(first[i])) cut = i + 1;   // האיבר עצמו (המילה האחרונה) לעולם אינו «מפוזר»
+  let cut = -1;
+  const mi = first.findIndex(isMark);   // סמן-שדות בראש («לכל שיעור במערכת יש כיתה») = סוף-הראש, גם כשמילה מפוזרת («במערכת») יושבת לפניו
+  if (mi >= 0 && mi < first.length - 1) cut = mi + 1;
+  else for (let i = 0; i < first.length - 1; i++) if (isSpreadTok(first[i])) cut = i + 1;   // האיבר עצמו (המילה האחרונה) לעולם אינו «מפוזר»
   if (cut < 0) cut = first.length - 1;   // אין מילה מפוזרת לפני ⇒ האיבר = המילה האחרונה בלבד («לרכב יש יצרן» ⇒ «יצרן»)
   let before = first.slice(0, cut), item0 = first.slice(cut);
   if (item0.length > 1 && isMany(item0[item0.length - 1]) && !/י$/.test(item0[0])) { before = [...before, ...item0.slice(0, -1)]; item0 = item0.slice(-1); }   // «לניהול לקוחות» ⇒ האיבר «לקוחות»
   const dropped = [];
-  const items = [item0, ...parts.slice(1)].map(deVav).map((it) => { let k = 0; while (k < it.length - 1 && isSpreadTok(it[k])) dropped.push(it[k++]); return it.slice(k); }).filter((it) => it.length);   // «כמה עזבו» ⇒ «עזבו»; «כמה» ⇒ מסגרת
+  const markedHead = before.some(isMark);   // ראש עם סמן-שדות («לכל אדם יש») ⇒ האיברים הם תוויות-שדה של הבעלים — לא גוזמים מהם מילים «מפוזרות» («שם האם» נשאר «שם האם»)
+  const items = [item0, ...parts.slice(1)].map(deVav).map((it) => { let k = 0; while (k < it.length - 1 && (markedHead ? isLeadin(it[k]) : isSpreadTok(it[k]))) dropped.push(it[k++]); return it.slice(k); }).filter((it) => it.length);   // «כמה עזבו» ⇒ «עזבו»; «כמה» ⇒ מסגרת
   return { before, items, rest, dropped };
 }
 
 // ── צורת-הצורך של משפט ──
-export function formOf(sentence) {
+export function formOf(sentence0) {
+  // סוגריים אחרי מילה = ערכים-מותרים (צורה, כמו לוכסן): «שפה (עברית, יידיש, אנגלית)» ⇒ «שפה עברית/יידיש/אנגלית» ⇒ שדה «שפה» עם enum
+  const sentence = String(sentence0 || '').replace(/\(([^()]*)\)/g, (m, inner) => { const vs = inner.split(/[,،]/).map((s) => s.trim().replace(/\s+/g, '_')).filter(Boolean); return vs.length > 1 ? ' ' + vs.join('/') + ' ' : m; });
   const words = toks(sentence);
   const segments = sentence.split(/[:;]|\.(?=\s|$)/).map((s) => s.trim()).filter(Boolean);   // «.» בסוף/לפני רווח = מפריד (כמו «:»)
   const things = [];   // { label, many, fields:[{label}], under, src, refs, acts, values }
@@ -140,7 +156,7 @@ export function formOf(sentence) {
     }
     let L = listOf(seg), head = null; if (L && L.rest) { queue.unshift(L.rest); if (L.only) { head = L.head; L = null; } }
     const pre = L ? L.before : (head || toks(seg));
-    const runs = runsOf(pre);
+    const runs = (L && pre.some(isMark)) ? [pre] : runsOf(pre);   // ראש-רשימה עם סמן-שדות = רצף אחד גם עם מילה מפוזרת בפנים («לכל תפקיד של אדם יש» ⇒ הדבר «תפקיד של אדם»)
     const attachOrPush = (run, under = null) => { const hit = run.length === 1 ? find(run[0]) : null; if (hit) (hit.refs = hit.refs || []).push(...run); else things.push(unitOf(run, seg, under)); };   // מילה בודדת שמצביעה על דבר קיים = הפניה; אחרת יחידה משלה. אף מילה לא נעלמת
     if (L) L.dropped.forEach((w) => frame.push(w));
     if (!L) {   // קטע בלי רשימה: כל רצף = יחידה; רצף, מילת-קישור אחת, רצף ⇒ השני הוא **תוכן** של הראשון («תמונה של חתול»: «חתול» = הכיתוב של «תמונה»)
@@ -156,13 +172,18 @@ export function formOf(sentence) {
     if (declRun) things.push(unitOf(declRun, seg));
     let owner = null; for (let j = run.length - 1; j >= 0 && !owner; j--) owner = find(run[j]) || null;   // מילה כלשהי ברצף מזהה הורה קיים («לרכב יש» ⇒ «רכבים»)
     if (owner) (owner.refs = owner.refs || []).push(...run);
-    else if (run.length) { owner = unitOf(run, seg); things.push(owner); }
+    let created = false;
+    if (!owner && run.length) { owner = unitOf(run, seg); things.push(owner); created = true; }
+    // ראש-רשימה עם סמן-שדות («לכל תלמיד יש», «משפחה עם») ⇒ הדבר = הראש בלי «לכל»/«יש» (המילים נשמרות ב-head), וכל האיברים = שדות — גם ברבים («שעות», «רגישויות»)
+    //   רק לדבר שנולד מהראש הזה — «לרכב יש …» שמצביע על «ניהול רכבים» קיים אינו משנה את שמו
+    const marked = owner && run.some(isMark);
+    if (marked && created) { const c = cleanHead(run); if (c.length && c.join(' ') !== owner.label) { owner.head = owner.label; owner.label = c.join(' '); } owner.fieldsHead = true; }
     const manyItems = L.items.filter(itemMany).length, oneItems = L.items.length - manyItems;
     for (const it of L.items) {
-      if (itemMany(it) || (oneItems === 0) || manyItems > oneItems) {   // רוב-רבים ⇒ גם היחיד ברשימה הוא דבר («… עובדים, ציוד ובטיחות»)
+      if (!marked && (itemMany(it) || (oneItems === 0) || manyItems > oneItems)) {   // רוב-רבים ⇒ גם היחיד ברשימה הוא דבר («… עובדים, ציוד ובטיחות»)
         const hit = find(it[0]); if (hit) (hit.refs = hit.refs || []).push(...it); else things.push({ ...unitOf(it, seg, owner ? owner.label : null), many: itemMany(it) }); }
       else if (isDeclItem(it)) things.push(unitOf(it, seg));   // איבר-הצהרה ברשימה («עם שרת בענן ועיצוב כהה») = יחידה משלו, לא שדה
-      else if (owner) owner.fields.push({ label: it.join(' ').replace(/\//g, ' '), enumVals: enumOf(it) });
+      else if (owner) { const ev = enumOf(it); const lbl = ev ? it.filter((w) => !w.includes('/')).join(' ') : ''; owner.fields.push({ label: lbl || it.join(' ').replace(/\//g, ' '), enumVals: ev }); }   // «שפה עברית/יידיש/אנגלית» ⇒ תווית «שפה», ערכים {…}
       else things.push(unitOf(it, seg));
     }
   }

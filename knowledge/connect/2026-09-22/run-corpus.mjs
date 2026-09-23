@@ -6,10 +6,11 @@ const sents = fs.readFileSync(file, 'utf8').split('\n').map((s) => s.trim()).fil
 let ok = 0, lost = 0;
 for (const s of sents) {
   let r; try { r = formOf(s); } catch (e) { console.log(`✗ קריסה «${s}»: ${e.message}`); continue; }
-  const covered = new Set(r.things.flatMap((t) => [...toks(t.label), ...(t.refs || []), ...t.fields.flatMap((f) => [...toks(f.label), ...(f.enumVals || [])]), ...(t.stages || []).flatMap(toks)]).flatMap((w) => [w, ...w.split('/')]));
+  const covered = new Set(r.things.flatMap((t) => [...toks(t.label), ...(t.refs || []), ...t.fields.flatMap((f) => [...toks(f.label), ...(f.enumVals || [])]), ...(t.stages || []).flatMap(toks), ...toks(t.head || '')]).flatMap((w) => [w, ...w.split('/')]));
   const frame = new Set(r.frame);
   const placed = (w) => frame.has(w) || covered.has(w);
-  const miss = r.words.filter((w) => !/^\d+$/.test(w) && !placed(w) && !placed(w.slice(1)) && !placed(w.slice(2)));   // «ומצב» ⇒ «מצב» במסגרת
+  const placed3 = (w) => placed(w) || placed(w.slice(1)) || placed(w.slice(2));   // «ומצב» ⇒ «מצב» במסגרת
+  const miss = r.words.filter((w) => !/^\d+$/.test(w) && !(w.includes('/') ? w.split('/').every((p) => placed3(p) || placed3(p.replace(/_/g, ' '))) : placed3(w)));   // אסימון-ערכים «א/ב/ג» ממוקם כשכל ערך ממוקם (enumVals; «חבר_קהילה» = «חבר קהילה»)
   const good = r.things.length > 0 && miss.length === 0; if (good) ok++; lost += miss.length;
   const th = r.things.map((t) => `${t.label}${t.many ? '⁺' : ''}${t.fields.length ? `[${t.fields.map((f) => f.label).join(',')}]` : ''}${t.under ? `⊂${t.under}` : ''}`).join(' · ');
   console.log(`${good ? '✓' : '✗'} «${s}»\n     ${th}${miss.length ? `\n     אבדו: ${miss.join(', ')}` : ''}`);
