@@ -35,7 +35,7 @@ const isMany = (w) => w.length >= 4 && /(ים|ות)$/.test(w);                  
 const stem = (w) => w.replace(/(ים|ות|ה)$/, '');   // (ג') גם «ה» סופית להשוואת יחיד↔רבים (משימה↔משימות)
 const itemMany = (item) => isMany(item[0]) || isMany(item[item.length - 1]) || (item.length > 1 && /י$/.test(item[0]));   // «קבלני משנה» — סמיכות-רבים (י + מילה שנייה)
 
-// ── פיזור מהקטלוג: על כמה מינים שונים של חלקיקים כתובה המילה (משפט-המטרה בראש הקובץ) ──
+// ── פיזור מהקטלוג: על כמה מינים שונים של חלקיקים כתובה המילה (משפט-המטרה בראש הקובץ), לפי שכבה ──
 let _spread = null, _ops = 0;
 export const opsCount = () => (spreadIndex(), _ops);
 export function spreadIndex() {
@@ -45,74 +45,81 @@ export function spreadIndex() {
   for (const a of map) { ops.add(a.op);
     let head = '';
     try { head = fs.readFileSync(R.NEW + a.file, 'utf8').split('\n').filter((l) => /^\s*\/\/\/?/.test(l)).slice(0, 4).join(' '); } catch { continue; }
-    for (const w of new Set(toks(head))) { if (!idx.has(w)) idx.set(w, new Set()); idx.get(w).add(a.op); }
+    for (const w of new Set(toks(head))) { if (!idx.has(w)) idx.set(w, { logic: new Set(), display: new Set(), data: new Set() }); (idx.get(w)[a.layer] || idx.get(w).data).add(a.op); }
   }
   _ops = ops.size;
   return (_spread = idx);
 }
-export function spreadOf(w) { const idx = spreadIndex(); for (const f of stripLead(w)) if (idx.has(f)) return { form: f, ops: idx.get(f).size }; return { form: w, ops: 0 }; }
+const entryOf = (w) => { const idx = spreadIndex(); for (const f of stripLead(w)) if (idx.has(f)) return { form: f, e: idx.get(f) }; return null; };
+export function spreadOf(w) { const x = entryOf(w); return x ? { form: x.form, ops: x.e.logic.size + x.e.display.size + x.e.data.size } : { form: w, ops: 0 }; }
 const isSpread = (w) => spreadOf(w).ops >= SPREAD();
 const known = (w) => spreadIndex().has(w);   // הצורה עצמה כתובה על חלקיק כלשהו
 const bareLabel = (w) => (known(w) ? w : (stripLead(w).slice(1).find(known) || w));   // «לעמותה» ⇒ «עמותה» רק אם «עמותה» כתובה ו-«לעמותה» לא
+/** רמז-מין למילה מהקטלוג בלבד: 'act' = כתובה בעיקר על חלקיקי-חישוב · 'thing' = על חלקיקי-ציור/נתונים · 'ask' = לא כתובה בשום מקום */
+export function hintOf(w) {
+  const x = entryOf(w); if (!x) return { hint: 'ask', ops: [] };
+  const l = x.e.logic.size, d = x.e.display.size + x.e.data.size;
+  return l > 0 && l >= d ? { hint: 'act', ops: [...x.e.logic] } : { hint: 'thing', ops: [...x.e.display] };
+}
+const isNum = (w) => /^\d+$/.test(w);
+const deVav = (it) => (it.length && /^ו[֐-׿]{2,}/.test(it[0]) ? [it[0].slice(1), ...it.slice(1)] : it);   // (ב) «ו»-החיבור על ראש איבר
 
-// ── רשימה בקטע: חלקי-פסיק; החלק האחרון «X וY» נחצה ב-«ו» (ב) ──
+// ── רשימה בקטע: חלקי-פסיק; «X וY» נחצה ב-«ו» (ב); מילים מפוזרות בראש איבר עוברות ל«לפני» ──
 function listOf(segment) {
-  const parts = segment.split(/[,،]/).map((p) => toks(p)).filter((p) => p.length);
+  let parts = segment.split(/[,،]/).map((p) => toks(p)).filter((p) => p.length);
   if (!parts.length) return null;
   const last = parts[parts.length - 1];
   const vi = last.findIndex((w, i) => i > 0 && /^ו[֐-׿]{2,}/.test(w));
-  if (vi > 0) { parts[parts.length - 1] = last.slice(0, vi); parts.push([last[vi].slice(1), ...last.slice(vi + 1)]); }
+  if (vi > 0) { parts[parts.length - 1] = last.slice(0, vi); parts.push([last[vi], ...last.slice(vi + 1)]); }
   if (parts.length < 2) return null;
-  // חלק ארוך (≥3 מילים) בין חלקים קצרים = פסוקית חדשה, לא איבר («ניהול משימות, לכל משימה כותרת, …») ⇒ הרשימה נחתכת לפניו
-  const cutAt = parts.findIndex((p, i) => i > 0 && p.length >= 3);
-  if (cutAt > 0) { const rest = parts.slice(cutAt).map((p) => p.join(' ')).join(', '); parts.length = cutAt; if (parts.length < 2) return { rest, only: true, head: parts[0] }; return { ...listCore(parts), rest }; }
-  return listCore(parts);
-}
-function listCore(parts) {
-  const first0 = parts[0];
-  // האיבר הראשון נושא את «לפני-הרשימה»: מילותיו המפוזרות (ועד המילה המפוזרת האחרונה) הן הקשר; מה שאחריה — האיבר עצמו
-  const first = first0;
-  let cut = -1; for (let i = 0; i < first.length - 1; i++) if (isSpread(first[i])) cut = i + 1;   // האיבר עצמו (המילה האחרונה) לעולם אינו «מפוזר» — מיקום ברשימה קובע
+  // חלק ארוך (≥3 מילים) אחרי הראשון = פסוקית חדשה, לא איבר («ניהול משימות, לכל משימה כותרת, …») ⇒ הרשימה נחתכת לפניו
+  const cutAt = parts.findIndex((p, i) => i > 0 && deVav(p).filter((w) => !isSpread(w)).length >= 3);
+  let rest = null;
+  if (cutAt > 0) { rest = parts.slice(cutAt).map((p) => p.join(' ')).join(', '); parts = parts.slice(0, cutAt); if (parts.length < 2) return { rest, only: true, head: parts[0] }; }
+  const first = parts[0];
+  let cut = -1; for (let i = 0; i < first.length - 1; i++) if (isSpread(first[i])) cut = i + 1;   // האיבר עצמו (המילה האחרונה) לעולם אינו «מפוזר»
   if (cut < 0) cut = first.length - 1;   // אין מילה מפוזרת לפני ⇒ האיבר = המילה האחרונה בלבד («לרכב יש יצרן» ⇒ «יצרן»)
   let before = first.slice(0, cut), item0 = first.slice(cut);
-  if (item0.length > 1 && isMany(item0[item0.length - 1]) && !/י$/.test(item0[0])) { before = [...before, ...item0.slice(0, -1)]; item0 = item0.slice(-1); }   // «לניהול לקוחות» ⇒ האיבר «לקוחות», «לניהול» להורה
-  const items = [item0, ...parts.slice(1)].filter((it) => it.length);
-  return { before, items };
+  if (item0.length > 1 && isMany(item0[item0.length - 1]) && !/י$/.test(item0[0])) { before = [...before, ...item0.slice(0, -1)]; item0 = item0.slice(-1); }   // «לניהול לקוחות» ⇒ האיבר «לקוחות»
+  const items = [item0, ...parts.slice(1)].map(deVav).map((it) => { let k = 0; while (k < it.length - 1 && isSpread(it[k])) k++; return it.slice(k); }).filter((it) => it.length);   // «כמה עזבו» ⇒ «עזבו»
+  return { before, items, rest };
 }
 
 // ── צורת-הצורך של משפט ──
 export function formOf(sentence) {
   const words = toks(sentence);
   const segments = sentence.split(/[:;]/).map((s) => s.trim()).filter(Boolean);
-  const things = [];   // { label, many, fields:[{label}], under, src }
+  const things = [];   // { label, many, fields:[{label}], under, src, refs, acts, values }
   const frame = [];    // מילים מפוזרות (מסגרת/קישור) — מדווחות, לא מפורשות
   const find = (w) => things.find((t) => toks(t.label).some((lw) => stripLead(stem(w)).some((f) => f === stem(lw))));   // «לרכב» ⇔ «ניהול רכבים»: כל מילה בתווית
+  // רצף מילים נמוכות-פיזור ⇒ יחידה: מילים שהקטלוג מצביע בהן לחישוב = עשייה-מוצעת; השאר = דבר; מספר צמוד = ערך
+  const unitOf = (run, src, under = null) => {
+    const acts = [], plain = [], values = [], asks = [];
+    for (let i = 0; i < run.length; i++) { const w = run[i];
+      if (isNum(w)) { values.push({ num: +w, unit: run[i + 1] && !isNum(run[i + 1]) ? run[i + 1] : null }); continue; }
+      plain.push(w); const h = hintOf(w); if (h.hint === 'act') acts.push({ word: w, ops: h.ops.slice(0, 3) }); else if (h.hint === 'ask') asks.push(w); }   // התווית נשארת שלמה; הרמזים = הערות עליה, לא מחיקה ממנה
+    const label = plain.length ? [bareLabel(plain[0]), ...plain.slice(1)].join(' ') : run.join(' ');
+    return { label, many: plain.length ? isMany(plain[plain.length - 1]) : false, fields: [], under, src, acts, values, asks };
+  };
+  const runsOf = (ws) => { const runs = []; let cur = []; for (const w of ws) { if (!isNum(w) && isSpread(w)) { if (cur.length) runs.push(cur); cur = []; frame.push(w); } else cur.push(w); } if (cur.length) runs.push(cur); return runs; };   // מספר לעולם אינו «מפוזר» — נשאר ברצף כערך
   const queue = [...segments];
   while (queue.length) { const seg = queue.shift();
     let L = listOf(seg), head = null; if (L && L.rest) { queue.unshift(L.rest); if (L.only) { head = L.head; L = null; } }
     const pre = L ? L.before : (head || toks(seg));
-    const lowPre = pre.filter((w) => !/^\d+$/.test(w) && !isSpread(w));
-    pre.filter((w) => isSpread(w)).forEach((w) => frame.push(w));
-    if (!L) {   // קטע בלי רשימה: הרצף הנמוך-פיזור **האחרון** = דבר אחד («משרד עורכי דין»); רצפים שלפני מילה מפוזרת = מסגרת («תעשה לי מערכת …»)
-      const runs = []; let cur = []; for (const w of pre) { if (isSpread(w) || /^\d+$/.test(w)) { if (cur.length) runs.push(cur); cur = []; } else cur.push(w); } if (cur.length) runs.push(cur);
-      runs.slice(0, -1).forEach((r) => r.forEach((w) => frame.push(w)));
-      const run = runs[runs.length - 1] || []; if (run.length && !find(run[run.length - 1])) things.push({ label: [bareLabel(run[0]), ...run.slice(1)].join(' '), many: isMany(run[run.length - 1]), fields: [], under: null, src: seg });
-      continue; }
-    const manyItems = L.items.filter(itemMany).length, oneItems = L.items.length - manyItems;
-    // הורה: המילה הנמוכה-פיזור האחרונה לפני הרשימה (אחרי הסרת אות פותחת), אם יש
-    let run = [], i = pre.length - 1; while (i >= 0 && isSpread(pre[i])) i--;   // מדלגים על הקישור («עם»)
-    { let j = i; while (j >= 0 && !isSpread(pre[j])) j--; for (let q = 0; q < j; q++) if (!isSpread(pre[q])) frame.push(pre[q]); }   // «הכן» לפני «מערכת» = מסגרת, לא נעלם
-    for (; i >= 0 && !isSpread(pre[i]) && !/^\d+$/.test(pre[i]); i--) run.unshift(pre[i]);   // הרצף הנמוך-פיזור שלפניו = ההורה («חדר כושר»)
-    const ownerW = run.length ? run[run.length - 1] : null;
+    const runs = runsOf(pre);
+    if (!L) { for (const run of runs) if (!find(run[run.length - 1])) things.push(unitOf(run, seg)); continue; }
+    // רשימה: הרצף הצמוד לרשימה = ההורה; רצפים קודמים = יחידות משלהן («תעשה לי» ⇒ יחידה עם שאלות)
+    const run = runs.length ? runs[runs.length - 1] : [];
+    for (const r of runs.slice(0, -1)) if (!find(r[r.length - 1])) things.push(unitOf(r, seg));
     let owner = null; for (let j = run.length - 1; j >= 0 && !owner; j--) owner = find(run[j]) || null;   // מילה כלשהי ברצף מזהה הורה קיים («לרכב יש» ⇒ «רכבים»)
-    if (owner) (owner.refs = owner.refs || []).push(...run);   // המילים שהצביעו על ההורה — נספרות כמכוסות
-    if (ownerW && !owner) { owner = { label: [bareLabel(run[0]), ...run.slice(1)].join(' '), many: isMany(run[0]), fields: [], under: null, src: seg }; things.push(owner); }
+    if (owner) (owner.refs = owner.refs || []).push(...run);
+    else if (run.length) { owner = unitOf(run, seg); things.push(owner); }
+    const manyItems = L.items.filter(itemMany).length, oneItems = L.items.length - manyItems;
     for (const it of L.items) {
-      const label = it.join(' ');
       if (itemMany(it) || (oneItems === 0) || manyItems > oneItems) {   // רוב-רבים ⇒ גם היחיד ברשימה הוא דבר («… עובדים, ציוד ובטיחות»)
-        if (!find(it[0])) things.push({ label, many: itemMany(it), fields: [], under: owner ? owner.label : null, src: seg }); }
-      else if (owner) owner.fields.push({ label });
-      else things.push({ label, many: false, fields: [], under: null, src: seg });
+        if (!find(it[0])) things.push({ ...unitOf(it, seg, owner ? owner.label : null), many: itemMany(it) }); }
+      else if (owner) owner.fields.push({ label: it.join(' ') });
+      else things.push(unitOf(it, seg));
     }
   }
   return { sentence, words, segments, things, frame: [...new Set(frame)] };
@@ -126,7 +133,9 @@ export function questionsFor(form, answers = {}) {
     if (a.many == null) qs.push({ thing: t.label, ask: 'many', proposal: t.many, options: [true, false] });
     if (!t.fields.length && !(a.fields && a.fields.length)) qs.push({ thing: t.label, ask: 'fields', options: TYPES });
     for (const f of t.fields) { const af = (a.fields || []).find((x) => x.label === f.label); if (!af || !af.type) qs.push({ thing: t.label, ask: 'type', field: f.label, options: TYPES }); }
-    if (!(a.acts && a.acts.length)) qs.push({ thing: t.label, ask: 'acts', options: ACTS });
+    if (!(a.acts && a.acts.length)) qs.push({ thing: t.label, ask: 'acts', options: ACTS, proposal: (t.acts || []).map((x) => x.word) });
+    for (const w of (t.asks || [])) qs.push({ thing: t.label, ask: 'word', word: w, options: ['thing', 'act', 'field', 'skip'] });   // מילה שאינה כתובה על שום חלקיק
+    for (const x of (t.acts || [])) qs.push({ thing: t.label, ask: 'act', word: x.word, proposal: x.ops });
     for (const f of (a.fields || [])) if (f.type === 'ref' && !f.to) qs.push({ thing: t.label, ask: 'ref', field: f.label, options: form.things.map((x) => x.label) });
   }
   return qs;
