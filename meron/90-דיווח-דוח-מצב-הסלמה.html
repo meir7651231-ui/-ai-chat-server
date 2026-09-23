@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>דיווח ראשון דוח מצב והסלמה — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_style.css">
+<style>
+.org{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;color:#D6CFC4;border-radius:10px;padding:14px 16px;white-space:pre;overflow-x:auto;line-height:1.5}
+table.roles td:nth-child(2){text-align:center;width:44px}
+.sum td{font-weight:700}
+.lock{background:#3B1111;color:#FCA5A5;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700}
+.phones{display:flex;gap:16px;flex-wrap:wrap}
+.phone{width:260px;background:#0F0D0B;color:#E8E2D8;border-radius:22px;padding:16px 14px;border:2px solid #3A332B;font-size:13px;line-height:1.5}
+.phone h5{margin:0 0 8px;font-size:14px;color:#fff}
+.phone .row{background:#1C1916;border-radius:8px;padding:7px 9px;margin-bottom:6px}
+.phone .row b{color:#fff}
+.phone .red{background:#3B1111;color:#FECACA}
+.phone .yel{background:#2E2208;color:#FDE68A}
+.phone .grn{background:#0F2A1C;color:#BBF0D0}
+.phone .btn{display:block;text-align:center;border-radius:10px;padding:9px;margin-top:8px;font-weight:700;background:#3A332B;color:#fff}
+.phone .muted{color:#9A9085;font-size:11px}
+</style></head>
+<body><div class="wrap">
+
+<style>.code{font-family:ui-monospace,monospace;font-size:12.5px;background:#0F0D0B;color:#D6CFC4;border-radius:8px;padding:12px;white-space:pre;overflow-x:auto;line-height:1.6}
+.lv td{font-size:12.5px}.l0{background:#ECFCCB}.l1{background:#FEF9C3}.l2{background:#FEF3C7}.l3{background:#FEE2E2}</style>
+<h1>דיווח ראשון, דוח מצב, וטבלת הסלמה — ניהול חי</h1>
+<p class="lead">נושא 90. שלושה פורמטים <b>קבועים</b> — כדי שכל אחד מדווח באותו סדר, והמקבל יודע איפה לחפש: <b>(1) דיווח ראשון מזירה</b> — 6 שורות. <b>(2) דוח מצב</b> — כל שעה, 3 שורות מכל עולם. <b>(3) טבלת הסלמה</b> — 4 רמות, מתי עולים ולמי מתקשרים.</p>
+
+<h2>1. דיווח ראשון מזירה — "זמ"ן סכ"ם"</h2>
+<p>המבנה המקובל בעולם לדיווח ראשון מאירוע (דומה למה שמד"א משתמשים בו), בעברית, <b>6 מילים לזכור</b>:</p>
+<table>
+<tr><th>אות</th><th>מה</th><th>דוגמה</th></tr>
+<tr><td><b>ז</b>יהוי</td><td>מי אני</td><td>"מזרח-כחול-סדרן-ראש"</td></tr>
+<tr><td><b>מ</b>יקום</td><td>שם אזור + מעבר</td><td>"מזרח כחול, מעבר 7, מדרגות"</td></tr>
+<tr><td><b>נ</b>פגעים</td><td>כמה, בערך</td><td>"כ-10 על הרצפה, 2 לא זזים"</td></tr>
+<tr><td><b>ס</b>כנה</td><td>מה עוד מסוכן</td><td>"לחץ מלמעלה ממשיך"</td></tr>
+<tr><td><b>כ</b>ניסה</td><td>מאיפה אפשר להגיע</td><td>"מלמטה, דרך מעבר 6"</td></tr>
+<tr><td><b>מ</b>ה צריך</td><td>מה לשלוח</td><td>"חובשים, לעצור את מעבר 5 מלמעלה"</td></tr>
+</table>
+<div class="code">"מזרח-כחול-סדרן-ראש. מעבר 7, מדרגות. כ-10 על הרצפה, 2 לא זזים.
+ לחץ מלמעלה ממשיך. גישה מלמטה דרך 6. צריך חובשים ולעצור את 5 מלמעלה."</div>
+<p style="font-size:12px;color:var(--mu)">הדיווח הזה — <b>30 שניות</b>. הוא נכנס ליומן ככה (72), והמסך של המקבל ממלא את השדות לבד מהדיבור או מהכפתורים (80/1).</p>
+
+<h2>2. דוח מצב — כל שעה עגולה, 3 שורות מכל עולם</h2>
+<div class="code">[עולם] · [שעה]
+1. המספר שלי: ____ (יעד ____) · ירוק / צהוב / אדום
+2. מה השתנה בשעה האחרונה: ____
+3. מה אני צריך / מה מדאיג אותי: ____
+
+דוגמה —
+תחבורה · 04:00
+1. המתנה בתחנה: 34 דק' (יעד 30) · צהוב
+2. 2 אוטובוסים תקועים ב-89, הוזזו 6 ממסוף ג'
+3. צריך: פתיחת ציר 866 לאוטובוסים עד 06:00 · מדאיג: נהגים — 40 מגיעים לסוף השעות ב-05:30</div>
+<p>על הקיר (34) — <b>עשר שורות</b> (אחת לכל עולם), <b>והשורה השלישית</b> — היא מה שהמפקד קורא.</p>
+
+<h2>3. טבלת הסלמה — 4 רמות</h2>
+<table class="lv">
+<tr><th>רמה</th><th>מה זה</th><th>דוגמאות — מתי עולים</th><th>מי יודע</th><th>מי מחליט</th></tr>
+<tr class="l0"><td><b>0 · שגרה</b></td><td>הכל ביעד</td><td>—</td><td>העולם עצמו</td><td>מחזיק העמדה</td></tr>
+<tr class="l1"><td><b>1 · אזור</b></td><td>משהו מקומי</td><td>מעבר עצור · ילד אבוד · חובש לאירוע · מדורה מושעית</td><td>+ הגשר האזורי · מפקד הגזרה</td><td>מפקד הגזרה</td></tr>
+<tr class="l2"><td><b>2 · חמ"ל</b></td><td>נוגע ביותר מאזור / עולם</td><td>מעבר עצור &gt;3 דק' · 3 דיווחי "צפוף" ב-30 דק' (70) · תחזית ריקון &gt;15 דק' · אשכול · תור &gt;45 דק' · סירוב לעזור</td><td>+ הקיר · קציני הקישור</td><td>ראש העולם + המפקד</td></tr>
+<tr class="l3"><td><b>3 · מצב</b></td><td>מצב חדש (11 מצבים)</td><td>"מגן" · אזעקה · רעידה · חושך · פינוי · הודעה מזויפת</td><td><b>כולם</b> — לפי ספר ההחלטות</td><td>הסמכות של אותו מצב (32)</td></tr>
+</table>
+<div class="six" style="margin-top:10px">
+<div class="card"><b>עולים לבד</b><br>המערכת מעלה רמה <b>לפי הסף</b> — לא מחכה שמישהו יחליט להעלות. <b>יורדים — רק אדם</b> (12).</div>
+<div class="card"><b>כל רמה — שעון</b><br>רמה 1 לא נסגרה תוך 10 דק' → רמה 2. רמה 2 לא נסגרה תוך 20 דק' → המפקד בעצמו.</div>
+<div class="card"><b>אף אחד לא "בולע"</b><br>אירוע ברמה 2 לא נסגר בלי מי שהיה שם (70 — איטאוון).</div>
+</div>
+
+<div class="card" style="margin-top:12px"><b>נסגר:</b> פריטים 3, 5, 6 מהרשימה. <b>הכלל:</b> אותו סדר, אותן מילים, מכל גוף — כדי שבאמצע הלילה אף אחד לא צריך לשאול "מה?".</div>
+
+</div></body></html>

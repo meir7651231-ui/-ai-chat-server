@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>טבלת הסיכונים — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_style.css">
+<style>
+.org{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;color:#D6CFC4;border-radius:10px;padding:14px 16px;white-space:pre;overflow-x:auto;line-height:1.5}
+table.roles td:nth-child(2){text-align:center;width:44px}
+.sum td{font-weight:700}
+.lock{background:#3B1111;color:#FCA5A5;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700}
+.phones{display:flex;gap:16px;flex-wrap:wrap}
+.phone{width:260px;background:#0F0D0B;color:#E8E2D8;border-radius:22px;padding:16px 14px;border:2px solid #3A332B;font-size:13px;line-height:1.5}
+.phone h5{margin:0 0 8px;font-size:14px;color:#fff}
+.phone .row{background:#1C1916;border-radius:8px;padding:7px 9px;margin-bottom:6px}
+.phone .row b{color:#fff}
+.phone .red{background:#3B1111;color:#FECACA}
+.phone .yel{background:#2E2208;color:#FDE68A}
+.phone .grn{background:#0F2A1C;color:#BBF0D0}
+.phone .btn{display:block;text-align:center;border-radius:10px;padding:9px;margin-top:8px;font-weight:700;background:#3A332B;color:#fff}
+.phone .muted{color:#9A9085;font-size:11px}
+</style></head>
+<body><div class="wrap">
+
+<style>
+table.risk td{font-size:12px;vertical-align:top}table.risk td.s{text-align:center;font-weight:700}
+.r5{background:#FEE2E2}.r4{background:#FEF3C7}.r3{background:#FEF9C3}.r2{background:#ECFCCB}
+.hm{display:grid;grid-template-columns:40px repeat(5,1fr);gap:3px;max-width:520px;font-size:11px;text-align:center}
+.hm div{padding:8px 2px;border-radius:4px}
+</style>
+<h1>טבלת הסיכונים — ניהול חי</h1>
+<p class="lead">נושא 88. המסמך הבסיסי של כל תיק אירוע — <b>ולא היה לנו</b>. 30 סכנות, לכל אחת: <b>סבירות</b> (1–5), <b>חומרה</b> (1–5), <b>ציון</b> (מכפלה), <b>מה מקטין</b>, <b>מי הבעלים</b>, ו<b>איפה זה כתוב</b>. <b>הציונים — הערכה שלנו</b>, מבוססת על המחקר (45, 70). הוועדה והמהנדס מכיילים.</p>
+
+<h2>1. מפת החום — איפה הסכנות מתרכזות</h2>
+<div class="hm">
+<div></div><div><b>1 קל</b></div><div><b>2</b></div><div><b>3</b></div><div><b>4</b></div><div><b>5 קטסטרופלי</b></div>
+<div><b>5 כמעט ודאי</b></div><div class="r2"></div><div class="r3">חום</div><div class="r4">ילד אבוד · נשירה</div><div class="r5">הגעה בלי כרטיס</div><div class="r5"></div>
+<div><b>4</b></div><div class="r2"></div><div class="r3">שמועה</div><div class="r4">תור בתחנה · סלולר</div><div class="r5">עימות</div><div class="r5"><b>צפיפות ביציאה מטקס</b></div>
+<div><b>3</b></div><div class="r2"></div><div class="r2">כרטיס מזויף</div><div class="r3">חושך · אש ביער</div><div class="r4">זרם נגדי · מסך שטועה</div><div class="r5"><b>מטח באירוע מלא</b> · פתיחה ליעד מלא · מעל התקרה</div>
+<div><b>2</b></div><div class="r2"></div><div class="r2">הרעלה</div><div class="r3">רחפן</div><div class="r4">מבנה קורס</div><div class="r5">הודעה מזויפת</div>
+<div><b>1 נדיר</b></div><div class="r2"></div><div class="r2"></div><div class="r2">מגפה</div><div class="r3"></div><div class="r4">רעידה</div>
+</div>
+<p style="font-size:12px;color:var(--mu)">שורה = סבירות · עמודה = חומרה. <b>אדום = חומרה 5, או ציון 16 ומעלה</b> — חובה: בעלים, צעד מקטין, תרגיל.</p>
+
+<h2>2. הטבלה</h2>
+<table class="risk">
+<tr><th>#</th><th>סכנה</th><th>ס'</th><th>ח'</th><th>ציון</th><th>מה מקטין (עיקר)</th><th>בעלים</th><th>נושא</th></tr>
+<tr class="r5"><td>1</td><td><b>צפיפות ביציאה מסוף טקס</b></td><td class="s">4</td><td class="s">5</td><td class="s">20</td><td>תחזית יציאה ≤15 דק' כתנאי להיתר · סיום מדורג · "עמוד" לכל סדרן</td><td>המפקד + מהנדס</td><td>69, 80</td></tr>
+<tr class="r5"><td>2</td><td><b>אזור מעל התקרה</b> (2021: פי 6)</td><td class="s">3</td><td class="s">5</td><td class="s">15</td><td>תקרה = סכום חתימות · מודל קהל · עצירה בכניסה לאזור</td><td>המפקד</td><td>25, 33</td></tr>
+<tr class="r5"><td>3</td><td><b>פתיחת מעבר לאזור מלא</b> (הילסבורו)</td><td class="s">3</td><td class="s">5</td><td class="s">15</td><td>פתיחה רק אם היעד מתחת לסף · דלת לאדם, לא שער</td><td>מפקדי גזרות</td><td>70</td></tr>
+<tr class="r5"><td>4</td><td><b>מטח רקטות באירוע מלא</b></td><td class="s">3</td><td class="s">5</td><td class="s">15</td><td>תוכנית פינוי תחת אש כתנאי לקיום · מפת מחסה · מצבים נערמים</td><td>פקע"ר + המפקד</td><td>53, 61</td></tr>
+<tr class="r5"><td>5</td><td><b>הגעה המונית בלי כרטיס</b> (2022, 2024, 2026)</td><td class="s">5</td><td class="s">4</td><td class="s">20</td><td>מודל התקרבות · "לא" עם "לאן" · רבנים 48 שעות לפני · חלופות</td><td>המפקד + הממונה</td><td>40, 46, 54, 55</td></tr>
+<tr class="r5"><td>6</td><td><b>עימות מתוכנן</b></td><td class="s">4</td><td class="s">4</td><td class="s">16</td><td>לרוקן → להפריד → לאכוף · סוגרים אזור לא אירוע · תיעוד לשני הכיוונים</td><td>משטרה</td><td>63</td></tr>
+<tr class="r4"><td>7</td><td>זרימה נגדית במעבר צר (מינא, דואיסבורג)</td><td class="s">3</td><td class="s">4</td><td class="s">12</td><td>כיוון לכל מעבר לכל חלון · עלייה/ירידה נפרדים</td><td>מהנדס + משטרה</td><td>70</td></tr>
+<tr class="r4"><td>8</td><td>המסך טועה ונראה בטוח</td><td class="s">3</td><td class="s">4</td><td class="s">12</td><td>אדם גובר על מספר · צוות אדום · פער ספירה = התראה</td><td>ראש חמ"ל</td><td>58</td></tr>
+<tr class="r5"><td>9</td><td><b>הודעה מזויפת "פינוי"</b></td><td class="s">2</td><td class="s">5</td><td class="s">10</td><td>שני ערוצים · שולח קבוע · הפרכה מוקלטת · לימוד הציבור</td><td>סייבר + המפקד</td><td>59</td></tr>
+<tr class="r4"><td>10</td><td>קריסת מבנה / יציע</td><td class="s">2</td><td class="s">4</td><td class="s">8</td><td>חתימת מהנדס כולל רעידה · שבר → כל הדומים נבדקים</td><td>מהנדס</td><td>14, 25</td></tr>
+<tr class="r5"><td>11</td><td>רעידת אדמה</td><td class="s">1</td><td class="s">5</td><td class="s">5</td><td>"תרועה" → "שבו" אוטומטי · ביטול חתימות</td><td>המפקד + מהנדס</td><td>60</td></tr>
+<tr class="r4"><td>12</td><td>תור בתחנה = קהל</td><td class="s">4</td><td class="s">3</td><td class="s">12</td><td>חלון בכרטיס · 5 שעות · יחס תור/מקומות</td><td>תחבורה</td><td>11, 24</td></tr>
+<tr class="r4"><td>13</td><td>הסלולר קורס</td><td class="s">4</td><td class="s">3</td><td class="s">12</td><td>רשתות פרטיות · גשר אזורי · רצים</td><td>קשר</td><td>10, 79</td></tr>
+<tr class="r4"><td>14</td><td>ילד אבוד</td><td class="s">5</td><td class="s">3</td><td class="s">15</td><td>צמיד חובה · נקודות איסוף · "יונה"</td><td>מתנדבים</td><td>09, 37</td></tr>
+<tr class="r4"><td>15</td><td>נשירת מתנדבים מעמדה חיונית</td><td class="s">5</td><td class="s">3</td><td class="s">15</td><td>גיבוי יודע קודם · קופצים 5% · הפסקות מחוץ לשיא</td><td>רכז מתנדבים</td><td>27, 43/6</td></tr>
+<tr class="r3"><td>16</td><td>חום / התייבשות</td><td class="s">5</td><td class="s">2</td><td class="s">10</td><td>מצב שרב · מים ≤3 דק' · ספים −10%</td><td>מד"א + תפעול</td><td>28, 38</td></tr>
+<tr class="r3"><td>17</td><td>חושך בכל המתחם</td><td class="s">3</td><td class="s">3</td><td class="s">9</td><td>תאורת חירום 0 שנ' · הודעה מוקלטת · חמ"ל על חשמל נפרד</td><td>תפעול</td><td>25, 39</td></tr>
+<tr class="r3"><td>18</td><td>שריפה ביער</td><td class="s">3</td><td class="s">3</td><td class="s">9</td><td>היתר חי · חיץ 60 מ' · סף לפי מורד הרוח</td><td>כב"ה + רט"ג</td><td>18, 26</td></tr>
+<tr class="r3"><td>19</td><td>שמועה שמזיזה קהל</td><td class="s">4</td><td class="s">2</td><td class="s">8</td><td>הודעה רשמית ≤10 דק' · שמועה = דיווח</td><td>דוברות</td><td>29</td></tr>
+<tr class="r3"><td>20</td><td>רחפן זר</td><td class="s">2</td><td class="s">3</td><td class="s">6</td><td>שיבוש "חזור הביתה" · לא להפיל · לא לכרוז</td><td>משטרה + ח"א</td><td>19</td></tr>
+<tr class="r2"><td>21</td><td>כרטיסים מזויפים</td><td class="s">3</td><td class="s">2</td><td class="s">6</td><td>כרטיס נשרף · אימות קולי</td><td>תחבורה</td><td>59</td></tr>
+<tr class="r2"><td>22</td><td>הרעלת מזון</td><td class="s">2</td><td class="s">2</td><td class="s">4</td><td>אין אוכל על ההר מ-2022 · חיישן קור · אשכול</td><td>פיקוח מזון</td><td>20, 28</td></tr>
+<tr class="r3"><td>23</td><td>מגפה</td><td class="s">1</td><td class="s">3</td><td class="s">3</td><td>משרד הבריאות = סמכות · "מי היה שם" מצרפי</td><td>משרד הבריאות</td><td>62</td></tr>
+<tr class="r3"><td>24</td><td>VIP / תהלוכה חוסמת יציאה</td><td class="s">3</td><td class="s">3</td><td class="s">9</td><td>מחסום VIP לא סוגר יציאה</td><td>המפקד</td><td>17, 70</td></tr>
+<tr class="r3"><td>25</td><td>נעדר שלא יצא</td><td class="s">3</td><td class="s">3</td><td class="s">9</td><td>"נכנס ולא יצא" ב-09:30 · סריקת אפס כולל שבילים</td><td>משטרה</td><td>42</td></tr>
+<tr class="r3"><td>26</td><td>נזק לתושבים</td><td class="s">4</td><td class="s">2</td><td class="s">8</td><td>קוד תושב · שדות = נכסים · נזק בזמן אמת</td><td>המועצה</td><td>49</td></tr>
+<tr class="r4"><td>27</td><td>עייפות מפקדים</td><td class="s">4</td><td class="s">3</td><td class="s">12</td><td>שעון ער · החלפה מעל 16 ש'</td><td>כל עולם</td><td>58</td></tr>
+<tr class="r4"><td>28</td><td>החלטה ב-01:45 הולכת לאיבוד במשמרת</td><td class="s">3</td><td class="s">4</td><td class="s">12</td><td>כרטיס העברה · אין העברה באמצע אירוע</td><td>כל מפקד</td><td>34</td></tr>
+<tr class="r4"><td>29</td><td>ביטול מאוחר (100 מיליון) → פריצה</td><td class="s">3</td><td class="s">4</td><td class="s">12</td><td>סולם 4 שלבים · נקודות אל-חזור · תוכנית "סגור"</td><td>הממשלה / השר</td><td>53</td></tr>
+<tr class="r4"><td>30</td><td>אובדן אמון הציבור</td><td class="s">3</td><td class="s">4</td><td class="s">12</td><td>רבנים שותפים · הוגנות · עקביות · מדד אמון</td><td>הממונה</td><td>55</td></tr>
+</table>
+
+<h2>3. מה הטבלה מלמדת</h2>
+<div class="six">
+<div class="card"><b>האדומים — רובם זרימה והחלטה</b><br>לא אש, לא רפואה. <b>יציאה מטקס, תקרה, פתיחה, מטח, הגעה בלי כרטיס, עימות.</b> שם צריך את רוב התרגילים (74).</div>
+<div class="card"><b>הסכנות השכיחות — אנושיות</b><br>ילד אבוד, נשירה, חום, תור. לא מפילות — אבל <b>מעמיסות</b> על אותם אנשים שצריכים לעצור את האדומים.</div>
+<div class="card"><b>לכל אדום — שלושה דברים</b><br>בעלים בשם · צעד מקטין שנבדק · <b>תרגיל שנה</b>. בלי שלושתם — השלב (53) לא מאושר.</div>
+</div>
+
+</div></body></html>

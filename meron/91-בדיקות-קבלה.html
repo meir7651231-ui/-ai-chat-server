@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>בדיקות קבלה — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_style.css">
+<style>
+.org{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;color:#D6CFC4;border-radius:10px;padding:14px 16px;white-space:pre;overflow-x:auto;line-height:1.5}
+table.roles td:nth-child(2){text-align:center;width:44px}
+.sum td{font-weight:700}
+.lock{background:#3B1111;color:#FCA5A5;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700}
+.phones{display:flex;gap:16px;flex-wrap:wrap}
+.phone{width:260px;background:#0F0D0B;color:#E8E2D8;border-radius:22px;padding:16px 14px;border:2px solid #3A332B;font-size:13px;line-height:1.5}
+.phone h5{margin:0 0 8px;font-size:14px;color:#fff}
+.phone .row{background:#1C1916;border-radius:8px;padding:7px 9px;margin-bottom:6px}
+.phone .row b{color:#fff}
+.phone .red{background:#3B1111;color:#FECACA}
+.phone .yel{background:#2E2208;color:#FDE68A}
+.phone .grn{background:#0F2A1C;color:#BBF0D0}
+.phone .btn{display:block;text-align:center;border-radius:10px;padding:9px;margin-top:8px;font-weight:700;background:#3A332B;color:#fff}
+.phone .muted{color:#9A9085;font-size:11px}
+</style></head>
+<body><div class="wrap">
+
+<style>table.t td{font-size:12px;vertical-align:top}table.t td:first-child{font-family:ui-monospace,monospace;white-space:nowrap}</style>
+<h1>בדיקות קבלה וטבלת מעקב — ניהול חי</h1>
+<p class="lead">נושא 91. הגשר מאפיון לבנייה <b>נסגר רק כשיש מבחן</b>. כאן: <b>36 מבחנים</b> שהמערכת חייבת לעבור <b>לפני</b> שמשתמשים בה — גם בשלב "צל" (71). כל מבחן: <b>מה נבדק · מאיזה נושא · איך בודקים · מה נחשב עבר</b>. זו גם <b>טבלת המעקב</b>: כל דרישה ← נושא ← מבחן. <b>דרישה בלי מבחן — לא קיימת.</b></p>
+
+<h2>1. המבחן הראשי</h2>
+<div class="card" style="font-size:15px;border-right:4px solid #B91C1C"><b>ב-00 · הרצה לאחור של 2021 (69).</b> מזינים למערכת את הנתונים של אותו לילה, דקה אחרי דקה. <b>עבר</b> = (1) ברמת החורף — הרחבה <b>לא נפתחת</b> ל-20,000 (חתימות, 4 יציאות). (2) אם נכפה — <b>ב-00:30 לכל המאוחר</b> יוצאת התראת "המעבר לא יספיק", ו-"עמוד" מוצע <b>לסדרן</b> ב-00:44. <b>נכשל</b> = אחד מהם לא קרה. <b>מבחן זה חוזר בכל גרסה.</b></div>
+
+<h2>2. 35 מבחנים נוספים</h2>
+<table class="t">
+<tr><th>#</th><th>מה נבדק</th><th>נושא</th><th>איך</th><th>עבר =</th></tr>
+<tr><td colspan="5"><b>זרימה ועצירה</b></td></tr>
+<tr><td>ב-01</td><td>"עמוד" מכל בעל תפקיד בעמדה</td><td>23, 69</td><td>סדרן של ספק לוחץ</td><td>מעבר עצור ≤5 שנ' · שכנים יודעים ≤10 שנ'</td></tr>
+<tr><td>ב-02</td><td>פתיחה חסומה כשהיעד מלא</td><td>70</td><td>יעד ב-3.6 · מפקד מנסה לפתוח</td><td>נחסם + הסבר "היעד מלא"</td></tr>
+<tr><td>ב-03</td><td>"עמוד" לפי מצב</td><td>43/2</td><td>אותו כפתור בשגרה / פינוי / חושך</td><td>עצור / הפנה / עצור הכל</td></tr>
+<tr><td>ב-04</td><td>זרימה נגדית</td><td>70</td><td>מונה מזהה תנועה נגד הכיוון</td><td>אדום ≤30 שנ'</td></tr>
+<tr><td>ב-05</td><td>ספיקה לפי משטח</td><td>69</td><td>מעבר 5 מ' בשיפוע</td><td>330/דק', לא 410</td></tr>
+<tr><td colspan="5"><b>מודל הקהל ונתונים</b></td></tr>
+<tr><td>ב-06</td><td>אין מספר בלי גיל</td><td>30</td><td>מצלמה מפסיקה לשדר</td><td>אפור ≤60 שנ' + גיל</td></tr>
+<tr><td>ב-07</td><td>אי-הסכמה → טווח + ספים ↓</td><td>33</td><td>ספירה 31K, מצלמות 38K</td><td>"31–38 אלף" · סף אדום יורד</td></tr>
+<tr><td>ב-08</td><td>אדם גובר על מספר</td><td>58</td><td>מודל 2.4, סדרן "עין"</td><td>ביטחון ↓ · לראש הקיר</td></tr>
+<tr><td>ב-09</td><td>פער ספירה &gt;20%</td><td>58</td><td>שער פרוץ שלא נספר</td><td>התראה "משהו לא נספר"</td></tr>
+<tr><td>ב-10</td><td>תחזית 30 דק'</td><td>33</td><td>נתוני שנה קודמת</td><td>שגיאה ≤±15% (76)</td></tr>
+<tr><td>ב-11</td><td>שעון 5 שעות</td><td>33, 35</td><td>כרטיס עובר 5:00</td><td>רשימה לסדרן + שיחה קולית</td></tr>
+<tr><td colspan="5"><b>מצבים והחלטות</b></td></tr>
+<tr><td>ב-12</td><td>כניסה אוטומטית רק ממקור ודאי</td><td>12, 43/8</td><td>אזעקה אמיתית מול חשד</td><td>אזעקה → אוטומטי · חשד → מוצע</td></tr>
+<tr><td>ב-13</td><td>מצבים נערמים</td><td>61</td><td>פינוי + ר"נ + אזעקה ביחד</td><td>כל אחד פעיל · סתירה → סדר גבירה</td></tr>
+<tr><td>ב-14</td><td>יציאה ממצב — רק אדם</td><td>12</td><td>אזעקה נגמרת</td><td>המערכת לא משחררת לבד</td></tr>
+<tr><td>ב-15</td><td>החלטה מותנית</td><td>18</td><td>"אם X עד Y → Z"</td><td>Z מופעל בזמן · נרשם</td></tr>
+<tr><td>ב-16</td><td>שורה לא חתומה לא פועלת</td><td>86</td><td>החלטה בלי חתימה</td><td>לא מופעלת בלילה</td></tr>
+<tr><td>ב-17</td><td>היתר חי מושעה</td><td>26</td><td>רוח עוברת את הסף</td><td>מושעה ≤60 שנ' · הצוות הצמוד יודע</td></tr>
+<tr><td>ב-18</td><td>תחזית יציאה כתנאי</td><td>69</td><td>הדלקה עם ריקון 22 דק'</td><td>היתר לא ניתן</td></tr>
+<tr><td>ב-19</td><td>ר"נ → הפקות נעצרות</td><td>70</td><td>"מגן"</td><td>כל ההפקות נעצרות ≤2 דק'</td></tr>
+<tr><td colspan="5"><b>הודעות</b></td></tr>
+<tr><td>ב-20</td><td>הודעה לציבור רק באישור</td><td>21, 29</td><td>ניסיון לשלוח בלי מפקד</td><td>נחסם (חוץ ממוקלטות — ב-21)</td></tr>
+<tr><td>ב-21</td><td>הודעות מוקלטות — אוטומטי</td><td>39, 73</td><td>חושך · רעידה · מזויפת</td><td>יוצאות ≤10 שנ', ב-4 שפות</td></tr>
+<tr><td>ב-22</td><td>שני ערוצים לכל הודעה ציבורית</td><td>59</td><td>הודעה בטלפון בלבד</td><td>נחסמת</td></tr>
+<tr><td>ב-23</td><td>ר"נ — אין הודעות על אנשים</td><td>14, 43/1</td><td>ניסיון הודעה אישית</td><td>נחסם · כללית עוברת</td></tr>
+<tr><td colspan="5"><b>הרשאות ופרטיות</b></td></tr>
+<tr><td>ב-24</td><td>בלי הכשרה — אין "עמוד"</td><td>74</td><td>מתנדב בלי רמה א'</td><td>רק "דווח"</td></tr>
+<tr><td>ב-25</td><td>הרשאה שפגה</td><td>24, 58</td><td>נהג אחרי מכסה · מפקד אחרי 16 ש'</td><td>לא משובץ · החלפה מוצעת</td></tr>
+<tr><td>ב-26</td><td>תיק רפואי לא יוצא</td><td>22, 57</td><td>מד"א שולח אירוע</td><td>בשכבה: רק סטטוס</td></tr>
+<tr><td>ב-27</td><td>מחיקה בזמן</td><td>43/7</td><td>BLE גולמי · כרטיסים אחרי שבוע</td><td>נמחק · יומן נשמר</td></tr>
+<tr><td>ב-28</td><td>גישה לאדם אחד</td><td>42</td><td>חיפוש נעדר</td><td>רק הוא · נרשם מי ומתי</td></tr>
+<tr><td>ב-29</td><td>יומן לא נערך</td><td>70, 72</td><td>ניסיון לשנות רשומה</td><td>נכשל · רק תוספת</td></tr>
+<tr><td colspan="5"><b>עמידות</b></td></tr>
+<tr><td>ב-30</td><td>עומס</td><td>72</td><td>60,000 סריקות בשעה · 4,500 "אני פה"</td><td>בלי עיכוב &gt;2 שנ'</td></tr>
+<tr><td>ב-31</td><td>מקור נופל</td><td>05, 25</td><td>50% מהמצלמות</td><td>המודל ממשיך על ספירה · ספים ↓</td></tr>
+<tr><td>ב-32</td><td>החמ"ל נופל</td><td>34</td><td>מכבים את הראשי</td><td>גיבוי פעיל ≤5 דק'</td></tr>
+<tr><td>ב-33</td><td>הכל נופל</td><td>30</td><td>מכבים את המערכת</td><td>נייר: כל עמדה עובדת</td></tr>
+<tr><td>ב-34</td><td>הודעה מזויפת מבחוץ</td><td>59</td><td>SMS משולח זר</td><td>זיהוי + הפרכה ≤60 שנ'</td></tr>
+<tr><td>ב-35</td><td>העברת משמרת</td><td>34</td><td>החלפה עם 3 פריטים פתוחים</td><td>כולם עוברים · עד חתימה — היוצא אחראי</td></tr>
+</table>
+
+<h2>3. טבלת המעקב — איך קוראים</h2>
+<div class="six">
+<div class="card"><b>דרישה → נושא → מבחן</b><br>כל חוק בספר (86) מצביע על מבחן כאן. <b>36 מבחנים מכסים את 30 ההחלטות</b> ואת עיקר 12 משפחות החוקים (32).</div>
+<div class="card"><b>מי מריץ</b><br>הבונה — לפני מסירה. <b>גוף ביקורת חיצוני</b> (57) — כל שנה. המפקד — ב-00 ו-01 בעצמו.</div>
+<div class="card"><b>מתי</b><br>כל גרסה · לפני "צל" (71) · לפני כל אירוע · <b>ב-00 תמיד</b>.</div>
+</div>
+
+</div></body></html>
