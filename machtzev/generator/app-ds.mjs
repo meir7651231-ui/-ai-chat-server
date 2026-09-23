@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
 import { renderEntity, renderDashboard, renderHub, renderSystem, renderWizard, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write, setLook, getLook } from './render-ds.mjs';
+import { DEFAULT_LOOK } from './look.mjs';
 import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, renderReportTest, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
 import { nlToSpec } from './nl-spec.mjs';
 import { rule as yeshivaRule } from '../../yeshiva/purpose.mjs';   // המנוע הישיבתי — פוסק לפני שנבנה מסך
@@ -86,7 +87,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
   const appLine = all0.map((l) => l.match(APP_RE)).find(Boolean); const appName = appLine ? appLine[1].trim() : null;
   // G28 · `עיצוב: נייר` ⇒ עור-הנייר (setLook) · `שאלה <מסך>: <טקסט>` ⇒ המסך עונה על שאלה (PLAN §1: מסך = שאלה אחת)
   const LOOK_RE = new RegExp('^\\s*' + SL.lookWord + '\\s*:\\s*(.+)$');
-  const lookLine = all0.map((l) => l.match(LOOK_RE)).find(Boolean); const look = lookLine ? (SL.looks[lookLine[1].trim()] || 'dark') : 'dark';
+  const lookLine = all0.map((l) => l.match(LOOK_RE)).find(Boolean); const look = lookLine ? (SL.looks[lookLine[1].trim()] || DEFAULT_LOOK) : DEFAULT_LOOK;   // הכרעת-בעלים 23.9: לא 'dark' קשיח — ברירת-המחדל מהדאטה (look.mjs ⇐ spec-lang.defaultLook)
   setLook(look);
   const Q_RE = new RegExp('^\\s*' + SL.questionWord + '\\s+(\\S+)\\s*:\\s*(.+)$');
   const questions = {}; for (const l of all0) { const m = l.match(Q_RE); if (m && SL.questionTargets[m[1]]) questions[SL.questionTargets[m[1]]] = m[2].trim(); }

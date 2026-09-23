@@ -5,8 +5,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as R from '../root.mjs';
 
-let LOOK = 'dark';
-export const setLook = (l) => { LOOK = l || 'dark'; };
+// ברירת-המחדל מהדאטה (spec-lang.defaultLook ⇒ looks[...]) — לא 'dark' קשיח (הכרעת-בעלים 23.9 «לא קשיח, לא דעה קדומה»)
+const SL = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
+export const DEFAULT_LOOK = SL.looks[SL.defaultLook] || Object.values(SL.looks)[0];
+export const defaultLookWord = SL.defaultLook || Object.keys(SL.looks)[0];
+let LOOK = DEFAULT_LOOK;
+export const setLook = (l) => { LOOK = l || DEFAULT_LOOK; };
 export const getLook = () => LOOK;
 export const isPaper = () => LOOK === 'paper';
 const GLYPH_RE = /^(?:[\p{Extended_Pictographic}☀-➿⬀-⯿\u{1F000}-\u{1FAFF}][️‍]?)+\s*/u;

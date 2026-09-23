@@ -137,6 +137,7 @@
  ],
  "appWord": "אפליקציה",
  "lookWord": "עיצוב",
+ "defaultLook": "כהה",
  "looks": {
   "נייר": "paper",
   "כהה": "dark"

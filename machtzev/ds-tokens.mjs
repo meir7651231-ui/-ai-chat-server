@@ -59,13 +59,47 @@ const gradients = [
   ...Object.entries(seed.gradientHues).map(([n, cols]) => grad(n, cols, n === 'aurora' ? 'topCenter' : 'topLeft', n === 'aurora' ? 'bottomCenter' : 'bottomRight')),
 ];
 
-// ── מצב-כהה: טרנספורם דטרמיניסטי מהבהיר ──
+// ── מצב-כהה: טרנספורם דטרמיניסטי מהבהיר — הבסיסים והיחסים מהזרע (seed.dark); היו קשיחים כאן (הכרעת-בעלים 23.9: «לא קשיח, לא דעה קדומה») ──
+const D = seed.dark;
 const dark = {
-  bg: '0A0C14', card: '141829', ink: 'EEF0FB',
-  muted: mix(P.muted, 'FFFFFF', 0.25), faint: mix(P.faint, '0A0C14', 0.35),
-  line: '232A3D', accent: mix(P.accent, 'FFFFFF', 0.15), accentDark: P.accent,
-  success: mix(P.success, 'FFFFFF', 0.2),
+  bg: D.bg, card: D.card, ink: D.ink,
+  muted: mix(P.muted, 'FFFFFF', D.mutedMix), faint: mix(P.faint, D.bg, D.faintMix),
+  line: D.line, accent: mix(P.accent, 'FFFFFF', D.accentMix), accentDark: P.accent,
+  success: mix(P.success, 'FFFFFF', D.successMix),
 };
+const shadowRow = (tint) => ([a, blur, dy]) => `BoxShadow(color: ${argb(a, tint)}, blurRadius: ${blur}, offset: Offset(0, ${dy}))`;
+
+// ── זהות-הניאון (seed.identity): הצבעים שישבו ביד בתוך ds.dart ⇒ DsIdentity. המנוע עיוור: פולט מה שבזרע, בסדר קבוע ──
+const I = seed.identity;
+const c = (v) => Array.isArray(v) ? argb(v[0], v[1]) : `Color(0xFF${v})`;
+const identity = [
+  `  static const accentSoft = ${c(I.accentSoft)};`,
+  `  static const magenta = ${c(I.magenta)};`,
+  `  static const cyan = ${c(I.cyan)};`,
+  `  static const success = ${c(I.success)};`,
+  `  static const successSoft = ${c(I.successSoft)};`,
+  `  static const List<Color> inkGrad = [${I.inkGrad.map((h) => `Color(0xFF${h})`).join(', ')}];`,
+  `  static const List<BoxShadow> shadowSm = [${I.shadowSm.map(shadowRow(I.shadowTint)).join(', ')}];`,
+  `  static const List<BoxShadow> shadow = [${I.shadow.map(shadowRow(I.shadowTint)).join(', ')}];`,
+  `  static const List<BoxShadow> shadowLg = [${I.shadowLg.map(shadowRow(I.shadowTint)).join(', ')}];`,
+  `  static const List<BoxShadow> glow = [${I.glow.map(([a, h, blur, dy]) => `BoxShadow(color: ${argb(a, h)}, blurRadius: ${blur}, offset: Offset(0, ${dy}))`).join(', ')}];`,
+  `  static const List<Color> scaffoldGlow = [${I.scaffoldGlow.map(c).join(', ')}];`,
+  `  static const List<Color> tones = [${I.tones.map(c).join(', ')}];`,
+  `  static const warn = ${c(I.warn)};`,
+  `  static const List<Color> panelGrad = [${I.panelGrad.map(c).join(', ')}];`,
+  `  static const List<Color> cardGrad = [${I.cardGrad.map(c).join(', ')}];`,
+  `  static const hairline = ${c(I.hairline)};`,
+  `  static const chipBorderSuccess = ${c(I.chipBorderSuccess)};`,
+  `  static const chipBorderAccent = ${c(I.chipBorderAccent)};`,
+  `  static const statGlyphBorder = ${c(I.statGlyphBorder)};`,
+  `  static const lookWarn = ${c(I.lookWarn)};`,
+  `  static const danger = ${c(I.danger)};`,
+  `  static const dangerSoft = ${c(I.dangerSoft)};`,
+  `  static const dangerLine = ${c(I.dangerLine)};`,
+  `  static const chipBg = ${c(I.chipBg)};`,
+  `  static const barGlow = ${c(I.barGlow)};`,
+  `  static const graphMid = ${c(I.graphMid)};`,
+];
 
 const out = `// ✨ מאגר-העיצוב · סקאלות-טוקנים (Design Tokens) — **מחולל ע"י machtzev/ds-tokens.mjs מ-design-seed.json.**
 // אל תערוך ידנית: שנה את הזרע והרץ את המנוע. הכרעה 17 (מראה-רצוי) + 19 (טוקן=דאטה). material בלבד.
@@ -122,9 +156,13 @@ class DsDark {
   static const accentDark = Color(0xFF${dark.accentDark});
   static const success = Color(0xFF${dark.success});
   static const List<BoxShadow> shadow = [
-    BoxShadow(color: Color(0x33000000), blurRadius: 8, offset: Offset(0, 4)),
-    BoxShadow(color: Color(0x1A000000), blurRadius: 3, offset: Offset(0, 1)),
+${D.shadow.map((s) => '    ' + shadowRow(I.shadowTint)(s) + ',').join('\n')}
   ];
+}
+
+// ── זהות-הניאון · מהזרע (seed.identity) — ds.dart מפנה לכאן במקום צבעים כתובים ביד (הכרעת-בעלים 23.9) ──
+class DsIdentity {
+${identity.join('\n')}
 }
 `;
 

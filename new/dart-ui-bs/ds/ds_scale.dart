@@ -94,3 +94,33 @@ class DsDark {
     BoxShadow(color: Color(0x1A000000), blurRadius: 3, offset: Offset(0, 1)),
   ];
 }
+
+// ── זהות-הניאון · מהזרע (seed.identity) — ds.dart מפנה לכאן במקום צבעים כתובים ביד (הכרעת-בעלים 23.9) ──
+class DsIdentity {
+  static const accentSoft = Color(0x1F7A6BF0);
+  static const magenta = Color(0xFFB57BE6);
+  static const cyan = Color(0xFF4CC6E6);
+  static const success = Color(0xFF43D08C);
+  static const successSoft = Color(0x1F43D08C);
+  static const List<Color> inkGrad = [Color(0xFFFFFFFF), Color(0xFF9BF0FF)];
+  static const List<BoxShadow> shadowSm = [BoxShadow(color: Color(0x40000000), blurRadius: 4, offset: Offset(0, 2))];
+  static const List<BoxShadow> shadow = [BoxShadow(color: Color(0x59000000), blurRadius: 18, offset: Offset(0, 9)), BoxShadow(color: Color(0x33000000), blurRadius: 4, offset: Offset(0, 1))];
+  static const List<BoxShadow> shadowLg = [BoxShadow(color: Color(0x66000000), blurRadius: 40, offset: Offset(0, 20)), BoxShadow(color: Color(0x40000000), blurRadius: 8, offset: Offset(0, 3))];
+  static const List<BoxShadow> glow = [BoxShadow(color: Color(0x807C3AED), blurRadius: 26, offset: Offset(0, 8)), BoxShadow(color: Color(0x40EC4899), blurRadius: 12, offset: Offset(0, 2))];
+  static const List<Color> scaffoldGlow = [Color(0x267C3AED), Color(0x0007070D)];
+  static const List<Color> tones = [Color(0xFF7C3AED), Color(0xFF34D399), Color(0xFFF43F5E), Color(0xFFF59E0B)];
+  static const warn = Color(0xFFC98A00);
+  static const List<Color> panelGrad = [Color(0xFF141534), Color(0xFF101127)];
+  static const List<Color> cardGrad = [Color(0xFF16173A), Color(0xFF101127)];
+  static const hairline = Color(0x24FFFFFF);
+  static const chipBorderSuccess = Color(0x3334D399);
+  static const chipBorderAccent = Color(0x407C3AED);
+  static const statGlyphBorder = Color(0x337C3AED);
+  static const lookWarn = Color(0xFFF59E0B);
+  static const danger = Color(0xFFDC2626);
+  static const dangerSoft = Color(0x14DC2626);
+  static const dangerLine = Color(0x40DC2626);
+  static const chipBg = Color(0xFFF1F5F9);
+  static const barGlow = Color(0x557C3AED);
+  static const graphMid = Color(0xFF6366F1);
+}

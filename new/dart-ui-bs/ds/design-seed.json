@@ -10,5 +10,17 @@
   "radiusBase": 8,
   "elevTint": "101828",
   "motion": { "fast": 140, "base": 240, "slow": 420, "ambient": 6000 },
-  "gradientHues": { "sunset": ["FB923C", "F43F5E"], "ocean": ["38BDF8", "4F46E5"], "aurora": ["34E0C8", "6366F1", "A855F7"], "forest": ["34D399", "059669"], "dusk": ["6366F1", "EC4899"] }
+  "gradientHues": { "sunset": ["FB923C", "F43F5E"], "ocean": ["38BDF8", "4F46E5"], "aurora": ["34E0C8", "6366F1", "A855F7"], "forest": ["34D399", "059669"], "dusk": ["6366F1", "EC4899"] },
+  "_identity": "זהות-הניאון של ds.dart (הכרעת-בעלים 23.9: «לא קשיח, לא דעה קדומה») — עד כאן ישבו 33 צבעים ביד בתוך ds.dart; מכאן: זרע ⇒ ds-tokens ⇒ DsIdentity. הערכים = בדיוק מה שהיה (ביט-זהה). [alpha, hex] · צל: [alpha, blur, dy] · זוהר: [alpha, hex, blur, dy]",
+  "identity": {
+    "accentSoft": ["1F", "7A6BF0"], "magenta": "B57BE6", "cyan": "4CC6E6", "success": "43D08C", "successSoft": ["1F", "43D08C"], "inkGrad": ["FFFFFF", "9BF0FF"],
+    "shadowTint": "000000", "shadowSm": [["40", 4, 2]], "shadow": [["59", 18, 9], ["33", 4, 1]], "shadowLg": [["66", 40, 20], ["40", 8, 3]],
+    "glow": [["80", "7C3AED", 26, 8], ["40", "EC4899", 12, 2]], "scaffoldGlow": [["26", "7C3AED"], ["00", "07070D"]],
+    "tones": ["7C3AED", "34D399", "F43F5E", "F59E0B"], "warn": "C98A00", "panelGrad": ["141534", "101127"], "cardGrad": ["16173A", "101127"],
+    "hairline": ["24", "FFFFFF"], "chipBorderSuccess": ["33", "34D399"], "chipBorderAccent": ["40", "7C3AED"], "statGlyphBorder": ["33", "7C3AED"],
+    "lookWarn": "F59E0B", "danger": "DC2626", "dangerSoft": ["14", "DC2626"], "dangerLine": ["40", "DC2626"], "chipBg": "F1F5F9",
+    "barGlow": ["55", "7C3AED"], "graphMid": "6366F1"
+  },
+  "_dark": "מצב-כהה של ds_scale (היה קשיח בתוך ds-tokens.mjs — מנוע עם דעה): הבסיסים והיחסים כאן; המנוע רק מערבב.",
+  "dark": { "bg": "0A0C14", "card": "141829", "ink": "EEF0FB", "line": "232A3D", "mutedMix": 0.25, "faintMix": 0.35, "accentMix": 0.15, "successMix": 0.2, "shadow": [["33", 8, 4], ["1A", 3, 1]] }
 }

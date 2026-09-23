@@ -2,6 +2,7 @@
 // חיצונית (material בלבד), אפס-דאטה. מציג השוואה-חזותית של מדדי-הדשבורד החיים.
 import 'package:flutter/material.dart';
 import 'ds.dart';
+import 'ds_scale.dart';
 
 class DsBars extends StatelessWidget {
   const DsBars({required this.labels, required this.values, this.title = '', super.key});
@@ -43,7 +44,7 @@ class DsBars extends StatelessWidget {
                             decoration: const BoxDecoration(
                               gradient: DsTokens.neonGrad,
                               borderRadius: BorderRadius.all(Radius.circular(6)),
-                              boxShadow: [BoxShadow(color: Color(0x557C3AED), blurRadius: 10, offset: Offset(0, 2))],
+                              boxShadow: [BoxShadow(color: DsIdentity.barGlow, blurRadius: 10, offset: Offset(0, 2))],
                             ),
                           ),
                         ),

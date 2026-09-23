@@ -107,7 +107,7 @@ function markSilentDefaults(spec, notes, questions) {
   let SL; try { SL = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); } catch { return; }
   const has = (word) => word && new RegExp('^\\s*' + word + '\\s*:', 'm').test(spec);
   const silent = [];
-  if (!has(SL.lookWord)) silent.push({ what: SL.lookWord, engine: 'app-ds', value: 'dark', say: `${SL.lookWord}: ${Object.keys(SL.looks || {}).join(' / ')}` });
+  if (!has(SL.lookWord)) silent.push({ what: SL.lookWord, engine: 'app-ds', value: `${SL.defaultLook} = ${SL.looks?.[SL.defaultLook]} (spec-lang.defaultLook)`, say: `${SL.lookWord}: ${Object.keys(SL.looks || {}).join(' / ')}` });
   if (!has(SL.appWord)) silent.push({ what: SL.appWord, engine: 'app-ds', value: 'L.appTitle («האפליקציה שלי» — מילון-הכרום של app-ds)', say: `${SL.appWord}: <שם>` });
   if (!silent.length) return;
   for (const s of silent) questions.push({ thing: 'האפליקציה', ask: s.what, q: `${s.what} — לא נאמר במשפט; ${s.engine} הניח לבד (${s.value}). לומר: «${s.say}»` });

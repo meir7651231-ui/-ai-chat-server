@@ -4,6 +4,7 @@
 // ⚠️ חתימות-הבנאי קפואות (תפר atom-census) — כאן משתנה רק המראה (build/צבעים/צללים).
 import 'package:flutter/material.dart';
 import 'ds_pure.dart'; // 🎨 עיצוב-Pure (הכרעת-בעלים 1.9) — הפלטה מופנית ל-DsPure. הפיך: שחזור-קובץ ⇒ הישן.
+import 'ds_scale.dart'; // 🎨 DsIdentity (הכרעת-בעלים 23.9 «לא קשיח, לא דעה קדומה»): צבעי-הזהות (ניאון · זוהר · צללים · גוונים) מהזרע design-seed.json דרך ds-tokens — אפס צבע כתוב ביד כאן
 import 'ds_seam.dart'; // G28 · חריץ-העור: DsLook.of(context) — כרום-ה-DS לובש את העור המוזרק (paper) או נשאר ביט-זהה (כהה)
 
 class DsTokens {
@@ -22,11 +23,11 @@ class DsTokens {
   static const track = DsPure.raised2;         // רקע-מסילה (פסים · התקדמות · שבב-נייטרל)
   static const accent = DsPure.accent;         // אינדיגו-Pure (מבטא ראשי)
   static const accentDark = DsPure.accentHi;
-  static const accentSoft = Color(0x1F7A6BF0); // אינדיגו-שקוף (רקע-שבב)
-  static const magenta = Color(0xFFB57BE6);
-  static const cyan = Color(0xFF4CC6E6);
-  static const success = Color(0xFF43D08C);
-  static const successSoft = Color(0x1F43D08C);
+  static const accentSoft = DsIdentity.accentSoft; // אינדיגו-שקוף (רקע-שבב) — מהזרע
+  static const magenta = DsIdentity.magenta;
+  static const cyan = DsIdentity.cyan;
+  static const success = DsIdentity.success;
+  static const successSoft = DsIdentity.successSoft;
   // ── טיפוגרפיה · Pure (הכרעת-בעלים 1.9): כותרות = Frank Ruhl Libre · גוף = Heebo (theme) ──
   static const fontHead = 'FrankRuhlLibre';
   static const fontBody = 'Heebo';             // גופן-גוף עברי מצורף (pubspec של בנייה-חכמה: Heebo) — טקסט-ברירת-מחדל בלי CDN (L69: Roboto-מ-gstatic לא נטען באתר-מנותק ⇒ טקסט נעלם)
@@ -47,25 +48,14 @@ class DsTokens {
   );
   static const inkGrad = LinearGradient(
     begin: Alignment.topLeft, end: Alignment.bottomRight,
-    colors: [Color(0xFFFFFFFF), Color(0xFF9BF0FF)],
+    colors: DsIdentity.inkGrad,
   );
-  // ── ראמפת-צל · כפולת-שכבה (מגע קרוב + עומק רחוק) ──
-  static const List<BoxShadow> shadowSm = [
-    BoxShadow(color: Color(0x40000000), blurRadius: 4, offset: Offset(0, 2)),
-  ];
-  static const List<BoxShadow> shadow = [
-    BoxShadow(color: Color(0x59000000), blurRadius: 18, offset: Offset(0, 9)),
-    BoxShadow(color: Color(0x33000000), blurRadius: 4, offset: Offset(0, 1)),
-  ];
-  static const List<BoxShadow> shadowLg = [
-    BoxShadow(color: Color(0x66000000), blurRadius: 40, offset: Offset(0, 20)),
-    BoxShadow(color: Color(0x40000000), blurRadius: 8, offset: Offset(0, 3)),
-  ];
-  // ── זוהר-ניאון (מבטא) — לכפתורים/הדגשות ──
-  static const List<BoxShadow> glow = [
-    BoxShadow(color: Color(0x807C3AED), blurRadius: 26, offset: Offset(0, 8)),
-    BoxShadow(color: Color(0x40EC4899), blurRadius: 12, offset: Offset(0, 2)),
-  ];
+  // ── ראמפת-צל · כפולת-שכבה (מגע קרוב + עומק רחוק) — מהזרע ──
+  static const List<BoxShadow> shadowSm = DsIdentity.shadowSm;
+  static const List<BoxShadow> shadow = DsIdentity.shadow;
+  static const List<BoxShadow> shadowLg = DsIdentity.shadowLg;
+  // ── זוהר-ניאון (מבטא) — לכפתורים/הדגשות — מהזרע ──
+  static const List<BoxShadow> glow = DsIdentity.glow;
 }
 
 // ── G28 (הכרעה-28) · מראה-נפתר לכרום-ה-DS ──
@@ -78,7 +68,7 @@ class DsLook {
   final Color bg, card, cardAlt, ink, muted, faint, line, track, accent, accentDark, accentSoft, success, successSoft, warn, danger, dangerSoft, dangerLine, chipBg;
   final double r, rSm;
   final String fontHead;
-  static const DsLook dark = DsLook(paper: false, bg: DsTokens.bg, card: DsTokens.card, cardAlt: DsTokens.cardAlt, ink: DsTokens.ink, muted: DsTokens.muted, faint: DsTokens.faint, line: DsTokens.line, track: DsTokens.track, accent: DsTokens.accent, accentDark: DsTokens.accentDark, accentSoft: DsTokens.accentSoft, success: DsTokens.success, successSoft: DsTokens.successSoft, warn: Color(0xFFF59E0B), danger: Color(0xFFDC2626), dangerSoft: Color(0x14DC2626), dangerLine: Color(0x40DC2626), chipBg: Color(0xFFF1F5F9), r: DsTokens.r, rSm: DsTokens.rSm, fontHead: DsTokens.fontHead);
+  static const DsLook dark = DsLook(paper: false, bg: DsTokens.bg, card: DsTokens.card, cardAlt: DsTokens.cardAlt, ink: DsTokens.ink, muted: DsTokens.muted, faint: DsTokens.faint, line: DsTokens.line, track: DsTokens.track, accent: DsTokens.accent, accentDark: DsTokens.accentDark, accentSoft: DsTokens.accentSoft, success: DsTokens.success, successSoft: DsTokens.successSoft, warn: DsIdentity.lookWarn, danger: DsIdentity.danger, dangerSoft: DsIdentity.dangerSoft, dangerLine: DsIdentity.dangerLine, chipBg: DsIdentity.chipBg, r: DsTokens.r, rSm: DsTokens.rSm, fontHead: DsTokens.fontHead);
   static DsLook of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<PureScope>();
     if (scope == null || scope.skin.canvas.computeLuminance() < 0.5) return dark;
@@ -168,7 +158,7 @@ class DsScaffold extends StatelessWidget {
                 decoration: const BoxDecoration(
                   gradient: RadialGradient(
                     center: Alignment(-0.7, -1.1), radius: 1.5,
-                    colors: [Color(0x267C3AED), Color(0x0007070D)],
+                    colors: DsIdentity.scaffoldGlow,
                   ),
                 ),
                 child: SafeArea(child: column),
@@ -185,13 +175,13 @@ class DsSection extends StatelessWidget {
   final List<Widget> children;
   final Widget? trailing;
   final int tone; // פס-האקסנט: 0=accent(ברירת-מחדל, ביט-זהה) · 1=success · 2=danger · 3=warning
-  static const List<Color> _toneC = [Color(0xFF7C3AED), Color(0xFF34D399), Color(0xFFF43F5E), Color(0xFFF59E0B)];
+  static const List<Color> _toneC = DsIdentity.tones;
 
   @override
   Widget build(BuildContext context) {
     final lk = DsLook.of(context);
     if (lk.paper) {
-      final toneC = tone == 0 ? lk.ink : tone == 1 ? lk.success : tone == 2 ? lk.danger : const Color(0xFFC98A00);
+      final toneC = tone == 0 ? lk.ink : tone == 1 ? lk.success : tone == 2 ? lk.danger : DsIdentity.warn;
       return Padding(
         padding: const EdgeInsets.only(bottom: 24),
         child: Column(
@@ -212,7 +202,7 @@ class DsSection extends StatelessWidget {
     return Container(
         margin: const EdgeInsets.only(bottom: DsTokens.gap),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF141534), Color(0xFF101127)]),
+          gradient: const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: DsIdentity.panelGrad),
           borderRadius: BorderRadius.circular(DsTokens.r),
           border: Border.all(color: DsTokens.line),
           boxShadow: DsTokens.shadow,
@@ -286,7 +276,7 @@ class DsNote extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lk = DsLook.of(context);
-    final toneC = tone == 1 ? lk.success : tone == 2 ? lk.danger : tone == 3 ? const Color(0xFFC98A00) : lk.ink;
+    final toneC = tone == 1 ? lk.success : tone == 2 ? lk.danger : tone == 3 ? DsIdentity.warn : lk.ink;
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Column(
@@ -308,7 +298,7 @@ class DsDiffRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lk = DsLook.of(context);
-    final dC = tone == 1 ? lk.success : tone == 2 ? lk.danger : tone == 3 ? const Color(0xFFC98A00) : lk.ink;
+    final dC = tone == 1 ? lk.success : tone == 2 ? lk.danger : tone == 3 ? DsIdentity.warn : lk.ink;
     return Container(
       constraints: const BoxConstraints(minHeight: 44),
       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -640,7 +630,7 @@ class DsPrimaryButton extends StatelessWidget {
               alignment: Alignment.center,
               decoration: paper ? null : BoxDecoration(
                 borderRadius: BorderRadius.circular(13),
-                border: Border.all(color: const Color(0x24FFFFFF)),
+                border: Border.all(color: DsIdentity.hairline),
               ),
               child: Text(label, style: TextStyle(color: Colors.white, fontSize: paper ? 16 : 15.5, fontWeight: paper ? FontWeight.w600 : FontWeight.w800, letterSpacing: paper ? 0 : 0.2)),
             ),
@@ -660,7 +650,7 @@ class DsChip extends StatelessWidget {
     final lk = DsLook.of(context);
     final bg = tone == 1 ? lk.successSoft : tone == 2 ? lk.track : lk.accentSoft;
     final fg = tone == 1 ? lk.success : tone == 2 ? lk.muted : lk.accentDark;
-    final bd = lk.paper ? Colors.transparent : (tone == 1 ? const Color(0x3334D399) : tone == 2 ? DsTokens.line : const Color(0x407C3AED));
+    final bd = lk.paper ? Colors.transparent : (tone == 1 ? DsIdentity.chipBorderSuccess : tone == 2 ? DsTokens.line : DsIdentity.chipBorderAccent);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
       decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20), border: Border.all(color: bd)),
@@ -683,7 +673,7 @@ class DsStat extends StatelessWidget {
         decoration: paper
             ? BoxDecoration(color: lk.card, borderRadius: BorderRadius.circular(lk.r), border: Border.all(color: lk.line))
             : BoxDecoration(
-                gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(0xFF16173A), Color(0xFF101127)]),
+                gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: DsIdentity.cardGrad),
                 borderRadius: BorderRadius.circular(DsTokens.r),
                 border: Border.all(color: DsTokens.line),
                 boxShadow: DsTokens.shadow,
@@ -697,7 +687,7 @@ class DsStat extends StatelessWidget {
                 if (!paper) Container(
                   width: 34, height: 34,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(color: DsTokens.accentSoft, borderRadius: BorderRadius.circular(9), border: Border.all(color: const Color(0x337C3AED))),
+                  decoration: BoxDecoration(color: DsTokens.accentSoft, borderRadius: BorderRadius.circular(9), border: Border.all(color: DsIdentity.statGlyphBorder)),
                   child: Text(glyph, style: const TextStyle(fontSize: 17)),
                 ),
                 const Spacer(),

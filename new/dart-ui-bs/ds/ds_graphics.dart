@@ -49,7 +49,7 @@ class _MeshBgPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final rect = Offset.zero & size;
     canvas.drawRect(rect, Paint()..color = DsTokens.bg);
-    const cols = [DsTokens.accent, Color(0xFF6366F1), DsTokens.success];
+    const cols = [DsTokens.accent, DsIdentity.graphMid, DsTokens.success];
     for (var i = 0; i < cols.length; i++) {
       final c = Offset(size.width * (0.25 + i * 0.28), size.height * (i.isEven ? 0.28 : 0.66));
       final r = size.width * 0.4;
