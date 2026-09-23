@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>אפיון טכני — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_style.css">
+<style>
+.org{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;color:#D6CFC4;border-radius:10px;padding:14px 16px;white-space:pre;overflow-x:auto;line-height:1.5}
+table.roles td:nth-child(2){text-align:center;width:44px}
+.sum td{font-weight:700}
+.lock{background:#3B1111;color:#FCA5A5;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700}
+.phones{display:flex;gap:16px;flex-wrap:wrap}
+.phone{width:260px;background:#0F0D0B;color:#E8E2D8;border-radius:22px;padding:16px 14px;border:2px solid #3A332B;font-size:13px;line-height:1.5}
+.phone h5{margin:0 0 8px;font-size:14px;color:#fff}
+.phone .row{background:#1C1916;border-radius:8px;padding:7px 9px;margin-bottom:6px}
+.phone .row b{color:#fff}
+.phone .red{background:#3B1111;color:#FECACA}
+.phone .yel{background:#2E2208;color:#FDE68A}
+.phone .grn{background:#0F2A1C;color:#BBF0D0}
+.phone .btn{display:block;text-align:center;border-radius:10px;padding:9px;margin-top:8px;font-weight:700;background:#3A332B;color:#fff}
+.phone .muted{color:#9A9085;font-size:11px}
+</style></head>
+<body><div class="wrap">
+
+<style>.code{font-family:ui-monospace,monospace;font-size:12px;direction:ltr;text-align:left;background:#0F0D0B;color:#D6CFC4;border-radius:8px;padding:12px;white-space:pre;overflow-x:auto;line-height:1.5}</style>
+<h1>אפיון טכני — לבונים — ניהול חי</h1>
+<p class="lead">נושא 72. הגשר מ"מה המערכת עושה" ל"מה בונים". 21 היסודות (32) — כ<b>מבנה נתונים</b>: שדות, מצבים, אירועים, ממשקים. <b>זה לא קוד</b> — זה מה שמתכנת צריך לקבל כדי להתחיל. השמות באנגלית — כדי שיהיו אחידים בקוד; ההסבר בעברית.</p>
+
+<h2>1. עקרונות לכל ישות</h2>
+<div class="six">
+<div class="card"><b>לכל רשומה:</b> <code>id</code> · <code>owner</code> (ארגון/תפקיד) · <code>version</code> · <code>updated_at</code> · <code>source</code> · <code>confidence</code> (30).</div>
+<div class="card"><b>לכל שינוי:</b> אירוע ביומן — מי, מתי, מה היה, מה נהיה, <b>מה ראה על המסך</b> (23, 56). <b>יומן בלבד-הוספה</b>, לא נמחק.</div>
+<div class="card"><b>לכל נתון אישי:</b> <code>retention</code>: <code>immediate</code> / <code>week</code> / <code>keep</code> / <code>case</code> (43/7). מחיקה אוטומטית בתאריך.</div>
+</div>
+
+<h2>2. 21 הישויות — השדות העיקריים</h2>
+<table>
+<tr><th>ישות</th><th>שדות עיקריים</th><th>מצבים</th></tr>
+<tr><td><b>Zone</b> אזור</td><td>geometry · public_name (צבע+אות, 35) · sector (16) · place_owner · topic_owners[] · capacity_by_activity{} · signatures[] · meaning (64)</td><td>closed · open · restricted</td></tr>
+<tr><td><b>Passage</b> מעבר</td><td>from_zone · to_zone · width_m · surface (flat/slope/stairs → 82/66, 69) · flow_capacity · stop_holders[] · reopen_role</td><td>open · stopped · redirect · stopped_all (43/2)</td></tr>
+<tr><td><b>Route</b> מסלול</td><td>segments · owner (police) · emergency_cost (06) · one_way</td><td>open · closed · emergency_only</td></tr>
+<tr><td><b>Point</b> נקודה</td><td>zone · kind (medical/water/kids/boarding/...) · world · capacity</td><td>active · full · closed</td></tr>
+<tr><td><b>Person</b> אדם</td><td>code · org_id · roles[] · certifications[{type, expires}] · sector · family_link · resident_of · awake_since (58)</td><td>registered · on_site · on_post · off · left</td></tr>
+<tr><td><b>Org</b> ארגון</td><td>kind (court/company/contractor/volunteer/vendor/production) · coordinator · quota_id · channel_id · rating</td><td>—</td></tr>
+<tr><td><b>Assignment</b> שיבוץ</td><td>person · post · shift · critical (bool) · backup_person · max_empty_min (27)</td><td>planned · checked_in · active · empty · handed_over</td></tr>
+<tr><td><b>Permission</b> הרשאה</td><td>role · phase · zone · time_window · certification · clearance (23) · action (see/do/cue/stop/reopen)</td><td>—</td></tr>
+<tr><td><b>Pool</b> מאגר</td><td>item · qty · rate · forecast · threshold · refill_rule · sector · mobile · expires_at</td><td>ok · low · critical · empty</td></tr>
+<tr><td><b>Trip</b> נסיעה</td><td>vehicle · driver · route · planned/actual times · manifest_count · ticket_ids (retention=week)</td><td>planned · boarding · en_route · arrived · missing_passenger (42)</td></tr>
+<tr><td><b>Asset</b> נכס</td><td>kind · zone · power_source · depends_on[] · feeds[{asset, fail_after_min}] (25)</td><td>ok · degraded · down · unchecked (60)</td></tr>
+<tr><td><b>Quota</b> מכסה</td><td>owner · total · allocations[{org, window}] · rules_id · promises[] (36)</td><td>—</td></tr>
+<tr><td><b>Ticket</b> כרטיס</td><td>holder_phone · org · window · boarding_point · seat · scans[] · stay_clock (5h) · language</td><td>issued · verified · boarded · entered · overstayed · exited · cancelled · burned (59)</td></tr>
+<tr><td><b>Schedule</b> לו"ז</td><td>items[{owner, time, kind: fixed/managed/deadline (47), depends_on[]}] · master (34 — אג"ם)</td><td>—</td></tr>
+<tr><td><b>Mode</b> מצב</td><td>kind (11 סוגים) · source (external/proposed/calendar) · entered_by · stack_order (61)</td><td>proposed · active · releasing · off</td></tr>
+<tr><td><b>Incident</b> אירוע</td><td>kind · zone · severity · common_factor (20) · reporter · world_owner · place_owner</td><td>open · assigned · closed</td></tr>
+<tr><td><b>Decision</b> החלטה</td><td>by · at · screen_snapshot_id · kind (act/not_act/conditional/recommend) · condition · deadline · signed_in_winter (50)</td><td>proposed · decided · armed · fired · expired</td></tr>
+<tr><td><b>Rule</b> חוק</td><td>expression · owner · signature · version · tested_in_drill_at</td><td>draft · signed · active · retired</td></tr>
+<tr><td><b>Permit</b> היתר</td><td>subject (fire/tent/structure/journalist) · conditions[] · signers[] (69: 4 חותמים)</td><td>pending · granted · suspended · revoked</td></tr>
+<tr><td><b>Authority</b> סמכות</td><td>kind (risk/crowd/owners/halacha/host_state 67) · holder · precedence</td><td>—</td></tr>
+<tr><td><b>Message</b> הודעה + <b>Channel</b></td><td>audience · channels[] (≥2 לציבור, 59) · languages · approved_by · signed · prerecorded_id (73)</td><td>draft · approved · sent · confirmed</td></tr>
+<tr><td><b>Datum</b> נתון</td><td>value · measured_at · source · confidence · retention · visibility</td><td>fresh · stale (>60s) · unreliable</td></tr>
+</table>
+
+<h2>3. ארבעת המנועים — מה נכנס, מה יוצא</h2>
+<table>
+<tr><th>מנוע</th><th>נכנס</th><th>יוצא</th><th>קצב</th></tr>
+<tr><td><b>CrowdModel</b> (33)</td><td>scans, trip arrivals, passage counters, camera counts, BLE aggregate, human reports, schedule</td><td>per zone: count range, density, activity, forecast 10/30, confidence · per passage: flow ratio, stop suggestion</td><td>כל 10 שנ'</td></tr>
+<tr><td><b>Dependency</b> (25)</td><td>asset states</td><td>countdowns: "X fails in N min" → wall</td><td>באירוע</td></tr>
+<tr><td><b>Cluster</b> (20)</td><td>incidents with common_factor</td><td>proposed cluster (rate × kind × factor)</td><td>כל דקה</td></tr>
+<tr><td><b>Commitments</b> (26, 31)</td><td>rules, permits, contracts, live data</td><td>green/red/suspended per item</td><td>כל דקה</td></tr>
+</table>
+
+<h2>4. ממשקים חיצוניים (57)</h2>
+<div class="code">IN  police      : passage.stop/open, forces, incidents(public-level)
+IN  mda         : incident {kind:medical, zone, severity, status}   // no names
+IN  homefront   : alert {zones}, ceiling {number}
+IN  transport   : ticket {scan, window}, trip {gps, manifest_count}
+IN  fire        : permit {id, state}
+IN  quake_ews   : warning {seconds}                                  // "תרועה" (60)
+IN  weather     : wind, temp, forecast
+OUT all         : crowd model (by permission), wall, requests (34)
+OUT public      : message {signed, prerecorded, channels>=2}         // voice first (35)</div>
+
+<h2>5. חמישה אירועי מפתח — הזרימה</h2>
+<div class="code">passage.flow_ratio > 1.0  → suggest(stop) → holder presses → passage.stopped
+                          → notify(neighbors) → wall(if >3 min) → log(decision)
+ticket.stay_clock > 5h    → list(zone steward) → voice(ticket phone)
+asset.down                → dependency.countdowns → wall + owners
+mode.enter(external)      → auto actions from signed winter decisions (50) only
+decision.conditional      → armed → condition true at deadline → fired → log</div>
+
+<h2>6. מה זה סוגר</h2>
+<div class="card"><b>נסגר:</b> הגשר לבנייה — <b>ברמת אפיון</b>. מה שמתכנת צריך כדי להתחיל: ישויות, שדות, מצבים, מנועים, ממשקים, זרימות. <b>לא נבנה כלום</b> (לא ביקשת).<br>
+<b>נשאר לבונים:</b> בחירת טכנולוגיה, אבטחה (30, 59), עומסים (60,000 סריקות לשעה), ממשקים אמיתיים מול כל גוף (מה הם באמת יודעים לתת).</div>
+
+</div></body></html>
