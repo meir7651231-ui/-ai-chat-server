@@ -385,6 +385,16 @@ build-check.mjs "ניהול לקוחות: … . כשחוב של לקוח עול�
   ומסכי-genesis בונים `Scaffold` רגיל (משפחה אחרת של מסכים). הציפייה של gen-verify (נעוץ) — לא שיניתי; מדווח.
 · **ספירה:** 14 מנועים בדלת. נשארו: balagan · ship · skin-golden (הצעה) · cloud-screen · board-gen/op-bridge · wizard/pass · engine/ · yeshiva-read/apply/ask/kashe.
 
+## סבב 32 (23.9): balagan — האפליקציה-האחת מכל מודולי-הבעלים, דרך הדלת, על buildsmart האמיתי
+· **balagan.mjs (לא נעוץ):** `buildBalagan({ writeIndex, writeTest })` — הדלת קוראת עם שניהם false: אפס כתיבה ל-`balagan-index.json` (ריפו) ואפס קובץ-בדיקה במארח; פלט-Dart בלבד
+  ל-GEN_OUT/GEN_DATA_OUT (env-aware כבר קודם). ה-CLI זהה (ברירת-מחדל true).
+· **הדלת:** `generateBalagan({outDir})` — כניסה של «כל המודולים» (apps/*.json שנגזרו מפירוקי-הבעלים + peruk-index), לא של משפט; אותו שומר-ניקיון (`inRepo`).
+  build-check `--balagan`: משקף גם את מסכי-המודולים מהמדף (gen_<ns>_*.dart + תוכן, קבצים חסרים בלבד) כי «בלגן» מייבא אותם; ואז analyze + `--verify`.
+· **נמדד (buildsmart האמיתי):** **30 מודולים ⇒ אפליקציה אחת** (היום · מה קרה? · נושאים 9) · מזהה-הרגע ✓ 30/30 · analyze ✅ 0 · 18 קבצים ·
+  **5/5 מסכים רונדרו** (ask · home · keys · shell · topics), 0 חריגות. אפס כתיבה לריפו (git status: רק 3 הקבצים שנערכו).
+· **ספירה אחרי הסבב:** **15 מנועים בדלת.** נשארו: ship (פריסה — דוחף לגיט, פעולה של הבעלים) · skin-golden (נעוץ · הצעה) · cloud-screen (סעיף בתוך בלגן — עכשיו רץ **דרך** בלגן) ·
+  board-gen/op-bridge (הצעות) · wizard/pass (עץ-המוסד) · engine/ (הישן) · yeshiva-read/apply/ask/kashe (ביקורת). **כל מנוע שבונה מהמילים של הבעלים בלבד — מחובר.**
+
 ## סוג-שדה ⇒ מנוע 3 (נפתר בצד מנוע 2, 22.9)
 נמדד: לא הקטלוג (DsToggleTile/DsDateField/DsNumberField = str2·num0·cb1 זהים) ולא הטיפוס המוצהר
 (`String value` בכולם) מבדילים סוג. מה שמבדיל: **מה הקוד עושה עם value** (`DateTime.tryParse` · `value == 'true'` ·

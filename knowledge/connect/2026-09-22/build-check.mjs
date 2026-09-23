@@ -25,7 +25,13 @@ for (const f of fs.readdirSync(realData)) if (/^screens__.*_content2?\.dart$/.te
 const { generateAll, generateFromSpec, generateFromDoc } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
 const { formOf, specOf } = await import(path.join(ROOT, 'yeshiva/mavin.mjs'));
 let spec, skipped = [], builtin = [], G0;
-if (si >= 0 || di >= 0) {
+const bi = args.includes('--balagan');   // «בלגן»: האפליקציה-האחת מכל מודולי-הבעלים (apps/*.json) — כניסת «כל המודולים», לא משפט
+const genRe = bi ? /^gen_balagan_.*\.dart$/ : /^gen_app_.*\.dart$/;
+if (bi) {
+  const { generateBalagan } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
+  G0 = await generateBalagan({ outDir: process.env.GEN_OUT }); spec = G0.spec; G0.routes = [];
+  console.log(`«בלגן» (${G0.modules} מודולים מ-apps/*.json של הבעלים)${G0.bad && G0.bad.length ? ` · מזהה-הרגע נכשל: ${G0.bad.join(' · ')}` : ''}\n  ${(spec || '').slice(0, 200)}`);
+} else if (si >= 0 || di >= 0) {
   const f = args[(si >= 0 ? si : di) + 1], txt = fs.readFileSync(f, 'utf8');
   G0 = si >= 0 ? await generateFromSpec(txt, { outDir: process.env.GEN_OUT, name: 'chk' }) : await generateFromDoc(txt, { outDir: process.env.GEN_OUT, name: 'chk' });
   spec = G0.spec; G0.routes = [];
@@ -44,7 +50,7 @@ if (G0.node) console.log(`צומת-פירוק: ${G0.node.id ?? '?'} «${G0.node.
 const extra = G0.files.filter((f) => f.file && /\.dart$/.test(f.file)).map((f) => f.file);   // רק Dart למארח; app.html / behaviors.json נשארים ב-outDir
 const genEntry = G0.files.find((f) => f.route === 'gen'); if (genEntry) console.log(`gen (HTML): ${genEntry.file} · ${(genEntry.bytes / 1024).toFixed(0)}KB · אטומים מוכחים ${genEntry.atoms} · לא-מוכחים ${genEntry.unproven} · עדשות פתוחות ${genEntry.lensesOpen}`);
 if (!spec && !extra.length) { console.log('⚪ אין אפיון ואין מסלול אחר ⇒ אין בנייה. ענה על השאלות ותנסה שוב.'); process.exit(0); }
-const gen = fs.readdirSync(process.env.GEN_OUT).filter((f) => /^gen_app_.*\.dart$/.test(f));
+const gen = fs.readdirSync(process.env.GEN_OUT).filter((f) => genRe.test(f));
 if (!HOST || !FLUTTER) { console.log(`⚪ לא-נמדד: ${!FLUTTER ? 'אין flutter' : 'אין BS_HOST'} — נפלטו ${gen.length + extra.length} קבצי Dart ל-${process.env.GEN_OUT}`); process.exit(2); }
 // מראה מינימלית: המסכים + התוכן שלהם; עצי-האטומים מועתקים פעם אחת (קיימים ⇒ לא נוגעים)
 const G = path.join(HOST, 'lib/genesis');
@@ -52,8 +58,10 @@ for (const [src, dst] of [['new/dart-ui-bs', 'dart-ui-bs'], ['new/dart-forge-bs'
   if (!fs.existsSync(path.join(G, dst)) && fs.existsSync(path.join(ROOT, src))) fs.cpSync(path.join(ROOT, src), path.join(G, dst), { recursive: true });
 fs.mkdirSync(path.join(G, 'dart-gen-bs'), { recursive: true }); fs.mkdirSync(path.join(G, 'dart-data-bs/auto'), { recursive: true });
 if (!fs.existsSync(path.join(G, 'dart-gen-bs/gen_behaviors.dart')) && fs.existsSync(path.join(ROOT, 'new/dart-gen-bs/gen_behaviors.dart'))) fs.copyFileSync(path.join(ROOT, 'new/dart-gen-bs/gen_behaviors.dart'), path.join(G, 'dart-gen-bs/gen_behaviors.dart'));
-for (const f of fs.readdirSync(path.join(G, 'dart-gen-bs'))) if (/^gen_app_/.test(f)) fs.unlinkSync(path.join(G, 'dart-gen-bs', f));
-for (const f of fs.readdirSync(path.join(G, 'dart-data-bs/auto'))) if (/^gen_app_/.test(f)) fs.unlinkSync(path.join(G, 'dart-data-bs/auto', f));
+for (const f of fs.readdirSync(path.join(G, 'dart-gen-bs'))) if (/^gen_app_|^gen_balagan_/.test(f)) fs.unlinkSync(path.join(G, 'dart-gen-bs', f));
+for (const f of fs.readdirSync(path.join(G, 'dart-data-bs/auto'))) if (/^gen_app_|^gen_balagan_/.test(f)) fs.unlinkSync(path.join(G, 'dart-data-bs/auto', f));
+// «בלגן» מייבא את מסכי-הבית של כל המודולים (gen_<ns>_*.dart של המדף) ⇒ מראה מלאה של new/dart-gen-bs + new/dart-data-bs/auto (קבצים חסרים בלבד; המדף עצמו לא נגע)
+if (bi) for (const [src, dst] of [['new/dart-gen-bs', 'dart-gen-bs'], ['new/dart-data-bs/auto', 'dart-data-bs/auto']]) for (const f of fs.readdirSync(path.join(ROOT, src))) if (f.endsWith('.dart') && !fs.existsSync(path.join(G, dst, f))) fs.copyFileSync(path.join(ROOT, src, f), path.join(G, dst, f));
 for (const f of gen) fs.copyFileSync(path.join(process.env.GEN_OUT, f), path.join(G, 'dart-gen-bs', f));
 const extraTargets = [];
 for (const f of extra) { const dst = /\.g\.dart$/.test(f) ? path.join(G, 'dart-screens-bs', path.basename(f)) : path.join(G, 'dart-gen-bs', path.basename(f)); fs.mkdirSync(path.dirname(dst), { recursive: true }); fs.copyFileSync(f, dst); extraTargets.push(path.relative(HOST, dst)); }

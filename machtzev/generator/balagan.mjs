@@ -86,7 +86,7 @@ const topicOf = (m) => {
   return best ? best.name : L.topicOther;
 };
 
-export function buildBalagan() {
+export function buildBalagan({ writeIndex = true, writeTest = true } = {}) {   // הדלת: {writeIndex:false, writeTest:false} — פלט-Dart בלבד ל-GEN_OUT/GEN_DATA_OUT, אפס כתיבה לריפו/למארח
   setLook('paper');
   const mods = loadModules();
   if (!mods.length) { console.log('בלגן: אין מודולי-נייר (apps/*.json) — דלג'); return null; }
@@ -1085,7 +1085,7 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
   });
 }
 `;
-    if (fs.existsSync(path.join(bsTest, '..', 'pubspec.yaml'))) fs.writeFileSync(path.join(bsTest, 'genesis_gen_balagan_facts_test.dart'), code);
+    if (writeTest && fs.existsSync(path.join(bsTest, '..', 'pubspec.yaml'))) fs.writeFileSync(path.join(bsTest, 'genesis_gen_balagan_facts_test.dart'), code);
   }
 
   // ── 2 · «היום» המאוחד ──
@@ -2151,7 +2151,7 @@ class ${cls} extends StatelessWidget {
 `;
     write(slug, code, dump());
   }
-  fs.writeFileSync(path.join(HERE, 'balagan-index.json'), JSON.stringify({ modules: mods.map((m, i) => ({ index: i, ns: m.ns, layer: m.layer || 'peruk', title: m.title, topic: m.topic, home: m.home.cls, root: m.root.cls, dates: m.root.fields.filter((f) => f.type === 'date').length })), selfTest: bad }, null, 1));
+  if (writeIndex) fs.writeFileSync(path.join(HERE, 'balagan-index.json'), JSON.stringify({ modules: mods.map((m, i) => ({ index: i, ns: m.ns, layer: m.layer || 'peruk', title: m.title, topic: m.topic, home: m.home.cls, root: m.root.cls, dates: m.root.fields.filter((f) => f.type === 'date').length })), selfTest: bad }, null, 1));
   console.log(`🧭 בלגן: ${mods.length} מודולים ⇒ אפליקציה אחת (היום · מה קרה? · נושאים ${[...new Set(mods.map((m) => m.topic))].length}) · מזהה-הרגע: ${bad.length ? '🔴 ' + bad.join(' · ') : '✓ כותרת+הרגע ⇒ עצמו ב-' + mods.length + '/' + mods.length}`);
   return { mods, bad };
 }

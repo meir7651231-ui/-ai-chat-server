@@ -100,6 +100,18 @@ async function runAppDs(spec, files, notes) {
   else if (spec) { const { buildApp } = await import('../machtzev/generator/app-ds.mjs'); const logs = []; const _l = console.log; console.log = (...a) => logs.push(a.join(' ')); try { app = buildApp(spec, { writePlan: false }); } finally { console.log = _l; } for (const l of logs) if (/נמצאו-ומחווטים/.test(l)) notes.push(l.slice(0, 140)); files.push({ route: 'appds', screens: app.screens.map((s) => `${s.kind}:${s.name}`) }); }
   return app;
 }
+/** «בלגן» — האפליקציה-האחת מכל מודולי-הבעלים (apps/*.json שנגזרו מפירוקיו) ⇒ gen_balagan_*.dart ל-GEN_OUT/GEN_DATA_OUT בלבד (בלי אינדקס, בלי קובץ-בדיקה).
+ *  balagan קורא את המודולים מהדיסק (apps/ · peruk-index) — כניסה של «כל המודולים», לא של משפט אחד. שומר-ניקיון: רץ רק כשהסביבה מופנית מחוץ ל-new/. */
+export async function generateBalagan({ outDir } = {}) {
+  const notes = [];
+  if (inRepo(process.env.GEN_OUT) || inRepo(process.env.GEN_DATA_OUT)) return { files: [], notes: ['⛔ בלגן לא הופעל: GEN_OUT/GEN_DATA_OUT חייבים להצביע מחוץ ל-new/ (שומר-ניקיון)'] };
+  const BG = await import('../machtzev/generator/balagan.mjs');
+  const logs = []; const _l = console.log; console.log = (...a) => logs.push(a.join(' '));
+  let r = null; try { r = BG.buildBalagan({ writeIndex: false, writeTest: false }); } finally { console.log = _l; }
+  for (const l of logs) if (/בלגן/.test(l)) notes.push(l.slice(0, 200));
+  const out = R.outDir(); const files = fs.existsSync(out) ? fs.readdirSync(out).filter((f) => /^gen_balagan_.*\.dart$/.test(f)).map((f) => ({ route: 'balagan', file: path.join(out, f) })) : [];
+  return { files, notes, modules: r ? r.mods.length : 0, bad: r ? r.bad : [], spec: r ? `(בלגן) ${r.mods.length} מודולים: ${r.mods.map((m) => m.title).join(' · ')}` : '' };
+}
 /** דלת שנייה — מסמך של הבעלים במקום משפט: ספק מוכן (specs-ds/*.txt, נגזר ממסמך-«פירוק») ⇒ app-ds ⇒ outDir. */
 export async function generateFromSpec(spec, { outDir, name = 'spec' } = {}) {
   fs.mkdirSync(outDir, { recursive: true }); const files = [], notes = [];
