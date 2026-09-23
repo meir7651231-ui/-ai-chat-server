@@ -14,10 +14,13 @@ const ai = args.indexOf('--answers'); const answers = ai >= 0 ? JSON.parse(fs.re
 const sentence = args.filter((a, i) => !a.startsWith('--') && !(ai >= 0 && i === ai + 1))[0];
 const HOST = process.env.BS_HOST;
 const FLUTTER = ['/root/flutter/bin/flutter', process.env.FLUTTER_BIN].find((p) => p && fs.existsSync(p));
-const { generateAll } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));   // קורפוס-המסכים נטען מהמדף האמיתי לפני הפניית הפלט לסקראצ'
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'mavin-build-'));
 process.env.GEN_OUT = path.join(tmp, 'gen'); process.env.GEN_DATA_OUT = path.join(tmp, 'data');
 fs.mkdirSync(process.env.GEN_OUT, { recursive: true }); fs.mkdirSync(process.env.GEN_DATA_OUT, { recursive: true });
+// קורפוס-המסכים-הרשומים (retrieve-screen) נקרא מ-dataOutDir בזמן-טעינה ⇒ מעתיקים את קובצי-התוכן לסקראצ' **לפני** הייבוא הראשון. אפס כתיבה למדף.
+const realData = path.join(ROOT, 'new/dart-data-bs/auto');
+for (const f of fs.readdirSync(realData)) if (/^screens__.*_content\.dart$/.test(f)) fs.copyFileSync(path.join(realData, f), path.join(process.env.GEN_DATA_OUT, f));
+const { generateAll } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
 const { formOf, specOf } = await import(path.join(ROOT, 'yeshiva/mavin.mjs'));
 const { buildApp } = await import(path.join(ROOT, 'machtzev/generator/app-ds.mjs'));
 const form = formOf(sentence);
