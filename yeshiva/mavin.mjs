@@ -227,7 +227,10 @@ export function specOf(form, answers = {}) {
     if (acts.includes('search')) lines.push(`חלקיק ${t.label}: [חיפוש]`);   // הכרעה-33: מסך-החלקיקים מחווט חיפוש (particles.mjs); מסך-הישות נושא חיפוש משלו (render-ds:734)
     if (acts.includes('filter')) lines.push(`חלקיק ${t.label}: [סינון]`);
     if (acts.includes('empty')) lines.push(`חלקיק ${t.label}: [ריק] ${a.emptyText || t.label}`);   // טקסט = של הבעלים; אין ⇒ התווית, לא המצאה
-    if (acts.includes('export')) lines.push(`חלקיק ${t.label}: [ייצוא]`);
+    if (acts.includes('export')) {   // ייצוא = פעולה + מנוע-קישור שנבחר לפי **מילות-הבעלים** (G25). בלי מילים אין מנוע ⇒ שורת-חלקיק (הערה), לא המצאה
+      if (a.exportGoal) { const SL = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')); lines.push(`דוח ${t.label}: [ייצוא] ${a.exportLabel || SL.pExport[0]} = ${a.exportGoal}`); }
+      else lines.push(`חלקיק ${t.label}: [ייצוא]`);
+    }
     if (acts.includes('message') && a.messages && a.messages.length) {   // הודעה = נוסחים של הבעלים (תוכן), על שדה-בחירה: `[הודעה] שדה = [תוכן קבוצה]` + שורות `תוכן`
       const ef = (a.fields || []).find((f) => f.enumVals) || t.fields.find((f) => f.enumVals);
       if (ef) { const g = `הודעה ${t.label}`; lines.push(`חלקיק ${t.label}: [הודעה] ${ef.label} = [תוכן ${g}]`); for (const m of a.messages) lines.push(`תוכן ${g}${m.tag ? ` [${m.tag}]` : ''}: ${m.text}`); }

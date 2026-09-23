@@ -1,1 +1,50 @@
-{"לקוחות": {"many": true, "acts": ["list", "search", "filter", "empty", "export", "sum", "message"], "emptyText": "עוד אין לקוחות", "fields": [{"label": "שם", "type": "text"}, {"label": "טלפון", "type": "text"}, {"label": "חוב", "type": "num"}, {"label": "מצב", "type": "text", "enumVals": ["פעיל", "לא פעיל"]}], "messages": [{"tag": "פעיל", "text": "שלום, תודה שאתה איתנו"}, {"tag": "לא פעיל", "text": "התגעגענו, חוזרים?"}]}}
+{
+ "לקוחות": {
+  "many": true,
+  "acts": [
+   "list",
+   "search",
+   "filter",
+   "empty",
+   "export",
+   "sum",
+   "message"
+  ],
+  "emptyText": "עוד אין לקוחות",
+  "fields": [
+   {
+    "label": "שם",
+    "type": "text"
+   },
+   {
+    "label": "טלפון",
+    "type": "text"
+   },
+   {
+    "label": "חוב",
+    "type": "num"
+   },
+   {
+    "label": "מצב",
+    "type": "text",
+    "enumVals": [
+     "פעיל",
+     "לא פעיל"
+    ]
+   }
+  ],
+  "messages": [
+   {
+    "tag": "פעיל",
+    "text": "שלום, תודה שאתה איתנו"
+   },
+   {
+    "tag": "לא פעיל",
+    "text": "התגעגענו, חוזרים?"
+   }
+  ],
+  "exportLabel": "שליחה בוואטסאפ",
+  "exportGoal": "טלפון, קישור לפתיחת שיחה"
+ },
+ "_": "תשובות-לדוגמה של המנהל; מילות-הייצוא לקוחות מ-peruk07 של הבעלים"
+}

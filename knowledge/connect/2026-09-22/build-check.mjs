@@ -23,7 +23,8 @@ const form = formOf(sentence);
 const { spec, skipped, builtin } = specOf(form, answers);
 console.log(`«${sentence}»\nאפיון:\n${spec.split('\n').map((l) => '  ' + l).join('\n') || '  (ריק)'}${skipped.length ? `\n  לא נכנסו (בלי שדות ⇒ שאלה): ${skipped.join(', ')}` : ''}${builtin && builtin.length ? `\n  כבר מובנה במסך-הישות: ${builtin.join(' · ')}` : ''}`);
 if (!spec) { console.log('⚪ אין אפיון ⇒ אין בנייה. ענה על השדות ותנסה שוב.'); process.exit(0); }
-const app = buildApp(spec, { writePlan: false });
+const logs = []; const _log = console.log; console.log = (...a) => logs.push(a.join(' ')); let app; try { app = buildApp(spec, { writePlan: false }); } finally { console.log = _log; }
+for (const l of logs) if (/נמצאו-ומחווטים|ייצוא|דוח/.test(l)) console.log(l.slice(0, 160));
 console.log(`מסכים: ${app.screens.map((s) => `${s.kind}:${s.name}${s.sub ? ` (${s.sub})` : ''}`).join(' · ')}`);
 const gen = fs.readdirSync(process.env.GEN_OUT).filter((f) => /^gen_app_.*\.dart$/.test(f));
 if (!HOST || !FLUTTER) { console.log(`⚪ לא-נמדד: ${!FLUTTER ? 'אין flutter' : 'אין BS_HOST'} — נפלטו ${gen.length} קבצי Dart ל-${process.env.GEN_OUT}`); process.exit(2); }
