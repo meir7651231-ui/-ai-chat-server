@@ -28,7 +28,7 @@ const DATA = JSON.parse(fs.readFileSync(new URL('./atom-psak.data.json', import.
 export const roleOf = (op) => DATA.roleOf[op] || null;   // פעולת-חיפוש ⇒ תפקיד-עור מדוד (דאטה); אין ⇒ null = אין מדידת-צורה
 let MAN = null;
 const manifest = () => (MAN ||= new Map(JSON.parse(fs.readFileSync(new URL('../new/dart-forge-bs/forge-manifest.json', import.meta.url), 'utf8')).atoms.map((a) => [a.cls, a])));
-const sigOfDefault = (cls) => manifest().get(cls) || atomSigs().get(cls) || null;   // forge (CSS) ⇒ אחרת Dart
+export const sigOfDefault = (cls) => manifest().get(cls) || atomSigs().get(cls) || null;   // forge (CSS) ⇒ אחרת Dart
 // אות-צורה: אטום מדוד מול התפקידים המבוקשים ⇒ { ok, score, role, why } · לא-מדוד ⇒ null
 function shapeOf(a, roles) {
   if (!a || !roles.length) return null;
@@ -84,14 +84,14 @@ export function judge({ purpose, cands, wire, widgetOf, skinWired = null, sigOf 
     survivors.push({ cls, w, covered: covered.length, left: unfilled.length, filledKey: [...w.filled].sort().join(','), shape: shape ? shape.score : 0, measured: !!shape });
     rulings.push({ cls, verdict: 'חד שיעורא', move: 'ורמינהו', why: `מתחווט (${w.filled.join(',')})${unfilled.length ? ` · נותרו ${unfilled.length}` : ''} · מכסה ${covered.length}/${need.length}${shape ? ` · צורה ${shape.role} ${shape.score.toFixed(1)}` : roles.length ? ' · לא-מדוד' : ''}` });
   }
-  if (!survivors.length) return { pick: null, rulings, said: `אין: ${cands.length} מועמדים נפסקו בשמם` };
+  if (!survivors.length) return { pick: null, rulings, said: `אין: ${cands.length} מועמדים נפסקו בשמם`, pickShape: null, pickMeasured: false, bestMeasured: -Infinity };
   // ממה נפשך: אותם חורים מלאים ואותה צורה ⇒ אין שאלה ⇒ הראשון. אחרת הכרעה-20א: הכי-הרבה-מהצורך, ואז ניקוד-הצורה, ואז הכי-מעט-נותרים; שוויון ⇒ סדר-החיפוש
   const best = survivors.reduce((a, b) => (b.covered > a.covered || (b.covered === a.covered && (b.shape > a.shape || (b.shape === a.shape && b.left < a.left)))) ? b : a, survivors[0]);
   const same = survivors.filter((s) => s.filledKey === best.filledKey && s.shape === best.shape);
   const chosen = same.length > 1 ? same[0] : best;
   const move = same.length > 1 && same[0].cls !== best.cls ? 'ממה נפשך' : same.length > 1 ? 'ממה נפשך' : 'הכרעה-20א';
   rulings.push({ cls: chosen.cls, verdict: 'הלכתא', move, why: `מכסה ${chosen.covered}/${(purpose && purpose.need || []).length} · נותרו ${chosen.left}${chosen.measured ? ` · צורה ${chosen.shape.toFixed(1)}` : roles.length ? ' · לא-מדוד' : ''}${same.length > 1 ? ` · ${same.length} מועמדים עם אותם חורים מלאים` : ''}` });
-  return { pick: chosen.w, rulings, said: `${chosen.cls} (${move})` };
+  return { pick: chosen.w, rulings, said: `${chosen.cls} (${move})`, pickShape: chosen.shape, pickMeasured: chosen.measured, bestMeasured: Math.max(...survivors.filter((x) => x.measured).map((x) => x.shape), -Infinity) };
 }
 
 /** שורת-פנקס אחת לחלקיק: מי נבחר, ומי נפסל ולמה (L114: מהלך בלי דיווח = חצי מהלך). */

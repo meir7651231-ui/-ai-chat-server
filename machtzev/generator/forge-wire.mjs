@@ -32,11 +32,11 @@ export function forgeCands(op, role = null) {
 }
 
 /** חיווט: אטום עם חריץ-`fields` ⇒ לפי צורת-החריץ; אחרת wireAtom כרגיל. */
-export function wireForge(cls, ctx, { widgetOf, wireAtom }) {
+export function wireForge(cls, ctx, { widgetOf, wireAtom, sigOf = null }) {
   const w = widgetOf(cls);
-  const a = w && w.types.has('fields') && isPaper() ? manifest().get(cls) : null;
+  const a = w && w.types.has('fields') && isPaper() ? (manifest().get(cls) || (sigOf ? sigOf(cls) : null)) : null;
   if (!a) return wireAtom(cls, ctx);
-  const base = wireAtom(cls, { ...ctx, must: [] }); if (!base) return null;   // בדיקות-הסף של wireAtom (לובש-עור · bare) — נשארות שם
+  const base = wireAtom(cls, { ...ctx, must: [] }) || (w.shelf === 'synth' ? { cls, file: w.file, call: `${cls}()`, filled: [], sockets: [...w.types.keys()].filter((n) => !/^(key|child)$/.test(n)).length } : null); if (!base) return null;   // בדיקות-הסף של wireAtom (לובש-עור · bare) — נשארות שם; אטום-מסונתז (לא באטלס) = לובש-עור מבנייה
   const demo = a.fieldDemo || [];
   let own = a.items && a.items.slots ? Math.max(0, a.fieldSlots - a.items.demo * a.items.slots) : a.fieldSlots;   // חריצים-עצמיים (פריטים ⇐ items)
   if (a.columns && base.filled.includes('columns') && own === a.columns) own = 0;   // החריצים-העצמיים הם כותרות-העמודות, ו-columns כבר ממלא אותן ⇒ לא לטעון שמולאו

@@ -1315,23 +1315,8 @@ function collectGlobalGrads(html) {
 const EMITTED = new Map();   // file ⇒ המשפחה הראשונה שחישלה אותו (dedupe חוצה-משפחות)
 const RENAMED = [];          // וריאנטים שקיבלו סיומת-משפחה — מדווח ב-forge-manifest.json
 const ATOMS = [];            // קטלוג-אטומים למחולל: משפחה · מחלקה · קובץ · seam · חריצים · תוכן-דמו
-function forgeFamily(fam) {
-  const html = fs.readFileSync(path.join(PURE, `${fam}-family.html`), 'utf8');
-  const styleM = html.match(/<style>([\s\S]*?)<\/style>/);
-  const map = parseStyle(styleM ? styleM[1] : '');
-  collectGlobalGrads(html);
-  const list = cells(html);
-  const dir = path.join(OUT, fam);
-  fs.mkdirSync(dir, { recursive: true });
-  const seen = new Set(), made = [];
-  for (const c of list) {
-    let cls = 'Forge' + pascal(c.name);
-    if (seen.has(cls)) continue; seen.add(cls);
-    let file = snake(c.name) + '.dart';
-    // כפליות-שם חוצת-משפחות (הכרעה 5 · שער cross-source 23-ד): אותו שם-אטום בשתי משפחות-Pure עם גוף שונה = וריאנט, לא עותק ⇒
-    // המופע הראשון (סדר-משפחות אלפביתי) שומר את השם הפשוט; מופע מאוחר מקבל סיומת-משפחה בקובץ ובמחלקה (Forge<Name><Family>). נרשם ב-manifest.renamed.
-    if (EMITTED.has(file)) { const fam0 = EMITTED.get(file); file = file.replace(/\.dart$/, `_${fam}.dart`); cls = cls + pascal(fam); RENAMED.push({ name: c.name, family: fam, first: fam0, file, cls }); }
-    EMITTED.set(file, fam);
+/** חישול תא-אחד (חיבור «synth ⇒ ds-forge», הכרעת-בעלים 23.9): תא-Pure {name, seam, body} + מפת-CSS ⇒ { src: קוד-Dart, atom: רשומת-מניפסט (אותות-צורה) }. לא כותב לדיסק. */
+export function forgeCell(c, fam, map, cls, file) {
     CUR = freshCur();   // G12a חריצי-טקסט · G13a לכל seam + child/control/onAction/items/values
     // מצבים (theater) ⇒ enum + switch; אחרת ⇒ אטום-יחיד
     const states = theaterStates(c.body);
@@ -1408,8 +1393,6 @@ ${decls}${decls ? '\n' : ''}${coreBlock}    final Widget body = ${useBare ? `bar
   }
 }
 `;
-    fs.writeFileSync(path.join(dir, file), src);
-    made.push({ cls, file });
     // G17a · אותות-צורה לבורר-לפי-ייעוד: שורש (תג · מעוטר · אינטראקטיבי) · svg · חריצים (fs/fw/inBtn) · הדגשת-המספר (fs-מספרי-מקסימלי / fs-טקסט-מקסימלי)
     const rootN = CUR && (CUR.coreNode || CUR.rootNode) || null;
     const rootSt = rootN ? (() => { try { const st0 = styleOf(rootN, map, []); const st = {}; for (const k in st0) st[k] = resolveVars(st0[k], {}); return st; } catch { return {}; } })() : {};
@@ -1418,7 +1401,31 @@ ${decls}${decls ? '\n' : ''}${coreBlock}    final Widget body = ${useBare ? `bar
     const numEmph = Math.max(0, ...numFs) && Math.max(0, ...txtFs) ? +(Math.max(...numFs) / Math.max(...txtFs)).toFixed(2) : 0;
     const rootDir = rootN ? (/flex|grid/.test(rootSt['display'] || '') ? (/column/.test(rootSt['flex-direction'] || '') ? 'column' : 'row') : 'block') : null;
     const sig = { root: { tag: rootN ? rootN.tag : null, decorated: !!(rootN && decoration(rootSt)), interactive: !!(rootN && isSelectable(rootN)), dir: rootDir }, svg: !!(CUR && CUR.svg), input: CUR && CUR.input || null, series: CUR && CUR.series || 0, fills: CUR && CUR.fills || 0, slots: CUR ? CUR.sig.slice(0, slotsN) : [], numEmph };
-    ATOMS.push({ family: fam, cls, file, seam: c.seam, states: !!states, stateIds, fieldSlots: slotsN, fieldDemo: slotDemo, sig, child: true, bare: useBare, control: !!useCtl, actions: useAct ? CUR.actions : 0, items: useItems ? { slots: it.slots, demo: it.demo, selectable: !!useOnSel, selected: !!useSel, cells: CUR.cells || 0, variants: it.variants || null } : null, columns: useCols ? (CUR.columns ? CUR.columns.demo : 0) : 0, values: useV ? CUR.vn : 0 });
+    const atom = ({ family: fam, cls, file, seam: c.seam, states: !!states, stateIds, fieldSlots: slotsN, fieldDemo: slotDemo, sig, child: true, bare: useBare, control: !!useCtl, actions: useAct ? CUR.actions : 0, items: useItems ? { slots: it.slots, demo: it.demo, selectable: !!useOnSel, selected: !!useSel, cells: CUR.cells || 0, variants: it.variants || null } : null, columns: useCols ? (CUR.columns ? CUR.columns.demo : 0) : 0, values: useV ? CUR.vn : 0 });
+    return { src, atom };
+}
+
+function forgeFamily(fam) {
+  const html = fs.readFileSync(path.join(PURE, `${fam}-family.html`), 'utf8');
+  const styleM = html.match(/<style>([\s\S]*?)<\/style>/);
+  const map = parseStyle(styleM ? styleM[1] : '');
+  collectGlobalGrads(html);
+  const list = cells(html);
+  const dir = path.join(OUT, fam);
+  fs.mkdirSync(dir, { recursive: true });
+  const seen = new Set(), made = [];
+  for (const c of list) {
+    let cls = 'Forge' + pascal(c.name);
+    if (seen.has(cls)) continue; seen.add(cls);
+    let file = snake(c.name) + '.dart';
+    // כפליות-שם חוצת-משפחות (הכרעה 5 · שער cross-source 23-ד): אותו שם-אטום בשתי משפחות-Pure עם גוף שונה = וריאנט, לא עותק ⇒
+    // המופע הראשון (סדר-משפחות אלפביתי) שומר את השם הפשוט; מופע מאוחר מקבל סיומת-משפחה בקובץ ובמחלקה (Forge<Name><Family>). נרשם ב-manifest.renamed.
+    if (EMITTED.has(file)) { const fam0 = EMITTED.get(file); file = file.replace(/\.dart$/, `_${fam}.dart`); cls = cls + pascal(fam); RENAMED.push({ name: c.name, family: fam, first: fam0, file, cls }); }
+    EMITTED.set(file, fam);
+    const { src, atom } = forgeCell(c, fam, map, cls, file);
+    fs.writeFileSync(path.join(dir, file), src);
+    made.push({ cls, file });
+    ATOMS.push(atom);
   }
   // barrel
   fs.writeFileSync(path.join(dir, `${fam}.dart`), made.map(a => `export '${a.file}';`).join('\n') + '\n');

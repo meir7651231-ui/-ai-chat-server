@@ -9,7 +9,8 @@ import { searchOp, wireAtom } from './particles.mjs';
 import { makeConsts, write } from './render-ds.mjs';
 import { buildAtlas } from './atlas.mjs';
 import { isPaper, skinWired } from './look.mjs';
-import { roleOf, judge, ledgerLine, KIND } from '../../yeshiva/atom-psak.mjs';
+import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';
+import { synthDisplay } from './display-synth.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { ops as opsOfKind } from '../compose-engine.mjs';   // צורה ⇒ פעולות-יסוד (הטבלה הקיימת, לא רשימה שלי)
 import * as R from '../root.mjs';
@@ -48,9 +49,21 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   const pick = (op, need, ctx, purpose) => {
     const pk = searchOp(op, `${name} ${entity.name}`, null, 12);
     const first = prior ? prior.ops.filter((o) => o.op === op && o.atom).map((o) => o.atom) : [];
-    const r = judge({ purpose: { kind: purpose || KIND.fact, need, text: `${op} · ${name}`, role: roleOf(op) }, cands: [...new Set([...first, ...pk.atoms, ...pk.alts, ...forgeCands(op, roleOf(op))])], widgetOf, skinWired, wire: (c) => wireForge(c, { ...ctx, need }, { widgetOf, wireAtom }) });
-    ledger.push(ledgerLine(`${name} · ${op}`, r));
-    manifest.ops.push({ op, need, atom: r.pick ? r.pick.cls : null, filled: r.pick ? r.pick.filled : [], rulings: r.rulings.map((x) => `${x.cls}: ${x.verdict} · ${x.move} — ${x.why}`) });
+    const role = roleOf(op); const cands = [...new Set([...first, ...pk.atoms, ...pk.alts, ...forgeCands(op, role)])];
+    let r = judge({ purpose: { kind: purpose || KIND.fact, need, text: `${op} · ${name}`, role }, cands, widgetOf, skinWired, wire: (c) => wireForge(c, { ...ctx, need }, { widgetOf, wireAtom }) });
+    let synth = null;
+    if (isPaper() && role && !(r.pickMeasured && r.pickShape > 0)) {   // אין אטום מדוד-חיובי לתפקיד ⇒ מבקשים הרכבה מיסודות; חייבת לעלות על הטוב-הקיים
+      const sy = synthDisplay({ role, need, floor: Number.isFinite(r.bestMeasured) ? r.bestMeasured : 0 });
+      synth = { role, tried: sy ? sy.tried : 0, fit: sy ? sy.fit : 0, ms: sy ? sy.ms : 0, cls: sy && sy.cls, score: sy && sy.cls ? sy.score : null, why: sy && !sy.cls ? sy.why : null };
+      if (sy && sy.cls) {
+        const file = `gen_synth_${slug}_${op}.dart`; fs.writeFileSync(path.join(R.outDir(), file), sy.src);
+        const wrec = { cls: sy.cls, file: 'dart-gen-bs/' + file, shelf: 'synth', types: new Map([['fields', 'List<String>?'], ['child', 'Widget?']]), required: new Set(), positional: [], flexRoot: false, he: [] };
+        const wo2 = (c) => (c === sy.cls ? wrec : widgetOf(c)); const so2 = (c) => (c === sy.cls ? sy.atom : sigOfDefault(c));
+        r = judge({ purpose: { kind: purpose || KIND.fact, need, text: `${op} · ${name}`, role }, cands: [...cands, sy.cls], widgetOf: wo2, skinWired: (f) => (f === wrec.file ? true : skinWired(f)), sigOf: so2, wire: (c) => wireForge(c, { ...ctx, need }, { widgetOf: wo2, wireAtom, sigOf: so2 }) });
+      }
+    }
+    ledger.push(ledgerLine(`${name} · ${op}`, r) + (synth ? ` · 🧪 סינתזה(${synth.role}): ${synth.cls ? `${synth.cls} ציון ${synth.score.toFixed(1)}` : synth.why} · ${synth.tried} הרכבות · ${synth.ms}ms` : ''));
+    manifest.ops.push({ op, need, atom: r.pick ? r.pick.cls : null, filled: r.pick ? r.pick.filled : [], synth, rulings: r.rulings.map((x) => `${x.cls}: ${x.verdict} · ${x.move} — ${x.why}`) });
     if (r.pick) imports.add(impOf(r.pick));
     return r.pick;
   };
