@@ -201,6 +201,15 @@ build-check.mjs "ניהול לקוחות: … . כשחוב של לקוח עול�
   את הסביבה לפני כל ייבוא ומעתיק את `screens__*_content.dart` לסקראצ' כדי ש-retrieve-screen ימצא את הקורפוס; (ב) `generateAll` מסרב
   להפעיל app-ds כש-GEN_OUT/GEN_DATA_OUT מצביעים לתוך `new/` (שומר-ניקיון). נבדק: רכבים ✅ · תורמים (combine 3.85) ✅ · עץ נקי.
 
+## סבב 17 (23.9): 5 מנועים בגורל (זרע 20260929) — מה יוצא
+· **quarry-golden + render-module** — 9 מודולי-זהב (SchoolOS) ⇒ 1,668 שברים, 218 עם כותרת-מטרה בעברית («מלאי · מטרה: שלא ייגמר פריט קריטי…»).
+  `assembleByOps({module, entity})` מרכיב מודול מהשברים (למשל תשלומים ⇒ schoolos_fees 77/203 שברים · 29k תווים). נמדד בסקראצ':
+  הקוד מתקמפל למעט הפניות בין-מודוליות (StudentsScreen/FeesScreen… — `assembleMulti` נועד לזה). בחירת-מודול לפי חפיפת-כותרות חלשה
+  (הורים ⇒ attendance · חדרים ⇒ courses) ואינה סלקטיבית לישות (תלמידים/תשלומים על schoolos.dart = אותם 67 שברים). 102/155 משפטים
+  נוגעים בכותרת-זהב אבל דרך מילים כלליות (יכול · לכל · לפני). **פלוס אמיתי לתחום בית-ספר בלבד**; חיבור = מסלול «זהב» עם assembleMulti — הכרעת-בעלים.
+· **dart-twins** — רתמת-הרצה של אטומי-Dart (harvestDartTwins(functions)); לא לשפה. **box-assemble** — מקור ⇒ קופסה. **golden-harness** — צריך buildsmart.
+  **allow-check** — משטרה (כבר עובד ב-hooks). ארבעתם לא פלוס לדלת.
+
 ## סוג-שדה ⇒ מנוע 3 (נפתר בצד מנוע 2, 22.9)
 נמדד: לא הקטלוג (DsToggleTile/DsDateField/DsNumberField = str2·num0·cb1 זהים) ולא הטיפוס המוצהר
 (`String value` בכולם) מבדילים סוג. מה שמבדיל: **מה הקוד עושה עם value** (`DateTime.tryParse` · `value == 'true'` ·
