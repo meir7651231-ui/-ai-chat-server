@@ -301,8 +301,10 @@ build-check.mjs "ניהול לקוחות: … . כשחוב של לקוח עול�
 · **מה נעשה ונמדד:** gen-verify.mjs פוצל (screensIn · verifyDart · parseVerify · DISPLAY + isMain) ו-build-check קיבל `--verify` (pump לכל מסך-מחולל במארח,
   אפס-חריגות, ספירת אטומי-תצוגה, סריקת-טאפים). על «ניהול משימות … סטטוסים: …»: analyze ✅ 0 · 8 קבצים, אבל `flutter test` **נכשל בקומפילציה של המארח**:
   73 אטומי-מדף (dart-ui-bs/auto) מייבאים `package:buildsmart/theme/app_theme.dart` / `config_theme.dart` — קבצים של buildsmart האמיתי שאינם בריפו. ⇒ 0/4 רונדרו — לא נמדד.
-· **הוחזר:** `machtzev/generator/gen-verify.mjs` **נעוץ** (pins.sha256:67) — השער `pins` חסם את הקומיט. לא ממציאים מספר-הכרעה (הגבוה 33). הקובץ הוחזר ל-HEAD,
-  ה-`--verify` הוסר מ-build-check. הטלאי המלא שמור: `scratchpad/gen-verify-refactor.patch` (69 שורות) — יחזור עם `Allow: pins-write:machtzev/generator/gen-verify.mjs הכרעה-N`.
+· **הוחזר, ואז נכנס בהכרעה-34:** `machtzev/generator/gen-verify.mjs` **נעוץ** (pins.sha256:67) — השער `pins` חסם את הקומיט הראשון; הקובץ הוחזר ל-HEAD ו-`--verify` הוסר.
+  אחרי «מה אתה רוצה לשנות ובמה זה פוגע» הבעלים הכריע «אוקיי תתקן מה שצריך ותשנה» ⇒ **הכרעה-34** (DECISIONS §34): השינוי נכנס בעריכה ידנית (המסווג חסם `git apply`
+  ואת הפקודות המשולבות — פוצל לכלי-עריכה), `pins-check --write`, טריילרים `Allow: pins-write:… הכרעה-34`, קומיט `019fc58f`. הרצה חוזרת עם הקוד המקומט: אותו ממצא —
+  analyze ✅ 0 · 8 קבצים · `flutter test` נכשל על `lib/theme/config_theme.dart` חסר ⇒ **0/4 רונדרו, לא-נמדד** עד buildsmart אמיתי.
 · **⚠️ לקח על המספרים עד כאן:** `flutter analyze <קבצים>` בודק את הקבצים שנמסרו, לא מקמפל את סגירת-הייבוא. «✅ 0 שגיאות» בסבבים 15–24 = analyze על הקבצים שנוצרו,
   לא «האפליקציה כולה מתקמפלת». אימות מלא (test/build) דורש buildsmart אמיתי — הכרעת-בעלים (מארח אמיתי; stub-תמה = המצאה ⇒ לא).
 · **לקח-תהליך:** לפני נגיעה במנוע קיים — `grep -c <file> machtzev/pins.sha256`. עשיתי זאת ל-capability ול-server, לא ל-gen-verify.
