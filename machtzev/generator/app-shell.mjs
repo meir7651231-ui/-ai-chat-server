@@ -8,7 +8,8 @@ import { makeConsts, write, isPaper } from './render-ds.mjs';
 import { searchOp, wireAtom, pickWired, particleWidgets } from './particles.mjs';
 import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';   // הישיבה על בחירת-אטום (L114)
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
-import { synthDisplay, widgetRecordOf } from './display-synth.mjs';   // «אין» בבית ⇒ הרכבה מיסודות (סף ⇒ פריטי-גוון · הקשה ⇒ שורש לחיץ), עולה לפסק
+import { synthDisplay, widgetRecordOf } from './display-synth.mjs';
+import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER } from './live-expr.mjs';   // «אין» בבית ⇒ הרכבה מיסודות (סף ⇒ פריטי-גוון · הקשה ⇒ שורש לחיץ), עולה לפסק
 import { skinWired } from './look.mjs';
 import { buildAtlas } from './atlas.mjs';
 let ATL = null; const widgetOf = (cls) => ((ATL ||= buildAtlas({ forge: isPaper() })).widgets.find((w) => w.cls === cls) || null);
@@ -485,9 +486,9 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
   // מסך-ליד (התראה) = שיעור: סף במקור ⇒ הישיבה פוסקת על המועמדים (ring/gauge/alert/headline); אין שורד ⇒ שורה (היום) + פנקס
   const judged = extras.map((x) => {
     if (!x.live) return null;
-    const purpose = { kind: KIND.shiur, need: ['label', 'value', 'onTap'], threshold: x.live.n, op: x.live.op, text: x.name, roles: [...new Set(['ring', 'gauge', 'alert', 'headline'].map(roleOf))] };
+    const purpose = { kind: KIND.shiur, need: ['label', 'value', 'onTap'], threshold: liveThreshold(x.live), op: x.live.op, text: x.name, roles: [...new Set(['alertTile', ...['ring', 'gauge', 'alert', 'headline'].map(roleOf)])] };   // alertTile = תפקיד מדוד (auto-skin, הכרעה-37): גוון + מספר + הקשה
     const cands = [...new Set(['ring', 'gauge', 'alert', 'headline'].flatMap((op) => { const pk = searchOp(op, x.name, null, 12); return [...pk.atoms, ...pk.alts, ...forgeCands(op, roleOf(op))]; }))];
-    const live = `appStore.records('${x.live.slug}').where((r) => (double.tryParse(r[${k(x.live.field)}] ?? '') ?? double.nan) ${x.live.op} ${x.live.n}).length`;
+    const live = `appStore.records('${x.live.slug}').where((r) => ${liveValue(x.live, 'r', k)} ${x.live.op} ${liveThreshold(x.live)}).length`;
     const ctx = { label: k(x.name), value: { str: `${live}.toString()`, num: `${live}.toDouble()` }, sub: k(x.sub || ''), glyph: k(x.icon || '🔔'), message: k(x.name), nav: `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}()))`, need: purpose.need };
     let r = judge({ purpose, cands, widgetOf, skinWired, wire: (c) => wireForge(c, ctx, { widgetOf, wireAtom }) });
     let synthNote = '';
@@ -496,7 +497,7 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
         const sy = synthDisplay({ role, need: purpose.need, floor: r.pick ? (Number.isFinite(r.bestMeasured) ? r.bestMeasured : 0) : -Infinity, hints: { tap: true, state: true } });
         synthNote += ` · 🧪 סינתזה(${role}): ${sy && sy.cls ? `${sy.cls} ציון ${sy.score.toFixed(1)}` : sy ? sy.why : 'תפקיד לא מוכר'} · ${sy ? sy.tried : 0} הרכבות · ${sy ? sy.ms : 0}ms`;
         if (!sy || !sy.cls) continue;
-        const file = `gen_synth_${x.slug}_home.dart`; fs0.writeFileSync(path.join(R.outDir(), file), sy.src);
+        const file = `gen_synth_${sy.cls.toLowerCase()}.dart`; fs0.writeFileSync(path.join(R.outDir(), file), sy.src);   // שם לפי המחלקה (hash-ההרכבה): אותה הרכבה לשתי התראות = קובץ אחד
         const wrec = widgetRecordOf(sy, 'dart-gen-bs/' + file);
         const wo2 = (c) => (c === sy.cls ? wrec : widgetOf(c)); const so2 = (c) => (c === sy.cls ? sy.atom : sigOfDefault(c));
         const r2 = judge({ purpose, cands: [...cands, sy.cls], widgetOf: wo2, skinWired: (f) => (f === wrec.file ? true : skinWired(f)), sigOf: so2, wire: (c) => wireForge(c, { ...ctx, tone: 2 }, { widgetOf: wo2, wireAtom, sigOf: so2 }) });
@@ -508,7 +509,7 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
     if (r.pick) imports.add(impOf(r.pick));
     return r.pick;
   });
-  const extraRows = extras.map((x, i) => { if (judged[i]) return `Padding(padding: const EdgeInsets.only(bottom: 6), child: ${judged[i].call}),`; const sub = x.live ? `appStore.records('${x.live.slug}').where((r) => (double.tryParse(r[${k(x.live.field)}] ?? '') ?? double.nan) ${x.live.op} ${x.live.n}).length.toString() + ' · ' + ${k(x.sub || String(x.value))}` : k(x.value != null ? String(x.value) : (x.sub || '')); return `Padding(padding: const EdgeInsets.only(bottom: 6), child: DsNavTile(glyph: ${k(x.icon || '🔔')}, title: ${k(x.name)}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}())))),`; }).join('\n      ');   // live: כמה רשומות עונות לתנאי של הבעלים עכשיו
+  const extraRows = extras.map((x, i) => { if (judged[i]) return `Padding(padding: const EdgeInsets.only(bottom: 6), child: ${judged[i].call}),`; const sub = x.live ? `appStore.records('${x.live.slug}').where((r) => ${liveValue(x.live, 'r', k)} ${x.live.op} ${liveThreshold(x.live)}).length.toString() + ' · ' + ${k(x.sub || String(x.value))}` : k(x.value != null ? String(x.value) : (x.sub || '')); return `Padding(padding: const EdgeInsets.only(bottom: 6), child: DsNavTile(glyph: ${k(x.icon || '🔔')}, title: ${k(x.name)}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}())))),`; }).join('\n      ');   // live: כמה רשומות עונות לתנאי של הבעלים עכשיו
   const paper = isPaper();
   const quick = paper && root.descField ? `DsQuickAdd(hint: ${k(T('quickAddHint', { action: T('rootAdd', { ent: root.name }) }))}, onSubmit: (s) => appStore.add('${root.slug}', {${k(root.descField)}: s}))` : null;   // G30 · D2: יצירה = טקסט בלבד
   const paletteItems = `[DsPaletteItem(label: ${k(T('rootAdd', { ent: root.name }))}, sub: ${k(L.keysHint)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${root.cls}()))), for (final r in appStore.records('${root.slug}')) DsPaletteItem(label: ${disp}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? ''))))]`;
@@ -522,6 +523,7 @@ ${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
 ${paper ? "import 'package:flutter/services.dart';" : ''}
 
+${extras.some((x) => x.live && liveNeedsHelper(x.live)) ? AGE_HELPER + '\n' : ''}
 class ${cls} extends StatefulWidget {
   const ${cls}({super.key});
   @override

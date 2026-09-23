@@ -10,7 +10,8 @@ import { makeConsts, write } from './render-ds.mjs';
 import { buildAtlas } from './atlas.mjs';
 import { isPaper, skinWired } from './look.mjs';
 import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';
-import { synthDisplay, widgetRecordOf } from './display-synth.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
+import { synthDisplay, widgetRecordOf } from './display-synth.mjs';
+import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { ops as opsOfKind } from '../compose-engine.mjs';   // צורה ⇒ פעולות-יסוד (הטבלה הקיימת, לא רשימה שלי)
 import * as R from '../root.mjs';
@@ -41,8 +42,9 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   const prior = readComposites().find((c) => c.key === manifest.key) || null;   // יכולת רשומה עם אותה צורה ⇒ האטומים שלה מועמדים ראשונים (ועדיין נפסקים)
   manifest.prior = prior ? { ops: prior.ops } : null;
   // ── הנתונים המשותפים (חוק 23-ד: מחברים בהחלטה): כל האטומים קוראים מאותו br/rs ──
-  const numOf = `(double.tryParse(r[${k(live.field)}] ?? '') ?? double.nan)`;
-  const cond = decide && decide.name ? `${decide.name}(${numOf}, ${live.n})` : `${numOf} ${live.op} ${live.n}`;
+  const numOf = liveValue(live, 'r', k); const thr = liveThreshold(live);   // צורת-התנאי (מספר / ותק-בימים) — מקום אחד
+  const cond = decide && decide.name ? `${decide.name}(${numOf}, ${thr})` : `${numOf} ${live.op} ${thr}`;
+  manifest.source.kind = live.kind || 'num'; if (live.kind === 'age') { manifest.source.days = live.days; manifest.timeDependent = true; }
   if (decide && decide.file) imports.add(`import '../${decide.file}';`);
   manifest.decision = decide ? { atom: decide.name, file: decide.file, proven: !!decide.proven, examples: decide.examples || [] } : { atom: null, why: 'אין אטום-החלטה מוכח ⇒ השוואה ביד (מדווח)' };
   const descField = entity.fields[0] || live.field;
@@ -56,7 +58,7 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
       const sy = synthDisplay({ role, need, floor: r.pick ? (Number.isFinite(r.bestMeasured) ? r.bestMeasured : 0) : -Infinity, hints: { tap: need.includes('onTap'), state: (purpose || KIND.fact) === KIND.shiur } });   // יש שורד ⇒ לעלות עליו; אין שורד ⇒ כל הרכבה מתאימה
       synth = { role, tried: sy ? sy.tried : 0, fit: sy ? sy.fit : 0, ms: sy ? sy.ms : 0, cls: sy && sy.cls, score: sy && sy.cls ? sy.score : null, why: sy && !sy.cls ? sy.why : null };
       if (sy && sy.cls) {
-        const file = `gen_synth_${slug}_${op}.dart`; fs.writeFileSync(path.join(R.outDir(), file), sy.src);
+        const file = `gen_synth_${sy.cls.toLowerCase()}.dart`; fs.writeFileSync(path.join(R.outDir(), file), sy.src);   // שם לפי המחלקה (hash-ההרכבה): אותה הרכבה = קובץ אחד
         const wrec = widgetRecordOf(sy, 'dart-gen-bs/' + file);
         const wo2 = (c) => (c === sy.cls ? wrec : widgetOf(c)); const so2 = (c) => (c === sy.cls ? sy.atom : sigOfDefault(c));
         r = judge({ purpose: { kind: purpose || KIND.fact, need, text: `${op} · ${name}`, role }, cands: [...cands, sy.cls], widgetOf: wo2, skinWired: (f) => (f === wrec.file ? true : skinWired(f)), sigOf: so2, wire: (c) => wireForge(c, { ...ctx, need }, { widgetOf: wo2, wireAtom, sigOf: so2 }) });
@@ -97,12 +99,12 @@ import '../dart-data-bs/auto/gen_${slug}_content.dart';
 ${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
-class ${cls} extends StatelessWidget {
+${liveNeedsHelper(live) ? AGE_HELPER + '\n' : ''}class ${cls} extends StatelessWidget {
   const ${cls}({super.key});
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
     final rs = appStore.records('${live.slug}');
-    final br = rs.where((r) => ${cond}).toList()..sort((a, b) => ${live.op === '<' ? '' : '-'}((double.tryParse(a[${k(live.field)}] ?? '') ?? 0) - (double.tryParse(b[${k(live.field)}] ?? '') ?? 0)).sign.toInt());   // ההחלטה מניעה את הסדר: החורג ביותר ראשון (23-ד)
+    final br = rs.where((r) => ${cond}).toList()..sort((a, b) => ${live.op === '<' ? '' : '-'}(${liveValue(live, 'a', k)} - ${liveValue(live, 'b', k)}).sign.toInt());   // ההחלטה מניעה את הסדר: החורג ביותר ראשון (23-ד)
     return DsScaffold(title: ${k(name)}, subtitle: br.length.toString() + ' / ' + rs.length.toString() + ' ' + ${k(entity.name)}, icon: ${k('🔔')}, children: [
 ${parts.map((p) => `      ${p.cond ? `if (${p.cond}) ` : ''}Padding(padding: const EdgeInsets.only(bottom: 10), child: ${p.call}),`).join('\n')}
       if (br.isEmpty) Padding(padding: const EdgeInsets.only(top: 24), child: Center(child: Text(${k(`${entity.name}: 0 · ${said}`)}, style: TextStyle(color: DsLook.of(context).muted)))),

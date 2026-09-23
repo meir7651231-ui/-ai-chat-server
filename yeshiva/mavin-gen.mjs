@@ -56,15 +56,19 @@ const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(
 
 /** תנאי לפי צורה (העיקרון של capability בלי מרקר-WHEN): בקטע יש מספר, ולפניו (עד אסימון-אות-אחת כמו «ל») מילת-יחס מדקדוק-היחסים הסגור של capability
  *  ⇒ סעיף {x: המילים שלפני היחס (בלי מסגרת), op, n: המספר של הבעלים, trigger: המילים שאחרי המספר}. קטע שכבר יש בו סעיף-טקסט (כש…) לא נבדק שוב. */
+const SL_TIME = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
 export function clausesByForm(seg, frame = []) {
   if (detectAllClauses(seg).length) return [];
   const ws = toks(seg), F = new Set(frame), out = [];
+  const TU = SL_TIME.timeUnits || {};   // יחידות-זמן (דאטה): «מעל 7 ימים» · «מעל שבוע» (יחידה בלי מספר = 1)
   for (let i = 0; i < ws.length; i++) {
-    if (!/^\d+$/.test(ws[i])) continue;
+    const unitOnly = TU[ws[i]] && !/^\d+$/.test(ws[i - 1] || '');
+    if (!/^\d+$/.test(ws[i]) && !unitOnly) continue;
     let j = i - 1; if (j >= 0 && /^[֐-׿]$/.test(ws[j])) j--;   // «מתחת ל 5»: אות-יחס בודדת בין היחס למספר
     const op = j >= 0 ? relOpOf(ws[j]) : null; if (!op) continue;
     const x = ws.slice(0, j).filter((w) => !F.has(w) && !/^\d+$/.test(w)); if (!x.length) continue;
-    out.push({ x: x.join(' '), op, n: ws[i], y: ws[i], trigger: ws.slice(i + 1).filter((w) => !F.has(w)).slice(0, 2).join(' ') });
+    const n = unitOnly ? 1 : ws[i]; const unit = unitOnly ? TU[ws[i]] : (TU[ws[i + 1]] || null); const after = unitOnly ? i + 1 : (unit ? i + 2 : i + 1);
+    out.push({ x: x.join(' '), op, n, y: n, unit, trigger: ws.slice(after).filter((w) => !F.has(w)).slice(0, 2).join(' ') });
   }
   return out;
 }
@@ -219,13 +223,14 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       const ent = ents.find((e) => e.fields.includes(x.live.field)) || ents[0];
       // הציפייה מהדוגמאות של הבעלים (אימות מול הייעוד): אילו רשומות עונות לתנאי — לפי הצורה, בלי המצאה
       let expect = null; const SLd = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
-      if (ent && SLd.exampleWord) { const exLine = spec.split('\n').find((l) => l.startsWith(`${SLd.exampleWord} ${ent.name}:`)); if (exLine) { const recs = exLine.slice(exLine.indexOf(':') + 1).split(';').map((r) => r.split(/[,،]/).map((v) => v.trim())); const fi = ent.fields.indexOf(x.live.field); const rows = recs.filter((r) => { const v = parseFloat(r[fi]); return !isNaN(v) && (x.live.op === '<' ? v < x.live.n : v > x.live.n); }).map((r) => [r[0] || '', r[fi] || '']); expect = { count: rows.length, rows }; } }
+      if (ent && SLd.exampleWord) { const exLine = spec.split('\n').find((l) => l.startsWith(`${SLd.exampleWord} ${ent.name}:`)); if (exLine) { const recs = exLine.slice(exLine.indexOf(':') + 1).split(';').map((r) => r.split(/[,،]/).map((v) => v.trim())); const fi = ent.fields.indexOf(x.live.field); const LE0 = await import('../machtzev/generator/live-expr.mjs'); const thr0 = LE0.liveThreshold(x.live); const rows = recs.filter((r) => { const v = LE0.liveSample(x.live, r[fi]); return v != null && (x.live.op === '<' ? v < thr0 : v > thr0); }).map((r) => [r[0] || '', r[fi] || '']); expect = { count: rows.length, rows }; } }   // הציפייה בצורת-התנאי (מספר / ותק-בימים)
       const seedSlug = fs.existsSync(path.join(outDir, 'gen_app_seed.dart')) ? 'app_seed' : null;
       // ההחלטה האחת — אטום מהקטלוג, מוכח בהרצה (behavior-plan) על הדוגמאות של הבעלים + גבול-הסף מצורת היחס («מתחת ל» = ממש מתחת ⇒ 55 אינו חורג)
       let decide = null;
       if (ent && SLd.exampleWord) { const exLine = spec.split('\n').find((l) => l.startsWith(`${SLd.exampleWord} ${ent.name}:`)); const fi = ent.fields.indexOf(x.live.field);
-        const vals = exLine && fi >= 0 ? exLine.slice(exLine.indexOf(':') + 1).split(';').map((r) => parseFloat(r.split(/[,،]/)[fi])).filter((v) => !isNaN(v)) : [];
-        if (vals.length) { const lt = x.live.op === '<'; const examples = [...vals.map((v) => [`${v}, ${x.live.n}`, `r == ${lt ? v < x.live.n : v > x.live.n}`]), [`${x.live.n}, ${x.live.n}`, 'r == false']];
+        const LE = await import('../machtzev/generator/live-expr.mjs'); const thr = LE.liveThreshold(x.live);
+        const vals = exLine && fi >= 0 ? exLine.slice(exLine.indexOf(':') + 1).split(';').map((r) => LE.liveSample(x.live, (r.split(/[,،]/)[fi] || '').trim())).filter((v) => v != null) : [];
+        if (vals.length) { const lt = x.live.op === '<'; const examples = [...vals.map((v) => [`${v}, ${thr}`, `r == ${lt ? v < thr : v > thr}`]), [`${thr}, ${thr}`, 'r == false']];
           try { const BP = await import('../machtzev/generator/behavior-plan.mjs'); const id = `sev.${x.slug}`; const P = BP.planNeeds({ [id]: { shape: 'מספר', demand: x.sub || x.name, params: ['num', 'num'], ret: 'bool', examples } }, { prove: true, earlyExit: true }); const pr = P[id];
             if (pr && pr.pick && pr.proven) { decide = { name: pr.pick, file: pr.file, proven: true, examples }; notes.push(`החלטה «${x.name}»: ${pr.pick} (${pr.file}) הוכח על ${examples.length} דוגמאות${pr.ties ? ` · ${pr.ties} תיקו` : ''}`); }
             else notes.push(`החלטה «${x.name}»: אין אטום מוכח בקטלוג ⇒ השוואה ביד (מדווח)`); } catch (e) { notes.push(`החלטה «${x.name}»: behavior-plan נכשל — ${String(e.message || e).slice(0, 120)}`); } } }

@@ -124,6 +124,11 @@
    "ForgeMeter:0",
    "ForgeLinearProgress:-8"
   ],
+  "alertTile": [
+   "ForgeKpiBox:2.46",
+   "ForgeStatPlain:2.46",
+   "ForgeRadialGaugeStatus:2.42"
+  ],
   "glass": [
    "ForgeStripPanelFrame:0",
    "ForgeFlatCard:-2",
@@ -184,10 +189,12 @@
   "Forge11Atoms",
   "Forge18Atoms",
   "Forge2Atoms",
+  "Forge4Atoms",
   "Forge4AtomsList",
   "Forge4AtomsStatus",
   "Forge5AtomsFeedback",
   "Forge5AtomsList",
+  "Forge5AtomsStatus",
   "Forge6Atoms",
   "Forge6AtomsFeedback",
   "Forge6AtomsHeader",

@@ -22,7 +22,7 @@ export const ROLES = {
   emptyState: { need: 'text2', fam: ['feedback'] }, mediaRow: { need: 'text2', fam: ['card', 'list'] },
   section: { need: 'child+text1', fam: ['header', 'card', 'composite'] }, frame: { need: 'child', fam: ['card', 'header', 'composite'] },
   segmented: { need: 'select', fam: ['selection', 'nav', 'action', 'composite'] }, chip: { need: 'select', fam: ['selection', 'composite', 'status'] },
-  meter: { need: 'value+values', fam: ['status', 'dataviz', 'card', 'list'] }, glass: { need: 'text2', fam: ['card'] }, timeline: { need: 'items2', fam: ['list', 'chat', 'card'] },
+  meter: { need: 'value+values', fam: ['status', 'dataviz', 'card', 'list'] }, alertTile: { need: 'value+label', fam: ['feedback', 'status', 'card'], judgeOnly: true }, glass: { need: 'text2', fam: ['card'] }, timeline: { need: 'items2', fam: ['list', 'chat', 'card'] },
   field: { need: 'control', fam: ['input', 'composite'] }, enumField: { need: 'control', fam: ['input', 'composite'] }, numberField: { need: 'control', fam: ['input', 'composite'] },
   dateField: { need: 'control', fam: ['input', 'composite'] }, search: { need: 'control', fam: ['input', 'composite'] }, pageHeader: { need: 'text2', fam: ['header'] },
   table: { need: 'table', fam: ['spatial', 'list'] }, bars: { need: 'values', fam: ['dataviz'] }, board: { need: 'board', fam: ['spatial'] }, calendar: { need: 'calendar', fam: ['temporal', 'spatial'] },
@@ -93,6 +93,8 @@ export function score(role, a) {
       sc = (inBtn(a) ? 3 : 0) - (s.root.interactive ? 4 : 0) - (s.svg ? 3 : 0) - (a.items.slots - 1) * 5 - a.items.cells * 5 - Math.max(0, effSlots(a) - 1) * 2; break;   // בורר-מקטעים = מסילה של טקסטים (השורש אינו הכפתור, בלי אייקונים)
     case 'chip':
       sc = (a.bare ? 2 : 0) + (s.root.interactive ? 2 : 0) - (s.root.decorated ? 2 : 0) + (a.items.slots === 1 ? 3 : 0) - a.items.cells * 5; break;   // צ׳יפ = הפריט עצמו לחיץ
+    case 'alertTile':   // הכרעה-37 · אריח-התראה: גוון (מצב) + מספר מודגש + לחיץ — מה שמסך-הבית מבקש לתנאי-חי; עד כאן נמדד כ-kpi ונקנס על בדיוק זה
+      sc = (tones(a).length ? 4 : 0) + toneCoverage(a) * 2 + s.numEmph * 2 + (s.root.interactive ? 3 : -3) - surplus * 3; break;
     case 'meter':
       sc = -Math.max(0, a.values - 1) * 4 - surplus * 3; break;
     case 'glass':
@@ -165,7 +167,7 @@ export function autoSkin(overrides = {}) {
   for (const role of Object.keys(ROLES)) {
     const r = rank(role, atoms); report[role] = r.slice(0, 3); for (const x of r) reach.add(x.cls);
     const cls = overrides[role] || (r[0] && r[0].cls); if (!cls) continue;
-    skin[role] = cls;
+    if (!ROLES[role].judgeOnly) skin[role] = cls;   // judgeOnly: תפקיד-מדידה לפסק (atom-psak/display-synth), לא תפקיד-עור של resolveSkin — נשאר ב-report/top3
     const a = atoms.find((x) => x.cls === cls); const tm = a && toneMapOf(a); if (tm) toneMap[role] = tm;
   }
   if (overrides.toneMap) Object.assign(toneMap, overrides.toneMap);

@@ -144,8 +144,16 @@
   "בנייה חכמה": "build"
  },
  "lookScope": {
-  "paper": { "skin": "paper", "theme": "t-balagan", "fonts": "heebo" },
-  "build": { "skin": "build", "theme": "t-build", "fonts": "heebo" }
+  "paper": {
+   "skin": "paper",
+   "theme": "t-balagan",
+   "fonts": "heebo"
+  },
+  "build": {
+   "skin": "build",
+   "theme": "t-build",
+   "fonts": "heebo"
+  }
  },
  "themes": {
   "אינדיגו": "t-indigo",
@@ -155,7 +163,10 @@
   "כתום": "t-build"
  },
  "exampleWord": "דוגמה",
- "exampleWords": ["למשל", "לדוגמה"],
+ "exampleWords": [
+  "למשל",
+  "לדוגמה"
+ ],
  "questionWord": "שאלה",
  "questionTargets": {
   "דוח": "report",
@@ -227,7 +238,11 @@
  "pastSuffix": "תי",
  "pastMinLen": 5,
  "prefixLetters": "והבלמשכ",
- "stemSuffixes": ["ים", "ות", "ה"],
+ "stemSuffixes": [
+  "ים",
+  "ות",
+  "ה"
+ ],
  "waHead": "^\\s*\\[?(\\d{1,2}[./]\\d{1,2}[./]\\d{2,4}),?\\s+(\\d{1,2}:\\d{2})(?::\\d{2})?\\]?\\s*-?\\s*([^:\\n]{2,30}):\\s+",
  "momentSeparators": "\\n|;|(?<=[\\u0590-\\u05FF\\d])\\.\\s+(?=[\\u0590-\\u05FF])",
  "weekWords": {
@@ -287,5 +302,11 @@
  "serverWord": "שרת",
  "servers": {
   "ענן": "cloud"
+ },
+ "timeUnits": {
+  "יום": 1,
+  "ימים": 1,
+  "שבוע": 7,
+  "שבועות": 7
  }
 }

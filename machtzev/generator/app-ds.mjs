@@ -366,7 +366,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     const PFX = new RegExp('^[' + (SL.prefixLetters || '') + ']'), SFX = new RegExp('(' + (SL.stemSuffixes || []).join('|') + ')$');   // אותיות-קידומת וסיומות-ריבוי מהדאטה (spec-lang)
     const stemOf = (w) => String(w || '').replace(PFX, '').replace(SFX, '');
     const liveExtras = extraScreens.map((x) => { const c = x.clause; if (!c || !c.x || !/^[<>]$/.test(c.op) || c.n == null || isNaN(+c.n)) return x;
-      for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n } }; }
+      for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) { if (c.unit && f.type !== 'date') { seedNotes.push(T('liveNotDate', { name: x.name, label: f.label, type: f.type })); return x; } return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: c.unit ? 'age' : 'num', days: c.unit ? +c.n * c.unit : null } }; } }
       return x; });   // אין ישות עם השדה ⇒ השורה נשארת סטטית (הסף בלבד), לא מומצא
     liveExtrasOut = liveExtras;
     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr, homeIsRoot: rootIsFirst, extras: liveExtras, seed });
