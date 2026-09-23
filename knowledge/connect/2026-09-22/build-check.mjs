@@ -65,4 +65,5 @@ const errors = lines.filter((l) => /^\s*error •/.test(l)), others = lines.filt
 console.log(`מתקמפל: ${errors.length === 0 ? '✅' : '❌'} · שגיאות ${errors.length} · אזהרות/מידע ${others.length} · ${targets.length} קבצים · (cd ${HOST} && ${cmd})`);
 for (const e of errors.slice(0, 8)) console.log('  ' + e.trim().slice(0, 160));
 for (const e of others.slice(0, 4)) console.log('  ' + e.trim().slice(0, 160));
+// (--verify — pump של כל מסך במארח דרך gen-verify — ממתין להכרעת-בעלים: gen-verify.mjs נעוץ. הטלאי: scratchpad/gen-verify-refactor.patch)
 process.exit(errors.length ? 1 : 0);

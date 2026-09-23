@@ -297,6 +297,16 @@ build-check.mjs "ניהול לקוחות: … . כשחוב של לקוח עול�
   סודות: רק `process.env.*` (חוק-6). בלי ההצהרה (אותו משפט בלי «עם שרת בענן») ⇒ 0 קובצי-שרת.
 · **לא נמדד:** הרצת rules.test.mjs (צריך אמולטור-Firebase) · deploy. ה-runbook (ACTIVATE.md) אומר לבעלים מה להזין.
 
+## סבב 25 (23.9): gen-verify — «מוצג-בפועל» על פלטי-הדלת: נמדד, ואז הוחזר — הקובץ נעוץ
+· **מה נעשה ונמדד:** gen-verify.mjs פוצל (screensIn · verifyDart · parseVerify · DISPLAY + isMain) ו-build-check קיבל `--verify` (pump לכל מסך-מחולל במארח,
+  אפס-חריגות, ספירת אטומי-תצוגה, סריקת-טאפים). על «ניהול משימות … סטטוסים: …»: analyze ✅ 0 · 8 קבצים, אבל `flutter test` **נכשל בקומפילציה של המארח**:
+  73 אטומי-מדף (dart-ui-bs/auto) מייבאים `package:buildsmart/theme/app_theme.dart` / `config_theme.dart` — קבצים של buildsmart האמיתי שאינם בריפו. ⇒ 0/4 רונדרו — לא נמדד.
+· **הוחזר:** `machtzev/generator/gen-verify.mjs` **נעוץ** (pins.sha256:67) — השער `pins` חסם את הקומיט. לא ממציאים מספר-הכרעה (הגבוה 33). הקובץ הוחזר ל-HEAD,
+  ה-`--verify` הוסר מ-build-check. הטלאי המלא שמור: `scratchpad/gen-verify-refactor.patch` (69 שורות) — יחזור עם `Allow: pins-write:machtzev/generator/gen-verify.mjs הכרעה-N`.
+· **⚠️ לקח על המספרים עד כאן:** `flutter analyze <קבצים>` בודק את הקבצים שנמסרו, לא מקמפל את סגירת-הייבוא. «✅ 0 שגיאות» בסבבים 15–24 = analyze על הקבצים שנוצרו,
+  לא «האפליקציה כולה מתקמפלת». אימות מלא (test/build) דורש buildsmart אמיתי — הכרעת-בעלים (מארח אמיתי; stub-תמה = המצאה ⇒ לא).
+· **לקח-תהליך:** לפני נגיעה במנוע קיים — `grep -c <file> machtzev/pins.sha256`. עשיתי זאת ל-capability ול-server, לא ל-gen-verify.
+
 ## סוג-שדה ⇒ מנוע 3 (נפתר בצד מנוע 2, 22.9)
 נמדד: לא הקטלוג (DsToggleTile/DsDateField/DsNumberField = str2·num0·cb1 זהים) ולא הטיפוס המוצהר
 (`String value` בכולם) מבדילים סוג. מה שמבדיל: **מה הקוד עושה עם value** (`DateTime.tryParse` · `value == 'true'` ·
