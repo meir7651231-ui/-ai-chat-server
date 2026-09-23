@@ -101,7 +101,7 @@ export function formOf(sentence) {
     for (let i = 0; i < run.length; i++) { const w = run[i];
       if (isNum(w)) { values.push({ num: +w, unit: run[i + 1] && !isNum(run[i + 1]) ? run[i + 1] : null }); continue; }
       plain.push(w); const h = hintOf(w); if (h.hint === 'act') acts.push({ word: w, ops: h.ops.slice(0, 3) }); else if (h.hint === 'ask') asks.push(w); }   // התווית נשארת שלמה; הרמזים = הערות עליה, לא מחיקה ממנה
-    const label = plain.length ? [bareLabel(plain[0]), ...plain.slice(1)].join(' ') : run.join(' ');
+    const label = plain.length ? plain.join(' ') : run.join(' ');   // התווית = המילים שלך כמו שכתבת («מטופלים» לא הופך ל«טופל»); הסרת-אות משמשת להשוואה בלבד
     // יחס לפי מיקום (אפס דקדוק): נושא = המילה הראשונה · מושא = המילה הבאה שהקטלוג מכיר כדבר או שצורתה רבים · מה שביניהן = היחס
     let rel = null;
     if (plain.length >= 2) {
@@ -109,7 +109,7 @@ export function formOf(sentence) {
       let j = 1; while (j < plain.length && !(hintOf(plain[j]).hint === 'thing' || isMany(plain[j]) || prefixed(plain[j]))) j++;
       let object = j < plain.length ? plain[j] : null, words = plain.slice(1, object ? j : plain.length);
       if (!object && values.length) object = values.map((v) => v.num + (v.unit ? ' ' + v.unit : '')).join(', ');   // אין מושא-מילה ⇒ הערך הוא המושא («מעל 200 שקל»)
-      if (words.length) rel = { subject: bareLabel(plain[0]), words, object: object ? (prefixed(object) ? bareObj(object) : bareLabel(object)) : null, proposal: [...new Set(words.flatMap((w) => hintOf(w).ops))].slice(0, 3) };
+      if (words.length) rel = { subject: plain[0], words, object: object || null, proposal: [...new Set(words.flatMap((w) => hintOf(w).ops))].slice(0, 3) };
     }
     return { label, many: plain.length ? isMany(plain[plain.length - 1]) : false, fields: [], under, src, acts, values, asks, rel };
   };
@@ -149,7 +149,7 @@ export function questionsFor(form, answers = {}) {
     for (const f of t.fields) { const af = (a.fields || []).find((x) => x.label === f.label); if (!af || !af.type) qs.push({ thing: t.label, ask: 'type', field: f.label, options: TYPES }); }
     if (!(a.acts && a.acts.length)) qs.push({ thing: t.label, ask: 'acts', options: ACTS, proposal: (t.acts || []).map((x) => x.word) });
     const inRel = new Set(t.rel ? t.rel.words : []);
-    if (t.rel && !a.rel) qs.push({ thing: t.label, ask: 'rel', subject: t.rel.subject, words: t.rel.words, object: t.rel.object, proposal: t.rel.proposal, options: ['ref', 'act', 'cond', 'value', 'skip'] });   // «A» —מילים→ «B»: מצביע / פעולה / תנאי / ערך / דלג
+    if (t.rel && !a.rel) qs.push({ thing: t.label, ask: 'rel', subject: t.rel.subject, words: t.rel.words, object: t.rel.object, objectOptions: t.rel.object ? [] : form.things.filter((x) => x !== t).map((x) => x.label), proposal: t.rel.proposal, options: ['ref', 'act', 'cond', 'value', 'skip'] });   // אין מושא ⇒ הדברים האחרים במשפט כאפשרויות   // «A» —מילים→ «B»: מצביע / פעולה / תנאי / ערך / דלג
     for (const w of (t.asks || [])) if (!inRel.has(w)) qs.push({ thing: t.label, ask: 'word', word: w, options: ['thing', 'act', 'field', 'skip'] });   // מילה שאינה כתובה על שום חלקיק
     for (const x of (t.acts || [])) if (!inRel.has(x.word)) qs.push({ thing: t.label, ask: 'act', word: x.word, proposal: x.ops });
     for (const f of (a.fields || [])) if (f.type === 'ref' && !f.to) qs.push({ thing: t.label, ask: 'ref', field: f.label, options: form.things.map((x) => x.label) });
@@ -228,7 +228,10 @@ export function valueKinds() {
   const map = JSON.parse(fs.readFileSync(R.GEN_DIR + 'ops-map.json', 'utf8'));
   _kinds = new Map();
   for (const a of map) { if (a.layer !== 'display') continue; let src = ''; try { src = fs.readFileSync(R.NEW + a.file, 'utf8'); } catch { continue; }
-    const k = Object.entries(KIND_RE).filter(([, re]) => re.test(src)).map(([n]) => n); _kinds.set(a.id.split('@')[0], k.length ? k : ['text']); }
+    let k = Object.entries(KIND_RE).filter(([, re]) => re.test(src)).map(([n]) => n);
+    const fd = src.match(/fieldDemo = <String>\[([^\]]*)\]/);   // forge: אין value — הסוג מצורת חריץ-הדוגמה (ספרות ⇒ num · yyyy-mm-dd ⇒ date · on/off ⇒ bool)
+    if (!k.length && fd) { const demo = [...fd[1].matchAll(/"([^"]*)"/g)].map((m) => m[1]); if (demo.some((d) => /^\d{4}-\d{2}-\d{2}/.test(d))) k.push('date'); else if (demo.some((d) => /^(on|off|true|false)$/i.test(d))) k.push('bool'); else if (demo.some((d) => /^[\d.,]+$/.test(d))) k.push('num'); }
+    _kinds.set(a.id.split('@')[0], k.length ? k : ['text']); }
   return _kinds;
 }
 export const kindOf = (id) => valueKinds().get(String(id).split('@')[0]) || ['text'];
