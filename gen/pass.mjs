@@ -17,15 +17,12 @@ import { SKIN_CSS, FONTS } from './skin.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const NEEDS = JSON.parse(fs.readFileSync(path.join(HERE, 'needs.data.json'), 'utf8')).needs;
 const DATA = JSON.parse(fs.readFileSync(path.join(HERE, 'mosad.data.json'), 'utf8'));
-const LANG = loadLang();
-const withFlutter = !process.argv.includes('--no-flutter');
-const shelf = readShelf();
-const dartShelf = hasDart() ? readDartShelf() : [];
-const dartCache = {};
-const dartProver = dartShelf.length ? (need) => (dartCache[need.id] ||= proveDart(need, dartShelf)) : null;
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);   // בייבוא (הדלת: «כל המוסד») — רק specOf/DATA; אפס כתיבה, אפס ריצה
+const LANG = loadLang({ write: !!isMain });   // !! — undefined היה מפעיל את ברירת-המחדל (write=true) וכותב את הצילום בייבוא (נמדד)
+export const MOSAD = DATA;
 
 const fieldText = (f) => f.shape === 'formula' ? f.name + '=' + f.formula : f.name + (f.shape === 'number' ? `(${f.min ?? 0}..${f.max ?? 1000000})` : f.shape === 'enum' ? `{${f.values.join('|')}}` : f.shape === 'date' ? '[תאריך]' : f.shape === 'phone' ? '[טלפון]' : f.shape === 'id' ? '[מזהה]' : f.shape === 'count' ? '[כמות]' : '') + (f.required ? '*' : '');
-function specOf(dep, roles = []) {
+export function specOf(dep, roles = []) {
   const lines = [`אפליקציה: ${dep.app || dep.name}`];
   const dash = [];
   const names = new Set(dep.entities.map((e) => e.name));
@@ -77,6 +74,12 @@ function improvements(dep, report) {
   return out;
 }
 
+if (isMain) {
+const withFlutter = !process.argv.includes('--no-flutter');
+const shelf = readShelf();
+const dartShelf = hasDart() ? readDartShelf() : [];
+const dartCache = {};
+const dartProver = dartShelf.length ? (need) => (dartCache[need.id] ||= proveDart(need, dartShelf)) : null;
 const outDir = path.join(HERE, 'out', 'pass'); fs.mkdirSync(outDir, { recursive: true });
 const results = [];
 const ROLES = DATA.roles || [];
@@ -170,3 +173,4 @@ ${uni ? (() => { const byLens = {}; for (const l of uni.lenses) for (const o of 
 fs.writeFileSync(path.join(outDir, 'index.html'), page);
 
 console.log(`\nסה"כ (12 אגפים): ${Object.values(deptTotals).reduce((a, b) => a + b, 0)} · מאוחד: ${uni ? uni.improvements.length : '—'}`); Object.entries(deptTotals).sort((a, b) => b[1] - a[1]).forEach(([k, v]) => console.log(`  ${String(v).padStart(4)}  ${k}${uni ? '  · מאוחד ' + (uni.byKind[k] ?? 0) : ''}`));
+}

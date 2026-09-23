@@ -11,8 +11,8 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '../../..');
 const args = process.argv.slice(2);
 const ai = args.indexOf('--answers'); const answers = ai >= 0 ? JSON.parse(fs.readFileSync(args[ai + 1], 'utf8')) : {};
-const si = args.indexOf('--spec'), di = args.indexOf('--doc');   // דלת שנייה: ספק מוכן / מסמך-«פירוק» של הבעלים במקום משפט
-const skipIdx = new Set([ai, si, di].filter((x) => x >= 0).map((x) => x + 1));
+const si = args.indexOf('--spec'), di = args.indexOf('--doc'), mi = args.indexOf('--mosad');   // דלת שנייה: ספק מוכן / מסמך-«פירוק» / אגף מעץ-המוסד — במקום משפט
+const skipIdx = new Set([ai, si, di, mi].filter((x) => x >= 0).map((x) => x + 1));
 const sentence = args.filter((a, i) => !a.startsWith('--') && !skipIdx.has(i))[0];
 const HOST = process.env.BS_HOST;
 const FLUTTER = ['/root/flutter/bin/flutter', process.env.FLUTTER_BIN].find((p) => p && fs.existsSync(p));
@@ -31,6 +31,13 @@ if (bi) {
   const { generateBalagan } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
   G0 = await generateBalagan({ outDir: process.env.GEN_OUT }); spec = G0.spec; G0.routes = [];
   console.log(`«בלגן» (${G0.modules} מודולים מ-apps/*.json של הבעלים)${G0.bad && G0.bad.length ? ` · מזהה-הרגע נכשל: ${G0.bad.join(' · ')}` : ''}\n  ${(spec || '').slice(0, 200)}`);
+} else if (mi >= 0) {   // --mosad <N>: אגף N מעץ-המוסד של הבעלים (gen/wizard+pass ⇒ ספק) דרך אותו app-ds; --mosad 0 מדפיס את רשימת-האגפים
+  const { mosadSpecs } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
+  const all = await mosadSpecs(); const n = +(args[mi + 1] || 0);
+  if (!n) { console.log(`עץ-המוסד: ${all.length} אגפים\n` + all.map((d) => `  ${d.i}. ${d.name} · ${d.entities} ישויות · ${d.spec.split('\n').length} שורות-ספק`).join('\n')); process.exit(0); }
+  const dep = all.find((d) => d.i === n); if (!dep) { console.log(`אין אגף ${n}`); process.exit(2); }
+  G0 = await generateFromSpec(dep.spec, { outDir: process.env.GEN_OUT, name: 'chk' }); spec = G0.spec; G0.routes = [];
+  const sl = spec.split('\n'); console.log(`«אגף ${dep.i}: ${dep.name}» (עץ-המוסד ⇒ ספק, ${dep.entities} ישויות)\nאפיון (${sl.length} שורות):\n${sl.slice(0, 8).map((l) => '  ' + l.slice(0, 120)).join('\n')}${sl.length > 8 ? '\n  …' : ''}`);
 } else if (si >= 0 || di >= 0) {
   const f = args[(si >= 0 ? si : di) + 1], txt = fs.readFileSync(f, 'utf8');
   G0 = si >= 0 ? await generateFromSpec(txt, { outDir: process.env.GEN_OUT, name: 'chk' }) : await generateFromDoc(txt, { outDir: process.env.GEN_OUT, name: 'chk' });
@@ -57,6 +64,8 @@ const G = path.join(HOST, 'lib/genesis');
 for (const [src, dst] of [['new/dart-ui-bs', 'dart-ui-bs'], ['new/dart-forge-bs', 'dart-forge-bs'], ['new/dart-maor', 'dart-maor'], ['new/dart-screens-bs', 'dart-screens-bs'], ['new/dart-data-maor', 'dart-data-maor'], ['new/dart', 'dart'], ['new/dart-boxes', 'dart-boxes'], ['new/dart-data', 'dart-data'], ['new/dart-boards-bs', 'dart-boards-bs']])   // gen_behaviors ⇒ dart-boxes (נמדד: flutter test על המארח האמיתי)
   if (!fs.existsSync(path.join(G, dst)) && fs.existsSync(path.join(ROOT, src))) fs.cpSync(path.join(ROOT, src), path.join(G, dst), { recursive: true });
 fs.mkdirSync(path.join(G, 'dart-gen-bs'), { recursive: true }); fs.mkdirSync(path.join(G, 'dart-data-bs/auto'), { recursive: true });
+// קובצי-דאטה בשורש dart-data-bs (home_content וכו') — מסכים רשומים (lipskey_product_sheet.g.dart) מייבאים אותם (נמדד ב---mosad 1 --verify)
+for (const f of fs.readdirSync(path.join(ROOT, 'new/dart-data-bs'))) if (f.endsWith('.dart') && !fs.existsSync(path.join(G, 'dart-data-bs', f))) fs.copyFileSync(path.join(ROOT, 'new/dart-data-bs', f), path.join(G, 'dart-data-bs', f));
 if (!fs.existsSync(path.join(G, 'dart-gen-bs/gen_behaviors.dart')) && fs.existsSync(path.join(ROOT, 'new/dart-gen-bs/gen_behaviors.dart'))) fs.copyFileSync(path.join(ROOT, 'new/dart-gen-bs/gen_behaviors.dart'), path.join(G, 'dart-gen-bs/gen_behaviors.dart'));
 for (const f of fs.readdirSync(path.join(G, 'dart-gen-bs'))) if (/^gen_app_|^gen_balagan_/.test(f)) fs.unlinkSync(path.join(G, 'dart-gen-bs', f));
 for (const f of fs.readdirSync(path.join(G, 'dart-data-bs/auto'))) if (/^gen_app_|^gen_balagan_/.test(f)) fs.unlinkSync(path.join(G, 'dart-data-bs/auto', f));

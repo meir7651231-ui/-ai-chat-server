@@ -112,6 +112,13 @@ export async function generateBalagan({ outDir } = {}) {
   const out = R.outDir(); const files = fs.existsSync(out) ? fs.readdirSync(out).filter((f) => /^gen_balagan_.*\.dart$/.test(f)).map((f) => ({ route: 'balagan', file: path.join(out, f) })) : [];
   return { files, notes, modules: r ? r.mods.length : 0, bad: r ? r.bad : [], spec: r ? `(בלגן) ${r.mods.length} מודולים: ${r.mods.map((m) => m.title).join(' · ')}` : '' };
 }
+/** «כל המוסד» — היכולת של gen/wizard+pass: עץ-המוסד של הבעלים (gen/mosad.data.json: 12 אגפים, נבנה ממשפטיו והעשרותיו) ⇒ ספק לכל אגף (pass.specOf) ⇒ ספק-ds (gen/flutter.toSpecDs).
+ *  קריאה בלבד; מחזיר את הספקים — כל אגף נבנה דרך generateFromSpec (אותו app-ds), אגף אחד להרצה (שמות-הקבצים של app-ds אינם ממורחבים בתוך תהליך). */
+export async function mosadSpecs() {
+  const [PS, FL] = await Promise.all([import('../gen/pass.mjs'), import('../gen/flutter.mjs')]);
+  const roles = PS.MOSAD.roles || [];
+  return PS.MOSAD.departments.map((dep, i) => ({ i: i + 1, name: dep.name, entities: dep.entities.length, specGen: PS.specOf(dep, roles), spec: FL.toSpecDs(PS.specOf(dep, roles)) }));
+}
 /** דלת שנייה — מסמך של הבעלים במקום משפט: ספק מוכן (specs-ds/*.txt, נגזר ממסמך-«פירוק») ⇒ app-ds ⇒ outDir. */
 export async function generateFromSpec(spec, { outDir, name = 'spec' } = {}) {
   fs.mkdirSync(outDir, { recursive: true }); const files = [], notes = [];
@@ -122,7 +129,17 @@ export async function generateFromSpec(spec, { outDir, name = 'spec' } = {}) {
 export async function generateFromDoc(md, { outDir, name = 'doc' } = {}) {
   const { perukToSpec } = await import('../machtzev/generator/peruk.mjs');
   const { spec, node } = perukToSpec(md, name);
-  return { ...(await generateFromSpec(spec, { outDir, name })), node };
+  const r = await generateFromSpec(spec, { outDir, name });
+  // היכולת של yeshiva/read (הקורא הישיבתי): המסמך מול הספק — מה בפירוק לא הגיע לספק ומה הספק הניח (איכא דאמרי · שיעור · ורמינהו · ייתור …). טהור: check(doc, spec) בזיכרון
+  try {
+    const RD = await import('./read.mjs');
+    const findings = RD.check(RD.parsePeruk(md), RD.parseSpec(spec));
+    const qs = findings.filter((f) => f.q), fixes = findings.filter((f) => !f.q && f.kind !== 'ממה נפשך');
+    fs.writeFileSync(path.join(outDir, 'doc-check.json'), JSON.stringify(findings, null, 1));
+    r.notes.push(`הקורא (מסמך מול ספק): שאלות לבעלים ${qs.length} · תיקונים מכניים ${fixes.length}${qs.length ? ' · ' + qs.slice(0, 3).map((f) => `[${f.kind}] ${f.text.slice(0, 90)}`).join(' ¦ ') : ''}`);
+    r.docCheck = { questions: qs.length, fixes: fixes.length, file: path.join(outDir, 'doc-check.json') };
+  } catch (e) { r.notes.push(`הקורא לא רץ: ${String(e.message || e).slice(0, 120)}`); }
+  return { ...r, node };
 }
 /** הפעלה: כל מסלול למנוע שלו; כתיבה רק ל-outDir. מחזיר את הקבצים שנוצרו ופערים. */
 export async function generateAll(sentence, { answers = {}, outDir, name = 'mavin', proposals = false } = {}) {
