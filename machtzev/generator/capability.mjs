@@ -86,8 +86,9 @@ export function detectLevelsClause(head, tail) {
   if (!COND.levels) return null;
   const hm = String(head || '').trim().match(new RegExp(COND.levels.head)), tm = String(tail || '').trim().match(new RegExp(COND.levels.tail));
   if (!hm || !tm) return null;
-  const [high, mid] = [+tm[1], +tm[2]].sort((a, b) => b - a);
-  return { kind: 'levels', label: hm[1].trim(), x: cleanPhrase(hw(hm[2])), high, mid, op: null, n: null, y: null, trigger: hm[1].trim() };
+  const thresholds = [...new Set(tm[1].split(',').map((v) => +v.trim()).filter((v) => !isNaN(v)))].sort((a, b) => b - a);   // N ספים, מהגבוה לנמוך; מדרגה = כמה ספים הערך עובר
+  if (thresholds.length < 2) return null;
+  return { kind: 'levels', label: hm[1].trim(), x: cleanPhrase(hw(hm[2])), thresholds, high: thresholds[0], mid: thresholds[1], op: null, n: null, y: null, trigger: hm[1].trim() };
 }
 export function detectAllClauses(text) {
   const out = [];

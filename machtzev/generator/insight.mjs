@@ -11,7 +11,7 @@ import { buildAtlas } from './atlas.mjs';
 import { isPaper, skinWired } from './look.mjs';
 import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';
 import { synthDisplay, widgetRecordOf, sidecarOf } from './display-synth.mjs';
-import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr, liveCond, liveThresholdDart, liveOpDart } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
+import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr, liveCond, liveThresholdDart, liveOpDart, liveKeyExpr } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { ops as opsOfKind } from '../compose-engine.mjs';   // צורה ⇒ פעולות-יסוד (הטבלה הקיימת, לא רשימה שלי)
 import * as R from '../root.mjs';
@@ -114,7 +114,8 @@ ${isSet ? `    final agg = ${liveAggExpr(live, 'rs', k)};   // ערך-הקבוצ
     final br = (${cond}) ? rs.toList() : <Map<String, String>>[];` : `    final br = rs.where((r) => ${cond}).toList()${live.kind === 'eq' ? '' : '..sort((a, b) => ' + (live.kind === 'levels' ? `(b[${k(live.by)}] ?? '').compareTo(a[${k(live.by)}] ?? '')` : `${live.op === '<' ? '' : '-'}(${liveValue(live, 'a', k)} - ${liveValue(live, 'b', k)}).sign.toInt()`) + ')'};`}   // ההחלטה מניעה את הסדר: החורג ביותר ראשון (23-ד)
     return DsScaffold(title: ${k(name)}, subtitle: br.length.toString() + ' / ' + rs.length.toString() + ' ' + ${k(entity.name)}, icon: ${k('🔔')}, children: [
 ${parts.map((p) => `      ${p.cond ? `if (${p.cond}) ` : ''}Padding(padding: const EdgeInsets.only(bottom: 10), child: ${p.call}),`).join('\n')}
-      if (br.isEmpty) Padding(padding: const EdgeInsets.only(top: 24), child: Center(child: Text(${k(`${entity.name}: 0 · ${said}`)}, style: TextStyle(color: DsLook.of(context).muted)))),
+${live.kind === 'levels' ? `      for (final g in br) DsFold(title: (g[${k(live.by)}] ?? '') + ' · ' + (g[${k(live.field)}] ?? ''), details: [for (final r in appStore.records('${live.slug}').where((r) => ${liveKeyExpr(live, 'r', k)} == (g[${k(live.by)}] ?? ''))) Text((r[${k(entity.fields[0] || live.field)}] ?? '') + ' · ' + (r[${k(live.field)}] ?? ''), style: TextStyle(color: DsLook.of(context).ink, fontSize: 15, height: 1.5))]),   // חברי-המדרגה
+` : ''}      if (br.isEmpty) Padding(padding: const EdgeInsets.only(top: 24), child: Center(child: Text(${k(`${entity.name}: 0 · ${said}`)}, style: TextStyle(color: DsLook.of(context).muted)))),
     ]);
   });
 }

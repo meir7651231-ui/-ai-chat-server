@@ -16,9 +16,9 @@ export const AGG_WORD = { avg: 'ממוצע', sum: 'סכום', count: 'מונה' 
 export const liveIsGrouped = (live) => live.kind === 'aggBy' || live.kind === 'levels';
 /** מפתח-הקבוצה: aggBy ⇒ ערך שדה-החלוקה · levels ⇒ המדרגה (אטום-ההחלטה המוכח כשיש — live.decide — אחרת השוואה ביד לפי הצורה: ≥גבוה ⇒ 2 · ≥בינוני ⇒ 1 · אחרת 0) */
 export const liveKeyExpr = (live, r = 'r', k = (s) => `'${s}'`) => live.kind === 'levels'
-  ? `(() { final v = double.tryParse(${r}[${k(live.field)}] ?? '') ?? double.nan; return v.isNaN ? '' : ${live.decide ? `${live.decide}(v.toInt(), ${live.high}, ${live.mid})` : `(v >= ${live.high} ? 2 : v >= ${live.mid} ? 1 : 0)`}.toString(); })()`
+  ? `(() { final v = double.tryParse(${r}[${k(live.field)}] ?? '') ?? double.nan; return v.isNaN ? '' : ${live.decide && (live.thresholds || []).length === 2 ? `${live.decide}(v.toInt(), ${live.high}, ${live.mid})` : `const [${(live.thresholds || [live.high, live.mid]).join(', ')}].where((t) => v >= t).length`}.toString(); })()`
   : `(${r}[${k(live.by)}] ?? '').trim()`;
-export const levelOf = (live, v) => (v == null || isNaN(v) ? null : v >= live.high ? 2 : v >= live.mid ? 1 : 0);
+export const levelOf = (live, v) => (v == null || isNaN(v) ? null : (live.thresholds || [live.high, live.mid]).filter((t) => v >= t).length);
 /** קבוצות (aggBy): הרשומות ⇒ רשימת-קבוצות {by: ערך-החלוקה, field: ערך-הצבירה} — ומכאן הצורה היא פר-רשומה (רשומה = קבוצה) */
 export const liveGroupsExpr = (live, rs0 = 'rs0', k = (s) => `'${s}'`) => `(() { final g = <String, List<Map<String, String>>>{}; for (final r in ${rs0}) { g.putIfAbsent(${liveKeyExpr(live, 'r', k)}, () => <Map<String, String>>[]).add(r); } return [for (final e in g.entries) <String, String>{${k(live.by)}: e.key, ${k(live.field)}: ((${liveAggExpr(live, 'e.value', k)}) * 10).round() / 10 == ((${liveAggExpr(live, 'e.value', k)}) * 10).round() ~/ 10 ? (((${liveAggExpr(live, 'e.value', k)}) * 10).round() ~/ 10).toString() : (((${liveAggExpr(live, 'e.value', k)}) * 10).round() / 10).toString()}]; })()`;
 /** ערך-הקבוצות מהדוגמאות (aggBy) ⇒ [[by, value]] */

@@ -370,7 +370,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     const aggOf = (w) => Object.keys(AGG).find((a) => AGG[a].includes(w)) || null;
     const entByStem = (w) => { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; if (stemOf(r.entity) === stemOf(w) || r.entity === w) return r; } return null; };
     const liveOf = (x) => { const c = x.clause;
-      if (c && c.kind === 'levels' && c.x) { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'levels', field: f.label, by: c.label, agg: 'count', high: c.high, mid: c.mid, op: null, n: null } }; } return x; }
+      if (c && c.kind === 'levels' && c.x) { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'levels', field: f.label, by: c.label, agg: 'count', high: c.high, mid: c.mid, thresholds: c.thresholds || [c.high, c.mid], op: null, n: null } }; } return x; }
       if (!c || !c.x || !/^[<>=]$/.test(c.op) || (c.op === '=' ? !c.y : (c.n == null || isNaN(+c.n)))) return x;
       if (c.unit === 'ask') { const why = T('liveMonthAsk', { name: x.name, unit: c.unitWord || '' }); seedNotes.push(why); return { ...x, why, ask: 'timeUnit' }; }   // שאלה לדלת, לא הנחה
       const xw = String(c.x).split(/\s+/).filter(Boolean); const agg = aggOf(xw[0]); const rest = agg ? xw.slice(1) : xw;
