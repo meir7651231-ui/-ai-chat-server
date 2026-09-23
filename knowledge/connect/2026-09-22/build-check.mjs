@@ -14,6 +14,7 @@ const ai = args.indexOf('--answers'); const answers = ai >= 0 ? JSON.parse(fs.re
 const sentence = args.filter((a, i) => !a.startsWith('--') && !(ai >= 0 && i === ai + 1))[0];
 const HOST = process.env.BS_HOST;
 const FLUTTER = ['/root/flutter/bin/flutter', process.env.FLUTTER_BIN].find((p) => p && fs.existsSync(p));
+const { generateAll } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));   // קורפוס-המסכים נטען מהמדף האמיתי לפני הפניית הפלט לסקראצ'
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'mavin-build-'));
 process.env.GEN_OUT = path.join(tmp, 'gen'); process.env.GEN_DATA_OUT = path.join(tmp, 'data');
 fs.mkdirSync(process.env.GEN_OUT, { recursive: true }); fs.mkdirSync(process.env.GEN_DATA_OUT, { recursive: true });
@@ -22,12 +23,14 @@ const { buildApp } = await import(path.join(ROOT, 'machtzev/generator/app-ds.mjs
 const form = formOf(sentence);
 const { spec, skipped, builtin } = specOf(form, answers);
 console.log(`«${sentence}»\nאפיון:\n${spec.split('\n').map((l) => '  ' + l).join('\n') || '  (ריק)'}${skipped.length ? `\n  לא נכנסו (בלי שדות ⇒ שאלה): ${skipped.join(', ')}` : ''}${builtin && builtin.length ? `\n  כבר מובנה במסך-הישות: ${builtin.join(' · ')}` : ''}`);
-if (!spec) { console.log('⚪ אין אפיון ⇒ אין בנייה. ענה על השדות ותנסה שוב.'); process.exit(0); }
-const logs = []; const _log = console.log; console.log = (...a) => logs.push(a.join(' ')); let app; try { app = buildApp(spec, { writePlan: false }); } finally { console.log = _log; }
-for (const l of logs) if (/נמצאו-ומחווטים|ייצוא|דוח/.test(l)) console.log(l.slice(0, 160));
-console.log(`מסכים: ${app.screens.map((s) => `${s.kind}:${s.name}${s.sub ? ` (${s.sub})` : ''}`).join(' · ')}`);
+const G0 = await generateAll(sentence, { answers, outDir: process.env.GEN_OUT, name: 'chk' });
+for (const r of G0.routes) console.log(`  מסלול · «${r.thing}» ⇒ ${r.route} · ${r.why}`);
+for (const n of G0.notes) console.log('  ' + n);
+const appEntry = G0.files.find((f) => f.route === 'appds'); if (appEntry) console.log(`מסכים: ${appEntry.screens.join(' · ')}`);
+const extra = G0.files.filter((f) => f.file).map((f) => f.file);
+if (!spec && !extra.length) { console.log('⚪ אין אפיון ואין מסלול אחר ⇒ אין בנייה. ענה על השאלות ותנסה שוב.'); process.exit(0); }
 const gen = fs.readdirSync(process.env.GEN_OUT).filter((f) => /^gen_app_.*\.dart$/.test(f));
-if (!HOST || !FLUTTER) { console.log(`⚪ לא-נמדד: ${!FLUTTER ? 'אין flutter' : 'אין BS_HOST'} — נפלטו ${gen.length} קבצי Dart ל-${process.env.GEN_OUT}`); process.exit(2); }
+if (!HOST || !FLUTTER) { console.log(`⚪ לא-נמדד: ${!FLUTTER ? 'אין flutter' : 'אין BS_HOST'} — נפלטו ${gen.length + extra.length} קבצי Dart ל-${process.env.GEN_OUT}`); process.exit(2); }
 // מראה מינימלית: המסכים + התוכן שלהם; עצי-האטומים מועתקים פעם אחת (קיימים ⇒ לא נוגעים)
 const G = path.join(HOST, 'lib/genesis');
 for (const [src, dst] of [['new/dart-ui-bs', 'dart-ui-bs'], ['new/dart-forge-bs', 'dart-forge-bs'], ['new/dart-maor', 'dart-maor'], ['new/dart-screens-bs', 'dart-screens-bs'], ['new/dart-data-maor', 'dart-data-maor']])
@@ -37,8 +40,10 @@ if (!fs.existsSync(path.join(G, 'dart-gen-bs/gen_behaviors.dart')) && fs.existsS
 for (const f of fs.readdirSync(path.join(G, 'dart-gen-bs'))) if (/^gen_app_/.test(f)) fs.unlinkSync(path.join(G, 'dart-gen-bs', f));
 for (const f of fs.readdirSync(path.join(G, 'dart-data-bs/auto'))) if (/^gen_app_/.test(f)) fs.unlinkSync(path.join(G, 'dart-data-bs/auto', f));
 for (const f of gen) fs.copyFileSync(path.join(process.env.GEN_OUT, f), path.join(G, 'dart-gen-bs', f));
+const extraTargets = [];
+for (const f of extra) { const dst = /\.g\.dart$/.test(f) ? path.join(G, 'dart-screens-bs', path.basename(f)) : path.join(G, 'dart-gen-bs', path.basename(f)); fs.mkdirSync(path.dirname(dst), { recursive: true }); fs.copyFileSync(f, dst); extraTargets.push(path.relative(HOST, dst)); }
 for (const f of fs.readdirSync(process.env.GEN_DATA_OUT)) fs.copyFileSync(path.join(process.env.GEN_DATA_OUT, f), path.join(G, 'dart-data-bs/auto', f));
-const targets = gen.filter((f) => !/bind|wizard|audit|flags/.test(f)).map((f) => 'lib/genesis/dart-gen-bs/' + f);   // מסכי-המערכת המשותפים (bind/wizard/audit/flags) תלויים ב-buildsmart האמיתי — לא מדד של המשפט
+const targets = [...gen.filter((f) => !/bind|wizard|audit|flags/.test(f)).map((f) => 'lib/genesis/dart-gen-bs/' + f), ...extraTargets];   // מסכי-המערכת המשותפים (bind/wizard/audit/flags) תלויים ב-buildsmart האמיתי — לא מדד של המשפט
 const cmd = `flutter analyze --no-fatal-infos --no-fatal-warnings ${targets.join(' ')}`;
 const r = spawnSync(FLUTTER, ['analyze', '--no-fatal-infos', '--no-fatal-warnings', ...targets], { cwd: HOST, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
 const lines = (r.stdout + r.stderr).split('\n');
