@@ -55,6 +55,8 @@ export function spreadOf(w) { const x = entryOf(w); return x ? { form: x.form, o
 const isSpread = (w) => spreadOf(w).ops >= SPREAD();
 const known = (w) => spreadIndex().has(w);   // הצורה עצמה כתובה על חלקיק כלשהו
 const bareLabel = (w) => (known(w) ? w : (stripLead(w).slice(1).find(known) || w));   // «לעמותה» ⇒ «עמותה» רק אם «עמותה» כתובה ו-«לעמותה» לא
+const prefixed = (w) => stripLead(w).slice(1).some((f) => f.length >= 3 && known(f));   // «לתורם»/«במייל»: גם הצורה בלי האות הפותחת כתובה ⇒ נושאת אות-יחס
+const bareObj = (w) => (stripLead(w).slice(1).find((f) => f.length >= 3 && known(f)) || w);
 /** רמז-מין למילה מהקטלוג בלבד: 'act' = כתובה בעיקר על חלקיקי-חישוב · 'thing' = על חלקיקי-ציור/נתונים · 'ask' = לא כתובה בשום מקום */
 export function hintOf(w) {
   const x = entryOf(w); if (!x) return { hint: 'ask', ops: [] };
@@ -89,7 +91,7 @@ function listOf(segment) {
 // ── צורת-הצורך של משפט ──
 export function formOf(sentence) {
   const words = toks(sentence);
-  const segments = sentence.split(/[:;]/).map((s) => s.trim()).filter(Boolean);
+  const segments = sentence.split(/[:;]|\.(?=\s|$)/).map((s) => s.trim()).filter(Boolean);   // «.» בסוף/לפני רווח = מפריד (כמו «:»)
   const things = [];   // { label, many, fields:[{label}], under, src, refs, acts, values }
   const frame = [];    // מילים מפוזרות (מסגרת/קישור) — מדווחות, לא מפורשות
   const find = (w) => things.find((t) => toks(t.label).some((lw) => stripLead(stem(w)).some((f) => f.length >= 3 && f === stem(lw))));   // «לרכב» ⇔ «ניהול רכבים»: כל מילה בתווית; גזע ≥3 אותיות («כמ» לא)
@@ -100,7 +102,16 @@ export function formOf(sentence) {
       if (isNum(w)) { values.push({ num: +w, unit: run[i + 1] && !isNum(run[i + 1]) ? run[i + 1] : null }); continue; }
       plain.push(w); const h = hintOf(w); if (h.hint === 'act') acts.push({ word: w, ops: h.ops.slice(0, 3) }); else if (h.hint === 'ask') asks.push(w); }   // התווית נשארת שלמה; הרמזים = הערות עליה, לא מחיקה ממנה
     const label = plain.length ? [bareLabel(plain[0]), ...plain.slice(1)].join(' ') : run.join(' ');
-    return { label, many: plain.length ? isMany(plain[plain.length - 1]) : false, fields: [], under, src, acts, values, asks };
+    // יחס לפי מיקום (אפס דקדוק): נושא = המילה הראשונה · מושא = המילה הבאה שהקטלוג מכיר כדבר או שצורתה רבים · מה שביניהן = היחס
+    let rel = null;
+    if (plain.length >= 2) {
+      // מושא = המילה הבאה שהיא דבר לפי צורה: רבים · מוכרת-לקטלוג-כדבר · או נושאת אות-יחס (bareLabel שונה מהמילה: «לתורם»⇒«תורם», «במייל»⇒«מייל»)
+      let j = 1; while (j < plain.length && !(hintOf(plain[j]).hint === 'thing' || isMany(plain[j]) || prefixed(plain[j]))) j++;
+      let object = j < plain.length ? plain[j] : null, words = plain.slice(1, object ? j : plain.length);
+      if (!object && values.length) object = values.map((v) => v.num + (v.unit ? ' ' + v.unit : '')).join(', ');   // אין מושא-מילה ⇒ הערך הוא המושא («מעל 200 שקל»)
+      if (words.length) rel = { subject: bareLabel(plain[0]), words, object: object ? (prefixed(object) ? bareObj(object) : bareLabel(object)) : null, proposal: [...new Set(words.flatMap((w) => hintOf(w).ops))].slice(0, 3) };
+    }
+    return { label, many: plain.length ? isMany(plain[plain.length - 1]) : false, fields: [], under, src, acts, values, asks, rel };
   };
   const runsOf = (ws) => { const runs = []; let cur = []; for (const w of ws) { if (!isNum(w) && isSpread(w)) { if (cur.length) runs.push(cur); cur = []; frame.push(w); } else cur.push(w); } if (cur.length) runs.push(cur); return runs; };   // מספר לעולם אינו «מפוזר» — נשאר ברצף כערך
   const queue = [...segments];
@@ -137,8 +148,10 @@ export function questionsFor(form, answers = {}) {
     if (!t.fields.length && !(a.fields && a.fields.length)) qs.push({ thing: t.label, ask: 'fields', options: TYPES });
     for (const f of t.fields) { const af = (a.fields || []).find((x) => x.label === f.label); if (!af || !af.type) qs.push({ thing: t.label, ask: 'type', field: f.label, options: TYPES }); }
     if (!(a.acts && a.acts.length)) qs.push({ thing: t.label, ask: 'acts', options: ACTS, proposal: (t.acts || []).map((x) => x.word) });
-    for (const w of (t.asks || [])) qs.push({ thing: t.label, ask: 'word', word: w, options: ['thing', 'act', 'field', 'skip'] });   // מילה שאינה כתובה על שום חלקיק
-    for (const x of (t.acts || [])) qs.push({ thing: t.label, ask: 'act', word: x.word, proposal: x.ops });
+    const inRel = new Set(t.rel ? t.rel.words : []);
+    if (t.rel && !a.rel) qs.push({ thing: t.label, ask: 'rel', subject: t.rel.subject, words: t.rel.words, object: t.rel.object, proposal: t.rel.proposal, options: ['ref', 'act', 'cond', 'value', 'skip'] });   // «A» —מילים→ «B»: מצביע / פעולה / תנאי / ערך / דלג
+    for (const w of (t.asks || [])) if (!inRel.has(w)) qs.push({ thing: t.label, ask: 'word', word: w, options: ['thing', 'act', 'field', 'skip'] });   // מילה שאינה כתובה על שום חלקיק
+    for (const x of (t.acts || [])) if (!inRel.has(x.word)) qs.push({ thing: t.label, ask: 'act', word: x.word, proposal: x.ops });
     for (const f of (a.fields || [])) if (f.type === 'ref' && !f.to) qs.push({ thing: t.label, ask: 'ref', field: f.label, options: form.things.map((x) => x.label) });
   }
   return qs;
@@ -159,6 +172,13 @@ export function needsFrom(form, answers = {}) {
       if (act === 'sum') needs.push({ thing: t.label, act, op: 'stat', need: ['value', 'label'], goal: t.label });
     }
     for (const f of fields) if (f.type === 'ref' && f.to) needs.push({ thing: t.label, act: 'ref', field: f.label, to: f.to, op: null });
+    if (a.rel && t.rel) {   // יחס שנענה: מצביע ⇒ קישור · פעולה ⇒ כפתור · תנאי ⇒ חלקיק-בדיקה לפי מילות-הבעלים (coverLogic) · ערך ⇒ מספר בולט
+      const goal = t.rel.words.join(' ');
+      if (a.rel === 'ref') needs.push({ thing: t.label, act: 'ref', to: t.rel.object, op: null });
+      if (a.rel === 'act') needs.push({ thing: t.label, act: 'act', op: 'action', need: ['label', 'onTap'], goal });
+      if (a.rel === 'cond') needs.push({ thing: t.label, act: 'cond', op: 'predicate', need: [], goal });
+      if (a.rel === 'value') needs.push({ thing: t.label, act: 'value', op: 'stat', need: ['value', 'label'], goal });
+    }
   }
   return needs;
 }
@@ -198,7 +218,7 @@ export const kindOf = (id) => valueKinds().get(String(id).split('@')[0]) || ['te
 export async function coverNeeds(needs) {
   const { cover } = await import('../machtzev/generator/cover.mjs');
   return needs.filter((n) => n.op).map((n) => {
-    const c = cover({ op: n.op, need: n.need, goal: '', k: n.type ? 12 : 3 });
+    const c = cover({ op: n.op, need: n.need, goal: n.goal && n.act === 'cond' ? n.goal : '', k: n.type ? 12 : 3 });
     let atoms = c.atoms, missing = c.missing.slice(), alts = c.alts || [];
     if (n.type) {   // שדה עם סוג: החלופה הראשונה שסוג-ערכה תואם; אין ב-op ⇒ גם במין-השכן (ממצא: DsField יושב תחת 'search', לא 'field')
       let fit = alts.find((id) => kindOf(id).includes(n.type)), via = n.op;
@@ -216,7 +236,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const show = (s) => {
     const r = mavin(s, { answers });
     console.log(`\n«${s}»\n  מנוע 1: ${r.words.length} מילים · מסגרת/קישור (מפוזר ≥${SPREAD()} מ-${opsCount()} מינים): ${r.frame.map((w) => `${w}(${spreadOf(w).ops})`).join(' ') || '—'}`);
-    for (const t of r.things) console.log(`  דבר «${t.label}» · ${t.many ? 'הרבה' : 'אחד'}${t.under ? ` · בתוך «${t.under}»` : ''}${t.fields.length ? ` · שדות: ${t.fields.map((f) => f.label).join(', ')}` : ''}`);
+    for (const t of r.things) console.log(`  דבר «${t.label}» · ${t.many ? 'הרבה' : 'אחד'}${t.under ? ` · בתוך «${t.under}»` : ''}${t.fields.length ? ` · שדות: ${t.fields.map((f) => f.label).join(', ')}` : ''}${t.rel ? ` · יחס: «${t.rel.subject}» —${t.rel.words.join(' ')}→ ${t.rel.object ? `«${t.rel.object}»` : '?'}${t.rel.proposal.length ? ` (קטלוג: ${t.rel.proposal.join('/')})` : ''}` : ''}${t.values && t.values.length ? ` · ערכים: ${t.values.map((v) => v.num + (v.unit ? ' ' + v.unit : '')).join(', ')}` : ''}`);
     console.log(`  שאלות: ${r.questions.length} · ${r.questions.map((q) => q.ask + (q.field ? `(${q.field})` : '')).join(' ')}`);
     if (r.needs.length) console.log(`  בקשות למנוע 3: ${r.needs.map((n) => `${n.op || 'ref'}[${(n.need || []).join(',')}]←${n.thing}`).join(' · ')}`);
     return r;
