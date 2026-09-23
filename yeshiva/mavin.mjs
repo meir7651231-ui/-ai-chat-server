@@ -64,6 +64,8 @@ export function hintOf(w) {
   return l > 0 && l >= d ? { hint: 'act', ops: [...x.e.logic] } : { hint: 'thing', ops: [...x.e.display] };
 }
 const isNum = (w) => /^\d+$/.test(w);
+const STAGE_WORDS = (() => { try { return new Set(JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')).stagePrefixes || []); } catch { return new Set(); } })();   // מילות-«שלבים» של שפת-הספק הקיימת (דאטה של מנוע 4)
+const ARROW = /\s*(?:→|->|⇒|»)\s*/;   // חץ בין מילים = סדר (צורה): «חדשה → בעבודה → הושלמה» ⇒ שלבים
 const enumOf = (it) => { const g = it.find((w) => w.includes('/')); return g ? g.split('/').filter(Boolean) : null; };   // איבר עם «/» ⇒ ערכים-מותרים
 const deVav = (it) => (it.length && /^ו[֐-׿]{2,}/.test(it[0]) ? [it[0].slice(1), ...it.slice(1)] : it);   // (ב) «ו»-החיבור על ראש איבר
 
@@ -117,6 +119,24 @@ export function formOf(sentence) {
   const runsOf = (ws) => { const runs = []; let cur = []; for (const w of ws) { if (!isNum(w) && isSpread(w)) { if (cur.length) runs.push(cur); cur = []; frame.push(w); } else cur.push(w); } if (cur.length) runs.push(cur); return runs; };   // מספר לעולם אינו «מפוזר» — נשאר ברצף כערך
   const queue = [...segments];
   while (queue.length) { const seg = queue.shift();
+    // ── שלבים לפי צורה (העיקרון של מחזור-חיים, מהמילים של הבעלים בלבד): ──
+    // (א) קטע = מילת-«שלבים» של שפת-הספק והקטע הבא הוא רשימה ⇒ איברי-הרשימה = שלבי הדבר האחרון (עם שדות, ואם אין — האחרון)
+    const segToks = toks(seg);
+    if (segToks.length === 1 && STAGE_WORDS.has(segToks[0]) && queue.length && things.length) {
+      const nxt = queue.shift(); const parts = nxt.split(ARROW).flatMap((p) => p.split(/[,،]/)).map((p) => deVav(toks(p))).filter((p) => p.length);
+      const owner = [...things].reverse().find((t) => t.fields.length) || things[things.length - 1];
+      owner.stages = parts.map((p) => p.join(' ')); owner.stagesWord = segToks[0]; frame.push(segToks[0]); continue; }
+    // (ב) חץ בתוך הקטע: «משימות עם מצב חדשה → בעבודה → הושלמה» ⇒ המילה שלפני החץ הראשון = שלב 1; הרצף שלפניה = הדבר
+    const ar = seg.split(ARROW);
+    if (ar.length >= 2 && ar.every((p) => toks(p).length)) {
+      const head = toks(ar[0]); const runs = runsOf(head); const last = runs.length ? runs[runs.length - 1] : [];
+      const st0 = last[last.length - 1]; const ownerRun = last.length > 1 ? last.slice(0, -1) : (runs.length > 1 ? runs[runs.length - 2] : []);
+      for (const r of runs.slice(0, -1)) { if (r === ownerRun) continue; const hit = r.length === 1 ? find(r[0]) : null; if (hit) (hit.refs = hit.refs || []).push(...r); else things.push(unitOf(r, seg)); }
+      let owner = ownerRun.length ? (find(ownerRun[ownerRun.length - 1]) || null) : null;
+      if (!owner && ownerRun.length) { owner = unitOf(ownerRun, seg); things.push(owner); }
+      if (!owner) owner = things[things.length - 1];
+      if (owner) { owner.stages = [st0, ...ar.slice(1).map((p) => toks(p).join(' '))]; continue; }
+    }
     let L = listOf(seg), head = null; if (L && L.rest) { queue.unshift(L.rest); if (L.only) { head = L.head; L = null; } }
     const pre = L ? L.before : (head || toks(seg));
     const runs = runsOf(pre);
@@ -216,9 +236,13 @@ export function specOf(form, answers = {}) {
     const a = answerFor(t, answers);
     const fields = (a.fields && a.fields.length) ? a.fields.map((f) => f.label + (f.enumVals ? `{${f.enumVals.join('|')}}` : '')) : t.fields.map((f) => f.label + (f.enumVals ? `{${f.enumVals.join('|')}}` : ''));   // {א|ב|ג} = בחירה-אחת-מכמה ⇒ entity.mjs ⇒ צ'יפים
     const refs = (a.fields || []).filter((f) => f.type === 'ref' && f.to && names.has(f.to)).map((f) => f.to);
+    // יחס לפי צורה: «הזמנות של לקוחות» (רצף, מילת-קישור אחת, רצף) ⇒ להזמנות שדה «לקוחות» כשגם הוא ישות; app-ds מזהה בו קשר (relOf)
+    if (t.content && names.has(t.content) && t.content !== t.label && !fields.some((f) => f === t.content)) fields.push(t.content);
     const all = [...new Set([...fields, ...refs])];
-    if (!all.length) { skipped.push(t.label); continue; }
-    lines.push(`ישות ${t.label} עם ${all.join(', ')}`);
+    if (!all.length && !(t.stages && t.stages.length)) { skipped.push(t.label); continue; }
+    // שלבים מהמילים של הבעלים ⇒ סעיף-שלבים של שפת-הספק (entity.mjs: BreadcrumbTrail + «קדם ל…»); בלי שלבים אין workflow (לא ברירת-מחדל)
+    const stagesPart = t.stages && t.stages.length >= 2 ? ` | ${t.stagesWord || [...STAGE_WORDS][0]}: ${t.stages.join(', ')}` : '';
+    lines.push(`ישות ${t.label} עם ${all.join(', ')}${stagesPart}`);
   }
   // [פעולה]: יחס שהבעלים ענה עליו «פעולה» (או «תנאי» ⇒ חוק) על דבר שנכנס כישות
   for (const t of form.things) { const a = answerFor(t, answers); if (t.rel && a.rel === 'act') { const st = (w) => stripLead(stem(w)).filter((f) => f.length >= 3); const ent = ents.find((e) => toks(e.label).some((lw) => st(t.rel.subject).includes(stem(lw)))) || ents.find((e) => e.label === t.label); if (ent) lines.push(`חלקיק ${ent.label}: [פעולה] ${t.rel.words.join(' ')}`); } }
