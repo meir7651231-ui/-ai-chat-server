@@ -17,19 +17,37 @@ const D = JSON.parse(fs.readFileSync(new URL('./insight.data.json', import.meta.
 let ATL = null; const widgetOf = (cls) => ((ATL ||= buildAtlas({ forge: isPaper() })).widgets.find((w) => w.cls === cls) || null);
 const impOf = (w) => `import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`;
 
+const REG = path.join(R.GEN_DIR, 'knowledge', 'composites.json');
+/** אינדקס-היכולות-המורכבות (PURPOSE §3): מניפסטים שהבעלים רשם ⇒ בפעם הבאה מועמדים ראשונים (ועדיין נפסקים — הכרעה-27). רישום = פקודה מפורשת, לא בזמן-בנייה. */
+export const readComposites = () => { try { return JSON.parse(fs.readFileSync(REG, 'utf8')).composites || []; } catch { return []; } };
+export function registerComposite(manifestPath) {
+  const m = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  const cur = readComposites().filter((c) => c.key !== m.key);
+  cur.push({ key: m.key, shape: m.shape, purpose: m.purpose, decision: m.decision, ops: m.ops.map((o) => ({ op: o.op, atom: o.atom })), flow: m.flow });
+  fs.mkdirSync(path.dirname(REG), { recursive: true });
+  fs.writeFileSync(REG, JSON.stringify({ _: 'אינדקס-יכולות-מורכבות (insight): יכולת = תיאור-דאטה של הרכבה — אילו אטומים, איזה חיווט, לאיזו מטרה. נרשם בפקודה, לא בבנייה.', composites: cur }, null, 1) + '\n');
+  return cur.length;
+}
 /** תובנת-סף על ישות ⇒ מסך אחד מורכב. live = { slug, field, op:'<'|'>', n } · entity = { name, fields[] } · name = מילות-הבעלים */
-export function emitInsight({ slug, cls, name, live, entity, expect = null, seedSlug = null, words = null }) {
+export function emitInsight({ slug, cls, name, live, entity, expect = null, seedSlug = null, words = null, decide = null }) {
+  // decide = { name, file, proven, examples } — אטום-ההחלטה מהקטלוג, מוכח בהרצה (behavior-plan) על הדוגמאות של הבעלים; בלי החלטה מוכחת ⇒ ההשוואה נכתבת ביד ומדווחת
   const said = words || `${live.field} ${live.op} ${live.n}`;   // מילות-הבעלים («ציון מתחת ל-55»), לא סימן (RTL הופך «<»)
   const { k, dump } = makeConsts(slug);
   const imports = new Set(["import '../dart-ui-bs/ds/ds.dart';", "import '../dart-ui-bs/ds/ds_store.dart';"]);
   const ledger = [];
-  const manifest = { purpose: name, kind: KIND.shiur, source: { entity: entity.name, field: live.field, op: live.op, n: live.n }, ops: [], flow: [] };
+  const manifest = { key: `predicateOverSet·${live.op}`, shape: 'predicateOverSet', purpose: name, kind: KIND.shiur, source: { entity: entity.name, field: live.field, op: live.op, n: live.n }, ops: [], flow: [] };
+  const prior = readComposites().find((c) => c.key === manifest.key) || null;   // יכולת רשומה עם אותה צורה ⇒ האטומים שלה מועמדים ראשונים (ועדיין נפסקים)
+  manifest.prior = prior ? { ops: prior.ops } : null;
   // ── הנתונים המשותפים (חוק 23-ד: מחברים בהחלטה): כל האטומים קוראים מאותו br/rs ──
-  const cond = `(double.tryParse(r[${k(live.field)}] ?? '') ?? double.nan) ${live.op} ${live.n}`;
+  const numOf = `(double.tryParse(r[${k(live.field)}] ?? '') ?? double.nan)`;
+  const cond = decide && decide.name ? `${decide.name}(${numOf}, ${live.n})` : `${numOf} ${live.op} ${live.n}`;
+  if (decide && decide.file) imports.add(`import '../${decide.file}';`);
+  manifest.decision = decide ? { atom: decide.name, file: decide.file, proven: !!decide.proven, examples: decide.examples || [] } : { atom: null, why: 'אין אטום-החלטה מוכח ⇒ השוואה ביד (מדווח)' };
   const descField = entity.fields[0] || live.field;
   const pick = (op, need, ctx, purpose) => {
     const pk = searchOp(op, `${name} ${entity.name}`, null, 12);
-    const r = judge({ purpose: { kind: purpose || KIND.fact, need, text: `${op} · ${name}` }, cands: [...pk.atoms, ...pk.alts], widgetOf, skinWired, wire: (c) => wireAtom(c, ctx) });
+    const first = prior ? prior.ops.filter((o) => o.op === op && o.atom).map((o) => o.atom) : [];
+    const r = judge({ purpose: { kind: purpose || KIND.fact, need, text: `${op} · ${name}` }, cands: [...new Set([...first, ...pk.atoms, ...pk.alts])], widgetOf, skinWired, wire: (c) => wireAtom(c, ctx) });
     ledger.push(ledgerLine(`${name} · ${op}`, r));
     manifest.ops.push({ op, need, atom: r.pick ? r.pick.cls : null, filled: r.pick ? r.pick.filled : [], rulings: r.rulings.map((x) => `${x.cls}: ${x.verdict} · ${x.move} — ${x.why}`) });
     if (r.pick) imports.add(impOf(r.pick));
@@ -68,7 +86,7 @@ class ${cls} extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
     final rs = appStore.records('${live.slug}');
-    final br = rs.where((r) => ${cond}).toList();
+    final br = rs.where((r) => ${cond}).toList()..sort((a, b) => ${live.op === '<' ? '' : '-'}((double.tryParse(a[${k(live.field)}] ?? '') ?? 0) - (double.tryParse(b[${k(live.field)}] ?? '') ?? 0)).sign.toInt());   // ההחלטה מניעה את הסדר: החורג ביותר ראשון (23-ד)
     return DsScaffold(title: ${k(name)}, subtitle: br.length.toString() + ' / ' + rs.length.toString() + ' ' + ${k(entity.name)}, icon: ${k('🔔')}, children: [
 ${parts.map((p) => `      ${p.cond ? `if (${p.cond}) ` : ''}Padding(padding: const EdgeInsets.only(bottom: 10), child: ${p.call}),`).join('\n')}
       if (br.isEmpty) Padding(padding: const EdgeInsets.only(top: 24), child: Center(child: Text(${k(`${entity.name}: 0 · ${said}`)}, style: TextStyle(color: DsLook.of(context).muted)))),
@@ -100,4 +118,10 @@ ${texts.map((t) => `    expect(find.textContaining('${String(t).replace(/'/g, "\
   }
   fs.writeFileSync(path.join(R.outDir(), `insight_${slug}.json`), JSON.stringify(manifest, null, 1));
   return { cls, ops: manifest.ops.length, wired: manifest.ops.filter((o) => o.atom).length, missing, ledger, manifest, accept: !!accept };
+}
+
+// CLI: node machtzev/generator/insight.mjs --register <insight_*.json>   (רישום מפורש של יכולת מורכבת לאינדקס — הכרעת-בעלים, לא אוטומטי)
+if (process.argv[1] && import.meta.url === 'file://' + process.argv[1] && process.argv.includes('--register')) {
+  const f = process.argv[process.argv.indexOf('--register') + 1];
+  console.log(`📇 נרשמו ${registerComposite(f)} יכולות מורכבות ⇒ ${REG}`);
 }
