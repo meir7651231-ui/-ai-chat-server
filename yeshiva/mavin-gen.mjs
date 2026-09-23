@@ -15,6 +15,7 @@ import { askMaimatai } from './kashe.mjs';   // המקשה (18 גלאים) — �
 import { rule as yeshivaRule } from './purpose.mjs';   // הפוסק (9 מהלכים) על האפיון שיצא
 import { detectAllClauses, detectLevelsClause, relOpOf, emitAppFrom } from '../machtzev/generator/capability.mjs';
 import { retrieveScreen } from '../machtzev/generator/retrieve-screen.mjs';
+import { resolveEin } from './ein.mjs';
 import * as R from '../machtzev/root.mjs';
 
 const MAN = path.join(R.ROOT, 'screens-seed/manifests');
@@ -202,66 +203,12 @@ export async function generateFromDoc(md, { outDir, name = 'doc' } = {}) {
  *  (א) יש תשובה מהבעלים («מתקשה» = «ציון מתחת ל-55 או היעדרויות מעל 3») ⇒ המילה מוחלפת בהגדרה, «או» = סעיף לכל חלק, והמשפט נקרא שוב באותה דלת;
  *      התשובה נזכרת (remember) ומוצעת בפעם הבאה כהצעה, לא כעובדה (recall ⇒ ברירת-מחדל בשאלה; נכנסת לבד רק עם proposals).
  *  (ב) אין ⇒ שאלה עם מפתח = המילה. אפס פירוש: המילה נמצאת לפי צורה (אחרי מילת-הישות בסעיף), ההגדרה היא משפט של הבעלים. */
-/** הכיוון-ההפוך של ההגדרה (הכרעת-בעלים 23.9 «מנוע תמיד יכול לעבוד דו-כיווני»): במקום משפט, הבעלים מסמן אילו דוגמאות הן «מתקשה» («ראובן»).
- *  behavior-plan.valueSearch (החיפוש הרקורסיבי-המוכח על קטלוג-הלוגיקה) מקבל לכל שדה-מספר צורך: פרמטר = ערך-השדה, קבועים = ערכי-הדוגמאות, תשובה = הסימון —
- *  ומוצא בהוכחה-בריצה ב-Dart כלל שמסכים עם כל הדוגמאות. הכיוון (מתחת/מעל) נקרא מהדוגמאות עצמן מול הקבוע; המילים מ-spec-lang (amountAbove/amountBelow).
- *  שדה-מספר יחיד ⇒ ההגדרה נכנסת (וסימון-הסף הוא ערך מהדוגמאות, לא המצאה). כמה שדות ⇒ שאלה סגורה עם הכללים שנמצאו. אפס ⇒ שאלה: עוד דוגמאות. */
-async function defineByMarks(w, ans, thing, SL) {
-  const keys = new Set((thing.examples || []).map((r) => String(r[0]).trim())); const marks = ans.split(/[,;\s]+/).filter(Boolean);
-  if (!marks.length || !marks.every((m) => keys.has(m)) || !keys.size) return null;
-  const isNum = (v) => /^-?\d+(\.\d+)?$/.test(String(v).trim());
-  const numIdx = thing.fields.map((f, i) => i).filter((i) => i > 0 && thing.examples.every((r) => isNum(r[i])));
-  if (!numIdx.length) return { marks, cands: [] };
-  const needs = {};
-  for (const i of numIdx) { const vals = [...new Set(thing.examples.map((r) => String(r[i]).trim()))];
-    needs[`def.${w}.${i}`] = { shape: 'בדיקה', demand: `${thing.label} ${w} ${thing.fields[i].label}`, params: ['num'], ret: 'bool', consts: vals, examples: thing.examples.map((r) => [String(r[i]).trim(), `r == ${marks.includes(String(r[0]).trim())}`]) }; }
-  const BP = await import('../machtzev/generator/behavior-plan.mjs'); const P = BP.planNeeds(needs, { prove: true });
-  const cands = [];
-  for (const i of numIdx) { const p = P[`def.${w}.${i}`]; if (!p || !p.pick || !p.proven) continue;
-    const m = String(p.pick).match(/^\w+\(([^)]*)\)$/); const c = m ? m[1].split(',').map((x) => x.trim()).find((x) => isNum(x)) : null; if (c == null) continue;
-    const marked = thing.examples.filter((r) => marks.includes(String(r[0]).trim())).map((r) => +r[i]), rest = thing.examples.filter((r) => !marks.includes(String(r[0]).trim())).map((r) => +r[i]);
-    const below = marked.every((v) => v < +c) && rest.every((v) => v >= +c), above = marked.every((v) => v > +c) && rest.every((v) => v <= +c);
-    if (!below && !above) continue;
-    const word = below ? (SL.amountBelow || [])[1] || (SL.amountBelow || [])[0] : (SL.amountAbove || [])[0]; if (!word) continue;
-    cands.push({ field: thing.fields[i].label, clause: `${thing.fields[i].label} ${word}${/-$/.test(word) ? '' : ' '}${c}`, ties: p.ties || 0, atom: p.pick }); }
-  return { marks, cands };
-}
-async function expandDefinitions(sentence, form, routed, answers, proposals) {
-  let SLd = {}; try { SLd = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); } catch {}
-  const out = { sentence, changed: false, notes: [], questions: [] };
-  let orRe = null; try { const ow = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')).orWords || []; if (ow.length) orRe = new RegExp('\\s+(?:' + ow.join('|') + ')\\s+'); } catch {}
-  const ents = form.things.filter((t) => t.fields && t.fields.length);
-  for (const r of routed.routes.filter((x) => x.route === 'none')) {
-    const thing = form.things.find((t) => t.label === r.thing); if (!thing) continue;
-    const tokens = toks(thing.label);
-    let ei = -1, ent = null; tokens.forEach((w, i) => { const e = ents.find((t) => leadOf(w, t.label) != null); if (e) { ei = i; ent = e; } });
-    const cands = ei >= 0 ? tokens.slice(ei + 1) : tokens.slice(1).filter((w) => !ents.some((t) => sameStem(w, t.label) || t.fields.some((f) => sameStem(w, f.label))));
-    for (const w of cands) {
-      let said = typeof answers[w] === 'string' ? answers[w].trim() : '';
-      const rec = recall(w);
-      if (said && ent) { const bm = await defineByMarks(w, said, ent, SLd);   // התשובה היא סימון-דוגמאות ⇒ הכלל מהמנוע-ההפוך
-        if (bm) { if (bm.cands.length === 1) { out.notes.push(`הגדרה «${w}» מהדוגמאות שסימנת (${bm.marks.join(', ')}): «${bm.cands[0].clause}» — ${bm.cands[0].atom} הוכח ב-Dart על ${ent.examples.length} דוגמאות · ${bm.cands[0].ties} שקולים · הסף הוא ערך מהדוגמאות`); said = bm.cands[0].clause; }
-          else { out.questions.push({ thing: r.thing, ask: 'define', key: w, q: `«${w}» לפי הסימון (${bm.marks.join(', ')}): ${bm.cands.length ? bm.cands.map((c) => `${c.clause} (${c.ties} שקולים)`).join(' · ') + ' — בחר אחד או חבר ב«או»' : 'אין כלל על שדה-מספר שמסכים עם כל הדוגמאות — סמן עוד דוגמאות או הגדר במשפט'} ⇒ ${bm.cands[0] ? bm.cands[0].clause : '—'}` }); continue; } } }
-      const def = said || (proposals && rec ? String(rec.proposal) : '');
-      if (!def) { const sx = (r.search || []).find((x) => x.word === w); out.questions.push({ thing: r.thing, ask: 'define', key: w, q: `«${w}» — ${sx ? `כתוב על ${sx.carriers} חלקיקים${sx.carriers ? ` (${[...sx.logic, ...sx.display].slice(0, 3).join(', ')})` : ''}, ` : ''}לא שדה${ent ? ` של «${ent.label}» (${ent.fields.map((f) => f.label).join(', ')})` : ''} ולא תנאי; להגדיר במשפט על שדה ⇒ ${rec ? `${rec.proposal} (נענה ${rec.times} פעמים — הצעה, לא עובדה)` : 'נשאר בלי מסך עד תשובה'}` }); continue; }
-      const parts = (orRe ? def.split(orRe) : [def]).map((x) => x.trim()).filter(Boolean);
-      const lead = ei >= 0 ? leadOf(tokens[ei], ent.label) : '';
-      const clauses = parts.map((p) => ei >= 0 ? [...tokens.slice(0, ei), lead + p].join(' ') : tokens.map((t) => (t === w ? p : t)).join(' '));
-      if (!out.sentence.includes(thing.label)) { out.notes.push(`הגדרה «${w}»: הסעיף «${thing.label}» לא נמצא כלשונו במשפט ⇒ לא הוחלף`); continue; }
-      out.sentence = out.sentence.replace(thing.label, clauses.join('; ')); out.changed = true;
-      out.notes.push(`הגדרה «${w}» = «${def}» (${said ? 'תשובת-הבעלים' : `נזכרה, נענתה ${rec.times} פעמים`}) ⇒ ${clauses.length} סעיפים: ${clauses.map((c) => `«${c}»`).join(' · ')}`);
-      if (said && !(rec && String(rec.proposal) === said)) { try { remember(w, said, sentence); } catch {} }
-      break;   // מילה אחת לסעיף; השאר נקראות מחדש אחרי ההחלפה
-    }
-  }
-  return out;
-}
 export async function generateAll(sentence, { answers = {}, outDir, name = 'mavin', proposals = false } = {}) {
   let form = formOf(sentence);
   let routed = routeOf(form, answers, { proposals });
-  // הגדרה של הגדרה (הכרעת-בעלים 23.9): אחרי החלפה המשפט נקרא שוב, ומילה שנשארה זרה מוגדרת בסיבוב הבא — עד שאין שינוי (תקרה 5)
-  const defs = { notes: [], questions: [] };
-  for (let pass = 0; pass < 5; pass++) { const d = await expandDefinitions(sentence, form, routed, answers, proposals); defs.notes.push(...d.notes); if (!d.changed) { defs.questions.push(...d.questions); break; } sentence = d.sentence; form = formOf(sentence); routed = routeOf(form, answers, { proposals }); }
+  // 🕳️ «אין» ⇒ סוג ⇒ מפרק ⇒ מרכיב ⇒ שוב (yeshiva/ein.mjs · הכרעת-בעלים 23.9 «צא לדרך»): הגדרות, סימון-דוגמאות, דוגמאות קלט⇒פלט — עד שאין שינוי
+  const defs = await resolveEin({ sentence, form, routed, answers, proposals, formOf, routeOf });
+  sentence = defs.sentence; form = defs.form; routed = defs.routed;
   const { routes: allRoutes, skipped } = routed; let spec = routed.spec;
   // הישיבה על המשפט ועל האפיון (הכרעת-בעלים 23.9 «תתחיל לחבר»): (א) המקשה ⇒ קושיות (לא הנחות) · (ב) הפוסק ⇒ מה שהוכרע מוחל, מתגים ⇒ שאלות
   const yesh = { kushyot: [], rulings: [], switches: [], note: null };

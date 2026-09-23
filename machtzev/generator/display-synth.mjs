@@ -15,7 +15,9 @@ import { fits, score, ROLES } from './auto-skin.mjs';
 const GEN = path.dirname(fileURLToPath(import.meta.url));
 let MAP = null;
 // מפת-ה-CSS: רק המשפחות שהיסודות משתמשים במחלקות שלהן (.nb/.dt/.nbt ⇐ feedback); מיזוג של חמש משפחות דרס את .nb ⇒ הפריט ירד לטקסט-בלי-קופסה
-const cssMap = () => { if (MAP) return MAP; MAP = {}; for (const f of ['card', 'feedback'].map((x) => path.join(PURE, `${x}-family.html`))) { if (!fs.existsSync(f)) continue; const m = fs.readFileSync(f, 'utf8').match(/<style>([\s\S]*?)<\/style>/); if (m) Object.assign(MAP, parseStyle(m[1])); } return MAP; };
+const MAPS = {};   // לכל משפחה מפה משלה: המשפחה של התפקיד ⇐ card ⇐ feedback (המחלקות שהיסודות משתמשים בהן, .nb/.dt/.nbt, גוברות) — מיזוג-על-הכל דרס אותן (הבאג הקודם)
+const cssMapOf = (fam) => { if (MAPS[fam]) return MAPS[fam]; const map = {}; for (const x of [...new Set([fam, 'card', 'feedback'])]) { const f = path.join(PURE, `${x}-family.html`); if (!fs.existsSync(f)) continue; const m = fs.readFileSync(f, 'utf8').match(/<style>([\s\S]*?)<\/style>/); if (m) Object.assign(map, parseStyle(m[1])); } return (MAPS[fam] = map); };
+const cssMap = () => cssMapOf('card');
 const sh = (s) => crypto.createHash('sha1').update(s).digest('hex').slice(0, 6);
 
 // ── יסודות (צורה בלבד) ──
@@ -57,7 +59,7 @@ export function candidatesFor(role, hints = {}) {
 /** חיפוש: כל מועמד נחצב (ds-forge) ונמדד (auto-skin); הטוב-ביותר מעל אפס חוזר. */
 export function synthDisplay({ role, need = [], limit = 2000, floor = 0, hints = {} } = {}) {   // floor = הציון של הטוב-הקיים; ההרכבה חייבת לעלות עליו (אין קיים ⇒ הקורא נותן −∞: הרכבה מתאימה עדיפה על «אין»)
   const R = ROLES[role]; if (!R) return null;
-  const t0 = Date.now(); const fam = (R.fam || ['card'])[0]; const map = cssMap();
+  const t0 = Date.now(); const fam = (R.fam || ['card'])[0]; const map = cssMapOf(fam);
   let best = null, tried = 0, fitN = 0;
   for (const html of candidatesFor(role, hints).slice(0, limit)) {
     tried++;

@@ -210,7 +210,11 @@ export function formOf(sentence0) {
   }
   // הדוגמאות ⇒ הישות-עם-שדות האחרונה שלפניהן במשפט (צורה: מה שקרוב); אין כזו ⇒ מדווח (הדלת שואלת), לא מומצא
   const orphan = [];
-  for (const e of ex.examples) { const before = String(sentence0).slice(0, e.at); const t = [...things].reverse().find((x) => x.fields.length && before.includes(x.src)); if (t) t.examples = (t.examples || []).concat(e.records); else orphan.push(e.records); }
+  const ARROWS = (() => { try { return JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')).pairArrow || []; } catch { return []; } })();   // «אבג ⇒ 6»: דוגמת קלט⇒פלט (צורה: חץ מהדאטה)
+  for (const e of ex.examples) { const before = String(sentence0).slice(0, e.at);
+    if (ARROWS.length && e.records.every((r) => r.length === 1 && ARROWS.some((a) => r[0].includes(a)))) {   // דוגמאות-חץ ⇒ הדבר הקרוב שלפניהן (גם בלי שדות): קלט⇒פלט להרכבת-התנהגות
+      const t0 = [...things].reverse().find((x) => before.includes(x.src)); if (t0) { t0.ioExamples = (t0.ioExamples || []).concat(e.records.map((r) => { const a = ARROWS.find((z) => r[0].includes(z)); const [i, o] = r[0].split(a); return [i.trim(), o.trim()]; })); continue; } }
+    const t = [...things].reverse().find((x) => x.fields.length && before.includes(x.src)); if (t) t.examples = (t.examples || []).concat(e.records); else orphan.push(e.records); }
   return { sentence, words, segments, things, frame: [...new Set(frame)], examplesOrphan: orphan };
 }
 
