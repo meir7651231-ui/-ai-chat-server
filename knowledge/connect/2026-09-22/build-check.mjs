@@ -1,6 +1,6 @@
 // מנוע 2 ⇒ מנוע 4 ⇒ מקמפל · משפט ⇒ צורה ⇒ אפיון ⇒ app-ds.buildApp ⇒ מראה למארח-Flutter ⇒ flutter analyze על המסכים שנוצרו.
 //   מארח: BS_HOST=<app_flutter> (נוצר ע"י `flutter create --offline --project-name buildsmart`; אין buildsmart אמיתי בעץ הזה).
-//   שימוש: BS_HOST=... node knowledge/connect/2026-09-22/build-check.mjs "<משפט>" [--answers f.json] [--spec specs-ds/x.txt | --doc peruk.md] [--proposals: לבנות גם הצעות (מסך-רשום/זהב — תוכן ממקום אחר)]
+//   שימוש: BS_HOST=... node knowledge/connect/2026-09-22/build-check.mjs "<משפט>" [--answers f.json] [--spec specs-ds/x.txt | --doc peruk.md] [--verify: pump כל מסך במארח (gen-verify, הכרעה-34)] [--proposals: לבנות גם הצעות (מסך-רשום/זהב — תוכן ממקום אחר)]
 //   פלט: אפיון · מסכים · מספר שגיאות-analyze (עם הפקודה). אין flutter/מארח ⇒ ⚪ לא-נמדד (L34: אין-כלי ≠ כשל).
 import fs from 'node:fs';
 import path from 'node:path';
@@ -65,5 +65,23 @@ const errors = lines.filter((l) => /^\s*error •/.test(l)), others = lines.filt
 console.log(`מתקמפל: ${errors.length === 0 ? '✅' : '❌'} · שגיאות ${errors.length} · אזהרות/מידע ${others.length} · ${targets.length} קבצים · (cd ${HOST} && ${cmd})`);
 for (const e of errors.slice(0, 8)) console.log('  ' + e.trim().slice(0, 160));
 for (const e of others.slice(0, 4)) console.log('  ' + e.trim().slice(0, 160));
-// (--verify — pump של כל מסך במארח דרך gen-verify — ממתין להכרעת-בעלים: gen-verify.mjs נעוץ. הטלאי: scratchpad/gen-verify-refactor.patch)
+// --verify · העיקרון של gen-verify על פלטי-הדלת (הכרעה-34): analyze ירוק ≠ מסך שעובד ⇒ pump כל מסך במארח, אפס-חריגות, ספירת אטומי-תצוגה, סריקת-טאפים (strict)
+if (args.includes('--verify') && errors.length === 0) {
+  const GV = await import(path.join(ROOT, 'machtzev/generator/gen-verify.mjs'));
+  const dir = path.join(G, 'dart-gen-bs'); const only = targets.filter((t) => t.startsWith('lib/genesis/dart-gen-bs/')).map((t) => path.basename(t));
+  const live = GV.screensIn(dir, only);
+  if (!live.length) console.log('⚪ מוצג-בפועל: אין מסך-מחולל בלי פרמטרי-חובה לבדוק');
+  else {
+    const testPath = path.join(HOST, 'test/genesis_gen_verify_test.dart'); fs.mkdirSync(path.dirname(testPath), { recursive: true });
+    fs.writeFileSync(testPath, GV.verifyDart(live, { strict: () => true }));
+    const t = spawnSync(FLUTTER, ['test', 'test/genesis_gen_verify_test.dart', '--reporter', 'compact'], { cwd: HOST, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+    const out = (t.stdout || '') + (t.stderr || ''); try { fs.unlinkSync(testPath); } catch {}
+    const { rows, passed, failed, compileErr } = GV.parseVerify(out);
+    for (const s of live) { const row = rows.find((x) => x.file === s.file); const atoms = row ? Object.keys(row.types).filter((x) => GV.DISPLAY.has(x)) : [];
+      console.log(`${row && !row.tapErrors ? '✓' : '✗'} ${s.file} · ${row ? `רונדר · אטומי-תצוגה ${atoms.length} (${atoms.slice(0, 6).join(', ')}) · widgets ${Object.values(row.types).reduce((a, b) => a + b, 0)} · טאפים ${row.taps ?? 0} · שגיאות-טאפ ${row.tapErrors ?? 0}` : 'לא רונדר'}`);
+      if (row && row.tapErrorAt && row.tapErrorAt.length) console.log('   ✗ ' + row.tapErrorAt.join(' ¦ ').slice(0, 300)); }
+    console.log(`מוצג-בפועל: ${rows.length}/${live.length} מסכים · עבר ${passed} · נכשל ${failed}${compileErr.length ? ' · קומפילציה: ' + compileErr.slice(0, 2).join(' ¦ ') : ''} · (cd ${HOST} && flutter test test/genesis_gen_verify_test.dart)`);
+    if (!rows.length) console.log('   פלט-הבדיקה (זנב): ' + out.trim().split('\n').slice(-4).join(' ¦ ').slice(0, 400));
+  }
+}
 process.exit(errors.length ? 1 : 0);

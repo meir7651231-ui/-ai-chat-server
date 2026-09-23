@@ -17,28 +17,21 @@ const DISPLAY = new Set(MAP.filter((a) => a.layer === 'display' || a.kind === 'd
 // G15b · L82: אטומי-forge (dart-forge-bs, שכבת-תצוגה באינדקס-האמת) נספרים כאטומי-תצוגה — אחרת החלפת DS⇒forge נראית כ"נסיגה" (KpiTile ירד מהמסך כי StatPlain עלה במקומו)
 const IDX_FULL = path.join(GEN, 'atom-index-full.json');
 if (fs.existsSync(IDX_FULL)) for (const a of JSON.parse(fs.readFileSync(IDX_FULL, 'utf8'))) if (a.layer === 'display' && /dart-forge-bs/.test(a.file || '')) DISPLAY.add(a.id.split('@')[0]);
-const gate = process.argv.includes('--gate');
-const only = (() => { const i = process.argv.indexOf('--only'); return i > -1 ? process.argv[i + 1].split(',') : null; })();
-if (!fs.existsSync(path.join(BS, 'pubspec.yaml'))) { console.log(`⚪ genverify: אין buildsmart ב-${BS} — מדולג`); process.exit(0); }
-
-// פלטי-מחולל עם מסך ציבורי (subset/composite/retarget) — לא מסכי-הזהב הידניים
-const files = fs.readdirSync(DIR).filter((f) => /^gen_.*\.dart$/.test(f) && (!only || only.includes(f))).filter((f) => /^class \w+Screen extends StatefulWidget/m.test(fs.readFileSync(path.join(DIR, f), 'utf8')));
+// ── מיוצא (הכרעה-34: הדלת מריצה את אותו אימות על פלטי-outDir במארח-סקראצ'): screensIn · verifyDart · parseVerify · DISPLAY. ה-CLI כולו תחת isMain, אותה לוגיקה ──
+export { DISPLAY };
 // G33 · מסך שהבנאי שלו דורש פרמטר (required this.x, בלי ברירת-מחדל) אינו מסך-כניסה — הוא נרנדר דרך הורה (למשל gen_balagan_confirm: module+facts). לא מומצא ארגומנט; מדולג ומדווח.
 const needsArgs = (src, cls) => { const m = src.match(new RegExp('const ' + cls + '\\(\\{([^}]*)\\}')); return !!(m && /\brequired\b/.test(m[1])); };
-const screens = files.map((f) => { const src = fs.readFileSync(path.join(DIR, f), 'utf8'); const cls = src.match(/^class (\w+Screen) extends StatefulWidget/m)[1]; return { file: f, cls, args: needsArgs(src, cls) }; }).filter((s) => { if (s.args) console.log(`⚪ ${s.file}: ${s.cls} דורש פרמטרים — נרנדר דרך הורה, מדולג`); return !s.args; });
-if (!screens.length) { console.log('⚪ genverify: אין פלטי-מחולל עם מסך'); process.exit(0); }
-// המראה חייב להיות ≡ המקור (סחף-מראה = כשל, כמו ברתמת-הזהב)
-const drift = screens.filter((s) => { const m = path.join(BS, 'lib/genesis/dart-gen-bs', s.file); return !fs.existsSync(m) || fs.readFileSync(m, 'utf8') !== fs.readFileSync(path.join(DIR, s.file), 'utf8'); }).map((s) => s.file);
-// קפדני = פלטי G4–G9 שלנו (חייבים לעבוד): לפי שם-משפחה, ורכזות-אפליקציה רק לפי חותמת-המחולל בכותרת (L64: 'app_\\w+' לבדו תפס גם gen_app_rec1..6 הישנים של render-ds ⇒ שער אדום שלא נראה)
-const STRICT_NAME = /^gen_(?:\w+_subset|composite_\w+|retarget_\w+|core_\w+|opsseed_\w+|schoolos\w*_forge)\.dart$/;   // G12d: בית-הספר בעור-forge — קפדני
-const _stampCache = new Map();
-const isStrict = (file) => { if (STRICT_NAME.test(file)) return true; if (!/^gen_app_\w+\.dart$/.test(file)) return false; if (!_stampCache.has(file)) { const f = path.join(DIR, file); _stampCache.set(file, fs.existsSync(f) && /app-from-sentences\.mjs/.test(fs.readFileSync(f, 'utf8').split('\n').slice(0, 3).join('\n'))); } return _stampCache.get(file); };
-const testPath = path.join(BS, 'test/genesis_gen_verify_test.dart');
-// רק קבצים שהמראה שלהם ≡ המקור נכנסים לבדיקה (קובץ-חסר/סחוף היה מפיל את קומפילציית כל הבדיקה ⇒ 0/57); הסחופים מדווחים ✗ בלי לייבא
-const live = screens.filter((s) => !drift.includes(s.file));
-const dart = [`// מחולל ע"י machtzev/generator/gen-verify.mjs — אל תערוך ידנית · G5b אימות-בפועל של פלטי-המחולל`,
-  ...live.map((s, i) => `import 'package:buildsmart/genesis/dart-gen-bs/${s.file}' as g${i};`),
-  `import 'package:buildsmart/genesis/dart-ui-bs/ds/ds.dart';`, `import 'package:buildsmart/genesis/dart-ui-bs/premium/actions/soft_button.dart';`, `import 'package:flutter/material.dart';`, `import 'package:flutter_test/flutter_test.dart';`, `import 'dart:convert';`, '',
+/** פלטי-מחולל עם מסך ציבורי בתיקייה נתונה (gen_*.dart עם `class XScreen extends StatefulWidget`, בנאי בלי פרמטר-חובה). */
+export function screensIn(dir, only = null) {
+  const files = fs.readdirSync(dir).filter((f) => /^gen_.*\.dart$/.test(f) && (!only || only.includes(f))).filter((f) => /^class \w+Screen extends StatefulWidget/m.test(fs.readFileSync(path.join(dir, f), 'utf8')));
+  return files.map((f) => { const src = fs.readFileSync(path.join(dir, f), 'utf8'); const cls = src.match(/^class (\w+Screen) extends StatefulWidget/m)[1]; return { file: f, cls, args: needsArgs(src, cls) }; }).filter((s) => { if (s.args) console.log(`⚪ ${s.file}: ${s.cls} דורש פרמטרים — נרנדר דרך הורה, מדולג`); return !s.args; });
+}
+/** בדיקת-widget מחוללת למסכים: pump ⇒ אפס-חריגות ⇒ DsScaffold ⇒ ספירת-מחלקות; strict(file) ⇒ גם סריקת-טאפים. pkg = שם-חבילת-המארח. */
+export function verifyDart(live, { strict = () => false, pkg = 'buildsmart' } = {}) {
+  const isStrict = strict;
+  return [`// מחולל ע"י machtzev/generator/gen-verify.mjs — אל תערוך ידנית · G5b אימות-בפועל של פלטי-המחולל`,
+  ...live.map((s, i) => `import 'package:${pkg}/genesis/dart-gen-bs/${s.file}' as g${i};`),
+  `import 'package:${pkg}/genesis/dart-ui-bs/ds/ds.dart';`, `import 'package:${pkg}/genesis/dart-ui-bs/premium/actions/soft_button.dart';`, `import 'package:flutter/material.dart';`, `import 'package:flutter_test/flutter_test.dart';`, `import 'dart:convert';`, '',
   'void main() {',
   ...live.flatMap((s, i) => [
     `  testWidgets('gen-verify · ${s.file}', (tester) async {`,
@@ -63,15 +56,41 @@ const dart = [`// מחולל ע"י machtzev/generator/gen-verify.mjs — אל ת
     ]),
     `  });`]),
   '}', ''].join('\n');
+}
+/** פענוח פלט flutter test: שורות GENVERIFY · עבר/נכשל · שגיאות-קומפילציה. */
+export function parseVerify(out) {
+  const rows = [...out.matchAll(/GENVERIFY (\{.*\})/g)].map((m) => JSON.parse(m[1]));
+  const last = [...out.matchAll(/\+(\d+)(?:\s+-(\d+))?:/g)].pop();
+  const passed = last ? +last[1] : 0, failed = last && last[2] ? +last[2] : 0;
+  const compileErr = [...out.matchAll(/^((?:lib|test)\/[^\n]*Error: [^\n]*)$/gm)].map((m) => m[1].slice(0, 160));
+  return { rows, passed, failed, compileErr };
+}
+
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname);
+if (isMain) {
+const gate = process.argv.includes('--gate');
+const only = (() => { const i = process.argv.indexOf('--only'); return i > -1 ? process.argv[i + 1].split(',') : null; })();
+if (!fs.existsSync(path.join(BS, 'pubspec.yaml'))) { console.log(`⚪ genverify: אין buildsmart ב-${BS} — מדולג`); process.exit(0); }
+
+// פלטי-מחולל עם מסך ציבורי (subset/composite/retarget) — לא מסכי-הזהב הידניים
+const screens = screensIn(DIR, only);
+if (!screens.length) { console.log('⚪ genverify: אין פלטי-מחולל עם מסך'); process.exit(0); }
+// המראה חייב להיות ≡ המקור (סחף-מראה = כשל, כמו ברתמת-הזהב)
+const drift = screens.filter((s) => { const m = path.join(BS, 'lib/genesis/dart-gen-bs', s.file); return !fs.existsSync(m) || fs.readFileSync(m, 'utf8') !== fs.readFileSync(path.join(DIR, s.file), 'utf8'); }).map((s) => s.file);
+// קפדני = פלטי G4–G9 שלנו (חייבים לעבוד): לפי שם-משפחה, ורכזות-אפליקציה רק לפי חותמת-המחולל בכותרת (L64: 'app_\\w+' לבדו תפס גם gen_app_rec1..6 הישנים של render-ds ⇒ שער אדום שלא נראה)
+const STRICT_NAME = /^gen_(?:\w+_subset|composite_\w+|retarget_\w+|core_\w+|opsseed_\w+|schoolos\w*_forge)\.dart$/;   // G12d: בית-הספר בעור-forge — קפדני
+const _stampCache = new Map();
+const isStrict = (file) => { if (STRICT_NAME.test(file)) return true; if (!/^gen_app_\w+\.dart$/.test(file)) return false; if (!_stampCache.has(file)) { const f = path.join(DIR, file); _stampCache.set(file, fs.existsSync(f) && /app-from-sentences\.mjs/.test(fs.readFileSync(f, 'utf8').split('\n').slice(0, 3).join('\n'))); } return _stampCache.get(file); };
+const testPath = path.join(BS, 'test/genesis_gen_verify_test.dart');
+// רק קבצים שהמראה שלהם ≡ המקור נכנסים לבדיקה (קובץ-חסר/סחוף היה מפיל את קומפילציית כל הבדיקה ⇒ 0/57); הסחופים מדווחים ✗ בלי לייבא
+const live = screens.filter((s) => !drift.includes(s.file));
+const dart = verifyDart(live, { strict: isStrict });
 fs.writeFileSync(testPath, dart);
 const res = spawnSync(FLUTTER, ['test', 'test/genesis_gen_verify_test.dart', '--reporter', 'compact'], { cwd: BS, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: { ...process.env, PATH: path.dirname(FLUTTER) + ':' + process.env.PATH } });
 const out = (res.stdout || '') + (res.stderr || '');
 try { fs.unlinkSync(testPath); } catch {}
 fs.writeFileSync(path.join(GEN, 'gen-verify-last.log'), out);                       // הלוג הגולמי (לא נעול, לא בקומיט) — לאבחון
-const rows = [...out.matchAll(/GENVERIFY (\{.*\})/g)].map((m) => JSON.parse(m[1]));
-const last = [...out.matchAll(/\+(\d+)(?:\s+-(\d+))?:/g)].pop();
-const passed = last ? +last[1] : 0, failed = last && last[2] ? +last[2] : 0;
-const compileErr = [...out.matchAll(/^((?:lib|test)\/[^\n]*Error: [^\n]*)$/gm)].map((m) => m[1].slice(0, 160));
+const { rows, passed, failed, compileErr } = parseVerify(out);
 const atomsAll = new Set();
 const coreWired = new Set(fs.readdirSync(DIR).filter((f) => /^gen_retarget_/.test(f) && /_coreState/.test(fs.readFileSync(path.join(DIR, f), 'utf8'))));   // מסכי-ישות עם גרעין-על-הרשומה (G6d) — חייבים להראות אותו בסריקה
 const report = screens.map((s) => { const r = rows.find((x) => x.file === s.file); const atoms = r ? Object.keys(r.types).filter((t) => DISPLAY.has(t)) : []; atoms.forEach((a) => atomsAll.add(a)); return { file: s.file, screen: s.cls, rendered: !!r, drift: drift.includes(s.file), atoms: atoms.length, widgets: r ? Object.values(r.types).reduce((a, b) => a + b, 0) : 0, atomList: atoms, taps: r ? r.taps ?? null : null, tapErrors: r ? r.tapErrors ?? 0 : 0, coreSeen: r ? !!r.coreSeen : false, coreExpected: coreWired.has(s.file) }; });
@@ -92,3 +111,4 @@ if (gate) {
   if (rendered < base.rendered || atomsAll.size < base.atoms) { console.log(`🔴 genverify: נסיגה מ-baseline ${base.rendered}/${base.atoms} ⇒ ${rendered}/${atomsAll.size}`); process.exit(1); }
   console.log(`✓ genverify: ${rendered}/${screens.length} פלטי-מחולל רונדרו בפועל · ${atomsAll.size} אטומי-תצוגה על המסך`);
 } else if (!only && (process.argv.includes('--write-baseline') || !fs.existsSync(BASE))) fs.writeFileSync(BASE, JSON.stringify(summary));
+}
