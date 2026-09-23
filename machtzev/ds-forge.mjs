@@ -1343,6 +1343,9 @@ export function forgeCell(c, fam, map, cls, file) {
       const dom = parseDOM(c.body);
       CUR.rootNode = frameNode(dom, map); CUR.coreNode = coreNode(dom); CUR.primary = primaryGroup(dom);
       try { bodyExpr = emit(dom, map); } catch { bodyExpr = 'const SizedBox.shrink()'; }
+      // הכרעת-בעלים 23.9 «תתקן»: מה שהמדד (auto-skin) רואה כלחיץ — שורש עם role/tabindex/aria (isSelectable) — מקבל חור-הקשה, גם בלי <a>/<button> בתוכו.
+      //   עד כאן המדד אמר «אריח-ניווט» והחישול לא נתן לו onAction ⇒ הישיבה פסלה «אין חור ל-onTap». אותו פרדיקט בשני המקומות.
+      { const rootN = CUR.coreNode || CUR.rootNode; if (rootN && isSelectable(rootN) && CUR.actions === 0 && !CUR.itemMode) { const k = CUR.actions++; bodyExpr = `GestureDetector(behavior: HitTestBehavior.opaque, onTap: onAction == null ? null : () => onAction!(${k}), child: ${bodyExpr})`; } }
     }
     // הכרז רק על מה שבשימוש (למניעת unused_local_variable / unused_element)
     const useSkin = /\bskin\./.test(bodyExpr), useTheme = /\btheme\./.test(bodyExpr);

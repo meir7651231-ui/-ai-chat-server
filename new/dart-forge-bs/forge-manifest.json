@@ -1573,7 +1573,7 @@
       "child": true,
       "bare": false,
       "control": false,
-      "actions": 0,
+      "actions": 1,
       "items": null,
       "columns": 0,
       "values": 0
@@ -1618,7 +1618,7 @@
       "child": true,
       "bare": false,
       "control": false,
-      "actions": 0,
+      "actions": 1,
       "items": null,
       "columns": 0,
       "values": 0
@@ -1663,7 +1663,7 @@
       "child": true,
       "bare": false,
       "control": false,
-      "actions": 0,
+      "actions": 1,
       "items": null,
       "columns": 0,
       "values": 0
@@ -3834,7 +3834,7 @@
       "child": true,
       "bare": false,
       "control": false,
-      "actions": 0,
+      "actions": 1,
       "items": null,
       "columns": 0,
       "values": 0
@@ -3879,7 +3879,7 @@
       "child": true,
       "bare": false,
       "control": false,
-      "actions": 0,
+      "actions": 1,
       "items": null,
       "columns": 0,
       "values": 0
@@ -3924,7 +3924,7 @@
       "child": true,
       "bare": false,
       "control": false,
-      "actions": 0,
+      "actions": 1,
       "items": null,
       "columns": 0,
       "values": 0
@@ -4498,7 +4498,7 @@
       "child": true,
       "bare": false,
       "control": false,
-      "actions": 0,
+      "actions": 1,
       "items": null,
       "columns": 0,
       "values": 0
@@ -12333,7 +12333,7 @@
       "child": true,
       "bare": false,
       "control": false,
-      "actions": 0,
+      "actions": 1,
       "items": null,
       "columns": 0,
       "values": 0
@@ -16597,7 +16597,7 @@
       "child": true,
       "bare": false,
       "control": false,
-      "actions": 0,
+      "actions": 1,
       "items": {
         "slots": 2,
         "demo": 3,
@@ -16673,7 +16673,7 @@
       "child": true,
       "bare": false,
       "control": false,
-      "actions": 0,
+      "actions": 1,
       "items": {
         "slots": 2,
         "demo": 3,
@@ -17014,7 +17014,7 @@
       "child": true,
       "bare": true,
       "control": false,
-      "actions": 0,
+      "actions": 1,
       "items": {
         "slots": 1,
         "demo": 6,

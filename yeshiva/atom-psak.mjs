@@ -45,10 +45,10 @@ function shapeOf(a, roles) {
   return best || { ok: false, score: null, role: null, why: fails.join(' · ') };
 }
 const SOCK_THR = /^(threshold|thr|limit|max|min|target|goal|of|total|cap|bound)$/i;
-const SOCK_STATE = /^(tone|severity|level|status|state|ok|danger|warn|alert)$/i;
+const SOCK_STATE = /^(tone|severity|level|status|state|ok|danger|warn|alert|variants)$/i;   // variants = וריאנט-הגוון של אטום-forge (tone-*) — חור-מצב
 const SOCK_ENUM = /^(items|options|values|choices)$/i;
 const SOCK_DECOR = /^(trend|delta|series|spark|sparkline|history|points|change|diff)$/i;
-const SOCK_MATCH = { label: /^(label|title|caption|name|text)$/, value: /^(value|val|amount|total|count|num)$/, sub: /^(sub|subtitle|desc|body|note)$/, glyph: /^(glyph|emoji|icon)$/, onTap: /^(onTap|onPressed)$/, message: /^(message)$/, items: SOCK_ENUM, labels: /^(labels|cols|columns|headers)$/, rows: /^(rows|data)$/, fraction: /^(fraction|pct|percent|progress)$/ };   // אותן צורות-שקע כמו particles.SOCK
+const SOCK_MATCH = { label: /^(label|title|caption|name|text)$/, value: /^(value|val|amount|total|count|num)$/, sub: /^(sub|subtitle|desc|body|note)$/, glyph: /^(glyph|emoji|icon)$/, onTap: /^(onTap|onPressed|onAction|onSelect|onCell)$/, message: /^(message)$/, items: SOCK_ENUM, labels: /^(labels|cols|columns|headers)$/, rows: /^(rows|data)$/, fraction: /^(fraction|pct|percent|progress)$/ };   // אותן צורות-שקע כמו particles.SOCK
 
 export function judge({ purpose, cands, wire, widgetOf, skinWired = null, sigOf = sigOfDefault }) {
   const rulings = [];

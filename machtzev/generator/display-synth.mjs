@@ -14,7 +14,8 @@ import { forgeCell, parseStyle, PURE, pascal } from '../ds-forge.mjs';
 import { fits, score, ROLES } from './auto-skin.mjs';
 const GEN = path.dirname(fileURLToPath(import.meta.url));
 let MAP = null;
-const cssMap = () => { if (MAP) return MAP; MAP = {}; for (const f of ['card', 'feedback', 'header', 'action', 'status'].map((x) => path.join(PURE, `${x}-family.html`))) { if (!fs.existsSync(f)) continue; const m = fs.readFileSync(f, 'utf8').match(/<style>([\s\S]*?)<\/style>/); if (m) Object.assign(MAP, parseStyle(m[1])); } return MAP; };
+// מפת-ה-CSS: רק המשפחות שהיסודות משתמשים במחלקות שלהן (.nb/.dt/.nbt ⇐ feedback); מיזוג של חמש משפחות דרס את .nb ⇒ הפריט ירד לטקסט-בלי-קופסה
+const cssMap = () => { if (MAP) return MAP; MAP = {}; for (const f of ['card', 'feedback'].map((x) => path.join(PURE, `${x}-family.html`))) { if (!fs.existsSync(f)) continue; const m = fs.readFileSync(f, 'utf8').match(/<style>([\s\S]*?)<\/style>/); if (m) Object.assign(MAP, parseStyle(m[1])); } return MAP; };
 const sh = (s) => crypto.createHash('sha1').update(s).digest('hex').slice(0, 6);
 
 // ── יסודות (צורה בלבד) ──
@@ -27,12 +28,18 @@ const icon = () => `<svg viewBox="0 0 24 24" style="width:16px;height:16px"><cir
 const product = (...lists) => lists.reduce((acc, l) => acc.flatMap((a) => l.map((b) => [...a, b])), [[]]);
 
 // ── מרחב-החיפוש לפי צורת-הצורך (ROLES[role].need), לא לפי שם-התפקיד ──
-export function candidatesFor(role) {
+// רמזי-המטרה (צורה): tap = המטרה דורשת הקשה ⇒ שורש role=button (ds-forge ⇒ onAction) · state = סף במקור ⇒ ארבעה פריטי-גוון (Pure .nb.tone-*) ⇒ חור-variants
+const TONES = ['info', 'ok', 'warn', 'err'];
+const toned = (inner) => TONES.map((t) => `<div class="nb tone-${t}"><span class="dt"></span>${inner}</div>`).join('');
+const tapRoot = (inner, dir = 'column') => `<div role="button" tabindex="0" style="display:flex;flex-direction:${dir};gap:6px">${inner}</div>`;
+export function candidatesFor(role, hints = {}) {
   const R = ROLES[role]; if (!R) return [];
   const out = [];
   if (R.need === 'value+label') {
     for (const [dir, dec, lfs, lfw, vfs, vfw, first] of product(['column', 'row'], [true, false], [11, 12.5, 14], [600, 700], [16, 20, 24, 30, 36], [700, 800, 900], ['label', 'value']))
-      { const L = text('Label', lfs, lfw, 'mut'), V = text('248', vfs, vfw, 'ink'); out.push(box(dir, dec, first === 'label' ? L + V : V + L)); }
+      { const L = text('Label', lfs, lfw, 'mut'), V = text('248', vfs, vfw, 'ink'); const inner = first === 'label' ? L + V : V + L;
+        if (hints.state) { if (dir === 'row') out.push(tapRoot(toned(inner))); }   // מצב ⇒ פריטי-גוון (השורה היא הפריט; השורש לחיץ)
+        else out.push(hints.tap ? tapRoot(box(dir, dec, inner)) : box(dir, dec, inner)); }
   } else if (R.need === 'text2') {
     for (const [dir, dec, tone, withDot, fs1, fs2] of product(['row', 'column'], [true, false], ['a', 'ok', 'warn', 'err'], [true, false], [12.5, 14, 15], [11, 12.5]))
       out.push(R.fam && R.fam.includes('nav') && !withDot ? link(icon() + text('Label', fs1, 600) + text('Label', fs2, 400, 'mut')) : box(dir, dec, (withDot ? dot(tone) : '') + text('Label', fs1, 600) + text('Label', fs2, 400, 'mut'), withDot ? `border-color:var(--${tone});` : ''));
@@ -48,11 +55,11 @@ export function candidatesFor(role) {
 }
 
 /** חיפוש: כל מועמד נחצב (ds-forge) ונמדד (auto-skin); הטוב-ביותר מעל אפס חוזר. */
-export function synthDisplay({ role, need = [], limit = 2000, floor = 0 } = {}) {   // floor = הציון של הטוב-הקיים; ההרכבה חייבת לעלות עליו (ומעל אפס כשאין קיים)
+export function synthDisplay({ role, need = [], limit = 2000, floor = 0, hints = {} } = {}) {   // floor = הציון של הטוב-הקיים; ההרכבה חייבת לעלות עליו (אין קיים ⇒ הקורא נותן −∞: הרכבה מתאימה עדיפה על «אין»)
   const R = ROLES[role]; if (!R) return null;
   const t0 = Date.now(); const fam = (R.fam || ['card'])[0]; const map = cssMap();
   let best = null, tried = 0, fitN = 0;
-  for (const html of candidatesFor(role).slice(0, limit)) {
+  for (const html of candidatesFor(role, hints).slice(0, limit)) {
     tried++;
     const cls = `Synth${pascal(role)}${sh(html)}`; const file = `synth_${role}_${sh(html)}.dart`;
     let r; try { r = forgeCell({ name: `${role} ${sh(html)}`, seam: 'fields', body: html }, fam, map, cls, file); } catch { continue; }
@@ -62,8 +69,17 @@ export function synthDisplay({ role, need = [], limit = 2000, floor = 0 } = {}) 
     if (!best || sc > best.score) best = { cls, file, html, atom: a, score: sc, src: r.src.replace("import '../../dart-ui-bs/ds/ds_seam.dart';", "import '../dart-ui-bs/ds/ds_seam.dart';") };
   }
   const ms = Date.now() - t0;
-  if (!best || best.score <= floor) return { cls: null, role, tried, fit: fitN, best: best ? best.score : null, ms, why: best ? `הטוב ${best.score.toFixed(1)} ≤ ${Number.isFinite(floor) ? floor.toFixed(1) : '−∞'}${floor === 0 ? '' : ' (הקיים)'}` : `אף הרכבה מ-${tried} לא מקיימת ${R.need}` };
+  if (!best || !(best.score > floor)) return { cls: null, role, tried, fit: fitN, best: best ? best.score : null, ms, why: best ? `הטוב ${best.score.toFixed(1)} ≤ ${Number.isFinite(floor) ? floor.toFixed(1) : '−∞'}${floor === 0 ? '' : ' (הקיים)'}` : `אף הרכבה מ-${tried} לא מקיימת ${R.need}` };
   return { ...best, role, tried, fit: fitN, ms };
+}
+/** רשומת-ווידג׳ט (בצורת האטלס) לאטום מסונתז — השקעים מהרשומה האמיתית של ds-forge, לא מהנחה. */
+export function widgetRecordOf(sy, file) {
+  const a = sy.atom; const types = [['fields', 'List<String>?'], ['child', 'Widget?']];
+  if (a.actions > 0) types.push(['onAction', 'void Function(int)?']);
+  if (a.items && a.items.slots) { types.push(['items', 'List<List<String>>?']); if (a.items.variants) types.push(['variants', 'List<int>?']); if (a.items.selectable) types.push(['onSelect', 'void Function(int)?']); }
+  if (a.values > 0) types.push(['values', 'List<double>?']);
+  if (a.columns) types.push(['columns', 'List<String>?']);
+  return { cls: sy.cls, file, shelf: 'synth', types: new Map(types), required: new Set(), positional: [], flexRoot: false, he: [] };
 }
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {

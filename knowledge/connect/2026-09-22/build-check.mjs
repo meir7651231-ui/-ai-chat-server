@@ -27,7 +27,7 @@ const { generateAll, generateFromSpec, generateFromDoc } = await import(path.joi
 const { formOf, specOf } = await import(path.join(ROOT, 'yeshiva/mavin.mjs'));
 let spec, skipped = [], builtin = [], G0;
 const bi = args.includes('--balagan');   // «בלגן»: האפליקציה-האחת מכל מודולי-הבעלים (apps/*.json) — כניסת «כל המודולים», לא משפט
-const genRe = bi ? /^gen_balagan_.*\.dart$/ : /^gen_(app_|cap\d+).*\.dart$/;   // גם מסכי-התראה (gen_cap*) — לצילום/אימות
+const genRe = bi ? /^gen_balagan_.*\.dart$/ : /^gen_(app_|cap\d+|synth_).*\.dart$/;   // גם מסכי-התראה (gen_cap*) ואטומים מסונתזים (gen_synth_*) — לצילום/אימות
 if (bi) {
   const { generateBalagan } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
   G0 = await generateBalagan({ outDir: process.env.GEN_OUT }); spec = G0.spec; G0.routes = [];

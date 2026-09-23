@@ -97,13 +97,16 @@ class ForgeSiteHubCardBtn extends StatelessWidget {
   static Widget _withChild(Widget w, Widget? c) => c == null ? w : LayoutBuilder(builder: (ctx, cns) => cns.hasBoundedHeight
       ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [w, Expanded(child: c)])
       : Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [w, c]));
-  const ForgeSiteHubCardBtn({super.key, this.fields, this.child});
+  /// G13a · הקשה על כפתור/קישור k (סדר-הופעה, 1 פעולות).
+  final void Function(int)? onAction;
+  static const int actionSlots = 1;
+  const ForgeSiteHubCardBtn({super.key, this.fields, this.child, this.onAction});
   @override
   Widget build(BuildContext context) {
     final skin = DsSeam.skinOf(context);   // מלוא-העיצוב מהחריץ
     final theme = DsSeam.of(context);       // אקצנט (מורף)
     final fonts = DsSeam.fontsOf(context);  // פונט
-    final Widget body = SizedBox(width: double.infinity, child: Container(padding: const EdgeInsets.fromLTRB(12, 12, 12, 12), decoration: BoxDecoration(color: skin.raised, border: Border.all(color: skin.hair), borderRadius: BorderRadius.circular(11)), child: _withChild(Row(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.center, spacing: 9, children: [Container(width: 30, height: 30, alignment: Alignment.center, decoration: BoxDecoration(color: skin.sunken, border: Border.all(color: skin.hair), borderRadius: BorderRadius.circular(9)), child: SizedBox(width: 15, height: 15, child: CustomPaint(painter: _SvgScene([_Op.path("M3 21V9l9-6 9 6v12h-6v-7H9v7z", theme.aHi, false, 1.8)], 24, 24)))), Expanded(child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [Text(_f(0, "Label"), style: TextStyle(color: skin.ink, fontFamily: fonts.he, fontSize: 12.5, fontWeight: FontWeight.w600)), const SizedBox(height: 2), Directionality(textDirection: TextDirection.ltr, child: Text(_f(1, "Meta"), style: TextStyle(color: skin.faint, fontFamily: fonts.grotesk, fontFamilyFallback: [fonts.he], fontSize: 9.5)))])), SizedBox(width: 13, height: 13, child: CustomPaint(painter: _SvgScene([_Op.path("M15 6l-6 6 6 6", skin.faint, false, 1.8)], 24, 24)))]), child)));
+    final Widget body = GestureDetector(behavior: HitTestBehavior.opaque, onTap: onAction == null ? null : () => onAction!(0), child: SizedBox(width: double.infinity, child: Container(padding: const EdgeInsets.fromLTRB(12, 12, 12, 12), decoration: BoxDecoration(color: skin.raised, border: Border.all(color: skin.hair), borderRadius: BorderRadius.circular(11)), child: _withChild(Row(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.center, spacing: 9, children: [Container(width: 30, height: 30, alignment: Alignment.center, decoration: BoxDecoration(color: skin.sunken, border: Border.all(color: skin.hair), borderRadius: BorderRadius.circular(9)), child: SizedBox(width: 15, height: 15, child: CustomPaint(painter: _SvgScene([_Op.path("M3 21V9l9-6 9 6v12h-6v-7H9v7z", theme.aHi, false, 1.8)], 24, 24)))), Expanded(child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [Text(_f(0, "Label"), style: TextStyle(color: skin.ink, fontFamily: fonts.he, fontSize: 12.5, fontWeight: FontWeight.w600)), const SizedBox(height: 2), Directionality(textDirection: TextDirection.ltr, child: Text(_f(1, "Meta"), style: TextStyle(color: skin.faint, fontFamily: fonts.grotesk, fontFamilyFallback: [fonts.he], fontSize: 9.5)))])), SizedBox(width: 13, height: 13, child: CustomPaint(painter: _SvgScene([_Op.path("M15 6l-6 6 6 6", skin.faint, false, 1.8)], 24, 24)))]), child))));
     return body;
   }
 }

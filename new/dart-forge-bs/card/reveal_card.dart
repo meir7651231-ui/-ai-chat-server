@@ -17,12 +17,15 @@ class ForgeRevealCard extends StatelessWidget {
   static Widget _withChild(Widget w, Widget? c) => c == null ? w : LayoutBuilder(builder: (ctx, cns) => cns.hasBoundedHeight
       ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [w, Expanded(child: c)])
       : Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [w, c]));
-  const ForgeRevealCard({super.key, this.fields, this.child});
+  /// G13a · הקשה על כפתור/קישור k (סדר-הופעה, 1 פעולות).
+  final void Function(int)? onAction;
+  static const int actionSlots = 1;
+  const ForgeRevealCard({super.key, this.fields, this.child, this.onAction});
   @override
   Widget build(BuildContext context) {
     final skin = DsSeam.skinOf(context);   // מלוא-העיצוב מהחריץ
     final fonts = DsSeam.fontsOf(context);  // פונט
-    final Widget body = Container(height: 120, decoration: BoxDecoration(color: skin.surface, border: Border.all(color: skin.hair), borderRadius: BorderRadius.circular(15)), child: Center(widthFactor: 1.0, child: _withChild(SizedBox(width: double.infinity, child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [Text(_f(0, "Label"), style: TextStyle(color: skin.ink, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: fonts.he)), Positioned.fill(child: const SizedBox.shrink())])), child)));
+    final Widget body = GestureDetector(behavior: HitTestBehavior.opaque, onTap: onAction == null ? null : () => onAction!(0), child: Container(height: 120, decoration: BoxDecoration(color: skin.surface, border: Border.all(color: skin.hair), borderRadius: BorderRadius.circular(15)), child: Center(widthFactor: 1.0, child: _withChild(SizedBox(width: double.infinity, child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [Text(_f(0, "Label"), style: TextStyle(color: skin.ink, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: fonts.he)), Positioned.fill(child: const SizedBox.shrink())])), child))));
     return body;
   }
 }

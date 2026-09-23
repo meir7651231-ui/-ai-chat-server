@@ -97,13 +97,16 @@ class ForgeGridHubCard extends StatelessWidget {
   static Widget _withChild(Widget w, Widget? c) => c == null ? w : LayoutBuilder(builder: (ctx, cns) => cns.hasBoundedHeight
       ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [w, Expanded(child: c)])
       : Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [w, c]));
-  const ForgeGridHubCard({super.key, this.fields, this.child});
+  /// G13a · הקשה על כפתור/קישור k (סדר-הופעה, 1 פעולות).
+  final void Function(int)? onAction;
+  static const int actionSlots = 1;
+  const ForgeGridHubCard({super.key, this.fields, this.child, this.onAction});
   @override
   Widget build(BuildContext context) {
     final skin = DsSeam.skinOf(context);   // מלוא-העיצוב מהחריץ
     final theme = DsSeam.of(context);       // אקצנט (מורף)
     final fonts = DsSeam.fontsOf(context);  // פונט
-    final Widget body = Container(padding: const EdgeInsets.fromLTRB(16, 16, 16, 16), decoration: BoxDecoration(gradient: LinearGradient(colors: [skin.surface, skin.sunken], begin: Alignment.topCenter, end: Alignment.bottomCenter), border: Border.all(color: skin.hair), borderRadius: BorderRadius.circular(15)), child: _withChild(Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, spacing: 11, children: [Container(width: 42, height: 42, alignment: Alignment.center, decoration: BoxDecoration(gradient: RadialGradient(center: Alignment(-0.40, -0.60), radius: 1.20, colors: [theme.gl, skin.sunken], stops: [0.0, 0.60]), border: Border.all(color: skin.hair), borderRadius: BorderRadius.circular(12)), child: SizedBox(width: 20, height: 20, child: CustomPaint(painter: _SvgScene([_Op.rect(3, 3, 7, 7, 2, theme.aHi, false, 1.8), _Op.rect(14, 3, 7, 7, 2, theme.aHi, false, 1.8), _Op.rect(3, 14, 7, 7, 2, theme.aHi, false, 1.8), _Op.rect(14, 14, 7, 7, 2, theme.aHi, false, 1.8)], 24, 24)))), Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [Text(_f(0, "Label"), style: TextStyle(color: skin.ink, fontSize: 13.5, fontWeight: FontWeight.w600, fontFamily: fonts.he)), Text(_f(1, "Meta"), style: TextStyle(color: skin.mut, fontSize: 11, fontFamily: fonts.he))])]), child));
+    final Widget body = GestureDetector(behavior: HitTestBehavior.opaque, onTap: onAction == null ? null : () => onAction!(0), child: Container(padding: const EdgeInsets.fromLTRB(16, 16, 16, 16), decoration: BoxDecoration(gradient: LinearGradient(colors: [skin.surface, skin.sunken], begin: Alignment.topCenter, end: Alignment.bottomCenter), border: Border.all(color: skin.hair), borderRadius: BorderRadius.circular(15)), child: _withChild(Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, spacing: 11, children: [Container(width: 42, height: 42, alignment: Alignment.center, decoration: BoxDecoration(gradient: RadialGradient(center: Alignment(-0.40, -0.60), radius: 1.20, colors: [theme.gl, skin.sunken], stops: [0.0, 0.60]), border: Border.all(color: skin.hair), borderRadius: BorderRadius.circular(12)), child: SizedBox(width: 20, height: 20, child: CustomPaint(painter: _SvgScene([_Op.rect(3, 3, 7, 7, 2, theme.aHi, false, 1.8), _Op.rect(14, 3, 7, 7, 2, theme.aHi, false, 1.8), _Op.rect(3, 14, 7, 7, 2, theme.aHi, false, 1.8), _Op.rect(14, 14, 7, 7, 2, theme.aHi, false, 1.8)], 24, 24)))), Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [Text(_f(0, "Label"), style: TextStyle(color: skin.ink, fontSize: 13.5, fontWeight: FontWeight.w600, fontFamily: fonts.he)), Text(_f(1, "Meta"), style: TextStyle(color: skin.mut, fontSize: 11, fontFamily: fonts.he))])]), child)));
     return body;
   }
 }

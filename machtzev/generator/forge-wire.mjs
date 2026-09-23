@@ -64,6 +64,9 @@ export function wireForge(cls, ctx, { widgetOf, wireAtom, sigOf = null }) {
   }
   if (a.values >= 1 && w.types.has('values') && ctx.fraction) { extra.push(`values: [${ctx.fraction}]`); filled.push('fraction'); }
   if (w.types.has('variants') && ctx.tone != null && extra.some((e) => e.startsWith('items: [['))) { const vi = variantOf(a, ctx.tone); if (vi >= 0) { extra.push(`variants: [${vi}]`); filled.push('tone'); } }
+  if (w.types.has('onAction') && ctx.nav && !base.filled.includes('onAction')) { extra.push(`onAction: (_) => (${ctx.nav})()`); filled.push('onAction'); }   // הקשה ⇒ הניווט של המטרה (חור-הפעולה של ds-forge)
+  else if (ctx.nav && !ctx.onSelect && extra.some((e) => e.startsWith('items: [[')) && w.types.has('onSelect') && !base.filled.includes('onSelect')) { extra.push(`onSelect: (_) => (${ctx.nav})()`); filled.push('onSelect'); }   // פריט-יחיד: הקשה על הפריט = הניווט
+  else if (ctx.nav && extra.some((e) => e.startsWith('items: [[')) && w.types.has('onCell') && !base.filled.includes('onCell')) { extra.push(`onCell: (_, __) => (${ctx.nav})()`); filled.push('onCell'); }
   for (const m of ctx.must || []) if (!filled.includes(m)) return null;   // שקע-נדרש-מהקורא (G26)
   const baseArgs = base.call.slice(base.call.indexOf('(') + 1, base.call.lastIndexOf(')')).trim();
   return { ...base, call: `${cls}(${[baseArgs, ...extra].filter(Boolean).join(', ')})`, filled };

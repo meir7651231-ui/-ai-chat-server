@@ -10,7 +10,7 @@ import { makeConsts, write } from './render-ds.mjs';
 import { buildAtlas } from './atlas.mjs';
 import { isPaper, skinWired } from './look.mjs';
 import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';
-import { synthDisplay } from './display-synth.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
+import { synthDisplay, widgetRecordOf } from './display-synth.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { ops as opsOfKind } from '../compose-engine.mjs';   // צורה ⇒ פעולות-יסוד (הטבלה הקיימת, לא רשימה שלי)
 import * as R from '../root.mjs';
@@ -53,11 +53,11 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
     let r = judge({ purpose: { kind: purpose || KIND.fact, need, text: `${op} · ${name}`, role }, cands, widgetOf, skinWired, wire: (c) => wireForge(c, { ...ctx, need }, { widgetOf, wireAtom }) });
     let synth = null;
     if (isPaper() && role && !(r.pickMeasured && r.pickShape > 0)) {   // אין אטום מדוד-חיובי לתפקיד ⇒ מבקשים הרכבה מיסודות; חייבת לעלות על הטוב-הקיים
-      const sy = synthDisplay({ role, need, floor: Number.isFinite(r.bestMeasured) ? r.bestMeasured : 0 });
+      const sy = synthDisplay({ role, need, floor: r.pick ? (Number.isFinite(r.bestMeasured) ? r.bestMeasured : 0) : -Infinity, hints: { tap: need.includes('onTap'), state: (purpose || KIND.fact) === KIND.shiur } });   // יש שורד ⇒ לעלות עליו; אין שורד ⇒ כל הרכבה מתאימה
       synth = { role, tried: sy ? sy.tried : 0, fit: sy ? sy.fit : 0, ms: sy ? sy.ms : 0, cls: sy && sy.cls, score: sy && sy.cls ? sy.score : null, why: sy && !sy.cls ? sy.why : null };
       if (sy && sy.cls) {
         const file = `gen_synth_${slug}_${op}.dart`; fs.writeFileSync(path.join(R.outDir(), file), sy.src);
-        const wrec = { cls: sy.cls, file: 'dart-gen-bs/' + file, shelf: 'synth', types: new Map([['fields', 'List<String>?'], ['child', 'Widget?']]), required: new Set(), positional: [], flexRoot: false, he: [] };
+        const wrec = widgetRecordOf(sy, 'dart-gen-bs/' + file);
         const wo2 = (c) => (c === sy.cls ? wrec : widgetOf(c)); const so2 = (c) => (c === sy.cls ? sy.atom : sigOfDefault(c));
         r = judge({ purpose: { kind: purpose || KIND.fact, need, text: `${op} · ${name}`, role }, cands: [...cands, sy.cls], widgetOf: wo2, skinWired: (f) => (f === wrec.file ? true : skinWired(f)), sigOf: so2, wire: (c) => wireForge(c, { ...ctx, need }, { widgetOf: wo2, wireAtom, sigOf: so2 }) });
       }
