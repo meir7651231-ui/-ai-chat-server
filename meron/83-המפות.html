@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>המפות — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_style.css">
+<style>
+.org{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;color:#D6CFC4;border-radius:10px;padding:14px 16px;white-space:pre;overflow-x:auto;line-height:1.5}
+table.roles td:nth-child(2){text-align:center;width:44px}
+.sum td{font-weight:700}
+.lock{background:#3B1111;color:#FCA5A5;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700}
+.phones{display:flex;gap:16px;flex-wrap:wrap}
+.phone{width:260px;background:#0F0D0B;color:#E8E2D8;border-radius:22px;padding:16px 14px;border:2px solid #3A332B;font-size:13px;line-height:1.5}
+.phone h5{margin:0 0 8px;font-size:14px;color:#fff}
+.phone .row{background:#1C1916;border-radius:8px;padding:7px 9px;margin-bottom:6px}
+.phone .row b{color:#fff}
+.phone .red{background:#3B1111;color:#FECACA}
+.phone .yel{background:#2E2208;color:#FDE68A}
+.phone .grn{background:#0F2A1C;color:#BBF0D0}
+.phone .btn{display:block;text-align:center;border-radius:10px;padding:9px;margin-top:8px;font-weight:700;background:#3A332B;color:#fff}
+.phone .muted{color:#9A9085;font-size:11px}
+</style></head>
+<body><div class="wrap">
+
+<style>
+.mapwrap{display:flex;gap:14px;flex-wrap:wrap}
+.layers{min-width:210px;background:var(--sur,#FFFDF9);border:1px solid var(--bd,#E7DFD2);border-radius:10px;padding:10px 12px;font-size:13px}
+.layers label{display:block;padding:3px 0;cursor:pointer}
+svg.map{flex:1;min-width:320px;max-width:100%;height:auto;background:#F7F3EA;border:1px solid #D6CFC4;border-radius:10px}
+svg.map text{font-family:Heebo,sans-serif;fill:#1C1917}
+.warn{background:#2E2208;color:#FDE68A;border-radius:8px;padding:8px 12px;font-size:13px;margin:8px 0}
+</style>
+<h1>המפות — ניהול חי</h1>
+<p class="lead">נושא 83. 14 המפות מ-78 — <b>כשכבות על מפה אחת</b>. מסמנים שכבה — היא מופיעה. <b>למה שכבות:</b> כי זה מה שהמפקד צריך — לא 14 דפים, אלא "תראה לי את המעברים ואת המחסה ביחד".</p>
+<div class="warn"><b>⚠ סכמטי.</b> לא בקנה מידה, הכיוונים והמיקומים <b>מקורבים</b>, מבוסס על מידע ציבורי (45): ציון, מתחם 89, בני עקיבא, מושב מירון, כבישים 89 ו-866, מסוף 4, חניוני כח"ל ואליפלט. <b>לא לשימוש בשטח.</b> המפה האמיתית — מתוכניות המדידה של האתר.</div>
+
+<div class="mapwrap">
+<div class="layers" id="layers">
+<b>שכבות</b>
+<label><input type="checkbox" data-l="zones" checked> 1. אזורים ושמות</label>
+<label><input type="checkbox" data-l="pass" checked> 2. מעברים וכיוון</label>
+<label><input type="checkbox" data-l="roads" checked> 3. צירים וסגירות</label>
+<label><input type="checkbox" data-l="evac"> 4. פינוי</label>
+<label><input type="checkbox" data-l="shelter"> 5. מחסה</label>
+<label><input type="checkbox" data-l="points"> 6. נקודות</label>
+<label><input type="checkbox" data-l="access"> 7. נגישות</label>
+<label><input type="checkbox" data-l="infra"> 8. תשתיות</label>
+<label><input type="checkbox" data-l="fire"> 9. אש</label>
+<label><input type="checkbox" data-l="cams"> 10. מצלמות וכיסוי</label>
+<label><input type="checkbox" data-l="comms"> 11. קשר</label>
+<label><input type="checkbox" data-l="sectors"> 12. גזרות</label>
+<label><input type="checkbox" data-l="signs"> 13. שילוט</label>
+<label><input type="checkbox" data-l="border"> 14. גבול ויישובים</label>
+<div style="margin-top:8px;font-size:12px;color:var(--mu,#6B6259)">מקרא: ירוק = פתוח · כתום = מוגבל · אדום = סגור / סכנה</div>
+</div>
+
+<svg class="map" viewBox="0 0 900 600" role="img" aria-label="מפה סכמטית של מתחם מירון">
+<!-- base -->
+<rect x="0" y="0" width="900" height="600" fill="#F7F3EA"/>
+<path d="M0 0 L420 0 L360 140 L180 190 L0 170 Z" fill="#DDE8D5"/>
+<text x="120" y="60" font-size="14" fill="#3F6B3F">שמורת הר מירון (רט"ג)</text>
+
+<g id="L-roads">
+<path d="M0 470 C200 455 420 470 620 440 C720 425 820 420 900 410" stroke="#8A7F72" stroke-width="14" fill="none"/>
+<text x="40" y="500" font-size="13">כביש 89 — חד-כיווני לשאטלים</text>
+<path d="M620 440 C660 520 700 560 760 600" stroke="#8A7F72" stroke-width="10" fill="none"/>
+<text x="700" y="590" font-size="13">866</text>
+<path d="M880 405 l14 -8 l0 16 z" fill="#8A7F72"/><text x="760" y="395" font-size="12">→ חניון כח"ל · אליפלט (כביש 90)</text>
+<rect x="470" y="440" width="70" height="26" rx="4" fill="#fff" stroke="#8A7F72"/><text x="478" y="458" font-size="12">מסוף 4</text>
+<g fill="#DC2626"><rect x="210" y="452" width="10" height="24"/><rect x="640" y="470" width="10" height="24"/></g>
+<text x="190" y="446" font-size="11" fill="#B91C1C">מחסום</text>
+<path d="M650 450 C600 380 520 330 470 300" stroke="#2563EB" stroke-width="4" stroke-dasharray="8 6" fill="none"/>
+<text x="560" y="360" font-size="11" fill="#1D4ED8">ציר חירום (06)</text>
+</g>
+
+<g id="L-zones">
+<rect x="360" y="230" width="140" height="90" rx="8" fill="#FDE7C7" stroke="#B45309" stroke-width="2"/>
+<text x="385" y="262" font-size="15" font-weight="700">הציון</text><text x="378" y="282" font-size="11">+ גג (באיאן 20:30)</text>
+<text x="378" y="300" font-size="11">~20,000 · אזור ציון</text>
+<rect x="90" y="220" width="230" height="170" rx="10" fill="#E3EEF9" stroke="#1E3A5F" stroke-width="2"/>
+<text x="110" y="250" font-size="15" font-weight="700">מתחם 89 (ההילולה)</text><text x="110" y="270" font-size="11">~33,000 · מערב-כחול 1–6</text>
+<rect x="540" y="170" width="170" height="110" rx="10" fill="#EDE7F9" stroke="#5B21B6" stroke-width="2"/>
+<text x="560" y="200" font-size="15" font-weight="700">בני עקיבא</text><text x="560" y="220" font-size="11">~5,000 · צפון-סגול</text>
+<rect x="520" y="300" width="80" height="60" rx="6" fill="#F3E8E8" stroke="#9F1239" stroke-dasharray="4 3"/>
+<text x="528" y="325" font-size="11">עזרת נשים</text><text x="528" y="342" font-size="10">(16)</text>
+<rect x="300" y="170" width="60" height="45" rx="6" fill="#F5F5F4" stroke="#57534E"/>
+<text x="304" y="190" font-size="10">מקום</text><text x="304" y="204" font-size="10">ההנצחה (64)</text>
+<rect x="250" y="500" width="330" height="90" rx="10" fill="#EFEAE0" stroke="#78716C"/>
+<text x="330" y="545" font-size="14" font-weight="700">מושב מירון</text><text x="300" y="565" font-size="11">~697 תושבים · יישוב (49)</text>
+<rect x="160" y="420" width="120" height="30" rx="6" fill="#DCFCE7" stroke="#15803D"/><text x="172" y="440" font-size="11">מתחם חלאקה (37)</text>
+</g>
+
+<g id="L-pass">
+<g stroke="#15803D" stroke-width="5" fill="none"><path d="M320 290 L360 280"/><path d="M500 260 L540 240"/><path d="M430 320 L470 440"/></g>
+<g fill="#15803D"><path d="M360 280 l-10 -8 l0 16 z"/><path d="M540 240 l-12 -2 l6 14 z"/><path d="M470 440 l-12 -4 l8 14 z"/></g>
+<path d="M400 320 L380 420" stroke="#D97706" stroke-width="5"/><text x="340" y="380" font-size="11" fill="#B45309">מעבר 7 ↕ שיפוע · 66/מ'/דק'</text>
+<circle cx="390" cy="370" r="5" fill="#D97706"/>
+<text x="300" y="305" font-size="10" fill="#15803D">מעבר 3 →</text>
+<text x="505" y="235" font-size="10" fill="#15803D">מעבר 5 →</text>
+<text x="440" y="395" font-size="10" fill="#15803D">עלייה/ירידה נפרדים</text>
+</g>
+
+<g id="L-evac" style="display:none">
+<g stroke="#DC2626" stroke-width="3" stroke-dasharray="10 5" fill="none"><path d="M200 390 L200 470"/><path d="M430 320 L480 440"/><path d="M620 280 L660 440"/></g>
+<g fill="#DC2626"><circle cx="200" cy="470" r="7"/><circle cx="480" cy="440" r="7"/><circle cx="660" cy="440" r="7"/></g>
+<text x="120" y="415" font-size="11" fill="#B91C1C">יציאה 3</text><text x="600" y="420" font-size="11" fill="#B91C1C">יציאה 5</text>
+<rect x="760" y="440" width="120" height="40" rx="6" fill="#FEE2E2" stroke="#DC2626"/><text x="770" y="465" font-size="11">נקודת קליטה (13)</text>
+</g>
+
+<g id="L-shelter" style="display:none">
+<g fill="#1D4ED8" opacity=".85"><rect x="230" y="330" width="24" height="18"/><rect x="455" y="240" width="24" height="18"/><rect x="640" y="250" width="24" height="18"/><rect x="420" y="520" width="24" height="18"/></g>
+<text x="215" y="325" font-size="10" fill="#1D4ED8">מחסה ~? איש</text><text x="610" y="245" font-size="10" fill="#1D4ED8">מחסה</text>
+<text x="600" y="585" font-size="10" fill="#1D4ED8">כמה נכנסים — מהשטח (12, 61)</text>
+</g>
+
+<g id="L-points" style="display:none">
+<g font-size="15"><text x="140" y="300">✚</text><text x="410" y="215">✚</text><text x="620" y="265">✚</text>
+<text x="250" y="300" fill="#0369A1">💧</text><text x="600" y="190" fill="#0369A1">💧</text><text x="330" y="340" fill="#0369A1">💧</text>
+<text x="280" y="250">👶</text><text x="650" y="215">👶</text></g>
+<text x="120" y="320" font-size="10">רפואה 1</text><text x="620" y="283" font-size="10">רפואה 3</text>
+</g>
+
+<g id="L-access" style="display:none">
+<path d="M540 455 C470 420 450 360 430 320" stroke="#7C3AED" stroke-width="4" fill="none"/>
+<text x="470" y="410" font-size="11" fill="#6D28D9">♿ מסלול נגיש — בלי מדרגות</text>
+<rect x="540" y="445" width="60" height="22" rx="4" fill="#EDE9FE" stroke="#7C3AED"/><text x="545" y="460" font-size="10">עלייה נגישה</text>
+<text x="600" y="520" font-size="10" fill="#6D28D9">נוהל נגישות — לא נמצא (45) → מהשטח</text>
+</g>
+
+<g id="L-infra" style="display:none">
+<g fill="#92400E"><rect x="95" y="395" width="16" height="16"/><rect x="505" y="325" width="16" height="16"/><rect x="715" y="180" width="16" height="16"/></g>
+<text x="80" y="425" font-size="10">גנרטור 1</text><text x="495" y="355" font-size="10">גנרטור 4</text>
+<path d="M513 333 L430 280" stroke="#92400E" stroke-dasharray="3 3"/><text x="440" y="300" font-size="9">→ תאורה, מצלמות 14–19 (25)</text>
+</g>
+
+<g id="L-fire" style="display:none">
+<g font-size="16"><text x="420" y="235">🔥</text><text x="190" y="235">🔥</text><text x="660" y="190">🔥</text></g>
+<path d="M340 140 L700 140" stroke="#DC2626" stroke-width="18" opacity=".18"/><text x="480" y="135" font-size="11" fill="#B91C1C">רצועת חיץ 60 מ' (18)</text>
+<text x="660" y="170" font-size="10">הדלקה · סף רוח לפי מה במורד</text>
+</g>
+
+<g id="L-cams" style="display:none">
+<g fill="#0F172A"><circle cx="150" cy="240" r="4"/><circle cx="300" cy="360" r="4"/><circle cx="420" cy="230" r="4"/><circle cx="600" cy="175" r="4"/><circle cx="410" cy="380" r="4"/></g>
+<g fill="#0F172A" opacity=".08"><circle cx="150" cy="240" r="60"/><circle cx="300" cy="360" r="55"/><circle cx="420" cy="230" r="50"/><circle cx="600" cy="175" r="60"/><circle cx="410" cy="380" r="45"/></g>
+<rect x="220" y="265" width="70" height="40" fill="none" stroke="#DC2626" stroke-dasharray="4 3"/><text x="215" y="320" font-size="10" fill="#B91C1C">עיוור (58)</text>
+</g>
+
+<g id="L-comms" style="display:none">
+<g fill="#0E7490"><path d="M760 250 l8 -24 l8 24 z"/><path d="M60 180 l8 -24 l8 24 z"/></g>
+<text x="720" y="270" font-size="10" fill="#0E7490">אנטנה ניידת</text>
+<circle cx="768" cy="240" r="170" fill="#0E7490" opacity=".06"/><circle cx="68" cy="170" r="150" fill="#0E7490" opacity=".06"/>
+<text x="400" y="590" font-size="10" fill="#0E7490">גשר אזורי לכל אזור (79) · אזורים מתים — מהשטח</text>
+</g>
+
+<g id="L-sectors" style="display:none">
+<g fill="none" stroke="#111827" stroke-width="2" stroke-dasharray="12 6"><rect x="80" y="210" width="250" height="250"/><rect x="340" y="160" width="180" height="180"/><rect x="530" y="160" width="190" height="130"/><rect x="510" y="290" width="100" height="80"/><rect x="440" y="420" width="460" height="100"/></g>
+<g font-size="11" font-weight="700"><text x="90" y="455">גזרת 89</text><text x="345" y="175">גזרת ציון</text><text x="600" y="155">גזרת צפון</text><text x="515" y="385">עזרה</text><text x="800" y="435">גזרת חניונים וצירים</text></g>
+</g>
+
+<g id="L-signs" style="display:none">
+<g fill="#1E3A5F"><rect x="330" y="215" width="12" height="12"/><rect x="200" y="400" width="12" height="12"/><rect x="620" y="300" width="12" height="12"/></g>
+<text x="120" y="398" font-size="10" fill="#1E3A5F">שלט: "מערב כחול 4"</text>
+</g>
+
+<g id="L-border" style="display:none">
+<path d="M0 180 L180 200 L360 150 L430 0" stroke="#15803D" stroke-width="4" fill="none"/>
+<text x="20" y="200" font-size="11" fill="#15803D">גבול השמורה (26)</text>
+<rect x="600" y="500" width="150" height="80" rx="8" fill="#FEF9C3" stroke="#A16207"/><text x="615" y="530" font-size="11">שדות ומטעים</text><text x="615" y="548" font-size="10">נכסים של תושבים (49)</text>
+<path d="M600 500 L560 470" stroke="#DC2626" stroke-dasharray="4 3"/><text x="760" y="540" font-size="10" fill="#B91C1C">מעבר עוקף (46)</text>
+</g>
+
+<text x="890" y="590" font-size="10" text-anchor="end" fill="#78716C">סכמטי · לא בקנה מידה</text>
+</svg>
+</div>
+
+<h2>מה כל שכבה צריכה כדי להיות אמיתית</h2>
+<table>
+<tr><th>שכבה</th><th>מה חסר</th><th>ממי</th></tr>
+<tr><td>1–2 אזורים ומעברים</td><td>גבולות מדויקים · רוחב ומשטח של כל מעבר · ספיקה</td><td>מהנדס האתר · מומחה קהל</td></tr>
+<tr><td>3 צירים</td><td>מיקום מחסומים · סגירות לפי שעה</td><td>משטרה — תנועה</td></tr>
+<tr><td>4–5 פינוי ומחסה</td><td>מסלולים מאושרים · <b>כמה נכנסים לכל מחסה</b></td><td>משטרה · פיקוד העורף</td></tr>
+<tr><td>6–7 נקודות ונגישות</td><td>מיקומים · מסלול נגיש אמיתי</td><td>הממונה · מד"א</td></tr>
+<tr><td>8–9 תשתיות ואש</td><td>לוחות, גנרטורים, ברזים, מקורות אש</td><td>תפעול · כב"ה</td></tr>
+<tr><td>10–11 מצלמות וקשר</td><td>מיקום וכיוון מצלמה · כיסוי קשר מדוד</td><td>משטרה · קשר</td></tr>
+<tr><td>12–14 גזרות, שלטים, גבול</td><td>הגבולות בפועל · תוכנית שילוט · מפת יישובים</td><td>משטרה · הממונה · המועצה</td></tr>
+</table>
+
+<div class="card" style="margin-top:12px"><b>נסגר:</b> 14 המפות מ-78 — <b>כמבנה ושכבות</b>, סכמטי. <b>הכלל:</b> <b>כל הגופים על אותה מפה</b>, אותם שמות אזורים (35), אותם גבולות גזרה — <b>למשטרה, מד"א וכב"ה אותן גזרות</b>, אחרת "צפון" של אחד הוא לא "צפון" של השני. <b>המפה האמיתית</b> — ממדידה, לא ממני.</div>
+
+<script>
+document.querySelectorAll('#layers input').forEach(function(cb){
+  var g=document.getElementById('L-'+cb.dataset.l);
+  function sync(){ if(g) g.style.display = cb.checked ? '' : 'none'; }
+  cb.addEventListener('change', sync); sync();
+});
+</script>
+
+</div></body></html>

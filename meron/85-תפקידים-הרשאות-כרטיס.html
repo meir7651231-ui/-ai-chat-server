@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>תפקידים הרשאות וכרטיס תפקיד — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_style.css">
+<style>
+.org{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;color:#D6CFC4;border-radius:10px;padding:14px 16px;white-space:pre;overflow-x:auto;line-height:1.5}
+table.roles td:nth-child(2){text-align:center;width:44px}
+.sum td{font-weight:700}
+.lock{background:#3B1111;color:#FCA5A5;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700}
+.phones{display:flex;gap:16px;flex-wrap:wrap}
+.phone{width:260px;background:#0F0D0B;color:#E8E2D8;border-radius:22px;padding:16px 14px;border:2px solid #3A332B;font-size:13px;line-height:1.5}
+.phone h5{margin:0 0 8px;font-size:14px;color:#fff}
+.phone .row{background:#1C1916;border-radius:8px;padding:7px 9px;margin-bottom:6px}
+.phone .row b{color:#fff}
+.phone .red{background:#3B1111;color:#FECACA}
+.phone .yel{background:#2E2208;color:#FDE68A}
+.phone .grn{background:#0F2A1C;color:#BBF0D0}
+.phone .btn{display:block;text-align:center;border-radius:10px;padding:9px;margin-top:8px;font-weight:700;background:#3A332B;color:#fff}
+.phone .muted{color:#9A9085;font-size:11px}
+</style></head>
+<body><div class="wrap">
+
+<style>
+table.m td{text-align:center;font-size:12px}table.m td:first-child{text-align:right;font-weight:700;white-space:nowrap}
+.y{color:#15803D;font-weight:700}.n{color:#D6D3D1}.c{color:#B45309;font-weight:700}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.rcard{background:#FFFDF9;color:#1C1917;border:2px solid #1C1917;border-radius:8px;padding:10px 12px;font-size:12.5px}
+.rcard h4{margin:0 0 6px;font-size:14px;border-bottom:2px solid #1C1917;padding-bottom:3px}
+.rcard div{padding:2px 0}
+</style>
+<h1>התפקידים, ההרשאות וכרטיס התפקיד — ניהול חי</h1>
+<p class="lead">נושא 85. שלושה כלים מ-78: <b>(1) טבלת תפקידים מאוחדת</b> — ~200 התפקידים מ-11 עולמות, מקובצים ל-<b>12 משפחות</b> שיש להן אותן הרשאות. <b>(2) טבלת הרשאות</b> — משפחה × פעולה. <b>(3) כרטיס תפקיד</b> — דף אחד בכיס.</p>
+
+<h2>1. 12 משפחות תפקידים</h2>
+<table>
+<tr><th>#</th><th>משפחה</th><th>דוגמאות (עולם)</th><th>כמה (הערכה)</th></tr>
+<tr><td>1</td><td><b>מחליט עליון</b></td><td>המפקד · הממונה · מפקד מד"א · מפקד כב"ה · פקע"ר</td><td>~10</td></tr>
+<tr><td>2</td><td><b>מפקד אזור / עולם</b></td><td>מפקד גזרה (23) · ראש נקודת רפואה (22) · מנהל תחנה (24) · רכז ארגון (27)</td><td>~120</td></tr>
+<tr><td>3</td><td><b>חמ"ל</b></td><td>ראש חמ"ל · מוקדנים · צופי מצלמות · צוות אדום (58)</td><td>~150</td></tr>
+<tr><td>4</td><td><b>קישור</b></td><td>קציני קישור בחמ"ל (34)</td><td>~30</td></tr>
+<tr><td>5</td><td><b>מחזיק מעבר</b></td><td>שוטר במעבר · סדרן בעמדה חיונית · מנהל רציף</td><td>~800</td></tr>
+<tr><td>6</td><td><b>כוח בשטח עם סמכות חוק</b></td><td>שוטרים · מג"ב</td><td>~5,000</td></tr>
+<tr><td>7</td><td><b>מטפל מוסמך</b></td><td>פראמדיק · חובש · כבאי · חילוץ</td><td>~600</td></tr>
+<tr><td>8</td><td><b>סדרן / מתנדב</b></td><td>סדרנים · מתנדבים · סדרני חצרות וספקים</td><td>~4,500</td></tr>
+<tr><td>9</td><td><b>מפעיל שירות</b></td><td>נהג · טכנאי · ניקיון · מים</td><td>~3,000</td></tr>
+<tr><td>10</td><td><b>הפקה</b></td><td>במאי · מנהל במה · גבאי (21, 48)</td><td>~1,000</td></tr>
+<tr><td>11</td><td><b>סמכות מקצועית</b></td><td>מהנדס · פיקוח מזון · קצין מניעה · רב (15)</td><td>~40</td></tr>
+<tr><td>12</td><td><b>חיצוני עם גישה</b></td><td>עיתונאי (29) · תושב (49) · נציג משפחות (64)</td><td>—</td></tr>
+</table>
+
+<h2>2. טבלת הרשאות — משפחה × פעולה</h2>
+<table class="m">
+<tr><th>משפחה</th><th>לראות מצב אזור</th><th>לראות הכל</th><th>לדווח</th><th>"עמוד"</th><th>לפתוח מעבר</th><th>לשגר</th><th>מצב (לאשר)</th><th>הודעה לציבור</th><th>לשנות חוק</th><th>מסווג</th></tr>
+<tr><td>1 מחליט עליון</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="c">בתחומו</td><td class="c">המפקד</td><td class="c">חותם לתחומו</td><td class="c">לפי תפקיד</td></tr>
+<tr><td>2 מפקד אזור</td><td class="y">✓</td><td class="c">שכנים</td><td class="y">✓</td><td class="y">✓</td><td class="c">אזורו · <b>אם היעד פנוי</b></td><td class="c">אזורו</td><td class="n">—</td><td class="c">כריזה אזורית</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>3 חמ"ל</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n">—</td><td class="n">—</td><td class="y">✓</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>4 קישור</td><td class="y">✓</td><td class="c">גופו + משותף</td><td class="y">✓</td><td class="n">—</td><td class="n">—</td><td class="c">בקשות</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>5 מחזיק מעבר</td><td class="c">מעברו</td><td class="n">—</td><td class="y">✓</td><td class="y"><b>✓ לבד</b></td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="c">מוקלטת במעבר</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>6 כוח עם סמכות</td><td class="c">עמדתו</td><td class="n">—</td><td class="y">✓</td><td class="y">✓</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>7 מטפל</td><td class="c">עמדתו</td><td class="n">—</td><td class="y">✓</td><td class="y">✓</td><td class="n">—</td><td class="n">—</td><td class="c">ר"נ — מד"א</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>8 סדרן</td><td class="c">עמדתו</td><td class="n">—</td><td class="y">✓</td><td class="y"><b>✓ אם הוכשר</b> (74)</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>9 מפעיל</td><td class="c">משימתו</td><td class="n">—</td><td class="y">✓</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>10 הפקה</td><td class="c">הבמה</td><td class="n">—</td><td class="y">✓</td><td class="c">עצירת מופע</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="c">ערוץ חצר</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>11 סמכות מקצועית</td><td class="c">תחומו</td><td class="n">—</td><td class="y">✓</td><td class="c">עצירת עבודה/היתר</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="c">חותם לתחומו</td><td class="n">—</td></tr>
+<tr><td>12 חיצוני</td><td class="c">ציבורי</td><td class="n">—</td><td class="y">✓</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+</table>
+<p style="font-size:12px;color:var(--mu)">הכל תלוי גם בשלב, אזור, זמן והסמכה (32). <b>הרשאה לתיק רפואי — רק לצוות המטפל</b> (22), לא בטבלה הזו.</p>
+
+<h2>3. כרטיס תפקיד — דף אחד בכיס (6 דוגמאות)</h2>
+<div class="cards">
+<div class="rcard"><h4>מחזיק מעבר — "מעבר-7"</h4>
+<div><b>אתה:</b> האחראי על המעבר הזה עכשיו.</div><div><b>המספר שלך:</b> יחס זרימה (מעל 100% = אדום).</div>
+<div><b>"עמוד" — לבד, בלי לשאול,</b> כשצפוף / נופלים / דוחפים.</div><div><b>לא פותח</b> — רק מפקד הגזרה.</div>
+<div><b>ביקשת עזרה וסירבו?</b> לחץ "סירבו" (69).</div><div><b>קשר:</b> גשר מזרח-כחול (79).</div></div>
+<div class="rcard"><h4>סדרן בעמדה חיונית</h4>
+<div><b>אתה:</b> העיניים של המעבר.</div><div><b>"עמוד"</b> — מותר לך (אם עברת הכשרה א').</div>
+<div><b>הולך?</b> "צריך ללכת" — הגיבוי מגיע לפני (27).</div><div><b>ילד לבד:</b> "יונה" + תיאור.</div>
+<div><b>המסך אומר ירוק ואתה רואה לחץ?</b> "עין" (58). <b>אתה גובר.</b></div></div>
+<div class="rcard"><h4>מפקד גזרה</h4>
+<div><b>המספר שלך:</b> זמן עד עצירה (≤60 שנ').</div><div><b>פותח מעבר</b> — רק אם <b>היעד</b> מתחת לסף (70).</div>
+<div><b>תחזית יציאה</b> לכל הדלקה בגזרה (69).</div><div><b>משמרת:</b> לא עוזב באמצע אירוע (34).</div>
+<div><b>שעון ער</b> מעל 16 — החלפה (58).</div></div>
+<div class="rcard"><h4>חובש בשטח</h4>
+<div><b>המספר שלך:</b> זמן עד מטופל (≤4 דק').</div><div><b>לחמ"ל:</b> רק "רפואי · אזור · חומרה" — לא שם.</div>
+<div><b>"איפה אכלת / מאיזה אוטובוס"</b> — שאלה אחת (20).</div><div><b>"מגן"</b> — רק מד"א מכריז.</div>
+<div><b>מבוגר שמשתחרר</b> — מלווה לרציף (42).</div></div>
+<div class="rcard"><h4>נהג שאטל</h4>
+<div><b>המסך:</b> לאן · רציף · שעות שנשארו.</div><div><b>אחרי מכסת השעות — לא נוהג</b> (24).</div>
+<div><b>יצאת בלי נוסע?</b> "חסר נוסע" (42).</div><div><b>מלא</b> = מלא. לא מעל המקומות.</div></div>
+<div class="rcard"><h4>גבאי</h4>
+<div><b>ההיתר שלך:</b> 4 חותמים → השר (80).</div><div><b>כב"ה עצר?</b> אתה אומר לאדמו"ר (43/5).</div>
+<div><b>ערוץ החצר:</b> הודעות — אחרי אישור.</div><div><b>רשימת עלייה וחזרה</b> — בידיים שלך (48).</div>
+<div><b>מקבל 48 שעות לפני הציבור</b> (55).</div></div>
+</div>
+
+<div class="card" style="margin-top:12px"><b>נסגר:</b> כלים ד'2–4 מ-78. ~200 תפקידים → <b>12 משפחות</b> → טבלה אחת → כרטיס לכל אחד. <b>הכלל:</b> כל כרטיס — "אתה, המספר שלך, מתי עוצר, מה אסור, קשר". בדיוק 5 שורות.</div>
+
+</div></body></html>
