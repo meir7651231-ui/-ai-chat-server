@@ -26,7 +26,7 @@ import * as R from '../machtzev/root.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const SPREAD = () => +(process.env.MAVIN_SPREAD || Math.ceil(opsCount() / 3));   // ≥ שליש מהמינים ⇒ מילה מפוזרת (לא דבר). נגזר מהקטלוג, לא קבוע
 export const TYPES = ['text', 'num', 'date', 'bool', 'ref'];            // 5 סוגי-שדה
-export const ACTS = ['list', 'one', 'add', 'edit', 'del', 'sum'];        // 6 צורות-עשייה
+export const ACTS = ['list', 'one', 'add', 'edit', 'del', 'sum', 'search', 'filter', 'empty', 'export', 'message'];   // צורות-עשייה = תגי-האפיון הקיימים (spec-lang: pTable/pAct/pCount/pSearch/pFilter/pEmpty/pExport/pMessage)
 const ANSWERS = () => process.env.MAVIN_ANSWERS || path.join(R.ROOT, '.maimatai', 'mavin-answers.jsonl');
 
 export const toks = (s) => [...String(s || '').matchAll(/[֐-׿]+(?:\s*\/\s*[֐-׿]+)+|[֐-׿]+|\d+|[A-Za-z]+/g)].map((m) => m[0].replace(/\s*\/\s*/g, '/'));   // «בעד/נגד/נמנע» = אסימון אחד: בחירה-אחת-מכמה (צורה)
@@ -189,6 +189,10 @@ export function needsFrom(form, answers = {}) {
       if (act === 'add' || act === 'edit') { for (const f of fields) needs.push({ thing: t.label, act, field: f.label, type: f.type || 'text', op: 'field', need: ['label', 'value', 'onChanged'], goal: f.label }); needs.push({ thing: t.label, act, op: 'action', need: ['label', 'onTap'], goal: t.label }); }
       if (act === 'del') needs.push({ thing: t.label, act, op: 'action', need: ['label', 'onTap'], goal: t.label });
       if (act === 'sum') needs.push({ thing: t.label, act, op: 'stat', need: ['value', 'label'], goal: t.label });
+      if (act === 'search') needs.push({ thing: t.label, act, op: 'search', need: ['value', 'onChanged'], goal: t.label });
+      if (act === 'filter') needs.push({ thing: t.label, act, op: 'filter', need: ['selected', 'onTap'], goal: t.label });
+      if (act === 'empty') needs.push({ thing: t.label, act, op: 'empty', need: ['message'], goal: t.label });
+      if (act === 'export') needs.push({ thing: t.label, act, op: 'action', need: ['label', 'onTap'], goal: t.label });
     }
     for (const f of fields) if (f.type === 'ref' && f.to) needs.push({ thing: t.label, act: 'ref', field: f.label, to: f.to, op: null });
     if (a.rel && t.rel) {   // יחס שנענה: מצביע ⇒ קישור · פעולה ⇒ כפתור · תנאי ⇒ חלקיק-בדיקה לפי מילות-הבעלים (coverLogic) · ערך ⇒ מספר בולט
@@ -218,6 +222,17 @@ export function specOf(form, answers = {}) {
   }
   // [פעולה]: יחס שהבעלים ענה עליו «פעולה» (או «תנאי» ⇒ חוק) על דבר שנכנס כישות
   for (const t of form.things) { const a = answerFor(t, answers); if (t.rel && a.rel === 'act') { const st = (w) => stripLead(stem(w)).filter((f) => f.length >= 3); const ent = ents.find((e) => toks(e.label).some((lw) => st(t.rel.subject).includes(stem(lw)))) || ents.find((e) => e.label === t.label); if (ent) lines.push(`חלקיק ${ent.label}: [פעולה] ${t.rel.words.join(' ')}`); } }
+  // תגי-חלקיק מהתשובות (הטבלה הקיימת: shapeOf ⇒ compose-engine.ops): חיפוש · סינון · ריק · ייצוא · הודעה
+  for (const t of ents) { const a = answerFor(t, answers); const acts = a.acts || [];
+    if (acts.includes('search')) lines.push(`חלקיק ${t.label}: [חיפוש]`);
+    if (acts.includes('filter')) lines.push(`חלקיק ${t.label}: [סינון]`);
+    if (acts.includes('empty')) lines.push(`חלקיק ${t.label}: [ריק] ${a.emptyText || t.label}`);   // טקסט = של הבעלים; אין ⇒ התווית, לא המצאה
+    if (acts.includes('export')) lines.push(`חלקיק ${t.label}: [ייצוא]`);
+    if (acts.includes('message') && a.messages && a.messages.length) {   // הודעה = נוסחים של הבעלים (תוכן), על שדה-בחירה: `[הודעה] שדה = [תוכן קבוצה]` + שורות `תוכן`
+      const ef = (a.fields || []).find((f) => f.enumVals) || t.fields.find((f) => f.enumVals);
+      if (ef) { const g = `הודעה ${t.label}`; lines.push(`חלקיק ${t.label}: [הודעה] ${ef.label} = [תוכן ${g}]`); for (const m of a.messages) lines.push(`תוכן ${g}${m.tag ? ` [${m.tag}]` : ''}: ${m.text}`); }
+    }
+  }
   // לוח בקרה: מונה לכל ישות עם sum · סכום לכל שדה-מספר שלה
   const metrics = [];
   for (const t of ents) { const a = answerFor(t, answers); if (!(a.acts && a.acts.includes('sum'))) continue; metrics.push(`מונה(${t.label})`); for (const f of (a.fields || [])) if (f.type === 'num') metrics.push(`סכום(${t.label}.${f.label})`); }

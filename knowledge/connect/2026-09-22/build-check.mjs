@@ -24,7 +24,7 @@ const { spec, skipped } = specOf(form, answers);
 console.log(`«${sentence}»\nאפיון:\n${spec.split('\n').map((l) => '  ' + l).join('\n') || '  (ריק)'}${skipped.length ? `\n  לא נכנסו (בלי שדות ⇒ שאלה): ${skipped.join(', ')}` : ''}`);
 if (!spec) { console.log('⚪ אין אפיון ⇒ אין בנייה. ענה על השדות ותנסה שוב.'); process.exit(0); }
 const app = buildApp(spec, { writePlan: false });
-console.log(`מסכים: ${app.screens.map((s) => `${s.kind}:${s.name}`).join(' · ')}`);
+console.log(`מסכים: ${app.screens.map((s) => `${s.kind}:${s.name}${s.sub ? ` (${s.sub})` : ''}`).join(' · ')}`);
 const gen = fs.readdirSync(process.env.GEN_OUT).filter((f) => /^gen_app_.*\.dart$/.test(f));
 if (!HOST || !FLUTTER) { console.log(`⚪ לא-נמדד: ${!FLUTTER ? 'אין flutter' : 'אין BS_HOST'} — נפלטו ${gen.length} קבצי Dart ל-${process.env.GEN_OUT}`); process.exit(2); }
 // מראה מינימלית: המסכים + התוכן שלהם; עצי-האטומים מועתקים פעם אחת (קיימים ⇒ לא נוגעים)
