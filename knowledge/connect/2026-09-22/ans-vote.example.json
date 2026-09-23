@@ -1,0 +1,2 @@
+{ "הצבעות": { "many": true, "acts": ["list","sum"], "fields": [{"label":"נושא","type":"text"},{"label":"בעד נגד נמנע","type":"text","enumVals":["בעד","נגד","נמנע"]},{"label":"תאריך","type":"date"}] },
+  "הצבעה נסגרת": { "rel": "act" } }

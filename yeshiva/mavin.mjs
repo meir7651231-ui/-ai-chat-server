@@ -29,7 +29,7 @@ export const TYPES = ['text', 'num', 'date', 'bool', 'ref'];            // 5 ס�
 export const ACTS = ['list', 'one', 'add', 'edit', 'del', 'sum'];        // 6 צורות-עשייה
 const ANSWERS = () => process.env.MAVIN_ANSWERS || path.join(R.ROOT, '.maimatai', 'mavin-answers.jsonl');
 
-export const toks = (s) => [...String(s || '').matchAll(/[֐-׿]+|\d+|[A-Za-z]+/g)].map((m) => m[0]);
+export const toks = (s) => [...String(s || '').matchAll(/[֐-׿]+(?:\s*\/\s*[֐-׿]+)+|[֐-׿]+|\d+|[A-Za-z]+/g)].map((m) => m[0].replace(/\s*\/\s*/g, '/'));   // «בעד/נגד/נמנע» = אסימון אחד: בחירה-אחת-מכמה (צורה)
 const stripLead = (w) => { const out = [w]; for (let k = 1; k <= 2 && w.length - k >= 3; k++) out.push(w.slice(k)); return out; };   // (ג)
 const isMany = (w) => w.length >= 4 && /(ים|ות)$/.test(w);                                                                    // (א)
 const stem = (w) => w.replace(/(ים|ות|ה)$/, '');   // (ג') גם «ה» סופית להשוואת יחיד↔רבים (משימה↔משימות)
@@ -64,6 +64,7 @@ export function hintOf(w) {
   return l > 0 && l >= d ? { hint: 'act', ops: [...x.e.logic] } : { hint: 'thing', ops: [...x.e.display] };
 }
 const isNum = (w) => /^\d+$/.test(w);
+const enumOf = (it) => { const g = it.find((w) => w.includes('/')); return g ? g.split('/').filter(Boolean) : null; };   // איבר עם «/» ⇒ ערכים-מותרים
 const deVav = (it) => (it.length && /^ו[֐-׿]{2,}/.test(it[0]) ? [it[0].slice(1), ...it.slice(1)] : it);   // (ב) «ו»-החיבור על ראש איבר
 
 // ── רשימה בקטע: חלקי-פסיק; «X וY» נחצה ב-«ו» (ב); מילים מפוזרות בראש איבר עוברות ל«לפני» ──
@@ -136,18 +137,29 @@ export function formOf(sentence) {
     for (const it of L.items) {
       if (itemMany(it) || (oneItems === 0) || manyItems > oneItems) {   // רוב-רבים ⇒ גם היחיד ברשימה הוא דבר («… עובדים, ציוד ובטיחות»)
         const hit = find(it[0]); if (hit) (hit.refs = hit.refs || []).push(...it); else things.push({ ...unitOf(it, seg, owner ? owner.label : null), many: itemMany(it) }); }
-      else if (owner) owner.fields.push({ label: it.join(' ') });
+      else if (owner) owner.fields.push({ label: it.join(' ').replace(/\//g, ' '), enumVals: enumOf(it) });
       else things.push(unitOf(it, seg));
     }
   }
   return { sentence, words, segments, things, frame: [...new Set(frame)] };
 }
 
+// ── תשובה לדבר: לפי התווית המדויקת, ואם אין — מפתח שמילה שלו מתאימה לפי גזע («הצבעות» ⇔ «ניהול הצבעות») ──
+export function answerFor(t, answers = {}) {
+  if (answers[t.label]) return answers[t.label];
+  const st = (w) => stripLead(stem(w)).filter((f) => f.length >= 3);
+  const lw = toks(t.label).flatMap(st);
+  // כל מילות-המפתח חייבות להתאים; המפתח עם הכי הרבה מילים-תואמות מנצח («הצבעה נסגרת» גובר על «הצבעות» ליחידה «הצבעה נסגרת אחרי שבוע»)
+  let best = null, bestN = 0;
+  for (const k of Object.keys(answers)) { const kw = toks(k); const n = kw.filter((w) => st(w).some((f) => lw.includes(f))).length; if (n === kw.length && n > bestN) { best = k; bestN = n; } }
+  return best ? answers[best] : {};
+}
+
 // ── שאלות סגורות: מה שהצורה לא אמרה ──
 export function questionsFor(form, answers = {}) {
   const qs = [];
   for (const t of form.things) {
-    const a = answers[t.label] || {};
+    const a = answerFor(t, answers);
     if (a.many == null) qs.push({ thing: t.label, ask: 'many', proposal: t.many, options: [true, false] });
     if (!t.fields.length && !(a.fields && a.fields.length)) qs.push({ thing: t.label, ask: 'fields', options: TYPES });
     for (const f of t.fields) { const af = (a.fields || []).find((x) => x.label === f.label); if (!af || !af.type) qs.push({ thing: t.label, ask: 'type', field: f.label, options: TYPES }); }
@@ -166,7 +178,7 @@ export function questionsFor(form, answers = {}) {
 export function needsFrom(form, answers = {}) {
   const needs = [];
   for (const t of form.things) {
-    const a = answers[t.label];
+    const a = answerFor(t, answers); if (!Object.keys(a).length) { if (t.kinds && t.kinds.length) for (const k of t.kinds) needs.push({ thing: t.label, act: 'kind', op: k.ops[0], need: ['fields'], goal: k.word, word: k.word, content: t.content || null }); continue; }
     if (t.kinds && t.kinds.length && !(a && a.acts)) for (const k of t.kinds) needs.push({ thing: t.label, act: 'kind', op: k.ops[0], need: ['fields'], goal: k.word, word: k.word, content: t.content || null });   // «תמונה» ⇒ חלקיק שכתוב עליו «תמונה», עם הכיתוב «חתול»; תשובת-בעלים גוברת
     if (!a || !a.acts) continue;
     const fields = (a.fields && a.fields.length) ? a.fields : t.fields.map((f) => ({ label: f.label, type: 'text' }));
@@ -194,18 +206,22 @@ export function needsFrom(form, answers = {}) {
 //    דבר בלי שדות (לא מהמשפט ולא מתשובה) אינו נכנס — app-ds פוסל ישות-בלי-שדות (§22), והמנוע שואל במקום להמציא. ──
 export function specOf(form, answers = {}) {
   const lines = [], skipped = [];
-  const ents = form.things.filter((t) => t.many || t.fields.length || (answers[t.label] && answers[t.label].fields));
+  const ents = form.things.filter((t) => t.many || t.fields.length || (answerFor(t, answers).fields));
   const names = new Set(ents.map((t) => t.label));
   for (const t of ents) {
-    const a = answers[t.label] || {};
-    const fields = (a.fields && a.fields.length) ? a.fields.map((f) => f.label + (f.type === 'ref' && f.to ? '' : '')) : t.fields.map((f) => f.label);
+    const a = answerFor(t, answers);
+    const fields = (a.fields && a.fields.length) ? a.fields.map((f) => f.label + (f.enumVals ? `{${f.enumVals.join('|')}}` : '')) : t.fields.map((f) => f.label + (f.enumVals ? `{${f.enumVals.join('|')}}` : ''));   // {א|ב|ג} = בחירה-אחת-מכמה ⇒ entity.mjs ⇒ צ'יפים
     const refs = (a.fields || []).filter((f) => f.type === 'ref' && f.to && names.has(f.to)).map((f) => f.to);
     const all = [...new Set([...fields, ...refs])];
     if (!all.length) { skipped.push(t.label); continue; }
     lines.push(`ישות ${t.label} עם ${all.join(', ')}`);
   }
-  const sums = ents.filter((t) => (answers[t.label] || {}).acts && answers[t.label].acts.includes('sum')).map((t) => `מונה(${t.label})`);
-  if (sums.length) lines.push(`לוח בקרה עם ${sums.join(', ')}`);
+  // [פעולה]: יחס שהבעלים ענה עליו «פעולה» (או «תנאי» ⇒ חוק) על דבר שנכנס כישות
+  for (const t of form.things) { const a = answerFor(t, answers); if (t.rel && a.rel === 'act') { const st = (w) => stripLead(stem(w)).filter((f) => f.length >= 3); const ent = ents.find((e) => toks(e.label).some((lw) => st(t.rel.subject).includes(stem(lw)))) || ents.find((e) => e.label === t.label); if (ent) lines.push(`חלקיק ${ent.label}: [פעולה] ${t.rel.words.join(' ')}`); } }
+  // לוח בקרה: מונה לכל ישות עם sum · סכום לכל שדה-מספר שלה
+  const metrics = [];
+  for (const t of ents) { const a = answerFor(t, answers); if (!(a.acts && a.acts.includes('sum'))) continue; metrics.push(`מונה(${t.label})`); for (const f of (a.fields || [])) if (f.type === 'num') metrics.push(`סכום(${t.label}.${f.label})`); }
+  if (metrics.length) lines.push(`לוח בקרה עם ${metrics.join(', ')}`);
   if (lines.length) lines.push('תפקיד בודק: הכל');
   return { spec: lines.join('\n'), skipped };
 }

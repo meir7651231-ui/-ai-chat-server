@@ -6,7 +6,7 @@ const sents = fs.readFileSync(file, 'utf8').split('\n').map((s) => s.trim()).fil
 let ok = 0, lost = 0;
 for (const s of sents) {
   let r; try { r = formOf(s); } catch (e) { console.log(`✗ קריסה «${s}»: ${e.message}`); continue; }
-  const covered = new Set(r.things.flatMap((t) => [...toks(t.label), ...(t.refs || []), ...t.fields.flatMap((f) => toks(f.label))]));
+  const covered = new Set(r.things.flatMap((t) => [...toks(t.label), ...(t.refs || []), ...t.fields.flatMap((f) => [...toks(f.label), ...(f.enumVals || [])])]).flatMap((w) => [w, ...w.split('/')]));
   const frame = new Set(r.frame);
   const placed = (w) => frame.has(w) || covered.has(w);
   const miss = r.words.filter((w) => !/^\d+$/.test(w) && !placed(w) && !placed(w.slice(1)) && !placed(w.slice(2)));   // «ומצב» ⇒ «מצב» במסגרת
