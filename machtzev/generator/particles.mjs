@@ -229,6 +229,8 @@ export function wireAtom(cls, ctx) {
     else if (SOCK.onSelect.test(name) && /ValueChanged<int>|void Function\(int\)/.test(t) && ctx.onSelect) e = ctx.onSelect;
     else if (SOCK.children.test(name) && /^List<Widget>/.test(t) && ctx.children) e = `[${ctx.children.join(', ')}]`;
     else if (SOCK.delta.test(name) && t === 'String' && ctx.delta) e = ctx.delta;   // G29
+    else if (name === 'onChanged' && /ValueChanged<String>|void Function\(String\)/.test(t) && ctx.onChanged) e = ctx.onChanged;   // הכרעה-33 · חיפוש: שדה-קלט מבוקר במסך-החלקיקים
+    else if (SOCK.selected.test(name) && t === 'bool' && ctx.selectedBool) e = ctx.selectedBool;   // הכרעה-33 · סינון: צ'יפ נבחר/לא (bool)
     if (e == null) { if (req) return null; continue; }   // שקע-חובה בלי דאטה ⇒ האטום נפסל (§20-ג: אין ערך-מומצא)
     args.push(w.positional.includes(name) ? e : `${name}: ${e}`); filled.push(name);
   }
@@ -331,7 +333,8 @@ const diffVal = (r0, k) => `${numFmt(r0.b)} + ' ' + ${k(T('diffWas', { old: '' }
 // ── 6 · פליטה: מסך-חלקיקים לישות (AnimatedBuilder על appStore; אגרגטים למעלה, פר-רשומה בשורות) ──
 export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) {
   const scoped = !!recsOverride;   // G24 · דוח: הרשומות מוגבלות לרשומת-השורש ⇒ אגרגטים inline על הרשימה (לא על appStore כולו)
-  const recs = recsOverride || `appStore.records('${entity.slug}')`;
+  const state = { search: false, filter: null };   // הכרעה-33 · מסך-חלקיקים עם מצב (חיפוש/סינון) ⇒ StatefulWidget ו-_rs
+  const recs = recsOverride || (plan.some((p) => p.ok && p.shape && /^(search|filter)$/.test(p.shape.kind)) ? '_rs' : `appStore.records('${entity.slug}')`);
   const numOf = (lbl) => `(num.tryParse(r[${k(lbl)}] ?? '') ?? 0)`;
   const strOf = (lbl) => `(r[${k(lbl)}] ?? '')`;
   const imports = new Set(); const widgets = []; const notes = [];
@@ -440,6 +443,16 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) 
       const ctx = { label: shown, value: { str: strOf(s.field), num: numOf(s.field) }, sub: lbl, glyph: k('🧩'), tone: 0, message: shown };
       const w = firstWired(kd[0][1], ctx); if (!w) { notes.push(`⚪ ${p.name}: אין אטום מתחווט ל-${kd[0][0]}`); continue; }
       rowOf = w; p.wired = [w.cand]; rowSrc = `${recs}.where((r) => (r[${k(s.field)}] ?? '').toString().trim().isNotEmpty)`;   // ערך-ריק ⇒ אין שבב-ריק (§20-ג)
+    } else if (s.kind === 'search') {   // הכרעה-33 · חיפוש = שדה-קלט מבוקר (value+onChanged) על מצב-המסך; הרשומות של שאר החלקיקים מסוננות ב-_rs
+      const w = firstWired(kd[0][1], { value: { str: '_q', num: '0' }, onChanged: '(v) => setState(() => _q = v)', label: lbl, glyph: k('🔎') });
+      if (!w) { notes.push(`⚪ ${p.name}: אין אטום-חיפוש מתחווט ל-${kd[0][0]}`); continue; }
+      widgets.push(w.call); p.wired = [w.cand]; state.search = true; continue;
+    } else if (s.kind === 'filter') {   // הכרעה-33 · סינון = צ'יפ פר-ערך של שדה-הבחירה הראשון (selected+onTap ⇒ _sel), הרשומות מסוננות ב-_rs
+      const ef = entity.schema.find((f) => f.enumVals && f.enumVals.length);
+      if (!ef) { notes.push(`⚪ ${p.name}: סינון צריך שדה-בחירה {א|ב|ג} — אין בסכמה`); continue; }
+      const chips = ef.enumVals.map((v) => firstWired(kd[0][1], { label: k(v), selectedBool: `_sel.contains(${k(v)})`, nav: `() => setState(() => _sel.contains(${k(v)}) ? _sel.remove(${k(v)}) : _sel.add(${k(v)}))`, glyph: k('🧩') }));
+      if (chips.some((c) => !c)) { notes.push(`⚪ ${p.name}: אין אטום-סינון מתחווט ל-${kd[0][0]}`); continue; }
+      widgets.push(`Wrap(spacing: 8, runSpacing: 8, children: [${chips.map((c) => c.call).join(', ')}])`); p.wired = [chips[0].cand]; state.filter = ef.label; continue;
     } else if (s.kind === 'act') {
       const nav = `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${entity.cls}()))`;
       const w = firstWired(kd[0][1], { label: k(s.label || p.name), nav, glyph: k('🧩') }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-פעולה מתחווט`); continue; }
@@ -495,7 +508,7 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) 
     }
     widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [for (final r in ${rowSrc}) Padding(padding: const EdgeInsets.only(bottom: 8), child: ${rowOf.call})]))`);
   }
-  return { imports, widgets, notes, firstWired };
+  return { imports, widgets, notes, firstWired, state };
 }
 // ── 6ב · סריאליזציה (G25): לכל חלקיק ביטוי-Dart שמחזיר טקסט (וואטסאפ: *כותרת* · "- שורה" · "שדה: ערך"); צורות-פעולה/טבלה/ריק אינן טקסט ──
 const descFieldOf = (entity, p) => {
@@ -504,7 +517,8 @@ const descFieldOf = (entity, p) => {
 };
 export function particleText({ entity, plan, k, recs: recsOverride = null }) {
   const scoped = !!recsOverride;
-  const recs = recsOverride || `appStore.records('${entity.slug}')`;
+  const state = { search: false, filter: null };   // הכרעה-33 · מסך-חלקיקים עם מצב (חיפוש/סינון) ⇒ StatefulWidget ו-_rs
+  const recs = recsOverride || (plan.some((p) => p.ok && p.shape && /^(search|filter)$/.test(p.shape.kind)) ? '_rs' : `appStore.records('${entity.slug}')`);
   const numOf = (lbl) => `(num.tryParse(r[${k(lbl)}] ?? '') ?? 0)`;
   const strOf = (lbl) => `(r[${k(lbl)}] ?? '')`;
   const exprs = [];
@@ -550,8 +564,18 @@ export function particleText({ entity, plan, k, recs: recsOverride = null }) {
 }
 const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
 export function renderParticles({ slug, entity, plan, k }) {
-  const { imports, widgets, notes } = particleWidgets({ entity, plan, k });
+  const { imports, widgets, notes, state } = particleWidgets({ entity, plan, k });
   const cls = clsOf(slug);
+  const stateful = state && (state.search || state.filter);   // הכרעה-33
+  const rsGetter = stateful ? `
+  String _q = '';
+  final Set<String> _sel = <String>{};
+  List<Map<String, String>> get _rs {
+    final all = appStore.records('${entity.slug}');
+    final q = _q.trim().toLowerCase();
+    return all.where((r) => (q.isEmpty || r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q)))${state.filter ? ` && (_sel.isEmpty || _sel.contains(r[${k(state.filter)}] ?? ''))` : ''}).toList();
+  }
+` : '';
   const code = `// 🧩 חולל ע"י מפרק-החלקיקים הפתוח (particles · הכרעה-27): כל חלקיק נמצא בכל הקטלוג ומורכב מחדש. אל תערוך ידנית.
 ${plan.filter((p) => p.ok).map((p) => `//   ${p.name} = ${p.expr} ⇒ ${p.shape.kind} ⇒ [${p.ops.join(', ')}] ⇒ ${(p.wired || ['—']).join(' + ')}`).join('\n')}
 ${notes.map((n) => '//   ' + n).join('\n')}
@@ -561,13 +585,24 @@ import '../dart-ui-bs/ds/ds_store.dart';
 ${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
-class ${cls} extends StatelessWidget {
+${stateful ? `class ${cls} extends StatefulWidget {
+  const ${cls}({super.key});
+  @override
+  State<${cls}> createState() => _${cls}State();
+}
+
+class _${cls}State extends State<${cls}> {${rsGetter}
+  @override
+  Widget build(BuildContext context) => DsScaffold(title: ${k(T('particlesTitle', { ent: entity.name }))}, subtitle: ${k(`${widgets.length} ${L.particlesLive} · ${notes.length} ${L.particlesUnres}`)}, icon: ${k('🧩')}, children: [
+${widgets.map((w) => `    Padding(padding: const EdgeInsets.only(bottom: 10), child: ${w}),`).join('\n')}
+  ]);
+}` : `class ${cls} extends StatelessWidget {
   const ${cls}({super.key});
   @override
   Widget build(BuildContext context) => DsScaffold(title: ${k(T('particlesTitle', { ent: entity.name }))}, subtitle: ${k(`${widgets.length} ${L.particlesLive} · ${notes.length} ${L.particlesUnres}`)}, icon: ${k('🧩')}, children: [
 ${widgets.map((w) => `    Padding(padding: const EdgeInsets.only(bottom: 10), child: ${w}),`).join('\n')}
   ]);
-}
+}`}
 `;
   return { cls, code, notes, count: widgets.length };
 }

@@ -224,7 +224,7 @@ export function specOf(form, answers = {}) {
   for (const t of form.things) { const a = answerFor(t, answers); if (t.rel && a.rel === 'act') { const st = (w) => stripLead(stem(w)).filter((f) => f.length >= 3); const ent = ents.find((e) => toks(e.label).some((lw) => st(t.rel.subject).includes(stem(lw)))) || ents.find((e) => e.label === t.label); if (ent) lines.push(`חלקיק ${ent.label}: [פעולה] ${t.rel.words.join(' ')}`); } }
   // תגי-חלקיק מהתשובות (הטבלה הקיימת: shapeOf ⇒ compose-engine.ops): חיפוש · סינון · ריק · ייצוא · הודעה
   for (const t of ents) { const a = answerFor(t, answers); const acts = a.acts || [];
-    if (acts.includes('search')) builtin.push(`${t.label}: חיפוש`);   // מסך-ישות של app-ds כבר נושא DsSearch (render-ds:734) — שורת-חלקיק כפולה רק נופלת על חיווט
+    if (acts.includes('search')) lines.push(`חלקיק ${t.label}: [חיפוש]`);   // הכרעה-33: מסך-החלקיקים מחווט חיפוש (particles.mjs); מסך-הישות נושא חיפוש משלו (render-ds:734)
     if (acts.includes('filter')) lines.push(`חלקיק ${t.label}: [סינון]`);
     if (acts.includes('empty')) lines.push(`חלקיק ${t.label}: [ריק] ${a.emptyText || t.label}`);   // טקסט = של הבעלים; אין ⇒ התווית, לא המצאה
     if (acts.includes('export')) lines.push(`חלקיק ${t.label}: [ייצוא]`);
