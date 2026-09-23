@@ -91,10 +91,11 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
   return { routes, spec: spec.spec, skipped: spec.skipped, builtin: spec.builtin };
 }
 
+/** שומר-ניקיון: נתיב-פלט ריק או בתוך new/ (המדף) ⇒ אסור לכתוב. משותף ל-app-ds ול-genesis-gen. */
+const inRepo = (p) => !p || path.resolve(p).startsWith(path.resolve(R.ROOT, 'new'));
 /** app-ds על ספק (שומר-ניקיון: GEN_OUT/GEN_DATA_OUT מחוץ ל-new/). מחזיר את האפליקציה או null. */
 async function runAppDs(spec, files, notes) {
   let app = null;
-  const inRepo = (p) => !p || path.resolve(p).startsWith(path.resolve(R.ROOT, 'new'));
   if (spec && (inRepo(process.env.GEN_OUT) || inRepo(process.env.GEN_DATA_OUT))) { notes.push('⛔ app-ds לא הופעל: GEN_OUT/GEN_DATA_OUT חייבים להצביע מחוץ ל-new/ לפני הייבוא הראשון (שומר-ניקיון)'); }
   else if (spec) { const { buildApp } = await import('../machtzev/generator/app-ds.mjs'); const logs = []; const _l = console.log; console.log = (...a) => logs.push(a.join(' ')); try { app = buildApp(spec, { writePlan: false }); } finally { console.log = _l; } for (const l of logs) if (/נמצאו-ומחווטים/.test(l)) notes.push(l.slice(0, 140)); files.push({ route: 'appds', screens: app.screens.map((s) => `${s.kind}:${s.name}`) }); }
   return app;
@@ -144,7 +145,21 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       const exs = (n.examples || []).map(([args, want]) => { const a = String(args).trim(), w = String(want).replace(/^r\s*==\s*/, '').trim(); const one = /^'[^']*'$|^"[^"]*"$|^[^,'"]+$/.test(a); return one ? { in: a.replace(/^['"]|['"]$/g, ''), out: w.replace(/^['"]|['"]$/g, '') } : null; });
       if (exs.every(Boolean) && exs.length) { const r = SY.synthesize(n.demand, exs); rec.synth = r ? r.chain : null; rec.synthNote = r ? `הוכח ב-synth: ${r.chain.join('∘')}${r.alts ? ` (+${r.alts} שקולות)` : ''}${r.shortcut ? ' · אטום-יחיד' : ''}` : 'synth: לא נמצאה שרשרת (עומק≤4)'; }
       else rec.synthNote = 'synth: לא חל — הדוגמאות עם כמה ארגומנטים (ההשחלה היא קלט-יחיד)';
-      out[id] = rec; notes.push(`התנהגות «${n.demand}» · תכנון: ${rec.plan ? rec.plan.join('∘') : 'לא הוכח'} · ${rec.synthNote}`);
+      // genesis-gen: שרשרת מוכחת ⇒ ספק-חלקים (שפת genesis: כותרת/אטום/חישוב — knowledge/lexicon.json; הנוסחים מ-self-model.json) ⇒ מסך-Dart עם החישובים מחווטים.
+      //   OUT של genesis = GEN_OUT (נתפס בייבוא) ⇒ רץ רק כשהסביבה מופנית מחוץ ל-new/ (אותו שומר-ניקיון של app-ds)
+      if (rec.synth && !inRepo(process.env.GEN_OUT) && !inRepo(process.env.GEN_DATA_OUT)) {
+        try {
+          const GG = await import('../machtzev/generator/genesis-gen.mjs');
+          const P = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'knowledge/self-model.json'), 'utf8')).phrases || {};
+          const calc = rec.synth.map((fn) => `  חישוב ${(SY.fnsBy.get(fn)?.he || [fn]).join(' ')} (${fn})`);
+          const gspec = [`${n.demand}:`, `כותרת ${P.capProofTitle || n.demand}`, `אטום ChipWrap ${n.demand}: ${exs.map((e) => e.in).join(' / ')}`, ...calc, `כותרת ${P.capFreeTitle || n.demand}`, `${P.fieldPrompt || ''} ${n.demand}`.trim(), ...calc].join('\n');
+          const gslug = 'beh_' + slug(name) + '_' + (Object.keys(out).length + 1);
+          const cls = GG.generate(gslug, gspec);
+          rec.genesis = { slug: gslug, cls, file: path.join(R.outDir(), `gen_${gslug}.dart`) };
+          files.push({ route: 'genesis', file: rec.genesis.file, cls, need: n.demand, chain: rec.synth });
+        } catch (e) { rec.genesisNote = `genesis-gen: ${String(e.message || e).slice(0, 140)}`; }
+      }
+      out[id] = rec; notes.push(`התנהגות «${n.demand}» · תכנון: ${rec.plan ? rec.plan.join('∘') : 'לא הוכח'} · ${rec.synthNote}${rec.genesis ? ` · מסך: ${rec.genesis.cls}` : rec.genesisNote ? ' · ' + rec.genesisNote : ''}`);
     }
     fs.writeFileSync(path.join(outDir, 'behaviors.json'), JSON.stringify(out, null, 1)); files.push({ route: 'behavior', file: path.join(outDir, 'behaviors.json'), needs: Object.keys(out).length });
   }

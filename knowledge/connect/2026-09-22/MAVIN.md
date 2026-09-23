@@ -373,6 +373,18 @@ build-check.mjs "ניהול לקוחות: … . כשחוב של לקוח עול�
 · **גבולות:** צורות-שדה ל-gen מגיעות רק מסימנים מפורשים (`{enum}`, ומהתשובות: date/num) — בלי סימון, שדה = טקסט ⇒ פחות צרכים להוכיח; ה-HTML לא נבדק בלחיצה;
   gen/sentence (מנוע-המשפט של gen) לא בשימוש — יש מנוע 2 אחד; wizard/pass/mosad (עץ-המוסד) לא חוברו — קלט שונה (mosad.data.json), הכרעת-בעלים.
 
+## סבב 31 (23.9): genesis-gen — השרשרת המוכחת הופכת למסך (דוגמאות ⇒ synth ⇒ genesis-gen ⇒ Dart)
+· **הפספוס שנמצא כשהבעלים שאל «אתה בטוח?»:** ספרתי מי כותב קובצי-Dart מחוללים — 11 קבצים; 4 לא היו ברשימה: **genesis-gen** (מחולל מספק-חלקים, 71 ספקים, היעד של synth),
+  **balagan** (מרכיב האפליקציה-האחת), **skin-golden** (זהב בעור-forge — הצעה), **ship** (צנרת-פריסה). הספירה «כ-80 שאינם לדלת» לא הייתה מדויקת.
+· **genesis-gen.mjs (לא נעוץ):** `export { generate }` · ה-CLI (שכתוב-ספקים improv/goal/showcase/entry, מחיקת-תוצרים, חילול-כל-הספקים) תחת `if (isMain)` ·
+  `writeAtlas` רק ב-CLI (בייבוא האטלס נבנה בזיכרון). נמדד: ייבוא 292ms, `generate("probe", …)` ⇒ 5/5 חלקים ⇒ GenProbeScreen, אפס כתיבה לריפו.
+· **הדלת:** לכל צורך ש-synth הוכיח ⇒ ספק-חלקים בשפת genesis (המילים כותרת/אטום/חישוב = הלקסיקון שלו; הנוסחים = self-model.json; תוויות-החישוב = ה-`he` של האטום)
+  ⇒ `generate` ⇒ `gen_beh_<שם>_N.dart` + תוכן ב-GEN_OUT/GEN_DATA_OUT (רק כשמופנים מחוץ ל-new/ — `inRepo` משותף). `files: {route:'genesis', cls, need, chain}`.
+· **נמדד (buildsmart האמיתי, `ans-synth.example.json`):** «ניהול תורים: לתור יש שעה. השעה מוצגת כתאריך» ⇒ תכנון fmtDate(excelSerialToIso(timeToMin(p0))) · synth אותה שרשרת ·
+  **מסך GenBehChk_1Screen** ⇒ analyze ✅ 0 · 8 קבצים. `--verify`: המסך **רונדר** (flutter test: All tests passed, GENVERIFY מלא) — אבל נספר ✗ כי הבדיקה מצפה ל-`DsScaffold`
+  ומסכי-genesis בונים `Scaffold` רגיל (משפחה אחרת של מסכים). הציפייה של gen-verify (נעוץ) — לא שיניתי; מדווח.
+· **ספירה:** 14 מנועים בדלת. נשארו: balagan · ship · skin-golden (הצעה) · cloud-screen · board-gen/op-bridge · wizard/pass · engine/ · yeshiva-read/apply/ask/kashe.
+
 ## סוג-שדה ⇒ מנוע 3 (נפתר בצד מנוע 2, 22.9)
 נמדד: לא הקטלוג (DsToggleTile/DsDateField/DsNumberField = str2·num0·cb1 זהים) ולא הטיפוס המוצהר
 (`String value` בכולם) מבדילים סוג. מה שמבדיל: **מה הקוד עושה עם value** (`DateTime.tryParse` · `value == 'true'` ·

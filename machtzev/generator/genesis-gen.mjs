@@ -49,8 +49,9 @@ try {
     if (!termKeyOf.has(t.he)) termKeyOf.set(t.he, t.key);
 } catch { }
 
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname);
 const atlas = buildAtlas();
-writeAtlas(atlas);
+if (isMain) writeAtlas(atlas);   // בייבוא (הדלת) — האטלס נבנה בזיכרון בלבד, לא נכתב לריפו
 // ידע-זנבות-הקציר (נכתב ע"י רתמת-התאומים בריצת-הסינתזה; חסר ⇒ אין זנבות)
 let TWIN_TAILS = {};
 try { TWIN_TAILS = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/twin-tails.json'), 'utf8')); } catch { }
@@ -824,7 +825,9 @@ async function writeGoalSpecs() {
   }
 }
 
-// ── CLI ──
+// ── CLI ── (רץ רק כשהקובץ מורץ ישירות; בייבוא — הדלת קוראת ל-generate בלבד: אפס כתיבה ל-specs/, אפס מחיקה)
+export { generate };
+if (isMain) {
 fs.mkdirSync(SPECS, { recursive: true });
 if (!process.argv.includes('--only')) { await writeImprovSpec(); await writeGoalSpecs(); writeShowcaseSpec(); writeSelfEntry(); }
 const [slugArg, specArg] = process.argv.slice(2);
@@ -842,3 +845,4 @@ for (const f of SLUGS) {
   if (spec && generate(f.replace('.txt', ''), spec)) n++;
 }
 console.log(`🧬 המחולל · ${n} מסכים · אטלס-מלא: ${atlas.widgets.length} widgets · ${atlas.functions.length} functions · ${atlas.data.length} data`);
+}
