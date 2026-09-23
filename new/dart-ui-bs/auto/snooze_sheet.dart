@@ -48,7 +48,7 @@ class SnoozeSheet extends StatelessWidget {
               'notif_settings_screen.t06',
               fallback,
               style: TextStyle(
-                color: BsTokens.inkLight,
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
               ),
@@ -60,7 +60,7 @@ class SnoozeSheet extends StatelessWidget {
             (o) => ListTile(
               title: Text(
                 o.label,
-                style: const TextStyle(color: BsTokens.inkLight, fontSize: 15),
+                style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 15),
               ),
               trailing: Icon(
                 Icons.chevron_left,

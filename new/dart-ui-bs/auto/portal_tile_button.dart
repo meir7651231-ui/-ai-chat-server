@@ -37,8 +37,8 @@ class PortalTileButton extends StatelessWidget {
                 title,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: BsTokens.inkLight,
+                style: TextStyle(
+                  color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                   fontWeight: FontWeight.w800,
                   fontSize: 14.5,
                 ),
@@ -48,8 +48,8 @@ class PortalTileButton extends StatelessWidget {
                 sub,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: BsTokens.mutedLight,
+                style: TextStyle(
+                  color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                   fontSize: 12.5,
                 ),
               ),

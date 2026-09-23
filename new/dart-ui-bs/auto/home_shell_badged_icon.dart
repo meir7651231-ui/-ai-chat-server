@@ -25,8 +25,8 @@ class HomeShellBadgedIcon extends StatelessWidget {
           right: -6,
           child: Container(
             padding: const EdgeInsets.all(2),
-            decoration: const BoxDecoration(
-              color: BsTokens.brand,
+            decoration: BoxDecoration(
+              color: dsWear(context, BsTokens.brand, (l) => l.accent),
               shape: BoxShape.circle,
             ),
             constraints: const BoxConstraints(minWidth: 15, minHeight: 15),

@@ -16,8 +16,8 @@ class SiteHubCardBtn extends StatelessWidget {
           child: OutlinedButton(
             onPressed: onTap,
             style: OutlinedButton.styleFrom(
-              foregroundColor: _kBrandDark,
-              side: const BorderSide(color: _kBrand),
+              foregroundColor: _kBrandDark(context),
+              side: BorderSide(color: _kBrand(context)),
               padding: const EdgeInsets.symmetric(vertical: 9),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(9),
@@ -32,6 +32,10 @@ class SiteHubCardBtn extends StatelessWidget {
       );
 }
 
-const Color _kBrandDark = BsTokens.brandDark;
+const _kBrandDark0 = BsTokens.brandDark;
 
-const Color _kBrand = BsTokens.brand;
+Color _kBrandDark(BuildContext context) => dsWear(context, BsTokens.brandDark, (l) => l.accentDark);   // לובש עור · _kBrandDark0 = הערך-הכהה
+
+const _kBrand0 = BsTokens.brand;
+
+Color _kBrand(BuildContext context) => dsWear(context, BsTokens.brand, (l) => l.accent);   // לובש עור · _kBrand0 = הערך-הכהה

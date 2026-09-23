@@ -27,7 +27,7 @@ class DraftBadge extends StatelessWidget {
       child: Text(
         has ? '${label}$count${label2}' : label3,
         style: TextStyle(
-          color: has ? dsWear(context, BsTokens.brandDark, (l) => l.accentDark) : BsTokens.mutedLight,
+          color: has ? dsWear(context, BsTokens.brandDark, (l) => l.accentDark) : dsWear(context, BsTokens.mutedLight, (l) => l.muted),
           fontWeight: FontWeight.w700,
           fontSize: BsTokens.typeCaption,
         ),

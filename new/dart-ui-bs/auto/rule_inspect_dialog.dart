@@ -26,13 +26,13 @@ class RuleInspectDialog extends StatelessWidget {
           'connection_rule_studio.rule_title',
           fallback,
           style: TextStyle(
-            color: BsTokens.inkLight,
+            color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
             fontWeight: FontWeight.w800,
             fontSize: 16),
         ),
         content: Text(
           methodLabelHe,
-          style: const TextStyle(color: BsTokens.inkLight, fontSize: 14),
+          style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 14),
         ),
         actions: [
           // composite hide: whole delete button gone when the org hides this element

@@ -22,7 +22,7 @@ class ThumbPlaceholder extends StatelessWidget {
       ),
       child: Text(
         glyph,
-        style: const TextStyle(fontSize: 18, color: BsTokens.mutedLight),
+        style: TextStyle(fontSize: 18, color: dsWear(context, BsTokens.mutedLight, (l) => l.muted)),
       ),
     );
   }

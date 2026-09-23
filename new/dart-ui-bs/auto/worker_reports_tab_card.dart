@@ -38,8 +38,8 @@ class WorkerReportsTabCard extends StatelessWidget {
           if (titleId == null)
             Text(
               title,
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: FontWeight.w800,
                 fontSize: 15,
               ),
@@ -48,8 +48,8 @@ class WorkerReportsTabCard extends StatelessWidget {
             CfgText(
               titleId!,
               title,
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: FontWeight.w800,
                 fontSize: 15,
               ),

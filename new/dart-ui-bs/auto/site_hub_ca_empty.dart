@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__site_hub_screen:_CaEmpty (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class SiteHubCaEmpty extends StatelessWidget {
@@ -12,8 +13,8 @@ class SiteHubCaEmpty extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: const TextStyle(
-              color: BsTokens.mutedLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
               fontWeight: FontWeight.w700,
               fontSize: 13,
             ),

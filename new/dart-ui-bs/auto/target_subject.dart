@@ -28,7 +28,7 @@ class TargetSubject extends StatelessWidget {
         '👤 $name',
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: BsTokens.inkLight,
+          color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
           fontSize: 15,
           fontWeight: FontWeight.w800,
         ),

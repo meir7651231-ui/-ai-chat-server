@@ -43,8 +43,8 @@ class FacetRow extends StatelessWidget {
                     children: [
                       Text(
                         label,
-                        style: const TextStyle(
-                          color: BsTokens.inkLight,
+                        style: TextStyle(
+                          color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),

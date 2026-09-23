@@ -17,8 +17,8 @@ class CatalogConfigCatalogConfigCountBadge extends StatelessWidget {
         horizontal: BsTokens.space2,
         vertical: 2,
       ),
-      decoration: const BoxDecoration(
-        color: BsTokens.brand,
+      decoration: BoxDecoration(
+        color: dsWear(context, BsTokens.brand, (l) => l.accent),
         borderRadius: BorderRadius.all(Radius.circular(BsTokens.radiusPill)),
       ),
       child: Text(

@@ -32,8 +32,8 @@ class WorkerEmployerStockSheetStockRow extends StatelessWidget {
           Expanded(
             child: Text(
               name,
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
               ),
@@ -52,7 +52,7 @@ class WorkerEmployerStockSheetStockRow extends StatelessWidget {
             child: Text(
               warehouse ? label : label2,
               style: TextStyle(
-                color: warehouse ? BsTokens.mutedLight : dsWear(context, BsTokens.brandDark, (l) => l.accentDark),
+                color: warehouse ? dsWear(context, BsTokens.mutedLight, (l) => l.muted) : dsWear(context, BsTokens.brandDark, (l) => l.accentDark),
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
               ),

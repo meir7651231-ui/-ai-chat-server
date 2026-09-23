@@ -21,7 +21,7 @@ class RoleRequestsInboxEmpty extends StatelessWidget {
           const SizedBox(height: BsTokens.space3),
           Text(
             text,
-            style: const TextStyle(color: BsTokens.mutedLight, fontSize: 15),
+            style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 15),
           ),
         ],
       ),

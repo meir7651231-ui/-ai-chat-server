@@ -36,7 +36,7 @@ class SpecialtyDerivedRow extends StatelessWidget {
                 'worker.profile.specialty_label',
                 fallback,
                 style: TextStyle(
-                  color: BsTokens.inkLight,
+                  color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                   fontWeight: FontWeight.w800,
                   fontSize: 14,
                 ),
@@ -47,7 +47,7 @@ class SpecialtyDerivedRow extends StatelessWidget {
                   has ? specialty : label,
                   textAlign: TextAlign.end,
                   style: TextStyle(
-                    color: has ? BsTokens.inkLight : BsTokens.mutedLight,
+                    color: has ? dsWear(context, BsTokens.inkLight, (l) => l.ink) : dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                     fontWeight: FontWeight.w700,
                     fontSize: 13.5,
                   ),
@@ -60,7 +60,7 @@ class SpecialtyDerivedRow extends StatelessWidget {
           CfgText(
             'worker_profile_screen.specialty_hint',
             fallback2,
-            style: TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+            style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
           ),
         ],
       ),

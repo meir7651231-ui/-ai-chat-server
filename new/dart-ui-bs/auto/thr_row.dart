@@ -34,7 +34,7 @@ class ThrRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(color: BsTokens.inkLight, fontSize: 13.5),
+              style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 13.5),
             ),
           ),
         ],

@@ -13,7 +13,7 @@ class ActionRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-      title: Text(label, style: const TextStyle(color: BsTokens.brand)),
+      title: Text(label, style: TextStyle(color: dsWear(context, BsTokens.brand, (l) => l.accent))),
       onTap: onTap,
     );
   }

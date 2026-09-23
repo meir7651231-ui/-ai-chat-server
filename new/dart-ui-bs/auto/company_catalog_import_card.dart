@@ -39,7 +39,7 @@ class CompanyCatalogImportCard extends StatelessWidget {
                   Text(
                     label,
                     style: TextStyle(
-                      color: BsTokens.inkLight,
+                      color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                     ),

@@ -20,8 +20,8 @@ class StoreSummaryLine extends StatelessWidget {
   Widget build(BuildContext context) {
     final style =
         bold
-            ? const TextStyle(
-              color: BsTokens.inkLight,
+            ? TextStyle(
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontSize: 15,
               fontWeight: FontWeight.w800,
             )

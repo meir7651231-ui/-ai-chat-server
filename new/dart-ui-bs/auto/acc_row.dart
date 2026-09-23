@@ -143,8 +143,8 @@ class AccRow extends StatelessWidget {
                       Expanded(
                         child: Text(
                           name,
-                          style: const TextStyle(
-                            color: BsTokens.inkLight,
+                          style: TextStyle(
+                            color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
@@ -158,13 +158,13 @@ class AccRow extends StatelessWidget {
                           onTap: onTap,
                           // ≥48dp tap target around the small ⓘ (a11y),
                           // without enlarging the visible glyph.
-                          child: const SizedBox(
+                          child: SizedBox(
                             width: 48,
                             height: 48,
                             child: Center(
                               child: Icon(
                                 Icons.info_outline,
-                                color: BsTokens.brand,
+                                color: dsWear(context, BsTokens.brand, (l) => l.accent),
                                 size: 16,
                               ),
                             ),
@@ -220,8 +220,8 @@ class AccRow extends StatelessWidget {
                         child: Text(
                           '$qty',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: BsTokens.inkLight,
+                          style: TextStyle(
+                            color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                           ),

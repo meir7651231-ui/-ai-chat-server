@@ -41,8 +41,8 @@ class DecisionLine extends StatelessWidget {
           children: [
             Text(
               name,
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),
@@ -102,7 +102,7 @@ class DecisionLine extends StatelessWidget {
                         'persona_picking_sheet.t09',
                         fallback2,
                         style: TextStyle(
-                          color: BsTokens.inkLight,
+                          color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                           fontWeight: FontWeight.w700,
                           fontSize: 13.5,
                         ),

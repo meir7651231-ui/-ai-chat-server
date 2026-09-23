@@ -21,8 +21,8 @@ class ValueChip extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: const TextStyle(
-          color: BsTokens.inkLight,
+        style: TextStyle(
+          color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),

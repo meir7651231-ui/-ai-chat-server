@@ -23,8 +23,8 @@ class LinkBtn extends StatelessWidget {
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                      color: BsTokens.inkLight, fontSize: 12)),
+                  style: TextStyle(
+                      color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 12)),
             ),
           ),
         ),

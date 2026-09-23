@@ -23,13 +23,13 @@ class ThreeCol extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+            style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
           ),
           const SizedBox(height: 2),
           Text(
             value,
             style: TextStyle(
-              color: bad ? dsWear(context, DsAtomColors.autoThreeCol1, (l) => l.danger) : BsTokens.inkLight,
+              color: bad ? dsWear(context, DsAtomColors.autoThreeCol1, (l) => l.danger) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w800,
               fontSize: 13,
             ),

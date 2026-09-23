@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__courier_attendance_screen:_TableRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class CourierAttendanceTableRow extends StatelessWidget {
@@ -21,7 +22,7 @@ class CourierAttendanceTableRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = TextStyle(
-      color: header ? BsTokens.mutedLight : BsTokens.inkLight,
+      color: header ? dsWear(context, BsTokens.mutedLight, (l) => l.muted) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
       fontSize: header ? 12 : 13.5,
       fontWeight: header ? FontWeight.w700 : FontWeight.w600,
     );

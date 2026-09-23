@@ -46,20 +46,20 @@ class ProposalCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(name,
-                    style: const TextStyle(
-                        color: BsTokens.inkLight,
+                    style: TextStyle(
+                        color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                         fontWeight: FontWeight.w700,
                         fontSize: 15)),
                 if (detail.isNotEmpty) ...[
                   const SizedBox(height: 2),
                   Text(detail,
-                      style: const TextStyle(
-                          color: BsTokens.mutedLight, fontSize: 12.5)),
+                      style: TextStyle(
+                          color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12.5)),
                 ],
                 const SizedBox(height: 2),
                 Text('👷 $workerLabel · ⏱️ $days${label}',
-                    style: const TextStyle(
-                        color: BsTokens.mutedLight, fontSize: 12.5)),
+                    style: TextStyle(
+                        color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12.5)),
                 const SizedBox(height: BsTokens.space3),
                 Row(children: [
                   Expanded(

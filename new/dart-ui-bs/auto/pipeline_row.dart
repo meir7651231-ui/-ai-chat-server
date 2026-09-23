@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__manager_dashboard_screen:_PipelineRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class PipelineRow extends StatelessWidget {
@@ -33,8 +34,8 @@ class PipelineRow extends StatelessWidget {
                 Expanded(
                   child: Text(
                     label,
-                    style: const TextStyle(
-                      color: BsTokens.inkLight,
+                    style: TextStyle(
+                      color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                       fontSize: 13.5,
                       fontWeight: FontWeight.w600,
                     ),
@@ -42,8 +43,8 @@ class PipelineRow extends StatelessWidget {
                 ),
                 Text(
                   '$count',
-                  style: const TextStyle(
-                    color: BsTokens.inkLight,
+                  style: TextStyle(
+                    color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                   ),

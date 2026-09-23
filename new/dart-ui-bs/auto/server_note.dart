@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__rewards_hub_screen:_ServerNote (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
 
@@ -18,7 +19,7 @@ class ServerNote extends StatelessWidget {
         borderRadius: BorderRadius.circular(cfgRadius(context)),
       ),
       child: Text(text,
-          style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12)),
+          style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12)),
     );
   }
 }

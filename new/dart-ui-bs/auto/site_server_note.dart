@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__site_hub_screen:_SiteServerNote (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class SiteServerNote extends StatelessWidget {
@@ -18,7 +19,7 @@ class SiteServerNote extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+        style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
       ),
     );
   }

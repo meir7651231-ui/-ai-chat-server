@@ -36,7 +36,7 @@ class WizardHeader extends StatelessWidget {
                     'trade_builder_home.t01',
                     fallback,
                     style: TextStyle(
-                      color: BsTokens.inkLight,
+                      color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                       fontWeight: FontWeight.w800,
                       fontSize: 15,
                     ),
@@ -45,7 +45,7 @@ class WizardHeader extends StatelessWidget {
                 CfgText(
                   'trade_builder_home.t02',
                   fallback2,
-                  style: TextStyle(color: BsTokens.mutedLight, fontSize: 12.5),
+                  style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12.5),
                 ),
               ],
             ),

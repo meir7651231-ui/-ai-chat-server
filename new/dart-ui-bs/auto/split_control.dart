@@ -31,7 +31,7 @@ class SplitControl extends StatelessWidget {
             'persona_picking_sheet.t12',
             fallback,
             style: TextStyle(
-              color: BsTokens.inkLight,
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w800,
               fontSize: 13.5,
             ),
@@ -58,7 +58,7 @@ class SplitControl extends StatelessWidget {
                       style: TextStyle(
                         color: splitInto == g
                             ? bsOnAccent(context)
-                            : BsTokens.inkLight,
+                            : dsWear(context, BsTokens.inkLight, (l) => l.ink),
                         fontWeight: FontWeight.w700,
                         fontSize: 12.5,
                       ),

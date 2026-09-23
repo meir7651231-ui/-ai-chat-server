@@ -41,8 +41,8 @@ class LinkRow extends StatelessWidget {
                   child: ExcludeSemantics(
                     child: Text(
                       label,
-                      style: const TextStyle(
-                        color: _ink,
+                      style: TextStyle(
+                        color: _ink(context),
                         fontWeight: FontWeight.w700,
                         fontSize: 15,
                       ),
@@ -59,4 +59,6 @@ class LinkRow extends StatelessWidget {
   }
 }
 
-const Color _ink = BsTokens.inkLight;
+const _ink0 = BsTokens.inkLight;
+
+Color _ink(BuildContext context) => dsWear(context, BsTokens.inkLight, (l) => l.ink);   // לובש עור · _ink0 = הערך-הכהה

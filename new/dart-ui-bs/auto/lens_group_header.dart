@@ -31,8 +31,8 @@ class LensGroupHeader extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
               ),

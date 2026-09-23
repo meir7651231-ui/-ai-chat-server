@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__manager_dashboard_screen:_ManageRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class ManageRow extends StatelessWidget {
@@ -19,8 +20,8 @@ class ManageRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontSize: 13.5,
                 fontWeight: FontWeight.w600,
               ),
@@ -29,8 +30,8 @@ class ManageRow extends StatelessWidget {
           const SizedBox(width: BsTokens.space3),
           Text(
             value,
-            style: const TextStyle(
-              color: BsTokens.mutedLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
               fontSize: 13.5,
               fontWeight: FontWeight.w700,
             ),

@@ -88,8 +88,8 @@ class ChatSettingsSectionTile extends StatelessWidget {
                   ),
           title: Text(
             title,
-            style: const TextStyle(
-              color: BsTokens.inkLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontSize: 15,
               fontWeight: FontWeight.w600,
             ),
@@ -100,7 +100,7 @@ class ChatSettingsSectionTile extends StatelessWidget {
                   child: CfgText(
                     'chat_settings_screen.t14',
                     fallback,
-                    style: TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+                    style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
                   ),
                 )
               : null,
@@ -121,11 +121,11 @@ class _PlaceholderRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-      title: Text(label, style: const TextStyle(color: BsTokens.inkLight)),
+      title: Text(label, style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink))),
       trailing: CfgText(
         'chat_settings_screen.t17',
         fallback2,
-        style: TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+        style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
       ),
       onTap: onTap,
     );

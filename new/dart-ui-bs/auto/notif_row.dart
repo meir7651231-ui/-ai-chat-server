@@ -28,7 +28,7 @@ class NotifRow extends StatelessWidget {
           'worker_settings_screen.notifications',
           fallback,
           style: TextStyle(
-            color: BsTokens.inkLight,
+            color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
             fontSize: 15,
             fontWeight: FontWeight.w600,
           ),

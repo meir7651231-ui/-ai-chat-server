@@ -22,7 +22,7 @@ class RewardsHubPill extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: danger ? dsWear(context, DsAtomColors.autoRewardsHubPill3, (l) => l.danger) : BsTokens.inkLight,
+          color: danger ? dsWear(context, DsAtomColors.autoRewardsHubPill3, (l) => l.danger) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
           fontWeight: FontWeight.w700,
           fontSize: 12,
         ),

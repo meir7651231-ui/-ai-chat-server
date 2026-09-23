@@ -61,16 +61,16 @@ class CourierPersonalAreaCard extends StatelessWidget {
                 title: CfgText(
                   'courier.personal.attendance_title',
                   fallback,
-                  style: TextStyle(color: BsTokens.inkLight, fontSize: 15),
+                  style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 15),
                 ),
                 subtitle: CfgText(
                   'courier_profile_screen.attendance_subtitle',
                   fallback2,
-                  style: TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+                  style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
                 ),
-                trailing: const Icon(
+                trailing: Icon(
                   Icons.chevron_left,
-                  color: BsTokens.mutedLight,
+                  color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                 ),
                 onTap:
                     onTap,
@@ -85,16 +85,16 @@ class CourierPersonalAreaCard extends StatelessWidget {
                 title: CfgText(
                   'courier.personal.forms_title',
                   fallback3,
-                  style: TextStyle(color: BsTokens.inkLight, fontSize: 15),
+                  style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 15),
                 ),
                 subtitle: CfgText(
                   'courier_profile_screen.forms_subtitle',
                   fallback4,
-                  style: TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+                  style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
                 ),
-                trailing: const Icon(
+                trailing: Icon(
                   Icons.chevron_left,
-                  color: BsTokens.mutedLight,
+                  color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                 ),
                 onTap:
                     onTap2,
@@ -110,16 +110,16 @@ class CourierPersonalAreaCard extends StatelessWidget {
                 title: CfgText(
                   'courier.personal.certs_title',
                   fallback5,
-                  style: TextStyle(color: BsTokens.inkLight, fontSize: 15),
+                  style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 15),
                 ),
                 subtitle: CfgText(
                   'courier_profile_screen.certs_subtitle',
                   fallback6,
-                  style: TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+                  style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
                 ),
-                trailing: const Icon(
+                trailing: Icon(
                   Icons.chevron_left,
-                  color: BsTokens.mutedLight,
+                  color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                 ),
                 onTap:
                     onTap3,
@@ -135,16 +135,16 @@ class CourierPersonalAreaCard extends StatelessWidget {
                 title: CfgText(
                   'courier.personal.payslips_title',
                   fallback7,
-                  style: TextStyle(color: BsTokens.inkLight, fontSize: 15),
+                  style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 15),
                 ),
                 subtitle: CfgText(
                   'courier_profile_screen.payslips_subtitle',
                   fallback8,
-                  style: TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+                  style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
                 ),
-                trailing: const Icon(
+                trailing: Icon(
                   Icons.chevron_left,
-                  color: BsTokens.mutedLight,
+                  color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                 ),
                 // reuse כמו-שהוא — ה-sheet role-agnostic ומוכן-לשרת (#86.5).
                 onTap: onTap4,

@@ -2,6 +2,7 @@
 // מוצא: screens__manager_dashboard_screen:_ProductTreeBody (בנייה-חכמה main) · צרור-3 · props-שורש: fallback, label, label2, text
 // התוכן: new/dart-data-bs/auto/screens__manager_dashboard_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 
@@ -27,7 +28,7 @@ class ProductTreeBody extends StatelessWidget {
           'manager_dashboard_screen.producttree_intro',
           fallback,
           style: TextStyle(
-            color: BsTokens.inkLight,
+            color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
             fontSize: 13,
             height: 1.35,
           ),
@@ -59,8 +60,8 @@ class _ManageRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontSize: 13.5,
                 fontWeight: FontWeight.w600,
               ),
@@ -69,8 +70,8 @@ class _ManageRow extends StatelessWidget {
           const SizedBox(width: BsTokens.space3),
           Text(
             value,
-            style: const TextStyle(
-              color: BsTokens.mutedLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
               fontSize: 13.5,
               fontWeight: FontWeight.w700,
             ),
@@ -92,8 +93,8 @@ class _ManageHint extends StatelessWidget {
       padding: const EdgeInsets.only(top: BsTokens.space2),
       child: Text(
         text,
-        style: const TextStyle(
-          color: BsTokens.mutedLight,
+        style: TextStyle(
+          color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
           fontSize: 12,
           height: 1.3,
         ),

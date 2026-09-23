@@ -44,12 +44,12 @@ class Referral extends StatelessWidget {
           child: Column(
             children: [
               CfgText('rewards_hub_screen.t01', fallback,
-                  style: TextStyle(color: BsTokens.mutedLight, fontSize: 13)),
+                  style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 13)),
               SizedBox(height: 6),
               Text(
                 kReferralCode,
                 style: TextStyle(
-                  color: BsTokens.inkLight,
+                  color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                   fontWeight: FontWeight.w800,
                   fontSize: 22,
                   letterSpacing: 1.5,
@@ -92,14 +92,14 @@ class _MdHead extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           title,
-          style: const TextStyle(
-            color: BsTokens.inkLight,
+          style: TextStyle(
+            color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
             fontWeight: FontWeight.w800,
             fontSize: 20,
           ),
         ),
         const SizedBox(height: 2),
-        Text(sub, style: const TextStyle(color: BsTokens.mutedLight, fontSize: 13)),
+        Text(sub, style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 13)),
       ],
     );
   }
@@ -119,7 +119,7 @@ class _ServerNote extends StatelessWidget {
         borderRadius: BorderRadius.circular(cfgRadius(context)),
       ),
       child: Text(text,
-          style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12)),
+          style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12)),
     );
   }
 }
@@ -139,10 +139,10 @@ class _FinRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
-              style: const TextStyle(color: BsTokens.inkLight, fontSize: 14)),
+              style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 14)),
           Text(value,
               style: TextStyle(
-                color: up ? dsWear(context, DsAtomColors.autoReferral2, (l) => l.faint) : BsTokens.inkLight,
+                color: up ? dsWear(context, DsAtomColors.autoReferral2, (l) => l.faint) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: FontWeight.w800,
                 fontSize: 14,
               )),

@@ -24,8 +24,8 @@ class BigButton extends StatelessWidget {
           child: Text(
             label,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: BsTokens.brandDark,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.brandDark, (l) => l.accentDark),
               fontWeight: FontWeight.w800,
               fontSize: 15,
             ),

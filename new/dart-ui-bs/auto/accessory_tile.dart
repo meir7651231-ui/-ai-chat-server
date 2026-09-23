@@ -60,8 +60,8 @@ class AccessoryTile extends StatelessWidget {
                         nameHe,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: BsTokens.inkLight,
+                        style: TextStyle(
+                          color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                           fontWeight: FontWeight.w800,
                           fontSize: 15,
                         ),
@@ -72,8 +72,8 @@ class AccessoryTile extends StatelessWidget {
                           whyHe,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: BsTokens.mutedLight,
+                          style: TextStyle(
+                            color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                             fontSize: 12.5,
                           ),
                         ),
@@ -91,10 +91,10 @@ class AccessoryTile extends StatelessWidget {
                     // AND a long-press hint — independent of semantics-tree
                     // timing.
                     tooltip: tooltip,
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.delete_outline,
                       size: 20,
-                      color: BsTokens.mutedLight,
+                      color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                     ),
                   ),
                 ),
@@ -156,8 +156,8 @@ class _PriceChip extends StatelessWidget {
     return Chip(
       label: Text(
         '₪$price',
-        style: const TextStyle(
-          color: BsTokens.inkLight,
+        style: TextStyle(
+          color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),

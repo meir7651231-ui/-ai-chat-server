@@ -46,8 +46,8 @@ class WorkerSettingsSectionCardState extends State<WorkerSettingsSectionCard> {
             leading: Text(widget.emoji, style: const TextStyle(fontSize: 22)),
             title: Text(
               widget.title,
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),

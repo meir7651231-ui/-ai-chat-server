@@ -25,10 +25,10 @@ class Callout extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
-              style: const TextStyle(color: BsTokens.mutedLight, fontSize: 13)),
+              style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 13)),
           Text(value,
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: FontWeight.w800,
                 fontSize: 16,
               )),

@@ -33,7 +33,7 @@ class IntelIntro extends StatelessWidget {
               'intel_tab.t01',
               fallback,
               style: TextStyle(
-                color: BsTokens.inkLight,
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: FontWeight.w800,
                 fontSize: 18,
               ),
@@ -42,7 +42,7 @@ class IntelIntro extends StatelessWidget {
             CfgText(
               'intel_tab.t02',
               fallback2,
-              style: TextStyle(color: BsTokens.mutedLight, fontSize: 13),
+              style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 13),
             ),
           ],
         ),

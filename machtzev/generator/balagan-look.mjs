@@ -6,11 +6,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { HARD_COLOR } from './look.mjs';
+import { HARD_COLOR, skinWired } from './look.mjs';   // הכרעה-37: אטום קשיח = מה ש-skinWired אומר (dsWear סביב DsAtomColors/BsTokens = לובש, לא קשיח)
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '../..');
-const GEN = path.join(ROOT, 'new/dart-gen-bs'), DATA = path.join(ROOT, 'new/dart-data-bs/auto'), SPECS = path.join(HERE, 'specs-ds');
+// הכרעה-37 (23.9): שקע לפלט-הדלת — BALAGAN_GEN/BALAGAN_DATA (תיקיות) + BALAGAN_PREFIX (קידומת-קבצים, למשל gen_app_) ⇒ אותם 36 כללים על מה שהמשפט ייצר.
+//   במצב-דלת: אפליקציה וירטואלית אחת («דלת»), בלי «בלגן», בלי כתיבת ציון/baseline, בלי ratchet — מדידה בלבד; אדום = דיווח (exit 1 רק עם --gate).
+const DOOR = !!process.env.BALAGAN_GEN;
+const GEN = DOOR ? path.resolve(process.env.BALAGAN_GEN) : path.join(ROOT, 'new/dart-gen-bs'), DATA = DOOR ? path.resolve(process.env.BALAGAN_DATA || path.join(process.env.BALAGAN_GEN, '../data')) : path.join(ROOT, 'new/dart-data-bs/auto'), SPECS = path.join(HERE, 'specs-ds');
 const SL = JSON.parse(fs.readFileSync(path.join(HERE, 'spec-lang.data.json'), 'utf8'));
 const REG = path.join(HERE, 'balagan-score.json'), BASE = path.join(HERE, 'balagan-score-baseline.json');
 const GATE = process.argv.includes('--gate'), WRITE = process.argv.includes('--write');
@@ -18,14 +21,14 @@ const rd = (p) => (fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : '');
 
 // אפליקציות-הנייר = ספקים עם `עיצוב: נייר`
 const LOOK_RE = new RegExp('^\\s*' + SL.lookWord + '\\s*:\\s*(.+)$', 'm');
-const apps = fs.readdirSync(SPECS).filter((f) => f.endsWith('.txt')).map((f) => ({ ns: f.replace(/\.txt$/, ''), spec: rd(path.join(SPECS, f)) }))
+const apps = DOOR ? [{ ns: 'door', spec: '' }] : fs.readdirSync(SPECS).filter((f) => f.endsWith('.txt')).map((f) => ({ ns: f.replace(/\.txt$/, ''), spec: rd(path.join(SPECS, f)) }))
   .filter((a) => { const m = a.spec.match(LOOK_RE); return m && SL.looks[m[1].trim()] === 'paper'; });
-apps.push({ ns: 'balagan', spec: '' });   // G53 · המוצר עצמו, לא רק חומרי-הגלם
+if (!DOOR) apps.push({ ns: 'balagan', spec: '' });   // G53 · המוצר עצמו, לא רק חומרי-הגלם
 // G53 · «בלגן» עצמו נכנס לשער-המראה. עד כאן נסרקו רק מודולי-הנייר (`gen_app_<ns>_*`) —
 //   36 הכללים מעולם לא נמדדו על האפליקציה שהבעלים באמת פותח (`gen_balagan_*`), והציון «35/36»
 //   תיאר את החומר, לא את המוצר. ns וירטואלי, אותה קבוצת-כללים, בלי ספק-txt.
 const BAL = 'balagan';
-const pref = (ns) => (ns === BAL ? 'gen_balagan_' : `gen_app_${ns}_`);
+const pref = (ns) => (DOOR ? (process.env.BALAGAN_PREFIX || 'gen_app_') : ns === BAL ? 'gen_balagan_' : `gen_app_${ns}_`);
 const files = (ns) => fs.readdirSync(GEN).filter((f) => f.startsWith(pref(ns)) && f.endsWith('.dart')).map((f) => ({ f, s: rd(path.join(GEN, f)) }));
 const contents = (ns) => fs.readdirSync(DATA).filter((f) => f.startsWith(pref(ns)) && f.endsWith('_content.dart')).map((f) => ({ f, s: rd(path.join(DATA, f)) }));
 const ds = rd(path.join(ROOT, 'new/dart-ui-bs/ds/ds.dart'));
@@ -58,7 +61,7 @@ const CHECKS = {
   onePrimary: (ns) => { const sh = files(ns).find((x) => x.f.endsWith('_shell.dart')); if (!sh) return 'אין שלד'; const tab = sh.s.slice(sh.s.indexOf('class _RootTab')); const n = (tab.match(/Forge\w*Btn|DsPrimaryButton|ForgeFab/g) || []).length; return n <= 1 ? null : `${n} פעולות-ראשיות במסך-הרשימה`; },
   threeOnTop: (ns) => { const bad = []; for (const x of files(ns).filter((x) => /_rp\d+\.dart$/.test(x.f))) { const secs = (x.s.match(/^\/\/   [^⚪\n]+ = /gm) || []).length; const fold = x.s.includes('DsFold('); if (secs > 3 && !fold) bad.push(x.f); } return bad.length ? `דוח בלי קיפול: ${bad.join(', ')}` : null; },
   screenQuestion: (ns) => { const rp = files(ns).find((x) => /_rp1\.dart$/.test(x.f)); const sh = files(ns).find((x) => x.f.endsWith('_shell.dart')); if (!rp || !sh) return null; const c = contents(ns); const first = (f, i) => { const cf = c.find((x) => x.f === f.replace('.dart', '_content.dart')); if (!cf) return ''; const m = cf.s.match(new RegExp(`const String \\w+_c${i} = '([^']*)'`)); return m ? m[1] : ''; }; const qRp = rp.s.match(/DsScaffold\(title: (\w+_c(\d+))/); const t = qRp ? first(rp.f, qRp[2]) : ''; return /\?$/.test(t) ? null : `כותרת-הדוח אינה שאלה: «${t}»`; },
-  noHardAtoms: (ns) => { const bad = new Set(); for (const x of files(ns)) for (const m of x.s.matchAll(/^import '\.\.\/(dart-[^']+)';/gm)) { const f = m[1]; if (/^dart-ui-bs\/ds\/|^dart-data-bs\/|^dart-gen-bs\/|^dart-maor\//.test(f)) continue; const src = rd(path.join(ROOT, 'new', f)); if (HARD_COLOR.test(src)) bad.add(f); } return bad.size ? `אטום עם צבע-קשיח: ${[...bad].slice(0, 3).join(', ')}` : null; },
+  noHardAtoms: (ns) => { const bad = new Set(); for (const x of files(ns)) for (const m of x.s.matchAll(/^import '\.\.\/(dart-[^']+)';/gm)) { const f = m[1]; if (/^dart-ui-bs\/ds\/|^dart-data-bs\/|^dart-gen-bs\/|^dart-maor\//.test(f)) continue; if (!skinWired(f)) bad.add(f); } return bad.size ? `אטום עם צבע-קשיח: ${[...bad].slice(0, 3).join(', ')}` : null; },
   diffMoney: (ns) => { const rp = files(ns).filter((x) => /_(rp|px)\d+\.dart$/.test(x.f)); const withDiff = rp.filter((x) => x.s.includes('DsDiffRow(')); for (const x of withDiff) { if (!/delta:/.test(x.s) || !/!= 0\)/.test(x.s)) return `${x.f}: דיף בלי Δ/סינון-מה-שהשתנה`; } return null; },
   diffExists: () => { const any = apps.some((a) => files(a.ns).some((x) => x.s.includes('DsDiffRow('))); return any ? null : 'אף אפליקציית-נייר בלי דיף (אין זוגות ישן/חדש?)'; },
   calmEmpty: (ns) => { if (ns === BAL) { const h = CHECKS._home(ns); if (!h || !/\bempty\b/.test(h.s)) return '«היום» בלי מצב-ריק'; const c = contents(ns).find((x) => x.f === 'gen_balagan_home_content.dart'); return c && /תנוח\.|וזהו\./.test(c.s) ? null : 'מצב-ריק בלי משפט מרגיע'; }
@@ -112,12 +115,13 @@ for (const r of reg.rules) {
 const total = reg.rules.length;
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { green: 0 };
 const md = `# ציון «בלגן» · ${green}/${total} (הכרעה-28 · ratchet רצפה ${base.green})\n\n| # | קבוצה | כלל | מצב |\n|---|---|---|---|\n` + rows.map((r) => `| ${r.id} | ${r.group} | ${r.text} | ${r.status === 'green' ? '✅' : r.status === 'red' ? '❌ ' + r.why : '⏳ ' + r.status} |`).join('\n') + `\n\nאפליקציות-נייר: ${apps.map((a) => a.ns).join(' · ')}\n`;
-if (!GATE) fs.writeFileSync(path.join(HERE, 'balagan-score.md'), md);   // --gate = עץ-נח (L14): לא כותב
+if (!GATE && !DOOR) fs.writeFileSync(path.join(HERE, 'balagan-score.md'), md);   // --gate = עץ-נח (L14): לא כותב · מצב-דלת: מדידה בלבד
 const reds = rows.filter((r) => r.status === 'red');
 console.log(`🎯 balagan-look: ${green}/${total} ירוקים · ${reds.length} אדומים · ${rows.filter((r) => /^wave/.test(r.status)).length} ממתינים-לגל · ${apps.length} אפליקציות-נייר (${apps.map((a) => a.ns).join(' · ')})`);
 for (const r of reds) console.log(`  ❌ ${r.id} ${r.text}: ${r.why}`);
 const slots = homeSlots(BAL);
 console.log(`   חריצי-«היום» של בלגן: ${slots}${base.slots ? ` (תקרה ${base.slots}, יורד-בלבד)` : ''}`);
+if (DOOR) { if (GATE && reds.length) process.exit(1); process.exit(0); }   // מצב-דלת: בלי baseline, בלי ratchet, בלי «בלגן»
 if (WRITE) { fs.writeFileSync(BASE, JSON.stringify({ green, total, at: 'G53', slots }, null, 1) + '\n'); console.log(`✍️ baseline ⇒ ${green}/${total} · חריצים ${slots}`); }
 if (GATE) {
   if (reds.length) { console.error(`🚨 balagan-look: ${reds.length} כללים אדומים על פלט-המנוע`); process.exit(1); }

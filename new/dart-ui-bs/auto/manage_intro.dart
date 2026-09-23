@@ -27,7 +27,7 @@ class ManageIntro extends StatelessWidget {
         'manager.manage.intro',
         fallback,
         style: TextStyle(
-          color: BsTokens.inkLight,
+          color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
           fontSize: 13.5,
           fontWeight: FontWeight.w600,
           height: 1.3,

@@ -25,8 +25,8 @@ class SStat extends StatelessWidget {
           children: [
             Text(
               value,
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: FontWeight.w800,
                 fontSize: 16,
               ),
@@ -37,7 +37,7 @@ class SStat extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: BsTokens.mutedLight, fontSize: 11),
+              style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 11),
             ),
           ],
         ),

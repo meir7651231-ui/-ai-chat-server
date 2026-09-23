@@ -48,7 +48,7 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   const pick = (op, need, ctx, purpose) => {
     const pk = searchOp(op, `${name} ${entity.name}`, null, 12);
     const first = prior ? prior.ops.filter((o) => o.op === op && o.atom).map((o) => o.atom) : [];
-    const r = judge({ purpose: { kind: purpose || KIND.fact, need, text: `${op} · ${name}`, role: roleOf(op) }, cands: [...new Set([...first, ...pk.atoms, ...pk.alts, ...forgeCands(op, roleOf(op))])], widgetOf, skinWired, wire: (c) => wireForge(c, ctx, { widgetOf, wireAtom }) });
+    const r = judge({ purpose: { kind: purpose || KIND.fact, need, text: `${op} · ${name}`, role: roleOf(op) }, cands: [...new Set([...first, ...pk.atoms, ...pk.alts, ...forgeCands(op, roleOf(op))])], widgetOf, skinWired, wire: (c) => wireForge(c, { ...ctx, need }, { widgetOf, wireAtom }) });
     ledger.push(ledgerLine(`${name} · ${op}`, r));
     manifest.ops.push({ op, need, atom: r.pick ? r.pick.cls : null, filled: r.pick ? r.pick.filled : [], rulings: r.rulings.map((x) => `${x.cls}: ${x.verdict} · ${x.move} — ${x.why}`) });
     if (r.pick) imports.add(impOf(r.pick));

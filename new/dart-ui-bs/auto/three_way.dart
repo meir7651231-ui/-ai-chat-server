@@ -109,8 +109,8 @@ class _AiMdHead extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           title,
-          style: const TextStyle(
-            color: BsTokens.inkLight,
+          style: TextStyle(
+            color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
             fontWeight: FontWeight.w800,
             fontSize: 20,
           ),
@@ -118,7 +118,7 @@ class _AiMdHead extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           sub,
-          style: const TextStyle(color: BsTokens.mutedLight, fontSize: 13),
+          style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 13),
         ),
       ],
     );
@@ -140,7 +140,7 @@ class _AiServerNote extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+        style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
       ),
     );
   }
@@ -189,8 +189,8 @@ class _AiCardTop extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: const TextStyle(
-              color: BsTokens.inkLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w800,
               fontSize: 14,
             ),
@@ -206,7 +206,7 @@ class _AiCardTop extends StatelessWidget {
           child: Text(
             pill,
             style: TextStyle(
-              color: danger ? dsWear(context, DsAtomColors.autoThreeWay1, (l) => l.danger) : BsTokens.inkLight,
+              color: danger ? dsWear(context, DsAtomColors.autoThreeWay1, (l) => l.danger) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w700,
               fontSize: 12,
             ),
@@ -235,13 +235,13 @@ class _ThreeCol extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+            style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
           ),
           const SizedBox(height: 2),
           Text(
             value,
             style: TextStyle(
-              color: bad ? dsWear(context, DsAtomColors.autoThreeWay1, (l) => l.danger) : BsTokens.inkLight,
+              color: bad ? dsWear(context, DsAtomColors.autoThreeWay1, (l) => l.danger) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w800,
               fontSize: 13,
             ),

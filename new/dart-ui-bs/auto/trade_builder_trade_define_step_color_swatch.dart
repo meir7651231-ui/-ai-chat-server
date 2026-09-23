@@ -37,7 +37,7 @@ class TradeBuilderTradeDefineStepColorSwatch extends StatelessWidget {
             color: Color(color),
             shape: BoxShape.circle,
             border: selected
-                ? Border.all(color: BsTokens.inkLight, width: 3)
+                ? Border.all(color: dsWear(context, BsTokens.inkLight, (l) => l.ink), width: 3)
                 : Border.all(color: dsWear(context, DsAtomColors.autoTradeBuilderTradeDefineStepColorSwatch1, (l) => l.ink)),
           ),
           child: selected

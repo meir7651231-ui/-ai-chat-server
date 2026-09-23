@@ -62,7 +62,7 @@ class QuickAction extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+            style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
           ),
         ],
       ),

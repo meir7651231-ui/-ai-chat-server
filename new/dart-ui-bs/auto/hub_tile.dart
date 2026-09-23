@@ -39,8 +39,8 @@ class HubTile extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 t,
-                style: const TextStyle(
-                  color: BsTokens.inkLight,
+                style: TextStyle(
+                  color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                   fontWeight: FontWeight.w800,
                   fontSize: 13.5,
                 ),
@@ -48,8 +48,8 @@ class HubTile extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 s,
-                style: const TextStyle(
-                  color: BsTokens.mutedLight,
+                style: TextStyle(
+                  color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                   fontSize: 11,
                 ),
               ),

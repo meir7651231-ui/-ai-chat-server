@@ -32,8 +32,8 @@ class FormCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              color: BsTokens.inkLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w800,
               fontSize: 15,
             ),

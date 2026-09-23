@@ -36,8 +36,8 @@ class SmartProjectHero extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(title,
-              style: const TextStyle(
-                  color: BsTokens.inkLight,
+              style: TextStyle(
+                  color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                   fontWeight: FontWeight.w800,
                   fontSize: 16)),
           const SizedBox(height: BsTokens.space3),
@@ -53,8 +53,8 @@ class SmartProjectHero extends StatelessWidget {
           ),
           const SizedBox(height: BsTokens.space2),
           Text('$done${label}$total${label2}$pct%',
-              style: const TextStyle(
-                  color: BsTokens.mutedLight, fontSize: 13)),
+              style: TextStyle(
+                  color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 13)),
         ],
       ),
     );

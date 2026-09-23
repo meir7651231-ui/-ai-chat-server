@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__studio__panes__find_replace_pane:_Placeholder (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class StudioPanesFindReplacePanePlaceholder extends StatelessWidget {
@@ -15,7 +16,7 @@ class StudioPanesFindReplacePanePlaceholder extends StatelessWidget {
           child: Text(
             msg,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: BsTokens.mutedLight),
+            style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted)),
           ),
         ),
       );

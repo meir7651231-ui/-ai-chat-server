@@ -85,8 +85,8 @@ class ManageSection extends StatelessWidget {
                                     child: CfgText(
                                       titleCfgId,
                                       title,
-                                      style: const TextStyle(
-                                        color: BsTokens.inkLight,
+                                      style: TextStyle(
+                                        color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                                         fontWeight: FontWeight.w800,
                                         fontSize: 15,
                                       ),
@@ -101,8 +101,8 @@ class ManageSection extends StatelessWidget {
                               const SizedBox(height: 2),
                               Text(
                                 sub,
-                                style: const TextStyle(
-                                  color: BsTokens.mutedLight,
+                                style: TextStyle(
+                                  color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                                   fontSize: 12.5,
                                 ),
                               ),
@@ -112,8 +112,8 @@ class ManageSection extends StatelessWidget {
                         const SizedBox(width: BsTokens.space2),
                         Text(
                           open ? '▾' : '‹',
-                          style: const TextStyle(
-                            color: BsTokens.mutedLight,
+                          style: TextStyle(
+                            color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
                           ),

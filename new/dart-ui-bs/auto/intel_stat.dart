@@ -28,7 +28,7 @@ class IntelStat extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-            border: Border.all(color: BsTokens.divider),
+            border: Border.all(color: dsWear(context, BsTokens.divider, (l) => l.line)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,8 +38,8 @@ class IntelStat extends StatelessWidget {
               const SizedBox(height: BsTokens.spaceHair),
               Text(
                 value,
-                style: const TextStyle(
-                  color: BsTokens.brand,
+                style: TextStyle(
+                  color: dsWear(context, BsTokens.brand, (l) => l.accent),
                   fontWeight: FontWeight.w800,
                   fontSize: 22,
                   height: 1.1,
@@ -49,8 +49,8 @@ class IntelStat extends StatelessWidget {
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: BsTokens.mutedLight,
+                style: TextStyle(
+                  color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),

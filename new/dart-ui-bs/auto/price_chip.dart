@@ -15,8 +15,8 @@ class PriceChip extends StatelessWidget {
     return Chip(
       label: Text(
         '₪$price',
-        style: const TextStyle(
-          color: BsTokens.inkLight,
+        style: TextStyle(
+          color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),

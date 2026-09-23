@@ -38,7 +38,7 @@ class EquipmentButton extends StatelessWidget {
               child: OutlinedButton.icon(
               style: OutlinedButton.styleFrom(
                 foregroundColor: dsWear(context, BsTokens.brandDark, (l) => l.accentDark),
-                side: const BorderSide(color: BsTokens.brand, width: 1.5),
+                side: BorderSide(color: dsWear(context, BsTokens.brand, (l) => l.accent), width: 1.5),
                 minimumSize: const Size(0, 48),
                 padding: const EdgeInsets.symmetric(
                   horizontal: BsTokens.space4,

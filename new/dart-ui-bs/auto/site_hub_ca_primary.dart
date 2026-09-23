@@ -16,7 +16,7 @@ class SiteHubCaPrimary extends StatelessWidget {
       child: FilledButton(
         onPressed: onTap,
         style: FilledButton.styleFrom(
-          backgroundColor: _kBrand,
+          backgroundColor: _kBrand(context),
           padding: const EdgeInsets.symmetric(vertical: 13),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(11),
@@ -31,4 +31,6 @@ class SiteHubCaPrimary extends StatelessWidget {
   }
 }
 
-const Color _kBrand = BsTokens.brand;
+const _kBrand0 = BsTokens.brand;
+
+Color _kBrand(BuildContext context) => dsWear(context, BsTokens.brand, (l) => l.accent);   // לובש עור · _kBrand0 = הערך-הכהה

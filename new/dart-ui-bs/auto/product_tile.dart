@@ -53,8 +53,8 @@ class ProductTile extends StatelessWidget {
                     nameHe,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: BsTokens.inkLight,
+                    style: TextStyle(
+                      color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                       fontWeight: FontWeight.w800,
                       fontSize: 15,
                     ),
@@ -64,8 +64,8 @@ class ProductTile extends StatelessWidget {
                     id,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: BsTokens.mutedLight,
+                    style: TextStyle(
+                      color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                       fontSize: 12.5,
                     ),
                   ),
@@ -75,8 +75,8 @@ class ProductTile extends StatelessWidget {
                       categoryTitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: BsTokens.mutedLight,
+                      style: TextStyle(
+                        color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                         fontSize: 12.5,
                       ),
                     ),
@@ -93,10 +93,10 @@ class ProductTile extends StatelessWidget {
                 // A real tooltip: a semantics label for screen-readers AND
                 // a long-press hint — independent of semantics-tree timing.
                 tooltip: tooltip,
-                icon: const Icon(
+                icon: Icon(
                   Icons.delete_outline,
                   size: 20,
-                  color: BsTokens.mutedLight,
+                  color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                 ),
               ),
             ),

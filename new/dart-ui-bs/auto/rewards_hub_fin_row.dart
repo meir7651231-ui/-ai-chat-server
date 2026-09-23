@@ -20,10 +20,10 @@ class RewardsHubFinRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
-              style: const TextStyle(color: BsTokens.inkLight, fontSize: 14)),
+              style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 14)),
           Text(value,
               style: TextStyle(
-                color: up ? dsWear(context, DsAtomColors.autoRewardsHubFinRow1, (l) => l.faint) : BsTokens.inkLight,
+                color: up ? dsWear(context, DsAtomColors.autoRewardsHubFinRow1, (l) => l.faint) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: FontWeight.w800,
                 fontSize: 14,
               )),

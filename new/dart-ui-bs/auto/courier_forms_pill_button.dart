@@ -50,7 +50,7 @@ class CourierFormsPillButton extends StatelessWidget {
               label,
               style: TextStyle(
                 // bsOnAccent on the brand fill (F-28) — high-contrast safe.
-                color: filled ? bsOnAccent(context) : BsTokens.inkLight,
+                color: filled ? bsOnAccent(context) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
               ),

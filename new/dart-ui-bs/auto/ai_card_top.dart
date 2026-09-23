@@ -25,8 +25,8 @@ class AiCardTop extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: const TextStyle(
-              color: BsTokens.inkLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w800,
               fontSize: 14,
             ),
@@ -42,7 +42,7 @@ class AiCardTop extends StatelessWidget {
           child: Text(
             pill,
             style: TextStyle(
-              color: danger ? dsWear(context, DsAtomColors.autoAiCardTop3, (l) => l.danger) : BsTokens.inkLight,
+              color: danger ? dsWear(context, DsAtomColors.autoAiCardTop3, (l) => l.danger) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w700,
               fontSize: 12,
             ),

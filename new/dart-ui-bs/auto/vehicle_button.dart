@@ -42,7 +42,7 @@ class VehicleButton extends StatelessWidget {
                 style: TextStyle(
                   // F-28 — bsOnAccent על מילוי-מותג (לא לבן קשיח): מכבד את
                   // מתג הניגודיות-הגבוהה.
-                  color: on ? bsOnAccent(context) : BsTokens.inkLight,
+                  color: on ? bsOnAccent(context) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
                   fontWeight: FontWeight.w700,
                   fontSize: 12.5),
               ),

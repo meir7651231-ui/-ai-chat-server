@@ -31,8 +31,9 @@ function slotStyle(code, sock) {
   }
   return null;
 }
+const classBody = (src, cls) => { const m = new RegExp(`\\bclass\\s+${cls}\\b[^{]*\\{`).exec(src); if (!m) return src; let d = 0, k = m.index + m[0].length - 1; for (; k < src.length; k++) { if (src[k] === '{') d++; else if (src[k] === '}') { d--; if (!d) break; } } return src.slice(m.index, k + 1); };
 export function sigOfDart(w, src) {
-  const code = stripC(src);
+  const code = stripC(classBody(src, w.cls));   // רק גוף-המחלקה: קובץ עם כמה אטומים (ds.dart) לא מדליף אותות בין אטומים
   const types = [...w.types].filter(([n]) => !/^(key)$/.test(n));
   const isNumSock = ([n, t]) => NUM_T.test(t.replace(/\?$/, '')) || (t.replace(/\?$/, '') === 'String' && S.value.test(n));
   const isTxtSock = ([n, t]) => t.replace(/\?$/, '') === 'String' && !S.value.test(n);
@@ -58,12 +59,17 @@ export function sigOfDart(w, src) {
   const actions = types.filter(([, t]) => /VoidCallback|void Function\(\)/.test(t)).length;
   const child = types.some(([, t]) => /^(Widget|List<Widget>)\??$/.test(t));
   const bare = types.some(([n, t]) => n === 'bare' && /^bool/.test(t));
-  const lists = types.filter(([n, t]) => /^List</.test(t) && !/^List<(double|num|int)>/.test(t) && !S.labels.test(n));
+  const lists = types.filter(([n, t]) => /^List</.test(t) && !/^List<(double|num|int|Widget)>/.test(t) && !S.labels.test(n));   // List<Widget> = ילדים, לא פריטי-דאטה
   const items = lists.length ? { slots: lists.some(([, t]) => /^List<List</.test(t)) ? 2 : 1, demo: 0, selectable: types.some(([n]) => S.onSelect.test(n)), selected: types.some(([n]) => S.selected.test(n)), cells: lists.some(([, t]) => /^List<List</.test(t)) ? 1 : 0, variants: null } : null;
   const columns = types.filter(([n, t]) => S.labels.test(n) && /^List<String>/.test(t)).length;
   const values = types.filter(([n, t]) => /^List<(double|num|int)>/.test(t) || S.fraction.test(n)).length;
   const famDir = w.file.split('/').slice(0, -1).find((d) => FAMILIES.has(d)) || null;
-  return { family: famDir, cls: w.cls, file: w.file, seam: null, states: false, stateIds: null, fieldSlots: slots.length, fieldDemo, sig: { root: { tag: btnRoot ? 'button' : 'div', decorated, interactive, dir }, svg, input, series: 0, fills: 0, slots: sigSlots, numEmph }, child, bare, control, actions, items, columns, values, from: 'atom-sig (Dart)' };
+  // משפחה מצורה (הכרעה-37 «תתקן את כל השאר»): תיקייה-בשם-משפחה ⇒ היא; אחרת מהאותות עצמם, בסדר קבוע (קלט · פעולה · נתונים · פריטים · גוון · כותרת · כרטיס · ניווט · טקסט)
+  const paint = /\bCustomPaint\(/.test(build);
+  const toneSock = types.some(([n, t]) => /^(tone|severity|level|status|state)$/.test(n) && /^(int|bool)/.test(t));
+  const heading = sigSlots.some((x) => x.fs >= 15 && x.fw >= 600);
+  const famForm = control ? 'input' : (btnRoot || (interactive && slots.length <= 1 && !child && !items)) ? 'action' : (values >= 1 || paint) ? 'dataviz' : items ? (columns ? 'spatial' : items.selectable ? 'selection' : 'list') : toneSock ? (slots.length >= 2 ? 'feedback' : 'status') : child ? (heading ? 'header' : 'card') : (interactive && svg) ? 'nav' : decorated ? 'card' : 'text';
+  return { family: famDir || famForm, familyFrom: famDir ? 'dir' : 'form', cls: w.cls, file: w.file, seam: null, states: false, stateIds: null, fieldSlots: slots.length, fieldDemo, sig: { root: { tag: btnRoot ? 'button' : 'div', decorated, interactive, dir }, svg, input, series: 0, fills: 0, slots: sigSlots, numEmph }, child, bare, control, actions, items, columns, values, from: 'atom-sig (Dart)' };
 }
 let MAP = null;
 export function atomSigs() {
@@ -77,5 +83,5 @@ if (isMain) {
   const ci = process.argv.indexOf('--cls'); if (ci > 0) { console.log(JSON.stringify(m.get(process.argv[ci + 1]), null, 1)); process.exit(0); }
   if (process.argv.includes('--write')) fs.writeFileSync(path.join(GEN, 'atom-sig.json'), JSON.stringify(arr, null, 1) + '\n');
   const kpi = arr.filter((a) => a.sig.numEmph >= 1.4).length, dflt = arr.filter((a) => a.sig.slots.some((s) => s.defaulted)).length;
-  console.log(`📐 atom-sig: ${arr.length} אטומי-Dart נמדדו · עם חריץ-מספר ${arr.filter((a) => a.fieldDemo.includes('0')).length} · הדגשת-מספר ≥1.4: ${kpi} · חריצים בברירת-מחדל (Text בלי עיצוב-שקע): ${dflt} · משפחה ידועה ${arr.filter((a) => a.family).length}`);
+  console.log(`📐 atom-sig: ${arr.length} אטומי-Dart נמדדו · עם חריץ-מספר ${arr.filter((a) => a.fieldDemo.includes('0')).length} · הדגשת-מספר ≥1.4: ${kpi} · חריצים בברירת-מחדל (Text בלי עיצוב-שקע): ${dflt} · משפחה מתיקייה ${arr.filter((a) => a.familyFrom === 'dir').length} · מצורה ${arr.filter((a) => a.familyFrom === 'form').length}`); if (process.argv.includes('--families')) { const c = {}; for (const a of arr) c[a.family] = (c[a.family] || 0) + 1; console.log(JSON.stringify(c)); }
 }

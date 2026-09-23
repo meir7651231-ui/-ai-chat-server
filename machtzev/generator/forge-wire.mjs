@@ -43,7 +43,9 @@ export function wireForge(cls, ctx, { widgetOf, wireAtom }) {
   const fields = Array.from({ length: a.fieldSlots }, () => "''");
   const filled = [...base.filled, 'fields'];
   const valNum = !!ctx.value && ctx.value.isNum !== false;   // ערך שצורתו מספר ⇒ חריץ-המספר; ערך-טקסט (שם/תאריך) ⇒ חריץ-טקסט, אחרי התווית
-  const texts = [['label', ctx.label], ...(ctx.value && !valNum ? [['value', ctx.value.str]] : []), ['sub', ctx.sub], ['message', ctx.message && ctx.message !== ctx.label ? ctx.message : null]].filter(([, e]) => e);
+  const texts0 = [['label', ctx.label], ...(ctx.value && !valNum ? [['value', ctx.value.str]] : []), ['sub', ctx.sub], ['message', ctx.message && ctx.message !== ctx.label ? ctx.message : null]].filter(([, e]) => e);
+  const need = ctx.need || [];   // מה שהמטרה דורשת נכנס לחריצים ראשון (התראה: message לפני label) — סדר-המטרה, לא סדר-קבוע
+  const texts = [...texts0.filter(([k]) => need.includes(k)).sort((a, b) => need.indexOf(a[0]) - need.indexOf(b[0])), ...texts0.filter(([k]) => !need.includes(k))];
   let numDone = !valNum;
   for (let i = 0; i < own; i++) {
     if (isNum(demo[i])) { if (!numDone) { fields[i] = ctx.value.str; filled.push('value'); numDone = true; } }
@@ -51,8 +53,9 @@ export function wireForge(cls, ctx, { widgetOf, wireAtom }) {
   }
   const extra = [`fields: [${fields.join(', ')}]`];
   if (a.items && a.items.slots && w.types.has('items') && !base.filled.includes('items')) {
-    if (ctx.rows) { extra.push(`items: ${ctx.rows}`); filled.push('rows'); }
-    else if (ctx.items) { extra.push(`items: [for (final s in ${ctx.items}) [s]]`); filled.push('items'); }
+    const wantRows = !need.length || need.some((k) => k === 'rows' || k === 'items');   // המטרה מבקשת שורות/פריטים ⇒ רשימה; אחרת (התראה: message) הפריט-היחיד מהטקסטים
+    if (ctx.rows && wantRows) { extra.push(`items: ${ctx.rows}`); filled.push('rows'); }
+    else if (ctx.items && wantRows) { extra.push(`items: [for (final s in ${ctx.items}) [s]]`); filled.push('items'); }
     else {   // אטום-פריטים בלי רשימה במקור ⇒ פריט אחד, חריציו לפי צורת-חריצי-הפריט הראשון בדמו (מספר/טקסט)
       const item = [];
       for (let j = 0; j < a.items.slots; j++) { const d = demo[own + j]; if (isNum(d)) { if (!numDone) { item.push(ctx.value.str); filled.push('value'); numDone = true; } else item.push("''"); } else if (texts.length) { const [k, e] = texts.shift(); item.push(e); filled.push(k); } else item.push("''"); }

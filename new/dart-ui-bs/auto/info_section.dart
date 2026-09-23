@@ -27,9 +27,9 @@ class InfoSection extends StatelessWidget {
           title: CfgText(
             'catalog_settings_screen.t09',
             fallback,
-            style: TextStyle(color: BsTokens.inkLight),
+            style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink)),
           ),
-          trailing: const Icon(Icons.chevron_left, color: BsTokens.mutedLight),
+          trailing: Icon(Icons.chevron_left, color: dsWear(context, BsTokens.mutedLight, (l) => l.muted)),
           onTap:
               onTap,
         ),
@@ -38,9 +38,9 @@ class InfoSection extends StatelessWidget {
           title: CfgText(
             'catalog_settings_screen.t10',
             fallback2,
-            style: TextStyle(color: BsTokens.inkLight),
+            style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink)),
           ),
-          trailing: const Icon(Icons.chevron_left, color: BsTokens.mutedLight),
+          trailing: Icon(Icons.chevron_left, color: dsWear(context, BsTokens.mutedLight, (l) => l.muted)),
           onTap:
               onTap2,
         ),
@@ -114,8 +114,8 @@ class _SectionTile extends StatelessWidget {
                   ),
           title: Text(
             title,
-            style: const TextStyle(
-              color: BsTokens.inkLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontSize: 15,
               fontWeight: FontWeight.w600,
             ),
@@ -137,11 +137,11 @@ class _PlaceholderRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-      title: Text(label, style: const TextStyle(color: BsTokens.inkLight)),
+      title: Text(label, style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink))),
       trailing: CfgText(
         'catalog_settings_screen.t12',
         fallback3,
-        style: TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+        style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
       ),
       onTap: onTap3,
     );

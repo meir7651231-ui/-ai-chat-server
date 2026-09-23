@@ -41,15 +41,15 @@ class FinTile extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 title,
-                style: const TextStyle(
-                  color: BsTokens.inkLight,
+                style: TextStyle(
+                  color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                   fontWeight: FontWeight.w800,
                   fontSize: 14,
                 ),
               ),
               const SizedBox(height: 2),
               Text(sub,
-                  style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12)),
+                  style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12)),
             ],
           ),
         ),

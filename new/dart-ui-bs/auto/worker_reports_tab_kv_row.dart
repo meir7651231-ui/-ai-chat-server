@@ -2,6 +2,7 @@
 // מוצא: screens__worker_reports_tab:_KvRow (בנייה-חכמה main) · צרור-1 · props-שורש: label2
 // התוכן: new/dart-data-bs/auto/screens__worker_reports_tab_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class WorkerReportsTabKvRow extends StatelessWidget {
@@ -20,14 +21,14 @@ class WorkerReportsTabKvRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(color: BsTokens.inkLight, fontSize: 13.5),
+            style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 13.5),
           ),
         ),
         const SizedBox(width: BsTokens.space2),
         Text(
           value,
-          style: const TextStyle(
-            color: BsTokens.inkLight,
+          style: TextStyle(
+            color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
             fontWeight: FontWeight.w700,
             fontSize: 13,
           ),

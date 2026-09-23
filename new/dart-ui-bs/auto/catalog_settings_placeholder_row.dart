@@ -3,6 +3,7 @@
 // התוכן: new/dart-data-bs/auto/screens__catalog_settings_screen_content.dart
 // משרת-גם (זהה-מבנית): screens__chat_settings_screen:_PlaceholderRow · screens__notif_settings_screen:_PlaceholderRow · screens__store_settings_screen:_PlaceholderRow
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 
@@ -16,11 +17,11 @@ class CatalogSettingsPlaceholderRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-      title: Text(label, style: const TextStyle(color: BsTokens.inkLight)),
+      title: Text(label, style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink))),
       trailing: CfgText(
         'catalog_settings_screen.t12',
         fallback,
-        style: TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+        style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
       ),
       onTap: onTap,
     );

@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__home_shell:_MenuRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 
@@ -27,8 +28,8 @@ class HomeShellMenuRow extends StatelessWidget {
                   ? Text(
                     label,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: BsTokens.inkLight,
+                    style: TextStyle(
+                      color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                       fontSize: 15,
                     ),
                   )
@@ -36,8 +37,8 @@ class HomeShellMenuRow extends StatelessWidget {
                     id,
                     label,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: BsTokens.inkLight,
+                    style: TextStyle(
+                      color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                       fontSize: 15,
                     ),
                   ),

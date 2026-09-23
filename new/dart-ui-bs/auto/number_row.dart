@@ -31,7 +31,7 @@ class NumberRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-      title: Text(label, style: const TextStyle(color: BsTokens.inkLight)),
+      title: Text(label, style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink))),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

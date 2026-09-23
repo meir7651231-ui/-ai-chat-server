@@ -16,10 +16,10 @@ class MaterialDots extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text(
+        Text(
           '↔',
           style: TextStyle(
-            color: BsTokens.mutedLight,
+            color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
             fontSize: 12,
             fontWeight: FontWeight.w900,
           ),

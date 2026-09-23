@@ -39,8 +39,8 @@ class TreeComingSoon extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
               ),

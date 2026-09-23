@@ -20,8 +20,8 @@ class CaTop extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: const TextStyle(
-              color: BsTokens.inkLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w800,
               fontSize: 14,
             ),
@@ -51,7 +51,7 @@ class _Pill extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: danger ? dsWear(context, DsAtomColors.autoCaTop3, (l) => l.danger) : BsTokens.inkLight,
+          color: danger ? dsWear(context, DsAtomColors.autoCaTop3, (l) => l.danger) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
           fontWeight: FontWeight.w700,
           fontSize: 12,
         ),

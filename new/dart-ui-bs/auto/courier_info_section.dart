@@ -35,11 +35,11 @@ class CourierInfoSection extends StatelessWidget {
             title: CfgText(
               'courier.info.terms',
               fallback,
-              style: TextStyle(color: BsTokens.inkLight),
+              style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink)),
             ),
-            trailing: const Icon(
+            trailing: Icon(
               Icons.chevron_left,
-              color: BsTokens.mutedLight,
+              color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
             ),
             onTap:
                 onTap,
@@ -53,11 +53,11 @@ class CourierInfoSection extends StatelessWidget {
             title: CfgText(
               'courier.info.privacy',
               fallback2,
-              style: TextStyle(color: BsTokens.inkLight),
+              style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink)),
             ),
-            trailing: const Icon(
+            trailing: Icon(
               Icons.chevron_left,
-              color: BsTokens.mutedLight,
+              color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
             ),
             onTap:
                 onTap2,
@@ -121,8 +121,8 @@ class _SectionTile extends StatelessWidget {
                   ),
           title: Text(
             title,
-            style: const TextStyle(
-              color: BsTokens.inkLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontSize: 15,
               fontWeight: FontWeight.w600,
             ),

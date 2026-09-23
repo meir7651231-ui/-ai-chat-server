@@ -37,8 +37,8 @@ class TrainingAction extends StatelessWidget {
                 const SizedBox(width: 6),
                 Text(
                   label,
-                  style: const TextStyle(
-                    color: BsTokens.brand,
+                  style: TextStyle(
+                    color: dsWear(context, BsTokens.brand, (l) => l.accent),
                     fontSize: 12.5,
                     fontWeight: FontWeight.w700,
                   ),

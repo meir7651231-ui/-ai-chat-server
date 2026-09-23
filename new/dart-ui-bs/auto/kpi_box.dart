@@ -23,8 +23,8 @@ class KpiBox extends StatelessWidget {
           children: [
             Text(
               value,
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: FontWeight.w800,
                 fontSize: 17,
               ),
@@ -33,7 +33,7 @@ class KpiBox extends StatelessWidget {
             Text(
               label,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+              style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
             ),
           ],
         ),

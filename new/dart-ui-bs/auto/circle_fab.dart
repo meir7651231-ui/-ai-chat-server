@@ -30,8 +30,8 @@ class CircleFab extends StatelessWidget {
           child: Container(
             width: 48,
             height: 48,
-            decoration: const BoxDecoration(
-              color: BsTokens.brand,
+            decoration: BoxDecoration(
+              color: dsWear(context, BsTokens.brand, (l) => l.accent),
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,

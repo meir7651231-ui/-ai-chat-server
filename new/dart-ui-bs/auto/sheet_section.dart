@@ -32,8 +32,8 @@ class SheetSection extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: BsTokens.inkLight,
+                  style: TextStyle(
+                    color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),
@@ -46,8 +46,8 @@ class SheetSection extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
-                      style: const TextStyle(
-                        color: BsTokens.brand,
+                      style: TextStyle(
+                        color: dsWear(context, BsTokens.brand, (l) => l.accent),
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),

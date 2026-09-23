@@ -27,7 +27,7 @@ class RegressionBody extends StatelessWidget {
           'manager_dashboard_screen.regression_intro',
           fallback,
           style: TextStyle(
-            color: BsTokens.inkLight,
+            color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
             fontSize: 13,
             height: 1.35,
           ),

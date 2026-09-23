@@ -25,7 +25,7 @@ class CourierSettingsSwitchRow extends StatelessWidget {
       title: CfgText(
         cfgId,
         label,
-        style: const TextStyle(color: BsTokens.inkLight),
+        style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink)),
       ),
       value: value,
       activeColor: dsWear(context, BsTokens.brand, (l) => l.accent),

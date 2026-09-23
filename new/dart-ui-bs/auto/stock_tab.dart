@@ -31,7 +31,7 @@ class StockTab extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w700,
-            color: on ? bsOnAccent(context) : _ink,
+            color: on ? bsOnAccent(context) : _ink(context),
           ),
         ),
       ),
@@ -39,4 +39,6 @@ class StockTab extends StatelessWidget {
   );
 }
 
-const _ink = BsTokens.inkLight;
+const _ink0 = BsTokens.inkLight;
+
+Color _ink(BuildContext context) => dsWear(context, BsTokens.inkLight, (l) => l.ink);   // לובש עור · _ink0 = הערך-הכהה

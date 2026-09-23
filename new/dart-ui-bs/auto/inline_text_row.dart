@@ -55,7 +55,7 @@ class InlineTextRowState extends State<InlineTextRow> {
           const SizedBox(height: 6),
           TextField(
             controller: _ctrl,
-            style: const TextStyle(color: BsTokens.inkLight),
+            style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink)),
             cursorColor: dsWear(context, BsTokens.brand, (l) => l.accent),
             maxLines: 2,
             decoration: InputDecoration(

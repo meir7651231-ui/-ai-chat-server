@@ -49,7 +49,7 @@ class StatsCard extends StatelessWidget {
                   'worker.profile.tasks_title',
                   fallback,
                   style: TextStyle(
-                    color: BsTokens.inkLight,
+                    color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                     fontWeight: FontWeight.w800,
                     fontSize: 15,
                   ),
@@ -57,8 +57,8 @@ class StatsCard extends StatelessWidget {
               ),
               Text(
                 '$done/$total',
-                style: const TextStyle(
-                  color: BsTokens.brandDark,
+                style: TextStyle(
+                  color: dsWear(context, BsTokens.brandDark, (l) => l.accentDark),
                   fontWeight: FontWeight.w800,
                   fontSize: 14,
                 ),
@@ -72,7 +72,7 @@ class StatsCard extends StatelessWidget {
               value: total == 0 ? 0 : done / total,
               minHeight: 8,
               backgroundColor: dsWear(context, DsAtomColors.autoStatsCard2, (l) => l.ink),
-              valueColor: const AlwaysStoppedAnimation<Color>(BsTokens.brand),
+              valueColor: AlwaysStoppedAnimation<Color>(dsWear(context, BsTokens.brand, (l) => l.accent)),
             ),
           ),
           const SizedBox(height: BsTokens.space3),
@@ -102,8 +102,8 @@ class _Stat extends StatelessWidget {
         children: [
           Text(
             value,
-            style: const TextStyle(
-              color: BsTokens.inkLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w800,
               fontSize: 18,
             ),
@@ -111,7 +111,7 @@ class _Stat extends StatelessWidget {
           Text(
             label,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+            style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
           ),
         ],
       ),

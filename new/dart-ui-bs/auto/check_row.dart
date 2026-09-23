@@ -17,7 +17,7 @@ class CheckRow extends StatelessWidget {
         Text(
           pass ? '✓' : '✗',
           style: TextStyle(
-            color: pass ? BsTokens.successDark : dsWear(context, BsTokens.dangerDark, (l) => l.danger),
+            color: pass ? dsWear(context, BsTokens.successDark, (l) => l.success) : dsWear(context, BsTokens.dangerDark, (l) => l.danger),
             fontSize: 15,
             fontWeight: FontWeight.w800,
           ),
@@ -26,8 +26,8 @@ class CheckRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
-              color: BsTokens.inkLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),

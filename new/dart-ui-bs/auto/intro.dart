@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__tasks_screen:_Intro (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class Intro extends StatelessWidget {
@@ -11,7 +12,7 @@ class Intro extends StatelessWidget {
         padding: const EdgeInsets.only(top: BsTokens.space3),
         child: Text(
           text,
-          style: const TextStyle(color: BsTokens.mutedLight, fontSize: 13),
+          style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 13),
         ),
       );
 }

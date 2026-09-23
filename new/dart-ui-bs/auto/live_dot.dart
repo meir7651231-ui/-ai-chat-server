@@ -12,8 +12,8 @@ class LiveDot extends StatelessWidget {
     return Container(
       width: 8,
       height: 8,
-      decoration: const BoxDecoration(
-        color: BsTokens.success,
+      decoration: BoxDecoration(
+        color: dsWear(context, BsTokens.success, (l) => l.success),
         shape: BoxShape.circle,
       ),
     );

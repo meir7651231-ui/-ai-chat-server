@@ -40,13 +40,13 @@ class FinCallout extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(color: _kBrandTeal, fontSize: 12.5),
+            style: TextStyle(color: _kBrandTeal(context), fontSize: 12.5),
           ),
           const SizedBox(height: 4),
           Text(
             value,
             style: TextStyle(
-              color: valueColor ?? BsTokens.inkLight,
+              color: valueColor ?? dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w800,
               fontSize: big ? 26 : 18,
             ),
@@ -55,13 +55,13 @@ class FinCallout extends StatelessWidget {
             const SizedBox(height: BsTokens.space2),
             Text(
               secondLabel!,
-              style: const TextStyle(color: _kBrandTeal, fontSize: 12.5),
+              style: TextStyle(color: _kBrandTeal(context), fontSize: 12.5),
             ),
             const SizedBox(height: 4),
             Text(
               secondValue ?? '',
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: FontWeight.w800,
                 fontSize: 26,
               ),
@@ -71,7 +71,7 @@ class FinCallout extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               note!,
-              style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+              style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
             ),
           ],
         ],
@@ -80,4 +80,6 @@ class FinCallout extends StatelessWidget {
   }
 }
 
-const Color _kBrandTeal = BsTokens.brand;
+const _kBrandTeal0 = BsTokens.brand;
+
+Color _kBrandTeal(BuildContext context) => dsWear(context, BsTokens.brand, (l) => l.accent);   // לובש עור · _kBrandTeal0 = הערך-הכהה

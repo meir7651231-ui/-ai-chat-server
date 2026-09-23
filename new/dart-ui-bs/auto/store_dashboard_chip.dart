@@ -24,7 +24,7 @@ class StoreDashboardChip extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: on ? bsOnAccent(context) : BsTokens.inkLight,
+              color: on ? bsOnAccent(context) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w700,
               fontSize: 13,
             ),

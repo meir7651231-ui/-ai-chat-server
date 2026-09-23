@@ -34,7 +34,7 @@ class Swatch extends StatelessWidget {
               color: color,
               shape: BoxShape.circle,
               border: Border.all(
-                color: selected ? BsTokens.inkLight : dsWear(context, DsAtomColors.autoSwatch1, (l) => l.bg.withValues(alpha: 0.122)),
+                color: selected ? dsWear(context, BsTokens.inkLight, (l) => l.ink) : dsWear(context, DsAtomColors.autoSwatch1, (l) => l.bg.withValues(alpha: 0.122)),
                 width: selected ? 3 : 1,
               ),
             ),

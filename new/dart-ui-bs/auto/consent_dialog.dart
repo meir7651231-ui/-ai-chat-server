@@ -33,7 +33,7 @@ class ConsentDialog extends StatelessWidget {
           'consent_modal.t01',
           fallback,
           style: TextStyle(
-            color: BsTokens.inkLight,
+            color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
             fontWeight: FontWeight.w800,
             fontSize: BsTokens.typeSubhead,
           ),
@@ -49,7 +49,7 @@ class ConsentDialog extends StatelessWidget {
                   'consent_modal.t02',
                   fallback2,
                   style: TextStyle(
-                    color: BsTokens.mutedLight,
+                    color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                     fontSize: BsTokens.typeBody,
                     height: 1.6,
                   ),
@@ -60,12 +60,12 @@ class ConsentDialog extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(BsTokens.space2),
-                    border: Border.all(color: BsTokens.divider),
+                    border: Border.all(color: dsWear(context, BsTokens.divider, (l) => l.line)),
                   ),
                   child: Text(
                     consentPolicyExcerpt(),
-                    style: const TextStyle(
-                      color: BsTokens.mutedLight,
+                    style: TextStyle(
+                      color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                       fontSize: BsTokens.typeMicro,
                       height: 1.6,
                     ),
@@ -99,7 +99,7 @@ class ConsentDialog extends StatelessWidget {
             'consent_modal.t04',
             child: TextButton(
             onPressed: onDismiss,
-            style: TextButton.styleFrom(foregroundColor: BsTokens.mutedLight),
+            style: TextButton.styleFrom(foregroundColor: dsWear(context, BsTokens.mutedLight, (l) => l.muted)),
             child: CfgText('consent_modal.t04', fallback4),
           ),
           ),

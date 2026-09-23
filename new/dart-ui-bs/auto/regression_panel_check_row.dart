@@ -39,8 +39,8 @@ class RegressionPanelCheckRow extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: const TextStyle(
-                    color: BsTokens.inkLight,
+                  style: TextStyle(
+                    color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                     fontSize: 12,
                   ),
                 ),
@@ -55,8 +55,8 @@ class RegressionPanelCheckRow extends StatelessWidget {
                 if (!pass && expected != null)
                   Text(
                     '${label}${expected}${label2}${got ?? "—"}',
-                    style: const TextStyle(
-                      color: BsTokens.danger,
+                    style: TextStyle(
+                      color: dsWear(context, BsTokens.danger, (l) => l.danger),
                       fontSize: 11,
                     ),
                   ),

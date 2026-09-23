@@ -12,8 +12,8 @@ class ReportH2 extends StatelessWidget {
     padding: const EdgeInsets.only(bottom: BsTokens.space2),
     child: Text(
       text,
-      style: const TextStyle(
-        color: _kBrandTeal,
+      style: TextStyle(
+        color: _kBrandTeal(context),
         fontWeight: FontWeight.w700,
         fontSize: 14,
       ),
@@ -21,4 +21,6 @@ class ReportH2 extends StatelessWidget {
   );
 }
 
-const Color _kBrandTeal = BsTokens.brand;
+const _kBrandTeal0 = BsTokens.brand;
+
+Color _kBrandTeal(BuildContext context) => dsWear(context, BsTokens.brand, (l) => l.accent);   // לובש עור · _kBrandTeal0 = הערך-הכהה

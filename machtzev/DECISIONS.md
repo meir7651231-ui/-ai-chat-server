@@ -136,3 +136,8 @@
     (ד) `Colors.white` ⇒ `lk.onAccent` · `'Colors.grey'` ×3 (ברירת-שדה מסוג Color) ⇒ `DsIdentity.propFallback` (זרע). (ה) בנייר **אין** תרשים-עמודות: אין שקע-values בחיווט, ואטום-תרשים עלה עם מספרים מובנים = מומצא (§20-ג) — נזרק.
     **המינוסים שלא נלקחו:** אין מיפוי-צבע-לפי-מרחק בתוך render-ds (זה באטומים, dsWear — סבב 40); אין נתוני-דוגמה. פרטים: MAVIN.md סבבים 37–40.
 
+
+37. 🔴 **חרוט · הכרעה-37 · render-ds.mjs + balagan-look.mjs: הלוח נכנס לישיבה · 36 חוקי בלגן על פלט-הדלת** (23.9, הכרעת-בעלים בשיחה: «37 ותתקן את כל השאר»)
+    **מה נכנס (render-ds.mjs):** אריחי-המונה והתראה בנייר עוברים בפסק-הישיבה (`yeshiva/atom-psak.judge`) עם תפקיד-עור לפי הפעולה (roleOf) ובמועמדים המדודים של forge (`forge-wire.forgeCands` + `wireForge`) במקום `pickWired`; הפנקס ⚖️ נדפס לכל אריח. כהה ביט-זהה (נמדד: צילום-הרפרנס זהה).
+    **וגם (render-ds.mjs):** האשף (`_live`) לובש `DsLook.of(context)` במקום `DsTokens` קשיח — כלל D13 של בלגן על פלט-הדלת; כהה = אותם ערכים (DsLook.dark ⇐ DsTokens).
+    **מה נכנס (balagan-look.mjs):** שקע `BALAGAN_GEN`/`BALAGAN_DATA`/`BALAGAN_PREFIX` ⇒ אותם 36 כללים על תיקיית-פלט של הדלת («door»): מדידה בלבד — בלי «בלגן» הווירטואלי, בלי ציון/baseline/ratchet; build-check מריץ ומדפיס. הריפו-מצב (specs-ds + בלגן) לא השתנה.

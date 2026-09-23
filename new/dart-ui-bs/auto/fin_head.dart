@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__finance_hub_sheets:_FinHead (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class FinHead extends StatelessWidget {
@@ -21,8 +22,8 @@ class FinHead extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(
-                  color: BsTokens.inkLight,
+                style: TextStyle(
+                  color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                   fontWeight: FontWeight.w800,
                   fontSize: 19,
                 ),
@@ -33,7 +34,7 @@ class FinHead extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           sub,
-          style: const TextStyle(color: BsTokens.mutedLight, fontSize: 13),
+          style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 13),
         ),
         const SizedBox(height: BsTokens.space4),
       ],

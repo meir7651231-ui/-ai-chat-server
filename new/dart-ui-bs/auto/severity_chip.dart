@@ -36,7 +36,7 @@ class SeverityChip extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: selected ? dsWear(context, DsAtomColors.autoSeverityChip2, (l) => l.onAccent) : BsTokens.inkLight,
+              color: selected ? dsWear(context, DsAtomColors.autoSeverityChip2, (l) => l.onAccent) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w700,
               fontSize: 13.5,
             ),

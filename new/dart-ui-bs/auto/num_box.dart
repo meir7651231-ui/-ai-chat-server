@@ -10,7 +10,7 @@ class NumBox extends StatelessWidget {
       {required this.value,
       required this.label,
       required this.onTap,
-      this.color = _ink});
+      this.color = _ink0});
   final String value;
   final String label;
   final Color color;
@@ -47,7 +47,9 @@ class NumBox extends StatelessWidget {
       );
 }
 
-const _ink = BsTokens.inkLight;
+const _ink0 = BsTokens.inkLight;
+
+Color _ink(BuildContext context) => dsWear(context, BsTokens.inkLight, (l) => l.ink);   // לובש עור · _ink0 = הערך-הכהה
 
 
 Color _muted(BuildContext context) => dsWear(context, DsAtomColors.autoNumBox2, (l) => l.muted);   // לובש עור · _muted0 = הערך-הכהה

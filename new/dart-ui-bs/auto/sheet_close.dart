@@ -2,6 +2,7 @@
 // מוצא: screens__install_studio_screen:_SheetClose (בנייה-חכמה main) · צרור-2 · props-שורש: label, message, onTap
 // התוכן: new/dart-data-bs/auto/screens__install_studio_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class SheetClose extends StatelessWidget {
@@ -25,10 +26,10 @@ class SheetClose extends StatelessWidget {
                 child: InkWell(
                   customBorder: const CircleBorder(),
                   onTap: onTap,
-                  child: const SizedBox(
+                  child: SizedBox(
                     width: 48,
                     height: 48,
-                    child: Icon(Icons.close, color: _ink, size: 22),
+                    child: Icon(Icons.close, color: _ink(context), size: 22),
                   ),
                 ),
               ),
@@ -38,4 +39,6 @@ class SheetClose extends StatelessWidget {
       );
 }
 
-const _ink = BsTokens.inkLight;
+const _ink0 = BsTokens.inkLight;
+
+Color _ink(BuildContext context) => dsWear(context, BsTokens.inkLight, (l) => l.ink);   // לובש עור · _ink0 = הערך-הכהה

@@ -17,7 +17,7 @@ class Bar extends StatelessWidget {
         value: pct / 100,
         minHeight: 8,
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-        valueColor: const AlwaysStoppedAnimation<Color>(BsTokens.brand),
+        valueColor: AlwaysStoppedAnimation<Color>(dsWear(context, BsTokens.brand, (l) => l.accent)),
       ),
     );
   }

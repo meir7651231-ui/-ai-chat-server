@@ -23,6 +23,11 @@ const pascal = (slug) => 'GenApp' + slug.replace(/^app_/, '').replace(/(^|[_-])(
 import { readAtlas } from './atlas.mjs';
 import { searchOp, wireAtom, pickWired } from './particles.mjs';
 import { isPaper, stripGlyph, getScope } from './look.mjs';   // הכרעה-27 · חיפוש-פתוח לאריחי-אגרגט
+import { judge as yeshivaJudge, ledgerLine, KIND as PSAK_KIND, roleOf as psakRoleOf } from '../../yeshiva/atom-psak.mjs';
+import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה   // הישיבה על בחירת-אטום (L114)
+import { skinWired as skinWiredPsak } from './look.mjs';
+import { buildAtlas as buildAtlasForPsak } from './atlas.mjs';
+let ATL_PSAK = null; const widgetOfPsak = (cls) => ((ATL_PSAK ||= buildAtlasForPsak({ forge: isPaper() })).widgets.find((w) => w.cls === cls) || null);
 const atlas = readAtlas();   // L93: atlas.json + atlas-data.json
 const heToks = (s) => [...String(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => stem(m[0])).filter((t) => t.length > 1);
 // מילים-עבריות שלמות (לא-גזומות) — לאימות-חפיפה מול הגזם (הגזם מקבץ, המילה מאשרת).
@@ -795,10 +800,15 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
   }
   // אריח-מונה לישות: בנייר — אותו חיפוש-עור של אריחי-האגרגט (אטום בצבע-קשיח נפסל, הלובש-עור נמצא); בכהה — PremiumStat כמו שהיה (ביט-זהה). אין לובש-עור ⇒ כמו שהיה
   let usedPremium = false;
-  const countTile = (lbl, num, g, sub, navExpr, navImport) => {
+  const countTile = (lbl, num, g, sub, navExpr, navImport, purpose = null, rawLabel = '') => {
+    purpose = purpose || { kind: PSAK_KIND.fact, need: ['label', 'value'], text: rawLabel || lbl };
     if (isPaper()) {
-      const pk = searchOp('headline', `${lbl} ${sub}`, null, 12);
-      const wired = pickWired([...pk.atoms, ...pk.alts], (c) => wireAtom(c, { label: lbl, value: { str: `${num}.toStringAsFixed(0)`, num }, glyph: g, sub, nav: navExpr }));
+      const ops = purpose.kind === PSAK_KIND.shiur ? ['ring', 'gauge', 'alert', 'headline'] : ['headline'];
+      const cands = [...new Set(ops.flatMap((op) => { const pk = searchOp(op, `${lbl} ${sub}`, null, 12); return [...pk.atoms, ...pk.alts, ...forgeCands(op, psakRoleOf(op))]; }))];
+      purpose.roles = purpose.roles || [...new Set(ops.map(psakRoleOf))];
+      const r = yeshivaJudge({ purpose, cands, widgetOf: widgetOfPsak, skinWired: skinWiredPsak, wire: (c) => wireForge(c, { label: lbl, value: { str: `${num}.toStringAsFixed(0)`, num }, glyph: g, sub, message: lbl, nav: navExpr }, { widgetOf: widgetOfPsak, wireAtom }) });
+      console.log(ledgerLine(`${title} · ${purpose.text}`, r));
+      const wired = r.pick;
       if (wired) { if (navImport) imports.add(navImport); imports.add(`import '../${wired.file.startsWith('dart-') ? wired.file : 'dart-ui-bs/' + wired.file}';`); return `AnimatedBuilder(animation: appStore, builder: (context, _) => ${wired.call})`; }
     }
     usedPremium = true; if (navImport) imports.add(navImport);
@@ -809,13 +819,13 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
     const sub = k(`${e.fields} ${L.fieldsWord}${e.stages ? ` · ${e.stages} ${L.stagesWord}` : ''}`);
     const g = k(e.icon || '🗂️');
     const num = `appStore.count('${e.slug || ''}').toDouble()`;
-    tiles.push(countTile(lbl, num, g, sub, e.slug ? `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${pascal(e.slug)}()))` : null, e.slug ? `import 'gen_${e.slug}.dart';` : null));
+    tiles.push(countTile(lbl, num, g, sub, e.slug ? `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${pascal(e.slug)}()))` : null, e.slug ? `import 'gen_${e.slug}.dart';` : null, null, e.name));
     barLabels.push(lbl); barVals.push(num);
   }
   for (const x of extras) {   // מסך-ליד (התראה): הערך = המספר של הבעלים (הסף), הניווט = המסך עצמו
     const lbl = k(x.name), sub = k(x.sub || ''), g = k(x.icon || '🔔');
     const num = x.value != null && /^\d+(\.\d+)?$/.test(String(x.value)) ? `${Number(x.value)}.toDouble()` : '0.0';
-    tiles.push(countTile(lbl, num, g, sub, `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}()))`, `import 'gen_${x.slug}.dart';`));
+    tiles.push(countTile(lbl, num, g, sub, `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}()))`, `import 'gen_${x.slug}.dart';`, x.live ? { kind: PSAK_KIND.shiur, need: ['label', 'value', 'onTap'], threshold: x.live.n, op: x.live.op, text: x.name } : null, x.name));
   }
   const cSub = k(`${tiles.length} ${L.metricsWord} · ${L.overview}`);
   const cChart = k(L.liveCompare);
@@ -1605,19 +1615,19 @@ class _${cls}State extends State<${cls}> {
   int get _liveFields => _kFieldOpts.fold(0, (n, g) => n + g.where((i) => _on[i]).length);
   int get _liveEntities => _kFieldOpts.where((g) => g.any((i) => _on[i])).length;
 
-  Widget _live(String label, String out) => Padding(
+  Widget _live(String label, String out) { final lk = DsLook.of(context); return Padding(   // הכרעה-37: אשף לובש עור (DsLook), לא DsTokens קשיח; כהה = אותם ערכים
         padding: const EdgeInsets.only(top: 2, bottom: 6),
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(11),
-          decoration: BoxDecoration(color: DsTokens.accentSoft, borderRadius: BorderRadius.circular(DsTokens.rSm)),
+          decoration: BoxDecoration(color: lk.accentSoft, borderRadius: BorderRadius.circular(lk.rSm)),
           child: Row(children: [
-            const Icon(Icons.bolt, size: 15, color: DsTokens.accentDark),
+            Icon(Icons.bolt, size: 15, color: lk.accentDark),
             const SizedBox(width: 7),
-            Expanded(child: Text('\$label · \$out', style: const TextStyle(color: DsTokens.accentDark, fontSize: 13, fontWeight: FontWeight.w700))),
+            Expanded(child: Text('\$label · \$out', style: TextStyle(color: lk.accentDark, fontSize: 13, fontWeight: FontWeight.w700))),
           ]),
         ),
-      );
+      ); }
 
   Widget _bar() => IntrinsicHeight(
         child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [

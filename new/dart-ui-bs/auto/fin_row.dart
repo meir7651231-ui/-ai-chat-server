@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__finance_hub_sheets:_FinRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class FinRow extends StatelessWidget {
@@ -18,13 +19,13 @@ class FinRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(color: BsTokens.inkLight, fontSize: 14),
+              style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 14),
             ),
           ),
           Text(
             value,
             style: TextStyle(
-              color: valueColor ?? BsTokens.inkLight,
+              color: valueColor ?? dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w700,
               fontSize: 14,
             ),

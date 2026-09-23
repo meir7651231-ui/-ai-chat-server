@@ -21,7 +21,7 @@ class PipeLink extends StatelessWidget {
   final bool broken;
   @override
   Widget build(BuildContext context) {
-    final c = broken ? dsWear(context, BsTokens.danger, (l) => l.danger) : _accent;
+    final c = broken ? dsWear(context, BsTokens.danger, (l) => l.danger) : _accent(context);
     return SizedBox(
       height: 30,
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -47,7 +47,9 @@ class PipeLink extends StatelessWidget {
   }
 }
 
-const _accent = BsTokens.brand;
+const _accent0 = BsTokens.brand;
+
+Color _accent(BuildContext context) => dsWear(context, BsTokens.brand, (l) => l.accent);   // לובש עור · _accent0 = הערך-הכהה
 
 class _PipePainter extends CustomPainter {
   _PipePainter(this.from, this.to, this.flow);

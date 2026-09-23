@@ -25,7 +25,7 @@ class IntelCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-        border: Border.all(color: BsTokens.divider),
+        border: Border.all(color: dsWear(context, BsTokens.divider, (l) => l.line)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -38,8 +38,8 @@ class IntelCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(
-                    color: BsTokens.inkLight,
+                  style: TextStyle(
+                    color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
                   ),

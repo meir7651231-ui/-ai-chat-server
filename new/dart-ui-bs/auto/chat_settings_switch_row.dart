@@ -26,12 +26,12 @@ class ChatSettingsSwitchRow extends StatelessWidget implements _Inert {
   Widget build(BuildContext context) {
     return SwitchListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-      title: Text(label, style: const TextStyle(color: BsTokens.inkLight)),
+      title: Text(label, style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink))),
       subtitle: underConstruction
           ? CfgText(
               'chat_settings_screen.t15',
               fallback,
-              style: TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+              style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
             )
           : null,
       value: value,

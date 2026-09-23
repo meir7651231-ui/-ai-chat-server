@@ -2,6 +2,7 @@
 // מוצא: screens__manager_copilot_screen:_InputBar (בנייה-חכמה main) · צרור-1 · props-שורש: hintText, tooltip
 // התוכן: new/dart-data-bs/auto/screens__manager_copilot_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class InputBar extends StatelessWidget {
@@ -21,7 +22,7 @@ class InputBar extends StatelessWidget {
         padding: const EdgeInsets.all(BsTokens.space3),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          border: const Border(top: BorderSide(color: BsTokens.divider)),
+          border: Border(top: BorderSide(color: dsWear(context, BsTokens.divider, (l) => l.line))),
         ),
         child: Row(
           children: [

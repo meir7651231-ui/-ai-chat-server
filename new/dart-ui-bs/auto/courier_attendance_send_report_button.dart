@@ -45,7 +45,7 @@ class CourierAttendanceSendReportButton extends StatelessWidget {
                 label,
                 style: TextStyle(
                   // bsOnAccent on the brand fill (F-28).
-                  color: enabled ? bsOnAccent(context) : BsTokens.mutedLight,
+                  color: enabled ? bsOnAccent(context) : dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                   fontSize: 14.5,
                   fontWeight: FontWeight.w800,
                 ),

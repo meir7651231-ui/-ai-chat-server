@@ -18,7 +18,7 @@ class CardBtn extends StatelessWidget {
         onPressed: onTap,
         style: OutlinedButton.styleFrom(
           foregroundColor: dsWear(context, BsTokens.brandDark, (l) => l.accentDark),
-          side: const BorderSide(color: BsTokens.brand),
+          side: BorderSide(color: dsWear(context, BsTokens.brand, (l) => l.accent)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(BsTokens.radiusPill),
           ),

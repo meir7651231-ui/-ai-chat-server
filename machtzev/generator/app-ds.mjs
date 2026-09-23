@@ -121,6 +121,9 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
   // מקדימים: כל הישויות (לתוכן-הדשבורדים ולזיהוי-קשרים בין-ישויות) + מפת שם→slug יציב
   const entRes = {};
   for (const li of info) if (li.isEnt) entRes[li.i] = entInterpret(li.line);
+  // הכרעה-37 «תתקן את כל השאר»: סוג-שדה מערכי-הדוגמאות של הבעלים (צורה: כל הערכים בעמודה מספר ⇒ num · כל הערכים תאריך ⇒ date). רק שדה שהרמז-הלשוני השאיר 'text'; הדאטה של הבעלים, לא השלמה.
+  const isNumV = (v) => /^[+-]?\d+([.,]\d+)?%?$/.test(String(v).trim()), isDateV = (v) => /^(\d{1,2}[./-]\d{1,2}[./-]\d{2,4}|\d{4}-\d{2}-\d{2})$/.test(String(v).trim());
+  for (const r of Object.values(entRes)) { const ex = r && examples[r.entity]; if (!ex || !ex.length) continue; r.schema.forEach((f, i) => { if (f.type !== 'text') return; const col = ex.map((row) => row[i]).filter((v) => v != null && String(v).trim()); if (!col.length) return; if (col.every(isNumV)) f.type = 'num'; else if (col.every(isDateV)) f.type = 'date'; }); }
   // §22 · ישות בלי שדות = ספק שבור, לא פלט שבור. בלי השער הזה נפלט
   //   DsTable(labels: const [], rows: rs.map((r) => []).toList()) ⇒ List<List<dynamic>>
   //   שאינו מתקמפל, והכשל צף רק ב-flutter build web ~70s אחר-כך, בלי שם-הישות.

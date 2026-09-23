@@ -2,6 +2,7 @@
 // מוצא: features__catalog_config__catalog_config_screen:_EmptyState (בנייה-חכמה main) · צרור-1 · props-שורש: label
 // התוכן: new/dart-data-bs/auto/features__catalog_config__catalog_config_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class EmptyState extends StatelessWidget {
@@ -19,7 +20,7 @@ class EmptyState extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: BsTokens.inkLight,
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontSize: BsTokens.typeTitleSm,
               fontWeight: FontWeight.w600,
             ),

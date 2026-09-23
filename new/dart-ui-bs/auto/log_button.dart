@@ -32,7 +32,7 @@ class LogButton extends StatelessWidget {
                 'tasks_screen.log_btn',
                 fallback,
                 style: TextStyle(
-                  color: BsTokens.inkLight,
+                  color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
                 ),

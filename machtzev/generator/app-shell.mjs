@@ -32,7 +32,7 @@ export function renderRootPage(slug, { root, children, report, title }) {
   const { k, dump } = makeConsts(slug);
   const imports = new Set([`import 'gen_${root.slug}.dart';`, "import 'gen_behaviors.dart';"]);   // G34ב · שכבת-ההרכבה
   const firstWired = (pick, ctx) => { const w = pickWired([...pick.atoms, ...pick.alts], (c) => wireAtom(c, ctx)); if (w) imports.add(impOf(w)); return w; };
-  const judgedWired = (pick, purpose, ctx) => { const r = judge({ purpose, cands: [...new Set([...pick.atoms, ...pick.alts, ...forgeCands(pick.op, purpose.role)])], widgetOf, skinWired, wire: (c) => wireForge(c, ctx, { widgetOf, wireAtom }) }); console.log(ledgerLine(`${root.name} · ${purpose.text}`, r)); if (r.pick) imports.add(impOf(r.pick)); return r.pick; };   // עובדה ⇒ הישיבה (L114)
+  const judgedWired = (pick, purpose, ctx) => { const r = judge({ purpose, cands: [...new Set([...pick.atoms, ...pick.alts, ...forgeCands(pick.op, purpose.role)])], widgetOf, skinWired, wire: (c) => wireForge(c, { ...ctx, need: purpose.need }, { widgetOf, wireAtom }) }); console.log(ledgerLine(`${root.name} · ${purpose.text}`, r)); if (r.pick) imports.add(impOf(r.pick)); return r.pick; };   // עובדה ⇒ הישיבה (L114)
   const goal = `${root.name} ${title}`;
   const notes = [];
   // עובדות: שדות-השורש (בלי מקוננים) — אטום label+value (חיפוש fact עם צורך label+value ⇒ שורת מפתח-ערך, לא שבב)

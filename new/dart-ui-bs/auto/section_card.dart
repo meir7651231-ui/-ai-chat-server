@@ -38,8 +38,8 @@ class SectionCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              color: BsTokens.inkLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w800,
               fontSize: 15,
             ),
@@ -48,8 +48,8 @@ class SectionCard extends StatelessWidget {
           if (lines.isEmpty && emptyText != null)
             Text(
               emptyText!,
-              style: const TextStyle(
-                color: BsTokens.mutedLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                 fontSize: 13.5,
               ),
             )
@@ -73,8 +73,8 @@ class SectionCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         line,
-                        style: const TextStyle(
-                          color: BsTokens.inkLight,
+                        style: TextStyle(
+                          color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                           fontSize: 13.5,
                           height: 1.35,
                         ),

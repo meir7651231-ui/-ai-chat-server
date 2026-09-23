@@ -36,7 +36,7 @@ class ProposePrimaryBtn extends StatelessWidget {
               label,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: enabled ? bsOnAccent(context) : BsTokens.mutedLight,
+                color: enabled ? bsOnAccent(context) : dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                 fontWeight: FontWeight.w800,
                 fontSize: 14,
               ),

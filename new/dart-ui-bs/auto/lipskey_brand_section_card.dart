@@ -42,8 +42,8 @@ class LipskeyBrandSectionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(name,
-                    style: const TextStyle(
-                        color: BsTokens.inkLight,
+                    style: TextStyle(
+                        color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         height: 1.2)),

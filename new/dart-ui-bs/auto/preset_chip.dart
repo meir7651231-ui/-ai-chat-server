@@ -43,7 +43,7 @@ class PresetChip extends StatelessWidget {
               label,
               style: TextStyle(
                 // bsOnAccent on the selected brand fill (F-28).
-                color: selected ? bsOnAccent(context) : BsTokens.inkLight,
+                color: selected ? bsOnAccent(context) : dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
               ),

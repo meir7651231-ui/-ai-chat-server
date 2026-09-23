@@ -34,7 +34,7 @@ class EmptyConnectors extends StatelessWidget {
             fallback,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: BsTokens.mutedLight,
+              color: dsWear(context, BsTokens.mutedLight, (l) => l.muted),
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),

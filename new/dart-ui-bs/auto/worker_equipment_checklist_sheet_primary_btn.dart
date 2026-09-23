@@ -33,7 +33,7 @@ class WorkerEquipmentChecklistSheetPrimaryBtn extends StatelessWidget {
               label,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: enabled ? bsOnAccent(context) : BsTokens.mutedLight,
+                color: enabled ? bsOnAccent(context) : dsWear(context, BsTokens.mutedLight, (l) => l.muted),
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
               ),

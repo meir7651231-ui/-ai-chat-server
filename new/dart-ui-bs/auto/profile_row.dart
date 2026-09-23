@@ -26,7 +26,7 @@ class ProfileRow extends StatelessWidget {
           'catalog_settings_screen.t06',
           fallback,
           style: TextStyle(
-            color: BsTokens.inkLight,
+            color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
             fontSize: 15,
             fontWeight: FontWeight.w600,
           ),

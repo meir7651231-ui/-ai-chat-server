@@ -18,8 +18,8 @@ class QtyStepper extends StatelessWidget {
               height: 44,
               child: Center(
                   child: Text(s,
-                      style: const TextStyle(
-                          color: BsTokens.inkLight, fontSize: 20)))),
+                      style: TextStyle(
+                          color: dsWear(context, BsTokens.inkLight, (l) => l.ink), fontSize: 20)))),
         );
     return Container(
       decoration: BoxDecoration(
@@ -36,8 +36,8 @@ class QtyStepper extends StatelessWidget {
               width: 34,
               child: Center(
                   child: Text('$qty',
-                      style: const TextStyle(
-                          color: BsTokens.inkLight,
+                      style: TextStyle(
+                          color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                           fontSize: 17,
                           fontWeight: FontWeight.w800)))),
           b('+', () => onChanged(qty + 1)),

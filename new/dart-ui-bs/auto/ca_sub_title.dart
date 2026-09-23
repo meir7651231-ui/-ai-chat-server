@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__site_hub_screen:_CaSubTitle (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class CaSubTitle extends StatelessWidget {
@@ -11,8 +12,8 @@ class CaSubTitle extends StatelessWidget {
         padding: const EdgeInsets.only(top: 6, bottom: 8),
         child: Text(
           text,
-          style: const TextStyle(
-            color: BsTokens.inkLight,
+          style: TextStyle(
+            color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
             fontWeight: FontWeight.w800,
             fontSize: 12.5,
           ),

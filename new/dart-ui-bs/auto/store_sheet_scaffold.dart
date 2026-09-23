@@ -39,8 +39,8 @@ class StoreSheetScaffold extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: Text(
               '$emoji $title',
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
               ),

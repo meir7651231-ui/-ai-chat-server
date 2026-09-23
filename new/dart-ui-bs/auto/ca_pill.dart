@@ -22,7 +22,7 @@ class CaPill extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          color: done ? BsTokens.mutedLight : _kBrandDark,
+          color: done ? dsWear(context, BsTokens.mutedLight, (l) => l.muted) : _kBrandDark(context),
           fontWeight: FontWeight.w800,
           fontSize: 10,
         ),
@@ -31,4 +31,6 @@ class CaPill extends StatelessWidget {
   }
 }
 
-const Color _kBrandDark = BsTokens.brandDark;
+const _kBrandDark0 = BsTokens.brandDark;
+
+Color _kBrandDark(BuildContext context) => dsWear(context, BsTokens.brandDark, (l) => l.accentDark);   // לובש עור · _kBrandDark0 = הערך-הכהה

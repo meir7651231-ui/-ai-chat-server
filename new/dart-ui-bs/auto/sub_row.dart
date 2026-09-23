@@ -39,8 +39,8 @@ class SubRow extends StatelessWidget {
               Expanded(
                 child: Text(
                   '${ic} ${name}',
-                  style: const TextStyle(
-                    color: BsTokens.inkLight,
+                  style: TextStyle(
+                    color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                     fontWeight: FontWeight.w800,
                     fontSize: 14,
                   ),
@@ -49,7 +49,7 @@ class SubRow extends StatelessWidget {
               Text(
                 '$pct%',
                 style: TextStyle(
-                  color: over ? _kDn : BsTokens.inkLight,
+                  color: over ? _kDn : dsWear(context, BsTokens.inkLight, (l) => l.ink),
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
                 ),
@@ -71,7 +71,7 @@ class SubRow extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             '${label}${fMoney(spent)}${label2}${fMoney(allocated)}',
-            style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+            style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
           ),
         ],
       ),

@@ -50,7 +50,7 @@ class StockRow extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: _ink,
+                  color: _ink(context),
                 ),
               ),
               if (info.why.isNotEmpty)
@@ -78,7 +78,9 @@ class StockRow extends StatelessWidget {
   );
 }
 
-final _ink = BsTokens.inkLight;
+const _ink0 = BsTokens.inkLight;
+
+Color _ink(BuildContext context) => dsWear(context, BsTokens.inkLight, (l) => l.ink);   // לובש עור · _ink0 = הערך-הכהה
 
 
 Color _muted(BuildContext context) => dsWear(context, DsAtomColors.autoStockRow2, (l) => l.muted);   // לובש עור · _muted0 = הערך-הכהה

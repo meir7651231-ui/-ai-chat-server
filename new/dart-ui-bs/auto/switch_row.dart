@@ -19,7 +19,7 @@ class SwitchRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return SwitchListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-      title: Text(label, style: const TextStyle(color: BsTokens.inkLight)),
+      title: Text(label, style: TextStyle(color: dsWear(context, BsTokens.inkLight, (l) => l.ink))),
       value: value,
       activeColor: dsWear(context, BsTokens.brand, (l) => l.accent),
       onChanged: onChanged,

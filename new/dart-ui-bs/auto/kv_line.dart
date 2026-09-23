@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__worker_report_drilldowns:_KvLine (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class KvLine extends StatelessWidget {
@@ -29,8 +30,8 @@ class KvLine extends StatelessWidget {
               const SizedBox(width: BsTokens.space2),
               Text(
                 value,
-                style: const TextStyle(
-                  color: BsTokens.inkLight,
+                style: TextStyle(
+                  color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                   fontWeight: FontWeight.w700,
                   fontSize: 13,
                 ),

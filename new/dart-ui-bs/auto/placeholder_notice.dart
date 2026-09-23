@@ -28,7 +28,7 @@ class PlaceholderNotice extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                color: BsTokens.warnText,
+                color: dsWear(context, BsTokens.warnText, (l) => l.warn),
                 fontSize: BsTokens.typeMicro,
                 height: 1.5,
               ),

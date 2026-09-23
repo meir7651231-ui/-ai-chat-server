@@ -59,8 +59,8 @@ class SectionTile extends StatelessWidget {
                   ),
           title: Text(
             title,
-            style: const TextStyle(
-              color: BsTokens.inkLight,
+            style: TextStyle(
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontSize: 15,
               fontWeight: FontWeight.w600,
             ),

@@ -67,7 +67,7 @@ class RequestComposer extends StatelessWidget {
             'worker_employer_stock_sheet.t07',
             fallback2,
             style: TextStyle(
-              color: BsTokens.inkLight,
+              color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
               fontWeight: FontWeight.w800,
               fontSize: 15,
             ),
@@ -76,7 +76,7 @@ class RequestComposer extends StatelessWidget {
           CfgText(
             'worker_employer_stock_sheet.t08',
             fallback3,
-            style: TextStyle(color: BsTokens.mutedLight, fontSize: 12),
+            style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12),
           ),
           const SizedBox(height: BsTokens.space3),
           TextField(

@@ -62,6 +62,11 @@ const extra = G0.files.filter((f) => f.file && /\.dart$/.test(f.file)).map((f) =
 const genEntry = G0.files.find((f) => f.route === 'gen'); if (genEntry) console.log(`gen (HTML): ${genEntry.file} · ${(genEntry.bytes / 1024).toFixed(0)}KB · אטומים מוכחים ${genEntry.atoms} · לא-מוכחים ${genEntry.unproven} · עדשות פתוחות ${genEntry.lensesOpen}`);
 if (!spec && !extra.length) { console.log('⚪ אין אפיון ואין מסלול אחר ⇒ אין בנייה. ענה על השאלות ותנסה שוב.'); process.exit(0); }
 const gen = fs.readdirSync(process.env.GEN_OUT).filter((f) => genRe.test(f));
+// הכרעה-37: 36 חוקי «בלגן» על פלט-הדלת (מדידה, לא שער) — רק לאפליקציית-נייר (עור עם lookScope)
+{ const main0 = gen.find((f) => /_main\.dart$/.test(f)); const paperOut = main0 && /PureScope\(|DsPure\.skins/.test(fs.readFileSync(path.join(process.env.GEN_OUT, main0), 'utf8'));
+  if (paperOut) { const b = spawnSync(process.execPath, [path.join(ROOT, 'machtzev/generator/balagan-look.mjs')], { encoding: 'utf8', env: { ...process.env, BALAGAN_GEN: process.env.GEN_OUT, BALAGAN_DATA: process.env.GEN_DATA_OUT, BALAGAN_PREFIX: 'gen_app_' } });
+    const lines = (b.stdout || '').split('\n').filter((l) => /^🎯|^  ❌/.test(l)); const reds = lines.filter((l) => /^  ❌/.test(l));
+    console.log(`בלגן על הפלט: ${(lines[0] || '').replace(/^🎯 balagan-look: /, '')}`); const noToday = reds.filter((l) => /אין «היום»/.test(l)).length; if (noToday) console.log(`   ${noToday} מהאדומים = «אין מסך היום» (כללי-המוצר של בלגן, אין לדלת מסך כזה)`); for (const l of reds.filter((l) => !/אין «היום»/.test(l))) console.log(l.replace(/^  ❌/, '   ❌')); } }
 if (!HOST || !FLUTTER) { console.log(`⚪ לא-נמדד: ${!FLUTTER ? 'אין flutter' : 'אין BS_HOST'} — נפלטו ${gen.length + extra.length} קבצי Dart ל-${process.env.GEN_OUT}`); process.exit(2); }
 // מראה מינימלית: המסכים + התוכן שלהם; עצי-האטומים מועתקים פעם אחת (קיימים ⇒ לא נוגעים)
 const G = path.join(HOST, 'lib/genesis');

@@ -44,15 +44,15 @@ class LbRow extends StatelessWidget {
             child: Text(
               name,
               style: TextStyle(
-                color: BsTokens.inkLight,
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: me ? FontWeight.w800 : FontWeight.w600,
                 fontSize: 14,
               ),
             ),
           ),
           Text('🪙 $coins',
-              style: const TextStyle(
-                color: BsTokens.inkLight,
+              style: TextStyle(
+                color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                 fontWeight: FontWeight.w700,
                 fontSize: 13,
               )),

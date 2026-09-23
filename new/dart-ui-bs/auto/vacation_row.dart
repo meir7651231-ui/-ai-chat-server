@@ -43,8 +43,8 @@ class VacationRow extends StatelessWidget {
                   // These are worker requests (role=='worker' from the query),
                   // so the 🦺 worker icon is always correct here.
                   '🦺 ${workerName} · ${range}',
-                  style: const TextStyle(
-                    color: BsTokens.inkLight,
+                  style: TextStyle(
+                    color: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                     fontWeight: FontWeight.w800,
                     fontSize: 14,
                   ),
@@ -57,7 +57,7 @@ class VacationRow extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               reason,
-              style: const TextStyle(color: BsTokens.mutedLight, fontSize: 12.5),
+              style: TextStyle(color: dsWear(context, BsTokens.mutedLight, (l) => l.muted), fontSize: 12.5),
             ),
           ],
           if (pending) ...[
@@ -78,7 +78,7 @@ class VacationRow extends StatelessWidget {
                     key: ValueKey('contractor-vac-reject-${id}'),
                     label: label2,
                     color: Theme.of(context).colorScheme.surface,
-                    textColor: BsTokens.inkLight,
+                    textColor: dsWear(context, BsTokens.inkLight, (l) => l.ink),
                     bordered: true,
                     // Fire-and-forget the async reject (reason prompt) — the
                     // Future is intentionally unawaited (tear-off).
