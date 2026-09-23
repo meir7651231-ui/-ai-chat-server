@@ -6,6 +6,10 @@
 //   אפס מילון-דומייני: שמות מהספק, אטומים מחיפוש-פתוח (switch לסרגל · group לחלקים · fact(label+value) לעובדות · action לפעולות).
 import { makeConsts, write, isPaper } from './render-ds.mjs';
 import { searchOp, wireAtom, pickWired, particleWidgets } from './particles.mjs';
+import { judge, ledgerLine, KIND } from '../../yeshiva/atom-psak.mjs';   // הישיבה על בחירת-אטום (L114)
+import { skinWired } from './look.mjs';
+import { buildAtlas } from './atlas.mjs';
+let ATL = null; const widgetOf = (cls) => ((ATL ||= buildAtlas({ forge: isPaper() })).widgets.find((w) => w.cls === cls) || null);
 import { L, T } from './chrome.mjs';
 import fs0 from 'node:fs';
 const SL0 = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
@@ -27,12 +31,13 @@ export function renderRootPage(slug, { root, children, report, title }) {
   const { k, dump } = makeConsts(slug);
   const imports = new Set([`import 'gen_${root.slug}.dart';`, "import 'gen_behaviors.dart';"]);   // G34ב · שכבת-ההרכבה
   const firstWired = (pick, ctx) => { const w = pickWired([...pick.atoms, ...pick.alts], (c) => wireAtom(c, ctx)); if (w) imports.add(impOf(w)); return w; };
+  const judgedWired = (pick, purpose, ctx) => { const r = judge({ purpose, cands: [...pick.atoms, ...pick.alts], widgetOf, skinWired, wire: (c) => wireAtom(c, ctx) }); console.log(ledgerLine(`${root.name} · ${purpose.text}`, r)); if (r.pick) imports.add(impOf(r.pick)); return r.pick; };   // עובדה ⇒ הישיבה (L114)
   const goal = `${root.name} ${title}`;
   const notes = [];
   // עובדות: שדות-השורש (בלי מקוננים) — אטום label+value (חיפוש fact עם צורך label+value ⇒ שורת מפתח-ערך, לא שבב)
   const factFields = root.schema.filter((f) => !(f.members && f.members.length));
   // עובדה-בכרטיס = label+value בלי גליף (אריח-KPI דורש glyph ⇒ נפסל; נשאר שורת מפתח-ערך) — משפחת-stat, צלילה ל-12 חלופות
-  const facts = factFields.map((f) => firstWired(searchOp('magnitude', goal, ['label', 'value'], 12), { label: k(f.label), value: { str: f.type === 'num' ? `_fmtNum(r0[${k(f.label)}] ?? '')` : f.type === 'date' ? `_fmtDate(r0[${k(f.label)}] ?? '')` : `(r0[${k(f.label)}] ?? '')`, num: `(num.tryParse(r0[${k(f.label)}] ?? '') ?? 0)` }, sub: k(''), tone: 0, must: ['value'] }));
+  const facts = factFields.map((f) => judgedWired(searchOp('magnitude', goal, ['label', 'value'], 12), { kind: KIND.fact, need: ['label', 'value'], text: f.label }, { label: k(f.label), value: { str: f.type === 'num' ? `_fmtNum(r0[${k(f.label)}] ?? '')` : f.type === 'date' ? `_fmtDate(r0[${k(f.label)}] ?? '')` : `(r0[${k(f.label)}] ?? '')`, num: `(num.tryParse(r0[${k(f.label)}] ?? '') ?? 0)` }, sub: k(''), tone: 0, must: ['value'] }));
   if (facts.some((w) => !w)) notes.push(L.rootNoFact);
   const factRows = factFields.map((f, i) => facts[i] ? `if ((r0[${k(f.label)}] ?? '').trim().isNotEmpty) ${facts[i].call}` : null).filter(Boolean);
   const sectionOf = (label, children) => { const g = firstWired(searchOp('group', goal), { label, children, sub: label, tone: 0 }); return g ? (/children:/.test(g.call) ? g.call : `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${g.call}, ${children.join(', ')}])`) : `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${children.join(', ')}])`; };
@@ -473,7 +478,18 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
   if (home) imports.add(`import 'gen_${home.slug}.dart';`);
   const tabs = (homeIsRoot ? [`_RootTab()`, dashboard ? `const ${dashboard.cls}()` : null, `const ${hub.cls}()`] : [home ? `const ${home.cls}()` : dashboard ? `const ${dashboard.cls}()` : null, `_RootTab()`, `const ${hub.cls}()`]).filter(Boolean);
   for (const x of extras) imports.add(`import 'gen_${x.slug}.dart';`); if (seed) imports.add(`import 'gen_${seed.slug}.dart';`);
-  const extraRows = extras.map((x) => { const sub = x.live ? `appStore.records('${x.live.slug}').where((r) => (double.tryParse(r[${k(x.live.field)}] ?? '') ?? double.nan) ${x.live.op} ${x.live.n}).length.toString() + ' · ' + ${k(x.sub || String(x.value))}` : k(x.value != null ? String(x.value) : (x.sub || '')); return `Padding(padding: const EdgeInsets.only(bottom: 6), child: DsNavTile(glyph: ${k(x.icon || '🔔')}, title: ${k(x.name)}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}())))),`; }).join('\n      ');   // live: כמה רשומות עונות לתנאי של הבעלים עכשיו
+  // מסך-ליד (התראה) = שיעור: סף במקור ⇒ הישיבה פוסקת על המועמדים (ring/gauge/alert/headline); אין שורד ⇒ שורה (היום) + פנקס
+  const judged = extras.map((x) => {
+    if (!x.live) return null;
+    const purpose = { kind: KIND.shiur, need: ['label', 'value', 'onTap'], threshold: x.live.n, op: x.live.op, text: x.name };
+    const cands = [...new Set(['ring', 'gauge', 'alert', 'headline'].flatMap((op) => { const pk = searchOp(op, x.name, null, 12); return [...pk.atoms, ...pk.alts]; }))];
+    const live = `appStore.records('${x.live.slug}').where((r) => (double.tryParse(r[${k(x.live.field)}] ?? '') ?? double.nan) ${x.live.op} ${x.live.n}).length`;
+    const r = judge({ purpose, cands, widgetOf, skinWired, wire: (c) => wireAtom(c, { label: k(x.name), value: { str: `${live}.toString()`, num: `${live}.toDouble()` }, sub: k(x.sub || ''), glyph: k(x.icon || '🔔'), message: k(x.name), nav: `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}()))` }) });
+    console.log(ledgerLine(`${L.shellHome || 'בית'} · ${x.name}`, r));
+    if (r.pick) imports.add(impOf(r.pick));
+    return r.pick;
+  });
+  const extraRows = extras.map((x, i) => { if (judged[i]) return `Padding(padding: const EdgeInsets.only(bottom: 6), child: ${judged[i].call}),`; const sub = x.live ? `appStore.records('${x.live.slug}').where((r) => (double.tryParse(r[${k(x.live.field)}] ?? '') ?? double.nan) ${x.live.op} ${x.live.n}).length.toString() + ' · ' + ${k(x.sub || String(x.value))}` : k(x.value != null ? String(x.value) : (x.sub || '')); return `Padding(padding: const EdgeInsets.only(bottom: 6), child: DsNavTile(glyph: ${k(x.icon || '🔔')}, title: ${k(x.name)}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}())))),`; }).join('\n      ');   // live: כמה רשומות עונות לתנאי של הבעלים עכשיו
   const paper = isPaper();
   const quick = paper && root.descField ? `DsQuickAdd(hint: ${k(T('quickAddHint', { action: T('rootAdd', { ent: root.name }) }))}, onSubmit: (s) => appStore.add('${root.slug}', {${k(root.descField)}: s}))` : null;   // G30 · D2: יצירה = טקסט בלבד
   const paletteItems = `[DsPaletteItem(label: ${k(T('rootAdd', { ent: root.name }))}, sub: ${k(L.keysHint)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${root.cls}()))), for (final r in appStore.records('${root.slug}')) DsPaletteItem(label: ${disp}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? ''))))]`;

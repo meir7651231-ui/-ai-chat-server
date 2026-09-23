@@ -1,0 +1,69 @@
+// ══════════════════════════════════════════════════════════════════════════
+//  yeshiva/atom-psak.mjs — 🕯️ **הישיבה על בחירת-אטום.** (הכרעת-בעלים 23.9: «זה לא מה שהישיבה עושה?» ⇒ «תתחיל לחבר»)
+//  ──────────────────────────────────────────────────────────────────────────
+//  L114: «בחירה בין מועמדים — לא בתוך המנוע; המנוע שואל את הישיבה». עד כאן המנוע בחר לפי
+//  ספירת-חורים (pickWired: הראשון-שמתחבר / הכי-הרבה-מולא). כאן כל מועמד עולה לפסק, לפי
+//  המהלכים של הפוסק (PSAK.md), על **צורת** המטרה — לא על משמעות:
+//    · §20-ג      שקע-חובה בלי דאטה           ⇒ פליגא
+//    · שיעור      סף במקור (מספר+יחס) ואין חור לסף/מצב ⇒ פליגא   («ציון מתחת ל-55» ≠ מונה)
+//    · איכא דאמרי ערכים במקור ואין חור לבחירה   ⇒ פליגא
+//    · ייתור      חור-קישוט שאין לו נתון (trend/delta/series — L73) ⇒ פליגא
+//    · ורמינהו    כל מועמד נפסק בשמו לפני «אין»; «אין» = לא-חיפשת
+//    · ממה נפשך   שני שורדים עם אותם חורים מלאים ⇒ אין שאלה, הראשון
+//    · הכרעה-20א  אחרת: מכסה הכי הרבה מהצורך, ואז הכי-מעט חורים נותרים
+//  🔒 אפס היוריסטיקה של יופי, אפס שם-אטום בניקוד (L83). כל הכרעה נושאת מהלך וראיה.
+//  שימוש: judge({ purpose, cands, wire, widgetOf }) ⇒ { pick, rulings, said }
+//    purpose = { kind: 'עובדה'|'שיעור', need: ['label','value',…], threshold?: n, op?: '<'|'>', enumVals?: [] , text }
+//    cands   = ['Cls@…', …] (מה שהחיפוש הביא, בסדרו) · wire(cls) ⇒ {cls, filled, sockets, call, file} | null
+//    widgetOf(cls) ⇒ { types: Map, required: Set, positional: [] } (האטלס)
+// ══════════════════════════════════════════════════════════════════════════
+export const KIND = { fact: 'עובדה', shiur: 'שיעור' };   // סוגי-מטרה (צורה): עובדה = תווית+ערך · שיעור = סף במקור
+const SOCK_THR = /^(threshold|thr|limit|max|min|target|goal|of|total|cap|bound)$/i;
+const SOCK_STATE = /^(tone|severity|level|status|state|ok|danger|warn|alert)$/i;
+const SOCK_ENUM = /^(items|options|values|choices)$/i;
+const SOCK_DECOR = /^(trend|delta|series|spark|sparkline|history|points|change|diff)$/i;
+const SOCK_MATCH = { label: /^(label|title|caption|name|text)$/, value: /^(value|val|amount|total|count|num)$/, sub: /^(sub|subtitle|desc|body|note)$/, glyph: /^(glyph|emoji|icon)$/, onTap: /^(onTap|onPressed)$/, message: /^(message)$/, items: SOCK_ENUM };
+
+export function judge({ purpose, cands, wire, widgetOf, skinWired = null }) {
+  const rulings = [];
+  const survivors = [];
+  for (const cand of cands) {
+    const cls = String(cand).split('@')[0];
+    const w0 = widgetOf ? widgetOf(cls) : null;
+    const names = w0 ? [...w0.types.keys()].filter((n) => !/^(key|child|children|bare)$/.test(n)) : [];
+    const w = wire(cls);
+    if (!w) { const skin = skinWired && w0 && !skinWired(w0.file); rulings.push({ cls, verdict: 'פליגא', move: skin ? 'לובש-עור (L102)' : '§20-ג', why: skin ? 'צבע קשיח — לא לובש את העור' : 'שקע-חובה בלי דאטה' }); continue; }
+    const unfilled = names.filter((n) => !w.filled.includes(n));
+    // שיעור: יש סף במטרה ⇒ האטום חייב חור לסף או למצב-חריגה
+    if (purpose && purpose.kind === KIND.shiur) {
+      const has = names.some((n) => SOCK_THR.test(n) || SOCK_STATE.test(n));
+      if (!has) { rulings.push({ cls, verdict: 'פליגא', move: 'שיעור', why: `סף ${purpose.op || ''}${purpose.threshold} במקור — אין חור לסף/מצב (חורים: ${names.join(',') || '—'})` }); continue; }
+    }
+    // איכא דאמרי: ערכים במקור ⇒ חור לבחירה
+    if (purpose && purpose.enumVals && purpose.enumVals.length && !names.some((n) => SOCK_ENUM.test(n))) { rulings.push({ cls, verdict: 'פליגא', move: 'איכא דאמרי', why: `${purpose.enumVals.length} ערכים במקור — אין חור לבחירה` }); continue; }
+    // ייתור: חור-קישוט-של-נתון שלא מולא = אות-שווא (L73)
+    const decor = unfilled.filter((n) => SOCK_DECOR.test(n));
+    if (decor.length) { rulings.push({ cls, verdict: 'פליגא', move: 'ייתור', why: `קישוט בלי נתון: ${decor.join(',')}` }); continue; }
+    const need = (purpose && purpose.need) || [];
+    const covered = need.filter((k) => (SOCK_MATCH[k] || new RegExp(`^${k}$`)).source && w.filled.some((n) => (SOCK_MATCH[k] || new RegExp(`^${k}$`)).test(n)));
+    // ייתור · חובה בלי שדה: דרישה במטרה (value/label/…) שאין לה חור באטום ⇒ פליגא — המספר הוא התשובה, אטום בלי מקום למספר אינו תשובה
+    const missingNeed = need.filter((k) => !covered.includes(k));
+    if (missingNeed.length) { rulings.push({ cls, verdict: 'פליגא', move: 'ייתור · חובה בלי שדה', why: `אין חור ל-${missingNeed.join(',')} (מולאו: ${w.filled.join(',')})` }); continue; }
+    survivors.push({ cls, w, covered: covered.length, left: unfilled.length, filledKey: [...w.filled].sort().join(',') });
+    rulings.push({ cls, verdict: 'חד שיעורא', move: 'ורמינהו', why: `מתחווט (${w.filled.join(',')})${unfilled.length ? ` · נותרו ${unfilled.length}` : ''} · מכסה ${covered.length}/${need.length}` });
+  }
+  if (!survivors.length) return { pick: null, rulings, said: `אין: ${cands.length} מועמדים נפסקו בשמם` };
+  // ממה נפשך: אותם חורים מלאים ⇒ אין שאלה ⇒ הראשון. אחרת הכרעה-20א: הכי-הרבה-מהצורך, ואז הכי-מעט-נותרים; שוויון ⇒ סדר-החיפוש
+  const best = survivors.reduce((a, b) => (b.covered > a.covered || (b.covered === a.covered && b.left < a.left)) ? b : a, survivors[0]);
+  const same = survivors.filter((s) => s.filledKey === best.filledKey);
+  const chosen = same.length > 1 ? same[0] : best;
+  const move = same.length > 1 && same[0].cls !== best.cls ? 'ממה נפשך' : same.length > 1 ? 'ממה נפשך' : 'הכרעה-20א';
+  rulings.push({ cls: chosen.cls, verdict: 'הלכתא', move, why: `מכסה ${chosen.covered}/${(purpose && purpose.need || []).length} · נותרו ${chosen.left}${same.length > 1 ? ` · ${same.length} מועמדים עם אותם חורים מלאים` : ''}` });
+  return { pick: chosen.w, rulings, said: `${chosen.cls} (${move})` };
+}
+
+/** שורת-פנקס אחת לחלקיק: מי נבחר, ומי נפסל ולמה (L114: מהלך בלי דיווח = חצי מהלך). */
+export function ledgerLine(name, r) {
+  const fell = r.rulings.filter((x) => x.verdict === 'פליגא').map((x) => `${x.cls}: ${x.move} — ${x.why}`);
+  return `⚖️ ${name} ⇒ ${r.pick ? r.said : r.said}${fell.length ? ` · פליגא ${fell.length}: ${fell.slice(0, 4).join(' | ')}${fell.length > 4 ? ' …' : ''}` : ''}`;
+}

@@ -11,6 +11,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { formOf, specOf, answerFor, toks, serverDeclOf, lookDeclOf, headOf, planBehaviors } from './mavin.mjs';
+import { askMaimatai } from './kashe.mjs';   // המקשה (18 גלאים) — שאלות על המשפט, לא הנחות
+import { rule as yeshivaRule } from './purpose.mjs';   // הפוסק (9 מהלכים) על האפיון שיצא
 import { detectAllClauses, relOpOf, emitAppFrom } from '../machtzev/generator/capability.mjs';
 import { retrieveScreen } from '../machtzev/generator/retrieve-screen.mjs';
 import * as R from '../machtzev/root.mjs';
@@ -98,7 +100,7 @@ const inRepo = (p) => !p || path.resolve(p).startsWith(path.resolve(R.ROOT, 'new
 async function runAppDs(spec, files, notes, questions = [], opts = {}) {
   let app = null;
   if (spec && (inRepo(process.env.GEN_OUT) || inRepo(process.env.GEN_DATA_OUT))) { notes.push('⛔ app-ds לא הופעל: GEN_OUT/GEN_DATA_OUT חייבים להצביע מחוץ ל-new/ לפני הייבוא הראשון (שומר-ניקיון)'); }
-  else if (spec) { const { buildApp } = await import('../machtzev/generator/app-ds.mjs'); const logs = []; const _l = console.log; console.log = (...a) => logs.push(a.join(' ')); try { app = buildApp(spec, { writePlan: false, ...opts }); } finally { console.log = _l; } for (const l of logs) if (/נמצאו-ומחווטים/.test(l)) notes.push(l.slice(0, 140)); files.push({ route: 'appds', screens: app.screens.map((s) => `${s.kind}:${s.name}`) }); }
+  else if (spec) { const { buildApp } = await import('../machtzev/generator/app-ds.mjs'); const logs = []; const _l = console.log; console.log = (...a) => logs.push(a.join(' ')); try { app = buildApp(spec, { writePlan: false, ...opts }); } finally { console.log = _l; } for (const l of logs) if (/נמצאו-ומחווטים/.test(l)) notes.push(l.slice(0, 140)); else if (/^⚖️/.test(l)) notes.push(l.slice(0, 400)); files.push({ route: 'appds', screens: app.screens.map((s) => `${s.kind}:${s.name}`) }); }
   if (app) { const { parseLookLine } = await import('../machtzev/generator/app-ds.mjs'); markSilentDefaults(spec, notes, questions, parseLookLine); }
   return app;
 }
@@ -184,12 +186,21 @@ export async function generateFromDoc(md, { outDir, name = 'doc' } = {}) {
 /** הפעלה: כל מסלול למנוע שלו; כתיבה רק ל-outDir. מחזיר את הקבצים שנוצרו ופערים. */
 export async function generateAll(sentence, { answers = {}, outDir, name = 'mavin', proposals = false } = {}) {
   const form = formOf(sentence);
-  const { routes: allRoutes, spec, skipped } = routeOf(form, answers, { proposals });
+  const routed = routeOf(form, answers, { proposals });
+  const { routes: allRoutes, skipped } = routed; let spec = routed.spec;
+  // הישיבה על המשפט ועל האפיון (הכרעת-בעלים 23.9 «תתחיל לחבר»): (א) המקשה ⇒ קושיות (לא הנחות) · (ב) הפוסק ⇒ מה שהוכרע מוחל, מתגים ⇒ שאלות
+  const yesh = { kushyot: [], rulings: [], switches: [], note: null };
+  try { const k = askMaimatai(sentence); if (!k.available || !k.ok) yesh.note = `מקשה: ${k.reason}`; else yesh.kushyot = (k.seeds || []).map((x) => ({ kind: x.kind, text: x.text })); } catch (e) { yesh.note = `מקשה: ${String(e.message || e).slice(0, 120)}`; }
+  if (spec) { try { const y = yeshivaRule(sentence, spec); yesh.rulings = y.rulings || []; yesh.switches = y.switches || []; if (y.changed && y.spec && y.spec.trim()) spec = y.spec; } catch (e) { yesh.note = (yesh.note ? yesh.note + ' · ' : '') + `פוסק: ${String(e.message || e).slice(0, 120)}`; } }
   // הצעות נבנות רק לפי בקשה; אחרת נרשמות בהערות (מוצע, לא נכנס לבד)
   const routes = proposals ? allRoutes : allRoutes.filter((r) => !r.proposal);
   const held = allRoutes.filter((r) => r.proposal && !proposals);
   fs.mkdirSync(outDir, { recursive: true });
   const files = [], notes = [], questions = [];
+  for (const q of yesh.kushyot) questions.push({ thing: 'הישיבה', ask: q.kind, q: `${q.kind}: ${q.text}` });
+  for (const sw of yesh.switches) questions.push({ thing: 'הישיבה', ask: sw.move || sw.kind, q: `${sw.move || sw.kind}: ${sw.text}` });
+  if (yesh.note) notes.push(yesh.note);
+  if (yesh.rulings.length) notes.push(`הפוסק: ${yesh.rulings.filter((r) => r.decided).length} הוכרעו · ${yesh.switches.length} מתגים`);
   for (const r of held) notes.push(`הצעה לא נבנתה («${r.thing}» ⇒ ${r.route}): ${r.why.replace(/^הצעה \(תוכן ממקום אחר\): /, '')} — לבנייה: proposals / --proposals`);
   // 1 · capability — פעם אחת לכל קטע-תנאי
   const capSegs = [...new Map(routes.filter((r) => r.route === 'capability').map((r) => [r.seg, r.clauses])).entries()];

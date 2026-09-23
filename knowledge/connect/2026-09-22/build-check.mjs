@@ -51,6 +51,8 @@ G0 = await generateAll(sentence, { answers, outDir: process.env.GEN_OUT, name: '
 }
 for (const r of G0.routes) console.log(`  מסלול · «${r.thing}» ⇒ ${r.route} · ${r.why}`);
 for (const n of G0.notes) console.log('  ' + n);
+const yq = (G0.questions || []).filter((q) => q.thing === 'הישיבה'); if (yq.length) { console.log(`קושיות הישיבה (המקשה · הפוסק): ${yq.length}`); for (const q of yq) console.log(`  ⚖ ${q.q.slice(0, 160)}`); }
+G0.questions = (G0.questions || []).filter((q) => q.thing !== 'הישיבה');
 if (G0.questions && G0.questions.length) { console.log(`שאלות (מה שלא נאמר, ובמקומו ברירת-מחדל של מנוע): ${G0.questions.length}`); for (const q of G0.questions.slice(0, 12)) console.log(`  ? ${q.q}`); if (G0.questions.length > 12) console.log(`  … ועוד ${G0.questions.length - 12}`); }
 const appEntry = G0.files.find((f) => f.route === 'appds'); if (appEntry) console.log(`מסכים: ${appEntry.screens.join(' · ')}`);
 const sv = G0.files.find((f) => f.route === 'server'); if (sv) console.log(`שרת: ${sv.count} קבצים ב-${sv.dir} · ישויות ${sv.entities.join(', ')}`);
