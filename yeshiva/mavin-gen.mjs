@@ -16,6 +16,32 @@ import { retrieveScreen } from '../machtzev/generator/retrieve-screen.mjs';
 import * as R from '../machtzev/root.mjs';
 
 const MAN = path.join(R.ROOT, 'screens-seed/manifests');
+// ── מודולי-הזהב (quarry-golden ⇒ golden-fragments.json · render-module.assembleByOps): פלוס לתחום שכותרות-השברים שלו בעברית ──
+//    בחירת-מודול לפי צורה: גזעי-מילות-היחידה מול גזעי-כותרות-השברים; גזע שמופיע ב-≥4 מ-9 מודולים אינו מבחין (כמו «מפוזר»). המודול-המאגד (hub) לא נבחר —
+//    הוא מפנה למסכי-אחים שאינם בקומפוזיציה (נמדד: 6 שגיאות-מחלקה). קריאה בלבד; הקוד המורכב נכתב רק ל-outDir.
+const GOLD = path.join(R.GEN_DIR, 'golden-fragments.json');
+let _gold = null;
+function goldIndex() {
+  if (_gold) return _gold;
+  if (!fs.existsSync(GOLD)) return (_gold = { mods: [], stemsOf: new Map(), df: new Map() });
+  const c = JSON.parse(fs.readFileSync(GOLD, 'utf8'));
+  const heTok = (t) => (String(t).match(/[֐-׿]+/g) || []); const stem = (w) => w.replace(/(ים|ות|ה)$/, '');
+  const stemsOf = new Map(), df = new Map();   // stemsOf: מודול ⇒ Map(גזע ⇒ tf = כמה שברים) · df: גזע ⇒ בכמה מודולים
+  for (const f of c.fragments) { if (!/[֐-׿]/.test(f.header || '')) continue; const m = stemsOf.get(f.module) || new Map(); for (const w of new Set(heTok(f.header).map(stem))) if (w.length >= 3) m.set(w, (m.get(w) || 0) + 1); stemsOf.set(f.module, m); }
+  for (const [, m] of stemsOf) for (const w of m.keys()) df.set(w, (df.get(w) || 0) + 1);
+  return (_gold = { mods: [...stemsOf.keys()], stemsOf, df });
+}
+export function goldModuleFor(label) {
+  const { mods, stemsOf, df } = goldIndex(); if (!mods.length) return null;
+  const stem = (w) => w.replace(/(ים|ות|ה)$/, '');
+  const he = toks(label).filter((w) => /[֐-׿]/.test(w)); if (he.length > 2) return null;   // ≥3 מילים = סעיף, לא דבר (נמדד: «אם הרופא פנוי» ⇒ rooms)
+  const ws = [...new Set(he.map(stem).filter((w) => w.length >= 3 && df.has(w)))];
+  // ציון = Σ tf(גזע,מודול): המודול שכותרותיו חוזרות על הגזע הכי הרבה. דורש נושא (tf ≥ 2) ומנצח יחיד (שוויון ⇒ null).
+  // (נמדד: משקל 1/df עם סף 1 תפס 81 יחידות דרך אזכור-יחיד: «יכול»·«מסך»; תלמיד ב-7 מודולים אבל students:4 > attendance:3.)
+  let best = null, bs = 0, second = 0, bw = [];
+  for (const m of mods) { if (/\/schoolos\.dart$/.test(m)) continue; const tf = stemsOf.get(m); let sc = 0; const hit = []; for (const w of ws) if (tf.has(w)) { sc += tf.get(w); hit.push(w); } if (sc > bs) { second = bs; bs = sc; best = m; bw = hit; } else if (sc > second) second = sc; }
+  return best && bs >= 2 && bs > second ? { module: best, score: bs, words: bw } : null;
+}
 const GEN_SCREEN = path.join(R.ROOT, 'machtzev/assemble/gen-screen.mjs');
 function loadManifest(screen) {   // קריאה בלבד (העתק של combine-screens.loadManifest — אינו מיוצא שם)
   const f = path.join(MAN, `screens__${screen}.manifest.json`);
@@ -37,6 +63,8 @@ export function routeOf(form, answers = {}) {
     if (entLabels.has(t.label)) { routes.push({ thing: t.label, route: 'appds', why: 'דבר עם שדות ⇒ ישות' }); continue; }
     const [b] = retrieveScreen(t.label, 1);
     if (b && b.score > 0) { routes.push({ thing: t.label, route: 'combine', why: `דומה למסך רשום ${b.name} (${(+b.score).toFixed(2)})`, screen: b.name, score: +b.score }); continue; }
+    const g = goldModuleFor(t.label);   // אחרי combine: תוספת בלבד — לא מחליף מסלול קיים («רק את הפלוסים»)
+    if (g) { routes.push({ thing: t.label, route: 'gold', why: `כותרות-זהב של ${path.basename(g.module)} חוזרות על «${g.words.join(' ')}» ${g.score} פעמים`, module: g.module }); continue; }
     routes.push({ thing: t.label, route: 'none', why: 'אין תנאי, אין שדות, אין מסך דומה ⇒ שאלה' });
   }
   return { routes, spec: spec.spec, skipped: spec.skipped, builtin: spec.builtin };
@@ -58,6 +86,10 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   const inRepo = (p) => !p || path.resolve(p).startsWith(path.resolve(R.ROOT, 'new'));
   if (spec && (inRepo(process.env.GEN_OUT) || inRepo(process.env.GEN_DATA_OUT))) { notes.push('⛔ app-ds לא הופעל: GEN_OUT/GEN_DATA_OUT חייבים להצביע מחוץ ל-new/ לפני הייבוא הראשון (שומר-ניקיון)'); }
   else if (spec) { const { buildApp } = await import('../machtzev/generator/app-ds.mjs'); const logs = []; const _l = console.log; console.log = (...a) => logs.push(a.join(' ')); try { app = buildApp(spec, { writePlan: false }); } finally { console.log = _l; } for (const l of logs) if (/נמצאו-ומחווטים/.test(l)) notes.push(l.slice(0, 140)); files.push({ route: 'appds', screens: app.screens.map((s) => `${s.kind}:${s.name}`) }); }
+  // 2ב · gold — מודול-זהב מורכב-מחדש מהשברים לישות (render-module.assembleByOps), נכתב רק ל-outDir
+  const golds = [...new Map(routes.filter((r) => r.route === 'gold').map((r) => [r.module + '|' + r.thing, r])).values()];
+  if (golds.length) { const RM = await import('../machtzev/generator/render-module.mjs'); let gi = 0;
+    for (const r of golds) { try { const a = await RM.assembleByOps({ module: r.module, entity: r.thing }); const f = path.join(outDir, `gen_gold${++gi}.dart`); fs.writeFileSync(f, a.code || ''); files.push({ route: 'gold', file: f, thing: r.thing, module: path.basename(r.module), fragments: `${a.fragments}/${a.of}` }); } catch (e) { notes.push(`זהב ${r.thing}: ${String(e.message || e).slice(0, 120)}`); } } }
   // 3 · combine — מיזוג-סקציות בזיכרון ⇒ מניפסט ל-outDir ⇒ gen-screen ⇒ outDir
   const comb = routes.filter((r) => r.route === 'combine');
   if (comb.length) {
