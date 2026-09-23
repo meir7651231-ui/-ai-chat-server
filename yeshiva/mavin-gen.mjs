@@ -254,8 +254,9 @@ async function expandDefinitions(sentence, form, routed, answers, proposals) {
 export async function generateAll(sentence, { answers = {}, outDir, name = 'mavin', proposals = false } = {}) {
   let form = formOf(sentence);
   let routed = routeOf(form, answers, { proposals });
-  const defs = await expandDefinitions(sentence, form, routed, answers, proposals);
-  if (defs.changed) { sentence = defs.sentence; form = formOf(sentence); routed = routeOf(form, answers, { proposals }); }
+  // הגדרה של הגדרה (הכרעת-בעלים 23.9): אחרי החלפה המשפט נקרא שוב, ומילה שנשארה זרה מוגדרת בסיבוב הבא — עד שאין שינוי (תקרה 5)
+  const defs = { notes: [], questions: [] };
+  for (let pass = 0; pass < 5; pass++) { const d = await expandDefinitions(sentence, form, routed, answers, proposals); defs.notes.push(...d.notes); if (!d.changed) { defs.questions.push(...d.questions); break; } sentence = d.sentence; form = formOf(sentence); routed = routeOf(form, answers, { proposals }); }
   const { routes: allRoutes, skipped } = routed; let spec = routed.spec;
   // הישיבה על המשפט ועל האפיון (הכרעת-בעלים 23.9 «תתחיל לחבר»): (א) המקשה ⇒ קושיות (לא הנחות) · (ב) הפוסק ⇒ מה שהוכרע מוחל, מתגים ⇒ שאלות
   const yesh = { kushyot: [], rulings: [], switches: [], note: null };
