@@ -209,7 +209,7 @@ export function needsFrom(form, answers = {}) {
 // ── צורה ⇒ אפיון למנוע 4 (app-ds.buildApp): `ישות <דבר> עם <שדות>` · `לוח בקרה עם מונה(<דבר>)` · `תפקיד בודק: הכל`.
 //    דבר בלי שדות (לא מהמשפט ולא מתשובה) אינו נכנס — app-ds פוסל ישות-בלי-שדות (§22), והמנוע שואל במקום להמציא. ──
 export function specOf(form, answers = {}) {
-  const lines = [], skipped = [];
+  const lines = [], skipped = [], builtin = [];
   const ents = form.things.filter((t) => t.many || t.fields.length || (answerFor(t, answers).fields));
   const names = new Set(ents.map((t) => t.label));
   for (const t of ents) {
@@ -224,7 +224,7 @@ export function specOf(form, answers = {}) {
   for (const t of form.things) { const a = answerFor(t, answers); if (t.rel && a.rel === 'act') { const st = (w) => stripLead(stem(w)).filter((f) => f.length >= 3); const ent = ents.find((e) => toks(e.label).some((lw) => st(t.rel.subject).includes(stem(lw)))) || ents.find((e) => e.label === t.label); if (ent) lines.push(`חלקיק ${ent.label}: [פעולה] ${t.rel.words.join(' ')}`); } }
   // תגי-חלקיק מהתשובות (הטבלה הקיימת: shapeOf ⇒ compose-engine.ops): חיפוש · סינון · ריק · ייצוא · הודעה
   for (const t of ents) { const a = answerFor(t, answers); const acts = a.acts || [];
-    if (acts.includes('search')) lines.push(`חלקיק ${t.label}: [חיפוש]`);
+    if (acts.includes('search')) builtin.push(`${t.label}: חיפוש`);   // מסך-ישות של app-ds כבר נושא DsSearch (render-ds:734) — שורת-חלקיק כפולה רק נופלת על חיווט
     if (acts.includes('filter')) lines.push(`חלקיק ${t.label}: [סינון]`);
     if (acts.includes('empty')) lines.push(`חלקיק ${t.label}: [ריק] ${a.emptyText || t.label}`);   // טקסט = של הבעלים; אין ⇒ התווית, לא המצאה
     if (acts.includes('export')) lines.push(`חלקיק ${t.label}: [ייצוא]`);
@@ -238,7 +238,7 @@ export function specOf(form, answers = {}) {
   for (const t of ents) { const a = answerFor(t, answers); if (!(a.acts && a.acts.includes('sum'))) continue; metrics.push(`מונה(${t.label})`); for (const f of (a.fields || [])) if (f.type === 'num') metrics.push(`סכום(${t.label}.${f.label})`); }
   if (metrics.length) lines.push(`לוח בקרה עם ${metrics.join(', ')}`);
   if (lines.length) lines.push('תפקיד בודק: הכל');
-  return { spec: lines.join('\n'), skipped };
+  return { spec: lines.join('\n'), skipped, builtin };
 }
 
 // ── יומן תשובות: הצעה לפעם הבאה, לא עובדה ──

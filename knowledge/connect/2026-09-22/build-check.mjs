@@ -20,8 +20,8 @@ fs.mkdirSync(process.env.GEN_OUT, { recursive: true }); fs.mkdirSync(process.env
 const { formOf, specOf } = await import(path.join(ROOT, 'yeshiva/mavin.mjs'));
 const { buildApp } = await import(path.join(ROOT, 'machtzev/generator/app-ds.mjs'));
 const form = formOf(sentence);
-const { spec, skipped } = specOf(form, answers);
-console.log(`«${sentence}»\nאפיון:\n${spec.split('\n').map((l) => '  ' + l).join('\n') || '  (ריק)'}${skipped.length ? `\n  לא נכנסו (בלי שדות ⇒ שאלה): ${skipped.join(', ')}` : ''}`);
+const { spec, skipped, builtin } = specOf(form, answers);
+console.log(`«${sentence}»\nאפיון:\n${spec.split('\n').map((l) => '  ' + l).join('\n') || '  (ריק)'}${skipped.length ? `\n  לא נכנסו (בלי שדות ⇒ שאלה): ${skipped.join(', ')}` : ''}${builtin && builtin.length ? `\n  כבר מובנה במסך-הישות: ${builtin.join(' · ')}` : ''}`);
 if (!spec) { console.log('⚪ אין אפיון ⇒ אין בנייה. ענה על השדות ותנסה שוב.'); process.exit(0); }
 const app = buildApp(spec, { writePlan: false });
 console.log(`מסכים: ${app.screens.map((s) => `${s.kind}:${s.name}${s.sub ? ` (${s.sub})` : ''}`).join(' · ')}`);
