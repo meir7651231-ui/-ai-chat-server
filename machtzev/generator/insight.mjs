@@ -64,6 +64,8 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   const resolve = (op, value, label, depth, cond) => {
     const w = pick(op, NEEDS[op] || ['label'], ctxFor(op, value, label));
     if (w) { parts.push({ cond, call: w.call }); manifest.flow.push(`${value} ⇒ ${op}(${w.cls})`); return true; }
+    // «חוצבים ומרכיבים»: לפני שיורדים — מה יש בקטלוג-השברים של הזהב (quarry-golden ⇒ render-module) לפעולה הזאת. נרשם כחלופה (הצעה — נבנית רק בבקשה, כמו כל זהב), לא נבנה לבד
+    try { const G = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'golden-fragments.json'), 'utf8')); const fr = (G.fragments || G).filter((f) => (f.ops || []).includes(op)); if (fr.length) { const byMod = {}; for (const f of fr) byMod[f.module] = (byMod[f.module] || 0) + 1; (manifest.alternatives ||= []).push({ op, goldenFragments: fr.length, modules: byMod, note: 'שברי-זהב (כהים, ליטרלים) — לבנייה דרך render-module בבקשה מפורשת' }); manifest.flow.push(`${op}: ${fr.length} שברי-זהב בקטלוג (${Object.keys(byMod).length} מודולים) — הצעה, לא נבנה`); } } catch { /* אין קטלוג ⇒ אין חלופה */ }
     const sub = D.decompose[op];
     if (!sub || depth >= D.maxDepth) return false;
     manifest.flow.push(`${op}: אין אטום ⇒ מפרקים ל-${sub.map((x) => x.op).join('+')}`);
