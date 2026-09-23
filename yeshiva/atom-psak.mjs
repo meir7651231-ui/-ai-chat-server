@@ -22,23 +22,26 @@
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
 import { fits, score, ROLES } from '../machtzev/generator/auto-skin.mjs';   // אותות-הצורה של ds-forge (L83) — אותו מודד, בלי העתק
+import { atomSigs } from '../machtzev/generator/atom-sig.mjs';   // אותם אותות לאטומי-Dart (atlas + פיגמנטים) — «יש לך את המנועים ⇒ תחבר»
 export const KIND = { fact: 'עובדה', shiur: 'שיעור' };   // סוגי-מטרה (צורה): עובדה = תווית+ערך · שיעור = סף במקור
 const DATA = JSON.parse(fs.readFileSync(new URL('./atom-psak.data.json', import.meta.url), 'utf8'));
 export const roleOf = (op) => DATA.roleOf[op] || null;   // פעולת-חיפוש ⇒ תפקיד-עור מדוד (דאטה); אין ⇒ null = אין מדידת-צורה
 let MAN = null;
 const manifest = () => (MAN ||= new Map(JSON.parse(fs.readFileSync(new URL('../new/dart-forge-bs/forge-manifest.json', import.meta.url), 'utf8')).atoms.map((a) => [a.cls, a])));
-const sigOfDefault = (cls) => manifest().get(cls) || null;
+const sigOfDefault = (cls) => manifest().get(cls) || atomSigs().get(cls) || null;   // forge (CSS) ⇒ אחרת Dart
 // אות-צורה: אטום מדוד מול התפקידים המבוקשים ⇒ { ok, score, role, why } · לא-מדוד ⇒ null
 function shapeOf(a, roles) {
   if (!a || !roles.length) return null;
   let best = null; const fails = [];
   for (const role of roles) {
     const R = ROLES[role]; if (!R) continue;
+    if (R.fam && a.family == null) continue;   // תפקיד שדורש משפחה ואטום בלי משפחה מוצהרת ⇒ לא נמדד לתפקיד הזה (לא נפסל)
     if (!fits(a, R)) { fails.push(`${role}: הצורה לא מקיימת ${R.need}`); continue; }
     const sc = score(role, a);
     if (sc == null) { fails.push(`${role}: ניקוד-ייעוד אין (numEmph ${(a.sig && a.sig.numEmph) || 0})`); continue; }
     if (!best || sc > best.score) best = { ok: true, score: sc, role };
   }
+  if (!best && !fails.length) return null;   // אף תפקיד לא נמדד ⇒ לא-מדוד
   return best || { ok: false, score: null, role: null, why: fails.join(' · ') };
 }
 const SOCK_THR = /^(threshold|thr|limit|max|min|target|goal|of|total|cap|bound)$/i;
