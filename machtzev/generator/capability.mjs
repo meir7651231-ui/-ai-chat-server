@@ -15,6 +15,8 @@ const REL = [
   { re: /חורג\S*|עולה\S*\s*על|מעל|גדול\S*|יותר|למעלה\s*מ/, op: '>' },
   { re: /נמוכ\S*|מתחת|קטנ\S*|פחות|יורד\S*/, op: '<' },
 ];
+/** אופרטור-השוואה של רצף-מילים לפי דקדוק-היחסים הסגור (אותו REL) — כדי שהדלת תזהה תנאי לפי צורה (מילת-יחס + מספר) גם בלי מרקר-WHEN. */
+export const relOpOf = (words) => { const t = definalize([].concat(words).join(' ')); for (const r of REL) if (r.re.test(t)) return r.op; return null; };
 const definalize = (s) => String(s).replace(/ך/g, 'כ').replace(/ם/g, 'מ').replace(/ן/g, 'נ').replace(/ף/g, 'פ').replace(/ץ/g, 'צ');
 // מרקרי-תנאי מבניים (כמו 'עם' מפריד-שדות) — סגור. בלי \b (ASCII-בלבד, לא נדלק על עברית).
 const WHEN = /(כאשר|ברגע ש|כש)/;
@@ -49,6 +51,7 @@ export function detectAlertClause(text) {
     x: cleanPhrase(xWords),                        // שדה-הערך = צירוף-השם המלא (סמיכות נשמרת)
     op: rel.op,
     y: deprefix(yWords[0]),                        // שדה-הסף (המילה הצמודה לתנאי)
+    n: (yPart.match(/\d+(?:\.\d+)?/) || [null])[0],   // המספר של הבעלים אחרי היחס (כשיש) — סף-ההתראה; אין ⇒ null
   };
 }
 
@@ -82,11 +85,12 @@ export function detectAllClauses(text) {
 // 🧩 מרכיב (compositor): המבנה **נגזר** ממספר-הצרכים במשפט, לא חרוט. סורק את **כל** מופעי-הצורך,
 // ולכל אחד בונה יחידה (ערך + קריאה + התראה-מותנית). אפס תנאים ⇒ תצוגה-בלבד (עוגן דקדוקי 'את',
 // מושא-ישיר — חלקיק, לא מילון). N תנאים ⇒ N יחידות (יכולת-ההתראה חוזרת). האטומים נגזרים פעם-אחת.
-export function emitApp(text, cls = 'GenCapScreen') {
-  const clauses = detectAllClauses(text);
+export function emitApp(text, cls = 'GenCapScreen') { return emitAppFrom(detectAllClauses(text), text, cls); }
+/** הרכבה מסעיפים שכבר זוהו (מהטקסט — detectAllClauses — או מצורת-המשפט של מנוע 2 דרך הדלת). סף = המספר של הבעלים (n) כשיש; אחרת קבוע-המצע הישן. */
+export function emitAppFrom(clauses, text, cls = 'GenCapScreen') {
   let units;
   if (clauses.length) {
-    units = clauses.map((f, i) => ({ i, label: f.x, op: f.op === '<' ? '<' : '>', alert: true, trigger: f.trigger }));
+    units = clauses.map((f, i) => ({ i, label: f.x, op: f.op === '<' ? '<' : '>', alert: true, trigger: f.trigger, thr: f.n != null && f.n !== '' && !isNaN(+f.n) ? +f.n : null }));
   } else {
     // אין תנאי ⇒ צורך של יכולת-**אחת** (תצוגה). עוגן: מושא-ישיר 'את X' (חלקיק דקדוקי, אפס-מילון).
     const m = String(text || '').match(/(?:^|\s)את\s+(.+)/);
@@ -127,18 +131,19 @@ export function emitApp(text, cls = 'GenCapScreen') {
   const impPaths = [`../${gauge.file.replace(/\.dart$/, '')}.dart`, `../${readout.file.replace(/\.dart$/, '')}.dart`];
   if (hasAlert) impPaths.push(`../${alertFile}.dart`);
   const imps = [...new Set(impPaths)].map((p) => `import '${p}';`).join('\n');
-  const stateVars = units.map((u) => `  double _v${u.i} = 55;`).join('\n');
+  const stateVars = units.map((u) => `  double _v${u.i} = ${u.thr != null ? u.thr : 55};`).join('\n');   // ערך-פתיחה = הסף של הבעלים (על הגבול) כשיש
   // גוף-הילדים **נבנה בלולאה** על היחידות — כאן המבנה נגזר (כמה, ואילו) ולא נחרט.
   const body = units.map((u) => {
-    const cmp = u.alert ? `_v${u.i} ${u.op} 60` : 'false';
+    const thr = u.thr != null ? u.thr : 60, smax = Math.max(100, thr * 2);
+    const cmp = u.alert ? `_v${u.i} ${u.op} ${thr}` : 'false';
     const rLabel = u.alert ? `(${cmp}) ? 'חריגה · ${u.label}' : 'תקין · ${u.label}'` : `'${u.label}'`;
     const alertW = u.alert
       ? `\n        if (${cmp})\n          Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: ${alertAtom}(label: 'חריגה — ${u.label}', height: 46, radius: 14, accentColor: skin.err, baseColor: skin.raised, fillColor: skin.surface)),`
       : '';
     return `        Padding(padding: const EdgeInsets.only(top: 10, right: 14), child: Align(alignment: Alignment.centerRight, child: Text('${u.label}', style: TextStyle(color: skin.mut, fontSize: 13)))),
-        Padding(padding: const EdgeInsets.symmetric(vertical: 6), child: Center(child: ${gauge.cls}(${gauge.p.value}: (_v${u.i} / 100).clamp(0.0, 1.0)${gFills}))),
+        Padding(padding: const EdgeInsets.symmetric(vertical: 6), child: Center(child: ${gauge.cls}(${gauge.p.value}: (_v${u.i} / ${smax}).clamp(0.0, 1.0)${gFills}))),
         Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: ${readout.cls}(${readout.p.value}: _v${u.i}, ${readout.p.label}: ${rLabel}${rFills})),${alertW}
-        Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Slider(value: _v${u.i}, max: 100, onChanged: (v) => setState(() => _v${u.i} = v))),
+        Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Slider(value: _v${u.i}, max: ${smax}, onChanged: (v) => setState(() => _v${u.i} = v))),
         Divider(color: skin.hair, height: 24),`;
   }).join('\n');
   const heCount = units.length + (clauses.length ? ' ניטורים' : ' תצוגה');

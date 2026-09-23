@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { formOf, specOf, answerFor, toks } from './mavin.mjs';
-import { detectAllClauses, emitApp } from '../machtzev/generator/capability.mjs';
+import { detectAllClauses, relOpOf, emitAppFrom } from '../machtzev/generator/capability.mjs';
 import { retrieveScreen } from '../machtzev/generator/retrieve-screen.mjs';
 import * as R from '../machtzev/root.mjs';
 
@@ -52,15 +52,29 @@ function loadManifest(screen) {   // קריאה בלבד (העתק של combine-
 }
 const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'x';
 
+/** תנאי לפי צורה (העיקרון של capability בלי מרקר-WHEN): בקטע יש מספר, ולפניו (עד אסימון-אות-אחת כמו «ל») מילת-יחס מדקדוק-היחסים הסגור של capability
+ *  ⇒ סעיף {x: המילים שלפני היחס (בלי מסגרת), op, n: המספר של הבעלים, trigger: המילים שאחרי המספר}. קטע שכבר יש בו סעיף-טקסט (כש…) לא נבדק שוב. */
+export function clausesByForm(seg, frame = []) {
+  if (detectAllClauses(seg).length) return [];
+  const ws = toks(seg), F = new Set(frame), out = [];
+  for (let i = 0; i < ws.length; i++) {
+    if (!/^\d+$/.test(ws[i])) continue;
+    let j = i - 1; if (j >= 0 && /^[֐-׿]$/.test(ws[j])) j--;   // «מתחת ל 5»: אות-יחס בודדת בין היחס למספר
+    const op = j >= 0 ? relOpOf(ws[j]) : null; if (!op) continue;
+    const x = ws.slice(0, j).filter((w) => !F.has(w) && !/^\d+$/.test(w)); if (!x.length) continue;
+    out.push({ x: x.join(' '), op, n: ws[i], y: ws[i], trigger: ws.slice(i + 1).filter((w) => !F.has(w)).slice(0, 2).join(' ') });
+  }
+  return out;
+}
 /** ניתוב לפי צורה: לכל יחידה — לאיזה מנוע קיים היא הולכת ולמה. */
 export function routeOf(form, answers = {}) {
   const spec = specOf(form, answers);
   const entLabels = new Set(spec.spec.split('\n').filter((l) => /^ישות /.test(l)).map((l) => l.replace(/^ישות /, '').split(' עם ')[0].trim()));
   const routes = [];
-  const capSegs = new Set();
-  for (const seg of form.segments) if (detectAllClauses(seg).length) capSegs.add(seg);
+  const capSegs = new Map();   // קטע ⇒ סעיפים (מהטקסט, או מהצורה)
+  for (const seg of form.segments) { const c = detectAllClauses(seg); if (c.length) capSegs.set(seg, { clauses: c, how: 'טקסט' }); else { const f = clausesByForm(seg, form.frame); if (f.length) capSegs.set(seg, { clauses: f, how: 'צורה' }); } }
   for (const t of form.things) {
-    if (capSegs.has(t.src)) { routes.push({ thing: t.label, route: 'capability', why: 'סעיף-תנאי מבני בקטע (capability.detectAllClauses)', seg: t.src }); continue; }
+    if (capSegs.has(t.src)) { const c = capSegs.get(t.src); routes.push({ thing: t.label, route: 'capability', why: c.how === 'טקסט' ? 'סעיף-תנאי מבני בקטע (capability.detectAllClauses)' : `תנאי לפי צורה: «${c.clauses[0].x}» ${c.clauses[0].op} ${c.clauses[0].n}`, seg: t.src, clauses: c.clauses }); continue; }
     if (entLabels.has(t.label)) { routes.push({ thing: t.label, route: 'appds', why: 'דבר עם שדות ⇒ ישות' }); continue; }
     const [b] = retrieveScreen(t.label, 1);
     if (b && b.score > 0) { routes.push({ thing: t.label, route: 'combine', why: `דומה למסך רשום ${b.name} (${(+b.score).toFixed(2)})`, screen: b.name, score: +b.score }); continue; }
@@ -78,8 +92,8 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   fs.mkdirSync(outDir, { recursive: true });
   const files = [], notes = [];
   // 1 · capability — פעם אחת לכל קטע-תנאי
-  const capSegs = [...new Set(routes.filter((r) => r.route === 'capability').map((r) => r.seg))];
-  capSegs.forEach((seg, i) => { const cls = `GenCap${i + 1}Screen`; const code = emitApp(seg, cls); const f = path.join(outDir, `gen_cap${i + 1}.dart`); fs.writeFileSync(f, code); files.push({ route: 'capability', file: f, seg }); });
+  const capSegs = [...new Map(routes.filter((r) => r.route === 'capability').map((r) => [r.seg, r.clauses])).entries()];
+  capSegs.forEach(([seg, clauses], i) => { const cls = `GenCap${i + 1}Screen`; const code = emitAppFrom(clauses, seg, cls); const f = path.join(outDir, `gen_cap${i + 1}.dart`); fs.writeFileSync(f, code); files.push({ route: 'capability', file: f, seg, thresholds: clauses.map((c) => `${c.x} ${c.op} ${c.n ?? '?'}`) }); });
   // 2 · app-ds — כל הישויות בקריאה אחת (GEN_OUT/GEN_DATA_OUT של הקורא)
   let app = null;
   // 🔒 שומר-ניקיון: app-ds/render-ds קוראים GEN_OUT/GEN_DATA_OUT **בזמן-טעינה**. אם לא הופנו מחוץ למדף לפני הייבוא הראשון —
