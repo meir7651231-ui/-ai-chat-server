@@ -126,6 +126,7 @@ async function verifyBuild(b) {
   const st = D.entities[0].stages;
   const r2 = await door(b, ['--verify', '--shot'], { BS_HOST: HOST });
   b.log = r2.out; fs.writeFileSync(path.join(bdir(b), 'log-verify.txt'), r2.out); parseDoor(b, r2.out);
+  try { const web = path.join(HOST, 'build', 'web-chk'); if (fs.existsSync(path.join(web, 'index.html'))) { const dst = path.join(bdir(b), 'web'); fs.rmSync(dst, { recursive: true, force: true }); fs.cpSync(web, dst, { recursive: true }); b.web = true; } } catch (e) { b.notes.push(String(e.message || e)); }   // אפליקציית-Flutter של הבנייה מוגשת ב-/build/<id>/flutter/ (api/data יחסי ⇒ הסנכרון עובד)
   if (b.verified) setStage(b, st[3]); else persist(b);
   log(T('phase2', { label: b.label, shown: b.verified ? b.verified.shown : 0, of: b.verified ? b.verified.of : 0, accept: b.verified ? b.verified.accept : 0, shots: b.shots.length }));
 }
@@ -135,7 +136,7 @@ const visible = () => builds.filter((b) => !b.self && !b.removed);
 function collections() {
   const bs = visible();
   return {
-    builds: bs.map((b) => [b.label, b.sentence, b.date, b.stage, String(b.screens.length), String(b.questions.length), String(b.errors), b.stage, b.stageDate, b.date]),
+    builds: bs.map((b) => [b.label, b.sentence, b.date, b.stage, String(b.screens.length), String(b.questions.length), String(b.errors), (b.shots || []).includes('shot.png') ? `/build/${b.id}/files/shot.png` : '', b.stage, b.stageDate, b.date]),   // צילום = כתובת-קובץ מהשרת; התאום מציג ערך בצורת-תמונה כתמונה
     questions: bs.flatMap((b) => b.questions.map((q) => [b.label, q.text, q.def, q.answer])),
     picks: bs.flatMap((b) => b.picks.map((p) => [b.label, ...p])),
     atoms: FIXED.atoms, capabilities: FIXED.capabilities, decisions: FIXED.decisions, gates: FIXED.gates,
@@ -167,11 +168,20 @@ const json = (res, code, obj) => { res.writeHead(code, { 'content-type': 'applic
 const text = (res, code, s, type = 'text/plain; charset=utf-8') => { res.writeHead(code, { 'content-type': type }); res.end(s); };
 const file = (res, f) => { if (!f || !fs.existsSync(f)) return text(res, 404, T('notFound')); const ext = path.extname(f); text(res, 200, fs.readFileSync(f), { '.html': 'text/html; charset=utf-8', '.png': 'image/png', '.json': 'application/json; charset=utf-8' }[ext] || 'text/plain; charset=utf-8'); };
 const body = (req) => new Promise((res) => { let s = ''; req.on('data', (d) => { s += d; }); req.on('end', () => res(s)); });
-const pub = (b) => ({ id: b.id, label: b.label, sentence: b.sentence, date: b.date, stage: b.stage, stageDate: b.stageDate, ms: b.ms, spec: b.spec, questions: b.questions, picks: b.picks, screens: b.screens, errors: b.errors, synth: b.synth, notes: b.notes, verified: b.verified, shots: b.shots || [], app: b.gen ? `/build/${b.id}/app` : null, registered: b.registered });
+const pub = (b) => ({ id: b.id, label: b.label, flutter: b.web ? (b.self ? '/flutter/' : `/build/${b.id}/flutter/`) : null, sentence: b.sentence, date: b.date, stage: b.stage, stageDate: b.stageDate, ms: b.ms, spec: b.spec, questions: b.questions, picks: b.picks, screens: b.screens, errors: b.errors, synth: b.synth, notes: b.notes, verified: b.verified, shots: b.shots || [], app: b.gen ? `/build/${b.id}/app` : null, registered: b.registered });
 const server = http.createServer(async (req, res) => {
   const u = new URL(req.url, 'http://x'); const p = u.pathname; const m = p.match(/^\/build\/(\d+)(?:\/(.*))?$/);
   try {
     if (p === '/' ) return cockpit && cockpit.gen ? file(res, path.join(cockpit.gen, 'app.html')) : text(res, 503, T('cockpitPending'));
+    const fm = p.match(/^(?:\/build\/(\d+))?\/flutter\/(.*)$/);   // /flutter/… = הקוקפיט ב-Flutter · /build/<id>/flutter/… = האפליקציה שנבנתה ב-Flutter (מ-build/web של המארח אחרי ההוכחה)
+    if (fm) { const b = fm[1] ? builds.find((x) => x.id === +fm[1]) : cockpit; if (!b || !b.web) return text(res, 404, T('notFound'));
+      const base = fm[1] ? `/build/${b.id}/flutter/` : '/flutter/'; const rel = fm[2] || 'index.html';
+      if (rel === 'api/data' && req.method === 'GET') return fm[1] ? file(res, fs.existsSync(perBuildData(b)) ? perBuildData(b) : null) : json(res, 200, data());
+      if (rel === 'api/data' && req.method === 'PUT') { const s0 = await body(req); try { JSON.parse(s0); } catch { return text(res, 400, T('badJson')); } if (fm[1]) fs.writeFileSync(perBuildData(b), s0); else acceptData(JSON.parse(s0)); return json(res, 200, { ok: true }); }
+      const f = path.join(bdir(b), 'web', ...rel.split('/').filter((x) => x && x !== '..'));
+      if (!fs.existsSync(f) || fs.statSync(f).isDirectory()) return text(res, 404, T('notFound'));
+      if (/index\.html$/.test(f)) return text(res, 200, fs.readFileSync(f, 'utf8').replace(/<base href="[^"]*">/, `<base href="${base}">`), 'text/html; charset=utf-8');   // base = הנתיב שממנו מוגש
+      const ext = path.extname(f); return text(res, 200, fs.readFileSync(f), { '.js': 'application/javascript', '.json': 'application/json', '.wasm': 'application/wasm', '.png': 'image/png', '.css': 'text/css', '.html': 'text/html; charset=utf-8', '.svg': 'image/svg+xml', '.otf': 'font/otf', '.ttf': 'font/ttf', '.woff2': 'font/woff2' }[ext] || 'application/octet-stream'); }
     if (p === '/api/data' && req.method === 'GET') return json(res, 200, data());
     if (p === '/api/data' && req.method === 'PUT') { let d; try { d = JSON.parse(await body(req)); } catch { return text(res, 400, T('badJson')); } acceptData(d); return json(res, 200, { ok: true }); }
     if (p === '/sentence') return text(res, 200, selfSentence());

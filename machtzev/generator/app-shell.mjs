@@ -68,6 +68,8 @@ export function renderRootPage(slug, { root, children, report, title }) {
   if (factRows.length && paper) blocks.push(`DsFold(title: ${k(T('foldLabel', { n: factRows.length }))}, details: [${factRows.join(', ')}])`);
   const phoneLabels = root.schema.filter((f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && String(f.label).split(/\s+/).some((w) => (SL0.typePhone || []).includes(w))).map((f) => f.label);   // שדה-טלפון ⇒ «התקשר» · «וואטסאפ» (tel: · wa.me, אפס-מפתח)
   if (paper && phoneLabels.length) blocks.push(`(() { final ph = [${phoneLabels.map((l) => `(r0[${k(l)}] ?? '')`).join(', ')}].map((x) => x.replaceAll(RegExp(r'[^0-9+]'), '')).firstWhere((x) => x.length >= 9, orElse: () => ''); if (ph.isEmpty) return const SizedBox.shrink(); final intl = ph.startsWith('+') ? ph.substring(1) : (ph.startsWith('0') ? '972' + ph.substring(1) : ph); return Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.callLabel)}, onTap: () => launchUrl(Uri.parse('tel:' + ph), mode: LaunchMode.externalApplication)), const SizedBox(width: 8), DsChipButton(label: ${k(L.waLabel)}, onTap: () => launchUrl(Uri.parse('https://wa.me/' + intl), mode: LaunchMode.externalApplication))])); })()`);
+  const imgLabels = root.schema.filter((f) => !/^(num|date|bool)$/.test(f.type || '') && String(f.label).split(/\s+/).some((w) => (SL0.typeImage || []).includes(w))).map((f) => f.label);   // שדה-תמונה ⇒ התמונה עצמה (כתובת / data:image); ריק ⇒ כלום
+  if (paper && imgLabels.length) blocks.push(`(() { final u = [${imgLabels.map((l) => `(r0[${k(l)}] ?? '')`).join(', ')}].map((x) => x.trim()).firstWhere((x) => x.startsWith('http') || x.startsWith('/') || x.startsWith('data:image'), orElse: () => ''); if (u.isEmpty) return const SizedBox.shrink(); return Padding(padding: const EdgeInsets.only(bottom: 12), child: ClipRRect(borderRadius: BorderRadius.circular(12), child: u.startsWith('data:image') ? Image.memory(base64Decode(u.split(',').last), fit: BoxFit.fitWidth) : Image.network(u.startsWith('/') ? Uri.base.resolve(u).toString() : u, fit: BoxFit.fitWidth, errorBuilder: (_, __, ___) => const SizedBox.shrink()))); })()`);
   const locLabels = root.schema.filter((f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && String(f.label).split(/\s+/).some((w) => (SL0.typeLocation || []).includes(w))).map((f) => f.label);   // שדה-מקום ⇒ «ניווט» (maps, אפס-מפתח)
   if (paper && locLabels.length) blocks.push(`(() { final loc = [${locLabels.map((l) => `(r0[${k(l)}] ?? '')`).join(', ')}].map((x) => x.trim()).firstWhere((x) => x.length >= 3, orElse: () => ''); if (loc.isEmpty) return const SizedBox.shrink(); return Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.navLabel)} + ' · ' + (loc.length > 24 ? loc.substring(0, 24) + '…' : loc), onTap: () => launchUrl(Uri.parse('https://maps.google.com/?q=' + Uri.encodeComponent(loc)), mode: LaunchMode.externalApplication))])); })()`);
   if (paper) blocks.push(`Padding(padding: const EdgeInsets.only(bottom: 10), child: DsQuickAdd(hint: ${k(L.noteAddHint)}, onSubmit: (t) { final v = t.trim(); if (v.isEmpty) return; final prev = r0['__note'] ?? ''; final stamp = DateTime.now().toIso8601String().substring(0, 10); appStore.update('${root.slug}', id, {'__note': (prev.isEmpty ? '' : prev + '\\n') + stamp + ' · ' + v}); appStore.logAction('auto', ${k(L.noteAddLog)}.replaceAll('{who}', appStore.displayOf('${root.slug}', id)), entity: '${root.slug}', rid: id, field: '__note', prev: prev); }))`);   // «מה קרה מאז?» — הערה מתוארכת נצברת ב«מה כתבת», עם החזר
@@ -467,7 +469,7 @@ ${extraFields.map(([key, def, lbl]) => `    DsField(label: ${k(L[lbl])}, hint: '
 }
 
 // ── השלד: סרגל-תחתון (בית · שורש · עוד) על IndexedStack — כל לשונית מסך שלם ──
-export function renderShell(slug, { title, root, rootPage, dashboard, hub, questions = {}, home = null, homeIsRoot = false, extras = [], seed = null }) {   // homeIsRoot: הישות הראשונה שנאמרה = הלשונית הראשונה (הכרעת-בעלים 23.9: הבית = הדבר, לא אריח) · extras: מסך-ליד (התראה) = שורה חיה מעל הרשימה · seed: רשומות-הדוגמה   // G30 · home = מסך «היום» (נייר) במקום לוח-הבקרה בלשונית-הבית   // G28 · questions.list = השאלה שמסך-הרשימה עונה עליה (PLAN §1: מסך = שאלה אחת)
+export function renderShell(slug, { title, root, rootPage, dashboard, hub, questions = {}, home = null, homeIsRoot = false, extras = [], seed = null, sync = null }) {   // homeIsRoot: הישות הראשונה שנאמרה = הלשונית הראשונה (הכרעת-בעלים 23.9: הבית = הדבר, לא אריח) · extras: מסך-ליד (התראה) = שורה חיה מעל הרשימה · seed: רשומות-הדוגמה   // G30 · home = מסך «היום» (נייר) במקום לוח-הבקרה בלשונית-הבית   // G28 · questions.list = השאלה שמסך-הרשימה עונה עליה (PLAN §1: מסך = שאלה אחת)
   const { k, dump } = makeConsts(slug);
   const imports = new Set([`import 'gen_${hub.slug}.dart';`, `import 'gen_${root.slug}.dart';`, `import 'gen_${rootPage.slug}.dart';`]);
   if (dashboard) imports.add(`import 'gen_${dashboard.slug}.dart';`);
@@ -482,7 +484,7 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
   const sub = root.subField ? `(r[${k(root.subField)}] ?? '')` : `''`;
   if (home) imports.add(`import 'gen_${home.slug}.dart';`);
   const tabs = (homeIsRoot ? [`_RootTab()`, dashboard ? `const ${dashboard.cls}()` : null, `const ${hub.cls}()`] : [home ? `const ${home.cls}()` : dashboard ? `const ${dashboard.cls}()` : null, `_RootTab()`, `const ${hub.cls}()`]).filter(Boolean);
-  for (const x of extras) imports.add(`import 'gen_${x.slug}.dart';`); if (seed) imports.add(`import 'gen_${seed.slug}.dart';`);
+  for (const x of extras) imports.add(`import 'gen_${x.slug}.dart';`); if (seed) imports.add(`import 'gen_${seed.slug}.dart';`); if (sync) imports.add(`import 'gen_${sync.slug}.dart';`);
   // מסך-ליד (התראה) = שיעור: סף במקור ⇒ הישיבה פוסקת על המועמדים (ring/gauge/alert/headline); אין שורד ⇒ שורה (היום) + פנקס
   const judged = extras.map((x) => {
     if (!x.live) return null;
@@ -536,8 +538,8 @@ class ${cls} extends StatefulWidget {
 
 class _${cls}State extends State<${cls}> {
   int _t = 0;
-${seed ? `  @override
-  void initState() { super.initState(); ${seed.fn}(); }   // רשומות-הדוגמה של הבעלים — פעם אחת
+${seed || sync ? `  @override
+  void initState() { super.initState(); ${seed ? `${seed.fn}();` : ''}${sync ? ` ${sync.fn}();` : ''} }   // רשומות-הדוגמה של הבעלים — פעם אחת · ואם יש שרת: הרשומות ממנו
 ` : ''}  @override
   Widget build(BuildContext context) => ${paper ? `CallbackShortcuts(   // G30 · D3/D4: ≤3 מקשים — T היום · I רשימה · A הוספה · Ctrl/Cmd+K פלטה
     bindings: <ShortcutActivator, VoidCallback>{

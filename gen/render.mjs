@@ -123,6 +123,7 @@ const bidi = (s) => '<bdi dir="ltr">' + s + '</bdi>';   // UAX#9: ערך בסד�
 function show(f, v, e, r) {
   if (f.shape === 'formula' && e && r) { const n = calc(e, r, f); return Number.isFinite(n) ? bidi(CALL.money ? CALL.money(n) : String(n)) : '—'; }
   if (v === '' || v == null) return '';
+  if (/^data:image\\//.test(String(v)) || /\\.(png|jpe?g|gif|webp|svg)(\\?[^ ]*)?$/i.test(String(v))) return '<img src="' + esc(v) + '" alt="" style="max-width:220px;max-height:160px;border-radius:8px;display:block">';   // ערך בצורת-תמונה (data:image / קובץ-תמונה) ⇒ תמונה, לא טקסט
   if (f.shape === 'date') return bidi(CALL.fmtDate ? CALL.fmtDate(v) : esc(v)) + expiry(f, v);
   if (f.shape === 'number' && CALL.money) return bidi(CALL.money(Number(v)));
   if (f.shape === 'count') return bidi(esc(v));
