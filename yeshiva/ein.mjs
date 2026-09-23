@@ -24,20 +24,36 @@ export async function defineByMarks(w, ans, thing, SL) {
   const keys = new Set((thing.examples || []).map((r) => String(r[0]).trim())); const marks = ans.split(/[,;\s]+/).filter(Boolean);
   if (!marks.length || !marks.every((m) => keys.has(m)) || !keys.size) return null;
   const isNum = (v) => /^-?\d+(\.\d+)?$/.test(String(v).trim());
+  const LE = await import('../machtzev/generator/live-expr.mjs');
+  const ageOf = (v) => (isNum(v) ? null : LE.liveSample({ kind: 'age' }, v));   // שדה-תאריך ⇒ ותק בימים היום (תלוי-זמן, מוצהר) — אותה צורה שהדלת קוראת «מעל N ימים»
   const numIdx = thing.fields.map((f, i) => i).filter((i) => i > 0 && thing.examples.every((r) => isNum(r[i])));
-  if (!numIdx.length) return { marks, cands: [] };
+  const dateIdx = thing.fields.map((f, i) => i).filter((i) => i > 0 && !numIdx.includes(i) && thing.examples.every((r) => ageOf(r[i]) != null));
+  const textIdx = thing.fields.map((f, i) => i).filter((i) => i > 0 && !numIdx.includes(i) && !dateIdx.includes(i));   // שדה-טקסט ⇒ שוויון («כיתה שווה ל-א»), צורת-התנאי «=»
+  if (!numIdx.length && !dateIdx.length && !textIdx.length) return { marks, cands: [] };
+  const valAt = (r, i) => (dateIdx.includes(i) ? String(ageOf(r[i])) : String(r[i]).trim());
+  const qs = (v) => `'${String(v).replace(/'/g, "\\'")}'`;
   const needs = {};
-  for (const i of numIdx) { const vals = [...new Set(thing.examples.map((r) => String(r[i]).trim()))];
-    needs[`def.${w}.${i}`] = { shape: 'בדיקה', demand: `${thing.label} ${w} ${thing.fields[i].label}`, params: ['num'], ret: 'bool', consts: vals, examples: thing.examples.map((r) => [String(r[i]).trim(), `r == ${marks.includes(String(r[0]).trim())}`]) }; }
+  for (const i of [...numIdx, ...dateIdx]) { const vals = [...new Set(thing.examples.map((r) => valAt(r, i)))];
+    needs[`def.${w}.${i}`] = { shape: 'בדיקה', demand: `${thing.label} ${w} ${thing.fields[i].label}`, params: ['num'], ret: 'bool', consts: vals, examples: thing.examples.map((r) => [valAt(r, i), `r == ${marks.includes(String(r[0]).trim())}`]) }; }
+  for (const i of textIdx) { const vals = [...new Set(thing.examples.map((r) => valAt(r, i)))].map(qs);
+    needs[`def.${w}.${i}`] = { shape: 'בדיקה', demand: `${thing.label} ${w} ${thing.fields[i].label}`, params: ['String'], ret: 'bool', consts: vals, examples: thing.examples.map((r) => [qs(valAt(r, i)), `r == ${marks.includes(String(r[0]).trim())}`]) }; }
   const BP = await import('../machtzev/generator/behavior-plan.mjs'); const P = BP.planNeeds(needs, { prove: true });
   const cands = [];
-  for (const i of numIdx) { const p = P[`def.${w}.${i}`]; if (!p || !p.pick || !p.proven) continue;
+  const dayWord = Object.keys(SL.timeUnits || {}).find((u) => (SL.timeUnits || {})[u] === 1) || '';   // מילת-היחידה של יום מהדאטה («ימים»)
+  for (const i of [...numIdx, ...dateIdx, ...textIdx]) { const p = P[`def.${w}.${i}`]; if (!p || !p.pick || !p.proven) continue;
+    if (textIdx.includes(i)) {   // שוויון: הקבוע-המחרוזת מהעץ; המסומנים כולם שווים לו והשאר לא ⇒ «שדה שווה ל-ערך»
+      const sm = String(p.pick).match(/'([^']*)'/); const cv = sm ? sm[1] : null; if (cv == null) continue;
+      const mk = thing.examples.filter((r) => marks.includes(String(r[0]).trim())).map((r) => valAt(r, i)), rs = thing.examples.filter((r) => !marks.includes(String(r[0]).trim())).map((r) => valAt(r, i));
+      if (!(mk.every((v) => v === cv) && rs.every((v) => v !== cv))) continue;
+      const eqw = (SL.amountEqual || [])[0]; if (!eqw) continue;
+      cands.push({ field: thing.fields[i].label, clause: `${thing.fields[i].label} ${eqw}${/-$/.test(eqw) ? '' : ' '}${cv}`, ties: p.ties || 0, atom: p.pick }); continue; }
     const m = String(p.pick).match(/^\w+\(([^)]*)\)$/); const c = m ? m[1].split(',').map((x) => x.trim()).find((x) => isNum(x)) : null; if (c == null) continue;
-    const marked = thing.examples.filter((r) => marks.includes(String(r[0]).trim())).map((r) => +r[i]), rest = thing.examples.filter((r) => !marks.includes(String(r[0]).trim())).map((r) => +r[i]);
+    const marked = thing.examples.filter((r) => marks.includes(String(r[0]).trim())).map((r) => +valAt(r, i)), rest = thing.examples.filter((r) => !marks.includes(String(r[0]).trim())).map((r) => +valAt(r, i));
     const below = marked.every((v) => v < +c) && rest.every((v) => v >= +c), above = marked.every((v) => v > +c) && rest.every((v) => v <= +c);
     if (!below && !above) continue;
     const word = below ? (SL.amountBelow || [])[1] || (SL.amountBelow || [])[0] : (SL.amountAbove || [])[0]; if (!word) continue;
-    cands.push({ field: thing.fields[i].label, clause: `${thing.fields[i].label} ${word}${/-$/.test(word) ? '' : ' '}${c}`, ties: p.ties || 0, atom: p.pick }); }
+    const unit = dateIdx.includes(i) && dayWord ? ` ${dayWord}` : '';
+    cands.push({ field: thing.fields[i].label, clause: `${thing.fields[i].label} ${word}${/-$/.test(word) ? '' : ' '}${c}${unit}`, ties: p.ties || 0, atom: p.pick }); }
   return { marks, cands };
 }
 export async function expandDefinitions(sentence, form, routed, answers, proposals) {

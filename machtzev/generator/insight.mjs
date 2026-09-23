@@ -11,7 +11,7 @@ import { buildAtlas } from './atlas.mjs';
 import { isPaper, skinWired } from './look.mjs';
 import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';
 import { synthDisplay, widgetRecordOf, sidecarOf } from './display-synth.mjs';
-import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr, liveCond } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
+import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr, liveCond, liveThresholdDart, liveOpDart } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { ops as opsOfKind } from '../compose-engine.mjs';   // צורה ⇒ פעולות-יסוד (הטבלה הקיימת, לא רשימה שלי)
 import * as R from '../root.mjs';
@@ -43,7 +43,8 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   manifest.prior = prior ? { ops: prior.ops } : null;
   // ── הנתונים המשותפים (חוק 23-ד: מחברים בהחלטה): כל האטומים קוראים מאותו br/rs ──
   const isSet = liveIsSet(live); const numOf = isSet ? 'agg' : liveValue(live, 'r', k); const thr = liveThreshold(live);   // צורת-התנאי (מספר / ותק / מונה-קשר / קבוצה) — מקום אחד
-  const cond0 = live.kind === 'levels' ? 'true' : decide && decide.name ? `${decide.name}(${numOf}, ${thr})` : `${numOf} ${live.op} ${thr}`;
+  const thrD = liveThresholdDart(live, k);
+  const cond0 = live.kind === 'levels' ? 'true' : decide && decide.name ? `${decide.name}(${numOf}, ${thrD})` : `${numOf} ${liveOpDart(live)} ${thrD}`;
   const cond = (isSet || liveIsGrouped(live)) ? cond0 : liveCond(live, cond0, 'r', k);   // «או»: איחוד ברמת-הרשומה   // מדרגות: כל הקבוצות מוצגות; אטום-ההחלטה מחשב את המדרגה (live.decide), לא סף
   if (isSet) { manifest.source.agg = live.agg; const ai = liveAggImport(live); if (ai) imports.add(ai); }
   const grouped = liveIsGrouped(live); if (grouped) { manifest.source.agg = live.agg; manifest.source.by = live.by; const ai = liveAggImport({ ...live, kind: 'agg' }); if (ai) imports.add(ai); }
@@ -110,7 +111,7 @@ ${liveNeedsHelper(live) ? AGE_HELPER + '\n' : ''}class ${cls} extends StatelessW
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
     final rs = ${grouped ? liveGroupsExpr(live, liveSetExpr(live, `appStore.records('${live.slug}')`, k), k) : liveSetExpr(live, `appStore.records('${live.slug}')`, k)};   ${grouped ? '// רשומה = קבוצה (' + live.by + ' ⇒ ' + live.agg + ' ' + live.field + ')' : ''}
 ${isSet ? `    final agg = ${liveAggExpr(live, 'rs', k)};   // ערך-הקבוצה (${live.agg}); ההתראה על הקבוצה כולה
-    final br = (${cond}) ? rs.toList() : <Map<String, String>>[];` : `    final br = rs.where((r) => ${cond}).toList()..sort((a, b) => ${live.kind === 'levels' ? `(b[${k(live.by)}] ?? '').compareTo(a[${k(live.by)}] ?? '')` : `${live.op === '<' ? '' : '-'}(${liveValue(live, 'a', k)} - ${liveValue(live, 'b', k)}).sign.toInt()`});`}   // ההחלטה מניעה את הסדר: החורג ביותר ראשון (23-ד)
+    final br = (${cond}) ? rs.toList() : <Map<String, String>>[];` : `    final br = rs.where((r) => ${cond}).toList()${live.kind === 'eq' ? '' : '..sort((a, b) => ' + (live.kind === 'levels' ? `(b[${k(live.by)}] ?? '').compareTo(a[${k(live.by)}] ?? '')` : `${live.op === '<' ? '' : '-'}(${liveValue(live, 'a', k)} - ${liveValue(live, 'b', k)}).sign.toInt()`) + ')'};`}   // ההחלטה מניעה את הסדר: החורג ביותר ראשון (23-ד)
     return DsScaffold(title: ${k(name)}, subtitle: br.length.toString() + ' / ' + rs.length.toString() + ' ' + ${k(entity.name)}, icon: ${k('🔔')}, children: [
 ${parts.map((p) => `      ${p.cond ? `if (${p.cond}) ` : ''}Padding(padding: const EdgeInsets.only(bottom: 10), child: ${p.call}),`).join('\n')}
       if (br.isEmpty) Padding(padding: const EdgeInsets.only(top: 24), child: Center(child: Text(${k(`${entity.name}: 0 · ${said}`)}, style: TextStyle(color: DsLook.of(context).muted)))),

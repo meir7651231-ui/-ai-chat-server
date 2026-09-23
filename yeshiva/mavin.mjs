@@ -72,6 +72,7 @@ export function hintOf(w) {
   return l > 0 && l >= d ? { hint: 'act', ops: [...x.e.logic] } : { hint: 'thing', ops: [...x.e.display] };
 }
 const isNum = (w) => /^\d+$/.test(w);
+const COND_WHEN = (() => { try { const c = JSON.parse(fs.readFileSync(R.GEN_DIR + 'knowledge/conditions.json', 'utf8')); return c.when && c.when.length ? new RegExp('(' + c.when.map((x) => String(x).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')') : null; } catch { return null; } })();   // אותה מילת-תנאי של הגלאי
 const STAGE_WORDS = (() => { try { return new Set(JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')).stagePrefixes || []); } catch { return new Set(); } })();   // מילות-«שלבים» של שפת-הספק הקיימת (דאטה של מנוע 4)
 const ARROW = /\s*(?:→|->|⇒|»)\s*/;   // חץ בין מילים = סדר (צורה): «חדשה → בעבודה → הושלמה» ⇒ שלבים
 // סמני-שדות ומילות-«כל» של מנוע-המשפט הקיים (nl-lang.data.json — דאטה של מנוע 1/4): «לכל תלמיד יש …» ⇒ הדבר = «תלמיד», וכל איברי-הרשימה = שדות (גם ברבים)
@@ -175,6 +176,8 @@ export function formOf(sentence0) {
       if (!owner) owner = things[things.length - 1];
       if (owner) { owner.stages = [st0, ...ar.slice(1).map((p) => toks(p).join(' '))]; continue; }
     }
+    // קטע-תנאי (מילת-תנאי מהדאטה, knowledge/conditions.json): יחידה אחת, בלי רשימת-שדות — «כשתלמיד ותיק» אינו «כשתלמיד ו-תיק» (הכרעת-בעלים 23.9). המסלול נקבע בדלת (capability/none)
+    if (COND_WHEN && COND_WHEN.test(seg)) { things.push(unitOf(toks(seg), seg)); continue; }
     let L = listOf(seg), head = null; if (L && L.rest) { queue.unshift(L.rest); if (L.only) { head = L.head; L = null; } }
     const pre = L ? L.before : (head || toks(seg));
     const runs = (L && pre.some(isMark)) ? [pre] : runsOf(pre);   // ראש-רשימה עם סמן-שדות = רצף אחד גם עם מילה מפוזרת בפנים («לכל תפקיד של אדם יש» ⇒ הדבר «תפקיד של אדם»)

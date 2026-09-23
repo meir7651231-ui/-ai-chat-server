@@ -4,7 +4,8 @@
 export const AGE_HELPER = `double _ageDays(String s) { final t = s.trim(); DateTime? d = DateTime.tryParse(t); if (d == null) { final m = RegExp(r'^(\\d{1,2})[./-](\\d{1,2})[./-](\\d{2,4})$').firstMatch(t); if (m != null) { final y = int.parse(m.group(3)!); d = DateTime(y < 100 ? 2000 + y : y, int.parse(m.group(2)!), int.parse(m.group(1)!)); } } return d == null ? double.nan : DateTime.now().difference(d).inDays.toDouble(); }`;
 //   kind:'refCount' — לכל רשומת-הורה: כמה רשומות-בנות מצביעות עליה ({ childSlug, childField, parentKey }) · kind:'agg' — על הקבוצה כולה: avg/sum/count של שדה (agg, field)
 export const liveValue = (live, r = 'r', k = (s) => `'${s}'`) =>
-  live.kind === 'age' ? `_ageDays(${r}[${k(live.field)}] ?? '')`
+  live.kind === 'eq' ? `(${r}[${k(live.field)}] ?? '').trim()`
+  : live.kind === 'age' ? `_ageDays(${r}[${k(live.field)}] ?? '')`
   : live.kind === 'refCount' ? `appStore.records('${live.childSlug}').where((c) => (c[${k(live.childField)}] ?? '').trim() == (${r}[${k(live.parentKey)}] ?? '').trim()).length.toDouble()`
   : `(double.tryParse(${r}[${k(live.field)}] ?? '') ?? double.nan)`;
 export const liveIsSet = (live) => live.kind === 'agg';
@@ -22,20 +23,26 @@ export const levelOf = (live, v) => (v == null || isNaN(v) ? null : v >= live.hi
 export const liveGroupsExpr = (live, rs0 = 'rs0', k = (s) => `'${s}'`) => `(() { final g = <String, List<Map<String, String>>>{}; for (final r in ${rs0}) { g.putIfAbsent(${liveKeyExpr(live, 'r', k)}, () => <Map<String, String>>[]).add(r); } return [for (final e in g.entries) <String, String>{${k(live.by)}: e.key, ${k(live.field)}: ((${liveAggExpr(live, 'e.value', k)}) * 10).round() / 10 == ((${liveAggExpr(live, 'e.value', k)}) * 10).round() ~/ 10 ? (((${liveAggExpr(live, 'e.value', k)}) * 10).round() ~/ 10).toString() : (((${liveAggExpr(live, 'e.value', k)}) * 10).round() / 10).toString()}]; })()`;
 /** ערך-הקבוצות מהדוגמאות (aggBy) ⇒ [[by, value]] */
 export function liveGroupsSample(live, rows, fi, bi) { const g = new Map(); for (const r of rows) { const key = live.kind === 'levels' ? String(levelOf(live, parseFloat(r[fi])) ?? '') : String(r[bi] || '').trim(); (g.get(key) || g.set(key, []).get(key)).push(r); } return [...g.entries()].map(([key, rs]) => { const v = liveAggSample(live, rs, fi); return [key, v == null ? null : Math.round(v * 10) / 10]; }); }
-export const liveThreshold = (live) => (live.kind === 'age' ? live.days : live.n);
+export const liveThreshold = (live) => (live.kind === 'eq' ? live.value : live.kind === 'age' ? live.days : live.n);
+/** הסף כביטוי-Dart: שוויון ⇒ מחרוזת דרך k (קבוע-תוכן), אחרת המספר · האופרטור ב-Dart: «=» ⇒ «==» */
+export const liveThresholdDart = (live, k = (s) => `'${s}'`) => (live.kind === 'eq' ? k(live.value) : String(liveThreshold(live)));
+export const liveOpDart = (live) => (live.op === '=' ? '==' : live.op);
+/** האם ערך-דוגמה עונה לתנאי (JS, לציפייה): < · > · = (מחרוזת) */
+export const liveHit = (live, v) => { const t = liveThreshold(live); if (v == null) return false; return live.op === '<' ? v < t : live.op === '>' ? v > t : String(v).trim() === String(t).trim(); };
 export const liveNeedsHelper = (live) => live.kind === 'age' || (live.pre || []).some((p) => p.kind === 'age');
 /** צירוף («וגם», הכרעת-בעלים 23.9 «צא לדרך»): live.pre = תנאים קודמים על אותה קבוצה ⇒ הקבוצה של התנאי הראשי היא הרשומות שעברו את כולם (מסנן על מסנן) */
-export const livePre = (live, r = 'r', k = (s) => `'${s}'`) => (live.pre || []).map((p) => `(${liveValue(p, r, k)} ${p.op} ${liveThreshold(p)})`).join(' && ');
+export const livePre = (live, r = 'r', k = (s) => `'${s}'`) => (live.pre || []).map((p) => `(${liveValue(p, r, k)} ${liveOpDart(p)} ${liveThresholdDart(p, k)})`).join(' && ');
 export const liveSetExpr = (live, rs, k = (s) => `'${s}'`) => (live.pre && live.pre.length ? `${rs}.where((r) => ${livePre(live, 'r', k)}).toList()` : rs);
 /** חלופה («או»): live.alt = תנאים שכל אחד מהם מספיק — רשומה חורגת אם התנאי הראשי או אחת החלופות (איחוד) */
-export const liveAlt = (live, r = 'r', k = (s) => `'${s}'`) => (live.alt || []).map((p) => `(${liveValue(p, r, k)} ${p.op} ${liveThreshold(p)})`).join(' || ');
+export const liveAlt = (live, r = 'r', k = (s) => `'${s}'`) => (live.alt || []).map((p) => `(${liveValue(p, r, k)} ${liveOpDart(p)} ${liveThresholdDart(p, k)})`).join(' || ');
 export const liveCond = (live, cond, r = 'r', k = (s) => `'${s}'`) => (live.alt && live.alt.length ? `((${cond}) || ${liveAlt(live, r, k)})` : cond);
-export const liveAltOk = (live, row, fieldIndex) => (live.alt || []).some((p) => { const v = liveSample(p, row[fieldIndex(p.field)]); const t = liveThreshold(p); return v != null && (p.op === '<' ? v < t : v > t); });
-export const livePreOk = (live, row, fieldIndex) => (live.pre || []).every((p) => { const v = liveSample(p, row[fieldIndex(p.field)]); const t = liveThreshold(p); return v != null && (p.op === '<' ? v < t : v > t); });
+export const liveAltOk = (live, row, fieldIndex) => (live.alt || []).some((p) => liveHit(p, liveSample(p, row[fieldIndex(p.field)])));
+export const livePreOk = (live, row, fieldIndex) => (live.pre || []).every((p) => liveHit(p, liveSample(p, row[fieldIndex(p.field)])));
 /** ערכי-הדוגמאות של הבעלים בצורת-התנאי: מספר ⇒ המספר · תאריך ⇒ ותק בימים היום (תלוי-זמן, מוצהר) */
 /** ערך-הקבוצה מהדוגמאות (agg) — לציפייה ולהחלטה */
 export function liveAggSample(live, rows, fi) { const vals = rows.map((r) => parseFloat(r[fi])).filter((v) => !isNaN(v)); if (live.agg === 'count') return rows.length; if (!vals.length) return null; const sum = vals.reduce((a, b) => a + b, 0); return live.agg === 'sum' ? sum : sum / vals.length; }
 export function liveSample(live, raw) {
+  if (live.kind === 'eq') return String(raw ?? '').trim();
   if (live.kind !== 'age') { const v = parseFloat(raw); return isNaN(v) ? null : v; }
   const t = String(raw || '').trim(); let d = Date.parse(t); if (isNaN(d)) { const m = t.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{2,4})$/); if (m) { const y = +m[3]; d = Date.UTC(y < 100 ? 2000 + y : y, +m[2] - 1, +m[1]); } }
   if (isNaN(d)) return null; return Math.floor((Date.now() - d) / 86400000);
