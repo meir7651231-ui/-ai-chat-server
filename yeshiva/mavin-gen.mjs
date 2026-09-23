@@ -289,7 +289,8 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       const ents = spec.split('\n').filter((l) => /^ישות /.test(l));
       const roles = spec.split('\n').filter((l) => /^תפקיד /.test(l));
       const dash = spec.split('\n').filter((l) => /^לוח בקרה עם /.test(l)).map((l) => l.replace(/^לוח בקרה עם\s*/, '').split(',').map((p) => p.trim()).filter((p) => /^\S+?\(.+?\..+?\)$/.test(p))).flat();
-      const genSpec = [`אפליקציה: ${name}`, ...ents, ...(dash.length ? [`לוח בקרה עם ${dash.join(', ')}`] : []), ...roles].join('\n');
+      const appLine = spec.split('\n').find((l) => /^[^\s:]+: /.test(l) && !/^(ישות|דוגמה|תפקיד|עיצוב|שרת|דוח|תוכן|חלקיק) /.test(l));   // ראש-המשפט (specOf: «<appWord>: <head>») ⇒ שם-האפליקציה בתאום, לא שם-הריצה
+      const genSpec = [appLine || `אפליקציה: ${name}`, ...ents, ...(dash.length ? [`לוח בקרה עם ${dash.join(', ')}`] : []), ...roles].join('\n');
       const { report, app: html } = await GE.runGenerator({ specText: genSpec, slug: slug(name), shelf: GS.readShelf(), NEEDS: GB.NEEDS, LANG: GL.loadLang({ write: false }) });
       fs.writeFileSync(path.join(outDir, 'app.html'), html);
       fs.writeFileSync(path.join(outDir, 'gen-report.json'), JSON.stringify({ ...report, atoms: report.atoms.map(({ src, ...a }) => a) }, null, 1));

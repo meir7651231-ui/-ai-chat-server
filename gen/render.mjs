@@ -96,9 +96,14 @@ const KEY = ${jstr('gen:' + meta.slug)};
 const FN = {${atoms.map((a) => a.fn + '__call').join(', ')}};
 const CALL = { money: ${callOf('money')}, fmtDate: ${callOf('fmt-date')}, daysSince: ${callOf('days-since')}, phone: ${callOf('phone-format')}, norm: ${callOf('norm-search')}, sum: ${callOf('sum')}, countBy: ${callOf('count-by')}, csv: ${callOf('csv')}, csvEsc: ${callOf('csv-escape')} };
 const today = () => new Date().toISOString().slice(0, 10);
+// אחסון: מוגש משרת (http) ⇒ הרשומות אצל השרת (/api/data, אותה צורה: מערך-לישות לפי סדר-הסכמה); נפתח כקובץ ⇒ localStorage. אפס פירוש — רק מאיפה הדף הגיע
+const API = /^https?:$/.test(location.protocol) ? new URL('api/data', location.href).pathname : '';   // יחסי לדף: / ⇒ /api/data · /build/7/app ⇒ /build/7/api/data
 let DATA; try { DATA = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { DATA = null; }
 if (!DATA) DATA = SCHEMA.map(() => []);
-const save = () => { try { localStorage.setItem(KEY, JSON.stringify(DATA)); } catch {} };
+let synced = '';
+const save = () => { if (API) { synced = JSON.stringify(DATA); fetch(API, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: synced }).catch(() => {}); return; } try { localStorage.setItem(KEY, JSON.stringify(DATA)); } catch {} };
+async function pull() { if (!API) return; try { const r = await fetch(API, { cache: 'no-store' }); if (!r.ok) return; const t = await r.text(); if (t === synced) return; const d = JSON.parse(t); if (!Array.isArray(d) || d.length !== SCHEMA.length) return; synced = t; DATA = d; paint(); } catch {} }
+if (API) { pull(); setInterval(pull, 3000); }
 const el = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function calc(e, r, f) { // נוסחה על שדות אותה רשומה: שמות ⇒ ערכים מספריים, חשבון בלבד
