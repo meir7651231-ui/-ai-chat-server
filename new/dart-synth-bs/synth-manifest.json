@@ -1,0 +1,103 @@
+{
+ "_": "אטומי-תצוגה שנולדו בסינתזה ונרשמו בפקודת-בעלים (display-synth --register). רשומת-אותות בצורת forge-manifest + תפקיד + ציון + המשפט שהוליד.",
+ "atoms": [
+  {
+   "family": "feedback",
+   "cls": "SynthAlertTile5372f7",
+   "file": "synthalerttile5372f7.dart",
+   "seam": "fields",
+   "states": false,
+   "stateIds": null,
+   "fieldSlots": 8,
+   "fieldDemo": [
+    "Label",
+    "248",
+    "Label",
+    "248",
+    "Label",
+    "248",
+    "Label",
+    "248"
+   ],
+   "sig": {
+    "root": {
+     "tag": "div",
+     "decorated": false,
+     "interactive": true,
+     "dir": "column"
+    },
+    "svg": false,
+    "input": null,
+    "series": 0,
+    "fills": 0,
+    "slots": [
+     {
+      "fs": 11,
+      "fw": 600,
+      "inBtn": false
+     },
+     {
+      "fs": 36,
+      "fw": 700,
+      "inBtn": false
+     },
+     {
+      "fs": 11,
+      "fw": 600,
+      "inBtn": false
+     },
+     {
+      "fs": 36,
+      "fw": 700,
+      "inBtn": false
+     },
+     {
+      "fs": 11,
+      "fw": 600,
+      "inBtn": false
+     },
+     {
+      "fs": 36,
+      "fw": 700,
+      "inBtn": false
+     },
+     {
+      "fs": 11,
+      "fw": 600,
+      "inBtn": false
+     },
+     {
+      "fs": 36,
+      "fw": 700,
+      "inBtn": false
+     }
+    ],
+    "numEmph": 3.27
+   },
+   "child": true,
+   "bare": false,
+   "control": false,
+   "actions": 1,
+   "items": {
+    "slots": 2,
+    "demo": 4,
+    "selectable": false,
+    "selected": false,
+    "cells": 2,
+    "variants": [
+     "tone-info",
+     "tone-ok",
+     "tone-warn",
+     "tone-err"
+    ]
+   },
+   "columns": 2,
+   "values": 0,
+   "role": "alertTile",
+   "score": 21.54,
+   "html": "<div role=\"button\" tabindex=\"0\" style=\"display:flex;flex-direction:column;gap:6px\"><div class=\"nb tone-info\"><span class=\"dt\"></span><span style=\"font-size:11px;font-weight:600;color:var(--mut)\">Label</span><span style=\"font-size:36px;font-weight:700;color:var(--ink)\">248</span></div><div class=\"nb tone-ok\"><span class=\"dt\"></span><span style=\"font-size:11px;font-weight:600;color:var(--mut)\">Label</span><span style=\"font-size:36px;font-weight:700;color:var(--ink)\">248</span></div><div class=\"nb tone-warn\"><span class=\"dt\"></span><span style=\"font-size:11px;font-weight:600;color:var(--mut)\">Label</span><span style=\"font-size:36px;font-weight:700;color:var(--ink)\">248</span></div><div class=\"nb tone-err\"><span class=\"dt\"></span><span style=\"font-size:11px;font-weight:600;color:var(--mut)\">Label</span><span style=\"font-size:36px;font-weight:700;color:var(--ink)\">248</span></div></div>",
+   "from": "התראה כשציון מתחת ל-55",
+   "registeredAt": "2026-09-23T16:21:30.594Z"
+  }
+ ]
+}

@@ -81,7 +81,26 @@ export function widgetRecordOf(sy, file) {
   if (a.columns) types.push(['columns', 'List<String>?']);
   return { cls: sy.cls, file, shelf: 'synth', types: new Map(types), required: new Set(), positional: [], flexRoot: false, he: [] };
 }
+// ── רישום (פקודת-בעלים): אטומים מסונתזים מתיקיית-פלט ⇒ מדף new/dart-synth-bs + synth-manifest.json (רשומת-אותות + תפקיד + ציון + מקור).
+//   מרגע הרישום הם באטלס (נייר), במניפסט של הפסק ובמועמדי-התפקיד (forgeCands) — הרכבה שנולדה פעם היא אטום-מדף בפעם הבאה.
+const SYNTH_SHELF = path.resolve(GEN, '../../new/dart-synth-bs'); const SYNTH_MAN = path.join(SYNTH_SHELF, 'synth-manifest.json');
+export const readSynthManifest = () => { try { return JSON.parse(fs.readFileSync(SYNTH_MAN, 'utf8')).atoms || []; } catch { return []; } };
+export function sidecarOf(sy, from) { return { cls: sy.cls, role: sy.role, score: sy.score, tried: sy.tried, html: sy.html, atom: sy.atom, from }; }
+export function registerSynth(outDir) {
+  const done = [];
+  for (const f of fs.readdirSync(outDir).filter((x) => /^gen_synth_.*\.json$/.test(x))) {
+    const sc = JSON.parse(fs.readFileSync(path.join(outDir, f), 'utf8')); const dart = path.join(outDir, f.replace(/\.json$/, '.dart')); if (!fs.existsSync(dart)) continue;
+    fs.mkdirSync(SYNTH_SHELF, { recursive: true }); const file = `${sc.cls.toLowerCase()}.dart`;
+    fs.writeFileSync(path.join(SYNTH_SHELF, file), fs.readFileSync(dart, 'utf8'));
+    const cur = readSynthManifest().filter((a) => a.cls !== sc.cls);
+    cur.push({ ...sc.atom, cls: sc.cls, file, role: sc.role, score: sc.score, html: sc.html, from: sc.from || null, registeredAt: new Date().toISOString() });
+    fs.writeFileSync(SYNTH_MAN, JSON.stringify({ _: 'אטומי-תצוגה שנולדו בסינתזה ונרשמו בפקודת-בעלים (display-synth --register). רשומת-אותות בצורת forge-manifest + תפקיד + ציון + המשפט שהוליד.', atoms: cur }, null, 1) + '\n');
+    done.push(sc.cls);
+  }
+  return done;
+}
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain && process.argv.includes('--register')) { const dir = process.argv[process.argv.indexOf('--register') + 1]; const d = registerSynth(dir); console.log(`📌 display-synth: נרשמו ${d.length} אטומים מסונתזים למדף new/dart-synth-bs: ${d.join(', ') || '—'}`); process.exit(0); }
 if (isMain) {
   const role = process.argv[2] || 'kpi'; const r = synthDisplay({ role });
   if (!r || !r.cls) { console.log(`🧪 display-synth ${role}: אין — ${r ? r.why : 'תפקיד לא מוכר'} (${r ? r.tried : 0} הרכבות · ${r ? r.ms : 0}ms)`); process.exit(1); }

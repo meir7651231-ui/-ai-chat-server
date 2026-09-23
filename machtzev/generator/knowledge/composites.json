@@ -1,0 +1,241 @@
+{
+ "_": "אינדקס-יכולות-מורכבות (insight): יכולת = תיאור-דאטה של הרכבה — אילו אטומים, איזה חיווט, לאיזו מטרה. נרשם בפקודה, לא בבנייה.",
+ "composites": [
+  {
+   "key": "predicateOverSet·num·<",
+   "shape": "predicateOverSet",
+   "purpose": "התראה כשמסכים מתחת ל-4",
+   "decision": {
+    "atom": "gtNum",
+    "file": "dart-maor/op-gt-num.dart",
+    "proven": true,
+    "examples": [
+     [
+      "4, 4",
+      "r == false"
+     ],
+     [
+      "4, 4",
+      "r == false"
+     ],
+     [
+      "4, 4",
+      "r == false"
+     ],
+     [
+      "4, 4",
+      "r == false"
+     ],
+     [
+      "4, 4",
+      "r == false"
+     ],
+     [
+      "4, 4",
+      "r == false"
+     ]
+    ]
+   },
+   "ops": [
+    {
+     "op": "headline",
+     "atom": "ForgeStatPlain"
+    },
+    {
+     "op": "ratio",
+     "atom": "ForgeLinearProgressStatus"
+    },
+    {
+     "op": "alert",
+     "atom": "ForgeToneBanner"
+    },
+    {
+     "op": "table",
+     "atom": "ForgeDataGrid"
+    }
+   ],
+   "flow": [
+    "br.length ⇒ headline(ForgeStatPlain)",
+    "br.length / rs.length ⇒ ratio(ForgeLinearProgressStatus)",
+    "br.isNotEmpty ⇒ alert(ForgeToneBanner)",
+    "br ⇒ table(ForgeDataGrid)"
+   ]
+  },
+  {
+   "key": "predicateOverSet·refCount·>",
+   "shape": "predicateOverSet",
+   "purpose": "התראה כשמונה שאלות של משפט מעל 1",
+   "decision": {
+    "atom": "gtNum",
+    "file": "dart-maor/op-gt-num.dart",
+    "proven": true,
+    "examples": [
+     [
+      "0, 1",
+      "r == false"
+     ],
+     [
+      "0, 1",
+      "r == false"
+     ],
+     [
+      "0, 1",
+      "r == false"
+     ],
+     [
+      "0, 1",
+      "r == false"
+     ],
+     [
+      "2, 1",
+      "r == true"
+     ],
+     [
+      "1, 1",
+      "r == false"
+     ]
+    ]
+   },
+   "ops": [
+    {
+     "op": "headline",
+     "atom": "ForgeStatPlain"
+    },
+    {
+     "op": "ratio",
+     "atom": "ForgeLinearProgressStatus"
+    },
+    {
+     "op": "alert",
+     "atom": "ForgeToneBanner"
+    },
+    {
+     "op": "table",
+     "atom": "ForgeDataGrid"
+    }
+   ],
+   "flow": [
+    "br.length ⇒ headline(ForgeStatPlain)",
+    "br.length / rs.length ⇒ ratio(ForgeLinearProgressStatus)",
+    "br.isNotEmpty ⇒ alert(ForgeToneBanner)",
+    "br ⇒ table(ForgeDataGrid)"
+   ]
+  },
+  {
+   "key": "predicateOverSet·aggBy·avg·by·<",
+   "shape": "predicateOverSet",
+   "purpose": "התראה כשממוצע ציון לכל משפחה מתחת ל-5",
+   "decision": {
+    "atom": "ltNum",
+    "file": "dart-maor/op-lt-num.dart",
+    "proven": true,
+    "examples": [
+     [
+      "4.5, 5",
+      "r == true"
+     ],
+     [
+      "3.3, 5",
+      "r == true"
+     ],
+     [
+      "8, 5",
+      "r == false"
+     ],
+     [
+      "0, 5",
+      "r == true"
+     ],
+     [
+      "5, 5",
+      "r == false"
+     ]
+    ]
+   },
+   "ops": [
+    {
+     "op": "headline",
+     "atom": "ForgeStatPlain"
+    },
+    {
+     "op": "ratio",
+     "atom": "ForgeLinearProgressStatus"
+    },
+    {
+     "op": "alert",
+     "atom": "ForgeToneBanner"
+    },
+    {
+     "op": "table",
+     "atom": "ForgeDataGrid"
+    }
+   ],
+   "flow": [
+    "br.length ⇒ headline(ForgeStatPlain)",
+    "br.length / rs.length ⇒ ratio(ForgeLinearProgressStatus)",
+    "br.isNotEmpty ⇒ alert(ForgeToneBanner)",
+    "br ⇒ table(ForgeDataGrid)"
+   ]
+  },
+  {
+   "key": "predicateOverSet·age·>",
+   "shape": "predicateOverSet",
+   "purpose": "התראה כשתאריך הכרעה מעל 30 ימים",
+   "decision": {
+    "atom": "gtNum",
+    "file": "dart-maor/op-gt-num.dart",
+    "proven": true,
+    "examples": [
+     [
+      "0, 30",
+      "r == false"
+     ],
+     [
+      "0, 30",
+      "r == false"
+     ],
+     [
+      "0, 30",
+      "r == false"
+     ],
+     [
+      "0, 30",
+      "r == false"
+     ],
+     [
+      "0, 30",
+      "r == false"
+     ],
+     [
+      "30, 30",
+      "r == false"
+     ]
+    ]
+   },
+   "ops": [
+    {
+     "op": "headline",
+     "atom": "ForgeStatPlain"
+    },
+    {
+     "op": "ratio",
+     "atom": "ForgeLinearProgressStatus"
+    },
+    {
+     "op": "alert",
+     "atom": "ForgeToneBanner"
+    },
+    {
+     "op": "table",
+     "atom": "ForgeDataGrid"
+    }
+   ],
+   "flow": [
+    "br.length ⇒ headline(ForgeStatPlain)",
+    "br.length / rs.length ⇒ ratio(ForgeLinearProgressStatus)",
+    "br.isNotEmpty ⇒ alert(ForgeToneBanner)",
+    "br ⇒ table(ForgeDataGrid)"
+   ]
+  }
+ ]
+}

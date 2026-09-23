@@ -116,7 +116,8 @@ function splitExamples(text) {
   if (!EX_WORDS.length) return { text, examples: [] };
   const re = new RegExp(`\\s*(?:${EX_WORDS.join('|')})\\s*:?\\s*(.+?)(?=\\.(?:\\s|$)|$)`, 'g');
   const examples = [];
-  const out = text.replace(re, (m, body, offset) => { const records = body.split(';').map((r) => r.split(/[,،]/).map((v) => v.trim()).filter(Boolean)).filter((r) => r.length); if (records.length) examples.push({ at: offset, records }); return ''; });
+  let removed = 0;   // המיקום נמדד על הטקסט **אחרי** הסרת הדוגמאות הקודמות — אחרת הדוגמה השנייה «נופלת» על הישות האחרונה (הבאג: כל הדוגמאות נדבקו ל«הכרעה»)
+  const out = text.replace(re, (m, body, offset) => { const records = body.split(';').map((r) => r.split(/[,،]/).map((v) => v.trim()).filter(Boolean)).filter((r) => r.length); if (records.length) examples.push({ at: offset - removed, records }); removed += m.length; return ''; });
   return { text: out, examples };
 }
 export function formOf(sentence0) {

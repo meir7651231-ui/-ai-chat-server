@@ -14,7 +14,8 @@ import { OPFAM } from './cover.mjs';
 const GEN = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(GEN, '../..');
 let MAN = null, MAP = null, SKIN = null;
-const manifest = () => (MAN ||= new Map(JSON.parse(fs.readFileSync(path.join(ROOT, 'new/dart-forge-bs/forge-manifest.json'), 'utf8')).atoms.map((a) => [a.cls, a])));
+const synthMan = () => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'new/dart-synth-bs/synth-manifest.json'), 'utf8')).atoms || []; } catch { return []; } };   // אטומים מסונתזים שנרשמו
+const manifest = () => (MAN ||= new Map([...JSON.parse(fs.readFileSync(path.join(ROOT, 'new/dart-forge-bs/forge-manifest.json'), 'utf8')).atoms, ...synthMan()].map((a) => [a.cls, a])));
 const opsMap = () => (MAP ||= JSON.parse(fs.readFileSync(path.join(GEN, 'ops-map.json'), 'utf8')));
 const autoSkin = () => (SKIN ||= JSON.parse(fs.readFileSync(path.join(GEN, 'auto-skin.json'), 'utf8')));
 const isNum = (t) => /^[\d,.%₪$+\-–]+$/.test(String(t).trim());   // אותה צורת-חריץ כמו auto-skin.fits
@@ -28,7 +29,8 @@ export function forgeCands(op, role = null) {
   const fam = OPFAM[op] || op;
   const byOp = opsMap().filter((a) => a.layer === 'display' && a.op === fam && /^Forge/.test(a.id) && a.sockets.includes('fields')).map((a) => a.id);
   const byRole = role && autoSkin().top3 && autoSkin().top3[role] ? autoSkin().top3[role].map((x) => x.split(':')[0]) : [];
-  return [...new Set([...byRole, ...byOp])];
+  const bySynth = role ? synthMan().filter((a) => a.role === role).map((a) => a.cls) : [];   // הרכבה שנרשמה לתפקיד — מועמדת ראשונה (ועדיין נפסקת)
+  return [...new Set([...bySynth, ...byRole, ...byOp])];
 }
 
 /** חיווט: אטום עם חריץ-`fields` ⇒ לפי צורת-החריץ; אחרת wireAtom כרגיל. */

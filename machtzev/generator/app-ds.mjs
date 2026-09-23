@@ -378,13 +378,23 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
         if (child && parent) { const b = (backRefs[parent.entity] || []).find((q) => q.fname === child.entity); if (!b) { const why = T('liveNoRelation', { name: x.name, child: child.entity, parent: parent.entity }); seedNotes.push(why); return { ...x, why }; }
           return { ...x, live: { slug: nameToSlug[parent.entity], kind: 'refCount', field: b.ffield, childSlug: b.fslug, childField: b.ffield, childName: child.entity, parentKey: (parent.schema[0] || {}).label, op: c.op, n: +c.n } }; }
       }
+      const byI = rest.findIndex((w) => (SL.perEach || []).includes(w));   // «ממוצע ציון לכל כיתה» ⇒ ערך-הצבירה לכל קבוצה (השדה אחרי מילת-החלוקה)
+      if (agg && byI > 0 && byI < rest.length - 1) {
+        const fw = rest.slice(0, byI).join(' '), bw = rest.slice(byI + 1).join(' ');
+        for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(fw) || fd.label === fw); const b = r.schema.find((fd) => stemOf(fd.label) === stemOf(bw) || fd.label === bw);
+          if (f && b && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'aggBy', agg, field: f.label, by: b.label, op: c.op, n: +c.n } }; }
+        return x;
+      }
       if (agg) {   // על הקבוצה: מונה של ישות («מונה תלמידים») או ממוצע/סכום של שדה («ממוצע ציון»)
         const ent0 = agg === 'count' ? entByStem(rest.join(' ')) : null;
         if (ent0) return { ...x, live: { slug: nameToSlug[ent0.entity], kind: 'agg', agg, field: (ent0.schema[0] || {}).label, op: c.op, n: +c.n } };
         for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(rest.join(' ')) || fd.label === rest.join(' ')); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'agg', agg, field: f.label, op: c.op, n: +c.n } }; }
         return x;
       }
-      for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) { if (c.unit && f.type !== 'date') { const why = T('liveNotDate', { name: x.name, label: f.label, type: f.type }); seedNotes.push(why); return { ...x, why }; } return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: c.unit ? 'age' : 'num', days: c.unit ? +c.n * c.unit : null } }; } }
+      // «תאריך הכרעה» (שדה + ישות בסמיכות) ⇒ השדה של אותה ישות קודם; אחרת השדה בכל ישות
+      const xw2 = String(c.x).split(/\s+/).filter(Boolean); const entTail = xw2.length >= 2 ? entByStem(xw2[xw2.length - 1]) : null; const fieldHead = entTail ? xw2.slice(0, -1).join(' ') : null;
+      const ordered = [...(entTail ? [entTail] : []), ...info.filter((li) => li.isEnt && entRes[li.i] && entRes[li.i] !== entTail).map((li) => entRes[li.i])];
+      for (const r of ordered) { const cx = (r === entTail && fieldHead) ? fieldHead : c.x; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(cx) || fd.label === cx); if (f && nameToSlug[r.entity]) { if (c.unit && f.type !== 'date') { const why = T('liveNotDate', { name: x.name, label: f.label, type: f.type }); seedNotes.push(why); return { ...x, why }; } return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: c.unit ? 'age' : 'num', days: c.unit ? +c.n * c.unit : null } }; } }
       return x; });   // אין ישות עם השדה ⇒ השורה נשארת סטטית (הסף בלבד), לא מומצא
     liveExtrasOut = liveExtras;
     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr, homeIsRoot: rootIsFirst, extras: liveExtras, seed });

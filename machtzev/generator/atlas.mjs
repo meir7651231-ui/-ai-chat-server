@@ -48,7 +48,7 @@ export function buildAtlas({ forge = false } = {}) {
   };
 
   const widgets = [];
-  for (const f of [...WIDGET_SHELVES, ...(forge ? ['new/dart-forge-bs'] : [])].flatMap(dartFiles)) {
+  for (const f of [...WIDGET_SHELVES, ...(forge ? ['new/dart-forge-bs', ...(fs.existsSync(path.join(ROOT, 'new/dart-synth-bs')) ? ['new/dart-synth-bs'] : [])] : [])].flatMap(dartFiles)) {   // dart-synth-bs: אטומים מסונתזים שנרשמו (display-synth --register) — קיים רק אחרי רישום ראשון
     const raw = fs.readFileSync(f.abs, 'utf8');
     const he = heHead(raw);
     const src = stripComments(raw);
@@ -67,7 +67,7 @@ export function buildAtlas({ forge = false } = {}) {
         const mm = pp.match(/this\.(\w+)/); if (mm) positional.push(mm[1]);
       }
       widgets.push({
-        cls, file: f.shelf === 'new/dart-forge-bs' ? 'dart-forge-bs/' + f.rel : f.rel, shelf: f.shelf, types, positional, he,
+        cls, file: f.shelf === 'new/dart-forge-bs' ? 'dart-forge-bs/' + f.rel : f.shelf === 'new/dart-synth-bs' ? 'dart-synth-bs/' + f.rel : f.rel, shelf: f.shelf, types, positional, he,
         required: new Set([...namedPart.matchAll(/required\s+this\.(\w+)/g)].map(x => x[1])),
         named: new Set([...namedPart.matchAll(/this\.(\w+)/g)].map(x => x[1])),
         flexRoot: /return\s+(?:Expanded|Flexible)\s*\(/.test(body),   // בנוי-ל-Row: חייב הורה-flex

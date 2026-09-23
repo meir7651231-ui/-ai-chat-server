@@ -12,6 +12,11 @@ export const liveIsSet = (live) => live.kind === 'agg';
 export const liveAggExpr = (live, rs = 'rs', k = (s) => `'${s}'`) => live.agg === 'count' ? `${rs}.length.toDouble()` : live.agg === 'sum' ? `sumBy(${rs}, (x) => double.tryParse(((x as Map)[${k(live.field)}] ?? '').toString()) ?? 0).toDouble()` : `(${rs}.isEmpty ? double.nan : sumBy(${rs}, (x) => double.tryParse(((x as Map)[${k(live.field)}] ?? '').toString()) ?? 0) / ${rs}.length)`;
 export const liveAggImport = (live) => (live.kind === 'agg' && live.agg !== 'count' ? "import '../dart-maor/op-sum-by.dart';" : null);
 export const AGG_WORD = { avg: 'ממוצע', sum: 'סכום', count: 'מונה' };
+export const liveIsGrouped = (live) => live.kind === 'aggBy';
+/** קבוצות (aggBy): הרשומות ⇒ רשימת-קבוצות {by: ערך-החלוקה, field: ערך-הצבירה} — ומכאן הצורה היא פר-רשומה (רשומה = קבוצה) */
+export const liveGroupsExpr = (live, rs0 = 'rs0', k = (s) => `'${s}'`) => `(() { final g = <String, List<Map<String, String>>>{}; for (final r in ${rs0}) { g.putIfAbsent((r[${k(live.by)}] ?? '').trim(), () => <Map<String, String>>[]).add(r); } return [for (final e in g.entries) <String, String>{${k(live.by)}: e.key, ${k(live.field)}: ((${liveAggExpr(live, 'e.value', k)}) * 10).round() / 10 == ((${liveAggExpr(live, 'e.value', k)}) * 10).round() ~/ 10 ? (((${liveAggExpr(live, 'e.value', k)}) * 10).round() ~/ 10).toString() : (((${liveAggExpr(live, 'e.value', k)}) * 10).round() / 10).toString()}]; })()`;
+/** ערך-הקבוצות מהדוגמאות (aggBy) ⇒ [[by, value]] */
+export function liveGroupsSample(live, rows, fi, bi) { const g = new Map(); for (const r of rows) { const key = String(r[bi] || '').trim(); (g.get(key) || g.set(key, []).get(key)).push(r); } return [...g.entries()].map(([key, rs]) => { const v = liveAggSample(live, rs, fi); return [key, v == null ? null : Math.round(v * 10) / 10]; }); }
 export const liveThreshold = (live) => (live.kind === 'age' ? live.days : live.n);
 export const liveNeedsHelper = (live) => live.kind === 'age';
 /** ערכי-הדוגמאות של הבעלים בצורת-התנאי: מספר ⇒ המספר · תאריך ⇒ ותק בימים היום (תלוי-זמן, מוצהר) */

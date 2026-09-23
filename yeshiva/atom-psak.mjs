@@ -27,7 +27,8 @@ export const KIND = { fact: 'עובדה', shiur: 'שיעור' };   // סוגי-�
 const DATA = JSON.parse(fs.readFileSync(new URL('./atom-psak.data.json', import.meta.url), 'utf8'));
 export const roleOf = (op) => DATA.roleOf[op] || null;   // פעולת-חיפוש ⇒ תפקיד-עור מדוד (דאטה); אין ⇒ null = אין מדידת-צורה
 let MAN = null;
-const manifest = () => (MAN ||= new Map(JSON.parse(fs.readFileSync(new URL('../new/dart-forge-bs/forge-manifest.json', import.meta.url), 'utf8')).atoms.map((a) => [a.cls, a])));
+const synthMan = () => { try { return JSON.parse(fs.readFileSync(new URL('../new/dart-synth-bs/synth-manifest.json', import.meta.url), 'utf8')).atoms || []; } catch { return []; } };   // אטומים מסונתזים שנרשמו (display-synth --register)
+const manifest = () => (MAN ||= new Map([...JSON.parse(fs.readFileSync(new URL('../new/dart-forge-bs/forge-manifest.json', import.meta.url), 'utf8')).atoms, ...synthMan()].map((a) => [a.cls, a])));
 export const sigOfDefault = (cls) => manifest().get(cls) || atomSigs().get(cls) || null;   // forge (CSS) ⇒ אחרת Dart
 // אות-צורה: אטום מדוד מול התפקידים המבוקשים ⇒ { ok, score, role, why } · לא-מדוד ⇒ null
 function shapeOf(a, roles) {
