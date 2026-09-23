@@ -34,7 +34,11 @@ const ANSWERS = () => process.env.MAVIN_ANSWERS || path.join(R.ROOT, '.maimatai'
 export const toks = (s) => [...String(s || '').matchAll(/[֐-׿]+(?:["״׳'_][֐-׿]+)*(?:\s*\/\s*[֐-׿]+(?:["״׳'_][֐-׿]+)*)+|[֐-׿]+(?:["״׳'_][֐-׿]+)*|\d+|[A-Za-z]+/g)].map((m) => m[0].replace(/\s*\/\s*/g, '/'));   // «בעד/נגד/נמנע» = אסימון אחד: בחירה-אחת-מכמה (צורה)
 const stripLead = (w) => { const out = [w]; for (let k = 1; k <= 2 && w.length - k >= 3; k++) out.push(w.slice(k)); return out; };   // (ג)
 const isMany = (w) => w.length >= 4 && /(ים|ות)$/.test(w) && !SINGULAR.has(w);                                                 // (א) · «כמות»/«נוכחות» = יחיד (דאטה של gen/lang)
-const stem = (w) => w.replace(/(ים|ות|ה)$/, '');   // (ג') גם «ה» סופית להשוואת יחיד↔רבים (משימה↔משימות)
+const stem = (w) => w.replace(/(ים|ות|ה)$/, '');
+/** אותו גזע: מילה (אולי עם 1–2 אותיות פותחות) ⇔ תווית. צורה בלבד — לשימוש הדלת (הגדרות-מילים). */
+export const sameStem = (w, label) => toks(label).some((lw) => stripLead(stem(w)).some((f) => f.length >= 3 && f === stem(lw)));
+/** האות-הפותחת של מילה שגזעה = תווית (כש+תלמיד ⇒ «כש»); null כשאין התאמה. */
+export const leadOf = (w, label) => { const sw = stem(w); for (let k = 0; k <= 2; k++) { if (sw.length - k < 3) break; if (toks(label).some((lw) => sw.slice(k) === stem(lw))) return w.slice(0, k); } return null; };   // (ג') גם «ה» סופית להשוואת יחיד↔רבים (משימה↔משימות)
 const itemMany = (item) => isMany(item[0]) || isMany(item[item.length - 1]) || (item.length > 1 && /י$/.test(item[0]));   // «קבלני משנה» — סמיכות-רבים (י + מילה שנייה)
 
 // ── פיזור מהקטלוג: על כמה מינים שונים של חלקיקים כתובה המילה (משפט-המטרה בראש הקובץ), לפי שכבה ──
@@ -53,6 +57,8 @@ export function spreadIndex() {
   return (_spread = idx);
 }
 const entryOf = (w) => { const idx = spreadIndex(); for (const f of stripLead(w)) if (idx.has(f)) return { form: f, e: idx.get(f) }; return null; };
+/** על אילו חלקיקים כתובה המילה (לפי שכבה, בשמות-הפעולה). «אין» בלי זה אסור (הכרעת-בעלים 23.9: «אין» בלי חיפוש נחסם). */
+export function carriersOf(w) { const x = entryOf(w); return x ? { form: x.form, logic: [...x.e.logic], display: [...x.e.display], data: [...x.e.data] } : { form: w, logic: [], display: [], data: [] }; }
 export function spreadOf(w) { const x = entryOf(w); return x ? { form: x.form, ops: x.e.logic.size + x.e.display.size + x.e.data.size } : { form: w, ops: 0 }; }
 const isSpread = (w) => spreadOf(w).ops >= SPREAD();
 const known = (w) => spreadIndex().has(w);   // הצורה עצמה כתובה על חלקיק כלשהו

@@ -10,7 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { formOf, specOf, answerFor, toks, serverDeclOf, lookDeclOf, headOf, planBehaviors } from './mavin.mjs';
+import { formOf, specOf, answerFor, toks, serverDeclOf, lookDeclOf, headOf, planBehaviors, sameStem, leadOf, recall, remember, carriersOf } from './mavin.mjs';
 import { askMaimatai } from './kashe.mjs';   // המקשה (18 גלאים) — שאלות על המשפט, לא הנחות
 import { rule as yeshivaRule } from './purpose.mjs';   // הפוסק (9 מהלכים) על האפיון שיצא
 import { detectAllClauses, relOpOf, emitAppFrom } from '../machtzev/generator/capability.mjs';
@@ -93,7 +93,12 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
     if (b && b.score > 0) { routes.push({ thing: t.label, route: 'combine', proposal: true, why: `הצעה (תוכן ממקום אחר): דומה במילים למסך רשום ${b.name} (${(+b.score).toFixed(2)})`, screen: b.name, score: +b.score }); continue; }
     const g = goldModuleFor(t.label);   // אחרי combine: תוספת בלבד — לא מחליף מסלול קיים («רק את הפלוסים»)
     if (g) { routes.push({ thing: t.label, route: 'gold', proposal: true, why: `הצעה (תוכן ממקום אחר): כותרות-זהב של ${path.basename(g.module)} חוזרות על «${g.words.join(' ')}» ${g.score} פעמים`, module: g.module }); continue; }
-    routes.push({ thing: t.label, route: 'none', why: 'אין תנאי, אין שדות, אין מסך דומה ⇒ שאלה' });
+    // «אין» רק אחרי חיפוש (הכרעת-בעלים 23.9): כל מילה ביחידה נבדקת מול המדף (על אילו חלקיקים היא כתובה), מול שדות בגזע, ומול הגדרה זכורה; המסך-הדומה כבר נמדד
+    const search = toks(t.label).filter((w) => !form.things.some((x) => x !== t && (sameStem(w, x.label) || (x.fields || []).some((f) => sameStem(w, f.label))))).map((w) => {
+      const c = carriersOf(w); const fields = form.things.flatMap((x) => (x.fields || []).filter((f) => sameStem(w, f.label)).map((f) => `${x.label}.${f.label}`)); const rec = recall(w);
+      return { word: w, form: c.form, carriers: c.logic.length + c.display.length + c.data.length, logic: c.logic.slice(0, 3), display: c.display.slice(0, 3), fields, remembered: rec ? String(rec.proposal) : null }; });
+    const line = search.map((x) => `«${x.word}»: כתוב על ${x.carriers} חלקיקים${x.carriers ? ` (${[...x.logic, ...x.display].slice(0, 3).join(', ')})` : ''} · שדות בגזע ${x.fields.length ? x.fields.join(', ') : 0} · הגדרה זכורה ${x.remembered ? 'כן' : 'לא'}`).join(' | ');
+    routes.push({ thing: t.label, route: 'none', search, why: `אין תנאי, אין שדות, מסך דומה ${b ? (+b.score).toFixed(2) : 0} · חיפוש: ${line || '—'} ⇒ שאלה` });
   }
   return { routes, spec: spec.spec, skipped: spec.skipped, builtin: spec.builtin };
 }
@@ -188,9 +193,41 @@ export async function generateFromDoc(md, { outDir, name = 'doc' } = {}) {
   return { ...r, node };
 }
 /** הפעלה: כל מסלול למנוע שלו; כתיבה רק ל-outDir. מחזיר את הקבצים שנוצרו ופערים. */
+/** הגדרות-מילים (הכרעת-בעלים 23.9 «תפרק את זה ותחבר»): סעיף שלא נכנס («התראה כשתלמיד מתקשה» ⇒ none) ומילה שאינה שדה ולא תנאי —
+ *  (א) יש תשובה מהבעלים («מתקשה» = «ציון מתחת ל-55 או היעדרויות מעל 3») ⇒ המילה מוחלפת בהגדרה, «או» = סעיף לכל חלק, והמשפט נקרא שוב באותה דלת;
+ *      התשובה נזכרת (remember) ומוצעת בפעם הבאה כהצעה, לא כעובדה (recall ⇒ ברירת-מחדל בשאלה; נכנסת לבד רק עם proposals).
+ *  (ב) אין ⇒ שאלה עם מפתח = המילה. אפס פירוש: המילה נמצאת לפי צורה (אחרי מילת-הישות בסעיף), ההגדרה היא משפט של הבעלים. */
+function expandDefinitions(sentence, form, routed, answers, proposals) {
+  const out = { sentence, changed: false, notes: [], questions: [] };
+  let orRe = null; try { const ow = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')).orWords || []; if (ow.length) orRe = new RegExp('\\s+(?:' + ow.join('|') + ')\\s+'); } catch {}
+  const ents = form.things.filter((t) => t.fields && t.fields.length);
+  for (const r of routed.routes.filter((x) => x.route === 'none')) {
+    const thing = form.things.find((t) => t.label === r.thing); if (!thing) continue;
+    const tokens = toks(thing.label);
+    let ei = -1, ent = null; tokens.forEach((w, i) => { const e = ents.find((t) => leadOf(w, t.label) != null); if (e) { ei = i; ent = e; } });
+    const cands = ei >= 0 ? tokens.slice(ei + 1) : tokens.slice(1).filter((w) => !ents.some((t) => sameStem(w, t.label) || t.fields.some((f) => sameStem(w, f.label))));
+    for (const w of cands) {
+      const said = typeof answers[w] === 'string' ? answers[w].trim() : '';
+      const rec = recall(w);
+      const def = said || (proposals && rec ? String(rec.proposal) : '');
+      if (!def) { const sx = (r.search || []).find((x) => x.word === w); out.questions.push({ thing: r.thing, ask: 'define', key: w, q: `«${w}» — ${sx ? `כתוב על ${sx.carriers} חלקיקים${sx.carriers ? ` (${[...sx.logic, ...sx.display].slice(0, 3).join(', ')})` : ''}, ` : ''}לא שדה${ent ? ` של «${ent.label}» (${ent.fields.map((f) => f.label).join(', ')})` : ''} ולא תנאי; להגדיר במשפט על שדה ⇒ ${rec ? `${rec.proposal} (נענה ${rec.times} פעמים — הצעה, לא עובדה)` : 'נשאר בלי מסך עד תשובה'}` }); continue; }
+      const parts = (orRe ? def.split(orRe) : [def]).map((x) => x.trim()).filter(Boolean);
+      const lead = ei >= 0 ? leadOf(tokens[ei], ent.label) : '';
+      const clauses = parts.map((p) => ei >= 0 ? [...tokens.slice(0, ei), lead + p].join(' ') : tokens.map((t) => (t === w ? p : t)).join(' '));
+      if (!out.sentence.includes(thing.label)) { out.notes.push(`הגדרה «${w}»: הסעיף «${thing.label}» לא נמצא כלשונו במשפט ⇒ לא הוחלף`); continue; }
+      out.sentence = out.sentence.replace(thing.label, clauses.join('; ')); out.changed = true;
+      out.notes.push(`הגדרה «${w}» = «${def}» (${said ? 'תשובת-הבעלים' : `נזכרה, נענתה ${rec.times} פעמים`}) ⇒ ${clauses.length} סעיפים: ${clauses.map((c) => `«${c}»`).join(' · ')}`);
+      if (said && !(rec && String(rec.proposal) === said)) { try { remember(w, said, sentence); } catch {} }
+      break;   // מילה אחת לסעיף; השאר נקראות מחדש אחרי ההחלפה
+    }
+  }
+  return out;
+}
 export async function generateAll(sentence, { answers = {}, outDir, name = 'mavin', proposals = false } = {}) {
-  const form = formOf(sentence);
-  const routed = routeOf(form, answers, { proposals });
+  let form = formOf(sentence);
+  let routed = routeOf(form, answers, { proposals });
+  const defs = expandDefinitions(sentence, form, routed, answers, proposals);
+  if (defs.changed) { sentence = defs.sentence; form = formOf(sentence); routed = routeOf(form, answers, { proposals }); }
   const { routes: allRoutes, skipped } = routed; let spec = routed.spec;
   // הישיבה על המשפט ועל האפיון (הכרעת-בעלים 23.9 «תתחיל לחבר»): (א) המקשה ⇒ קושיות (לא הנחות) · (ב) הפוסק ⇒ מה שהוכרע מוחל, מתגים ⇒ שאלות
   const yesh = { kushyot: [], rulings: [], switches: [], note: null };
@@ -200,7 +237,7 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   const routes = proposals ? allRoutes : allRoutes.filter((r) => !r.proposal);
   const held = allRoutes.filter((r) => r.proposal && !proposals);
   fs.mkdirSync(outDir, { recursive: true });
-  const files = [], notes = [], questions = [];
+  const files = [], notes = [...defs.notes], questions = [...defs.questions];
   for (const q of yesh.kushyot) questions.push({ thing: 'הישיבה', ask: q.kind, q: `${q.kind}: ${q.text}` });
   for (const sw of yesh.switches) questions.push({ thing: 'הישיבה', ask: sw.move || sw.kind, q: `${sw.move || sw.kind}: ${sw.text}` });
   if (yesh.note) notes.push(yesh.note);

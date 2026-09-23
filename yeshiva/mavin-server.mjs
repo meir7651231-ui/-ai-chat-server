@@ -89,7 +89,7 @@ function door(b, extra, env) {
     const argv = [DOOR, b.sentence, ...extra];
     if (b.answers && Object.keys(b.answers).length) { const af = path.join(bdir(b), 'answers.json'); fs.writeFileSync(af, JSON.stringify(b.answers)); argv.push('--answers', af); }
     let out = ''; const t0 = Date.now();
-    const p = spawn(process.execPath, argv, { cwd: ROOT, env: { ...process.env, TMPDIR: bdir(b), ...env } });
+    const p = spawn(process.execPath, argv, { cwd: ROOT, env: { ...process.env, TMPDIR: bdir(b), MAVIN_ANSWERS: path.join(BUILDS, 'answers.jsonl'), ...env } });   // זיכרון-ההגדרות משותף לכל הבניות של השרת
     p.stdout.on('data', (d) => { out += d; }); p.stderr.on('data', (d) => { out += d; });
     p.on('close', (code) => res({ out, code, ms: Date.now() - t0 }));
   });
@@ -98,7 +98,7 @@ function parseDoor(b, out) {
   const lines = out.split('\n');
   const i0 = lines.findIndex((l) => /^אפיון:/.test(l));
   if (i0 >= 0) { b.spec = []; for (const l of lines.slice(i0 + 1)) { if (!/^  /.test(l) || /^  (מסלול|לא נכנסו|כבר מובנה|⚖|\?|החלטה|הרכבה|🧪)/.test(l)) break; b.spec.push(l.trim()); } }
-  b.questions = lines.filter((l) => /^\s+\? /.test(l)).map((l) => { const [text, def = ''] = l.replace(/^\s+\? /, '').split(' ⇒ '); return { text: text.trim(), def: def.trim(), answer: (b.questions.find((q) => q.text === text.trim()) || {}).answer || '' }; });
+  b.questions = lines.filter((l) => /^\s+\? /.test(l)).map((l) => { const km = l.match(/ \[([^\]]+)\]\s*$/); const [text, def = ''] = l.replace(/^\s+\? /, '').replace(/ \[[^\]]+\]\s*$/, '').split(' ⇒ '); return { text: text.trim(), def: def.trim(), key: km ? km[1] : '', answer: (b.questions.find((q) => q.text === text.trim()) || {}).answer || '' }; });   // [מפתח] = שאלת-הגדרה: התשובה נכנסת ל---answers תחת המפתח
   b.picks = lines.map((l) => l.match(/^\s+⚖️ (.+?) ⇒ (\S+) \((.+?)\)(?: · פליגא (\d+))?/)).filter(Boolean).map((m) => [m[1], m[2], m[3], m[4] || '0']);
   const sc = lines.find((l) => /^מסכים: /.test(l)); b.screens = sc ? sc.replace(/^מסכים: /, '').split(' · ') : [];
   b.errors = lines.filter((l) => /error •/.test(l)).length;
@@ -149,7 +149,7 @@ function acceptData(d) {
   const seen = new Set();
   for (const row of d[ei]) { const label = String(row[0] || '').trim(), sentence = String(row[1] || '').trim(); const b = visible().find((x) => x.label === label); if (b) { seen.add(b.id); continue; } if (sentence) seen.add(newBuild(sentence, { label }).id); }
   for (const b of visible()) if (!seen.has(b.id)) { b.removed = true; persist(b); }
-  if (qi >= 0 && Array.isArray(d[qi])) for (const row of d[qi]) { const b = visible().find((x) => x.label === String(row[0] || '').trim()); const q = b && b.questions.find((x) => x.text === String(row[1] || '').trim()); if (q && String(row[3] || '') !== q.answer) { q.answer = String(row[3] || ''); b.answers[q.text] = q.answer; persist(b); if (!queue.includes(b) && running !== b) { queue.push(b); pump(); } } }
+  if (qi >= 0 && Array.isArray(d[qi])) for (const row of d[qi]) { const b = visible().find((x) => x.label === String(row[0] || '').trim()); const t = String(row[1] || '').trim(); const q = b && b.questions.find((x) => x.text === t || (x.key && x.key === t)); /* שורת-שאלה מהתאום: אותה בנייה + הטקסט או המפתח («מתקשה») = אותה שאלה; התשובה בשדה-התשובה */ if (q && String(row[3] || '') !== q.answer) { q.answer = String(row[3] || ''); b.answers[q.key || q.text] = q.answer; persist(b); if (!queue.includes(b) && running !== b) { queue.push(b); pump(); } } }
 }
 
 // ── המשפט של המחולל על עצמו: סכמה + דוגמאות מהרשומות החיות ──
