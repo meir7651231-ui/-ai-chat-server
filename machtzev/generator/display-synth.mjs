@@ -50,6 +50,17 @@ export function candidatesFor(role, hints = {}) {
       out.push(box('column', dec, `<div style="display:flex;justify-content:space-between">${text('Label', lfs, 600, 'mut')}${text('72%', vfs, vfw, 'ink')}</div><div style="height:${h}px;border-radius:999px;background:var(--raised2)"><div style="width:72%;height:${h}px;border-radius:999px;background:var(--a)"></div></div>`));
   } else if (R.need === 'text1') {
     for (const [fs, fw, withIcon] of product([12.5, 14, 15], [600, 700], [true, false])) out.push(R.fam && R.fam.includes('action') ? btn((withIcon ? icon() : '') + text('Label', fs, fw, 'on-a')) : box('row', true, (withIcon ? dot('a') : '') + text('Label', fs, fw)));
+  } else if (R.need === 'table') {   // טבלה: שורת-כותרות (קבוצת-עלים = columns) + ≥3 שורות זהות של תאים (קבוצה ראשית = items עם cells)
+    const cell = (demo, fs, fw, tone) => `<span style="flex:1;font-size:${fs}px;font-weight:${fw};color:var(--${tone})">${demo}</span>`;
+    for (const [dec, hfs, rfs, cols, rows, zebra] of product([true, false], [11, 12.5], [13, 14], [2, 3, 4], [3, 4], [true, false])) {
+      const head = `<div style="display:flex;gap:12px;padding:10px 14px;${dec ? 'background:var(--raised2);' : ''}">${Array.from({ length: cols }, () => cell('Label', hfs, 700, 'mut')).join('')}</div>`;
+      const row = (i) => `<div style="display:flex;gap:12px;padding:10px 14px;border-top:1px solid var(--hair);${zebra && i % 2 ? 'background:var(--raised);' : ''}">${Array.from({ length: cols }, (_, j) => cell(j === cols - 1 ? '248' : 'Label', rfs, j === 0 ? 600 : 400, 'ink')).join('')}</div>`;
+      out.push(`<div style="display:flex;flex-direction:column;border:1px solid var(--hair);border-radius:12px;overflow:hidden">${head}${Array.from({ length: rows }, (_, i) => row(i)).join('')}</div>`); }
+  } else if (R.need === 'values') {   // בארים: ≥3 מלבנים באותו רוחב ובסיס ב-SVG (ds-forge: rectSeries ⇒ values[k]) + כותרת
+    for (const [dec, n, w, gap, lfs] of product([true, false], [4, 5, 6, 8], [10, 14, 18], [4, 8], [11, 12.5])) {
+      const hs = Array.from({ length: n }, (_, i) => 12 + Math.round(40 * ((i * 7) % n + 1) / n));
+      const rects = hs.map((h, i) => `<rect x="${4 + i * (w + gap)}" y="${60 - h}" width="${w}" height="${h}" rx="2" fill="var(--a)"/>`).join('');
+      out.push(box('column', dec, text('Label', lfs, 600, 'mut') + `<svg viewBox="0 0 ${8 + n * (w + gap)} 64" style="width:100%;height:64px">${rects}</svg>`)); }
   } else if (R.need === 'child+text1') {
     for (const [fs, fw] of product([15, 18, 22], [600, 700])) out.push(box('column', true, text('Label', fs, fw)));
   }
