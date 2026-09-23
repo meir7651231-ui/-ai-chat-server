@@ -36,7 +36,7 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   const { k, dump } = makeConsts(slug);
   const imports = new Set(["import '../dart-ui-bs/ds/ds.dart';", "import '../dart-ui-bs/ds/ds_store.dart';"]);
   const ledger = [];
-  const manifest = { key: `predicateOverSet·${live.op}`, shape: 'predicateOverSet', purpose: name, kind: KIND.shiur, source: { entity: entity.name, field: live.field, op: live.op, n: live.n }, ops: [], flow: [] };
+  const manifest = { key: `predicateOverSet·${live.op}`, slug, cls, shape: 'predicateOverSet', purpose: name, kind: KIND.shiur, source: { entity: entity.name, field: live.field, op: live.op, n: live.n }, ops: [], flow: [] };
   const prior = readComposites().find((c) => c.key === manifest.key) || null;   // יכולת רשומה עם אותה צורה ⇒ האטומים שלה מועמדים ראשונים (ועדיין נפסקים)
   manifest.prior = prior ? { ops: prior.ops } : null;
   // ── הנתונים המשותפים (חוק 23-ד: מחברים בהחלטה): כל האטומים קוראים מאותו br/rs ──

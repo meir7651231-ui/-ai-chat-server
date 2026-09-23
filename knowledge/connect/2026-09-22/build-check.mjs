@@ -7,6 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { spawnSync, spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { makeCard } from '../../../machtzev/goal-card.mjs';   // חיבור 4: כרטיס-מטרה על מסך-התובנה
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '../../..');
 const args = process.argv.slice(2);
@@ -129,6 +130,7 @@ if (args.includes('--web') && errors.length === 0) {
 }
 // --shot · היכולת של ship בלי הפרסום: flutter build web מנקודת-הכניסה שנוצרה ⇒ הגשה מקומית ⇒ צילום ב-Chromium headless ⇒ <outDir>/shot.png. אפס git, אפס gh-pages.
 const shotArg = args.find((a) => /^--shot=/.test(a));
+let shotFile = null;   // חיבור 4: המסך שצולם ⇒ כרטיס-מטרה חתום בפלט (goal-card.makeCard)
 if ((args.includes('--shot') || shotArg) && errors.length === 0) {
   let entry = gen.find((f) => /_main\.dart$/.test(f));
   if (shotArg && entry) {   // --shot=<Cls>: אותו main, רק home = המסך המבוקש (צילום של מסך פנימי — ראיה, לא מוצר)
@@ -136,6 +138,7 @@ if ((args.includes('--shot') || shotArg) && errors.length === 0) {
     const src = fs.readFileSync(path.join(dir, entry), 'utf8');
     const file = gen.find((f) => new RegExp(`class ${cls}\\b`).test(fs.readFileSync(path.join(dir, f), 'utf8')));
     const seedFile = gen.find((f) => /_seed\.dart$/.test(f));   // רשומות-הדוגמה של הבעלים נזרעות בשלד; כניסה-ישירה למסך ⇒ זורעים כאן (ראיה)
+    shotFile = file || null;
     if (!file || !/home: const \w+\(\),/.test(src)) console.log(`⚪ shot: לא נמצא מסך ${cls} בפלט`);
     else { const tmpEntry = entry.replace(/_main\.dart$/, `_shot_main.dart`); fs.writeFileSync(path.join(dir, tmpEntry), src.replace(/home: const \w+\(\),/, `home: const ${cls}(),`).replace(/^(import 'package:flutter\/material\.dart';)$/m, `import '${file}';\n${seedFile ? `import '${seedFile}';\n` : ''}$1`).replace(/void main\(\) => runApp\(/, seedFile ? 'void main() { seedExamples(); runApp(' : 'void main() => runApp(').replace(seedFile ? /runApp\((.*)\);\s*$/m : /$^/, 'runApp($1); }')); entry = tmpEntry; }
   }
@@ -154,6 +157,18 @@ if ((args.includes('--shot') || shotArg) && errors.length === 0) {
       spawnSync(CHROME, ['--headless=new', '--no-sandbox', '--disable-gpu', '--hide-scrollbars', '--window-size=800,1400', '--virtual-time-budget=20000', `--screenshot=${shot}`, `http://127.0.0.1:${port}/`], { encoding: 'utf8', timeout: 120000 });
       try { srv.kill(); } catch {}
       console.log(fs.existsSync(shot) ? `shot: ${shot} · ${(fs.statSync(shot).size / 1024).toFixed(0)}KB · build ${((Date.now() - t0) / 1000).toFixed(0)}s · כניסה ${entry} · ${outWeb} ${(fs.statSync(path.join(HOST, outWeb, 'main.dart.js')).size / 1024 / 1024).toFixed(1)}MB main.dart.js` : '❌ shot: הצילום לא נוצר');
+      // חיבור 4 (הכרעת-בעלים 23.9 «תתחיל לחבר»): מסך-תובנה שצולם ⇒ כרטיס-מטרה באותה בדיקה ואותה חתימה של goal-card, לתיקיית-הפלט (לא לריפו).
+      //   מטרה = משפט-הבעלים · מודלים = אטום-ההחלטה + המקור (appStore) · אטומים = מה שהישיבה פסקה · קבלה = הדוגמאות של הבעלים · תמונה = הצילום.
+      if (shotFile && fs.existsSync(shot)) {
+        const slug = shotFile.replace(/^gen_/, '').replace(/\.dart$/, ''); const mf = path.join(process.env.GEN_OUT, `insight_${slug}.json`);
+        if (fs.existsSync(mf)) {
+          const m = JSON.parse(fs.readFileSync(mf, 'utf8')); const pic = `goal_${slug}.png`; fs.copyFileSync(shot, path.join(process.env.GEN_OUT, pic));
+          const accept = m.accept ? [`${m.accept.count} ${m.source.entity}`, ...m.accept.rows.map((r) => r.join(' · '))] : [];
+          const { card, errs } = makeCard({ screen: shotFile, screenSrc: fs.readFileSync(path.join(process.env.GEN_OUT, shotFile), 'utf8'), goal: sentence, models: [m.decision && m.decision.atom, 'appStore'].filter(Boolean), atoms: m.ops.map((o) => o.atom).filter(Boolean), accept, picture: pic, pictureBytes: fs.readFileSync(shot) });
+          if (errs.length) console.log(`❌ כרטיס-מטרה (${shotFile}) לא תקף: ${errs.join(' | ')}`);
+          else { const cf = path.join(process.env.GEN_OUT, `goal_${slug}.json`); fs.writeFileSync(cf, JSON.stringify(card, null, 1) + '\n'); console.log(`🎯 כרטיס-מטרה: ${cf} · מודלים ${card.models.join(',')} · אטומים ${card.atoms.join(',')} · קבלה ${card.accept.length} · sig ${card.sig.slice(0, 8)}`); }
+        }
+      }
     }
   }
 }

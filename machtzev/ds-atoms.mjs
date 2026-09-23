@@ -34,7 +34,8 @@ ${lines.join('\n')}
 }
 `;
 
-if (CHECK) {
+const isMain = process.argv[1] && import.meta.url === 'file://' + process.argv[1];   // ייבוא (ds-wear) לא מריץ את הבדיקה
+if (CHECK && isMain) {
   const cur = fs.existsSync(TARGET) ? fs.readFileSync(TARGET, 'utf8') : '';
   let bad = 0;
   if (cur !== out) { console.error('🚨 ds-atoms: ds_atoms.dart אינו-טרי — הרץ node machtzev/ds-atoms.mjs'); bad++; }
@@ -44,7 +45,7 @@ if (CHECK) {
   if (bad) process.exit(1);
   console.log(`✓ ds-atoms: ds_atoms.dart טרי (${lines.length} צבעים · ${Object.keys(seed.files || {}).length} קבצים) · אפס ליטרלי-צבע באטומים (מלבד הפטורים המוצהרים)`); process.exit(0);
 }
-if (process.argv[1] && import.meta.url === 'file://' + process.argv[1]) {
+if (isMain) {
   fs.writeFileSync(TARGET, out);
   console.log(`🎨 ds-atoms: זרע ⇒ DsAtomColors (${lines.length} צבעים · ${Object.keys(seed.files || {}).length} קבצים) ⇒ ds_atoms.dart`);
 }

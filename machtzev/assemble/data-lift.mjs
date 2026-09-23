@@ -889,3 +889,5 @@ fs.writeFileSync(path.join(ROOT, 'screens-seed/data-lift-report.json'), JSON.str
 console.log(`🧽 מנוע-המטרות v3 · לוטשו: ${report.lifted.length} widgets (${strings} מחרוזות⇒props · ${modeled} משוטחי-מודל · משרתים ${report.lifted.reduce((a, x) => a + x.serves, 0)}) · נדחו: ${skippedN}`);
 for (const [why, ids] of Object.entries(report.skipped).sort((a, b) => b[1].length - a[1].length)) console.log(`   ⏭️ ${why}: ${ids.length}`);
 console.log('⇒ new/dart-ui-bs/auto/ + new/dart-data-bs/auto/ + screens-seed/data-lift-report.json');
+// חיבור 8: אחרי הליטוש — לובשים עור (ds-wear על המדף); ליטרל שחזר מההרמה נכנס לזרע ולובש, לא נשאר קשיח
+{ const w = execFileSync(process.execPath, [path.join(ROOT, 'machtzev/ds-wear.mjs')], { encoding: 'utf8' }); process.stdout.write(w); }

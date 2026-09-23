@@ -287,3 +287,5 @@ const st = report.lifted.filter(x => x.kind.startsWith('Stateful')).length;
 console.log(`🛗 מנוע-המדף v2 · הורמו: ${report.lifted.length} אטומים (${st} Stateful · משרתים ${serves} מופעים) · נדחו: ${skippedN}`);
 for (const [why, ids] of Object.entries(report.skipped).sort((a, b) => b[1].length - a[1].length)) console.log(`   ⏭️ ${why}: ${ids.length}`);
 console.log('⇒ new/dart-ui-bs/auto/ + screens-seed/shelf-lift-report.json');
+// חיבור 8 (הכרעת-בעלים 23.9 «תתחיל לחבר»): מה שהורם לובש עור מיד — ds-wear על מדף-היעד (או על תיקיית-המדידה), לפני ש-ds-atoms --check מאדים
+{ const wearRoot = /\/auto\/?$/.test(OUT) ? path.dirname(OUT) : OUT; const w = execFileSync(process.execPath, [path.join(ROOT, 'machtzev/ds-wear.mjs'), '--root', wearRoot], { encoding: 'utf8' }); process.stdout.write(w); }
