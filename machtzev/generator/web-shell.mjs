@@ -10,7 +10,8 @@ import fs from 'fs'; import path from 'path'; import vm from 'node:vm'; import {
 import * as R from '../root.mjs';   // bsApp/bsRoot — איתור-buildsmart
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const APP = R.bsApp() || '/home/user/buildsmart/app_flutter';
-const GEN = path.join(ROOT, 'new/dart-gen-bs'), DATA = path.join(ROOT, 'new/dart-data-bs/auto'), DS = path.join(ROOT, 'new/dart-ui-bs/ds');
+// הדלת (mavin-gen/build-check) מפנה GEN_OUT/GEN_DATA_OUT לפלט-בזיכרון — אותה מוסכמה כמו app-ds/render-ds; בלי ההפניה: המדף, כמו קודם
+const GEN = process.env.GEN_OUT || path.join(ROOT, 'new/dart-gen-bs'), DATA = process.env.GEN_DATA_OUT || path.join(ROOT, 'new/dart-data-bs/auto'), DS = path.join(ROOT, 'new/dart-ui-bs/ds');
 const argv = process.argv.slice(2);
 const opt = (f) => { const i = argv.indexOf(f); return i >= 0 ? argv[i + 1] : null; };
 const rd = (p) => fs.readFileSync(p, 'utf8');

@@ -84,4 +84,19 @@ if (args.includes('--verify') && errors.length === 0) {
     if (!rows.length) console.log('   פלט-הבדיקה (זנב): ' + out.trim().split('\n').slice(-4).join(' ¦ ').slice(0, 400));
   }
 }
+// --web · web-shell על פלט-הדלת: קליפת-אתר (שם · צבע · סמל) נגזרת מהקוד שנוצר, נכתבת ל-<מארח>/web (עותק-סקראצ'), ואז --restore מחזיר את המקור
+if (args.includes('--web') && errors.length === 0) {
+  const entry = gen.find((f) => /^gen_app_.*main\.dart$/.test(f)) || gen.find((f) => /_main\.dart$/.test(f));
+  if (!entry) console.log('⚪ web-shell: אין קובץ-כניסה (gen_app_*main.dart) בפלט');
+  else {
+    const env = { ...process.env, BUILDSMART: HOST };   // root.bsApp ⇒ <HOST>/app_flutter? — bsRoot מסיר /app_flutter מהסוף
+    const w = spawnSync(process.execPath, [path.join(ROOT, 'machtzev/generator/web-shell.mjs'), '--site', 'chk', '--entry', entry], { encoding: 'utf8', env });
+    const out = (w.stdout || '') + (w.stderr || '');
+    const idx = path.join(HOST, 'web/index.html'), man = path.join(HOST, 'web/manifest.json');
+    const title = fs.existsSync(idx) ? (fs.readFileSync(idx, 'utf8').match(/<title>([^<]*)<\/title>/) || [])[1] : null;
+    const name = fs.existsSync(man) ? (JSON.parse(fs.readFileSync(man, 'utf8')).name || null) : null;
+    console.log(`web-shell: ${w.status === 0 ? '✅' : '❌'} · index.html <title> «${title ?? '—'}» · manifest.name «${name ?? '—'}» · ${out.trim().split('\n').slice(-1)[0].slice(0, 160)}`);
+    spawnSync(process.execPath, [path.join(ROOT, 'machtzev/generator/web-shell.mjs'), '--restore'], { encoding: 'utf8', env });
+  }
+}
 process.exit(errors.length ? 1 : 0);

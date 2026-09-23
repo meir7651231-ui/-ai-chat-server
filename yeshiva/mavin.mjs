@@ -82,12 +82,12 @@ function listOf(segment) {
   let rest = null;
   if (cutAt > 0) { rest = parts.slice(cutAt).map((p) => p.join(' ')).join(', '); parts = parts.slice(0, cutAt); if (parts.length < 2) return { rest, only: true, head: parts[0] }; }
   const first = parts[0];
-  let cut = -1; for (let i = 0; i < first.length - 1; i++) if (isSpread(first[i])) cut = i + 1;   // האיבר עצמו (המילה האחרונה) לעולם אינו «מפוזר»
+  let cut = -1; for (let i = 0; i < first.length - 1; i++) if (isSpreadTok(first[i])) cut = i + 1;   // האיבר עצמו (המילה האחרונה) לעולם אינו «מפוזר»
   if (cut < 0) cut = first.length - 1;   // אין מילה מפוזרת לפני ⇒ האיבר = המילה האחרונה בלבד («לרכב יש יצרן» ⇒ «יצרן»)
   let before = first.slice(0, cut), item0 = first.slice(cut);
   if (item0.length > 1 && isMany(item0[item0.length - 1]) && !/י$/.test(item0[0])) { before = [...before, ...item0.slice(0, -1)]; item0 = item0.slice(-1); }   // «לניהול לקוחות» ⇒ האיבר «לקוחות»
   const dropped = [];
-  const items = [item0, ...parts.slice(1)].map(deVav).map((it) => { let k = 0; while (k < it.length - 1 && isSpread(it[k])) dropped.push(it[k++]); return it.slice(k); }).filter((it) => it.length);   // «כמה עזבו» ⇒ «עזבו»; «כמה» ⇒ מסגרת
+  const items = [item0, ...parts.slice(1)].map(deVav).map((it) => { let k = 0; while (k < it.length - 1 && isSpreadTok(it[k])) dropped.push(it[k++]); return it.slice(k); }).filter((it) => it.length);   // «כמה עזבו» ⇒ «עזבו»; «כמה» ⇒ מסגרת
   return { before, items, rest, dropped };
 }
 
@@ -116,7 +116,8 @@ export function formOf(sentence) {
     }
     return { label, many: plain.length ? isMany(plain[plain.length - 1]) : false, fields: [], under, src, acts, values, asks, kinds, rel };
   };
-  const runsOf = (ws) => { const runs = []; let cur = []; for (const w of ws) { if (!isNum(w) && isSpread(w)) { if (cur.length) runs.push(cur); cur = []; frame.push(w); } else cur.push(w); } if (cur.length) runs.push(cur); return runs; };   // מספר לעולם אינו «מפוזר» — נשאר ברצף כערך
+  // מילת-הצהרה של שפת-הספק (שרת · עיצוב) פותחת רצף משלה — כמו מילה מפוזרת, אבל היא נשארת ברצף (ההצהרה = המילה + הערך): «ניהול לקוחות בעיצוב נייר» ⇒ [ניהול לקוחות] [בעיצוב נייר]
+  const runsOf = (ws) => { const runs = []; let cur = []; for (const w of ws) { if (!isNum(w) && isSpreadTok(w)) { if (cur.length) runs.push(cur); cur = []; frame.push(w); } else if (isDeclWord(w) && cur.length) { runs.push(cur); cur = [w]; } else cur.push(w); } if (cur.length) runs.push(cur); return runs; };   // מספר לעולם אינו «מפוזר» — נשאר ברצף כערך
   const queue = [...segments];
   while (queue.length) { const seg = queue.shift();
     // ── שלבים לפי צורה (העיקרון של מחזור-חיים, מהמילים של הבעלים בלבד): ──
@@ -148,8 +149,11 @@ export function formOf(sentence) {
       if (made.length === 2 && runs.length === 2) { const gap = pre.slice(pre.indexOf(runs[0][runs[0].length - 1]) + 1, pre.indexOf(runs[1][0])); if (gap.length === 1) { made[0].content = made[1].label; made[0].via = gap[0]; made[1].contentOf = made[0].label; } }
       continue; }
     // רשימה: הרצף הצמוד לרשימה = ההורה; רצפים קודמים = יחידות משלהן («תעשה לי» ⇒ יחידה עם שאלות)
-    const run = runs.length ? runs[runs.length - 1] : [];
-    for (const r of runs.slice(0, -1)) attachOrPush(r);
+    // רצף-הצהרה צמוד לרשימה אינו ההורה של האיברים («משימות בעיצוב כהה עם כותרת ותאריך» ⇒ ההורה: משימות; ההצהרה = יחידה משלה)
+    let runs2 = runs, declRun = null; if (runs2.length > 1 && isDeclItem(runs2[runs2.length - 1])) { declRun = runs2[runs2.length - 1]; runs2 = runs2.slice(0, -1); }
+    const run = runs2.length ? runs2[runs2.length - 1] : [];
+    for (const r of runs2.slice(0, -1)) attachOrPush(r);
+    if (declRun) things.push(unitOf(declRun, seg));
     let owner = null; for (let j = run.length - 1; j >= 0 && !owner; j--) owner = find(run[j]) || null;   // מילה כלשהי ברצף מזהה הורה קיים («לרכב יש» ⇒ «רכבים»)
     if (owner) (owner.refs = owner.refs || []).push(...run);
     else if (run.length) { owner = unitOf(run, seg); things.push(owner); }
@@ -157,6 +161,7 @@ export function formOf(sentence) {
     for (const it of L.items) {
       if (itemMany(it) || (oneItems === 0) || manyItems > oneItems) {   // רוב-רבים ⇒ גם היחיד ברשימה הוא דבר («… עובדים, ציוד ובטיחות»)
         const hit = find(it[0]); if (hit) (hit.refs = hit.refs || []).push(...it); else things.push({ ...unitOf(it, seg, owner ? owner.label : null), many: itemMany(it) }); }
+      else if (isDeclItem(it)) things.push(unitOf(it, seg));   // איבר-הצהרה ברשימה («עם שרת בענן ועיצוב כהה») = יחידה משלו, לא שדה
       else if (owner) owner.fields.push({ label: it.join(' ').replace(/\//g, ' '), enumVals: enumOf(it) });
       else things.push(unitOf(it, seg));
     }
@@ -229,17 +234,28 @@ export function needsFrom(form, answers = {}) {
 // ── צורה ⇒ אפיון למנוע 4 (app-ds.buildApp): `ישות <דבר> עם <שדות>` · `לוח בקרה עם מונה(<דבר>)` · `תפקיד בודק: הכל`.
 //    דבר בלי שדות (לא מהמשפט ולא מתשובה) אינו נכנס — app-ds פוסל ישות-בלי-שדות (§22), והמנוע שואל במקום להמציא. ──
 // הצהרת-שרת לפי צורה: דבר שמילותיו נושאות את מילת-השרת ואת אחד מערכי-השרת של שפת-הספק (spec-lang: שרת · ענן) ⇒ `שרת: ענן`. בלי ההצהרה — אין שרת (לא ברירת-מחדל).
-const SL_SERVER = (() => { try { const d = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')); return { word: d.serverWord, values: Object.keys(d.servers || {}) }; } catch { return { word: null, values: [] }; } })();
-export function serverDeclOf(form) {
-  if (!SL_SERVER.word) return null;
+// אותו דפוס להצהרת-עיצוב (spec-lang: עיצוב · נייר/כהה — העורות של מנועי-העיצוב ds-* שכבר על המדף): «בעיצוב נייר» ⇒ `עיצוב: נייר` ⇒ app-ds.setLook.
+const SL_DECL = (() => { try { const d = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')); return { server: { word: d.serverWord, values: Object.keys(d.servers || {}) }, look: { word: d.lookWord, values: Object.keys(d.looks || {}) } }; } catch { return { server: { word: null, values: [] }, look: { word: null, values: [] } }; } })();
+const SL_SERVER = SL_DECL.server;
+const DECLS = [SL_DECL.server, SL_DECL.look].filter((d) => d.word);
+const isDeclWord = (w) => DECLS.some((d) => stripLead(w).includes(d.word));                                   // «בעיצוב» ⇒ «עיצוב»
+// מילת-הצהרה או ערך-הצהרה של שפת-הספק לעולם אינם «מפוזרים» — הם אוצר-המילים המבני של מנוע 4 (נמדד: «עיצוב» 15 מינים · «כהה» 14 ⇒ היו נופלים למסגרת)
+const isDeclTok = (w) => DECLS.some((d) => stripLead(w).some((f) => f === d.word || d.values.includes(f)));
+const isSpreadTok = (w) => isSpread(w) && !isDeclTok(w);
+const isDeclItem = (ws) => DECLS.some((d) => ws.some((w) => stripLead(w).includes(d.word)) && ws.some((w) => d.values.some((v) => stripLead(w).includes(v))));
+function declOf(form, decl, skip = null) {
+  if (!decl.word) return null;
   const has = (t, w) => toks(t.label).some((x) => stripLead(x).includes(w));
-  const t = form.things.find((t) => has(t, SL_SERVER.word) && SL_SERVER.values.some((v) => has(t, v)));
-  return t ? { thing: t, value: SL_SERVER.values.find((v) => has(t, v)) } : null;
+  const t = form.things.find((t) => t !== skip && has(t, decl.word) && decl.values.some((v) => has(t, v)));
+  return t ? { thing: t, value: decl.values.find((v) => has(t, v)) } : null;
 }
+export function serverDeclOf(form) { return declOf(form, SL_DECL.server); }
+export function lookDeclOf(form) { return declOf(form, SL_DECL.look, (serverDeclOf(form) || {}).thing || null); }
 export function specOf(form, answers = {}) {
   const lines = [], skipped = [], builtin = [];
-  const srv = serverDeclOf(form);
-  const ents = form.things.filter((t) => t !== (srv && srv.thing) && (t.many || t.fields.length || (answerFor(t, answers).fields)));
+  const srv = serverDeclOf(form), lk = lookDeclOf(form);
+  const decl = new Set([srv && srv.thing, lk && lk.thing].filter(Boolean));
+  const ents = form.things.filter((t) => !decl.has(t) && (t.many || t.fields.length || (answerFor(t, answers).fields)));
   const names = new Set(ents.map((t) => t.label));
   for (const t of ents) {
     const a = answerFor(t, answers);
@@ -273,6 +289,7 @@ export function specOf(form, answers = {}) {
   const metrics = [];
   for (const t of ents) { const a = answerFor(t, answers); if (!(a.acts && a.acts.includes('sum'))) continue; metrics.push(`מונה(${t.label})`); for (const f of (a.fields || [])) if (f.type === 'num') metrics.push(`סכום(${t.label}.${f.label})`); }
   if (metrics.length) lines.push(`לוח בקרה עם ${metrics.join(', ')}`);
+  if (lk && lines.length) lines.push(`${SL_DECL.look.word}: ${lk.value}`);   // הצהרת-עיצוב של הבעלים ⇒ app-ds.setLook (עור מהמדף); בלי הצהרה — ברירת-המחדל של app-ds
   if (srv && lines.length) lines.push(`${SL_SERVER.word}: ${srv.value}`);   // הצהרה של הבעלים ⇒ server.mjs פולט חבילת-שרת מאותן ישויות
   if (lines.length) lines.push('תפקיד בודק: הכל');
   return { spec: lines.join('\n'), skipped, builtin };
