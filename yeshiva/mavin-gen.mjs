@@ -149,6 +149,26 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
     fs.writeFileSync(path.join(outDir, 'behaviors.json'), JSON.stringify(out, null, 1)); files.push({ route: 'behavior', file: path.join(outDir, 'behaviors.json'), needs: Object.keys(out).length });
   }
   for (const a of (B && B.asks) || []) notes.push(`התנהגות «${a.thing}»: ${a.ask === 'examples' ? 'אין דוגמאות ⇒ שאלה' : a.ask}`);
+  // 2ה · gen (המחולל השני, gen/): אותו ספק (ישויות · enum · שלבים · תפקידים) ⇒ הוכחת-אטומים בריצה מול המדף + אפליקציית-HTML בקובץ אחד + 12 עדשות-שאלה לכל ישות.
+  //      קריאה בלבד (loadLang({write:false}) · readShelf · runGenerator בזיכרון); app.html · gen-report.json · gen-lenses.json ⇒ outDir. שורות-ספק שגֶן לא מכיר (עיצוב/שרת/חלקיק/דוח/תוכן) מסוננות.
+  if (spec) {
+    try {
+      const [GE, GS, GL, GB, GN] = await Promise.all(['engine', 'shelf', 'lang', 'build', 'lenses'].map((m) => import(`../gen/${m}.mjs`)));
+      const ents = spec.split('\n').filter((l) => /^ישות /.test(l));
+      const roles = spec.split('\n').filter((l) => /^תפקיד /.test(l));
+      const dash = spec.split('\n').filter((l) => /^לוח בקרה עם /.test(l)).map((l) => l.replace(/^לוח בקרה עם\s*/, '').split(',').map((p) => p.trim()).filter((p) => /^\S+?\(.+?\..+?\)$/.test(p))).flat();
+      const genSpec = [`אפליקציה: ${name}`, ...ents, ...(dash.length ? [`לוח בקרה עם ${dash.join(', ')}`] : []), ...roles].join('\n');
+      const { report, app: html } = await GE.runGenerator({ specText: genSpec, slug: slug(name), shelf: GS.readShelf(), NEEDS: GB.NEEDS, LANG: GL.loadLang({ write: false }) });
+      fs.writeFileSync(path.join(outDir, 'app.html'), html);
+      fs.writeFileSync(path.join(outDir, 'gen-report.json'), JSON.stringify({ ...report, atoms: report.atoms.map(({ src, ...a }) => a) }, null, 1));
+      const kpi = new Set(report.dashboard.map((d) => d.entity));
+      const lenses = Object.fromEntries(report.entities.map((e) => [e.name, GN.applyLenses(e, { roles: report.roles, automations: [], faces: [], kpiEntities: kpi }).filter((x) => x.open && !x.grammar).map((x) => ({ lens: x.name, q: x.q, why: x.why }))]));
+      fs.writeFileSync(path.join(outDir, 'gen-lenses.json'), JSON.stringify(lenses, null, 1));
+      const openN = Object.values(lenses).reduce((a, l) => a + l.length, 0);
+      files.push({ route: 'gen', file: path.join(outDir, 'app.html'), bytes: html.length, atoms: report.atoms.length, unproven: report.unproven.length, proofs: report.proofs.length, lensesOpen: openN });
+      notes.push(`gen (HTML): ${(html.length / 1024).toFixed(0)}KB · אטומים מוכחים ${report.atoms.length}${report.proofs.length ? ` (${report.proofs.map((p) => p.need + (p.chosen ? '⇒' + p.chosen : '⇒—')).join(' · ').slice(0, 160)})` : ''} · לא-מוכחים ${report.unproven.length} · עדשות פתוחות ${openN} על ${report.entities.length} ישויות`);
+    } catch (e) { notes.push(`gen (HTML) לא רץ: ${String(e.message || e).slice(0, 160)}`); }
+  }
   // 2ד · gold — מודול-זהב מורכב-מחדש מהשברים לישות (render-module.assembleByOps), נכתב רק ל-outDir
   const golds = [...new Map(routes.filter((r) => r.route === 'gold').map((r) => [r.module + '|' + r.thing, r])).values()];
   if (golds.length) { const RM = await import('../machtzev/generator/render-module.mjs'); let gi = 0;

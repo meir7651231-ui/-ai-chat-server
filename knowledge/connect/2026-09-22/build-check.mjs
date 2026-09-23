@@ -41,7 +41,8 @@ for (const n of G0.notes) console.log('  ' + n);
 const appEntry = G0.files.find((f) => f.route === 'appds'); if (appEntry) console.log(`מסכים: ${appEntry.screens.join(' · ')}`);
 const sv = G0.files.find((f) => f.route === 'server'); if (sv) console.log(`שרת: ${sv.count} קבצים ב-${sv.dir} · ישויות ${sv.entities.join(', ')}`);
 if (G0.node) console.log(`צומת-פירוק: ${G0.node.id ?? '?'} «${G0.node.title || ''}» · שדות ${G0.node.fields ?? '?'} · פלטים ${(G0.node.outputs || []).length}`);
-const extra = G0.files.filter((f) => f.file).map((f) => f.file);
+const extra = G0.files.filter((f) => f.file && /\.dart$/.test(f.file)).map((f) => f.file);   // רק Dart למארח; app.html / behaviors.json נשארים ב-outDir
+const genEntry = G0.files.find((f) => f.route === 'gen'); if (genEntry) console.log(`gen (HTML): ${genEntry.file} · ${(genEntry.bytes / 1024).toFixed(0)}KB · אטומים מוכחים ${genEntry.atoms} · לא-מוכחים ${genEntry.unproven} · עדשות פתוחות ${genEntry.lensesOpen}`);
 if (!spec && !extra.length) { console.log('⚪ אין אפיון ואין מסלול אחר ⇒ אין בנייה. ענה על השאלות ותנסה שוב.'); process.exit(0); }
 const gen = fs.readdirSync(process.env.GEN_OUT).filter((f) => /^gen_app_.*\.dart$/.test(f));
 if (!HOST || !FLUTTER) { console.log(`⚪ לא-נמדד: ${!FLUTTER ? 'אין flutter' : 'אין BS_HOST'} — נפלטו ${gen.length + extra.length} קבצי Dart ל-${process.env.GEN_OUT}`); process.exit(2); }

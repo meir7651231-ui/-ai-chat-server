@@ -33,7 +33,7 @@ const ANSWERS = () => process.env.MAVIN_ANSWERS || path.join(R.ROOT, '.maimatai'
 //   «_» בתוך מילה = רווח של ערך רב-מילי בסוגריים («חבר קהילה» ⇒ «חבר_קהילה» ב-formOf; enumOf מחזיר את הרווח)
 export const toks = (s) => [...String(s || '').matchAll(/[֐-׿]+(?:["״׳'_][֐-׿]+)*(?:\s*\/\s*[֐-׿]+(?:["״׳'_][֐-׿]+)*)+|[֐-׿]+(?:["״׳'_][֐-׿]+)*|\d+|[A-Za-z]+/g)].map((m) => m[0].replace(/\s*\/\s*/g, '/'));   // «בעד/נגד/נמנע» = אסימון אחד: בחירה-אחת-מכמה (צורה)
 const stripLead = (w) => { const out = [w]; for (let k = 1; k <= 2 && w.length - k >= 3; k++) out.push(w.slice(k)); return out; };   // (ג)
-const isMany = (w) => w.length >= 4 && /(ים|ות)$/.test(w);                                                                    // (א)
+const isMany = (w) => w.length >= 4 && /(ים|ות)$/.test(w) && !SINGULAR.has(w);                                                 // (א) · «כמות»/«נוכחות» = יחיד (דאטה של gen/lang)
 const stem = (w) => w.replace(/(ים|ות|ה)$/, '');   // (ג') גם «ה» סופית להשוואת יחיד↔רבים (משימה↔משימות)
 const itemMany = (item) => isMany(item[0]) || isMany(item[item.length - 1]) || (item.length > 1 && /י$/.test(item[0]));   // «קבלני משנה» — סמיכות-רבים (י + מילה שנייה)
 
@@ -70,6 +70,10 @@ const STAGE_WORDS = (() => { try { return new Set(JSON.parse(fs.readFileSync(R.G
 const ARROW = /\s*(?:→|->|⇒|»)\s*/;   // חץ בין מילים = סדר (צורה): «חדשה → בעבודה → הושלמה» ⇒ שלבים
 // סמני-שדות ומילות-«כל» של מנוע-המשפט הקיים (nl-lang.data.json — דאטה של מנוע 1/4): «לכל תלמיד יש …» ⇒ הדבר = «תלמיד», וכל איברי-הרשימה = שדות (גם ברבים)
 const NL = (() => { try { const d = JSON.parse(fs.readFileSync(R.GEN_DIR + 'nl-lang.data.json', 'utf8')); return { marks: new Set(d.fieldMarks || []), each: new Set(d.eachWords || []), leadins: new Set(d.leadins || []) }; } catch { return { marks: new Set(), each: new Set(), leadins: new Set() }; } })();
+// הפלוסים של המחולל השני (gen/lang.mjs, extra): מילות-«ות» שהן יחיד («כמות», «נוכחות», «עלות») ומילות-פתיחה נוספות («גם») — דאטה של מנוע קיים, נקרא בלי כתיבה
+const GEN_EXTRA = (() => { try { return (JSON.parse(fs.readFileSync(path.join(R.ROOT, 'gen/lang.data.json'), 'utf8')).extra) || {}; } catch { return {}; } })();
+for (const w of GEN_EXTRA.leadins || []) NL.leadins.add(w);
+const SINGULAR = new Set(GEN_EXTRA.singular || []);
 const isMark = (w) => NL.marks.has(w);
 const isLeadin = (w) => NL.leadins.has(w);   // «יש גם שכונה» ⇒ «גם» = מילת-פתיחה של מנוע-המשפט, לא חלק מתווית-השדה
 const isEach = (w) => stripLead(w).some((f) => NL.each.has(f));   // «לכל» ⇒ «כל»
