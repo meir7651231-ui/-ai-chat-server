@@ -27,10 +27,9 @@ const rd = (p) => (fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : '');
 const SERVER_RE = new RegExp('^\\s*' + SL.serverWord + '\\s*:\\s*(.+)$', 'm');
 
 /// הצהרת-השרת של אפליקציה: `שרת: ענן` בספק ⇒ 'cloud'; אין ⇒ null.
-export function serverOf(ns) {
-  const m = rd(path.join(SPECS, ns + '.txt')).match(SERVER_RE);
-  return m ? (SL.servers[m[1].trim()] || null) : null;
-}
+export function serverOf(ns) { return declaredServer(rd(path.join(SPECS, ns + '.txt'))); }
+/// אותה הצהרה על טקסט-ספק (לדלת: ספק בזיכרון, לא קובץ) ⇒ 'cloud' | null.
+export function declaredServer(specText) { const m = String(specText || '').match(SERVER_RE); return m ? (SL.servers[m[1].trim()] || null) : null; }
 
 /// כל הישויות של האפליקציות שהוכרזו — משמות-האוספים בחוקים ובוולידציה.
 function entitiesOf(nsList) {
@@ -274,21 +273,25 @@ if (ok.length !== 15) process.exit(1);
 `;
 
 // ── CLI ───────────────────────────────────────────────────────────────────────
+/// חבילת-השרת כקבצים בזיכרון (טהור, אפס כתיבה) — לישויות נתונות. הדלת כותבת ל-outDir; emitServer כותב ל-server-gen/.
+export function serverFiles(app, entities) {
+  if (!entities.length) throw new Error(`✗ server: אין ישויות ל-${app}`);
+  const keys = stateKeys();
+  return [
+    { rel: 'firestore.rules', content: rulesFor(entities, keys) },
+    { rel: 'firebase.json', content: FIREBASE_JSON },
+    { rel: 'package.json', content: PKG(app) },
+    { rel: 'rules.test.mjs', content: RULES_TEST(entities, keys) },
+    { rel: 'ACTIVATE.md', content: ACTIVATE(app, entities) },
+    { rel: 'functions/index.js', content: FUNCTIONS_INDEX },
+    { rel: 'functions/package.json', content: FUNCTIONS_PKG },
+    { rel: '.gitignore', content: 'node_modules/\npackage-lock.json\nfirebase-debug.log\nfunctions/node_modules/\nfunctions/package-lock.json\n' },   // תלויות-בדיקה אינן אטומים
+  ];
+}
 export function emitServer(app, nsList) {
   const entities = entitiesOf(nsList);
-  if (!entities.length) throw new Error(`✗ server: אין ישויות ל-${app}`);
   const dir = path.join(OUT, app);
-  fs.mkdirSync(dir, { recursive: true });
-  const keys = stateKeys();
-  fs.writeFileSync(path.join(dir, 'firestore.rules'), rulesFor(entities, keys));
-  fs.writeFileSync(path.join(dir, 'firebase.json'), FIREBASE_JSON);
-  fs.writeFileSync(path.join(dir, 'package.json'), PKG(app));
-  fs.writeFileSync(path.join(dir, 'rules.test.mjs'), RULES_TEST(entities, keys));
-  fs.writeFileSync(path.join(dir, 'ACTIVATE.md'), ACTIVATE(app, entities));
-  fs.mkdirSync(path.join(dir, 'functions'), { recursive: true });
-  fs.writeFileSync(path.join(dir, 'functions/index.js'), FUNCTIONS_INDEX);
-  fs.writeFileSync(path.join(dir, 'functions/package.json'), FUNCTIONS_PKG);
-  fs.writeFileSync(path.join(dir, '.gitignore'), 'node_modules/\npackage-lock.json\nfirebase-debug.log\nfunctions/node_modules/\nfunctions/package-lock.json\n');   // תלויות-בדיקה אינן תוצר-מנוע
+  for (const f of serverFiles(app, entities)) { const p = path.join(dir, f.rel); fs.mkdirSync(path.dirname(p), { recursive: true }); fs.writeFileSync(p, f.content); }
   return { dir, entities };
 }
 

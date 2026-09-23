@@ -228,9 +228,18 @@ export function needsFrom(form, answers = {}) {
 
 // ── צורה ⇒ אפיון למנוע 4 (app-ds.buildApp): `ישות <דבר> עם <שדות>` · `לוח בקרה עם מונה(<דבר>)` · `תפקיד בודק: הכל`.
 //    דבר בלי שדות (לא מהמשפט ולא מתשובה) אינו נכנס — app-ds פוסל ישות-בלי-שדות (§22), והמנוע שואל במקום להמציא. ──
+// הצהרת-שרת לפי צורה: דבר שמילותיו נושאות את מילת-השרת ואת אחד מערכי-השרת של שפת-הספק (spec-lang: שרת · ענן) ⇒ `שרת: ענן`. בלי ההצהרה — אין שרת (לא ברירת-מחדל).
+const SL_SERVER = (() => { try { const d = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')); return { word: d.serverWord, values: Object.keys(d.servers || {}) }; } catch { return { word: null, values: [] }; } })();
+export function serverDeclOf(form) {
+  if (!SL_SERVER.word) return null;
+  const has = (t, w) => toks(t.label).some((x) => stripLead(x).includes(w));
+  const t = form.things.find((t) => has(t, SL_SERVER.word) && SL_SERVER.values.some((v) => has(t, v)));
+  return t ? { thing: t, value: SL_SERVER.values.find((v) => has(t, v)) } : null;
+}
 export function specOf(form, answers = {}) {
   const lines = [], skipped = [], builtin = [];
-  const ents = form.things.filter((t) => t.many || t.fields.length || (answerFor(t, answers).fields));
+  const srv = serverDeclOf(form);
+  const ents = form.things.filter((t) => t !== (srv && srv.thing) && (t.many || t.fields.length || (answerFor(t, answers).fields)));
   const names = new Set(ents.map((t) => t.label));
   for (const t of ents) {
     const a = answerFor(t, answers);
@@ -264,6 +273,7 @@ export function specOf(form, answers = {}) {
   const metrics = [];
   for (const t of ents) { const a = answerFor(t, answers); if (!(a.acts && a.acts.includes('sum'))) continue; metrics.push(`מונה(${t.label})`); for (const f of (a.fields || [])) if (f.type === 'num') metrics.push(`סכום(${t.label}.${f.label})`); }
   if (metrics.length) lines.push(`לוח בקרה עם ${metrics.join(', ')}`);
+  if (srv && lines.length) lines.push(`${SL_SERVER.word}: ${srv.value}`);   // הצהרה של הבעלים ⇒ server.mjs פולט חבילת-שרת מאותן ישויות
   if (lines.length) lines.push('תפקיד בודק: הכל');
   return { spec: lines.join('\n'), skipped, builtin };
 }
