@@ -365,8 +365,26 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     }
     const PFX = new RegExp('^[' + (SL.prefixLetters || '') + ']'), SFX = new RegExp('(' + (SL.stemSuffixes || []).join('|') + ')$');   // אותיות-קידומת וסיומות-ריבוי מהדאטה (spec-lang)
     const stemOf = (w) => String(w || '').replace(PFX, '').replace(SFX, '');
+    // צורות-התנאי (הכרעת-בעלים 23.9 «תסיים»): «שדה יחס מספר» · «שדה-תאריך יחס משך» · «<ממוצע|סכום|מונה> שדה» על הקבוצה · «<בנות> של <הורה>» מונה-קשר לכל הורה · «חודש» ⇒ שאלה
+    const AGG = { avg: SL.pAvg || [], sum: SL.pSum || [], count: SL.pCount || [] };
+    const aggOf = (w) => Object.keys(AGG).find((a) => AGG[a].includes(w)) || null;
+    const entByStem = (w) => { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; if (stemOf(r.entity) === stemOf(w) || r.entity === w) return r; } return null; };
     const liveExtras = extraScreens.map((x) => { const c = x.clause; if (!c || !c.x || !/^[<>]$/.test(c.op) || c.n == null || isNaN(+c.n)) return x;
-      for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) { if (c.unit && f.type !== 'date') { seedNotes.push(T('liveNotDate', { name: x.name, label: f.label, type: f.type })); return x; } return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: c.unit ? 'age' : 'num', days: c.unit ? +c.n * c.unit : null } }; } }
+      if (c.unit === 'ask') { const why = T('liveMonthAsk', { name: x.name, unit: c.unitWord || '' }); seedNotes.push(why); return { ...x, why, ask: 'timeUnit' }; }   // שאלה לדלת, לא הנחה
+      const xw = String(c.x).split(/\s+/).filter(Boolean); const agg = aggOf(xw[0]); const rest = agg ? xw.slice(1) : xw;
+      const ofI = rest.indexOf('של');
+      if (ofI > 0 && ofI < rest.length - 1) {   // «<בנות> של <הורה>» ⇒ מונה-קשר לכל רשומת-הורה (השדה המצביע מ-backRefs, לא מנוחש)
+        const child = entByStem(rest.slice(0, ofI).join(' ')), parent = entByStem(rest.slice(ofI + 1).join(' '));
+        if (child && parent) { const b = (backRefs[parent.entity] || []).find((q) => q.fname === child.entity); if (!b) { const why = T('liveNoRelation', { name: x.name, child: child.entity, parent: parent.entity }); seedNotes.push(why); return { ...x, why }; }
+          return { ...x, live: { slug: nameToSlug[parent.entity], kind: 'refCount', field: b.ffield, childSlug: b.fslug, childField: b.ffield, childName: child.entity, parentKey: (parent.schema[0] || {}).label, op: c.op, n: +c.n } }; }
+      }
+      if (agg) {   // על הקבוצה: מונה של ישות («מונה תלמידים») או ממוצע/סכום של שדה («ממוצע ציון»)
+        const ent0 = agg === 'count' ? entByStem(rest.join(' ')) : null;
+        if (ent0) return { ...x, live: { slug: nameToSlug[ent0.entity], kind: 'agg', agg, field: (ent0.schema[0] || {}).label, op: c.op, n: +c.n } };
+        for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(rest.join(' ')) || fd.label === rest.join(' ')); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'agg', agg, field: f.label, op: c.op, n: +c.n } }; }
+        return x;
+      }
+      for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) { if (c.unit && f.type !== 'date') { const why = T('liveNotDate', { name: x.name, label: f.label, type: f.type }); seedNotes.push(why); return { ...x, why }; } return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: c.unit ? 'age' : 'num', days: c.unit ? +c.n * c.unit : null } }; } }
       return x; });   // אין ישות עם השדה ⇒ השורה נשארת סטטית (הסף בלבד), לא מומצא
     liveExtrasOut = liveExtras;
     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr, homeIsRoot: rootIsFirst, extras: liveExtras, seed });
@@ -379,7 +397,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
   for (const n of seedNotes) console.log(`⚪ ${n}`); if (seed) console.log(`🌱 ${T('seedLog', { word: SL.exampleWord, count: seed.count, slug: seed.slug })}`);
   renderMain(`${P}main`, { title: appTitle, hubSlug: home.slug, hubCls: home.cls, edges });
 
-  return { screens, sys, roles, liveExtras: liveExtrasOut };
+  return { screens, sys, roles, liveExtras: liveExtrasOut, nameToSlug };
 }
 
 if (import.meta.url === 'file://' + process.argv[1]) {

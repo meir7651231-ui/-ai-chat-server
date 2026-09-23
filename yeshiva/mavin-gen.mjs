@@ -60,7 +60,7 @@ const SL_TIME = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.
 export function clausesByForm(seg, frame = []) {
   if (detectAllClauses(seg).length) return [];
   const ws = toks(seg), F = new Set(frame), out = [];
-  const TU = SL_TIME.timeUnits || {};   // יחידות-זמן (דאטה): «מעל 7 ימים» · «מעל שבוע» (יחידה בלי מספר = 1)
+  const TU = { ...(SL_TIME.timeUnits || {}) }; for (const w of SL_TIME.timeUnitsAsk || []) TU[w] = 'ask';   // יחידות-זמן (דאטה): «מעל 7 ימים» · «מעל שבוע» (יחידה בלי מספר = 1) · «חודש» ⇒ שאלה
   for (let i = 0; i < ws.length; i++) {
     const unitOnly = TU[ws[i]] && !/^\d+$/.test(ws[i - 1] || '');
     if (!/^\d+$/.test(ws[i]) && !unitOnly) continue;
@@ -68,7 +68,7 @@ export function clausesByForm(seg, frame = []) {
     const op = j >= 0 ? relOpOf(ws[j]) : null; if (!op) continue;
     const x = ws.slice(0, j).filter((w) => !F.has(w) && !/^\d+$/.test(w)); if (!x.length) continue;
     const n = unitOnly ? 1 : ws[i]; const unit = unitOnly ? TU[ws[i]] : (TU[ws[i + 1]] || null); const after = unitOnly ? i + 1 : (unit ? i + 2 : i + 1);
-    out.push({ x: x.join(' '), op, n, y: n, unit, trigger: ws.slice(after).filter((w) => !F.has(w)).slice(0, 2).join(' ') });
+    out.push({ x: x.join(' '), op, n, y: n, unit, unitWord: unit ? (unitOnly ? ws[i] : ws[i + 1]) : null, trigger: ws.slice(after).filter((w) => !F.has(w)).slice(0, 2).join(' ') });
   }
   return out;
 }
@@ -217,19 +217,27 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   // 2א · הרכבה (insight.mjs · הכרעת-בעלים 23.9 «תחבר»): התראה עם קישור-נתונים ⇒ מסך-תובנה אחד מהנתונים האמיתיים במקום הדמו של capability
   if (app && Array.isArray(app.liveExtras) && !inRepo(process.env.GEN_OUT)) {
     const IN = await import('../machtzev/generator/insight.mjs');
-    for (const x of app.liveExtras) { if (!x.live) { notes.push(`הרכבה «${x.name}»: אין ישות עם השדה ⇒ נשאר מסך-capability (דמו)`); continue; }
+    for (const x of app.liveExtras) { if (!x.live) { notes.push(x.why || `הרכבה «${x.name}»: אין ישות עם השדה ⇒ נשאר מסך-capability (דמו)`); if (x.ask) questions.push({ thing: x.name, ask: x.ask, q: x.why }); continue; }
       const entLine = spec.split('\n').find((l) => new RegExp(`^ישות\\s+\\S.*\\s+עם\\s`).test(l) && (() => { const m = l.match(/^ישות\s+(.+?)\s+עם\s+(.+)$/); return m && Object.entries({}).length === 0 && x.live.slug && true; })());
       const ents = spec.split('\n').map((l) => l.match(/^ישות\s+(.+?)\s+עם\s+(.+)$/)).filter(Boolean).map((m) => ({ name: m[1].trim(), fields: m[2].split('|')[0].split(/[,،]/).map((f) => f.trim().replace(/\{[^}]*\}$/, '')).filter(Boolean) }));
-      const ent = ents.find((e) => e.fields.includes(x.live.field)) || ents[0];
+      const entOfSlug = (sl) => { const m0 = spec.split('\n').map((l) => l.match(/^ישות\s+(.+?)\s+עם\s/)).filter(Boolean).map((m) => m[1].trim()); return ents.find((e) => app.nameToSlug && app.nameToSlug[e.name] === sl) || null; };
+      const ent = (x.live.kind === 'refCount' || x.live.kind === 'agg') ? (entOfSlug(x.live.slug) || ents.find((e) => e.fields.includes(x.live.field)) || ents[0]) : (ents.find((e) => e.fields.includes(x.live.field)) || ents[0]);
+      // מונה-קשר: רשומות-הבנות מהדוגמאות של ישות-הבת (השדה המצביע ⇐ live.childField); הורה מזוהה לפי השדה הראשון שלו
+      const childRecs = (() => { if (x.live.kind !== 'refCount') return null; const ce = ents.find((e) => app.nameToSlug && app.nameToSlug[e.name] === x.live.childSlug); if (!ce) return null; const SLc = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); const l = spec.split('\n').find((q) => q.startsWith(`${SLc.exampleWord} ${ce.name}:`)); if (!l) return null; const cfi = ce.fields.indexOf(x.live.childField); return l.slice(l.indexOf(':') + 1).split(';').map((r) => r.split(/[,،]/).map((v) => v.trim())).map((r) => (r[cfi] || '').trim()); })();
+      const childCount = (r) => (childRecs ? childRecs.filter((v) => v && v === (r[0] || '').trim()).length : 0);
       // הציפייה מהדוגמאות של הבעלים (אימות מול הייעוד): אילו רשומות עונות לתנאי — לפי הצורה, בלי המצאה
       let expect = null; const SLd = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
-      if (ent && SLd.exampleWord) { const exLine = spec.split('\n').find((l) => l.startsWith(`${SLd.exampleWord} ${ent.name}:`)); if (exLine) { const recs = exLine.slice(exLine.indexOf(':') + 1).split(';').map((r) => r.split(/[,،]/).map((v) => v.trim())); const fi = ent.fields.indexOf(x.live.field); const LE0 = await import('../machtzev/generator/live-expr.mjs'); const thr0 = LE0.liveThreshold(x.live); const rows = recs.filter((r) => { const v = LE0.liveSample(x.live, r[fi]); return v != null && (x.live.op === '<' ? v < thr0 : v > thr0); }).map((r) => [r[0] || '', r[fi] || '']); expect = { count: rows.length, rows }; } }   // הציפייה בצורת-התנאי (מספר / ותק-בימים)
+      if (ent && SLd.exampleWord) { const exLine = spec.split('\n').find((l) => l.startsWith(`${SLd.exampleWord} ${ent.name}:`)); if (exLine) { const recs = exLine.slice(exLine.indexOf(':') + 1).split(';').map((r) => r.split(/[,،]/).map((v) => v.trim())); const fi = ent.fields.indexOf(x.live.field); const LE0 = await import('../machtzev/generator/live-expr.mjs'); const thr0 = LE0.liveThreshold(x.live); const lt0 = x.live.op === '<';
+        const sampleOf = (r) => x.live.kind === 'refCount' ? childCount(r) : LE0.liveSample(x.live, r[fi]);   // מונה-קשר: כמה רשומות-בנות בדוגמאות מצביעות על ההורה
+        if (x.live.kind === 'agg') { const v = LE0.liveAggSample(x.live, recs, fi); const hit = v != null && (lt0 ? v < thr0 : v > thr0); expect = { count: v == null ? '' : (Math.round(v * 10) / 10).toString(), rows: hit ? recs.map((r) => [r[0] || '', r[fi] || '']) : [], agg: v }; }
+        else { const rows = recs.filter((r) => { const v = sampleOf(r); return v != null && (lt0 ? v < thr0 : v > thr0); }).map((r) => [r[0] || '', x.live.kind === 'refCount' ? String(childCount(r)) : (r[fi] || '')]); expect = { count: rows.length, rows }; } } }   // הציפייה בצורת-התנאי (מספר / ותק / מונה-קשר / קבוצה)
       const seedSlug = fs.existsSync(path.join(outDir, 'gen_app_seed.dart')) ? 'app_seed' : null;
       // ההחלטה האחת — אטום מהקטלוג, מוכח בהרצה (behavior-plan) על הדוגמאות של הבעלים + גבול-הסף מצורת היחס («מתחת ל» = ממש מתחת ⇒ 55 אינו חורג)
       let decide = null;
       if (ent && SLd.exampleWord) { const exLine = spec.split('\n').find((l) => l.startsWith(`${SLd.exampleWord} ${ent.name}:`)); const fi = ent.fields.indexOf(x.live.field);
         const LE = await import('../machtzev/generator/live-expr.mjs'); const thr = LE.liveThreshold(x.live);
-        const vals = exLine && fi >= 0 ? exLine.slice(exLine.indexOf(':') + 1).split(';').map((r) => LE.liveSample(x.live, (r.split(/[,،]/)[fi] || '').trim())).filter((v) => v != null) : [];
+        const recs0 = exLine ? exLine.slice(exLine.indexOf(':') + 1).split(';').map((r) => r.split(/[,،]/).map((v) => v.trim())) : [];
+        const vals = x.live.kind === 'agg' ? [LE.liveAggSample(x.live, recs0, fi)].filter((v) => v != null) : x.live.kind === 'refCount' ? recs0.map((r) => childCount(r)) : (exLine && fi >= 0 ? recs0.map((r) => LE.liveSample(x.live, (r[fi] || '').trim())).filter((v) => v != null) : []);
         if (vals.length) { const lt = x.live.op === '<'; const examples = [...vals.map((v) => [`${v}, ${thr}`, `r == ${lt ? v < thr : v > thr}`]), [`${thr}, ${thr}`, 'r == false']];
           try { const BP = await import('../machtzev/generator/behavior-plan.mjs'); const id = `sev.${x.slug}`; const P = BP.planNeeds({ [id]: { shape: 'מספר', demand: x.sub || x.name, params: ['num', 'num'], ret: 'bool', examples } }, { prove: true, earlyExit: true }); const pr = P[id];
             if (pr && pr.pick && pr.proven) { decide = { name: pr.pick, file: pr.file, proven: true, examples }; notes.push(`החלטה «${x.name}»: ${pr.pick} (${pr.file}) הוכח על ${examples.length} דוגמאות${pr.ties ? ` · ${pr.ties} תיקו` : ''}`); }

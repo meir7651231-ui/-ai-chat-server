@@ -11,7 +11,7 @@ import { buildAtlas } from './atlas.mjs';
 import { isPaper, skinWired } from './look.mjs';
 import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';
 import { synthDisplay, widgetRecordOf } from './display-synth.mjs';
-import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
+import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { ops as opsOfKind } from '../compose-engine.mjs';   // צורה ⇒ פעולות-יסוד (הטבלה הקיימת, לא רשימה שלי)
 import * as R from '../root.mjs';
@@ -42,8 +42,9 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   const prior = readComposites().find((c) => c.key === manifest.key) || null;   // יכולת רשומה עם אותה צורה ⇒ האטומים שלה מועמדים ראשונים (ועדיין נפסקים)
   manifest.prior = prior ? { ops: prior.ops } : null;
   // ── הנתונים המשותפים (חוק 23-ד: מחברים בהחלטה): כל האטומים קוראים מאותו br/rs ──
-  const numOf = liveValue(live, 'r', k); const thr = liveThreshold(live);   // צורת-התנאי (מספר / ותק-בימים) — מקום אחד
+  const isSet = liveIsSet(live); const numOf = isSet ? 'agg' : liveValue(live, 'r', k); const thr = liveThreshold(live);   // צורת-התנאי (מספר / ותק / מונה-קשר / קבוצה) — מקום אחד
   const cond = decide && decide.name ? `${decide.name}(${numOf}, ${thr})` : `${numOf} ${live.op} ${thr}`;
+  if (isSet) { manifest.source.agg = live.agg; const ai = liveAggImport(live); if (ai) imports.add(ai); }
   manifest.source.kind = live.kind || 'num'; if (live.kind === 'age') { manifest.source.days = live.days; manifest.timeDependent = true; }
   if (decide && decide.file) imports.add(`import '../${decide.file}';`);
   manifest.decision = decide ? { atom: decide.name, file: decide.file, proven: !!decide.proven, examples: decide.examples || [] } : { atom: null, why: 'אין אטום-החלטה מוכח ⇒ השוואה ביד (מדווח)' };
@@ -70,11 +71,12 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
     return r.pick;
   };
   const parts = [];
+  const aggStr = isSet ? "(agg.isNaN ? '' : (agg * 10).round() / 10).toString()" : null;
   const ctxFor = (op, value, label) => ({
     label: k(label || name), message: k(`${entity.name}: ${said}`), glyph: k(op === 'alert' ? '⚠️' : '🔔'), tone: 2,
-    value: /^br\.length \/ rs\.length$/.test(value) ? { str: "'${br.length}/${rs.length}'", num: 'br.length.toDouble()' } : /\.length$/.test(value) ? { str: `${value}.toString()`, num: `${value}.toDouble()` } : { str: `${value}.toString()`, num: '0.0' },
+    value: (isSet && value === 'br.length') ? { str: aggStr, num: 'agg', isNum: true } : /^br\.length \/ rs\.length$/.test(value) ? { str: "'${br.length}/${rs.length}'", num: 'br.length.toDouble()' } : /\.length$/.test(value) ? { str: `${value}.toString()`, num: `${value}.toDouble()` } : { str: `${value}.toString()`, num: '0.0' },
     fraction: 'rs.isEmpty ? 0.0 : br.length / rs.length', sub: k(`${entity.name} · ${said}`),
-    labels: [k(descField), k(live.field)], rows: `[for (final r in br) [r[${k(descField)}] ?? '', r[${k(live.field)}] ?? '']]`,
+    labels: [k(descField), k(live.kind === 'refCount' ? (live.childName || live.field) : live.field)], rows: live.kind === 'refCount' ? `[for (final r in br) [r[${k(descField)}] ?? '', ${liveValue(live, 'r', k)}.toStringAsFixed(0)]]` : `[for (final r in br) [r[${k(descField)}] ?? '', r[${k(live.field)}] ?? '']]`,   // מונה-קשר: העמודה השנייה = כמה בנות, לא שדה של ההורה
   });
   // רזולוציה רקורסיבית: פעולה ⇒ פסק; אין שורד ⇒ decompose[op] ⇒ תת-פעולות (עד maxDepth) ⇒ עובדות
   const resolve = (op, value, label, depth, cond) => {
@@ -104,7 +106,8 @@ ${liveNeedsHelper(live) ? AGE_HELPER + '\n' : ''}class ${cls} extends StatelessW
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
     final rs = appStore.records('${live.slug}');
-    final br = rs.where((r) => ${cond}).toList()..sort((a, b) => ${live.op === '<' ? '' : '-'}(${liveValue(live, 'a', k)} - ${liveValue(live, 'b', k)}).sign.toInt());   // ההחלטה מניעה את הסדר: החורג ביותר ראשון (23-ד)
+${isSet ? `    final agg = ${liveAggExpr(live, 'rs', k)};   // ערך-הקבוצה (${live.agg}); ההתראה על הקבוצה כולה
+    final br = (${cond}) ? rs.toList() : <Map<String, String>>[];` : `    final br = rs.where((r) => ${cond}).toList()..sort((a, b) => ${live.op === '<' ? '' : '-'}(${liveValue(live, 'a', k)} - ${liveValue(live, 'b', k)}).sign.toInt());`}   // ההחלטה מניעה את הסדר: החורג ביותר ראשון (23-ד)
     return DsScaffold(title: ${k(name)}, subtitle: br.length.toString() + ' / ' + rs.length.toString() + ' ' + ${k(entity.name)}, icon: ${k('🔔')}, children: [
 ${parts.map((p) => `      ${p.cond ? `if (${p.cond}) ` : ''}Padding(padding: const EdgeInsets.only(bottom: 10), child: ${p.call}),`).join('\n')}
       if (br.isEmpty) Padding(padding: const EdgeInsets.only(top: 24), child: Center(child: Text(${k(`${entity.name}: 0 · ${said}`)}, style: TextStyle(color: DsLook.of(context).muted)))),

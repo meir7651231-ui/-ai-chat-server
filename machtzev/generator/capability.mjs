@@ -31,7 +31,7 @@ const cleanPhrase = (words) => words.length ? [deprefix(words[0]), ...words.slic
 
 // גלאי סעיף-התראה-מותנית: "<trigger> ... כש <X> <REL> <Y>". מבני בלבד.
 // מחזיר {trigger, xWords, op, yWords} או null. אינו יודע מה X/Y — רק צורתם.
-const TIME_UNITS = (JSON.parse(fs.readFileSync((R.GEN_DIR + 'spec-lang.data.json'), 'utf8')).timeUnits) || {};
+const SL_T = JSON.parse(fs.readFileSync((R.GEN_DIR + 'spec-lang.data.json'), 'utf8')); const TIME_UNITS = SL_T.timeUnits || {}; const TIME_ASK = new Set(SL_T.timeUnitsAsk || []);   // «חודש» = שאלה, לא 30
 export function detectAlertClause(text) {
   const t = String(text || '');
   const wm = t.match(WHEN);
@@ -45,15 +45,16 @@ export function detectAlertClause(text) {
   if (!rel) return null;
   const xPart = after.slice(0, relM.index);
   const yPart = after.slice(relM.index + relM[0].length);
-  const xWords = hw(xPart), yWords = hw(yPart);
-  if (!xWords.length || !yWords.length) return null;
+  const xWords = hw(xPart), yWords = hw(yPart); const yNum = (yPart.match(/\d+(?:\.\d+)?/) || [null])[0];
+  if (!xWords.length || (!yWords.length && yNum == null)) return null;   // «מעל 1» — מספר בלי מילה אחריו הוא סף כשר
   return {
     trigger: hw(before).slice(-2).join(' '),      // 2 המילים לפני 'כש' = אות-הכוונה (בלי שם-הערך)
     x: cleanPhrase(xWords),                        // שדה-הערך = צירוף-השם המלא (סמיכות נשמרת)
     op: rel.op,
-    y: deprefix(yWords[0]),                        // שדה-הסף (המילה הצמודה לתנאי)
-    n: (yPart.match(/\d+(?:\.\d+)?/) || [null])[0] ?? (TIME_UNITS[deprefix(yWords[0])] ? '1' : null),   // המספר של הבעלים אחרי היחס (כשיש) — סף-ההתראה; יחידת-זמן בלי מספר = 1; אין ⇒ null
-    unit: (() => { const m = yPart.match(/\d+(?:\.\d+)?\s*([֐-׿]+)/); const w = m ? deprefix(m[1]) : deprefix(yWords[0]); return TIME_UNITS[w] || null; })(),   // «מעל 7 ימים» / «מעל שבוע» ⇒ ימים ליחידה (spec-lang.timeUnits — דאטה)
+    y: yWords.length ? deprefix(yWords[0]) : yNum,   // שדה-הסף (המילה הצמודה לתנאי) או המספר עצמו
+    n: (yPart.match(/\d+(?:\.\d+)?/) || [null])[0] ?? (yWords.length && (TIME_UNITS[deprefix(yWords[0])] || TIME_ASK.has(deprefix(yWords[0]))) ? '1' : null),   // המספר של הבעלים אחרי היחס (כשיש) — סף-ההתראה; יחידת-זמן בלי מספר = 1; אין ⇒ null
+    unit: (() => { const m = yPart.match(/\d+(?:\.\d+)?\s*([֐-׿]+)/); const w = m ? deprefix(m[1]) : (yWords.length ? deprefix(yWords[0]) : ''); return TIME_UNITS[w] || (TIME_ASK.has(w) ? 'ask' : null); })(),
+    unitWord: (() => { const m = yPart.match(/\d+(?:\.\d+)?\s*([֐-׿]+)/); const w = m ? deprefix(m[1]) : (yWords.length ? deprefix(yWords[0]) : ''); return TIME_UNITS[w] || TIME_ASK.has(w) ? w : null; })(),   // «מעל 7 ימים» / «מעל שבוע» ⇒ ימים ליחידה (spec-lang.timeUnits — דאטה)
   };
 }
 
