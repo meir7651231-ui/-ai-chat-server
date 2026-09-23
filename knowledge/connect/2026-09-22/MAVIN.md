@@ -57,6 +57,19 @@ node knowledge/connect/2026-09-22/run-corpus.mjs knowledge/connect/2026-09-22/nl
 «חשבונית —נשלחת→ מייל», «לקוח —שיש לו→ הזמנות». חלשים (רמזי-קטלוג מטעים): «עובד —יכול→ להיות», «מוצר —יורד→ מתחת».
 הכול הצעה; הבעלים מכריע והתשובה נרשמת.
 
+## סבב 6 (23.9): עד מסך — מנוע 2 ⇒ מנוע 4 ⇒ flutter analyze
+`specOf(form, answers)` ⇒ אפיון של app-ds (`ישות <דבר> עם <שדות>` · `לוח בקרה עם מונה(<דבר>)` · `תפקיד בודק: הכל`).
+דבר בלי שדות לא נכנס (app-ds פוסל ישות-בלי-שדות, §22) ⇒ נשאר שאלה. `build-check.mjs`: משפט ⇒ אפיון ⇒ buildApp ⇒
+מראה למארח ⇒ `flutter analyze` על מסכי-המשפט בלבד (מסכי-המערכת bind/wizard/audit/flags תלויים ב-buildsmart האמיתי).
+מארח: אין buildsmart בעץ ⇒ `flutter create --offline --project-name buildsmart` בסקראצ'פד + עצי-האטומים מועתקים (BS_HOST).
+```
+BS_HOST=<app_flutter> node knowledge/connect/2026-09-22/build-check.mjs "ניהול רכבים: לרכב יש יצרן, דגם, שנה ומחיר"   # ✅ 0 שגיאות · 8 קבצים
+BS_HOST=... build-check.mjs "מערכת לספרייה: כל ספר עם שם, מחבר, שנה; כל שואל עם שם וטלפון"                          # ✅ 0 · 2 ישויות
+BS_HOST=... build-check.mjs "מערכת לעמותה עם תורמים, תרומות וקבלות"                                                 # ⚪ אין שדות ⇒ שאלה
+BS_HOST=... build-check.mjs "מערכת לעמותה …" --answers opt-b.json (תשובות-לדוגמה של המנהל)                           # ✅ 0 · ישות+לוח-בקרה
+```
+זה הפעם הראשונה שמשפט חופשי עובר את כל ארבעת המנועים ומתקמפל. מה שלא נמדד: `flutter test` (pumpWidget) — צריך buildsmart.
+
 ## סוג-שדה ⇒ מנוע 3 (נפתר בצד מנוע 2, 22.9)
 נמדד: לא הקטלוג (DsToggleTile/DsDateField/DsNumberField = str2·num0·cb1 זהים) ולא הטיפוס המוצהר
 (`String value` בכולם) מבדילים סוג. מה שמבדיל: **מה הקוד עושה עם value** (`DateTime.tryParse` · `value == 'true'` ·

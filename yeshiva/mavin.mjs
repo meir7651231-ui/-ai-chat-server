@@ -183,6 +183,26 @@ export function needsFrom(form, answers = {}) {
   return needs;
 }
 
+// ── צורה ⇒ אפיון למנוע 4 (app-ds.buildApp): `ישות <דבר> עם <שדות>` · `לוח בקרה עם מונה(<דבר>)` · `תפקיד בודק: הכל`.
+//    דבר בלי שדות (לא מהמשפט ולא מתשובה) אינו נכנס — app-ds פוסל ישות-בלי-שדות (§22), והמנוע שואל במקום להמציא. ──
+export function specOf(form, answers = {}) {
+  const lines = [], skipped = [];
+  const ents = form.things.filter((t) => t.many || t.fields.length || (answers[t.label] && answers[t.label].fields));
+  const names = new Set(ents.map((t) => t.label));
+  for (const t of ents) {
+    const a = answers[t.label] || {};
+    const fields = (a.fields && a.fields.length) ? a.fields.map((f) => f.label + (f.type === 'ref' && f.to ? '' : '')) : t.fields.map((f) => f.label);
+    const refs = (a.fields || []).filter((f) => f.type === 'ref' && f.to && names.has(f.to)).map((f) => f.to);
+    const all = [...new Set([...fields, ...refs])];
+    if (!all.length) { skipped.push(t.label); continue; }
+    lines.push(`ישות ${t.label} עם ${all.join(', ')}`);
+  }
+  const sums = ents.filter((t) => (answers[t.label] || {}).acts && answers[t.label].acts.includes('sum')).map((t) => `מונה(${t.label})`);
+  if (sums.length) lines.push(`לוח בקרה עם ${sums.join(', ')}`);
+  if (lines.length) lines.push('תפקיד בודק: הכל');
+  return { spec: lines.join('\n'), skipped };
+}
+
 // ── יומן תשובות: הצעה לפעם הבאה, לא עובדה ──
 export function remember(label, answer, sentence) { const f = ANSWERS(); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.appendFileSync(f, JSON.stringify({ ts: new Date().toISOString(), label, sentence, answer }) + '\n'); }
 export function recall(label) { const f = ANSWERS(); if (!fs.existsSync(f)) return null; const rows = fs.readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((r) => r.label === label); return rows.length ? { proposal: rows[rows.length - 1].answer, times: rows.length } : null; }
