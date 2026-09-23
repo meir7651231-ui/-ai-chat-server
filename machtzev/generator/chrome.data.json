@@ -519,6 +519,7 @@
  "wizSubScr": "ייבנו לבעלים",
  "wizSubInv": "אפשרות בלי מקור",
  "liveNotDate": "«{name}»: משך-זמן על שדה שאינו תאריך ({label}: {type}) ⇒ נשאר סטטי",
+ "liveAndDropped": "«{name}»: חלקי-הצירוף שלא נקשרו לאותה ישות ({parts}) — לא נכנסו לתנאי",
  "liveMonthAsk": "«{name}»: «{unit}» — כמה ימים? (30/31 אינם צורה) ⇒ נשאר סטטי עד תשובה",
  "liveNoRelation": "«{name}»: «{child} של {parent}» — אין שדה ב-{child} שמצביע על {parent} ⇒ נשאר סטטי"
 }

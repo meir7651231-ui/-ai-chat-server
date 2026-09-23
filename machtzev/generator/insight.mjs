@@ -11,7 +11,7 @@ import { buildAtlas } from './atlas.mjs';
 import { isPaper, skinWired } from './look.mjs';
 import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';
 import { synthDisplay, widgetRecordOf, sidecarOf } from './display-synth.mjs';
-import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
+import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { ops as opsOfKind } from '../compose-engine.mjs';   // צורה ⇒ פעולות-יסוד (הטבלה הקיימת, לא רשימה שלי)
 import * as R from '../root.mjs';
@@ -38,7 +38,7 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   const { k, dump } = makeConsts(slug);
   const imports = new Set(["import '../dart-ui-bs/ds/ds.dart';", "import '../dart-ui-bs/ds/ds_store.dart';"]);
   const ledger = [];
-  const manifest = { key: `predicateOverSet·${live.kind || 'num'}${live.agg ? '·' + live.agg : ''}${live.by ? '·by' : ''}·${live.op}`, slug, cls, shape: 'predicateOverSet', purpose: name, kind: KIND.shiur, source: { entity: entity.name, field: live.field, op: live.op, n: live.n }, ops: [], flow: [] };
+  const manifest = { key: `predicateOverSet·${live.kind || 'num'}${live.agg ? '·' + live.agg : ''}${live.by ? '·by' : ''}${live.pre && live.pre.length ? '·and' + live.pre.length : ''}·${live.op}`, slug, cls, shape: 'predicateOverSet', purpose: name, kind: KIND.shiur, source: { entity: entity.name, field: live.field, op: live.op, n: live.n }, ops: [], flow: [] };
   const prior = readComposites().find((c) => c.key === manifest.key) || null;   // יכולת רשומה עם אותה צורה ⇒ האטומים שלה מועמדים ראשונים (ועדיין נפסקים)
   manifest.prior = prior ? { ops: prior.ops } : null;
   // ── הנתונים המשותפים (חוק 23-ד: מחברים בהחלטה): כל האטומים קוראים מאותו br/rs ──
@@ -46,7 +46,7 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   const cond = decide && decide.name ? `${decide.name}(${numOf}, ${thr})` : `${numOf} ${live.op} ${thr}`;
   if (isSet) { manifest.source.agg = live.agg; const ai = liveAggImport(live); if (ai) imports.add(ai); }
   const grouped = liveIsGrouped(live); if (grouped) { manifest.source.agg = live.agg; manifest.source.by = live.by; const ai = liveAggImport({ ...live, kind: 'agg' }); if (ai) imports.add(ai); }
-  manifest.source.kind = live.kind || 'num'; if (live.kind === 'age') { manifest.source.days = live.days; manifest.timeDependent = true; }
+  manifest.source.kind = live.kind || 'num'; if (live.pre && live.pre.length) manifest.source.pre = live.pre.map((p) => ({ field: p.field, op: p.op, n: liveThreshold(p), kind: p.kind || 'num' })); if (live.kind === 'age') { manifest.source.days = live.days; manifest.timeDependent = true; }
   if (decide && decide.file) imports.add(`import '../${decide.file}';`);
   manifest.decision = decide ? { atom: decide.name, file: decide.file, proven: !!decide.proven, examples: decide.examples || [] } : { atom: null, why: 'אין אטום-החלטה מוכח ⇒ השוואה ביד (מדווח)' };
   const descField = grouped ? live.by : (entity.fields[0] || live.field);   // קבוצות: העמודה המתארת = שדה-החלוקה
@@ -106,7 +106,7 @@ ${liveNeedsHelper(live) ? AGE_HELPER + '\n' : ''}class ${cls} extends StatelessW
   const ${cls}({super.key});
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
-    final rs = ${grouped ? liveGroupsExpr(live, `appStore.records('${live.slug}')`, k) : `appStore.records('${live.slug}')`};   ${grouped ? '// רשומה = קבוצה (' + live.by + ' ⇒ ' + live.agg + ' ' + live.field + ')' : ''}
+    final rs = ${grouped ? liveGroupsExpr(live, liveSetExpr(live, `appStore.records('${live.slug}')`, k), k) : liveSetExpr(live, `appStore.records('${live.slug}')`, k)};   ${grouped ? '// רשומה = קבוצה (' + live.by + ' ⇒ ' + live.agg + ' ' + live.field + ')' : ''}
 ${isSet ? `    final agg = ${liveAggExpr(live, 'rs', k)};   // ערך-הקבוצה (${live.agg}); ההתראה על הקבוצה כולה
     final br = (${cond}) ? rs.toList() : <Map<String, String>>[];` : `    final br = rs.where((r) => ${cond}).toList()..sort((a, b) => ${live.op === '<' ? '' : '-'}(${liveValue(live, 'a', k)} - ${liveValue(live, 'b', k)}).sign.toInt());`}   // ההחלטה מניעה את הסדר: החורג ביותר ראשון (23-ד)
     return DsScaffold(title: ${k(name)}, subtitle: br.length.toString() + ' / ' + rs.length.toString() + ' ' + ${k(entity.name)}, icon: ${k('🔔')}, children: [

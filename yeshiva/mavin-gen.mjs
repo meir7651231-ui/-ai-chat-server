@@ -100,7 +100,10 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
     const line = search.map((x) => `«${x.word}»: כתוב על ${x.carriers} חלקיקים${x.carriers ? ` (${[...x.logic, ...x.display].slice(0, 3).join(', ')})` : ''} · שדות בגזע ${x.fields.length ? x.fields.join(', ') : 0} · הגדרה זכורה ${x.remembered ? 'כן' : 'לא'}`).join(' | ');
     routes.push({ thing: t.label, route: 'none', search, why: `אין תנאי, אין שדות, מסך דומה ${b ? (+b.score).toFixed(2) : 0} · חיפוש: ${line || '—'} ⇒ שאלה` });
   }
-  return { routes, spec: spec.spec, skipped: spec.skipped, builtin: spec.builtin };
+  // דבר שנקרא כישות אבל הקטע שלו הוא סעיף-תנאי («התראה כשציון מתחת ל-55 וגם היעדרויות מעל 3» ⇒ «ישות התראה… עם היעדרויות מעל») — לא ישות: שורות-הספק שלו נמחקות
+  const capThings = new Set(routes.filter((r) => r.route === 'capability').map((r) => r.thing));
+  const specLines = spec.spec.split('\n').filter((l) => { const m = l.match(/^(\S+)\s+(.+?)(?:\s+עם\s|:)/); return !(m && capThings.has(m[2].trim()) && entLabels.has(m[2].trim())); });
+  return { routes, spec: specLines.join('\n'), skipped: spec.skipped, builtin: spec.builtin };
 }
 
 /** שומר-ניקיון: נתיב-פלט ריק או בתוך new/ (המדף) ⇒ אסור לכתוב. משותף ל-app-ds ול-genesis-gen. */
@@ -278,7 +281,7 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   // 2 · app-ds — כל הישויות בקריאה אחת (GEN_OUT/GEN_DATA_OUT של הקורא)
   // 🔒 שומר-ניקיון: app-ds/render-ds קוראים GEN_OUT/GEN_DATA_OUT **בזמן-טעינה**. אם לא הופנו מחוץ למדף לפני הייבוא הראשון —
   //    הבנייה כותבת ל-new/dart-gen-bs ו-new/dart-data-bs/auto ומוחקת יתומים (קרה 23.9, שוחזר מ-git). כאן: מסרבים, לא מלכלכים.
-  const caps = capSegs.map(([seg, clauses], i) => ({ slug: `cap${i + 1}`, cls: `GenCap${i + 1}Screen`, kind: 'capability', name: seg.trim(), icon: '🔔', value: (clauses.find((c) => c.n != null) || {}).n ?? null, clause: clauses.find((c) => c.n != null) || null, sub: clauses.map((c) => { const i = c.x ? seg.indexOf(c.x) : -1; return i >= 0 ? seg.slice(i).trim() : `${c.x || ''} ${c.op || ''} ${c.n ?? ''}`.trim(); }).join(' · ') }));   // המילים של הבעלים («ציון מתחת ל-55»), לא סימן   // מסך-ההתראה ⇒ אריח בלוח-הבית וברכזת (הרכבה: לא קובץ-ליד)
+  const caps = capSegs.map(([seg, clauses], i) => ({ slug: `cap${i + 1}`, cls: `GenCap${i + 1}Screen`, kind: 'capability', name: seg.trim(), icon: '🔔', value: (clauses.find((c) => c.n != null) || {}).n ?? null, clause: (() => { const main = clauses.find((c) => c.n != null && !c.and) || clauses.find((c) => c.n != null) || null; const ands = clauses.filter((c) => c !== main && c.and && c.n != null); return main ? (ands.length ? { ...main, and: ands } : main) : null; })(), sub: clauses.map((c) => { const i = c.x ? seg.indexOf(c.x) : -1; return i >= 0 ? seg.slice(i).trim() : `${c.x || ''} ${c.op || ''} ${c.n ?? ''}`.trim(); }).join(' · ') }));   // המילים של הבעלים («ציון מתחת ל-55»), לא סימן   // מסך-ההתראה ⇒ אריח בלוח-הבית וברכזת (הרכבה: לא קובץ-ליד)
   const app = await runAppDs(spec, files, notes, questions, { extraScreens: caps });
   // 2א · הרכבה (insight.mjs · הכרעת-בעלים 23.9 «תחבר»): התראה עם קישור-נתונים ⇒ מסך-תובנה אחד מהנתונים האמיתיים במקום הדמו של capability
   if (app && Array.isArray(app.liveExtras) && !inRepo(process.env.GEN_OUT)) {
@@ -293,7 +296,7 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       const childCount = (r) => (childRecs ? childRecs.filter((v) => v && v === (r[0] || '').trim()).length : 0);
       // הציפייה מהדוגמאות של הבעלים (אימות מול הייעוד): אילו רשומות עונות לתנאי — לפי הצורה, בלי המצאה
       let expect = null; const SLd = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
-      if (ent && SLd.exampleWord) { const exLine = spec.split('\n').find((l) => l.startsWith(`${SLd.exampleWord} ${ent.name}:`)); if (exLine) { const recs = exLine.slice(exLine.indexOf(':') + 1).split(';').map((r) => r.split(/[,،]/).map((v) => v.trim())); const fi = ent.fields.indexOf(x.live.field); const LE0 = await import('../machtzev/generator/live-expr.mjs'); const thr0 = LE0.liveThreshold(x.live); const lt0 = x.live.op === '<';
+      if (ent && SLd.exampleWord) { const exLine = spec.split('\n').find((l) => l.startsWith(`${SLd.exampleWord} ${ent.name}:`)); if (exLine) { const LE0 = await import('../machtzev/generator/live-expr.mjs'); const recs = exLine.slice(exLine.indexOf(':') + 1).split(';').map((r) => r.split(/[,،]/).map((v) => v.trim())).filter((r) => LE0.livePreOk(x.live, r, (f) => ent.fields.indexOf(f))); const fi = ent.fields.indexOf(x.live.field); const thr0 = LE0.liveThreshold(x.live); const lt0 = x.live.op === '<';
         const sampleOf = (r) => x.live.kind === 'refCount' ? childCount(r) : LE0.liveSample(x.live, r[fi]);   // מונה-קשר: כמה רשומות-בנות בדוגמאות מצביעות על ההורה
         if (x.live.kind === 'aggBy') { const bi = ent.fields.indexOf(x.live.by); const gs = LE0.liveGroupsSample(x.live, recs, fi, bi).filter((g) => g[1] != null); const rows = gs.filter((g) => (lt0 ? g[1] < thr0 : g[1] > thr0)).map((g) => [g[0], String(g[1])]); expect = { count: rows.length, rows, groups: gs }; }
         else if (x.live.kind === 'agg') { const v = LE0.liveAggSample(x.live, recs, fi); const hit = v != null && (lt0 ? v < thr0 : v > thr0); expect = { count: v == null ? '' : (Math.round(v * 10) / 10).toString(), rows: hit ? recs.map((r) => [r[0] || '', r[fi] || '']) : [], agg: v }; }

@@ -18,7 +18,11 @@ export const liveGroupsExpr = (live, rs0 = 'rs0', k = (s) => `'${s}'`) => `(() {
 /** ערך-הקבוצות מהדוגמאות (aggBy) ⇒ [[by, value]] */
 export function liveGroupsSample(live, rows, fi, bi) { const g = new Map(); for (const r of rows) { const key = String(r[bi] || '').trim(); (g.get(key) || g.set(key, []).get(key)).push(r); } return [...g.entries()].map(([key, rs]) => { const v = liveAggSample(live, rs, fi); return [key, v == null ? null : Math.round(v * 10) / 10]; }); }
 export const liveThreshold = (live) => (live.kind === 'age' ? live.days : live.n);
-export const liveNeedsHelper = (live) => live.kind === 'age';
+export const liveNeedsHelper = (live) => live.kind === 'age' || (live.pre || []).some((p) => p.kind === 'age');
+/** צירוף («וגם», הכרעת-בעלים 23.9 «צא לדרך»): live.pre = תנאים קודמים על אותה קבוצה ⇒ הקבוצה של התנאי הראשי היא הרשומות שעברו את כולם (מסנן על מסנן) */
+export const livePre = (live, r = 'r', k = (s) => `'${s}'`) => (live.pre || []).map((p) => `(${liveValue(p, r, k)} ${p.op} ${liveThreshold(p)})`).join(' && ');
+export const liveSetExpr = (live, rs, k = (s) => `'${s}'`) => (live.pre && live.pre.length ? `${rs}.where((r) => ${livePre(live, 'r', k)}).toList()` : rs);
+export const livePreOk = (live, row, fieldIndex) => (live.pre || []).every((p) => { const v = liveSample(p, row[fieldIndex(p.field)]); const t = liveThreshold(p); return v != null && (p.op === '<' ? v < t : v > t); });
 /** ערכי-הדוגמאות של הבעלים בצורת-התנאי: מספר ⇒ המספר · תאריך ⇒ ותק בימים היום (תלוי-זמן, מוצהר) */
 /** ערך-הקבוצה מהדוגמאות (agg) — לציפייה ולהחלטה */
 export function liveAggSample(live, rows, fi) { const vals = rows.map((r) => parseFloat(r[fi])).filter((v) => !isNaN(v)); if (live.agg === 'count') return rows.length; if (!vals.length) return null; const sum = vals.reduce((a, b) => a + b, 0); return live.agg === 'sum' ? sum : sum / vals.length; }

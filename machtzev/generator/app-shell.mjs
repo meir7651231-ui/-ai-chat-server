@@ -9,7 +9,7 @@ import { searchOp, wireAtom, pickWired, particleWidgets } from './particles.mjs'
 import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';   // הישיבה על בחירת-אטום (L114)
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { synthDisplay, widgetRecordOf, sidecarOf } from './display-synth.mjs';
-import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr } from './live-expr.mjs';   // «אין» בבית ⇒ הרכבה מיסודות (סף ⇒ פריטי-גוון · הקשה ⇒ שורש לחיץ), עולה לפסק
+import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr } from './live-expr.mjs';   // «אין» בבית ⇒ הרכבה מיסודות (סף ⇒ פריטי-גוון · הקשה ⇒ שורש לחיץ), עולה לפסק
 import { skinWired } from './look.mjs';
 import { buildAtlas } from './atlas.mjs';
 let ATL = null; const widgetOf = (cls) => ((ATL ||= buildAtlas({ forge: isPaper() })).widgets.find((w) => w.cls === cls) || null);
@@ -488,9 +488,10 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
     if (!x.live) return null;
     const purpose = { kind: KIND.shiur, need: ['label', 'value', 'onTap'], threshold: liveThreshold(x.live), op: x.live.op, text: x.name, roles: [...new Set(['alertTile', ...['ring', 'gauge', 'alert', 'headline'].map(roleOf)])] };   // alertTile = תפקיד מדוד (auto-skin, הכרעה-37): גוון + מספר + הקשה
     const cands = [...new Set([...purpose.roles.flatMap((role) => forgeCands('alert', role)), ...['ring', 'gauge', 'alert', 'headline'].flatMap((op) => { const pk = searchOp(op, x.name, null, 12); return [...pk.atoms, ...pk.alts, ...forgeCands(op, roleOf(op))]; })])];   // אטומים רשומים לתפקידי-המטרה (כולל alertTile) — מועמדים ראשונים
-    const isSet = liveIsSet(x.live); const aggE = isSet ? liveAggExpr(x.live, `appStore.records('${x.live.slug}')`, k) : null; if (isSet && liveAggImport(x.live)) imports.add(liveAggImport(x.live));
+    const base = liveSetExpr(x.live, `appStore.records('${x.live.slug}')`, k);   // צירוף: הקבוצה אחרי התנאים הקודמים
+    const isSet = liveIsSet(x.live); const aggE = isSet ? liveAggExpr(x.live, base, k) : null; if (isSet && liveAggImport(x.live)) imports.add(liveAggImport(x.live));
     const grouped = liveIsGrouped(x.live); if (grouped && liveAggImport({ ...x.live, kind: 'agg' })) imports.add(liveAggImport({ ...x.live, kind: 'agg' }));
-    const recsE = grouped ? liveGroupsExpr(x.live, `appStore.records('${x.live.slug}')`, k) : `appStore.records('${x.live.slug}')`;
+    const recsE = grouped ? liveGroupsExpr(x.live, base, k) : base;
     const live = isSet ? `((${aggE} * 10).round() / 10)` : `${recsE}.where((r) => ${liveValue(x.live, 'r', k)} ${x.live.op} ${liveThreshold(x.live)}).length`;   // קבוצה ⇒ ערך-הקבוצה עצמו; קבוצות ⇒ מונה-הקבוצות החורגות; אחרת מונה-החורגים
     const ctx = { label: k(x.name), value: { str: `${live}.toString()`, num: `${live}.toDouble()` }, sub: k(x.sub || ''), glyph: k(x.icon || '🔔'), message: k(x.name), nav: `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}()))`, need: purpose.need };
     let r = judge({ purpose, cands, widgetOf, skinWired, wire: (c) => wireForge(c, ctx, { widgetOf, wireAtom }) });

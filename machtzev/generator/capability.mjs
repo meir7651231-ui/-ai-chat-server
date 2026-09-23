@@ -4,6 +4,7 @@
 import { retrieve } from './match.mjs';
 import { selectAtom } from './render-ds.mjs';
 import fs from 'node:fs';
+import path from 'node:path';
 import * as R from '../root.mjs';
 import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const ATOM_INDEX = JSON.parse(fs.readFileSync((R.GEN_DIR + 'atom-index.json'), 'utf8'));
@@ -11,15 +12,17 @@ const fileOf = (cls) => { const a = ATOM_INDEX.find((e) => e.cls === cls); retur
 
 // דקדוק-יחסי — קבוצה סגורה של אופרטורי-השוואה (כמו >,< במתמטיקה). לא דומיין. \S* סופג נטיית-מין/מספר.
 // דפוסים בצורה מנוטרלת-סופיות (definalize) — סופג ך/כ · ם/מ · נטיית-מין/מספר.
-const REL = [
-  { re: /חורג\S*|עולה\S*\s*על|מעל|גדול\S*|יותר|למעלה\s*מ/, op: '>' },
-  { re: /נמוכ\S*|מתחת|קטנ\S*|פחות|יורד\S*/, op: '<' },
-];
+// מהדאטה (knowledge/conditions.json · הכרעת-בעלים 23.9): מילות-התנאי · דקדוק-היחסים · מחברי-הריבוי — אפס עברית בקוד
+const COND = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'knowledge/conditions.json'), 'utf8'));
+const REL = COND.rel.map((r) => ({ re: new RegExp(r.pattern), op: r.op }));
+const escRe = (x) => String(x).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const AND_RE = new RegExp('\\s+(?:' + COND.and.map(escRe).join('|') + ')\\s+');
+const SEP_RE = new RegExp(COND.sep.map(escRe).join('|'));
 /** אופרטור-השוואה של רצף-מילים לפי דקדוק-היחסים הסגור (אותו REL) — כדי שהדלת תזהה תנאי לפי צורה (מילת-יחס + מספר) גם בלי מרקר-WHEN. */
 export const relOpOf = (words) => { const t = definalize([].concat(words).join(' ')); for (const r of REL) if (r.re.test(t)) return r.op; return null; };
 const definalize = (s) => String(s).replace(/ך/g, 'כ').replace(/ם/g, 'מ').replace(/ן/g, 'נ').replace(/ף/g, 'פ').replace(/ץ/g, 'צ');
 // מרקרי-תנאי מבניים (כמו 'עם' מפריד-שדות) — סגור. בלי \b (ASCII-בלבד, לא נדלק על עברית).
-const WHEN = /(כאשר|ברגע ש|כש)/;
+const WHEN = new RegExp('(' + COND.when.map(escRe).join('|') + ')');
 const hw = (s) => [...String(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
 // קילוף-קידומת חד-אותית (ה/ו/ש/כ/ל/ב/מ) לצורך התאמת-שדה — רק אם המילה נשארת ≥2 אותיות.
 // קילוף-קידומת שמרני: "מה..." (מן-ה) ⇒ קלף 2 · "ה..." (יידוע) ⇒ קלף 1. לעולם לא מ' בודדת
@@ -78,9 +81,17 @@ const STR_RE = /^(label|title|caption|name|text|msg|message)$/;
 // = 2 מסגרות (יכולת-ההתראה מופעלת פעמיים). מחברים = חלקיקים מבניים (כמו של/עם), אפס-מילון-דומייני.
 export function detectAllClauses(text) {
   const out = [];
-  for (const s of String(text || '').split(/\s+וגם\s+|\s+גם\s+|;|\n/)) {
-    const d = detectAlertClause(s);
-    if (d && !out.some((o) => o.x === d.x && o.op === d.op && o.y === d.y)) out.push(d);
+  // קטע = תנאי אחד; מחבר-ריבוי («וגם») בתוך קטע = צירוף: הסעיף הבא יורש את מילת-התנאי של הראשון ומסומן and (הרכבה: מסנן על מסנן — whereList בתוך whereList)
+  for (const seg of String(text || '').split(SEP_RE)) {
+    let whenWord = null;
+    seg.split(AND_RE).forEach((part, i) => {
+      let d = detectAlertClause(part);
+      if (!d && i > 0 && whenWord) d = detectAlertClause(`${whenWord} ${part}`);
+      if (!d) return;
+      if (!whenWord) { const m = part.match(WHEN); whenWord = m ? m[0] : null; }
+      if (i > 0) d.and = true;
+      if (!out.some((o) => o.x === d.x && o.op === d.op && o.y === d.y)) out.push(d);
+    });
   }
   return out;
 }
@@ -102,9 +113,9 @@ export function emitAppFrom(clauses, text, cls = 'GenCapScreen') {
       //    🕯️ «לא נמצאו יכולות» היא «אין» על **המשפט**, ולכן נפסק על כל חלקיק-דקדוק שנסרק בשמו
       //    (הכרעה-23: אומרים את החסר בשפת-החלקיקים — «ל-X אין מילוי», לא «אין יכולת»).
       const r = rminhu({ engine: 'capability.emitApp', matter: `משפט «${String(text || '').slice(0, 60)}»`,
-        searched: ['WHEN (כאשר/ברגע ש/כש)', `REL (${REL.map((x) => x.op).join(',')})`, 'מושא-ישיר «את X»'],
+        searched: [`WHEN (${COND.when.join('/')})`, `REL (${REL.map((x) => x.op).join(',')})`, 'מושא-ישיר «את X»'],
         rulings: [
-          (WHEN.test(String(text || '')) ? pliga : lo)('חלקיק WHEN (כאשר/ברגע ש/כש)', WHEN.test(String(text || '')) ? 'נמצא במשפט אך detectAllClauses לא הוציא ממנו סעיף — אין יחס (REL) או שאחד מצדדיו ריק' : 'אין במשפט מרקר-תנאי — המשפט אינו מותנה, וזו צורה תקינה, לא חסר'),
+          (WHEN.test(String(text || '')) ? pliga : lo)(`חלקיק WHEN (${COND.when.join('/')})`, WHEN.test(String(text || '')) ? 'נמצא במשפט אך detectAllClauses לא הוציא ממנו סעיף — אין יחס (REL) או שאחד מצדדיו ריק' : 'אין במשפט מרקר-תנאי — המשפט אינו מותנה, וזו צורה תקינה, לא חסר'),
           lo('מושא-ישיר «את X»', 'אין במשפט «את» ואחריו צירוף-שם — אין עוגן-תצוגה שממנו נגזרת יכולת-אחת'),
         ] });
       throw new Error(`לא נמצאו יכולות במשפט — ${r.digest}`);
