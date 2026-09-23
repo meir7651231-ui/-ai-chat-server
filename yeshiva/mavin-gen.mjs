@@ -67,7 +67,10 @@ export function clausesByForm(seg, frame = []) {
   return out;
 }
 /** ניתוב לפי צורה: לכל יחידה — לאיזה מנוע קיים היא הולכת ולמה. */
-export function routeOf(form, answers = {}) {
+// הצעות (הכרעת-בעלים 23.9 «לא לגרור כלום»): combine (מסך רשום של אפליקציה אחרת, לפי דמיון-מילים לתוכן שלה) ו-gold (מודול בית-ספר) מביאים **תוכן ממקום אחר**.
+// מדדתי: העיקרון של combine (סקציה = אטום עם חיווט מוכח) אינו נפרד מהתוכן — התאמה לפי op בלבד שרירותית (סקציות: action 82 · text 60 · container 40).
+// לכן שניהם מסומנים `proposal` ונבנים רק כשהקורא מבקש (proposals: true / --proposals) — מוצעים, לא נכנסים לבד.
+export function routeOf(form, answers = {}, { proposals = false } = {}) {
   const spec = specOf(form, answers);
   const entLabels = new Set(spec.spec.split('\n').filter((l) => /^ישות /.test(l)).map((l) => l.replace(/^ישות /, '').split(' עם ')[0].trim()));
   const routes = [];
@@ -77,20 +80,24 @@ export function routeOf(form, answers = {}) {
     if (capSegs.has(t.src)) { const c = capSegs.get(t.src); routes.push({ thing: t.label, route: 'capability', why: c.how === 'טקסט' ? 'סעיף-תנאי מבני בקטע (capability.detectAllClauses)' : `תנאי לפי צורה: «${c.clauses[0].x}» ${c.clauses[0].op} ${c.clauses[0].n}`, seg: t.src, clauses: c.clauses }); continue; }
     if (entLabels.has(t.label)) { routes.push({ thing: t.label, route: 'appds', why: 'דבר עם שדות ⇒ ישות' }); continue; }
     const [b] = retrieveScreen(t.label, 1);
-    if (b && b.score > 0) { routes.push({ thing: t.label, route: 'combine', why: `דומה למסך רשום ${b.name} (${(+b.score).toFixed(2)})`, screen: b.name, score: +b.score }); continue; }
+    if (b && b.score > 0) { routes.push({ thing: t.label, route: 'combine', proposal: true, why: `הצעה (תוכן ממקום אחר): דומה במילים למסך רשום ${b.name} (${(+b.score).toFixed(2)})`, screen: b.name, score: +b.score }); continue; }
     const g = goldModuleFor(t.label);   // אחרי combine: תוספת בלבד — לא מחליף מסלול קיים («רק את הפלוסים»)
-    if (g) { routes.push({ thing: t.label, route: 'gold', why: `כותרות-זהב של ${path.basename(g.module)} חוזרות על «${g.words.join(' ')}» ${g.score} פעמים`, module: g.module }); continue; }
+    if (g) { routes.push({ thing: t.label, route: 'gold', proposal: true, why: `הצעה (תוכן ממקום אחר): כותרות-זהב של ${path.basename(g.module)} חוזרות על «${g.words.join(' ')}» ${g.score} פעמים`, module: g.module }); continue; }
     routes.push({ thing: t.label, route: 'none', why: 'אין תנאי, אין שדות, אין מסך דומה ⇒ שאלה' });
   }
   return { routes, spec: spec.spec, skipped: spec.skipped, builtin: spec.builtin };
 }
 
 /** הפעלה: כל מסלול למנוע שלו; כתיבה רק ל-outDir. מחזיר את הקבצים שנוצרו ופערים. */
-export async function generateAll(sentence, { answers = {}, outDir, name = 'mavin' } = {}) {
+export async function generateAll(sentence, { answers = {}, outDir, name = 'mavin', proposals = false } = {}) {
   const form = formOf(sentence);
-  const { routes, spec, skipped } = routeOf(form, answers);
+  const { routes: allRoutes, spec, skipped } = routeOf(form, answers, { proposals });
+  // הצעות נבנות רק לפי בקשה; אחרת נרשמות בהערות (מוצע, לא נכנס לבד)
+  const routes = proposals ? allRoutes : allRoutes.filter((r) => !r.proposal);
+  const held = allRoutes.filter((r) => r.proposal && !proposals);
   fs.mkdirSync(outDir, { recursive: true });
   const files = [], notes = [];
+  for (const r of held) notes.push(`הצעה לא נבנתה («${r.thing}» ⇒ ${r.route}): ${r.why.replace(/^הצעה \(תוכן ממקום אחר\): /, '')} — לבנייה: proposals / --proposals`);
   // 1 · capability — פעם אחת לכל קטע-תנאי
   const capSegs = [...new Map(routes.filter((r) => r.route === 'capability').map((r) => [r.seg, r.clauses])).entries()];
   capSegs.forEach(([seg, clauses], i) => { const cls = `GenCap${i + 1}Screen`; const code = emitAppFrom(clauses, seg, cls); const f = path.join(outDir, `gen_cap${i + 1}.dart`); fs.writeFileSync(f, code); files.push({ route: 'capability', file: f, seg, thresholds: clauses.map((c) => `${c.x} ${c.op} ${c.n ?? '?'}`) }); });
@@ -123,5 +130,5 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       if (g.status === 0 && hit) files.push({ route: 'combine', file: path.join(R.ROOT, hit[1]), sources, sections: sections.length }); else notes.push(`gen-screen נכשל: ${out.trim().slice(0, 160)}`);
     }
   }
-  return { form, routes, spec, skipped, files, notes, none: routes.filter((r) => r.route === 'none').map((r) => r.thing) };
+  return { form, routes: allRoutes, held: held.map((r) => r.thing), spec, skipped, files, notes, none: allRoutes.filter((r) => r.route === 'none').map((r) => r.thing) };
 }

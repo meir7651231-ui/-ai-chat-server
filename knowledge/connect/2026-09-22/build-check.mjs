@@ -1,6 +1,6 @@
 // מנוע 2 ⇒ מנוע 4 ⇒ מקמפל · משפט ⇒ צורה ⇒ אפיון ⇒ app-ds.buildApp ⇒ מראה למארח-Flutter ⇒ flutter analyze על המסכים שנוצרו.
 //   מארח: BS_HOST=<app_flutter> (נוצר ע"י `flutter create --offline --project-name buildsmart`; אין buildsmart אמיתי בעץ הזה).
-//   שימוש: BS_HOST=... node knowledge/connect/2026-09-22/build-check.mjs "<משפט>" [--answers f.json]
+//   שימוש: BS_HOST=... node knowledge/connect/2026-09-22/build-check.mjs "<משפט>" [--answers f.json] [--proposals: לבנות גם הצעות (מסך-רשום/זהב — תוכן ממקום אחר)]
 //   פלט: אפיון · מסכים · מספר שגיאות-analyze (עם הפקודה). אין flutter/מארח ⇒ ⚪ לא-נמדד (L34: אין-כלי ≠ כשל).
 import fs from 'node:fs';
 import path from 'node:path';
@@ -26,7 +26,7 @@ const { buildApp } = await import(path.join(ROOT, 'machtzev/generator/app-ds.mjs
 const form = formOf(sentence);
 const { spec, skipped, builtin } = specOf(form, answers);
 console.log(`«${sentence}»\nאפיון:\n${spec.split('\n').map((l) => '  ' + l).join('\n') || '  (ריק)'}${skipped.length ? `\n  לא נכנסו (בלי שדות ⇒ שאלה): ${skipped.join(', ')}` : ''}${builtin && builtin.length ? `\n  כבר מובנה במסך-הישות: ${builtin.join(' · ')}` : ''}`);
-const G0 = await generateAll(sentence, { answers, outDir: process.env.GEN_OUT, name: 'chk' });
+const G0 = await generateAll(sentence, { answers, outDir: process.env.GEN_OUT, name: 'chk', proposals: args.includes('--proposals') });
 for (const r of G0.routes) console.log(`  מסלול · «${r.thing}» ⇒ ${r.route} · ${r.why}`);
 for (const n of G0.notes) console.log('  ' + n);
 const appEntry = G0.files.find((f) => f.route === 'appds'); if (appEntry) console.log(`מסכים: ${appEntry.screens.join(' · ')}`);
