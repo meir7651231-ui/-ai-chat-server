@@ -27,6 +27,10 @@ export const liveNeedsHelper = (live) => live.kind === 'age' || (live.pre || [])
 /** צירוף («וגם», הכרעת-בעלים 23.9 «צא לדרך»): live.pre = תנאים קודמים על אותה קבוצה ⇒ הקבוצה של התנאי הראשי היא הרשומות שעברו את כולם (מסנן על מסנן) */
 export const livePre = (live, r = 'r', k = (s) => `'${s}'`) => (live.pre || []).map((p) => `(${liveValue(p, r, k)} ${p.op} ${liveThreshold(p)})`).join(' && ');
 export const liveSetExpr = (live, rs, k = (s) => `'${s}'`) => (live.pre && live.pre.length ? `${rs}.where((r) => ${livePre(live, 'r', k)}).toList()` : rs);
+/** חלופה («או»): live.alt = תנאים שכל אחד מהם מספיק — רשומה חורגת אם התנאי הראשי או אחת החלופות (איחוד) */
+export const liveAlt = (live, r = 'r', k = (s) => `'${s}'`) => (live.alt || []).map((p) => `(${liveValue(p, r, k)} ${p.op} ${liveThreshold(p)})`).join(' || ');
+export const liveCond = (live, cond, r = 'r', k = (s) => `'${s}'`) => (live.alt && live.alt.length ? `((${cond}) || ${liveAlt(live, r, k)})` : cond);
+export const liveAltOk = (live, row, fieldIndex) => (live.alt || []).some((p) => { const v = liveSample(p, row[fieldIndex(p.field)]); const t = liveThreshold(p); return v != null && (p.op === '<' ? v < t : v > t); });
 export const livePreOk = (live, row, fieldIndex) => (live.pre || []).every((p) => { const v = liveSample(p, row[fieldIndex(p.field)]); const t = liveThreshold(p); return v != null && (p.op === '<' ? v < t : v > t); });
 /** ערכי-הדוגמאות של הבעלים בצורת-התנאי: מספר ⇒ המספר · תאריך ⇒ ותק בימים היום (תלוי-זמן, מוצהר) */
 /** ערך-הקבוצה מהדוגמאות (agg) — לציפייה ולהחלטה */

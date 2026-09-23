@@ -398,11 +398,13 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       const ordered = [...(entTail ? [entTail] : []), ...info.filter((li) => li.isEnt && entRes[li.i] && entRes[li.i] !== entTail).map((li) => entRes[li.i])];
       for (const r of ordered) { const cx = (r === entTail && fieldHead) ? fieldHead : c.x; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(cx) || fd.label === cx); if (f && nameToSlug[r.entity]) { if (c.unit && f.type !== 'date') { const why = T('liveNotDate', { name: x.name, label: f.label, type: f.type }); seedNotes.push(why); return { ...x, why }; } return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: c.unit ? 'age' : 'num', days: c.unit ? +c.n * c.unit : null } }; } }
       return x; };   // אין ישות עם השדה ⇒ השורה נשארת סטטית (הסף בלבד), לא מומצא
-    const liveExtras = extraScreens.map((x) => { const y = liveOf(x); const c = x.clause; if (!y.live || !c || !Array.isArray(c.and) || !c.and.length) return y;
-      const pre = [], dropped = [];
-      for (const cj of c.and) { const z = liveOf({ ...x, clause: cj }); if (z.live && z.live.slug === y.live.slug && !['agg', 'aggBy', 'refCount'].includes(z.live.kind || 'num')) pre.push(z.live); else dropped.push(`${cj.x} ${cj.op} ${cj.n}`); }
+    const liveExtras = extraScreens.map((x) => { const y = liveOf(x); const c = x.clause; if (!y.live || !c || !((c.and && c.and.length) || (c.or && c.or.length))) return y;
+      const pre = [], alt = [], dropped = [];
+      const same = (z) => z.live && z.live.slug === y.live.slug && !['agg', 'aggBy', 'refCount', 'levels'].includes(z.live.kind || 'num');
+      for (const cj of c.and || []) { const z = liveOf({ ...x, clause: cj }); if (same(z)) pre.push(z.live); else dropped.push(`${cj.x} ${cj.op} ${cj.n}`); }
+      for (const cj of c.or || []) { const z = liveOf({ ...x, clause: cj }); if (same(z)) alt.push(z.live); else dropped.push(`${cj.x} ${cj.op} ${cj.n}`); }
       if (dropped.length) { const why = T('liveAndDropped', { name: x.name, parts: dropped.join(', ') }); seedNotes.push(why); }
-      return pre.length ? { ...y, live: { ...y.live, pre } } : y; });
+      return (pre.length || alt.length) ? { ...y, live: { ...y.live, ...(pre.length ? { pre } : {}), ...(alt.length ? { alt } : {}) } } : y; });
     liveExtrasOut = liveExtras;
     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr, homeIsRoot: rootIsFirst, extras: liveExtras, seed });
     home = { slug: `${P}shell`, cls: shell.cls };

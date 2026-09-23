@@ -17,6 +17,8 @@ const COND = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'knowledge/conditio
 const REL = COND.rel.map((r) => ({ re: new RegExp(r.pattern), op: r.op }));
 const escRe = (x) => String(x).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const AND_RE = new RegExp('\\s+(?:' + COND.and.map(escRe).join('|') + ')\\s+');
+const OR_RE = new RegExp('\\s+(?:' + (COND.or || []).map(escRe).join('|') + ')\\s+');
+const CONN_RE = new RegExp('(\\s+(?:' + [...COND.and, ...(COND.or || [])].map(escRe).join('|') + ')\\s+)');   // פיצול עם המחבר (כדי לדעת אם ההמשך הוא «וגם» או «או»)
 const SEP_RE = new RegExp(COND.sep.map(escRe).join('|'));
 /** אופרטור-השוואה של רצף-מילים לפי דקדוק-היחסים הסגור (אותו REL) — כדי שהדלת תזהה תנאי לפי צורה (מילת-יחס + מספר) גם בלי מרקר-WHEN. */
 export const relOpOf = (words) => { const t = definalize([].concat(words).join(' ')); for (const r of REL) if (r.re.test(t)) return r.op; return null; };
@@ -91,15 +93,15 @@ export function detectAllClauses(text) {
   const out = [];
   // קטע = תנאי אחד; מחבר-ריבוי («וגם») בתוך קטע = צירוף: הסעיף הבא יורש את מילת-התנאי של הראשון ומסומן and (הרכבה: מסנן על מסנן — whereList בתוך whereList)
   for (const seg of String(text || '').split(SEP_RE)) {
-    let whenWord = null;
-    seg.split(AND_RE).forEach((part, i) => {
+    let whenWord = null; const pieces = seg.split(CONN_RE);   // [חלק, מחבר, חלק, מחבר, …]
+    for (let i = 0; i < pieces.length; i += 2) { const part = pieces[i], conn = i > 0 ? pieces[i - 1] : null;
       let d = detectAlertClause(part);
-      if (!d && i > 0 && whenWord) d = detectAlertClause(`${whenWord} ${part}`);
-      if (!d) return;
+      if (!d && conn && whenWord) d = detectAlertClause(`${whenWord} ${part}`);
+      if (!d) continue;
       if (!whenWord) { const m = part.match(WHEN); whenWord = m ? m[0] : null; }
-      if (i > 0) d.and = true;
+      if (conn) { if (OR_RE.test(conn)) d.or = true; else d.and = true; }   // «או» = חלופה (איחוד) · «וגם» = צירוף (חיתוך)
       if (!out.some((o) => o.x === d.x && o.op === d.op && o.y === d.y)) out.push(d);
-    });
+    }
   }
   return out;
 }
