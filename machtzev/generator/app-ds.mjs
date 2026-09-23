@@ -110,7 +110,9 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
   //   ולכן כל שורה חדשה מעל הישות מזיזה את המזהה ומיתמת את הנתונים של המשתמש.
   //   `שרת:` נוסף כאן ברגע שנולד; שער `server` נועל את המפה כדי שזה לא יקרה בשקט שוב.
   const SERVER_RE = new RegExp('^\\s*' + SL.serverWord + '\\s*:\\s*(.+)$');
-  const all = all0.filter((l) => !PARTICLE_RE.test(l) && !CONTENT_RE.test(l) && !REPORT_RE.test(l) && !APP_RE.test(l) && !LOOK_RE.test(l) && !Q_RE.test(l) && !CHAIN_RE.test(l) && !LAYER_RE.test(l) && !SERVER_RE.test(l));
+  const EXAMPLE_RE = SL.exampleWord ? new RegExp('^\\s*' + SL.exampleWord + '\\s+(.+?)\\s*:\\s*(.+)$') : /$^/;   // דוגמאות של הבעלים ⇒ רשומות (לא לוח, לא ישות)
+  const examples = {}; for (const l of all0) { const m = l.match(EXAMPLE_RE); if (m) (examples[m[1].trim()] ||= []).push(...m[2].split(';').map((r) => r.split(/[,،]/).map((v) => v.trim()).filter(Boolean)).filter((r) => r.length)); }
+  const all = all0.filter((l) => !PARTICLE_RE.test(l) && !CONTENT_RE.test(l) && !REPORT_RE.test(l) && !APP_RE.test(l) && !LOOK_RE.test(l) && !Q_RE.test(l) && !CHAIN_RE.test(l) && !LAYER_RE.test(l) && !SERVER_RE.test(l) && !EXAMPLE_RE.test(l));
   const roles = all.filter((l) => ROLE_RE.test(l)).map(parseRole);
   const lines = all.filter((l) => !ROLE_RE.test(l));
   const info = lines.map((line, idx) => ({ line, i: idx + 1, isEnt: ENTITY_RE.test(line) }));
@@ -329,6 +331,14 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
   const hub = renderHub(`${P}hub`, { title: appTitle, icon: '🏗️', screens: [...screens, ...extraScreens, ...reportScreens, ...particleScreens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys, ...(wizTile ? [wizTile] : [])], roles, scopeFields });
   // 🧭 G26 · ניווט-מקשרים: השורש = הישות עם הכי-הרבה מצביעים (backRefs); יש שורש ⇒ שלד (בית · שורש · עוד) הוא הבית, הרכזת = "עוד" (ביט-זהה)
   // הרכבה: אין שורש לפי קשרים אבל יש לוח-בית (ראש-המשפט) ⇒ הישות הראשונה שנאמרה = לשונית-השורש, והלוח = לשונית-הבית (לא הרכזת, לא «היום» של ישות אחת)
+  // רשומות-דוגמה של הבעלים: ערכים לפי סדר-השדות של הישות; עודף ⇒ מדווח, לא מומצא (הטקסטים מ-chrome.data.json)
+  let seed = null; const seedNotes = [];
+  { const { k, dump } = makeConsts(`${P}seed`); const adds = []; let count = 0;
+    for (const [ent, recs] of Object.entries(examples)) { const li = info.find((x) => x.isEnt && entRes[x.i] && entRes[x.i].entity === ent); const r = li ? entRes[li.i] : null; const sl = nameToSlug[ent];
+      if (!r || !sl) { seedNotes.push(T('seedNoEntity', { word: SL.exampleWord, ent })); continue; }
+      const labels = r.schema.map((f) => f.label);
+      for (const rec of recs) { const pairs = rec.slice(0, labels.length).map((v, j) => `${k(labels[j])}: ${k(v)}`); if (rec.length > labels.length) seedNotes.push(T('seedOverflow', { word: SL.exampleWord, ent, extra: rec.length - labels.length, n: labels.length })); adds.push(`  appStore.add('${sl}', {${pairs.join(', ')}});`); count++; } }
+    if (adds.length) { seed = { slug: `${P}seed`, fn: 'seedExamples', count }; write(seed.slug, `// 🌱 ${T('seedHeader', { word: SL.exampleWord })}\nimport '../dart-data-bs/auto/gen_${seed.slug}_content.dart';\nimport '../dart-ui-bs/ds/ds_store.dart';\n\nbool _seeded = false;\nvoid seedExamples() {\n  if (_seeded) return; _seeded = true;\n${adds.join('\n')}\n}\n`, dump()); } }
   const rootByRefs = pickRoot(entMeta, backRefs);
   const headDash = screens.find((x) => x.kind === 'dashboard') || null;
   const rootMeta = rootByRefs || (headDash && entMeta.length ? entMeta[0] : null);
@@ -349,13 +359,19 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       const msgP = planAll.find((x) => x.ok && x.entity === rootMeta.name && x.shape && x.shape.kind === 'message') || null;
       homeScr = renderHome(`${P}home`, { root: rootE, rootPage, report: rep, message: msgP ? { entity: pentsAll.find((e) => e.name === rootMeta.name), p: msgP } : null, title: questions.home || L.shellHome, chain, appTitle });
     }
-    const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr });
+    const PFX = new RegExp('^[' + (SL.prefixLetters || '') + ']'), SFX = new RegExp('(' + (SL.stemSuffixes || []).join('|') + ')$');   // אותיות-קידומת וסיומות-ריבוי מהדאטה (spec-lang)
+    const stemOf = (w) => String(w || '').replace(PFX, '').replace(SFX, '');
+    const liveExtras = extraScreens.map((x) => { const c = x.clause; if (!c || !c.x || !/^[<>]$/.test(c.op) || c.n == null || isNaN(+c.n)) return x;
+      for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n } }; }
+      return x; });   // אין ישות עם השדה ⇒ השורה נשארת סטטית (הסף בלבד), לא מומצא
+    const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr, homeIsRoot: rootIsFirst, extras: liveExtras, seed });
     home = { slug: `${P}shell`, cls: shell.cls };
     // G33 · מניפסט-המודול (הכרעה-29): מה ש«בלגן» (האפליקציה-האחת) צריך כדי למזג את המודול — מסכים · שורש · שדות · שרשרת. נגזר, לא יד.
     if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [] })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
     console.log(`🧭 ${L.shellLog}: ${L.shellRootWord} ${rootMeta.name}${rootIsFirst ? ' (1st)' : ''} · ${kids.length} ${L.shellChildrenWord} · ${shell.nav || '—'}${[...rootPage.notes, ...shell.notes].length ? ' · ⚪ ' + [...rootPage.notes, ...shell.notes].join(' · ') : ''}`);
   }
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
+  for (const n of seedNotes) console.log(`⚪ ${n}`); if (seed) console.log(`🌱 ${T('seedLog', { word: SL.exampleWord, count: seed.count, slug: seed.slug })}`);
   renderMain(`${P}main`, { title: appTitle, hubSlug: home.slug, hubCls: home.cls, edges });
 
   return { screens, sys, roles };

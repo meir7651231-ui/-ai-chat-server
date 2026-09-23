@@ -26,7 +26,7 @@ const { generateAll, generateFromSpec, generateFromDoc } = await import(path.joi
 const { formOf, specOf } = await import(path.join(ROOT, 'yeshiva/mavin.mjs'));
 let spec, skipped = [], builtin = [], G0;
 const bi = args.includes('--balagan');   // «בלגן»: האפליקציה-האחת מכל מודולי-הבעלים (apps/*.json) — כניסת «כל המודולים», לא משפט
-const genRe = bi ? /^gen_balagan_.*\.dart$/ : /^gen_app_.*\.dart$/;
+const genRe = bi ? /^gen_balagan_.*\.dart$/ : /^gen_(app_|cap\d+).*\.dart$/;   // גם מסכי-התראה (gen_cap*) — לצילום/אימות
 if (bi) {
   const { generateBalagan } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
   G0 = await generateBalagan({ outDir: process.env.GEN_OUT }); spec = G0.spec; G0.routes = [];
@@ -126,8 +126,9 @@ if ((args.includes('--shot') || shotArg) && errors.length === 0) {
     const cls = shotArg.slice(7); const dir = path.join(HOST, 'lib/genesis/dart-gen-bs');
     const src = fs.readFileSync(path.join(dir, entry), 'utf8');
     const file = gen.find((f) => new RegExp(`class ${cls}\\b`).test(fs.readFileSync(path.join(dir, f), 'utf8')));
+    const seedFile = gen.find((f) => /_seed\.dart$/.test(f));   // רשומות-הדוגמה של הבעלים נזרעות בשלד; כניסה-ישירה למסך ⇒ זורעים כאן (ראיה)
     if (!file || !/home: const \w+\(\),/.test(src)) console.log(`⚪ shot: לא נמצא מסך ${cls} בפלט`);
-    else { const tmpEntry = entry.replace(/_main\.dart$/, `_shot_main.dart`); fs.writeFileSync(path.join(dir, tmpEntry), src.replace(/home: const \w+\(\),/, `home: const ${cls}(),`).replace(/^(import 'package:flutter\/material\.dart';)$/m, `import '${file}';\n$1`)); entry = tmpEntry; }
+    else { const tmpEntry = entry.replace(/_main\.dart$/, `_shot_main.dart`); fs.writeFileSync(path.join(dir, tmpEntry), src.replace(/home: const \w+\(\),/, `home: const ${cls}(),`).replace(/^(import 'package:flutter\/material\.dart';)$/m, `import '${file}';\n${seedFile ? `import '${seedFile}';\n` : ''}$1`).replace(/void main\(\) => runApp\(/, seedFile ? 'void main() { seedExamples(); runApp(' : 'void main() => runApp(').replace(seedFile ? /runApp\((.*)\);\s*$/m : /$^/, 'runApp($1); }')); entry = tmpEntry; }
   }
   const CHROME = ['/opt/pw-browsers/chromium', process.env.CHROME].find((p) => p && fs.existsSync(p));
   if (!entry) console.log('⚪ shot: אין נקודת-כניסה (*_main.dart) בפלט');

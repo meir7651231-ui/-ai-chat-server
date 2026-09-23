@@ -110,7 +110,17 @@ function listOf(segment) {
 }
 
 // ── צורת-הצורך של משפט ──
+// דוגמאות של הבעלים (צורה): «למשל: משה, ב, 80; שרה, ג, 40.» — עד נקודה-ורווח או סוף המשפט; רשומות ב-';', ערכים ב-','. המילים מ-spec-lang (exampleWords).
+const EX_WORDS = (() => { try { return JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')).exampleWords || []; } catch { return []; } })();
+function splitExamples(text) {
+  if (!EX_WORDS.length) return { text, examples: [] };
+  const re = new RegExp(`\\s*(?:${EX_WORDS.join('|')})\\s*:?\\s*(.+?)(?=\\.(?:\\s|$)|$)`, 'g');
+  const examples = [];
+  const out = text.replace(re, (m, body, offset) => { const records = body.split(';').map((r) => r.split(/[,،]/).map((v) => v.trim()).filter(Boolean)).filter((r) => r.length); if (records.length) examples.push({ at: offset, records }); return ''; });
+  return { text: out, examples };
+}
 export function formOf(sentence0) {
+  const ex = splitExamples(String(sentence0 || '')); sentence0 = ex.text;
   // סוגריים אחרי מילה = ערכים-מותרים (צורה, כמו לוכסן): «שפה (עברית, יידיש, אנגלית)» ⇒ «שפה עברית/יידיש/אנגלית» ⇒ שדה «שפה» עם enum
   const sentence = String(sentence0 || '').replace(/\(([^()]*)\)/g, (m, inner) => { const vs = inner.split(/[,،]/).map((s) => s.trim().replace(/\s+/g, '_')).filter(Boolean); return vs.length > 1 ? ' ' + vs.join('/') + ' ' : m; });
   const words = toks(sentence);
@@ -191,7 +201,10 @@ export function formOf(sentence0) {
       else things.push(unitOf(it, seg));
     }
   }
-  return { sentence, words, segments, things, frame: [...new Set(frame)] };
+  // הדוגמאות ⇒ הישות-עם-שדות האחרונה שלפניהן במשפט (צורה: מה שקרוב); אין כזו ⇒ מדווח (הדלת שואלת), לא מומצא
+  const orphan = [];
+  for (const e of ex.examples) { const before = String(sentence0).slice(0, e.at); const t = [...things].reverse().find((x) => x.fields.length && before.includes(x.src)); if (t) t.examples = (t.examples || []).concat(e.records); else orphan.push(e.records); }
+  return { sentence, words, segments, things, frame: [...new Set(frame)], examplesOrphan: orphan };
 }
 
 // ── תשובה לדבר: לפי התווית המדויקת, ואם אין — מפתח שמילה שלו מתאימה לפי גזע («הצבעות» ⇔ «ניהול הצבעות») ──
@@ -310,6 +323,7 @@ export function specOf(form, answers = {}) {
     // שלבים מהמילים של הבעלים ⇒ סעיף-שלבים של שפת-הספק (entity.mjs: BreadcrumbTrail + «קדם ל…»); בלי שלבים אין workflow (לא ברירת-מחדל)
     const stagesPart = t.stages && t.stages.length >= 2 ? ` | ${t.stagesWord || [...STAGE_WORDS][0]}: ${t.stages.join(', ')}` : '';
     lines.push(`ישות ${t.label} עם ${all.join(', ')}${stagesPart}`);
+    if (t.examples && t.examples.length) { const SLx = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')); lines.push(`${SLx.exampleWord} ${t.label}: ${t.examples.map((r) => r.join(', ')).join('; ')}`); builtin.push(`${t.examples.length} דוגמאות של הבעלים ל«${t.label}» ⇒ רשומות`); }
   }
   // [פעולה]: יחס שהבעלים ענה עליו «פעולה» (או «תנאי» ⇒ חוק) על דבר שנכנס כישות
   for (const t of form.things) { const a = answerFor(t, answers); if (t.rel && a.rel === 'act') { const st = (w) => stripLead(stem(w)).filter((f) => f.length >= 3); const ent = ents.find((e) => toks(e.label).some((lw) => st(t.rel.subject).includes(stem(lw)))) || ents.find((e) => e.label === t.label); if (ent) lines.push(`חלקיק ${ent.label}: [פעולה] ${t.rel.words.join(' ')}`); } }

@@ -457,13 +457,13 @@ ${extraFields.map(([key, def, lbl]) => `    DsField(label: ${k(L[lbl])}, hint: '
 }
 
 // ── השלד: סרגל-תחתון (בית · שורש · עוד) על IndexedStack — כל לשונית מסך שלם ──
-export function renderShell(slug, { title, root, rootPage, dashboard, hub, questions = {}, home = null }) {   // G30 · home = מסך «היום» (נייר) במקום לוח-הבקרה בלשונית-הבית   // G28 · questions.list = השאלה שמסך-הרשימה עונה עליה (PLAN §1: מסך = שאלה אחת)
+export function renderShell(slug, { title, root, rootPage, dashboard, hub, questions = {}, home = null, homeIsRoot = false, extras = [], seed = null }) {   // homeIsRoot: הישות הראשונה שנאמרה = הלשונית הראשונה (הכרעת-בעלים 23.9: הבית = הדבר, לא אריח) · extras: מסך-ליד (התראה) = שורה חיה מעל הרשימה · seed: רשומות-הדוגמה   // G30 · home = מסך «היום» (נייר) במקום לוח-הבקרה בלשונית-הבית   // G28 · questions.list = השאלה שמסך-הרשימה עונה עליה (PLAN §1: מסך = שאלה אחת)
   const { k, dump } = makeConsts(slug);
   const imports = new Set([`import 'gen_${hub.slug}.dart';`, `import 'gen_${root.slug}.dart';`, `import 'gen_${rootPage.slug}.dart';`]);
   if (dashboard) imports.add(`import 'gen_${dashboard.slug}.dart';`);
   const firstWired = (pick, ctx) => { const w = pickWired([...pick.atoms, ...pick.alts], (c) => wireAtom(c, ctx)); if (w) imports.add(impOf(w)); return w; };
   const notes = [];
-  const labels = [dashboard ? L.shellHome : null, root.name, L.shellMore].filter(Boolean);
+  const labels = homeIsRoot ? [root.name, dashboard ? L.shellHome : null, L.shellMore].filter(Boolean) : [dashboard ? L.shellHome : null, root.name, L.shellMore].filter(Boolean);
   const nav = firstWired(searchOp('switch', `${title} ${labels.join(' ')}`, ['items', 'selected', 'onSelect']), { items: `[${labels.map((l) => k(l)).join(', ')}]`, selected: '_t', onSelect: '(i) => setState(() => _t = i)', label: k(title), bare: true, must: ['items', 'selected', 'onSelect'] });   // G28 · הצורך מפורש: פריטים+נבחר+בחירה — בורר שלא יודע לבחור אינו סרגל
   if (!nav) notes.push(L.shellNoNav);
   const add = firstWired(searchOp('action', `${root.name} ${title}`), { label: k(T('rootAdd', { ent: root.name })), nav: `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${root.cls}()))`, glyph: k('➕') });
@@ -471,7 +471,9 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
   const disp = root.descField ? `(r[${k(root.descField)}] ?? '')` : `appStore.displayOf('${root.slug}', r[AppStore.idKey] ?? '')`;
   const sub = root.subField ? `(r[${k(root.subField)}] ?? '')` : `''`;
   if (home) imports.add(`import 'gen_${home.slug}.dart';`);
-  const tabs = [home ? `const ${home.cls}()` : dashboard ? `const ${dashboard.cls}()` : null, `_RootTab()`, `const ${hub.cls}()`].filter(Boolean);
+  const tabs = (homeIsRoot ? [`_RootTab()`, dashboard ? `const ${dashboard.cls}()` : null, `const ${hub.cls}()`] : [home ? `const ${home.cls}()` : dashboard ? `const ${dashboard.cls}()` : null, `_RootTab()`, `const ${hub.cls}()`]).filter(Boolean);
+  for (const x of extras) imports.add(`import 'gen_${x.slug}.dart';`); if (seed) imports.add(`import 'gen_${seed.slug}.dart';`);
+  const extraRows = extras.map((x) => { const sub = x.live ? `appStore.records('${x.live.slug}').where((r) => (double.tryParse(r[${k(x.live.field)}] ?? '') ?? double.nan) ${x.live.op} ${x.live.n}).length.toString() + ' · ' + ${k(x.sub || String(x.value))}` : k(x.value != null ? String(x.value) : (x.sub || '')); return `Padding(padding: const EdgeInsets.only(bottom: 6), child: DsNavTile(glyph: ${k(x.icon || '🔔')}, title: ${k(x.name)}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}())))),`; }).join('\n      ');   // live: כמה רשומות עונות לתנאי של הבעלים עכשיו
   const paper = isPaper();
   const quick = paper && root.descField ? `DsQuickAdd(hint: ${k(T('quickAddHint', { action: T('rootAdd', { ent: root.name }) }))}, onSubmit: (s) => appStore.add('${root.slug}', {${k(root.descField)}: s}))` : null;   // G30 · D2: יצירה = טקסט בלבד
   const paletteItems = `[DsPaletteItem(label: ${k(T('rootAdd', { ent: root.name }))}, sub: ${k(L.keysHint)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${root.cls}()))), for (final r in appStore.records('${root.slug}')) DsPaletteItem(label: ${disp}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? ''))))]`;
@@ -493,7 +495,9 @@ class ${cls} extends StatefulWidget {
 
 class _${cls}State extends State<${cls}> {
   int _t = 0;
-  @override
+${seed ? `  @override
+  void initState() { super.initState(); ${seed.fn}(); }   // רשומות-הדוגמה של הבעלים — פעם אחת
+` : ''}  @override
   Widget build(BuildContext context) => ${paper ? `CallbackShortcuts(   // G30 · D3/D4: ≤3 מקשים — T היום · I רשימה · A הוספה · Ctrl/Cmd+K פלטה
     bindings: <ShortcutActivator, VoidCallback>{
       const SingleActivator(LogicalKeyboardKey.keyT): () => setState(() => _t = 0),
@@ -513,7 +517,8 @@ class _RootTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
     final rs = appStore.records('${root.slug}');
-    return DsScaffold(title: ${k(questions.list || root.name)}, subtitle: rs.length.toString() + ' ' + ${k(root.name)}, icon: ${k(root.icon || '🗂️')}, children: [
+    return DsScaffold(title: ${k(questions.list || (homeIsRoot ? title : root.name))}, subtitle: rs.length.toString() + ' ' + ${k(root.name)}, icon: ${k(root.icon || '🗂️')}, children: [   // הבית = הישות ⇒ הכותרת = שם-האפליקציה (הראש של המשפט)
+      ${extraRows}
       ${add ? `Padding(padding: const EdgeInsets.only(bottom: 10), child: ${add.call}),` : ''}
       ${quick ? `Padding(padding: const EdgeInsets.only(bottom: 6), child: ${quick}),` : ''}
       ${empty ? `if (rs.isEmpty) ${empty.call},` : ''}
