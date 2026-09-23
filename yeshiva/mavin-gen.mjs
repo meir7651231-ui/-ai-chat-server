@@ -10,7 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { formOf, specOf, answerFor, toks, serverDeclOf, lookDeclOf } from './mavin.mjs';
+import { formOf, specOf, answerFor, toks, serverDeclOf, lookDeclOf, planBehaviors } from './mavin.mjs';
 import { detectAllClauses, relOpOf, emitAppFrom } from '../machtzev/generator/capability.mjs';
 import { retrieveScreen } from '../machtzev/generator/retrieve-screen.mjs';
 import * as R from '../machtzev/root.mjs';
@@ -133,7 +133,23 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   if (SV.declaredServer(spec)) { const ents = app ? app.screens.filter((s) => s.kind === 'entity').map((s) => s.slug) : [];
     if (!ents.length) notes.push('שרת הוצהר אבל אין ישויות שנבנו ⇒ אין חבילת-שרת');
     else { const sf = SV.serverFiles(slug(name), ents); for (const f of sf) { const p = path.join(outDir, 'server', f.rel); fs.mkdirSync(path.dirname(p), { recursive: true }); fs.writeFileSync(p, f.content); } files.push({ route: 'server', dir: path.join(outDir, 'server'), count: sf.length, entities: ents }); } }
-  // 2ג · gold — מודול-זהב מורכב-מחדש מהשברים לישות (render-module.assembleByOps), נכתב רק ל-outDir
+  // 2ג · התנהגות — רק כשהבעלים נתן דוגמאות (needsFor ⇒ NEEDS): (א) behavior-plan.planNeeds (עומק 3, הוכחה ב-Dart) · (ב) synth.synthesize (הכרעה-35: BFS עומק 4 על תאומים חיים,
+  //      קלט-יחיד מושחל כמחרוזת) — מוכיח שני על אותן דוגמאות. תוצאות = הערות + behaviors.json ב-outDir; אפס כתיבה ל-capabilities/specs
+  const B = await planBehaviors(form, answers);
+  if (B && B.needs && Object.keys(B.needs).length) {
+    const SY = await import('../machtzev/generator/synth.mjs'); const out = {};
+    for (const [id, n] of Object.entries(B.needs)) {
+      const p = (B.picks || {})[id] || {}; const rec = { demand: n.demand, plan: p.proven ? (p.chain || [p.pick]).filter(Boolean) : null, synth: null, synthNote: '' };
+      // synth: דוגמה = קלט-יחיד ⇒ פלט; «'a', 'b'» (כמה ארגומנטים) אינו בר-השחלה — מדווח, לא מומצא
+      const exs = (n.examples || []).map(([args, want]) => { const a = String(args).trim(), w = String(want).replace(/^r\s*==\s*/, '').trim(); const one = /^'[^']*'$|^"[^"]*"$|^[^,'"]+$/.test(a); return one ? { in: a.replace(/^['"]|['"]$/g, ''), out: w.replace(/^['"]|['"]$/g, '') } : null; });
+      if (exs.every(Boolean) && exs.length) { const r = SY.synthesize(n.demand, exs); rec.synth = r ? r.chain : null; rec.synthNote = r ? `הוכח ב-synth: ${r.chain.join('∘')}${r.alts ? ` (+${r.alts} שקולות)` : ''}${r.shortcut ? ' · אטום-יחיד' : ''}` : 'synth: לא נמצאה שרשרת (עומק≤4)'; }
+      else rec.synthNote = 'synth: לא חל — הדוגמאות עם כמה ארגומנטים (ההשחלה היא קלט-יחיד)';
+      out[id] = rec; notes.push(`התנהגות «${n.demand}» · תכנון: ${rec.plan ? rec.plan.join('∘') : 'לא הוכח'} · ${rec.synthNote}`);
+    }
+    fs.writeFileSync(path.join(outDir, 'behaviors.json'), JSON.stringify(out, null, 1)); files.push({ route: 'behavior', file: path.join(outDir, 'behaviors.json'), needs: Object.keys(out).length });
+  }
+  for (const a of (B && B.asks) || []) notes.push(`התנהגות «${a.thing}»: ${a.ask === 'examples' ? 'אין דוגמאות ⇒ שאלה' : a.ask}`);
+  // 2ד · gold — מודול-זהב מורכב-מחדש מהשברים לישות (render-module.assembleByOps), נכתב רק ל-outDir
   const golds = [...new Map(routes.filter((r) => r.route === 'gold').map((r) => [r.module + '|' + r.thing, r])).values()];
   if (golds.length) { const RM = await import('../machtzev/generator/render-module.mjs'); let gi = 0;
     for (const r of golds) { try { const a = await RM.assembleByOps({ module: r.module, entity: r.thing }); const f = path.join(outDir, `gen_gold${++gi}.dart`); fs.writeFileSync(f, a.code || ''); files.push({ route: 'gold', file: f, thing: r.thing, module: path.basename(r.module), fragments: `${a.fragments}/${a.of}` }); } catch (e) { notes.push(`זהב ${r.thing}: ${String(e.message || e).slice(0, 120)}`); } } }

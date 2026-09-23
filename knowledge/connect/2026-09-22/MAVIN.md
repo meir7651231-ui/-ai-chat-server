@@ -333,6 +333,15 @@ build-check.mjs "ניהול לקוחות: … . כשחוב של לקוח עול�
   (`_cloudState/_cloudBusy/_cloudNote` + פעולות) ⇒ לחבר = להעביר את צנרת-הענן של balagan לאפליקציה-מהמשפט (עבודה נפרדת). **board-gen / op-bridge** — נשענים על מסכים-רשומים/זהב ⇒ תחום ההצעות.
   **ds-tokens/graphics/motion/variants/pure/forge** — מנועי-מדף: כותבים את אטומי-העיצוב ל-new/; מחוברים דרך המדף, ומהמשפט — דרך הצהרת-העיצוב.
 
+## סבב 28 (23.9): synth — «תקח את הפלוסים» (הכרעה-35) · הדלת מריצה עכשיו גם את מנוע-ההתנהגות
+· **הפלוס שנלקח:** חיפוש שרשרת של אטומים חיים (BFS עד עומק 4, השחלת-מחרוזת כמו במסך) שמוכיחה את כל הדוגמאות. **לא נלקחו:** הכתיבה ל-`capabilities/`+`specs/` בריפו
+  ו-`--dream` (הזמנה-עצמית). synth.mjs (נעוץ ⇒ §35): `pool` · `fnsBy` · `runChain` · `synthesize` מיוצאים; ה-CLI תחת `if (isMain)`. אפס שינוי בלוגיקה. ייבוא: 740ms, 902 אטומים, אפס כתיבה.
+· **הדלת (generateAll) מריצה עכשיו התנהגות** — עד כאן רק ה-CLI של מנוע 2 עשה זאת: לכל צורך עם דוגמאות ⇒ behavior-plan.planNeeds (מוכיח 1, Dart) **וגם** synth (מוכיח 2, JS-תאומים)
+  ⇒ `behaviors.json` ב-outDir + הערה לכל צורך. דוגמאות עם כמה ארגומנטים («'a', 'b'») ⇒ «synth: לא חל» (ההשחלה היא קלט-יחיד) — מדווח. בלי דוגמאות ⇒ «שאלה».
+· **נמדד (`ans-synth.example.json`, דוגמאות שלי = ההזמנה clock-calendar המוכחת):** «ניהול תורים: לתור יש שעה. השעה מוצגת כתאריך» ⇒ תכנון: `fmtDate(excelSerialToIso(timeToMin(p0)))` ·
+  synth: `timeToMin∘excelSerialToIso∘fmtDate` — **שני המוכיחים הגיעו לאותה שרשרת**, 0 חלופות. עץ נקי אחרי ההרצה (אין כתיבה ל-capabilities/specs).
+· **ספירה:** 12 מנועים בדלת (+synth). לא-מחוברים בהכרעה: cloud-screen (צנרת-בלגן) · board-gen/op-bridge (הצעות).
+
 ## סוג-שדה ⇒ מנוע 3 (נפתר בצד מנוע 2, 22.9)
 נמדד: לא הקטלוג (DsToggleTile/DsDateField/DsNumberField = str2·num0·cb1 זהים) ולא הטיפוס המוצהר
 (`String value` בכולם) מבדילים סוג. מה שמבדיל: **מה הקוד עושה עם value** (`DateTime.tryParse` · `value == 'true'` ·

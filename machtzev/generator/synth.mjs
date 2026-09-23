@@ -28,7 +28,7 @@ const norm = (w) => w.replace(/^ה(?=..)/, '');
 // מילות-קישור תלושות בסוף מהות מחולצת ("מספר סידורי של") — נגזמות לתווית נקייה
 const STOP_TAIL = new Set(['של', 'עם', 'או', 'אם', 'את', 'על', 'אל', 'מ', 'ל']);
 const cleanHe = (ws) => { const a = [...ws]; while (a.length > 1 && STOP_TAIL.has(a[a.length - 1])) a.pop(); return a; };
-const pool = [];
+export const pool = [];   // הכרעה-35: מיוצא לדלת (mavin-gen) — אותו מאגר, אותו חיפוש; הדלת כותבת רק ל-outDir
 {
   const seen = new Set();
   for (const f of atlas.functions) {
@@ -37,7 +37,7 @@ const pool = [];
   }
 }
 const twins = await buildTwinRegistry(pool);
-const fnsBy = new Map(pool.map(f => [f.name, f]));
+export const fnsBy = new Map(pool.map(f => [f.name, f]));
 // קבילות-למסך: המנוע רץ ב-JS, אבל spec חייב להיות ניתן-לחיווט Dart שקול —
 // זנב אופציונלי (null) או זנב-קציר פשוט באורך-הפרמטרים (נפלט כליטרלים).
 const FEEDABLE0 = /^(String|dynamic|Object|num|int|double)\??$/;
@@ -64,13 +64,13 @@ const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
   return (out === undefined || out === null) ? null : String(out);
 };
-const runChain = (chain, input) => {
+export const runChain = (chain, input) => {
   let v = String(input);
   for (const c of chain) { try { v = stepFn(fnsBy.get(c), v); } catch { return null; } if (v === null) return null; }
   return v;
 };
 
-function synthesize(desc, examples) {
+export function synthesize(desc, examples) {
   const dwords = new Set((desc.match(/[֐-׿]+/g) || []).map(norm));
   const cohere = (f) => f.he.reduce((n, w) => n + (dwords.has(norm(w)) ? 1 : 0), 0);
   const fns = pool.filter(wirable).sort((a, b) => cohere(b) - cohere(a));
@@ -149,6 +149,9 @@ const chainOfSpec = (specPath) => {                                // השרשר
   return chain;
 };
 
+// הכרעה-35: ה-CLI (שער · חלום · סינתזה-לספקים) רץ רק כשהקובץ מורץ ישירות; בייבוא (הדלת) — רק החיפוש, אפס כתיבה לריפו
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname);
+if (isMain) {
 // ── 🚪 שער-השימור (--gate): יכולת שהוכחה חייבת להישאר מוכחת ──
 if (GATE) {
   let bad = 0, n = 0;
@@ -295,3 +298,4 @@ if (fs.existsSync(CAPS)) for (const cf of fs.readdirSync(CAPS).filter(x => x.end
 }
 printNotes('synth');
 console.log(`🧪 סינתזה: ${made} יכולות-מוזמנות הורכבו (מאגר-חיווט: ${pool.filter(wirable).length} · ברי-הרצה: ${twins.size})`);
+}
