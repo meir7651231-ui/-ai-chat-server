@@ -28,6 +28,7 @@ const { spec, skipped, builtin } = specOf(form, answers);
 console.log(`«${sentence}»\nאפיון:\n${spec.split('\n').map((l) => '  ' + l).join('\n') || '  (ריק)'}${skipped.length ? `\n  לא נכנסו (בלי שדות ⇒ שאלה): ${skipped.join(', ')}` : ''}${builtin && builtin.length ? `\n  כבר מובנה במסך-הישות: ${builtin.join(' · ')}` : ''}`);
 const G0 = await generateAll(sentence, { answers, outDir: process.env.GEN_OUT, name: 'chk' });
 for (const r of G0.routes) console.log(`  מסלול · «${r.thing}» ⇒ ${r.route} · ${r.why}`);
+for (const c of G0.cores || []) console.log(`  גרעין · «${c.thing}» ⇒ ${c.entity} (${c.term}) · ${c.workflow ? 'workflow ' + c.workflow : 'בלי workflow'} · יחסים ${c.relations.join(' ') || '—'}`);
 for (const n of G0.notes) console.log('  ' + n);
 const appEntry = G0.files.find((f) => f.route === 'appds'); if (appEntry) console.log(`מסכים: ${appEntry.screens.join(' · ')}`);
 const extra = G0.files.filter((f) => f.file).map((f) => f.file);

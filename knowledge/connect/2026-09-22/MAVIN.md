@@ -224,6 +224,20 @@ build-check.mjs "ניהול לקוחות: … . כשחוב של לקוח עול�
 · **גבולות:** תיוג-הכותרות דל (79–181 שברים עם עברית למודול) ⇒ תחום בית-ספר בלבד; `assembleMulti` (הפניות בין-מודולים) עדיין לא בשימוש;
   «מתאים» = כותרות חוזרות, לא נמדדה התאמה-של-ממש למשפט. מספרי-הצנזוס: `scratchpad/census-routes.mjs` (מחוץ לענף).
 
+## סבב 19 (23.9): גרעין-מהסכמה בדלת — entity-terms ⇒ core-registry ⇒ core-dart (2 מנועים + 2 קובצי-דאטה)
+· **מה חובר:** `coreEntityFor(label)` — גזע מילת-היחידה מול גזעי המונחים ב-`entity-terms.data.json` (דאטה חצוב של מנוע קיים, אפס רשימה בקוד).
+  שכבה 1: המילה עצמה · שכבה 2 (רק בלי התאמה): בלי 1–2 אותיות-תחילית. אותיות-סופיות מנורמלות (תורמים⇔תורם). מונח שיושב על ≥2 ישויות ⇒ null
+  (משפחות: Family וגם Member «בני משפחה»). ≥3 מילים = סעיף ⇒ null. הישות ⇒ רשומת-גרעין מ-`core-registry.json` (יחסים · מצבים · חוקים · ערוצים).
+· **תוספת, לא מסלול-במקום:** הגרעין מצטרף ליחידה בלי לגעת במסלול שלה (app-ds/combine/gold נשארים). ישות עם workflow ⇒ `core-dart.emit`
+  (טהור) ⇒ `gen_coreN.dart` **רק ל-outDir**; בלי workflow ⇒ היחסים והחוקים חוזרים ב-`cores` (build-check מדפיס). אפס כתיבה למדף.
+· **נבנה:** «ניהול לקוחות: ללקוח יש שם, טלפון וחוב» ⇒ app-ds + גרעין Family (status: active→pending→inactive) ⇒ ✅ 0 שגיאות · 8 קבצים.
+  «מרכז חוגים עם שיבוצים, מורים, חדרים ומסירות» ⇒ combine + 2 זהב + 2 גרעין (Enrollment · Delivery, עם היחסים memberId⇒Member, courseId⇒Course …)
+  ⇒ ✅ 0 שגיאות · 5 קבצים. חוגים/מורים/חדרים ⇒ Course/Teacher/Room בלי workflow ⇒ יחסים בלבד (teacherId⇒Teacher · roomId⇒Room).
+· **צנזוס (155 משפטים, 389 יחידות):** 39 יחידות ⇒ ישות · 20 עם workflow (מסך-גרעין). ישויות: Family 18 («לקוח» = מונח של Family בסכמה) · ShopProduct 4 ·
+  Donation 4 · Supporter 4 · Room 3 · Teacher 2 · Course/TzBox/ShopItem/AyinCase 1. המסלולים לא זזו (gold 15 · combine 195 · none 157).
+· **גבולות:** 32 מונחים בלבד, 21 ישויות עם מונח, 8 עם workflow — תלמידים/הזמנות/מטופלים אין להם מונח ⇒ null. היחסים עדיין לא נכנסים
+  לספק של app-ds (יחס «X של Y» של מנוע 2 ⇔ `xId` בסכמה — סבב הבא). core-registry.json חייב להיות טרי מול הסכמה (שער `core` קיים).
+
 ## סוג-שדה ⇒ מנוע 3 (נפתר בצד מנוע 2, 22.9)
 נמדד: לא הקטלוג (DsToggleTile/DsDateField/DsNumberField = str2·num0·cb1 זהים) ולא הטיפוס המוצהר
 (`String value` בכולם) מבדילים סוג. מה שמבדיל: **מה הקוד עושה עם value** (`DateTime.tryParse` · `value == 'true'` ·

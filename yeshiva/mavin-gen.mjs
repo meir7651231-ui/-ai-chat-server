@@ -42,6 +42,33 @@ export function goldModuleFor(label) {
   for (const m of mods) { if (/\/schoolos\.dart$/.test(m)) continue; const tf = stemsOf.get(m); let sc = 0; const hit = []; for (const w of ws) if (tf.has(w)) { sc += tf.get(w); hit.push(w); } if (sc > bs) { second = bs; bs = sc; best = m; bw = hit; } else if (sc > second) second = sc; }
   return best && bs >= 2 && bs > second ? { module: best, score: bs, words: bw } : null;
 }
+// ── גרעין-מהסכמה (entity-terms.data.json ⇒ core-registry.json ⇒ core-dart.emit): מונח-עברי של מנוע קיים (דאטה חצוב, לא רשימה בקוד) ⇒ ישות ⇒ מסך-גרעין ──
+//    (מצבים · יחסים · חוקים · ערוצים). תוספת ליחידה, לא מסלול-במקום: הגרעין מצטרף למסך שהיחידה קיבלה. קריאה בלבד; נכתב רק ל-outDir.
+const TERMS_F = path.join(R.GEN_DIR, 'entity-terms.data.json'), CORE_F = path.join(R.GEN_DIR, 'core-registry.json');
+const fin = (w) => w.replace(/ך/g, 'כ').replace(/ם/g, 'מ').replace(/ן/g, 'נ').replace(/ף/g, 'פ').replace(/ץ/g, 'צ');   // אות-סופית ⇒ רגילה (חוק-אותיות, להתאמה בלבד)
+let _core = null;
+function coreIndex() {
+  if (_core) return _core;
+  if (!fs.existsSync(TERMS_F) || !fs.existsSync(CORE_F)) return (_core = { terms: [], reg: new Map() });
+  const stem = (w) => w.replace(/(ים|ות|ה)$/, '');
+  const terms = [];   // { stem, entity, form }
+  for (const t of JSON.parse(fs.readFileSync(TERMS_F, 'utf8')).terms) { if (!t.entity) continue; for (const f of t.forms) for (const w of f.split('/')) for (const x of toks(w)) if (/[֐-׿]/.test(x) && stem(x).length >= 3) terms.push({ stem: fin(stem(x)), entity: t.entity, form: w }); }
+  const reg = new Map(JSON.parse(fs.readFileSync(CORE_F, 'utf8')).entities.map((e) => [e.entity, e]));
+  return (_core = { terms, reg });
+}
+export function coreEntityFor(label) {
+  const { terms, reg } = coreIndex(); if (!terms.length) return null;
+  const stem = (w) => w.replace(/(ים|ות|ה)$/, '');
+  const he = toks(label).filter((w) => /[֐-׿]/.test(w)); if (he.length > 2) return null;   // ≥3 מילים = סעיף, לא דבר
+  // גזע המילה, וגם בלי 1–2 אותיות-תחילית (ל/ב/ה/ו/ש — חוק-אותיות של מנוע 2, להתאמה בלבד)
+  // שכבה 1: המילה עצמה · שכבה 2: בלי 1–2 אותיות-תחילית (רק כשאין התאמה מלאה — נמדד: «מתנדבים»⇒«נדב»⇒Donation). אותיות-סופיות מנורמלות (תורמים⇔תורם).
+  const tiers = [he.map((w) => fin(stem(w))), he.flatMap((w) => [w.slice(1), w.slice(2)]).map((w) => fin(stem(w)))].map((c) => new Set(c.filter((x) => x.length >= 3)));
+  let hits = []; for (const c of tiers) { hits = terms.filter((t) => c.has(t.stem)); if (hits.length) break; }
+  const ents = [...new Set(hits.map((h) => h.entity))]; if (ents.length !== 1) return null;   // אפס או כמה ישויות ⇒ לא מכריעים
+  const e = reg.get(ents[0]); if (!e) return null;
+  const wf = e.workflows.find((w) => w.states && w.states.length);
+  return { entity: e.entity, term: hits[0].form, workflow: wf ? `${wf.field}: ${wf.states.join('→')}` : null, relations: e.relations.filter((r) => r.target).map((r) => `${r.field}⇒${r.target}`), rules: e.rules.length, core: e };
+}
 const GEN_SCREEN = path.join(R.ROOT, 'machtzev/assemble/gen-screen.mjs');
 function loadManifest(screen) {   // קריאה בלבד (העתק של combine-screens.loadManifest — אינו מיוצא שם)
   const f = path.join(MAN, `screens__${screen}.manifest.json`);
@@ -67,13 +94,15 @@ export function routeOf(form, answers = {}) {
     if (g) { routes.push({ thing: t.label, route: 'gold', why: `כותרות-זהב של ${path.basename(g.module)} חוזרות על «${g.words.join(' ')}» ${g.score} פעמים`, module: g.module }); continue; }
     routes.push({ thing: t.label, route: 'none', why: 'אין תנאי, אין שדות, אין מסך דומה ⇒ שאלה' });
   }
-  return { routes, spec: spec.spec, skipped: spec.skipped, builtin: spec.builtin };
+  // גרעין: תוספת לכל יחידה שמונח-ישות של מנוע קיים מתאים לה (לא מחליף מסלול)
+  const cores = [...new Map(form.things.map((t) => [t.label, coreEntityFor(t.label)]).filter(([, c]) => c).map(([thing, c]) => [c.entity, { thing, ...c }])).values()];
+  return { routes, cores, spec: spec.spec, skipped: spec.skipped, builtin: spec.builtin };
 }
 
 /** הפעלה: כל מסלול למנוע שלו; כתיבה רק ל-outDir. מחזיר את הקבצים שנוצרו ופערים. */
 export async function generateAll(sentence, { answers = {}, outDir, name = 'mavin' } = {}) {
   const form = formOf(sentence);
-  const { routes, spec, skipped } = routeOf(form, answers);
+  const { routes, cores, spec, skipped } = routeOf(form, answers);
   fs.mkdirSync(outDir, { recursive: true });
   const files = [], notes = [];
   // 1 · capability — פעם אחת לכל קטע-תנאי
@@ -90,6 +119,10 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   const golds = [...new Map(routes.filter((r) => r.route === 'gold').map((r) => [r.module + '|' + r.thing, r])).values()];
   if (golds.length) { const RM = await import('../machtzev/generator/render-module.mjs'); let gi = 0;
     for (const r of golds) { try { const a = await RM.assembleByOps({ module: r.module, entity: r.thing }); const f = path.join(outDir, `gen_gold${++gi}.dart`); fs.writeFileSync(f, a.code || ''); files.push({ route: 'gold', file: f, thing: r.thing, module: path.basename(r.module), fragments: `${a.fragments}/${a.of}` }); } catch (e) { notes.push(`זהב ${r.thing}: ${String(e.message || e).slice(0, 120)}`); } } }
+  // 2ג · core — מסך-גרעין מהסכמה (core-dart.emit, טהור) לישות עם workflow; בלי workflow ⇒ הערה עם היחסים בלבד
+  if (cores.length) { const CD = await import('../machtzev/generator/core-dart.mjs'); let ci = 0;
+    for (const c of cores) { if (!c.workflow) continue;   // בלי workflow ⇒ אין מסך-גרעין; היחסים/החוקים חוזרים ב-cores למי שקורא
+      const code = CD.emit(c.core); if (!code) continue; const f = path.join(outDir, `gen_core${++ci}.dart`); fs.writeFileSync(f, code); files.push({ route: 'core', file: f, thing: c.thing, entity: c.entity, workflow: c.workflow }); } }
   // 3 · combine — מיזוג-סקציות בזיכרון ⇒ מניפסט ל-outDir ⇒ gen-screen ⇒ outDir
   const comb = routes.filter((r) => r.route === 'combine');
   if (comb.length) {
@@ -108,5 +141,5 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       if (g.status === 0 && hit) files.push({ route: 'combine', file: path.join(R.ROOT, hit[1]), sources, sections: sections.length }); else notes.push(`gen-screen נכשל: ${out.trim().slice(0, 160)}`);
     }
   }
-  return { form, routes, spec, skipped, files, notes, none: routes.filter((r) => r.route === 'none').map((r) => r.thing) };
+  return { form, routes, cores, spec, skipped, files, notes, none: routes.filter((r) => r.route === 'none').map((r) => r.thing) };
 }
