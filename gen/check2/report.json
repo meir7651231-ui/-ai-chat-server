@@ -162,7 +162,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 75,
+   "ms": 83,
    "proven": [
     {
      "name": "norm-search",
@@ -226,7 +226,7 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 17,
+   "ms": 19,
    "proven": [
     {
      "name": "shekel",
@@ -300,7 +300,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 17,
+   "ms": 19,
    "proven": [
     {
      "name": "fmt-date",
@@ -451,7 +451,7 @@
     "פלט שונה": 201,
     "אורך-קריאה": 13
    },
-   "ms": 18,
+   "ms": 20,
    "proven": [
     {
      "name": "csv-escape",
@@ -553,7 +553,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 147
    },
-   "ms": 14,
+   "ms": 16,
    "proven": [
     {
      "name": "to-csv",
@@ -648,7 +648,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 12,
+   "ms": 15,
    "proven": [
     {
      "name": "grand-total",
@@ -761,7 +761,7 @@
    },
    {
     "layer": "Dart · תאומי ה-JS (dart-maor)",
-    "count": 569,
+    "count": 628,
     "connected": "אותם אטומים כמו ה-JS, מומרים — מחוברים דרך צורת ה-JS",
     "state": "on"
    },
@@ -775,8 +775,8 @@
  },
  "meta": {
   "slug": "check2",
-  "built": "2026-09-16T03:16:48.265Z",
-  "ms": 11810,
+  "built": "2026-09-23T06:17:41.649Z",
+  "ms": 12865,
   "shelf": 1096,
   "fns": 569,
   "dart": 394,
@@ -801,7 +801,8 @@
    "gen_app_gencheck2_root.dart",
    "gen_app_gencheck2_scr2.dart",
    "gen_app_gencheck2_settings.dart",
-   "gen_app_gencheck2_shell.dart"
+   "gen_app_gencheck2_shell.dart",
+   "gen_app_gencheck2_wizard.dart"
   ],
   "displayAtoms": [
    "dart-data-bs/auto/gen_app_gencheck2_audit_content.dart",
@@ -815,9 +816,23 @@
    "dart-data-bs/auto/gen_app_gencheck2_scr2_content.dart",
    "dart-data-bs/auto/gen_app_gencheck2_settings_content.dart",
    "dart-data-bs/auto/gen_app_gencheck2_shell_content.dart",
+   "dart-data-bs/auto/gen_app_gencheck2_wizard_content.dart",
+   "dart-data-maor/wizard-step-error-sockets.dart",
+   "dart-maor/empty-wizard.dart",
+   "dart-maor/fmt-date.dart",
+   "dart-maor/is-valid-pin.dart",
+   "dart-maor/phone-key.dart",
+   "dart-maor/phone-region.dart",
+   "dart-maor/round2.dart",
+   "dart-maor/valid-israeli-id.dart",
+   "dart-maor/vertical-packs.dart",
+   "dart-maor/wizard-industries.dart",
+   "dart-maor/wizard-step-error.dart",
+   "dart-maor/wizard-steps.dart",
    "dart-screens-bs/ai_hub_screen.g.dart",
    "dart-ui-bs/auto/ai_bar.dart",
    "dart-ui-bs/auto/callout.dart",
+   "dart-ui-bs/auto/switch_row.dart",
    "dart-ui-bs/ds/ds.dart",
    "dart-ui-bs/ds/ds_board.dart",
    "dart-ui-bs/ds/ds_calendar.dart",
@@ -850,7 +865,7 @@
   "site": "gen/out/check2/site",
   "entry": "gen_app_gencheck2_main.dart",
   "files": 55,
-  "bytes": 36016419,
-  "ms": 31764
+  "bytes": 36065316,
+  "ms": 33602
  }
 }

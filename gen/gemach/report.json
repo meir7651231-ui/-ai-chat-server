@@ -254,7 +254,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 76,
+   "ms": 84,
    "proven": [
     {
      "name": "norm-search",
@@ -326,7 +326,7 @@
     "פלט שונה": 200,
     "אורך-קריאה": 13
    },
-   "ms": 21,
+   "ms": 23,
    "proven": [
     {
      "name": "format-israeli-phone",
@@ -390,7 +390,7 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 16,
+   "ms": 18,
    "proven": [
     {
      "name": "shekel",
@@ -465,7 +465,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 16,
+   "ms": 18,
    "proven": [
     {
      "name": "fmt-date",
@@ -541,7 +541,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 114
    },
-   "ms": 16,
+   "ms": 17,
    "proven": [
     {
      "name": "cockpit-days-since",
@@ -618,7 +618,7 @@
     "פלט שונה": 201,
     "אורך-קריאה": 13
    },
-   "ms": 16,
+   "ms": 19,
    "proven": [
     {
      "name": "csv-escape",
@@ -720,7 +720,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 147
    },
-   "ms": 16,
+   "ms": 18,
    "proven": [
     {
      "name": "to-csv",
@@ -815,7 +815,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 14,
+   "ms": 15,
    "proven": [
     {
      "name": "grand-total",
@@ -934,7 +934,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 136
    },
-   "ms": 15,
+   "ms": 18,
    "proven": [
     {
      "name": "count-by",
@@ -1063,7 +1063,7 @@
    },
    {
     "layer": "Dart · תאומי ה-JS (dart-maor)",
-    "count": 569,
+    "count": 628,
     "connected": "אותם אטומים כמו ה-JS, מומרים — מחוברים דרך צורת ה-JS",
     "state": "on"
    },
@@ -1077,8 +1077,8 @@
  },
  "meta": {
   "slug": "gemach",
-  "built": "2026-09-16T03:18:25.130Z",
-  "ms": 15561,
+  "built": "2026-09-23T06:19:25.030Z",
+  "ms": 17039,
   "shelf": 1096,
   "fns": 569,
   "dart": 394,
@@ -1107,7 +1107,8 @@
    "gen_app_gengemach_root.dart",
    "gen_app_gengemach_scr3.dart",
    "gen_app_gengemach_settings.dart",
-   "gen_app_gengemach_shell.dart"
+   "gen_app_gengemach_shell.dart",
+   "gen_app_gengemach_wizard.dart"
   ],
   "displayAtoms": [
    "dart-data-bs/auto/gen_app_gengemach_audit_content.dart",
@@ -1124,11 +1125,23 @@
    "dart-data-bs/auto/gen_app_gengemach_scr3_content.dart",
    "dart-data-bs/auto/gen_app_gengemach_settings_content.dart",
    "dart-data-bs/auto/gen_app_gengemach_shell_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach_wizard_content.dart",
+   "dart-data-maor/wizard-step-error-sockets.dart",
+   "dart-maor/advance-status.dart",
+   "dart-maor/empty-wizard.dart",
+   "dart-maor/export-allowed.dart",
+   "dart-maor/fmt-date.dart",
+   "dart-maor/is-safe-accent.dart",
+   "dart-maor/vertical-packs.dart",
+   "dart-maor/wizard-industries.dart",
+   "dart-maor/wizard-step-error.dart",
+   "dart-maor/wizard-steps.dart",
    "dart-screens-bs/ai_hub_screen.g.dart",
    "dart-screens-bs/courier_certs_screen.g.dart",
    "dart-ui-bs/auto/callout.dart",
    "dart-ui-bs/auto/link_row.dart",
    "dart-ui-bs/auto/rstat.dart",
+   "dart-ui-bs/auto/switch_row.dart",
    "dart-ui-bs/ds/ds.dart",
    "dart-ui-bs/ds/ds_bars.dart",
    "dart-ui-bs/ds/ds_calendar.dart",
@@ -1166,7 +1179,7 @@
   "site": "gen/out/gemach/site",
   "entry": "gen_app_gengemach_main.dart",
   "files": 55,
-  "bytes": 36021439,
-  "ms": 32127
+  "bytes": 36076272,
+  "ms": 32905
  }
 }

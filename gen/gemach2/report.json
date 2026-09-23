@@ -333,7 +333,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 76,
+   "ms": 83,
    "proven": [
     {
      "name": "norm-search",
@@ -400,7 +400,7 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 16,
+   "ms": 18,
    "proven": [
     {
      "name": "shekel",
@@ -477,7 +477,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 17,
+   "ms": 19,
    "proven": [
     {
      "name": "fmt-date",
@@ -554,7 +554,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 114
    },
-   "ms": 15,
+   "ms": 16,
    "proven": [
     {
      "name": "cockpit-days-since",
@@ -734,7 +734,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 147
    },
-   "ms": 13,
+   "ms": 16,
    "proven": [
     {
      "name": "to-csv",
@@ -829,7 +829,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 12,
+   "ms": 14,
    "proven": [
     {
      "name": "grand-total",
@@ -945,7 +945,7 @@
    },
    {
     "layer": "Dart · תאומי ה-JS (dart-maor)",
-    "count": 569,
+    "count": 628,
     "connected": "אותם אטומים כמו ה-JS, מומרים — מחוברים דרך צורת ה-JS",
     "state": "on"
    },
@@ -959,8 +959,8 @@
  },
  "meta": {
   "slug": "gemach2",
-  "built": "2026-09-16T03:19:10.298Z",
-  "ms": 11917,
+  "built": "2026-09-23T06:20:12.000Z",
+  "ms": 12888,
   "shelf": 1096,
   "fns": 569,
   "dart": 394,
@@ -989,7 +989,8 @@
    "gen_app_gengemach2_root.dart",
    "gen_app_gengemach2_scr3.dart",
    "gen_app_gengemach2_settings.dart",
-   "gen_app_gengemach2_shell.dart"
+   "gen_app_gengemach2_shell.dart",
+   "gen_app_gengemach2_wizard.dart"
   ],
   "displayAtoms": [
    "dart-data-bs/auto/gen_app_gengemach2_audit_content.dart",
@@ -1006,12 +1007,26 @@
    "dart-data-bs/auto/gen_app_gengemach2_scr3_content.dart",
    "dart-data-bs/auto/gen_app_gengemach2_settings_content.dart",
    "dart-data-bs/auto/gen_app_gengemach2_shell_content.dart",
+   "dart-data-bs/auto/gen_app_gengemach2_wizard_content.dart",
+   "dart-data-maor/wizard-step-error-sockets.dart",
+   "dart-maor/empty-wizard.dart",
+   "dart-maor/fmt-date.dart",
+   "dart-maor/is-valid-pin.dart",
+   "dart-maor/phone-key.dart",
+   "dart-maor/phone-region.dart",
+   "dart-maor/round2.dart",
+   "dart-maor/valid-israeli-id.dart",
+   "dart-maor/vertical-packs.dart",
+   "dart-maor/wizard-industries.dart",
+   "dart-maor/wizard-step-error.dart",
+   "dart-maor/wizard-steps.dart",
    "dart-screens-bs/ai_hub_screen.g.dart",
    "dart-screens-bs/courier_certs_screen.g.dart",
    "dart-ui-bs/auto/bar.dart",
    "dart-ui-bs/auto/callout.dart",
    "dart-ui-bs/auto/rewards_hub_fin_row.dart",
    "dart-ui-bs/auto/sstat.dart",
+   "dart-ui-bs/auto/switch_row.dart",
    "dart-ui-bs/auto/worker_equipment_checklist_sheet_primary_btn.dart",
    "dart-ui-bs/ds/ds.dart",
    "dart-ui-bs/ds/ds_bars.dart",
@@ -1048,7 +1063,7 @@
   "site": "gen/out/gemach2/site",
   "entry": "gen_app_gengemach2_main.dart",
   "files": 55,
-  "bytes": 36054273,
-  "ms": 31637
+  "bytes": 36113522,
+  "ms": 33336
  }
 }

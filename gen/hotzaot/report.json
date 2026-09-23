@@ -164,7 +164,7 @@
     "פלט שונה": 199,
     "אורך-קריאה": 13
    },
-   "ms": 72,
+   "ms": 85,
    "proven": [
     {
      "name": "norm-search",
@@ -228,7 +228,7 @@
     "פלט שונה": 159,
     "אורך-קריאה": 13
    },
-   "ms": 17,
+   "ms": 18,
    "proven": [
     {
      "name": "shekel",
@@ -302,7 +302,7 @@
     "פלט שונה": 195,
     "אורך-קריאה": 13
    },
-   "ms": 16,
+   "ms": 19,
    "proven": [
     {
      "name": "fmt-date",
@@ -377,7 +377,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 114
    },
-   "ms": 14,
+   "ms": 17,
    "proven": [
     {
      "name": "cockpit-days-since",
@@ -453,7 +453,7 @@
     "פלט שונה": 201,
     "אורך-קריאה": 13
    },
-   "ms": 17,
+   "ms": 20,
    "proven": [
     {
      "name": "csv-escape",
@@ -650,7 +650,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 134
    },
-   "ms": 12,
+   "ms": 14,
    "proven": [
     {
      "name": "grand-total",
@@ -768,7 +768,7 @@
     "אורך-קריאה": 158,
     "פלט שונה": 136
    },
-   "ms": 14,
+   "ms": 17,
    "proven": [
     {
      "name": "count-by",
@@ -889,7 +889,7 @@
    },
    {
     "layer": "Dart · תאומי ה-JS (dart-maor)",
-    "count": 569,
+    "count": 628,
     "connected": "אותם אטומים כמו ה-JS, מומרים — מחוברים דרך צורת ה-JS",
     "state": "on"
    },
@@ -903,8 +903,8 @@
  },
  "meta": {
   "slug": "hotzaot",
-  "built": "2026-09-16T03:19:56.514Z",
-  "ms": 13443,
+  "built": "2026-09-23T06:21:01.144Z",
+  "ms": 14643,
   "shelf": 1096,
   "fns": 569,
   "dart": 394,
@@ -929,7 +929,8 @@
    "gen_app_genhotzaot_root.dart",
    "gen_app_genhotzaot_scr2.dart",
    "gen_app_genhotzaot_settings.dart",
-   "gen_app_genhotzaot_shell.dart"
+   "gen_app_genhotzaot_shell.dart",
+   "gen_app_genhotzaot_wizard.dart"
   ],
   "displayAtoms": [
    "dart-data-bs/auto/gen_app_genhotzaot_audit_content.dart",
@@ -943,9 +944,18 @@
    "dart-data-bs/auto/gen_app_genhotzaot_scr2_content.dart",
    "dart-data-bs/auto/gen_app_genhotzaot_settings_content.dart",
    "dart-data-bs/auto/gen_app_genhotzaot_shell_content.dart",
+   "dart-data-bs/auto/gen_app_genhotzaot_wizard_content.dart",
+   "dart-data-maor/wizard-step-error-sockets.dart",
+   "dart-maor/empty-wizard.dart",
+   "dart-maor/fmt-date.dart",
+   "dart-maor/vertical-packs.dart",
+   "dart-maor/wizard-industries.dart",
+   "dart-maor/wizard-step-error.dart",
+   "dart-maor/wizard-steps.dart",
    "dart-screens-bs/ai_hub_screen.g.dart",
    "dart-ui-bs/auto/callout.dart",
    "dart-ui-bs/auto/stat.dart",
+   "dart-ui-bs/auto/switch_row.dart",
    "dart-ui-bs/ds/ds.dart",
    "dart-ui-bs/ds/ds_bars.dart",
    "dart-ui-bs/ds/ds_calendar.dart",
@@ -980,7 +990,7 @@
   "site": "gen/out/hotzaot/site",
   "entry": "gen_app_genhotzaot_main.dart",
   "files": 55,
-  "bytes": 35993298,
-  "ms": 31570
+  "bytes": 36038032,
+  "ms": 32862
  }
 }
