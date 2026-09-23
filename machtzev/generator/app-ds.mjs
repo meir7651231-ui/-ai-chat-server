@@ -339,6 +339,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       const labels = r.schema.map((f) => f.label);
       for (const rec of recs) { const pairs = rec.slice(0, labels.length).map((v, j) => `${k(labels[j])}: ${k(v)}`); if (rec.length > labels.length) seedNotes.push(T('seedOverflow', { word: SL.exampleWord, ent, extra: rec.length - labels.length, n: labels.length })); adds.push(`  appStore.add('${sl}', {${pairs.join(', ')}});`); count++; } }
     if (adds.length) { seed = { slug: `${P}seed`, fn: 'seedExamples', count }; write(seed.slug, `// 🌱 ${T('seedHeader', { word: SL.exampleWord })}\nimport '../dart-data-bs/auto/gen_${seed.slug}_content.dart';\nimport '../dart-ui-bs/ds/ds_store.dart';\n\nbool _seeded = false;\nvoid seedExamples() {\n  if (_seeded) return; _seeded = true;\n${adds.join('\n')}\n}\n`, dump()); } }
+  let liveExtrasOut = extraScreens;   // ההתראות עם קישור-הנתונים (slug/field) — הדלת מרכיבה מהן מסך-תובנה (insight.mjs)
   const rootByRefs = pickRoot(entMeta, backRefs);
   const headDash = screens.find((x) => x.kind === 'dashboard') || null;
   const rootMeta = rootByRefs || (headDash && entMeta.length ? entMeta[0] : null);
@@ -364,6 +365,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     const liveExtras = extraScreens.map((x) => { const c = x.clause; if (!c || !c.x || !/^[<>]$/.test(c.op) || c.n == null || isNaN(+c.n)) return x;
       for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n } }; }
       return x; });   // אין ישות עם השדה ⇒ השורה נשארת סטטית (הסף בלבד), לא מומצא
+    liveExtrasOut = liveExtras;
     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr, homeIsRoot: rootIsFirst, extras: liveExtras, seed });
     home = { slug: `${P}shell`, cls: shell.cls };
     // G33 · מניפסט-המודול (הכרעה-29): מה ש«בלגן» (האפליקציה-האחת) צריך כדי למזג את המודול — מסכים · שורש · שדות · שרשרת. נגזר, לא יד.
@@ -374,7 +376,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
   for (const n of seedNotes) console.log(`⚪ ${n}`); if (seed) console.log(`🌱 ${T('seedLog', { word: SL.exampleWord, count: seed.count, slug: seed.slug })}`);
   renderMain(`${P}main`, { title: appTitle, hubSlug: home.slug, hubCls: home.cls, edges });
 
-  return { screens, sys, roles };
+  return { screens, sys, roles, liveExtras: liveExtrasOut };
 }
 
 if (import.meta.url === 'file://' + process.argv[1]) {

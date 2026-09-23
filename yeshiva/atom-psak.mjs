@@ -33,6 +33,8 @@ export function judge({ purpose, cands, wire, widgetOf, skinWired = null }) {
     const names = w0 ? [...w0.types.keys()].filter((n) => !/^(key|child|children|bare)$/.test(n)) : [];
     const w = wire(cls);
     if (!w) { const skin = skinWired && w0 && !skinWired(w0.file); rulings.push({ cls, verdict: 'פליגא', move: skin ? 'לובש-עור (L102)' : '§20-ג', why: skin ? 'צבע קשיח — לא לובש את העור' : 'שקע-חובה בלי דאטה' }); continue; }
+    // אין מערבין: אטום שבנוי לשורה (flexRoot: Expanded/Flexible בשורש — עובדת-אטלס) בתוך עמודה ⇒ ממלא את כל המסך ⇒ פליגא
+    if (w0 && w0.flexRoot && (!purpose || purpose.placement !== 'row')) { rulings.push({ cls, verdict: 'פליגא', move: 'אין מערבין', why: 'בנוי-לשורה (Expanded בשורש) בתוך עמודה' }); continue; }
     const unfilled = names.filter((n) => !w.filled.includes(n));
     // שיעור: יש סף במטרה ⇒ האטום חייב חור לסף או למצב-חריגה
     if (purpose && purpose.kind === KIND.shiur) {
