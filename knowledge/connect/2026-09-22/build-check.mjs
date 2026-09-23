@@ -1,11 +1,11 @@
 // מנוע 2 ⇒ מנוע 4 ⇒ מקמפל · משפט ⇒ צורה ⇒ אפיון ⇒ app-ds.buildApp ⇒ מראה למארח-Flutter ⇒ flutter analyze על המסכים שנוצרו.
 //   מארח: BS_HOST=<app_flutter> (נוצר ע"י `flutter create --offline --project-name buildsmart`; אין buildsmart אמיתי בעץ הזה).
-//   שימוש: BS_HOST=... node knowledge/connect/2026-09-22/build-check.mjs "<משפט>" [--answers f.json] [--spec specs-ds/x.txt | --doc peruk.md] [--verify: pump כל מסך במארח (gen-verify, הכרעה-34)] [--proposals: לבנות גם הצעות (מסך-רשום/זהב — תוכן ממקום אחר)]
+//   שימוש: BS_HOST=... node knowledge/connect/2026-09-22/build-check.mjs "<משפט>" [--answers f.json] [--spec specs-ds/x.txt | --doc peruk.md] [--verify: pump כל מסך במארח (gen-verify, הכרעה-34)] [--shot: build web + צילום Chromium ⇒ shot.png (היכולת של ship, בלי פרסום)] [--balagan: כל המודולים ⇒ אפליקציה אחת] [--web: קליפת-אתר] [--proposals: לבנות גם הצעות (מסך-רשום/זהב — תוכן ממקום אחר)]
 //   פלט: אפיון · מסכים · מספר שגיאות-analyze (עם הפקודה). אין flutter/מארח ⇒ ⚪ לא-נמדד (L34: אין-כלי ≠ כשל).
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-import { spawnSync } from 'node:child_process';
+import { spawnSync, spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '../../..');
@@ -106,6 +106,27 @@ if (args.includes('--web') && errors.length === 0) {
     const name = fs.existsSync(man) ? (JSON.parse(fs.readFileSync(man, 'utf8')).name || null) : null;
     console.log(`web-shell: ${w.status === 0 ? '✅' : '❌'} · index.html <title> «${title ?? '—'}» · manifest.name «${name ?? '—'}» · ${out.trim().split('\n').slice(-1)[0].slice(0, 160)}`);
     spawnSync(process.execPath, [path.join(ROOT, 'machtzev/generator/web-shell.mjs'), '--restore'], { encoding: 'utf8', env });
+  }
+}
+// --shot · היכולת של ship בלי הפרסום: flutter build web מנקודת-הכניסה שנוצרה ⇒ הגשה מקומית ⇒ צילום ב-Chromium headless ⇒ <outDir>/shot.png. אפס git, אפס gh-pages.
+if (args.includes('--shot') && errors.length === 0) {
+  const entry = gen.find((f) => /_main\.dart$/.test(f));
+  const CHROME = ['/opt/pw-browsers/chromium', process.env.CHROME].find((p) => p && fs.existsSync(p));
+  if (!entry) console.log('⚪ shot: אין נקודת-כניסה (*_main.dart) בפלט');
+  else if (!CHROME) console.log('⚪ shot: אין Chromium (/opt/pw-browsers/chromium)');
+  else {
+    const t0 = Date.now(); const outWeb = 'build/web-chk';
+    const b = spawnSync(FLUTTER, ['build', 'web', '--release', '--no-web-resources-cdn', '-t', 'lib/genesis/dart-gen-bs/' + entry, '-o', outWeb], { cwd: HOST, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+    if (b.status !== 0) console.log(`❌ shot: flutter build web נכשל · ${(b.stdout + b.stderr).split('\n').filter((l) => /Error|error/.test(l)).slice(0, 3).join(' ¦ ').slice(0, 300)}`);
+    else {
+      const port = 8700 + Math.floor(Math.random() * 200);
+      const srv = spawn('python3', ['-m', 'http.server', String(port), '--bind', '127.0.0.1'], { cwd: path.join(HOST, outWeb), stdio: 'ignore' });
+      await new Promise((r) => setTimeout(r, 1200));
+      const shot = path.join(process.env.GEN_OUT, 'shot.png');
+      spawnSync(CHROME, ['--headless=new', '--no-sandbox', '--disable-gpu', '--hide-scrollbars', '--window-size=800,1400', '--virtual-time-budget=20000', `--screenshot=${shot}`, `http://127.0.0.1:${port}/`], { encoding: 'utf8', timeout: 120000 });
+      try { srv.kill(); } catch {}
+      console.log(fs.existsSync(shot) ? `shot: ${shot} · ${(fs.statSync(shot).size / 1024).toFixed(0)}KB · build ${((Date.now() - t0) / 1000).toFixed(0)}s · כניסה ${entry} · ${outWeb} ${(fs.statSync(path.join(HOST, outWeb, 'main.dart.js')).size / 1024 / 1024).toFixed(1)}MB main.dart.js` : '❌ shot: הצילום לא נוצר');
+    }
   }
 }
 process.exit(errors.length ? 1 : 0);
