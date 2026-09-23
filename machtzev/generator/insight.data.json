@@ -1,0 +1,15 @@
+{
+ "_": "אטום-דאטה · מנוע-ההרכבה (insight): מה תנאי-על-קבוצה מכיל (צורה, לא דעה) ולאיזה סוג-נוסחה של compose-engine כל תוצאה מתורגמת; ומה מפרקים כשאין אטום לפעולה (חוק 23-ב: אין אטום ⇒ יורדים עד עובדות).",
+ "predicateOverSet": [
+  { "result": "count", "kind": "count", "value": "br.length" },
+  { "result": "share", "kind": "/", "value": "br.length / rs.length" },
+  { "result": "any", "op": "alert", "value": "br.isNotEmpty" },
+  { "result": "subset", "kind": "table", "value": "br" }
+ ],
+ "decompose": {
+  "ratio": [ { "op": "headline", "value": "br.length", "label": "part" }, { "op": "headline", "value": "rs.length", "label": "whole" } ],
+  "ring": [ { "op": "ratio" } ],
+  "gauge": [ { "op": "ratio" } ]
+ },
+ "maxDepth": 3
+}

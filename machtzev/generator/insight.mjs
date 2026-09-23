@@ -1,8 +1,8 @@
 // 🧩 insight — מנוע-הרכבה לתצוגה (הכרעת-בעלים 23.9 «יש את כל המנועים? ⇒ כן, חסר החיבור ⇒ תחבר»).
 //   חוק 23-ב/ג/ד + הכרעה 23-ג («מד-ניטור = מד + בדיקת-סף + כרזה + סטטוס»): תובנה ⇒ פעולות-יסוד ⇒ אטום לכל פעולה (הישיבה פוסקת) ⇒
 //   חיווט **מהנתונים האמיתיים** (appStore) לתוך מסך אחד ⇒ מניפסט-הרכבה כדאטה (PURPOSE §3). אפס סליידר, אפס ערך-מומצא.
-//   הצורה: «<שדה> <יחס> <מספר>» על ישות ⇒ פעולות: headline (כמה חורגים) · ratio (חלק מהכלל) · alert (כשיש) · table (מי חורג).
-//   פעולה בלי אטום-שורד ⇒ נרשמת «אין» במניפסט והמסך מורכב מהשאר — לא מומצא, לא מוסתר.
+//   הצורה: «<שדה> <יחס> <מספר>» על ישות = תנאי-על-קבוצה ⇒ התוצאות שהוא מכיל (insight.data.json: מונה · חלק · יש/אין · תת-קבוצה) ⇒ compose-engine.ops(kind) ⇒ פעולות.
+//   פעולה בלי אטום-שורד ⇒ **יורדים** (חוק 23-ב): decompose[op] ⇒ תת-פעולות עד עובדות; רק כשגם זה אין ⇒ «אין» במניפסט. ואז אימות מול הייעוד: מבחן-קבלה מהדוגמאות של הבעלים.
 import fs from 'node:fs';
 import path from 'node:path';
 import { searchOp, wireAtom } from './particles.mjs';
@@ -10,13 +10,16 @@ import { makeConsts, write } from './render-ds.mjs';
 import { buildAtlas } from './atlas.mjs';
 import { isPaper, skinWired } from './look.mjs';
 import { judge, ledgerLine, KIND } from '../../yeshiva/atom-psak.mjs';
+import { ops as opsOfKind } from '../compose-engine.mjs';   // צורה ⇒ פעולות-יסוד (הטבלה הקיימת, לא רשימה שלי)
 import * as R from '../root.mjs';
+const D = JSON.parse(fs.readFileSync(new URL('./insight.data.json', import.meta.url), 'utf8'));
 
 let ATL = null; const widgetOf = (cls) => ((ATL ||= buildAtlas({ forge: isPaper() })).widgets.find((w) => w.cls === cls) || null);
 const impOf = (w) => `import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`;
 
 /** תובנת-סף על ישות ⇒ מסך אחד מורכב. live = { slug, field, op:'<'|'>', n } · entity = { name, fields[] } · name = מילות-הבעלים */
-export function emitInsight({ slug, cls, name, live, entity }) {
+export function emitInsight({ slug, cls, name, live, entity, expect = null, seedSlug = null, words = null }) {
+  const said = words || `${live.field} ${live.op} ${live.n}`;   // מילות-הבעלים («ציון מתחת ל-55»), לא סימן (RTL הופך «<»)
   const { k, dump } = makeConsts(slug);
   const imports = new Set(["import '../dart-ui-bs/ds/ds.dart';", "import '../dart-ui-bs/ds/ds_store.dart';"]);
   const ledger = [];
@@ -33,19 +36,28 @@ export function emitInsight({ slug, cls, name, live, entity }) {
     return r.pick;
   };
   const parts = [];
-  // 1 · כמה חורגים (headline): label+value ⇐ br.length
-  const head = pick('headline', ['label', 'value'], { label: k(name), value: { str: 'br.length.toString()', num: 'br.length.toDouble()' }, sub: k(`${entity.name} · ${live.field} ${live.op} ${live.n}`), glyph: k('🔔') });
-  if (head) { parts.push({ call: head.call }); manifest.flow.push('br.length ⇒ headline.value'); }
-  // 2 · חלק מהכלל (ratio): fraction ⇐ br/rs
-  const ratio = pick('ratio', ['fraction'], { label: k(name), value: { str: "'${br.length}/${rs.length}'", num: 'br.length.toDouble()' }, fraction: 'rs.isEmpty ? 0.0 : br.length / rs.length', sub: k(entity.name), glyph: k('📊') });
-  if (ratio) { parts.push({ call: ratio.call }); manifest.flow.push('br.length / rs.length ⇒ ratio.fraction'); }
-  // 3 · כרזה כשיש חורגים (alert): message ⇐ מילות-הבעלים; מוצג רק כש-br לא ריק
-  const alert = pick('alert', ['message'], { message: k(`${entity.name}: ${live.field} ${live.op} ${live.n}`), label: k(name), sub: k(`${live.field} ${live.op} ${live.n}`), tone: 2, glyph: k('⚠️') });   // הכרזה = מילות-הבעלים בלבד
-  if (alert) { parts.push({ cond: 'br.isNotEmpty', call: alert.call }); manifest.flow.push('br.isNotEmpty ⇒ alert'); }
-  // 4 · מי חורג (table): labels ⇐ [שדה-שם, שדה-הסף] · rows ⇐ br
-  const table = pick('table', ['labels', 'rows'], { labels: [k(descField), k(live.field)], rows: `[for (final r in br) [r[${k(descField)}] ?? '', r[${k(live.field)}] ?? '']]`, label: k(name) });
-  if (table) { parts.push({ cond: 'br.isNotEmpty', call: table.call }); manifest.flow.push('br ⇒ table.rows'); }
-  const missing = manifest.ops.filter((o) => !o.atom).map((o) => o.op);
+  const ctxFor = (op, value, label) => ({
+    label: k(label || name), message: k(`${entity.name}: ${said}`), glyph: k(op === 'alert' ? '⚠️' : '🔔'), tone: 2,
+    value: /^br\.length \/ rs\.length$/.test(value) ? { str: "'${br.length}/${rs.length}'", num: 'br.length.toDouble()' } : /\.length$/.test(value) ? { str: `${value}.toString()`, num: `${value}.toDouble()` } : { str: `${value}.toString()`, num: '0.0' },
+    fraction: 'rs.isEmpty ? 0.0 : br.length / rs.length', sub: k(`${entity.name} · ${said}`),
+    labels: [k(descField), k(live.field)], rows: `[for (final r in br) [r[${k(descField)}] ?? '', r[${k(live.field)}] ?? '']]`,
+  });
+  // רזולוציה רקורסיבית: פעולה ⇒ פסק; אין שורד ⇒ decompose[op] ⇒ תת-פעולות (עד maxDepth) ⇒ עובדות
+  const resolve = (op, value, label, depth, cond) => {
+    const w = pick(op, NEEDS[op] || ['label'], ctxFor(op, value, label));
+    if (w) { parts.push({ cond, call: w.call }); manifest.flow.push(`${value} ⇒ ${op}(${w.cls})`); return true; }
+    const sub = D.decompose[op];
+    if (!sub || depth >= D.maxDepth) return false;
+    manifest.flow.push(`${op}: אין אטום ⇒ מפרקים ל-${sub.map((x) => x.op).join('+')}`);
+    let any = false; for (const x of sub) any = resolve(x.op, x.value || value, x.label ? `${name} · ${x.label === 'part' ? said : entity.name}` : label, depth + 1, cond) || any;
+    return any;
+  };
+  const NEEDS = { headline: ['label', 'value'], ratio: ['fraction'], alert: ['message'], table: ['labels', 'rows'], ring: ['value'], gauge: ['value'] };
+  for (const res of D.predicateOverSet) {
+    const opList = res.kind ? opsOfKind({ kind: res.kind }).map((o) => o.op) : [res.op];
+    for (const op of opList) resolve(op, res.value, null, 0, res.result === 'any' || res.result === 'subset' ? 'br.isNotEmpty' : null);
+  }
+  const missing = manifest.ops.filter((o) => !o.atom).map((o) => o.op).filter((op, i, a) => a.indexOf(op) === i);
   const code = `// 🧩 חולל ע"י מנוע-ההרכבה (insight · הכרעת-בעלים 23.9) — תובנת-סף על נתונים אמיתיים: ${manifest.ops.filter((o) => o.atom).map((o) => o.op).join(' ⊕ ') || '—'}${missing.length ? ` · בלי אטום: ${missing.join(', ')}` : ''}. אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 ${[...imports].sort().join('\n')}
@@ -59,12 +71,33 @@ class ${cls} extends StatelessWidget {
     final br = rs.where((r) => ${cond}).toList();
     return DsScaffold(title: ${k(name)}, subtitle: br.length.toString() + ' / ' + rs.length.toString() + ' ' + ${k(entity.name)}, icon: ${k('🔔')}, children: [
 ${parts.map((p) => `      ${p.cond ? `if (${p.cond}) ` : ''}Padding(padding: const EdgeInsets.only(bottom: 10), child: ${p.call}),`).join('\n')}
-      if (br.isEmpty) Padding(padding: const EdgeInsets.only(top: 24), child: Center(child: Text(${k(`${entity.name}: 0 ${live.field} ${live.op} ${live.n}`)}, style: TextStyle(color: DsLook.of(context).muted)))),
+      if (br.isEmpty) Padding(padding: const EdgeInsets.only(top: 24), child: Center(child: Text(${k(`${entity.name}: 0 · ${said}`)}, style: TextStyle(color: DsLook.of(context).muted)))),
     ]);
   });
 }
 `;
   write(slug, code, dump());
+  // אימות מול הייעוד (THE-WAY 6 · L110): מבחן-קבלה מהדוגמאות של הבעלים — המספר והחורגים חייבים להופיע על המסך. אין דוגמאות ⇒ אין מבחן (לא ממציאים)
+  let accept = null;
+  if (expect && seedSlug) {
+    const texts = [String(expect.count), ...expect.rows.flat()].filter((t) => t && String(t).trim());
+    manifest.accept = { count: expect.count, rows: expect.rows };
+    accept = `// 🎯 מבחן-קבלה מול הייעוד (insight) — מהדוגמאות של הבעלים. חולל; אל תערוך.
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:buildsmart/genesis/dart-gen-bs/gen_${slug}.dart';
+import 'package:buildsmart/genesis/dart-gen-bs/gen_${seedSlug}.dart';
+void main() {
+  testWidgets('ייעוד: ${name.replace(/'/g, '')} ⇒ ${expect.count} ${expect.rows.map((r) => r.join('/')).join(', ')}', (tester) async {
+    seedExamples();
+    await tester.pumpWidget(const MaterialApp(home: ${cls}()));
+    await tester.pump();
+${texts.map((t) => `    expect(find.textContaining('${String(t).replace(/'/g, "\\'")}'), findsWidgets, reason: 'הייעוד דורש «${String(t).replace(/'/g, '')}» על המסך');`).join('\n')}
+  });
+}
+`;
+    fs.writeFileSync(path.join(R.outDir(), `gen_${slug}_accept_test.dart`), accept);
+  }
   fs.writeFileSync(path.join(R.outDir(), `insight_${slug}.json`), JSON.stringify(manifest, null, 1));
-  return { cls, ops: manifest.ops.length, wired: manifest.ops.filter((o) => o.atom).length, missing, ledger, manifest };
+  return { cls, ops: manifest.ops.length, wired: manifest.ops.filter((o) => o.atom).length, missing, ledger, manifest, accept: !!accept };
 }

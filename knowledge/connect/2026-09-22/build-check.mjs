@@ -101,6 +101,13 @@ if (args.includes('--verify') && errors.length === 0) {
     for (const s of live) { const row = rows.find((x) => x.file === s.file); const atoms = row ? Object.keys(row.types).filter((x) => GV.DISPLAY.has(x)) : [];
       console.log(`${row && !row.tapErrors ? '✓' : '✗'} ${s.file} · ${row ? `רונדר · אטומי-תצוגה ${atoms.length} (${atoms.slice(0, 6).join(', ')}) · widgets ${Object.values(row.types).reduce((a, b) => a + b, 0)} · טאפים ${row.taps ?? 0} · שגיאות-טאפ ${row.tapErrors ?? 0}` : 'לא רונדר'}`);
       if (row && row.tapErrorAt && row.tapErrorAt.length) console.log('   ✗ ' + row.tapErrorAt.join(' ¦ ').slice(0, 300)); }
+    // אימות מול הייעוד (insight): מבחני-הקבלה מהדוגמאות של הבעלים — המספר והחורגים על המסך
+    for (const f of fs.readdirSync(process.env.GEN_OUT).filter((x) => /_accept_test\.dart$/.test(x))) {
+      const tp = path.join(HOST, 'test', f); fs.copyFileSync(path.join(process.env.GEN_OUT, f), tp);
+      const a = spawnSync(FLUTTER, ['test', `test/${f}`, '--reporter', 'compact'], { cwd: HOST, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+      const ok = a.status === 0; const why = ok ? '' : ' · ' + (a.stdout + a.stderr).split('\n').filter((l) => /reason|Expected|Actual|Error|error/.test(l)).slice(0, 3).join(' ¦ ').slice(0, 300);
+      console.log(`מול הייעוד: ${ok ? '✅ עבר' : '❌ נכשל'} · ${f}${why} · (cd ${HOST} && ${FLUTTER} test test/${f})`);
+    }
     console.log(`מוצג-בפועל: ${rows.length}/${live.length} מסכים · עבר ${passed} · נכשל ${failed}${compileErr.length ? ' · קומפילציה: ' + compileErr.slice(0, 2).join(' ¦ ') : ''} · (cd ${HOST} && flutter test test/genesis_gen_verify_test.dart)`);
     if (!rows.length) console.log('   פלט-הבדיקה (זנב): ' + out.trim().split('\n').slice(-4).join(' ¦ ').slice(0, 400));
   }
