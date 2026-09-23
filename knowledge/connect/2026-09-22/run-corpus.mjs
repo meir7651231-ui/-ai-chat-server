@@ -8,7 +8,8 @@ for (const s of sents) {
   let r; try { r = formOf(s); } catch (e) { console.log(`✗ קריסה «${s}»: ${e.message}`); continue; }
   const covered = new Set(r.things.flatMap((t) => [...toks(t.label), ...(t.refs || []), ...t.fields.flatMap((f) => toks(f.label))]));
   const frame = new Set(r.frame);
-  const miss = r.words.filter((w) => !/^\d+$/.test(w) && !frame.has(w) && !covered.has(w) && !covered.has(w.slice(1)) && !covered.has(w.slice(2)));
+  const placed = (w) => frame.has(w) || covered.has(w);
+  const miss = r.words.filter((w) => !/^\d+$/.test(w) && !placed(w) && !placed(w.slice(1)) && !placed(w.slice(2)));   // «ומצב» ⇒ «מצב» במסגרת
   const good = r.things.length > 0 && miss.length === 0; if (good) ok++; lost += miss.length;
   const th = r.things.map((t) => `${t.label}${t.many ? '⁺' : ''}${t.fields.length ? `[${t.fields.map((f) => f.label).join(',')}]` : ''}${t.under ? `⊂${t.under}` : ''}`).join(' · ');
   console.log(`${good ? '✓' : '✗'} «${s}»\n     ${th}${miss.length ? `\n     אבדו: ${miss.join(', ')}` : ''}`);

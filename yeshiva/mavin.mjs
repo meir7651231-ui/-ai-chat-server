@@ -81,8 +81,9 @@ function listOf(segment) {
   if (cut < 0) cut = first.length - 1;   // אין מילה מפוזרת לפני ⇒ האיבר = המילה האחרונה בלבד («לרכב יש יצרן» ⇒ «יצרן»)
   let before = first.slice(0, cut), item0 = first.slice(cut);
   if (item0.length > 1 && isMany(item0[item0.length - 1]) && !/י$/.test(item0[0])) { before = [...before, ...item0.slice(0, -1)]; item0 = item0.slice(-1); }   // «לניהול לקוחות» ⇒ האיבר «לקוחות»
-  const items = [item0, ...parts.slice(1)].map(deVav).map((it) => { let k = 0; while (k < it.length - 1 && isSpread(it[k])) k++; return it.slice(k); }).filter((it) => it.length);   // «כמה עזבו» ⇒ «עזבו»
-  return { before, items, rest };
+  const dropped = [];
+  const items = [item0, ...parts.slice(1)].map(deVav).map((it) => { let k = 0; while (k < it.length - 1 && isSpread(it[k])) dropped.push(it[k++]); return it.slice(k); }).filter((it) => it.length);   // «כמה עזבו» ⇒ «עזבו»; «כמה» ⇒ מסגרת
+  return { before, items, rest, dropped };
 }
 
 // ── צורת-הצורך של משפט ──
@@ -91,7 +92,7 @@ export function formOf(sentence) {
   const segments = sentence.split(/[:;]/).map((s) => s.trim()).filter(Boolean);
   const things = [];   // { label, many, fields:[{label}], under, src, refs, acts, values }
   const frame = [];    // מילים מפוזרות (מסגרת/קישור) — מדווחות, לא מפורשות
-  const find = (w) => things.find((t) => toks(t.label).some((lw) => stripLead(stem(w)).some((f) => f === stem(lw))));   // «לרכב» ⇔ «ניהול רכבים»: כל מילה בתווית
+  const find = (w) => things.find((t) => toks(t.label).some((lw) => stripLead(stem(w)).some((f) => f.length >= 3 && f === stem(lw))));   // «לרכב» ⇔ «ניהול רכבים»: כל מילה בתווית; גזע ≥3 אותיות («כמ» לא)
   // רצף מילים נמוכות-פיזור ⇒ יחידה: מילים שהקטלוג מצביע בהן לחישוב = עשייה-מוצעת; השאר = דבר; מספר צמוד = ערך
   const unitOf = (run, src, under = null) => {
     const acts = [], plain = [], values = [], asks = [];
@@ -107,17 +108,19 @@ export function formOf(sentence) {
     let L = listOf(seg), head = null; if (L && L.rest) { queue.unshift(L.rest); if (L.only) { head = L.head; L = null; } }
     const pre = L ? L.before : (head || toks(seg));
     const runs = runsOf(pre);
-    if (!L) { for (const run of runs) if (!find(run[run.length - 1])) things.push(unitOf(run, seg)); continue; }
+    const attachOrPush = (run, under = null) => { const hit = run.length === 1 ? find(run[0]) : null; if (hit) (hit.refs = hit.refs || []).push(...run); else things.push(unitOf(run, seg, under)); };   // מילה בודדת שמצביעה על דבר קיים = הפניה; אחרת יחידה משלה. אף מילה לא נעלמת
+    if (L) L.dropped.forEach((w) => frame.push(w));
+    if (!L) { for (const run of runs) attachOrPush(run); continue; }
     // רשימה: הרצף הצמוד לרשימה = ההורה; רצפים קודמים = יחידות משלהן («תעשה לי» ⇒ יחידה עם שאלות)
     const run = runs.length ? runs[runs.length - 1] : [];
-    for (const r of runs.slice(0, -1)) if (!find(r[r.length - 1])) things.push(unitOf(r, seg));
+    for (const r of runs.slice(0, -1)) attachOrPush(r);
     let owner = null; for (let j = run.length - 1; j >= 0 && !owner; j--) owner = find(run[j]) || null;   // מילה כלשהי ברצף מזהה הורה קיים («לרכב יש» ⇒ «רכבים»)
     if (owner) (owner.refs = owner.refs || []).push(...run);
     else if (run.length) { owner = unitOf(run, seg); things.push(owner); }
     const manyItems = L.items.filter(itemMany).length, oneItems = L.items.length - manyItems;
     for (const it of L.items) {
       if (itemMany(it) || (oneItems === 0) || manyItems > oneItems) {   // רוב-רבים ⇒ גם היחיד ברשימה הוא דבר («… עובדים, ציוד ובטיחות»)
-        if (!find(it[0])) things.push({ ...unitOf(it, seg, owner ? owner.label : null), many: itemMany(it) }); }
+        const hit = find(it[0]); if (hit) (hit.refs = hit.refs || []).push(...it); else things.push({ ...unitOf(it, seg, owner ? owner.label : null), many: itemMany(it) }); }
       else if (owner) owner.fields.push({ label: it.join(' ') });
       else things.push(unitOf(it, seg));
     }
