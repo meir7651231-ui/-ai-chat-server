@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>סטטוס — עקביות, תיאום, מדידה — ניהול חי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_style.css">
+<style>
+.org{font-family:ui-monospace,monospace;font-size:12px;background:#0F0D0B;color:#D6CFC4;border-radius:10px;padding:14px 16px;white-space:pre;overflow-x:auto;line-height:1.5}
+table.roles td:nth-child(2){text-align:center;width:44px}
+.sum td{font-weight:700}
+.lock{background:#3B1111;color:#FCA5A5;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:700}
+.phones{display:flex;gap:16px;flex-wrap:wrap}
+.phone{width:260px;background:#0F0D0B;color:#E8E2D8;border-radius:22px;padding:16px 14px;border:2px solid #3A332B;font-size:13px;line-height:1.5}
+.phone h5{margin:0 0 8px;font-size:14px;color:#fff}
+.phone .row{background:#1C1916;border-radius:8px;padding:7px 9px;margin-bottom:6px}
+.phone .row b{color:#fff}
+.phone .red{background:#3B1111;color:#FECACA}
+.phone .yel{background:#2E2208;color:#FDE68A}
+.phone .grn{background:#0F2A1C;color:#BBF0D0}
+.phone .btn{display:block;text-align:center;border-radius:10px;padding:9px;margin-top:8px;font-weight:700;background:#3A332B;color:#fff}
+.phone .muted{color:#9A9085;font-size:11px}
+</style></head>
+<body><div class="wrap">
+
+<h1>סטטוס — עקביות, תיאום, מדידה — ניהול חי</h1>
+<p class="lead">נושא 133. אחרי 131 נושאים שאלנו: <b>האם הכל בפנים, מדוד ומתואם — או שיש סתירות?</b> התשובה הייתה: <b>לא</b>. 6 סתירות, 5 קבצים מרכזיים שלא עודכנו מאז 99, ומדדים שלא נרשמו. כאן — מה תוקן, <b>בגוף הקבצים</b>, לא בהערות.</p>
+
+<h2>1. שש הסתירות — נסגרו</h2>
+<table>
+<tr><th>#</th><th>הסתירה</th><th>ההכרעה</th><th>תוקן ב-</th></tr>
+<tr><td>1</td><td><b>מי עוצר:</b> 113 "רק המלצה" מול 03/05 "נעילה אוטומטית"</td><td><b>נעילת כניסה</b> לאזור מלא — אוטומטית (הכיוון הבטוח), מפקד השער מבטל ≤60 שנ' · <b>כל עצירה אחרת</b> — המלצה עד אישור · "עצור" של סדרן — מיד</td><td>113, 119, README, 86/31, 91/ב-41</td></tr>
+<tr><td>2</td><td><b>ספים:</b> 33 אדום &gt;3.5 מול 05 נעילה 4.0</td><td>נעילה <b>3.5</b> עם וידאו, <b>3.1</b> בלי — מתחת לאדום, לא מעליו</td><td>05, 100</td></tr>
+<tr><td>3</td><td><b>עזרת הנשים:</b> 127 "תמונה רק באירוע" מול 16 "חמ"ל-נשים רואה הכל"</td><td>לחמ"ל הראשי — <b>מספר בלבד</b> · התמונה — <b>רק לחמ"ל-הנשים</b> (מפעילות) · הקלטה רק באירוע</td><td>127, 16, 131, README</td></tr>
+<tr><td>4</td><td><b>שמירת צילום:</b> 127 "30 יום" מול 30 "שבוע"</td><td><b>שבוע</b>, חוץ מתיק אירוע</td><td>127, 100</td></tr>
+<tr><td>5</td><td><b>בהר:</b> 120 "מניפסט" מול 123 "סורק ביד"</td><td>בשגרה — <b>סורק ביד</b>; בלי רשת — <b>אוטובוס מול מניפסט</b></td><td>120, 123</td></tr>
+<tr><td>6</td><td><b>רכבים:</b> 121 שיירות מול 24/45 "אין רכב פרטי"</td><td>כל אישור = <b>חריג בשם</b>, בתקרה, ביומן — לא פרצה</td><td>121</td></tr>
+<tr><td>+</td><td>120 "T−14" מול המציאות "~10 ימים"</td><td>מסומן: <b>הצעה</b> לשינוי</td><td>120, 100</td></tr>
+<tr><td>+</td><td>05 "42 מצלמות" מול "מאות"</td><td>הערת עקביות — מספר להדגמה</td><td>05</td></tr>
+<tr><td>+</td><td>102 גרסה 1 סומכת על מונים שלא נבדקו</td><td><b>תנאי לגרסה 1:</b> מבחן ספירה · עובד בלי העולם · שעון אחד · רשימה סופית</td><td>102</td></tr>
+</table>
+
+<h2>2. הקבצים המרכזיים — עודכנו</h2>
+<table>
+<tr><th>קובץ</th><th>היה</th><th>עכשיו</th></tr>
+<tr><td>86 ספר ההחלטות</td><td>30</td><td><b>47</b> — +17 (הגרלה, אין קרוסלות, צילום, רשימה סופית, שיירות, מכשיר, שתייה, ערבית, שגרירויות...)</td></tr>
+<tr><td>88 טבלת הסיכונים</td><td>30</td><td><b>40</b> — +10, כולל <b>בידוק בצוואר בקבוק (15, אדום)</b> ו<b>גדר/יציע (אדום)</b> · מפת החום עודכנה</td></tr>
+<tr><td>100 מספרי המקור</td><td>מספרים עד 99</td><td>+10 — כל ההערכות החדשות, מסומנות "הערכה"; ספים ושמירה — מיושרים</td></tr>
+<tr><td>76 מדדים</td><td>12</td><td>12 + <b>10 מדדי-משנה</b> (13–22) — כל "נמדד" שנכתב ב-100–131</td></tr>
+<tr><td>91 בדיקות קבלה</td><td>36</td><td><b>47</b> — +11 בתוך הטבלה (ההערות הוסרו)</td></tr>
+<tr><td>98 הספר האחד</td><td>עד 99</td><td>פרק 10 — 100–133</td></tr>
+<tr><td>שאלות לשטח</td><td>5 מקומות</td><td><b>רשימה אחת — 132</b> (23 גופים, 4 גלים)</td></tr>
+</table>
+
+<h2>3. בדיקה חוזרת — מכונה, על כל 133 הקבצים</h2>
+<div class="six">
+<div class="card"><b>קישורים:</b> כל הקישורים בין הקבצים — <b>0 שבורים</b>.</div>
+<div class="card"><b>באיאן 23:00:</b> נשאר רק בגוף תרחישים 04, 21 — ושניהם עם הערת "20:30" בראש. ב-34 ו-100 — כתיקון.</div>
+<div class="card"><b>ספים 4.0 / 3.6:</b> 0. <b>ספירות ישנות</b> (30 החלטות / 36 מבחנים / 30 סכנות) — תוקנו ב-91, 110, README; נשארו רק בעמודי סטטוס היסטוריים (87, 99) — שהם צילום של אז.</div>
+</div>
+
+<div class="card" style="margin-top:12px"><b>עכשיו — כן:</b> <b>בפנים</b> (133 נושאים, כולם בספר 98) · <b>מתואם</b> (0 סתירות ידועות; ההחלטות, הסיכונים, המספרים, המדדים והמבחנים — מעודכנים) · <b>מדוד</b> (22 מדדים, 47 מבחנים — כל חוק שאמר "נמדד" יש לו מדד).<br>
+<b>מה שלא בידי:</b> "מתואם" = מתואם <b>בתוך התיק</b>. עם המציאות — רק רשימת השטח (132) תגיד. <b>0 ישויות חדשות מאז 32.</b></div>
+
+</div></body></html>
