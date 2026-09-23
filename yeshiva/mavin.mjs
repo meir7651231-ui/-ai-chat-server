@@ -244,6 +244,32 @@ export function specOf(form, answers = {}) {
   return { spec: lines.join('\n'), skipped, builtin };
 }
 
+// ── צרכי-התנהגות למנוע-ההרכבה (behavior-plan.planNeeds): יחס שהבעלים ענה עליו ב-`behavior` ⇒ צורך בצורת NEEDS.
+//    demand = מילות-הבעלים (נושא · מילות-היחס · מושא) · shape לפי סוג-השדות · params/ret/examples מהתשובה. בלי דוגמאות ⇒ שאלה, לא המצאה. ──
+const SHAPE_OF_TYPE = { date: 'מועד', num: 'כסף', text: 'טקסט-חופשי', bool: 'בדיקה', ref: 'רשומות' };
+export function needsFor(form, answers = {}) {
+  const needs = {}, asks = [];
+  for (const t of form.things) {
+    const a = answerFor(t, answers); const b = a.behavior; if (!b) continue;   // תשובת-התנהגות על יחידה (עם או בלי יחס-מזוהה)
+    const rel = t.rel || { subject: toks(t.label)[0] || t.label, words: toks(t.label).slice(1), object: t.content || null };
+    const id = `${toks(t.label)[0]}.${toks(t.label).slice(1, 4).join('_') || 'need'}`;
+    if (!(b.examples && b.examples.length)) { asks.push({ thing: t.label, ask: 'examples', rel }); continue; }
+    const fieldType = (label) => { const f = (a.fields || []).find((x) => x.label === label) || form.things.flatMap((x) => (answerFor(x, answers).fields || [])).find((x) => x.label === label); return f ? f.type : null; };
+    const shape = b.shape || SHAPE_OF_TYPE[fieldType(rel.object) || fieldType(rel.subject) || 'text'];
+    const valueWords = (t.values || []).map((v) => v.unit).filter(Boolean);
+    needs[id] = { shape, demand: [rel.subject, ...rel.words, rel.object || '', ...valueWords].filter(Boolean).join(' ') + (b.demand ? ' ' + b.demand : ''), params: b.params || ['String', 'String'], ret: b.ret || 'num', examples: b.examples, ...(b.forbid ? { forbid: b.forbid } : {}), ...(b.consts ? { consts: b.consts } : {}), ...(b.clock ? { clock: b.clock } : {}) };   // consts/clock = של הבעלים (הסף «30» בא מהתשובה, לא מהמנוע)
+  }
+  return { needs, asks };
+}
+export async function planBehaviors(form, answers = {}) {
+  const { needs, asks } = needsFor(form, answers);
+  if (!Object.keys(needs).length) return { picks: {}, asks };
+  const { planNeeds } = await import('../machtzev/generator/behavior-plan.mjs');
+  const t0 = Date.now(); const P = planNeeds(needs, { prove: true });
+  const picks = Object.fromEntries(Object.entries(P).map(([id, p]) => [id, { pick: p.pick || null, nodes: p.nodes || null, chain: p.chain || null, proven: !!p.proven, ties: p.ties || 0, top3: (p.top3 || []).slice(0, 3) }]));
+  return { picks, asks, needs, ms: Date.now() - t0 };
+}
+
 // ── יומן תשובות: הצעה לפעם הבאה, לא עובדה ──
 export function remember(label, answer, sentence) { const f = ANSWERS(); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.appendFileSync(f, JSON.stringify({ ts: new Date().toISOString(), label, sentence, answer }) + '\n'); }
 export function recall(label) { const f = ANSWERS(); if (!fs.existsSync(f)) return null; const rows = fs.readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((r) => r.label === label); return rows.length ? { proposal: rows[rows.length - 1].answer, times: rows.length } : null; }
@@ -310,7 +336,11 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     if (r.needs.length) console.log(`  בקשות למנוע 3: ${r.needs.map((n) => `${n.op || 'ref'}[${(n.need || []).join(',')}]←${n.thing}`).join(' · ')}`);
     return r;
   };
-  const after = async (r) => { if (!r.needs.length) return; for (const c of await coverNeeds(r.needs)) console.log(`  מנוע 3 · ${c.thing}/${c.act}${c.field ? `(${c.field})` : ''} · ${c.op} ⇒ ${c.atoms.join('+')} · חלופות: ${c.alts.join(', ')} · חסר: ${c.missing.length ? c.missing.join(',') : 'כלום'}`); };
+  const after = async (r) => {
+    const B = await planBehaviors(r, answers);
+    for (const [id, p] of Object.entries(B.picks || {})) console.log(`  מנוע-הרכבה · ${id} ⇒ ${p.pick || '∅'}${p.chain ? ` · שרשרת ${JSON.stringify(p.chain).slice(0, 80)}` : ''} · מוכח: ${p.proven ? 'כן' : 'לא'} · ${B.ms}ms`);
+    for (const q of (B.asks || [])) console.log(`  ? דוגמאות ל-«${q.rel.subject}» —${q.rel.words.join(' ')}→ «${q.rel.object || '?'}»: תן קלט ⇒ פלט (למשל [["'2026-09-20', '2026-09-23'", "r == 3"]])`);
+    if (!r.needs.length) return; for (const c of await coverNeeds(r.needs)) console.log(`  מנוע 3 · ${c.thing}/${c.act}${c.field ? `(${c.field})` : ''} · ${c.op} ⇒ ${c.atoms.join('+')} · חלופות: ${c.alts.join(', ')} · חסר: ${c.missing.length ? c.missing.join(',') : 'כלום'}`); };
   if (args.includes('--smoke')) {
     const sents = fs.readFileSync(R.GEN_DIR + 'nl-smoke.txt', 'utf8').split('\n').map((s) => s.trim()).filter(Boolean);
     let W = 0, T = 0, F = 0, Q = 0; for (const s of sents) { const r = show(s); W += r.words.length; T += r.things.length; F += r.things.reduce((n, t) => n + t.fields.length, 0); Q += r.questions.length; }
