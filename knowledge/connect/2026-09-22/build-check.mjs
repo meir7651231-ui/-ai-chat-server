@@ -1,6 +1,6 @@
 // מנוע 2 ⇒ מנוע 4 ⇒ מקמפל · משפט ⇒ צורה ⇒ אפיון ⇒ app-ds.buildApp ⇒ מראה למארח-Flutter ⇒ flutter analyze על המסכים שנוצרו.
 //   מארח: BS_HOST=<app_flutter> (נוצר ע"י `flutter create --offline --project-name buildsmart`; אין buildsmart אמיתי בעץ הזה).
-//   שימוש: BS_HOST=... node knowledge/connect/2026-09-22/build-check.mjs "<משפט>" [--answers f.json] [--proposals: לבנות גם הצעות (מסך-רשום/זהב — תוכן ממקום אחר)]
+//   שימוש: BS_HOST=... node knowledge/connect/2026-09-22/build-check.mjs "<משפט>" [--answers f.json] [--spec specs-ds/x.txt | --doc peruk.md] [--proposals: לבנות גם הצעות (מסך-רשום/זהב — תוכן ממקום אחר)]
 //   פלט: אפיון · מסכים · מספר שגיאות-analyze (עם הפקודה). אין flutter/מארח ⇒ ⚪ לא-נמדד (L34: אין-כלי ≠ כשל).
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,7 +11,9 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '../../..');
 const args = process.argv.slice(2);
 const ai = args.indexOf('--answers'); const answers = ai >= 0 ? JSON.parse(fs.readFileSync(args[ai + 1], 'utf8')) : {};
-const sentence = args.filter((a, i) => !a.startsWith('--') && !(ai >= 0 && i === ai + 1))[0];
+const si = args.indexOf('--spec'), di = args.indexOf('--doc');   // דלת שנייה: ספק מוכן / מסמך-«פירוק» של הבעלים במקום משפט
+const skipIdx = new Set([ai, si, di].filter((x) => x >= 0).map((x) => x + 1));
+const sentence = args.filter((a, i) => !a.startsWith('--') && !skipIdx.has(i))[0];
 const HOST = process.env.BS_HOST;
 const FLUTTER = ['/root/flutter/bin/flutter', process.env.FLUTTER_BIN].find((p) => p && fs.existsSync(p));
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'mavin-build-'));
@@ -20,16 +22,24 @@ fs.mkdirSync(process.env.GEN_OUT, { recursive: true }); fs.mkdirSync(process.env
 // קורפוס-המסכים-הרשומים (retrieve-screen) נקרא מ-dataOutDir בזמן-טעינה ⇒ מעתיקים את קובצי-התוכן לסקראצ' **לפני** הייבוא הראשון. אפס כתיבה למדף.
 const realData = path.join(ROOT, 'new/dart-data-bs/auto');
 for (const f of fs.readdirSync(realData)) if (/^screens__.*_content\.dart$/.test(f)) fs.copyFileSync(path.join(realData, f), path.join(process.env.GEN_DATA_OUT, f));
-const { generateAll } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
+const { generateAll, generateFromSpec, generateFromDoc } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
 const { formOf, specOf } = await import(path.join(ROOT, 'yeshiva/mavin.mjs'));
-const { buildApp } = await import(path.join(ROOT, 'machtzev/generator/app-ds.mjs'));
+let spec, skipped = [], builtin = [], G0;
+if (si >= 0 || di >= 0) {
+  const f = args[(si >= 0 ? si : di) + 1], txt = fs.readFileSync(f, 'utf8');
+  G0 = si >= 0 ? await generateFromSpec(txt, { outDir: process.env.GEN_OUT, name: 'chk' }) : await generateFromDoc(txt, { outDir: process.env.GEN_OUT, name: 'chk' });
+  spec = G0.spec; G0.routes = [];
+  const sl = spec.split('\n'); console.log(`«${path.basename(f)}» (${si >= 0 ? 'ספק מוכן' : 'מסמך-פירוק'})\nאפיון (${sl.length} שורות):\n${sl.slice(0, 10).map((l) => '  ' + l.slice(0, 110)).join('\n')}${sl.length > 10 ? '\n  …' : ''}`);
+} else {
 const form = formOf(sentence);
-const { spec, skipped, builtin } = specOf(form, answers);
+({ spec, skipped, builtin } = specOf(form, answers));
 console.log(`«${sentence}»\nאפיון:\n${spec.split('\n').map((l) => '  ' + l).join('\n') || '  (ריק)'}${skipped.length ? `\n  לא נכנסו (בלי שדות ⇒ שאלה): ${skipped.join(', ')}` : ''}${builtin && builtin.length ? `\n  כבר מובנה במסך-הישות: ${builtin.join(' · ')}` : ''}`);
-const G0 = await generateAll(sentence, { answers, outDir: process.env.GEN_OUT, name: 'chk', proposals: args.includes('--proposals') });
+G0 = await generateAll(sentence, { answers, outDir: process.env.GEN_OUT, name: 'chk', proposals: args.includes('--proposals') });
+}
 for (const r of G0.routes) console.log(`  מסלול · «${r.thing}» ⇒ ${r.route} · ${r.why}`);
 for (const n of G0.notes) console.log('  ' + n);
 const appEntry = G0.files.find((f) => f.route === 'appds'); if (appEntry) console.log(`מסכים: ${appEntry.screens.join(' · ')}`);
+if (G0.node) console.log(`צומת-פירוק: ${G0.node.id ?? '?'} «${G0.node.title || ''}» · שדות ${G0.node.fields ?? '?'} · פלטים ${(G0.node.outputs || []).length}`);
 const extra = G0.files.filter((f) => f.file).map((f) => f.file);
 if (!spec && !extra.length) { console.log('⚪ אין אפיון ואין מסלול אחר ⇒ אין בנייה. ענה על השאלות ותנסה שוב.'); process.exit(0); }
 const gen = fs.readdirSync(process.env.GEN_OUT).filter((f) => /^gen_app_.*\.dart$/.test(f));
