@@ -1,0 +1,8 @@
+{
+ "_": "אטום-דאטה · הישיבה על בחירת-אטום: איזה תפקיד-עור (auto-skin ROLES, אותות-צורה L83) מודד כל פעולת-חיפוש. פעולה שאין לה שורה ⇒ אין מדידת-צורה (מדווח, לא נפסל).",
+ "roleOf": {
+  "headline": "kpi", "hero": "hero", "stat": "stat", "magnitude": "kpi", "count": "kpi",
+  "alert": "banner", "ratio": "meter", "ring": "meter", "gauge": "meter",
+  "table": "table", "group": "section", "action": "button", "empty": "empty", "nav": "navTile", "bars": "bars"
+ }
+}

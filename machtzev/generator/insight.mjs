@@ -9,7 +9,8 @@ import { searchOp, wireAtom } from './particles.mjs';
 import { makeConsts, write } from './render-ds.mjs';
 import { buildAtlas } from './atlas.mjs';
 import { isPaper, skinWired } from './look.mjs';
-import { judge, ledgerLine, KIND } from '../../yeshiva/atom-psak.mjs';
+import { roleOf, judge, ledgerLine, KIND } from '../../yeshiva/atom-psak.mjs';
+import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { ops as opsOfKind } from '../compose-engine.mjs';   // צורה ⇒ פעולות-יסוד (הטבלה הקיימת, לא רשימה שלי)
 import * as R from '../root.mjs';
 const D = JSON.parse(fs.readFileSync(new URL('./insight.data.json', import.meta.url), 'utf8'));
@@ -47,7 +48,7 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   const pick = (op, need, ctx, purpose) => {
     const pk = searchOp(op, `${name} ${entity.name}`, null, 12);
     const first = prior ? prior.ops.filter((o) => o.op === op && o.atom).map((o) => o.atom) : [];
-    const r = judge({ purpose: { kind: purpose || KIND.fact, need, text: `${op} · ${name}` }, cands: [...new Set([...first, ...pk.atoms, ...pk.alts])], widgetOf, skinWired, wire: (c) => wireAtom(c, ctx) });
+    const r = judge({ purpose: { kind: purpose || KIND.fact, need, text: `${op} · ${name}`, role: roleOf(op) }, cands: [...new Set([...first, ...pk.atoms, ...pk.alts, ...forgeCands(op, roleOf(op))])], widgetOf, skinWired, wire: (c) => wireForge(c, ctx, { widgetOf, wireAtom }) });
     ledger.push(ledgerLine(`${name} · ${op}`, r));
     manifest.ops.push({ op, need, atom: r.pick ? r.pick.cls : null, filled: r.pick ? r.pick.filled : [], rulings: r.rulings.map((x) => `${x.cls}: ${x.verdict} · ${x.move} — ${x.why}`) });
     if (r.pick) imports.add(impOf(r.pick));
