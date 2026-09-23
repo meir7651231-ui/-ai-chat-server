@@ -2,6 +2,7 @@
 // מוצא: screens__camera_sheet:_ShutterButton (בנייה-חכמה main) · צרור-1 · props-שורש: label2, label3, label4
 // התוכן: new/dart-data-bs/auto/screens__camera_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -25,7 +26,7 @@ class ShutterButton extends StatelessWidget {
       button: true,
       label: '${label2}$label',
       child: Material(
-        color: busy ? DsAtomColors.autoShutterButton1 : BsTokens.brand,
+        color: busy ? dsWear(context, DsAtomColors.autoShutterButton1, (l) => l.faint) : dsWear(context, BsTokens.brand, (l) => l.accent),
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         child: InkWell(
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),
@@ -36,12 +37,12 @@ class ShutterButton extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (busy)
-                  const SizedBox(
+                  SizedBox(
                     width: 16,
                     height: 16,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      color: DsAtomColors.autoShutterButton2,
+                      color: dsWear(context, DsAtomColors.autoShutterButton2, (l) => l.onAccent),
                     ),
                   )
                 else
@@ -49,8 +50,8 @@ class ShutterButton extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   busy ? label3 : '${label4}$label',
-                  style: const TextStyle(
-                    color: DsAtomColors.autoShutterButton2,
+                  style: TextStyle(
+                    color: dsWear(context, DsAtomColors.autoShutterButton2, (l) => l.onAccent),
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
                   ),

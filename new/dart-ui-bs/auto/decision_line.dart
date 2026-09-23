@@ -2,6 +2,7 @@
 // מוצא: screens__persona_picking_sheet:_DecisionLine (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2, fallback, fallback2
 // התוכן: new/dart-data-bs/auto/screens__persona_picking_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
@@ -33,7 +34,7 @@ class DecisionLine extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-          border: Border.all(color: DsAtomColors.autoDecisionLine1),
+          border: Border.all(color: dsWear(context, DsAtomColors.autoDecisionLine1, (l) => l.ink)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,8 +50,8 @@ class DecisionLine extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               '${label}$qty${label2}',
-              style: const TextStyle(
-                color: DsAtomColors.autoDecisionLine2,
+              style: TextStyle(
+                color: dsWear(context, DsAtomColors.autoDecisionLine2, (l) => l.faint),
                 fontSize: 12.5,
               ),
             ),
@@ -64,7 +65,7 @@ class DecisionLine extends StatelessWidget {
                     child: FilledButton(
                       onPressed: onReplace,
                       style: FilledButton.styleFrom(
-                        backgroundColor: BsTokens.brand,
+                        backgroundColor: dsWear(context, BsTokens.brand, (l) => l.accent),
                         padding: const EdgeInsets.symmetric(vertical: 13),
                         shape: RoundedRectangleBorder(
                           borderRadius:
@@ -91,7 +92,7 @@ class DecisionLine extends StatelessWidget {
                       onPressed: onRemove,
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 13),
-                        side: const BorderSide(color: DsAtomColors.autoDecisionLine3),
+                        side: BorderSide(color: dsWear(context, DsAtomColors.autoDecisionLine3, (l) => l.ink)),
                         shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(BsTokens.radiusPill),

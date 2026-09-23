@@ -1,6 +1,7 @@
 // ✨ RatingStars — 5 כוכבים לפי value 0..5 (מלא/חצי/ריק), זהב זוהר; דאטה: double value + size
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class RatingStars extends StatelessWidget {
@@ -8,8 +9,11 @@ class RatingStars extends StatelessWidget {
   final double size;
   const RatingStars({super.key, required this.value, this.size = 22});
 
-  static const Color _gold = DsAtomColors.premiumFeedbackRatingStars1;
-  static const Color _empty = DsAtomColors.premiumFeedbackRatingStars2;
+  static const _gold0 = DsAtomColors.premiumFeedbackRatingStars1;
+
+  static Color _gold(BuildContext context) => dsWear(context, DsAtomColors.premiumFeedbackRatingStars1, (l) => l.warn);   // לובש עור · _gold0 = הערך-הכהה
+  static const _empty0 = DsAtomColors.premiumFeedbackRatingStars2;
+  static Color _empty(BuildContext context) => dsWear(context, DsAtomColors.premiumFeedbackRatingStars2, (l) => l.track);   // לובש עור · _empty0 = הערך-הכהה
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +68,7 @@ class _StarPainter extends CustomPainter {
     canvas.drawPath(
       star,
       Paint()
-        ..color = RatingStars._empty
+        ..color = RatingStars._empty0
         ..style = PaintingStyle.fill,
     );
     // מלא (חתוך לפי fill)
@@ -72,14 +76,14 @@ class _StarPainter extends CustomPainter {
       canvas.save();
       canvas.clipRect(Rect.fromLTWH(0, 0, size.width * fill, size.height));
       final Paint glow = Paint()
-        ..color = RatingStars._gold.withValues(alpha: 0.55)
+        ..color = RatingStars._gold0.withValues(alpha: 0.55)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
       canvas.drawPath(star, glow);
       canvas.drawPath(
         star,
         Paint()
-          ..shader = const LinearGradient(
-            colors: [DsAtomColors.premiumFeedbackRatingStars3, RatingStars._gold],
+          ..shader = LinearGradient(
+            colors: [DsAtomColors.premiumFeedbackRatingStars3, RatingStars._gold0],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ).createShader(Rect.fromLTWH(0, 0, size.width, size.height)),
@@ -90,7 +94,7 @@ class _StarPainter extends CustomPainter {
     canvas.drawPath(
       star,
       Paint()
-        ..color = RatingStars._gold.withValues(alpha: 0.35)
+        ..color = RatingStars._gold0.withValues(alpha: 0.35)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 0.8,
     );

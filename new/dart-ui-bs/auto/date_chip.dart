@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__chats_screen:_DateChip (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 
 class DateChip extends StatelessWidget {
@@ -14,11 +15,11 @@ class DateChip extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 10),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
         decoration: BoxDecoration(
-          color: DsAtomColors.autoDateChip1,
+          color: dsWear(context, DsAtomColors.autoDateChip1, (l) => l.ink),
           borderRadius: BorderRadius.circular(14),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: DsAtomColors.autoDateChip2,
+              color: dsWear(context, DsAtomColors.autoDateChip2, (l) => l.bg.withValues(alpha: 0.078)),
               blurRadius: 2,
               offset: Offset(0, 1),
             ),
@@ -26,8 +27,8 @@ class DateChip extends StatelessWidget {
         ),
         child: Text(
           date,
-          style: const TextStyle(
-            color: DsAtomColors.autoDateChip3,
+          style: TextStyle(
+            color: dsWear(context, DsAtomColors.autoDateChip3, (l) => l.faint),
             fontSize: 12,
             fontWeight: FontWeight.w500,
           ),

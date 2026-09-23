@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__worker_reports_tab:_Card (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -23,9 +24,9 @@ class WorkerReportsTabCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: DsAtomColors.autoWorkerReportsTabCard1,
+            color: dsWear(context, DsAtomColors.autoWorkerReportsTabCard1, (l) => l.bg.withValues(alpha: 0.078)),
             blurRadius: 10,
             offset: Offset(0, 2),
           ),

@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__finance_hub_sheets:_CaPrimary (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
 
@@ -16,7 +17,7 @@ class CaPrimary extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-          backgroundColor: BsTokens.brand,
+          backgroundColor: dsWear(context, BsTokens.brand, (l) => l.accent),
           foregroundColor: bsOnAccent(context),
           elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 14),

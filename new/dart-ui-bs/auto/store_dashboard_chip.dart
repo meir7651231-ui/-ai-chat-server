@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__store_dashboard_screen:_Chip (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
 
@@ -13,7 +14,7 @@ class StoreDashboardChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: on ? BsTokens.brand : Theme.of(context).colorScheme.surface,
+      color: on ? dsWear(context, BsTokens.brand, (l) => l.accent) : Theme.of(context).colorScheme.surface,
       borderRadius: BorderRadius.circular(BsTokens.radiusPill),
       child: InkWell(
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),

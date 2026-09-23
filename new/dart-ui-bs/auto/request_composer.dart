@@ -2,6 +2,7 @@
 // מוצא: screens__worker_employer_stock_sheet:_RequestComposer (בנייה-חכמה main) · צרור-1 · props-שורש: fallback, fallback2, fallback3, hintText, labelText, hintText2, fallback4, fallback5
 // התוכן: new/dart-data-bs/auto/screens__worker_employer_stock_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -40,7 +41,7 @@ class RequestComposer extends StatelessWidget {
           child: FilledButton.icon(
           onPressed: onToggle,
           style: FilledButton.styleFrom(
-            backgroundColor: BsTokens.brand,
+            backgroundColor: dsWear(context, BsTokens.brand, (l) => l.accent),
             minimumSize: const Size.fromHeight(48),
           ),
           icon: const Text('🧱', style: TextStyle(fontSize: 16)),
@@ -114,7 +115,7 @@ class RequestComposer extends StatelessWidget {
                   child: FilledButton(
                   onPressed: onSend,
                   style: FilledButton.styleFrom(
-                    backgroundColor: BsTokens.brand,
+                    backgroundColor: dsWear(context, BsTokens.brand, (l) => l.accent),
                     minimumSize: const Size.fromHeight(48),
                   ),
                   child: CfgText(

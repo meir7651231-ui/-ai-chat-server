@@ -2,10 +2,11 @@
 // וזוהר-מבטא בנבחר · משטח+hairline בלא-נבחר · נקודת-מצב · מונה · מיקרו-לחיצה.
 // a11y: Semantics(selected/button) · reduced-motion · אין-צבע-לבד (אייקון+נקודה). חוט-טהור.
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class PremiumChip extends StatefulWidget {
-  const PremiumChip({
+  PremiumChip({
     required this.label,
     this.icon,
     this.selected = false,
@@ -20,13 +21,21 @@ class PremiumChip extends StatefulWidget {
   final VoidCallback? onTap;
   final int? count;
 
-  static const _accentA = DsAtomColors.premiumShowcasePremiumChip1;
-  static const _accentB = DsAtomColors.premiumShowcasePremiumChip2;
-  static const _glow = DsAtomColors.premiumShowcasePremiumChip3;
-  static const _surface = DsAtomColors.premiumShowcasePremiumChip4;
-  static const _hair = DsAtomColors.premiumShowcasePremiumChip5;
-  static const _ink = DsAtomColors.premiumShowcasePremiumChip6;
-  static const _muted = DsAtomColors.premiumShowcasePremiumChip7;
+  static const _accentA0 = DsAtomColors.premiumShowcasePremiumChip1;
+
+  static Color _accentA(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumChip1, (l) => l.accent);   // לובש עור · _accentA0 = הערך-הכהה
+  static const _accentB0 = DsAtomColors.premiumShowcasePremiumChip2;
+  static Color _accentB(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumChip2, (l) => l.accent);   // לובש עור · _accentB0 = הערך-הכהה
+  static const _glow0 = DsAtomColors.premiumShowcasePremiumChip3;
+  static Color _glow(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumChip3, (l) => l.accent);   // לובש עור · _glow0 = הערך-הכהה
+  static const _surface0 = DsAtomColors.premiumShowcasePremiumChip4;
+  static Color _surface(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumChip4, (l) => l.cardAlt);   // לובש עור · _surface0 = הערך-הכהה
+  static const _hair0 = DsAtomColors.premiumShowcasePremiumChip5;
+  static Color _hair(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumChip5, (l) => l.onAccent.withValues(alpha: 0.122));   // לובש עור · _hair0 = הערך-הכהה
+  static const _ink0 = DsAtomColors.premiumShowcasePremiumChip6;
+  static Color _ink(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumChip6, (l) => l.chipBg);   // לובש עור · _ink0 = הערך-הכהה
+  static const _muted0 = DsAtomColors.premiumShowcasePremiumChip7;
+  static Color _muted(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumChip7, (l) => l.muted);   // לובש עור · _muted0 = הערך-הכהה
 
   @override
   State<PremiumChip> createState() => _PremiumChipState();
@@ -40,7 +49,7 @@ class _PremiumChipState extends State<PremiumChip> {
   Widget build(BuildContext context) {
     final reduce = MediaQuery.of(context).disableAnimations;
     final sel = widget.selected;
-    final fg = sel ? DsAtomColors.premiumShowcasePremiumChip8 : PremiumChip._muted;
+    final fg = sel ? dsWear(context, DsAtomColors.premiumShowcasePremiumChip8, (l) => l.onAccent) : PremiumChip._muted(context);
 
     final chip = AnimatedContainer(
       duration: Duration(milliseconds: reduce ? 0 : 180),
@@ -49,13 +58,13 @@ class _PremiumChipState extends State<PremiumChip> {
       padding: const EdgeInsetsDirectional.fromSTEB(14, 0, 14, 0),
       decoration: BoxDecoration(
         gradient: sel
-            ? const LinearGradient(colors: [PremiumChip._accentA, PremiumChip._accentB])
+            ? LinearGradient(colors: [PremiumChip._accentA(context), PremiumChip._accentB(context)])
             : null,
-        color: sel ? null : PremiumChip._surface,
+        color: sel ? null : PremiumChip._surface(context),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: sel ? DsAtomColors.premiumShowcasePremiumChip9 : PremiumChip._hair),
+        border: Border.all(color: sel ? dsWear(context, DsAtomColors.premiumShowcasePremiumChip9, (l) => l.onAccent.withValues(alpha: 0.18)) : PremiumChip._hair(context)),
         boxShadow: sel
-            ? [BoxShadow(color: PremiumChip._glow.withValues(alpha: 0.4), blurRadius: 14, offset: const Offset(0, 5))]
+            ? [BoxShadow(color: PremiumChip._glow(context).withValues(alpha: 0.4), blurRadius: 14, offset: const Offset(0, 5))]
             : null,
       ),
       child: Row(
@@ -68,14 +77,14 @@ class _PremiumChipState extends State<PremiumChip> {
             Container(
               width: 6,
               height: 6,
-              decoration: const BoxDecoration(color: DsAtomColors.premiumShowcasePremiumChip8, shape: BoxShape.circle),
+              decoration: BoxDecoration(color: dsWear(context, DsAtomColors.premiumShowcasePremiumChip8, (l) => l.onAccent), shape: BoxShape.circle),
             ),
             const SizedBox(width: 7),
           ],
           Text(
             widget.label,
             style: TextStyle(
-                color: sel ? PremiumChip._ink : PremiumChip._muted,
+                color: sel ? PremiumChip._ink(context) : PremiumChip._muted(context),
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 letterSpacing: -0.1),
@@ -85,13 +94,13 @@ class _PremiumChipState extends State<PremiumChip> {
             Container(
               padding: const EdgeInsetsDirectional.fromSTEB(7, 2, 7, 2),
               decoration: BoxDecoration(
-                color: sel ? DsAtomColors.premiumShowcasePremiumChip10 : DsAtomColors.premiumShowcasePremiumChip11,
+                color: sel ? dsWear(context, DsAtomColors.premiumShowcasePremiumChip10, (l) => l.onAccent.withValues(alpha: 0.2)) : dsWear(context, DsAtomColors.premiumShowcasePremiumChip11, (l) => l.onAccent.withValues(alpha: 0.078)),
                 borderRadius: BorderRadius.circular(999),
               ),
               child: Text(
                 '${widget.count}',
                 style: TextStyle(
-                    color: sel ? DsAtomColors.premiumShowcasePremiumChip8 : PremiumChip._muted,
+                    color: sel ? dsWear(context, DsAtomColors.premiumShowcasePremiumChip8, (l) => l.onAccent) : PremiumChip._muted(context),
                     fontSize: 11.5,
                     fontWeight: FontWeight.w700),
               ),

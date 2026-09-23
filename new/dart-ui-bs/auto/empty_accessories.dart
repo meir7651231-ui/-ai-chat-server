@@ -3,6 +3,7 @@
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__accessory_rule_editor_content.dart
 // משרת-גם (זהה-מבנית): screens__trade_builder__category_tree_editor:_EmptyCategories · screens__trade_builder__trade_builder_home:_EmptyTrades
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -23,7 +24,7 @@ class EmptyAccessories extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
-        border: Border.all(color: DsAtomColors.autoEmptyAccessories1),
+        border: Border.all(color: dsWear(context, DsAtomColors.autoEmptyAccessories1, (l) => l.ink)),
       ),
       child: Column(
         children: [

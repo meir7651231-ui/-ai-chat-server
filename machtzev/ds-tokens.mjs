@@ -101,6 +101,8 @@ const identity = [
   `  static const graphMid = ${c(I.graphMid)};`,
   `  static const graphHalo = ${c(I.graphHalo)};`,
   `  static const surfaceHi = ${c(I.surfaceHi)};`,
+  `  static const onAccent = ${c(I.onAccent)};`,
+  `  static const propFallback = ${c(I.propFallback)};`,
 ];
 
 const out = `// ✨ מאגר-העיצוב · סקאלות-טוקנים (Design Tokens) — **מחולל ע"י machtzev/ds-tokens.mjs מ-design-seed.json.**

@@ -2,6 +2,7 @@
 // מוצא: screens__store_screen:_SichaSheet (בנייה-חכמה main) · צרור-2 · props-שורש: name, name2, name3, name4, title, onTap
 // התוכן: new/dart-data-bs/auto/screens__store_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -33,8 +34,8 @@ class SichaSheet extends StatelessWidget {
                   leading: Container(
                     width: 40,
                     height: 40,
-                    decoration: const BoxDecoration(
-                      color: DsAtomColors.autoSichaSheet1,
+                    decoration: BoxDecoration(
+                      color: dsWear(context, DsAtomColors.autoSichaSheet1, (l) => l.track),
                       shape: BoxShape.circle,
                     ),
                     alignment: Alignment.center,
@@ -47,9 +48,9 @@ class SichaSheet extends StatelessWidget {
                       fontSize: 15,
                     ),
                   ),
-                  trailing: const Icon(
+                  trailing: Icon(
                     Icons.phone_outlined,
-                    color: DsAtomColors.autoSichaSheet2,
+                    color: dsWear(context, DsAtomColors.autoSichaSheet2, (l) => l.bg.withValues(alpha: 0.38)),
                   ),
                   onTap: onTap,
                 ),
@@ -83,7 +84,7 @@ class _SheetScaffold extends StatelessWidget {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: DsAtomColors.autoSichaSheet3,
+                color: dsWear(context, DsAtomColors.autoSichaSheet3, (l) => l.bg.withValues(alpha: 0.122)),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

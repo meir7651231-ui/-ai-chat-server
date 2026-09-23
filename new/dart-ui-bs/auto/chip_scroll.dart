@@ -1,10 +1,11 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__finder_screen:_ChipScroll (בנייה-חכמה main) · Stateful+State
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 
 class ChipScroll extends StatefulWidget {
-  const ChipScroll({required this.children});
+  ChipScroll({required this.children});
   final List<Widget> children;
   @override
   State<ChipScroll> createState() => ChipScrollState();
@@ -45,7 +46,7 @@ class ChipScrollState extends State<ChipScroll> {
           child: ListView(
             controller: _ctrl,
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(vertical: 7),
+            padding: EdgeInsets.symmetric(vertical: 7),
             children: widget.children,
           ),
         ),
@@ -56,17 +57,17 @@ class ChipScrollState extends State<ChipScroll> {
             bottom: 0,
             child: IgnorePointer(
               child: Container(
-                key: const Key('chip-scroll-more'),
+                key: Key('chip-scroll-more'),
                 width: 30,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.centerRight,
                     end: Alignment.centerLeft,
-                    colors: [DsAtomColors.autoChipScroll1, DsAtomColors.autoChipScroll2],
+                    colors: [dsWear(context, DsAtomColors.autoChipScroll1, (l) => l.onAccent.withValues(alpha: 0.0)), dsWear(context, DsAtomColors.autoChipScroll2, (l) => l.onAccent)],
                   ),
                 ),
                 alignment: Alignment.centerLeft,
-                child: const Icon(Icons.chevron_left, size: 18, color: _mute,
+                child: Icon(Icons.chevron_left, size: 18, color: _mute(context),
                     textDirection: TextDirection.ltr),
               ),
             ),
@@ -76,4 +77,5 @@ class ChipScrollState extends State<ChipScroll> {
   }
 }
 
-const _mute = DsAtomColors.autoChipScroll3;
+
+Color _mute(BuildContext context) => dsWear(context, DsAtomColors.autoChipScroll3, (l) => l.muted);   // לובש עור · _mute0 = הערך-הכהה

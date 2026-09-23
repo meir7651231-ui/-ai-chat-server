@@ -1,6 +1,7 @@
 // ✨ GlassButton — כפתור-זכוכית (BackdropFilter+blur) עם גבול-אור עדין ורקע שקוף. מקבל label · onTap · icon אופציונלי.
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class GlassButton extends StatelessWidget {
@@ -28,17 +29,17 @@ class GlassButton extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                DsAtomColors.premiumActionsGlassButton1.withValues(alpha: 0.14),
-                DsAtomColors.premiumActionsGlassButton1.withValues(alpha: 0.04),
+                dsWear(context, DsAtomColors.premiumActionsGlassButton1, (l) => l.onAccent).withValues(alpha: 0.14),
+                dsWear(context, DsAtomColors.premiumActionsGlassButton1, (l) => l.onAccent).withValues(alpha: 0.04),
               ],
             ),
             border: Border.all(
-              color: DsAtomColors.premiumActionsGlassButton1.withValues(alpha: 0.20),
+              color: dsWear(context, DsAtomColors.premiumActionsGlassButton1, (l) => l.onAccent).withValues(alpha: 0.20),
               width: 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: DsAtomColors.premiumActionsGlassButton2.withValues(alpha: 0.40),
+                color: dsWear(context, DsAtomColors.premiumActionsGlassButton2, (l) => l.bg).withValues(alpha: 0.40),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
@@ -50,8 +51,8 @@ class GlassButton extends StatelessWidget {
             child: InkWell(
               onTap: onTap,
               borderRadius: BorderRadius.circular(16),
-              splashColor: DsAtomColors.premiumActionsGlassButton1.withValues(alpha: 0.14),
-              highlightColor: DsAtomColors.premiumActionsGlassButton1.withValues(alpha: 0.05),
+              splashColor: dsWear(context, DsAtomColors.premiumActionsGlassButton1, (l) => l.onAccent).withValues(alpha: 0.14),
+              highlightColor: dsWear(context, DsAtomColors.premiumActionsGlassButton1, (l) => l.onAccent).withValues(alpha: 0.05),
               child: Padding(
                 padding: const EdgeInsetsDirectional.symmetric(
                   horizontal: 22,
@@ -64,14 +65,14 @@ class GlassButton extends StatelessWidget {
                       Icon(
                         icon,
                         size: 19,
-                        color: DsAtomColors.premiumActionsGlassButton3,
+                        color: dsWear(context, DsAtomColors.premiumActionsGlassButton3, (l) => l.chipBg),
                       ),
                       const SizedBox(width: 10),
                     ],
                     Text(
                       label,
-                      style: const TextStyle(
-                        color: DsAtomColors.premiumActionsGlassButton3,
+                      style: TextStyle(
+                        color: dsWear(context, DsAtomColors.premiumActionsGlassButton3, (l) => l.chipBg),
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.3,

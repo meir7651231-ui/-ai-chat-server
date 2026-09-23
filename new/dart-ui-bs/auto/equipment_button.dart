@@ -3,6 +3,7 @@
 // התוכן: new/dart-data-bs/auto/screens__worker_app_screen_content.dart
 // משרת-גם (זהה-מבנית): screens__worker_app_screen:_EmployerStockButton
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/help_target.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
@@ -36,7 +37,7 @@ class EquipmentButton extends StatelessWidget {
               'worker.action.checkEquipment',
               child: OutlinedButton.icon(
               style: OutlinedButton.styleFrom(
-                foregroundColor: BsTokens.brandDark,
+                foregroundColor: dsWear(context, BsTokens.brandDark, (l) => l.accentDark),
                 side: const BorderSide(color: BsTokens.brand, width: 1.5),
                 minimumSize: const Size(0, 48),
                 padding: const EdgeInsets.symmetric(

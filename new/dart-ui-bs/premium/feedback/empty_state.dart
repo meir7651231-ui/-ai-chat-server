@@ -1,5 +1,6 @@
 // ✨ EmptyState — מצב-ריק עם אייקון בעיגול-כהה זוהר; דאטה: String glyph + String message
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class EmptyState extends StatelessWidget {
@@ -20,12 +21,12 @@ class EmptyState extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              gradient: const RadialGradient(
-                colors: [DsAtomColors.premiumFeedbackEmptyState1, DsAtomColors.premiumFeedbackEmptyState2],
+              gradient: RadialGradient(
+                colors: [dsWear(context, DsAtomColors.premiumFeedbackEmptyState1, (l) => l.track), dsWear(context, DsAtomColors.premiumFeedbackEmptyState2, (l) => l.card)],
               ),
-              border: Border.all(color: DsAtomColors.premiumFeedbackEmptyState3.withValues(alpha: 0.35), width: 1),
+              border: Border.all(color: dsWear(context, DsAtomColors.premiumFeedbackEmptyState3, (l) => l.accent).withValues(alpha: 0.35), width: 1),
               boxShadow: [
-                BoxShadow(color: DsAtomColors.premiumFeedbackEmptyState3.withValues(alpha: 0.30), blurRadius: 28, spreadRadius: 1),
+                BoxShadow(color: dsWear(context, DsAtomColors.premiumFeedbackEmptyState3, (l) => l.accent).withValues(alpha: 0.30), blurRadius: 28, spreadRadius: 1),
               ],
             ),
             child: Text(glyph, style: const TextStyle(fontSize: 36)),
@@ -35,7 +36,7 @@ class EmptyState extends StatelessWidget {
             message,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: DsAtomColors.premiumFeedbackEmptyState4.withValues(alpha: 0.72),
+              color: dsWear(context, DsAtomColors.premiumFeedbackEmptyState4, (l) => l.chipBg).withValues(alpha: 0.72),
               fontSize: 14,
               height: 1.4,
               fontWeight: FontWeight.w500,

@@ -23,7 +23,7 @@ class DsToggleTile extends StatelessWidget {
             value: on,
             onChanged: onChanged == null ? null : (v) => onChanged!(v ? 'true' : 'false'),
             activeTrackColor: lk.accent,
-            thumbColor: WidgetStateProperty.all(DsAtomColors.dsDsToggleTile1),
+            thumbColor: WidgetStateProperty.all(dsWear(context, DsAtomColors.dsDsToggleTile1, (l) => l.onAccent)),
           ),
         ],
       ),

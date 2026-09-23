@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_settings_screen:_NumberRow (בנייה-חכמה main) · צרור-1 · props-שורש: tooltip, tooltip2
 // התוכן: new/dart-data-bs/auto/screens__catalog_settings_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -36,7 +37,7 @@ class NumberRow extends StatelessWidget {
         children: [
           IconButton(
             tooltip: tooltip,
-            icon: const Icon(Icons.remove, color: DsAtomColors.autoNumberRow1, size: 20),
+            icon: Icon(Icons.remove, color: dsWear(context, DsAtomColors.autoNumberRow1, (l) => l.bg.withValues(alpha: 0.541)), size: 20),
             onPressed:
                 value > min
                     ? () => onChanged((value - step).clamp(min, max))
@@ -44,11 +45,11 @@ class NumberRow extends StatelessWidget {
           ),
           Text(
             suffix.isEmpty ? '$value' : '$value $suffix',
-            style: const TextStyle(color: DsAtomColors.autoNumberRow1, fontSize: 14),
+            style: TextStyle(color: dsWear(context, DsAtomColors.autoNumberRow1, (l) => l.bg.withValues(alpha: 0.541)), fontSize: 14),
           ),
           IconButton(
             tooltip: tooltip2,
-            icon: const Icon(Icons.add, color: DsAtomColors.autoNumberRow1, size: 20),
+            icon: Icon(Icons.add, color: dsWear(context, DsAtomColors.autoNumberRow1, (l) => l.bg.withValues(alpha: 0.541)), size: 20),
             onPressed:
                 value < max
                     ? () => onChanged((value + step).clamp(min, max))

@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__product_authoring_screen:_EmptyProducts (בנייה-חכמה main) · צרור-2 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__product_authoring_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -22,7 +23,7 @@ class EmptyProducts extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
-        border: Border.all(color: DsAtomColors.autoEmptyProducts1),
+        border: Border.all(color: dsWear(context, DsAtomColors.autoEmptyProducts1, (l) => l.ink)),
       ),
       child: Column(
         children: [

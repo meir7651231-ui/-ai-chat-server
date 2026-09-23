@@ -3,12 +3,13 @@
 // גוברת. a11y: Semantics(image/label) · אין-צבע-לבד (טבעת). חוט-טהור: material+dart:math · RTL.
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 enum AvatarStatus { none, online, away, busy }
 
 class PremiumAvatar extends StatelessWidget {
-  const PremiumAvatar({
+  PremiumAvatar({
     required this.name,
     this.size = 56,
     this.status = AvatarStatus.none,
@@ -22,7 +23,7 @@ class PremiumAvatar extends StatelessWidget {
   final ImageProvider? image;
 
   // פלטת-גרדיאנטים דטרמיניסטית (נבחרת לפי-שם)
-  static const List<List<Color>> _palettes = [
+  static List<List<Color>> _palettes = [
     [DsAtomColors.premiumShowcasePremiumAvatar1, DsAtomColors.premiumShowcasePremiumAvatar2],
     [DsAtomColors.premiumShowcasePremiumAvatar3, DsAtomColors.premiumShowcasePremiumAvatar4],
     [DsAtomColors.premiumShowcasePremiumAvatar5, DsAtomColors.premiumShowcasePremiumAvatar6],
@@ -30,12 +31,18 @@ class PremiumAvatar extends StatelessWidget {
     [DsAtomColors.premiumShowcasePremiumAvatar9, DsAtomColors.premiumShowcasePremiumAvatar10],
     [DsAtomColors.premiumShowcasePremiumAvatar11, DsAtomColors.premiumShowcasePremiumAvatar12],
   ];
-  static const _online = DsAtomColors.premiumShowcasePremiumAvatar9;
-  static const _away = DsAtomColors.premiumShowcasePremiumAvatar11;
-  static const _busy = DsAtomColors.premiumShowcasePremiumAvatar13;
-  static const _ringLo = DsAtomColors.premiumShowcasePremiumAvatar2;
-  static const _ringHi = DsAtomColors.premiumShowcasePremiumAvatar5;
-  static const _ringCyan = DsAtomColors.premiumShowcasePremiumAvatar3;
+  static const _online0 = DsAtomColors.premiumShowcasePremiumAvatar9;
+  static Color _online(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumAvatar9, (l) => l.success);   // לובש עור · _online0 = הערך-הכהה
+  static const _away0 = DsAtomColors.premiumShowcasePremiumAvatar11;
+  static Color _away(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumAvatar11, (l) => l.warn);   // לובש עור · _away0 = הערך-הכהה
+  static const _busy0 = DsAtomColors.premiumShowcasePremiumAvatar13;
+  static Color _busy(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumAvatar13, (l) => l.muted);   // לובש עור · _busy0 = הערך-הכהה
+  static const _ringLo0 = DsAtomColors.premiumShowcasePremiumAvatar2;
+  static Color _ringLo(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumAvatar2, (l) => l.accent);   // לובש עור · _ringLo0 = הערך-הכהה
+  static const _ringHi0 = DsAtomColors.premiumShowcasePremiumAvatar5;
+  static Color _ringHi(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumAvatar5, (l) => l.accentDark);   // לובש עור · _ringHi0 = הערך-הכהה
+  static const _ringCyan0 = DsAtomColors.premiumShowcasePremiumAvatar3;
+  static Color _ringCyan(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumAvatar3, (l) => l.success);   // לובש עור · _ringCyan0 = הערך-הכהה
 
   String get _initials {
     final parts = name.trim().split(RegExp(r'\s+')).where((s) => s.isNotEmpty).toList();
@@ -57,11 +64,11 @@ class PremiumAvatar extends StatelessWidget {
   Color? get _statusColor {
     switch (status) {
       case AvatarStatus.online:
-        return _online;
+        return _online0;
       case AvatarStatus.away:
-        return _away;
+        return _away0;
       case AvatarStatus.busy:
-        return _busy;
+        return _busy0;
       case AvatarStatus.none:
         return null;
     }
@@ -89,7 +96,7 @@ class PremiumAvatar extends StatelessWidget {
           ? Text(
               _initials,
               style: TextStyle(
-                color: DsAtomColors.premiumShowcasePremiumAvatar14,
+                color: dsWear(context, DsAtomColors.premiumShowcasePremiumAvatar14, (l) => l.onAccent),
                 fontSize: inner * 0.36,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0.5,
@@ -121,7 +128,7 @@ class PremiumAvatar extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: sc,
                     shape: BoxShape.circle,
-                    border: Border.all(color: DsAtomColors.premiumShowcasePremiumAvatar15, width: size * 0.05),
+                    border: Border.all(color: dsWear(context, DsAtomColors.premiumShowcasePremiumAvatar15, (l) => l.bg), width: size * 0.05),
                     boxShadow: [BoxShadow(color: sc.withValues(alpha: 0.6), blurRadius: 6)],
                   ),
                 ),
@@ -139,12 +146,12 @@ class _AvatarRing extends CustomPainter {
     final rect = Offset.zero & size;
     final center = size.center(Offset.zero);
     final radius = size.width / 2 - 1;
-    final shader = const SweepGradient(
+    final shader = SweepGradient(
       colors: [
-        PremiumAvatar._ringLo,
-        PremiumAvatar._ringCyan,
-        PremiumAvatar._ringHi,
-        PremiumAvatar._ringLo,
+        PremiumAvatar._ringLo0,
+        PremiumAvatar._ringCyan0,
+        PremiumAvatar._ringHi0,
+        PremiumAvatar._ringLo0,
       ],
       stops: [0, 0.4, 0.75, 1],
       transform: GradientRotation(-math.pi / 4),

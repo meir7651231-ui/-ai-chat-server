@@ -1,5 +1,6 @@
 // ✨ SplitAction — כפתור-פיצול: פעולה ראשית (label) + אזור-חץ משני מופרד בקו-אור. גרדיאנט כהה-ניאון. מקבל label · onMain · onMore.
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class SplitAction extends StatelessWidget {
@@ -19,18 +20,18 @@ class SplitAction extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [DsAtomColors.premiumActionsSplitAction1, DsAtomColors.premiumActionsSplitAction2],
+          colors: [dsWear(context, DsAtomColors.premiumActionsSplitAction1, (l) => l.cardAlt), dsWear(context, DsAtomColors.premiumActionsSplitAction2, (l) => l.bg)],
         ),
         border: Border.all(
-          color: DsAtomColors.premiumActionsSplitAction3.withValues(alpha: 0.40),
+          color: dsWear(context, DsAtomColors.premiumActionsSplitAction3, (l) => l.accent).withValues(alpha: 0.40),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: DsAtomColors.premiumActionsSplitAction3.withValues(alpha: 0.24),
+            color: dsWear(context, DsAtomColors.premiumActionsSplitAction3, (l) => l.accent).withValues(alpha: 0.24),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -45,8 +46,8 @@ class SplitAction extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 onTap: onMain,
-                splashColor: DsAtomColors.premiumActionsSplitAction3.withValues(alpha: 0.22),
-                highlightColor: DsAtomColors.premiumActionsSplitAction4.withValues(alpha: 0.08),
+                splashColor: dsWear(context, DsAtomColors.premiumActionsSplitAction3, (l) => l.accent).withValues(alpha: 0.22),
+                highlightColor: dsWear(context, DsAtomColors.premiumActionsSplitAction4, (l) => l.muted).withValues(alpha: 0.08),
                 child: Padding(
                   padding: const EdgeInsetsDirectional.symmetric(
                     horizontal: 20,
@@ -54,8 +55,8 @@ class SplitAction extends StatelessWidget {
                   ),
                   child: Text(
                     label,
-                    style: const TextStyle(
-                      color: DsAtomColors.premiumActionsSplitAction5,
+                    style: TextStyle(
+                      color: dsWear(context, DsAtomColors.premiumActionsSplitAction5, (l) => l.chipBg),
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.3,
@@ -73,7 +74,7 @@ class SplitAction extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    DsAtomColors.premiumActionsSplitAction4.withValues(alpha: 0.55),
+                    dsWear(context, DsAtomColors.premiumActionsSplitAction4, (l) => l.muted).withValues(alpha: 0.55),
                     Colors.transparent,
                   ],
                 ),
@@ -83,9 +84,9 @@ class SplitAction extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 onTap: onMore,
-                splashColor: DsAtomColors.premiumActionsSplitAction4.withValues(alpha: 0.22),
-                highlightColor: DsAtomColors.premiumActionsSplitAction6.withValues(alpha: 0.08),
-                child: const Padding(
+                splashColor: dsWear(context, DsAtomColors.premiumActionsSplitAction4, (l) => l.muted).withValues(alpha: 0.22),
+                highlightColor: dsWear(context, DsAtomColors.premiumActionsSplitAction6, (l) => l.success).withValues(alpha: 0.08),
+                child: Padding(
                   padding: EdgeInsetsDirectional.symmetric(
                     horizontal: 12,
                     vertical: 13,
@@ -93,7 +94,7 @@ class SplitAction extends StatelessWidget {
                   child: Icon(
                     Icons.keyboard_arrow_down_rounded,
                     size: 22,
-                    color: DsAtomColors.premiumActionsSplitAction4,
+                    color: dsWear(context, DsAtomColors.premiumActionsSplitAction4, (l) => l.muted),
                   ),
                 ),
               ),

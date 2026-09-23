@@ -29,6 +29,6 @@ export function skinWired(file) {
   if (CACHE.has(f)) return CACHE.get(f);
   const p = path.join(R.ROOT, 'new', f);
   const src = fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : '';
-  const ok = !HARD_COLOR.test(src);
+  const ok = !HARD_COLOR.test(src.replace(/dsWear\(context, (?:DsAtomColors|BsTokens)\.\w+/g, 'dsWear('));   // DsAtomColors בתוך dsWear = הערך-הכהה של תפקיד-עור (לובש) — לא קשיח
   CACHE.set(file, ok); return ok;
 }

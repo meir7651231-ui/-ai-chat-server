@@ -125,4 +125,6 @@ class DsIdentity {
   static const graphMid = Color(0xFF6366F1);
   static const graphHalo = Color(0xFFFFFFFF);
   static const surfaceHi = Color(0xFFFFFFFF);
+  static const onAccent = Color(0xFFFFFFFF);
+  static const propFallback = Color(0xFF9E9E9E);
 }

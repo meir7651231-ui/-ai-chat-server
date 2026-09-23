@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__trade_builder__attribute_schema_editor:_MatchChip (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -14,13 +15,13 @@ class MatchChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: _kMatchColor.withValues(alpha: 0.12),
+        color: _kMatchColor(context).withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
       ),
       child: Text(
         text,
-        style: const TextStyle(
-          color: _kMatchColor,
+        style: TextStyle(
+          color: _kMatchColor(context),
           fontSize: 12,
           fontWeight: FontWeight.w800,
         ),
@@ -29,4 +30,5 @@ class MatchChip extends StatelessWidget {
   }
 }
 
-const Color _kMatchColor = DsAtomColors.autoMatchChip1;
+
+Color _kMatchColor(BuildContext context) => dsWear(context, DsAtomColors.autoMatchChip1, (l) => l.faint);   // לובש עור · _kMatchColor0 = הערך-הכהה

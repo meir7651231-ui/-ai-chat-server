@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__trade_builder_home:_WizardHeader (בנייה-חכמה main) · צרור-3 · props-שורש: label, label2, fallback, fallback2
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__trade_builder_home_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -23,7 +24,7 @@ class WizardHeader extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(cfgRadius(context)),
-          border: Border.all(color: DsAtomColors.autoWizardHeader1),
+          border: Border.all(color: dsWear(context, DsAtomColors.autoWizardHeader1, (l) => l.ink)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,8 +58,8 @@ class WizardHeader extends StatelessWidget {
                       height: 5,
                       decoration: BoxDecoration(
                         color: i < _kWizardStep
-                            ? BsTokens.brand
-                            : DsAtomColors.autoWizardHeader1,
+                            ? dsWear(context, BsTokens.brand, (l) => l.accent)
+                            : dsWear(context, DsAtomColors.autoWizardHeader1, (l) => l.ink),
                         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
                       ),
                     ),

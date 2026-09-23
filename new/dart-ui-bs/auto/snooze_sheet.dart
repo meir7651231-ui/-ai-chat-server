@@ -2,6 +2,7 @@
 // מוצא: screens__notif_settings_screen:_SnoozeSheet (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2, label3, label4, fallback, onTap
 // התוכן: new/dart-data-bs/auto/screens__notif_settings_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -35,7 +36,7 @@ class SnoozeSheet extends StatelessWidget {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: DsAtomColors.autoSnoozeSheet1,
+                color: dsWear(context, DsAtomColors.autoSnoozeSheet1, (l) => l.bg.withValues(alpha: 0.122)),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -54,16 +55,16 @@ class SnoozeSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          const Divider(color: DsAtomColors.autoSnoozeSheet2, height: 1),
+          Divider(color: dsWear(context, DsAtomColors.autoSnoozeSheet2, (l) => l.chipBg), height: 1),
           ..._options.map(
             (o) => ListTile(
               title: Text(
                 o.label,
                 style: const TextStyle(color: BsTokens.inkLight, fontSize: 15),
               ),
-              trailing: const Icon(
+              trailing: Icon(
                 Icons.chevron_left,
-                color: DsAtomColors.autoSnoozeSheet3,
+                color: dsWear(context, DsAtomColors.autoSnoozeSheet3, (l) => l.muted),
               ),
               onTap: onTap,
             ),

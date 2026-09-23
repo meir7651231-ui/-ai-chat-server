@@ -1,10 +1,11 @@
 // 🧼 אטום · BadgedIcon — אייקון עם תג-עיגול-ספירה בפינה (minWidth/minHeight 15).
 // מוצא: _BadgedIcon (screens__home_shell.dart:963-1002) — היה כבר טהור-IO ונקי-דאטה.
 // התרת-סבך יחידה: התקרה count>9 ⇒ ׳9+׳ עברה לקופסה — האטום מקבל badgeLabel מוכן
-// (null ⇒ אייקון חשוף, כמו count==0 במקור). היו צרובים: BsTokens.brand ·
+// (null ⇒ אייקון חשוף, כמו count==0 במקור). היו צרובים: dsWear(context, BsTokens.brand, (l) => l.accent) ·
 // Colors.white ⇒ badgeFillColor/badgeTextColor.
 // שונה מ-CartFabButton (תג-מלבני-ממוסגר על FAB) — כאן עיגול-מלא על אייקון חשוף.
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 
 class BadgedIcon extends StatelessWidget {
   const BadgedIcon({

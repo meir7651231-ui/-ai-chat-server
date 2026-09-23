@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__worker_settings_screen:_SectionCard (בנייה-חכמה main) · Stateful+State
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -54,7 +55,7 @@ class WorkerSettingsSectionCardState extends State<WorkerSettingsSectionCard> {
             trailing: AnimatedRotation(
               turns: _expanded ? 0.25 : 0.0,
               duration: const Duration(milliseconds: 200),
-              child: const Icon(Icons.chevron_left, color: DsAtomColors.autoWorkerSettingsSectionCard1),
+              child: Icon(Icons.chevron_left, color: dsWear(context, DsAtomColors.autoWorkerSettingsSectionCard1, (l) => l.bg.withValues(alpha: 0.541))),
             ),
             onTap: _toggle,
           ),

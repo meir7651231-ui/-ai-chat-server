@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__trade_builder__trade_publish_sheet:_CheckRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class CheckRow extends StatelessWidget {
@@ -16,7 +17,7 @@ class CheckRow extends StatelessWidget {
         Text(
           pass ? '✓' : '✗',
           style: TextStyle(
-            color: pass ? BsTokens.successDark : BsTokens.dangerDark,
+            color: pass ? BsTokens.successDark : dsWear(context, BsTokens.dangerDark, (l) => l.danger),
             fontSize: 15,
             fontWeight: FontWeight.w800,
           ),

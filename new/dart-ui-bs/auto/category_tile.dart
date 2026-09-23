@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__category_tree_editor:_CategoryTile (בנייה-חכמה main) · צרור-1 · מודל-שוטח: 2 שדות · props-שורש: label, tooltip, emoji, titleHe
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__category_tree_editor_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
@@ -33,7 +34,7 @@ class CategoryTile extends StatelessWidget {
             padding: const EdgeInsets.all(BsTokens.space4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(cfgRadius(context)),
-              border: Border.all(color: DsAtomColors.autoCategoryTile1)),
+              border: Border.all(color: dsWear(context, DsAtomColors.autoCategoryTile1, (l) => l.ink))),
             child: Row(
               children: [
                 Container(
@@ -41,7 +42,7 @@ class CategoryTile extends StatelessWidget {
                   height: 40,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: BsTokens.brand.withValues(alpha: 0.12),
+                    color: dsWear(context, BsTokens.brand, (l) => l.accent).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(

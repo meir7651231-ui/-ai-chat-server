@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__camera_sheet:_ModeFrame (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 
 class ModeFrame extends StatelessWidget {
@@ -16,7 +17,7 @@ class ModeFrame extends StatelessWidget {
         Container(
           width: 260, height: 200,
           decoration: BoxDecoration(
-            border: Border.all(color: DsAtomColors.autoModeFrame1, width: 1.5),
+            border: Border.all(color: dsWear(context, DsAtomColors.autoModeFrame1, (l) => l.bg.withValues(alpha: 0.38)), width: 1.5),
             borderRadius: BorderRadius.circular(12),
           ),
           alignment: Alignment.center,
@@ -26,11 +27,11 @@ class ModeFrame extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           decoration: BoxDecoration(
-            color: DsAtomColors.autoModeFrame2,
+            color: dsWear(context, DsAtomColors.autoModeFrame2, (l) => l.bg.withValues(alpha: 0.541)),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(hint,
-              style: const TextStyle(color: DsAtomColors.autoModeFrame3, fontSize: 13)),
+              style: TextStyle(color: dsWear(context, DsAtomColors.autoModeFrame3, (l) => l.onAccent), fontSize: 13)),
         ),
       ],
     );

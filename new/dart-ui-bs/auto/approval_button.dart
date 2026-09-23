@@ -1,11 +1,12 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__manager_dashboard_screen:_ApprovalButton (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
 class ApprovalButton extends StatelessWidget {
-  const ApprovalButton({
+  ApprovalButton({
     required this.label,
     required this.color,
     required this.onPressed,
@@ -34,7 +35,7 @@ class ApprovalButton extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(BsTokens.radiusPill),
             border:
-                bordered ? Border.all(color: DsAtomColors.autoApprovalButton2) : null,
+                bordered ? Border.all(color: dsWear(context, DsAtomColors.autoApprovalButton2, (l) => l.ink)) : null,
           ),
           child: Text(
             label,

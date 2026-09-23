@@ -2,6 +2,7 @@
 // מוצא: screens__manager_dashboard_screen:_ManageSection (בנייה-חכמה main) · צרור-2 · props-שורש: title2, body, label
 // התוכן: new/dart-data-bs/auto/screens__manager_dashboard_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/help_target.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
@@ -47,7 +48,7 @@ class ManageSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
-        border: Border.all(color: DsAtomColors.autoManageSection1),
+        border: Border.all(color: dsWear(context, DsAtomColors.autoManageSection1, (l) => l.ink)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -156,7 +157,7 @@ class _CountBadge extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         constraints: const BoxConstraints(minWidth: 22),
         decoration: BoxDecoration(
-          color: BsTokens.brand,
+          color: dsWear(context, BsTokens.brand, (l) => l.accent),
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         ),
         child: Text(

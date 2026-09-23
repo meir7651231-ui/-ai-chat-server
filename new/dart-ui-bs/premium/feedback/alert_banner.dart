@@ -1,14 +1,15 @@
 // ✨ AlertBanner — באנר-התראה זכוכית עם glyph + פס-tone; דאטה: String message, int tone, String? glyph
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class AlertBanner extends StatelessWidget {
   final String message;
   final int tone;
   final String? glyph;
-  const AlertBanner({super.key, required this.message, this.tone = 0, this.glyph});
+  AlertBanner({super.key, required this.message, this.tone = 0, this.glyph});
 
-  static const List<Color> _tones = [
+  static List<Color> _tones = [
     DsAtomColors.premiumFeedbackAlertBanner1, // 0 accent
     DsAtomColors.premiumFeedbackAlertBanner2, // 1 success
     DsAtomColors.premiumFeedbackAlertBanner3, // 2 danger
@@ -54,8 +55,8 @@ class AlertBanner extends StatelessWidget {
             Expanded(
               child: Text(
                 message,
-                style: const TextStyle(
-                  color: DsAtomColors.premiumFeedbackAlertBanner5,
+                style: TextStyle(
+                  color: dsWear(context, DsAtomColors.premiumFeedbackAlertBanner5, (l) => l.chipBg),
                   fontSize: 13.5,
                   height: 1.35,
                   fontWeight: FontWeight.w600,

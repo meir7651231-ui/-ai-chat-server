@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__store_screen:_QuickAction (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -35,19 +36,19 @@ class QuickAction extends StatelessWidget {
                   color: Theme.of(context).colorScheme.surfaceContainerHighest,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(icon, color: DsAtomColors.autoQuickAction1, size: 28),
+                child: Icon(icon, color: dsWear(context, DsAtomColors.autoQuickAction1, (l) => l.bg.withValues(alpha: 0.541)), size: 28),
               ),
               if (badge > 0)
                 Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: DsAtomColors.autoQuickAction2,
+                    color: dsWear(context, DsAtomColors.autoQuickAction2, (l) => l.danger),
                     shape: BoxShape.circle,
                   ),
                   child: Text(
                     badge.toString(),
-                    style: const TextStyle(
-                      color: DsAtomColors.autoQuickAction3,
+                    style: TextStyle(
+                      color: dsWear(context, DsAtomColors.autoQuickAction3, (l) => l.onAccent),
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                     ),

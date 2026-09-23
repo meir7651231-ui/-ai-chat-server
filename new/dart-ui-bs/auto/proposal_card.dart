@@ -2,6 +2,7 @@
 // מוצא: screens__tasks_screen:_ProposalCard (בנייה-חכמה main) · צרור-2 · props-שורש: label, fallback, label2
 // התוכן: new/dart-data-bs/auto/screens__tasks_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
@@ -38,7 +39,7 @@ class ProposalCard extends StatelessWidget {
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(cfgRadius(context)),
           elevation: 1,
-          shadowColor: DsAtomColors.autoProposalCard1,
+          shadowColor: dsWear(context, DsAtomColors.autoProposalCard1, (l) => l.bg.withValues(alpha: 0.259)),
           child: Padding(
             padding: const EdgeInsets.all(BsTokens.space4),
             child: Column(
@@ -94,7 +95,7 @@ class _PrimaryBtn extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) => Material(
-        color: BsTokens.brand,
+        color: dsWear(context, BsTokens.brand, (l) => l.accent),
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         child: InkWell(
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),

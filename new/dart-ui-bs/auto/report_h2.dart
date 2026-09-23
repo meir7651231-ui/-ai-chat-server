@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__finance_hub_sheets:_ReportH2 (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class ReportH2 extends StatelessWidget {

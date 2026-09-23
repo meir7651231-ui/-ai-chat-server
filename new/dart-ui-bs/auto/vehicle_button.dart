@@ -2,6 +2,7 @@
 // מוצא: screens__courier_dashboard_screen:_VehicleButton (בנייה-חכמה main) · צרור-1 · מודל-שוטח: 2 שדות · props-שורש: fallback, ic, name
 // התוכן: new/dart-data-bs/auto/screens__courier_dashboard_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
@@ -25,7 +26,7 @@ class VehicleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: on ? BsTokens.brand : Theme.of(context).colorScheme.surface,
+      color: on ? dsWear(context, BsTokens.brand, (l) => l.accent) : Theme.of(context).colorScheme.surface,
       borderRadius: BorderRadius.circular(BsTokens.radiusPill),
       child: InkWell(
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
@@ -51,7 +52,7 @@ class VehicleButton extends StatelessWidget {
                   'courier.vehicle.preferred',
                   fallback,
                   style: TextStyle(
-                    color: on ? bsOnAccent(context) : BsTokens.brandDark,
+                    color: on ? bsOnAccent(context) : dsWear(context, BsTokens.brandDark, (l) => l.accentDark),
                     fontWeight: FontWeight.w700,
                     fontSize: 10.5,
                   ),

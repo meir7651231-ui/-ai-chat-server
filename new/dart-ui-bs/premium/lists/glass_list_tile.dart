@@ -1,6 +1,7 @@
 // ✨ GlassListTile — שורת-זכוכית: BackdropFilter מטושטש + כותרת/תת + trailing
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class GlassListTile extends StatelessWidget {
@@ -15,9 +16,13 @@ class GlassListTile extends StatelessWidget {
     this.trailing,
   });
 
-  static const Color _accent = DsAtomColors.premiumListsGlassListTile1;
-  static const Color _text = DsAtomColors.premiumListsGlassListTile2;
-  static const Color _muted = DsAtomColors.premiumListsGlassListTile3;
+  static const _accent0 = DsAtomColors.premiumListsGlassListTile1;
+
+  static Color _accent(BuildContext context) => dsWear(context, DsAtomColors.premiumListsGlassListTile1, (l) => l.accent);   // לובש עור · _accent0 = הערך-הכהה
+  static const _text0 = DsAtomColors.premiumListsGlassListTile2;
+  static Color _text(BuildContext context) => dsWear(context, DsAtomColors.premiumListsGlassListTile2, (l) => l.chipBg);   // לובש עור · _text0 = הערך-הכהה
+  static const _muted0 = DsAtomColors.premiumListsGlassListTile3;
+  static Color _muted(BuildContext context) => dsWear(context, DsAtomColors.premiumListsGlassListTile3, (l) => l.muted);   // לובש עור · _muted0 = הערך-הכהה
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +45,12 @@ class GlassListTile extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      DsAtomColors.premiumListsGlassListTile4.withValues(alpha: 0.10),
-                      DsAtomColors.premiumListsGlassListTile4.withValues(alpha: 0.03),
+                      dsWear(context, DsAtomColors.premiumListsGlassListTile4, (l) => l.onAccent).withValues(alpha: 0.10),
+                      dsWear(context, DsAtomColors.premiumListsGlassListTile4, (l) => l.onAccent).withValues(alpha: 0.03),
                     ],
                   ),
                   border: Border.all(
-                    color: DsAtomColors.premiumListsGlassListTile4.withValues(alpha: 0.14),
+                    color: dsWear(context, DsAtomColors.premiumListsGlassListTile4, (l) => l.onAccent).withValues(alpha: 0.14),
                   ),
                 ),
                 child: Row(
@@ -55,14 +60,14 @@ class GlassListTile extends StatelessWidget {
                       height: 40,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
-                        gradient: const LinearGradient(
+                        gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [_accent, DsAtomColors.premiumListsGlassListTile5],
+                          colors: [_accent(context), dsWear(context, DsAtomColors.premiumListsGlassListTile5, (l) => l.muted)],
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: _accent.withValues(alpha: 0.5),
+                            color: _accent(context).withValues(alpha: 0.5),
                             blurRadius: 12,
                             spreadRadius: -2,
                           ),
@@ -79,8 +84,8 @@ class GlassListTile extends StatelessWidget {
                             title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: _text,
+                            style: TextStyle(
+                              color: _text(context),
                               fontSize: 15.5,
                               fontWeight: FontWeight.w700,
                             ),
@@ -90,8 +95,8 @@ class GlassListTile extends StatelessWidget {
                             subtitle,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: _muted,
+                            style: TextStyle(
+                              color: _muted(context),
                               fontSize: 12.5,
                               height: 1.2,
                             ),
@@ -103,8 +108,8 @@ class GlassListTile extends StatelessWidget {
                       const SizedBox(width: 10),
                       Text(
                         trailing!,
-                        style: const TextStyle(
-                          color: DsAtomColors.premiumListsGlassListTile6,
+                        style: TextStyle(
+                          color: dsWear(context, DsAtomColors.premiumListsGlassListTile6, (l) => l.accentDark),
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                         ),

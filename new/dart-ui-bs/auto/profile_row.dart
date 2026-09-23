@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_settings_screen:_ProfileRow (בנייה-חכמה main) · צרור-1 · props-שורש: fallback, onTap
 // התוכן: new/dart-data-bs/auto/screens__catalog_settings_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -30,7 +31,7 @@ class ProfileRow extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        trailing: const Icon(Icons.chevron_left, color: DsAtomColors.autoProfileRow1),
+        trailing: Icon(Icons.chevron_left, color: dsWear(context, DsAtomColors.autoProfileRow1, (l) => l.bg.withValues(alpha: 0.541))),
         onTap: onTap,
       ),
     );

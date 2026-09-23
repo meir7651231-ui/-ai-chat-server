@@ -2,6 +2,7 @@
 // מוצא: screens__worker_employer_stock_sheet:_StockRow (בנייה-חכמה main) · צרור-1 · מודל-שוטח: 2 שדות · props-שורש: label, label2, location, name
 // התוכן: new/dart-data-bs/auto/screens__worker_employer_stock_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -24,7 +25,7 @@ class WorkerEmployerStockSheetStockRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-        border: Border.all(color: DsAtomColors.autoWorkerEmployerStockSheetStockRow1),
+        border: Border.all(color: dsWear(context, DsAtomColors.autoWorkerEmployerStockSheetStockRow1, (l) => l.ink)),
       ),
       child: Row(
         children: [
@@ -44,14 +45,14 @@ class WorkerEmployerStockSheetStockRow extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
               color: warehouse
-                  ? DsAtomColors.autoWorkerEmployerStockSheetStockRow2
-                  : DsAtomColors.autoWorkerEmployerStockSheetStockRow3,
+                  ? dsWear(context, DsAtomColors.autoWorkerEmployerStockSheetStockRow2, (l) => l.chipBg)
+                  : dsWear(context, DsAtomColors.autoWorkerEmployerStockSheetStockRow3, (l) => l.ink),
               borderRadius: BorderRadius.circular(BsTokens.radiusPill),
             ),
             child: Text(
               warehouse ? label : label2,
               style: TextStyle(
-                color: warehouse ? BsTokens.mutedLight : BsTokens.brandDark,
+                color: warehouse ? BsTokens.mutedLight : dsWear(context, BsTokens.brandDark, (l) => l.accentDark),
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
               ),

@@ -1,12 +1,13 @@
 // ✨ SkeletonBlock — טוען-שלד עם shimmer נע; דאטה: double width, height (מידות בלבד)
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class SkeletonBlock extends StatefulWidget {
   final double width;
   final double height;
   final double radius;
-  const SkeletonBlock({
+  SkeletonBlock({
     super.key,
     this.width = double.infinity,
     this.height = 16,
@@ -26,7 +27,7 @@ class _SkeletonBlockState extends State<SkeletonBlock>
     super.initState();
     _c = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1400),
+      duration: Duration(milliseconds: 1400),
     )..repeat();
   }
 
@@ -51,10 +52,10 @@ class _SkeletonBlockState extends State<SkeletonBlock>
               gradient: LinearGradient(
                 begin: Alignment(-1 + t * 2 - 0.6, 0),
                 end: Alignment(-1 + t * 2 + 0.6, 0),
-                colors: const [
-                  DsAtomColors.premiumFeedbackSkeletonBlock1,
-                  DsAtomColors.premiumFeedbackSkeletonBlock2,
-                  DsAtomColors.premiumFeedbackSkeletonBlock1,
+                colors: [
+                  dsWear(context, DsAtomColors.premiumFeedbackSkeletonBlock1, (l) => l.track),
+                  dsWear(context, DsAtomColors.premiumFeedbackSkeletonBlock2, (l) => l.track),
+                  dsWear(context, DsAtomColors.premiumFeedbackSkeletonBlock1, (l) => l.track),
                 ],
                 stops: const [0.25, 0.5, 0.75],
               ),

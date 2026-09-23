@@ -1,5 +1,6 @@
 // ✨ StatRow — שורת-סטטיסטיקה: תווית + פס-התקדמות-ניאון (fraction 0..1) + ערך
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class StatRow extends StatelessWidget {
@@ -14,10 +15,15 @@ class StatRow extends StatelessWidget {
     required this.fraction,
   });
 
-  static const Color _card = DsAtomColors.premiumListsStatRow1;
-  static const Color _accent = DsAtomColors.premiumListsStatRow2;
-  static const Color _text = DsAtomColors.premiumListsStatRow3;
-  static const Color _muted = DsAtomColors.premiumListsStatRow4;
+  static const _card0 = DsAtomColors.premiumListsStatRow1;
+
+  static Color _card(BuildContext context) => dsWear(context, DsAtomColors.premiumListsStatRow1, (l) => l.card);   // לובש עור · _card0 = הערך-הכהה
+  static const _accent0 = DsAtomColors.premiumListsStatRow2;
+  static Color _accent(BuildContext context) => dsWear(context, DsAtomColors.premiumListsStatRow2, (l) => l.accent);   // לובש עור · _accent0 = הערך-הכהה
+  static const _text0 = DsAtomColors.premiumListsStatRow3;
+  static Color _text(BuildContext context) => dsWear(context, DsAtomColors.premiumListsStatRow3, (l) => l.chipBg);   // לובש עור · _text0 = הערך-הכהה
+  static const _muted0 = DsAtomColors.premiumListsStatRow4;
+  static Color _muted(BuildContext context) => dsWear(context, DsAtomColors.premiumListsStatRow4, (l) => l.muted);   // לובש עור · _muted0 = הערך-הכהה
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +33,9 @@ class StatRow extends StatelessWidget {
       child: Container(
         padding: const EdgeInsetsDirectional.fromSTEB(14, 12, 14, 12),
         decoration: BoxDecoration(
-          color: _card,
+          color: _card(context),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: DsAtomColors.premiumListsStatRow5.withValues(alpha: 0.06)),
+          border: Border.all(color: dsWear(context, DsAtomColors.premiumListsStatRow5, (l) => l.onAccent).withValues(alpha: 0.06)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,8 +48,8 @@ class StatRow extends StatelessWidget {
                     label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: _muted,
+                    style: TextStyle(
+                      color: _muted(context),
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
@@ -52,8 +58,8 @@ class StatRow extends StatelessWidget {
                 const SizedBox(width: 10),
                 Text(
                   value,
-                  style: const TextStyle(
-                    color: _text,
+                  style: TextStyle(
+                    color: _text(context),
                     fontSize: 14.5,
                     fontWeight: FontWeight.w800,
                   ),
@@ -68,7 +74,7 @@ class StatRow extends StatelessWidget {
                     Container(
                       height: 8,
                       decoration: BoxDecoration(
-                        color: DsAtomColors.premiumListsStatRow5.withValues(alpha: 0.06),
+                        color: dsWear(context, DsAtomColors.premiumListsStatRow5, (l) => l.onAccent).withValues(alpha: 0.06),
                         borderRadius: BorderRadius.circular(6),
                       ),
                     ),
@@ -77,12 +83,12 @@ class StatRow extends StatelessWidget {
                       width: constraints.maxWidth * f,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
-                        gradient: const LinearGradient(
-                          colors: [_accent, DsAtomColors.premiumListsStatRow6],
+                        gradient: LinearGradient(
+                          colors: [_accent(context), dsWear(context, DsAtomColors.premiumListsStatRow6, (l) => l.muted)],
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: _accent.withValues(alpha: 0.55),
+                            color: _accent(context).withValues(alpha: 0.55),
                             blurRadius: 10,
                             spreadRadius: -1,
                           ),

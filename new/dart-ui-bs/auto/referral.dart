@@ -2,6 +2,7 @@
 // מוצא: screens__rewards_hub_screen:_Referral (בנייה-חכמה main) · צרור-5 · props-שורש: title, sub, fallback, text, label, label2, label3, value, label4, onTap
 // התוכן: new/dart-data-bs/auto/screens__rewards_hub_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -38,7 +39,7 @@ class Referral extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(cfgRadius(context)),
-            border: Border.all(color: DsAtomColors.autoReferral1),
+            border: Border.all(color: dsWear(context, DsAtomColors.autoReferral1, (l) => l.ink)),
           ),
           child: Column(
             children: [
@@ -141,7 +142,7 @@ class _FinRow extends StatelessWidget {
               style: const TextStyle(color: BsTokens.inkLight, fontSize: 14)),
           Text(value,
               style: TextStyle(
-                color: up ? DsAtomColors.autoReferral2 : BsTokens.inkLight,
+                color: up ? dsWear(context, DsAtomColors.autoReferral2, (l) => l.faint) : BsTokens.inkLight,
                 fontWeight: FontWeight.w800,
                 fontSize: 14,
               )),
@@ -164,7 +165,7 @@ class _Primary extends StatelessWidget {
       child: FilledButton(
         onPressed: onTap,
         style: FilledButton.styleFrom(
-          backgroundColor: BsTokens.brand,
+          backgroundColor: dsWear(context, BsTokens.brand, (l) => l.accent),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(BsTokens.radiusPill),
           ),

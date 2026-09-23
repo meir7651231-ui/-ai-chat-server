@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__profile_screen:_LinkRow (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
@@ -29,7 +30,7 @@ class LinkRow extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(cfgRadius(context)),
-            border: Border.all(color: DsAtomColors.autoLinkRow1),
+            border: Border.all(color: dsWear(context, DsAtomColors.autoLinkRow1, (l) => l.ink)),
           ),
           child: Semantics(
             button: true,

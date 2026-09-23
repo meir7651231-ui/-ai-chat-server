@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__rewards_hub_screen:_LbRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
@@ -27,10 +28,10 @@ class LbRow extends StatelessWidget {
         vertical: BsTokens.space3,
       ),
       decoration: BoxDecoration(
-        color: me ? DsAtomColors.autoLbRow1 : Theme.of(context).colorScheme.surface,
+        color: me ? dsWear(context, DsAtomColors.autoLbRow1, (l) => l.ink) : Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
         border: Border.all(
-          color: me ? DsAtomColors.autoLbRow2 : DsAtomColors.autoLbRow3,
+          color: me ? dsWear(context, DsAtomColors.autoLbRow2, (l) => l.warn) : dsWear(context, DsAtomColors.autoLbRow3, (l) => l.ink),
         ),
       ),
       child: Row(

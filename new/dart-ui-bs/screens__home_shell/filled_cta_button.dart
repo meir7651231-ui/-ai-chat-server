@@ -2,12 +2,13 @@
 // רדיוס-כרטיס). מוצא: גוף _ProfileCard, כפתור-העריכה (screens__home_shell.dart:
 // 1677-1707).
 // התרת-סבך: CfgVisible/CfgText home.profilecard.editCta ⇒ עטיפת-הקופסה + labelSlot;
-// pop+push של מסך-העריכה ⇒ onPressed. היו צרובים: BsTokens.brand · bsOnAccent ·
+// pop+push של מסך-העריכה ⇒ onPressed. היו צרובים: dsWear(context, BsTokens.brand, (l) => l.accent) · bsOnAccent ·
 // BsTokens.radiusCard · BsTokens.space3 ⇒ params.
 // שונה מ-PillButton שבמדף (Material+InkWell, גלולה, 14/w800, padding קבוע 16/12,
 // מצב-מנוטרל) — כאן FilledButton-של-הערכה, רוחב-מלא, רדיוס-כרטיס מוזרק, בלי
 // מצב-מנוטרל; עוגנים שונים בגוף ⇒ אטום נפרד, לא כפילות-מדף.
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 
 class FilledCtaButton extends StatelessWidget {
   const FilledCtaButton({

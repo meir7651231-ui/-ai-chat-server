@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__product_authoring_screen:_ProductTile (בנייה-חכמה main) · צרור-2 · מודל-שוטח: 2 שדות · props-שורש: label, tooltip, nameHe, id
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__product_authoring_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
@@ -27,7 +28,7 @@ class ProductTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(cfgRadius(context)),
-          border: Border.all(color: DsAtomColors.autoProductTile1)),
+          border: Border.all(color: dsWear(context, DsAtomColors.autoProductTile1, (l) => l.ink))),
         child: Row(
           children: [
             Container(
@@ -35,7 +36,7 @@ class ProductTile extends StatelessWidget {
               height: 40,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: BsTokens.brand.withValues(alpha: 0.12),
+                color: dsWear(context, BsTokens.brand, (l) => l.accent).withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Text(

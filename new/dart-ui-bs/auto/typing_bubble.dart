@@ -2,6 +2,7 @@
 // מוצא: screens__chats_screen:_TypingBubble (בנייה-חכמה main) · צרור-1 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__chats_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'package:buildsmart/screens/chats_screen.dart';
@@ -25,9 +26,9 @@ class TypingBubble extends StatelessWidget {
             bottomStart: Radius.circular(16),
             bottomEnd: Radius.circular(4),
           ),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: DsAtomColors.autoTypingBubble1,
+              color: dsWear(context, DsAtomColors.autoTypingBubble1, (l) => l.bg.withValues(alpha: 0.094)),
               blurRadius: 2,
               offset: Offset(0, 1),
             ),
@@ -37,7 +38,7 @@ class TypingBubble extends StatelessWidget {
           'chats_screen.typing',
           fallback,
           style: TextStyle(
-            color: DsAtomColors.autoTypingBubble2,
+            color: dsWear(context, DsAtomColors.autoTypingBubble2, (l) => l.muted),
             fontSize: 13,
             fontStyle: FontStyle.italic,
           ),

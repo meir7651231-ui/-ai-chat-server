@@ -3,6 +3,7 @@
 // התוכן: new/dart-data-bs/auto/screens__chat_settings_screen_content.dart
 // משרת-גם (זהה-מבנית): screens__store_settings_screen:_SwitchRow
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 
@@ -34,7 +35,7 @@ class ChatSettingsSwitchRow extends StatelessWidget implements _Inert {
             )
           : null,
       value: value,
-      activeColor: BsTokens.brand,
+      activeColor: dsWear(context, BsTokens.brand, (l) => l.accent),
       onChanged: onChanged,
     );
   }

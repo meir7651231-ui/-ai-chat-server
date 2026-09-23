@@ -2,6 +2,7 @@
 // מוצא: screens__courier_reports_tab:_RStat (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__manager_profile_screen:_PStat
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -19,9 +20,9 @@ class RStat extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: DsAtomColors.autoRstat1,
+              color: dsWear(context, DsAtomColors.autoRstat1, (l) => l.bg.withValues(alpha: 0.059)),
               blurRadius: 8,
               offset: Offset(0, 2),
             ),

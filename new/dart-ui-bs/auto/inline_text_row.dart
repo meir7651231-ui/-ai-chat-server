@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__chat_settings_screen:_InlineTextRow (בנייה-חכמה main) · Stateful+State
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -49,19 +50,19 @@ class InlineTextRowState extends State<InlineTextRow> {
         children: [
           Text(
             widget.label,
-            style: const TextStyle(color: DsAtomColors.autoInlineTextRow1, fontSize: 13),
+            style: TextStyle(color: dsWear(context, DsAtomColors.autoInlineTextRow1, (l) => l.bg.withValues(alpha: 0.541)), fontSize: 13),
           ),
           const SizedBox(height: 6),
           TextField(
             controller: _ctrl,
             style: const TextStyle(color: BsTokens.inkLight),
-            cursorColor: BsTokens.brand,
+            cursorColor: dsWear(context, BsTokens.brand, (l) => l.accent),
             maxLines: 2,
             decoration: InputDecoration(
               hintText: widget.hint,
-              hintStyle: const TextStyle(color: DsAtomColors.autoInlineTextRow2),
+              hintStyle: TextStyle(color: dsWear(context, DsAtomColors.autoInlineTextRow2, (l) => l.muted)),
               filled: true,
-              fillColor: DsAtomColors.autoInlineTextRow3,
+              fillColor: dsWear(context, DsAtomColors.autoInlineTextRow3, (l) => l.chipBg),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide.none,

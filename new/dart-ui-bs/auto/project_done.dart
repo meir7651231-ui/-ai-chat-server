@@ -2,6 +2,7 @@
 // מוצא: screens__smart_project_screen:_ProjectDone (בנייה-חכמה main) · צרור-1 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__smart_project_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -14,13 +15,13 @@ class ProjectDone extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.all(BsTokens.space4),
         decoration: BoxDecoration(
-          color: DsAtomColors.autoProjectDone1,
+          color: dsWear(context, DsAtomColors.autoProjectDone1, (l) => l.chipBg),
           borderRadius: BorderRadius.circular(cfgRadius(context)),
         ),
         child: CfgText('smart_project_screen.t08', fallback,
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: DsAtomColors.autoProjectDone2,
+                color: dsWear(context, DsAtomColors.autoProjectDone2, (l) => l.track),
                 fontWeight: FontWeight.w800,
                 fontSize: 15)),
       );

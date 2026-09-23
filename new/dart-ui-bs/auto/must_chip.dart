@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__accessory_rule_editor:_MustChip (בנייה-חכמה main) · צרור-2 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__accessory_rule_editor_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
@@ -20,16 +21,17 @@ class MustChip extends StatelessWidget {
           'accessory_rule_editor.t06',
           fallback,
           style: TextStyle(
-            color: _kMustColor,
+            color: _kMustColor(context),
             fontSize: 12,
             fontWeight: FontWeight.w800,
           ),
         ),
-        backgroundColor: _kMustColor.withValues(alpha: 0.12),
+        backgroundColor: _kMustColor(context).withValues(alpha: 0.12),
         side: BorderSide.none,
       ),
     );
   }
 }
 
-const Color _kMustColor = DsAtomColors.autoMustChip1;
+
+Color _kMustColor(BuildContext context) => dsWear(context, DsAtomColors.autoMustChip1, (l) => l.danger);   // לובש עור · _kMustColor0 = הערך-הכהה

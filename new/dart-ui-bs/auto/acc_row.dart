@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_AccRow (בנייה-חכמה main) · צרור-2 · מודל-שוטח: 4 שדות · props-שורש: label, label2, onTap, name, emoji, why, price, label3, label4
 // התוכן: new/dart-data-bs/auto/screens__catalog_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/logic/money_format.dart';
@@ -45,7 +46,7 @@ class AccRow extends StatelessWidget {
             ? BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: DsAtomColors.autoAccRow1.withAlpha(115),
+                  color: dsWear(context, DsAtomColors.autoAccRow1, (l) => l.warn).withAlpha(115),
                   width: 1.5),
               )
             : null,
@@ -69,18 +70,18 @@ class AccRow extends StatelessWidget {
                     height: 24,
                     decoration: BoxDecoration(
                       color: selected
-                          ? BsTokens.brand
-                          : DsAtomColors.autoAccRow2,
+                          ? dsWear(context, BsTokens.brand, (l) => l.accent)
+                          : dsWear(context, DsAtomColors.autoAccRow2, (l) => l.ink),
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
                         color: selected
-                            ? BsTokens.brand
-                            : DsAtomColors.autoAccRow3,
+                            ? dsWear(context, BsTokens.brand, (l) => l.accent)
+                            : dsWear(context, DsAtomColors.autoAccRow3, (l) => l.ink),
                       ),
                     ),
                     child: selected
-                        ? const Icon(Icons.check,
-                            color: DsAtomColors.autoAccRow4, size: 13)
+                        ? Icon(Icons.check,
+                            color: dsWear(context, DsAtomColors.autoAccRow4, (l) => l.onAccent), size: 13)
                         : null,
                   ),
                 ),
@@ -113,17 +114,17 @@ class AccRow extends StatelessWidget {
                         width: 16,
                         height: 16,
                         decoration: BoxDecoration(
-                          color: BsTokens.success,
+                          color: dsWear(context, BsTokens.success, (l) => l.success),
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: DsAtomColors.autoAccRow4,
+                            color: dsWear(context, DsAtomColors.autoAccRow4, (l) => l.onAccent),
                             width: 1.5,
                           ),
                         ),
                         alignment: Alignment.center,
-                        child: const Icon(
+                        child: Icon(
                           Icons.check,
-                          color: DsAtomColors.autoAccRow4,
+                          color: dsWear(context, DsAtomColors.autoAccRow4, (l) => l.onAccent),
                           size: 10,
                         ),
                       ),
@@ -174,8 +175,8 @@ class AccRow extends StatelessWidget {
                   ),
                   Text(
                     why,
-                    style: const TextStyle(
-                      color: DsAtomColors.autoAccRow5,
+                    style: TextStyle(
+                      color: dsWear(context, DsAtomColors.autoAccRow5, (l) => l.muted),
                       fontSize: 11,
                     ),
                   ),
@@ -193,8 +194,8 @@ class AccRow extends StatelessWidget {
                       : label2,
                   style: TextStyle(
                     color: selected
-                        ? BsTokens.brand
-                        : DsAtomColors.autoAccRow6,
+                        ? dsWear(context, BsTokens.brand, (l) => l.accent)
+                        : dsWear(context, DsAtomColors.autoAccRow6, (l) => l.faint),
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                   ),
@@ -202,7 +203,7 @@ class AccRow extends StatelessWidget {
                 const SizedBox(height: 4),
                 Container(
                   decoration: BoxDecoration(
-                    color: DsAtomColors.autoAccRow7,
+                    color: dsWear(context, DsAtomColors.autoAccRow7, (l) => l.chipBg),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -267,8 +268,8 @@ class _MiniQtyBtn extends StatelessWidget {
               icon,
               size: 12,
               color: onTap != null
-                  ? DsAtomColors.autoAccRow8
-                  : DsAtomColors.autoAccRow9,
+                  ? dsWear(context, DsAtomColors.autoAccRow8, (l) => l.bg.withValues(alpha: 0.541))
+                  : dsWear(context, DsAtomColors.autoAccRow9, (l) => l.ink),
             ),
           ),
         ),

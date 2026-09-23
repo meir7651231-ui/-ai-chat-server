@@ -5,10 +5,11 @@
 // + כיבוד reduced-motion) · inclusive-design (Semantics·ניגוד·tabular·no-color-alone). חוט-טהור.
 import 'dart:ui' show FontFeature;
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class PremiumStat extends StatefulWidget {
-  const PremiumStat({
+  PremiumStat({
     required this.label,
     required this.value,
     this.unit = '',
@@ -28,14 +29,22 @@ class PremiumStat extends StatefulWidget {
   final VoidCallback? onTap;
 
   // ── טוקנים (Studio Dark · מבטא-אינדיגו יחיד · 60/30/10) ──
-  static const _surface = DsAtomColors.premiumShowcasePremiumStat1;
-  static const _surface2 = DsAtomColors.premiumShowcasePremiumStat2;
-  static const _line = DsAtomColors.premiumShowcasePremiumStat3;
-  static const _muted = DsAtomColors.premiumShowcasePremiumStat4; // secondary ≥4.5:1
-  static const _faint = DsAtomColors.premiumShowcasePremiumStat5; // tertiary
-  static const _success = DsAtomColors.premiumShowcasePremiumStat6;
-  static const _danger = DsAtomColors.premiumShowcasePremiumStat7;
-  static const _accentSoft = DsAtomColors.premiumShowcasePremiumStat8;
+  static const _surface0 = DsAtomColors.premiumShowcasePremiumStat1;
+  static Color _surface(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumStat1, (l) => l.cardAlt);   // לובש עור · _surface0 = הערך-הכהה
+  static const _surface20 = DsAtomColors.premiumShowcasePremiumStat2;
+  static Color _surface2(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumStat2, (l) => l.card);   // לובש עור · _surface20 = הערך-הכהה
+  static const _line0 = DsAtomColors.premiumShowcasePremiumStat3;
+  static Color _line(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumStat3, (l) => l.onAccent.withValues(alpha: 0.078));   // לובש עור · _line0 = הערך-הכהה
+  static const _muted0 = DsAtomColors.premiumShowcasePremiumStat4; // secondary ≥4.5:1
+  static Color _muted(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumStat4, (l) => l.muted);   // לובש עור · _muted0 = הערך-הכהה
+  static const _faint0 = DsAtomColors.premiumShowcasePremiumStat5; // tertiary
+  static Color _faint(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumStat5, (l) => l.muted);   // לובש עור · _faint0 = הערך-הכהה
+  static const _success0 = DsAtomColors.premiumShowcasePremiumStat6;
+  static Color _success(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumStat6, (l) => l.success);   // לובש עור · _success0 = הערך-הכהה
+  static const _danger0 = DsAtomColors.premiumShowcasePremiumStat7;
+  static Color _danger(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumStat7, (l) => l.muted);   // לובש עור · _danger0 = הערך-הכהה
+  static const _accentSoft0 = DsAtomColors.premiumShowcasePremiumStat8;
+  static Color _accentSoft(BuildContext context) => dsWear(context, DsAtomColors.premiumShowcasePremiumStat8, (l) => l.accentSoft.withValues(alpha: 0.141));   // לובש עור · _accentSoft0 = הערך-הכהה
 
   @override
   State<PremiumStat> createState() => _PremiumStatState();
@@ -66,10 +75,10 @@ class _PremiumStatState extends State<PremiumStat> with SingleTickerProviderStat
 
     final deltaUp = widget.delta > 0;
     final deltaColor = widget.delta == 0
-        ? PremiumStat._muted
+        ? PremiumStat._muted(context)
         : deltaUp
-            ? PremiumStat._success
-            : PremiumStat._danger;
+            ? PremiumStat._success(context)
+            : PremiumStat._danger(context);
 
     final card = AnimatedBuilder(
       animation: _c,
@@ -124,16 +133,16 @@ class _PremiumStatState extends State<PremiumStat> with SingleTickerProviderStat
       padding: const EdgeInsetsDirectional.fromSTEB(18, 16, 18, 16),
       decoration: BoxDecoration(
         // depth: משטח-גרדיאנט עדין + מסגרת-שיער (modern-web · refactoring-ui elevation)
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [PremiumStat._surface, PremiumStat._surface2],
+          colors: [PremiumStat._surface(context), PremiumStat._surface2(context)],
         ),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: PremiumStat._line),
-        boxShadow: const [
-          BoxShadow(color: DsAtomColors.premiumShowcasePremiumStat9, blurRadius: 3, offset: Offset(0, 1)),
-          BoxShadow(color: DsAtomColors.premiumShowcasePremiumStat10, blurRadius: 18, offset: Offset(0, 9)),
+        border: Border.all(color: PremiumStat._line(context)),
+        boxShadow: [
+          BoxShadow(color: dsWear(context, DsAtomColors.premiumShowcasePremiumStat9, (l) => l.bg.withValues(alpha: 0.349)), blurRadius: 3, offset: Offset(0, 1)),
+          BoxShadow(color: dsWear(context, DsAtomColors.premiumShowcasePremiumStat10, (l) => l.bg.withValues(alpha: 0.251)), blurRadius: 18, offset: Offset(0, 9)),
         ],
       ),
       child: Column(
@@ -149,9 +158,9 @@ class _PremiumStatState extends State<PremiumStat> with SingleTickerProviderStat
                   height: 30,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: PremiumStat._accentSoft,
+                    color: PremiumStat._accentSoft(context),
                     borderRadius: BorderRadius.circular(9),
-                    border: Border.all(color: DsAtomColors.premiumShowcasePremiumStat11),
+                    border: Border.all(color: dsWear(context, DsAtomColors.premiumShowcasePremiumStat11, (l) => l.accentSoft.withValues(alpha: 0.2))),
                   ),
                   child: Text(widget.glyph, style: const TextStyle(fontSize: 15)),
                 ),
@@ -162,8 +171,8 @@ class _PremiumStatState extends State<PremiumStat> with SingleTickerProviderStat
                   widget.label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: PremiumStat._muted,
+                  style: TextStyle(
+                    color: PremiumStat._muted(context),
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
                     letterSpacing: 0.2,
@@ -180,15 +189,15 @@ class _PremiumStatState extends State<PremiumStat> with SingleTickerProviderStat
             textBaseline: TextBaseline.alphabetic,
             children: [
               ShaderMask(
-                shaderCallback: (r) => const LinearGradient(
+                shaderCallback: (r) => LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [DsAtomColors.premiumShowcasePremiumStat12, DsAtomColors.premiumShowcasePremiumStat13],
+                  colors: [dsWear(context, DsAtomColors.premiumShowcasePremiumStat12, (l) => l.onAccent), dsWear(context, DsAtomColors.premiumShowcasePremiumStat13, (l) => l.accentDark)],
                 ).createShader(r),
                 child: Text(
                   valueText,
-                  style: const TextStyle(
-                    color: DsAtomColors.premiumShowcasePremiumStat12,
+                  style: TextStyle(
+                    color: dsWear(context, DsAtomColors.premiumShowcasePremiumStat12, (l) => l.onAccent),
                     fontSize: 48,
                     fontWeight: FontWeight.w800,
                     height: 1,
@@ -201,8 +210,8 @@ class _PremiumStatState extends State<PremiumStat> with SingleTickerProviderStat
                 const SizedBox(width: 6),
                 Text(
                   widget.unit,
-                  style: const TextStyle(
-                    color: PremiumStat._faint,
+                  style: TextStyle(
+                    color: PremiumStat._faint(context),
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                   ),
@@ -291,7 +300,7 @@ class _Spark extends CustomPainter {
     canvas.drawPath(
       fill,
       Paint()
-        ..shader = const LinearGradient(
+        ..shader = LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [DsAtomColors.premiumShowcasePremiumStat11, DsAtomColors.premiumShowcasePremiumStat14],
@@ -304,7 +313,7 @@ class _Spark extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2
         ..strokeCap = StrokeCap.round
-        ..shader = const LinearGradient(colors: [DsAtomColors.premiumShowcasePremiumStat15, DsAtomColors.premiumShowcasePremiumStat16])
+        ..shader = LinearGradient(colors: [DsAtomColors.premiumShowcasePremiumStat15, DsAtomColors.premiumShowcasePremiumStat16])
             .createShader(Offset.zero & size),
     );
     // נקודת-קצה

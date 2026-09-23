@@ -1,8 +1,9 @@
 // 🧼 אטום · SectionPill — גלולת-בחירת-סקשן עם מצב active (צבע+משקל מתחלפים).
 // מוצא: screens__store_screen.dart:740 (_Pill). שונה מ-PillButton שבמדף (אין שם active).
-// היו צרובים: BsTokens.brand · bsOnAccent · Theme.of(surfaceContainerHighest) · 0xFF595959
+// היו צרובים: dsWear(context, BsTokens.brand, (l) => l.accent) · bsOnAccent · Theme.of(surfaceContainerHighest) · 0xFF595959
 // ⇒ activeColor/activeInkColor/idleColor/idleInkColor. הקופסה כותבת storeSectionProvider.
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 
 class SectionPill extends StatelessWidget {
   const SectionPill({

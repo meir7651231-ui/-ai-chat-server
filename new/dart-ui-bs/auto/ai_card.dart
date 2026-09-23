@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__ai_hub_screen:AiCard (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
@@ -20,7 +21,7 @@ class AiCard extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
         border: Border.all(
-          color: overdue ? DsAtomColors.autoAiCard1 : DsAtomColors.autoAiCard2,
+          color: overdue ? dsWear(context, DsAtomColors.autoAiCard1, (l) => l.muted) : dsWear(context, DsAtomColors.autoAiCard2, (l) => l.ink),
         ),
       ),
       child: child,

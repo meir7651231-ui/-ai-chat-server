@@ -2,6 +2,7 @@
 // מוצא: screens__camera_sheet:_GalleryThumb (בנייה-חכמה main) · צרור-1 · props-שורש: label2, message
 // התוכן: new/dart-data-bs/auto/screens__camera_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 
 class GalleryThumb extends StatelessWidget {
@@ -36,10 +37,10 @@ class GalleryThumb extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(icon, color: DsAtomColors.autoGalleryThumb1, size: 26),
+                  Icon(icon, color: dsWear(context, DsAtomColors.autoGalleryThumb1, (l) => l.bg.withValues(alpha: 0.38)), size: 26),
                   const SizedBox(height: 4),
                   Text(label,
-                      style: const TextStyle(color: DsAtomColors.autoGalleryThumb2, fontSize: 9)),
+                      style: TextStyle(color: dsWear(context, DsAtomColors.autoGalleryThumb2, (l) => l.onAccent.withValues(alpha: 0.384)), fontSize: 9)),
                 ],
               ),
             ),

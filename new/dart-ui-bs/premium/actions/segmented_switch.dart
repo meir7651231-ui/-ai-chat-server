@@ -1,5 +1,6 @@
 // ✨ SegmentedSwitch — בורר-מקטעים בקופסת-זכוכית כהה; המקטע הנבחר בגרדיאנט סגול→מגנטה עם זוהר. מקבל items · selected · onSelect.
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class SegmentedSwitch extends StatelessWidget {
@@ -20,9 +21,9 @@ class SegmentedSwitch extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: DsAtomColors.premiumActionsSegmentedSwitch1.withValues(alpha: 0.85),
+        color: dsWear(context, DsAtomColors.premiumActionsSegmentedSwitch1, (l) => l.bg).withValues(alpha: 0.85),
         border: Border.all(
-          color: DsAtomColors.premiumActionsSegmentedSwitch2.withValues(alpha: 0.08),
+          color: dsWear(context, DsAtomColors.premiumActionsSegmentedSwitch2, (l) => l.onAccent).withValues(alpha: 0.08),
           width: 1,
         ),
       ),
@@ -61,16 +62,16 @@ class _Segment extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         gradient: active
-            ? const LinearGradient(
+            ? LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [DsAtomColors.premiumActionsSegmentedSwitch3, DsAtomColors.premiumActionsSegmentedSwitch4],
+                colors: [dsWear(context, DsAtomColors.premiumActionsSegmentedSwitch3, (l) => l.accent), dsWear(context, DsAtomColors.premiumActionsSegmentedSwitch4, (l) => l.muted)],
               )
             : null,
         boxShadow: active
             ? [
                 BoxShadow(
-                  color: DsAtomColors.premiumActionsSegmentedSwitch3.withValues(alpha: 0.42),
+                  color: dsWear(context, DsAtomColors.premiumActionsSegmentedSwitch3, (l) => l.accent).withValues(alpha: 0.42),
                   blurRadius: 16,
                   offset: const Offset(0, 4),
                 ),
@@ -83,8 +84,8 @@ class _Segment extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(12),
-          splashColor: DsAtomColors.premiumActionsSegmentedSwitch2.withValues(alpha: 0.12),
-          highlightColor: DsAtomColors.premiumActionsSegmentedSwitch2.withValues(alpha: 0.04),
+          splashColor: dsWear(context, DsAtomColors.premiumActionsSegmentedSwitch2, (l) => l.onAccent).withValues(alpha: 0.12),
+          highlightColor: dsWear(context, DsAtomColors.premiumActionsSegmentedSwitch2, (l) => l.onAccent).withValues(alpha: 0.04),
           child: Padding(
             padding: const EdgeInsetsDirectional.symmetric(
               horizontal: 18,
@@ -94,8 +95,8 @@ class _Segment extends StatelessWidget {
               label,
               style: TextStyle(
                 color: active
-                    ? DsAtomColors.premiumActionsSegmentedSwitch2
-                    : DsAtomColors.premiumActionsSegmentedSwitch5.withValues(alpha: 0.55),
+                    ? dsWear(context, DsAtomColors.premiumActionsSegmentedSwitch2, (l) => l.onAccent)
+                    : dsWear(context, DsAtomColors.premiumActionsSegmentedSwitch5, (l) => l.chipBg).withValues(alpha: 0.55),
                 fontSize: 14,
                 fontWeight: active ? FontWeight.w700 : FontWeight.w500,
                 letterSpacing: 0.2,

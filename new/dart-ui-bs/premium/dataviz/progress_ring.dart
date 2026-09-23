@@ -2,6 +2,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class ProgressRing extends StatelessWidget {
@@ -11,7 +12,9 @@ class ProgressRing extends StatelessWidget {
   final String? label;
   final double size;
 
-  static const Color _mute = DsAtomColors.premiumDatavizProgressRing1;
+  static const _mute0 = DsAtomColors.premiumDatavizProgressRing1;
+
+  static Color _mute(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizProgressRing1, (l) => l.muted);   // לובש עור · _mute0 = הערך-הכהה
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +33,13 @@ class ProgressRing extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ShaderMask(
-                  shaderCallback: (r) => const LinearGradient(
-                    colors: [DsAtomColors.premiumDatavizProgressRing2, DsAtomColors.premiumDatavizProgressRing3],
+                  shaderCallback: (r) => LinearGradient(
+                    colors: [dsWear(context, DsAtomColors.premiumDatavizProgressRing2, (l) => l.success), dsWear(context, DsAtomColors.premiumDatavizProgressRing3, (l) => l.accentDark)],
                   ).createShader(r),
                   child: Text(
                     '$pct%',
                     style: TextStyle(
-                      color: DsAtomColors.premiumDatavizProgressRing4,
+                      color: dsWear(context, DsAtomColors.premiumDatavizProgressRing4, (l) => l.onAccent),
                       fontSize: size * 0.24,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -1.5,
@@ -49,8 +52,8 @@ class ProgressRing extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     label!,
-                    style: const TextStyle(
-                      color: _mute,
+                    style: TextStyle(
+                      color: _mute(context),
                       fontSize: 11.5,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.4,
@@ -71,7 +74,9 @@ class _RingPainter extends CustomPainter {
 
   final double value;
 
-  static const Color _track = DsAtomColors.premiumDatavizProgressRing5;
+  static const _track0 = DsAtomColors.premiumDatavizProgressRing5;
+
+  static Color _track(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizProgressRing5, (l) => l.track);   // לובש עור · _track0 = הערך-הכהה
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -88,12 +93,12 @@ class _RingPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = stroke
-        ..color = _track,
+        ..color = _track0,
     );
 
     if (value <= 0) return;
 
-    const SweepGradient grad = SweepGradient(
+    SweepGradient grad = SweepGradient(
       startAngle: -math.pi / 2,
       endAngle: 3 * math.pi / 2,
       colors: [DsAtomColors.premiumDatavizProgressRing2, DsAtomColors.premiumDatavizProgressRing6, DsAtomColors.premiumDatavizProgressRing3, DsAtomColors.premiumDatavizProgressRing2],

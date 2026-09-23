@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__store_settings_screen:_ActionRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class StoreSettingsActionRow extends StatelessWidget {
@@ -23,7 +24,7 @@ class StoreSettingsActionRow extends StatelessWidget {
         onPressed: onTap,
         style: TextButton.styleFrom(
           // AA על ListTile לבן (redAccent=3.19:1 נכשל) — token חוזה 9.
-          foregroundColor: BsTokens.dangerDark,
+          foregroundColor: dsWear(context, BsTokens.dangerDark, (l) => l.danger),
         ),
         child: Text(buttonLabel),
       ),

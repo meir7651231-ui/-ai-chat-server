@@ -1,5 +1,6 @@
 // ✨ NavRow — שורת-ניווט: אייקון-גרדיאנט + כותרת/תת + chevron לוגי + onTap
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class NavRow extends StatelessWidget {
@@ -16,10 +17,15 @@ class NavRow extends StatelessWidget {
     this.onTap,
   });
 
-  static const Color _card = DsAtomColors.premiumListsNavRow1;
-  static const Color _accent = DsAtomColors.premiumListsNavRow2;
-  static const Color _text = DsAtomColors.premiumListsNavRow3;
-  static const Color _muted = DsAtomColors.premiumListsNavRow4;
+  static const _card0 = DsAtomColors.premiumListsNavRow1;
+
+  static Color _card(BuildContext context) => dsWear(context, DsAtomColors.premiumListsNavRow1, (l) => l.card);   // לובש עור · _card0 = הערך-הכהה
+  static const _accent0 = DsAtomColors.premiumListsNavRow2;
+  static Color _accent(BuildContext context) => dsWear(context, DsAtomColors.premiumListsNavRow2, (l) => l.accent);   // לובש עור · _accent0 = הערך-הכהה
+  static const _text0 = DsAtomColors.premiumListsNavRow3;
+  static Color _text(BuildContext context) => dsWear(context, DsAtomColors.premiumListsNavRow3, (l) => l.chipBg);   // לובש עור · _text0 = הערך-הכהה
+  static const _muted0 = DsAtomColors.premiumListsNavRow4;
+  static Color _muted(BuildContext context) => dsWear(context, DsAtomColors.premiumListsNavRow4, (l) => l.muted);   // לובש עור · _muted0 = הערך-הכהה
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +39,9 @@ class NavRow extends StatelessWidget {
           child: Container(
             padding: const EdgeInsetsDirectional.fromSTEB(14, 12, 10, 12),
             decoration: BoxDecoration(
-              color: _card,
+              color: _card(context),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: DsAtomColors.premiumListsNavRow5.withValues(alpha: 0.05)),
+              border: Border.all(color: dsWear(context, DsAtomColors.premiumListsNavRow5, (l) => l.onAccent).withValues(alpha: 0.05)),
             ),
             child: Row(
               children: [
@@ -48,8 +54,8 @@ class NavRow extends StatelessWidget {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        _accent.withValues(alpha: 0.9),
-                        DsAtomColors.premiumListsNavRow6.withValues(alpha: 0.9),
+                        _accent(context).withValues(alpha: 0.9),
+                        dsWear(context, DsAtomColors.premiumListsNavRow6, (l) => l.accent).withValues(alpha: 0.9),
                       ],
                     ),
                   ),
@@ -66,8 +72,8 @@ class NavRow extends StatelessWidget {
                         title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: _text,
+                        style: TextStyle(
+                          color: _text(context),
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                         ),
@@ -77,8 +83,8 @@ class NavRow extends StatelessWidget {
                         sub,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: _muted,
+                        style: TextStyle(
+                          color: _muted(context),
                           fontSize: 12,
                           height: 1.2,
                         ),
@@ -86,9 +92,9 @@ class NavRow extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.chevron_left,
-                  color: _muted,
+                  color: _muted(context),
                   size: 24,
                 ),
               ],

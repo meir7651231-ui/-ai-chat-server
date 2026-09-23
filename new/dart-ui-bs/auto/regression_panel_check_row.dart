@@ -2,6 +2,7 @@
 // מוצא: screens__regression_panel_screen:_CheckRow (בנייה-חכמה main) · צרור-1 · מודל-שוטח: 5 שדות · props-שורש: label, label2, pass, name, detail, expected, got
 // התוכן: new/dart-data-bs/auto/screens__regression_panel_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -26,8 +27,8 @@ class RegressionPanelCheckRow extends StatelessWidget {
             pass ? '✓' : '✗',
             style: TextStyle(
               color: pass
-                  ? BsTokens.success
-                  : BsTokens.danger,
+                  ? dsWear(context, BsTokens.success, (l) => l.success)
+                  : dsWear(context, BsTokens.danger, (l) => l.danger),
               fontSize: 13,
               fontWeight: FontWeight.w700),
           ),
@@ -46,8 +47,8 @@ class RegressionPanelCheckRow extends StatelessWidget {
                 if (detail != null && detail!.isNotEmpty)
                   Text(
                     detail!,
-                    style: const TextStyle(
-                      color: DsAtomColors.autoRegressionPanelCheckRow1,
+                    style: TextStyle(
+                      color: dsWear(context, DsAtomColors.autoRegressionPanelCheckRow1, (l) => l.muted),
                       fontSize: 11,
                     ),
                   ),

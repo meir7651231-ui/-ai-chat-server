@@ -2,6 +2,7 @@
 // מוצא: screens__courier_forms_screen:_FormCard (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__worker_forms_screen:_FormCard
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -18,9 +19,9 @@ class FormCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: DsAtomColors.autoFormCard1,
+            color: dsWear(context, DsAtomColors.autoFormCard1, (l) => l.bg.withValues(alpha: 0.078)),
             blurRadius: 10,
             offset: Offset(0, 2),
           ),

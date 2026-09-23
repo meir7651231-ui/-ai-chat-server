@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_TreeComingSoon (בנייה-חכמה main) · צרור-1 · מודל-שוטח: 2 שדות · props-שורש: fallback, fallback2, title, emoji
 // התוכן: new/dart-data-bs/auto/screens__catalog_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
@@ -28,9 +29,9 @@ class TreeComingSoon extends StatelessWidget {
               width: 96,
               height: 96,
               decoration: BoxDecoration(
-                color: BsTokens.brand.withAlpha(20),
+                color: dsWear(context, BsTokens.brand, (l) => l.accent).withAlpha(20),
                 shape: BoxShape.circle,
-                border: Border.all(color: BsTokens.brand, width: 1.5)),
+                border: Border.all(color: dsWear(context, BsTokens.brand, (l) => l.accent), width: 1.5)),
               alignment: Alignment.center,
               child: catAvatar(title, emoji, 44),
             ),
@@ -50,7 +51,7 @@ class TreeComingSoon extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               decoration: BoxDecoration(
-                color: BsTokens.brand,
+                color: dsWear(context, BsTokens.brand, (l) => l.accent),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: CfgText('catalog_screen.t21',
@@ -66,7 +67,7 @@ class TreeComingSoon extends StatelessWidget {
             CfgText('catalog_screen.t22', 
               fallback2,
               textAlign: TextAlign.center,
-              style: TextStyle(color: DsAtomColors.autoTreeComingSoon1, fontSize: 13),
+              style: TextStyle(color: dsWear(context, DsAtomColors.autoTreeComingSoon1, (l) => l.muted), fontSize: 13),
             ),
           ],
         ),

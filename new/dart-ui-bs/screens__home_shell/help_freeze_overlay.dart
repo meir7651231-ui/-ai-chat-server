@@ -4,9 +4,10 @@
 // התרת-סבך: helpModeProvider (כתיבת-היציאה) ⇒ onExit; ה-SnackBar של הקשת-ה-scrim
 // (ScaffoldMessenger + שתי מחרוזות-ההדרכה) ⇒ onScrimTap — הקופסה מציגה; CfgText
 // home.helpmode.banner ⇒ bannerSlot (הקופסה מזרימה CfgText, ברירת-מחדל Text מ-bannerText).
-// היו צרובים: BsTokens.brand/space4/space3/space2/radiusPill · Colors.white ·
+// היו צרובים: dsWear(context, BsTokens.brand, (l) => l.accent)/space4/space3/space2/radiusPill · Colors.white ·
 // Color(0x14000000) ⇒ כולם params.
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 
 class HelpFreezeOverlay extends StatelessWidget {
   const HelpFreezeOverlay({

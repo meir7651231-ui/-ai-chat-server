@@ -2,6 +2,7 @@
 // מוצא: screens__chat_settings_screen:_SectionTile (בנייה-חכמה main) · צרור-3 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__chat_settings_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -60,8 +61,8 @@ class ChatSettingsSectionTile extends StatelessWidget {
         child: ExpansionTile(
           tilePadding: const EdgeInsets.symmetric(horizontal: 16),
           childrenPadding: const EdgeInsets.only(bottom: 8),
-          iconColor: DsAtomColors.autoChatSettingsSectionTile1,
-          collapsedIconColor: DsAtomColors.autoChatSettingsSectionTile1,
+          iconColor: dsWear(context, DsAtomColors.autoChatSettingsSectionTile1, (l) => l.bg.withValues(alpha: 0.541)),
+          collapsedIconColor: dsWear(context, DsAtomColors.autoChatSettingsSectionTile1, (l) => l.bg.withValues(alpha: 0.541)),
           leading: Text(emoji, style: const TextStyle(fontSize: 22)),
           // Count badge replaces the default expand chevron.
           trailing:
@@ -73,13 +74,13 @@ class ChatSettingsSectionTile extends StatelessWidget {
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: BsTokens.brand,
+                      color: dsWear(context, BsTokens.brand, (l) => l.accent),
                       borderRadius: BorderRadius.circular(11),
                     ),
                     child: Text(
                       '$_activeCount',
-                      style: const TextStyle(
-                        color: DsAtomColors.autoChatSettingsSectionTile2,
+                      style: TextStyle(
+                        color: dsWear(context, DsAtomColors.autoChatSettingsSectionTile2, (l) => l.onAccent),
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),

@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__chat_settings_screen:_ActionRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -25,7 +26,7 @@ class ChatSettingsActionRow extends StatelessWidget {
       trailing: TextButton(
         onPressed: onTap,
         style: TextButton.styleFrom(
-          foregroundColor: destructive ? DsAtomColors.autoChatSettingsActionRow1 : BsTokens.brand,
+          foregroundColor: destructive ? dsWear(context, DsAtomColors.autoChatSettingsActionRow1, (l) => l.danger) : dsWear(context, BsTokens.brand, (l) => l.accent),
         ),
         child: Text(buttonLabel),
       ),

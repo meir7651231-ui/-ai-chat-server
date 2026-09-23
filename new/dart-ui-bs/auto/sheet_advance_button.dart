@@ -2,6 +2,7 @@
 // מוצא: screens__manager_dashboard_screen:_SheetAdvanceButton (בנייה-חכמה main) · צרור-1 · props-שורש: title, body
 // התוכן: new/dart-data-bs/auto/screens__manager_dashboard_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/help_target.dart';
 import 'bs_tokens.dart';
@@ -23,7 +24,7 @@ class SheetAdvanceButton extends StatelessWidget {
       body:
           body,
       child: Material(
-        color: DsAtomColors.autoSheetAdvanceButton1,
+        color: dsWear(context, DsAtomColors.autoSheetAdvanceButton1, (l) => l.faint),
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         child: InkWell(
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),
@@ -33,8 +34,8 @@ class SheetAdvanceButton extends StatelessWidget {
             child: Text(
               label,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: DsAtomColors.autoSheetAdvanceButton2,
+              style: TextStyle(
+                color: dsWear(context, DsAtomColors.autoSheetAdvanceButton2, (l) => l.onAccent),
                 fontSize: 15,
                 fontWeight: FontWeight.w800,
               ),

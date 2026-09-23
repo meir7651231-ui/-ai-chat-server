@@ -2,6 +2,7 @@
 // מוצא: screens__notif_settings_screen:_QuickActionsSection (בנייה-חכמה main) · צרור-5 · props-שורש: title, label, label2, label3, label4, fallback, fallback2, onTap
 // התוכן: new/dart-data-bs/auto/screens__notif_settings_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -89,8 +90,8 @@ class _SectionTile extends StatelessWidget {
         child: ExpansionTile(
           tilePadding: const EdgeInsets.symmetric(horizontal: 16),
           childrenPadding: const EdgeInsets.only(bottom: 8),
-          iconColor: DsAtomColors.autoQuickActionsSection1,
-          collapsedIconColor: DsAtomColors.autoQuickActionsSection1,
+          iconColor: dsWear(context, DsAtomColors.autoQuickActionsSection1, (l) => l.bg.withValues(alpha: 0.541)),
+          collapsedIconColor: dsWear(context, DsAtomColors.autoQuickActionsSection1, (l) => l.bg.withValues(alpha: 0.541)),
           leading: Text(emoji, style: const TextStyle(fontSize: 22)),
           // Count badge replaces the default expand chevron.
           trailing:
@@ -102,13 +103,13 @@ class _SectionTile extends StatelessWidget {
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: BsTokens.brand,
+                      color: dsWear(context, BsTokens.brand, (l) => l.accent),
                       borderRadius: BorderRadius.circular(11),
                     ),
                     child: Text(
                       '$_activeCount',
-                      style: const TextStyle(
-                        color: DsAtomColors.autoQuickActionsSection2,
+                      style: TextStyle(
+                        color: dsWear(context, DsAtomColors.autoQuickActionsSection2, (l) => l.onAccent),
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),
@@ -205,7 +206,7 @@ class _SwitchRow extends StatelessWidget implements _Inert {
               )
               : null,
       value: value,
-      activeColor: BsTokens.brand,
+      activeColor: dsWear(context, BsTokens.brand, (l) => l.accent),
       onChanged: requiresServer ? null : onChanged,
     );
   }

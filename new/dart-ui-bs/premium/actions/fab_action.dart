@@ -1,5 +1,6 @@
 // ✨ FabAction — כפתור-פעולה צף עגול, גרדיאנט סגול→מגנטה עם זוהר ניאון כפול. מקבל icon · onTap.
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class FabAction extends StatelessWidget {
@@ -17,19 +18,19 @@ class FabAction extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [DsAtomColors.premiumActionsFabAction1, DsAtomColors.premiumActionsFabAction2],
+          colors: [dsWear(context, DsAtomColors.premiumActionsFabAction1, (l) => l.accent), dsWear(context, DsAtomColors.premiumActionsFabAction2, (l) => l.muted)],
         ),
         boxShadow: [
           BoxShadow(
-            color: DsAtomColors.premiumActionsFabAction1.withValues(alpha: 0.50),
+            color: dsWear(context, DsAtomColors.premiumActionsFabAction1, (l) => l.accent).withValues(alpha: 0.50),
             blurRadius: 22,
             offset: const Offset(0, 8),
           ),
           BoxShadow(
-            color: DsAtomColors.premiumActionsFabAction2.withValues(alpha: 0.36),
+            color: dsWear(context, DsAtomColors.premiumActionsFabAction2, (l) => l.muted).withValues(alpha: 0.36),
             blurRadius: 34,
             spreadRadius: -4,
           ),
@@ -41,8 +42,8 @@ class FabAction extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
-          splashColor: DsAtomColors.premiumActionsFabAction3.withValues(alpha: 0.22),
-          highlightColor: DsAtomColors.premiumActionsFabAction3.withValues(alpha: 0.08),
+          splashColor: dsWear(context, DsAtomColors.premiumActionsFabAction3, (l) => l.onAccent).withValues(alpha: 0.22),
+          highlightColor: dsWear(context, DsAtomColors.premiumActionsFabAction3, (l) => l.onAccent).withValues(alpha: 0.08),
           child: Container(
             width: 58,
             height: 58,
@@ -50,11 +51,11 @@ class FabAction extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: DsAtomColors.premiumActionsFabAction3.withValues(alpha: 0.24),
+                color: dsWear(context, DsAtomColors.premiumActionsFabAction3, (l) => l.onAccent).withValues(alpha: 0.24),
                 width: 1,
               ),
             ),
-            child: Icon(icon, size: 25, color: DsAtomColors.premiumActionsFabAction3),
+            child: Icon(icon, size: 25, color: dsWear(context, DsAtomColors.premiumActionsFabAction3, (l) => l.onAccent)),
           ),
         ),
       ),

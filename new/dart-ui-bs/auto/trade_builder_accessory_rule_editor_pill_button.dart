@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__accessory_rule_editor:_PillButton (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__trade_builder__attribute_schema_editor:_PillButton · screens__trade_builder__category_tree_editor:_PillButton · screens__trade_builder__connection_rule_studio:_PillButton · screens__trade_builder__product_authoring_screen:_PillButton · screens__trade_builder__trade_publish_sheet:_PillButton
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
@@ -24,7 +25,7 @@ class TradeBuilderAccessoryRuleEditorPillButton extends StatelessWidget {
       enabled: enabled,
       label: label,
       child: Material(
-        color: enabled ? BsTokens.brand : DsAtomColors.autoTradeBuilderAccessoryRuleEditorPillButton1,
+        color: enabled ? dsWear(context, BsTokens.brand, (l) => l.accent) : dsWear(context, DsAtomColors.autoTradeBuilderAccessoryRuleEditorPillButton1, (l) => l.ink),
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         child: InkWell(
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),

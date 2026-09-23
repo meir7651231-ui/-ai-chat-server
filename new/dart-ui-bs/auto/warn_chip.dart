@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__trade_builder__attribute_schema_editor:_WarnChip (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -14,13 +15,13 @@ class WarnChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: _kWarnColor.withValues(alpha: 0.12),
+        color: _kWarnColor(context).withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
       ),
       child: Text(
         text,
-        style: const TextStyle(
-          color: _kWarnColor,
+        style: TextStyle(
+          color: _kWarnColor(context),
           fontSize: 12,
           fontWeight: FontWeight.w800,
         ),
@@ -29,4 +30,5 @@ class WarnChip extends StatelessWidget {
   }
 }
 
-const Color _kWarnColor = DsAtomColors.autoWarnChip1;
+
+Color _kWarnColor(BuildContext context) => dsWear(context, DsAtomColors.autoWarnChip1, (l) => l.danger);   // לובש עור · _kWarnColor0 = הערך-הכהה

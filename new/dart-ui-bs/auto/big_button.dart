@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__store_dashboard_screen:_BigButton (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
@@ -13,7 +14,7 @@ class BigButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: DsAtomColors.autoBigButton1,
+      color: dsWear(context, DsAtomColors.autoBigButton1, (l) => l.ink),
       borderRadius: BorderRadius.circular(cfgRadius(context)),
       child: InkWell(
         borderRadius: BorderRadius.circular(cfgRadius(context)),

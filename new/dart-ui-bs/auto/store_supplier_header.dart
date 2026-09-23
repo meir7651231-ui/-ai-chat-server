@@ -2,6 +2,7 @@
 // מוצא: screens__store_screen:_SupplierHeader (בנייה-חכמה main) · צרור-1 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__store_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -29,7 +30,7 @@ class StoreSupplierHeader extends StatelessWidget {
           CfgText(
             'store_screen.supplier_lead_time',
             fallback,
-            style: TextStyle(color: DsAtomColors.autoStoreSupplierHeader1, fontSize: 11),
+            style: TextStyle(color: dsWear(context, DsAtomColors.autoStoreSupplierHeader1, (l) => l.muted), fontSize: 11),
           ),
         ],
       ),

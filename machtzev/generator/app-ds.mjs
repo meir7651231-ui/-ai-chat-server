@@ -114,6 +114,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
   const roles = all.filter((l) => ROLE_RE.test(l)).map(parseRole);
   const lines = all.filter((l) => !ROLE_RE.test(l));
   const info = lines.map((line, idx) => ({ line, i: idx + 1, isEnt: ENTITY_RE.test(line) }));
+  const extraScreens = Array.isArray(opts.extraScreens) ? opts.extraScreens : [];   // מסכים שנבנו ליד (התראה של capability) ⇒ אריח בלוח-הבית וברכזת
 
   // מקדימים: כל הישויות (לתוכן-הדשבורדים ולזיהוי-קשרים בין-ישויות) + מפת שם→slug יציב
   const entRes = {};
@@ -218,7 +219,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
         if (m) aggs.push({ kind: m[1], entityName: m[2].trim(), field: (m[3] || '').trim(), slug: nameToSlug[m[2].trim()] || '' });
         else countWords.push(t);
       }
-      const { cls } = renderDashboard(slug, { title: clean(title), icon: '📊', entities: entMeta, metrics: countWords, aggs });
+      const { cls } = renderDashboard(slug, { title: clean(title), icon: '📊', entities: entMeta, metrics: countWords, aggs, extras: extraScreens });
       screens.push({ slug, cls, kind: 'dashboard', name: clean(title), icon: '📊', sub: `${(countWords.length + aggs.length) || entMeta.length} ${L.metricsWord}` });
     }
   }
@@ -324,7 +325,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     const wiz = renderWizard(`${P}wizard`, { entities: wEnts, screenCount: screens.length + sys.length + 2 });
     if (wiz && wiz.slug) wizTile = { slug: wiz.slug, cls: wiz.cls, name: L.wizTitle, icon: '🧙', sub: `${wiz.steps} ${L.wizSteps} · ${wiz.options} ${L.wizOpts} · ${wiz.inventions} ${L.wizInv}` };
   } catch (e) { wizTile = null; }
-  const extraScreens = Array.isArray(opts.extraScreens) ? opts.extraScreens : [];   // הרכבה (הדלת): מסכים שנבנו ליד (התראה של capability) ⇒ אריח ברכזת, לא קובץ-יתום
+  // הרכבה (הדלת): מסכים שנבנו ליד (התראה של capability) ⇒ אריח ברכזת, לא קובץ-יתום
   const hub = renderHub(`${P}hub`, { title: appTitle, icon: '🏗️', screens: [...screens, ...extraScreens, ...reportScreens, ...particleScreens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys, ...(wizTile ? [wizTile] : [])], roles, scopeFields });
   // 🧭 G26 · ניווט-מקשרים: השורש = הישות עם הכי-הרבה מצביעים (backRefs); יש שורש ⇒ שלד (בית · שורש · עוד) הוא הבית, הרכזת = "עוד" (ביט-זהה)
   // הרכבה: אין שורש לפי קשרים אבל יש לוח-בית (ראש-המשפט) ⇒ הישות הראשונה שנאמרה = לשונית-השורש, והלוח = לשונית-הבית (לא הרכזת, לא «היום» של ישות אחת)

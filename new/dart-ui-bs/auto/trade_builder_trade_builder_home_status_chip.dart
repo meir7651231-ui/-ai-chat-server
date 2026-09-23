@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__trade_builder_home:_StatusChip (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__trade_builder_home_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -15,7 +16,7 @@ class TradeBuilderTradeBuilderHomeStatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color =
-        published ? DsAtomColors.autoTradeBuilderTradeBuilderHomeStatusChip1 : DsAtomColors.autoTradeBuilderTradeBuilderHomeStatusChip2;
+        published ? dsWear(context, DsAtomColors.autoTradeBuilderTradeBuilderHomeStatusChip1, (l) => l.faint) : dsWear(context, DsAtomColors.autoTradeBuilderTradeBuilderHomeStatusChip2, (l) => l.danger);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(

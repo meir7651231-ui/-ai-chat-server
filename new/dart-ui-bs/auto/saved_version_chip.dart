@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_SavedVersionChip (בנייה-חכמה main) · צרור-1 · props-שורש: message, label2, message2, label3
 // התוכן: new/dart-data-bs/auto/screens__catalog_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 
 class SavedVersionChip extends StatelessWidget {
@@ -23,7 +24,7 @@ class SavedVersionChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: DsAtomColors.autoSavedVersionChip1,
+        color: dsWear(context, DsAtomColors.autoSavedVersionChip1, (l) => l.chipBg),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -46,8 +47,8 @@ class SavedVersionChip extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8, 3, 6, 3),
                       child: Text(label,
-                          style: const TextStyle(
-                              color: DsAtomColors.autoSavedVersionChip2,
+                          style: TextStyle(
+                              color: dsWear(context, DsAtomColors.autoSavedVersionChip2, (l) => l.accent),
                               fontSize: 10.5,
                               fontWeight: FontWeight.w600)),
                     ),
@@ -65,12 +66,12 @@ class SavedVersionChip extends StatelessWidget {
                 behavior: HitTestBehavior.opaque,
                 onTap: onDelete,
                 // ≥48dp tap target around the small ✕ (a11y).
-                child: const SizedBox(
+                child: SizedBox(
                   width: 48,
                   height: 48,
                   child: Center(
                     child: Icon(Icons.close,
-                        size: 12, color: DsAtomColors.autoSavedVersionChip3),
+                        size: 12, color: dsWear(context, DsAtomColors.autoSavedVersionChip3, (l) => l.accent)),
                   ),
                 ),
               ),

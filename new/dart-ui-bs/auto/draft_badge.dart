@@ -2,6 +2,7 @@
 // מוצא: screens__studio__studio_top_bar:_DraftBadge (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2, label3
 // התוכן: new/dart-data-bs/auto/screens__studio__studio_top_bar_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class DraftBadge extends StatelessWidget {
@@ -19,14 +20,14 @@ class DraftBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: has
-            ? BsTokens.brand.withValues(alpha: 0.12)
+            ? dsWear(context, BsTokens.brand, (l) => l.accent).withValues(alpha: 0.12)
             : Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
       ),
       child: Text(
         has ? '${label}$count${label2}' : label3,
         style: TextStyle(
-          color: has ? BsTokens.brandDark : BsTokens.mutedLight,
+          color: has ? dsWear(context, BsTokens.brandDark, (l) => l.accentDark) : BsTokens.mutedLight,
           fontWeight: FontWeight.w700,
           fontSize: BsTokens.typeCaption,
         ),

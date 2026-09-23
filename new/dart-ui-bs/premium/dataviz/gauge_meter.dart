@@ -1,17 +1,18 @@
 // ✨ GaugeMeter — מד-קשת 0..1 גרדיאנט-ניאון עם מחוג זוהר (CustomPainter)
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class GaugeMeter extends StatelessWidget {
-  const GaugeMeter({super.key, required this.value, this.size = 200, this.tone = 0});
+  GaugeMeter({super.key, required this.value, this.size = 200, this.tone = 0});
 
   final double value;
   final double size;
   final int tone; // 0=ניאון(ברירת-מחדל, ביט-זהה) · 1=success · 2=danger · 3=warning — פיגמנט מוזרק (חוק-6)
 
   // גרדיאנטי-tone: כל שורה [בהיר, אמצע, כהה] — הצבע מגיב-למצב במקום קשיח.
-  static const List<List<Color>> tones = [
+  static List<List<Color>> tones = [
     [DsAtomColors.premiumDatavizGaugeMeter1, DsAtomColors.premiumDatavizGaugeMeter2, DsAtomColors.premiumDatavizGaugeMeter3], // 0 ניאון
     [DsAtomColors.premiumDatavizGaugeMeter4, DsAtomColors.premiumDatavizGaugeMeter5, DsAtomColors.premiumDatavizGaugeMeter6], // 1 success
     [DsAtomColors.premiumDatavizGaugeMeter7, DsAtomColors.premiumDatavizGaugeMeter8, DsAtomColors.premiumDatavizGaugeMeter9], // 2 danger
@@ -41,7 +42,7 @@ class GaugeMeter extends StatelessWidget {
               child: Text(
                 '${(v * 100).round()}',
                 style: TextStyle(
-                  color: DsAtomColors.premiumDatavizGaugeMeter13,
+                  color: dsWear(context, DsAtomColors.premiumDatavizGaugeMeter13, (l) => l.onAccent),
                   fontSize: size * 0.2,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -2,
@@ -63,7 +64,9 @@ class _GaugePainter extends CustomPainter {
   final double value;
   final List<Color> grad; // 3 גווני-tone מוזרקים
 
-  static const Color _track = DsAtomColors.premiumDatavizGaugeMeter14;
+  static const _track0 = DsAtomColors.premiumDatavizGaugeMeter14;
+
+  static Color _track(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizGaugeMeter14, (l) => l.track);   // לובש עור · _track0 = הערך-הכהה
   static const double _start = math.pi;
   static const double _extent = math.pi;
 
@@ -83,7 +86,7 @@ class _GaugePainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = stroke
         ..strokeCap = StrokeCap.round
-        ..color = _track,
+        ..color = _track0,
     );
 
     final SweepGradient sweepGrad = SweepGradient(

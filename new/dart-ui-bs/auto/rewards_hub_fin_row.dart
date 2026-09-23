@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__rewards_hub_screen:_FinRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -22,7 +23,7 @@ class RewardsHubFinRow extends StatelessWidget {
               style: const TextStyle(color: BsTokens.inkLight, fontSize: 14)),
           Text(value,
               style: TextStyle(
-                color: up ? DsAtomColors.autoRewardsHubFinRow1 : BsTokens.inkLight,
+                color: up ? dsWear(context, DsAtomColors.autoRewardsHubFinRow1, (l) => l.faint) : BsTokens.inkLight,
                 fontWeight: FontWeight.w800,
                 fontSize: 14,
               )),

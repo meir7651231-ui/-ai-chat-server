@@ -2,6 +2,7 @@
 // מוצא: screens__chats_screen:_Pill (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__regression_panel_screen:_Pill
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
@@ -18,7 +19,7 @@ class Pill extends StatelessWidget {
     return Material(
       color:
           active
-              ? BsTokens.brand
+              ? dsWear(context, BsTokens.brand, (l) => l.accent)
               : Theme.of(context).colorScheme.surfaceContainerHighest,
       borderRadius: BorderRadius.circular(20),
       child: InkWell(
@@ -29,7 +30,7 @@ class Pill extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: active ? bsOnAccent(context) : DsAtomColors.autoPill1,
+              color: active ? bsOnAccent(context) : dsWear(context, DsAtomColors.autoPill1, (l) => l.muted),
               fontSize: 13,
               fontWeight: active ? FontWeight.w600 : FontWeight.w400,
             ),

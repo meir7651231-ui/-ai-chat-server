@@ -1,5 +1,6 @@
 // ✨ GradButton — כפתור-פעולה גרדיאנט סגול→מגנטה עם זוהר ניאון ומסגרת-לבנה-שקופה. מקבל label · onTap · icon אופציונלי.
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class GradButton extends StatelessWidget {
@@ -19,19 +20,19 @@ class GradButton extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [DsAtomColors.premiumActionsGradButton1, DsAtomColors.premiumActionsGradButton2],
+          colors: [dsWear(context, DsAtomColors.premiumActionsGradButton1, (l) => l.accent), dsWear(context, DsAtomColors.premiumActionsGradButton2, (l) => l.muted)],
         ),
         boxShadow: [
           BoxShadow(
-            color: DsAtomColors.premiumActionsGradButton1.withValues(alpha: 0.45),
+            color: dsWear(context, DsAtomColors.premiumActionsGradButton1, (l) => l.accent).withValues(alpha: 0.45),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: DsAtomColors.premiumActionsGradButton2.withValues(alpha: 0.30),
+            color: dsWear(context, DsAtomColors.premiumActionsGradButton2, (l) => l.muted).withValues(alpha: 0.30),
             blurRadius: 40,
             spreadRadius: -6,
             offset: const Offset(0, 4),
@@ -44,13 +45,13 @@ class GradButton extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(16),
-          splashColor: DsAtomColors.premiumActionsGradButton3.withValues(alpha: 0.16),
-          highlightColor: DsAtomColors.premiumActionsGradButton3.withValues(alpha: 0.06),
+          splashColor: dsWear(context, DsAtomColors.premiumActionsGradButton3, (l) => l.onAccent).withValues(alpha: 0.16),
+          highlightColor: dsWear(context, DsAtomColors.premiumActionsGradButton3, (l) => l.onAccent).withValues(alpha: 0.06),
           child: Ink(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: DsAtomColors.premiumActionsGradButton3.withValues(alpha: 0.22),
+                color: dsWear(context, DsAtomColors.premiumActionsGradButton3, (l) => l.onAccent).withValues(alpha: 0.22),
                 width: 1,
               ),
             ),
@@ -63,13 +64,13 @@ class GradButton extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (icon != null) ...[
-                    Icon(icon, size: 19, color: DsAtomColors.premiumActionsGradButton3),
+                    Icon(icon, size: 19, color: dsWear(context, DsAtomColors.premiumActionsGradButton3, (l) => l.onAccent)),
                     const SizedBox(width: 10),
                   ],
                   Text(
                     label,
-                    style: const TextStyle(
-                      color: DsAtomColors.premiumActionsGradButton4,
+                    style: TextStyle(
+                      color: dsWear(context, DsAtomColors.premiumActionsGradButton4, (l) => l.chipBg),
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.3,

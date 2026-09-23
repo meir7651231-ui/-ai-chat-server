@@ -2,6 +2,7 @@
 // מוצא: screens__store_screen:_SmartQtyStepper (בנייה-חכמה main) · צרור-1 · props-שורש: message, message2, label, label2
 // התוכן: new/dart-data-bs/auto/screens__store_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class StoreSmartQtyStepper extends StatelessWidget {
@@ -34,7 +35,7 @@ class StoreSmartQtyStepper extends StatelessWidget {
             width: 48,
             height: 48,
             child: Center(
-              child: Icon(icon, size: 18, color: BsTokens.brand),
+              child: Icon(icon, size: 18, color: dsWear(context, BsTokens.brand, (l) => l.accent)),
             ),
           ),
         ),
@@ -42,7 +43,7 @@ class StoreSmartQtyStepper extends StatelessWidget {
     );
     return Container(
       decoration: BoxDecoration(
-        color: BsTokens.brand.withAlpha(20),
+        color: dsWear(context, BsTokens.brand, (l) => l.accent).withAlpha(20),
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 2),

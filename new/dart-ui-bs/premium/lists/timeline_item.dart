@@ -1,5 +1,6 @@
 // ✨ TimelineItem — פריט-ציר-זמן: נקודה+קו זוהרים + כותרת/שעה/גוף
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class TimelineItem extends StatelessWidget {
@@ -14,9 +15,13 @@ class TimelineItem extends StatelessWidget {
     this.body,
   });
 
-  static const Color _accent = DsAtomColors.premiumListsTimelineItem1;
-  static const Color _text = DsAtomColors.premiumListsTimelineItem2;
-  static const Color _muted = DsAtomColors.premiumListsTimelineItem3;
+  static const _accent0 = DsAtomColors.premiumListsTimelineItem1;
+
+  static Color _accent(BuildContext context) => dsWear(context, DsAtomColors.premiumListsTimelineItem1, (l) => l.accent);   // לובש עור · _accent0 = הערך-הכהה
+  static const _text0 = DsAtomColors.premiumListsTimelineItem2;
+  static Color _text(BuildContext context) => dsWear(context, DsAtomColors.premiumListsTimelineItem2, (l) => l.chipBg);   // לובש עור · _text0 = הערך-הכהה
+  static const _muted0 = DsAtomColors.premiumListsTimelineItem3;
+  static Color _muted(BuildContext context) => dsWear(context, DsAtomColors.premiumListsTimelineItem3, (l) => l.muted);   // לובש עור · _muted0 = הערך-הכהה
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +38,12 @@ class TimelineItem extends StatelessWidget {
                   height: 16,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [_accent, DsAtomColors.premiumListsTimelineItem4],
+                    gradient: LinearGradient(
+                      colors: [_accent(context), dsWear(context, DsAtomColors.premiumListsTimelineItem4, (l) => l.muted)],
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: _accent.withValues(alpha: 0.7),
+                        color: _accent(context).withValues(alpha: 0.7),
                         blurRadius: 12,
                         spreadRadius: 1,
                       ),
@@ -54,8 +59,8 @@ class TimelineItem extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          _accent.withValues(alpha: 0.6),
-                          _accent.withValues(alpha: 0.05),
+                          _accent(context).withValues(alpha: 0.6),
+                          _accent(context).withValues(alpha: 0.05),
                         ],
                       ),
                     ),
@@ -78,8 +83,8 @@ class TimelineItem extends StatelessWidget {
                             title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: _text,
+                            style: TextStyle(
+                              color: _text(context),
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                             ),
@@ -88,8 +93,8 @@ class TimelineItem extends StatelessWidget {
                         const SizedBox(width: 8),
                         Text(
                           time,
-                          style: const TextStyle(
-                            color: DsAtomColors.premiumListsTimelineItem5,
+                          style: TextStyle(
+                            color: dsWear(context, DsAtomColors.premiumListsTimelineItem5, (l) => l.accentDark),
                             fontSize: 11.5,
                             fontWeight: FontWeight.w600,
                           ),
@@ -100,8 +105,8 @@ class TimelineItem extends StatelessWidget {
                       const SizedBox(height: 5),
                       Text(
                         body!,
-                        style: const TextStyle(
-                          color: _muted,
+                        style: TextStyle(
+                          color: _muted(context),
                           fontSize: 12.5,
                           height: 1.4,
                         ),

@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__intel__intel_tab:_IntelCard (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class IntelCard extends StatelessWidget {
@@ -45,7 +46,7 @@ class IntelCard extends StatelessWidget {
                 ),
               ),
               if (trailing != null)
-                _IntelPill(label: trailing!, color: BsTokens.success),
+                _IntelPill(label: trailing!, color: dsWear(context, BsTokens.success, (l) => l.success)),
             ],
           ),
           const SizedBox(height: BsTokens.space3),

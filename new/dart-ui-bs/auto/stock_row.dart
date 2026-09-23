@@ -2,6 +2,7 @@
 // מוצא: screens__stock_screen:_StockRow (בנייה-חכמה main) · צרור-3 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__stock_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -20,12 +21,12 @@ class StockRow extends StatelessWidget {
   final VoidCallback onMove;
   @override
   Widget build(BuildContext context) => Container(
-    margin: const EdgeInsets.only(bottom: 10),
-    padding: const EdgeInsets.all(12),
+    margin: EdgeInsets.only(bottom: 10),
+    padding: EdgeInsets.all(12),
     decoration: BoxDecoration(
       color: Theme.of(context).colorScheme.surface,
       borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: DsAtomColors.autoStockRow1),
+      border: Border.all(color: dsWear(context, DsAtomColors.autoStockRow1, (l) => l.ink)),
     ),
     child: Row(
       children: [
@@ -37,16 +38,16 @@ class StockRow extends StatelessWidget {
             color: Theme.of(context).colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Text(info.img, style: const TextStyle(fontSize: 22)),
+          child: Text(info.img, style: TextStyle(fontSize: 22)),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 name,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: _ink,
@@ -55,7 +56,7 @@ class StockRow extends StatelessWidget {
               if (info.why.isNotEmpty)
                 Text(
                   info.why,
-                  style: const TextStyle(fontSize: 12, color: _muted),
+                  style: TextStyle(fontSize: 12, color: _muted(context)),
                 ),
             ],
           ),
@@ -63,13 +64,13 @@ class StockRow extends StatelessWidget {
         OutlinedButton(
           onPressed: onMove,
           style: OutlinedButton.styleFrom(
-            foregroundColor: BsTokens.brand,
-            side: const BorderSide(color: BsTokens.brand),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            foregroundColor: dsWear(context, BsTokens.brand, (l) => l.accent),
+            side: BorderSide(color: dsWear(context, BsTokens.brand, (l) => l.accent)),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           ),
           child: Text(
             warehouse ? label : label2,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
           ),
         ),
       ],
@@ -77,6 +78,7 @@ class StockRow extends StatelessWidget {
   );
 }
 
-const _ink = BsTokens.inkLight;
+final _ink = BsTokens.inkLight;
 
-const _muted = DsAtomColors.autoStockRow2;
+
+Color _muted(BuildContext context) => dsWear(context, DsAtomColors.autoStockRow2, (l) => l.muted);   // לובש עור · _muted0 = הערך-הכהה

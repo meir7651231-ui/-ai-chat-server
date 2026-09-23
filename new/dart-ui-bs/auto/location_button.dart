@@ -2,6 +2,7 @@
 // מוצא: screens__worker_attendance_screen:_LocationButton (בנייה-חכמה main) · צרור-1 · props-שורש: label2, fallback, onTap
 // התוכן: new/dart-data-bs/auto/screens__worker_attendance_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
@@ -31,7 +32,7 @@ class LocationButton extends StatelessWidget {
       child: CfgVisible(
         'worker_attendance_screen.open_nav',
         child: Material(
-        color: DsAtomColors.autoLocationButton1,
+        color: dsWear(context, DsAtomColors.autoLocationButton1, (l) => l.chipBg),
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         child: InkWell(
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),
@@ -41,21 +42,21 @@ class LocationButton extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: BsTokens.space3),
             child: Row(
               children: [
-                const Icon(Icons.place, color: DsAtomColors.autoLocationButton2, size: 20),
+                Icon(Icons.place, color: dsWear(context, DsAtomColors.autoLocationButton2, (l) => l.accent), size: 20),
                 const SizedBox(width: BsTokens.space2),
                 Expanded(
                   child: CfgText(
                     'worker_attendance_screen.open_nav',
                     fallback,
-                    style: const TextStyle(
-                      color: DsAtomColors.autoLocationButton3,
+                    style: TextStyle(
+                      color: dsWear(context, DsAtomColors.autoLocationButton3, (l) => l.accent),
                       fontWeight: FontWeight.w700,
                       fontSize: 13.5,
                     ),
                   ),
                 ),
-                const Icon(Icons.navigation_outlined,
-                    color: DsAtomColors.autoLocationButton2, size: 18),
+                Icon(Icons.navigation_outlined,
+                    color: dsWear(context, DsAtomColors.autoLocationButton2, (l) => l.accent), size: 18),
               ],
             ),
           ),

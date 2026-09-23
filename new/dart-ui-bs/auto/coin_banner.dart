@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__rewards_hub_screen:_CoinBanner (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
@@ -16,11 +17,11 @@ class CoinBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(BsTokens.space4),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [DsAtomColors.autoCoinBanner1, DsAtomColors.autoCoinBanner2],
+        gradient: LinearGradient(
+          colors: [dsWear(context, DsAtomColors.autoCoinBanner1, (l) => l.ink), dsWear(context, DsAtomColors.autoCoinBanner2, (l) => l.ink)],
         ),
         borderRadius: BorderRadius.circular(cfgRadius(context)),
-        border: Border.all(color: DsAtomColors.autoCoinBanner3),
+        border: Border.all(color: dsWear(context, DsAtomColors.autoCoinBanner3, (l) => l.ink)),
       ),
       child: Row(
         children: [

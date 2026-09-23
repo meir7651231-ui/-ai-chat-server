@@ -2,6 +2,7 @@
 // מוצא: screens__courier_profile_screen:_CourierPersonalAreaCard (בנייה-חכמה main) · צרור-1 · props-שורש: title, body, fallback, fallback2, title2, body2, fallback3, fallback4, title3, body3, fallback5, fallback6, title4, body4, fallback7, fallback8, onTap, onTap2, onTap3, onTap4
 // התוכן: new/dart-data-bs/auto/screens__courier_profile_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/help_target.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
@@ -37,9 +38,9 @@ class CourierPersonalAreaCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: DsAtomColors.autoCourierPersonalAreaCard1,
+            color: dsWear(context, DsAtomColors.autoCourierPersonalAreaCard1, (l) => l.bg.withValues(alpha: 0.059)),
             blurRadius: 8,
             offset: Offset(0, 2),
           ),
@@ -75,7 +76,7 @@ class CourierPersonalAreaCard extends StatelessWidget {
                     onTap,
               ),
             ),
-            const Divider(height: 1, color: DsAtomColors.autoCourierPersonalAreaCard2),
+            Divider(height: 1, color: dsWear(context, DsAtomColors.autoCourierPersonalAreaCard2, (l) => l.chipBg)),
             HelpTarget(
               title: title2,
               body: body2,
@@ -99,7 +100,7 @@ class CourierPersonalAreaCard extends StatelessWidget {
                     onTap2,
               ),
             ),
-            const Divider(height: 1, color: DsAtomColors.autoCourierPersonalAreaCard2),
+            Divider(height: 1, color: dsWear(context, DsAtomColors.autoCourierPersonalAreaCard2, (l) => l.chipBg)),
             HelpTarget(
               title: title3,
               body:
@@ -124,7 +125,7 @@ class CourierPersonalAreaCard extends StatelessWidget {
                     onTap3,
               ),
             ),
-            const Divider(height: 1, color: DsAtomColors.autoCourierPersonalAreaCard2),
+            Divider(height: 1, color: dsWear(context, DsAtomColors.autoCourierPersonalAreaCard2, (l) => l.chipBg)),
             HelpTarget(
               title: title4,
               body:

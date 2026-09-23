@@ -2,6 +2,7 @@
 // מוצא: screens__manager_dashboard_screen:_ManageIntro (בנייה-חכמה main) · צרור-1 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__manager_dashboard_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
@@ -19,7 +20,7 @@ class ManageIntro extends StatelessWidget {
         vertical: BsTokens.space3,
       ),
       decoration: BoxDecoration(
-        color: BsTokens.brand.withValues(alpha: 0.08),
+        color: dsWear(context, BsTokens.brand, (l) => l.accent).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(cfgRadius(context)),
       ),
       child: CfgText(

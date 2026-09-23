@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__site_hub_screen:_CaPill (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -14,8 +15,8 @@ class CaPill extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
       decoration: BoxDecoration(
         color: done
-            ? DsAtomColors.autoCaPill1
-            : DsAtomColors.autoCaPill2,
+            ? dsWear(context, DsAtomColors.autoCaPill1, (l) => l.faint.withValues(alpha: 0.141))
+            : dsWear(context, DsAtomColors.autoCaPill2, (l) => l.faint.withValues(alpha: 0.141)),
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
       ),
       child: Text(

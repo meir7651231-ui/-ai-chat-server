@@ -2,6 +2,7 @@
 // מוצא: screens__finance_hub_sheets:_SubRow (בנייה-חכמה main) · צרור-2 · מודל-שוטח: 4 שדות · props-שורש: label, label2, allocated, spent, ic, name
 // התוכן: new/dart-data-bs/auto/screens__finance_hub_sheets_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
@@ -27,9 +28,9 @@ class SubRow extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: BsTokens.space3),
       padding: const EdgeInsets.all(BsTokens.space3),
       decoration: BoxDecoration(
-        color: DsAtomColors.autoSubRow1,
+        color: dsWear(context, DsAtomColors.autoSubRow1, (l) => l.chipBg),
         borderRadius: BorderRadius.circular(cfgRadius(context)),
-        border: Border.all(color: DsAtomColors.autoSubRow2)),
+        border: Border.all(color: dsWear(context, DsAtomColors.autoSubRow2, (l) => l.ink))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -61,9 +62,9 @@ class SubRow extends StatelessWidget {
             child: LinearProgressIndicator(
               value: (pct.clamp(0, 100)) / 100,
               minHeight: 8,
-              backgroundColor: DsAtomColors.autoSubRow2,
+              backgroundColor: dsWear(context, DsAtomColors.autoSubRow2, (l) => l.ink),
               valueColor: AlwaysStoppedAnimation<Color>(
-                over ? _kDn : BsTokens.brand,
+                over ? _kDn : dsWear(context, BsTokens.brand, (l) => l.accent),
               ),
             ),
           ),

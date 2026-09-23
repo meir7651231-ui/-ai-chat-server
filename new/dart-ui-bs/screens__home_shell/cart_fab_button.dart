@@ -4,10 +4,11 @@
 // התרת-סבך: smartCartProvider + fold-הכמויות ⇒ הקופסה מחשבת ומזריקה countLabel
 // (null ⇒ בלי תג, כמו count==0 במקור); openCart (dial-reset + ניווט-טאב + maybePop)
 // ⇒ onPressed. heroTag נשאר prop (זהות-אנימציה של הקופסה). היו צרובים:
-// BsTokens.brand · Colors.white · bsOnAccent(context) · Theme.of(surface) ⇒ params.
+// dsWear(context, BsTokens.brand, (l) => l.accent) · Colors.white · bsOnAccent(context) · Theme.of(surface) ⇒ params.
 // שונה מ-BadgedIcon שבתיקייה זו (תג-עיגול-מלא על אייקון חשוף) — כאן תג-מלבני ממוסגר
 // על FAB שלם; ומ-CountBadge של מסך-המנהל (גלולה עצמאית, לא overlay-פינה).
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 
 class CartFabButton extends StatelessWidget {
   const CartFabButton({

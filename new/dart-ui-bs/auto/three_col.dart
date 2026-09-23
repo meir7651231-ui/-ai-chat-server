@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__ai_hub_screen:_ThreeCol (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -28,7 +29,7 @@ class ThreeCol extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-              color: bad ? DsAtomColors.autoThreeCol1 : BsTokens.inkLight,
+              color: bad ? dsWear(context, DsAtomColors.autoThreeCol1, (l) => l.danger) : BsTokens.inkLight,
               fontWeight: FontWeight.w800,
               fontSize: 13,
             ),

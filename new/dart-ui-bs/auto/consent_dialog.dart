@@ -2,6 +2,7 @@
 // מוצא: screens__consent_modal:_ConsentDialog (בנייה-חכמה main) · צרור-1 · props-שורש: fallback, fallback2, fallback3, fallback4, fallback5, onTap
 // התוכן: new/dart-data-bs/auto/screens__consent_modal_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -80,7 +81,7 @@ class ConsentDialog extends StatelessWidget {
                     'consent_modal.t03',
                     fallback3,
                     style: TextStyle(
-                      color: BsTokens.brandDark,
+                      color: dsWear(context, BsTokens.brandDark, (l) => l.accentDark),
                       fontSize: BsTokens.typeLabel,
                       fontWeight: FontWeight.w700,
                       decoration: TextDecoration.underline,
@@ -108,7 +109,7 @@ class ConsentDialog extends StatelessWidget {
             critical: true, // affirmative consent — never hideable (don't strand the user)
             child: TextButton(
             onPressed: onAgree,
-            style: TextButton.styleFrom(foregroundColor: BsTokens.brandDark),
+            style: TextButton.styleFrom(foregroundColor: dsWear(context, BsTokens.brandDark, (l) => l.accentDark)),
             child: CfgText(
               'consent_modal.t05',
               fallback5,

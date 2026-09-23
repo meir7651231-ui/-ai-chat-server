@@ -2,6 +2,7 @@
 // מוצא: screens__contractor_hr_sheet:_VacationRow (בנייה-חכמה main) · צרור-3 · מודל-שוטח: 5 שדות · props-שורש: label, label2, status, workerName, range, reason, id, label3, label4
 // התוכן: new/dart-data-bs/auto/screens__contractor_hr_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/state/vacation_requests.dart';
@@ -31,7 +32,7 @@ class VacationRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: DsAtomColors.autoVacationRow1)),
+        border: Border.all(color: dsWear(context, DsAtomColors.autoVacationRow1, (l) => l.ink))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -67,7 +68,7 @@ class VacationRow extends StatelessWidget {
                   child: _DecideButton(
                     key: ValueKey('contractor-vac-approve-${id}'),
                     label: label,
-                    color: DsAtomColors.autoVacationRow2,
+                    color: dsWear(context, DsAtomColors.autoVacationRow2, (l) => l.faint),
                     onPressed: onApprove,
                   ),
                 ),
@@ -102,7 +103,7 @@ class _StatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final approved = status == kVacationApproved;
-    final color = approved ? DsAtomColors.autoVacationRow2 : BsTokens.danger;
+    final color = approved ? dsWear(context, DsAtomColors.autoVacationRow2, (l) => l.faint) : dsWear(context, BsTokens.danger, (l) => l.danger);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -145,7 +146,7 @@ class _DecideButton extends StatelessWidget {
       shape: bordered
           ? RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(BsTokens.radiusPill),
-              side: const BorderSide(color: DsAtomColors.autoVacationRow3),
+              side: BorderSide(color: dsWear(context, DsAtomColors.autoVacationRow3, (l) => l.ink)),
             )
           : null,
       child: InkWell(
@@ -157,7 +158,7 @@ class _DecideButton extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: textColor ?? DsAtomColors.autoVacationRow4,
+              color: textColor ?? dsWear(context, DsAtomColors.autoVacationRow4, (l) => l.onAccent),
               fontWeight: FontWeight.w800,
               fontSize: 14,
             ),

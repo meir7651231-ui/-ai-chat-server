@@ -2,6 +2,7 @@
 // מוצא: screens__manager_dashboard_screen:_RegressionBody (בנייה-חכמה main) · צרור-1 · props-שורש: fallback, title, body, fallback2
 // התוכן: new/dart-data-bs/auto/screens__manager_dashboard_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/help_target.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
@@ -46,7 +47,7 @@ class RegressionBody extends StatelessWidget {
           child: CfgVisible(
             'manager.manage.regression.open',
             child: Material(
-              color: BsTokens.brand,
+              color: dsWear(context, BsTokens.brand, (l) => l.accent),
               borderRadius: BorderRadius.circular(BsTokens.radiusPill),
               child: InkWell(
                 borderRadius: BorderRadius.circular(BsTokens.radiusPill),

@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_EmptySection (בנייה-חכמה main) · צרור-1 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__catalog_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -35,7 +36,7 @@ class EmptySection extends StatelessWidget {
             child: CfgText('catalog_screen.t18', 
               fallback,
               textAlign: TextAlign.center,
-              style: TextStyle(color: DsAtomColors.autoEmptySection1, fontSize: 13),
+              style: TextStyle(color: dsWear(context, DsAtomColors.autoEmptySection1, (l) => l.muted), fontSize: 13),
             ),
           ),
         ],

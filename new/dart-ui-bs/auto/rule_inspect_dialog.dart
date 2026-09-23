@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__connection_rule_studio:_RuleInspectDialog (בנייה-חכמה main) · צרור-1 · מודל-שוטח: 1 שדות · props-שורש: fallback, fallback2, fallback3, onPressed, onPressed2, methodLabelHe
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__connection_rule_studio_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -43,7 +44,7 @@ class RuleInspectDialog extends StatelessWidget {
                 'connection_rule_studio.delete_rule',
                 fallback2,
                 style: TextStyle(
-                  color: BsTokens.dangerDark,
+                  color: dsWear(context, BsTokens.dangerDark, (l) => l.danger),
                   fontWeight: FontWeight.w800,
                 ),
               ),
@@ -54,7 +55,7 @@ class RuleInspectDialog extends StatelessWidget {
             'connection_rule_studio.close',
             child: TextButton(
               onPressed: onPressed2,
-              style: TextButton.styleFrom(foregroundColor: BsTokens.brand),
+              style: TextButton.styleFrom(foregroundColor: dsWear(context, BsTokens.brand, (l) => l.accent)),
               child: CfgText(
                 'connection_rule_studio.close',
                 fallback3,

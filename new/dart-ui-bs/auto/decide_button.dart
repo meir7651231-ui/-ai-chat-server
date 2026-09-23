@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__contractor_hr_sheet:_DecideButton (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -28,7 +29,7 @@ class DecideButton extends StatelessWidget {
       shape: bordered
           ? RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(BsTokens.radiusPill),
-              side: const BorderSide(color: DsAtomColors.autoDecideButton1),
+              side: BorderSide(color: dsWear(context, DsAtomColors.autoDecideButton1, (l) => l.ink)),
             )
           : null,
       child: InkWell(
@@ -40,7 +41,7 @@ class DecideButton extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: textColor ?? DsAtomColors.autoDecideButton2,
+              color: textColor ?? dsWear(context, DsAtomColors.autoDecideButton2, (l) => l.onAccent),
               fontWeight: FontWeight.w800,
               fontSize: 14,
             ),

@@ -1,5 +1,6 @@
 // ✨ HeroHeader — כותרת-על עם אייקון-גרדיאנט זוהר ורקע-רדיאלי; מקבל title/subtitle/glyph
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class HeroHeader extends StatelessWidget {
@@ -14,15 +15,25 @@ class HeroHeader extends StatelessWidget {
   final String subtitle;
   final String glyph;
 
-  static const Color _bg = DsAtomColors.premiumSurfacesHeroHeader1;
-  static const Color _radialCore = DsAtomColors.premiumSurfacesHeroHeader2;
-  static const Color _radialEdge = DsAtomColors.premiumSurfacesHeroHeader3;
-  static const Color _text = DsAtomColors.premiumSurfacesHeroHeader4;
-  static const Color _sub = DsAtomColors.premiumSurfacesHeroHeader5;
-  static const Color _glyphA = DsAtomColors.premiumSurfacesHeroHeader6;
-  static const Color _glyphB = DsAtomColors.premiumSurfacesHeroHeader7;
-  static const Color _glyphGlow = DsAtomColors.premiumSurfacesHeroHeader8;
-  static const Color _border = DsAtomColors.premiumSurfacesHeroHeader9;
+  static const _bg0 = DsAtomColors.premiumSurfacesHeroHeader1;
+
+  static Color _bg(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesHeroHeader1, (l) => l.bg);   // לובש עור · _bg0 = הערך-הכהה
+  static const _radialCore0 = DsAtomColors.premiumSurfacesHeroHeader2;
+  static Color _radialCore(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesHeroHeader2, (l) => l.accentSoft.withValues(alpha: 0.333));   // לובש עור · _radialCore0 = הערך-הכהה
+  static const _radialEdge0 = DsAtomColors.premiumSurfacesHeroHeader3;
+  static Color _radialEdge(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesHeroHeader3, (l) => l.bg.withValues(alpha: 0.0));   // לובש עור · _radialEdge0 = הערך-הכהה
+  static const _text0 = DsAtomColors.premiumSurfacesHeroHeader4;
+  static Color _text(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesHeroHeader4, (l) => l.chipBg);   // לובש עור · _text0 = הערך-הכהה
+  static const _sub0 = DsAtomColors.premiumSurfacesHeroHeader5;
+  static Color _sub(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesHeroHeader5, (l) => l.muted);   // לובש עור · _sub0 = הערך-הכהה
+  static const _glyphA0 = DsAtomColors.premiumSurfacesHeroHeader6;
+  static Color _glyphA(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesHeroHeader6, (l) => l.accent);   // לובש עור · _glyphA0 = הערך-הכהה
+  static const _glyphB0 = DsAtomColors.premiumSurfacesHeroHeader7;
+  static Color _glyphB(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesHeroHeader7, (l) => l.muted);   // לובש עור · _glyphB0 = הערך-הכהה
+  static const _glyphGlow0 = DsAtomColors.premiumSurfacesHeroHeader8;
+  static Color _glyphGlow(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesHeroHeader8, (l) => l.muted.withValues(alpha: 0.4));   // לובש עור · _glyphGlow0 = הערך-הכהה
+  static const _border0 = DsAtomColors.premiumSurfacesHeroHeader9;
+  static Color _border(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesHeroHeader9, (l) => l.onAccent.withValues(alpha: 0.102));   // לובש עור · _border0 = הערך-הכהה
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +42,8 @@ class HeroHeader extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(26),
-          color: _bg,
-          border: Border.all(color: _border, width: 1),
+          color: _bg(context),
+          border: Border.all(color: _border(context), width: 1),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(26),
@@ -44,7 +55,7 @@ class HeroHeader extends StatelessWidget {
                 child: _RadialBlob(),
               ),
               Padding(
-                padding: const EdgeInsets.all(26),
+                padding: EdgeInsets.all(26),
                 child: Row(
                   children: [
                     Container(
@@ -52,14 +63,14 @@ class HeroHeader extends StatelessWidget {
                       height: 62,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18),
-                        gradient: const LinearGradient(
+                        gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [_glyphA, _glyphB],
+                          colors: [_glyphA(context), _glyphB(context)],
                         ),
-                        boxShadow: const [
+                        boxShadow: [
                           BoxShadow(
-                            color: _glyphGlow,
+                            color: _glyphGlow(context),
                             blurRadius: 26,
                             spreadRadius: -2,
                           ),
@@ -68,7 +79,7 @@ class HeroHeader extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         glyph,
-                        style: const TextStyle(fontSize: 30, color: DsAtomColors.premiumSurfacesHeroHeader10),
+                        style: TextStyle(fontSize: 30, color: dsWear(context, DsAtomColors.premiumSurfacesHeroHeader10, (l) => l.onAccent)),
                       ),
                     ),
                     const SizedBox(width: 18),
@@ -79,8 +90,8 @@ class HeroHeader extends StatelessWidget {
                         children: [
                           Text(
                             title,
-                            style: const TextStyle(
-                              color: _text,
+                            style: TextStyle(
+                              color: _text(context),
                               fontSize: 24,
                               fontWeight: FontWeight.w800,
                               height: 1.1,
@@ -90,8 +101,8 @@ class HeroHeader extends StatelessWidget {
                           const SizedBox(height: 6),
                           Text(
                             subtitle,
-                            style: const TextStyle(
-                              color: _sub,
+                            style: TextStyle(
+                              color: _sub(context),
                               fontSize: 14,
                               height: 1.3,
                               fontWeight: FontWeight.w500,
@@ -119,10 +130,10 @@ class _RadialBlob extends StatelessWidget {
     return Container(
       width: 220,
       height: 220,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: RadialGradient(
-          colors: [HeroHeader._radialCore, HeroHeader._radialEdge],
+          colors: [HeroHeader._radialCore(context), HeroHeader._radialEdge(context)],
         ),
       ),
     );

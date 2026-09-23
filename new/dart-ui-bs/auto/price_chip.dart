@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__trade_builder__accessory_rule_editor:_PriceChip (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -21,7 +22,7 @@ class PriceChip extends StatelessWidget {
         ),
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      side: const BorderSide(color: DsAtomColors.autoPriceChip1),
+      side: BorderSide(color: dsWear(context, DsAtomColors.autoPriceChip1, (l) => l.ink)),
     );
   }
 }

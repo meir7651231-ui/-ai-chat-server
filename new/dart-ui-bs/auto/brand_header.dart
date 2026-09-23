@@ -2,6 +2,7 @@
 // מוצא: screens__lipskey_brand_screen:_BrandHeader (בנייה-חכמה main) · צרור-1 · props-שורש: fallback, label, label2
 // התוכן: new/dart-data-bs/auto/screens__lipskey_brand_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 
@@ -19,14 +20,14 @@ class BrandHeader extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.fromLTRB(12, 8, 12, 12),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [DsAtomColors.autoBrandHeader1, DsAtomColors.autoBrandHeader2],
+          colors: [dsWear(context, DsAtomColors.autoBrandHeader1, (l) => l.cardAlt), dsWear(context, DsAtomColors.autoBrandHeader2, (l) => l.cardAlt)],
         ),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-            color: DsAtomColors.autoBrandHeader3.withOpacity(0.4), width: 0.8),
+            color: dsWear(context, DsAtomColors.autoBrandHeader3, (l) => l.faint).withOpacity(0.4), width: 0.8),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Row(
@@ -40,12 +41,12 @@ class BrandHeader extends StatelessWidget {
                 CfgText(
                     'lipskey_brand_screen.header_title', fallback,
                     style: TextStyle(
-                        color: DsAtomColors.autoBrandHeader4,
+                        color: dsWear(context, DsAtomColors.autoBrandHeader4, (l) => l.success),
                         fontSize: 14,
                         fontWeight: FontWeight.w700)),
                 Text('$totalProducts${label}$totalCats${label2}',
-                    style: const TextStyle(
-                        color: DsAtomColors.autoBrandHeader5, fontSize: 11)),
+                    style: TextStyle(
+                        color: dsWear(context, DsAtomColors.autoBrandHeader5, (l) => l.bg.withValues(alpha: 0.38)), fontSize: 11)),
               ],
             ),
           ),

@@ -2,6 +2,7 @@
 // אפס מודולים, אפס store. כל הטקסטים/צבעים/פעולה מוזרקים. מוצא: _WorkPath
 // (smart_home_screen.dart) אחרי חילוץ-הדאטה ל-dart-data-bs/home_content.dart.
 import 'package:flutter/material.dart';
+import 'ds/ds.dart';
 import 'ds/ds_atoms.dart';
 
 class WorkPathCard extends StatelessWidget {
@@ -27,17 +28,17 @@ class WorkPathCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: DsAtomColors.workPathCard1,
+                color: dsWear(context, DsAtomColors.workPathCard1, (l) => l.onAccent.withValues(alpha: 0.239)),
                 borderRadius: BorderRadius.circular(pillRadius),
               ),
               child: Text(badge,
-                  style: const TextStyle(color: DsAtomColors.workPathCard2, fontWeight: FontWeight.w700, fontSize: 12)),
+                  style: TextStyle(color: dsWear(context, DsAtomColors.workPathCard2, (l) => l.onAccent), fontWeight: FontWeight.w700, fontSize: 12)),
             ),
             const SizedBox(height: 6),
             Text(title,
-                style: const TextStyle(color: DsAtomColors.workPathCard2, fontWeight: FontWeight.w800, fontSize: 17)),
+                style: TextStyle(color: dsWear(context, DsAtomColors.workPathCard2, (l) => l.onAccent), fontWeight: FontWeight.w800, fontSize: 17)),
             const SizedBox(height: 4),
-            Text(sub, style: const TextStyle(color: DsAtomColors.workPathCard3, fontSize: 13)),
+            Text(sub, style: TextStyle(color: dsWear(context, DsAtomColors.workPathCard3, (l) => l.onAccent.withValues(alpha: 0.702)), fontSize: 13)),
           ],
         ),
       );

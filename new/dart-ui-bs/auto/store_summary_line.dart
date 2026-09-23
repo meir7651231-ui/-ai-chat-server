@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__store_screen:_SummaryLine (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -24,7 +25,7 @@ class StoreSummaryLine extends StatelessWidget {
               fontSize: 15,
               fontWeight: FontWeight.w800,
             )
-            : const TextStyle(color: DsAtomColors.autoStoreSummaryLine1, fontSize: 13);
+            : TextStyle(color: dsWear(context, DsAtomColors.autoStoreSummaryLine1, (l) => l.muted), fontSize: 13);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [Text(label, style: style), Text(value, style: style)],

@@ -2,6 +2,7 @@
 // מוצא: screens__worker_reports_tab:_ProofThumb (בנייה-חכמה main) · צרור-2 · props-שורש: title, body, label, onTap
 // התוכן: new/dart-data-bs/auto/screens__worker_reports_tab_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/help_target.dart';
 import 'bs_tokens.dart';
@@ -65,7 +66,7 @@ class _ThumbPlaceholder extends StatelessWidget {
       height: 48,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: DsAtomColors.autoProofThumb1,
+        color: dsWear(context, DsAtomColors.autoProofThumb1, (l) => l.chipBg),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text(

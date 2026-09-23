@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__rewards_hub_screen:_FinTile (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
@@ -30,7 +31,7 @@ class FinTile extends StatelessWidget {
           padding: const EdgeInsets.all(BsTokens.space3),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(cfgRadius(context)),
-            border: Border.all(color: DsAtomColors.autoFinTile1),
+            border: Border.all(color: dsWear(context, DsAtomColors.autoFinTile1, (l) => l.ink)),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

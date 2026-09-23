@@ -2,6 +2,7 @@
 // מוצא: screens__notif_settings_screen:_SwitchRow (בנייה-חכמה main) · צרור-2 · props-שורש: fallback, fallback2
 // התוכן: new/dart-data-bs/auto/screens__notif_settings_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 
@@ -46,7 +47,7 @@ class NotifSettingsSwitchRow extends StatelessWidget implements _Inert {
               )
               : null,
       value: value,
-      activeColor: BsTokens.brand,
+      activeColor: dsWear(context, BsTokens.brand, (l) => l.accent),
       onChanged: requiresServer ? null : onChanged,
     );
   }

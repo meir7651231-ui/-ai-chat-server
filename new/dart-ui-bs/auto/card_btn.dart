@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__rewards_hub_screen:_CardBtn (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class CardBtn extends StatelessWidget {
@@ -16,7 +17,7 @@ class CardBtn extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onTap,
         style: OutlinedButton.styleFrom(
-          foregroundColor: BsTokens.brandDark,
+          foregroundColor: dsWear(context, BsTokens.brandDark, (l) => l.accentDark),
           side: const BorderSide(color: BsTokens.brand),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(BsTokens.radiusPill),

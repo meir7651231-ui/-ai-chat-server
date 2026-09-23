@@ -2,6 +2,7 @@
 // מוצא: screens__contractor_hr_sheet:_StatusChip (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__contractor_hr_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/state/vacation_requests.dart';
@@ -15,7 +16,7 @@ class StatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final approved = status == kVacationApproved;
-    final color = approved ? DsAtomColors.autoStatusChip1 : BsTokens.danger;
+    final color = approved ? dsWear(context, DsAtomColors.autoStatusChip1, (l) => l.faint) : dsWear(context, BsTokens.danger, (l) => l.danger);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'ds_atoms.dart';
 import 'ds_pure.dart'; // 🎨 עיצוב-Pure (הכרעת-בעלים 1.9) — הפלטה מופנית ל-DsPure. הפיך: שחזור-קובץ ⇒ הישן.
 import 'ds_scale.dart'; // 🎨 DsIdentity (הכרעת-בעלים 23.9 «לא קשיח, לא דעה קדומה»): צבעי-הזהות (ניאון · זוהר · צללים · גוונים) מהזרע design-seed.json דרך ds-tokens — אפס צבע כתוב ביד כאן
+export 'ds_scale.dart' show DsIdentity; // צבעי-ברירת-מחדל של המחוללים (propFallback · onAccent) מהזרע — כל מי שמייבא ds.dart רואה אותם
 import 'ds_seam.dart'; // G28 · חריץ-העור: DsLook.of(context) — כרום-ה-DS לובש את העור המוזרק (paper) או נשאר ביט-זהה (כהה)
 
 class DsTokens {
@@ -59,22 +60,25 @@ class DsTokens {
   static const List<BoxShadow> glow = DsIdentity.glow;
 }
 
+// ── לובש-עור (הכרעת-בעלים 23.9 «תוריד לכולם את העור»): צבע-אטום = תפקיד, לא ערך. בכהה — הערך המדויק מהזרע (ביט-זהה); בעור-בהיר — התפקיד מהעור ──
+Color dsWear(BuildContext context, Color dark, Color Function(DsLook look) role) { final lk = DsLook.of(context); return lk.paper ? role(lk) : dark; }
+
 // ── G28 (הכרעה-28) · מראה-נפתר לכרום-ה-DS ──
 // בלי PureScope, או עור-כהה ⇒ DsLook.dark = ערכי-DsTokens (ביט-זהה — חוק-7). עור-בהיר (skins.paper) ⇒ paper:
 // לבן · דיו #37352F · קו 8% · אקצנט-יחיד · בלי גרדיאנט/זוהר/צל · שורה-לא-כרטיס · בלי אריח-אמוג׳י. הכרום קורא DsLook.of(context)
 // בדיוק כמו שאטום-forge קורא DsSeam.skinOf — הזהות בחיווט (חוק-6), לא בקוד.
 class DsLook {
-  const DsLook({required this.paper, required this.bg, required this.card, required this.cardAlt, required this.ink, required this.muted, required this.faint, required this.line, required this.track, required this.accent, required this.accentDark, required this.accentSoft, required this.success, required this.successSoft, required this.warn, required this.danger, required this.dangerSoft, required this.dangerLine, required this.chipBg, required this.r, required this.rSm, required this.fontHead});
+  const DsLook({required this.paper, required this.bg, required this.card, required this.cardAlt, required this.ink, required this.muted, required this.faint, required this.line, required this.track, required this.accent, required this.accentDark, required this.accentSoft, required this.success, required this.successSoft, required this.warn, required this.danger, required this.dangerSoft, required this.dangerLine, required this.chipBg, required this.onAccent, required this.r, required this.rSm, required this.fontHead});
   final bool paper;
-  final Color bg, card, cardAlt, ink, muted, faint, line, track, accent, accentDark, accentSoft, success, successSoft, warn, danger, dangerSoft, dangerLine, chipBg;
+  final Color bg, card, cardAlt, ink, muted, faint, line, track, accent, accentDark, accentSoft, success, successSoft, warn, danger, dangerSoft, dangerLine, chipBg, onAccent;
   final double r, rSm;
   final String fontHead;
-  static const DsLook dark = DsLook(paper: false, bg: DsTokens.bg, card: DsTokens.card, cardAlt: DsTokens.cardAlt, ink: DsTokens.ink, muted: DsTokens.muted, faint: DsTokens.faint, line: DsTokens.line, track: DsTokens.track, accent: DsTokens.accent, accentDark: DsTokens.accentDark, accentSoft: DsTokens.accentSoft, success: DsTokens.success, successSoft: DsTokens.successSoft, warn: DsIdentity.lookWarn, danger: DsIdentity.danger, dangerSoft: DsIdentity.dangerSoft, dangerLine: DsIdentity.dangerLine, chipBg: DsIdentity.chipBg, r: DsTokens.r, rSm: DsTokens.rSm, fontHead: DsTokens.fontHead);
+  static const DsLook dark = DsLook(paper: false, bg: DsTokens.bg, card: DsTokens.card, cardAlt: DsTokens.cardAlt, ink: DsTokens.ink, muted: DsTokens.muted, faint: DsTokens.faint, line: DsTokens.line, track: DsTokens.track, accent: DsTokens.accent, accentDark: DsTokens.accentDark, accentSoft: DsTokens.accentSoft, success: DsTokens.success, successSoft: DsTokens.successSoft, warn: DsIdentity.lookWarn, danger: DsIdentity.danger, dangerSoft: DsIdentity.dangerSoft, dangerLine: DsIdentity.dangerLine, chipBg: DsIdentity.chipBg, onAccent: DsIdentity.onAccent, r: DsTokens.r, rSm: DsTokens.rSm, fontHead: DsTokens.fontHead);
   static DsLook of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<PureScope>();
     if (scope == null || scope.skin.canvas.computeLuminance() < 0.5) return dark;
     final s = scope.skin, th = scope.theme;
-    return DsLook(paper: true, bg: s.canvas, card: s.surface, cardAlt: s.raised, ink: s.ink, muted: s.mut, faint: s.faint, line: s.hair, track: s.raised2, accent: th.a, accentDark: th.a800, accentSoft: th.a.withValues(alpha: 0.10), success: s.ok, successSoft: s.ok.withValues(alpha: 0.12), warn: s.warn, danger: s.err, dangerSoft: s.err.withValues(alpha: 0.08), dangerLine: s.err.withValues(alpha: 0.25), chipBg: s.raised2, r: 12, rSm: 10, fontHead: scope.fonts.he);
+    return DsLook(paper: true, bg: s.canvas, card: s.surface, cardAlt: s.raised, ink: s.ink, muted: s.mut, faint: s.faint, line: s.hair, track: s.raised2, accent: th.a, accentDark: th.a800, accentSoft: th.a.withValues(alpha: 0.10), success: s.ok, successSoft: s.ok.withValues(alpha: 0.12), warn: s.warn, danger: s.err, dangerSoft: s.err.withValues(alpha: 0.08), dangerLine: s.err.withValues(alpha: 0.25), chipBg: s.raised2, onAccent: s.onA, r: 12, rSm: 10, fontHead: scope.fonts.he);
   }
 }
 
@@ -439,7 +443,7 @@ class DsLoadMeter extends StatelessWidget {
         Row(mainAxisSize: MainAxisSize.min, children: [for (var i = 0; i < 5; i++) Container(width: 12, height: 18, margin: const EdgeInsets.only(left: 3), decoration: BoxDecoration(color: i < on ? c : lk.line, borderRadius: BorderRadius.circular(2)))]),
         const SizedBox(width: 10),
         Expanded(child: Text(label, style: TextStyle(color: lk.ink, fontSize: 15))),
-        Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2), decoration: BoxDecoration(color: c, borderRadius: BorderRadius.circular(999)), child: Text(stateLabels[state.clamp(0, stateLabels.length - 1)], style: const TextStyle(color: DsAtomColors.dsDs1, fontSize: 12, fontWeight: FontWeight.w600))),
+        Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2), decoration: BoxDecoration(color: c, borderRadius: BorderRadius.circular(999)), child: Text(stateLabels[state.clamp(0, stateLabels.length - 1)], style: TextStyle(color: dsWear(context, DsAtomColors.dsDs1, (l) => l.onAccent), fontSize: 12, fontWeight: FontWeight.w600))),
       ]),
     );
   }
@@ -494,7 +498,7 @@ class DsApproveCard extends StatelessWidget {
         Text(question, style: TextStyle(color: lk.ink, fontSize: 16, height: 1.4)),
         if (source.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 2), child: Text(source, style: TextStyle(color: lk.muted, fontSize: 13))),
         Padding(padding: const EdgeInsets.only(top: 10), child: Row(children: [
-          GestureDetector(onTap: onOk, child: Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7), decoration: BoxDecoration(color: lk.accent, borderRadius: BorderRadius.circular(9)), child: Text(okLabel, style: const TextStyle(color: DsAtomColors.dsDs1, fontSize: 14, fontWeight: FontWeight.w600)))),
+          GestureDetector(onTap: onOk, child: Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7), decoration: BoxDecoration(color: lk.accent, borderRadius: BorderRadius.circular(9)), child: Text(okLabel, style: TextStyle(color: dsWear(context, DsAtomColors.dsDs1, (l) => l.onAccent), fontSize: 14, fontWeight: FontWeight.w600)))),
           const SizedBox(width: 8),
           GestureDetector(onTap: onNo, child: Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7), decoration: BoxDecoration(border: Border.all(color: lk.line), borderRadius: BorderRadius.circular(9)), child: Text(noLabel, style: TextStyle(color: lk.ink, fontSize: 14, fontWeight: FontWeight.w600)))),
           if (onAlways != null && alwaysLabel.isNotEmpty) ...[const SizedBox(width: 8), GestureDetector(onTap: onAlways, child: Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7), decoration: BoxDecoration(border: Border.all(color: lk.line), borderRadius: BorderRadius.circular(9)), child: Text(alwaysLabel, style: TextStyle(color: lk.ink, fontSize: 14, fontWeight: FontWeight.w600))))],
@@ -584,7 +588,7 @@ class DsWorkflow extends StatelessWidget {
               border: Border.all(color: done ? Colors.transparent : lk.line, width: 2),
               boxShadow: paper ? null : (i == current ? DsTokens.glow : null),
             ),
-            child: Text('${i + 1}', style: TextStyle(color: done ? DsAtomColors.dsDs1 : lk.faint, fontSize: 13, fontWeight: FontWeight.w800)),
+            child: Text('${i + 1}', style: TextStyle(color: done ? dsWear(context, DsAtomColors.dsDs1, (l) => l.onAccent) : lk.faint, fontSize: 13, fontWeight: FontWeight.w800)),
           ),
           const SizedBox(height: 6),
           SizedBox(
@@ -633,7 +637,7 @@ class DsPrimaryButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(13),
                 border: Border.all(color: DsIdentity.hairline),
               ),
-              child: Text(label, style: TextStyle(color: DsAtomColors.dsDs1, fontSize: paper ? 16 : 15.5, fontWeight: paper ? FontWeight.w600 : FontWeight.w800, letterSpacing: paper ? 0 : 0.2)),
+              child: Text(label, style: TextStyle(color: dsWear(context, DsAtomColors.dsDs1, (l) => l.onAccent), fontSize: paper ? 16 : 15.5, fontWeight: paper ? FontWeight.w600 : FontWeight.w800, letterSpacing: paper ? 0 : 0.2)),
             ),
           ),
         ),
@@ -697,7 +701,7 @@ class DsStat extends StatelessWidget {
                 else
                   ShaderMask(
                     shaderCallback: (r) => DsTokens.inkGrad.createShader(r),
-                    child: Text(value, style: const TextStyle(color: DsAtomColors.dsDs1, fontSize: 25, fontWeight: FontWeight.w800, letterSpacing: -0.6, fontFamily: DsTokens.fontHead)),
+                    child: Text(value, style: TextStyle(color: dsWear(context, DsAtomColors.dsDs1, (l) => l.onAccent), fontSize: 25, fontWeight: FontWeight.w800, letterSpacing: -0.6, fontFamily: DsTokens.fontHead)),
                   ),
               ],
             ),

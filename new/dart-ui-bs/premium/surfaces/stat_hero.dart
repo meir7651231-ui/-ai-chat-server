@@ -1,22 +1,28 @@
 // ✨ StatHero — מספר-ענק בגרדיאנט-טקסט (ShaderMask) עם תווית מתחת; מקבל value/label
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class StatHero extends StatelessWidget {
-  const StatHero({super.key, required this.value, required this.label});
+  StatHero({super.key, required this.value, required this.label});
 
   final String value;
   final String label;
 
-  static const Color _shaderA = DsAtomColors.premiumSurfacesStatHero1;
-  static const Color _shaderB = DsAtomColors.premiumSurfacesStatHero2;
-  static const Color _shaderC = DsAtomColors.premiumSurfacesStatHero3;
-  static const Color _label = DsAtomColors.premiumSurfacesStatHero4;
+  static const _shaderA0 = DsAtomColors.premiumSurfacesStatHero1;
 
-  static const Gradient _grad = LinearGradient(
+  static Color _shaderA(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesStatHero1, (l) => l.success);   // לובש עור · _shaderA0 = הערך-הכהה
+  static const _shaderB0 = DsAtomColors.premiumSurfacesStatHero2;
+  static Color _shaderB(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesStatHero2, (l) => l.accent);   // לובש עור · _shaderB0 = הערך-הכהה
+  static const _shaderC0 = DsAtomColors.premiumSurfacesStatHero3;
+  static Color _shaderC(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesStatHero3, (l) => l.muted);   // לובש עור · _shaderC0 = הערך-הכהה
+  static const _label0 = DsAtomColors.premiumSurfacesStatHero4;
+  static Color _label(BuildContext context) => dsWear(context, DsAtomColors.premiumSurfacesStatHero4, (l) => l.muted);   // לובש עור · _label0 = הערך-הכהה
+
+  static Gradient _grad = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [_shaderA, _shaderB, _shaderC],
+    colors: [_shaderA0, _shaderB0, _shaderC0],
   );
 
   @override
@@ -34,8 +40,8 @@ class StatHero extends StatelessWidget {
             blendMode: BlendMode.srcIn,
             child: Text(
               value,
-              style: const TextStyle(
-                color: DsAtomColors.premiumSurfacesStatHero5,
+              style: TextStyle(
+                color: dsWear(context, DsAtomColors.premiumSurfacesStatHero5, (l) => l.onAccent),
                 fontSize: 54,
                 fontWeight: FontWeight.w900,
                 height: 1.0,
@@ -46,8 +52,8 @@ class StatHero extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             label,
-            style: const TextStyle(
-              color: _label,
+            style: TextStyle(
+              color: _label(context),
               fontSize: 14,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.2,

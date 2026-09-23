@@ -148,8 +148,7 @@ export async function mosadSpecs() {
 /** דלת שנייה — מסמך של הבעלים במקום משפט: ספק מוכן (specs-ds/*.txt, נגזר ממסמך-«פירוק») ⇒ app-ds ⇒ outDir. */
 export async function generateFromSpec(spec, { outDir, name = 'spec' } = {}) {
   fs.mkdirSync(outDir, { recursive: true }); const files = [], notes = [], questions = [];
-  const caps = capSegs.map(([seg, clauses], i) => ({ slug: `cap${i + 1}`, cls: `GenCap${i + 1}Screen`, kind: 'capability', name: seg.trim(), icon: '🔔', sub: clauses.map((c) => `${c.x || ''} ${c.op || ''} ${c.n ?? ''}`.trim()).join(' · ') }));   // מסך-ההתראה ⇒ אריח ברכזת (הרכבה: לא קובץ-ליד)
-  const app = await runAppDs(spec, files, notes, questions, { extraScreens: caps });
+  const app = await runAppDs(spec, files, notes, questions);
   return { spec, files, notes, questions, screens: app ? app.screens.map((s) => `${s.kind}:${s.name}`) : [] };
 }
 /** מסמך-«פירוק» (markdown של הבעלים, שלד peruk-lang) ⇒ peruk.perukToSpec ⇒ ספק ⇒ app-ds. אפס כתיבה ל-specs-ds. */
@@ -198,7 +197,8 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   // 2 · app-ds — כל הישויות בקריאה אחת (GEN_OUT/GEN_DATA_OUT של הקורא)
   // 🔒 שומר-ניקיון: app-ds/render-ds קוראים GEN_OUT/GEN_DATA_OUT **בזמן-טעינה**. אם לא הופנו מחוץ למדף לפני הייבוא הראשון —
   //    הבנייה כותבת ל-new/dart-gen-bs ו-new/dart-data-bs/auto ומוחקת יתומים (קרה 23.9, שוחזר מ-git). כאן: מסרבים, לא מלכלכים.
-  const app = await runAppDs(spec, files, notes, questions);
+  const caps = capSegs.map(([seg, clauses], i) => ({ slug: `cap${i + 1}`, cls: `GenCap${i + 1}Screen`, kind: 'capability', name: seg.trim(), icon: '🔔', value: (clauses.find((c) => c.n != null) || {}).n ?? null, sub: clauses.map((c) => `${c.x || ''} ${c.op || ''} ${c.n ?? ''}`.trim()).join(' · ') }));   // מסך-ההתראה ⇒ אריח בלוח-הבית וברכזת (הרכבה: לא קובץ-ליד)
+  const app = await runAppDs(spec, files, notes, questions, { extraScreens: caps });
   // 2ב · server — רק כשהספק מצהיר (`שרת: ענן`): חבילת-שרת לישויות שנבנו, בזיכרון ⇒ outDir/server/ (לא server-gen/)
   const SV = await import('../machtzev/generator/server.mjs');
   if (SV.declaredServer(spec)) { const ents = app ? app.screens.filter((s) => s.kind === 'entity').map((s) => s.slug) : [];

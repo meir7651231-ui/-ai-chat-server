@@ -2,6 +2,7 @@
 // מוצא: screens__persona_picking_sheet:_SplitControl (בנייה-חכמה main) · צרור-1 · props-שורש: fallback, label, label2
 // התוכן: new/dart-data-bs/auto/screens__persona_picking_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -44,9 +45,9 @@ class SplitControl extends StatelessWidget {
                     onPressed: () => onSelect(g),
                     style: OutlinedButton.styleFrom(
                       backgroundColor: splitInto == g
-                          ? BsTokens.brand
+                          ? dsWear(context, BsTokens.brand, (l) => l.accent)
                           : Colors.transparent,
-                      side: const BorderSide(color: DsAtomColors.autoSplitControl1),
+                      side: BorderSide(color: dsWear(context, DsAtomColors.autoSplitControl1, (l) => l.ink)),
                       padding: const EdgeInsets.symmetric(vertical: 9),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(BsTokens.radiusPill),

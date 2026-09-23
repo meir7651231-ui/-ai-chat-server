@@ -2,6 +2,7 @@
 // מוצא: screens__trade_builder__trade_builder_home:_AddTradeButton (בנייה-חכמה main) · צרור-1 · props-שורש: label, fallback
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__trade_builder_home_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -23,7 +24,7 @@ class AddTradeButton extends StatelessWidget {
         button: true,
         label: label,
         child: Material(
-          color: BsTokens.brand,
+          color: dsWear(context, BsTokens.brand, (l) => l.accent),
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),
           child: InkWell(
             borderRadius: BorderRadius.circular(BsTokens.radiusPill),

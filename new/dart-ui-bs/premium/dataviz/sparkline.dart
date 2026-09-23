@@ -1,6 +1,7 @@
 // ✨ Sparkline — קו-מגמה זעיר עם מילוי-גרדיאנט ונקודת-קצה מודגשת (CustomPainter)
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class Sparkline extends StatelessWidget {
@@ -26,9 +27,13 @@ class _SparkPainter extends CustomPainter {
 
   final List<double> values;
 
-  static const Color _cyan = DsAtomColors.premiumDatavizSparkline1;
-  static const Color _violet = DsAtomColors.premiumDatavizSparkline2;
-  static const Color _magenta = DsAtomColors.premiumDatavizSparkline3;
+  static const _cyan0 = DsAtomColors.premiumDatavizSparkline1;
+
+  static Color _cyan(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizSparkline1, (l) => l.success);   // לובש עור · _cyan0 = הערך-הכהה
+  static const _violet0 = DsAtomColors.premiumDatavizSparkline2;
+  static Color _violet(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizSparkline2, (l) => l.accent);   // לובש עור · _violet0 = הערך-הכהה
+  static const _magenta0 = DsAtomColors.premiumDatavizSparkline3;
+  static Color _magenta(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizSparkline3, (l) => l.accentDark);   // לובש עור · _magenta0 = הערך-הכהה
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -40,7 +45,7 @@ class _SparkPainter extends CustomPainter {
       if (v > hi) hi = v;
     }
     final double span = (hi - lo).abs() < 1e-9 ? 1 : (hi - lo);
-    const double pad = 5;
+    double pad = 5;
     final double h = size.height - pad * 2;
     final double dx = size.width / (values.length - 1);
 
@@ -59,8 +64,8 @@ class _SparkPainter extends CustomPainter {
     }
 
     final Rect rect = Offset.zero & size;
-    const Gradient grad = LinearGradient(
-      colors: [_cyan, _violet, _magenta],
+    Gradient grad = LinearGradient(
+      colors: [_cyan0, _violet0, _magenta0],
     );
 
     final Path fill = Path.from(line)
@@ -73,7 +78,7 @@ class _SparkPainter extends CustomPainter {
         ..shader = LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [_violet.withValues(alpha: 0.28), _violet.withValues(alpha: 0.0)],
+          colors: [_violet0.withValues(alpha: 0.28), _violet0.withValues(alpha: 0.0)],
         ).createShader(rect),
     );
 
@@ -94,8 +99,8 @@ class _SparkPainter extends CustomPainter {
     canvas.drawPath(line, stroke);
 
     final Offset end = pts.last;
-    canvas.drawCircle(end, 8, Paint()..color = _magenta.withValues(alpha: 0.28));
-    canvas.drawCircle(end, 4.5, Paint()..color = _magenta);
+    canvas.drawCircle(end, 8, Paint()..color = _magenta0.withValues(alpha: 0.28));
+    canvas.drawCircle(end, 4.5, Paint()..color = _magenta0);
     canvas.drawCircle(end, 2, Paint()..color = DsAtomColors.premiumDatavizSparkline4);
   }
 

@@ -4,8 +4,9 @@
 // התרת-סבך: userProfileProvider + גזירת-השם-הפרטי (split רווחים) ⇒ הקופסה מזריקה
 // label מוכן; showProfileCard ⇒ onTap; ה-HelpTarget העוטף = חיווט-קופסה.
 // תווית-הנגישות + tooltip (במקור אותה מחרוזת) ⇒ content. היו צרובים:
-// 0xFFFFF0E3 · BsTokens.brandDark ⇒ fillColor/textColor.
+// 0xFFFFF0E3 · dsWear(context, BsTokens.brandDark, (l) => l.accentDark) ⇒ fillColor/textColor.
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 
 class NameChip extends StatelessWidget {
   const NameChip({

@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__finance_hub_sheets:_ThrRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/config_theme.dart';
@@ -19,10 +20,10 @@ class ThrRow extends StatelessWidget {
         vertical: BsTokens.space3,
       ),
       decoration: BoxDecoration(
-        color: hit ? DsAtomColors.autoThrRow1 : DsAtomColors.autoThrRow2,
+        color: hit ? dsWear(context, DsAtomColors.autoThrRow1, (l) => l.ink) : dsWear(context, DsAtomColors.autoThrRow2, (l) => l.chipBg),
         borderRadius: BorderRadius.circular(cfgRadius(context)),
         border: Border.all(
-          color: hit ? DsAtomColors.autoThrRow3 : DsAtomColors.autoThrRow4,
+          color: hit ? dsWear(context, DsAtomColors.autoThrRow3, (l) => l.ink) : dsWear(context, DsAtomColors.autoThrRow4, (l) => l.ink),
         ),
       ),
       child: Row(

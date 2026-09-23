@@ -1,8 +1,9 @@
 // 🧼 אטום · InstallStageRow — שורת-שלב-התקנה מתקפלת: עיגול-מספר + גליף + תווית (+תיאור).
 // מוצא: screens__lipskey_product_sheet.dart:1894-1987 (_StageRow).
 // התרת-סבך: LipskeyCatStage (טיפוס-דאטה) ⇒ שדות שטוחים (numberText/emoji/label/desc/
-// isFinal); צבעי success/accent (BsTokens.success · 0xFF64FFDA · 0xFF3D5A80) ⇒ פיגמנטים.
+// isFinal); צבעי success/accent (dsWear(context, BsTokens.success, (l) => l.success) · 0xFF64FFDA · 0xFF3D5A80) ⇒ פיגמנטים.
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 
 class InstallStageRow extends StatelessWidget {
   const InstallStageRow({

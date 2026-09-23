@@ -4,8 +4,9 @@
 // התרת-סבך: userProfileProvider + דין-האורח (שם ריק ⇒ תווית-אורח מ-content +
 // אייקון-person) ⇒ הקופסה מזריקה name מוכן ו-initial (null ⇒ fallbackIcon);
 // Navigator.pop ⇒ onClose; tooltip-הסגירה ⇒ content. היו צרובים: 0xFFFFF0E3 ·
-// BsTokens.brandDark · BsTokens.inkLight · 0xFF888888 · BsTokens.space3 ⇒ params.
+// dsWear(context, BsTokens.brandDark, (l) => l.accentDark) · BsTokens.inkLight · 0xFF888888 · BsTokens.space3 ⇒ params.
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 
 class ProfileHeaderRow extends StatelessWidget {
   const ProfileHeaderRow({

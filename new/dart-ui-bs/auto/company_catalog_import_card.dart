@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_CompanyCatalogImportCard (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2, label3, label4, onTap
 // התוכן: new/dart-data-bs/auto/screens__catalog_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/data/catalog_source.dart';
@@ -25,7 +26,7 @@ class CompanyCatalogImportCard extends StatelessWidget {
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: DsAtomColors.autoCompanyCatalogImportCard1,
+            color: dsWear(context, DsAtomColors.autoCompanyCatalogImportCard1, (l) => l.ink),
             width: 0.5,
           ),
         ),
@@ -48,12 +49,12 @@ class CompanyCatalogImportCard extends StatelessWidget {
                     resolvedCatalogProducts.isNotEmpty
                         ? '${label2}${resolvedCatalogProducts.length}${label3}'
                         : label4,
-                    style: const TextStyle(color: DsAtomColors.autoCompanyCatalogImportCard2, fontSize: 12),
+                    style: TextStyle(color: dsWear(context, DsAtomColors.autoCompanyCatalogImportCard2, (l) => l.bg.withValues(alpha: 0.38)), fontSize: 12),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_left, color: DsAtomColors.autoCompanyCatalogImportCard2, size: 22),
+            Icon(Icons.chevron_left, color: dsWear(context, DsAtomColors.autoCompanyCatalogImportCard2, (l) => l.bg.withValues(alpha: 0.38)), size: 22),
           ],
         ),
       ),

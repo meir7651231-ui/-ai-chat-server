@@ -2,15 +2,16 @@
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class DonutChart extends StatelessWidget {
-  const DonutChart({super.key, required this.values, this.size = 176});
+  DonutChart({super.key, required this.values, this.size = 176});
 
   final List<double> values;
   final double size;
 
-  static const List<Color> palette = [
+  static List<Color> palette = [
     DsAtomColors.premiumDatavizDonutChart1,
     DsAtomColors.premiumDatavizDonutChart2,
     DsAtomColors.premiumDatavizDonutChart3,
@@ -33,13 +34,13 @@ class DonutChart extends StatelessWidget {
         children: [
           CustomPaint(size: Size.square(size), painter: _DonutPainter(values)),
           ShaderMask(
-            shaderCallback: (r) => const LinearGradient(
-              colors: [DsAtomColors.premiumDatavizDonutChart1, DsAtomColors.premiumDatavizDonutChart3],
+            shaderCallback: (r) => LinearGradient(
+              colors: [dsWear(context, DsAtomColors.premiumDatavizDonutChart1, (l) => l.success), dsWear(context, DsAtomColors.premiumDatavizDonutChart3, (l) => l.accentDark)],
             ).createShader(r),
             child: Text(
               _fmt(total),
               style: TextStyle(
-                color: DsAtomColors.premiumDatavizDonutChart7,
+                color: dsWear(context, DsAtomColors.premiumDatavizDonutChart7, (l) => l.onAccent),
                 fontSize: size * 0.19,
                 fontWeight: FontWeight.w900,
                 letterSpacing: -1.5,
@@ -66,7 +67,9 @@ class _DonutPainter extends CustomPainter {
 
   final List<double> values;
 
-  static const Color _track = DsAtomColors.premiumDatavizDonutChart8;
+  static const _track0 = DsAtomColors.premiumDatavizDonutChart8;
+
+  static Color _track(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizDonutChart8, (l) => l.track);   // לובש עור · _track0 = הערך-הכהה
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -81,7 +84,7 @@ class _DonutPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = stroke
-        ..color = _track,
+        ..color = _track0,
     );
 
     double total = 0;

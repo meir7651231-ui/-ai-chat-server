@@ -1,25 +1,34 @@
 // ✨ NeonBars — עמודות אופקיות גרדיאנט-ניאון מנורמלות-למקסימום + ערך טבלאי
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class NeonBars extends StatelessWidget {
-  const NeonBars({super.key, required this.labels, required this.values, this.tone = 0});
+  NeonBars({super.key, required this.labels, required this.values, this.tone = 0});
 
   final List<String> labels;
   final List<double> values;
   final int tone; // 0=ניאון(ברירת-מחדל, ביט-זהה) · 1=success · 2=danger · 3=warning — פיגמנט מוזרק (חוק-6)
 
-  static const Color _bg = DsAtomColors.premiumDatavizNeonBars1;
-  static const Color _track = DsAtomColors.premiumDatavizNeonBars2;
-  static const Color _cyan = DsAtomColors.premiumDatavizNeonBars3;
-  static const Color _violet = DsAtomColors.premiumDatavizNeonBars4;
-  static const Color _magenta = DsAtomColors.premiumDatavizNeonBars5;
-  static const Color _ink = DsAtomColors.premiumDatavizNeonBars6;
-  static const Color _mute = DsAtomColors.premiumDatavizNeonBars7;
+  static const _bg0 = DsAtomColors.premiumDatavizNeonBars1;
+
+  static Color _bg(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizNeonBars1, (l) => l.card);   // לובש עור · _bg0 = הערך-הכהה
+  static const _track0 = DsAtomColors.premiumDatavizNeonBars2;
+  static Color _track(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizNeonBars2, (l) => l.track);   // לובש עור · _track0 = הערך-הכהה
+  static const _cyan0 = DsAtomColors.premiumDatavizNeonBars3;
+  static Color _cyan(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizNeonBars3, (l) => l.success);   // לובש עור · _cyan0 = הערך-הכהה
+  static const _violet0 = DsAtomColors.premiumDatavizNeonBars4;
+  static Color _violet(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizNeonBars4, (l) => l.accent);   // לובש עור · _violet0 = הערך-הכהה
+  static const _magenta0 = DsAtomColors.premiumDatavizNeonBars5;
+  static Color _magenta(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizNeonBars5, (l) => l.accentDark);   // לובש עור · _magenta0 = הערך-הכהה
+  static const _ink0 = DsAtomColors.premiumDatavizNeonBars6;
+  static Color _ink(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizNeonBars6, (l) => l.chipBg);   // לובש עור · _ink0 = הערך-הכהה
+  static const _mute0 = DsAtomColors.premiumDatavizNeonBars7;
+  static Color _mute(BuildContext context) => dsWear(context, DsAtomColors.premiumDatavizNeonBars7, (l) => l.muted);   // לובש עור · _mute0 = הערך-הכהה
 
   // גרדיאנטי-tone לפס-המילוי — הצבע מגיב-למצב במקום קשיח.
-  static const List<List<Color>> tones = [
-    [_cyan, _violet, _magenta],                                       // 0 ניאון
+  static List<List<Color>> tones = [
+    [_cyan0, _violet0, _magenta0],                                       // 0 ניאון
     [DsAtomColors.premiumDatavizNeonBars8, DsAtomColors.premiumDatavizNeonBars9, DsAtomColors.premiumDatavizNeonBars10],        // 1 success
     [DsAtomColors.premiumDatavizNeonBars11, DsAtomColors.premiumDatavizNeonBars12, DsAtomColors.premiumDatavizNeonBars13],        // 2 danger
     [DsAtomColors.premiumDatavizNeonBars14, DsAtomColors.premiumDatavizNeonBars15, DsAtomColors.premiumDatavizNeonBars16],        // 3 warning
@@ -39,9 +48,9 @@ class NeonBars extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
         decoration: BoxDecoration(
-          color: _bg,
+          color: _bg(context),
           borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: DsAtomColors.premiumDatavizNeonBars17.withValues(alpha: 0.06)),
+          border: Border.all(color: dsWear(context, DsAtomColors.premiumDatavizNeonBars17, (l) => l.onAccent).withValues(alpha: 0.06)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -86,8 +95,8 @@ class _Row extends StatelessWidget {
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: NeonBars._mute,
+                  style: TextStyle(
+                    color: NeonBars._mute(context),
                     fontSize: 12.5,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.2,
@@ -96,8 +105,8 @@ class _Row extends StatelessWidget {
               ),
               Text(
                 _fmt(value),
-                style: const TextStyle(
-                  color: NeonBars._ink,
+                style: TextStyle(
+                  color: NeonBars._ink(context),
                   fontSize: 13.5,
                   fontWeight: FontWeight.w800,
                   letterSpacing: -0.4,
@@ -115,7 +124,7 @@ class _Row extends StatelessWidget {
                 Container(
                   height: 12,
                   decoration: BoxDecoration(
-                    color: NeonBars._track,
+                    color: NeonBars._track(context),
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),

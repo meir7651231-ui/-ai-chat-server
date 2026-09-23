@@ -2,6 +2,7 @@
 // מוצא: features__fittings__intel__build_plan_screen:_CutTile (בנייה-חכמה main) · צרור-1 · מודל-שוטח: 4 שדות · props-שורש: label, label2, cutLength, fromFamily, od, toFamily
 // התוכן: new/dart-data-bs/auto/features__fittings__intel__build_plan_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 
 class CutTile extends StatelessWidget {
@@ -22,20 +23,20 @@ class CutTile extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: DsAtomColors.autoCutTile1,
+              color: dsWear(context, DsAtomColors.autoCutTile1, (l) => l.track),
               borderRadius: BorderRadius.circular(8)),
             child: Text('${cutLength.toStringAsFixed(1)}${label}',
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: 'Heebo',
-                    color: DsAtomColors.autoCutTile2,
+                    color: dsWear(context, DsAtomColors.autoCutTile2, (l) => l.muted),
                     fontWeight: FontWeight.w700,),),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               '${fromFamily}${label2}${od} → ${toFamily}',
-              style: const TextStyle(
-                  fontFamily: 'Heebo', color: DsAtomColors.autoCutTile3, fontSize: 13,),
+              style: TextStyle(
+                  fontFamily: 'Heebo', color: dsWear(context, DsAtomColors.autoCutTile3, (l) => l.onAccent), fontSize: 13,),
             ),
           ),
         ],

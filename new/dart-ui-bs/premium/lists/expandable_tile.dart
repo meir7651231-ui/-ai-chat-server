@@ -1,5 +1,6 @@
 // ✨ ExpandableTile — אריח מתקפל: כותרת + גוף נחשף באנימציה + חץ מסתובב
 import 'package:flutter/material.dart';
+import '../../ds/ds.dart';
 import '../../ds/ds_atoms.dart';
 
 class ExpandableTile extends StatefulWidget {
@@ -18,10 +19,10 @@ class ExpandableTile extends StatefulWidget {
 
 class _ExpandableTileState extends State<ExpandableTile>
     with SingleTickerProviderStateMixin {
-  static const Color _card = DsAtomColors.premiumListsExpandableTile1;
-  static const Color _accent = DsAtomColors.premiumListsExpandableTile2;
-  static const Color _text = DsAtomColors.premiumListsExpandableTile3;
-  static const Color _muted = DsAtomColors.premiumListsExpandableTile4;
+  Color get _card => dsWear(context, DsAtomColors.premiumListsExpandableTile1, (l) => l.card);   // State.context — לובש עור
+  Color get _accent => dsWear(context, DsAtomColors.premiumListsExpandableTile2, (l) => l.accent);   // State.context — לובש עור
+  Color get _text => dsWear(context, DsAtomColors.premiumListsExpandableTile3, (l) => l.chipBg);   // State.context — לובש עור
+  Color get _muted => dsWear(context, DsAtomColors.premiumListsExpandableTile4, (l) => l.muted);   // State.context — לובש עור
 
   bool _open = false;
 
@@ -40,7 +41,7 @@ class _ExpandableTileState extends State<ExpandableTile>
           border: Border.all(
             color: _open
                 ? _accent.withValues(alpha: 0.45)
-                : DsAtomColors.premiumListsExpandableTile5.withValues(alpha: 0.06),
+                : dsWear(context, DsAtomColors.premiumListsExpandableTile5, (l) => l.onAccent).withValues(alpha: 0.06),
           ),
           boxShadow: _open
               ? [
@@ -70,7 +71,7 @@ class _ExpandableTileState extends State<ExpandableTile>
                           widget.title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: _text,
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
@@ -90,9 +91,9 @@ class _ExpandableTileState extends State<ExpandableTile>
                             color: _accent.withValues(alpha: 0.16),
                           ),
                           alignment: Alignment.center,
-                          child: const Icon(
+                          child: Icon(
                             Icons.keyboard_arrow_down_rounded,
-                            color: DsAtomColors.premiumListsExpandableTile6,
+                            color: dsWear(context, DsAtomColors.premiumListsExpandableTile6, (l) => l.accentDark),
                             size: 20,
                           ),
                         ),
@@ -108,7 +109,7 @@ class _ExpandableTileState extends State<ExpandableTile>
                 padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
                 child: Text(
                   widget.body,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: _muted,
                     fontSize: 13,
                     height: 1.5,

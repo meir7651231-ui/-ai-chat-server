@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__lipskey_products_screen:_LensGroupHeader (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -19,7 +20,7 @@ class LensGroupHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: smartTree ? DsAtomColors.autoLensGroupHeader1 : DsAtomColors.autoLensGroupHeader2,
+      color: smartTree ? dsWear(context, DsAtomColors.autoLensGroupHeader1, (l) => l.chipBg) : dsWear(context, DsAtomColors.autoLensGroupHeader2, (l) => l.chipBg),
       padding: const EdgeInsets.fromLTRB(14, 9, 14, 9),
       child: Row(
         children: [
@@ -39,8 +40,8 @@ class LensGroupHeader extends StatelessWidget {
           ),
           Text(
             '$count',
-            style: const TextStyle(
-              color: DsAtomColors.autoLensGroupHeader3,
+            style: TextStyle(
+              color: dsWear(context, DsAtomColors.autoLensGroupHeader3, (l) => l.muted),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),

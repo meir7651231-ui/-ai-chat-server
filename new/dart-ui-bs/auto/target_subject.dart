@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__manager_role_assign_sheet:_TargetSubject (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -21,7 +22,7 @@ class TargetSubject extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-        border: Border.all(color: DsAtomColors.autoTargetSubject1),
+        border: Border.all(color: dsWear(context, DsAtomColors.autoTargetSubject1, (l) => l.ink)),
       ),
       child: Text(
         '👤 $name',

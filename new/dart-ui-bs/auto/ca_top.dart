@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__rewards_hub_screen:_CaTop (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -44,13 +45,13 @@ class _Pill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: danger ? DsAtomColors.autoCaTop1 : DsAtomColors.autoCaTop2,
+        color: danger ? dsWear(context, DsAtomColors.autoCaTop1, (l) => l.chipBg) : dsWear(context, DsAtomColors.autoCaTop2, (l) => l.chipBg),
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
       ),
       child: Text(
         text,
         style: TextStyle(
-          color: danger ? DsAtomColors.autoCaTop3 : BsTokens.inkLight,
+          color: danger ? dsWear(context, DsAtomColors.autoCaTop3, (l) => l.danger) : BsTokens.inkLight,
           fontWeight: FontWeight.w700,
           fontSize: 12,
         ),

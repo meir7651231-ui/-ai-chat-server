@@ -2,6 +2,7 @@
 // מוצא: screens__install_studio_screen:_PipeLink (בנייה-חכמה main) · צרור-3 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__install_studio_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'dart:math' as math;
@@ -20,7 +21,7 @@ class PipeLink extends StatelessWidget {
   final bool broken;
   @override
   Widget build(BuildContext context) {
-    final c = broken ? BsTokens.danger : _accent;
+    final c = broken ? dsWear(context, BsTokens.danger, (l) => l.danger) : _accent;
     return SizedBox(
       height: 30,
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [

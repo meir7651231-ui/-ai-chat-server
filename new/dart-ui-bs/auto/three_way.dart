@@ -2,6 +2,7 @@
 // מוצא: screens__ai_hub_screen:_ThreeWay (בנייה-חכמה main) · צרור-6 · props-שורש: title, sub, text, pill, pill2, label, label2, label3, fallback
 // התוכן: new/dart-data-bs/auto/screens__ai_hub_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -73,7 +74,7 @@ class ThreeWay extends StatelessWidget {
                     'ai_hub_screen.t02',
                     fallback,
                     style: TextStyle(
-                      color: DsAtomColors.autoThreeWay1,
+                      color: dsWear(context, DsAtomColors.autoThreeWay1, (l) => l.danger),
                       fontWeight: FontWeight.w700,
                       fontSize: 12,
                     ),
@@ -160,7 +161,7 @@ class _AiCard extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(cfgRadius(context)),
         border: Border.all(
-          color: overdue ? DsAtomColors.autoThreeWay2 : DsAtomColors.autoThreeWay3,
+          color: overdue ? dsWear(context, DsAtomColors.autoThreeWay2, (l) => l.muted) : dsWear(context, DsAtomColors.autoThreeWay3, (l) => l.ink),
         ),
       ),
       child: child,
@@ -199,13 +200,13 @@ class _AiCardTop extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
-            color: danger ? DsAtomColors.autoThreeWay4 : DsAtomColors.autoThreeWay5,
+            color: danger ? dsWear(context, DsAtomColors.autoThreeWay4, (l) => l.chipBg) : dsWear(context, DsAtomColors.autoThreeWay5, (l) => l.chipBg),
             borderRadius: BorderRadius.circular(BsTokens.radiusPill),
           ),
           child: Text(
             pill,
             style: TextStyle(
-              color: danger ? DsAtomColors.autoThreeWay1 : BsTokens.inkLight,
+              color: danger ? dsWear(context, DsAtomColors.autoThreeWay1, (l) => l.danger) : BsTokens.inkLight,
               fontWeight: FontWeight.w700,
               fontSize: 12,
             ),
@@ -240,7 +241,7 @@ class _ThreeCol extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-              color: bad ? DsAtomColors.autoThreeWay1 : BsTokens.inkLight,
+              color: bad ? dsWear(context, DsAtomColors.autoThreeWay1, (l) => l.danger) : BsTokens.inkLight,
               fontWeight: FontWeight.w800,
               fontSize: 13,
             ),

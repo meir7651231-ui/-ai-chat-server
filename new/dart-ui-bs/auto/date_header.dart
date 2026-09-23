@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__notifications_screen:_DateHeader (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 
 class DateHeader extends StatelessWidget {
@@ -14,8 +15,8 @@ class DateHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
       child: Text(
         label,
-        style: const TextStyle(
-          color: DsAtomColors.autoDateHeader1,
+        style: TextStyle(
+          color: dsWear(context, DsAtomColors.autoDateHeader1, (l) => l.muted),
           fontSize: 12,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.5,

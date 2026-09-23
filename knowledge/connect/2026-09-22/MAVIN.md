@@ -481,6 +481,22 @@ build-check.mjs "ניהול לקוחות: … . כשחוב של לקוח עול�
   בשורש (991–997). ds-forge litColor ממיר צבעי-ספק ⇒ Dart (דאטה של הספק, לא של המנוע). data-lift (auto/) יכניס ליטרלים בהרמה הבאה ⇒ `ds-atoms --check` יאדים (מוצהר; המעבר לא נוסף ללוטש).
   מסכי-הפלט new/dart-gen-bs (75 קבצים עם ליטרל) = תוצרי-מחוללים שלא חוללו-מחדש (baselines).
 
+## סבב 40 (23.9): «תוריד לכולם את העור» — צבע-אטום = תפקיד: dsWear(context, ערך-כהה, (l) => l.<תפקיד>)
+· **הבעלים:** «זה נראה לך כמו אפליקציה?» — לא: שלוש שורות דקות, כי 268 אטומים צבועים בכהה בקוד ורק קומץ לובש עור. «אז מה אני אמרתי — תוריד לכולם את העור».
+· **המנגנון (ds.dart):** `Color dsWear(BuildContext context, Color dark, Color Function(DsLook) role)` — בכהה מחזיר את הערך המדויק מהזרע (ביט-זהה), בעור-בהיר את התפקיד מ-DsLook.of(context).
+  DsLook קיבל `onAccent` (כהה = seed.identity.onAccent · נייר = skin.onA).
+· **התפקיד (צורה, לא דעה):** לכל צבע בזרע — התפקיד הקרוב ביותר ב-DsLook.dark במרחק-RGB (19 תפקידים: bg card cardAlt ink muted faint line track accent accentDark accentSoft success
+  successSoft warn danger dangerSoft dangerLine chipBg onAccent); אלפא נשמרת (`withValues`). נמדד: 711 הפניות ⇒ 134 מדויקות · 577 קרובות (18 רחוקות >120, כולן ניאון-dataviz: 22E1FF/FF3DCB).
+  BsTokens (הפלטה של buildsmart באטומי auto/) — לפי **שם**: brand⇒accent · brandDark⇒accentDark · danger/dangerDark⇒danger · success⇒success (152 הפניות · 117 קבצים).
+· **המכניקה (חד-פעמי, scratch: migrate-skin · migrate-static · migrate-bstokens · fix-loop):** ליטרל-בזרע ⇒ dsWear; שדות static/עליונים ⇒ `NAME0` (ערך-כהה) + `Color NAME(BuildContext)`; שימושים ⇒ NAME(context).
+  לולאת-קומפילציה על עותק-buildsmart: analyze ⇒ «Undefined name context» ⇒ חזרה לערך-הכהה · שגיאת-const ⇒ הסרת ה-const הקרוב · `const x =` שנפל ⇒ `final x =` · ברירת-פרמטר ⇒ ערך-כהה.
+  4 תיקוני-יד (num_box · report_table · expandable_tile: getters על State.context · premium_stat: `const []`).
+· **נמדד:** analyze על כל האטומים: **0 שגיאות**. הפניות-לובשות: **753**. אטומים «לא לובשים» (look.mjs skinWired): **268 ⇒ 68** (premium 33 · auto 27 · screens__ 6 · forged 2) — הנותרים: painters ומקומות בלי context
+  (הערך-הכהה נשאר, מסומן NAME0). ds-atoms --check ✓ · balagan-look 35/36 · generator-ratchet ✓ · **הצילום הכהה («לכל תלמיד יש…») זהה בית-לבית** · המשפט המורכב: 5/5 רונדרו, לוח-הבית = Callout לובש-עור
+  (תלמיד 0 · מורה 0 · התראה ⇒ 55) — כתום buildsmart, בלי כהה.
+· **render-ds.mjs (נעול, בעץ-העבודה — מחכה להכרעה):** אריחי-מונה בנייר דרך חיפוש-העור (כמו אגרגטים) · extras (התראה) ⇒ אריח בלוח · שורש מ-getScope · onAccent · propFallback ⇒ 0 ליטרלים.
+  בנייר **אין** תרשים-עמודות: אין שקע-values בחיווט, ואטום-תרשים עלה עם המספרים המובנים שלו (= מומצא, §20-ג) — נזרק.
+
 ## סוג-שדה ⇒ מנוע 3 (נפתר בצד מנוע 2, 22.9)
 נמדד: לא הקטלוג (DsToggleTile/DsDateField/DsNumberField = str2·num0·cb1 זהים) ולא הטיפוס המוצהר
 (`String value` בכולם) מבדילים סוג. מה שמבדיל: **מה הקוד עושה עם value** (`DateTime.tryParse` · `value == 'true'` ·

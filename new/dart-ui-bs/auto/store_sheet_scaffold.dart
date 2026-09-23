@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__store_screen:_SheetScaffold (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -28,7 +29,7 @@ class StoreSheetScaffold extends StatelessWidget {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: DsAtomColors.autoStoreSheetScaffold1,
+                color: dsWear(context, DsAtomColors.autoStoreSheetScaffold1, (l) => l.bg.withValues(alpha: 0.122)),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

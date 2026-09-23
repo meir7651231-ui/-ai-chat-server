@@ -4,9 +4,10 @@
 // התרת-סבך: SmartCartLine + cartLineDisplay(line) ⇒ הקופסה מפרקת ומזריקה
 // emoji/name/attrs; תבניות המחיר והכמות (priceTpl/qtyTpl ב-content) מפורמטות בקופסה
 // ⇒ priceLabel/qtyLabel מוכנים. תווית-הנגישות + tooltip של ה-✕ ⇒ content
-// (cartChatBubbleContent). היו צרובים: Theme.of(surface) · BsTokens.brand(.25) ·
+// (cartChatBubbleContent). היו צרובים: Theme.of(surface) · dsWear(context, BsTokens.brand, (l) => l.accent)(.25) ·
 // BsTokens.inkLight · 0xFF888888 · shadow-שחור(.16) · black38/54 · 0x22000000 ⇒ params.
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 
 class CartChatBubble extends StatelessWidget {
   const CartChatBubble({

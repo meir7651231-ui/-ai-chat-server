@@ -2,6 +2,7 @@
 // מוצא: screens__manager_role_assign_sheet:_AssignButton (בנייה-חכמה main) · צרור-1 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__manager_role_assign_sheet_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -22,7 +23,7 @@ class AssignButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: enabled ? BsTokens.brand : DsAtomColors.autoAssignButton1,
+      color: enabled ? dsWear(context, BsTokens.brand, (l) => l.accent) : dsWear(context, DsAtomColors.autoAssignButton1, (l) => l.ink),
       borderRadius: BorderRadius.circular(BsTokens.radiusPill),
       child: InkWell(
         key: const ValueKey('role-assign-submit'),
@@ -31,13 +32,13 @@ class AssignButton extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 14),
           child: busy
-              ? const Center(
+              ? Center(
                   child: SizedBox(
                     width: 20,
                     height: 20,
                     child: CircularProgressIndicator(
                       strokeWidth: 2.4,
-                      valueColor: AlwaysStoppedAnimation<Color>(DsAtomColors.autoAssignButton2),
+                      valueColor: AlwaysStoppedAnimation<Color>(dsWear(context, DsAtomColors.autoAssignButton2, (l) => l.onAccent)),
                     ),
                   ),
                 )

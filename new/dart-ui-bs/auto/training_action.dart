@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__worker_safety_screen:_TrainingAction (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class TrainingAction extends StatelessWidget {
@@ -32,7 +33,7 @@ class TrainingAction extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, size: 18, color: BsTokens.brand),
+                Icon(icon, size: 18, color: dsWear(context, BsTokens.brand, (l) => l.accent)),
                 const SizedBox(width: 6),
                 Text(
                   label,

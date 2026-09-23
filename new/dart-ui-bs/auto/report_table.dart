@@ -1,16 +1,17 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__finance_hub_sheets:_ReportTable (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 
 class ReportTable extends StatelessWidget {
-  const ReportTable({required this.rows});
+  ReportTable({required this.rows});
   final List<(String, String, bool)> rows; // (label, value, big)
   @override
   Widget build(BuildContext context) {
-    const border = BorderSide(color: DsAtomColors.autoReportTable1);
+    final border = BorderSide(color: dsWear(context, DsAtomColors.autoReportTable1, (l) => l.line));
     return Table(
-      border: const TableBorder(
+      border: TableBorder(
         top: border,
         bottom: border,
         left: border,
@@ -27,8 +28,8 @@ class ReportTable extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 child: Text(
                   r.$1,
-                  style: const TextStyle(
-                    color: DsAtomColors.autoReportTable2,
+                  style: TextStyle(
+                    color: dsWear(context, DsAtomColors.autoReportTable2, (l) => l.cardAlt),
                     fontSize: 13,
                   ),
                 ),
@@ -39,7 +40,7 @@ class ReportTable extends StatelessWidget {
                   r.$2,
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                    color: DsAtomColors.autoReportTable2,
+                    color: dsWear(context, DsAtomColors.autoReportTable2, (l) => l.cardAlt),
                     fontSize: r.$3 ? 16 : 13,
                     fontWeight: r.$3 ? FontWeight.w800 : FontWeight.w400,
                   ),

@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: features__catalog_config__wheel_picker:_SelectionBand (בנייה-חכמה main) · צרור-4
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -13,9 +14,9 @@ class SelectionBand extends StatelessWidget {
       height: _kItemExtent,
       margin: const EdgeInsets.symmetric(horizontal: BsTokens.space2),
       decoration: BoxDecoration(
-        color: _kBandFill,
+        color: _kBandFill(context),
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
-        border: Border.all(color: _kBandLine, width: 1.2),
+        border: Border.all(color: _kBandLine(context), width: 1.2),
       ),
     );
   }
@@ -23,6 +24,8 @@ class SelectionBand extends StatelessWidget {
 
 const double _kItemExtent = 36;
 
-const Color _kBandFill = DsAtomColors.autoSelectionBand1;
 
-const Color _kBandLine = DsAtomColors.autoSelectionBand2;
+Color _kBandFill(BuildContext context) => dsWear(context, DsAtomColors.autoSelectionBand1, (l) => l.warn.withValues(alpha: 0.078));   // לובש עור · _kBandFill0 = הערך-הכהה
+
+
+Color _kBandLine(BuildContext context) => dsWear(context, DsAtomColors.autoSelectionBand2, (l) => l.warn.withValues(alpha: 0.4));   // לובש עור · _kBandLine0 = הערך-הכהה

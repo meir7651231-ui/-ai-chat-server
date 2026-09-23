@@ -2,6 +2,7 @@
 // מוצא: screens__manager_dashboard_screen:_CountBadge (בנייה-חכמה main) · צרור-1 · props-שורש: label
 // התוכן: new/dart-data-bs/auto/screens__manager_dashboard_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
 
@@ -19,7 +20,7 @@ class ManagerDashboardCountBadge extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         constraints: const BoxConstraints(minWidth: 22),
         decoration: BoxDecoration(
-          color: BsTokens.brand,
+          color: dsWear(context, BsTokens.brand, (l) => l.accent),
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         ),
         child: Text(

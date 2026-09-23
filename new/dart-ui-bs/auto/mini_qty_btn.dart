@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_MiniQtyBtn (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__catalog_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 
 class MiniQtyBtn extends StatelessWidget {
@@ -29,8 +30,8 @@ class MiniQtyBtn extends StatelessWidget {
               icon,
               size: 12,
               color: onTap != null
-                  ? DsAtomColors.autoMiniQtyBtn1
-                  : DsAtomColors.autoMiniQtyBtn2,
+                  ? dsWear(context, DsAtomColors.autoMiniQtyBtn1, (l) => l.bg.withValues(alpha: 0.541))
+                  : dsWear(context, DsAtomColors.autoMiniQtyBtn2, (l) => l.ink),
             ),
           ),
         ),

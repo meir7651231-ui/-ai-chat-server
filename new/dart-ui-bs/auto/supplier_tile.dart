@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__suppliers_screen:_SupplierTile (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -28,7 +29,7 @@ class SupplierTile extends StatelessWidget {
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: DsAtomColors.autoSupplierTile1,
+            color: dsWear(context, DsAtomColors.autoSupplierTile1, (l) => l.ink),
             width: 0.5,
           ),
         ),
@@ -60,15 +61,15 @@ class SupplierTile extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: const TextStyle(
-                      color: DsAtomColors.autoSupplierTile2,
+                    style: TextStyle(
+                      color: dsWear(context, DsAtomColors.autoSupplierTile2, (l) => l.bg.withValues(alpha: 0.38)),
                       fontSize: 12,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_left, color: DsAtomColors.autoSupplierTile2, size: 22),
+            Icon(Icons.chevron_left, color: dsWear(context, DsAtomColors.autoSupplierTile2, (l) => l.bg.withValues(alpha: 0.38)), size: 22),
           ],
         ),
       ),

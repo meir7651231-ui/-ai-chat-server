@@ -2,6 +2,7 @@
 // מוצא: screens__manager_dashboard_screen:_AdvanceButton (בנייה-חכמה main) · צרור-1 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__manager_dashboard_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -22,7 +23,7 @@ class AdvanceButton extends StatelessWidget {
     return CfgVisible(
       'manager.orders.advance',
       child: Material(
-        color: BsTokens.brand,
+        color: dsWear(context, BsTokens.brand, (l) => l.accent),
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         child: InkWell(
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),

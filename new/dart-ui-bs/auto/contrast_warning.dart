@@ -2,6 +2,7 @@
 // מוצא: screens__studio__panes__theme_pane:_ContrastWarning (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__studio__panes__theme_pane_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -17,15 +18,15 @@ class ContrastWarning extends StatelessWidget {
         key: const Key('studio-contrast-warning'),
         padding: const EdgeInsets.all(BsTokens.space3),
         decoration: BoxDecoration(
-          color: DsAtomColors.autoContrastWarning1,
+          color: dsWear(context, DsAtomColors.autoContrastWarning1, (l) => l.ink),
           borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-          border: Border.all(color: DsAtomColors.autoContrastWarning2),
+          border: Border.all(color: dsWear(context, DsAtomColors.autoContrastWarning2, (l) => l.warn)),
         ),
         child: Row(
           children: [
-            const Icon(
+            Icon(
               Icons.warning_amber_rounded,
-              color: DsAtomColors.autoContrastWarning3,
+              color: dsWear(context, DsAtomColors.autoContrastWarning3, (l) => l.danger),
             ),
             const SizedBox(width: BsTokens.space2),
             Expanded(
@@ -34,8 +35,8 @@ class ContrastWarning extends StatelessWidget {
                 // don't reorder in the RTL sentence — escapes, since a raw isolate
                 // char would itself trip the analyzer. [round-2 a11y]
                 '${label}${ratio.toStringAsFixed(1)}${label2}',
-                style: const TextStyle(
-                  color: DsAtomColors.autoContrastWarning4,
+                style: TextStyle(
+                  color: dsWear(context, DsAtomColors.autoContrastWarning4, (l) => l.track),
                   fontSize: BsTokens.typeBody,
                 ),
               ),

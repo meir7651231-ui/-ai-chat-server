@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__catalog_settings_screen:_SwitchRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'bs_tokens.dart';
 
 class SwitchRow extends StatelessWidget {
@@ -20,7 +21,7 @@ class SwitchRow extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       title: Text(label, style: const TextStyle(color: BsTokens.inkLight)),
       value: value,
-      activeColor: BsTokens.brand,
+      activeColor: dsWear(context, BsTokens.brand, (l) => l.accent),
       onChanged: onChanged,
     );
   }

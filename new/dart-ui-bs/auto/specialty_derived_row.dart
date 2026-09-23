@@ -2,6 +2,7 @@
 // מוצא: screens__worker_profile_screen:_SpecialtyDerivedRow (בנייה-חכמה main) · צרור-1 · props-שורש: fallback, label, fallback2
 // התוכן: new/dart-data-bs/auto/screens__worker_profile_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
@@ -22,7 +23,7 @@ class SpecialtyDerivedRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: DsAtomColors.autoSpecialtyDerivedRow1),
+        border: Border.all(color: dsWear(context, DsAtomColors.autoSpecialtyDerivedRow1, (l) => l.ink)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -2,6 +2,7 @@
 // מוצא: screens__intel__intel_tab:_IntelIntro (בנייה-חכמה main) · צרור-1 · props-שורש: label, fallback, fallback2
 // התוכן: new/dart-data-bs/auto/screens__intel__intel_tab_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
 
@@ -20,9 +21,9 @@ class IntelIntro extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsetsDirectional.all(BsTokens.space4),
         decoration: BoxDecoration(
-          color: BsTokens.brand.withValues(alpha: 0.10),
+          color: dsWear(context, BsTokens.brand, (l) => l.accent).withValues(alpha: 0.10),
           borderRadius: BorderRadius.circular(BsTokens.radiusCard),
-          border: Border.all(color: BsTokens.brand.withValues(alpha: 0.25)),
+          border: Border.all(color: dsWear(context, BsTokens.brand, (l) => l.accent).withValues(alpha: 0.25)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

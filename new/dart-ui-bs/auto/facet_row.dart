@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_FacetRow (בנייה-חכמה main) · צרור-1 · props-שורש: label2
 // התוכן: new/dart-data-bs/auto/screens__catalog_screen_content.dart
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 
@@ -25,7 +26,7 @@ class FacetRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: BsTokens.brand, width: 1),
+        border: Border.all(color: dsWear(context, BsTokens.brand, (l) => l.accent), width: 1),
       ),
       clipBehavior: Clip.antiAlias,
       child: Material(
@@ -53,8 +54,8 @@ class FacetRow extends StatelessWidget {
                         desc.isEmpty ? '$count${label2}' : desc,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            color: DsAtomColors.autoFacetRow1, fontSize: 13),
+                        style: TextStyle(
+                            color: dsWear(context, DsAtomColors.autoFacetRow1, (l) => l.muted), fontSize: 13),
                       ),
                     ],
                   ),
@@ -63,13 +64,13 @@ class FacetRow extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: BsTokens.brand,
+                    color: dsWear(context, BsTokens.brand, (l) => l.accent),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     '$count',
-                    style: const TextStyle(
-                      color: DsAtomColors.autoFacetRow2,
+                    style: TextStyle(
+                      color: dsWear(context, DsAtomColors.autoFacetRow2, (l) => l.onAccent),
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                     ),

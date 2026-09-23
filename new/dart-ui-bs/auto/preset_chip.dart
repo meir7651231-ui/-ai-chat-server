@@ -1,6 +1,7 @@
 // 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
 // מוצא: screens__courier_certs_screen:_PresetChip (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import '../ds/ds.dart';
 import '../ds/ds_atoms.dart';
 import 'bs_tokens.dart';
 import 'package:buildsmart/theme/app_theme.dart';
@@ -24,7 +25,7 @@ class PresetChip extends StatelessWidget {
       label: label,
       excludeSemantics: true,
       child: Material(
-        color: selected ? BsTokens.brand : Theme.of(context).colorScheme.surface,
+        color: selected ? dsWear(context, BsTokens.brand, (l) => l.accent) : Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(BsTokens.radiusPill),
         child: InkWell(
           borderRadius: BorderRadius.circular(BsTokens.radiusPill),
@@ -36,7 +37,7 @@ class PresetChip extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(BsTokens.radiusPill),
               border:
-                  selected ? null : Border.all(color: DsAtomColors.autoPresetChip1),
+                  selected ? null : Border.all(color: dsWear(context, DsAtomColors.autoPresetChip1, (l) => l.ink)),
             ),
             child: Text(
               label,
