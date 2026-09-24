@@ -45,9 +45,18 @@
   "shapeNone": "«{seg}»: צורת «{ent}» ({shape}) — {atoms} אטומי-רשימה במדף, {tried} שיבוצים נוסו, אף אחד לא מושפע מכל העמודות",
   "shapeLearned": "«{seg}»: אושר ⇒ {atom} על «{ent}» ({map}) ⇒ נרשם לצורה ⇒ מסך",
   "shapeRecalled": "«{seg}»: צורת «{ent}» ({shape}) כבר אושרה ל-{atom} ({at}) ⇒ מסך בלי שאלה",
-  "linkAsk": "«{seg}»: «{child}» מצביע אל «{ent}» ({shape}) ⇒ {n} חישובים מחלקי-היסוד שבמדף (whereList · sumBy · subNum) הורצו על הדוגמאות שלך. הראשון — {first}: {sample}.{others} ענה «כן» לראשון, או כתוב את שם החישוב שהתכוונת אליו",
+  "linkAsk": "«{seg}»: {child} מצביעים אל «{ent}» ({shape}) ⇒ {n} צירופים מחלקי-היסוד שבמדף (whereList · sumBy · subNum · addNum · leNum/geNum) הורצו על הדוגמאות שלך. הראשון — {first}: {sample}.{others} ענה «כן» לראשון, כתוב שם של אחר, או תן דוגמה של התוצאה («מפתח ערך, מפתח ערך»)",
   "linkOthers": " אחרים: {list}.",
   "linkLearned": "«{seg}»: אושר ⇒ {atom} לכל «{ent}» מתוך «{child}» ⇒ נרשם לצורה ⇒ מסך",
-  "linkRecalled": "«{seg}»: הקשר «{child}» ⇒ «{ent}» ({shape}) כבר אושר ל-{atom} ({at}) ⇒ מסך בלי שאלה"
+  "linkRecalled": "«{seg}»: הקשר «{child}» ⇒ «{ent}» ({shape}) כבר אושר ל-{atom} ({at}) ⇒ מסך בלי שאלה",
+  "kush_ein": "⚖ אין לי אלא ⇒ חיפוש: מה עוד מצביע אל «{ent}» — נמצאו {list} ⇒ צירופים מכולם",
+  "kush_mai": "⚖ מאי «{v}» ⇒ חיפוש: עמודה ש-{v} חותך את הדוגמאות שלה — «{col}» ב«{child}» ⇒ תנאי ≤ / ≥",
+  "kush_kgon": "⚖ כגון ⇒ דוגמת-התוצאה שלך התאימה ל-{n} צירופים",
+  "withinWords": [
+   "בעוד",
+   "תוך",
+   "בתוך",
+   "עד"
+  ]
  }
 }

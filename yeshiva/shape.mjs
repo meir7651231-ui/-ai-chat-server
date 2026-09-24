@@ -126,55 +126,76 @@ export function emit({ shp, cls, slug = 'shape1', entSlug, title, pkg = 'buildsm
 //  לכל שורת-אב מחשבים מהשורות שמצביעות אליה — מורכב מחלקיקי-יסוד שבמדף (dart-maor/op-*): whereList (סינון לפי מצביע) ·
 //  sumBy (סכום עמודת-מספר) · subNum (נכנס − יצא). כל מועמד מורץ על הדוגמאות, נשאר רק מה שכל עמודה בו משפיעה, ומוצג לבעלים.
 // ══════════════════════════════════════════════════════════════════════════
-const LINK_DART = ['dart-maor/op-where-list.dart', 'dart-maor/op-sum-by.dart', 'dart-maor/op-sub-num.dart'];
-// אותו ביטוי כמו ב-Dart (שורה אחת כל אחד): xs.where(f).toList() · xs.fold(0, (a, x) => a + f(x)) · a - b
-const whereList = (xs, f) => xs.filter(f); const sumBy = (xs, f) => xs.reduce((a, x) => a + f(x), 0); const subNum = (a, b) => a - b;
+const LINK_DART = ['dart-maor/op-where-list.dart', 'dart-maor/op-sum-by.dart', 'dart-maor/op-sub-num.dart', 'dart-maor/op-add-num.dart', 'dart-maor/op-le-num.dart', 'dart-maor/op-ge-num.dart'];
+// אותו ביטוי כמו ב-Dart (שורה אחת כל אחד): xs.where(f).toList() · xs.fold(0, (a, x) => a + f(x)) · a - b · a + b · a <= b · a >= b
+const whereList = (xs, f) => xs.filter(f); const sumBy = (xs, f) => xs.reduce((a, x) => a + f(x), 0); const subNum = (a, b) => a - b; const addNum = (a, b) => a + b;
+const leNum = (a, b) => a <= b; const geNum = (a, b) => a >= b;
 /** צורת טבלת-הבת מול טבלת-האב: key · xref (ערכים ⊆ מפתחות-האב) · num · text */
 export function linkShape(parent, child) {
   const pk = new Set((parent.examples || []).map((r) => String(r[0] || '').trim()).filter(Boolean));
   return child.fields.map((f, i) => { const ne = (child.examples || []).map((r) => String(r[i] ?? '').trim()).filter(Boolean);
     return { i, label: f.label, kind: i === 0 ? 'key' : ne.length && ne.every((v) => pk.has(v)) ? 'xref' : ne.length && ne.every((v) => NUM.test(v)) ? 'num' : 'text' }; });
 }
-/** מועמדים: לכל עמודת-מספר — סכום דרך כל מצביע, ונטו (מצביע מאוחר − מצביע מוקדם: סדר-העמודות = מ… ואז אל…) */
-export function searchLinked(parent, child) {
-  const shape = linkShape(parent, child); const xs = shape.filter((c) => c.kind === 'xref'), ns = shape.filter((c) => c.kind === 'num');
-  if (!xs.length || !ns.length) return { shape, results: [], tried: 0 };
-  const keys = parent.examples.map((r) => String(r[0] || '').trim()).filter(Boolean); const rows = child.examples.filter((r) => String(r[0] || '').trim());
-  const inOf = (rs, x, n, k) => sumBy(whereList(rs, (r) => String(r[x.i] ?? '').trim() === k), (r) => Number(String(r[n.i] ?? '').trim()) || 0);
-  const val = (c, rs, k) => (c.op === 'net' ? subNum(inOf(rs, c.to, c.n, k), inOf(rs, c.from, c.n, k)) : inOf(rs, c.to, c.n, k));
-  const cands = []; for (const n of ns) { for (let a = 0; a < xs.length; a++) for (let b = a + 1; b < xs.length; b++) cands.push({ op: 'net', from: xs[a], to: xs[b], n }); for (const x of xs) cands.push({ op: 'sum', to: x, n }); }
-  const results = []; let tried = 0;
-  for (const c of cands) { tried++;
-    const out = keys.map((k) => ({ key: k, value: val(c, rows, k) })); if (out.every((o) => o.value === 0)) continue; const j = JSON.stringify(out);
-    const used = [c.n, c.to, ...(c.from ? [c.from] : [])];
-    const moves = used.every((u) => { const alt = rows.map((r, ri) => r.map((v, i) => (i !== u.i ? v : u.kind === 'num' ? String((Number(v) || 0) + 7 * (ri + 1)) : ''))); /* תוספת שונה לכל שורה (תוספת שווה מתקזזת בנטו) */ return JSON.stringify(keys.map((k) => ({ key: k, value: val(c, alt, k) }))) !== j; });
+/** ⚖ קושיה ⇒ חיפוש (הכרעת-בעלים 24.9 «תנסה»): הישיבה מקשה, והקושיה מפעילה חיפוש — רק מה שהחיפוש לא מוצא עולה לבעלים.
+ *  · «אין לי אלא» — מצאת טבלה אחת שמצביעה אל האב? מה עוד מצביע אליו ⇒ כל טבלאות-הבת נכנסות, ומועמד = צירוף איברים מכמה טבלאות.
+ *  · «מאי <מספר>» — מספר במשפט ⇒ עמודת-מספר בטבלת-בת שהוא **חותך** את הדוגמאות שלה (חלק מתחת, חלק מעל) ⇒ תנאי ≤ / ≥ על האיבר.
+ *  · «כגון» — דוגמת-תוצאה של הבעלים ({מפתח: ערך}) ⇒ נבחר רק מועמד שמחזיר אותה בדיוק.
+ *  איבר = {child, op: sum|net, n, to, from?, filt?: {col, cmp: le|ge, v}} · מועמד = איברים שמתחברים (addNum). */
+export function searchLinked(parent, children, { text = '', within = [], want = null } = {}) {
+  const keys = parent.examples.map((r) => String(r[0] || '').trim()).filter(Boolean); const tried = { n: 0 }; const kush = [];
+  const nums = [...String(text).matchAll(/(?<![\d.])(\d+(?:\.\d+)?)(?![\d.])/g)].map((m) => +m[1]);
+  const words = String(text).split(/\s+/).filter(Boolean); const isWithin = words.some((w) => within.includes(w));
+  const per = []; const shapes = {};
+  for (const child of children) { const shape = linkShape(parent, child); shapes[child.label] = shape; const xs = shape.filter((c) => c.kind === 'xref'), ns = shape.filter((c) => c.kind === 'num'); if (!xs.length || !ns.length) continue;
+    const rows = child.examples.filter((r) => String(r[0] || '').trim());
+    const filts = [null]; for (const v of nums) for (const c of ns) { const vals = rows.map((r) => Number(String(r[c.i] ?? '').trim())); if (vals.some((x) => x <= v) && vals.some((x) => x > v)) { for (const cmp of isWithin ? ['le', 'ge'] : ['ge', 'le']) filts.push({ col: c, cmp, v }); kush.push({ k: 'מאי', v, col: c.label, child: child.label }); } }
+    for (const n of ns) for (const f of filts) { if (f && f.col === n) continue;
+      for (let a = 0; a < xs.length; a++) for (let b = a + 1; b < xs.length; b++) per.push({ child, rows, op: 'net', from: xs[a], to: xs[b], n, filt: f });
+      for (const x of xs) per.push({ child, rows, op: 'sum', to: x, n, filt: f }); } }
+  const linked = [...new Set(per.map((t) => t.child.label))]; if (linked.length > 1) kush.push({ k: 'אין לי אלא', list: linked });
+  const keep = (t, rs) => (r) => !t.filt || (t.filt.cmp === 'le' ? leNum : geNum)(Number(String(r[t.filt.col.i] ?? '').trim()) || 0, t.filt.v);
+  const inOf = (t, rs, x, k) => sumBy(whereList(rs, (r) => String(r[x.i] ?? '').trim() === k && keep(t, rs)(r)), (r) => Number(String(r[t.n.i] ?? '').trim()) || 0);
+  const termVal = (t, rs, k) => (t.op === 'net' ? subNum(inOf(t, rs, t.to, k), inOf(t, rs, t.from, k)) : inOf(t, rs, t.to, k));
+  const evalC = (terms, alt) => keys.map((k) => ({ key: k, value: terms.reduce((acc, t) => addNum(acc, termVal(t, alt && alt.t === t ? alt.rows : t.rows, k)), 0) }));
+  const cands = [...per.map((t) => [t])]; for (let a = 0; a < per.length; a++) for (let b = a + 1; b < per.length; b++) if (per[a].child !== per[b].child) cands.push([per[a], per[b]]);
+  const results = [];
+  for (const terms of cands) { tried.n++;
+    const out = evalC(terms); if (out.every((o) => o.value === 0)) continue; const j = JSON.stringify(out);
+    const moves = terms.every((t) => [t.n, t.to, ...(t.from ? [t.from] : []), ...(t.filt ? [t.filt.col] : [])].every((u) => { const rows = t.rows.map((r, ri) => r.map((v, i) => (i !== u.i ? v : u === (t.filt || {}).col ? String((Number(v) || 0) <= t.filt.v ? t.filt.v + 1 : t.filt.v - 1) /* עמודת-התנאי: כל שורה עוברת לצד השני של הסף */ : u.kind === 'num' ? String((Number(v) || 0) + 7 * (ri + 1)) : ''))); return JSON.stringify(evalC(terms, { t, rows })) !== j; }));
     if (!moves) continue;
-    const name = c.op === 'net' ? `נטו:${c.n.label}:${c.to.label}−${c.from.label}` : `סכום:${c.n.label}:${c.to.label}`;
-    results.push({ atom: { name, dart: LINK_DART[0], call: null }, calc: { op: c.op, n: c.n.label, to: c.to.label, from: c.from ? c.from.label : null }, map: [], out, score: c.op === 'net' ? 20 : 10 }); }
+    const nameT = (t) => `${t.op === 'net' ? `נטו(${t.child.label}.${t.n.label}:${t.to.label}−${t.from.label})` : `סכום(${t.child.label}.${t.n.label}:${t.to.label})`}${t.filt ? `[${t.filt.col.label}${t.filt.cmp === 'le' ? '≤' : '≥'}${t.filt.v}]` : ''}`;
+    const usedNums = terms.filter((t) => t.filt).length;
+    const score = terms.length * 20 + usedNums * 15 * Math.min(1, nums.length) + terms.filter((t) => t.op === 'net').length * 5 + terms.filter((t) => t.filt && t.filt === (per.find((p) => p.filt && p.filt.col === t.filt.col) || {}).filt).length;
+    results.push({ atom: { name: terms.map(nameT).join(' + '), dart: LINK_DART[0], call: null }, calc: { terms: terms.map((t) => ({ child: t.child.label, op: t.op, n: t.n.label, to: t.to.label, from: t.from ? t.from.label : null, filt: t.filt ? { col: t.filt.col.label, cmp: t.filt.cmp, v: t.filt.v } : null })) }, map: [], out, score }); }
   results.sort((x, y) => y.score - x.score);
-  return { shape, results, tried };
+  let pick = null; if (want) { const m = results.filter((r) => r.out.every((o) => want[o.key] === undefined || Math.abs(want[o.key] - o.value) < 1e-9) && Object.keys(want).every((k) => r.out.some((o) => o.key === k))); if (m.length) { pick = m[0]; kush.push({ k: 'כגון', n: m.length }); } else kush.push({ k: 'כגון', n: 0 }); }
+  return { shapes, results, tried: tried.n, kush: [...new Map(kush.map((x) => [x.k + (x.v ?? ''), x])).values()], pick, children: linked };
 }
-/** מסך הקשר: לכל שורת-אב — החישוב על שורות-הבת החיות (חלקיקי-היסוד מהמדף). + מבחן-קבלה: הדוגמאות ⇒ הערכים שחושבו כאן. */
-export function emitLinked({ shp, cls, slug = 'shape1', entSlug, childSlug, title, pkg = 'buildsmart', seedSlug = null }) {
-  const lit = (v) => "'" + String(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$') + "'"; const c = shp.calc; const pkey = shp.fields[0];
-  const inOf = (col) => `inOf(${lit(col)}, k)`; const expr = c.op === 'net' ? `subNum(${inOf(c.to)}, ${inOf(c.from)})` : inOf(c.to);
+/** מסך הקשר: לכל שורת-אב — סכום האיברים על שורות-הבת החיות (חלקיקי-היסוד מהמדף). + מבחן-קבלה: הדוגמאות ⇒ הערכים שחושבו כאן. */
+export function emitLinked({ shp, cls, slug = 'shape1', entSlug, slugOf, title, pkg = 'buildsmart', seedSlug = null }) {
+  const lit = (v) => "'" + String(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$') + "'"; const pkey = shp.fields[0];
+  const terms = shp.calc.terms || [{ child: shp.child, ...shp.calc }];
+  const num = (m, c) => `(num.tryParse(((${m} as Map)[${lit(c)}] ?? '').toString().trim()) ?? 0)`;
+  const inOf = (t, x) => `sumBy(whereList(appStore.records('${slugOf(t.child)}').toList(), (x) => ((x as Map)[${lit(x)}] ?? '').toString().trim() == k${t.filt ? ` && ${t.filt.cmp === 'le' ? 'leNum' : 'geNum'}(${num('x', t.filt.col)}, ${t.filt.v})` : ''}), (x) => ${num('x', t.n)})`;
+  const termE = (t) => (t.op === 'net' ? `subNum(${inOf(t, t.to)}, ${inOf(t, t.from)})` : inOf(t, t.to));
+  const expr = terms.slice(1).reduce((acc, t) => `addNum(${acc}, ${termE(t)})`, termE(terms[0]));
   const fmt = (v) => (Number.isInteger(v) ? String(v) : v.toFixed(1));
-  const code = [`// 🔗 חולל ע"י הדלת (yeshiva/shape · שתי טבלאות קשורות) — «${shp.child}» ⇒ «${shp.ent}»: ${shp.atom} (אושר ע"י הבעלים) ⇒ מסך חי. אל תערוך ידנית.`,
+  const head = terms.map((t) => (t.op === 'net' ? `${t.child}.${t.n}: ${t.to} − ${t.from}` : `${t.child}.${t.n}: ${t.to}`) + (t.filt ? ` (${t.filt.col} ${t.filt.cmp === 'le' ? '≤' : '≥'} ${t.filt.v})` : '')).join(' + ');
+  const code = [`// 🔗 חולל ע"י הדלת (yeshiva/shape · טבלאות קשורות) — ${terms.map((t) => `«${t.child}»`).join(' + ')} ⇒ «${shp.ent}»: ${shp.atom} (אושר ע"י הבעלים) ⇒ מסך חי. אל תערוך ידנית.`,
     `import '../dart-ui-bs/ds/ds_store.dart';`, ...LINK_DART.map((d) => `import '../${d}';`), `import 'package:flutter/material.dart';`, '',
     `class ${cls} extends StatefulWidget {`, `  const ${cls}({super.key});`, '  @override', `  State<${cls}> createState() => _${cls}State();`, '}', '',
     `class _${cls}State extends State<${cls}> {`,
     `  String _f(num v) => v == v.roundToDouble() ? v.toInt().toString() : v.toStringAsFixed(1);`,
+    `  num _v(String k) => ${expr};`,
     '  @override', `  Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {`,
-    `        final kids = appStore.records('${childSlug}').toList();`,
-    `        num inOf(String col, String k) => sumBy(whereList(kids, (x) => ((x as Map)[col] ?? '').toString().trim() == k), (x) => num.tryParse(((x as Map)[${lit(c.n)}] ?? '').toString().trim()) ?? 0);`,
     `        return Scaffold(appBar: AppBar(title: Text(${lit(title)})), body: ListView(padding: const EdgeInsets.all(16), children: [`,
-    `          Row(children: [Expanded(child: Text(${lit(shp.ent)}, style: const TextStyle(fontWeight: FontWeight.w700))), Expanded(child: Text(${lit(c.op === 'net' ? `${c.n}: ${c.to} − ${c.from}` : `${c.n}: ${c.to}`)}, style: const TextStyle(fontWeight: FontWeight.w700)))]),`,
-    `          for (final p in appStore.records('${entSlug}')) Builder(builder: (context) { final k = (p[${lit(pkey)}] ?? '').trim(); return Row(children: [Expanded(child: Text(k)), Expanded(child: Text(_f(${expr})))]); }),`,
+    `          Row(children: [Expanded(child: Text(${lit(shp.ent)}, style: const TextStyle(fontWeight: FontWeight.w700))), Expanded(child: Text(${lit(head)}, style: const TextStyle(fontWeight: FontWeight.w700)))]),`,
+    `          for (final p in appStore.records('${entSlug}')) Builder(builder: (context) { final k = (p[${lit(pkey)}] ?? '').trim(); return Row(children: [Expanded(child: Text(k)), Expanded(child: Text(_f(_v(k))))]); }),`,
     '        ]));', '      });', '}', ''].join('\n');
   const exp = [...new Set(shp.out.flatMap((o) => [o.key, fmt(o.value)]))];
-  const test = seedSlug ? [`// 🎯 מבחן-קבלה (שתי טבלאות קשורות): הדוגמאות של הבעלים ⇒ מה ש-${shp.atom} חישב עליהן חייב להופיע במסך. חולל; אל תערוך.`,
+  const test = seedSlug ? [`// 🎯 מבחן-קבלה (טבלאות קשורות): הדוגמאות של הבעלים ⇒ מה ש-${shp.atom} חישב עליהן חייב להופיע במסך. חולל; אל תערוך.`,
     `import 'package:flutter/material.dart';`, `import 'package:flutter_test/flutter_test.dart';`, `import 'package:${pkg}/genesis/dart-gen-bs/gen_${seedSlug}.dart';`, `import 'package:${pkg}/genesis/dart-gen-bs/gen_${slug}.dart';`,
     'void main() {', `  testWidgets(${lit(`קשר: ${title} ⇒ ${shp.atom}`)}, (tester) async {`, '    seedExamples();', `    await tester.pumpWidget(const MaterialApp(home: ${cls}()));`, '    await tester.pump();',
     ...shp.out.map((o) => `    expect(find.text(${lit(fmt(o.value))}), findsWidgets, reason: ${lit(`${o.key}: ${fmt(o.value)}`)});`), '  });', '}', ''].join('\n') : null;
-  return { code, test, cols: [shp.ent, c.n], expect: exp };
+  return { code, test, cols: [shp.ent, head], expect: exp };
 }

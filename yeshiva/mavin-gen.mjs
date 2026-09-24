@@ -228,7 +228,7 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   const held = allRoutes.filter((r) => r.proposal && !proposals);
   fs.mkdirSync(outDir, { recursive: true });
   const files = [], notes = [...defs.notes], questions = [...defs.questions];
-  for (const q of yesh.kushyot) questions.push({ thing: 'הישיבה', ask: q.kind, q: `${q.kind}: ${q.text}` });
+  for (const q of yesh.kushyot) questions.push({ thing: 'הישיבה', ask: q.kind, q: `${q.kind}: ${q.text}${(answers.__kush || []).some((k) => q.kind.includes(k)) ? ' ⇒ ✅ נענתה בחיפוש (ראה ⚖ למעלה)' : ''}` });   // קושיה שהחיפוש ענה עליה — מסומנת
   for (const sw of yesh.switches) questions.push({ thing: 'הישיבה', ask: sw.move || sw.kind, q: `${sw.move || sw.kind}: ${sw.text}` });
   if (yesh.note) notes.push(yesh.note);
   if (yesh.rulings.length) notes.push(`הפוסק: ${yesh.rulings.filter((r) => r.decided).length} הוכרעו · ${yesh.switches.length} מתגים`);
@@ -322,7 +322,7 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       files.push({ route: 'buffer', file: path.join(R.outDir(), `gen_${slug}.dart`), cls }); notes.push(`אזור-המתנה «${b.seg}»: ${b.ent}.${b.field} · תקרה ${b.ceiling} · מנה ${b.batch} כל ${b.everyMin} דק׳ · על הדוגמאות ${b.sum} ממתינים ⇒ אחרי מנה ${e.after1}`); }); }
   // 2א' · מסך-הצורה (yeshiva/shape): הרשומות החיות ⇒ האטום שנמצא לפי הצורה ⇒ טבלה; מבחן-קבלה מתוצאת-התאום על הדוגמאות
   if (SHP0 && app && app.nameToSlug && app.nameToSlug[SHP0.ent] && !inRepo(process.env.GEN_OUT)) { const SHm = await import('./shape.mjs'); const seedSlug = fs.existsSync(path.join(outDir, 'gen_app_seed.dart')) ? 'app_seed' : null;
-    const e = SHP0.linked ? SHm.emitLinked({ shp: SHP0, cls: 'GenShape1Screen', entSlug: app.nameToSlug[SHP0.ent], childSlug: app.nameToSlug[SHP0.child], title: SHP0.seg, seedSlug }) : SHm.emit({ shp: SHP0, cls: 'GenShape1Screen', entSlug: app.nameToSlug[SHP0.ent], title: SHP0.seg, seedSlug });
+    const e = SHP0.linked ? SHm.emitLinked({ shp: SHP0, cls: 'GenShape1Screen', entSlug: app.nameToSlug[SHP0.ent], slugOf: (n) => app.nameToSlug[n], title: SHP0.seg, seedSlug }) : SHm.emit({ shp: SHP0, cls: 'GenShape1Screen', entSlug: app.nameToSlug[SHP0.ent], title: SHP0.seg, seedSlug });
     fs.writeFileSync(path.join(R.outDir(), 'gen_shape1.dart'), e.code); if (e.test) fs.writeFileSync(path.join(R.outDir(), 'gen_shape1_accept_test.dart'), e.test);
     files.push({ route: 'shape', file: path.join(R.outDir(), 'gen_shape1.dart'), cls: 'GenShape1Screen', atom: SHP0.atom }); notes.push(`מסך-צורה «${SHP0.seg}» ⇒ ${SHP0.atom} על הרשומות של «${SHP0.ent}» · עמודות: ${e.cols.join(', ')} · מבחן-קבלה: ${e.expect.length} ערכים`); }
   // 2ב · server — רק כשהספק מצהיר (`שרת: ענן`): חבילת-שרת לישויות שנבנו, בזיכרון ⇒ outDir/server/ (לא server-gen/)

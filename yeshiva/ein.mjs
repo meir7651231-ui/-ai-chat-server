@@ -173,6 +173,8 @@ export async function learnForms(sentence, form, routed, answers) {
 // ═══ ein.shape = tableShape ⊕ rowAtoms ⊕ run-on-examples ⊕ owner-yes ⇒ מסך
 /** חיפוש לפי צורה (הכרעת-בעלים 24.9 «העיקרון שחסר»): קטע שיש בו חלק שלא נקרא (none) או דבר בלי שדות, ליד ישות עם דוגמאות שיש בה עמודת-מספר/מצביע
  *  ⇒ yeshiva/shape.search (צורת-הטבלה מול אטומי-רשימה, הרצה על הדוגמאות, סינון-השפעה) ⇒ התוצאה על הדוגמאות מוצגת ⇒ «כן» ⇒ נרשם + answers.__shape ⇒ routeOf מסמן 'shape'. */
+/** דוגמת-תוצאה של הבעלים: «מזרחית 290, צפונית -250, ציון 50» ⇒ {מזרחית: 290, …} (null אם אין זוגות) */
+const wantOf = (t) => { const m = [...String(t || '').matchAll(/([^,;:\d\-−]+?)\s*[:=]?\s*([-−]?\d+(?:\.\d+)?)/g)].map((x) => [x[1].trim(), Number(x[2].replace('−', '-'))]).filter(([k]) => k); return m.length ? Object.fromEntries(m) : null; };
 export async function shapeSearch(sentence, form, routed, answers, skip = new Set()) {
   const out = { notes: [], questions: [], handled: new Set(), changed: false };
   if (answers.__shape) return out;
@@ -184,17 +186,20 @@ export async function shapeSearch(sentence, form, routed, answers, skip = new Se
   for (const seg of [...new Set([...loose, ...looseL].map((r) => (form.things.find((t) => t.label === r.thing) || {}).src).filter(Boolean))]) {
     const thingsL = form.things.filter((t) => t.src === seg && [...loose, ...looseL].some((r) => r.thing === t.label)).map((t) => t.label);
     // 🔗 שתי טבלאות קשורות: עמודה בטבלה אחת שמצביעה על מפתחות של אחרת ⇒ חישוב לכל שורת-אב (yeshiva/shape.searchLinked)
-    if (thingsL.length && ents.length > 1) for (const parent of ents) { for (const child of ents) { if (child === parent) continue;
-      const r = SH.searchLinked(parent, child); if (!r.results.length) continue;
-      const sig = 'link:' + r.shape.map((c) => c.kind).join(','); const key = thingsL[thingsL.length - 1]; const show = (x) => x.out.map((o) => `${o.key} ${o.value}`).join(' · ');
+    if (thingsL.length && ents.length > 1) for (const parent of ents) {
+      const key = thingsL[thingsL.length - 1]; const said = typeof answers[key] === 'string' ? answers[key].trim() : '';
+      const want = said && (D.T.yesWords || []).includes(said) ? null : wantOf(said);   /* ⚖ כגון: «מזרחית 290, ציון 50» ⇒ דוגמת-תוצאה */
+      const r = SH.searchLinked(parent, ents.filter((c) => c !== parent), { text: seg, within: D.T.withinWords || [], want }); if (!r.results.length) continue;
+      const sig = 'link:' + r.children.map((c) => `${c}(${r.shapes[c].map((x) => x.kind).join(',')})`).join('+'); const show = (x) => x.out.map((o) => `${o.key} ${o.value}`).join(' · ');
+      for (const k of r.kush) out.notes.push(fill(D.T['kush_' + (k.k === 'אין לי אלא' ? 'ein' : k.k === 'מאי' ? 'mai' : 'kgon')], { ent: parent.label, list: (k.list || []).join(' · '), v: k.v, col: k.col, child: k.child, n: k.n }));
+      answers.__kush = r.kush.map((k) => k.k);
       const known = formsAll().filter((x) => x.kind === 'table' && x.sig === sig && r.results.some((y) => y.atom.name === x.atom)).pop();
-      const said = typeof answers[key] === 'string' ? answers[key].trim() : '';
-      const pick = known ? r.results.find((y) => y.atom.name === known.atom) : said && (D.T.yesWords || []).includes(said) ? r.results[0] : said ? r.results.find((y) => y.atom.name === said) : null;
+      const pick = known ? r.results.find((y) => y.atom.name === known.atom) : r.pick ? r.pick : said && (D.T.yesWords || []).includes(said) ? r.results[0] : said ? r.results.find((y) => y.atom.name === said) : null;
       for (const t of thingsL) out.handled.add(t);
-      if (!pick) { out.questions.push({ thing: key, ask: 'shape', key, q: fill(D.T.linkAsk, { seg, child: child.label, ent: parent.label, shape: r.shape.map((c) => `${c.label}=${c.kind}`).join(' · '), n: r.results.length, first: r.results[0].atom.name, sample: show(r.results[0]), others: r.results.length > 1 ? fill(D.T.linkOthers, { list: r.results.slice(1).map((y) => `${y.atom.name}: ${show(y)}`).join(' | ') }) : '' }) }); return out; }
+      if (!pick) { out.questions.push({ thing: key, ask: 'shape', key, q: fill(D.T.linkAsk, { seg, child: r.children.join(' + '), ent: parent.label, shape: r.children.map((c) => r.shapes[c].map((x) => `${x.label}=${x.kind}`).join(' · ')).join(' | '), n: r.results.length, first: r.results[0].atom.name, sample: show(r.results[0]), others: r.results.length > 1 ? fill(D.T.linkOthers, { list: r.results.slice(1, 4).map((y) => `${y.atom.name}: ${show(y)}`).join(' | ') }) : '' }) }); return out; }
       if (!known) { fs.mkdirSync(path.dirname(FORMS()), { recursive: true }); fs.appendFileSync(FORMS(), JSON.stringify({ at: new Date().toISOString(), kind: 'table', sig, atom: pick.atom.name, from: sentence }) + '\n'); }
-      out.notes.push(known ? fill(D.T.linkRecalled, { seg, child: child.label, ent: parent.label, shape: sig, atom: pick.atom.name, at: String(known.at).slice(0, 10) }) : fill(D.T.linkLearned, { seg, child: child.label, ent: parent.label, atom: pick.atom.name }));
-      answers.__shape = { linked: true, seg, things: thingsL, ent: parent.label, child: child.label, atom: pick.atom.name, calc: pick.calc, out: pick.out, fields: parent.fields.map((f) => f.label) }; out.changed = true; return out; } }
+      out.notes.push(known ? fill(D.T.linkRecalled, { seg, child: r.children.join(' + '), ent: parent.label, shape: sig, atom: pick.atom.name, at: String(known.at).slice(0, 10) }) : fill(D.T.linkLearned, { seg, child: r.children.join(' + '), ent: parent.label, atom: pick.atom.name }));
+      answers.__shape = { linked: true, seg, things: thingsL, ent: parent.label, children: r.children, atom: pick.atom.name, calc: pick.calc, out: pick.out, fields: parent.fields.map((f) => f.label) }; out.changed = true; return out; }
     const things = form.things.filter((t) => t.src === seg && loose.some((r) => r.thing === t.label)).map((t) => t.label); if (!things.length) continue;
     for (const ent of ents) {
       const r = await SH.search(ent); if (!r.results.length) { if (r.shape.some((c) => c.kind !== 'key' && c.kind !== 'text')) out.notes.push(fill(D.T.shapeNone, { seg, ent: ent.label, shape: r.shape.map((c) => `${c.label}=${c.kind}`).join(' · '), atoms: SH.rowAtoms().length, tried: r.tried })); continue; }
