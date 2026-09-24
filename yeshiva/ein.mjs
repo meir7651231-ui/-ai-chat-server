@@ -192,8 +192,8 @@ export async function shapeSearch(sentence, form, routed, answers, skip = new Se
       for (const t of things) out.handled.add(t);
       if (!pick) { out.questions.push({ thing: key, ask: 'shape', key, q: r.results.length === 1 ? fill(D.T.shapeAsk, { seg, ent: ent.label, shape: r.shape.map((c) => `${c.label}=${c.kind}`).join(' · '), atom: r.results[0].atom.name, tried: r.tried, sample: show(r.results[0]) }) : fill(D.T.shapeMany, { seg, ent: ent.label, n: r.results.length, cands: r.results.map((y) => `${y.atom.name}: ${show(y)}`).join(' | ') }) }); break; }
       if (!known) { fs.mkdirSync(path.dirname(FORMS()), { recursive: true }); fs.appendFileSync(FORMS(), JSON.stringify({ at: new Date().toISOString(), kind: 'table', sig, atom: pick.atom.name, from: sentence }) + '\n'); }
-      out.notes.push(known ? fill(D.T.shapeRecalled, { seg, ent: ent.label, shape: sig, atom: pick.atom.name, at: String(known.at).slice(0, 10) }) : fill(D.T.shapeLearned, { seg, ent: ent.label, atom: pick.atom.name, map: pick.map.map((m) => `${m.k}←${m.label}`).join(' · ') }));
-      answers.__shape = { seg, things, ent: ent.label, atom: pick.atom.name, dart: pick.atom.dart, call: pick.atom.call, map: pick.map, out: pick.out, fields: ent.fields.map((f) => f.label) }; out.changed = true; void L; break;
+      out.notes.push(known ? fill(D.T.shapeRecalled, { seg, ent: ent.label, shape: sig, atom: pick.atom.name, at: String(known.at).slice(0, 10) }) : fill(D.T.shapeLearned, { seg, ent: ent.label, atom: pick.atom.name, map: [...pick.map.map((m) => `${m.k}←${m.label}`), ...(pick.sockets || []).map((x) => `🔌${x.label}`)].join(' · ') }));
+      answers.__shape = { seg, things, ent: ent.label, atom: pick.atom.name, dart: pick.atom.dart, call: pick.atom.call, map: pick.map, sockets: pick.sockets || [], out: pick.out, fields: ent.fields.map((f) => f.label) }; out.changed = true; void L; break;
     }
     if (out.changed) break;
   }
