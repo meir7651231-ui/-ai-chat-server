@@ -45,7 +45,7 @@ if (bi) {
   const sl = spec.split('\n'); console.log(`«אגף ${dep.i}: ${dep.name}» (עץ-המוסד ⇒ ספק, ${dep.entities} ישויות)\nאפיון (${sl.length} שורות):\n${sl.slice(0, 8).map((l) => '  ' + l.slice(0, 120)).join('\n')}${sl.length > 8 ? '\n  …' : ''}`);
 } else if (si >= 0 || di >= 0) {
   const f = args[(si >= 0 ? si : di) + 1], txt = fs.readFileSync(f, 'utf8');
-  G0 = si >= 0 ? await generateFromSpec(txt, { outDir: process.env.GEN_OUT, name: 'chk' }) : await generateFromDoc(txt, { outDir: process.env.GEN_OUT, name: 'chk' });
+  G0 = si >= 0 ? await generateFromSpec(txt, { outDir: process.env.GEN_OUT, name: 'chk' }) : await generateFromDoc(txt, { outDir: process.env.GEN_OUT, name: 'chk', answers });
   spec = G0.spec; G0.routes = [];
   const sl = spec.split('\n'); console.log(`«${path.basename(f)}» (${si >= 0 ? 'ספק מוכן' : 'מסמך-פירוק'})\nאפיון (${sl.length} שורות):\n${sl.slice(0, 10).map((l) => '  ' + l.slice(0, 110)).join('\n')}${sl.length > 10 ? '\n  …' : ''}`);
 } else {

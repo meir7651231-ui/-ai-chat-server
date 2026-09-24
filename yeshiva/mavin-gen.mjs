@@ -178,16 +178,19 @@ export async function generateFromSpec(spec, { outDir, name = 'spec' } = {}) {
   return { spec, files, notes, questions, screens: app ? app.screens.map((s) => `${s.kind}:${s.name}`) : [] };
 }
 /** מסמך-«פירוק» (markdown של הבעלים, שלד peruk-lang) ⇒ peruk.perukToSpec ⇒ ספק ⇒ app-ds. אפס כתיבה ל-specs-ds. */
-export async function generateFromDoc(md, { outDir, name = 'doc' } = {}) {
+export async function generateFromDoc(md, { outDir, name = 'doc', answers = {} } = {}) {
   const { perukToSpec } = await import('../machtzev/generator/peruk.mjs');
   const DS = await import('../machtzev/generator/doc-shape.mjs');   // 📐 קריאה לפי צורה (הכרעת-בעלים 24.9): peruk מכיר רק את שלד-הפירוק שלו
   const pk = perukToSpec(DS.htmlToMd(md), name); const shp = DS.docToSpec(md); const perukRead = Number((pk.node && pk.node.fields) || 0);
   const byShape = !!shp.spec && perukRead === 0;   // peruk קרא 0 שדות והמסמך מכיל טבלת-ישויות ⇒ הצורה קובעת (נמדד: מירון/72 ⇒ «תיק» כללי מהדאטה של peruk)
   const spec = byShape ? shp.spec : pk.spec; const node = byShape ? { ...(pk.node || {}), reader: 'doc-shape', fields: shp.ents.reduce((a, e) => a + e.fields.length, 0), entities: shp.ents.length, links: shp.links.length } : pk.node;
-  const r = await generateFromSpec(spec, { outDir, name });
-  if (byShape) { r.notes.push(`📐 קריאה לפי צורה: שלד-הפירוק קרא 0 שדות ⇒ טבלת-ישויות במסמך: ${shp.ents.length} ישויות · ${node.fields} שדות · ${shp.links.length} קישורים לפי השמות שהמסמך נותן (${shp.links.slice(0, 5).map((l) => `${l.ent}.${l.field}→${l.to}`).join(' · ')}${shp.links.length > 5 ? ' …' : ''})`);
+  // 🔁 המסמך עובר באותו צינור כמו משפט (לולאת ein · קושיות · חיפוש-צורה · התראות): דלת-המסמך רק מתרגמת — לא נתקעת ועוצרת
+  const sen = byShape ? DS.docToSentence(md) : null;
+  const r = sen ? await generateAll(sen.sentence, { answers, outDir, name }) : await generateFromSpec(spec, { outDir, name });
+  if (sen) { r.notes.push(`🔁 המסמך תורגם למשפט (${sen.ents.length} ישויות · ${sen.flows.length} זרימות ⇒ ${sen.flows.map((f) => `«${f.clause}»`).join(' · ') || '—'}) ⇒ אותו צינור כמו משפט`); r.docSentence = sen.sentence; }
+  if (byShape && !sen) { r.notes.push(`📐 קריאה לפי צורה: שלד-הפירוק קרא 0 שדות ⇒ טבלת-ישויות במסמך: ${shp.ents.length} ישויות · ${node.fields} שדות · ${shp.links.length} קישורים לפי השמות שהמסמך נותן (${shp.links.slice(0, 5).map((l) => `${l.ent}.${l.field}→${l.to}`).join(' · ')}${shp.links.length > 5 ? ' …' : ''})`);
     for (const f of shp.flows) r.questions.push({ thing: 'זרימה', ask: 'flow', q: `זרימה «${f.ent}.${f.field} ${f.op} ${f.n}${f.unit} → ${f.then.slice(0, 60)}» נקראה — לא נבנתה: ${f.field} ${shp.ents.some((e) => e.fields.some((x) => x.name === f.field)) ? 'שדה בטבלה, אבל אין בדלת-המסמך בניית-התראות' : 'אינו שדה באף טבלה (ערך מחושב — מנוע)'} ` }); }
-  else if (perukRead === 0) r.questions.push({ thing: 'מסמך', ask: 'read', q: `⚠️ המסמך לא נקרא: שלד-הפירוק קרא 0 שדות ואין טבלת-ישויות — האפליקציה בנויה מברירות-המחדל של peruk, לא מהמסמך` });
+  else if (!byShape && perukRead === 0) r.questions.push({ thing: 'מסמך', ask: 'read', q: `⚠️ המסמך לא נקרא: שלד-הפירוק קרא 0 שדות ואין טבלת-ישויות — האפליקציה בנויה מברירות-המחדל של peruk, לא מהמסמך` });
   // 🔎 הקורא: כמה ישויות המסמך מתאר מול כמה נבנו — אובדן = שאלה, לא «0 שאלות»
   { const want = shp.ents.map((e) => e.name); const got = new Set(spec.split('\n').map((l) => (l.match(/^ישות\s+(.+?)\s+עם\s/) || [])[1]).filter(Boolean)); const lost = want.filter((w) => !got.has(w));
     if (lost.length) r.questions.push({ thing: 'מסמך', ask: 'lost', q: `המסמך מתאר ${want.length} ישויות, נבנו ${want.length - lost.length}: חסרות ${lost.join(' · ')}` }); }
@@ -258,7 +261,7 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   // 2א · הרכבה (insight.mjs · הכרעת-בעלים 23.9 «תחבר»): התראה עם קישור-נתונים ⇒ מסך-תובנה אחד מהנתונים האמיתיים במקום הדמו של capability
   if (app && Array.isArray(app.liveExtras) && !inRepo(process.env.GEN_OUT)) {
     const IN = await import('../machtzev/generator/insight.mjs');
-    for (const x of app.liveExtras) { if (x.shape) continue; if (!x.live) { notes.push(x.why || `הרכבה «${x.name}»: אין ישות עם השדה ⇒ נשאר מסך-capability (דמו)`); if (x.ask) questions.push({ thing: x.name, ask: x.ask, q: x.why }); continue; }
+    for (const x of app.liveExtras) { if (x.shape) continue; if (!x.live) { notes.push(x.why || `הרכבה «${x.name}»: אין ישות עם השדה ⇒ נשאר מסך-capability (דמו)`); if (x.ask) questions.push({ thing: x.name, ask: x.ask, q: x.why }); else if (!x.why && x.clause && x.clause.x) questions.push({ thing: x.name, ask: 'field', key: x.clause.x, q: `«${x.clause.x}» (ב«${x.name}») אינו שדה באף טבלה ⇒ נבנה מסך-דמו. מה זה: שדה של טבלה, או חישוב משדות קיימים?` }); continue; }   // נתקע ⇒ שאלה, לא דמו בשקט
       const entLine = spec.split('\n').find((l) => new RegExp(`^ישות\\s+\\S.*\\s+עם\\s`).test(l) && (() => { const m = l.match(/^ישות\s+(.+?)\s+עם\s+(.+)$/); return m && Object.entries({}).length === 0 && x.live.slug && true; })());
       const ents = spec.split('\n').map((l) => l.match(/^ישות\s+(.+?)\s+עם\s+(.+)$/)).filter(Boolean).map((m) => ({ name: m[1].trim(), fields: m[2].split('|')[0].split(/[,،]/).map((f) => f.trim().replace(/\{[^}]*\}$/, '')).filter(Boolean) }));
       const entOfSlug = (sl) => { const m0 = spec.split('\n').map((l) => l.match(/^ישות\s+(.+?)\s+עם\s/)).filter(Boolean).map((m) => m[1].trim()); return ents.find((e) => app.nameToSlug && app.nameToSlug[e.name] === sl) || null; };

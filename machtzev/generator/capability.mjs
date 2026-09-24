@@ -62,7 +62,7 @@ export function detectAlertClause(text) {
   if (!rel) return null;
   const xPart = after.slice(0, relM.index);
   const yPart = after.slice(relM.index + relM[0].length);
-  const xWords = hw(xPart), yWords = hw(yPart); const yNum = (yPart.match(/\d+(?:\.\d+)?/) || [null])[0];
+  const xWords = [...String(xPart).matchAll(/[֐-׿][֐-׿״׳]*|[A-Za-z][A-Za-z0-9_]*/g)].map((m) => m[0]), yWords = hw(yPart); /* שם-השדה: גם מזהה לועזי («stay clock» — מסמך חצי-אנגלי); עברית-בלבד ⇒ כמו hw */ const yNum = (yPart.match(/\d+(?:\.\d+)?/) || [null])[0];
   if (!xWords.length || (!yWords.length && yNum == null)) return null;   // «מעל 1» — מספר בלי מילה אחריו הוא סף כשר
   return {
     ...(window ? { window } : {}), ...(horizon != null ? { horizon } : {}),
