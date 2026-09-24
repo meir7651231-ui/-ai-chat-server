@@ -68,3 +68,39 @@ export function judgeWith(engine, c) {
 }
 /** שני מקורות לאותו מספר (שדה-נוסחה «מוחלט(א-ב)») ⇒ מקרה למנוע אי-הידיעה */
 export const twoSourceCase = ({ app, ent, a, b, field }) => ({ raw_text: `${app}: לכל ${ent} שני מקורות לאותו מספר — ${a} ו${b} — והם לא תמיד מסכימים (הפער נמדד בשדה ${field}).`, subject: `«${a} מול ${b} ב${ent}»`, structure: { experts_disagree: true } });
+// ══ 🌉 סימולציית-תור מהמנוע (לא נוסחה משלנו): «המתנה צפויה של קצב, עמדות, דקות-טיפול» ⇒ Model של מנוע-המערכות.
+//    אותה פונקציה (SIM_FN) רצה ב-JS (ציפייה/הערות לבעלים) ומומרת ל-Dart ע"י emitTs (האפליקציה) — שוויון הוכח ב-parity-ts.
+//    רמז: ρ = קצב × טיפול ÷ עמדות ≥ 1 ⇒ התור גדל בלי גבול ⇒ Infinity (לא מספר מומצא).
+const SIM_FILES = ['core/src/rng.ts', 'core/src/sim.ts', 'core/src/stats.ts', 'core/src/stock.ts', 'core/src/node.ts', 'core/src/atoms.ts', 'core/src/model.ts'];
+export const SIM_FN = `
+function simWaitRaw(rate, servers, svc) {
+  if (!(rate > 0) || !(servers >= 1) || !(svc > 0)) return NaN;
+  const c = Math.floor(servers);
+  if (rate * svc >= c) return Infinity;
+  const n = 4000; const T = n / rate;
+  const m = new Model(1);
+  m.source('in', { interarrival: { kind: 'exp', mean: 1 / rate } });
+  m.station('s', { servers: c, service: { kind: 'exp', mean: svc } });
+  m.sink('out'); m.chain('in', 's', 'out');
+  m.run(T, T / 10);
+  const st = m.report().nodes.find((x) => x.id === 's');
+  return st.avgWait;
+}`;
+/** קובץ-Dart אחד לאפליקציה: שקעי-הממיר + ליבת-המנוע (מומרת עכשיו מה-TS) + simWaitMin עם זיכרון. אין מנוע ⇒ null + reason */
+export async function simEngineDart() {
+  const home = judgeHome(); if (!home) return { available: false, reason: judgeHome.reason };
+  const { emitTs } = await import('../machtzev/emit/ast-js-to-dart.mjs');
+  const H = fs.readFileSync(path.join(HERE, '../machtzev/emit/parity-ast.mjs'), 'utf8').match(/const H = `([^]*?)`;/)[1];
+  const src = SIM_FILES.map((f) => fs.readFileSync(path.join(home, 'packages', f), 'utf8')).join('\n') + '\n' + SIM_FN;
+  const code = `// 🌉 מנוע-המערכות (systems-engine/core) — הומר אוטומטית מ-TS (emitTs). לא לערוך ביד: נוצר מחדש בכל בנייה.\n// ignore_for_file: type=lint, unused_element, dead_code, argument_type_not_assignable, for_in_of_invalid_type, invalid_assignment, non_bool_condition, non_bool_operand, not_iterable_spread, return_of_invalid_type\n// (strict-casts של המארח: המרה-מרומזת מ-dynamic — מותרת בקומפיילר; ההוכחה = ריצה ב-flutter test)\n${H}\n${emitTs(src)}\nfinal Map<String, double> _simMemo = {};\n/** המתנה ממוצעת (דקות) בעמדה: קצב-הגעה לדקה · עמדות · דקות-טיפול לאדם. ρ≥1 ⇒ אינסוף. */\ndouble simWaitMin(num rate, num servers, num svc) => _simMemo.putIfAbsent('$rate|$servers|$svc', () => _toNum(simWaitRaw(rate, servers, svc)).toDouble());\n`;
+  return { available: true, code };
+}
+/** אותו חישוב ב-JS (אותו מנוע, TS ישירות) — שורות [[קצב, עמדות, טיפול], …] ⇒ [המתנה…] */
+export function simWaitJs(rows) {
+  const home = judgeHome(); if (!home) return { available: false, reason: judgeHome.reason };
+  const js = `const M = await import(${JSON.stringify('file://' + path.join(home, 'packages/core/src/index.ts'))}); const f = new Function('Model', ${JSON.stringify(SIM_FN + '\nreturn simWaitRaw;')})(M.Model);
+console.log(JSON.stringify(${JSON.stringify(rows)}.map((a) => { const v = f(...a); return Number.isFinite(v) ? v : String(v); })));`;
+  const r = spawnSync(process.execPath, ['--input-type=module', '-e', js], { encoding: 'utf8', timeout: 60000 });
+  if (r.status !== 0) return { available: true, error: (r.stderr || '').slice(0, 300) };
+  return { available: true, values: JSON.parse(r.stdout).map((v) => typeof v === 'string' ? Number(v) : v) };
+}

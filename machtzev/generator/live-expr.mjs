@@ -32,14 +32,18 @@ export function exprDart(t, r = 'r', k = (s) => `'${s}'`) {
   if (t.since != null) return `(((${r}['__stage'] ?? '0') == '${t.since}') ? _ageMin(${r}['__stage_at'] ?? '') : double.nan)`;
   if (t.ageField) return `_ageMin(${r}[${k(t.ageField)}] ?? '')`;
   if (t.linked) return liveLinkedExpr(t.linked, r, k);
+  if (t.queue) return `simWaitMin(${t.queue.map((q) => exprDart(q, r, k)).join(', ')})`;   // 🌉 המתנה צפויה (קצב, עמדות, דקות-טיפול) ⇒ סימולציה של מנוע-המערכות (gen_sim_engine.dart)
   return `(double.tryParse((${r}[${k(t.field)}] ?? '').trim()) ?? double.nan)`;
 }
 /** אותו עץ בצד-JS (לציפייה מהדוגמאות): null כשעלה תלוי-זמן (since/ageField) או קשר — אז אין ציפייה מהדוגמאות */
-export function exprJs(t, row) {
-  if (t.op) { const a = exprJs(t.a, row), b = exprJs(t.b, row); return a == null || b == null ? null : t.op === '+' ? a + b : t.op === '-' ? a - b : t.op === '*' ? a * b : a / b; }
+export function exprJs(t, row, ctx = null) {
+  if (t.op) { const a = exprJs(t.a, row, ctx), b = exprJs(t.b, row, ctx); return a == null || b == null ? null : t.op === '+' ? a + b : t.op === '-' ? a - b : t.op === '*' ? a * b : a / b; }
+  if (t.queue) { const a = t.queue.map((q) => exprJs(q, row, ctx)); return ctx && ctx.queue && a.every((v) => v != null) ? ctx.queue(a) ?? null : null; }   // 🌉 הסימולציה מחושבת מראש ב-mavin-gen (shofet.simWaitJs — אותו מנוע) ⇒ ctx.queue
   if (t.num != null) return t.num; if (t.fi != null) { const v = parseFloat(row[t.fi]); return Number.isFinite(v) ? v : null; } return null;
 }
-const treeHas = (t, key) => !!t && (t[key] != null || treeHas(t.a, key) || treeHas(t.b, key));
+const treeHas = (t, key) => !!t && (t[key] != null || treeHas(t.a, key) || treeHas(t.b, key) || (t.queue || []).some((q) => treeHas(q, key)));
+export const exprHasQueue = (t) => treeHas(t, 'queue');
+export const SIM_IMPORT = "import 'gen_sim_engine.dart';";   // 🌉 נכתב ע"י mavin-gen ליד המסכים כשיש «המתנה צפויה»
 export const exprNeedsAge = (t) => treeHas(t, 'since') || treeHas(t, 'ageField');
 export const exprHasLinked = (t) => treeHas(t, 'linked');
 export const LINKED_IMPORTS = ['op-where-list', 'op-sum-by', 'op-sub-num', 'op-add-num', 'op-le-num', 'op-ge-num'].map((f) => `import '../dart-maor/${f}.dart';`);

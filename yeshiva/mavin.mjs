@@ -22,6 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as R from '../machtzev/root.mjs';
+import { whenRegex } from '../machtzev/generator/capability.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const SPREAD = () => +(process.env.MAVIN_SPREAD || Math.ceil(opsCount() / 3));   // ≥ שליש מהמינים ⇒ מילה מפוזרת (לא דבר). נגזר מהקטלוג, לא קבוע
@@ -72,7 +73,7 @@ export function hintOf(w) {
   return l > 0 && l >= d ? { hint: 'act', ops: [...x.e.logic] } : { hint: 'thing', ops: [...x.e.display] };
 }
 const isNum = (w) => /^\d+$/.test(w);
-const COND_WHEN = (() => { try { const c = JSON.parse(fs.readFileSync(R.GEN_DIR + 'knowledge/conditions.json', 'utf8')); return c.when && c.when.length ? new RegExp('(' + c.when.map((x) => String(x).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')') : null; } catch { return null; } })();   // אותה מילת-תנאי של הגלאי
+const COND_WHEN = (() => { try { const c = JSON.parse(fs.readFileSync(R.GEN_DIR + 'knowledge/conditions.json', 'utf8')); return c.when && c.when.length ? whenRegex(c.when) : null; } catch { return null; } })();   // אותה מילת-תנאי של הגלאי (whenRegex: כמילה, «כשל» אינו תנאי)
 const STAGE_WORDS = (() => { try { return new Set(JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')).stagePrefixes || []); } catch { return new Set(); } })();   // מילות-«שלבים» של שפת-הספק הקיימת (דאטה של מנוע 4)
 const ARROW = /\s*(?:→|->|⇒|»)\s*/;   // חץ בין מילים = סדר (צורה): «חדשה → בעבודה → הושלמה» ⇒ שלבים
 // סמני-שדות ומילות-«כל» של מנוע-המשפט הקיים (nl-lang.data.json — דאטה של מנוע 1/4): «לכל תלמיד יש …» ⇒ הדבר = «תלמיד», וכל איברי-הרשימה = שדות (גם ברבים)

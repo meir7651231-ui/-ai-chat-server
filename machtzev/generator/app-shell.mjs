@@ -9,7 +9,7 @@ import { searchOp, wireAtom, pickWired, particleWidgets } from './particles.mjs'
 import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';   // הישיבה על בחירת-אטום (L114)
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { synthDisplay, widgetRecordOf, sidecarOf } from './display-synth.mjs';
-import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr, liveCond, liveThresholdDart, liveOpDart, liveTest, liveAtomImports, LINKED_IMPORTS, exprHasLinked } from './live-expr.mjs';   // «אין» בבית ⇒ הרכבה מיסודות (סף ⇒ פריטי-גוון · הקשה ⇒ שורש לחיץ), עולה לפסק
+import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr, liveCond, liveThresholdDart, liveOpDart, liveTest, liveAtomImports, LINKED_IMPORTS, exprHasQueue, SIM_IMPORT, exprHasLinked } from './live-expr.mjs';   // «אין» בבית ⇒ הרכבה מיסודות (סף ⇒ פריטי-גוון · הקשה ⇒ שורש לחיץ), עולה לפסק
 import { skinWired } from './look.mjs';
 import { buildAtlas } from './atlas.mjs';
 let ATL = null; const widgetOf = (cls) => ((ATL ||= buildAtlas({ forge: isPaper() })).widgets.find((w) => w.cls === cls) || null);
@@ -494,7 +494,8 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
     const isSet = liveIsSet(x.live); const aggE = isSet ? liveAggExpr(x.live, base, k) : null; if (isSet && liveAggImport(x.live)) imports.add(liveAggImport(x.live));
     const grouped = liveIsGrouped(x.live); if (grouped && liveAggImport({ ...x.live, kind: 'agg' })) imports.add(liveAggImport({ ...x.live, kind: 'agg' }));
     for (const ai of liveAtomImports(x.live)) imports.add(ai);
-    if (x.live.kind === 'linked' || (x.live.kind === 'expr' && exprHasLinked(x.live.tree))) for (const ai of LINKED_IMPORTS) imports.add(ai);   // 🔗 תוצאת-קשר כשדה
+    if (x.live.kind === 'linked' || (x.live.kind === 'expr' && exprHasLinked(x.live.tree))) for (const ai of LINKED_IMPORTS) imports.add(ai);
+    if (x.live.kind === 'expr' && exprHasQueue(x.live.tree)) imports.add(SIM_IMPORT);   // 🌉 המתנה צפויה ⇒ מנוע-המערכות ב-Dart   // 🔗 תוצאת-קשר כשדה
     const recsE = grouped ? liveGroupsExpr(x.live, base, k) : base;
     const live = isSet ? `(() { final v = ${aggE}; return v.isNaN ? 0 : (v * 10).round() / 10; })()` :   /* צפי בלי קריאות-עם-זמן = NaN ⇒ 0 בתצוגה (כמו insight: ריק), לא קריסה */ x.live.op ? `${recsE}.where((r) => ${grouped ? liveTest(x.live, liveValue(x.live, 'r', k), liveThresholdDart(x.live, k)) : liveCond(x.live, liveTest(x.live, liveValue(x.live, 'r', k), liveThresholdDart(x.live, k)), 'r', k)}).length` : `${recsE}.length`;   // מדרגות: מונה-הקבוצות   // קבוצה ⇒ ערך-הקבוצה עצמו; קבוצות ⇒ מונה-הקבוצות החורגות; אחרת מונה-החורגים
     const ctx = { label: k(x.name), value: { str: `${live}.toString()`, num: `${live}.toDouble()` }, sub: k(x.sub || ''), glyph: k(x.icon || '🔔'), message: k(x.name), nav: `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${x.cls}()))`, need: purpose.need };

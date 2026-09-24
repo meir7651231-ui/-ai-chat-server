@@ -382,6 +382,14 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     const valueOf = (words, r) => { if (!words.length) return null; const txt = words.join(' ');
       for (const grp of [['+', '-'], ['*', '/']]) for (let i = words.length - 2; i >= 1; i--) { const op = AWV[words[i]]; if (!op || !grp.includes(op)) continue; const a = valueOf(words.slice(0, i), r), b = valueOf(words.slice(i + 1), r); if (a && b) return { op, a, b }; }
       if (/^-?\d+(\.\d+)?$/.test(txt)) return { num: +txt };
+      for (const qw0 of (SL.queueWords || [])) for (const qw of [qw0, qw0.replace(/^ה/, '')]) if (txt === qw || txt.startsWith(qw + ' ')) {   // 🌉 «המתנה צפויה של קצב, עמדות, דקות-טיפול» ⇒ סימולציית-תור (מנוע-המערכות); «כשהמתנה» ⇒ ה' נבלעה בכש
+        let rest = txt.slice(qw.length).trim(); for (const w of (SL.queueOf || [])) if (rest.startsWith(w + ' ')) { rest = rest.slice(w.length + 1); break; }
+        const vw = (ws) => valueOf(ws, r) || (ws.length && /^ו./.test(ws[0]) ? valueOf([ws[0].slice(1), ...ws.slice(1)], r) : null);   // «ודקות בדיקה»
+        const parts = rest.split(/\s*,\s*/).filter(Boolean); if (parts.length === 3) { const a = parts.map((p) => vw(p.split(/\s+/).filter(Boolean))); if (a.every(Boolean)) return { queue: a }; }
+        // בלי פסיקים (הסעיף מגיע מנוקה): חלוקה לשלושה רצפים שכל אחד נפתר — אחת בלבד; יותר ⇒ דו-משמעי ⇒ null (שאלה, לא ניחוש)
+        const ws = rest.split(/[\s,]+/).filter(Boolean); const sols = [];
+        for (let i1 = 1; i1 < ws.length - 1; i1++) for (let i2 = i1 + 1; i2 < ws.length; i2++) { const a = [ws.slice(0, i1), ws.slice(i1, i2), ws.slice(i2)].map(vw); if (a.every(Boolean)) sols.push(a); }
+        return sols.length === 1 ? { queue: sols[0] } : null; }
       for (const sw of SINCE) if (txt.startsWith(sw + ' ')) { const st = txt.slice(sw.length + 1).trim(); const si = (r.stages || []).findIndex((s) => s === st || stemOf(s) === stemOf(st)); if (si >= 0) return { since: si, stage: r.stages[si] }; }
       const d = (Array.isArray(opts.derived) ? opts.derived : []).find((q) => q.ent === r.entity && (q.name === txt || stemOf(q.name) === stemOf(txt)));
       if (d) return { linked: { parentKey: d.parentKey, terms: d.terms.map((t) => ({ ...t, slug: nameToSlug[t.child] })) }, name: d.name };
@@ -398,7 +406,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
           return { ...x, live: { slug: nameToSlug[d.ent], kind: 'linked', field: arith ? `${d.name} ${arith.word} ${arith.field}` : d.name, base: d.name, parentKey: d.parentKey, terms: d.terms.map((t) => ({ ...t, slug: nameToSlug[t.child] })), ...(arith ? { arith } : {}), op: c.op, n: +c.n } }; } }
       if (c && c.kind === 'levels' && c.x) { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'levels', field: f.label, by: c.label, agg: 'count', high: c.high, mid: c.mid, thresholds: c.thresholds || [c.high, c.mid], op: null, n: null } }; } return x; }
       // ⊕⊕ מנוע-ההרכבה הכללי — אחרי הענפים הייעודיים (תוצאת-קשר), לפני ענפי-השדה-הבודד
-      if (c && c.x && /^[<>]$/.test(c.op || '') && c.n != null && String(c.x).split(/\s+/).some((w) => AWV[w]) || (c && c.x && SINCE.some((sw) => String(c.x).includes(sw)))) {
+      if (c && c.x && /^[<>]$/.test(c.op || '') && c.n != null && String(c.x).split(/\s+/).some((w) => AWV[w]) || (c && c.x && SINCE.some((sw) => String(c.x).includes(sw))) || (c && c.x && /^[<>]$/.test(c.op || '') && (SL.queueWords || []).some((q) => String(c.x).includes(q.replace(/^ה/, ''))))) {   // 🌉 גם «המתנה צפויה»
         for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const v = valueOf(String(c.x).split(/\s+/).filter(Boolean), r);
           if (v && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'expr', field: String(c.x), tree: v, op: c.op, n: +c.n } }; } }
       // @אטום = יחס נלמד (capability.addLearnedRel) — סף-טקסט כמו «=»

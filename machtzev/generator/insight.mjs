@@ -11,7 +11,7 @@ import { buildAtlas } from './atlas.mjs';
 import { isPaper, skinWired } from './look.mjs';
 import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';
 import { synthDisplay, widgetRecordOf, sidecarOf } from './display-synth.mjs';
-import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr, liveCond, liveThresholdDart, liveOpDart, liveTest, liveAtomImports, liveKeyExpr, LINKED_IMPORTS, exprHasLinked } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
+import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr, liveCond, liveThresholdDart, liveOpDart, liveTest, liveAtomImports, liveKeyExpr, LINKED_IMPORTS, exprHasQueue, SIM_IMPORT, exprHasLinked } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { ops as opsOfKind } from '../compose-engine.mjs';   // צורה ⇒ פעולות-יסוד (הטבלה הקיימת, לא רשימה שלי)
 import * as R from '../root.mjs';
@@ -56,7 +56,8 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   manifest.source.kind = live.kind || 'num'; if (live.pre && live.pre.length) manifest.source.pre = live.pre.map((p) => ({ field: p.field, op: p.op, n: liveThreshold(p), kind: p.kind || 'num' })); if (live.alt && live.alt.length) manifest.source.alt = live.alt.map((p) => ({ field: p.field, op: p.op, n: liveThreshold(p), kind: p.kind || 'num' })); if (live.kind === 'age') { manifest.source.days = live.days; manifest.timeDependent = true; }
   if (decide && decide.file) imports.add(`import '../${decide.file}';`);
   for (const ai of liveAtomImports(live)) imports.add(ai);
-  if (live.kind === 'linked' || (live.kind === 'expr' && exprHasLinked(live.tree))) for (const ai of LINKED_IMPORTS) imports.add(ai);   // 🔗 תוצאת-קשר כשדה ⇒ חלקי-היסוד שהיא בנויה מהם
+  if (live.kind === 'linked' || (live.kind === 'expr' && exprHasLinked(live.tree))) for (const ai of LINKED_IMPORTS) imports.add(ai);
+  if (live.kind === 'expr' && exprHasQueue(live.tree)) imports.add(SIM_IMPORT);   // 🌉 המתנה צפויה ⇒ מנוע-המערכות ב-Dart   // 🔗 תוצאת-קשר כשדה ⇒ חלקי-היסוד שהיא בנויה מהם
   if (live.kind === 'levels') { manifest.source.levels = { high: live.high, mid: live.mid, by: live.by }; if (decide && decide.proven) live.decide = decide.name; }
   manifest.decision = decide ? { atom: decide.name, file: decide.file, proven: !!decide.proven, examples: decide.examples || [] } : { atom: null, why: 'אין אטום-החלטה מוכח ⇒ השוואה ביד (מדווח)' };
   const descField = grouped ? live.by : (entity.fields[0] || live.field);   // קבוצות: העמודה המתארת = שדה-החלוקה
@@ -87,7 +88,7 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
     label: k(label || name), message: k(`${entity.name}: ${said}`), glyph: k(op === 'alert' ? '⚠️' : '🔔'), tone: 2,
     value: (isSet && value === 'br.length') ? { str: aggStr, num: 'agg', isNum: true } : /^br\.length \/ rs\.length$/.test(value) ? { str: "'${br.length}/${rs.length}'", num: 'br.length.toDouble()' } : /\.length$/.test(value) ? { str: `${value}.toString()`, num: `${value}.toDouble()` } : { str: `${value}.toString()`, num: '0.0' },
     fraction: 'rs.isEmpty ? 0.0 : br.length / rs.length', sub: k(`${entity.name} · ${said}`),
-    labels: [k(descField), k(live.kind === 'refCount' ? (live.childName || live.field) : live.field)], rows: live.kind === 'refCount' || live.kind === 'linked' || live.kind === 'expr' ? `[for (final r in br) [r[${k(descField)}] ?? '', ${liveValue(live, 'r', k)}.toStringAsFixed(${live.arith || (live.kind === 'expr' && !Number.isInteger(+live.n)) ? 2 : 0})]]` :   /* 🔗 תוצאת-קשר: מחושבת, לא שדה שמור */ `[for (final r in br) [r[${k(descField)}] ?? '', r[${k(live.field)}] ?? '']]`,   // מונה-קשר: העמודה השנייה = כמה בנות, לא שדה של ההורה
+    labels: [k(descField), k(live.kind === 'refCount' ? (live.childName || live.field) : live.field)], rows: live.kind === 'refCount' || live.kind === 'linked' || live.kind === 'expr' ? `[for (final r in br) [r[${k(descField)}] ?? '', ${live.kind === 'expr' && exprHasQueue(live.tree) ? `((double v) => v.isInfinite ? '∞' : v.toStringAsFixed(${Number.isInteger(+live.n) ? 0 : 2}))(${liveValue(live, 'r', k)})` : `${liveValue(live, 'r', k)}.toStringAsFixed(${live.arith || (live.kind === 'expr' && !Number.isInteger(+live.n)) ? 2 : 0})`}]]`   /* 🌉 תור שלא עומד בקצב ⇒ ∞ (לא Infinity) */ :   /* 🔗 תוצאת-קשר: מחושבת, לא שדה שמור */ `[for (final r in br) [r[${k(descField)}] ?? '', r[${k(live.field)}] ?? '']]`,   // מונה-קשר: העמודה השנייה = כמה בנות, לא שדה של ההורה
   });
   // רזולוציה רקורסיבית: פעולה ⇒ פסק; אין שורד ⇒ decompose[op] ⇒ תת-פעולות (עד maxDepth) ⇒ עובדות
   const resolve = (op, value, label, depth, cond) => {
