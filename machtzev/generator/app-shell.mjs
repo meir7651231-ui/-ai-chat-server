@@ -469,7 +469,7 @@ ${extraFields.map(([key, def, lbl]) => `    DsField(label: ${k(L[lbl])}, hint: '
 }
 
 // ── השלד: סרגל-תחתון (בית · שורש · עוד) על IndexedStack — כל לשונית מסך שלם ──
-export function renderShell(slug, { title, root, rootPage, dashboard, hub, questions = {}, home = null, homeIsRoot = false, extras = [], seed = null, sync = null }) {   // homeIsRoot: הישות הראשונה שנאמרה = הלשונית הראשונה (הכרעת-בעלים 23.9: הבית = הדבר, לא אריח) · extras: מסך-ליד (התראה) = שורה חיה מעל הרשימה · seed: רשומות-הדוגמה   // G30 · home = מסך «היום» (נייר) במקום לוח-הבקרה בלשונית-הבית   // G28 · questions.list = השאלה שמסך-הרשימה עונה עליה (PLAN §1: מסך = שאלה אחת)
+export function renderShell(slug, { title, root, rootPage, dashboard, hub, questions = {}, home = null, homeIsRoot = false, extras = [], seed = null, sync = null, feed = null }) {   // homeIsRoot: הישות הראשונה שנאמרה = הלשונית הראשונה (הכרעת-בעלים 23.9: הבית = הדבר, לא אריח) · extras: מסך-ליד (התראה) = שורה חיה מעל הרשימה · seed: רשומות-הדוגמה   // G30 · home = מסך «היום» (נייר) במקום לוח-הבקרה בלשונית-הבית   // G28 · questions.list = השאלה שמסך-הרשימה עונה עליה (PLAN §1: מסך = שאלה אחת)
   const { k, dump } = makeConsts(slug);
   const imports = new Set([`import 'gen_${hub.slug}.dart';`, `import 'gen_${root.slug}.dart';`, `import 'gen_${rootPage.slug}.dart';`]);
   if (dashboard) imports.add(`import 'gen_${dashboard.slug}.dart';`);
@@ -484,7 +484,7 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
   const sub = root.subField ? `(r[${k(root.subField)}] ?? '')` : `''`;
   if (home) imports.add(`import 'gen_${home.slug}.dart';`);
   const tabs = (homeIsRoot ? [`_RootTab()`, dashboard ? `const ${dashboard.cls}()` : null, `const ${hub.cls}()`] : [home ? `const ${home.cls}()` : dashboard ? `const ${dashboard.cls}()` : null, `_RootTab()`, `const ${hub.cls}()`]).filter(Boolean);
-  for (const x of extras) imports.add(`import 'gen_${x.slug}.dart';`); if (seed) imports.add(`import 'gen_${seed.slug}.dart';`); if (sync) imports.add(`import 'gen_${sync.slug}.dart';`);
+  for (const x of extras) imports.add(`import 'gen_${x.slug}.dart';`); if (seed) imports.add(`import 'gen_${seed.slug}.dart';`); if (sync) imports.add(`import 'gen_${sync.slug}.dart';`); if (feed) imports.add(`import 'gen_${feed.slug}.dart';`);
   // מסך-ליד (התראה) = שיעור: סף במקור ⇒ הישיבה פוסקת על המועמדים (ring/gauge/alert/headline); אין שורד ⇒ שורה (היום) + פנקס
   const judged = extras.map((x) => {
     if (!x.live) return null;
@@ -539,8 +539,8 @@ class ${cls} extends StatefulWidget {
 
 class _${cls}State extends State<${cls}> {
   int _t = 0;
-${seed || sync ? `  @override
-  void initState() { super.initState(); ${seed ? `${seed.fn}();` : ''}${sync ? ` ${sync.fn}();` : ''} }   // רשומות-הדוגמה של הבעלים — פעם אחת · ואם יש שרת: הרשומות ממנו
+${seed || sync || feed ? `  @override
+  void initState() { super.initState(); ${seed ? `${seed.fn}();` : ''}${sync ? ` ${sync.fn}();` : ''}${feed ? ` ${feed.fn}();` : ''} }   // רשומות-הדוגמה של הבעלים — פעם אחת · ואם יש שרת: הרשומות ממנו
 ` : ''}  @override
   Widget build(BuildContext context) => ${paper ? `CallbackShortcuts(   // G30 · D3/D4: ≤3 מקשים — T היום · I רשימה · A הוספה · Ctrl/Cmd+K פלטה
     bindings: <ShortcutActivator, VoidCallback>{

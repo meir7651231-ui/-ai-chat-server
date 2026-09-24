@@ -739,7 +739,7 @@
   },
   {
    "file": "machtzev/generator/app-ds.mjs",
-   "lines": 457,
+   "lines": 463,
    "fragments": [
     {
      "id": "app-ds#0",
@@ -912,7 +912,7 @@
      "id": "app-ds#15",
      "range": [
       373,
-      457
+      463
      ],
      "marker": "liveOf",
      "composed": [

@@ -308,6 +308,16 @@ function declOf(form, decl, skip = null) {
   const extra = toks(t.label).filter((x) => !stripLead(x).includes(decl.word) && !vw.some((v) => stripLead(x).includes(v))).join(' ') || null;
   return { thing: t, value, extra };
 }
+/** מקור מבחוץ (הכרעת-בעלים 24.9 «מקור הוא גם צורה»): קטע שיש בו מילת-מקור (spec-lang.sourceWords) וגזע של ישות-עם-שדות ⇒ השורות של הישות מגיעות מבחוץ. צורה בלבד. */
+const SRC_WORDS = (() => { try { return JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')).sourceWords || []; } catch { return []; } })();
+export function sourceDeclsOf(form) {
+  if (!SRC_WORDS.length) return [];
+  const ents = form.things.filter((t) => t.fields && t.fields.length); const out = [];
+  for (const seg of form.segments) { if (!SRC_WORDS.some((w) => seg.includes(w))) continue;
+    const ent = ents.find((e) => toks(seg).some((w) => sameStem(w, e.label))); if (!ent || ent.src === seg) continue;
+    out.push({ seg, ent: ent.label, things: form.things.filter((t) => t.src === seg && t !== ent).map((t) => t.label) }); }
+  return out;
+}
 export function serverDeclOf(form) { return declOf(form, SL_DECL.server); }
 export function lookDeclOf(form) { return declOf(form, SL_DECL.look, (serverDeclOf(form) || {}).thing || null); }
 /** ראש-המשפט (צורה, לא משמעות): מה שלפני הנקודתיים הראשונות = השלם שכל השאר בתוכו. «ניהול מוסד: לכל תלמיד יש…» ⇒ ראש «ניהול מוסד».

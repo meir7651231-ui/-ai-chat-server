@@ -10,7 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { formOf, specOf, answerFor, toks, serverDeclOf, lookDeclOf, headOf, planBehaviors, sameStem, leadOf, recall, remember, carriersOf } from './mavin.mjs';
+import { formOf, specOf, answerFor, toks, serverDeclOf, sourceDeclsOf, lookDeclOf, headOf, planBehaviors, sameStem, leadOf, recall, remember, carriersOf } from './mavin.mjs';
 import { askMaimatai } from './kashe.mjs';   // המקשה (18 גלאים) — שאלות על המשפט, לא הנחות
 import { rule as yeshivaRule } from './purpose.mjs';   // הפוסק (9 מהלכים) על האפיון שיצא
 import { detectAllClauses, detectLevelsClause, relOpOf, emitAppFrom } from '../machtzev/generator/capability.mjs';
@@ -86,8 +86,10 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
   // צורת-מדרגות: ראש «<תווית> לפי <שדה>» + הקטע הבא «<n>, <n>» (הדלת פיצלה על נקודתיים) — רק כשהשדה קיים באיזו ישות (אחרת נשאר none עם החיפוש)
   form.segments.forEach((seg, i) => { const lv = detectLevelsClause(seg, form.segments[i + 1]); if (!lv) return; const has = form.things.some((t) => (t.fields || []).some((f) => sameStem(lv.x, f.label) || f.label === lv.x)); if (!has) return; capSegs.set(seg, { clauses: [lv], how: 'מדרגות' }); capSegs.set(form.segments[i + 1], { clauses: [lv], how: 'מדרגות', tail: seg }); });
   const srv = serverDeclOf(form), lk = lookDeclOf(form), head = headOf(form);
+  const SRC = sourceDeclsOf(form); const srcThings = new Set(SRC.flatMap((x) => x.things));   // מקור מבחוץ ⇒ דברי-הקטע = הצהרה, לא ישות ולא «אין»
   const SHP = answers.__shape || null;   // חיפוש-לפי-צורה אושר (ein.shapeSearch) ⇒ דברי-הקטע = מסך-צורה, לא ישות ולא «אין»
   for (const t of form.things) {
+    if (srcThings.has(t.label)) { const x = SRC.find((y) => y.things.includes(t.label)); routes.push({ thing: t.label, route: 'source', ent: x.ent, why: `מקור מבחוץ: השורות של «${x.ent}» מגיעות מהשרת (api/feed) ⇒ האפליקציה מושכת` }); continue; }
     if (SHP && SHP.things.includes(t.label)) { routes.push({ thing: t.label, route: 'shape', why: `צורת «${SHP.ent}» ⇒ ${SHP.atom} (מאושר) ⇒ מסך` }); continue; }
     if (head && t.src === form.segments[0] && !(srv && t === srv.thing) && !(lk && t === lk.thing) && !entLabels.has(t.label)) { routes.push({ thing: t.label, route: 'head', why: `ראש-המשפט (לפני הנקודתיים) ⇒ שם-האפליקציה «${head}» + לוח-הבית (אריח לכל ישות)` }); continue; }
     if (srv && t === srv.thing) { routes.push({ thing: t.label, route: 'server', why: `הצהרת-שרת «${srv.value}» ⇒ server.mjs (חבילת-שרת לישויות שנבנו)` }); continue; }
@@ -107,7 +109,7 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
   }
   // דבר שנקרא כישות אבל הקטע שלו הוא סעיף-תנאי («התראה כשציון מתחת ל-55 וגם היעדרויות מעל 3» ⇒ «ישות התראה… עם היעדרויות מעל») — לא ישות: שורות-הספק שלו נמחקות
   const capThings = new Set(routes.filter((r) => r.route === 'capability').map((r) => r.thing));
-  const specLines = spec.spec.split('\n').filter((l) => { const m = l.match(/^(\S+)\s+(.+?)(?:\s+עם\s|:)/); if (SHP && SHP.things.some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; return !(m && capThings.has(m[2].trim()) && entLabels.has(m[2].trim())); });
+  const specLines = spec.spec.split('\n').filter((l) => { const m = l.match(/^(\S+)\s+(.+?)(?:\s+עם\s|:)/); if (srcThings.size && [...srcThings].some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; if (SHP && SHP.things.some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; return !(m && capThings.has(m[2].trim()) && entLabels.has(m[2].trim())); });
   return { routes, spec: specLines.join('\n'), skipped: spec.skipped, builtin: spec.builtin };
 }
 
@@ -234,7 +236,8 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   //    הבנייה כותבת ל-new/dart-gen-bs ו-new/dart-data-bs/auto ומוחקת יתומים (קרה 23.9, שוחזר מ-git). כאן: מסרבים, לא מלכלכים.
   const caps = capSegs.map(([seg, clauses], i) => ({ slug: `cap${i + 1}`, cls: `GenCap${i + 1}Screen`, kind: 'capability', name: seg.trim(), icon: '🔔', value: (clauses.find((c) => c.n != null) || {}).n ?? (clauses.find((c) => c.kind === 'levels') || {}).high ?? null, clause: (() => { const ok = (c) => c.n != null || ((c.op === '=' || String(c.op || '')[0] === '@') && c.y); const main = clauses.find((c) => c.kind === 'levels') || clauses.find((c) => ok(c) && !c.and && !c.or) || clauses.find(ok) || null; const ands = clauses.filter((c) => c !== main && c.and && ok(c)), ors = clauses.filter((c) => c !== main && c.or && ok(c)); /* שוויון: סף = מילה, לא מספר */ return main ? { ...main, ...(ands.length ? { and: ands } : {}), ...(ors.length ? { or: ors } : {}) } : null; })(), sub: clauses.map((c) => { const i = c.x ? seg.indexOf(c.x) : -1; return i >= 0 ? seg.slice(i).trim() : `${c.x || ''} ${c.op || ''} ${c.n ?? ''}`.trim(); }).join(' · ') }));   // המילים של הבעלים («ציון מתחת ל-55»), לא סימן   // מסך-ההתראה ⇒ אריח בלוח-הבית וברכזת (הרכבה: לא קובץ-ליד)
   const SHP0 = answers.__shape || null; if (SHP0) caps.push({ slug: 'shape1', cls: 'GenShape1Screen', kind: 'capability', name: SHP0.seg, icon: '📋', sub: SHP0.atom, value: null, clause: null, shape: true });   // מסך-הצורה ⇒ אריח ברכזת
-  const app = await runAppDs(spec, files, notes, questions, { extraScreens: caps, server: routes.some((r) => r.route === 'server') });   // «שרת בענן» ⇒ האפליקציה מסתנכרנת מהשרת (gen_app_sync)
+  const feeds = [...new Set(routes.filter((r) => r.route === 'source').map((r) => r.ent))]; if (feeds.length) notes.push(`מקור מבחוץ: ${feeds.join(', ')} ⇒ השרת מקבל שורות (POST <בנייה>/api/feed/<ישות>) · האפליקציה מושכת כל 3 שניות`);
+  const app = await runAppDs(spec, files, notes, questions, { feeds, extraScreens: caps, server: routes.some((r) => r.route === 'server') });   // «שרת בענן» ⇒ האפליקציה מסתנכרנת מהשרת (gen_app_sync)
   // 2א · הרכבה (insight.mjs · הכרעת-בעלים 23.9 «תחבר»): התראה עם קישור-נתונים ⇒ מסך-תובנה אחד מהנתונים האמיתיים במקום הדמו של capability
   if (app && Array.isArray(app.liveExtras) && !inRepo(process.env.GEN_OUT)) {
     const IN = await import('../machtzev/generator/insight.mjs');
@@ -273,6 +276,13 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
             else notes.push(`החלטה «${x.name}»: אין אטום מוכח בקטלוג ⇒ השוואה ביד (מדווח)`); } catch (e) { notes.push(`החלטה «${x.name}»: behavior-plan נכשל — ${String(e.message || e).slice(0, 120)}`); } } }
       try { const r = IN.emitInsight({ slug: x.slug, cls: x.cls, name: x.name, live: x.live, entity: x.live.kind === 'aggBy' ? { name: ent ? ent.name : '', fields: [x.live.by, x.live.field] } : (ent || { name: '', fields: [x.live.field] }), expect, seedSlug, words: x.sub || null, decide }); for (const l of r.ledger) notes.push(l.slice(0, 400)); notes.push(`הרכבה «${x.name}»: ${r.wired}/${r.ops} פעולות עם אטום · לרישום כיכולת: node machtzev/generator/insight.mjs --register ${path.join(outDir, `insight_${x.slug}.json`)}`); notes.push(`הרכבה «${x.name}»: ${r.wired}/${r.ops} פעולות עם אטום${r.missing.length ? ` · בלי אטום: ${r.missing.join(', ')}` : ''} ⇒ ${x.cls} (insight_${x.slug}.json)${r.accept ? ` · מבחן-קבלה: ${expect.count} חורגים ${expect.rows.map((q) => q.join('/')).join(', ')}` : ' · אין דוגמאות ⇒ אין מבחן-קבלה'}`); files.push({ route: 'insight', file: path.join(outDir, `gen_${x.slug}.dart`), cls: x.cls, ops: r.ops, wired: r.wired }); }
       catch (e) { notes.push(`הרכבה «${x.name}» נכשלה: ${String(e.message || e).slice(0, 160)} ⇒ נשאר מסך-capability`); } }
+  }
+  // 2א'' · מקור מבחוץ: מבחן-קבלה — שורה (מהדוגמאות של הבעלים, לא ממציאים) נכנסת דרך ingestFeed ⇒ הטבלה גדלה והערך בה
+  if (feeds.length && app && app.nameToSlug && fs.existsSync(path.join(R.outDir(), 'gen_app_feed.dart')) && !inRepo(process.env.GEN_OUT)) {
+    const lit = (v) => "'" + String(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$') + "'";
+    const tests = feeds.map((en) => { const t = form.things.find((x) => x.label === en); const row = t && t.examples && t.examples[0]; const sl = app.nameToSlug[en]; if (!row || !sl) return null;
+      return [`  test(${lit(`מקור מבחוץ: «${en}» ⇒ שורה נכנסת לטבלה`)}, () {`, `    final before = appStore.records('${sl}').length;`, `    expect(ingestFeed('${sl}', ${lit(JSON.stringify([row]))}), 1);`, `    expect(appStore.records('${sl}').length, before + 1);`, `    expect(appStore.records('${sl}').any((r) => r.values.contains(${lit(row[0])})), isTrue);`, '  });'].join('\n'); }).filter(Boolean);
+    if (tests.length) fs.writeFileSync(path.join(R.outDir(), 'gen_app_feed_accept_test.dart'), [`// 🎯 מבחן-קבלה (מקור מבחוץ): שורה שמגיעה מבחוץ נכנסת לטבלה. חולל; אל תערוך.`, `import 'package:flutter_test/flutter_test.dart';`, `import 'package:buildsmart/genesis/dart-gen-bs/gen_app_feed.dart';`, `import 'package:buildsmart/genesis/dart-ui-bs/ds/ds_store.dart';`, 'void main() {', ...tests, '}', ''].join('\n'));
   }
   // 2א' · מסך-הצורה (yeshiva/shape): הרשומות החיות ⇒ האטום שנמצא לפי הצורה ⇒ טבלה; מבחן-קבלה מתוצאת-התאום על הדוגמאות
   if (SHP0 && app && app.nameToSlug && app.nameToSlug[SHP0.ent] && !inRepo(process.env.GEN_OUT)) { const SHm = await import('./shape.mjs'); const seedSlug = fs.existsSync(path.join(outDir, 'gen_app_seed.dart')) ? 'app_seed' : null;

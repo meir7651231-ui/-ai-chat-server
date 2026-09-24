@@ -11,7 +11,7 @@
 //    בנייה אחת בכל רגע (המארח משותף).
 //  שימוש: [BS_HOST=<app_flutter>] node yeshiva/mavin-server.mjs [--port 8765] [--builds <dir>] [--no-self]
 //  מסלולים: GET / · GET|PUT /api/data · GET /sentence · POST /self · GET /builds · POST /build {sentence,answers}
-//           GET /build/:id · GET /build/:id/app · GET|PUT /build/:id/api/data · GET /build/:id/files/:name · POST /register {id}
+//           GET /build/:id · GET /build/:id/app · GET|PUT /build/:id/api/data · GET|POST /build/:id/api/feed/:ent (מקור מבחוץ) · GET /build/:id/files/:name · POST /register {id}
 // ════════════════════════════════════════════════════════════════════════════════
 import http from 'node:http';
 import fs from 'node:fs';
@@ -164,6 +164,15 @@ function buildSelf() { const b = newBuild(selfSentence(), { label: D.app, self: 
 
 // ── HTTP ──
 const perBuildData = (b) => path.join(bdir(b), 'data.json');
+// 📡 מקור מבחוץ (הכרעת-בעלים 24.9 «מקור הוא גם צורה»): מערכת חיצונית שולחת שורות (POST …/api/feed/<ישות>: מערך-שורות או {rows}) ⇒ נשמרות לפי סדר (seq) ⇒ האפליקציה מושכת GET …?since=<n> ⇒ {rows, next}
+const feedFile = (b, slug) => path.join(bdir(b), `feed-${String(slug).replace(/[^\w-]/g, '')}.jsonl`);
+const feedRead = (b, slug) => { const f = feedFile(b, slug); return fs.existsSync(f) ? fs.readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : []; };
+async function feedRoute(req, res, b, slug, u) {
+  if (req.method === 'GET') { const since = +(u.searchParams.get('since') || 0); const all = feedRead(b, slug); return json(res, 200, { rows: all.filter((x) => x.seq > since).map((x) => x.row), next: all.length ? all[all.length - 1].seq : since }); }
+  if (req.method === 'POST') { let d; try { d = JSON.parse(await body(req)); } catch { return text(res, 400, T('badJson')); } const rows = Array.isArray(d) ? d : Array.isArray(d && d.rows) ? d.rows : null; if (!rows) return text(res, 400, T('badJson'));
+    const all = feedRead(b, slug); let seq = all.length ? all[all.length - 1].seq : 0; fs.mkdirSync(bdir(b), { recursive: true }); fs.appendFileSync(feedFile(b, slug), rows.map((row) => JSON.stringify({ seq: ++seq, at: new Date().toISOString(), row })).join('\n') + '\n'); return json(res, 200, { ok: true, added: rows.length, next: seq }); }
+  return text(res, 405, T('notFound'));
+}
 const json = (res, code, obj) => { res.writeHead(code, { 'content-type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(obj)); };
 const text = (res, code, s, type = 'text/plain; charset=utf-8') => { res.writeHead(code, { 'content-type': type }); res.end(s); };
 const file = (res, f) => { if (!f || !fs.existsSync(f)) return text(res, 404, T('notFound')); const ext = path.extname(f); text(res, 200, fs.readFileSync(f), { '.html': 'text/html; charset=utf-8', '.png': 'image/png', '.json': 'application/json; charset=utf-8' }[ext] || 'text/plain; charset=utf-8'); };
@@ -176,6 +185,7 @@ const server = http.createServer(async (req, res) => {
     const fm = p.match(/^(?:\/build\/(\d+))?\/flutter\/(.*)$/);   // /flutter/… = הקוקפיט ב-Flutter · /build/<id>/flutter/… = האפליקציה שנבנתה ב-Flutter (מ-build/web של המארח אחרי ההוכחה)
     if (fm) { const b = fm[1] ? builds.find((x) => x.id === +fm[1]) : cockpit; if (!b || !b.web) return text(res, 404, T('notFound'));
       const base = fm[1] ? `/build/${b.id}/flutter/` : '/flutter/'; const rel = fm[2] || 'index.html';
+      { const fd = rel.match(/^api\/feed\/([\w-]+)$/); if (fd && fm[1]) return feedRoute(req, res, b, fd[1], u); }
       if (rel === 'api/data' && req.method === 'GET') return fm[1] ? file(res, fs.existsSync(perBuildData(b)) ? perBuildData(b) : null) : json(res, 200, data());
       if (rel === 'api/data' && req.method === 'PUT') { const s0 = await body(req); try { JSON.parse(s0); } catch { return text(res, 400, T('badJson')); } if (fm[1]) fs.writeFileSync(perBuildData(b), s0); else acceptData(JSON.parse(s0)); return json(res, 200, { ok: true }); }
       const f = path.join(bdir(b), 'web', ...rel.split('/').filter((x) => x && x !== '..'));
@@ -194,6 +204,7 @@ const server = http.createServer(async (req, res) => {
     if (m) { const b = builds.find((x) => x.id === +m[1]); if (!b) return text(res, 404, T('notFound')); const sub = m[2] || '';
       if (!sub) return json(res, 200, pub(b));
       if (sub === 'app') return file(res, b.gen && path.join(b.gen, 'app.html'));
+      { const fd = sub.match(/^api\/feed\/([\w-]+)$/); if (fd) return feedRoute(req, res, b, fd[1], u); }
       if (sub === 'api/data' && req.method === 'GET') { if (fs.existsSync(perBuildData(b))) return file(res, perBuildData(b)); let n = 0; try { n = JSON.parse(fs.readFileSync(path.join(b.gen, 'gen-report.json'), 'utf8')).entities.length; } catch {} return json(res, 200, Array.from({ length: n }, () => [])); }
       if (sub === 'api/data' && req.method === 'PUT') { const s = await body(req); try { JSON.parse(s); } catch { return text(res, 400, T('badJson')); } fs.writeFileSync(perBuildData(b), s); return json(res, 200, { ok: true }); }
       if (sub === 'log') return text(res, 200, b.log);
