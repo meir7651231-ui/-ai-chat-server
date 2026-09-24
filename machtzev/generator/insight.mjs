@@ -11,7 +11,7 @@ import { buildAtlas } from './atlas.mjs';
 import { isPaper, skinWired } from './look.mjs';
 import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';
 import { synthDisplay, widgetRecordOf, sidecarOf } from './display-synth.mjs';
-import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr, liveCond, liveThresholdDart, liveOpDart, liveKeyExpr } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
+import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr, liveCond, liveThresholdDart, liveOpDart, liveTest, liveAtomImports, liveKeyExpr } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { ops as opsOfKind } from '../compose-engine.mjs';   // צורה ⇒ פעולות-יסוד (הטבלה הקיימת, לא רשימה שלי)
 import * as R from '../root.mjs';
@@ -45,12 +45,13 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   // ── הנתונים המשותפים (חוק 23-ד: מחברים בהחלטה): כל האטומים קוראים מאותו br/rs ──
   const isSet = liveIsSet(live); const numOf = isSet ? 'agg' : liveValue(live, 'r', k); const thr = liveThreshold(live);   // צורת-התנאי (מספר / ותק / מונה-קשר / קבוצה) — מקום אחד
   const thrD = liveThresholdDart(live, k);
-  const cond0 = live.kind === 'levels' ? 'true' : decide && decide.name ? `${decide.name}(${numOf}, ${thrD})` : `${numOf} ${liveOpDart(live)} ${thrD}`;
+  const cond0 = live.kind === 'levels' ? 'true' : decide && decide.name ? `${decide.name}(${numOf}, ${thrD})` : liveTest(live, numOf, thrD);
   const cond = (isSet || liveIsGrouped(live)) ? cond0 : liveCond(live, cond0, 'r', k);   // «או»: איחוד ברמת-הרשומה   // מדרגות: כל הקבוצות מוצגות; אטום-ההחלטה מחשב את המדרגה (live.decide), לא סף
   if (isSet) { manifest.source.agg = live.agg; const ai = liveAggImport(live); if (ai) imports.add(ai); }
   const grouped = liveIsGrouped(live); if (grouped) { manifest.source.agg = live.agg; manifest.source.by = live.by; const ai = liveAggImport({ ...live, kind: 'agg' }); if (ai) imports.add(ai); }
   manifest.source.kind = live.kind || 'num'; if (live.pre && live.pre.length) manifest.source.pre = live.pre.map((p) => ({ field: p.field, op: p.op, n: liveThreshold(p), kind: p.kind || 'num' })); if (live.alt && live.alt.length) manifest.source.alt = live.alt.map((p) => ({ field: p.field, op: p.op, n: liveThreshold(p), kind: p.kind || 'num' })); if (live.kind === 'age') { manifest.source.days = live.days; manifest.timeDependent = true; }
   if (decide && decide.file) imports.add(`import '../${decide.file}';`);
+  for (const ai of liveAtomImports(live)) imports.add(ai);
   if (live.kind === 'levels') { manifest.source.levels = { high: live.high, mid: live.mid, by: live.by }; if (decide && decide.proven) live.decide = decide.name; }
   manifest.decision = decide ? { atom: decide.name, file: decide.file, proven: !!decide.proven, examples: decide.examples || [] } : { atom: null, why: 'אין אטום-החלטה מוכח ⇒ השוואה ביד (מדווח)' };
   const descField = grouped ? live.by : (entity.fields[0] || live.field);   // קבוצות: העמודה המתארת = שדה-החלוקה

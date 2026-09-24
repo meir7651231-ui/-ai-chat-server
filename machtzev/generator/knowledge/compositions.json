@@ -3,7 +3,7 @@
  "files": [
   {
    "file": "machtzev/generator/capability.mjs",
-   "lines": 228,
+   "lines": 233,
    "fragments": [
     {
      "id": "capability#0",
@@ -53,7 +53,7 @@
      "id": "capability#4",
      "range": [
       16,
-      17
+      19
      ],
      "marker": null,
      "composed": [],
@@ -63,8 +63,30 @@
     {
      "id": "capability#5",
      "range": [
-      17,
-      18
+      19,
+      20
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "REL_FILE",
+     "uses": []
+    },
+    {
+     "id": "capability#6",
+     "range": [
+      20,
+      22
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "addLearnedRel",
+     "uses": []
+    },
+    {
+     "id": "capability#7",
+     "range": [
+      22,
+      23
      ],
      "marker": null,
      "composed": [],
@@ -72,10 +94,10 @@
      "uses": []
     },
     {
-     "id": "capability#6",
+     "id": "capability#8",
      "range": [
-      18,
-      19
+      23,
+      24
      ],
      "marker": null,
      "composed": [],
@@ -83,10 +105,10 @@
      "uses": []
     },
     {
-     "id": "capability#7",
+     "id": "capability#9",
      "range": [
-      19,
-      20
+      24,
+      25
      ],
      "marker": null,
      "composed": [],
@@ -94,10 +116,10 @@
      "uses": []
     },
     {
-     "id": "capability#8",
+     "id": "capability#10",
      "range": [
-      20,
-      21
+      25,
+      26
      ],
      "marker": null,
      "composed": [],
@@ -105,10 +127,10 @@
      "uses": []
     },
     {
-     "id": "capability#9",
+     "id": "capability#11",
      "range": [
-      21,
-      23
+      26,
+      28
      ],
      "marker": null,
      "composed": [],
@@ -116,10 +138,10 @@
      "uses": []
     },
     {
-     "id": "capability#10",
+     "id": "capability#12",
      "range": [
-      23,
-      24
+      28,
+      29
      ],
      "marker": null,
      "composed": [],
@@ -127,10 +149,10 @@
      "uses": []
     },
     {
-     "id": "capability#11",
+     "id": "capability#13",
      "range": [
-      24,
-      26
+      29,
+      31
      ],
      "marker": null,
      "composed": [],
@@ -138,10 +160,10 @@
      "uses": []
     },
     {
-     "id": "capability#12",
+     "id": "capability#14",
      "range": [
-      26,
-      27
+      31,
+      32
      ],
      "marker": null,
      "composed": [],
@@ -149,10 +171,10 @@
      "uses": []
     },
     {
-     "id": "capability#13",
+     "id": "capability#15",
      "range": [
-      27,
-      31
+      32,
+      36
      ],
      "marker": null,
      "composed": [],
@@ -160,10 +182,10 @@
      "uses": []
     },
     {
-     "id": "capability#14",
+     "id": "capability#16",
      "range": [
-      31,
-      34
+      36,
+      39
      ],
      "marker": null,
      "composed": [],
@@ -171,10 +193,10 @@
      "uses": []
     },
     {
-     "id": "capability#15",
+     "id": "capability#17",
      "range": [
-      34,
-      38
+      39,
+      43
      ],
      "marker": null,
      "composed": [],
@@ -182,10 +204,10 @@
      "uses": []
     },
     {
-     "id": "capability#16",
+     "id": "capability#18",
      "range": [
-      38,
-      39
+      43,
+      44
      ],
      "marker": null,
      "composed": [],
@@ -193,10 +215,10 @@
      "uses": []
     },
     {
-     "id": "capability#17",
+     "id": "capability#19",
      "range": [
-      39,
-      68
+      44,
+      73
      ],
      "marker": "form: condition (num · age · eq)",
      "composed": [
@@ -210,10 +232,10 @@
      ]
     },
     {
-     "id": "capability#18",
+     "id": "capability#20",
      "range": [
-      68,
-      78
+      73,
+      83
      ],
      "marker": null,
      "composed": [],
@@ -221,10 +243,10 @@
      "uses": []
     },
     {
-     "id": "capability#19",
+     "id": "capability#21",
      "range": [
-      78,
-      79
+      83,
+      84
      ],
      "marker": null,
      "composed": [],
@@ -232,10 +254,10 @@
      "uses": []
     },
     {
-     "id": "capability#20",
+     "id": "capability#22",
      "range": [
-      79,
-      80
+      84,
+      85
      ],
      "marker": null,
      "composed": [],
@@ -243,10 +265,10 @@
      "uses": []
     },
     {
-     "id": "capability#21",
+     "id": "capability#23",
      "range": [
-      80,
-      85
+      85,
+      90
      ],
      "marker": null,
      "composed": [],
@@ -254,10 +276,10 @@
      "uses": []
     },
     {
-     "id": "capability#22",
+     "id": "capability#24",
      "range": [
-      85,
-      94
+      90,
+      99
      ],
      "marker": "form: levels",
      "composed": [
@@ -270,10 +292,10 @@
      ]
     },
     {
-     "id": "capability#23",
+     "id": "capability#25",
      "range": [
-      94,
-      115
+      99,
+      120
      ],
      "marker": "form: and / or",
      "composed": [
@@ -287,10 +309,10 @@
      ]
     },
     {
-     "id": "capability#24",
+     "id": "capability#26",
      "range": [
-      115,
-      117
+      120,
+      122
      ],
      "marker": null,
      "composed": [],
@@ -300,10 +322,10 @@
      ]
     },
     {
-     "id": "capability#25",
+     "id": "capability#27",
      "range": [
-      117,
-      187
+      122,
+      192
      ],
      "marker": null,
      "composed": [],
@@ -313,10 +335,10 @@
      ]
     },
     {
-     "id": "capability#26",
+     "id": "capability#28",
      "range": [
-      187,
-      204
+      192,
+      209
      ],
      "marker": null,
      "composed": [],
@@ -324,10 +346,10 @@
      "uses": []
     },
     {
-     "id": "capability#27",
+     "id": "capability#29",
      "range": [
-      204,
-      228
+      209,
+      233
      ],
      "marker": null,
      "composed": [],
@@ -338,13 +360,13 @@
   },
   {
    "file": "machtzev/generator/live-expr.mjs",
-   "lines": 54,
+   "lines": 61,
    "fragments": [
     {
      "id": "live-expr#0",
      "range": [
       0,
-      3
+      6
      ],
      "marker": null,
      "composed": [],
@@ -354,8 +376,8 @@
     {
      "id": "live-expr#1",
      "range": [
-      3,
-      5
+      6,
+      8
      ],
      "marker": null,
      "composed": [],
@@ -365,8 +387,8 @@
     {
      "id": "live-expr#2",
      "range": [
-      5,
-      11
+      8,
+      14
      ],
      "marker": "liveValue",
      "composed": [
@@ -383,8 +405,8 @@
     {
      "id": "live-expr#3",
      "range": [
-      11,
-      13
+      14,
+      16
      ],
      "marker": null,
      "composed": [],
@@ -396,8 +418,8 @@
     {
      "id": "live-expr#4",
      "range": [
-      13,
-      14
+      16,
+      17
      ],
      "marker": null,
      "composed": [],
@@ -409,8 +431,8 @@
     {
      "id": "live-expr#5",
      "range": [
-      14,
-      15
+      17,
+      18
      ],
      "marker": null,
      "composed": [],
@@ -422,8 +444,8 @@
     {
      "id": "live-expr#6",
      "range": [
-      15,
-      16
+      18,
+      19
      ],
      "marker": null,
      "composed": [],
@@ -433,8 +455,8 @@
     {
      "id": "live-expr#7",
      "range": [
-      16,
-      18
+      19,
+      21
      ],
      "marker": null,
      "composed": [],
@@ -446,8 +468,8 @@
     {
      "id": "live-expr#8",
      "range": [
-      18,
-      22
+      21,
+      25
      ],
      "marker": "liveKeyExpr",
      "composed": [
@@ -462,8 +484,8 @@
     {
      "id": "live-expr#9",
      "range": [
-      22,
-      24
+      25,
+      27
      ],
      "marker": null,
      "composed": [],
@@ -473,8 +495,8 @@
     {
      "id": "live-expr#10",
      "range": [
-      24,
-      26
+      27,
+      29
      ],
      "marker": null,
      "composed": [],
@@ -488,8 +510,8 @@
     {
      "id": "live-expr#11",
      "range": [
-      26,
-      27
+      29,
+      30
      ],
      "marker": null,
      "composed": [],
@@ -502,8 +524,8 @@
     {
      "id": "live-expr#12",
      "range": [
-      27,
-      29
+      30,
+      32
      ],
      "marker": null,
      "composed": [],
@@ -515,8 +537,8 @@
     {
      "id": "live-expr#13",
      "range": [
-      29,
-      30
+      32,
+      33
      ],
      "marker": null,
      "composed": [],
@@ -529,8 +551,8 @@
     {
      "id": "live-expr#14",
      "range": [
-      30,
-      32
+      33,
+      35
      ],
      "marker": null,
      "composed": [],
@@ -542,8 +564,35 @@
     {
      "id": "live-expr#15",
      "range": [
-      32,
-      33
+      35,
+      37
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveTest",
+     "uses": [
+      "liveOpDart",
+      "liveTest"
+     ]
+    },
+    {
+     "id": "live-expr#16",
+     "range": [
+      37,
+      39
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveAtomImports",
+     "uses": [
+      "liveAtomImports"
+     ]
+    },
+    {
+     "id": "live-expr#17",
+     "range": [
+      39,
+      40
      ],
      "marker": null,
      "composed": [],
@@ -554,10 +603,10 @@
      ]
     },
     {
-     "id": "live-expr#16",
+     "id": "live-expr#18",
      "range": [
-      33,
-      35
+      40,
+      42
      ],
      "marker": null,
      "composed": [],
@@ -567,10 +616,10 @@
      ]
     },
     {
-     "id": "live-expr#17",
+     "id": "live-expr#19",
      "range": [
-      35,
-      37
+      42,
+      44
      ],
      "marker": "livePre",
      "composed": [
@@ -578,17 +627,17 @@
      ],
      "declares": "livePre",
      "uses": [
-      "liveOpDart",
       "livePre",
+      "liveTest",
       "liveThresholdDart",
       "liveValue"
      ]
     },
     {
-     "id": "live-expr#18",
+     "id": "live-expr#20",
      "range": [
-      37,
-      39
+      44,
+      46
      ],
      "marker": null,
      "composed": [],
@@ -599,10 +648,10 @@
      ]
     },
     {
-     "id": "live-expr#19",
+     "id": "live-expr#21",
      "range": [
-      39,
-      41
+      46,
+      48
      ],
      "marker": "liveAlt",
      "composed": [
@@ -611,16 +660,16 @@
      "declares": "liveAlt",
      "uses": [
       "liveAlt",
-      "liveOpDart",
+      "liveTest",
       "liveThresholdDart",
       "liveValue"
      ]
     },
     {
-     "id": "live-expr#20",
+     "id": "live-expr#22",
      "range": [
-      41,
-      42
+      48,
+      49
      ],
      "marker": null,
      "composed": [],
@@ -631,10 +680,10 @@
      ]
     },
     {
-     "id": "live-expr#21",
+     "id": "live-expr#23",
      "range": [
-      42,
-      43
+      49,
+      50
      ],
      "marker": null,
      "composed": [],
@@ -646,10 +695,10 @@
      ]
     },
     {
-     "id": "live-expr#22",
+     "id": "live-expr#24",
      "range": [
-      43,
-      46
+      50,
+      53
      ],
      "marker": null,
      "composed": [],
@@ -661,10 +710,10 @@
      ]
     },
     {
-     "id": "live-expr#23",
+     "id": "live-expr#25",
      "range": [
-      46,
-      47
+      53,
+      54
      ],
      "marker": null,
      "composed": [],
@@ -674,10 +723,10 @@
      ]
     },
     {
-     "id": "live-expr#24",
+     "id": "live-expr#26",
      "range": [
-      47,
-      54
+      54,
+      61
      ],
      "marker": null,
      "composed": [],
@@ -690,7 +739,7 @@
   },
   {
    "file": "machtzev/generator/app-ds.mjs",
-   "lines": 454,
+   "lines": 457,
    "fragments": [
     {
      "id": "app-ds#0",
@@ -718,7 +767,7 @@
      "id": "app-ds#2",
      "range": [
       5,
-      17
+      18
      ],
      "marker": null,
      "composed": [],
@@ -728,8 +777,8 @@
     {
      "id": "app-ds#3",
      "range": [
-      17,
-      21
+      18,
+      22
      ],
      "marker": null,
      "composed": [],
@@ -739,8 +788,8 @@
     {
      "id": "app-ds#4",
      "range": [
-      21,
-      22
+      22,
+      23
      ],
      "marker": null,
      "composed": [],
@@ -750,8 +799,8 @@
     {
      "id": "app-ds#5",
      "range": [
-      22,
-      24
+      23,
+      25
      ],
      "marker": null,
      "composed": [],
@@ -761,8 +810,8 @@
     {
      "id": "app-ds#6",
      "range": [
-      24,
-      25
+      25,
+      26
      ],
      "marker": null,
      "composed": [],
@@ -772,8 +821,8 @@
     {
      "id": "app-ds#7",
      "range": [
-      25,
-      26
+      26,
+      27
      ],
      "marker": null,
      "composed": [],
@@ -783,8 +832,8 @@
     {
      "id": "app-ds#8",
      "range": [
-      26,
-      27
+      27,
+      28
      ],
      "marker": null,
      "composed": [],
@@ -794,8 +843,8 @@
     {
      "id": "app-ds#9",
      "range": [
-      27,
-      28
+      28,
+      29
      ],
      "marker": null,
      "composed": [],
@@ -805,8 +854,8 @@
     {
      "id": "app-ds#10",
      "range": [
-      28,
-      29
+      29,
+      30
      ],
      "marker": null,
      "composed": [],
@@ -816,8 +865,8 @@
     {
      "id": "app-ds#11",
      "range": [
-      29,
-      32
+      30,
+      33
      ],
      "marker": null,
      "composed": [],
@@ -827,8 +876,8 @@
     {
      "id": "app-ds#12",
      "range": [
-      32,
-      59
+      33,
+      60
      ],
      "marker": null,
      "composed": [],
@@ -838,8 +887,8 @@
     {
      "id": "app-ds#13",
      "range": [
-      59,
-      68
+      60,
+      69
      ],
      "marker": null,
      "composed": [],
@@ -849,8 +898,8 @@
     {
      "id": "app-ds#14",
      "range": [
-      68,
-      371
+      69,
+      373
      ],
      "marker": null,
      "composed": [],
@@ -862,8 +911,8 @@
     {
      "id": "app-ds#15",
      "range": [
-      371,
-      454
+      373,
+      457
      ],
      "marker": "liveOf",
      "composed": [
@@ -886,7 +935,7 @@
   },
   {
    "file": "machtzev/generator/insight.mjs",
-   "lines": 155,
+   "lines": 156,
    "fragments": [
     {
      "id": "insight#0",
@@ -902,6 +951,7 @@
       "judge",
       "liveAggExpr",
       "liveAggImport",
+      "liveAtomImports",
       "liveCond",
       "liveGroupsExpr",
       "liveIsGrouped",
@@ -910,6 +960,7 @@
       "liveNeedsHelper",
       "liveOpDart",
       "liveSetExpr",
+      "liveTest",
       "liveThreshold",
       "liveThresholdDart",
       "liveValue",
@@ -987,7 +1038,7 @@
      "id": "insight#7",
      "range": [
       34,
-      155
+      156
      ],
      "marker": "emitInsight",
      "composed": [
@@ -1003,14 +1054,15 @@
       "judge",
       "liveAggExpr",
       "liveAggImport",
+      "liveAtomImports",
       "liveCond",
       "liveGroupsExpr",
       "liveIsGrouped",
       "liveIsSet",
       "liveKeyExpr",
       "liveNeedsHelper",
-      "liveOpDart",
       "liveSetExpr",
+      "liveTest",
       "liveThreshold",
       "liveThresholdDart",
       "liveValue",
@@ -1022,7 +1074,7 @@
   },
   {
    "file": "yeshiva/ein.mjs",
-   "lines": 122,
+   "lines": 200,
    "fragments": [
     {
      "id": "ein#0",
@@ -1121,7 +1173,7 @@
      "id": "ein#6",
      "range": [
       92,
-      107
+      110
      ],
      "marker": "ein.examplesIO",
      "composed": [
@@ -1138,8 +1190,82 @@
     {
      "id": "ein#7",
      "range": [
-      107,
-      122
+      110,
+      115
+     ],
+     "marker": "ein.form",
+     "composed": [
+      "marks",
+      "(> · < · =)ⁿ",
+      "(וגם | או) ⇒ צורה נלמדת (זיכרון) ⇒ הסעיף נכתב בצורות מוכרות"
+     ],
+     "declares": null,
+     "uses": []
+    },
+    {
+     "id": "ein#8",
+     "range": [
+      115,
+      116
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "FORMS",
+     "uses": []
+    },
+    {
+     "id": "ein#9",
+     "range": [
+      116,
+      117
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "formsAll",
+     "uses": []
+    },
+    {
+     "id": "ein#10",
+     "range": [
+      117,
+      118
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "fill",
+     "uses": []
+    },
+    {
+     "id": "ein#11",
+     "range": [
+      118,
+      172
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "learnForms",
+     "uses": [
+      "leadOf",
+      "liveSample",
+      "sameStem"
+     ]
+    },
+    {
+     "id": "ein#12",
+     "range": [
+      172,
+      183
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "bornRecall",
+     "uses": []
+    },
+    {
+     "id": "ein#13",
+     "range": [
+      183,
+      200
      ],
      "marker": null,
      "composed": [],

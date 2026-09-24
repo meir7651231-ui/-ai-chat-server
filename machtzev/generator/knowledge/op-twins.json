@@ -1,0 +1,701 @@
+{
+ "_": "נגזר ע\"י machtzev/generator/op-twins.mjs — תאומי-JS לפעולות-היסוד, מאומתים מול Dart על דגימות; sha = מקור-ה-Dart. אל תערוך ידנית.",
+ "ok": {
+  "absNum": {
+   "file": "op-abs-num.dart",
+   "sha": "1a38ced3ce73a5ee",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    }
+   ],
+   "ret": "num",
+   "expr": "a.abs()",
+   "samples": 6
+  },
+  "addDyn": {
+   "file": "op-add-dyn.dart",
+   "sha": "3480718655f97b9e",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    },
+    {
+     "type": "dynamic",
+     "name": "b"
+    }
+   ],
+   "ret": "dynamic",
+   "expr": "a + b",
+   "samples": 16
+  },
+  "addNum": {
+   "file": "op-add-num.dart",
+   "sha": "2e2bd2fbbc62e621",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    },
+    {
+     "type": "num",
+     "name": "b"
+    }
+   ],
+   "ret": "num",
+   "expr": "a + b",
+   "samples": 36
+  },
+  "addStr": {
+   "file": "op-add-str.dart",
+   "sha": "bbca255a0018e664",
+   "params": [
+    {
+     "type": "String",
+     "name": "a"
+    },
+    {
+     "type": "String",
+     "name": "b"
+    }
+   ],
+   "ret": "String",
+   "expr": "a + b",
+   "samples": 36
+  },
+  "cmpGeStr": {
+   "file": "op-cmp-ge-str.dart",
+   "sha": "c4f5380986d8bc9b",
+   "params": [
+    {
+     "type": "String",
+     "name": "a"
+    },
+    {
+     "type": "String",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a.compareTo(b) >= 0",
+   "samples": 36
+  },
+  "cmpGtDyn": {
+   "file": "op-cmp-gt-dyn.dart",
+   "sha": "6c48825d4f75f667",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    },
+    {
+     "type": "dynamic",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a.compareTo(b) > 0",
+   "samples": 16
+  },
+  "cmpGtStr": {
+   "file": "op-cmp-gt-str.dart",
+   "sha": "6a9fdf76d8035ced",
+   "params": [
+    {
+     "type": "String",
+     "name": "a"
+    },
+    {
+     "type": "String",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a.compareTo(b) > 0",
+   "samples": 36
+  },
+  "cmpLeDyn": {
+   "file": "op-cmp-le-dyn.dart",
+   "sha": "79669dd0d4acaf4f",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    },
+    {
+     "type": "dynamic",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a.compareTo(b) <= 0",
+   "samples": 16
+  },
+  "cmpLeStr": {
+   "file": "op-cmp-le-str.dart",
+   "sha": "937af6cd8fcca428",
+   "params": [
+    {
+     "type": "String",
+     "name": "a"
+    },
+    {
+     "type": "String",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a.compareTo(b) <= 0",
+   "samples": 36
+  },
+  "cmpLtDyn": {
+   "file": "op-cmp-lt-dyn.dart",
+   "sha": "ea0a438621b428fc",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    },
+    {
+     "type": "dynamic",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a.compareTo(b) < 0",
+   "samples": 16
+  },
+  "cmpLtStr": {
+   "file": "op-cmp-lt-str.dart",
+   "sha": "11c5b0fd785c74cf",
+   "params": [
+    {
+     "type": "String",
+     "name": "a"
+    },
+    {
+     "type": "String",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a.compareTo(b) < 0",
+   "samples": 36
+  },
+  "containsStr": {
+   "file": "op-contains-str.dart",
+   "sha": "dcbebccea00491c8",
+   "params": [
+    {
+     "type": "String",
+     "name": "s"
+    },
+    {
+     "type": "String",
+     "name": "q"
+    }
+   ],
+   "ret": "bool",
+   "expr": "s.contains(q)",
+   "samples": 36
+  },
+  "eqBool": {
+   "file": "op-eq-bool.dart",
+   "sha": "6f669777ca24d46a",
+   "params": [
+    {
+     "type": "bool",
+     "name": "a"
+    },
+    {
+     "type": "bool",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a == b",
+   "samples": 4
+  },
+  "eqDyn": {
+   "file": "op-eq-dyn.dart",
+   "sha": "46a94af81d33d81f",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    },
+    {
+     "type": "dynamic",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a == b",
+   "samples": 16
+  },
+  "eqNum": {
+   "file": "op-eq-num.dart",
+   "sha": "f55731ca6e24ba84",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    },
+    {
+     "type": "num",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a == b",
+   "samples": 36
+  },
+  "eqStr": {
+   "file": "op-eq-str.dart",
+   "sha": "cfafcf72f78f3039",
+   "params": [
+    {
+     "type": "String",
+     "name": "a"
+    },
+    {
+     "type": "String",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a == b",
+   "samples": 36
+  },
+  "floorNum": {
+   "file": "op-floor-num.dart",
+   "sha": "b0df3f6e555065ee",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    }
+   ],
+   "ret": "num",
+   "expr": "a.floor()",
+   "samples": 6
+  },
+  "geDyn": {
+   "file": "op-ge-dyn.dart",
+   "sha": "511e8ebb24f81289",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    },
+    {
+     "type": "dynamic",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a >= b",
+   "samples": 16
+  },
+  "geNum": {
+   "file": "op-ge-num.dart",
+   "sha": "10e982cdff40edc4",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    },
+    {
+     "type": "num",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a >= b",
+   "samples": 36
+  },
+  "gtDyn": {
+   "file": "op-gt-dyn.dart",
+   "sha": "8696ef8c5b132c61",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    },
+    {
+     "type": "dynamic",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a > b",
+   "samples": 16
+  },
+  "gtNum": {
+   "file": "op-gt-num.dart",
+   "sha": "b92b97111a48b092",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    },
+    {
+     "type": "num",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a > b",
+   "samples": 36
+  },
+  "iDivNum": {
+   "file": "op-i-div-num.dart",
+   "sha": "c96e246545cd6ed2",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    },
+    {
+     "type": "num",
+     "name": "b"
+    }
+   ],
+   "ret": "num",
+   "expr": "a ~/ b",
+   "samples": 36
+  },
+  "isEmptyStr": {
+   "file": "op-is-empty-str.dart",
+   "sha": "e5326028d20eb98b",
+   "params": [
+    {
+     "type": "String",
+     "name": "xs"
+    }
+   ],
+   "ret": "bool",
+   "expr": "xs.isEmpty",
+   "samples": 6
+  },
+  "isNotEmptyStr": {
+   "file": "op-is-not-empty-str.dart",
+   "sha": "d8a0cf63763f54fe",
+   "params": [
+    {
+     "type": "String",
+     "name": "xs"
+    }
+   ],
+   "ret": "bool",
+   "expr": "xs.isNotEmpty",
+   "samples": 6
+  },
+  "isNotNull": {
+   "file": "op-is-not-null.dart",
+   "sha": "f8d456282f16220a",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a != null",
+   "samples": 4
+  },
+  "isNull": {
+   "file": "op-is-null.dart",
+   "sha": "d9f018cbb39d8ee4",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a == null",
+   "samples": 4
+  },
+  "leDyn": {
+   "file": "op-le-dyn.dart",
+   "sha": "19446206830e9891",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    },
+    {
+     "type": "dynamic",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a <= b",
+   "samples": 16
+  },
+  "leNum": {
+   "file": "op-le-num.dart",
+   "sha": "569bec9942afdf6f",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    },
+    {
+     "type": "num",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a <= b",
+   "samples": 36
+  },
+  "lengthStr": {
+   "file": "op-length-str.dart",
+   "sha": "d560471c181216b2",
+   "params": [
+    {
+     "type": "String",
+     "name": "xs"
+    }
+   ],
+   "ret": "num",
+   "expr": "xs.length",
+   "samples": 6
+  },
+  "lowerStr": {
+   "file": "op-lower-str.dart",
+   "sha": "f54a4517d5084c10",
+   "params": [
+    {
+     "type": "String",
+     "name": "s"
+    }
+   ],
+   "ret": "String",
+   "expr": "s.toLowerCase()",
+   "samples": 6
+  },
+  "ltDyn": {
+   "file": "op-lt-dyn.dart",
+   "sha": "42082f0d045ce341",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    },
+    {
+     "type": "dynamic",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a < b",
+   "samples": 16
+  },
+  "ltNum": {
+   "file": "op-lt-num.dart",
+   "sha": "7ae723c071e494dd",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    },
+    {
+     "type": "num",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a < b",
+   "samples": 36
+  },
+  "modNum": {
+   "file": "op-mod-num.dart",
+   "sha": "e59e822aa7ee5c6e",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    },
+    {
+     "type": "num",
+     "name": "b"
+    }
+   ],
+   "ret": "num",
+   "expr": "a % b",
+   "samples": 36
+  },
+  "mulDyn": {
+   "file": "op-mul-dyn.dart",
+   "sha": "d63c44668b396cc4",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    },
+    {
+     "type": "dynamic",
+     "name": "b"
+    }
+   ],
+   "ret": "dynamic",
+   "expr": "a * b",
+   "samples": 16
+  },
+  "mulNum": {
+   "file": "op-mul-num.dart",
+   "sha": "2beb4346dda251ef",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    },
+    {
+     "type": "num",
+     "name": "b"
+    }
+   ],
+   "ret": "num",
+   "expr": "a * b",
+   "samples": 36
+  },
+  "neBool": {
+   "file": "op-ne-bool.dart",
+   "sha": "a8b082a49aaed83c",
+   "params": [
+    {
+     "type": "bool",
+     "name": "a"
+    },
+    {
+     "type": "bool",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a != b",
+   "samples": 4
+  },
+  "neDyn": {
+   "file": "op-ne-dyn.dart",
+   "sha": "38467bd0b5a46865",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    },
+    {
+     "type": "dynamic",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a != b",
+   "samples": 16
+  },
+  "neNum": {
+   "file": "op-ne-num.dart",
+   "sha": "e428c34e072f130e",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    },
+    {
+     "type": "num",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a != b",
+   "samples": 36
+  },
+  "neStr": {
+   "file": "op-ne-str.dart",
+   "sha": "2842684ab313c625",
+   "params": [
+    {
+     "type": "String",
+     "name": "a"
+    },
+    {
+     "type": "String",
+     "name": "b"
+    }
+   ],
+   "ret": "bool",
+   "expr": "a != b",
+   "samples": 36
+  },
+  "startsWithStr": {
+   "file": "op-starts-with-str.dart",
+   "sha": "8c801d078db0b501",
+   "params": [
+    {
+     "type": "String",
+     "name": "s"
+    },
+    {
+     "type": "String",
+     "name": "q"
+    }
+   ],
+   "ret": "bool",
+   "expr": "s.startsWith(q)",
+   "samples": 36
+  },
+  "subDyn": {
+   "file": "op-sub-dyn.dart",
+   "sha": "0ab1ca115ec62681",
+   "params": [
+    {
+     "type": "dynamic",
+     "name": "a"
+    },
+    {
+     "type": "dynamic",
+     "name": "b"
+    }
+   ],
+   "ret": "dynamic",
+   "expr": "a - b",
+   "samples": 16
+  },
+  "subNum": {
+   "file": "op-sub-num.dart",
+   "sha": "3ceca833dd3a0e59",
+   "params": [
+    {
+     "type": "num",
+     "name": "a"
+    },
+    {
+     "type": "num",
+     "name": "b"
+    }
+   ],
+   "ret": "num",
+   "expr": "a - b",
+   "samples": 36
+  },
+  "trimStr": {
+   "file": "op-trim-str.dart",
+   "sha": "2f8ed236f7914116",
+   "params": [
+    {
+     "type": "String",
+     "name": "s"
+    }
+   ],
+   "ret": "String",
+   "expr": "s.trim()",
+   "samples": 6
+  }
+ },
+ "rejected": []
+}

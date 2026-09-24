@@ -13,6 +13,7 @@ import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLin
 import { nlToSpec } from './nl-spec.mjs';
 import { rule as yeshivaRule } from '../../yeshiva/purpose.mjs';   // המנוע הישיבתי — פוסק לפני שנבנה מסך
 import { specFromSentence } from './tzinor.mjs';   // combined pipeline (§20-c): wraps nlToSpec — source-of-truth wins, otherwise reports empty
+import { REL_FILE as CAPREL } from './capability.mjs';
 import { pickRoot, renderRootPage, renderShell, renderHome, renderBehavior } from './app-shell.mjs';
 import fs0 from 'node:fs';
 const SL = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
@@ -373,7 +374,8 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     // ═══ liveOf = clause ⊕ entity ⊕ field ⇒ live (num · age · refCount · agg · aggBy · levels · eq)
     const liveOf = (x) => { const c = x.clause;
       if (c && c.kind === 'levels' && c.x) { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'levels', field: f.label, by: c.label, agg: 'count', high: c.high, mid: c.mid, thresholds: c.thresholds || [c.high, c.mid], op: null, n: null } }; } return x; }
-      if (!c || !c.x || !/^[<>=]$/.test(c.op) || (c.op === '=' ? !c.y : (c.n == null || isNaN(+c.n)))) return x;
+      // @אטום = יחס נלמד (capability.addLearnedRel) — סף-טקסט כמו «=»
+      if (!c || !c.x || !/^([<>=]|@\w+)$/.test(c.op) || ((c.op === '=' || c.op[0] === '@') ? !c.y : (c.n == null || isNaN(+c.n)))) return x;
       if (c.unit === 'ask') { const why = T('liveMonthAsk', { name: x.name, unit: c.unitWord || '' }); seedNotes.push(why); return { ...x, why, ask: 'timeUnit' }; }   // שאלה לדלת, לא הנחה
       const xw = String(c.x).split(/\s+/).filter(Boolean); const agg = aggOf(xw[0]); const rest = agg ? xw.slice(1) : xw;
       const ofI = rest.indexOf('של');
@@ -398,7 +400,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       // «תאריך הכרעה» (שדה + ישות בסמיכות) ⇒ השדה של אותה ישות קודם; אחרת השדה בכל ישות
       const xw2 = String(c.x).split(/\s+/).filter(Boolean); const entTail = xw2.length >= 2 ? entByStem(xw2[xw2.length - 1]) : null; const fieldHead = entTail ? xw2.slice(0, -1).join(' ') : null;
       const ordered = [...(entTail ? [entTail] : []), ...info.filter((li) => li.isEnt && entRes[li.i] && entRes[li.i] !== entTail).map((li) => entRes[li.i])];
-      for (const r of ordered) { const cx = (r === entTail && fieldHead) ? fieldHead : c.x; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(cx) || fd.label === cx); if (f && nameToSlug[r.entity]) { if (c.op === '=') return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: '=', kind: 'eq', value: String(c.y), n: null } }; if (c.unit && f.type !== 'date') { const why = T('liveNotDate', { name: x.name, label: f.label, type: f.type }); seedNotes.push(why); return { ...x, why }; } return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: c.unit ? 'age' : 'num', days: c.unit ? +c.n * c.unit : null } }; } }
+      for (const r of ordered) { const cx = (r === entTail && fieldHead) ? fieldHead : c.x; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(cx) || fd.label === cx); if (f && nameToSlug[r.entity]) { if (c.op === '=' || c.op[0] === '@') return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, kind: 'eq', value: String(c.y), n: null, ...(c.op[0] === '@' ? { atomFile: CAPREL[c.op] || null } : {}) } }; if (c.unit && f.type !== 'date') { const why = T('liveNotDate', { name: x.name, label: f.label, type: f.type }); seedNotes.push(why); return { ...x, why }; } return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: c.unit ? 'age' : 'num', days: c.unit ? +c.n * c.unit : null } }; } }
       return x; };   // אין ישות עם השדה ⇒ השורה נשארת סטטית (הסף בלבד), לא מומצא
     const liveExtras = extraScreens.map((x) => { const y = liveOf(x); const c = x.clause; if (!y.live || !c || !((c.and && c.and.length) || (c.or && c.or.length))) return y;
       const pre = [], alt = [], dropped = [];

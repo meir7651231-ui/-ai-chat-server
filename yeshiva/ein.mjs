@@ -97,11 +97,14 @@ export function examplesIO(form, routed, answers) {
     const t = form.things.find((x) => x.label === r.thing); if (!t || !(t.ioExamples && t.ioExamples.length)) continue;
     const cur = answers[t.label]; if (cur && cur.behavior) continue;
     const ins = t.ioExamples.map((e) => e[0]), outs = t.ioExamples.map((e) => e[1]);
-    const b = { examples: t.ioExamples.map(([i, o]) => [q(i), `r == ${q(o)}`]), params: [ins.every(isNum) ? 'num' : 'String'], ret: outs.every(isNum) ? (outs.every((o) => /^-?\d+$/.test(String(o).trim())) ? 'int' : 'num') : 'String' };   // פלטים שלמים ⇒ int (חתימת-הקטלוג של gemValueWired היא int?)
+    // כמה קלטים («3, 4 ⇒ 7»): אותו מספר ערכים בכל דוגמה (≥2) ⇒ פרמטר לכל עמדה, טיפוס לפי העמדה — מנוע-התכנון (Dart) מוכיח רב-פרמטרי; synth נשאר קלט-יחיד
+    const parts = ins.map((i) => String(i).split(/\s*[,،]\s*/)); const k = parts[0].length; const multi = k >= 2 && parts.every((p) => p.length === k);
+    const b = multi ? { examples: parts.map((p, n) => [p.map(q).join(', '), `r == ${q(outs[n])}`]), params: Array.from({ length: k }, (_, j) => (parts.every((p) => isNum(p[j])) ? (parts.every((p) => /^-?\d+$/.test(p[j].trim())) ? 'int' : 'num') : 'String')), ret: outs.every(isNum) ? (outs.every((o) => /^-?\d+$/.test(String(o).trim())) ? 'int' : 'num') : 'String', multi: k }
+      : { examples: t.ioExamples.map(([i, o]) => [q(i), `r == ${q(o)}`]), params: [ins.every(isNum) ? 'num' : 'String'], ret: outs.every(isNum) ? (outs.every((o) => /^-?\d+$/.test(String(o).trim())) ? 'int' : 'num') : 'String' };   // פלטים שלמים ⇒ int (חתימת-הקטלוג של gemValueWired היא int?)
     if (cur && Array.isArray(cur.mid)) b.mid = cur.mid.map(String);   // שלב-ביניים מהבעלים (born.steps) — לכל דוגמה הערך שבאמצע
     answers[t.label] = { ...(cur || {}), behavior: b };
     if (!process.env.BP_CAPV) process.env.BP_CAPV = '2000';   // צורך טקסט⇒מספר פותח מרחב-עצים עצום (נמדד: מחרוזת-הוכחה >512MB); תקרה — האטום המחווט נמצא בעומק 1
-    notes.push(`${D.T.ioNote.replace('{thing}', t.label).replace('{n}', String(t.ioExamples.length)).replace('{sig}', `${b.params[0]} ⇒ ${b.ret}`)}`);
+    notes.push(`${D.T.ioNote.replace('{thing}', t.label).replace('{n}', String(t.ioExamples.length)).replace('{sig}', `${b.params.join(', ')} ⇒ ${b.ret}`)}`);
   }
   return { notes };
 }
@@ -113,40 +116,56 @@ export function examplesIO(form, routed, answers) {
 const FORMS = () => process.env.MAVIN_FORMS || path.join(R.ROOT, '.maimatai', 'forms.learned.jsonl');
 const formsAll = () => { const f = FORMS(); return fs.existsSync(f) ? fs.readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : []; };
 const fill = (t, o) => Object.entries(o).reduce((a, [k, v]) => a.split(`{${k}}`).join(String(v)), t);
-export function learnForms(sentence, form, routed, answers) {
+export async function learnForms(sentence, form, routed, answers) {
   const out = { sentence, changed: false, notes: [], questions: [], handled: new Set() };
   let SL = {}, CO = {}; try { SL = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); CO = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'knowledge/conditions.json'), 'utf8')); } catch { return out; }
+  const LE = await import('../machtzev/generator/live-expr.mjs'); const CAP = await import('../machtzev/generator/capability.mjs'); const OT = await import('../machtzev/generator/op-twins.mjs');
   const ents = form.things.filter((t) => t.fields && t.fields.length && t.examples && t.examples.length);
   const relWord = { '>': (SL.amountAbove || [])[0], '<': (SL.amountBelow || [])[1] || (SL.amountBelow || [])[0], '=': (SL.amountEqual || [])[0] };
-  const joinWord = { and: (CO.and || [])[0], or: (CO.or || [])[0] };
-  const NUM = /^\d+(?:\.\d+)?$/, ATT = /^([֐-׿]+)-?(\d+(?:\.\d+)?)$/;
-  for (const r of routed.routes.filter((x) => x.route === 'none')) {
+  const joinWord = { and: (CO.and || [])[0], or: (CO.or || [])[0] }; const TU = SL.timeUnits || {};
+  const NUM = /^\d+(?:\.\d+)?$/, ATT = /^([֐-׿]+)-?(\d+(?:\.\d+)?)$/, ATTX = /^([֐-׿])-(.+)$/;
+  const escRe = (x) => String(x).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); const defin = (x) => String(x).replace(/ך/g, 'כ').replace(/ם/g, 'מ').replace(/ן/g, 'נ').replace(/ף/g, 'פ').replace(/ץ/g, 'צ');
+  const save = (e) => { fs.mkdirSync(path.dirname(FORMS()), { recursive: true }); fs.appendFileSync(FORMS(), JSON.stringify({ at: new Date().toISOString(), ...e }) + '\n'); };
+  const atomsBool2 = () => { let cat = {}; try { cat = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'knowledge/op-twins.json'), 'utf8')).ok || {}; } catch {} return Object.entries(cat).filter(([, e]) => e.ret === 'bool' && e.params.length === 2).map(([name, e]) => ({ name, file: 'dart-maor/' + e.file, types: e.params.map((q) => q.type), fn: OT.verifiedTwin(name) })).filter((a) => a.fn); };
+  for (const r of routed.routes.filter((x) => x.route === 'none' || x.proposal)) {   // גם הצעת-מסך (דמיון-מילים): סעיף עם שדה-ישות ומספר/סף הוא תנאי, לא מסך ממקום אחר
     const t = form.things.find((x) => x.label === r.thing); const src = t && t.src; if (!src || !out.sentence.includes(src)) continue;
-    const ws = src.split(/\s+/); let fi = -1, ent = null, fld = null;
-    ws.forEach((w, i) => { if (fi >= 0) return; for (const e of ents) { const f = e.fields.find((x) => leadOf(w, x.label) != null); if (f) { fi = i; ent = e; fld = f; return; } } });
+    const ws = src.split(/\s+/); let fi = -1, fEnd = -1, ent = null, fld = null;
+    for (let i = 0; i < ws.length && fi < 0; i++) for (const e of ents) { const f = e.fields.find((x) => { if (leadOf(ws[i], x.label) == null) return false; const lt = toks(x.label); return lt.slice(1).every((w, k) => ws[i + 1 + k] && sameStem(ws[i + 1 + k], w)); }); if (f) { fi = i; fEnd = i + toks(f.label).length - 1; ent = e; fld = f; break; } }
     if (fi < 0) continue;
-    const tmpl = [], nums = []; let last = -1;
-    for (let i = fi + 1; i < ws.length; i++) { const w = ws[i]; if (NUM.test(w)) { tmpl.push('#'); nums.push(+w); last = i; continue; } const m = w.match(ATT); if (m) { tmpl.push(m[1], '#'); nums.push(+m[2]); last = i; continue; } tmpl.push(w); }
-    if (!nums.length) continue;
-    const pat = tmpl.slice(0, tmpl.lastIndexOf('#') + 1); const words = pat.filter((x) => x !== '#'); if (!words.length) continue;
+    const fIdx = ent.fields.indexOf(fld); const rows = ent.examples.filter((x) => x.length > fIdx); const names = rows.map((x) => String(x[0]).trim()); const raw = rows.map((x) => String(x[fIdx]).trim());
+    const kind = raw.every((v) => NUM.test(v)) ? 'num' : raw.every((v) => LE.liveSample({ kind: 'age' }, v) != null) ? 'date' : 'text';
+    const tmpl = [], consts = []; let last = -1, unitWord = null, mult = 1;
+    for (let i = fEnd + 1; i < ws.length; i++) { const w = ws[i];
+      if (kind !== 'text') { if (NUM.test(w)) { tmpl.push('#'); consts.push(+w); last = i; continue; } const m = w.match(ATT); if (m) { tmpl.push(m[1], '#'); consts.push(+m[2]); last = i; continue; }
+        if (kind === 'date' && TU[w] && last === i - 1) { unitWord = w; mult = TU[w] === 'ask' ? NaN : +TU[w]; last = i; continue; } tmpl.push(w); continue; }
+      const m = w.match(ATTX); if (m) { tmpl.push(m[1], '$'); consts.push(m[2]); last = i; continue; } if (raw.includes(w)) { tmpl.push('$'); consts.push(w); last = i; continue; } tmpl.push(w); }
+    if (!consts.length || Number.isNaN(mult)) continue;
+    const cut = Math.max(tmpl.lastIndexOf('#'), tmpl.lastIndexOf('$')); const pat = tmpl.slice(0, cut + 1); const words = pat.filter((x) => x !== '#' && x !== '$'); if (!words.length) continue;
     const key = words[0]; out.handled.add(r.thing);
-    const fIdx = ent.fields.indexOf(fld); const rows = ent.examples.filter((x) => x.length > fIdx); const names = rows.map((x) => String(x[0]).trim());
-    const rewrite = (e) => { const parts = e.ops.map((op, i) => `${i ? fld.label + ' ' : ''}${relWord[op]}${/-$/.test(relWord[op]) ? '' : ' '}${nums[i]}`);
-      return [...ws.slice(0, fi + 1).slice(0, -1), ws[fi] + ' ' + parts.join(` ${joinWord[e.join] || joinWord.and} `), ...ws.slice(last + 1)].join(' ').replace(ws[fi] + ' ' + parts[0], ws[fi] + ' ' + parts[0]); };
+    const unit = unitWord ? ` ${unitWord}` : '';
+    const rewrite = (e) => { const parts = e.ops.map((op, i) => `${i ? fld.label + ' ' : ''}${relWord[op]}${/-$/.test(relWord[op]) ? '' : ' '}${consts[i]}${unit}`); return [...ws.slice(0, fEnd + 1), parts.join(` ${joinWord[e.join] || joinWord.and} `), ...ws.slice(last + 1)].join(' '); };
     const apply = (e, note) => { const txt = rewrite(e); out.sentence = out.sentence.replace(src, txt); out.changed = true; out.notes.push(note(txt)); };
-    const known = formsAll().filter((x) => JSON.stringify(x.tmpl) === JSON.stringify(pat)).pop();
-    if (known && known.ops.length === nums.length) { apply(known, (txt) => fill(D.T.formRecalled, { tmpl: pat.join(' '), at: String(known.at).slice(0, 10), n: known.n, out: txt })); continue; }
+    const known = formsAll().filter((x) => JSON.stringify(x.tmpl) === JSON.stringify(pat) && (x.kind || 'compose') !== 'atom').pop();
+    if (known && known.ops.length === consts.length) { apply(known, (txt) => fill(D.T.formRecalled, { tmpl: pat.join(' '), at: String(known.at).slice(0, 10), n: known.n, out: txt })); continue; }
     const said = typeof answers[key] === 'string' ? answers[key].trim() : '';
     if (!said) { out.questions.push({ thing: r.thing, ask: 'define', key, q: fill(D.T.formAsk, { key, src, names: names.join(', ') }) }); continue; }
     const marks = said.split(/[,;\s]+/).filter(Boolean);
     if (!marks.every((m) => names.includes(m))) { out.questions.push({ thing: r.thing, ask: 'define', key, q: fill(D.T.formBadMarks, { key, marks: marks.join(', '), names: names.join(', ') }) }); continue; }
-    const vals = rows.map((x) => parseFloat(x[fIdx])); if (vals.some((v) => Number.isNaN(v))) continue;
+    const vals = kind === 'text' ? raw : kind === 'date' ? raw.map((v) => LE.liveSample({ kind: 'age' }, v)) : raw.map(Number); const cmpC = consts.map((c) => (kind === 'date' ? c * mult : c));
+    const same = (sel) => sel.length === marks.length && marks.every((m) => sel.includes(m));
     const hit = (op, v, n) => (op === '>' ? v > n : op === '<' ? v < n : v === n);
-    const combos = []; const ops = ['>', '<', '=']; const rec = (acc) => { if (acc.length === nums.length) { for (const j of nums.length > 1 ? ['and', 'or'] : ['and']) combos.push({ ops: acc, join: j }); return; } for (const o of ops) rec([...acc, o]); }; rec([]);
-    const agree = combos.filter((c) => { const sel = rows.filter((x, i) => { const hs = c.ops.map((o, k) => hit(o, vals[i], nums[k])); return c.join === 'or' ? hs.some(Boolean) : hs.every(Boolean); }).map((x) => String(x[0]).trim()); return sel.length === marks.length && marks.every((m) => sel.includes(m)); });
-    if (agree.length === 1) { const e = { tmpl: pat, ops: agree[0].ops, join: agree[0].join, n: rows.length, marks, from: sentence }; fs.mkdirSync(path.dirname(FORMS()), { recursive: true }); fs.appendFileSync(FORMS(), JSON.stringify({ at: new Date().toISOString(), ...e }) + '\n');
+    const combos = []; const ops = kind === 'text' ? ['='] : ['>', '<', '=']; const rec = (acc) => { if (acc.length === consts.length) { for (const j of consts.length > 1 ? ['and', 'or'] : ['and']) combos.push({ ops: acc, join: j }); return; } for (const o of ops) rec([...acc, o]); }; rec([]);
+    const agree = combos.filter((c) => same(rows.filter((x, i) => { const hs = c.ops.map((o, k) => hit(o, vals[i], cmpC[k])); return c.join === 'or' ? hs.some(Boolean) : hs.every(Boolean); }).map((x) => String(x[0]).trim())));
+    if (agree.length === 1) { const e = { kind: 'compose', tmpl: pat, ops: agree[0].ops, join: agree[0].join, field: kind, n: rows.length, marks, from: sentence }; save(e);
       apply(e, (txt) => fill(D.T.formLearned, { tmpl: pat.join(' '), marks: marks.join(', '), n: rows.length, tried: combos.length, out: txt })); continue; }
-    out.questions.push({ thing: r.thing, ask: 'define', key, q: agree.length ? fill(D.T.formMany, { key, marks: marks.join(', '), n: agree.length, cands: agree.map((c) => `«${rewrite(c)}»`).join(' · ') }) : fill(D.T.formNone, { key, marks: marks.join(', '), tried: combos.length }) });
+    // אין הרכבה של צורות מוכרות ⇒ אטום-השוואה מאומת (פעולות-יסוד עם תאום זהה-ל-Dart): (ערך, סף) ⇒ bool, מסכים עם הסימון בכל הדוגמאות ⇒ יחס נלמד
+    let atomsTried = 0; const atomAgree = [];
+    if (!agree.length && consts.length === 1) for (const a of atomsBool2()) { const wantT = kind === 'text' ? 'String' : 'num'; if (!a.types.every((ty) => ty === wantT || ty === 'dynamic')) continue; atomsTried++;
+      let ok = true; const sel = []; for (let i = 0; i < rows.length; i++) { let b; try { b = a.fn(kind === 'text' ? vals[i] : +vals[i], kind === 'text' ? String(cmpC[0]) : +cmpC[0]); } catch { ok = false; break; } if (b === true) sel.push(names[i]); else if (b !== false) { ok = false; break; } } if (ok && same(sel)) atomAgree.push(a); }
+    if (atomAgree.length === 1) { const a = atomAgree[0]; const pattern = words.map((w) => escRe(defin(w))).join('\\s+') + '-?'; const e = { kind: 'atom', tmpl: pat, atom: a.name, file: a.file, pattern, field: kind, n: rows.length, marks, from: sentence }; save(e); CAP.addLearnedRel(e);
+      out.changed = true; out.notes.push(fill(D.T.formAtomLearned, { tmpl: pat.join(' '), marks: marks.join(', '), n: rows.length, tried: combos.length + atomsTried, atom: a.name })); continue; }
+    out.questions.push({ thing: r.thing, ask: 'define', key, q: agree.length ? fill(D.T.formMany, { key, marks: marks.join(', '), n: agree.length, cands: agree.map((c) => `«${rewrite(c)}»`).join(' · ') })
+      : atomAgree.length ? fill(D.T.formAtomMany, { key, marks: marks.join(', '), n: atomAgree.length, cands: atomAgree.map((a) => a.name).join(' · ') }) : fill(D.T.formNone, { key, marks: marks.join(', '), tried: combos.length + atomsTried }) });
   }
   return out;
 }
@@ -170,7 +189,7 @@ export async function resolveEin({ sentence, form, routed, answers = {}, proposa
       if (K.off) continue;
       if (K.kind === 'examplesIO') { const e = examplesIO(form, routed, answers); notes.push(...e.notes); if (e.notes.length) trace.push(`${pass}:${K.kind}`); continue; }
       if (K.kind === 'born') { const b = await bornRecall(form, routed, answers); notes.push(...b.notes); for (const x of b.handled) skip.add(x); if (b.notes.length) trace.push(`${pass}:${K.kind}`); continue; }
-      if (K.kind === 'form') { const f = learnForms(sentence, form, routed, answers); notes.push(...f.notes); for (const x of f.handled) skip.add(x); if (f.changed) { changed = true; sentence = f.sentence; form = formOf(sentence); routed = routeOf(form, answers, { proposals }); trace.push(`${pass}:${K.kind}`); } else questions.push(...f.questions.filter((q) => !questions.some((y) => y.key === q.key && y.thing === q.thing))); continue; }
+      if (K.kind === 'form') { const f = await learnForms(sentence, form, routed, answers); notes.push(...f.notes); for (const x of f.handled) skip.add(x); if (f.changed) { changed = true; sentence = f.sentence; form = formOf(sentence); routed = routeOf(form, answers, { proposals }); trace.push(`${pass}:${K.kind}`); } else questions.push(...f.questions.filter((q) => !questions.some((y) => y.key === q.key && y.thing === q.thing))); continue; }
       if (K.kind === 'word') { const d = await expandDefinitions(sentence, form, routed, answers, proposals, skip); notes.push(...d.notes); if (d.changed) { changed = true; sentence = d.sentence; form = formOf(sentence); routed = routeOf(form, answers, { proposals }); trace.push(`${pass}:${K.kind}`); break; } questions.push(...d.questions); continue; }
       throw new Error(`ein: ${D.T.unknownKind} «${K.kind}»`);
     }

@@ -15,6 +15,11 @@ const fileOf = (cls) => { const a = ATOM_INDEX.find((e) => e.cls === cls); retur
 // מהדאטה (knowledge/conditions.json · הכרעת-בעלים 23.9): מילות-התנאי · דקדוק-היחסים · מחברי-הריבוי — אפס עברית בקוד
 const COND = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'knowledge/conditions.json'), 'utf8'));
 const REL = COND.rel.map((r) => ({ re: new RegExp(r.pattern), op: r.op }));
+// 🎓 יחסים נלמדים (yeshiva/ein · learnForms · הכרעת-בעלים 24.9): צורה שלא בנויה מ-< > = נלמדה מסימון-דוגמאות כאטום-השוואה מאומת («מתחיל ב» ⇒ startsWithStr).
+//    הזיכרון מקומי (MAVIN_FORMS · .maimatai/forms.learned.jsonl, כמו יומן-התשובות); op = «@<אטום>», והקובץ ב-REL_FILE. נטענים לפני הדקדוק הסגור (ספציפיים יותר).
+export const REL_FILE = {};
+export function addLearnedRel(e) { if (!e || e.kind !== 'atom' || !e.pattern || !e.atom) return; if (REL.some((r) => r.op === '@' + e.atom && r.re.source === e.pattern)) return; REL.unshift({ re: new RegExp(e.pattern), op: '@' + e.atom }); REL_FILE['@' + e.atom] = e.file; }
+{ const f = process.env.MAVIN_FORMS || path.join(R.ROOT, '.maimatai', 'forms.learned.jsonl'); try { if (fs.existsSync(f)) for (const l of fs.readFileSync(f, 'utf8').split('\n').filter(Boolean)) addLearnedRel(JSON.parse(l)); } catch {} }
 const escRe = (x) => String(x).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const AND_RE = new RegExp('\\s+(?:' + COND.and.map(escRe).join('|') + ')\\s+');
 const OR_RE = new RegExp('\\s+(?:' + (COND.or || []).map(escRe).join('|') + ')\\s+');

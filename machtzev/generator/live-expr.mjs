@@ -1,6 +1,9 @@
 // ⏱️ live-expr — ביטוי-הערך של תנאי-חי (הכרעת-בעלים 23.9 «תחבר כבר»): צורת-תנאי אחת הייתה «שדה יחס מספר»; כאן נוספת «שדה-תאריך יחס משך»
 //   (ותק בימים, DateTime.now בזמן-ריצה כמו ds_calendar). מקום אחד לכל הקוראים (insight · app-shell · לוח) — לא שלושה העתקים.
 //   live = { slug, field, op:'<'|'>', n, kind:'num'|'age', days? }. אין המצאה: תנאי-משך על שדה שאינו תאריך אינו נוצר (app-ds משאיר סטטי ומדווח).
+import path from 'node:path';
+import * as R from '../root.mjs';
+import { verifiedTwin } from './op-twins.mjs';
 export const AGE_HELPER = `double _ageDays(String s) { final t = s.trim(); DateTime? d = DateTime.tryParse(t); if (d == null) { final m = RegExp(r'^(\\d{1,2})[./-](\\d{1,2})[./-](\\d{2,4})$').firstMatch(t); if (m != null) { final y = int.parse(m.group(3)!); d = DateTime(y < 100 ? 2000 + y : y, int.parse(m.group(2)!), int.parse(m.group(1)!)); } } return d == null ? double.nan : DateTime.now().difference(d).inDays.toDouble(); }`;
 //   kind:'refCount' — לכל רשומת-הורה: כמה רשומות-בנות מצביעות עליה ({ childSlug, childField, parentKey }) · kind:'agg' — על הקבוצה כולה: avg/sum/count של שדה (agg, field)
 // ═══ liveValue = eq ⊕ age ⊕ refCount ⊕ num
@@ -29,16 +32,20 @@ export const liveThreshold = (live) => (live.kind === 'eq' ? live.value : live.k
 /** הסף כביטוי-Dart: שוויון ⇒ מחרוזת דרך k (קבוע-תוכן), אחרת המספר · האופרטור ב-Dart: «=» ⇒ «==» */
 export const liveThresholdDart = (live, k = (s) => `'${s}'`) => (live.kind === 'eq' ? k(live.value) : String(liveThreshold(live)));
 export const liveOpDart = (live) => (live.op === '=' ? '==' : live.op);
+/** בדיקת-התנאי כביטוי-Dart: יחס נלמד «@אטום» ⇒ קריאה לאטום (ערך, סף) · אחרת «ערך יחס סף» */
+export const liveTest = (live, v, t) => (String(live.op || '')[0] === '@' ? `${live.op.slice(1)}(${v}, ${t})` : `${v} ${liveOpDart(live)} ${t}`);
+/** ייבוא-האטום של יחס נלמד (גם בצירוף/חלופה) */
+export const liveAtomImports = (live) => [live, ...(live.pre || []), ...(live.alt || [])].filter((p) => String(p.op || '')[0] === '@' && p.atomFile).map((p) => `import '../${p.atomFile}';`);
 /** האם ערך-דוגמה עונה לתנאי (JS, לציפייה): < · > · = (מחרוזת) */
-export const liveHit = (live, v) => { const t = liveThreshold(live); if (v == null) return false; return live.op === '<' ? v < t : live.op === '>' ? v > t : String(v).trim() === String(t).trim(); };
+export const liveHit = (live, v) => { const t = liveThreshold(live); if (v == null) return false; if (String(live.op || '')[0] === '@') { const fn = verifiedTwin(live.op.slice(1), live.atomFile ? path.join(R.ROOT, 'new', live.atomFile) : null); return fn ? fn(String(v).trim(), String(t).trim()) === true : false; } return live.op === '<' ? v < t : live.op === '>' ? v > t : String(v).trim() === String(t).trim(); };   /* @אטום: התאום המאומת-מול-Dart (op-twins) */
 export const liveNeedsHelper = (live) => live.kind === 'age' || (live.pre || []).some((p) => p.kind === 'age');
 /** צירוף («וגם», הכרעת-בעלים 23.9 «צא לדרך»): live.pre = תנאים קודמים על אותה קבוצה ⇒ הקבוצה של התנאי הראשי היא הרשומות שעברו את כולם (מסנן על מסנן) */
 // ═══ livePre = and (filter over filter)
-export const livePre = (live, r = 'r', k = (s) => `'${s}'`) => (live.pre || []).map((p) => `(${liveValue(p, r, k)} ${liveOpDart(p)} ${liveThresholdDart(p, k)})`).join(' && ');
+export const livePre = (live, r = 'r', k = (s) => `'${s}'`) => (live.pre || []).map((p) => `(${liveTest(p, liveValue(p, r, k), liveThresholdDart(p, k))})`).join(' && ');
 export const liveSetExpr = (live, rs, k = (s) => `'${s}'`) => (live.pre && live.pre.length ? `${rs}.where((r) => ${livePre(live, 'r', k)}).toList()` : rs);
 /** חלופה («או»): live.alt = תנאים שכל אחד מהם מספיק — רשומה חורגת אם התנאי הראשי או אחת החלופות (איחוד) */
 // ═══ liveAlt = or (union)
-export const liveAlt = (live, r = 'r', k = (s) => `'${s}'`) => (live.alt || []).map((p) => `(${liveValue(p, r, k)} ${liveOpDart(p)} ${liveThresholdDart(p, k)})`).join(' || ');
+export const liveAlt = (live, r = 'r', k = (s) => `'${s}'`) => (live.alt || []).map((p) => `(${liveTest(p, liveValue(p, r, k), liveThresholdDart(p, k))})`).join(' || ');
 export const liveCond = (live, cond, r = 'r', k = (s) => `'${s}'`) => (live.alt && live.alt.length ? `((${cond}) || ${liveAlt(live, r, k)})` : cond);
 export const liveAltOk = (live, row, fieldIndex) => (live.alt || []).some((p) => liveHit(p, liveSample(p, row[fieldIndex(p.field)])));
 export const livePreOk = (live, row, fieldIndex) => (live.pre || []).every((p) => liveHit(p, liveSample(p, row[fieldIndex(p.field)])));

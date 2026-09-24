@@ -215,8 +215,8 @@ export function formOf(sentence0) {
   const orphan = [];
   const ARROWS = (() => { try { return JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')).pairArrow || []; } catch { return []; } })();   // «אבג ⇒ 6»: דוגמת קלט⇒פלט (צורה: חץ מהדאטה)
   for (const e of ex.examples) { const before = String(sentence0).slice(0, e.at);
-    if (ARROWS.length && e.records.every((r) => r.length === 1 && ARROWS.some((a) => r[0].includes(a)))) {   // דוגמאות-חץ ⇒ הדבר הקרוב שלפניהן (גם בלי שדות): קלט⇒פלט להרכבת-התנהגות
-      const t0 = [...things].reverse().find((x) => before.includes(x.src)); if (t0) { t0.ioExamples = (t0.ioExamples || []).concat(e.records.map((r) => { const a = ARROWS.find((z) => r[0].includes(z)); const [i, o] = r[0].split(a); return [i.trim(), o.trim()]; })); continue; } }
+    if (ARROWS.length && e.records.every((r) => ARROWS.some((a) => r.join(', ').includes(a)))) {   // דוגמאות-חץ ⇒ הדבר הקרוב שלפניהן (גם בלי שדות): קלט⇒פלט להרכבת-התנהגות · «3, 4 ⇒ 7» = כמה קלטים (הפסיק נשמר בקלט)
+      const t0 = [...things].reverse().find((x) => before.includes(x.src)); if (t0) { t0.ioExamples = (t0.ioExamples || []).concat(e.records.map((r) => { const j = r.join(', '); const a = ARROWS.find((z) => j.includes(z)); const [i, o] = j.split(a); return [i.trim(), o.trim()]; })); continue; } }
     const t = [...things].reverse().find((x) => x.fields.length && before.includes(x.src)); if (t) t.examples = (t.examples || []).concat(e.records); else orphan.push(e.records); }
   return { sentence, words, segments, things, frame: [...new Set(frame)], examplesOrphan: orphan };
 }
@@ -390,7 +390,8 @@ export async function planBehaviors(form, answers = {}) {
   const { planNeeds } = await import('../machtzev/generator/behavior-plan.mjs');
   const t0 = Date.now(); const P = planNeeds(needs, { prove: true });
   const picks = Object.fromEntries(Object.entries(P).map(([id, p]) => [id, { pick: p.pick || null, nodes: p.nodes || null, chain: p.chain || null, proven: !!p.proven, ties: p.ties || 0, top3: (p.top3 || []).slice(0, 3) }]));
-  return { picks, asks, needs, ms: Date.now() - t0 };
+  const trees = Object.fromEntries(Object.entries(P).filter(([, p]) => p.proven && (p.tree || (p.pick && p.file && /^\w+$/.test(p.pick)))).map(([id, p]) => [id, p.tree || { k: 'a', id: p.pick, file: p.file, args: (needs[id].params || []).map((_, i) => ({ k: 'p', i })) }]));   // אטום-יחיד מוכח = עץ של קריאה אחת על הפרמטרים לפי הסדר   // העץ המוכח (אטום·פרמטר·קבוע) — הדלת בונה ממנו מסך רב-קלט
+  return { picks, asks, needs, trees, ms: Date.now() - t0 };
 }
 
 // ── יומן תשובות: הצעה לפעם הבאה, לא עובדה ──

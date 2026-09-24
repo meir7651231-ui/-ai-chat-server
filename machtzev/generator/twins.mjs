@@ -118,7 +118,11 @@ export async function buildTwinRegistry(fns) {
   for (const f of fns) {
     const base = path.basename(f.file).replace(/\.dart$/, '');
     const tp = path.join(ROOT, 'new/atoms', base + '.mjs');
-    if (!fs.existsSync(tp)) continue;
+    if (!fs.existsSync(tp)) {   // 🤝 פעולת-יסוד בלי אטום-JS ⇒ תאום מאומת-מול-Dart מ-op-twins (sha של המקור חייב להתאים)
+      const OT = await import('./op-twins.mjs'); const t = OT.verifiedTwin(f.name, path.join(ROOT, 'new/dart-maor', path.basename(f.file)));
+      if (t) twins.set(f.name, t);
+      continue;
+    }
     try {
       const m = await import('file://' + tp);
       if (typeof m[f.name] !== 'function') continue;
