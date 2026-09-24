@@ -129,6 +129,9 @@ function splitExamples(text) {
 }
 export function formOf(sentence0) {
   const ex = splitExamples(String(sentence0 || '')); sentence0 = ex.text;
+  // ⊕ שדה-נוסחה «פער=ספירה-מצלמות» / «מצב=פער > 5000 ? טווח : מסכימים» (אותה שפה כמו בספק — entity.mjs/render-ds): נשמר בצד לפני
+  //    הפירוק למילים (שמוחק = > ? :) ⇒ השדה נשאר בשמו ⇒ הנוסחה חוזרת אליו בסוף (הכרעת-בעלים 24.9 «תסגור הכל»)
+  const FORM = {}; sentence0 = String(sentence0 || '').replace(/(,\s*|יש\s+)([֐-׿][֐-׿\w_]*)=(?=\S)([^,;]+?)(?=\s*[,;]|\.(?:\s|$)|$)/g, (m, pre, name, expr) => { FORM[name] = expr.trim(); return pre + name; });
   // סוגריים אחרי מילה = ערכים-מותרים (צורה, כמו לוכסן): «שפה (עברית, יידיש, אנגלית)» ⇒ «שפה עברית/יידיש/אנגלית» ⇒ שדה «שפה» עם enum
   const sentence = String(sentence0 || '').replace(/\(([^()]*)\)/g, (m, inner) => { const vs = inner.split(/[,،]/).map((s) => s.trim().replace(/\s+/g, '_')).filter(Boolean); return vs.length > 1 ? ' ' + vs.join('/') + ' ' : m; });
   const words = toks(sentence);
@@ -218,6 +221,7 @@ export function formOf(sentence0) {
     if (ARROWS.length && e.records.every((r) => ARROWS.some((a) => r.join(', ').includes(a)))) {   // דוגמאות-חץ ⇒ הדבר הקרוב שלפניהן (גם בלי שדות): קלט⇒פלט להרכבת-התנהגות · «3, 4 ⇒ 7» = כמה קלטים (הפסיק נשמר בקלט)
       const t0 = [...things].reverse().find((x) => before.includes(x.src)); if (t0) { t0.ioExamples = (t0.ioExamples || []).concat(e.records.map((r) => { const j = r.join(', '); const a = ARROWS.find((z) => j.includes(z)); const [i, o] = j.split(a); return [i.trim(), o.trim()]; })); continue; } }
     const t = [...things].reverse().find((x) => x.fields.length && before.includes(x.src)); if (t) t.examples = (t.examples || []).concat(e.records); else orphan.push(e.records); }
+  for (const t of things) for (const f of t.fields || []) if (FORM[f.label]) f.formula = FORM[f.label];   // ⊕ הנוסחה חוזרת לשדה
   return { sentence, words, segments, things, frame: [...new Set(frame)], examplesOrphan: orphan };
 }
 
@@ -358,7 +362,7 @@ export function specOf(form, answers = {}) {
   const names = new Set(ents.map((t) => t.label));
   for (const t of ents) {
     const a = answerFor(t, answers);
-    const fields = (a.fields && a.fields.length) ? a.fields.map((f) => f.label + (f.enumVals ? `{${f.enumVals.join('|')}}` : '')) : t.fields.map((f) => f.label + (f.enumVals ? `{${f.enumVals.join('|')}}` : ''));   // {א|ב|ג} = בחירה-אחת-מכמה ⇒ entity.mjs ⇒ צ'יפים
+    const fields = (a.fields && a.fields.length) ? a.fields.map((f) => f.label + (f.enumVals ? `{${f.enumVals.join('|')}}` : '') + (f.formula ? `=${f.formula}` : '')) : t.fields.map((f) => f.label + (f.enumVals ? `{${f.enumVals.join('|')}}` : '') + (f.formula ? `=${f.formula}` : ''));   // ⊕ שדה-נוסחה ⇒ «שם=נוסחה» בספק   // {א|ב|ג} = בחירה-אחת-מכמה ⇒ entity.mjs ⇒ צ'יפים
     const refs = (a.fields || []).filter((f) => f.type === 'ref' && f.to && names.has(f.to)).map((f) => f.to);
     // יחס לפי צורה: «הזמנות של לקוחות» (רצף, מילת-קישור אחת, רצף) ⇒ להזמנות שדה «לקוחות» כשגם הוא ישות; app-ds מזהה בו קשר (relOf)
     if (t.content && names.has(t.content) && t.content !== t.label && !fields.some((f) => f === t.content)) fields.push(t.content);

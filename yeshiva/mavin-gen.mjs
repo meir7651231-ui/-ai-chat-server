@@ -479,6 +479,14 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       if (sm.error) notes.push(`🎲 סימולציה «${a.seg}»: שגיאה — ${sm.error}`); else if (sm.available) notes.push(`🎲 סימולציה «${a.seg}» (systems-engine · רעש סינתטי סביב ${a.n}, סטיית-תקן ${sm.sd}, ${sm.steps} צעדים, זרע ${sm.seed}): בלי פער ${sm.without} הדלקות · עם הפער ${sm.with}`); }
     for (const a of alerts.filter((x) => x.off == null)) questions.push({ thing: a.seg, ask: 'off', key: `כיבוי ${a.seg}`, q: `⚖️ השופט: «${a.seg}» נדלקת ונכבית באותה נקודה (${a.n}) ⇒ תתנדנד. באיזה ערך לכבות אותה? (מספר ${a.op === '>' ? 'מתחת ל' : 'מעל '}${a.n})` });
     const cases = J.casesOf({ app: (form.things.find((t) => !t.fields || !t.fields.length) || {}).label || name, alerts: alerts.filter((x) => x.off == null), buffers: BUF0, feeds });
+    // 🧭 שני מקורות לאותו מספר (שדה «X=מוחלט(א-ב)») ⇒ מנוע אי-הידיעה (אח של השופט): מה אסור להחליט ומה הבדיקה הזולה
+    { const ABS = (JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'chrome.data.json'), 'utf8')).fnAbs) || null;
+      for (const t of form.things) for (const f of t.fields || []) { const m = ABS && f.formula && f.formula.match(new RegExp(`^${ABS}\\((.+?)-(.+)\\)$`)); if (!m) continue;
+        if (!J.judgeHome()) { notes.push(`🧭 אי-ידיעה: לא-נמדד — ${J.judgeHome.reason}`); break; }
+        const r = J.judgeWith('uncertainty', J.twoSourceCase({ app: name, ent: t.label, a: m[1].trim(), b: m[2].trim(), field: f.label })); if (r.error || !r.result) { notes.push(`🧭 אי-ידיעה «${t.label}.${f.label}»: ${r.error || r.reason}`); continue; }
+        const o = r.result.output || {}; const mv = typeof o.move === 'string' ? o.move : (o.move && (o.move.text || o.move.move)) || '';
+        notes.push(`🧭 אי-ידיעה «${m[1].trim()} מול ${m[2].trim()} ב${t.label}»: ${o.fields ? o.fields.decision : ''} · אסור: ${(o.forbidden || []).map((x) => x.text).join(' · ')}${mv ? ` · מהלך: ${mv}` : ''}${r.rejected ? ' · 🐞 הבודק פסל' : ''}`);
+        if (r.text) fs.appendFileSync(path.join(outDir, 'judge.md'), `\n## 🧭 ${m[1].trim()} מול ${m[2].trim()} (${t.label})\n\n${r.text}\n`); } }
     if (cases.length) { if (!J.judgeHome()) notes.push(`⚖️ שופט: לא-נמדד — ${J.judgeHome.reason}`);
       else { const md = []; for (const c of cases) { const r = J.judge(c); if (r.error) { notes.push(`⚖️ שופט «${c.where}»: שגיאה — ${r.error}`); continue; }
           const v = r.verdict || {}; notes.push(`⚖️ שופט ${c.where}: ${Object.keys(c.structure).join('+')} ⇒ ${v.status === 'refused' ? `מסרב להכריע: ${(v.refusal || {}).reason || ''} · יציאה: ${(v.refusal || {}).exit_condition || (v.refusal || {}).exit || ''}` : `מהלך: ${v.leverage_move || v.needs_one_question || '—'}`}${(v.forbidden || []).length ? ` · אסור: ${v.forbidden[0].text || v.forbidden[0]}` : ''}${r.rejected ? ` · 🐞 הבודק של השופט פסל (${r.violations.map((x) => x.rule).join(',')}) — באג במנוע` : ''}`);

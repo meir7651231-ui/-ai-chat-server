@@ -55,3 +55,16 @@ console.log(JSON.stringify({ without: run(n, n), with: run(off, off), steps, sd:
   if (r.status !== 0) return { available: true, error: (r.stderr || '').slice(0, 300) };
   return { available: true, ...JSON.parse(r.stdout) };
 }
+/** 🧭 אחים של השופט (packages/engines — «מנוע אי-ידיעה» ועוד): אותו חוזה — מבנה ⇒ פסק כמו שהוא. engine = 'uncertainty' … */
+export function judgeWith(engine, c) {
+  const home = judgeHome(); if (!home) return { available: false, reason: judgeHome.reason };
+  const cli = path.join(home, 'packages/engines/cli.ts'); if (!fs.existsSync(cli)) return { available: false, reason: `אין ${cli} (עדכן את systems-engine)` };
+  const f = path.join(os.tmpdir(), `shofet-${engine}-${process.pid}-${Date.now()}.json`); fs.writeFileSync(f, JSON.stringify(c));
+  const j = spawnSync(process.execPath, [cli, engine, f, '--json'], { encoding: 'utf8', timeout: 20000 }); const t = spawnSync(process.execPath, [cli, engine, f], { encoding: 'utf8', timeout: 20000 });
+  try { fs.unlinkSync(f); } catch { /* קובץ-זמני */ }
+  if (!j.stdout) return { available: true, error: (j.stderr || '').slice(0, 300) || `exit ${j.status}` };
+  let r = null; try { r = JSON.parse(j.stdout); } catch { return { available: true, error: 'פלט לא-JSON' }; }
+  return { available: true, result: r, rejected: j.status === 1, text: t.stdout };
+}
+/** שני מקורות לאותו מספר (שדה-נוסחה «מוחלט(א-ב)») ⇒ מקרה למנוע אי-הידיעה */
+export const twoSourceCase = ({ app, ent, a, b, field }) => ({ raw_text: `${app}: לכל ${ent} שני מקורות לאותו מספר — ${a} ו${b} — והם לא תמיד מסכימים (הפער נמדד בשדה ${field}).`, subject: `«${a} מול ${b} ב${ent}»`, structure: { experts_disagree: true } });
