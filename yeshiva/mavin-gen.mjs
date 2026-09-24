@@ -186,13 +186,20 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
   const spec = byShape ? shp.spec : pk.spec; const node = byShape ? { ...(pk.node || {}), reader: 'doc-shape', fields: shp.ents.reduce((a, e) => a + e.fields.length, 0), entities: shp.ents.length, links: shp.links.length } : pk.node;
   // 🔁 המסמך עובר באותו צינור כמו משפט (לולאת ein · קושיות · חיפוש-צורה · התראות): דלת-המסמך רק מתרגמת — לא נתקעת ועוצרת
   // ⛏️ הכורה (yeshiva/koreh — בדפוס mine.py): קורפוס-הבעלים (תרחישים) מול שמות-הישויות ⇒ ערכים שחוזרים בכמה מקורות ⇒ שאלה «לאיזה שדה?» ⇒ שדה-בחירה
-  const enums = {}; const mined = [];
+  const enums = {}; const mined = []; const rowsBy = {};
   if (byShape && corpus) { const K = await import('./koreh.mjs'); const res = K.mine(await K.corpusOf(corpus), shp.ents.map((e) => e.name)); K.ledger(res);
     for (const e of shp.ents) { const vals = res.candidates.filter((c) => c.ent === e.name && c.sources >= 3).slice(0, 8); if (vals.length < 2) continue; const key = `ערכים ${e.name}`;
       const said = typeof answers[key] === 'string' ? answers[key].trim() : ''; const f = e.fields.find((x) => x.name === said);
       if (f) { (enums[e.name] ??= {})[f.name] = vals.map((c) => c.name); mined.push(`${e.name}.${f.name} ⇐ ${vals.map((c) => c.name).join('/')}`); }
-      else if (!said) mined.push({ q: { thing: 'כורה', ask: 'mined', key, q: `⛏️ בתרחישים (${res.corpus} מקורות) חוזרים ערכים של «${e.name}»: ${vals.map((c) => `${c.name} (${c.sources})`).join(' · ')}. לאיזה שדה הם שייכים? (${e.fields.map((x) => x.name).join(' · ')}) — ענה בשם השדה, או «לא»` } }); } }
-  const sen = byShape ? DS.docToSentence(md, { enums }) : null;
+      else if (!said) mined.push({ q: { thing: 'כורה', ask: 'mined', key, q: `⛏️ בתרחישים (${res.corpus} מקורות) חוזרים ערכים של «${e.name}»: ${vals.map((c) => `${c.name} (${c.sources})`).join(' · ')}. לאיזה שדה הם שייכים? (${e.fields.map((x) => x.name).join(' · ')}) — ענה בשם השדה, או «לא»` } }); }
+    // 🔢 יחידה ⇒ שדה (הכרעת-בעלים 24.9 «3»: הוא שואל פעם אחת וזוכר): «איש» אחרי מספר, ליד «נקודה» ⇒ «איזה שדה?» ⇒ K.rememberUnit ⇒ שורות-דוגמה
+    const umap = K.unitMap(); const shapeOf = (n) => shp.ents.find((x) => x.name === n);
+    for (const u of res.units.filter((x) => x.sources >= 3 && x.ents.length).slice(0, 12)) { const key = `יחידה ${u.unit}`; const said = typeof answers[key] === 'string' ? answers[key].trim() : '';
+      if (umap[u.unit]) continue; if (said) { const ok = said === 'לא' || u.ents.some((x) => { const E = shapeOf(x.ent); return E && E.fields.some((f) => `${x.ent}.${f.name}` === said); }); if (ok) { K.rememberUnit(u.unit, said); umap[u.unit] = said; continue; } }
+      const opts = u.ents.slice(0, 3).flatMap((x) => (shapeOf(x.ent) || { fields: [] }).fields.map((f) => `${x.ent}.${f.name}`)).slice(0, 16);
+      mined.push({ q: { thing: 'כורה', ask: 'unit', key, q: `🔢 «${u.unit}» בא אחרי מספר ב-${u.sources} תרחישים${u.sample ? ` (למשל «${u.sample}»)` : ''}, ליד ${u.ents.slice(0, 3).map((x) => `«${x.ent}»`).join(' · ')}. איזה שדה זה? (${opts.join(' · ')}) — ענה ישות.שדה, או «לא»` } }); }
+    for (const e of shp.ents) { const rw = K.rowsOf(res, e, e.fields.map((f) => f.name), { enumField: Object.keys(enums[e.name] || {})[0] || null, map: umap }); if (rw.length) { rowsBy[e.name] = rw; mined.push(`${e.name}: ${rw.length} שורות-דוגמה`); } } }
+  const sen = byShape ? DS.docToSentence(md, { enums, rows: rowsBy }) : null;
   const r = sen ? await generateAll(sen.sentence, { answers, outDir, name }) : await generateFromSpec(spec, { outDir, name });
   if (corpus && byShape) { r.notes.push(`⛏️ כורה: ${mined.filter((m) => typeof m === 'string').length} שדות-בחירה מהתרחישים${mined.some((m) => typeof m === 'string') ? ' — ' + mined.filter((m) => typeof m === 'string').join(' · ') : ''} · ${mined.filter((m) => m.q).length} שאלות «לאיזה שדה»`); for (const m of mined) if (m.q) r.questions.push(m.q); }
   if (sen) { r.notes.push(`🔁 המסמך תורגם למשפט (${sen.ents.length} ישויות · ${sen.flows.length} זרימות ⇒ ${sen.flows.map((f) => `«${f.clause}»`).join(' · ') || '—'}) ⇒ אותו צינור כמו משפט`); r.docSentence = sen.sentence; }

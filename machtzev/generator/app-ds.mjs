@@ -112,7 +112,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
   //   `שרת:` נוסף כאן ברגע שנולד; שער `server` נועל את המפה כדי שזה לא יקרה בשקט שוב.
   const SERVER_RE = new RegExp('^\\s*' + SL.serverWord + '\\s*:\\s*(.+)$');
   const EXAMPLE_RE = SL.exampleWord ? new RegExp('^\\s*' + SL.exampleWord + '\\s+(.+?)\\s*:\\s*(.+)$') : /$^/;   // דוגמאות של הבעלים ⇒ רשומות (לא לוח, לא ישות)
-  const examples = {}; for (const l of all0) { const m = l.match(EXAMPLE_RE); if (m) (examples[m[1].trim()] ||= []).push(...m[2].split(';').map((r) => r.split(/[,،]/).map((v) => v.trim()).filter(Boolean)).filter((r) => r.length)); }
+  const examples = {}; for (const l of all0) { const m = l.match(EXAMPLE_RE); if (m) (examples[m[1].trim()] ||= []).push(...m[2].split(';').map((r) => { const c = r.split(/[,،]/).map((v) => v.trim()); while (c.length && !c[c.length - 1]) c.pop(); return c; }).filter((r) => r.some(Boolean))); }   // תא ריק בתחילה/באמצע נשמר (אחרת הערכים זזים עמודה)
   const all = all0.filter((l) => !PARTICLE_RE.test(l) && !CONTENT_RE.test(l) && !REPORT_RE.test(l) && !APP_RE.test(l) && !LOOK_RE.test(l) && !Q_RE.test(l) && !CHAIN_RE.test(l) && !LAYER_RE.test(l) && !SERVER_RE.test(l) && !EXAMPLE_RE.test(l));
   const roles = all.filter((l) => ROLE_RE.test(l)).map(parseRole);
   const lines = all.filter((l) => !ROLE_RE.test(l));
