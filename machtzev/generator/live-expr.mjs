@@ -10,8 +10,18 @@ export const AGE_HELPER = `double _ageDays(String s) { final t = s.trim(); DateT
 export const liveValue = (live, r = 'r', k = (s) => `'${s}'`) =>
   live.kind === 'eq' ? `(${r}[${k(live.field)}] ?? '').trim()`
   : live.kind === 'age' ? `_ageDays(${r}[${k(live.field)}] ?? '')`
+  : live.kind === 'linked' ? liveLinkedExpr(live, r, k)
   : live.kind === 'refCount' ? `appStore.records('${live.childSlug}').where((c) => (c[${k(live.childField)}] ?? '').trim() == (${r}[${k(live.parentKey)}] ?? '').trim()).length.toDouble()`
   : `(double.tryParse(${r}[${k(live.field)}] ?? '') ?? double.nan)`;
+/** 🔗 תוצאה של טבלאות קשורות כשדה (הכרעת-בעלים 24.9 «תמשיך» — «תוצאה של שלב היא קלט לשלב הבא»): לכל רשומת-אב — סכום האיברים
+ *  (yeshiva/shape.searchLinked) על רשומות-הבת החיות; live = { kind:'linked', parentKey, terms:[{slug, op, n, to, from?, filt?}] } — אותם חלקי-יסוד כמו מסך-הקשר */
+export function liveLinkedExpr(live, r = 'r', k = (s) => `'${s}'`) {
+  const num = (m, c) => `(num.tryParse(((${m} as Map)[${k(c)}] ?? '').toString().trim()) ?? 0)`;
+  const inOf = (t, x) => `sumBy(whereList(appStore.records('${t.slug}').toList(), (x) => ((x as Map)[${k(x)}] ?? '').toString().trim() == (${r}[${k(live.parentKey)}] ?? '').trim()${t.filt ? ` && ${t.filt.cmp === 'le' ? 'leNum' : 'geNum'}(${num('x', t.filt.col)}, ${t.filt.v})` : ''}), (x) => ${num('x', t.n)})`;
+  const termE = (t) => (t.op === 'net' ? `subNum(${inOf(t, t.to)}, ${inOf(t, t.from)})` : inOf(t, t.to));
+  return `(${live.terms.slice(1).reduce((acc, t) => `addNum(${acc}, ${termE(t)})`, termE(live.terms[0]))}).toDouble()`;
+}
+export const LINKED_IMPORTS = ['op-where-list', 'op-sum-by', 'op-sub-num', 'op-add-num', 'op-le-num', 'op-ge-num'].map((f) => `import '../dart-maor/${f}.dart';`);
 export const liveIsSet = (live) => live.kind === 'agg';
 /** ערך-הקבוצה (agg): count ⇒ מספר הרשומות · sum ⇒ sumBy (אטום-קטלוג dart-maor) · avg ⇒ sumBy / מספר (צורה: סכום חלקי מונה) */
 export const liveAggExpr = (live, rs = 'rs', k = (s) => `'${s}'`) => live.agg === 'trend' ? `_trendAt(${rs}, ${k(live.field)}, ${live.horizon || 0})` : live.agg === 'count' ? `${rs}.length.toDouble()` : live.agg === 'sum' ? `sumBy(${rs}, (x) => double.tryParse(((x as Map)[${k(live.field)}] ?? '').toString()) ?? 0).toDouble()` : `(${rs}.isEmpty ? double.nan : sumBy(${rs}, (x) => double.tryParse(((x as Map)[${k(live.field)}] ?? '').toString()) ?? 0) / ${rs}.length)`;

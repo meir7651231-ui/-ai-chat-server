@@ -375,6 +375,9 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     // ═══ liveOf = clause ⊕ entity ⊕ field ⇒ live (num · age · refCount · agg · aggBy · levels · eq)
     const liveOf = (x) => { const y = liveOf0(x); const w = x.clause && x.clause.window, h = x.clause && x.clause.horizon; return (w || h != null) && y.live ? { ...y, live: { ...y.live, ...(w ? { window: w } : {}), ...(h != null ? { horizon: h } : {}) } } : y; };   // חלון-זמן על כל צורת-תנאי
     const liveOf0 = (x) => { const c = x.clause;
+      // 🔗 תוצאה של טבלאות קשורות = שדה של ישות-האב (opts.derived): «התראה כשצפי מעל 250» ⇒ הערך המחושב לכל אזור — לפני מילות-הצבירה («צפי» היא גם קו-מגמה)
+      for (const d of (Array.isArray(opts.derived) ? opts.derived : [])) { if (!c || !c.x || !/^[<>]$/.test(c.op) || c.n == null || isNaN(+c.n)) break; const xw0 = String(c.x).split(/\s+/)[0];
+        if ((stemOf(xw0) === stemOf(d.name) || xw0 === d.name) && nameToSlug[d.ent]) return { ...x, live: { slug: nameToSlug[d.ent], kind: 'linked', field: d.name, parentKey: d.parentKey, terms: d.terms.map((t) => ({ ...t, slug: nameToSlug[t.child] })), op: c.op, n: +c.n } }; }
       if (c && c.kind === 'levels' && c.x) { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'levels', field: f.label, by: c.label, agg: 'count', high: c.high, mid: c.mid, thresholds: c.thresholds || [c.high, c.mid], op: null, n: null } }; } return x; }
       // @אטום = יחס נלמד (capability.addLearnedRel) — סף-טקסט כמו «=»
       if (!c || !c.x || !/^([<>=]|@\w+)$/.test(c.op) || ((c.op === '=' || c.op[0] === '@') ? !c.y : (c.n == null || isNaN(+c.n)))) return x;

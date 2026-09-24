@@ -360,7 +360,7 @@
   },
   {
    "file": "machtzev/generator/live-expr.mjs",
-   "lines": 64,
+   "lines": 74,
    "fragments": [
     {
      "id": "live-expr#0",
@@ -388,7 +388,7 @@
      "id": "live-expr#2",
      "range": [
       8,
-      14
+      17
      ],
      "marker": "liveValue",
      "composed": [
@@ -399,14 +399,39 @@
      ],
      "declares": "liveValue",
      "uses": [
+      "liveLinkedExpr",
       "liveValue"
      ]
     },
     {
      "id": "live-expr#3",
      "range": [
-      14,
-      16
+      17,
+      23
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveLinkedExpr",
+     "uses": [
+      "liveLinkedExpr"
+     ]
+    },
+    {
+     "id": "live-expr#4",
+     "range": [
+      23,
+      24
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "LINKED_IMPORTS",
+     "uses": []
+    },
+    {
+     "id": "live-expr#5",
+     "range": [
+      24,
+      26
      ],
      "marker": null,
      "composed": [],
@@ -416,10 +441,10 @@
      ]
     },
     {
-     "id": "live-expr#4",
+     "id": "live-expr#6",
      "range": [
-      16,
-      17
+      26,
+      27
      ],
      "marker": null,
      "composed": [],
@@ -429,10 +454,10 @@
      ]
     },
     {
-     "id": "live-expr#5",
+     "id": "live-expr#7",
      "range": [
-      17,
-      18
+      27,
+      28
      ],
      "marker": null,
      "composed": [],
@@ -442,10 +467,10 @@
      ]
     },
     {
-     "id": "live-expr#6",
+     "id": "live-expr#8",
      "range": [
-      18,
-      19
+      28,
+      29
      ],
      "marker": null,
      "composed": [],
@@ -453,10 +478,10 @@
      "uses": []
     },
     {
-     "id": "live-expr#7",
+     "id": "live-expr#9",
      "range": [
-      19,
-      21
+      29,
+      31
      ],
      "marker": null,
      "composed": [],
@@ -466,10 +491,10 @@
      ]
     },
     {
-     "id": "live-expr#8",
+     "id": "live-expr#10",
      "range": [
-      21,
-      25
+      31,
+      35
      ],
      "marker": "liveKeyExpr",
      "composed": [
@@ -482,10 +507,10 @@
      ]
     },
     {
-     "id": "live-expr#9",
+     "id": "live-expr#11",
      "range": [
-      25,
-      27
+      35,
+      37
      ],
      "marker": null,
      "composed": [],
@@ -493,10 +518,10 @@
      "uses": []
     },
     {
-     "id": "live-expr#10",
+     "id": "live-expr#12",
      "range": [
-      27,
-      29
+      37,
+      39
      ],
      "marker": null,
      "composed": [],
@@ -508,10 +533,10 @@
      ]
     },
     {
-     "id": "live-expr#11",
+     "id": "live-expr#13",
      "range": [
-      29,
-      30
+      39,
+      40
      ],
      "marker": null,
      "composed": [],
@@ -522,10 +547,10 @@
      ]
     },
     {
-     "id": "live-expr#12",
+     "id": "live-expr#14",
      "range": [
-      30,
-      32
+      40,
+      42
      ],
      "marker": null,
      "composed": [],
@@ -535,10 +560,10 @@
      ]
     },
     {
-     "id": "live-expr#13",
+     "id": "live-expr#15",
      "range": [
-      32,
-      33
+      42,
+      43
      ],
      "marker": null,
      "composed": [],
@@ -549,10 +574,10 @@
      ]
     },
     {
-     "id": "live-expr#14",
+     "id": "live-expr#16",
      "range": [
-      33,
-      35
+      43,
+      45
      ],
      "marker": null,
      "composed": [],
@@ -562,10 +587,10 @@
      ]
     },
     {
-     "id": "live-expr#15",
+     "id": "live-expr#17",
      "range": [
-      35,
-      37
+      45,
+      47
      ],
      "marker": null,
      "composed": [],
@@ -576,10 +601,10 @@
      ]
     },
     {
-     "id": "live-expr#16",
+     "id": "live-expr#18",
      "range": [
-      37,
-      39
+      47,
+      49
      ],
      "marker": null,
      "composed": [],
@@ -589,10 +614,10 @@
      ]
     },
     {
-     "id": "live-expr#17",
+     "id": "live-expr#19",
      "range": [
-      39,
-      40
+      49,
+      50
      ],
      "marker": null,
      "composed": [],
@@ -603,10 +628,10 @@
      ]
     },
     {
-     "id": "live-expr#18",
+     "id": "live-expr#20",
      "range": [
-      40,
-      42
+      50,
+      52
      ],
      "marker": null,
      "composed": [],
@@ -616,10 +641,10 @@
      ]
     },
     {
-     "id": "live-expr#19",
+     "id": "live-expr#21",
      "range": [
-      42,
-      44
+      52,
+      54
      ],
      "marker": "livePre",
      "composed": [
@@ -634,10 +659,10 @@
      ]
     },
     {
-     "id": "live-expr#20",
+     "id": "live-expr#22",
      "range": [
-      44,
-      45
+      54,
+      55
      ],
      "marker": null,
      "composed": [],
@@ -647,10 +672,10 @@
      ]
     },
     {
-     "id": "live-expr#21",
+     "id": "live-expr#23",
      "range": [
-      45,
-      47
+      55,
+      57
      ],
      "marker": null,
      "composed": [],
@@ -662,10 +687,10 @@
      ]
     },
     {
-     "id": "live-expr#22",
+     "id": "live-expr#24",
      "range": [
-      47,
-      49
+      57,
+      59
      ],
      "marker": "liveAlt",
      "composed": [
@@ -680,10 +705,10 @@
      ]
     },
     {
-     "id": "live-expr#23",
+     "id": "live-expr#25",
      "range": [
-      49,
-      50
+      59,
+      60
      ],
      "marker": null,
      "composed": [],
@@ -694,10 +719,10 @@
      ]
     },
     {
-     "id": "live-expr#24",
+     "id": "live-expr#26",
      "range": [
-      50,
-      51
+      60,
+      61
      ],
      "marker": null,
      "composed": [],
@@ -709,10 +734,10 @@
      ]
     },
     {
-     "id": "live-expr#25",
+     "id": "live-expr#27",
      "range": [
-      51,
-      55
+      61,
+      65
      ],
      "marker": null,
      "composed": [],
@@ -724,10 +749,10 @@
      ]
     },
     {
-     "id": "live-expr#26",
+     "id": "live-expr#28",
      "range": [
-      55,
-      56
+      65,
+      66
      ],
      "marker": null,
      "composed": [],
@@ -735,10 +760,10 @@
      "uses": []
     },
     {
-     "id": "live-expr#27",
+     "id": "live-expr#29",
      "range": [
-      56,
-      57
+      66,
+      67
      ],
      "marker": null,
      "composed": [],
@@ -748,10 +773,10 @@
      ]
     },
     {
-     "id": "live-expr#28",
+     "id": "live-expr#30",
      "range": [
-      57,
-      64
+      67,
+      74
      ],
      "marker": null,
      "composed": [],
@@ -764,7 +789,7 @@
   },
   {
    "file": "machtzev/generator/app-ds.mjs",
-   "lines": 476,
+   "lines": 479,
    "fragments": [
     {
      "id": "app-ds#0",
@@ -937,7 +962,7 @@
      "id": "app-ds#15",
      "range": [
       374,
-      476
+      479
      ],
      "marker": "liveOf",
      "composed": [
@@ -961,7 +986,7 @@
   },
   {
    "file": "machtzev/generator/insight.mjs",
-   "lines": 156,
+   "lines": 157,
    "fragments": [
     {
      "id": "insight#0",
@@ -1064,7 +1089,7 @@
      "id": "insight#7",
      "range": [
       34,
-      156
+      157
      ],
      "marker": "emitInsight",
      "composed": [
