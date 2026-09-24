@@ -3,7 +3,7 @@
  "files": [
   {
    "file": "machtzev/generator/capability.mjs",
-   "lines": 237,
+   "lines": 240,
    "fragments": [
     {
      "id": "capability#0",
@@ -218,7 +218,7 @@
      "id": "capability#19",
      "range": [
       44,
-      77
+      80
      ],
      "marker": "form: condition (num · age · eq)",
      "composed": [
@@ -234,8 +234,8 @@
     {
      "id": "capability#20",
      "range": [
-      77,
-      87
+      80,
+      90
      ],
      "marker": null,
      "composed": [],
@@ -245,8 +245,8 @@
     {
      "id": "capability#21",
      "range": [
-      87,
-      88
+      90,
+      91
      ],
      "marker": null,
      "composed": [],
@@ -256,8 +256,8 @@
     {
      "id": "capability#22",
      "range": [
-      88,
-      89
+      91,
+      92
      ],
      "marker": null,
      "composed": [],
@@ -267,8 +267,8 @@
     {
      "id": "capability#23",
      "range": [
-      89,
-      94
+      92,
+      97
      ],
      "marker": null,
      "composed": [],
@@ -278,8 +278,8 @@
     {
      "id": "capability#24",
      "range": [
-      94,
-      103
+      97,
+      106
      ],
      "marker": "form: levels",
      "composed": [
@@ -294,8 +294,8 @@
     {
      "id": "capability#25",
      "range": [
-      103,
-      124
+      106,
+      127
      ],
      "marker": "form: and / or",
      "composed": [
@@ -311,8 +311,8 @@
     {
      "id": "capability#26",
      "range": [
-      124,
-      126
+      127,
+      129
      ],
      "marker": null,
      "composed": [],
@@ -324,8 +324,8 @@
     {
      "id": "capability#27",
      "range": [
-      126,
-      196
+      129,
+      199
      ],
      "marker": null,
      "composed": [],
@@ -337,8 +337,8 @@
     {
      "id": "capability#28",
      "range": [
-      196,
-      213
+      199,
+      216
      ],
      "marker": null,
      "composed": [],
@@ -348,8 +348,8 @@
     {
      "id": "capability#29",
      "range": [
-      213,
-      237
+      216,
+      240
      ],
      "marker": null,
      "composed": [],
@@ -360,7 +360,7 @@
   },
   {
    "file": "machtzev/generator/live-expr.mjs",
-   "lines": 62,
+   "lines": 64,
    "fragments": [
     {
      "id": "live-expr#0",
@@ -712,7 +712,7 @@
      "id": "live-expr#25",
      "range": [
       51,
-      54
+      55
      ],
      "marker": null,
      "composed": [],
@@ -726,8 +726,19 @@
     {
      "id": "live-expr#26",
      "range": [
-      54,
-      55
+      55,
+      56
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "trendAt",
+     "uses": []
+    },
+    {
+     "id": "live-expr#27",
+     "range": [
+      56,
+      57
      ],
      "marker": null,
      "composed": [],
@@ -737,10 +748,10 @@
      ]
     },
     {
-     "id": "live-expr#27",
+     "id": "live-expr#28",
      "range": [
-      55,
-      62
+      57,
+      64
      ],
      "marker": null,
      "composed": [],
@@ -753,7 +764,7 @@
   },
   {
    "file": "machtzev/generator/app-ds.mjs",
-   "lines": 475,
+   "lines": 476,
    "fragments": [
     {
      "id": "app-ds#0",
@@ -913,7 +924,7 @@
      "id": "app-ds#14",
      "range": [
       69,
-      373
+      374
      ],
      "marker": null,
      "composed": [],
@@ -925,8 +936,8 @@
     {
      "id": "app-ds#15",
      "range": [
-      373,
-      475
+      374,
+      476
      ],
      "marker": "liveOf",
      "composed": [

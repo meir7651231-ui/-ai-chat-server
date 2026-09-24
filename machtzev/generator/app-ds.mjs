@@ -369,10 +369,11 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     const stemOf = (w) => String(w || '').replace(PFX, '').replace(SFX, '');
     // צורות-התנאי (הכרעת-בעלים 23.9 «תסיים»): «שדה יחס מספר» · «שדה-תאריך יחס משך» · «<ממוצע|סכום|מונה> שדה» על הקבוצה · «<בנות> של <הורה>» מונה-קשר לכל הורה · «חודש» ⇒ שאלה
     const AGG = { avg: SL.pAvg || [], sum: SL.pSum || [], count: SL.pCount || [] };
+    AGG.trend = SL.pTrend || [];   // צפי (חיזוי קו-מגמה על קריאות עם זמן) — צורת-צבירה על הקבוצה
     const aggOf = (w) => Object.keys(AGG).find((a) => AGG[a].includes(w)) || null;
     const entByStem = (w) => { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; if (stemOf(r.entity) === stemOf(w) || r.entity === w) return r; } return null; };
     // ═══ liveOf = clause ⊕ entity ⊕ field ⇒ live (num · age · refCount · agg · aggBy · levels · eq)
-    const liveOf = (x) => { const y = liveOf0(x); const w = x.clause && x.clause.window; return w && y.live ? { ...y, live: { ...y.live, window: w } } : y; };   // חלון-זמן על כל צורת-תנאי
+    const liveOf = (x) => { const y = liveOf0(x); const w = x.clause && x.clause.window, h = x.clause && x.clause.horizon; return (w || h != null) && y.live ? { ...y, live: { ...y.live, ...(w ? { window: w } : {}), ...(h != null ? { horizon: h } : {}) } } : y; };   // חלון-זמן על כל צורת-תנאי
     const liveOf0 = (x) => { const c = x.clause;
       if (c && c.kind === 'levels' && c.x) { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'levels', field: f.label, by: c.label, agg: 'count', high: c.high, mid: c.mid, thresholds: c.thresholds || [c.high, c.mid], op: null, n: null } }; } return x; }
       // @אטום = יחס נלמד (capability.addLearnedRel) — סף-טקסט כמו «=»

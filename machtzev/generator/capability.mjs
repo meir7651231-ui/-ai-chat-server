@@ -53,6 +53,9 @@ export function detectAlertClause(text) {
   // חלון-זמן («ב-10 הדקות האחרונות», הכרעת-בעלים 24.9): מספר + יחידת-דקות + מילת-אחרון (spec-lang) ⇒ window בדקות; הביטוי יוצא מהסעיף לפני היחס
   let window = null; { const WW = (SL_T.windowWords || []).map(escRe).join('|'), MU = SL_T.minuteUnits || {};
     if (WW) { const wm = after.match(new RegExp('\\s*[֐-׿]?-?(\\d+(?:\\.\\d+)?)\\s+(\\S+)\\s+(?:' + WW + ')')); if (wm && MU[wm[2]]) { window = +wm[1] * MU[wm[2]]; after = after.slice(0, wm.index) + after.slice(wm.index + wm[0].length); } } }
+  // אופק-חיזוי («בעוד 30 דקות»): מילת-אופק + מספר + יחידת-דקות ⇒ horizon בדקות; יוצא מהסעיף
+  let horizon = null; { const HW = (SL_T.horizonWords || []).map(escRe).join('|'), MU = SL_T.minuteUnits || {};
+    if (HW) { const hm = after.match(new RegExp('\\s*(?:' + HW + ')\\s+(\\d+(?:\\.\\d+)?)\\s+(\\S+)')); if (hm && MU[hm[2]]) { horizon = +hm[1] * MU[hm[2]]; after = after.slice(0, hm.index) + after.slice(hm.index + hm[0].length); } } }
   const afterN = definalize(after);
   let rel = null, relM = null;
   for (const r of REL) { const m = afterN.match(r.re); if (m) { rel = r; relM = m; break; } }
@@ -62,7 +65,7 @@ export function detectAlertClause(text) {
   const xWords = hw(xPart), yWords = hw(yPart); const yNum = (yPart.match(/\d+(?:\.\d+)?/) || [null])[0];
   if (!xWords.length || (!yWords.length && yNum == null)) return null;   // «מעל 1» — מספר בלי מילה אחריו הוא סף כשר
   return {
-    ...(window ? { window } : {}),
+    ...(window ? { window } : {}), ...(horizon != null ? { horizon } : {}),
     trigger: hw(before).slice(-2).join(' '),      // 2 המילים לפני 'כש' = אות-הכוונה (בלי שם-הערך)
     x: cleanPhrase(xWords),                        // שדה-הערך = צירוף-השם המלא (סמיכות נשמרת)
     op: rel.op,

@@ -4,7 +4,7 @@
 import path from 'node:path';
 import * as R from '../root.mjs';
 import { verifiedTwin } from './op-twins.mjs';
-export const AGE_HELPER = `double _ageDays(String s) { final t = s.trim(); DateTime? d = DateTime.tryParse(t); if (d == null) { final m = RegExp(r'^(\\d{1,2})[./-](\\d{1,2})[./-](\\d{2,4})$').firstMatch(t); if (m != null) { final y = int.parse(m.group(3)!); d = DateTime(y < 100 ? 2000 + y : y, int.parse(m.group(2)!), int.parse(m.group(1)!)); } } return d == null ? double.nan : DateTime.now().difference(d).inDays.toDouble(); }\ndouble _ageMin(String s) { final d = DateTime.tryParse(s.trim()); if (d == null || s.trim().length <= 10) return double.infinity; return DateTime.now().difference(d).inSeconds / 60.0; }`;
+export const AGE_HELPER = `double _ageDays(String s) { final t = s.trim(); DateTime? d = DateTime.tryParse(t); if (d == null) { final m = RegExp(r'^(\\d{1,2})[./-](\\d{1,2})[./-](\\d{2,4})$').firstMatch(t); if (m != null) { final y = int.parse(m.group(3)!); d = DateTime(y < 100 ? 2000 + y : y, int.parse(m.group(2)!), int.parse(m.group(1)!)); } } return d == null ? double.nan : DateTime.now().difference(d).inDays.toDouble(); }\ndouble _ageMin(String s) { final d = DateTime.tryParse(s.trim()); if (d == null || s.trim().length <= 10) return double.infinity; return DateTime.now().difference(d).inSeconds / 60.0; }\ndouble _trendAt(List<Map<String, String>> rs, String f, num h) { final xs = <double>[], ys = <double>[]; final now = DateTime.now(); for (final r in rs) { final at = (r['__at'] ?? '').trim(); final t = DateTime.tryParse(at); final v = double.tryParse((r[f] ?? '').trim()); if (t == null || at.length <= 10 || v == null) continue; xs.add(t.difference(now).inSeconds / 60.0); ys.add(v); } if (xs.isEmpty) return double.nan; final n = xs.length; if (n == 1) return ys.first; final mx = xs.reduce((a, b) => a + b) / n, my = ys.reduce((a, b) => a + b) / n; var sxy = 0.0, sxx = 0.0; for (var i = 0; i < n; i++) { sxy += (xs[i] - mx) * (ys[i] - my); sxx += (xs[i] - mx) * (xs[i] - mx); } final b = sxx == 0 ? 0.0 : sxy / sxx; return my + b * (h - mx); }`;
 //   kind:'refCount' — לכל רשומת-הורה: כמה רשומות-בנות מצביעות עליה ({ childSlug, childField, parentKey }) · kind:'agg' — על הקבוצה כולה: avg/sum/count של שדה (agg, field)
 // ═══ liveValue = eq ⊕ age ⊕ refCount ⊕ num
 export const liveValue = (live, r = 'r', k = (s) => `'${s}'`) =>
@@ -14,9 +14,9 @@ export const liveValue = (live, r = 'r', k = (s) => `'${s}'`) =>
   : `(double.tryParse(${r}[${k(live.field)}] ?? '') ?? double.nan)`;
 export const liveIsSet = (live) => live.kind === 'agg';
 /** ערך-הקבוצה (agg): count ⇒ מספר הרשומות · sum ⇒ sumBy (אטום-קטלוג dart-maor) · avg ⇒ sumBy / מספר (צורה: סכום חלקי מונה) */
-export const liveAggExpr = (live, rs = 'rs', k = (s) => `'${s}'`) => live.agg === 'count' ? `${rs}.length.toDouble()` : live.agg === 'sum' ? `sumBy(${rs}, (x) => double.tryParse(((x as Map)[${k(live.field)}] ?? '').toString()) ?? 0).toDouble()` : `(${rs}.isEmpty ? double.nan : sumBy(${rs}, (x) => double.tryParse(((x as Map)[${k(live.field)}] ?? '').toString()) ?? 0) / ${rs}.length)`;
-export const liveAggImport = (live) => (live.kind === 'agg' && live.agg !== 'count' ? "import '../dart-maor/op-sum-by.dart';" : null);
-export const AGG_WORD = { avg: 'ממוצע', sum: 'סכום', count: 'מונה' };
+export const liveAggExpr = (live, rs = 'rs', k = (s) => `'${s}'`) => live.agg === 'trend' ? `_trendAt(${rs}, ${k(live.field)}, ${live.horizon || 0})` : live.agg === 'count' ? `${rs}.length.toDouble()` : live.agg === 'sum' ? `sumBy(${rs}, (x) => double.tryParse(((x as Map)[${k(live.field)}] ?? '').toString()) ?? 0).toDouble()` : `(${rs}.isEmpty ? double.nan : sumBy(${rs}, (x) => double.tryParse(((x as Map)[${k(live.field)}] ?? '').toString()) ?? 0) / ${rs}.length)`;
+export const liveAggImport = (live) => (live.kind === 'agg' && live.agg !== 'count' && live.agg !== 'trend' ? "import '../dart-maor/op-sum-by.dart';" : null);
+export const AGG_WORD = { avg: 'ממוצע', sum: 'סכום', count: 'מונה', trend: 'צפי' };
 export const liveIsGrouped = (live) => live.kind === 'aggBy' || live.kind === 'levels';
 /** מפתח-הקבוצה: aggBy ⇒ ערך שדה-החלוקה · levels ⇒ המדרגה (אטום-ההחלטה המוכח כשיש — live.decide — אחרת השוואה ביד לפי הצורה: ≥גבוה ⇒ 2 · ≥בינוני ⇒ 1 · אחרת 0) */
 // ═══ liveKeyExpr = levels ⊕ aggBy
@@ -38,7 +38,7 @@ export const liveTest = (live, v, t) => (String(live.op || '')[0] === '@' ? `${l
 export const liveAtomImports = (live) => [live, ...(live.pre || []), ...(live.alt || [])].filter((p) => String(p.op || '')[0] === '@' && p.atomFile).map((p) => `import '../${p.atomFile}';`);
 /** האם ערך-דוגמה עונה לתנאי (JS, לציפייה): < · > · = (מחרוזת) */
 export const liveHit = (live, v) => { const t = liveThreshold(live); if (v == null) return false; if (String(live.op || '')[0] === '@') { const fn = verifiedTwin(live.op.slice(1), live.atomFile ? path.join(R.ROOT, 'new', live.atomFile) : null); return fn ? fn(String(v).trim(), String(t).trim()) === true : false; } return live.op === '<' ? v < t : live.op === '>' ? v > t : String(v).trim() === String(t).trim(); };   /* @אטום: התאום המאומת-מול-Dart (op-twins) */
-export const liveNeedsHelper = (live) => live.kind === 'age' || !!live.window || (live.pre || []).some((p) => p.kind === 'age');
+export const liveNeedsHelper = (live) => live.kind === 'age' || !!live.window || live.agg === 'trend' || (live.pre || []).some((p) => p.kind === 'age');
 /** צירוף («וגם», הכרעת-בעלים 23.9 «צא לדרך»): live.pre = תנאים קודמים על אותה קבוצה ⇒ הקבוצה של התנאי הראשי היא הרשומות שעברו את כולם (מסנן על מסנן) */
 // ═══ livePre = and (filter over filter)
 export const livePre = (live, r = 'r', k = (s) => `'${s}'`) => (live.pre || []).map((p) => `(${liveTest(p, liveValue(p, r, k), liveThresholdDart(p, k))})`).join(' && ');
@@ -52,6 +52,8 @@ export const liveAltOk = (live, row, fieldIndex) => (live.alt || []).some((p) =>
 export const livePreOk = (live, row, fieldIndex) => (live.pre || []).every((p) => liveHit(p, liveSample(p, row[fieldIndex(p.field)])));
 /** ערכי-הדוגמאות של הבעלים בצורת-התנאי: מספר ⇒ המספר · תאריך ⇒ ותק בימים היום (תלוי-זמן, מוצהר) */
 /** ערך-הקבוצה מהדוגמאות (agg) — לציפייה ולהחלטה */
+/** צפי (JS, זהה ל-_trendAt): קריאות [דקות-מעכשיו, ערך] ⇒ קו-מגמה (ריבועים-פחותים) ⇒ הערך בעוד h דקות */
+export function trendAt(pts, h) { if (!pts.length) return NaN; const n = pts.length; if (n === 1) return pts[0][1]; const mx = pts.reduce((a, p) => a + p[0], 0) / n, my = pts.reduce((a, p) => a + p[1], 0) / n; let sxy = 0, sxx = 0; for (const [x, y] of pts) { sxy += (x - mx) * (y - my); sxx += (x - mx) * (x - mx); } const b = sxx === 0 ? 0 : sxy / sxx; return my + b * (h - mx); }
 export function liveAggSample(live, rows, fi) { const vals = rows.map((r) => parseFloat(r[fi])).filter((v) => !isNaN(v)); if (live.agg === 'count') return rows.length; if (!vals.length) return null; const sum = vals.reduce((a, b) => a + b, 0); return live.agg === 'sum' ? sum : sum / vals.length; }
 export function liveSample(live, raw) {
   if (live.kind === 'eq') return String(raw ?? '').trim();
