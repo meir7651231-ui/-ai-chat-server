@@ -284,7 +284,16 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       const p = (B.picks || {})[id] || {}; const rec = { demand: n.demand, plan: p.proven ? (p.chain || [p.pick]).filter(Boolean) : null, synth: null, synthNote: '' };
       // synth: דוגמה = קלט-יחיד ⇒ פלט; «'a', 'b'» (כמה ארגומנטים) אינו בר-השחלה — מדווח, לא מומצא
       const exs = (n.examples || []).map(([args, want]) => { const a = String(args).trim(), w = String(want).replace(/^r\s*==\s*/, '').trim(); const one = /^'[^']*'$|^"[^"]*"$|^[^,'"]+$/.test(a); return one ? { in: a.replace(/^['"]|['"]$/g, ''), out: w.replace(/^['"]|['"]$/g, '') } : null; });
-      if (exs.every(Boolean) && exs.length) { const r = SY.synthesize(n.demand, exs); rec.synth = r ? r.chain : null; rec.synthNote = r ? `הוכח ב-synth: ${r.chain.join('∘')}${r.alts ? ` (+${r.alts} שקולות)` : ''}${r.shortcut ? ' · אטום-יחיד' : ''}` : 'synth: לא נמצאה שרשרת (עומק≤4)'; }
+      // 🐣 מדף-הנולדים (yeshiva/born.mjs · הכרעת-בעלים 24.9 «תסגור»): (א) נולד שמוכיח בהרצה ⇒ בלי BFS · (ב) synth · (ג) נולד כחוליה-ראשונה + synth (עומק מעבר ל-4)
+      //   (ד) שלב-ביניים מהבעלים (mid) ⇒ שני חיפושים קצרים · הצלחה מהרכבה (שרשרת ≥2 / ג / ד) ⇒ נולדת. כישלון ⇒ שאלה על שלב-ביניים, לא «אין» יבש.
+      if (exs.every(Boolean) && exs.length) { const BN = await import('./born.mjs'); const hit = BN.find(SY, exs);
+        if (hit) { rec.synth = hit.chain; rec.born = 'found'; rec.synthNote = `נמצא במדף-הנולדים: ${hit.chain.join('∘')} (נולד ${String(hit.at).slice(0, 10)} ל«${hit.thing}») — הוכח בהרצה על ${exs.length} הדוגמאות, בלי חיפוש`; }
+        else { let r = SY.synthesize(n.demand, exs), how = r ? `הוכח ב-synth: ${r.chain.join('∘')}${r.alts ? ` (+${r.alts} שקולות)` : ''}${r.shortcut ? ' · אטום-יחיד' : ''}` : '';
+          if (!r) { const c = BN.compose(SY, n.demand, exs); if (c) { r = { chain: c.chain }; how = `הוכח מנולד «${c.via.thing}» (${c.via.chain.join('∘')}) + synth: ${c.chain.join('∘')} — עומק ${c.chain.length}`; } }
+          if (!r && n.mid) { const st = BN.steps(SY, n.demand, exs, n.mid); if (st && st.chain) { r = { chain: st.chain }; how = `הוכח משלב-הביניים שנתת (${n.mid.join(', ')}): ${st.chain.join('∘')}`; } else how = `שלב-הביניים (${n.mid.join(', ')}) לא נסגר: ${st && st.failed === 'first' ? 'קלט ⇒ ביניים' : st && st.failed === 'second' ? 'ביניים ⇒ פלט' : 'השרשרת המלאה'} לא נמצא`; }
+          rec.synth = r ? r.chain : null; rec.synthNote = r ? how : (how || 'synth: לא נמצאה שרשרת (עומק≤4)');
+          if (r && (r.chain.length >= 2 || !/^הוכח ב-synth/.test(how))) { BN.add({ thing: n.thing || n.demand, demand: n.demand, chain: r.chain, behavior: n.behavior || { examples: n.examples, params: n.params, ret: n.ret }, how }); rec.born = 'new'; rec.synthNote += ' · 🐣 נולד למדף-הנולדים'; }
+          if (!r && !rec.plan) questions.push({ thing: n.thing || n.demand, ask: 'mid', key: n.thing || n.demand, q: `«${n.thing || n.demand}»: אין אטום ואין הרכבה עד עומק 4 — תן שלב-ביניים: לכל דוגמה (${exs.map((e) => e.in).join(' / ')}) הערך שבאמצע הדרך ⇒ שני חיפושים קצרים ⇒ אטום חדש נולד` }); } }
       else rec.synthNote = 'synth: לא חל — הדוגמאות עם כמה ארגומנטים (ההשחלה היא קלט-יחיד)';
       // genesis-gen: שרשרת מוכחת ⇒ ספק-חלקים (שפת genesis: כותרת/אטום/חישוב — knowledge/lexicon.json; הנוסחים מ-self-model.json) ⇒ מסך-Dart עם החישובים מחווטים.
       //   OUT של genesis = GEN_OUT (נתפס בייבוא) ⇒ רץ רק כשהסביבה מופנית מחוץ ל-new/ (אותו שומר-ניקיון של app-ds)

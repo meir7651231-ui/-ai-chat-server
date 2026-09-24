@@ -380,7 +380,7 @@ export function needsFor(form, answers = {}) {
     const fieldType = (label) => { const f = (a.fields || []).find((x) => x.label === label) || form.things.flatMap((x) => (answerFor(x, answers).fields || [])).find((x) => x.label === label); return f ? f.type : null; };
     const shape = b.shape || SHAPE_OF_TYPE[fieldType(rel.object) || fieldType(rel.subject) || 'text'];
     const valueWords = (t.values || []).map((v) => v.unit).filter(Boolean);
-    needs[id] = { shape, demand: [rel.subject, ...rel.words, rel.object || '', ...valueWords].filter(Boolean).join(' ') + (b.demand ? ' ' + b.demand : ''), params: b.params || ['String', 'String'], ret: b.ret || 'num', examples: b.examples, ...(b.forbid ? { forbid: b.forbid } : {}), ...(b.consts ? { consts: b.consts } : {}), ...(b.clock ? { clock: b.clock } : {}) };   // consts/clock = של הבעלים (הסף «30» בא מהתשובה, לא מהמנוע)
+    needs[id] = { shape, demand: [rel.subject, ...rel.words, rel.object || '', ...valueWords].filter(Boolean).join(' ') + (b.demand ? ' ' + b.demand : ''), params: b.params || ['String', 'String'], ret: b.ret || 'num', thing: t.label, ...(b.mid ? { mid: b.mid } : {}), behavior: b, examples: b.examples, ...(b.forbid ? { forbid: b.forbid } : {}), ...(b.consts ? { consts: b.consts } : {}), ...(b.clock ? { clock: b.clock } : {}) };   // consts/clock = של הבעלים (הסף «30» בא מהתשובה, לא מהמנוע)
   }
   return { needs, asks };
 }
