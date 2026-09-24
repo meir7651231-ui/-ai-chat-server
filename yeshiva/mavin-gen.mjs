@@ -16,6 +16,7 @@ import { rule as yeshivaRule } from './purpose.mjs';   // הפוסק (9 מהלכ
 import { detectAllClauses, detectLevelsClause, relOpOf, emitAppFrom } from '../machtzev/generator/capability.mjs';
 import { retrieveScreen } from '../machtzev/generator/retrieve-screen.mjs';
 import { resolveEin } from './ein.mjs';
+import { bufferDeclsOf } from './buffer.mjs';
 import * as R from '../machtzev/root.mjs';
 
 const MAN = path.join(R.ROOT, 'screens-seed/manifests');
@@ -87,9 +88,11 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
   form.segments.forEach((seg, i) => { const lv = detectLevelsClause(seg, form.segments[i + 1]); if (!lv) return; const has = form.things.some((t) => (t.fields || []).some((f) => sameStem(lv.x, f.label) || f.label === lv.x)); if (!has) return; capSegs.set(seg, { clauses: [lv], how: 'מדרגות' }); capSegs.set(form.segments[i + 1], { clauses: [lv], how: 'מדרגות', tail: seg }); });
   const srv = serverDeclOf(form), lk = lookDeclOf(form), head = headOf(form);
   const SRC = sourceDeclsOf(form); const srcThings = new Set(SRC.flatMap((x) => x.things));
-  const RUL = rulesDeclOf(form); const ruleThings = new Set(RUL ? RUL.things : []);   // חוקים על האפליקציה ⇒ דברי-הקטעים = הצהרה   // מקור מבחוץ ⇒ דברי-הקטע = הצהרה, לא ישות ולא «אין»
+  const RUL = rulesDeclOf(form); const ruleThings = new Set(RUL ? RUL.things : []);
+  const BUF = bufferDeclsOf(form); const bufThings = new Set(BUF.flatMap((x) => x.things));   // אזור-המתנה עם תקרה ושחרור במנות   // חוקים על האפליקציה ⇒ דברי-הקטעים = הצהרה   // מקור מבחוץ ⇒ דברי-הקטע = הצהרה, לא ישות ולא «אין»
   const SHP = answers.__shape || null;   // חיפוש-לפי-צורה אושר (ein.shapeSearch) ⇒ דברי-הקטע = מסך-צורה, לא ישות ולא «אין»
   for (const t of form.things) {
+    if (bufThings.has(t.label)) { const x = BUF.find((y) => y.things.includes(t.label)); routes.push({ thing: t.label, route: 'buffer', why: `אזור-המתנה של «${x.ent}» (${x.field}) · תקרה ${x.ceiling} · מנה ${x.batch} כל ${x.everyMin} דק׳` }); continue; }
     if (ruleThings.has(t.label)) { routes.push({ thing: t.label, route: 'rules', why: `חוק על האפליקציה (מצבים/תפקידים) ⇒ gen_app_rules` }); continue; }
     if (srcThings.has(t.label)) { const x = SRC.find((y) => y.things.includes(t.label)); routes.push({ thing: t.label, route: 'source', ent: x.ent, why: `מקור מבחוץ: השורות של «${x.ent}» מגיעות מהשרת (api/feed) ⇒ האפליקציה מושכת` }); continue; }
     if (SHP && SHP.things.includes(t.label)) { routes.push({ thing: t.label, route: 'shape', why: `צורת «${SHP.ent}» ⇒ ${SHP.atom} (מאושר) ⇒ מסך` }); continue; }
@@ -111,7 +114,7 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
   }
   // דבר שנקרא כישות אבל הקטע שלו הוא סעיף-תנאי («התראה כשציון מתחת ל-55 וגם היעדרויות מעל 3» ⇒ «ישות התראה… עם היעדרויות מעל») — לא ישות: שורות-הספק שלו נמחקות
   const capThings = new Set(routes.filter((r) => r.route === 'capability').map((r) => r.thing));
-  const specLines = spec.spec.split('\n').filter((l) => { const m = l.match(/^(\S+)\s+(.+?)(?:\s+עם\s|:)/); if (ruleThings.size && [...ruleThings].some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; if (srcThings.size && [...srcThings].some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; if (SHP && SHP.things.some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; return !(m && capThings.has(m[2].trim()) && entLabels.has(m[2].trim())); });
+  const specLines = spec.spec.split('\n').filter((l) => { const m = l.match(/^(\S+)\s+(.+?)(?:\s+עם\s|:)/); if (bufThings.size && [...bufThings].some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; if (ruleThings.size && [...ruleThings].some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; if (srcThings.size && [...srcThings].some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; if (SHP && SHP.things.some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; return !(m && capThings.has(m[2].trim()) && entLabels.has(m[2].trim())); });
   return { routes, spec: specLines.join('\n'), skipped: spec.skipped, builtin: spec.builtin };
 }
 
@@ -237,6 +240,7 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   // 🔒 שומר-ניקיון: app-ds/render-ds קוראים GEN_OUT/GEN_DATA_OUT **בזמן-טעינה**. אם לא הופנו מחוץ למדף לפני הייבוא הראשון —
   //    הבנייה כותבת ל-new/dart-gen-bs ו-new/dart-data-bs/auto ומוחקת יתומים (קרה 23.9, שוחזר מ-git). כאן: מסרבים, לא מלכלכים.
   const caps = capSegs.map(([seg, clauses], i) => ({ slug: `cap${i + 1}`, cls: `GenCap${i + 1}Screen`, kind: 'capability', name: seg.trim(), icon: '🔔', value: (clauses.find((c) => c.n != null) || {}).n ?? (clauses.find((c) => c.kind === 'levels') || {}).high ?? null, clause: (() => { const ok = (c) => c.n != null || ((c.op === '=' || String(c.op || '')[0] === '@') && c.y); const main = clauses.find((c) => c.kind === 'levels') || clauses.find((c) => ok(c) && !c.and && !c.or) || clauses.find(ok) || null; const ands = clauses.filter((c) => c !== main && c.and && ok(c)), ors = clauses.filter((c) => c !== main && c.or && ok(c)); /* שוויון: סף = מילה, לא מספר */ return main ? { ...main, ...(ands.length ? { and: ands } : {}), ...(ors.length ? { or: ors } : {}) } : null; })(), sub: clauses.map((c) => { const i = c.x ? seg.indexOf(c.x) : -1; return i >= 0 ? seg.slice(i).trim() : `${c.x || ''} ${c.op || ''} ${c.n ?? ''}`.trim(); }).join(' · ') }));   // המילים של הבעלים («ציון מתחת ל-55»), לא סימן   // מסך-ההתראה ⇒ אריח בלוח-הבית וברכזת (הרכבה: לא קובץ-ליד)
+  const BUF0 = bufferDeclsOf(form); BUF0.forEach((b, i) => caps.push({ slug: `buf${i + 1}`, cls: `GenBuf${i + 1}Screen`, kind: 'capability', name: b.seg, icon: '🚦', sub: `${b.ceiling} · ${b.batch}/${b.everyMin}`, value: null, clause: null, shape: true }));   // אזור-המתנה ⇒ אריח
   const SHP0 = answers.__shape || null; if (SHP0) caps.push({ slug: 'shape1', cls: 'GenShape1Screen', kind: 'capability', name: SHP0.seg, icon: '📋', sub: SHP0.atom, value: null, clause: null, shape: true });   // מסך-הצורה ⇒ אריח ברכזת
   const feeds = [...new Set(routes.filter((r) => r.route === 'source').map((r) => r.ent))]; if (feeds.length) notes.push(`מקור מבחוץ: ${feeds.join(', ')} ⇒ השרת מקבל שורות (POST <בנייה>/api/feed/<ישות>) · האפליקציה מושכת כל 3 שניות`);
   const rules = rulesDeclOf(form); if (rules) notes.push(`חוקים על האפליקציה: מצבים ${rules.modes.join(', ') || '—'} · תפקידים ${rules.roles.join(', ') || '—'} · ${Object.entries(rules.hide).map(([m, e]) => `במצב ${m} מוסתר ${e.join(', ')}`).concat(Object.entries(rules.only).map(([m, e]) => `במצב ${m} רק ${e.join(', ')}`), Object.entries(rules.see).map(([r, e]) => `${r} רואה רק ${e.join(', ')}`)).join(' · ') || 'בלי חוקים'}`);
@@ -311,6 +315,11 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       T0.push([`  test(${lit(`${r} רואה רק ${es.join(', ')}`)}, () {`, `    appStore.setSetting('mode', ${lit(rules.modes[0] || '')}); appStore.setRole(${ri});`, ...es.filter(sl).map((e) => `    expect(visibleOf('${sl(e)}'), isTrue, reason: ${lit(`${r} רואה ${e}`)});`), ...others.filter(sl).map((e) => `    expect(visibleOf('${sl(e)}'), isFalse, reason: ${lit(`${r} לא רואה ${e}`)});`), '    appStore.setRole(0);', '  });'].join('\n')); }
     if (T0.length) fs.writeFileSync(path.join(R.outDir(), 'gen_app_rules_accept_test.dart'), [`// 🎯 מבחן-קבלה (חוקים על האפליקציה): מצב שמסתיר · תפקיד שרואה רק. חולל; אל תערוך.`, `import 'package:flutter/material.dart';`, `import 'package:flutter_test/flutter_test.dart';`, `import 'package:buildsmart/genesis/dart-gen-bs/gen_app_rules.dart';`, ...(hubCls ? [`import 'package:buildsmart/genesis/dart-gen-bs/gen_app_hub.dart';`] : []), `import 'package:buildsmart/genesis/dart-ui-bs/ds/ds_store.dart';`, 'void main() {', ...T0, '}', ''].join('\n'));
   }
+  // 2א'''' · אזור-המתנה (yeshiva/buffer): מסך + מבחן-קבלה (הסכום · שחרור מנה · קצב)
+  if (BUF0.length && app && app.nameToSlug && !inRepo(process.env.GEN_OUT)) { const BM = await import('./buffer.mjs'); const seedSlug = fs.existsSync(path.join(outDir, 'gen_app_seed.dart')) ? 'app_seed' : null;
+    BUF0.forEach((b, i) => { const es = app.nameToSlug[b.ent]; if (!es) return; const slug = `buf${i + 1}`, cls = `GenBuf${i + 1}Screen`; const e = BM.emit(b, { cls, slug, entSlug: es, seedSlug });
+      fs.writeFileSync(path.join(R.outDir(), `gen_${slug}.dart`), e.code); if (e.test) fs.writeFileSync(path.join(R.outDir(), `gen_${slug}_accept_test.dart`), e.test);
+      files.push({ route: 'buffer', file: path.join(R.outDir(), `gen_${slug}.dart`), cls }); notes.push(`אזור-המתנה «${b.seg}»: ${b.ent}.${b.field} · תקרה ${b.ceiling} · מנה ${b.batch} כל ${b.everyMin} דק׳ · על הדוגמאות ${b.sum} ממתינים ⇒ אחרי מנה ${e.after1}`); }); }
   // 2א' · מסך-הצורה (yeshiva/shape): הרשומות החיות ⇒ האטום שנמצא לפי הצורה ⇒ טבלה; מבחן-קבלה מתוצאת-התאום על הדוגמאות
   if (SHP0 && app && app.nameToSlug && app.nameToSlug[SHP0.ent] && !inRepo(process.env.GEN_OUT)) { const SHm = await import('./shape.mjs'); const seedSlug = fs.existsSync(path.join(outDir, 'gen_app_seed.dart')) ? 'app_seed' : null;
     const e = SHm.emit({ shp: SHP0, cls: 'GenShape1Screen', entSlug: app.nameToSlug[SHP0.ent], title: SHP0.seg, seedSlug });

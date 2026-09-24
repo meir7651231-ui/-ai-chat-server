@@ -372,5 +372,16 @@
  ],
  "horizonWords": [
   "בעוד"
+ ],
+ "bufferWords": [
+  "עד"
+ ],
+ "releaseWords": [
+  "משחררים",
+  "משחררות",
+  "משחרר"
+ ],
+ "everyWords": [
+  "כל"
  ]
 }

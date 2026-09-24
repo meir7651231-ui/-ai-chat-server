@@ -31,7 +31,7 @@ const { generateAll, generateFromSpec, generateFromDoc } = await import(path.joi
 const { formOf, specOf } = await import(path.join(ROOT, 'yeshiva/mavin.mjs'));
 let spec, skipped = [], builtin = [], G0;
 const bi = args.includes('--balagan');   // «בלגן»: האפליקציה-האחת מכל מודולי-הבעלים (apps/*.json) — כניסת «כל המודולים», לא משפט
-const genRe = bi ? /^gen_balagan_.*\.dart$/ : /^gen_(app_|cap\d+|synth_).*\.dart$/;   // גם מסכי-התראה (gen_cap*) ואטומים מסונתזים (gen_synth_*) — לצילום/אימות
+const genRe = bi ? /^gen_balagan_.*\.dart$/ : /^gen_(app_|cap\d+|synth_|buf\d+|shape\d+).*\.dart$/;   // גם מסכי-התראה (gen_cap*) ואטומים מסונתזים (gen_synth_*) — לצילום/אימות
 if (bi) {
   const { generateBalagan } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
   G0 = await generateBalagan({ outDir: process.env.GEN_OUT }); spec = G0.spec; G0.routes = [];
@@ -60,6 +60,10 @@ for (const n of G0.notes) console.log('  ' + n);
 const yq = (G0.questions || []).filter((q) => q.thing === 'הישיבה'); if (yq.length) { console.log(`קושיות הישיבה (המקשה · הפוסק): ${yq.length}`); for (const q of yq) console.log(`  ⚖ ${q.q.slice(0, 160)}`); }
 G0.questions = (G0.questions || []).filter((q) => q.thing !== 'הישיבה');
 if (G0.questions && G0.questions.length) { console.log(`שאלות (מה שלא נאמר, ובמקומו ברירת-מחדל של מנוע): ${G0.questions.length}`); for (const q of G0.questions.slice(0, 12)) console.log(`  ? ${q.q}${q.key ? ` [${q.key}]` : ''}`); if (G0.questions.length > 12) console.log(`  … ועוד ${G0.questions.length - 12}`); }
+// 📋 כל השאלות בבת אחת (אזור-מיון לשאלות): קובץ-תשובות מוכן — מפתח לכל שאלה, ממלאים פעם אחת ומריצים עם --answers
+{ const qs = (G0.questions || []).filter((q) => q.key); if (qs.length) { const tpl = {}; for (const q of qs) if (!(q.key in tpl)) tpl[q.key] = answers[q.key] ?? '';
+  const f = path.join(tmp, 'answers-template.json'); fs.writeFileSync(f, JSON.stringify(tpl, null, 1) + '\n'); fs.writeFileSync(path.join(tmp, 'questions.json'), JSON.stringify(qs, null, 1) + '\n');
+  console.log(`📋 ${Object.keys(tpl).length} שאלות עם מפתח — קובץ-תשובות אחד: ${f} (למלא הכל ⇒ --answers)`); } }
 const appEntry = G0.files.find((f) => f.route === 'appds'); if (appEntry) console.log(`מסכים: ${appEntry.screens.join(' · ')}`);
 const sv = G0.files.find((f) => f.route === 'server'); if (sv) console.log(`שרת: ${sv.count} קבצים ב-${sv.dir} · ישויות ${sv.entities.join(', ')}`);
 if (G0.node) console.log(`צומת-פירוק: ${G0.node.id ?? '?'} «${G0.node.title || ''}» · שדות ${G0.node.fields ?? '?'} · פלטים ${(G0.node.outputs || []).length}`);

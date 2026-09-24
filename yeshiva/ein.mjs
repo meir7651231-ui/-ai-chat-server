@@ -63,7 +63,7 @@ export async function expandDefinitions(sentence, form, routed, answers, proposa
   const out = { sentence, changed: false, notes: [], questions: [] };
   let orRe = null; try { const ow = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')).orWords || []; if (ow.length) orRe = new RegExp('\\s+(?:' + ow.join('|') + ')\\s+'); } catch {}
   const ents = form.things.filter((t) => t.fields && t.fields.length);
-  for (const r of routed.routes.filter((x) => x.route === 'none' && !skip.has(x.thing))) {
+  for (const r of routed.routes.filter((x) => (x.route === 'none' || x.proposal) && !skip.has(x.thing))) {   // גם הצעה (combine/gold לפי דמיון-שם): מילה שלא הוגדרה — נשאלת, לא נבלעת בהצעה שלא נבנית
     const thing = form.things.find((t) => t.label === r.thing); if (!thing || (thing.ioExamples && thing.ioExamples.length)) continue;
     const tokens = toks(thing.label);
     let ei = -1, ent = null; tokens.forEach((w, i) => { const e = ents.find((t) => leadOf(w, t.label) != null); if (e) { ei = i; ent = e; } });
@@ -173,11 +173,11 @@ export async function learnForms(sentence, form, routed, answers) {
 // ═══ ein.shape = tableShape ⊕ rowAtoms ⊕ run-on-examples ⊕ owner-yes ⇒ מסך
 /** חיפוש לפי צורה (הכרעת-בעלים 24.9 «העיקרון שחסר»): קטע שיש בו חלק שלא נקרא (none) או דבר בלי שדות, ליד ישות עם דוגמאות שיש בה עמודת-מספר/מצביע
  *  ⇒ yeshiva/shape.search (צורת-הטבלה מול אטומי-רשימה, הרצה על הדוגמאות, סינון-השפעה) ⇒ התוצאה על הדוגמאות מוצגת ⇒ «כן» ⇒ נרשם + answers.__shape ⇒ routeOf מסמן 'shape'. */
-export async function shapeSearch(sentence, form, routed, answers) {
+export async function shapeSearch(sentence, form, routed, answers, skip = new Set()) {
   const out = { notes: [], questions: [], handled: new Set(), changed: false };
   if (answers.__shape) return out;
   const ents = form.things.filter((t) => t.fields && t.fields.length && t.examples && t.examples.length); if (!ents.length) return out;
-  const loose = routed.routes.filter((r) => r.route === 'none' || (r.route === 'appds' && !((form.things.find((t) => t.label === r.thing) || {}).fields || []).length));
+  const loose = routed.routes.filter((r) => !skip.has(r.thing) && (r.route === 'none' || (r.route === 'appds' && !((form.things.find((t) => t.label === r.thing) || {}).fields || []).length)));   // סעיף שסוג אחר כבר לקח (צורה/נולד) — לא נשאל פעמיים
   if (!loose.length) return out;
   const SH = await import('./shape.mjs');
   for (const seg of [...new Set(loose.map((r) => (form.things.find((t) => t.label === r.thing) || {}).src).filter(Boolean))]) {
@@ -220,7 +220,7 @@ export async function resolveEin({ sentence, form, routed, answers = {}, proposa
       if (K.kind === 'examplesIO') { const e = examplesIO(form, routed, answers); notes.push(...e.notes); if (e.notes.length) trace.push(`${pass}:${K.kind}`); continue; }
       if (K.kind === 'born') { const b = await bornRecall(form, routed, answers); notes.push(...b.notes); for (const x of b.handled) skip.add(x); if (b.notes.length) trace.push(`${pass}:${K.kind}`); continue; }
       if (K.kind === 'form') { const f = await learnForms(sentence, form, routed, answers); notes.push(...f.notes); for (const x of f.handled) skip.add(x); if (f.changed) { changed = true; sentence = f.sentence; form = formOf(sentence); routed = routeOf(form, answers, { proposals }); trace.push(`${pass}:${K.kind}`); } else questions.push(...f.questions.filter((q) => !questions.some((y) => y.key === q.key && y.thing === q.thing))); continue; }
-      if (K.kind === 'shape') { const h = await shapeSearch(sentence, form, routed, answers); notes.push(...h.notes); for (const x of h.handled) skip.add(x); questions.push(...h.questions.filter((q) => !questions.some((y) => y.key === q.key && y.thing === q.thing))); if (h.changed) { changed = true; routed = routeOf(form, answers, { proposals }); trace.push(`${pass}:${K.kind}`); } continue; }
+      if (K.kind === 'shape') { const h = await shapeSearch(sentence, form, routed, answers, skip); notes.push(...h.notes); for (const x of h.handled) skip.add(x); questions.push(...h.questions.filter((q) => !questions.some((y) => y.key === q.key && y.thing === q.thing))); if (h.changed) { changed = true; routed = routeOf(form, answers, { proposals }); trace.push(`${pass}:${K.kind}`); } continue; }
       if (K.kind === 'word') { const d = await expandDefinitions(sentence, form, routed, answers, proposals, skip); notes.push(...d.notes); if (d.changed) { changed = true; sentence = d.sentence; form = formOf(sentence); routed = routeOf(form, answers, { proposals }); trace.push(`${pass}:${K.kind}`); break; } questions.push(...d.questions); continue; }
       throw new Error(`ein: ${D.T.unknownKind} «${K.kind}»`);
     }
