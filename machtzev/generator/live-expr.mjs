@@ -12,6 +12,7 @@ export const liveValue = (live, r = 'r', k = (s) => `'${s}'`) =>
   : live.kind === 'age' ? `_ageDays(${r}[${k(live.field)}] ?? '')`
   : live.kind === 'ageMin' ? `_ageMin(${r}[${k(live.field)}] ?? '')`
   : live.kind === 'linked' ? liveLinkedExpr(live, r, k)
+  : live.kind === 'expr' ? exprDart(live.tree, r, k)
   : live.kind === 'refCount' ? `appStore.records('${live.childSlug}').where((c) => (c[${k(live.childField)}] ?? '').trim() == (${r}[${k(live.parentKey)}] ?? '').trim()).length.toDouble()`
   : `(double.tryParse(${r}[${k(live.field)}] ?? '') ?? double.nan)`;
 /** 🔗 תוצאה של טבלאות קשורות כשדה (הכרעת-בעלים 24.9 «תמשיך» — «תוצאה של שלב היא קלט לשלב הבא»): לכל רשומת-אב — סכום האיברים
@@ -24,6 +25,23 @@ export function liveLinkedExpr(live, r = 'r', k = (s) => `'${s}'`) {
   if (!live.arith) return base;   // ⊕ «צפי חלקי שטח»: תוצאת-הקשר <פעולה> שדה של אותה רשומה
   const f = `(double.tryParse((${r}[${k(live.arith.field)}] ?? '').trim()) ?? double.nan)`; return `(${base} ${live.arith.op} ${f})`;
 }
+/** ⊕⊕ עץ-ביטוי (app-ds.valueOf) ⇒ Dart. עלים: num · field · ageField (דקות מאז) · since (דקות מאז כניסה לשלב; לא בשלב ⇒ NaN) · linked */
+export function exprDart(t, r = 'r', k = (s) => `'${s}'`) {
+  if (t.op) return `(${exprDart(t.a, r, k)} ${t.op} ${exprDart(t.b, r, k)})`;
+  if (t.num != null) return String(t.num);
+  if (t.since != null) return `(((${r}['__stage'] ?? '0') == '${t.since}') ? _ageMin(${r}['__stage_at'] ?? '') : double.nan)`;
+  if (t.ageField) return `_ageMin(${r}[${k(t.ageField)}] ?? '')`;
+  if (t.linked) return liveLinkedExpr(t.linked, r, k);
+  return `(double.tryParse((${r}[${k(t.field)}] ?? '').trim()) ?? double.nan)`;
+}
+/** אותו עץ בצד-JS (לציפייה מהדוגמאות): null כשעלה תלוי-זמן (since/ageField) או קשר — אז אין ציפייה מהדוגמאות */
+export function exprJs(t, row) {
+  if (t.op) { const a = exprJs(t.a, row), b = exprJs(t.b, row); return a == null || b == null ? null : t.op === '+' ? a + b : t.op === '-' ? a - b : t.op === '*' ? a * b : a / b; }
+  if (t.num != null) return t.num; if (t.fi != null) { const v = parseFloat(row[t.fi]); return Number.isFinite(v) ? v : null; } return null;
+}
+const treeHas = (t, key) => !!t && (t[key] != null || treeHas(t.a, key) || treeHas(t.b, key));
+export const exprNeedsAge = (t) => treeHas(t, 'since') || treeHas(t, 'ageField');
+export const exprHasLinked = (t) => treeHas(t, 'linked');
 export const LINKED_IMPORTS = ['op-where-list', 'op-sum-by', 'op-sub-num', 'op-add-num', 'op-le-num', 'op-ge-num'].map((f) => `import '../dart-maor/${f}.dart';`);
 export const liveIsSet = (live) => live.kind === 'agg';
 /** ערך-הקבוצה (agg): count ⇒ מספר הרשומות · sum ⇒ sumBy (אטום-קטלוג dart-maor) · avg ⇒ sumBy / מספר (צורה: סכום חלקי מונה) */
@@ -51,7 +69,7 @@ export const liveTest = (live, v, t) => (String(live.op || '')[0] === '@' ? `${l
 export const liveAtomImports = (live) => [live, ...(live.pre || []), ...(live.alt || [])].filter((p) => String(p.op || '')[0] === '@' && p.atomFile).map((p) => `import '../${p.atomFile}';`);
 /** האם ערך-דוגמה עונה לתנאי (JS, לציפייה): < · > · = (מחרוזת) */
 export const liveHit = (live, v) => { const t = liveThreshold(live); if (v == null) return false; if (String(live.op || '')[0] === '@') { const fn = verifiedTwin(live.op.slice(1), live.atomFile ? path.join(R.ROOT, 'new', live.atomFile) : null); return fn ? fn(String(v).trim(), String(t).trim()) === true : false; } return live.op === '<' ? v < t : live.op === '>' ? v > t : String(v).trim() === String(t).trim(); };   /* @אטום: התאום המאומת-מול-Dart (op-twins) */
-export const liveNeedsHelper = (live) => live.kind === 'age' || live.kind === 'ageMin' || !!live.window || live.agg === 'trend' || (live.pre || []).some((p) => p.kind === 'age');
+export const liveNeedsHelper = (live) => live.kind === 'age' || live.kind === 'ageMin' || (live.kind === 'expr' && exprNeedsAge(live.tree)) || !!live.window || live.agg === 'trend' || (live.pre || []).some((p) => p.kind === 'age');
 /** צירוף («וגם», הכרעת-בעלים 23.9 «צא לדרך»): live.pre = תנאים קודמים על אותה קבוצה ⇒ הקבוצה של התנאי הראשי היא הרשומות שעברו את כולם (מסנן על מסנן) */
 // ═══ livePre = and (filter over filter)
 export const livePre = (live, r = 'r', k = (s) => `'${s}'`) => (live.pre || []).map((p) => `(${liveTest(p, liveValue(p, r, k), liveThresholdDart(p, k))})`).join(' && ');
@@ -70,6 +88,7 @@ export function trendAt(pts, h) { if (!pts.length) return NaN; const n = pts.len
 export function liveAggSample(live, rows, fi) { const vals = rows.map((r) => parseFloat(r[fi])).filter((v) => !isNaN(v)); if (live.agg === 'count') return rows.length; if (!vals.length) return null; const sum = vals.reduce((a, b) => a + b, 0); return live.agg === 'sum' ? sum : sum / vals.length; }
 export function liveSample(live, raw) {
   if (live.kind === 'eq') return String(raw ?? '').trim();
+  if (live.kind === 'expr') return null;   // ערך-ביטוי: מחושב מהשורה (exprJs), לא מתא אחד
   if (live.kind === 'ageMin') { const t = String(raw || '').trim(); const d = Date.parse(t.replace(' ', 'T')); return t.length <= 10 || isNaN(d) ? null : Math.floor((Date.now() - d) / 60000); }   // כמו _ageMin: רק חותמת מלאה (תאריך+שעה)
   if (live.kind !== 'age') { const v = parseFloat(raw); return isNaN(v) ? null : v; }
   const t = String(raw || '').trim(); let d = Date.parse(t); if (isNaN(d)) { const m = t.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{2,4})$/); if (m) { const y = +m[3]; d = Date.UTC(y < 100 ? 2000 + y : y, +m[2] - 1, +m[1]); } }

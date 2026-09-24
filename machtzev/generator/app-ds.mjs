@@ -374,6 +374,20 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     const entByStem = (w) => { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; if (stemOf(r.entity) === stemOf(w) || r.entity === w) return r; } return null; };
     // ═══ liveOf = clause ⊕ entity ⊕ field ⇒ live (num · age · refCount · agg · aggBy · levels · eq)
     const liveOf = (x) => { const y = liveOf0(x); const w = x.clause && x.clause.window, h = x.clause && x.clause.horizon, off = x.clause && x.clause.off; return (w || h != null || off != null) && y.live ? { ...y, live: { ...y.live, ...(w ? { window: w } : {}), ...(h != null ? { horizon: h } : {}), ...(off != null ? { off } : {}) } } : y; };   // חלון-זמן · אופק · נקודת-כיבוי (היסטרזיס) על כל צורת-תנאי   // חלון-זמן על כל צורת-תנאי
+    // ═══ valueOf = number ⊕ field ⊕ derived ⊕ ageMin ⊕ sinceStage ⊕ arith (רקורסיבי)
+    // ⊕⊕ מנוע-ההרכבה הכללי (הכרעת-בעלים 24.9 «תסיים את זה כבר» — «כשנתקעים, לשלב את מה שיש», לא צירוף-ביד לכל צורך):
+    //    ביטוי ⇒ מתפרק במילת-החשבון (ועוד/פחות לפני כפול/חלקי) ⇒ כל חלק נפתר בכל סוג שקיים: מספר · שדה-מספר · שדה-תאריך
+    //    (דקות מאז) · תוצאת-קשר · «זמן מאז <שלב>» (דקות מאז שהרשומה נכנסה לשלב; לא בשלב ⇒ NaN) ⇒ מורכב בחזרה. סוג חדש = ענף אחד כאן.
+    const AWV = SL.arithWords || {}; const SINCE = SL.sinceWords || [];
+    const valueOf = (words, r) => { if (!words.length) return null; const txt = words.join(' ');
+      for (const grp of [['+', '-'], ['*', '/']]) for (let i = words.length - 2; i >= 1; i--) { const op = AWV[words[i]]; if (!op || !grp.includes(op)) continue; const a = valueOf(words.slice(0, i), r), b = valueOf(words.slice(i + 1), r); if (a && b) return { op, a, b }; }
+      if (/^-?\d+(\.\d+)?$/.test(txt)) return { num: +txt };
+      for (const sw of SINCE) if (txt.startsWith(sw + ' ')) { const st = txt.slice(sw.length + 1).trim(); const si = (r.stages || []).findIndex((s) => s === st || stemOf(s) === stemOf(st)); if (si >= 0) return { since: si, stage: r.stages[si] }; }
+      const d = (Array.isArray(opts.derived) ? opts.derived : []).find((q) => q.ent === r.entity && (q.name === txt || stemOf(q.name) === stemOf(txt)));
+      if (d) return { linked: { parentKey: d.parentKey, terms: d.terms.map((t) => ({ ...t, slug: nameToSlug[t.child] })) }, name: d.name };
+      const f = r.schema.find((fd) => fd.label === txt || stemOf(fd.label) === stemOf(txt)); if (!f) return null;
+      return f.type === 'date' ? { ageField: f.label } : { field: f.label, fi: r.schema.indexOf(f) };
+    };
     const liveOf0 = (x) => { const c = x.clause;
       // 🔗 תוצאה של טבלאות קשורות = שדה של ישות-האב (opts.derived): «התראה כשצפי מעל 250» ⇒ הערך המחושב לכל אזור — לפני מילות-הצבירה («צפי» היא גם קו-מגמה)
       for (const d of (Array.isArray(opts.derived) ? opts.derived : [])) { if (!c || !c.x || !/^[<>]$/.test(c.op) || c.n == null || isNaN(+c.n)) break; const xw0 = String(c.x).split(/\s+/)[0];
@@ -383,6 +397,10 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
           if (ai >= 0) { const w2 = AW[xs.slice(Math.max(0, ai - 1), ai + 1).join(' ')] ? xs.slice(Math.max(0, ai - 1), ai + 1).join(' ') : xs[ai]; const rest = xs.slice(ai + 1).join(' '); const P = Object.values(entRes).find((r) => r && r.entity === d.ent); const f = P && P.schema.find((fd) => stemOf(fd.label) === stemOf(rest) || fd.label === rest); if (!f) { const why = T('liveNoField', { name: x.name, field: rest, ent: d.ent }); seedNotes.push(why); return { ...x, why }; } arith = { op: AW[w2], field: f.label, word: w2 }; }
           return { ...x, live: { slug: nameToSlug[d.ent], kind: 'linked', field: arith ? `${d.name} ${arith.word} ${arith.field}` : d.name, base: d.name, parentKey: d.parentKey, terms: d.terms.map((t) => ({ ...t, slug: nameToSlug[t.child] })), ...(arith ? { arith } : {}), op: c.op, n: +c.n } }; } }
       if (c && c.kind === 'levels' && c.x) { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'levels', field: f.label, by: c.label, agg: 'count', high: c.high, mid: c.mid, thresholds: c.thresholds || [c.high, c.mid], op: null, n: null } }; } return x; }
+      // ⊕⊕ מנוע-ההרכבה הכללי — אחרי הענפים הייעודיים (תוצאת-קשר), לפני ענפי-השדה-הבודד
+      if (c && c.x && /^[<>]$/.test(c.op || '') && c.n != null && String(c.x).split(/\s+/).some((w) => AWV[w]) || (c && c.x && SINCE.some((sw) => String(c.x).includes(sw)))) {
+        for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const v = valueOf(String(c.x).split(/\s+/).filter(Boolean), r);
+          if (v && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'expr', field: String(c.x), tree: v, op: c.op, n: +c.n } }; } }
       // @אטום = יחס נלמד (capability.addLearnedRel) — סף-טקסט כמו «=»
       if (!c || !c.x || !/^([<>=]|@\w+)$/.test(c.op) || ((c.op === '=' || c.op[0] === '@') ? !c.y : (c.n == null || isNaN(+c.n)))) return x;
       if (c.unit === 'ask') { const why = T('liveMonthAsk', { name: x.name, unit: c.unitWord || '' }); seedNotes.push(why); return { ...x, why, ask: 'timeUnit' }; }   // שאלה לדלת, לא הנחה

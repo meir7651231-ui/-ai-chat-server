@@ -33,6 +33,7 @@ class AppStore extends ChangeNotifier {
 
   static const idKey = '__id';       // מזהה-רשומה יציב
   static const stageKey = '__stage'; // אינדקס שלב-המסע הנוכחי
+  static const stageAtKey = '__stage_at'; // מתי נכנסה הרשומה לשלב הנוכחי (זמן-מאז-שלב: «זמן מאז נפל»)
   static const _pkey = 'ds_app_v1';  // מפתח-ההתמדה
 
   // ── G51 · בריאות-האחסון (הכרעת-הביקורת 10.9): כשל-שמירה ואי-קריאות אסור שיהיו שקטים.
@@ -312,7 +313,7 @@ class AppStore extends ChangeNotifier {
     if (r == null) return;
     final cur = int.tryParse(r[stageKey] ?? '0') ?? 0;
     if (cur + 1 < stageCount) {
-      r[stageKey] = '${cur + 1}';
+      r[stageKey] = '${cur + 1}'; r[stageAtKey] = DateTime.now().toIso8601String();
       notifyListeners();
     }
   }
@@ -321,7 +322,7 @@ class AppStore extends ChangeNotifier {
   void setStage(String entity, String id, int i) {
     final r = byId(entity, id);
     if (r == null || i < 0) return;
-    r[stageKey] = '$i';
+    r[stageKey] = '$i'; r[stageAtKey] = DateTime.now().toIso8601String();
     notifyListeners();
   }
 

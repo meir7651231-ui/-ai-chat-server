@@ -59,6 +59,9 @@ export function detectAlertClause(text) {
   const afterN = definalize(after);
   let rel = null, relM = null;
   for (const r of REL) { const m = afterN.match(r.re); if (m) { rel = r; relM = m; break; } }
+  // ⊕ ביטוי לפני היחס («דקות עד כשל פחות זמן מאז נפל מתחת ל-10»): כשיש כמה מילות-יחס, היחס הוא **האחרון** — זה שצמוד לסף;
+  //    מילה מוקדמת (כאן «פחות») היא חלק מהביטוי. יחס יחיד ⇒ כמו קודם.
+  if (rel) for (const r of REL) { const g = new RegExp(r.re.source, (r.re.flags || '').includes('g') ? r.re.flags : r.re.flags + 'g'); for (const m of afterN.matchAll(g)) if (m.index > relM.index) { rel = r; relM = m; } }
   if (!rel) return null;
   const xPart = after.slice(0, relM.index);
   const yPart = after.slice(relM.index + relM[0].length);
