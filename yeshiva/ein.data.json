@@ -44,6 +44,10 @@
   "shapeMany": "«{seg}»: לפי צורת «{ent}» נמצאו {n} אטומים — {cands}. כתוב את שם האטום שהתכוונת אליו",
   "shapeNone": "«{seg}»: צורת «{ent}» ({shape}) — {atoms} אטומי-רשימה במדף, {tried} שיבוצים נוסו, אף אחד לא מושפע מכל העמודות",
   "shapeLearned": "«{seg}»: אושר ⇒ {atom} על «{ent}» ({map}) ⇒ נרשם לצורה ⇒ מסך",
-  "shapeRecalled": "«{seg}»: צורת «{ent}» ({shape}) כבר אושרה ל-{atom} ({at}) ⇒ מסך בלי שאלה"
+  "shapeRecalled": "«{seg}»: צורת «{ent}» ({shape}) כבר אושרה ל-{atom} ({at}) ⇒ מסך בלי שאלה",
+  "linkAsk": "«{seg}»: «{child}» מצביע אל «{ent}» ({shape}) ⇒ {n} חישובים מחלקי-היסוד שבמדף (whereList · sumBy · subNum) הורצו על הדוגמאות שלך. הראשון — {first}: {sample}.{others} ענה «כן» לראשון, או כתוב את שם החישוב שהתכוונת אליו",
+  "linkOthers": " אחרים: {list}.",
+  "linkLearned": "«{seg}»: אושר ⇒ {atom} לכל «{ent}» מתוך «{child}» ⇒ נרשם לצורה ⇒ מסך",
+  "linkRecalled": "«{seg}»: הקשר «{child}» ⇒ «{ent}» ({shape}) כבר אושר ל-{atom} ({at}) ⇒ מסך בלי שאלה"
  }
 }

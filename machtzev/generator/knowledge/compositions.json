@@ -1100,7 +1100,7 @@
   },
   {
    "file": "yeshiva/ein.mjs",
-   "lines": 231,
+   "lines": 245,
    "fragments": [
     {
      "id": "ein#0",
@@ -1296,7 +1296,7 @@
      "id": "ein#13",
      "range": [
       175,
-      202
+      216
      ],
      "marker": null,
      "composed": [],
@@ -1306,8 +1306,8 @@
     {
      "id": "ein#14",
      "range": [
-      202,
-      213
+      216,
+      227
      ],
      "marker": null,
      "composed": [],
@@ -1317,8 +1317,8 @@
     {
      "id": "ein#15",
      "range": [
-      213,
-      231
+      227,
+      245
      ],
      "marker": null,
      "composed": [],

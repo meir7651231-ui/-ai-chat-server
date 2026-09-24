@@ -178,9 +178,23 @@ export async function shapeSearch(sentence, form, routed, answers, skip = new Se
   if (answers.__shape) return out;
   const ents = form.things.filter((t) => t.fields && t.fields.length && t.examples && t.examples.length); if (!ents.length) return out;
   const loose = routed.routes.filter((r) => !skip.has(r.thing) && (r.route === 'none' || (r.route === 'appds' && !((form.things.find((t) => t.label === r.thing) || {}).fields || []).length)));   // סעיף שסוג אחר כבר לקח (צורה/נולד) — לא נשאל פעמיים
-  if (!loose.length) return out;
+  const looseL = routed.routes.filter((r) => !skip.has(r.thing) && !loose.includes(r) && r.proposal);   // 🔗 לקשר בין טבלאות — גם סעיף שהלך להצעה לפי דמיון-מילים (נמדד: «יתרה בכל אזור» ⇒ מסך-מנהל 4.73, לא נבנה)
+  if (!loose.length && !looseL.length) return out;
   const SH = await import('./shape.mjs');
-  for (const seg of [...new Set(loose.map((r) => (form.things.find((t) => t.label === r.thing) || {}).src).filter(Boolean))]) {
+  for (const seg of [...new Set([...loose, ...looseL].map((r) => (form.things.find((t) => t.label === r.thing) || {}).src).filter(Boolean))]) {
+    const thingsL = form.things.filter((t) => t.src === seg && [...loose, ...looseL].some((r) => r.thing === t.label)).map((t) => t.label);
+    // 🔗 שתי טבלאות קשורות: עמודה בטבלה אחת שמצביעה על מפתחות של אחרת ⇒ חישוב לכל שורת-אב (yeshiva/shape.searchLinked)
+    if (thingsL.length && ents.length > 1) for (const parent of ents) { for (const child of ents) { if (child === parent) continue;
+      const r = SH.searchLinked(parent, child); if (!r.results.length) continue;
+      const sig = 'link:' + r.shape.map((c) => c.kind).join(','); const key = thingsL[thingsL.length - 1]; const show = (x) => x.out.map((o) => `${o.key} ${o.value}`).join(' · ');
+      const known = formsAll().filter((x) => x.kind === 'table' && x.sig === sig && r.results.some((y) => y.atom.name === x.atom)).pop();
+      const said = typeof answers[key] === 'string' ? answers[key].trim() : '';
+      const pick = known ? r.results.find((y) => y.atom.name === known.atom) : said && (D.T.yesWords || []).includes(said) ? r.results[0] : said ? r.results.find((y) => y.atom.name === said) : null;
+      for (const t of thingsL) out.handled.add(t);
+      if (!pick) { out.questions.push({ thing: key, ask: 'shape', key, q: fill(D.T.linkAsk, { seg, child: child.label, ent: parent.label, shape: r.shape.map((c) => `${c.label}=${c.kind}`).join(' · '), n: r.results.length, first: r.results[0].atom.name, sample: show(r.results[0]), others: r.results.length > 1 ? fill(D.T.linkOthers, { list: r.results.slice(1).map((y) => `${y.atom.name}: ${show(y)}`).join(' | ') }) : '' }) }); return out; }
+      if (!known) { fs.mkdirSync(path.dirname(FORMS()), { recursive: true }); fs.appendFileSync(FORMS(), JSON.stringify({ at: new Date().toISOString(), kind: 'table', sig, atom: pick.atom.name, from: sentence }) + '\n'); }
+      out.notes.push(known ? fill(D.T.linkRecalled, { seg, child: child.label, ent: parent.label, shape: sig, atom: pick.atom.name, at: String(known.at).slice(0, 10) }) : fill(D.T.linkLearned, { seg, child: child.label, ent: parent.label, atom: pick.atom.name }));
+      answers.__shape = { linked: true, seg, things: thingsL, ent: parent.label, child: child.label, atom: pick.atom.name, calc: pick.calc, out: pick.out, fields: parent.fields.map((f) => f.label) }; out.changed = true; return out; } }
     const things = form.things.filter((t) => t.src === seg && loose.some((r) => r.thing === t.label)).map((t) => t.label); if (!things.length) continue;
     for (const ent of ents) {
       const r = await SH.search(ent); if (!r.results.length) { if (r.shape.some((c) => c.kind !== 'key' && c.kind !== 'text')) out.notes.push(fill(D.T.shapeNone, { seg, ent: ent.label, shape: r.shape.map((c) => `${c.label}=${c.kind}`).join(' · '), atoms: SH.rowAtoms().length, tried: r.tried })); continue; }
