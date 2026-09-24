@@ -5,7 +5,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-import { spawnSync, spawn } from 'node:child_process';
+import { spawnSync as spawnSync0, spawn } from 'node:child_process';
+// ⏱ מדידת-שלבים (הכרעת-בעלים 24.9 «תנסה ותגיד מה התוצאה»): כל פקודה חיצונית נמדדת; בסוף — שורת «⏱» אחת (איפה הזמן הולך)
+const T_START = Date.now(); const TIMES = []; let T_DOOR = null;
+const spawnSync = (cmd, a = [], o) => { const t = Date.now(); const r = spawnSync0(cmd, a, o); TIMES.push([`${path.basename(String(cmd)) === 'flutter' ? 'flutter ' + a[0] : path.basename(String(a[0] || cmd))}`, Date.now() - t]); return r; };
+process.on('exit', () => { const tot = Date.now() - T_START; console.log(`⏱ סה"כ ${(tot / 1000).toFixed(1)}ש · דלת ${T_DOOR != null ? (T_DOOR / 1000).toFixed(1) : '?'}ש · ${TIMES.map(([k, v]) => `${k} ${(v / 1000).toFixed(1)}ש`).join(' · ')}`); });
 import { fileURLToPath } from 'node:url';
 import { makeCard } from '../../../machtzev/goal-card.mjs';   // חיבור 4: כרטיס-מטרה על מסך-התובנה
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -62,6 +66,7 @@ if (G0.node) console.log(`צומת-פירוק: ${G0.node.id ?? '?'} «${G0.node.
 const extra = G0.files.filter((f) => f.file && /\.dart$/.test(f.file)).map((f) => f.file);   // רק Dart למארח; app.html / behaviors.json נשארים ב-outDir
 const genEntry = G0.files.find((f) => f.route === 'gen'); if (genEntry) console.log(`gen (HTML): ${genEntry.file} · ${(genEntry.bytes / 1024).toFixed(0)}KB · אטומים מוכחים ${genEntry.atoms} · לא-מוכחים ${genEntry.unproven} · עדשות פתוחות ${genEntry.lensesOpen}`);
 if (!spec && !extra.length) { console.log('⚪ אין אפיון ואין מסלול אחר ⇒ אין בנייה. ענה על השאלות ותנסה שוב.'); process.exit(0); }
+T_DOOR = Date.now() - T_START;
 const gen = fs.readdirSync(process.env.GEN_OUT).filter((f) => genRe.test(f));
 // הכרעה-37: 36 חוקי «בלגן» על פלט-הדלת (מדידה, לא שער) — רק לאפליקציית-נייר (עור עם lookScope)
 { const main0 = gen.find((f) => /_main\.dart$/.test(f)); const paperOut = main0 && /PureScope\(|DsPure\.skins/.test(fs.readFileSync(path.join(process.env.GEN_OUT, main0), 'utf8'));
@@ -157,7 +162,7 @@ if ((args.includes('--shot') || shotArg) && errors.length === 0) {
   else if (!CHROME) console.log('⚪ shot: אין Chromium (/opt/pw-browsers/chromium)');
   else {
     const t0 = Date.now(); const outWeb = 'build/web-chk';
-    const b = spawnSync(FLUTTER, ['build', 'web', '--release', '--no-web-resources-cdn', '-t', 'lib/genesis/dart-gen-bs/' + entry, '-o', outWeb], { cwd: HOST, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+    const b = spawnSync(FLUTTER, ['build', 'web', '--release', '--no-web-resources-cdn', ...(process.env.WEB_OPT ? [`--dart2js-optimization=${process.env.WEB_OPT}`] : []), '-t', 'lib/genesis/dart-gen-bs/' + entry, '-o', outWeb], { cwd: HOST, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
     if (b.status !== 0) console.log(`❌ shot: flutter build web נכשל · ${(b.stdout + b.stderr).split('\n').filter((l) => /Error|error/.test(l)).slice(0, 3).join(' ¦ ').slice(0, 300)}`);
     else {
       const port = 8700 + Math.floor(Math.random() * 200);
