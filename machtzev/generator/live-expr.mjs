@@ -19,7 +19,9 @@ export function liveLinkedExpr(live, r = 'r', k = (s) => `'${s}'`) {
   const num = (m, c) => `(num.tryParse(((${m} as Map)[${k(c)}] ?? '').toString().trim()) ?? 0)`;
   const inOf = (t, x) => `sumBy(whereList(appStore.records('${t.slug}').toList(), (x) => ((x as Map)[${k(x)}] ?? '').toString().trim() == (${r}[${k(live.parentKey)}] ?? '').trim()${t.filt ? ` && ${t.filt.cmp === 'le' ? 'leNum' : 'geNum'}(${num('x', t.filt.col)}, ${t.filt.v})` : ''}), (x) => ${num('x', t.n)})`;
   const termE = (t) => (t.op === 'net' ? `subNum(${inOf(t, t.to)}, ${inOf(t, t.from)})` : inOf(t, t.to));
-  return `(${live.terms.slice(1).reduce((acc, t) => `addNum(${acc}, ${termE(t)})`, termE(live.terms[0]))}).toDouble()`;
+  const base = `(${live.terms.slice(1).reduce((acc, t) => `addNum(${acc}, ${termE(t)})`, termE(live.terms[0]))}).toDouble()`;
+  if (!live.arith) return base;   // ⊕ «צפי חלקי שטח»: תוצאת-הקשר <פעולה> שדה של אותה רשומה
+  const f = `(double.tryParse((${r}[${k(live.arith.field)}] ?? '').trim()) ?? double.nan)`; return `(${base} ${live.arith.op} ${f})`;
 }
 export const LINKED_IMPORTS = ['op-where-list', 'op-sum-by', 'op-sub-num', 'op-add-num', 'op-le-num', 'op-ge-num'].map((f) => `import '../dart-maor/${f}.dart';`);
 export const liveIsSet = (live) => live.kind === 'agg';

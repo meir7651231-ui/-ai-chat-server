@@ -87,7 +87,7 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
     label: k(label || name), message: k(`${entity.name}: ${said}`), glyph: k(op === 'alert' ? '⚠️' : '🔔'), tone: 2,
     value: (isSet && value === 'br.length') ? { str: aggStr, num: 'agg', isNum: true } : /^br\.length \/ rs\.length$/.test(value) ? { str: "'${br.length}/${rs.length}'", num: 'br.length.toDouble()' } : /\.length$/.test(value) ? { str: `${value}.toString()`, num: `${value}.toDouble()` } : { str: `${value}.toString()`, num: '0.0' },
     fraction: 'rs.isEmpty ? 0.0 : br.length / rs.length', sub: k(`${entity.name} · ${said}`),
-    labels: [k(descField), k(live.kind === 'refCount' ? (live.childName || live.field) : live.field)], rows: live.kind === 'refCount' || live.kind === 'linked' ? `[for (final r in br) [r[${k(descField)}] ?? '', ${liveValue(live, 'r', k)}.toStringAsFixed(0)]]` :   /* 🔗 תוצאת-קשר: מחושבת, לא שדה שמור */ `[for (final r in br) [r[${k(descField)}] ?? '', r[${k(live.field)}] ?? '']]`,   // מונה-קשר: העמודה השנייה = כמה בנות, לא שדה של ההורה
+    labels: [k(descField), k(live.kind === 'refCount' ? (live.childName || live.field) : live.field)], rows: live.kind === 'refCount' || live.kind === 'linked' ? `[for (final r in br) [r[${k(descField)}] ?? '', ${liveValue(live, 'r', k)}.toStringAsFixed(${live.arith ? 2 : 0})]]` :   /* 🔗 תוצאת-קשר: מחושבת, לא שדה שמור */ `[for (final r in br) [r[${k(descField)}] ?? '', r[${k(live.field)}] ?? '']]`,   // מונה-קשר: העמודה השנייה = כמה בנות, לא שדה של ההורה
   });
   // רזולוציה רקורסיבית: פעולה ⇒ פסק; אין שורד ⇒ decompose[op] ⇒ תת-פעולות (עד maxDepth) ⇒ עובדות
   const resolve = (op, value, label, depth, cond) => {
