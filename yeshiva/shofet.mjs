@@ -9,6 +9,7 @@
 //    · אזור-המתנה (תקרה · שחרור במנות)                   ⇒ waiting
 //    · מקור-נתונים חיצוני יחיד                            ⇒ single_dependency
 //  מה שלא ידוע בוודאות — לא מסומן (USE.md: «סמן true רק למנגנונים שבאמת קיימים. אל תנחש כדי לעזור»).
+//  שם כ-where נשלח בתוך «…» (USE.md של השופט: אות-ה בתחילת שם נשמרת — «התראה», לא «תראה»).
 //  🔎 איתור לפי סימן בדיסק (`packages/judge/src/engine.ts`), כמו ask.mjs; אין ⇒ { available:false, reason } — «לא-נמדד».
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
@@ -34,8 +35,23 @@ export function judge(c) {
 /** המבנה מתוך מה שהמחולל בנה — עובדות בלבד. מחזיר רשימת-מקרים (אחד לכל «איפה») */
 export function casesOf({ alerts = [], buffers = [], feeds = [], app = '' }) {
   const out = [];
-  for (const b of buffers) out.push({ raw_text: `${app}: אזור-המתנה «${b.seg}» — ממתינים מצטברים עד תקרה ${b.ceiling}, משוחררים ${b.batch} בכל ${b.everyMin} דקות.`, where: b.seg, structure: { waiting: true } });
-  for (const a of alerts) out.push({ raw_text: `${app}: ${a.seg} — ההתראה נדלקת כשהערך חוצה ${a.n} ונכבית כשהוא חוזר מתחת ל-${a.n}, באותה נקודה בדיוק.`, where: a.seg, kind: 'feedback_loop', structure: { same_threshold: true } });
-  if (feeds.length === 1) out.push({ raw_text: `${app}: הנתונים של «${feeds[0]}» מגיעים ממקור חיצוני אחד בלבד; האפליקציה מושכת ממנו כל כמה שניות.`, where: `מקור «${feeds[0]}»`, kind: 'failure_point', structure: { single_dependency: true } });
+  for (const b of buffers) out.push({ raw_text: `${app}: אזור-המתנה «${b.seg}» — ממתינים מצטברים עד תקרה ${b.ceiling}, משוחררים ${b.batch} בכל ${b.everyMin} דקות.`, where: `«${b.seg}»`, structure: { waiting: true } });
+  for (const a of alerts) out.push({ raw_text: `${app}: ${a.seg} — ההתראה נדלקת כשהערך חוצה ${a.n} ונכבית כשהוא חוזר מתחת ל-${a.n}, באותה נקודה בדיוק.`, where: `«${a.seg}»`, kind: 'feedback_loop', structure: { same_threshold: true } });
+  if (feeds.length === 1) out.push({ raw_text: `${app}: הנתונים של «${feeds[0]}» מגיעים ממקור חיצוני אחד בלבד; האפליקציה מושכת ממנו כל כמה שניות.`, where: `«מקור ${feeds[0]}»`, kind: 'failure_point', structure: { single_dependency: true } });
   return out;
+}
+/** 🎲 הוכחת-המהלך בהרצה (כמו bridge/verify של השופט): בקר-הסף של systems-engine (dynamics.threshold — תרמוסטט עם פס-מת) +
+ *  Rng עם זרע קבוע ⇒ אות סינתטי סביב הסף (רעש בגודל הפער), 1000 צעדים ⇒ כמה הדלקות בלי פער ועם הפער שהבעלים נתן.
+ *  זה **רעש סינתטי מוצהר**, לא נתונים: הוא בודק שהמהלך עובד על רעש בגודל הזה — לא מנבא את המערכת. */
+export function simulateHysteresis({ n, off, op = '>', steps = 1000, seed = 1 }) {
+  const home = judgeHome(); if (!home) return { available: false, reason: judgeHome.reason };
+  const url = (p) => 'file://' + path.join(home, p);
+  const js = `const D = await import(${JSON.stringify(url('packages/dynamics/src/controllers.ts'))}); const C = await import(${JSON.stringify(url('packages/core/src/rng.ts'))});
+const n = ${+n}, off = ${+off}, sgn = ${op === '>' ? -1 : 1}, gap = Math.abs(n - off), steps = ${+steps};
+const run = (lo, hi) => { const rng = new C.Rng(${+seed}); const ctl = D.threshold({ low: sgn * n, high: sgn * lo, on: 1 }); let prev = 0, ons = 0, v = n;
+  for (let i = 0; i < steps; i++) { v = n + rng.normal(0, gap / 2); const a = ctl(sgn * v); if (a && !prev) ons++; prev = a; } return ons; };
+console.log(JSON.stringify({ without: run(n, n), with: run(off, off), steps, sd: gap / 2, seed: ${+seed} }));`;
+  const r = spawnSync(process.execPath, ['--input-type=module', '-e', js], { encoding: 'utf8', timeout: 20000 });
+  if (r.status !== 0) return { available: true, error: (r.stderr || '').slice(0, 300) };
+  return { available: true, ...JSON.parse(r.stdout) };
 }

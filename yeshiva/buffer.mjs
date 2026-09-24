@@ -29,7 +29,11 @@ export function emit(b, { cls, slug, entSlug, seedSlug = null, pkg = 'buildsmart
     `  static const num ceiling = ${b.ceiling}, batch = ${b.batch}, everyMin = ${b.everyMin};`,
     `  num get _total => appStore.records('${entSlug}').fold<num>(0, (a, r) => a + (num.tryParse((r[${lit(b.field)}] ?? '').trim()) ?? 0));`,
     `  num get _released => num.tryParse(appStore.setting(${key('released')}, '0')) ?? 0;`,
-    `  num get _fill => math.max(0, _total - _released);`,
+    // ⚖️ השופט (יתרון: «להגביל את מספר הפריטים הפתוחים … כך שחדש נכנס רק כשאחד יוצא» · מגבלות WIP / משיכה): בפנים לעולם לא יותר מהתקרה;
+    //    מי שמעבר לה ממתין בחוץ, ונכנס לבד רק כשמשתחרר מקום (נכנסו = min(הגיעו, שוחררו + תקרה)).
+    `  num get _admitted => math.min(_total, _released + ceiling);`,
+    `  num get _fill => math.max(0, _admitted - _released);`,
+    `  num get _outside => math.max(0, _total - _admitted);`,
     `  double get _waitMin { final last = DateTime.tryParse(appStore.setting(${key('last')}, '')); if (last == null) return 0; return math.max(0, everyMin - DateTime.now().difference(last).inSeconds / 60.0); }`,
     `  void _release() { final m = math.min(batch, _fill); if (m <= 0) return; appStore.setSetting(${key('released')}, '\${_released + m}'); appStore.setSetting(${key('last')}, DateTime.now().toIso8601String()); }`,
     '  @override', `  Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {`,
@@ -37,22 +41,26 @@ export function emit(b, { cls, slug, entSlug, seedSlug = null, pkg = 'buildsmart
     `        return Scaffold(appBar: AppBar(title: Text(${lit(b.seg)})), body: ListView(padding: const EdgeInsets.all(16), children: [`,
     `          Text('\$fill / \$ceiling', key: const Key('buf-fill'), style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w700)),`,
     `          const SizedBox(height: 8), LinearProgressIndicator(value: (fill / ceiling).clamp(0, 1).toDouble()),`,
-    `          if (fill >= ceiling) Text(${lit('מעל התקרה — לא להכניס עוד')}, key: const Key('buf-over')) else if (fill >= ceiling * 0.9) Text(${lit('קרוב לתקרה')}, key: const Key('buf-near')),`,
+    `          if (fill >= ceiling) Text(${lit('מלא — הכניסה סגורה עד שמשתחרר מקום')}, key: const Key('buf-over')) else if (fill >= ceiling * 0.9) Text(${lit('קרוב לתקרה')}, key: const Key('buf-near')),`,
+    `          if (_outside > 0) Text('${'ממתינים בחוץ (ייכנסו כשיתפנה מקום)'}: \${_outside}', key: const Key('buf-out')),`,
     `          const SizedBox(height: 16), FilledButton(key: const Key('buf-release'), onPressed: can ? _release : null, child: Text(${lit(`שחרר מנה (${b.batch})`)})),`,
     `          if (wait > 0) Text('${'שחרור הבא בעוד'} \${wait.ceil()} ${'דק׳'}', key: const Key('buf-next')),`,
     `          Text('${'שוחררו עד עכשיו'}: \${_released}', key: const Key('buf-released')),`,
     '        ]));', '      });', '}', ''].join('\n');
-  const after1 = Math.max(0, b.sum - Math.min(b.batch, b.sum));
-  const test = seedSlug ? [`// 🎯 מבחן-קבלה (אזור-המתנה): הדוגמאות ⇒ ממתינים = הסכום · שחרור מנה מוריד · שחרור שני מיד — חסום (קצב). חולל; אל תערוך.`,
+  const in0 = Math.min(b.sum, b.ceiling), out0 = b.sum - in0;   // בפנים עד התקרה, השאר בחוץ
+  const adm1 = Math.min(b.sum, Math.min(b.batch, in0) + b.ceiling); const after1 = adm1 - Math.min(b.batch, in0), out1 = b.sum - adm1;   // אחרי מנה: מי שבחוץ נכנס עד התקרה
+  const test = seedSlug ? [`// 🎯 מבחן-קבלה (אזור-המתנה): הדוגמאות ⇒ בפנים עד התקרה, השאר בחוץ · שחרור מנה מוריד ומכניס מבחוץ · שחרור שני מיד — חסום (קצב). חולל; אל תערוך.`,
     `import 'package:flutter/material.dart';`, `import 'package:flutter_test/flutter_test.dart';`, `import 'package:${pkg}/genesis/dart-gen-bs/gen_${seedSlug}.dart';`, `import 'package:${pkg}/genesis/dart-gen-bs/gen_${slug}.dart';`,
     'void main() {', `  testWidgets(${lit(`אזור-המתנה: ${b.sum} ממתינים, תקרה ${b.ceiling}, מנה ${b.batch} כל ${b.everyMin} דק׳`)}, (tester) async {`,
     '    seedExamples();', `    await tester.pumpWidget(const MaterialApp(home: ${cls}()));`, '    await tester.pump();',
-    `    expect(find.text('${b.sum} / ${b.ceiling}'), findsOneWidget);`,
-    ...(b.sum >= b.ceiling ? [`    expect(find.byKey(const Key('buf-over')), findsOneWidget);`] : b.sum >= b.ceiling * 0.9 ? [`    expect(find.byKey(const Key('buf-near')), findsOneWidget);`] : []),
+    `    expect(find.text('${in0} / ${b.ceiling}'), findsOneWidget, reason: ${lit(`הגיעו ${b.sum} · בפנים לעולם לא יותר מ-${b.ceiling}`)});`,
+    ...(out0 > 0 ? [`    expect(find.byKey(const Key('buf-out')), findsOneWidget, reason: ${lit(`${out0} ממתינים בחוץ`)});`] : []),
+    ...(in0 >= b.ceiling ? [`    expect(find.byKey(const Key('buf-over')), findsOneWidget);`] : in0 >= b.ceiling * 0.9 ? [`    expect(find.byKey(const Key('buf-near')), findsOneWidget);`] : []),
     `    await tester.tap(find.byKey(const Key('buf-release'))); await tester.pump();`,
-    `    expect(find.text('${after1} / ${b.ceiling}'), findsOneWidget, reason: ${lit(`שחרור מנה: ${b.sum} ⇒ ${after1}`)});`,
+    `    expect(find.text('${after1} / ${b.ceiling}'), findsOneWidget, reason: ${lit(`שחרור מנה: ${in0} ⇒ ${in0 - Math.min(b.batch, in0)}, ומבחוץ נכנסים ${adm1 - in0} ⇒ ${after1}`)});`,
+    ...(out1 === 0 && out0 > 0 ? [`    expect(find.byKey(const Key('buf-out')), findsNothing, reason: ${lit('כל מי שחיכה בחוץ נכנס')});`] : []),
     `    await tester.tap(find.byKey(const Key('buf-release')), warnIfMissed: false); await tester.pump();`,
     `    expect(find.text('${after1} / ${b.ceiling}'), findsOneWidget, reason: ${lit(`שחרור שני מיד — חסום עד ${b.everyMin} דק׳`)});`,
     `    expect(find.byKey(const Key('buf-next')), findsOneWidget);`, '  });', '}', ''].join('\n') : null;
-  return { code, test, after1 };
+  return { code, test, after1, in0, out0 };
 }
