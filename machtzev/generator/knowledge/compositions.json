@@ -1074,7 +1074,7 @@
   },
   {
    "file": "yeshiva/ein.mjs",
-   "lines": 200,
+   "lines": 231,
    "fragments": [
     {
      "id": "ein#0",
@@ -1152,7 +1152,7 @@
      "id": "ein#5",
      "range": [
       59,
-      92
+      93
      ],
      "marker": "ein.word",
      "composed": [
@@ -1172,8 +1172,8 @@
     {
      "id": "ein#6",
      "range": [
-      92,
-      110
+      93,
+      111
      ],
      "marker": "ein.examplesIO",
      "composed": [
@@ -1190,8 +1190,8 @@
     {
      "id": "ein#7",
      "range": [
-      110,
-      115
+      111,
+      116
      ],
      "marker": "ein.form",
      "composed": [
@@ -1205,8 +1205,8 @@
     {
      "id": "ein#8",
      "range": [
-      115,
-      116
+      116,
+      117
      ],
      "marker": null,
      "composed": [],
@@ -1216,8 +1216,8 @@
     {
      "id": "ein#9",
      "range": [
-      116,
-      117
+      117,
+      118
      ],
      "marker": null,
      "composed": [],
@@ -1227,8 +1227,8 @@
     {
      "id": "ein#10",
      "range": [
-      117,
-      118
+      118,
+      119
      ],
      "marker": null,
      "composed": [],
@@ -1238,7 +1238,7 @@
     {
      "id": "ein#11",
      "range": [
-      118,
+      119,
       172
      ],
      "marker": null,
@@ -1254,7 +1254,34 @@
      "id": "ein#12",
      "range": [
       172,
-      183
+      175
+     ],
+     "marker": "ein.shape",
+     "composed": [
+      "tableShape",
+      "rowAtoms",
+      "run-on-examples",
+      "owner-yes ⇒ מסך"
+     ],
+     "declares": null,
+     "uses": []
+    },
+    {
+     "id": "ein#13",
+     "range": [
+      175,
+      202
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "shapeSearch",
+     "uses": []
+    },
+    {
+     "id": "ein#14",
+     "range": [
+      202,
+      213
      ],
      "marker": null,
      "composed": [],
@@ -1262,10 +1289,10 @@
      "uses": []
     },
     {
-     "id": "ein#13",
+     "id": "ein#15",
      "range": [
-      183,
-      200
+      213,
+      231
      ],
      "marker": null,
      "composed": [],

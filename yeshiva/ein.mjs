@@ -67,7 +67,8 @@ export async function expandDefinitions(sentence, form, routed, answers, proposa
     const thing = form.things.find((t) => t.label === r.thing); if (!thing || (thing.ioExamples && thing.ioExamples.length)) continue;
     const tokens = toks(thing.label);
     let ei = -1, ent = null; tokens.forEach((w, i) => { const e = ents.find((t) => leadOf(w, t.label) != null); if (e) { ei = i; ent = e; } });
-    const cands = ei >= 0 ? tokens.slice(ei + 1) : tokens.slice(1).filter((w) => !ents.some((t) => sameStem(w, t.label) || t.fields.some((f) => sameStem(w, f.label))));
+    let cands = ei >= 0 ? tokens.slice(ei + 1) : tokens.slice(1).filter((w) => !ents.some((t) => sameStem(w, t.label) || t.fields.some((f) => sameStem(w, f.label))));
+    if (!cands.length && ei < 0 && tokens.length === 1) cands = tokens;   // סעיף של מילה אחת («תלויות») — נעלם בשקט; «אין» בלי שאלה אסור ⇒ שואלים על המילה עצמה
     for (const w of cands) {
       let said = typeof answers[w] === 'string' ? answers[w].trim() : '';
       const rec = recall(w);
@@ -169,6 +170,35 @@ export async function learnForms(sentence, form, routed, answers) {
   }
   return out;
 }
+// ═══ ein.shape = tableShape ⊕ rowAtoms ⊕ run-on-examples ⊕ owner-yes ⇒ מסך
+/** חיפוש לפי צורה (הכרעת-בעלים 24.9 «העיקרון שחסר»): קטע שיש בו חלק שלא נקרא (none) או דבר בלי שדות, ליד ישות עם דוגמאות שיש בה עמודת-מספר/מצביע
+ *  ⇒ yeshiva/shape.search (צורת-הטבלה מול אטומי-רשימה, הרצה על הדוגמאות, סינון-השפעה) ⇒ התוצאה על הדוגמאות מוצגת ⇒ «כן» ⇒ נרשם + answers.__shape ⇒ routeOf מסמן 'shape'. */
+export async function shapeSearch(sentence, form, routed, answers) {
+  const out = { notes: [], questions: [], handled: new Set(), changed: false };
+  if (answers.__shape) return out;
+  const ents = form.things.filter((t) => t.fields && t.fields.length && t.examples && t.examples.length); if (!ents.length) return out;
+  const loose = routed.routes.filter((r) => r.route === 'none' || (r.route === 'appds' && !((form.things.find((t) => t.label === r.thing) || {}).fields || []).length));
+  if (!loose.length) return out;
+  const SH = await import('./shape.mjs');
+  for (const seg of [...new Set(loose.map((r) => (form.things.find((t) => t.label === r.thing) || {}).src).filter(Boolean))]) {
+    const things = form.things.filter((t) => t.src === seg && loose.some((r) => r.thing === t.label)).map((t) => t.label); if (!things.length) continue;
+    for (const ent of ents) {
+      const r = await SH.search(ent); if (!r.results.length) { if (r.shape.some((c) => c.kind !== 'key' && c.kind !== 'text')) out.notes.push(fill(D.T.shapeNone, { seg, ent: ent.label, shape: r.shape.map((c) => `${c.label}=${c.kind}`).join(' · '), atoms: SH.rowAtoms().length, tried: r.tried })); continue; }
+      const sig = r.shape.map((c) => c.kind).join(','); const key = things[things.length - 1];
+      const L = SH.layoutOf(r.results[0].out); const show = (x) => { const lay = SH.layoutOf(x.out); return lay.rows.slice(0, 4).map((row) => [...new Set(Object.values(row).filter((v) => typeof v !== 'object' || Array.isArray(v)).map(SH.cellOf).filter(Boolean))].slice(0, 5).join(' ')).join(' · ') + (lay.scalars.length ? ' · ' + lay.scalars.map((k) => `${k} ${SH.cellOf(x.out[k])}`).join(' · ') : ''); };
+      const known = formsAll().filter((x) => x.kind === 'table' && x.sig === sig && r.results.some((y) => y.atom.name === x.atom)).pop();
+      const said = typeof answers[key] === 'string' ? answers[key].trim() : '';
+      const pick = known ? r.results.find((y) => y.atom.name === known.atom) : said && (D.T.yesWords || []).includes(said) && r.results.length === 1 ? r.results[0] : said ? r.results.find((y) => y.atom.name === said) : null;
+      for (const t of things) out.handled.add(t);
+      if (!pick) { out.questions.push({ thing: key, ask: 'shape', key, q: r.results.length === 1 ? fill(D.T.shapeAsk, { seg, ent: ent.label, shape: r.shape.map((c) => `${c.label}=${c.kind}`).join(' · '), atom: r.results[0].atom.name, tried: r.tried, sample: show(r.results[0]) }) : fill(D.T.shapeMany, { seg, ent: ent.label, n: r.results.length, cands: r.results.map((y) => `${y.atom.name}: ${show(y)}`).join(' | ') }) }); break; }
+      if (!known) { fs.mkdirSync(path.dirname(FORMS()), { recursive: true }); fs.appendFileSync(FORMS(), JSON.stringify({ at: new Date().toISOString(), kind: 'table', sig, atom: pick.atom.name, from: sentence }) + '\n'); }
+      out.notes.push(known ? fill(D.T.shapeRecalled, { seg, ent: ent.label, shape: sig, atom: pick.atom.name, at: String(known.at).slice(0, 10) }) : fill(D.T.shapeLearned, { seg, ent: ent.label, atom: pick.atom.name, map: pick.map.map((m) => `${m.k}←${m.label}`).join(' · ') }));
+      answers.__shape = { seg, things, ent: ent.label, atom: pick.atom.name, dart: pick.atom.dart, call: pick.atom.call, map: pick.map, out: pick.out, fields: ent.fields.map((f) => f.label) }; out.changed = true; void L; break;
+    }
+    if (out.changed) break;
+  }
+  return out;
+}
 /** דבר במסלול none בלי דוגמאות שתוויתו = צורך שנולד (מדף-הנולדים) ⇒ הדוגמאות שלו חוזרות לתשובת-התנהגות ⇒ הדלת מוצאת את הנולד בלי BFS. */
 export async function bornRecall(form, routed, answers) {
   const notes = [], handled = new Set(); const B = await import('./born.mjs');
@@ -190,6 +220,7 @@ export async function resolveEin({ sentence, form, routed, answers = {}, proposa
       if (K.kind === 'examplesIO') { const e = examplesIO(form, routed, answers); notes.push(...e.notes); if (e.notes.length) trace.push(`${pass}:${K.kind}`); continue; }
       if (K.kind === 'born') { const b = await bornRecall(form, routed, answers); notes.push(...b.notes); for (const x of b.handled) skip.add(x); if (b.notes.length) trace.push(`${pass}:${K.kind}`); continue; }
       if (K.kind === 'form') { const f = await learnForms(sentence, form, routed, answers); notes.push(...f.notes); for (const x of f.handled) skip.add(x); if (f.changed) { changed = true; sentence = f.sentence; form = formOf(sentence); routed = routeOf(form, answers, { proposals }); trace.push(`${pass}:${K.kind}`); } else questions.push(...f.questions.filter((q) => !questions.some((y) => y.key === q.key && y.thing === q.thing))); continue; }
+      if (K.kind === 'shape') { const h = await shapeSearch(sentence, form, routed, answers); notes.push(...h.notes); for (const x of h.handled) skip.add(x); questions.push(...h.questions.filter((q) => !questions.some((y) => y.key === q.key && y.thing === q.thing))); if (h.changed) { changed = true; routed = routeOf(form, answers, { proposals }); trace.push(`${pass}:${K.kind}`); } continue; }
       if (K.kind === 'word') { const d = await expandDefinitions(sentence, form, routed, answers, proposals, skip); notes.push(...d.notes); if (d.changed) { changed = true; sentence = d.sentence; form = formOf(sentence); routed = routeOf(form, answers, { proposals }); trace.push(`${pass}:${K.kind}`); break; } questions.push(...d.questions); continue; }
       throw new Error(`ein: ${D.T.unknownKind} «${K.kind}»`);
     }

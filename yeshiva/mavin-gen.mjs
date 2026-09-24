@@ -86,7 +86,9 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
   // צורת-מדרגות: ראש «<תווית> לפי <שדה>» + הקטע הבא «<n>, <n>» (הדלת פיצלה על נקודתיים) — רק כשהשדה קיים באיזו ישות (אחרת נשאר none עם החיפוש)
   form.segments.forEach((seg, i) => { const lv = detectLevelsClause(seg, form.segments[i + 1]); if (!lv) return; const has = form.things.some((t) => (t.fields || []).some((f) => sameStem(lv.x, f.label) || f.label === lv.x)); if (!has) return; capSegs.set(seg, { clauses: [lv], how: 'מדרגות' }); capSegs.set(form.segments[i + 1], { clauses: [lv], how: 'מדרגות', tail: seg }); });
   const srv = serverDeclOf(form), lk = lookDeclOf(form), head = headOf(form);
+  const SHP = answers.__shape || null;   // חיפוש-לפי-צורה אושר (ein.shapeSearch) ⇒ דברי-הקטע = מסך-צורה, לא ישות ולא «אין»
   for (const t of form.things) {
+    if (SHP && SHP.things.includes(t.label)) { routes.push({ thing: t.label, route: 'shape', why: `צורת «${SHP.ent}» ⇒ ${SHP.atom} (מאושר) ⇒ מסך` }); continue; }
     if (head && t.src === form.segments[0] && !(srv && t === srv.thing) && !(lk && t === lk.thing) && !entLabels.has(t.label)) { routes.push({ thing: t.label, route: 'head', why: `ראש-המשפט (לפני הנקודתיים) ⇒ שם-האפליקציה «${head}» + לוח-הבית (אריח לכל ישות)` }); continue; }
     if (srv && t === srv.thing) { routes.push({ thing: t.label, route: 'server', why: `הצהרת-שרת «${srv.value}» ⇒ server.mjs (חבילת-שרת לישויות שנבנו)` }); continue; }
     if (lk && t === lk.thing) { routes.push({ thing: t.label, route: 'look', why: `הצהרת-עיצוב «${lk.value}${lk.extra ? ' ' + lk.extra : ''}» ⇒ app-ds.setLook (עור מהמדף: ds-pure/ds-tokens)` }); continue; }
@@ -105,7 +107,7 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
   }
   // דבר שנקרא כישות אבל הקטע שלו הוא סעיף-תנאי («התראה כשציון מתחת ל-55 וגם היעדרויות מעל 3» ⇒ «ישות התראה… עם היעדרויות מעל») — לא ישות: שורות-הספק שלו נמחקות
   const capThings = new Set(routes.filter((r) => r.route === 'capability').map((r) => r.thing));
-  const specLines = spec.spec.split('\n').filter((l) => { const m = l.match(/^(\S+)\s+(.+?)(?:\s+עם\s|:)/); return !(m && capThings.has(m[2].trim()) && entLabels.has(m[2].trim())); });
+  const specLines = spec.spec.split('\n').filter((l) => { const m = l.match(/^(\S+)\s+(.+?)(?:\s+עם\s|:)/); if (SHP && SHP.things.some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; return !(m && capThings.has(m[2].trim()) && entLabels.has(m[2].trim())); });
   return { routes, spec: specLines.join('\n'), skipped: spec.skipped, builtin: spec.builtin };
 }
 
@@ -231,11 +233,12 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   // 🔒 שומר-ניקיון: app-ds/render-ds קוראים GEN_OUT/GEN_DATA_OUT **בזמן-טעינה**. אם לא הופנו מחוץ למדף לפני הייבוא הראשון —
   //    הבנייה כותבת ל-new/dart-gen-bs ו-new/dart-data-bs/auto ומוחקת יתומים (קרה 23.9, שוחזר מ-git). כאן: מסרבים, לא מלכלכים.
   const caps = capSegs.map(([seg, clauses], i) => ({ slug: `cap${i + 1}`, cls: `GenCap${i + 1}Screen`, kind: 'capability', name: seg.trim(), icon: '🔔', value: (clauses.find((c) => c.n != null) || {}).n ?? (clauses.find((c) => c.kind === 'levels') || {}).high ?? null, clause: (() => { const ok = (c) => c.n != null || ((c.op === '=' || String(c.op || '')[0] === '@') && c.y); const main = clauses.find((c) => c.kind === 'levels') || clauses.find((c) => ok(c) && !c.and && !c.or) || clauses.find(ok) || null; const ands = clauses.filter((c) => c !== main && c.and && ok(c)), ors = clauses.filter((c) => c !== main && c.or && ok(c)); /* שוויון: סף = מילה, לא מספר */ return main ? { ...main, ...(ands.length ? { and: ands } : {}), ...(ors.length ? { or: ors } : {}) } : null; })(), sub: clauses.map((c) => { const i = c.x ? seg.indexOf(c.x) : -1; return i >= 0 ? seg.slice(i).trim() : `${c.x || ''} ${c.op || ''} ${c.n ?? ''}`.trim(); }).join(' · ') }));   // המילים של הבעלים («ציון מתחת ל-55»), לא סימן   // מסך-ההתראה ⇒ אריח בלוח-הבית וברכזת (הרכבה: לא קובץ-ליד)
+  const SHP0 = answers.__shape || null; if (SHP0) caps.push({ slug: 'shape1', cls: 'GenShape1Screen', kind: 'capability', name: SHP0.seg, icon: '📋', sub: SHP0.atom, value: null, clause: null, shape: true });   // מסך-הצורה ⇒ אריח ברכזת
   const app = await runAppDs(spec, files, notes, questions, { extraScreens: caps, server: routes.some((r) => r.route === 'server') });   // «שרת בענן» ⇒ האפליקציה מסתנכרנת מהשרת (gen_app_sync)
   // 2א · הרכבה (insight.mjs · הכרעת-בעלים 23.9 «תחבר»): התראה עם קישור-נתונים ⇒ מסך-תובנה אחד מהנתונים האמיתיים במקום הדמו של capability
   if (app && Array.isArray(app.liveExtras) && !inRepo(process.env.GEN_OUT)) {
     const IN = await import('../machtzev/generator/insight.mjs');
-    for (const x of app.liveExtras) { if (!x.live) { notes.push(x.why || `הרכבה «${x.name}»: אין ישות עם השדה ⇒ נשאר מסך-capability (דמו)`); if (x.ask) questions.push({ thing: x.name, ask: x.ask, q: x.why }); continue; }
+    for (const x of app.liveExtras) { if (x.shape) continue; if (!x.live) { notes.push(x.why || `הרכבה «${x.name}»: אין ישות עם השדה ⇒ נשאר מסך-capability (דמו)`); if (x.ask) questions.push({ thing: x.name, ask: x.ask, q: x.why }); continue; }
       const entLine = spec.split('\n').find((l) => new RegExp(`^ישות\\s+\\S.*\\s+עם\\s`).test(l) && (() => { const m = l.match(/^ישות\s+(.+?)\s+עם\s+(.+)$/); return m && Object.entries({}).length === 0 && x.live.slug && true; })());
       const ents = spec.split('\n').map((l) => l.match(/^ישות\s+(.+?)\s+עם\s+(.+)$/)).filter(Boolean).map((m) => ({ name: m[1].trim(), fields: m[2].split('|')[0].split(/[,،]/).map((f) => f.trim().replace(/\{[^}]*\}$/, '')).filter(Boolean) }));
       const entOfSlug = (sl) => { const m0 = spec.split('\n').map((l) => l.match(/^ישות\s+(.+?)\s+עם\s/)).filter(Boolean).map((m) => m[1].trim()); return ents.find((e) => app.nameToSlug && app.nameToSlug[e.name] === sl) || null; };
@@ -271,6 +274,11 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       try { const r = IN.emitInsight({ slug: x.slug, cls: x.cls, name: x.name, live: x.live, entity: x.live.kind === 'aggBy' ? { name: ent ? ent.name : '', fields: [x.live.by, x.live.field] } : (ent || { name: '', fields: [x.live.field] }), expect, seedSlug, words: x.sub || null, decide }); for (const l of r.ledger) notes.push(l.slice(0, 400)); notes.push(`הרכבה «${x.name}»: ${r.wired}/${r.ops} פעולות עם אטום · לרישום כיכולת: node machtzev/generator/insight.mjs --register ${path.join(outDir, `insight_${x.slug}.json`)}`); notes.push(`הרכבה «${x.name}»: ${r.wired}/${r.ops} פעולות עם אטום${r.missing.length ? ` · בלי אטום: ${r.missing.join(', ')}` : ''} ⇒ ${x.cls} (insight_${x.slug}.json)${r.accept ? ` · מבחן-קבלה: ${expect.count} חורגים ${expect.rows.map((q) => q.join('/')).join(', ')}` : ' · אין דוגמאות ⇒ אין מבחן-קבלה'}`); files.push({ route: 'insight', file: path.join(outDir, `gen_${x.slug}.dart`), cls: x.cls, ops: r.ops, wired: r.wired }); }
       catch (e) { notes.push(`הרכבה «${x.name}» נכשלה: ${String(e.message || e).slice(0, 160)} ⇒ נשאר מסך-capability`); } }
   }
+  // 2א' · מסך-הצורה (yeshiva/shape): הרשומות החיות ⇒ האטום שנמצא לפי הצורה ⇒ טבלה; מבחן-קבלה מתוצאת-התאום על הדוגמאות
+  if (SHP0 && app && app.nameToSlug && app.nameToSlug[SHP0.ent] && !inRepo(process.env.GEN_OUT)) { const SHm = await import('./shape.mjs'); const seedSlug = fs.existsSync(path.join(outDir, 'gen_app_seed.dart')) ? 'app_seed' : null;
+    const e = SHm.emit({ shp: SHP0, cls: 'GenShape1Screen', entSlug: app.nameToSlug[SHP0.ent], title: SHP0.seg, seedSlug });
+    fs.writeFileSync(path.join(R.outDir(), 'gen_shape1.dart'), e.code); if (e.test) fs.writeFileSync(path.join(R.outDir(), 'gen_shape1_accept_test.dart'), e.test);
+    files.push({ route: 'shape', file: path.join(R.outDir(), 'gen_shape1.dart'), cls: 'GenShape1Screen', atom: SHP0.atom }); notes.push(`מסך-צורה «${SHP0.seg}» ⇒ ${SHP0.atom} על הרשומות של «${SHP0.ent}» · עמודות: ${e.cols.join(', ')} · מבחן-קבלה: ${e.expect.length} ערכים`); }
   // 2ב · server — רק כשהספק מצהיר (`שרת: ענן`): חבילת-שרת לישויות שנבנו, בזיכרון ⇒ outDir/server/ (לא server-gen/)
   const SV = await import('../machtzev/generator/server.mjs');
   if (SV.declaredServer(spec)) { const ents = app ? app.screens.filter((s) => s.kind === 'entity').map((s) => s.slug) : [];
