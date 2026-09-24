@@ -2949,10 +2949,12 @@
   "id": "ForgeCardBtn",
   "layer": "display",
   "file": "dart-forge-bs/action/card_btn.dart",
-  "op": "fact",
+  "op": "action",
   "sockets": [
    "fields",
-   "child"
+   "onTap",
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3152,10 +3154,12 @@
   "id": "ForgeContactTile",
   "layer": "display",
   "file": "dart-forge-bs/card/contact_tile.dart",
-  "op": "fact",
+  "op": "action",
   "sockets": [
    "fields",
-   "child"
+   "onTap",
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3645,12 +3649,14 @@
   "id": "ForgeFacetChip",
   "layer": "display",
   "file": "dart-forge-bs/selection/facet_chip.dart",
-  "op": "group",
+  "op": "action",
   "sockets": [
    "fields",
    "items",
+   "onTap",
    "child",
    "bare",
+   "onAction",
    "onSelect",
    "selected"
   ],
@@ -3979,10 +3985,12 @@
   "id": "ForgeGridHubCard",
   "layer": "display",
   "file": "dart-forge-bs/card/grid_hub_card.dart",
-  "op": "fact",
+  "op": "action",
   "sockets": [
    "fields",
-   "child"
+   "onTap",
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4073,10 +4081,12 @@
   "id": "ForgeHubTile",
   "layer": "display",
   "file": "dart-forge-bs/card/hub_tile.dart",
-  "op": "fact",
+  "op": "action",
   "sockets": [
    "fields",
-   "child"
+   "onTap",
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4820,10 +4830,12 @@
   "id": "ForgePickerOption",
   "layer": "display",
   "file": "dart-forge-bs/input/picker_option.dart",
-  "op": "fact",
+  "op": "action",
   "sockets": [
    "fields",
-   "child"
+   "onTap",
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4849,7 +4861,9 @@
   "sockets": [
    "fields",
    "items",
+   "onTap",
    "child",
+   "onAction",
    "onSelect",
    "variants"
   ],
@@ -4877,7 +4891,9 @@
   "sockets": [
    "fields",
    "items",
+   "onTap",
    "child",
+   "onAction",
    "onSelect",
    "selected"
   ],
@@ -4937,10 +4953,12 @@
   "id": "ForgePortalTileButton",
   "layer": "display",
   "file": "dart-forge-bs/action/portal_tile_button.dart",
-  "op": "fact",
+  "op": "action",
   "sockets": [
    "fields",
-   "child"
+   "onTap",
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5358,10 +5376,12 @@
   "id": "ForgeRevealCard",
   "layer": "display",
   "file": "dart-forge-bs/card/reveal_card.dart",
-  "op": "fact",
+  "op": "action",
   "sockets": [
    "fields",
-   "child"
+   "onTap",
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5739,10 +5759,12 @@
   "id": "ForgeSiteHubCardBtn",
   "layer": "display",
   "file": "dart-forge-bs/action/site_hub_card_btn.dart",
-  "op": "fact",
+  "op": "action",
   "sockets": [
    "fields",
-   "child"
+   "onTap",
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -17006,6 +17028,48 @@
   "flags": [
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "gemValue",
+  "layer": "logic",
+  "file": "dart-maor/gematria-value.dart",
+  "op": "aggregate",
+  "sockets": [
+   "String",
+   "List<String> U",
+   "List<String> T",
+   "List<String> H",
+   "Map<String, dynamic> T2"
+  ],
+  "ret": "int?",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "gemValueWired",
+  "layer": "logic",
+  "file": "dart-maor/gematria-value-wired.dart",
+  "op": "measure",
+  "sockets": [
+   "String"
+  ],
+  "ret": "int?",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "gemWired",
+  "layer": "logic",
+  "file": "dart-maor/gematria-wired.dart",
+  "op": "format",
+  "sockets": [
+   "num"
+  ],
+  "ret": "String",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {

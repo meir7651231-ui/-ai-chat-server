@@ -256,8 +256,9 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
   let detN = 0;
   for (const e of drawer ? entMeta : []) {
     const rels = (backRefs[e.name] || []).map((b) => ({ childSlug: b.fslug, childField: b.ffield, childName: b.fname }));
-    const d = renderRecordDetail(`${P}rec${++detN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], relations: rels, scopeField: scopeByEnt[e.slug] || null });
-    if (d) { detailScreens.push({ slug: d.slug, cls: d.cls, kind: 'entity', name: `🔎 ${e.name} · ${L.cardTag}`, icon: '🔎', sub: rels.length ? T('recordRels', { n: rels.length }) : L.singleRecord }); detailByEnt[e.slug] = { cls: d.cls, slug: d.slug }; }
+    const recSub = rels.length ? T('recordRels', { n: rels.length }) : L.singleRecord;
+    const d = renderRecordDetail(`${P}rec${++detN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], relations: rels, scopeField: scopeByEnt[e.slug] || null, icon: '🔎', sub: recSub });
+    if (d) { detailScreens.push({ slug: d.slug, cls: d.cls, kind: 'entity', name: `🔎 ${e.name} · ${L.cardTag}`, icon: '🔎', sub: recSub }); detailByEnt[e.slug] = { cls: d.cls, slug: d.slug }; }
     else detN--;
   }
 
@@ -369,6 +370,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     const AGG = { avg: SL.pAvg || [], sum: SL.pSum || [], count: SL.pCount || [] };
     const aggOf = (w) => Object.keys(AGG).find((a) => AGG[a].includes(w)) || null;
     const entByStem = (w) => { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; if (stemOf(r.entity) === stemOf(w) || r.entity === w) return r; } return null; };
+    // ═══ liveOf = clause ⊕ entity ⊕ field ⇒ live (num · age · refCount · agg · aggBy · levels · eq)
     const liveOf = (x) => { const c = x.clause;
       if (c && c.kind === 'levels' && c.x) { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'levels', field: f.label, by: c.label, agg: 'count', high: c.high, mid: c.mid, thresholds: c.thresholds || [c.high, c.mid], op: null, n: null } }; } return x; }
       if (!c || !c.x || !/^[<>=]$/.test(c.op) || (c.op === '=' ? !c.y : (c.n == null || isNaN(+c.n)))) return x;

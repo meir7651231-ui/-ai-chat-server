@@ -1225,7 +1225,7 @@ class ${cls} extends StatelessWidget {
 // 🔎 מסך-רשומה-בודדת: בורר-רשומה (dropdown) ⇒ שדות-הרשומה + KPI-יחסים (כמה ילדים
 // מצביעים על הרשומה — countRef). היחסים הם ערך פר-רשומה, ולכן חיים כאן ולא בסקירה.
 // אטום-ה-KPI נבחר מהמצע (label+value); חיווט-אמת בלבד.
-export function renderRecordDetail(slug, { entitySlug, entityName, fields = [], relations = [], scopeField = null }) {
+export function renderRecordDetail(slug, { entitySlug, entityName, fields = [], relations = [], scopeField = null, icon = '', sub = '' }) {
   if (!fields.length) return null;
   const { k, dump } = makeConsts(slug);
   const cls = pascal(slug);
@@ -1238,7 +1238,9 @@ export function renderRecordDetail(slug, { entitySlug, entityName, fields = [], 
   const fieldRows = fields.map((f) => `Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: ${kv(`r[${k(f)}] ?? ''`, k(f))})`).join(',\n              ');
   const relRows = relations.map((rel) => kv(`appStore.countRef('${rel.childSlug}', ${k(rel.childField)}, id).toString()`, k(rel.childName))).join(',\n                ');
   const relBlock = relations.length ? `\n              const SizedBox(height: 8),\n              Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Text(${k(L.linked)}, style: const TextStyle(fontWeight: FontWeight.w800))),\n              Padding(\n                padding: const EdgeInsets.all(12),\n                child: Wrap(spacing: 10, runSpacing: 10, children: [\n                ${relRows},\n                ]),\n              ),` : '';
-  const imports = new Set(["import '../dart-ui-bs/ds/ds_store.dart';", "import 'package:flutter/material.dart';", `import '../${kpi.file}';`, `import '../dart-data-bs/auto/gen_${slug}_content.dart';`]);
+  const imports = new Set(["import '../dart-ui-bs/ds/ds.dart';", "import '../dart-ui-bs/ds/ds_store.dart';", "import 'package:flutter/material.dart';", `import '../${kpi.file}';`, `import '../dart-data-bs/auto/gen_${slug}_content.dart';`]);
+  // מסך-רשומה נדחף כדף (hub ⇒ push) ⇒ נושא את כרום-ה-DS שלו (כותרת · חזרה); בלי זה: דף בלי כותרת וללא חזרה (gen-verify אדום על המשפט-הכהה)
+  const cTitle = k(entityName), cSub = k(sub), cIcon = k(icon);
   const code = `// ✨ חולל ע"י מנוע-ההרכבה (render-ds/detail) — בורר-רשומה ⇒ שדות + KPI-יחסים. אל תערוך ידנית.
 ${[...imports].join('\n')}
 
@@ -1259,13 +1261,15 @@ class _${cls}State extends State<${cls}> {
         animation: appStore,
         builder: (context, _) {
           final recs = ${scopeField ? `appStore.scoped('${entitySlug}', ${k(scopeField)})` : `appStore.records('${entitySlug}')`};
-          if (recs.isEmpty) return Center(child: Text(${k(L.noRecords)}));
+          if (recs.isEmpty) return DsScaffold(title: ${cTitle}, subtitle: ${cSub}, icon: ${cIcon}, children: [Center(child: Text(${k(L.noRecords)}))]);
           final i0 = _sel ?? (widget.initialId != null ? recs.indexWhere((r) => r['__id'] == widget.initialId) : 0);
           final i = (i0 < 0 ? 0 : i0).clamp(0, recs.length - 1);
           final r = recs[i];
           ${relations.length ? `final id = r['__id'] ?? '';` : ''}
-          return ListView(
-            padding: const EdgeInsets.only(bottom: 24, top: 8),
+          return DsScaffold(
+            title: ${cTitle},
+            subtitle: ${cSub},
+            icon: ${cIcon},
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),

@@ -37,6 +37,7 @@ const cleanPhrase = (words) => words.length ? [deprefix(words[0]), ...words.slic
 // גלאי סעיף-התראה-מותנית: "<trigger> ... כש <X> <REL> <Y>". מבני בלבד.
 // מחזיר {trigger, xWords, op, yWords} או null. אינו יודע מה X/Y — רק צורתם.
 const SL_T = JSON.parse(fs.readFileSync((R.GEN_DIR + 'spec-lang.data.json'), 'utf8')); const TIME_UNITS = SL_T.timeUnits || {}; const TIME_ASK = new Set(SL_T.timeUnitsAsk || []);   // «חודש» = שאלה, לא 30
+// ═══ form: condition (num · age · eq) = WHEN ⊕ REL ⊕ detectAlertClause
 export function detectAlertClause(text) {
   const t = String(text || '');
   const wm = t.match(WHEN);
@@ -82,6 +83,7 @@ const STR_RE = /^(label|title|caption|name|text|msg|message)$/;
 // רב-סעיפים: פיצול לפי מחברי-ריבוי **דקדוקיים** (וגם/גם/;/שורה) ⇒ סעיף-תנאי בכל מקטע. כך "A וגם B"
 // = 2 מסגרות (יכולת-ההתראה מופעלת פעמיים). מחברים = חלקיקים מבניים (כמו של/עם), אפס-מילון-דומייני.
 /** צורת-מדרגות (הכרעת-בעלים 23.9 «צא לדרך»): ראש «<תווית> לפי <שדה>» + זנב «<n>, <n>» (שני קטעים, כי הדלת מפצלת על נקודתיים). מבני בלבד. */
+// ═══ form: levels = levels.head ⊕ levels.tail
 export function detectLevelsClause(head, tail) {
   if (!COND.levels) return null;
   const hm = String(head || '').trim().match(new RegExp(COND.levels.head)), tm = String(tail || '').trim().match(new RegExp(COND.levels.tail));
@@ -90,6 +92,7 @@ export function detectLevelsClause(head, tail) {
   if (thresholds.length < 2) return null;
   return { kind: 'levels', label: hm[1].trim(), x: cleanPhrase(hw(hm[2])), thresholds, high: thresholds[0], mid: thresholds[1], op: null, n: null, y: null, trigger: hm[1].trim() };
 }
+// ═══ form: and / or = CONN_RE ⊕ detectAlertClause
 export function detectAllClauses(text) {
   const out = [];
   // קטע = תנאי אחד; מחבר-ריבוי («וגם») בתוך קטע = צירוף: הסעיף הבא יורש את מילת-התנאי של הראשון ומסומן and (הרכבה: מסנן על מסנן — whereList בתוך whereList)

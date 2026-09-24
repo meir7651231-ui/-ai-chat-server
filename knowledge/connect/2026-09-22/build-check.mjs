@@ -71,8 +71,12 @@ const gen = fs.readdirSync(process.env.GEN_OUT).filter((f) => genRe.test(f));
 if (!HOST || !FLUTTER) { console.log(`⚪ לא-נמדד: ${!FLUTTER ? 'אין flutter' : 'אין BS_HOST'} — נפלטו ${gen.length + extra.length} קבצי Dart ל-${process.env.GEN_OUT}`); process.exit(2); }
 // מראה מינימלית: המסכים + התוכן שלהם; עצי-האטומים מועתקים פעם אחת (קיימים ⇒ לא נוגעים)
 const G = path.join(HOST, 'lib/genesis');
-for (const [src, dst] of [['new/dart-ui-bs', 'dart-ui-bs'], ['new/dart-forge-bs', 'dart-forge-bs'], ...(fs.existsSync(path.join(ROOT, 'new/dart-synth-bs')) ? [['new/dart-synth-bs', 'dart-synth-bs']] : []), ['new/dart-maor', 'dart-maor'], ['new/dart-screens-bs', 'dart-screens-bs'], ['new/dart-data-maor', 'dart-data-maor'], ['new/dart', 'dart'], ['new/dart-boxes', 'dart-boxes'], ['new/dart-data', 'dart-data'], ['new/dart-boards-bs', 'dart-boards-bs']])   // gen_behaviors ⇒ dart-boxes (נמדד: flutter test על המארח האמיתי)
-  if (!fs.existsSync(path.join(G, dst)) && fs.existsSync(path.join(ROOT, src))) fs.cpSync(path.join(ROOT, src), path.join(G, dst), { recursive: true });
+for (const [src, dst] of [['new/dart-ui-bs', 'dart-ui-bs'], ['new/dart-forge-bs', 'dart-forge-bs'], ...(fs.existsSync(path.join(ROOT, 'new/dart-synth-bs')) ? [['new/dart-synth-bs', 'dart-synth-bs']] : []), ['new/dart-maor', 'dart-maor'], ['new/dart-screens-bs', 'dart-screens-bs'], ['new/dart-data-maor', 'dart-data-maor'], ['new/dart', 'dart'], ['new/dart-boxes', 'dart-boxes'], ['new/dart-data', 'dart-data'], ['new/dart-boards-bs', 'dart-boards-bs']]) {   // gen_behaviors ⇒ dart-boxes (נמדד: flutter test על המארח האמיתי)
+  if (!fs.existsSync(path.join(ROOT, src))) continue;
+  if (!fs.existsSync(path.join(G, dst))) { fs.cpSync(path.join(ROOT, src), path.join(G, dst), { recursive: true }); continue; }
+  // מדף קיים במארח ⇒ קובץ חדש/שונה במדף נכנס (חלקיק חדש כמו gematria-value חייב להגיע למארח; בלי זה «Target of URI doesn't exist»)
+  (function sync(a, b) { for (const e of fs.readdirSync(a, { withFileTypes: true })) { const pa = path.join(a, e.name), pb = path.join(b, e.name); if (e.isDirectory()) { fs.mkdirSync(pb, { recursive: true }); sync(pa, pb); } else if (!fs.existsSync(pb) || fs.readFileSync(pa).compare(fs.readFileSync(pb)) !== 0) fs.copyFileSync(pa, pb); } })(path.join(ROOT, src), path.join(G, dst));
+}
 fs.mkdirSync(path.join(G, 'dart-gen-bs'), { recursive: true }); fs.mkdirSync(path.join(G, 'dart-data-bs/auto'), { recursive: true });
 // קובצי-דאטה בשורש dart-data-bs (home_content וכו') — מסכים רשומים (lipskey_product_sheet.g.dart) מייבאים אותם (נמדד ב---mosad 1 --verify)
 for (const f of fs.readdirSync(path.join(ROOT, 'new/dart-data-bs'))) if (f.endsWith('.dart') && !fs.existsSync(path.join(G, 'dart-data-bs', f))) fs.copyFileSync(path.join(ROOT, 'new/dart-data-bs', f), path.join(G, 'dart-data-bs', f));

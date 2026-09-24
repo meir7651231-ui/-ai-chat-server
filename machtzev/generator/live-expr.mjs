@@ -3,6 +3,7 @@
 //   live = { slug, field, op:'<'|'>', n, kind:'num'|'age', days? }. אין המצאה: תנאי-משך על שדה שאינו תאריך אינו נוצר (app-ds משאיר סטטי ומדווח).
 export const AGE_HELPER = `double _ageDays(String s) { final t = s.trim(); DateTime? d = DateTime.tryParse(t); if (d == null) { final m = RegExp(r'^(\\d{1,2})[./-](\\d{1,2})[./-](\\d{2,4})$').firstMatch(t); if (m != null) { final y = int.parse(m.group(3)!); d = DateTime(y < 100 ? 2000 + y : y, int.parse(m.group(2)!), int.parse(m.group(1)!)); } } return d == null ? double.nan : DateTime.now().difference(d).inDays.toDouble(); }`;
 //   kind:'refCount' — לכל רשומת-הורה: כמה רשומות-בנות מצביעות עליה ({ childSlug, childField, parentKey }) · kind:'agg' — על הקבוצה כולה: avg/sum/count של שדה (agg, field)
+// ═══ liveValue = eq ⊕ age ⊕ refCount ⊕ num
 export const liveValue = (live, r = 'r', k = (s) => `'${s}'`) =>
   live.kind === 'eq' ? `(${r}[${k(live.field)}] ?? '').trim()`
   : live.kind === 'age' ? `_ageDays(${r}[${k(live.field)}] ?? '')`
@@ -15,6 +16,7 @@ export const liveAggImport = (live) => (live.kind === 'agg' && live.agg !== 'cou
 export const AGG_WORD = { avg: 'ממוצע', sum: 'סכום', count: 'מונה' };
 export const liveIsGrouped = (live) => live.kind === 'aggBy' || live.kind === 'levels';
 /** מפתח-הקבוצה: aggBy ⇒ ערך שדה-החלוקה · levels ⇒ המדרגה (אטום-ההחלטה המוכח כשיש — live.decide — אחרת השוואה ביד לפי הצורה: ≥גבוה ⇒ 2 · ≥בינוני ⇒ 1 · אחרת 0) */
+// ═══ liveKeyExpr = levels ⊕ aggBy
 export const liveKeyExpr = (live, r = 'r', k = (s) => `'${s}'`) => live.kind === 'levels'
   ? `(() { final v = double.tryParse(${r}[${k(live.field)}] ?? '') ?? double.nan; return v.isNaN ? '' : ${live.decide && (live.thresholds || []).length === 2 ? `${live.decide}(v.toInt(), ${live.high}, ${live.mid})` : `const [${(live.thresholds || [live.high, live.mid]).join(', ')}].where((t) => v >= t).length`}.toString(); })()`
   : `(${r}[${k(live.by)}] ?? '').trim()`;
@@ -31,9 +33,11 @@ export const liveOpDart = (live) => (live.op === '=' ? '==' : live.op);
 export const liveHit = (live, v) => { const t = liveThreshold(live); if (v == null) return false; return live.op === '<' ? v < t : live.op === '>' ? v > t : String(v).trim() === String(t).trim(); };
 export const liveNeedsHelper = (live) => live.kind === 'age' || (live.pre || []).some((p) => p.kind === 'age');
 /** צירוף («וגם», הכרעת-בעלים 23.9 «צא לדרך»): live.pre = תנאים קודמים על אותה קבוצה ⇒ הקבוצה של התנאי הראשי היא הרשומות שעברו את כולם (מסנן על מסנן) */
+// ═══ livePre = and (filter over filter)
 export const livePre = (live, r = 'r', k = (s) => `'${s}'`) => (live.pre || []).map((p) => `(${liveValue(p, r, k)} ${liveOpDart(p)} ${liveThresholdDart(p, k)})`).join(' && ');
 export const liveSetExpr = (live, rs, k = (s) => `'${s}'`) => (live.pre && live.pre.length ? `${rs}.where((r) => ${livePre(live, 'r', k)}).toList()` : rs);
 /** חלופה («או»): live.alt = תנאים שכל אחד מהם מספיק — רשומה חורגת אם התנאי הראשי או אחת החלופות (איחוד) */
+// ═══ liveAlt = or (union)
 export const liveAlt = (live, r = 'r', k = (s) => `'${s}'`) => (live.alt || []).map((p) => `(${liveValue(p, r, k)} ${liveOpDart(p)} ${liveThresholdDart(p, k)})`).join(' || ');
 export const liveCond = (live, cond, r = 'r', k = (s) => `'${s}'`) => (live.alt && live.alt.length ? `((${cond}) || ${liveAlt(live, r, k)})` : cond);
 export const liveAltOk = (live, row, fieldIndex) => (live.alt || []).some((p) => liveHit(p, liveSample(p, row[fieldIndex(p.field)])));

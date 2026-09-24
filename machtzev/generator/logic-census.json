@@ -4509,6 +4509,40 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/gematria-value.dart",
+  "name": "gemValue",
+  "ret": "int?",
+  "params": [
+   "String",
+   "List<String> U",
+   "List<String> T",
+   "List<String> H",
+   "Map<String, dynamic> T2"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/gematria-value-wired.dart",
+  "name": "gemValueWired",
+  "ret": "int?",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
+  "file": "dart-maor/gematria-wired.dart",
+  "name": "gemWired",
+  "ret": "String",
+  "params": [
+   "num"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/gem-year.dart",
   "name": "gemYear",
   "ret": "String",

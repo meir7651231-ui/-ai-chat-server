@@ -141,3 +141,12 @@
     **מה נכנס (render-ds.mjs):** אריחי-המונה והתראה בנייר עוברים בפסק-הישיבה (`yeshiva/atom-psak.judge`) עם תפקיד-עור לפי הפעולה (roleOf) ובמועמדים המדודים של forge (`forge-wire.forgeCands` + `wireForge`) במקום `pickWired`; הפנקס ⚖️ נדפס לכל אריח. כהה ביט-זהה (נמדד: צילום-הרפרנס זהה).
     **וגם (render-ds.mjs):** האשף (`_live`) לובש `DsLook.of(context)` במקום `DsTokens` קשיח — כלל D13 של בלגן על פלט-הדלת; כהה = אותם ערכים (DsLook.dark ⇐ DsTokens).
     **מה נכנס (balagan-look.mjs):** שקע `BALAGAN_GEN`/`BALAGAN_DATA`/`BALAGAN_PREFIX` ⇒ אותם 36 כללים על תיקיית-פלט של הדלת («door»): מדידה בלבד — בלי «בלגן» הווירטואלי, בלי ציון/baseline/ratchet; build-check מריץ ומדפיס. הריפו-מצב (specs-ds + בלגן) לא השתנה.
+
+38. 🔴 **חרוט · הכרעה-38 · גימטריה הפוכה + חציבה-עצמית + מסך-רשומה נושא כרום-DS** (24.9, הכרעת-בעלים בשיחה: «תסיים הכל 38»)
+    **מה נכנס (new/atoms/gematria-value · new/dart-maor/gematria-value):** אטום «אותיות ⇒ מספר» (`int? gemValue(s, U, T, H, T2)`) על שקעי-הדאטה של gem הקיים; סופיות מהצורה (תו שאינו בטבלה ואחריו תו שכן), מכפילים מ-T2 — אפס-קשיח (deep-purity 0). הדלת על «גימטריה של שם; למשל: אבג ⇒ 6; שלום ⇒ 376; דוד ⇒ 14» מוצאת `gemValueWired`, מוכיחה 3/3 ב-Dart, 5/5 מסכים במארח.
+    **וגם (machtzev/generator/wire-sockets.mjs):** אטומי dart-maor עם זנב-שקעים מקבלים `<base>-wired.dart` שממלא את הזנב משקעי-הבסיס-שלו/משפחתו (סריקת-מקורות, לא אינדקס ישן); יתומים נמחקים; ב-regen לפני logic-census. atom-index-full/logic-census מתחדשים בהתאם.
+    **וגם (gen-verify.mjs):** `DsScaffold` נדרש רק ל-`gen_(app_|cap\d+|synth_)` — מסכי-הוכחה של genesis (gen_beh_*) נדרשים רק לרנדר בלי חריגה.
+    **וגם (render-ds.mjs + app-ds.mjs):** מסך-הרשומה (rec) נדחף כדף מה-hub ולכן נושא `DsScaffold` (כותרת · תת-כותרת · אייקון · חזרה). לפני: `✗ gen_app_rec1 לא רונדר` על המשפט-הכהה — נמדד גם ב-4329c364 (לא רגרסיה של הגל). הצילום-הכהה נשאר ביט-זהה (המסך-הראשי לא משבץ rec).
+    **וגם (חציבה-עצמית · סעיף 8):** 12 סמני `// ═══ <מטרה> = A ⊕ B` על אתרי-ההרכבה של צורות-המשפט (capability · live-expr · app-ds · insight · ein) + `machtzev/generator/quarry-self.mjs` ⇒ `knowledge/compositions.json` (85 שברים · 12 הרכבות · סיבוב-מלא 5/5 ביט-לביט · `--check`).
+    **מה לא נכנס:** סעיף 7 (צבעים קשיחים, L102) — נמדד בלבד (57 קבצים לפי כלל-השופט; ds-wear 0) — ממתין להכרעה נפרדת. ממצאי-בלגן-על-הפלט (22 אדומים = כללי-מוצר) זהים ל-4329c364.
+    **הערת-פרוטוקול:** שער stuck-loop (learn) עצר אחרי 3 ניסיונות-commit שנפלו על search-proof (רשומות-חיפוש חסרו לארבעת קבצי-הגימטריה); נפתר ברשומות-חיפוש (`audit/search/2026-09-24-gematria-gem-*`), לא בעריכת retry.jsonl.

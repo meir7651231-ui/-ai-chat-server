@@ -1,0 +1,80 @@
+{
+ "v": 1,
+ "ts": "2026-09-24T12:45:58.327Z",
+ "query": "gematria gem גימטריה",
+ "tokens": [
+  "gematria",
+  "gem",
+  "גימטריה"
+ ],
+ "oracle": {
+  "atomIndexSha": "5d9b1738e94a5c7dc05e68c6223b988289a925ee6897be5b0ba7514468434fd2",
+  "logicCensusSha": "71f07270db679ffe368f1ee726d1ec19dd67ce915609b5d77e787afe45798833",
+  "display": 1949,
+  "logic": 1025
+ },
+ "candidates": [
+  {
+   "id": "gem",
+   "layer": "logic",
+   "file": "dart-maor/gematria.dart",
+   "score": 5,
+   "hits": [
+    "gematria",
+    "gem"
+   ]
+  },
+  {
+   "id": "gemValue",
+   "layer": "logic",
+   "file": "dart-maor/gematria-value.dart",
+   "score": 5,
+   "hits": [
+    "gematria",
+    "gem"
+   ]
+  },
+  {
+   "id": "gemValueWired",
+   "layer": "logic",
+   "file": "dart-maor/gematria-value-wired.dart",
+   "score": 5,
+   "hits": [
+    "gematria",
+    "gem"
+   ]
+  },
+  {
+   "id": "gemWired",
+   "layer": "logic",
+   "file": "dart-maor/gematria-wired.dart",
+   "score": 5,
+   "hits": [
+    "gematria",
+    "gem"
+   ]
+  },
+  {
+   "id": "gemYear",
+   "layer": "logic",
+   "file": "dart-maor/gem-year.dart",
+   "score": 3,
+   "hits": [
+    "gem"
+   ]
+  }
+ ],
+ "strong": [
+  "gem",
+  "gemValue",
+  "gemValueWired",
+  "gemWired",
+  "gemYear"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart-maor/gematria-value-wired.dart",
+ "chosen": "none",
+ "why": "עטיפה מכנית שפולט wire-sockets.mjs: <fn>Wired(p0) = <fn>(p0, gematria_U, gematria_T, gematria_H, gematria_T2) — הזנב מהשקעים של הבסיס; gem/gemWired/gemValue/gemValueWired = הבסיס ועטיפותיו, לא תחליף; gemYear = שנה ⇒ אותיות דרך gem, אטום אחר",
+ "sig": "c5ac5e7a0d4e635b09ee39413430a09e7e5675385ec32db7428281d3891c280b"
+}

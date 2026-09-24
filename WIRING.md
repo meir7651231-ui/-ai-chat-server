@@ -2,7 +2,7 @@
 > **מחולל אוטומטית מה-imports — אל תערוך ידנית** (`node machtzev/tools/gen-wiring-doc.mjs`).
 > כל קופסה: אילו חוטים היא מחווטת + ההכרעה-החתומה שלה (מהחוזה) + הזהב שלה.
 
-**מלאי:** 1160 אטומים · 78 קופסאות · מחווטים: 1012/1160 (87%)
+**מלאי:** 1161 אטומים · 78 קופסאות · מחווטים: 1012/1161 (87%)
 
 ## #a11y
 הקופסה של סולם-הגופן ומתגי-הנגישות (P2 פער 31) — זום 0.8–1.6 בצעדי 0.1
@@ -394,5 +394,5 @@
 - **חוטים (11):** task-identity · task-identity-strings · open-tasks-for · done-today-for · done-today-for-strings · task-overdue · task-stats-for · task-stats-for-strings · overdue-contact-task-drafts · overdue-contact-task-drafts-strings · pri-labels
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
-## אטומים-במלאי (טרם-חווטו): 148
+## אטומים-במלאי (טרם-חווטו): 149
 _ההתקדמות האמיתית = אחוז-המחווט (L10)._

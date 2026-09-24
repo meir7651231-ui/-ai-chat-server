@@ -39,7 +39,7 @@ export function verifyDart(live, { strict = () => false, pkg = 'buildsmart' } = 
     `    await tester.pumpWidget(const MaterialApp(home: g${i}.${s.cls}()));`,
     `    await tester.pump(const Duration(milliseconds: 300));`,
     `    expect(tester.takeException(), isNull);`,
-    `    expect(find.byType(DsScaffold), findsWidgets);`,
+    /^gen_(app_|cap\d+|synth_)/.test(s.file) ? `    expect(find.byType(DsScaffold), findsWidgets);` : `    // מסך-הוכחה של genesis (gen_beh_*): בלי כרום-DS — נדרש רק שירונדר בלי חריגה`,
     `    final types = <String, int>{}; for (final w in tester.allWidgets) { final t = w.runtimeType.toString(); types[t] = (types[t] ?? 0) + 1; }`,
     // G7a · סריקת-אינטראקציה (פלטי G4–G6 בלבד): כל טאפ = pumpAndSettle + takeException; חריגה = ממצא (נספר, לא מפיל את הרנדר); מקטע-הגרעין-על-הרשומה מזוהה בטקסט
     ...(isStrict(s.file) ? [

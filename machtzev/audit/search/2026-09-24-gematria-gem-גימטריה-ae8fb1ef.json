@@ -1,0 +1,80 @@
+{
+ "v": 1,
+ "ts": "2026-09-24T12:45:58.211Z",
+ "query": "gematria gem גימטריה",
+ "tokens": [
+  "gematria",
+  "gem",
+  "גימטריה"
+ ],
+ "oracle": {
+  "atomIndexSha": "5d9b1738e94a5c7dc05e68c6223b988289a925ee6897be5b0ba7514468434fd2",
+  "logicCensusSha": "71f07270db679ffe368f1ee726d1ec19dd67ce915609b5d77e787afe45798833",
+  "display": 1949,
+  "logic": 1025
+ },
+ "candidates": [
+  {
+   "id": "gem",
+   "layer": "logic",
+   "file": "dart-maor/gematria.dart",
+   "score": 5,
+   "hits": [
+    "gematria",
+    "gem"
+   ]
+  },
+  {
+   "id": "gemValue",
+   "layer": "logic",
+   "file": "dart-maor/gematria-value.dart",
+   "score": 5,
+   "hits": [
+    "gematria",
+    "gem"
+   ]
+  },
+  {
+   "id": "gemValueWired",
+   "layer": "logic",
+   "file": "dart-maor/gematria-value-wired.dart",
+   "score": 5,
+   "hits": [
+    "gematria",
+    "gem"
+   ]
+  },
+  {
+   "id": "gemWired",
+   "layer": "logic",
+   "file": "dart-maor/gematria-wired.dart",
+   "score": 5,
+   "hits": [
+    "gematria",
+    "gem"
+   ]
+  },
+  {
+   "id": "gemYear",
+   "layer": "logic",
+   "file": "dart-maor/gem-year.dart",
+   "score": 3,
+   "hits": [
+    "gem"
+   ]
+  }
+ ],
+ "strong": [
+  "gem",
+  "gemValue",
+  "gemValueWired",
+  "gemWired",
+  "gemYear"
+ ],
+ "strongLayer": "logic",
+ "strongOtherLayers": [],
+ "creates": "new/dart-maor/gematria-value.dart",
+ "chosen": "none",
+ "why": "gemValue/gemValueWired הם הקבצים שנוצרים בגל הזה (לא מדף קיים); gem/gemWired (gematria.dart) הם הכיוון ההפוך: מספר ⇒ אותיות (String gem(num n, U, T, H, T2)); gemYear (gem-year.dart) = שנה-מספרית ⇒ אותיות דרך gem, גם הוא הכיוון ההפוך; המשפט «אבג ⇒ 6» דורש אותיות ⇒ מספר (int? gemValue(String s, U, T, H, T2)) על אותם שקעי-דאטה U/T/H/T2 — פונקציה הפוכה שלא הייתה במדף",
+ "sig": "ae8fb1ef54cb0dfd7262e3ab570e50bdb12812d41fb4971b677b5b9daabd98b9"
+}

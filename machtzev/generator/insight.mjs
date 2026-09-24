@@ -32,6 +32,7 @@ export function registerComposite(manifestPath) {
   return cur.length;
 }
 /** תובנת-סף על ישות ⇒ מסך אחד מורכב. live = { slug, field, op:'<'|'>', n } · entity = { name, fields[] } · name = מילות-הבעלים */
+// ═══ emitInsight = predicateOverSet ⊕ levelsOverSet ⊕ judge ⊕ synthDisplay
 export function emitInsight({ slug, cls, name, live, entity, expect = null, seedSlug = null, words = null, decide = null }) {
   // decide = { name, file, proven, examples } — אטום-ההחלטה מהקטלוג, מוכח בהרצה (behavior-plan) על הדוגמאות של הבעלים; בלי החלטה מוכחת ⇒ ההשוואה נכתבת ביד ומדווחת
   const said = words || `${live.field} ${live.op} ${live.n}`;   // מילות-הבעלים («ציון מתחת ל-55»), לא סימן (RTL הופך «<»)

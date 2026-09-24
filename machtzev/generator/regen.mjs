@@ -33,6 +33,7 @@ function dsSpecs() {
   return readdirSync(dir).filter((f) => f.endsWith('.txt')).sort().map((f) => ({ rel: 'machtzev/generator/app-ds.mjs', args: ['-f', `machtzev/generator/specs-ds/${f}`, '--name', f.replace(/\.txt$/, ''), '--skin'], quiet: true, note: `מסלול-ב׳ · ${f}` }));
 }
 export const INDEX = [
+  { rel: 'machtzev/generator/wire-sockets.mjs', args: [], quiet: true, note: 'חלקיקים עם שקעי-דאטה ⇒ תאומים מחווטים (<fn>Wired) לפני מפקד-הלוגיקה' },
   { rel: 'machtzev/census/logic-census.mjs', args: [], quiet: true, note: 'חתימות-הלוגיקה (מהודקות) לפני האורקל' },
   { rel: 'machtzev/census/atom-index.mjs', args: [], quiet: true, note: 'אינדקס-התצוגה' },
   { rel: 'machtzev/census/oracle.mjs', args: ['--write'], quiet: true, note: 'אינדקס-האמת המאוחד' },

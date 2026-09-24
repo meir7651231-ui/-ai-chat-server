@@ -1,0 +1,1152 @@
+{
+ "_": "קטלוג-ההרכבות של המחולל עצמו (quarry-self): שבר = טווח-שורות בקובץ-מנוע; סמן ═══ = הרכבה מוצהרת (A ⊕ B). נגזר; אל תערוך ידנית.",
+ "files": [
+  {
+   "file": "machtzev/generator/capability.mjs",
+   "lines": 228,
+   "fragments": [
+    {
+     "id": "capability#0",
+     "range": [
+      0,
+      9
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": null,
+     "uses": []
+    },
+    {
+     "id": "capability#1",
+     "range": [
+      9,
+      10
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "ATOM_INDEX",
+     "uses": []
+    },
+    {
+     "id": "capability#2",
+     "range": [
+      10,
+      15
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "fileOf",
+     "uses": []
+    },
+    {
+     "id": "capability#3",
+     "range": [
+      15,
+      16
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "COND",
+     "uses": []
+    },
+    {
+     "id": "capability#4",
+     "range": [
+      16,
+      17
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "REL",
+     "uses": []
+    },
+    {
+     "id": "capability#5",
+     "range": [
+      17,
+      18
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "escRe",
+     "uses": []
+    },
+    {
+     "id": "capability#6",
+     "range": [
+      18,
+      19
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "AND_RE",
+     "uses": []
+    },
+    {
+     "id": "capability#7",
+     "range": [
+      19,
+      20
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "OR_RE",
+     "uses": []
+    },
+    {
+     "id": "capability#8",
+     "range": [
+      20,
+      21
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "CONN_RE",
+     "uses": []
+    },
+    {
+     "id": "capability#9",
+     "range": [
+      21,
+      23
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "SEP_RE",
+     "uses": []
+    },
+    {
+     "id": "capability#10",
+     "range": [
+      23,
+      24
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "relOpOf",
+     "uses": []
+    },
+    {
+     "id": "capability#11",
+     "range": [
+      24,
+      26
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "definalize",
+     "uses": []
+    },
+    {
+     "id": "capability#12",
+     "range": [
+      26,
+      27
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "WHEN",
+     "uses": []
+    },
+    {
+     "id": "capability#13",
+     "range": [
+      27,
+      31
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "hw",
+     "uses": []
+    },
+    {
+     "id": "capability#14",
+     "range": [
+      31,
+      34
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "deprefix",
+     "uses": []
+    },
+    {
+     "id": "capability#15",
+     "range": [
+      34,
+      38
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "cleanPhrase",
+     "uses": []
+    },
+    {
+     "id": "capability#16",
+     "range": [
+      38,
+      39
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "SL_T",
+     "uses": []
+    },
+    {
+     "id": "capability#17",
+     "range": [
+      39,
+      68
+     ],
+     "marker": "form: condition (num · age · eq)",
+     "composed": [
+      "WHEN",
+      "REL",
+      "detectAlertClause"
+     ],
+     "declares": "detectAlertClause",
+     "uses": [
+      "detectAlertClause"
+     ]
+    },
+    {
+     "id": "capability#18",
+     "range": [
+      68,
+      78
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "pickAtom",
+     "uses": []
+    },
+    {
+     "id": "capability#19",
+     "range": [
+      78,
+      79
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "NUM_RE",
+     "uses": []
+    },
+    {
+     "id": "capability#20",
+     "range": [
+      79,
+      80
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "NUME",
+     "uses": []
+    },
+    {
+     "id": "capability#21",
+     "range": [
+      80,
+      85
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "STR_RE",
+     "uses": []
+    },
+    {
+     "id": "capability#22",
+     "range": [
+      85,
+      94
+     ],
+     "marker": "form: levels",
+     "composed": [
+      "levels.head",
+      "levels.tail"
+     ],
+     "declares": "detectLevelsClause",
+     "uses": [
+      "detectLevelsClause"
+     ]
+    },
+    {
+     "id": "capability#23",
+     "range": [
+      94,
+      115
+     ],
+     "marker": "form: and / or",
+     "composed": [
+      "CONN_RE",
+      "detectAlertClause"
+     ],
+     "declares": "detectAllClauses",
+     "uses": [
+      "detectAlertClause",
+      "detectAllClauses"
+     ]
+    },
+    {
+     "id": "capability#24",
+     "range": [
+      115,
+      117
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "emitApp",
+     "uses": [
+      "detectAllClauses"
+     ]
+    },
+    {
+     "id": "capability#25",
+     "range": [
+      117,
+      187
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "emitAppFrom",
+     "uses": [
+      "detectAllClauses"
+     ]
+    },
+    {
+     "id": "capability#26",
+     "range": [
+      187,
+      204
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "_CapApp",
+     "uses": []
+    },
+    {
+     "id": "capability#27",
+     "range": [
+      204,
+      228
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "_",
+     "uses": []
+    }
+   ]
+  },
+  {
+   "file": "machtzev/generator/live-expr.mjs",
+   "lines": 54,
+   "fragments": [
+    {
+     "id": "live-expr#0",
+     "range": [
+      0,
+      3
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": null,
+     "uses": []
+    },
+    {
+     "id": "live-expr#1",
+     "range": [
+      3,
+      5
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "AGE_HELPER",
+     "uses": []
+    },
+    {
+     "id": "live-expr#2",
+     "range": [
+      5,
+      11
+     ],
+     "marker": "liveValue",
+     "composed": [
+      "eq",
+      "age",
+      "refCount",
+      "num"
+     ],
+     "declares": "liveValue",
+     "uses": [
+      "liveValue"
+     ]
+    },
+    {
+     "id": "live-expr#3",
+     "range": [
+      11,
+      13
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveIsSet",
+     "uses": [
+      "liveIsSet"
+     ]
+    },
+    {
+     "id": "live-expr#4",
+     "range": [
+      13,
+      14
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveAggExpr",
+     "uses": [
+      "liveAggExpr"
+     ]
+    },
+    {
+     "id": "live-expr#5",
+     "range": [
+      14,
+      15
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveAggImport",
+     "uses": [
+      "liveAggImport"
+     ]
+    },
+    {
+     "id": "live-expr#6",
+     "range": [
+      15,
+      16
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "AGG_WORD",
+     "uses": []
+    },
+    {
+     "id": "live-expr#7",
+     "range": [
+      16,
+      18
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveIsGrouped",
+     "uses": [
+      "liveIsGrouped"
+     ]
+    },
+    {
+     "id": "live-expr#8",
+     "range": [
+      18,
+      22
+     ],
+     "marker": "liveKeyExpr",
+     "composed": [
+      "levels",
+      "aggBy"
+     ],
+     "declares": "liveKeyExpr",
+     "uses": [
+      "liveKeyExpr"
+     ]
+    },
+    {
+     "id": "live-expr#9",
+     "range": [
+      22,
+      24
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "levelOf",
+     "uses": []
+    },
+    {
+     "id": "live-expr#10",
+     "range": [
+      24,
+      26
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveGroupsExpr",
+     "uses": [
+      "liveAggExpr",
+      "liveGroupsExpr",
+      "liveKeyExpr"
+     ]
+    },
+    {
+     "id": "live-expr#11",
+     "range": [
+      26,
+      27
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveGroupsSample",
+     "uses": [
+      "liveAggSample",
+      "liveGroupsSample"
+     ]
+    },
+    {
+     "id": "live-expr#12",
+     "range": [
+      27,
+      29
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveThreshold",
+     "uses": [
+      "liveThreshold"
+     ]
+    },
+    {
+     "id": "live-expr#13",
+     "range": [
+      29,
+      30
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveThresholdDart",
+     "uses": [
+      "liveThreshold",
+      "liveThresholdDart"
+     ]
+    },
+    {
+     "id": "live-expr#14",
+     "range": [
+      30,
+      32
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveOpDart",
+     "uses": [
+      "liveOpDart"
+     ]
+    },
+    {
+     "id": "live-expr#15",
+     "range": [
+      32,
+      33
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveHit",
+     "uses": [
+      "liveHit",
+      "liveThreshold"
+     ]
+    },
+    {
+     "id": "live-expr#16",
+     "range": [
+      33,
+      35
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveNeedsHelper",
+     "uses": [
+      "liveNeedsHelper"
+     ]
+    },
+    {
+     "id": "live-expr#17",
+     "range": [
+      35,
+      37
+     ],
+     "marker": "livePre",
+     "composed": [
+      "and (filter over filter)"
+     ],
+     "declares": "livePre",
+     "uses": [
+      "liveOpDart",
+      "livePre",
+      "liveThresholdDart",
+      "liveValue"
+     ]
+    },
+    {
+     "id": "live-expr#18",
+     "range": [
+      37,
+      39
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveSetExpr",
+     "uses": [
+      "livePre",
+      "liveSetExpr"
+     ]
+    },
+    {
+     "id": "live-expr#19",
+     "range": [
+      39,
+      41
+     ],
+     "marker": "liveAlt",
+     "composed": [
+      "or (union)"
+     ],
+     "declares": "liveAlt",
+     "uses": [
+      "liveAlt",
+      "liveOpDart",
+      "liveThresholdDart",
+      "liveValue"
+     ]
+    },
+    {
+     "id": "live-expr#20",
+     "range": [
+      41,
+      42
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveCond",
+     "uses": [
+      "liveAlt",
+      "liveCond"
+     ]
+    },
+    {
+     "id": "live-expr#21",
+     "range": [
+      42,
+      43
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveAltOk",
+     "uses": [
+      "liveAltOk",
+      "liveHit",
+      "liveSample"
+     ]
+    },
+    {
+     "id": "live-expr#22",
+     "range": [
+      43,
+      46
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "livePreOk",
+     "uses": [
+      "liveHit",
+      "livePreOk",
+      "liveSample"
+     ]
+    },
+    {
+     "id": "live-expr#23",
+     "range": [
+      46,
+      47
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveAggSample",
+     "uses": [
+      "liveAggSample"
+     ]
+    },
+    {
+     "id": "live-expr#24",
+     "range": [
+      47,
+      54
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveSample",
+     "uses": [
+      "liveSample"
+     ]
+    }
+   ]
+  },
+  {
+   "file": "machtzev/generator/app-ds.mjs",
+   "lines": 454,
+   "fragments": [
+    {
+     "id": "app-ds#0",
+     "range": [
+      0,
+      1
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": null,
+     "uses": []
+    },
+    {
+     "id": "app-ds#1",
+     "range": [
+      1,
+      5
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": null,
+     "uses": []
+    },
+    {
+     "id": "app-ds#2",
+     "range": [
+      5,
+      17
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": null,
+     "uses": []
+    },
+    {
+     "id": "app-ds#3",
+     "range": [
+      17,
+      21
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "SL",
+     "uses": []
+    },
+    {
+     "id": "app-ds#4",
+     "range": [
+      21,
+      22
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "ROOT",
+     "uses": []
+    },
+    {
+     "id": "app-ds#5",
+     "range": [
+      22,
+      24
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "OUT",
+     "uses": []
+    },
+    {
+     "id": "app-ds#6",
+     "range": [
+      24,
+      25
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "NS",
+     "uses": []
+    },
+    {
+     "id": "app-ds#7",
+     "range": [
+      25,
+      26
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "P",
+     "uses": []
+    },
+    {
+     "id": "app-ds#8",
+     "range": [
+      26,
+      27
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "DATA",
+     "uses": []
+    },
+    {
+     "id": "app-ds#9",
+     "range": [
+      27,
+      28
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "ENTITY_RE",
+     "uses": []
+    },
+    {
+     "id": "app-ds#10",
+     "range": [
+      28,
+      29
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "ROLE_RE",
+     "uses": []
+    },
+    {
+     "id": "app-ds#11",
+     "range": [
+      29,
+      32
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "clean",
+     "uses": []
+    },
+    {
+     "id": "app-ds#12",
+     "range": [
+      32,
+      59
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "parseRole",
+     "uses": []
+    },
+    {
+     "id": "app-ds#13",
+     "range": [
+      59,
+      68
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "parseLookLine",
+     "uses": []
+    },
+    {
+     "id": "app-ds#14",
+     "range": [
+      68,
+      371
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "buildApp",
+     "uses": [
+      "liveExtrasOut"
+     ]
+    },
+    {
+     "id": "app-ds#15",
+     "range": [
+      371,
+      454
+     ],
+     "marker": "liveOf",
+     "composed": [
+      "clause",
+      "entity",
+      "field ⇒ live (num · age · refCount · agg · aggBy · levels · eq)"
+     ],
+     "declares": null,
+     "uses": [
+      "liveAndDropped",
+      "liveExtras",
+      "liveExtrasOut",
+      "liveMonthAsk",
+      "liveNoRelation",
+      "liveNotDate",
+      "liveOf"
+     ]
+    }
+   ]
+  },
+  {
+   "file": "machtzev/generator/insight.mjs",
+   "lines": 155,
+   "fragments": [
+    {
+     "id": "insight#0",
+     "range": [
+      0,
+      17
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": null,
+     "uses": [
+      "forgeCands",
+      "judge",
+      "liveAggExpr",
+      "liveAggImport",
+      "liveCond",
+      "liveGroupsExpr",
+      "liveIsGrouped",
+      "liveIsSet",
+      "liveKeyExpr",
+      "liveNeedsHelper",
+      "liveOpDart",
+      "liveSetExpr",
+      "liveThreshold",
+      "liveThresholdDart",
+      "liveValue",
+      "synthDisplay",
+      "wireForge"
+     ]
+    },
+    {
+     "id": "insight#1",
+     "range": [
+      17,
+      19
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "D",
+     "uses": []
+    },
+    {
+     "id": "insight#2",
+     "range": [
+      19,
+      20
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "ATL",
+     "uses": []
+    },
+    {
+     "id": "insight#3",
+     "range": [
+      20,
+      22
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "impOf",
+     "uses": []
+    },
+    {
+     "id": "insight#4",
+     "range": [
+      22,
+      24
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "REG",
+     "uses": []
+    },
+    {
+     "id": "insight#5",
+     "range": [
+      24,
+      25
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "readComposites",
+     "uses": []
+    },
+    {
+     "id": "insight#6",
+     "range": [
+      25,
+      34
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "registerComposite",
+     "uses": []
+    },
+    {
+     "id": "insight#7",
+     "range": [
+      34,
+      155
+     ],
+     "marker": "emitInsight",
+     "composed": [
+      "predicateOverSet",
+      "levelsOverSet",
+      "judge",
+      "synthDisplay"
+     ],
+     "declares": "emitInsight",
+     "uses": [
+      "emitInsight",
+      "forgeCands",
+      "judge",
+      "liveAggExpr",
+      "liveAggImport",
+      "liveCond",
+      "liveGroupsExpr",
+      "liveIsGrouped",
+      "liveIsSet",
+      "liveKeyExpr",
+      "liveNeedsHelper",
+      "liveOpDart",
+      "liveSetExpr",
+      "liveThreshold",
+      "liveThresholdDart",
+      "liveValue",
+      "synthDisplay",
+      "wireForge"
+     ]
+    }
+   ]
+  },
+  {
+   "file": "yeshiva/ein.mjs",
+   "lines": 122,
+   "fragments": [
+    {
+     "id": "ein#0",
+     "range": [
+      0,
+      9
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": null,
+     "uses": [
+      "planBehaviors",
+      "valueSearch"
+     ]
+    },
+    {
+     "id": "ein#1",
+     "range": [
+      9,
+      15
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": null,
+     "uses": [
+      "leadOf",
+      "recall",
+      "remember",
+      "sameStem"
+     ]
+    },
+    {
+     "id": "ein#2",
+     "range": [
+      15,
+      16
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "HERE",
+     "uses": []
+    },
+    {
+     "id": "ein#3",
+     "range": [
+      16,
+      22
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "D",
+     "uses": [
+      "valueSearch"
+     ]
+    },
+    {
+     "id": "ein#4",
+     "range": [
+      22,
+      59
+     ],
+     "marker": "ein.marks",
+     "composed": [
+      "valueSearch",
+      "amountAbove/amountBelow/amountEqual"
+     ],
+     "declares": "defineByMarks",
+     "uses": [
+      "liveSample",
+      "planNeeds",
+      "valueSearch"
+     ]
+    },
+    {
+     "id": "ein#5",
+     "range": [
+      59,
+      92
+     ],
+     "marker": "ein.word",
+     "composed": [
+      "definitions",
+      "orWords",
+      "remember/recall"
+     ],
+     "declares": "expandDefinitions",
+     "uses": [
+      "detectAllClauses",
+      "leadOf",
+      "recall",
+      "remember",
+      "sameStem"
+     ]
+    },
+    {
+     "id": "ein#6",
+     "range": [
+      92,
+      107
+     ],
+     "marker": "ein.examplesIO",
+     "composed": [
+      "ioExamples",
+      "needsFor",
+      "planBehaviors",
+      "synth"
+     ],
+     "declares": "examplesIO",
+     "uses": [
+      "planBehaviors"
+     ]
+    },
+    {
+     "id": "ein#7",
+     "range": [
+      107,
+      122
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "resolveEin",
+     "uses": []
+    }
+   ]
+  }
+ ]
+}

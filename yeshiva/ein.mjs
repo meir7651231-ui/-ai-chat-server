@@ -20,6 +20,7 @@ const D = JSON.parse(fs.readFileSync(path.join(HERE, 'ein.data.json'), 'utf8'));
  *  behavior-plan.valueSearch (החיפוש הרקורסיבי-המוכח על קטלוג-הלוגיקה) מקבל לכל שדה-מספר צורך: פרמטר = ערך-השדה, קבועים = ערכי-הדוגמאות, תשובה = הסימון —
  *  ומוצא בהוכחה-בריצה ב-Dart כלל שמסכים עם כל הדוגמאות. הכיוון (מתחת/מעל) נקרא מהדוגמאות עצמן מול הקבוע; המילים מ-spec-lang (amountAbove/amountBelow).
  *  שדה-מספר יחיד ⇒ ההגדרה נכנסת (וסימון-הסף הוא ערך מהדוגמאות, לא המצאה). כמה שדות ⇒ שאלה סגורה עם הכללים שנמצאו. אפס ⇒ שאלה: עוד דוגמאות. */
+// ═══ ein.marks = valueSearch ⊕ amountAbove/amountBelow/amountEqual
 export async function defineByMarks(w, ans, thing, SL) {
   const keys = new Set((thing.examples || []).map((r) => String(r[0]).trim())); const marks = ans.split(/[,;\s]+/).filter(Boolean);
   if (!marks.length || !marks.every((m) => keys.has(m)) || !keys.size) return null;
@@ -56,6 +57,7 @@ export async function defineByMarks(w, ans, thing, SL) {
     cands.push({ field: thing.fields[i].label, clause: `${thing.fields[i].label} ${word}${/-$/.test(word) ? '' : ' '}${c}${unit}`, ties: p.ties || 0, atom: p.pick }); }
   return { marks, cands };
 }
+// ═══ ein.word = definitions ⊕ orWords ⊕ remember/recall
 export async function expandDefinitions(sentence, form, routed, answers, proposals) {
   let SLd = {}; try { SLd = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); } catch {}
   const out = { sentence, changed: false, notes: [], questions: [] };
@@ -88,14 +90,16 @@ export async function expandDefinitions(sentence, form, routed, answers, proposa
 }
 
 /** דוגמאות קלט⇒פלט על דבר במסלול none ⇒ תשובת-התנהגות (הצורה של needsFor): פרמטר = טיפוס-הקלט מהצורה (מספר/טקסט), תשובה = טיפוס-הפלט. הדלת (2ג) מוכיחה ומרכיבה. */
+// ═══ ein.examplesIO = ioExamples ⊕ needsFor ⊕ planBehaviors ⊕ synth
 export function examplesIO(form, routed, answers) {
   const notes = []; const isNum = (v) => /^-?\d+(\.\d+)?$/.test(String(v).trim()); const q = (v) => (isNum(v) ? String(v).trim() : `'${String(v).replace(/'/g, "\\'")}'`);
   for (const r of routed.routes.filter((x) => x.route === 'none')) {
     const t = form.things.find((x) => x.label === r.thing); if (!t || !(t.ioExamples && t.ioExamples.length)) continue;
     const cur = answers[t.label]; if (cur && cur.behavior) continue;
     const ins = t.ioExamples.map((e) => e[0]), outs = t.ioExamples.map((e) => e[1]);
-    const b = { examples: t.ioExamples.map(([i, o]) => [q(i), `r == ${q(o)}`]), params: [ins.every(isNum) ? 'num' : 'String'], ret: outs.every(isNum) ? 'num' : 'String' };
+    const b = { examples: t.ioExamples.map(([i, o]) => [q(i), `r == ${q(o)}`]), params: [ins.every(isNum) ? 'num' : 'String'], ret: outs.every(isNum) ? (outs.every((o) => /^-?\d+$/.test(String(o).trim())) ? 'int' : 'num') : 'String' };   // פלטים שלמים ⇒ int (חתימת-הקטלוג של gemValueWired היא int?)
     answers[t.label] = { ...(cur || {}), behavior: b };
+    if (!process.env.BP_CAPV) process.env.BP_CAPV = '2000';   // צורך טקסט⇒מספר פותח מרחב-עצים עצום (נמדד: מחרוזת-הוכחה >512MB); תקרה — האטום המחווט נמצא בעומק 1
     notes.push(`${D.T.ioNote.replace('{thing}', t.label).replace('{n}', String(t.ioExamples.length)).replace('{sig}', `${b.params[0]} ⇒ ${b.ret}`)}`);
   }
   return { notes };
