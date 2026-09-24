@@ -207,9 +207,11 @@ const ROLLUP_RE = new RegExp('^(' + [L.sum, L.avg, L.count].join('|') + ')\\(([^
 // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
 function compileFormula(formula, labels) {
   const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
-  let e = ' ' + formula + ' ';
+  // ⊕ ערך מוחלט: «מוחלט(ספירה-מצלמות)» ⇒ (…).abs() — המילה מהדאטה (L.fnAbs), סוגריים מאוזנים (שני מקורות: פער בלי סימן)
+  let f0 = String(formula); if (L.fnAbs) for (let at = f0.indexOf(L.fnAbs + '('); at >= 0; at = f0.indexOf(L.fnAbs + '(')) { let d = 0, j = at + L.fnAbs.length; for (; j < f0.length; j++) { if (f0[j] === '(') d++; else if (f0[j] === ')' && --d === 0) break; } if (j >= f0.length) return null; f0 = f0.slice(0, at) + '(' + f0.slice(at + L.fnAbs.length, j + 1) + ').abs()' + f0.slice(j + 1); }
+  let e = ' ' + f0 + ' ';
   for (const f of sorted) e = e.split(f.label).join(` @${f.idx}@ `);
-  const residue = e.replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
+  const residue = e.replace(/@\d+@/g, ' ').replace(/\.abs\(\)/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
   const dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)").trim();
   return /@|[֐-׿]/.test(dart) ? null : (dart || null);
@@ -243,8 +245,8 @@ function compileGuard(cond, labels) {
 }
 
 // 🔁 מהדר-תנאי-מבני: תנאי-guard ⇒ ביטוי-bool ב-Dart מעל _v[] (מספרי או "מלא"). עיוור-דומיין.
-function guardBool(g) {
-  const V = (i) => `(num.tryParse(_v[${i}] ?? '') ?? 0)`;
+function guardBool(g, labels = null) {
+  const V = (i) => { const l = labels && labels.find((x) => x.idx === i); return l && l.expr ? `(${l.expr})` : `(num.tryParse(_v[${i}] ?? '') ?? 0)`; };   // שדה-נוסחה ⇒ הביטוי שלו
   if (g.kind === 'num') return `${V(g.li)} ${g.op} ${g.num}`;
   if (g.kind === 'ff') return `${V(g.li)} ${g.op} ${V(g.ri)}`;
   if (g.kind === 'filled') return `(_v[${g.li}] ?? '').trim().isNotEmpty`;
@@ -257,7 +259,7 @@ function compileCond(formula, labels) {
   const m = formula.match(/^(.+?)\s*\?\s*([^?:]+?)\s*:\s*([^?:]+)$/);
   if (!m) return null;
   const g = compileGuard(m[1].trim(), labels); if (!g) return null;
-  const b = guardBool(g); if (!b) return null;
+  const b = guardBool(g, labels); if (!b) return null;
   return { bool: b, then: m[2].trim(), els: m[3].trim() };
 }
 
@@ -295,6 +297,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   let firstDateConst = null;   // תפר-לוח-שנה: הקבוע של שדה-התאריך הראשון (null ⇒ אין תאריך)
   const numFields = [];        // תפר-KPI: קבועי השדות-המספריים (לסכום/ממוצע חי)
   const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
+  const onRec = (e) => e.replace(/_v\[(\d+)\]/g, (m, j) => `r[${k(schema[+j].label)}]`);   // ביטוי מעל טופס-הקלט ⇒ אותו ביטוי מעל רשומה r
+  // ⊕ תנאי על שדה-מחושב («מצב=פער > 5000 ? …» כש«פער» הוא נוסחה): נמדד — התנאי קרא את תיבת-הקלט הריקה של «פער» ⇒ תמיד «מסכימים».
+  //    עכשיו שדה-נוסחה נושא את הביטוי שלו (expr) והתנאי משתמש בו.
+  for (const l of labelIdx) { const s0 = schema[l.idx]; if (s0.formula && !ROLLUP_RE.test(s0.formula) && !compileCond(s0.formula, labelIdx)) { const ex = compileFormula(s0.formula, labelIdx); if (ex) l.expr = ex; } }
   schema.forEach((s, i) => {
     const cl = k(s.label); labelConst.push(cl);
     const bind = `value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)`;
@@ -360,14 +366,14 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
         hasLive = true;
         const ce = `((${cd.bool}) ? ${k(cd.then)} : ${k(cd.els)})`;
         addField(i, `_live(${cl}, ${ce})`, `true`);
-        recValsR.push(ce); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
+        recValsR.push(onRec(ce)); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן · בכרטיס/CSV: מהרשומה עצמה (נמדד: _v = טופס-הקלט הריק ⇒ תמיד «else»)
         return;
       }
       const expr = compileFormula(s.formula, labelIdx);
       if (expr) {
         hasCalc = true;
         addField(i, `_calc(${cl}, ${expr})`);
-        recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: (${expr}).toStringAsFixed(2)`);
+        recValsR.push(`(${onRec(expr)}).toStringAsFixed(2)`);   // מהרשומה עצמה (נמדד: רשומות-דוגמה נשמרו בלי הערך המחושב ⇒ לא הוצג) mapVals.push(`${cl}: (${expr}).toStringAsFixed(2)`);
         return;
       }
     }
