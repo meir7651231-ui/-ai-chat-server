@@ -17,7 +17,9 @@ const HERE = R.GEN_DIR;
 const G = JSON.parse(fs.readFileSync((R.GEN_DIR + 'spec-lang.data.json'), 'utf8'));
 const alt = (arr) => '(' + arr.join('|') + ')';   // בונה אלטרנציית-regex מהדאטה
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
-const clean = (s) => heWords(s).join(' ').slice(0, 60) || G.fallbackField;
+// שם-שדה: מילים עבריות **ומזהים לועזיים** (from_zone · width_m) לפי הסדר — נמדד: מירון/72 כתוב בחלקו באנגלית ⇒ 5 שדות «שדה» ושני «אזור» (הכרעת-בעלים 24.9). עברית-בלבד ⇒ ביט-זהה
+const nameWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿״׳]*|[A-Za-z][A-Za-z0-9_]*/g)].map((m) => m[0]);
+const clean = (s) => nameWords(s).join(' ').slice(0, 60) || G.fallbackField;
 
 // הסקת-טיפוס מרמזי-שפה (לינגוויסטי, לא פר-ישות) — כמו stemmer. הרמזים מהדאטה (עיוור).
 const RE_DATE = new RegExp(G.typeDate.join('|'));

@@ -180,8 +180,17 @@ export async function generateFromSpec(spec, { outDir, name = 'spec' } = {}) {
 /** מסמך-«פירוק» (markdown של הבעלים, שלד peruk-lang) ⇒ peruk.perukToSpec ⇒ ספק ⇒ app-ds. אפס כתיבה ל-specs-ds. */
 export async function generateFromDoc(md, { outDir, name = 'doc' } = {}) {
   const { perukToSpec } = await import('../machtzev/generator/peruk.mjs');
-  const { spec, node } = perukToSpec(md, name);
+  const DS = await import('../machtzev/generator/doc-shape.mjs');   // 📐 קריאה לפי צורה (הכרעת-בעלים 24.9): peruk מכיר רק את שלד-הפירוק שלו
+  const pk = perukToSpec(DS.htmlToMd(md), name); const shp = DS.docToSpec(md); const perukRead = Number((pk.node && pk.node.fields) || 0);
+  const byShape = !!shp.spec && perukRead === 0;   // peruk קרא 0 שדות והמסמך מכיל טבלת-ישויות ⇒ הצורה קובעת (נמדד: מירון/72 ⇒ «תיק» כללי מהדאטה של peruk)
+  const spec = byShape ? shp.spec : pk.spec; const node = byShape ? { ...(pk.node || {}), reader: 'doc-shape', fields: shp.ents.reduce((a, e) => a + e.fields.length, 0), entities: shp.ents.length, links: shp.links.length } : pk.node;
   const r = await generateFromSpec(spec, { outDir, name });
+  if (byShape) { r.notes.push(`📐 קריאה לפי צורה: שלד-הפירוק קרא 0 שדות ⇒ טבלת-ישויות במסמך: ${shp.ents.length} ישויות · ${node.fields} שדות · ${shp.links.length} קישורים לפי השמות שהמסמך נותן (${shp.links.slice(0, 5).map((l) => `${l.ent}.${l.field}→${l.to}`).join(' · ')}${shp.links.length > 5 ? ' …' : ''})`);
+    for (const f of shp.flows) r.questions.push({ thing: 'זרימה', ask: 'flow', q: `זרימה «${f.ent}.${f.field} ${f.op} ${f.n}${f.unit} → ${f.then.slice(0, 60)}» נקראה — לא נבנתה: ${f.field} ${shp.ents.some((e) => e.fields.some((x) => x.name === f.field)) ? 'שדה בטבלה, אבל אין בדלת-המסמך בניית-התראות' : 'אינו שדה באף טבלה (ערך מחושב — מנוע)'} ` }); }
+  else if (perukRead === 0) r.questions.push({ thing: 'מסמך', ask: 'read', q: `⚠️ המסמך לא נקרא: שלד-הפירוק קרא 0 שדות ואין טבלת-ישויות — האפליקציה בנויה מברירות-המחדל של peruk, לא מהמסמך` });
+  // 🔎 הקורא: כמה ישויות המסמך מתאר מול כמה נבנו — אובדן = שאלה, לא «0 שאלות»
+  { const want = shp.ents.map((e) => e.name); const got = new Set(spec.split('\n').map((l) => (l.match(/^ישות\s+(.+?)\s+עם\s/) || [])[1]).filter(Boolean)); const lost = want.filter((w) => !got.has(w));
+    if (lost.length) r.questions.push({ thing: 'מסמך', ask: 'lost', q: `המסמך מתאר ${want.length} ישויות, נבנו ${want.length - lost.length}: חסרות ${lost.join(' · ')}` }); }
   // היכולת של yeshiva/read (הקורא הישיבתי): המסמך מול הספק — מה בפירוק לא הגיע לספק ומה הספק הניח (איכא דאמרי · שיעור · ורמינהו · ייתור …). טהור: check(doc, spec) בזיכרון
   try {
     const RD = await import('./read.mjs');
@@ -194,7 +203,7 @@ export async function generateFromDoc(md, { outDir, name = 'doc' } = {}) {
   // השלמות של peruk (הכרעה-27: שדות-אדם, שלבים — מהדאטה שלו, לא מהמסמך) ⇒ שאלות: תווית שאף מילה שלה (גזע ≥3) אינה במסמך = הושלמה, לא נאמרה
   try {
     const st = (w) => w.replace(/(ים|ות|ה)$/, ''); const docStems = new Set(toks(md).map(st).filter((w) => w.length >= 3));
-    const said = (label) => toks(label).map(st).filter((w) => w.length >= 3).some((w) => docStems.has(w));
+    const latin = new Set((md.match(/[A-Za-z_]+/g) || []).map((w) => w.toLowerCase())); const said = (label) => toks(label).map(st).filter((w) => w.length >= 3).some((w) => docStems.has(w)) || (label.match(/[A-Za-z_]+/g) || []).some((w) => latin.has(w.toLowerCase()));   // גם מילים לועזיות (נמדד: «ok» במירון/72 סומן «לא נאמר»)
     const completed = [];
     for (const l of spec.split('\n')) {
       const m = l.match(/^ישות\s+(.+?)\s+עם\s+(.+)$/); if (!m) continue;
