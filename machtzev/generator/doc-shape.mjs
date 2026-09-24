@@ -4,6 +4,9 @@
 //   עמודה שרוב התאים בה הם **רשימה** (· או ,) = שדות · רשימה נוספת אחריה = מצבים · העמודה הראשונה = שם.
 //   שם עם מילה לועזית ומילה עברית («Zone אזור») = מילון שהמסמך עצמו נותן ⇒ שדה «from_zone» מקושר ל«אזור» (בלי מילון שלי).
 //   זרימות «ישות.שדה > מספר → פעולה» ⇒ תנאים (נאספים ומוחזרים; מי שקורא מחליט מה לבנות מהם).
+import fs from 'node:fs';
+import path from 'node:path';
+import * as R from '../root.mjs';
 const HE = /[֐-׿]/;
 /** HTML ⇒ Markdown מינימלי (כותרות · רשימות · טבלאות) — כדי שקבצי-הבעלים (html) ייקראו ישירות */
 export function htmlToMd(h) {
@@ -62,6 +65,7 @@ export function docToSentence(md0, { title = null, enums = {}, rows = {} } = {})
   const link = (e, f) => { const l = r.links.find((x) => x.ent === e.name && x.field === f.name); const ev = (enums[e.name] || {})[f.name]; return l ? `${f.name} ${l.to}` : ev && ev.length ? `${f.name} ${ev.map((v) => v.replace(/\s+/g, '_')).join('/')}` : f.name; };   /* «kind איסוף/מפגש» = שדה-בחירה בשפת-המשפט */
   const parts = r.ents.map((e) => `לכל ${e.name} יש ${[...new Set(e.fields.map((f) => link(e, f)))].join(', ')}${(rows[e.name] || []).length ? `; למשל: ${rows[e.name].map((x) => x.join(', ')).join('; ')}` : ''}${e.states.length ? `; שלבים: ${e.states.join(', ')}` : ''}`);   /* שורות מהכורה (תאים ריקים נשמרים) */
   const aliasHe = new Map(); for (const e of r.ents) for (const a of e.alias) aliasHe.set(a.toLowerCase(), e.name);
-  const flows = r.flows.map((f) => ({ ...f, he: aliasHe.get(f.ent.toLowerCase()) || null, clause: `התראה כש${f.field.replace(/_/g, ' ')} ${f.op === '>' ? 'מעל' : 'מתחת ל-'}${f.op === '>' ? ' ' : ''}${f.n}` }));   /* שם-השדה כמו שהצינור קורא אותו (_ ⇒ רווח) */
+  const LU = (() => { try { return JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')).latinUnits || {}; } catch { return {}; } })();
+  const flows = r.flows.map((f) => ({ ...f, he: aliasHe.get(f.ent.toLowerCase()) || null, clause: `התראה כש${f.field.replace(/_/g, ' ')} ${f.op === '>' ? 'מעל' : 'מתחת ל-'}${f.op === '>' ? ' ' : ''}${f.n}${f.unit && LU[f.unit] ? ' ' + LU[f.unit] : ''}` }));   /* «5h» ⇒ «5 שעות» (latinUnits בדאטה) — היחידה לא נבלעת */   /* שם-השדה כמו שהצינור קורא אותו (_ ⇒ רווח) */
   return { ...r, sentence: `${head}: ${parts.join('. ')}${flows.length ? '. ' + flows.map((f) => f.clause).join('. ') : ''}`, flows };
 }

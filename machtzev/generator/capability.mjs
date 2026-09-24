@@ -29,9 +29,9 @@ const SEP_RE = new RegExp(COND.sep.map(escRe).join('|'));
 export const relOpOf = (words) => { const t = definalize([].concat(words).join(' ')); for (const r of REL) if (r.re.test(t)) return r.op; return null; };
 const definalize = (s) => String(s).replace(/ך/g, 'כ').replace(/ם/g, 'מ').replace(/ן/g, 'נ').replace(/ף/g, 'פ').replace(/ץ/g, 'צ');
 // מרקרי-תנאי מבניים (כמו 'עם' מפריד-שדות) — סגור. בלי \b (ASCII-בלבד, לא נדלק על עברית).
-/** מילת-תנאי כמילה, לא כאותיות: רק בתחילת-מילה · מילה שלמה («כאשר») ⇒ לא צמודה לאות · קידומת («כש», «ברגע ש») ⇒ אחריה מילה אמיתית (≥2 אותיות).
+/** מילת-תנאי כמילה, לא כאותיות: רק בתחילת-מילה · מילה שלמה («כאשר») ⇒ לא צמודה לאות · קידומת («כש», «ברגע ש») ⇒ אחריה מילה אמיתית (≥2 אותיות, או מזהה לועזי «כשstay»).
  *  «כשדקות» / «כשהמתנה» = תנאי · «כשל» (כש+ל) / «הכשרה» (באמצע) = לא. מקור אחד לדלת (mavin.formOf) ולגלאי. */
-export const whenRegex = (list) => new RegExp('(?<![\u0590-\u05FF])(?:' + list.map((w) => /ש$/.test(w) ? escRe(w) + '(?=[\u0590-\u05FF]{2})' : escRe(w) + '(?![\u0590-\u05FF])').join('|') + ')');
+export const whenRegex = (list) => new RegExp('(?<![\u0590-\u05FF])(?:' + list.map((w) => /ש$/.test(w) ? escRe(w) + '(?=[\u0590-\u05FF]{2}|[A-Za-z])' : escRe(w) + '(?![\u0590-\u05FF])').join('|') + ')');
 const WHEN = whenRegex(COND.when);
 const hw = (s) => [...String(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
 // קילוף-קידומת חד-אותית (ה/ו/ש/כ/ל/ב/מ) לצורך התאמת-שדה — רק אם המילה נשארת ≥2 אותיות.
