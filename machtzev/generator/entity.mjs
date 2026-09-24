@@ -108,7 +108,7 @@ export function interpret(text) {
   // 🔄 שלבי-workflow (אם ניתנו): שרשרת-סטטוס. בלי '|' ⇒ אין workflow (לא ברירת-מחדל).
   // אין חיתוך ל-8 (קודם הפיל 'ועדה/התקבל/נדחה' — שלבי-ההכרעה שה-workflow קיים בשבילם).
   const stages = stagesPart
-    ? stagesPart.replace(new RegExp('^\\s*' + alt(G.stagePrefixes) + '[:\\s]*'), '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 30)
+    ? stagesPart.replace(new RegExp('^\\s*' + alt(G.stagePrefixes) + '[:\\s]*'), '').split(/[,\n]|\s*→\s*/).map((s) => nameWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 30)
     : [];
 
   const schema = annots.map((a) => ({ label: a.label, type: inferType(a.label), required: a.required, unique: a.unique, enumVals: a.enumVals, formula: a.formula, def: a.def, members: a.members, pattern: a.pattern, range: a.range }));

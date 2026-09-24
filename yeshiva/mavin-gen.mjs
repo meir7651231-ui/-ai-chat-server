@@ -199,7 +199,11 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
       const opts = u.ents.slice(0, 3).flatMap((x) => (shapeOf(x.ent) || { fields: [] }).fields.map((f) => `${x.ent}.${f.name}`)).slice(0, 16);
       mined.push({ q: { thing: 'כורה', ask: 'unit', key, q: `🔢 «${u.unit}» בא אחרי מספר ב-${u.sources} תרחישים${u.sample ? ` (למשל «${u.sample}»)` : ''}, ליד ${u.ents.slice(0, 3).map((x) => `«${x.ent}»`).join(' · ')}. איזה שדה זה? (${opts.join(' · ')}) — ענה ישות.שדה, או «לא»` } }); }
     for (const e of shp.ents) { const rw = K.rowsOf(res, e, e.fields.map((f) => f.name), { enumField: Object.keys(enums[e.name] || {})[0] || null, map: umap }); if (rw.length) { rowsBy[e.name] = rw; mined.push(`${e.name}: ${rw.length} שורות-דוגמה`); } } }
-  const sen = byShape ? DS.docToSentence(md, { enums, rows: rowsBy }) : null;
+  // ✍️ תשובות-הבעלים לשאלות הזרימה: «flow ratio» ⇒ ביטוי (מפתח-השאלה עצמו) · «שדה נוסף <ישות>» ⇒ שדה שהמסמך לא מנה (למשל מה שהמונים מודדים)
+  const defs = {}, extra = {}; if (byShape) { const SLx = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); const XW = SLx.extraFieldWord || '';
+    for (const f of shp.flows || []) { const k = f.field.replace(/_/g, ' '); if (typeof answers[k] === 'string' && answers[k].trim()) { defs[k] = answers[k].trim(); mined.push(`✍️ «${k}» = «${defs[k]}» (תשובת-הבעלים)`); } }
+    for (const [k, v] of Object.entries(answers)) if (XW && k.startsWith(XW + ' ') && typeof v === 'string' && v.trim()) { const en = k.slice(XW.length + 1).trim(); extra[en] = v.split(/\s*,\s*/).filter(Boolean); mined.push(`✍️ ${en} + ${extra[en].join(', ')} (תשובת-הבעלים)`); } }
+  const sen = byShape ? DS.docToSentence(md, { enums, rows: rowsBy, defs, extra }) : null;
   const r = sen ? await generateAll(sen.sentence, { answers, outDir, name }) : await generateFromSpec(spec, { outDir, name });
   if (corpus && byShape) { r.notes.push(`⛏️ כורה: ${mined.filter((m) => typeof m === 'string').length} שדות-בחירה מהתרחישים${mined.some((m) => typeof m === 'string') ? ' — ' + mined.filter((m) => typeof m === 'string').join(' · ') : ''} · ${mined.filter((m) => m.q).length} שאלות «לאיזה שדה»`); for (const m of mined) if (m.q) r.questions.push(m.q); }
   if (sen) { r.notes.push(`🔁 המסמך תורגם למשפט (${sen.ents.length} ישויות · ${sen.flows.length} זרימות ⇒ ${sen.flows.map((f) => `«${f.clause}»`).join(' · ') || '—'}) ⇒ אותו צינור כמו משפט`); r.docSentence = sen.sentence; }
