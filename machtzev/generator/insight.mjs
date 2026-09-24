@@ -46,7 +46,11 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   const isSet = liveIsSet(live); const numOf = isSet ? 'agg' : liveValue(live, 'r', k); const thr = liveThreshold(live);   // צורת-התנאי (מספר / ותק / מונה-קשר / קבוצה) — מקום אחד
   const thrD = liveThresholdDart(live, k);
   const cond0 = live.kind === 'levels' ? 'true' : decide && decide.name ? `${decide.name}(${numOf}, ${thrD})` : liveTest(live, numOf, thrD);
-  const cond = (isSet || liveIsGrouped(live)) ? cond0 : liveCond(live, cond0, 'r', k);   // «או»: איחוד ברמת-הרשומה   // מדרגות: כל הקבוצות מוצגות; אטום-ההחלטה מחשב את המדרגה (live.decide), לא סף
+  const cond1 = (isSet || liveIsGrouped(live)) ? cond0 : liveCond(live, cond0, 'r', k);
+  // ⚖️ היסטרזיס (השופט: «להפריד בין נקודת ההפעלה לנקודת העצירה … פער שמונע נדנוד»): live.off = נקודת-הכיבוי שהבעלים נתן.
+  //    רשומה שכבר בהתראה נשארת בה עד שהיא חוצה את נקודת-הכיבוי (זיכרון _on בזמן-ריצה). בלי off ⇒ כמו קודם (ביט-זהה).
+  const hyst = live.off != null && !isSet && !liveIsGrouped(live) && /^[<>]$/.test(live.op || '');
+  const cond = hyst ? `(${cond1}) || (_on.contains(r['__id'] ?? '') && ${liveTest(live, numOf, String(live.off))})` : cond1;   // «או»: איחוד ברמת-הרשומה   // מדרגות: כל הקבוצות מוצגות; אטום-ההחלטה מחשב את המדרגה (live.decide), לא סף
   if (isSet) { manifest.source.agg = live.agg; const ai = liveAggImport(live); if (ai) imports.add(ai); }
   const grouped = liveIsGrouped(live); if (grouped) { manifest.source.agg = live.agg; manifest.source.by = live.by; const ai = liveAggImport({ ...live, kind: 'agg' }); if (ai) imports.add(ai); }
   manifest.source.kind = live.kind || 'num'; if (live.pre && live.pre.length) manifest.source.pre = live.pre.map((p) => ({ field: p.field, op: p.op, n: liveThreshold(p), kind: p.kind || 'num' })); if (live.alt && live.alt.length) manifest.source.alt = live.alt.map((p) => ({ field: p.field, op: p.op, n: liveThreshold(p), kind: p.kind || 'num' })); if (live.kind === 'age') { manifest.source.days = live.days; manifest.timeDependent = true; }
@@ -111,11 +115,12 @@ import 'package:flutter/material.dart';
 ${liveNeedsHelper(live) ? AGE_HELPER + '\n' : ''}class ${cls} extends StatelessWidget {
   const ${cls}({super.key});
   @override
-  Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
+${hyst ? `  static final _on = <String>{};   // ⚖️ מי כבר בהתראה (היסטרזיס: נכנס מעל ${live.n}, יוצא רק ${live.op === '>' ? 'מתחת ל' : 'מעל '}${live.off})
+` : ''}  Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
     final rs = ${grouped ? liveGroupsExpr(live, liveSetExpr(live, `appStore.records('${live.slug}')`, k), k) : liveSetExpr(live, `appStore.records('${live.slug}')`, k)};   ${grouped ? '// רשומה = קבוצה (' + live.by + ' ⇒ ' + live.agg + ' ' + live.field + ')' : ''}
 ${isSet ? `    final agg = ${liveAggExpr(live, 'rs', k)};   // ערך-הקבוצה (${live.agg}); ההתראה על הקבוצה כולה
     final br = (${cond}) ? rs.toList() : <Map<String, String>>[];` : `    final br = rs.where((r) => ${cond}).toList()${live.kind === 'eq' ? '' : '..sort((a, b) => ' + (live.kind === 'levels' ? `(b[${k(live.by)}] ?? '').compareTo(a[${k(live.by)}] ?? '')` : `${live.op === '<' ? '' : '-'}(${liveValue(live, 'a', k)} - ${liveValue(live, 'b', k)}).sign.toInt()`) + ')'};`}   // ההחלטה מניעה את הסדר: החורג ביותר ראשון (23-ד)
-    return DsScaffold(title: ${k(name)}, subtitle: br.length.toString() + ' / ' + rs.length.toString() + ' ' + ${k(entity.name)}, icon: ${k('🔔')}, children: [
+${hyst ? "    _on..clear()..addAll(br.map((r) => r['__id'] ?? ''));\n" : ''}    return DsScaffold(title: ${k(name)}, subtitle: br.length.toString() + ' / ' + rs.length.toString() + ' ' + ${k(entity.name)}, icon: ${k('🔔')}, children: [
 ${parts.map((p) => `      ${p.cond ? `if (${p.cond}) ` : ''}Padding(padding: const EdgeInsets.only(bottom: 10), child: ${p.call}),`).join('\n')}
 ${live.kind === 'levels' ? `      for (final g in br) DsFold(title: (g[${k(live.by)}] ?? '') + ' · ' + (g[${k(live.field)}] ?? ''), details: [for (final r in appStore.records('${live.slug}').where((r) => ${liveKeyExpr(live, 'r', k)} == (g[${k(live.by)}] ?? ''))) Text((r[${k(entity.fields[0] || live.field)}] ?? '') + ' · ' + (r[${k(live.field)}] ?? ''), style: TextStyle(color: DsLook.of(context).ink, fontSize: 15, height: 1.5))]),   // חברי-המדרגה
 ` : ''}      if (br.isEmpty) Padding(padding: const EdgeInsets.only(top: 24), child: Center(child: Text(${k(`${entity.name}: 0 · ${said}`)}, style: TextStyle(color: DsLook.of(context).muted)))),

@@ -267,6 +267,9 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   // 🔒 שומר-ניקיון: app-ds/render-ds קוראים GEN_OUT/GEN_DATA_OUT **בזמן-טעינה**. אם לא הופנו מחוץ למדף לפני הייבוא הראשון —
   //    הבנייה כותבת ל-new/dart-gen-bs ו-new/dart-data-bs/auto ומוחקת יתומים (קרה 23.9, שוחזר מ-git). כאן: מסרבים, לא מלכלכים.
   const caps = capSegs.map(([seg, clauses], i) => ({ slug: `cap${i + 1}`, cls: `GenCap${i + 1}Screen`, kind: 'capability', name: seg.trim(), icon: '🔔', value: (clauses.find((c) => c.n != null) || {}).n ?? (clauses.find((c) => c.kind === 'levels') || {}).high ?? null, clause: (() => { const ok = (c) => c.n != null || ((c.op === '=' || String(c.op || '')[0] === '@') && c.y); const main = clauses.find((c) => c.kind === 'levels') || clauses.find((c) => ok(c) && !c.and && !c.or) || clauses.find(ok) || null; const ands = clauses.filter((c) => c !== main && c.and && ok(c)), ors = clauses.filter((c) => c !== main && c.or && ok(c)); /* שוויון: סף = מילה, לא מספר */ return main ? { ...main, ...(ands.length ? { and: ands } : {}), ...(ors.length ? { or: ors } : {}) } : null; })(), sub: clauses.map((c) => { const i = c.x ? seg.indexOf(c.x) : -1; return i >= 0 ? seg.slice(i).trim() : `${c.x || ''} ${c.op || ''} ${c.n ?? ''}`.trim(); }).join(' · ') }));   // המילים של הבעלים («ציון מתחת ל-55»), לא סימן   // מסך-ההתראה ⇒ אריח בלוח-הבית וברכזת (הרכבה: לא קובץ-ליד)
+  // ⚖️ נקודת-כיבוי מהבעלים (תשובה לשאלת-השופט «כיבוי <סעיף>») ⇒ clause.off ⇒ התראה עם היסטרזיס; כיוון לא-נכון ⇒ נשאל שוב
+  const offOf = (seg, c) => { const raw = String(answers[`כיבוי ${seg.trim()}`] ?? '').trim(); if (!raw) return null; const v = Number(raw);   /* ריק ≠ 0 */ return c && c.n != null && Number.isFinite(v) && (c.op === '>' ? v < +c.n : c.op === '<' ? v > +c.n : false) ? v : null; };
+  for (const cp of caps) if (cp.clause && offOf(cp.name, cp.clause) != null) cp.clause = { ...cp.clause, off: offOf(cp.name, cp.clause) };
   const BUF0 = bufferDeclsOf(form); BUF0.forEach((b, i) => caps.push({ slug: `buf${i + 1}`, cls: `GenBuf${i + 1}Screen`, kind: 'capability', name: b.seg, icon: '🚦', sub: `${b.ceiling} · ${b.batch}/${b.everyMin}`, value: null, clause: null, shape: true }));   // אזור-המתנה ⇒ אריח
   const SHP0 = answers.__shape || null; if (SHP0) caps.push({ slug: 'shape1', cls: 'GenShape1Screen', kind: 'capability', name: SHP0.seg, icon: '📋', sub: SHP0.atom, value: null, clause: null, shape: true });   // מסך-הצורה ⇒ אריח ברכזת
   const feeds = [...new Set(routes.filter((r) => r.route === 'source').map((r) => r.ent))]; if (feeds.length) notes.push(`מקור מבחוץ: ${feeds.join(', ')} ⇒ השרת מקבל שורות (POST <בנייה>/api/feed/<ישות>) · האפליקציה מושכת כל 3 שניות`);
@@ -463,5 +466,20 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       if (g.status === 0 && hit) files.push({ route: 'combine', file: path.join(R.ROOT, hit[1]), sources, sections: sections.length }); else notes.push(`gen-screen נכשל: ${out.trim().slice(0, 160)}`);
     }
   }
+  // ⚖️ השופט (systems-engine · הכרעת-בעלים 24.9 «כמו הישיבה — חלק מהמחולל»): המחולל עונה על שאלות-המבנה מתוך מה שבנה
+  //    (עובדות בלבד) ⇒ pureJudge ⇒ הפסק כמו שהוא: שורה בהערות (מהלך + איסור ראשון) + judge.md מלא ליד הקבצים. אין שופט ⇒ «לא-נמדד».
+  { const J = await import('./shofet.mjs'); /* «מתנדנד» הוא עובדה רק על ערך שעולה ויורד חי (נמדד: «ציון מעל 81» — ציון קבוע; «תאריך מעל 7 ימים» — עולה בלבד; «בין 60 ל-90» — כבר שני ספים ⇒ לא).
+       חי = מחושב מטבלאות אחרות (linked) · נכנס מבחוץ (מקור) · בחלון-זמן · קו-מגמה. תנאי מורכב (וגם/או) — לא מסומן. */
+    const fedSlugs = new Set(feeds.map((en) => app && app.nameToSlug && app.nameToSlug[en]).filter(Boolean));
+    const swings = (lv) => lv && /^[<>]$/.test(lv.op || '') && !(lv.pre || []).length && !(lv.alt || []).length && lv.kind !== 'age' && lv.kind !== 'levels' && (lv.kind === 'linked' || !!lv.window || lv.agg === 'trend' || fedSlugs.has(lv.slug));
+    const alerts = ((app && app.liveExtras) || []).filter((x) => x.live && swings(x.live)).map((x) => ({ seg: String(x.name).trim(), n: x.live.n, op: x.live.op, off: offOf(String(x.name), x.live) }));
+    for (const a of alerts.filter((x) => x.off != null)) notes.push(`⚖️ «${a.seg}»: נקודת-כיבוי נפרדת — נכנס ${a.op === '>' ? 'מעל' : 'מתחת ל'} ${a.n}, יוצא רק ${a.op === '>' ? 'מתחת ל' : 'מעל'} ${a.off} (היסטרזיס, לפי הפסק)`);
+    for (const a of alerts.filter((x) => x.off == null)) questions.push({ thing: a.seg, ask: 'off', key: `כיבוי ${a.seg}`, q: `⚖️ השופט: «${a.seg}» נדלקת ונכבית באותה נקודה (${a.n}) ⇒ תתנדנד. באיזה ערך לכבות אותה? (מספר ${a.op === '>' ? 'מתחת ל' : 'מעל '}${a.n})` });
+    const cases = J.casesOf({ app: (form.things.find((t) => !t.fields || !t.fields.length) || {}).label || name, alerts: alerts.filter((x) => x.off == null), buffers: BUF0, feeds });
+    if (cases.length) { if (!J.judgeHome()) notes.push(`⚖️ שופט: לא-נמדד — ${J.judgeHome.reason}`);
+      else { const md = []; for (const c of cases) { const r = J.judge(c); if (r.error) { notes.push(`⚖️ שופט «${c.where}»: שגיאה — ${r.error}`); continue; }
+          const v = r.verdict || {}; notes.push(`⚖️ שופט «${c.where}»: ${Object.keys(c.structure).join('+')} ⇒ מהלך: ${v.leverage_move || v.needs_one_question || '—'}${(v.forbidden || []).length ? ` · אסור: ${v.forbidden[0].text || v.forbidden[0]}` : ''}${r.rejected ? ` · 🐞 הבודק של השופט פסל (${r.violations.map((x) => x.rule).join(',')}) — באג במנוע` : ''}`);
+          md.push(`## ${c.where}\n\nמבנה (מהמחולל): ${Object.keys(c.structure).join(', ')}\n\n${r.text || ''}`); }
+        if (md.length) fs.writeFileSync(path.join(outDir, 'judge.md'), `# ⚖️ השופט על האפליקציה\n\n${md.join('\n\n')}\n`); } } }
   return { form, routes: allRoutes, held: held.map((r) => r.thing), spec, skipped, files, notes, questions, none: allRoutes.filter((r) => r.route === 'none').map((r) => r.thing) };
 }

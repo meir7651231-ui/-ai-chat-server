@@ -986,7 +986,7 @@
   },
   {
    "file": "machtzev/generator/insight.mjs",
-   "lines": 157,
+   "lines": 162,
    "fragments": [
     {
      "id": "insight#0",
@@ -1089,7 +1089,7 @@
      "id": "insight#7",
      "range": [
       34,
-      157
+      162
      ],
      "marker": "emitInsight",
      "composed": [
