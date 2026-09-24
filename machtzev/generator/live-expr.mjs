@@ -4,7 +4,7 @@
 import path from 'node:path';
 import * as R from '../root.mjs';
 import { verifiedTwin } from './op-twins.mjs';
-export const AGE_HELPER = `double _ageDays(String s) { final t = s.trim(); DateTime? d = DateTime.tryParse(t); if (d == null) { final m = RegExp(r'^(\\d{1,2})[./-](\\d{1,2})[./-](\\d{2,4})$').firstMatch(t); if (m != null) { final y = int.parse(m.group(3)!); d = DateTime(y < 100 ? 2000 + y : y, int.parse(m.group(2)!), int.parse(m.group(1)!)); } } return d == null ? double.nan : DateTime.now().difference(d).inDays.toDouble(); }`;
+export const AGE_HELPER = `double _ageDays(String s) { final t = s.trim(); DateTime? d = DateTime.tryParse(t); if (d == null) { final m = RegExp(r'^(\\d{1,2})[./-](\\d{1,2})[./-](\\d{2,4})$').firstMatch(t); if (m != null) { final y = int.parse(m.group(3)!); d = DateTime(y < 100 ? 2000 + y : y, int.parse(m.group(2)!), int.parse(m.group(1)!)); } } return d == null ? double.nan : DateTime.now().difference(d).inDays.toDouble(); }\ndouble _ageMin(String s) { final d = DateTime.tryParse(s.trim()); if (d == null || s.trim().length <= 10) return double.infinity; return DateTime.now().difference(d).inSeconds / 60.0; }`;
 //   kind:'refCount' — לכל רשומת-הורה: כמה רשומות-בנות מצביעות עליה ({ childSlug, childField, parentKey }) · kind:'agg' — על הקבוצה כולה: avg/sum/count של שדה (agg, field)
 // ═══ liveValue = eq ⊕ age ⊕ refCount ⊕ num
 export const liveValue = (live, r = 'r', k = (s) => `'${s}'`) =>
@@ -38,11 +38,12 @@ export const liveTest = (live, v, t) => (String(live.op || '')[0] === '@' ? `${l
 export const liveAtomImports = (live) => [live, ...(live.pre || []), ...(live.alt || [])].filter((p) => String(p.op || '')[0] === '@' && p.atomFile).map((p) => `import '../${p.atomFile}';`);
 /** האם ערך-דוגמה עונה לתנאי (JS, לציפייה): < · > · = (מחרוזת) */
 export const liveHit = (live, v) => { const t = liveThreshold(live); if (v == null) return false; if (String(live.op || '')[0] === '@') { const fn = verifiedTwin(live.op.slice(1), live.atomFile ? path.join(R.ROOT, 'new', live.atomFile) : null); return fn ? fn(String(v).trim(), String(t).trim()) === true : false; } return live.op === '<' ? v < t : live.op === '>' ? v > t : String(v).trim() === String(t).trim(); };   /* @אטום: התאום המאומת-מול-Dart (op-twins) */
-export const liveNeedsHelper = (live) => live.kind === 'age' || (live.pre || []).some((p) => p.kind === 'age');
+export const liveNeedsHelper = (live) => live.kind === 'age' || !!live.window || (live.pre || []).some((p) => p.kind === 'age');
 /** צירוף («וגם», הכרעת-בעלים 23.9 «צא לדרך»): live.pre = תנאים קודמים על אותה קבוצה ⇒ הקבוצה של התנאי הראשי היא הרשומות שעברו את כולם (מסנן על מסנן) */
 // ═══ livePre = and (filter over filter)
 export const livePre = (live, r = 'r', k = (s) => `'${s}'`) => (live.pre || []).map((p) => `(${liveTest(p, liveValue(p, r, k), liveThresholdDart(p, k))})`).join(' && ');
-export const liveSetExpr = (live, rs, k = (s) => `'${s}'`) => (live.pre && live.pre.length ? `${rs}.where((r) => ${livePre(live, 'r', k)}).toList()` : rs);
+const liveWin = (live, rs) => (live.window ? `${rs}.where((r) => _ageMin(r['__at'] ?? '') <= ${live.window}).toList()` : rs);   // חלון-זמן: רק מה שנכנס ב-N הדקות האחרונות (שורה בלי זמן מלא ⇒ לא בחלון)
+export const liveSetExpr = (live, rs, k = (s) => `'${s}'`) => { const w = liveWin(live, rs); return live.pre && live.pre.length ? `${w}.where((r) => ${livePre(live, 'r', k)}).toList()` : w; };
 /** חלופה («או»): live.alt = תנאים שכל אחד מהם מספיק — רשומה חורגת אם התנאי הראשי או אחת החלופות (איחוד) */
 // ═══ liveAlt = or (union)
 export const liveAlt = (live, r = 'r', k = (s) => `'${s}'`) => (live.alt || []).map((p) => `(${liveTest(p, liveValue(p, r, k), liveThresholdDart(p, k))})`).join(' || ');

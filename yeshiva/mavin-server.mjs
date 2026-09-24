@@ -13,6 +13,7 @@
 //  מסלולים: GET / · GET|PUT /api/data · GET /sentence · POST /self · GET /builds · POST /build {sentence,answers}
 //           GET /build/:id · GET /build/:id/app · GET|PUT /build/:id/api/data · GET|POST /build/:id/api/feed/:ent (מקור מבחוץ) · GET /build/:id/files/:name · POST /register {id}
 // ════════════════════════════════════════════════════════════════════════════════
+import { mintFeedToken } from '../new/atoms/mint-feed-token.mjs';   // 📡 מפתח-סוד לכל בנייה — האטום מהמדף (16 בייטים אקראיים ⇒ 32 hex)
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -73,7 +74,7 @@ for (const d of fs.existsSync(BUILDS) ? fs.readdirSync(BUILDS).filter((x) => /^\
 }
 let nextId = builds.reduce((m, b) => Math.max(m, b.id), 0) + 1;
 function newBuild(sentence, { label = '', answers = {}, self = false } = {}) {
-  const b = { id: nextId++, label: label || `${D.phrases.buildLabel} ${nextId - 1}`, sentence: String(sentence || '').trim(), answers, self, date: today(), stage: D.entities[0].stages[0], stageDate: today(), ms: 0, spec: [], questions: [], picks: [], screens: [], errors: 0, synth: 0, notes: [], gen: '', log: '', verified: null, registered: false };
+  const b = { id: nextId++, label: label || `${D.phrases.buildLabel} ${nextId - 1}`, sentence: String(sentence || '').trim(), answers, self, date: today(), stage: D.entities[0].stages[0], stageDate: today(), ms: 0, spec: [], questions: [], picks: [], screens: [], errors: 0, synth: 0, notes: [], gen: '', log: '', verified: null, registered: false }; b.feedToken = mintFeedToken();
   fs.mkdirSync(bdir(b), { recursive: true }); builds.push(b); persist(b); queue.push(b); pump(); log(T('queued', { label: b.label, sentence: b.sentence.slice(0, 60) }));
   return b;
 }
@@ -168,8 +169,9 @@ const perBuildData = (b) => path.join(bdir(b), 'data.json');
 const feedFile = (b, slug) => path.join(bdir(b), `feed-${String(slug).replace(/[^\w-]/g, '')}.jsonl`);
 const feedRead = (b, slug) => { const f = feedFile(b, slug); return fs.existsSync(f) ? fs.readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : []; };
 async function feedRoute(req, res, b, slug, u) {
-  if (req.method === 'GET') { const since = +(u.searchParams.get('since') || 0); const all = feedRead(b, slug); return json(res, 200, { rows: all.filter((x) => x.seq > since).map((x) => x.row), next: all.length ? all[all.length - 1].seq : since }); }
-  if (req.method === 'POST') { let d; try { d = JSON.parse(await body(req)); } catch { return text(res, 400, T('badJson')); } const rows = Array.isArray(d) ? d : Array.isArray(d && d.rows) ? d.rows : null; if (!rows) return text(res, 400, T('badJson'));
+  if (req.method === 'GET') { const since = +(u.searchParams.get('since') || 0); const all = feedRead(b, slug); const fresh = all.filter((x) => x.seq > since); return json(res, 200, { rows: fresh.map((x) => x.row), at: fresh.map((x) => x.at), next: all.length ? all[all.length - 1].seq : since }); }
+  if (req.method === 'POST') { const tok = req.headers['x-feed-token'] || u.searchParams.get('token'); if (!b.feedToken || tok !== b.feedToken) return text(res, 403, T('feedToken'));   /* מפתח-סוד לכל בנייה (mintFeedToken מהמדף): בלי המפתח לא שולחים שורות */
+    let d; try { d = JSON.parse(await body(req)); } catch { return text(res, 400, T('badJson')); } const rows = Array.isArray(d) ? d : Array.isArray(d && d.rows) ? d.rows : null; if (!rows) return text(res, 400, T('badJson'));
     const all = feedRead(b, slug); let seq = all.length ? all[all.length - 1].seq : 0; fs.mkdirSync(bdir(b), { recursive: true }); fs.appendFileSync(feedFile(b, slug), rows.map((row) => JSON.stringify({ seq: ++seq, at: new Date().toISOString(), row })).join('\n') + '\n'); return json(res, 200, { ok: true, added: rows.length, next: seq }); }
   return text(res, 405, T('notFound'));
 }
@@ -177,7 +179,7 @@ const json = (res, code, obj) => { res.writeHead(code, { 'content-type': 'applic
 const text = (res, code, s, type = 'text/plain; charset=utf-8') => { res.writeHead(code, { 'content-type': type }); res.end(s); };
 const file = (res, f) => { if (!f || !fs.existsSync(f)) return text(res, 404, T('notFound')); const ext = path.extname(f); text(res, 200, fs.readFileSync(f), { '.html': 'text/html; charset=utf-8', '.png': 'image/png', '.json': 'application/json; charset=utf-8' }[ext] || 'text/plain; charset=utf-8'); };
 const body = (req) => new Promise((res) => { let s = ''; req.on('data', (d) => { s += d; }); req.on('end', () => res(s)); });
-const pub = (b) => ({ id: b.id, label: b.label, flutter: b.web ? (b.self ? '/flutter/' : `/build/${b.id}/flutter/`) : null, sentence: b.sentence, date: b.date, stage: b.stage, stageDate: b.stageDate, ms: b.ms, spec: b.spec, questions: b.questions, picks: b.picks, screens: b.screens, errors: b.errors, synth: b.synth, notes: b.notes, verified: b.verified, shots: b.shots || [], app: b.gen ? `/build/${b.id}/app` : null, registered: b.registered });
+const pub = (b) => ({ id: b.id, label: b.label, feedToken: b.feedToken || null, flutter: b.web ? (b.self ? '/flutter/' : `/build/${b.id}/flutter/`) : null, sentence: b.sentence, date: b.date, stage: b.stage, stageDate: b.stageDate, ms: b.ms, spec: b.spec, questions: b.questions, picks: b.picks, screens: b.screens, errors: b.errors, synth: b.synth, notes: b.notes, verified: b.verified, shots: b.shots || [], app: b.gen ? `/build/${b.id}/app` : null, registered: b.registered });
 const server = http.createServer(async (req, res) => {
   const u = new URL(req.url, 'http://x'); const p = u.pathname; const m = p.match(/^\/build\/(\d+)(?:\/(.*))?$/);
   try {

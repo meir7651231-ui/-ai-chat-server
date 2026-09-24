@@ -318,6 +318,26 @@ export function sourceDeclsOf(form) {
     out.push({ seg, ent: ent.label, things: form.things.filter((t) => t.src === seg && t !== ent).map((t) => t.label) }); }
   return out;
 }
+/** חוקים על האפליקציה (הכרעת-בעלים 24.9 «חוק-על-האפליקציה הוא טבלה»): «מצבים: א, ב» · «תפקידים: א, ב» · «במצב X מסתירים/רק <ישויות>» · «<תפקיד> רואה רק <ישויות>».
+ *  המילים מ-spec-lang (modesWord · rolesWord · modeRuleWord · hideWords · onlyWords · roleSeeWords); הישויות לפי גזע. מחזיר גם את הקטעים שנצרכו (לא ישות, לא «אין»). */
+export function rulesDeclOf(form) {
+  let SL = {}; try { SL = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')); } catch { return null; }
+  if (!SL.modesWord && !SL.rolesWord) return null;
+  const s = String(form.sentence || ''); const ents = form.things.filter((t) => t.fields && t.fields.length); const esc = (x) => String(x).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const listAfter = (w) => { if (!w) return { list: [], raw: null }; const m = s.match(new RegExp('(?:^|[.;]\\s*)' + esc(w) + '\\s*:\\s*([^.;]+)')); return m ? { list: m[1].split(/[,،]/).map((x) => x.trim().replace(/^ו(?=\S{2,})/, '')).filter(Boolean), raw: m[1].trim() } : { list: [], raw: null }; };
+  const modes = listAfter(SL.modesWord), roles = listAfter(SL.rolesWord);
+  const entsOf = (txt) => [...new Set(toks(txt).map((w) => (ents.find((e) => sameStem(w, e.label)) || {}).label).filter(Boolean))];
+  const hide = {}, only = {}, see = {}; const ruleSegs = new Set();
+  for (const seg of s.split(/[.;]/).map((x) => x.trim()).filter(Boolean)) {
+    if (SL.modeRuleWord && seg.startsWith(SL.modeRuleWord + ' ')) { const rest = seg.slice(SL.modeRuleWord.length).trim(); const mode = modes.list.find((m) => rest.startsWith(m + ' ')); if (!mode) continue; const tail = rest.slice(mode.length).trim();
+      const hw = (SL.hideWords || []).find((w) => tail.startsWith(w + ' ')), ow = (SL.onlyWords || []).find((w) => tail.startsWith(w + ' '));
+      const es = entsOf(tail.slice((hw || ow || '').length)); if (!es.length) continue; (hw ? hide : ow ? only : hide)[mode] = es; ruleSegs.add(seg); continue; }
+    const rw = (SL.roleSeeWords || []).find((w) => seg.includes(' ' + w + ' ')); if (rw) { const role = seg.slice(0, seg.indexOf(' ' + rw + ' ')).trim(); if (!roles.list.includes(role)) continue; const es = entsOf(seg.slice(seg.indexOf(' ' + rw + ' ') + rw.length + 2)); if (es.length) { see[role] = es; ruleSegs.add(seg); } }
+  }
+  if (!modes.list.length && !roles.list.length) return null;
+  const segs = new Set([...ruleSegs]); for (const [w, x] of [[SL.modesWord, modes], [SL.rolesWord, roles]]) if (x.raw) { segs.add(w); segs.add(x.raw); }
+  return { modes: modes.list, roles: roles.list, hide, only, see, things: form.things.filter((t) => [...segs].some((g) => t.src === g || g.includes(t.src))).map((t) => t.label) };
+}
 export function serverDeclOf(form) { return declOf(form, SL_DECL.server); }
 export function lookDeclOf(form) { return declOf(form, SL_DECL.look, (serverDeclOf(form) || {}).thing || null); }
 /** ראש-המשפט (צורה, לא משמעות): מה שלפני הנקודתיים הראשונות = השלם שכל השאר בתוכו. «ניהול מוסד: לכל תלמיד יש…» ⇒ ראש «ניהול מוסד».

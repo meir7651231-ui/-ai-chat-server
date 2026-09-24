@@ -48,8 +48,11 @@ export function detectAlertClause(text) {
   const wm = t.match(WHEN);
   if (!wm) return null;
   const before = t.slice(0, wm.index);          // ראש-הסעיף — כוונת-התצוגה (יתורגם ע"י match)
-  const after = t.slice(wm.index + wm[0].length); // תנאי — X REL Y
+  let after = t.slice(wm.index + wm[0].length); // תנאי — X REL Y
   // התאמת-יחס על טקסט מנוטרל-סופיות (אורך זהה ⇒ אינדקסים תואמים ל-after המקורי).
+  // חלון-זמן («ב-10 הדקות האחרונות», הכרעת-בעלים 24.9): מספר + יחידת-דקות + מילת-אחרון (spec-lang) ⇒ window בדקות; הביטוי יוצא מהסעיף לפני היחס
+  let window = null; { const WW = (SL_T.windowWords || []).map(escRe).join('|'), MU = SL_T.minuteUnits || {};
+    if (WW) { const wm = after.match(new RegExp('\\s*[֐-׿]?-?(\\d+(?:\\.\\d+)?)\\s+(\\S+)\\s+(?:' + WW + ')')); if (wm && MU[wm[2]]) { window = +wm[1] * MU[wm[2]]; after = after.slice(0, wm.index) + after.slice(wm.index + wm[0].length); } } }
   const afterN = definalize(after);
   let rel = null, relM = null;
   for (const r of REL) { const m = afterN.match(r.re); if (m) { rel = r; relM = m; break; } }
@@ -59,6 +62,7 @@ export function detectAlertClause(text) {
   const xWords = hw(xPart), yWords = hw(yPart); const yNum = (yPart.match(/\d+(?:\.\d+)?/) || [null])[0];
   if (!xWords.length || (!yWords.length && yNum == null)) return null;   // «מעל 1» — מספר בלי מילה אחריו הוא סף כשר
   return {
+    ...(window ? { window } : {}),
     trigger: hw(before).slice(-2).join(' '),      // 2 המילים לפני 'כש' = אות-הכוונה (בלי שם-הערך)
     x: cleanPhrase(xWords),                        // שדה-הערך = צירוף-השם המלא (סמיכות נשמרת)
     op: rel.op,

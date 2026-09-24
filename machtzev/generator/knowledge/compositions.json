@@ -3,7 +3,7 @@
  "files": [
   {
    "file": "machtzev/generator/capability.mjs",
-   "lines": 233,
+   "lines": 237,
    "fragments": [
     {
      "id": "capability#0",
@@ -218,7 +218,7 @@
      "id": "capability#19",
      "range": [
       44,
-      73
+      77
      ],
      "marker": "form: condition (num · age · eq)",
      "composed": [
@@ -234,8 +234,8 @@
     {
      "id": "capability#20",
      "range": [
-      73,
-      83
+      77,
+      87
      ],
      "marker": null,
      "composed": [],
@@ -245,8 +245,8 @@
     {
      "id": "capability#21",
      "range": [
-      83,
-      84
+      87,
+      88
      ],
      "marker": null,
      "composed": [],
@@ -256,8 +256,8 @@
     {
      "id": "capability#22",
      "range": [
-      84,
-      85
+      88,
+      89
      ],
      "marker": null,
      "composed": [],
@@ -267,8 +267,8 @@
     {
      "id": "capability#23",
      "range": [
-      85,
-      90
+      89,
+      94
      ],
      "marker": null,
      "composed": [],
@@ -278,8 +278,8 @@
     {
      "id": "capability#24",
      "range": [
-      90,
-      99
+      94,
+      103
      ],
      "marker": "form: levels",
      "composed": [
@@ -294,8 +294,8 @@
     {
      "id": "capability#25",
      "range": [
-      99,
-      120
+      103,
+      124
      ],
      "marker": "form: and / or",
      "composed": [
@@ -311,8 +311,8 @@
     {
      "id": "capability#26",
      "range": [
-      120,
-      122
+      124,
+      126
      ],
      "marker": null,
      "composed": [],
@@ -324,8 +324,8 @@
     {
      "id": "capability#27",
      "range": [
-      122,
-      192
+      126,
+      196
      ],
      "marker": null,
      "composed": [],
@@ -337,8 +337,8 @@
     {
      "id": "capability#28",
      "range": [
-      192,
-      209
+      196,
+      213
      ],
      "marker": null,
      "composed": [],
@@ -348,8 +348,8 @@
     {
      "id": "capability#29",
      "range": [
-      209,
-      233
+      213,
+      237
      ],
      "marker": null,
      "composed": [],
@@ -360,7 +360,7 @@
   },
   {
    "file": "machtzev/generator/live-expr.mjs",
-   "lines": 61,
+   "lines": 62,
    "fragments": [
     {
      "id": "live-expr#0",
@@ -637,21 +637,35 @@
      "id": "live-expr#20",
      "range": [
       44,
-      46
+      45
+     ],
+     "marker": null,
+     "composed": [],
+     "declares": "liveWin",
+     "uses": [
+      "liveWin"
+     ]
+    },
+    {
+     "id": "live-expr#21",
+     "range": [
+      45,
+      47
      ],
      "marker": null,
      "composed": [],
      "declares": "liveSetExpr",
      "uses": [
       "livePre",
-      "liveSetExpr"
+      "liveSetExpr",
+      "liveWin"
      ]
     },
     {
-     "id": "live-expr#21",
+     "id": "live-expr#22",
      "range": [
-      46,
-      48
+      47,
+      49
      ],
      "marker": "liveAlt",
      "composed": [
@@ -666,10 +680,10 @@
      ]
     },
     {
-     "id": "live-expr#22",
+     "id": "live-expr#23",
      "range": [
-      48,
-      49
+      49,
+      50
      ],
      "marker": null,
      "composed": [],
@@ -680,10 +694,10 @@
      ]
     },
     {
-     "id": "live-expr#23",
+     "id": "live-expr#24",
      "range": [
-      49,
-      50
+      50,
+      51
      ],
      "marker": null,
      "composed": [],
@@ -695,10 +709,10 @@
      ]
     },
     {
-     "id": "live-expr#24",
+     "id": "live-expr#25",
      "range": [
-      50,
-      53
+      51,
+      54
      ],
      "marker": null,
      "composed": [],
@@ -710,10 +724,10 @@
      ]
     },
     {
-     "id": "live-expr#25",
+     "id": "live-expr#26",
      "range": [
-      53,
-      54
+      54,
+      55
      ],
      "marker": null,
      "composed": [],
@@ -723,10 +737,10 @@
      ]
     },
     {
-     "id": "live-expr#26",
+     "id": "live-expr#27",
      "range": [
-      54,
-      61
+      55,
+      62
      ],
      "marker": null,
      "composed": [],
@@ -739,7 +753,7 @@
   },
   {
    "file": "machtzev/generator/app-ds.mjs",
-   "lines": 463,
+   "lines": 475,
    "fragments": [
     {
      "id": "app-ds#0",
@@ -912,7 +926,7 @@
      "id": "app-ds#15",
      "range": [
       373,
-      463
+      475
      ],
      "marker": "liveOf",
      "composed": [
@@ -928,7 +942,8 @@
       "liveMonthAsk",
       "liveNoRelation",
       "liveNotDate",
-      "liveOf"
+      "liveOf",
+      "liveOf0"
      ]
     }
    ]
