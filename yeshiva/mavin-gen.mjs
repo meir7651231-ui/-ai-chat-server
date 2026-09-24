@@ -178,15 +178,23 @@ export async function generateFromSpec(spec, { outDir, name = 'spec' } = {}) {
   return { spec, files, notes, questions, screens: app ? app.screens.map((s) => `${s.kind}:${s.name}`) : [] };
 }
 /** מסמך-«פירוק» (markdown של הבעלים, שלד peruk-lang) ⇒ peruk.perukToSpec ⇒ ספק ⇒ app-ds. אפס כתיבה ל-specs-ds. */
-export async function generateFromDoc(md, { outDir, name = 'doc', answers = {} } = {}) {
+export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, corpus = null } = {}) {
   const { perukToSpec } = await import('../machtzev/generator/peruk.mjs');
   const DS = await import('../machtzev/generator/doc-shape.mjs');   // 📐 קריאה לפי צורה (הכרעת-בעלים 24.9): peruk מכיר רק את שלד-הפירוק שלו
   const pk = perukToSpec(DS.htmlToMd(md), name); const shp = DS.docToSpec(md); const perukRead = Number((pk.node && pk.node.fields) || 0);
   const byShape = !!shp.spec && perukRead === 0;   // peruk קרא 0 שדות והמסמך מכיל טבלת-ישויות ⇒ הצורה קובעת (נמדד: מירון/72 ⇒ «תיק» כללי מהדאטה של peruk)
   const spec = byShape ? shp.spec : pk.spec; const node = byShape ? { ...(pk.node || {}), reader: 'doc-shape', fields: shp.ents.reduce((a, e) => a + e.fields.length, 0), entities: shp.ents.length, links: shp.links.length } : pk.node;
   // 🔁 המסמך עובר באותו צינור כמו משפט (לולאת ein · קושיות · חיפוש-צורה · התראות): דלת-המסמך רק מתרגמת — לא נתקעת ועוצרת
-  const sen = byShape ? DS.docToSentence(md) : null;
+  // ⛏️ הכורה (yeshiva/koreh — בדפוס mine.py): קורפוס-הבעלים (תרחישים) מול שמות-הישויות ⇒ ערכים שחוזרים בכמה מקורות ⇒ שאלה «לאיזה שדה?» ⇒ שדה-בחירה
+  const enums = {}; const mined = [];
+  if (byShape && corpus) { const K = await import('./koreh.mjs'); const res = K.mine(await K.corpusOf(corpus), shp.ents.map((e) => e.name)); K.ledger(res);
+    for (const e of shp.ents) { const vals = res.candidates.filter((c) => c.ent === e.name && c.sources >= 3).slice(0, 8); if (vals.length < 2) continue; const key = `ערכים ${e.name}`;
+      const said = typeof answers[key] === 'string' ? answers[key].trim() : ''; const f = e.fields.find((x) => x.name === said);
+      if (f) { (enums[e.name] ??= {})[f.name] = vals.map((c) => c.name); mined.push(`${e.name}.${f.name} ⇐ ${vals.map((c) => c.name).join('/')}`); }
+      else if (!said) mined.push({ q: { thing: 'כורה', ask: 'mined', key, q: `⛏️ בתרחישים (${res.corpus} מקורות) חוזרים ערכים של «${e.name}»: ${vals.map((c) => `${c.name} (${c.sources})`).join(' · ')}. לאיזה שדה הם שייכים? (${e.fields.map((x) => x.name).join(' · ')}) — ענה בשם השדה, או «לא»` } }); } }
+  const sen = byShape ? DS.docToSentence(md, { enums }) : null;
   const r = sen ? await generateAll(sen.sentence, { answers, outDir, name }) : await generateFromSpec(spec, { outDir, name });
+  if (corpus && byShape) { r.notes.push(`⛏️ כורה: ${mined.filter((m) => typeof m === 'string').length} שדות-בחירה מהתרחישים${mined.some((m) => typeof m === 'string') ? ' — ' + mined.filter((m) => typeof m === 'string').join(' · ') : ''} · ${mined.filter((m) => m.q).length} שאלות «לאיזה שדה»`); for (const m of mined) if (m.q) r.questions.push(m.q); }
   if (sen) { r.notes.push(`🔁 המסמך תורגם למשפט (${sen.ents.length} ישויות · ${sen.flows.length} זרימות ⇒ ${sen.flows.map((f) => `«${f.clause}»`).join(' · ') || '—'}) ⇒ אותו צינור כמו משפט`); r.docSentence = sen.sentence; }
   if (byShape && !sen) { r.notes.push(`📐 קריאה לפי צורה: שלד-הפירוק קרא 0 שדות ⇒ טבלת-ישויות במסמך: ${shp.ents.length} ישויות · ${node.fields} שדות · ${shp.links.length} קישורים לפי השמות שהמסמך נותן (${shp.links.slice(0, 5).map((l) => `${l.ent}.${l.field}→${l.to}`).join(' · ')}${shp.links.length > 5 ? ' …' : ''})`);
     for (const f of shp.flows) r.questions.push({ thing: 'זרימה', ask: 'flow', q: `זרימה «${f.ent}.${f.field} ${f.op} ${f.n}${f.unit} → ${f.then.slice(0, 60)}» נקראה — לא נבנתה: ${f.field} ${shp.ents.some((e) => e.fields.some((x) => x.name === f.field)) ? 'שדה בטבלה, אבל אין בדלת-המסמך בניית-התראות' : 'אינו שדה באף טבלה (ערך מחושב — מנוע)'} ` }); }
