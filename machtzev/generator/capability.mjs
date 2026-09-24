@@ -72,6 +72,7 @@ export function detectAlertClause(text) {
     y: yWords.length ? deprefix(yWords[0]) : yNum,   // שדה-הסף (המילה הצמודה לתנאי) או המספר עצמו
     n: (yPart.match(/\d+(?:\.\d+)?/) || [null])[0] ?? (yWords.length && (TIME_UNITS[deprefix(yWords[0])] || TIME_ASK.has(deprefix(yWords[0]))) ? '1' : null),   // המספר של הבעלים אחרי היחס (כשיש) — סף-ההתראה; יחידת-זמן בלי מספר = 1; אין ⇒ null
     unit: (() => { const m = yPart.match(/\d+(?:\.\d+)?\s*([֐-׿]+)/); const w = m ? deprefix(m[1]) : (yWords.length ? deprefix(yWords[0]) : ''); return TIME_UNITS[w] || (TIME_ASK.has(w) ? 'ask' : null); })(),
+    unitMin: (() => { const m = yPart.match(/\d+(?:\.\d+)?\s*([֐-׿'׳]+)/); const w = m ? deprefix(m[1]) : ''; return (SL_T.minuteUnits || {})[w] || null; })(),   // «מעל 270 דקות» / «מעל 5 שעות» ⇒ דקות (זמן-מאז בדקות; אותן מילים כמו חלון-הזמן)
     unitWord: (() => { const m = yPart.match(/\d+(?:\.\d+)?\s*([֐-׿]+)/); const w = m ? deprefix(m[1]) : (yWords.length ? deprefix(yWords[0]) : ''); return TIME_UNITS[w] || TIME_ASK.has(w) ? w : null; })(),   // «מעל 7 ימים» / «מעל שבוע» ⇒ ימים ליחידה (spec-lang.timeUnits — דאטה)
   };
 }

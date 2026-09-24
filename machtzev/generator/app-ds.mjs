@@ -123,7 +123,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
   const entRes = {};
   for (const li of info) if (li.isEnt) entRes[li.i] = entInterpret(li.line);
   // הכרעה-37 «תתקן את כל השאר»: סוג-שדה מערכי-הדוגמאות של הבעלים (צורה: כל הערכים בעמודה מספר ⇒ num · כל הערכים תאריך ⇒ date). רק שדה שהרמז-הלשוני השאיר 'text'; הדאטה של הבעלים, לא השלמה.
-  const isNumV = (v) => /^[+-]?\d+([.,]\d+)?%?$/.test(String(v).trim()), isDateV = (v) => /^(\d{1,2}[./-]\d{1,2}[./-]\d{2,4}|\d{4}-\d{2}-\d{2})$/.test(String(v).trim());
+  const isNumV = (v) => /^[+-]?\d+([.,]\d+)?%?$/.test(String(v).trim()), isDateV = (v) => /^(\d{1,2}[./-]\d{1,2}[./-]\d{2,4}|\d{4}-\d{2}-\d{2}([ T]\d{1,2}:\d{2}(:\d{2})?)?)$/.test(String(v).trim());   // גם תאריך+שעה (זמן-מאז בדקות)
   for (const r of Object.values(entRes)) { const ex = r && examples[r.entity]; if (!ex || !ex.length) continue; r.schema.forEach((f, i) => { if (f.type !== 'text') return; const col = ex.map((row) => row[i]).filter((v) => v != null && String(v).trim()); if (!col.length) return; if (col.every(isNumV)) f.type = 'num'; else if (col.every(isDateV)) f.type = 'date'; }); }
   // §22 · ישות בלי שדות = ספק שבור, לא פלט שבור. בלי השער הזה נפלט
   //   DsTable(labels: const [], rows: rs.map((r) => []).toList()) ⇒ List<List<dynamic>>
@@ -409,7 +409,9 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       // «תאריך הכרעה» (שדה + ישות בסמיכות) ⇒ השדה של אותה ישות קודם; אחרת השדה בכל ישות
       const xw2 = String(c.x).split(/\s+/).filter(Boolean); const entTail = xw2.length >= 2 ? entByStem(xw2[xw2.length - 1]) : null; const fieldHead = entTail ? xw2.slice(0, -1).join(' ') : null;
       const ordered = [...(entTail ? [entTail] : []), ...info.filter((li) => li.isEnt && entRes[li.i] && entRes[li.i] !== entTail).map((li) => entRes[li.i])];
-      for (const r of ordered) { const cx = (r === entTail && fieldHead) ? fieldHead : c.x; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(cx) || fd.label === cx); if (f && nameToSlug[r.entity]) { if (c.op === '=' || c.op[0] === '@') return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, kind: 'eq', value: String(c.y), n: null, ...(c.op[0] === '@' ? { atomFile: CAPREL[c.op] || null } : {}) } }; if (c.unit && f.type !== 'date') { const why = T('liveNotDate', { name: x.name, label: f.label, type: f.type }); seedNotes.push(why); return { ...x, why }; } return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: c.unit ? 'age' : 'num', days: c.unit ? +c.n * c.unit : null } }; } }
+      for (const r of ordered) { const cx = (r === entTail && fieldHead) ? fieldHead : c.x; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(cx) || fd.label === cx); if (f && nameToSlug[r.entity]) { if (c.op === '=' || c.op[0] === '@') return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, kind: 'eq', value: String(c.y), n: null, ...(c.op[0] === '@' ? { atomFile: CAPREL[c.op] || null } : {}) } }; if ((c.unit || c.unitMin) && f.type !== 'date') { const why = T('liveNotDate', { name: x.name, label: f.label, type: f.type }); seedNotes.push(why); return { ...x, why }; }
+            if (c.unitMin && !c.unit) return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: 'ageMin', minutes: +c.n * c.unitMin } };   // ⊕ זמן-מאז בדקות (_ageMin הקיים) — «נסרק מעל 270 דקות»
+            return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: c.unit ? 'age' : 'num', days: c.unit ? +c.n * c.unit : null } }; } }
       return x; };   // אין ישות עם השדה ⇒ השורה נשארת סטטית (הסף בלבד), לא מומצא
     const liveExtras = extraScreens.map((x) => { const y = liveOf(x); const c = x.clause; if (!y.live || !c || !((c.and && c.and.length) || (c.or && c.or.length))) return y;
       const pre = [], alt = [], dropped = [];
