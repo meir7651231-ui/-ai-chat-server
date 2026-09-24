@@ -103,6 +103,7 @@
 | mutation | `mutation-check.mjs` | אדום-על-חלול, ירוק-על-אמיתי |
 | freeref | `emit/free-ref-scan.mjs` | אפס מזהה לא-מוגדר (חוק-1) |
 | `emit/ast-js-to-dart.mjs` · `parity-ast.mjs` | 🌳 **מנוע-ההמרה JS⇒Dart** (AST): **G20 — פולט חתימות מוקלדות**: הסקה סטטית מצורת-ה-JS (ברירות-מחדל · שימוש · null) + ראיית-בדיקות (`--types`) · פרמטר-Map ⇒ `m['k']` · `parity-ast.mjs N [--dynamic\|--evidence]` מודד קומפילציה-נקייה ושיעור-הקלדה |
+| `emit/parity-ts.mjs` | 🌉 **שוויון TS⇔Dart על מודול-מחלקות** (מנוע-המערכות: Rng · Sim · תור · מודל-ממפרט · שרשרת-אספקה · תנועה · מלאי): `emitTs` (מחלקות · סיביות-32 · `_o` אובייקט-נגיש-בנקודה · `_moduleInit`) מול ריצת-ה-JS — כל ערך זהה. `SYSTEMS_ENGINE`/Dart חסר ⇒ exit 2 |
 | assembly | `assemble/box-audit.mjs` | כל חוט-מתוכנן מחווט — אפס אובדן-יכולת |
 | datapurity | `data-purity-check.mjs` | אפס דאטה-צרובה במנגנון (הכרעה 16) |
 | deeppurity | `deep-purity-scan.mjs` | אפס דאטה-חדשה — גם קבועים ושמות-דומיין (הכרעה 19) |
@@ -151,7 +152,7 @@
 | `generator/` | 28 | ליבת-המחולל: `app-ds` · `render-ds` · `entity` · `nl-spec` · `synth` · `genesis-gen` + `*.json` דאטה-אטומים + `acceptance-space.txt`. |
 | `assemble/` | 16 | הרכבה: `shelf-lift` · `data-lift` · `gen-manifest` · `gen-screen` · `board-gen` · `box-audit`. |
 | `extract/` | 15 | מחלצי-L2: כל לחיצה/פעולה ממסך-המקור. |
-| `emit/` | 14 | JS↔Dart: `ast-js-to-dart` · `js-to-dart` · `dart-to-js` · `parity-*` · `free-ref-scan`. |
+| `emit/` | 15 | JS↔Dart: `ast-js-to-dart` · `js-to-dart` · `dart-to-js` · `parity-*` · `free-ref-scan`. |
 | `carve/` | 9 | חצב-AST: `ast_dehardcode.dart` · `screen-decomp` · `screen-lift` · `widget-dedup`. |
 | `behavioral/` | 4 | זהב-התנהגות: `run.mjs` (AppStore · golden 14/14). |
 
