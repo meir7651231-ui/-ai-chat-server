@@ -301,8 +301,14 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   // ⊕ תנאי על שדה-מחושב («מצב=פער > 5000 ? …» כש«פער» הוא נוסחה): נמדד — התנאי קרא את תיבת-הקלט הריקה של «פער» ⇒ תמיד «מסכימים».
   //    עכשיו שדה-נוסחה נושא את הביטוי שלו (expr) והתנאי משתמש בו.
   for (const l of labelIdx) { const s0 = schema[l.idx]; if (s0.formula && !ROLLUP_RE.test(s0.formula) && !compileCond(s0.formula, labelIdx)) { const ex = compileFormula(s0.formula, labelIdx); if (ex) l.expr = ex; } }
+  // ✍️ חוק/מסמך חתום (הכרעה-39 · מירון/72 «Rule: expression · owner · signature · version»): שדה שאחת ממילותיו ב-L.signWords
+  //    אינו קלט — כפתור «חתום» בכרטיס שומר בו טביעת-אצבע (FNV-1a 32 — זהה ב-VM וב-web) של שאר שדות-הקלט; הכרטיס מציג
+  //    ✓ חתום / ✗ שונה אחרי חתימה / לא חתום. שינוי אחרי חתימה גלוי מיד. בלי שדה כזה ⇒ ביט-זהה.
+  const sigIdx = schema.findIndex((s) => String(s.label).split(/\s+/).some((w) => (L.signWords || []).includes(w)));
+  const sigOver = sigIdx < 0 ? [] : schema.map((s, i) => i).filter((i) => i !== sigIdx && !schema[i].formula && !schema[i].members);
   schema.forEach((s, i) => {
     const cl = k(s.label); labelConst.push(cl);
+    if (i === sigIdx) { recValsR.push('_sigState(r)'); return; }   // ✍️ לא קלט, לא נשמר מהטופס — רק מהכפתור
     const bind = `value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)`;
     if (s.required) requiredIdx.push(i);
     if (s.unique) uniqueIdx.push(i);
@@ -484,7 +490,14 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const labelsList = labelConst.join(', ');
   // קשר-הפוך: שבב פר-ישות-מצביעה עם מונה-חי (appStore.referencing).
   const backChips = backRefs.map((b) => `_backChip(${k(b.fname)}, appStore.referencing('${b.fslug}', ${k(b.ffield)}, rid).length)`).join(', ');
-  const backFooter = backRefs.length ? `, footer: Wrap(spacing: 6, runSpacing: 6, children: [${backChips}])` : '';
+  const sigBtn = sigIdx >= 0 ? `TextButton(key: Key('sign-' + rid), onPressed: () => appStore.update(${SK}, rid, {${k(schema[sigIdx].label)}: _fp(r)}), child: const Text(${k(L.sigAction || '')}))` : null;   // ✍️
+  const backFooter = backRefs.length ? `, footer: Wrap(spacing: 6, runSpacing: 6, children: [${backChips}${sigBtn ? ', ' + sigBtn : ''}])` : sigBtn ? `, footer: ${sigBtn}` : '';
+  const sigMethods = sigIdx < 0 ? '' : `
+  // ✍️ טביעת-אצבע FNV-1a 32 (זהה ב-VM וב-web: כפל מפוצל, אין חריגה מ-2^53) על שדות-הקלט; השדה «${schema[sigIdx].label}» שומר אותה בחתימה.
+  String _fnv(String s) { var h = 0x811c9dc5; for (final c in s.codeUnits) { h = (h ^ c) & 0xffffffff; h = ((h * 0x193) + ((h << 24) & 0xffffffff)) & 0xffffffff; } return h.toRadixString(16).padLeft(8, '0'); }
+  String _fp(Map<String, String> r) => _fnv([${sigOver.map((i) => `r[${k(schema[i].label)}] ?? ''`).join(', ')}].join('\u0001'));
+  String _sigState(Map<String, String> r) { final s = r[${k(schema[sigIdx].label)}] ?? ''; return s.isEmpty ? ${k(L.sigNone || '')} : (s == _fp(r) ? ${k(L.sigOk || '')} : ${k(L.sigBroken || '')}); }
+`;
   // 🗑 שער-מחיקה בכרטיס-ההורה (opt-in · רק אם הוכרז '| מחיקה:'): חסימה ⇒ blockedReason
   // (טוסט) · מפל ⇒ confirmMessage (דיאלוג-אישור). ניתוק/ברירת-מחדל ⇒ שקט (כמקודם).
   const refCount = `appStore.inboundRefs(${SK}, rid)`;
@@ -653,7 +666,7 @@ ${hasVal ? `    final miss = <String>[];
       _v = {${editLoad}};
     });
   }
-${guardMethod}${rlsFields}${viewToggle}
+${guardMethod}${rlsFields}${viewToggle}${sigMethods}
   ${cardSig}
     final rid = r['__id'] ?? '';
     return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid)${backFooter}${delArgs}${cardHiddenArg});
