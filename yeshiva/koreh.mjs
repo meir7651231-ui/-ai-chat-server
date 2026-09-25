@@ -74,17 +74,25 @@ export function rulesOf(corpus, names, { subjects = [], skip = [], instances = {
     for (const w of t) { if (entOf(w, names) || inst(w)) continue; const w0 = w.replace(/^[ובלמהש]/, ''); if (subjects.includes(w) || subjects.includes(w0)) sub.push(subjects.includes(w) ? w : w0); }
     return [...new Set([...ents, ...sub])]; };
   for (const { src, text } of corpus) for (const line of text.split(/\n+/)) for (const s0 of line.split(/\s·\s|(?<=[.!?])\s+/)) {
-    if (/\|/.test(s0)) continue;   /* שורת-טבלה (מחזור-חיים «הקמה → פירוק») — לא כלל */
+    const put = (sub, r0) => { const g = out.get(sub) || out.set(sub, new Map()).get(sub); const k = r0.type + ':' + norm(r0.cond) + ' → ' + norm(r0.act); const r = g.get(k) || g.set(k, { ...r0, srcs: new Set() }).get(k); r.srcs.add(src); };
+    const shortSeg = (x) => { const w = toks(x); return w.length >= 1 && w.length <= 3 && !/\d/.test(x) && !/[?:]/.test(x); };
+    // ⇄ סיווג-החץ לפי צורה (הכרעת-בעלים 25.9): בטבלה «| ישות | … | הקמה → פירוק |» = מחזור-חיים של הישות (שלבים)
+    if (/\|/.test(s0)) { const cells = s0.split('|').map((x) => x.trim()).filter(Boolean); const e = cells.length && entOf(bare(toks(cells[0])[0] || ''), names);
+      if (e) for (const c of cells.slice(1)) { const seg = c.split(/\s*[→⇒]\s*/); if (seg.length >= 2 && seg.every(shortSeg)) put(e, { type: 'seq', cond: seg[0], act: seg.slice(1).join(' → '), seq: seg, ex: `${src}: ${s0.slice(0, 160)}` }); }
+      continue; }
     const s = s0.replace(/[«»"“”]/g, '').trim(); let m = s.match(/^(.{3,140}?)\s*[→⇒]\s*(.{2,140})$/); let prose = false;
     if (!m && WH) { const w = s.match(WH); if (w) { m = [w[0], w[1], w[2]]; prose = true; } }   /* «כשמקור נופל — הביטחון יורד» */
     if (!m) continue;
     let cond = m[1].trim(); const act = m[2].split(/\s*[→⇒]\s*/)[0].trim(); let label = null;
     { const lm = cond.match(/^([֐-׿][֐-׿'"׳\- ]{1,24}):\s*(.+)$/); if (lm && !/\d/.test(lm[1])) { label = lm[1].trim(); cond = lm[2].trim(); } }   /* «מתרחבות: אדם → קוד אישי» — תווית (סוג-הכלל), לא נושא */
+    // סוג-החץ: רצף (≥3 מקטעים קצרים) = שלבים · ↔ / שתי ישויות = קשר · מספר → מספר = שינוי-ערך · «?» = שאלה-פתוחה · אחרת = כלל
+    const chain = [cond, ...m[2].split(/\s*[→⇒]\s*/)].map((x) => x.trim()).filter(Boolean);
+    const type = !prose && chain.length >= 3 && chain.every(shortSeg) ? 'seq' : /←\s*→|↔|<->/.test(s) || (entOf(bare(cond), names) && entOf(bare(act), names)) ? 'link' : /\d[\d.,%]*\s*[→⇒]\s*\d/.test(s) ? 'change' : /\?\s*$/.test(m[2].trim()) ? 'open' : 'rule';
+    if (type === 'seq') { const es = [...new Set([...toks(`${label || ''} ${s}`).map(bare).map((w) => entOf(w, names)).filter(Boolean)])]; for (const e of es) put(e, { type, cond: chain[0], act: chain.slice(1).join(' → '), seq: chain, label, ex: `${src}: ${s.slice(0, 160)}` }); continue; }
     if (!prose && !/\d/.test(cond) && !names.some((n) => cond.includes(n))) continue;          // תנאי-חץ = כמות או ישות (תנאי-כש נושא את עצמו)
     if (!(act.match(HEW) || []).some((w) => w.length > 1) || /^[\d.:,\s/+\-–]+$/.test(act)) continue;   // פעולה = מילה, לא רק מספר
     const subs = subjOf(cond); if (label) for (const w of toks(label).map(bare)) { const e = entOf(w, names); if (e && !subs.includes(e)) subs.push(e); }   /* «נקודות איסוף: …» ⇒ גם נקודה */
-    for (const sub of subs) { const g = out.get(sub) || out.set(sub, new Map()).get(sub); const k = norm(cond) + ' → ' + norm(act);
-      const r = g.get(k) || g.set(k, { cond, act, label, srcs: new Set(), ex: `${src}: ${s.slice(0, 160)}` }).get(k); r.srcs.add(src); } }
+    for (const sub of subs) put(sub, { type, cond, act, label, ex: `${src}: ${s.slice(0, 160)}` }); }
   // יחיד/רבים של אותה מילה (ילד/ילדים · נקודה/נקודות) ⇒ נושא אחד (הצורה הנפוצה); נושא שאינו ישות ושכל כלליו ממקור אחד ⇒ תוכן של תרחיש, לא שיטה (פיזור)
   const keyOf = (w) => w.replace(/(ים|ות)$/, '').replace(/ה$/, ''); const groups = new Map();
   for (const sub of out.keys()) { const k = names.includes(sub) ? sub : keyOf(sub); (groups.get(k) || groups.set(k, []).get(k)).push(sub); }
@@ -92,7 +100,7 @@ export function rulesOf(corpus, names, { subjects = [], skip = [], instances = {
   for (const subs of groups.values()) { const main = subs.find((x) => names.includes(x)) || subs.sort((a, b) => out.get(b).size - out.get(a).size)[0]; const m = new Map();
     for (const x of subs) for (const [k, r] of out.get(x)) { const r0 = m.get(k); if (r0) for (const s2 of r.srcs) r0.srcs.add(s2); else m.set(k, { ...r, srcs: new Set(r.srcs) }); }
     const rows = [...m.values()]; const srcs = new Set(rows.flatMap((r) => [...r.srcs])); if (!names.includes(main) && srcs.size < 2) continue;
-    res[main] = rows.map((r) => ({ cond: r.cond, act: r.act, ...(r.label ? { label: r.label } : {}), sources: r.srcs.size, ex: r.ex })).sort((a, b) => b.sources - a.sources); }
+    res[main] = rows.map((r) => ({ type: r.type || 'rule', cond: r.cond, act: r.act, ...(r.seq ? { seq: r.seq } : {}), ...(r.label ? { label: r.label } : {}), sources: r.srcs.size, ex: r.ex })).sort((a, b) => b.sources - a.sources); }
   return res;
 }
 /** ⇄ הכיוון-ההפוך של הכורה (הכרעת-בעלים 23.9 «דו-כיווני» · 25.9 «ישר והפוך»): **תרחישים ⇒ מודל**.
@@ -126,7 +134,7 @@ export function ruleClauses(rules, tables, { perEach = 'לכל', lastWord = 'ה�
   const stem = (w) => String(w).replace(/^[ובלמהש]+(?=[֐-׿]{3})/, '').replace(/(ים|ות|ת|ה)$/, '');
   for (const t of tables) {
     const rs = rules[t.name] || rules[t.name + 'ים'] || rules[t.name.replace(/ה$/, 'ות')] || []; if (!rs.length) continue;
-    for (const r of rs) { const c = `${r.label ? r.label + ' ' : ''}${r.cond}`;
+    for (const r of rs) { if (r.type && r.type !== 'rule') continue; const c = `${r.label ? r.label + ' ' : ''}${r.cond}`;
       const m = r.cond.match(/(\d+)\+?\s+[֐-׿]+.*?(?:ב[-־]?(\d+)\s*(?:'|דק'|דקות)|(באותה שעה|בשעה|בשעה אחת)|(?=(?:מאותו|מאותה)\s))/);   /* גם «3 ילדים מאותו מקום» — קיבוץ בלי חלון */
       const dl0 = r.cond.match(/([֐-׿]+)\s+(?:ש)?לא\s+([֐-׿]+)\s+עד\s*(\d{1,2}:\d{2})/); const dl = dl0 && (stem(dl0[1]) === stem(t.name) || dl0[1].startsWith(stem(t.name))) ? [dl0[0], dl0[2], dl0[3]] : null;   /* הנושא = המילה לפני «שלא» — חייב להיות הטבלה */
       if (dl0 && !dl) continue;   // ⏰ «ילד שלא נאסף עד 01:00» ⇒ זמן מאז 01:00 כשלא <שלב>
