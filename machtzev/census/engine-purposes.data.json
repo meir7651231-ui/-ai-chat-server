@@ -103,7 +103,7 @@
       "reverse": "בתוכו",
       "evidence": "modelGaps: «תרחישים ⇒ מודל» — טבלה חסרה / הרחבת-טבלה ⇒ שאלה; «כן» ⇒ docToSentence newEnts/extra (25.9)"
     },
-    "yeshiva/mavin-gen.mjs": {
+    "machtzev/generator/generate.mjs": {
       "from": "משפט/מסמך",
       "to": "אפליקציה",
       "reverse": null,

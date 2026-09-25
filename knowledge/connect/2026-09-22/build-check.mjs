@@ -27,17 +27,17 @@ fs.mkdirSync(process.env.GEN_OUT, { recursive: true }); fs.mkdirSync(process.env
 // קורפוס-המסכים-הרשומים (retrieve-screen) נקרא מ-dataOutDir בזמן-טעינה ⇒ מעתיקים את קובצי-התוכן לסקראצ' **לפני** הייבוא הראשון. אפס כתיבה למדף.
 const realData = path.join(ROOT, 'new/dart-data-bs/auto');
 for (const f of fs.readdirSync(realData)) if (/^screens__.*_content2?\.dart$/.test(f)) fs.copyFileSync(path.join(realData, f), path.join(process.env.GEN_DATA_OUT, f));   // גם _content2 (נמדד: ai_hub_screen.g.dart מייבא אותו)
-const { generateAll, generateFromSpec, generateFromDoc } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
+const { generateAll, generateFromSpec, generateFromDoc } = await import(path.join(ROOT, 'machtzev/generator/generate.mjs'));
 const { formOf, specOf } = await import(path.join(ROOT, 'yeshiva/mavin.mjs'));
 let spec, skipped = [], builtin = [], G0;
 const bi = args.includes('--balagan');   // «בלגן»: האפליקציה-האחת מכל מודולי-הבעלים (apps/*.json) — כניסת «כל המודולים», לא משפט
 const genRe = bi ? /^gen_balagan_.*\.dart$/ : /^gen_(app_|cap\d+|synth_|buf\d+|shape\d+).*\.dart$/;   // גם מסכי-התראה (gen_cap*) ואטומים מסונתזים (gen_synth_*) — לצילום/אימות
 if (bi) {
-  const { generateBalagan } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
+  const { generateBalagan } = await import(path.join(ROOT, 'machtzev/generator/generate.mjs'));
   G0 = await generateBalagan({ outDir: process.env.GEN_OUT }); spec = G0.spec; G0.routes = [];
   console.log(`«בלגן» (${G0.modules} מודולים מ-apps/*.json של הבעלים)${G0.bad && G0.bad.length ? ` · מזהה-הרגע נכשל: ${G0.bad.join(' · ')}` : ''}\n  ${(spec || '').slice(0, 200)}`);
 } else if (mi >= 0) {   // --mosad <N>: אגף N מעץ-המוסד של הבעלים (gen/wizard+pass ⇒ ספק) דרך אותו app-ds; --mosad 0 מדפיס את רשימת-האגפים
-  const { mosadSpecs } = await import(path.join(ROOT, 'yeshiva/mavin-gen.mjs'));
+  const { mosadSpecs } = await import(path.join(ROOT, 'machtzev/generator/generate.mjs'));
   const all = await mosadSpecs(); const n = +(args[mi + 1] || 0);
   if (!n) { console.log(`עץ-המוסד: ${all.length} אגפים\n` + all.map((d) => `  ${d.i}. ${d.name} · ${d.entities} ישויות · ${d.spec.split('\n').length} שורות-ספק`).join('\n')); process.exit(0); }
   const dep = all.find((d) => d.i === n); if (!dep) { console.log(`אין אגף ${n}`); process.exit(2); }
