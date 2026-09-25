@@ -219,7 +219,11 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
   const defs = {}; if (byShape) { const SLx = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); const XW = SLx.extraFieldWord || '';
     for (const f of shp.flows || []) { const k = f.field.replace(/_/g, ' '); if (typeof answers[k] === 'string' && answers[k].trim()) { defs[k] = answers[k].trim(); mined.push(`✍️ «${k}» = «${defs[k]}» (תשובת-הבעלים)`); } }
     for (const [k, v] of Object.entries(answers)) if (XW && k.startsWith(XW + ' ') && typeof v === 'string' && v.trim()) { const en = k.slice(XW.length + 1).trim(); extra[en] = v.split(/\s*,\s*/).filter(Boolean); mined.push(`✍️ ${en} + ${extra[en].join(', ')} (תשובת-הבעלים)`); } }
-  let ruleCl = []; if (ruleRes.R) { const K2 = await import('./koreh.mjs'); const X = K2.ruleClauses(ruleRes.R, ruleTables); ruleCl = X.clauses;
+  let ruleCl = []; if (ruleRes.R) { const K2 = await import('./koreh.mjs');
+    // שלבים לטבלה חדשה — רק מתשובת-הבעלים («שלבים ילד»: נמצא, בנקודה, נאסף); טבלאות-המסמך — מהמסמך
+    for (const t of ruleTables) { const sd = answers[`שלבים ${t.name}`]; const ne = newEnts.find((n) => n.name === t.name); if (typeof sd === 'string' && sd.trim() && ne) { ne.stages = sd.split(/\s*,\s*/).filter(Boolean); t.stages = ne.stages; } else if (!t.stages) { const E = shp.ents.find((e) => e.name === t.name); t.stages = E ? E.states : []; } }
+    const X = K2.ruleClauses(ruleRes.R, ruleTables); ruleCl = X.clauses;
+    for (const [tn, verb] of [...new Map(X.skipped.filter((x) => x.needStage).map((x) => [x.table, x.needStage]))]) mined.push({ q: { thing: 'כורה', ask: 'stages', key: `שלבים ${tn}`, q: `⏰ בתרחישים: «${X.skipped.find((x) => x.table === tn && x.needStage).rule.slice(0, 80)}» — צריך שלב «${verb}» ל«${tn}». אילו שלבים עובר ${tn}? (למשל: …, ${verb})` } });
     if (ruleCl.length) mined.push(`🔔 ${ruleCl.length} כללים מהתרחישים ⇒ התראות: ${ruleCl.map((x) => `«${x.clause.replace(/^התראה כש/, '')}» → ${x.act.slice(0, 30)}`).join(' · ')}`);
     if (X.skipped.length) mined.push(`⏸ ${X.skipped.length} כללים של הטבלאות לא תורגמו (הסיבות ב-rules-skipped.json): ${[...new Set(X.skipped.map((x) => x.why))].slice(0, 3).join(' · ')}`);
     try { fs.mkdirSync(outDir, { recursive: true }); fs.writeFileSync(path.join(outDir, 'rules-skipped.json'), JSON.stringify(X.skipped, null, 1)); } catch {} }

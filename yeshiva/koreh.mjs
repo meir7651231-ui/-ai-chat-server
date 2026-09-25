@@ -121,14 +121,20 @@ export function modelGaps(corpus, names, rules, { minSources = 2, extLabels = ['
  *   «N <נושא> [מאותו X] ב-M דק'/באותה שעה/בשעה» ⇒ «התראה כשמונה <טבלה> [לכל <שדה-X>] ב-M הדקות האחרונות מעל N-1»
  *  ≥N = מעל N-1 · «באותה שעה/בשעה» = 60 · הקיבוץ: שדה בטבלה שהמילה אחרי «מאותו/באותו/לכל» (או תווית הכלל) נוגעת בו.
  *  כלל שלא בצורה הזו (שעה-ביום «עד 01:00», שרשרת-סיבות…) ⇒ חוזר ב-skipped עם הסיבה — לא ממציאים התראה. */
-export function ruleClauses(rules, tables, { perEach = 'לכל', lastWord = 'האחרונות', minutesWord = 'הדקות' } = {}) {
+export function ruleClauses(rules, tables, { perEach = 'לכל', lastWord = 'האחרונות', minutesWord = 'הדקות', sinceWord = 'זמן מאז', notWord = 'כשלא' } = {}) {
   const out = [], skipped = [];
   const stem = (w) => String(w).replace(/^[ובלמהש]+(?=[֐-׿]{3})/, '').replace(/(ים|ות|ת|ה)$/, '');
   for (const t of tables) {
     const rs = rules[t.name] || rules[t.name + 'ים'] || rules[t.name.replace(/ה$/, 'ות')] || []; if (!rs.length) continue;
     for (const r of rs) { const c = `${r.label ? r.label + ' ' : ''}${r.cond}`;
       const m = r.cond.match(/(\d+)\+?\s+[֐-׿]+.*?(?:ב[-־]?(\d+)\s*(?:'|דק'|דקות)|(באותה שעה|בשעה|בשעה אחת)|(?=(?:מאותו|מאותה)\s))/);   /* גם «3 ילדים מאותו מקום» — קיבוץ בלי חלון */
-      if (!m) { skipped.push({ table: t.name, rule: `${r.cond} → ${r.act}`, why: /עד\s*\d{1,2}:\d{2}/.test(r.cond) ? 'שעה-ביום (עד HH:MM) — אין עדיין צורה כזו במנוע-ההתראות' : 'לא בצורת «N ב-M דקות»' }); continue; }
+      const dl0 = r.cond.match(/([֐-׿]+)\s+(?:ש)?לא\s+([֐-׿]+)\s+עד\s*(\d{1,2}:\d{2})/); const dl = dl0 && (stem(dl0[1]) === stem(t.name) || dl0[1].startsWith(stem(t.name))) ? [dl0[0], dl0[2], dl0[3]] : null;   /* הנושא = המילה לפני «שלא» — חייב להיות הטבלה */
+      if (dl0 && !dl) continue;   // ⏰ «ילד שלא נאסף עד 01:00» ⇒ זמן מאז 01:00 כשלא <שלב>
+      if (dl) { const st = (t.stages || []).find((x) => stem(x) === stem(dl[1]) || x === dl[1]);
+        if (st) { if (!out.some((o) => o.table === t.name && o.clause.includes(dl[2]))) out.push({ table: t.name, clause: `התראה כש${sinceWord} ${dl[2]} ${notWord} ${st} מעל 0`, act: r.act, from: r.ex }); }
+        else skipped.push({ table: t.name, rule: `${r.cond} → ${r.act}`, why: `חסר שלב «${dl[1]}» ב«${t.name}»`, needStage: dl[1] });
+        continue; }
+      if (!m) { skipped.push({ table: t.name, rule: `${r.cond} → ${r.act}`, why: 'לא בצורת «N ב-M דקות» / «שלא X עד HH:MM»' }); continue; }
       const counted = (r.cond.match(/\d+\+?\s+([֐-׿]+)/) || [])[1] || '';   /* מה נספר = המילה אחרי המספר — חייבת להיות הטבלה («3 ילדים» ≠ טבלת נקודה) */
       if (stem(counted) !== stem(t.name) && !counted.startsWith(stem(t.name))) { skipped.push({ table: t.name, rule: `${r.cond} → ${r.act}`, why: `נספר «${counted}», לא «${t.name}»` }); continue; }
       const n = +m[1], win = m[2] ? +m[2] : m[3] ? 60 : null;

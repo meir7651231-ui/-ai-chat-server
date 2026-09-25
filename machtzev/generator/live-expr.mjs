@@ -4,7 +4,7 @@
 import path from 'node:path';
 import * as R from '../root.mjs';
 import { verifiedTwin } from './op-twins.mjs';
-export const AGE_HELPER = `double _ageDays(String s) { final t = s.trim(); DateTime? d = DateTime.tryParse(t); if (d == null) { final m = RegExp(r'^(\\d{1,2})[./-](\\d{1,2})[./-](\\d{2,4})$').firstMatch(t); if (m != null) { final y = int.parse(m.group(3)!); d = DateTime(y < 100 ? 2000 + y : y, int.parse(m.group(2)!), int.parse(m.group(1)!)); } } return d == null ? double.nan : DateTime.now().difference(d).inDays.toDouble(); }\ndouble _ageMin(String s) { final d = DateTime.tryParse(s.trim()); if (d == null || s.trim().length <= 10) return double.infinity; return DateTime.now().difference(d).inSeconds / 60.0; }\ndouble _trendAt(List<Map<String, String>> rs, String f, num h) { final xs = <double>[], ys = <double>[]; final now = DateTime.now(); for (final r in rs) { final at = (r['__at'] ?? '').trim(); final t = DateTime.tryParse(at); final v = double.tryParse((r[f] ?? '').trim()); if (t == null || at.length <= 10 || v == null) continue; xs.add(t.difference(now).inSeconds / 60.0); ys.add(v); } if (xs.isEmpty) return double.nan; final n = xs.length; if (n == 1) return ys.first; final mx = xs.reduce((a, b) => a + b) / n, my = ys.reduce((a, b) => a + b) / n; var sxy = 0.0, sxx = 0.0; for (var i = 0; i < n; i++) { sxy += (xs[i] - mx) * (ys[i] - my); sxx += (xs[i] - mx) * (xs[i] - mx); } final b = sxx == 0 ? 0.0 : sxy / sxx; return my + b * (h - mx); }`;
+export const AGE_HELPER = `double _ageDays(String s) { final t = s.trim(); DateTime? d = DateTime.tryParse(t); if (d == null) { final m = RegExp(r'^(\\d{1,2})[./-](\\d{1,2})[./-](\\d{2,4})$').firstMatch(t); if (m != null) { final y = int.parse(m.group(3)!); d = DateTime(y < 100 ? 2000 + y : y, int.parse(m.group(2)!), int.parse(m.group(1)!)); } } return d == null ? double.nan : DateTime.now().difference(d).inDays.toDouble(); }\ndouble _ageMin(String s) { final d = DateTime.tryParse(s.trim()); if (d == null || s.trim().length <= 10) return double.infinity; return DateTime.now().difference(d).inSeconds / 60.0; }\ndouble _trendAt(List<Map<String, String>> rs, String f, num h) { final xs = <double>[], ys = <double>[]; final now = DateTime.now(); for (final r in rs) { final at = (r['__at'] ?? '').trim(); final t = DateTime.tryParse(at); final v = double.tryParse((r[f] ?? '').trim()); if (t == null || at.length <= 10 || v == null) continue; xs.add(t.difference(now).inSeconds / 60.0); ys.add(v); } if (xs.isEmpty) return double.nan; final n = xs.length; if (n == 1) return ys.first; final mx = xs.reduce((a, b) => a + b) / n, my = ys.reduce((a, b) => a + b) / n; var sxy = 0.0, sxx = 0.0; for (var i = 0; i < n; i++) { sxy += (xs[i] - mx) * (ys[i] - my); sxx += (xs[i] - mx) * (xs[i] - mx); } final b = sxx == 0 ? 0.0 : sxy / sxx; return my + b * (h - mx); } double _sinceClock(int hm) { final n = DateTime.now(); var d = n.hour * 60 + n.minute - hm; if (d >= 720) d -= 1440; if (d < -720) d += 1440; return d.toDouble(); }`;
 //   kind:'refCount' — לכל רשומת-הורה: כמה רשומות-בנות מצביעות עליה ({ childSlug, childField, parentKey }) · kind:'agg' — על הקבוצה כולה: avg/sum/count של שדה (agg, field)
 // ═══ liveValue = eq ⊕ age ⊕ refCount ⊕ num
 export const liveValue = (live, r = 'r', k = (s) => `'${s}'`) =>
@@ -29,6 +29,7 @@ export function liveLinkedExpr(live, r = 'r', k = (s) => `'${s}'`) {
 export function exprDart(t, r = 'r', k = (s) => `'${s}'`) {
   if (t.op) return `(${exprDart(t.a, r, k)} ${t.op} ${exprDart(t.b, r, k)})`;
   if (t.num != null) return String(t.num);
+  if (t.clock != null) return t.notStage != null ? `(((${r}['__stage'] ?? '0') != '${t.notStage}') ? _sinceClock(${t.clock}) : double.nan)` : `_sinceClock(${t.clock})`;   // ⏰ דקות מאז HH:MM הלילה (±12 שעות) · «כשלא <שלב>» ⇒ רק רשומה שעוד לא הגיעה לשלב
   if (t.since != null) return `(((${r}['__stage'] ?? '0') == '${t.since}') ? _ageMin(${r}['__stage_at'] ?? '') : double.nan)`;
   if (t.ageField) return `_ageMin(${r}[${k(t.ageField)}] ?? '')`;
   if (t.linked) return liveLinkedExpr(t.linked, r, k);
@@ -44,7 +45,7 @@ export function exprJs(t, row, ctx = null) {
 const treeHas = (t, key) => !!t && (t[key] != null || treeHas(t.a, key) || treeHas(t.b, key) || (t.queue || []).some((q) => treeHas(q, key)));
 export const exprHasQueue = (t) => treeHas(t, 'queue');
 export const SIM_IMPORT = "import 'gen_sim_engine.dart';";   // 🌉 נכתב ע"י mavin-gen ליד המסכים כשיש «המתנה צפויה»
-export const exprNeedsAge = (t) => treeHas(t, 'since') || treeHas(t, 'ageField');
+export const exprNeedsAge = (t) => treeHas(t, 'since') || treeHas(t, 'ageField') || treeHas(t, 'clock');
 export const exprHasLinked = (t) => treeHas(t, 'linked');
 export const LINKED_IMPORTS = ['op-where-list', 'op-sum-by', 'op-sub-num', 'op-add-num', 'op-le-num', 'op-ge-num'].map((f) => `import '../dart-maor/${f}.dart';`);
 export const liveIsSet = (live) => live.kind === 'agg';

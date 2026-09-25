@@ -136,7 +136,7 @@ export function formOf(sentence0) {
   // סוגריים אחרי מילה = ערכים-מותרים (צורה, כמו לוכסן): «שפה (עברית, יידיש, אנגלית)» ⇒ «שפה עברית/יידיש/אנגלית» ⇒ שדה «שפה» עם enum
   const sentence = String(sentence0 || '').replace(/\(([^()]*)\)/g, (m, inner) => { const vs = inner.split(/[,،]/).map((s) => s.trim().replace(/\s+/g, '_')).filter(Boolean); return vs.length > 1 ? ' ' + vs.join('/') + ' ' : m; });
   const words = toks(sentence);
-  const segments = sentence.split(/[:;]|\.(?=\s|$)/).map((s) => s.trim()).filter(Boolean);   // «.» בסוף/לפני רווח = מפריד (כמו «:»)
+  const segments = sentence.split(/(?<!\d):|:(?!\d{2})|;|\.(?=\s|$)/).map((s) => s.trim()).filter(Boolean);   // «01:00» = שעה, לא מפריד   // «.» בסוף/לפני רווח = מפריד (כמו «:»)
   const things = [];   // { label, many, fields:[{label}], under, src, refs, acts, values }
   const frame = [];    // מילים מפוזרות (מסגרת/קישור) — מדווחות, לא מפורשות
   const find = (w) => things.find((t) => toks(t.label).some((lw) => stripLead(stem(w)).some((f) => f.length >= 3 && f === stem(lw))));   // «לרכב» ⇔ «ניהול רכבים»: כל מילה בתווית; גזע ≥3 אותיות («כמ» לא)

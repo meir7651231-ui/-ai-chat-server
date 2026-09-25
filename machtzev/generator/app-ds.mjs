@@ -390,6 +390,9 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
         const ws = rest.split(/[\s,]+/).filter(Boolean); const sols = [];
         for (let i1 = 1; i1 < ws.length - 1; i1++) for (let i2 = i1 + 1; i2 < ws.length; i2++) { const a = [ws.slice(0, i1), ws.slice(i1, i2), ws.slice(i2)].map(vw); if (a.every(Boolean)) sols.push(a); }
         return sols.length === 1 ? { queue: sols[0] } : null; }
+      for (const sw of SINCE) { const cm = txt.startsWith(sw + ' ') && txt.slice(sw.length + 1).match(/^(\d{1,2}):(\d{2})(?:\s+(\S+)\s+(.+))?$/); if (!cm) continue;   // ⏰ «זמן מאז 01:00 [כשלא נאסף]»
+        const hm = +cm[1] * 60 + +cm[2]; if (!cm[3]) return { clock: hm }; if (!(SL.notInStageWords || []).includes(cm[3])) continue;
+        const si = (r.stages || []).findIndex((s0) => s0 === cm[4].trim() || stemOf(s0) === stemOf(cm[4].trim())); if (si >= 0) return { clock: hm, notStage: si, stage: r.stages[si] }; }
       for (const sw of SINCE) if (txt.startsWith(sw + ' ')) { const st = txt.slice(sw.length + 1).trim(); const si = (r.stages || []).findIndex((s) => s === st || stemOf(s) === stemOf(st)); if (si >= 0) return { since: si, stage: r.stages[si] }; }
       const d = (Array.isArray(opts.derived) ? opts.derived : []).find((q) => q.ent === r.entity && (q.name === txt || stemOf(q.name) === stemOf(txt)));
       if (d) return { linked: { parentKey: d.parentKey, terms: d.terms.map((t) => ({ ...t, slug: nameToSlug[t.child] })) }, name: d.name };
