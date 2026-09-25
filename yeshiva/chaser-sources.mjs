@@ -43,6 +43,7 @@ export function registerAll(CH) {
     const cw = (ctx.compareWords || []).find((w) => c.split(/\s+/).includes(w)); if (c.indexOf(f) > c.indexOf(cw)) { g.why = `השוואה של ספירה מול השדה «${f}» — אין עדיין צורה במנוע-ההתראות`; return null; }   // השדה אחרי מילת-ההשוואה = הסף עצמו, לא הנמדד
     const key = `סף ${g.table.name}: ${f}`, said = typeof ctx.answers[key] === 'string' ? ctx.answers[key].trim() : '';
     if (/^\d+(\.\d+)?$/.test(said)) return { outcome: 'clause', clause: `${ctx.alertWord} ${ctx.whenWord}${f} ${ctx.aboveWord} ${said}`, act: g.rule.act };
+    if (said && said.includes(` ${ctx.aboveWord} `)) return { outcome: 'clause', clause: `${ctx.alertWord} ${ctx.whenWord}${said}`, act: g.rule.act };   // תשובה כביטוי («… חלקי capacity מעל 0.8» — יחס לקיבולת של כל נקודה)
     const dup = ctx.asked.has(key); ctx.asked.add(key);
     return { outcome: 'question', key, dup, q: `🔢 «${c.slice(0, 70)} → ${g.rule.act.slice(0, 30)}»: «${f}» — מעל איזה מספר להתריע? (מספר)` }; });
   // ⚖️ ספירה מול שדה («שוטרים במעבר מתחת לתקן שוטרים»): לכל רשומת-הורה — כמה בנות מצביעות עליה, מול שדה של אותה רשומה.
