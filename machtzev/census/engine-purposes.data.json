@@ -33,5 +33,82 @@
       "why_it_matters": "הבודקים שבו (novel_facts · teiku · yitur) הם בדיוק אלה שהיו תופסים את «אין מטופל» · «buildsmart לא בקונטיינר» · «295 מנועים» — שלוש טענות-שווא שנמסרו לבעלים באותו יום. הוא מנותק.",
       "caught_by": "סשן-המנהל, בשלב-1, ע\"י הרצת `grep -c` במקום לקבל את המספר."
     }
+  },
+  "directions_": "⇄ כיוונים **נמדדים** (הכרעת-בעלים 23.9 «מנוע תמיד יכול לעבוד דו-כיווני» · 25.9 «כל מנוע צריך לעבוד ישר והפוך»): לכל מנוע — מ ⇒ אל · הפוך (נתיב / «בתוכו» / null + מה חסר) · evidence = מה נקרא בקוד. בלי evidence אין רשומה. כותרת `⇄ כיוון:` בקובץ גוברת.",
+  "directions": {
+    "machtzev/emit/ast-js-to-dart.mjs": {
+      "from": "JS/TS",
+      "to": "Dart",
+      "reverse": "machtzev/emit/dart-to-js.mjs",
+      "evidence": "export function emit / emitTs · dart-to-js.mjs קיים באותה תיקייה"
+    },
+    "machtzev/emit/js-to-dart.mjs": {
+      "from": "JS",
+      "to": "Dart (רגקס)",
+      "reverse": "machtzev/emit/dart-to-js.mjs",
+      "evidence": "כותרת: מנוע הפוך JS→Dart (README)"
+    },
+    "machtzev/emit/dart-to-js.mjs": {
+      "from": "Dart",
+      "to": "JS",
+      "reverse": "machtzev/emit/ast-js-to-dart.mjs",
+      "evidence": "README: dart-to-js ⇄ js-to-dart"
+    },
+    "machtzev/generator/entity.mjs": {
+      "from": "משפט-ישות",
+      "to": "טופס+טבלה",
+      "reverse": "machtzev/extract/schema.mjs",
+      "evidence": "כותרת: «מנוע-הישויות (ההפוך של schema.mjs)»"
+    },
+    "machtzev/extract/schema.mjs": {
+      "from": "מודל-נתונים קיים",
+      "to": "אטומי-שדה",
+      "reverse": "machtzev/generator/entity.mjs",
+      "evidence": "«כל שדה בכל ישות = אטום» — entity.mjs מצהיר עליו כהפוך"
+    },
+    "machtzev/carve/screen-decomp.mjs": {
+      "from": "מסך",
+      "to": "מניפסט-שכבות",
+      "reverse": "machtzev/generator/combine-screens.mjs",
+      "evidence": "combine-screens: «הכיוון-ההפוך · המנוע-האחד פירק מסך-מלא ⇒ סקציות… כאן ההפך»"
+    },
+    "machtzev/generator/combine-screens.mjs": {
+      "from": "צורך",
+      "to": "מסך ממוזג",
+      "reverse": "machtzev/carve/screen-decomp.mjs",
+      "evidence": "כותרת: «הכיוון-ההפוך · §20-ב»"
+    },
+    "machtzev/generator/behavior-plan.mjs": {
+      "from": "קלט A",
+      "to": "פלט B (אטום)",
+      "reverse": "בתוכו",
+      "evidence": "שורה 489: «כל מנוע יכול לנוע קדימה ואחורה · הכיוון-ההפוך (up-backward)»"
+    },
+    "yeshiva/ein.mjs": {
+      "from": "הגדרה במשפט",
+      "to": "כלל",
+      "reverse": "בתוכו",
+      "evidence": "defineByMarks: «הכיוון-ההפוך של ההגדרה — הבעלים מסמן דוגמאות ⇒ הכלל»"
+    },
+    "machtzev/generator/doc-shape.mjs": {
+      "from": "מסמך",
+      "to": "אפיון/משפט",
+      "reverse": null,
+      "missing": "אפיון ⇒ מסמך (לא נבנה)",
+      "evidence": "export docToSpec/docToSentence בלבד"
+    },
+    "yeshiva/koreh.mjs": {
+      "from": "מודל",
+      "to": "ערכים/כללים מהתרחישים",
+      "reverse": "בתוכו",
+      "evidence": "modelGaps: «תרחישים ⇒ מודל» — טבלה חסרה / הרחבת-טבלה ⇒ שאלה; «כן» ⇒ docToSentence newEnts/extra (25.9)"
+    },
+    "yeshiva/mavin-gen.mjs": {
+      "from": "משפט/מסמך",
+      "to": "אפליקציה",
+      "reverse": null,
+      "missing": "אפליקציה ⇒ משפט (לא נבנה)",
+      "evidence": "generateAll/generateFromDoc/generateFromSpec — אין ייצוא הפוך"
+    }
   }
 }

@@ -95,6 +95,25 @@ export function rulesOf(corpus, names, { subjects = [], skip = [], instances = {
     res[main] = rows.map((r) => ({ cond: r.cond, act: r.act, ...(r.label ? { label: r.label } : {}), sources: r.srcs.size, ex: r.ex })).sort((a, b) => b.sources - a.sources); }
   return res;
 }
+/** ⇄ הכיוון-ההפוך של הכורה (הכרעת-בעלים 23.9 «דו-כיווני» · 25.9 «ישר והפוך»): **תרחישים ⇒ מודל**.
+ *  הכיוון-הישר שואל «לאיזה שדה קיים זה שייך»; ההפוך שואל «מה חסר במודל». שני סוגים, שניהם מהצורה בלבד:
+ *   (א) טבלה חסרה — נושא-כלל (rulesOf) שאינו ישות, מ-≥2 תרחישים ⇒ טבלה מוצעת: הכללים שלה + הישויות שמוזכרות לידה (קשרים)
+ *   (ב) הרחבת-טבלה — תווית «מתרחבות/מתרחב: <ישות> → <מה נוסף>» (המחקר עצמו כותב מה להוסיף) ⇒ שדה מוצע לישות קיימת
+ *  ההכרעה אצל הבעלים (שאלה אחת לכל הצעה); «כן» ⇒ הדלת מוסיפה למודל ובונה. אפס מילון · אפס מודל. */
+export function modelGaps(corpus, names, rules, { minSources = 2, extLabels = ['מתרחבות', 'מתרחב'] } = {}) {
+  const tables = [], extensions = [];
+  for (const [sub, rs] of Object.entries(rules)) {
+    if (names.includes(sub)) continue;
+    const srcs = new Set(rs.flatMap((r) => String(r.ex).split(':')[0] ? [String(r.ex).split(':')[0]] : [])); if (srcs.size < minSources) continue;
+    const near = new Map(); for (const { text } of corpus) for (const s of sentencesOf(text)) { if (!s.includes(sub)) continue; for (const w of toks(s).map(bare)) { const e = entOf(w, names); if (e) near.set(e, (near.get(e) || 0) + 1); } }
+    const links = [...near.entries()].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([e]) => e);
+    tables.push({ name: sub, sources: srcs.size, links, rules: rs.filter((r) => !extLabels.includes(r.label)).slice(0, 8).map((r) => `${r.cond} → ${r.act}`), ex: rs[0] && rs[0].ex }); }
+  for (const rs of Object.values(rules)) for (const r of rs) if (r.label && extLabels.includes(r.label)) {
+    const ent = toks(r.cond).map(bare).map((w) => entOf(w, names)).find(Boolean); if (!ent) continue;
+    const add = String(r.act).replace(/\s*\(.*?\)\s*/g, ' ').trim(); if (!extensions.some((x) => x.ent === ent && x.add === add)) extensions.push({ ent, add, ex: r.ex }); }
+  tables.sort((a, b) => b.sources - a.sources);
+  return { tables, extensions };
+}
 /** זיכרון-המיפוי (יחידה ⇒ ישות.שדה) — מקומי, כמו שאר תשובות-הבעלים (הכרעה-35: הדלת לא כותבת ל-new/) */
 const MAP_FILE = () => process.env.MAVIN_KOREH_MAP || '.maimatai/koreh-map.jsonl';
 export function unitMap() { try { const m = {}; for (const l of fs.readFileSync(MAP_FILE(), 'utf8').split('\n').filter(Boolean)) { const e = JSON.parse(l); m[e.unit] = e.to; } return m; } catch { return {}; } }

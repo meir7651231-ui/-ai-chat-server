@@ -108,6 +108,13 @@ function walk(dir, out = []) {
 
 // ── מטרה: כותרת-הקובץ (בלוק-הערה עליון) ⇒ INDEX.md ⇒ ∅. אפס ניחוש ──────────
 const BOILER = /^(#!|(?:\/\/|#)\s*[═─=-]{3,}|\/\*|\*\/|\*\s*$|set -[a-z]+)/;
+// ── ⇄ כיוון (עובדה שישית · הכרעת-בעלים 25.9 «כל מנוע צריך לעבוד ישר והפוך»): המנוע מצהיר בכותרת
+//    `⇄ כיוון: <מ> ⇒ <אל> · הפוך: <נתיב | בתוכו | ∅ <מה חסר>>`. לא מנחשים מהתיאור (⇒ בתיאורים משמש לסיפור — נמדד: 218/491).
+//    בלי הצהרה ⇒ «לא נמדד» (נספר, כמו מטרה חסרה) · הפוך ∅ ⇒ חור מוצהר · נתיב שלא קיים ⇒ אדום.
+function directionOf(src) {
+  const m = String(src).slice(0, 6000).match(/⇄\s*כיוון:\s*([^\n]*?)\s*⇒\s*([^\n·]*?)\s*·\s*הפוך:\s*([^\n]*)/); if (!m) return null;
+  const rv = m[3].trim(); return { from: m[1].trim(), to: m[2].trim(), reverse: /^∅/.test(rv) ? null : rv.replace(/\s.*$/, ''), missing: /^∅/.test(rv) ? rv.replace(/^∅\s*/, '') : null };
+}
 function purposeFromHeader(src) {
   // Python: ‏docstring-המודול הוא **המטרה המוצהרת** (כמו כותרת-הבלוק ב-mjs)
   const ds = src.match(/^\s*(?:"""|''')([\s\S]{2,600}?)(?:"""|''')/);
@@ -133,6 +140,7 @@ function purposeFromHeader(src) {
 }
 
 // מקור-מטרה שלישי: מטרות **נחקרות** (מישהו פתח וקרא). כל רשומה עם evidence.
+const DIRS = (() => { try { return JSON.parse(fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), 'engine-purposes.data.json'), 'utf8')).directions || {}; } catch { return {}; } })();   // ⇄ כיוונים נמדדים (+evidence)
 const RESEARCHED = (() => { try { return JSON.parse(fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), 'engine-purposes.data.json'), 'utf8')).purposes || {}; } catch { return {}; } })();
 
 function indexRows() {
@@ -258,7 +266,7 @@ export function build() {
 
     engines.push({
       file: p, lang: LANG_OF(p), lines: src.split('\n').length,
-      purpose, purposeFrom,
+      purpose, purposeFrom, direction: directionOf(src) || (DIRS[p] ? { ...DIRS[p] } : null),
       exports: exportsOf(src), cli: flagsOf(src), writes: writesOf(src), reads: dataOf(src),
       imports: importsOf(src), importsDyn: dynImportsOf(src), importedBy: [],
       gate, gateRegistered: !!gateRow,
@@ -293,8 +301,10 @@ export function build() {
   for (const e of engines) {
     e.importedBy = uniq(e.importedBy);
     // «מה הוא לא» — עובדות-שלילה מפורשות, כדי שאיש לא יניח יכולת שאינה שם
+    if (e.direction && e.direction.reverse && e.direction.reverse !== 'בתוכו') e.direction.reverseExists = byPath.has(e.direction.reverse) || fs.existsSync(path.join(ROOT, e.direction.reverse));
     e.isNot = uniq([
       !e.purpose && 'אין-מטרה-מתועדת',
+      e.direction && !e.direction.reverse && 'אין-כיוון-הפוך',
       !e.exports.length && 'אין-ייצוא (לא ספרייה)',
       !e.cli.length && !e.runnable && 'לא-רץ-מהשורה',
       !e.writes.length && 'לא-כותב-פלט',
@@ -307,6 +317,19 @@ export function build() {
   return { engines, roots: ROOTS, at: new Date().toISOString().slice(0, 10) };
 }
 
+// ── ⇄ חיפוש-לפי-כיוון: «X ⇒ Y» מוצא גם מנוע Y ⇒ X (ואומר אם ההפוך שלו קיים / חסר) — המאתר רואה את שני הכיוונים
+export function findDirection(q, engines) {
+  const m = String(q).split(/\s*⇒\s*/); if (m.length !== 2) return [];
+  const W = (x) => String(x).toLowerCase().split(/[^a-z0-9\u0590-\u05FF]+/).filter((w) => w.length >= 2);   /* גם JS/TS קצרים; «מהתרחישים» ⊇ «תרחישים» */
+  const hit = (a, b) => { const A = W(a), B = W(b); return A.length && B.length && A.some((x) => B.some((y) => x === y || near(x, y) || (x.length >= 4 && y.includes(x)) || (y.length >= 4 && x.includes(y)))); };
+  const out = [];
+  for (const e of engines.filter((x) => x.direction)) {
+    const d = e.direction;
+    if (hit(m[0], d.from) && hit(m[1], d.to)) out.push({ file: e.file, how: 'ישר', d });
+    else if (hit(m[0], d.to) && hit(m[1], d.from)) out.push({ file: e.file, how: d.reverse ? `הפוך קיים: ${d.reverse}` : `זה ההפוך שלו — חסר (${d.missing || '∅'})`, d });
+  }
+  return out;
+}
 // ── חיפוש-לפי-מטרה (לא לפי שם) — אותו IDF של חיפוש-האטומים ────────────────
 export function find(q, engines, k = 5) {
   const docs = engines.filter((e) => e.purpose);
@@ -405,6 +428,7 @@ const card = (e) => {
   L.push(`🎯 מטרה: ${e.purpose ? e.purpose.slice(0, 260) : '∅ — לא מתועדת'}${e.purposeFrom ? `   [${e.purposeFrom}]` : ''}`);
   L.push(`🔧 עושה: ${e.exports.length} ייצואים${e.exports.length ? ' (' + e.exports.slice(0, 6).join(', ') + ')' : ''}` +
     `${e.cli.length ? ` · CLI ${e.cli.slice(0, 6).join(' ')}` : ''}${e.writes.length ? ` · כותב ${e.writes.length}` : ''}${e.reads.length ? ` · קורא ${e.reads.slice(0, 3).join(', ')}` : ''}`);
+  L.push(`⇄ כיוון: ${e.direction ? `${e.direction.from} ⇒ ${e.direction.to} · הפוך: ${e.direction.reverse ? e.direction.reverse + (e.direction.reverseExists === false ? ' (❌ לא קיים!)' : '') : '∅ ' + (e.direction.missing || '')}` : 'לא נמדד (אין הצהרת ⇄ בכותרת)'}`);
   L.push(`🚫 לא: ${e.isNot.join(' · ') || '—'}`);
   L.push(`🔌 מחובר: ${e.importedBy.length} מייבאים${e.importedBy.length ? ' (' + e.importedBy.slice(0, 3).map((x) => path.basename(x)).join(', ') + ')' : ''}` +
     `${e.gate ? ` · שער «${e.gate}»${e.gateRegistered ? '' : ' (לא במרשם!)'}` : ''}${e.calledByName.length ? ` · נקרא-בשם: ${e.calledByName.join(',')}` : ''}`);
@@ -428,6 +452,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const q = A.slice(A.indexOf('--find') + 1).join(' ');
     if (!q) { console.log('usage: --find "<מטרה בעברית>"'); process.exit(0); }
     console.log(`❓ ${q}\n`);
+    for (const r of findDirection(q, engines)) console.log(`   ⇄ ${r.file}: ${r.d.from} ⇒ ${r.d.to} · ${r.how}\n`);
     for (const r of find(q, engines)) console.log(`${String(r.score).padStart(6)}  ${r.file}\n        ${(r.purpose || '').slice(0, 150)}\n`);
     (await import('../../yeshiva/rminhu.mjs')).printNotes('engine-index --find');
   } else if (A.includes('--connected')) {
@@ -456,6 +481,12 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     if (A.includes('--list-reverse')) for (const e of rev) console.log(`  ← ${e.file}   ⇒ ${reverse.get(e.file)}`);
     else if (A.includes('--list')) for (const e of own.filter((x) => none.has(x.file))) console.log(`  ○ ${e.file}`);
     else console.log('(‏--connected --list = הלא-מחוברים · --list-reverse = הקוראים-למחולל + נקודת-הכניסה · --with-entry <קובץ> = מדידה עם נקודת-כניסה נוספת)');
+  } else if (A.includes('--directions')) {   // ⇄ ישר והפוך: מי הצהיר · למי יש הפוך · למי חסר · מי לא נמדד
+    const dec = engines.filter((e) => e.direction); const has = dec.filter((e) => e.direction.reverse); const miss = dec.filter((e) => !e.direction.reverse); const broken = has.filter((e) => e.direction.reverseExists === false);
+    console.log(`⇄ כיוונים: ${dec.length}/${engines.length} הצהירו · ${has.length} עם הפוך · ${miss.length} חסר הפוך · ${broken.length} הפוך שלא קיים · ${engines.length - dec.length} לא נמדדו`);
+    for (const e of has) console.log(`  ⇄ ${e.file}: ${e.direction.from} ⇒ ${e.direction.to}  ·  הפוך: ${e.direction.reverse}${e.direction.reverseExists === false ? ' ❌' : ''}`);
+    for (const e of miss) console.log(`  ⇥ ${e.file}: ${e.direction.from} ⇒ ${e.direction.to}  ·  חסר: ${e.direction.to} ⇒ ${e.direction.from}${e.direction.missing ? ' — ' + e.direction.missing : ''}`);
+    if (broken.length) process.exit(1);
   } else if (A.includes('--orphans')) {
     console.log(`בלי-מטרה: ${engines.length - withP} · בלי-קורא: ${orphan.length}\n`);
     for (const e of engines.filter((x) => !x.purpose)) console.log(`  ∅ מטרה   ${e.file}`);

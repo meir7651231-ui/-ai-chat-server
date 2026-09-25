@@ -59,11 +59,12 @@ export function docToSpec(md0, { title = null } = {}) {
 /** 🔁 המסמך ⇒ **משפט** בשפת-המחולל («לכל X יש …; שלבים: …» · זרימה ⇒ «התראה כש<שדה> מעל N») — כדי שהמסמך יעבור באותו צינור
  *  כמו משפט (לולאת ein · קושיות · חיפוש-צורה · התראות), ולא בדלת נפרדת שנתקעת ועוצרת (הכרעת-בעלים 24.9 «תחבר»).
  *  זרימה על שדה שאינו בשום טבלה (flow_ratio) נכנסת גם היא — הצינור שואל עליה (הגדרה/חיפוש), לא הדלת מוותרת. */
-export function docToSentence(md0, { title = null, enums = {}, rows = {}, defs = {}, extra = {} } = {}) {   /* defs = {שם-בזרימה: ביטוי} · extra = {ישות: [שדות]} — תשובות-הבעלים (לא ניחוש) */   /* enums = {ישות: {שדה: [ערכים]}} — מהכורה, אחרי שהבעלים אמר לאיזה שדה */
+export function docToSentence(md0, { title = null, enums = {}, rows = {}, defs = {}, extra = {}, newEnts = [] } = {}) {   /* newEnts = [{name, fields}] — טבלה שהבעלים אישר מהכיוון-ההפוך */   /* defs = {שם-בזרימה: ביטוי} · extra = {ישות: [שדות]} — תשובות-הבעלים (לא ניחוש) */   /* enums = {ישות: {שדה: [ערכים]}} — מהכורה, אחרי שהבעלים אמר לאיזה שדה */
   const md = htmlToMd(md0); const r = docToSpec(md0, { title }); if (!r.spec) return null;
   const head = (title || (md.match(/^#\s+(.+)$/m) || [])[1] || 'מסמך').replace(/[:.;]/g, ' ').split(/\s+[—–-]\s+/)[0].trim();
   const link = (e, f) => { const l = r.links.find((x) => x.ent === e.name && x.field === f.name); const ev = (enums[e.name] || {})[f.name]; return l ? `${f.name} ${l.to}` : ev && ev.length ? `${f.name} ${ev.map((v) => v.replace(/\s+/g, '_')).join('/')}` : f.name; };   /* «kind איסוף/מפגש» = שדה-בחירה בשפת-המשפט */
   const parts = r.ents.map((e) => `לכל ${e.name} יש ${[...new Set([...e.fields.map((f) => link(e, f)), ...(extra[e.name] || [])])].join(', ')}${(rows[e.name] || []).length ? `; למשל: ${rows[e.name].map((x) => x.join(', ')).join('; ')}` : ''}${e.states.length ? `; שלבים: ${e.states.join(', ')}` : ''}`);   /* שורות מהכורה (תאים ריקים נשמרים) */
+  for (const n of newEnts) parts.push(`לכל ${n.name} יש ${n.fields.join(', ')}`);
   const aliasHe = new Map(); for (const e of r.ents) for (const a of e.alias) aliasHe.set(a.toLowerCase(), e.name);
   const LU = (() => { try { return JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')).latinUnits || {}; } catch { return {}; } })();
   const flows = r.flows.map((f) => ({ ...f, he: aliasHe.get(f.ent.toLowerCase()) || null, clause: `התראה כש${defs[f.field.replace(/_/g, ' ')] || f.field.replace(/_/g, ' ')} ${f.op === '>' ? 'מעל' : 'מתחת ל-'}${f.op === '>' ? ' ' : ''}${f.n}${f.unit && LU[f.unit] ? ' ' + LU[f.unit] : ''}` }));   /* «5h» ⇒ «5 שעות» (latinUnits בדאטה) — היחידה לא נבלעת */   /* שם-השדה כמו שהצינור קורא אותו (_ ⇒ רווח) */
