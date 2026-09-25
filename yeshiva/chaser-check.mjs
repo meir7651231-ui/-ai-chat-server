@@ -64,3 +64,11 @@ console.log(`✓ chaser: ${CH.kinds().length} סוגי-חסר רשומים (${CH
   if (d2[0].outcome !== 'clause' || !/זמן מאז open מעל 0 וגם מונה אירוע לכל point ב-60 הדקות האחרונות מעל 2/.test(d2[0].clause)) bad.push('אחרי תשובה: ' + (d2[0].clause || d2[0].q));
   if (bad.length) { for (const b of bad) console.error('🚨 chaser: ' + b); process.exit(1); }
   console.log(`✓ כל החלקים נצרכים: «${d2[0].clause}» · סף ⇒ שאלה · ספירה-מול-שדה ⇒ מוצהר`); }
+// (11) ספירה מול שדה: «שוטרים במעבר מתחת לתקן שוטרים» — «שוטרים» = שיבוץ (תשובת-יחידה) ⇒ «שוטר» הוא ערך-הסינון · חסר שדה-קישור/תפקיד ⇒ שאלה
+{ const M = { name: 'מעבר', fields: ['from zone', 'תקן שוטרים'], stages: [] }, Sh = { name: 'שיבוץ', fields: ['person', 'post'], stages: [] };
+  const base = { K, asked: new Set(), corpus: [], subs: [], roleFieldWords: ['תפקיד'], compareWords: ['מתחת'], detect: detectAllClauses, alertWord: 'התראה', whenWord: 'כש', aboveWord: 'מעל', belowWord: 'מתחת ל', sinceWord: 'זמן מאז' };
+  const R = { kind: 'rule', table: M, rule: { cond: 'שוטרים במעבר מתחת לתקן שוטרים', act: 'התראה' } };
+  const a = (await CH.resolveAll([R], { ...base, tables: [M, Sh], answers: { 'יחידה שוטרים': 'שיבוץ' } }))[0];
+  const Sh2 = { ...Sh, fields: [...Sh.fields, 'מעבר', 'תפקיד'] }; const b = (await CH.resolveAll([R], { ...base, asked: new Set(), tables: [M, Sh2], answers: { 'יחידה שוטרים': 'שיבוץ' } }))[0];
+  if (a.outcome !== 'question' || a.key !== 'שדה שיבוץ: מעבר' || b.outcome !== 'clause' || b.clause !== 'התראה כשמונה שיבוץ שוטר פחות תקן שוטרים מתחת ל 0') { console.error('🚨 chaser: ספירה-מול-שדה: ' + JSON.stringify([a.outcome, a.key, b.clause || b.q])); process.exit(1); }
+  console.log(`✓ ספירה מול שדה: חסר קישור ⇒ «${a.key}» · אחרי ⇒ «${b.clause}»`); }

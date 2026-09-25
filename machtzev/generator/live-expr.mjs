@@ -13,7 +13,7 @@ export const liveValue = (live, r = 'r', k = (s) => `'${s}'`) =>
   : live.kind === 'ageMin' ? `_ageMin(${r}[${k(live.field)}] ?? '')`
   : live.kind === 'linked' ? liveLinkedExpr(live, r, k)
   : live.kind === 'expr' ? exprDart(live.tree, r, k)
-  : live.kind === 'refCount' ? `appStore.records('${live.childSlug}').where((c) => (c[${k(live.childField)}] ?? '').trim() == (${r}[${k(live.parentKey)}] ?? '').trim()).length.toDouble()`
+  : live.kind === 'refCount' ? `appStore.records('${live.childSlug}').where((c) => (c[${k(live.childField)}] ?? '').trim() == (${r}[${k(live.parentKey)}] ?? '').trim()${live.filt ? ` && (c[${k(live.filt.field)}] ?? '').trim() == ${k(live.filt.value)}` : ''}).length.toDouble()`
   : `(double.tryParse(${r}[${k(live.field)}] ?? '') ?? double.nan)`;
 /** 🔗 תוצאה של טבלאות קשורות כשדה (הכרעת-בעלים 24.9 «תמשיך» — «תוצאה של שלב היא קלט לשלב הבא»): לכל רשומת-אב — סכום האיברים
  *  (yeshiva/shape.searchLinked) על רשומות-הבת החיות; live = { kind:'linked', parentKey, terms:[{slug, op, n, to, from?, filt?}] } — אותם חלקי-יסוד כמו מסך-הקשר */
@@ -32,6 +32,7 @@ export function exprDart(t, r = 'r', k = (s) => `'${s}'`) {
   if (t.clock != null) return t.notStage != null ? `(((${r}['__stage'] ?? '0') != '${t.notStage}') ? _sinceClock(${t.clock}) : double.nan)` : `_sinceClock(${t.clock})`;   // ⏰ דקות מאז HH:MM הלילה (±12 שעות) · «כשלא <שלב>» ⇒ רק רשומה שעוד לא הגיעה לשלב
   if (t.since != null) return `(((${r}['__stage'] ?? '0') == '${t.since}') ? _ageMin(${r}['__stage_at'] ?? '') : double.nan)`;
   if (t.ageField) return `_ageMin(${r}[${k(t.ageField)}] ?? '')`;
+  if (t.refCount) return liveValue({ kind: 'refCount', ...t.refCount }, r, k);   // 🔗 ספירת-בנות לכל רשומה כעלה בעץ
   if (t.hmField) return `_hm(${r}[${k(t.hmField)}] ?? '')`;   // 🕘 שעה «HH:MM» ⇒ דקות על ציר-הלילה (לפני 12:00 = אחרי חצות) — «בפועל פחות מתוכנן» עובר חצות נכון
   if (t.linked) return liveLinkedExpr(t.linked, r, k);
   if (t.queue) return `simWaitMin(${t.queue.map((q) => exprDart(q, r, k)).join(', ')})`;   // 🌉 המתנה צפויה (קצב, עמדות, דקות-טיפול) ⇒ סימולציה של מנוע-המערכות (gen_sim_engine.dart)

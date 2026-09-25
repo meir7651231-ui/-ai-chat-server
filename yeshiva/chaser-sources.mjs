@@ -40,6 +40,18 @@ export function registerAll(CH) {
     if (/^\d+(\.\d+)?$/.test(said)) return { outcome: 'clause', clause: `${ctx.alertWord} ${ctx.whenWord}${f} ${ctx.aboveWord} ${said}`, act: g.rule.act };
     const dup = ctx.asked.has(key); ctx.asked.add(key);
     return { outcome: 'question', key, dup, q: `🔢 «${c.slice(0, 70)} → ${g.rule.act.slice(0, 30)}»: «${f}» — מעל איזה מספר להתריע? (מספר)` }; });
+  // ⚖️ ספירה מול שדה («שוטרים במעבר מתחת לתקן שוטרים»): לכל רשומת-הורה — כמה בנות מצביעות עליה, מול שדה של אותה רשומה.
+  //    הנספר דרך תשובת-היחידה («שוטרים» = שיבוץ); כשהמילה אינה שם-הטבלה — היא עצמה ערך-הסינון («שוטר» בשדה-התפקיד). כל חלק חסר ⇒ ערוץ (שאלה)
+  CH.register('rule', 'countVsField', async (ctx, g) => {
+    const m = g.rule.cond.match(/^([\u0590-\u05FF]+)\s+ב([\u0590-\u05FF]+)\s+(מתחת ל|מעל)\s*([\u0590-\u05FF][\u0590-\u05FF\s]*)$/); if (!m) return null;
+    const parts = []; const pp = await ctx.need('part', { part: 'table', word: m[2], cond: g.rule.cond }); parts.push(pp); const cp = await ctx.need('part', { part: 'table', word: m[1], cond: g.rule.cond }); parts.push(cp);
+    const P = pp.outcome === 'built' ? pp.value : null, Ch = cp.outcome === 'built' ? cp.value : null; let f = null, val = null;
+    if (P) { const fp = await ctx.need('part', { part: 'field', word: m[4].trim(), T: P, cond: g.rule.cond }); parts.push(fp); if (fp.outcome === 'built') f = fp.value; }
+    if (Ch && P) { const lp = await ctx.need('part', { part: 'field', word: P.name, T: Ch, cond: g.rule.cond }); parts.push(lp);   // השדה בבת שמצביע על ההורה
+      if (stem(m[1]) !== stem(Ch.name)) { val = m[1].replace(/(ים|ות)$/, ''); const rw = (ctx.roleFieldWords || [])[0]; if (rw) parts.push(await ctx.need('part', { part: 'field', word: rw, T: Ch, cond: g.rule.cond })); } }
+    if (parts.every((p) => p.outcome === 'built')) return { outcome: 'clause', clause: `${ctx.alertWord} ${ctx.whenWord}מונה ${Ch.name}${val ? ` ${val}` : ''} פחות ${f} ${m[3] === 'מעל' ? ctx.aboveWord : ctx.belowWord} 0`, act: g.rule.act };
+    const no = parts.find((p) => p.outcome === 'declared'); if (no) { g.why = `חלק «${no.word}»: ${no.why}`; return null; }
+    const qs = parts.filter((p) => p.outcome === 'question'); return { outcome: 'question', key: qs[0].key, dup: qs.every((p) => p.dup), q: `⚖️ «${g.rule.cond.slice(0, 70)}»: חסר: ${qs.map((p) => p.ask).join(' · ')}` }; });
   // 🧩 הרכבה (הכרעת-בעלים 25.9 «תתקן ותשדרג»): כלל שלא התאים לצורה אחת ⇒ פירוק לחלקים ⇒ כל חלק מחפש את הצורה הקיימת שלו ⇒ הרכבה.
   //    חלקים: נספר (N + שם ⇒ טבלה) · סינון («לא X» ⇒ שלב) · קיבוץ («באותו/ב<ישות>» ⇒ שדה) · חלון («ב-M דק'») · סף (N-1)
   //    ⇄ כל חלק נשלח לערוץ (ctx.need('part')) — לא «חסר» ועצירה (25.9 «תשדרג את הקיים»): שם · הגדרות-המסמך · מחקר · שאלה
@@ -79,7 +91,7 @@ export function registerAll(CH) {
     const w = g.word;
     if (g.part === 'value') { const st = (g.T.stages || []).find((x) => stem(x) === stem(w)); return st ? { outcome: 'built', value: { stage: st } } : null; }
     if (g.part === 'table') { const t = (ctx.tables || []).find((x) => stem(w) === stem(x.name) || w.startsWith(stem(x.name)) || stem(w.split('-')[0]) === stem(x.name)); return t ? { outcome: 'built', value: t } : null; }
-    if (g.part === 'field') { const f = (g.T.fields || []).find((x) => x.split(/\s+/).some((y) => stem(y) === stem(w))); return f ? { outcome: 'built', value: f } : null; }
+    if (g.part === 'field') { const f = (g.T.fields || []).find((x) => x === w) || (g.T.fields || []).find((x) => x.split(/\s+/).some((y) => stem(y) === stem(w))); return f ? { outcome: 'built', value: f } : null; }
     const st = (g.T.stages || []).find((x) => stem(x.replace(/^לא\s+/, '')) === stem(w) || fin(x).includes(stem(w))); return st ? { outcome: 'built', value: st } : null; });
   CH.register('part', 'byDoc', async (ctx, g) => {   // המסמך כותב «Zone אזור» ⇒ שדה zone / zone_id בטבלה אחרת = קיבוץ לפי אזור
     if (g.part !== 'field') return null;

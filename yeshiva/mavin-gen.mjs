@@ -238,7 +238,7 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
     for (const [k, v] of Object.entries(answers)) { const mm = k.match(new RegExp(`^${SLc.ownerRuleWord || 'כלל'} (\\S+)`)); if (!mm || typeof v !== 'string' || !v.trim()) continue; const [cond, act] = v.split(/\s*→\s*/);
       gaps.push({ kind: 'rule', owner: k, table: ruleTables.find((x) => x.name === mm[1]) || { name: mm[1], fields: [], stages: [] }, rule: { cond: cond.trim(), act: (act || SLc.alertWord || 'התראה').trim(), type: 'rule' } }); }
     for (const t of ruleTables) { const xs = String(answers[`${SLc.extraFieldWord || 'שדה נוסף'} ${t.name}`] || '').split(/\s*,\s*/).filter(Boolean); for (const x of xs) if (!t.fields.includes(x)) t.fields.push(x); }   // שדה שהבעלים הוסיף — גם הפותרים רואים אותו
-    const cctx = { corpus: ruleRes.C, subs: [], descWord: SLc.descWord || 'תיאור', compareWords: SLc.compareWords || [], stateChangeWords: SLc.stateChangeWords || [] };
+    const cctx = { corpus: ruleRes.C, subs: [], descWord: SLc.descWord || 'תיאור', compareWords: SLc.compareWords || [], stateChangeWords: SLc.stateChangeWords || [], roleFieldWords: SLc.roleFieldWords || [] };
     const done = await CH.resolveAll(gaps, { ...cctx, K: K2, answers, asked: new Set(), seqBy, tables: ruleTables, sinceWord: (SLc.sinceWords || ['זמן מאז'])[0], detect: CAP.detectAllClauses, alertWord: SLc.alertWord || 'התראה', whenWord: 'כש', aboveWord: 'מעל', belowWord: 'מתחת ל' });
     ruleCl = done.filter((x) => x.outcome === 'clause').filter((x, i, a) => a.findIndex((y) => y.clause === x.clause) === i);
     for (const x of done.filter((y) => y.outcome === 'question' && !y.dup)) mined.push({ q: { thing: 'כורה', ask: x.kind, key: x.key, q: x.q } });
