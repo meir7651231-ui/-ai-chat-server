@@ -120,9 +120,10 @@ function listOf(segment) {
 // ── צורת-הצורך של משפט ──
 // דוגמאות של הבעלים (צורה): «למשל: משה, ב, 80; שרה, ג, 40.» — עד נקודה-ורווח או סוף המשפט; רשומות ב-';', ערכים ב-','. המילים מ-spec-lang (exampleWords).
 const EX_WORDS = (() => { try { return JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')).exampleWords || []; } catch { return []; } })();
+const ST_WORDS = (() => { try { return JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')).stagePrefixes || []; } catch { return []; } })();   // «; שלבים: …» אחרי הדוגמאות אינו רשומה (נמדד: 'שלבים: open' נכנס כשורה)
 function splitExamples(text) {
   if (!EX_WORDS.length) return { text, examples: [] };
-  const re = new RegExp(`\\s*(?:${EX_WORDS.join('|')})\\s*:?\\s*(.+?)(?=\\.(?:\\s|$)|$)`, 'g');
+  const re = new RegExp(`\\s*(?:${EX_WORDS.join('|')})\\s*:?\\s*(.+?)(?=\\.(?:\\s|$)${ST_WORDS.length ? `|;\\s*(?:${ST_WORDS.join('|')})\\s*:` : ''}|$)`, 'g');
   const examples = [];
   let removed = 0;   // המיקום נמדד על הטקסט **אחרי** הסרת הדוגמאות הקודמות — אחרת הדוגמה השנייה «נופלת» על הישות האחרונה (הבאג: כל הדוגמאות נדבקו ל«הכרעה»)
   const out = text.replace(re, (m, body, offset) => { const records = body.split(';').map((r) => { const c = r.split(/[,،]/).map((v) => v.trim()); while (c.length && !c[c.length - 1]) c.pop(); return c; }).filter((r) => r.some(Boolean));   /* תא ריק בתחילה/באמצע נשמר ('') — אחרת הערכים זזים עמודה (נמדד: «, רפואה, 30» ⇒ רפואה נכנס ל-zone); ריק בסוף נחתך כמו קודם */ if (records.length) examples.push({ at: offset - removed, records }); removed += m.length; return ''; });

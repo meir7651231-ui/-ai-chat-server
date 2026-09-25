@@ -158,6 +158,17 @@ export function registerAll(CH) {
       const ask = `«${g.word}» — איזה שדה ב«${g.T.name}»? (${(g.T.fields || []).join(' · ')})${via.length ? ` · בטבלה המקושרת: ${via.join(' · ')}` : ''} — או שם שדה חדש, או «לא»`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; }
     if (g.part === 'value') { const ask = `«${g.noun} ${g.word}» — «${g.word}» הוא שלב של ${g.T.name}? (${(g.T.stages || []).join(' · ') || '—'}) — ענה שם-שלב (קיים או חדש), או «${ctx.descWord || 'תיאור'}» אם כל ה${g.noun} כאלה`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; }
     const ask = `סינון «לא ${g.word}» — אין שלב כזה ב«${g.T.name}» (עכשיו: ${(g.T.stages || []).join(' · ') || '—'}). אילו שלבים להוסיף? (למשל: לא ${g.word})`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; });
+  // 📋 «תנאי → תפקיד [מחליט]» (25.9 «למה הוא לא קורא את המסמכים»): המסמך כבר מחזיק טבלה לזה — שדה-מי (by/holder) ושדה-תנאי (condition),
+  //    כמו «החלטה». הכלל הוא שורה בה (דוגמה), לא «הוראה» שמדלגים עליה. אין טבלה כזו במסמך ⇒ ממשיכים למיון
+  CH.register('rule', 'docRow', async (ctx, g) => {
+    const A = ctx.actorWords || [], V = ctx.decideVerbs || []; const act = g.rule.act.replace(/\(.*?\)/g, ' ').replace(/[.,;:]+\s*$/, '').trim();
+    if (/☐/.test(`${g.rule.cond} ${g.rule.act}`)) return null;   // רשימת-סימון (☐) אינה תנאי
+    const cut = act.split(/\s+/); const vi = cut.findIndex((w) => V.includes(w.replace(/[,.;:]+$/, ''))); const who = (vi > 0 ? cut.slice(0, vi) : cut).join(' ').replace(/[,.;].*$/, '').trim();
+    if (!who || who.split(/\s+/).length > 4 || !A.some((a) => who.includes(a))) return null;
+    const T = (ctx.docTables || []).find((t) => t.fields.some((f) => (ctx.actorFieldWords || []).includes(f)) && t.fields.some((f) => (ctx.condFieldWords || []).includes(f))); if (!T) return null;
+    const clean = (x) => String(x).replace(/[,;.·|]+/g, ' ').replace(/\s+/g, ' ').trim();
+    const row = T.fields.map((f) => ((ctx.actorFieldWords || []).includes(f) ? clean(who) : (ctx.condFieldWords || []).includes(f) ? clean(g.rule.cond).slice(0, 80) : ''));
+    return { outcome: 'built', row: { table: T.name, values: row }, why: `שורה ב«${T.name}»: ${clean(g.rule.cond).slice(0, 50)} ⇐ ${who}` }; });
   // 🗂️ מיון מה שלא נבנה (25.9 «תסיים כל מה שאתה והמחולל יכולים»): «לא בצורה» אינו סיבה — כל כלל מוצהר מקבל סוג, כדי שמה שנשאר יהיה רק כללים אמיתיים בלי צורה
   CH.register('rule', 'declared', async (ctx, g) => {
     const c = g.rule.cond.trim(), full = `${c} → ${g.rule.act}`; const seen = (ctx.seenRules ??= new Set()); const T = (ctx.tables || []).map((t) => t.name);
