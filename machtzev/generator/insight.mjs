@@ -11,7 +11,7 @@ import { buildAtlas } from './atlas.mjs';
 import { isPaper, skinWired } from './look.mjs';
 import { roleOf, judge, ledgerLine, KIND, sigOfDefault } from '../../yeshiva/atom-psak.mjs';
 import { synthDisplay, widgetRecordOf, sidecarOf } from './display-synth.mjs';
-import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr, liveCond, liveThresholdDart, liveOpDart, liveTest, liveAtomImports, liveKeyExpr, LINKED_IMPORTS, exprHasQueue, SIM_IMPORT, exprHasReach, GRAPH_IMPORT, exprHasLinked } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
+import { liveValue, liveThreshold, liveNeedsHelper, AGE_HELPER, liveIsSet, liveAggExpr, liveAggImport, liveIsGrouped, liveGroupsExpr, liveSetExpr, liveCond, liveThresholdDart, liveOpDart, liveTest, liveAtomImports, liveKeyExpr, LINKED_IMPORTS, exprHasQueue, SIM_IMPORT, exprHasLinked } from './live-expr.mjs';   // «אין אטום מדוד-חיובי» ⇒ הרכבה מיסודות (synth ⇒ ds-forge ⇒ auto-skin), עולה לפסק כמו כולם
 import { wireForge, forgeCands } from './forge-wire.mjs';   // חיבור 1: המועמדים המדודים (forge) + חיווט-חריצים לפי צורה
 import { ops as opsOfKind } from '../compose-engine.mjs';   // צורה ⇒ פעולות-יסוד (הטבלה הקיימת, לא רשימה שלי)
 import * as R from '../root.mjs';
@@ -59,7 +59,6 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
   for (const ai of liveAtomImports(live)) imports.add(ai);
   if (live.kind === 'linked' || (live.kind === 'expr' && exprHasLinked(live.tree))) for (const ai of LINKED_IMPORTS) imports.add(ai);
   if (live.kind === 'expr' && exprHasQueue(live.tree)) imports.add(SIM_IMPORT);
-  if ([live, ...(live.pre || []), ...(live.alt || [])].some((q) => q.kind === 'expr' && exprHasReach(q.tree))) imports.add(GRAPH_IMPORT);   // 🔗 מנוע-התלות — גם בחלק-סינון (וגם)   // 🔗 מנוע-התלות   // 🌉 המתנה צפויה ⇒ מנוע-המערכות ב-Dart   // 🔗 תוצאת-קשר כשדה ⇒ חלקי-היסוד שהיא בנויה מהם
   if (live.kind === 'levels') { manifest.source.levels = { high: live.high, mid: live.mid, by: live.by }; if (decide && decide.proven) live.decide = decide.name; }
   manifest.decision = decide ? { atom: decide.name, file: decide.file, proven: !!decide.proven, examples: decide.examples || [] } : { atom: null, why: 'אין אטום-החלטה מוכח ⇒ השוואה ביד (מדווח)' };
   const descField = grouped ? live.by : (entity.fields[0] || live.field);   // קבוצות: העמודה המתארת = שדה-החלוקה

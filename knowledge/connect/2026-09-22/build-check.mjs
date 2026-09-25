@@ -17,7 +17,7 @@ const ROOT = path.resolve(HERE, '../../..');
 const args = process.argv.slice(2);
 const ai = args.indexOf('--answers'); const answers = ai >= 0 ? JSON.parse(fs.readFileSync(args[ai + 1], 'utf8')) : {};
 const si = args.indexOf('--spec'), di = args.indexOf('--doc'), mi = args.indexOf('--mosad');   // דלת שנייה: ספק מוכן / מסמך-«פירוק» / אגף מעץ-המוסד — במקום משפט
-const ci = args.indexOf('--corpus'); const skipIdx = new Set([ai, si, di, mi, ci].filter((x) => x >= 0).map((x) => x + 1));
+const skipIdx = new Set([ai, si, di, mi].filter((x) => x >= 0).map((x) => x + 1));
 const sentence = args.filter((a, i) => !a.startsWith('--') && !skipIdx.has(i))[0];
 const HOST = process.env.BS_HOST;
 const FLUTTER = ['/root/flutter/bin/flutter', process.env.FLUTTER_BIN].find((p) => p && fs.existsSync(p));
@@ -45,7 +45,7 @@ if (bi) {
   const sl = spec.split('\n'); console.log(`«אגף ${dep.i}: ${dep.name}» (עץ-המוסד ⇒ ספק, ${dep.entities} ישויות)\nאפיון (${sl.length} שורות):\n${sl.slice(0, 8).map((l) => '  ' + l.slice(0, 120)).join('\n')}${sl.length > 8 ? '\n  …' : ''}`);
 } else if (si >= 0 || di >= 0) {
   const f = args[(si >= 0 ? si : di) + 1], txt = fs.readFileSync(f, 'utf8');
-  G0 = si >= 0 ? await generateFromSpec(txt, { outDir: process.env.GEN_OUT, name: 'chk' }) : await generateFromDoc(txt, { outDir: process.env.GEN_OUT, name: 'chk', answers, corpus: args.includes('--corpus') ? args[args.indexOf('--corpus') + 1] : null });
+  G0 = si >= 0 ? await generateFromSpec(txt, { outDir: process.env.GEN_OUT, name: 'chk' }) : await generateFromDoc(txt, { outDir: process.env.GEN_OUT, name: 'chk' });
   spec = G0.spec; G0.routes = [];
   const sl = spec.split('\n'); console.log(`«${path.basename(f)}» (${si >= 0 ? 'ספק מוכן' : 'מסמך-פירוק'})\nאפיון (${sl.length} שורות):\n${sl.slice(0, 10).map((l) => '  ' + l.slice(0, 110)).join('\n')}${sl.length > 10 ? '\n  …' : ''}`);
 } else {

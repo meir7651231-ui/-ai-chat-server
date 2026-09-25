@@ -32,13 +32,12 @@ export function exprDart(t, r = 'r', k = (s) => `'${s}'`) {
   if (t.clock != null) return t.notStage != null ? `(((${r}['__stage'] ?? '0') != '${t.notStage}') ? _sinceClock(${t.clock}) : double.nan)` : `_sinceClock(${t.clock})`;   // ⏰ דקות מאז HH:MM הלילה (±12 שעות) · «כשלא <שלב>» ⇒ רק רשומה שעוד לא הגיעה לשלב
   if (t.since != null) return `(((${r}['__stage'] ?? '0') == '${t.since}') ? _ageMin(${r}['__stage_at'] ?? '') : double.nan)`;
   if (t.ageField) return `_ageMin(${r}[${k(t.ageField)}] ?? '')`;
-  if (t.reach) return `reachCountRecs(appStore.records('${t.reach.slug}').toList(), ${k(t.reach.key)}, [${t.reach.down.map(k).join(', ')}], [${t.reach.up.map(k).join(', ')}], (${r}[${k(t.reach.key)}] ?? '')).toDouble()`;   // 🔗 מנוע-התלות (gen_graph_engine.dart)
   if (t.refCount) return liveValue({ kind: 'refCount', ...t.refCount }, r, k);   // 🔗 ספירת-בנות לכל רשומה כעלה בעץ
   if (t.hmField) return `_hm(${r}[${k(t.hmField)}] ?? '')`;   // 🕘 שעה «HH:MM» ⇒ דקות על ציר-הלילה (לפני 12:00 = אחרי חצות) — «בפועל פחות מתוכנן» עובר חצות נכון
   if (t.linked) return liveLinkedExpr(t.linked, r, k);
   if (t.queue) return `simWaitMin(${t.queue.map((q) => exprDart(q, r, k)).join(', ')})`;   // 🌉 המתנה צפויה (קצב, עמדות, דקות-טיפול) ⇒ סימולציה של מנוע-המערכות (gen_sim_engine.dart)
   const base = `(double.tryParse((${r}[${k(t.field)}] ?? '').trim()) ?? double.nan)`;
-  return t.eff && t.eff.length ? `(${base}${t.eff.map((e) => ` * (${e.when ? `(${r}[${k(e.when.field)}] ?? '').contains(${k(e.when.value)}) && ` : ''}appStore.records('${e.slug}').any((m) => (m[${k(e.kindField)}] ?? '').trim() == ${k(e.kind)} && (m['__stage'] ?? '0') == '${e.active}') ? ${e.n} : 1.0)`).join('')})` : base;   // 🌧️ × מקדם כשמצב מהסוג פעיל
+  return base;
 }
 /** אותו עץ בצד-JS (לציפייה מהדוגמאות): null כשעלה תלוי-זמן (since/ageField) או קשר — אז אין ציפייה מהדוגמאות */
 export function exprJs(t, row, ctx = null) {
@@ -49,8 +48,6 @@ export function exprJs(t, row, ctx = null) {
 const treeHas = (t, key) => !!t && (t[key] != null || treeHas(t.a, key) || treeHas(t.b, key) || (t.queue || []).some((q) => treeHas(q, key)));
 export const exprHasQueue = (t) => treeHas(t, 'queue');
 export const SIM_IMPORT = "import 'gen_sim_engine.dart';";
-export const exprHasReach = (t) => treeHas(t, 'reach');
-export const GRAPH_IMPORT = "import 'gen_graph_engine.dart';";   // 🔗 נכתב ע"י mavin-gen כשיש «נופלים איתו»   // 🌉 נכתב ע"י mavin-gen ליד המסכים כשיש «המתנה צפויה»
 export const exprNeedsAge = (t) => treeHas(t, 'since') || treeHas(t, 'ageField') || treeHas(t, 'clock') || treeHas(t, 'hmField');
 export const exprHasLinked = (t) => treeHas(t, 'linked');
 export const LINKED_IMPORTS = ['op-where-list', 'op-sum-by', 'op-sub-num', 'op-add-num', 'op-le-num', 'op-ge-num'].map((f) => `import '../dart-maor/${f}.dart';`);

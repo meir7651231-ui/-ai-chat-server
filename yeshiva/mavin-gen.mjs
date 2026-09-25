@@ -177,102 +177,13 @@ export async function generateFromSpec(spec, { outDir, name = 'spec' } = {}) {
   const app = await runAppDs(spec, files, notes, questions);
   return { spec, files, notes, questions, screens: app ? app.screens.map((s) => `${s.kind}:${s.name}`) : [] };
 }
-/** מסמך-«פירוק» (markdown של הבעלים, שלד peruk-lang) ⇒ peruk.perukToSpec ⇒ ספק ⇒ app-ds. אפס כתיבה ל-specs-ds. */
-export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, corpus = null } = {}) {
+/** מסמך-«פירוק» (markdown של הבעלים, שלד peruk-lang) ⇒ peruk.perukToSpec ⇒ ספק ⇒ app-ds. אפס כתיבה ל-specs-ds.
+ *  L101: שלד-הפירוק קרא 0 שדות ⇒ לא בונים מברירות-מחדל ולא ממציאים קורא אחר — אדום עם שאלה; הבעלים מתקן את המסמך. */
+export async function generateFromDoc(md, { outDir, name = 'doc' } = {}) {
   const { perukToSpec } = await import('../machtzev/generator/peruk.mjs');
-  const DS = await import('../machtzev/generator/doc-shape.mjs');   // 📐 קריאה לפי צורה (הכרעת-בעלים 24.9): peruk מכיר רק את שלד-הפירוק שלו
-  const pk = perukToSpec(DS.htmlToMd(md), name); const shp = DS.docToSpec(md); const perukRead = Number((pk.node && pk.node.fields) || 0);
-  const byShape = !!shp.spec && perukRead === 0;   // peruk קרא 0 שדות והמסמך מכיל טבלת-ישויות ⇒ הצורה קובעת (נמדד: מירון/72 ⇒ «תיק» כללי מהדאטה של peruk)
-  const spec = byShape ? shp.spec : pk.spec; const node = byShape ? { ...(pk.node || {}), reader: 'doc-shape', fields: shp.ents.reduce((a, e) => a + e.fields.length, 0), entities: shp.ents.length, links: shp.links.length } : pk.node;
-  // 🔁 המסמך עובר באותו צינור כמו משפט (לולאת ein · קושיות · חיפוש-צורה · התראות): דלת-המסמך רק מתרגמת — לא נתקעת ועוצרת
-  // ⛏️ הכורה (yeshiva/koreh — בדפוס mine.py): קורפוס-הבעלים (תרחישים) מול שמות-הישויות ⇒ ערכים שחוזרים בכמה מקורות ⇒ שאלה «לאיזה שדה?» ⇒ שדה-בחירה
-  const enums = {}; const mined = []; const rowsBy = {}; const newEnts = []; const extra = {}; const ruleTables = []; const ruleRes = {}; const gaps = []; const extraStages = {};
-  if (byShape && corpus) { const K = await import('./koreh.mjs'); const res = K.mine(await K.corpusOf(corpus), shp.ents.map((e) => e.name)); K.ledger(res); mined.__units = res.units.map((u) => u.unit);
-    for (const e of shp.ents) { const vals = res.candidates.filter((c) => c.ent === e.name && c.sources >= 3).slice(0, 8); if (vals.length < 2) continue; const key = `ערכים ${e.name}`;
-      const said = typeof answers[key] === 'string' ? answers[key].trim() : ''; const f = e.fields.find((x) => x.name === said);
-      if (f) { (enums[e.name] ??= {})[f.name] = vals.map((c) => c.name); mined.push(`${e.name}.${f.name} ⇐ ${vals.map((c) => c.name).join('/')}`); }
-      else if (!said) mined.push({ q: { thing: 'כורה', ask: 'mined', key, q: `⛏️ בתרחישים (${res.corpus} מקורות) חוזרים ערכים של «${e.name}»: ${vals.map((c) => `${c.name} (${c.sources})`).join(' · ')}. לאיזה שדה הם שייכים? (${e.fields.map((x) => x.name).join(' · ')}) — ענה בשם השדה, או «לא»` } }); }
-    // 🔢 יחידה ⇒ שדה (הכרעת-בעלים 24.9 «3»: הוא שואל פעם אחת וזוכר): «איש» אחרי מספר, ליד «נקודה» ⇒ «איזה שדה?» ⇒ K.rememberUnit ⇒ שורות-דוגמה
-    const SLu = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
-    const umap = K.unitMap(); const shapeOf = (n) => shp.ents.find((x) => x.name === n);
-    for (const u of res.units.filter((x) => x.sources >= 3 && x.ents.length).slice(0, 12)) { const key = `יחידה ${u.unit}`; const said = typeof answers[key] === 'string' ? answers[key].trim() : '';
-      if (umap[u.unit]) continue; if (said) { const [se, sf] = said.split('.'); const XWu = SLu.extraFieldWord || 'שדה נוסף'; const isTable = (n) => !!shapeOf(n) || answers[`${SLu.newTableWord || 'טבלה'} ${n}`] === 'כן';
-        // תשובה = «לא» · ישות.שדה (גם שדה שהבעלים הוסיף: «שדה נוסף ישות») · שם-טבלה = היחידה היא ספירת-שורות של הטבלה («ילדים» = מונה ילד)
-        const ok = said === 'לא' || (sf ? (!!shapeOf(se) && (shapeOf(se).fields.some((f) => f.name === sf) || String(answers[`${XWu} ${se}`] || '').split(/\s*,\s*/).includes(sf))) : isTable(said)); if (ok) { K.rememberUnit(u.unit, said); umap[u.unit] = said; continue; } }
-      const opts = u.ents.slice(0, 3).flatMap((x) => (shapeOf(x.ent) || { fields: [] }).fields.map((f) => `${x.ent}.${f.name}`)).slice(0, 16);
-      mined.push({ q: { thing: 'כורה', ask: 'unit', key, q: `🔢 «${u.unit}» בא אחרי מספר ב-${u.sources} תרחישים${u.sample ? ` (למשל «${u.sample}»)` : ''}, ליד ${u.ents.slice(0, 3).map((x) => `«${x.ent}»`).join(' · ')}. איזה שדה זה? (${opts.join(' · ')}) — ענה ישות.שדה, או «לא»` } }); }
-    // ⇄ הכיוון-ההפוך (תרחישים ⇒ מודל · הכרעות-בעלים 23.9 / 25.9): טבלה חסרה / הרחבת-טבלה ⇒ שאלה אחת לכל הצעה; «כן» ⇒ נכנס למודל
-    { const SLg = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); const COg = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'knowledge/conditions.json'), 'utf8')); const skip = SLg.durationWords || [];
-      const C = await K.corpusOf(corpus); const names = shp.ents.map((e) => e.name);
-      const RL = K.rulesOf(C, names, { subjects: res.units.map((u) => u.unit).filter((u) => !skip.includes(u)), skip, instances: Object.fromEntries(res.candidates.map((x) => [x.name, x.ent])), when: COg.when || [] });
-      const G = K.modelGaps(C, names, RL); const TW = SLg.newTableWord || 'טבלה', XW = SLg.extraFieldWord || 'שדה נוסף';
-      for (const t of G.tables) { const key = `${TW} ${t.name}`; const said = typeof answers[key] === 'string' ? answers[key].trim() : ''; const saidF = typeof answers[`שדות ${t.name}`] === 'string' ? answers[`שדות ${t.name}`].split(/\s*,\s*/).filter(Boolean) : []; if (saidF.length) t.fields = [...new Set([...(t.fields || []), ...saidF])];
-        if (said === 'כן') { { const fs0 = [...(t.fields || []), ...t.links.filter((l) => !(t.fields || []).includes(l))]; if (fs0.length) newEnts.push({ name: t.name, fields: fs0 }); else mined.push({ q: { thing: 'כורה', ask: 'newTableFields', key: `שדות ${t.name}`, q: `🆕 «${t.name}»: המחקר לא מונה שדות — אילו? (למשל: א, ב, ג)` } }); } mined.push(`🆕 ${t.name} ⇐ טבלה חדשה (תשובת-הבעלים) · קשרים ${t.links.join(', ') || '—'} · ${t.rules.length} כללים`); }
-        gaps.push({ kind: 'table', key, name: t.name, q: `🆕 «${t.name}» חוזר ב-${t.sources} תרחישים ואין לו טבלה. כללים: ${t.rules.slice(0, 2).join(' · ') || '—'}${t.links.length ? ` · ליד ${t.links.join(', ')}` : ''}. לפתוח טבלה? (כן / לא)` }); }
-      // 🔔 כללי-התרחישים ⇒ משפטי-התראה בשפה הקיימת (ruleClauses) — לטבלאות שאושרו ולטבלאות המסמך; מה שלא מתורגם ⇒ מדווח עם הסיבה
-      ruleTables.push(...G.tables.filter((t) => newEnts.some((n) => n.name === t.name)).map((t) => ({ name: t.name, fields: newEnts.find((n) => n.name === t.name).fields })), ...shp.ents.map((e) => ({ name: e.name, alias: e.alias, fields: e.fields.map((f) => f.name.replace(/_/g, ' ')) })));
-      ruleRes.R = RL; ruleRes.C = C;
-      for (const x of G.extensions) { const key = `הרחבה ${x.ent}: ${x.add}`; const said = typeof answers[key] === 'string' ? answers[key].trim() : '';
-        if (said === 'כן') { const f = x.add.split(/\s+[—–-]\s+/)[0].replace(/[.,]+$/, '').trim(); (extra[x.ent] ??= []).push(f); mined.push(`➕ ${x.ent} + ${f} (תשובת-הבעלים)`); }
-        else if (said === (SLg.enumAnswerWord || 'ערך')) { const f = x.add.split(/\s+[—–-]\s+/)[0].replace(/[.,]+$/, '').trim(); const E = shp.ents.find((e) => e.name === x.ent); const kf = E && (E.fields.find((q) => /^kind$|^סוג$/.test(q.name)) || null);   // «מצב → שרב» = סוג-מצב, לא שדה
-          if (kf) { const cur = (enums[x.ent] ??= {})[kf.name] || []; enums[x.ent][kf.name] = [...new Set([...cur, f])]; mined.push(`➕ ${x.ent}.${kf.name} ⇐ ${f} (ערך, תשובת-הבעלים)`); } else mined.push({ q: { thing: 'כורה', ask: 'extend', key, q: `«${x.ent}» אין לו שדה-סוג — «${f}» כשדה? (כן / לא)` } }); }
-        gaps.push({ kind: 'extend', key, name: x.ent, q: `➕ המחקר כותב: «${x.ent} → ${x.add}» (${String(x.ex).split(':')[0]}). להוסיף ל«${x.ent}»? (כן / לא)` }); } }
-    for (const e of shp.ents) { const rw = K.rowsOf(res, e, e.fields.map((f) => f.name), { enumField: Object.keys(enums[e.name] || {})[0] || null, map: umap }); if (rw.length) { rowsBy[e.name] = rw; mined.push(`${e.name}: ${rw.length} שורות-דוגמה`); } } }
-  // ✍️ תשובות-הבעלים לשאלות הזרימה: «flow ratio» ⇒ ביטוי (מפתח-השאלה עצמו) · «שדה נוסף <ישות>» ⇒ שדה שהמסמך לא מנה (למשל מה שהמונים מודדים)
-  const defs = {}; if (byShape) { const SLx = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); const XW = SLx.extraFieldWord || '';
-    for (const f of shp.flows || []) { const k = f.field.replace(/_/g, ' '); if (typeof answers[k] === 'string' && answers[k].trim()) { defs[k] = answers[k].trim(); mined.push(`✍️ «${k}» = «${defs[k]}» (תשובת-הבעלים)`); } }
-    for (const [k, v] of Object.entries(answers)) if (XW && k.startsWith(XW + ' ') && typeof v === 'string' && v.trim()) { const en = k.slice(XW.length + 1).trim(); extra[en] = v.split(/\s*,\s*/).filter(Boolean); mined.push(`✍️ ${en} + ${extra[en].join(', ')} (תשובת-הבעלים)`); } }
-  let ruleCl = []; const effects = []; let acts = [], decisionT = null; if (ruleRes.R) { const K2 = await import('./koreh.mjs'); const SLx0 = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
-    // שלבים לטבלה חדשה — רק מתשובת-הבעלים («שלבים ילד»: נמצא, בנקודה, נאסף); טבלאות-המסמך — מהמסמך
-    for (const t of ruleTables) { let sd = answers[`שלבים ${t.name}`]; if (sd === 'כן') { const q = (ruleRes.R[t.name] || []).find((r) => r.type === 'seq' && r.seq); sd = q ? q.seq.join(', ') : ''; }   // «כן» = מחזור-החיים שבמחקר
-      { const adj = Object.entries(answers).filter(([k, v]) => k.startsWith(`תואר ${t.name}: `) && typeof v === 'string' && !['לא', SLx0.descWord || 'תיאור'].includes(v.trim()) && !/ (מעל|מתחת ל?|הוא|היא) /.test(v)).map(([, v]) => v.trim()); if (adj.length) sd = [...(typeof sd === 'string' && sd.trim() ? sd.split(/\s*,\s*/) : []), ...adj].join(', '); }   // «תואר T: X» = שלב חדש (תשובת-הבעלים)
-      const ne = newEnts.find((n) => n.name === t.name); if (typeof sd === 'string' && sd.trim() && ne) { ne.stages = sd.split(/\s*,\s*/).filter(Boolean); t.stages = ne.stages; } else if (typeof sd === 'string' && sd.trim()) { extraStages[t.name] = sd.split(/\s*,\s*/).filter(Boolean); t.stages = [...new Set([...(shp.ents.find((e) => e.name === t.name) || { states: [] }).states, ...extraStages[t.name]])]; } else if (!t.stages) { const E = shp.ents.find((e) => e.name === t.name); t.stages = E ? E.states : []; } }
-    // 🕳️⇒🔁 ערוץ-החסרים (yeshiva/chaser): כל כלל של כל טבלה · כל טבלה/הרחבה חסרה ⇒ פותרים ⇒ משפט | שאלה | נבנה | מוצהר — לא נכתב-ונעצר
-    for (const t of ruleTables) for (const r of (ruleRes.R[t.name] || ruleRes.R[t.name + 'ים'] || ruleRes.R[t.name.replace(/ה$/, 'ות')] || [])) gaps.push({ kind: 'rule', table: t, rule: r });
-    const CH = await import('./chaser.mjs'); const CS = await import('./chaser-sources.mjs'); CS.registerAll(CH); const CAP = await import('../machtzev/generator/capability.mjs');
-    const SLc = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
-    const seqBy = {}; for (const [t, rs] of Object.entries(ruleRes.R)) { const q = rs.find((r) => r.type === 'seq' && r.seq && r.seq.length >= 2); if (q) seqBy[t] = q.seq; }   // מחזור-חיים מהמחקר לכל טבלה
-    // ⇄ «שדה <טבלה>: <מילה>» = שם שדה חדש (לא קיים) ⇒ שדה נוסף לטבלה (כמו «שדה נוסף») — תשובה לשאלת-חלק מההרכבה
-    for (const [k, v] of Object.entries(answers)) { const mm = typeof v === 'string' && k.match(/^שדה (\S+): /); const t = mm && ruleTables.find((x) => x.name === mm[1]); if (!t || !v.trim() || v.trim() === 'לא' || t.fields.includes(v.trim())) continue; t.fields.push(v.trim()); (extra[t.name] ??= []).push(v.trim()); mined.push(`✍️ ${t.name} + ${v.trim()} (תשובת-הבעלים, קיבוץ)`); }
-    // ✍️ כלל שהבעלים כתב («כלל <טבלה> <n>» = «תנאי → פעולה») נכנס לאותו ערוץ כמו כללי-המחקר — לא נשאר בקובץ-הסיכום
-    for (const [k, v] of Object.entries(answers)) { const mm = k.match(new RegExp(`^${SLc.ownerRuleWord || 'כלל'} (\\S+)`)); if (!mm || typeof v !== 'string' || !v.trim()) continue; const [cond, act] = v.split(/\s*→\s*/);
-      gaps.push({ kind: 'rule', owner: k, table: ruleTables.find((x) => x.name === mm[1]) || { name: mm[1], fields: [], stages: [] }, rule: { cond: cond.trim(), act: (act || SLc.alertWord || 'התראה').trim(), type: 'rule' } }); }
-    for (const t of ruleTables) { const xs = String(answers[`${SLc.extraFieldWord || 'שדה נוסף'} ${t.name}`] || '').split(/\s*,\s*/).filter(Boolean); for (const x of xs) if (!t.fields.includes(x)) t.fields.push(x); }   // שדה שהבעלים הוסיף — גם הפותרים רואים אותו
-    const CSx = await import('./chaser-sources.mjs'); const docRefs = {}; for (const e of shp.ents) for (const f of e.fields) for (const n of CSx.refNums(f.raw)) (docRefs[n] ??= []).push({ table: e.name, field: f.name.replace(/_/g, ' ') });   // 🔢 מספר-תרחיש ⇒ טבלה.שדה (המסמך)
-    const docRaw = Object.fromEntries(shp.ents.map((e) => [e.name, e.fields.map((f) => ({ field: f.name.replace(/_/g, ' '), raw: f.raw }))]));
-    const docTables = shp.ents.map((e) => ({ name: e.name, fields: e.fields.map((f) => f.name) }));
-    const cctx = { docTables, actorWords: SLc.actorWords || [], actorFieldWords: SLc.actorFieldWords || [], condFieldWords: SLc.condFieldWords || [], decideVerbs: SLc.decideVerbs || [], docRaw, docRefs, glossary: SLc.glossary || {}, typeFieldWords: SLc.typeFieldWords || [], corpus: ruleRes.C, subs: [], descWord: SLc.descWord || 'תיאור', compareWords: SLc.compareWords || [], stateChangeWords: SLc.stateChangeWords || [], roleFieldWords: SLc.roleFieldWords || [], edgeFields: SLc.edgeFields || {}, reachWords: SLc.reachWords || [], effectVerbs: SLc.effectVerbs || [] };
-    const done = await CH.resolveAll(gaps, { ...cctx, K: K2, answers, asked: new Set(), seqBy, tables: ruleTables, sinceWord: (SLc.sinceWords || ['זמן מאז'])[0], detect: CAP.detectAllClauses, alertWord: SLc.alertWord || 'התראה', whenWord: 'כש', aboveWord: 'מעל', belowWord: 'מתחת ל' });
-    // 🌧️ השפעות-מצב שנבנו (תשובת-הבעלים = מקדם) ⇒ app-ds (עלה-שדה × מקדם כשמצב מהסוג פעיל) · הסוג נכנס לסוגי-המצב
-    // 📋 כללים שהם שורות בטבלת-המסמך («תנאי → מי מחליט» ⇒ החלטה) ⇒ שורות-דוגמה (אותו מנגנון של הכורה)
-    { const seen = new Set(); for (const x of done.filter((y) => y.outcome === 'built' && y.row)) { const key = x.row.values.join('|'); if (seen.has(key)) continue; seen.add(key); (rowsBy[x.row.table] ??= []).push(x.row.values); }
-      try { fs.mkdirSync(outDir, { recursive: true }); fs.writeFileSync(path.join(outDir, 'rules-rows.json'), JSON.stringify(done.filter((y) => y.row).map((y) => ({ rule: `${y.rule.cond} → ${y.rule.act}`, table: y.row.table, why: y.why })), null, 1)); } catch {}
-      if (seen.size) mined.push(`📋 ${seen.size} כללי «תנאי → מי מחליט» ⇒ שורות ב«${[...new Set(done.filter((y) => y.row).map((y) => y.row.table))].join(', ')}»`); }
-    for (const x of done.filter((y) => y.outcome === 'built' && y.effect)) { effects.push(x.effect); const ME = shp.ents.find((e) => (SLc.modeEntityWords || []).includes(e.name)); const kf = ME && ME.fields.find((q) => /^kind$|^סוג$/.test(q.name)); if (kf) { const cur = (enums[ME.name] ??= {})[kf.name] || []; enums[ME.name][kf.name] = [...new Set([...cur, x.effect.kind])]; } mined.push(`🌧️ במצב ${x.effect.kind}: ${x.effect.ent}.${x.effect.field} × ${x.effect.n}`); }
-    { const SLa = SLc; const E0 = shp.ents.find((e) => e.fields.some((f) => (SLa.actorFieldWords || []).includes(f.name)) && e.fields.some((f) => (SLa.condFieldWords || []).includes(f.name)));   // טבלת-ההחלטה של המסמך (מי + תנאי)
-      if (E0) decisionT = { table: E0.name, by: E0.fields.find((f) => (SLa.actorFieldWords || []).includes(f.name)).name.replace(/_/g, ' '), cond: E0.fields.find((f) => (SLa.condFieldWords || []).includes(f.name)).name.replace(/_/g, ' ') };
-      acts = done.filter((x) => x.outcome === 'clause').map((x) => { const act = String(x.act || '').replace(/\(.*?\)/g, ' ').trim(); const who = (SLa.actorWords || []).map((a) => { const i = act.indexOf(a); if (i < 0) return null; const m = act.slice(i + a.length).match(/^\s+(ה[\u0590-\u05FF]+)/); return m ? `${a} ${m[1]}` : a; }).find(Boolean) || null; /* התפקיד עצמו (+ «הגזרה»/«האירוע»), לא מילה שנדבקה אליו («המפקדשני») */ return { clause: x.clause, act: act.replace(/\s+/g, ' ').slice(0, 60), actor: who }; }); }
-    ruleCl = done.filter((x) => x.outcome === 'clause').filter((x, i, a) => a.findIndex((y) => y.clause === x.clause) === i);
-    for (const x of done.filter((y) => y.outcome === 'question' && !y.dup)) mined.push({ q: { thing: 'כורה', ask: x.kind, key: x.key, q: x.q } });
-    const SM = CH.summary(done); const TY = {}; for (const x of done.filter((y) => y.type)) TY[x.type] = (TY[x.type] || 0) + 1; mined.push(`🕳️ ערוץ-החסרים: ${done.length} חסרים ⇒ ${ruleCl.length} התראות · ${SM.question || 0} שאלות · ${SM.built || 0} נבנו · ${SM.declared || 0} מוצהרים (מתוכם לפי סוג-החץ: ${Object.entries(TY).map(([k, v]) => `${k} ${v}`).join(' · ') || '—'}) (rules-declared.json) · 🗂️ ${Object.entries(done.filter((x) => x.cls).reduce((a, x) => ((a[x.cls.split(' — ')[0]] = (a[x.cls.split(' — ')[0]] || 0) + 1), a), {})).map(([k, v]) => `${k} ${v}`).join(' · ')} · 🧩 ${cctx.subs.length} חלקים ⇒ ${JSON.stringify(CH.summary(cctx.subs))}${CH.silent([...done, ...cctx.subs]).length ? ` · ⛔ ${CH.silent([...done, ...cctx.subs]).length} שקטים` : ''}`);
-    if (ruleCl.length) mined.push(`🔔 ${ruleCl.length} כללים ⇒ התראות: ${ruleCl.map((x) => `«${x.clause.replace(/^התראה כש/, '')}» → ${String(x.act || '').slice(0, 30)}`).join(' · ')}`);
-    try { fs.mkdirSync(outDir, { recursive: true }); fs.writeFileSync(path.join(outDir, 'rules-declared.json'), JSON.stringify(done.filter((x) => x.outcome === 'declared').map((x) => ({ kind: x.kind, table: x.table && x.table.name, cls: x.cls || x.type || null, rule: x.rule && `${x.rule.cond} → ${x.rule.act}`, why: x.why })), null, 1)); } catch {} }
-  const sen = byShape ? DS.docToSentence(md, { enums, rows: rowsBy, defs, extra, newEnts, extraStages, clauses: ruleCl.map((x) => x.clause) }) : null;
-  const r = sen ? await generateAll(sen.sentence, { answers: { ...answers, __effects: effects, __acts: acts, __decision: decisionT, __corpus: corpus || null, __docEnts: shp.ents.map((e) => e.name), __subjects: (mined.__units || []) }, outDir, name }) : await generateFromSpec(spec, { outDir, name });
-  if (corpus && byShape) { r.notes.push(`⛏️ כורה: ${mined.filter((m) => typeof m === 'string').length} שדות-בחירה מהתרחישים${mined.some((m) => typeof m === 'string') ? ' — ' + mined.filter((m) => typeof m === 'string').join(' · ') : ''} · ${mined.filter((m) => m.q).length} שאלות «לאיזה שדה»`); for (const m of mined) if (m.q) r.questions.push(m.q); }
-  // 🔌 התראה מכלל שלא מחוברת לנתונים (מסך-הדגמה עם סליידר) אינה התראה — נמדד 25.9: 2 מתוך 9 נפלו בשקט לסליידר. כל כלל-התראה נבדק בקובץ שנוצר
-  if (ruleCl.length && outDir) { const dir = path.join(outDir); const caps = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => /^gen_cap\d+\.dart$/.test(f)).map((f) => fs.readFileSync(path.join(dir, f), 'utf8')) : [];
-    const norm = (t) => String(t).replace(/\s+/g, ' ').trim(); const statics = caps.filter((c) => !c.includes('appStore.records')).map((c) => norm((c.split('\n')[0].match(/: "(.*)"/) || [])[1] || ''));   // מסך בלי נתונים = מסך-הדגמה (הכותרת נושאת את המשפט)
-    const dead = ruleCl.filter((x) => statics.some((t) => t && t.includes(norm(x.clause))));
-    r.notes.push(`🔌 התראות-כללים מחוברות לנתונים: ${ruleCl.length - dead.length}/${ruleCl.length}`);
-    for (const x of dead) r.questions.push({ thing: 'מנוע', ask: 'notLive', q: `⛔ «${x.clause}» נבנתה כמסך-הדגמה (סליידר), לא מחוברת לנתונים — המנוע לא יודע לחבר את הצורה הזו עדיין` }); }
-  if (sen) { r.notes.push(`🔁 המסמך תורגם למשפט (${sen.ents.length} ישויות · ${sen.flows.length} זרימות ⇒ ${sen.flows.map((f) => `«${f.clause}»`).join(' · ') || '—'}) ⇒ אותו צינור כמו משפט`); r.docSentence = sen.sentence; }
-  if (byShape && !sen) { r.notes.push(`📐 קריאה לפי צורה: שלד-הפירוק קרא 0 שדות ⇒ טבלת-ישויות במסמך: ${shp.ents.length} ישויות · ${node.fields} שדות · ${shp.links.length} קישורים לפי השמות שהמסמך נותן (${shp.links.slice(0, 5).map((l) => `${l.ent}.${l.field}→${l.to}`).join(' · ')}${shp.links.length > 5 ? ' …' : ''})`);
-    for (const f of shp.flows) r.questions.push({ thing: 'זרימה', ask: 'flow', q: `זרימה «${f.ent}.${f.field} ${f.op} ${f.n}${f.unit} → ${f.then.slice(0, 60)}» נקראה — לא נבנתה: ${f.field} ${shp.ents.some((e) => e.fields.some((x) => x.name === f.field)) ? 'שדה בטבלה, אבל אין בדלת-המסמך בניית-התראות' : 'אינו שדה באף טבלה (ערך מחושב — מנוע)'} ` }); }
-  else if (!byShape && perukRead === 0) r.questions.push({ thing: 'מסמך', ask: 'read', q: `⚠️ המסמך לא נקרא: שלד-הפירוק קרא 0 שדות ואין טבלת-ישויות — האפליקציה בנויה מברירות-המחדל של peruk, לא מהמסמך` });
-  // 🔎 הקורא: כמה ישויות המסמך מתאר מול כמה נבנו — אובדן = שאלה, לא «0 שאלות»
-  { const want = shp.ents.map((e) => e.name); const got = new Set(spec.split('\n').map((l) => (l.match(/^ישות\s+(.+?)\s+עם\s/) || [])[1]).filter(Boolean)); const lost = want.filter((w) => !got.has(w));
-    if (lost.length) r.questions.push({ thing: 'מסמך', ask: 'lost', q: `המסמך מתאר ${want.length} ישויות, נבנו ${want.length - lost.length}: חסרות ${lost.join(' · ')}` }); }
+  const pk = perukToSpec(md, name); const spec = pk.spec; const node = pk.node; const perukRead = Number((node && node.fields) || 0);
+  if (perukRead === 0) return { spec: '', files: [], notes: ['🔴 L101: שלד-הפירוק קרא 0 שדות — לא נבנה (בלי ברירות-מחדל, בלי קורא אחר)'], questions: [{ thing: 'מסמך', ask: 'read', q: '⚠️ המסמך לא נקרא: שלד-הפירוק קרא 0 שדות. לתקן את המסמך לפי השלד (peruk-lang), ואז לבנות שוב' }], screens: [], node, red: true };
+  const r = await generateFromSpec(spec, { outDir, name });
   // היכולת של yeshiva/read (הקורא הישיבתי): המסמך מול הספק — מה בפירוק לא הגיע לספק ומה הספק הניח (איכא דאמרי · שיעור · ורמינהו · ייתור …). טהור: check(doc, spec) בזיכרון
   try {
     const RD = await import('./read.mjs');
@@ -319,13 +230,7 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   const held = allRoutes.filter((r) => r.proposal && !proposals);
   fs.mkdirSync(outDir, { recursive: true });
   const files = [], notes = [...defs.notes], questions = [...defs.questions];
-  // ⚖️⇒🔎 כל קושיה עוברת במרכז-החיפוש (yeshiva/kushya · הכרעת-בעלים 25.9): כל מקור שנרשם שם מחפש; קושיית-חיפוש שלא חיפשה ⇒ ⛔
-  const KU = await import('./kushya.mjs'); const KS = await import('./kushya-sources.mjs'); KS.registerAll(KU);
-  const answered = await KU.answerAll(yesh.kushyot, { answers, outDir, notes });
-  for (const q of answered) { const tag = q.searched.length ? ` ⇒ 🔎 ${q.searched.join('+')}: ${q.summary.join(' · ') || 'לא נמצא'}` : q.why === 'noSource' ? ' ⇒ 🔎 אין מקור בריצה הזו' : '';
-    questions.push({ thing: 'הישיבה', ask: q.kind, q: `${q.kind}: ${q.text}${tag}` }); }
-  for (const q of KU.unsearched(answered)) notes.push(`⛔ קושיה בלי חיפוש: ${q.kind} — יש לה מחפש רשום אבל אף מקור לא רץ`);
-  yesh.answered = answered;
+  for (const q of yesh.kushyot) questions.push({ thing: 'הישיבה', ask: q.kind, q: `${q.kind}: ${q.text}` });
   for (const sw of yesh.switches) questions.push({ thing: 'הישיבה', ask: sw.move || sw.kind, q: `${sw.move || sw.kind}: ${sw.text}` });
   if (yesh.note) notes.push(yesh.note);
   if (yesh.rulings.length) notes.push(`הפוסק: ${yesh.rulings.filter((r) => r.decided).length} הוכרעו · ${yesh.switches.length} מתגים`);
@@ -345,12 +250,7 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   const feeds = [...new Set(routes.filter((r) => r.route === 'source').map((r) => r.ent))]; if (feeds.length) notes.push(`מקור מבחוץ: ${feeds.join(', ')} ⇒ השרת מקבל שורות (POST <בנייה>/api/feed/<ישות>) · האפליקציה מושכת כל 3 שניות`);
   const rules = rulesDeclOf(form); if (rules) notes.push(`חוקים על האפליקציה: מצבים ${rules.modes.join(', ') || '—'} · תפקידים ${rules.roles.join(', ') || '—'} · ${Object.entries(rules.hide).map(([m, e]) => `במצב ${m} מוסתר ${e.join(', ')}`).concat(Object.entries(rules.only).map(([m, e]) => `במצב ${m} רק ${e.join(', ')}`), Object.entries(rules.see).map(([r, e]) => `${r} רואה רק ${e.join(', ')}`)).join(' · ') || 'בלי חוקים'}`);
   const derived = SHP0 && SHP0.linked ? [{ name: String(SHP0.seg).trim().split(/\s+/)[0], ent: SHP0.ent, parentKey: SHP0.fields[0], terms: SHP0.calc.terms, out: SHP0.out }] : [];   // 🔗 תוצאת-הקשר = שדה של האב (המילה הראשונה בסעיף: «צפי» / «יתרה»)
-  // 🗳️ התראה ⇒ הצעת-החלטה: הכלל שממנו נולדה ההתראה (answers.__acts) + טבלת-ההחלטה של המסמך (answers.__decision)
-  const routeTests = [];
-  const normC = (t) => String(t || '').replace(/\s+/g, ' ').trim(); const DEC = answers.__decision || null; const ACTS = Array.isArray(answers.__acts) ? answers.__acts : [];
-  const decRouteOf = (x) => { if (!DEC || !app || !app.nameToSlug || !app.nameToSlug[DEC.table]) return null; const a = ACTS.find((q) => normC(q.clause) === normC(x.name) || normC(x.name).includes(normC(q.clause).replace(/^התראה כש/, ''))); if (!a) return null;
-    return { slug: app.nameToSlug[DEC.table], byField: DEC.by, condField: DEC.cond, actor: a.actor || null, text: `${normC(a.clause).replace(/^התראה כש/, '')} → ${a.act}`.slice(0, 120) }; };
-  const app = await runAppDs(spec, files, notes, questions, { feeds, rules, extraScreens: caps, derived, effects: Array.isArray(answers.__effects) ? answers.__effects : [], server: routes.some((r) => r.route === 'server') });   // «שרת בענן» ⇒ האפליקציה מסתנכרנת מהשרת (gen_app_sync)
+  const app = await runAppDs(spec, files, notes, questions, { feeds, rules, extraScreens: caps, derived, server: routes.some((r) => r.route === 'server') });   // «שרת בענן» ⇒ האפליקציה מסתנכרנת מהשרת (gen_app_sync)
   // 2א · הרכבה (insight.mjs · הכרעת-בעלים 23.9 «תחבר»): התראה עם קישור-נתונים ⇒ מסך-תובנה אחד מהנתונים האמיתיים במקום הדמו של capability
   if (app && Array.isArray(app.liveExtras) && !inRepo(process.env.GEN_OUT)) {
     const IN = await import('../machtzev/generator/insight.mjs');
@@ -397,40 +297,16 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
           try { const BP = await import('../machtzev/generator/behavior-plan.mjs'); const id = `sev.${x.slug}`; const P = BP.planNeeds({ [id]: { shape: 'מספר', demand: x.sub || x.name, params: isEq ? ['String', 'String'] : ['num', 'num'], ret: 'bool', examples } }, { prove: true, earlyExit: true }); const pr = P[id];
             if (pr && pr.pick && pr.proven) { decide = { name: pr.pick, file: pr.file, proven: true, examples }; notes.push(`החלטה «${x.name}»: ${pr.pick} (${pr.file}) הוכח על ${examples.length} דוגמאות${pr.ties ? ` · ${pr.ties} תיקו` : ''}`); }
             else notes.push(`החלטה «${x.name}»: אין אטום מוכח בקטלוג ⇒ השוואה ביד (מדווח)`); } catch (e) { notes.push(`החלטה «${x.name}»: behavior-plan נכשל — ${String(e.message || e).slice(0, 120)}`); } } }
-      try { const r = IN.emitInsight({ slug: x.slug, cls: x.cls, name: x.name, live: x.live, entity: x.live.kind === 'aggBy' ? { name: ent ? ent.name : '', fields: [x.live.by, x.live.field] } : (ent || { name: '', fields: [x.live.field] }), expect, seedSlug, words: x.sub || null, decide, route: decRouteOf(x) }); { const ro = decRouteOf(x); if (ro) routeTests.push({ slug: x.slug, cls: x.cls, name: x.name, ro, live: x.live }); } for (const l of r.ledger) notes.push(l.slice(0, 400)); notes.push(`הרכבה «${x.name}»: ${r.wired}/${r.ops} פעולות עם אטום · לרישום כיכולת: node machtzev/generator/insight.mjs --register ${path.join(outDir, `insight_${x.slug}.json`)}`); notes.push(`הרכבה «${x.name}»: ${r.wired}/${r.ops} פעולות עם אטום${r.missing.length ? ` · בלי אטום: ${r.missing.join(', ')}` : ''} ⇒ ${x.cls} (insight_${x.slug}.json)${r.accept ? ` · מבחן-קבלה: ${expect.count} חורגים ${expect.rows.map((q) => q.join('/')).join(', ')}` : ' · אין דוגמאות ⇒ אין מבחן-קבלה'}`); files.push({ route: 'insight', file: path.join(outDir, `gen_${x.slug}.dart`), cls: x.cls, ops: r.ops, wired: r.wired }); }
+      try { const r = IN.emitInsight({ slug: x.slug, cls: x.cls, name: x.name, live: x.live, entity: x.live.kind === 'aggBy' ? { name: ent ? ent.name : '', fields: [x.live.by, x.live.field] } : (ent || { name: '', fields: [x.live.field] }), expect, seedSlug, words: x.sub || null, decide }); for (const l of r.ledger) notes.push(l.slice(0, 400)); notes.push(`הרכבה «${x.name}»: ${r.wired}/${r.ops} פעולות עם אטום · לרישום כיכולת: node machtzev/generator/insight.mjs --register ${path.join(outDir, `insight_${x.slug}.json`)}`); notes.push(`הרכבה «${x.name}»: ${r.wired}/${r.ops} פעולות עם אטום${r.missing.length ? ` · בלי אטום: ${r.missing.join(', ')}` : ''} ⇒ ${x.cls} (insight_${x.slug}.json)${r.accept ? ` · מבחן-קבלה: ${expect.count} חורגים ${expect.rows.map((q) => q.join('/')).join(', ')}` : ' · אין דוגמאות ⇒ אין מבחן-קבלה'}`); files.push({ route: 'insight', file: path.join(outDir, `gen_${x.slug}.dart`), cls: x.cls, ops: r.ops, wired: r.wired }); }
       catch (e) { notes.push(`הרכבה «${x.name}» נכשלה: ${String(e.message || e).slice(0, 160)} ⇒ נשאר מסך-capability`); } }
   }
-  // 🎯 מבחן-קבלה (התראה ⇒ הצעת-החלטה): לכל מסך-התראה — הכפתור מופיע רק כשההתראה פעילה; לחיצה ⇒ רשומה חדשה בטבלת-ההחלטה (שלב ראשון) עם «מי» ו«תנאי»
-  if (routeTests.length && !inRepo(process.env.GEN_OUT)) { const q = (t) => `'${String(t).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$')}'`;
-    fs.writeFileSync(path.join(R.outDir(), 'gen_route_accept_test.dart'), [`// 🎯 מבחן-קבלה: התראה ⇒ הצעת-החלטה (המערכת מציגה, אדם מחליט). חולל; אל תערוך.`, `import 'package:flutter/material.dart';`, `import 'package:flutter_test/flutter_test.dart';`, `import 'package:buildsmart/genesis/dart-ui-bs/ds/ds_store.dart';`, `import 'package:buildsmart/genesis/dart-gen-bs/gen_app_seed.dart';`,
-      ...routeTests.map((t) => `import 'package:buildsmart/genesis/dart-gen-bs/gen_${t.slug}.dart';`), `void main() {`,
-      `int _tapped = 0;`,
-      ...routeTests.map((t) => `  testWidgets(${q(`הצעת-החלטה: ${t.name}`.slice(0, 80))}, (tester) async {
-    seedExamples();
-${t.live && t.live.kind === 'num' && !t.live.pre && Number.isFinite(+t.live.n) ? `    appStore.add('${t.live.slug}', <String, String>{${q(t.live.field)}: '${t.live.op === '>' ? +t.live.n + 1 : +t.live.n - 1}'});   // רשומה שמדליקה את ההתראה (הסף ±1)
-` : ''}    await tester.pumpWidget(const MaterialApp(home: ${t.cls}()));
-    await tester.pump();
-    final b = find.text(${q(`הצע החלטה${t.ro.actor ? ` ← ${t.ro.actor}` : ''}`)});
-    if (b.evaluate().isEmpty) return;   // ההתראה לא פעילה בנתוני-הדוגמה ⇒ אין כפתור (נכון)
-    final n0 = appStore.records('${t.ro.slug}').length;
-    await tester.ensureVisible(b.first); await tester.tap(b.first); await tester.pump(); _tapped++;
-    final rs = appStore.records('${t.ro.slug}');
-    expect(rs.length, n0 + 1, reason: 'לחיצה חייבת ליצור החלטה');
-    expect(rs.last[${q(t.ro.condField)}], ${q(t.ro.text)});${t.ro.actor ? `
-    expect(rs.last[${q(t.ro.byField)}], ${q(t.ro.actor)});` : ''}
-  });`), `  test('לפחות הצעת-החלטה אחת נלחצה בפועל (לא ירוק-חלול)', () => expect(_tapped, greaterThan(0)));`, `}`, ''].join('\n'));
-    notes.push(`🗳️ ${routeTests.length} התראות ⇒ הצעת-החלטה ב«${DEC.table}» · מבחן-קבלה gen_route_accept_test.dart`); }
   // 🌉 מסך שמייבא את מנוע-המערכות («המתנה צפויה») ⇒ הקובץ נכתב עכשיו מה-TS (emitTs) ליד המסכים; אין מנוע ⇒ שאלה, לא קובץ מזויף
   { const dirs = [...new Set([R.outDir(), process.env.GEN_OUT].filter(Boolean))]; const LEq = await import('../machtzev/generator/live-expr.mjs');
     const uses = dirs.some((d) => fs.existsSync(d) && fs.readdirSync(d).some((f) => f.endsWith('.dart') && f !== 'gen_sim_engine.dart' && fs.readFileSync(path.join(d, f), 'utf8').includes(LEq.SIM_IMPORT)));
     if (uses) { const J = await import('./shofet.mjs'); const se = await J.simEngineDart();
       if (se.available) { const f = path.join(R.outDir(), 'gen_sim_engine.dart'); fs.writeFileSync(f, se.code); files.push({ route: 'sim', file: f }); notes.push(`🌉 מנוע-המערכות ⇒ Dart (${Math.round(se.code.length / 1024)}KB, emitTs) · המתנה צפויה מחושבת בסימולציה באפליקציה`); }
       else questions.push({ thing: 'מנוע-המערכות', q: `«המתנה צפויה» צריכה את מנוע-המערכות: ${se.reason}` }); }
-    // 🔗 אותו דפוס למנוע-התלות (systems-engine/sensors/graph.reach) — «נופלים איתו»
-    const usesG = dirs.some((d) => fs.existsSync(d) && fs.readdirSync(d).some((f) => f.endsWith('.dart') && f !== 'gen_graph_engine.dart' && fs.readFileSync(path.join(d, f), 'utf8').includes(LEq.GRAPH_IMPORT)));
-    if (usesG) { const J = await import('./shofet.mjs'); const ge = await J.graphEngineDart();
-      if (ge.available) { const f = path.join(R.outDir(), 'gen_graph_engine.dart'); fs.writeFileSync(f, ge.code); files.push({ route: 'graph', file: f }); notes.push(`🔗 מנוע-התלות ⇒ Dart (graph.reach, emitTs) · «נופלים איתו» מחושב באפליקציה`); }
-      else questions.push({ thing: 'מנוע-התלות', q: `«נופלים איתו» צריך את מנוע-המערכות: ${ge.reason}` }); } }
+  }
   // 2א'' · מקור מבחוץ: מבחן-קבלה — שורה (מהדוגמאות של הבעלים, לא ממציאים) נכנסת דרך ingestFeed ⇒ הטבלה גדלה והערך בה
   if (feeds.length && app && app.nameToSlug && fs.existsSync(path.join(R.outDir(), 'gen_app_feed.dart')) && !inRepo(process.env.GEN_OUT)) {
     const lit = (v) => "'" + String(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$') + "'";
