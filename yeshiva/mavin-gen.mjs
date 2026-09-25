@@ -186,7 +186,7 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
   const spec = byShape ? shp.spec : pk.spec; const node = byShape ? { ...(pk.node || {}), reader: 'doc-shape', fields: shp.ents.reduce((a, e) => a + e.fields.length, 0), entities: shp.ents.length, links: shp.links.length } : pk.node;
   // 🔁 המסמך עובר באותו צינור כמו משפט (לולאת ein · קושיות · חיפוש-צורה · התראות): דלת-המסמך רק מתרגמת — לא נתקעת ועוצרת
   // ⛏️ הכורה (yeshiva/koreh — בדפוס mine.py): קורפוס-הבעלים (תרחישים) מול שמות-הישויות ⇒ ערכים שחוזרים בכמה מקורות ⇒ שאלה «לאיזה שדה?» ⇒ שדה-בחירה
-  const enums = {}; const mined = []; const rowsBy = {}; const newEnts = []; const extra = {}; const ruleTables = []; const ruleRes = {};
+  const enums = {}; const mined = []; const rowsBy = {}; const newEnts = []; const extra = {}; const ruleTables = []; const ruleRes = {}; const gaps = [];
   if (byShape && corpus) { const K = await import('./koreh.mjs'); const res = K.mine(await K.corpusOf(corpus), shp.ents.map((e) => e.name)); K.ledger(res); mined.__units = res.units.map((u) => u.unit);
     for (const e of shp.ents) { const vals = res.candidates.filter((c) => c.ent === e.name && c.sources >= 3).slice(0, 8); if (vals.length < 2) continue; const key = `ערכים ${e.name}`;
       const said = typeof answers[key] === 'string' ? answers[key].trim() : ''; const f = e.fields.find((x) => x.name === said);
@@ -205,7 +205,7 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
       const G = K.modelGaps(C, names, RL); const TW = SLg.newTableWord || 'טבלה', XW = SLg.extraFieldWord || 'שדה נוסף';
       for (const t of G.tables) { const key = `${TW} ${t.name}`; const said = typeof answers[key] === 'string' ? answers[key].trim() : ''; const saidF = typeof answers[`שדות ${t.name}`] === 'string' ? answers[`שדות ${t.name}`].split(/\s*,\s*/).filter(Boolean) : []; if (saidF.length) t.fields = [...new Set([...(t.fields || []), ...saidF])];
         if (said === 'כן') { { const fs0 = [...(t.fields || []), ...t.links.filter((l) => !(t.fields || []).includes(l))]; if (fs0.length) newEnts.push({ name: t.name, fields: fs0 }); else mined.push({ q: { thing: 'כורה', ask: 'newTableFields', key: `שדות ${t.name}`, q: `🆕 «${t.name}»: המחקר לא מונה שדות — אילו? (למשל: א, ב, ג)` } }); } mined.push(`🆕 ${t.name} ⇐ טבלה חדשה (תשובת-הבעלים) · קשרים ${t.links.join(', ') || '—'} · ${t.rules.length} כללים`); }
-        else if (!said) mined.push({ q: { thing: 'כורה', ask: 'newTable', key, q: `🆕 «${t.name}» חוזר ב-${t.sources} תרחישים ואין לו טבלה. כללים: ${t.rules.slice(0, 2).join(' · ') || '—'}${t.links.length ? ` · ליד ${t.links.join(', ')}` : ''}. לפתוח טבלה? (כן / לא)` } }); }
+        gaps.push({ kind: 'table', key, name: t.name, q: `🆕 «${t.name}» חוזר ב-${t.sources} תרחישים ואין לו טבלה. כללים: ${t.rules.slice(0, 2).join(' · ') || '—'}${t.links.length ? ` · ליד ${t.links.join(', ')}` : ''}. לפתוח טבלה? (כן / לא)` }); }
       // 🔔 כללי-התרחישים ⇒ משפטי-התראה בשפה הקיימת (ruleClauses) — לטבלאות שאושרו ולטבלאות המסמך; מה שלא מתורגם ⇒ מדווח עם הסיבה
       ruleTables.push(...G.tables.filter((t) => newEnts.some((n) => n.name === t.name)).map((t) => ({ name: t.name, fields: newEnts.find((n) => n.name === t.name).fields })), ...shp.ents.map((e) => ({ name: e.name, fields: e.fields.map((f) => f.name.replace(/_/g, ' ')) })));
       ruleRes.R = RL;
@@ -213,7 +213,7 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
         if (said === 'כן') { const f = x.add.split(/\s+[—–-]\s+/)[0].replace(/[.,]+$/, '').trim(); (extra[x.ent] ??= []).push(f); mined.push(`➕ ${x.ent} + ${f} (תשובת-הבעלים)`); }
         else if (said === (SLg.enumAnswerWord || 'ערך')) { const f = x.add.split(/\s+[—–-]\s+/)[0].replace(/[.,]+$/, '').trim(); const E = shp.ents.find((e) => e.name === x.ent); const kf = E && (E.fields.find((q) => /^kind$|^סוג$/.test(q.name)) || null);   // «מצב → שרב» = סוג-מצב, לא שדה
           if (kf) { const cur = (enums[x.ent] ??= {})[kf.name] || []; enums[x.ent][kf.name] = [...new Set([...cur, f])]; mined.push(`➕ ${x.ent}.${kf.name} ⇐ ${f} (ערך, תשובת-הבעלים)`); } else mined.push({ q: { thing: 'כורה', ask: 'extend', key, q: `«${x.ent}» אין לו שדה-סוג — «${f}» כשדה? (כן / לא)` } }); }
-        else if (!said) mined.push({ q: { thing: 'כורה', ask: 'extend', key, q: `➕ המחקר כותב: «${x.ent} → ${x.add}» (${String(x.ex).split(':')[0]}). להוסיף ל«${x.ent}»? (כן / לא)` } }); } }
+        gaps.push({ kind: 'extend', key, name: x.ent, q: `➕ המחקר כותב: «${x.ent} → ${x.add}» (${String(x.ex).split(':')[0]}). להוסיף ל«${x.ent}»? (כן / לא)` }); } }
     for (const e of shp.ents) { const rw = K.rowsOf(res, e, e.fields.map((f) => f.name), { enumField: Object.keys(enums[e.name] || {})[0] || null, map: umap }); if (rw.length) { rowsBy[e.name] = rw; mined.push(`${e.name}: ${rw.length} שורות-דוגמה`); } } }
   // ✍️ תשובות-הבעלים לשאלות הזרימה: «flow ratio» ⇒ ביטוי (מפתח-השאלה עצמו) · «שדה נוסף <ישות>» ⇒ שדה שהמסמך לא מנה (למשל מה שהמונים מודדים)
   const defs = {}; if (byShape) { const SLx = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); const XW = SLx.extraFieldWord || '';
@@ -222,11 +222,16 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
   let ruleCl = []; if (ruleRes.R) { const K2 = await import('./koreh.mjs');
     // שלבים לטבלה חדשה — רק מתשובת-הבעלים («שלבים ילד»: נמצא, בנקודה, נאסף); טבלאות-המסמך — מהמסמך
     for (const t of ruleTables) { const sd = answers[`שלבים ${t.name}`]; const ne = newEnts.find((n) => n.name === t.name); if (typeof sd === 'string' && sd.trim() && ne) { ne.stages = sd.split(/\s*,\s*/).filter(Boolean); t.stages = ne.stages; } else if (!t.stages) { const E = shp.ents.find((e) => e.name === t.name); t.stages = E ? E.states : []; } }
-    const X = K2.ruleClauses(ruleRes.R, ruleTables); ruleCl = X.clauses;
-    for (const [tn, verb] of [...new Map(X.skipped.filter((x) => x.needStage).map((x) => [x.table, x.needStage]))]) mined.push({ q: { thing: 'כורה', ask: 'stages', key: `שלבים ${tn}`, q: `⏰ בתרחישים: «${X.skipped.find((x) => x.table === tn && x.needStage).rule.slice(0, 80)}» — צריך שלב «${verb}» ל«${tn}». אילו שלבים עובר ${tn}? (למשל: …, ${verb})` } });
-    if (ruleCl.length) mined.push(`🔔 ${ruleCl.length} כללים מהתרחישים ⇒ התראות: ${ruleCl.map((x) => `«${x.clause.replace(/^התראה כש/, '')}» → ${x.act.slice(0, 30)}`).join(' · ')}`);
-    if (X.skipped.length) mined.push(`⏸ ${X.skipped.length} כללים של הטבלאות לא תורגמו (הסיבות ב-rules-skipped.json): ${[...new Set(X.skipped.map((x) => x.why))].slice(0, 3).join(' · ')}`);
-    try { fs.mkdirSync(outDir, { recursive: true }); fs.writeFileSync(path.join(outDir, 'rules-skipped.json'), JSON.stringify(X.skipped, null, 1)); } catch {} }
+    // 🕳️⇒🔁 ערוץ-החסרים (yeshiva/chaser): כל כלל של כל טבלה · כל טבלה/הרחבה חסרה ⇒ פותרים ⇒ משפט | שאלה | נבנה | מוצהר — לא נכתב-ונעצר
+    for (const t of ruleTables) for (const r of (ruleRes.R[t.name] || ruleRes.R[t.name + 'ים'] || ruleRes.R[t.name.replace(/ה$/, 'ות')] || [])) gaps.push({ kind: 'rule', table: t, rule: r });
+    const CH = await import('./chaser.mjs'); const CS = await import('./chaser-sources.mjs'); CS.registerAll(CH); const CAP = await import('../machtzev/generator/capability.mjs');
+    const SLc = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
+    const done = await CH.resolveAll(gaps, { K: K2, answers, asked: new Set(), detect: CAP.detectAllClauses, alertWord: SLc.alertWord || 'התראה', whenWord: 'כש', aboveWord: 'מעל', belowWord: 'מתחת ל' });
+    ruleCl = done.filter((x) => x.outcome === 'clause').filter((x, i, a) => a.findIndex((y) => y.clause === x.clause) === i);
+    for (const x of done.filter((y) => y.outcome === 'question' && !y.dup)) mined.push({ q: { thing: 'כורה', ask: x.kind, key: x.key, q: x.q } });
+    const SM = CH.summary(done); mined.push(`🕳️ ערוץ-החסרים: ${done.length} חסרים ⇒ ${ruleCl.length} התראות · ${SM.question || 0} שאלות · ${SM.built || 0} נבנו · ${SM.declared || 0} מוצהרים (rules-declared.json)${CH.silent(done).length ? ` · ⛔ ${CH.silent(done).length} שקטים` : ''}`);
+    if (ruleCl.length) mined.push(`🔔 ${ruleCl.length} כללים ⇒ התראות: ${ruleCl.map((x) => `«${x.clause.replace(/^התראה כש/, '')}» → ${String(x.act || '').slice(0, 30)}`).join(' · ')}`);
+    try { fs.mkdirSync(outDir, { recursive: true }); fs.writeFileSync(path.join(outDir, 'rules-declared.json'), JSON.stringify(done.filter((x) => x.outcome === 'declared').map((x) => ({ kind: x.kind, table: x.table && x.table.name, rule: x.rule && `${x.rule.cond} → ${x.rule.act}`, why: x.why })), null, 1)); } catch {} }
   const sen = byShape ? DS.docToSentence(md, { enums, rows: rowsBy, defs, extra, newEnts, clauses: ruleCl.map((x) => x.clause) }) : null;
   const r = sen ? await generateAll(sen.sentence, { answers: { ...answers, __corpus: corpus || null, __docEnts: shp.ents.map((e) => e.name), __subjects: (mined.__units || []) }, outDir, name }) : await generateFromSpec(spec, { outDir, name });
   if (corpus && byShape) { r.notes.push(`⛏️ כורה: ${mined.filter((m) => typeof m === 'string').length} שדות-בחירה מהתרחישים${mined.some((m) => typeof m === 'string') ? ' — ' + mined.filter((m) => typeof m === 'string').join(' · ') : ''} · ${mined.filter((m) => m.q).length} שאלות «לאיזה שדה»`); for (const m of mined) if (m.q) r.questions.push(m.q); }
