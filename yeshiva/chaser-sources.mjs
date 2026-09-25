@@ -72,9 +72,10 @@ export function registerAll(CH) {
     if (ctx.answers[`יחידה ${noun}`] === 'לא') { g.why = `«${noun}» — הבעלים ענה שאינו דבר נספר`; return null; }
     const entNames = (ctx.tables || []).map((t) => t.name);   // «ב<ישות>» רק כשהמילה אחרי ה-ב׳ היא באמת שם-טבלה («באזור» ✓ · «בעלים» ✗)
     const neg = rest.match(/(?:ש)?לא\s+([\u0590-\u05FF]+)/);
-    const gm = rest.match(/(?:באותו|באותה|מאותו|מאותה|לכל)\s+([\u0590-\u05FF]+)/) || [...rest.matchAll(/(?:^|\s)ב([\u0590-\u05FF]{3,})/g)].map((x) => [x[0], x[1]]).find((x) => entNames.some((n) => stem(n) === stem(x[1])));
+    const gm = rest.match(/(?:באותו|באותה|מאותו|מאותה|לכל)\s+([\u0590-\u05FF]+)/) || [...rest.matchAll(/(?:^|\s)[במ]([\u0590-\u05FF]{3,})/g)].map((x) => [x[0], x[1]]).find((x) => entNames.some((n) => stem(n) === stem(x[1])));
     const t0 = (rest.trim().split(/\s+/)[0] || '').replace(/[.,:;]+$/, '');   // תואר צמוד לנספר («ילדים אבודים» · «אירועים קטנים») ⇒ חלק «value» — לא נבלע
-    const adj = /(ים|ות)$/.test(noun) && /^[\u0590-\u05FF]{3,}(ים|ות)$/.test(t0) && !/^(ב|ל|ש|כ|ו|מאות)/.test(t0) ? t0 : null;   // תואר מתאים לשם ברבים («אירועים קטנים» ✓ · «אוטובוסים ממסוף» ✗)
+    const construct = /י$/.test(noun) && !(ctx.tables || []).some((t) => stem(t.name) === stem(noun));   // סמיכות («דיווחי גניבה») ⇒ המילה הבאה היא הערך
+    const adj = (/(ים|ות)$/.test(noun) && /^[\u0590-\u05FF]{3,}(ים|ות)$/.test(t0) && !/^(ב|ל|ש|כ|ו|מאות)/.test(t0)) || (construct && /^[\u0590-\u05FF]{3,}$/.test(t0)) ? t0 : null;   // תואר מתאים לשם ברבים («אירועים קטנים» ✓ · «אוטובוסים ממסוף» ✗)
     if (!neg && !gm && !adj) { g.why = 'חסרים חלקים: אין סינון/קיבוץ'; return null; }   // לא כלל-הרכבה ⇒ לא שואלים על המילה
     const wm = rest.match(/ב[-־]?(\d+)\s*(?:'|דק'|דקות)|(באותה שעה|בשעה)/); const win = wm ? (wm[1] ? +wm[1] : 60) : null;
     const parts = [await ctx.need('part', { part: 'table', word: noun, cond: c })]; const T = parts[0].outcome === 'built' ? parts[0].value : null;
@@ -92,7 +93,7 @@ export function registerAll(CH) {
     const key = partKey(g), said = key && typeof ctx.answers[key] === 'string' ? ctx.answers[key].trim() : ''; if (!said) return null;
     if (said === 'לא') return { outcome: 'declared', why: 'הבעלים ענה «לא»' };
     if (g.part === 'table') { const t = (ctx.tables || []).find((x) => x.name === said); return t ? { outcome: 'built', value: t } : null; }
-    if (g.part === 'value') return { outcome: 'built', value: said === (ctx.descWord || 'תיאור') ? { none: true } : [ctx.aboveWord, ctx.belowWord].some((w) => w && said.includes(` ${w.trim()} `)) ? { expr: said } : { stage: said } };   // «actual time מעל planned time» = הגדרה כהשוואת-שדות
+    if (g.part === 'value') return { outcome: 'built', value: said === (ctx.descWord || 'תיאור') ? { none: true } : [ctx.aboveWord, ctx.belowWord, ...(ctx.eqWords || ['הוא', 'היא'])].some((w) => w && said.includes(` ${w.trim()} `)) ? { expr: said } : { stage: said } };   // «actual time מעל planned time» = הגדרה כהשוואת-שדות
     return { outcome: 'built', value: said }; });
   CH.register('part', 'unitTable', async (ctx, g) => {   // «יחידה ילדים = ילד» (תשובה אחת) ⇒ גם הנספר בכללים
     if (g.part !== 'table') return null; const u = ctx.answers[`יחידה ${g.word}`]; const t = typeof u === 'string' && (ctx.tables || []).find((x) => x.name === u.trim()); return t ? { outcome: 'built', value: t } : null; });

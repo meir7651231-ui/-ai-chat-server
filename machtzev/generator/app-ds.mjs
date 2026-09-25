@@ -453,7 +453,12 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       const same = (z) => z.live && z.live.slug === y.live.slug && !['agg', 'aggBy', 'refCount', 'levels'].includes(z.live.kind || 'num');
       const isAgg = (z) => z.live && ['agg', 'aggBy'].includes(z.live.kind);   // «לא מגיב וגם מונה אדם לכל אזור» ⇒ הספירה היא הראשי, תנאי-השורה הם הסינון שלה
       let main = y; const rowParts = [];
-      for (const cj of c.and || []) { const z = liveOf({ ...x, clause: cj }); if (isAgg(z) && !isAgg(main) && z.live.slug === main.live.slug) { rowParts.push(main.live); main = z; } else if (same(z) || (isAgg(main) && z.live && z.live.slug === main.live.slug && !isAgg(z))) rowParts.push(z.live); else dropped.push(`${cj.x} ${cj.op} ${cj.n}`); }
+      // ⇄ יש ספירה בין החלקים ⇒ כל תנאי-שורה נקרא בטבלה שנספרת («kind הוא גניבה וגם מונה אירוע» — kind של אירוע, לא של הטבלה הראשונה שיש בה kind)
+      const slugName = Object.fromEntries(Object.entries(nameToSlug).map(([n, sl]) => [sl, n]));
+      const aggZ = [y, ...(c.and || []).map((cj) => liveOf({ ...x, clause: cj }))].find((z) => isAgg(z)); const tail = aggZ && slugName[aggZ.live.slug];
+      const inAgg = (cj, z) => (tail && z.live && z.live.slug !== aggZ.live.slug && !isAgg(z) ? liveOf({ ...x, clause: { ...cj, x: `${cj.x} ${tail}` } }) : z);
+      if (tail && !isAgg(y) && y.live.slug !== aggZ.live.slug) { const y2 = inAgg(c, y); if (y2.live) main = y2; }
+      for (const cj of c.and || []) { const z = inAgg(cj, liveOf({ ...x, clause: cj })); if (isAgg(z) && !isAgg(main) && z.live.slug === main.live.slug) { rowParts.push(main.live); main = z; } else if (same(z) || (isAgg(main) && z.live && z.live.slug === main.live.slug && !isAgg(z))) rowParts.push(z.live); else dropped.push(`${cj.x} ${cj.op} ${cj.n}`); }
       if (dropped.length) { const why = T('liveAndDropped', { name: x.name, parts: dropped.join(', ') }); seedNotes.push(why); return { ...x, why }; }   // חלק «וגם» שנזרק = התראה רחבה ממה שנאמר ⇒ לא מחוברת (שאלה), לא התראה שגויה בשקט
       if (main !== y) return { ...main, live: { ...main.live, pre: rowParts } };
       pre.push(...rowParts);
