@@ -680,5 +680,6 @@
   "מה",
   "ה"
  ],
- "objectMarker": "את"
+ "objectMarker": "את",
+ "andPrefix": "ו"
 }

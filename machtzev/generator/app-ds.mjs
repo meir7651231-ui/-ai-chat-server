@@ -379,12 +379,13 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     //    ביטוי ⇒ מתפרק במילת-החשבון (ועוד/פחות לפני כפול/חלקי) ⇒ כל חלק נפתר בכל סוג שקיים: מספר · שדה-מספר · שדה-תאריך
     //    (דקות מאז) · תוצאת-קשר · «זמן מאז <שלב>» (דקות מאז שהרשומה נכנסה לשלב; לא בשלב ⇒ NaN) ⇒ מורכב בחזרה. סוג חדש = ענף אחד כאן.
     const AWV = SL.arithWords || {}; const SINCE = SL.sinceWords || [];
+    const ART1_RE = new RegExp(`^(${(SL.articlePrefixes || []).filter((p) => p.length === 1).join('|') || '(?!)'})`), AND1_RE = new RegExp(`^${SL.andPrefix}.`);   // ה-הידיעה · ו-החיבור מהדאטה (P1)
     const valueOf = (words, r) => { if (!words.length) return null; const txt = words.join(' ');
       for (const grp of [['+', '-'], ['*', '/']]) for (let i = words.length - 2; i >= 1; i--) { const op = AWV[words[i]]; if (!op || !grp.includes(op)) continue; const a = valueOf(words.slice(0, i), r), b = valueOf(words.slice(i + 1), r); if (a && b) return { op, a, b }; }
       if (/^-?\d+(\.\d+)?$/.test(txt)) return { num: +txt };
-      for (const qw0 of (SL.queueWords || [])) for (const qw of [qw0, qw0.replace(/^ה/, '')]) if (txt === qw || txt.startsWith(qw + ' ')) {   // 🌉 «המתנה צפויה של קצב, עמדות, דקות-טיפול» ⇒ סימולציית-תור (מנוע-המערכות); «כשהמתנה» ⇒ ה' נבלעה בכש
+      for (const qw0 of (SL.queueWords || [])) for (const qw of [qw0, qw0.replace(ART1_RE, '')]) if (txt === qw || txt.startsWith(qw + ' ')) {   // 🌉 «המתנה צפויה של קצב, עמדות, דקות-טיפול» ⇒ סימולציית-תור (מנוע-המערכות); «כשהמתנה» ⇒ ה' נבלעה בכש
         let rest = txt.slice(qw.length).trim(); for (const w of (SL.queueOf || [])) if (rest.startsWith(w + ' ')) { rest = rest.slice(w.length + 1); break; }
-        const vw = (ws) => valueOf(ws, r) || (ws.length && /^ו./.test(ws[0]) ? valueOf([ws[0].slice(1), ...ws.slice(1)], r) : null);   // «ודקות בדיקה»
+        const vw = (ws) => valueOf(ws, r) || (ws.length && AND1_RE.test(ws[0]) ? valueOf([ws[0].slice(1), ...ws.slice(1)], r) : null);   // «ודקות בדיקה»
         const parts = rest.split(/\s*,\s*/).filter(Boolean); if (parts.length === 3) { const a = parts.map((p) => vw(p.split(/\s+/).filter(Boolean))); if (a.every(Boolean)) return { queue: a }; }
         // בלי פסיקים (הסעיף מגיע מנוקה): חלוקה לשלושה רצפים שכל אחד נפתר — אחת בלבד; יותר ⇒ דו-משמעי ⇒ null (שאלה, לא ניחוש)
         const ws = rest.split(/[\s,]+/).filter(Boolean); const sols = [];
@@ -413,14 +414,14 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
           return { ...x, live: { slug: nameToSlug[d.ent], kind: 'linked', field: arith ? `${d.name} ${arith.word} ${arith.field}` : d.name, base: d.name, parentKey: d.parentKey, terms: d.terms.map((t) => ({ ...t, slug: nameToSlug[t.child] })), ...(arith ? { arith } : {}), op: c.op, n: +c.n } }; } }
       if (c && c.kind === 'levels' && c.x) { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'levels', field: f.label, by: c.label, agg: 'count', high: c.high, mid: c.mid, thresholds: c.thresholds || [c.high, c.mid], op: null, n: null } }; } return x; }
       // ⊕⊕ מנוע-ההרכבה הכללי — אחרי הענפים הייעודיים (תוצאת-קשר), לפני ענפי-השדה-הבודד
-      if (c && c.x && /^[<>]$/.test(c.op || '') && c.n != null && String(c.x).split(/\s+/).some((w) => AWV[w]) || (c && c.x && SINCE.some((sw) => String(c.x).includes(sw))) || (c && c.x && /^[<>]$/.test(c.op || '') && (SL.queueWords || []).some((q) => String(c.x).includes(q.replace(/^ה/, ''))))) {   // 🌉 גם «המתנה צפויה»
+      if (c && c.x && /^[<>]$/.test(c.op || '') && c.n != null && String(c.x).split(/\s+/).some((w) => AWV[w]) || (c && c.x && SINCE.some((sw) => String(c.x).includes(sw))) || (c && c.x && /^[<>]$/.test(c.op || '') && (SL.queueWords || []).some((q) => String(c.x).includes(q.replace(ART1_RE, ''))))) {   // 🌉 גם «המתנה צפויה»
         for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const v = valueOf(String(c.x).split(/\s+/).filter(Boolean), r);
           if (v && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'expr', field: String(c.x), tree: v, op: c.op, n: +c.n } }; } }
       // @אטום = יחס נלמד (capability.addLearnedRel) — סף-טקסט כמו «=»
       if (!c || !c.x || !/^([<>=]|@\w+)$/.test(c.op) || ((c.op === '=' || c.op[0] === '@') ? !c.y : (c.n == null || isNaN(+c.n)))) return x;
       if (c.unit === 'ask') { const why = T('liveMonthAsk', { name: x.name, unit: c.unitWord || '' }); seedNotes.push(why); return { ...x, why, ask: 'timeUnit' }; }   // שאלה לדלת, לא הנחה
       const xw = String(c.x).split(/\s+/).filter(Boolean); const agg = aggOf(xw[0]); const rest = agg ? xw.slice(1) : xw;
-      const ofI = rest.indexOf('של');
+      const ofI = rest.indexOf(String(SL.ofWord).trim());
       if (ofI > 0 && ofI < rest.length - 1) {   // «<בנות> של <הורה>» ⇒ מונה-קשר לכל רשומת-הורה (השדה המצביע מ-backRefs, לא מנוחש)
         const child = entByStem(rest.slice(0, ofI).join(' ')), parent = entByStem(rest.slice(ofI + 1).join(' '));
         if (child && parent) { const b = (backRefs[parent.entity] || []).find((q) => q.fname === child.entity); if (!b) { const why = T('liveNoRelation', { name: x.name, child: child.entity, parent: parent.entity }); seedNotes.push(why); return { ...x, why }; }
