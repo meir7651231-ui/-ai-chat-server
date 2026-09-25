@@ -397,7 +397,8 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       const d = (Array.isArray(opts.derived) ? opts.derived : []).find((q) => q.ent === r.entity && (q.name === txt || stemOf(q.name) === stemOf(txt)));
       if (d) return { linked: { parentKey: d.parentKey, terms: d.terms.map((t) => ({ ...t, slug: nameToSlug[t.child] })) }, name: d.name };
       const f = r.schema.find((fd) => fd.label === txt || stemOf(fd.label) === stemOf(txt)); if (!f) return null;
-      return f.type === 'date' ? { ageField: f.label } : { field: f.label, fi: r.schema.indexOf(f) };
+      const isHm = f.type !== 'date' && f.type !== 'num' && String(f.label).split(/[\s_]+/).some((w) => (SL.typeTime || []).includes(w));   // שדה-שעה («actual time» · «שעת יציאה») ⇒ דקות, לא מספר
+      return f.type === 'date' ? { ageField: f.label } : isHm ? { hmField: f.label } : { field: f.label, fi: r.schema.indexOf(f) };
     };
     const liveOf0 = (x) => { const c = x.clause;
       // 🔗 תוצאה של טבלאות קשורות = שדה של ישות-האב (opts.derived): «התראה כשצפי מעל 250» ⇒ הערך המחושב לכל אזור — לפני מילות-הצבירה («צפי» היא גם קו-מגמה)
@@ -425,7 +426,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       const byI = rest.findIndex((w) => (SL.perEach || []).includes(w));   // «ממוצע ציון לכל כיתה» ⇒ ערך-הצבירה לכל קבוצה (השדה אחרי מילת-החלוקה)
       if (agg && byI > 0 && byI < rest.length - 1) {
         const fw = rest.slice(0, byI).join(' '), bw = rest.slice(byI + 1).join(' ');
-        for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const isEnt = agg === 'count' && (stemOf(r.entity) === stemOf(fw) || r.entity === fw); const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(fw) || fd.label === fw) || (isEnt ? r.schema[0] : null); const b = r.schema.find((fd) => stemOf(fd.label) === stemOf(bw) || fd.label === bw);   // «מונה ילד לכל נקודה» — ספירת-רשומות לא צריכה שדה
+        for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const isEnt = agg === 'count' && (stemOf(r.entity) === stemOf(fw) || r.entity === fw); const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(fw) || fd.label === fw) || (isEnt ? r.schema[0] : null); const one = (a) => (a.length === 1 ? a[0] : null); const b = r.schema.find((fd) => stemOf(fd.label) === stemOf(bw) || fd.label === bw) || one(r.schema.filter((fd) => fd.label.split(/\s+/)[0] === bw)) || one(r.schema.filter((fd) => stemOf(fd.label.split(/\s+/).pop()) === stemOf(bw)));   // שדה-קישור «zone אזור» ← «zone» / «אזור» (רק כשיחיד) · «מונה ילד לכל נקודה» — ספירת-רשומות לא צריכה שדה
           if (f && b && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'aggBy', agg, field: f.label, by: b.label, op: c.op, n: +c.n } }; }
         return x;
       }

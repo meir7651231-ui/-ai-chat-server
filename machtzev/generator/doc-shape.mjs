@@ -35,7 +35,8 @@ export function entityTables(md) {
     const body = rows.filter((r) => { const l = listOf(r[fc] || ''); return l && l.length >= 2; });   // שורת-כותרת (לא רשימה) נופלת לבד
     for (const r of body) { const nameCell = r[0] || ''; const he = nameCell.split(/\s+/).filter((x) => HE.test(x)).join(' ').replace(/[+/]/g, ' ').trim(); if (!he) continue;
       const alias = nameCell.split(/\s+/).filter((x) => /^[A-Za-z]+$/.test(x));
-      const fields = listOf(r[fc]).map(cleanField).filter((f) => f.name);
+      // «planned/actual times» = שני שדות עם סיומת משותפת (planned time · actual time) — המסמך דוחס, הקורא פורש
+      const fields = listOf(r[fc]).map(cleanField).filter((f) => f.name).flatMap((f) => { const m = f.name.match(/^([A-Za-z]+)\/([A-Za-z]+)\s+([A-Za-z_]+?)s?$/); return m ? [m[1], m[2]].map((a) => ({ raw: f.raw, name: `${a}_${m[3]}`, multi: false })) : [f]; });
       const states = sc >= 0 ? (listOf(r[sc] || '') || []).map((x) => x.replace(/\(.*?\)/g, '').trim()).filter((x) => x && x !== '—') : [];
       ents.push({ name: he, alias, fields, states }); } }
   return ents;

@@ -58,20 +58,20 @@ export function registerAll(CH) {
     const wm = rest.match(/ב[-־]?(\d+)\s*(?:'|דק'|דקות)|(באותה שעה|בשעה)/); const win = wm ? (wm[1] ? +wm[1] : 60) : null;
     const parts = [await ctx.need('part', { part: 'table', word: noun, cond: c })]; const T = parts[0].outcome === 'built' ? parts[0].value : null;
     let filter = null, group = null; const filters = [];
-    if (T && adj) { const p = await ctx.need('part', { part: 'value', word: adj, T, noun, cond: c }); parts.push(p); if (p.outcome === 'built' && p.value && p.value.stage) filters.push(`${ctx.sinceWord} ${p.value.stage} ${ctx.aboveWord} 0`); }
+    if (T && adj) { const p = await ctx.need('part', { part: 'value', word: adj, T, noun, cond: c }); parts.push(p); if (p.outcome === 'built' && p.value && p.value.stage) filters.push(`${ctx.sinceWord} ${p.value.stage} ${ctx.aboveWord} 0`); if (p.outcome === 'built' && p.value && p.value.expr) filters.push(p.value.expr); }
     if (T && neg) { const p = await ctx.need('part', { part: 'stage', word: neg[1], T, cond: c }); parts.push(p); if (p.outcome === 'built') filters.push(`${ctx.sinceWord} ${p.value} ${ctx.aboveWord} 0`); }
     if (T && gm) { const p = await ctx.need('part', { part: 'field', word: gm[1], T, cond: c }); parts.push(p); if (p.outcome === 'built') group = p.value; }
     filter = filters.join(' וגם ') || null;
     if (parts.every((p) => p.outcome === 'built')) return { outcome: 'clause', clause: `${ctx.alertWord} ${ctx.whenWord}${filter ? `${filter} וגם ` : ''}מונה ${T.name}${group ? ` לכל ${group}` : ''}${win ? ` ב-${win} הדקות האחרונות` : ''} ${ctx.aboveWord} ${N - 1}`, act: g.rule.act, parts: parts.map((p) => `${p.part}:${p.word}⇐${p.by}`) };
     const no = parts.find((p) => p.outcome === 'declared'); if (no) { g.why = `חלק «${no.word}»: ${no.why}`; return null; }
     const qs = parts.filter((p) => p.outcome === 'question');
-    return { outcome: 'question', key: qs[0].key, dup: qs.every((p) => p.dup), q: `🧩 «${c.slice(0, 70)} → ${g.rule.act.slice(0, 30)}»: ${parts.filter((p) => p.outcome === 'built').map((p) => `«${p.word}» = ${p.value && (p.value.name || p.value.stage || (p.value.none ? 'תיאור' : '')) || p.value} ✓`).join(' · ')}${parts.some((p) => p.outcome === 'built') ? ' · ' : ''}חסר: ${qs.map((p) => p.ask).join(' · ')}` }; });
+    return { outcome: 'question', key: qs[0].key, dup: qs.every((p) => p.dup), q: `🧩 «${c.slice(0, 70)} → ${g.rule.act.slice(0, 30)}»: ${parts.filter((p) => p.outcome === 'built').map((p) => `«${p.word}» = ${p.value && (p.value.name || p.value.stage || p.value.expr || (p.value.none ? 'תיאור' : '')) || p.value} ✓`).join(' · ')}${parts.some((p) => p.outcome === 'built') ? ' · ' : ''}חסר: ${qs.map((p) => p.ask).join(' · ')}` }; });
   // ⇄ חלק-חסר (kind='part'): part ∈ table|field|stage · word · T. סדר-החיפוש: תשובה שנשמרה ⇒ שם ⇒ הגדרות-המסמך ⇒ שאלה (עם אפשרויות מהמחקר)
   CH.register('part', 'answered', async (ctx, g) => {
     const key = partKey(g), said = key && typeof ctx.answers[key] === 'string' ? ctx.answers[key].trim() : ''; if (!said) return null;
     if (said === 'לא') return { outcome: 'declared', why: 'הבעלים ענה «לא»' };
     if (g.part === 'table') { const t = (ctx.tables || []).find((x) => x.name === said); return t ? { outcome: 'built', value: t } : null; }
-    if (g.part === 'value') return { outcome: 'built', value: said === (ctx.descWord || 'תיאור') ? { none: true } : { stage: said } };
+    if (g.part === 'value') return { outcome: 'built', value: said === (ctx.descWord || 'תיאור') ? { none: true } : [ctx.aboveWord, ctx.belowWord].some((w) => w && said.includes(` ${w.trim()} `)) ? { expr: said } : { stage: said } };   // «actual time מעל planned time» = הגדרה כהשוואת-שדות
     return { outcome: 'built', value: said }; });
   CH.register('part', 'unitTable', async (ctx, g) => {   // «יחידה ילדים = ילד» (תשובה אחת) ⇒ גם הנספר בכללים
     if (g.part !== 'table') return null; const u = ctx.answers[`יחידה ${g.word}`]; const t = typeof u === 'string' && (ctx.tables || []).find((x) => x.name === u.trim()); return t ? { outcome: 'built', value: t } : null; });
