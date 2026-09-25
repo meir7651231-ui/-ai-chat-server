@@ -15,6 +15,11 @@ const partKey = (g) => (g.part === 'table' ? `מילה ${g.word}` : g.part === '
 /** מהמחקר: באילו טבלאות המילה מופיעה באותו משפט — אפשרויות לשאלה, לא ניחוש */
 const coTables = (ctx, w) => { const c = {}; for (const d of ctx.corpus || []) for (const s of d.text.split(/[.\n!?]/)) if (s.includes(w)) for (const t of ctx.tables || []) if (t.name !== w && s.split(/[\s,:;()"״]+/).some((x) => stem(x) === stem(t.name))) c[t.name] = (c[t.name] || 0) + 1;
   return Object.entries(c).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([k, v]) => `${k} (${v})`); };
+/** מספרי-תרחיש בטקסט: בתוך סוגריים («(20)» · «(105←20)» · «(flat/slope → 82/66, 69)» ⇒ 69 — לא 82/66) */
+export const refNums = (t) => { const out = new Set(); for (const m of String(t || '').matchAll(/\(([^()]*)\)/g)) for (const tok of m[1].split(/[\s,←→⇐⇒·]+/)) if (/^\d{1,3}$/.test(tok)) out.add(String(+tok)); return out; };
+const ruleRefs = (r) => { if (!r) return new Set(); const s = refNums(`${r.cond || ''} ${r.act || ''} ${r.ex || ''}`); const src = String(r.ex || '').match(/^(\d{1,3})-/); if (src) s.add(String(+src[1])); return s; };
+/** מילון-המסמך (spec-lang glossary): «capacity» ⇔ קיבולת/ספיקה — שדה לועזי נמצא במילה עברית */
+const gloss = (ctx, field, w) => String(field).split(/[\s_]+/).some((x) => ((ctx.glossary || {})[x.toLowerCase()] || []).some((h) => stem(h) === stem(w)));
 export function registerAll(CH) {
   CH.register('rule', 'byType', async (ctx, g) => (g.rule.type && g.rule.type !== 'rule' ? { outcome: 'declared', type: g.rule.type, why: TYPE_WHY[g.rule.type] + (g.rule.seq ? `: ${g.rule.seq.join(' → ')}` : '') } : null));   // ⇄ סוג-החץ קודם לכל פותר
   CH.register('rule', 'ruleClauses', async (ctx, g) => {
@@ -67,12 +72,13 @@ export function registerAll(CH) {
     const act = g.rule.act.trim(), cond = g.rule.cond.trim(); const vm = act.match(new RegExp(`^([\\u0590-\\u05FF\\s]+?)\\s+(${(ctx.effectVerbs || []).join('|') || '$^'})$`)); if (!vm) return null;
     const cause = (cond.match(/^([\u0590-\u05FF]+)/) || [])[1]; if (!cause) return null;
     const T = (ctx.tables || []).find((t) => cond.split(/[\s,:;]+/).some((w) => stem(w.replace(/^ה(?=\S{3})/, '')) === stem(t.name))); if (!T) return null;
-    const fp = await ctx.need('part', { part: 'field', word: vm[1].trim(), T, cond }); if (fp.outcome === 'question') return { outcome: 'question', key: fp.key, dup: fp.dup, q: `🌧️ «${cond} → ${act}»: ${fp.ask}` }; if (fp.outcome !== 'built') return null;
+    const fp = await ctx.need('part', { part: 'field', word: vm[1].trim(), T, cond, allowLink: true }); if (fp.outcome === 'question') return { outcome: 'question', key: fp.key, dup: fp.dup, q: `🌧️ «${cond} → ${act}»: ${fp.ask}` }; if (fp.outcome !== 'built') return null;
     const key = `השפעה ${T.name}: ${fp.value} במצב ${cause}`, said = typeof ctx.answers[key] === 'string' ? ctx.answers[key].trim() : '';
-    if (/^\d+(\.\d+)?$/.test(said)) return { outcome: 'built', effect: { ent: T.name, field: fp.value, kind: cause, n: +said }, why: `במצב ${cause}: ${T.name}.${fp.value} × ${said}` };
+    const [ent, fld] = String(fp.value).includes('.') ? String(fp.value).split('.') : [T.name, fp.value];   // שדה בטבלה מקושרת (+ when: רק השורות שהן «מדרגות»)
+    if (/^\d+(\.\d+)?$/.test(said)) return { outcome: 'built', effect: { ent, field: fld, kind: cause, n: +said, ...(fp.when ? { when: fp.when } : {}) }, why: `במצב ${cause}: ${ent}.${fld}${fp.when ? ` (${fp.when.field} = ${fp.when.value})` : ''} × ${said}` };
     if (said === 'לא') return { outcome: 'declared', why: 'הבעלים: לא' };
     const dup = ctx.asked.has(key); ctx.asked.add(key);
-    return { outcome: 'question', key, dup, q: `🌧️ «${cond} → ${act}»: במצב «${cause}» — «${fp.value}» של «${T.name}» כפול כמה? (למשל 0.8 = יורדת ל-80%) · «${cause}» ייכנס כסוג-מצב` }; });
+    return { outcome: 'question', key, dup, q: `🌧️ «${cond} → ${act}»: ${fp.why ? `(${fp.why}) ` : ''}במצב «${cause}» — «${fp.value}»${fp.when ? ` (רק ${fp.when.field} = ${fp.when.value})` : ''} כפול כמה? (למשל 0.8 = יורדת ל-80%) · «${cause}» ייכנס כסוג-מצב` }; });
   // 🧩 הרכבה (הכרעת-בעלים 25.9 «תתקן ותשדרג»): כלל שלא התאים לצורה אחת ⇒ פירוק לחלקים ⇒ כל חלק מחפש את הצורה הקיימת שלו ⇒ הרכבה.
   //    חלקים: נספר (N + שם ⇒ טבלה) · סינון («לא X» ⇒ שלב) · קיבוץ («באותו/ב<ישות>» ⇒ שדה) · חלון («ב-M דק'») · סף (N-1)
   //    ⇄ כל חלק נשלח לערוץ (ctx.need('part')) — לא «חסר» ועצירה (25.9 «תשדרג את הקיים»): שם · הגדרות-המסמך · מחקר · שאלה
@@ -113,8 +119,26 @@ export function registerAll(CH) {
     const w = g.word;
     if (g.part === 'value') { const st = (g.T.stages || []).find((x) => stem(x) === stem(w)); return st ? { outcome: 'built', value: { stage: st } } : null; }
     if (g.part === 'table') { const t = (ctx.tables || []).find((x) => stem(w) === stem(x.name) || w.startsWith(stem(x.name)) || stem(w.split('-')[0]) === stem(x.name)); return t ? { outcome: 'built', value: t } : null; }
-    if (g.part === 'field') { const f = (g.T.fields || []).find((x) => x === w) || (g.T.fields || []).find((x) => x.split(/\s+/).some((y) => stem(y) === stem(w))); return f ? { outcome: 'built', value: f } : null; }
+    if (g.part === 'field') { const f = (g.T.fields || []).find((x) => x === w) || (g.T.fields || []).find((x) => x.split(/\s+/).some((y) => stem(y) === stem(w))) || (g.T.fields || []).find((x) => gloss(ctx, x, w)); return f ? { outcome: 'built', value: f } : null; }
     const st = (g.T.stages || []).find((x) => stem(x.replace(/^לא\s+/, '')) === stem(w) || fin(x).includes(stem(w))); return st ? { outcome: 'built', value: st } : null; });
+  // 🔢 הפניות (25.9 «הכל מפורט בקבצים»): המסמך מסמן שדה במספר-התרחיש שלו («common_factor (20)») והכלל מסמן את מקורו («(105←20)», קובץ 105-…).
+  //    מספר משותף = אותו דבר. יחיד ⇒ נבנה; כמה ⇒ לא מנחשים (ממשיכים לשאלה עם האפשרויות)
+  CH.register('part', 'byRef', async (ctx, g) => {
+    const refs = ruleRefs(ctx.cur && ctx.cur.rule); if (!refs.size || !ctx.docRefs) return null; const hits = [...refs].flatMap((n) => ctx.docRefs[n] || []);
+    if (g.part === 'table') { const ts = [...new Set(hits.map((h) => h.table))].map((n) => (ctx.tables || []).find((t) => t.name === n)).filter(Boolean); return ts.length === 1 ? { outcome: 'built', value: ts[0], why: `הפניה משותפת: ${[...refs].filter((n) => ctx.docRefs[n]).join(',')} ⇒ ${ts[0].name}` } : null; }
+    // שדה — לא לפי הפניה: הפניה מצביעה על הנושא («אשכול» ⇒ common factor), לא על מילת-הקיבוץ («מאזור» ⇒ zone). שדה נמצא בשם · מילון · שם-לועזי
+    if (g.part === 'value') {   // ערך = סוג: המילה מופיעה במחקר באותו משפט עם הפניה שמובילה לטבלה הזו ⇒ «<שדה-הסוג> הוא <מילה>»
+      const kf = (g.T.fields || []).find((f) => (ctx.typeFieldWords || []).includes(f)); if (!kf || !ctx.corpus) return null;
+      const mine = new Set(Object.entries(ctx.docRefs).filter(([, hs]) => hs.some((h) => h.table === g.T.name)).map(([n]) => n));
+      const ev = ctx.corpus.flatMap((d) => d.text.split(/[\n!?]|\.\s/)).find((snt) => snt.includes(g.word) && [...refNums(snt)].some((n) => mine.has(n)));
+      return ev ? { outcome: 'built', value: { expr: `${kf} ${(ctx.eqWords || ['הוא'])[0]} ${g.word}` }, why: `במחקר: «${ev.trim().slice(0, 80)}»` } : null; }
+    return null; });
+  // 🔗 שדה בטבלה מקושרת («קיבולת» של מדרגות ⇒ מדרגות.מעבר ⇒ מעבר.flow capacity): כמה מועמדים ⇒ נשאר רק זה שהמסמך מזכיר בו את הטבלה
+  //    (surface: flat/slope/stairs — «stairs» = מדרגות במילון) ⇒ ערך «טבלה.שדה» + when (surface הוא stairs). אחרת — שאלה עם המועמדים
+  CH.register('part', 'byLink', async (ctx, g) => {
+    if (g.part !== 'field' || !g.allowLink) return null; const cand = (g.T.fields || []).map((lf) => (ctx.tables || []).find((t) => t.name === lf)).filter(Boolean).flatMap((t) => (t.fields || []).filter((f) => gloss(ctx, f, g.word) || stem(f) === stem(g.word)).map((f) => ({ t, f })));
+    const tag = (c) => { for (const x of (ctx.docRaw || {})[c.t.name] || []) for (const w of String(x.raw).match(/[A-Za-z]+/g) || []) if (((ctx.glossary || {})[w.toLowerCase()] || []).some((h) => stem(h) === stem(g.T.name))) return { field: x.field, value: w }; return null; };
+    const ok = cand.map((c) => ({ ...c, when: tag(c) })).filter((c) => c.when); return ok.length === 1 ? { outcome: 'built', value: `${ok[0].t.name}.${ok[0].f}`, when: ok[0].when, why: `המסמך: ${ok[0].t.name}.${ok[0].when.field} כולל «${ok[0].when.value}» = ${g.T.name}` } : null; });
   CH.register('part', 'byDoc', async (ctx, g) => {   // המסמך כותב «Zone אזור» ⇒ שדה zone / zone_id בטבלה אחרת = קיבוץ לפי אזור
     if (g.part !== 'field') return null;
     const E = (ctx.tables || []).find((x) => stem(x.name) === stem(g.word)); if (!E) return null;
@@ -129,7 +153,8 @@ export function registerAll(CH) {
   CH.register('part', 'ask', async (ctx, g) => {
     const key = partKey(g); const dup = ctx.asked.has(key); ctx.asked.add(key);
     if (g.part === 'table') { const opt = coTables(ctx, g.word); return { outcome: 'question', key, dup, ask: `«${g.word}» — איזו טבלה נספרת?${opt.length ? ` (במחקר מופיע ליד: ${opt.join(' · ')})` : ''} — ענה שם-טבלה או «לא»`, q: `🧩 «${g.cond.slice(0, 70)}»: «${g.word}» — איזו טבלה נספרת?${opt.length ? ` (במחקר מופיע ליד: ${opt.join(' · ')})` : ''} — ענה שם-טבלה או «לא»` }; }
-    if (g.part === 'field') { const ask = `«${g.word}» — איזה שדה ב«${g.T.name}»? (${(g.T.fields || []).join(' · ')}) — או שם שדה חדש, או «לא»`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; }
+    if (g.part === 'field') { const via = (g.T.fields || []).map((lf) => (ctx.tables || []).find((t) => t.name === lf)).filter(Boolean).flatMap((t) => (t.fields || []).filter((f) => gloss(ctx, f, g.word) || stem(f) === stem(g.word)).map((f) => `${t.name}.${f}`));   // בטבלה מקושרת («מדרגות» ⇒ «מעבר».flow capacity)
+      const ask = `«${g.word}» — איזה שדה ב«${g.T.name}»? (${(g.T.fields || []).join(' · ')})${via.length ? ` · בטבלה המקושרת: ${via.join(' · ')}` : ''} — או שם שדה חדש, או «לא»`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; }
     if (g.part === 'value') { const ask = `«${g.noun} ${g.word}» — «${g.word}» הוא שלב של ${g.T.name}? (${(g.T.stages || []).join(' · ') || '—'}) — ענה שם-שלב (קיים או חדש), או «${ctx.descWord || 'תיאור'}» אם כל ה${g.noun} כאלה`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; }
     const ask = `סינון «לא ${g.word}» — אין שלב כזה ב«${g.T.name}» (עכשיו: ${(g.T.stages || []).join(' · ') || '—'}). אילו שלבים להוסיף? (למשל: לא ${g.word})`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; });
   // 🗂️ מיון מה שלא נבנה (25.9 «תסיים כל מה שאתה והמחולל יכולים»): «לא בצורה» אינו סיבה — כל כלל מוצהר מקבל סוג, כדי שמה שנשאר יהיה רק כללים אמיתיים בלי צורה

@@ -345,6 +345,8 @@
  "extraFieldWord": "שדה נוסף",
  "compareWords": ["מתקרב", "מתקרבת", "עולה", "יורד", "חורג", "מעל", "מתחת"],
  "descWord": "תיאור",
+ "typeFieldWords": ["kind", "סוג"],
+ "glossary": {"capacity": ["קיבולת", "ספיקה"], "zone": ["אזור"], "kind": ["סוג"], "severity": ["חומרה"], "time": ["שעה", "זמן"], "planned": ["מתוכנן"], "actual": ["בפועל"], "role": ["תפקיד"], "width": ["רוחב"], "owner": ["בעלים"], "source": ["מקור"], "stairs": ["מדרגות"], "slope": ["שיפוע"], "flat": ["מישור"]},
  "effectVerbs": ["יורדת", "יורד", "עולה", "עולים", "יורדים"],
  "modeEntityWords": ["מצב"],
  "activeStageWords": ["active", "פעיל"],

@@ -405,7 +405,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       const isHm = f.type !== 'date' && f.type !== 'num' && String(f.label).split(/[\s_]+/).some((w) => (SL.typeTime || []).includes(w));   // שדה-שעה («actual time» · «שעת יציאה») ⇒ דקות, לא מספר
       // 🌧️ השפעת-מצב (opts.effects — תשובת-הבעלים): השדה × מקדם כשרשומת-מצב מהסוג פעילה (טבלת-המצב של המסמך · שלב active)
       const ME = Object.values(entRes).find((e) => e && (SL.modeEntityWords || []).includes(e.entity)); const mk = ME && (ME.schema.find((q) => /^kind$|^סוג$/.test(q.label)) || ME.schema[0]); const ai = ME ? (ME.stages || []).findIndex((st) => (SL.activeStageWords || []).includes(st)) : -1;
-      const eff = ME && mk && ai >= 0 && nameToSlug[ME.entity] ? (Array.isArray(opts.effects) ? opts.effects : []).filter((e) => e.ent === r.entity && (e.field === f.label || stemOf(e.field) === stemOf(f.label))).map((e) => ({ slug: nameToSlug[ME.entity], kindField: mk.label, active: ai, kind: e.kind, n: e.n })) : [];
+      const eff = ME && mk && ai >= 0 && nameToSlug[ME.entity] ? (Array.isArray(opts.effects) ? opts.effects : []).filter((e) => e.ent === r.entity && (e.field === f.label || stemOf(e.field) === stemOf(f.label))).map((e) => ({ slug: nameToSlug[ME.entity], kindField: mk.label, active: ai, kind: e.kind, n: e.n, ...(e.when ? { when: { field: (r.schema.find((q) => q.label === e.when.field || stemOf(q.label) === stemOf(e.when.field)) || {}).label || e.when.field, value: e.when.value } } : {}) })) : [];
       return f.type === 'date' ? { ageField: f.label } : isHm ? { hmField: f.label } : { field: f.label, fi: r.schema.indexOf(f), ...(eff.length ? { eff } : {}) };
     };
     const liveOf0 = (x) => { const c = x.clause;

@@ -38,7 +38,7 @@ export function exprDart(t, r = 'r', k = (s) => `'${s}'`) {
   if (t.linked) return liveLinkedExpr(t.linked, r, k);
   if (t.queue) return `simWaitMin(${t.queue.map((q) => exprDart(q, r, k)).join(', ')})`;   // 🌉 המתנה צפויה (קצב, עמדות, דקות-טיפול) ⇒ סימולציה של מנוע-המערכות (gen_sim_engine.dart)
   const base = `(double.tryParse((${r}[${k(t.field)}] ?? '').trim()) ?? double.nan)`;
-  return t.eff && t.eff.length ? `(${base}${t.eff.map((e) => ` * (appStore.records('${e.slug}').any((m) => (m[${k(e.kindField)}] ?? '').trim() == ${k(e.kind)} && (m['__stage'] ?? '0') == '${e.active}') ? ${e.n} : 1.0)`).join('')})` : base;   // 🌧️ × מקדם כשמצב מהסוג פעיל
+  return t.eff && t.eff.length ? `(${base}${t.eff.map((e) => ` * (${e.when ? `(${r}[${k(e.when.field)}] ?? '').contains(${k(e.when.value)}) && ` : ''}appStore.records('${e.slug}').any((m) => (m[${k(e.kindField)}] ?? '').trim() == ${k(e.kind)} && (m['__stage'] ?? '0') == '${e.active}') ? ${e.n} : 1.0)`).join('')})` : base;   // 🌧️ × מקדם כשמצב מהסוג פעיל
 }
 /** אותו עץ בצד-JS (לציפייה מהדוגמאות): null כשעלה תלוי-זמן (since/ageField) או קשר — אז אין ציפייה מהדוגמאות */
 export function exprJs(t, row, ctx = null) {

@@ -17,6 +17,7 @@ export const kinds = () => [...REG.keys()];
 export async function resolveAll(gaps, ctx) {
   const out = []; ctx.need = (kind, data) => need(kind, data, ctx);   // תמיד קשור ל-ctx הנוכחי (העתק-ctx עם תשובות אחרות לא יורש need ישן)
   for (const g of gaps) {
+    if (g.kind !== 'part') ctx.cur = g;   // החסר-האב (הכלל) — חלקים שנשלחים ממנו קוראים את ההפניות שלו (מספרי-תרחיש)
     const rs = REG.get(g.kind) || []; let res = null;
     for (const r of rs) { try { const a = await r.run(ctx, g); if (a && a.outcome) { res = { ...a, by: r.name }; break; } } catch (e) { res = { outcome: 'declared', why: `${r.name}: ${String(e.message || e).slice(0, 80)}`, by: r.name }; break; } }
     if (!res && !rs.length) res = { outcome: 'declared', why: `אין פותר רשום לסוג «${g.kind}»`, by: null };
