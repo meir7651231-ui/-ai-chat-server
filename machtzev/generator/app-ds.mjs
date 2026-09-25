@@ -422,7 +422,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       const byI = rest.findIndex((w) => (SL.perEach || []).includes(w));   // «ממוצע ציון לכל כיתה» ⇒ ערך-הצבירה לכל קבוצה (השדה אחרי מילת-החלוקה)
       if (agg && byI > 0 && byI < rest.length - 1) {
         const fw = rest.slice(0, byI).join(' '), bw = rest.slice(byI + 1).join(' ');
-        for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(fw) || fd.label === fw); const b = r.schema.find((fd) => stemOf(fd.label) === stemOf(bw) || fd.label === bw);
+        for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const isEnt = agg === 'count' && (stemOf(r.entity) === stemOf(fw) || r.entity === fw); const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(fw) || fd.label === fw) || (isEnt ? r.schema[0] : null); const b = r.schema.find((fd) => stemOf(fd.label) === stemOf(bw) || fd.label === bw);   // «מונה ילד לכל נקודה» — ספירת-רשומות לא צריכה שדה
           if (f && b && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'aggBy', agg, field: f.label, by: b.label, op: c.op, n: +c.n } }; }
         return x;
       }

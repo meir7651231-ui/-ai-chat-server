@@ -186,7 +186,7 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
   const spec = byShape ? shp.spec : pk.spec; const node = byShape ? { ...(pk.node || {}), reader: 'doc-shape', fields: shp.ents.reduce((a, e) => a + e.fields.length, 0), entities: shp.ents.length, links: shp.links.length } : pk.node;
   // 🔁 המסמך עובר באותו צינור כמו משפט (לולאת ein · קושיות · חיפוש-צורה · התראות): דלת-המסמך רק מתרגמת — לא נתקעת ועוצרת
   // ⛏️ הכורה (yeshiva/koreh — בדפוס mine.py): קורפוס-הבעלים (תרחישים) מול שמות-הישויות ⇒ ערכים שחוזרים בכמה מקורות ⇒ שאלה «לאיזה שדה?» ⇒ שדה-בחירה
-  const enums = {}; const mined = []; const rowsBy = {}; const newEnts = []; const extra = {};
+  const enums = {}; const mined = []; const rowsBy = {}; const newEnts = []; const extra = {}; const ruleTables = []; const ruleRes = {};
   if (byShape && corpus) { const K = await import('./koreh.mjs'); const res = K.mine(await K.corpusOf(corpus), shp.ents.map((e) => e.name)); K.ledger(res); mined.__units = res.units.map((u) => u.unit);
     for (const e of shp.ents) { const vals = res.candidates.filter((c) => c.ent === e.name && c.sources >= 3).slice(0, 8); if (vals.length < 2) continue; const key = `ערכים ${e.name}`;
       const said = typeof answers[key] === 'string' ? answers[key].trim() : ''; const f = e.fields.find((x) => x.name === said);
@@ -206,6 +206,9 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
       for (const t of G.tables) { const key = `${TW} ${t.name}`; const said = typeof answers[key] === 'string' ? answers[key].trim() : ''; const saidF = typeof answers[`שדות ${t.name}`] === 'string' ? answers[`שדות ${t.name}`].split(/\s*,\s*/).filter(Boolean) : []; if (saidF.length) t.fields = [...new Set([...(t.fields || []), ...saidF])];
         if (said === 'כן') { { const fs0 = [...(t.fields || []), ...t.links.filter((l) => !(t.fields || []).includes(l))]; if (fs0.length) newEnts.push({ name: t.name, fields: fs0 }); else mined.push({ q: { thing: 'כורה', ask: 'newTableFields', key: `שדות ${t.name}`, q: `🆕 «${t.name}»: המחקר לא מונה שדות — אילו? (למשל: א, ב, ג)` } }); } mined.push(`🆕 ${t.name} ⇐ טבלה חדשה (תשובת-הבעלים) · קשרים ${t.links.join(', ') || '—'} · ${t.rules.length} כללים`); }
         else if (!said) mined.push({ q: { thing: 'כורה', ask: 'newTable', key, q: `🆕 «${t.name}» חוזר ב-${t.sources} תרחישים ואין לו טבלה. כללים: ${t.rules.slice(0, 2).join(' · ') || '—'}${t.links.length ? ` · ליד ${t.links.join(', ')}` : ''}. לפתוח טבלה? (כן / לא)` } }); }
+      // 🔔 כללי-התרחישים ⇒ משפטי-התראה בשפה הקיימת (ruleClauses) — לטבלאות שאושרו ולטבלאות המסמך; מה שלא מתורגם ⇒ מדווח עם הסיבה
+      ruleTables.push(...G.tables.filter((t) => newEnts.some((n) => n.name === t.name)).map((t) => ({ name: t.name, fields: newEnts.find((n) => n.name === t.name).fields })), ...shp.ents.map((e) => ({ name: e.name, fields: e.fields.map((f) => f.name.replace(/_/g, ' ')) })));
+      ruleRes.R = RL;
       for (const x of G.extensions) { const key = `הרחבה ${x.ent}: ${x.add}`; const said = typeof answers[key] === 'string' ? answers[key].trim() : '';
         if (said === 'כן') { const f = x.add.split(/\s+[—–-]\s+/)[0].replace(/[.,]+$/, '').trim(); (extra[x.ent] ??= []).push(f); mined.push(`➕ ${x.ent} + ${f} (תשובת-הבעלים)`); }
         else if (said === (SLg.enumAnswerWord || 'ערך')) { const f = x.add.split(/\s+[—–-]\s+/)[0].replace(/[.,]+$/, '').trim(); const E = shp.ents.find((e) => e.name === x.ent); const kf = E && (E.fields.find((q) => /^kind$|^סוג$/.test(q.name)) || null);   // «מצב → שרב» = סוג-מצב, לא שדה
@@ -216,7 +219,11 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
   const defs = {}; if (byShape) { const SLx = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); const XW = SLx.extraFieldWord || '';
     for (const f of shp.flows || []) { const k = f.field.replace(/_/g, ' '); if (typeof answers[k] === 'string' && answers[k].trim()) { defs[k] = answers[k].trim(); mined.push(`✍️ «${k}» = «${defs[k]}» (תשובת-הבעלים)`); } }
     for (const [k, v] of Object.entries(answers)) if (XW && k.startsWith(XW + ' ') && typeof v === 'string' && v.trim()) { const en = k.slice(XW.length + 1).trim(); extra[en] = v.split(/\s*,\s*/).filter(Boolean); mined.push(`✍️ ${en} + ${extra[en].join(', ')} (תשובת-הבעלים)`); } }
-  const sen = byShape ? DS.docToSentence(md, { enums, rows: rowsBy, defs, extra, newEnts }) : null;
+  let ruleCl = []; if (ruleRes.R) { const K2 = await import('./koreh.mjs'); const X = K2.ruleClauses(ruleRes.R, ruleTables); ruleCl = X.clauses;
+    if (ruleCl.length) mined.push(`🔔 ${ruleCl.length} כללים מהתרחישים ⇒ התראות: ${ruleCl.map((x) => `«${x.clause.replace(/^התראה כש/, '')}» → ${x.act.slice(0, 30)}`).join(' · ')}`);
+    if (X.skipped.length) mined.push(`⏸ ${X.skipped.length} כללים של הטבלאות לא תורגמו (הסיבות ב-rules-skipped.json): ${[...new Set(X.skipped.map((x) => x.why))].slice(0, 3).join(' · ')}`);
+    try { fs.mkdirSync(outDir, { recursive: true }); fs.writeFileSync(path.join(outDir, 'rules-skipped.json'), JSON.stringify(X.skipped, null, 1)); } catch {} }
+  const sen = byShape ? DS.docToSentence(md, { enums, rows: rowsBy, defs, extra, newEnts, clauses: ruleCl.map((x) => x.clause) }) : null;
   const r = sen ? await generateAll(sen.sentence, { answers: { ...answers, __corpus: corpus || null, __docEnts: shp.ents.map((e) => e.name), __subjects: (mined.__units || []) }, outDir, name }) : await generateFromSpec(spec, { outDir, name });
   if (corpus && byShape) { r.notes.push(`⛏️ כורה: ${mined.filter((m) => typeof m === 'string').length} שדות-בחירה מהתרחישים${mined.some((m) => typeof m === 'string') ? ' — ' + mined.filter((m) => typeof m === 'string').join(' · ') : ''} · ${mined.filter((m) => m.q).length} שאלות «לאיזה שדה»`); for (const m of mined) if (m.q) r.questions.push(m.q); }
   if (sen) { r.notes.push(`🔁 המסמך תורגם למשפט (${sen.ents.length} ישויות · ${sen.flows.length} זרימות ⇒ ${sen.flows.map((f) => `«${f.clause}»`).join(' · ') || '—'}) ⇒ אותו צינור כמו משפט`); r.docSentence = sen.sentence; }

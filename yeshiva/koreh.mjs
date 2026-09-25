@@ -117,6 +117,27 @@ export function modelGaps(corpus, names, rules, { minSources = 2, extLabels = ['
   tables.sort((a, b) => b.sources - a.sources);
   return { tables, extensions };
 }
+/** ⛏️⇒🔔 כלל-מהתרחיש ⇒ משפט שמנוע-ההתראות כבר מבין (לא מנוע חדש — תרגום לשפה הקיימת):
+ *   «N <נושא> [מאותו X] ב-M דק'/באותה שעה/בשעה» ⇒ «התראה כשמונה <טבלה> [לכל <שדה-X>] ב-M הדקות האחרונות מעל N-1»
+ *  ≥N = מעל N-1 · «באותה שעה/בשעה» = 60 · הקיבוץ: שדה בטבלה שהמילה אחרי «מאותו/באותו/לכל» (או תווית הכלל) נוגעת בו.
+ *  כלל שלא בצורה הזו (שעה-ביום «עד 01:00», שרשרת-סיבות…) ⇒ חוזר ב-skipped עם הסיבה — לא ממציאים התראה. */
+export function ruleClauses(rules, tables, { perEach = 'לכל', lastWord = 'האחרונות', minutesWord = 'הדקות' } = {}) {
+  const out = [], skipped = [];
+  const stem = (w) => String(w).replace(/^[ובלמהש]+(?=[֐-׿]{3})/, '').replace(/(ים|ות|ת|ה)$/, '');
+  for (const t of tables) {
+    const rs = rules[t.name] || rules[t.name + 'ים'] || rules[t.name.replace(/ה$/, 'ות')] || []; if (!rs.length) continue;
+    for (const r of rs) { const c = `${r.label ? r.label + ' ' : ''}${r.cond}`;
+      const m = r.cond.match(/(\d+)\+?\s+[֐-׿]+.*?(?:ב[-־]?(\d+)\s*(?:'|דק'|דקות)|(באותה שעה|בשעה|בשעה אחת)|(?=(?:מאותו|מאותה)\s))/);   /* גם «3 ילדים מאותו מקום» — קיבוץ בלי חלון */
+      if (!m) { skipped.push({ table: t.name, rule: `${r.cond} → ${r.act}`, why: /עד\s*\d{1,2}:\d{2}/.test(r.cond) ? 'שעה-ביום (עד HH:MM) — אין עדיין צורה כזו במנוע-ההתראות' : 'לא בצורת «N ב-M דקות»' }); continue; }
+      const counted = (r.cond.match(/\d+\+?\s+([֐-׿]+)/) || [])[1] || '';   /* מה נספר = המילה אחרי המספר — חייבת להיות הטבלה («3 ילדים» ≠ טבלת נקודה) */
+      if (stem(counted) !== stem(t.name) && !counted.startsWith(stem(t.name))) { skipped.push({ table: t.name, rule: `${r.cond} → ${r.act}`, why: `נספר «${counted}», לא «${t.name}»` }); continue; }
+      const n = +m[1], win = m[2] ? +m[2] : m[3] ? 60 : null;
+      const gw = (c.match(/(?:מאותו|באותו|מאותה|באותה|לכל)\s+([֐-׿]+)/) || [])[1]; const lw = r.label ? r.label.split(/\s+/) : [];
+      const g = (t.fields || []).find((f) => [gw, ...lw].filter(Boolean).some((w) => stem(f.split(/\s+/)[0]) === stem(w) || f.includes(stem(w))));
+      if (!win && !g) { skipped.push({ table: t.name, rule: `${r.cond} → ${r.act}`, why: `«${gw}» אינו שדה ב«${t.name}» — לפי מה לקבץ?` }); continue; }
+      out.push({ table: t.name, clause: `התראה כשמונה ${t.name}${g ? ` ${perEach} ${g}` : ''}${win ? ` ב-${win} ${minutesWord} ${lastWord}` : ''} מעל ${n - 1}`, act: r.act, from: r.ex }); } }
+  return { clauses: out, skipped };
+}
 /** זיכרון-המיפוי (יחידה ⇒ ישות.שדה) — מקומי, כמו שאר תשובות-הבעלים (הכרעה-35: הדלת לא כותבת ל-new/) */
 const MAP_FILE = () => process.env.MAVIN_KOREH_MAP || '.maimatai/koreh-map.jsonl';
 export function unitMap() { try { const m = {}; for (const l of fs.readFileSync(MAP_FILE(), 'utf8').split('\n').filter(Boolean)) { const e = JSON.parse(l); m[e.unit] = e.to; } return m; } catch { return {}; } }
