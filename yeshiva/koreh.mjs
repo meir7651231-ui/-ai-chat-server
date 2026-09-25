@@ -59,7 +59,8 @@ export function mine(corpus, names, { minSources = 2 } = {}) {
 /** ⛏️⚖️ כללים מהסיפור («אין לי אלא» ⇒ חיפוש, הכרעת-בעלים 25.9 «צא»): משפט-כלל = «<תנאי> → <פעולה>» (חץ, כמו שורת-זרימה במסמך 72),
  *  כשבצד-התנאי יש מספר+מילה (או ישות) ובצד-הפעולה יש מילה (לא רק מעבר-מספרים «3.5 → 3.1»). קיבוץ לפי נושא: ישות מהמסמך, אחרת המילה שאחרי המספר.
  *  אפס מילון · אפס מודל: הצורה בלבד + פיזור (בכמה מקורות). מה שלא מתחבר לטבלה ⇒ נשאר כלל-שנמצא עם המקור, לא נזרק ולא מומצא. */
-export function rulesOf(corpus, names, { subjects = [], skip = [], instances = {} } = {}) {   /* instances = {שם-מופע: ישות} מהכורה («צפון» ⇒ אזור) */
+export function rulesOf(corpus, names, { subjects = [], skip = [], instances = {}, when = [] } = {}) {   /* when = מילות-תנאי (knowledge/conditions.json) ⇒ «כש<תנאי> — <פעולה>» הוא אותו כלל בלי חץ */
+  const WH = when.length ? new RegExp('^(?:.{0,40}?\\s)?(?:' + when.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')(?=[֐-׿A-Za-z])(.{3,120}?)\\s+[—–-]{1,2}\\s+(.{3,140})$') : null;   /* instances = {שם-מופע: ישות} מהכורה («צפון» ⇒ אזור) */
   // נושא = שם-ישות (עם ים/ות/אות-שימוש ⇒ entOf) · אחרת המילה אחרי המספר — בלי מילות-זמן/יחידות-משך (skip מהדאטה) ובלי מילה נפוצה (פיזור > 25% מהמקורות)
   const df = new Map(); for (const { text } of corpus) for (const w of new Set(toks(text).map(bare))) df.set(w, (df.get(w) || 0) + 1);
   const common = (w) => corpus.length >= 8 && (df.get(w) || 0) > corpus.length * 0.25;   /* פיזור נמדד רק בקורפוס שיש בו מה למדוד */
@@ -74,10 +75,12 @@ export function rulesOf(corpus, names, { subjects = [], skip = [], instances = {
     return [...new Set([...ents, ...sub])]; };
   for (const { src, text } of corpus) for (const line of text.split(/\n+/)) for (const s0 of line.split(/\s·\s|(?<=[.!?])\s+/)) {
     if (/\|/.test(s0)) continue;   /* שורת-טבלה (מחזור-חיים «הקמה → פירוק») — לא כלל */
-    const s = s0.replace(/[«»"“”]/g, '').trim(); const m = s.match(/^(.{3,140}?)\s*[→⇒]\s*(.{2,140})$/); if (!m) continue;
+    const s = s0.replace(/[«»"“”]/g, '').trim(); let m = s.match(/^(.{3,140}?)\s*[→⇒]\s*(.{2,140})$/); let prose = false;
+    if (!m && WH) { const w = s.match(WH); if (w) { m = [w[0], w[1], w[2]]; prose = true; } }   /* «כשמקור נופל — הביטחון יורד» */
+    if (!m) continue;
     let cond = m[1].trim(); const act = m[2].split(/\s*[→⇒]\s*/)[0].trim(); let label = null;
     { const lm = cond.match(/^([֐-׿][֐-׿'"׳\- ]{1,24}):\s*(.+)$/); if (lm && !/\d/.test(lm[1])) { label = lm[1].trim(); cond = lm[2].trim(); } }   /* «מתרחבות: אדם → קוד אישי» — תווית (סוג-הכלל), לא נושא */
-    if (!/\d/.test(cond) && !names.some((n) => cond.includes(n))) continue;          // תנאי = כמות או ישות
+    if (!prose && !/\d/.test(cond) && !names.some((n) => cond.includes(n))) continue;          // תנאי-חץ = כמות או ישות (תנאי-כש נושא את עצמו)
     if (!(act.match(HEW) || []).some((w) => w.length > 1) || /^[\d.:,\s/+\-–]+$/.test(act)) continue;   // פעולה = מילה, לא רק מספר
     const subs = subjOf(cond); if (label) for (const w of toks(label).map(bare)) { const e = entOf(w, names); if (e && !subs.includes(e)) subs.push(e); }   /* «נקודות איסוף: …» ⇒ גם נקודה */
     for (const sub of subs) { const g = out.get(sub) || out.set(sub, new Map()).get(sub); const k = norm(cond) + ' → ' + norm(act);

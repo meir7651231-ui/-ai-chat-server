@@ -15,7 +15,8 @@ export function registerAll(KU) {
     if (tag.includes('אין לי אלא')) {
       const SL = JSON.parse(fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), '../machtzev/generator/spec-lang.data.json'), 'utf8')); const skip = SL.durationWords || [];
       const MI = K.mine(c, names); const instances = Object.fromEntries(MI.candidates.map((x) => [x.name, x.ent]));
-      const R = K.rulesOf(c, names, { subjects: MI.units.map((u) => u.unit).filter((u) => !skip.includes(u)), skip, instances }); const subs = Object.keys(R); const n = subs.reduce((s, x) => s + R[x].length, 0);
+      const CO = JSON.parse(fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), '../machtzev/generator/knowledge/conditions.json'), 'utf8'));
+      const R = K.rulesOf(c, names, { subjects: MI.units.map((u) => u.unit).filter((u) => !skip.includes(u)), skip, instances, when: CO.when || [] }); const subs = Object.keys(R); const n = subs.reduce((s, x) => s + R[x].length, 0);
       const f = path.join(ctx.outDir, 'rules-found.json'); fs.writeFileSync(f, JSON.stringify(R, null, 1));
       const md = subs.sort((a, b) => R[b].length - R[a].length).map((x) => `## ${x} (${R[x].length})\n` + R[x].map((r) => `- ${r.label ? `[${r.label}] ` : ''}${r.cond} → ${r.act}  ·  ${r.sources} מקורות  ·  ${r.ex}`).join('\n')).join('\n\n');
       fs.writeFileSync(path.join(ctx.outDir, 'rules-found.md'), `# כללים שנמצאו בתרחישים («אין לי אלא» ⇒ חיפוש)\n\n${md}\n`);
