@@ -87,9 +87,11 @@ export function registerAll(CH) {
     const al = (E.alias || []).map((a) => a.toLowerCase()); const f = (g.T.fields || []).find((x) => al.some((a) => x.toLowerCase() === a || x.toLowerCase() === `${a} id` || x.toLowerCase() === `${a}_id`));
     return f ? { outcome: 'built', value: f } : null; });
   CH.register('part', 'byDesc', async (ctx, g) => {   // תואר שמופיע ברוב האזכורים של הנספר במחקר («ילדים אבודים») = תיאור הטבלה, לא סינון
-    if (g.part !== 'value' || !ctx.corpus) return null; let all = 0, with_ = 0;
-    for (const d of ctx.corpus) { const ws = d.text.split(/[\s,.:;()"״]+/); for (let i = 0; i < ws.length; i++) if (ws[i] === g.noun) { all++; if (stem(ws[i + 1] || '') === stem(g.word)) with_++; } }
-    return all >= 3 && with_ / all >= 0.5 ? { outcome: 'built', value: { none: true }, why: `במחקר ${with_}/${all} מהאזכורים של «${g.noun}» הם «${g.noun} ${g.word}» — תיאור` } : null; });
+    // «ילדים אבודים» 18 פעמים ב-12 תרחישים = שם-התופעה (תיאור), גם כש«ילדים» לבד מופיע יותר (ילדים וקשישים · ילדים עם …)
+    if (g.part !== 'value' || !ctx.corpus) return null; let all = 0, with_ = 0; const src = new Set();
+    for (const d of ctx.corpus) { const ws = d.text.split(/[\s,.:;()"״]+/); for (let i = 0; i < ws.length; i++) if (ws[i] === g.noun) { all++; if (stem(ws[i + 1] || '') === stem(g.word)) { with_++; src.add(d.src); } } }
+    const ok = (all >= 3 && with_ / all >= 0.5) || (with_ >= 10 && src.size >= 5);
+    return ok ? { outcome: 'built', value: { none: true }, why: `במחקר «${g.noun} ${g.word}» ${with_} פעמים ב-${src.size} תרחישים (מתוך ${all} אזכורים של «${g.noun}») — תיאור` } : null; });
   CH.register('part', 'ask', async (ctx, g) => {
     const key = partKey(g); const dup = ctx.asked.has(key); ctx.asked.add(key);
     if (g.part === 'table') { const opt = coTables(ctx, g.word); return { outcome: 'question', key, dup, ask: `«${g.word}» — איזו טבלה נספרת?${opt.length ? ` (במחקר מופיע ליד: ${opt.join(' · ')})` : ''} — ענה שם-טבלה או «לא»`, q: `🧩 «${g.cond.slice(0, 70)}»: «${g.word}» — איזו טבלה נספרת?${opt.length ? ` (במחקר מופיע ליד: ${opt.join(' · ')})` : ''} — ענה שם-טבלה או «לא»` }; }
