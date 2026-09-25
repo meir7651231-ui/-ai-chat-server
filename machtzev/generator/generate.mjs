@@ -18,6 +18,8 @@ import { detectAllClauses, detectLevelsClause, emitAppFrom, clausesByForm as cap
 import { retrieveScreen } from './retrieve-screen.mjs';
 import { resolveEin } from '../../yeshiva/ein.mjs';
 import { bufferDeclsOf } from '../../yeshiva/buffer.mjs';
+import { roundTrip } from '../../yeshiva/read.mjs';   // 🔁 הלוך-חזור: הספק שנבנה ⇒ חזרה למילים ⇒ השוואה למשפט
+import { specFromSentence } from './tzinor.mjs';   // קורא שני לאותו משפט (מחלוקת ⇒ שאלה)
 import * as R from '../root.mjs';
 
 const MAN = path.join(R.ROOT, 'screens-seed/manifests');
@@ -225,6 +227,14 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   fs.mkdirSync(outDir, { recursive: true });
   const files = [], notes = [...defs.notes], questions = [...defs.questions];
   for (const q of yesh.kushyot) questions.push({ thing: 'הישיבה', ask: q.kind, q: `${q.kind}: ${q.text}` });
+  // 🔁 הלוך-חזור (עיקרון «מנוע דו-כיווני», בעלים 23.9): מה שנבנה מתורגם חזרה ומושווה למשפט — מה שלא חזר כפי שנאמר ⇒ שאלה סגורה, לא הצלחה שקטה
+  { let other = null; try { const t = specFromSentence(sentence); other = typeof t === 'string' ? t : (t && t.spec) || null; } catch {}
+    const covered = allRoutes.filter((x) => x.route !== 'appds').map((x) => ({ role: x.route, text: x.thing }));
+    const rt = roundTrip({ sentence, words: form.words, frame: form.frame, spec, covered, other });
+    for (const q of rt.questions) questions.push({ thing: 'הלוך-חזור', ask: q.ask, key: q.key, q: q.q });
+    notes.push(`🔁 הלוך-חזור: ${rt.clean ? 'המשפט חזר כפי שנאמר' : `${rt.questions.length} פערים (נאבד ${rt.lost.length} · נושא ${rt.lostSubject.length} · דקדוק-בשם ${rt.gramInName.length} · הומצא ${rt.invented.length} · מחלוקת-קוראים ${rt.disagree.length})`}`);
+    try { fs.writeFileSync(path.join(outDir, 'roundtrip.json'), JSON.stringify(rt, null, 1)); } catch {}
+    routed.roundTrip = rt; }
   for (const sw of yesh.switches) questions.push({ thing: 'הישיבה', ask: sw.move || sw.kind, q: `${sw.move || sw.kind}: ${sw.text}` });
   if (yesh.note) notes.push(yesh.note);
   if (yesh.rulings.length) notes.push(`הפוסק: ${yesh.rulings.filter((r) => r.decided).length} הוכרעו · ${yesh.switches.length} מתגים`);
@@ -475,5 +485,5 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
           const v = r.verdict || {}; notes.push(`⚖️ שופט ${c.where}: ${Object.keys(c.structure).join('+')} ⇒ ${v.status === 'refused' ? `מסרב להכריע: ${(v.refusal || {}).reason || ''} · יציאה: ${(v.refusal || {}).exit_condition || (v.refusal || {}).exit || ''}` : `מהלך: ${v.leverage_move || v.needs_one_question || '—'}`}${(v.forbidden || []).length ? ` · אסור: ${v.forbidden[0].text || v.forbidden[0]}` : ''}${r.rejected ? ` · 🐞 הבודק של השופט פסל (${r.violations.map((x) => x.rule).join(',')}) — באג במנוע` : ''}`);
           md.push(`## ${c.where}\n\nמבנה (מהמחולל): ${Object.keys(c.structure).join(', ')}\n\n${r.text || ''}`); }
         if (md.length) fs.writeFileSync(path.join(outDir, 'judge.md'), `# ⚖️ השופט על האפליקציה\n\n${md.join('\n\n')}\n`); } } }
-  return { form, routes: allRoutes, held: held.map((r) => r.thing), spec, skipped, files, notes, questions, none: allRoutes.filter((r) => r.route === 'none').map((r) => r.thing) };
+  return { form, routes: allRoutes, held: held.map((r) => r.thing), spec, skipped, files, notes, questions, roundTrip: routed.roundTrip || null, none: allRoutes.filter((r) => r.route === 'none').map((r) => r.thing) };
 }

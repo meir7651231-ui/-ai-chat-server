@@ -55,6 +55,52 @@ export function parseSpec(text) {
   return spec;
 }
 
+// ── 🔁 הלוך-חזור (עיקרון «מנוע תמיד יכול לעבוד דו-כיווני», בעלים 23.9): משפט ⇒ ספק שנבנה ⇒ חזרה למילים ⇒ השוואה למשפט.
+//    מה שלא חוזר כפי שנאמר = קריאה שגויה ⇒ שאלה סגורה, לא הצלחה שקטה. צורה בלבד: דקדוק מ-spec-lang (אפס מילון).
+//    words/frame — מילות-המשפט ומילות-המסגרת של הקורא · covered — מה שנכנס בתפקיד אחר (תנאי · ראש · הצהרה · שאלה)
+//    other — ספק של קורא שני לאותו משפט: דבר שאחד קרא כטבלה והשני כשדה ⇒ מחלוקת ⇒ שאלה עם שתי הקריאות.
+let _SL = null; const specLang = () => (_SL ||= JSON.parse(fs.readFileSync(path.join(ROOT, 'machtzev/generator/spec-lang.data.json'), 'utf8')));
+export function roundTrip({ sentence = '', words = [], frame = [], spec = '', covered = [], other = null } = {}) {
+  const SL = specLang();
+  const PFX = new RegExp(`^[${SL.prefixLetters}]`), SFX = new RegExp(`(${SL.stemSuffixes.join('|')})$`);
+  const clean = (w) => String(w).replace(/[״׳"'()]/g, '');
+  const formsOf = (w0) => { const w = clean(w0); const out = new Set([w, w.replace(SFX, '')]); if (PFX.test(w) && w.length > 3) { const b = w.slice(1); out.add(b); out.add(b.replace(SFX, '')); } return [...out].filter((x) => x.length > 1 || x === w); };   // ערך של אות-אחת («א, ב, ג, ד») נשאר
+  const toks = (t) => String(t).split(/[\s,،/_|{}]+/).map(clean).filter(Boolean);
+  const GRAM = new Set([...(SL.perEach || []), SL.haveWord, SL.withWord, ...(SL.orWords || []), ...(SL.exampleWords || []), ...(SL.stagePrefixes || []), ...(SL.entityNouns || [])].filter(Boolean));
+  const isGram = (w) => formsOf(w).some((f) => GRAM.has(f)) || GRAM.has(clean(w)) || (clean(w).length === 1 && SL.prefixLetters.includes(clean(w)));   // «מ-5» ⇒ «מ» = אות-יחס, לא מילה
+  const S = parseSpec(spec || '');
+  const claims = [...S.entities.map((t) => ({ role: 'table', text: t })), ...S.fields.map((f) => ({ role: 'field', text: f.name, of: f.ent })), ...S.enums.flatMap((e) => e.values.map((v) => ({ role: e.name, text: v, of: e.ent }))), ...covered];
+  const has = new Map(); for (const c of claims) for (const w of toks(c.text)) for (const f of formsOf(w)) { if (!has.has(f)) has.set(f, []); has.get(f).push(c); }
+  const F = new Set(frame); words = words.flatMap((w) => String(w).split(/[/_]/));   // «זמין/מושאל/אבוד» · «חבר_קהילה» = מילים נפרדות
+  const content = words.filter((w) => !/^\d+$/.test(w) && !F.has(w) && !isGram(w));
+  const lost = [...new Set(content.filter((w) => !formsOf(w).some((f) => has.has(f))))];
+  const said = new Set(words.flatMap(formsOf));
+  const invented = [...new Set(claims.filter((c) => c.role === 'table' || c.role === 'field').flatMap((c) => toks(c.text)).filter((w) => !/^\d+$/.test(w) && !isGram(w) && !formsOf(w).some((f) => said.has(f))))];
+  const NAME_GRAM = new Set([...(SL.perEach || []), SL.haveWord, SL.withWord].filter(Boolean));   // מילות-המבנה של המשפט (לא מילות-המפתח של הספק — «ישות חול» היא שם)
+  const nameGram = (w) => formsOf(w).some((f) => NAME_GRAM.has(f)) || NAME_GRAM.has(clean(w)) || (clean(w).length === 1 && SL.prefixLetters.includes(clean(w)));
+  const gramInName = claims.filter((c) => ['table', 'field', 'combine', 'gold'].includes(c.role) && toks(c.text).length > 1 && toks(c.text).some(nameGram)).map((c) => `${c.role === 'table' ? 'הטבלה' : c.role === 'field' ? 'השדה' : 'הדבר'} «${c.text}»`);
+  // נושא-המשפט («ל<X> יש» · «לכל <X> יש»): מה שלפני מילת-ה«יש» הוא דבר ⇒ חייב לחזור כטבלה בשמו, לא להיבלע בשם אחר
+  const tableForms = new Set(S.entities.map((t) => clean(t)).flatMap((t) => [t, t.replace(SFX, '')]));
+  const subjects = []; let hasSubject = false; for (const seg of String(sentence).split(/[.:;]\s/)) { const ws = seg.trim().split(/\s+/); const hi = ws.indexOf(SL.haveWord); if (hi <= 0) continue; hasSubject = true;
+    let ph = ws.slice(0, hi); const pe = ph.findIndex((w) => (SL.perEach || []).includes(w)); if (pe >= 0) ph = ph.slice(pe + 1); else if (ph.length === 1 && PFX.test(ph[0]) && ph[0].length > 3) ph = [ph[0].slice(1)]; else continue;   // «לכל X יש» · «לX יש»
+    const x = ph.map(clean).join(' '); if (x && !ph.every(isGram)) subjects.push(x); }
+  const lostSubject = [...new Set(subjects.filter((x) => !tableForms.has(x) && !tableForms.has(x.replace(SFX, '')) && !S.entities.some((t) => clean(t).replace(SFX, '') === x.replace(SFX, ''))))];
+  const disagree = [];
+  // מחלוקת-קוראים רק בלי נושא מפורש («לכל X יש»): משפט-רשימה («X עם א, ב, ג») — שם שני הקוראים נחלקים באמת
+  if (other && !hasSubject) { const O = parseSpec(other); const stem = (w) => formsOf(w)[1] || clean(w);
+    const oTables = new Set(O.entities.flatMap((t) => toks(t).map(stem))); const ourTables = new Set(S.entities.flatMap((t) => toks(t).map(stem)));
+    for (const t of S.entities) { const fs0 = S.fields.filter((f) => f.ent === t); const asT = fs0.filter((f) => { const st = toks(f.name).map(stem); return st.length === 1 && oTables.has(st[0]); });
+      if (fs0.length >= 2 && asT.length === fs0.length && !toks(t).map(stem).some((w) => oTables.has(w))) for (const f of asT) disagree.push({ word: f.name, ours: `שדה של «${t}»`, theirs: 'table' }); } }
+  const questions = [
+    ...lost.map((w) => ({ ask: 'lost', key: w, q: `🔁 «${w}» נאמר במשפט ולא חזר מהאפליקציה — מה הוא: טבלה, שדה, שלב, או תנאי?` })),
+    ...lostSubject.map((w) => ({ ask: 'subject', key: w, q: `🔁 «${w}» הוא נושא במשפט («…${w} ${SL.haveWord}…») ולא חזר כטבלה בשמו — ${S.entities.length ? `נבנה: ${S.entities.map((t) => `«${t}»`).join(', ')}` : 'לא נבנתה טבלה'}. מה נכון?` })),
+    ...gramInName.map((n) => ({ ask: 'gram', key: n, q: `🔁 ${n} מכיל מילת-דקדוק — המשפט נקרא לא נכון. מה השם הנכון?` })),
+    ...invented.map((w) => ({ ask: 'invented', key: w, q: `🔁 «${w}» נבנה באפליקציה ולא נאמר במשפט — להשאיר או להוריד?` })),
+    ...disagree.map((d) => ({ ask: 'disagree', key: d.word, q: `🔁 «${d.word}»: נקרא כ${d.ours}, וקורא שני קרא אותו כטבלה נפרדת. מה נכון?` })),
+  ];
+  return { clean: !questions.length, lost, invented, gramInName, lostSubject, disagree, questions, claims: claims.length };
+}
+
 // ── קריאת הפירוק (מבנית: כותרות · רשימות · «ציטוטים» · סלאשים · מספרים) ──
 export function parsePeruk(text) {
   const lines = text.split('\n');
