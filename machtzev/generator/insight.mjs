@@ -33,7 +33,8 @@ export function registerComposite(manifestPath) {
 }
 /** תובנת-סף על ישות ⇒ מסך אחד מורכב. live = { slug, field, op:'<'|'>', n } · entity = { name, fields[] } · name = מילות-הבעלים */
 // ═══ emitInsight = predicateOverSet ⊕ levelsOverSet ⊕ judge ⊕ synthDisplay
-export function emitInsight({ slug, cls, name, live, entity, expect = null, seedSlug = null, words = null, decide = null }) {
+export function emitInsight({ slug, cls, name, live, entity, expect = null, seedSlug = null, words = null, decide = null, route = null }) {
+  // route = { slug, byField, condField, actor, text } — ההתראה מציעה החלטה (טבלת-ההחלטה של המסמך, שלב ראשון): «המערכת מציגה, אדם מחליט»
   // decide = { name, file, proven, examples } — אטום-ההחלטה מהקטלוג, מוכח בהרצה (behavior-plan) על הדוגמאות של הבעלים; בלי החלטה מוכחת ⇒ ההשוואה נכתבת ביד ומדווחת
   const said = words || `${live.field} ${live.op} ${live.n}`;   // מילות-הבעלים («ציון מתחת ל-55»), לא סימן (RTL הופך «<»)
   const { k, dump } = makeConsts(slug);
@@ -108,6 +109,8 @@ export function emitInsight({ slug, cls, name, live, entity, expect = null, seed
     const opList = res.kind ? opsOfKind({ kind: res.kind }).map((o) => o.op) : [res.op];
     for (const op of opList) resolve(op, res.value, null, 0, res.result === 'any' || res.result === 'subset' ? 'br.isNotEmpty' : null);
   }
+  if (route && route.slug) { parts.push({ cond: 'br.isNotEmpty', call: `DsPrimaryButton(label: ${k(`הצע החלטה${route.actor ? ` ← ${route.actor}` : ''}`)}, onTap: () { appStore.add('${route.slug}', <String, String>{${route.byField && route.actor ? `${k(route.byField)}: ${k(route.actor)}, ` : ''}${k(route.condField)}: ${k(route.text)}}); })` });
+    manifest.flow.push(`br.isNotEmpty ⇒ הצעת-החלטה (${route.actor || '—'}) ⇒ ${route.slug}`); }
   const missing = manifest.ops.filter((o) => !o.atom).map((o) => o.op).filter((op, i, a) => a.indexOf(op) === i);
   const code = `// 🧩 חולל ע"י מנוע-ההרכבה (insight · הכרעת-בעלים 23.9) — תובנת-סף על נתונים אמיתיים: ${manifest.ops.filter((o) => o.atom).map((o) => o.op).join(' ⊕ ') || '—'}${missing.length ? ` · בלי אטום: ${missing.join(', ')}` : ''}. אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
