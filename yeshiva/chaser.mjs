@@ -15,7 +15,7 @@ export function register(kind, name, run) { const a = REG.get(kind) || REG.set(k
 export const kinds = () => [...REG.keys()];
 /** gaps = [{kind, ...data}] ⇒ לכל חסר: outcome (clause|question|built|declared) + by (מי פתר) · silent = אין תוצאה בכלל */
 export async function resolveAll(gaps, ctx) {
-  const out = []; if (!ctx.need) ctx.need = (kind, data) => need(kind, data, ctx);
+  const out = []; ctx.need = (kind, data) => need(kind, data, ctx);   // תמיד קשור ל-ctx הנוכחי (העתק-ctx עם תשובות אחרות לא יורש need ישן)
   for (const g of gaps) {
     const rs = REG.get(g.kind) || []; let res = null;
     for (const r of rs) { try { const a = await r.run(ctx, g); if (a && a.outcome) { res = { ...a, by: r.name }; break; } } catch (e) { res = { outcome: 'declared', why: `${r.name}: ${String(e.message || e).slice(0, 80)}`, by: r.name }; break; } }

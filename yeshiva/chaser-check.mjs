@@ -52,3 +52,15 @@ console.log(`✓ chaser: ${CH.kinds().length} סוגי-חסר רשומים (${CH
   if (e.d.outcome !== 'clause' || !/לכל zone/.test(e.d.clause) || !e.subs.some((p) => p.by === 'byDoc')) { console.error('🚨 chaser: «אזור» ⇒ שדה zone דרך Zone שבמסמך: ' + (e.d.clause || e.d.q)); process.exit(1); }
   for (const x of [a, b, c, e]) if (!x.subs.length || CH.silent(x.subs).length) { console.error('🚨 chaser: חלק-חסר לא עבר בערוץ / שקט'); process.exit(1); }
   console.log(`✓ חלק-חסר ⇒ ערוץ: «${a.d.key}» (${a.d.q.match(/במחקר[^)]*/)?.[0] || '—'}) ⇒ «${b.d.key}» ⇒ «${c.d.clause}» · zone דרך המסמך`); }
+// (10) פותר שלא צורך את כל החלקים לא בונה חלק מהכלל · תואר צמוד ⇒ חלק · סף בלי מספר ⇒ שאלה (לא ניחוש) · שדה אחרי מילת-השוואה ⇒ מוצהר
+{ const E = { name: 'אירוע', fields: ['kind', 'point'], stages: ['open', 'closed'] }, P = { name: 'נקודה', alias: ['Point'], fields: ['משפחות ממתינות', 'תקן שוטרים'], stages: [] };
+  const cx = { K, answers: {}, asked: new Set(), tables: [E, P], corpus: [], subs: [], compareWords: ['מתקרב', 'מתחת'], detect: detectAllClauses, alertWord: 'התראה', whenWord: 'כש', aboveWord: 'מעל', belowWord: 'מתחת ל', sinceWord: 'זמן מאז' };
+  const d = await CH.resolveAll([{ kind: 'rule', table: E, rule: { cond: '3 אירועים קטנים באותה נקודה באותה שעה', act: 'ריכוז' } }, { kind: 'rule', table: P, rule: { cond: 'משפחות ממתינות מתקרב לקיבולת', act: 'התראה' } }, { kind: 'rule', table: P, rule: { cond: 'ספירה מתחת לתקן שוטרים', act: 'התראה' } }], cx);
+  const bad = [];
+  if (d[0].outcome !== 'question' || d[0].by !== 'compose' || d[0].key !== 'תואר אירוע: קטנים') bad.push(`«אירועים קטנים באותה נקודה» חייב הרכבה+שאלה על «קטנים», לא «3 אירועים»: ${d[0].clause || d[0].key}`);
+  if (d[1].outcome !== 'question' || d[1].key !== 'סף נקודה: משפחות ממתינות') bad.push('סף בלי מספר ⇒ שאלה');
+  if (d[2].outcome !== 'declared' || !/ספירה מול/.test(d[2].why)) bad.push('שדה אחרי מילת-השוואה ⇒ מוצהר עם סיבה');
+  const d2 = await CH.resolveAll([{ kind: 'rule', table: E, rule: { cond: '3 אירועים קטנים באותה נקודה באותה שעה', act: 'ריכוז' } }], { ...cx, asked: new Set(), answers: { 'תואר אירוע: קטנים': 'open' } });
+  if (d2[0].outcome !== 'clause' || !/זמן מאז open מעל 0 וגם מונה אירוע לכל point ב-60 הדקות האחרונות מעל 2/.test(d2[0].clause)) bad.push('אחרי תשובה: ' + (d2[0].clause || d2[0].q));
+  if (bad.length) { for (const b of bad) console.error('🚨 chaser: ' + b); process.exit(1); }
+  console.log(`✓ כל החלקים נצרכים: «${d2[0].clause}» · סף ⇒ שאלה · ספירה-מול-שדה ⇒ מוצהר`); }
