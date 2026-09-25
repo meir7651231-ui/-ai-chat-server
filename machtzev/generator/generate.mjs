@@ -21,6 +21,15 @@ import { bufferDeclsOf } from '../../yeshiva/buffer.mjs';
 import * as R from '../root.mjs';
 
 const MAN = path.join(R.ROOT, 'screens-seed/manifests');
+// מילות שפת-הספק (spec-lang.data.json) — הכניסה קוראת את הספק שהיא כותבת לפי אותן מילים, אפס עברית-בקוד (P1)
+const SLG = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
+const esc = (w) => String(w).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const ENT_W = esc(SLG.entityNouns[0]), WITH_W = esc(SLG.withWord);
+const SUFFIX_RE = new RegExp(`(${SLG.stemSuffixes.map(esc).join('|')})$`);
+const ENT_LINE_RE = new RegExp(`^${ENT_W} `), ENT_NAME_RE = new RegExp(`^${ENT_W}\\s+(.+?)\\s+${WITH_W}\\s`), ENT_FIELDS_RE = new RegExp(`^${ENT_W}\\s+(.+?)\\s+${WITH_W}\\s+(.+)$`);
+const DECL_RE = new RegExp(`^(\\S+)\\s+(.+?)(?:\\s+${WITH_W}\\s|:)`);
+const ROLE_LINE_RE = new RegExp(`^${esc(SLG.roleWord)} `), DASH_LINE_RE = new RegExp(`^${esc(SLG.dashWord)} ${WITH_W}\\s*`);
+const NOT_APP_RE = new RegExp(`^(${[SLG.entityNouns[0], SLG.exampleWord, SLG.roleWord, SLG.lookWord, SLG.serverWord, SLG.reportWord, SLG.contentWord, SLG.particleWord].map(esc).join('|')}) `);
 // ── מודולי-הזהב (quarry-golden ⇒ golden-fragments.json · render-module.assembleByOps): פלוס לתחום שכותרות-השברים שלו בעברית ──
 //    בחירת-מודול לפי צורה: גזעי-מילות-היחידה מול גזעי-כותרות-השברים; גזע שמופיע ב-≥4 מ-9 מודולים אינו מבחין (כמו «מפוזר»). המודול-המאגד (hub) לא נבחר —
 //    הוא מפנה למסכי-אחים שאינם בקומפוזיציה (נמדד: 6 שגיאות-מחלקה). קריאה בלבד; הקוד המורכב נכתב רק ל-outDir.
@@ -30,7 +39,7 @@ function goldIndex() {
   if (_gold) return _gold;
   if (!fs.existsSync(GOLD)) return (_gold = { mods: [], stemsOf: new Map(), df: new Map() });
   const c = JSON.parse(fs.readFileSync(GOLD, 'utf8'));
-  const heTok = (t) => (String(t).match(/[֐-׿]+/g) || []); const stem = (w) => w.replace(/(ים|ות|ה)$/, '');
+  const heTok = (t) => (String(t).match(/[֐-׿]+/g) || []); const stem = (w) => w.replace(SUFFIX_RE, '');
   const stemsOf = new Map(), df = new Map();   // stemsOf: מודול ⇒ Map(גזע ⇒ tf = כמה שברים) · df: גזע ⇒ בכמה מודולים
   for (const f of c.fragments) { if (!/[֐-׿]/.test(f.header || '')) continue; const m = stemsOf.get(f.module) || new Map(); for (const w of new Set(heTok(f.header).map(stem))) if (w.length >= 3) m.set(w, (m.get(w) || 0) + 1); stemsOf.set(f.module, m); }
   for (const [, m] of stemsOf) for (const w of m.keys()) df.set(w, (df.get(w) || 0) + 1);
@@ -38,7 +47,7 @@ function goldIndex() {
 }
 export function goldModuleFor(label) {
   const { mods, stemsOf, df } = goldIndex(); if (!mods.length) return null;
-  const stem = (w) => w.replace(/(ים|ות|ה)$/, '');
+  const stem = (w) => w.replace(SUFFIX_RE, '');
   const he = toks(label).filter((w) => /[֐-׿]/.test(w)); if (he.length > 2) return null;   // ≥3 מילים = סעיף, לא דבר (נמדד: «אם הרופא פנוי» ⇒ rooms)
   const ws = [...new Set(he.map(stem).filter((w) => w.length >= 3 && df.has(w)))];
   // ציון = Σ tf(גזע,מודול): המודול שכותרותיו חוזרות על הגזע הכי הרבה. דורש נושא (tf ≥ 2) ומנצח יחיד (שוויון ⇒ null).
@@ -65,12 +74,12 @@ export const clausesByForm = (seg, frame = []) => capClausesByForm(seg, frame, t
 // לכן שניהם מסומנים `proposal` ונבנים רק כשהקורא מבקש (proposals: true / --proposals) — מוצעים, לא נכנסים לבד.
 export function routeOf(form, answers = {}, { proposals = false } = {}) {
   const spec = specOf(form, answers);
-  const entLabels = new Set(spec.spec.split('\n').filter((l) => /^ישות /.test(l)).map((l) => l.replace(/^ישות /, '').split(' עם ')[0].trim()));
+  const entLabels = new Set(spec.spec.split('\n').filter((l) => ENT_LINE_RE.test(l)).map((l) => l.replace(ENT_LINE_RE, '').split(` ${SLG.withWord} `)[0].trim()));
   const routes = [];
   const capSegs = new Map();   // קטע ⇒ סעיפים (מהטקסט, או מהצורה)
-  for (const seg of form.segments) { const c = detectAllClauses(seg); if (c.length) capSegs.set(seg, { clauses: c, how: 'טקסט' }); else { const f = clausesByForm(seg, form.frame); if (f.length) capSegs.set(seg, { clauses: f, how: 'צורה' }); } }
+  for (const seg of form.segments) { const c = detectAllClauses(seg); if (c.length) capSegs.set(seg, { clauses: c, how: 'text' }); else { const f = clausesByForm(seg, form.frame); if (f.length) capSegs.set(seg, { clauses: f, how: 'form' }); } }
   // צורת-מדרגות: ראש «<תווית> לפי <שדה>» + הקטע הבא «<n>, <n>» (הדלת פיצלה על נקודתיים) — רק כשהשדה קיים באיזו ישות (אחרת נשאר none עם החיפוש)
-  form.segments.forEach((seg, i) => { const lv = detectLevelsClause(seg, form.segments[i + 1]); if (!lv) return; const has = form.things.some((t) => (t.fields || []).some((f) => sameStem(lv.x, f.label) || f.label === lv.x)); if (!has) return; capSegs.set(seg, { clauses: [lv], how: 'מדרגות' }); capSegs.set(form.segments[i + 1], { clauses: [lv], how: 'מדרגות', tail: seg }); });
+  form.segments.forEach((seg, i) => { const lv = detectLevelsClause(seg, form.segments[i + 1]); if (!lv) return; const has = form.things.some((t) => (t.fields || []).some((f) => sameStem(lv.x, f.label) || f.label === lv.x)); if (!has) return; capSegs.set(seg, { clauses: [lv], how: 'levels' }); capSegs.set(form.segments[i + 1], { clauses: [lv], how: 'levels', tail: seg }); });
   const srv = serverDeclOf(form), lk = lookDeclOf(form), head = headOf(form);
   const SRC = sourceDeclsOf(form); const srcThings = new Set(SRC.flatMap((x) => x.things));
   const RUL = rulesDeclOf(form); const ruleThings = new Set(RUL ? RUL.things : []);
@@ -84,12 +93,12 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
     if (head && t.src === form.segments[0] && !(srv && t === srv.thing) && !(lk && t === lk.thing) && !entLabels.has(t.label)) { routes.push({ thing: t.label, route: 'head', why: `ראש-המשפט (לפני הנקודתיים) ⇒ שם-האפליקציה «${head}» + לוח-הבית (אריח לכל ישות)` }); continue; }
     if (srv && t === srv.thing) { routes.push({ thing: t.label, route: 'server', why: `הצהרת-שרת «${srv.value}» ⇒ server.mjs (חבילת-שרת לישויות שנבנו)` }); continue; }
     if (lk && t === lk.thing) { routes.push({ thing: t.label, route: 'look', why: `הצהרת-עיצוב «${lk.value}${lk.extra ? ' ' + lk.extra : ''}» ⇒ app-ds.setLook (עור מהמדף: ds-pure/ds-tokens)` }); continue; }
-    if (capSegs.has(t.src)) { const c = capSegs.get(t.src); routes.push({ thing: t.label, route: 'capability', tail: c.tail || null, why: c.how === 'טקסט' ? 'סעיף-תנאי מבני בקטע (capability.detectAllClauses)' : c.how === 'מדרגות' ? `מדרגות (capability.detectLevelsClause): «${c.clauses[0].label}» לפי «${c.clauses[0].x}» — ${(c.clauses[0].thresholds || [c.clauses[0].high, c.clauses[0].mid]).join(', ')}` : `תנאי לפי צורה: «${c.clauses[0].x}» ${c.clauses[0].op} ${c.clauses[0].n}`, seg: t.src, clauses: c.clauses }); continue; }
+    if (capSegs.has(t.src)) { const c = capSegs.get(t.src); routes.push({ thing: t.label, route: 'capability', tail: c.tail || null, why: c.how === 'text' ? 'סעיף-תנאי מבני בקטע (capability.detectAllClauses)' : c.how === 'levels' ? `מדרגות (capability.detectLevelsClause): «${c.clauses[0].label}» לפי «${c.clauses[0].x}» — ${(c.clauses[0].thresholds || [c.clauses[0].high, c.clauses[0].mid]).join(', ')}` : `תנאי לפי צורה: «${c.clauses[0].x}» ${c.clauses[0].op} ${c.clauses[0].n}`, seg: t.src, clauses: c.clauses }); continue; }
     if (entLabels.has(t.label)) { routes.push({ thing: t.label, route: 'appds', why: 'דבר עם שדות ⇒ ישות' }); continue; }
     const [b] = retrieveScreen(t.label, 1);
-    /* דבר עם דוגמאות קלט⇒פלט = התנהגות (ein.examplesIO) — דמיון-מילים למסך רשום לא גובר עליו */ if (!(t.ioExamples && t.ioExamples.length) && b && b.score > 0) { routes.push({ thing: t.label, route: 'combine', proposal: true, why: `הצעה (תוכן ממקום אחר): דומה במילים למסך רשום ${b.name} (${(+b.score).toFixed(2)})`, screen: b.name, score: +b.score }); continue; }
+    /* דבר עם דוגמאות קלט⇒פלט = התנהגות (ein.examplesIO) — דמיון-מילים למסך רשום לא גובר עליו */ if (!(t.ioExamples && t.ioExamples.length) && b && b.score > 0) { routes.push({ thing: t.label, route: 'combine', proposal: true, core: `דומה במילים למסך רשום ${b.name} (${(+b.score).toFixed(2)})`, why: `הצעה (תוכן ממקום אחר): דומה במילים למסך רשום ${b.name} (${(+b.score).toFixed(2)})`, screen: b.name, score: +b.score }); continue; }
     const g = (t.ioExamples && t.ioExamples.length) ? null : goldModuleFor(t.label);   // אחרי combine: תוספת בלבד — לא מחליף מסלול קיים («רק את הפלוסים»)
-    if (g) { routes.push({ thing: t.label, route: 'gold', proposal: true, why: `הצעה (תוכן ממקום אחר): כותרות-זהב של ${path.basename(g.module)} חוזרות על «${g.words.join(' ')}» ${g.score} פעמים`, module: g.module }); continue; }
+    if (g) { routes.push({ thing: t.label, route: 'gold', proposal: true, core: `כותרות-זהב של ${path.basename(g.module)} חוזרות על «${g.words.join(' ')}» ${g.score} פעמים`, why: `הצעה (תוכן ממקום אחר): כותרות-זהב של ${path.basename(g.module)} חוזרות על «${g.words.join(' ')}» ${g.score} פעמים`, module: g.module }); continue; }
     // «אין» רק אחרי חיפוש (הכרעת-בעלים 23.9): כל מילה ביחידה נבדקת מול המדף (על אילו חלקיקים היא כתובה), מול שדות בגזע, ומול הגדרה זכורה; המסך-הדומה כבר נמדד
     const search = toks(t.label).filter((w) => !form.things.some((x) => x !== t && (sameStem(w, x.label) || (x.fields || []).some((f) => sameStem(w, f.label))))).map((w) => {
       const c = carriersOf(w); const fields = form.things.flatMap((x) => (x.fields || []).filter((f) => sameStem(w, f.label)).map((f) => `${x.label}.${f.label}`)); const rec = recall(w);
@@ -99,7 +108,7 @@ export function routeOf(form, answers = {}, { proposals = false } = {}) {
   }
   // דבר שנקרא כישות אבל הקטע שלו הוא סעיף-תנאי («התראה כשציון מתחת ל-55 וגם היעדרויות מעל 3» ⇒ «ישות התראה… עם היעדרויות מעל») — לא ישות: שורות-הספק שלו נמחקות
   const capThings = new Set(routes.filter((r) => r.route === 'capability').map((r) => r.thing));
-  const specLines = spec.spec.split('\n').filter((l) => { const m = l.match(/^(\S+)\s+(.+?)(?:\s+עם\s|:)/); if (bufThings.size && [...bufThings].some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; if (ruleThings.size && [...ruleThings].some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; if (srcThings.size && [...srcThings].some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; if (SHP && SHP.things.some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; return !(m && capThings.has(m[2].trim()) && entLabels.has(m[2].trim())); });
+  const specLines = spec.spec.split('\n').filter((l) => { const m = l.match(DECL_RE); if (bufThings.size && [...bufThings].some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; if (ruleThings.size && [...ruleThings].some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; if (srcThings.size && [...srcThings].some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; if (SHP && SHP.things.some((x) => new RegExp(`^\\S+\\s+${x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|:|$)`).test(l))) return false; return !(m && capThings.has(m[2].trim()) && entLabels.has(m[2].trim())); });
   return { routes, spec: specLines.join('\n'), skipped: spec.skipped, builtin: spec.builtin };
 }
 
@@ -145,7 +154,7 @@ export async function generateBalagan({ outDir } = {}) {
   const BG = await import('./balagan.mjs');
   const logs = []; const _l = console.log; console.log = (...a) => logs.push(a.join(' '));
   let r = null; try { r = BG.buildBalagan({ writeIndex: false, writeTest: false }); } finally { console.log = _l; }
-  for (const l of logs) if (/בלגן/.test(l)) notes.push(l.slice(0, 200));
+  for (const l of logs.slice(-6)) notes.push(l.slice(0, 200));
   const out = R.outDir(); const files = fs.existsSync(out) ? fs.readdirSync(out).filter((f) => /^gen_balagan_.*\.dart$/.test(f)).map((f) => ({ route: 'balagan', file: path.join(out, f) })) : [];
   return { files, notes, modules: r ? r.mods.length : 0, bad: r ? r.bad : [], spec: r ? `(בלגן) ${r.mods.length} מודולים: ${r.mods.map((m) => m.title).join(' · ')}` : '' };
 }
@@ -180,11 +189,11 @@ export async function generateFromDoc(md, { outDir, name = 'doc' } = {}) {
   } catch (e) { r.notes.push(`הקורא לא רץ: ${String(e.message || e).slice(0, 120)}`); }
   // השלמות של peruk (הכרעה-27: שדות-אדם, שלבים — מהדאטה שלו, לא מהמסמך) ⇒ שאלות: תווית שאף מילה שלה (גזע ≥3) אינה במסמך = הושלמה, לא נאמרה
   try {
-    const st = (w) => w.replace(/(ים|ות|ה)$/, ''); const docStems = new Set(toks(md).map(st).filter((w) => w.length >= 3));
+    const st = (w) => w.replace(SUFFIX_RE, ''); const docStems = new Set(toks(md).map(st).filter((w) => w.length >= 3));
     const latin = new Set((md.match(/[A-Za-z_]+/g) || []).map((w) => w.toLowerCase())); const said = (label) => toks(label).map(st).filter((w) => w.length >= 3).some((w) => docStems.has(w)) || (label.match(/[A-Za-z_]+/g) || []).some((w) => latin.has(w.toLowerCase()));   // גם מילים לועזיות (נמדד: «ok» במירון/72 סומן «לא נאמר»)
     const completed = [];
     for (const l of spec.split('\n')) {
-      const m = l.match(/^ישות\s+(.+?)\s+עם\s+(.+)$/); if (!m) continue;
+      const m = l.match(ENT_FIELDS_RE); if (!m) continue;
       const [fieldsPart, ...secs] = m[2].split(/\s*\|\s*/);
       for (const f of fieldsPart.split(',').map((x) => x.replace(/\{[^}]*\}|\*|\[[^\]]*\]/g, '').trim()).filter(Boolean)) if (!said(f)) completed.push({ entity: m[1], kind: 'שדה', value: f });
       for (const s of secs) { const sm = s.match(/^\S+\s*:?\s*(.+)$/); if (!sm) continue; for (const v of sm[1].split(',').map((x) => x.trim()).filter(Boolean)) if (!said(v)) completed.push({ entity: m[1], kind: 'שלב', value: v }); }
@@ -219,7 +228,7 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   for (const sw of yesh.switches) questions.push({ thing: 'הישיבה', ask: sw.move || sw.kind, q: `${sw.move || sw.kind}: ${sw.text}` });
   if (yesh.note) notes.push(yesh.note);
   if (yesh.rulings.length) notes.push(`הפוסק: ${yesh.rulings.filter((r) => r.decided).length} הוכרעו · ${yesh.switches.length} מתגים`);
-  for (const r of held) notes.push(`הצעה לא נבנתה («${r.thing}» ⇒ ${r.route}): ${r.why.replace(/^הצעה \(תוכן ממקום אחר\): /, '')} — לבנייה: proposals / --proposals`);
+  for (const r of held) notes.push(`הצעה לא נבנתה («${r.thing}» ⇒ ${r.route}): ${r.core || r.why} — לבנייה: proposals / --proposals`);
   // 1 · capability — פעם אחת לכל קטע-תנאי
   const capSegs = [...new Map(routes.filter((r) => r.route === 'capability' && !r.tail).map((r) => [r.seg, r.clauses])).entries()];   // מדרגות: קטע-הזנב («90, 60») שייך לראש
   capSegs.forEach(([seg, clauses], i) => { const cls = `GenCap${i + 1}Screen`; if (clauses.every((c) => c.kind === 'levels')) return; const code = emitAppFrom(clauses.filter((c) => c.kind !== 'levels'), seg, cls); const f = path.join(outDir, `gen_cap${i + 1}.dart`); fs.writeFileSync(f, code); files.push({ route: 'capability', file: f, seg, thresholds: clauses.map((c) => `${c.x} ${c.op} ${c.n ?? '?'}`) }); });
@@ -240,9 +249,9 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   if (app && Array.isArray(app.liveExtras) && !inRepo(process.env.GEN_OUT)) {
     const IN = await import('./insight.mjs');
     for (const x of app.liveExtras) { if (x.shape) continue; if (!x.live) { notes.push(x.why || `הרכבה «${x.name}»: אין ישות עם השדה ⇒ נשאר מסך-capability (דמו)`); if (x.ask) questions.push({ thing: x.name, ask: x.ask, q: x.why }); else if (!x.why && x.clause && x.clause.x) questions.push({ thing: x.name, ask: 'field', key: x.clause.x, q: `«${x.clause.x}» (ב«${x.name}») אינו שדה באף טבלה ⇒ נבנה מסך-דמו. מה זה: שדה של טבלה, או חישוב משדות קיימים?` }); continue; }   // נתקע ⇒ שאלה, לא דמו בשקט
-      const entLine = spec.split('\n').find((l) => new RegExp(`^ישות\\s+\\S.*\\s+עם\\s`).test(l) && (() => { const m = l.match(/^ישות\s+(.+?)\s+עם\s+(.+)$/); return m && Object.entries({}).length === 0 && x.live.slug && true; })());
-      const ents = spec.split('\n').map((l) => l.match(/^ישות\s+(.+?)\s+עם\s+(.+)$/)).filter(Boolean).map((m) => ({ name: m[1].trim(), fields: m[2].split('|')[0].split(/[,،]/).map((f) => f.trim().replace(/\{[^}]*\}$/, '')).filter(Boolean) }));
-      const entOfSlug = (sl) => { const m0 = spec.split('\n').map((l) => l.match(/^ישות\s+(.+?)\s+עם\s/)).filter(Boolean).map((m) => m[1].trim()); return ents.find((e) => app.nameToSlug && app.nameToSlug[e.name] === sl) || null; };
+      const entLine = spec.split('\n').find((l) => new RegExp(`^${ENT_W}\\s+\\S.*\\s+${WITH_W}\\s`).test(l) && (() => { const m = l.match(ENT_FIELDS_RE); return m && Object.entries({}).length === 0 && x.live.slug && true; })());
+      const ents = spec.split('\n').map((l) => l.match(ENT_FIELDS_RE)).filter(Boolean).map((m) => ({ name: m[1].trim(), fields: m[2].split('|')[0].split(/[,،]/).map((f) => f.trim().replace(/\{[^}]*\}$/, '')).filter(Boolean) }));
+      const entOfSlug = (sl) => { const m0 = spec.split('\n').map((l) => l.match(ENT_NAME_RE)).filter(Boolean).map((m) => m[1].trim()); return ents.find((e) => app.nameToSlug && app.nameToSlug[e.name] === sl) || null; };
       const ent = (x.live.kind === 'refCount' || x.live.kind === 'agg' || x.live.kind === 'aggBy' || x.live.kind === 'linked' || x.live.kind === 'expr') ? (entOfSlug(x.live.slug) || ents.find((e) => e.fields.includes(x.live.field)) || ents[0]) : (ents.find((e) => e.fields.includes(x.live.field)) || ents[0]);
       // מונה-קשר: רשומות-הבנות מהדוגמאות של ישות-הבת (השדה המצביע ⇐ live.childField); הורה מזוהה לפי השדה הראשון שלו
       const childRecs = (() => { if (x.live.kind !== 'refCount') return null; const ce = ents.find((e) => app.nameToSlug && app.nameToSlug[e.name] === x.live.childSlug); if (!ce) return null; const SLc = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8')); const l = spec.split('\n').find((q) => q.startsWith(`${SLc.exampleWord} ${ce.name}:`)); if (!l) return null; const cfi = ce.fields.indexOf(x.live.childField); return l.slice(l.indexOf(':') + 1).split(';').map((r) => r.split(/[,،]/).map((v) => v.trim())).map((r) => (r[cfi] || '').trim()); })();
@@ -349,11 +358,11 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
       //   (ד) שלב-ביניים מהבעלים (mid) ⇒ שני חיפושים קצרים · הצלחה מהרכבה (שרשרת ≥2 / ג / ד) ⇒ נולדת. כישלון ⇒ שאלה על שלב-ביניים, לא «אין» יבש.
       if (exs.every(Boolean) && exs.length) { const BN = await import('../../yeshiva/born.mjs'); const hit = BN.find(SY, exs);
         if (hit) { rec.synth = hit.chain; rec.born = 'found'; rec.synthNote = `נמצא במדף-הנולדים: ${hit.chain.join('∘')} (נולד ${String(hit.at).slice(0, 10)} ל«${hit.thing}») — הוכח בהרצה על ${exs.length} הדוגמאות, בלי חיפוש`; }
-        else { let r = SY.synthesize(n.demand, exs), how = r ? `הוכח ב-synth: ${r.chain.join('∘')}${r.alts ? ` (+${r.alts} שקולות)` : ''}${r.shortcut ? ' · אטום-יחיד' : ''}` : '';
+        else { let r = SY.synthesize(n.demand, exs); const plainSynth = !!r; let how = r ? `הוכח ב-synth: ${r.chain.join('∘')}${r.alts ? ` (+${r.alts} שקולות)` : ''}${r.shortcut ? ' · אטום-יחיד' : ''}` : '';
           if (!r) { const c = BN.compose(SY, n.demand, exs); if (c) { r = { chain: c.chain }; how = `הוכח מנולד «${c.via.thing}» (${c.via.chain.join('∘')}) + synth: ${c.chain.join('∘')} — עומק ${c.chain.length}`; } }
           if (!r && n.mid) { const st = BN.steps(SY, n.demand, exs, n.mid); if (st && st.chain) { r = { chain: st.chain }; how = `הוכח משלב-הביניים שנתת (${n.mid.join(', ')}): ${st.chain.join('∘')}`; } else how = `שלב-הביניים (${n.mid.join(', ')}) לא נסגר: ${st && st.failed === 'first' ? 'קלט ⇒ ביניים' : st && st.failed === 'second' ? 'ביניים ⇒ פלט' : 'השרשרת המלאה'} לא נמצא`; }
           rec.synth = r ? r.chain : null; rec.synthNote = r ? how : (how || 'synth: לא נמצאה שרשרת (עומק≤4)');
-          if (r && (r.chain.length >= 2 || !/^הוכח ב-synth/.test(how))) { BN.add({ thing: n.thing || n.demand, demand: n.demand, chain: r.chain, behavior: n.behavior || { examples: n.examples, params: n.params, ret: n.ret }, how }); rec.born = 'new'; rec.synthNote += ' · 🐣 נולד למדף-הנולדים'; }
+          if (r && (r.chain.length >= 2 || !plainSynth)) { BN.add({ thing: n.thing || n.demand, demand: n.demand, chain: r.chain, behavior: n.behavior || { examples: n.examples, params: n.params, ret: n.ret }, how }); rec.born = 'new'; rec.synthNote += ' · 🐣 נולד למדף-הנולדים'; }
           if (!r && !rec.plan) questions.push({ thing: n.thing || n.demand, ask: 'mid', key: n.thing || n.demand, q: `«${n.thing || n.demand}»: אין אטום ואין הרכבה עד עומק 4 — תן שלב-ביניים: לכל דוגמה (${exs.map((e) => e.in).join(' / ')}) הערך שבאמצע הדרך ⇒ שני חיפושים קצרים ⇒ אטום חדש נולד` }); } }
       else { rec.synthNote = 'synth: לא חל — הדוגמאות עם כמה ארגומנטים (ההשחלה היא קלט-יחיד) ⇒ מנוע-התכנון (Dart, רב-פרמטרי)';
         // מסך רב-קלט: העץ שמנוע-התכנון הוכיח ⇒ ביטוי-Dart (אטום · פרמטר · קבוע) ⇒ שדה לכל קלט + התוצאה חיה. צומת אחר (זמן/שקע/תנאי) ⇒ מדווח, בלי מסך
@@ -402,11 +411,11 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   if (spec) {
     try {
       const [GE, GS, GL, GB, GN] = await Promise.all(['engine', 'shelf', 'lang', 'build', 'lenses'].map((m) => import(`../../gen/${m}.mjs`)));
-      const ents = spec.split('\n').filter((l) => /^ישות /.test(l));
-      const roles = spec.split('\n').filter((l) => /^תפקיד /.test(l));
-      const dash = spec.split('\n').filter((l) => /^לוח בקרה עם /.test(l)).map((l) => l.replace(/^לוח בקרה עם\s*/, '').split(',').map((p) => p.trim()).filter((p) => /^\S+?\(.+?\..+?\)$/.test(p))).flat();
-      const appLine = spec.split('\n').find((l) => /^[^\s:]+: /.test(l) && !/^(ישות|דוגמה|תפקיד|עיצוב|שרת|דוח|תוכן|חלקיק) /.test(l));   // ראש-המשפט (specOf: «<appWord>: <head>») ⇒ שם-האפליקציה בתאום, לא שם-הריצה
-      const genSpec = [appLine || `אפליקציה: ${name}`, ...ents, ...(dash.length ? [`לוח בקרה עם ${dash.join(', ')}`] : []), ...roles].join('\n');
+      const ents = spec.split('\n').filter((l) => ENT_LINE_RE.test(l));
+      const roles = spec.split('\n').filter((l) => ROLE_LINE_RE.test(l));
+      const dash = spec.split('\n').filter((l) => DASH_LINE_RE.test(l)).map((l) => l.replace(DASH_LINE_RE, '').split(',').map((p) => p.trim()).filter((p) => /^\S+?\(.+?\..+?\)$/.test(p))).flat();
+      const appLine = spec.split('\n').find((l) => /^[^\s:]+: /.test(l) && !NOT_APP_RE.test(l));   // ראש-המשפט (specOf: «<appWord>: <head>») ⇒ שם-האפליקציה בתאום, לא שם-הריצה
+      const genSpec = [appLine || `${SLG.appWord}: ${name}`, ...ents, ...(dash.length ? [`לוח בקרה עם ${dash.join(', ')}`] : []), ...roles].join('\n');
       const { report, app: html } = await GE.runGenerator({ specText: genSpec, slug: slug(name), shelf: GS.readShelf(), NEEDS: GB.NEEDS, LANG: GL.loadLang({ write: false }) });
       fs.writeFileSync(path.join(outDir, 'app.html'), html);
       fs.writeFileSync(path.join(outDir, 'gen-report.json'), JSON.stringify({ ...report, atoms: report.atoms.map(({ src, ...a }) => a) }, null, 1));

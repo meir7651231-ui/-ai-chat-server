@@ -191,7 +191,7 @@ export async function shapeSearch(sentence, form, routed, answers, skip = new Se
       const want = said && (D.T.yesWords || []).includes(said) ? null : wantOf(said);   /* ⚖ כגון: «מזרחית 290, ציון 50» ⇒ דוגמת-תוצאה */
       const r = SH.searchLinked(parent, ents.filter((c) => c !== parent), { text: seg, within: D.T.withinWords || [], want }); if (!r.results.length) continue;
       const sig = 'link:' + r.children.map((c) => `${c}(${r.shapes[c].map((x) => x.kind).join(',')})`).join('+'); const show = (x) => x.out.map((o) => `${o.key} ${o.value}`).join(' · ');
-      for (const k of r.kush) out.notes.push(fill(D.T['kush_' + (k.k === 'אין לי אלא' ? 'ein' : k.k === 'מאי' ? 'mai' : 'kgon')], { ent: parent.label, list: (k.list || []).join(' · '), v: k.v, col: k.col, child: k.child, n: k.n }));
+      for (const k of r.kush) out.notes.push(fill(D.T['kush_' + ((D.kushKeys || {})[k.k] || 'kgon')], { ent: parent.label, list: (k.list || []).join(' · '), v: k.v, col: k.col, child: k.child, n: k.n }));
       answers.__kush = r.kush.map((k) => k.k);
       const known = formsAll().filter((x) => x.kind === 'table' && x.sig === sig && r.results.some((y) => y.atom.name === x.atom)).pop();
       const pick = known ? r.results.find((y) => y.atom.name === known.atom) : r.pick ? r.pick : said && (D.T.yesWords || []).includes(said) ? r.results[0] : said ? r.results.find((y) => y.atom.name === said) : null;

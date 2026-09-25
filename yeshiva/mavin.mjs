@@ -34,13 +34,13 @@ const ANSWERS = () => process.env.MAVIN_ANSWERS || path.join(R.ROOT, '.maimatai'
 //   «_» בתוך מילה = רווח של ערך רב-מילי בסוגריים («חבר קהילה» ⇒ «חבר_קהילה» ב-formOf; enumOf מחזיר את הרווח)
 export const toks = (s) => [...String(s || '').matchAll(/[֐-׿]+(?:["״׳'_][֐-׿]+)*(?:\s*\/\s*[֐-׿]+(?:["״׳'_][֐-׿]+)*)+|[֐-׿]+(?:["״׳'_][֐-׿]+)*|\d+|[A-Za-z]+/g)].map((m) => m[0].replace(/\s*\/\s*/g, '/'));   // «בעד/נגד/נמנע» = אסימון אחד: בחירה-אחת-מכמה (צורה)
 const stripLead = (w) => { const out = [w]; for (let k = 1; k <= 2 && w.length - k >= 3; k++) out.push(w.slice(k)); return out; };   // (ג)
-const isMany = (w) => w.length >= 4 && /(ים|ות)$/.test(w) && !SINGULAR.has(w);                                                 // (א) · «כמות»/«נוכחות» = יחיד (דאטה של gen/lang)
-const stem = (w) => w.replace(/(ים|ות|ה)$/, '');
+const isMany = (w) => w.length >= 4 && PLURAL_RE.test(w) && !SINGULAR.has(w);                                                 // (א) · «כמות»/«נוכחות» = יחיד (דאטה של gen/lang)
+const stem = (w) => w.replace(STEM_RE, '');
 /** אותו גזע: מילה (אולי עם 1–2 אותיות פותחות) ⇔ תווית. צורה בלבד — לשימוש הדלת (הגדרות-מילים). */
 export const sameStem = (w, label) => toks(label).some((lw) => stripLead(stem(w)).some((f) => f.length >= 3 && f === stem(lw)));
 /** האות-הפותחת של מילה שגזעה = תווית (כש+תלמיד ⇒ «כש»); null כשאין התאמה. */
 export const leadOf = (w, label) => { const sw = stem(w); for (let k = 0; k <= 2; k++) { if (sw.length - k < 3) break; if (toks(label).some((lw) => sw.slice(k) === stem(lw))) return w.slice(0, k); } return null; };   // (ג') גם «ה» סופית להשוואת יחיד↔רבים (משימה↔משימות)
-const itemMany = (item) => isMany(item[0]) || isMany(item[item.length - 1]) || (item.length > 1 && /י$/.test(item[0]));   // «קבלני משנה» — סמיכות-רבים (י + מילה שנייה)
+const itemMany = (item) => isMany(item[0]) || isMany(item[item.length - 1]) || (item.length > 1 && CONSTRUCT_RE.test(item[0]));   // «קבלני משנה» — סמיכות-רבים (י + מילה שנייה)
 
 // ── פיזור מהקטלוג: על כמה מינים שונים של חלקיקים כתובה המילה (משפט-המטרה בראש הקובץ), לפי שכבה ──
 let _spread = null, _ops = 0;
@@ -82,6 +82,9 @@ const NL = (() => { try { const d = JSON.parse(fs.readFileSync(R.GEN_DIR + 'nl-l
 const GEN_EXTRA = (() => { try { return (JSON.parse(fs.readFileSync(path.join(R.ROOT, 'gen/lang.data.json'), 'utf8')).extra) || {}; } catch { return {}; } })();
 for (const w of GEN_EXTRA.leadins || []) NL.leadins.add(w);
 const SINGULAR = new Set(GEN_EXTRA.singular || []);
+// דקדוק-הצורה מהדאטה (spec-lang.data.json): סיומות-רבים · סיומת-סמיכות · «יש» — אפס עברית-בקוד (P1 · L105)
+const SLM = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8'));
+const PLURAL_RE = new RegExp(`(${SLM.pluralSuffixes.join('|')})$`), STEM_RE = new RegExp(`(${SLM.stemSuffixes.join('|')})$`), CONSTRUCT_RE = new RegExp(`${SLM.constructSuffix}$`);
 const isMark = (w) => NL.marks.has(w);
 const isLeadin = (w) => NL.leadins.has(w);   // «יש גם שכונה» ⇒ «גם» = מילת-פתיחה של מנוע-המשפט, לא חלק מתווית-השדה
 const isEach = (w) => stripLead(w).some((f) => NL.each.has(f));   // «לכל» ⇒ «כל»
@@ -110,7 +113,7 @@ function listOf(segment) {
   else for (let i = 0; i < first.length - 1; i++) if (isSpreadTok(first[i])) cut = i + 1;   // האיבר עצמו (המילה האחרונה) לעולם אינו «מפוזר»
   if (cut < 0) cut = first.length - 1;   // אין מילה מפוזרת לפני ⇒ האיבר = המילה האחרונה בלבד («לרכב יש יצרן» ⇒ «יצרן»)
   let before = first.slice(0, cut), item0 = first.slice(cut);
-  if (item0.length > 1 && isMany(item0[item0.length - 1]) && !/י$/.test(item0[0])) { before = [...before, ...item0.slice(0, -1)]; item0 = item0.slice(-1); }   // «לניהול לקוחות» ⇒ האיבר «לקוחות»
+  if (item0.length > 1 && isMany(item0[item0.length - 1]) && !CONSTRUCT_RE.test(item0[0])) { before = [...before, ...item0.slice(0, -1)]; item0 = item0.slice(-1); }   // «לניהול לקוחות» ⇒ האיבר «לקוחות»
   const dropped = [];
   const markedHead = before.some(isMark);   // ראש עם סמן-שדות («לכל אדם יש») ⇒ האיברים הם תוויות-שדה של הבעלים — לא גוזמים מהם מילים «מפוזרות» («שם האם» נשאר «שם האם»)
   const items = [item0, ...parts.slice(1)].map(deVav).map((it) => { let k = 0; while (k < it.length - 1 && (markedHead ? isLeadin(it[k]) : isSpreadTok(it[k]))) dropped.push(it[k++]); return it.slice(k); }).filter((it) => it.length);   // «כמה עזבו» ⇒ «עזבו»; «כמה» ⇒ מסגרת
@@ -133,7 +136,7 @@ export function formOf(sentence0) {
   const ex = splitExamples(String(sentence0 || '')); sentence0 = ex.text;
   // ⊕ שדה-נוסחה «פער=ספירה-מצלמות» / «מצב=פער > 5000 ? טווח : מסכימים» (אותה שפה כמו בספק — entity.mjs/render-ds): נשמר בצד לפני
   //    הפירוק למילים (שמוחק = > ? :) ⇒ השדה נשאר בשמו ⇒ הנוסחה חוזרת אליו בסוף (הכרעת-בעלים 24.9 «תסגור הכל»)
-  const FORM = {}; sentence0 = String(sentence0 || '').replace(/(,\s*|יש\s+)([֐-׿][֐-׿\w_]*)=(?=\S)([^,;]+?)(?=\s*[,;]|\.(?:\s|$)|$)/g, (m, pre, name, expr) => { FORM[name] = expr.trim(); return pre + name; });
+  const FORM = {}; sentence0 = String(sentence0 || '').replace(new RegExp(`(,\\s*|${SLM.haveWord}\\s+)([֐-׿][֐-׿\\w_]*)=(?=\\S)([^,;]+?)(?=\\s*[,;]|\\.(?:\\s|$)|$)`, 'g'), (m, pre, name, expr) => { FORM[name] = expr.trim(); return pre + name; });
   // סוגריים אחרי מילה = ערכים-מותרים (צורה, כמו לוכסן): «שפה (עברית, יידיש, אנגלית)» ⇒ «שפה עברית/יידיש/אנגלית» ⇒ שדה «שפה» עם enum
   const sentence = String(sentence0 || '').replace(/\(([^()]*)\)/g, (m, inner) => { const vs = inner.split(/[,،]/).map((s) => s.trim().replace(/\s+/g, '_')).filter(Boolean); return vs.length > 1 ? ' ' + vs.join('/') + ' ' : m; });
   const words = toks(sentence);

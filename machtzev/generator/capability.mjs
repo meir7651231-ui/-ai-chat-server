@@ -6,7 +6,10 @@ import { selectAtom } from './render-ds.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import * as R from '../root.mjs';
-import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
+import { rminhu, had, pliga, lo } from '../../yeshiva/rminhu.mjs';
+// דקדוק-הצורה מהדאטה (spec-lang.data.json): «ש» צמודה · ה/מה הידיעה · «את» — אפס עברית-בקוד (P1 · L105)
+const SLC = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8'));
+const CLITIC_RE = new RegExp(`${SLC.whenClitic}$`), ARTICLES = [...SLC.articlePrefixes].sort((a, b) => b.length - a.length), OBJ_RE = new RegExp(`(?:^|\\s)${SLC.objectMarker}\\s+(.+)`);   // 🕯️ «אין» = «לא-חיפשת» (הכרעה-23)
 const ATOM_INDEX = JSON.parse(fs.readFileSync((R.GEN_DIR + 'atom-index.json'), 'utf8'));
 const fileOf = (cls) => { const a = ATOM_INDEX.find((e) => e.cls === cls); return a ? a.file : null; };
 
@@ -31,20 +34,20 @@ const definalize = (s) => String(s).replace(/ך/g, 'כ').replace(/ם/g, 'מ').re
 // מרקרי-תנאי מבניים (כמו 'עם' מפריד-שדות) — סגור. בלי \b (ASCII-בלבד, לא נדלק על עברית).
 /** מילת-תנאי כמילה, לא כאותיות: רק בתחילת-מילה · מילה שלמה («כאשר») ⇒ לא צמודה לאות · קידומת («כש», «ברגע ש») ⇒ אחריה מילה אמיתית (≥2 אותיות, או מזהה לועזי «כשstay»).
  *  «כשדקות» / «כשהמתנה» = תנאי · «כשל» (כש+ל) / «הכשרה» (באמצע) = לא. מקור אחד לדלת (mavin.formOf) ולגלאי. */
-export const whenRegex = (list) => new RegExp('(?<![\u0590-\u05FF])(?:' + list.map((w) => /ש$/.test(w) ? escRe(w) + '(?=[\u0590-\u05FF]{2}|[A-Za-z])' : escRe(w) + '(?![\u0590-\u05FF])').join('|') + ')');
+export const whenRegex = (list) => new RegExp('(?<![\u0590-\u05FF])(?:' + list.map((w) => CLITIC_RE.test(w) ? escRe(w) + '(?=[\u0590-\u05FF]{2}|[A-Za-z])' : escRe(w) + '(?![\u0590-\u05FF])').join('|') + ')');
 const WHEN = whenRegex(COND.when);
 const hw = (s) => [...String(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
 // קילוף-קידומת חד-אותית (ה/ו/ש/כ/ל/ב/מ) לצורך התאמת-שדה — רק אם המילה נשארת ≥2 אותיות.
 // קילוף-קידומת שמרני: "מה..." (מן-ה) ⇒ קלף 2 · "ה..." (יידוע) ⇒ קלף 1. לעולם לא מ' בודדת
 // (שורש: מעבד/מלאי/מחיר) ⇒ מונע over-strip. עיוור-דומיין, מבני.
-const deprefix = (w) => { const s = String(w); if (/^מה../.test(s)) return s.slice(2); if (/^ה./.test(s) && s.length > 2) return s.slice(1); return s; };
+const deprefix = (w) => { const s = String(w); for (const p of ARTICLES) if (s.startsWith(p) && s.length >= p.length + 2) return s.slice(p.length); return s; };
 // שם-הערך = צירוף-השם המלא של סעיף-הערך (לא מילה בודדת) — כך סמיכות/שייכות נשמרות נכון:
 // "עומס המעבד"·"יתרת החשבון"·"לחות הקרקע"·"דופק של המטופל". קילוף-יידוע על המילה הראשונה בלבד.
 const cleanPhrase = (words) => words.length ? [deprefix(words[0]), ...words.slice(1)].join(' ') : '';
 
 // גלאי סעיף-התראה-מותנית: "<trigger> ... כש <X> <REL> <Y>". מבני בלבד.
 // מחזיר {trigger, xWords, op, yWords} או null. אינו יודע מה X/Y — רק צורתם.
-const SL_T = JSON.parse(fs.readFileSync((R.GEN_DIR + 'spec-lang.data.json'), 'utf8')); const TIME_UNITS = SL_T.timeUnits || {}; const TIME_ASK = new Set(SL_T.timeUnitsAsk || []);   // «חודש» = שאלה, לא 30
+const SL_T = SLC; const TIME_UNITS = SL_T.timeUnits || {}; const TIME_ASK = new Set(SL_T.timeUnitsAsk || []);   // «חודש» = שאלה, לא 30
 // ═══ form: condition (num · age · eq) = WHEN ⊕ REL ⊕ detectAlertClause
 export function detectAlertClause(text) {
   const t = String(text || '');
@@ -136,7 +139,7 @@ export function detectAllClauses(text) {
     let whenWord = null; const pieces = seg.split(CONN_RE);   // [חלק, מחבר, חלק, מחבר, …]
     for (let i = 0; i < pieces.length; i += 2) { const part = pieces[i], conn = i > 0 ? pieces[i - 1] : null;
       let d = detectAlertClause(part);
-      if (!d && conn && whenWord) d = detectAlertClause(/ש$/.test(whenWord) ? `${whenWord}${part.trim()}` : `${whenWord} ${part}`);   // «כש» + «כיתה» = «כשכיתה» (whenRegex: מילת-תנאי צמודה)
+      if (!d && conn && whenWord) d = detectAlertClause(CLITIC_RE.test(whenWord) ? `${whenWord}${part.trim()}` : `${whenWord} ${part}`);   // «כש» + «כיתה» = «כשכיתה» (whenRegex: מילת-תנאי צמודה)
       if (!d) continue;
       if (!whenWord) { const m = part.match(WHEN); whenWord = m ? m[0] : null; }
       if (conn) { if (OR_RE.test(conn)) d.or = true; else d.and = true; }   // «או» = חלופה (איחוד) · «וגם» = צירוף (חיתוך)
@@ -157,7 +160,7 @@ export function emitAppFrom(clauses, text, cls = 'GenCapScreen') {
     units = clauses.map((f, i) => ({ i, label: f.x, op: f.op === '<' ? '<' : '>', alert: true, trigger: f.trigger, thr: f.n != null && f.n !== '' && !isNaN(+f.n) ? +f.n : null }));
   } else {
     // אין תנאי ⇒ צורך של יכולת-**אחת** (תצוגה). עוגן: מושא-ישיר 'את X' (חלקיק דקדוקי, אפס-מילון).
-    const m = String(text || '').match(/(?:^|\s)את\s+(.+)/);
+    const m = String(text || '').match(OBJ_RE);
     const val = m ? cleanPhrase(hw(m[1]).slice(0, 3)) : '';
     if (!val) {
       //    🕯️ «לא נמצאו יכולות» היא «אין» על **המשפט**, ולכן נפסק על כל חלקיק-דקדוק שנסרק בשמו
