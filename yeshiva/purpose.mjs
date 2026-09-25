@@ -88,7 +88,8 @@ const TYPE_KEYS = Object.keys(SPL).filter((k) => /^type[A-Z]/.test(k) && Array.i
 // רק שלוש צורות חד-משמעיות; רמז בלי צורה מוכרת אינו נקשר לשקע (∅, לא ניחוש).
 const TYPE_SHAPE = { typeDate: /date/i, typeNum: /number/i, typePercent: /number/i, typeBool: /bool/i };
 const DATE_SHAPE = TYPE_SHAPE.typeDate;   // צורת-הערך של שקע-תאריך — **אותו** ביטוי, לא עותק שני
-const CMP_WORDS = [['מעל', SPL.amountAbove || []], ['מתחת', SPL.amountBelow || []]];
+const CMP_WORDS = [[SPL.cmpLabels['>'], SPL.amountAbove || []], [SPL.cmpLabels['<'], SPL.amountBelow || []]];   // תוויות-הכיוון מהדאטה (P1)
+const CMP_DIR = { [SPL.cmpLabels['>']]: '>', [SPL.cmpLabels['<']]: '<' };
 
 const heW = (s) => [...String(s || '').matchAll(/[א-ת][א-ת'"״׳]*/g)].map((m) => m[0]);
 const stemsOf = (s) => heW(s).map(stem).filter((w) => w.length > 1);
@@ -104,7 +105,7 @@ export function isGoalVerb(w) {
   if (SCAF.has(w)) return false;
   // מילה שמוצהרת כדקדוק-שפת-האפיון (לקסיקון-החלקים · סימני-המקטע) אינה פועל.
   if (GRAMW.has(w)) return false;
-  if (!cands.some((v) => v.length >= 4 && v[0] === 'ל' && !SCAF.has(v))) return false;
+  if (!cands.some((v) => v.length >= 4 && v[0] === SPL.infinitivePrefix && !SCAF.has(v))) return false;
   // ל־ היא גם אות-שימוש על שם-עצם («למתנדב»). ההכרעה נופלת על **שרשרת-המקור**,
   // לא על מילון: מה שיש לו מחלקת-סכמה או רמז-טיפוס הוא שם-עצם, ולא פועל-מטרה.
   return !classOf(w) && !typeHint(w);
@@ -281,7 +282,7 @@ export function goalPsak(sentence, origin = 'מטרה') {
       rulings: declMiss.concat(ws.map((w) => {
         const PFX = SPL.prefixLetters || '';
         const cands = [w]; if (w.length > 4 && PFX.includes(w[0])) cands.push(w.slice(1));
-        if (!cands.some((v) => v.length >= 4 && v[0] === 'ל')) return lo(w, 'אינה בצורת שם-פועל (ל… באורך ≥4) — אינה מועמדת לפועל-מטרה מבנית, ולא נפסלה בשרשרת');
+        if (!cands.some((v) => v.length >= 4 && v[0] === SPL.infinitivePrefix)) return lo(w, 'אינה בצורת שם-פועל (ל… באורך ≥4) — אינה מועמדת לפועל-מטרה מבנית, ולא נפסלה בשרשרת');
         const k = (() => { try { return classOf(w); } catch { return null; } })();
         const t = typeHint(w);
         if (k || t) return pliga(w, `בצורת ל… אך ${k ? `יש לה מחלקת-סכמה (${k.cls || (k.options || []).join('/')})` : `יש לה רמז-טיפוס (${t.type || (t.options || []).join('/')})`} — ל־ כאן היא אות-שימוש על שם-עצם, לא שם-פועל; המשמר הוא שרשרת-המקור ולא מילון`);
@@ -399,7 +400,7 @@ export function goalSlots(sentence, origin = 'מטרה') {
 //  עם השאלה המדויקת (L57). הדוגמאות עצמן אינן כאן: החוזה מצהיר `derive` (הסמנטיקה
 //  המבנית), והמקור-לדוגמאות נבחר ע"י הפקודה-האחת מנתוני-fixture שקיימים בריפו.
 const SIGNALS = { sum: SPL.pSum || [], count: SPL.pCount || [], avg: SPL.pAvg || [], list: SPL.pTable || [] };
-const CMP_TAG = { 'מעל': 'Over', 'מתחת': 'Under' };
+const CMP_TAG = { [SPL.cmpLabels['>']]: 'Over', [SPL.cmpLabels['<']]: 'Under' };
 const cap = (s) => String(s).charAt(0).toUpperCase() + String(s).slice(1);
 /** האם מילות-התביעה נושאות אות-סימן מדקדוק-החלקיקים (התאמת-`stem` של המדף). */
 const signalsIn = (words) => {
@@ -457,13 +458,13 @@ export function goalNeeds(sentence, origin = 'מטרה') {
       const src = [{ token: `'${F}'`, src: s.src }, { token: K, src: r.src }];
       const c0 = clockNeed(s); if (c0) ids.push(c0);
       ids.push(mk(`g${i + 1}.predicate.${F}${tag}${K}`, { shape: 'מועד', demand: purp([F, r.cmp]), params: ['String'], ret: 'bool',
-        clock: { type: 'String' }, consts: [K], sources: src, derive: { kind: 'threshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp } }));
+        clock: { type: 'String' }, consts: [K], sources: src, derive: { kind: 'threshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp, dir: CMP_DIR[r.cmp] } }));
       ids.push(mk(`g${i + 1}.predicate.record${Fc}${tag}${K}`, { shape: 'רשומות', demand: purp([F, r.cmp]), params: ['dynamic'], ret: 'bool',
         clock: { type: 'String' }, consts: [`'${F}'`, K], entity: s.cls, sources: src,
-        derive: { kind: 'recordThreshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp } }));
+        derive: { kind: 'recordThreshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp, dir: CMP_DIR[r.cmp] } }));
       ids.push(mk(`g${i + 1}.collection.${F}${tag}${K}List`, { shape: 'רשומות', demand: purp([F, r.cmp]), params: ['List<dynamic>'], ret: 'List<dynamic>',
         clock: { type: 'String' }, consts: [`'${F}'`, K], entity: s.cls, sources: src,
-        derive: { kind: 'filterThreshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp } }));
+        derive: { kind: 'filterThreshold', cls: s.cls, field: F, k: Number(K), cmp: r.cmp, dir: CMP_DIR[r.cmp] } }));
     }
     // ── 🕯️ שקע-תאריך שהתביעה **כבר קשרה**, בלי קבוע-סף (שלב-3 · PLAN-100 §3) ──────
     //  מה שנמדד: 40 מתוך 75 התביעות שנפלו על «ישות-בלי-שקע» נושאות דרישה שכבר

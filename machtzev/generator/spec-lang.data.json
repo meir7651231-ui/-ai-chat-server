@@ -681,5 +681,10 @@
   "ה"
  ],
  "objectMarker": "את",
- "andPrefix": "ו"
+ "andPrefix": "ו",
+ "cmpLabels": {
+  ">": "מעל",
+  "<": "מתחת"
+ },
+ "infinitivePrefix": "ל"
 }
