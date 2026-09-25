@@ -36,3 +36,19 @@ console.log(`✓ chaser: ${CH.kinds().length} סוגי-חסר רשומים (${CH
 { const a = detectAllClauses('התראה כשציון מתחת ל-55 וגם ציון מעל 10'), b = detectAllClauses('התראה כשזמן מאז לא מגיב מעל 0 וגם מונה אדם לכל אזור מעל 2');
   if (a.length !== 2 || !a[1].and || b.length !== 2 || !b[1].and) { console.error('🚨 chaser: «וגם» נבלע — ' + JSON.stringify([a.length, b.length])); process.exit(1); }
   console.log('✓ «וגם»: שני החלקים נקראים (גם אחרי «כש»)'); }
+// (9) ⇄ חלק-חסר עובר בערוץ (25.9 «תשדרג את הקיים»): «5 בעלי-תפקידים לא מגיבים באזור צפון» — המילה לא שם-טבלה ⇒ שאלה עם אפשרויות מהמחקר (לא «חסר» ועצירה)
+//     אחרי תשובה ⇒ השלב/השדה נשאלים בנפרד · «אזור» ⇒ שדה zone דרך השם-הלועזי שבמסמך (Zone) · כל חלק נרשם ב-subs ואף אחד לא שקט
+{ const Z = { name: 'אזור', alias: ['Zone'], fields: ['geometry', 'sector'], stages: ['open'] }, A = { name: 'אדם', alias: ['Person'], fields: ['code', 'roles', 'sector'], stages: ['registered', 'on site'] }, S = { name: 'שיבוץ', alias: ['Assignment'], fields: ['person', 'zone'], stages: [] };
+  const R = { kind: 'rule', table: A, rule: { cond: '5 בעלי-תפקידים לא מגיבים באזור צפון', act: 'רשת' } };
+  const corpus = [{ text: 'אם 5 בעלי-תפקידים לא מגיבים, אדם אחד בודק. בעלי-תפקידים הם אדם עם תפקיד.' }];
+  const run = async (answers, tables) => { const cx = { K, answers, asked: new Set(), tables, corpus, subs: [], detect: detectAllClauses, alertWord: 'התראה', whenWord: 'כש', aboveWord: 'מעל', belowWord: 'מתחת ל', sinceWord: 'זמן מאז' }; return { d: (await CH.resolveAll([R], cx))[0], subs: cx.subs }; };
+  const a = await run({}, [Z, A, S]);
+  if (a.d.outcome !== 'question' || a.d.key !== 'מילה בעלי-תפקידים' || !/אדם/.test(a.d.q)) { console.error('🚨 chaser: מילה שאינה שם-טבלה חייבת שאלה עם אפשרויות מהמחקר: ' + (a.d.q || a.d.why)); process.exit(1); }
+  const b = await run({ 'מילה בעלי-תפקידים': 'אדם' }, [Z, A, S]);
+  if (b.d.outcome !== 'question' || b.d.key !== 'שלבים אדם') { console.error('🚨 chaser: אחרי תשובה — השלב נשאל: ' + b.d.key); process.exit(1); }
+  const A2 = { ...A, stages: [...A.stages, 'לא מגיב'] }; const c = await run({ 'מילה בעלי-תפקידים': 'אדם', 'שדה אדם: אזור': 'sector' }, [Z, A2, S]);
+  if (c.d.outcome !== 'clause' || !/זמן מאז לא מגיב מעל 0 וגם מונה אדם לכל sector מעל 4/.test(c.d.clause)) { console.error('🚨 chaser: אחרי התשובות — הרכבה: ' + (c.d.clause || c.d.q)); process.exit(1); }
+  const S2 = { ...S, stages: ['לא מגיב'] }; const e = await run({ 'מילה בעלי-תפקידים': 'שיבוץ' }, [Z, A, S2]);
+  if (e.d.outcome !== 'clause' || !/לכל zone/.test(e.d.clause) || !e.subs.some((p) => p.by === 'byDoc')) { console.error('🚨 chaser: «אזור» ⇒ שדה zone דרך Zone שבמסמך: ' + (e.d.clause || e.d.q)); process.exit(1); }
+  for (const x of [a, b, c, e]) if (!x.subs.length || CH.silent(x.subs).length) { console.error('🚨 chaser: חלק-חסר לא עבר בערוץ / שקט'); process.exit(1); }
+  console.log(`✓ חלק-חסר ⇒ ערוץ: «${a.d.key}» (${a.d.q.match(/במחקר[^)]*/)?.[0] || '—'}) ⇒ «${b.d.key}» ⇒ «${c.d.clause}» · zone דרך המסמך`); }

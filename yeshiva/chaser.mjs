@@ -15,7 +15,7 @@ export function register(kind, name, run) { const a = REG.get(kind) || REG.set(k
 export const kinds = () => [...REG.keys()];
 /** gaps = [{kind, ...data}] ⇒ לכל חסר: outcome (clause|question|built|declared) + by (מי פתר) · silent = אין תוצאה בכלל */
 export async function resolveAll(gaps, ctx) {
-  const out = [];
+  const out = []; if (!ctx.need) ctx.need = (kind, data) => need(kind, data, ctx);
   for (const g of gaps) {
     const rs = REG.get(g.kind) || []; let res = null;
     for (const r of rs) { try { const a = await r.run(ctx, g); if (a && a.outcome) { res = { ...a, by: r.name }; break; } } catch (e) { res = { outcome: 'declared', why: `${r.name}: ${String(e.message || e).slice(0, 80)}`, by: r.name }; break; } }
@@ -24,6 +24,9 @@ export async function resolveAll(gaps, ctx) {
   }
   return out;
 }
+/** ⇄ חלק-חסר בתוך פותר (הכרעת-בעלים 25.9 «תשדרג את הקיים»): פותר שלא מצא חלק לא רושם «חסר» ועוצר — הוא שולח את החלק
+ *  לאותו ערוץ (kind='part') ⇒ חיפוש בשם · בהגדרות-המסמך · במחקר · שאלה. כל חלק נרשם ב-ctx.subs (השער בודק שאף חלק לא שקט) */
+export async function need(kind, data, ctx) { const r = (await resolveAll([{ kind, ...data }], ctx))[0]; (ctx.subs ??= []).push(r); return r; }
 /** השער: חסר שנכנס לערוץ ולא יצאה לו אף תוצאה */
 export const silent = (resolved) => resolved.filter((x) => !['clause', 'question', 'built', 'declared'].includes(x.outcome));
 export const summary = (resolved) => { const c = {}; for (const x of resolved) c[x.outcome || 'silent'] = (c[x.outcome || 'silent'] || 0) + 1; return c; };
