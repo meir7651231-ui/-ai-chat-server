@@ -103,6 +103,23 @@ const STR_RE = /^(label|title|caption|name|text|msg|message)$/;
 // = 2 מסגרות (יכולת-ההתראה מופעלת פעמיים). מחברים = חלקיקים מבניים (כמו של/עם), אפס-מילון-דומייני.
 /** צורת-מדרגות (הכרעת-בעלים 23.9 «צא לדרך»): ראש «<תווית> לפי <שדה>» + זנב «<n>, <n>» (שני קטעים, כי הדלת מפצלת על נקודתיים). מבני בלבד. */
 // ═══ form: levels = levels.head ⊕ levels.tail
+/** תנאי לפי צורה (העיקרון של capability בלי מרקר-WHEN): בקטע יש מספר, ולפניו (עד אסימון-אות-אחת כמו «ל») מילת-יחס מדקדוק-היחסים הסגור של capability
+ *  ⇒ סעיף {x: המילים שלפני היחס (בלי מסגרת), op, n: המספר של הבעלים, trigger: המילים שאחרי המספר}. קטע שכבר יש בו סעיף-טקסט (כש…) לא נבדק שוב. */
+export function clausesByForm(seg, frame = [], toks = (x) => String(x || '').split(/\s+/).filter(Boolean)) {
+  if (detectAllClauses(seg).length) return [];
+  const ws = toks(seg), F = new Set(frame), out = [];
+  const TU = { ...(SL_T.timeUnits || {}) }; for (const w of SL_T.timeUnitsAsk || []) TU[w] = 'ask';   // יחידות-זמן (דאטה): «מעל 7 ימים» · «מעל שבוע» (יחידה בלי מספר = 1) · «חודש» ⇒ שאלה
+  for (let i = 0; i < ws.length; i++) {
+    const unitOnly = TU[ws[i]] && !/^\d+$/.test(ws[i - 1] || '');
+    if (!/^\d+$/.test(ws[i]) && !unitOnly) continue;
+    let j = i - 1; if (j >= 0 && /^[֐-׿]$/.test(ws[j])) j--;   // «מתחת ל 5»: אות-יחס בודדת בין היחס למספר
+    const op = j >= 0 ? relOpOf(ws[j]) : null; if (!op) continue;
+    const x = ws.slice(0, j).filter((w) => !F.has(w) && !/^\d+$/.test(w)); if (!x.length) continue;
+    const n = unitOnly ? 1 : ws[i]; const unit = unitOnly ? TU[ws[i]] : (TU[ws[i + 1]] || null); const after = unitOnly ? i + 1 : (unit ? i + 2 : i + 1);
+    out.push({ x: x.join(' '), op, n, y: n, unit, unitWord: unit ? (unitOnly ? ws[i] : ws[i + 1]) : null, trigger: ws.slice(after).filter((w) => !F.has(w)).slice(0, 2).join(' ') });
+  }
+  return out;
+}
 export function detectLevelsClause(head, tail) {
   if (!COND.levels) return null;
   const hm = String(head || '').trim().match(new RegExp(COND.levels.head)), tm = String(tail || '').trim().match(new RegExp(COND.levels.tail));

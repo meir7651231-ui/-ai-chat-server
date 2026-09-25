@@ -14,7 +14,7 @@ import { spawnSync } from 'node:child_process';
 import { formOf, specOf, answerFor, toks, serverDeclOf, sourceDeclsOf, rulesDeclOf, lookDeclOf, headOf, planBehaviors, sameStem, leadOf, recall, remember, carriersOf } from '../../yeshiva/mavin.mjs';
 import { askMaimatai } from '../../yeshiva/kashe.mjs';   // המקשה (18 גלאים) — שאלות על המשפט, לא הנחות
 import { rule as yeshivaRule } from '../../yeshiva/purpose.mjs';   // הפוסק (9 מהלכים) על האפיון שיצא
-import { detectAllClauses, detectLevelsClause, relOpOf, emitAppFrom } from './capability.mjs';
+import { detectAllClauses, detectLevelsClause, emitAppFrom, clausesByForm as capClausesByForm } from './capability.mjs';
 import { retrieveScreen } from './retrieve-screen.mjs';
 import { resolveEin } from '../../yeshiva/ein.mjs';
 import { bufferDeclsOf } from '../../yeshiva/buffer.mjs';
@@ -57,24 +57,8 @@ function loadManifest(screen) {   // קריאה בלבד (העתק של combine-
 }
 const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'x';
 
-/** תנאי לפי צורה (העיקרון של capability בלי מרקר-WHEN): בקטע יש מספר, ולפניו (עד אסימון-אות-אחת כמו «ל») מילת-יחס מדקדוק-היחסים הסגור של capability
- *  ⇒ סעיף {x: המילים שלפני היחס (בלי מסגרת), op, n: המספר של הבעלים, trigger: המילים שאחרי המספר}. קטע שכבר יש בו סעיף-טקסט (כש…) לא נבדק שוב. */
-const SL_TIME = JSON.parse(fs.readFileSync(path.join(R.GEN_DIR, 'spec-lang.data.json'), 'utf8'));
-export function clausesByForm(seg, frame = []) {
-  if (detectAllClauses(seg).length) return [];
-  const ws = toks(seg), F = new Set(frame), out = [];
-  const TU = { ...(SL_TIME.timeUnits || {}) }; for (const w of SL_TIME.timeUnitsAsk || []) TU[w] = 'ask';   // יחידות-זמן (דאטה): «מעל 7 ימים» · «מעל שבוע» (יחידה בלי מספר = 1) · «חודש» ⇒ שאלה
-  for (let i = 0; i < ws.length; i++) {
-    const unitOnly = TU[ws[i]] && !/^\d+$/.test(ws[i - 1] || '');
-    if (!/^\d+$/.test(ws[i]) && !unitOnly) continue;
-    let j = i - 1; if (j >= 0 && /^[֐-׿]$/.test(ws[j])) j--;   // «מתחת ל 5»: אות-יחס בודדת בין היחס למספר
-    const op = j >= 0 ? relOpOf(ws[j]) : null; if (!op) continue;
-    const x = ws.slice(0, j).filter((w) => !F.has(w) && !/^\d+$/.test(w)); if (!x.length) continue;
-    const n = unitOnly ? 1 : ws[i]; const unit = unitOnly ? TU[ws[i]] : (TU[ws[i + 1]] || null); const after = unitOnly ? i + 1 : (unit ? i + 2 : i + 1);
-    out.push({ x: x.join(' '), op, n, y: n, unit, unitWord: unit ? (unitOnly ? ws[i] : ws[i + 1]) : null, trigger: ws.slice(after).filter((w) => !F.has(w)).slice(0, 2).join(' ') });
-  }
-  return out;
-}
+/** תנאי לפי צורה — הקורא יושב ב-capability (קורא-תנאים אחד, L111); כאן רק מעבירים את המפרק-למילים של הדלת. */
+export const clausesByForm = (seg, frame = []) => capClausesByForm(seg, frame, toks);
 /** ניתוב לפי צורה: לכל יחידה — לאיזה מנוע קיים היא הולכת ולמה. */
 // הצעות (הכרעת-בעלים 23.9 «לא לגרור כלום»): combine (מסך רשום של אפליקציה אחרת, לפי דמיון-מילים לתוכן שלה) ו-gold (מודול בית-ספר) מביאים **תוכן ממקום אחר**.
 // מדדתי: העיקרון של combine (סקציה = אטום עם חיווט מוכח) אינו נפרד מהתוכן — התאמה לפי op בלבד שרירותית (סקציות: action 82 · text 60 · container 40).
