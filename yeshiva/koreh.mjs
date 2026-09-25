@@ -56,6 +56,42 @@ export function mine(corpus, names, { minSources = 2 } = {}) {
   for (const c of cands) for (const q of c.qty) { const u = unitList.find((x) => x.unit === q.unit); if (u && !u.sample) u.sample = `${q.vals[0]} ${q.unit}`; }
   return { candidates: cands, units: unitList, corpus: corpus.length, sentRows: Object.fromEntries(sentRows) };
 }
+/** ⛏️⚖️ כללים מהסיפור («אין לי אלא» ⇒ חיפוש, הכרעת-בעלים 25.9 «צא»): משפט-כלל = «<תנאי> → <פעולה>» (חץ, כמו שורת-זרימה במסמך 72),
+ *  כשבצד-התנאי יש מספר+מילה (או ישות) ובצד-הפעולה יש מילה (לא רק מעבר-מספרים «3.5 → 3.1»). קיבוץ לפי נושא: ישות מהמסמך, אחרת המילה שאחרי המספר.
+ *  אפס מילון · אפס מודל: הצורה בלבד + פיזור (בכמה מקורות). מה שלא מתחבר לטבלה ⇒ נשאר כלל-שנמצא עם המקור, לא נזרק ולא מומצא. */
+export function rulesOf(corpus, names, { subjects = [], skip = [], instances = {} } = {}) {   /* instances = {שם-מופע: ישות} מהכורה («צפון» ⇒ אזור) */
+  // נושא = שם-ישות (עם ים/ות/אות-שימוש ⇒ entOf) · אחרת המילה אחרי המספר — בלי מילות-זמן/יחידות-משך (skip מהדאטה) ובלי מילה נפוצה (פיזור > 25% מהמקורות)
+  const df = new Map(); for (const { text } of corpus) for (const w of new Set(toks(text).map(bare))) df.set(w, (df.get(w) || 0) + 1);
+  const common = (w) => corpus.length >= 8 && (df.get(w) || 0) > corpus.length * 0.25;   /* פיזור נמדד רק בקורפוס שיש בו מה למדוד */
+  const out = new Map();   // נושא ⇒ Map(כלל-מנורמל ⇒ {cond, act, srcs:Set, ex})
+  const HEW = /[֐-׿][֐-׿'"׳]*/g;
+  const norm = (x) => x.replace(/\d[\d,.:]*/g, '#').replace(/\s+/g, ' ').trim();
+  const subjOf = (cond) => { const t = toks(cond).map(bare);
+    const inst = (w) => instances[w] || instances[w.replace(/^[ובלמה]/, '')] || null;
+    const ents = [...new Set(t.map((w) => entOf(w, names) || inst(w)).filter(Boolean))];
+    const sub = []; for (let i = 0; i < t.length - 1; i++) if (/^\d[\d,.]*\+?$/.test(t[i]) && /^[֐-׿]/.test(t[i + 1] || '')) { const w = t[i + 1]; const e = entOf(w, names); if (e) { sub.push(e); continue; } const w1 = w.replace(/^[ובלמה](?=[֐-׿]{3})/, ''); if (!skip.includes(w) && !skip.includes(w1) && !common(w1) && !/['׳]$/.test(w1)) sub.push(w1); }
+    for (const w of t) { if (entOf(w, names) || inst(w)) continue; const w0 = w.replace(/^[ובלמהש]/, ''); if (subjects.includes(w) || subjects.includes(w0)) sub.push(subjects.includes(w) ? w : w0); }
+    return [...new Set([...ents, ...sub])]; };
+  for (const { src, text } of corpus) for (const line of text.split(/\n+/)) for (const s0 of line.split(/\s·\s|(?<=[.!?])\s+/)) {
+    if (/\|/.test(s0)) continue;   /* שורת-טבלה (מחזור-חיים «הקמה → פירוק») — לא כלל */
+    const s = s0.replace(/[«»"“”]/g, '').trim(); const m = s.match(/^(.{3,140}?)\s*[→⇒]\s*(.{2,140})$/); if (!m) continue;
+    let cond = m[1].trim(); const act = m[2].split(/\s*[→⇒]\s*/)[0].trim(); let label = null;
+    { const lm = cond.match(/^([֐-׿][֐-׿'"׳\- ]{1,24}):\s*(.+)$/); if (lm && !/\d/.test(lm[1])) { label = lm[1].trim(); cond = lm[2].trim(); } }   /* «מתרחבות: אדם → קוד אישי» — תווית (סוג-הכלל), לא נושא */
+    if (!/\d/.test(cond) && !names.some((n) => cond.includes(n))) continue;          // תנאי = כמות או ישות
+    if (!(act.match(HEW) || []).some((w) => w.length > 1) || /^[\d.:,\s/+\-–]+$/.test(act)) continue;   // פעולה = מילה, לא רק מספר
+    const subs = subjOf(cond); if (label) for (const w of toks(label).map(bare)) { const e = entOf(w, names); if (e && !subs.includes(e)) subs.push(e); }   /* «נקודות איסוף: …» ⇒ גם נקודה */
+    for (const sub of subs) { const g = out.get(sub) || out.set(sub, new Map()).get(sub); const k = norm(cond) + ' → ' + norm(act);
+      const r = g.get(k) || g.set(k, { cond, act, label, srcs: new Set(), ex: `${src}: ${s.slice(0, 160)}` }).get(k); r.srcs.add(src); } }
+  // יחיד/רבים של אותה מילה (ילד/ילדים · נקודה/נקודות) ⇒ נושא אחד (הצורה הנפוצה); נושא שאינו ישות ושכל כלליו ממקור אחד ⇒ תוכן של תרחיש, לא שיטה (פיזור)
+  const keyOf = (w) => w.replace(/(ים|ות)$/, '').replace(/ה$/, ''); const groups = new Map();
+  for (const sub of out.keys()) { const k = names.includes(sub) ? sub : keyOf(sub); (groups.get(k) || groups.set(k, []).get(k)).push(sub); }
+  const res = {};
+  for (const subs of groups.values()) { const main = subs.find((x) => names.includes(x)) || subs.sort((a, b) => out.get(b).size - out.get(a).size)[0]; const m = new Map();
+    for (const x of subs) for (const [k, r] of out.get(x)) { const r0 = m.get(k); if (r0) for (const s2 of r.srcs) r0.srcs.add(s2); else m.set(k, { ...r, srcs: new Set(r.srcs) }); }
+    const rows = [...m.values()]; const srcs = new Set(rows.flatMap((r) => [...r.srcs])); if (!names.includes(main) && srcs.size < 2) continue;
+    res[main] = rows.map((r) => ({ cond: r.cond, act: r.act, ...(r.label ? { label: r.label } : {}), sources: r.srcs.size, ex: r.ex })).sort((a, b) => b.sources - a.sources); }
+  return res;
+}
 /** זיכרון-המיפוי (יחידה ⇒ ישות.שדה) — מקומי, כמו שאר תשובות-הבעלים (הכרעה-35: הדלת לא כותבת ל-new/) */
 const MAP_FILE = () => process.env.MAVIN_KOREH_MAP || '.maimatai/koreh-map.jsonl';
 export function unitMap() { try { const m = {}; for (const l of fs.readFileSync(MAP_FILE(), 'utf8').split('\n').filter(Boolean)) { const e = JSON.parse(l); m[e.unit] = e.to; } return m; } catch { return {}; } }

@@ -187,7 +187,7 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
   // 🔁 המסמך עובר באותו צינור כמו משפט (לולאת ein · קושיות · חיפוש-צורה · התראות): דלת-המסמך רק מתרגמת — לא נתקעת ועוצרת
   // ⛏️ הכורה (yeshiva/koreh — בדפוס mine.py): קורפוס-הבעלים (תרחישים) מול שמות-הישויות ⇒ ערכים שחוזרים בכמה מקורות ⇒ שאלה «לאיזה שדה?» ⇒ שדה-בחירה
   const enums = {}; const mined = []; const rowsBy = {};
-  if (byShape && corpus) { const K = await import('./koreh.mjs'); const res = K.mine(await K.corpusOf(corpus), shp.ents.map((e) => e.name)); K.ledger(res);
+  if (byShape && corpus) { const K = await import('./koreh.mjs'); const res = K.mine(await K.corpusOf(corpus), shp.ents.map((e) => e.name)); K.ledger(res); mined.__units = res.units.map((u) => u.unit);
     for (const e of shp.ents) { const vals = res.candidates.filter((c) => c.ent === e.name && c.sources >= 3).slice(0, 8); if (vals.length < 2) continue; const key = `ערכים ${e.name}`;
       const said = typeof answers[key] === 'string' ? answers[key].trim() : ''; const f = e.fields.find((x) => x.name === said);
       if (f) { (enums[e.name] ??= {})[f.name] = vals.map((c) => c.name); mined.push(`${e.name}.${f.name} ⇐ ${vals.map((c) => c.name).join('/')}`); }
@@ -204,7 +204,7 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
     for (const f of shp.flows || []) { const k = f.field.replace(/_/g, ' '); if (typeof answers[k] === 'string' && answers[k].trim()) { defs[k] = answers[k].trim(); mined.push(`✍️ «${k}» = «${defs[k]}» (תשובת-הבעלים)`); } }
     for (const [k, v] of Object.entries(answers)) if (XW && k.startsWith(XW + ' ') && typeof v === 'string' && v.trim()) { const en = k.slice(XW.length + 1).trim(); extra[en] = v.split(/\s*,\s*/).filter(Boolean); mined.push(`✍️ ${en} + ${extra[en].join(', ')} (תשובת-הבעלים)`); } }
   const sen = byShape ? DS.docToSentence(md, { enums, rows: rowsBy, defs, extra }) : null;
-  const r = sen ? await generateAll(sen.sentence, { answers, outDir, name }) : await generateFromSpec(spec, { outDir, name });
+  const r = sen ? await generateAll(sen.sentence, { answers: { ...answers, __corpus: corpus || null, __docEnts: shp.ents.map((e) => e.name), __subjects: (mined.__units || []) }, outDir, name }) : await generateFromSpec(spec, { outDir, name });
   if (corpus && byShape) { r.notes.push(`⛏️ כורה: ${mined.filter((m) => typeof m === 'string').length} שדות-בחירה מהתרחישים${mined.some((m) => typeof m === 'string') ? ' — ' + mined.filter((m) => typeof m === 'string').join(' · ') : ''} · ${mined.filter((m) => m.q).length} שאלות «לאיזה שדה»`); for (const m of mined) if (m.q) r.questions.push(m.q); }
   if (sen) { r.notes.push(`🔁 המסמך תורגם למשפט (${sen.ents.length} ישויות · ${sen.flows.length} זרימות ⇒ ${sen.flows.map((f) => `«${f.clause}»`).join(' · ') || '—'}) ⇒ אותו צינור כמו משפט`); r.docSentence = sen.sentence; }
   if (byShape && !sen) { r.notes.push(`📐 קריאה לפי צורה: שלד-הפירוק קרא 0 שדות ⇒ טבלת-ישויות במסמך: ${shp.ents.length} ישויות · ${node.fields} שדות · ${shp.links.length} קישורים לפי השמות שהמסמך נותן (${shp.links.slice(0, 5).map((l) => `${l.ent}.${l.field}→${l.to}`).join(' · ')}${shp.links.length > 5 ? ' …' : ''})`);
@@ -259,7 +259,13 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
   const held = allRoutes.filter((r) => r.proposal && !proposals);
   fs.mkdirSync(outDir, { recursive: true });
   const files = [], notes = [...defs.notes], questions = [...defs.questions];
-  for (const q of yesh.kushyot) questions.push({ thing: 'הישיבה', ask: q.kind, q: `${q.kind}: ${q.text}${(answers.__kush || []).some((k) => q.kind.includes(k)) ? ' ⇒ ✅ נענתה בחיפוש (ראה ⚖ למעלה)' : ''}` });   // קושיה שהחיפוש ענה עליה — מסומנת
+  // ⚖️⇒🔎 כל קושיה עוברת במרכז-החיפוש (yeshiva/kushya · הכרעת-בעלים 25.9): כל מקור שנרשם שם מחפש; קושיית-חיפוש שלא חיפשה ⇒ ⛔
+  const KU = await import('./kushya.mjs'); const KS = await import('./kushya-sources.mjs'); KS.registerAll(KU);
+  const answered = await KU.answerAll(yesh.kushyot, { answers, outDir, notes });
+  for (const q of answered) { const tag = q.searched.length ? ` ⇒ 🔎 ${q.searched.join('+')}: ${q.summary.join(' · ') || 'לא נמצא'}` : q.why === 'noSource' ? ' ⇒ 🔎 אין מקור בריצה הזו' : '';
+    questions.push({ thing: 'הישיבה', ask: q.kind, q: `${q.kind}: ${q.text}${tag}` }); }
+  for (const q of KU.unsearched(answered)) notes.push(`⛔ קושיה בלי חיפוש: ${q.kind} — יש לה מחפש רשום אבל אף מקור לא רץ`);
+  yesh.answered = answered;
   for (const sw of yesh.switches) questions.push({ thing: 'הישיבה', ask: sw.move || sw.kind, q: `${sw.move || sw.kind}: ${sw.text}` });
   if (yesh.note) notes.push(yesh.note);
   if (yesh.rulings.length) notes.push(`הפוסק: ${yesh.rulings.filter((r) => r.decided).length} הוכרעו · ${yesh.switches.length} מתגים`);
