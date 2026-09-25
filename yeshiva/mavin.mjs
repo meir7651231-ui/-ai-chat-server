@@ -289,7 +289,7 @@ export function needsFrom(form, answers = {}) {
   return needs;
 }
 
-// ── צורה ⇒ אפיון למנוע 4 (app-ds.buildApp): `ישות <דבר> עם <שדות>` · `לוח בקרה עם מונה(<דבר>)` · `תפקיד בודק: הכל`.
+// ── צורה ⇒ אפיון למנוע 4 (app-ds.buildApp): `ישות <דבר> עם <שדות>` · `לוח בקרה עם מונה(<דבר>)`. תפקיד — רק כשנאמר (לא מוסיפים תפקיד שלא נאמר).
 //    דבר בלי שדות (לא מהמשפט ולא מתשובה) אינו נכנס — app-ds פוסל ישות-בלי-שדות (§22), והמנוע שואל במקום להמציא. ──
 // הצהרת-שרת לפי צורה: דבר שמילותיו נושאות את מילת-השרת ואת אחד מערכי-השרת של שפת-הספק (spec-lang: שרת · ענן) ⇒ `שרת: ענן`. בלי ההצהרה — אין שרת (לא ברירת-מחדל).
 // אותו דפוס להצהרת-עיצוב (spec-lang: עיצוב · נייר/כהה — העורות של מנועי-העיצוב ds-* שכבר על המדף): «בעיצוב נייר» ⇒ `עיצוב: נייר` ⇒ app-ds.setLook.
@@ -399,7 +399,6 @@ export function specOf(form, answers = {}) {
   if (head && lines.length) { const SL = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8')); lines.unshift(`${SL.appWord}: ${head}`); if (!metrics.length) lines.push(head); builtin.push(`ראש «${head}» ⇒ ${SL.appWord} + לוח-הבית`); }
   if (lk && lines.length) lines.push(`${SL_DECL.look.word}: ${lk.value}${lk.extra ? ' ' + lk.extra : ''}`);   // הצהרת-עיצוב של הבעלים ⇒ app-ds.setLook (עור מהמדף); בלי הצהרה — ברירת-המחדל של app-ds
   if (srv && lines.length) lines.push(`${SL_SERVER.word}: ${srv.value}`);   // הצהרה של הבעלים ⇒ server.mjs פולט חבילת-שרת מאותן ישויות
-  if (lines.length) lines.push('תפקיד בודק: הכל');
   return { spec: lines.join('\n'), skipped, builtin };
 }
 
