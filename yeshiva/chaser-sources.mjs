@@ -158,17 +158,35 @@ export function registerAll(CH) {
       const ask = `«${g.word}» — איזה שדה ב«${g.T.name}»? (${(g.T.fields || []).join(' · ')})${via.length ? ` · בטבלה המקושרת: ${via.join(' · ')}` : ''} — או שם שדה חדש, או «לא»`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; }
     if (g.part === 'value') { const ask = `«${g.noun} ${g.word}» — «${g.word}» הוא שלב של ${g.T.name}? (${(g.T.stages || []).join(' · ') || '—'}) — ענה שם-שלב (קיים או חדש), או «${ctx.descWord || 'תיאור'}» אם כל ה${g.noun} כאלה`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; }
     const ask = `סינון «לא ${g.word}» — אין שלב כזה ב«${g.T.name}» (עכשיו: ${(g.T.stages || []).join(' · ') || '—'}). אילו שלבים להוסיף? (למשל: לא ${g.word})`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; });
-  // 📋 «תנאי → תפקיד [מחליט]» (25.9 «למה הוא לא קורא את המסמכים»): המסמך כבר מחזיק טבלה לזה — שדה-מי (by/holder) ושדה-תנאי (condition),
-  //    כמו «החלטה». הכלל הוא שורה בה (דוגמה), לא «הוראה» שמדלגים עליה. אין טבלה כזו במסמך ⇒ ממשיכים למיון
-  CH.register('rule', 'docRow', async (ctx, g) => {
-    const A = ctx.actorWords || [], V = ctx.decideVerbs || []; const act = g.rule.act.replace(/\(.*?\)/g, ' ').replace(/[.,;:]+\s*$/, '').trim();
-    if (/☐/.test(`${g.rule.cond} ${g.rule.act}`)) return null;   // רשימת-סימון (☐) אינה תנאי
-    const cut = act.split(/\s+/); const vi = cut.findIndex((w) => V.includes(w.replace(/[,.;:]+$/, ''))); const who = (vi > 0 ? cut.slice(0, vi) : cut).join(' ').replace(/[,.;].*$/, '').trim();
-    if (!who || who.split(/\s+/).length > 4 || !A.some((a) => who.includes(a))) return null;
-    const T = (ctx.docTables || []).find((t) => t.fields.some((f) => (ctx.actorFieldWords || []).includes(f)) && t.fields.some((f) => (ctx.condFieldWords || []).includes(f))); if (!T) return null;
+  // 📋 כלל ⇒ שורה בטבלת-המסמך (25.9 «צא לדרך» — עיקרון, לא צורה אחת): לכל טבלה במסמך — אילו שדות אפשר למלא מהכלל:
+  //    שדה-מי (by/holder) ⇐ תפקיד בפעולה · שם-השדה במילון או מילה עברית שהמסמך עצמו כתב ליד השדה («signers (69: 4 חותמים)») · מספר-תרחיש משותף ·
+  //    שדה-תנאי ⇐ התנאי (רק כשעוד שדה התמלא). טבלה אחת בולטת (≥2 שדות, יותר מהשנייה) ⇒ שורה; שתיים שוות ⇒ מוצהר עם שתיהן (לא ניחוש)
+  CH.register('rule', 'docFit', async (ctx, g) => {
+    const txt = `${g.rule.cond} ${g.rule.act}`; if (/[☐✓]/.test(txt)) return null;   // רשימת-סימון · שורת-טבלה במחקר (✓) — לא כלל
+    if ((ctx.tables || []).some((t) => stem(g.rule.cond.trim()) === stem(t.name) || (g.rule.cond.trim().startsWith(t.name + ' ') && /(הקמה|פירוק|סוף|פקיעה|תפוגה)/.test(txt)))) return null;   // «X → …» = הרחבה · «X בעלים … → סוף» = שורת-טבלה במחקר
+    if (/:\s*[^,]+,[^,]+,/.test(g.rule.cond)) return null;   // «40 הקופות רשומות: מיקום, בעלים, …» = רשימת-שדות (תיאור)
+    const words = [...new Set((txt.match(/[\u0590-\u05FF][\u0590-\u05FF"׳'\-]{2,}/g) || []))]; const refs = ruleRefs(g.rule);
+    const A = ctx.actorWords || [], V = ctx.decideVerbs || []; const act = g.rule.act.replace(/\(.*?\)/g, ' ').replace(/[.,;:]+\s*$/, '').trim(); const cut = act.split(/\s+/);
+    const vi = cut.findIndex((w) => V.includes(w.replace(/[,.;:]+$/, ''))); const who0 = (vi > 0 ? cut.slice(0, vi) : cut).join(' ').replace(/[,.;].*$/, '').trim();
+    const who = who0 && who0.split(/\s+/).length <= 4 && A.some((a) => who0.includes(a)) ? who0 : null;
     const clean = (x) => String(x).replace(/[,;.·|]+/g, ' ').replace(/\s+/g, ' ').trim();
-    const row = T.fields.map((f) => ((ctx.actorFieldWords || []).includes(f) ? clean(who) : (ctx.condFieldWords || []).includes(f) ? clean(g.rule.cond).slice(0, 80) : ''));
-    return { outcome: 'built', row: { table: T.name, values: row }, why: `שורה ב«${T.name}»: ${clean(g.rule.cond).slice(0, 50)} ⇐ ${who}` }; });
+    const numBefore = (w) => { const m = g.rule.cond.match(new RegExp(`(\\d+)\\s+${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`)); return m ? m[1] : null; };
+    // שדה שמופיע בהרבה טבלאות (zone · from zone · to zone) אינו ראיה — כמו מילה נפוצה (נמדד: «אזור» משך כל כלל ל«מעבר»)
+    const keyOf = (f) => String(f).toLowerCase().split(/[\s_]+/).filter((x) => (ctx.glossary || {})[x]); const freq = {}; for (const T of ctx.docTables || []) for (const k of new Set(T.fields.flatMap(keyOf))) freq[k] = (freq[k] || 0) + 1;
+    const rare = (f, w) => keyOf(f).some((k) => (freq[k] || 0) < 3 && ((ctx.glossary || {})[k] || []).some((h) => stem(h) === stem(w)));
+    const fits = (ctx.docTables || []).map((T) => { const raw = Object.fromEntries(((ctx.docRaw || {})[T.name] || []).map((x) => [x.field, x.raw])); const vals = {}; const why = [];
+      const used = new Set(); let w2 = 0;   // מילה אחת ממלאת שדה אחד (נמדד: «לציבור» מילא audience וגם channels) · מילה שהמסמך עצמו כתב ליד השדה = ראיה כפולה
+      for (const f of T.fields) { const fr = raw[f] || '';
+        if ((ctx.actorFieldWords || []).includes(f)) { if (who) { vals[f] = clean(who); why.push(`${f}=${who}`); } continue; }
+        if ((ctx.condFieldWords || []).includes(f)) continue;
+        const heRaw = (fr.match(/[\u0590-\u05FF]{3,}/g) || []); const wr = words.find((x) => !used.has(x) && heRaw.some((h) => stem(h) === stem(x))); const w = wr || words.find((x) => !used.has(x) && rare(f, x)); if (w) used.add(w); if (wr) w2++;
+        const rf = [...refNums(fr)].some((n) => refs.has(n));
+        if (w) { vals[f] = numBefore(w) || (/\[\]/.test(fr) ? clean(act) : clean(w)); why.push(`${f}⇐«${w}»`); } else if (rf) why.push(`${f}⇐הפניה`); }
+      const cf = T.fields.find((f) => (ctx.condFieldWords || []).includes(f)); if (cf && why.length) vals[cf] = clean(g.rule.cond).slice(0, 80);
+      return { T, vals, why, score: why.length + w2 + (cf && why.length ? 1 : 0) + (words.some((x) => stem(x) === stem(T.name)) ? 1 : 0) }; }).filter((x) => x.score >= 2 && Object.keys(x.vals).length).sort((a, b) => b.score - a.score);
+    if (!fits.length) return null;
+    if (fits[1] && fits[1].score === fits[0].score) { g.why = `מתאים לכמה טבלאות במסמך: ${fits.filter((x) => x.score === fits[0].score).map((x) => `${x.T.name} (${x.why.join(', ')})`).join(' · ')}`; return null; }
+    const F = fits[0]; return { outcome: 'built', row: { table: F.T.name, values: F.T.fields.map((f) => F.vals[f] || '') }, why: `שורה ב«${F.T.name}»: ${F.why.join(' · ')}` }; });
   // 🗂️ מיון מה שלא נבנה (25.9 «תסיים כל מה שאתה והמחולל יכולים»): «לא בצורה» אינו סיבה — כל כלל מוצהר מקבל סוג, כדי שמה שנשאר יהיה רק כללים אמיתיים בלי צורה
   CH.register('rule', 'declared', async (ctx, g) => {
     const c = g.rule.cond.trim(), full = `${c} → ${g.rule.act}`; const seen = (ctx.seenRules ??= new Set()); const T = (ctx.tables || []).map((t) => t.name);

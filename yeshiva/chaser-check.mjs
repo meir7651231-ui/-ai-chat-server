@@ -94,3 +94,13 @@ console.log(`✓ chaser: ${CH.kinds().length} סוגי-חסר רשומים (${CH
   const d = await CH.resolveAll([{ kind: 'rule', table: Dc, rule: { cond: 'ספירה אדומה באזור נשים', act: 'חמל-הנשים מחליט ומדווח לראשי.' } }, { kind: 'rule', table: Dc, rule: { cond: 'משטרה ☐כבה', act: 'המפקד ☐' } }], cx);
   if (d[0].outcome !== 'built' || !d[0].row || d[0].row.values.join('|') !== 'חמל-הנשים|||ספירה אדומה באזור נשים' || d[1].outcome !== 'declared') { console.error('🚨 chaser: שורת-החלטה: ' + JSON.stringify([d[0].row, d[1].outcome])); process.exit(1); }
   console.log(`✓ «תנאי → מי מחליט» ⇒ ${d[0].why}`); }
+// (15) כלל ⇒ הטבלה במסמך שהוא ממלא הכי הרבה שדות שלה (לא צורה אחת): «הודעה … (לציבור) — ניסוח → אישור» ⇒ הודעה (audience · approved by) ·
+//      שדה נפוץ (zone בהרבה טבלאות) אינו ראיה · שתי טבלאות שוות ⇒ מוצהר עם שתיהן · «X → Y» (הרחבה) / ✓ לא כאן
+{ const Ms = { name: 'הודעה', fields: ['audience', 'channels', 'approved by'] }, Dc = { name: 'החלטה', fields: ['by', 'condition'] }, Pm = { name: 'היתר', fields: ['signers', 'conditions'] }, Z1 = { name: 'מעבר', fields: ['from zone', 'to zone'] }, Z2 = { name: 'נקודה', fields: ['zone'] }, Z3 = { name: 'הרשאה', fields: ['zone'] };
+  const cx = { K, answers: {}, asked: new Set(), subs: [], tables: [Ms, Dc, Pm, Z1, Z2, Z3], docTables: [Ms, Dc, Pm, Z1, Z2, Z3], docRaw: { 'היתר': [{ field: 'signers', raw: 'signers[] (69: 4 חותמים)' }] }, glossary: { audience: ['קהל', 'ציבור'], channels: ['ערוץ'], approved: ['אישור'], zone: ['אזור'] },
+    actorWords: ['המפקד', 'השר'], actorFieldWords: ['by'], condFieldWords: ['condition'], decideVerbs: [], detect: detectAllClauses, alertWord: 'התראה', whenWord: 'כש', aboveWord: 'מעל', belowWord: 'מתחת ל', sinceWord: 'זמן מאז' };
+  const d = await CH.resolveAll([{ kind: 'rule', table: Ms, rule: { cond: 'הודעה וערוץ המפקד (לציבור) — ניסוח', act: 'אישור' } }, { kind: 'rule', table: Dc, rule: { cond: '4 חותמים', act: 'השר (80).' } }, { kind: 'rule', table: Z1, rule: { cond: 'עומס באזור צפון', act: 'להאט' } }, { kind: 'rule', table: Ms, rule: { cond: 'הודעה', act: 'הודעה מוקלטת' } }], cx);
+  const bad = []; if (d[0].outcome !== 'built' || d[0].row.table !== 'הודעה') bad.push('הודעה ⇒ ' + (d[0].row && d[0].row.table)); if (d[1].outcome !== 'declared' || !/כמה טבלאות/.test(d[1].why)) bad.push('שוויון ⇒ מוצהר עם שתיהן: ' + d[1].why);
+  if (d[2].outcome === 'built') bad.push('«אזור» לבד (שדה נפוץ) ⇒ לא שורה'); if (d[3].outcome === 'built') bad.push('«X → …» הרחבה ⇒ לא שורה');
+  if (bad.length) { for (const x of bad) console.error('🚨 chaser: ' + x); process.exit(1); }
+  console.log(`✓ כלל ⇒ טבלת-המסמך: ${d[0].why} · שוויון ⇒ מוצהר · שדה נפוץ/הרחבה ⇒ לא`); }

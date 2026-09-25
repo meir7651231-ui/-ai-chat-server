@@ -246,6 +246,7 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
     // 🌧️ השפעות-מצב שנבנו (תשובת-הבעלים = מקדם) ⇒ app-ds (עלה-שדה × מקדם כשמצב מהסוג פעיל) · הסוג נכנס לסוגי-המצב
     // 📋 כללים שהם שורות בטבלת-המסמך («תנאי → מי מחליט» ⇒ החלטה) ⇒ שורות-דוגמה (אותו מנגנון של הכורה)
     { const seen = new Set(); for (const x of done.filter((y) => y.outcome === 'built' && y.row)) { const key = x.row.values.join('|'); if (seen.has(key)) continue; seen.add(key); (rowsBy[x.row.table] ??= []).push(x.row.values); }
+      try { fs.mkdirSync(outDir, { recursive: true }); fs.writeFileSync(path.join(outDir, 'rules-rows.json'), JSON.stringify(done.filter((y) => y.row).map((y) => ({ rule: `${y.rule.cond} → ${y.rule.act}`, table: y.row.table, why: y.why })), null, 1)); } catch {}
       if (seen.size) mined.push(`📋 ${seen.size} כללי «תנאי → מי מחליט» ⇒ שורות ב«${[...new Set(done.filter((y) => y.row).map((y) => y.row.table))].join(', ')}»`); }
     for (const x of done.filter((y) => y.outcome === 'built' && y.effect)) { effects.push(x.effect); const ME = shp.ents.find((e) => (SLc.modeEntityWords || []).includes(e.name)); const kf = ME && ME.fields.find((q) => /^kind$|^סוג$/.test(q.name)); if (kf) { const cur = (enums[ME.name] ??= {})[kf.name] || []; enums[ME.name][kf.name] = [...new Set([...cur, x.effect.kind])]; } mined.push(`🌧️ במצב ${x.effect.kind}: ${x.effect.ent}.${x.effect.field} × ${x.effect.n}`); }
     ruleCl = done.filter((x) => x.outcome === 'clause').filter((x, i, a) => a.findIndex((y) => y.clause === x.clause) === i);
