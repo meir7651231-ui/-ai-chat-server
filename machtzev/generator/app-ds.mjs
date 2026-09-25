@@ -396,6 +396,8 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       for (const sw of SINCE) if (txt.startsWith(sw + ' ')) { const st = txt.slice(sw.length + 1).trim(); const si = (r.stages || []).findIndex((s) => s === st || stemOf(s) === stemOf(st)); if (si >= 0) return { since: si, stage: r.stages[si] }; }
       const d = (Array.isArray(opts.derived) ? opts.derived : []).find((q) => q.ent === r.entity && (q.name === txt || stemOf(q.name) === stemOf(txt)));
       if (d) return { linked: { parentKey: d.parentKey, terms: d.terms.map((t) => ({ ...t, slug: nameToSlug[t.child] })) }, name: d.name };
+      if ((SL.reachWords || []).includes(txt)) { const E = SL.edgeFields || {}; const lab = (d) => r.schema.filter((fd) => (E[d] || []).includes(String(fd.label).replace(/_/g, ' '))).map((fd) => fd.label);   // 🔗 «נופלים איתו» = כמה רשומות נופלות אחרי זו (systems-engine graph.reach) — קשתות מ-feeds / depends on
+        const down = lab('down'), up = lab('up'); if ((down.length || up.length) && nameToSlug[r.entity]) return { reach: { slug: nameToSlug[r.entity], key: (r.schema[0] || {}).label, down, up } }; }
       if (words.length >= 2 && aggOf(words[0]) === 'count') for (let j = words.length; j >= 2; j--) { const ch = entByStem(words.slice(1, j).join(' ')); const b = ch && (backRefs[r.entity] || []).find((q) => q.fname === ch.entity); if (!b) continue;   // 🔗 «מונה שיבוץ [שוטר]» בתוך מעבר = כמה שיבוצים (שערכם «שוטר») מצביעים על המעבר הזה — עלה בעץ ⇒ «מונה שיבוץ שוטר פחות תקן מתחת ל 0»
         const val = words.slice(j).join(' '); const ff = val ? (ch.schema.find((fd) => (fd.enumVals || []).some((v) => v === val || stemOf(v) === stemOf(val))) || ch.schema.find((fd) => (SL.roleFieldWords || []).includes(fd.label))) : null; if (val && !ff) break;   // ערך ⇒ שדה-רשימה שמכיל אותו, או שדה-התפקיד (דקדוק: roleFieldWords)   // ערך בלי שדה שמכיל אותו ⇒ לא מנחשים
         return { refCount: { childSlug: b.fslug, childField: b.ffield, parentKey: (r.schema[0] || {}).label, ...(ff ? { filt: { field: ff.label, value: (ff.enumVals || []).find((v) => v === val || stemOf(v) === stemOf(val)) || val } } : {}) } }; }
@@ -413,7 +415,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
           return { ...x, live: { slug: nameToSlug[d.ent], kind: 'linked', field: arith ? `${d.name} ${arith.word} ${arith.field}` : d.name, base: d.name, parentKey: d.parentKey, terms: d.terms.map((t) => ({ ...t, slug: nameToSlug[t.child] })), ...(arith ? { arith } : {}), op: c.op, n: +c.n } }; } }
       if (c && c.kind === 'levels' && c.x) { for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(c.x) || fd.label === c.x); if (f && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'levels', field: f.label, by: c.label, agg: 'count', high: c.high, mid: c.mid, thresholds: c.thresholds || [c.high, c.mid], op: null, n: null } }; } return x; }
       // ⊕⊕ מנוע-ההרכבה הכללי — אחרי הענפים הייעודיים (תוצאת-קשר), לפני ענפי-השדה-הבודד
-      if (c && c.x && /^[<>]$/.test(c.op || '') && c.n != null && String(c.x).split(/\s+/).some((w) => AWV[w]) || (c && c.x && SINCE.some((sw) => String(c.x).includes(sw))) || (c && c.x && /^[<>]$/.test(c.op || '') && (SL.queueWords || []).some((q) => String(c.x).includes(q.replace(/^ה/, ''))))) {   // 🌉 גם «המתנה צפויה»
+      if (c && c.x && /^[<>]$/.test(c.op || '') && c.n != null && String(c.x).split(/\s+/).some((w) => AWV[w]) || (c && c.x && SINCE.some((sw) => String(c.x).includes(sw))) || (c && c.x && /^[<>]$/.test(c.op || '') && (SL.reachWords || []).some((w) => String(c.x).includes(w))) || (c && c.x && /^[<>]$/.test(c.op || '') && (SL.queueWords || []).some((q) => String(c.x).includes(q.replace(/^ה/, ''))))) {   // 🌉 גם «המתנה צפויה»
         for (const li of info) { if (!li.isEnt || !entRes[li.i]) continue; const r = entRes[li.i]; const v = valueOf(String(c.x).split(/\s+/).filter(Boolean), r);
           if (v && nameToSlug[r.entity]) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'expr', field: String(c.x), tree: v, op: c.op, n: +c.n } }; } }
       // @אטום = יחס נלמד (capability.addLearnedRel) — סף-טקסט כמו «=»
@@ -452,10 +454,11 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       const isAgg = (z) => z.live && ['agg', 'aggBy'].includes(z.live.kind);   // «לא מגיב וגם מונה אדם לכל אזור» ⇒ הספירה היא הראשי, תנאי-השורה הם הסינון שלה
       let main = y; const rowParts = [];
       for (const cj of c.and || []) { const z = liveOf({ ...x, clause: cj }); if (isAgg(z) && !isAgg(main) && z.live.slug === main.live.slug) { rowParts.push(main.live); main = z; } else if (same(z) || (isAgg(main) && z.live && z.live.slug === main.live.slug && !isAgg(z))) rowParts.push(z.live); else dropped.push(`${cj.x} ${cj.op} ${cj.n}`); }
-      if (main !== y) { if (dropped.length) seedNotes.push(T('liveAndDropped', { name: x.name, parts: dropped.join(', ') })); return { ...main, live: { ...main.live, pre: rowParts } }; }
+      if (dropped.length) { const why = T('liveAndDropped', { name: x.name, parts: dropped.join(', ') }); seedNotes.push(why); return { ...x, why }; }   // חלק «וגם» שנזרק = התראה רחבה ממה שנאמר ⇒ לא מחוברת (שאלה), לא התראה שגויה בשקט
+      if (main !== y) return { ...main, live: { ...main.live, pre: rowParts } };
       pre.push(...rowParts);
       for (const cj of c.or || []) { const z = liveOf({ ...x, clause: cj }); if (same(z)) alt.push(z.live); else dropped.push(`${cj.x} ${cj.op} ${cj.n}`); }
-      if (dropped.length) { const why = T('liveAndDropped', { name: x.name, parts: dropped.join(', ') }); seedNotes.push(why); }
+      if (dropped.length) { const why = T('liveAndDropped', { name: x.name, parts: dropped.join(', ') }); seedNotes.push(why); return { ...x, why }; }   // «או» שנזרק = התראה צרה ממה שנאמר ⇒ לא מחוברת
       return (pre.length || alt.length) ? { ...y, live: { ...y.live, ...(pre.length ? { pre } : {}), ...(alt.length ? { alt } : {}) } } : y; });
     liveExtrasOut = liveExtras;
     let sync = null;

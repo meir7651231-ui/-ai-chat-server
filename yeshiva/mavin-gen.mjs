@@ -238,7 +238,7 @@ export async function generateFromDoc(md, { outDir, name = 'doc', answers = {}, 
     for (const [k, v] of Object.entries(answers)) { const mm = k.match(new RegExp(`^${SLc.ownerRuleWord || 'כלל'} (\\S+)`)); if (!mm || typeof v !== 'string' || !v.trim()) continue; const [cond, act] = v.split(/\s*→\s*/);
       gaps.push({ kind: 'rule', owner: k, table: ruleTables.find((x) => x.name === mm[1]) || { name: mm[1], fields: [], stages: [] }, rule: { cond: cond.trim(), act: (act || SLc.alertWord || 'התראה').trim(), type: 'rule' } }); }
     for (const t of ruleTables) { const xs = String(answers[`${SLc.extraFieldWord || 'שדה נוסף'} ${t.name}`] || '').split(/\s*,\s*/).filter(Boolean); for (const x of xs) if (!t.fields.includes(x)) t.fields.push(x); }   // שדה שהבעלים הוסיף — גם הפותרים רואים אותו
-    const cctx = { corpus: ruleRes.C, subs: [], descWord: SLc.descWord || 'תיאור', compareWords: SLc.compareWords || [], stateChangeWords: SLc.stateChangeWords || [], roleFieldWords: SLc.roleFieldWords || [] };
+    const cctx = { corpus: ruleRes.C, subs: [], descWord: SLc.descWord || 'תיאור', compareWords: SLc.compareWords || [], stateChangeWords: SLc.stateChangeWords || [], roleFieldWords: SLc.roleFieldWords || [], edgeFields: SLc.edgeFields || {}, reachWords: SLc.reachWords || [] };
     const done = await CH.resolveAll(gaps, { ...cctx, K: K2, answers, asked: new Set(), seqBy, tables: ruleTables, sinceWord: (SLc.sinceWords || ['זמן מאז'])[0], detect: CAP.detectAllClauses, alertWord: SLc.alertWord || 'התראה', whenWord: 'כש', aboveWord: 'מעל', belowWord: 'מתחת ל' });
     ruleCl = done.filter((x) => x.outcome === 'clause').filter((x, i, a) => a.findIndex((y) => y.clause === x.clause) === i);
     for (const x of done.filter((y) => y.outcome === 'question' && !y.dup)) mined.push({ q: { thing: 'כורה', ask: x.kind, key: x.key, q: x.q } });
@@ -388,7 +388,12 @@ export async function generateAll(sentence, { answers = {}, outDir, name = 'mavi
     const uses = dirs.some((d) => fs.existsSync(d) && fs.readdirSync(d).some((f) => f.endsWith('.dart') && f !== 'gen_sim_engine.dart' && fs.readFileSync(path.join(d, f), 'utf8').includes(LEq.SIM_IMPORT)));
     if (uses) { const J = await import('./shofet.mjs'); const se = await J.simEngineDart();
       if (se.available) { const f = path.join(R.outDir(), 'gen_sim_engine.dart'); fs.writeFileSync(f, se.code); files.push({ route: 'sim', file: f }); notes.push(`🌉 מנוע-המערכות ⇒ Dart (${Math.round(se.code.length / 1024)}KB, emitTs) · המתנה צפויה מחושבת בסימולציה באפליקציה`); }
-      else questions.push({ thing: 'מנוע-המערכות', q: `«המתנה צפויה» צריכה את מנוע-המערכות: ${se.reason}` }); } }
+      else questions.push({ thing: 'מנוע-המערכות', q: `«המתנה צפויה» צריכה את מנוע-המערכות: ${se.reason}` }); }
+    // 🔗 אותו דפוס למנוע-התלות (systems-engine/sensors/graph.reach) — «נופלים איתו»
+    const usesG = dirs.some((d) => fs.existsSync(d) && fs.readdirSync(d).some((f) => f.endsWith('.dart') && f !== 'gen_graph_engine.dart' && fs.readFileSync(path.join(d, f), 'utf8').includes(LEq.GRAPH_IMPORT)));
+    if (usesG) { const J = await import('./shofet.mjs'); const ge = await J.graphEngineDart();
+      if (ge.available) { const f = path.join(R.outDir(), 'gen_graph_engine.dart'); fs.writeFileSync(f, ge.code); files.push({ route: 'graph', file: f }); notes.push(`🔗 מנוע-התלות ⇒ Dart (graph.reach, emitTs) · «נופלים איתו» מחושב באפליקציה`); }
+      else questions.push({ thing: 'מנוע-התלות', q: `«נופלים איתו» צריך את מנוע-המערכות: ${ge.reason}` }); } }
   // 2א'' · מקור מבחוץ: מבחן-קבלה — שורה (מהדוגמאות של הבעלים, לא ממציאים) נכנסת דרך ingestFeed ⇒ הטבלה גדלה והערך בה
   if (feeds.length && app && app.nameToSlug && fs.existsSync(path.join(R.outDir(), 'gen_app_feed.dart')) && !inRepo(process.env.GEN_OUT)) {
     const lit = (v) => "'" + String(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$') + "'";

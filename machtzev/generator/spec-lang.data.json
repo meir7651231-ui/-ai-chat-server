@@ -345,6 +345,8 @@
  "extraFieldWord": "שדה נוסף",
  "compareWords": ["מתקרב", "מתקרבת", "עולה", "יורד", "חורג", "מעל", "מתחת"],
  "descWord": "תיאור",
+ "reachWords": ["נופלים איתו", "מונה תלויים"],
+ "edgeFields": {"down": ["feeds"], "up": ["depends on"]},
  "roleFieldWords": ["תפקיד", "role"],
  "stateChangeWords": ["נפל", "נופל", "יורד", "יורדת", "עולה", "אדומה", "צפוף", "חסר", "מלא", "נסגר", "נפתח", "נתקע", "קורס"],
  "ownerRuleWord": "כלל",

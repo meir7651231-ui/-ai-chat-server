@@ -52,6 +52,15 @@ export function registerAll(CH) {
     if (parts.every((p) => p.outcome === 'built')) return { outcome: 'clause', clause: `${ctx.alertWord} ${ctx.whenWord}מונה ${Ch.name}${val ? ` ${val}` : ''} פחות ${f} ${m[3] === 'מעל' ? ctx.aboveWord : ctx.belowWord} 0`, act: g.rule.act };
     const no = parts.find((p) => p.outcome === 'declared'); if (no) { g.why = `חלק «${no.word}»: ${no.why}`; return null; }
     const qs = parts.filter((p) => p.outcome === 'question'); return { outcome: 'question', key: qs[0].key, dup: qs.every((p) => p.dup), q: `⚖️ «${g.rule.cond.slice(0, 70)}»: חסר: ${qs.map((p) => p.ask).join(' · ')}` }; });
+  // 🔗 תלות («נכס נפל → מה נופל איתו»): הטבלה יש לה קשתות (feeds / depends on) ⇒ מנוע-התלות (systems-engine graph.reach). הפועל ⇒ שלב (חלק value: תשובה · שם · שאלה)
+  CH.register('rule', 'dependency', async (ctx, g) => {
+    const m = g.rule.cond.trim().match(/^([\u0590-\u05FF]+)\s+([\u0590-\u05FF]+)$/); if (!m || !(ctx.stateChangeWords || []).includes(m[2])) return null;
+    const tp = await ctx.need('part', { part: 'table', word: m[1], cond: g.rule.cond }); if (tp.outcome !== 'built') return tp.outcome === 'question' ? { outcome: 'question', key: tp.key, dup: tp.dup, q: tp.q } : null;
+    const T = tp.value; const E = ctx.edgeFields || {}; if (![...(E.down || []), ...(E.up || [])].some((f) => (T.fields || []).includes(f))) { g.why = `«${T.name}» אין לו שדות-תלות (${[...(E.down || []), ...(E.up || [])].join(' / ')}) — אין גרף`; return null; }
+    const vp = await ctx.need('part', { part: 'value', word: m[2], T, noun: T.name, cond: g.rule.cond });
+    if (vp.outcome === 'built' && vp.value && vp.value.stage) return { outcome: 'clause', clause: `${ctx.alertWord} ${ctx.whenWord}${ctx.sinceWord} ${vp.value.stage} ${ctx.aboveWord} 0 וגם ${(ctx.reachWords || ['נופלים איתו'])[0]} ${ctx.aboveWord} 0`, act: g.rule.act };
+    if (vp.outcome === 'question') return { outcome: 'question', key: vp.key, dup: vp.dup, q: `🔗 «${g.rule.cond} → ${g.rule.act.slice(0, 30)}»: «${T.name}» מחובר בגרף (${[...(E.down || []), ...(E.up || [])].filter((f) => T.fields.includes(f)).join(' · ')}) ✓ · חסר: ${vp.ask}` };
+    return null; });
   // 🧩 הרכבה (הכרעת-בעלים 25.9 «תתקן ותשדרג»): כלל שלא התאים לצורה אחת ⇒ פירוק לחלקים ⇒ כל חלק מחפש את הצורה הקיימת שלו ⇒ הרכבה.
   //    חלקים: נספר (N + שם ⇒ טבלה) · סינון («לא X» ⇒ שלב) · קיבוץ («באותו/ב<ישות>» ⇒ שדה) · חלון («ב-M דק'») · סף (N-1)
   //    ⇄ כל חלק נשלח לערוץ (ctx.need('part')) — לא «חסר» ועצירה (25.9 «תשדרג את הקיים»): שם · הגדרות-המסמך · מחקר · שאלה

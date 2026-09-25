@@ -104,3 +104,33 @@ console.log(JSON.stringify(${JSON.stringify(rows)}.map((a) => { const v = f(...a
   if (r.status !== 0) return { available: true, error: (r.stderr || '').slice(0, 300) };
   return { available: true, values: JSON.parse(r.stdout).map((v) => typeof v === 'string' ? Number(v) : v) };
 }
+
+// 🔗 מנוע-התלות (systems-engine/sensors/graph.reach — «מה נופל איתו»): אותה פונקציה ב-JS ובאפליקציה (emitTs). קשתות מהרשומות:
+//    שדה «down» (feeds) = הרשומה ⇒ הערך · שדה «up» (depends on) = הערך ⇒ הרשומה. ערך «שם:דקות» ⇒ השם. מפתח = השדה הראשון (כמו refCount).
+export const GRAPH_FN = `
+function reachCountRecs(recs: Array<Record<string, string>>, key: string, down: string[], up: string[], from: string): number {
+  const succ = new Map<string, string[]>();
+  const vals = (s: string): string[] => String(s ?? '').split(/[,;|]/).map((x) => x.split(':')[0].trim()).filter((x) => x.length > 0);
+  for (const r of recs) {
+    const me = String(r[key] ?? '').trim();
+    for (const f of down) for (const v of vals(r[f])) { if (me.length > 0) { const l = succ.get(me) ?? []; l.push(v); succ.set(me, l); } }
+    for (const f of up) for (const v of vals(r[f])) { if (me.length > 0) { const l = succ.get(v) ?? []; l.push(me); succ.set(v, l); } }
+  }
+  const g: Graph = { ids: [], type: new Map<string, string>(), succ: succ, pred: new Map<string, string[]>() };
+  return reach(g, [from.trim()], 'down', new Set<string>()).size - 1;
+}`;
+export async function graphEngineDart() {
+  const home = judgeHome(); if (!home) return { available: false, reason: judgeHome.reason };
+  const { emitTs } = await import('../machtzev/emit/ast-js-to-dart.mjs');
+  const H = fs.readFileSync(path.join(HERE, '../machtzev/emit/parity-ast.mjs'), 'utf8').match(/const H = `([^]*?)`;/)[1];
+  const g = fs.readFileSync(path.join(home, 'packages/sensors/src/graph.ts'), 'utf8');
+  const src = g.match(/export interface Graph[\s\S]*?\n}\n/)[0] + g.match(/export function reach[\s\S]*?\n}\n/)[0] + GRAPH_FN;
+  const body = emitTs(src);
+  const code = `// 🔗 מנוע-התלות (systems-engine/sensors/graph.reach) — הומר אוטומטית מ-TS (emitTs). לא לערוך ביד: נוצר מחדש בכל בנייה.\n// ignore_for_file: type=lint, unused_element, dead_code, argument_type_not_assignable, for_in_of_invalid_type, invalid_assignment, non_bool_condition, non_bool_operand, non_bool_negation_expression, not_iterable_spread, return_of_invalid_type\n${H}\n${body}\n`;
+  return { available: true, code };
+}
+export async function reachCountJs(recs, key, down, up, from) {
+  const home = judgeHome(); if (!home) return null; const G = await import('file://' + path.join(home, 'packages/sensors/src/graph.ts'));
+  const { requireTs } = await import('../machtzev/lib-ts.mjs'); const ts = requireTs(); const js = ts.transpileModule(GRAPH_FN, { compilerOptions: { target: 99 } }).outputText;
+  const f = new Function('reach', js + '\nreturn reachCountRecs;')(G.reach); return f(recs, key, down, up, from);
+}

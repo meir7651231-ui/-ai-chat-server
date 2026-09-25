@@ -18,7 +18,7 @@ export function htmlToMd(h) {
   return s.split('\n').map((l) => l.trim()).join('\n').replace(/\n{3,}/g, '\n\n');
 }
 const listOf = (cell) => { const sep = cell.includes('·') ? '·' : cell.includes(',') ? ',' : null; return sep ? cell.split(sep).map((x) => x.trim()).filter(Boolean) : null; };
-const cleanField = (f) => ({ raw: f, name: f.replace(/\(.*?\)|\{.*?\}|→.*$/g, '').replace(/\[\]$/, '').trim(), multi: /\[\]|\{.*\}\]?$|_ids$|s$/.test(f.replace(/\(.*?\)/g, '').trim()) });
+const cleanField = (f) => ({ raw: f, name: f.replace(/\(.*?\)|\{.*?\}|→.*$/g, '').trim().replace(/\[\]$/, '').trim(), multi: /\[\]|\{.*\}\]?$|_ids$|s$/.test(f.replace(/\(.*?\)/g, '').trim()) });
 /** הטבלאות שבמסמך: רצף שורות «| … |» ⇒ מערך שורות-תאים */
 function tablesOf(md) {
   const out = []; let cur = null;

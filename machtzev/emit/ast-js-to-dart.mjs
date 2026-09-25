@@ -87,8 +87,10 @@ const classOf = (e) => { const K = ts.SyntaxKind; if (!e) return null; if (e.kin
   if (e.kind === K.NewExpression && e.expression.kind === K.Identifier && CLASSES.has(e.expression.text)) return e.expression.text; return null; };
 // מחלקות · TS ⇒ Dart: מתרגמים TS⇒JS (פרמטר אופציונלי `x?: T` ⇒ `x = undefined`, כדי שלא ילך לאיבוד בתרגום), מורידים import/export, ואז emit.
 export function emitTs(src, opts = {}) {
-  const hint = { fields: {}, params: {}, coll: {} }; const sf = ts.createSourceFile('a.ts', src, ts.ScriptTarget.ES2022, true, ts.ScriptKind.TS);   // טיפוסי-מחלקה מה-TS לפני שהתרגום מוחק אותם
+  const hint = { fields: {}, params: {}, coll: {}, locals: {}, ret: {} }; const sf = ts.createSourceFile('a.ts', src, ts.ScriptTarget.ES2022, true, ts.ScriptKind.TS);   // טיפוסי-מחלקה מה-TS לפני שהתרגום מוחק אותם
   const cls = new Set(); ts.forEachChild(sf, (n) => { if (ts.isClassDeclaration(n) && n.name) cls.add(n.name.text); });
+  const collT = (t) => (t && ts.isTypeReferenceNode(t) && ts.isIdentifier(t.typeName) ? ({ Set: 'Set', ReadonlySet: 'Set', Map: 'Map', ReadonlyMap: 'Map' })[t.typeName.text] || null : null);
+  const IFACE = {}; ts.forEachChild(sf, (n) => { if (ts.isInterfaceDeclaration(n)) { const m = (IFACE[n.name.text] = {}); for (const x of n.members) if (ts.isPropertySignature(x) && ts.isIdentifier(x.name) && collT(x.type)) m[x.name.text] = collT(x.type); } });   // ממשק: שדות Map/Set (Graph.succ)
   const tn = (t) => t && ts.isTypeReferenceNode(t) && ts.isIdentifier(t.typeName) && cls.has(t.typeName.text) ? t.typeName.text : null;
   const walk = (n, owner) => { if (ts.isClassDeclaration(n) && n.name) { const c = n.name.text; hint.fields[c] = hint.fields[c] || {};
       for (const m of n.members) { if (ts.isPropertyDeclaration(m) && ts.isIdentifier(m.name) && m.type && ts.isTypeReferenceNode(m.type) && ts.isIdentifier(m.type.typeName) && /^(Map|Set)$/.test(m.type.typeName.text)) ((hint.coll[c] = hint.coll[c] || {})[m.name.text] = m.type.typeName.text);
@@ -96,7 +98,13 @@ export function emitTs(src, opts = {}) {
       ts.forEachChild(n, (x) => walk(x, c)); return; }
     const fname = (ts.isFunctionDeclaration(n) || ts.isMethodDeclaration(n)) && n.name && ts.isIdentifier(n.name) ? n.name.text : ts.isConstructorDeclaration(n) ? owner : ts.isVariableDeclaration(n) && ts.isIdentifier(n.name) && n.initializer && (ts.isArrowFunction(n.initializer) || ts.isFunctionExpression(n.initializer)) ? n.name.text : null;
     if (fname) { const ps = ts.isVariableDeclaration(n) ? n.initializer.parameters : n.parameters; const key = owner + '.' + fname;   /* = מפתח fnHead: (CUR_CLASS||'') + '.' + שם */
-      for (const p of ps) if (ts.isIdentifier(p.name) && tn(p.type)) (hint.params[key] = hint.params[key] || {})[p.name.text] = tn(p.type); }
+      for (const p of ps) if (ts.isIdentifier(p.name) && tn(p.type)) (hint.params[key] = hint.params[key] || {})[p.name.text] = tn(p.type);
+      // ⇄ אוספים מהטיפוס (שדרוג 25.9 — graph.reach של systems-engine): פרמטר Set/Map/ReadonlySet · משתנה מקומי = שדה-ממשק מטיפוס Map/Set (גם בתנאי «a ? g.succ : g.pred») · החזרה Set/Map
+      const lc = (hint.locals[key] = hint.locals[key] || {}); const ifp = {};
+      for (const p of ps) if (ts.isIdentifier(p.name) && p.type) { const c = collT(p.type); if (c) lc[p.name.text] = c; else if (ts.isTypeReferenceNode(p.type) && ts.isIdentifier(p.type.typeName) && IFACE[p.type.typeName.text]) ifp[p.name.text] = IFACE[p.type.typeName.text]; }
+      const rt = (ts.isFunctionDeclaration(n) || ts.isMethodDeclaration(n)) && n.type ? collT(n.type) : null; if (rt) hint.ret[fname] = rt;
+      const propColl = (e) => (e && ts.isPropertyAccessExpression(e) && ts.isIdentifier(e.expression) && ifp[e.expression.text] ? ifp[e.expression.text][e.name.text] || null : null);
+      const body = ts.isVariableDeclaration(n) ? n.initializer.body : n.body; const scan = (x) => { if (ts.isVariableDeclaration(x) && ts.isIdentifier(x.name) && x.initializer) { const i = x.initializer; const c = propColl(i) || (ts.isConditionalExpression(i) && propColl(i.whenTrue) && propColl(i.whenTrue) === propColl(i.whenFalse) ? propColl(i.whenTrue) : null) || (x.type ? collT(x.type) : null); if (c) lc[x.name.text] = c; } ts.forEachChild(x, scan); }; if (body) scan(body); }
     ts.forEachChild(n, (x) => walk(x, owner)); };
   walk(sf, '');
   const f = ts.factory; const opt = (ctx) => (root) => { const v = (n) => { n = ts.visitEachChild(n, v, ctx); return ts.isParameter(n) && n.questionToken && !n.initializer && !n.dotDotDotToken ? f.updateParameterDeclaration(n, n.modifiers, n.dotDotDotToken, n.name, undefined, n.type, f.createIdentifier('undefined')) : n; }; return ts.visitNode(root, v); };
@@ -107,6 +115,7 @@ const CTX_STACK = [];   // פונקציה מקוננת (חץ בתוך גוף) �
 function fnHead(name, params, body) {
   const inf = INFER ? inferFn(params, body) : { params: {}, ret: null }; const ev = TYPES[name] || {};
   CTX_STACK.push(CTX); CTX = { params: new Map(CTX ? CTX.params : []), locals: new Map(CTX ? CTX.locals : []), nullables: new Set(CTX ? CTX.nullables : []) };   // up-converter · פונקציה-מקוננת יורשת את טיפוסי-הפרמטרים של החיצונית (T.k1 בתוך arrow ⇒ T['k1'])
+  for (const [v, c] of Object.entries((HINT.locals || {})[(CUR_CLASS || '') + '.' + name] || {})) CTX.locals.set(v, c);   // ⇄ Set/Map מהטיפוס (פרמטר · שדה-ממשק · מקומי)
   const hp = HINT.params[(CUR_CLASS || '') + '.' + name] || {}; for (const p of params) if (p.name.kind === ts.SyntaxKind.Identifier && hp[p.name.text]) CTX.locals.set(p.name.text, 'class:' + hp[p.name.text]);   // מחלקות · (sim: Sim) מה-TS
   for (const p of params) { const nm = p.name.text; const o = ev.params && ev.params[nm]; const t = hp[nm] ? null : (FORCE && o) ? (o === 'dynamic' ? null : o) : (o || inf.params[nm] || null); CTX.params.set(nm, t);   /* רמז-TS גובר על הסקה (sim.every ≠ List) */ }
   const ret = (FORCE && ev.ret) ? ev.ret : (ev.ret || inf.ret || 'dynamic');
@@ -306,7 +315,8 @@ function expr(n) {
       if (obj === 'Math' && MATH[name]) return MATH[name];          // Math.x → helper/dart:math
       if (name === 'length') return `${obj}.length`;
       if (name === 'size' && CTX && n.expression.kind === K.Identifier && /^(Set|Map)$/.test(CTX.locals.get(n.expression.text) || '')) return `${obj}.length`;
-      if (name === 'size' && collOf(n.expression)) return `${obj}.length`;   /* this.stocks.size */   // up-converter · Set/Map.size
+      if (name === 'size' && collOf(n.expression)) return `${obj}.length`;
+      if (name === 'size' && n.expression.kind === K.CallExpression && n.expression.expression.kind === K.Identifier && (HINT.ret || {})[n.expression.expression.text]) return `${obj}.length`;   // reach(...).size — פונקציה שמחזירה Set   /* this.stocks.size */   // up-converter · Set/Map.size
       { const mt = isMapParam(n.expression); if (mt) return `${obj}['${name}']`; }   // G20 · פרמטר-Map ⇒ גישת-מפתח (nullable כבר קיבל !)
       return `${obj}.${name}`;
     }
