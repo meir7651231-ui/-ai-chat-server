@@ -24,3 +24,15 @@ if (CH.silent(done).length) fails.push(`חסרים שקטים: ${CH.silent(done)
 if (CH.silent([{ kind: 'x', outcome: null }]).length !== 1) fails.push('silent לא תופס חסר בלי תוצאה');
 if (fails.length) { for (const f of fails) console.error('🚨 chaser: ' + f); process.exit(1); }
 console.log(`✓ chaser: ${CH.kinds().length} סוגי-חסר רשומים (${CH.kinds().join(' · ')}) · ${done.length} חסרים ⇒ ${JSON.stringify(CH.summary(done))} · אף אחד לא שקט`);
+// (7) הרכבה: «5 אנשים לא מגיבים באותו אזור» ⇒ סינון-שלב + ספירה-לכל-קבוצה · חלק חסר אחד ⇒ שאלה מדויקת
+{ const P = { name: 'סדרן', fields: ['שם', 'zone אזור'], stages: ['פעיל', 'לא מגיב'] };
+  const d2 = await CH.resolveAll([{ kind: 'rule', table: P, rule: { cond: '5 סדרנים לא מגיבים באותו אזור', act: 'רשת' } }, { kind: 'rule', table: P, rule: { cond: '5 סדרנים לא מגיבים באותו אזור', act: 'רשת' } }],
+    { K, answers: {}, asked: new Set(), tables: [P], detect: detectAllClauses, alertWord: 'התראה', whenWord: 'כש', aboveWord: 'מעל', belowWord: 'מתחת ל', sinceWord: 'זמן מאז' });
+  const P2 = { ...P, stages: ['פעיל'] }; const d3 = await CH.resolveAll([{ kind: 'rule', table: P2, rule: { cond: '5 סדרנים לא מגיבים באותו אזור', act: 'רשת' } }], { K, answers: {}, asked: new Set(), tables: [P2], detect: detectAllClauses, alertWord: 'התראה', whenWord: 'כש', aboveWord: 'מעל', belowWord: 'מתחת ל', sinceWord: 'זמן מאז' });
+  if (d3[0].outcome !== 'question' || !/לא מגיבים/.test(d3[0].q)) { console.error('🚨 chaser: חלק-חסר אחד חייב שאלה מדויקת: ' + d3[0].outcome); process.exit(1); }
+  if (d2[0].outcome !== 'clause' || !/זמן מאז לא מגיב מעל 0 וגם מונה סדרן לכל zone אזור מעל 4/.test(d2[0].clause)) { console.error('🚨 chaser: הרכבה לא הרכיבה: ' + (d2[0].clause || d2[0].outcome)); process.exit(1); }
+  console.log(`✓ chaser הרכבה: «${d2[0].clause}» · חסר-שלב ⇒ ${d3[0].outcome}: ${d3[0].q.slice(0, 80)}`); }
+// (8) «וגם» אחרי «כש» (רגרסיה שנתפסה 25.9: whenRegex דרש מילה צמודה ⇒ החלק השני נבלע) · ספירה עם סינון נשארת ספירה
+{ const a = detectAllClauses('התראה כשציון מתחת ל-55 וגם ציון מעל 10'), b = detectAllClauses('התראה כשזמן מאז לא מגיב מעל 0 וגם מונה אדם לכל אזור מעל 2');
+  if (a.length !== 2 || !a[1].and || b.length !== 2 || !b[1].and) { console.error('🚨 chaser: «וגם» נבלע — ' + JSON.stringify([a.length, b.length])); process.exit(1); }
+  console.log('✓ «וגם»: שני החלקים נקראים (גם אחרי «כש»)'); }

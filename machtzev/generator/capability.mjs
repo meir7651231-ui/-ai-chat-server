@@ -119,7 +119,7 @@ export function detectAllClauses(text) {
     let whenWord = null; const pieces = seg.split(CONN_RE);   // [חלק, מחבר, חלק, מחבר, …]
     for (let i = 0; i < pieces.length; i += 2) { const part = pieces[i], conn = i > 0 ? pieces[i - 1] : null;
       let d = detectAlertClause(part);
-      if (!d && conn && whenWord) d = detectAlertClause(`${whenWord} ${part}`);
+      if (!d && conn && whenWord) d = detectAlertClause(/ש$/.test(whenWord) ? `${whenWord}${part.trim()}` : `${whenWord} ${part}`);   // «כש» + «כיתה» = «כשכיתה» (whenRegex: מילת-תנאי צמודה)
       if (!d) continue;
       if (!whenWord) { const m = part.match(WHEN); whenWord = m ? m[0] : null; }
       if (conn) { if (OR_RE.test(conn)) d.or = true; else d.and = true; }   // «או» = חלופה (איחוד) · «וגם» = צירוף (חיתוך)

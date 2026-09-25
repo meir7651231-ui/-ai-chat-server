@@ -445,7 +445,11 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
     const liveExtras = extraScreens.map((x) => { const y = liveOf(x); const c = x.clause; if (!y.live || !c || !((c.and && c.and.length) || (c.or && c.or.length))) return y;
       const pre = [], alt = [], dropped = [];
       const same = (z) => z.live && z.live.slug === y.live.slug && !['agg', 'aggBy', 'refCount', 'levels'].includes(z.live.kind || 'num');
-      for (const cj of c.and || []) { const z = liveOf({ ...x, clause: cj }); if (same(z)) pre.push(z.live); else dropped.push(`${cj.x} ${cj.op} ${cj.n}`); }
+      const isAgg = (z) => z.live && ['agg', 'aggBy'].includes(z.live.kind);   // «לא מגיב וגם מונה אדם לכל אזור» ⇒ הספירה היא הראשי, תנאי-השורה הם הסינון שלה
+      let main = y; const rowParts = [];
+      for (const cj of c.and || []) { const z = liveOf({ ...x, clause: cj }); if (isAgg(z) && !isAgg(main) && z.live.slug === main.live.slug) { rowParts.push(main.live); main = z; } else if (same(z) || (isAgg(main) && z.live && z.live.slug === main.live.slug && !isAgg(z))) rowParts.push(z.live); else dropped.push(`${cj.x} ${cj.op} ${cj.n}`); }
+      if (main !== y) { if (dropped.length) seedNotes.push(T('liveAndDropped', { name: x.name, parts: dropped.join(', ') })); return { ...main, live: { ...main.live, pre: rowParts } }; }
+      pre.push(...rowParts);
       for (const cj of c.or || []) { const z = liveOf({ ...x, clause: cj }); if (same(z)) alt.push(z.live); else dropped.push(`${cj.x} ${cj.op} ${cj.n}`); }
       if (dropped.length) { const why = T('liveAndDropped', { name: x.name, parts: dropped.join(', ') }); seedNotes.push(why); }
       return (pre.length || alt.length) ? { ...y, live: { ...y.live, ...(pre.length ? { pre } : {}), ...(alt.length ? { alt } : {}) } } : y; });

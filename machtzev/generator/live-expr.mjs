@@ -74,7 +74,7 @@ export const liveTest = (live, v, t) => (String(live.op || '')[0] === '@' ? `${l
 export const liveAtomImports = (live) => [live, ...(live.pre || []), ...(live.alt || [])].filter((p) => String(p.op || '')[0] === '@' && p.atomFile).map((p) => `import '../${p.atomFile}';`);
 /** האם ערך-דוגמה עונה לתנאי (JS, לציפייה): < · > · = (מחרוזת) */
 export const liveHit = (live, v) => { const t = liveThreshold(live); if (v == null) return false; if (String(live.op || '')[0] === '@') { const fn = verifiedTwin(live.op.slice(1), live.atomFile ? path.join(R.ROOT, 'new', live.atomFile) : null); return fn ? fn(String(v).trim(), String(t).trim()) === true : false; } return live.op === '<' ? v < t : live.op === '>' ? v > t : String(v).trim() === String(t).trim(); };   /* @אטום: התאום המאומת-מול-Dart (op-twins) */
-export const liveNeedsHelper = (live) => live.kind === 'age' || live.kind === 'ageMin' || (live.kind === 'expr' && exprNeedsAge(live.tree)) || !!live.window || live.agg === 'trend' || (live.pre || []).some((p) => p.kind === 'age');
+export const liveNeedsHelper = (live) => live.kind === 'age' || live.kind === 'ageMin' || (live.kind === 'expr' && exprNeedsAge(live.tree)) || !!live.window || live.agg === 'trend' || [...(live.pre || []), ...(live.alt || [])].some((p) => liveNeedsHelper(p));   // מסנן/חלופה שצריכים _ageMin (זמן-מאז-שלב · ותק) ⇒ גם הראשי
 /** צירוף («וגם», הכרעת-בעלים 23.9 «צא לדרך»): live.pre = תנאים קודמים על אותה קבוצה ⇒ הקבוצה של התנאי הראשי היא הרשומות שעברו את כולם (מסנן על מסנן) */
 // ═══ livePre = and (filter over filter)
 export const livePre = (live, r = 'r', k = (s) => `'${s}'`) => (live.pre || []).map((p) => `(${liveTest(p, liveValue(p, r, k), liveThresholdDart(p, k))})`).join(' && ');
