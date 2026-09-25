@@ -143,6 +143,8 @@ gate('particles', 'generator/particles.mjs', ['--gate']);
 gate('peruk', 'generator/peruk.mjs', ['--gate']);
 gate('hamtzaa', 'generator/hamtzaa.mjs', ['--ratchet']);
 gate('yeshiva', '../yeshiva/gate.mjs', ['--gate']);
+gate('chaser', '../yeshiva/chaser-check.mjs');   // הכרעה-40 (25.9 «מאושר 40»): כל חסר יוצא עם תוצאה · חלק-חסר עובר בערוץ · «וגם» לא נבלע · הקבצים עונים לפני שאלה
+gate('kushya', '../yeshiva/kushya-check.mjs');   // הכרעה-40: קושיה ⇒ חיפוש בכל מקור רשום; קושיה בלי חיפוש ובלי סיבה = אדום
 gate('balagan', 'generator/balagan-look.mjs', ['--gate']);
 gate('balaganone', 'generator/balagan-one.mjs', ['--gate']);
 gate('server', 'generator/server-gate.mjs', ['--gate']);   // G57 · הכרעה-31: חבילת-השרת נגזרת ומאומתת (ישויות · מפתחות · אפס-סודות · מצבות)
