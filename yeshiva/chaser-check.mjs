@@ -72,3 +72,12 @@ console.log(`✓ chaser: ${CH.kinds().length} סוגי-חסר רשומים (${CH
   const Sh2 = { ...Sh, fields: [...Sh.fields, 'מעבר', 'תפקיד'] }; const b = (await CH.resolveAll([R], { ...base, asked: new Set(), tables: [M, Sh2], answers: { 'יחידה שוטרים': 'שיבוץ' } }))[0];
   if (a.outcome !== 'question' || a.key !== 'שדה שיבוץ: מעבר' || b.outcome !== 'clause' || b.clause !== 'התראה כשמונה שיבוץ שוטר פחות תקן שוטרים מתחת ל 0') { console.error('🚨 chaser: ספירה-מול-שדה: ' + JSON.stringify([a.outcome, a.key, b.clause || b.q])); process.exit(1); }
   console.log(`✓ ספירה מול שדה: חסר קישור ⇒ «${a.key}» · אחרי ⇒ «${b.clause}»`); }
+// (12) השפעת-מצב ותלות: «גשם: המדרגות חלקות → קיבולת יורדת» ⇒ שאלת-מקדם ⇒ נבנה (מקדם) · «נכס נפל» ⇒ פועל ⇒ שלב ⇒ התראה עם «נופלים איתו»
+{ const St = { name: 'מדרגות', fields: ['קיבולת'], stages: [] }, As = { name: 'נכס', fields: ['kind', 'depends on', 'feeds'], stages: ['ok', 'down'] };
+  const base = { K, asked: new Set(), corpus: [], subs: [], tables: [St, As], effectVerbs: ['יורדת'], stateChangeWords: ['נפל'], edgeFields: { down: ['feeds'], up: ['depends on'] }, reachWords: ['נופלים איתו'], detect: detectAllClauses, alertWord: 'התראה', whenWord: 'כש', aboveWord: 'מעל', belowWord: 'מתחת ל', sinceWord: 'זמן מאז' };
+  const E = { kind: 'rule', table: St, rule: { cond: 'גשם ב-05:00: המדרגות חלקות', act: 'קיבולת יורדת' } }, D = { kind: 'rule', table: As, rule: { cond: 'נכס נפל', act: 'מה נופל איתו' } };
+  const a = await CH.resolveAll([E, D], { ...base, answers: {} }); const b = await CH.resolveAll([E, D], { ...base, asked: new Set(), answers: { 'השפעה מדרגות: קיבולת במצב גשם': '0.8', 'תואר נכס: נפל': 'down' } });
+  const bad = []; if (a[0].outcome !== 'question' || a[0].key !== 'השפעה מדרגות: קיבולת במצב גשם') bad.push('השפעה בלי מקדם ⇒ שאלה'); if (a[1].outcome !== 'question' || a[1].key !== 'תואר נכס: נפל') bad.push('תלות: פועל ⇒ שאלת-שלב');
+  if (b[0].outcome !== 'built' || !b[0].effect || b[0].effect.n !== 0.8) bad.push('השפעה עם מקדם ⇒ נבנה'); if (b[1].outcome !== 'clause' || b[1].clause !== 'התראה כשזמן מאז down מעל 0 וגם נופלים איתו מעל 0') bad.push('תלות ⇒ ' + (b[1].clause || b[1].q));
+  if (bad.length) { for (const x of bad) console.error('🚨 chaser: ' + x); process.exit(1); }
+  console.log(`✓ השפעת-מצב ⇒ ${b[0].why} · תלות ⇒ «${b[1].clause}»`); }

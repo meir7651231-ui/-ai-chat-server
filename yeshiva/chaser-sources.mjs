@@ -61,6 +61,18 @@ export function registerAll(CH) {
     if (vp.outcome === 'built' && vp.value && vp.value.stage) return { outcome: 'clause', clause: `${ctx.alertWord} ${ctx.whenWord}${ctx.sinceWord} ${vp.value.stage} ${ctx.aboveWord} 0 וגם ${(ctx.reachWords || ['נופלים איתו'])[0]} ${ctx.aboveWord} 0`, act: g.rule.act };
     if (vp.outcome === 'question') return { outcome: 'question', key: vp.key, dup: vp.dup, q: `🔗 «${g.rule.cond} → ${g.rule.act.slice(0, 30)}»: «${T.name}» מחובר בגרף (${[...(E.down || []), ...(E.up || [])].filter((f) => T.fields.includes(f)).join(' · ')}) ✓ · חסר: ${vp.ask}` };
     return null; });
+  // 🌧️ השפעת-מצב («גשם: המדרגות חלקות → קיבולת יורדת»): לא התראה — מקדם על שדה בזמן שמצב פעיל. מנוע קיים: חוקי-המצבים (gen_app_rules/מצב) —
+  //    כאן: שדה של הטבלה (חלק field) · סיבה = המילה הראשונה (סוג-מצב) · המקדם = תשובת-הבעלים (המחקר לא נוקב מספר ⇒ שאלה, לא ניחוש)
+  CH.register('rule', 'effect', async (ctx, g) => {
+    const act = g.rule.act.trim(), cond = g.rule.cond.trim(); const vm = act.match(new RegExp(`^([\\u0590-\\u05FF\\s]+?)\\s+(${(ctx.effectVerbs || []).join('|') || '$^'})$`)); if (!vm) return null;
+    const cause = (cond.match(/^([\u0590-\u05FF]+)/) || [])[1]; if (!cause) return null;
+    const T = (ctx.tables || []).find((t) => cond.split(/[\s,:;]+/).some((w) => stem(w.replace(/^ה(?=\S{3})/, '')) === stem(t.name))); if (!T) return null;
+    const fp = await ctx.need('part', { part: 'field', word: vm[1].trim(), T, cond }); if (fp.outcome === 'question') return { outcome: 'question', key: fp.key, dup: fp.dup, q: `🌧️ «${cond} → ${act}»: ${fp.ask}` }; if (fp.outcome !== 'built') return null;
+    const key = `השפעה ${T.name}: ${fp.value} במצב ${cause}`, said = typeof ctx.answers[key] === 'string' ? ctx.answers[key].trim() : '';
+    if (/^\d+(\.\d+)?$/.test(said)) return { outcome: 'built', effect: { ent: T.name, field: fp.value, kind: cause, n: +said }, why: `במצב ${cause}: ${T.name}.${fp.value} × ${said}` };
+    if (said === 'לא') return { outcome: 'declared', why: 'הבעלים: לא' };
+    const dup = ctx.asked.has(key); ctx.asked.add(key);
+    return { outcome: 'question', key, dup, q: `🌧️ «${cond} → ${act}»: במצב «${cause}» — «${fp.value}» של «${T.name}» כפול כמה? (למשל 0.8 = יורדת ל-80%) · «${cause}» ייכנס כסוג-מצב` }; });
   // 🧩 הרכבה (הכרעת-בעלים 25.9 «תתקן ותשדרג»): כלל שלא התאים לצורה אחת ⇒ פירוק לחלקים ⇒ כל חלק מחפש את הצורה הקיימת שלו ⇒ הרכבה.
   //    חלקים: נספר (N + שם ⇒ טבלה) · סינון («לא X» ⇒ שלב) · קיבוץ («באותו/ב<ישות>» ⇒ שדה) · חלון («ב-M דק'») · סף (N-1)
   //    ⇄ כל חלק נשלח לערוץ (ctx.need('part')) — לא «חסר» ועצירה (25.9 «תשדרג את הקיים»): שם · הגדרות-המסמך · מחקר · שאלה
@@ -117,7 +129,7 @@ export function registerAll(CH) {
   CH.register('part', 'ask', async (ctx, g) => {
     const key = partKey(g); const dup = ctx.asked.has(key); ctx.asked.add(key);
     if (g.part === 'table') { const opt = coTables(ctx, g.word); return { outcome: 'question', key, dup, ask: `«${g.word}» — איזו טבלה נספרת?${opt.length ? ` (במחקר מופיע ליד: ${opt.join(' · ')})` : ''} — ענה שם-טבלה או «לא»`, q: `🧩 «${g.cond.slice(0, 70)}»: «${g.word}» — איזו טבלה נספרת?${opt.length ? ` (במחקר מופיע ליד: ${opt.join(' · ')})` : ''} — ענה שם-טבלה או «לא»` }; }
-    if (g.part === 'field') { const ask = `קיבוץ «${g.word}» — איזה שדה ב«${g.T.name}»? (${(g.T.fields || []).join(' · ')}) — או שם שדה חדש, או «לא»`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; }
+    if (g.part === 'field') { const ask = `«${g.word}» — איזה שדה ב«${g.T.name}»? (${(g.T.fields || []).join(' · ')}) — או שם שדה חדש, או «לא»`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; }
     if (g.part === 'value') { const ask = `«${g.noun} ${g.word}» — «${g.word}» הוא שלב של ${g.T.name}? (${(g.T.stages || []).join(' · ') || '—'}) — ענה שם-שלב (קיים או חדש), או «${ctx.descWord || 'תיאור'}» אם כל ה${g.noun} כאלה`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; }
     const ask = `סינון «לא ${g.word}» — אין שלב כזה ב«${g.T.name}» (עכשיו: ${(g.T.stages || []).join(' · ') || '—'}). אילו שלבים להוסיף? (למשל: לא ${g.word})`; return { outcome: 'question', key, dup, ask, q: `🧩 «${g.cond.slice(0, 70)}»: ${ask}` }; });
   // 🗂️ מיון מה שלא נבנה (25.9 «תסיים כל מה שאתה והמחולל יכולים»): «לא בצורה» אינו סיבה — כל כלל מוצהר מקבל סוג, כדי שמה שנשאר יהיה רק כללים אמיתיים בלי צורה

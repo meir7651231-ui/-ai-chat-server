@@ -403,7 +403,10 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
         return { refCount: { childSlug: b.fslug, childField: b.ffield, parentKey: (r.schema[0] || {}).label, ...(ff ? { filt: { field: ff.label, value: (ff.enumVals || []).find((v) => v === val || stemOf(v) === stemOf(val)) || val } } : {}) } }; }
       const f = r.schema.find((fd) => fd.label === txt || stemOf(fd.label) === stemOf(txt)); if (!f) return null;
       const isHm = f.type !== 'date' && f.type !== 'num' && String(f.label).split(/[\s_]+/).some((w) => (SL.typeTime || []).includes(w));   // שדה-שעה («actual time» · «שעת יציאה») ⇒ דקות, לא מספר
-      return f.type === 'date' ? { ageField: f.label } : isHm ? { hmField: f.label } : { field: f.label, fi: r.schema.indexOf(f) };
+      // 🌧️ השפעת-מצב (opts.effects — תשובת-הבעלים): השדה × מקדם כשרשומת-מצב מהסוג פעילה (טבלת-המצב של המסמך · שלב active)
+      const ME = Object.values(entRes).find((e) => e && (SL.modeEntityWords || []).includes(e.entity)); const mk = ME && (ME.schema.find((q) => /^kind$|^סוג$/.test(q.label)) || ME.schema[0]); const ai = ME ? (ME.stages || []).findIndex((st) => (SL.activeStageWords || []).includes(st)) : -1;
+      const eff = ME && mk && ai >= 0 && nameToSlug[ME.entity] ? (Array.isArray(opts.effects) ? opts.effects : []).filter((e) => e.ent === r.entity && (e.field === f.label || stemOf(e.field) === stemOf(f.label))).map((e) => ({ slug: nameToSlug[ME.entity], kindField: mk.label, active: ai, kind: e.kind, n: e.n })) : [];
+      return f.type === 'date' ? { ageField: f.label } : isHm ? { hmField: f.label } : { field: f.label, fi: r.schema.indexOf(f), ...(eff.length ? { eff } : {}) };
     };
     const liveOf0 = (x) => { const c = x.clause;
       // 🔗 תוצאה של טבלאות קשורות = שדה של ישות-האב (opts.derived): «התראה כשצפי מעל 250» ⇒ הערך המחושב לכל אזור — לפני מילות-הצבירה («צפי» היא גם קו-מגמה)
@@ -446,6 +449,7 @@ export function buildApp(specText, opts = {}) {   // up-plan · opts.writePlan=f
       const ordered = [...(entTail ? [entTail] : []), ...info.filter((li) => li.isEnt && entRes[li.i] && entRes[li.i] !== entTail).map((li) => entRes[li.i])];
       for (const r of ordered) { const cx = (r === entTail && fieldHead) ? fieldHead : c.x; const f = r.schema.find((fd) => stemOf(fd.label) === stemOf(cx) || fd.label === cx); if (f && nameToSlug[r.entity]) { if (c.op === '=' || c.op[0] === '@') return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, kind: 'eq', value: String(c.y), n: null, ...(c.op[0] === '@' ? { atomFile: CAPREL[c.op] || null } : {}) } }; if ((c.unit || c.unitMin) && f.type !== 'date') { const why = T('liveNotDate', { name: x.name, label: f.label, type: f.type }); seedNotes.push(why); return { ...x, why }; }
             if (c.unitMin && !c.unit) return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: 'ageMin', minutes: +c.n * c.unitMin } };   // ⊕ זמן-מאז בדקות (_ageMin הקיים) — «נסרק מעל 270 דקות»
+            { const vt = !c.unit ? valueOf([f.label], r) : null; if (vt && vt.eff) return { ...x, live: { slug: nameToSlug[r.entity], kind: 'expr', field: f.label, tree: vt, op: c.op, n: +c.n } }; }   // 🌧️ שדה עם השפעת-מצב ⇒ ביטוי (× מקדם)
             return { ...x, live: { slug: nameToSlug[r.entity], field: f.label, op: c.op, n: +c.n, kind: c.unit ? 'age' : 'num', days: c.unit ? +c.n * c.unit : null } }; } }
       return x; };   // אין ישות עם השדה ⇒ השורה נשארת סטטית (הסף בלבד), לא מומצא
     const liveExtras = extraScreens.map((x) => { const y = liveOf(x); const c = x.clause; if (!y.live || !c || !((c.and && c.and.length) || (c.or && c.or.length))) return y;

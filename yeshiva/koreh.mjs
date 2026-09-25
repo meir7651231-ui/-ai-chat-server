@@ -117,7 +117,7 @@ export function modelGaps(corpus, names, rules, { minSources = 2, extLabels = ['
     const links = [...near.entries()].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([e]) => e);
     // שדות מהמחקר עצמו: משפט «…<נושא>…: א, ב, ג» (רשימה אחרי נקודתיים, ≥3 פריטים קצרים) ⇒ השדות של הטבלה — לא ממציאים
     let fields = []; for (const { text } of corpus) { for (const line of text.split(/\n+/)) { const i = line.indexOf(sub); const c = line.indexOf(':', i); if (i < 0 || c < 0 || c - i > 40) continue;
-      const items = line.slice(c + 1).split(/[.(]/)[0].split(/\s*,\s*/).map((x) => x.trim()).filter((x) => x && x.split(/\s+/).length <= 4 && !/[\d[\]'׳]/.test(x)); if (items.length >= 3 && items.length > fields.length) fields = items.slice(0, 10); } }
+      const items = line.slice(c + 1).split(/[.(|]/)[0].split(/\s*,\s*/).map((x) => x.trim()).filter((x) => x && x.split(/\s+/).length <= 4 && !/[\d[\]'׳]/.test(x)); if (items.length >= 3 && items.length > fields.length) fields = items.slice(0, 10); } }
     tables.push({ name: sub, sources: srcs.size, links, fields, rules: rs.filter((r) => !extLabels.includes(r.label)).slice(0, 8).map((r) => `${r.cond} → ${r.act}`), ex: rs[0] && rs[0].ex }); }
   for (const rs of Object.values(rules)) for (const r of rs) if (r.label && extLabels.includes(r.label)) {
     const ent = toks(r.cond).map(bare).map((w) => entOf(w, names)).find(Boolean); if (!ent) continue;
