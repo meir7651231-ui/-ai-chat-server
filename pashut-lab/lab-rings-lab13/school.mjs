@@ -10,9 +10,11 @@ const vs = variants(JSON.parse(fs.readFileSync('lib2.json', 'utf8')).filter((m) 
 // progress is saved to a file after every lesson — if the machine restarts, we continue from where we stopped
 const SAVE = `school-${useNet ? 'net' : 'nonet'}.json`; const done = fs.existsSync(SAVE) ? JSON.parse(fs.readFileSync(SAVE, 'utf8')) : {};
 const solved = Object.values(done).filter((x) => x.kinds);
+let ran = 0;
 for (const task of LESSONS) {
   if (task in done) { console.log(done[task].line + ' (from the file)'); continue; }
-  const { g, ok } = makeTask(task); const t0 = Date.now(); const deadline = t0 + 8 * 60000;
+  if (ran++ >= 1) break;   // one lesson per run (the machine restarts)
+  const { g, ok } = makeTask(task); const t0 = Date.now(); const deadline = t0 + 7 * 60000;
   const net = useNet && solved.length ? trainedPrior(task, 4, solved.map((x) => x.kinds)) : null; let r;
   for (const beam of [100, 300, 1000]) { r = searchPieces(g, vs, { beam, deadline, rank: net ? net.probs : null }); if (r.solved && ok(assemble(r.ps))) break; r.solved = false; if (Date.now() > deadline) break; }
   const sec = Math.round((Date.now() - t0) / 1000);
