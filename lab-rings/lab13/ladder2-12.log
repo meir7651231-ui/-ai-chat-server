@@ -1,0 +1,23 @@
+✓ העתק · מהזיכרון (6 פעולות)
+✓ לא (מספר) · מהזיכרון (8 פעולות)
+✓ וגם (מספרים) · מהזיכרון (14 פעולות)
+✓ או (מספרים) · מהזיכרון (14 פעולות)
+
+<--- Last few GCs --->
+
+[480:0x18987000]   697481 ms: Scavenge 4901.1 (5016.0) -> 4888.3 (5017.0) MB, pooled: 0 MB, 17.92 / 0.00 ms  (average mu = 0.268, current mu = 0.271) allocation failure; 
+[480:0x18987000]   702493 ms: Mark-Compact (reduce) 4888.5 (5017.0) -> 4805.7 (4985.0) MB, pooled: 0 MB, 4968.36 / 0.00 ms  (+ 1.3 ms in 0 steps since start of marking, biggest step 0.0 ms, walltime since start of marking 5012 ms) (average mu = 0.267, cur
+
+<--- JS stacktrace --->
+
+FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
+----- Native stack trace -----
+
+ 1: 0xe42d60 node::OOMErrorHandler(char const*, v8::OOMDetails const&) [node]
+ 2: 0x121ded0 v8::Utils::ReportOOMFailure(v8::internal::Isolate*, char const*, v8::OOMDetails const&) [node]
+ 3: 0x121e1a7 v8::internal::V8::FatalProcessOutOfMemory(v8::internal::Isolate*, char const*, v8::OOMDetails const&) [node]
+ 4: 0x144d015  [node]
+ 5: 0x144d043  [node]
+ 6: 0x146611a  [node]
+ 7: 0x14692e8  [node]
+ 8: 0x1cd07a1  [node]
