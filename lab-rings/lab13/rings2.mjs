@@ -78,6 +78,8 @@ if (import.meta.url === 'file://' + process.argv[1]) {
     G('קבוע 1', 12, cell(() => 1)),
     G('ועוד 1', 16, cell((m) => (m[0] + 1) & 15)),
     G('חיבור מספרים', 16, cell((m) => (m[0] + m[1]) & 15)),
+    G('ועוד 1 באותו תא', 16, () => { const m = new Array(16).fill(0); m[2] = rnd(16); return { mem: m, want: (m[2] + 1) & 15 }; }),
+    G('אורך רשימה לא-ריקה', 20, () => { let r; do { r = listOf(6)(); } while (!r.l.length); return { mem: r.m, want: r.l.length }; }),
     G('אורך רשימה (לולאה + ספירה)', 20, () => { const { m, l } = listOf(6)(); return { mem: m, want: l.length }; }),
     G('חפש ברשימה', 24, () => { const { m, l } = listOf(6)(); m[0] = 8 + rnd(8); return { mem: m, want: l.includes(m[0]) ? 15 : 0 }; }),
   ];
@@ -90,7 +92,11 @@ if (import.meta.url === 'file://' + process.argv[1]) {
     for (let i = 0; i < 30; i++) { const m = new Array(16).fill(0); const l = shuffled().slice(0, 7 + rnd(2)); chain(m, l); m[0] = 8 + rnd(8);
       out.push({ mem: m, want: /חפש/.test(g.name) ? (l.includes(m[0]) ? 15 : 0) : /צעד/.test(g.name) ? l[0] : /אורך/.test(g.name) ? l.length : l[l.length - 1] }); }
     return out; };
-  for (const g of LADDER) g.holdout = holdoutFor(g);
+  // תאי-קלט: רק בהם יש משמעות. כל תא אחר מתחיל «מלוכלך» (מספר אקראי) ⇒ לבנה לא סומכת על אפס שנשאר — אפשר לשים אותה בתוך לולאה
+  const LISTIN = [0, 1, 8, 9, 10, 11, 12, 13, 14, 15];
+  for (const g of LADDER) g.inputs = /רשימה/.test(g.name) ? LISTIN : g.name === 'ועוד 1 באותו תא' ? [2] : /קח מהכתובת/.test(g.name) ? [0, 8, 9, 10, 11, 12, 13, 14, 15] : [0, 1, 3];
+  const dirty = (g, list) => list.flatMap((e) => [e, { ...e, mem: e.mem.map((v, k) => (g.inputs.includes(k) ? v : rnd(16))) }]);
+  for (const g of LADDER) { g.examples = dirty(g, g.examples); g.holdout = dirty(g, holdoutFor(g)); }
   const withHold = (g) => ({ ...g, examples: [...g.examples, ...g.holdout] });
   // «הכנס לתוך»: לולאה שנלמדה + חלק שנלמד בתוך הגוף שלה (בכל מקום), כתובות-הקוד מוזזות
   function insertInto(g, lib, okAll) {
@@ -105,8 +111,10 @@ if (import.meta.url === 'file://' + process.argv[1]) {
     const bodies = pieces.flatMap(variantsOf);
     for (const L of loops) {
       const lvars = [L.prog, ...all.filter((c) => !L.data.includes(c)).map((o) => L.prog.map(([op, k, t]) => (op === 'WHERE' && t !== 'code' && k === L.out ? ['WHERE', o] : [op, k, t].filter((x) => x !== undefined))))];
-      for (const lp of lvars) for (let pos = 2; pos <= lp.length; pos++) for (const S of bodies) {
-        const shifted = lp.map(([op, k, t]) => (op === 'WHERE' && t === 'code' && k !== END && k >= pos ? ['WHERE', k + S.prog.length, 'code'] : [op, k, t].filter((x) => x !== undefined)));
+      // head: קפיצה שחוזרת בדיוק למקום ההכנסה — נשארת לפני החלק (החלק בתוך הלולאה), או עוברת אחריו
+      for (const lp of lvars) for (let pos = 2; pos <= lp.length; pos++) for (const head of [false, true]) for (const S of bodies) {
+        if (head && !lp.some(([op, k, t]) => op === 'WHERE' && t === 'code' && k === pos)) continue;
+        const shifted = lp.map(([op, k, t]) => (op === 'WHERE' && t === 'code' && k !== END && (head ? k > pos : k >= pos) ? ['WHERE', k + S.prog.length, 'code'] : [op, k, t].filter((x) => x !== undefined)));
         const prog = [...shifted.slice(0, pos), ...S.prog, ...shifted.slice(pos)];
         if (okAll(prog)) return { prog, used: [L.name, S.name] }; } }
     return null; }
@@ -143,7 +151,7 @@ if (import.meta.url === 'file://' + process.argv[1]) {
       line += `${longTest(g.name, r.prog)} · ${how} · ${before}⇐${r.prog.length} פעולות`; }
     console.log(`${line} · ${Math.round((Date.now() - t) / 1000)}s${r.used.length ? ' · השתמש ב: ' + [...new Set(r.used)].join(', ') : ''}`);
     if (r.solved) { console.log('   ' + show(r.prog)); const data = [...new Set(r.prog.filter(([o, k, t]) => o === 'WHERE' && t !== 'code').map(([, k]) => k))];
-      const ins = [...new Set([0, ...data])].filter((k) => k !== g.out && g.examples.some((e) => e.mem[k] !== 0));
+      const ins = [...new Set([0, ...data])].filter((k) => k !== g.out && g.inputs.includes(k) && g.examples.some((e) => e.mem[k] !== 0));
       lib.push({ name: g.name, ins, out: g.out, data: [...new Set([0, ...data])], prog: [['WHERE', 0], ['GO'], ...r.prog.map(([o, k, tt]) => (o === 'WHERE' && tt === 'code' && k !== END ? ['WHERE', k + 2, 'code'] : [o, k, tt].filter((x) => x !== undefined)))] }); }
     fs.writeFileSync(LIB, JSON.stringify([...saved.filter((m) => !lib.some((x) => x.name === m.name)), ...lib])); }
   fs.writeFileSync(path.join(HERE, 'manifest2.json'), JSON.stringify(lib.map((m) => ({ name: m.name, prog: show(m.prog) })), null, 1));
