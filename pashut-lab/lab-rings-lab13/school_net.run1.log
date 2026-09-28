@@ -1,0 +1,8 @@
+✓ צעד ברשימה · 0s · 111 checked · חיבור מספרים(0,1→2)
+the network learned from 1 solutions of other tasks (1 choices)
+✓ שני ברשימה · 0s · 795 checked · קח מהכתובת שבתא(1→2)
+the network learned from 2 solutions of other tasks (2 choices)
+✓ ראשון ועוד 1 · 0s · 81 checked · ועוד 1(1→2)
+the network learned from 3 solutions of other tasks (3 choices)
+✓ סוף רשימה · 42s · 221295 checked · קח מהכתובת שבתא(1→2) · חיבור מספרים(1,2→0) · חיבור מספרים(2,3→1) · אם 1≠0 ⇒ חלק 1 · חיבור מספרים(0,1→2)
+the network learned from 4 solutions of other tasks (8 choices)

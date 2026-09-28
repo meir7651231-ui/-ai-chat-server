@@ -1,0 +1,3 @@
+what the network suggests as the first step: לאן 100% · לאן@ 0% · לך 0%
+{"task":"סוף רשימה באורך עד 2","mode":"guided","solved":true,"best":26,"total":26,"len":16,"sec":2,"checked":22188,"how":"{\"keep\":3}"}
+לאן1 GO לאן2 TAKE GO PUT TAKE WHERE@ GO TAKE לאן1 GO PUT TAKE →0 JUMP

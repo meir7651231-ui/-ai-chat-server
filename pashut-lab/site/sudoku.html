@@ -1,0 +1,705 @@
+<title>פותר סודוקו</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap">
+<style>
+:root { --bg: #eef2f0; --card: #fbfcfb; --ink: #1c2622; --muted: #56655e; --accent: #0f6b5c; --accent-ink: #ffffff;
+        --line: #d6dfdb; --field: #f3f6f5; --err: #b3261e; color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #111715; --card: #19211e; --ink: #e5ece9; --muted: #9fb0a8; --accent: #4fc2ac;
+        --accent-ink: #0b1411; --line: #2a3531; --field: #141b19; --err: #ff8a80; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #111715; --card: #19211e; --ink: #e5ece9; --muted: #9fb0a8; --accent: #4fc2ac;
+        --accent-ink: #0b1411; --line: #2a3531; --field: #141b19; --err: #ff8a80; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 18px/1.6 "Assistant", system-ui, "Segoe UI", Arial, sans-serif;
+        padding-inline: 16px; padding-block: 32px; }
+#pd-app { max-width: 620px; margin-inline: auto; padding: 28px 24px; background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+          display: flex; flex-direction: column; gap: 10px; }
+@media (max-width: 520px) { body { padding-block: 12px; } #pd-app { padding: 20px 16px; } }
+.pd-title { font-size: 30px; line-height: 1.2; margin: 0 0 6px; text-wrap: balance; font-weight: 700; }
+.pd-text { margin: 0; color: var(--muted); }
+.pd-input { width: 100%; font: inherit; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--field); color: var(--ink); }
+.pd-input:focus-visible, .pd-button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.pd-button { font: inherit; font-weight: 600; padding: 9px 20px; border: 0; border-radius: 10px;
+              background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+.pd-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.pd-list { list-style: none; padding: 0; margin: 4px 0 0; border-top: 1px solid var(--line); }
+.pd-list:empty { border-top: 0; }
+.pd-list li { padding: 10px 2px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.pd-out { white-space: pre-wrap; overflow-x: auto; font: 15px/1.5 ui-monospace, Consolas, monospace; background: var(--field); padding: 12px; border-radius: 10px; margin: 0; }
+.pd-grid { display: grid; gap: 0; border: 2px solid var(--ink); border-radius: 8px; overflow: hidden; width: 100%;
+            direction: ltr; margin-block: 6px; }
+.pd-grid-sq { max-width: 460px; }
+.pd-scroll { overflow-x: auto; }
+.pd-grid-wide { border-width: 1px; border-color: var(--line); }
+.pd-grid input { width: 100%; min-width: 0; border: 1px solid var(--line); background: var(--field); color: var(--ink);
+                 font-variant-numeric: tabular-nums; border-radius: 0; }
+.pd-grid-sq input { aspect-ratio: 1; font: 600 clamp(15px, 4.8vw, 24px) "Assistant", system-ui, sans-serif; text-align: center; padding: 0; }
+.pd-grid-wide input { height: 38px; font: 15px "Assistant", system-ui, sans-serif; padding: 0 8px; text-align: start; }
+.pd-grid input:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.pd-grid input[readonly] { background: var(--card); }
+.pd-grid input.pd-head { background: var(--bg); color: var(--muted); font-weight: 700; text-align: center; }
+.pd-grid input.pd-mark { color: var(--accent); font-weight: 600; }
+.pd-grid-sq input.pd-mark { background: var(--card); }
+.pd-grid input.pd-b-r { border-right: 2px solid var(--ink); }
+.pd-grid input.pd-b-b { border-bottom: 2px solid var(--ink); }
+.pd-error { color: var(--err); border: 1px solid var(--err); border-radius: 10px; padding: 10px 14px; }
+@media (prefers-reduced-motion: no-preference) { .pd-button { transition: filter .15s; } .pd-button:hover { filter: brightness(1.08); } }
+</style>
+<main id="pd-app" dir="rtl" lang="he"></main>
+<script>
+/* נוצר אוטומטית ע"י tools/gen_unidata.py מתוך Python 3.13.12 — לא לערוך ביד */
+const PD_SPACE = [[9, 13], [28, 32], [133, 133], [160, 160], [5760, 5760], [8192, 8202], [8232, 8233], [8239, 8239], [8287, 8287], [12288, 12288]];
+const PD_NOPRINT = [[0, 31], [127, 160], [173, 173], [888, 889], [896, 899], [907, 907], [909, 909], [930, 930], [1328, 1328], [1367, 1368], [1419, 1420], [1424, 1424], [1480, 1487], [1515, 1518], [1525, 1541], [1564, 1564], [1757, 1757], [1806, 1807], [1867, 1868], [1970, 1983], [2043, 2044], [2094, 2095], [2111, 2111], [2140, 2141], [2143, 2143], [2155, 2159], [2191, 2199], [2274, 2274], [2436, 2436], [2445, 2446], [2449, 2450], [2473, 2473], [2481, 2481], [2483, 2485], [2490, 2491], [2501, 2502], [2505, 2506], [2511, 2518], [2520, 2523], [2526, 2526], [2532, 2533], [2559, 2560], [2564, 2564], [2571, 2574], [2577, 2578], [2601, 2601], [2609, 2609], [2612, 2612], [2615, 2615], [2618, 2619], [2621, 2621], [2627, 2630], [2633, 2634], [2638, 2640], [2642, 2648], [2653, 2653], [2655, 2661], [2679, 2688], [2692, 2692], [2702, 2702], [2706, 2706], [2729, 2729], [2737, 2737], [2740, 2740], [2746, 2747], [2758, 2758], [2762, 2762], [2766, 2767], [2769, 2783], [2788, 2789], [2802, 2808], [2816, 2816], [2820, 2820], [2829, 2830], [2833, 2834], [2857, 2857], [2865, 2865], [2868, 2868], [2874, 2875], [2885, 2886], [2889, 2890], [2894, 2900], [2904, 2907], [2910, 2910], [2916, 2917], [2936, 2945], [2948, 2948], [2955, 2957], [2961, 2961], [2966, 2968], [2971, 2971], [2973, 2973], [2976, 2978], [2981, 2983], [2987, 2989], [3002, 3005], [3011, 3013], [3017, 3017], [3022, 3023], [3025, 3030], [3032, 3045], [3067, 3071], [3085, 3085], [3089, 3089], [3113, 3113], [3130, 3131], [3141, 3141], [3145, 3145], [3150, 3156], [3159, 3159], [3163, 3164], [3166, 3167], [3172, 3173], [3184, 3190], [3213, 3213], [3217, 3217], [3241, 3241], [3252, 3252], [3258, 3259], [3269, 3269], [3273, 3273], [3278, 3284], [3287, 3292], [3295, 3295], [3300, 3301], [3312, 3312], [3316, 3327], [3341, 3341], [3345, 3345], [3397, 3397], [3401, 3401], [3408, 3411], [3428, 3429], [3456, 3456], [3460, 3460], [3479, 3481], [3506, 3506], [3516, 3516], [3518, 3519], [3527, 3529], [3531, 3534], [3541, 3541], [3543, 3543], [3552, 3557], [3568, 3569], [3573, 3584], [3643, 3646], [3676, 3712], [3715, 3715], [3717, 3717], [3723, 3723], [3748, 3748], [3750, 3750], [3774, 3775], [3781, 3781], [3783, 3783], [3791, 3791], [3802, 3803], [3808, 3839], [3912, 3912], [3949, 3952], [3992, 3992], [4029, 4029], [4045, 4045], [4059, 4095], [4294, 4294], [4296, 4300], [4302, 4303], [4681, 4681], [4686, 4687], [4695, 4695], [4697, 4697], [4702, 4703], [4745, 4745], [4750, 4751], [4785, 4785], [4790, 4791], [4799, 4799], [4801, 4801], [4806, 4807], [4823, 4823], [4881, 4881], [4886, 4887], [4955, 4956], [4989, 4991], [5018, 5023], [5110, 5111], [5118, 5119], [5760, 5760], [5789, 5791], [5881, 5887], [5910, 5918], [5943, 5951], [5972, 5983], [5997, 5997], [6001, 6001], [6004, 6015], [6110, 6111], [6122, 6127], [6138, 6143], [6158, 6158], [6170, 6175], [6265, 6271], [6315, 6319], [6390, 6399], [6431, 6431], [6444, 6447], [6460, 6463], [6465, 6467], [6510, 6511], [6517, 6527], [6572, 6575], [6602, 6607], [6619, 6621], [6684, 6685], [6751, 6751], [6781, 6782], [6794, 6799], [6810, 6815], [6830, 6831], [6863, 6911], [6989, 6991], [7039, 7039], [7156, 7163], [7224, 7226], [7242, 7244], [7305, 7311], [7355, 7356], [7368, 7375], [7419, 7423], [7958, 7959], [7966, 7967], [8006, 8007], [8014, 8015], [8024, 8024], [8026, 8026], [8028, 8028], [8030, 8030], [8062, 8063], [8117, 8117], [8133, 8133], [8148, 8149], [8156, 8156], [8176, 8177], [8181, 8181], [8191, 8207], [8232, 8239], [8287, 8303], [8306, 8307], [8335, 8335], [8349, 8351], [8385, 8399], [8433, 8447], [8588, 8591], [9255, 9279], [9291, 9311], [11124, 11125], [11158, 11158], [11508, 11512], [11558, 11558], [11560, 11564], [11566, 11567], [11624, 11630], [11633, 11646], [11671, 11679], [11687, 11687], [11695, 11695], [11703, 11703], [11711, 11711], [11719, 11719], [11727, 11727], [11735, 11735], [11743, 11743], [11870, 11903], [11930, 11930], [12020, 12031], [12246, 12271], [12288, 12288], [12352, 12352], [12439, 12440], [12544, 12548], [12592, 12592], [12687, 12687], [12772, 12782], [12831, 12831], [42125, 42127], [42183, 42191], [42540, 42559], [42744, 42751], [42955, 42959], [42962, 42962], [42964, 42964], [42970, 42993], [43053, 43055], [43066, 43071], [43128, 43135], [43206, 43213], [43226, 43231], [43348, 43358], [43389, 43391], [43470, 43470], [43482, 43485], [43519, 43519], [43575, 43583], [43598, 43599], [43610, 43611], [43715, 43738], [43767, 43776], [43783, 43784], [43791, 43792], [43799, 43807], [43815, 43815], [43823, 43823], [43884, 43887], [44014, 44015], [44026, 44031], [55204, 55215], [55239, 55242], [55292, 55295], [57344, 63743], [64110, 64111], [64218, 64255], [64263, 64274], [64280, 64284], [64311, 64311], [64317, 64317], [64319, 64319], [64322, 64322], [64325, 64325], [64451, 64466], [64912, 64913], [64968, 64974], [64976, 65007], [65050, 65055], [65107, 65107], [65127, 65127], [65132, 65135], [65141, 65141], [65277, 65280], [65471, 65473], [65480, 65481], [65488, 65489], [65496, 65497], [65501, 65503], [65511, 65511], [65519, 65531], [65534, 65535], [65548, 65548], [65575, 65575], [65595, 65595], [65598, 65598], [65614, 65615], [65630, 65663], [65787, 65791], [65795, 65798], [65844, 65846], [65935, 65935], [65949, 65951], [65953, 65999], [66046, 66175], [66205, 66207], [66257, 66271], [66300, 66303], [66340, 66348], [66379, 66383], [66427, 66431], [66462, 66462], [66500, 66503], [66518, 66559], [66718, 66719], [66730, 66735], [66772, 66775], [66812, 66815], [66856, 66863], [66916, 66926], [66939, 66939], [66955, 66955], [66963, 66963], [66966, 66966], [66978, 66978], [66994, 66994], [67002, 67002], [67005, 67071], [67383, 67391], [67414, 67423], [67432, 67455], [67462, 67462], [67505, 67505], [67515, 67583], [67590, 67591], [67593, 67593], [67638, 67638], [67641, 67643], [67645, 67646], [67670, 67670], [67743, 67750], [67760, 67807], [67827, 67827], [67830, 67834], [67868, 67870], [67898, 67902], [67904, 67967], [68024, 68027], [68048, 68049], [68100, 68100], [68103, 68107], [68116, 68116], [68120, 68120], [68150, 68151], [68155, 68158], [68169, 68175], [68185, 68191], [68256, 68287], [68327, 68330], [68343, 68351], [68406, 68408], [68438, 68439], [68467, 68471], [68498, 68504], [68509, 68520], [68528, 68607], [68681, 68735], [68787, 68799], [68851, 68857], [68904, 68911], [68922, 69215], [69247, 69247], [69290, 69290], [69294, 69295], [69298, 69372], [69416, 69423], [69466, 69487], [69514, 69551], [69580, 69599], [69623, 69631], [69710, 69713], [69750, 69758], [69821, 69821], [69827, 69839], [69865, 69871], [69882, 69887], [69941, 69941], [69960, 69967], [70007, 70015], [70112, 70112], [70133, 70143], [70162, 70162], [70210, 70271], [70279, 70279], [70281, 70281], [70286, 70286], [70302, 70302], [70314, 70319], [70379, 70383], [70394, 70399], [70404, 70404], [70413, 70414], [70417, 70418], [70441, 70441], [70449, 70449], [70452, 70452], [70458, 70458], [70469, 70470], [70473, 70474], [70478, 70479], [70481, 70486], [70488, 70492], [70500, 70501], [70509, 70511], [70517, 70655], [70748, 70748], [70754, 70783], [70856, 70863], [70874, 71039], [71094, 71095], [71134, 71167], [71237, 71247], [71258, 71263], [71277, 71295], [71354, 71359], [71370, 71423], [71451, 71452], [71468, 71471], [71495, 71679], [71740, 71839], [71923, 71934], [71943, 71944], [71946, 71947], [71956, 71956], [71959, 71959], [71990, 71990], [71993, 71994], [72007, 72015], [72026, 72095], [72104, 72105], [72152, 72153], [72165, 72191], [72264, 72271], [72355, 72367], [72441, 72447], [72458, 72703], [72713, 72713], [72759, 72759], [72774, 72783], [72813, 72815], [72848, 72849], [72872, 72872], [72887, 72959], [72967, 72967], [72970, 72970], [73015, 73017], [73019, 73019], [73022, 73022], [73032, 73039], [73050, 73055], [73062, 73062], [73065, 73065], [73103, 73103], [73106, 73106], [73113, 73119], [73130, 73439], [73465, 73471], [73489, 73489], [73531, 73533], [73562, 73647], [73649, 73663], [73714, 73726], [74650, 74751], [74863, 74863], [74869, 74879], [75076, 77711], [77811, 77823], [78896, 78911], [78934, 82943], [83527, 92159], [92729, 92735], [92767, 92767], [92778, 92781], [92863, 92863], [92874, 92879], [92910, 92911], [92918, 92927], [92998, 93007], [93018, 93018], [93026, 93026], [93048, 93052], [93072, 93759], [93851, 93951], [94027, 94030], [94088, 94094], [94112, 94175], [94181, 94191], [94194, 94207], [100344, 100351], [101590, 101631], [101641, 110575], [110580, 110580], [110588, 110588], [110591, 110591], [110883, 110897], [110899, 110927], [110931, 110932], [110934, 110947], [110952, 110959], [111356, 113663], [113771, 113775], [113789, 113791], [113801, 113807], [113818, 113819], [113824, 118527], [118574, 118575], [118599, 118607], [118724, 118783], [119030, 119039], [119079, 119080], [119155, 119162], [119275, 119295], [119366, 119487], [119508, 119519], [119540, 119551], [119639, 119647], [119673, 119807], [119893, 119893], [119965, 119965], [119968, 119969], [119971, 119972], [119975, 119976], [119981, 119981], [119994, 119994], [119996, 119996], [120004, 120004], [120070, 120070], [120075, 120076], [120085, 120085], [120093, 120093], [120122, 120122], [120127, 120127], [120133, 120133], [120135, 120137], [120145, 120145], [120486, 120487], [120780, 120781], [121484, 121498], [121504, 121504], [121520, 122623], [122655, 122660], [122667, 122879], [122887, 122887], [122905, 122906], [122914, 122914], [122917, 122917], [122923, 122927], [122990, 123022], [123024, 123135], [123181, 123183], [123198, 123199], [123210, 123213], [123216, 123535], [123567, 123583], [123642, 123646], [123648, 124111], [124154, 124895], [124903, 124903], [124908, 124908], [124911, 124911], [124927, 124927], [125125, 125126], [125143, 125183], [125260, 125263], [125274, 125277], [125280, 126064], [126133, 126208], [126270, 126463], [126468, 126468], [126496, 126496], [126499, 126499], [126501, 126502], [126504, 126504], [126515, 126515], [126520, 126520], [126522, 126522], [126524, 126529], [126531, 126534], [126536, 126536], [126538, 126538], [126540, 126540], [126544, 126544], [126547, 126547], [126549, 126550], [126552, 126552], [126554, 126554], [126556, 126556], [126558, 126558], [126560, 126560], [126563, 126563], [126565, 126566], [126571, 126571], [126579, 126579], [126584, 126584], [126589, 126589], [126591, 126591], [126602, 126602], [126620, 126624], [126628, 126628], [126634, 126634], [126652, 126703], [126706, 126975], [127020, 127023], [127124, 127135], [127151, 127152], [127168, 127168], [127184, 127184], [127222, 127231], [127406, 127461], [127491, 127503], [127548, 127551], [127561, 127567], [127570, 127583], [127590, 127743], [128728, 128731], [128749, 128751], [128765, 128767], [128887, 128890], [128986, 128991], [129004, 129007], [129009, 129023], [129036, 129039], [129096, 129103], [129114, 129119], [129160, 129167], [129198, 129199], [129202, 129279], [129620, 129631], [129646, 129647], [129661, 129663], [129673, 129679], [129726, 129726], [129734, 129741], [129756, 129759], [129769, 129775], [129785, 129791], [129939, 129939], [129995, 130031], [130042, 131071], [173792, 173823], [177978, 177983], [178206, 178207], [183970, 183983], [191457, 191471], [192094, 194559], [195102, 196607], [201547, 201551], [205744, 917759], [918000, 1114111]];
+/* runtime.js — זמן הריצה של "פשוט" בדפדפן (ובבדיקות: ב-node).
+ * אותם כללים כמו runtime.h: מספר שלם = BigInt בטווח של 64 ביט, בדיוק כמו בגרסה שרצה על המעבד;
+ * כל כשל = הודעה בעברית עם מספר שורה. */
+'use strict';
+class PdError extends Error { constructor(line, msg) { super(msg); this.line = line; this.msg = msg; } }
+const pd = {};
+const IS_NODE = typeof process !== 'undefined' && process.versions && process.versions.node && typeof window === 'undefined';
+pd.die = (line, msg) => { throw new PdError(line, msg); };
+pd.unset = (name, line) => pd.die(line, `המשתנה "${name}" עוד לא קיבל ערך`);
+
+/* ---------- מספרים שלמים ---------- */
+const MAXI = 2n ** 63n - 1n, MINI = -(2n ** 63n);
+const OVF = 'המספר גדול מדי (מעבר לטווח של מספר שלם)';
+pd.ci = (r, l) => { if (r > MAXI || r < MINI) pd.die(l, OVF); return r; };
+pd.add = (a, b, l) => pd.ci(a + b, l);
+pd.sub = (a, b, l) => pd.ci(a - b, l);
+pd.mul = (a, b, l) => pd.ci(a * b, l);
+pd.neg = (a, l) => pd.ci(-a, l);
+pd.abs = (a, l) => pd.ci(a < 0n ? -a : a, l);
+pd.floordiv = (a, b, l) => {
+    if (b === 0n) pd.die(l, 'חלוקה באפס');
+    let q = a / b;
+    if ((a % b !== 0n) && ((a < 0n) !== (b < 0n))) q -= 1n;
+    return pd.ci(q, l);
+};
+pd.mod = (a, b, l) => {
+    if (b === 0n) pd.die(l, 'חלוקה באפס (שארית)');
+    let r = a % b;
+    if (r !== 0n && ((r < 0n) !== (b < 0n))) r += b;
+    return r;
+};
+/* ---------- שברים ---------- */
+pd.fc = (v, l) => { if (!Number.isFinite(v)) pd.die(l, 'שבר גדול מדי (אינסוף)'); return v; };
+pd.fdiv = (a, b, l) => { if (b === 0) pd.die(l, 'חלוקה באפס'); return pd.fc(a / b, l); };
+pd.itof = (a) => Number(a);
+
+/* ---------- טקסט (לפי אותיות, לא לפי יחידות UTF-16) ---------- */
+pd.chars = (s) => Array.from(s);
+pd.len = (s) => { let n = 0; for (const _ of s) n++; return n; };
+const inRanges = (t, c) => { let lo = 0, hi = t.length; while (lo < hi) { const m = (lo + hi) >> 1; if (c < t[m][0]) hi = m; else if (c > t[m][1]) lo = m + 1; else return true; } return false; };
+const isSpace = (ch) => inRanges(PD_SPACE, ch.codePointAt(0));
+pd.textAt = (s, i, l) => {
+    const a = pd.chars(s), n = BigInt(a.length), j = i < 0n ? i + n : i;
+    if (j < 0n || j >= n) pd.die(l, `אין אות במקום ${i} (בטקסט יש ${n} אותיות)`);
+    return a[Number(j)];
+};
+pd.contains = (hay, needle) => hay.includes(needle);
+pd.repeatText = (s, n, l) => {
+    if (n <= 0n || s === '') return '';
+    if (BigInt(s.length) * n > 1n << 29n) pd.die(l, 'הטקסט יוצא גדול מדי');
+    return s.repeat(Number(n));
+};
+pd.repeatList = (a, n, l) => {
+    if (n <= 0n || a.length === 0) return [];
+    if (BigInt(a.length) * n > 1n << 27n) pd.die(l, 'הרשימה יוצאת גדולה מדי');
+    const r = []; for (let i = 0n; i < n; i++) for (const x of a) r.push(x); return r;
+};
+/* מקום בבתים -> מקום באותיות */
+const cpIndex = (s, unitIdx) => pd.len(s.slice(0, unitIdx));
+pd.find = (s, sub) => { const f = s.indexOf(sub); return BigInt(f < 0 ? -1 : cpIndex(s, f)); };
+pd.count = (s, sub) => {
+    if (sub === '') return BigInt(pd.len(s) + 1);
+    let n = 0, i = 0;
+    for (;;) { const f = s.indexOf(sub, i); if (f < 0) break; n++; i = f + sub.length; }
+    return BigInt(n);
+};
+pd.starts = (s, x) => s.startsWith(x);
+pd.ends = (s, x) => s.endsWith(x);
+pd.replace = (s, o, n) => {
+    if (o === '') return n + pd.chars(s).map(c => c + n).join('');
+    return s.split(o).join(n);
+};
+pd.split = (s, sep, l) => {
+    if (sep !== null) {
+        if (sep === '') pd.die(l, 'המפריד ב"פצל" לא יכול להיות טקסט ריק');
+        return s.split(sep);
+    }
+    const r = []; let cur = null;
+    for (const ch of s) { if (isSpace(ch)) { if (cur !== null) { r.push(cur); cur = null; } } else cur = (cur ?? '') + ch; }
+    if (cur !== null) r.push(cur);
+    return r;
+};
+pd.lines = (s) => {
+    const r = []; let cur = ''; const a = pd.chars(s);
+    for (let i = 0; i < a.length; i++) {
+        const c = a[i].codePointAt(0);
+        if (c === 10 || c === 13 || c === 0x0B || c === 0x0C || c === 0x1C || c === 0x1D || c === 0x1E || c === 0x85 || c === 0x2028 || c === 0x2029) {
+            r.push(cur); cur = '';
+            if (c === 13 && a[i + 1] === '\n') i++;
+        } else cur += a[i];
+    }
+    if (cur !== '') r.push(cur);
+    return r;
+};
+pd.join = (sep, l) => l.join(sep);
+pd.strip = (s, chars) => {
+    const a = pd.chars(s);
+    const has = chars === null ? isSpace : (ch) => chars.includes(ch);
+    let i = 0, j = a.length;
+    while (i < j && has(a[i])) i++;
+    while (j > i && has(a[j - 1])) j--;
+    return a.slice(i, j).join('');
+};
+pd.upper = (s) => s.toUpperCase();
+pd.lower = (s) => s.toLowerCase();
+pd.ord = (s, l) => { const a = pd.chars(s); if (a.length !== 1) pd.die(l, `"קוד_אות" צריך אות אחת בדיוק — קיבל טקסט עם ${a.length} אותיות`); return BigInt(a[0].codePointAt(0)); };
+pd.chr = (c, l) => {
+    if (c <= 0n || c > 0x10FFFFn || (c >= 0xD800n && c < 0xE000n)) pd.die(l, `${c} אינו קוד של אות (צריך 1 עד 1114111, בלי 55296–57343)`);
+    return String.fromCodePoint(Number(c));
+};
+/* ---------- חיתוך — הכללים של Python ---------- */
+pd.sliceIdx = (len, a, b, s, l) => {
+    if (s === null) s = 1n;
+    if (s === 0n) pd.die(l, 'הקפיצה בחיתוך לא יכולה להיות 0');
+    const L = BigInt(len);
+    if (a === null) a = s < 0n ? L - 1n : 0n; else { if (a < 0n) { a += L; if (a < 0n) a = s < 0n ? -1n : 0n; } else if (a >= L) a = s < 0n ? L - 1n : L; }
+    if (b === null) b = s < 0n ? -1n : L; else { if (b < 0n) { b += L; if (b < 0n) b = s < 0n ? -1n : 0n; } else if (b >= L) b = s < 0n ? L - 1n : L; }
+    const r = [];
+    if (s > 0n) for (let i = a; i < b; i += s) r.push(Number(i)); else for (let i = a; i > b; i += s) r.push(Number(i));
+    return r;
+};
+pd.sliceList = (x, a, b, s, l) => pd.sliceIdx(x.length, a, b, s, l).map(i => x[i]);
+pd.sliceText = (x, a, b, s, l) => { const c = pd.chars(x); return pd.sliceIdx(c.length, a, b, s, l).map(i => c[i]).join(''); };
+
+/* ---------- המרות ---------- */
+pd.ftos = (v) => {                   /* כמו repr של Python: הכי מעט ספרות שמחזירות את אותו מספר */
+    if (v === 0) return Object.is(v, -0) ? '-0.0' : '0.0';
+    const e = v.toExponential();      /* הכי קצר שמדויק — לפי התקן */
+    const m = /^(-?)(\d)(?:\.(\d+))?e([+-]\d+)$/.exec(e);
+    const neg = m[1], digits = (m[2] + (m[3] || '')).replace(/0+$/, '') || '0', exp = parseInt(m[4], 10);
+    let out;
+    if (exp >= -4 && exp < 16) {
+        if (exp < 0) out = '0.' + '0'.repeat(-exp - 1) + digits;
+        else {
+            const ip = digits.slice(0, exp + 1).padEnd(exp + 1, '0'), fp = digits.slice(exp + 1);
+            out = ip + '.' + (fp || '0');
+        }
+    } else {
+        out = digits[0] + (digits.length > 1 ? '.' + digits.slice(1) : '') + 'e' + (exp < 0 ? '-' : '+') + String(Math.abs(exp)).padStart(2, '0');
+    }
+    return neg + out;
+};
+pd.btos = (b) => b ? 'נכון' : 'לא נכון';
+pd.stoi = (s, l) => {
+    const m = /^[ \t]*([+-]?)([0-9]+)[ \t\r\n]*$/.exec(s);
+    if (!m) pd.die(l, `הטקסט "${s.slice(0, 200)}" אינו מספר שלם`);
+    return pd.ci(BigInt(m[1] + m[2]), l);
+};
+pd.stof = (s, l) => {
+    const m = /^[ \t\n\v\f\r]*([+-]?([0-9]+\.?[0-9]*|\.[0-9]+)([eE][+-]?[0-9]+)?)[ \t\r\n]*$/.exec(s);
+    const v = m ? Number(m[1]) : NaN;
+    if (!m || !Number.isFinite(v)) pd.die(l, `הטקסט "${s.slice(0, 200)}" אינו מספר`);
+    return v;
+};
+pd.ftoi = (v, l) => { if (!(v > -9223372036854775808.0 && v < 9223372036854775808.0)) pd.die(l, OVF); return BigInt(Math.trunc(v)); };
+/* עגל כמו Python: חצי הולך לזוגי, ובדיוק מלא (לפי הערך המדויק של השבר) */
+pd.round0 = (x, l) => {
+    const f = Math.floor(x), d = x - f;
+    let r = d > 0.5 ? f + 1 : d < 0.5 ? f : (f % 2 === 0 ? f : f + 1);
+    return pd.ftoi(r, l);
+};
+pd.roundn = (x, n, l) => {
+    if (n < 0n) pd.die(l, '"עגל" עם מספר ספרות שלילי עוד לא נתמך');
+    if (n > 330n) return x;
+    /* x = m * 2^e בדיוק */
+    const buf = new DataView(new ArrayBuffer(8)); buf.setFloat64(0, x);
+    const hi = buf.getUint32(0), lo = buf.getUint32(4);
+    const sign = hi >>> 31 ? -1n : 1n, ex = (hi >>> 20) & 0x7ff;
+    let mant = (BigInt(hi & 0xfffff) << 32n) | BigInt(lo), e;
+    if (ex === 0) e = -1074; else { mant |= 1n << 52n; e = ex - 1075; }
+    const N = Number(n), p10 = 10n ** BigInt(N);
+    let q;
+    if (e >= 0) q = mant * (2n ** BigInt(e)) * p10;
+    else {
+        const den = 2n ** BigInt(-e), num = mant * p10;
+        q = num / den; const r = num % den, twice = 2n * r;
+        if (twice > den || (twice === den && (q & 1n))) q += 1n;
+    }
+    const s = q.toString().padStart(N + 1, '0');
+    const str = (sign < 0n ? '-' : '') + (N ? s.slice(0, s.length - N) + '.' + s.slice(s.length - N) : s);
+    return pd.fc(Number(str), l);
+};
+
+/* ---------- הצגה (כמו str / repr של Python) ---------- */
+const hex = (c, w) => c.toString(16).padStart(w, '0');
+pd.reprText = (s) => {
+    const q = (s.includes("'") && !s.includes('"')) ? '"' : "'";
+    let o = q;
+    for (const ch of s) {
+        const c = ch.codePointAt(0);
+        if (ch === '\\') o += '\\\\';
+        else if (ch === q) o += '\\' + q;
+        else if (ch === '\n') o += '\\n';
+        else if (ch === '\t') o += '\\t';
+        else if (ch === '\r') o += '\\r';
+        else if (c < 0x20 || c === 0x7f) o += '\\x' + hex(c, 2);
+        else if (c >= 0x80 && inRanges(PD_NOPRINT, c)) o += c < 0x100 ? '\\x' + hex(c, 2) : c < 0x10000 ? '\\u' + hex(c, 4) : '\\U' + hex(c, 8);
+        else o += ch;
+    }
+    return o + q;
+};
+pd.repr = (v) => {
+    if (v === null || v === undefined) return 'כלום';
+    switch (typeof v) {
+    case 'bigint': return v.toString();
+    case 'number': return pd.ftos(v);
+    case 'string': return pd.reprText(v);
+    case 'boolean': return pd.btos(v);
+    }
+    if (Array.isArray(v)) return '[' + v.map(pd.repr).join(', ') + ']';
+    if (v instanceof PdDict) { const p = []; for (const [k, x] of v.m) p.push(pd.repr(k) + ': ' + pd.repr(x)); return '{' + p.join(', ') + '}'; }
+    if (v.__pd) return v.__pd.name + '(' + v.__pd.fields.map((f, i) => f + '=' + pd.repr(v[v.__pd.keys[i]])).join(', ') + ')';
+    if (v instanceof PdEl) return '<רכיב בדף>';
+    return String(v);
+};
+pd.str = (v) => typeof v === 'string' ? v : pd.repr(v);
+pd.eq = (a, b) => {
+    if (a === b) return true;
+    if (a === null || b === null || typeof a !== 'object') return false;
+    if (Array.isArray(a)) return a.length === b.length && a.every((x, i) => pd.eq(x, b[i]));
+    if (a instanceof PdDict) {
+        if (a.m.size !== b.m.size) return false;
+        for (const [k, x] of a.m) { if (!b.m.has(k) || !pd.eq(x, b.m.get(k))) return false; }
+        return true;
+    }
+    if (a.__pd) return a.__pd === b.__pd && a.__pd.keys.every(k => pd.eq(a[k], b[k]));
+    return false;
+};
+pd.nn = (x, l) => { if (x === null || x === undefined) pd.die(l, 'הערך כאן הוא כלום — אין לו שדות, איברים או ערך לחשב איתו'); return x; };
+
+/* ---------- רשימות ---------- */
+pd.idx = (a, i, l) => {
+    const n = BigInt(a.length), j = i < 0n ? i + n : i;
+    if (j < 0n || j >= n) {
+        if (n === 0n) pd.die(l, `אין איבר במקום ${i} — הרשימה ריקה`);
+        if (n === 1n) pd.die(l, `אין איבר במקום ${i} (ברשימה יש איבר אחד, במקום 0)`);
+        pd.die(l, `אין איבר במקום ${i} (ברשימה יש ${n} איברים: מקומות 0 עד ${n - 1n})`);
+    }
+    return Number(j);
+};
+pd.get = (a, i, l) => a[pd.idx(a, i, l)];
+pd.set = (a, i, v, l) => { a[pd.idx(a, i, l)] = v; };
+pd.pop = (a, l) => { if (a.length === 0) pd.die(l, 'אי אפשר להוציא איבר מרשימה ריקה'); return a.pop(); };
+pd.size = (x) => Array.isArray(x) ? x.length : x.m.size;
+pd.need = (a, what, l) => { if (a.length === 0) pd.die(l, `${what} של רשימה ריקה — אין בה אף איבר`); };
+pd.inList = (a, x) => a.some(y => pd.eq(y, x));
+pd.sumI = (a, l) => { let s = 0n; for (const x of a) s = pd.add(s, x, l); return s; };
+pd.sumF = (a, l) => {            /* כמו Python 3.12+: צבירה מתוקנת */
+    let r = 0, c = 0;
+    for (const x of a) { const t = r + x; if (Math.abs(r) >= Math.abs(x)) c += (r - t) + x; else c += (x - t) + r; r = t; }
+    if (c !== 0 && Number.isFinite(c)) r += c;
+    return pd.fc(r, l);
+};
+const cmpCp = (a, b) => {       /* טקסט: לפי קוד האות (כמו Python), לא לפי UTF-16 */
+    const x = pd.chars(a), y = pd.chars(b);
+    for (let i = 0; i < x.length && i < y.length; i++) { const d = x[i].codePointAt(0) - y[i].codePointAt(0); if (d) return d; }
+    return x.length - y.length;
+};
+pd.cmp = (a, b) => typeof a === 'string' ? cmpCp(a, b) : (a < b ? -1 : a > b ? 1 : 0);
+pd.lt = (a, b) => pd.cmp(a, b) < 0;
+pd.sorted = (a, keys, rev) => {
+    const ix = a.map((_, i) => i), k = keys || a;
+    ix.sort((i, j) => rev ? pd.cmp(k[j], k[i]) : pd.cmp(k[i], k[j]));    /* sort של JS יציב */
+    return ix.map(i => a[i]);
+};
+pd.best = (a, keys, dir, what, l) => {
+    pd.need(a, what, l);
+    const k = keys || a; let b = 0;
+    for (let i = 1; i < a.length; i++) if (dir * pd.cmp(k[i], k[b]) > 0) b = i;
+    return a[b];
+};
+
+/* ---------- מילונים (בסדר ההכנסה) ---------- */
+class PdDict { constructor() { this.m = new Map(); this.ver = 0; } }
+pd.dict = (pairs) => { const d = new PdDict(); for (const [k, v] of pairs) pd.dset(d, k, v); return d; };
+pd.dset = (d, k, v) => { if (!d.m.has(k)) d.ver++; d.m.set(k, v); };
+const missing = (k, l) => pd.die(l, 'אין במילון את המפתח ' + pd.repr(k));
+pd.dget = (d, k, l) => { if (!d.m.has(k)) missing(k, l); return d.m.get(k); };
+pd.dgetor = (d, k, def) => d.m.has(k) ? d.m.get(k) : def;
+pd.dpop = (d, k, l) => { if (!d.m.has(k)) missing(k, l); const v = d.m.get(k); d.m.delete(k); d.ver++; return v; };
+pd.dhas = (d, k) => d.m.has(k);
+pd.keys = (d) => [...d.m.keys()];
+pd.values = (d) => [...d.m.values()];
+pd.diter = function* (d, l) {
+    const ver = d.ver;
+    const ks = [...d.m.keys()];
+    for (const k of ks) {
+        if (d.ver !== ver) pd.die(l, 'המילון השתנה (נוסף או נמחק מפתח) בזמן שהלולאה עוברת עליו');
+        if (d.m.has(k)) yield k;
+    }
+    if (d.ver !== ver) pd.die(l, 'המילון השתנה (נוסף או נמחק מפתח) בזמן שהלולאה עוברת עליו');
+};
+
+/* ---------- קלט, פלט, קבצים ---------- */
+let pdOut = '';
+pd.print = (parts) => {
+    const line = parts.join(' ') + '\n';
+    if (IS_NODE) process.stdout.write(line); else pd.ui.console(line);
+};
+pd.input = (prompt, l) => {
+    if (IS_NODE) {
+        process.stdout.write(prompt);
+        const fs = require('fs'); const b = Buffer.alloc(1); const bytes = [];
+        let any = false;
+        for (;;) {
+            let n; try { n = fs.readSync(0, b, 0, 1, null); } catch (e) { if (e.code === 'EAGAIN') continue; if (e.code === 'EOF') n = 0; else throw e; }
+            if (n === 0) break;
+            any = true;
+            if (b[0] === 10) break;
+            bytes.push(b[0]);
+        }
+        if (!any) pd.die(l, 'לא התקבל קלט (הקלט נגמר)');
+        let s = null;
+        try { s = new TextDecoder('utf-8', { fatal: true }).decode(Buffer.from(bytes)); } catch (e) { }
+        if (s === null || s.includes('\0')) pd.die(l, 'הקלט לא בקידוד UTF-8 (או שיש בו תו אפס)');
+        return s;
+    }
+    const r = window.prompt(prompt);
+    if (r === null) pd.die(l, 'לא התקבל קלט (הקלט נגמר)');
+    return r;
+};
+const fileFail = (what, path, why, l) => pd.die(l, what + ' ' + pd.reprText(path) + ': ' + why);
+const errHe = (e) => ({ ENOENT: 'הקובץ או התיקייה לא קיימים', EACCES: 'אין הרשאה', EPERM: 'אין הרשאה', EISDIR: 'זו תיקייה, לא קובץ',
+                        ENOTDIR: 'חלק מהנתיב אינו תיקייה', ENOSPC: 'הדיסק מלא', EROFS: 'הדיסק לקריאה בלבד', ENAMETOOLONG: 'השם ארוך מדי' })[e.code] || e.message;
+/* בדפדפן, "קובץ" נשמר בזיכרון של הדפדפן (localStorage) — נשאר גם אחרי סגירה */
+const LS = 'פשוט:';
+pd.readFile = (p, l) => {
+    if (IS_NODE) {
+        const fs = require('fs'); let b;
+        try { b = fs.readFileSync(p); } catch (e) { fileFail('אי אפשר לקרוא את הקובץ', p, errHe(e), l); }
+        if (b.includes(0)) fileFail('הקובץ', p, 'מכיל תו אפס — זה לא קובץ טקסט', l);
+        const s = new TextDecoder('utf-8', { fatal: true });
+        try { return s.decode(b); } catch (e) { fileFail('הקובץ', p, 'לא שמור בקידוד UTF-8', l); }
+    }
+    let v = null; try { v = localStorage.getItem(LS + p); } catch (e) { }
+    if (v === null) fileFail('אי אפשר לקרוא את הקובץ', p, 'הקובץ או התיקייה לא קיימים', l);
+    return v;
+};
+pd.writeFile = (p, t, append, l) => {
+    if (IS_NODE) {
+        const fs = require('fs');
+        try { (append ? fs.appendFileSync : fs.writeFileSync)(p, t); } catch (e) { fileFail('אי אפשר לכתוב לקובץ', p, errHe(e), l); }
+        return;
+    }
+    try { localStorage.setItem(LS + p, (append ? (localStorage.getItem(LS + p) || '') : '') + t); }
+    catch (e) { fileFail('אי אפשר לכתוב לקובץ', p, 'הדפדפן לא מרשה לשמור', l); }
+};
+pd.exists = (p) => {
+    if (IS_NODE) return require('fs').existsSync(p);
+    try { return localStorage.getItem(LS + p) !== null; } catch (e) { return false; }
+};
+pd.args = () => IS_NODE ? process.argv.slice(2) : [...new URLSearchParams(location.search).values()];
+
+/* ---------- הדף: רכיבים שאפשר לבנות בעברית ---------- */
+class PdEl { constructor(node, kind) { this.node = node; this.kind = kind; } }
+pd.ui = {
+    root: null,
+    area() { if (!this.root) this.root = document.getElementById('pd-app'); return this.root; },
+    consoleEl: null,
+    console(line) {                    /* הצג(...) בדף: שורות טקסט */
+        if (IS_NODE) { process.stdout.write(line); return; }
+        if (!this.consoleEl) { this.consoleEl = document.createElement('pre'); this.consoleEl.className = 'pd-out'; this.area().appendChild(this.consoleEl); }
+        this.consoleEl.textContent += line;
+    },
+    add(tag, cls) {
+        if (IS_NODE) return { textContent: '', value: '', children: [], appendChild(c) { this.children.push(c); }, remove() {}, addEventListener() {}, set innerHTML(v) { this.children = []; } };
+        const n = document.createElement(tag); if (cls) n.className = cls;
+        this.area().appendChild(n); this.consoleEl = null;
+        return n;
+    },
+};
+/* פעולה שנקראת מאירוע (לחיצה, Enter, שעון): שגיאה בה מוצגת בדף */
+const guard = (f) => () => { try { f(); } catch (e) { pd.report(e); } };
+pd.title = (t) => { const n = pd.ui.add('h1', 'pd-title'); n.textContent = t; return new PdEl(n, 'text'); };
+pd.textEl = (t) => { const n = pd.ui.add('p', 'pd-text'); n.textContent = t; return new PdEl(n, 'text'); };
+pd.input_el = (hint, onEnter) => {
+    const n = pd.ui.add('input', 'pd-input');
+    if (!IS_NODE) { n.placeholder = hint; n.type = 'text'; n.dir = 'auto'; }
+    if (onEnter) n.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') guard(onEnter)(); });
+    return new PdEl(n, 'input');
+};
+pd.button = (t, f) => {
+    let n;
+    if (IS_NODE) n = pd.ui.add('button', 'pd-button');
+    else {                                     /* כפתורים שנוצרים ברצף — באותה שורה */
+        let row = pd.ui.area().lastElementChild;
+        if (!row || !row.classList.contains('pd-row')) { row = pd.ui.add('div', 'pd-row'); }
+        n = document.createElement('button'); n.className = 'pd-button'; row.appendChild(n);
+    } n.textContent = t; n.addEventListener('click', guard(f)); return new PdEl(n, 'button'); };
+pd.listEl = () => new PdEl(pd.ui.add('ul', 'pd-list'), 'list');
+/* לוח: שורות × עמודות של משבצות לכתיבה. כל 3 משבצות — קו עבה (כמו בסודוקו) כשהגודל מתחלק ב-3 */
+pd.grid = (rows, cols, l, onChange) => {
+    if (rows < 1n || cols < 1n || rows > 50n || cols > 50n) pd.die(l, '"לוח" צריך בין 1 ל-50 שורות ועמודות');
+    const R = Number(rows), C = Number(cols), cells = [];
+    const square = R === C && R % 3 === 0;
+    let n;
+    if (IS_NODE) n = pd.ui.add('div', 'pd-grid');
+    else if (square) { n = pd.ui.add('div', 'pd-grid pd-grid-sq'); n.style.gridTemplateColumns = `repeat(${C}, 1fr)`; }
+    else {                                      /* טבלה: משבצות מלבניות; בטלפון גוללים לצד בתוך הטבלה בלבד */
+        const wrap = pd.ui.add('div', 'pd-scroll');
+        n = document.createElement('div'); n.className = 'pd-grid pd-grid-wide'; wrap.appendChild(n);
+        n.style.gridTemplateColumns = `minmax(34px, 0.45fr) repeat(${C - 1}, minmax(76px, 1fr))`;
+    }
+    for (let r = 0; r < R; r++) for (let c = 0; c < C; c++) {
+        let inp;
+        if (IS_NODE) inp = { value: '', classList: { toggle() {} } };
+        else {
+            inp = document.createElement('input');
+            inp.dir = 'auto'; inp.setAttribute('aria-label', `שורה ${r + 1}, עמודה ${c + 1}`);
+            if (square) {                            /* לוח ריבועי (כמו סודוקו): קו עבה כל 3 משבצות, וספרות בלבד */
+                inp.inputMode = 'numeric'; inp.maxLength = 3;
+                if (c % 3 === 2 && c !== C - 1) inp.classList.add('pd-b-r');
+                if (r % 3 === 2 && r !== R - 1) inp.classList.add('pd-b-b');
+            }
+            if (onChange) inp.addEventListener('change', guard(onChange));
+            n.appendChild(inp);
+        }
+        cells.push(inp);
+    }
+    const e = new PdEl(n, 'grid'); e.R = R; e.C = C; e.cells = cells;
+    return e;
+};
+pd.every = (secs, f, l) => {
+    if (!(secs > 0)) pd.die(l, '"כל_כמה" צריך מספר שניות גדול מ-0');
+    if (!IS_NODE) setInterval(guard(f), secs * 1000);
+};
+pd.el = {
+    cell(e, r, c, l) {
+        if (e.kind !== 'grid') pd.die(l, '"קבע" / "קרא" / "סמן" עובדים רק על לוח');
+        if (r < 0n || c < 0n || r >= BigInt(e.R) || c >= BigInt(e.C)) pd.die(l, `אין משבצת בשורה ${r}, עמודה ${c} (בלוח יש ${e.R} שורות ו-${e.C} עמודות, מ-0)`);
+        const inp = e.cells[Number(r) * e.C + Number(c)];
+        return { set: (t) => { inp.value = t; }, get: () => inp.value.trim(), mark: (b) => inp.classList.toggle('pd-mark', b),
+                 lock: () => {
+                     if (!inp.setAttribute) return;
+                     inp.setAttribute('readonly', ''); inp.tabIndex = -1;
+                     if (r === 0n || c === 0n) inp.classList.add('pd-head');     /* שורה/עמודה ראשונה נעולה = כותרת */
+                 } };
+    },
+    set(e, t) { if (e.kind === 'input') e.node.value = t; else e.node.textContent = t; },
+    get(e) { return e.kind === 'input' ? e.node.value : e.node.textContent; },
+    clear(e) {
+        if (e.kind === 'input') e.node.value = '';
+        else if (e.kind === 'list') e.node.innerHTML = '';
+        else if (e.kind === 'grid') e.cells.forEach(c => { c.value = ''; c.classList.toggle('pd-mark', false); });
+        else e.node.textContent = '';
+    },
+    add(e, t, l) {
+        if (e.kind !== 'list') pd.die(l, '"הוסף" על רכיב בדף עובד רק על רשימת_שורות()');
+        const li = IS_NODE ? { textContent: '' } : document.createElement('li'); li.textContent = t; e.node.appendChild(li);
+    },
+};
+
+/* ---------- הרצה ---------- */
+pd.report = (e) => {
+    let msg;
+    if (e instanceof PdError) msg = `שגיאה בשורה ${e.line}: ${e.msg}`;
+    else if (e instanceof RangeError && /call stack/i.test(e.message)) msg = 'שגיאה: רקורסיה עמוקה מדי — פעולה קוראת לעצמה יותר מדי פעמים';
+    else msg = 'שגיאה פנימית: ' + (e && e.message) + ' (זה באג במהדר, לא בקוד שלך)';
+    if (IS_NODE) { process.stderr.write(msg + '\n'); process.exitCode = 1; return; }
+    const n = document.createElement('div'); n.className = 'pd-error'; n.textContent = msg; pd.ui.area().appendChild(n);
+};
+pd.run = (main) => {
+    try { main(); }
+    catch (e) { pd.report(e); if (IS_NODE) process.exit(1); }
+};
+
+"use strict";
+let g_d79cd795d7975fd79ed7a9d797d7a7, g_d794d795d793d7a2d794, g_d79ed795d7a0d794, g_d7a7d7a9d794;
+function f_d790d7a4d7a9d7a8d795d799d795d7aa(l_d79c, l_d79ed7a7d795d79d) {
+    let l_d7aad7a4d795d7a1, l_69, l_6a, l_d7aad795d7a6d790d794, l_d7a1d7a4d7a8d794, l_d7a9, l_d7a2, l_d7a4d799d7a0d7945fd7a9, l_d7a4d799d7a0d7945fd7a2;
+    l_d7a9 = pd.floordiv(l_d79ed7a7d795d79d, 9n, 19);
+    l_d7a2 = pd.mod(l_d79ed7a7d795d79d, 9n, 20);
+    l_d7aad7a4d795d7a1 = pd.repeatList([false], 10n, 21);
+    { const _a1 = 0n, _e1 = 9n, _s1 = 1n;
+      if (_s1 === 0n) pd.die(22, "הקפיצה בספירה לא יכולה להיות 0");
+      for (let _i1 = _a1; _s1 > 0n ? _i1 < _e1 : _i1 > _e1; _i1 += _s1) {
+        l_69 = _i1;
+            { const _v = true; const _o = l_d7aad7a4d795d7a1; const _k = pd.get(l_d79c, pd.add(pd.mul(l_d7a9, 9n, 23), l_69, 23), 23); pd.set(_o, _k, _v, 23); }
+            { const _v = true; const _o = l_d7aad7a4d795d7a1; const _k = pd.get(l_d79c, pd.add(pd.mul(l_69, 9n, 24), l_d7a2, 24), 24); pd.set(_o, _k, _v, 24); }
+      }
+    }
+    l_d7a4d799d7a0d7945fd7a9 = pd.mul(pd.floordiv(l_d7a9, 3n, 25), 3n, 25);
+    l_d7a4d799d7a0d7945fd7a2 = pd.mul(pd.floordiv(l_d7a2, 3n, 26), 3n, 26);
+    { const _a2 = 0n, _e2 = 3n, _s2 = 1n;
+      if (_s2 === 0n) pd.die(27, "הקפיצה בספירה לא יכולה להיות 0");
+      for (let _i2 = _a2; _s2 > 0n ? _i2 < _e2 : _i2 > _e2; _i2 += _s2) {
+        l_69 = _i2;
+            { const _a3 = 0n, _e3 = 3n, _s3 = 1n;
+              if (_s3 === 0n) pd.die(28, "הקפיצה בספירה לא יכולה להיות 0");
+              for (let _i3 = _a3; _s3 > 0n ? _i3 < _e3 : _i3 > _e3; _i3 += _s3) {
+                l_6a = _i3;
+                    { const _v = true; const _o = l_d7aad7a4d795d7a1; const _k = pd.get(l_d79c, pd.add(pd.add(pd.mul(pd.add(l_d7a4d799d7a0d7945fd7a9, l_69, 29), 9n, 29), l_d7a4d799d7a0d7945fd7a2, 29), l_6a, 29), 29); pd.set(_o, _k, _v, 29); }
+              }
+            }
+      }
+    }
+    l_d7aad795d7a6d790d794 = [];
+    { const _a4 = 1n, _e4 = 10n, _s4 = 1n;
+      if (_s4 === 0n) pd.die(31, "הקפיצה בספירה לא יכולה להיות 0");
+      for (let _i4 = _a4; _s4 > 0n ? _i4 < _e4 : _i4 > _e4; _i4 += _s4) {
+        l_d7a1d7a4d7a8d794 = _i4;
+            if ((!(pd.get(l_d7aad7a4d795d7a1, l_d7a1d7a4d7a8d794, 32)))) {
+                void (l_d7aad795d7a6d790d794).push(l_d7a1d7a4d7a8d794);
+            }
+      }
+    }
+    return l_d7aad795d7a6d790d794;
+    pd.die(18, "הפעולה אפשרויות הגיעה לסוף בלי לתת ערך (חסר תן)");
+}
+function f_d7a4d7aad795d7a85fd79ed79bd790d79f(l_d79c) {
+    let l_d794d79bd7995fd798d795d791, l_d790d7a4d7a9d7a8d795d799d795d7aa5fd7a9d79cd795, l_d79ed7a7d795d79d, l_d790, l_d7a1d7a4d7a8d794;
+    { const _o = (g_d79ed795d7a0d794 !== undefined ? g_d79ed795d7a0d794 : pd.unset("\u05de\u05d5\u05e0\u05d4", 37)); const _k = 0n; const _cur = pd.get(_o, _k, 37); const _v = pd.add(_cur, 1n, 37); pd.set(_o, _k, _v, 37); }
+    l_d794d79bd7995fd798d795d791 = pd.neg(1n, 38);
+    l_d790d7a4d7a9d7a8d795d799d795d7aa5fd7a9d79cd795 = [];
+    { const _a5 = 0n, _e5 = 81n, _s5 = 1n;
+      if (_s5 === 0n) pd.die(40, "הקפיצה בספירה לא יכולה להיות 0");
+      for (let _i5 = _a5; _s5 > 0n ? _i5 < _e5 : _i5 > _e5; _i5 += _s5) {
+        l_d79ed7a7d795d79d = _i5;
+            if (pd.eq(pd.get(l_d79c, l_d79ed7a7d795d79d, 41), 0n)) {
+                l_d790 = f_d790d7a4d7a9d7a8d795d799d795d7aa(l_d79c, l_d79ed7a7d795d79d);
+                if (pd.eq(BigInt(pd.size(l_d790)), 0n)) {
+                    return false;
+                }
+                if (((pd.eq(l_d794d79bd7995fd798d795d791, pd.neg(1n, 45))) || (((BigInt(pd.size(l_d790))) < (BigInt(pd.size(l_d790d7a4d7a9d7a8d795d799d795d7aa5fd7a9d79cd795))))))) {
+                    l_d794d79bd7995fd798d795d791 = l_d79ed7a7d795d79d;
+                    l_d790d7a4d7a9d7a8d795d799d795d7aa5fd7a9d79cd795 = l_d790;
+                }
+            }
+      }
+    }
+    if (pd.eq(l_d794d79bd7995fd798d795d791, pd.neg(1n, 48))) {
+        return true;
+    }
+    for (let _i6 = 0, _l6 = l_d790d7a4d7a9d7a8d795d799d795d7aa5fd7a9d79cd795; _i6 < _l6.length; _i6++) {
+        l_d7a1d7a4d7a8d794 = _l6[_i6];
+        { const _v = l_d7a1d7a4d7a8d794; const _o = l_d79c; const _k = l_d794d79bd7995fd798d795d791; pd.set(_o, _k, _v, 51); }
+        if (f_d7a4d7aad795d7a85fd79ed79bd790d79f(l_d79c)) {
+            return true;
+        }
+    }
+    { const _v = 0n; const _o = l_d79c; const _k = l_d794d79bd7995fd798d795d791; pd.set(_o, _k, _v, 54); }
+    return false;
+    pd.die(36, "הפעולה פתור_מכאן הגיעה לסוף בלי לתת ערך (חסר תן)");
+}
+function f_d7a7d7a8d7905fd79cd795d797() {
+    let l_d79c, l_d7a9, l_d7a2, l_d79ed7a7d795d79d, l_d798, l_d7a1, l_d7a1d7a4d7a8d794;
+    l_d79c = [];
+    { const _a7 = 0n, _e7 = 9n, _s7 = 1n;
+      if (_s7 === 0n) pd.die(59, "הקפיצה בספירה לא יכולה להיות 0");
+      for (let _i7 = _a7; _s7 > 0n ? _i7 < _e7 : _i7 > _e7; _i7 += _s7) {
+        l_d7a9 = _i7;
+            { const _a8 = 0n, _e8 = 9n, _s8 = 1n;
+              if (_s8 === 0n) pd.die(60, "הקפיצה בספירה לא יכולה להיות 0");
+              for (let _i8 = _a8; _s8 > 0n ? _i8 < _e8 : _i8 > _e8; _i8 += _s8) {
+                l_d7a2 = _i8;
+                    l_d798 = pd.el.cell((g_d79cd795d7975fd79ed7a9d797d7a7 !== undefined ? g_d79cd795d7975fd79ed7a9d797d7a7 : pd.unset("\u05dc\u05d5\u05d7_\u05de\u05e9\u05d7\u05e7", 61)), l_d7a9, l_d7a2, 61).get();
+                    if (pd.eq(l_d798, "")) {
+                        void (l_d79c).push(0n);
+                    } else {
+                        try {
+                            l_d7a1 = pd.stoi(l_d798, 66);
+                        } catch (_e) {
+                            if (!(_e instanceof PdError)) throw _e;
+                            l_d7a1 = pd.neg(1n, 68);
+                        }
+                        if (((((l_d7a1) < (1n))) || (((l_d7a1) > (9n))))) {
+                            pd.el.set((g_d794d795d793d7a2d794 !== undefined ? g_d794d795d793d7a2d794 : pd.unset("\u05d4\u05d5\u05d3\u05e2\u05d4", 70)), (((((("\u05d1\u05de\u05e9\u05d1\u05e6\u05ea \u05d1\u05e9\u05d5\u05e8\u05d4 " + pd.str(pd.add(l_d7a9, 1n, 70))) + ", \u05e2\u05de\u05d5\u05d3\u05d4 ") + pd.str(pd.add(l_d7a2, 1n, 70))) + " \u05db\u05ea\u05d5\u05d1 \"") + l_d798) + "\" \u2014 \u05de\u05d5\u05ea\u05e8 \u05e8\u05e7 1 \u05e2\u05d3 9"));
+                            return null;
+                        }
+                        void (l_d79c).push(l_d7a1);
+                    }
+              }
+            }
+      }
+    }
+    { const _a9 = 0n, _e9 = 81n, _s9 = 1n;
+      if (_s9 === 0n) pd.die(74, "הקפיצה בספירה לא יכולה להיות 0");
+      for (let _i9 = _a9; _s9 > 0n ? _i9 < _e9 : _i9 > _e9; _i9 += _s9) {
+        l_d79ed7a7d795d79d = _i9;
+            if ((!pd.eq(pd.get(l_d79c, l_d79ed7a7d795d79d, 75), 0n))) {
+                l_d7a1d7a4d7a8d794 = pd.get(l_d79c, l_d79ed7a7d795d79d, 76);
+                { const _v = 0n; const _o = l_d79c; const _k = l_d79ed7a7d795d79d; pd.set(_o, _k, _v, 77); }
+                if ((!((_a, _b) => pd.inList(_b, _a))(l_d7a1d7a4d7a8d794, f_d790d7a4d7a9d7a8d795d799d795d7aa(l_d79c, l_d79ed7a7d795d79d)))) {
+                    pd.el.set((g_d794d795d793d7a2d794 !== undefined ? g_d794d795d793d7a2d794 : pd.unset("\u05d4\u05d5\u05d3\u05e2\u05d4", 79)), (((((("\u05d4\u05e1\u05e4\u05e8\u05d4 " + pd.str(l_d7a1d7a4d7a8d794)) + " \u05d1\u05e9\u05d5\u05e8\u05d4 ") + pd.str(pd.add(pd.floordiv(l_d79ed7a7d795d79d, 9n, 79), 1n, 79))) + ", \u05e2\u05de\u05d5\u05d3\u05d4 ") + pd.str(pd.add(pd.mod(l_d79ed7a7d795d79d, 9n, 79), 1n, 79))) + " \u05de\u05d5\u05e4\u05d9\u05e2\u05d4 \u05e4\u05e2\u05de\u05d9\u05d9\u05dd"));
+                    return null;
+                }
+                { const _v = l_d7a1d7a4d7a8d794; const _o = l_d79c; const _k = l_d79ed7a7d795d79d; pd.set(_o, _k, _v, 81); }
+            }
+      }
+    }
+    return l_d79c;
+    return null;
+}
+function f_d7a4d7aad795d7a8() {
+    let l_d79c, l_d7a8d799d7a7d795d7aa, l_d79ed7a7d795d79d;
+    l_d79c = f_d7a7d7a8d7905fd79cd795d797();
+    if (pd.eq(l_d79c, null)) {
+        return;
+    }
+    l_d7a8d799d7a7d795d7aa = [];
+    { const _a10 = 0n, _e10 = 81n, _s10 = 1n;
+      if (_s10 === 0n) pd.die(89, "הקפיצה בספירה לא יכולה להיות 0");
+      for (let _i10 = _a10; _s10 > 0n ? _i10 < _e10 : _i10 > _e10; _i10 += _s10) {
+        l_d79ed7a7d795d79d = _i10;
+            if (pd.eq(pd.get(pd.nn(l_d79c, 90), l_d79ed7a7d795d79d, 90), 0n)) {
+                void (l_d7a8d799d7a7d795d7aa).push(l_d79ed7a7d795d79d);
+            }
+      }
+    }
+    { const _v = 0n; const _o = (g_d79ed795d7a0d794 !== undefined ? g_d79ed795d7a0d794 : pd.unset("\u05de\u05d5\u05e0\u05d4", 92)); const _k = 0n; pd.set(_o, _k, _v, 92); }
+    if (f_d7a4d7aad795d7a85fd79ed79bd790d79f(pd.nn(l_d79c, 93))) {
+        for (let _i11 = 0, _l11 = l_d7a8d799d7a7d795d7aa; _i11 < _l11.length; _i11++) {
+            l_d79ed7a7d795d79d = _l11[_i11];
+            pd.el.cell((g_d79cd795d7975fd79ed7a9d797d7a7 !== undefined ? g_d79cd795d7975fd79ed7a9d797d7a7 : pd.unset("\u05dc\u05d5\u05d7_\u05de\u05e9\u05d7\u05e7", 95)), pd.floordiv(l_d79ed7a7d795d79d, 9n, 95), pd.mod(l_d79ed7a7d795d79d, 9n, 95), 95).set(pd.str(pd.get(pd.nn(l_d79c, 95), l_d79ed7a7d795d79d, 95)));
+            pd.el.cell((g_d79cd795d7975fd79ed7a9d797d7a7 !== undefined ? g_d79cd795d7975fd79ed7a9d797d7a7 : pd.unset("\u05dc\u05d5\u05d7_\u05de\u05e9\u05d7\u05e7", 96)), pd.floordiv(l_d79ed7a7d795d79d, 9n, 96), pd.mod(l_d79ed7a7d795d79d, 9n, 96), 96).mark(true);
+        }
+        pd.el.set((g_d794d795d793d7a2d794 !== undefined ? g_d794d795d793d7a2d794 : pd.unset("\u05d4\u05d5\u05d3\u05e2\u05d4", 97)), (((("\u05e0\u05e4\u05ea\u05e8! \u05de\u05d9\u05dc\u05d0\u05ea\u05d9 " + pd.str(BigInt(pd.size(l_d7a8d799d7a7d795d7aa)))) + " \u05de\u05e9\u05d1\u05e6\u05d5\u05ea, \u05d0\u05d7\u05e8\u05d9 ") + pd.str(pd.get((g_d79ed795d7a0d794 !== undefined ? g_d79ed795d7a0d794 : pd.unset("\u05de\u05d5\u05e0\u05d4", 97)), 0n, 97))) + " \u05e0\u05d9\u05e1\u05d9\u05d5\u05e0\u05d5\u05ea."));
+    } else {
+        pd.el.set((g_d794d795d793d7a2d794 !== undefined ? g_d794d795d793d7a2d794 : pd.unset("\u05d4\u05d5\u05d3\u05e2\u05d4", 99)), "\u05dc\u05e1\u05d5\u05d3\u05d5\u05e7\u05d5 \u05d4\u05d6\u05d4 \u05d0\u05d9\u05df \u05e4\u05ea\u05e8\u05d5\u05df.");
+    }
+}
+function f_d793d795d792d79ed794() {
+    let l_d79ed7a7d795d79d;
+    pd.el.clear((g_d79cd795d7975fd79ed7a9d797d7a7 !== undefined ? g_d79cd795d7975fd79ed7a9d797d7a7 : pd.unset("\u05dc\u05d5\u05d7_\u05de\u05e9\u05d7\u05e7", 102)));
+    { const _a12 = 0n, _e12 = 81n, _s12 = 1n;
+      if (_s12 === 0n) pd.die(103, "הקפיצה בספירה לא יכולה להיות 0");
+      for (let _i12 = _a12; _s12 > 0n ? _i12 < _e12 : _i12 > _e12; _i12 += _s12) {
+        l_d79ed7a7d795d79d = _i12;
+            if ((!pd.eq(pd.textAt((g_d7a7d7a9d794 !== undefined ? g_d7a7d7a9d794 : pd.unset("\u05e7\u05e9\u05d4", 104)), l_d79ed7a7d795d79d, 104), "0"))) {
+                pd.el.cell((g_d79cd795d7975fd79ed7a9d797d7a7 !== undefined ? g_d79cd795d7975fd79ed7a9d797d7a7 : pd.unset("\u05dc\u05d5\u05d7_\u05de\u05e9\u05d7\u05e7", 105)), pd.floordiv(l_d79ed7a7d795d79d, 9n, 105), pd.mod(l_d79ed7a7d795d79d, 9n, 105), 105).set(pd.textAt((g_d7a7d7a9d794 !== undefined ? g_d7a7d7a9d794 : pd.unset("\u05e7\u05e9\u05d4", 105)), l_d79ed7a7d795d79d, 105));
+            }
+      }
+    }
+    pd.el.set((g_d794d795d793d7a2d794 !== undefined ? g_d794d795d793d7a2d794 : pd.unset("\u05d4\u05d5\u05d3\u05e2\u05d4", 106)), "\u05d6\u05d4 \u05e0\u05d7\u05e9\u05d1 \u05d4\u05e1\u05d5\u05d3\u05d5\u05e7\u05d5 \u05d4\u05e7\u05e9\u05d4 \u05d1\u05d9\u05d5\u05ea\u05e8 \u05d1\u05e2\u05d5\u05dc\u05dd. \u05dc\u05d7\u05e5 \"\u05e4\u05ea\u05d5\u05e8\".");
+}
+function f_d7a0d7a7d7945fd794d79bd79c() {
+    pd.el.clear((g_d79cd795d7975fd79ed7a9d797d7a7 !== undefined ? g_d79cd795d7975fd79ed7a9d797d7a7 : pd.unset("\u05dc\u05d5\u05d7_\u05de\u05e9\u05d7\u05e7", 109)));
+    pd.el.set((g_d794d795d793d7a2d794 !== undefined ? g_d794d795d793d7a2d794 : pd.unset("\u05d4\u05d5\u05d3\u05e2\u05d4", 110)), "");
+}
+pd.run(() => {
+    pd.title("\u05e4\u05d5\u05ea\u05e8 \u05e1\u05d5\u05d3\u05d5\u05e7\u05d5");
+    pd.textEl("\u05db\u05ea\u05d5\u05d1 \u05e1\u05e4\u05e8\u05d5\u05ea \u05d1\u05de\u05e9\u05d1\u05e6\u05d5\u05ea, \u05d0\u05d5 \u05dc\u05d7\u05e5 \"\u05d3\u05d5\u05d2\u05de\u05d4\". \u05d0\u05d7\u05e8 \u05db\u05da \"\u05e4\u05ea\u05d5\u05e8\". \u05de\u05e9\u05d1\u05e6\u05ea \u05e8\u05d9\u05e7\u05d4 \u05d4\u05d9\u05d0 \u05de\u05e9\u05d1\u05e6\u05ea \u05e9\u05dc\u05d0 \u05d9\u05d5\u05d3\u05e2\u05d9\u05dd.");
+    g_d79cd795d7975fd79ed7a9d797d7a7 = pd.grid(9n, 9n, 7, null);
+    pd.button("\u05e4\u05ea\u05d5\u05e8", f_d7a4d7aad795d7a8);
+    pd.button("\u05d3\u05d5\u05d2\u05de\u05d4", f_d793d795d792d79ed794);
+    pd.button("\u05e0\u05e7\u05d4", f_d7a0d7a7d7945fd794d79bd79c);
+    g_d794d795d793d7a2d794 = pd.textEl("");
+    g_d79ed795d7a0d794 = [0n];
+    g_d7a7d7a9d794 = "800000000003600000070090200050007000000045700000100030001000068008500010090000400";
+    f_d793d795d792d79ed794();
+});
+
+</script>
