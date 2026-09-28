@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import { run } from './machine2.mjs';
+import { variants, assemble } from './pieces.mjs';
+import { makeTask } from './tasks.mjs';
+const vs = variants(JSON.parse(fs.readFileSync('lib2.json', 'utf8')).filter((m) => !m.name.startsWith('סוף') && !m.name.startsWith('חפש')));
+const V = (l) => vs.find((v) => v.label === l); const J = (cell, to) => ({ jump: true, cell, to }); const S = (cell, skip) => ({ jump: true, cell, skip });
+const { g } = makeTask('אורך רשימה');
+const sc = (ps) => { const p = assemble(ps); let s = 0, near = 0; for (const [i, e] of g.examples.entries()) { const r = run(p, e.mem, { maxSteps: 900, scramble: i % 2 ? i + 1 : 0 }); if (!r) return 'crash'; if (r.mem[2] === e.want) s++; if (r.mem.slice(0, 8).includes(e.want)) near++; } return `${s}/30 (near ${near})`; };
+const loop = [V('חיבור מספרים(0,1→2)'), V('קח מהכתובת שבתא(1→1)'), J(1, 0)];
+console.log('start (end of list):', sc(loop));
+console.log('+ replace with counter:', sc([V('חיבור מספרים(2,5→2)'), loop[1], J(1, 0)]));
+console.log('+ insert "constant 1" at start:', sc([V('קבוע 1(0→5)'), ...loop.slice(0, 2), J(1, 1)]));
+console.log('both:', sc([V('קבוע 1(0→5)'), V('חיבור מספרים(2,5→2)'), loop[1], J(1, 1)]));
+console.log('all three (with skip):', sc([V('קבוע 1(0→5)'), S(5, 2), V('חיבור מספרים(2,5→2)'), loop[1], J(1, 2)]));
