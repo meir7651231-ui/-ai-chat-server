@@ -6,7 +6,7 @@
    triggered too, this is the page's own guard); ledger/<day> holds this page's counters under its own key, so two
    tabs merge instead of overwriting each other. */
 const PULSE_EVERY=5*60*1000,PULSE_STALE=15*60*1000,LEDGER_EVERY=5*60*1000;
-const PULSE_KEYS=['mic','overlay','battery','charging','net','vad','ttsOk','pageReady','ver','lastHeard','lastSpoke','since','why','battOpt','uptime'];
+const PULSE_KEYS=['mic','overlay','battery','charging','net','vad','ttsOk','pageReady','ver','lastHeard','lastSpoke','since','why','battOpt','uptime','doze','login','life','gasp'];
 const pulseLast={};
 /* the body comes from the bubble; only known keys, only plain values, bounded */
 function pulseClean(raw){let b={};try{b=JSON.parse(String(raw||'{}').slice(0,2000))||{};}catch(e){fail('P_MSG_BAD',e,'pulse');}
@@ -14,7 +14,9 @@ function pulseClean(raw){let b={};try{b=JSON.parse(String(raw||'{}').slice(0,200
 function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A-Za-z0-9_-]/g,'').slice(0,40);if(!dev)return false;
   const body=pulseClean(d.body);const sig=JSON.stringify(Object.assign({},body,{lastHeard:0,lastSpoke:0,since:0,why:''}));const last=pulseLast[dev];
   if(last&&last.sig===sig&&now-last.at<PULSE_EVERY)return false;
-  pulseLast[dev]={sig:sig,at:now};
+  if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
+  else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
+  pulseLast[dev]={sig:sig,at:now,body:body};
   P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:__PAGE_HASH__})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
@@ -34,6 +36,7 @@ function pulseSay(p,now,many){const who=many?(p.name||'מכשיר')+': ':'';cons
   if(p.mic===false)return who+'הטלפון חי, אבל ההרשאה למיקרופון נשללה'+(since?''+since:'')+'.';
   if(p.ttsOk===false)return who+'הטלפון חי, אבל הקול לא עלה.';
   if(p.net===false)return who+'הטלפון חי, אבל אין לו אינטרנט.';
+  if(p.login===true)return who+'הבועה פתוחה, אבל הדף התנתק מהחשבון. צריך להתחבר מחדש ל-claude.ai בטלפון.';
   if(p.pageReady===false)return who+'הבועה פתוחה, אבל הדף בתוכה עוד לא התחבר.';
   const heard=+p.lastHeard>0?' שמעתי אותך לאחרונה '+ago(now-(+p.lastHeard))+'.':'';
   const risk=p.battOpt===false?' רק דבר אחד: אין לי פטור מחיסכון בסוללה, אז הטלפון עלול לכבות אותי. תפתח את ליבה ותאשר.':'';
@@ -43,5 +46,20 @@ function heAt(t){if(!t)return 'אף פעם';const d=new Date(t),n=new Date();con
 async function whyCmd(){const now=Date.now();let r;try{r=await coldGet(P.pulses(),null,10);}catch(e){fail('P_DB_READ',e,'pulse');sayLocal('לא הצלחתי לקרוא את מצב הטלפון.');return;}
   const ps=r.docs.map(d=>d.data()||{}).sort((a,b)=>(b.at||0)-(a.at||0));
   if(!ps.length){sayLocal('עוד לא קיבלתי דופק מהטלפון. זה יתחיל אחרי שהגרסה החדשה של האפליקציה תותקן.');return;}
-  sayLocal(ps.map(p=>pulseSay(p,now,ps.length>1)).join(' '));}
-window.__pulse={in:pulseIn,say:pulseSay,why:whyCmd,ledgerFlush:ledgerFlush,ledger:()=>Object.assign({},ledger)};
+  let past='';try{const h=await P.health().get();const x=h.exists?(h.data()||{}):null;if(x&&now-(+x.at||0)<864e5&&x.reason)past=' השתיקה האחרונה, '+ago(now-(+x.from||now))+', הייתה כי '+(HEALTH_HE[x.reason]||HEALTH_HE.unknown)+'.';}catch(e){fail('P_DB_READ',e,'channel/health');}
+  sayLocal(ps.map(p=>pulseSay(p,now,ps.length>1)).join(' ')+past);}
+/* heartbeat-diag: a closed vocabulary for why ליבה was silent. When a pulse comes back after a gap, the gap gets a
+   reason from what the phone knew: why this life began (boot/revive), the last gasp of the previous one (the app saw
+   its own end coming, or Meir turned it off), and the last pulse before the gap (no network, deep sleep, logged out).
+   Written to channel/health - one document, rewritten. */
+const HEALTH_HE={'phone-off':'הטלפון כבה או הופעל מחדש','app-killed':'המערכת סגרה אותי','mic-revoked':'ההרשאה למיקרופון נשללה','overlay-revoked':'ההרשאה לבועה נשללה',
+  'page-logged-out':'הדף התנתק מהחשבון','network-down':'לא הייתה רשת','doze':'הטלפון נכנס לשינה עמוקה','turned-off':'כיבית אותי','unknown':'אני לא יודעת למה'};
+function gapReason(prev,cur){const g=String(cur.gasp||'');
+  if(/^turned-off/.test(g))return 'turned-off';if(cur.life==='boot')return 'phone-off';if(/^app-killed/.test(g)||cur.life==='revive')return 'app-killed';
+  if(prev&&prev.net===false)return 'network-down';if(prev&&prev.doze===true)return 'doze';if(prev&&prev.login===true)return 'page-logged-out';
+  if(prev&&prev.mic===false)return 'mic-revoked';if(prev&&prev.overlay===false)return 'overlay-revoked';return 'unknown';}
+function liveReason(p,now){if(now-(+p.at||0)>PULSE_STALE)return p.net===false?'network-down':p.doze?'doze':'unknown';
+  if(p.overlay===false)return 'overlay-revoked';if(p.mic===false)return 'mic-revoked';if(p.login===true)return 'page-logged-out';return 'ok';}
+function healthGap(dev,prev,cur,from,to){const reason=gapReason(prev,cur);
+  P.health().set({reason:reason,dev:dev,from:from,to:to,at:to}).catch(e=>fail('P_DB_WRITE',e,'channel/health'));return reason;}
+window.__pulse={in:pulseIn,reason:gapReason,live:liveReason,say:pulseSay,why:whyCmd,ledgerFlush:ledgerFlush,ledger:()=>Object.assign({},ledger)};

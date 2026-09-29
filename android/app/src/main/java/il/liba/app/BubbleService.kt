@@ -60,6 +60,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     // same clock, so page and phone stamps line up; the page checks that in the hello handshake.
     private var voiceAt = 0L; private var heardAt = 0L; private var listenReadyAt = 0L
     private var sayStartAt = 0L; private var spokeCause = "done"; private var lastSpokeAt = 0L
+    // heartbeat-diag: why this life began (opened/boot/updated/revive), the previous life's last gasp, and a login wall
+    private var lifeWhy = "opened"; private var lastGasp = ""; private var loginWall = false
     private fun stamps() = org.json.JSONObject().put("voice", if (voiceAt > 0) voiceAt else listenReadyAt).put("heard", heardAt).put("wall", System.currentTimeMillis()).toString()
     /** release the page's wait for the utterance, with what really happened */
     private fun releaseSay(cause: String) { val id = sayId ?: return; sayId = null
@@ -124,6 +126,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val am0 = getSystemService(AUDIO_SERVICE) as AudioManager; intArrayOf(AudioManager.STREAM_SYSTEM, AudioManager.STREAM_MUSIC).forEach { try { am0.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) { Trace.e(Trace.Code.E_AUDIO_STREAM, "boot:" + e.javaClass.simpleName) } }
         if (!startForegroundNotif()) { stopSelf(); return }
         Prefs.setOn(this, true); il.liba.app.life.Life.arm(this)
+        lastGasp = Prefs.gasp(this); Prefs.setGasp(this, "")
         runCatching { applyPrefs() }.onFailure { Trace.e(Trace.Code.E_PREFS, "applyPrefs:" + it.javaClass.simpleName) }
         runCatching { setupTts() }.onFailure { Trace.e(Trace.Code.E_TTS_INIT, "setup:" + it.javaClass.simpleName) }
         runCatching { setupWeb() }.onFailure { Trace.e(Trace.Code.E_OVERLAY_DENIED, "web"); status = "WebView נכשל: $it" }
@@ -133,6 +136,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         runCatching { checkUpdate() }.onFailure { Trace.e(Trace.Code.E_NET, "check:" + it.javaClass.simpleName) }
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        intent?.getStringExtra("why")?.let { if (lifeWhy == "opened") lifeWhy = it }
         when (intent?.action) { // step 32: actions from the permanent notification
             "il.liba.TALK" -> main.post { stopSpeaking(); startListening("cmd") }
             "il.liba.QUIET" -> main.post { stopSpeaking(); heyOff(); setState(LibaState.IDLE); showLabel("שקט.", 2000) }
@@ -324,7 +328,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val charging = runCatching { bm.isCharging }.getOrDefault(false)
         val net = runCatching { val cm = getSystemService(ConnectivityManager::class.java); cm.getNetworkCapabilities(cm.activeNetwork)?.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true }.getOrDefault(false)
         val ver = runCatching { packageManager.getPackageInfo(packageName, 0).versionName ?: "?" }.getOrDefault("?")
-        val body = Pulse.due(Pulse.State(mic, Settings.canDrawOverlays(this), battery, charging, net, heyOn, ttsReady, pageReady, ver, getSystemService(PowerManager::class.java)?.isIgnoringBatteryOptimizations(packageName) != false), heardAt, lastSpokeAt, System.currentTimeMillis()) ?: return
+        val body = Pulse.due(Pulse.State(mic, Settings.canDrawOverlays(this), battery, charging, net, heyOn, ttsReady, pageReady, ver, getSystemService(PowerManager::class.java)?.isIgnoringBatteryOptimizations(packageName) != false,
+            getSystemService(PowerManager::class.java)?.isDeviceIdleMode == true, loginWall, lifeWhy, lastGasp), heardAt, lastSpokeAt, System.currentTimeMillis()) ?: return
         LibaWeb.sendPulse(w, Pulse.devId(this), Pulse.name(), body)
     }
     /** one-life: WAKE_LOCK was declared and never used. A partial lock only while speaking, with a 90 s ceiling, so a
@@ -783,8 +788,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         pageLoadedAt = SystemClock.elapsedRealtime()
         status = when {
             url.startsWith("error:") -> { Trace.e(Trace.Code.E_PAGE_LOAD, "error"); "הדף לא נטען: " + url.removePrefix("error:") }
-            url.contains("/login") || url.contains("auth") -> { Trace.e(Trace.Code.E_PAGE_LOGIN, if (url.contains("/login")) "login" else "auth"); val now = SystemClock.elapsedRealtime(); if (now - loginWarnedAt > 3600000) { loginWarnedAt = now; speak("צריך להתחבר ל‑claude.ai. לחיצה ארוכה עליי, כבה בועה, התחבר, והפעל שוב.") }; "צריך להתחבר ל‑claude.ai" }
-            url.contains("/artifact/") -> "הדף נטען, מחכה שהוא יתחבר…"
+            url.contains("/login") || url.contains("auth") -> { loginWall = true; Trace.e(Trace.Code.E_PAGE_LOGIN, if (url.contains("/login")) "login" else "auth"); val now = SystemClock.elapsedRealtime(); if (now - loginWarnedAt > 3600000) { loginWarnedAt = now; speak("צריך להתחבר ל‑claude.ai. לחיצה ארוכה עליי, כבה בועה, התחבר, והפעל שוב.") }; "צריך להתחבר ל‑claude.ai" }
+            url.contains("/artifact/") -> { loginWall = false; "הדף נטען, מחכה שהוא יתחבר…" }
             else -> "נטען: " + url.take(60)
         }
         if (!pageReady) showLabel(status, 5000)
@@ -847,7 +852,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         v.vibrate(VibrationEffect.createWaveform(longArrayOf(0, 300, 150, 300, 150, 300), -1))
     }
 
-    override fun onDestroy() { speakLock(false)
+    override fun onDestroy() { speakLock(false); Prefs.setGasp(this, (if (Prefs.on(this)) "app-killed" else "turned-off") + "|" + System.currentTimeMillis())
         running = false; instance = null; main.removeCallbacksAndMessages(null); stopVad(); bargeVad?.stop(); screenCb?.let { r -> runCatching { unregisterReceiver(r) }.onFailure { Trace.e(Trace.Code.E_SYS_CB, "unScreen:" + it.javaClass.simpleName) } }; screenCb = null; netCb?.let { n -> runCatching { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(n) }.onFailure { Trace.e(Trace.Code.E_SYS_CB, "unNet:" + it.javaClass.simpleName) } }; mediaSession?.let { it.isActive = false; it.release() }; unmuteSystem()
         try { sr?.destroy() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "destroy:" + e.javaClass.simpleName) }
         tts?.stop(); tts?.shutdown()

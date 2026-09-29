@@ -10,6 +10,9 @@ object Prefs {
     /** one-life: Meir left the bubble on. Only "כבה בועה" turns it off; a crash or the OS killing it does not */
     fun on(c: Context) = p(c).getBoolean("on", false)
     fun setOn(c: Context, v: Boolean) = p(c).edit().putBoolean("on", v).apply()
+    /** heartbeat-diag: the last words before a death the app could see coming - read (and cleared) by the next life */
+    fun gasp(c: Context): String = p(c).getString("gasp", "") ?: ""
+    fun setGasp(c: Context, v: String) = p(c).edit().putString("gasp", v).commit()
     fun batteryAsked(c: Context) = p(c).getBoolean("battAsked", false)
     fun setBatteryAsked(c: Context, v: Boolean) = p(c).edit().putBoolean("battAsked", v).apply()
     fun hey(c: Context) = p(c).getBoolean("hey", false)

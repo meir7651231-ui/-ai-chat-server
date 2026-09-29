@@ -27,12 +27,13 @@ object Pulse {
 
     /** the state that matters; times are carried but are not part of the signature (they change every time) */
     data class State(val mic: Boolean, val overlay: Boolean, val battery: Int, val charging: Boolean, val net: Boolean,
-                     val vad: Boolean, val ttsOk: Boolean, val pageReady: Boolean, val ver: String, val battOpt: Boolean = true)
+                     val vad: Boolean, val ttsOk: Boolean, val pageReady: Boolean, val ver: String, val battOpt: Boolean = true,
+                     val doze: Boolean = false, val login: Boolean = false, val life: String = "", val gasp: String = "")
 
     /** returns the body to send now, or null when nothing changed and five minutes have not passed */
     fun due(s: State, lastHeard: Long, lastSpoke: Long, now: Long): String? {
         // battery in steps of ten, so a draining phone is not a change every minute
-        val sig = listOf(s.mic, s.overlay, s.battery / 10, s.charging, s.net, s.vad, s.ttsOk, s.pageReady, s.ver, s.battOpt).joinToString("|")
+        val sig = listOf(s.mic, s.overlay, s.battery / 10, s.charging, s.net, s.vad, s.ttsOk, s.pageReady, s.ver, s.battOpt, s.doze, s.login).joinToString("|")
         val changed = sig != lastSig
         if (changed) { since = now }
         if (!changed && now - lastSentAt < EVERY_MS) return null
@@ -41,6 +42,7 @@ object Pulse {
             .put("mic", s.mic).put("overlay", s.overlay).put("battery", s.battery).put("charging", s.charging)
             .put("net", s.net).put("vad", s.vad).put("ttsOk", s.ttsOk).put("pageReady", s.pageReady).put("ver", s.ver)
             .put("battOpt", s.battOpt).put("uptime", android.os.SystemClock.elapsedRealtime() / 1000)
+            .put("doze", s.doze).put("login", s.login).put("life", s.life).put("gasp", s.gasp)
             .put("lastHeard", lastHeard).put("lastSpoke", lastSpoke).put("since", since).put("why", if (changed) "change" else "beat")
             .toString()
     }

@@ -57,6 +57,21 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   ok(/לא דיבר איתי מאז אתמול ב-21:00/.test(s), 'why: the phone has not talked since yesterday at nine: ' + s);
   const bo = await said({ dev: 'd-1', name: 'Pixel', at: Date.now() - 60000, mic: true, overlay: true, battOpt: false, battery: 70 });
   ok(/הכול תקין/.test(bo) && /פטור מחיסכון בסוללה/.test(bo), 'why: all fine but no battery exemption - said as the one risk: ' + bo);
+  // (d) heartbeat-diag: every silence gets a reason from the closed list - from the pulses around the gap
+  const cases = [
+    [{}, { life: 'boot' }, 'phone-off'], [{}, { gasp: 'app-killed|1' }, 'app-killed'], [{}, { life: 'revive' }, 'app-killed'],
+    [{}, { gasp: 'turned-off|1', life: 'opened' }, 'turned-off'], [{ net: false }, {}, 'network-down'], [{ doze: true }, {}, 'doze'],
+    [{ login: true }, {}, 'page-logged-out'], [{ mic: false }, {}, 'mic-revoked'], [{ overlay: false }, {}, 'overlay-revoked'], [{}, {}, 'unknown']];
+  const got = await f.evaluate(cs => cs.map(([a, b]) => window.__pulse.reason(a, b)), cases);
+  const miss = cases.filter((c, i) => got[i] !== c[2]).map((c, i) => c[2] + '→' + got[cases.indexOf(c)]);
+  ok(miss.length === 0, `diag: ${cases.length - miss.length}/${cases.length} silences get the right reason` + (miss.length ? ': ' + miss.join(', ') : ''));
+  const gap = await f.evaluate(async () => { const t = Date.now() - 3 * 3600e3;
+    window.__pulse.in({ dev: 'd-gap', name: 'Fold', body: JSON.stringify({ mic: true, overlay: true, net: true }) }, t);
+    window.__pulse.in({ dev: 'd-gap', name: 'Fold', body: JSON.stringify({ mic: true, overlay: true, net: true, life: 'boot' }) }, Date.now());
+    await new Promise(r => setTimeout(r, 200)); return window.__h.get('channel/health'); });
+  ok(gap && gap.reason === 'phone-off' && gap.dev === 'd-gap', 'diag: a pulse after three silent hours, from a fresh boot, writes channel/health = phone-off: ' + JSON.stringify(gap && gap.reason));
+  const past = await said({ dev: 'd-gap', name: 'Fold', at: Date.now() - 30000, mic: true, overlay: true });
+  ok(/השתיקה האחרונה/.test(past) && /הטלפון כבה/.test(past), '"למה שתקת" also tells the last silence and why: ' + past);
   ok(!errs.length, 'no page error: ' + errs.join(' | '));
   await b.close(); console.log(fails ? `\n${fails} נכשלו` : '\nכל הבדיקות עברו'); process.exit(fails ? 1 : 0);
 })().catch(e => { console.log('HARNESS ERROR', e); process.exit(1); });

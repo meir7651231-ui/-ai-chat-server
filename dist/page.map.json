@@ -1,5 +1,5 @@
 {
- "pageHash": "3816da1f9e7c",
+ "pageHash": "24eec9e339a8",
  "anchors": {
   "paths": {
    "src": "liba/src/00-paths.js",
@@ -510,24 +510,36 @@
    "line": 880
   },
   "pulse.ledgerBump": {
-   "src": "liba/src/15-pulse.js:22",
-   "line": 888
+   "src": "liba/src/15-pulse.js:24",
+   "line": 890
   },
   "pulse.ledgerFlush": {
-   "src": "liba/src/15-pulse.js:23",
-   "line": 889
+   "src": "liba/src/15-pulse.js:25",
+   "line": 891
   },
   "pulse.pulseSay": {
-   "src": "liba/src/15-pulse.js:30",
-   "line": 896
+   "src": "liba/src/15-pulse.js:32",
+   "line": 898
   },
   "pulse.heAt": {
-   "src": "liba/src/15-pulse.js:41",
-   "line": 907
+   "src": "liba/src/15-pulse.js:44",
+   "line": 910
   },
   "pulse.whyCmd": {
-   "src": "liba/src/15-pulse.js:43",
-   "line": 909
+   "src": "liba/src/15-pulse.js:46",
+   "line": 912
+  },
+  "pulse.gapReason": {
+   "src": "liba/src/15-pulse.js:57",
+   "line": 923
+  },
+  "pulse.liveReason": {
+   "src": "liba/src/15-pulse.js:61",
+   "line": 927
+  },
+  "pulse.healthGap": {
+   "src": "liba/src/15-pulse.js:63",
+   "line": 929
   }
  }
 }
