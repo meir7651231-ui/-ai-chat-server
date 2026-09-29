@@ -479,7 +479,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             }
             main.post { onDone?.invoke() }
         }.start()
-        main.removeCallbacks(recheck); main.postDelayed(recheck, 6 * 3600 * 1000L)
+        main.removeCallbacks(recheck); main.postDelayed(recheck, 3 * 3600 * 1000L) // always-updatable: every 3 h, and on every start (boot, update, revive)
     }
 
     // ---------- bubble ----------

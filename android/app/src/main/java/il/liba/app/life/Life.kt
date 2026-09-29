@@ -22,7 +22,7 @@ import il.liba.app.Trace
  */
 class LifeReceiver : BroadcastReceiver() {
     override fun onReceive(c: Context, i: Intent) {
-        val why = when (i.action) { Intent.ACTION_BOOT_COMPLETED -> "boot"; Intent.ACTION_MY_PACKAGE_REPLACED -> "updated"; Life.REVIVE -> "revive"; else -> return }
+        val why = when (i.action) { Intent.ACTION_BOOT_COMPLETED, "android.intent.action.QUICKBOOT_POWERON" -> "boot"; Intent.ACTION_MY_PACKAGE_REPLACED -> "updated"; Life.REVIVE -> "revive"; else -> return }
         Life.arm(c)
         if (!Prefs.on(c)) return
         if (BubbleService.running) return
