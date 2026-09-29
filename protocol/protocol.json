@@ -5,6 +5,7 @@
     "beat",
     "clock",
     "proto",
+    "pulse",
     "spoke",
     "state",
     "trace"
@@ -132,6 +133,14 @@
         "batch": "str",
         "events": "str"
       }
+    },
+    "pulse": {
+      "fields": {
+        "dev": "str",
+        "name": "str",
+        "body": "str"
+      },
+      "why": "one sign of life per device, edge-triggered (a change, or every five minutes); the page keeps it in one fixed document pulse/<dev>"
     }
   },
   "compat": "Adding an optional field is compatible and keeps the version; removing or renaming a message or a field bumps it.",

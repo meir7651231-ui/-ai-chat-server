@@ -15,6 +15,7 @@ const P_RAW={
   budget:()=>db.doc('channel/budget'),
   crashes:()=>db.collection('crashes'),
   fold:id=>db.doc('fold/'+id),folds:()=>db.collection('fold'),janitor:()=>db.doc('channel/janitor'),
+  pulse:dev=>db.doc('pulse/'+dev),pulses:()=>db.collection('pulse'),ledger:day=>db.doc('ledger/'+day),ledgers:()=>db.collection('ledger'),
 };
 /* req-spine: the only id minter. String(Date.now()) collided whenever two writes shared a millisecond and
    silently overwrote each other; this is 48 bits of time + a per-millisecond counter + 32 random bits, so ids
@@ -31,7 +32,9 @@ const CLS_OF={inbox:'voice',inboxDoc:'voice',current:'voice',owner:'state',quiet
   sessions:'state',budget:'state',gallery:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
   device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',
   /* the janitor frees space, so its folds and lease are never refused - refusing the cure would keep the db full */
-  fold:'janitor',folds:'janitor',janitor:'janitor',crashes:'record'};
+  fold:'janitor',folds:'janitor',janitor:'janitor',crashes:'record',
+  /* fixed cardinality: one document per device, one per day - rewriting an existing document still works on a full db */
+  pulse:'fixed',pulses:'fixed',ledger:'fixed',ledgers:'fixed'};
 /* the fraction of the quota at which each class stops being written; voice has no line */
 const CH_TIER={telemetry:0.72,record:0.84,state:0.92};
 let chBudget={docs:0,limit:25000,bypass:false},chAlarmedAt=0;const chDenied={};

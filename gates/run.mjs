@@ -17,6 +17,7 @@ const extra = [
   ['state-table', 'node tests/machine.test.js'],
   ['wal-chaos', 'CHAOS=45 node tests/wal.chaos.js'],
   ['capacity', 'node tests/capacity.sim.js'],
+  ['telemetry', 'node tests/telemetry.test.js'],
 ]
 
 let pass = 0

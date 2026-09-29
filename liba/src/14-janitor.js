@@ -20,6 +20,8 @@ const JAN_KINDS=[
   /* the board already announced it; a finished task has no reason to sit on the live board for a month */
   ['tasks',()=>P.tasks(),now=>[['status','in',['archived','done']],['updatedAt','<',now-D3]],'updatedAt'],
   ['sessions',()=>P.sessions(),now=>[['updatedAt','<',now-D30]],'updatedAt'],
+  ['telemetry',()=>P.telemetry(),now=>[['ts','<',now-D7]],'ts'],
+  ['ledger',()=>P.ledgers(),now=>[['at','<',now-D30]],'at'],
 ];
 const JAN_GALLERY_KEEP=120;
 let janHolder='';try{janHolder=localStorage.getItem('liba.jid')||'';if(!janHolder){janHolder='p-'+mintId();localStorage.setItem('liba.jid',janHolder);}}catch(e){janHolder='p-'+mintId();}

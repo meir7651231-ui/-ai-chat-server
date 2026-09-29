@@ -21,6 +21,7 @@ async function bindReply(d){try{const r=await P.req(String(d.re)).get();const no
   await P.req(String(d.re)).update({firstReplyAt:x.firstReplyAt||now,lastReplyAt:now,replies:reps,answeredBy:speakerOf(d),state:'answered'});}
   catch(e){fail('P_DB_WRITE',e,'req reply');}}
 async function incoming(d){
+  if(d.kind!=='cmd')ledgerBump('said');
   if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post(PROTO.toApp.cmd,{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return true;}
   d.text=typeof d.text==='string'?d.text:String(d.text==null?'':d.text);
   d.options=Array.isArray(d.options)?d.options.map(o=>String(o)).filter(o=>o.length):[];

@@ -33,6 +33,7 @@ const M = [
   ['משפט לא נכתב לפני שליחה', '13-send.js', "walPut({req:reqId,", "({req:reqId,"],
   ['קיפול דורס במקום להוסיף', '14-janitor.js', 'if(cur)await ref.update({items:rows,at:Date.now()});', 'if(cur)await ref.set({items:rows,at:Date.now()});'],
   ['המנקה מוחק הודעה שלא נקראה', '14-janitor.js', "now=>[['spoken','==',true],['ts','<',now-H48]]", "now=>[['ts','<',now-H48]]"],
+  ['דופק בלי שומר חמש דקות', '15-pulse.js', 'if(last&&last.sig===sig&&now-last.at<PULSE_EVERY)return false;', ''],
 ]
 const pick = process.argv.slice(2).map(Number).filter(Boolean)
 const todo = M.map((m, i) => [i + 1, m]).filter(([n]) => !pick.length || pick.includes(n))
@@ -49,7 +50,7 @@ for (const [n, [name, file, from, to]] of todo) {
   if (src.split(from).length !== 2) { console.log(`  ✗ ${n}. ${name} — המוטציה לא מצאה את היעד שלה ב-${file}; הרתמה התיישנה`); process.exit(2) }
   writeFileSync(f, src.replace(from, to))
   const build = spawnSync('node', ['liba/build.mjs'], { cwd: WT, encoding: 'utf8' })
-  const suite = build.status === 0 ? spawnSync('bash', ['-lc', 'node tests/page.test.js && node tests/page.e2e.js && node tests/bridge.e2e.js && node tests/capacity.sim.js'], { cwd: WT, encoding: 'utf8' }) : build
+  const suite = build.status === 0 ? spawnSync('bash', ['-lc', 'node tests/page.test.js && node tests/page.e2e.js && node tests/bridge.e2e.js && node tests/capacity.sim.js && node tests/telemetry.test.js'], { cwd: WT, encoding: 'utf8' }) : build
   const red = suite.status !== 0
   const why = red ? ((suite.stdout || '').match(/^FAIL .*/m) || [build.status ? 'build נכשל' : ''])[0].slice(0, 90) : ''
   if (red) { caught++; console.log(`  ✓ ${n}. ${name} — נתפס: ${why}`) } else { holes.push(name); console.log(`  ✗ ${n}. ${name} — הבדיקות לא שמו לב`) }

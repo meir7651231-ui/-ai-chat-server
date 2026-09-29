@@ -59,11 +59,11 @@ class BubbleService : Service(), LibaWeb.Bridge {
     // step clock: measured, not guessed. Wall clock on purpose - the page runs on the same device and reads the
     // same clock, so page and phone stamps line up; the page checks that in the hello handshake.
     private var voiceAt = 0L; private var heardAt = 0L; private var listenReadyAt = 0L
-    private var sayStartAt = 0L; private var spokeCause = "done"
+    private var sayStartAt = 0L; private var spokeCause = "done"; private var lastSpokeAt = 0L
     private fun stamps() = org.json.JSONObject().put("voice", if (voiceAt > 0) voiceAt else listenReadyAt).put("heard", heardAt).put("wall", System.currentTimeMillis()).toString()
     /** release the page's wait for the utterance, with what really happened */
     private fun releaseSay(cause: String) { val id = sayId ?: return; sayId = null
-        val end = System.currentTimeMillis(); val start = if (sayStartAt > 0) sayStartAt else end; sayStartAt = 0
+        val end = System.currentTimeMillis(); val start = if (sayStartAt > 0) sayStartAt else end; sayStartAt = 0; lastSpokeAt = end
         web?.let { w -> LibaWeb.sendSpoke(w, id, start, end, cause) } }
     // step page-kernel: while a page utterance is being spoken, tell the page so every 2 s. Silence from
     // here means the voice died without onSpoken - the page stops waiting after 6 s instead of 120.
@@ -315,6 +315,17 @@ class BubbleService : Service(), LibaWeb.Bridge {
         webHost?.let { runCatching { wm.removeView(it) }.onFailure { x -> Trace.e(Trace.Code.E_OVERLAY_UPDATE, "rebuild:" + x.javaClass.simpleName) } }; web?.destroy(); web = null; pageReady = false; pageOk = false
         setupWeb(); showLabel("הדף קרס – טוען מחדש", 4000)
     }
+    /** step fixed-cardinality-telemetry: what the page needs to answer "why were you silent" - sent on change or every five minutes */
+    private fun pulse(w: WebView) {
+        val mic = checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        val bm = getSystemService(BatteryManager::class.java)
+        val battery = runCatching { bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY) }.getOrDefault(-1)
+        val charging = runCatching { bm.isCharging }.getOrDefault(false)
+        val net = runCatching { val cm = getSystemService(ConnectivityManager::class.java); cm.getNetworkCapabilities(cm.activeNetwork)?.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true }.getOrDefault(false)
+        val ver = runCatching { packageManager.getPackageInfo(packageName, 0).versionName ?: "?" }.getOrDefault("?")
+        val body = Pulse.due(Pulse.State(mic, Settings.canDrawOverlays(this), battery, charging, net, heyOn, ttsReady, pageReady, ver), heardAt, lastSpokeAt, System.currentTimeMillis()) ?: return
+        LibaWeb.sendPulse(w, Pulse.devId(this), Pulse.name(), body)
+    }
     private fun reloadPage(why: String) {
         val now = SystemClock.elapsedRealtime(); if (now - lastReloadAt < 90000) return
         lastReloadAt = now; pageReady = false; pageOk = false; pageLoadedAt = now; status = "טוען מחדש ($why)"
@@ -322,7 +333,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
     private val watchdog = object : Runnable { override fun run() {
         if (!pageReady && SystemClock.elapsedRealtime() - pageLoadedAt > 90000) { Trace.e(Trace.Code.E_PAGE_LOAD, "timeout"); reloadPage("אין תגובה מהדף") }
-        if (pageReady) web?.let { LibaWeb.hello(it); drainTrace() }
+        if (pageReady) web?.let { LibaWeb.hello(it); drainTrace(); pulse(it) }
         main.postDelayed(this, 30000)
     } }
     private fun watchNetwork() {
@@ -768,7 +779,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (!pageReady) showLabel(status, 5000)
         web?.let { LibaWeb.hello(it) }
     } }
-    override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
+    override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; Pulse.resend(); main.postDelayed({ web?.let { pulse(it) } }, 3000); status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         if (Prefs.reports(this)) Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } }
         main.postDelayed({ drainTrace() }, 2000) } } }
     fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "heyOff:" + e.javaClass.simpleName) }; listening = false }; unmuteSystem() }

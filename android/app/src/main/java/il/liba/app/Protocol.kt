@@ -3,8 +3,8 @@ package il.liba.app
 
 object Protocol {
     const val VERSION = 1
-    const val HASH = "54a74e8c27dd"
-    val CAPS = listOf("beat", "clock", "proto", "spoke", "state", "trace")
+    const val HASH = "b875d4c60051"
+    val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace")
 
     /** page -> app */
     object ToApp {
@@ -29,6 +29,7 @@ object Protocol {
         const val SPEAKING = "speaking"
         const val INPUT = "input"
         const val TRACE = "trace"
+        const val PULSE = "pulse"
     }
 
     /** Relay for the top frame's message listener: page -> LibaBridge. */
@@ -49,12 +50,13 @@ object Protocol {
     /** Senders the app calls through evaluateJavascript: app -> page. */
     const val SENDERS = """
   window.__libaSend=function(k,o){Array.prototype.slice.call(document.querySelectorAll('iframe')).forEach(function(f){try{f.contentWindow.postMessage(Object.assign({liba:k},o),'*');}catch(e){}});};
-  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"54a74e8c27dd",pv:1,caps:["beat","clock","proto","spoke","state","trace"],wall:Date.now(),state:window.__libaState||''});};
+  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"b875d4c60051",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace"],wall:Date.now(),state:window.__libaState||''});};
   window.__libaCrash=function(id,version,text){window.__libaSend("crash",{id:id,version:version,text:text});};
   window.__libaSpoke=function(id,startAt,endAt,cause){window.__libaSend("spoke",{id:id,startAt:startAt,endAt:endAt,cause:cause});};
   window.__libaSpeaking=function(id){window.__libaSend("speaking",{id:id});};
   window.__libaInput=function(text,source,stamps){window.__libaSend("input",{text:text,source:source,stamps:stamps});};
   window.__libaTrace=function(batch,events){window.__libaSend("trace",{batch:batch,events:events});};
+  window.__libaPulse=function(dev,name,body){window.__libaSend("pulse",{dev:dev,name:name,body:body});};
 """
 }
 

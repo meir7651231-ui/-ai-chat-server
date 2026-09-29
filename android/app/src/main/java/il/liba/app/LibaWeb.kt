@@ -122,6 +122,8 @@ object LibaWeb {
     }
     /** 3.14.0: tell the page that the utterance it sent has finished being spoken, so it acks in order. */
     /** step page-kernel: "still speaking" every 2 s, so a page that hears nothing for 6 s knows the voice stopped. */
+    /** step fixed-cardinality-telemetry: one edge-triggered sign of life; the page keeps it in pulse/<dev> */
+    fun sendPulse(web: WebView, dev: String, name: String, body: String) { web.evaluateJavascript("window.__libaPulse && window.__libaPulse(${JSONObject.quote(dev)},${JSONObject.quote(name)},${JSONObject.quote(body)})", null) }
     fun sendSpeaking(web: WebView, id: String) { web.evaluateJavascript("window.__libaSpeaking && window.__libaSpeaking(${JSONObject.quote(id)})", null) }
     /** step clock: when the phone really started and stopped saying it, and why it stopped (done/error/guard/stop). */
     fun sendSpoke(web: WebView, id: String, startAt: Long = 0, endAt: Long = 0, cause: String = "done") { web.evaluateJavascript("window.__libaSpoke && window.__libaSpoke(${JSONObject.quote(id)},$startAt,$endAt,${JSONObject.quote(cause)})", null) }

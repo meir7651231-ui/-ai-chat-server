@@ -64,7 +64,9 @@ function latencyCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
     sayLocal('בחציון, על '+ok.length+' בקשות היום: '+parts.join(', ')+'.'+(slow?' הכי איטי: '+slow[1]+'.':'')+(out.dropped?' '+out.dropped+' לא נספרו כי השעון לא היה מדויק.':''));
   }).catch(e=>{fail('P_DB_READ',e,'req');sayLocal('לא הצלחתי לקרוא את המדידות.');});
   return true;}
-function taskCmd(text){if(reqCmd(text)||latencyCmd(text))return true;const t=text.replace(/[?!.,]/g,'').trim();
+/* step fixed-cardinality-telemetry: the phone's own state, from pulse/<dev> */
+function pulseCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(!/^(למה שתקת|למה לא ענית|למה לא דיברת|מה שלומך|מה שלום הטלפון|מה מצב הטלפון)$/.test(t))return false;whyCmd();return true;}
+function taskCmd(text){if(reqCmd(text)||latencyCmd(text)||pulseCmd(text))return true;const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(מפה|מפת המערכת|תראה מפה|מה כל הסשנים עושים|מי תקוע)$/.test(t)){mapOn=true;renderMap();const m=mapSummary();bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:'ליבה, מפת המערכת: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
   if(/^(תפתח|פתח|תפתח את התוצאה|תראה לי|תפתח תראה לי|פתח תראה לי|תפתח לי|תפתח אותו|תפתח אותה|תראה)$/.test(t)){const d=lastTasks.find(x=>x.status==='done'&&x.link)||lastTasks.find(x=>x.link);if(!d)return false;const m='פותחת: '+d.title;bubble('li',m);if(appMode){post(PROTO.toApp.cmd,{cmd:'open '+d.link});post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});}else{say(m);window.open(d.link,'_blank');}return true;}
   const pr=t.match(/^(קודם|תעדיף|עדיפות ל|תתחיל עם)\s+(את\s+)?(.+)$/);if(pr){const q=pr[3].trim();const task=lastTasks.find(x=>(x.title||'').includes(q));if(!task)return false;P.task(task.id).update({priority:Date.now(),updatedAt:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'tasks'));const m='בסדר, '+task.title+' קודם.';bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
