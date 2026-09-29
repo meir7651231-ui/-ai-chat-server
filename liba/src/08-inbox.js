@@ -147,9 +147,11 @@ function catchupCheck(){let last=0;try{last=+localStorage.getItem(LSK('lastHello
   queueLocal({id:'catchup-'+now,kind:'say',release:true,speaker:'ליבה',topic:'תדרוך',text:[a,b,c,'תגיד "הכול" ואקריא את השאר.'].filter(Boolean).join(' ')});}
 function catchupAll(){if(!catchupUntil)return false;catchupUntil=0;sayLocal('מקריאה את כולן.');setTimeout(pump,300);return true;}
 /* "על מה דיברנו אתמול" / "תחזור לשיחה על X": from the conversation log and its folds */
-async function turnsBetween(from,to){const r=await coldGet(P.turns(),[['ts','>=',from],['ts','<',to]],300);const rows=r.docs.map(x=>x.data()||{});
-  try{const f=await coldGet(P.folds(),[['kind','==','turns']],60);f.docs.forEach(x=>{const it=(x.data()||{}).items||{};Object.values(it).forEach(v=>{if((+v.ts||0)>=from&&(+v.ts||0)<to)rows.push(v);});});}catch(e){}
+/* a log between two times, live rows and the janitor's folds together, each row with its id */
+async function logBetween(kind,col,from,to,n){const r=await coldGet(col,[['ts','>=',from],['ts','<',to]],n||300);const rows=r.docs.map(x=>Object.assign({id:x.id},x.data()||{}));const have=new Set(rows.map(x=>x.id));
+  try{const f=await coldGet(P.folds(),[['kind','==',kind]],60);f.docs.forEach(x=>{const it=(x.data()||{}).items||{};Object.entries(it).forEach(([k,v])=>{if(!have.has(k)&&(+v.ts||0)>=from&&(+v.ts||0)<to){have.add(k);rows.push(Object.assign({id:k},v));}});});}catch(e){}
   return rows.sort((a,b)=>(a.ts||0)-(b.ts||0));}
+const turnsBetween=(from,to,n)=>logBetween('turns',P.turns(),from,to,n);
 async function daysYesterday(){const d0=new Date();d0.setHours(0,0,0,0);const to=d0.getTime(),from=to-864e5;let rows;
   try{rows=await turnsBetween(from,to);}catch(e){fail('P_DB_READ',e,'turns');sayLocal('לא הצלחתי לקרוא את השיחה של אתמול.');return true;}
   if(!rows.length){sayLocal('אתמול לא דיברנו.');return true;}

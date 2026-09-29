@@ -129,6 +129,11 @@
       "ttlDays": 30,
       "cls": "record",
       "time": "day"
+    },
+    "memory/candidates/items": {
+      "cap": 100,
+      "cls": "record",
+      "time": "updatedAt"
     }
   }
 }
