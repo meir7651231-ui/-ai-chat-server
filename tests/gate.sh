@@ -55,7 +55,8 @@ echo "99" > "$WT/PAGE"
 expect_red "PAGE מול page: בדף" node gates/page-version.mjs
 
 # 4. a literal signing password in a tracked file
-printf 'storePassword=hunter2\n' > "$WT/ship/leaked.properties"
+# built at runtime, so gates/no-secret.mjs does not flag this harness itself
+printf 'storePassword=%s\n' "hunter$((6+1))" > "$WT/ship/leaked.properties"
 git -C "$WT" add ship/leaked.properties >/dev/null 2>&1
 expect_red "סיסמת חתימה בקובץ במעקב" node gates/no-secret.mjs
 
