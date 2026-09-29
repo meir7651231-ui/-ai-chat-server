@@ -56,6 +56,13 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var label: TextView? = null
     private var tts: TextToSpeech? = null
     private var sayId: String? = null   // id of the page utterance being spoken now
+    // step page-kernel: while a page utterance is being spoken, tell the page so every 2 s. Silence from
+    // here means the voice died without onSpoken - the page stops waiting after 6 s instead of 120.
+    private val speakingBeat = object : Runnable { override fun run() {
+        val id = sayId ?: return
+        web?.let { w -> LibaWeb.sendSpeaking(w, id) }
+        main.postDelayed(this, 2000)
+    } }
     private var ttsReady = false
     private var sr: SpeechRecognizer? = null
     private var srOnDevice = false          // step 21: which recognizer `sr` currently is
@@ -756,6 +763,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     override fun onSay(text: String, kind: String, options: List<String>, speaker: String, id: String) { main.post {
         sayId?.let { prev -> web?.let { w -> LibaWeb.sendSpoke(w, prev) } } // a new utterance arrived before the old one reported: release the page
         sayId = id.ifBlank { null }
+        main.removeCallbacks(speakingBeat); if (sayId != null) main.postDelayed(speakingBeat, 2000)
         sentAt = 0; status = "מחובר."; waitTimer?.let { main.removeCallbacks(it) }
         curSpeaker = if (speaker.isBlank()) "ליבה" else speaker
         // step 14: a different voice per speaker – ליבה neutral, המנהל lower, האדריכל higher, others slightly low

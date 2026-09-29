@@ -205,6 +205,19 @@ const failed = [];
   check((await get('inbox/k2') || {}).speakingAt > 0, 'kernel: phase one of the ack (speakingAt) is written before speaking');
   const st = await H(() => ({ s: window.__kernel.state(), n: window.__kernel.log.length, has: window.__kernel.log.some(x => x.to === 'SPEAKING') }));
   check(st.s === 'IDLE' && st.n > 0 && st.has, 'kernel: one state machine, back to IDLE, transitions logged: ' + JSON.stringify(st));
+  // page-kernel: 3.16 speaks a heartbeat; silence for 6 s releases the queue, beats keep it held
+  await p.evaluate(() => window.app({ liba: 'hello', ver: '3.16.0' })); await flush(600);
+  await set('inbox/hb1', { text: 'דופק-נשמע', kind: 'say', from: 'liba', ts: Date.now() });
+  let m1 = await flush(1200); const s1 = m1.find(x => x.liba === 'say' && /דופק-נשמע/.test(x.text || ''));
+  for (let i = 0; i < 5; i++) { await p.evaluate(id => window.app({ liba: 'speaking', id }), s1 && s1.id); await flush(2000); }
+  check(!(await get('inbox/hb1') || {}).spoken, 'heartbeat: while beats keep coming (10 s), the message is still held');
+  await p.evaluate(id => window.app({ liba: 'spoke', id }), s1 && s1.id); await flush(1200);
+  check((await get('inbox/hb1') || {}).spoken === true, 'heartbeat: acked once the phone reports it finished');
+  const t0 = Date.now();
+  await set('inbox/hb2', { text: 'דופק-אבד', kind: 'say', from: 'liba', ts: Date.now() });
+  for (let i = 0; i < 10 && !(await get('inbox/hb2') || {}).spoken; i++) await flush(1000);
+  const waited = Date.now() - t0;
+  check((await get('inbox/hb2') || {}).spoken === true && waited < 9500, 'heartbeat: no beat and no spoke - released after ~6 s, not 120: ' + waited + 'ms');
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

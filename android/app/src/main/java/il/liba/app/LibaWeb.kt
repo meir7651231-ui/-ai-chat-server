@@ -35,6 +35,7 @@ object LibaWeb {
   window.__libaHello=function(){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'hello',ver:window.__libaVer||''},'*');}catch(e){}});};
   window.__libaCrash=function(id,ver,t){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'crash',id:id,version:ver,text:t},'*');}catch(e){}});};
   window.__libaSpoke=function(id){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'spoke',id:id},'*');}catch(e){}});};
+  window.__libaSpeaking=function(id){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'speaking',id:id},'*');}catch(e){}});};
   window.__libaInput=function(t){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'input',text:t},'*');}catch(e){}});};
   window.__libaTrace=function(b,j){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'trace',batch:b,events:j},'*');}catch(e){}});};
   setInterval(function(){if(!ready)window.__libaHello();},3000);
@@ -130,6 +131,8 @@ object LibaWeb {
         web.dispatchTouchEvent(down); web.postDelayed({ web.dispatchTouchEvent(up); down.recycle(); up.recycle() }, 50)
     }
     /** 3.14.0: tell the page that the utterance it sent has finished being spoken, so it acks in order. */
+    /** step page-kernel: "still speaking" every 2 s, so a page that hears nothing for 6 s knows the voice stopped. */
+    fun sendSpeaking(web: WebView, id: String) { web.evaluateJavascript("window.__libaSpeaking && window.__libaSpeaking(${JSONObject.quote(id)})", null) }
     fun sendSpoke(web: WebView, id: String) { web.evaluateJavascript("window.__libaSpoke && window.__libaSpoke(${JSONObject.quote(id)})", null) }
     fun sendCrash(web: WebView, id: String, ver: String, text: String) { web.evaluateJavascript("window.__libaCrash && window.__libaCrash(${JSONObject.quote(id)},${JSONObject.quote(ver)},${JSONObject.quote(text)})", null) }
     /** step blackbox: one batch of on-disk trace lines, short-key shape unchanged.
