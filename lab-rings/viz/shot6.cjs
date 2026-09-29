@@ -1,0 +1,12 @@
+const { chromium } = require('/opt/node22/lib/node_modules/playwright');
+(async()=>{ const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1360, height: 1250 } });
+const errs=[]; p.on('pageerror', e=>errs.push(e.message));
+const st=require('fs').readFileSync('core2-state.json','utf8');
+await p.goto('about:blank');
+const html = require('fs').readFileSync('rings-live.html','utf8');
+await p.route('http://x/', r=>r.fulfill({contentType:'text/html',body:`<!doctype html><html><head><meta charset="utf-8"></head><body>${html}</body></html>`}));
+await p.goto('http://x/'); await p.evaluate(s=>localStorage.setItem('rings-harvest-v2',s), st); await p.reload();
+await p.waitForTimeout(4000); await p.screenshot({ path: 'shrink1.png' });
+await p.waitForTimeout(3000); await p.screenshot({ path: 'shrink2.png', fullPage:true });
+console.log('errors:', errs.length?errs:'none');
+console.log('CAP:', (await p.textContent('#cap')).replace(/\s+/g,' ')); console.log('STREAM:', (await p.textContent('#stream')).replace(/\s+/g,' ')); console.log('STATS:', (await p.textContent('.stats')).replace(/\s+/g,' ')); await b.close(); })();

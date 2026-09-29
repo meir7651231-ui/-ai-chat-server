@@ -1,0 +1,256 @@
+<title>מכונת חמש הפעולות</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Secular+One&family=Assistant:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --ground:#EEF1F4; --panel:#FFFFFF; --ink:#18202B; --muted:#5B6675; --line:#D5DBE3; --soft:#F5F7FA;
+  --amber:#B86F00; --amber-bg:#FFF1D6; --teal:#0F7C86; --teal-bg:#DDF3F4; --rose:#B4235A; --rose-bg:#FBE3EC;
+  --ok:#23804A; --bad:#B4235A;
+  --display:"Secular One","Assistant",system-ui,sans-serif; --body:"Assistant",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark; --ground:#0E131A; --panel:#161D27; --ink:#E6ECF3; --muted:#93A0B0; --line:#263241; --soft:#1B2330;
+  --amber:#F2A93B; --amber-bg:#3A2A0C; --teal:#3FC1C9; --teal-bg:#0F2F33; --rose:#F0648F; --rose-bg:#3B1424; --ok:#4CC37F; --bad:#F0648F; } }
+:root[data-theme="dark"]{
+  color-scheme:dark; --ground:#0E131A; --panel:#161D27; --ink:#E6ECF3; --muted:#93A0B0; --line:#263241; --soft:#1B2330;
+  --amber:#F2A93B; --amber-bg:#3A2A0C; --teal:#3FC1C9; --teal-bg:#0F2F33; --rose:#F0648F; --rose-bg:#3B1424; --ok:#4CC37F; --bad:#F0648F; }
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:20px 40px}
+.wrap{direction:rtl;max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(26px,4vw,36px);margin:0;line-height:1.15;text-wrap:balance}
+.lede{margin:4px 0 0;color:var(--muted);max-width:68ch}
+.atoms{display:flex;flex-wrap:wrap;gap:8px}
+.atom{font-family:var(--mono);font-size:13px;border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:3px 9px}
+.atom b{font-family:var(--body);font-weight:700;margin-inline-start:6px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.bar label{font-size:13px;color:var(--muted)}
+select,button{font-family:var(--body);font-size:15px;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+button.primary{background:var(--ink);color:var(--panel);border-color:var(--ink);font-weight:700;min-width:96px}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+input[type=range]{accent-color:var(--teal);width:120px}
+.grow{flex:1}
+.stat{font-family:var(--mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.narr{background:var(--amber-bg);border-inline-start:4px solid var(--amber);border-radius:8px;padding:10px 14px;font-size:17px;min-height:48px}
+.narr .op{font-family:var(--mono);font-weight:600;color:var(--amber);margin-inline-end:8px}
+.main{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:760px){.main{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.card h2{font-family:var(--body);font-size:13px;font-weight:700;letter-spacing:.04em;color:var(--muted);margin:0 0 8px}
+.prog{font-family:var(--mono);font-size:13px;max-height:560px;overflow:auto;border-radius:6px;background:var(--soft)}
+.ln{display:grid;grid-template-columns:34px 1fr;gap:6px;padding:1px 8px;border-inline-start:3px solid transparent;white-space:nowrap}
+.ln .no{color:var(--muted);text-align:end;font-variant-numeric:tabular-nums}
+.ln.jmp .tx{color:var(--rose)}
+.ln.cur{background:var(--amber-bg);border-inline-start-color:var(--amber);font-weight:600}
+.ln.target{box-shadow:inset 0 -1px 0 var(--rose)}
+.right{display:flex;flex-direction:column;gap:16px}
+.cells{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px}
+.cellgroup{font-size:12px;color:var(--muted);margin:6px 0 4px}
+.cell{position:relative;border:1px solid var(--line);border-radius:8px;background:var(--soft);padding:4px 0 6px;text-align:center;transition:background .15s}
+.cell .ad{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.cell .v{font-family:var(--mono);font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+.cell.hand{border-color:var(--teal);box-shadow:0 0 0 2px var(--teal);background:var(--teal-bg)}
+.cell.addr::after{content:"לאן";position:absolute;top:-9px;inset-inline-start:4px;font-size:10px;font-weight:700;background:var(--amber);color:var(--panel);border-radius:4px;padding:0 4px}
+.cell.wrote{background:var(--rose-bg);border-color:var(--rose)}
+.cell.dirty .v{color:var(--muted)}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+.stack{display:flex;flex-direction:column-reverse;gap:4px;min-height:132px;justify-content:flex-start}
+.sv{font-family:var(--mono);font-size:18px;font-weight:600;text-align:center;border:1px solid var(--line);border-radius:6px;background:var(--soft);padding:2px 0}
+.sv.top{border-color:var(--amber);background:var(--amber-bg)}
+.regs{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center;font-size:15px}
+.regs .k{color:var(--muted)}
+.regs .v{font-family:var(--mono);font-weight:600;font-size:18px}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--mono);font-size:16px}
+.node{border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:var(--soft)}
+.node.head{background:var(--ink);color:var(--panel);border-color:var(--ink);font-family:var(--body);font-size:13px}
+.arrow{color:var(--muted)}
+.result{font-size:16px;font-weight:600}
+.result.ok{color:var(--ok)} .result.bad{color:var(--bad)}
+.note{font-size:13px;color:var(--muted);margin:6px 0 0}
+@media (prefers-reduced-motion:reduce){.cell{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>מכונת חמש הפעולות</h1>
+    <p class="lede">כך המנוע עובד מבפנים. תוכנית היא רשימת פעולות. המכונה מבצעת אותן אחת-אחת: בוחרת כתובת, הולכת אליה, לוקחת, שמה, מחשבת. אין לה שום דבר אחר.</p>
+  </header>
+
+  <div class="atoms" aria-label="הפעולות">
+    <span class="atom">לאן<b>בוחרת כתובת</b></span>
+    <span class="atom">לך<b>היד הולכת לכתובת</b></span>
+    <span class="atom">קח<b>מעתיקה מהתא לערימה</b></span>
+    <span class="atom">שים<b>כותבת מהערימה לתא</b></span>
+    <span class="atom">חשב<b>לא-וגם על שני מספרים</b></span>
+    <span class="atom">חשב+<b>חיבור (נלמד במכונה הראשונה)</b></span>
+    <span class="atom">⤴<b>קפוץ לשורה אם לא אפס</b></span>
+  </div>
+
+  <div class="bar">
+    <label for="brick">תוכנית</label>
+    <select id="brick"></select>
+    <button id="newlist" type="button">רשימה חדשה</button>
+    <button id="play" class="primary" type="button">הפעל</button>
+    <button id="step" type="button">צעד אחד</button>
+    <button id="reset" type="button">מההתחלה</button>
+    <label for="speed">מהירות</label>
+    <input id="speed" type="range" min="1" max="40" value="6">
+    <span class="grow"></span>
+    <span class="stat" id="stat"></span>
+  </div>
+
+  <div class="narr" id="narr" aria-live="polite"></div>
+
+  <div class="main">
+    <section class="card">
+      <h2 id="progtitle">התוכנית</h2>
+      <div class="prog" id="prog"></div>
+    </section>
+
+    <div class="right">
+      <section class="card">
+        <h2>הזיכרון · 16 תאים</h2>
+        <div class="cellgroup">תאי עבודה (0–7) · תא 1 = תחילת הרשימה · תא 2 = התשובה</div>
+        <div class="cells" id="cellsA"></div>
+        <div class="cellgroup">תאי הרשימה (8–15) · בכל איבר כתובה הכתובת של האיבר הבא</div>
+        <div class="cells" id="cellsB"></div>
+        <p class="note">תא עם מספר אפור = «מלוכלך»: מספר אקראי שנשאר. תוכנית נכונה לא סומכת עליו.</p>
+      </section>
+
+      <div class="row2">
+        <section class="card">
+          <h2>הערימה</h2>
+          <div class="stack" id="stack"></div>
+        </section>
+        <section class="card">
+          <h2>המצב</h2>
+          <div class="regs">
+            <span class="k">לאן (כתובת שנבחרה)</span><span class="v" id="rA">0</span>
+            <span class="k">היד נמצאת בתא</span><span class="v" id="rP">0</span>
+            <span class="k">צעדים עד עכשיו</span><span class="v" id="rS">0</span>
+          </div>
+        </section>
+      </div>
+
+      <section class="card">
+        <h2>הרשימה כמו שהיא עכשיו בזיכרון</h2>
+        <div class="chain" id="chain"></div>
+        <p class="note" id="keynote"></p>
+      </section>
+
+      <section class="card">
+        <h2>הבדיקה</h2>
+        <div class="result" id="result">עוד לא נגמר.</div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+const PROGS = {"אורך רשימה (לולאה + ספירה)":[["W",0],["GO"],["W",2],["TAKE"],["TAKE"],["CALC"],["GO"],["PUT"],["W",1],["GO"],["TAKE"],["TAKE"],["TAKE"],["TAKE"],["CALC"],["J",31],["JUMP"],["W",0],["GO"],["TAKE"],["TAKE"],["CALC"],["W",2],["GO"],["TAKE"],["ADD"],["PUT"],["WHERE@"],["GO"],["TAKE"],["TAKE"],["J",17],["JUMP"],["W",2],["GO"],["TAKE"],["TAKE"],["CALC"],["PUT"]],"חפש ברשימה":[["W",0],["GO"],["W",2],["TAKE"],["GO"],["W",1],["PUT"],["GO"],["TAKE"],["TAKE"],["J",19],["JUMP"],["W",2],["GO"],["PUT"],["TAKE"],["WHERE@"],["GO"],["TAKE"],["W",3],["GO"],["W",0],["PUT"],["TAKE"],["TAKE"],["GO"],["TAKE"],["CALC"],["W",4],["GO"],["W",3],["PUT"],["TAKE"],["GO"],["TAKE"],["CALC"],["W",0],["GO"],["TAKE"],["W",4],["GO"],["TAKE"],["CALC"],["CALC"],["J",12],["JUMP"],["W",2],["GO"],["TAKE"],["J",53],["JUMP"],["J",59],["JUMP"],["TAKE"],["TAKE"],["TAKE"],["CALC"],["CALC"],["PUT"]],"סכום רשימה":[["W",0],["GO"],["W",2],["TAKE"],["GO"],["PUT"],["W",1],["GO"],["TAKE"],["TAKE"],["TAKE"],["J",27],["JUMP"],["W",3],["GO"],["PUT"],["TAKE"],["TAKE"],["W",2],["GO"],["TAKE"],["ADD"],["PUT"],["WHERE@"],["GO"],["TAKE"],["TAKE"],["J",13],["JUMP"]],"הגדול ברשימה":[["W",0],["GO"],["W",1],["GO"],["TAKE"],["W",2],["GO"],["PUT"],["W",0],["GO"],["TAKE"],["TAKE"],["CALC"],["W",3],["GO"],["PUT"],["TAKE"],["TAKE"],["ADD"],["PUT"],["TAKE"],["TAKE"],["ADD"],["PUT"],["TAKE"],["TAKE"],["ADD"],["PUT"],["W",1],["GO"],["TAKE"],["TAKE"],["TAKE"],["J",72],["JUMP"],["W",4],["GO"],["PUT"],["W",2],["GO"],["TAKE"],["TAKE"],["CALC"],["W",4],["GO"],["TAKE"],["ADD"],["W",3],["GO"],["TAKE"],["CALC"],["W",5],["GO"],["PUT"],["TAKE"],["TAKE"],["CALC"],["J",65],["JUMP"],["W",4],["GO"],["TAKE"],["W",2],["GO"],["PUT"],["W",4],["GO"],["TAKE"],["WHERE@"],["GO"],["TAKE"],["TAKE"],["J",35],["JUMP"]],"הפוך רשימה":[["W",0],["GO"],["W",2],["TAKE"],["GO"],["PUT"],["W",1],["GO"],["TAKE"],["TAKE"],["TAKE"],["J",42],["JUMP"],["W",3],["GO"],["PUT"],["TAKE"],["WHERE@"],["GO"],["TAKE"],["W",4],["GO"],["PUT"],["W",2],["GO"],["TAKE"],["W",3],["GO"],["TAKE"],["WHERE@"],["GO"],["PUT"],["W",3],["GO"],["TAKE"],["W",2],["GO"],["PUT"],["W",4],["GO"],["TAKE"],["TAKE"],["J",13],["JUMP"],["W",2],["GO"],["TAKE"],["W",1],["GO"],["PUT"]],"מיין רשימה":[["W",0],["GO"],["W",1],["GO"],["TAKE"],["TAKE"],["TAKE"],["J",30],["JUMP"],["W",3],["GO"],["PUT"],["TAKE"],["WHERE@"],["GO"],["TAKE"],["W",4],["GO"],["PUT"],["W",3],["GO"],["TAKE"],["TAKE"],["WHERE@"],["GO"],["PUT"],["W",4],["GO"],["TAKE"],["TAKE"],["J",9],["JUMP"],["W",2],["GO"],["PUT"],["W",3],["TAKE"],["GO"],["TAKE"],["CALC"],["PUT"],["W",3],["GO"],["TAKE"],["WHERE@"],["GO"],["TAKE"],["J",53],["JUMP"],["GO"],["TAKE"],["J",66],["JUMP"],["W",2],["TAKE"],["GO"],["WHERE@"],["TAKE"],["GO"],["PUT"],["W",3],["GO"],["TAKE"],["W",2],["GO"],["PUT"],["W",3],["GO"],["TAKE"],["W",0],["GO"],["TAKE"],["TAKE"],["CALC"],["W",3],["GO"],["ADD"],["PUT"],["TAKE"],["TAKE"],["TAKE"],["ADD"],["CALC"],["TAKE"],["ADD"],["J",41],["JUMP"],["W",2],["GO"],["TAKE"],["W",1],["GO"],["PUT"]]};
+const GOALS = {
+  "אורך רשימה (לולאה + ספירה)": { short:"אורך רשימה", what:"כמה איברים יש ברשימה", check:(m,l)=>({want:l.length, got:m[2]}) },
+  "חפש ברשימה": { short:"חפש ברשימה", key:true, what:"האם המספר שבתא 0 נמצא ברשימה (15 = כן, 0 = לא)", check:(m,l,k)=>({want:l.includes(k)?15:0, got:m[2]}) },
+  "סכום רשימה": { short:"סכום רשימה", what:"סכום כל המספרים ברשימה (מודולו 16)", check:(m,l)=>({want:l.reduce((a,b)=>a+b,0)&15, got:m[2]}) },
+  "הגדול ברשימה": { short:"הגדול ברשימה", what:"המספר הכי גדול ברשימה", check:(m,l)=>({want:l.length?Math.max(...l):0, got:m[2]}) },
+  "הפוך רשימה": { short:"הפוך רשימה", list:true, what:"אותה רשימה, מהסוף להתחלה", check:(m,l)=>({want:[...l].reverse(), got:walk(m)}) },
+  "מיין רשימה": { short:"מיין רשימה", list:true, what:"אותה רשימה, מהקטן לגדול", check:(m,l)=>({want:[...l].sort((a,b)=>a-b), got:walk(m)}) }
+};
+const NAME = { W:"לאן", GO:"לך", TAKE:"קח", PUT:"שים", CALC:"חשב", ADD:"חשב+", "WHERE@":"לאן@", J:"לשורה", JUMP:"⤴ קפוץ" };
+const $ = (id) => document.getElementById(id);
+const walk = (m) => { const out=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ out.push(a); a=m[a]; } return out; };
+
+let prog, goal, list, key, mem, A, P, pc, st, steps, done, lastWrote, timer=null;
+
+function randomList(){
+  const p=[8,9,10,11,12,13,14,15]; for(let i=7;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]];}
+  const n=goal.key ? 3+Math.floor(Math.random()*4) : 3+Math.floor(Math.random()*4);
+  list=p.slice(0,n);
+  key = goal.key ? (Math.random()<.5 ? list[Math.floor(Math.random()*list.length)] : [8,9,10,11,12,13,14,15].filter(x=>!list.includes(x))[0] || list[0]) : 0;
+}
+function load(){
+  mem=new Array(16).fill(0); mem[1]=list[0]||0; list.forEach((a,i)=>{ mem[a]=list[i+1]||0; }); mem[0]=key;
+  for(let c=2;c<8;c++) mem[c]=Math.floor(Math.random()*16);
+  window.dirty=new Set([2,3,4,5,6,7]);
+  A=0; P=0; pc=0; st=[]; steps=0; done=false; lastWrote=-1;
+  $("narr").innerHTML = `<span class="op">מוכן</span>המשימה: ${goal.what}. לחץ «הפעל» או «צעד אחד».`;
+  render(); renderProg();
+}
+function exec(){
+  if(done) return;
+  if(pc>=prog.length){ finish(); return; }
+  const [op,k]=prog[pc]; const line=pc; pc++; steps++; lastWrote=-1; let say="";
+  if(op==="W"){ A=k; say=`הכתובת שנבחרה היא עכשיו <b>${k}</b>.`; }
+  else if(op==="J"){ A=k; say = k>=prog.length ? `הכתובת עכשיו היא <b>סוף התוכנית</b> (לקפיצה).` : `הכתובת עכשיו היא <b>שורה ${k}</b> (לקפיצה).`; }
+  else if(op==="WHERE@"){ const v=st.pop(); A=v%16; say=`לוקחת את המספר מראש הערימה (<b>${v}</b>) ומשתמשת בו ככתובת.`; }
+  else if(op==="GO"){ P=A; say=`היד הולכת לתא <b>${A}</b>.`; }
+  else if(op==="TAKE"){ st.push(mem[P]); window.dirty.has(P) && 0; say=`מעתיקה את מה שבתא ${P} (<b>${mem[P]}</b>) לראש הערימה.`; }
+  else if(op==="PUT"){ const v=st.pop(); mem[P]=v; window.dirty.delete(P); lastWrote=P; say=`כותבת <b>${v}</b> מהערימה לתוך תא ${P}.`; }
+  else if(op==="CALC"){ const b=st.pop(), a=st.pop(); const r=~(a&b)&15; st.push(r); say=`לא-וגם של ${a} ו-${b} = <b>${r}</b>.`; }
+  else if(op==="ADD"){ const b=st.pop(), a=st.pop(); const r=(a+b)&15; st.push(r); say=`${a} ועוד ${b} = <b>${r}</b> (בתוך 0–15).`; }
+  else if(op==="JUMP"){ const v=st.pop(); if(v!==0){ const back=A<line; pc=A; say = A>=prog.length ? `בראש הערימה ${v}, לא אפס ⇒ <b>קופצים לסוף</b>.` : `בראש הערימה ${v}, לא אפס ⇒ <b>קופצים לשורה ${A}</b>${back?" (סיבוב נוסף בלולאה)":""}.`; } else say=`בראש הערימה 0 ⇒ <b>לא קופצים</b>, ממשיכים לשורה הבאה.`; }
+  $("narr").innerHTML=`<span class="op">${line} · ${NAME[op]}${k!=null&&op!=="JUMP"&&op!=="WHERE@"?" "+(op==="J"&&k>=prog.length?"סוף":k):""}</span>${say}`;
+  if(pc>=prog.length) finish(); else { render(); markLine(); }
+}
+function finish(){
+  done=true; stop(); render(); markLine();
+  const {want,got}=goal.check(mem,list,key); const same=JSON.stringify(want)===JSON.stringify(got);
+  const f=(x)=>Array.isArray(x)?(x.length?x.join(" → "):"ריקה"):x;
+  $("result").className="result "+(same?"ok":"bad");
+  $("result").textContent = `${same?"✓ נכון":"✗ לא נכון"} · צריך: ${f(want)} · יצא: ${f(got)} · ${steps} צעדים`;
+  $("narr").innerHTML=`<span class="op">סוף</span>התוכנית נגמרה אחרי ${steps} צעדים. ${same?"התשובה נכונה.":"התשובה לא נכונה."}`;
+}
+function renderCells(){
+  for(const [id,from] of [["cellsA",0],["cellsB",8]]){
+    const box=$(id); box.innerHTML="";
+    for(let c=from;c<from+8;c++){
+      const d=document.createElement("div");
+      d.className="cell"+(c===P?" hand":"")+(c===A&&!(prog[pc-1]&&prog[pc-1][0]==="J")?" addr":"")+(c===lastWrote?" wrote":"")+(window.dirty.has(c)?" dirty":"");
+      d.innerHTML=`<div class="ad">${c}</div><div class="v">${mem[c]}</div>`;
+      d.title = c===P ? "היד כאן" : "";
+      box.appendChild(d);
+    }
+  }
+}
+function render(){
+  renderCells();
+  const s=$("stack"); s.innerHTML="";
+  if(!st.length){ s.innerHTML='<div class="note">ריקה</div>'; }
+  st.forEach((v,i)=>{ const d=document.createElement("div"); d.className="sv"+(i===st.length-1?" top":""); d.textContent=v; s.appendChild(d); });
+  $("rA").textContent = A>=prog.length ? "סוף" : A; $("rP").textContent=P; $("rS").textContent=steps;
+  const ch=$("chain"); ch.innerHTML='<span class="node head">התחלה (תא 1)</span>';
+  const w=walk(mem); w.forEach(a=>{ ch.insertAdjacentHTML("beforeend",`<span class="arrow">←</span><span class="node">${a}</span>`); });
+  ch.insertAdjacentHTML("beforeend",`<span class="arrow">←</span><span class="node">סוף</span>`);
+  $("keynote").textContent = goal.key ? `המספר שמחפשים (בתא 0): ${key}` : `הרשימה בהתחלה: ${list.length?list.join(" ← "):"ריקה"}`;
+  $("stat").textContent = `${prog.length} פעולות בתוכנית · ${steps} צעדים בוצעו`;
+  if(!done) { $("result").className="result"; $("result").textContent="עוד לא נגמר."; }
+}
+function renderProg(){
+  const box=$("prog"); box.innerHTML="";
+  prog.forEach(([op,k],i)=>{
+    const d=document.createElement("div"); d.className="ln"+(op==="J"||op==="JUMP"?" jmp":""); d.id="ln"+i;
+    const arg = k==null ? "" : " "+(op==="J" ? (k>=prog.length?"סוף":k) : k);
+    d.innerHTML=`<span class="no">${i}</span><span class="tx">${NAME[op]}${arg}</span>`; box.appendChild(d);
+  });
+  $("progtitle").textContent=`התוכנית · ${goal.short} · ${prog.length} פעולות`;
+  markLine();
+}
+function markLine(){
+  document.querySelectorAll(".ln.cur,.ln.target").forEach(e=>e.classList.remove("cur","target"));
+  const cur=$("ln"+pc); if(cur){ cur.classList.add("cur"); const box=$("prog"); const top=cur.offsetTop-box.offsetTop; if(top<box.scrollTop+20||top>box.scrollTop+box.clientHeight-40) box.scrollTop=top-box.clientHeight/2; }
+}
+function delay(){ return 1000/ +$("speed").value; }
+function tick(){ exec(); if(!done) timer=setTimeout(tick, delay()); }
+function play(){ if(done) load(); if(timer){ stop(); return; } $("play").textContent="עצור"; timer=setTimeout(tick, 0); }
+function stop(){ clearTimeout(timer); timer=null; $("play").textContent="הפעל"; }
+function choose(){ stop(); const n=$("brick").value; prog=PROGS[n]; goal=GOALS[n]; randomList(); load(); }
+
+for(const n of Object.keys(PROGS)){ const o=document.createElement("option"); o.value=n; o.textContent=`${GOALS[n].short} (${PROGS[n].length})`; $("brick").appendChild(o); }
+$("brick").addEventListener("change", choose);
+$("newlist").addEventListener("click", ()=>{ stop(); randomList(); load(); });
+$("play").addEventListener("click", play);
+$("step").addEventListener("click", ()=>{ stop(); if(done) load(); else exec(); });
+$("reset").addEventListener("click", ()=>{ stop(); load(); });
+document.documentElement.dir="rtl"; document.documentElement.lang="he";
+choose();
+</script>

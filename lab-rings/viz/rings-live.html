@@ -1,0 +1,469 @@
+<title>מנוע העיגולים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;900&family=Heebo:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --night:#060914; --glass:rgba(150,170,255,.06); --glass2:rgba(150,170,255,.11); --edge:rgba(160,178,255,.16);
+  --ink:#EEF1FF; --muted:#8C95BA; --faint:#5A6390;
+  --ice:#7D93E8; --gold:#FFC65C; --mint:#5CF2B6; --coral:#FF6F5B;
+  --serif:"Frank Ruhl Libre","Heebo",serif; --body:"Heebo",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--night)}
+body{background:radial-gradient(1200px 700px at 50% 16%, #111a3d 0%, var(--night) 62%) fixed, var(--night);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;padding-inline:16px;padding-block:18px 56px;min-height:100%}
+.wrap{direction:rtl;max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+
+.top{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:end}
+@media (max-width:1000px){.top{grid-template-columns:1fr;gap:14px;align-items:start}}
+.brand .k{font-size:11px;letter-spacing:.32em;color:var(--muted);font-weight:500}
+.brand h1{font-family:var(--serif);font-weight:900;font-size:clamp(34px,4.6vw,56px);line-height:.95;margin:2px 0 0}
+.brand h1 em{font-style:normal;color:var(--coral)}
+.live{display:inline-flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.2em;color:var(--mint);font-weight:700;margin-inline-start:12px;vertical-align:middle}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint);animation:blink 1.4s infinite}
+.live.off{color:var(--faint)} .live.off i{background:var(--faint);box-shadow:none;animation:none}
+@keyframes blink{50%{opacity:.25}}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--edge);border:1px solid var(--edge);border-radius:16px;overflow:hidden}
+.st{background:rgba(9,13,34,.85);padding:10px 16px}
+.st .n{font-family:var(--serif);font-weight:500;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.st .t{font-size:11.5px;color:var(--muted);margin-top:4px}
+.st.l .n{color:var(--mint)} .st.w .n{color:var(--gold)}
+@media (max-width:560px){.st{padding:8px 10px}.st .n{font-size:22px}}
+.ctl{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.pill{height:46px;padding:0 20px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-size:15px;font-weight:700;cursor:pointer;border:1px solid var(--edge);background:var(--glass);color:var(--ink);transition:background .2s,transform .1s}
+.pill:hover{background:var(--glass2)} .pill:active{transform:scale(.97)}
+.pill.main{background:var(--ink);color:var(--night);border-color:var(--ink)}
+.pill svg{width:16px;height:16px;fill:currentColor}
+.pill.quiet{font-weight:500;color:var(--muted);height:40px;padding:0 14px;font-size:13px}
+.pill:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.spd{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
+input[type=range]{accent-color:var(--gold);width:96px}
+
+.stage{position:relative;height:min(74vh,760px);min-height:460px;border-radius:26px;overflow:hidden;border:1px solid var(--edge);
+  background:radial-gradient(closest-side at 50% 52%, #121c47 0%, #0a1030 55%, #070b1d 100%);box-shadow:0 30px 80px rgba(0,0,0,.45), inset 0 0 120px rgba(0,0,0,.35)}
+@media (max-width:640px){.stage{height:auto;aspect-ratio:3/4;min-height:0}}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ov{position:absolute;inset:0;pointer-events:none;padding:22px 26px;display:grid;grid-template-rows:auto 1fr auto auto;gap:10px}
+@media (max-width:640px){.ov{padding:14px}}
+.ov-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.task .k,.ringc .k{font-size:10.5px;letter-spacing:.3em;color:var(--muted);font-weight:500}
+.task .v{font-family:var(--serif);font-weight:900;font-size:clamp(28px,4vw,46px);line-height:1.02}
+.task .r{font-family:var(--mono);font-size:13px;color:var(--gold);margin-top:6px}
+.task .try{display:inline-block;margin-top:8px;font-size:12px;color:var(--night);background:var(--gold);border-radius:999px;padding:1px 10px;font-weight:700}
+.ringc{text-align:end}
+.ringc .v{font-family:var(--serif);font-weight:500;font-size:clamp(46px,7vw,92px);line-height:.85;font-variant-numeric:tabular-nums;opacity:.92}
+.caption{justify-self:center;max-width:64ch;text-align:center;font-size:16.5px;line-height:1.55;text-shadow:0 1px 12px rgba(0,0,0,.8);min-height:52px}
+.caption b{color:var(--gold);font-weight:700}
+.caption.win b{color:var(--mint)} .caption.fail b{color:var(--coral)}
+@media (max-width:640px){.caption{font-size:14px}}
+.meters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--edge);border:1px solid var(--edge);border-radius:14px;overflow:hidden;backdrop-filter:blur(8px)}
+.m{background:rgba(8,12,32,.74);padding:9px 14px}
+.m .n{font-family:var(--mono);font-size:21px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.m .t{font-size:11.5px;color:var(--muted)}
+.m.merge .n{color:var(--ice)} .m.brk .n{color:var(--coral)} .m.keep .n{color:var(--mint)}
+@media (max-width:640px){.m{padding:6px 8px}.m .n{font-size:15px}.m .t{font-size:10px}}
+
+.stream{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:thin}
+.ev{flex:0 0 auto;display:flex;flex-direction:column;gap:1px;padding:8px 12px;border-radius:12px;border:1px solid var(--edge);background:var(--glass);min-width:112px;animation:rise .4s cubic-bezier(.2,.8,.2,1) both}
+.ev .a{font-weight:700;font-size:14px;white-space:nowrap}
+.ev .b{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.ev.ok{border-color:rgba(92,242,182,.45)} .ev.ok .a::before{content:"✓ ";color:var(--mint)}
+.ev.no{border-color:rgba(255,111,91,.35)} .ev.no .a::before{content:"↻ ";color:var(--coral)}
+.ev.now{border-color:var(--gold);background:rgba(255,198,92,.08)} .ev.now .a::before{content:"● ";color:var(--gold)}
+
+.dock{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.1fr);gap:16px}
+@media (max-width:1060px){.dock{grid-template-columns:1fr}}
+.panel{background:linear-gradient(180deg,rgba(150,170,255,.07),rgba(150,170,255,.025));border:1px solid var(--edge);border-radius:20px;padding:16px 18px 18px}
+.panel h2{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:0 0 12px;font-size:11px;letter-spacing:.28em;font-weight:500;color:var(--muted)}
+.panel h2 span{letter-spacing:0;font-family:var(--mono);font-size:11px;color:var(--faint)}
+.ribbon{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:36px}
+.tk{font-family:var(--mono);font-size:12.5px;padding:4px 10px;border-radius:999px;background:var(--glass);border:1px solid var(--edge);animation:rise .35s cubic-bezier(.2,.8,.2,1) both}
+.tk.bk{font-family:var(--body);font-weight:700;color:#1a0703;background:var(--coral);border-color:var(--coral)}
+.arr{color:var(--faint);font-size:11px}
+.none{color:var(--faint);font-size:14px}
+.lamps{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px 6px}
+.lp{display:flex;flex-direction:column;align-items:center;gap:2px}
+.bulb{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-weight:600;font-size:14px;border:1px solid var(--edge);background:rgba(10,15,40,.8);color:var(--faint);transition:all .35s}
+.lp.ok .bulb{background:radial-gradient(circle at 40% 35%,#b8ffe3,var(--mint) 55%,#1d8f68);color:#04261a;border-color:transparent;box-shadow:0 0 14px rgba(92,242,182,.5)}
+.lp.no .bulb{color:var(--gold);border-color:rgba(255,198,92,.35)}
+.lp .w{font-size:10px;color:var(--muted);font-family:var(--mono)}
+.atoms{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.at{font-family:var(--mono);font-size:11.5px;color:var(--muted);padding:2px 8px;border-radius:7px;border:1px dashed var(--edge)}
+.shelf{display:flex;flex-wrap:wrap;gap:8px;min-height:44px;align-items:center;max-height:260px;overflow:auto}
+.brick{padding:6px 12px 7px;border-radius:11px;background:linear-gradient(160deg,#ff8a74,var(--coral) 45%,#d4442f);color:#1a0703;box-shadow:0 5px 14px rgba(255,111,91,.25), inset 0 1px 0 rgba(255,255,255,.35)}
+.brick .a{font-weight:700;font-size:14px;line-height:1.2;white-space:nowrap}
+.brick .b{font-family:var(--mono);font-size:10px;opacity:.75}
+.brick.fresh{animation:land .6s cubic-bezier(.2,.9,.25,1.25) both}
+.flyer{position:fixed;z-index:50;pointer-events:none;padding:8px 14px;border-radius:12px;background:var(--coral);color:#1a0703;font-weight:700;font-family:var(--body);box-shadow:0 0 30px rgba(255,111,91,.7)}
+.who{margin:-6px 4px 0;font-size:13px;color:var(--muted);min-height:18px}
+.map{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:3px;direction:ltr}
+.map .cell{aspect-ratio:1/1;border-radius:3px;background:rgba(150,170,255,.08);transition:background .4s,box-shadow .4s}
+.map .cell.on{background:var(--mint);box-shadow:0 0 6px rgba(92,242,182,.45)}
+.map .cell.fresh{background:#fff;box-shadow:0 0 10px var(--mint)}
+.map .cell.cur{background:var(--gold);box-shadow:0 0 10px rgba(255,198,92,.7);animation:blink 1.2s infinite}
+.foot{color:var(--faint);font-size:12.5px;text-align:center;max-width:84ch;margin:4px auto 0}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes land{0%{transform:scale(.6);opacity:0}100%{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+#best{max-height:360px;overflow-y:auto}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><div class="k">מעבדה · חמש פעולות-יסוד</div><h1>מנוע ה<em>עיגולים</em><span class="live" id="live"><i></i>חי</span></h1></div>
+    <div class="stats">
+      <div class="st l"><div class="n" id="sLearned">0</div><div class="t">טבלאות ממופות מתוך 256</div></div>
+      <div class="st"><div class="n" id="sTask">0</div><div class="t">משימות עד עכשיו</div></div>
+      <div class="st w"><div class="n" id="sWait">0</div><div class="t">נקצרו בדרך, בחינם</div></div>
+      <div class="st"><div class="n" id="sTried">0</div><div class="t">תוכניות נבדקו בסך הכל</div></div>
+    </div>
+    <div class="ctl">
+      <button class="pill main" id="run" type="button"><svg viewBox="0 0 24 24" id="runIcon"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg><span id="runTxt">עצור</span></button>
+      <label class="spd" for="speed">קצב<input id="speed" type="range" min="1" max="10" value="6"></label>
+      <button class="pill quiet" id="wipe" type="button">התחל מאפס</button>
+    </div>
+  </div>
+
+  <section class="stage" id="stage" aria-label="העיגולים">
+    <canvas id="cv"></canvas>
+    <div class="ov">
+      <div class="ov-top">
+        <div class="task"><div class="k">המשימה עכשיו</div><div class="v" id="tname"></div><div class="r" id="trule"></div><div class="try" id="ttry" hidden></div></div>
+        <div class="ringc"><div class="k">עיגול</div><div class="v" id="rno">00</div></div>
+      </div>
+      <div></div>
+      <div class="caption" id="cap" aria-live="polite"></div>
+      <div class="meters">
+        <div class="m"><div class="n" id="cTried">0</div><div class="t">נבדקו בעיגול</div></div>
+        <div class="m merge"><div class="n" id="cMerged">0</div><div class="t">כפולות · אוחדו</div></div>
+        <div class="m brk"><div class="n" id="cBroke">0</div><div class="t">נשברו</div></div>
+        <div class="m keep"><div class="n" id="cKept">0</div><div class="t">ממשיכות פנימה</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stream" id="stream" aria-label="משימות אחרונות"></div>
+  <p class="who" id="who"></p>
+
+  <div class="dock">
+    <section class="panel"><h2>התוכנית המובילה <span id="plen"></span></h2><div class="ribbon" id="best"><span class="none">עוד אין.</span></div></section>
+    <section class="panel"><h2>השופט <span>16 דוגמאות · מה יצא בתא 2 / מה צריך</span></h2><div class="lamps" id="lamps"></div></section>
+    <section class="panel"><h2>המפה · 256 הטבלאות <span id="tokn"></span></h2><div class="map" id="map" aria-label="מפת הטבלאות"></div><div class="atoms" id="atoms" style="margin-top:12px"></div><div class="shelf" id="shelf"></div></section>
+  </div>
+  <p class="foot">המנוע רץ באמת בדפדפן ולא נעצר. כל תוכנית שנבדקת בדרך נבדקת גם «מה היא בעצם מחשבת» — וכל טבלה חדשה נקצרת למפה בחינם. המשימה הבאה היא תמיד הטבלה החסרה הכי קרובה למה שכבר ידוע. כל לבנה נכתבת לזיכרון משותף: מה שנלמד כאן, בכל עמוד פתוח אחר, ובמנוע שרץ בשרת — מגיע לכולם. 6 תאים: א=0, ב=1, ג=3, התשובה=2, 4 ו-5 לעבודה; תאים שאינם קלט מתחילים במספר אקראי.</p>
+</div>
+<script>
+// מנוע העיגולים — גרסה «קוצרת»: כל תוכנית שנבדקת בדרך נבדקת גם «מה היא בעצם מחשבת».
+// 6 תאים: א=0, ב=1, ג=3 (קלט) · 2 = תשובה · 4,5 = עבודה. תאים שאינם קלט מתחילים מלוכלכים.
+// כל פונקציה של שלושה קלטים (ביט-ביט) היא טבלה של 8 שורות ⇒ יש בדיוק 256. המטרה: למפות את כולן, כל אחת בדרך הקצרה ביותר שנמצאה.
+const ROOT={id:0,prog:[],ops:[]};
+function makeEngine(seed){
+  let s=seed||7; const rnd=(k)=>{s=(s*1103515245+12345)%2147483648;return Math.floor(s/2147483648*k)};
+  const FREE_IN=[0,1,3,4,5], FREE_OUT=[2,3,4,5];
+  const ATOMS=[...[0,1,2,3,4,5].map(k=>({name:`לאן ${k}`,ops:[["W",k]]})),{name:"לך",ops:[["GO"]]},{name:"קח",ops:[["TAKE"]]},{name:"שים",ops:[["PUT"]]},{name:"חשב",ops:[["CALC"]]}];
+  function run(ops,mem0){const m=mem0.slice();let A=0,P=0;const st=[];for(const [o,k] of ops){if(o==="W")A=k;else if(o==="GO")P=A;else if(o==="TAKE"){if(st.length>=4)return null;st.push(m[P])}else if(o==="PUT"){if(!st.length)return null;m[P]=st.pop()}else if(o==="CALC"){if(st.length<2)return null;const b=st.pop(),a=st.pop();st.push(~(a&b)&15)}}return {m,st,A,P}}
+  const table=(tt)=>(a,b,c)=>{ let r=0; for(let i=0;i<4;i++){ const idx=(((a>>i)&1)<<2)|(((b>>i)&1)<<1)|((c>>i)&1); r|=((tt>>idx)&1)<<i; } return r; };
+  const ttOfFn=(fn)=>{ let t=0; for(let idx=0;idx<8;idx++){ const a=(idx>>2)&1?15:0,b=(idx>>1)&1?15:0,c=idx&1?15:0; if(fn(a,b,c)&1) t|=1<<idx; } return t; };
+  const NAMED=[["העתק",(a)=>a],["לא",(a)=>~a],["לא-וגם",(a,b)=>~(a&b)],["וגם",(a,b)=>a&b],["או",(a,b)=>a|b],["לא-או",(a,b)=>~(a|b)],["שונה",(a,b)=>a^b],["שווה",(a,b)=>~(a^b)],
+    ["א ולא ב",(a,b)=>a&~b],["קבוע 15",()=>15],["קבוע 0",()=>0],["וגם-3",(a,b,c)=>a&b&c],["או-3",(a,b,c)=>a|b|c],["בחר",(a,b,c)=>(a&b)|(~a&c)],["רוב",(a,b,c)=>(a&b)|(a&c)|(b&c)],["שונה-3",(a,b,c)=>a^b^c],
+    ["ב",(a,b)=>b],["ג",(a,b,c)=>c],["לא ב",(a,b)=>~b],["לא ג",(a,b,c)=>~c]].map(([n,f])=>({name:n,tt:ttOfFn(f)}));
+  const ALIAS=new Map(); for(const x of NAMED) if(!ALIAS.has(x.tt)) ALIAS.set(x.tt,x.name);
+  const nameOf=(tt)=>ALIAS.get(tt)||`טבלה ${tt}`;
+  const ruleOf=(tt)=>ALIAS.has(tt)?`תא 2 ← ${ALIAS.get(tt)} · טבלה ${tt.toString(2).padStart(8,"0")}`:`תא 2 ← לפי הטבלה ${tt.toString(2).padStart(8,"0")}`;
+  const uses=(tt)=>{ const u=[]; for(const [bit,cell] of [[4,0],[2,1],[1,3]]){ let d=false; for(let idx=0;idx<8;idx++) if(((tt>>idx)&1)!==((tt>>(idx^bit))&1)) d=true; if(d) u.push(cell); } return u; };
+  const dataOf=(ops)=>[...new Set(ops.filter(o=>o[0]==="W").map(o=>o[1]))];
+  const mem=(a,b,c)=>[a,b,rnd(16),c,rnd(16),rnd(16),rnd(16),rnd(16)];   // 6,7 = תאי-עבודה נוספים (מלוכלכים) — מקום להרכבת לבנים
+  const HOLD=Array.from({length:240},()=>{ const a=rnd(16),b=rnd(16),c=rnd(16); return {a,b,c,mem:mem(a,b,c)}; });
+  // מה התוכנית מחשבת? מריצים על 240 זיכרונות (עם תאים מלוכלכים). אם כל ביט של התשובה תלוי רק בביטים של א,ב,ג באותו מקום — זו טבלה.
+  function ttOfOps(ops){ const tab=new Array(8).fill(-1);
+    for(const h of HOLD){ const r=run(ops,h.mem); if(!r) return null; for(let i=0;i<4;i++){ const idx=(((h.a>>i)&1)<<2)|(((h.b>>i)&1)<<1)|((h.c>>i)&1); const o=(r.m[2]>>i)&1; if(tab[idx]<0) tab[idx]=o; else if(tab[idx]!==o) return null; } }
+    if(tab.includes(-1)) return null; return tab.reduce((t,v,i)=>t|(v<<i),0); }
+  // המדף: טבלה ⇒ הלבנה הקצרה ביותר שידועה לה
+  const lib=new Map(); const events=[];
+  function offer(ops,src){ const tt=ttOfOps(ops); if(tt==null) return null; const cur=lib.get(tt); if(cur&&cur.ops.length<=ops.length) return null;
+    const b={tt,name:nameOf(tt),ins:uses(tt),ops,len:ops.length,data:dataOf(ops),src,at:Date.now()}; lib.set(tt,b); events.push({tt,name:b.name,len:b.len,better:!!cur,src}); return b; }
+  function variants(b){ const out=[]; const scratch=b.data.filter(c=>!b.ins.includes(c)&&c!==2);
+    const pool=b.ins.length===3?[0,1,3]:FREE_IN; const pick=(n,pre=[])=>pre.length===n?[pre]:pool.filter(c=>!pre.includes(c)).flatMap(c=>pick(n,[...pre,c]));
+    for(const ins of pick(b.ins.length)) for(const o of FREE_OUT){ if(ins.includes(o)) continue; const map={}; b.ins.forEach((a,i)=>map[a]=ins[i]); map[2]=o;
+      const used=new Set(Object.values(map)); const free=[7,6,5,4,3,1,0,2].filter(c=>!used.has(c)); if(free.length<scratch.length) continue; scratch.forEach((c,i)=>map[c]=free[i]);
+      out.push({name:`${b.name}(${ins.join(",")}→${o})`,ops:b.ops.map(([op,k])=>op==="W"?["W",map[k]??k]:[op]),brick:b.name}); }
+    return out; }
+  const bits=(x,y)=>4-((x^y)&15).toString(2).split("").filter(z=>z==="1").length;
+  class Search{
+    constructor(tt){ this.goal=tt; const fn=table(tt); this.tokens=[...ATOMS];
+      for(const b of [...lib.values()].sort((x,y)=>x.len-y.len)){ if(b.ins.length===0) continue; const v=variants(b); if(this.tokens.length+v.length>240) continue; this.tokens.push(...v); }
+      this.ex=Array.from({length:16},()=>{ const a=rnd(16),b=rnd(16),c=rnd(16); return {a,b,c,mem:mem(a,b,c),want:fn(a,b,c)}; });
+      this.N=16; this.inner=[ROOT]; this.seen=new Set(); this.nid=0; this.ring=0; this.harvested=0; this.probed=new Set(); this.begin(); }
+    begin(){ this.ring++; this.ci=0; this.outer=[]; this.tried=0; this.merged=0; this.broke=0; this.best=null; }
+    // קציר: מה התוכנית הזאת מחשבת לפי 16 הדוגמאות? אם זו טבלה שאין לנו, או שיש לה עכשיו דרך קצרה יותר — בודקים עד הסוף ושומרים.
+    harvest(node,rs){ const tab=new Array(8).fill(-1);
+      for(let k=0;k<rs.length;k++){ const e=this.ex[k], o2=rs[k].m[2]; for(let i=0;i<4;i++){ const idx=(((e.a>>i)&1)<<2)|(((e.b>>i)&1)<<1)|((e.c>>i)&1); const o=(o2>>i)&1; if(tab[idx]<0) tab[idx]=o; else if(tab[idx]!==o) return; } }
+      if(tab.includes(-1)) return; const tt=tab.reduce((t,v,i)=>t|(v<<i),0); const cur=lib.get(tt); const L=node.ops.length+2;
+      if(cur&&cur.len<=L) return; const key=tt+":"+L; if(this.probed.has(key)) return; this.probed.add(key);
+      if(offer([["W",0],["GO"],...node.ops],"harvest")) this.harvested++; }
+    step(ms){ const t0=performance.now(), ex=this.ex, N=this.N;
+      while(this.ci<this.inner.length){ const c=this.inner[this.ci++];
+        for(const t of this.tokens){ this.tried++; const ops=c.ops.concat(t.ops); const rs=[]; let bad=false;
+          for(const e of ex){ const r=run(ops,e.mem); if(!r){bad=true;break} rs.push(r) }
+          if(bad){ this.broke++; continue }
+          const sig=rs.map(r=>r.m.join(",")+"|"+r.st.join(",")+"|"+r.A+r.P).join("/"); if(this.seen.has(sig)){ this.merged++; continue } this.seen.add(sig);
+          let ok=0,b2=0,bn=0; rs.forEach((r,i)=>{ const w=ex[i].want; if(r.m[2]===w) ok++; b2+=bits(r.m[2],w); let bb=0; for(const v of r.m) bb=Math.max(bb,bits(v,w)); for(const v of r.st) bb=Math.max(bb,bits(v,w)); bn+=bb; });
+          const node={id:++this.nid,prog:c.prog.concat([t]),ops,ok,b2,bn,parent:c,out:rs.map(r=>r.m[2])}; this.outer.push(node);
+          this.harvest(node,rs);
+          if(ok===N&&!this.best&&ttOfOps(ops)===this.goal) this.best=node; }
+        if(performance.now()-t0>ms) return null; }
+      this.outer.sort((a,b)=>b.ok-a.ok||b.bn-a.bn||b.b2-a.b2||a.prog.length-b.prog.length); const kept=this.outer.slice(0,Math.max(1500,Math.floor(160000/this.tokens.length)));
+      const res={ring:this.ring,tried:this.tried,merged:this.merged,broke:this.broke,kept,best:this.best,N,harvested:this.harvested};
+      if(!this.best){ this.inner=kept; this.begin(); } return res; }
+    get progress(){ return this.inner.length? this.ci/this.inner.length : 0 }
+  }
+  // קיצור: מתחילים מתוכנית שעובדת. מנסים למחוק קטע של 1–4 פעולות, או להחליף אותו בפעולה אחת או שתיים. נשאר רק מה שעדיין עובד (בדיקה מהירה על 24, ואז 240).
+  const QUICK=Array.from({length:24},()=>{ const a=rnd(16),b=rnd(16),c=rnd(16); return {a,b,c,mem:mem(a,b,c)}; });
+  const ALL8=[...[0,1,2,3,4,5,6,7].map(k=>["W",k]),["GO"],["TAKE"],["PUT"],["CALC"]];
+  class Shrinker{
+    constructor(b){ this.tt=b.tt; this.fn=table(b.tt); this.start=b.ops.length; this.ops=b.ops.slice(); this.w=4; this.i=0; this.r=0; this.k=0; this.tried=0; this.wins=0; this.passImproved=false; this.done=false; this.last=null; }
+    works(ops){ for(const h of QUICK){ const r=run(ops,h.mem); if(!r||r.m[2]!==this.fn(h.a,h.b,h.c)) return false; } return ttOfOps(ops)===this.tt; }
+    reps(r){ if(r===0) return [[]]; if(r===1) return ALL8.map(x=>[x]); const o=[]; for(const x of ALL8) for(const y of ALL8) o.push([x,y]); return o; }
+    step(ms){ const t0=performance.now(); this.last=null;
+      while(!this.done){
+        if(this.i+this.w>this.ops.length){ this.i=0; this.r=0; this.k=0; this.w--; if(this.w<1){ if(this.passImproved){ this.w=4; this.passImproved=false; } else { this.done=true; break; } } continue; }
+        const R=this.reps(this.r); if(this.k>=R.length){ this.k=0; this.r++; if(this.r>=Math.min(this.w,3)){ this.r=0; this.i++; } continue; }
+        const rep=R[this.k++]; this.tried++; const cand=[...this.ops.slice(0,this.i),...rep,...this.ops.slice(this.i+this.w)];
+        if(this.works(cand)){ this.last={i:this.i,w:this.w,r:rep.length,from:this.ops.length,to:cand.length}; this.ops=cand; this.wins++; this.passImproved=true; this.k=0; this.r=0; return this.last; }
+        if(performance.now()-t0>ms) return null; }
+      return null; }
+    get where(){ return {i:this.i,w:this.w}; }
+  }
+  // המשימה הבאה — לפי תועלת, לא באקראי: קודם הרשימה, ואחר כך הטבלה החסרה שהכי קרובה (בביטים) למשהו שכבר יודעים.
+  const backoff=new Map();   // tt ⇒ {tries, until}
+  function nextTarget(accept,round,skip){ const known=new Set(lib.keys()); const ok=(tt)=>!known.has(tt)&&(!skip||!skip(tt))&&(!backoff.has(tt)||backoff.get(tt).until<=round);
+    for(const x of NAMED) if(ok(x.tt)&&(!accept||accept(x.tt))) return x.tt;
+    let best=null, bd=9; const pop=(x)=>x.toString(2).split("").filter(z=>z==="1").length;
+    for(let tt=0;tt<256;tt++){ if(!ok(tt)||(accept&&!accept(tt))) continue; let d=9; for(const k of known) d=Math.min(d,pop(tt^k)); if(d<bd||(d===bd&&rnd(3)===0)){ bd=d; best=tt; } }
+    return best; }
+  function failed(tt,round){ const b=backoff.get(tt)||{tries:0}; b.tries++; b.until=round+2+b.tries*3; backoff.set(tt,b); return b.tries; }
+  const state=()=>({s,lib:[...lib.values()].map(({tt,ops,src,at})=>({tt,ops,src,at})),backoff:[...backoff.entries()]});
+  const restore=(o)=>{ s=o.s; lib.clear(); for(const b of o.lib) { const tt=ttOfOps(b.ops); if(tt===b.tt) lib.set(tt,{tt,name:nameOf(tt),ins:uses(tt),ops:b.ops,len:b.ops.length,data:dataOf(b.ops),src:b.src,at:b.at}); } backoff.clear(); for(const [k,v] of o.backoff||[]) backoff.set(k,v); };
+  return {ATOMS,Search,Shrinker,lib,events,offer,nextTarget,failed,backoff,nameOf,ruleOf,ttOfOps,uses,state,restore,run,table};
+}
+
+/* ————— the running loop: endless, live, harvesting, shared ————— */
+const $=(id)=>document.getElementById(id);
+const fmt=(n)=>n.toLocaleString("en-US");
+const C={ice:"#7D93E8",gold:"#FFC65C",mint:"#5CF2B6",coral:"#FF6F5B",faint:"#5A6390",ink:"#EEF1FF"};
+const KEY="rings-harvest-v2", MAX_RINGS=9, MAX_MS=70000;
+// כל דפדפן מגריל ממספר-התחלה משלו
+let ME=null, SEED0=7; try{ ME=localStorage.getItem("rings-me"); if(!ME){ ME="b"+Math.floor(Math.random()*1e9); localStorage.setItem("rings-me",ME); } SEED0=1+(parseInt(ME.slice(1))%100000); }catch(e){ ME="b"+Math.floor(Math.random()*1e9); }
+const E=makeEngine(SEED0);
+let stream=[], taskNo=0, totalTried=0, totalHarvest=0, evSeen=0, freshTT=null;
+let SH=null, shDone={}, dots=[], falling=[], shFrom=0, shWinAt=0;
+let T=null, S=null, rings=[], busy=false, playing=true, winPath=null, winBorn=0, nextAt=0, sweepA=0, spent=0, lastTick=0, phase="idle";
+const libList=()=>[...E.lib.values()];
+
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify({eng:E.state(), stream:stream.slice(-40), taskNo, totalTried, totalHarvest, shDone})); }catch(e){} }
+function load(){ try{ const o=JSON.parse(localStorage.getItem(KEY)||"null"); if(!o) return false; E.restore(o.eng); stream=o.stream||[]; taskNo=o.taskNo||0; totalTried=o.totalTried||0; totalHarvest=o.totalHarvest||0; shDone=o.shDone||{}; evSeen=E.events.length; return true; }catch(e){ return false; } }
+
+/* ————— shared memory: one document per table, «bricks/t<tt>». Anything read is re-run before it is trusted. ————— */
+let DB=null, dbLen=new Map(), claims={};
+async function connectShared(){
+  try{ DB=await claude.use("db"); }catch(e){ DB=null; } if(!DB) return;
+  DB.collection("bricks").onSnapshot((snap)=>{ let n=0;
+    for(const d of snap.docs){ const b=d.data(); if(!b||!Array.isArray(b.ops)) continue; const got=E.offer(b.ops, b.src==="server"?"server":"shared"); if(got){ n++; } const tt=E.ttOfOps(b.ops); if(tt!=null) dbLen.set("t"+tt, Math.min(dbLen.get("t"+tt)??1e9, b.ops.length)); }
+    evSeen=E.events.length; pushAll();
+    if(n){ renderShelf(); renderStats(); save(); cap(`<b>${n}</b> ${n===1?"טבלה הגיעה":"טבלאות הגיעו"} מהזיכרון המשותף (כל אחת הורצה ונבדקה לפני שנכנסה). ממופות עכשיו ${E.lib.size} מתוך 256.`,"win"); }
+  }, ()=>{});
+  DB.collection("claims").onSnapshot((snap)=>{ const m={}; for(const d of snap.docs){ const v=d.data(); if(v) m[d.id]=v; } claims=m; renderWho(); }, ()=>{});
+  if(T) claim(T);
+}
+let pushing=false;
+async function pushAll(){ if(!DB||pushing) return; pushing=true;
+  try{ for(const b of libList()){ const id="t"+b.tt; if((dbLen.get(id)??1e9)<=b.ops.length) continue; dbLen.set(id,b.ops.length);
+      await DB.doc("bricks/"+id).set({name:b.name,tt:b.tt,ops:b.ops,len:b.ops.length,src:b.src==="server"?"server":"browser",at:new Date().toISOString()}).catch(()=>dbLen.delete(id)); } }
+  finally{ pushing=false; } }
+function claim(t){ if(DB&&t) DB.doc("claims/t"+t.tt).set({by:ME,name:t.name,at:new Date().toISOString()}).catch(()=>{}); }
+function unclaim(t){ if(DB&&t) DB.doc("claims/t"+t.tt).delete().catch(()=>{}); }
+function renderWho(){ const others=Object.entries(claims).filter(([k,v])=>v.by!==ME&&Date.now()-Date.parse(v.at)<600000).map(([k,v])=>`${v.name}${v.by==="server"?" (שרת)":""}`);
+  $("who").textContent=others.length?`במקביל עובדים על: ${others.join(" · ")}`:""; }
+const claimedElse=(tt)=>{ const c=claims["t"+tt]; return !!(c&&c.by!==ME&&Date.now()-Date.parse(c.at)<600000); };
+/* canvas */
+const cv=$("cv"), ctx=cv.getContext("2d"); let W=0,H=0,DPR=1;
+function resize(){ const r=$("stage").getBoundingClientRect(); DPR=Math.min(2,window.devicePixelRatio||1); W=r.width; H=r.height; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); layout(); }
+new ResizeObserver(resize).observe($("stage"));
+const sprites={};
+function sprite(color,r){ const key=color+r; if(sprites[key]) return sprites[key]; const d=Math.ceil(r*6); const c=document.createElement("canvas"); c.width=c.height=d*2; const g=c.getContext("2d");
+  const grd=g.createRadialGradient(d,d,0,d,d,d); grd.addColorStop(0,color); grd.addColorStop(.18,color); grd.addColorStop(.32,color+"88"); grd.addColorStop(1,color+"00");
+  g.fillStyle=grd; g.fillRect(0,0,d*2,d*2); sprites[key]={c,d}; return sprites[key]; }
+const cx=()=>W/2, cy=()=>H*0.5+(W<640?10:18);
+function Rmax(){ return Math.min(W*0.5,H*0.5)-(W<640?30:64); }
+function radius(i){ const n=Math.max(rings.length+(busy?1:0),4); const r0=Math.max(26,Rmax()*0.11); return r0+(i+1)*(Rmax()-r0)/n; }
+const SHOW=80;
+function layout(){ rings.forEach((r,i)=>{ const rad=radius(i); r.show.forEach((nd,j)=>{ const a=(j/r.show.length)*Math.PI*2-Math.PI/2+i*0.37; nd._t={x:Math.cos(a)*rad,y:Math.sin(a)*rad}; }); }); }
+const ease=(t)=>1-Math.pow(1-Math.min(1,Math.max(0,t)),3);
+function draw(now){
+  ctx.clearRect(0,0,W,H); ctx.save(); ctx.translate(cx(),cy()); const R=Rmax();
+  if((phase==="shrink"||phase==="shrunk")&&dots.length){ drawShrink(now); ctx.restore(); return; }
+  ctx.strokeStyle="rgba(160,178,255,.05)"; ctx.lineWidth=1;
+  for(let k=0;k<24;k++){ const a=k/24*Math.PI*2; ctx.beginPath(); ctx.moveTo(Math.cos(a)*R*0.12,Math.sin(a)*R*0.12); ctx.lineTo(Math.cos(a)*(R+26),Math.sin(a)*(R+26)); ctx.stroke(); }
+  const n=Math.max(rings.length+(busy?1:0),4);
+  for(let i=0;i<n;i++){ const live=i<rings.length, cur=busy&&i===rings.length, rad=radius(i); const grow=live?ease((now-rings[i].born)/700):1;
+    ctx.beginPath(); ctx.arc(0,0,rad*(live?(0.85+0.15*grow):1),0,Math.PI*2);
+    ctx.strokeStyle=cur?"rgba(255,198,92,.45)":live?"rgba(160,178,255,.22)":"rgba(160,178,255,.07)"; ctx.setLineDash(live||cur?[]:[2,6]); ctx.lineWidth=cur?1.4:1; ctx.stroke(); }
+  ctx.setLineDash([]);
+  if(busy&&S){ if(playing) sweepA+=0.045; const rad=radius(rings.length);
+    if(ctx.createConicGradient){ const g=ctx.createConicGradient(sweepA,0,0); g.addColorStop(0,"rgba(255,198,92,.28)"); g.addColorStop(.08,"rgba(255,198,92,0)"); g.addColorStop(1,"rgba(255,198,92,0)"); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(0,0,rad,0,Math.PI*2); ctx.fill(); }
+    ctx.strokeStyle="rgba(255,198,92,.8)"; ctx.lineWidth=1.2; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(Math.cos(sweepA)*rad,Math.sin(sweepA)*rad); ctx.stroke();
+    ctx.strokeStyle=C.gold; ctx.lineWidth=2.5; ctx.beginPath(); ctx.arc(0,0,rad,-Math.PI/2,-Math.PI/2+Math.PI*2*S.progress); ctx.stroke(); }
+  ctx.lineWidth=.7;
+  rings.forEach((r)=>{ r.show.forEach((nd,j)=>{ const e=ease((now-r.born-j*6)/620); const p=nd.parent; const px=p._x??0, py=p._y??0;
+    nd._x=px+(nd._t.x-px)*e; nd._y=py+(nd._t.y-py)*e; ctx.strokeStyle=`rgba(125,147,232,${0.18*e})`; ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(nd._x,nd._y); ctx.stroke(); }); });
+  ctx.globalCompositeOperation="lighter";
+  rings.forEach((r)=>{ r.show.forEach((nd)=>{ const col=nd.ok===r.N?C.mint:nd.ok>0?C.gold:C.ice; const sz=nd.ok===r.N?4.2:nd.ok>0?2.6:2; const sp=sprite(col,sz);
+    ctx.globalAlpha=nd.ok>0?1:.55; ctx.drawImage(sp.c,nd._x-sp.d,nd._y-sp.d); }); });
+  ctx.globalAlpha=1;
+  if(winPath){ const L=winPath; const t=(now-winBorn)/(300*L.length); const upto=Math.max(0,t*L.length); ctx.lineCap="round"; ctx.lineJoin="round";
+    for(const [w,a] of [[10,.12],[5,.3],[2.4,1]]){ ctx.strokeStyle=`rgba(255,111,91,${a})`; ctx.lineWidth=w; ctx.beginPath(); ctx.moveTo(0,0); let px=0,py=0;
+      L.forEach((nd,k)=>{ if(k>upto) return; const f=Math.min(1,upto-k); ctx.lineTo(px+(nd._x-px)*f,py+(nd._y-py)*f); px=nd._x; py=nd._y; }); ctx.stroke(); }
+    L.forEach((nd,k)=>{ if(k<upto){ const sp=sprite(C.coral,5); ctx.drawImage(sp.c,nd._x-sp.d,nd._y-sp.d); } });
+    if(t>=1){ const last=L[L.length-1]; const ph=((now-winBorn)/900)%1; ctx.globalCompositeOperation="source-over"; ctx.strokeStyle=`rgba(92,242,182,${1-ph})`; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(last._x,last._y,8+ph*26,0,Math.PI*2); ctx.stroke(); } }
+  ctx.globalCompositeOperation="source-over";
+  ctx.font="500 10.5px 'JetBrains Mono', monospace"; ctx.fillStyle=C.faint; ctx.textAlign="center";
+  for(let i=0;i<rings.length;i++) ctx.fillText(String(i+1),0,-radius(i)-6);
+  const pulse=busy?(Math.sin(now/140)+1)/2:0; const core=sprite(busy?C.gold:C.ink,5+pulse*1.5); ctx.globalCompositeOperation="lighter"; ctx.drawImage(core.c,-core.d,-core.d); ctx.globalCompositeOperation="source-over";
+  ctx.restore();
+}
+
+
+/* ————— flow ————— */
+function startTask(){
+  taskNo++; const tt=E.nextTarget(x=>x%2===0, taskNo, claimedElse) ?? E.nextTarget(null, taskNo, claimedElse);
+  if(tt==null){ startShrink(performance.now()); return; }
+  T={tt,name:E.nameOf(tt),rule:E.ruleOf(tt),tries:(E.backoff.get(tt)||{tries:0}).tries}; claim(T);
+  meters(["נבדקו בעיגול","כפולות · אוחדו","נשברו","ממשיכות פנימה"]); SH=null; dots=[];
+  S=new E.Search(tt); rings=[]; winPath=null; busy=false; spent=0; phase="search";
+  $("tname").textContent=T.name; $("trule").textContent=T.rule; $("rno").textContent="00";
+  const tr=$("ttry"); if(T.tries){ tr.hidden=false; tr.textContent=`ניסיון ${T.tries+1} · עם ${E.lib.size} טבלאות ממופות`; } else tr.hidden=true;
+  ["cTried","cMerged","cBroke","cKept"].forEach(k=>$(k).textContent="0");
+  $("tokn").textContent=`${S.tokens.length} אפשרויות לכל צעד`;
+  cap(`משימה ${fmt(taskNo)}: <b>${T.name}</b> — הטבלה החסרה הכי קרובה למה שכבר יודעים. בדרך, כל תוכנית שתיבדק תיבדק גם «מה היא בעצם מחשבת».`);
+  ribbon(null); lamps(null); renderStream(); renderShelf(); renderStats();
+  nextAt=performance.now()+400;
+}
+function advance(){ busy=true; $("rno").textContent=String(rings.length+1).padStart(2,"0"); layout(); cap(`מחפש בעיגול ${rings.length+1}: כל תוכנית שנשארה, ועוד פעולה אחת מתוך ${S.tokens.length}. כל אחת נבדקת גם «מה היא מחשבת».`); }
+function harvestNews(){ const ev=E.events.slice(evSeen); evSeen=E.events.length; const mine=ev.filter(e=>e.src==="harvest"); if(mine.length){ totalHarvest+=mine.length; freshTT=mine[mine.length-1].tt; renderShelf(); renderStats(); pushAll(); save(); } return mine; }
+function ringDone(r,now){
+  busy=false; r.born=now; r.show=r.kept.slice(0,SHOW); totalTried+=r.tried;
+  if(r.best){ const list=[]; let x=r.best; while(x&&x.id!==0){ list.unshift(x); x=x.parent; }
+    rings.forEach((rr,i)=>{ const need=list[i]; if(need&&!rr.show.includes(need)) rr.show.push(need); }); if(!r.show.includes(r.best)) r.show.push(r.best); winPath=list; winBorn=now+700; }
+  rings.push(r); layout();
+  $("cTried").textContent=fmt(r.tried); $("cMerged").textContent=fmt(r.merged); $("cBroke").textContent=fmt(r.broke); $("cKept").textContent=fmt(r.kept.length);
+  const top=r.best||r.kept[0]; ribbon(top); lamps(top);
+  const got=harvestNews(); const hv=got.length?` בדרך נקצרו <b>${got.length}</b> ${got.length===1?"טבלה":"טבלאות"} ${got.some(g=>g.better)?"(חלקן בדרך קצרה מהקודמת) ":""}— ממופות ${E.lib.size}/256.`:"";
+  if(r.best){ const b=E.offer([["W",0],["GO"],...r.best.ops],"browser"); evSeen=E.events.length; stream.push({name:T.name,ok:true,ring:r.ring,h:r.harvested}); phase="won"; unclaim(T);
+    setTimeout(()=>fly(T.name), 700+300*winPath.length); pushAll();
+    cap(`<b>נמצא בעיגול ${r.ring}.</b> ${r.best.prog.length} צעדים, עובר את 16 הדוגמאות ועוד 240 בדיקה.${hv}`,"win");
+    nextAt=now+pace()+300*winPath.length+1600; save();
+  } else if(r.ring>=MAX_RINGS || spent>MAX_MS){ const tries=E.failed(T.tt,taskNo); stream.push({name:T.name,ok:false,tries,h:r.harvested}); phase="lost"; unclaim(T);
+    cap(`<b>«${T.name}» לא נמצאה עד עיגול ${r.ring}.</b>${hv||" "} היא תחזור אחרי שהמדף יגדל.`,"fail"); renderStats(); save(); nextAt=now+pace()+1400;
+  } else { cap(`עיגול ${r.ring}: <b>${fmt(r.tried)}</b> נבדקו · ${fmt(r.merged)} כפולות אוחדו. הכי קרובה: ${top?top.ok:0} מתוך 16.${hv}`, got.length?"win":undefined); nextAt=now+pace(); }
+}
+function pace(){ return 2600/ +$("speed").value; }
+function loop(now){
+  const dt=lastTick?now-lastTick:0; lastTick=now;
+  if(playing){
+    if(busy&&S){ spent+=dt; const res=S.step(12); liveCounters(); if(res) ringDone(res,now); else if(E.events.length>evSeen) harvestNews(); }
+    else if(phase==="shrink"&&SH){ if(now>=nextAt) shrinkTick(now); }
+    else if(now>=nextAt){ if(phase==="search") advance(); else startTask(); }
+  }
+  draw(now); requestAnimationFrame(loop);
+}
+function liveCounters(){ $("cTried").textContent=fmt(S.tried); $("cMerged").textContent=fmt(S.merged); $("cBroke").textContent=fmt(S.broke); $("cKept").textContent=fmt(S.outer.length); }
+
+
+/* ————— קיצור: כשהכל ממופה, לוקחים את התוכנית הכי ארוכה ומנסים להוריד ממנה פעולות — רק מה שעדיין נותן אותה טבלה נשאר ————— */
+const OPN={GO:"לך",TAKE:"קח",PUT:"שים",CALC:"חשב"}, opName=(o)=>o[0]==="W"?"לאן "+o[1]:OPN[o[0]]||o[0];
+const OPC={W:C.ice,GO:C.ink,TAKE:C.gold,PUT:C.mint,CALC:C.coral};
+const totalOps=()=>libList().reduce((a,b)=>a+b.ops.length,0);
+function meters(names){ ["cTried","cMerged","cBroke","cKept"].forEach((k,i)=>{ $(k).parentElement.querySelector(".t").textContent=names[i]; }); }
+function startShrink(now){
+  const pool=libList().filter(b=>shDone["t"+b.tt]!==b.ops.length&&!claimedElse(b.tt)); const mine=pool.filter(b=>b.tt%2===0);
+  const list=(mine.length?mine:pool).sort((x,y)=>y.ops.length-x.ops.length);
+  if(!list.length){ phase="idle"; SH=null; cap(`<b>כל 256 קוצרו עד כמה שהשיטה יודעת.</b> סך הכל ${fmt(totalOps())} פעולות. בודק שוב בעוד דקה.`,"win"); nextAt=now+60000; return; }
+  const b=list[0]; SH=new E.Shrinker(b); shFrom=b.ops.length; phase="shrink"; T={tt:b.tt,name:b.name,rule:E.ruleOf(b.tt)}; claim(T); taskNo++;
+  $("tname").textContent=T.name; $("trule").textContent=T.rule; $("rno").textContent="✂"; $("ttry").hidden=true; $("tokn").textContent="בהיר = קצר";
+  meters(["ניסיונות","קיצורים","פעולות נמחקו","אורך עכשיו"]); rings=[]; winPath=null; busy=false;
+  dots=b.ops.map((o,j)=>({o,a:j/b.ops.length*Math.PI*2,born:now-2000})); falling=[];
+  cap(`<b>מקצר את «${T.name}»</b> — ${b.ops.length} פעולות, הכי ארוכה שנשארה. מנסה למחוק קטע של 1–4 פעולות או להחליף אותו בפעולה אחת או שתיים. נשאר רק מה שעדיין נותן את אותה טבלה בכל 240 הבדיקות.`);
+  ribbonOps(b.ops,null); shLamps(); shMeters(); renderShelf(); renderStats(); renderStream(); nextAt=now+500;
+}
+function shMeters(){ $("cTried").textContent=fmt(SH.tried); $("cMerged").textContent=fmt(SH.wins); $("cBroke").textContent=fmt(shFrom-SH.ops.length); $("cKept").textContent=fmt(SH.ops.length); }
+function shrinkTick(now){
+  const before=SH.ops, t0=SH.tried; const r=SH.step(10); totalTried+=SH.tried-t0; if(now-(shrinkTick.st||0)>500){ shrinkTick.st=now; renderStats(); } shMeters();
+  if(r){ const n=SH.ops.length, cut=before.slice(r.i,r.i+r.w);
+    cut.forEach((o,k)=>{ const d=dots[r.i+k]; if(d) falling.push({o,a:d.a,t:now}); });
+    const neu=SH.ops.slice(r.i,r.i+r.r).map(o=>({o,a:(dots[r.i]||dots[dots.length-1]).a,born:now}));
+    dots=[...dots.slice(0,r.i),...neu,...dots.slice(r.i+r.w)]; shWinAt=now;
+    ribbonOps(SH.ops,{i:r.i,r:r.r}); shLamps();
+    cap(`<b>«${T.name}»: ${r.from} → ${r.to}.</b> נמחקו ${r.w} פעולות (${cut.map(opName).join(" ‹ ")})${r.r?`, במקומן ${SH.ops.slice(r.i,r.i+r.r).map(opName).join(" ‹ ")}`:""} — ועדיין אותה טבלה בכל 240 הבדיקות.`,"win");
+    nextAt=now+Math.max(120,pace()/5); return; }
+  if(SH.done){ const b=E.offer(SH.ops,"shrink"); evSeen=E.events.length; shDone["t"+SH.tt]=SH.ops.length; unclaim(T);
+    stream.push({name:T.name,ok:true,shr:[shFrom,SH.ops.length]}); pushAll(); save();
+    cap(`<b>«${T.name}» קוצרה מ-${shFrom} ל-${SH.ops.length} פעולות.</b> ${b?"נכנסה למדף ונשלחה לזיכרון המשותף.":"לא יצאה קצרה ממה שכבר היה."} עוברים לארוכה הבאה.`,"win");
+    renderShelf(); renderStats(); renderStream(); phase="shrunk"; nextAt=now+pace()+600; }
+}
+function shLamps(){ const L=$("lamps"); L.innerHTML=""; const f=E.table(SH.tt); const r16=()=>Math.floor(Math.random()*16);
+  for(let i=0;i<16;i++){ const a=r16(),b=r16(),c=r16(); const out=E.run(SH.ops,[a,b,r16(),c,r16(),r16(),r16(),r16()]); const got=out?out.m[2]:"·", want=f(a,b,c);
+    L.insertAdjacentHTML("beforeend",`<div class="lp ${got===want?"ok":"no"}" title="א=${a} ב=${b} ג=${c}"><div class="bulb" style="transition-delay:${i*25}ms">${got}</div><div class="w">${want}</div></div>`); } }
+function ribbonOps(ops,hl){ const b=$("best"); $("plen").textContent=`${ops.length} פעולות · התחיל ב-${shFrom}`;
+  b.innerHTML=ops.map((o,i)=>`<span class="tk${hl&&i>=hl.i&&i<hl.i+hl.r?" bk":""}" style="animation:none;opacity:1">${opName(o)}</span>`).join('<span class="arr">‹</span>'); }
+function drawShrink(now){
+  const R=Rmax()*0.7, n=dots.length; if(!n) return; const w=SH&&!SH.done?SH.where:null;
+  dots.forEach((d,j)=>{ const ta=j/n*Math.PI*2-Math.PI/2; d.a+=(ta-d.a)*0.12; });
+  if(w&&n){ const a0=w.i/n*Math.PI*2-Math.PI/2, a1=(w.i+w.w)/n*Math.PI*2-Math.PI/2; ctx.strokeStyle="rgba(255,198,92,.9)"; ctx.lineWidth=10; ctx.lineCap="round"; ctx.beginPath(); ctx.arc(0,0,R,a0-0.01,a1); ctx.stroke(); ctx.lineCap="butt"; }
+  ctx.strokeStyle="rgba(160,178,255,.14)"; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(0,0,R,0,Math.PI*2); ctx.stroke();
+  const sz=Math.max(2.2,Math.min(6,Math.PI*R/n*0.8));
+  dots.forEach((d)=>{ const fresh=now-d.born<900; ctx.fillStyle=fresh?"#FFFFFF":OPC[d.o[0]]||C.ice; ctx.beginPath(); ctx.arc(Math.cos(d.a)*R,Math.sin(d.a)*R,fresh?sz+1.5:sz,0,Math.PI*2); ctx.fill(); });
+  ctx.globalCompositeOperation="lighter";
+  falling=falling.filter(f=>now-f.t<900); falling.forEach((f)=>{ const t=(now-f.t)/900, rr=R+t*70; const sp=sprite(C.coral,3.2); ctx.globalAlpha=1-t; ctx.drawImage(sp.c,Math.cos(f.a)*rr-sp.d,Math.sin(f.a)*rr-sp.d); }); ctx.globalAlpha=1;
+  ctx.globalCompositeOperation="source-over"; ctx.textAlign="center"; ctx.fillStyle=now-shWinAt<500?C.mint:C.ink;
+  ctx.font=`600 ${Math.round(Math.max(34,R*0.34))}px 'JetBrains Mono', monospace`; ctx.fillText(String(n),0,R*0.08);
+  ctx.font="500 12px 'Heebo', sans-serif"; ctx.fillStyle=C.faint; ctx.fillText(`פעולות · התחילה ב-${shFrom}`,0,R*0.08+22);
+}
+
+/* ————— panels ————— */
+function cap(html,kind){ const c=$("cap"); c.innerHTML=html; c.className="caption"+(kind?" "+kind:""); }
+function ribbon(node){ const b=$("best"); b.innerHTML=""; $("plen").textContent=node?`${node.prog.length} צעדים · ${node.ok}/16`:"";
+  if(!node){ b.innerHTML='<span class="none">עוד אין.</span>'; return; }
+  node.prog.forEach((t,i)=>{ if(i) b.insertAdjacentHTML("beforeend",'<span class="arr">‹</span>'); const s=document.createElement("span"); s.className="tk"+(t.brick?" bk":""); s.textContent=t.name; s.style.animationDelay=(i*40)+"ms"; b.appendChild(s); }); }
+function lamps(node){ const L=$("lamps"); L.innerHTML=""; if(!S) return;
+  S.ex.forEach((e,i)=>{ const got=node?node.out[i]:"·"; const ok=node&&got===e.want;
+    L.insertAdjacentHTML("beforeend",`<div class="lp ${node?(ok?"ok":"no"):""}" title="א=${e.a} ב=${e.b} ג=${e.c}"><div class="bulb" style="transition-delay:${i*25}ms">${got}</div><div class="w">${e.want}</div></div>`); }); }
+function renderShelf(){ $("atoms").innerHTML=E.ATOMS.map(a=>`<span class="at">${a.name}</span>`).join("");
+  // מפת 256 הטבלאות: כל משבצת טבלה; צבועה = ממופה
+  const map=$("map"); if(map){ let h=""; for(let tt=0;tt<256;tt++){ const b=E.lib.get(tt); const cur=T&&T.tt===tt&&(phase==="shrink"||!b); const cls=cur?"cell cur":b?(tt===freshTT?"cell on fresh":"cell on"):"cell"; const q=b?Math.max(.18,1-Math.log(b.len/6)/Math.log(90)):0; h+=`<i class="${cls}"${b&&!cur?` style="opacity:${q.toFixed(2)}"`:""} title="${E.nameOf(tt)}${b?` · ${b.len} פעולות`:""}"></i>`; } map.innerHTML=h; }
+  const s=$("shelf"); const named=libList().filter(b=>!b.name.startsWith("טבלה")).sort((a,b)=>a.len-b.len);
+  s.innerHTML=named.map(b=>`<div class="brick" data-n="${b.name}"><div class="a">${b.name}</div><div class="b">${b.len} פעולות${b.src==="server"?" · מהשרת":b.src==="shared"?" · משותף":b.src==="harvest"?" · נקצר":b.src==="shrink"?" · קוצר":""}</div></div>`).join("") || '<span class="none">עוד אין.</span>'; }
+function renderStream(){ const el=$("stream"); const items=stream.slice(-30).map(e=>`<div class="ev ${e.ok?"ok":"no"}"><span class="a">${e.name}</span><span class="b">${e.shr?`${e.shr[0]} → ${e.shr[1]}`:e.ok?`עיגול ${e.ring}`:`ניסיון ${e.tries}`}${e.h?` · +${e.h} נקצרו`:""}</span></div>`);
+  if(T&&phase==="shrink") items.push(`<div class="ev now"><span class="a">${T.name}</span><span class="b">מקצר עכשיו</span></div>`);
+  if(T&&phase==="search") items.push(`<div class="ev now"><span class="a">${T.name}</span><span class="b">מחפש עכשיו</span></div>`); el.innerHTML=items.join(""); el.scrollLeft=-el.scrollWidth; }
+function renderStats(){ $("sLearned").textContent=`${E.lib.size}/256`; const full=E.lib.size>=256; $("sTask").textContent=full?fmt(totalOps()):fmt(taskNo); $("sTask").parentElement.querySelector(".t").textContent=full?"פעולות בכל 256 יחד":"משימות עד עכשיו"; $("sWait").textContent=fmt(totalHarvest); $("sTried").textContent=totalTried>=1e6?(totalTried/1e6).toFixed(1)+"M":fmt(totalTried); }
+function fly(name){
+  const last=winPath&&winPath[winPath.length-1]; const st=$("stage").getBoundingClientRect(); renderShelf(); renderStream(); renderStats();
+  const target=document.querySelector(`.brick[data-n="${CSS.escape(name)}"]`)||$("map"); if(!target||matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const from={x:st.left+cx()+(last?last._x:0), y:st.top+cy()+(last?last._y:0)}; const tr=target.getBoundingClientRect(); if(tr.bottom<0||tr.top>innerHeight+400) return;
+  const f=document.createElement("div"); f.className="flyer"; f.textContent=name; document.body.appendChild(f);
+  const fr=f.getBoundingClientRect(); f.style.left=(from.x-fr.width/2)+"px"; f.style.top=(from.y-fr.height/2)+"px";
+  const dx=tr.left-from.x+fr.width/2, dy=tr.top-from.y+fr.height/2;
+  f.animate([{transform:"translate(0,0) scale(.4)",opacity:0},{transform:"translate(0,-20px) scale(1.1)",opacity:1,offset:.2},{transform:`translate(${dx}px,${dy}px) scale(1)`,opacity:1}],{duration:1100,easing:"cubic-bezier(.5,0,.2,1)"}).onfinish=()=>f.remove();
+}
+
+/* ————— controls ————— */
+const PLAY='<path d="M8 5v14l11-7z"/>', PAUSE='<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>';
+function setPlaying(p){ playing=p; $("runIcon").innerHTML=p?PAUSE:PLAY; $("runTxt").textContent=p?"עצור":"המשך"; $("live").classList.toggle("off",!p); $("live").lastChild.textContent=p?"חי":"עצור"; }
+$("run").addEventListener("click",()=>setPlaying(!playing));
+let wipeArmed=false;
+$("wipe").addEventListener("click",()=>{ if(!wipeArmed){ wipeArmed=true; $("wipe").textContent="בטוח? לחץ שוב"; setTimeout(()=>{ wipeArmed=false; $("wipe").textContent="התחל מאפס"; },3000); return; }
+  try{ localStorage.removeItem(KEY); }catch(e){} location.reload(); });
+const resumed=load(); resize(); renderShelf(); renderStats(); connectShared();
+cap(`${resumed?"ממשיך מאיפה שעצר. ":""}ממופות ${E.lib.size} מתוך 256 טבלאות. מתחבר לזיכרון המשותף…`);
+phase="idle"; nextAt=performance.now()+(resumed?1500:1200); requestAnimationFrame(loop);
+</script>
