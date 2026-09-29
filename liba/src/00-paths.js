@@ -13,6 +13,8 @@ const P_RAW={
   req:id=>db.doc('req/'+id),reqs:()=>db.collection('req'),
   metricsDay:day=>db.doc('metrics/daily').collection('days').doc(day),
   budget:()=>db.doc('channel/budget'),
+  crashes:()=>db.collection('crashes'),
+  fold:id=>db.doc('fold/'+id),folds:()=>db.collection('fold'),janitor:()=>db.doc('channel/janitor'),
 };
 /* req-spine: the only id minter. String(Date.now()) collided whenever two writes shared a millisecond and
    silently overwrote each other; this is 48 bits of time + a per-millisecond counter + 32 random bits, so ids
@@ -27,7 +29,9 @@ function mintId(){const t=Date.now();if(t===mintLast)mintSeq++;else{mintLast=t;m
    call sites changed: P hands out guarded references, and db-paths already forbids any path outside this table. */
 const CLS_OF={inbox:'voice',inboxDoc:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
   sessions:'state',budget:'state',gallery:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
-  device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry'};
+  device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',
+  /* the janitor frees space, so its folds and lease are never refused - refusing the cure would keep the db full */
+  fold:'janitor',folds:'janitor',janitor:'janitor',crashes:'record'};
 /* the fraction of the quota at which each class stops being written; voice has no line */
 const CH_TIER={telemetry:0.72,record:0.84,state:0.92};
 let chBudget={docs:0,limit:25000,bypass:false},chAlarmedAt=0;const chDenied={};
@@ -36,11 +40,12 @@ function chAlarm(code){chBudget.docs=chBudget.limit;if(Date.now()-chAlarmedAt<36
   /* said from the page's own queue, not written to the inbox - the inbox is exactly what might be full */
   queueLocal({id:'ch-full-'+Date.now(),kind:'say',priority:'urgent',speaker:'ליבה',topic:'המסד',text:'המסד מלא. הפסקתי לרשום טלמטריה ויומנים כדי שהדיבור ימשיך.'});}
 function ch(ref,op,body,cls,what){
-  if(!chAllowed(cls)){chDenied[cls]=(chDenied[cls]||0)+1;return Promise.reject({code:'budget',cls:cls,what:what});}
+  if(op!=='delete'&&!chAllowed(cls)){chDenied[cls]=(chDenied[cls]||0)+1;return Promise.reject({code:'budget',cls:cls,what:what});}
   let pr;try{pr=op==='set'?ref.set(body):op==='update'?ref.update(body):ref.delete();}catch(e){pr=Promise.reject(e);}
   return Promise.resolve(pr).catch(e=>{const c=String(e&&(e.code||e.name)||e);if(/quota|resource.?exhausted/i.test(c))chAlarm(c);throw e;});}
 function guardDoc(ref,cls,what){return {ref:ref,path:ref.path,get:()=>ref.get(),onSnapshot:(a,b)=>ref.onSnapshot(a,b),collection:n=>guardCol(ref.collection(n),cls,what),
-  set:d=>ch(ref,'set',d,cls,what),update:d=>ch(ref,'update',d,cls,what),delete:()=>ch(ref,'delete',null,cls,what)};}
+  set:d=>ch(ref,'set',d,cls,what),update:d=>ch(ref,'update',d,cls,what),delete:()=>ch(ref,'delete',null,cls,what),
+  acquire:o=>ref.acquire(o)};}
 function guardCol(ref,cls,what){return {ref:ref,path:ref.path,get:()=>ref.get(),onSnapshot:(a,b)=>ref.onSnapshot(a,b),
   where:(f,o,v)=>ref.where(f,o,v),orderBy:(f,d)=>ref.orderBy(f,d),limit:n=>ref.limit(n),doc:id=>guardDoc(ref.doc(id),cls,what)};}
 const P=Object.fromEntries(Object.entries(P_RAW).map(([k,f])=>[k,(...a)=>{const r=f(...a);const cls=CLS_OF[k]||'record';return typeof r.set==='function'?guardDoc(r,cls,k):guardCol(r,cls,k);}]));

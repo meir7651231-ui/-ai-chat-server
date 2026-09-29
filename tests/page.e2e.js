@@ -6,13 +6,17 @@ const docs=new Map(), colSubs=new Map(), docSubs=new Map();
 if(window.__seedN){const N=window.__seedN,now=Date.now(),q=Math.floor(N/4);for(let i=0;i<q;i++){docs.set('inbox/old-'+i,{from:'liba',kind:'say',text:'ישן '+i,spoken:true,ts:now-864e5*30+i});docs.set('tasks/t-'+i,{title:'משימה '+i,status:'done',updatedAt:now-864e5*30+i});docs.set('sessions/s-'+i,{title:'שיחה '+i,status:'idle',updatedAt:now-864e5*30+i});docs.set('gallery/g-'+i,{title:'תמונה '+i,ts:now-864e5*30+i});}
  for(let i=0;i<5;i++)docs.set('inbox/fresh-'+i,{from:'liba',kind:'say',speaker:'ליבה',text:'חלון-'+i,spoken:false,ts:now+i});}
 const parts=p=>p.split('/').filter(Boolean);
+/* the real store: update merges nested objects recursively (arrays and scalars replace); leases are set-if-not-busy */
+const leases=new Map();
+function deepMerge(a,b){for(const k of Object.keys(b)){const v=b[k];if(v&&typeof v==='object'&&!Array.isArray(v)&&a[k]&&typeof a[k]==='object'&&!Array.isArray(a[k]))a[k]=deepMerge(a[k],v);else a[k]=v;}return a;}
 const colOf=p=>{const a=parts(p);return a.slice(0,-1).join('/');};
 function snapDoc(path){const d=docs.get(path);return {exists:!!d,data:()=>d?JSON.parse(JSON.stringify(d)):undefined,id:parts(path).pop()};}
 function notify(path){const c=colOf(path);(colSubs.get(c)||[]).forEach(fire);(docSubs.get(path)||[]).forEach(cb=>cb(snapDoc(path)));}
 function colSnap(c){const n=parts(c).length;const out=[];for(const [p,d] of docs){const a=parts(p);if(a.length===n+1&&a.slice(0,n).join('/')===c)out.push({id:a[n],data:()=>JSON.parse(JSON.stringify(d)),ref:docRef(p)});}return {docs:out};}
 function docRef(path){return {path,collection:n=>colRef(path+'/'+n),
  set:async d=>{if(window.__quotaPath&&path.indexOf(window.__quotaPath)===0)throw Object.assign(new Error('quota'),{code:'resource_exhausted'});if(parts(path).length%2)throw Object.assign(new Error('bad doc path '+path),{code:'bad_path'});docs.set(path,JSON.parse(JSON.stringify(d)));notify(path);},
- update:async d=>{if(!docs.has(path))throw Object.assign(new Error('missing '+path),{code:'not_found'});docs.set(path,Object.assign(docs.get(path),JSON.parse(JSON.stringify(d))));notify(path);},
+ update:async d=>{if(!docs.has(path))throw Object.assign(new Error('missing '+path),{code:'not_found'});docs.set(path,deepMerge(docs.get(path),JSON.parse(JSON.stringify(d))));notify(path);},
+ acquire:async o=>{const now=Date.now(),l=leases.get(path);if(l&&l.until>now&&l.holder!==o.holder)return {acquired:false,expiresAt:new Date(l.until).toISOString()};const until=now+((o&&o.ttlMs)||30000);leases.set(path,{holder:o.holder,until});if(o&&o.data){docs.set(path,deepMerge(docs.get(path)||{},JSON.parse(JSON.stringify(o.data))));notify(path);}return {acquired:true,holder:o.holder,expiresAt:new Date(until).toISOString()};},
  delete:async()=>{docs.delete(path);notify(path);},
  get:async()=>snapDoc(path),
  onSnapshot:(cb,err)=>{if(!docSubs.has(path))docSubs.set(path,[]);docSubs.get(path).push(cb);setTimeout(()=>cb(snapDoc(path)),0);return()=>{};}};}
@@ -39,7 +43,7 @@ function colRef(c){return Object.assign(query(c,{w:[],o:null,l:0}),{doc:id=>docR
 const db={doc:p=>{if(parts(p).length%2)throw new Error('bad doc path '+p);return docRef(p);},collection:c=>colRef(c)};
 const sent=[],sentRaw=[];const comments={canSendToClaude:async()=>{if(window.__slowSend)await new Promise(r=>setTimeout(r,window.__slowSend));return 'available';},anchorFor:async()=>({}),sendToClaude:async o=>{sentRaw.push(o.text);sent.push(String(o.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));window.parent.postMessage({harness:'sent',text:o.text},'*');}};
 window.claude={use:async n=>n==='db'?db:n==='comments'?comments:null};
-window.__h={db,docs,reads,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSnap(c).docs.map(x=>({id:x.id,...x.data()})),sent,sentRaw};
+window.__h={db,docs,reads,leases,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSnap(c).docs.map(x=>({id:x.id,...x.data()})),sent,sentRaw};
 })();`;
 const failed = [];
 (async () => {
