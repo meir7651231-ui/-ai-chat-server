@@ -26,7 +26,7 @@ async function incoming(d){
   d.text=typeof d.text==='string'?d.text:String(d.text==null?'':d.text);
   d.options=Array.isArray(d.options)?d.options.map(o=>String(o)).filter(o=>o.length):[];
   if(d.re&&!d.local)bindReply(d);
-  cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem('liba.seen',d.id);}catch(e){fail('P_STORE',e,'set seen');}
+  cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem(LSK('seen'),d.id);}catch(e){fail('P_STORE',e,'set seen');}
   if(rec){try{rec.abort();}catch(e){fail('P_SR',e,'abort');}}
   transition('SPEAKING','incoming '+(d.kind||'say'));try{
   TR.querySelectorAll('.think').forEach(x=>x.remove());

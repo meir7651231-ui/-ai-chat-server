@@ -8,18 +8,21 @@ if(window.__seedN){const N=window.__seedN,now=Date.now(),q=Math.floor(N/4);for(l
 const parts=p=>p.split('/').filter(Boolean);
 /* the real store: update merges nested objects recursively (arrays and scalars replace); leases are set-if-not-busy */
 const leases=new Map();
+/* a frame that was reloaded is dead: its callbacks and writes must not act on a shared db (tests/inbox.chaos.js) */
+const alive=()=>{try{return window.top===window||!window.frameElement||window.frameElement.contentWindow===window;}catch(e){return true;}};
+const dead=()=>Object.assign(new Error('page is gone'),{code:'dead'});
 function deepMerge(a,b){for(const k of Object.keys(b)){const v=b[k];if(v&&typeof v==='object'&&!Array.isArray(v)&&a[k]&&typeof a[k]==='object'&&!Array.isArray(a[k]))a[k]=deepMerge(a[k],v);else a[k]=v;}return a;}
 const colOf=p=>{const a=parts(p);return a.slice(0,-1).join('/');};
 function snapDoc(path){const d=docs.get(path);return {exists:!!d,data:()=>d?JSON.parse(JSON.stringify(d)):undefined,id:parts(path).pop()};}
-function notify(path){const c=colOf(path);(colSubs.get(c)||[]).forEach(fire);(docSubs.get(path)||[]).forEach(cb=>cb(snapDoc(path)));}
+function notify(path){const c=colOf(path);(colSubs.get(c)||[]).slice().forEach(fire);(docSubs.get(path)||[]).slice().forEach(cb=>{if(cb.alive&&!cb.alive()){const a=docSubs.get(path);a.splice(a.indexOf(cb),1);return;}try{cb(snapDoc(path));}catch(e){setTimeout(()=>{throw e;},0);}});}
 function colSnap(c){const n=parts(c).length;const out=[];for(const [p,d] of docs){const a=parts(p);if(a.length===n+1&&a.slice(0,n).join('/')===c)out.push({id:a[n],data:()=>JSON.parse(JSON.stringify(d)),ref:docRef(p)});}return {docs:out};}
 function docRef(path){return {path,collection:n=>colRef(path+'/'+n),
- set:async d=>{if(window.__quotaPath&&path.indexOf(window.__quotaPath)===0)throw Object.assign(new Error('quota'),{code:'resource_exhausted'});if(window.__quotaCreate&&!docs.has(path))throw Object.assign(new Error('quota: no new documents'),{code:'resource_exhausted'});if(parts(path).length%2)throw Object.assign(new Error('bad doc path '+path),{code:'bad_path'});docs.set(path,JSON.parse(JSON.stringify(d)));notify(path);},
- update:async d=>{if(!docs.has(path))throw Object.assign(new Error('missing '+path),{code:'not_found'});docs.set(path,deepMerge(docs.get(path),JSON.parse(JSON.stringify(d))));notify(path);},
- acquire:async o=>{const now=Date.now(),l=leases.get(path);if(l&&l.until>now&&l.holder!==o.holder)return {acquired:false,expiresAt:new Date(l.until).toISOString()};const until=now+((o&&o.ttlMs)||30000);leases.set(path,{holder:o.holder,until});if(o&&o.data){docs.set(path,deepMerge(docs.get(path)||{},JSON.parse(JSON.stringify(o.data))));notify(path);}return {acquired:true,holder:o.holder,expiresAt:new Date(until).toISOString()};},
- delete:async()=>{docs.delete(path);notify(path);},
+ set:async d=>{if(!alive())throw dead();if(window.__quotaPath&&path.indexOf(window.__quotaPath)===0)throw Object.assign(new Error('quota'),{code:'resource_exhausted'});if(window.__quotaCreate&&!docs.has(path))throw Object.assign(new Error('quota: no new documents'),{code:'resource_exhausted'});if(parts(path).length%2)throw Object.assign(new Error('bad doc path '+path),{code:'bad_path'});docs.set(path,JSON.parse(JSON.stringify(d)));notify(path);},
+ update:async d=>{if(!alive())throw dead();if(!docs.has(path))throw Object.assign(new Error('missing '+path),{code:'not_found'});docs.set(path,deepMerge(docs.get(path),JSON.parse(JSON.stringify(d))));notify(path);},
+ acquire:async o=>{if(!alive())throw dead();const now=Date.now(),l=leases.get(path);if(l&&l.until>now&&l.holder!==o.holder)return {acquired:false,expiresAt:new Date(l.until).toISOString()};const until=now+((o&&o.ttlMs)||30000);leases.set(path,{holder:o.holder,until});if(o&&o.data){docs.set(path,deepMerge(docs.get(path)||{},JSON.parse(JSON.stringify(o.data))));notify(path);}return {acquired:true,holder:o.holder,expiresAt:new Date(until).toISOString()};},
+ delete:async()=>{if(!alive())throw dead();docs.delete(path);notify(path);},
  get:async()=>snapDoc(path),
- onSnapshot:(cb,err)=>{if(!docSubs.has(path))docSubs.set(path,[]);docSubs.get(path).push(cb);setTimeout(()=>cb(snapDoc(path)),0);return()=>{};}};}
+ onSnapshot:(cb,err)=>{if(!docSubs.has(path))docSubs.set(path,[]);cb.alive=alive;docSubs.get(path).push(cb);setTimeout(()=>cb(snapDoc(path)),0);return()=>{};}};}
 /* the real store's query rules (db.d.ts): a where on a field the document lacks never matches it, orderBy puts
    missing fields last, no orderBy means id order, limit is a window. Every delivery is counted in __reads so a test
    can prove how many document bodies a page open costs, and docChanges() is computed against the last delivery. */
@@ -29,16 +32,16 @@ function runQ(c,q){let out=colSnap(c).docs;for(const [f,op,v] of q.w){out=out.fi
  if(q.o){const [f,dir]=q.o;const k=d=>{const x=d.data();return x&&(f in x)?x[f]:undefined;};out.sort((a,b)=>{const x=k(a),y=k(b);if(x===undefined&&y===undefined)return a.id<b.id?-1:1;if(x===undefined)return 1;if(y===undefined)return -1;if(x===y)return a.id<b.id?-1:1;return (x<y?-1:1)*(dir==='desc'?-1:1);});}
  else out.sort((a,b)=>a.id<b.id?-1:1);
  if(q.l)out=out.slice(0,q.l);return out;}
-function fire(sub){if(window.__exhaust&&sub.q.l>window.__exhaust){sub.err&&sub.err({code:'resource_exhausted',message:'scan too large'});return;}
+function fire(sub){if(sub.alive&&!sub.alive()){const a=colSubs.get(sub.c);if(a&&a.indexOf(sub)>=0)a.splice(a.indexOf(sub),1);return;}if(window.__exhaust&&sub.q.l>window.__exhaust){sub.err&&sub.err({code:'resource_exhausted',message:'scan too large'});return;}
  const docsNow=runQ(sub.c,sub.q);const now=new Map(docsNow.map(d=>[d.id,JSON.stringify(d.data())]));const ch=[];
  docsNow.forEach((d,i)=>{if(!sub.last.has(d.id))ch.push({type:'added',doc:d,oldIndex:-1,newIndex:i});else if(sub.last.get(d.id)!==now.get(d.id))ch.push({type:'modified',doc:d,oldIndex:i,newIndex:i});});
  for(const [id] of sub.last)if(!now.has(id))ch.push({type:'removed',doc:{id,data:()=>undefined},oldIndex:0,newIndex:-1});
  if(sub.fired&&!ch.length)return;sub.fired=true;sub.last=now;reads.docs+=docsNow.length;reads.deltas+=ch.length;
- sub.cb({docs:docsNow,size:docsNow.length,empty:!docsNow.length,docChanges:()=>ch});}
+ try{sub.cb({docs:docsNow,size:docsNow.length,empty:!docsNow.length,docChanges:()=>ch});}catch(e){setTimeout(()=>{throw e;},0);}}
 function query(c,q){return {path:c,
  where:(f,op,v)=>query(c,{...q,w:q.w.concat([[f,op,v]])}),orderBy:(f,dir)=>query(c,{...q,o:[f,dir||'asc']}),limit:n=>query(c,{...q,l:n}),
  get:async()=>{const d=runQ(c,q);reads.docs+=d.length;return {docs:d,size:d.length,empty:!d.length,docChanges:()=>[]};},
- onSnapshot:(cb,err)=>{if(parts(c).length%2===0){if(err)err({code:'bad_collection_path'});throw new Error('bad collection path '+c);}if(!colSubs.has(c))colSubs.set(c,[]);const sub={c,q,cb,err,last:new Map(),fired:false};colSubs.get(c).push(sub);reads.subs++;setTimeout(()=>fire(sub),0);return()=>{const a=colSubs.get(c);a.splice(a.indexOf(sub),1);};}};}
+ onSnapshot:(cb,err)=>{if(parts(c).length%2===0){if(err)err({code:'bad_collection_path'});throw new Error('bad collection path '+c);}if(!colSubs.has(c))colSubs.set(c,[]);const sub={c,q,cb,err,last:new Map(),fired:false,alive};colSubs.get(c).push(sub);reads.subs++;setTimeout(()=>fire(sub),0);return()=>{const a=colSubs.get(c);a.splice(a.indexOf(sub),1);};}};}
 function colRef(c){return Object.assign(query(c,{w:[],o:null,l:0}),{doc:id=>docRef(c+'/'+id)});}
 const db={doc:p=>{if(parts(p).length%2)throw new Error('bad doc path '+p);return docRef(p);},collection:c=>colRef(c)};
 const sent=[],sentRaw=[];const comments={canSendToClaude:async()=>{if(window.__slowSend)await new Promise(r=>setTimeout(r,window.__slowSend));return 'available';},anchorFor:async()=>({}),sendToClaude:async o=>{sentRaw.push(o.text);sent.push(String(o.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));window.parent.postMessage({harness:'sent',text:o.text},'*');}};
@@ -243,9 +246,21 @@ const failed = [];
   check((await get('inbox/hb1') || {}).spoken === true, 'heartbeat: acked once the phone reports it finished');
   const t0 = Date.now();
   await set('inbox/hb2', { text: 'דופק-אבד', kind: 'say', from: 'liba', ts: Date.now() });
-  for (let i = 0; i < 10 && !(await get('inbox/hb2') || {}).spoken; i++) await flush(1000);
+  let dv = null; for (let i = 0; i < 20; i++) { await flush(500); dv = (await get('inbox/hb2') || {}).delivery; if (dv && dv.attempts >= 1) break; }
   const waited = Date.now() - t0;
-  check((await get('inbox/hb2') || {}).spoken === true && waited < 9500, 'heartbeat: no beat and no spoke - released after ~6 s, not 120: ' + waited + 'ms');
+  check(dv && dv.attempts === 1 && dv.lastError === 'lost' && waited < 9500, 'heartbeat: no beat and no spoke - released after ~6 s, not 120, and put back as not delivered: ' + waited + 'ms ' + JSON.stringify(dv));
+  // inbox-lease: the retry that the phone does finish is the one that is acked
+  let retry = null; for (let i = 0; i < 12 && !retry; i++) retry = (await flush(500)).find(x => x.liba === 'say' && /דופק-אבד/.test(x.text || ''));
+  if (retry) await p.evaluate(id => window.app({ liba: 'spoke', id }), retry.id); await flush(900);
+  const hb2 = await get('inbox/hb2') || {};
+  check(retry && hb2.spoken === true && hb2.delivery && hb2.delivery.state === 'spoken', 'inbox-lease: the retry the phone finished is acked spoken');
+  // three silent tries: the message is marked failed, and that is said once - it never loops forever
+  await set('inbox/hb3', { text: 'דופק-אבד-תמיד', kind: 'say', from: 'liba', topic: 'בדיקה', ts: Date.now() });
+  for (let i = 0; i < 34 && !(await get('inbox/hb3') || {}).failed; i++) await flush(1000);
+  const hb3 = await get('inbox/hb3') || {};
+  let failTold = said('לא הצלחתי להקריא שלוש פעמים'); for (let i = 0; i < 12 && !failTold.length; i++) { await speakOut(500); failTold = said('לא הצלחתי להקריא שלוש פעמים'); }
+  check(hb3.failed === true && hb3.delivery && hb3.delivery.attempts === 3 && !hb3.spoken, 'inbox-lease: three silent tries → failed, attempts 3, never marked spoken: ' + JSON.stringify(hb3.delivery));
+  check(failTold.length === 1, 'inbox-lease: the failure is said once: ' + failTold.map(x => x.text).join(' | '));
   // protocol-contract: hello carries the contract version; the page tells an older app apart from an older page
   const oldSaid = () => msgs.filter(x => x.liba === 'say' && /ישנה מהדף/.test(x.text || '')).length;
   await p.evaluate(() => window.app({ liba: 'hello', ver: '3.17.0', pv: 2, caps: ['spoke', 'beat', 'trace', 'proto'] })); await flush(2200);

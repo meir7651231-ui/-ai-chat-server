@@ -8,9 +8,9 @@
    and before any resend the request is checked in the database - if it already went out, it is dropped.
    localStorage and not IndexedDB: it already works inside this iframe, and each write is atomic. */
 const LEASE=60000;
-let outbox=[];try{outbox=JSON.parse(localStorage.getItem('liba.outbox')||'[]');}catch(e){fail('P_STORE',e,'get outbox');}
+let outbox=[];try{outbox=JSON.parse(localStorage.getItem(LSK('outbox'))||'[]');}catch(e){fail('P_STORE',e,'get outbox');}
 outbox=outbox.map(it=>Object.assign({phase:'queued',leaseUntil:0,attempts:0},it,{req:it.req||('legacy-'+mintId())}));
-function saveOutbox(){try{localStorage.setItem('liba.outbox',JSON.stringify(outbox));}catch(e){fail('P_STORE',e,'set outbox');}}
+function saveOutbox(){try{localStorage.setItem(LSK('outbox'),JSON.stringify(outbox));}catch(e){fail('P_STORE',e,'set outbox');}}
 const walFind=req=>outbox.find(x=>x.req===req);
 function walPut(it){outbox=outbox.filter(x=>x.req!==it.req);outbox.push(it);saveOutbox();}
 function walLease(req){const it=walFind(req);if(!it)return null;it.phase='sending';it.leaseUntil=Date.now()+LEASE;it.attempts=(it.attempts||0)+1;saveOutbox();return it;}

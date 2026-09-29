@@ -19,6 +19,7 @@ const extra = [
   ['capacity', 'node tests/capacity.sim.js'],
   ['telemetry', 'node tests/telemetry.test.js'],
   ['budget', 'node tests/budget.gate.js && node tests/budget.gate.js --self-test'],
+  ['inbox-chaos', 'node tests/inbox.chaos.js'],
 ]
 
 let pass = 0

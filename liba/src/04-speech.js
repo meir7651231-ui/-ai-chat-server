@@ -15,10 +15,13 @@ const appBeats=()=>{const h=hasCap('beat');return h!==null?h:verAtLeast(3,16);},
 let appCaps=null,appPv=0;
 const hasCap=c=>appCaps?appCaps.indexOf(c)>=0:null;
 function appSpeaksBack(){const h=hasCap('spoke');return h!==null?h:verAtLeast(3,14);}
-/* v36: in the app, wait until the phone finished speaking before acking the next message */
-function sayApp(text,extra,re){return new Promise(res=>{const id='s'+(++sayTok);if(re)sayReq.set(id,String(re));const p=Object.assign({},extra||{},{text:text,id:id});if(!appSpeaksBack()){post(PROTO.toApp.say,p);res();return;}let done=false;const fin=()=>{if(done)return;done=true;sayWait.delete(id);beatWait.delete(id);res();};sayWait.set(id,fin);post(PROTO.toApp.say,p);
+/* v36: in the app, wait until the phone finished speaking before acking the next message.
+   inbox-lease: it resolves with how the speech ended - done/guard from the phone, lost (no beat), ceiling, or sent
+   (an app that never reports) - and the last outcome is kept for the mailbox to decide delivered or not. */
+let sayOutcome='done';
+function sayApp(text,extra,re){return new Promise(res=>{const id='s'+(++sayTok);if(re)sayReq.set(id,String(re));const p=Object.assign({},extra||{},{text:text,id:id});if(!appSpeaksBack()){post(PROTO.toApp.say,p);sayOutcome='sent';res('sent');return;}let done=false;const fin=c=>{if(done)return;done=true;sayOutcome=c||'done';sayWait.delete(id);beatWait.delete(id);res(sayOutcome);};sayWait.set(id,fin);post(PROTO.toApp.say,p);
   /* with beats the length guess is gone - the beat IS the measurement; 120 s stays only as a ceiling */
-  setTimeout(fin,appBeats()?120000:Math.min(120000,6000+text.length*160));
-  if(appBeats()){let w=setTimeout(lost,BEAT_LOST);function lost(){if(done)return;fail('P_SPEAK_LOST',null,'no beat '+BEAT_LOST);fin();}
+  setTimeout(()=>fin('ceiling'),appBeats()?120000:Math.min(120000,6000+text.length*160));
+  if(appBeats()){let w=setTimeout(lost,BEAT_LOST);function lost(){if(done)return;fail('P_SPEAK_LOST',null,'no beat '+BEAT_LOST);fin('lost');}
     beatWait.set(id,()=>{clearTimeout(w);if(!done)w=setTimeout(lost,BEAT_LOST);});}});}
 function say(text){return new Promise(res=>{if(appMode){res();return;}if(!('speechSynthesis' in window)){res();return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='he-IL';if(voice)u.voice=voice;u.rate=1.3;u.onend=res;u.onerror=res;speechSynthesis.speak(u);setTimeout(res,Math.min(20000,1500+text.length*90));});}

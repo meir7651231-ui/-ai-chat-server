@@ -100,8 +100,12 @@ function mintId(){const t=Date.now();if(t===mintLast)mintSeq++;else{mintLast=t;m
   return t.toString(36).padStart(9,'0')+mintSeq.toString(36).padStart(4,'0')+r.toString(36).padStart(7,'0');}
 /* budget-contract-gate: the collection contract (channel-budget.json), baked in at build time */
 const BUDGET={"v":1,"ceiling":4000,"c":{"inbox":{"cap":200,"ttlDays":2,"cls":"voice","time":"ts"},"tasks":{"cap":60,"ttlDays":3,"cls":"state","time":"updatedAt"},"sessions":{"cap":60,"ttlDays":30,"cls":"state","time":"updatedAt"},"gallery":{"cap":150,"cls":"record","time":"ts"},"req":{"cap":800,"ttlDays":14,"cls":"record","time":"askedAt"},"chat/log/turns":{"cap":200,"ttlDays":2,"cls":"record","time":"ts"},"decisions/log/items":{"cap":120,"ttlDays":7,"cls":"record","time":"ts"},"crashes":{"cap":40,"ttlDays":7,"cls":"telemetry","time":"ts"},"telemetry/events/items":{"cap":400,"ttlDays":7,"cls":"telemetry","time":"ts"},"metrics/daily/days":{"cap":60,"cls":"telemetry","time":"at"},"memory/notes/items":{"cap":300,"cls":"record","time":"ts"},"memory/prefs/items":{"cap":100,"cls":"record","time":"ts"},"fold":{"cap":400,"cls":"janitor","time":"at"},"pulse":{"cap":4,"cls":"fixed","time":"at"},"ledger":{"cap":40,"ttlDays":30,"cls":"fixed","time":"at"},"channel":{"cap":12,"cls":"state","time":"at"},"chat":{"cap":4,"cls":"voice","time":"at"},"memory":{"cap":12,"cls":"record","time":"at"}}};
+/* test hook: tests/inbox.chaos.js runs two instances in one browser and names them, so each keeps its own local
+   stores like two devices would. A real page is never named, and its keys stay liba.<name>. */
+const LS_SUFFIX=(()=>{try{return window.__LIBA_INSTANCE?'.'+String(window.__LIBA_INSTANCE).replace(/[^a-z0-9]/gi,''):'';}catch(e){return '';}})();
+const LSK=k=>'liba.'+k+LS_SUFFIX;
 /* one stable id per browser profile: the janitor's lease holder, and the by on every document this page creates */
-let PAGE_ID='';try{PAGE_ID=localStorage.getItem('liba.jid')||'';if(!PAGE_ID){PAGE_ID='p-'+mintId();localStorage.setItem('liba.jid',PAGE_ID);}}catch(e){PAGE_ID='p-'+mintId();}
+let PAGE_ID='';try{PAGE_ID=localStorage.getItem(LSK('jid'))||'';if(!PAGE_ID){PAGE_ID='p-'+mintId();localStorage.setItem(LSK('jid'),PAGE_ID);}}catch(e){PAGE_ID='p-'+mintId();}
 /* write-clearinghouse: every path above has a class, and every write through P goes through ch(), which knows
    the budget. When the database fills, telemetry is refused first, then records, then state - speech (voice) is
    never refused. A quota error is caught by name, said aloud once, and the page degrades at once. Nothing at the
@@ -249,11 +253,14 @@ const appBeats=()=>{const h=hasCap('beat');return h!==null?h:verAtLeast(3,16);},
 let appCaps=null,appPv=0;
 const hasCap=c=>appCaps?appCaps.indexOf(c)>=0:null;
 function appSpeaksBack(){const h=hasCap('spoke');return h!==null?h:verAtLeast(3,14);}
-/* v36: in the app, wait until the phone finished speaking before acking the next message */
-function sayApp(text,extra,re){return new Promise(res=>{const id='s'+(++sayTok);if(re)sayReq.set(id,String(re));const p=Object.assign({},extra||{},{text:text,id:id});if(!appSpeaksBack()){post(PROTO.toApp.say,p);res();return;}let done=false;const fin=()=>{if(done)return;done=true;sayWait.delete(id);beatWait.delete(id);res();};sayWait.set(id,fin);post(PROTO.toApp.say,p);
+/* v36: in the app, wait until the phone finished speaking before acking the next message.
+   inbox-lease: it resolves with how the speech ended - done/guard from the phone, lost (no beat), ceiling, or sent
+   (an app that never reports) - and the last outcome is kept for the mailbox to decide delivered or not. */
+let sayOutcome='done';
+function sayApp(text,extra,re){return new Promise(res=>{const id='s'+(++sayTok);if(re)sayReq.set(id,String(re));const p=Object.assign({},extra||{},{text:text,id:id});if(!appSpeaksBack()){post(PROTO.toApp.say,p);sayOutcome='sent';res('sent');return;}let done=false;const fin=c=>{if(done)return;done=true;sayOutcome=c||'done';sayWait.delete(id);beatWait.delete(id);res(sayOutcome);};sayWait.set(id,fin);post(PROTO.toApp.say,p);
   /* with beats the length guess is gone - the beat IS the measurement; 120 s stays only as a ceiling */
-  setTimeout(fin,appBeats()?120000:Math.min(120000,6000+text.length*160));
-  if(appBeats()){let w=setTimeout(lost,BEAT_LOST);function lost(){if(done)return;fail('P_SPEAK_LOST',null,'no beat '+BEAT_LOST);fin();}
+  setTimeout(()=>fin('ceiling'),appBeats()?120000:Math.min(120000,6000+text.length*160));
+  if(appBeats()){let w=setTimeout(lost,BEAT_LOST);function lost(){if(done)return;fail('P_SPEAK_LOST',null,'no beat '+BEAT_LOST);fin('lost');}
     beatWait.set(id,()=>{clearTimeout(w);if(!done)w=setTimeout(lost,BEAT_LOST);});}});}
 function say(text){return new Promise(res=>{if(appMode){res();return;}if(!('speechSynthesis' in window)){res();return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='he-IL';if(voice)u.voice=voice;u.rate=1.3;u.onend=res;u.onerror=res;speechSynthesis.speak(u);setTimeout(res,Math.min(20000,1500+text.length*90));});}
 
@@ -291,8 +298,8 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:50,pageHash:"10c5c70e5b10",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
-  else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:51,pageHash:"6c75dcc08054",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+  else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f(String(d.cause||'done'));}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
   else if(d.liba===PROTO.toPage.trace&&d.events&&db){trBridge(String(d.batch||''),String(d.events));}
@@ -302,7 +309,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
 });
 let pendingInput=null,pendingT=null;
 ['pointerdown','click','touchstart'].forEach(ev=>document.addEventListener(ev,()=>{if(pendingInput){const t=pendingInput;pendingInput=null;clearTimeout(pendingT);send(t);}},true));
-try{seen=localStorage.getItem('liba.seen');}catch(e){fail('P_STORE',e,'get seen');}
+try{seen=localStorage.getItem(LSK('seen'));}catch(e){fail('P_STORE',e,'get seen');}
 const TR=$('tr');
 function bubble(cls,text){const d=document.createElement('div');d.className=cls;d.textContent=text;TR.appendChild(d);while(TR.children.length>8)TR.firstChild.remove();TR.scrollTop=TR.scrollHeight;TR.hidden=false;return d;}
 /* windowed-reads: no live read of a whole collection. Each is a bounded window (at most 160 documents in all,
@@ -321,7 +328,7 @@ function coldGet(ref,where,n){let q=ref;(where||[]).forEach(w=>{q=q.where(w[0],w
    (the real channel had one: an update command) is still heard. */
 let inboxOpen=new Map(),inboxNew=new Map();
 function inboxMerged(){const m=new Map(inboxNew);inboxOpen.forEach((v,k)=>m.set(k,v));return [...m.values()];}
-function onInbox(){const items=inboxMerged().filter(d=>{if(d.spoken||d.expired||!(d.text||d.kind==='cmd'))return false;if(spokenDone(d.id)){P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),repaired:true}).catch(e=>fail('P_ACK',e,'repair'));return false;}return !spokenLocal.has(d.id);}).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();}
+function onInbox(){const items=inboxMerged().filter(d=>{if(d.spoken||d.expired||d.failed||!(d.text||d.kind==='cmd'))return false;if(spokenDone(d.id)){P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),repaired:true}).catch(e=>fail('P_ACK',e,'repair'));return false;}return !spokenLocal.has(d.id);}).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();}
 (async()=>{
   const c=window.claude;
   if(!c||!c.use){setSt('אין חיבור','warn');log('הדף צריך להיפתח מ‑claude.ai');return;}
@@ -351,10 +358,10 @@ const inboxQ=[],spokenLocal=new Set(),sendQ=[];let pumping=false,owner='liba',ow
    before speaking, so nothing is read twice in one load; spokenStore is written only AFTER the speech ends,
    so a reload in the middle of a sentence still reads it again, while one after the sentence does not. */
 const SPOKEN_TTL=72*3600*1000;let spokenStore={};
-try{spokenStore=JSON.parse(localStorage.getItem('liba.spoken')||'{}')||{};}catch(e){fail('P_STORE',e,'get spoken');}
+try{spokenStore=JSON.parse(localStorage.getItem(LSK('spoken'))||'{}')||{};}catch(e){fail('P_STORE',e,'get spoken');}
 function spokenDone(id){const t=spokenStore[id];return !!t&&Date.now()-t<SPOKEN_TTL;}
 function spokenMark(id){const now=Date.now();spokenStore[id]=now;for(const k in spokenStore)if(now-spokenStore[k]>SPOKEN_TTL)delete spokenStore[k];
-  try{localStorage.setItem('liba.spoken',JSON.stringify(spokenStore));}catch(e){fail('P_STORE',e,'set spoken');}}
+  try{localStorage.setItem(LSK('spoken'),JSON.stringify(spokenStore));}catch(e){fail('P_STORE',e,'set spoken');}}
 /* a message's age is part of its meaning (page-kernel). Past AGE_SAY it is read with its age; a plain
    announcement past EXPIRE is not read at all but marked expired. Questions never expire - they still
    need an answer - and commands never expire, they still need to run. */
@@ -367,7 +374,7 @@ function expired(d){const lim=EXPIRE[d.kind||'say'];return !!lim&&!d.priority&&a
 window.__kernel={state:()=>state,illegal:()=>illegalMoves,log:stateLog,forgetLoad:()=>spokenLocal.clear(),spoken:()=>Object.assign({},spokenStore)};
 function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.some(x=>x.id===d.id)&&!spokenLocal.has(d.id))inboxQ.push(d);pump();}
 /* step 19: priority – urgent bypasses quiet; morning waits for 08:00 */
-function ready(d){if(d.kind==='cmd')return appMode;const p=d.priority||'normal';if(p==='urgent')return true;if(p==='morning'){const h=new Date().getHours();if(h<8||h>=22)return false;}if(quietUntil>Date.now())return false;return true;}
+function ready(d){if(d.retryAt>Date.now())return false;if(d.kind==='cmd')return appMode;const p=d.priority||'normal';if(p==='urgent')return true;if(p==='morning'){const h=new Date().getHours();if(h<8||h>=22)return false;}if(quietUntil>Date.now())return false;return true;}
 const NAMES={liba:'ליבה',manager:'המנהל',architect:'האדריכל',builder:'סוכן הבנייה'};
 const KINDW={ask:'שאלה',stuck:'נתקע',done:'סיים'};
 function speakerOf(d){if(d.speaker)return d.speaker;if(/^arch/i.test(d.id||''))return 'האדריכל';return NAMES[d.from||'liba']||d.from||'ליבה';}
@@ -376,8 +383,25 @@ async function pump(){if(pumping||!isArmed())return;pumping=true;try{const n=inb
   if(n>=2){const asks=inboxQ.filter(d=>ready(d)&&(d.kind==='ask'||d.kind==='stuck')).length;await incoming({id:'batch-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:asks?'stuck':'say',noListen:true,text:'הצטברו '+n+' הודעות'+(asks?', '+asks+' מהן שאלות. אקרא אותן ברצף, צלצול אחד.':'. אקרא אותן ברצף.')});}
   for(;;){let i=inboxQ.findIndex(d=>ready(d)&&d.kind==='cmd');if(i<0)i=inboxQ.findIndex(ready);if(i<0)break;const d=inboxQ.splice(i,1)[0];if(spokenLocal.has(d.id))continue;if(d.kind==='cmd'){if(!appMode){spokenLocal.add(d.id);continue;}spokenLocal.add(d.id);await incoming(d);spokenMark(d.id);continue;}spokenLocal.add(d.id);
     if(!d.local&&expired(d)){spokenMark(d.id);try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now()});}catch(e){fail('P_ACK',e,'expire');}continue;}
-    if(!d.local){d.again=!!d.speakingAt&&!d.spoken;P.inboxDoc(d.id).update({speakingAt:Date.now()}).catch(e=>fail('P_ACK',e,'speakingAt'));}
-    try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;spokenMark(d.id);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'inbox');log('ack: '+(e.code||e));}}}finally{pumping=false;if(inboxQ.length){clearTimeout(pumpTimer);pumpTimer=setTimeout(pump,60000);log(inboxQ.length+' הודעות מחכות (שקט/בוקר)');}}}
+    /* inbox-lease: claim before speaking. Another instance holding the claim is speaking it - try again after the claim
+       would have lapsed; a claim left by a page that died lapses by itself, so nothing is lost and nothing is said twice */
+    if(!d.local){const c=await inboxClaim(d);if(c==='busy'){spokenLocal.delete(d.id);d.retryAt=Date.now()+INBOX_RETRY;inboxQ.push(d);continue;}
+      d.again=!!d.speakingAt&&!d.spoken;d.attempts=+(d.delivery&&d.delivery.attempts)||0;
+      P.inboxDoc(d.id).update({speakingAt:Date.now(),delivery:{state:'speaking',by:PAGE_ID,at:Date.now(),attempts:d.attempts}}).catch(e=>fail('P_ACK',e,'speakingAt'));}
+    sayOutcome='done';try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;
+    /* the voice went silent without finishing (no beat, or the ceiling): not delivered - back to pending, three tries */
+    if(sayOutcome==='lost'||sayOutcome==='ceiling'){spokenLocal.delete(d.id);await inboxRetry(d,sayOutcome);continue;}
+    spokenMark(d.id);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),delivery:{state:'spoken',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'inbox');log('ack: '+(e.code||e));}}}
+  finally{pumping=false;if(inboxQ.length){clearTimeout(pumpTimer);const now=Date.now(),soon=inboxQ.filter(x=>x.retryAt>now).map(x=>x.retryAt).sort((a,b)=>a-b)[0];
+    pumpTimer=setTimeout(pump,soon?Math.max(500,soon-now+50):60000);if(!soon)log(inboxQ.length+' הודעות מחכות (שקט/בוקר)');}}}
+const INBOX_CLAIM=90000,INBOX_RETRY=15000,INBOX_TRIES=3;
+async function inboxClaim(d){try{const r=await P.inboxDoc(d.id).acquire({holder:PAGE_ID,ttlMs:INBOX_CLAIM});return r&&r.acquired===false?'busy':'ok';}
+  catch(e){fail('P_ACK',e,'claim');return 'ok';} /* a store without leases: speak anyway - silence is worse than a rare repeat */}
+async function inboxRetry(d,why){const attempts=(d.attempts||0)+1;
+  if(attempts>=INBOX_TRIES){spokenMark(d.id);try{await P.inboxDoc(d.id).update({failed:true,failedAt:Date.now(),delivery:{state:'failed',by:PAGE_ID,at:Date.now(),attempts:attempts,lastError:why}});}catch(e){fail('P_ACK',e,'failed');}
+    queueLocal({id:'failed-'+d.id,kind:'say',speaker:'ליבה',topic:'הודעה',text:'יש הודעה שלא הצלחתי להקריא שלוש פעמים'+(d.topic?', בנוגע ל'+d.topic:'')+'. היא נשארת בערוץ.'});return;}
+  try{await P.inboxDoc(d.id).update({delivery:{state:'pending',by:PAGE_ID,at:Date.now(),attempts:attempts,lastError:why}});}catch(e){fail('P_ACK',e,'retry');}
+  d.attempts=attempts;d.delivery={attempts:attempts};d.retryAt=Date.now()+2000;inboxQ.push(d);}
 // 12: switch who holds the channel, by voice, without leaving the page
 function quietCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(בטל|סיים|תפסיק)( את)? (השקט|שקט)$|^תפריע$|^אפשר להפריע$|^שקט נגמר$/.test(t)){setQuiet(0);return true;}
@@ -502,7 +526,7 @@ async function incoming(d){
   d.text=typeof d.text==='string'?d.text:String(d.text==null?'':d.text);
   d.options=Array.isArray(d.options)?d.options.map(o=>String(o)).filter(o=>o.length):[];
   if(d.re&&!d.local)bindReply(d);
-  cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem('liba.seen',d.id);}catch(e){fail('P_STORE',e,'set seen');}
+  cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem(LSK('seen'),d.id);}catch(e){fail('P_STORE',e,'set seen');}
   if(rec){try{rec.abort();}catch(e){fail('P_SR',e,'abort');}}
   transition('SPEAKING','incoming '+(d.kind||'say'));try{
   TR.querySelectorAll('.think').forEach(x=>x.remove());
@@ -539,9 +563,9 @@ $('ack').addEventListener('click',()=>send('הבנתי, תמשיך',null,'option
    and before any resend the request is checked in the database - if it already went out, it is dropped.
    localStorage and not IndexedDB: it already works inside this iframe, and each write is atomic. */
 const LEASE=60000;
-let outbox=[];try{outbox=JSON.parse(localStorage.getItem('liba.outbox')||'[]');}catch(e){fail('P_STORE',e,'get outbox');}
+let outbox=[];try{outbox=JSON.parse(localStorage.getItem(LSK('outbox'))||'[]');}catch(e){fail('P_STORE',e,'get outbox');}
 outbox=outbox.map(it=>Object.assign({phase:'queued',leaseUntil:0,attempts:0},it,{req:it.req||('legacy-'+mintId())}));
-function saveOutbox(){try{localStorage.setItem('liba.outbox',JSON.stringify(outbox));}catch(e){fail('P_STORE',e,'set outbox');}}
+function saveOutbox(){try{localStorage.setItem(LSK('outbox'),JSON.stringify(outbox));}catch(e){fail('P_STORE',e,'set outbox');}}
 const walFind=req=>outbox.find(x=>x.req===req);
 function walPut(it){outbox=outbox.filter(x=>x.req!==it.req);outbox.push(it);saveOutbox();}
 function walLease(req){const it=walFind(req);if(!it)return null;it.phase='sending';it.leaseUntil=Date.now()+LEASE;it.attempts=(it.attempts||0)+1;saveOutbox();return it;}
@@ -746,7 +770,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   const body=pulseClean(d.body);const sig=JSON.stringify(Object.assign({},body,{lastHeard:0,lastSpoke:0,since:0,why:''}));const last=pulseLast[dev];
   if(last&&last.sig===sig&&now-last.at<PULSE_EVERY)return false;
   pulseLast[dev]={sig:sig,at:now};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"10c5c70e5b10"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"6c75dcc08054"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;

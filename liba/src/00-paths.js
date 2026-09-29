@@ -26,8 +26,12 @@ function mintId(){const t=Date.now();if(t===mintLast)mintSeq++;else{mintLast=t;m
   return t.toString(36).padStart(9,'0')+mintSeq.toString(36).padStart(4,'0')+r.toString(36).padStart(7,'0');}
 /* budget-contract-gate: the collection contract (channel-budget.json), baked in at build time */
 const BUDGET=__BUDGET__;
+/* test hook: tests/inbox.chaos.js runs two instances in one browser and names them, so each keeps its own local
+   stores like two devices would. A real page is never named, and its keys stay liba.<name>. */
+const LS_SUFFIX=(()=>{try{return window.__LIBA_INSTANCE?'.'+String(window.__LIBA_INSTANCE).replace(/[^a-z0-9]/gi,''):'';}catch(e){return '';}})();
+const LSK=k=>'liba.'+k+LS_SUFFIX;
 /* one stable id per browser profile: the janitor's lease holder, and the by on every document this page creates */
-let PAGE_ID='';try{PAGE_ID=localStorage.getItem('liba.jid')||'';if(!PAGE_ID){PAGE_ID='p-'+mintId();localStorage.setItem('liba.jid',PAGE_ID);}}catch(e){PAGE_ID='p-'+mintId();}
+let PAGE_ID='';try{PAGE_ID=localStorage.getItem(LSK('jid'))||'';if(!PAGE_ID){PAGE_ID='p-'+mintId();localStorage.setItem(LSK('jid'),PAGE_ID);}}catch(e){PAGE_ID='p-'+mintId();}
 /* write-clearinghouse: every path above has a class, and every write through P goes through ch(), which knows
    the budget. When the database fills, telemetry is refused first, then records, then state - speech (voice) is
    never refused. A quota error is caught by name, said aloud once, and the page degrades at once. Nothing at the
