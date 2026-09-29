@@ -8,7 +8,7 @@ function snapDoc(path){const d=docs.get(path);return {exists:!!d,data:()=>d?JSON
 function notify(path){const c=colOf(path);(colSubs.get(c)||[]).forEach(cb=>cb(colSnap(c)));(docSubs.get(path)||[]).forEach(cb=>cb(snapDoc(path)));}
 function colSnap(c){const n=parts(c).length;const out=[];for(const [p,d] of docs){const a=parts(p);if(a.length===n+1&&a.slice(0,n).join('/')===c)out.push({id:a[n],data:()=>JSON.parse(JSON.stringify(d)),ref:docRef(p)});}return {docs:out};}
 function docRef(path){return {path,collection:n=>colRef(path+'/'+n),
- set:async d=>{if(parts(path).length%2)throw Object.assign(new Error('bad doc path '+path),{code:'bad_path'});docs.set(path,JSON.parse(JSON.stringify(d)));notify(path);},
+ set:async d=>{if(window.__quotaPath&&path.indexOf(window.__quotaPath)===0)throw Object.assign(new Error('quota'),{code:'resource_exhausted'});if(parts(path).length%2)throw Object.assign(new Error('bad doc path '+path),{code:'bad_path'});docs.set(path,JSON.parse(JSON.stringify(d)));notify(path);},
  update:async d=>{if(!docs.has(path))throw Object.assign(new Error('missing '+path),{code:'not_found'});docs.set(path,Object.assign(docs.get(path),JSON.parse(JSON.stringify(d))));notify(path);},
  delete:async()=>{docs.delete(path);notify(path);},
  get:async()=>snapDoc(path),
@@ -16,7 +16,7 @@ function docRef(path){return {path,collection:n=>colRef(path+'/'+n),
 function colRef(c){return {path:c,doc:id=>docRef(c+'/'+id),get:async()=>colSnap(c),
  onSnapshot:(cb,err)=>{if(parts(c).length%2===0){if(err)err({code:'bad_collection_path'});throw new Error('bad collection path '+c);}if(!colSubs.has(c))colSubs.set(c,[]);colSubs.get(c).push(cb);setTimeout(()=>cb(colSnap(c)),0);return()=>{};}};}
 const db={doc:p=>{if(parts(p).length%2)throw new Error('bad doc path '+p);return docRef(p);},collection:c=>colRef(c)};
-const sent=[],sentRaw=[];const comments={canSendToClaude:async()=>'available',anchorFor:async()=>({}),sendToClaude:async o=>{sentRaw.push(o.text);sent.push(String(o.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));window.parent.postMessage({harness:'sent',text:o.text},'*');}};
+const sent=[],sentRaw=[];const comments={canSendToClaude:async()=>{if(window.__slowSend)await new Promise(r=>setTimeout(r,window.__slowSend));return 'available';},anchorFor:async()=>({}),sendToClaude:async o=>{sentRaw.push(o.text);sent.push(String(o.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));window.parent.postMessage({harness:'sent',text:o.text},'*');}};
 window.claude={use:async n=>n==='db'?db:n==='comments'?comments:null};
 window.__h={db,docs,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSnap(c).docs.map(x=>({id:x.id,...x.data()})),sent,sentRaw};
 })();`;
@@ -295,6 +295,32 @@ const failed = [];
   await p.evaluate(() => window.app({ liba: 'input', text: 'משפט-כפול' })); await flush(2600);
   const after = (await H(() => window.__h.sent.slice())).filter(t => /משפט-כפול/.test(t)).length;
   check(after - before === 1, 'the same sentence said twice within five seconds is sent once: ' + (after - before));
+  // write-clearinghouse: near the quota telemetry is refused first; speech is never refused
+  await set('channel/budget', { docs: 20000, limit: 25000 }); await flush(600);
+  const telBefore = (await H(() => window.__h.all('telemetry/events/items'))).length;
+  await H(() => { window.__trace.fail('P_AUDIO', new Error('x'), 'budget-test'); window.__trace.flush(); }); await flush(3800);
+  const telAfter = (await H(() => window.__h.all('telemetry/events/items'))).length;
+  const denied = await H(() => window.__ch.denied());
+  check(telAfter === telBefore && denied.telemetry > 0, 'budget: at 80% of the quota telemetry is refused: ' + JSON.stringify(denied));
+  await set('inbox/bud1', { text: 'דיבור-בזמן-תקציב', kind: 'say', from: 'liba', ts: Date.now() }); await speakOut();
+  check((await get('inbox/bud1') || {}).spoken === true, 'budget: speech still goes through - its ack is written');
+  await set('channel/budget', { docs: 900, limit: 25000 }); await flush(400);
+  // a real quota error, caught by name: said aloud within two seconds, and the page degrades at once
+  await H(() => { window.__quotaPath = 'chat/log'; });
+  const q0 = Date.now();
+  await set('inbox/bud2', { text: 'גורם-לכתיבת-יומן', kind: 'say', from: 'liba', ts: Date.now() });
+  let full = []; for (let i = 0; i < 8 && !full.length; i++) { await speakOut(300); full = said('המסד מלא') }
+  check(full.length >= 1 && Date.now() - q0 < 4000, 'budget: a quota error is said aloud within seconds: ' + (Date.now() - q0) + 'ms');
+  check((await H(() => window.__ch.budget())).docs >= 25000, 'budget: after a quota error the page stops non-speech writes at once');
+  await H(() => { window.__quotaPath = null; }); await set('channel/budget', { docs: 900, limit: 25000 }); await flush(400);
+  // wal-queue: WHILE a sentence is on its way it is already written down, leased - a page that dies now keeps it
+  await H(() => { window.__slowSend = 3000; });
+  await p.evaluate(() => window.app({ liba: 'input', text: 'נכתב-לפני-שנשלח' })); await flush(2600);
+  const inFlight = await H(() => JSON.parse(localStorage.getItem('liba.outbox') || '[]').filter(x => /נכתב-לפני-שנשלח/.test(x.text)));
+  check(inFlight.length === 1 && inFlight[0].phase === 'sending' && inFlight[0].leaseUntil > Date.now(), 'wal: during the send the sentence is already in the outbox, leased: ' + JSON.stringify(inFlight.map(x => x.phase)));
+  await flush(3000); await H(() => { window.__slowSend = 0; });
+  const gone = await H(() => JSON.parse(localStorage.getItem('liba.outbox') || '[]').filter(x => /נכתב-לפני-שנשלח/.test(x.text)).length);
+  check(gone === 0, 'wal: once delivered it is removed - by its request id');
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

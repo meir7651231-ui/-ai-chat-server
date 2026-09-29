@@ -7,6 +7,7 @@
   if(!db){setSt('אין מסד','warn');log('db לא זמין בתצוגה הזו');return;}
   setSt('מחובר','on');
   P.gallery().onSnapshot(q=>{galleryList=q.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>(b.ts||0)-(a.ts||0));},e=>fail('P_DB_READ',e,'gallery'));
+  P.budget().onSnapshot(s=>{const d=(s.exists&&s.data())||{};chBudget={docs:+d.docs||0,limit:+d.limit||25000,bypass:!!d.bypass};},e=>fail('P_DB_READ',e,'channel/budget'));
   P.settings().onSnapshot(s=>{if(s.exists&&s.data())memSettings=Object.assign(memSettings,s.data());},e=>fail('P_DB_READ',e,'memory/settings'));
   P.sessions().onSnapshot(q=>{sessionsList=q.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));renderMap();},e=>fail('P_DB_READ',e,'sessions'));
   P.tasks().onSnapshot(q=>{const list=q.docs.map(d=>Object.assign({id:d.id},d.data())).filter(t=>t.status!=='archived').sort((a,b)=>((b.priority||0)-(a.priority||0))||((b.updatedAt||0)-(a.updatedAt||0)));
