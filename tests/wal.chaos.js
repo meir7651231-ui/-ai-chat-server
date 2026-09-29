@@ -25,7 +25,11 @@ const ROUNDS = +process.env.CHAOS || 60;
   await p.goto('file://' + tmp + '/host.html');
   const frame = () => p.frames().find(f => f.url().includes('inner.html'));
   const ready = async () => { for (let i = 0; i < 50; i++) { const f = frame(); try { if (f && await f.evaluate(() => !!(window.__h && window.claude))) return f } catch {} await p.waitForTimeout(100) } throw new Error('frame did not boot') };
-  const hello = async () => { await ready(); await p.waitForTimeout(250); await p.evaluate(() => window.app({ liba: 'hello', ver: '3.20.0', pv: 1, caps: ['spoke', 'beat', 'trace', 'proto', 'clock', 'state'], wall: Date.now() })) };
+  // the bubble says hello when the page has loaded; a fixed 250 ms guess lost it under load (the page ended OFFLINE with
+  // an empty transition log, and its queue never drained). Say it until the page is really armed, like a real handshake.
+  const hello = async () => { for (let i = 0; i < 40; i++) { const f = await ready(); await p.waitForTimeout(250);
+    await p.evaluate(() => window.app({ liba: 'hello', ver: '3.20.0', pv: 1, caps: ['spoke', 'beat', 'trace', 'proto', 'clock', 'state'], wall: Date.now() }));
+    await p.waitForTimeout(150); try { if (await f.evaluate(() => window.__kernel && window.__kernel.state() !== 'OFFLINE')) return } catch {} } throw new Error('the page never took hello') };
   await hello(); await (await ready()).evaluate(() => localStorage.setItem('__flaky', '1'));
   let load = 0, n = 0; const completed = {}, sentInputs = [];
   const pump = async (ms) => { // answer every say with spoke after a random speaking time - unless the page dies first
