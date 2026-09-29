@@ -3,9 +3,12 @@
   "private": true,
   "scripts": {
     "build": "node liba/build.mjs",
+    "test": "node tests/page.test.js && node tests/req-spine.test.js && node tests/page.e2e.js && node tests/bridge.e2e.js",
+    "mutate": "node tests/mutate.mjs",
     "gates": "node gates/run.mjs"
   },
   "devDependencies": {
-    "esbuild": "0.28.2"
+    "esbuild": "0.28.2",
+    "playwright": "1.56.1"
   }
 }

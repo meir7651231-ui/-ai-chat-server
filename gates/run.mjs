@@ -7,12 +7,13 @@ import { fileURLToPath } from 'node:url'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, '..')
-const gates = readdirSync(here).filter(f => f.endsWith('.mjs') && f !== 'run.mjs').sort()
+const gates = readdirSync(here).filter(f => f.endsWith('.mjs') && f !== 'run.mjs' && f !== 'field.mjs').sort()
 const extra = [
   ['page-static', 'node tests/page.test.js'],
-  ['page-live', 'NODE_PATH=$(npm root -g) node tests/page.e2e.js'],
-  ['bridge-live', 'NODE_PATH=$(npm root -g) node tests/bridge.e2e.js'],
+  ['page-live', 'node tests/page.e2e.js'],
+  ['bridge-live', 'node tests/bridge.e2e.js'],
   ['req-ids', 'node tests/req-spine.test.js'],
+  ['key-rotation', 'bash keys/rotation-drill.sh'],
 ]
 
 let pass = 0
@@ -31,7 +32,8 @@ for (const [name, cmd] of extra) {
     const out = execFileSync('bash', ['-lc', cmd], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })
     const fails = (out.match(/^FAIL/gm) || []).length
     if (fails) throw new Error(out.split('\n').filter(l => l.startsWith('FAIL')).slice(0, 3).join(' | '))
-    lines.push(`✓ ${name.padEnd(14)} ${(out.match(/^PASS/gm) || []).length} בדיקות`); pass++
+    const n = (out.match(/^PASS/gm) || []).length
+    lines.push(`✓ ${name.padEnd(14)} ${n ? n + ' בדיקות' : out.trim().split('\n').pop()}`); pass++
   } catch (e) {
     lines.push(`✗ ${name.padEnd(14)} ${String(e.message || e).trim().split('\n').slice(0, 3).join(' | ')}`)
   }
@@ -39,4 +41,8 @@ for (const [name, cmd] of extra) {
 const total = gates.length + extra.length
 console.log(lines.join('\n'))
 console.log(`\n${pass}/${total} שערים עברו`)
+// the field is its own category: what the phone reported, not what the repo says. Printed every time,
+// never folded into the count - a phone that is offline is neither a pass nor a code failure.
+try { const out = execFileSync('node', [join(here, 'field.mjs')], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }); console.log('שטח:\n' + out.trim().replace(/^/gm, '  ')) }
+catch (e) { console.log('שטח:\n' + String(e.stdout || '').trim().replace(/^/gm, '  ')) }
 process.exit(pass === total ? 0 : 1)

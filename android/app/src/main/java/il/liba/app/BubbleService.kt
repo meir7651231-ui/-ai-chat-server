@@ -343,6 +343,20 @@ class BubbleService : Service(), LibaWeb.Bridge {
 
     // ---------- update check ----------
     /** step 92: download the new APK and hand it to the package installer – no browser, no file manager. */
+    /** SHA-256 of each signing certificate - of the running app, or of an APK file on disk. */
+    @Suppress("DEPRECATION")
+    private fun signers(pi: android.content.pm.PackageInfo?): Set<String> {
+        if (pi == null) return emptySet()
+        val sigs = if (Build.VERSION.SDK_INT >= 28) pi.signingInfo?.let { if (it.hasMultipleSigners()) it.apkContentsSigners else it.signingCertificateHistory } else pi.signatures
+        return (sigs ?: emptyArray()).map { s -> java.security.MessageDigest.getInstance("SHA-256").digest(s.toByteArray()).joinToString("") { "%02x".format(it) } }.toSet()
+    }
+    @Suppress("DEPRECATION")
+    private fun sameSigner(apkPath: String): Boolean {
+        val flag = if (Build.VERSION.SDK_INT >= 28) android.content.pm.PackageManager.GET_SIGNING_CERTIFICATES else android.content.pm.PackageManager.GET_SIGNATURES
+        val mine = signers(packageManager.getPackageInfo(packageName, flag))
+        val file = signers(packageManager.getPackageArchiveInfo(apkPath, flag))
+        return mine.isNotEmpty() && file.isNotEmpty() && mine.intersect(file).isNotEmpty()
+    }
     fun installUpdate() {
         val url = Prefs.updateUrl(this) ?: run { speak("אין עדכון ממתין."); return }
         if (!packageManager.canRequestPackageInstalls()) { // the installer silently drops our intent without this
@@ -378,6 +392,10 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 val info = packageManager.getPackageArchiveInfo(f.absolutePath, 0)
                     ?: run { fail = "notapk"; throw java.io.IOException("הקובץ שהתקבל אינו אפליקציה") }
                 if (info.packageName != packageName) { fail = "pkg"; throw java.io.IOException("הקובץ שהתקבל הוא אפליקציה אחרת") }
+                // (d) step release-drift: signed by the key of what is running. Android would refuse a foreign signer too,
+                // but only as "האפליקציה לא הותקנה" with no reason. Compared with the installed app rather than a
+                // constant baked into the code, so a v3 key rotation (lineage) stays possible.
+                if (!sameSigner(f.absolutePath)) { fail = "signer"; throw java.io.IOException("הקובץ חתום במפתח אחר ממה שמותקן, ולכן לא מתקינה אותו") }
                 val fileCode = if (Build.VERSION.SDK_INT >= 28) info.longVersionCode.toInt() else @Suppress("DEPRECATION") info.versionCode
                 val mine = packageManager.getPackageInfo(packageName, 0).let { if (Build.VERSION.SDK_INT >= 28) it.longVersionCode.toInt() else @Suppress("DEPRECATION") it.versionCode }
                 if (fileCode <= mine) { fail = "older"; throw java.io.IOException("זו אותה גרסה שכבר מותקנת (" + fileCode + ")") }
@@ -389,7 +407,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
                     try { startActivity(i) } catch (e: Exception) { Trace.e(Trace.Code.E_INTENT_OPEN, "installer:" + e.javaClass.simpleName) }
                     notifyIntent("התקנת ליבה", "לחץ כדי להתקין את הגרסה החדשה", i) } // a background start can be dropped silently: always leave a tappable notification
             } catch (e: Exception) { val why = e.message ?: e.toString()
-                if (fail == "sha" || fail == "notapk" || fail == "pkg" || fail == "older") Trace.e(Trace.Code.E_INSTALL_SIG, fail)
+                if (fail == "sha" || fail == "notapk" || fail == "pkg" || fail == "older" || fail == "signer") Trace.e(Trace.Code.E_INSTALL_SIG, fail)
                 else Trace.e(Trace.Code.E_INSTALL_NET, if (fail == "net") e.javaClass.simpleName else fail)
                 main.post { showLabel("הורדה נכשלה: $why", 10000); speak("ההורדה נכשלה. " + why + ". אפשר לנסות שוב מהמסך הראשי.") } }
         }.start()

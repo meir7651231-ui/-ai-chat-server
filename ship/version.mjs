@@ -20,7 +20,7 @@ export function version() {
 export function writeVersionJson({ sha256, commit, notes }) {
   const v = version()
   const url = `https://raw.githubusercontent.com/meir7651231-ui/-ai-chat-server/${commit}/dist/liba.apk`
-  const json = { ...v, url, sha256, commit, notes }
+  const json = { ...v, url, sha256, commit, notes, shippedAt: new Date().toISOString() }
   // stays at the repo root on purpose: every installed copy already reads
   // raw.githubusercontent.com/.../liba-android/version.json. Moving it would cut them off.
   writeFileSync(join(ROOT, 'version.json'), JSON.stringify(json) + '\n')
