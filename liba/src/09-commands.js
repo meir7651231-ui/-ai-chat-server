@@ -66,7 +66,14 @@ function latencyCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   return true;}
 /* step fixed-cardinality-telemetry: the phone's own state, from pulse/<dev> */
 function pulseCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(!/^(למה שתקת|למה לא ענית|למה לא דיברת|מה שלומך|מה שלום הטלפון|מה מצב הטלפון)$/.test(t))return false;whyCmd();return true;}
-function taskCmd(text){if(reqCmd(text)||latencyCmd(text)||pulseCmd(text))return true;const t=text.replace(/[?!.,]/g,'').trim();
+/* outbox-keys: what did not go out, and send it again now */
+function outboxCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
+  if(/^(מה לא נשלח|מה נתקע|מה מחכה לשליחה)$/.test(t)){const w=outbox.map(x=>String(x.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));
+    sayLocal(w.length?(w.length===1?'משפט אחד לא נשלח: ':'יש '+w.length+' משפטים שלא נשלחו: ')+w.slice(0,3).join('; ')+(w.length>3?' ועוד':'')+'.':'הכול נשלח, אין משפט שמחכה.');return true;}
+  if(/^(תשלח שוב|תנסי שוב לשלוח|תשלחי שוב)$/.test(t)){const n=outbox.length;outbox.forEach(x=>{x.phase='queued';x.leaseUntil=0;});saveOutbox();
+    sayLocal(n?'שולחת שוב '+(n===1?'משפט אחד':n+' משפטים')+'.':'אין מה לשלוח שוב.');if(n)setTimeout(flushOutbox,300);return true;}
+  return false;}
+function taskCmd(text){if(reqCmd(text)||latencyCmd(text)||pulseCmd(text)||outboxCmd(text))return true;const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(מפה|מפת המערכת|תראה מפה|מה כל הסשנים עושים|מי תקוע)$/.test(t)){mapOn=true;renderMap();const m=mapSummary();bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:'ליבה, מפת המערכת: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
   if(/^(תפתח|פתח|תפתח את התוצאה|תראה לי|תפתח תראה לי|פתח תראה לי|תפתח לי|תפתח אותו|תפתח אותה|תראה)$/.test(t)){const d=lastTasks.find(x=>x.status==='done'&&x.link)||lastTasks.find(x=>x.link);if(!d)return false;const m='פותחת: '+d.title;bubble('li',m);if(appMode){post(PROTO.toApp.cmd,{cmd:'open '+d.link});post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});}else{say(m);window.open(d.link,'_blank');}return true;}
   const pr=t.match(/^(קודם|תעדיף|עדיפות ל|תתחיל עם)\s+(את\s+)?(.+)$/);if(pr){const q=pr[3].trim();const task=lastTasks.find(x=>(x.title||'').includes(q));if(!task)return false;P.task(task.id).update({priority:Date.now(),updatedAt:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'tasks'));const m='בסדר, '+task.title+' קודם.';bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}

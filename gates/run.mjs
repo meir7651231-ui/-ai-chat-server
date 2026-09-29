@@ -15,7 +15,7 @@ const extra = [
   ['req-ids', 'node tests/req-spine.test.js'],
   ['key-rotation', 'bash keys/rotation-drill.sh'],
   ['state-table', 'node tests/machine.test.js'],
-  ['wal-chaos', 'CHAOS=45 node tests/wal.chaos.js'],
+  ['wal-chaos', 'WIPE=1 CHAOS=45 node tests/wal.chaos.js'],
   ['capacity', 'node tests/capacity.sim.js'],
   ['telemetry', 'node tests/telemetry.test.js'],
   ['budget', 'node tests/budget.gate.js && node tests/budget.gate.js --self-test'],

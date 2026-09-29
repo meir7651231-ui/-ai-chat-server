@@ -10,9 +10,10 @@ const ROUNDS = +process.env.CHAOS || 60;
   // the database and the Claude inbox survive the reload; delivery fails on purpose while __flaky is on
   STUB = STUB.replace('const docs=new Map()', "const docs=new Map(JSON.parse(localStorage.getItem('__db')||'[]'))")
     .replace('function notify(path){', "function notify(path){localStorage.setItem('__db',JSON.stringify([...docs]));")
-    .replace("canSendToClaude:async()=>'available'", "canSendToClaude:async()=>(localStorage.getItem('__flaky')==='1'&&Math.random()<0.33)?'unavailable':'available'")
+    .replace("return 'available';}", "return (localStorage.getItem('__flaky')==='all'||(localStorage.getItem('__flaky')==='1'&&Math.random()<0.33))?'unavailable':'available';}")
     .replace('sendToClaude:async o=>{sentRaw.push(o.text);', "sendToClaude:async o=>{sentRaw.push(o.text);const q=JSON.parse(localStorage.getItem('__claude')||'[]');q.push(o.text);localStorage.setItem('__claude',JSON.stringify(q));");
-  if (!/__claude/.test(STUB) || !/__db/.test(STUB)) throw new Error('chaos: the stub could not be made persistent - the harness is out of date');
+  // every injection must land: a replace that stops matching silently turns the chaos off (it did once - the flaky network)
+  if (!/__claude/.test(STUB) || !/__db/.test(STUB) || !/__flaky/.test(STUB)) throw new Error('chaos: the stub could not be made persistent/flaky - the harness is out of date');
   const page = fs.readFileSync(process.env.PAGE_FILE || path.join(__dirname, '..', 'liba-call.html'), 'utf8');
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'liba-chaos-'));
   fs.writeFileSync(tmp + '/inner.html', '<!doctype html><html><head><meta charset="utf-8"></head><body>' + page + '</body></html>');
@@ -31,6 +32,7 @@ const ROUNDS = +process.env.CHAOS || 60;
     await p.evaluate(() => window.app({ liba: 'hello', ver: '3.20.0', pv: 1, caps: ['spoke', 'beat', 'trace', 'proto', 'clock', 'state'], wall: Date.now() }));
     await p.waitForTimeout(150); try { if (await f.evaluate(() => window.__kernel && window.__kernel.state() !== 'OFFLINE')) return } catch {} } throw new Error('the page never took hello') };
   await hello(); await (await ready()).evaluate(() => localStorage.setItem('__flaky', '1'));
+  const WIPE = process.env.WIPE === '1'; let wiped = 0;
   let load = 0, n = 0; const completed = {}, sentInputs = [];
   const pump = async (ms) => { // answer every say with spoke after a random speaking time - unless the page dies first
     const end = Date.now() + ms;
@@ -51,6 +53,12 @@ const ROUNDS = +process.env.CHAOS || 60;
     // A sentence round always kills 1.7-4.2 s in - inside send() and its retries; other rounds die half the time.
     await pump(k === 1 ? 1700 + Math.random() * 2500 : 300 + Math.random() * 2500);
     if (k === 1 || Math.random() < 0.5) { load++; await p.evaluate(() => window.kill()); await hello() }
+    // outbox-keys: WIPE=1 - halfway through, the page's local outbox is erased while sentences are still waiting,
+    // then the page dies. Only the request documents in the database can bring those sentences back.
+    if (WIPE && r === Math.floor(ROUNDS / 2)) { let f2 = await ready(); await f2.evaluate(() => localStorage.setItem('__flaky', 'all'));
+      for (let j = 0; j < 3; j++) { n++; const t = 'משפט-מחוק-' + n; sentInputs.push(t); await p.evaluate(t => window.app({ liba: 'input', text: t, source: 'voice' }), t); await pump(3500); }
+      f2 = await ready(); wiped = await f2.evaluate(() => { const k = Object.keys(localStorage).filter(x => /^liba\.outbox/.test(x)); const n = k.reduce((a, x) => a + JSON.parse(localStorage.getItem(x) || '[]').length, 0); k.forEach(x => localStorage.removeItem(x)); return n; });
+      load++; await p.evaluate(() => window.kill()); await hello(); await (await ready()).evaluate(() => localStorage.setItem('__flaky', '1')) }
   }
   // settle: no more deaths, no more failures - whatever is pending must now drain exactly once
   await (await ready()).evaluate(() => localStorage.setItem('__flaky', '0'));
@@ -75,6 +83,7 @@ const ROUNDS = +process.env.CHAOS || 60;
   let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); if (!c) fails++ };
   console.log(`chaos: ${ROUNDS} rounds, ${load} page deaths, ${inbox.length} inbox messages, ${accepted.length}/${sentInputs.length} sentences accepted by the page`);
   ok(lost.length === 0, 'no inbox message is lost: ' + lost.join(','));
+  if (WIPE) ok(wiped > 0, 'wipe: the local outbox was erased with ' + wiped + ' sentences still in it - and the checks below say none was lost');
   ok(doubles.length === 0, 'no message is spoken to the end twice: ' + doubles.join(','));
   ok(dupSends.length === 0, 'no sentence reaches Claude twice: ' + dupSends.join(','));
   ok(undelivered.length === 0, 'every sentence the page accepted reached Claude: ' + undelivered.join(','));

@@ -42,6 +42,7 @@ h1.q{font-weight:300}
 .tr .me{align-self:flex-start;background:rgba(255,92,138,.12);color:var(--ink)}
 .tr .li{align-self:flex-end;background:var(--glass);border:1px solid var(--edge);color:var(--ink-2)}
 .tr .li.think{color:var(--ink-3);font-style:italic}
+.tr .me[data-st]::after{content:attr(data-st);display:block;font-size:.72em;color:var(--ink-3);margin-top:2px}
 .tog{font-size:13px;color:var(--ink-3);background:none;border:1px solid var(--ink-4);border-radius:999px;padding:6px 14px;cursor:pointer;font-family:inherit}
 .tog.on{color:var(--ok);border-color:var(--ok)}
 .tasks{width:100%;max-width:560px;display:flex;flex-direction:column;gap:6px;text-align:right}
@@ -298,7 +299,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:51,pageHash:"6c75dcc08054",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:52,pageHash:"38589e543d26",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f(String(d.cause||'done'));}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -468,7 +469,14 @@ function latencyCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   return true;}
 /* step fixed-cardinality-telemetry: the phone's own state, from pulse/<dev> */
 function pulseCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(!/^(למה שתקת|למה לא ענית|למה לא דיברת|מה שלומך|מה שלום הטלפון|מה מצב הטלפון)$/.test(t))return false;whyCmd();return true;}
-function taskCmd(text){if(reqCmd(text)||latencyCmd(text)||pulseCmd(text))return true;const t=text.replace(/[?!.,]/g,'').trim();
+/* outbox-keys: what did not go out, and send it again now */
+function outboxCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
+  if(/^(מה לא נשלח|מה נתקע|מה מחכה לשליחה)$/.test(t)){const w=outbox.map(x=>String(x.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));
+    sayLocal(w.length?(w.length===1?'משפט אחד לא נשלח: ':'יש '+w.length+' משפטים שלא נשלחו: ')+w.slice(0,3).join('; ')+(w.length>3?' ועוד':'')+'.':'הכול נשלח, אין משפט שמחכה.');return true;}
+  if(/^(תשלח שוב|תנסי שוב לשלוח|תשלחי שוב)$/.test(t)){const n=outbox.length;outbox.forEach(x=>{x.phase='queued';x.leaseUntil=0;});saveOutbox();
+    sayLocal(n?'שולחת שוב '+(n===1?'משפט אחד':n+' משפטים')+'.':'אין מה לשלוח שוב.');if(n)setTimeout(flushOutbox,300);return true;}
+  return false;}
+function taskCmd(text){if(reqCmd(text)||latencyCmd(text)||pulseCmd(text)||outboxCmd(text))return true;const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(מפה|מפת המערכת|תראה מפה|מה כל הסשנים עושים|מי תקוע)$/.test(t)){mapOn=true;renderMap();const m=mapSummary();bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:'ליבה, מפת המערכת: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
   if(/^(תפתח|פתח|תפתח את התוצאה|תראה לי|תפתח תראה לי|פתח תראה לי|תפתח לי|תפתח אותו|תפתח אותה|תראה)$/.test(t)){const d=lastTasks.find(x=>x.status==='done'&&x.link)||lastTasks.find(x=>x.link);if(!d)return false;const m='פותחת: '+d.title;bubble('li',m);if(appMode){post(PROTO.toApp.cmd,{cmd:'open '+d.link});post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});}else{say(m);window.open(d.link,'_blank');}return true;}
   const pr=t.match(/^(קודם|תעדיף|עדיפות ל|תתחיל עם)\s+(את\s+)?(.+)$/);if(pr){const q=pr[3].trim();const task=lastTasks.find(x=>(x.title||'').includes(q));if(!task)return false;P.task(task.id).update({priority:Date.now(),updatedAt:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'tasks'));const m='בסדר, '+task.title+' קודם.';bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
@@ -524,6 +532,8 @@ async function incoming(d){
   if(d.kind!=='cmd')ledgerBump('said');
   if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post(PROTO.toApp.cmd,{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return true;}
   d.text=typeof d.text==='string'?d.text:String(d.text==null?'':d.text);
+  /* outbox-keys: a reply that quotes the sentence it answers carries its ⟦#id⟧ - never read it aloud */
+  d.text=d.text.replace(/\s*⟦#[0-9a-z]+⟧/g,'');
   d.options=Array.isArray(d.options)?d.options.map(o=>String(o)).filter(o=>o.length):[];
   if(d.re&&!d.local)bindReply(d);
   cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem(LSK('seen'),d.id);}catch(e){fail('P_STORE',e,'set seen');}
@@ -572,6 +582,20 @@ function walLease(req){const it=walFind(req);if(!it)return null;it.phase='sendin
 function walRelease(req){const it=walFind(req);if(!it)return;it.phase='queued';it.leaseUntil=0;saveOutbox();}
 function walDone(req){outbox=outbox.filter(x=>x.req!==req);saveOutbox();}
 const walPending=()=>outbox.filter(x=>x.phase==='queued'||(x.phase==='sending'&&x.leaseUntil<Date.now()));
+/* outbox-keys: localStorage is the fast copy, the request documents are the durable one. When the local copy is gone
+   (cleared storage, a fresh WebView) the page rebuilds it from its own requests still marked sending or queued. A
+   request another device left behind for ten minutes is taken too - but only under the request's lease, so two
+   devices never both resend it. */
+const WAL_ABANDONED=10*60000;let walRecAt=0;
+async function walRecover(){if(!db)return 0;walRecAt=Date.now();let r;
+  try{r=await coldGet(P.reqs(),[['state','in',['sending','queued']],['askedAt','>',Date.now()-6*3600e3]],50);}catch(e){fail('P_DB_READ',e,'outbox recover');return 0;}
+  let n=0;for(const d of r.docs){const x=d.data()||{};if(walFind(d.id)||!x.text)continue;
+    if(x.by&&x.by!==PAGE_ID&&Date.now()-(+x.askedAt||0)<WAL_ABANDONED)continue;
+    outbox.push({req:d.id,text:String(x.text)+reqMark(d.id),tag:x.tag?String(x.tag).trim()+' ':tagOf(x.owner),ts:+x.askedAt||Date.now(),phase:'queued',leaseUntil:0,attempts:0,recovered:true,foreign:!!(x.by&&x.by!==PAGE_ID)});n++;}
+  if(n){saveOutbox();log('שחזרתי '+n+' משפטים שלא נשלחו מהמסד');}return n;}
+/* each of Meir's sentences shows where it is: sending, waiting, sent late, failed */
+const reqBubble=new Map();
+function bubbleState(req,st){const b=reqBubble.get(req);if(!b)return;const he={sending:'שולחת…',queued:'ממתין לרשת',sent:'',late:'נשלח באיחור',failed:'לא נשלח'}[st];if(he)b.dataset.st=he;else delete b.dataset.st;if(st==='sent'||st==='late'||st==='failed')setTimeout(()=>reqBubble.delete(req),60000);}
 let lastSent={text:'',id:'',ts:0},lastIncomingAt=0;
 function drainQ(){if(sendQ.length){const nx=sendQ.shift();setTimeout(()=>send({text:nx.text,tag:nx.tag,source:nx.source,stamps:nx.stamps}),300);return true;}return false;}
 const RETRYABLE=r=>/network|fetch|timeout|unavailable|rate|503|502|429|offline|aborted|internal/i.test(r);
@@ -596,17 +620,20 @@ async function deliverWithRetry(text,tag){
 }
 let flushing=false;
 async function flushOutbox(){
+  if(!flushing&&!outbox.length&&db&&Date.now()-walRecAt>60000)await walRecover();
   if(flushing||!walPending().length||!navigator.onLine||!comments)return;
   flushing=true;let items=[];
   let delivered=0;
   try{items=walPending();for(const it of items){
     // a sentence whose request is already sent went out before a reload: drop it, never send it twice
-    if(!/^legacy-/.test(it.req)){try{const g=await P.req(it.req).get();const st=g.exists&&(g.data()||{}).state;if(st==='sent'||st==='answered'){walDone(it.req);continue;}}catch(e){fail('P_DB_READ',e,'req before resend');}}
+    if(!/^legacy-/.test(it.req)){try{const g=await P.req(it.req).get();const st=g.exists&&(g.data()||{}).state;if(st==='sent'||st==='answered'){walDone(it.req);continue;}}catch(e){fail('P_DB_READ',e,'req before resend');}
+      /* the request's lease: another device resending the same sentence right now holds it */
+      try{const l=await P.req(it.req).acquire({holder:PAGE_ID,ttlMs:LEASE});if(l&&l.acquired===false)continue;}catch(e){fail('P_DB_WRITE',e,'req lease');}}
     if(!walLease(it.req))continue;
     const r=await deliver(it.text,it.tag);if(!r.sent){walRelease(it.req);break;}
     walDone(it.req);delivered++;
     try{P.req(it.req).update({state:'sent',sentAt:Date.now(),late:true}).catch(e=>fail('P_DB_WRITE',e,'req late'));}catch(e){}
-    post(PROTO.toApp.sent,{text:it.text,late:true});bubble('li','נשלח באיחור: '+it.text);}}
+    bubbleState(it.req,'late');post(PROTO.toApp.sent,{text:it.text,late:true});bubble('li','נשלח באיחור: '+String(it.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));}}
   finally{flushing=false;}
   if(delivered&&!walPending().length){const m='ליבה, בנוגע לשליחה: מה שאמרת נשלח עכשיו.';if(appMode)post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);}
 }
@@ -624,10 +651,10 @@ async function send(text,forcedTag,source){
   if(isBusy()){sendQ.push({text,tag,source,stamps});post(PROTO.toApp.queued,{text});return;}transition('SENDING','send');const id=cur?cur.id:'free';cur=null;
   $('typed').value='';OPTS.innerHTML='';$('ack').hidden=true;HEARD.hidden=true;
   if(text===lastSent.text&&(id==='free'||id===lastSent.id)&&Date.now()-lastSent.ts<5000){log('כפילות – לא נשלח שוב');post(PROTO.toApp.sent,{text,dup:true});transition('IDLE','duplicate');drainQ();return;}
-  bubble('me',text);const th=bubble('li think','ליבה חושבת…');
+  const mine=bubble('me',text);const th=bubble('li think','ליבה חושבת…');
   /* one request per sentence: what was said, how, to whom, and what it answered - so "how many did ליבה
      close" is a query and not a feeling */
-  const reqId=mintId();
+  const reqId=mintId();reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
   ledgerBump('req');
   try{P.req(reqId).set({text,askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending',
     t:{voice:(stamps&&+stamps.voice)||0,heard:(stamps&&+stamps.heard)||0,asked:Date.now(),skew:clockSkew,skewBad:clockSkew!=null&&Math.abs(clockSkew)>SKEW_MAX}}).catch(e=>fail('P_DB_WRITE',e,'req'));}catch(e){fail('P_DB_WRITE',e,'req');}
@@ -636,9 +663,9 @@ async function send(text,forcedTag,source){
   walPut({req:reqId,text:text+reqMark(reqId),tag,ts:Date.now(),phase:'sending',leaseUntil:Date.now()+LEASE,attempts:1});
   const r=await deliverWithRetry(text+reqMark(reqId),tag);const sent=r.sent,reason=r.reason;
   const reqState=st=>{try{P.req(reqId).update(Object.assign({state:st,at:Date.now()},st==='sent'?{sentAt:Date.now()}:{reason:String(reason||'')})).catch(e=>fail('P_DB_WRITE',e,'req state'));}catch(e){}};
-  if(sent){walDone(reqId);lastSent={text,id,ts:Date.now()};reqState('sent');}
-  else if(RETRYABLE(reason)||reason==='offline'){reqState('queued');walRelease(reqId);const off=!navigator.onLine||reason==='offline';th.textContent=off?'אין רשת – שמרתי, אשלח כשתחזור':'השליחה נכשלה ('+reason+') – שמרתי, אנסה שוב';post(PROTO.toApp.outbox,{text,n:outbox.length,reason});const msg=off?'ליבה, בנוגע לרשת: אין רשת. שמרתי את מה שאמרת, ואשלח כשהרשת תחזור.':'ליבה, בנוגע לשליחה: השרת לא קיבל את זה כרגע. שמרתי, ואשלח שוב בעוד רגע.';if(appMode)post(PROTO.toApp.say,{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else await say(msg);}
-  else{walDone(reqId);reqState('failed');th.textContent='לא הצלחתי לשלוח ('+reason+') – נסה שוב';await say('לא הצלחתי לשלוח');}
+  if(sent){walDone(reqId);lastSent={text,id,ts:Date.now()};reqState('sent');bubbleState(reqId,'sent');}
+  else if(RETRYABLE(reason)||reason==='offline'){reqState('queued');walRelease(reqId);bubbleState(reqId,'queued');const off=!navigator.onLine||reason==='offline';th.textContent=off?'אין רשת – שמרתי, אשלח כשתחזור':'השליחה נכשלה ('+reason+') – שמרתי, אנסה שוב';post(PROTO.toApp.outbox,{text,n:outbox.length,reason});const msg=off?'ליבה, בנוגע לרשת: אין רשת. שמרתי את מה שאמרת, ואשלח כשהרשת תחזור.':'ליבה, בנוגע לשליחה: השרת לא קיבל את זה כרגע. שמרתי, ואשלח שוב בעוד רגע.';if(appMode)post(PROTO.toApp.say,{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else await say(msg);}
+  else{walDone(reqId);reqState('failed');bubbleState(reqId,'failed');th.textContent='לא הצלחתי לשלוח ('+reason+') – נסה שוב';await say('לא הצלחתי לשלוח');}
   post(sent?PROTO.toApp.sent:(outbox.length&&(RETRYABLE(reason)||reason==='offline')?PROTO.toApp.queued:PROTO.toApp.error),{text,reason});
   transition('IDLE','sent');
   if(drainQ())return;
@@ -770,7 +797,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   const body=pulseClean(d.body);const sig=JSON.stringify(Object.assign({},body,{lastHeard:0,lastSpoke:0,since:0,why:''}));const last=pulseLast[dev];
   if(last&&last.sig===sig&&now-last.at<PULSE_EVERY)return false;
   pulseLast[dev]={sig:sig,at:now};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"6c75dcc08054"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"38589e543d26"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;

@@ -44,7 +44,7 @@ function query(c,q){return {path:c,
  onSnapshot:(cb,err)=>{if(parts(c).length%2===0){if(err)err({code:'bad_collection_path'});throw new Error('bad collection path '+c);}if(!colSubs.has(c))colSubs.set(c,[]);const sub={c,q,cb,err,last:new Map(),fired:false,alive};colSubs.get(c).push(sub);reads.subs++;setTimeout(()=>fire(sub),0);return()=>{const a=colSubs.get(c);a.splice(a.indexOf(sub),1);};}};}
 function colRef(c){return Object.assign(query(c,{w:[],o:null,l:0}),{doc:id=>docRef(c+'/'+id)});}
 const db={doc:p=>{if(parts(p).length%2)throw new Error('bad doc path '+p);return docRef(p);},collection:c=>colRef(c)};
-const sent=[],sentRaw=[];const comments={canSendToClaude:async()=>{if(window.__slowSend)await new Promise(r=>setTimeout(r,window.__slowSend));return 'available';},anchorFor:async()=>({}),sendToClaude:async o=>{sentRaw.push(o.text);sent.push(String(o.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));window.parent.postMessage({harness:'sent',text:o.text},'*');}};
+const sent=[],sentRaw=[];const comments={canSendToClaude:async()=>{if(window.__slowSend)await new Promise(r=>setTimeout(r,window.__slowSend));if(window.__noSend)return 'unavailable';return 'available';},anchorFor:async()=>({}),sendToClaude:async o=>{sentRaw.push(o.text);sent.push(String(o.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));window.parent.postMessage({harness:'sent',text:o.text},'*');}};
 window.claude={use:async n=>n==='db'?db:n==='comments'?comments:null};
 window.__h={db,docs,reads,leases,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSnap(c).docs.map(x=>({id:x.id,...x.data()})),sent,sentRaw};
 })();`;
@@ -395,6 +395,21 @@ const failed = [];
     check(!e2.length, 'windows: no page error on the big channel: ' + e2.join(' | '));
     await p2.close();
   }
+  // outbox-keys: a sentence that could not go out says so on its own bubble, "מה לא נשלח" lists it, "תשלח שוב" sends it
+  await H(() => { window.__noSend = true; });
+  await p.evaluate(() => window.app({ liba: 'input', text: 'משפט-בלי-רשת' })); await flush(2600); await flush(16000);
+  const st1 = await H(() => [...document.querySelectorAll('.tr .me')].filter(b => /משפט-בלי-רשת/.test(b.textContent)).map(b => b.dataset.st || '').pop());
+  check(st1 === 'ממתין לרשת', 'outbox: the sentence that did not go out shows it on its bubble: ' + st1);
+  await p.evaluate(() => window.app({ liba: 'input', text: 'מה לא נשלח' })); await speakOut(2600);
+  check(said('משפט-בלי-רשת').some(x => /לא נשלח/.test(x.text)), '"מה לא נשלח" names the waiting sentence: ' + said('לא נשלח').map(x => x.text).pop());
+  await H(() => { window.__noSend = false; });
+  await p.evaluate(() => window.app({ liba: 'input', text: 'תשלח שוב' })); await speakOut(2600); await flush(3000);
+  const sentNow = (await H(() => window.__h.sent.slice())).filter(t => /משפט-בלי-רשת/.test(t)).length;
+  const st2 = await H(() => [...document.querySelectorAll('.tr .me')].filter(b => /משפט-בלי-רשת/.test(b.textContent)).map(b => b.dataset.st || '').pop());
+  check(sentNow === 1 && st2 === 'נשלח באיחור', '"תשלח שוב" sends it once, and its bubble says it went out late: ' + JSON.stringify({ sentNow, st2 }));
+  // the id mark is for sessions, never for Meir's ears
+  await set('inbox/mark1', { text: 'תשובה עם סימן ⟦#0abc123def⟧ בסוף', kind: 'say', from: 'manager', spoken: false, ts: Date.now() }); await speakOut(2000);
+  check(said('תשובה עם סימן').length && !said('⟦').length, 'the ⟦#id⟧ mark is never read aloud: ' + said('תשובה עם סימן').map(x => x.text).pop());
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

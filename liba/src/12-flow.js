@@ -24,6 +24,8 @@ async function incoming(d){
   if(d.kind!=='cmd')ledgerBump('said');
   if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post(PROTO.toApp.cmd,{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return true;}
   d.text=typeof d.text==='string'?d.text:String(d.text==null?'':d.text);
+  /* outbox-keys: a reply that quotes the sentence it answers carries its ⟦#id⟧ - never read it aloud */
+  d.text=d.text.replace(/\s*⟦#[0-9a-z]+⟧/g,'');
   d.options=Array.isArray(d.options)?d.options.map(o=>String(o)).filter(o=>o.length):[];
   if(d.re&&!d.local)bindReply(d);
   cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem(LSK('seen'),d.id);}catch(e){fail('P_STORE',e,'set seen');}
