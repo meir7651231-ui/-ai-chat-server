@@ -41,7 +41,8 @@ function ch(ref,op,body,cls,what){
   return Promise.resolve(pr).catch(e=>{const c=String(e&&(e.code||e.name)||e);if(/quota|resource.?exhausted/i.test(c))chAlarm(c);throw e;});}
 function guardDoc(ref,cls,what){return {ref:ref,path:ref.path,get:()=>ref.get(),onSnapshot:(a,b)=>ref.onSnapshot(a,b),collection:n=>guardCol(ref.collection(n),cls,what),
   set:d=>ch(ref,'set',d,cls,what),update:d=>ch(ref,'update',d,cls,what),delete:()=>ch(ref,'delete',null,cls,what)};}
-function guardCol(ref,cls,what){return {ref:ref,path:ref.path,get:()=>ref.get(),onSnapshot:(a,b)=>ref.onSnapshot(a,b),doc:id=>guardDoc(ref.doc(id),cls,what)};}
+function guardCol(ref,cls,what){return {ref:ref,path:ref.path,get:()=>ref.get(),onSnapshot:(a,b)=>ref.onSnapshot(a,b),
+  where:(f,o,v)=>ref.where(f,o,v),orderBy:(f,d)=>ref.orderBy(f,d),limit:n=>ref.limit(n),doc:id=>guardDoc(ref.doc(id),cls,what)};}
 const P=Object.fromEntries(Object.entries(P_RAW).map(([k,f])=>[k,(...a)=>{const r=f(...a);const cls=CLS_OF[k]||'record';return typeof r.set==='function'?guardDoc(r,cls,k):guardCol(r,cls,k);}]));
 window.__ch={budget:()=>Object.assign({},chBudget),denied:()=>Object.assign({},chDenied)};
 /* text from the database goes into the DOM through this, never raw: a task title is written by other

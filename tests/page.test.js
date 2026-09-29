@@ -20,6 +20,14 @@ ok(/outbox/.test(html) && /deliverWithRetry/.test(html), 'outbox + retry present
 ok(/memory\/notes'\)\.collection\('items'\)/.test(html), 'memory notes path is a valid collection');
 ok(!/db\.doc\('(memory|decisions|chat)'\)\.collection/.test(html), 'no invalid 2-segment db paths');
 ok(/apple-touch-icon/.test(html) && /manifest\.json/.test(html), 'PWA tags present');
+// windowed-reads: no live read and no one-shot read of a whole collection. Every collection in the path table
+// is read through a window (orderBy/where + limit) or coldGet(..., n). Was 8 of 8 unbounded before the step.
+const COLS = ['inbox', 'tasks', 'sessions', 'gallery', 'notes', 'prefs', 'turns', 'decisions', 'telemetry', 'reqs'];
+const unbounded = html.match(new RegExp('P\\.(' + COLS.join('|') + ')\\(\\)\\.(onSnapshot|get)\\(', 'g')) || [];
+unbounded.push(...(html.match(/trCol\(\)\.(onSnapshot|get)\(/g) || []));
+ok(unbounded.length === 0, 'no unbounded collection read (windowed-reads): ' + (unbounded.join(' ') || '0'));
+const windows = (html.match(/watch\('[a-z-]+',k=>P\.[a-z]+\(\)(\.where\([^)]*\))?\.orderBy\([^)]*\)\.limit\(k\)/g) || []).length;
+ok(windows === 5, 'five live windows, each ordered and limited: ' + windows);
 // 3. voice command regexes accept the canonical phrases
 const must = [['תזכור שהרואה חשבון הוא דני', /תזכור/], ['אל תפריע שעה', /אל תפריע/], ['ליבה תחזור', /ליבה/], ['מה בניתי השבוע', /מה בניתי השבוע/], ['מה את יודעת', /מה את יודעת/]];
 must.forEach(([p, r]) => ok(r.test(html), 'command wired: ' + p));

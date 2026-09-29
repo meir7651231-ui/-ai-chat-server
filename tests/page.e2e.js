@@ -2,10 +2,13 @@
 const { chromium } = require('playwright'); const fs = require('fs');
 const STUB = `(()=>{ if (window.top === window) return; // only inside the iframe
 const docs=new Map(), colSubs=new Map(), docSubs=new Map();
+/* windowed-reads: a channel with a long past. __seedN documents across inbox/tasks/sessions/gallery before boot */
+if(window.__seedN){const N=window.__seedN,now=Date.now(),q=Math.floor(N/4);for(let i=0;i<q;i++){docs.set('inbox/old-'+i,{from:'liba',kind:'say',text:'ישן '+i,spoken:true,ts:now-864e5*30+i});docs.set('tasks/t-'+i,{title:'משימה '+i,status:'done',updatedAt:now-864e5*30+i});docs.set('sessions/s-'+i,{title:'שיחה '+i,status:'idle',updatedAt:now-864e5*30+i});docs.set('gallery/g-'+i,{title:'תמונה '+i,ts:now-864e5*30+i});}
+ for(let i=0;i<5;i++)docs.set('inbox/fresh-'+i,{from:'liba',kind:'say',speaker:'ליבה',text:'חלון-'+i,spoken:false,ts:now+i});}
 const parts=p=>p.split('/').filter(Boolean);
 const colOf=p=>{const a=parts(p);return a.slice(0,-1).join('/');};
 function snapDoc(path){const d=docs.get(path);return {exists:!!d,data:()=>d?JSON.parse(JSON.stringify(d)):undefined,id:parts(path).pop()};}
-function notify(path){const c=colOf(path);(colSubs.get(c)||[]).forEach(cb=>cb(colSnap(c)));(docSubs.get(path)||[]).forEach(cb=>cb(snapDoc(path)));}
+function notify(path){const c=colOf(path);(colSubs.get(c)||[]).forEach(fire);(docSubs.get(path)||[]).forEach(cb=>cb(snapDoc(path)));}
 function colSnap(c){const n=parts(c).length;const out=[];for(const [p,d] of docs){const a=parts(p);if(a.length===n+1&&a.slice(0,n).join('/')===c)out.push({id:a[n],data:()=>JSON.parse(JSON.stringify(d)),ref:docRef(p)});}return {docs:out};}
 function docRef(path){return {path,collection:n=>colRef(path+'/'+n),
  set:async d=>{if(window.__quotaPath&&path.indexOf(window.__quotaPath)===0)throw Object.assign(new Error('quota'),{code:'resource_exhausted'});if(parts(path).length%2)throw Object.assign(new Error('bad doc path '+path),{code:'bad_path'});docs.set(path,JSON.parse(JSON.stringify(d)));notify(path);},
@@ -13,12 +16,30 @@ function docRef(path){return {path,collection:n=>colRef(path+'/'+n),
  delete:async()=>{docs.delete(path);notify(path);},
  get:async()=>snapDoc(path),
  onSnapshot:(cb,err)=>{if(!docSubs.has(path))docSubs.set(path,[]);docSubs.get(path).push(cb);setTimeout(()=>cb(snapDoc(path)),0);return()=>{};}};}
-function colRef(c){return {path:c,doc:id=>docRef(c+'/'+id),get:async()=>colSnap(c),
- onSnapshot:(cb,err)=>{if(parts(c).length%2===0){if(err)err({code:'bad_collection_path'});throw new Error('bad collection path '+c);}if(!colSubs.has(c))colSubs.set(c,[]);colSubs.get(c).push(cb);setTimeout(()=>cb(colSnap(c)),0);return()=>{};}};}
+/* the real store's query rules (db.d.ts): a where on a field the document lacks never matches it, orderBy puts
+   missing fields last, no orderBy means id order, limit is a window. Every delivery is counted in __reads so a test
+   can prove how many document bodies a page open costs, and docChanges() is computed against the last delivery. */
+const reads={docs:0,deltas:0,subs:0};
+const OPS={'==':(a,b)=>a===b,'!=':(a,b)=>a!==b,'<':(a,b)=>a<b,'<=':(a,b)=>a<=b,'>':(a,b)=>a>b,'>=':(a,b)=>a>=b,'in':(a,b)=>b.includes(a),'not-in':(a,b)=>!b.includes(a)};
+function runQ(c,q){let out=colSnap(c).docs;for(const [f,op,v] of q.w){out=out.filter(d=>{const x=d.data();return x&&(f in x)&&OPS[op](x[f],v);});}
+ if(q.o){const [f,dir]=q.o;const k=d=>{const x=d.data();return x&&(f in x)?x[f]:undefined;};out.sort((a,b)=>{const x=k(a),y=k(b);if(x===undefined&&y===undefined)return a.id<b.id?-1:1;if(x===undefined)return 1;if(y===undefined)return -1;if(x===y)return a.id<b.id?-1:1;return (x<y?-1:1)*(dir==='desc'?-1:1);});}
+ else out.sort((a,b)=>a.id<b.id?-1:1);
+ if(q.l)out=out.slice(0,q.l);return out;}
+function fire(sub){if(window.__exhaust&&sub.q.l>window.__exhaust){sub.err&&sub.err({code:'resource_exhausted',message:'scan too large'});return;}
+ const docsNow=runQ(sub.c,sub.q);const now=new Map(docsNow.map(d=>[d.id,JSON.stringify(d.data())]));const ch=[];
+ docsNow.forEach((d,i)=>{if(!sub.last.has(d.id))ch.push({type:'added',doc:d,oldIndex:-1,newIndex:i});else if(sub.last.get(d.id)!==now.get(d.id))ch.push({type:'modified',doc:d,oldIndex:i,newIndex:i});});
+ for(const [id] of sub.last)if(!now.has(id))ch.push({type:'removed',doc:{id,data:()=>undefined},oldIndex:0,newIndex:-1});
+ if(sub.fired&&!ch.length)return;sub.fired=true;sub.last=now;reads.docs+=docsNow.length;reads.deltas+=ch.length;
+ sub.cb({docs:docsNow,size:docsNow.length,empty:!docsNow.length,docChanges:()=>ch});}
+function query(c,q){return {path:c,
+ where:(f,op,v)=>query(c,{...q,w:q.w.concat([[f,op,v]])}),orderBy:(f,dir)=>query(c,{...q,o:[f,dir||'asc']}),limit:n=>query(c,{...q,l:n}),
+ get:async()=>{const d=runQ(c,q);reads.docs+=d.length;return {docs:d,size:d.length,empty:!d.length,docChanges:()=>[]};},
+ onSnapshot:(cb,err)=>{if(parts(c).length%2===0){if(err)err({code:'bad_collection_path'});throw new Error('bad collection path '+c);}if(!colSubs.has(c))colSubs.set(c,[]);const sub={c,q,cb,err,last:new Map(),fired:false};colSubs.get(c).push(sub);reads.subs++;setTimeout(()=>fire(sub),0);return()=>{const a=colSubs.get(c);a.splice(a.indexOf(sub),1);};}};}
+function colRef(c){return Object.assign(query(c,{w:[],o:null,l:0}),{doc:id=>docRef(c+'/'+id)});}
 const db={doc:p=>{if(parts(p).length%2)throw new Error('bad doc path '+p);return docRef(p);},collection:c=>colRef(c)};
 const sent=[],sentRaw=[];const comments={canSendToClaude:async()=>{if(window.__slowSend)await new Promise(r=>setTimeout(r,window.__slowSend));return 'available';},anchorFor:async()=>({}),sendToClaude:async o=>{sentRaw.push(o.text);sent.push(String(o.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));window.parent.postMessage({harness:'sent',text:o.text},'*');}};
 window.claude={use:async n=>n==='db'?db:n==='comments'?comments:null};
-window.__h={db,docs,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSnap(c).docs.map(x=>({id:x.id,...x.data()})),sent,sentRaw};
+window.__h={db,docs,reads,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSnap(c).docs.map(x=>({id:x.id,...x.data()})),sent,sentRaw};
 })();`;
 const failed = [];
 (async () => {
@@ -321,6 +342,40 @@ const failed = [];
   await flush(3000); await H(() => { window.__slowSend = 0; });
   const gone = await H(() => JSON.parse(localStorage.getItem('liba.outbox') || '[]').filter(x => /נכתב-לפני-שנשלח/.test(x.text)).length);
   check(gone === 0, 'wal: once delivered it is removed - by its request id');
+  // windowed-reads: open the page over a channel with 3,000 documents. The open reads a bounded number of bodies,
+  // the first sentence is heard fast, and reading five messages moves a few deltas each - not five times the channel.
+  {
+    const p2 = await b.newPage(); const e2 = [];
+    p2.on('pageerror', e => e2.push(e.message));
+    await p2.addInitScript('if (window.top !== window) window.__seedN = 3000;'); await p2.addInitScript(STUB);
+    await p2.goto('file://' + tmp + '/h_host.html', { waitUntil: 'load' });
+    const g = p2.frames()[1]; await g.waitForFunction(() => window.__h, null, { timeout: 5000 });
+    await p2.waitForTimeout(700); const open = await g.evaluate(() => Object.assign({}, window.__h.reads));
+    const t0 = Date.now(); await p2.evaluate(() => window.app({ liba: 'hello', ver: '3.20.0', caps: ['spoke', 'beat'] }));
+    let heard = 0, first = 0, seen = [];
+    for (let i = 0; i < 80 && heard < 5; i++) {
+      await p2.waitForTimeout(100);
+      const ms = await p2.evaluate(() => { const x = window.msgs.slice(); window.msgs = []; return x; });
+      for (const x of ms) if (x.liba === 'say') { if (/חלון-\d/.test(x.text)) { if (!first) first = Date.now() - t0; heard++; seen.push(x.text); } await p2.evaluate(id => window.app({ liba: 'spoke', id }), x.id); }
+    }
+    await p2.waitForTimeout(800);
+    const r = await g.evaluate(() => window.__h.reads);
+    check(first > 0 && first < 2500, 'windows: with 3,000 documents the first sentence is heard in under 2.5 s: ' + first + 'ms');
+    check(heard === 5, 'windows: all five fresh messages are read, in order: ' + seen.map(t => t.replace(/.*חלון-/, '')).join(','));
+    check(open && open.docs <= 160, 'windows: opening the page reads at most 160 document bodies, not 3,000: ' + JSON.stringify(open));
+    check(r.docs - open.docs <= 600, 'windows: reading five messages moves at most 600 document bodies (the old page moved each ack times the whole inbox): ' + JSON.stringify({ bodies: r.docs - open.docs, deltas: r.deltas - open.deltas }));
+    const hear = async (re, n = 40) => { for (let i = 0; i < n; i++) { await p2.waitForTimeout(100); const ms = await p2.evaluate(() => { const x = window.msgs.slice(); window.msgs = []; return x; }); let hit = false; for (const x of ms) if (x.liba === 'say') { if (re.test(x.text)) hit = true; await p2.evaluate(id => window.app({ liba: 'spoke', id }), x.id); } if (hit) return true; } return false; };
+    // the real channel had it: a writer that never wrote spoken:false. The newest-window still hears it.
+    await g.evaluate(() => window.__h.set('inbox/nofield', { from: 'liba', kind: 'say', text: 'בלי-שדה-נאמר', ts: Date.now() }));
+    check(await hear(/בלי-שדה-נאמר/), 'windows: a message without the spoken field is still heard');
+    // the store refuses a big scan: every window narrows once, says so in the black box, and speech goes on
+    await g.evaluate(() => { window.__exhaust = 15; window.__h.set('inbox/x1', { from: 'liba', kind: 'say', text: 'אחרי-צמצום', spoken: false, ts: Date.now() }); });
+    check(await hear(/אחרי-צמצום/), 'windows: after resource_exhausted the narrowed window still hears new messages');
+    const codes = await g.evaluate(() => window.__trace.ring.map(l => l.c + ':' + l.ctx));
+    check(codes.some(c => /^P_DB_WINDOW:inbox/.test(c)), 'windows: the narrowing is written to the black box as P_DB_WINDOW: ' + codes.filter(c => /WINDOW/.test(c)).join(','));
+    check(!e2.length, 'windows: no page error on the big channel: ' + e2.join(' | '));
+    await p2.close();
+  }
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

@@ -25,10 +25,10 @@ function memoryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(galleryCmd
   let m=t.match(/^(תזכור|תזכרי|זכור|זכרי)\s+(?:(?:כי|את)\s+)?(.+)$/);
   if(m){const note=m[2].trim();if(note.length<2)return false;P.notes().doc(mintId()).set({text:note,ts:Date.now(),by:'מאיר'}).then(()=>sayLocal('זכרתי: '+note)).catch(e=>{fail('P_DB_WRITE',e,'memory/notes/items');sayLocal('לא הצלחתי לשמור');});return true;}
   m=t.match(/^(תשכח|תשכחי|שכח|שכחי)\s+(?:את|ש)\s*(.+)$/);
-  if(m){const q=m[2].trim();P.notes().get().then(async r=>{const hits=r.docs.filter(d=>((d.data()||{}).text||'').includes(q));for(const d of hits){try{await d.ref.delete();}catch(e){fail('P_DB_WRITE',e,'memory/notes/items');}}sayLocal(hits.length?'שכחתי '+hits.length+(hits.length===1?' דבר':' דברים')+' על '+q:'לא מצאתי משהו על '+q+' בזיכרון');}).catch(e=>{fail('P_DB_READ',e,'memory/notes/items');sayLocal('לא הצלחתי');});return true;}
+  if(m){const q=m[2].trim();coldGet(P.notes(),null,500).then(async r=>{const hits=r.docs.filter(d=>((d.data()||{}).text||'').includes(q));for(const d of hits){try{await d.ref.delete();}catch(e){fail('P_DB_WRITE',e,'memory/notes/items');}}sayLocal(hits.length?'שכחתי '+hits.length+(hits.length===1?' דבר':' דברים')+' על '+q:'לא מצאתי משהו על '+q+' בזיכרון');}).catch(e=>{fail('P_DB_READ',e,'memory/notes/items');sayLocal('לא הצלחתי');});return true;}
   m=t.match(/^(אל תשאל(י)? אותי (על|לגבי)|תמיד תזכור|תמיד אל|אף פעם אל)\s+(.+)$/);
   if(m){P.prefs().doc(mintId()).set({text:t,ts:Date.now()}).then(()=>sayLocal('הבנתי, זו העדפה קבועה: '+t)).catch(e=>fail('P_DB_WRITE',e,'memory/prefs/items'));return true;}
-  if(/^(מה אתה זוכר|מה את זוכרת|מה בזיכרון|מה זכרת)$/.test(t)){P.notes().get().then(r=>{const n=r.docs.map(d=>(d.data()||{}).text).filter(Boolean);sayLocal(n.length?'אני זוכרת '+n.length+' דברים: '+n.slice(-8).join('; '):'הזיכרון של הערות עוד ריק.');}).catch(e=>fail('P_DB_READ',e,'memory/notes/items'));return true;}
+  if(/^(מה אתה זוכר|מה את זוכרת|מה בזיכרון|מה זכרת)$/.test(t)){coldGet(P.notes(),null,500).then(r=>{const n=r.docs.map(d=>(d.data()||{}).text).filter(Boolean);sayLocal(n.length?'אני זוכרת '+n.length+' דברים: '+n.slice(-8).join('; '):'הזיכרון של הערות עוד ריק.');}).catch(e=>fail('P_DB_READ',e,'memory/notes/items'));return true;}
   if(/^(אל תשמור שיחות|בלי לשמור שיחות|תפסיק לשמור)$/.test(t)){memSettings.logTurns=false;P.settings().set(memSettings).catch(e=>fail('P_DB_WRITE',e,'memory/settings'));sayLocal('בסדר, מעכשיו לא שומרת את השיחות.');return true;}
   if(/^(תשמור שיחות|תחזור לשמור)$/.test(t)){memSettings.logTurns=true;P.settings().set(memSettings).catch(e=>fail('P_DB_WRITE',e,'memory/settings'));sayLocal('שומרת שיחות שוב.');return true;}
   if(/^(מה נשמר|פרטיות|מה אתה שומר|מה את שומרת)$/.test(t)){sayLocal('מה נשמר: שיחות '+(memSettings.logTurns?'כן':'לא')+', החלטות '+(memSettings.decisions?'כן':'לא')+', הערות זיכרון '+(memSettings.notes?'כן':'לא')+'. הכל בענן הפרטי של הארטיפקט, לא ברפו הציבורי. תגיד אל תשמור שיחות כדי לעצור.');return true;}
@@ -37,7 +37,7 @@ function memoryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(galleryCmd
 function reqCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(!/^(כמה בקשות( היום)?|כמה בקשות סגרת|כמה שאלתי היום|מה סגרת היום)$/.test(t))return false;
   const from=new Date();from.setHours(0,0,0,0);
-  P.reqs().get().then(r=>{const today=r.docs.map(d=>d.data()||{}).filter(x=>(x.askedAt||0)>=from.getTime());
+  coldGet(P.reqs(),[['askedAt','>=',from.getTime()]],1000).then(r=>{const today=r.docs.map(d=>d.data()||{}).filter(x=>(x.askedAt||0)>=from.getTime());
     if(!today.length){sayLocal('היום עוד לא ביקשת כלום.');return;}
     const ans=today.filter(x=>x.firstReplyAt),waits=ans.map(x=>x.firstReplyAt-x.askedAt).sort((a,b)=>a-b);
     const med=waits.length?Math.round(waits[Math.floor(waits.length/2)]/60000):0;
@@ -53,7 +53,7 @@ function heDur(ms){if(ms==null)return 'אין עדיין';const s=Math.round(ms/
 function latencyCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(!/^(כמה זמן לוקח לך לענות|כמה זמן לוקחות תשובות|כמה מהר את עונה|מה זמן התגובה)$/.test(t))return false;
   const day=trDay(Date.now());const from=new Date();from.setHours(0,0,0,0);
-  P.reqs().get().then(r=>{const all=r.docs.map(d=>d.data()||{}).filter(x=>(x.askedAt||0)>=from.getTime()&&x.t);const ok=all.filter(x=>!x.t.skewBad);
+  coldGet(P.reqs(),[['askedAt','>=',from.getTime()]],1000).then(r=>{const all=r.docs.map(d=>d.data()||{}).filter(x=>(x.askedAt||0)>=from.getTime()&&x.t);const ok=all.filter(x=>!x.t.skewBad);
     const out={day:day,n:ok.length,dropped:all.length-ok.length,at:Date.now()};
     SEGS.forEach(([k,,a,b])=>{const v=ok.map(x=>(tv(x,b)&&tv(x,a))?tv(x,b)-tv(x,a):null).filter(v=>v!=null&&v>=0);out[k]={n:v.length,p50:pct(v,.5),p90:pct(v,.9)};});
     const sp=ok.filter(x=>x.spokeCause);out.guard={n:sp.filter(x=>x.spokeCause==='guard').length,of:sp.length};
