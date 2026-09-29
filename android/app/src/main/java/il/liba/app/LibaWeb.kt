@@ -94,8 +94,9 @@ object LibaWeb {
     }
 
     fun injectTop(web: WebView) { web.evaluateJavascript(TOP_SCRIPT, null) }
-    fun sendInput(web: WebView, text: String) {
-        web.evaluateJavascript("window.__libaInput && window.__libaInput(${JSONObject.quote(text)})", null)
+    /** req-spine: source is how the sentence reached ליבה - "voice" or "share" from here; the page adds typed/option. */
+    fun sendInput(web: WebView, text: String, source: String = "voice") {
+        web.evaluateJavascript("window.__libaInput && window.__libaInput(${JSONObject.quote(text)},${JSONObject.quote(source)})", null)
     }
     /** A real touch through the view pipeline gives the page user activation (needed for sending to Claude).
      *  Taps the artifact iframe itself (centre, then upper and lower thirds) rather than a blind screen centre. */

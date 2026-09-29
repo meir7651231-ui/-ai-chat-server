@@ -677,7 +677,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
 
     /** step 63: text shared from another app – sent as-is; a following "תטפל בזה" refers to it. */
-    fun sendShared(msg: String) { main.post { lastShared = msg; showLabel("שיתוף → ליבה", 3000); tone("heard"); if (pageReady) { Prefs.log(this, "me", msg); sentAt = SystemClock.elapsedRealtime(); setState(State.SENDING); web?.let { LibaWeb.sendInput(it, msg) } } else Prefs.setPendingShare(this, msg) } }
+    fun sendShared(msg: String) { main.post { lastShared = msg; showLabel("שיתוף → ליבה", 3000); tone("heard"); if (pageReady) { Prefs.log(this, "me", msg); sentAt = SystemClock.elapsedRealtime(); setState(State.SENDING); web?.let { LibaWeb.sendInput(it, msg, "share") } } else Prefs.setPendingShare(this, msg) } }
     private var lastShared = ""
     // ---------- local commands, then send ----------
     private fun handleUtterance(t: String) {

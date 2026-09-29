@@ -16,9 +16,9 @@ function docRef(path){return {path,collection:n=>colRef(path+'/'+n),
 function colRef(c){return {path:c,doc:id=>docRef(c+'/'+id),get:async()=>colSnap(c),
  onSnapshot:(cb,err)=>{if(parts(c).length%2===0){if(err)err({code:'bad_collection_path'});throw new Error('bad collection path '+c);}if(!colSubs.has(c))colSubs.set(c,[]);colSubs.get(c).push(cb);setTimeout(()=>cb(colSnap(c)),0);return()=>{};}};}
 const db={doc:p=>{if(parts(p).length%2)throw new Error('bad doc path '+p);return docRef(p);},collection:c=>colRef(c)};
-const sent=[];const comments={canSendToClaude:async()=>'available',anchorFor:async()=>({}),sendToClaude:async o=>{sent.push(o.text);window.parent.postMessage({harness:'sent',text:o.text},'*');}};
+const sent=[],sentRaw=[];const comments={canSendToClaude:async()=>'available',anchorFor:async()=>({}),sendToClaude:async o=>{sentRaw.push(o.text);sent.push(String(o.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));window.parent.postMessage({harness:'sent',text:o.text},'*');}};
 window.claude={use:async n=>n==='db'?db:n==='comments'?comments:null};
-window.__h={db,docs,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSnap(c).docs.map(x=>({id:x.id,...x.data()})),sent};
+window.__h={db,docs,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSnap(c).docs.map(x=>({id:x.id,...x.data()})),sent,sentRaw};
 })();`;
 const failed = [];
 (async () => {
@@ -228,6 +228,25 @@ const failed = [];
   check(oldSaid() === 1, 'contract: app older than the page - Meir hears it once, not on every hello: ' + oldSaid());
   const beats = await H(() => ({ beat: hasCap('beat'), spoke: hasCap('spoke') }));
   check(beats.beat === false && beats.spoke === true, 'contract: capabilities come from hello, not from the version number: ' + JSON.stringify(beats));
+  // req-spine: every sentence is a request with an id that travels to Claude and comes back on the reply
+  await p.evaluate(() => window.app({ liba: 'input', text: 'בקשה-עם-מספר', source: 'voice' })); await flush(2600);
+  const raw = await H(() => window.__h.sentRaw.filter(t => /בקשה-עם-מספר/.test(t)));
+  const rid = ((raw[0] || '').match(/⟦#([0-9a-z]+)⟧$/) || [])[1];
+  check(!!rid && /^\[ליבה/.test(raw[0]), 'req: the sentence reaches Claude with its tag intact at the start and its id at the end: ' + JSON.stringify(raw[0]));
+  const rq = rid && await get('req/' + rid);
+  check(rq && rq.text === 'בקשה-עם-מספר' && rq.source === 'voice' && rq.state === 'sent' && rq.askedAt > 0 && rq.sentAt >= rq.askedAt, 'req: the request document knows what, how, when asked and when sent: ' + JSON.stringify(rq && { s: rq.source, st: rq.state }));
+  const turn = (await H(() => window.__h.all('chat/log/turns'))).find(x => x.text === 'בקשה-עם-מספר');
+  check(turn && turn.req === rid, 'req: the conversation log points at the request');
+  await set('inbox/rep1', { text: 'תשובה-לבקשה', kind: 'say', from: 'manager', re: rid, ts: Date.now() }); await speakOut();
+  const rq2 = await get('req/' + rid);
+  check(rq2 && rq2.state === 'answered' && rq2.firstReplyAt > 0 && (rq2.replies || []).includes('rep1'), 'req: a reply with re closes the loop - first reply time and the reply id: ' + JSON.stringify(rq2 && { st: rq2.state, r: rq2.replies }));
+  await set('inbox/rep2', { text: 'תשובה-יתומה', kind: 'say', from: 'manager', re: 'nosuchreq', ts: Date.now() }); await speakOut();
+  const orphan = await H(() => window.__trace.ring.filter(x => x.c === 'P_REQ_UNBOUND').length);
+  check(orphan >= 1, 'req: a reply whose re matches nothing is counted as unbound, not dropped');
+  const ids = await H(() => { const a = []; for (let i = 0; i < 20000; i++) a.push(mintId()); return { n: a.length, u: new Set(a).size, sorted: a.every((x, i) => i === 0 || a[i - 1] < x) }; });
+  check(ids.u === ids.n && ids.sorted, 'req: 20,000 ids in a tight loop - 0 collisions and strictly ordered: ' + JSON.stringify(ids));
+  await p.evaluate(() => window.app({ liba: 'input', text: 'כמה בקשות היום' })); await flush(2600);
+  check(said('היום ביקשת').length >= 1, 'req: "כמה בקשות היום" answers from the requests: ' + JSON.stringify(said('היום ביקשת').map(x => x.text.slice(0, 80))));
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

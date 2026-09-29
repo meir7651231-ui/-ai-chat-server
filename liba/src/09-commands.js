@@ -23,17 +23,28 @@ function galleryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   return false;}
 function memoryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(galleryCmd(text))return true;if(helpCmd(text))return true;if(traceCmd(text))return true;
   let m=t.match(/^(תזכור|תזכרי|זכור|זכרי)\s+(?:(?:כי|את)\s+)?(.+)$/);
-  if(m){const note=m[2].trim();if(note.length<2)return false;P.notes().doc(String(Date.now())).set({text:note,ts:Date.now(),by:'מאיר'}).then(()=>sayLocal('זכרתי: '+note)).catch(e=>{fail('P_DB_WRITE',e,'memory/notes/items');sayLocal('לא הצלחתי לשמור');});return true;}
+  if(m){const note=m[2].trim();if(note.length<2)return false;P.notes().doc(mintId()).set({text:note,ts:Date.now(),by:'מאיר'}).then(()=>sayLocal('זכרתי: '+note)).catch(e=>{fail('P_DB_WRITE',e,'memory/notes/items');sayLocal('לא הצלחתי לשמור');});return true;}
   m=t.match(/^(תשכח|תשכחי|שכח|שכחי)\s+(?:את|ש)\s*(.+)$/);
   if(m){const q=m[2].trim();P.notes().get().then(async r=>{const hits=r.docs.filter(d=>((d.data()||{}).text||'').includes(q));for(const d of hits){try{await d.ref.delete();}catch(e){fail('P_DB_WRITE',e,'memory/notes/items');}}sayLocal(hits.length?'שכחתי '+hits.length+(hits.length===1?' דבר':' דברים')+' על '+q:'לא מצאתי משהו על '+q+' בזיכרון');}).catch(e=>{fail('P_DB_READ',e,'memory/notes/items');sayLocal('לא הצלחתי');});return true;}
   m=t.match(/^(אל תשאל(י)? אותי (על|לגבי)|תמיד תזכור|תמיד אל|אף פעם אל)\s+(.+)$/);
-  if(m){P.prefs().doc(String(Date.now())).set({text:t,ts:Date.now()}).then(()=>sayLocal('הבנתי, זו העדפה קבועה: '+t)).catch(e=>fail('P_DB_WRITE',e,'memory/prefs/items'));return true;}
+  if(m){P.prefs().doc(mintId()).set({text:t,ts:Date.now()}).then(()=>sayLocal('הבנתי, זו העדפה קבועה: '+t)).catch(e=>fail('P_DB_WRITE',e,'memory/prefs/items'));return true;}
   if(/^(מה אתה זוכר|מה את זוכרת|מה בזיכרון|מה זכרת)$/.test(t)){P.notes().get().then(r=>{const n=r.docs.map(d=>(d.data()||{}).text).filter(Boolean);sayLocal(n.length?'אני זוכרת '+n.length+' דברים: '+n.slice(-8).join('; '):'הזיכרון של הערות עוד ריק.');}).catch(e=>fail('P_DB_READ',e,'memory/notes/items'));return true;}
   if(/^(אל תשמור שיחות|בלי לשמור שיחות|תפסיק לשמור)$/.test(t)){memSettings.logTurns=false;P.settings().set(memSettings).catch(e=>fail('P_DB_WRITE',e,'memory/settings'));sayLocal('בסדר, מעכשיו לא שומרת את השיחות.');return true;}
   if(/^(תשמור שיחות|תחזור לשמור)$/.test(t)){memSettings.logTurns=true;P.settings().set(memSettings).catch(e=>fail('P_DB_WRITE',e,'memory/settings'));sayLocal('שומרת שיחות שוב.');return true;}
   if(/^(מה נשמר|פרטיות|מה אתה שומר|מה את שומרת)$/.test(t)){sayLocal('מה נשמר: שיחות '+(memSettings.logTurns?'כן':'לא')+', החלטות '+(memSettings.decisions?'כן':'לא')+', הערות זיכרון '+(memSettings.notes?'כן':'לא')+'. הכל בענן הפרטי של הארטיפקט, לא ברפו הציבורי. תגיד אל תשמור שיחות כדי לעצור.');return true;}
   return false;}
-function taskCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
+/* req-spine: the question this step exists for. Unbound replies are named, not hidden in the denominator. */
+function reqCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
+  if(!/^(כמה בקשות( היום)?|כמה בקשות סגרת|כמה שאלתי היום|מה סגרת היום)$/.test(t))return false;
+  const from=new Date();from.setHours(0,0,0,0);
+  P.reqs().get().then(r=>{const today=r.docs.map(d=>d.data()||{}).filter(x=>(x.askedAt||0)>=from.getTime());
+    if(!today.length){sayLocal('היום עוד לא ביקשת כלום.');return;}
+    const ans=today.filter(x=>x.firstReplyAt),waits=ans.map(x=>x.firstReplyAt-x.askedAt).sort((a,b)=>a-b);
+    const med=waits.length?Math.round(waits[Math.floor(waits.length/2)]/60000):0;
+    sayLocal('היום ביקשת '+today.length+'. '+(ans.length?ans.length+' קיבלו תשובה'+(med?', בחציון אחרי '+med+' דקות':', תוך פחות מדקה')+'. ':'')+(today.length-ans.length?(today.length-ans.length)+' עוד בלי תשובה שמחוברת אליהן.':'כולן נענו.'));
+  }).catch(e=>{fail('P_DB_READ',e,'req');sayLocal('לא הצלחתי לקרוא את הבקשות.');});
+  return true;}
+function taskCmd(text){if(reqCmd(text))return true;const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(מפה|מפת המערכת|תראה מפה|מה כל הסשנים עושים|מי תקוע)$/.test(t)){mapOn=true;renderMap();const m=mapSummary();bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:'ליבה, מפת המערכת: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
   if(/^(תפתח|פתח|תפתח את התוצאה|תראה לי|תפתח תראה לי|פתח תראה לי|תפתח לי|תפתח אותו|תפתח אותה|תראה)$/.test(t)){const d=lastTasks.find(x=>x.status==='done'&&x.link)||lastTasks.find(x=>x.link);if(!d)return false;const m='פותחת: '+d.title;bubble('li',m);if(appMode){post(PROTO.toApp.cmd,{cmd:'open '+d.link});post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});}else{say(m);window.open(d.link,'_blank');}return true;}
   const pr=t.match(/^(קודם|תעדיף|עדיפות ל|תתחיל עם)\s+(את\s+)?(.+)$/);if(pr){const q=pr[3].trim();const task=lastTasks.find(x=>(x.title||'').includes(q));if(!task)return false;P.task(task.id).update({priority:Date.now(),updatedAt:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'tasks'));const m='בסדר, '+task.title+' קודם.';bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}

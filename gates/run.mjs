@@ -12,6 +12,7 @@ const extra = [
   ['page-static', 'node tests/page.test.js'],
   ['page-live', 'NODE_PATH=$(npm root -g) node tests/page.e2e.js'],
   ['bridge-live', 'NODE_PATH=$(npm root -g) node tests/bridge.e2e.js'],
+  ['req-ids', 'node tests/req-spine.test.js'],
 ]
 
 let pass = 0

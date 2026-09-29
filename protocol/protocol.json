@@ -1,26 +1,122 @@
 {
   "version": 1,
   "note": "The one definition of what the page and the bubble say to each other. Edit here, then run node tools/gen-protocol.mjs. Generated files say so at the top and are checked by gates/protocol.mjs.",
-  "caps": ["spoke", "beat", "trace", "proto"],
+  "caps": [
+    "spoke",
+    "beat",
+    "trace",
+    "proto"
+  ],
   "toApp": {
-    "ready":      { "fields": {}, "relay": "ready=true;" },
-    "say":        { "fields": { "text": "str", "kind": "str=say", "options": "list", "speaker": "str", "id": "str" } },
-    "sent":       { "fields": { "text": "str" } },
-    "error":      { "fields": { "text": "str", "reason": "str" } },
-    "queued":     { "fields": { "text": "str" }, "why": "a sentence said while ליבה is speaking waits; the bubble shows it waits" },
-    "outbox":     { "fields": { "text": "str", "n": "int", "reason": "str" }, "why": "no network: the sentence is kept and will be sent; the bubble shows how many wait" },
-    "tap":        { "fields": {} },
-    "cmd":        { "fields": { "cmd": "str" } },
-    "crashSaved": { "fields": { "id": "str" } },
-    "tasks":      { "fields": { "summary": "str", "n": "int", "blocked": "int" } },
-    "traceAck":   { "fields": { "batch": "str", "ids": "list" } }
+    "ready": {
+      "fields": {},
+      "relay": "ready=true;"
+    },
+    "say": {
+      "fields": {
+        "text": "str",
+        "kind": "str=say",
+        "options": "list",
+        "speaker": "str",
+        "id": "str"
+      }
+    },
+    "sent": {
+      "fields": {
+        "text": "str"
+      }
+    },
+    "error": {
+      "fields": {
+        "text": "str",
+        "reason": "str"
+      }
+    },
+    "queued": {
+      "fields": {
+        "text": "str"
+      },
+      "why": "a sentence said while ליבה is speaking waits; the bubble shows it waits"
+    },
+    "outbox": {
+      "fields": {
+        "text": "str",
+        "n": "int",
+        "reason": "str"
+      },
+      "why": "no network: the sentence is kept and will be sent; the bubble shows how many wait"
+    },
+    "tap": {
+      "fields": {}
+    },
+    "cmd": {
+      "fields": {
+        "cmd": "str"
+      }
+    },
+    "crashSaved": {
+      "fields": {
+        "id": "str"
+      }
+    },
+    "tasks": {
+      "fields": {
+        "summary": "str",
+        "n": "int",
+        "blocked": "int"
+      }
+    },
+    "traceAck": {
+      "fields": {
+        "batch": "str",
+        "ids": "list"
+      }
+    }
   },
   "toPage": {
-    "hello":    { "fields": { "ver": "str", "proto": "str", "pv": "int", "caps": "list" }, "from": { "ver": "window.__libaVer||''", "proto": "HASH", "pv": "VERSION", "caps": "CAPS" } },
-    "crash":    { "fields": { "id": "str", "version": "str", "text": "str" } },
-    "spoke":    { "fields": { "id": "str" } },
-    "speaking": { "fields": { "id": "str" } },
-    "input":    { "fields": { "text": "str" } },
-    "trace":    { "fields": { "batch": "str", "events": "str" } }
-  }
+    "hello": {
+      "fields": {
+        "ver": "str",
+        "proto": "str",
+        "pv": "int",
+        "caps": "list"
+      },
+      "from": {
+        "ver": "window.__libaVer||''",
+        "proto": "HASH",
+        "pv": "VERSION",
+        "caps": "CAPS"
+      }
+    },
+    "crash": {
+      "fields": {
+        "id": "str",
+        "version": "str",
+        "text": "str"
+      }
+    },
+    "spoke": {
+      "fields": {
+        "id": "str"
+      }
+    },
+    "speaking": {
+      "fields": {
+        "id": "str"
+      }
+    },
+    "input": {
+      "fields": {
+        "text": "str",
+        "source": "str=voice"
+      }
+    },
+    "trace": {
+      "fields": {
+        "batch": "str",
+        "events": "str"
+      }
+    }
+  },
+  "compat": "Adding an optional field is compatible and keeps the version; removing or renaming a message or a field bumps it."
 }

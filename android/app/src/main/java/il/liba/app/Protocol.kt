@@ -3,7 +3,7 @@ package il.liba.app
 
 object Protocol {
     const val VERSION = 1
-    const val HASH = "aad0e7c5b015"
+    const val HASH = "8a9e858b43ff"
     val CAPS = listOf("spoke", "beat", "trace", "proto")
 
     /** page -> app */
@@ -47,11 +47,11 @@ object Protocol {
     /** Senders the app calls through evaluateJavascript: app -> page. */
     const val SENDERS = """
   window.__libaSend=function(k,o){Array.prototype.slice.call(document.querySelectorAll('iframe')).forEach(function(f){try{f.contentWindow.postMessage(Object.assign({liba:k},o),'*');}catch(e){}});};
-  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"aad0e7c5b015",pv:1,caps:["spoke","beat","trace","proto"]});};
+  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"8a9e858b43ff",pv:1,caps:["spoke","beat","trace","proto"]});};
   window.__libaCrash=function(id,version,text){window.__libaSend("crash",{id:id,version:version,text:text});};
   window.__libaSpoke=function(id){window.__libaSend("spoke",{id:id});};
   window.__libaSpeaking=function(id){window.__libaSend("speaking",{id:id});};
-  window.__libaInput=function(text){window.__libaSend("input",{text:text});};
+  window.__libaInput=function(text,source){window.__libaSend("input",{text:text,source:source});};
   window.__libaTrace=function(batch,events){window.__libaSend("trace",{batch:batch,events:events});};
 """
 }
