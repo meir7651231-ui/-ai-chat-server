@@ -72,7 +72,7 @@ function check() {
   })
 }
 
-function order() {
+function topo() {
   const indeg = new Map(steps.map(s => [s.id, 0]))
   const out = new Map(steps.map(s => [s.id, []]))
   for (const s of steps) for (const d of deps(s)) { indeg.set(s.id, indeg.get(s.id) + 1); out.get(d).push(s.id) }
@@ -85,7 +85,12 @@ function order() {
     for (const m of out.get(n)) { indeg.set(m, indeg.get(m) - 1); if (indeg.get(m) === 0) ready.push(m) }
   }
   if (seq.length !== steps.length) { console.error('order: יש מעגל — הרץ --check'); process.exit(1) }
-  seq.forEach((id, i) => {
+  return seq
+}
+const rank = () => new Map(topo().map((id, i) => [id, i + 1]))
+
+function order() {
+  topo().forEach((id, i) => {
     const s = byId.get(id)
     const d = deps(s)
     console.log(`${String(i + 1).padStart(3)}  ${id.padEnd(26)} ms${String(s.ms).padStart(2)}  ${d.length ? '← ' + d.join(', ') : ''}`)
@@ -96,11 +101,14 @@ function own() {
   const f = join(HERE, 'ownership.json')
   if (!existsSync(f)) { console.error('own: אין plan/ownership.json — הרץ את מיפוי הבעלויות קודם'); process.exit(1) }
   const { rulings = [] } = JSON.parse(readFileSync(f, 'utf8'))
+  const R = rank()   // execution order, not the order of the array
   const real = rulings.filter(r => !r.false_clash)
   for (const r of real) {
     if (!byId.has(r.owner)) { problems.push(`בעלות: ${r.asset} — הבעלים ${r.owner} אינו צעד`); continue }
-    const late = (r.others || []).filter(o => byId.has(o.step_id) && byId.get(o.step_id).pos < byId.get(r.owner).pos)
-    for (const o of late) problems.push(`בעלות: ${r.asset} — ${o.step_id} (${byId.get(o.step_id).pos}) מרחיב לפני שהבעלים ${r.owner} (${byId.get(r.owner).pos}) קיים`)
+    // only 'extends' is an order constraint: a step that merely reads or catalogues a path
+    // (protocol-contract writes the path catalogue) may legitimately name one created later.
+    const late = (r.others || []).filter(o => o.becomes === 'extends' && byId.has(o.step_id) && R.get(o.step_id) < R.get(r.owner))
+    for (const o of late) problems.push(`בעלות: ${r.asset} — ${o.step_id} (${R.get(o.step_id)}) מרחיב לפני שהבעלים ${r.owner} (${R.get(r.owner)}) קיים. תיקון: הוסף את ${r.owner} ל-depends של ${o.step_id}`)
   }
   console.log(`own: ${real.length} נכסים עם בעלים יחיד, ${rulings.length - real.length} התנגשויות שווא`)
 }
