@@ -46,11 +46,12 @@ const TABLE = [
   const s1 = (await sentNow()).slice(before);
   ok(s1.some(t => /מה פספסתיי$/.test(t)), '"לא" sends the sentence on to Claude, as it was: ' + JSON.stringify(s1));
   // confirm: "תשכח" asks; "כן" runs it
-  await f.evaluate(() => window.__h.set('memory/notes/items/n1', { text: 'הרואה חשבון הוא דני', ts: Date.now() }));
+  await f.evaluate(() => window.__mem.put(window.__mem.parse('הרואה חשבון הוא דני')));
+  const live = () => f.evaluate(() => window.__h.all('memory/facts/items').some(x => x.subject === 'הרואה חשבון' && x.state !== 'tomb'));
   const ask = await said('תשכח את הרואה חשבון');
-  ok(ask.some(t => /כן או לא/.test(t)) && !!(await f.evaluate(() => window.__h.get('memory/notes/items/n1'))), 'confirm: "תשכח" asks first and deletes nothing yet: ' + ask.join(' | '));
+  ok(ask.some(t => /כן או לא/.test(t)) && await live(), 'confirm: "תשכח" asks first and forgets nothing yet: ' + ask.join(' | '));
   const yes = await said('כן', 2500);
-  ok(!(await f.evaluate(() => window.__h.get('memory/notes/items/n1'))) && yes.some(t => /שכחתי/.test(t)), '"כן" runs it: ' + yes.join(' | '));
+  ok(!(await live()) && yes.some(t => /שכחתי/.test(t)), '"כן" runs it: ' + yes.join(' | '));
   // with nothing pending, "כן" is just an answer - it goes to Claude
   const b2 = (await sentNow()).length; await said('כן', 2600);
   ok((await sentNow()).slice(b2).some(t => /כן$/.test(t)), 'with nothing pending, "כן" is an answer and goes on to Claude');

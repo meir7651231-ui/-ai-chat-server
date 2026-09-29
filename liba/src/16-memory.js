@@ -5,7 +5,7 @@
    always kept; a sentence the parser does not understand is still stored - as kind 'note' with confidence 0.3, never
    as a wrong triple. Forget is a tomb for 30 days (the janitor clears it after), so a mistaken "תשכח" can be undone.
    memory/notes and memory/prefs move over once (MEM.migrate, under a lease), and stay behind as tombs for 30 days. */
-const MEM_TOMB_DAYS=30;
+const MEM_TOMB_DAYS=30,MEM_ONE=['הוא','זהות','גר','גרה','עובד','עובדת','לומד','לומדת'];
 const slug=t=>inorm(t).replace(/[^0-9a-zא-ת ]/gi,'').trim().replace(/ /g,'_').slice(0,60)||'x';
 function hash36(s){let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return h.toString(36);}
 /* the parser: the few shapes Meir actually uses. Anything else is a note - raw kept, low confidence */
@@ -20,7 +20,10 @@ const MEM={
   parse(raw){const t=inorm(raw).replace(/^ש/,'');for(const [re,f] of MEM_SHAPES){const m=t.match(re);if(m){const x=f(m);return Object.assign(x,{raw:raw});}}
     for(const re of MEM_PREF){const m=t.match(re);if(m)return {subject:'מאיר',predicate:'העדפה',value:t,kind:'pref',conf:0.9,raw:raw};}
     return {subject:'הערה',predicate:hash36(t),value:t,kind:'note',conf:0.3,raw:raw};},
-  key(f){return slug(f.subject)+'.'+slug(f.predicate);},
+  /* single-valued predicates ("X הוא Y": one answer, a new one corrects the old) key on subject.predicate; the rest
+     ("יש לי X", preferences, notes) can hold many values, so the value is part of the key - found by recall7, where
+     every "יש לי" overwrote the one before */
+  key(f){const one=MEM_ONE.indexOf(f.predicate)>=0||f.kind==='event';return slug(f.subject)+'.'+slug(f.predicate)+(one?'':'.'+hash36(inorm(f.value)));},
   sens(f){return f.kind==='person'||/(בן|בת|אשתי|בריאות|רופא|כסף|חוב|משכורת|סיסמה)/.test(f.raw||'')?1:0;},
   /* put: one document per key; the same fact again only counts a use; a new value for the key replaces it, and the
      old value is kept in prev so a correction is visible */
@@ -50,5 +53,27 @@ const FINAL={'ך':'כ','ם':'מ','ן':'נ','ף':'פ','ץ':'צ'};
 function memWords(t){return inorm(t).split(' ').map(w=>w.replace(/[ךםןףץ]/g,c=>FINAL[c])).map(w=>w.length>3?w.replace(/^[בלכושהמ]{1,2}(?=[א-ת]{3})/,''):w).filter(w=>w.length>=2&&!['של','את','על','עם','זה','מה','הוא','היא'].includes(w));}
 /* the commands, on top of MEM */
 function memAbout(rest){const q=rest.trim();if(!q)return false;MEM.query(q).then(h=>{sayLocal(h.length?'על '+q+' אני יודעת: '+h.slice(0,5).map(f=>f.raw||f.value).join('; ')+'.':'אני לא יודעת כלום על '+q+'.');}).catch(e=>{fail('P_DB_READ',e,'facts');sayLocal('לא הצלחתי לקרוא את הזיכרון.');});return true;}
+/* mem-brief: every sentence that goes out carries Meir with it - but only what is relevant, and never first.
+   After the sentence (the [ליבה] tag at the start is what other sessions route on) and before the ⟦#id⟧ mark:
+   "[הקשר#<hash>]" and up to six facts ranked by shared words x confidence x freshness, the identity card's line when
+   it is relevant, preferences that bound the answer. Nothing sensitive (sens>=2), a hard cap of 700 characters,
+   nothing at all when nothing matches, and "בלי הקשר" skips it for the next sentence. */
+const BRIEF_MAX=700,BRIEF_FACTS=6;let briefSkip=false,identityCard=null;
+/* a rare word (a name) weighs more than a common one ("לי" is in every "יש לי" fact): inverse document frequency */
+function memIdf(all){const df={},N=all.length||1;for(const f of all)for(const x of new Set(memWords([f.subject,f.predicate,f.value,f.raw].join(' '))))df[x]=(df[x]||0)+1;
+  return x=>Math.log(1+N/(df[x]||N));}
+function memScore(f,w,now,idf){const hay=memWords([f.subject,f.predicate,f.value,f.raw].join(' '));let hit=0;for(const x of w)if(hay.indexOf(x)>=0)hit+=idf?idf(x):1;
+  if(!hit)return 0;const age=(now-(+f.updatedAt||+f.ts||now))/864e5;return hit*(+f.conf||0.5)*Math.pow(0.5,age/30)*(f.kind==='pref'?1.2:1);}
+async function brief(text){if(briefSkip){briefSkip=false;return '';}if(!db)return '';const w=memWords(text);if(!w.length)return '';
+  let all=[];try{all=(await MEM.all()).filter(f=>f.state!=='tomb'&&(+f.sens||0)<2);}catch(e){return '';}
+  const now=Date.now(),idf=memIdf(all);const top=all.map(f=>({f,s:memScore(f,w,now,idf)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,BRIEF_FACTS).map(x=>x.f);
+  if(!top.length)return '';
+  const lines=top.map(f=>'- '+(f.raw||f.subject+' '+f.predicate+' '+f.value).replace(/^ש/,''));
+  let out='[הקשר#'+hash36(lines.join('|'))+'] '+lines.join(' ');if(out.length>BRIEF_MAX)out=out.slice(0,BRIEF_MAX-1)+'…';
+  for(const f of top){P.fact(f.key).update({uses:(+f.uses||0)+1,lastUsed:now}).catch(()=>{});}
+  return '\n\n'+out;}
+function memNoBrief(){briefSkip=true;sayLocal('בסדר, המשפט הבא ילך בלי הקשר.');return true;}
+function memIdentity(rest,m){const card=m.t.slice(0,400);P.identity().set({card:card,updatedAt:Date.now()}).then(()=>sayLocal('שמרתי את כרטיס הזהות.')).catch(e=>fail('P_DB_WRITE',e,'memory/identity'));
+  MEM.put({subject:'מאיר',predicate:'זהות',value:card,kind:'fact',conf:1,raw:card},{type:'said'}).catch(()=>{});return true;}
 setTimeout(()=>{if(db)MEM.migrate().catch(e=>fail('P_DB_WRITE',e,'migrate'));},15000);
 window.__mem=MEM;

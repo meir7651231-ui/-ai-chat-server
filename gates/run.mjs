@@ -28,6 +28,7 @@ const extra = [
   ['stream', 'node tests/stream.test.js'],
   ['days', 'node tests/days.test.js'],
   ['memory', 'node tests/memory.test.js'],
+  ['recall7', 'node tests/recall7.js'],
 ]
 
 let pass = 0
