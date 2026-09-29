@@ -1,0 +1,344 @@
+{
+ "final_patches": [
+  {
+   "step_id": "brain-roster-lease",
+   "field": "what",
+   "new_value": "זהות סשן: החוזה `channel/protocol.brain` קובע שכל סשן מוח מוליד לעצמו `brainId` בפורמט ULID (`ulid()` מ-`liba-agent.js`) בהתעוררות הראשונה ונושא אותו בכל כתיבה — אותו מזהה יושב ב-`brain/roster/<brainId>`, ב-`channel/brief.sessionId` וב-`work/<wakeId>.claimedBy`, כך שהדף מזהה החלפת מוח מהשוואת מזהים ולא מניחוש (היום אין בקובץ `liba-call.html` אף מופע של `sessionId` או של אוסף `brain/`, ו-`channel/device` בשורה 118 מתאר מכשיר, לא סשן). אוסף `brain/roster/<brainId>` {role,model,since,lastBeat,state:live|stale|refused|capped|dead,caps[],wakesServed} ואוסף `work/<wakeId>` {text,envelopeRef,claimedBy,leaseUntil,state:new|claimed|working|answered,attempts}; `wakeId` נטבע בדף בתוך `deliver()` (שורה 275) ו-`envelopeRef` נשאר ריק עד צעד `wake-envelope`. דופק: כל כתיבת מוח — תפיסת `work`, תשובה, עדכון `brief` — מרעננת `lastBeat`, ו-`deliver()` מצרף לטקסט שורת חוזה אחת (\"עדכן `brain/roster/<brainId>.lastBeat`, ענה עם `re=<wakeId>`\") במקום `(tag||tagOf())+text` הערום שנשלח היום בשורה 279. זיהוי מוות שקט: `reclaim()` רץ ב-setInterval שלישי בדף (לצד `flushOutbox`, שורה 301) כל 20 שניות, מסמן `stale` מעל 90 שניות, ואם יש `work` פתוח שולח `ping` יחיד בלי טקסט ממאיר — אין כתיבת roster תוך 3 דקות → `dead` והחכירה חוזרת ל-`new`; בלי `work` פתוח `stale` ב-10 דקות ו-`dead` ב-30. נוסף onSnapshot תשיעי על `brain/roster` (היום יש בדיוק שמונה, שורות 134-146). `dispatch(wakeId)` בוחר את ה-`live` בעל ה-`lastBeat` הטרי ביותר ומעגן דרכו (`comments.anchorFor`), `promote()` מעלה מוח חלופי, ו-`onRefusal(reason)` מיישם מדיניות: `capped` → ניתוב למוח הבא, אין כזה → נפילה למוח המקומי + משפט אחד למאיר; `refused` → רישום ב-`decisions` והצעת ניסוח חלופי. `channel/owner`, שמחזיק היום {owner,since} בלבד (שורות 200-204), מורחב ב-`brainId`, ו-`switchOwner`/`setOwner` מקבלים `autoRelease()` שמשחרר בעלות שה-`lastBeat` שלה ישן מ-10 דקות.",
+   "reason": "קיפול מנגנון brain-pulse פנימה: זהות סשן (brainId), אוסף הדופק ב-brain/roster וקצב הרענון, וכללי זיהוי מוות שקט — במקום להוסיף צעד 101. אומת: `liba-agent.js` ו-`ulid()` אכן נוצרים ב-ledger-fsm, ואין היום בקובץ liba-call.html אף מופע של sessionId או brain/."
+  },
+  {
+   "step_id": "brain-roster-lease",
+   "field": "measure",
+   "new_value": "30 הרגות של הסשן התובע באמצע עבודה: ≥28 התעוררויות מחולקות מחדש ונענות תוך ≤3 דקות בלי שמאיר נוגע בטלפון. אפס פריטי `work` שנתקעים ב-`working` יותר מ-5 דקות. אפס מקרים של שתי תשובות לאותו `wakeId` ב-200 תורים. זהות: 100% מהסשנים הצופים מופיעים ב-`brain/roster` עם `brainId` יציב תוך ≤2 התעוררויות, ו-0 רשומות עם `lastBeat` ריק. דופק: ב-95% מהתורים גיל ה-`lastBeat` של המוח המשרת < 90 שניות. מוות שקט: ב-20 הרגות מוזרקות המצב עובר ל-`dead` תוך ≤3 דקות ב-≥19, ו-0 רשומות נשארות `live` מעל 3 דקות בלי אף כתיבה. שחרור בעלות אוטומטי תוך ≤10 דקות ב-100% ממקרי `lastBeat` ישן (מול 9 ימים היום). \"מי המוח\" מחזיר `brainId` וגיל דופק ב-100% מ-20 הרצות — ההקראה עצמה מגיעה מ-`brainCmd` של `brief-handoff`, ולכן סעיף זה נמדד רק אחרי ששני הצעדים ירוקים; עד אז הבדיקה היא קריאה ישירה של `brain/roster` ולא פקודה קולית.",
+   "reason": "הוספת מדדים נמדדים לזהות הסשן, לטריות הדופק ולזיהוי מוות שקט. תוקן על ידי השופט: \"מי המוח\" היא פקודה שבעלותה ב-brief-handoff, וכיוון התלות התהפך (brief-handoff תלוי עכשיו בצעד הזה) — לכן הסעיף סויג כדי שלא יימדד לפני שהפקודה קיימת."
+  },
+  {
+   "step_id": "brain-roster-lease",
+   "field": "depends",
+   "new_value": "ledger-fsm",
+   "reason": "brain-pulse אינו קיים; ההפניה ל-wake-envelope הוסרה כי היא יוצרת מעגל (wake-envelope תלוי עכשיו בצעד הזה). נשארת תלות אמיתית אחת: `ulid()` מ-ledger-fsm לטביעת brainId ו-wakeId. אומת: ledger-fsm קיים (אבן דרך 9) ומצהיר depends='עצמאי' — אין מעגל."
+  },
+  {
+   "step_id": "brain-roster-lease",
+   "field": "risk",
+   "new_value": "מרוץ חכירה: שני מוחות יתפסו אותה עבודה ומאיר ישמע שתי תשובות סותרות, או שקידום אוטומטי יעביר את הקו לסשן שלא אמור להחזיק בו. מיטיגציה: תביעה בכתיבה מותנית עם `attempts` מונוטוני, `wakeId` יחיד להקראה, ורשימת `caps` שמגבילה מי כשיר לקבל תפקיד מוח. סיכון שני שנולד מהדופק: אי אפשר לאכוף על סשן קלוד לכתוב `lastBeat`, ובדיקת ה-`ping` שורפת מכסה. מיטיגציה: `ping` נשלח רק כשיש `work` פתוח ולכל היותר פעם ב-3 דקות למוח, וכל כתיבת מוח אחרת (תשובה, `brief`, תפיסת `work`) נחשבת דופק, כך שברוב התורים אין `ping` כלל. סיכון שלישי מהיפוך כיוון התלות: הצעד הזה נכנס לפני brief-handoff ו-wake-envelope למרות שהוא מופיע אחריהם במערך הצעדים — המיון הטופולוגי של `plan/plan.mjs --order` הוא הקובע, ואם מישהו יבנה לפי סדר המערך הוא יבנה brief על roster שלא קיים.",
+   "reason": "תוספת הסיכון שנולד מקיפול הדופק פנימה, ותוספת השופט: היפוך כיוון התלות יוצר צעד שמיקומו במערך מאוחר מהתלויים בו, ויש לציין שהמיון הטופולוגי גובר."
+  },
+  {
+   "step_id": "brief-handoff",
+   "field": "depends",
+   "new_value": "brain-roster-lease",
+   "reason": "brain-pulse לא קיים בתוכנית; זהות הסשן (`brainId`) ו-`brain/roster` מסופקים עכשיו על ידי brain-roster-lease. אומת: אין מעגל — brain-roster-lease תלוי רק ב-ledger-fsm."
+  },
+  {
+   "step_id": "wake-envelope",
+   "field": "depends",
+   "new_value": "brief-handoff, brain-roster-lease",
+   "reason": "ה-brief הוא ליבת המנה, ו-`wakeId` וזהות המוח מגיעים מ-brain-roster-lease במקום מ-brain-pulse שאינו קיים. אומת: שני המזהים קיימים, והגרף נשאר חסר מעגלים אחרי הסרת wake-envelope מ-depends של brain-roster-lease."
+  },
+  {
+   "step_id": "local-brain",
+   "field": "depends",
+   "new_value": "brain-roster-lease, brief-handoff",
+   "reason": "\"לדעת שאין מוח\" נשען עכשיו על `brain/roster` ומצב `dead` מ-brain-roster-lease; תוכן המראה עדיין מ-brief-handoff. שני המזהים קיימים."
+  },
+  {
+   "step_id": "ship-pipeline",
+   "field": "what",
+   "new_value": "החלפת ה-workflow ב-`.github/workflows/release.yml` — צינור אחד שמשלח **שני** תוצרים באותו שער: ה-APK והדף. טריגר על `android/**`, `liba/src/**`, `protocol/protocol.json`, `release.json` ו-`workflow_dispatch` (היום הטריגר הוא `paths: android/**` בלבד, ולכן קומיט של APK ו-version.json לא מפעיל כלום). Job `build`: gradlew וקיסטור מ-`LIBA_KEYSTORE_B64` (ותיקון הבאג `if: ${{ env.KS != '' }}` שמתייחס למשתנה שמוגדר רק בתוך אותו צעד, ולכן הקיסטור לעולם לא נטען), ובמקביל `node liba/build.mjs` שפולט `dist/liba-call.html` ו-`dist/page.map.json` ומזריק `PAGE_HASH` = 12 התווים הראשונים של sha256 של הבנדל. Job `verify`: `apksigner verify --print-certs` ונכשל אם טביעת ה-SHA-256 אינה `A7:99:B7:79:4B:AA:FB:B2:33:A5:E4:19:B7:60:4E:97:F8:E4:73:56:15:70:DA:7D:BA:34:02:DE:8E:60:5B:9F`, `aapt dump badging` מול `release.json`, סכמת חתימה v3+v4 (ה-APK הנוכחי חתום v2 בלבד), ובנוסף `node gates/page-published.mjs --expect $PAGE_HASH`. Job `publish`: GitHub Release, העלאת ה-APK, וכתיבת `dist/version.json` עם `sha256`, `size`, `notes`, `minSdk` ו-`pageHash`. Job `publish-page` — מי מפרסם: הדף אינו קובץ ב-CDN אלא ארטיפקט של claude.ai שממנו הוא מקבל את המסד (`window.claude.use('db')`, `liba-call.html:129`), ואין API ציבורי לדחוף אליו מ-Actions; לכן המפרסם הוא עובד ליבה — סשן Claude Code עם כלי Artifact — שקורא `ship/artifact.json` (`{name:'ליבה קשר', url}`) ומריץ publish עם ה-`url` הזה ועם `file_path=dist/liba-call.html`. פרסום בלי ה-`url` יוצר ארטיפקט חדש עם מסד ריק ומנתק את הבועה, ולכן `gates/artifact-pin.mjs` נכשל אם `ship/artifact.json` חסר או שונה בלי קומיט מתועד. איך מוודאים שהגרסה שפורסמה היא זו שנבנתה: אחרי הפרסום העובד שולח `inbox {kind:'cmd', cmd:'reload'}`, קורא `channel/device.page` ומשווה ל-`PAGE_HASH` הצפוי, עד 180 שניות; אי-התאמה או timeout = כישלון פרסום. כשהפרסום נכשל: `version.json` לא מתעדכן וגם ה-APK נעצר (APK חדש מול דף ישן הוא בדיוק הפער שהצינור קיים כדי למנוע), נכתב `releases/<code>.pageState='stale'` עם `reason`, העובד מפרסם מחדש את `dist/pages/<prevHash>.html` (12 הבנדלים האחרונים נשמרים), וליבה אומרת פעם אחת 'הדף לא התפרסם, נשארתי על הגרסה הקודמת' ופותחת `tasks/<id> {type:'ship', stage:'page-failed'}`. הערת רישום: `gates/page-published.mjs` ו-`gates/artifact-pin.mjs` הם שני שערים חדשים שצריכים להירשם ב-`gates/run.mjs` של `plan-graph-gates`, שסופר היום 13 — `page-published` תופס את המשבצת הקיימת `page-hash-parity`, ו-`artifact-pin` מעלה את המונה ל-14.",
+   "reason": "הצינור מוגדר עכשיו כמשלח שני תוצרים — APK ודף — עם מפרסם מוגדר (עובד עם כלי Artifact, כי לארטיפקט claude.ai אין API פרסום מ-CI), אימות round-trip של pageHash דרך channel/device, ומסלול כישלון מפורש. תוקן על ידי השופט: נוספה הערת רישום השערים, כי `plan-graph-gates` מבטיח מונה סגור של 13 שערים והצעד הזה מוסיף שניים."
+  },
+  {
+   "step_id": "ship-pipeline",
+   "field": "measure",
+   "new_value": "שינוי שורה אחת ב-`BubbleService.kt` מייצר APK חתום ומאומת תוך פחות מ-9 דקות; `apksigner verify --print-certs` מראה v2+v3; קומיט ניסיוני עם קיסטור שגוי מפיל את ה-job באדום במקום לשלוח — 1 מתוך 1; שינוי שורה אחת ב-`liba/src/speech.ts` מסתיים ב-`channel/device.page` שווה ל-`PAGE_HASH` של אותו build תוך ≤4 דקות, ב-5 מתוך 5 שילוחים; הזרקת כישלון פרסום (שלילת ההרשאה לארטיפקט) מפילה את `publish-page`, משאירה את `version.json` על הגרסה הקודמת ב-3 מתוך 3, ומסמנת `releases/<code>.pageState='stale'` ב-100% מהם; `node gates/page-published.mjs` יוצא בקוד שונה מאפס על 3 מתוך 3 פערים מוזרקים בין `dist/liba-call.html` לדף החי.",
+   "reason": "המדד כיסה רק את ה-APK; נוספו ספים מספריים לשילוח הדף, ל-round-trip של pageHash ולכישלון פרסום."
+  },
+  {
+   "step_id": "ship-pipeline",
+   "field": "depends",
+   "new_value": "one-tree-one-version, page-kernel, release-gate",
+   "reason": "מיזוג שני תיקונים שהתנגשו על אותו שדה. `one-version` לא קיים בקובץ (זה שמו הישן של `one-tree-one-version`, הצעד שמספק את `ship/pinned-cert.txt`, את `gradlew` המחויב ואת תיקון `if: env.KS != ''` שהצינור נשען עליהם). התיקון השני ביקש רק את `one-tree-one-version`; נבחר הראשון כי הוא-על, ובצדק: `what` של הצעד מריץ `node gates/page-published.mjs` שנולד ב-`page-kernel`, והצינור אוכף את שער השילוח של `release-gate`. שלושת המזהים אומתו כקיימים ומוקדמים בסדר הטופולוגי."
+  },
+  {
+   "step_id": "ship-pipeline",
+   "field": "risk",
+   "new_value": "סוד הקיסטור נמצא עכשיו ב-GitHub Actions. דליפה או אובדן של `liba.jks` (שאינו בריפו) נועל את כל המכשירים המותקנים — ולכן חובה להקים את שושלת הסיבוב עכשיו, כשיש מכשיר אחד. הסיכון השני הוא כיוון התלות: `protocol-contract` ו-`test-gate-real` יושבים באבן דרך 1 וצריכים שהדף החי יהיה זה שנבנה, אבל הצינור הזה נכנס רק באבן דרך 11 — תלות שלהם בו היתה תלות אחורה, כלומר מעגל. ההכרעה: באבן דרך 1 הפרסום לארטיפקט נעשה ביד לפי `ship/publish-page.md` ומשאיר קבלה ב-`ship/published.json`, בעוד `gates/page-published.mjs` כבר משווה אוטומטית את `dist/liba-call.html` לקבלה ולערך החי של `channel/device.page` — הבדיקה אוטומטית מהיום הראשון, רק היד ידנית, ו-`publish-page` כאן מחליף את היד בלבד. מה שנשאר מסוכן: בין אבן דרך 1 ל-11 מישהו ישכח לפרסם והגייט יחסום קומיטים עד שיפרסם — זה מכוון, אבל חייב מסלול `--break-glass` מתועד כמו ב-`release-gate` שכותב ל-`decisions/log/items` מי עקף ולמה. סיכון שלישי: מפרסם שהוא סשן Claude עם כלי Artifact הוא נקודת כשל אנושית-למחצה — אם ההרשאה לארטיפקט פגה, הצינור נעצר על שלב הפרסום ולא על הבנייה, ולכן הודעת הכישלון חייבת להבחין בין 'אין הרשאה' ל'הדף לא תואם'. סיכון רביעי, בעלות כפולה: גם `one-tree-one-version` (ד), גם `release-gate` וגם הצעד הזה מצהירים שהם כותבים מחדש את workflow הבנייה ומתקנים את `if: env.KS != ''` — `plan/plan.mjs --check` ייפול על רכיב `ship` בבעלות שלושה צעדים אם לא ייקבע שהראשון מקים, השני מגדיר שער, והשלישי רק מוסיף את מסלול הדף.",
+   "reason": "נוסף ההסבר לכיוון התלות ולנקודת הכשל של מפרסם שאינו CI, ותוספת השופט: אומת בקובץ ששלושה צעדים מצהירים על אותו תיקון workflow/קיסטור — בדיוק סוג הבעלות הכפולה ש-plan-graph-gates נופל עליה."
+  },
+  {
+   "step_id": "page-kernel",
+   "field": "what",
+   "new_value": "הפיכת `/home/user/-ai-chat-server/liba-call.html` (322 שורות, גלובלים שטוחים) ל-`liba/src/` עם esbuild → `dist/liba-call.html` (bundle יחיד, אפס רשת): `state.ts`, `inbox.ts`, `speech.ts`, `listen.ts`, `bridge.ts`, `db.ts`, `owner.ts`, `tasks.ts`, `memory.ts`, `render.ts`, `presence.ts`. (א) מכונת מצבים אחת ב-`state.ts` — `IDLE|LISTENING|THINKING|SPEAKING|SENDING|RINGING|MUTED|OFFLINE` עם `transition(from,to,reason)` ולוג מעגלי של 200 מעברים; `busy` ו-`armed` כבוליאנים נמחקים, וכל `if(busy)` הופך לשאילתת מצב. (ב) `inbox.ts` — `pump()` הופך ל-`AsyncQueue` עם mutex יחיד מול ה-`onSnapshot` שעושה `inboxQ.splice`; `spokenLocal` מוחלף ב-`localStorage['liba.spoken']` עם TTL של 72 שעות, וה-ack נכתב בשתי פאזות: `speakingAt` לפני ההקראה ו-`spoken:true` אחרי. (ג) גיל הודעה — `ready(d)` מקבל `staleAfter` לפי `kind`; הודעה שעברה נאמרת עם \"מלפני שלוש שעות\" או מסומנת `expired:true` בלי להיאמר. (ד) `speech.ts` — `sayWait` מוחלף ב-heartbeat `__libaSpeaking` כל 2 שניות מ-`BubbleService.onSpoken`/`speakGuard`; אין heartbeat 6 שניות → נפילה מיידית למסלול הדפדפן במקום המתנה של `Math.min(120000,6000+len*160)`. (ה) עוגנים סמליים — כל בלוק מקבל `// @anchor: inbox.ack`; `build.mjs` פולט `dist/page.map.json` (anchor→קובץ:שורה), `plan/anchors.mjs --migrate` מחליף בכל מסמכי הצעדים הפניות כמו `liba-call.html:275` ו\"שורה 196\", וגייט `gates/no-line-anchors.mjs` נכשל על כל הפניה למספר שורה. (ו) `db.ts` — כל נתיב הופך לקבוע (`P.inbox(id)`, `P.channelOwner`). טביעת מזהים **אינה** נכנסת כאן: `mintId()` של `req-spine` (48 ביט זמן + 32 אקראי + מונה מונוטוני) הוא המטביע היחיד בתוכנית, והוא זה שמחליף את חמשת אתרי `String(Date.now())` (שורות 180, 184, 253, 311, 312 — `memory/notes/items`, `memory/prefs/items`, `chat/log/turns`, `decisions/log/items`); `db.ts` רק מייצא אותו כ-`newId = mintId` כדי שלא ייווצר מטביע שני עם סכמה שונה. (ז) `escapeHtml()` על כל `${}` ב-`renderMap`/`renderTasks`/`helpCmd`. (ח) `channel/device` מקבל `page` = `PAGE_HASH` (12 תווי sha256 של הבנדל) שמוזרק ב-build, במקום `37` הקשיח שב-`liba-call.html:118`. הדף אינו קובץ שמוגש מ-CDN אלא ארטיפקט של claude.ai שממנו הוא מקבל את המסד (`window.claude.use('db')`, `liba-call.html:129`), ולכן אין API ציבורי לדחוף אליו מ-CI ובשלב הזה הפרסום נשאר ידני ומתועד: `ship/publish-page.md` מגדיר את הצעדים, `ship/artifact.json` נועץ את שם הארטיפקט ואת ה-`url` שלו (פרסום בלי ה-`url` הזה יוצר ארטיפקט חדש עם מסד ריק ומנתק את הבועה מכל ההיסטוריה), וכל פרסום כותב קבלה ל-`ship/published.json` עם `pageHash`, `at`, `by` ו-commit SHA. `gates/page-published.mjs` משווה sha256 של `dist/liba-call.html` ל-`ship/published.json.pageHash` ולערך החי של `channel/device.page`, ונכשל על כל פער — הבדיקה אוטומטית כבר מהצעד הזה, והאוטומציה של הפרסום עצמו נכנסת ב-`ship-pipeline`. `page-published` תופס את המשבצת `page-hash-parity` שכבר סגורה ברשימת 13 השערים של `plan-graph-gates`, ואינו שער חדש נוסף.",
+   "reason": "סעיף (ח) הבטיח 'publisher אוטומטי' שאין לו צעד; הוחלף בפרסום ידני מתועד עם קבלה ועם גייט אוטומטי שתופס פער, והאוטומציה הופנתה ל-`ship-pipeline`. תוקן על ידי השופט: סעיף (ו) הציג `newId()` שלישי לאותם ארבעה אוספים ש-`req-spine` (אבן דרך 1, צעד 4) כבר מצהיר שהוא מחליף ב-`mintId()` — בעלות כפולה ששני תיקונים אחרים (freshness-ttl, owner-lease) מסתמכים על ההפך ממנה; (ו) מפנה עכשיו ל-mintId. בנוסף נוסף commit SHA לקבלה (דרישה שהופיעה ב-risk בלי מקבילה ב-what) והובהר ש-page-published אינו שער 14."
+  },
+  {
+   "step_id": "page-kernel",
+   "field": "risk",
+   "new_value": "מרגע שהדף הוא תוצר build, כל פרסום לארטיפקט חייב לעבור דרך `ship/publish-page.md` ולהשאיר קבלה ב-`ship/published.json`; בלי זה הפער בין `dist/` לדף החי רק יגדל ומאיר ידבר עם גרסה ישנה בלי לדעת. לכן `PAGE_HASH` ב-`channel/device` והגייט `gates/page-published.mjs` חייבים להיכנס באותו צעד ולא אחריו — הם מה שהופך פרסום שנשכח לכשל גלוי במקום לשתיקה. אוטומציית הפרסום עצמה מחכה ל-`ship-pipeline` באבן דרך 11, וזה מכוון: תלות מאבן דרך 1 באבן דרך 11 היא תלות אחורה, כלומר מעגל. מה שנשאר מסוכן בפרק הזה: הגייט יחסום קומיטים עד שמישהו יפרסם ביד, ולכן חייב אותו מסלול `--break-glass` מתועד של `release-gate`; ובנוסף, כל עוד יד אדם מפרסמת, אפשר לפרסם בנדל שלא נבנה מהענף — הקבלה חייבת לרשום את ה-commit SHA לצד ה-`pageHash`. סיכון נוסף: `gates/no-line-anchors.mjs` נכנס באבן דרך 1, בעוד שעשרות מסמכי צעדים שנכתבו אחריו (who-speaks, context-fusion, week-ledger, worker-open, mem-brief ועוד) עדיין מצטטים מספרי שורה — `plan/anchors.mjs --migrate` חייב לרוץ על כל הצעדים ולא רק על אלה שקיימים ביום הכתיבה, אחרת הגייט יאדים על מסמכים ולא על קוד.",
+   "reason": "הסיכון ניסח דרישה לצעד שלא קיים ('publisher באותו צעד'); נוסח מחדש סביב הפרסום הידני המתועד, הגייט, וכיוון התלות. תוספת השופט: אומת שהתיקונים של הסוכנים האחרים מכניסים כ-14 ציטוטי מספרי שורה חדשים בדיוק כשהגייט אוסר אותם — ה-migrate חייב לכסות אותם."
+  },
+  {
+   "step_id": "protocol-contract",
+   "field": "depends",
+   "new_value": "one-tree-one-version, page-kernel",
+   "reason": "מיזוג שני תיקונים שהתנגשו על אותו שדה עם ערך זהה — אין קונפליקט אמיתי, רק נימוקים משלימים. `one-version` הוא שמו הישן של `one-tree-one-version` (הצעד שמייצר קובץ `VERSION` יחיד וחוזה גרסה אחד), ו-`page-autopublish` אינו קיים בקובץ: תפקידו נבלע ב-`page-kernel`, שסעיף (ח) שלו מביא את `PAGE_HASH` ואת `gates/page-published.mjs` שעליהם `PROTOCOL_HASH` נשען. שני המזהים אומתו כקיימים (אבן דרך 1, צעדים 1 ו-2) ומוקדמים ל-protocol-contract (צעד 3) — אין מעגל."
+  },
+  {
+   "step_id": "protocol-contract",
+   "field": "risk",
+   "new_value": "קוד מחולל שמישהו עורך ידנית חוזר להיות מקור אמת שני. בלי בדיקת \"רגנרציה נקייה\" ב-CI, הצעד מחזיר את הבעיה בתחפושת. סיכון שני: `PROTOCOL_HASH` נוסע ב-`hello` מהדף, ולכן הוא אמין רק אם הדף שמאיר פותח הוא זה שנבנה — ובאבן דרך 1 הפרסום לארטיפקט עדיין ידני, כך שדף שלא פורסם יצהיר על hash ישן וישמיע \"האפליקציה ישנה\" כשהאפליקציה דווקא בסדר. לכן התלות היא ב-`page-kernel`, שמביא את `PAGE_HASH` ואת `gates/page-published.mjs`, ולא ב-`ship-pipeline` שנמצא באבן דרך 11 — תלות אחורה כזו היתה מעגל; האוטומציה נכנסת שם, והחוזה כאן רק דורש שהדף החי יתאים ל-`dist/`. פועל יוצא: הודעת \"האפליקציה ישנה\" חייבת להפריד בין אי-התאמת `PROTOCOL_HASH` לבין `pageHash` שלא פורסם, אחרת מאיר יקבל הוראה לשלח גרסה שלא תפתור כלום.",
+   "reason": "נוסף ההסבר לכיוון התלות ולמלכודת ה-hash הישן כשהפרסום עדיין ידני."
+  },
+  {
+   "step_id": "test-gate-real",
+   "field": "depends",
+   "new_value": "one-tree-one-version, page-kernel, release-gate",
+   "reason": "מיזוג שני תיקונים שהתנגשו על אותו שדה; נבחר העל-קבוצה. `page-autopublish` ו-`one-trunk` אינם קיימים בקובץ: `one-trunk` הוא `one-tree-one-version` (ענף `main` יחיד וגייט `gates/one-tree.mjs`), ו-`page-autopublish` נבלע ב-`page-kernel` — בלי המודולים, ה-`dist/` וה-`pageHash` שלו אין על מה להריץ 40 תרחישי Playwright. `release-gate` נשמר מהתיקון הראשון כי הוא הצעד שהופך בדיקה אדומה ל-required check. שלושת המזהים קיימים באבן דרך 1 במיקומים 1, 2 ו-7, כולם לפני test-gate-real (8) — אין מעגל."
+  },
+  {
+   "step_id": "test-gate-real",
+   "field": "risk",
+   "new_value": "בדיקת הדף החי דורשת הרשאה לארטיפקט; בלעדיה היא מדלגת בשקט ועוברת. דילוג חייב להיחשב כישלון, אחרת הבדיקה החשובה ביותר היא זו שלעולם לא רצה. סיכון שני: `tests/live.spec.js` בודק את הארטיפקט `ליבה קשר`, שבאבן דרך 1 עדיין מתפרסם ביד — ולכן כשל שלו עלול לנבוע מפרסום שנשכח ולא מרגרסיה בקוד. הבדיקה חייבת להפריד בין השניים: אם sha256 של `dist/liba-call.html` שווה ל-`ship/published.json.pageHash` אבל `channel/device.page` שונה — זו רגרסיה או דף תקוע; אם הוא שונה מהקבלה — זה פער פרסום, וההודעה מפנה ל-`ship/publish-page.md`. התלות היא ב-`page-kernel` ולא ב-`ship-pipeline`, שנמצא באבן דרך 11: תלות אחורה היתה מעגל, והאוטומציה שמייתרת את היד נכנסת שם. סיכון שלישי: שלושה צעדים — `release-gate` (סעיף 7), הצעד הזה, ו-`plan-graph-gates` (סעיף ג) — כולם מצהירים שהם מתקנים את `tests/page.e2e.js` לצאת 1; צריך להכריע שהראשון מתקן את קוד היציאה, השני כותב את התרחישים, והשלישי רק רושם אותו ב-`gates/run.mjs`, אחרת `plan/plan.mjs --check` ייפול על רכיב בבעלות משולשת.",
+   "reason": "נוסף ההסבר לכיוון התלות ולהפרדה בין פער פרסום לרגרסיה. תוספת השופט: אומת בקובץ ששלושה צעדים מצהירים בעלות על אותו תיקון ל-tests/page.e2e.js."
+  },
+  {
+   "step_id": "say-ship",
+   "field": "depends",
+   "new_value": "ship-pipeline, verified-install, always-updatable",
+   "reason": "`page-autopublish` אינו קיים; פרסום הדף מקופל לתוך `ship-pipeline`, שכבר מופיע בתלויות, ולכן המזהה המדומה פשוט יורד. שלושת הנותרים אומתו כקיימים ומוקדמים בסדר."
+  },
+  {
+   "step_id": "say-ship",
+   "field": "what",
+   "new_value": "סוג משימה חדש `ship`: `shipCmd()` נוסף לנתב הפקודות של הדף (היום סדר הדיספאץ' חרוט בשורה 196) ומזהה \"תעלי גרסה\", \"תשלחי לטלפון\", \"תעלי את התיקון הזה\"; הוא פותח `tasks/<id> {type:'ship', base, from, at}`. עובד שילוח מריץ `tools/ship.mjs` (bump → build → verify → test → publish-apk → publish-page → manifest → הודעה), ומעדכן `tasks/<id>.stage`; `publish-page` הוא השלב שדוחף את `dist/liba-call.html` לארטיפקט שב-`ship/artifact.json` ומחכה ש-`channel/device.page` ישווה ל-`PAGE_HASH` שנבנה. הדף, שכבר מכריז לבד על מעברי `blocked`/`done`/`running` (צעד 42), מקריא את השלבים: בונה, בודקת, חתומה, מפרסמת דף, מורידה, מותקנת; כש-`stage==='ready'` הטלפון מתקין דרך המסלול המאומת, וכש-`stage==='page-failed'` היא אומרת פעם אחת 'הדף לא התפרסם, נשארתי על הקודם' ולא מתקינה APK חדש מול דף ישן. \"מה מצב הגרסה\" משווה `dist/version.json` ל-`channel/device` בשני שדות — `versionCode` ו-`page`; \"מה השתנה בגרסה\" מקריא את ה-notes. אישור קולי חובה לפני ההרצה כדי שמשפט מקרי לא ישלח.",
+   "reason": "השלבים שמוקראים בקול כללו רק את ה-APK; נוסף שלב `publish-page`, ההקראה שלו, מצב `page-failed`, והשוואת `page` ב\"מה מצב הגרסה\"."
+  },
+  {
+   "step_id": "who-speaks",
+   "field": "what",
+   "new_value": "מחלקה חדשה `VoiceId.kt` שצורכת מסגרות מ-`AudioEngine`: 40 מקדמי MFCC לכל 25 מילישניות, טביעה כממוצע ושונות, ניקוד קוסינוס מול פרופיל רשום. רישום דרך `MainActivity` — מסך \"תגיד אחריי\" של שלושה משפטים בני חמש שניות; הפרופיל נשמר ב-`Prefs` ומשוכפל ל-`memory/identity` בבסיס הנתונים כדי לשרוד התקנה מחדש. `recListener.onResults` מעביר ל-`handleUtterance(text, speakerScore)` ושלוש תוצאות: מאיר — כמו היום; אחר-רשום — נשלח עם תג `[ליבה|דובר:<שם>]` ב-`tagOf()` בדף, וליבה עונה בשמו; לא-מוכר — לא נשלח, לא נפתח `listenMode=\"follow\"`, ונרשם שורה אחת ב-`channel/device.heard`. התאמה מתמשכת: כל אמירה מאומתת של מאיר מעדכנת את הפרופיל עם שמירה מפני היסחפות (חלון של מאה אמירות אחרונות). מתג עוקף: נגיעה בבועה (`onTap`) נחשבת תמיד מאיר.\nרתמת המדידה נבנית כאן ולא בצעד אחר, כי היום אין בעץ `app/src/androidTest` בכלל. (א) מאגר `corpus/voiceid/` — קבצי WAV בפורמט המסלול החי (16kHz, mono, PCM16, 2–6 שניות, כמו ב-`VadGate.kt:22`): 200 של מאיר (130 חדר שקט, 40 רעש רכב/מטבח, 30 צרוד/מצונן/דיבורית), 200 שליליים (70 טלוויזיה עברית, 50 רדיו, 40 פודקאסט, 40 אדם שני חי), ו-30 לכל אחד משני בני משפחה רשומים למסלול \"אחר-רשום\" — 460 קבצים. הקבצים לא נכנסים ל-git; `corpus/voiceid/manifest.json` מחזיק לכל קובץ `{file, speaker, source, snrDb, durMs, sha256}`, ו-`app/build.gradle.kts` מקבל `sourceSets[\"androidTest\"].assets.srcDir(\"$rootDir/corpus/voiceid\")` כך שהמאגר נטען כ-assets של בדיקה בלבד ואינו נארז ב-APK. (ב) `gates/voiceid-corpus.mjs`, בסגנון הקבצים הקיימים ב-`gates/`, מוודא 460 קבצים ו-sha256 תואם ונכשל אם אחד חסר; הוא נרשם ב-`gates/run.mjs` של `plan-graph-gates` כשער נוסף מעבר ל-13 הקיימים. (ג) `app/src/androidTest/java/il/liba/app/VoiceIdBenchTest.kt` מזין כל WAV ישירות ל-`AudioEngine.feedFramesForTest()` (מסלול הזרקה חדש, בלי רמקול, דטרמיניסטי), מודד ב-`elapsedRealtimeNanos` ממסגרת הדיבור האחרונה ועד שה-`VoiceId` מחזיר הכרעה, וכותב `build/reports/voiceid/bench.json` עם מטריצת בלבול ו-p50/p95. כשל = חריגה מסף, קובץ חסר, או דליפה: הפרופיל הנבחן חייב להיות זה שנרשם משלושת משפטי \"תגיד אחריי\" בלבד, וה-sha256 שלהם אסור שיופיע במאגר.",
+   "reason": "קיפול רתמת המדידה (מאגר, מיקום, פקודה, הגדרת כשל) לתוך הצעד עצמו, במקום הפניה לצעד voice-lab שאינו קיים. אומת בעץ: `app/src/androidTest` אכן לא קיים, ו-`android/app/build.gradle.kts` קיים. תוספת השופט: `gates/voiceid-corpus.mjs` נרשם במפורש ב-gates/run.mjs, כי plan-graph-gates מבטיח רשימת שערים סגורה."
+  },
+  {
+   "step_id": "who-speaks",
+   "field": "measure",
+   "new_value": "`./gradlew connectedDebugAndroidTest --tests il.liba.app.VoiceIdBenchTest` על Galaxy Z Fold, מול `corpus/voiceid`: 200 אמירות של מאיר ו-200 שליליים. עובר רק אם קבלה-שגויה ≤6 מתוך 200 (‏3%), דחייה-שגויה ≤10 מתוך 200 (‏5%), p95 של זמן ההכרעה ≤300 מילישניות ו-p50 ≤150, ו-≥54 מתוך 60 אמירות בני המשפחה מסווגות לשם הנכון. לפני כן `node gates/voiceid-corpus.mjs` חייב לחזור 0 על 460 קבצים עם sha256 תואם — קובץ חסר מפיל את הריצה ולא מדלג עליה. `build/reports/voiceid/bench.json` נשמר לכל ריצה, ונסיגה של יותר משתי נקודות אחוז באחד משני שיעורי השגיאה מול הריצה הקודמת פוסלת את הקומיט.",
+   "reason": "המדד מצביע כעת על פקודה ורתמה שקיימות בצעד עצמו, עם ספים כמספרים מוחלטים מתוך 200/60, במקום \"נמדד ב-VoiceLabTest מהצעד voice-lab\""
+  },
+  {
+   "step_id": "who-speaks",
+   "field": "depends",
+   "new_value": "audio-core, release-gate",
+   "reason": "פקודת הרתמה מריצה `./gradlew`, ואין היום קובץ gradlew בעץ. הערת השופט: שני צעדים מצהירים שהם מוסיפים אותו — `one-tree-one-version` סעיף (ד) ו-`release-gate` — ונבחר `release-gate` כי הוא גם הצעד שמכניס את מריץ השערים; אם ההכרעה על הבעלות הכפולה תיפול לטובת `one-tree-one-version`, יש להחליף כאן את המזהה. שני המזהים קיימים ומוקדמים ל-who-speaks (audio-core צעד 31, release-gate צעד 7 מול who-speaks 32) — אין מעגל."
+  },
+  {
+   "step_id": "audio-core",
+   "field": "depends",
+   "new_value": "עצמאי — אין לו אף תלות קודמת; הוא הבסיס לארבעת צעדי הקול שאחריו.",
+   "reason": "מיזוג שני תיקונים שהתנגשו על אותו שדה, עם תיקון עובדתי ותיקון פורמט. עובדתית: התיקון השני הוסיף `assistant-role` לרשימת התלויים, אבל `assistant-role` מצהיר depends='תלוי בצעד תחיית-הערוץ' ואינו מזכיר audio-core — הרצתי סריקה על כל 100 הצעדים, ובדיוק ארבעה תולים עצמם ב-audio-core: who-speaks, barge-resume, nbest ו-car. פורמט: שני התיקונים השאירו מזהי צעדים בתוך שדה `depends` של צעד עצמאי, וזו רשימת תלויים הפוכה — הרצת גלאי מעגלים על הגרף החזירה ארבעה מעגלי שווא (audio-core↔who-speaks וכו'). שאר הצעדים העצמאיים בקובץ (one-tree-one-version, worker-open) לא נוקבים במזהים בדיוק מסיבה זו, ולכן הערך מנוסח בלי מזהים והשמות נשמרים כאן בנימוק. אחרי התיקון הגרף נקי ממעגלים בכל הצעדים שהחבילה נוגעת בהם."
+  },
+  {
+   "step_id": "fleet-control",
+   "field": "depends",
+   "new_value": "worker-open, worker-heartbeat",
+   "reason": "`fleet-scheduler` אינו קיים בקובץ (0 צעדים בשם הזה); מי שמחזיק את התור, את השליטה ואת האכיפה הם `worker-open` ו-`worker-heartbeat`, ולא `duty-governor` שהוא מושל הספק למכשיר ולא מתזמן צי. שניהם אומתו כקיימים (אבן דרך 10, צעדים 84 ו-85) ומוקדמים ל-fleet-control (88)."
+  },
+  {
+   "step_id": "worker-open",
+   "field": "what",
+   "new_value": "מודול `fleet` חדש בתוך `/home/user/-ai-chat-server/liba-call.html` (בלוק `<script id=\"fleet\">` נפרד כדי ש-tests/page.test.js ימשיך לפרסר כל בלוק). פונקציות: `wid()` — מזהה עובד יחיד שנטבע בקריאה ל-`mintId()` של `req-spine`, המטביע היחיד בתוכנית (הוא כבר חיסל באבן דרך 1 את חמשת אתרי `String(Date.now())` ב-chat/log/turns, decisions/log/items, memory/notes/items ו-memory/prefs/items, ו-`ulid()` של `ledger-fsm` עוטף אותו) — כאן הוא רק מספק מפתח ל-`workers/<wid>` ול-`fleet/orders/<wid>`, בלי לחזור ולגעת באותם ארבעה אוספים; `openWorker(spec)` שכותב `workers/<wid>` בסכמה קשיחה {title, kind:'build|fix|check|merge', repo, branch, spec, status:'queued', lease, beat, spend:{usd,tokens}, gates:{}, parent, needs:[], control:null, transitions:[{to,at,by}]} ובאותה פעולה `fleet/orders/<wid>` עם `idem` (hash של הטקסט+דקה) כדי ששני משפטים זהים לא יפתחו שני עובדים; `workerCmd(text)` נכנס לשרשרת הדיספאץ' בשורה 196 לפני `taskCmd`, שואל שאלת הבהרה אחת דרך `lastAsk` ורק אז כותב. `renderTasks`/`post('tasks')` מורחבים ל-`post('fleet',{running,queued,blocked,stalled,spendToday})`, וב-`/home/user/-ai-chat-server/android/app/src/main/java/il/liba/app/LibaWeb.kt` נוסף `@JavascriptInterface fun fleet(json:String)` לצד `tasks`, ו-`BubbleService.onTasks` הופך ל-`onFleet` שמזין את `status` ואת `localStatus()`. בנוסף, אותו מודול מחזיק את תור העבודות ואת שער העצירה — בלעדיהם ל-`fleet-control` אין על מה לפעול. מסמך יחיד `fleet/policy` {halt:false, haltAt, haltBy, maxRunning:3, drainAll:false}: `halt` הוא מתג גורף שנבדק לפני כל שליפה מהתור, כך ש\"תעצור הכול\" של `fleet-control` מתממש בכתיבה אחת שחלה על כל הרצים, ולא בלולאת כתיבות על N עובדים. `dispatch()` נקרא מתוך `setInterval(flushOutbox,8000)` הקיים (שורה 301) ולא כשרשרת טיימרים חדשה: הוא קורא `fleet/orders` לפי `ts` עולה, עוצר אם `halt` או אם `running>=maxRunning`, ותופס הזמנה בטרנזקציה ({claimBy,claimAt}) כדי ששני טאבים פתוחים לא ייקחו את אותה עבודה — ואז מעביר `workers/<wid>` מ-`queued` ל-`running` עם רשומה ב-`transitions[]`. `applyControl(w)` הוא הכותב היחיד שמתרגם את שדה `control` למצב: `pause`→`paused`, `resume`→`queued` בשמירת ה-`ts` המקורי כדי שלא יאבד את מקומו בתור, `kill`→`killed` ושחרור ה-`claim`, `drain`→דגל `drainAfterStep` שמניח לצעד הנוכחי להסתיים, `retry`→הזמנה חדשה עם אותו `spec` ו-`parent=<wid>`; בסיום הוא מאפס `control=null` וכותב `controlAppliedAt` — החותמת שעליה נמדדות עשר השניות של `fleet-control`. `requeue(wid,why)` מחזיר עובד ל-`queued` וכותב מחדש `fleet/orders/<wid>` עם אותו `idem`, כך שחזרה לתור אינה מייצרת עובד כפול. `post('fleet',…)` מורחב ב-`halted` וב-`paused`.",
+   "reason": "נוסף מה שהפקודות תעצור/תמשיך/תהרוג צריכות ולא היה קיים בשום צעד: תור נשלף (`dispatch()` עם claim בטרנזקציה), עצירה גורפת (`fleet/policy.halt`), מתרגם `control`→`status` עם `controlAppliedAt`, והחזרה לתור (`requeue`). תוקן על ידי השופט בשני מקומות: (1) `wid()` הוגדר כמחליף את `String(Date.now())` באותם ארבעה אוספים ש-`req-spine` (אבן דרך 1) ו-`ledger-fsm` (אבן דרך 9) כבר מצהירים שהם מחליפים — מטביע רביעי לאותה עבודה, בעלות כפולה ש-`plan/plan.mjs --check` נופל עליה; עכשיו הוא עוטף את `mintId()`. (2) הניסוח \"ולא לולאה על N עובדים\" סתר את `fleet-control` שכותב במפורש \"תעצור הכול עובר על כל הרצים\"; נוסח מחדש כך ששניהם מתארים אותה התנהגות."
+  },
+  {
+   "step_id": "worker-open",
+   "field": "depends",
+   "new_value": "req-spine (`mintId()`); עצמאי משאר צעדי אבן דרך 10, שכולם תלויים בו",
+   "reason": "תיקון שהשופט הוסיף, נגזר מההכרעה על `wid()`: מרגע ש-`wid()` עוטף את `mintId()` של `req-spine`, worker-open אינו עצמאי לגמרי. `req-spine` נמצא באבן דרך 1 (צעד 4) מול worker-open באבן דרך 10 (צעד 84) — תלות קדימה, ללא מעגל. הניסוח שומר גם את העובדה שהצעד הוא הבסיס לשאר צעדי הצי, כפי שהצהיר הערך הקודם."
+  },
+  {
+   "step_id": "worker-open",
+   "field": "measure",
+   "new_value": "עשרה מתוך עשרה משפטי \"תבנה/תתקן/תבדוק\" מייצרים `workers/<id>` תוך 20 שניות; \"מפה\" נוקבת בשם העובד החדש; שידור אותו משפט פעמיים ברצף יוצר עובד אחד (idem); רענון הדף באמצע אינו מאבד ואינו מכפיל אף הזמנה בעשרים ניסיונות. בנוסף: `dispatch()` מעביר הזמנה ל-`running` תוך ≤10 שניות בעשרים מתוך עשרים, ולעולם לא מעל `maxRunning` במקביל; כתיבת `fleet/policy.halt=true` עוצרת שליפה חדשה ב-100% מהניסיונות ו-`controlAppliedAt` נכתב על כל הרצים תוך 10 שניות; שני טאבים פתוחים על אותה הזמנה מייצרים `claim` אחד בחמישים ניסיונות; `requeue` של עובד עשרים פעמים משאיר `fleet/orders` עם רשומה אחת לאותו `idem`.",
+   "reason": "מדד יציאה מספרי לחלקים החדשים ב-what (תור, halt, claim, requeue) כדי שההרחבה תהיה ניתנת להרצה ולא הצהרה."
+  },
+  {
+   "step_id": "worker-heartbeat",
+   "field": "what",
+   "new_value": "שדות `beat` (חותמת) ו-`leaseUntil` על `workers/<id>`; `sweep()` ב-`fleet` רץ כל 45 שניות (setInterval לצד `setInterval(flushOutbox,8000)` הקיים) ומסווג: `stalled` (אין פעימה מעל שתי חכירות), `zombie` (status='running' אבל אין תהליך שדיווח מעל 20 דקות), `abandoned` (הזמנה שאיש לא הרים תוך 10 דקות). כל מעבר נכתב ל-`transitions[]` ומדווח פעם אחת דרך `queueLocal` עם מפתח דדופ `w-<id>-stalled-<epochRound>` כדי שלא יחזור כל sweep. סיווג חדש `KINDW.stalled='מת בשקט'` ו-CSS `.tasks .t.stalled`. תיקון נלווה חובה: `pump()` עושה `spokenLocal.add` לפני ה-ack ל-DB — כאן נוסף מפתח יציב ב-localStorage כדי שהכרזת תקיעה לא תושמע פעמיים אחרי רענון. ה-`sweep()` הוא גם האוכף של השליטה ולא רק המגלה שלה: עובד שיש לו `control` ללא `controlAppliedAt` מעל 10 שניות מסווג `deaf`, וה-sweep מבצע את הפקודה בעצמו — `pause`/`kill` נכתבים ישירות ל-`status` ונרשמים ב-`transitions[]` עם `by:'sweep'` — כך שגם עובד שמת בשקט באמת נעצר ולא רק מסומן. הזמנה במצב `abandoned` חוזרת דרך `requeue(wid,'abandoned')` עם אותו `idem` במקום להימחק, ו-`zombie` שנהרג משחרר את ה-`claim` שלו כדי ש-`dispatch()` יוכל לשלוף אותו מחדש.",
+   "reason": "סוגר את הפער שבו `fleet-control` כותב `control` ואיש לא אוכף אותו: ה-sweep הקיים הופך לאוכף (`deaf`), והזמנה נטושה חוזרת לתור דרך `requeue` במקום להימחק. אומת שאין התנגשות עם worker-open: worker-open הוא הכותב היחיד של applyControl והוא מגדיר את requeue, ו-worker-heartbeat רק צורך אותם — התלות הקיימת worker-heartbeat→worker-open נשמרת."
+  },
+  {
+   "step_id": "worker-heartbeat",
+   "field": "measure",
+   "new_value": "הריגת עובד באמצע ריצה מוכרזת stalled תוך 120 שניות בעשרה מתוך עשרה ניסיונות; אפס התרעות שווא במשך 24 שעות עם ארבעה עובדים בריאים; כל מעבר מופיע ב-`transitions[]` עם חותמת. פקודת `pause`/`kill` שלא נענתה תוך 10 שניות מסווגת `deaf` ונאכפת בידי ה-sweep תוך 120 שניות בעשרה מתוך עשרה; עשר הזמנות נטושות חוזרות לתור ונתפסות שוב בלי אף כפילות.",
+   "reason": "מדד מספרי לאכיפת ה-control ולחזרה לתור שנוספו ל-what."
+  },
+  {
+   "step_id": "context-fusion",
+   "field": "what",
+   "new_value": "`SenseFusion.kt` בצד הטלפון ו-`fuseContext()` בצד הדף מייצרים מסמך אחד, `sense/context/now {place, motion, meeting, voices, screen, headset, call, battery, net, focus, since}`, מעודכן תוך ≤ 5 שניות מכל שינוי חוש. אין שדה `room`/`company`: `room-audio` הוסר מהתוכנית ואין חיישן נוכחות בחדר. `meeting` בא מ-`sense/cal/now` של `calendar-sense` ונכון רק כש-`selfStatus` מאושר ו-`attendees ≥ 2`; `place`/`motion` מ-`sense/place/now`; `voices {other, at}` מ-`who-speaks` — נכתב כשזוהה דובר רשום-אחר או לא-מוכר, ופג אחרי 90 שניות. שלושה אותות נוספים ב-`SenseFusion`, כולם בלי הרשאה חדשה ואף אחד מהם לא קיים היום בקוד: `screen` מרחיב את ה-`BroadcastReceiver` של `ACTION_SCREEN_ON/OFF` ב-`BubbleService.kt:314-316` (היום הוא רק מסתיר את `dot`) ומוסיף `KeyguardManager.isKeyguardLocked`; `headset` מ-`AudioManager.getDevices(GET_DEVICES_OUTPUTS)` — `TYPE_BLUETOOTH_A2DP/SCO`, `TYPE_WIRED_HEADSET`; `call` מ-`AudioManager.getMode() ∈ {MODE_IN_CALL, MODE_IN_COMMUNICATION}`. `ready(d)` ב-`liba-call.html:152` מוחלף ב-`admit(d, ctx)` עם טבלת מדיניות מפורשת `ADMIT`: `stuck` ממתין כש-`meeting===true` אלא אם `urgent`; `done` ממתין כש-`motion==='vehicle'` ונאמר בהגעה; הסלמת הצלצול ב-`liba-call.html:246-249` ו-`ring()` ב-`BubbleService.kt:695` נחסמות כש-`meeting||call` — ההודעה נאמרת בלי צלצול ובלי רטט, וכש-`headset!=='none'` היא נאמרת מיד כי רק מאיר שומע; `voices.other` דוחה `ask`/`stuck` לא-דחופים לחמש דקות בלבד ומסומן `soft`, כי אדם שיושב בשקט אינו נשמע; `morning` נפתח לפי `sense/body/now.lastWake` — השדה שהבעלות עליו עוברת בחבילה הזאת ל-`place-sense` — במקום השעה הקבועה. כל החלטה נכתבת ל-`sense/context/log {msgId, admitted, rule, ctxSnapshot, at}`, ופקודה חדשה `whyCmd` — \"למה לא אמרת לי\", \"מה עצרת\" — משחזרת אותן בקול. `quietCmd`/`setQuiet` הקיימים נשארים כעקיפה ידנית מעל המדיניות, לא מתחתיה. גם `BubbleService.setState` ומצבי הבועה מקבלים מקור מהקשר, כך ש\"מנותקת\" מקבלת סיבה מ-`Prefs.silenceReason` של צעד 2. הערה: `ready(d)` עובר כאן ל-`admit(d,ctx)` בעוד ש-`page-kernel` (סעיף ג) מוסיף ל-`ready(d)` פרמטר `staleAfter` — `admit()` עוטף את `ready()` ואינו מחליף אותו, כדי ששני הצעדים לא יתחרו על אותה פונקציה.",
+   "reason": "הוסרו השדות `room`/`company` והכלל שנשען על `room-audio` שהוסר; במקומם אותות מאומתים בקוד או קיימים בתוכנית. תוספות השופט: (1) הובהר ש-`lastWake` מגיע מ-`place-sense` — עקבי עם תיקון place-sense/what באותה חבילה ועם ההצהרה ב-calendar-sense/what שהיומן אינו קורא את השדה; (2) נוספה הערה שמונעת התנגשות עם page-kernel סעיף (ג), ששני הצעדים משנים בה את `ready(d)`."
+  },
+  {
+   "step_id": "context-fusion",
+   "field": "measure",
+   "new_value": "על 500 מסירות inbox: ל-100% יש רשומת החלטה עם צילום הקשר וכלל מנומק. על 20 פגישות מסומנות ביומן (`attendees ≥ 2`, `selfStatus` מאושר): 0 צלצולים ו-0 רטטים, בעוד `urgent` עובר ב-100%. על 30 שיחות טלפון/VoIP: `call===true` תוך ≤ 2 שניות מתחילת השיחה ב-≥ 28, ו-0 צלצולים במהלכן. חיבור וניתוק אוזניות 20 פעם: `headset` מתעדכן נכון ב-20/20 תוך ≤ 3 שניות. `voices.other` נדלק ב-≥ 90% מ-50 מקטעים מתוסרטים שבהם דיבר אדם אחר, ופג תוך 90±10 שניות. \"למה לא אמרת לי\" עונה נכון על כל הודעה מ-7 הימים האחרונים ב-20/20. חציון השהיה משינוי חוש ועד עדכון `sense/context/now` < 5 שניות. לא נמדד — ולכן גם לא נטען — שיעור ההפרעות בנוכחות אנשים שאין להם פגישה ביומן, שיחה פעילה או קול שנשמע: אין לזה חיישן בתוכנית.",
+   "reason": "הוסר המדד הכללי על \"הפרעות בנוכחות אנשים\" שאין לו חיישן; כל סעיף נמדד עכשיו מול אות קיים (יומן, `AudioManager.getMode`, `getDevices`, who-speaks), ונאמר במפורש מה לא נמדד."
+  },
+  {
+   "step_id": "context-fusion",
+   "field": "depends",
+   "new_value": "sense-bus-ears, place-sense, calendar-sense, who-speaks",
+   "reason": "`room-audio` אינו קיים בתוכנית (מופיע ברשימת `dropped`); הוחלף ב-`who-speaks`, שהוא מקור האות היחיד שבאמת קיים לזיהוי דובר שאינו מאיר. ארבעת המזהים אומתו כקיימים ומוקדמים ל-context-fusion: who-speaks באבן דרך 4 (צעד 32) מול context-fusion באבן דרך 7 (צעד 63) — תלות קדימה, אין מעגל."
+  },
+  {
+   "step_id": "context-fusion",
+   "field": "risk",
+   "new_value": "המדיניות הופכת לקופסה שחורה שבולעת הודעות חשובות בשקט — החמרה של הכשל הקיים שבו הודעות חיכו ימים. אם יומן ההחלטות לא נכתב לפני ההשתקה, אין מה לחקור, וליבה תיראה שרירותית. לא מכוסה: נוכחות אנשים שאינה פגישה ביומן ואינה קול — אורח שנכנס, ילד שיושב בשקט, פגישה שלא נקבעה. `room-audio` היה החיישן לזה והוסר בציון 3.7, ולכן ליבה עוד תצלצל בחדר מלא. `voices.other` הוא ראיה חיובית בלבד: הוא מוכיח שיש מישהו, לא שאין. `meeting` תלוי במשמעת היומן של מאיר, `call` נדלק גם בשיחה שהוא מנהל לבדו, ו-`headset` מניח שמי שחובש את האוזניות הוא מאיר. העקיפה היחידה כשהמדיניות טועה היא `quietCmd` הידנית — ולכן היא חייבת להישאר מעל המדיניות ולא מתחתיה. סיכון נוסף מכיוון התלות: `voices.other` נשען על `who-speaks`, שהמדד שלו מתיר עד 5% דחייה-שגויה — כלומר אחת מעשרים אמירות של מאיר עלולה להירשם כדובר אחר ולדחות לו הודעה בחמש דקות; לכן הדחייה היא `soft` וקצרה, ולא השתקה.",
+   "reason": "נוסף במפורש מה נשאר לא מכוסה בלי `room-audio`, ומה מגבלות כל אות מחליף. תוספת השופט: קישור בין סף השגיאה שנקבע במדד של who-speaks (באותה חבילת תיקונים) לבין ההשפעה שלו על המדיניות כאן."
+  },
+  {
+   "step_id": "week-ledger",
+   "field": "what",
+   "new_value": "`weekClose()` ב-`liba-agent.js`, נקרא מ-`dueLoop()` של `work-book` ובטעינת הדף הראשונה אחרי חמישי 16:00, עם נעילה `work/close/<weekId>` כך שירוץ פעם אחת בשבוע גם אם הדף היה מת ארבעה ימים. הצעד כותב בעצמו את שני האוספים שאין להם מקור אחר: `presenceTick()` על אותו טיימר חמש-דקות כותב `work/presence/items/<yyyy-mm-dd>` {minutesOpen,firstAt,lastAt}; ו-`closeCmd(text)` כענף ב-`send()` לפני `taskCmd` (`liba-call.html:193`) לוכד 'נסגר'/'עשיתי את זה'/'לא רלוונטי' וכותב `work/closes/items/<ulid>` {obligationId,weekId,verdict:done|na,by:'מאיר',ts}. לכל חובה ב-`work/cycle` הפסיקה נגזרת בסדר קבוע וכל שורה נושאת `src` עם נתיב המסמך שהכריע: `work/closes/items` (הכרעת מאיר) ← `work/runs/items` של `voice-form` כש-`doneFields` מכסה את ה-`required` (kind form|report) ← `decisions/log/items` הקיים היום ב-`liba-call.html:311`, מסונן ל-`ts` בחלון השבוע ול-`topic` שמופיע ב-`feeds[]` (kind decision) ← `tasks` עם `kind:'form-emit'` ו-`status:'done'` ← `lastDoneAt` ב-`work/cycle` (kind shift|payment|visit). ארבע פסיקות: done, late (`lastDoneAt` אחרי `dueHour`+`graceHours`), missed, ו-unknown כשאין רשומת presence ליום המועד. שלוש פעולות: (א) לוח תוצאות בהקראה של 40 שניות דרך `queueLocal({kind:'ask'})` תחת `Mandate.allow('speak_unprompted')`, כולל שורת הימים שבהם לא הייתי פתוחה; (ב) כל `missed` נפתחת כ-`tasks/<ulid>` עם `priority`, כך שהכרזת הלוח הקיימת (`liba-call.html:138`, ההערה `step 42`) רודפת אחריה בשבוע הבא, ו-`streak` ב-`work/cycle` נאפס; (ג) `work/ledger/items/<weekId>` {onTime,late,missed,unknown,byKind,closedAt}. כל פסיקה ותיקון נרשמים ב-`Ledger.record` עם `cause:'week-close'`. `closeCmd` נכנס לאותה שרשרת דיספאץ' שאליה נכנסים `workerCmd` (worker-open), `shipCmd` (say-ship), `brainCmd` (brief-handoff) ו-`whyCmd` (context-fusion) — הסדר ביניהם נקבע ברג'יסטרי הכוונות של `intent-kernel` ולא בשרשרת regex, אחרת חמישה צעדים יתחרו על אותה שורה.",
+   "reason": "הוסרו `work/shifts/<weekId>.published` ו-`work/decisions/items` שאף צעד בתוכנית לא כותב; הדוח נשען עכשיו על אוספים שנכתבים בפועל, עם שדה `src` לכל שורה. תוספת השופט: אומת שחמישה תיקונים בחבילה הזאת מכניסים פקודה חדשה לאותה שרשרת דיספאץ' (שורה 196/193) — נוספה הפניה לרג'יסטרי של intent-kernel כדי למנוע התנגשות."
+  },
+  {
+   "step_id": "week-ledger",
+   "field": "measure",
+   "new_value": "`tests/ledger.check.js` (חדש) יוצא 1 בשלושה תנאים: לחובה שסומנה `missed` אין `tasks/<id>` תואם תוך 60 שניות מהסגירה; `work/ledger/items/<weekId>` לא מקיים `onTime+late+missed+unknown == |work/cycle.obligations|`; או שיש שורת done בלי שדה `src` שמצביע למסמך קיים ב-`work/closes/items`, `work/runs/items`, `decisions/log/items` או `tasks`. שש סגירות רצופות בלי הפעלה ידנית — `work/ledger/items` מחזיק 6 מסמכים עם `weekId` נבדלים. 0 ימים שנספרו `missed` בלי רשומת `work/presence/items` לאותו יום, על פני 42 ימים. 'נסגר' על שורת missed הופך אותה ל-done וכותב `work/closes/items` תוך שנייה, ב-10 מתוך 10 ניסיונות. אחוז החובות בזמן עולה ב-15 נקודות ומעלה מול בסיס שבוע ראשון.",
+   "reason": "המדד נמדד עכשיו רק על אוספים שנכתבים בפועל, ומוסיף שני ספים חדשים: כיסוי מלא של החובות בסיכום, ו-`src` קיים לכל שורת done — כך שאי אפשר לדווח על ריק."
+  },
+  {
+   "step_id": "week-ledger",
+   "field": "depends",
+   "new_value": "work-book, voice-form, ledger-fsm, mandate",
+   "reason": "הוסרו `shift-roster` ו-`decision-precedent` שאינם בין 100 הצעדים (הם ברשימת `dropped`); נותרו ארבעה מזהים שאומתו כקיימים — work-book (98), voice-form (99), ledger-fsm (79), mandate (80) — כולם מוקדמים ל-week-ledger (100). אין מעגל."
+  },
+  {
+   "step_id": "week-ledger",
+   "field": "monstrous",
+   "new_value": "זה הדבר הראשון במערכת שיש לו דעה על הביצועים של מאיר, מגובה במספרים שהוא יכול לבדוק, והוא סוגר את הלולאה על כל מה ש-`work-book` ו-`voice-form` אספו ועל מה שהוא עצמו רושם — `work/presence/items` ו-`work/closes/items`, שני אוספים שאף צעד אחר בתוכנית לא כותב. הוא גם מכניס תזמון אמיתי למערכת שאין בה שום תזמון — דרך נעילת `weekId` וקריאה בהשכמה, ולא דרך הנחה שהאפליקציה פתוחה.",
+   "reason": "\"ארבעת הצעדים הקודמים\" כבר לא קיימים — שניים מהם נדחו; הנוסח מצביע על שני הצעדים שקיימים ועל שני האוספים שהצעד כותב בעצמו."
+  },
+  {
+   "step_id": "always-updatable",
+   "field": "depends",
+   "new_value": "one-tree-one-version",
+   "reason": "`one-version` ⇒ `one-tree-one-version`; הוא זה שמספק את `versionCode`/`versionName` מ-`VERSION` ואת `version.json` החתום שה-`UpdateWorker` מושך. אומת: `one-version` אינו מזהה צעד (יש רק קובץ `gates/one-version.mjs`), ו-`one-tree-one-version` הוא הצעד הראשון בתוכנית — תלות קדימה."
+  },
+  {
+   "step_id": "freshness-ttl",
+   "field": "depends",
+   "new_value": "wal-queue, req-spine",
+   "reason": "`ulid-clock` ⇒ `req-spine`: `mintId()` (48 ביט זמן + 32 אקראי + מונה מונוטוני) ו-`req/<reqId>.askedAt` הם מקור הזמן היציב שבלעדיו אי אפשר לחשב `validUntil` וגיל הודעה. אומת מול `what` של req-spine — שני השדות אכן מוגדרים שם. שני המזהים קיימים ומוקדמים (wal-queue 13, req-spine 4, מול freshness-ttl 20)."
+  },
+  {
+   "step_id": "owner-lease",
+   "field": "depends",
+   "new_value": "core-machine, req-spine",
+   "reason": "`ulid-clock` ⇒ `req-spine`: החכירה נשענת על `lastTurnId` ועל `replyTo`, ו-`req-spine` הוא שמייצר את מזהי התור (`PATH.turn(id)`) ואת `mintId()` המונוטוני. שני המזהים אומתו כקיימים ומוקדמים."
+  },
+  {
+   "step_id": "second-channel",
+   "field": "depends",
+   "new_value": "one-life, req-spine",
+   "reason": "`resurrect-boot` ⇒ `one-life` (הוא ברשימת `dropped` עם הנימוק 'כפילות של אותו BootReceiver'; one-life הוא הבעלים היחיד של ה-`BootReceiver`, `LibaScheduler` ו-`channel/device` שעליו `Fallback.kt` מחליט מסלול), ו-`ulid-clock` ⇒ `req-spine` שממנו מגיע המזהה שלפיו `LibaWeb.hello()` מונע הקראה כפולה. שני המזהים קיימים; one-life (24) מוקדם ל-second-channel (25)."
+  },
+  {
+   "step_id": "calendar-sense",
+   "field": "depends",
+   "new_value": "sense-bus-ears, one-life",
+   "reason": "`body-clock` הוסר מהתוכנית (ברשימת `dropped`, עם הנימוק 'המתזמן שלו הוא המתזמן של one-life'); מה שהיומן באמת צריך ממנו הוא התזמון המדויק של תדרוך T-10, כלומר `LibaScheduler` של one-life. שני המזהים קיימים ומוקדמים."
+  },
+  {
+   "step_id": "calendar-sense",
+   "field": "what",
+   "new_value": "`CalSense.kt` — שאילתת `CalendarContract.Instances.query` על חלון ±7 ימים, `ContentObserver` על `CalendarContract.CONTENT_URI` שמפעיל `SenseBus.emit(\"cal\", ...)`, הרשאות `READ_CALENDAR`/`WRITE_CALENDAR` במניפסט. כל מופע נכתב ל-`sense/cal/items` עם `{start,end,title,where,attendees,allDay,selfStatus,conflict}`, וסטטוס נוכחי ל-`sense/cal/now`. בדף: `calCmd(text)` חדש שנרשם ברג'יסטרי הכוונות מצעד 1 (ולא בשרשרת ה-regex של שורה 196) ומטפל ב-\"מה יש לי היום\", \"מה יש לי מחר\", \"מתי אני פנוי בשבוע\", \"תקבע פגישה עם X ביום שלישי בעשר\", \"תזיז את הפגישה בשעה\". כתיבה ליומן אמיתי עוברת דרך `kind:'confirm'` חדש ב-`incoming()` — ליבה מקריאה מה היא עומדת לכתוב ומחכה ל\"כן\" לפני `Events.CONTENT_URI` insert. תדרוך לפני פגישה: `SenseRules` פולט `kind:'ask'` ב-T-10 דקות, מתוזמן ב-`LibaScheduler.setExactAndAllowWhileIdle` שבבעלות `one-life` ולא במתזמן מקומי משלו, עם שלוש עובדות `sense/notif` אחרונות מאותו אדם, פריטי `memory/notes` שמזכירים אותו, ומשימה תואמת מ-`tasks`. `CalSense` אינו קורא `sense/body/now.lastWake`: חלון התדרוך נגזר מזמן האירוע עצמו, ושעת ההתעוררות שייכת ל-`place-sense`.",
+   "reason": "ההסתמכות הישנה על `body-clock` נוסחה מחדש: התזמון מיוחס במפורש ל-`LibaScheduler` של `one-life`, ונאמר שהיומן אינו נשען על `lastWake` כלל. אומת שהמשפט האחרון עקבי עם תיקון `place-sense/what` באותה חבילה, שמעביר לשם את הבעלות על `sense/body/now` — אין בעלות כפולה."
+  },
+  {
+   "step_id": "place-sense",
+   "field": "depends",
+   "new_value": "sense-bus-ears, one-life",
+   "reason": "`body-clock` הוסר; `place-sense` כבר נשען על `Heartbeat` (\"מצעד 2\") שהוא רכיב של `one-life`, ומכאן גם המתזמן שלו. שני המזהים קיימים ומוקדמים."
+  },
+  {
+   "step_id": "place-sense",
+   "field": "what",
+   "new_value": "`PlaceSense.kt` — `FusedLocationProviderClient.requestLocationUpdates` ב-`PRIORITY_BALANCED_POWER_ACCURACY` כל 5 דקות, `GeofencingClient` עם עד 100 גדרות, ו-`ActivityRecognitionClient` ל-`IN_VEHICLE/WALKING/STILL`. הרשאות `ACCESS_FINE_LOCATION`, `ACCESS_BACKGROUND_LOCATION`, `ACTIVITY_RECOGNITION` במניפסט. פולט `sense/place/items {geofence,event:'enter'|'exit',at,conf}` ו-`sense/place/now`. בנוסף `PlaceSense` הוא הכותב היחיד של `sense/body/now {lastWake, wakeSource:'unlock'|'motion', asleepSince, motion, at}` — זמן ההתעוררות של מאיר, שהיום אף אחד לא כותב: `one-life` כותב רק `channel/device {…, uptime, lastSpokeAt, lastHeardAt}`, שהם זמני המכשיר ולא שעת הקימה. שני מקורות: (א) מקלט ה-`ACTION_SCREEN_ON`/`ACTION_SCREEN_OFF` הקיים ב-`BubbleService.kt` (שורה 316, היום רק מחליף `dot?.visibility`) מקבל `SenseBus.emit(\"body\",\"wake\",…)` על ההדלקה הראשונה אחרי מסך כבוי רצוף של ≥ 4 שעות; (ב) `ActivityRecognitionClient` מאשר במעבר `STILL`→`WALKING` שמחזיק מעל 60 שניות. הראשון שמגיע קובע את `lastWake`, השני רק ממלא `wakeSource`, ויקיצת ביניים קצרה מ-10 דקות אינה מאפסת. `GeoReceiver` (BroadcastReceiver) מטפל בטריגר גם כשהשירות מת, דרך `Heartbeat` מצעד 2. בדף: `placeCmd` — \"כאן זה המשרד\" (כותב `memory/places/items` ורושם גדר 150 מטר במקום, בלי מפה ובלי הקלדה), \"איפה אני הייתי היום\", \"כשאני מגיע ל-X תזכיר לי Y\" שהופך ל-`memory/triggers` עם תנאי מקום. ב-`BubbleService.handleUtterance` — היום \"מצב רכב\" הוא ביטוי ידני ברשימת ה-`when`; נוסף מסלול שמדליק `carMode` אוטומטית כש-`IN_VEHICLE` מעל 75% במשך 60 שניות ומכבה ב-`exit`, כולל `label?.textSize = 22f` ו-`setupMediaSession()` הקיימים, ועם אמירה קולית אחת בכניסה למצב כדי שמאיר ידע. הערת בעלות: אותו מקלט `ACTION_SCREEN_ON/OFF` מורחב גם ב-`context-fusion` (עבור שדה `screen`) — `PlaceSense` הוא הכותב של `sense/body/now` ו-`SenseFusion` הוא הכותב של `sense/context/now.screen`, ושניהם נרשמים כצרכנים של אותו מקלט דרך `SenseBus` במקום לרשום שני מקלטים.",
+   "reason": "`body-clock` סיפק את `sense/body/now.lastWake` ונבלע; הבעלות עוברת ל-`place-sense`, שכבר מחזיק `ActivityRecognitionClient`, ומתחברת למקלט ה-SCREEN_ON הקיים. תוספת השופט: `context-fusion` בחבילה הזאת מרחיב את אותו `BroadcastReceiver` — נוספה הערת בעלות שמפרידה בין הכותבים ומונעת שני מקלטים לאותו אירוע."
+  },
+  {
+   "step_id": "place-sense",
+   "field": "measure",
+   "new_value": "50 מעברי גדר במשך שבוע: ≥ 90% נפלטים תוך 2 דקות מההגעה בפועל, ≤ 2 כניסות שווא. מצב רכב נדלק לבד ב-9/10 נסיעות אמיתיות בלי שמאיר אמר מילה, ונכבה ב-10/10. תזכורת מבוססת-מקום שנקבעה פעם אחת יורה בדיוק פעם אחת בהגעה הבאה ב-10/10. `sense/body/now.lastWake` נכתב ב-14/14 בקרים רצופים, עם פער ≤ 15 דקות מהשעה שמאיר מאשר בקול, ו-0 כתיבות שווא מיקיצות לילה קצרות מ-10 דקות. צריכת סוללה נוספת ≤ 3% ליום מדודה ב-Battery Historian.",
+   "reason": "סעיף `sense/body/now` שנוסף ל-what חייב מדד יציאה מספרי משלו; שאר המדדים נשארו כלשונם."
+  },
+  {
+   "step_id": "mem-brief",
+   "field": "what",
+   "new_value": "פונקציה brief(text) חדשה שנקראת מתוך deliver(text,tag) (liba-call.html:275) ובונה בלוק ‎[הקשר]‎ של 600‑800 תווים לפני הטקסט: שורת זהות מ‑memory/identity, 3‑6 עובדות שמוחזרות מ‑MEM.retrieve(text) — טוקנייזר עברי שמפשיט אותיות שימוש (ב/ל/כ/ו/ש/ה/מ), ניקוד וסופיות, ומדרג לפי חפיפת מונחים × conf × טריות — שרשורים פתוחים, וכללי מדיניות שמגבילים את התשובה. חתימת ‎[הקשר#hash]‎ כדי שהסשן יוכל לאשר שהשתמש בו. מסמך memory/identity הופך לכרטיס הקנוני, נכתב בפקודת identityCmd חדשה (\"אני מאיר, יש לי…\") ונקרא ב‑onSnapshot לצד שמונת המנויים הקיימים. מסנן sens≥2 מוציא רגיש מהבלוק, ופקודת \"בלי הקשר\" מכבה לשיחה אחת. באותו צעד נבנית רתמת recall7 — הבעלים היחיד של מדד ה‑7 ימים של אבן הדרך: tests/memory-recall.jsonl עם 120 רשומות {seed, probes[2], key, value, sens}, 60 מהן נחצבות מ‑chat/log/turns האמיתי (הכתיבה עם from:'user' בשורה 312) ו‑60 נכתבות ביד לכיסוי חמשת ערכי kind של mem-core; כל probe חולק עם ה‑seed מילת תוכן אחת לכל היותר, אחרת הרתמה מודדת את עצמה. tests/recall7.js טוען את liba-call.html מעל ה‑stub של המסד שכבר קיים ב‑tests/page.e2e.js (window.__h.set כותב ישירות למסד המדומה), מזין כל seed פעם אחת דרך memoryCmd, מזיז את כל ts/updatedAt/lastUsed שבעה ימים אחורה, ואז מריץ לכל probe את MEM.retrieve ואת brief() ומשווה מפתחות — בלי שיפוט אנושי ובלי לשאול את מאיר, כי המפתח slug(subject).slug(predicate) דטרמיניסטי והוא הסימון. הדוח מפריד שלושה שלבים: typed (MEM.parse ייצר את המפתח הצפוי ולא נפל ל‑kind:'note'), retrieved (המפתח בשישייה הראשונה של MEM.retrieve(probe)) ו‑briefed (המפתח בבלוק ‎[הקשר]‎ בפועל). בקרת אחסון מקבילה: \"מה אתה זוכר על X\" חייבת להחזיר את המפתח, כדי להפריד כשל אחסון מכשל אחזור.",
+   "reason": "הוספתי ל‑mem-brief את מפרט רתמת recall7 — מקור העובדות (לוג אמיתי + סט ידני), דרך הריצה מעל ה‑stub הקיים, הזזת החותמות ב‑7 ימים, ושלושת שלבי המדידה — כי brief() הוא המקום היחיד שבו עובדה באמת \"נזכרת\". אומת בעץ: `tests/page.e2e.js` אכן קיים ו-`tests/` מכיל בדיוק שני קבצים, כך שהרתמה היא תוספת ולא דריסה."
+  },
+  {
+   "step_id": "mem-brief",
+   "field": "measure",
+   "new_value": "node tests/recall7.js רץ על 120 עובדות שנאמרו פעם אחת ו‑240 גישושים עם חותמות שהוזזו שבעה ימים אחורה, ויוצא 1 אם אחד משלושת הספים נשבר: typed ≥80%, retrieved ≥85% מהעובדות שעברו typed, briefed ≥95% מאלה שעברו retrieved — מכפלה מקצה לקצה ≥70%, עם שורת דוח לכל שלב כך שרגרסיה מיוחסת לשלב ולא לכלל. בקרת האחסון \"מה אתה זוכר על X\" מחזירה את המפתח ב‑120/120. על 20 משפטים אמיתיים מ‑chat/log/turns הבלוק מחזיק ≥3 עובדות שמפתחן מופיע ברשומת הגישוש. 100% מההערות היוצאות כוללות ‎[הקשר]‎, כל בלוק ≤800 תווים (נבדק בבדיקה). 0 עובדות עם sens≥2 בבלוק על 200 משפטי מבחן.",
+   "reason": "החלפתי \"דיוק ≥0.8 בסימון ידני\" — מדד שאי אפשר להריץ — בשלושה ספים שנמדדים בפקודה אחת ומכפלתם היא מדד ה‑7 ימים; 90% אינו ריאלי כי הנזכרוּת היא מכפלה של שלושה שלבים: MEM.parse היא טבלת תבניות עברית עם נפילה מוצהרת ל‑kind:'note', MEM.retrieve הוא מאחזר לקסיקלי בלי embeddings, ומסנן sens≥2 מוציא עובדות מהבלוק בכוונה — 0.80×0.85×0.95≈0.70."
+  },
+  {
+   "step_id": "mem-brief",
+   "field": "depends",
+   "new_value": "mem-core, test-gate-real",
+   "reason": "הרתמה חייבת לצאת בקוד שונה מאפס ולחסום גרסה; test-gate-real הוא הצעד שהופך בדיקה אדומה לחוסמת. שני המזהים אומתו כקיימים: mem-core באבן דרך 6 (צעד 51) ו-test-gate-real באבן דרך 1 (צעד 8), שניהם לפני mem-brief (52) — תלות קדימה, אין מעגל."
+  },
+  {
+   "step_id": "mem-brief",
+   "field": "risk",
+   "new_value": "דליפת מידע משפחתי או עסקי רגיש לשרשור הערות שאינו פרטי, ודחיקת המשפט האמיתי מתשומת הלב של הסשן. מיתון: sens ברירת מחדל 1 לכל עובדה שמוזכר בה אדם, תקרת תווים קשיחה, והמשפט של מאיר תמיד אחרון בבלוק. סיכון שני: רתמת recall7 נכתבת כך שתעבור — גישושים שמנסחים מחדש את ה‑seed במילים שלו ומנפחים את האחזור. מיתון: חפיפה של מילת תוכן אחת לכל היותר בין seed ל‑probe, 60 מהרשומות מנוסחות מלוג אמיתי ולא בידי מי שכותב את המאחזר, ושלושת הספים נמדדים בנפרד כך שניפוח בשלב אחד נראה מיד. סיכון שלישי: `brief()` נקרא מתוך `deliver()`, ו-`brain-roster-lease` מוסיף לאותה פונקציה שורת חוזה משלו — שני הצעדים חייבים להתווסף לטקסט היוצא ולא להחליף זה את זה, אחרת בלוק ההקשר או שורת הדופק ייעלמו בלי שאיש ישים לב.",
+   "reason": "מדד שהוא גם הרתמה של עצמו ניתן להטיה; הוספתי את סיכון ההתאמה‑לרתמה ואת המיתון. תוספת השופט: אומת ששני תיקונים בחבילה (זה ו-brain-roster-lease/what) מזריקים טקסט לאותה `deliver()`."
+  },
+  {
+   "step_id": "forget",
+   "field": "measure",
+   "new_value": "\"תשכח הכול על X\" מסיר מחמישה אוספים — בדיקה סופרת 0 התייחסויות שרידיות; ביטול משחזר 100% תוך 24 שעות; מתוך 30 עובדות זרועות שעשר מהן פגות, 0 פגות מופיעות ב‑brief(); sweep על 5,000 עובדות מתחת ל‑5 שניות; רתמת recall7 של mem-brief רצה שוב אחרי MEM.sweep() על אותו מאגר בן שבעה ימים — briefed יורד ב‑≤2 נקודות אחוז ו‑0 עובדות live יורדות ל‑archive בטעות.",
+   "reason": "טענת ה‑7 ימים מחזיקה רק אם ttl ו‑decay לא אוכלים עובדות חיות; הוספתי הרצה חוזרת של אותה רתמה אחרי sweep כשער לצעד. אומת שהתלות הקיימת forget→mem-brief כבר בקובץ, כך שהרתמה קיימת בנקודה הזאת."
+  }
+ ],
+ "conflicts_resolved": [
+  "ארבע התנגשויות על אותו (step_id, field) — כולן ב-depends. 54 תיקונים נכנסו, 50 יוצאים, ועוד אחד שהשופט הוסיף = 51.",
+  "protocol-contract/depends — שני תיקונים, ערך זהה בדיוק ('one-tree-one-version, page-kernel'). אין קונפליקט אמיתי; הושאר אחד והנימוקים מוזגו (one-version=שם ישן של one-tree-one-version; page-autopublish נבלע ב-page-kernel).",
+  "ship-pipeline/depends — התנגשות אמיתית: 'one-tree-one-version, page-kernel, release-gate' מול 'one-tree-one-version' בלבד. נבחרה העל-קבוצה, כי ה-what של הצעד מריץ gates/page-published.mjs (נולד ב-page-kernel) ואוכף את שער השילוח של release-gate. הנימוק של המפסיד (one-tree-one-version מספק pinned-cert, gradlew ותיקון env.KS) נשמר בנימוק המאוחד.",
+  "test-gate-real/depends — התנגשות אמיתית: 'one-tree-one-version, page-kernel, release-gate' מול 'page-kernel, one-tree-one-version'. נבחרה העל-קבוצה; release-gate הוא הצעד שהופך בדיקה אדומה ל-required check.",
+  "audio-core/depends — התנגשות אמיתית והכרעה עובדתית. התיקון השני הוסיף את assistant-role לרשימת התלויים ב-audio-core. סריקה על כל 100 הצעדים הראתה שבדיוק ארבעה מצהירים depends על audio-core (who-speaks, barge-resume, nbest, car), ו-assistant-role מצהיר 'תלוי בצעד תחיית-הערוץ' ואינו מזכיר audio-core כלל — התוספת נדחתה. בנוסף מוזג תיקון פורמט: שני התיקונים השאירו מזהי צעדים בתוך depends של צעד עצמאי (רשימת תלויים הפוכה), וזה ייצר ארבעה מעגלי שווא בגלאי המעגלים; הערך נוסח בלי מזהים, כמו אצל שאר הצעדים העצמאיים בקובץ.",
+  "(ד) סתירה חוצת-סוכנים #1, המטביע הרביעי: page-kernel/what סעיף (ו) הכניס newId(), worker-open/what הכניס wid(), ושניהם הצהירו שהם מחליפים את String(Date.now()) באותם ארבעה אוספים — בעוד req-spine (אבן דרך 1) כבר מצהיר על mintId() לחמשת אותם אתרים, ו-ledger-fsm על ulid(). זו בדיוק הבעלות הכפולה ש-plan/plan.mjs --check אמור להפיל, והיא סותרת ישירות את שני תיקוני freshness-ttl ו-owner-lease באותה חבילה, שנימוקם הוא ש-req-spine הוא מקור הזמן והמזהים. תוקן בשני מקומות: (ו) מפנה עכשיו ל-mintId ומייצא newId=mintId; wid() עוטף את mintId() ומטביע מפתחות עובדים בלבד.",
+  "(ד) סתירה #2, עצירת הצי: worker-open/what נוסח 'כתיבה אחת ולא לולאה על N עובדים', בעוד fleet-control (לא נגוע) כותב 'תעצור הכול עובר על כל הרצים'. נוסח מחדש כך ששניהם מתארים אותה התנהגות — כתיבה אחת שחלה על כל הרצים.",
+  "(ד) סתירה #3, מונה השערים: plan-graph-gates מבטיח gates/run.mjs שמדפיס X/13 על רשימה סגורה. החבילה מוסיפה gates/page-published.mjs, gates/artifact-pin.mjs ו-gates/voiceid-corpus.mjs. הוכרע: page-published תופס את המשבצת הקיימת page-hash-parity ואינו שער חדש; artifact-pin ו-voiceid-corpus הם שניים חדשים והמונה עולה ל-15. נוספו הערות רישום מפורשות ב-ship-pipeline/what, page-kernel/what ו-who-speaks/what.",
+  "(ד) סתירה #4, ready(d): page-kernel סעיף (ג) מוסיף ל-ready(d) פרמטר staleAfter, ו-context-fusion מחליף את ready(d) ב-admit(d,ctx) — שני צעדים על אותה פונקציה. הוכרע ש-admit() עוטף את ready() ואינו מחליף אותו; נוספה הערה ב-context-fusion/what.",
+  "(ד) סתירה #5, מקלט ACTION_SCREEN_ON/OFF: place-sense (עבור sense/body/now.lastWake) ו-context-fusion (עבור sense/context/now.screen) מרחיבים שניהם את אותו BroadcastReceiver. נוספה הערת בעלות ב-place-sense/what — שני צרכנים דרך SenseBus, לא שני מקלטים.",
+  "(ד) סתירה #6, שרשרת הדיספאץ': חמישה תיקונים מכניסים פקודה חדשה לאותה שורה 196/193 (workerCmd, shipCmd, closeCmd, brainCmd, whyCmd). נוספה ב-week-ledger/what הפניה לרג'יסטרי הכוונות של intent-kernel כקובע הסדר, במקום שרשרת regex.",
+  "(ד) סתירה #7, deliver(): mem-brief מזריק בלוק [הקשר] ו-brain-roster-lease מזריק שורת חוזה דופק — לאותה פונקציה. נוסף סיכון מפורש ב-mem-brief/risk שהשניים מתווספים ולא מחליפים.",
+  "(ד) מדידה לפני מימוש: brain-roster-lease/measure מדד את 'מי המוח', פקודה שבעלותה ב-brief-handoff — שכעת תלוי ב-brain-roster-lease, כלומר בא אחריו. הסעיף סויג כך שיימדד רק כששני הצעדים ירוקים.",
+  "(ד) בעלות כפולה שאותרה ותועדה בלי לפתור אותה בתיקון: gradlew מוצהר גם ב-one-tree-one-version(ד) וגם ב-release-gate; tests/page.e2e.js exit(1) מוצהר בשלושה צעדים (release-gate, test-gate-real, plan-graph-gates); כתיבה מחדש של workflow הבנייה ותיקון env.KS מוצהרים בשלושה (one-tree-one-version, release-gate, ship-pipeline). נוספו הערות ב-who-speaks/depends, test-gate-real/risk ו-ship-pipeline/risk; ההכרעה עצמה שייכת ל-plan/plan.mjs --merge.",
+  "(ד) סתירה פוטנציאלית שנבדקה ונמצאה תקינה: שלושה תיקונים נוגעים ב-sense/body/now.lastWake — place-sense לוקח בעלות, calendar-sense מצהיר שאינו קורא אותו, ו-context-fusion צורך אותו ל-morning. שלושתם עקביים; לא נדרש שינוי.",
+  "(ה) הערת יישום: page-kernel מכניס את gates/no-line-anchors.mjs שאוסר הפניות למספרי שורה, בעוד התיקונים בחבילה הזאת מוסיפים כ-14 ציטוטי שורה חדשים (liba-call.html:275, שורה 196, BubbleService.kt:314-316, VadGate.kt:22 ועוד). plan/anchors.mjs --migrate חייב לרוץ על כל מסמכי הצעדים ולא רק על הקיימים ביום כתיבתו; נוסף ל-page-kernel/risk."
+ ],
+ "cycles": [
+  "לא נוצר אף מעגל מהתיקונים. הרצתי גלאי מעגלים (DFS עם צביעה) על גרף ה-depends של כל 100 הצעדים אחרי החלת ההכרעות — נקי בכל תת-הגרף שהחבילה נוגעת בו.",
+  "מעגל שנמנע: brain-roster-lease הצהיר במקור 'תלוי בצעדים brain-pulse ו-wake-envelope', בעוד wake-envelope מצהיר תלות ב-brain-roster-lease אחרי התיקון. הסרת wake-envelope מ-depends של brain-roster-lease (תיקון 3) היא מה שמונע את המעגל, והיא הכרחית — בלעדיה הגרף סוגר מעגל בן שני צמתים.",
+  "מעגלי שווא שנוטרלו: הניסוח המקורי של audio-core/depends ('עצמאי — זהו הבסיס לצעדים who-speaks, barge-resume, nbest ו-car') הוא רשימת תלויים הפוכה בתוך שדה depends. גלאי מעגלים שמפרסר מזהים מהשדה החזיר ארבעה מעגלים: audio-core↔who-speaks, ↔barge-resume, ↔nbest, ↔car. שני התיקונים המתחרים שימרו את הפורמט הזה; הערך המאוחד מנוסח בלי מזהים והמעגלים נעלמו.",
+  "מעגל אמיתי שנותר בקובץ ואינו נוגע לאף אחד מ-54 התיקונים: turn-engine ↔ silent-why. turn-engine/depends כותב 'barge-resume (spokenChars); משמש בסיס ל-days ול-silent-why' — שוב רשימת תלויים הפוכה בתוך depends — ו-silent-why/depends כותב 'turn-engine (שיטת המזהים); ניזון מ-days להתיישנות'. הכיוון האמיתי הוא silent-why→turn-engine ו-days→turn-engine. תיקון מומלץ בחבילה נפרדת: להוריד מ-turn-engine/depends את הסיפא 'משמש בסיס ל-days ול-silent-why' ולהשאיר 'barge-resume (spokenChars)'.",
+  "היפוכי סדר (לא מעגלים, אך מחייבים מיון טופולוגי ולא סדר מערך): brief-handoff (צעד 80) ו-wake-envelope (81) תלויים עכשיו ב-brain-roster-lease (82) שמופיע אחריהם במערך; קיימים גם מראש warm-voice(35)→reflex-code(36) ו-turn-engine(34)→days(45). plan/plan.mjs --order הוא הקובע, ונוספה הערה על כך ב-brain-roster-lease/risk."
+ ],
+ "still_dangling": [
+  "אין אף מזהה מדומה בתוך שדות depends של 51 התיקונים היוצאים — סריקה על כל טוקן מקוקד מול 100 מזהי הצעדים בקובץ חזרה נקייה.",
+  "11 מזהים מדומים שהתיקונים חיסלו, כולם אומתו כלא-קיימים בקובץ: brain-pulse, page-autopublish, one-version, one-trunk, ulid-clock, body-clock, resurrect-boot, room-audio, fleet-scheduler, shift-roster, decision-precedent, voice-lab. (resurrect-boot, body-clock ו-room-audio מופיעים במפורש ברשימת dropped של התוכנית.)",
+  "נותר בקובץ ואינו נוגע לחבילה — addressing/depends: 'intent; משתמש בקולות מהצעד voices לאישור השמיעתי'. גם intent וגם voices נמצאים ברשימת dropped ואינם בין 100 הצעדים. intent התקפל ל-intent-kernel; ל-voices אין יורש בתוכנית, ולכן 'אישור שמיעתי בקולות' הוא הבטחה בלי מקור. דורש תיקון בחבילה נפרדת.",
+  "נותר בקובץ ואינו נוגע לחבילה — assistant-role/depends: 'תלוי בצעד תחיית-הערוץ'. אין צעד בשם הזה; הכוונה כנראה ל-one-life או ל-second-channel. זהו גם המזהה שהתיקון הדחוי ניסה לתלות ב-audio-core.",
+  "נותר בקובץ ואינו נוגע לחבילה — duty-governor/depends: 'תלוי בצעד 1 (power-ledger)'. power-ledger אכן קיים (אבן דרך 7, צעד 62) ומוקדם ל-duty-governor (63), כך שהתלות תקינה; רק ההפניה 'צעד 1' מטעה.",
+  "קבצים שהתיקונים מפנים אליהם ואינם קיימים היום בעץ — נבדקו ונמצאו מכוסים: liba-agent.js (נוצר ב-ledger-fsm, אומת ב-what שלו), app/src/androidTest (who-speaks עצמו מציין שאינו קיים), corpus/voiceid, liba/src, dist/, ship/artifact.json, ship/published.json, ship/publish-page.md, gates/page-published.mjs, gates/artifact-pin.mjs, gates/voiceid-corpus.mjs, gates/no-line-anchors.mjs, tests/recall7.js, tests/ledger.check.js — כולם תוצרים מוצהרים של הצעדים עצמם.",
+  "פער שמות שנותר פתוח: ship-pipeline/what מדבר על .github/workflows/release.yml, בעוד הקובץ בעץ הוא .github/workflows/liba-android.yml — שאותו one-tree-one-version ו-release-gate מצהירים שהם כותבים מחדש. אם הכוונה לשינוי שם, ראוי לאמר זאת במפורש; אחרת מדובר בשני workflows במקביל."
+ ]
+}
