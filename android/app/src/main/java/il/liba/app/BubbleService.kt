@@ -344,6 +344,21 @@ class BubbleService : Service(), LibaWeb.Bridge {
             Unit
         }
     }
+    /** login-health: a claude.ai session that died must not die in silence. Every ten minutes: cookies flushed to disk
+     *  (a killed WebView otherwise loses a fresh login), and no claude.ai cookie at all means logged out for certain -
+     *  said once an hour, and a tap on the bubble opens the page to log in. Whether the session cookie by name is there
+     *  only goes to the black box: the name is claude.ai's to change, and a wrong guess would cry wolf every hour. */
+    private var loginCheckedAt = 0L; private var loginLost = false
+    private fun loginCheck() {
+        val cm = android.webkit.CookieManager.getInstance(); runCatching { cm.flush() }
+        val ck = runCatching { cm.getCookie("https://claude.ai") ?: "" }.getOrDefault("")
+        if (ck.isNotEmpty() && !ck.contains("sessionKey")) Trace.e(Trace.Code.E_PAGE_LOGIN, "cookie-name")
+        if (ck.isEmpty() && !loginLost) {
+            loginLost = true; loginWall = true; Trace.e(Trace.Code.E_PAGE_LOGIN, "no-cookie")
+            val now = SystemClock.elapsedRealtime(); if (now - loginWarnedAt > 3600000) { loginWarnedAt = now; speak("ליבה מנותקת מ-claude. לחץ עליי ואפתח לך את הדף כדי להתחבר.") }
+        }
+    }
+    private fun loginRestored() { if (!loginLost && !loginWall) return; val was = loginLost; loginLost = false; loginWall = false; if (was) speak("התחברתי, הערוץ חי.") }
     private fun reloadPage(why: String) {
         val now = SystemClock.elapsedRealtime(); if (now - lastReloadAt < 90000) return
         lastReloadAt = now; pageReady = false; pageOk = false; pageLoadedAt = now; status = "טוען מחדש ($why)"
@@ -354,6 +369,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (pageReady) web?.let { LibaWeb.hello(it); drainTrace(); pulse(it) }
         else if (pageDeadSince == 0L) pageDeadSince = System.currentTimeMillis()
         UrgentPoller.maybe(this@BubbleService, main, pageDeadSince, pageAliveAt) { speak("הודעה דחופה, בלי הדף: " + it.text, true) }
+        if (SystemClock.elapsedRealtime() - loginCheckedAt > 10 * 60_000L) { loginCheckedAt = SystemClock.elapsedRealtime(); loginCheck() }
         main.postDelayed(this, 30000)
     } }
     private fun watchNetwork() {
@@ -660,6 +676,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         when {
             listening && listenMode != "wake" -> sr?.stopListening()
             speaking || tts?.isSpeaking == true -> { stopSpeaking(); idleOrWake() }
+            !pageReady && loginWall -> { revealPage(true); showLabel("התחבר ל-claude בדף שנפתח", 6000) }
             !pageReady -> { showLabel(status, 6000); web?.let { LibaWeb.hello(it) }; if (status.startsWith("הדף לא")) reloadPage("לחיצה") }
             else -> startListening("cmd")
         }
@@ -799,7 +816,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (!pageReady) showLabel(status, 5000)
         web?.let { LibaWeb.hello(it) }
     } }
-    override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; pageDeadSince = 0L; pageAliveAt = System.currentTimeMillis(); Pulse.resend(); main.postDelayed({ web?.let { pulse(it) } }, 3000); status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
+    override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; loginRestored(); pageDeadSince = 0L; pageAliveAt = System.currentTimeMillis(); Pulse.resend(); main.postDelayed({ web?.let { pulse(it) } }, 3000); status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         if (Prefs.reports(this)) Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } }
         main.postDelayed({ drainTrace() }, 2000) } } }
     fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "heyOff:" + e.javaClass.simpleName) }; listening = false }; unmuteSystem() }
