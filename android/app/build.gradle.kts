@@ -16,6 +16,9 @@ android {
             if (ksProps.isNotEmpty()) {
                 storeFile = rootProject.file(ksProps.getProperty("storeFile").removePrefix("../"))
                 storePassword = ksProps.getProperty("storePassword"); keyAlias = ksProps.getProperty("keyAlias"); keyPassword = ksProps.getProperty("keyPassword")
+                // step 1 (release-gate): v3 as well as v2. v2 alone means there is no key-rotation
+                // path at all - the day this key is lost, every installed copy is frozen forever.
+                enableV1Signing = true; enableV2Signing = true; enableV3Signing = true
             }
         }
     }

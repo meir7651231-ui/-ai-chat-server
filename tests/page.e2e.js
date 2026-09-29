@@ -20,6 +20,7 @@ const sent=[];const comments={canSendToClaude:async()=>'available',anchorFor:asy
 window.claude={use:async n=>n==='db'?db:n==='comments'?comments:null};
 window.__h={db,docs,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSnap(c).docs.map(x=>({id:x.id,...x.data()})),sent};
 })();`;
+const failed = [];
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 420, height: 860 } });
   const errs = [], msgs = [];
@@ -40,7 +41,9 @@ window.__h={db,docs,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSna
   const set = (path, d) => H(([path, d]) => window.__h.set(path, d), [path, d]);
   const get = path => H(p => window.__h.get(p), path);
   const flush = async (ms = 900) => { await p.waitForTimeout(ms); const m = await p.evaluate(() => { const x = window.msgs.slice(); window.msgs = []; return x; }); msgs.push(...m); return m; };
-  const check = (c, m) => console.log((c ? 'PASS ' : 'FAIL ') + m);
+  // step 1 (release-gate): this harness used to print FAIL and exit 0, so every scenario could
+  // fail and the ship would continue. Failures are counted now and the process exits 1.
+  const check = (c, m) => { if (!c) failed.push(m); console.log((c ? 'PASS ' : 'FAIL ') + m); };
   // 1. app hello
   await p.evaluate(() => window.app({ liba: 'hello', ver: '3.1.0' }));
   let m = await flush();
@@ -143,4 +146,6 @@ window.__h={db,docs,set:(p,d)=>docRef(p).set(d),get:p=>docs.get(p),all:c=>colSna
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();
+  console.log(failed.length ? `\n${failed.length} נכשלו:\n  ` + failed.join('\n  ') : '\nכל הבדיקות עברו');
+  if (failed.length) process.exit(1);
 })().catch(e => { console.log('HARNESS ERROR', e); process.exit(1); });

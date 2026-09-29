@@ -42,7 +42,9 @@ if (hard !== '0') die('מספר אחד', `${hard} מופעים קשיחים של
 ok('מספר אחד', 'רק VERSION מחזיק את המספר')
 
 // 3. build
-const gradlew = existsSync(join(ROOT, 'android', 'gradlew')) ? './gradlew' : 'gradle'
+// a missing wrapper means an unpinned gradle from apt, i.e. a different build on every machine
+if (!existsSync(join(ROOT, 'android', 'gradlew'))) die('בנייה', 'android/gradlew חסר — אין gradle נעוץ')
+const gradlew = './gradlew'
 try {
   sh('bash', ['-lc', `cd android && ${gradlew} assembleRelease -q --console=plain`], { stdio: ['ignore', 'pipe', 'inherit'] })
 } catch (e) { die('בנייה', `assembleRelease נכשל (${e.status})`) }
@@ -55,16 +57,18 @@ let certs
 try { certs = sh(APKSIGNER, ['verify', '--print-certs', apk]) }
 catch (e) { die('חתימה', `apksigner דחה את הקובץ: ${String(e.stderr || e).trim().split('\n')[0]}`) }
 const got = (certs.match(/SHA-256 digest:\s*([0-9a-f]{64})/i) || [])[1]
-const pinned = readFileSync(join(ROOT, 'ship/pinned-cert.txt'), 'utf8')
+const pinned = readFileSync(join(ROOT, 'keys/PINNED.sha256'), 'utf8')
   .split('\n').map(s => s.trim()).find(s => /^[0-9a-f]{64}$/.test(s))
 if (!got) die('חתימה', 'לא נמצאה טביעת חותם בפלט של apksigner')
 if (got !== pinned) die('חתימה', `חותם אחר: ${got.slice(0, 16)}… במקום ${pinned.slice(0, 16)}…`)
 ok('חתימה', `${got.slice(0, 16)}… זהה ל-pinned`)
 
 // 5. v2 block present (v1-only would let a zip entry be swapped after signing)
-const scheme = sh('bash', ['-lc', `${APKSIGNER} verify -v ${JSON.stringify(apk)} | grep -i 'v2 scheme' || true`])
-if (!/true/i.test(scheme)) die('חתימה', 'אין בלוק חתימה v2')
-ok('חתימה v2', scheme.trim())
+const schemes = sh('bash', ['-lc', `${APKSIGNER} verify -v ${JSON.stringify(apk)} | grep -iE 'v[123] scheme' || true`])
+const has = n => new RegExp(`v${n} scheme[^:]*:\\s*true`, 'i').test(schemes)
+if (!has(2)) die('חתימה', 'אין בלוק חתימה v2')
+if (!has(3)) die('חתימה', 'אין בלוק חתימה v3 — בלעדיו אין מסלול להחלפת מפתח')
+ok('חתימה v2+v3', schemes.trim().replace(/\s+/g, ' '))
 
 // 6. versionCode inside the APK agrees with VERSION
 let inApk = ''
