@@ -37,6 +37,10 @@ const pieces = files.map(f => {
 })
 
 let script = pieces.map(p => p.body).join('\n')
+// step budget-contract-gate: the collection contract is data in the repo, baked in before hashing, so a changed cap
+// is a changed page hash and page-version catches a contract that was edited but never published
+const budget = JSON.parse(readFileSync(join(ROOT, 'channel-budget.json'), 'utf8'))
+script = script.replace(/__BUDGET__/g, JSON.stringify({ v: budget.version, ceiling: budget.ceiling, c: budget.collections }))
 const hash = createHash('sha256').update(script.replace(/__PAGE_HASH__/g, '')).digest('hex').slice(0, 12)
 script = script.replace(/__PAGE_HASH__/g, JSON.stringify(hash))
 

@@ -85,7 +85,7 @@ const P_RAW={
   turns:()=>db.doc('chat/log').collection('turns'),decisions:()=>db.doc('decisions/log').collection('items'),
   telemetry:()=>db.doc('telemetry/events').collection('items'),
   req:id=>db.doc('req/'+id),reqs:()=>db.collection('req'),
-  metricsDay:day=>db.doc('metrics/daily').collection('days').doc(day),
+  metricsDay:day=>db.doc('metrics/daily').collection('days').doc(day),metricsDays:()=>db.doc('metrics/daily').collection('days'),
   budget:()=>db.doc('channel/budget'),
   crashes:()=>db.collection('crashes'),
   fold:id=>db.doc('fold/'+id),folds:()=>db.collection('fold'),janitor:()=>db.doc('channel/janitor'),
@@ -98,13 +98,17 @@ let mintLast=0,mintSeq=0;
 function mintId(){const t=Date.now();if(t===mintLast)mintSeq++;else{mintLast=t;mintSeq=0;}
   let r=0;try{const a=new Uint32Array(1);crypto.getRandomValues(a);r=a[0];}catch(e){r=Math.floor(Math.random()*4294967296);}
   return t.toString(36).padStart(9,'0')+mintSeq.toString(36).padStart(4,'0')+r.toString(36).padStart(7,'0');}
+/* budget-contract-gate: the collection contract (channel-budget.json), baked in at build time */
+const BUDGET={"v":1,"ceiling":4000,"c":{"inbox":{"cap":200,"ttlDays":2,"cls":"voice","time":"ts"},"tasks":{"cap":60,"ttlDays":3,"cls":"state","time":"updatedAt"},"sessions":{"cap":60,"ttlDays":30,"cls":"state","time":"updatedAt"},"gallery":{"cap":150,"cls":"record","time":"ts"},"req":{"cap":800,"ttlDays":14,"cls":"record","time":"askedAt"},"chat/log/turns":{"cap":200,"ttlDays":2,"cls":"record","time":"ts"},"decisions/log/items":{"cap":120,"ttlDays":7,"cls":"record","time":"ts"},"crashes":{"cap":40,"ttlDays":7,"cls":"telemetry","time":"ts"},"telemetry/events/items":{"cap":400,"ttlDays":7,"cls":"telemetry","time":"ts"},"metrics/daily/days":{"cap":60,"cls":"telemetry","time":"at"},"memory/notes/items":{"cap":300,"cls":"record","time":"ts"},"memory/prefs/items":{"cap":100,"cls":"record","time":"ts"},"fold":{"cap":400,"cls":"janitor","time":"at"},"pulse":{"cap":4,"cls":"fixed","time":"at"},"ledger":{"cap":40,"ttlDays":30,"cls":"fixed","time":"at"},"channel":{"cap":12,"cls":"state","time":"at"},"chat":{"cap":4,"cls":"voice","time":"at"},"memory":{"cap":12,"cls":"record","time":"at"}}};
+/* one stable id per browser profile: the janitor's lease holder, and the by on every document this page creates */
+let PAGE_ID='';try{PAGE_ID=localStorage.getItem('liba.jid')||'';if(!PAGE_ID){PAGE_ID='p-'+mintId();localStorage.setItem('liba.jid',PAGE_ID);}}catch(e){PAGE_ID='p-'+mintId();}
 /* write-clearinghouse: every path above has a class, and every write through P goes through ch(), which knows
    the budget. When the database fills, telemetry is refused first, then records, then state - speech (voice) is
    never refused. A quota error is caught by name, said aloud once, and the page degrades at once. Nothing at the
    call sites changed: P hands out guarded references, and db-paths already forbids any path outside this table. */
 const CLS_OF={inbox:'voice',inboxDoc:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
   sessions:'state',budget:'state',gallery:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
-  device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',
+  device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',metricsDays:'telemetry',
   /* the janitor frees space, so its folds and lease are never refused - refusing the cure would keep the db full */
   fold:'janitor',folds:'janitor',janitor:'janitor',crashes:'record',
   /* fixed cardinality: one document per device, one per day - rewriting an existing document still works on a full db */
@@ -118,6 +122,8 @@ function chAlarm(code){chBudget.docs=chBudget.limit;if(Date.now()-chAlarmedAt<36
   queueLocal({id:'ch-full-'+Date.now(),kind:'say',priority:'urgent',speaker:'ליבה',topic:'המסד',text:'המסד מלא. הפסקתי לרשום טלמטריה ויומנים כדי שהדיבור ימשיך.'});}
 function ch(ref,op,body,cls,what){
   if(op!=='delete'&&!chAllowed(cls)){chDenied[cls]=(chDenied[cls]||0)+1;return Promise.reject({code:'budget',cls:cls,what:what});}
+  /* attribution: every document this page creates says who wrote it, so a flood can be named */
+  if(op==='set'&&body&&typeof body==='object'&&!body.by)body=Object.assign({by:PAGE_ID},body);
   let pr;try{pr=op==='set'?ref.set(body):op==='update'?ref.update(body):ref.delete();}catch(e){pr=Promise.reject(e);}
   return Promise.resolve(pr).catch(e=>{const c=String(e&&(e.code||e.name)||e);if(/quota|resource.?exhausted/i.test(c))chAlarm(c);throw e;});}
 function guardDoc(ref,cls,what){return {ref:ref,path:ref.path,get:()=>ref.get(),onSnapshot:(a,b)=>ref.onSnapshot(a,b),collection:n=>guardCol(ref.collection(n),cls,what),
@@ -285,7 +291,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:50,pageHash:"2507363f4a16",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:50,pageHash:"10c5c70e5b10",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f();}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -620,25 +626,26 @@ async function send(text,forcedTag,source){
    read-modify-write race. A source document is deleted only after the fold document was read back and holds it -
    a fold that fails skips that kind's deletes. Each sweep is capped; a backlog drains over the next sweeps. */
 const JAN_EVERY=6*3600e3,JAN_CAP=400,JAN_PAGE=100,JAN_FOLD_MAX=200000,JAN_LEASE=60000;
-const H48=48*3600e3,D3=3*864e5,D7=7*864e5,D14=14*864e5,D30=30*864e5,D35=35*864e5;
+/* how long rows live comes from the contract; the day folds roll up to months after 35 days */
+const TTL=k=>((BUDGET.c[k]||{}).ttlDays||0)*864e5,D35=35*864e5;
 /* what goes, and when: [kind, collection, filters(now), time field] */
 const JAN_KINDS=[
   /* the filters select exactly what goes, so rows that must stay (an old unread question, a running task)
      can never fill a page and hide deletable rows behind them */
-  ['inbox',()=>P.inbox(),now=>[['spoken','==',true],['ts','<',now-H48]],'ts'],
-  ['inbox',()=>P.inbox(),now=>[['expired','==',true],['ts','<',now-H48]],'ts'],
-  ['turns',()=>P.turns(),now=>[['ts','<',now-H48]],'ts'],
-  ['decisions',()=>P.decisions(),now=>[['ts','<',now-D7]],'ts'],
-  ['crashes',()=>P.crashes(),now=>[['ts','<',now-D7]],'ts'],
-  ['req',()=>P.reqs(),now=>[['askedAt','<',now-D14]],'askedAt'],
+  ['inbox',()=>P.inbox(),now=>[['spoken','==',true],['ts','<',now-TTL('inbox')]],'ts'],
+  ['inbox',()=>P.inbox(),now=>[['expired','==',true],['ts','<',now-TTL('inbox')]],'ts'],
+  ['turns',()=>P.turns(),now=>[['ts','<',now-TTL('chat/log/turns')]],'ts'],
+  ['decisions',()=>P.decisions(),now=>[['ts','<',now-TTL('decisions/log/items')]],'ts'],
+  ['crashes',()=>P.crashes(),now=>[['ts','<',now-TTL('crashes')]],'ts'],
+  ['req',()=>P.reqs(),now=>[['askedAt','<',now-TTL('req')]],'askedAt'],
   /* the board already announced it; a finished task has no reason to sit on the live board for a month */
-  ['tasks',()=>P.tasks(),now=>[['status','in',['archived','done']],['updatedAt','<',now-D3]],'updatedAt'],
-  ['sessions',()=>P.sessions(),now=>[['updatedAt','<',now-D30]],'updatedAt'],
-  ['telemetry',()=>P.telemetry(),now=>[['ts','<',now-D7]],'ts'],
-  ['ledger',()=>P.ledgers(),now=>[['at','<',now-D30]],'at'],
+  ['tasks',()=>P.tasks(),now=>[['status','in',['archived','done']],['updatedAt','<',now-TTL('tasks')]],'updatedAt'],
+  ['sessions',()=>P.sessions(),now=>[['updatedAt','<',now-TTL('sessions')]],'updatedAt'],
+  ['telemetry',()=>P.telemetry(),now=>[['ts','<',now-TTL('telemetry/events/items')]],'ts'],
+  ['ledger',()=>P.ledgers(),now=>[['at','<',now-TTL('ledger')]],'at'],
 ];
 const JAN_GALLERY_KEEP=120;
-let janHolder='';try{janHolder=localStorage.getItem('liba.jid')||'';if(!janHolder){janHolder='p-'+mintId();localStorage.setItem('liba.jid',janHolder);}}catch(e){janHolder='p-'+mintId();}
+const janHolder=PAGE_ID;
 const janSize=o=>{try{return JSON.stringify(o).length;}catch(e){return JAN_FOLD_MAX;}};
 /* one fold document per kind and day; past JAN_FOLD_MAX bytes it rolls to <day>-2, -3 (a document caps at 256 KiB) */
 /* key is a day (YYYY-MM-DD) or, for the monthly roll-up, a month (YYYY-MM); only day documents carry a day field */
@@ -670,6 +677,34 @@ async function janMonths(now,budget){const cut=trDay(now-D35);const r=await cold
   for(const d of r.docs){const x=d.data()||{};if(!x.day||!x.kind)continue;const held=await janFold(x.kind,x.day.slice(0,7),x.items||{});
     if(held.length===Object.keys(x.items||{}).length){try{await P.fold(d.id).delete();rolled++;}catch(e){fail('P_DB_WRITE',e,'janitor month');}}}
   return {seen:r.docs.length,deleted:rolled};}
+/* the contract's caps. Over its cap, telemetry is folded and trimmed oldest first; anything else is only counted and
+   reported - a writer that made a lot of real work must not lose it to a rule. Either way the writer is named: every
+   document the page creates carries by, and a writer past JAN_FLOOD documents in a day goes into ledger/<day>.offenders
+   and is said aloud once. */
+const JAN_FLOOD=300,janSaid={};
+/* said aloud in words, never as a path */
+const JAN_HE={'inbox':'ההודעות','tasks':'המשימות','sessions':'מפת הסשנים','gallery':'הגלריה','req':'הבקשות','chat/log/turns':'יומן השיחה','decisions/log/items':'יומן ההחלטות','crashes':'הקריסות','telemetry/events/items':'יומן התקלות','metrics/daily/days':'המדידות','memory/notes/items':'הזיכרון','memory/prefs/items':'ההעדפות','fold':'הארכיון','pulse':'הדופק','ledger':'היומן היומי'};
+const janCol=path=>({'inbox':P.inbox,'tasks':P.tasks,'sessions':P.sessions,'gallery':P.gallery,'req':P.reqs,'chat/log/turns':P.turns,
+  'decisions/log/items':P.decisions,'crashes':P.crashes,'telemetry/events/items':P.telemetry,'metrics/daily/days':P.metricsDays,
+  'memory/notes/items':P.notes,'memory/prefs/items':P.prefs,'fold':P.folds,'pulse':P.pulses,'ledger':P.ledgers}[path]);
+async function janCaps(now,budget){const out={trimmed:0,over:{},writers:{},atLeast:false};const since=now-864e5;
+  for(const [path,c] of Object.entries(BUDGET.c)){const colF=janCol(path);if(!colF||!c.cap)continue;
+    const lim=Math.min(1000,c.cap*2+50);let r;try{r=await coldGet(colF(),null,lim);}catch(e){fail('P_DB_READ',e,'janitor caps '+path);continue;}
+    if(r.docs.length>=lim)out.atLeast=true; /* a full page is a lower bound, and is said as one */
+    r.docs.forEach(d=>{const x=d.data()||{};if((+x[c.time]||0)>=since){const by=String(x.by||'?').slice(0,40);const w=out.writers[by]=out.writers[by]||{};w[path]=(w[path]||0)+1;}});
+    const n=r.docs.length;if(n<=c.cap)continue;out.over[path]=n-c.cap;
+    if(c.cls!=='telemetry'||budget<=0)continue;
+    const old=r.docs.map(d=>({id:d.id,x:d.data()||{}})).sort((a,b)=>(+a.x[c.time]||0)-(+b.x[c.time]||0)).slice(0,Math.min(n-c.cap,budget));
+    const byDay={};old.forEach(o=>{const day=trDay(+o.x[c.time]||0);(byDay[day]=byDay[day]||{})[o.id]=o.x;});
+    for(const day of Object.keys(byDay)){const held=await janFold(path.split('/').pop(),day,byDay[day]);
+      for(const id of held){try{await colF().doc(id).delete();out.trimmed++;budget--;}catch(e){fail('P_DB_WRITE',e,'janitor trim '+path);}}}}
+  const day=trDay(now),offenders={};
+  Object.entries(out.writers).forEach(([by,w])=>{const total=Object.values(w).reduce((a,b)=>a+b,0);if(total>=JAN_FLOOD)offenders[by]=Object.assign({total:total},w);});
+  if(Object.keys(offenders).length){try{await P.ledger(day).update({offenders:offenders});}catch(e){try{await P.ledger(day).set({day:day,at:now,offenders:offenders});}catch(x){fail('P_DB_WRITE',x,'ledger offenders');}}
+    const [top,w]=Object.entries(offenders).sort((a,b)=>b[1].total-a[1].total)[0];
+    if(janSaid[day+top]!==true){janSaid[day+top]=true;const where=Object.entries(w).filter(([k])=>k!=='total').sort((a,b)=>b[1]-a[1])[0][0];
+      queueLocal({id:'flood-'+day+'-'+top,kind:'say',speaker:'ליבה',topic:'המסד',text:'כותב אחד, '+top+', כתב היום '+(out.atLeast?'לפחות ':'')+w.total+' מסמכים, רובם ל'+(JAN_HE[where]||'אוסף אחר')+'.'+(BUDGET.c[where]&&BUDGET.c[where].cls==='telemetry'?' גזמתי את העודף.':' לא מחקתי כלום, כי זה תוכן אמיתי. אם זה לא צפוי, כדאי לבדוק.')});}}
+  out.offenders=offenders;return out;}
 /* now is a parameter so the capacity simulation can run sixty days in a minute */
 async function janSweep(now){now=now||Date.now();const t0=Date.now();let left=JAN_CAP;const per={};let skipped=[];
   for(const [kind,col,filters,tf] of JAN_KINDS){if(left<=0)break;
@@ -678,6 +713,7 @@ async function janSweep(now){now=now||Date.now();const t0=Date.now();let left=JA
       while(got.deleted>0&&got.seen>=JAN_PAGE&&left>0);}
     catch(e){skipped.push(kind);fail('P_DB_WRITE',e,'janitor '+kind);}}
   if(left>0){try{const g=await janGallery(now,left);per.gallery=g;left-=g.deleted;}catch(e){skipped.push('gallery');fail('P_DB_WRITE',e,'janitor gallery');}}
+  if(left>0){try{const c=await janCaps(now,left);per.caps={trimmed:c.trimmed,over:c.over,offenders:Object.keys(c.offenders)};left-=c.trimmed;}catch(e){skipped.push('caps');fail('P_DB_WRITE',e,'janitor caps');}}
   if(left>0){try{const m=await janMonths(now,left);per.months=m;left-=m.deleted;}catch(e){skipped.push('months');fail('P_DB_WRITE',e,'janitor months');}}
   const deleted=JAN_CAP-left;
   const report={at:now,ms:Date.now()-t0,deleted:deleted,per:per,skipped:skipped,holder:janHolder,more:left<=0};
@@ -710,7 +746,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   const body=pulseClean(d.body);const sig=JSON.stringify(Object.assign({},body,{lastHeard:0,lastSpoke:0,since:0,why:''}));const last=pulseLast[dev];
   if(last&&last.sig===sig&&now-last.at<PULSE_EVERY)return false;
   pulseLast[dev]={sig:sig,at:now};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"2507363f4a16"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"10c5c70e5b10"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;

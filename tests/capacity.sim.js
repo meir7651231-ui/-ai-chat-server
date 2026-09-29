@@ -65,6 +65,21 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   ok(bl.left === 400 && bl.unread === 400, 'backlog: 4,000 → 400 left, exactly the unread ones: ' + JSON.stringify(bl));
   ok(bl.slowest < 20000, 'backlog: every capped sweep ends under 20 s: slowest ' + bl.slowest + 'ms over ' + bl.sweeps + ' sweeps');
 
+  // a flood: one writer drops 1,800 telemetry rows in a day. Telemetry over its cap is folded and trimmed (a few capped
+  // sweeps), the writer is named in ledger/<day>.offenders and said aloud once; a normal writer is not named.
+  const fl = await f.evaluate(async () => {
+    const docs = window.__h.docs; for (const k of [...docs.keys()]) docs.delete(k);
+    const now = Date.now(); for (let i = 0; i < 1800; i++) docs.set('telemetry/events/items/f' + i, { code: 'X', ts: now - 3600e3 + i, by: 'session_flood' });
+    for (let i = 0; i < 50; i++) docs.set('gallery/g' + i, { title: 'x', ts: now - i, by: 'p-normal' });
+    let sweeps = 0, r; do { r = await window.__janitor.sweep(now); sweeps++; } while (r.more && sweeps < 10);
+    const left = [...docs.keys()].filter(k => k.startsWith('telemetry/')).length;
+    const lg = docs.get('ledger/' + new Date(now).toLocaleDateString('sv-SE', { timeZone: 'Asia/Jerusalem' })) || {};
+    const folded = [...docs.entries()].filter(([k]) => /^fold\/items-/.test(k)).reduce((a, [, v]) => a + Object.keys(v.items || {}).length, 0);
+    return { sweeps, left, folded, off: Object.keys(lg.offenders || {}), said: inboxQ.filter(x => /^flood-/.test(x.id)).map(x => x.text) };
+  });
+  ok(fl.left <= 400 && fl.folded === 1800 - fl.left, 'flood: telemetry trimmed back to its cap of 400, every trimmed row folded: ' + JSON.stringify({ left: fl.left, folded: fl.folded, sweeps: fl.sweeps }));
+  ok(fl.off.length === 1 && fl.off[0] === 'session_flood', 'flood: the writer is named in ledger/<day>.offenders, the normal one is not: ' + fl.off.join(','));
+  ok(fl.said.length === 1 && /session_flood/.test(fl.said[0]) && /1800|18\d\d|\d{3,4} מסמכים/.test(fl.said[0]), 'flood: said aloud once, with the name: ' + fl.said.join(' | '));
   // one holder at a time: a second tab asking for the lease while it is held gets no
   const lease = await f.evaluate(async () => { const a = await window.claude.use('db'); const r1 = await a.doc('channel/janitor').acquire({ holder: 'tab-1', ttlMs: 60000 }); const r2 = await a.doc('channel/janitor').acquire({ holder: 'tab-2', ttlMs: 60000 }); return [r1.acquired, r2.acquired]; });
   ok(lease[0] === true && lease[1] === false, 'lease: a second tab does not sweep while the first holds the lease: ' + JSON.stringify(lease));

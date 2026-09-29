@@ -32,7 +32,7 @@ const M = [
   ['שגיאת מכסה נבלעת בשקט', '00-paths.js', 'if(/quota|resource.?exhausted/i.test(c))chAlarm(c);', ''],
   ['משפט לא נכתב לפני שליחה', '13-send.js', "walPut({req:reqId,", "({req:reqId,"],
   ['קיפול דורס במקום להוסיף', '14-janitor.js', 'if(cur)await ref.update({items:rows,at:Date.now()});', 'if(cur)await ref.set({items:rows,at:Date.now()});'],
-  ['המנקה מוחק הודעה שלא נקראה', '14-janitor.js', "now=>[['spoken','==',true],['ts','<',now-H48]]", "now=>[['ts','<',now-H48]]"],
+  ['המנקה מוחק הודעה שלא נקראה', '14-janitor.js', "now=>[['spoken','==',true],['ts','<',now-TTL('inbox')]]", "now=>[['ts','<',now-TTL('inbox')]]"],
   ['דופק בלי שומר חמש דקות', '15-pulse.js', 'if(last&&last.sig===sig&&now-last.at<PULSE_EVERY)return false;', ''],
 ]
 const pick = process.argv.slice(2).map(Number).filter(Boolean)

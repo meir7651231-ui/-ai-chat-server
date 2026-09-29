@@ -18,6 +18,7 @@ const extra = [
   ['wal-chaos', 'CHAOS=45 node tests/wal.chaos.js'],
   ['capacity', 'node tests/capacity.sim.js'],
   ['telemetry', 'node tests/telemetry.test.js'],
+  ['budget', 'node tests/budget.gate.js && node tests/budget.gate.js --self-test'],
 ]
 
 let pass = 0

@@ -11,7 +11,7 @@ const P_RAW={
   turns:()=>db.doc('chat/log').collection('turns'),decisions:()=>db.doc('decisions/log').collection('items'),
   telemetry:()=>db.doc('telemetry/events').collection('items'),
   req:id=>db.doc('req/'+id),reqs:()=>db.collection('req'),
-  metricsDay:day=>db.doc('metrics/daily').collection('days').doc(day),
+  metricsDay:day=>db.doc('metrics/daily').collection('days').doc(day),metricsDays:()=>db.doc('metrics/daily').collection('days'),
   budget:()=>db.doc('channel/budget'),
   crashes:()=>db.collection('crashes'),
   fold:id=>db.doc('fold/'+id),folds:()=>db.collection('fold'),janitor:()=>db.doc('channel/janitor'),
@@ -24,13 +24,17 @@ let mintLast=0,mintSeq=0;
 function mintId(){const t=Date.now();if(t===mintLast)mintSeq++;else{mintLast=t;mintSeq=0;}
   let r=0;try{const a=new Uint32Array(1);crypto.getRandomValues(a);r=a[0];}catch(e){r=Math.floor(Math.random()*4294967296);}
   return t.toString(36).padStart(9,'0')+mintSeq.toString(36).padStart(4,'0')+r.toString(36).padStart(7,'0');}
+/* budget-contract-gate: the collection contract (channel-budget.json), baked in at build time */
+const BUDGET=__BUDGET__;
+/* one stable id per browser profile: the janitor's lease holder, and the by on every document this page creates */
+let PAGE_ID='';try{PAGE_ID=localStorage.getItem('liba.jid')||'';if(!PAGE_ID){PAGE_ID='p-'+mintId();localStorage.setItem('liba.jid',PAGE_ID);}}catch(e){PAGE_ID='p-'+mintId();}
 /* write-clearinghouse: every path above has a class, and every write through P goes through ch(), which knows
    the budget. When the database fills, telemetry is refused first, then records, then state - speech (voice) is
    never refused. A quota error is caught by name, said aloud once, and the page degrades at once. Nothing at the
    call sites changed: P hands out guarded references, and db-paths already forbids any path outside this table. */
 const CLS_OF={inbox:'voice',inboxDoc:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
   sessions:'state',budget:'state',gallery:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
-  device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',
+  device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',metricsDays:'telemetry',
   /* the janitor frees space, so its folds and lease are never refused - refusing the cure would keep the db full */
   fold:'janitor',folds:'janitor',janitor:'janitor',crashes:'record',
   /* fixed cardinality: one document per device, one per day - rewriting an existing document still works on a full db */
@@ -44,6 +48,8 @@ function chAlarm(code){chBudget.docs=chBudget.limit;if(Date.now()-chAlarmedAt<36
   queueLocal({id:'ch-full-'+Date.now(),kind:'say',priority:'urgent',speaker:'ליבה',topic:'המסד',text:'המסד מלא. הפסקתי לרשום טלמטריה ויומנים כדי שהדיבור ימשיך.'});}
 function ch(ref,op,body,cls,what){
   if(op!=='delete'&&!chAllowed(cls)){chDenied[cls]=(chDenied[cls]||0)+1;return Promise.reject({code:'budget',cls:cls,what:what});}
+  /* attribution: every document this page creates says who wrote it, so a flood can be named */
+  if(op==='set'&&body&&typeof body==='object'&&!body.by)body=Object.assign({by:PAGE_ID},body);
   let pr;try{pr=op==='set'?ref.set(body):op==='update'?ref.update(body):ref.delete();}catch(e){pr=Promise.reject(e);}
   return Promise.resolve(pr).catch(e=>{const c=String(e&&(e.code||e.name)||e);if(/quota|resource.?exhausted/i.test(c))chAlarm(c);throw e;});}
 function guardDoc(ref,cls,what){return {ref:ref,path:ref.path,get:()=>ref.get(),onSnapshot:(a,b)=>ref.onSnapshot(a,b),collection:n=>guardCol(ref.collection(n),cls,what),
