@@ -1,0 +1,4 @@
+# The ONE signing identity of ליבה. Every APK that reaches Meir's phone must carry this signer.
+# A different fingerprint here means either the key was replaced (a decision, never an accident)
+# or something else built the APK. ship/release.mjs refuses to ship on a mismatch.
+a799b7794baafbb233a5e419b7604e97f8e473561570da7dba3402de8e605b9f

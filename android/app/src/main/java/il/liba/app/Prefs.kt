@@ -30,7 +30,13 @@ object Prefs {
     fun crash(c: Context): String? = p(c).getString("crash", null)
     fun clearCrash(c: Context) = p(c).edit().remove("crash").apply()
     fun updateUrl(c: Context): String? = p(c).getString("updateUrl", null)
-    fun setUpdate(c: Context, url: String?, code: Int) = p(c).edit().putString("updateUrl", url).putInt("updateCode", code).apply()
+    /** step 1: the hash and the name travel with the url, so the download can be proven before it installs. */
+    fun updateSha(c: Context): String? = p(c).getString("updateSha", null)
+    fun updateCode(c: Context) = p(c).getInt("updateCode", 0)
+    fun updateName(c: Context): String = p(c).getString("updateName", "") ?: ""
+    fun setUpdate(c: Context, url: String?, code: Int, sha: String? = null, name: String = "") =
+        p(c).edit().putString("updateUrl", url).putInt("updateCode", code)
+            .putString("updateSha", sha).putString("updateName", name).apply()
 
     @Synchronized fun log(c: Context, who: String, text: String) {
         val arr = try { JSONArray(p(c).getString("log", "[]")) } catch (e: Exception) { JSONArray() }

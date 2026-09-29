@@ -333,9 +333,27 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 if (want > 0 && got != want) throw java.io.IOException("ההורדה נקטעה (" + got / 1024 + " מתוך " + want / 1024 + " קילובייט)")
                 val head = ByteArray(2); java.io.FileInputStream(f).use { it.read(head) }
                 if (got < 100000 || head[0] != 'P'.code.toByte() || head[1] != 'K'.code.toByte()) throw java.io.IOException("הקובץ שהתקבל אינו אפליקציה")
+                // step 1: three proofs before the installer ever sees the file.
+                // (a) the bytes are the ones ship/release.mjs measured
+                val want256 = Prefs.updateSha(this)
+                if (!want256.isNullOrBlank()) {
+                    val md = java.security.MessageDigest.getInstance("SHA-256")
+                    java.io.FileInputStream(f).use { i -> val b = ByteArray(65536); while (true) { val n = i.read(b); if (n <= 0) break; md.update(b, 0, n) } }
+                    val got256 = md.digest().joinToString("") { "%02x".format(it) }
+                    if (got256 != want256) throw java.io.IOException("הקובץ שהתקבל אינו הגרסה שנשלחה")
+                }
+                // (b) it really is an APK, and (c) it is really newer than what is running
+                val info = packageManager.getPackageArchiveInfo(f.absolutePath, 0)
+                    ?: throw java.io.IOException("הקובץ שהתקבל אינו אפליקציה")
+                if (info.packageName != packageName) throw java.io.IOException("הקובץ שהתקבל הוא אפליקציה אחרת")
+                val fileCode = if (Build.VERSION.SDK_INT >= 28) info.longVersionCode.toInt() else @Suppress("DEPRECATION") info.versionCode
+                val mine = packageManager.getPackageInfo(packageName, 0).let { if (Build.VERSION.SDK_INT >= 28) it.longVersionCode.toInt() else @Suppress("DEPRECATION") it.versionCode }
+                if (fileCode <= mine) throw java.io.IOException("זו אותה גרסה שכבר מותקנת (" + fileCode + ")")
+                val newName = info.versionName ?: Prefs.updateName(this)
                 val uri = androidx.core.content.FileProvider.getUriForFile(this, "il.liba.app.files", f)
                 val i = Intent(Intent.ACTION_VIEW).setDataAndType(uri, "application/vnd.android.package-archive").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                main.post { showLabel("מתקינה… אשר בחלון", 8000); hideBubble(45000)
+                main.post { showLabel("מתקינה $newName… אשר בחלון", 8000); hideBubble(45000)
+                    speak("מתקינה גרסה " + newName.replace(".", " נקודה "))
                     try { startActivity(i) } catch (e: Exception) {}
                     notifyIntent("התקנת ליבה", "לחץ כדי להתקין את הגרסה החדשה", i) } // a background start can be dropped silently: always leave a tappable notification
             } catch (e: Exception) { val why = e.message ?: e.toString()
@@ -343,15 +361,37 @@ class BubbleService : Service(), LibaWeb.Bridge {
         }.start()
     }
     private val recheck = Runnable { checkUpdate() }
+    /**
+     * step 1 (one-tree-one-version): a version check that cannot fail quietly.
+     * Two things were wrong before. The request went through whatever the CDN had cached, so the
+     * answer could be minutes or hours old; and every failure ended in Log.d, which means Meir said
+     * "תתקין", nothing happened, and nothing said why.
+     */
+    private var updateFailSpoken = false
     private fun checkUpdate(onDone: (() -> Unit)? = null) {
         Thread {
             try {
-                val c = URL(getString(R.string.update_json)).openConnection() as HttpURLConnection; c.connectTimeout = 8000; c.readTimeout = 8000
+                val c = URL(getString(R.string.update_json)).openConnection() as HttpURLConnection
+                c.connectTimeout = 8000; c.readTimeout = 8000
+                c.setRequestProperty("Cache-Control", "no-cache")
+                c.setRequestProperty("Pragma", "no-cache")
+                if (c.responseCode != 200) throw java.io.IOException("שרת הגרסאות ענה " + c.responseCode)
                 val j = JSONObject(c.inputStream.bufferedReader().readText())
                 val mine = packageManager.getPackageInfo(packageName, 0).let { if (Build.VERSION.SDK_INT >= 28) it.longVersionCode.toInt() else @Suppress("DEPRECATION") it.versionCode }
-                if (j.getInt("versionCode") > mine) { Prefs.setUpdate(this, j.getString("url"), j.getInt("versionCode")); main.post { showLabel("יש גרסה חדשה (${j.optString("versionName")}) – לחיצה ארוכה עליי להתקנה", 8000) } }
-                else Prefs.setUpdate(this, null, mine)
-            } catch (e: Exception) { Log.d(LibaWeb.TAG, "update: $e") }
+                if (j.getInt("versionCode") > mine) {
+                    Prefs.setUpdate(this, j.getString("url"), j.getInt("versionCode"), j.optString("sha256", null), j.optString("versionName"))
+                    main.post { showLabel("יש גרסה חדשה (${j.optString("versionName")}) – לחיצה ארוכה עליי להתקנה", 8000) }
+                } else Prefs.setUpdate(this, null, mine)
+                updateFailSpoken = false
+            } catch (e: Exception) {
+                val why = e.message ?: e.toString()
+                Log.d(LibaWeb.TAG, "update: $e")
+                main.post {
+                    showLabel("בדיקת גרסה נכשלה: $why", 6000)
+                    // said once per failure streak, so a week offline is not a week of complaining
+                    if (!updateFailSpoken) { updateFailSpoken = true; speak("לא הצלחתי לבדוק אם יש גרסה חדשה. " + why + ".") }
+                }
+            }
             main.post { onDone?.invoke() }
         }.start()
         main.removeCallbacks(recheck); main.postDelayed(recheck, 6 * 3600 * 1000L)

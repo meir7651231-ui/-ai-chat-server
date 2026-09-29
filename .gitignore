@@ -1,0 +1,12 @@
+# build caches and outputs never enter the tree
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+.gradle/
+build/
+
+# signing material never enters a public repo
+keys/*.jks
+keys/keystore.properties
+android/keys/

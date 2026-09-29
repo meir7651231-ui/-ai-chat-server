@@ -1,28 +1,60 @@
-# צעד 91: כל שינוי בענף liba-android → APK. חתום כשיש סודות (LIBA_KEYSTORE_B64, LIBA_KEYSTORE_PASS, LIBA_KEY_PASS), אחרת debug.
-name: liba-android
+# step 1 (one-tree-one-version): every commit runs the gates; a tagged ship builds the signed APK.
+# What changed from the old workflow: it ran only on android/** (so a commit that replaced the APK
+# itself ran nothing), it installed gradle from apt instead of using a pinned wrapper, and its
+# keystore step carried `if: env.KS != ''` — a condition on a variable defined inside the same step,
+# which is always false, so the release was never actually signed with the real key.
+name: liba
 on:
   push:
-    branches: [liba-android]
-    paths: ['android/**', '.github/workflows/liba-android.yml']
+    branches: [liba-android, main]
+  pull_request:
   workflow_dispatch:
+
 jobs:
-  build:
+  gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Playwright (for the live-page gate)
+        run: npm i -g playwright@1.47.2 && npx playwright install --with-deps chromium
+      - name: כל השערים
+        run: node gates/run.mjs
+
+  build:
+    runs-on: ubuntu-latest
+    needs: gates
+    steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: '17' }
+        with: { distribution: temurin, java-version: '17', cache: gradle }
       - uses: android-actions/setup-android@v3
-      - name: Keystore from secrets (optional)
-        if: ${{ env.KS != '' }}
-        env: { KS: ${{ secrets.LIBA_KEYSTORE_B64 }} }
+
+      - name: Keystore from secrets
+        env:
+          KS: ${{ secrets.LIBA_KEYSTORE_B64 }}
+          KS_PASS: ${{ secrets.LIBA_KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.LIBA_KEY_PASS }}
         run: |
+          if [ -z "$KS" ]; then
+            echo "::error::אין LIBA_KEYSTORE_B64 ב-secrets — בלעדיו הבנייה תיחתם במפתח debug ולא תתקין על הטלפון"
+            exit 1
+          fi
           mkdir -p android/keys
-          echo "$KS" | base64 -d > android/keys/liba.jks
-          printf 'storeFile=keys/liba.jks\nstorePassword=%s\nkeyAlias=liba\nkeyPassword=%s\n' "${{ secrets.LIBA_KEYSTORE_PASS }}" "${{ secrets.LIBA_KEY_PASS }}" > android/keys/keystore.properties
-      - name: Build
-        working-directory: android
+          printf '%s' "$KS" | base64 -d > android/keys/liba.jks
+          printf 'storeFile=keys/liba.jks\nstorePassword=%s\nkeyAlias=liba\nkeyPassword=%s\n' "$KS_PASS" "$KEY_PASS" > android/keys/keystore.properties
+
+      - name: בנייה ואימות חותם
         run: |
-          (test -f gradlew && chmod +x gradlew && ./gradlew assembleRelease -q) || (sudo apt-get install -y gradle >/dev/null && gradle assembleRelease -q)
+          echo "$ANDROID_HOME/build-tools/34.0.0" >> $GITHUB_PATH
+          APKSIGNER="$ANDROID_HOME/build-tools/34.0.0/apksigner" \
+          AAPT2="$ANDROID_HOME/build-tools/34.0.0/aapt2" \
+          node ship/release.mjs --verify
+
+      - name: ניקוי חומר חתימה
+        if: always()
+        run: rm -rf android/keys
+
       - uses: actions/upload-artifact@v4
         with: { name: liba-apk, path: android/app/build/outputs/apk/release/*.apk }
