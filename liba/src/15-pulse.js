@@ -6,7 +6,7 @@
    triggered too, this is the page's own guard); ledger/<day> holds this page's counters under its own key, so two
    tabs merge instead of overwriting each other. */
 const PULSE_EVERY=5*60*1000,PULSE_STALE=15*60*1000,LEDGER_EVERY=5*60*1000;
-const PULSE_KEYS=['mic','overlay','battery','charging','net','vad','ttsOk','pageReady','ver','lastHeard','lastSpoke','since','why'];
+const PULSE_KEYS=['mic','overlay','battery','charging','net','vad','ttsOk','pageReady','ver','lastHeard','lastSpoke','since','why','battOpt','uptime'];
 const pulseLast={};
 /* the body comes from the bubble; only known keys, only plain values, bounded */
 function pulseClean(raw){let b={};try{b=JSON.parse(String(raw||'{}').slice(0,2000))||{};}catch(e){fail('P_MSG_BAD',e,'pulse');}
@@ -36,7 +36,8 @@ function pulseSay(p,now,many){const who=many?(p.name||'מכשיר')+': ':'';cons
   if(p.net===false)return who+'הטלפון חי, אבל אין לו אינטרנט.';
   if(p.pageReady===false)return who+'הבועה פתוחה, אבל הדף בתוכה עוד לא התחבר.';
   const heard=+p.lastHeard>0?' שמעתי אותך לאחרונה '+ago(now-(+p.lastHeard))+'.':'';
-  return who+'הכול תקין: הבועה פתוחה והמיקרופון עובד'+(+p.battery>=0?', סוללה '+p.battery+' אחוז'+(p.charging?' בטעינה':''):'')+'.'+heard;}
+  const risk=p.battOpt===false?' רק דבר אחד: אין לי פטור מחיסכון בסוללה, אז הטלפון עלול לכבות אותי. תפתח את ליבה ותאשר.':'';
+  return who+'הכול תקין: הבועה פתוחה והמיקרופון עובד'+(+p.battery>=0?', סוללה '+p.battery+' אחוז'+(p.charging?' בטעינה':''):'')+'.'+heard+risk;}
 function heAt(t){if(!t)return 'אף פעם';const d=new Date(t),n=new Date();const hm=d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
   if(d.toDateString()===n.toDateString())return 'היום ב-'+hm;const y=new Date(n.getTime()-864e5);if(d.toDateString()===y.toDateString())return 'אתמול ב-'+hm;return ago(Date.now()-t);}
 async function whyCmd(){const now=Date.now();let r;try{r=await coldGet(P.pulses(),null,10);}catch(e){fail('P_DB_READ',e,'pulse');sayLocal('לא הצלחתי לקרוא את מצב הטלפון.');return;}

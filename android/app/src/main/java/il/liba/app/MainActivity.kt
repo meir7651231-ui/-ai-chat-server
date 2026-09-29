@@ -100,11 +100,17 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.reveal).visibility = if (running) View.VISIBLE else View.GONE
     }
 
+    private fun batteryOk() = getSystemService(android.os.PowerManager::class.java)?.isIgnoringBatteryOptimizations(packageName) != false
+
     private fun onToggle() {
         when {
             !micOk() -> requestRuntimePermissions()
             !overlayOk() -> startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")))
-            BubbleService.running -> { stopService(Intent(this, BubbleService::class.java)); h.postDelayed({ web.loadUrl(getString(R.string.artifact_url)); refresh() }, 500) }
+            /* one-life: without the battery exemption a Samsung kills the service and nothing brings it back for long;
+               asked once, never forced - declining still starts the bubble */
+            !batteryOk() && !Prefs.batteryAsked(this) -> { Prefs.setBatteryAsked(this, true)
+                runCatching { startActivity(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:$packageName"))) } }
+            BubbleService.running -> { Prefs.setOn(this, false); stopService(Intent(this, BubbleService::class.java)); h.postDelayed({ web.loadUrl(getString(R.string.artifact_url)); refresh() }, 500) }
             else -> {
                 web.loadUrl("about:blank")
                 ContextCompat.startForegroundService(this, Intent(this, BubbleService::class.java))

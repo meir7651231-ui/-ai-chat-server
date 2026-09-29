@@ -123,6 +123,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val am0 = getSystemService(AUDIO_SERVICE) as AudioManager; intArrayOf(AudioManager.STREAM_SYSTEM, AudioManager.STREAM_MUSIC).forEach { try { am0.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) { Trace.e(Trace.Code.E_AUDIO_STREAM, "boot:" + e.javaClass.simpleName) } }
         if (!startForegroundNotif()) { stopSelf(); return }
+        Prefs.setOn(this, true); il.liba.app.life.Life.arm(this)
         runCatching { applyPrefs() }.onFailure { Trace.e(Trace.Code.E_PREFS, "applyPrefs:" + it.javaClass.simpleName) }
         runCatching { setupTts() }.onFailure { Trace.e(Trace.Code.E_TTS_INIT, "setup:" + it.javaClass.simpleName) }
         runCatching { setupWeb() }.onFailure { Trace.e(Trace.Code.E_OVERLAY_DENIED, "web"); status = "WebView נכשל: $it" }
@@ -183,9 +184,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 tts?.setSpeechRate(rate)
                 tts?.setAudioAttributes(android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_ASSISTANT).setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build())
                 tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-                    override fun onStart(id: String?) { main.post { if (sayId != null && sayStartAt == 0L) sayStartAt = System.currentTimeMillis() } }
-                    override fun onError(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakGuard?.let { main.removeCallbacks(it) }; bargeVad?.stop(); bargeVad = null; spokeCause = "error"; onSpoken() } }
-                    override fun onDone(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakGuard?.let { main.removeCallbacks(it) }; bargeVad?.stop(); bargeVad = null; if (chunks.isNotEmpty() && !paused) { main.postDelayed({ speakNextChunk(false) }, 350) } else onSpoken() } }
+                    override fun onStart(id: String?) { main.post { speakLock(true); if (sayId != null && sayStartAt == 0L) sayStartAt = System.currentTimeMillis() } }
+                    override fun onError(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakLock(false); speakGuard?.let { main.removeCallbacks(it) }; bargeVad?.stop(); bargeVad = null; spokeCause = "error"; onSpoken() } }
+                    override fun onDone(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakLock(false); speakGuard?.let { main.removeCallbacks(it) }; bargeVad?.stop(); bargeVad = null; if (chunks.isNotEmpty() && !paused) { main.postDelayed({ speakNextChunk(false) }, 350) } else onSpoken() } }
                 })
                 if (!ttsReady) { Trace.e(Trace.Code.E_TTS_INIT, "he-IL=" + r); main.post { showLabel("אין קול עברי בטלפון – התקן Google Text-to-Speech עברית", 6000) } }
             }
@@ -323,8 +324,18 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val charging = runCatching { bm.isCharging }.getOrDefault(false)
         val net = runCatching { val cm = getSystemService(ConnectivityManager::class.java); cm.getNetworkCapabilities(cm.activeNetwork)?.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true }.getOrDefault(false)
         val ver = runCatching { packageManager.getPackageInfo(packageName, 0).versionName ?: "?" }.getOrDefault("?")
-        val body = Pulse.due(Pulse.State(mic, Settings.canDrawOverlays(this), battery, charging, net, heyOn, ttsReady, pageReady, ver), heardAt, lastSpokeAt, System.currentTimeMillis()) ?: return
+        val body = Pulse.due(Pulse.State(mic, Settings.canDrawOverlays(this), battery, charging, net, heyOn, ttsReady, pageReady, ver, getSystemService(PowerManager::class.java)?.isIgnoringBatteryOptimizations(packageName) != false), heardAt, lastSpokeAt, System.currentTimeMillis()) ?: return
         LibaWeb.sendPulse(w, Pulse.devId(this), Pulse.name(), body)
+    }
+    /** one-life: WAKE_LOCK was declared and never used. A partial lock only while speaking, with a 90 s ceiling, so a
+     *  sentence is not cut when the screen sleeps - and a lock that is never released cannot drain the battery. */
+    private var wake: PowerManager.WakeLock? = null
+    private fun speakLock(on: Boolean) {
+        runCatching {
+            if (on) { if (wake == null) wake = getSystemService(PowerManager::class.java).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "liba:speak").apply { setReferenceCounted(false) }; wake?.acquire(90_000) }
+            else if (wake?.isHeld == true) wake?.release()
+            Unit
+        }
     }
     private fun reloadPage(why: String) {
         val now = SystemClock.elapsedRealtime(); if (now - lastReloadAt < 90000) return
@@ -606,7 +617,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         item("🕘 יומן והגדרות") { openMain() }
         item("🖥 הצג/הסתר דף") { revealPage(!pageShown) }
         if (Prefs.updateUrl(this) != null) item("⬇ התקן גרסה חדשה") { installUpdate() }
-        item("⏻ כבה בועה") { stopSelf() }
+        item("⏻ כבה בועה") { Prefs.setOn(this, false); stopSelf() }
         root.addView(m, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL; topMargin = bigSize / 2 + bubbleSize / 2 + dp(8f).toInt() })
         m.visibility = View.VISIBLE
         rootLp?.let { it.flags = it.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv(); runCatching { wm.updateViewLayout(root, it) }.onFailure { x -> Trace.e(Trace.Code.E_OVERLAY_UPDATE, "menu:open:" + x.javaClass.simpleName) } }
@@ -836,7 +847,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         v.vibrate(VibrationEffect.createWaveform(longArrayOf(0, 300, 150, 300, 150, 300), -1))
     }
 
-    override fun onDestroy() {
+    override fun onDestroy() { speakLock(false)
         running = false; instance = null; main.removeCallbacksAndMessages(null); stopVad(); bargeVad?.stop(); screenCb?.let { r -> runCatching { unregisterReceiver(r) }.onFailure { Trace.e(Trace.Code.E_SYS_CB, "unScreen:" + it.javaClass.simpleName) } }; screenCb = null; netCb?.let { n -> runCatching { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(n) }.onFailure { Trace.e(Trace.Code.E_SYS_CB, "unNet:" + it.javaClass.simpleName) } }; mediaSession?.let { it.isActive = false; it.release() }; unmuteSystem()
         try { sr?.destroy() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "destroy:" + e.javaClass.simpleName) }
         tts?.stop(); tts?.shutdown()

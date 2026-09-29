@@ -7,6 +7,11 @@ import org.json.JSONObject
 /** Small persistent state: toggles, conversation log, update info. */
 object Prefs {
     private fun p(c: Context) = c.getSharedPreferences("liba", Context.MODE_PRIVATE)
+    /** one-life: Meir left the bubble on. Only "כבה בועה" turns it off; a crash or the OS killing it does not */
+    fun on(c: Context) = p(c).getBoolean("on", false)
+    fun setOn(c: Context, v: Boolean) = p(c).edit().putBoolean("on", v).apply()
+    fun batteryAsked(c: Context) = p(c).getBoolean("battAsked", false)
+    fun setBatteryAsked(c: Context, v: Boolean) = p(c).edit().putBoolean("battAsked", v).apply()
     fun hey(c: Context) = p(c).getBoolean("hey", false)
     fun setHey(c: Context, v: Boolean) = p(c).edit().putBoolean("hey", v).apply()
     fun style(c: Context) = p(c).getInt("style", 2)

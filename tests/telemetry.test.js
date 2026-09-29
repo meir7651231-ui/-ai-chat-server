@@ -55,6 +55,8 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   const y = new Date(now - 864e5); y.setHours(21, 0, 0, 0);
   const s = await said({ dev: 'd-1', name: 'Pixel', at: y.getTime(), mic: true, overlay: true });
   ok(/לא דיבר איתי מאז אתמול ב-21:00/.test(s), 'why: the phone has not talked since yesterday at nine: ' + s);
+  const bo = await said({ dev: 'd-1', name: 'Pixel', at: Date.now() - 60000, mic: true, overlay: true, battOpt: false, battery: 70 });
+  ok(/הכול תקין/.test(bo) && /פטור מחיסכון בסוללה/.test(bo), 'why: all fine but no battery exemption - said as the one risk: ' + bo);
   ok(!errs.length, 'no page error: ' + errs.join(' | '));
   await b.close(); console.log(fails ? `\n${fails} נכשלו` : '\nכל הבדיקות עברו'); process.exit(fails ? 1 : 0);
 })().catch(e => { console.log('HARNESS ERROR', e); process.exit(1); });

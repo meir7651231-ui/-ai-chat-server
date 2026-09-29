@@ -1,5 +1,5 @@
 {
- "pageHash": "c313d62a62f9",
+ "pageHash": "3816da1f9e7c",
  "anchors": {
   "paths": {
    "src": "liba/src/00-paths.js",
@@ -522,12 +522,12 @@
    "line": 896
   },
   "pulse.heAt": {
-   "src": "liba/src/15-pulse.js:40",
-   "line": 906
+   "src": "liba/src/15-pulse.js:41",
+   "line": 907
   },
   "pulse.whyCmd": {
-   "src": "liba/src/15-pulse.js:42",
-   "line": 908
+   "src": "liba/src/15-pulse.js:43",
+   "line": 909
   }
  }
 }

@@ -299,7 +299,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:55,pageHash:"c313d62a62f9",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:56,pageHash:"3816da1f9e7c",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f(String(d.cause||'done'));}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -872,7 +872,7 @@ setTimeout(janMaybe,20000);
    triggered too, this is the page's own guard); ledger/<day> holds this page's counters under its own key, so two
    tabs merge instead of overwriting each other. */
 const PULSE_EVERY=5*60*1000,PULSE_STALE=15*60*1000,LEDGER_EVERY=5*60*1000;
-const PULSE_KEYS=['mic','overlay','battery','charging','net','vad','ttsOk','pageReady','ver','lastHeard','lastSpoke','since','why'];
+const PULSE_KEYS=['mic','overlay','battery','charging','net','vad','ttsOk','pageReady','ver','lastHeard','lastSpoke','since','why','battOpt','uptime'];
 const pulseLast={};
 /* the body comes from the bubble; only known keys, only plain values, bounded */
 function pulseClean(raw){let b={};try{b=JSON.parse(String(raw||'{}').slice(0,2000))||{};}catch(e){fail('P_MSG_BAD',e,'pulse');}
@@ -881,7 +881,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   const body=pulseClean(d.body);const sig=JSON.stringify(Object.assign({},body,{lastHeard:0,lastSpoke:0,since:0,why:''}));const last=pulseLast[dev];
   if(last&&last.sig===sig&&now-last.at<PULSE_EVERY)return false;
   pulseLast[dev]={sig:sig,at:now};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"c313d62a62f9"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"3816da1f9e7c"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;
@@ -902,7 +902,8 @@ function pulseSay(p,now,many){const who=many?(p.name||'מכשיר')+': ':'';cons
   if(p.net===false)return who+'הטלפון חי, אבל אין לו אינטרנט.';
   if(p.pageReady===false)return who+'הבועה פתוחה, אבל הדף בתוכה עוד לא התחבר.';
   const heard=+p.lastHeard>0?' שמעתי אותך לאחרונה '+ago(now-(+p.lastHeard))+'.':'';
-  return who+'הכול תקין: הבועה פתוחה והמיקרופון עובד'+(+p.battery>=0?', סוללה '+p.battery+' אחוז'+(p.charging?' בטעינה':''):'')+'.'+heard;}
+  const risk=p.battOpt===false?' רק דבר אחד: אין לי פטור מחיסכון בסוללה, אז הטלפון עלול לכבות אותי. תפתח את ליבה ותאשר.':'';
+  return who+'הכול תקין: הבועה פתוחה והמיקרופון עובד'+(+p.battery>=0?', סוללה '+p.battery+' אחוז'+(p.charging?' בטעינה':''):'')+'.'+heard+risk;}
 function heAt(t){if(!t)return 'אף פעם';const d=new Date(t),n=new Date();const hm=d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
   if(d.toDateString()===n.toDateString())return 'היום ב-'+hm;const y=new Date(n.getTime()-864e5);if(d.toDateString()===y.toDateString())return 'אתמול ב-'+hm;return ago(Date.now()-t);}
 async function whyCmd(){const now=Date.now();let r;try{r=await coldGet(P.pulses(),null,10);}catch(e){fail('P_DB_READ',e,'pulse');sayLocal('לא הצלחתי לקרוא את מצב הטלפון.');return;}
