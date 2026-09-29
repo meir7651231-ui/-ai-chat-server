@@ -6,7 +6,7 @@
 #   2. an APK signed by NEW without the lineage has no link to OLD - Android would refuse it as an update.
 # Procedure for a real rotation: keys/ROTATION.md.
 set -euo pipefail
-BT="${BUILD_TOOLS:-$(ls -d /opt/android-sdk/build-tools/* | sort -V | tail -1)}"
+SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/opt/android-sdk}}"; BT="${BUILD_TOOLS:-$(ls -d "$SDK"/build-tools/* | sort -V | tail -1)}"
 APKSIGNER="${APKSIGNER:-$BT/apksigner}"
 APK="${1:-$( [ -f android/app/build/outputs/apk/release/app-release.apk ] && echo android/app/build/outputs/apk/release/app-release.apk || echo dist/liba.apk )}"
 T="$(mktemp -d)"; P=drillpass

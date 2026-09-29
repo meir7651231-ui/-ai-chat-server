@@ -45,7 +45,9 @@ for (const [name, cmd] of extra) {
     const n = (out.match(/^PASS/gm) || []).length
     lines.push(`✓ ${name.padEnd(14)} ${n ? n + ' בדיקות' : out.trim().split('\n').pop()}`); pass++
   } catch (e) {
-    lines.push(`✗ ${name.padEnd(14)} ${String(e.message || e).trim().split('\n').slice(0, 3).join(' | ')}`)
+    // what the check itself said (its FAIL / HARNESS lines), not only that the command failed - CI shows nothing else
+    const said = String(e.stdout || '').split('\n').filter(l => /^(FAIL|HARNESS|✗)/.test(l)).slice(0, 4)
+    lines.push(`✗ ${name.padEnd(14)} ${(said.length ? said : String(e.message || e).trim().split('\n')).slice(0, 4).join(' | ')}`)
   }
 }
 const total = gates.length + extra.length
