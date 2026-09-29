@@ -23,6 +23,7 @@ const extra = [
   ['freshness', 'node tests/stale.test.js'],
   ['owner-lease', 'node tests/lease.test.js'],
   ['silence', 'node tests/silence.test.js'],
+  ['urgent', 'node tests/urgent.test.mjs'],
 ]
 
 let pass = 0

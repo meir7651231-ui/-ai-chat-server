@@ -3,7 +3,7 @@ package il.liba.app
 
 object Protocol {
     const val VERSION = 1
-    const val HASH = "b875d4c60051"
+    const val HASH = "7eef3940e84b"
     val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace")
 
     /** page -> app */
@@ -50,7 +50,7 @@ object Protocol {
     /** Senders the app calls through evaluateJavascript: app -> page. */
     const val SENDERS = """
   window.__libaSend=function(k,o){Array.prototype.slice.call(document.querySelectorAll('iframe')).forEach(function(f){try{f.contentWindow.postMessage(Object.assign({liba:k},o),'*');}catch(e){}});};
-  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"b875d4c60051",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace"],wall:Date.now(),state:window.__libaState||''});};
+  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"7eef3940e84b",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||''});};
   window.__libaCrash=function(id,version,text){window.__libaSend("crash",{id:id,version:version,text:text});};
   window.__libaSpoke=function(id,startAt,endAt,cause){window.__libaSend("spoke",{id:id,startAt:startAt,endAt:endAt,cause:cause});};
   window.__libaSpeaking=function(id){window.__libaSend("speaking",{id:id});};

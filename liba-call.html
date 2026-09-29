@@ -141,7 +141,7 @@ window.__ch={budget:()=>Object.assign({},chBudget),denied:()=>Object.assign({},c
 /* text from the database goes into the DOM through this, never raw: a task title is written by other
    sessions, and "<img onerror=…>" in one would otherwise run inside the page that holds the channel */
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-const PROTO=Object.freeze({v:1,hash:"b875d4c60051",caps:Object.freeze(["beat","clock","proto","pulse","spoke","state","trace"]),
+const PROTO=Object.freeze({v:1,hash:"7eef3940e84b",caps:Object.freeze(["beat","clock","proto","pulse","spoke","state","trace"]),
   toApp:Object.freeze({"ready":"ready","say":"say","sent":"sent","error":"error","queued":"queued","outbox":"outbox","tap":"tap","cmd":"cmd","crashSaved":"crashSaved","tasks":"tasks","traceAck":"traceAck","state":"state"}),
   toPage:Object.freeze({"hello":"hello","crash":"crash","spoke":"spoke","speaking":"speaking","input":"input","trace":"trace","pulse":"pulse"}),
   initial:"OFFLINE",moves:Object.freeze({"OFFLINE":["IDLE","WAKE"],"IDLE":["LISTENING","THINKING","SPEAKING","SENDING","RINGING","QUIET","DEGRADED","WAKE","OFFLINE"],"WAKE":["LISTENING","IDLE","SPEAKING","SENDING","RINGING","OFFLINE"],"LISTENING":["THINKING","SENDING","IDLE","SPEAKING","WAKE","OFFLINE"],"THINKING":["SENDING","SPEAKING","IDLE","OFFLINE"],"SENDING":["IDLE","SPEAKING","RINGING","THINKING","DEGRADED","WAKE","LISTENING","OFFLINE"],"SPEAKING":["IDLE","LISTENING","SENDING","WAKE","RINGING","OFFLINE"],"RINGING":["SPEAKING","IDLE","LISTENING","OFFLINE"],"QUIET":["IDLE","SPEAKING","OFFLINE"],"DEGRADED":["IDLE","SPEAKING","SENDING","OFFLINE"]})});
@@ -289,6 +289,10 @@ function spokeTimed(d){const id=String(d.id||''),re=sayReq.get(id);sayReq.delete
   if(d.cause==='guard')fail('P_SPEAK_GUARD',null,'guard');
   if(!re||!(+d.endAt>0))return;
   try{P.req(re).update({spokeStartAt:+d.startAt||0,spokeEndAt:+d.endAt,spokeCause:String(d.cause||'done')}).catch(e=>fail('P_DB_WRITE',e,'req spoke'));}catch(e){}}
+/* second-channel: ids the bubble already spoke by itself while the page was dead - marked before the queue runs */
+function urgentSeen(csv){String(csv||'').split(',').map(x=>x.trim()).filter(x=>/^[A-Za-z0-9_\-.~:@+]{1,200}$/.test(x)).forEach(id=>{if(spokenLocal.has(id)&&spokenDone(id))return;spokenMark(id);spokenLocal.add(id);
+  for(let i=inboxQ.length-1;i>=0;i--)if(inboxQ[i].id===id)inboxQ.splice(i,1);
+  if(db)P.inboxDoc(id).update({spoken:true,spokenAt:Date.now(),delivery:{state:'spoken',by:'native',at:Date.now()}}).catch(()=>{});});}
 function protoCheck(){if(!appPv)return;
   if(appPv<PROTO.v){fail('P_PROTO_APP_OLD',null,'app '+appPv+' page '+PROTO.v);if(!protoSaid){protoSaid=true;setTimeout(()=>sayLocal('האפליקציה בטלפון ישנה מהדף, ויש הודעות שהיא לא מכירה. תגיד תתקין ואעדכן אותה.'),1500);}}
   else if(appPv>PROTO.v)fail('P_PROTO_PAGE_OLD',null,'app '+appPv+' page '+PROTO.v);}
@@ -299,7 +303,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:57,pageHash:"24eec9e339a8",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:58,pageHash:"8708e39d8ace",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});urgentSeen(d.urgent);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f(String(d.cause||'done'));}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -883,7 +887,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
   else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
   pulseLast[dev]={sig:sig,at:now,body:body};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"24eec9e339a8"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"8708e39d8ace"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;

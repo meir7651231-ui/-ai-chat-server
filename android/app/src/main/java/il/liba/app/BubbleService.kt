@@ -62,6 +62,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var sayStartAt = 0L; private var spokeCause = "done"; private var lastSpokeAt = 0L
     // heartbeat-diag: why this life began (opened/boot/updated/revive), the previous life's last gasp, and a login wall
     private var lifeWhy = "opened"; private var lastGasp = ""; private var loginWall = false
+    // second-channel: since when the page has been dead (wall clock, 0 = alive), and when it was last alive
+    private var pageDeadSince = System.currentTimeMillis(); private var pageAliveAt = 0L
     private fun stamps() = org.json.JSONObject().put("voice", if (voiceAt > 0) voiceAt else listenReadyAt).put("heard", heardAt).put("wall", System.currentTimeMillis()).toString()
     /** release the page's wait for the utterance, with what really happened */
     private fun releaseSay(cause: String) { val id = sayId ?: return; sayId = null
@@ -350,6 +352,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private val watchdog = object : Runnable { override fun run() {
         if (!pageReady && SystemClock.elapsedRealtime() - pageLoadedAt > 90000) { Trace.e(Trace.Code.E_PAGE_LOAD, "timeout"); reloadPage("אין תגובה מהדף") }
         if (pageReady) web?.let { LibaWeb.hello(it); drainTrace(); pulse(it) }
+        else if (pageDeadSince == 0L) pageDeadSince = System.currentTimeMillis()
+        UrgentPoller.maybe(this@BubbleService, main, pageDeadSince, pageAliveAt) { speak("הודעה דחופה, בלי הדף: " + it.text, true) }
         main.postDelayed(this, 30000)
     } }
     private fun watchNetwork() {
@@ -795,7 +799,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (!pageReady) showLabel(status, 5000)
         web?.let { LibaWeb.hello(it) }
     } }
-    override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; Pulse.resend(); main.postDelayed({ web?.let { pulse(it) } }, 3000); status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
+    override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; pageDeadSince = 0L; pageAliveAt = System.currentTimeMillis(); Pulse.resend(); main.postDelayed({ web?.let { pulse(it) } }, 3000); status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         if (Prefs.reports(this)) Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } }
         main.postDelayed({ drainTrace() }, 2000) } } }
     fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "heyOff:" + e.javaClass.simpleName) }; listening = false }; unmuteSystem() }

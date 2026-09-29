@@ -134,6 +134,8 @@ object LibaWeb {
     fun hello(web: WebView) {
         val ver = try { web.context.packageManager.getPackageInfo(web.context.packageName, 0).versionName } catch (e: Exception) { "?" }
         val ver2 = ver + (if (OrbView.shaderOk) "" else if (android.os.Build.VERSION.SDK_INT >= 33) "-canvas:" + OrbView.shaderErr.take(60).replace("'", " ") else "-canvas")
-        web.evaluateJavascript("window.__libaVer='" + ver2 + "';window.__libaHello && window.__libaHello()", null)
+        // second-channel: what the bubble already spoke natively, so the page marks it and never says it again
+        val urgent = Prefs.urgentDone(web.context).joinToString(",").replace("'", "")
+        web.evaluateJavascript("window.__libaVer='" + ver2 + "';window.__libaUrgent='" + urgent + "';window.__libaHello && window.__libaHello()", null)
     }
 }

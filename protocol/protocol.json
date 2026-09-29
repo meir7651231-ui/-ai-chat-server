@@ -90,7 +90,8 @@
         "pv": "int",
         "caps": "list",
         "wall": "int",
-        "state": "str"
+        "state": "str",
+        "urgent": "str"
       },
       "from": {
         "ver": "window.__libaVer||''",
@@ -98,7 +99,8 @@
         "pv": "VERSION",
         "caps": "CAPS",
         "wall": "Date.now()",
-        "state": "window.__libaState||''"
+        "state": "window.__libaState||''",
+        "urgent": "window.__libaUrgent||''"
       }
     },
     "crash": {

@@ -13,6 +13,9 @@ object Prefs {
     /** heartbeat-diag: the last words before a death the app could see coming - read (and cleared) by the next life */
     fun gasp(c: Context): String = p(c).getString("gasp", "") ?: ""
     fun setGasp(c: Context, v: String) = p(c).edit().putString("gasp", v).commit()
+    /** second-channel: ids the bubble spoke natively - kept (last 50) so nothing is said twice, and told to the page */
+    fun urgentDone(c: Context): List<String> = (p(c).getString("urgentDone", "") ?: "").split(',').filter { it.isNotEmpty() }
+    fun addUrgentDone(c: Context, id: String) = p(c).edit().putString("urgentDone", (urgentDone(c) + id).distinct().takeLast(50).joinToString(",")).apply()
     fun batteryAsked(c: Context) = p(c).getBoolean("battAsked", false)
     fun setBatteryAsked(c: Context, v: Boolean) = p(c).edit().putBoolean("battAsked", v).apply()
     fun hey(c: Context) = p(c).getBoolean("hey", false)
