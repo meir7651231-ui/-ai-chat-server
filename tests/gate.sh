@@ -13,14 +13,17 @@ WT="${LIBA_GATE_WT:-/tmp/claude-0/liba-gate-wt}"
 
 [ "${1:-}" = "--inject" ] || { echo "usage: tests/gate.sh --inject"; exit 2; }
 
+# the worktree keeps its own HEAD, so pin it to what the repo has NOW - otherwise the injections
+# run against whatever commit the worktree was created at and every gate looks green.
+HEAD_SHA="$(git -C "$REPO" rev-parse HEAD)"
 if [ ! -d "$WT/.git" ] && [ ! -f "$WT/.git" ]; then
-  git -C "$REPO" worktree add --detach "$WT" HEAD >/dev/null 2>&1 || { echo "לא הצלחתי ליצור worktree ב-$WT"; exit 2; }
+  git -C "$REPO" worktree add --detach "$WT" "$HEAD_SHA" >/dev/null 2>&1 || { echo "לא הצלחתי ליצור worktree ב-$WT"; exit 2; }
 fi
-git -C "$WT" checkout -f --detach HEAD >/dev/null 2>&1
-git -C "$WT" clean -fdq -e local.properties >/dev/null 2>&1
+git -C "$WT" checkout -f --detach "$HEAD_SHA" >/dev/null 2>&1
+git -C "$WT" clean -fdq >/dev/null 2>&1
 
 pass=0; fail=0; deferred=0
-reset() { git -C "$WT" checkout -f --detach HEAD >/dev/null 2>&1; git -C "$WT" clean -fdq >/dev/null 2>&1; }
+reset() { git -C "$WT" checkout -f --detach "$HEAD_SHA" >/dev/null 2>&1; git -C "$WT" clean -fdq >/dev/null 2>&1; }
 
 # run <name> <gate-or-command> — expects a NON-zero exit
 expect_red() {
