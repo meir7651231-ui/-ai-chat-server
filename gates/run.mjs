@@ -14,6 +14,8 @@ const extra = [
   ['bridge-live', 'node tests/bridge.e2e.js'],
   ['req-ids', 'node tests/req-spine.test.js'],
   ['key-rotation', 'bash keys/rotation-drill.sh'],
+  ['state-table', 'node tests/machine.test.js'],
+  ['wal-chaos', 'CHAOS=45 node tests/wal.chaos.js'],
 ]
 
 let pass = 0
