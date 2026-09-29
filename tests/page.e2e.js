@@ -184,6 +184,27 @@ const failed = [];
   check(/<img src=x/.test(inj.text), 'task title with HTML is shown as text');
   const dev = await get('channel/device');
   check(dev && /^[0-9a-f]{12}$/.test(String(dev.pageHash || '')), 'channel/device carries the build hash: ' + JSON.stringify(dev && dev.pageHash));
+  // page-kernel: said once survives a lost ack + reload; age is spoken; expired is not; interrupted says so
+  const said = t => msgs.filter(x => x.liba === 'say' && String(x.text || '').includes(t));
+  const speakOut = async (ms = 1400) => { const m = await flush(ms); for (const x of m) if (x.liba === 'say' && x.id) await p.evaluate(id => window.app({ liba: 'spoke', id }), x.id); await flush(700); };
+  await set('inbox/k1', { text: 'בדיקת-קרנל-אחת', kind: 'say', from: 'liba', ts: Date.now() }); await speakOut();
+  check(said('בדיקת-קרנל-אחת').length === 1 && (await get('inbox/k1') || {}).spoken === true, 'kernel: message read and acked');
+  // the ack never landed, the page reloaded (this load's memory is gone), and the message comes back
+  await H(() => window.__kernel.forgetLoad());
+  await set('inbox/k1', { text: 'בדיקת-קרנל-אחת', kind: 'say', from: 'liba', ts: Date.now() }); await speakOut();
+  check(said('בדיקת-קרנל-אחת').length === 1, 'kernel: after a lost ack and a reload it is NOT read again: ' + said('בדיקת-קרנל-אחת').length);
+  check((await get('inbox/k1') || {}).repaired === true, 'kernel: the missing ack is repaired in the database');
+  await set('inbox/k2', { text: 'הודעה-ישנה', kind: 'say', from: 'liba', ts: Date.now() - 3 * 3600 * 1000 }); await speakOut();
+  check(said('הודעה-ישנה').some(x => /מלפני 3 שעות/.test(x.text)), 'kernel: a three-hour-old message is read with its age: ' + JSON.stringify(said('הודעה-ישנה').map(x => x.text.slice(0, 70))));
+  await set('inbox/k3', { text: 'הודעה-שפגה', kind: 'say', from: 'liba', ts: Date.now() - 4 * 24 * 3600 * 1000 }); await speakOut();
+  check(said('הודעה-שפגה').length === 0 && (await get('inbox/k3') || {}).expired === true, 'kernel: a four-day-old announcement is not read, it is marked expired');
+  await set('inbox/k4', { text: 'שאלה-ישנה', kind: 'ask', from: 'liba', ts: Date.now() - 4 * 24 * 3600 * 1000 }); await speakOut();
+  check(said('שאלה-ישנה').length === 1, 'kernel: an old question is still asked - questions never expire');
+  await set('inbox/k5', { text: 'הודעה-שנקטעה', kind: 'say', from: 'liba', ts: Date.now(), speakingAt: Date.now() - 5000 }); await speakOut();
+  check(said('הודעה-שנקטעה').some(x => /נקטע באמצע/.test(x.text)), 'kernel: a message cut off mid-sentence says so when it is read again');
+  check((await get('inbox/k2') || {}).speakingAt > 0, 'kernel: phase one of the ack (speakingAt) is written before speaking');
+  const st = await H(() => ({ s: window.__kernel.state(), n: window.__kernel.log.length, has: window.__kernel.log.some(x => x.to === 'SPEAKING') }));
+  check(st.s === 'IDLE' && st.n > 0 && st.has, 'kernel: one state machine, back to IDLE, transitions logged: ' + JSON.stringify(st));
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

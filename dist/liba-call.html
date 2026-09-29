@@ -90,9 +90,15 @@ const P={
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 const $=id=>document.getElementById(id);
 const app=$('app'),H=$('h'),SUB=$('sub'),KIND=$('kind'),OPTS=$('opts'),HEARD=$('heard'),LOG=$('log');
-let db=null,comments=null,AC=null,ringTimer=null,cur=null,lastRung=null,wakeLock=null,rec=null,armed=false;
+let db=null,comments=null,AC=null,ringTimer=null,cur=null,lastRung=null,wakeLock=null,rec=null;
 const log=t=>{LOG.textContent=t;};
 const setSt=(t,c='')=>{$('stt').textContent=t;$('st').className='st '+c;};
+/* one state instead of two booleans (page-kernel). OFF until the page is armed; SPEAKING and SENDING are
+   what "busy" used to mean. Every change goes through transition() and lands in a 200-entry log. */
+let state='OFF';const stateLog=[];
+function transition(to,why){const from=state;if(from===to)return;state=to;stateLog.push({t:Date.now(),from:from,to:to,why:why||''});while(stateLog.length>200)stateLog.shift();}
+const isArmed=()=>state!=='OFF',isBusy=()=>state==='SPEAKING'||state==='SENDING';
+const arm=why=>{if(state==='OFF')transition('IDLE',why);};
 /* ---- black box (step blackbox): one table of codes, one writer ---- */
 const TRACE_HE={E_OVERLAY_DENIED:'אין הרשאה לחלון צף',E_OVERLAY_UPDATE:'החלון הצף לא התעדכן',E_TTS_INIT:'הקול לא עלה',E_TTS_OP:'תקלה בדיבור',E_SR_LIFECYCLE:'סגירת המאזין נכשלה',E_SR_NONE:'אין זיהוי דיבור במכשיר',E_MIC_FGS:'המיקרופון נחסם ברקע',E_FGS_START:'השירות לא הצליח לעלות',E_MIC_INIT:'המיקרופון לא נפתח',E_MIC_READ:'ההקלטה נקטעה',E_HAPTIC:'הרטט נכשל',E_TONE:'הצליל נכשל',E_AUDIO_STREAM:'שינוי עוצמת הקול נכשל',E_MEDIA_SESSION:'כפתור האוזניה לא נרשם',E_NET:'בדיקת עדכון נכשלה ברשת',E_SYS_CB:'חיבור לאירועי המערכת נכשל',E_INSTALL_PERM:'אין הרשאה להתקין עדכון',E_INSTALL_NET:'הורדת העדכון נכשלה',E_INSTALL_SIG:'העדכון לא עבר אימות',E_INTENT_OPEN:'פתיחה של אפליקציה נכשלה',E_PAGE_LOGIN:'הבועה התנתקה מהחשבון',E_PAGE_LOAD:'הדף לא נטען',E_PAGE_TAP:'לחיצה אוטומטית החטיאה',E_CRASH_SAVE:'שמירת קריסה נכשלה',E_PREFS:'קריאת ההגדרות נכשלה',E_SHADER:'האנימציה של הבועה נכשלה',E_TRACE_ROTATE:'יומן תקלות ישן נמחק',P_BRIDGE:'הדף לא הצליח לדבר עם הבועה',P_STORE:'הזיכרון המקומי בדפדפן חסום',P_AUDIO:'הצלילים בדף לא עלו',P_SR:'המיקרופון בדף נתקע',P_MIC_DENIED:'המיקרופון בדף נחסם',P_WAKELOCK:'המסך לא נשאר דלוק',P_DB_WRITE:'כתיבה למסד נכשלה',P_DB_READ:'קריאה מהמסד נכשלה',P_SEND:'ההודעה לא הגיעה לקלוד',P_ACK:'סימון הודעה כנאמרה נכשל',P_MSG_BAD:'הודעה פגומה'};
 const TRACE_SR_HE={1:'זיהוי הדיבור נכשל ברשת',2:'זיהוי הדיבור נכשל ברשת',3:'ההקלטה נכשלה',4:'שרת הזיהוי סירב',5:'תקלה פנימית בזיהוי',6:'לא שמעתי כלום',7:'לא זוהו מילים',8:'המאזין היה תפוס',9:'אין הרשאת מיקרופון',11:'חסרה שפה לזיהוי',12:'העברית לא מותקנת במכשיר',13:'הזיהוי במכשיר לא זמין'};
@@ -192,14 +198,14 @@ function listen(){return new Promise(res=>{if(!SR){res(null);return;}if(listenin
   try{rec.start();}catch(e){fail('P_SR',e,'start');listening=false;res(null);}setTimeout(()=>{try{rec.stop();}catch(e){fail('P_SR',e,'stop cap');}},12000);});}
 /* ---- wake lock ---- */
 async function keepAwake(){try{if('wakeLock' in navigator){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null;});}}catch(e){fail('P_WAKELOCK',e);}}
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&armed&&!wakeLock)keepAwake();});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&isArmed()&&!wakeLock)keepAwake();});
 
 /* ---- capabilities ---- */
-let handsFree=true,busy=false,seen=null,appMode=false,lastAsk=null;
+let handsFree=true,seen=null,appMode=false,lastAsk=null;
 /* fail() never posts – P_BRIDGE would otherwise call the thing that just broke */
 function post(kind,extra){try{window.parent.postMessage(Object.assign({liba:kind},extra||{}),'*');}catch(e){fail('P_BRIDGE',e,kind);}}
 window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d=e.data;if(!d||!d.liba)return;
-  if(d.liba==='hello'){appMode=true;armed=true;appVer=String(d.ver||'');trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({app:d.ver||'',page:39,pageHash:"1a6805ca94d2",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post('ready',{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+  if(d.liba==='hello'){appMode=true;arm('hello');appVer=String(d.ver||'');trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({app:d.ver||'',page:40,pageHash:"f6055f1155d2",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post('ready',{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba==='spoke'){const f=sayWait.get(String(d.id||''));if(f)f();}
   else if(d.liba==='crash'&&d.text&&db){P.crash((d.id||Date.now())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post('crashSaved',{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
   else if(d.liba==='trace'&&d.events&&db){trBridge(String(d.batch||''),String(d.events));}
@@ -227,11 +233,29 @@ function bubble(cls,text){const d=document.createElement('div');d.className=cls;
     taskPrev={};list.forEach(t=>taskPrev[t.id]=t.status);taskSeen=true;lastTasks=list;renderTasks(list);},e=>{fail('P_DB_READ',e,'tasks');log('tasks: '+e.code);});
   P.quiet().onSnapshot(s=>{quietUntil=(s.exists&&s.data()&&s.data().until)||0;if(quietUntil>Date.now())log('שקט עד '+new Date(quietUntil).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}));pump();},e=>fail('P_DB_READ',e,'channel/quiet'));
   P.owner().onSnapshot(s=>{const d=(s.exists&&s.data())||{};if((d.since||0)<ownerSince)return;ownerSince=d.since||ownerSince;owner=d.owner||'liba';setSt(owner==='manager'?'על הקו: המנהל':'על הקו: ליבה','on');},e=>fail('P_DB_READ',e,'channel/owner'));
-  P.inbox().onSnapshot(q=>{const items=q.docs.map(d=>Object.assign({id:d.id},d.data())).filter(d=>(d.text||d.kind==='cmd')&&!d.spoken&&!spokenLocal.has(d.id)).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();},e=>{fail('P_DB_READ',e,'inbox');log('inbox: '+e.code);});
-  P.current().onSnapshot(s=>{if(!s.exists)return;let d=s.data();if(!d||!d.id||d.id===seen||d.spoken)return;d=Object.assign({from:'manager',legacy:true},d);if(!armed){cur=d;H.textContent='יש הודעה';SUB.textContent='לחץ "התחל" כדי לשמוע';return;}incoming(d);},e=>{fail('P_DB_READ',e,'chat/current');setSt('שגיאה','warn');log('db: '+e.code);});
+  P.inbox().onSnapshot(q=>{const items=q.docs.map(d=>Object.assign({id:d.id},d.data())).filter(d=>{if(d.spoken||d.expired||!(d.text||d.kind==='cmd'))return false;if(spokenDone(d.id)){P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),repaired:true}).catch(e=>fail('P_ACK',e,'repair'));return false;}return !spokenLocal.has(d.id);}).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();},e=>{fail('P_DB_READ',e,'inbox');log('inbox: '+e.code);});
+  P.current().onSnapshot(s=>{if(!s.exists)return;let d=s.data();if(!d||!d.id||d.id===seen||d.spoken)return;d=Object.assign({from:'manager',legacy:true},d);if(!isArmed()){cur=d;H.textContent='יש הודעה';SUB.textContent='לחץ "התחל" כדי לשמוע';return;}incoming(d);},e=>{fail('P_DB_READ',e,'chat/current');setSt('שגיאה','warn');log('db: '+e.code);});
 })();
 
 const inboxQ=[],spokenLocal=new Set(),sendQ=[];let pumping=false,owner='liba',ownerSince=0,quietUntil=0,pumpTimer=null,taskPrev={},taskSeen=false,lastTasks=[],lastRingAt=0;
+/* what was already said survives a reload (page-kernel). spokenLocal is this page load's memory and is set
+   before speaking, so nothing is read twice in one load; spokenStore is written only AFTER the speech ends,
+   so a reload in the middle of a sentence still reads it again, while one after the sentence does not. */
+const SPOKEN_TTL=72*3600*1000;let spokenStore={};
+try{spokenStore=JSON.parse(localStorage.getItem('liba.spoken')||'{}')||{};}catch(e){fail('P_STORE',e,'get spoken');}
+function spokenDone(id){const t=spokenStore[id];return !!t&&Date.now()-t<SPOKEN_TTL;}
+function spokenMark(id){const now=Date.now();spokenStore[id]=now;for(const k in spokenStore)if(now-spokenStore[k]>SPOKEN_TTL)delete spokenStore[k];
+  try{localStorage.setItem('liba.spoken',JSON.stringify(spokenStore));}catch(e){fail('P_STORE',e,'set spoken');}}
+/* a message's age is part of its meaning (page-kernel). Past AGE_SAY it is read with its age; a plain
+   announcement past EXPIRE is not read at all but marked expired. Questions never expire - they still
+   need an answer - and commands never expire, they still need to run. */
+const AGE_SAY=10*60*1000,EXPIRE={say:72*3600*1000,done:72*3600*1000};
+/* some writers number their messages (ts:1,2,3) instead of stamping them: such a ts orders, it does not age */
+const CLOCK_MIN=1577836800000; // 2020-01-01
+function ageOf(d){return d&&!d.local&&d.ts>=CLOCK_MIN?Math.max(0,Date.now()-d.ts):0;}
+function heAgo(ms){const m=Math.round(ms/60000);if(m<60)return 'מלפני '+m+' דקות';const h=Math.round(m/60);if(h===1)return 'מלפני שעה';if(h===2)return 'מלפני שעתיים';if(h<24)return 'מלפני '+h+' שעות';const n=Math.round(h/24);return n===1?'מאתמול':n===2?'משלשום':'מלפני '+n+' ימים';}
+function expired(d){const lim=EXPIRE[d.kind||'say'];return !!lim&&!d.priority&&ageOf(d)>lim;}
+window.__kernel={state:()=>state,log:stateLog,forgetLoad:()=>spokenLocal.clear(),spoken:()=>Object.assign({},spokenStore)};
 function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.some(x=>x.id===d.id)&&!spokenLocal.has(d.id))inboxQ.push(d);pump();}
 /* step 19: priority – urgent bypasses quiet; morning waits for 08:00 */
 function ready(d){if(d.kind==='cmd')return appMode;const p=d.priority||'normal';if(p==='urgent')return true;if(p==='morning'){const h=new Date().getHours();if(h<8||h>=22)return false;}if(quietUntil>Date.now())return false;return true;}
@@ -239,9 +263,12 @@ const NAMES={liba:'ליבה',manager:'המנהל',architect:'האדריכל',bui
 const KINDW={ask:'שאלה',stuck:'נתקע',done:'סיים'};
 function speakerOf(d){if(d.speaker)return d.speaker;if(/^arch/i.test(d.id||''))return 'האדריכל';return NAMES[d.from||'liba']||d.from||'ליבה';}
 function prefixOf(d,who){const t=(d.text||'').trim();if(t.startsWith(who)||t.startsWith('כאן '+who))return '';let p=who;if(d.topic)p+=', בנוגע ל'+d.topic;if(KINDW[d.kind])p+=', '+KINDW[d.kind];return p+': ';}
-async function pump(){if(pumping||!armed)return;pumping=true;try{const n=inboxQ.filter(d=>ready(d)&&d.kind!=='cmd'&&!spokenLocal.has(d.id)).length;
+async function pump(){if(pumping||!isArmed())return;pumping=true;try{const n=inboxQ.filter(d=>ready(d)&&d.kind!=='cmd'&&!spokenLocal.has(d.id)).length;
   if(n>=2){const asks=inboxQ.filter(d=>ready(d)&&(d.kind==='ask'||d.kind==='stuck')).length;await incoming({id:'batch-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:asks?'stuck':'say',noListen:true,text:'הצטברו '+n+' הודעות'+(asks?', '+asks+' מהן שאלות. אקרא אותן ברצף, צלצול אחד.':'. אקרא אותן ברצף.')});}
-  for(;;){let i=inboxQ.findIndex(d=>ready(d)&&d.kind==='cmd');if(i<0)i=inboxQ.findIndex(ready);if(i<0)break;const d=inboxQ.splice(i,1)[0];if(spokenLocal.has(d.id))continue;if(d.kind==='cmd'){if(!appMode){spokenLocal.add(d.id);continue;}spokenLocal.add(d.id);await incoming(d);continue;}spokenLocal.add(d.id);try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'inbox');log('ack: '+(e.code||e));}}}finally{pumping=false;if(inboxQ.length){clearTimeout(pumpTimer);pumpTimer=setTimeout(pump,60000);log(inboxQ.length+' הודעות מחכות (שקט/בוקר)');}}}
+  for(;;){let i=inboxQ.findIndex(d=>ready(d)&&d.kind==='cmd');if(i<0)i=inboxQ.findIndex(ready);if(i<0)break;const d=inboxQ.splice(i,1)[0];if(spokenLocal.has(d.id))continue;if(d.kind==='cmd'){if(!appMode){spokenLocal.add(d.id);continue;}spokenLocal.add(d.id);await incoming(d);spokenMark(d.id);continue;}spokenLocal.add(d.id);
+    if(!d.local&&expired(d)){spokenMark(d.id);try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now()});}catch(e){fail('P_ACK',e,'expire');}continue;}
+    if(!d.local){d.again=!!d.speakingAt&&!d.spoken;P.inboxDoc(d.id).update({speakingAt:Date.now()}).catch(e=>fail('P_ACK',e,'speakingAt'));}
+    try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;spokenMark(d.id);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'inbox');log('ack: '+(e.code||e));}}}finally{pumping=false;if(inboxQ.length){clearTimeout(pumpTimer);pumpTimer=setTimeout(pump,60000);log(inboxQ.length+' הודעות מחכות (שקט/בוקר)');}}}
 // 12: switch who holds the channel, by voice, without leaving the page
 function quietCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(בטל|סיים|תפסיק)( את)? (השקט|שקט)$|^תפריע$|^אפשר להפריע$|^שקט נגמר$/.test(t)){setQuiet(0);return true;}
@@ -308,17 +335,17 @@ function renderTasks(list){const el=$('tasks');if(!list.length){el.hidden=true;p
   if(c('queued'))parts.push(c('queued')+' בתור');
   post('tasks',{summary:parts.join('. ')||'אין משימות פתוחות',n:list.length,running:c('running'),blocked:c('blocked'),done:c('done')});}
 /* ---- flow ---- */
-$('start').addEventListener('click',async()=>{audioInit();if(AC&&AC.state==='suspended')AC.resume();armed=true;$('start').hidden=true;$('hf').hidden=false;keepAwake();
+$('start').addEventListener('click',async()=>{audioInit();if(AC&&AC.state==='suspended')AC.resume();arm('start');$('start').hidden=true;$('hf').hidden=false;keepAwake();
   if(!SR){SUB.textContent='אין זיהוי דיבור בדפדפן הזה – אני אדבר, אתה תכתוב.';setSt('בלי מיקרופון','warn');}else{try{const s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(t=>t.stop());setSt('מיקרופון פועל','on');}catch(e){fail('P_MIC_DENIED',e);micBlocked=true;dictationMode();}}
   H.textContent='';
   if(cur){const d=cur;cur=null;incoming(d);}else{await say('אני כאן. דבר.');idleListen();}
   pump();});
-$('hf').addEventListener('click',()=>{handsFree=!handsFree;$('hf').textContent='ידיים חופשיות: '+(handsFree?'פועל':'כבוי');$('hf').className='tog '+(handsFree?'on':'');if(handsFree&&!busy)idleListen();});
+$('hf').addEventListener('click',()=>{handsFree=!handsFree;$('hf').textContent='ידיים חופשיות: '+(handsFree?'פועל':'כבוי');$('hf').className='tog '+(handsFree?'on':'');if(handsFree&&!isBusy())idleListen();});
 
 function dictationMode(){handsFree=false;$('hf').hidden=true;$('talk').hidden=true;setSt('מצב הכתבה','warn');SUB.textContent='הדף הזה לא מקבל מיקרופון. במקום: לחץ על השורה למטה, ואז על 🎤 במקלדת של הטלפון – זה אותו דבר.';$('typed').placeholder='לחץ כאן → 🎤 במקלדת → דבר';$('typeRow').hidden=false;$('typed').focus();}
 function showTalk(){$('typeRow').hidden=false;$('talk').hidden=!SR||micBlocked;if(micBlocked)setTimeout(()=>$('typed').focus(),300);}
 async function idleListen(){app.className='';KIND.textContent='';H.className='';showTalk();$('ack').hidden=true;OPTS.innerHTML='';HEARD.hidden=true;
-  if(handsFree&&SR&&!busy){const t=await listen();if(t&&!busy)return send(t);if(handsFree&&!busy&&!listening)setTimeout(idleListen,800);}}
+  if(handsFree&&SR&&!isBusy()){const t=await listen();if(t&&!isBusy())return send(t);if(handsFree&&!isBusy()&&!listening)setTimeout(idleListen,800);}}
 
 async function incoming(d){
   if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post('cmd',{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return true;}
@@ -326,26 +353,29 @@ async function incoming(d){
   d.options=Array.isArray(d.options)?d.options.map(o=>String(o)).filter(o=>o.length):[];
   cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem('liba.seen',d.id);}catch(e){fail('P_STORE',e,'set seen');}
   if(rec){try{rec.abort();}catch(e){fail('P_SR',e,'abort');}}
-  busy=true;try{
+  transition('SPEAKING','incoming '+(d.kind||'say'));try{
   TR.querySelectorAll('.think').forEach(x=>x.remove());
-  const k=d.kind||'say';let ak=(d.priority==='urgent'&&(k==='say'||k==='ask'))?'call':k;
+  const k=d.kind||'say';const age=ageOf(d),old=age>AGE_SAY;
+  /* urgency does not survive an hour in the queue: an old 'urgent' is read, not rung */
+  let ak=(d.priority==='urgent'&&age<3600000&&(k==='say'||k==='ask'))?'call':k;
   if((ak==='call'||ak==='stuck')){if(Date.now()-lastRingAt<60000)ak='ask';else lastRingAt=Date.now();} /* step 47: one ring per batch */
-  const who=speakerOf(d);const spokenText=(d.priority==='urgent'?'דחוף. ':'')+prefixOf(d,who)+d.text;
+  const who=speakerOf(d);const lead=(d.again?'שוב, כי זה נקטע באמצע. ':'')+(old?heAgo(age)+': ':'');
+  const spokenText=(d.priority==='urgent'&&!old?'דחוף. ':'')+prefixOf(d,who)+lead+d.text;
   if(!appMode&&(ak==='call'||ak==='stuck')){app.className='ring';KIND.textContent='ליבה מצלצלת';KIND.className='kind stuck';ringStart();await new Promise(r=>setTimeout(r,2400));ringStop();app.className='';}
   KIND.textContent=k==='done'?'סיימתי':k==='stuck'?'נתקעתי':'';KIND.className='kind '+k;
-  bubble('li',prefixOf(d,who)+d.text);HEARD.hidden=true;OPTS.innerHTML='';
+  bubble('li',prefixOf(d,who)+lead+d.text);HEARD.hidden=true;OPTS.innerHTML='';
   if(k==='ask'||k==='stuck'||(d.options&&d.options.length))lastAsk={id:d.id,text:d.text,speaker:who,topic:d.topic||'',at:Date.now()};else if(!d.local)lastAsk=null;
   try{if(memSettings.logTurns)P.turns().doc(String(Date.now())).set({from:d.from||'liba',speaker:who,topic:d.topic||'',kind:k,text:d.text,msg:d.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
   if(appMode)await sayApp(spokenText,{kind:ak,options:d.options||[],from:d.from||'liba',speaker:who});else await say(spokenText+(d.options&&d.options.length?'. '+d.options.join(', או ')+'?':''));
   if(d.legacy){try{await P.current().update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'chat/current');log('legacy ack: '+(e.code||e));}}
   if(d.options&&d.options.length){OPTS.innerHTML=d.options.map(o=>`<button>${esc(o)}</button>`).join('');OPTS.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>send(b.textContent)));}
   showTalk();$('ack').hidden=k!=='done';
-  }finally{busy=false;drainQ();} /* v36: a sentence said while ליבה was speaking waits in the queue – release it here */
+  }finally{transition('IDLE','spoke');drainQ();} /* v36: a sentence said while ליבה was speaking waits in the queue – release it here */
   if(micBlocked)return;
   if(appMode)return;
-  if(SR&&!d.noListen&&(handsFree||(d.options&&d.options.length)||k==='stuck')){const t=await listen();if(t&&!busy)return send(t);if(handsFree&&!busy)idleListen();}
+  if(SR&&!d.noListen&&(handsFree||(d.options&&d.options.length)||k==='stuck')){const t=await listen();if(t&&!isBusy())return send(t);if(handsFree&&!isBusy())idleListen();}
 }
-$('talk').addEventListener('click',async()=>{if(busy)return;if(listening){try{rec.stop();}catch(e){fail('P_SR',e,'stop');}return;}const t=await listen();if(t)send(t);});
+$('talk').addEventListener('click',async()=>{if(isBusy())return;if(listening){try{rec.stop();}catch(e){fail('P_SR',e,'stop');}return;}const t=await listen();if(t)send(t);});
 $('sendTyped').addEventListener('click',()=>{const v=$('typed').value.trim();if(v)send(v);});
 $('typed').addEventListener('keydown',e=>{if(e.key==='Enter'){const v=$('typed').value.trim();if(v)send(v);}});
 let autoT=null;$('typed').addEventListener('input',()=>{if(!micBlocked)return;clearTimeout(autoT);const v=$('typed').value.trim();if(v.length<3){log('');return;}log('שולח אוטומטית בעוד 3 שניות… (הקלדה מבטלת)');autoT=setTimeout(()=>{const v2=$('typed').value.trim();if(v2&&v2===v)send(v2);},3000);});
@@ -387,11 +417,11 @@ window.addEventListener('online',()=>setTimeout(flushOutbox,1500));setInterval(f
 async function send(text,forcedTag){
   if(text&&typeof text==='object'){forcedTag=text.tag;text=text.text;}
   text=String(text||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7]/g,'').replace(/\s+/g,' ').trim();if(!text)return;
-  if(!forcedTag&&switchOwner(text)){post('sent',{text,local:true});if(!busy)drainQ();return;}
+  if(!forcedTag&&switchOwner(text)){post('sent',{text,local:true});if(!isBusy())drainQ();return;}
   const tag=forcedTag||tagOf();
-  if(busy){sendQ.push({text,tag});post('queued',{text});return;}busy=true;const id=cur?cur.id:'free';cur=null;
+  if(isBusy()){sendQ.push({text,tag});post('queued',{text});return;}transition('SENDING','send');const id=cur?cur.id:'free';cur=null;
   $('typed').value='';OPTS.innerHTML='';$('ack').hidden=true;HEARD.hidden=true;
-  if(text===lastSent.text&&(id==='free'||id===lastSent.id)&&Date.now()-lastSent.ts<5000){log('כפילות – לא נשלח שוב');post('sent',{text,dup:true});busy=false;drainQ();return;}
+  if(text===lastSent.text&&(id==='free'||id===lastSent.id)&&Date.now()-lastSent.ts<5000){log('כפילות – לא נשלח שוב');post('sent',{text,dup:true});transition('IDLE','duplicate');drainQ();return;}
   bubble('me',text);const th=bubble('li think','ליבה חושבת…');
   try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){P.decisions().doc(String(Date.now())).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'decisions/log/items'));lastAsk=null;}}catch(e){fail('P_DB_WRITE',e,'decisions/log/items');}
   try{if(memSettings.logTurns)P.turns().doc(String(Date.now())).set({from:'user',speaker:'מאיר',to:owner,text,re:id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
@@ -400,7 +430,7 @@ async function send(text,forcedTag){
   else if(RETRYABLE(reason)||reason==='offline'){outbox.push({text,tag,ts:Date.now()});saveOutbox();const off=!navigator.onLine||reason==='offline';th.textContent=off?'אין רשת – שמרתי, אשלח כשתחזור':'השליחה נכשלה ('+reason+') – שמרתי, אנסה שוב';post('outbox',{text,n:outbox.length,reason});const msg=off?'ליבה, בנוגע לרשת: אין רשת. שמרתי את מה שאמרת, ואשלח כשהרשת תחזור.':'ליבה, בנוגע לשליחה: השרת לא קיבל את זה כרגע. שמרתי, ואשלח שוב בעוד רגע.';if(appMode)post('say',{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else await say(msg);}
   else{th.textContent='לא הצלחתי לשלוח ('+reason+') – נסה שוב';await say('לא הצלחתי לשלוח');}
   post(sent?'sent':(outbox.length&&(RETRYABLE(reason)||reason==='offline')?'queued':'error'),{text,reason});
-  busy=false;
+  transition('IDLE','sent');
   if(drainQ())return;
   if(!sent&&handsFree&&!outbox.length)idleListen();
 }

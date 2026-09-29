@@ -12,4 +12,4 @@ function listen(){return new Promise(res=>{if(!SR){res(null);return;}if(listenin
   try{rec.start();}catch(e){fail('P_SR',e,'start');listening=false;res(null);}setTimeout(()=>{try{rec.stop();}catch(e){fail('P_SR',e,'stop cap');}},12000);});}
 /* ---- wake lock ---- */
 async function keepAwake(){try{if('wakeLock' in navigator){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null;});}}catch(e){fail('P_WAKELOCK',e);}}
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&armed&&!wakeLock)keepAwake();});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&isArmed()&&!wakeLock)keepAwake();});
