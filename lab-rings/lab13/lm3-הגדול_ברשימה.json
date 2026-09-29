@@ -1,0 +1,1 @@
+[["WHERE",1],["GO"],["WHERE",2],["TAKE"],["TAKE"],["GO"],["PUT"],["WHERE",3],["GO"],["PUT"],["TAKE"],["WHERE",2],["TAKE"],["TAKE"],["TAKE"],["CALC"],["GO"],["TAKE"],["ADD"],["CALC"],["SHR"],["WHERE",27,"code"],["SHR"],["SHR"],["JUMP"],["PUT"],["TAKE"],["WHERE@"],["GO"],["TAKE"],["WHERE",7,"code"],["TAKE"],["JUMP"],["PUT"]]
