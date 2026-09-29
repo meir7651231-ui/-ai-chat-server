@@ -62,4 +62,14 @@ function liveReason(p,now){if(now-(+p.at||0)>PULSE_STALE)return p.net===false?'n
   if(p.overlay===false)return 'overlay-revoked';if(p.mic===false)return 'mic-revoked';if(p.login===true)return 'page-logged-out';return 'ok';}
 function healthGap(dev,prev,cur,from,to){const reason=gapReason(prev,cur);
   P.health().set({reason:reason,dev:dev,from:from,to:to,at:to}).catch(e=>fail('P_DB_WRITE',e,'channel/health'));return reason;}
-window.__pulse={in:pulseIn,reason:gapReason,live:liveReason,say:pulseSay,why:whyCmd,ledgerFlush:ledgerFlush,ledger:()=>Object.assign({},ledger)};
+/* health-console: "מה מצב הקו" - three sentences, never a report: the line now, today in numbers, the last silence */
+async function lineCmd(){const now=Date.now();let p=null,h=null;
+  try{const r=await coldGet(P.pulses(),null,10);p=r.docs.map(d=>d.data()||{}).sort((a,b)=>(b.at||0)-(a.at||0))[0]||null;}catch(e){fail('P_DB_READ',e,'pulse');}
+  try{const g=await P.health().get();h=g.exists?(g.data()||{}):null;}catch(e){fail('P_DB_READ',e,'channel/health');}
+  const live=p?liveReason(p,now):'';
+  const a=!p?'הקו: עוד אין דופק מהטלפון.':live==='ok'?'הקו חי'+(+p.battery>=0?', סוללה '+p.battery+' אחוז':'')+'.':'הקו לא תקין: '+(HEALTH_HE[live]||HEALTH_HE.unknown)+'.';
+  const held=Object.values(silenceDay).reduce((x,y)=>x+y,0);
+  const b='היום: '+ledger.req+' בקשות, אמרתי '+ledger.said+(held?', ו-'+held+' עיכובים':'')+'.';
+  const c=h&&now-(+h.at||0)<7*864e5?'השתיקה האחרונה '+ago(now-(+h.from||now))+': '+(HEALTH_HE[h.reason]||HEALTH_HE.unknown)+'.':'אין שתיקה בשבוע האחרון.';
+  sayLocal(a+' '+b+' '+c);}
+window.__pulse={in:pulseIn,line:lineCmd,reason:gapReason,live:liveReason,say:pulseSay,why:whyCmd,ledgerFlush:ledgerFlush,ledger:()=>Object.assign({},ledger)};

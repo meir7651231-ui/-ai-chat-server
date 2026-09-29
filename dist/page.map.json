@@ -1,5 +1,5 @@
 {
- "pageHash": "8708e39d8ace",
+ "pageHash": "a69f96277a62",
  "anchors": {
   "paths": {
    "src": "liba/src/00-paths.js",
@@ -544,6 +544,10 @@
   "pulse.healthGap": {
    "src": "liba/src/15-pulse.js:63",
    "line": 933
+  },
+  "pulse.lineCmd": {
+   "src": "liba/src/15-pulse.js:66",
+   "line": 936
   }
  }
 }

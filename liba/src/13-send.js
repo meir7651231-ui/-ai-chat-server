@@ -76,7 +76,7 @@ window.addEventListener('online',()=>setTimeout(flushOutbox,1500));setInterval(f
 /* req-spine: the id a session puts in inbox.re to say which sentence it answers. It goes at the END of the
    text so the tag at the start stays exactly '[ליבה] ' / '[ליבה→מנהל] ' - other sessions route on it. */
 const reqMark=id=>' ⟦#'+id+'⟧';
-const SOURCES=['voice','typed','share','option'];
+const SOURCES=['voice','typed','share','option','offline']; /* offline: said while the page was down, kept on the phone */
 async function send(text,forcedTag,source){
   let stamps=null;if(text&&typeof text==='object'){forcedTag=text.tag;source=text.source;stamps=text.stamps||null;text=text.text;}
   source=SOURCES.indexOf(source)>=0?source:'voice';

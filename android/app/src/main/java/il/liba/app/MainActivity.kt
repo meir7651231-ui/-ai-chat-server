@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         LibaWeb.setup(web, null)
         if (!BubbleService.running) web.loadUrl(getString(R.string.artifact_url))
         toggle.setOnClickListener { onToggle() }
-        findViewById<Button>(R.id.reveal).setOnClickListener { BubbleService.instance?.revealPage(true); moveTaskToBack(true) }
+        findViewById<Button>(R.id.reveal).setOnClickListener { val p = problem(); if (p != null) repair(p) else { BubbleService.instance?.revealPage(true); moveTaskToBack(true) } }
         update.setOnClickListener { BubbleService.instance?.installUpdate() ?: Prefs.updateUrl(this)?.let { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it))) } }
         val hey = findViewById<Switch>(R.id.hey); val conv = findViewById<Switch>(R.id.conv)
         hey.isChecked = Prefs.hey(this); conv.isChecked = Prefs.conv(this)
@@ -97,9 +97,34 @@ class MainActivity : AppCompatActivity() {
         status.text = "ליבה $ver · " + status.text
         toggle.text = when { !micOk() -> "אשר מיקרופון"; !overlayOk() -> "אשר הצגה מעל אפליקציות"; running -> "כבה בועה"; else -> "הפעל בועה" }
         update.visibility = if (Prefs.updateUrl(this) != null) View.VISIBLE else View.GONE
-        findViewById<Button>(R.id.reveal).visibility = if (running) View.VISIBLE else View.GONE
+        val prob = problem()
+        findViewById<Button>(R.id.reveal).apply { visibility = if (running || prob != null) View.VISIBLE else View.GONE; text = if (prob != null) "תקן: " + PROBLEM_HE[prob] else "הצג את הדף החי" }
+        if (running) status.text = status.text.toString() + "\n" + lineStatus()
     }
 
+    /** health-console: the first thing wrong on the line, in the order that matters - and its one-tap repair.
+     *  Three lines of text and one button; not a dashboard. */
+    private fun notifOk() = Build.VERSION.SDK_INT < 33 || ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+    private fun problem(): String? = when {
+        !micOk() -> "mic"; !overlayOk() -> "overlay"; BubbleService.running && BubbleService.needsLogin -> "login"
+        BubbleService.running && !BubbleService.pageOk -> "page"; !batteryOk() -> "battery"; !notifOk() -> "notif"; else -> null }
+    private val PROBLEM_HE = mapOf("mic" to "המיקרופון", "overlay" to "ההרשאה לבועה", "login" to "ההתחברות ל-claude", "page" to "הדף", "battery" to "הפטור מחיסכון בסוללה", "notif" to "ההתראות")
+    private val SILENCE_HE = mapOf("app-killed" to "המערכת סגרה אותי", "turned-off" to "כיבית אותי")
+    private fun repair(p: String) { runCatching { when (p) {
+        "mic", "notif" -> requestRuntimePermissions()
+        "overlay" -> startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")))
+        "login" -> { BubbleService.instance?.revealPage(true); moveTaskToBack(true) }
+        "page" -> BubbleService.instance?.repairReload()
+        "battery" -> startActivity(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:$packageName")))
+        else -> Unit
+    } }; h.postDelayed({ refresh() }, 800) }
+    private fun lineStatus(): String {
+        val a = if (!BubbleService.running) "הקו: הבועה כבויה" else if (BubbleService.needsLogin) "הקו: מנותקת מ-claude" else if (BubbleService.pageOk) "הקו: מחוברת" else "הקו: מתחברת לדף…"
+        val miss = listOfNotNull(if (!micOk()) "מיקרופון" else null, if (!overlayOk()) "בועה" else null, if (!batteryOk()) "פטור סוללה" else null, if (!notifOk()) "התראות" else null)
+        val b = if (miss.isEmpty()) "הרשאות: הכול מאושר" else "חסר: " + miss.joinToString(", ")
+        val c = BubbleService.lastSilence.let { if (it.isEmpty()) "שתיקה אחרונה: אין" else "שתיקה אחרונה: " + (SILENCE_HE[it] ?: it) }
+        return "$a\n$b\n$c"
+    }
     private fun batteryOk() = getSystemService(android.os.PowerManager::class.java)?.isIgnoringBatteryOptimizations(packageName) != false
 
     private fun onToggle() {

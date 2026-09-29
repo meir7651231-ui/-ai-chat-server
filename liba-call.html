@@ -303,7 +303,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:58,pageHash:"8708e39d8ace",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});urgentSeen(d.urgent);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:59,pageHash:"a69f96277a62",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});urgentSeen(d.urgent);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f(String(d.cause||'done'));}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -529,7 +529,7 @@ function latencyCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   }).catch(e=>{fail('P_DB_READ',e,'req');sayLocal('לא הצלחתי לקרוא את המדידות.');});
   return true;}
 /* step fixed-cardinality-telemetry: the phone's own state, from pulse/<dev> */
-function pulseCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(!/^(למה שתקת|למה לא ענית|למה לא דיברת|מה שלומך|מה שלום הטלפון|מה מצב הטלפון)$/.test(t))return false;whyCmd();return true;}
+function pulseCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(/^(מה מצב הקו|מצב הקו|איך הקו)$/.test(t)){lineCmd();return true;}if(!/^(למה שתקת|למה לא ענית|למה לא דיברת|מה שלומך|מה שלום הטלפון|מה מצב הטלפון)$/.test(t))return false;whyCmd();return true;}
 /* outbox-keys: what did not go out, and send it again now */
 function outboxCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(מה לא נשלח|מה נתקע|מה מחכה לשליחה)$/.test(t)){const w=outbox.map(x=>String(x.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));
@@ -728,7 +728,7 @@ window.addEventListener('online',()=>setTimeout(flushOutbox,1500));setInterval(f
 /* req-spine: the id a session puts in inbox.re to say which sentence it answers. It goes at the END of the
    text so the tag at the start stays exactly '[ליבה] ' / '[ליבה→מנהל] ' - other sessions route on it. */
 const reqMark=id=>' ⟦#'+id+'⟧';
-const SOURCES=['voice','typed','share','option'];
+const SOURCES=['voice','typed','share','option','offline']; /* offline: said while the page was down, kept on the phone */
 async function send(text,forcedTag,source){
   let stamps=null;if(text&&typeof text==='object'){forcedTag=text.tag;source=text.source;stamps=text.stamps||null;text=text.text;}
   source=SOURCES.indexOf(source)>=0?source:'voice';
@@ -887,7 +887,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
   else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
   pulseLast[dev]={sig:sig,at:now,body:body};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"8708e39d8ace"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"a69f96277a62"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;
@@ -932,5 +932,15 @@ function liveReason(p,now){if(now-(+p.at||0)>PULSE_STALE)return p.net===false?'n
   if(p.overlay===false)return 'overlay-revoked';if(p.mic===false)return 'mic-revoked';if(p.login===true)return 'page-logged-out';return 'ok';}
 function healthGap(dev,prev,cur,from,to){const reason=gapReason(prev,cur);
   P.health().set({reason:reason,dev:dev,from:from,to:to,at:to}).catch(e=>fail('P_DB_WRITE',e,'channel/health'));return reason;}
-window.__pulse={in:pulseIn,reason:gapReason,live:liveReason,say:pulseSay,why:whyCmd,ledgerFlush:ledgerFlush,ledger:()=>Object.assign({},ledger)};
+/* health-console: "מה מצב הקו" - three sentences, never a report: the line now, today in numbers, the last silence */
+async function lineCmd(){const now=Date.now();let p=null,h=null;
+  try{const r=await coldGet(P.pulses(),null,10);p=r.docs.map(d=>d.data()||{}).sort((a,b)=>(b.at||0)-(a.at||0))[0]||null;}catch(e){fail('P_DB_READ',e,'pulse');}
+  try{const g=await P.health().get();h=g.exists?(g.data()||{}):null;}catch(e){fail('P_DB_READ',e,'channel/health');}
+  const live=p?liveReason(p,now):'';
+  const a=!p?'הקו: עוד אין דופק מהטלפון.':live==='ok'?'הקו חי'+(+p.battery>=0?', סוללה '+p.battery+' אחוז':'')+'.':'הקו לא תקין: '+(HEALTH_HE[live]||HEALTH_HE.unknown)+'.';
+  const held=Object.values(silenceDay).reduce((x,y)=>x+y,0);
+  const b='היום: '+ledger.req+' בקשות, אמרתי '+ledger.said+(held?', ו-'+held+' עיכובים':'')+'.';
+  const c=h&&now-(+h.at||0)<7*864e5?'השתיקה האחרונה '+ago(now-(+h.from||now))+': '+(HEALTH_HE[h.reason]||HEALTH_HE.unknown)+'.':'אין שתיקה בשבוע האחרון.';
+  sayLocal(a+' '+b+' '+c);}
+window.__pulse={in:pulseIn,line:lineCmd,reason:gapReason,live:liveReason,say:pulseSay,why:whyCmd,ledgerFlush:ledgerFlush,ledger:()=>Object.assign({},ledger)};
 </script>

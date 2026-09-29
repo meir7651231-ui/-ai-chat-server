@@ -72,6 +72,11 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   ok(gap && gap.reason === 'phone-off' && gap.dev === 'd-gap', 'diag: a pulse after three silent hours, from a fresh boot, writes channel/health = phone-off: ' + JSON.stringify(gap && gap.reason));
   const past = await said({ dev: 'd-gap', name: 'Fold', at: Date.now() - 30000, mic: true, overlay: true });
   ok(/השתיקה האחרונה/.test(past) && /הטלפון כבה/.test(past), '"למה שתקת" also tells the last silence and why: ' + past);
+  // (e) health-console: "מה מצב הקו" is three sentences - the line now, today, the last silence
+  await f.evaluate(() => { for (const k of [...window.__h.docs.keys()]) if (k.startsWith('pulse/')) window.__h.docs.delete(k); window.__h.docs.set('pulse/d-1', { dev: 'd-1', at: Date.now() - 20000, mic: true, overlay: true, battery: 64 }); });
+  await p.evaluate(() => { window.msgs = []; }); await p.evaluate(() => window.app({ liba: 'input', text: 'מה מצב הקו' })); await p.waitForTimeout(2500);
+  const line = (await p.evaluate(() => window.msgs.filter(x => x.liba === 'say').map(x => x.text))).join(' | ');
+  ok(/הקו חי, סוללה 64 אחוז/.test(line) && /היום: \d+ בקשות/.test(line) && /השתיקה האחרונה .*הטלפון כבה/.test(line) && line.split(/[.]\s/).length <= 4, '"מה מצב הקו" - three sentences: ' + line);
   ok(!errs.length, 'no page error: ' + errs.join(' | '));
   await b.close(); console.log(fails ? `\n${fails} נכשלו` : '\nכל הבדיקות עברו'); process.exit(fails ? 1 : 0);
 })().catch(e => { console.log('HARNESS ERROR', e); process.exit(1); });

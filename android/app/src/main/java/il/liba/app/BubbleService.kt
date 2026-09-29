@@ -42,6 +42,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
         const val CH = "liba"
         @Volatile var tasksSummary = ""
         @Volatile var pageOk = false
+        /** health-console: what the app's status screen shows - set by the running service */
+        @Volatile var needsLogin = false
+        @Volatile var lastSilence = ""
         val WAKE = listOf("ליבה", "ליבא", "ליבע", "לייבה", "היי ליבה", "הי ליבה")
     }
 
@@ -128,7 +131,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val am0 = getSystemService(AUDIO_SERVICE) as AudioManager; intArrayOf(AudioManager.STREAM_SYSTEM, AudioManager.STREAM_MUSIC).forEach { try { am0.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) { Trace.e(Trace.Code.E_AUDIO_STREAM, "boot:" + e.javaClass.simpleName) } }
         if (!startForegroundNotif()) { stopSelf(); return }
         Prefs.setOn(this, true); il.liba.app.life.Life.arm(this)
-        lastGasp = Prefs.gasp(this); Prefs.setGasp(this, "")
+        lastGasp = Prefs.gasp(this); Prefs.setGasp(this, ""); lastSilence = lastGasp.substringBefore('|')
         runCatching { applyPrefs() }.onFailure { Trace.e(Trace.Code.E_PREFS, "applyPrefs:" + it.javaClass.simpleName) }
         runCatching { setupTts() }.onFailure { Trace.e(Trace.Code.E_TTS_INIT, "setup:" + it.javaClass.simpleName) }
         runCatching { setupWeb() }.onFailure { Trace.e(Trace.Code.E_OVERLAY_DENIED, "web"); status = "WebView נכשל: $it" }
@@ -354,11 +357,12 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val ck = runCatching { cm.getCookie("https://claude.ai") ?: "" }.getOrDefault("")
         if (ck.isNotEmpty() && !ck.contains("sessionKey")) Trace.e(Trace.Code.E_PAGE_LOGIN, "cookie-name")
         if (ck.isEmpty() && !loginLost) {
-            loginLost = true; loginWall = true; Trace.e(Trace.Code.E_PAGE_LOGIN, "no-cookie")
+            loginLost = true; loginWall = true; needsLogin = true; Trace.e(Trace.Code.E_PAGE_LOGIN, "no-cookie")
             val now = SystemClock.elapsedRealtime(); if (now - loginWarnedAt > 3600000) { loginWarnedAt = now; speak("ליבה מנותקת מ-claude. לחץ עליי ואפתח לך את הדף כדי להתחבר.") }
         }
     }
-    private fun loginRestored() { if (!loginLost && !loginWall) return; val was = loginLost; loginLost = false; loginWall = false; if (was) speak("התחברתי, הערוץ חי.") }
+    fun repairReload() { lastReloadAt = 0L; reloadPage("תיקון") }
+    private fun loginRestored() { if (!loginLost && !loginWall) return; val was = loginLost; loginLost = false; loginWall = false; needsLogin = false; if (was) speak("התחברתי, הערוץ חי.") }
     private fun reloadPage(why: String) {
         val now = SystemClock.elapsedRealtime(); if (now - lastReloadAt < 90000) return
         lastReloadAt = now; pageReady = false; pageOk = false; pageLoadedAt = now; status = "טוען מחדש ($why)"
@@ -790,12 +794,28 @@ class BubbleService : Service(), LibaWeb.Bridge {
             n in listOf("תמשיך", "המשך", "תמשיכי") && chunks.isNotEmpty() -> { paused = false; speakNextChunk(false); return }
             n in listOf("רגע", "חכה", "עצור רגע") && (chunks.isNotEmpty() || speaking) -> { val keep = ArrayList(chunks); stopSpeaking(); chunks.addAll(keep); paused = true; showLabel("עצרתי. תגיד תמשיך.", 8000); return }
             n in listOf("שקט", "תשתוק", "עצור", "די", "ביטול", "בטל") -> { stopSpeaking(); sentAt = 0; lastSaid = ""; heyOff(); setState(LibaState.IDLE); showLabel("שקט. מילת ההפעלה כבויה.", 3000); return }
-            !pageReady -> { speak("אני לא מחובר לדף כרגע. $status"); return }
+            n in listOf("מה אמרתי כשהיית מנותקת", "מה שמרת", "מה בתור") -> { val w = WordQueue.all(this); speak(if (w.isEmpty()) "אין משפטים שמורים." else "שמרתי ${w.size}: " + w.takeLast(3).joinToString("; ") { it.optString("t") }); return }
+            n in listOf("תמחק את התור", "תמחקי את התור", "מחק את התור") -> { WordQueue.clear(this); speak("מחקתי את מה ששמרתי."); return }
+            !pageReady -> { val dropped = WordQueue.add(this, t, System.currentTimeMillis()); tone("heard")
+                val now = SystemClock.elapsedRealtime(); if (now - wordsSaidAt > 10 * 60_000L) { wordsSaidAt = now; speak("שמרתי. הערוץ סגור, אשלח כשיחזור.") } else showLabel("נשמר (" + WordQueue.size(this) + ")", 3000)
+                if (dropped > 0) Trace.e(Trace.Code.E_PREFS, "words-cap"); return }
         }
         Prefs.log(this, "me", t); sentAt = SystemClock.elapsedRealtime()
         setState(LibaState.SENDING); showLabel("→ $t", 6000)
         tone("heard")
         web?.let { LibaWeb.sendInput(it, t, "voice", stamps()) }
+    }
+    /** words-offline: the page is back - send what was said while it was down, oldest first, with when it was said.
+     *  An item leaves the file only when the page reports it sent (onSent); anything left goes on the next ready. */
+    private var wordsSaidAt = 0L; private val wordsInFlight = mutableMapOf<String, String>()
+    private fun drainWords() {
+        val w = WordQueue.all(this); if (w.isEmpty() || !pageReady) return
+        val fmt = java.text.SimpleDateFormat("HH:mm", Locale("he"))
+        w.forEachIndexed { i, o -> main.postDelayed({
+            if (!pageReady) return@postDelayed
+            val text = "(נאמר ב-" + fmt.format(java.util.Date(o.optLong("at"))) + " כשהערוץ היה סגור) " + o.optString("t")
+            wordsInFlight[o.optString("id")] = o.optString("t"); web?.let { LibaWeb.sendInput(it, text, "offline") }
+        }, 2500L + i * 2200L) }
     }
     private fun localStatus(): String {
         if (!pageReady) return "לא מחובר לדף. $status"
@@ -809,14 +829,14 @@ class BubbleService : Service(), LibaWeb.Bridge {
         pageLoadedAt = SystemClock.elapsedRealtime()
         status = when {
             url.startsWith("error:") -> { Trace.e(Trace.Code.E_PAGE_LOAD, "error"); "הדף לא נטען: " + url.removePrefix("error:") }
-            url.contains("/login") || url.contains("auth") -> { loginWall = true; Trace.e(Trace.Code.E_PAGE_LOGIN, if (url.contains("/login")) "login" else "auth"); val now = SystemClock.elapsedRealtime(); if (now - loginWarnedAt > 3600000) { loginWarnedAt = now; speak("צריך להתחבר ל‑claude.ai. לחיצה ארוכה עליי, כבה בועה, התחבר, והפעל שוב.") }; "צריך להתחבר ל‑claude.ai" }
-            url.contains("/artifact/") -> { loginWall = false; "הדף נטען, מחכה שהוא יתחבר…" }
+            url.contains("/login") || url.contains("auth") -> { loginWall = true; needsLogin = true; Trace.e(Trace.Code.E_PAGE_LOGIN, if (url.contains("/login")) "login" else "auth"); val now = SystemClock.elapsedRealtime(); if (now - loginWarnedAt > 3600000) { loginWarnedAt = now; speak("צריך להתחבר ל‑claude.ai. לחיצה ארוכה עליי, כבה בועה, התחבר, והפעל שוב.") }; "צריך להתחבר ל‑claude.ai" }
+            url.contains("/artifact/") -> { loginWall = false; needsLogin = false; "הדף נטען, מחכה שהוא יתחבר…" }
             else -> "נטען: " + url.take(60)
         }
         if (!pageReady) showLabel(status, 5000)
         web?.let { LibaWeb.hello(it) }
     } }
-    override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; loginRestored(); pageDeadSince = 0L; pageAliveAt = System.currentTimeMillis(); Pulse.resend(); main.postDelayed({ web?.let { pulse(it) } }, 3000); status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
+    override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; loginRestored(); drainWords(); pageDeadSince = 0L; pageAliveAt = System.currentTimeMillis(); Pulse.resend(); main.postDelayed({ web?.let { pulse(it) } }, 3000); status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         if (Prefs.reports(this)) Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } }
         main.postDelayed({ drainTrace() }, 2000) } } }
     fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "heyOff:" + e.javaClass.simpleName) }; listening = false }; unmuteSystem() }
@@ -841,7 +861,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     override fun onCrashSaved(id: String) { main.post { Prefs.clearCrash(this); showLabel("דוח הקריסה נשלח לליבה", 4000) } }
     override fun onTasks(summary: String, n: Int, blocked: Int) { tasksSummary = summary; main.post { taskSummary = summary; taskBlocked = blocked; if (n > 0) status = "מחובר · $n משימות" + (if (blocked > 0) " · $blocked מחכות לך" else "") } }
     override fun onPageTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
-    override fun onSent(text: String) { main.post { tone("sent"); status = "נשלח, מחכה לתשובה…"; setState(LibaState.IDLE); showLabel("נשלח. מחכה…", 30000); armWaitReminders(); if (heyOn) wakeLoop() } }
+    override fun onSent(text: String) { main.post { wordsInFlight.entries.firstOrNull { text.contains(it.value) }?.let { e -> WordQueue.remove(this, e.key); wordsInFlight.remove(e.key) }; tone("sent"); status = "נשלח, מחכה לתשובה…"; setState(LibaState.IDLE); showLabel("נשלח. מחכה…", 30000); armWaitReminders(); if (heyOn) wakeLoop() } }
     override fun onError(text: String, reason: String) { main.post { sentAt = 0
         val why = when {
             reason.contains("consent") -> "הדף צריך אישור חד פעמי. לחיצה ארוכה עליי, כבה בועה, שלח הודעה אחת מהדף ואשר."

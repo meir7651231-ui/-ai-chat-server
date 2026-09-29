@@ -65,7 +65,7 @@ function latencyCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   }).catch(e=>{fail('P_DB_READ',e,'req');sayLocal('לא הצלחתי לקרוא את המדידות.');});
   return true;}
 /* step fixed-cardinality-telemetry: the phone's own state, from pulse/<dev> */
-function pulseCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(!/^(למה שתקת|למה לא ענית|למה לא דיברת|מה שלומך|מה שלום הטלפון|מה מצב הטלפון)$/.test(t))return false;whyCmd();return true;}
+function pulseCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(/^(מה מצב הקו|מצב הקו|איך הקו)$/.test(t)){lineCmd();return true;}if(!/^(למה שתקת|למה לא ענית|למה לא דיברת|מה שלומך|מה שלום הטלפון|מה מצב הטלפון)$/.test(t))return false;whyCmd();return true;}
 /* outbox-keys: what did not go out, and send it again now */
 function outboxCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(מה לא נשלח|מה נתקע|מה מחכה לשליחה)$/.test(t)){const w=outbox.map(x=>String(x.text).replace(/ ⟦#[0-9a-z]+⟧$/,''));

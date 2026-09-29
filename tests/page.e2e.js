@@ -410,6 +410,10 @@ const failed = [];
   // the id mark is for sessions, never for Meir's ears
   await set('inbox/mark1', { text: 'תשובה עם סימן ⟦#0abc123def⟧ בסוף', kind: 'say', from: 'manager', spoken: false, ts: Date.now() }); await speakOut(2000);
   check(said('תשובה עם סימן').length && !said('⟦').length, 'the ⟦#id⟧ mark is never read aloud: ' + said('תשובה עם סימן').map(x => x.text).pop());
+  // words-offline: a sentence kept on the phone while the page was down arrives with its time, and is filed as offline
+  await p.evaluate(() => window.app({ liba: 'input', text: '(נאמר ב-14:32 כשהערוץ היה סגור) משפט-מהתור', source: 'offline' })); await flush(2600);
+  const offReq = (await H(() => window.__h.all('req'))).find(r => /משפט-מהתור/.test(r.text || ''));
+  check(offReq && offReq.source === 'offline' && /נאמר ב-14:32/.test(offReq.text), 'words-offline: the kept sentence is sent with its time, filed as offline: ' + JSON.stringify(offReq && offReq.source));
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();
