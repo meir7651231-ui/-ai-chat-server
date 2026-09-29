@@ -11,6 +11,7 @@ const P={
   turns:()=>db.doc('chat/log').collection('turns'),decisions:()=>db.doc('decisions/log').collection('items'),
   telemetry:()=>db.doc('telemetry/events').collection('items'),
   req:id=>db.doc('req/'+id),reqs:()=>db.collection('req'),
+  metricsDay:day=>db.doc('metrics/daily').collection('days').doc(day),
 };
 /* req-spine: the only id minter. String(Date.now()) collided whenever two writes shared a millisecond and
    silently overwrote each other; this is 48 bits of time + a per-millisecond counter + 32 random bits, so ids

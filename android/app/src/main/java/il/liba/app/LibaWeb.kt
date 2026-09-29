@@ -95,8 +95,8 @@ object LibaWeb {
 
     fun injectTop(web: WebView) { web.evaluateJavascript(TOP_SCRIPT, null) }
     /** req-spine: source is how the sentence reached ליבה - "voice" or "share" from here; the page adds typed/option. */
-    fun sendInput(web: WebView, text: String, source: String = "voice") {
-        web.evaluateJavascript("window.__libaInput && window.__libaInput(${JSONObject.quote(text)},${JSONObject.quote(source)})", null)
+    fun sendInput(web: WebView, text: String, source: String = "voice", stamps: String = "") {
+        web.evaluateJavascript("window.__libaInput && window.__libaInput(${JSONObject.quote(text)},${JSONObject.quote(source)},${JSONObject.quote(stamps)})", null)
     }
     /** A real touch through the view pipeline gives the page user activation (needed for sending to Claude).
      *  Taps the artifact iframe itself (centre, then upper and lower thirds) rather than a blind screen centre. */
@@ -121,7 +121,8 @@ object LibaWeb {
     /** 3.14.0: tell the page that the utterance it sent has finished being spoken, so it acks in order. */
     /** step page-kernel: "still speaking" every 2 s, so a page that hears nothing for 6 s knows the voice stopped. */
     fun sendSpeaking(web: WebView, id: String) { web.evaluateJavascript("window.__libaSpeaking && window.__libaSpeaking(${JSONObject.quote(id)})", null) }
-    fun sendSpoke(web: WebView, id: String) { web.evaluateJavascript("window.__libaSpoke && window.__libaSpoke(${JSONObject.quote(id)})", null) }
+    /** step clock: when the phone really started and stopped saying it, and why it stopped (done/error/guard/stop). */
+    fun sendSpoke(web: WebView, id: String, startAt: Long = 0, endAt: Long = 0, cause: String = "done") { web.evaluateJavascript("window.__libaSpoke && window.__libaSpoke(${JSONObject.quote(id)},$startAt,$endAt,${JSONObject.quote(cause)})", null) }
     fun sendCrash(web: WebView, id: String, ver: String, text: String) { web.evaluateJavascript("window.__libaCrash && window.__libaCrash(${JSONObject.quote(id)},${JSONObject.quote(ver)},${JSONObject.quote(text)})", null) }
     /** step blackbox: one batch of on-disk trace lines, short-key shape unchanged.
      *  Kotlin does not know the db schema; the page does not know the file format. */

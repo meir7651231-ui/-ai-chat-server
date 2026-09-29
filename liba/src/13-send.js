@@ -4,7 +4,7 @@
 let outbox=[];try{outbox=JSON.parse(localStorage.getItem('liba.outbox')||'[]');}catch(e){fail('P_STORE',e,'get outbox');}
 function saveOutbox(){try{localStorage.setItem('liba.outbox',JSON.stringify(outbox));}catch(e){fail('P_STORE',e,'set outbox');}}
 let lastSent={text:'',id:'',ts:0},lastIncomingAt=0;
-function drainQ(){if(sendQ.length){const nx=sendQ.shift();setTimeout(()=>send(nx.text,nx.tag,nx.source),300);return true;}return false;}
+function drainQ(){if(sendQ.length){const nx=sendQ.shift();setTimeout(()=>send({text:nx.text,tag:nx.tag,source:nx.source,stamps:nx.stamps}),300);return true;}return false;}
 const RETRYABLE=r=>/network|fetch|timeout|unavailable|rate|503|502|429|offline|aborted|internal/i.test(r);
 function tagOf(o){return (o||owner)==='manager'?'[ליבה→מנהל] ':'[ליבה] ';}
 async function deliver(text,tag){
@@ -39,19 +39,20 @@ window.addEventListener('online',()=>setTimeout(flushOutbox,1500));setInterval(f
 const reqMark=id=>' ⟦#'+id+'⟧';
 const SOURCES=['voice','typed','share','option'];
 async function send(text,forcedTag,source){
-  if(text&&typeof text==='object'){forcedTag=text.tag;source=text.source;text=text.text;}
+  let stamps=null;if(text&&typeof text==='object'){forcedTag=text.tag;source=text.source;stamps=text.stamps||null;text=text.text;}
   source=SOURCES.indexOf(source)>=0?source:'voice';
   text=String(text||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7]/g,'').replace(/\s+/g,' ').trim();if(!text)return;
   if(!forcedTag&&switchOwner(text)){post(PROTO.toApp.sent,{text,local:true});if(!isBusy())drainQ();return;}
   const tag=forcedTag||tagOf();
-  if(isBusy()){sendQ.push({text,tag,source});post(PROTO.toApp.queued,{text});return;}transition('SENDING','send');const id=cur?cur.id:'free';cur=null;
+  if(isBusy()){sendQ.push({text,tag,source,stamps});post(PROTO.toApp.queued,{text});return;}transition('SENDING','send');const id=cur?cur.id:'free';cur=null;
   $('typed').value='';OPTS.innerHTML='';$('ack').hidden=true;HEARD.hidden=true;
   if(text===lastSent.text&&(id==='free'||id===lastSent.id)&&Date.now()-lastSent.ts<5000){log('כפילות – לא נשלח שוב');post(PROTO.toApp.sent,{text,dup:true});transition('IDLE','duplicate');drainQ();return;}
   bubble('me',text);const th=bubble('li think','ליבה חושבת…');
   /* one request per sentence: what was said, how, to whom, and what it answered - so "how many did ליבה
      close" is a query and not a feeling */
   const reqId=mintId();
-  try{P.req(reqId).set({text,askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending'}).catch(e=>fail('P_DB_WRITE',e,'req'));}catch(e){fail('P_DB_WRITE',e,'req');}
+  try{P.req(reqId).set({text,askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending',
+    t:{voice:(stamps&&+stamps.voice)||0,heard:(stamps&&+stamps.heard)||0,asked:Date.now(),skew:clockSkew,skewBad:clockSkew!=null&&Math.abs(clockSkew)>SKEW_MAX}}).catch(e=>fail('P_DB_WRITE',e,'req'));}catch(e){fail('P_DB_WRITE',e,'req');}
   try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){P.decisions().doc(mintId()).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'decisions/log/items'));lastAsk=null;}}catch(e){fail('P_DB_WRITE',e,'decisions/log/items');}
   try{if(memSettings.logTurns)P.turns().doc(mintId()).set({from:'user',speaker:'מאיר',to:owner,text,re:id,req:reqId,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
   const r=await deliverWithRetry(text+reqMark(reqId),tag);const sent=r.sent,reason=r.reason;

@@ -5,7 +5,8 @@
     "spoke",
     "beat",
     "trace",
-    "proto"
+    "proto",
+    "clock"
   ],
   "toApp": {
     "ready": {
@@ -79,13 +80,15 @@
         "ver": "str",
         "proto": "str",
         "pv": "int",
-        "caps": "list"
+        "caps": "list",
+        "wall": "int"
       },
       "from": {
         "ver": "window.__libaVer||''",
         "proto": "HASH",
         "pv": "VERSION",
-        "caps": "CAPS"
+        "caps": "CAPS",
+        "wall": "Date.now()"
       }
     },
     "crash": {
@@ -97,7 +100,10 @@
     },
     "spoke": {
       "fields": {
-        "id": "str"
+        "id": "str",
+        "startAt": "int",
+        "endAt": "int",
+        "cause": "str=done"
       }
     },
     "speaking": {
@@ -108,7 +114,8 @@
     "input": {
       "fields": {
         "text": "str",
-        "source": "str=voice"
+        "source": "str=voice",
+        "stamps": "str"
       }
     },
     "trace": {

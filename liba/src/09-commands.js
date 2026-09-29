@@ -44,7 +44,27 @@ function reqCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
     sayLocal('היום ביקשת '+today.length+'. '+(ans.length?ans.length+' קיבלו תשובה'+(med?', בחציון אחרי '+med+' דקות':', תוך פחות מדקה')+'. ':'')+(today.length-ans.length?(today.length-ans.length)+' עוד בלי תשובה שמחוברת אליהן.':'כולן נענו.'));
   }).catch(e=>{fail('P_DB_READ',e,'req');sayLocal('לא הצלחתי לקרוא את הבקשות.');});
   return true;}
-function taskCmd(text){if(reqCmd(text))return true;const t=text.replace(/[?!.,]/g,'').trim();
+/* step clock: four measured segments, median and 90th percentile. Requests whose clock was off are left out. */
+/* creation-time stamps live in t; the later moments are top-level fields so plain merges never lose them */
+const SEGS=[['asr','עד שסיימתי לשמוע','voice','heard'],['send','עד שזה הגיע לקלוד','heard','sentAt'],['think','עד התשובה','sentAt','firstReplyAt'],['speak','עד שסיימתי להגיד','firstReplyAt','spokeEndAt']];
+const tv=(x,k)=>(x.t&&x.t[k])||x[k]||0;
+function pct(a,q){if(!a.length)return null;const s=a.slice().sort((x,y)=>x-y);return s[Math.min(s.length-1,Math.floor(q*s.length))];}
+function heDur(ms){if(ms==null)return 'אין עדיין';const s=Math.round(ms/1000);if(s<60)return s+' שניות';const m=Math.round(s/60);return m===1?'דקה':m+' דקות';}
+function latencyCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
+  if(!/^(כמה זמן לוקח לך לענות|כמה זמן לוקחות תשובות|כמה מהר את עונה|מה זמן התגובה)$/.test(t))return false;
+  const day=trDay(Date.now());const from=new Date();from.setHours(0,0,0,0);
+  P.reqs().get().then(r=>{const all=r.docs.map(d=>d.data()||{}).filter(x=>(x.askedAt||0)>=from.getTime()&&x.t);const ok=all.filter(x=>!x.t.skewBad);
+    const out={day:day,n:ok.length,dropped:all.length-ok.length,at:Date.now()};
+    SEGS.forEach(([k,,a,b])=>{const v=ok.map(x=>(tv(x,b)&&tv(x,a))?tv(x,b)-tv(x,a):null).filter(v=>v!=null&&v>=0);out[k]={n:v.length,p50:pct(v,.5),p90:pct(v,.9)};});
+    const sp=ok.filter(x=>x.spokeCause);out.guard={n:sp.filter(x=>x.spokeCause==='guard').length,of:sp.length};
+    P.metricsDay(day).set({latency:out}).catch(e=>fail('P_DB_WRITE',e,'metrics'));
+    if(!ok.length){sayLocal('היום עוד אין בקשות שמדדתי.');return;}
+    const parts=SEGS.filter(([k])=>out[k].n).map(([k,he])=>he+' '+heDur(out[k].p50));
+    const slow=SEGS.filter(([k])=>out[k].n).sort((x,y)=>out[y[0]].p50-out[x[0]].p50)[0];
+    sayLocal('בחציון, על '+ok.length+' בקשות היום: '+parts.join(', ')+'.'+(slow?' הכי איטי: '+slow[1]+'.':'')+(out.dropped?' '+out.dropped+' לא נספרו כי השעון לא היה מדויק.':''));
+  }).catch(e=>{fail('P_DB_READ',e,'req');sayLocal('לא הצלחתי לקרוא את המדידות.');});
+  return true;}
+function taskCmd(text){if(reqCmd(text)||latencyCmd(text))return true;const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(מפה|מפת המערכת|תראה מפה|מה כל הסשנים עושים|מי תקוע)$/.test(t)){mapOn=true;renderMap();const m=mapSummary();bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:'ליבה, מפת המערכת: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
   if(/^(תפתח|פתח|תפתח את התוצאה|תראה לי|תפתח תראה לי|פתח תראה לי|תפתח לי|תפתח אותו|תפתח אותה|תראה)$/.test(t)){const d=lastTasks.find(x=>x.status==='done'&&x.link)||lastTasks.find(x=>x.link);if(!d)return false;const m='פותחת: '+d.title;bubble('li',m);if(appMode){post(PROTO.toApp.cmd,{cmd:'open '+d.link});post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});}else{say(m);window.open(d.link,'_blank');}return true;}
   const pr=t.match(/^(קודם|תעדיף|עדיפות ל|תתחיל עם)\s+(את\s+)?(.+)$/);if(pr){const q=pr[3].trim();const task=lastTasks.find(x=>(x.title||'').includes(q));if(!task)return false;P.task(task.id).update({priority:Date.now(),updatedAt:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'tasks'));const m='בסדר, '+task.title+' קודם.';bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}

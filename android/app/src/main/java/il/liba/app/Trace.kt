@@ -28,7 +28,7 @@ object Trace {
      *  as dropped and reported as their own line, so a cap can never hide a storm. */
     enum class Code(val cap: Int) {
         E_OVERLAY_DENIED(5), E_OVERLAY_UPDATE(2),
-        E_TTS_INIT(5), E_TTS_OP(5),
+        E_TTS_INIT(5), E_TTS_OP(5), E_TTS_GUARD(5),
         E_SR_0(2), E_SR_1(2), E_SR_2(2), E_SR_3(2), E_SR_4(2), E_SR_5(2), E_SR_6(2), E_SR_7(2),
         E_SR_8(2), E_SR_9(2), E_SR_10(2), E_SR_11(2), E_SR_12(2), E_SR_13(2),
         E_SR_LIFECYCLE(5), E_SR_NONE(5),

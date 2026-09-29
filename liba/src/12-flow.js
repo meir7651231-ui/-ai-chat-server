@@ -40,7 +40,7 @@ async function incoming(d){
   bubble('li',prefixOf(d,who)+lead+d.text);HEARD.hidden=true;OPTS.innerHTML='';
   if(k==='ask'||k==='stuck'||(d.options&&d.options.length))lastAsk={id:d.id,text:d.text,speaker:who,topic:d.topic||'',at:Date.now()};else if(!d.local)lastAsk=null;
   try{if(memSettings.logTurns)P.turns().doc(mintId()).set({from:d.from||'liba',speaker:who,topic:d.topic||'',kind:k,text:d.text,msg:d.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
-  if(appMode)await sayApp(spokenText,{kind:ak,options:d.options||[],from:d.from||'liba',speaker:who});else await say(spokenText+(d.options&&d.options.length?'. '+d.options.join(', או ')+'?':''));
+  if(appMode)await sayApp(spokenText,{kind:ak,options:d.options||[],from:d.from||'liba',speaker:who},d.local?null:d.re);else await say(spokenText+(d.options&&d.options.length?'. '+d.options.join(', או ')+'?':''));
   if(d.legacy){try{await P.current().update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'chat/current');log('legacy ack: '+(e.code||e));}}
   if(d.options&&d.options.length){OPTS.innerHTML=d.options.map(o=>`<button>${esc(o)}</button>`).join('');OPTS.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>send(b.textContent,null,'option')));}
   showTalk();$('ack').hidden=k!=='done';

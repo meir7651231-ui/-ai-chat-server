@@ -56,6 +56,15 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var label: TextView? = null
     private var tts: TextToSpeech? = null
     private var sayId: String? = null   // id of the page utterance being spoken now
+    // step clock: measured, not guessed. Wall clock on purpose - the page runs on the same device and reads the
+    // same clock, so page and phone stamps line up; the page checks that in the hello handshake.
+    private var voiceAt = 0L; private var heardAt = 0L; private var listenReadyAt = 0L
+    private var sayStartAt = 0L; private var spokeCause = "done"
+    private fun stamps() = org.json.JSONObject().put("voice", if (voiceAt > 0) voiceAt else listenReadyAt).put("heard", heardAt).put("wall", System.currentTimeMillis()).toString()
+    /** release the page's wait for the utterance, with what really happened */
+    private fun releaseSay(cause: String) { val id = sayId ?: return; sayId = null
+        val end = System.currentTimeMillis(); val start = if (sayStartAt > 0) sayStartAt else end; sayStartAt = 0
+        web?.let { w -> LibaWeb.sendSpoke(w, id, start, end, cause) } }
     // step page-kernel: while a page utterance is being spoken, tell the page so every 2 s. Silence from
     // here means the voice died without onSpoken - the page stops waiting after 6 s instead of 120.
     private val speakingBeat = object : Runnable { override fun run() {
@@ -174,8 +183,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 tts?.setSpeechRate(rate)
                 tts?.setAudioAttributes(android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_ASSISTANT).setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build())
                 tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-                    override fun onStart(id: String?) {}
-                    override fun onError(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakGuard?.let { main.removeCallbacks(it) }; bargeVad?.stop(); bargeVad = null; onSpoken() } }
+                    override fun onStart(id: String?) { main.post { if (sayId != null && sayStartAt == 0L) sayStartAt = System.currentTimeMillis() } }
+                    override fun onError(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakGuard?.let { main.removeCallbacks(it) }; bargeVad?.stop(); bargeVad = null; spokeCause = "error"; onSpoken() } }
                     override fun onDone(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakGuard?.let { main.removeCallbacks(it) }; bargeVad?.stop(); bargeVad = null; if (chunks.isNotEmpty() && !paused) { main.postDelayed({ speakNextChunk(false) }, 350) } else onSpoken() } }
                 })
                 if (!ttsReady) { Trace.e(Trace.Code.E_TTS_INIT, "he-IL=" + r); main.post { showLabel("אין קול עברי בטלפון – התקן Google Text-to-Speech עברית", 6000) } }
@@ -186,7 +195,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun stopSpeaking() {
         try { tts?.stop() } catch (e: Exception) { Trace.e(Trace.Code.E_TTS_OP, "stop:" + e.javaClass.simpleName) }
         chunks.clear(); paused = false; speaking = false; pendingListenAfterSpeech = false
-        sayId?.let { id -> sayId = null; web?.let { w -> LibaWeb.sendSpoke(w, id) } } // skipped mid-sentence: don't leave the page waiting
+        releaseSay("stop") // skipped mid-sentence: don't leave the page waiting
         bargeVad?.stop(); bargeVad = null
         speakGuard?.let { main.removeCallbacks(it) }; speakGuard = null
     }
@@ -217,7 +226,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         speakSegments(part)
         if (bargeIn) { bargeVad?.stop(); var me: VadGate? = null; me = VadGate(sens = 6.0, minRms = 1800.0, comm = true, warm = true) { main.post { if (bargeVad !== me) return@post; bargeVad = null; if (speaking) { try { tts?.stop() } catch (e: Exception) { Trace.e(Trace.Code.E_TTS_OP, "barge:" + e.javaClass.simpleName) }; speaking = false; speakGuard?.let { main.removeCallbacks(it) }; showLabel("כן?", 3000); startListening("cmd") } } }; bargeVad = me; me.start() }
         speakGuard?.let { main.removeCallbacks(it) }
-        speakGuard = Runnable { if (speaking) { speaking = false; onSpoken() } }.also { main.postDelayed(it, 4000L + part.length * 120L) } // safety net if TTS never reports
+        // safety net if TTS never reports. step clock: it is no longer the measurement - when it fires, that is a fault
+        speakGuard = Runnable { if (speaking) { speaking = false; spokeCause = "guard"; Trace.e(Trace.Code.E_TTS_GUARD, "len:" + part.length); onSpoken() } }.also { main.postDelayed(it, 4000L + part.length * 120L) }
     }
     // step 30: Hebrew with English terms – Latin runs are spoken by the English voice
     private fun speakSegments(text: String) {
@@ -241,7 +251,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         try { ToneGenerator(AudioManager.STREAM_NOTIFICATION, 55).let { it.startTone(t, ms); main.postDelayed({ it.release() }, ms + 200L) } } catch (e: Exception) { Trace.e(Trace.Code.E_TONE, "tone:" + kind) } }
     private fun onSpoken() {
         speaking = false
-        sayId?.let { id -> sayId = null; web?.let { w -> LibaWeb.sendSpoke(w, id) } } // fix: the page acks only once the phone finished speaking
+        releaseSay(spokeCause); spokeCause = "done" // the page acks only once the phone finished speaking
         main.postDelayed({ afterSpeech() }, 600)
     }
     private fun afterSpeech() {
@@ -639,8 +649,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         return false to low
     }
     private val recListener = object : RecognitionListener {
-        override fun onReadyForSpeech(p: Bundle?) {}
-        override fun onBeginningOfSpeech() { if (listenMode == "wake") main.post { unmuteSystem() } }
+        override fun onReadyForSpeech(p: Bundle?) { listenReadyAt = System.currentTimeMillis(); voiceAt = 0L }
+        override fun onBeginningOfSpeech() { voiceAt = System.currentTimeMillis(); if (listenMode == "wake") main.post { unmuteSystem() } }
         override fun onRmsChanged(v: Float) { dot?.level = ((v + 2f) / 12f).coerceIn(0f, 1f) }
         override fun onBufferReceived(b: ByteArray?) {}
         override fun onEndOfSpeech() { main.post { unmuteSystem() } }
@@ -659,7 +669,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             if (listenMode == "follow" && (e == SpeechRecognizer.ERROR_NO_MATCH || e == SpeechRecognizer.ERROR_SPEECH_TIMEOUT)) { idleOrWake(); return }
             showLabel(when (e) { SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "לא שמעתי כלום"; SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "אין הרשאת מיקרופון"; SpeechRecognizer.ERROR_NETWORK -> "אין אינטרנט לזיהוי"; else -> "שגיאת מיקרופון ($e)" }, 3000)
             idleOrWake() }
-        override fun onResults(r: Bundle?) { listening = false; errStreak = 0; if (listenMode == "wake") unmuteSystem()
+        override fun onResults(r: Bundle?) { heardAt = System.currentTimeMillis(); listening = false; errStreak = 0; if (listenMode == "wake") unmuteSystem()
             val flush = pendingSay; pendingSay = null
             if (flush != null) main.postDelayed({ speak(flush) }, 1200)
             var t = r?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()?.trim().orEmpty()
@@ -709,7 +719,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         Prefs.log(this, "me", t); sentAt = SystemClock.elapsedRealtime()
         setState(State.SENDING); showLabel("→ $t", 6000)
         tone("heard")
-        web?.let { LibaWeb.sendInput(it, t) }
+        web?.let { LibaWeb.sendInput(it, t, "voice", stamps()) }
     }
     private fun localStatus(): String {
         if (!pageReady) return "לא מחובר לדף. $status"
@@ -764,7 +774,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             reason.isBlank() -> "" else -> "סיבה: $reason" }
         showLabel("לא נשלח" + (if (reason.isNotBlank()) " · $reason" else ""), 8000); speak("לא הצלחתי לשלוח. $why") } }
     override fun onSay(text: String, kind: String, options: List<String>, speaker: String, id: String) { main.post {
-        sayId?.let { prev -> web?.let { w -> LibaWeb.sendSpoke(w, prev) } } // a new utterance arrived before the old one reported: release the page
+        releaseSay("stop") // a new utterance arrived before the old one reported: release the page
         sayId = id.ifBlank { null }
         main.removeCallbacks(speakingBeat); if (sayId != null) main.postDelayed(speakingBeat, 2000)
         sentAt = 0; status = "מחובר."; waitTimer?.let { main.removeCallbacks(it) }

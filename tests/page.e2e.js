@@ -247,6 +247,36 @@ const failed = [];
   check(ids.u === ids.n && ids.sorted, 'req: 20,000 ids in a tight loop - 0 collisions and strictly ordered: ' + JSON.stringify(ids));
   await p.evaluate(() => window.app({ liba: 'input', text: 'כמה בקשות היום' })); await flush(2600);
   check(said('היום ביקשת').length >= 1, 'req: "כמה בקשות היום" answers from the requests: ' + JSON.stringify(said('היום ביקשת').map(x => x.text.slice(0, 80))));
+  // clock: four measured segments, skew from the handshake, real speech start/end with a cause
+  await p.evaluate(() => window.app({ liba: 'hello', ver: '3.19.0', pv: 1, caps: ['spoke', 'beat', 'trace', 'proto', 'clock'], wall: Date.now() - 40 })); await flush(800);
+  const dev2 = await get('channel/device');
+  const T0 = Date.now();
+  await p.evaluate(t0 => window.app({ liba: 'input', text: 'מדידה-אחת', source: 'voice', stamps: JSON.stringify({ voice: t0 - 3000, heard: t0 - 1200, wall: t0 }) }), T0); await flush(2600);
+  const mr = (await H(() => window.__h.sentRaw.filter(t => /מדידה-אחת/.test(t))))[0] || '';
+  const mid = (mr.match(/⟦#([0-9a-z]+)⟧$/) || [])[1];
+  let mq = await get('req/' + mid);
+  check(mq && mq.t && mq.t.voice === T0 - 3000 && mq.t.heard === T0 - 1200 && mq.sentAt >= T0 && typeof mq.t.skew === 'number' && !mq.t.skewBad,
+    'clock: the request keeps the phone\'s voice/heard stamps, when it was sent, and the measured skew: ' + JSON.stringify(mq && { t: mq.t, sent: mq.sentAt - T0 }));
+  await set('inbox/clk1', { text: 'תשובה-מדודה', kind: 'say', from: 'manager', re: mid, ts: Date.now() });
+  const mm = await flush(1400); const ms = mm.find(x => x.liba === 'say' && /תשובה-מדודה/.test(x.text || ''));
+  const S0 = Date.now();
+  await p.evaluate(([id, a, b]) => window.app({ liba: 'spoke', id, startAt: a, endAt: b, cause: 'done' }), [ms && ms.id, S0 + 100, S0 + 2100]); await flush(1200);
+  mq = await get('req/' + mid);
+  check(mq && mq.firstReplyAt > 0 && mq.spokeStartAt === S0 + 100 && mq.spokeEndAt === S0 + 2100 && mq.spokeCause === 'done',
+    'clock: the reply\'s real speech start and end (from the phone) land on the request it answered');
+  await p.evaluate(() => window.app({ liba: 'input', text: 'כמה זמן לוקח לך לענות' })); await flush(2600);
+  const lat = said('בחציון');
+  check(lat.length >= 1 && /עד שסיימתי לשמוע 2 שניות/.test(lat[0].text), 'clock: "כמה זמן לוקח לך לענות" answers from the measurements: ' + JSON.stringify(lat.map(x => x.text.slice(0, 120))));
+  const day = await H(() => trDay(Date.now()));
+  const md = await get('metrics/daily/days/' + day);
+  check(md && md.latency && md.latency.asr && md.latency.asr.p50 === 1800 && md.latency.guard, 'clock: metrics/daily keeps p50/p90 per segment and the guard rate: ' + JSON.stringify(md && md.latency && md.latency.asr));
+  await p.evaluate(() => window.app({ liba: 'hello', ver: '3.19.0', pv: 1, caps: ['clock'], wall: Date.now() - 5000 })); await flush(800);
+  await p.evaluate(() => window.app({ liba: 'input', text: 'מדידה-עם-שעון-רע', source: 'voice', stamps: '{}' })); await flush(2600);
+  const br = (await H(() => window.__h.sentRaw.filter(t => /שעון-רע/.test(t))))[0] || '';
+  const bq = await get('req/' + ((br.match(/⟦#([0-9a-z]+)⟧$/) || [])[1]));
+  check(bq && bq.t && bq.t.skewBad === true && (await H(() => window.__trace.ring.some(x => x.c === 'P_CLOCK_SKEW'))), 'clock: a 5-second skew marks the request as not measurable - it is left out, not corrected');
+  await p.evaluate(() => window.app({ liba: 'spoke', id: 'nope', startAt: 1, endAt: 2, cause: 'guard' })); await flush(400);
+  check(await H(() => window.__trace.ring.some(x => x.c === 'P_SPEAK_GUARD')), 'clock: a guard release (TTS never reported) is recorded as a fault');
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

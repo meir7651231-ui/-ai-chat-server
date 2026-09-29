@@ -16,7 +16,7 @@ let appCaps=null,appPv=0;
 const hasCap=c=>appCaps?appCaps.indexOf(c)>=0:null;
 function appSpeaksBack(){const h=hasCap('spoke');return h!==null?h:verAtLeast(3,14);}
 /* v36: in the app, wait until the phone finished speaking before acking the next message */
-function sayApp(text,extra){return new Promise(res=>{const id='s'+(++sayTok);const p=Object.assign({},extra||{},{text:text,id:id});if(!appSpeaksBack()){post(PROTO.toApp.say,p);res();return;}let done=false;const fin=()=>{if(done)return;done=true;sayWait.delete(id);beatWait.delete(id);res();};sayWait.set(id,fin);post(PROTO.toApp.say,p);
+function sayApp(text,extra,re){return new Promise(res=>{const id='s'+(++sayTok);if(re)sayReq.set(id,String(re));const p=Object.assign({},extra||{},{text:text,id:id});if(!appSpeaksBack()){post(PROTO.toApp.say,p);res();return;}let done=false;const fin=()=>{if(done)return;done=true;sayWait.delete(id);beatWait.delete(id);res();};sayWait.set(id,fin);post(PROTO.toApp.say,p);
   /* with beats the length guess is gone - the beat IS the measurement; 120 s stays only as a ceiling */
   setTimeout(fin,appBeats()?120000:Math.min(120000,6000+text.length*160));
   if(appBeats()){let w=setTimeout(lost,BEAT_LOST);function lost(){if(done)return;fail('P_SPEAK_LOST',null,'no beat '+BEAT_LOST);fin();}
