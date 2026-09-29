@@ -36,6 +36,12 @@ expect_red() {
   reset
 }
 
+# every injection must really change its target - a sed that matches nothing injects no fault and the
+# "gate fell" that follows is a lie. mutate() stops the whole run instead.
+mutate() { local file="$1" expr="$2"; local before; before="$(sha256sum "$file")"
+  sed -i "$expr" "$file"
+  if [ "$(sha256sum "$file")" = "$before" ]; then echo "  ✗ ההזרקה לא שינתה את $file ($expr) — הרתמה עצמה התיישנה"; exit 1; fi; }
+
 echo "הזרקת תקלות:"
 
 # 1. version.json disagrees with VERSION
@@ -47,7 +53,7 @@ PY
 expect_red "version.json מול VERSION" node gates/one-version.mjs
 
 # 2. the version number reappears hardcoded in the build file
-sed -i 's/versionCode = vCode/versionCode = 99/' "$WT/android/app/build.gradle.kts"
+mutate "$WT/android/app/build.gradle.kts" 's/versionCode = vCode/versionCode = 99/'
 expect_red "מספר גרסה קשיח ב-build.gradle" node gates/one-version.mjs
 
 # 3. the page contract number drifts from PAGE
@@ -66,19 +72,19 @@ git -C "$WT" add -f ship/liba.jks >/dev/null 2>&1
 expect_red "קיסטור במעקב" node gates/no-secret.mjs
 
 # 6. a static page invariant broken (the owner protocol the static test asserts)
-sed -i "s#channel/owner#channel/gone#g" "$WT/liba-call.html"
+mutate "$WT/liba-call.html" "s#channel/owner#channel/gone#g"
 expect_red "בדיקת הדף הסטטית" node tests/page.test.js
 
 # 7. the live page loses a behaviour the harness asserts
-sed -i "s/else if(d.liba==='spoke')/else if(d.liba==='__never__')/" "$WT/liba-call.html"
+mutate "$WT/liba-call.html" "s/d.liba===PROTO.toPage.spoke/d.liba==='__never__'/"
 expect_red "בדיקת הדף החי" env NODE_PATH="$(npm root -g)" node tests/page.e2e.js
 
 # 8. the contract changes and nobody regenerates: both sides now disagree with it
-sed -i 's/"queued":/"waiting":/' "$WT/protocol/protocol.json"
+mutate "$WT/protocol/protocol.json" 's/"queued":/"waiting":/'
 expect_red "חוזה שהשתנה בלי רגנרציה" node gates/protocol.mjs
 
 # 9. a message name typed by hand in the page, outside the contract
-sed -i "s/post(PROTO.toApp.tap/post('tap'/" "$WT/liba/src/06-bridge.js"
+mutate "$WT/liba/src/06-bridge.js" "s/post(PROTO.toApp.tap/post('tap'/"
 expect_red "שם מסר בכתב יד בדף" node gates/protocol.mjs
 
 # 10-12. everything that needs a signed APK in dist/
@@ -87,7 +93,7 @@ if [ -f "$REPO/dist/liba.apk" ]; then
   head -c 200000 "$REPO/dist/liba.apk" > "$WT/dist/liba.apk"
   expect_red "APK קצוץ מול sha256" node gates/apk-hash.mjs
   cp "$REPO/dist/liba.apk" "$WT/dist/liba.apk"
-  sed -i 's/^a7/b7/' "$WT/keys/PINNED.sha256"
+  mutate "$WT/keys/PINNED.sha256" 's/^a7/b7/'
   expect_red "חותם זר" node gates/apk-hash.mjs
   cp "$REPO/dist/liba.apk" "$WT/dist/liba.apk"
   python3 - "$WT" <<'PY'
