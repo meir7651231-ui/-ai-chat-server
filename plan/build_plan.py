@@ -1,6 +1,7 @@
 import json, html
 
 p = json.load(open('plan100.json'))
+SEC = json.load(open('sections.json'))
 ms = p['milestones']
 opening = p['opening']
 dropped = p.get('dropped') or []
@@ -105,6 +106,33 @@ input[type=search]:focus-visible{border-color:var(--accent);box-shadow:0 0 0 3px
 .exit,.f.measure p{unicode-bidi:plaintext}
 .lens{margin-top:12px;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:10.5px;color:var(--faint)}
 
+details.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-bottom:8px;overflow:hidden}
+details.card>summary{list-style:none;cursor:pointer;padding:13px 14px;display:flex;gap:10px;align-items:baseline}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary::after{content:"+";margin-inline-start:auto;font-family:"JetBrains Mono",monospace;color:var(--faint);font-size:15px}
+details.card[open]>summary::after{content:"\2212"}
+details.card>summary b{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:17.5px;font-weight:800}
+details.card>summary i{font-style:normal;font-size:12.5px;color:var(--muted)}
+.cardbody{padding:2px 14px 16px;border-top:1px solid var(--line)}
+.cardbody>p{font-size:14.8px;line-height:1.7;margin:12px 0 0}
+.cardbody code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--sunk);
+  border:1px solid var(--line);border-radius:5px;padding:1px 4px;direction:ltr;unicode-bidi:isolate;overflow-wrap:anywhere}
+.cardbody>ul{margin:12px 0 0;padding-inline-start:18px;font-size:14.5px;line-height:1.65}
+.cardbody>ul>li{margin-bottom:9px}
+.tw{overflow-x:auto;margin-top:12px;-webkit-overflow-scrolling:touch}
+.tw table{border-collapse:collapse;font-size:13px;min-width:560px}
+.tw th,.tw td{border:1px solid var(--line);padding:7px 9px;vertical-align:top;text-align:start}
+.tw th{background:var(--sunk);font-weight:500;font-size:11.5px;font-family:"JetBrains Mono",monospace;color:var(--fire);white-space:nowrap}
+.tw td:first-child{font-weight:500;min-width:96px}
+.es{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.es:first-child{border-top:0;padding-top:4px}
+.es h3{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:18px;margin:0 0 6px;display:flex;gap:9px;align-items:baseline}
+.es h3 b{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:500;color:var(--fire)}
+.es>p{margin:0 0 6px;font-size:14.5px;line-height:1.65}
+.es .vis{color:var(--muted);font-size:13.5px}
+ul.caps{margin:9px 0 0;padding-inline-start:17px;font-size:14px;line-height:1.6}
+ul.caps li{margin-bottom:7px}
+ul.caps b{font-weight:500}
 .note{margin-top:34px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:13.5px;max-width:66ch}
 .note h3{font-family:"Frank Ruhl Libre",Georgia,serif;font-size:17px;margin:0 0 6px;color:var(--ink)}
 .empty{color:var(--muted);font-size:14px;padding:14px 2px}
@@ -231,6 +259,21 @@ parts.append('<div class="stats">'
              '<span class="stat">86 סוכנים</span>'
              '</div>')
 parts.append('</header>')
+parts.append('<section id="picture">'
+             '<details class="card"><summary><b>יום אחד עם ליבה הגמורה</b> <i>איך זה נראה בסוף</i></summary>'
+             '<div class="cardbody">' + SEC['day'] + '</div></details>'
+             '<details class="card"><summary><b>מאה וארבעים היכולות</b> <i>לפי אבן דרך</i></summary>'
+             '<div class="cardbody">' + SEC['end'] + '</div></details>'
+             '<details class="card"><summary><b>לפני ⇐ אחרי</b> <i>עשרים תכונות מדידות</i></summary>'
+             '<div class="cardbody">' + SEC['table'] + '</div></details>'
+             '<details class="card"><summary><b>מה זה לא ייתן</b> <i>גבולות וחורים בתוכנית</i></summary>'
+             '<div class="cardbody">'
+             '<p>גבולות אמיתיים — דברים שנשארים כך גם כשכל מאה הצעדים גמורים:</p>'
+             '<ul>' + SEC['limits'] + '</ul>'
+             '<p>וחורים בתוכנית עצמה, שנמצאו בבדיקת תלויות על הקובץ:</p>'
+             '<ul>' + SEC['holes'] + '</ul>'
+             '</div></details>'
+             '</section>')
 parts.append('<div class="bar">'
              '<div class="track"><i class="done" id="fdone" style="width:0"></i><i class="doing" id="fdoing" style="width:0"></i></div>'
              '<div class="barrow">'
