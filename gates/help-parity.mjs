@@ -21,7 +21,9 @@ for (const i of reg.intents) {
   if (i.where === 'claude' && !RULES.includes(i.rule)) bad.push(`${i.id}: כלל ${i.rule} לא קיים בפרוטוקול`)
 }
 // no command regex outside the registry: a start-anchored regex with Hebrew in it is a command, wherever it hides
-const cmdRx = readdirSync(join(root, 'liba/src')).filter(f => /^\d\d-.*\.js$/.test(f) && f !== '00-intents.js')
+// a parser named in the registry (with its reason) holds grammar, not commands
+const parsers = Object.keys(reg.parsers || {})
+const cmdRx = readdirSync(join(root, 'liba/src')).filter(f => /^\d\d-.*\.js$/.test(f) && f !== '00-intents.js' && !parsers.includes(f))
   .flatMap(f => [...readFileSync(join(root, 'liba/src', f), 'utf8').matchAll(/\/\^[^\/\n]*[֐-׿][^\/\n]*\//g)].map(m => f + ' ' + m[0].slice(0, 40)))
 if (cmdRx.length) bad.push('ביטויי פקודה מחוץ לרישום: ' + cmdRx.join(' ; '))
 if (kt.match(/n in listOf\(/g)) bad.push('בבועה נשארו רשימות ביטויים בקוד - הן שייכות לרישום')

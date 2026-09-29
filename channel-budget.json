@@ -62,12 +62,12 @@
       "time": "at"
     },
     "memory/notes/items": {
-      "cap": 300,
+      "cap": 100,
       "cls": "record",
       "time": "ts"
     },
     "memory/prefs/items": {
-      "cap": 100,
+      "cap": 50,
       "cls": "record",
       "time": "ts"
     },
@@ -113,6 +113,11 @@
       "ttlDays": 14,
       "cls": "state",
       "time": "at"
+    },
+    "memory/facts/items": {
+      "cap": 600,
+      "cls": "record",
+      "time": "updatedAt"
     }
   }
 }

@@ -27,6 +27,7 @@ const extra = [
   ['intents', 'node tests/intents.test.js'],
   ['stream', 'node tests/stream.test.js'],
   ['days', 'node tests/days.test.js'],
+  ['memory', 'node tests/memory.test.js'],
 ]
 
 let pass = 0

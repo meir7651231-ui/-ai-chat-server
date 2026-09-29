@@ -98,7 +98,7 @@ const failed = [];
   sentAll = await H(() => window.__h.sent.slice()); console.log('  second "כן" sent? ' + (sentAll.filter(t => t === '[ליבה] כן').length === 2));
   // 5. memory note, local
   await p.evaluate(() => window.app({ liba: 'input', text: 'תזכור שהרואה חשבון הוא דני' })); m = await flush(2600);
-  const notes = await H(() => window.__h.all('memory/notes/items')); check(notes.length === 1 && /דני/.test(notes[0].text), 'memory note stored: ' + JSON.stringify(notes.map(n => n.text)));
+  const notes = await H(() => window.__h.all('memory/facts/items').filter(x => x.state !== 'tomb')); check(notes.length === 1 && /דני/.test(notes[0].raw), 'memory fact stored (mem-core): ' + JSON.stringify(notes.map(n => n.raw)));
   check(m.some(x => x.liba === 'say' && /זכרתי/.test(x.text)), 'memory confirmation spoken');
   // 6. owner switching by name
   await p.evaluate(() => window.app({ liba: 'input', text: 'מנהל מה המצב' })); m = await flush(2000);

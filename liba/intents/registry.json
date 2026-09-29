@@ -159,6 +159,21 @@
    ]
   },
   {
+   "id": "memory.about",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "prefix": [
+    "מה (אתה|את) (זוכר|זוכרת) על",
+    "מה (אני|את|אתה) (יודע|יודעת) על"
+   ],
+   "handler": "memAbout",
+   "help": "\"מה את זוכרת על X\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
    "id": "memory.list",
    "where": "page",
    "when": "liba",
@@ -960,5 +975,8 @@
  ],
  "families": {
   "דיבור": "לחיצה על הבועה, \"ליבה\" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח \"ליבה – דבר\" במסך הנעילה, שיתוף מכל אפליקציה → ליבה"
+ },
+ "parsers": {
+  "16-memory.js": "MEM.parse - the grammar of a fact ('X הוא Y', 'יש לי X'), not a command; commands stay in this registry"
  }
 }
