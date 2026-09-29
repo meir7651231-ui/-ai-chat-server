@@ -10,3 +10,6 @@ build/
 keys/*.jks
 keys/keystore.properties
 android/keys/
+
+# node
+node_modules/

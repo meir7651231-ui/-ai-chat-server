@@ -1,0 +1,11 @@
+{
+  "name": "liba",
+  "private": true,
+  "scripts": {
+    "build": "node liba/build.mjs",
+    "gates": "node gates/run.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

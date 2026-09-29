@@ -17,4 +17,11 @@ if (Number(live.page) !== want) {
   console.error(`page-version: בריפו ${want} אבל אצל מאיר רץ ${live.page} — יש דף שלא פורסם`)
   process.exit(1)
 }
-console.log(`page-version: ${want} — הריפו, הדף והמכשיר מסכימים`)
+// the number says which contract; the hash says which exact build. Both must be the one that is live.
+let built = ''
+try { built = JSON.parse(readFileSync(`${repo}/dist/page.map.json`, 'utf8')).pageHash || '' } catch {}
+if (built && live.pageHash !== built) {
+  console.error(`page-version: נבנה ${built} אבל פורסם ${live.pageHash || 'בלי hash'} — הבנייה האחרונה לא פורסמה`)
+  process.exit(1)
+}
+console.log(`page-version: ${want}${built ? ' · ' + built : ''} — הריפו, הדף והמכשיר מסכימים`)

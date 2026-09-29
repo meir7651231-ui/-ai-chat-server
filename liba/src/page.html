@@ -1,0 +1,78 @@
+<title>ליבה קשר</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ליבה">
+<meta name="theme-color" content="#04050A">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karantina:wght@300;700&family=Heebo:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+:root{--void:#04050A;--ink:#EEF1FF;--ink-2:#9AA3B8;--ink-3:#5B6478;--ink-4:#2C3140;--core:#7DF9FF;--mic:#FF5C8A;--open:#FFB454;--ok:#5CFFB0;--danger:#FF4F5E;--glass:rgba(10,12,22,.7);--edge:rgba(125,249,255,.2)}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--void);color:var(--ink);font-family:Heebo,Arial,sans-serif;direction:rtl;overflow:hidden;-webkit-font-smoothing:antialiased;user-select:none}
+#app{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-inline:20px;padding-block:calc(20px + env(safe-area-inset-top,0px)) calc(20px + env(safe-area-inset-bottom,0px));gap:18px;transition:background .4s}
+#app.ring{animation:flash 1.2s infinite}
+@keyframes flash{50%{background:#1a0f22}}
+.brand{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));inset-inline-start:18px;font-family:Karantina;font-weight:700;font-size:30px;line-height:1;background:linear-gradient(90deg,var(--ink),var(--core));-webkit-background-clip:text;background-clip:text;color:transparent}
+.st{position:absolute;top:calc(20px + env(safe-area-inset-top,0px));inset-inline-end:18px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--ink-3);display:flex;gap:6px;align-items:center}
+.st i{width:7px;height:7px;border-radius:50%;background:var(--ink-4)}.st.on i{background:var(--ok);box-shadow:0 0 8px var(--ok)}.st.warn i{background:var(--danger)}
+.core{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,#fff 0,var(--core) 28%,rgba(138,92,255,.4) 60%,transparent 72%);animation:breathe 4s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(125,249,255,.5));flex:none;transition:transform .3s}
+#app.ring .core{background:radial-gradient(circle,#fff 0,var(--mic) 28%,rgba(255,92,138,.4) 60%,transparent 72%);animation:ringpulse .6s ease-in-out infinite;filter:drop-shadow(0 0 40px rgba(255,92,138,.7))}
+#app.listen .core{background:radial-gradient(circle,#fff 0,var(--mic) 28%,rgba(255,92,138,.4) 60%,transparent 72%);filter:drop-shadow(0 0 40px rgba(255,92,138,.7));animation:none}
+@keyframes breathe{50%{transform:scale(1.08)}}@keyframes ringpulse{50%{transform:scale(1.25)}}
+h1{margin:0;font-family:Karantina;font-weight:700;font-size:clamp(40px,11vw,92px);line-height:.95;text-wrap:balance;max-width:16ch}
+h1.q{font-weight:300}
+.sub{color:var(--ink-2);font-size:16px;max-width:36ch;line-height:1.5;margin:0}
+.kind{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;color:var(--ink-3)}
+.kind.stuck{color:var(--open)}.kind.done{color:var(--ok)}
+.opts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:520px}
+.opts button,.big{font:500 20px Heebo;background:var(--glass);border:1px solid var(--edge);color:var(--ink);border-radius:999px;padding:14px 26px;cursor:pointer;min-width:120px}
+.opts button:active,.big:active{background:rgba(125,249,255,.15)}
+.big{font-size:24px;padding:18px 40px;border-color:var(--core);box-shadow:0 0 30px -8px var(--core)}
+.big.mic{border-color:var(--mic);box-shadow:0 0 30px -8px var(--mic)}
+.heard{font-family:Karantina;font-weight:300;font-size:clamp(30px,8vw,60px);color:var(--mic);min-height:1.1em;line-height:1}
+.row{display:flex;gap:10px;align-items:center;width:100%;max-width:520px}
+.row input{flex:1;min-width:0;font:400 20px Heebo;background:var(--glass);border:1px solid var(--edge);color:var(--ink);border-radius:999px;padding:12px 18px;outline:none}
+.row button{font:500 18px Heebo;background:var(--core);color:#04050A;border:0;border-radius:999px;padding:12px 20px;cursor:pointer}
+.log{position:absolute;bottom:calc(14px + env(safe-area-inset-bottom,0px));inset-inline:18px;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);letter-spacing:.06em;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.small{font-size:13px;color:var(--ink-3);background:none;border:0;text-decoration:underline;cursor:pointer;font-family:inherit}
+.tr{width:100%;max-width:560px;display:flex;flex-direction:column;gap:8px;max-height:34vh;overflow:auto;-webkit-mask-image:linear-gradient(180deg,transparent,#000 18%)}
+.tr div{font-size:17px;line-height:1.45;padding:8px 14px;border-radius:14px;max-width:85%}
+.tr .me{align-self:flex-start;background:rgba(255,92,138,.12);color:var(--ink)}
+.tr .li{align-self:flex-end;background:var(--glass);border:1px solid var(--edge);color:var(--ink-2)}
+.tr .li.think{color:var(--ink-3);font-style:italic}
+.tog{font-size:13px;color:var(--ink-3);background:none;border:1px solid var(--ink-4);border-radius:999px;padding:6px 14px;cursor:pointer;font-family:inherit}
+.tog.on{color:var(--ok);border-color:var(--ok)}
+.tasks{width:100%;max-width:560px;display:flex;flex-direction:column;gap:6px;text-align:right}
+.tasks .t{display:flex;gap:10px;align-items:center;font-size:14px;padding:6px 12px;border-radius:10px;background:var(--glass);border:1px solid var(--edge);color:var(--ink-2)}
+.tasks .t i{width:8px;height:8px;border-radius:50%;flex:none;background:var(--ink-3)}
+.tasks .t.running i{background:var(--core);box-shadow:0 0 8px var(--core)}.tasks .t.blocked i{background:var(--open);box-shadow:0 0 8px var(--open)}.tasks .t.done i{background:var(--ok)}
+.tasks .t b{font-weight:500;color:var(--ink);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tasks .t small{color:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.06em}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<div id="app">
+  <div class="brand">ליבה</div>
+  <div class="st" id="st"><i></i><span id="stt">מתחבר</span></div>
+  <div class="core"></div>
+  <div class="kind" id="kind"></div>
+  <h1 id="h">ליבה</h1>
+  <p class="sub" id="sub">שיחה בקול. לחץ "התחל" ודבר.</p>
+  <div class="tr" id="tr" hidden></div>
+  <div class="tasks" id="tasks" hidden></div>
+  <div class="tasks" id="map" hidden></div>
+  <div class="tasks" id="help" hidden></div>
+  <div class="heard" id="heard" hidden></div>
+  <div class="opts" id="opts"></div>
+  <button class="big" id="start">התחל</button>
+  <button class="big mic" id="talk" hidden>🎙 דבר</button>
+  <div class="row" id="typeRow" hidden><input id="typed" placeholder="או תכתוב…" aria-label="תשובה"><button id="sendTyped">שלח</button></div>
+  <button class="small" id="ack" hidden>הבנתי, תמשיך</button>
+  <button class="tog on" id="hf" hidden>ידיים חופשיות: פועל</button>
+  <div class="log" id="log">—</div>
+</div>
+<script>
+/*@@SCRIPT@@*/
+</script>

@@ -1,0 +1,281 @@
+{
+ "pageHash": "1a6805ca94d2",
+ "anchors": {
+  "paths": {
+   "src": "liba/src/00-paths.js",
+   "line": 77
+  },
+  "paths.esc": {
+   "src": "liba/src/00-paths.js:16",
+   "line": 90
+  },
+  "core": {
+   "src": "liba/src/01-core.js",
+   "line": 91
+  },
+  "trace": {
+   "src": "liba/src/02-trace.js",
+   "line": 96
+  },
+  "trace.trDay": {
+   "src": "liba/src/02-trace.js:12",
+   "line": 105
+  },
+  "trace.trId": {
+   "src": "liba/src/02-trace.js:13",
+   "line": 106
+  },
+  "trace.trCtx": {
+   "src": "liba/src/02-trace.js:15",
+   "line": 108
+  },
+  "trace.trHe": {
+   "src": "liba/src/02-trace.js:16",
+   "line": 109
+  },
+  "trace.trRingPush": {
+   "src": "liba/src/02-trace.js:17",
+   "line": 110
+  },
+  "trace.trQueue": {
+   "src": "liba/src/02-trace.js:18",
+   "line": 111
+  },
+  "trace.trRoll": {
+   "src": "liba/src/02-trace.js:20",
+   "line": 113
+  },
+  "trace.fail": {
+   "src": "liba/src/02-trace.js:23",
+   "line": 116
+  },
+  "trace.trDoc": {
+   "src": "liba/src/02-trace.js:32",
+   "line": 125
+  },
+  "trace.trFlush": {
+   "src": "liba/src/02-trace.js:34",
+   "line": 127
+  },
+  "trace.trBridge": {
+   "src": "liba/src/02-trace.js:39",
+   "line": 132
+  },
+  "trace.trTop": {
+   "src": "liba/src/02-trace.js:54",
+   "line": 147
+  },
+  "trace.traceCmd": {
+   "src": "liba/src/02-trace.js:62",
+   "line": 155
+  },
+  "audio": {
+   "src": "liba/src/03-audio.js",
+   "line": 166
+  },
+  "audio.audioInit": {
+   "src": "liba/src/03-audio.js:5",
+   "line": 168
+  },
+  "audio.beep": {
+   "src": "liba/src/03-audio.js:6",
+   "line": 169
+  },
+  "audio.ringOnce": {
+   "src": "liba/src/03-audio.js:7",
+   "line": 170
+  },
+  "audio.ringStart": {
+   "src": "liba/src/03-audio.js:8",
+   "line": 171
+  },
+  "audio.ringStop": {
+   "src": "liba/src/03-audio.js:9",
+   "line": 172
+  },
+  "speech": {
+   "src": "liba/src/04-speech.js",
+   "line": 173
+  },
+  "speech.pickVoice": {
+   "src": "liba/src/04-speech.js:6",
+   "line": 176
+  },
+  "speech.appSpeaksBack": {
+   "src": "liba/src/04-speech.js:9",
+   "line": 179
+  },
+  "speech.sayApp": {
+   "src": "liba/src/04-speech.js:11",
+   "line": 181
+  },
+  "speech.say": {
+   "src": "liba/src/04-speech.js:12",
+   "line": 182
+  },
+  "listen": {
+   "src": "liba/src/05-listen.js",
+   "line": 183
+  },
+  "listen.listen": {
+   "src": "liba/src/05-listen.js:8",
+   "line": 188
+  },
+  "listen.keepAwake": {
+   "src": "liba/src/05-listen.js:14",
+   "line": 194
+  },
+  "bridge": {
+   "src": "liba/src/06-bridge.js",
+   "line": 196
+  },
+  "bridge.post": {
+   "src": "liba/src/06-bridge.js:7",
+   "line": 200
+  },
+  "bridge.bubble": {
+   "src": "liba/src/06-bridge.js:19",
+   "line": 212
+  },
+  "db": {
+   "src": "liba/src/07-db.js",
+   "line": 213
+  },
+  "inbox": {
+   "src": "liba/src/08-inbox.js",
+   "line": 233
+  },
+  "inbox.queueLocal": {
+   "src": "liba/src/08-inbox.js:5",
+   "line": 235
+  },
+  "inbox.ready": {
+   "src": "liba/src/08-inbox.js:7",
+   "line": 237
+  },
+  "inbox.speakerOf": {
+   "src": "liba/src/08-inbox.js:10",
+   "line": 240
+  },
+  "inbox.prefixOf": {
+   "src": "liba/src/08-inbox.js:11",
+   "line": 241
+  },
+  "inbox.pump": {
+   "src": "liba/src/08-inbox.js:12",
+   "line": 242
+  },
+  "commands": {
+   "src": "liba/src/09-commands.js",
+   "line": 245
+  },
+  "commands.quietCmd": {
+   "src": "liba/src/09-commands.js:4",
+   "line": 246
+  },
+  "commands.setQuiet": {
+   "src": "liba/src/09-commands.js:8",
+   "line": 250
+  },
+  "commands.sayLocal": {
+   "src": "liba/src/09-commands.js:11",
+   "line": 253
+  },
+  "commands.helpCmd": {
+   "src": "liba/src/09-commands.js:16",
+   "line": 258
+  },
+  "commands.galleryCmd": {
+   "src": "liba/src/09-commands.js:20",
+   "line": 262
+  },
+  "commands.memoryCmd": {
+   "src": "liba/src/09-commands.js:24",
+   "line": 266
+  },
+  "commands.taskCmd": {
+   "src": "liba/src/09-commands.js:36",
+   "line": 278
+  },
+  "owner": {
+   "src": "liba/src/10-owner.js",
+   "line": 283
+  },
+  "owner.switchOwner": {
+   "src": "liba/src/10-owner.js:3",
+   "line": 283
+  },
+  "owner.setOwner": {
+   "src": "liba/src/10-owner.js:12",
+   "line": 292
+  },
+  "render": {
+   "src": "liba/src/11-render.js",
+   "line": 294
+  },
+  "render.renderMap": {
+   "src": "liba/src/11-render.js:6",
+   "line": 297
+  },
+  "render.mapSummary": {
+   "src": "liba/src/11-render.js:9",
+   "line": 300
+  },
+  "render.renderTasks": {
+   "src": "liba/src/11-render.js:10",
+   "line": 301
+  },
+  "flow": {
+   "src": "liba/src/12-flow.js",
+   "line": 310
+  },
+  "flow.dictationMode": {
+   "src": "liba/src/12-flow.js:11",
+   "line": 318
+  },
+  "flow.showTalk": {
+   "src": "liba/src/12-flow.js:12",
+   "line": 319
+  },
+  "flow.idleListen": {
+   "src": "liba/src/12-flow.js:13",
+   "line": 320
+  },
+  "flow.incoming": {
+   "src": "liba/src/12-flow.js:16",
+   "line": 323
+  },
+  "send": {
+   "src": "liba/src/13-send.js",
+   "line": 353
+  },
+  "send.saveOutbox": {
+   "src": "liba/src/13-send.js:5",
+   "line": 355
+  },
+  "send.drainQ": {
+   "src": "liba/src/13-send.js:7",
+   "line": 357
+  },
+  "send.tagOf": {
+   "src": "liba/src/13-send.js:9",
+   "line": 359
+  },
+  "send.deliver": {
+   "src": "liba/src/13-send.js:10",
+   "line": 360
+  },
+  "send.deliverWithRetry": {
+   "src": "liba/src/13-send.js:17",
+   "line": 367
+  },
+  "send.flushOutbox": {
+   "src": "liba/src/13-send.js:29",
+   "line": 379
+  },
+  "send.send": {
+   "src": "liba/src/13-send.js:37",
+   "line": 387
+  }
+ }
+}

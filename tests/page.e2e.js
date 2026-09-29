@@ -176,6 +176,14 @@ const failed = [];
   const brk = m.find(x => x.liba === 'say' && /\u05ea\u05e7\u05dc\u05d5\u05ea/.test(x.text));
   check(!!brk, 'what broke today is spoken');
   check(!!brk && !/E_[A-Z]|P_[A-Z]/.test(brk.text), 'spoken in Hebrew, no raw error codes: ' + JSON.stringify(brk && brk.text.slice(0, 160)));
+  // page-kernel: text written by other sessions must stay text in the DOM
+  await set('tasks/evil', { title: '<img src=x onerror="window.__pwned=1">רע', status: 'running', updatedAt: Date.now() });
+  await flush(1200);
+  const inj = await H(() => ({ imgs: document.querySelectorAll('#tasks img').length, pwned: !!window.__pwned, text: (document.getElementById('tasks') || {}).textContent || '' }));
+  check(inj.imgs === 0 && !inj.pwned, 'task title with HTML does not become an element: ' + JSON.stringify({ imgs: inj.imgs, pwned: inj.pwned }));
+  check(/<img src=x/.test(inj.text), 'task title with HTML is shown as text');
+  const dev = await get('channel/device');
+  check(dev && /^[0-9a-f]{12}$/.test(String(dev.pageHash || '')), 'channel/device carries the build hash: ' + JSON.stringify(dev && dev.pageHash));
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();
