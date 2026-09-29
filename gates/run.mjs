@@ -22,6 +22,7 @@ const extra = [
   ['inbox-chaos', 'node tests/inbox.chaos.js'],
   ['freshness', 'node tests/stale.test.js'],
   ['owner-lease', 'node tests/lease.test.js'],
+  ['silence', 'node tests/silence.test.js'],
 ]
 
 let pass = 0
