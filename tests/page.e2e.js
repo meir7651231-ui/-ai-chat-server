@@ -137,7 +137,10 @@ const failed = [];
   await set('inbox/m-spoke2', { from: 'liba', kind: 'ask', speaker: 'ליבה', topic: 'קול', text: 'שאלה שנאמרת לאט', options: ['כן', 'לא'], spoken: false, ts: 100 });
   m = await flush(1200);
   const say2 = m.find(x => x.liba === 'say' && /לאט/.test(x.text));
-  await p.evaluate(() => window.app({ liba: 'input', text: 'תשובה תוך כדי דיבור' })); await flush(1200);
+  // wait PAST the 1.5 s tap window, so send() is really called while she speaks and the sentence really
+  // enters the queue - before, the spoke came at 1.2 s, the sentence never queued, and the test proved nothing
+  await p.evaluate(() => window.app({ liba: 'input', text: 'תשובה תוך כדי דיבור' })); const qm = await flush(2400);
+  check(qm.some(x => x.liba === 'queued' && /תוך כדי/.test(x.text || '')), 'the sentence really entered the queue (the page told the bubble it waits)');
   let sentMid = await H(() => window.__h.sent.slice());
   check(!sentMid.some(t => /תוך כדי/.test(t)), 'answer given mid-sentence waits in the queue');
   await p.evaluate(id => window.app({ liba: 'spoke', id }), say2 && say2.id); await flush(2000);
@@ -282,6 +285,16 @@ const failed = [];
   check(mv.illegal === 0, 'core-machine: the whole suite ran with 0 moves outside the state table: ' + JSON.stringify(mv));
   const told = msgs.filter(x => x.liba === 'state').map(x => x.state);
   check(told.includes('SPEAKING') && told.includes('IDLE'), 'core-machine: the bubble is told every move of the page: ' + told.length + ' moves');
+  // mutation holes: a normal ack is written by the ack itself, not rescued later by the repair path
+  await set('inbox/ackdirect', { text: 'אישור-ישיר', kind: 'say', from: 'liba', ts: Date.now() }); await speakOut();
+  const ad = await get('inbox/ackdirect');
+  check(ad && ad.spoken === true && !ad.repaired, 'a normal message is acked spoken:true directly, not by the repair path: ' + JSON.stringify(ad && { s: ad.spoken, r: ad.repaired }));
+  // the same sentence twice within five seconds goes out once
+  const before = (await H(() => window.__h.sent.slice())).filter(t => /משפט-כפול/.test(t)).length;
+  await p.evaluate(() => window.app({ liba: 'input', text: 'משפט-כפול' })); await flush(2600);
+  await p.evaluate(() => window.app({ liba: 'input', text: 'משפט-כפול' })); await flush(2600);
+  const after = (await H(() => window.__h.sent.slice())).filter(t => /משפט-כפול/.test(t)).length;
+  check(after - before === 1, 'the same sentence said twice within five seconds is sent once: ' + (after - before));
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

@@ -1,5 +1,5 @@
 {
- "pageHash": "7739e386ca0f",
+ "pageHash": "4c61c2e5cb1f",
  "anchors": {
   "paths": {
    "src": "liba/src/00-paths.js",
@@ -310,32 +310,48 @@
    "line": 471
   },
   "send.saveOutbox": {
-   "src": "liba/src/13-send.js:5",
-   "line": 473
+   "src": "liba/src/13-send.js:13",
+   "line": 481
   },
-  "send.drainQ": {
-   "src": "liba/src/13-send.js:7",
-   "line": 475
+  "send.walPut": {
+   "src": "liba/src/13-send.js:15",
+   "line": 483
   },
-  "send.tagOf": {
-   "src": "liba/src/13-send.js:9",
-   "line": 477
+  "send.walLease": {
+   "src": "liba/src/13-send.js:16",
+   "line": 484
   },
-  "send.deliver": {
-   "src": "liba/src/13-send.js:10",
-   "line": 478
-  },
-  "send.deliverWithRetry": {
+  "send.walRelease": {
    "src": "liba/src/13-send.js:17",
    "line": 485
   },
+  "send.walDone": {
+   "src": "liba/src/13-send.js:18",
+   "line": 486
+  },
+  "send.drainQ": {
+   "src": "liba/src/13-send.js:21",
+   "line": 489
+  },
+  "send.tagOf": {
+   "src": "liba/src/13-send.js:23",
+   "line": 491
+  },
+  "send.deliver": {
+   "src": "liba/src/13-send.js:24",
+   "line": 492
+  },
+  "send.deliverWithRetry": {
+   "src": "liba/src/13-send.js:31",
+   "line": 499
+  },
   "send.flushOutbox": {
-   "src": "liba/src/13-send.js:29",
-   "line": 497
+   "src": "liba/src/13-send.js:43",
+   "line": 511
   },
   "send.send": {
-   "src": "liba/src/13-send.js:41",
-   "line": 509
+   "src": "liba/src/13-send.js:63",
+   "line": 531
   }
  }
 }
