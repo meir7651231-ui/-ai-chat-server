@@ -1,6 +1,6 @@
 // כלי הקיצור, למכונה עם לולאות: קפיצות נשמרות — כתובת-קוד («WHERE k code») מוזזת כשמשהו לפניה נמחק/נוסף,
 // ואסור לגעת בקטע שיש בו קפיצה, כתובת-קוד, או יעד של קפיצה.
-import { run } from './machine2.mjs';
+import { run } from './machine2s.mjs';
 export const ALPHA=[...[0,1,2,3,4,5,6,7].map(k=>['WHERE',k]),['WHERE@'],['GO'],['TAKE'],['PUT'],['CALC'],['ADD']];
 export const plain=(p)=>p.map(([o,k])=>o==='WHERE'?['WHERE',k]:[o]);
 export function replace(p,i,w,rep){ const n=p.length; if(i<0||i+w>n) return null; for(let j=i;j<i+w;j++){ const [o,,c]=p[j]; if(o==='JUMP'||c) return null; }

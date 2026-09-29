@@ -1,5 +1,5 @@
 // לא עוצרים עד שזה הכי קצר: מחזור של כל הכלים, שוב ושוב, עד שמחזור שלם לא מוצא שיפור (פעמיים ברצף).
-import fs from 'fs'; import { run } from './machine2.mjs'; import { makeSpecs } from './specs.mjs'; import { checker, shrink, ALPHA } from './tools2.mjs'; import { bigAnneal } from './bigmoves.mjs';
+import fs from 'fs'; import { run } from './machine2s.mjs'; import { makeSpecs } from './specs.mjs'; import { checker, shrink, ALPHA } from './tools2.mjs'; import { bigAnneal } from './bigmoves.mjs';
 const name=process.argv[2]||'אורך רשימה (לולאה + ספירה)'; const OUT=process.argv[3]||'loopmin.json';
 const {S}=makeSpecs(7070); const L=/הפוך|מיין/.test(name)?[]:[0,1,8,9,10,11,12,13,14,15]; const sh=JSON.parse(fs.readFileSync('shelf.json','utf8'));
 const g=()=>{ const e=S[name](); const b=e.mem.slice(); return {mem:e.mem,ok:r=>e.ok(r)&&L.every(c=>r[c]===b[c])}; };
@@ -23,8 +23,8 @@ const sig=(p)=>{ const out=[]; for(const e of EX){ const q=[['WHERE',e.pa],['GO'
 function pairs(best,deadline){ const one=new Map(); for(const e of edits(best)){ const k=sig(e); if(!one.has(k)) one.set(k,e); } 
   for(const p1 of one.values()){ if(Date.now()>deadline) break; for(const e of edits(p1)){ if(e.length>=best.length) continue; if(ok(e)&&accept(e,best,'זוג שינויים')) return e; } } return null; }
 const T0=Date.now(); const HOURS=+process.argv[4]||1;
-const hand=sh.named.find(b=>b.name===name).prog; let best=[hand, fs.existsSync('bigmoves.json')?JSON.parse(fs.readFileSync('bigmoves.json','utf8')):hand].filter(p=>fresh(p)).sort((a,b)=>a.length-b.length)[0];
-if(fs.existsSync(OUT)){ const o=JSON.parse(fs.readFileSync(OUT,'utf8')); if(o.length<best.length&&fresh(o)) best=o; }
+const hand=process.env.START?JSON.parse(fs.readFileSync(process.env.START,'utf8')):sh.named.find(b=>b.name===name).prog; let best=[hand, !process.env.START&&fs.existsSync('bigmoves.json')?JSON.parse(fs.readFileSync('bigmoves.json','utf8')):hand].filter(p=>fresh(p)).sort((a,b)=>a.length-b.length)[0];
+if(!process.env.START&&fs.existsSync(OUT)){ const o=JSON.parse(fs.readFileSync(OUT,'utf8')); if(o.length<best.length&&fresh(o)) best=o; }
 console.log(`${name} · מתחילים מ-${best.length} (ביד ${hand.length})`);
 let dry=0, cycle=0; const starts=()=>[best,hand];
 while(dry<2&&Date.now()-T0<HOURS*3600e3){ cycle++; let got=false;

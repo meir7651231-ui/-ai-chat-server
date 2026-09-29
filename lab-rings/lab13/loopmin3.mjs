@@ -1,10 +1,12 @@
 // לא עוצרים עד שזה הכי קצר: מחזור של כל הכלים, שוב ושוב, עד שמחזור שלם לא מוצא שיפור (פעמיים ברצף).
-import fs from 'fs'; import { run } from './machine3.mjs'; import { makeSpecs } from './specs.mjs'; import { checker, shrink, ALPHA } from './tools3.mjs'; import { bigAnneal } from './bigmoves3.mjs';
+import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeSpecs } from './specs.mjs'; import { checker, shrink, ALPHA } from './tools3.mjs'; import { bigAnneal } from './bigmoves3.mjs';
 const name=process.argv[2]||'אורך רשימה (לולאה + ספירה)'; const OUT=process.argv[3]||'loopmin.json';
 const {S}=makeSpecs(7070);
 const shuf=()=>{ const q=[8,9,10,11,12,13,14,15]; for(let i=7;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [q[i],q[j]]=[q[j],q[i]]; } return q; };
 const LG=(f,key)=>()=>{ const m=new Array(16).fill(0); const l=shuf().slice(0,Math.floor(Math.random()*9)); m[1]=l[0]||0; l.forEach((a,i)=>{ m[a]=l[i+1]||0; }); if(key) m[0]=8+Math.floor(Math.random()*8); const w=f(l,m); const LL=[0,1,8,9,10,11,12,13,14,15]; const mem=m.map((v,k)=>LL.includes(k)?v:Math.floor(Math.random()*16)); return {mem,ok:r=>r[2]===w}; };
-Object.assign(S,{'הקטן ברשימה':LG(l=>l.length?Math.min(...l):15),'ספור גדולים מ-X':LG((l,m)=>l.filter(x=>x>m[0]).length,true)}); const L=/הפוך|מיין/.test(name)?[]:[0,1,8,9,10,11,12,13,14,15]; const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8'));
+const M=(f)=>()=>{ const m=Array.from({length:16},()=>Math.floor(Math.random()*16)); if(Math.random()<0.25) m[1]=m[0]; const w=f(m[0],m[1]); return {mem:m,ok:r=>r[2]===w}; };
+Object.assign(S,{'חיסור':M((a,b)=>(a-b)&15),'ועוד 2':M(a=>(a+2)&15),'קטן מ-':M((a,b)=>a<b?15:0),'גדול מ-':M((a,b)=>a>b?15:0),'מינימום':M((a,b)=>Math.min(a,b)),'מקסימום':M((a,b)=>Math.max(a,b))});
+Object.assign(S,{'הקטן ברשימה':LG(l=>l.length?Math.min(...l):15),'ספור גדולים מ-X':LG((l,m)=>l.filter(x=>x>m[0]).length,true)}); const L=/הפוך|מיין/.test(name)?[]:/רשימה|ספור/.test(name)?[0,1,8,9,10,11,12,13,14,15]:/^ועוד/.test(name)?[0]:[0,1]; const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8'));
 const g=()=>{ const e=S[name](); const b=e.mem.slice(); return {mem:e.mem,ok:r=>e.ok(r)&&L.every(c=>r[c]===b[c])}; };
 const fast=checker(g,40,20000), full=checker(g,300,20000), fresh=checker(g,3000,20000); const ok=p=>fast(p)&&full(p);
 // בדיקה קשוחה: כל 256 צירופי «איפה/לאן» × 12 רשימות × עם ובלי ערבוב

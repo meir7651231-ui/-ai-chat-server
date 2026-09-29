@@ -1,0 +1,1 @@
+[["WHERE",1],["GO"],["TAKE"],["WHERE",0],["TAKE"],["CALC"],["TAKE"],["CALC"],["TAKE"],["GO"],["TAKE"],["TAKE"],["WHERE",2],["CALC"],["GO"],["ADD"],["PUT"],["TAKE"],["TAKE"],["WHERE",25,"code"],["TAKE"],["CALC"],["JUMP"],["WHERE",4],["GO"],["TAKE"],["CALC"],["TAKE"],["ADD"],["CALC"],["PUT"]]
