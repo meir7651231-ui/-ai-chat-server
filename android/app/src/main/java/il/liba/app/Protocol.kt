@@ -3,8 +3,8 @@ package il.liba.app
 
 object Protocol {
     const val VERSION = 1
-    const val HASH = "759da17d5b1d"
-    val CAPS = listOf("spoke", "beat", "trace", "proto", "clock")
+    const val HASH = "54a74e8c27dd"
+    val CAPS = listOf("beat", "clock", "proto", "spoke", "state", "trace")
 
     /** page -> app */
     object ToApp {
@@ -19,6 +19,7 @@ object Protocol {
         const val CRASH_SAVED = "crashSaved"
         const val TASKS = "tasks"
         const val TRACE_ACK = "traceAck"
+        const val STATE = "state"
     }
     /** app -> page */
     object ToPage {
@@ -43,17 +44,38 @@ object Protocol {
     else if(d.liba==="crashSaved"){LibaBridge.crashSaved(String(d.id||""));}
     else if(d.liba==="tasks"){LibaBridge.tasks(String(d.summary||""),Number(d.n||0),Number(d.blocked||0));}
     else if(d.liba==="traceAck"){LibaBridge.traceAck(String(d.batch||""),JSON.stringify(d.ids||[]));}
+    else if(d.liba==="state"){LibaBridge.state(String(d.state||""));}
 """
     /** Senders the app calls through evaluateJavascript: app -> page. */
     const val SENDERS = """
   window.__libaSend=function(k,o){Array.prototype.slice.call(document.querySelectorAll('iframe')).forEach(function(f){try{f.contentWindow.postMessage(Object.assign({liba:k},o),'*');}catch(e){}});};
-  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"759da17d5b1d",pv:1,caps:["spoke","beat","trace","proto","clock"],wall:Date.now()});};
+  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"54a74e8c27dd",pv:1,caps:["beat","clock","proto","spoke","state","trace"],wall:Date.now(),state:window.__libaState||''});};
   window.__libaCrash=function(id,version,text){window.__libaSend("crash",{id:id,version:version,text:text});};
   window.__libaSpoke=function(id,startAt,endAt,cause){window.__libaSend("spoke",{id:id,startAt:startAt,endAt:endAt,cause:cause});};
   window.__libaSpeaking=function(id){window.__libaSend("speaking",{id:id});};
   window.__libaInput=function(text,source,stamps){window.__libaSend("input",{text:text,source:source,stamps:stamps});};
   window.__libaTrace=function(batch,events){window.__libaSend("trace",{batch:batch,events:events});};
 """
+}
+
+/** The one state table (protocol/protocol.json "states"), shared with the page. */
+enum class LibaState { OFFLINE, IDLE, WAKE, LISTENING, THINKING, SENDING, SPEAKING, RINGING, QUIET, DEGRADED;
+    companion object {
+        val INITIAL = OFFLINE
+        private val MOVES: Map<LibaState, Set<LibaState>> = mapOf(
+            OFFLINE to setOf(IDLE, WAKE),
+            IDLE to setOf(LISTENING, THINKING, SPEAKING, SENDING, RINGING, QUIET, DEGRADED, WAKE, OFFLINE),
+            WAKE to setOf(LISTENING, IDLE, SPEAKING, SENDING, RINGING, OFFLINE),
+            LISTENING to setOf(THINKING, SENDING, IDLE, SPEAKING, WAKE, OFFLINE),
+            THINKING to setOf(SENDING, SPEAKING, IDLE, OFFLINE),
+            SENDING to setOf(IDLE, SPEAKING, RINGING, THINKING, DEGRADED, WAKE, LISTENING, OFFLINE),
+            SPEAKING to setOf(IDLE, LISTENING, SENDING, WAKE, RINGING, OFFLINE),
+            RINGING to setOf(SPEAKING, IDLE, LISTENING, OFFLINE),
+            QUIET to setOf(IDLE, SPEAKING, OFFLINE),
+            DEGRADED to setOf(IDLE, SPEAKING, SENDING, OFFLINE)
+        )
+        fun canMove(from: LibaState, to: LibaState) = from == to || MOVES[from]?.contains(to) == true
+    }
 }
 
 /** Every page -> app message in the contract. JsBridge implements this, so a message with no Kotlin side does not compile. */
@@ -69,4 +91,5 @@ interface ProtocolBridge {
     fun crashSaved(id: String)
     fun tasks(summary: String, n: Int, blocked: Int)
     fun traceAck(batch: String, ids: String)
+    fun state(state: String)
 }

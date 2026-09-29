@@ -43,6 +43,7 @@ object LibaWeb {
         fun onTraceAck(batch: String, ids: List<String>)
         fun onQueued(text: String)
         fun onOutbox(text: String, n: Int, reason: String)
+        fun onPageState(state: String)
     }
 
     private class JsBridge(val b: Bridge) : ProtocolBridge {
@@ -58,6 +59,7 @@ object LibaWeb {
         @JavascriptInterface override fun crashSaved(id: String) = b.onCrashSaved(id)
         @JavascriptInterface override fun tasks(summary: String, n: Int, blocked: Int) = b.onTasks(summary, n, blocked)
         @JavascriptInterface override fun traceAck(batch: String, ids: String) = b.onTraceAck(batch, list(ids))
+        @JavascriptInterface override fun state(state: String) = b.onPageState(state)
     }
 
     @SuppressLint("SetJavaScriptEnabled")

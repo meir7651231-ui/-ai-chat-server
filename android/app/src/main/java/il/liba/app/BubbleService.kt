@@ -134,7 +134,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) { // step 32: actions from the permanent notification
             "il.liba.TALK" -> main.post { stopSpeaking(); startListening("cmd") }
-            "il.liba.QUIET" -> main.post { stopSpeaking(); heyOff(); setState(State.IDLE); showLabel("שקט.", 2000) }
+            "il.liba.QUIET" -> main.post { stopSpeaking(); heyOff(); setState(LibaState.IDLE); showLabel("שקט.", 2000) }
         }
         return START_STICKY
     }
@@ -222,7 +222,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun speakNextChunk(first: Boolean) {
         if (listening) { chunks.clear(); return } // fix 4: the user is talking – never talk over the recognizer
         val part = chunks.removeFirstOrNull() ?: run { speaking = false; onSpoken(); return }
-        unmuteSystem(); setState(State.SPEAKING); speaking = true
+        unmuteSystem(); setState(LibaState.SPEAKING); speaking = true
         speakSegments(part)
         if (bargeIn) { bargeVad?.stop(); var me: VadGate? = null; me = VadGate(sens = 6.0, minRms = 1800.0, comm = true, warm = true) { main.post { if (bargeVad !== me) return@post; bargeVad = null; if (speaking) { try { tts?.stop() } catch (e: Exception) { Trace.e(Trace.Code.E_TTS_OP, "barge:" + e.javaClass.simpleName) }; speaking = false; speakGuard?.let { main.removeCallbacks(it) }; showLabel("כן?", 3000); startListening("cmd") } } }; bargeVad = me; me.start() }
         speakGuard?.let { main.removeCallbacks(it) }
@@ -261,7 +261,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             else -> idleOrWake()
         }
     }
-    private fun idleOrWake() { setState(if (pageReady) State.IDLE else State.OFFLINE); if (heyOn) wakeLoop() }
+    private fun idleOrWake() { setState(if (pageReady) LibaState.IDLE else LibaState.OFFLINE); if (heyOn) wakeLoop() }
     /** Step 7: never leave the user in silence after a send. */
     private fun armWaitReminders() {
         waitTimer?.let { main.removeCallbacks(it) }
@@ -452,22 +452,32 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
 
     // ---------- bubble ----------
-    private enum class State { IDLE, LISTENING, WAKE, SPEAKING, RINGING, SENDING, OFFLINE }
-    private fun setState(s: State) {
+    // step core-machine: the state enum is generated from protocol/protocol.json (LibaState) and shared with the
+    // page. A move the table does not allow is recorded as a fault and still applied - never break the bubble.
+    private var appState = LibaState.INITIAL
+    private var pageState = ""
+    private fun setState(s: LibaState) {
+        if (!LibaState.canMove(appState, s)) Trace.e(Trace.Code.E_STATE_ILLEGAL, appState.name + ">" + s.name)
+        appState = s
+        web?.evaluateJavascript("window.__libaState='" + s.name + "'", null)
         val d = dot ?: return
-        if (s == State.IDLE || s == State.WAKE || s == State.OFFLINE) schedulePeek() else unpeek()
-        if (s == State.LISTENING && d.mode != OrbView.Mode.LISTENING) haptic()
-        val lc = when (s) { State.LISTENING -> OrbView.ROSE; State.RINGING -> OrbView.AMBER; State.OFFLINE -> OrbView.GRAY; State.SPEAKING -> when { curSpeaker.contains("מנהל") -> OrbView.VIOLET; curSpeaker.contains("אדריכל") || curSpeaker.contains("עובד") || curSpeaker.contains("סוכן") -> OrbView.MINT; else -> OrbView.CYAN }; else -> OrbView.CYAN }
+        if (s == LibaState.IDLE || s == LibaState.WAKE || s == LibaState.OFFLINE) schedulePeek() else unpeek()
+        if (s == LibaState.LISTENING && d.mode != OrbView.Mode.LISTENING) haptic()
+        val lc = when (s) { LibaState.LISTENING -> OrbView.ROSE; LibaState.RINGING -> OrbView.AMBER; LibaState.OFFLINE -> OrbView.GRAY; LibaState.SPEAKING -> when { curSpeaker.contains("מנהל") -> OrbView.VIOLET; curSpeaker.contains("אדריכל") || curSpeaker.contains("עובד") || curSpeaker.contains("סוכן") -> OrbView.MINT; else -> OrbView.CYAN }; else -> OrbView.CYAN }
         (label?.background as? GradientDrawable)?.setStroke(dp(1f).toInt(), OrbView.withA(lc, 130))
         val speakerColor = when { curSpeaker.contains("מנהל") -> OrbView.VIOLET; curSpeaker.contains("אדריכל") || curSpeaker.contains("עובד") || curSpeaker.contains("סוכן") -> OrbView.MINT; else -> OrbView.CYAN }
         when (s) {
-            State.IDLE -> d.set(OrbView.Mode.IDLE, OrbView.CYAN)
-            State.WAKE -> d.set(OrbView.Mode.WAKE, OrbView.CYAN)
-            State.OFFLINE -> d.set(OrbView.Mode.OFFLINE, OrbView.GRAY)
-            State.LISTENING -> d.set(OrbView.Mode.LISTENING, OrbView.ROSE)
-            State.SPEAKING -> d.set(OrbView.Mode.SPEAKING, speakerColor)
-            State.RINGING -> d.set(OrbView.Mode.RINGING, OrbView.AMBER)
-            State.SENDING -> d.set(OrbView.Mode.SENDING, OrbView.CYAN)
+            LibaState.IDLE -> d.set(OrbView.Mode.IDLE, OrbView.CYAN)
+            LibaState.WAKE -> d.set(OrbView.Mode.WAKE, OrbView.CYAN)
+            LibaState.OFFLINE -> d.set(OrbView.Mode.OFFLINE, OrbView.GRAY)
+            LibaState.LISTENING -> d.set(OrbView.Mode.LISTENING, OrbView.ROSE)
+            LibaState.SPEAKING -> d.set(OrbView.Mode.SPEAKING, speakerColor)
+            LibaState.RINGING -> d.set(OrbView.Mode.RINGING, OrbView.AMBER)
+            LibaState.SENDING -> d.set(OrbView.Mode.SENDING, OrbView.CYAN)
+            // no else: a new state in the contract must get a look here, or the build fails
+            LibaState.THINKING -> d.set(OrbView.Mode.SENDING, OrbView.CYAN)
+            LibaState.QUIET -> d.set(OrbView.Mode.IDLE, OrbView.GRAY)
+            LibaState.DEGRADED -> d.set(OrbView.Mode.IDLE, OrbView.AMBER)
         }
     }
     // two windows, both small: an untouchable canvas (2.8x the body) that follows the creature as it roams the screen,
@@ -520,7 +530,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         lp.x = (d.pos.x - big / 2).toInt(); lp.y = (d.pos.y - big / 2).toInt(); lpH.x = (d.pos.x - size / 2).toInt(); lpH.y = (d.pos.y - size / 2).toInt()
         wm.addView(root, lp); wm.addView(h, lpH)
         d.onMoved = { _, _ -> main.post { syncWindows() } }
-        setState(State.OFFLINE)
+        setState(LibaState.OFFLINE)
         var sx = 0f; var sy = 0f; var ox = 0f; var oy = 0f; var moved = false; var downAt = 0L
         val longPress = Runnable { if (!moved) { moved = true; toggleMenu(root, size) } }
         h.setOnTouchListener { _, ev ->
@@ -633,7 +643,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun startVad() {
         if (vad?.active == true || listening) return
         if (!ensureMicFgs()) return
-        unmuteSystem(); setState(State.WAKE)
+        unmuteSystem(); setState(LibaState.WAKE)
         var me: VadGate? = null
         me = VadGate { main.post { if (vad !== me || !running) return@post; vad = null; if (heyOn && !listening && !speaking) startListening("wake") else wakeLoop() } }
         vad = me; me.start()
@@ -658,7 +668,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             if (mode == "wake") { putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 4000L); putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 2000L); putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true) }
         }
         listening = true; listenMode = mode
-        if (mode == "wake") { muteSystem(); setState(State.WAKE); main.postDelayed({ if (listenMode == "wake") unmuteSystem() }, 6000) } else { unmuteSystem(); setState(State.LISTENING); showLabel(if (mode == "follow") "…" else "מקשיב…", 15000) }
+        if (mode == "wake") { muteSystem(); setState(LibaState.WAKE); main.postDelayed({ if (listenMode == "wake") unmuteSystem() }, 6000) } else { unmuteSystem(); setState(LibaState.LISTENING); showLabel(if (mode == "follow") "…" else "מקשיב…", 15000) }
         sr?.startListening(i)
     }
     private fun stripWake(t: String): Pair<Boolean, String> {
@@ -705,7 +715,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
 
     /** step 63: text shared from another app – sent as-is; a following "תטפל בזה" refers to it. */
-    fun sendShared(msg: String) { main.post { lastShared = msg; showLabel("שיתוף → ליבה", 3000); tone("heard"); if (pageReady) { Prefs.log(this, "me", msg); sentAt = SystemClock.elapsedRealtime(); setState(State.SENDING); web?.let { LibaWeb.sendInput(it, msg, "share") } } else Prefs.setPendingShare(this, msg) } }
+    fun sendShared(msg: String) { main.post { lastShared = msg; showLabel("שיתוף → ליבה", 3000); tone("heard"); if (pageReady) { Prefs.log(this, "me", msg); sentAt = SystemClock.elapsedRealtime(); setState(LibaState.SENDING); web?.let { LibaWeb.sendInput(it, msg, "share") } } else Prefs.setPendingShare(this, msg) } }
     private var lastShared = ""
     // ---------- local commands, then send ----------
     private fun handleUtterance(t: String) {
@@ -731,11 +741,11 @@ class BubbleService : Service(), LibaWeb.Bridge {
             n in listOf("דלג", "תדלג", "הלאה", "מספיק") && (chunks.isNotEmpty() || speaking) -> { stopSpeaking(); showLabel("דילגתי.", 2000); onSpoken(); return }
             n in listOf("תמשיך", "המשך", "תמשיכי") && chunks.isNotEmpty() -> { paused = false; speakNextChunk(false); return }
             n in listOf("רגע", "חכה", "עצור רגע") && (chunks.isNotEmpty() || speaking) -> { val keep = ArrayList(chunks); stopSpeaking(); chunks.addAll(keep); paused = true; showLabel("עצרתי. תגיד תמשיך.", 8000); return }
-            n in listOf("שקט", "תשתוק", "עצור", "די", "ביטול", "בטל") -> { stopSpeaking(); sentAt = 0; lastSaid = ""; heyOff(); setState(State.IDLE); showLabel("שקט. מילת ההפעלה כבויה.", 3000); return }
+            n in listOf("שקט", "תשתוק", "עצור", "די", "ביטול", "בטל") -> { stopSpeaking(); sentAt = 0; lastSaid = ""; heyOff(); setState(LibaState.IDLE); showLabel("שקט. מילת ההפעלה כבויה.", 3000); return }
             !pageReady -> { speak("אני לא מחובר לדף כרגע. $status"); return }
         }
         Prefs.log(this, "me", t); sentAt = SystemClock.elapsedRealtime()
-        setState(State.SENDING); showLabel("→ $t", 6000)
+        setState(LibaState.SENDING); showLabel("→ $t", 6000)
         tone("heard")
         web?.let { LibaWeb.sendInput(it, t, "voice", stamps()) }
     }
@@ -776,13 +786,14 @@ class BubbleService : Service(), LibaWeb.Bridge {
         Trace.drain(pageReady && web != null) { batch, json -> main.post { web?.let { LibaWeb.sendTrace(it, batch, json) } } }
     }
     override fun onTraceAck(batch: String, ids: List<String>) { Trace.acked(ids) }
+    override fun onPageState(state: String) { pageState = state }
     // step protocol-contract: these two used to be posted by the page and dropped here in silence
     override fun onQueued(text: String) { main.post { showLabel("ממתין שאסיים לדבר…", 4000) } }
     override fun onOutbox(text: String, n: Int, reason: String) { main.post { showLabel(if (n > 1) "אין רשת · $n משפטים שמורים" else "אין רשת · שמרתי, אשלח כשתחזור", 6000) } }
     override fun onCrashSaved(id: String) { main.post { Prefs.clearCrash(this); showLabel("דוח הקריסה נשלח לליבה", 4000) } }
     override fun onTasks(summary: String, n: Int, blocked: Int) { tasksSummary = summary; main.post { taskSummary = summary; taskBlocked = blocked; if (n > 0) status = "מחובר · $n משימות" + (if (blocked > 0) " · $blocked מחכות לך" else "") } }
     override fun onPageTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
-    override fun onSent(text: String) { main.post { tone("sent"); status = "נשלח, מחכה לתשובה…"; setState(State.IDLE); showLabel("נשלח. מחכה…", 30000); armWaitReminders(); if (heyOn) wakeLoop() } }
+    override fun onSent(text: String) { main.post { tone("sent"); status = "נשלח, מחכה לתשובה…"; setState(LibaState.IDLE); showLabel("נשלח. מחכה…", 30000); armWaitReminders(); if (heyOn) wakeLoop() } }
     override fun onError(text: String, reason: String) { main.post { sentAt = 0
         val why = when {
             reason.contains("consent") -> "הדף צריך אישור חד פעמי. לחיצה ארוכה עליי, כבה בועה, שלח הודעה אחת מהדף ואשר."
@@ -804,7 +815,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val ask = options.isNotEmpty() || kind == "stuck" || kind == "call" || kind == "ask"
         val spoken = text + if (options.isNotEmpty()) ". " + options.joinToString(", או ") + "?" else ""
         showLabel(text, 20000)
-        if (kind == "call" || kind == "stuck") { setState(State.RINGING); ring(); main.postDelayed({ pendingListenAfterSpeech = ask; speak(spoken, urgent = true) }, 2200) }
+        if (kind == "call" || kind == "stuck") { setState(LibaState.RINGING); ring(); main.postDelayed({ pendingListenAfterSpeech = ask; speak(spoken, urgent = true) }, 2200) }
         else { tone("reply"); pendingListenAfterSpeech = ask; main.postDelayed({ speak(spoken) }, 250) }
     } }
     private fun ring() {

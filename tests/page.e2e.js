@@ -277,6 +277,11 @@ const failed = [];
   check(bq && bq.t && bq.t.skewBad === true && (await H(() => window.__trace.ring.some(x => x.c === 'P_CLOCK_SKEW'))), 'clock: a 5-second skew marks the request as not measurable - it is left out, not corrected');
   await p.evaluate(() => window.app({ liba: 'spoke', id: 'nope', startAt: 1, endAt: 2, cause: 'guard' })); await flush(400);
   check(await H(() => window.__trace.ring.some(x => x.c === 'P_SPEAK_GUARD')), 'clock: a guard release (TTS never reported) is recorded as a fault');
+  // core-machine: across EVERY scenario above, not one move outside the shared table
+  const mv = await H(() => ({ illegal: window.__kernel.illegal(), state: window.__kernel.state(), bad: window.__kernel.log.filter(x => !x.ok).map(x => x.from + '>' + x.to) }));
+  check(mv.illegal === 0, 'core-machine: the whole suite ran with 0 moves outside the state table: ' + JSON.stringify(mv));
+  const told = msgs.filter(x => x.liba === 'state').map(x => x.state);
+  check(told.includes('SPEAKING') && told.includes('IDLE'), 'core-machine: the bubble is told every move of the page: ' + told.length + ' moves');
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

@@ -17,7 +17,9 @@ import { fileURLToPath } from 'node:url'
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const P = JSON.parse(readFileSync(join(ROOT, 'protocol/protocol.json'), 'utf8'))
 const CHECK = process.argv.includes('--check')
-const canon = JSON.stringify({ version: P.version, caps: P.caps, toApp: P.toApp, toPage: P.toPage })
+const canon = JSON.stringify({ version: P.version, caps: P.caps, toApp: P.toApp, toPage: P.toPage, states: P.states })
+const ST = P.states || { initial: 'OFFLINE', moves: {} }
+const SNAMES = Object.keys(ST.moves)
 const HASH = createHash('sha256').update(canon).digest('hex').slice(0, 12)
 const HEAD = 'GENERATED from protocol/protocol.json by tools/gen-protocol.mjs - do not edit; edit the contract and regenerate'
 
@@ -76,6 +78,17 @@ ${consts('toPage', P.toPage)}
 """
 }
 
+/** The one state table (protocol/protocol.json "states"), shared with the page. */
+enum class LibaState { ${SNAMES.join(', ')};
+    companion object {
+        val INITIAL = ${ST.initial}
+        private val MOVES: Map<LibaState, Set<LibaState>> = mapOf(
+${SNAMES.map(n => `            ${n} to setOf(${ST.moves[n].join(', ')})`).join(',\n')}
+        )
+        fun canMove(from: LibaState, to: LibaState) = from == to || MOVES[from]?.contains(to) == true
+    }
+}
+
 /** Every page -> app message in the contract. JsBridge implements this, so a message with no Kotlin side does not compile. */
 interface ProtocolBridge {
 ${iface}
@@ -85,7 +98,8 @@ const page = `// @anchor: protocol
 // ${HEAD}
 const PROTO=Object.freeze({v:${P.version},hash:${js(HASH)},caps:Object.freeze(${js(P.caps)}),
   toApp:Object.freeze(${js(Object.fromEntries(Object.keys(P.toApp).map(k => [k, k])))}),
-  toPage:Object.freeze(${js(Object.fromEntries(Object.keys(P.toPage).map(k => [k, k])))})});
+  toPage:Object.freeze(${js(Object.fromEntries(Object.keys(P.toPage).map(k => [k, k])))}),
+  initial:${js(ST.initial)},moves:Object.freeze(${js(ST.moves)})});
 `
 const out = [
   [join(ROOT, 'android/app/src/main/java/il/liba/app/Protocol.kt'), kt],

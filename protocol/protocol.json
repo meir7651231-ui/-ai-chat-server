@@ -2,11 +2,12 @@
   "version": 1,
   "note": "The one definition of what the page and the bubble say to each other. Edit here, then run node tools/gen-protocol.mjs. Generated files say so at the top and are checked by gates/protocol.mjs.",
   "caps": [
-    "spoke",
     "beat",
-    "trace",
+    "clock",
     "proto",
-    "clock"
+    "spoke",
+    "state",
+    "trace"
   ],
   "toApp": {
     "ready": {
@@ -72,6 +73,12 @@
         "batch": "str",
         "ids": "list"
       }
+    },
+    "state": {
+      "fields": {
+        "state": "str"
+      },
+      "why": "the page tells the bubble what it is doing, so the two never disagree about who is speaking"
     }
   },
   "toPage": {
@@ -81,14 +88,16 @@
         "proto": "str",
         "pv": "int",
         "caps": "list",
-        "wall": "int"
+        "wall": "int",
+        "state": "str"
       },
       "from": {
         "ver": "window.__libaVer||''",
         "proto": "HASH",
         "pv": "VERSION",
         "caps": "CAPS",
-        "wall": "Date.now()"
+        "wall": "Date.now()",
+        "state": "window.__libaState||''"
       }
     },
     "crash": {
@@ -125,5 +134,83 @@
       }
     }
   },
-  "compat": "Adding an optional field is compatible and keeps the version; removing or renaming a message or a field bumps it."
+  "compat": "Adding an optional field is compatible and keeps the version; removing or renaming a message or a field bumps it.",
+  "states": {
+    "note": "One state table for the page and the bubble. A move not listed here is recorded as a fault (P_STATE_ILLEGAL / E_STATE_ILLEGAL) and still applied - the table is tightened from what the field reports, never by breaking the phone.",
+    "initial": "OFFLINE",
+    "moves": {
+      "OFFLINE": [
+        "IDLE",
+        "WAKE"
+      ],
+      "IDLE": [
+        "LISTENING",
+        "THINKING",
+        "SPEAKING",
+        "SENDING",
+        "RINGING",
+        "QUIET",
+        "DEGRADED",
+        "WAKE",
+        "OFFLINE"
+      ],
+      "WAKE": [
+        "LISTENING",
+        "IDLE",
+        "SPEAKING",
+        "SENDING",
+        "RINGING",
+        "OFFLINE"
+      ],
+      "LISTENING": [
+        "THINKING",
+        "SENDING",
+        "IDLE",
+        "SPEAKING",
+        "WAKE",
+        "OFFLINE"
+      ],
+      "THINKING": [
+        "SENDING",
+        "SPEAKING",
+        "IDLE",
+        "OFFLINE"
+      ],
+      "SENDING": [
+        "IDLE",
+        "SPEAKING",
+        "RINGING",
+        "THINKING",
+        "DEGRADED",
+        "WAKE",
+        "LISTENING",
+        "OFFLINE"
+      ],
+      "SPEAKING": [
+        "IDLE",
+        "LISTENING",
+        "SENDING",
+        "WAKE",
+        "RINGING",
+        "OFFLINE"
+      ],
+      "RINGING": [
+        "SPEAKING",
+        "IDLE",
+        "LISTENING",
+        "OFFLINE"
+      ],
+      "QUIET": [
+        "IDLE",
+        "SPEAKING",
+        "OFFLINE"
+      ],
+      "DEGRADED": [
+        "IDLE",
+        "SPEAKING",
+        "SENDING",
+        "OFFLINE"
+      ]
+    }
+  }
 }

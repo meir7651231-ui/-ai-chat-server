@@ -19,7 +19,7 @@ const CLOCK_MIN=1577836800000; // 2020-01-01
 function ageOf(d){return d&&!d.local&&d.ts>=CLOCK_MIN?Math.max(0,Date.now()-d.ts):0;}
 function heAgo(ms){const m=Math.round(ms/60000);if(m<60)return 'מלפני '+m+' דקות';const h=Math.round(m/60);if(h===1)return 'מלפני שעה';if(h===2)return 'מלפני שעתיים';if(h<24)return 'מלפני '+h+' שעות';const n=Math.round(h/24);return n===1?'מאתמול':n===2?'משלשום':'מלפני '+n+' ימים';}
 function expired(d){const lim=EXPIRE[d.kind||'say'];return !!lim&&!d.priority&&ageOf(d)>lim;}
-window.__kernel={state:()=>state,log:stateLog,forgetLoad:()=>spokenLocal.clear(),spoken:()=>Object.assign({},spokenStore)};
+window.__kernel={state:()=>state,illegal:()=>illegalMoves,log:stateLog,forgetLoad:()=>spokenLocal.clear(),spoken:()=>Object.assign({},spokenStore)};
 function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.some(x=>x.id===d.id)&&!spokenLocal.has(d.id))inboxQ.push(d);pump();}
 /* step 19: priority – urgent bypasses quiet; morning waits for 08:00 */
 function ready(d){if(d.kind==='cmd')return appMode;const p=d.priority||'normal';if(p==='urgent')return true;if(p==='morning'){const h=new Date().getHours();if(h<8||h>=22)return false;}if(quietUntil>Date.now())return false;return true;}
