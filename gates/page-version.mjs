@@ -11,4 +11,10 @@ const found = [...html.matchAll(/\bpage\s*:\s*(\d+)/g)].map(m => Number(m[1]))
 if (!found.length) { console.error('page-version: אין page:<מספר> ב-liba-call.html'); process.exit(1) }
 const bad = found.filter(n => n !== want)
 if (bad.length) { console.error(`page-version: PAGE=${want} אבל בדף מופיע ${[...new Set(bad)].join(', ')}`); process.exit(1) }
-console.log(`page-version: ${want} — הדף והריפו מסכימים`)
+// and the honest part: what is actually live on Meir's phone
+const live = JSON.parse(readFileSync(`${repo}/ship/published.json`, 'utf8'))
+if (Number(live.page) !== want) {
+  console.error(`page-version: בריפו ${want} אבל אצל מאיר רץ ${live.page} — יש דף שלא פורסם`)
+  process.exit(1)
+}
+console.log(`page-version: ${want} — הריפו, הדף והמכשיר מסכימים`)
