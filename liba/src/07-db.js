@@ -16,7 +16,7 @@ function coldGet(ref,where,n){let q=ref;(where||[]).forEach(w=>{q=q.where(w[0],w
    (the real channel had one: an update command) is still heard. */
 let inboxOpen=new Map(),inboxNew=new Map();
 function inboxMerged(){const m=new Map(inboxNew);inboxOpen.forEach((v,k)=>m.set(k,v));return [...m.values()];}
-function onInbox(){const items=inboxMerged().filter(d=>{if(d.spoken||d.expired||d.failed||!(d.text||d.kind==='cmd'))return false;if(spokenDone(d.id)){P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),repaired:true}).catch(e=>fail('P_ACK',e,'repair'));return false;}return !spokenLocal.has(d.id);}).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();}
+function onInbox(){const items=inboxMerged().filter(d=>{if(d.spoken||d.expired||d.failed||!(d.text||d.kind==='cmd'||d.stream))return false;if(spokenDone(d.id)){P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),repaired:true}).catch(e=>fail('P_ACK',e,'repair'));return false;}return !spokenLocal.has(d.id);}).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();}
 (async()=>{
   const c=window.claude;
   if(!c||!c.use){setSt('אין חיבור','warn');log('הדף צריך להיפתח מ‑claude.ai');return;}

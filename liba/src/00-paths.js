@@ -15,6 +15,7 @@ const P_RAW={
   budget:()=>db.doc('channel/budget'),
   crashes:()=>db.collection('crashes'),
   fold:id=>db.doc('fold/'+id),folds:()=>db.collection('fold'),janitor:()=>db.doc('channel/janitor'),
+  parts:id=>db.doc('inbox/'+id).collection('parts'),
   pulse:dev=>db.doc('pulse/'+dev),health:()=>db.doc('channel/health'),pulses:()=>db.collection('pulse'),ledger:day=>db.doc('ledger/'+day),ledgers:()=>db.collection('ledger'),
 };
 /* req-spine: the only id minter. String(Date.now()) collided whenever two writes shared a millisecond and
@@ -36,7 +37,7 @@ let PAGE_ID='';try{PAGE_ID=localStorage.getItem(LSK('jid'))||'';if(!PAGE_ID){PAG
    the budget. When the database fills, telemetry is refused first, then records, then state - speech (voice) is
    never refused. A quota error is caught by name, said aloud once, and the page degrades at once. Nothing at the
    call sites changed: P hands out guarded references, and db-paths already forbids any path outside this table. */
-const CLS_OF={inbox:'voice',inboxDoc:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
+const CLS_OF={inbox:'voice',inboxDoc:'voice',parts:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
   sessions:'state',budget:'state',gallery:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
   device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',metricsDays:'telemetry',
   /* the janitor frees space, so its folds and lease are never refused - refusing the cure would keep the db full */

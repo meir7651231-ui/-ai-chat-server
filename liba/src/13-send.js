@@ -31,7 +31,7 @@ async function walRecover(){if(!db)return 0;walRecAt=Date.now();let r;
 /* each of Meir's sentences shows where it is: sending, waiting, sent late, failed */
 const reqBubble=new Map();
 function bubbleState(req,st){const b=reqBubble.get(req);if(!b)return;const he={sending:'שולחת…',queued:'ממתין לרשת',sent:'',late:'נשלח באיחור',failed:'לא נשלח'}[st];if(he)b.dataset.st=he;else delete b.dataset.st;if(st==='sent'||st==='late'||st==='failed')setTimeout(()=>reqBubble.delete(req),60000);}
-let lastSent={text:'',id:'',ts:0},lastIncomingAt=0;
+let lastSent={text:'',id:'',ts:0},lastIncomingAt=0,lastReqId='',lastReqAt=0; /* stream-answer: the reply to this goes first */
 function drainQ(){if(sendQ.length){const nx=sendQ.shift();setTimeout(()=>send({text:nx.text,tag:nx.tag,source:nx.source,stamps:nx.stamps}),300);return true;}return false;}
 const RETRYABLE=r=>/network|fetch|timeout|unavailable|rate|503|502|429|offline|aborted|internal/i.test(r);
 function tagOf(o){return (o||owner)==='manager'?'[ליבה→מנהל] ':'[ליבה] ';}
@@ -90,7 +90,7 @@ async function send(text,forcedTag,source){
   const mine=bubble('me',text);const th=bubble('li think','ליבה חושבת…');
   /* one request per sentence: what was said, how, to whom, and what it answered - so "how many did ליבה
      close" is a query and not a feeling */
-  const reqId=mintId();reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
+  const reqId=mintId();lastReqId=reqId;lastReqAt=Date.now();reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
   ledgerBump('req');
   try{P.req(reqId).set({text,askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending',
     t:{voice:(stamps&&+stamps.voice)||0,heard:(stamps&&+stamps.heard)||0,asked:Date.now(),skew:clockSkew,skewBad:clockSkew!=null&&Math.abs(clockSkew)>SKEW_MAX}}).catch(e=>fail('P_DB_WRITE',e,'req'));}catch(e){fail('P_DB_WRITE',e,'req');}

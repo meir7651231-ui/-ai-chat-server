@@ -49,7 +49,7 @@ function speakerOf(d){if(d.speaker)return d.speaker;if(/^arch/i.test(d.id||''))r
 function prefixOf(d,who){const t=(d.text||'').trim();if(t.startsWith(who)||t.startsWith('כאן '+who))return '';let p=who;if(d.topic)p+=', בנוגע ל'+d.topic;if(KINDW[d.kind])p+=', '+KINDW[d.kind];return p+': ';}
 async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'offline');});return;}if(pumping)return;pumping=true;try{mergeTasks();const rd=inboxQ.filter(d=>ready(d)&&d.kind!=='cmd'&&!spokenLocal.has(d.id)),n=rd.length;
   if(n>=2){const asks=rd.filter(d=>d.kind==='ask'||d.kind==='stuck').length;await incoming({id:'batch-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:asks?'stuck':'say',noListen:true,text:(rd.some(d=>d.heldFor==='quiet')?'בזמן השקט הצטברו ':rd.some(d=>d.heldFor==='offline')?'כשהייתי מנותקת הצטברו ':'הצטברו ')+n+' הודעות'+byTopic(rd)+(asks?', '+asks+' מהן שאלות. אקרא אותן ברצף, צלצול אחד.':'. אקרא אותן ברצף.')});}
-  for(;;){let i=inboxQ.findIndex(d=>ready(d)&&d.kind==='cmd');if(i<0)i=inboxQ.findIndex(ready);
+  for(;;){let i=inboxQ.findIndex(d=>ready(d)&&d.kind==='cmd');if(i<0)i=inboxQ.findIndex(d=>fastLane(d)&&ready(d));if(i<0)i=inboxQ.findIndex(ready);
     if(i<0){if(staleDropped){const k=staleDropped;staleDropped=0;inboxQ.push({id:'stale-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:'say',text:k===1?'הודעה אחת כבר לא הייתה רלוונטית, ולא הקראתי אותה.':k+' הודעות כבר לא היו רלוונטיות, ולא הקראתי אותן.',ts:Date.now()});continue;}break;}const d=inboxQ.splice(i,1)[0];if(spokenLocal.has(d.id))continue;if(d.kind==='cmd'){if(!appMode){spokenLocal.add(d.id);continue;}spokenLocal.add(d.id);await incoming(d);spokenMark(d.id);continue;}spokenLocal.add(d.id);
     if(!d.local&&expired(d)){spokenMark(d.id);try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now()});}catch(e){fail('P_ACK',e,'expire');}continue;}
     /* inbox-lease: claim before speaking. Another instance holding the claim is speaking it - try again after the claim
@@ -58,7 +58,7 @@ async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'
       if(await fresh(d)==='drop'){spokenMark(d.id);staleDropped++;try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now(),stale:true,delivery:{state:'dropped',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'stale');}continue;}
       d.again=!!d.speakingAt&&!d.spoken;d.attempts=+(d.delivery&&d.delivery.attempts)||0;
       P.inboxDoc(d.id).update({speakingAt:Date.now(),delivery:{state:'speaking',by:PAGE_ID,at:Date.now(),attempts:d.attempts}}).catch(e=>fail('P_ACK',e,'speakingAt'));}
-    sayOutcome='done';try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;
+    sayOutcome='done';if(d.stream&&!d.local){await streamPlay(d);continue;}try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;
     /* the voice went silent without finishing (no beat, or the ceiling): not delivered - back to pending, three tries */
     if(sayOutcome==='lost'||sayOutcome==='ceiling'){spokenLocal.delete(d.id);await inboxRetry(d,sayOutcome);continue;}
     spokenMark(d.id);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),delivery:{state:'spoken',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'inbox');log('ack: '+(e.code||e));}}}
@@ -106,3 +106,23 @@ function missedAsks(){return missedRelease(true);}
 function missedRelease(asks){{let n=0;heldNow().forEach(({d,g})=>{if(g.reason==='claim'||g.reason==='noapp')return;if(asks&&d.kind!=='ask'&&d.kind!=='stuck')return;d.release=true;if(d.retryWhy==='retry')d.retryAt=0;n++;});
     sayLocal(n?'משחררת '+(n===1?'הודעה אחת':n+' הודעות')+'.':'אין מה לשחרר.');setTimeout(pump,400);return true;}}
 window.__silence={gate:gate,held:()=>heldNow().map(x=>({id:x.d.id,reason:x.g.reason})),day:()=>Object.assign({},silenceDay)};
+/* stream-answer: a long answer is heard while it is still being written. The session writes inbox/<id> with stream:true
+   and then inbox/<id>/parts/<seq> one sentence at a time, the last with final:true. The page speaks each part the
+   moment it lands, in order; a part that does not come for a minute is said once ("ההמשך מתעכב") and the wait goes on
+   to five minutes. When it ends, the whole text goes back on the message and the parts are deleted - nothing orphaned. */
+const STREAM_STALL=60000,STREAM_GIVEUP=5*60000;
+function fastLane(d){return d.priority==='urgent'||(!!d.re&&d.re===lastReqId&&Date.now()-lastReqAt<5*60000);}
+async function streamPlay(d){const parts=new Map();let next=1,done=false,wake=null,stalled=false,first=true;const all=[];
+  const unsub=P.parts(d.id).orderBy('seq','asc').limit(200).onSnapshot(q=>{q.docChanges().forEach(c=>{if(c.type!=='removed'){const x=c.doc.data()||{};x._id=c.doc.id;parts.set(+x.seq||0,x);}});if(wake)wake();},e=>fail('P_DB_READ',e,'parts'));
+  let lastAt=Date.now();
+  try{while(!done){const x=parts.get(next);
+      if(!x){if(Date.now()-lastAt>STREAM_GIVEUP){fail('P_MSG_BAD',null,'stream gave up '+d.id);break;}
+        if(!stalled&&Date.now()-lastAt>STREAM_STALL){stalled=true;await incoming({id:'stall-'+d.id,local:true,from:'liba',speaker:'ליבה',kind:'say',text:'ההמשך מתעכב. אמשיך כשיגיע.'});}
+        await new Promise(r=>{wake=r;setTimeout(r,1000);});wake=null;continue;}
+      lastAt=Date.now();all.push(String(x.text||''));
+      if(first){first=false;await incoming(Object.assign({},d,{text:String(x.text||''),options:x.final?d.options:[],kind:x.final?d.kind:'say'}));}
+      else if(appMode)await sayApp(String(x.text||''),{kind:x.final?(d.kind||'say'):'say',options:x.final?(d.options||[]):[],from:d.from||'liba',speaker:'',mid:''});else await say(String(x.text||''));
+      if(x.final)done=true;next++;}}
+  finally{try{unsub&&unsub();}catch(e){}}
+  spokenMark(d.id);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),text:all.join(' '),streamDone:done,delivery:{state:'spoken',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'stream');}
+  for(const x of parts.values()){P.parts(d.id).doc(x._id).delete().catch(()=>{});}}

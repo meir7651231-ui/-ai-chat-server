@@ -25,6 +25,7 @@ const extra = [
   ['silence', 'node tests/silence.test.js'],
   ['urgent', 'node tests/urgent.test.mjs'],
   ['intents', 'node tests/intents.test.js'],
+  ['stream', 'node tests/stream.test.js'],
 ]
 
 let pass = 0

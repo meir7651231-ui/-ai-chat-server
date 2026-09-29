@@ -3,23 +3,110 @@
   "note": "Step budget-contract-gate: every collection the page touches, how many documents it may hold, how long its rows live, and which class it is. The janitor reads ttlDays and cap from here (baked into the page at build time); tests/budget.gate.js fails the build when the page names a collection that is not listed, or the caps add up past the ceiling. cls: voice = never refused; state/record/telemetry = refused near a full db in that order; fixed = rewrites of existing documents only; janitor = the cure, never refused. Over its cap, telemetry is trimmed automatically; record, state and voice are only reported - a writer that made a lot of real work must not lose it to a rule.",
   "ceiling": 4000,
   "collections": {
-    "inbox": { "cap": 200, "ttlDays": 2, "cls": "voice", "time": "ts" },
-    "tasks": { "cap": 60, "ttlDays": 3, "cls": "state", "time": "updatedAt" },
-    "sessions": { "cap": 60, "ttlDays": 30, "cls": "state", "time": "updatedAt" },
-    "gallery": { "cap": 150, "cls": "record", "time": "ts" },
-    "req": { "cap": 800, "ttlDays": 14, "cls": "record", "time": "askedAt" },
-    "chat/log/turns": { "cap": 200, "ttlDays": 2, "cls": "record", "time": "ts" },
-    "decisions/log/items": { "cap": 120, "ttlDays": 7, "cls": "record", "time": "ts" },
-    "crashes": { "cap": 40, "ttlDays": 7, "cls": "telemetry", "time": "ts" },
-    "telemetry/events/items": { "cap": 400, "ttlDays": 7, "cls": "telemetry", "time": "ts" },
-    "metrics/daily/days": { "cap": 60, "cls": "telemetry", "time": "at" },
-    "memory/notes/items": { "cap": 300, "cls": "record", "time": "ts" },
-    "memory/prefs/items": { "cap": 100, "cls": "record", "time": "ts" },
-    "fold": { "cap": 400, "cls": "janitor", "time": "at" },
-    "pulse": { "cap": 4, "cls": "fixed", "time": "at" },
-    "ledger": { "cap": 40, "ttlDays": 30, "cls": "fixed", "time": "at" },
-    "channel": { "cap": 12, "cls": "state", "time": "at" },
-    "chat": { "cap": 4, "cls": "voice", "time": "at" },
-    "memory": { "cap": 12, "cls": "record", "time": "at" }
+    "inbox": {
+      "cap": 200,
+      "ttlDays": 2,
+      "cls": "voice",
+      "time": "ts"
+    },
+    "tasks": {
+      "cap": 60,
+      "ttlDays": 3,
+      "cls": "state",
+      "time": "updatedAt"
+    },
+    "sessions": {
+      "cap": 60,
+      "ttlDays": 30,
+      "cls": "state",
+      "time": "updatedAt"
+    },
+    "gallery": {
+      "cap": 150,
+      "cls": "record",
+      "time": "ts"
+    },
+    "req": {
+      "cap": 800,
+      "ttlDays": 14,
+      "cls": "record",
+      "time": "askedAt"
+    },
+    "chat/log/turns": {
+      "cap": 200,
+      "ttlDays": 2,
+      "cls": "record",
+      "time": "ts"
+    },
+    "decisions/log/items": {
+      "cap": 120,
+      "ttlDays": 7,
+      "cls": "record",
+      "time": "ts"
+    },
+    "crashes": {
+      "cap": 40,
+      "ttlDays": 7,
+      "cls": "telemetry",
+      "time": "ts"
+    },
+    "telemetry/events/items": {
+      "cap": 400,
+      "ttlDays": 7,
+      "cls": "telemetry",
+      "time": "ts"
+    },
+    "metrics/daily/days": {
+      "cap": 60,
+      "cls": "telemetry",
+      "time": "at"
+    },
+    "memory/notes/items": {
+      "cap": 300,
+      "cls": "record",
+      "time": "ts"
+    },
+    "memory/prefs/items": {
+      "cap": 100,
+      "cls": "record",
+      "time": "ts"
+    },
+    "fold": {
+      "cap": 400,
+      "cls": "janitor",
+      "time": "at"
+    },
+    "pulse": {
+      "cap": 4,
+      "cls": "fixed",
+      "time": "at"
+    },
+    "ledger": {
+      "cap": 40,
+      "ttlDays": 30,
+      "cls": "fixed",
+      "time": "at"
+    },
+    "channel": {
+      "cap": 12,
+      "cls": "state",
+      "time": "at"
+    },
+    "chat": {
+      "cap": 4,
+      "cls": "voice",
+      "time": "at"
+    },
+    "memory": {
+      "cap": 12,
+      "cls": "record",
+      "time": "at"
+    },
+    "inbox/*/parts": {
+      "cap": 200,
+      "ttlDays": 2,
+      "cls": "voice",
+      "time": "seq"
+    }
   }
 }

@@ -139,6 +139,7 @@ const P_RAW={
   budget:()=>db.doc('channel/budget'),
   crashes:()=>db.collection('crashes'),
   fold:id=>db.doc('fold/'+id),folds:()=>db.collection('fold'),janitor:()=>db.doc('channel/janitor'),
+  parts:id=>db.doc('inbox/'+id).collection('parts'),
   pulse:dev=>db.doc('pulse/'+dev),health:()=>db.doc('channel/health'),pulses:()=>db.collection('pulse'),ledger:day=>db.doc('ledger/'+day),ledgers:()=>db.collection('ledger'),
 };
 /* req-spine: the only id minter. String(Date.now()) collided whenever two writes shared a millisecond and
@@ -149,7 +150,7 @@ function mintId(){const t=Date.now();if(t===mintLast)mintSeq++;else{mintLast=t;m
   let r=0;try{const a=new Uint32Array(1);crypto.getRandomValues(a);r=a[0];}catch(e){r=Math.floor(Math.random()*4294967296);}
   return t.toString(36).padStart(9,'0')+mintSeq.toString(36).padStart(4,'0')+r.toString(36).padStart(7,'0');}
 /* budget-contract-gate: the collection contract (channel-budget.json), baked in at build time */
-const BUDGET={"v":1,"ceiling":4000,"c":{"inbox":{"cap":200,"ttlDays":2,"cls":"voice","time":"ts"},"tasks":{"cap":60,"ttlDays":3,"cls":"state","time":"updatedAt"},"sessions":{"cap":60,"ttlDays":30,"cls":"state","time":"updatedAt"},"gallery":{"cap":150,"cls":"record","time":"ts"},"req":{"cap":800,"ttlDays":14,"cls":"record","time":"askedAt"},"chat/log/turns":{"cap":200,"ttlDays":2,"cls":"record","time":"ts"},"decisions/log/items":{"cap":120,"ttlDays":7,"cls":"record","time":"ts"},"crashes":{"cap":40,"ttlDays":7,"cls":"telemetry","time":"ts"},"telemetry/events/items":{"cap":400,"ttlDays":7,"cls":"telemetry","time":"ts"},"metrics/daily/days":{"cap":60,"cls":"telemetry","time":"at"},"memory/notes/items":{"cap":300,"cls":"record","time":"ts"},"memory/prefs/items":{"cap":100,"cls":"record","time":"ts"},"fold":{"cap":400,"cls":"janitor","time":"at"},"pulse":{"cap":4,"cls":"fixed","time":"at"},"ledger":{"cap":40,"ttlDays":30,"cls":"fixed","time":"at"},"channel":{"cap":12,"cls":"state","time":"at"},"chat":{"cap":4,"cls":"voice","time":"at"},"memory":{"cap":12,"cls":"record","time":"at"}}};
+const BUDGET={"v":1,"ceiling":4000,"c":{"inbox":{"cap":200,"ttlDays":2,"cls":"voice","time":"ts"},"tasks":{"cap":60,"ttlDays":3,"cls":"state","time":"updatedAt"},"sessions":{"cap":60,"ttlDays":30,"cls":"state","time":"updatedAt"},"gallery":{"cap":150,"cls":"record","time":"ts"},"req":{"cap":800,"ttlDays":14,"cls":"record","time":"askedAt"},"chat/log/turns":{"cap":200,"ttlDays":2,"cls":"record","time":"ts"},"decisions/log/items":{"cap":120,"ttlDays":7,"cls":"record","time":"ts"},"crashes":{"cap":40,"ttlDays":7,"cls":"telemetry","time":"ts"},"telemetry/events/items":{"cap":400,"ttlDays":7,"cls":"telemetry","time":"ts"},"metrics/daily/days":{"cap":60,"cls":"telemetry","time":"at"},"memory/notes/items":{"cap":300,"cls":"record","time":"ts"},"memory/prefs/items":{"cap":100,"cls":"record","time":"ts"},"fold":{"cap":400,"cls":"janitor","time":"at"},"pulse":{"cap":4,"cls":"fixed","time":"at"},"ledger":{"cap":40,"ttlDays":30,"cls":"fixed","time":"at"},"channel":{"cap":12,"cls":"state","time":"at"},"chat":{"cap":4,"cls":"voice","time":"at"},"memory":{"cap":12,"cls":"record","time":"at"},"inbox/*/parts":{"cap":200,"ttlDays":2,"cls":"voice","time":"seq"}}};
 /* test hook: tests/inbox.chaos.js runs two instances in one browser and names them, so each keeps its own local
    stores like two devices would. A real page is never named, and its keys stay liba.<name>. */
 const LS_SUFFIX=(()=>{try{return window.__LIBA_INSTANCE?'.'+String(window.__LIBA_INSTANCE).replace(/[^a-z0-9]/gi,''):'';}catch(e){return '';}})();
@@ -160,7 +161,7 @@ let PAGE_ID='';try{PAGE_ID=localStorage.getItem(LSK('jid'))||'';if(!PAGE_ID){PAG
    the budget. When the database fills, telemetry is refused first, then records, then state - speech (voice) is
    never refused. A quota error is caught by name, said aloud once, and the page degrades at once. Nothing at the
    call sites changed: P hands out guarded references, and db-paths already forbids any path outside this table. */
-const CLS_OF={inbox:'voice',inboxDoc:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
+const CLS_OF={inbox:'voice',inboxDoc:'voice',parts:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
   sessions:'state',budget:'state',gallery:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
   device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',metricsDays:'telemetry',
   /* the janitor frees space, so its folds and lease are never refused - refusing the cure would keep the db full */
@@ -352,7 +353,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){urgentSeen(d.urgent,'native');urgentSeen(d.spoken,'phone');appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:60,pageHash:"eb7a81a56e05",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:61,pageHash:"f81c564a0e83",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f(String(d.cause||'done'));}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -382,7 +383,7 @@ function coldGet(ref,where,n){let q=ref;(where||[]).forEach(w=>{q=q.where(w[0],w
    (the real channel had one: an update command) is still heard. */
 let inboxOpen=new Map(),inboxNew=new Map();
 function inboxMerged(){const m=new Map(inboxNew);inboxOpen.forEach((v,k)=>m.set(k,v));return [...m.values()];}
-function onInbox(){const items=inboxMerged().filter(d=>{if(d.spoken||d.expired||d.failed||!(d.text||d.kind==='cmd'))return false;if(spokenDone(d.id)){P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),repaired:true}).catch(e=>fail('P_ACK',e,'repair'));return false;}return !spokenLocal.has(d.id);}).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();}
+function onInbox(){const items=inboxMerged().filter(d=>{if(d.spoken||d.expired||d.failed||!(d.text||d.kind==='cmd'||d.stream))return false;if(spokenDone(d.id)){P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),repaired:true}).catch(e=>fail('P_ACK',e,'repair'));return false;}return !spokenLocal.has(d.id);}).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();}
 (async()=>{
   const c=window.claude;
   if(!c||!c.use){setSt('אין חיבור','warn');log('הדף צריך להיפתח מ‑claude.ai');return;}
@@ -455,7 +456,7 @@ function speakerOf(d){if(d.speaker)return d.speaker;if(/^arch/i.test(d.id||''))r
 function prefixOf(d,who){const t=(d.text||'').trim();if(t.startsWith(who)||t.startsWith('כאן '+who))return '';let p=who;if(d.topic)p+=', בנוגע ל'+d.topic;if(KINDW[d.kind])p+=', '+KINDW[d.kind];return p+': ';}
 async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'offline');});return;}if(pumping)return;pumping=true;try{mergeTasks();const rd=inboxQ.filter(d=>ready(d)&&d.kind!=='cmd'&&!spokenLocal.has(d.id)),n=rd.length;
   if(n>=2){const asks=rd.filter(d=>d.kind==='ask'||d.kind==='stuck').length;await incoming({id:'batch-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:asks?'stuck':'say',noListen:true,text:(rd.some(d=>d.heldFor==='quiet')?'בזמן השקט הצטברו ':rd.some(d=>d.heldFor==='offline')?'כשהייתי מנותקת הצטברו ':'הצטברו ')+n+' הודעות'+byTopic(rd)+(asks?', '+asks+' מהן שאלות. אקרא אותן ברצף, צלצול אחד.':'. אקרא אותן ברצף.')});}
-  for(;;){let i=inboxQ.findIndex(d=>ready(d)&&d.kind==='cmd');if(i<0)i=inboxQ.findIndex(ready);
+  for(;;){let i=inboxQ.findIndex(d=>ready(d)&&d.kind==='cmd');if(i<0)i=inboxQ.findIndex(d=>fastLane(d)&&ready(d));if(i<0)i=inboxQ.findIndex(ready);
     if(i<0){if(staleDropped){const k=staleDropped;staleDropped=0;inboxQ.push({id:'stale-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:'say',text:k===1?'הודעה אחת כבר לא הייתה רלוונטית, ולא הקראתי אותה.':k+' הודעות כבר לא היו רלוונטיות, ולא הקראתי אותן.',ts:Date.now()});continue;}break;}const d=inboxQ.splice(i,1)[0];if(spokenLocal.has(d.id))continue;if(d.kind==='cmd'){if(!appMode){spokenLocal.add(d.id);continue;}spokenLocal.add(d.id);await incoming(d);spokenMark(d.id);continue;}spokenLocal.add(d.id);
     if(!d.local&&expired(d)){spokenMark(d.id);try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now()});}catch(e){fail('P_ACK',e,'expire');}continue;}
     /* inbox-lease: claim before speaking. Another instance holding the claim is speaking it - try again after the claim
@@ -464,7 +465,7 @@ async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'
       if(await fresh(d)==='drop'){spokenMark(d.id);staleDropped++;try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now(),stale:true,delivery:{state:'dropped',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'stale');}continue;}
       d.again=!!d.speakingAt&&!d.spoken;d.attempts=+(d.delivery&&d.delivery.attempts)||0;
       P.inboxDoc(d.id).update({speakingAt:Date.now(),delivery:{state:'speaking',by:PAGE_ID,at:Date.now(),attempts:d.attempts}}).catch(e=>fail('P_ACK',e,'speakingAt'));}
-    sayOutcome='done';try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;
+    sayOutcome='done';if(d.stream&&!d.local){await streamPlay(d);continue;}try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;
     /* the voice went silent without finishing (no beat, or the ceiling): not delivered - back to pending, three tries */
     if(sayOutcome==='lost'||sayOutcome==='ceiling'){spokenLocal.delete(d.id);await inboxRetry(d,sayOutcome);continue;}
     spokenMark(d.id);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),delivery:{state:'spoken',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'inbox');log('ack: '+(e.code||e));}}}
@@ -512,6 +513,26 @@ function missedAsks(){return missedRelease(true);}
 function missedRelease(asks){{let n=0;heldNow().forEach(({d,g})=>{if(g.reason==='claim'||g.reason==='noapp')return;if(asks&&d.kind!=='ask'&&d.kind!=='stuck')return;d.release=true;if(d.retryWhy==='retry')d.retryAt=0;n++;});
     sayLocal(n?'משחררת '+(n===1?'הודעה אחת':n+' הודעות')+'.':'אין מה לשחרר.');setTimeout(pump,400);return true;}}
 window.__silence={gate:gate,held:()=>heldNow().map(x=>({id:x.d.id,reason:x.g.reason})),day:()=>Object.assign({},silenceDay)};
+/* stream-answer: a long answer is heard while it is still being written. The session writes inbox/<id> with stream:true
+   and then inbox/<id>/parts/<seq> one sentence at a time, the last with final:true. The page speaks each part the
+   moment it lands, in order; a part that does not come for a minute is said once ("ההמשך מתעכב") and the wait goes on
+   to five minutes. When it ends, the whole text goes back on the message and the parts are deleted - nothing orphaned. */
+const STREAM_STALL=60000,STREAM_GIVEUP=5*60000;
+function fastLane(d){return d.priority==='urgent'||(!!d.re&&d.re===lastReqId&&Date.now()-lastReqAt<5*60000);}
+async function streamPlay(d){const parts=new Map();let next=1,done=false,wake=null,stalled=false,first=true;const all=[];
+  const unsub=P.parts(d.id).orderBy('seq','asc').limit(200).onSnapshot(q=>{q.docChanges().forEach(c=>{if(c.type!=='removed'){const x=c.doc.data()||{};x._id=c.doc.id;parts.set(+x.seq||0,x);}});if(wake)wake();},e=>fail('P_DB_READ',e,'parts'));
+  let lastAt=Date.now();
+  try{while(!done){const x=parts.get(next);
+      if(!x){if(Date.now()-lastAt>STREAM_GIVEUP){fail('P_MSG_BAD',null,'stream gave up '+d.id);break;}
+        if(!stalled&&Date.now()-lastAt>STREAM_STALL){stalled=true;await incoming({id:'stall-'+d.id,local:true,from:'liba',speaker:'ליבה',kind:'say',text:'ההמשך מתעכב. אמשיך כשיגיע.'});}
+        await new Promise(r=>{wake=r;setTimeout(r,1000);});wake=null;continue;}
+      lastAt=Date.now();all.push(String(x.text||''));
+      if(first){first=false;await incoming(Object.assign({},d,{text:String(x.text||''),options:x.final?d.options:[],kind:x.final?d.kind:'say'}));}
+      else if(appMode)await sayApp(String(x.text||''),{kind:x.final?(d.kind||'say'):'say',options:x.final?(d.options||[]):[],from:d.from||'liba',speaker:'',mid:''});else await say(String(x.text||''));
+      if(x.final)done=true;next++;}}
+  finally{try{unsub&&unsub();}catch(e){}}
+  spokenMark(d.id);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),text:all.join(' '),streamDone:done,delivery:{state:'spoken',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'stream');}
+  for(const x of parts.values()){P.parts(d.id).doc(x._id).delete().catch(()=>{});}}
 // 12: switch who holds the channel, by voice, without leaving the page
 /* intent-kernel: every handler below is reached through the registry (liba/intents/registry.json). It gets the rest of
    the sentence after the command's prefix (a slot), and returns false only to let the sentence go on to Claude. */
@@ -750,7 +771,7 @@ async function walRecover(){if(!db)return 0;walRecAt=Date.now();let r;
 /* each of Meir's sentences shows where it is: sending, waiting, sent late, failed */
 const reqBubble=new Map();
 function bubbleState(req,st){const b=reqBubble.get(req);if(!b)return;const he={sending:'שולחת…',queued:'ממתין לרשת',sent:'',late:'נשלח באיחור',failed:'לא נשלח'}[st];if(he)b.dataset.st=he;else delete b.dataset.st;if(st==='sent'||st==='late'||st==='failed')setTimeout(()=>reqBubble.delete(req),60000);}
-let lastSent={text:'',id:'',ts:0},lastIncomingAt=0;
+let lastSent={text:'',id:'',ts:0},lastIncomingAt=0,lastReqId='',lastReqAt=0; /* stream-answer: the reply to this goes first */
 function drainQ(){if(sendQ.length){const nx=sendQ.shift();setTimeout(()=>send({text:nx.text,tag:nx.tag,source:nx.source,stamps:nx.stamps}),300);return true;}return false;}
 const RETRYABLE=r=>/network|fetch|timeout|unavailable|rate|503|502|429|offline|aborted|internal/i.test(r);
 function tagOf(o){return (o||owner)==='manager'?'[ליבה→מנהל] ':'[ליבה] ';}
@@ -809,7 +830,7 @@ async function send(text,forcedTag,source){
   const mine=bubble('me',text);const th=bubble('li think','ליבה חושבת…');
   /* one request per sentence: what was said, how, to whom, and what it answered - so "how many did ליבה
      close" is a query and not a feeling */
-  const reqId=mintId();reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
+  const reqId=mintId();lastReqId=reqId;lastReqAt=Date.now();reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
   ledgerBump('req');
   try{P.req(reqId).set({text,askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending',
     t:{voice:(stamps&&+stamps.voice)||0,heard:(stamps&&+stamps.heard)||0,asked:Date.now(),skew:clockSkew,skewBad:clockSkew!=null&&Math.abs(clockSkew)>SKEW_MAX}}).catch(e=>fail('P_DB_WRITE',e,'req'));}catch(e){fail('P_DB_WRITE',e,'req');}
@@ -954,7 +975,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
   else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
   pulseLast[dev]={sig:sig,at:now,body:body};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"eb7a81a56e05"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"f81c564a0e83"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;

@@ -10,6 +10,8 @@ function collectionsIn(html) {
   const out = new Set();
   // db.doc('a/b').collection('c')...  →  a/b/c
   for (const m of html.matchAll(/db\.doc\('([^']+)'\)\.collection\('([^']+)'\)/g)) out.add(m[1] + '/' + m[2]);
+  // db.doc('a/'+id).collection('c')  →  a/*/c
+  for (const m of html.matchAll(/db\.doc\('([^'\/]+)\/'\+[^)]*\)\.collection\('([^']+)'\)/g)) out.add(m[1] + '/*/' + m[2]);
   // db.collection('x')  →  x
   for (const m of html.matchAll(/db\.collection\('([^']+)'\)/g)) out.add(m[1]);
   // db.doc('x/'+id) or db.doc('x/y') standing alone  →  the collection x
