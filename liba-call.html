@@ -88,6 +88,9 @@ const P={
 /* text from the database goes into the DOM through this, never raw: a task title is written by other
    sessions, and "<img onerror=…>" in one would otherwise run inside the page that holds the channel */
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+const PROTO=Object.freeze({v:1,hash:"aad0e7c5b015",caps:Object.freeze(["spoke","beat","trace","proto"]),
+  toApp:Object.freeze({"ready":"ready","say":"say","sent":"sent","error":"error","queued":"queued","outbox":"outbox","tap":"tap","cmd":"cmd","crashSaved":"crashSaved","tasks":"tasks","traceAck":"traceAck"}),
+  toPage:Object.freeze({"hello":"hello","crash":"crash","spoke":"spoke","speaking":"speaking","input":"input","trace":"trace"})});
 const $=id=>document.getElementById(id);
 const app=$('app'),H=$('h'),SUB=$('sub'),KIND=$('kind'),OPTS=$('opts'),HEARD=$('heard'),LOG=$('log');
 let db=null,comments=null,AC=null,ringTimer=null,cur=null,lastRung=null,wakeLock=null,rec=null;
@@ -100,7 +103,7 @@ function transition(to,why){const from=state;if(from===to)return;state=to;stateL
 const isArmed=()=>state!=='OFF',isBusy=()=>state==='SPEAKING'||state==='SENDING';
 const arm=why=>{if(state==='OFF')transition('IDLE',why);};
 /* ---- black box (step blackbox): one table of codes, one writer ---- */
-const TRACE_HE={E_OVERLAY_DENIED:'אין הרשאה לחלון צף',E_OVERLAY_UPDATE:'החלון הצף לא התעדכן',E_TTS_INIT:'הקול לא עלה',E_TTS_OP:'תקלה בדיבור',E_SR_LIFECYCLE:'סגירת המאזין נכשלה',E_SR_NONE:'אין זיהוי דיבור במכשיר',E_MIC_FGS:'המיקרופון נחסם ברקע',E_FGS_START:'השירות לא הצליח לעלות',E_MIC_INIT:'המיקרופון לא נפתח',E_MIC_READ:'ההקלטה נקטעה',E_HAPTIC:'הרטט נכשל',E_TONE:'הצליל נכשל',E_AUDIO_STREAM:'שינוי עוצמת הקול נכשל',E_MEDIA_SESSION:'כפתור האוזניה לא נרשם',E_NET:'בדיקת עדכון נכשלה ברשת',E_SYS_CB:'חיבור לאירועי המערכת נכשל',E_INSTALL_PERM:'אין הרשאה להתקין עדכון',E_INSTALL_NET:'הורדת העדכון נכשלה',E_INSTALL_SIG:'העדכון לא עבר אימות',E_INTENT_OPEN:'פתיחה של אפליקציה נכשלה',E_PAGE_LOGIN:'הבועה התנתקה מהחשבון',E_PAGE_LOAD:'הדף לא נטען',E_PAGE_TAP:'לחיצה אוטומטית החטיאה',E_CRASH_SAVE:'שמירת קריסה נכשלה',E_PREFS:'קריאת ההגדרות נכשלה',E_SHADER:'האנימציה של הבועה נכשלה',E_TRACE_ROTATE:'יומן תקלות ישן נמחק',P_BRIDGE:'הדף לא הצליח לדבר עם הבועה',P_STORE:'הזיכרון המקומי בדפדפן חסום',P_AUDIO:'הצלילים בדף לא עלו',P_SR:'המיקרופון בדף נתקע',P_MIC_DENIED:'המיקרופון בדף נחסם',P_WAKELOCK:'המסך לא נשאר דלוק',P_DB_WRITE:'כתיבה למסד נכשלה',P_DB_READ:'קריאה מהמסד נכשלה',P_SEND:'ההודעה לא הגיעה לקלוד',P_ACK:'סימון הודעה כנאמרה נכשל',P_MSG_BAD:'הודעה פגומה',P_SPEAK_LOST:'הקול בטלפון השתתק באמצע בלי לדווח'};
+const TRACE_HE={E_OVERLAY_DENIED:'אין הרשאה לחלון צף',E_OVERLAY_UPDATE:'החלון הצף לא התעדכן',E_TTS_INIT:'הקול לא עלה',E_TTS_OP:'תקלה בדיבור',E_SR_LIFECYCLE:'סגירת המאזין נכשלה',E_SR_NONE:'אין זיהוי דיבור במכשיר',E_MIC_FGS:'המיקרופון נחסם ברקע',E_FGS_START:'השירות לא הצליח לעלות',E_MIC_INIT:'המיקרופון לא נפתח',E_MIC_READ:'ההקלטה נקטעה',E_HAPTIC:'הרטט נכשל',E_TONE:'הצליל נכשל',E_AUDIO_STREAM:'שינוי עוצמת הקול נכשל',E_MEDIA_SESSION:'כפתור האוזניה לא נרשם',E_NET:'בדיקת עדכון נכשלה ברשת',E_SYS_CB:'חיבור לאירועי המערכת נכשל',E_INSTALL_PERM:'אין הרשאה להתקין עדכון',E_INSTALL_NET:'הורדת העדכון נכשלה',E_INSTALL_SIG:'העדכון לא עבר אימות',E_INTENT_OPEN:'פתיחה של אפליקציה נכשלה',E_PAGE_LOGIN:'הבועה התנתקה מהחשבון',E_PAGE_LOAD:'הדף לא נטען',E_PAGE_TAP:'לחיצה אוטומטית החטיאה',E_CRASH_SAVE:'שמירת קריסה נכשלה',E_PREFS:'קריאת ההגדרות נכשלה',E_SHADER:'האנימציה של הבועה נכשלה',E_TRACE_ROTATE:'יומן תקלות ישן נמחק',P_BRIDGE:'הדף לא הצליח לדבר עם הבועה',P_STORE:'הזיכרון המקומי בדפדפן חסום',P_AUDIO:'הצלילים בדף לא עלו',P_SR:'המיקרופון בדף נתקע',P_MIC_DENIED:'המיקרופון בדף נחסם',P_WAKELOCK:'המסך לא נשאר דלוק',P_DB_WRITE:'כתיבה למסד נכשלה',P_DB_READ:'קריאה מהמסד נכשלה',P_SEND:'ההודעה לא הגיעה לקלוד',P_ACK:'סימון הודעה כנאמרה נכשל',P_MSG_BAD:'הודעה פגומה',P_SPEAK_LOST:'הקול בטלפון השתתק באמצע בלי לדווח',P_PROTO_APP_OLD:'האפליקציה ישנה מהדף',P_PROTO_PAGE_OLD:'הדף ישן מהאפליקציה'};
 const TRACE_SR_HE={1:'זיהוי הדיבור נכשל ברשת',2:'זיהוי הדיבור נכשל ברשת',3:'ההקלטה נכשלה',4:'שרת הזיהוי סירב',5:'תקלה פנימית בזיהוי',6:'לא שמעתי כלום',7:'לא זוהו מילים',8:'המאזין היה תפוס',9:'אין הרשאת מיקרופון',11:'חסרה שפה לזיהוי',12:'העברית לא מותקנת במכשיר',13:'הזיהוי במכשיר לא זמין'};
 const TRACE_FLUSH=3000,TRACE_RING=200,TRACE_BATCH=200,TRACE_QMAX=1000;
 let trVer='',trBuf=new Map(),trWin=0,trCount={},trDrop={},trQ=[],trRing=[],trTimer=null,trWriting=false,trInTrace=false;
@@ -140,7 +143,7 @@ function trBridge(batch,json){
   if(trInTrace)return;trInTrace=true;
   try{arr=JSON.parse(json);}catch(e){fail('P_DB_WRITE',e,'telemetry/events parse');}
   trInTrace=false;
-  if(!Array.isArray(arr)){post('traceAck',{batch:batch,ids:'[]'});return;}
+  if(!Array.isArray(arr)){post(PROTO.toApp.traceAck,{batch:batch,ids:'[]'});return;}
   const ok=[];
   Promise.all(arr.slice(0,TRACE_BATCH).map(ev=>{
     const t=+ev.t||Date.now(),c=String(ev.c||'E_UNKNOWN'),cx=trCtx(ev.ctx);
@@ -148,7 +151,7 @@ function trBridge(batch,json){
     trRingPush(L);
     /* a rejected write is simply left out of ids – unacked, so it comes back in the next batch */
     try{return Promise.resolve(trCol().doc(L.id).set(trDoc(L))).then(()=>{ok.push(L.id);},()=>{});}catch(e){return Promise.resolve();}
-  })).then(()=>post('traceAck',{batch:batch,ids:JSON.stringify(ok)}),()=>post('traceAck',{batch:batch,ids:JSON.stringify(ok)}));}
+  })).then(()=>post(PROTO.toApp.traceAck,{batch:batch,ids:JSON.stringify(ok)}),()=>post(PROTO.toApp.traceAck,{batch:batch,ids:JSON.stringify(ok)}));}
 /* reading it back: dropped counts inside the total, so the cap changes what is stored, never what is counted */
 async function trTop(day){const byId=new Map();
   try{const r=await trCol().get();r.docs.forEach(d=>{const x=d.data()||{};const dy=x.day||trDay(x.ts||0);if(dy!==day)return;byId.set(d.id,{code:String(x.code||'?'),total:(+x.n||0)+(+x.dropped||0)});});}
@@ -185,10 +188,14 @@ let sayTok=0,appVer='';const sayWait=new Map(),beatWait=new Map();
 const verAtLeast=(a,b)=>{const m=/(\d+)\.(\d+)/.exec(appVer||'');return !!m&&(+m[1]>a||(+m[1]===a&&+m[2]>=b));};
 /* 3.16+: the phone says "still speaking" every 2 s (page-kernel). Six seconds of silence means the voice
    stopped without reporting - release the queue now instead of waiting up to two minutes. */
-const appBeats=()=>verAtLeast(3,16),BEAT_LOST=6000;
-function appSpeaksBack(){const m=/(\d+)\.(\d+)/.exec(appVer||'');return !!m&&(+m[1]>3||(+m[1]===3&&+m[2]>=14));}
+const appBeats=()=>{const h=hasCap('beat');return h!==null?h:verAtLeast(3,16);},BEAT_LOST=6000;
+/* protocol-contract: the app says what it can do in hello. Apps from before the contract (no caps) fall back
+   to the version number - the only thing they tell us. */
+let appCaps=null,appPv=0;
+const hasCap=c=>appCaps?appCaps.indexOf(c)>=0:null;
+function appSpeaksBack(){const h=hasCap('spoke');return h!==null?h:verAtLeast(3,14);}
 /* v36: in the app, wait until the phone finished speaking before acking the next message */
-function sayApp(text,extra){return new Promise(res=>{const id='s'+(++sayTok);const p=Object.assign({},extra||{},{text:text,id:id});if(!appSpeaksBack()){post('say',p);res();return;}let done=false;const fin=()=>{if(done)return;done=true;sayWait.delete(id);beatWait.delete(id);res();};sayWait.set(id,fin);post('say',p);
+function sayApp(text,extra){return new Promise(res=>{const id='s'+(++sayTok);const p=Object.assign({},extra||{},{text:text,id:id});if(!appSpeaksBack()){post(PROTO.toApp.say,p);res();return;}let done=false;const fin=()=>{if(done)return;done=true;sayWait.delete(id);beatWait.delete(id);res();};sayWait.set(id,fin);post(PROTO.toApp.say,p);
   /* with beats the length guess is gone - the beat IS the measurement; 120 s stays only as a ceiling */
   setTimeout(fin,appBeats()?120000:Math.min(120000,6000+text.length*160));
   if(appBeats()){let w=setTimeout(lost,BEAT_LOST);function lost(){if(done)return;fail('P_SPEAK_LOST',null,'no beat '+BEAT_LOST);fin();}
@@ -209,16 +216,22 @@ async function keepAwake(){try{if('wakeLock' in navigator){wakeLock=await naviga
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&isArmed()&&!wakeLock)keepAwake();});
 
 /* ---- capabilities ---- */
+/* protocol-contract: an app older than the page does not know some of its messages - Meir hears it once,
+   because only he can install. A page older than the app is ליבה's job to publish: logged, not spoken. */
+let protoSaid=false;
+function protoCheck(){if(!appPv)return;
+  if(appPv<PROTO.v){fail('P_PROTO_APP_OLD',null,'app '+appPv+' page '+PROTO.v);if(!protoSaid){protoSaid=true;setTimeout(()=>sayLocal('האפליקציה בטלפון ישנה מהדף, ויש הודעות שהיא לא מכירה. תגיד תתקין ואעדכן אותה.'),1500);}}
+  else if(appPv>PROTO.v)fail('P_PROTO_PAGE_OLD',null,'app '+appPv+' page '+PROTO.v);}
 let handsFree=true,seen=null,appMode=false,lastAsk=null;
 /* fail() never posts – P_BRIDGE would otherwise call the thing that just broke */
 function post(kind,extra){try{window.parent.postMessage(Object.assign({liba:kind},extra||{}),'*');}catch(e){fail('P_BRIDGE',e,kind);}}
 window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d=e.data;if(!d||!d.liba)return;
-  if(d.liba==='hello'){appMode=true;arm('hello');appVer=String(d.ver||'');trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({app:d.ver||'',page:41,pageHash:"607b326bb85d",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post('ready',{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
-  else if(d.liba==='spoke'){const f=sayWait.get(String(d.id||''));if(f)f();}
-  else if(d.liba==='speaking'){const b=beatWait.get(String(d.id||''));if(b)b();}
-  else if(d.liba==='crash'&&d.text&&db){P.crash((d.id||Date.now())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post('crashSaved',{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
-  else if(d.liba==='trace'&&d.events&&db){trBridge(String(d.batch||''),String(d.events));}
-  else if(d.liba==='input'&&d.text){if(pendingInput){const prev=pendingInput;pendingInput=null;clearTimeout(pendingT);send(prev);}pendingInput=String(d.text);post('tap',{});clearTimeout(pendingT);pendingT=setTimeout(()=>{if(pendingInput){const t=pendingInput;pendingInput=null;send(t);}},1500);}
+  if(d.liba===PROTO.toPage.hello){appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({app:d.ver||'',page:42,pageHash:"03c96221b647",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+  else if(d.liba===PROTO.toPage.spoke){const f=sayWait.get(String(d.id||''));if(f)f();}
+  else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
+  else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||Date.now())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
+  else if(d.liba===PROTO.toPage.trace&&d.events&&db){trBridge(String(d.batch||''),String(d.events));}
+  else if(d.liba===PROTO.toPage.input&&d.text){if(pendingInput){const prev=pendingInput;pendingInput=null;clearTimeout(pendingT);send(prev);}pendingInput=String(d.text);post(PROTO.toApp.tap,{});clearTimeout(pendingT);pendingT=setTimeout(()=>{if(pendingInput){const t=pendingInput;pendingInput=null;send(t);}},1500);}
 });
 let pendingInput=null,pendingT=null;
 ['pointerdown','click','touchstart'].forEach(ev=>document.addEventListener(ev,()=>{if(pendingInput){const t=pendingInput;pendingInput=null;clearTimeout(pendingT);send(t);}},true));
@@ -284,9 +297,9 @@ function quietCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(/^אל תפריע|^שקט(?=\s|$)|^תהיה בשקט|^בלי הפרעות/.test(t)){let m=60;const n=t.match(/(\d+)\s*(דקות|דקה)/);if(n)m=+n[1];else if(/חצי שעה/.test(t))m=30;else if(/שעתיים/.test(t))m=120;else if(/שלוש שעות/.test(t))m=180;else if(/עד הערב/.test(t))m=Math.max(1,Math.round((new Date().setHours(19,0,0,0)-Date.now())/60000));else if(/עד מחר|עד הבוקר/.test(t))m=Math.max(1,Math.round((new Date().setHours(32,0,0,0)-Date.now())/60000));setQuiet(m);return true;}
   return false;}
 async function setQuiet(min){const until=min>0?Date.now()+min*60000:0;quietUntil=until;try{await P.quiet().set({until,since:Date.now()});}catch(e){fail('P_DB_WRITE',e,'channel/quiet');}
-  const msg=min>0?'ליבה: שקט עד '+new Date(until).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})+'. רק דחוף יעבור.':'ליבה: השקט בוטל, אני מדברת שוב.';bubble('li',msg);if(appMode)post('say',{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(msg);if(!min)pump();}
+  const msg=min>0?'ליבה: שקט עד '+new Date(until).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})+'. רק דחוף יעבור.':'ליבה: השקט בוטל, אני מדברת שוב.';bubble('li',msg);if(appMode)post(PROTO.toApp.say,{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(msg);if(!min)pump();}
 let memSettings={logTurns:true,decisions:true,notes:true};
-function sayLocal(m){bubble('li',m);if(appMode)post('say',{text:'ליבה: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);}
+function sayLocal(m){bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:'ליבה: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);}
 /* steps 88, 90: gallery of built things + the generator screen */
 let galleryList=[];
 /* step 98: what ליבה knows – one list, by voice or by reading */
@@ -297,7 +310,7 @@ function helpCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   return false;}
 function galleryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(מה בניתי השבוע|מה בנינו השבוע|גלריה|מה בניתי)$/.test(t)){const wk=Date.now()-7*24*3600*1000;const g=galleryList.filter(x=>(x.ts||0)>wk);if(!g.length){sayLocal('השבוע עוד לא נבנה משהו שנרשם בגלריה.');return true;}lastTasks=g.map(x=>({id:x.id,title:x.title,link:x.link,status:'done'})).concat(lastTasks);sayLocal('השבוע נבנו '+g.length+': '+g.map(x=>x.title).join(', ')+'. תגיד תפתח ואפתח את האחרון.');return true;}
-  if(/^(המחולל|תפתח את המחולל|פתח את המחולל|מסך המחולל)$/.test(t)){const u='https://claude.ai/artifact/AcTS4zzdMcXFcxFFvr5UVn';sayLocal('פותחת את המחולל.');if(appMode)post('cmd',{cmd:'open '+u});else window.open(u,'_blank');return true;}
+  if(/^(המחולל|תפתח את המחולל|פתח את המחולל|מסך המחולל)$/.test(t)){const u='https://claude.ai/artifact/AcTS4zzdMcXFcxFFvr5UVn';sayLocal('פותחת את המחולל.');if(appMode)post(PROTO.toApp.cmd,{cmd:'open '+u});else window.open(u,'_blank');return true;}
   return false;}
 function memoryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(galleryCmd(text))return true;if(helpCmd(text))return true;if(traceCmd(text))return true;
   let m=t.match(/^(תזכור|תזכרי|זכור|זכרי)\s+(?:(?:כי|את)\s+)?(.+)$/);
@@ -312,9 +325,9 @@ function memoryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(galleryCmd
   if(/^(מה נשמר|פרטיות|מה אתה שומר|מה את שומרת)$/.test(t)){sayLocal('מה נשמר: שיחות '+(memSettings.logTurns?'כן':'לא')+', החלטות '+(memSettings.decisions?'כן':'לא')+', הערות זיכרון '+(memSettings.notes?'כן':'לא')+'. הכל בענן הפרטי של הארטיפקט, לא ברפו הציבורי. תגיד אל תשמור שיחות כדי לעצור.');return true;}
   return false;}
 function taskCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
-  if(/^(מפה|מפת המערכת|תראה מפה|מה כל הסשנים עושים|מי תקוע)$/.test(t)){mapOn=true;renderMap();const m=mapSummary();bubble('li',m);if(appMode)post('say',{text:'ליבה, מפת המערכת: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
-  if(/^(תפתח|פתח|תפתח את התוצאה|תראה לי|תפתח תראה לי|פתח תראה לי|תפתח לי|תפתח אותו|תפתח אותה|תראה)$/.test(t)){const d=lastTasks.find(x=>x.status==='done'&&x.link)||lastTasks.find(x=>x.link);if(!d)return false;const m='פותחת: '+d.title;bubble('li',m);if(appMode){post('cmd',{cmd:'open '+d.link});post('say',{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});}else{say(m);window.open(d.link,'_blank');}return true;}
-  const pr=t.match(/^(קודם|תעדיף|עדיפות ל|תתחיל עם)\s+(את\s+)?(.+)$/);if(pr){const q=pr[3].trim();const task=lastTasks.find(x=>(x.title||'').includes(q));if(!task)return false;P.task(task.id).update({priority:Date.now(),updatedAt:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'tasks'));const m='בסדר, '+task.title+' קודם.';bubble('li',m);if(appMode)post('say',{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
+  if(/^(מפה|מפת המערכת|תראה מפה|מה כל הסשנים עושים|מי תקוע)$/.test(t)){mapOn=true;renderMap();const m=mapSummary();bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:'ליבה, מפת המערכת: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
+  if(/^(תפתח|פתח|תפתח את התוצאה|תראה לי|תפתח תראה לי|פתח תראה לי|תפתח לי|תפתח אותו|תפתח אותה|תראה)$/.test(t)){const d=lastTasks.find(x=>x.status==='done'&&x.link)||lastTasks.find(x=>x.link);if(!d)return false;const m='פותחת: '+d.title;bubble('li',m);if(appMode){post(PROTO.toApp.cmd,{cmd:'open '+d.link});post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});}else{say(m);window.open(d.link,'_blank');}return true;}
+  const pr=t.match(/^(קודם|תעדיף|עדיפות ל|תתחיל עם)\s+(את\s+)?(.+)$/);if(pr){const q=pr[3].trim();const task=lastTasks.find(x=>(x.title||'').includes(q));if(!task)return false;P.task(task.id).update({priority:Date.now(),updatedAt:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'tasks'));const m='בסדר, '+task.title+' קודם.';bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
   return false;}
 function switchOwner(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(owner!=='manager'){if(quietCmd(text))return true;if(taskCmd(text))return true;if(memoryCmd(text))return true;}
@@ -326,7 +339,7 @@ function switchOwner(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(owner==='liba'&&/^(היי |הי )?מנהל(?=\s|$)/.test(t)){owner='manager';ownerSince=Date.now();P.owner().set({owner:'manager',since:ownerSince}).catch(e=>{fail('P_DB_WRITE',e,'channel/owner');log('owner: '+(e.code||e));});return false;}
   return false;}
 async function setOwner(o){owner=o;ownerSince=Date.now();try{await P.owner().set({owner:o,since:ownerSince});}catch(e){fail('P_DB_WRITE',e,'channel/owner');log('owner: '+(e.code||e));}
-  const msg=o==='liba'?'ליבה על הקו.':'המנהל על הקו. ליבה שותקת עד שתגיד ליבה תחזור.';bubble('li',msg);if(appMode)post('say',{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(msg);return true;}
+  const msg=o==='liba'?'ליבה על הקו.':'המנהל על הקו. ליבה שותקת עד שתגיד ליבה תחזור.';bubble('li',msg);if(appMode)post(PROTO.toApp.say,{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(msg);return true;}
 const ST={queued:'בתור',running:'רץ',blocked:'תקוע',done:'נגמר'};
 /* step 60: system map – one list: every session, what it does, who is stuck */
 let sessionsList=[],mapOn=false;
@@ -334,7 +347,7 @@ function renderMap(){const el=$('map');if(!mapOn||!sessionsList.length){el.hidde
   const age=t=>{const m=Math.round((Date.now()-(t||0))/60000);return m<60?m+' דק׳':Math.round(m/60)+' שע׳';};
   el.innerHTML='<div class="t"><b>מפת המערכת · '+sessionsList.length+' סשנים</b></div>'+sessionsList.slice(0,20).map(x=>`<div class="t ${x.status==='running'?'running':x.status==='blocked'||x.status==='failed'?'blocked':x.status==='done'?'done':''}"><i></i><b>${esc(x.title||x.id)}</b><small>${esc(x.status||'')} · ${age(x.updatedAt)}</small></div>`).join('');}
 function mapSummary(){if(!sessionsList.length)return 'אין לי עדיין מפה של הסשנים.';const r=sessionsList.filter(x=>x.status==='running'),b=sessionsList.filter(x=>x.status==='blocked'||x.status==='failed');return sessionsList.length+' סשנים. '+(r.length?r.length+' רצים: '+r.map(x=>x.title+(x.what?' – '+x.what:'')).join('; ')+'. ':'')+(b.length?b.length+' תקועים: '+b.map(x=>x.title).join(', ')+'.':'אין תקועים.');}
-function renderTasks(list){const el=$('tasks');if(!list.length){el.hidden=true;post('tasks',{summary:'',n:0,running:0,blocked:0,done:0});return;}
+function renderTasks(list){const el=$('tasks');if(!list.length){el.hidden=true;post(PROTO.toApp.tasks,{summary:'',n:0,running:0,blocked:0,done:0});return;}
   const pe=t=>(t.progress!=null?' '+Math.round(t.progress)+'%':'')+(t.eta?' · '+t.eta:'');
   el.hidden=false;el.innerHTML=list.slice(0,8).map(t=>`<div class="t ${esc(t.status||'')}"><i></i><b>${esc(t.title||t.id)}</b><small>${esc((ST[t.status]||t.status||'')+pe(t))}</small></div>`).join('');
   const c=k=>list.filter(t=>t.status===k).length;const parts=[];
@@ -342,7 +355,7 @@ function renderTasks(list){const el=$('tasks');if(!list.length){el.hidden=true;p
   if(c('blocked'))parts.push(c('blocked')+' תקועות ומחכות לך: '+list.filter(t=>t.status==='blocked').map(t=>t.title+(t.question?' – '+t.question:'')).join('; '));
   if(c('done'))parts.push(c('done')+' נגמרו: '+list.filter(t=>t.status==='done').map(t=>t.title).join(', '));
   if(c('queued'))parts.push(c('queued')+' בתור');
-  post('tasks',{summary:parts.join('. ')||'אין משימות פתוחות',n:list.length,running:c('running'),blocked:c('blocked'),done:c('done')});}
+  post(PROTO.toApp.tasks,{summary:parts.join('. ')||'אין משימות פתוחות',n:list.length,running:c('running'),blocked:c('blocked'),done:c('done')});}
 /* ---- flow ---- */
 $('start').addEventListener('click',async()=>{audioInit();if(AC&&AC.state==='suspended')AC.resume();arm('start');$('start').hidden=true;$('hf').hidden=false;keepAwake();
   if(!SR){SUB.textContent='אין זיהוי דיבור בדפדפן הזה – אני אדבר, אתה תכתוב.';setSt('בלי מיקרופון','warn');}else{try{const s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(t=>t.stop());setSt('מיקרופון פועל','on');}catch(e){fail('P_MIC_DENIED',e);micBlocked=true;dictationMode();}}
@@ -357,7 +370,7 @@ async function idleListen(){app.className='';KIND.textContent='';H.className='';
   if(handsFree&&SR&&!isBusy()){const t=await listen();if(t&&!isBusy())return send(t);if(handsFree&&!isBusy()&&!listening)setTimeout(idleListen,800);}}
 
 async function incoming(d){
-  if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post('cmd',{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return true;}
+  if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post(PROTO.toApp.cmd,{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return true;}
   d.text=typeof d.text==='string'?d.text:String(d.text==null?'':d.text);
   d.options=Array.isArray(d.options)?d.options.map(o=>String(o)).filter(o=>o.length):[];
   cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem('liba.seen',d.id);}catch(e){fail('P_STORE',e,'set seen');}
@@ -418,27 +431,27 @@ let flushing=false;
 async function flushOutbox(){
   if(flushing||!outbox.length||!navigator.onLine||!comments)return;
   flushing=true;let items=[];
-  try{items=outbox.slice();for(const it of items){const r=await deliver(it.text,it.tag);if(!r.sent)break;outbox=outbox.filter(x=>x!==it);saveOutbox();post('sent',{text:it.text,late:true});bubble('li','נשלח באיחור: '+it.text);}}
+  try{items=outbox.slice();for(const it of items){const r=await deliver(it.text,it.tag);if(!r.sent)break;outbox=outbox.filter(x=>x!==it);saveOutbox();post(PROTO.toApp.sent,{text:it.text,late:true});bubble('li','נשלח באיחור: '+it.text);}}
   finally{flushing=false;}
-  if(!outbox.length&&items.length){const m='ליבה, בנוגע לשליחה: מה שאמרת נשלח עכשיו.';if(appMode)post('say',{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);}
+  if(!outbox.length&&items.length){const m='ליבה, בנוגע לשליחה: מה שאמרת נשלח עכשיו.';if(appMode)post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);}
 }
 window.addEventListener('online',()=>setTimeout(flushOutbox,1500));setInterval(flushOutbox,8000);
 async function send(text,forcedTag){
   if(text&&typeof text==='object'){forcedTag=text.tag;text=text.text;}
   text=String(text||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7]/g,'').replace(/\s+/g,' ').trim();if(!text)return;
-  if(!forcedTag&&switchOwner(text)){post('sent',{text,local:true});if(!isBusy())drainQ();return;}
+  if(!forcedTag&&switchOwner(text)){post(PROTO.toApp.sent,{text,local:true});if(!isBusy())drainQ();return;}
   const tag=forcedTag||tagOf();
-  if(isBusy()){sendQ.push({text,tag});post('queued',{text});return;}transition('SENDING','send');const id=cur?cur.id:'free';cur=null;
+  if(isBusy()){sendQ.push({text,tag});post(PROTO.toApp.queued,{text});return;}transition('SENDING','send');const id=cur?cur.id:'free';cur=null;
   $('typed').value='';OPTS.innerHTML='';$('ack').hidden=true;HEARD.hidden=true;
-  if(text===lastSent.text&&(id==='free'||id===lastSent.id)&&Date.now()-lastSent.ts<5000){log('כפילות – לא נשלח שוב');post('sent',{text,dup:true});transition('IDLE','duplicate');drainQ();return;}
+  if(text===lastSent.text&&(id==='free'||id===lastSent.id)&&Date.now()-lastSent.ts<5000){log('כפילות – לא נשלח שוב');post(PROTO.toApp.sent,{text,dup:true});transition('IDLE','duplicate');drainQ();return;}
   bubble('me',text);const th=bubble('li think','ליבה חושבת…');
   try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){P.decisions().doc(String(Date.now())).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'decisions/log/items'));lastAsk=null;}}catch(e){fail('P_DB_WRITE',e,'decisions/log/items');}
   try{if(memSettings.logTurns)P.turns().doc(String(Date.now())).set({from:'user',speaker:'מאיר',to:owner,text,re:id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
   const r=await deliverWithRetry(text,tag);const sent=r.sent,reason=r.reason;
   if(sent){lastSent={text,id,ts:Date.now()};}
-  else if(RETRYABLE(reason)||reason==='offline'){outbox.push({text,tag,ts:Date.now()});saveOutbox();const off=!navigator.onLine||reason==='offline';th.textContent=off?'אין רשת – שמרתי, אשלח כשתחזור':'השליחה נכשלה ('+reason+') – שמרתי, אנסה שוב';post('outbox',{text,n:outbox.length,reason});const msg=off?'ליבה, בנוגע לרשת: אין רשת. שמרתי את מה שאמרת, ואשלח כשהרשת תחזור.':'ליבה, בנוגע לשליחה: השרת לא קיבל את זה כרגע. שמרתי, ואשלח שוב בעוד רגע.';if(appMode)post('say',{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else await say(msg);}
+  else if(RETRYABLE(reason)||reason==='offline'){outbox.push({text,tag,ts:Date.now()});saveOutbox();const off=!navigator.onLine||reason==='offline';th.textContent=off?'אין רשת – שמרתי, אשלח כשתחזור':'השליחה נכשלה ('+reason+') – שמרתי, אנסה שוב';post(PROTO.toApp.outbox,{text,n:outbox.length,reason});const msg=off?'ליבה, בנוגע לרשת: אין רשת. שמרתי את מה שאמרת, ואשלח כשהרשת תחזור.':'ליבה, בנוגע לשליחה: השרת לא קיבל את זה כרגע. שמרתי, ואשלח שוב בעוד רגע.';if(appMode)post(PROTO.toApp.say,{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else await say(msg);}
   else{th.textContent='לא הצלחתי לשלוח ('+reason+') – נסה שוב';await say('לא הצלחתי לשלוח');}
-  post(sent?'sent':(outbox.length&&(RETRYABLE(reason)||reason==='offline')?'queued':'error'),{text,reason});
+  post(sent?PROTO.toApp.sent:(outbox.length&&(RETRYABLE(reason)||reason==='offline')?PROTO.toApp.queued:PROTO.toApp.error),{text,reason});
   transition('IDLE','sent');
   if(drainQ())return;
   if(!sent&&handsFree&&!outbox.length)idleListen();

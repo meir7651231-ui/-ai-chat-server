@@ -218,6 +218,16 @@ const failed = [];
   for (let i = 0; i < 10 && !(await get('inbox/hb2') || {}).spoken; i++) await flush(1000);
   const waited = Date.now() - t0;
   check((await get('inbox/hb2') || {}).spoken === true && waited < 9500, 'heartbeat: no beat and no spoke - released after ~6 s, not 120: ' + waited + 'ms');
+  // protocol-contract: hello carries the contract version; the page tells an older app apart from an older page
+  const oldSaid = () => msgs.filter(x => x.liba === 'say' && /ישנה מהדף/.test(x.text || '')).length;
+  await p.evaluate(() => window.app({ liba: 'hello', ver: '3.17.0', pv: 2, caps: ['spoke', 'beat', 'trace', 'proto'] })); await flush(2200);
+  const ring = await H(() => window.__trace.ring.map(x => x.c));
+  check(oldSaid() === 0 && ring.includes('P_PROTO_PAGE_OLD'), 'contract: app newer than the page - logged for ליבה, not spoken to Meir');
+  await p.evaluate(() => window.app({ liba: 'hello', ver: '3.17.0', pv: 0.5, caps: ['spoke'] })); await flush(2200);
+  await p.evaluate(() => window.app({ liba: 'hello', ver: '3.17.0', pv: 0.5, caps: ['spoke'] })); await flush(2200);
+  check(oldSaid() === 1, 'contract: app older than the page - Meir hears it once, not on every hello: ' + oldSaid());
+  const beats = await H(() => ({ beat: hasCap('beat'), spoke: hasCap('spoke') }));
+  check(beats.beat === false && beats.spoke === true, 'contract: capabilities come from hello, not from the version number: ' + JSON.stringify(beats));
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

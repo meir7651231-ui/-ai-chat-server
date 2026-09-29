@@ -11,6 +11,7 @@ const gates = readdirSync(here).filter(f => f.endsWith('.mjs') && f !== 'run.mjs
 const extra = [
   ['page-static', 'node tests/page.test.js'],
   ['page-live', 'NODE_PATH=$(npm root -g) node tests/page.e2e.js'],
+  ['bridge-live', 'NODE_PATH=$(npm root -g) node tests/bridge.e2e.js'],
 ]
 
 let pass = 0

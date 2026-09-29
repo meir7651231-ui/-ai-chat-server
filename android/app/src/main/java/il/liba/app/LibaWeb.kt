@@ -13,31 +13,19 @@ object LibaWeb {
     const val TAG = "Liba"
 
     /** Runs at document start in the TOP frame only: fixes mic permission on artifact iframes and relays postMessage traffic to Android. */
-    private const val TOP_SCRIPT = """
+    /** Runs at document start in the TOP frame only. The message relay and the senders are generated from
+     *  protocol/protocol.json (Protocol.RELAY / Protocol.SENDERS) - nothing here names a message by hand. */
+    private val TOP_SCRIPT = """
 (function(){
   if(window!==window.top||window.__liba)return; window.__liba=true;
-  var frames=function(){return Array.prototype.slice.call(document.querySelectorAll('iframe'));};
   var fix=function(f){try{var a=f.getAttribute('allow')||'';if(!/microphone/.test(a)){f.setAttribute('allow',(a+'; microphone; autoplay').replace(/^; /,''));}}catch(e){}};
   new MutationObserver(function(ms){ms.forEach(function(m){Array.prototype.forEach.call(m.addedNodes,function(n){if(n.tagName==='IFRAME')fix(n);else if(n.querySelectorAll)Array.prototype.forEach.call(n.querySelectorAll('iframe'),fix);});});}).observe(document.documentElement,{childList:true,subtree:true});
   var ready=false;
   window.addEventListener('message',function(e){var d=e.data;if(!d||!d.liba||!window.LibaBridge)return;
-    if(d.liba==='ready'){ready=true;LibaBridge.ready();}
-    else if(d.liba==='say'){LibaBridge.say(String(d.text||''),String(d.kind||'say'),JSON.stringify(d.options||[]),String(d.speaker||''),String(d.id||''));}
-    else if(d.liba==='sent'){LibaBridge.sent(String(d.text||''));}
-    else if(d.liba==='error'){LibaBridge.error(String(d.text||''),String(d.reason||''));}
-    else if(d.liba==='tap'){LibaBridge.tap();}
-    else if(d.liba==='cmd'){LibaBridge.cmd(String(d.cmd||''));}
-    else if(d.liba==='crashSaved'){LibaBridge.crashSaved(String(d.id||''));}
-    else if(d.liba==='tasks'){LibaBridge.tasks(String(d.summary||''),Number(d.n||0),Number(d.blocked||0));}
-    else if(d.liba==='traceAck'){LibaBridge.traceAck(String(d.batch||''),String(d.ids||'[]'));}
+    ${Protocol.RELAY}
   });
   window.__libaRect=function(){var f=document.querySelector('iframe');if(!f)return '';var r=f.getBoundingClientRect();return JSON.stringify([r.left,r.top,r.width,r.height]);};
-  window.__libaHello=function(){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'hello',ver:window.__libaVer||''},'*');}catch(e){}});};
-  window.__libaCrash=function(id,ver,t){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'crash',id:id,version:ver,text:t},'*');}catch(e){}});};
-  window.__libaSpoke=function(id){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'spoke',id:id},'*');}catch(e){}});};
-  window.__libaSpeaking=function(id){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'speaking',id:id},'*');}catch(e){}});};
-  window.__libaInput=function(t){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'input',text:t},'*');}catch(e){}});};
-  window.__libaTrace=function(b,j){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'trace',batch:b,events:j},'*');}catch(e){}});};
+  ${Protocol.SENDERS}
   setInterval(function(){if(!ready)window.__libaHello();},3000);
 })();
 """
@@ -53,24 +41,23 @@ object LibaWeb {
         fun onCrashSaved(id: String)
         fun onCmd(cmd: String)
         fun onTraceAck(batch: String, ids: List<String>)
+        fun onQueued(text: String)
+        fun onOutbox(text: String, n: Int, reason: String)
     }
 
-    private class JsBridge(val b: Bridge) {
-        @JavascriptInterface fun ready() = b.onReady()
-        @JavascriptInterface fun say(text: String, kind: String, optionsJson: String, speaker: String, id: String) {
-            val opts = try { val a = org.json.JSONArray(optionsJson); List(a.length()) { a.getString(it) } } catch (e: Exception) { emptyList() }
-            b.onSay(text, kind, opts, speaker, id)
-        }
-        @JavascriptInterface fun sent(text: String) = b.onSent(text)
-        @JavascriptInterface fun error(text: String, reason: String) = b.onError(text, reason)
-        @JavascriptInterface fun tap() = b.onPageTap()
-        @JavascriptInterface fun tasks(summary: String, n: Int, blocked: Int) = b.onTasks(summary, n, blocked)
-        @JavascriptInterface fun crashSaved(id: String) = b.onCrashSaved(id)
-        @JavascriptInterface fun cmd(cmd: String) = b.onCmd(cmd)
-        @JavascriptInterface fun traceAck(batch: String, idsJson: String) {
-            val ids = try { val a = org.json.JSONArray(idsJson); List(a.length()) { a.getString(it) } } catch (e: Exception) { emptyList() }
-            b.onTraceAck(batch, ids)
-        }
+    private class JsBridge(val b: Bridge) : ProtocolBridge {
+        private fun list(json: String) = try { val a = org.json.JSONArray(json); List(a.length()) { a.getString(it) } } catch (e: Exception) { emptyList() }
+        @JavascriptInterface override fun ready() = b.onReady()
+        @JavascriptInterface override fun say(text: String, kind: String, options: String, speaker: String, id: String) = b.onSay(text, kind, list(options), speaker, id)
+        @JavascriptInterface override fun sent(text: String) = b.onSent(text)
+        @JavascriptInterface override fun error(text: String, reason: String) = b.onError(text, reason)
+        @JavascriptInterface override fun queued(text: String) = b.onQueued(text)
+        @JavascriptInterface override fun outbox(text: String, n: Int, reason: String) = b.onOutbox(text, n, reason)
+        @JavascriptInterface override fun tap() = b.onPageTap()
+        @JavascriptInterface override fun cmd(cmd: String) = b.onCmd(cmd)
+        @JavascriptInterface override fun crashSaved(id: String) = b.onCrashSaved(id)
+        @JavascriptInterface override fun tasks(summary: String, n: Int, blocked: Int) = b.onTasks(summary, n, blocked)
+        @JavascriptInterface override fun traceAck(batch: String, ids: String) = b.onTraceAck(batch, list(ids))
     }
 
     @SuppressLint("SetJavaScriptEnabled")

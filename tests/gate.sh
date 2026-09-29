@@ -73,7 +73,15 @@ expect_red "בדיקת הדף הסטטית" node tests/page.test.js
 sed -i "s/else if(d.liba==='spoke')/else if(d.liba==='__never__')/" "$WT/liba-call.html"
 expect_red "בדיקת הדף החי" env NODE_PATH="$(npm root -g)" node tests/page.e2e.js
 
-# 8-10. everything that needs a signed APK in dist/
+# 8. the contract changes and nobody regenerates: both sides now disagree with it
+sed -i 's/"queued":/"waiting":/' "$WT/protocol/protocol.json"
+expect_red "חוזה שהשתנה בלי רגנרציה" node gates/protocol.mjs
+
+# 9. a message name typed by hand in the page, outside the contract
+sed -i "s/post(PROTO.toApp.tap/post('tap'/" "$WT/liba/src/06-bridge.js"
+expect_red "שם מסר בכתב יד בדף" node gates/protocol.mjs
+
+# 10-12. everything that needs a signed APK in dist/
 if [ -f "$REPO/dist/liba.apk" ]; then
   cp "$REPO/dist/liba.apk" "$WT/dist/liba.apk"
   head -c 200000 "$REPO/dist/liba.apk" > "$WT/dist/liba.apk"

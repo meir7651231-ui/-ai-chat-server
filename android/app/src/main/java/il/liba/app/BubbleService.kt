@@ -748,6 +748,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
         Trace.drain(pageReady && web != null) { batch, json -> main.post { web?.let { LibaWeb.sendTrace(it, batch, json) } } }
     }
     override fun onTraceAck(batch: String, ids: List<String>) { Trace.acked(ids) }
+    // step protocol-contract: these two used to be posted by the page and dropped here in silence
+    override fun onQueued(text: String) { main.post { showLabel("ממתין שאסיים לדבר…", 4000) } }
+    override fun onOutbox(text: String, n: Int, reason: String) { main.post { showLabel(if (n > 1) "אין רשת · $n משפטים שמורים" else "אין רשת · שמרתי, אשלח כשתחזור", 6000) } }
     override fun onCrashSaved(id: String) { main.post { Prefs.clearCrash(this); showLabel("דוח הקריסה נשלח לליבה", 4000) } }
     override fun onTasks(summary: String, n: Int, blocked: Int) { tasksSummary = summary; main.post { taskSummary = summary; taskBlocked = blocked; if (n > 0) status = "מחובר · $n משימות" + (if (blocked > 0) " · $blocked מחכות לך" else "") } }
     override fun onPageTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
