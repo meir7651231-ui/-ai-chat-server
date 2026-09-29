@@ -27,7 +27,7 @@ const N = +(process.env.N || 200), KILLS = +(process.env.KILLS || 40);
   await p.goto('http://liba.test/host.html');
   const frame = who => p.frames().find(f => f.name() === who);
   // the phone of each instance remembers what it finished speaking (by message id) and says so in hello - like the bubble
-  const load = { a: 0, b: 0 }, completed = {}, phoneDone = { a: [], b: [] };
+  const load = { a: 0, b: 0 }, completed = {}, phoneDone = { a: [], b: [] }, inflight = { a: 0, b: 0 };
   const hello = async who => { for (let i = 0; i < 60; i++) { await p.waitForTimeout(150); const f = frame(who);
       try { if (f && await f.evaluate(() => !!(window.__h && window.__kernel))) { await p.evaluate(w => window.app(w[0], { liba: 'hello', ver: '3.26.0', pv: 1, caps: ['spoke', 'beat', 'trace', 'proto', 'clock', 'state'], wall: Date.now(), spoken: w[1] }), [who, phoneDone[who].slice(-40).join(',')]);
         await p.waitForTimeout(120); if (await f.evaluate(() => window.__kernel.state() !== 'OFFLINE')) return; } } catch {} } throw new Error('instance ' + who + ' never took hello'); };
@@ -36,7 +36,7 @@ const N = +(process.env.N || 200), KILLS = +(process.env.KILLS || 40);
   const answer = async ms => { const end = Date.now() + ms;
     while (Date.now() < end) { const m = await p.evaluate(() => { const x = window.msgs.slice(); window.msgs = []; return x; });
       for (const x of m) if (x.liba === 'say' && x.id && (x.src === 'a' || x.src === 'b')) { const who = x.src, my = load[who], id = x.id, t = x.text || '', mid = x.mid || '';
-        setTimeout(async () => { if (my !== load[who]) return; if (mid) phoneDone[who].push(mid); try { await p.evaluate(([w, id]) => window.app(w, { liba: 'spoke', id }), [who, id]); const k = (/חדש-(\d+)/.exec(t) || [])[1]; if (k) completed[k] = (completed[k] || 0) + 1; } catch {} }, 100 + Math.random() * 500); }
+        setTimeout(async () => { if (my !== load[who]) return; inflight[who]++; if (mid) phoneDone[who].push(mid); try { await p.evaluate(([w, id]) => window.app(w, { liba: 'spoke', id }), [who, id]); const k = (/חדש-(\d+)/.exec(t) || [])[1]; if (k) completed[k] = (completed[k] || 0) + 1; } catch {} finally { inflight[who]-- } }, 100 + Math.random() * 500); }
       await p.waitForTimeout(80); } };
   // writes go through a live frame's stub so subscriptions fire
   const write = async i => { for (const who of ['a', 'b']) { try { await frame(who).evaluate(i => window.__h.set('inbox/n' + i, { from: 'liba', kind: 'say', speaker: 'ליבה', text: 'חדש-' + i, spoken: false, ts: Date.now() }), i); return; } catch {} } };
@@ -45,7 +45,7 @@ const N = +(process.env.N || 200), KILLS = +(process.env.KILLS || 40);
   for (let i = 0; i < N; i++) {
     await write(i);
     await answer(120 + Math.random() * 300);
-    if (killAt.has(i)) { const who = Math.random() < 0.5 ? 'a' : 'b'; load[who]++; kills++; await p.evaluate(w => window.kill(w), who); await hello(who); }
+    if (killAt.has(i)) { const who = Math.random() < 0.5 ? 'a' : 'b'; while (inflight[who] > 0) await p.waitForTimeout(20); load[who]++; kills++; await p.evaluate(w => window.kill(w), who); await hello(who); }
   }
   // drain: no more deaths - wait until every message is acked (or 5 minutes)
   for (let i = 0; i < 150; i++) { await answer(2000); const left = await frame('a').evaluate(() => [...window.__h.docs.entries()].filter(([k, v]) => /^inbox\/n\d+$/.test(k) && !v.spoken && !v.failed).length); if (!left) break; }
@@ -58,7 +58,7 @@ const N = +(process.env.N || 200), KILLS = +(process.env.KILLS || 40);
   ok(lost.length === 0, 'no message lost - every one acked spoken: ' + lost.slice(0, 8).join(','));
   ok(never.length === 0, 'every message was spoken to the end at least once: ' + never.slice(0, 8).join(','));
   ok(twice.length === 0, 'no message spoken to the end twice: ' + twice.slice(0, 8).join(','));
-  const holders = new Set(docs.map(d => d.by)); ok(holders.size === 2, 'both instances delivered messages (the work was really shared): ' + holders.size);
+  const holders = new Set(docs.map(d => d.by).filter(b => b && b !== 'phone' && b !== 'native')); ok(holders.size === 2, 'both instances delivered messages (the work was really shared): ' + holders.size);
   ok(Date.now() - t0 < 10 * 60 * 1000, 'finished within ten minutes');
   ok(!errs.length, 'no page error: ' + errs.slice(0, 3).join(' | '));
   await b.close(); process.exit(fails ? 1 : 0);

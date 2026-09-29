@@ -57,8 +57,11 @@ async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'
     if(!d.local&&expired(d)){spokenMark(d.id);try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now()});}catch(e){fail('P_ACK',e,'expire');}continue;}
     /* inbox-lease: claim before speaking. Another instance holding the claim is speaking it - try again after the claim
        would have lapsed; a claim left by a page that died lapses by itself, so nothing is lost and nothing is said twice */
+    if(d.local&&d.speaker==='הלוח'){const rule=POLICY.check(d);if(rule){spokenMark(d.id);await digestAdd(d,rule);continue;}}
     if(!d.local){const c=await inboxClaim(d);if(c==='busy'){spokenLocal.delete(d.id);d.retryAt=Date.now()+INBOX_RETRY;d.retryWhy='claim';inboxQ.push(d);continue;}
       if(await fresh(d)==='drop'){spokenMark(d.id);staleDropped++;try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now(),stale:true,delivery:{state:'dropped',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'stale');}continue;}
+      const rule=POLICY.check(d);if(rule){spokenMark(d.id);await digestAdd(d,rule);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),digested:rule.id,delivery:{state:'digest',by:PAGE_ID,at:Date.now(),rule:rule.id}});}catch(e){fail('P_ACK',e,'digest');}continue;}
+      const sh=POLICY.shorten(d);if(sh){lastShort=sh.full;d.shortText=sh.text;}
       d.again=!!d.speakingAt&&!d.spoken;d.attempts=+(d.delivery&&d.delivery.attempts)||0;
       P.inboxDoc(d.id).update({speakingAt:Date.now(),delivery:{state:'speaking',by:PAGE_ID,at:Date.now(),attempts:d.attempts}}).catch(e=>fail('P_ACK',e,'speakingAt'));}
     sayOutcome='done';if(d.stream&&!d.local){await streamPlay(d);continue;}try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;

@@ -93,6 +93,11 @@ const INTENTS=Object.freeze([
   {"id":"people.who","where":"page","when":"liba","exact":[],"prefix":["מי זה","מי זאת","מי זו"],"suffix":[],"handler":"peopleWho","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
   {"id":"people.alias","where":"page","when":"liba","exact":[],"prefix":["תקרא לו","תקרא לה","תקראי לו","תקראי לה"],"suffix":[],"handler":"peopleAlias","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
   {"id":"people.merge","where":"page","when":"liba","exact":[],"prefix":["תאחד את","תאחדי את"],"suffix":[],"handler":"peopleMerge","confirm":true,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
+  {"id":"policy.why","where":"page","when":"liba","exact":["למה לא סיפרת לי","למה לא אמרת לי","מה השתקת היום"],"prefix":[],"suffix":[],"handler":"policyWhy","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
+  {"id":"policy.list","where":"page","when":"liba","exact":["מה הכללים שלי","אילו כללים יש","מה השתקת"],"prefix":[],"suffix":[],"handler":"policyList","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
+  {"id":"policy.drop","where":"page","when":"liba","exact":[],"prefix":["תבטל את הכלל על","תבטלי את הכלל על"],"suffix":[],"handler":"policyDrop","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
+  {"id":"policy.full","where":"page","when":"liba","exact":["תקריא את כל ההודעה","תקריאי את כל ההודעה","את כל ההודעה"],"prefix":[],"suffix":[],"handler":"policyFull","confirm":false,"pass":true,"requires":[],"lead":[],"leadRequired":false},
+  {"id":"policy.add","where":"page","when":"liba","exact":[],"prefix":["אל תספר לי על","אל תספר לי לגבי","אל תספר על","אל תספר לגבי","אל תספרי לי על","אל תספרי לי לגבי","אל תספרי על","אל תספרי לגבי","אל תעדכן לי על","אל תעדכן לי לגבי","אל תעדכן על","אל תעדכן לגבי","אל תעדכני לי על","אל תעדכני לי לגבי","אל תעדכני על","אל תעדכני לגבי","בלי עדכונים לי על","בלי עדכונים לי לגבי","בלי עדכונים על","בלי עדכונים לגבי","אל תספר אותי על","אל תספר אותי לגבי","אל תספרי אותי על","אל תספרי אותי לגבי","אל תעדכן אותי על","אל תעדכן אותי לגבי","אל תעדכני אותי על","אל תעדכני אותי לגבי","תשתיק","תשתיקי","השתק","אל תעביר לי הודעות","אל תעביר הודעות","אל תעבירי לי הודעות","אל תעבירי הודעות","בלי הודעות על משימות שנגמרו","אף פעם אל תעיר אותי","אף פעם אל תעירי אותי","אל תעיר אותי","אל תעירי אותי","רק דחוף","תאסוף לי","תאסוף","תאספי לי","תאספי","תקצר","תקצרי","בקצרה","תקרא לי","תקראי לי"],"suffix":[],"handler":"memPref","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
   {"id":"memory.list","where":"page","when":"liba","exact":["מה אתה זוכר","מה את זוכר","מה את זוכרת","מה בזיכרון","מה זכרת"],"prefix":[],"suffix":[],"handler":"memList","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
   {"id":"memory.nolog","where":"page","when":"liba","exact":["אל תשמור שיחות","בלי לשמור שיחות","תפסיק לשמור"],"prefix":[],"suffix":[],"handler":"memNoLog","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
   {"id":"memory.log","where":"page","when":"liba","exact":["תשמור שיחות","תחזור לשמור"],"prefix":[],"suffix":[],"handler":"memLog","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
@@ -136,13 +141,13 @@ const INTENTS=Object.freeze([
   {"id":"claude.cost","where":"claude","when":"","exact":["כמה עלה היום"],"prefix":[],"suffix":[],"handler":"","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
   {"id":"claude.decisions","where":"claude","when":"","exact":["מה אישרתי היום"],"prefix":[],"suffix":[],"handler":"","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false}
 ]);
-const INTENT_HELP=Object.freeze([["דיבור","לחיצה על הבועה, \"ליבה\" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח \"ליבה – דבר\" במסך הנעילה, שיתוף מכל אפליקציה → ליבה"],["משימות","\"מה בניתי השבוע\", \"מפה\" (כל הסשנים), \"תפתח\" (תוצאה אחרונה), \"קודם את X\", \"מה הסטטוס\", \"תעצור את X\", \"תמשיך את X\""],["בנייה","\"המחולל\", \"תבנה לי X\", \"תבדוק X\", \"תתקן X\" – נפתח עובד, \"תעלה לאוויר\", \"תחזור לגרסה של הבוקר\""],["אנשים","\"דני הוא הבן שלי\", \"מי זה X\", \"תקרא לו X\", \"תאחד את X עם Y\", \"ליבה תחזור\", \"תעלה את המנהל\", \"למי זה הלך\", \"תחזיר לי את זה\" (לצד השני), \"תשאיר את זה אצל המנהל\" (עד סוף היום), \"מה המנהל עושה עכשיו\""],["שקט","\"תפריע\", \"אל תפריע שעה / עד הערב\", \"מה פספסתי\", \"תשחרר הכול\", \"הכול\" (אחרי תדרוך), \"מצב לילה\", \"בטל מצב לילה\", \"שקט\" (כיבוי מילת הפעלה)"],["קול","\"חזור\", \"לאט יותר\", \"מהר יותר\", \"תני להפריע\", \"מצב רכב\", \"בלי צלילים\", \"דלג\", \"תמשיך\", \"רגע\""],["זיכרון","\"תזכור ש…\", \"תשכח את…\", \"אל תשאל אותי על…\", \"מה את זוכרת על X\", \"בלי הקשר\" (למשפט הבא), \"אני מאיר, …\" (כרטיס הזהות), \"מה אתה זוכר\", \"אל תשמור שיחות\", \"מה נשמר\", \"על מה דיברנו אתמול\", \"תחזור לשיחה על X\", \"תייצא את הזיכרון\""],["שליחה","\"מה לא נשלח\", \"תשלח שוב\", \"מה אמרתי כשהיית מנותקת\""],["חושים","\"מה חשוב במייל\", \"תענה ש…\", \"תזכיר לי מחר בתשע…\", \"תחפש…\""],["בקרה","\"מה נשבר היום\", \"כמה בקשות היום\", \"כמה זמן לוקח לך לענות\", \"מה מצב הקו\", \"למה שתקת\", \"תתקין\" (גרסה חדשה), \"מה למדנו היום\", \"כמה עלה היום\", \"מה אישרתי היום\""],["עזרה","\"מה את יודעת\", \"פקודות <משפחה>\""]]);
+const INTENT_HELP=Object.freeze([["דיבור","לחיצה על הבועה, \"ליבה\" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח \"ליבה – דבר\" במסך הנעילה, שיתוף מכל אפליקציה → ליבה"],["משימות","\"מה בניתי השבוע\", \"מפה\" (כל הסשנים), \"תפתח\" (תוצאה אחרונה), \"קודם את X\", \"מה הסטטוס\", \"תעצור את X\", \"תמשיך את X\""],["בנייה","\"המחולל\", \"תבנה לי X\", \"תבדוק X\", \"תתקן X\" – נפתח עובד, \"תעלה לאוויר\", \"תחזור לגרסה של הבוקר\""],["אנשים","\"דני הוא הבן שלי\", \"מי זה X\", \"תקרא לו X\", \"תאחד את X עם Y\", \"ליבה תחזור\", \"תעלה את המנהל\", \"למי זה הלך\", \"תחזיר לי את זה\" (לצד השני), \"תשאיר את זה אצל המנהל\" (עד סוף היום), \"מה המנהל עושה עכשיו\""],["שקט","\"תפריע\", \"אל תפריע שעה / עד הערב\", \"למה לא סיפרת לי\", \"מה הכללים שלי\", \"תבטל את הכלל על X\", \"אל תעדכן אותי על X\", \"תשתיק X\", \"אל תעיר אותי לפני שש\", \"תקצר\", \"מה פספסתי\", \"תשחרר הכול\", \"הכול\" (אחרי תדרוך), \"מצב לילה\", \"בטל מצב לילה\", \"שקט\" (כיבוי מילת הפעלה)"],["קול","\"חזור\", \"לאט יותר\", \"מהר יותר\", \"תני להפריע\", \"מצב רכב\", \"בלי צלילים\", \"דלג\", \"תמשיך\", \"רגע\""],["זיכרון","\"תזכור ש…\", \"תשכח את…\", \"אל תשאל אותי על…\", \"מה את זוכרת על X\", \"בלי הקשר\" (למשפט הבא), \"אני מאיר, …\" (כרטיס הזהות), \"מה אתה זוכר\", \"אל תשמור שיחות\", \"מה נשמר\", \"על מה דיברנו אתמול\", \"תחזור לשיחה על X\", \"תייצא את הזיכרון\""],["שליחה","\"מה לא נשלח\", \"תשלח שוב\", \"מה אמרתי כשהיית מנותקת\""],["חושים","\"מה חשוב במייל\", \"תענה ש…\", \"תזכיר לי מחר בתשע…\", \"תחפש…\""],["בקרה","\"מה נשבר היום\", \"כמה בקשות היום\", \"כמה זמן לוקח לך לענות\", \"מה מצב הקו\", \"למה שתקת\", \"תתקין\" (גרסה חדשה), \"מה למדנו היום\", \"כמה עלה היום\", \"מה אישרתי היום\""],["עזרה","\"מה את יודעת\", \"פקודות <משפחה>\""]]);
 const P_RAW={
   inbox:()=>db.collection('inbox'),inboxDoc:id=>db.doc('inbox/'+id),
   tasks:()=>db.collection('tasks'),task:id=>db.doc('tasks/'+id),
   sessions:()=>db.collection('sessions'),gallery:()=>db.collection('gallery'),
   owner:()=>db.doc('channel/owner'),ownerLog:()=>db.doc('channel/owner').collection('log'),quiet:()=>db.doc('channel/quiet'),device:()=>db.doc('channel/device'),
-  current:()=>db.doc('chat/current'),settings:()=>db.doc('memory/settings'),identity:()=>db.doc('memory/identity'),caps:()=>db.doc('memory/caps'),memMeta:()=>db.doc('memory/meta'),
+  current:()=>db.doc('chat/current'),settings:()=>db.doc('memory/settings'),digest:day=>db.doc('memory/digest').collection('items').doc(day),identity:()=>db.doc('memory/identity'),caps:()=>db.doc('memory/caps'),memMeta:()=>db.doc('memory/meta'),
   person:k=>db.doc('memory/people').collection('items').doc(k),people:()=>db.doc('memory/people').collection('items'),
   fact:k=>db.doc('memory/facts').collection('items').doc(k),facts:()=>db.doc('memory/facts').collection('items'),
   crash:id=>db.doc('crashes/'+id),
@@ -165,7 +170,7 @@ function mintId(){const t=Date.now();if(t===mintLast)mintSeq++;else{mintLast=t;m
   let r=0;try{const a=new Uint32Array(1);crypto.getRandomValues(a);r=a[0];}catch(e){r=Math.floor(Math.random()*4294967296);}
   return t.toString(36).padStart(9,'0')+mintSeq.toString(36).padStart(4,'0')+r.toString(36).padStart(7,'0');}
 /* budget-contract-gate: the collection contract (channel-budget.json), baked in at build time */
-const BUDGET={"v":1,"ceiling":4000,"c":{"inbox":{"cap":200,"ttlDays":2,"cls":"voice","time":"ts"},"tasks":{"cap":60,"ttlDays":3,"cls":"state","time":"updatedAt"},"sessions":{"cap":60,"ttlDays":30,"cls":"state","time":"updatedAt"},"gallery":{"cap":150,"cls":"record","time":"ts"},"req":{"cap":800,"ttlDays":14,"cls":"record","time":"askedAt"},"chat/log/turns":{"cap":200,"ttlDays":2,"cls":"record","time":"ts"},"decisions/log/items":{"cap":120,"ttlDays":7,"cls":"record","time":"ts"},"crashes":{"cap":40,"ttlDays":7,"cls":"telemetry","time":"ts"},"telemetry/events/items":{"cap":400,"ttlDays":7,"cls":"telemetry","time":"ts"},"metrics/daily/days":{"cap":60,"cls":"telemetry","time":"at"},"memory/notes/items":{"cap":100,"cls":"record","time":"ts"},"memory/prefs/items":{"cap":50,"cls":"record","time":"ts"},"fold":{"cap":400,"cls":"janitor","time":"at"},"pulse":{"cap":4,"cls":"fixed","time":"at"},"ledger":{"cap":40,"ttlDays":30,"cls":"fixed","time":"at"},"channel":{"cap":12,"cls":"state","time":"at"},"chat":{"cap":4,"cls":"voice","time":"at"},"memory":{"cap":12,"cls":"record","time":"at"},"inbox/*/parts":{"cap":200,"ttlDays":2,"cls":"voice","time":"seq"},"channel/owner/log":{"cap":100,"ttlDays":14,"cls":"state","time":"at"},"memory/facts/items":{"cap":600,"cls":"record","time":"updatedAt"},"memory/people/items":{"cap":200,"cls":"record","time":"lastMentioned"}}};
+const BUDGET={"v":1,"ceiling":4000,"c":{"inbox":{"cap":200,"ttlDays":2,"cls":"voice","time":"ts"},"tasks":{"cap":60,"ttlDays":3,"cls":"state","time":"updatedAt"},"sessions":{"cap":60,"ttlDays":30,"cls":"state","time":"updatedAt"},"gallery":{"cap":150,"cls":"record","time":"ts"},"req":{"cap":800,"ttlDays":14,"cls":"record","time":"askedAt"},"chat/log/turns":{"cap":200,"ttlDays":2,"cls":"record","time":"ts"},"decisions/log/items":{"cap":120,"ttlDays":7,"cls":"record","time":"ts"},"crashes":{"cap":40,"ttlDays":7,"cls":"telemetry","time":"ts"},"telemetry/events/items":{"cap":400,"ttlDays":7,"cls":"telemetry","time":"ts"},"metrics/daily/days":{"cap":60,"cls":"telemetry","time":"at"},"memory/notes/items":{"cap":100,"cls":"record","time":"ts"},"memory/prefs/items":{"cap":50,"cls":"record","time":"ts"},"fold":{"cap":400,"cls":"janitor","time":"at"},"pulse":{"cap":4,"cls":"fixed","time":"at"},"ledger":{"cap":40,"ttlDays":30,"cls":"fixed","time":"at"},"channel":{"cap":12,"cls":"state","time":"at"},"chat":{"cap":4,"cls":"voice","time":"at"},"memory":{"cap":12,"cls":"record","time":"at"},"inbox/*/parts":{"cap":200,"ttlDays":2,"cls":"voice","time":"seq"},"channel/owner/log":{"cap":100,"ttlDays":14,"cls":"state","time":"at"},"memory/facts/items":{"cap":600,"cls":"record","time":"updatedAt"},"memory/people/items":{"cap":200,"cls":"record","time":"lastMentioned"},"memory/digest/items":{"cap":40,"ttlDays":30,"cls":"record","time":"day"}}};
 /* test hook: tests/inbox.chaos.js runs two instances in one browser and names them, so each keeps its own local
    stores like two devices would. A real page is never named, and its keys stay liba.<name>. */
 const LS_SUFFIX=(()=>{try{return window.__LIBA_INSTANCE?'.'+String(window.__LIBA_INSTANCE).replace(/[^a-z0-9]/gi,''):'';}catch(e){return '';}})();
@@ -177,7 +182,7 @@ let PAGE_ID='';try{PAGE_ID=localStorage.getItem(LSK('jid'))||'';if(!PAGE_ID){PAG
    never refused. A quota error is caught by name, said aloud once, and the page degrades at once. Nothing at the
    call sites changed: P hands out guarded references, and db-paths already forbids any path outside this table. */
 const CLS_OF={inbox:'voice',inboxDoc:'voice',parts:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
-  sessions:'state',budget:'state',ownerLog:'state',gallery:'record',identity:'record',caps:'record',memMeta:'record',person:'record',people:'record',fact:'record',facts:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
+  sessions:'state',budget:'state',ownerLog:'state',gallery:'record',digest:'record',identity:'record',caps:'record',memMeta:'record',person:'record',people:'record',fact:'record',facts:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
   device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',metricsDays:'telemetry',
   /* the janitor frees space, so its folds and lease are never refused - refusing the cure would keep the db full */
   fold:'janitor',folds:'janitor',janitor:'janitor',crashes:'record',
@@ -236,6 +241,8 @@ const trMin=t=>Math.floor(t/60000);
 const trCol=()=>P.telemetry();
 /* hot loops (syncWindows per frame, wake-mode onError every 400ms) carry the hardest cap */
 const trCap=c=>c==='E_CRASH_SAVE'?1e9:(c==='E_OVERLAY_UPDATE'||/^E_SR_\d+$/.test(c))?2:5;
+/* the hour on Meir's clock (Jerusalem), not the browser's - a phone abroad or a UTC test machine must not move the night */
+function jHour(ts){try{return +new Date(ts).toLocaleString('en-GB',{timeZone:'Asia/Jerusalem',hour:'2-digit',hour12:false})%24;}catch(e){return new Date(ts).getHours();}}
 function trDay(ts){try{return new Date(ts).toLocaleDateString('sv-SE',{timeZone:'Asia/Jerusalem'});}catch(e){return new Date(ts).toISOString().slice(0,10);}}
 function trId(t,code,ctx){let h=0;const s=code+'|'+(ctx||'');for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return t.toString(36)+'-'+('00'+(h%46656).toString(36)).slice(-3);}
 /* ctx is machine text only – this strip is the privacy boundary: no utterance, no note, no url with a token */
@@ -368,7 +375,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){urgentSeen(d.urgent,'native');urgentSeen(d.spoken,'phone');if(!appMode)catchupCheck();appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:63,pageHash:"da69fadffef8",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:64,pageHash:"2598e2e9a369",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f(String(d.cause||'done'));}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -479,8 +486,11 @@ async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'
     if(!d.local&&expired(d)){spokenMark(d.id);try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now()});}catch(e){fail('P_ACK',e,'expire');}continue;}
     /* inbox-lease: claim before speaking. Another instance holding the claim is speaking it - try again after the claim
        would have lapsed; a claim left by a page that died lapses by itself, so nothing is lost and nothing is said twice */
+    if(d.local&&d.speaker==='הלוח'){const rule=POLICY.check(d);if(rule){spokenMark(d.id);await digestAdd(d,rule);continue;}}
     if(!d.local){const c=await inboxClaim(d);if(c==='busy'){spokenLocal.delete(d.id);d.retryAt=Date.now()+INBOX_RETRY;d.retryWhy='claim';inboxQ.push(d);continue;}
       if(await fresh(d)==='drop'){spokenMark(d.id);staleDropped++;try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now(),stale:true,delivery:{state:'dropped',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'stale');}continue;}
+      const rule=POLICY.check(d);if(rule){spokenMark(d.id);await digestAdd(d,rule);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),digested:rule.id,delivery:{state:'digest',by:PAGE_ID,at:Date.now(),rule:rule.id}});}catch(e){fail('P_ACK',e,'digest');}continue;}
+      const sh=POLICY.shorten(d);if(sh){lastShort=sh.full;d.shortText=sh.text;}
       d.again=!!d.speakingAt&&!d.spoken;d.attempts=+(d.delivery&&d.delivery.attempts)||0;
       P.inboxDoc(d.id).update({speakingAt:Date.now(),delivery:{state:'speaking',by:PAGE_ID,at:Date.now(),attempts:d.attempts}}).catch(e=>fail('P_ACK',e,'speakingAt'));}
     sayOutcome='done';if(d.stream&&!d.local){await streamPlay(d);continue;}try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;
@@ -609,8 +619,8 @@ function memRemember(rest){const note=rest.trim();if(note.length<2)return false;
   MEM.put(pf,{type:'said'}).then(r=>sayLocal(r.same?'כבר זכרתי: '+note:r.replaced?'עדכנתי: '+note:'זכרתי: '+note)).catch(e=>{fail('P_DB_WRITE',e,'memory/facts');sayLocal('לא הצלחתי לשמור');});return true;}
 function memForget(rest){const q=rest.trim();if(!q)return false;
   MEM.forget(q).then(h=>sayLocal(h.length?'שכחתי '+h.length+(h.length===1?' דבר':' דברים')+' על '+q+'. אם טעיתי, זה עוד שמור שלושים יום.':'לא מצאתי משהו על '+q+' בזיכרון')).catch(e=>{fail('P_DB_WRITE',e,'memory/facts');sayLocal('לא הצלחתי');});return true;}
-function memPref(rest,m){if(!rest)return false;const f=MEM.parse(m.t);if(f.kind!=='pref')Object.assign(f,{subject:'מאיר',predicate:'העדפה',kind:'pref',conf:0.9});
-  MEM.put(f,{type:'said'}).then(()=>sayLocal('הבנתי, זו העדפה קבועה: '+m.t)).catch(e=>fail('P_DB_WRITE',e,'memory/facts'));return true;}
+function memPref(rest,m){if(!rest&&!POLICY.compileOne({value:m.t}))return false;const f=MEM.parse(m.t);if(f.kind!=='pref')Object.assign(f,{subject:'מאיר',predicate:'העדפה',kind:'pref',conf:0.9});
+  MEM.put(f,{type:'said'}).then(()=>POLICY.load()).then(()=>{const r=POLICY.compileOne({value:m.t});sayLocal('הבנתי, זו העדפה קבועה: '+m.t+(r?'. מעכשיו זה כלל, ומה שאשתיק יחכה לסיכום הערב.':''));}).catch(e=>fail('P_DB_WRITE',e,'memory/facts'));return true;}
 function memList(){MEM.recent(8).then(n=>sayLocal(n.length?'אני זוכרת '+n.length+(n.length>=8?' דברים אחרונים':' דברים')+': '+n.map(f=>f.raw||f.value).join('; '):'הזיכרון עוד ריק.')).catch(e=>fail('P_DB_READ',e,'memory/facts'));return true;}
 function memNoLog(){{memSettings.logTurns=false;P.settings().set(memSettings).catch(e=>fail('P_DB_WRITE',e,'memory/settings'));sayLocal('בסדר, מעכשיו לא שומרת את השיחות.');return true;}}
 function memLog(){{memSettings.logTurns=true;P.settings().set(memSettings).catch(e=>fail('P_DB_WRITE',e,'memory/settings'));sayLocal('שומרת שיחות שוב.');return true;}}
@@ -662,7 +672,7 @@ function taskPriority(rest){{const q=rest.trim();if(!q)return false;const task=l
 const inorm=t=>String(t||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05c7]/g,'').replace(/[?!.,:;"'׳״]/g,'').replace(/\s+/g,' ').trim().replace(/(^|\s)ליבא(?=\s|$)/g,'$1ליבה');
 const HANDLERS={quietOff,quietOn,helpAll,helpFamily,galleryWeek,generatorOpen,traceToday,memRemember,memForget,memPref,memList,memNoLog,memLog,memPrivacy,
   reqToday,latencyToday,lineStatus,phoneWhy,outboxList,outboxResend,missedList,missedAll,missedAsks,mapShow,openLast,taskPriority,confirmYes,confirmNo,
-  memAbout,memNoBrief,memIdentity,peopleAdd,peopleWho,peopleAlias,peopleMerge,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
+  policyWhy,policyList,policyDrop,policyFull,memAbout,memNoBrief,memIdentity,peopleAdd,peopleWho,peopleAlias,peopleMerge,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
 const intentHere=it=>it.where==='page'&&!(it.when==='liba'&&owner==='manager')&&!(it.when==='manager'&&owner!=='manager');
 function lev(a,b){if(a===b)return 0;const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);
   for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[n];}
@@ -809,7 +819,7 @@ async function incoming(d){
   let ak=(d.priority==='urgent'&&age<3600000&&(k==='say'||k==='ask'))?'call':k;
   if((ak==='call'||ak==='stuck')){if(Date.now()-lastRingAt<60000)ak='ask';else lastRingAt=Date.now();} /* step 47: one ring per batch */
   const who=speakerOf(d);const lead=(d.again?'שוב, כי זה נקטע באמצע. ':'')+(d.merged>1?'העדכון האחרון מתוך '+d.merged+' על '+(d.topic||'אותה משימה')+'. ':'')+(d.restated?'':old?heAgo(age,d.ts)+': ':'');
-  const spokenText=(d.priority==='urgent'&&!old?'דחוף. ':'')+prefixOf(d,who)+lead+d.text;
+  const spokenText=(d.priority==='urgent'&&!old?'דחוף. ':'')+prefixOf(d,who)+lead+(d.shortText||d.text); /* policy: a rule may shorten it */
   if(!appMode&&(ak==='call'||ak==='stuck')){app.className='ring';KIND.textContent='ליבה מצלצלת';KIND.className='kind stuck';ringStart();await new Promise(r=>setTimeout(r,2400));ringStop();app.className='';}
   KIND.textContent=k==='done'?'סיימתי':k==='stuck'?'נתקעתי':'';KIND.className='kind '+k;
   bubble('li',prefixOf(d,who)+lead+d.text);HEARD.hidden=true;OPTS.innerHTML='';
@@ -1073,7 +1083,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
   else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
   pulseLast[dev]={sig:sig,at:now,body:body};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"da69fadffef8"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"2598e2e9a369"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;
@@ -1247,4 +1257,59 @@ window.__people=PEOPLE;
    ("הרואה חשבון"), the value is the name */
 function peopleFromFact(f){if(f.kind!=='person'||f.predicate!=='הוא')return null;const role=/^ה/.test(f.subject)&&f.value.split(' ').length<=2;
   const name=role?f.value:f.subject,rel=role?f.subject:f.value;if(name.split(' ').length>3)return null;return PEOPLE.upsert(name,{relation:rel}).then(p=>{lastPerson=p;return p;});}
+/* Step policy. Every live pref fact (memory/facts, kind pref) is compiled into a typed rule. A message a rule holds
+   back is never lost: it is acked into memory/digest/items/<day> and read once in the evening, and "למה לא סיפרת לי"
+   answers with the rule, its words and its date. Urgent is never muted, commands never, and Liba's own lines never (the board's lines can be).
+   Rule types: never_ask, mute_topic, mute_person, mute_kind, urgent_only (hours), short, digest_topic, address, short_all. */
+const HOUR_HE={'אחת':1,'שתיים':2,'שלוש':3,'ארבע':4,'חמש':5,'שש':6,'שבע':7,'שמונה':8,'תשע':9,'עשר':10,'אחת עשרה':11,'שתים עשרה':12};
+const hourOf=w=>{w=String(w||'').trim();return /^\d+$/.test(w)?+w:(HOUR_HE[w]!=null?HOUR_HE[w]:null);};
+const POLICY_SHAPES=[
+  [/^(אל תשאל|אל תשאלי) אותי (על|לגבי) (.+)$/,m=>({type:'never_ask',topic:m[3]})],
+  [/^(אל תספר|אל תספרי|אל תעדכן|אל תעדכני|בלי עדכונים) (לי |אותי )?(על|לגבי) (.+)$/,m=>({type:'mute_topic',topic:m[4]})],
+  [/^(תשתיק|תשתיקי|השתק) (את )?(.+)$/,m=>({type:'mute_topic',topic:m[3]})],
+  [/^(אל תעביר|אל תעבירי|בלי) (לי )?הודעות (מ|של )(.+)$/,m=>({type:'mute_person',person:m[4]})],
+  [/^בלי הודעות על משימות שנגמרו$/,m=>({type:'mute_kind',kind:'done'})],
+  [/^(אף פעם )?(אל תעיר|אל תעירי) אותי לפני (.+)$/,m=>({type:'urgent_only',from:0,to:hourOf(m[3])})],
+  [/^(אף פעם )?(אל תעיר|אל תעירי) אותי אחרי (.+)$/,m=>({type:'urgent_only',from:hourOf(m[3])+12>23?hourOf(m[3]):hourOf(m[3])+(hourOf(m[3])<12?12:0),to:24})],
+  [/^רק דחוף (בין|מ)(.+?) (ל|עד )(.+)$/,m=>({type:'urgent_only',from:hourOf(m[2]),to:hourOf(m[4])})],
+  [/^(תאסוף|תאספי) (לי )?(את )?(.+) לערב$/,m=>({type:'digest_topic',topic:m[4]})],
+  [/^(תקצר|תקצרי|בקצרה) (על|לגבי) (.+)$/,m=>({type:'short',topic:m[3]})],
+  [/^(תמיד )?(תקצר|תקצרי|בקצרה)$/,m=>({type:'short_all'})],
+  [/^(תקרא|תקראי) לי (.+)$/,m=>({type:'address',name:m[2]})],
+];
+const POLICY={rules:[],at:0,
+  compileOne(f){const t=inorm(f.value||f.raw||'');for(const [re,mk] of POLICY_SHAPES){const m=t.match(re);if(m){const r=mk(m);if(r.type==='urgent_only'&&(r.from==null||r.to==null))return null;return Object.assign(r,{id:'r-'+hash36(t),text:t,at:+f.updatedAt||+f.ts||Date.now(),key:f.key});}}return null;},
+  async load(){try{const all=await MEM.all();this.rules=all.filter(f=>f.kind==='pref'&&f.state!=='tomb').map(f=>this.compileOne(f)).filter(Boolean);this.at=Date.now();}catch(e){fail('P_DB_READ',e,'policy');}return this.rules;},
+  about(d,topic){const w=memWords(topic);if(!w.length)return false;const hay=memWords([d.topic,d.text].join(' ')).join(' ');return w.every(x=>hay.indexOf(x)>=0);},
+  /* which rule holds this message back, if any - urgent, local and commands never */
+  check(d,now){if((d.local&&d.speaker!=='הלוח')||d.kind==='cmd'||d.priority==='urgent')return null;const h=jHour(now||Date.now());
+    for(const r of this.rules){
+      if(r.type==='never_ask'&&(d.kind==='ask'||d.kind==='stuck')&&this.about(d,r.topic))return r;
+      if((r.type==='mute_topic'||r.type==='digest_topic')&&this.about(d,r.topic))return r;
+      if(r.type==='mute_person'){const who=memWords(r.person).join(' ');if(who&&(memWords(speakerOf(d)).join(' ').indexOf(who)>=0||memWords(d.from==='manager'?'המנהל':'').join(' ').indexOf(who)>=0))return r;}
+      if(r.type==='mute_kind'&&d.kind===r.kind)return r;
+      if(r.type==='urgent_only'&&(r.from<=r.to?(h>=r.from&&h<r.to):(h>=r.from||h<r.to)))return r;}
+    return null;},
+  shorten(d){const r=this.rules.find(x=>(x.type==='short'&&this.about(d,x.topic))||x.type==='short_all');if(!r||d.local)return null;const t=String(d.text||'');const cut=t.search(/[.!?](\s|$)/);
+    if(cut<0||cut>t.length-20)return null;return {text:t.slice(0,cut+1)+' יש עוד - תגיד "תקריא את כל ההודעה".',full:t,rule:r};}
+};
+let lastShort=null;
+async function digestAdd(d,r){const day=trDay(Date.now());try{await P.digest(day).update({items:{[d.id]:{text:String(d.text||'').slice(0,300),topic:d.topic||'',speaker:speakerOf(d),rule:r.id,ruleText:r.text,at:Date.now()}}});}
+  catch(e){try{await P.digest(day).set({day:day,items:{[d.id]:{text:String(d.text||'').slice(0,300),topic:d.topic||'',speaker:speakerOf(d),rule:r.id,ruleText:r.text,at:Date.now()}}});}catch(x){fail('P_DB_WRITE',x,'digest');}}}
+/* the evening: what was held back today, once, in two sentences */
+let digestSaidDay='';
+async function digestEvening(now){now=now||Date.now();const h=jHour(now),day=trDay(now);if(h<19||digestSaidDay===day||!db)return false;
+  let g;try{g=await P.digest(day).get();}catch(e){return false;}const x=g.exists?(g.data()||{}):null;if(!x||x.readAt)return false;const items=Object.values(x.items||{});digestSaidDay=day;if(!items.length)return false;
+  const by={};items.forEach(i=>{const k=i.topic||i.speaker||'אחר';by[k]=(by[k]||0)+1;});
+  queueLocal({id:'digest-'+day,kind:'say',release:true,speaker:'ליבה',topic:'סיכום השתקות',text:'בזמן שהשתקת היום חיכו '+items.length+' הודעות: '+Object.entries(by).slice(0,4).map(([k,n])=>n+' על '+k).join(', ')+'. תגיד "למה לא סיפרת לי" כדי לשמוע למה.'});
+  P.digest(day).update({readAt:now}).catch(()=>{});return true;}
+function policyWhy(){(async()=>{const day=trDay(Date.now());const g=await P.digest(day).get();const x=g.exists?(g.data()||{}):null;const items=Object.values((x&&x.items)||{}).sort((a,b)=>b.at-a.at);
+  if(!items.length){sayLocal('היום לא השתקתי כלום.');return;}const i=items[0];const r=POLICY.rules.find(z=>z.id===i.rule);
+  sayLocal('לא סיפרתי על '+(i.topic||i.speaker||'זה')+' כי ביקשת "'+i.ruleText+'"'+(r?', '+agoWords(Date.now(),r.at).replace(/^מלפני/,'לפני'):'')+'. זה הכלל '+i.rule+'. ההודעה: '+i.text.slice(0,120)+(items.length>1?'. ועוד '+(items.length-1)+' היום.':'.'));})().catch(e=>{fail('P_DB_READ',e,'digest');sayLocal('לא הצלחתי לקרוא.');});return true;}
+function policyList(){POLICY.load().then(rs=>sayLocal(rs.length?'יש '+rs.length+' כללים: '+rs.map(r=>r.text).join('; ')+'.':'אין כללים. תגיד למשל "אל תעדכן אותי על מייל".'));return true;}
+function policyDrop(rest){const q=rest.trim();if(!q)return false;POLICY.load().then(async rs=>{const hit=rs.filter(r=>r.text.indexOf(inorm(q))>=0);for(const r of hit)if(r.key)await P.fact(r.key).update({state:'tomb',tombAt:Date.now()});await POLICY.load();
+  sayLocal(hit.length?'ביטלתי '+hit.length+(hit.length===1?' כלל':' כללים')+' על '+q+'.':'לא מצאתי כלל על '+q+'.');});return true;}
+function policyFull(){if(!lastShort)return false;sayLocal(lastShort);lastShort=null;return true;}
+setTimeout(()=>{if(db)POLICY.load();},3000);setInterval(()=>{if(db){POLICY.load();digestEvening();}},10*60000);
+window.__policy=POLICY;
 </script>

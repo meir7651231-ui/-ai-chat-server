@@ -123,6 +123,12 @@
       "cap": 200,
       "cls": "record",
       "time": "lastMentioned"
+    },
+    "memory/digest/items": {
+      "cap": 40,
+      "ttlDays": 30,
+      "cls": "record",
+      "time": "day"
     }
   }
 }

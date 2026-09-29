@@ -257,6 +257,87 @@
    ]
   },
   {
+   "id": "policy.why",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "exact": [
+    "למה לא סיפרת לי",
+    "למה לא אמרת לי",
+    "מה השתקת היום"
+   ],
+   "handler": "policyWhy",
+   "help": "\"למה לא סיפרת לי\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "policy.list",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "exact": [
+    "מה הכללים שלי",
+    "אילו כללים יש",
+    "מה השתקת"
+   ],
+   "handler": "policyList",
+   "help": "\"מה הכללים שלי\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "policy.drop",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "prefix": [
+    "(תבטל|תבטלי) את הכלל על"
+   ],
+   "handler": "policyDrop",
+   "help": "\"תבטל את הכלל על X\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "policy.full",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "exact": [
+    "(תקריא|תקריאי) את כל ההודעה",
+    "את כל ההודעה"
+   ],
+   "handler": "policyFull",
+   "pass": true
+  },
+  {
+   "id": "policy.add",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "prefix": [
+    "(אל תספר|אל תספרי|אל תעדכן|אל תעדכני|בלי עדכונים) [לי] (על|לגבי)",
+    "(אל תספר|אל תספרי|אל תעדכן|אל תעדכני) אותי (על|לגבי)",
+    "(תשתיק|תשתיקי|השתק)",
+    "(אל תעביר|אל תעבירי) [לי] הודעות",
+    "בלי הודעות על משימות שנגמרו",
+    "[אף פעם] (אל תעיר|אל תעירי) אותי",
+    "רק דחוף",
+    "(תאסוף|תאספי) [לי]",
+    "(תקצר|תקצרי|בקצרה)",
+    "(תקרא|תקראי) לי"
+   ],
+   "handler": "memPref",
+   "help": "\"אל תעדכן אותי על X\", \"תשתיק X\", \"אל תעיר אותי לפני שש\", \"תקצר\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
    "id": "memory.list",
    "where": "page",
    "when": "liba",
@@ -1061,6 +1142,7 @@
  },
  "parsers": {
   "16-memory.js": "MEM.parse - the grammar of a fact ('X הוא Y', 'יש לי X'), not a command; commands stay in this registry",
-  "17-people.js": "the relation words of a person card, not a command"
+  "17-people.js": "the relation words of a person card, not a command",
+  "18-policy.js": "the grammar of a preference ('אל תעיר אותי לפני שש'), compiled into a rule - not a command"
  }
 }

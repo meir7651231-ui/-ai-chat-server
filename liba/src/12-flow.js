@@ -38,7 +38,7 @@ async function incoming(d){
   let ak=(d.priority==='urgent'&&age<3600000&&(k==='say'||k==='ask'))?'call':k;
   if((ak==='call'||ak==='stuck')){if(Date.now()-lastRingAt<60000)ak='ask';else lastRingAt=Date.now();} /* step 47: one ring per batch */
   const who=speakerOf(d);const lead=(d.again?'שוב, כי זה נקטע באמצע. ':'')+(d.merged>1?'העדכון האחרון מתוך '+d.merged+' על '+(d.topic||'אותה משימה')+'. ':'')+(d.restated?'':old?heAgo(age,d.ts)+': ':'');
-  const spokenText=(d.priority==='urgent'&&!old?'דחוף. ':'')+prefixOf(d,who)+lead+d.text;
+  const spokenText=(d.priority==='urgent'&&!old?'דחוף. ':'')+prefixOf(d,who)+lead+(d.shortText||d.text); /* policy: a rule may shorten it */
   if(!appMode&&(ak==='call'||ak==='stuck')){app.className='ring';KIND.textContent='ליבה מצלצלת';KIND.className='kind stuck';ringStart();await new Promise(r=>setTimeout(r,2400));ringStop();app.className='';}
   KIND.textContent=k==='done'?'סיימתי':k==='stuck'?'נתקעתי':'';KIND.className='kind '+k;
   bubble('li',prefixOf(d,who)+lead+d.text);HEARD.hidden=true;OPTS.innerHTML='';

@@ -9,6 +9,8 @@ const trMin=t=>Math.floor(t/60000);
 const trCol=()=>P.telemetry();
 /* hot loops (syncWindows per frame, wake-mode onError every 400ms) carry the hardest cap */
 const trCap=c=>c==='E_CRASH_SAVE'?1e9:(c==='E_OVERLAY_UPDATE'||/^E_SR_\d+$/.test(c))?2:5;
+/* the hour on Meir's clock (Jerusalem), not the browser's - a phone abroad or a UTC test machine must not move the night */
+function jHour(ts){try{return +new Date(ts).toLocaleString('en-GB',{timeZone:'Asia/Jerusalem',hour:'2-digit',hour12:false})%24;}catch(e){return new Date(ts).getHours();}}
 function trDay(ts){try{return new Date(ts).toLocaleDateString('sv-SE',{timeZone:'Asia/Jerusalem'});}catch(e){return new Date(ts).toISOString().slice(0,10);}}
 function trId(t,code,ctx){let h=0;const s=code+'|'+(ctx||'');for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return t.toString(36)+'-'+('00'+(h%46656).toString(36)).slice(-3);}
 /* ctx is machine text only – this strip is the privacy boundary: no utterance, no note, no url with a token */
