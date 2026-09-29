@@ -3,7 +3,7 @@ package il.liba.app
 
 object Protocol {
     const val VERSION = 1
-    const val HASH = "7eef3940e84b"
+    const val HASH = "ab52cc1b87ed"
     val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace")
 
     /** page -> app */
@@ -35,7 +35,7 @@ object Protocol {
     /** Relay for the top frame's message listener: page -> LibaBridge. */
     const val RELAY = """
     if(d.liba==="ready"){ready=true;LibaBridge.ready();}
-    else if(d.liba==="say"){LibaBridge.say(String(d.text||""),String(d.kind||"say"),JSON.stringify(d.options||[]),String(d.speaker||""),String(d.id||""));}
+    else if(d.liba==="say"){LibaBridge.say(String(d.text||""),String(d.kind||"say"),JSON.stringify(d.options||[]),String(d.speaker||""),String(d.id||""),String(d.mid||""));}
     else if(d.liba==="sent"){LibaBridge.sent(String(d.text||""));}
     else if(d.liba==="error"){LibaBridge.error(String(d.text||""),String(d.reason||""));}
     else if(d.liba==="queued"){LibaBridge.queued(String(d.text||""));}
@@ -50,7 +50,7 @@ object Protocol {
     /** Senders the app calls through evaluateJavascript: app -> page. */
     const val SENDERS = """
   window.__libaSend=function(k,o){Array.prototype.slice.call(document.querySelectorAll('iframe')).forEach(function(f){try{f.contentWindow.postMessage(Object.assign({liba:k},o),'*');}catch(e){}});};
-  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"7eef3940e84b",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||''});};
+  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"ab52cc1b87ed",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
   window.__libaCrash=function(id,version,text){window.__libaSend("crash",{id:id,version:version,text:text});};
   window.__libaSpoke=function(id,startAt,endAt,cause){window.__libaSend("spoke",{id:id,startAt:startAt,endAt:endAt,cause:cause});};
   window.__libaSpeaking=function(id){window.__libaSend("speaking",{id:id});};
@@ -83,7 +83,7 @@ enum class LibaState { OFFLINE, IDLE, WAKE, LISTENING, THINKING, SENDING, SPEAKI
 /** Every page -> app message in the contract. JsBridge implements this, so a message with no Kotlin side does not compile. */
 interface ProtocolBridge {
     fun ready()
-    fun say(text: String, kind: String, options: String, speaker: String, id: String)
+    fun say(text: String, kind: String, options: String, speaker: String, id: String, mid: String)
     fun sent(text: String)
     fun error(text: String, reason: String)
     fun queued(text: String)

@@ -97,13 +97,12 @@ async function inboxRetry(d,why){const attempts=(d.attempts||0)+1;
    command with no bubble are never released: that would mean saying it twice, or running it nowhere. */
 const HOLD_HE={quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
 const heldNow=()=>inboxQ.filter(d=>!spokenLocal.has(d.id)).map(d=>({d,g:gate(d)})).filter(x=>!x.g.ok);
-function missedCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
-  if(/^(מה פספסתי|מה חיכה לי|מה מחכה לי|למה שתקת היום)$/.test(t)){const h=heldNow();const by={};h.forEach(x=>{by[x.g.reason]=(by[x.g.reason]||0)+1;});
+function missedList(){{const h=heldNow();const by={};h.forEach(x=>{by[x.g.reason]=(by[x.g.reason]||0)+1;});
     const parts=Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([r,n])=>(n===1?'אחת':n)+' '+(HOLD_HE[r]||r));
     const today=Object.values(silenceDay).reduce((a,b)=>a+b,0);
-    sayLocal(h.length?(h.length===1?'מחכה לך הודעה אחת: ':'מחכות לך '+h.length+' הודעות: ')+parts.join(', ')+'. תגיד תשחרר הכול, או תשחרר רק שאלות.':'לא פספסת כלום'+(today?', הכול כבר הוקרא.':'.'));return true;}
-  const all=/^(תשחרר הכול|תשחרר הכל|תשחררי הכול|תשחררי הכל)$/.test(t),asks=/^(תשחרר רק שאלות|תשחררי רק שאלות)$/.test(t);
-  if(all||asks){let n=0;heldNow().forEach(({d,g})=>{if(g.reason==='claim'||g.reason==='noapp')return;if(asks&&d.kind!=='ask'&&d.kind!=='stuck')return;d.release=true;if(d.retryWhy==='retry')d.retryAt=0;n++;});
-    sayLocal(n?'משחררת '+(n===1?'הודעה אחת':n+' הודעות')+'.':'אין מה לשחרר.');setTimeout(pump,400);return true;}
-  return false;}
+    sayLocal(h.length?(h.length===1?'מחכה לך הודעה אחת: ':'מחכות לך '+h.length+' הודעות: ')+parts.join(', ')+'. תגיד תשחרר הכול, או תשחרר רק שאלות.':'לא פספסת כלום'+(today?', הכול כבר הוקרא.':'.'));return true;}}
+function missedAll(){return missedRelease(false);}
+function missedAsks(){return missedRelease(true);}
+function missedRelease(asks){{let n=0;heldNow().forEach(({d,g})=>{if(g.reason==='claim'||g.reason==='noapp')return;if(asks&&d.kind!=='ask'&&d.kind!=='stuck')return;d.release=true;if(d.retryWhy==='retry')d.retryAt=0;n++;});
+    sayLocal(n?'משחררת '+(n===1?'הודעה אחת':n+' הודעות')+'.':'אין מה לשחרר.');setTimeout(pump,400);return true;}}
 window.__silence={gate:gate,held:()=>heldNow().map(x=>({id:x.d.id,reason:x.g.reason})),day:()=>Object.assign({},silenceDay)};

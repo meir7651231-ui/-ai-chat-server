@@ -28,7 +28,7 @@ async function ledgerFlush(now){now=now||Date.now();const day=trDay(now);
   try{await P.ledger(day).update(mine);}catch(e){if(e&&e.code==='not_found'){try{await P.ledger(day).set(Object.assign({day:day},mine));}catch(x){fail('P_DB_WRITE',x,'ledger');}}else fail('P_DB_WRITE',e,'ledger');}}
 setInterval(()=>{if(db)ledgerFlush();},LEDGER_EVERY);
 /* "why were you silent" / "how are you": from the pulse documents, one sentence per device */
-const ago=ms=>heAgo(ms).replace(/^מלפני/,'לפני');
+const ago=ms=>{const w=heAgo(ms);return w.indexOf('מלפני')===0?w.slice(1):w;};
 function pulseSay(p,now,many){const who=many?(p.name||'מכשיר')+': ':'';const age=now-(+p.at||0);
   if(age>PULSE_STALE)return who+'הטלפון לא דיבר איתי מאז '+heAt(+p.at)+'.';
   const since=+p.since>0?' '+ago(now-(+p.since)):'';

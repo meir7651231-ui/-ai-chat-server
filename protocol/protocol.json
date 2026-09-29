@@ -21,7 +21,8 @@
         "kind": "str=say",
         "options": "list",
         "speaker": "str",
-        "id": "str"
+        "id": "str",
+        "mid": "str"
       }
     },
     "sent": {
@@ -91,7 +92,8 @@
         "caps": "list",
         "wall": "int",
         "state": "str",
-        "urgent": "str"
+        "urgent": "str",
+        "spoken": "str"
       },
       "from": {
         "ver": "window.__libaVer||''",
@@ -100,7 +102,8 @@
         "caps": "CAPS",
         "wall": "Date.now()",
         "state": "window.__libaState||''",
-        "urgent": "window.__libaUrgent||''"
+        "urgent": "window.__libaUrgent||''",
+        "spoken": "window.__libaSpoken||''"
       }
     },
     "crash": {

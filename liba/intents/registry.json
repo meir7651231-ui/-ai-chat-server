@@ -1,0 +1,879 @@
+{
+ "version": 1,
+ "note": "Step intent-kernel: the one place a voice command is defined. Phrases use a small pattern language, expanded by liba/intents/build.mjs: (a|b|c) = one of, [x] = optional, [a|b] = optional one of. exact = the whole sentence; prefix = the sentence starts with it (the rest is the slot). where: page (the channel page), app (the bubble, before anything reaches the page), claude (sent on as a sentence - a session does it, by the rule named in rule). when: liba = only while ליבה holds the line, manager = only while the manager does. status: live, or planned (never said as a promise). confirm: asks before it runs. Run node liba/intents/build.mjs after any change. lead: words dropped from the start of the slot (\"ש\" also when attached); leadRequired: the slot must start with one.",
+ "intents": [
+  {
+   "id": "quiet.off",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "exact": [
+    "(בטל|סיים|תפסיק) [את] (השקט|שקט)",
+    "תפריע",
+    "אפשר להפריע",
+    "שקט נגמר"
+   ],
+   "handler": "quietOff",
+   "help": "\"תפריע\""
+  },
+  {
+   "id": "quiet.on",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "prefix": [
+    "אל תפריע",
+    "תהיה בשקט",
+    "בלי הפרעות",
+    "שקט"
+   ],
+   "handler": "quietOn",
+   "help": "\"אל תפריע שעה / עד הערב\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "help",
+   "where": "page",
+   "when": "liba",
+   "family": "עזרה",
+   "exact": [
+    "מה (את|אתה|ליבה) (יודעת|יודע)",
+    "עזרה",
+    "מה אפשר להגיד",
+    "פקודות"
+   ],
+   "handler": "helpAll",
+   "help": "\"מה את יודעת\""
+  },
+  {
+   "id": "help.family",
+   "where": "page",
+   "when": "liba",
+   "family": "עזרה",
+   "prefix": [
+    "פקודות"
+   ],
+   "handler": "helpFamily",
+   "help": "\"פקודות <משפחה>\""
+  },
+  {
+   "id": "gallery.week",
+   "where": "page",
+   "when": "liba",
+   "family": "משימות",
+   "exact": [
+    "מה (בניתי|בנינו) השבוע",
+    "גלריה",
+    "מה בניתי"
+   ],
+   "handler": "galleryWeek",
+   "help": "\"מה בניתי השבוע\""
+  },
+  {
+   "id": "generator.open",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "exact": [
+    "המחולל",
+    "(תפתח|פתח) את המחולל",
+    "מסך המחולל"
+   ],
+   "handler": "generatorOpen",
+   "help": "\"המחולל\""
+  },
+  {
+   "id": "trace.today",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "exact": [
+    "מה נשבר [היום]",
+    "מה התקלקל היום",
+    "מה נפל היום",
+    "תקלות",
+    "מה התקלות",
+    "קופסה שחורה"
+   ],
+   "handler": "traceToday",
+   "help": "\"מה נשבר היום\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "memory.remember",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "prefix": [
+    "(תזכור|תזכרי|זכור|זכרי)"
+   ],
+   "handler": "memRemember",
+   "help": "\"תזכור ש…\"",
+   "requires": [
+    "db"
+   ],
+   "lead": [
+    "כי",
+    "את"
+   ]
+  },
+  {
+   "id": "memory.forget",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "prefix": [
+    "(תשכח|תשכחי|שכח|שכחי)"
+   ],
+   "handler": "memForget",
+   "help": "\"תשכח את…\"",
+   "requires": [
+    "db"
+   ],
+   "confirm": true,
+   "lead": [
+    "את",
+    "ש"
+   ],
+   "leadRequired": true
+  },
+  {
+   "id": "memory.pref",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "prefix": [
+    "(אל תשאל|אל תשאלי) אותי (על|לגבי)",
+    "תמיד תזכור",
+    "תמיד אל",
+    "אף פעם אל"
+   ],
+   "handler": "memPref",
+   "help": "\"אל תשאל אותי על…\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "memory.list",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "exact": [
+    "מה (אתה|את) זוכר",
+    "מה את זוכרת",
+    "מה בזיכרון",
+    "מה זכרת"
+   ],
+   "handler": "memList",
+   "help": "\"מה אתה זוכר\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "memory.nolog",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "exact": [
+    "אל תשמור שיחות",
+    "בלי לשמור שיחות",
+    "תפסיק לשמור"
+   ],
+   "handler": "memNoLog",
+   "help": "\"אל תשמור שיחות\""
+  },
+  {
+   "id": "memory.log",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "exact": [
+    "תשמור שיחות",
+    "תחזור לשמור"
+   ],
+   "handler": "memLog"
+  },
+  {
+   "id": "memory.privacy",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "exact": [
+    "מה נשמר",
+    "פרטיות",
+    "מה (אתה|את) (שומר|שומרת)"
+   ],
+   "handler": "memPrivacy",
+   "help": "\"מה נשמר\""
+  },
+  {
+   "id": "req.today",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "exact": [
+    "כמה בקשות [היום]",
+    "כמה בקשות סגרת",
+    "כמה שאלתי היום",
+    "מה סגרת היום"
+   ],
+   "handler": "reqToday",
+   "help": "\"כמה בקשות היום\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "latency.today",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "exact": [
+    "כמה זמן לוקח לך לענות",
+    "כמה זמן לוקחות תשובות",
+    "כמה מהר את עונה",
+    "מה זמן התגובה"
+   ],
+   "handler": "latencyToday",
+   "help": "\"כמה זמן לוקח לך לענות\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "line.status",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "exact": [
+    "מה מצב הקו",
+    "מצב הקו",
+    "איך הקו"
+   ],
+   "handler": "lineStatus",
+   "help": "\"מה מצב הקו\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "phone.why",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "exact": [
+    "למה שתקת",
+    "למה לא ענית",
+    "למה לא דיברת",
+    "מה שלומך",
+    "מה שלום הטלפון",
+    "מה מצב הטלפון"
+   ],
+   "handler": "phoneWhy",
+   "help": "\"למה שתקת\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "outbox.list",
+   "where": "page",
+   "when": "liba",
+   "family": "שליחה",
+   "exact": [
+    "מה לא נשלח",
+    "מה נתקע",
+    "מה מחכה לשליחה"
+   ],
+   "handler": "outboxList",
+   "help": "\"מה לא נשלח\""
+  },
+  {
+   "id": "outbox.resend",
+   "where": "page",
+   "when": "liba",
+   "family": "שליחה",
+   "exact": [
+    "(תשלח|תשלחי) שוב",
+    "תנסי שוב לשלוח"
+   ],
+   "handler": "outboxResend",
+   "help": "\"תשלח שוב\""
+  },
+  {
+   "id": "missed.list",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "exact": [
+    "מה פספסתי",
+    "מה חיכה לי",
+    "מה מחכה לי",
+    "למה שתקת היום"
+   ],
+   "handler": "missedList",
+   "help": "\"מה פספסתי\""
+  },
+  {
+   "id": "missed.all",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "exact": [
+    "(תשחרר|תשחררי) (הכול|הכל)"
+   ],
+   "handler": "missedAll",
+   "help": "\"תשחרר הכול\""
+  },
+  {
+   "id": "missed.asks",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "exact": [
+    "(תשחרר|תשחררי) רק שאלות"
+   ],
+   "handler": "missedAsks"
+  },
+  {
+   "id": "map",
+   "where": "page",
+   "when": "liba",
+   "family": "משימות",
+   "exact": [
+    "מפה",
+    "מפת המערכת",
+    "תראה מפה",
+    "מה כל הסשנים עושים",
+    "מי תקוע"
+   ],
+   "handler": "mapShow",
+   "help": "\"מפה\" (כל הסשנים)"
+  },
+  {
+   "id": "open.last",
+   "where": "page",
+   "when": "liba",
+   "family": "משימות",
+   "exact": [
+    "(תפתח|פתח)",
+    "תפתח את התוצאה",
+    "תראה לי",
+    "(תפתח|פתח) תראה לי",
+    "תפתח לי",
+    "תפתח (אותו|אותה)",
+    "תראה"
+   ],
+   "handler": "openLast",
+   "help": "\"תפתח\" (תוצאה אחרונה)"
+  },
+  {
+   "id": "task.priority",
+   "where": "page",
+   "when": "liba",
+   "family": "משימות",
+   "prefix": [
+    "קודם",
+    "תעדיף",
+    "עדיפות ל",
+    "תתחיל עם"
+   ],
+   "handler": "taskPriority",
+   "help": "\"קודם את X\"",
+   "requires": [
+    "db"
+   ],
+   "lead": [
+    "את"
+   ]
+  },
+  {
+   "id": "owner.liba",
+   "where": "page",
+   "family": "אנשים",
+   "exact": [
+    "[היי|הי] ליבה (תחזור|תחזרי|חזור|חזרי)"
+   ],
+   "handler": "ownerLiba",
+   "help": "\"ליבה תחזור\""
+  },
+  {
+   "id": "owner.back",
+   "where": "page",
+   "when": "manager",
+   "family": "אנשים",
+   "exact": [
+    "(תחזור|תחזרי|חזור|חזרי)"
+   ],
+   "handler": "ownerLiba"
+  },
+  {
+   "id": "owner.manager",
+   "where": "page",
+   "family": "אנשים",
+   "exact": [
+    "(תעלה|העלה|תעביר) [את] [ה]מנהל",
+    "(תן|תעביר) (למנהל|להמנהל)",
+    "מנהל"
+   ],
+   "handler": "ownerManager",
+   "help": "\"תעלה את המנהל\""
+  },
+  {
+   "id": "address.liba",
+   "where": "page",
+   "when": "manager",
+   "family": "אנשים",
+   "prefix": [
+    "[היי|הי] ליבה"
+   ],
+   "handler": "addressLiba",
+   "pass": true
+  },
+  {
+   "id": "address.manager",
+   "where": "page",
+   "when": "liba",
+   "family": "אנשים",
+   "prefix": [
+    "[היי|הי] מנהל"
+   ],
+   "handler": "addressManager",
+   "pass": true
+  },
+  {
+   "id": "confirm.yes",
+   "where": "page",
+   "family": "עזרה",
+   "exact": [
+    "כן",
+    "תאשר",
+    "אשר",
+    "נכון",
+    "כן בבקשה",
+    "בטח"
+   ],
+   "handler": "confirmYes",
+   "pass": true
+  },
+  {
+   "id": "confirm.no",
+   "where": "page",
+   "family": "עזרה",
+   "exact": [
+    "לא",
+    "בטל",
+    "לא תודה",
+    "עזוב"
+   ],
+   "handler": "confirmNo",
+   "pass": true
+  },
+  {
+   "id": "app.repeat",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "חזור",
+    "תחזור",
+    "תחזור על זה",
+    "עוד פעם",
+    "מה אמרת",
+    "מה"
+   ],
+   "help": "\"חזור\""
+  },
+  {
+   "id": "app.status",
+   "where": "app",
+   "family": "משימות",
+   "exact": [
+    "מה הסטטוס",
+    "סטטוס",
+    "מה קורה",
+    "מה המצב",
+    "מה עם המשימות",
+    "משימות"
+   ],
+   "help": "\"מה הסטטוס\""
+  },
+  {
+   "id": "app.slower",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "לאט יותר",
+    "יותר לאט",
+    "לאט",
+    "תדבר לאט"
+   ],
+   "help": "\"לאט יותר\""
+  },
+  {
+   "id": "app.faster",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "מהר יותר",
+    "יותר מהר",
+    "מהר",
+    "תדבר מהר"
+   ],
+   "help": "\"מהר יותר\""
+  },
+  {
+   "id": "app.night.on",
+   "where": "app",
+   "family": "שקט",
+   "exact": [
+    "מצב לילה",
+    "לחישה",
+    "מצב לחישה",
+    "בלי קול"
+   ],
+   "help": "\"מצב לילה\""
+  },
+  {
+   "id": "app.night.off",
+   "where": "app",
+   "family": "שקט",
+   "exact": [
+    "בטל מצב לילה",
+    "סיים מצב לילה",
+    "עם קול",
+    "תדברי",
+    "תדבר"
+   ],
+   "help": "\"בטל מצב לילה\""
+  },
+  {
+   "id": "app.barge.on",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "תני להפריע",
+    "תן להפריע",
+    "אפשר להפריע לך"
+   ],
+   "help": "\"תני להפריע\""
+  },
+  {
+   "id": "app.barge.off",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "אל תני להפריע",
+    "אל תן להפריע",
+    "בלי הפרעות באמצע"
+   ]
+  },
+  {
+   "id": "app.car.on",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "מצב רכב",
+    "אני נוהג",
+    "נוהג"
+   ],
+   "help": "\"מצב רכב\""
+  },
+  {
+   "id": "app.car.off",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "בטל מצב רכב",
+    "הגעתי",
+    "סיימתי לנהוג"
+   ]
+  },
+  {
+   "id": "app.headset.on",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "אוזניות",
+    "כפתור אוזניה",
+    "מצב אוזניות"
+   ]
+  },
+  {
+   "id": "app.headset.off",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "בלי אוזניות",
+    "בטל אוזניות"
+   ]
+  },
+  {
+   "id": "app.reports.off",
+   "where": "app",
+   "family": "בקרה",
+   "exact": [
+    "בלי דוחות",
+    "בטל דוחות",
+    "אל תשלח דוחות"
+   ]
+  },
+  {
+   "id": "app.reports.on",
+   "where": "app",
+   "family": "בקרה",
+   "exact": [
+    "עם דוחות",
+    "תשלח דוחות"
+   ]
+  },
+  {
+   "id": "app.install",
+   "where": "app",
+   "family": "בקרה",
+   "exact": [
+    "תתקין",
+    "התקן",
+    "תתקין את העדכון",
+    "עדכן",
+    "תעדכן"
+   ],
+   "help": "\"תתקין\" (גרסה חדשה)"
+  },
+  {
+   "id": "app.tones.off",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "בלי צלילים",
+    "בטל צלילים"
+   ],
+   "help": "\"בלי צלילים\""
+  },
+  {
+   "id": "app.tones.on",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "עם צלילים",
+    "החזר צלילים"
+   ]
+  },
+  {
+   "id": "app.skip",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "דלג",
+    "תדלג",
+    "הלאה",
+    "מספיק"
+   ],
+   "help": "\"דלג\""
+  },
+  {
+   "id": "app.resume",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "תמשיך",
+    "המשך",
+    "תמשיכי"
+   ],
+   "help": "\"תמשיך\""
+  },
+  {
+   "id": "app.pause",
+   "where": "app",
+   "family": "קול",
+   "exact": [
+    "רגע",
+    "חכה",
+    "עצור רגע"
+   ],
+   "help": "\"רגע\""
+  },
+  {
+   "id": "app.stop",
+   "where": "app",
+   "family": "שקט",
+   "exact": [
+    "שקט",
+    "תשתוק",
+    "עצור",
+    "די",
+    "ביטול",
+    "בטל"
+   ],
+   "help": "\"שקט\" (כיבוי מילת הפעלה)"
+  },
+  {
+   "id": "app.words.list",
+   "where": "app",
+   "family": "שליחה",
+   "exact": [
+    "מה אמרתי כשהיית מנותקת",
+    "מה שמרת",
+    "מה בתור"
+   ],
+   "help": "\"מה אמרתי כשהיית מנותקת\""
+  },
+  {
+   "id": "app.words.clear",
+   "where": "app",
+   "family": "שליחה",
+   "exact": [
+    "(תמחק|תמחקי|מחק) את התור"
+   ]
+  },
+  {
+   "id": "claude.task.stop",
+   "where": "claude",
+   "rule": "tasks_rules",
+   "family": "משימות",
+   "prefix": [
+    "תעצור את"
+   ],
+   "help": "\"תעצור את X\""
+  },
+  {
+   "id": "claude.task.resume",
+   "where": "claude",
+   "rule": "tasks_rules",
+   "family": "משימות",
+   "prefix": [
+    "תמשיך את"
+   ],
+   "help": "\"תמשיך את X\""
+  },
+  {
+   "id": "claude.build",
+   "where": "claude",
+   "rule": "tasks_rules",
+   "family": "בנייה",
+   "prefix": [
+    "תבנה לי",
+    "תבדוק",
+    "תתקן"
+   ],
+   "help": "\"תבנה לי X\", \"תבדוק X\", \"תתקן X\" – נפתח עובד"
+  },
+  {
+   "id": "claude.deploy",
+   "where": "claude",
+   "rule": "generator_rules",
+   "family": "בנייה",
+   "exact": [
+    "תעלה לאוויר"
+   ],
+   "help": "\"תעלה לאוויר\""
+  },
+  {
+   "id": "claude.rollback",
+   "where": "claude",
+   "rule": "generator_rules",
+   "family": "בנייה",
+   "prefix": [
+    "תחזור לגרסה"
+   ],
+   "help": "\"תחזור לגרסה של הבוקר\""
+  },
+  {
+   "id": "claude.manager.now",
+   "where": "claude",
+   "rule": "manager_rules",
+   "family": "אנשים",
+   "exact": [
+    "מה המנהל עושה עכשיו"
+   ],
+   "help": "\"מה המנהל עושה עכשיו\""
+  },
+  {
+   "id": "claude.memory.export",
+   "where": "claude",
+   "rule": "memory_rules",
+   "family": "זיכרון",
+   "exact": [
+    "תייצא את הזיכרון"
+   ],
+   "help": "\"תייצא את הזיכרון\""
+  },
+  {
+   "id": "claude.mail",
+   "where": "claude",
+   "rule": "senses_rules",
+   "family": "חושים",
+   "exact": [
+    "מה חשוב במייל"
+   ],
+   "help": "\"מה חשוב במייל\", \"תענה ש…\""
+  },
+  {
+   "id": "claude.remind",
+   "where": "claude",
+   "rule": "senses_rules",
+   "family": "חושים",
+   "prefix": [
+    "תזכיר לי"
+   ],
+   "help": "\"תזכיר לי מחר בתשע…\""
+  },
+  {
+   "id": "claude.search",
+   "where": "claude",
+   "rule": "senses_rules",
+   "family": "חושים",
+   "prefix": [
+    "תחפש"
+   ],
+   "help": "\"תחפש…\""
+  },
+  {
+   "id": "claude.lessons",
+   "where": "claude",
+   "rule": "memory_rules",
+   "family": "בקרה",
+   "exact": [
+    "מה למדנו היום"
+   ],
+   "help": "\"מה למדנו היום\""
+  },
+  {
+   "id": "claude.cost",
+   "where": "claude",
+   "rule": "tasks_rules",
+   "family": "בקרה",
+   "exact": [
+    "כמה עלה היום"
+   ],
+   "help": "\"כמה עלה היום\""
+  },
+  {
+   "id": "claude.decisions",
+   "where": "claude",
+   "rule": "manager_rules",
+   "family": "בקרה",
+   "exact": [
+    "מה אישרתי היום"
+   ],
+   "help": "\"מה אישרתי היום\""
+  },
+  {
+   "id": "routine.summaries",
+   "where": "claude",
+   "status": "planned",
+   "family": "בקרה",
+   "exact": [],
+   "help": "סיכום בוקר ב-08:00, סיכום ערב ב-19:00",
+   "why": "needs a scheduled routine; creating one was refused (unauthorized persistence) - not promised until Meir sets it up"
+  }
+ ],
+ "families": {
+  "דיבור": "לחיצה על הבועה, \"ליבה\" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח \"ליבה – דבר\" במסך הנעילה, שיתוף מכל אפליקציה → ליבה"
+ }
+}

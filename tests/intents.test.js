@@ -1,0 +1,59 @@
+// step intent-kernel: the one router, by table. Each sentence -> the command it is (or none: it goes to Claude).
+// The dangerous neighbours from the plan ("תעצור"/"תעזור", "תמחק"/"תמשיך") must never cross, a near miss is asked and
+// never run, "לא" sends the sentence on as it was, and "תשכח" asks before it deletes. Run: node tests/intents.test.js
+const { chromium } = require('playwright'); const fs = require('fs'); const path = require('path'); const os = require('os');
+const TABLE = [
+  ['אל תפריע שעה', 'quiet.on', 'שעה'], ['שקט עד הערב', 'quiet.on', 'עד הערב'], ['תפריע', 'quiet.off'], ['בטל את השקט', 'quiet.off'], ['שקט נגמר', 'quiet.off'],
+  ['מה את יודעת?', 'help'], ['פקודות משימות', 'help.family', 'משימות'], ['מה בניתי השבוע', 'gallery.week'], ['המחולל', 'generator.open'],
+  ['מה נשבר היום', 'trace.today'], ['תזכור שהרואה חשבון הוא דני', 'memory.remember', 'שהרואה חשבון הוא דני'], ['תזכור כי מחר יש ישיבה', 'memory.remember', 'מחר יש ישיבה'],
+  ['תשכח את הרואה חשבון', 'memory.forget', 'הרואה חשבון'], ['תשכח שהרואה חשבון הוא דני', 'memory.forget', 'הרואה חשבון הוא דני'], ['תשכח', null],
+  ['אל תשאל אותי על ארוחת ערב', 'memory.pref', 'ארוחת ערב'], ['מה אתה זוכר', 'memory.list'], ['כמה בקשות היום', 'req.today'], ['כמה זמן לוקח לך לענות', 'latency.today'],
+  ['מה מצב הקו', 'line.status'], ['למה שתקת', 'phone.why'], ['מה לא נשלח', 'outbox.list'], ['תשלח שוב', 'outbox.resend'], ['מה פספסתי', 'missed.list'],
+  ['תשחרר הכל', 'missed.all'], ['מפה', 'map'], ['קודם את הבנייה', 'task.priority', 'הבנייה'], ['ליבה, תחזור', 'owner.liba'], ['ליבא תחזור', 'owner.liba'],
+  ['תעלה את המנהל', 'owner.manager'], ['מנהל', 'owner.manager'], ['מנהל מה המצב', 'address.manager', 'מה המצב'],
+  // these go to Claude, as sentences
+  ['תעביר למנהל את הקובץ', null], ['תעצור את הבנייה', null], ['תבנה לי אתר', null], ['העיצוב טוב אבל יותר מפלצתי', null], ['מה נשאר לעשות היום', null],
+  // the dangerous neighbours never become each other
+  ['תעזור לי עם המייל', null], ['תמשיך', null], ['תמחק', null],
+  // punctuation, niqqud and spacing do not matter
+  ['  מַה  פִּסְפַסְתִּי ?! ', 'missed.list'], ['תשלח   שוב.', 'outbox.resend'],
+];
+(async () => {
+  const e2e = fs.readFileSync(path.join(__dirname, 'page.e2e.js'), 'utf8');
+  const STUB = eval(e2e.slice(e2e.indexOf('const STUB = ') + 13, e2e.indexOf('`;', e2e.indexOf('const STUB = ')) + 1));
+  const html = fs.readFileSync(path.join(__dirname, '..', 'liba-call.html'), 'utf8');
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'liba-intents-'));
+  fs.writeFileSync(tmp + '/inner.html', '<!doctype html><html><head><meta charset="utf-8"></head><body>' + html + '</body></html>');
+  fs.writeFileSync(tmp + '/host.html', `<!doctype html><html><body><iframe id=f src="inner.html"></iframe><script>
+    window.msgs=[];window.addEventListener('message',e=>{window.msgs.push(e.data);});window.app=d=>document.getElementById('f').contentWindow.postMessage(d,'*');</script></body></html>`);
+  const b = await chromium.launch(); const p = await b.newPage(); const errs = [];
+  p.on('pageerror', e => errs.push(e.message));
+  await p.addInitScript(STUB); await p.goto('file://' + tmp + '/host.html');
+  const f = p.frames()[1]; await f.waitForFunction(() => window.__h && window.__intent && window.claude, null, { timeout: 8000 });
+  await p.waitForTimeout(700);
+  await p.evaluate(() => window.app({ liba: 'hello', ver: '3.25.0', pv: 1, caps: ['spoke'], wall: Date.now() })); await p.waitForTimeout(500);
+  let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); if (!c) fails++ };
+  const got = await f.evaluate(rows => rows.map(([t]) => window.__intent.match(t)), TABLE);
+  const wrong = TABLE.map((r, i) => ({ r, g: got[i] })).filter(({ r, g }) => (g ? g.id : null) !== r[1] || (r[2] !== undefined && g && g.rest !== r[2]));
+  ok(wrong.length === 0, `router: ${TABLE.length - wrong.length}/${TABLE.length} sentences go where they belong` + (wrong.length ? ': ' + wrong.slice(0, 5).map(x => `"${x.r[0]}"→${x.g ? x.g.id + '/' + x.g.rest : 'Claude'}`).join(' ; ') : ''));
+  const said = async (t, ms = 2200) => { await p.evaluate(() => { window.msgs = []; }); await p.evaluate(t => window.app({ liba: 'input', text: t }), t); await p.waitForTimeout(ms);
+    const m = await p.evaluate(() => window.msgs.slice()); for (const x of m) if (x.liba === 'say' && x.id) await p.evaluate(id => window.app({ liba: 'spoke', id }), x.id); return m.filter(x => x.liba === 'say').map(x => x.text); };
+  const sentNow = () => f.evaluate(() => window.__h.sent.slice());
+  // a near miss: asked, not run; "לא" sends the sentence as it was said
+  const near = await said('מה פספסתיי');
+  ok(near.some(t => /התכוונת ל"מה פספסתי"/.test(t)), 'fuzzy: one letter off a command is asked, not run: ' + near.join(' | '));
+  const before = (await sentNow()).length; await said('לא', 3000);
+  const s1 = (await sentNow()).slice(before);
+  ok(s1.some(t => /מה פספסתיי$/.test(t)), '"לא" sends the sentence on to Claude, as it was: ' + JSON.stringify(s1));
+  // confirm: "תשכח" asks; "כן" runs it
+  await f.evaluate(() => window.__h.set('memory/notes/items/n1', { text: 'הרואה חשבון הוא דני', ts: Date.now() }));
+  const ask = await said('תשכח את הרואה חשבון');
+  ok(ask.some(t => /כן או לא/.test(t)) && !!(await f.evaluate(() => window.__h.get('memory/notes/items/n1'))), 'confirm: "תשכח" asks first and deletes nothing yet: ' + ask.join(' | '));
+  const yes = await said('כן', 2500);
+  ok(!(await f.evaluate(() => window.__h.get('memory/notes/items/n1'))) && yes.some(t => /שכחתי/.test(t)), '"כן" runs it: ' + yes.join(' | '));
+  // with nothing pending, "כן" is just an answer - it goes to Claude
+  const b2 = (await sentNow()).length; await said('כן', 2600);
+  ok((await sentNow()).slice(b2).some(t => /כן$/.test(t)), 'with nothing pending, "כן" is an answer and goes on to Claude');
+  ok(!errs.length, 'no page error: ' + errs.join(' | '));
+  await b.close(); console.log(fails ? `\n${fails} נכשלו` : '\nכל הבדיקות עברו'); process.exit(fails ? 1 : 0);
+})().catch(e => { console.log('HARNESS ERROR', e); process.exit(1); });

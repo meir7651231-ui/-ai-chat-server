@@ -62,7 +62,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     // step clock: measured, not guessed. Wall clock on purpose - the page runs on the same device and reads the
     // same clock, so page and phone stamps line up; the page checks that in the hello handshake.
     private var voiceAt = 0L; private var heardAt = 0L; private var listenReadyAt = 0L
-    private var sayStartAt = 0L; private var spokeCause = "done"; private var lastSpokeAt = 0L
+    private var sayStartAt = 0L; private var spokeCause = "done"; private var lastSpokeAt = 0L; private var sayMid = ""
     // heartbeat-diag: why this life began (opened/boot/updated/revive), the previous life's last gasp, and a login wall
     private var lifeWhy = "opened"; private var lastGasp = ""; private var loginWall = false
     // second-channel: since when the page has been dead (wall clock, 0 = alive), and when it was last alive
@@ -70,6 +70,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun stamps() = org.json.JSONObject().put("voice", if (voiceAt > 0) voiceAt else listenReadyAt).put("heard", heardAt).put("wall", System.currentTimeMillis()).toString()
     /** release the page's wait for the utterance, with what really happened */
     private fun releaseSay(cause: String) { val id = sayId ?: return; sayId = null
+        // turn-engine: remembered before the page is told - if the page dies between the two, hello still carries it
+        if ((cause == "done" || cause == "guard") && sayMid.isNotBlank()) Prefs.addSpokenMid(this, sayMid); sayMid = ""
         val end = System.currentTimeMillis(); val start = if (sayStartAt > 0) sayStartAt else end; sayStartAt = 0; lastSpokeAt = end
         web?.let { w -> LibaWeb.sendSpoke(w, id, start, end, cause) } }
     // step page-kernel: while a page utterance is being spoken, tell the page so every 2 s. Silence from
@@ -772,30 +774,31 @@ class BubbleService : Service(), LibaWeb.Bridge {
     // ---------- local commands, then send ----------
     private fun handleUtterance(t: String) {
         val n = t.replace("?", "").trim()
+        val id = LibaIntents.match(t) // intent-kernel: the phrases live in liba/intents/registry.json, not here
         when {
-            n in listOf("חזור", "תחזור", "תחזור על זה", "עוד פעם", "מה אמרת", "מה") && lastSaid.isNotEmpty() -> { speak(lastSaid); return }
-            n in listOf("מה הסטטוס", "סטטוס", "מה קורה", "מה המצב", "מה עם המשימות", "משימות") -> { speak(localStatus()); return }
-            n in listOf("לאט יותר", "יותר לאט", "לאט", "תדבר לאט") -> { rate = (rate - 0.15f).coerceIn(0.6f, 2.2f); Prefs.setRate(this, rate); tts?.setSpeechRate(rate); speak("ככה, לאט יותר."); return }
-            n in listOf("מהר יותר", "יותר מהר", "מהר", "תדבר מהר") -> { rate = (rate + 0.15f).coerceIn(0.6f, 2.2f); Prefs.setRate(this, rate); tts?.setSpeechRate(rate); speak("ככה, מהר יותר."); return }
-            n in listOf("מצב לילה", "לחישה", "מצב לחישה", "בלי קול") -> { night = true; Prefs.setNight(this, true); vibrate(longArrayOf(0, 200)); showLabel("🌙 מצב לילה: רטט וטקסט, בלי קול. תגיד 'בטל מצב לילה'.", 8000); return }
-            n in listOf("בטל מצב לילה", "סיים מצב לילה", "עם קול", "תדברי", "תדבר") -> { night = false; Prefs.setNight(this, false); speak("חזרתי לדבר."); return }
-            n in listOf("תני להפריע", "תן להפריע", "אפשר להפריע לך") -> { bargeIn = true; Prefs.setBarge(this, true); speak("בסדר, אפשר להפריע לי באמצע."); return }
-            n in listOf("אל תני להפריע", "אל תן להפריע", "בלי הפרעות באמצע") -> { bargeIn = false; Prefs.setBarge(this, false); bargeVad?.stop(); bargeVad = null; speak("בסדר, בלי הפרעות באמצע."); return }
-            n in listOf("מצב רכב", "אני נוהג", "נוהג") -> { headsetBtn = true; Prefs.setHeadset(this, true); setupMediaSession(); night = false; Prefs.setNight(this, false); carMode = true; label?.textSize = 22f; speak("מצב רכב. קול בלבד, כפתור האוזניה אומר דבר. תגיד בטל מצב רכב כשתגיע."); return }
-            n in listOf("בטל מצב רכב", "הגעתי", "סיימתי לנהוג") -> { carMode = false; label?.textSize = 15f; speak("יצאתי ממצב רכב."); return }
-            n in listOf("אוזניות", "כפתור אוזניה", "מצב אוזניות") -> { headsetBtn = true; Prefs.setHeadset(this, true); setupMediaSession(); speak("כפתור האוזניה עכשיו אומר דבר."); return }
-            n in listOf("בלי אוזניות", "בטל אוזניות", "בטל מצב רכב") -> { headsetBtn = false; Prefs.setHeadset(this, false); setupMediaSession(); speak("כפתור האוזניה חזר למוזיקה."); return }
-            n in listOf("בלי דוחות", "בטל דוחות", "אל תשלח דוחות") -> { Prefs.setReports(this, false); speak("בסדר, בלי דוחות קריסה."); return }
-            n in listOf("עם דוחות", "תשלח דוחות") -> { Prefs.setReports(this, true); speak("דוחות קריסה פועלים."); return }
-            n in listOf("תתקין", "התקן", "תתקין את העדכון", "עדכן", "תעדכן") -> { installUpdate(); return }
-            n in listOf("בלי צלילים", "בטל צלילים") -> { tones = false; Prefs.setTones(this, false); speak("בלי צלילים."); return }
-            n in listOf("עם צלילים", "החזר צלילים") -> { tones = true; Prefs.setTones(this, true); speak("עם צלילים."); return }
-            n in listOf("דלג", "תדלג", "הלאה", "מספיק") && (chunks.isNotEmpty() || speaking) -> { stopSpeaking(); showLabel("דילגתי.", 2000); onSpoken(); return }
-            n in listOf("תמשיך", "המשך", "תמשיכי") && chunks.isNotEmpty() -> { paused = false; speakNextChunk(false); return }
-            n in listOf("רגע", "חכה", "עצור רגע") && (chunks.isNotEmpty() || speaking) -> { val keep = ArrayList(chunks); stopSpeaking(); chunks.addAll(keep); paused = true; showLabel("עצרתי. תגיד תמשיך.", 8000); return }
-            n in listOf("שקט", "תשתוק", "עצור", "די", "ביטול", "בטל") -> { stopSpeaking(); sentAt = 0; lastSaid = ""; heyOff(); setState(LibaState.IDLE); showLabel("שקט. מילת ההפעלה כבויה.", 3000); return }
-            n in listOf("מה אמרתי כשהיית מנותקת", "מה שמרת", "מה בתור") -> { val w = WordQueue.all(this); speak(if (w.isEmpty()) "אין משפטים שמורים." else "שמרתי ${w.size}: " + w.takeLast(3).joinToString("; ") { it.optString("t") }); return }
-            n in listOf("תמחק את התור", "תמחקי את התור", "מחק את התור") -> { WordQueue.clear(this); speak("מחקתי את מה ששמרתי."); return }
+            id == "app.repeat" && lastSaid.isNotEmpty() -> { speak(lastSaid); return }
+            id == "app.status" -> { speak(localStatus()); return }
+            id == "app.slower" -> { rate = (rate - 0.15f).coerceIn(0.6f, 2.2f); Prefs.setRate(this, rate); tts?.setSpeechRate(rate); speak("ככה, לאט יותר."); return }
+            id == "app.faster" -> { rate = (rate + 0.15f).coerceIn(0.6f, 2.2f); Prefs.setRate(this, rate); tts?.setSpeechRate(rate); speak("ככה, מהר יותר."); return }
+            id == "app.night.on" -> { night = true; Prefs.setNight(this, true); vibrate(longArrayOf(0, 200)); showLabel("🌙 מצב לילה: רטט וטקסט, בלי קול. תגיד 'בטל מצב לילה'.", 8000); return }
+            id == "app.night.off" -> { night = false; Prefs.setNight(this, false); speak("חזרתי לדבר."); return }
+            id == "app.barge.on" -> { bargeIn = true; Prefs.setBarge(this, true); speak("בסדר, אפשר להפריע לי באמצע."); return }
+            id == "app.barge.off" -> { bargeIn = false; Prefs.setBarge(this, false); bargeVad?.stop(); bargeVad = null; speak("בסדר, בלי הפרעות באמצע."); return }
+            id == "app.car.on" -> { headsetBtn = true; Prefs.setHeadset(this, true); setupMediaSession(); night = false; Prefs.setNight(this, false); carMode = true; label?.textSize = 22f; speak("מצב רכב. קול בלבד, כפתור האוזניה אומר דבר. תגיד בטל מצב רכב כשתגיע."); return }
+            id == "app.car.off" -> { carMode = false; label?.textSize = 15f; speak("יצאתי ממצב רכב."); return }
+            id == "app.headset.on" -> { headsetBtn = true; Prefs.setHeadset(this, true); setupMediaSession(); speak("כפתור האוזניה עכשיו אומר דבר."); return }
+            id == "app.headset.off" -> { headsetBtn = false; Prefs.setHeadset(this, false); setupMediaSession(); speak("כפתור האוזניה חזר למוזיקה."); return }
+            id == "app.reports.off" -> { Prefs.setReports(this, false); speak("בסדר, בלי דוחות קריסה."); return }
+            id == "app.reports.on" -> { Prefs.setReports(this, true); speak("דוחות קריסה פועלים."); return }
+            id == "app.install" -> { installUpdate(); return }
+            id == "app.tones.off" -> { tones = false; Prefs.setTones(this, false); speak("בלי צלילים."); return }
+            id == "app.tones.on" -> { tones = true; Prefs.setTones(this, true); speak("עם צלילים."); return }
+            id == "app.skip" && (chunks.isNotEmpty() || speaking) -> { stopSpeaking(); showLabel("דילגתי.", 2000); onSpoken(); return }
+            id == "app.resume" && chunks.isNotEmpty() -> { paused = false; speakNextChunk(false); return }
+            id == "app.pause" && (chunks.isNotEmpty() || speaking) -> { val keep = ArrayList(chunks); stopSpeaking(); chunks.addAll(keep); paused = true; showLabel("עצרתי. תגיד תמשיך.", 8000); return }
+            id == "app.stop" -> { stopSpeaking(); sentAt = 0; lastSaid = ""; heyOff(); setState(LibaState.IDLE); showLabel("שקט. מילת ההפעלה כבויה.", 3000); return }
+            id == "app.words.list" -> { val w = WordQueue.all(this); speak(if (w.isEmpty()) "אין משפטים שמורים." else "שמרתי ${w.size}: " + w.takeLast(3).joinToString("; ") { it.optString("t") }); return }
+            id == "app.words.clear" -> { WordQueue.clear(this); speak("מחקתי את מה ששמרתי."); return }
             !pageReady -> { val dropped = WordQueue.add(this, t, System.currentTimeMillis()); tone("heard")
                 val now = SystemClock.elapsedRealtime(); if (now - wordsSaidAt > 10 * 60_000L) { wordsSaidAt = now; speak("שמרתי. הערוץ סגור, אשלח כשיחזור.") } else showLabel("נשמר (" + WordQueue.size(this) + ")", 3000)
                 if (dropped > 0) Trace.e(Trace.Code.E_PREFS, "words-cap"); return }
@@ -870,9 +873,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
             reason.contains("rate") -> "יותר מדי מהר. חכה רגע."
             reason.isBlank() -> "" else -> "סיבה: $reason" }
         showLabel("לא נשלח" + (if (reason.isNotBlank()) " · $reason" else ""), 8000); speak("לא הצלחתי לשלוח. $why") } }
-    override fun onSay(text: String, kind: String, options: List<String>, speaker: String, id: String) { main.post {
+    override fun onSay(text: String, kind: String, options: List<String>, speaker: String, id: String, mid: String) { main.post {
         releaseSay("stop") // a new utterance arrived before the old one reported: release the page
-        sayId = id.ifBlank { null }
+        sayId = id.ifBlank { null }; sayMid = mid
         main.removeCallbacks(speakingBeat); if (sayId != null) main.postDelayed(speakingBeat, 2000)
         sentAt = 0; status = "מחובר."; waitTimer?.let { main.removeCallbacks(it) }
         curSpeaker = if (speaker.isBlank()) "ליבה" else speaker

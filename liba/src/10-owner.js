@@ -1,14 +1,40 @@
 // @anchor: owner
 // who holds the line
-function switchOwner(text){const t=text.replace(/[?!.,]/g,'').trim();
-  if(owner!=='manager'){if(quietCmd(text))return true;if(taskCmd(text))return true;if(memoryCmd(text))return true;}
-  /* simple rule: a sentence that starts with "ליבה" is for ליבה; one that starts with "מנהל" is for the manager */
-  if(/^(היי |הי )?ליב[הא],?\s*(תחזור|תחזרי|חזור|חזרי)\s*$/.test(t)){return setOwner('liba');}
-  if(owner==='manager'&&/^(תחזור|תחזרי|חזור|חזרי)$/.test(t)){return setOwner('liba');}
-  if(owner==='manager'&&/^(היי |הי )?ליב[הא](?=\s|$)/.test(t)){ownerWrite('liba',true);return false;}
-  if(/^(תעלה|העלה|תן ל|תעביר ל)\s*(את\s+)?ה?מנהל$/.test(t)||/^מנהל$/.test(t)){return setOwner('manager');}
-  if(owner==='liba'&&/^(היי |הי )?מנהל(?=\s|$)/.test(t)){ownerWrite('manager',true);return false;}
-  return false;}
+/* intent-kernel: one router. The registry (liba/intents/registry.json -> INTENTS) says what a sentence is; this decides
+   whether it is a command here and runs it: exact phrase, then the longest prefix (the rest is the slot), then - only
+   for a short sentence one letter off a long command - a guess that is asked, never run: "לא" or silence sends the
+   sentence on as it was said. A command marked confirm (it deletes) asks first. Nothing here is a command regex. */
+const inorm=t=>String(t||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05c7]/g,'').replace(/[?!.,:;"'׳״]/g,'').replace(/\s+/g,' ').trim().replace(/(^|\s)ליבא(?=\s|$)/g,'$1ליבה');
+const HANDLERS={quietOff,quietOn,helpAll,helpFamily,galleryWeek,generatorOpen,traceToday,memRemember,memForget,memPref,memList,memNoLog,memLog,memPrivacy,
+  reqToday,latencyToday,lineStatus,phoneWhy,outboxList,outboxResend,missedList,missedAll,missedAsks,mapShow,openLast,taskPriority,confirmYes,confirmNo,
+  ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
+const intentHere=it=>it.where==='page'&&!(it.when==='liba'&&owner==='manager')&&!(it.when==='manager'&&owner!=='manager');
+function lev(a,b){if(a===b)return 0;const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);
+  for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[n];}
+function matchIntent(text){const t=inorm(text);if(!t)return null;
+  for(const it of INTENTS)if(intentHere(it)&&it.exact.indexOf(t)>=0)return {it:it,rest:'',t:t,how:'exact'};
+  let best=null;for(const it of INTENTS){if(!intentHere(it))continue;for(const p of it.prefix)if((t===p||t.startsWith(p+' '))&&(!best||p.length>best.p.length))best={it:it,rest:t.slice(p.length).trim(),t:t,how:'prefix',p:p};}
+  if(best){/* the slot's lead words ("תזכור כי…", "תשכח שהרואה…", "קודם את…") are the registry's, not a regex here */
+    const L=best.it.lead||[];let r=best.rest,cut=false;for(const w of L){if(r===w||r.startsWith(w+' ')){r=r.slice(w.length).trim();cut=true;break;}if(w==='ש'&&r.startsWith('ש')&&r.length>1){r=r.slice(1);cut=true;break;}}
+    if(best.it.leadRequired&&!cut)return null;best.rest=r;return best;}
+  if(t.length<8||t.split(' ').length>4)return null;
+  const near=[];for(const it of INTENTS){if(!intentHere(it)||it.pass)continue;for(const ph of it.exact)if(ph.length>=8&&Math.abs(ph.length-t.length)<=1&&lev(ph,t)===1){near.push({it:it,ph:ph});break;}}
+  return near.length===1?{it:near[0].it,rest:'',t:t,how:'fuzzy',ph:near[0].ph}:null;}
+let pendingIntent=null;const PENDING_MS=60000;
+function runIntent(m){const it=m.it;
+  if((it.requires||[]).indexOf('db')>=0&&!db){sayLocal('אין לי חיבור למסד כרגע, אז את זה אני לא יכולה לעשות.');return true;}
+  const h=HANDLERS[it.handler];if(!h){fail('P_MSG_BAD',null,'intent without handler '+it.id);return false;}
+  return h(m.rest,m)!==false;}
+function confirmYes(){const p=pendingIntent;if(!p||Date.now()-p.at>PENDING_MS)return false;pendingIntent=null;if(!runIntent(p.m))send({text:p.text,noIntent:true});return true;}
+function confirmNo(){const p=pendingIntent;if(!p||Date.now()-p.at>PENDING_MS)return false;pendingIntent=null;
+  if(p.m.how==='fuzzy')send({text:p.text,noIntent:true});else sayLocal('בסדר, לא עשיתי.');return true;}
+function switchOwner(text){const m=matchIntent(text);if(!m)return false;
+  if(m.how==='fuzzy'){fail('P_INTENT_FUZZY',null,m.it.id);const p={m:m,at:Date.now(),text:text};pendingIntent=p;
+    sayLocal('התכוונת ל"'+m.ph+'"? תגיד כן, או לא ואשלח את מה שאמרת כמו שהוא.');
+    setTimeout(()=>{if(pendingIntent===p){pendingIntent=null;send({text:text,noIntent:true});}},PENDING_MS);return true;}
+  if(m.it.confirm&&m.it.handler!=='confirmYes'){pendingIntent={m:m,at:Date.now(),text:text};sayLocal('לבצע את "'+m.t+'"? תגיד כן או לא.');return true;}
+  return runIntent(m);}
+window.__intent={match:t=>{const m=matchIntent(t);return m?{id:m.it.id,rest:m.rest,how:m.how}:null;}};
 async function setOwner(o){await ownerWrite(o,true);
   const msg=o==='liba'?'ליבה על הקו.':'המנהל על הקו. ליבה שותקת עד שתגיד ליבה תחזור.';bubble('li',msg);if(appMode)post(PROTO.toApp.say,{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(msg);return true;}
 /* owner-lease: the line is a lease, not a sticky switch. The manager keeps it for OWNER_TTL after the last exchange
@@ -32,7 +58,8 @@ function ownerFromDb(d){if((d.since||0)<ownerSince)return;ownerSince=d.since||ow
    השני") goes to the side that asked it - even if the other side holds the line. A sentence that opens with an
    address ("ליבה ...", "מנהל ...") is a new topic and goes where it says. */
 const REPLY_WINDOW=3*60000;
+const ADDRESS=INTENTS.filter(i=>/^address\./.test(i.id)).flatMap(i=>i.prefix);
 function replyTag(text){if(!lastAsk||Date.now()-lastAsk.at>REPLY_WINDOW)return '';
-  if(/^(היי |הי )?(ליב[הא]|מנהל)(?=[\s,]|$)/.test(String(text||'').trim()))return '';
+  const t=inorm(text);if(ADDRESS.some(p=>t===p||t.startsWith(p+' ')))return '';
   return lastAsk.from==='manager'?'[ליבה→מנהל] ':'[ליבה] ';}
 window.__owner={ttl:ms=>{OWNER_TTL=ms;ownerArm();},state:()=>({owner,renewedAt:ownerRenewedAt,ttl:OWNER_TTL})};

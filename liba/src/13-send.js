@@ -78,10 +78,10 @@ window.addEventListener('online',()=>setTimeout(flushOutbox,1500));setInterval(f
 const reqMark=id=>' ⟦#'+id+'⟧';
 const SOURCES=['voice','typed','share','option','offline']; /* offline: said while the page was down, kept on the phone */
 async function send(text,forcedTag,source){
-  let stamps=null;if(text&&typeof text==='object'){forcedTag=text.tag;source=text.source;stamps=text.stamps||null;text=text.text;}
+  let stamps=null,noIntent=false;if(text&&typeof text==='object'){forcedTag=text.tag;source=text.source;stamps=text.stamps||null;noIntent=!!text.noIntent;text=text.text;}
   source=SOURCES.indexOf(source)>=0?source:'voice';
   text=String(text||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7]/g,'').replace(/\s+/g,' ').trim();if(!text)return;
-  if(!forcedTag&&switchOwner(text)){post(PROTO.toApp.sent,{text,local:true});if(!isBusy())drainQ();return;}
+  if(!forcedTag&&!noIntent&&switchOwner(text)){post(PROTO.toApp.sent,{text,local:true});if(!isBusy())drainQ();return;}
   const tag=forcedTag||replyTag(text)||tagOf();
   if(tag.indexOf('מנהל')>=0)ownerRenew(lastAsk&&lastAsk.id);
   if(isBusy()){sendQ.push({text,tag,source,stamps});post(PROTO.toApp.queued,{text});return;}transition('SENDING','send');const id=cur?cur.id:'free';cur=null;

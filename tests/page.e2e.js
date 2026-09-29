@@ -142,7 +142,8 @@ const failed = [];
   check(m.some(x => x.liba === 'tasks' && /תקוע/.test(x.summary)), 'tasks summary posted to app');
   // 9. help + map + status commands local
   await p.evaluate(() => window.app({ liba: 'input', text: 'מה את יודעת' })); m = await flush(2600);
-  check(m.some(x => x.liba === 'say' && /תשע משפחות/.test(x.text)), 'help spoken locally');
+  const famN = await H(() => INTENT_HELP.length);
+  check(m.some(x => x.liba === 'say' && /משפחות של פקודות/.test(x.text) && x.text.split(':')[2].split(',').length === famN), 'help spoken locally, as many families as the registry has: ' + famN);
   // 10. plain message goes to Claude untouched
   await p.evaluate(() => window.app({ liba: 'input', text: 'תזכיר לי מחר בתשע לקנות חלב' })); await flush(2000);
   sentAll = await H(() => window.__h.sent.slice()); check(sentAll[sentAll.length - 1] === '[ליבה] תזכיר לי מחר בתשע לקנות חלב', 'reminder request sent to Claude (not swallowed): ' + JSON.stringify(sentAll.slice(-1)));
