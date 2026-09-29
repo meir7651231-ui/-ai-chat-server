@@ -118,6 +118,11 @@
       "cap": 600,
       "cls": "record",
       "time": "updatedAt"
+    },
+    "memory/people/items": {
+      "cap": 200,
+      "cls": "record",
+      "time": "lastMentioned"
     }
   }
 }

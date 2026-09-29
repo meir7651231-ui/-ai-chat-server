@@ -29,6 +29,7 @@ const extra = [
   ['days', 'node tests/days.test.js'],
   ['memory', 'node tests/memory.test.js'],
   ['recall7', 'node tests/recall7.js'],
+  ['people', 'node tests/people.test.js'],
 ]
 
 let pass = 0

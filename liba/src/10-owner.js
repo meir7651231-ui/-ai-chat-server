@@ -7,7 +7,7 @@
 const inorm=t=>String(t||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05c7]/g,'').replace(/[?!.,:;"'׳״]/g,'').replace(/\s+/g,' ').trim().replace(/(^|\s)ליבא(?=\s|$)/g,'$1ליבה');
 const HANDLERS={quietOff,quietOn,helpAll,helpFamily,galleryWeek,generatorOpen,traceToday,memRemember,memForget,memPref,memList,memNoLog,memLog,memPrivacy,
   reqToday,latencyToday,lineStatus,phoneWhy,outboxList,outboxResend,missedList,missedAll,missedAsks,mapShow,openLast,taskPriority,confirmYes,confirmNo,
-  memAbout,memNoBrief,memIdentity,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
+  memAbout,memNoBrief,memIdentity,peopleAdd,peopleWho,peopleAlias,peopleMerge,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
 const intentHere=it=>it.where==='page'&&!(it.when==='liba'&&owner==='manager')&&!(it.when==='manager'&&owner!=='manager');
 function lev(a,b){if(a===b)return 0;const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);
   for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[n];}
@@ -17,6 +17,8 @@ function matchIntent(text){const t=inorm(text);if(!t)return null;
   if(best){/* the slot's lead words ("תזכור כי…", "תשכח שהרואה…", "קודם את…") are the registry's, not a regex here */
     const L=best.it.lead||[];let r=best.rest,cut=false;for(const w of L){if(r===w||r.startsWith(w+' ')){r=r.slice(w.length).trim();cut=true;break;}if(w==='ש'&&r.startsWith('ש')&&r.length>1){r=r.slice(1);cut=true;break;}}
     if(best.it.leadRequired&&!cut)return null;best.rest=r;return best;}
+  /* suffix: "<one to three words> <phrase>" - the words before are the slot ("דני" in "דני הוא הבן שלי") */
+  for(const it of INTENTS){if(!intentHere(it))continue;for(const s of it.suffix||[]){if(t.endsWith(' '+s)){const r=t.slice(0,t.length-s.length).trim();const n=r.split(' ').length;if(r&&n<=3)return {it:it,rest:r,t:t,how:'suffix',rel:s};}}}
   if(t.length<8||t.split(' ').length>4)return null;
   const near=[];for(const it of INTENTS){if(!intentHere(it)||it.pass)continue;for(const ph of it.exact)if(ph.length>=8&&Math.abs(ph.length-t.length)<=1&&lev(ph,t)===1){near.push({it:it,ph:ph});break;}}
   return near.length===1?{it:near[0].it,rest:'',t:t,how:'fuzzy',ph:near[0].ph}:null;}

@@ -1,6 +1,6 @@
 {
  "version": 1,
- "note": "Step intent-kernel: the one place a voice command is defined. Phrases use a small pattern language, expanded by liba/intents/build.mjs: (a|b|c) = one of, [x] = optional, [a|b] = optional one of. exact = the whole sentence; prefix = the sentence starts with it (the rest is the slot). where: page (the channel page), app (the bubble, before anything reaches the page), claude (sent on as a sentence - a session does it, by the rule named in rule). when: liba = only while ליבה holds the line, manager = only while the manager does. status: live, or planned (never said as a promise). confirm: asks before it runs. Run node liba/intents/build.mjs after any change. lead: words dropped from the start of the slot (\"ש\" also when attached); leadRequired: the slot must start with one.",
+ "note": "Step intent-kernel: the one place a voice command is defined. Phrases use a small pattern language, expanded by liba/intents/build.mjs: (a|b|c) = one of, [x] = optional, [a|b] = optional one of. exact = the whole sentence; prefix = the sentence starts with it (the rest is the slot). where: page (the channel page), app (the bubble, before anything reaches the page), claude (sent on as a sentence - a session does it, by the rule named in rule). when: liba = only while ליבה holds the line, manager = only while the manager does. status: live, or planned (never said as a promise). confirm: asks before it runs. Run node liba/intents/build.mjs after any change. lead: words dropped from the start of the slot (\"ש\" also when attached); leadRequired: the slot must start with one. suffix: the sentence ends with it, after one to three words (the slot) - \"<name> הוא הבן שלי\".",
  "intents": [
   {
    "id": "quiet.off",
@@ -195,6 +195,63 @@
    ],
    "handler": "memIdentity",
    "help": "\"אני מאיר, …\" (כרטיס הזהות)",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "people.add",
+   "where": "page",
+   "when": "liba",
+   "family": "אנשים",
+   "suffix": [
+    "(הוא|היא) (הבן|הבת|הנכד|הנכדה|האח|האחות|אחי|אחותי|אשתי|בעלי|אבא|אמא|השכן|השכנה|הלקוח|הלקוחה|הרואה חשבון|עורך הדין|עורכת הדין|המורה|הרב|השותף|הספק|הרופא|הרופאה|המזכירה|הנהג|החבר|החברה) [שלי|של הילדים|של הבית|שלנו]"
+   ],
+   "handler": "peopleAdd",
+   "help": "\"דני הוא הבן שלי\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "people.who",
+   "where": "page",
+   "when": "liba",
+   "family": "אנשים",
+   "prefix": [
+    "מי (זה|זאת|זו)"
+   ],
+   "handler": "peopleWho",
+   "help": "\"מי זה X\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "people.alias",
+   "where": "page",
+   "when": "liba",
+   "family": "אנשים",
+   "prefix": [
+    "(תקרא|תקראי) (לו|לה)"
+   ],
+   "handler": "peopleAlias",
+   "help": "\"תקרא לו X\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "people.merge",
+   "where": "page",
+   "when": "liba",
+   "family": "אנשים",
+   "prefix": [
+    "(תאחד|תאחדי) את"
+   ],
+   "handler": "peopleMerge",
+   "confirm": true,
+   "help": "\"תאחד את X עם Y\"",
    "requires": [
     "db"
    ]
@@ -1003,6 +1060,7 @@
   "דיבור": "לחיצה על הבועה, \"ליבה\" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח \"ליבה – דבר\" במסך הנעילה, שיתוף מכל אפליקציה → ליבה"
  },
  "parsers": {
-  "16-memory.js": "MEM.parse - the grammar of a fact ('X הוא Y', 'יש לי X'), not a command; commands stay in this registry"
+  "16-memory.js": "MEM.parse - the grammar of a fact ('X הוא Y', 'יש לי X'), not a command; commands stay in this registry",
+  "17-people.js": "the relation words of a person card, not a command"
  }
 }

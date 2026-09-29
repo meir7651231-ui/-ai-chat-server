@@ -25,7 +25,8 @@ function galleryWeek(){{const wk=Date.now()-7*24*3600*1000;const g=galleryList.f
 function generatorOpen(){{const u='https://claude.ai/artifact/AcTS4zzdMcXFcxFFvr5UVn';sayLocal('פותחת את המחולל.');if(appMode)post(PROTO.toApp.cmd,{cmd:'open '+u});else window.open(u,'_blank');return true;}}
 /* mem-core: the memory commands, on the fact store (16-memory.js) */
 function memRemember(rest){const note=rest.trim();if(note.length<2)return false;
-  MEM.put(MEM.parse(note),{type:'said'}).then(r=>sayLocal(r.same?'כבר זכרתי: '+note:r.replaced?'עדכנתי: '+note:'זכרתי: '+note)).catch(e=>{fail('P_DB_WRITE',e,'memory/facts');sayLocal('לא הצלחתי לשמור');});return true;}
+  const pf=MEM.parse(note);peopleFromFact(pf);
+  MEM.put(pf,{type:'said'}).then(r=>sayLocal(r.same?'כבר זכרתי: '+note:r.replaced?'עדכנתי: '+note:'זכרתי: '+note)).catch(e=>{fail('P_DB_WRITE',e,'memory/facts');sayLocal('לא הצלחתי לשמור');});return true;}
 function memForget(rest){const q=rest.trim();if(!q)return false;
   MEM.forget(q).then(h=>sayLocal(h.length?'שכחתי '+h.length+(h.length===1?' דבר':' דברים')+' על '+q+'. אם טעיתי, זה עוד שמור שלושים יום.':'לא מצאתי משהו על '+q+' בזיכרון')).catch(e=>{fail('P_DB_WRITE',e,'memory/facts');sayLocal('לא הצלחתי');});return true;}
 function memPref(rest,m){if(!rest)return false;const f=MEM.parse(m.t);if(f.kind!=='pref')Object.assign(f,{subject:'מאיר',predicate:'העדפה',kind:'pref',conf:0.9});

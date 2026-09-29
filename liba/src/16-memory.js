@@ -66,7 +66,8 @@ function memScore(f,w,now,idf){const hay=memWords([f.subject,f.predicate,f.value
   if(!hit)return 0;const age=(now-(+f.updatedAt||+f.ts||now))/864e5;return hit*(+f.conf||0.5)*Math.pow(0.5,age/30)*(f.kind==='pref'?1.2:1);}
 async function brief(text){if(briefSkip){briefSkip=false;return '';}if(!db)return '';const w=memWords(text);if(!w.length)return '';
   let all=[];try{all=(await MEM.all()).filter(f=>f.state!=='tomb'&&(+f.sens||0)<2);}catch(e){return '';}
-  const now=Date.now(),idf=memIdf(all);const top=all.map(f=>({f,s:memScore(f,w,now,idf)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,BRIEF_FACTS).map(x=>x.f);
+  let who=[];try{who=(await PEOPLE.resolve(text)).map(p=>p.name);}catch(e){}
+  const now=Date.now(),idf=memIdf(all);const top=all.map(f=>({f,s:memScore(f,w,now,idf)*(who.some(n=>(f.raw||'').indexOf(n)>=0)?1.5:1)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,BRIEF_FACTS).map(x=>x.f);
   if(!top.length)return '';
   const lines=top.map(f=>'- '+(f.raw||f.subject+' '+f.predicate+' '+f.value).replace(/^ש/,''));
   let out='[הקשר#'+hash36(lines.join('|'))+'] '+lines.join(' ');if(out.length>BRIEF_MAX)out=out.slice(0,BRIEF_MAX-1)+'…';

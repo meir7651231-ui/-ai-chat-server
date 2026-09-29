@@ -24,6 +24,7 @@ const JAN_KINDS=[
   ['telemetry',()=>P.telemetry(),now=>[['ts','<',now-TTL('telemetry/events/items')]],'ts'],
   ['ledger',()=>P.ledgers(),now=>[['at','<',now-TTL('ledger')]],'at'],
   /* mem-core: forgotten facts and migrated notes stay as tombs for 30 days, so a mistaken "תשכח" can be undone */
+  ['people',()=>P.people(),now=>[['state','==','tomb'],['tombAt','<',now-30*864e5]],'tombAt'],
   ['facts',()=>P.facts(),now=>[['state','==','tomb'],['tombAt','<',now-30*864e5]],'tombAt'],
   ['notes',()=>P.notes(),now=>[['state','==','tomb'],['tombAt','<',now-30*864e5]],'tombAt'],
   ['prefs',()=>P.prefs(),now=>[['state','==','tomb'],['tombAt','<',now-30*864e5]],'tombAt'],
